@@ -2,115 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0591F127322
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2019 02:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03DBA1273A9
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2019 03:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727378AbfLTB4R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Dec 2019 20:56:17 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:36663 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727437AbfLTB4R (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Dec 2019 20:56:17 -0500
-Received: by mail-lj1-f195.google.com with SMTP id r19so8325909ljg.3;
-        Thu, 19 Dec 2019 17:56:15 -0800 (PST)
+        id S1727024AbfLTC7V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Dec 2019 21:59:21 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:33865 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726964AbfLTC7V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Dec 2019 21:59:21 -0500
+Received: by mail-pl1-f196.google.com with SMTP id x17so3469339pln.1;
+        Thu, 19 Dec 2019 18:59:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=i7a3lxaMDdErpekYLxYZCSpGszEjiHMz9VIU/9b2FAA=;
-        b=Gaur1TkDTfgRCAAJ2jfXLAtd91digvvIIikB88uo1dJJu/ngUmUAduyjVTTecEsPbY
-         2ezfycR++WnNJa5bhjjWIlzkn6K9EKUjdMxteA2Re2xODQ8wqQ3BOL33fru9bl5htJue
-         QjAnWq0dRdUmL0vuMovs6SyWKCErWy3B+ZuiXBPudXUX0HdDYMYtrdLdQAMp9bzsExtD
-         XV8wwqTLH+5LcNW0tmY8K7qI40dYA0ddYen2acLCSKofTrakr5nDPDSqxS0dDiKQZe8+
-         04t1P4sAYMw6109j1HfsmdSSUEVzd3xclbPhQZL2zGe3pX5x7pAm43gVmxAU3Pasbms+
-         TX3Q==
+        h=sender:from:to:subject:date:message-id;
+        bh=bNbW/BlTT6ZvgVAq0OoCTXIr6KiWB0s9gAQzENg8Kk0=;
+        b=Jm8X15pBgp294rFAoMot2kk2lFXs8FjWlGnTYgSJcWFis5Wq8YlmiLguWXbZ3rKns1
+         wD6P2dZSI2vtJNtunQpP6LfSTV0BLZMbNgdwFjWauGXNoUd3tFrM/8joVYgAVyhurwVR
+         SoaJ0hiNlX8uSFhJM/1PH42+1TNFjWlRQRuE3yzzxiuzFK5hDi4HRqaFvbcgcI8eaJav
+         fXQ0oXYvG9BDwnf46iFZIfu8JdGxDhZhhPVEfmwE8B7tT7nhZfq5a0BJdxcsOAc4yhaF
+         D3oPFz5tYiDkJXME30lY7vB+rZayJuui6OhSXBynWW3xl+j70EKbt1zdosdjd3pOPLSD
+         8IWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=i7a3lxaMDdErpekYLxYZCSpGszEjiHMz9VIU/9b2FAA=;
-        b=fywmB/oamn+5sVvB+hV7Ph82fSO3kkkon+VpS19JDp01D7UXmt6g0nyzCU6hhLrQT4
-         tTD0zDa49zH20VgTJAlhlr3KPHVhUwu+MclcfFuHDrc0AYxnkFDqrhb97CfBnSM7LkAX
-         X41FLIiXcPWU/vAyeRrVEvj+5ujl0PaUFU4ptgljcBX71cHUBsjAebcCrNEWaKEayyi4
-         quW3ltYzXjvYKcEkMMZlzfjd3c/bcJxMb9lazJ0ISHjiIc3J4ypoqFLJznLGMnPtH5a+
-         VctaxB6z0kT8LXrgD5stzo2lEsfKspq1sqXGB9h8Dmx9dAxnNKmtLLV2L0GqE7o5gfQk
-         UTUg==
-X-Gm-Message-State: APjAAAUfmyeAWKfaNsyjHN5k1mi3U+3GGVbCL9GXukl/l7xKo4hl/AkY
-        vTqxkQvAFlN9mRj8ZjcT0RMNiRfd
-X-Google-Smtp-Source: APXvYqwbN97kGheLd00XaTVr135VZRcJmbkDNLnp4cnbkDtsFk0Z5/dfW9k80jO5EEXSV5IdepTn0Q==
-X-Received: by 2002:a2e:2c04:: with SMTP id s4mr8493693ljs.35.1576806974736;
-        Thu, 19 Dec 2019 17:56:14 -0800 (PST)
-Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.gmail.com with ESMTPSA id m13sm3270901lfo.40.2019.12.19.17.56.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Dec 2019 17:56:14 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 10/10] usb: chipidea: tegra: Add USB_TEGRA_PHY module to driver's dependencies
-Date:   Fri, 20 Dec 2019 04:52:38 +0300
-Message-Id: <20191220015238.9228-11-digetx@gmail.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191220015238.9228-1-digetx@gmail.com>
-References: <20191220015238.9228-1-digetx@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:sender:from:to:subject:date:message-id;
+        bh=bNbW/BlTT6ZvgVAq0OoCTXIr6KiWB0s9gAQzENg8Kk0=;
+        b=g6JGDdNJoUliXLHCei0dsA6HFP3pIOi7B2Rw1JAzc6fYFV6T/24kREL9CEKlZe7m+o
+         yBHFkPG9VNmWYBqutNzzuuBsWqYhWRhbbxcAoEIeFtRYbXar0Bx8bV4THpXie7ca2oCB
+         CKBR/z9VgRolWkTDVc5eck7FyCUHvjVTANapZ1PLaPsS+4JJpjzPY8pZ6wb4/20rRlEV
+         yWalVOfdRb1zuoRmrqCrigriiDGw0aszuUXGRSVYuCwizB9D/RzZvxElMP9PAJySEdtj
+         sBCQL+rtAlAXGBQo8kxNjjhi7hELpsXk5c+0pz1WNHRbkPPCIEZXCUu9cce4xo11nG+K
+         tr7A==
+X-Gm-Message-State: APjAAAVblhULLbg6IeMK8U+49OzALCXB39f4uFH4hy+DwaZquAO0gGrB
+        OM8RDuGmyBIPrHfVo4Sz0xc=
+X-Google-Smtp-Source: APXvYqzZaI2UIUUwxjuE13+vUXr3i6YIEHow4ey3Cb74NWqxud4RqjIiQrhbYKCgVd/X8xQaOv+gVA==
+X-Received: by 2002:a17:90a:22e7:: with SMTP id s94mr13870029pjc.12.1576810760702;
+        Thu, 19 Dec 2019 18:59:20 -0800 (PST)
+Received: from localhost (61-220-137-37.HINET-IP.hinet.net. [61.220.137.37])
+        by smtp.gmail.com with ESMTPSA id k16sm2624831pje.18.2019.12.19.18.59.19
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 19 Dec 2019 18:59:19 -0800 (PST)
+From:   AceLan Kao <acelan.kao@canonical.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Harry Pan <harry.pan@intel.com>,
+        David Heinzelmann <heinzelmann.david@gmail.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Mathieu Malaterre <malat@debian.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: hub: move resume delay at the head of all USB access functions
+Date:   Fri, 20 Dec 2019 10:59:17 +0800
+Message-Id: <20191220025917.11886-1-acelan.kao@canonical.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Now, when ci_hdrc_tegra kernel module is loaded, the phy_tegra_usb module
-is loaded too regardless of kernel's configuration. Previously this
-problem was masked because Tegra's EHCI driver is usually enabled in
-kernel's config and thus PHY driver was getting loaded because of it, but
-now I was making some more thorough testing and noticed that PHY's module
-isn't getting auto-loaded without the host driver.
+usb_control_msg() function should be called after the resume delay, or
+you'll encounter the below errors sometime.
+After the issue happens, have to re-plug the USB cable to recover.
 
-Note that ChipIdea's driver doesn't use any of the exported functions of
-phy_tegra_usb module and thus the module needs to be requested explicitly.
+[ 837.483573] hub 2-3:1.0: hub_ext_port_status failed (err = -71)
+[ 837.490889] hub 2-3:1.0: hub_ext_port_status failed (err = -71)
+[ 837.506780] usb 2-3-port4: cannot disable (err = -71)
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+Signed-off-by: AceLan Kao <acelan.kao@canonical.com>
 ---
- drivers/usb/chipidea/Kconfig         | 1 +
- drivers/usb/chipidea/ci_hdrc_tegra.c | 6 ++++++
- 2 files changed, 7 insertions(+)
+ drivers/usb/core/hub.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/chipidea/Kconfig b/drivers/usb/chipidea/Kconfig
-index ae850b3fddf2..d53db520e209 100644
---- a/drivers/usb/chipidea/Kconfig
-+++ b/drivers/usb/chipidea/Kconfig
-@@ -7,6 +7,7 @@ config USB_CHIPIDEA
- 	select RESET_CONTROLLER
- 	select USB_ULPI_BUS
- 	select USB_ROLE_SWITCH
-+	select USB_TEGRA_PHY if ARCH_TEGRA
- 	help
- 	  Say Y here if your system has a dual role high speed USB
- 	  controller based on ChipIdea silicon IP. It supports:
-diff --git a/drivers/usb/chipidea/ci_hdrc_tegra.c b/drivers/usb/chipidea/ci_hdrc_tegra.c
-index 7455df0ede49..8bc11100245d 100644
---- a/drivers/usb/chipidea/ci_hdrc_tegra.c
-+++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
-@@ -53,6 +53,12 @@ static int tegra_udc_probe(struct platform_device *pdev)
- 	struct tegra_udc *udc;
- 	int err;
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index f229ad6952c0..2fb2816b0d38 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -3522,6 +3522,7 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
+ 		}
+ 	}
  
-+	if (IS_MODULE(CONFIG_USB_TEGRA_PHY)) {
-+		err = request_module("phy_tegra_usb");
-+		if (err)
-+			return err;
-+	}
-+
- 	udc = devm_kzalloc(&pdev->dev, sizeof(*udc), GFP_KERNEL);
- 	if (!udc)
- 		return -ENOMEM;
++	msleep(USB_RESUME_TIMEOUT);
+ 	usb_lock_port(port_dev);
+ 
+ 	/* Skip the initial Clear-Suspend step for a remote wakeup */
+@@ -3544,7 +3545,6 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
+ 		/* drive resume for USB_RESUME_TIMEOUT msec */
+ 		dev_dbg(&udev->dev, "usb %sresume\n",
+ 				(PMSG_IS_AUTO(msg) ? "auto-" : ""));
+-		msleep(USB_RESUME_TIMEOUT);
+ 
+ 		/* Virtual root hubs can trigger on GET_PORT_STATUS to
+ 		 * stop resume signaling.  Then finish the resume
 -- 
-2.24.0
+2.17.1
 
