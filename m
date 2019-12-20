@@ -2,38 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F743127D54
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2019 15:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39966127DC3
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2019 15:38:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728056AbfLTOc6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Dec 2019 09:32:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34704 "EHLO mail.kernel.org"
+        id S1727718AbfLTOgL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Dec 2019 09:36:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39468 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727876AbfLTOas (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 20 Dec 2019 09:30:48 -0500
+        id S1728349AbfLTOfF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 20 Dec 2019 09:35:05 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DCFA424689;
-        Fri, 20 Dec 2019 14:30:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 873B32468F;
+        Fri, 20 Dec 2019 14:35:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576852247;
+        s=default; t=1576852505;
         bh=t22WbMwhAkBRvhcTzO0J/E1i++DVIc0kth+PmaFyL2Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BEout+zqU4Uil8C6QUiX+xA5cmRP0QwqyV1BbAqCAcJ3v4G5ZwyqlC0xr891nnVmS
-         0Z8zbj9kKYRT0Z7NZ9v9qtJOvdi8kktvfa+MTPrUpCwufpzr6sZyG3B2idxR0i+iQ6
-         932Pz1Dvs8odyrF1kh4wXJHiAQNAvM4mE6sYzgVk=
+        b=sxkdhh5bKFTJEko2Hd4et541sbS6ev8DoUJdJl4wQO6THk887lTK+yDIjrA1nj7TB
+         o6/WkJQfdX794rk+WeixEmMok/rr2aRumuB53JvtME6dVAUZ4jpVtOL8ArgccFyPIi
+         ZxzDFu2uEdfJ/mu5+ZDPetPS1xqicFntb5Uf9juc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     EJ Hsu <ejh@nvidia.com>, Peter Chen <peter.chen@nxp.com>,
         Felipe Balbi <balbi@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 39/52] usb: gadget: fix wrong endpoint desc
-Date:   Fri, 20 Dec 2019 09:29:41 -0500
-Message-Id: <20191220142954.9500-39-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 24/34] usb: gadget: fix wrong endpoint desc
+Date:   Fri, 20 Dec 2019 09:34:23 -0500
+Message-Id: <20191220143433.9922-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191220142954.9500-1-sashal@kernel.org>
-References: <20191220142954.9500-1-sashal@kernel.org>
+In-Reply-To: <20191220143433.9922-1-sashal@kernel.org>
+References: <20191220143433.9922-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
