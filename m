@@ -2,92 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C79F127655
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2019 08:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EAF12762F
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2019 08:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727201AbfLTHLq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Dec 2019 02:11:46 -0500
-Received: from [167.172.186.51] ([167.172.186.51]:59478 "EHLO shell.v3.sk"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727167AbfLTHLq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 20 Dec 2019 02:11:46 -0500
-X-Greylist: delayed 577 seconds by postgrey-1.27 at vger.kernel.org; Fri, 20 Dec 2019 02:11:45 EST
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id EFD5FDFCAB;
-        Fri, 20 Dec 2019 07:02:24 +0000 (UTC)
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 7QzHhIRQE_fc; Fri, 20 Dec 2019 07:02:24 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 8F180DFCAC;
-        Fri, 20 Dec 2019 07:02:24 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at zimbra.v3.sk
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id EAJEg_byXsaI; Fri, 20 Dec 2019 07:02:24 +0000 (UTC)
-Received: from furthur.lan (unknown [109.183.109.54])
-        by zimbra.v3.sk (Postfix) with ESMTPSA id 48964DFCAB;
-        Fri, 20 Dec 2019 07:02:24 +0000 (UTC)
-From:   Lubomir Rintel <lkundrak@v3.sk>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lubomir Rintel <lkundrak@v3.sk>
-Subject: [PATCH] USB: EHCI: ehci-mv: add HSIC support
-Date:   Fri, 20 Dec 2019 08:02:18 +0100
-Message-Id: <20191220070218.240053-1-lkundrak@v3.sk>
-X-Mailer: git-send-email 2.24.1
+        id S1727165AbfLTHHe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Dec 2019 02:07:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57426 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726030AbfLTHHe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 20 Dec 2019 02:07:34 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DA83524679;
+        Fri, 20 Dec 2019 07:07:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576825652;
+        bh=DsXW0Gs0MivMncxjTRzFK4LBCsqpOeFEz2Rkne+5NfE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fXeukvU40uyFie6dkYH7y56kHDdbd8KQOw3ROSZuJOw0zDRn1YJanbxxZYtdrNCty
+         aiu+rBTEyQeQG2taT1D/uAafdg99A1yFWCllykAo9T9zd/bM9DfE3lp01e1WMip9iw
+         KlMUv0ae/ufrL45Wq4qCiDRf5BBFaGeQwvuwG5v4=
+Date:   Fri, 20 Dec 2019 08:07:30 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB fixes for 5.5-rc3
+Message-ID: <20191220070730.GA2190076@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some special dance is needed to initialize the HSIC port.
+The following changes since commit d1eef1c619749b2a57e514a3fa67d9a516ffa919:
 
-Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
----
- drivers/usb/host/ehci-mv.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+  Linux 5.5-rc2 (2019-12-15 15:16:08 -0800)
 
-diff --git a/drivers/usb/host/ehci-mv.c b/drivers/usb/host/ehci-mv.c
-index 66ec1fdf9fe7d..21eb32baf9380 100644
---- a/drivers/usb/host/ehci-mv.c
-+++ b/drivers/usb/host/ehci-mv.c
-@@ -11,6 +11,7 @@
- #include <linux/clk.h>
- #include <linux/err.h>
- #include <linux/usb/otg.h>
-+#include <linux/usb/of.h>
- #include <linux/platform_data/mv_usb.h>
- #include <linux/io.h>
-=20
-@@ -67,6 +68,8 @@ static int mv_ehci_reset(struct usb_hcd *hcd)
- {
- 	struct device *dev =3D hcd->self.controller;
- 	struct ehci_hcd_mv *ehci_mv =3D hcd_to_ehci_hcd_mv(hcd);
-+	struct ehci_hcd *ehci =3D hcd_to_ehci(hcd);
-+	u32 status;
- 	int retval;
-=20
- 	if (ehci_mv =3D=3D NULL) {
-@@ -80,6 +83,14 @@ static int mv_ehci_reset(struct usb_hcd *hcd)
- 	if (retval)
- 		dev_err(dev, "ehci_setup failed %d\n", retval);
-=20
-+	if (of_usb_get_phy_mode(dev->of_node) =3D=3D USBPHY_INTERFACE_MODE_HSIC=
-) {
-+		status =3D ehci_readl(ehci, &ehci->regs->port_status[0]);
-+		status |=3D PORT_TEST_FORCE;
-+		ehci_writel(ehci, status, &ehci->regs->port_status[0]);
-+		status &=3D ~PORT_TEST_FORCE;
-+		ehci_writel(ehci, status, &ehci->regs->port_status[0]);
-+	}
-+
- 	return retval;
- }
-=20
---=20
-2.24.1
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.5-rc3
+
+for you to fetch changes up to 6056a0f8ede27b296d10ef46f7f677cc9d715371:
+
+  usb: xhci: Fix build warning seen with CONFIG_PM=n (2019-12-18 19:23:42 +0100)
+
+----------------------------------------------------------------
+USB fixes for 5.5-rc3
+
+Here are some small USB fixes for some reported issues.
+
+Included in here are:
+  - xhci build warning fix
+  - ehci disconnect warning fix
+  - usbip lockup fix and error cleanup fix
+  - typec build fix
+
+All of these have been in linux-next with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Erkka Talvitie (1):
+      USB: EHCI: Do not return -EPIPE when hub is disconnected
+
+Guenter Roeck (1):
+      usb: xhci: Fix build warning seen with CONFIG_PM=n
+
+Suwan Kim (2):
+      usbip: Fix receive error in vhci-hcd when using scatter-gather
+      usbip: Fix error path of vhci_recv_ret_submit()
+
+zhong jiang (1):
+      usb: typec: fusb302: Fix an undefined reference to 'extcon_get_state'
+
+ drivers/usb/host/ehci-q.c        | 13 ++++++++++++-
+ drivers/usb/host/xhci-pci.c      |  2 +-
+ drivers/usb/typec/tcpm/Kconfig   |  1 +
+ drivers/usb/usbip/usbip_common.c |  3 +++
+ drivers/usb/usbip/vhci_rx.c      | 13 +++++++++----
+ 5 files changed, 26 insertions(+), 6 deletions(-)
