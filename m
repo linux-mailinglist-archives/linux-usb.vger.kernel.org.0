@@ -2,87 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8781278A6
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2019 10:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC36127909
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2019 11:15:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727317AbfLTJ6a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Dec 2019 04:58:30 -0500
-Received: from mail-ot1-f44.google.com ([209.85.210.44]:38500 "EHLO
-        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727179AbfLTJ6a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Dec 2019 04:58:30 -0500
-Received: by mail-ot1-f44.google.com with SMTP id d7so6840479otf.5;
-        Fri, 20 Dec 2019 01:58:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=74femySzIwPJDHG5x9zdNa+AfjyKAyPCNlMsQcYBmhs=;
-        b=MfZuZxlt/5aTM+eWADTAw1+ssMbTLO93nEPqcsWwi/PUCtCdYBBhFq6E7twghkXe1r
-         3hp+yhXgEhLdNM6yDFWsoqF0UQJYMvFLehRnFAl3EhwPF/6iUd7v5eIxRMCLrsEqTQcE
-         XBYzzVrEKNlWwW7NqXkTst1JFiYNMcHIMQsY7U8IYPwqM+K6d26bjDgKuk9s2gXYSTsM
-         WqWJpZAVCOk7XLCw/do4YsLvzuVHICVPZE7bnDmq/HSOPd5QXY3J8bzsK1WF5YqXE998
-         QLU7JhuIYTf/2c2caV3odpCQxCTt55p17hrVFqe/W+Cr6y3NDfSoZgOuS2aWRN6bWFOX
-         DJcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=74femySzIwPJDHG5x9zdNa+AfjyKAyPCNlMsQcYBmhs=;
-        b=VYicgB35pXcpvgXzUgqVAHokVvkO4rpqHYHwfZWfNG6RnpAUEuDFTlWR5CBJQjKFVS
-         27ktsCBMSoN1YgNavfkIKJfnMZT2O8xcsaH+bbleF2BsSLGWR/rsqCxfEq2H2rfII/we
-         G2z27LxrevNqM9KqQUNpaThNN8fiAfhAT9+gd/V01+VuMUFDI0dPkR1n3QYW3MY56MSD
-         HXuaGf0IsyPqbOHmNlXzsV75xM7wynP0BU8liTNdNFJ57h6eal0flxy25Q/f4HkKRbzS
-         zAEPd2MMfByoh6XoMPJdire3+s01/8DhrFVd0U3ca/ww7ae+iAcqxXtZQueiLee2ONKc
-         qSDg==
-X-Gm-Message-State: APjAAAVMDwHvQrGcWma98ByrrUfYEIJDblG4Odjyly3/6vqCOtMQnoYM
-        xUT+4zYCr943OJvlWCsCPV9VEwDWW7bxrG/D/aA=
-X-Google-Smtp-Source: APXvYqxNwbRenNNC3ee/+YtenI0dYdUuu8d469Q65xkASBDJ4VTai2GdRpnIGeCbklPsIf5o+/BCp8RjQDL4Dgpv5gE=
-X-Received: by 2002:a9d:478:: with SMTP id 111mr13874039otc.359.1576835909674;
- Fri, 20 Dec 2019 01:58:29 -0800 (PST)
+        id S1727277AbfLTKPB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Dec 2019 05:15:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52072 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727235AbfLTKPB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 20 Dec 2019 05:15:01 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AE5B9206EF;
+        Fri, 20 Dec 2019 10:15:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576836901;
+        bh=DxzAhHie1jM2AMgKqihWMBSP8hR6Xu6a9XQRUYb4ekk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xAD0JmwRWwZoljeVkCxWJdQoMNzvxRyMztCgFcrrEqR1G6nUVR0pa8QGKLoWzGHkw
+         TpJZwTR/A1Yp2xvBuysVBsQ5S2fhYgyfQ3xpzy1Ceo5f3Dz8sZz1tizoD1aSQmwQSY
+         mYNPYS+VDZgs+UW08ZtoolTHq30KC33Ln4zaT/i4=
+Date:   Fri, 20 Dec 2019 11:14:58 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lubomir Rintel <lkundrak@v3.sk>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: EHCI: ehci-mv: drop pxa_ehci_type and unused device
+ IDs
+Message-ID: <20191220101458.GA2259298@kroah.com>
+References: <20191220070202.239870-1-lkundrak@v3.sk>
+ <20191220073537.GA2193408@kroah.com>
+ <1fdbe2d493b71ed2105a8976ebbccbba28adfe26.camel@v3.sk>
 MIME-Version: 1.0
-References: <20191014141718.22603-1-narmstrong@baylibre.com>
- <20191014141718.22603-2-narmstrong@baylibre.com> <20191023201141.GA21235@bogus>
- <CA+3zgmsJPsvXgsjDQKKrSG+UNdY3SK+hKCTD2X3hGG+OXejHig@mail.gmail.com>
- <CAKgpwJWU3jB0DWEKE09TOV+YLceBFJ75ZirAXQbuhj8v3FwjXg@mail.gmail.com>
- <c32007f5-88b9-45c5-b542-b1dc4dbc76ea@baylibre.com> <CAKgpwJVHF6Ytdt9kq5SwiixFDLym_UPG51aXag1nVVay0pzofQ@mail.gmail.com>
- <45212db9-e366-2669-5c0a-3c5bd06287f6@synopsys.com> <ce35b6d2-7ed1-be2d-6e38-4c6e89340a40@baylibre.com>
- <CA+3zgmtWQwdJG5NT-t7__Mqt5u_U3m4+HEL6p4PWxx5NES7_AQ@mail.gmail.com>
-In-Reply-To: <CA+3zgmtWQwdJG5NT-t7__Mqt5u_U3m4+HEL6p4PWxx5NES7_AQ@mail.gmail.com>
-From:   Tim <elatllat@gmail.com>
-Date:   Fri, 20 Dec 2019 04:58:18 -0500
-Message-ID: <CA+3zgmsAWRYTqT+Q6t73ikYmm=L2gLmB6PEOUqLuMULfUcPKUg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] doc: dt: bindings: usb: dwc3: Update entries for
- disabling SS instances in park mode
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Jun Li <lijun.kernel@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "khilman@baylibre.com" <khilman@baylibre.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-amlogic@lists.infradead.org" 
-        <linux-amlogic@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Dongjin Kim <tobetter@gmail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1fdbe2d493b71ed2105a8976ebbccbba28adfe26.camel@v3.sk>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch is still good on 5.4 and 5.5, and the following network lag
-was solved by separating the USB and NIC smp_affinity_list.
+On Fri, Dec 20, 2019 at 09:55:07AM +0100, Lubomir Rintel wrote:
+> On Fri, 2019-12-20 at 08:35 +0100, Greg Kroah-Hartman wrote:
+> > On Fri, Dec 20, 2019 at 08:02:02AM +0100, Lubomir Rintel wrote:
+> > > A trivial cleanup.
+> > 
+> > How is dropping device ids a "trivial cleanup"?
+> > 
+> > Please be more descriptive as to why you are making a change.
+> 
+> Thanks for the response. I'll post a v2 with a hopefully better
+> description.
+> 
+> > Also, you sent a number of patches here and I do not know what order
+> > they should be applied in.  Please resend them all as a numbered patch
+> > series so that I have a clue what to do.
+> 
+> I did that because the patches are completely independent of each other
+> -- they don't conflict and don't need to be applied any particular
+> order. Would you still prefer a numbered series?
 
-On Tue, Dec 10, 2019, 7:45 PM Tim <elatllat@gmail.com> wrote:
->
-> Just writing to say;
-> this patch is still performing well on 5.5.0-rc1, and
-> there is no speed improvement by adding DWC3_GUCTL_NAK_PER_ENH_HS BIT(17)
->     I get up to 3890 ms second lag with "ping -s 5120 $IP" when
-> copying between USB HDDs either way, but at least this patch stops the
-> crashing.
+A numbered series is always easier.
+
+thanks,
+
+greg k-h
