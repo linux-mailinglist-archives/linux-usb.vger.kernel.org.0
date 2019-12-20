@@ -2,88 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DDAEC127BD8
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2019 14:40:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F24127BDA
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2019 14:40:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727378AbfLTNkG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Dec 2019 08:40:06 -0500
-Received: from sv2-smtprelay2.synopsys.com ([149.117.73.133]:44086 "EHLO
+        id S1727364AbfLTNkb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Dec 2019 08:40:31 -0500
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:44104 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727344AbfLTNkG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Dec 2019 08:40:06 -0500
-Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com [10.225.0.209])
+        by vger.kernel.org with ESMTP id S1727344AbfLTNkb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Dec 2019 08:40:31 -0500
+Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id A205440623;
-        Fri, 20 Dec 2019 13:40:05 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 5D7D942336;
+        Fri, 20 Dec 2019 13:40:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1576849205; bh=uJiZRqMwhGw7kQiiZQdtYhs/3k8oGogSFL7VS9u4WPE=;
+        t=1576849230; bh=Ar4tQxExynwUMAHZi/U/mRWmdym3BiGnnWXXk6fzbwA=;
         h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=E0XvKdLMYzelBGWe54SHDnJugvD36j/0eJS8iUn64DVHL7kMTYHwftWkX4FyYmEXd
-         bSrzNNbpeqDmBm9syNe2RS9dPSM/SQBs86M4qoVHyt9ReWuBB8s0MeaSku5Q0tELBB
-         mwyX1bGoTpTIs4expwxkjb5SwKfUb0DrWDX3yJgEALxla2XKXCAnMkidRelwJtPZPg
-         kuujvIMhVVrtEw4M5AGrPqH6Ue8CJsC0UvpdOC9R5yl/jpZ6jBcjLblhRIjnR2kRol
-         s4+PXbH6dr+iTtaM1KtklcNZBBTY/vuY3kSqdJPL8tXbIqM5gMIsqeRxbSpzCewzl2
-         +6/zGy02J1IXw==
+        b=knIFojO5ZRj+MvX37D5JrR8KHTinKTJqydIWPaZccS/YAvt7cpPK3DQIYMey4yZ+C
+         oqkyFAWlLIWhGUhh95KfnSwd6zHCcrgZ0XLpG8AHmdESxKjggYYw5Uhj45J8ObRCSg
+         oqBpf40WZJs+EUbtl93Q/StPpIX3Z62J6bLzqb09U1ekS6C9eFMATXTwYMyhCtjx4x
+         cQUDMtxjDirh2kVWKvniokdwlsUeMS5TSaNGCteskwO0FLMIOcyeYBBdrYFc2C/FKM
+         mxdyHU9d2bNrzr9Tw1gSZlkCwvu9gGuddeWiBM+O8hlOXKml4Aj3WM+u5zdX3CBAP5
+         laO6yg1T6IsYA==
 Received: from tejas-VirtualBox (joglekar-e7480.internal.synopsys.com [10.144.133.13])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 8FBE8A0063;
-        Fri, 20 Dec 2019 13:40:02 +0000 (UTC)
-Received: by tejas-VirtualBox (sSMTP sendmail emulation); Fri, 20 Dec 2019 19:10:00 +0530
-Date:   Fri, 20 Dec 2019 19:10:00 +0530
-Message-Id: <a391fb1bab2ac3abea664d11570ff3feefb4c934.1576848504.git.joglekar@synopsys.com>
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id D80FEA0057;
+        Fri, 20 Dec 2019 13:40:26 +0000 (UTC)
+Received: by tejas-VirtualBox (sSMTP sendmail emulation); Fri, 20 Dec 2019 19:10:24 +0530
+Date:   Fri, 20 Dec 2019 19:10:24 +0530
+Message-Id: <2450178afa4e09b315402c64224b44b542363fc7.1576848504.git.joglekar@synopsys.com>
 In-Reply-To: <cover.1576848504.git.joglekar@synopsys.com>
 References: <cover.1576848504.git.joglekar@synopsys.com>
 From:   Tejas Joglekar <Tejas.Joglekar@synopsys.com>
-Subject: [RFC PATCH 3/4] usb: xhci: Set quirk for XHCI_CONSOLIDATE_TRBS
+Subject: [RFC PATCH 4/4] dt-bindings: usb: Add snps,consolidate-trbs & consolidate-trbs
 To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
-        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
 Cc:     John Youn <John.Youn@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This commit enables the quirk when the consolidate_trbs property is set
-for the Synopsys xHC. TRB cache errata fixes the SNPS xHC hang issue
-when the data is scattered across small buffers which does not make
-atleast MPS size for given TRB cache size of SNPS xHC.
+This commit adds the documentation for consolidate-trbs, and
+snps,consolidate-trbs property. These when set enables the quirk for
+XHCI driver for consolidation of TRB's when small buffer sizes are
+scattered over the TRB cache not making up to MPS or total transfer size
+with Synopsys xHC.
 
 Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
 ---
- drivers/usb/host/xhci-pci.c  | 3 +++
- drivers/usb/host/xhci-plat.c | 3 +++
- 2 files changed, 6 insertions(+)
+ Documentation/devicetree/bindings/usb/dwc3.txt     | 6 ++++++
+ Documentation/devicetree/bindings/usb/usb-xhci.txt | 1 +
+ 2 files changed, 7 insertions(+)
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 2907fe4d78dd..74f82e67499a 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -260,6 +260,9 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	     pdev->device == 0x9026)
- 		xhci->quirks |= XHCI_RESET_PLL_ON_DISCONNECT;
+diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
+index 66780a47ad85..9851da41a442 100644
+--- a/Documentation/devicetree/bindings/usb/dwc3.txt
++++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+@@ -101,6 +101,12 @@ Optional properties:
+ 			this and tx-thr-num-pkt-prd to a valid, non-zero value
+ 			1-16 (DWC_usb31 programming guide section 1.2.3) to
+ 			enable periodic ESS TX threshold.
++ - snps,consolidate-trbs: enable TRBs consolidation - host mode only. Set this
++			to valid then for Synopsys xHC the TRBs would be
++			consolidated to at least MPS in order to prevent the
++			controller getting hang due to small buffer sizes which
++			does not make up to MPS size or total transfer size
++			across TRB cache.
  
-+	if (pdev->vendor == PCI_VENDOR_ID_SYNOPSYS)
-+		xhci->quirks |= XHCI_CONSOLIDATE_TRBS;
-+
- 	if (xhci->quirks & XHCI_RESET_ON_RESUME)
- 		xhci_dbg_trace(xhci, trace_xhci_dbg_quirks,
- 				"QUIRK: Resetting on resume");
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index d90cd5ec09cf..a6f0e7e3d660 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -289,6 +289,9 @@ static int xhci_plat_probe(struct platform_device *pdev)
- 		if (device_property_read_bool(tmpdev, "quirk-broken-port-ped"))
- 			xhci->quirks |= XHCI_BROKEN_PORT_PED;
+  - <DEPRECATED> tx-fifo-resize: determines if the FIFO *has* to be reallocated.
+  - snps,incr-burst-type-adjustment: Value for INCR burst type of GSBUSCFG0
+diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.txt b/Documentation/devicetree/bindings/usb/usb-xhci.txt
+index 3f378951d624..be8d5e6a6333 100644
+--- a/Documentation/devicetree/bindings/usb/usb-xhci.txt
++++ b/Documentation/devicetree/bindings/usb/usb-xhci.txt
+@@ -43,6 +43,7 @@ Optional properties:
+   - quirk-broken-port-ped: set if the controller has broken port disable mechanism
+   - imod-interval-ns: default interrupt moderation interval is 5000ns
+   - phys : see usb-hcd.yaml in the current directory
++  - consolidate-trbs: indicate if you need to consolidate trbs
  
-+		if (device_property_read_bool(tmpdev, "consolidate-trbs"))
-+			xhci->quirks |= XHCI_CONSOLIDATE_TRBS;
-+
- 		device_property_read_u32(tmpdev, "imod-interval-ns",
- 					 &xhci->imod_interval);
- 	}
+ additionally the properties from usb-hcd.yaml (in the current directory) are
+ supported.
 -- 
 2.11.0
 
