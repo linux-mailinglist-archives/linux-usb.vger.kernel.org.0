@@ -2,113 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D514F12844C
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2019 23:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE45128533
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2019 23:48:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727506AbfLTWLP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Dec 2019 17:11:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35108 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727473AbfLTWLP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 20 Dec 2019 17:11:15 -0500
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 34F43206DA;
-        Fri, 20 Dec 2019 22:11:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576879874;
-        bh=o3HlDsr/siqnvBypoqfes0hM1iU+w9VPO3GGDO30DCY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Bk+/AnavemaMi4clu0XTYMxgz8x2XpfFgSlxqSFF/S1nRrwSuF8yXBq6aNvJ1XzLq
-         BXZY4LONqS80LLzvgCRmnS37q5qmxDt3Z6YlxZ//1p3OjVvaSVUC5qBaGr7xmp171b
-         hnXW70Xm3h2XpCcFk7nrqn030tfE2TaXJCItrEpY=
-Received: by mail-qv1-f53.google.com with SMTP id u10so4140478qvi.2;
-        Fri, 20 Dec 2019 14:11:14 -0800 (PST)
-X-Gm-Message-State: APjAAAWLgh5kEIYExJfOLrtzI1g7XrQ+BiT818QJzSPoNPLdsmdZ6GfY
-        BfiWDuA+gr5/ipuxqLG9YSheFiGUWmRI761EJQ==
-X-Google-Smtp-Source: APXvYqxrgGyYUnVQtwMdPxLJhjvv7v/OzHoM6VSqE3TWWKKTIdvS8IJO01k1ZQwCfgUv7ibbCHD2kx9PtSPl9rbZ9Yc=
-X-Received: by 2002:a0c:f6cd:: with SMTP id d13mr14223740qvo.20.1576879873293;
- Fri, 20 Dec 2019 14:11:13 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1576118671.git.thinhn@synopsys.com> <b791f032edb8e6a739c342dbd0d2d5faa66ddfb8.1576118671.git.thinhn@synopsys.com>
- <87mubyvtuh.fsf@kernel.org> <6193f738-03ac-51b5-cdf0-d9b252a50146@synopsys.com>
- <87d0cswvs9.fsf@kernel.org> <20191219221704.GA29965@bogus> <b48e59f9-5339-b1c9-cc16-604900bd1cc4@synopsys.com>
-In-Reply-To: <b48e59f9-5339-b1c9-cc16-604900bd1cc4@synopsys.com>
+        id S1726556AbfLTWsE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Dec 2019 17:48:04 -0500
+Received: from mail-il1-f196.google.com ([209.85.166.196]:35200 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726030AbfLTWsE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Dec 2019 17:48:04 -0500
+Received: by mail-il1-f196.google.com with SMTP id g12so9316475ild.2;
+        Fri, 20 Dec 2019 14:48:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=5ydh8/8SwQZQURpsj7H5OMlNH6BqWqcQ+ZSr278ZEo8=;
+        b=p5nTIHIDOZeE5Lqqnshklv7LPVQaFQft7rGYRhMWXwZumlmvgCbzjTYCtVi3gcoc9u
+         rlSiJpDLoMx1i+/4BLEqbbZ4fWxUtv9900at5i1Jg/0s7TBWiavTs7CXXYyoyxwElcXL
+         6d43HaGk6SkY58Dh4jPlqKZdwTX45P/qs0l3FK7VvTMeaEGjrG8a0CCi2AM9WnTUPpgz
+         e2Y/AM2SwxRVAPRT7Zmqma9shMm4TsQ+7ToXn2NHsbfVar2uu2sXkCUKUru4ojmW8slT
+         KbxRDstuEML2o8IwTBc0xFZLg153dQ16bd9AF12C1FxFJMJuG4BXSPz6nXpRDoHL+qrt
+         3QdQ==
+X-Gm-Message-State: APjAAAUDOSfh1Ec04O8jRgHuYoOCrbXywVJHKKcLKPruGnrUsIpdVk0j
+        pLX9maYC73ESqOyOsa7hUw==
+X-Google-Smtp-Source: APXvYqzy+s5mc7VlnG7SFlraOtuA08IEQUgo479SMw+kCniTuFHiYyY/N6k1UpCt0aeX1y2CIkVv9Q==
+X-Received: by 2002:a92:af08:: with SMTP id n8mr14166376ili.217.1576882083423;
+        Fri, 20 Dec 2019 14:48:03 -0800 (PST)
+Received: from localhost ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id j26sm3918819iok.3.2019.12.20.14.48.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Dec 2019 14:48:02 -0800 (PST)
+Date:   Fri, 20 Dec 2019 15:48:02 -0700
 From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 20 Dec 2019 15:11:00 -0700
-X-Gmail-Original-Message-ID: <CAL_JsqKrRSk0NhqZ5tcus23rWfBzHcxBs8ZR6qv2qR4z_NrD_A@mail.gmail.com>
-Message-ID: <CAL_JsqKrRSk0NhqZ5tcus23rWfBzHcxBs8ZR6qv2qR4z_NrD_A@mail.gmail.com>
-Subject: Re: [RFC PATCH 13/14] usb: devicetree: dwc3: Add property to disable
- mult TRB fetch
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        John Youn <John.Youn@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     Benjamin Gaignard <benjamin.gaignard@st.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, khilman@baylibre.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Benjamin Gaignard <benjamin.gaignard@st.com>
+Subject: Re: [PATCH] dt-bindings: usb: amlogic,meson-g12a-usb-ctrl: fix clock
+ names
+Message-ID: <20191220224802.GA26316@bogus>
+References: <20191218142613.13683-1-benjamin.gaignard@st.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191218142613.13683-1-benjamin.gaignard@st.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 19, 2019 at 3:52 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
->
-> Hi,
->
-> Rob Herring wrote:
-> > On Fri, Dec 13, 2019 at 09:04:54AM +0200, Felipe Balbi wrote:
-> >> Hi,
-> >>
-> >> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
-> >>>> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
-> >>>>> DWC_usb32 has a feature where it can issue multiple TRB fetch requests.
-> >>>>> Add a new property to limit and only do only single TRB fetch request.
-> >>>>>
-> >>>>> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
-> >>>>> ---
-> >>>>>    Documentation/devicetree/bindings/usb/dwc3.txt | 2 ++
-> >>>>>    1 file changed, 2 insertions(+)
-> >>>>>
-> >>>>> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
-> >>>>> index ff35fa6de2eb..29d6f9b1fc70 100644
-> >>>>> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
-> >>>>> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
-> >>>>> @@ -108,6 +108,8 @@ Optional properties:
-> >>>>>     - snps,num-trb-prefetch: max value to do TRBs cache for DWC_usb32. The value
-> >>>>>                           can be from 1 to DWC_USB32_CACHE_TRBS_PER_TRANSFER.
-> >>>>>                           Default value is DWC_USB32_CACHE_TRBS_PER_TRANSFER.
-> >>>>> + - snps,dis-mult-trb-fetch: set to issue only single TRB fetch request in
-> >>>>> +                 DWC_usb32.
-> >>>> two questions:
-> >>>>
-> >>>> - how is this different from passing 1 to the previous DT binding
-> >>> The previous DT binding is related to the number TRBs to cache while
-> >>> this one is related to whether the controller will send multiple
-> >>> (internal) fetch commands to fetch the TRBs.
-> >>>
-> >>>> - do we know of anybody having issues with multi-trb prefetch?
-> >>> No, we added this for various internal tests.
-> >> We really a better way for you guys to have your test coverage enabled
-> >> with upstream kernel. I wonder if DT guys would accept a set of bindings
-> >> marked as "for testing purposes". In any case, we really need to enable
-> >> Silicon Validation with upstream kernel.
-> > Well, anything would be better than the endless stream of new
-> > properties. Include 'test-mode' in the property names would be fine I
-> > guess.
-> >
->
-> Generally the properties are for some quirks or configurations that the
-> controller must use to work properly and not for debugging purposes.
-> Unfortunately, this list can be long..
+On Wed, 18 Dec 2019 15:26:13 +0100, Benjamin Gaignard wrote:
+> dwc2 bindings require clock-names to be "otg".
+> Fix the example in amlogic,meson-g12a-usb-ctrl to follow this requirement.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+> ---
+>  Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-quirks or testing? Now I'm confused, which is it?
-
-I'm sure I've said this before (for DWC3), but it is better to have a
-compatible string for each implementation (usually an SoC) so you can
-address new quirks without a dtb change and continually adding new
-properties.
+Applied, thanks.
 
 Rob
