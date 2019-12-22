@@ -2,210 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5E8128C2C
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Dec 2019 02:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B43E128D14
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Dec 2019 06:48:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726318AbfLVBpL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 21 Dec 2019 20:45:11 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:46528 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726086AbfLVBpK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Dec 2019 20:45:10 -0500
-Received: by mail-io1-f69.google.com with SMTP id p206so9021642iod.13
-        for <linux-usb@vger.kernel.org>; Sat, 21 Dec 2019 17:45:10 -0800 (PST)
+        id S1725932AbfLVFrc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 22 Dec 2019 00:47:32 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:44996 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725776AbfLVFrc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 22 Dec 2019 00:47:32 -0500
+Received: by mail-pg1-f195.google.com with SMTP id x7so7099393pgl.11;
+        Sat, 21 Dec 2019 21:47:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=XjcArXgAKvyfXDBzvMFPB+lHDAxL1AfHT3DO6M8M8pE=;
+        b=QbGggnc4rIBvP1w2ApBWds25yNBz7SrOcuLl9VlQJCYjcADux3y+UglVZooSW4SdPa
+         aASLnMYWp9ViF6BO87ILXkqQ31ecI/dJ95aVsHGvEf4an7NFGG9VRRWXv0GlSWwXiOhe
+         SEeX6HvJncwtqsBCqvOYraM0XN9E025eXKDhV8/HP/yceXDtqY/XfKq96TJsCB7wbQ9d
+         3bzPdDFtPFSX5gh70p2FbaXB1nYNmUvODQkfOB6Z5yltAub3uX+1v4SlAssElHprNXV+
+         JSJ6elEQfi+pGIitKDnzijKqhSpQRTpGbLIcWcwB+FnKXRmNQHosDOEAxyQ6CR3uP7/A
+         7aXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=sm4+wUXkTCs2OOGVPDQmx501pVx6yNRgLcoZ5Pu14A4=;
-        b=k4vn/C0NWbq+SnimoUl9d3xP3IqBfGARM65ugIRTayzksShqtuZwYHJIsAxcJZYGRl
-         kt8fQHZU3moOi2MSCGmbipbunpFbnoljPZll9r1meC29RiviYKa61mGtLKyICWj5ZxJX
-         967+TcIq7QXVuP/mSH/PlxXC83lQA+RyaLXznAEyfzzE/guygZfCs+sKqX6l6EojEBTT
-         czkF4347pp3RGILQLo/zp5daO5pTWjaSH/C8AR36w3EgQqC9a+EIJTCGKY/7Zrn5H/Ux
-         IYlsQU/oE3YNU0OevNywtY163uD0eOouGncjLCuhcFWe/nC1KNPBECyE3e/3oYaLGO4D
-         OxXA==
-X-Gm-Message-State: APjAAAULgt9ul15lffdq7jkBnNAAwG/PzLt+mKNHbgtySlHmqqMymM7T
-        iKZvbAHsx2JAUFv/3boJgTmxyRocsLk0Ga9ZFkGuLt5x64E7
-X-Google-Smtp-Source: APXvYqygoTjVFuJd25kMYRH4C0iFAS6PHc6Nhy1XXiM0GWbRWTuOShGf7ZGDm7R8+z3qwRGDTTEPXcRUNie+0UQJK3BPVyCS+Yf/
-MIME-Version: 1.0
-X-Received: by 2002:a92:d151:: with SMTP id t17mr3292865ilg.175.1576979110007;
- Sat, 21 Dec 2019 17:45:10 -0800 (PST)
-Date:   Sat, 21 Dec 2019 17:45:10 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ab9d07059a410fae@google.com>
-Subject: KASAN: use-after-free Read in asix_suspend
-From:   syzbot <syzbot+514595412b80dc817633@syzkaller.appspotmail.com>
-To:     allison@lohutok.net, andreyknvl@google.com, davem@davemloft.net,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=XjcArXgAKvyfXDBzvMFPB+lHDAxL1AfHT3DO6M8M8pE=;
+        b=IyxwoT9i00bVRfWcdNIlSZbr7HwA9l8iV74/6bxObFOkfZegRZ+TB8VyMWAQFNSrEt
+         gmwCnfWmYTnC5iA6+OSgmlQm9+F5ZR8c7/k4MHjOxx4MV+60tRaXskfC1wYSf50zH7mI
+         Dg4Ua3ARt9VIzqr3Ry1j5SSUzrF3jBDAyN+3m9kdsw5xIO2zwpzk6SrYxbqK4i1aOecm
+         FCoJDMkruyUapWbLj6ZVsvpm32aSdnJTbF783ZdNyKk7rqpMAOTT9pbb4EhGdsdHFCgA
+         8Rh24sV7a7eK3Sep/TxgqQC3MZiF4nmDti4TmrclaIkZ9A5TOMbK5mfibjChowl8HJ87
+         vKCQ==
+X-Gm-Message-State: APjAAAVhI2B88yfDOTg9UwP9P/2VwZjBmEzWbnHiDz315b77Z1hQ9x0K
+        3hKZIae3W7x385CfbQxBVHM=
+X-Google-Smtp-Source: APXvYqx/CXunbtTsMsCA0OTUahlAsoQ/vNvrN9YML3yeUrMBpoBnwEnYlPtdizk64BmU3JLJ3C6eAQ==
+X-Received: by 2002:a63:d017:: with SMTP id z23mr24720347pgf.110.1576993651284;
+        Sat, 21 Dec 2019 21:47:31 -0800 (PST)
+Received: from debian.net.fpt ([2405:4800:58f7:229b:e8c2:8912:129c:d0d])
+        by smtp.gmail.com with ESMTPSA id o2sm10880285pjo.26.2019.12.21.21.47.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Dec 2019 21:47:30 -0800 (PST)
+From:   Phong Tran <tranmanphong@gmail.com>
+To:     syzbot+514595412b80dc817633@syzkaller.appspotmail.com,
+        davem@davemloft.net, gregkh@linuxfoundation.org, oneukum@suse.com
+Cc:     allison@lohutok.net, andreyknvl@google.com,
         kstewart@linuxfoundation.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org, netdev@vger.kernel.org,
         swinslow@gmail.com, syzkaller-bugs@googlegroups.com,
         tglx@linutronix.de, tranmanphong@gmail.com, zhang.run@zte.com.cn
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Subject: [PATCH] ax88172a: fix wrong reading MAC malicious device
+Date:   Sun, 22 Dec 2019 12:47:13 +0700
+Message-Id: <20191222054713.14887-1-tranmanphong@gmail.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <000000000000ab9d07059a410fae@google.com>
+References: <000000000000ab9d07059a410fae@google.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Crash log KASAN: use-after-free Read in asix_suspend
 
-syzbot found the following crash on:
+https://syzkaller.appspot.com/text?tag=CrashLog&x=1330a2c6e00000
+(unnamed net_device) (uninitialized): Failed to read MAC address: 0
 
-HEAD commit:    ecdf2214 usb: gadget: add raw-gadget interface
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=1330a2c6e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b06a019075333661
-dashboard link: https://syzkaller.appspot.com/bug?extid=514595412b80dc817633
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=108f9ac1e00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=152dc6c1e00000
+asix_read_cmd() with ret = 0 but this is a error. Fix the checking
+return value condition.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
 Reported-by: syzbot+514595412b80dc817633@syzkaller.appspotmail.com
 
-usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-usb 1-1: config 0 descriptor??
-hub 1-1:0.138: bad descriptor, ignoring hub
-hub: probe of 1-1:0.138 failed with error -5
-asix 1-1:0.138 (unnamed net_device) (uninitialized): Failed to read MAC  
-address: 0
-asix 1-1:0.138 eth1: register 'asix' at usb-dummy_hcd.0-1, ASIX AX88172A  
-USB 2.0 Ethernet, 76:16:76:e7:25:cd
-==================================================================
-BUG: KASAN: use-after-free in asix_suspend+0xb9/0xc0  
-drivers/net/usb/asix_devices.c:617
-Read of size 8 at addr ffff8881d1984288 by task kworker/0:1/12
+Tested by:
+https://groups.google.com/d/msg/syzkaller-bugs/0hHExZ030LI/yge-2Q_9BAAJ
 
-CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.5.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xef/0x16e lib/dump_stack.c:118
-  print_address_description.constprop.0+0x16/0x200 mm/kasan/report.c:374
-  __kasan_report.cold+0x37/0x7f mm/kasan/report.c:506
-  kasan_report+0xe/0x20 mm/kasan/common.c:639
-  asix_suspend+0xb9/0xc0 drivers/net/usb/asix_devices.c:617
-  usb_suspend_interface drivers/usb/core/driver.c:1203 [inline]
-  usb_suspend_both+0x260/0x7b0 drivers/usb/core/driver.c:1308
-  usb_runtime_suspend+0x46/0x120 drivers/usb/core/driver.c:1846
-  __rpm_callback+0x27e/0x3c0 drivers/base/power/runtime.c:357
-  rpm_callback+0x105/0x230 drivers/base/power/runtime.c:484
-  rpm_suspend+0x37a/0x1300 drivers/base/power/runtime.c:629
-  __pm_runtime_suspend+0xbb/0x150 drivers/base/power/runtime.c:1048
-  pm_runtime_put_sync_autosuspend include/linux/pm_runtime.h:252 [inline]
-  usb_new_device.cold+0xaee/0xe79 drivers/usb/core/hub.c:2567
-  hub_port_connect drivers/usb/core/hub.c:5184 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
-  port_event drivers/usb/core/hub.c:5470 [inline]
-  hub_event+0x1e59/0x3860 drivers/usb/core/hub.c:5552
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2264
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2410
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Allocated by task 12:
-  save_stack+0x1b/0x80 mm/kasan/common.c:72
-  set_track mm/kasan/common.c:80 [inline]
-  __kasan_kmalloc mm/kasan/common.c:513 [inline]
-  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:486
-  kmalloc include/linux/slab.h:556 [inline]
-  kzalloc include/linux/slab.h:670 [inline]
-  ax88172a_bind+0x9f/0x7a2 drivers/net/usb/ax88172a.c:191
-  usbnet_probe+0xb43/0x2470 drivers/net/usb/usbnet.c:1737
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0x1480/0x1c20 drivers/base/core.c:2487
-  usb_set_configuration+0xe67/0x1740 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0x1480/0x1c20 drivers/base/core.c:2487
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2537
-  hub_port_connect drivers/usb/core/hub.c:5184 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
-  port_event drivers/usb/core/hub.c:5470 [inline]
-  hub_event+0x1e59/0x3860 drivers/usb/core/hub.c:5552
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2264
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2410
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Freed by task 12:
-  save_stack+0x1b/0x80 mm/kasan/common.c:72
-  set_track mm/kasan/common.c:80 [inline]
-  kasan_set_free_info mm/kasan/common.c:335 [inline]
-  __kasan_slab_free+0x129/0x170 mm/kasan/common.c:474
-  slab_free_hook mm/slub.c:1425 [inline]
-  slab_free_freelist_hook mm/slub.c:1458 [inline]
-  slab_free mm/slub.c:3005 [inline]
-  kfree+0xda/0x310 mm/slub.c:3957
-  ax88172a_bind.cold+0x4d/0x1e8 drivers/net/usb/ax88172a.c:250
-  usbnet_probe+0xb43/0x2470 drivers/net/usb/usbnet.c:1737
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0x1480/0x1c20 drivers/base/core.c:2487
-  usb_set_configuration+0xe67/0x1740 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0x1480/0x1c20 drivers/base/core.c:2487
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2537
-  hub_port_connect drivers/usb/core/hub.c:5184 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
-  port_event drivers/usb/core/hub.c:5470 [inline]
-  hub_event+0x1e59/0x3860 drivers/usb/core/hub.c:5552
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2264
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2410
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-The buggy address belongs to the object at ffff8881d1984280
-  which belongs to the cache kmalloc-64 of size 64
-The buggy address is located 8 bytes inside of
-  64-byte region [ffff8881d1984280, ffff8881d19842c0)
-The buggy address belongs to the page:
-page:ffffea0007466100 refcount:1 mapcount:0 mapping:ffff8881da003180  
-index:0x0
-raw: 0200000000000200 ffffea00074c2100 0000000a0000000a ffff8881da003180
-raw: 0000000000000000 0000000080200020 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
-  ffff8881d1984180: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
-  ffff8881d1984200: 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc
-> ffff8881d1984280: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
-                       ^
-  ffff8881d1984300: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
-  ffff8881d
-
-
+Signed-off-by: Phong Tran <tranmanphong@gmail.com>
 ---
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/net/usb/ax88172a.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/net/usb/ax88172a.c b/drivers/net/usb/ax88172a.c
+index af3994e0853b..525900896ce0 100644
+--- a/drivers/net/usb/ax88172a.c
++++ b/drivers/net/usb/ax88172a.c
+@@ -197,6 +197,8 @@ static int ax88172a_bind(struct usbnet *dev, struct usb_interface *intf)
+ 	/* Get the MAC address */
+ 	ret = asix_read_cmd(dev, AX_CMD_READ_NODE_ID, 0, 0, ETH_ALEN, buf, 0);
+ 	if (ret < ETH_ALEN) {
++		if (ret >= 0)
++			ret = -ENXIO;
+ 		netdev_err(dev->net, "Failed to read MAC address: %d\n", ret);
+ 		goto free;
+ 	}
+-- 
+2.20.1
+
