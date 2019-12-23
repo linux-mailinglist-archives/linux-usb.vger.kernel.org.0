@@ -2,130 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED89E1297BB
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Dec 2019 15:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD8D1298A8
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Dec 2019 17:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726860AbfLWOxP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Dec 2019 09:53:15 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:38042 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726682AbfLWOxP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Dec 2019 09:53:15 -0500
-Received: by mail-pj1-f68.google.com with SMTP id l35so7603289pje.3;
-        Mon, 23 Dec 2019 06:53:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=3HYYz4nX1W0aJ3i8Yqd286kyh4DuRONRoG/BRh5FLZM=;
-        b=FBDmb6akcXnRiy4gGu86k3JBWheD7EF8ZJShoGDQKnd3gH9eVeNeCLS+juVOdYYUeg
-         ekcNjKvoqGR/iKqvpVI5Ba8BIJBqBQETnGcgBo/+I7yrkgJSbAZwDcLnGRRBCNA8DXJJ
-         YfuTY+j/6oYNlDceqx4BTi7rf8PQZcqeUKu0jbhhAFiF1QaqXwp72vLZ145sZ46vO6et
-         5Pnini8/3ndy41lpqZuJFA8M8drxuawVrfQ5xAfOfO5m+9YVnyDROoTsjXH8zmWzS5oI
-         PgxXThJ8xlzK9gCPE0i+YP1I4ZPgXqgd4e49VJuJhtQSus03DHvOUVFML/6gImeLZlOv
-         GgXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=3HYYz4nX1W0aJ3i8Yqd286kyh4DuRONRoG/BRh5FLZM=;
-        b=eb+sKqrByP9qFsTgyJ4HtFq/KKvqgOFOMC0CwFZBCIJhVoWKrEi7XhyFaWBAdep1JT
-         tINJqx406dFO0REo72VqWoQyskzer6imKSR+P7QI8y3rfLQuhdNUyG6v3lbSbBseg3O9
-         DT+ni3NBt3gx3DwaXcHgej79azBuqzSKpmJy5FEnHHyPsbBfdG1P50FVZMhVgMsaAeTf
-         Q/6UnmGtl7GZgLguCmbkGtF0pGMW06gJgmerySZ5mBTk77Pop3cOHCWuJmpEwGgmSMOf
-         LUm7f3HOWnKEjLQcOahVqWnlRdD5UMIzyqQ8U0C82jntMdsCUS80qZ1GlcgRXiYhqNFv
-         zc7w==
-X-Gm-Message-State: APjAAAWIWQ9Elxrz+H2uUOdgTVwJs88HrAn36FxbXESvcZGJdmIJhSD1
-        K/iGW5sMrokd3NecWVGORcQ=
-X-Google-Smtp-Source: APXvYqxcDbt12KSYdO549nYw+DSqKGA6Tdn3bVL7y1mSg9juQo+yboExHfaY7Nv7BuzAG8wiOUqI7w==
-X-Received: by 2002:a17:902:8d8c:: with SMTP id v12mr9725188plo.336.1577112794685;
-        Mon, 23 Dec 2019 06:53:14 -0800 (PST)
-Received: from localhost (64.64.229.47.16clouds.com. [64.64.229.47])
-        by smtp.gmail.com with ESMTPSA id 100sm20590383pjo.17.2019.12.23.06.53.13
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 23 Dec 2019 06:53:14 -0800 (PST)
-Date:   Mon, 23 Dec 2019 22:53:11 +0800
-From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 08/10] usb: phy: tegra: Use u32 for hardware register
- variables
-Message-ID: <20191223145311.GA9183@nuc8i5>
-References: <20191220015238.9228-1-digetx@gmail.com>
- <20191220015238.9228-9-digetx@gmail.com>
- <20191222132227.GA7096@nuc8i5>
- <6c0fbeb2-3db2-f331-fc0a-a900241a32f5@gmail.com>
+        id S1726893AbfLWQ0r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Dec 2019 11:26:47 -0500
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:56982 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726744AbfLWQ0r (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Dec 2019 11:26:47 -0500
+Received: from callcc.thunk.org (guestnat-104-133-0-111.corp.google.com [104.133.0.111] (may be forged))
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id xBNGQJ8k010341
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 Dec 2019 11:26:20 -0500
+Received: by callcc.thunk.org (Postfix, from userid 15806)
+        id 4BCF9420822; Mon, 23 Dec 2019 11:26:19 -0500 (EST)
+Date:   Mon, 23 Dec 2019 11:26:19 -0500
+From:   "Theodore Y. Ts'o" <tytso@mit.edu>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Andrea Vai <andrea.vai@unipv.it>,
+        "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: AW: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+Message-ID: <20191223162619.GA3282@mit.edu>
+References: <8196b014b1a4d91169bf3b0d68905109aeaf2191.camel@unipv.it>
+ <20191210080550.GA5699@ming.t460p>
+ <20191211024137.GB61323@mit.edu>
+ <20191211040058.GC6864@ming.t460p>
+ <20191211160745.GA129186@mit.edu>
+ <20191211213316.GA14983@ming.t460p>
+ <f38db337cf26390f7c7488a0bc2076633737775b.camel@unipv.it>
+ <20191218094830.GB30602@ming.t460p>
+ <b1b6a0e9d690ecd9432025acd2db4ac09f834040.camel@unipv.it>
+ <20191223130828.GA25948@ming.t460p>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6c0fbeb2-3db2-f331-fc0a-a900241a32f5@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20191223130828.GA25948@ming.t460p>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 23, 2019 at 12:48:09AM +0300, Dmitry Osipenko wrote:
-> 22.12.2019 16:24, Dejin Zheng пишет:
-> > On Fri, Dec 20, 2019 at 04:52:36AM +0300, Dmitry Osipenko wrote:
-> >> There is a mix of u32/ULONG usage in the driver's code. Let's switch to
-> >> u32 uniformly, for consistency.
-> >>
-> >> Suggested-by: Thierry Reding <thierry.reding@gmail.com>
-> >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> >> ---
-> >>  drivers/usb/phy/phy-tegra-usb.c | 28 +++++++++++++++-------------
-> >>  1 file changed, 15 insertions(+), 13 deletions(-)
-> >>
-> >> diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
-> >> index d5739b6e0b6c..551c94e3877a 100644
-> >> --- a/drivers/usb/phy/phy-tegra-usb.c
-> >> +++ b/drivers/usb/phy/phy-tegra-usb.c
-> >> @@ -202,7 +202,7 @@ static inline struct tegra_usb_phy *to_tegra_usb_phy(struct usb_phy *u_phy)
-> >>  static void set_pts(struct tegra_usb_phy *phy, u8 pts_val)
-> >>  {
-> >>  	void __iomem *base = phy->regs;
-> >> -	unsigned long val;
-> >> +	u32 val;
-> >>  
-> >>  	if (phy->soc_config->has_hostpc) {
-> >>  		val = readl_relaxed(base + TEGRA_USB_HOSTPC1_DEVLC);
-> >> @@ -221,7 +221,7 @@ static void set_pts(struct tegra_usb_phy *phy, u8 pts_val)
-> >>  static void set_phcd(struct tegra_usb_phy *phy, bool enable)
-> >>  {
-> >>  	void __iomem *base = phy->regs;
-> >> -	unsigned long val;
-> >> +	u32 val;
-> >>  
-> >>  	if (phy->soc_config->has_hostpc) {
-> >>  		val = readl_relaxed(base + TEGRA_USB_HOSTPC1_DEVLC);
-> >> @@ -320,7 +320,8 @@ static int utmip_pad_power_on(struct tegra_usb_phy *phy)
-> >>  {
-> >>  	struct tegra_utmip_config *config = phy->config;
-> >>  	void __iomem *base = phy->pad_regs;
-> >> -	unsigned long val, flags;
-> >> +	unsigned long flags;
-> >> +	u32 val;
-> > Why are you still using unsigned long here?
+On Mon, Dec 23, 2019 at 09:08:28PM +0800, Ming Lei wrote:
 > 
-> Please take a look at [1][2], the types are matching callees.
+> From the above trace:
 > 
-> [1]
-> https://elixir.bootlin.com/linux/v5.5-rc2/source/include/linux/spinlock.h#L249
+>   b'blk_mq_sched_request_inserted'
+>   b'blk_mq_sched_request_inserted'
+>   b'dd_insert_requests'
+>   b'blk_mq_sched_insert_requests'
+>   b'blk_mq_flush_plug_list'
+>   b'blk_flush_plug_list'
+>   b'io_schedule_prepare'
+>   b'io_schedule'
+>   b'rq_qos_wait'
+>   b'wbt_wait'
+>   b'__rq_qos_throttle'
+>   b'blk_mq_make_request'
+>   b'generic_make_request'
+>   b'submit_bio'
+>   b'ext4_io_submit'
+>   b'ext4_writepages'
+>   b'do_writepages'
+>   b'__filemap_fdatawrite_range'
+>   b'ext4_release_file'
+>   b'__fput'
+>   b'task_work_run'
+>   b'exit_to_usermode_loop'
+>   b'do_syscall_64'
+>   b'entry_SYSCALL_64_after_hwframe'
+>     b'cp' [19863]
+>     4400
 > 
-> [2]
-> https://elixir.bootlin.com/linux/v5.5-rc2/source/include/asm-generic/io.h#L297
+> So this write is clearly from 'cp' process, and it should be one
+> ext4 fs issue.
 
-Okay, thanks for your explanation.
+We need a system call trace of the cp process, to understand what
+system call is resulting in fput, (eg., I assume it's close(2) but
+let's be sure), and often it's calling that system call.
 
-Dejin
+What cp process is it?  Is it from shellutils?  Is it from busybox?
+
+     		   	      	   		- Ted
