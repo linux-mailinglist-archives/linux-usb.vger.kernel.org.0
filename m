@@ -2,113 +2,227 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0877C129A96
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Dec 2019 20:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 461E3129B0B
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Dec 2019 22:25:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726903AbfLWTx2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Dec 2019 14:53:28 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:59299 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726766AbfLWTx2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Dec 2019 14:53:28 -0500
-Received: from callcc.thunk.org (guestnat-104-133-0-111.corp.google.com [104.133.0.111] (may be forged))
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id xBNJr19e001916
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 Dec 2019 14:53:02 -0500
-Received: by callcc.thunk.org (Postfix, from userid 15806)
-        id 1C82A420822; Mon, 23 Dec 2019 14:53:01 -0500 (EST)
-Date:   Mon, 23 Dec 2019 14:53:01 -0500
-From:   "Theodore Y. Ts'o" <tytso@mit.edu>
-To:     Andrea Vai <andrea.vai@unipv.it>
-Cc:     Ming Lei <ming.lei@redhat.com>,
-        "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: AW: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-Message-ID: <20191223195301.GC3282@mit.edu>
-References: <20191211160745.GA129186@mit.edu>
- <20191211213316.GA14983@ming.t460p>
- <f38db337cf26390f7c7488a0bc2076633737775b.camel@unipv.it>
- <20191218094830.GB30602@ming.t460p>
- <b1b6a0e9d690ecd9432025acd2db4ac09f834040.camel@unipv.it>
- <20191223130828.GA25948@ming.t460p>
- <20191223162619.GA3282@mit.edu>
- <4c85fd3f2ec58694cc1ff7ab5c88d6e11ab6efec.camel@unipv.it>
- <20191223172257.GB3282@mit.edu>
- <bb5d395fe47f033be0b8ed96cbebf8867d2416c4.camel@unipv.it>
+        id S1726861AbfLWVZH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Dec 2019 16:25:07 -0500
+Received: from mail-io1-f68.google.com ([209.85.166.68]:44610 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726817AbfLWVZH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Dec 2019 16:25:07 -0500
+Received: by mail-io1-f68.google.com with SMTP id b10so17405267iof.11;
+        Mon, 23 Dec 2019 13:25:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Z+IJjZvvHtC9PAvUtdm8hS7l9OXtbifWK1RLCc5V4WY=;
+        b=Wl5+xrlKbGFGYnthfIO9SHO5ApUh8vQWBXmcGMpRRvVuB6gs6PqMQFBVIm/g2t8AzK
+         HXEUiMYnxZvIvcWroHkNpZbP87mF3AKa3F4dhAArDILGclHkus2foICoVsnnjdh9kQ0B
+         Kvz4YAX6d4C0RphuDrTUinbVZ4jU52oiEiOIHnouP7JhNx7+sjzKP5MqUsf26z4RimwC
+         5EsvlIzce1ZdPtelTNqBjkePl3sfxY3jGXhcSxmkKAmFii5W/+iMZRxHXE8qIzSn+cdx
+         bvqr8UtVQQulT9sVH3v7URDcYRxkJ0iGZfPHWRxnwVaSgNVCC0d3KbvaYepi9LxUY3Ix
+         tf+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z+IJjZvvHtC9PAvUtdm8hS7l9OXtbifWK1RLCc5V4WY=;
+        b=bWxt29DAd8ntnjA5GRNBGE4MrLxjInfx9DOjNTAuvjCoG9uZgICpRIeFEYxox7/bj/
+         Nw2XJ9eNsfWMxL5pBrui89mHPFxZuRATlFlAAhSkjSyR70cF2cgwnqdOfYOMGStK3vYR
+         6veKbT/7CtKEZGn4HYJ6FVSrjn+4saBBnVDrYwQHrnL+d1DJ3zXOYvwkAFfxkrydNFMZ
+         gX/dq4qLBdS5GXLoRzQ7wDyry5LRd4YWBOfzKthUMGtYNZWuVAydM3NkITYLiGskn8oJ
+         AuQk4JUujmfNnbRjykidKKVlqc2xCebzlet+SV9xsEUh0o4ahZzotCbZE4QMLpoJvZke
+         PLXQ==
+X-Gm-Message-State: APjAAAU7FK/9Bwr0qBkIwT7bYJCRicaFBV1doeZAw2+fZwDOZDDPrfC6
+        G3w0z0p0TWbwVx/ElWtblIfxcp9PQ4/1nPllFXY=
+X-Google-Smtp-Source: APXvYqzKyI9ZqbATSTk7ykfFNhYpDDFOPlSEMmy0+nFSKVR+kGNuoVrsnD6uD8iSavnFvFP9qEXLqW4RaQHmQQfaGKM=
+X-Received: by 2002:a6b:b20a:: with SMTP id b10mr21990461iof.87.1577136306071;
+ Mon, 23 Dec 2019 13:25:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bb5d395fe47f033be0b8ed96cbebf8867d2416c4.camel@unipv.it>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+References: <20191210003135.32427-1-jassisinghbrar@gmail.com> <87eexclkj0.fsf@gmail.com>
+In-Reply-To: <87eexclkj0.fsf@gmail.com>
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Mon, 23 Dec 2019 15:24:54 -0600
+Message-ID: <CABb+yY00xOZw2uw6oK3N6RBcOurJjhiPXHs0ShCSVauwZn6TNw@mail.gmail.com>
+Subject: Re: [PATCHv1 2/2] usb: gadget: add udc driver for max3420
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jassi Brar <jaswinder.singh@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 23, 2019 at 07:45:57PM +0100, Andrea Vai wrote:
-> basically, it's:
-> 
->   mount UUID=$uuid /mnt/pendrive
->   SECONDS=0
->   cp $testfile /mnt/pendrive
->   umount /mnt/pendrive
->   tempo=$SECONDS
-> 
-> and it copies one file only. Anyway, you can find the whole script
-> attached.
+Hi Felipe,
 
-OK, so whether we are doing the writeback at the end of cp, or when
-you do the umount, it's probably not going to make any difference.  We
-can get rid of the stack trace in question by changing the script to
-be basically:
+On Tue, Dec 10, 2019 at 1:13 AM Felipe Balbi <balbi@kernel.org> wrote:
 
-mount UUID=$uuid /mnt/pendrive
-SECONDS=0
-rm -f /mnt/pendrive/$testfile
-cp $testfile /mnt/pendrive
-umount /mnt/pendrive
-tempo=$SECONDS
+> > +#define MAX3420_MAX_EPS              4
+> > +#define EP_MAX_PACKET                64  /* Same for all Endpoints */
+> > +#define EPNAME_SIZE          16  /* Buffer size for endpoint name */
+> > +
+> > +#define ACKSTAT              BIT(0)
+>
+> Let's prepend everything with MAX3420_.
+>
+OK
 
-I predict if you do that, you'll see that all of the time is spent in
-the umount, when we are trying to write back the file.
+> > +
+> > +#define MAX3420_REG_EPSTALLS 9
+> > +     #define bACKSTAT        BIT(6)
+>
+> let's avoid CaMeLcAsE :-)
+>
+ok
 
-I really don't think then this is a file system problem at all.  It's
-just that USB I/O is slow, for whatever reason.  We'll see a stack
-trace in the writeback code waiting for the I/O to be completed, but
-that doesn't mean that the root cause is in the writeback code or in
-the file system which is triggering the writeback.
+> > +#define field(val, bit)      ((val) << (bit))
+>
+> The kernel has a bunch of helpers for this. Look at BIT() and GENMASK()
+> for example.
+>
+ok
 
-I suspect the next step is use a blktrace, to see what kind of I/O is
-being sent to the USB drive, and how long it takes for the I/O to
-complete.  You might also try to capture the output of "iostat -x 1"
-while the script is running, and see what the difference might be
-between a kernel version that has the problem and one that doesn't,
-and see if that gives us a clue.
+> > +struct max3420_req {
+> > +     struct usb_request usb_req;
+> > +     struct list_head queue;
+> > +     struct max3420_ep *ep;
+> > +};
+> > +
+> > +struct max3420_ep {
+> > +     struct max3420_udc *udc;
+> > +     struct list_head queue;
+> > +     char name[EPNAME_SIZE];
+> > +     unsigned int maxpacket;
+> > +     struct usb_ep ep_usb;
+>
+> considering you'll run container_of() on this ep_usb field, it's wise to
+> put it as the first field in the struct. That way, compiler can optimize
+> container_of() into a simple type cast.
+>
+ok
 
-> > And then send me
-> btw, please tell me if "me" means only you or I cc: all the
-> recipients, as usual
+> > +struct max3420_udc {
+> > +     struct max3420_ep ep[MAX3420_MAX_EPS];
+> > +     struct usb_gadget_driver *driver;
+> > +     struct task_struct *thread_task;
+> > +     int remote_wkp, is_selfpowered;
+> > +     bool vbus_active, softconnect;
+> > +     struct usb_ctrlrequest setup;
+> > +     struct mutex spi_bus_mutex;
+> > +     struct max3420_req ep0req;
+> > +     struct usb_gadget gadget;
+>
+> likewise with gadget field.
+>
+ok
 
-Well, I don't think we know what the root cause is.  Ming is focusing
-on that stack trace, but I think it's a red herring.....  And if it's
-not a file system problem, then other people will be best suited to
-debug the issue.
+>> +     spi_message_add_tail(&transfer, &msg);
+>> +     spi_sync(spi, &msg);
+> Not checking return code?
+ok.
 
-   	      	     	   	      	    - Ted
+> > +     if (todo == ENABLE) {
+> > +             epdis &= ~BIT(ep->id + 4);
+> > +             epien |= BIT(ep->id + 1);
+> > +     } else {
+> > +             epdis |= BIT(ep->id + 4);
+> > +             epien &= ~BIT(ep->id + 1);
+> > +     }
+> > +
+> > +     spi_wr8(udc, MAX3420_REG_CLRTOGS, epdis);
+> > +     spi_wr8(udc, MAX3420_REG_EPIEN, epien);
+> > +
+> > +     return 1;
+>
+> Usually we return 0 on success and a negative errno on failure. What do
+> you mean here by return 1?
+>
+ok
+
+
+> > +             ep->halted = 0;
+> > +             epstalls &= ~BIT(ep->id + 1);
+> > +             clrtogs = spi_rd8(udc, MAX3420_REG_CLRTOGS);
+> > +             clrtogs |= BIT(ep->id + 1);
+> > +             spi_wr8(udc, MAX3420_REG_CLRTOGS, clrtogs);
+> > +     }
+> > +     spi_wr8(udc, MAX3420_REG_EPSTALLS, epstalls | bACKSTAT);
+> > +
+> > +     return 1;
+>
+> and here?
+>
+ok
+
+
+> > +
+> > +     /* Clear Remote-WkUp Signal*/
+> > +     usbctl = spi_rd8(udc, MAX3420_REG_USBCTL);
+> > +     usbctl &= ~bSIGRWU;
+> > +     spi_wr8(udc, MAX3420_REG_USBCTL, usbctl);
+> > +
+> > +     udc->suspended = false;
+> > +
+> > +     return 1;
+>
+> here?
+>
+ok
+
+
+> > +
+> > +static void __max3420_start(struct max3420_udc *udc)
+> > +{
+> > +     u8 val;
+> > +
+> > +     /* Need this delay if bus-powered */
+> > +     msleep_interruptible(250);
+>
+> should you check if you're bus powered?
+>
+for some reason, even for self-powered, it helped reliability.
+
+
+> > +
+> > +static int do_data(struct max3420_udc *udc, int ep_id, int in)
+>
+> add a max3420_ prefix like all other functions
+>
+ok
+
+
+> > +
+> > +static int max3420_thread(void *dev_id)
+>
+> Why do you need this thread? Sure you can't live without it?
+>
+All the slow spi-bus transfers are handled at one place here without
+blocking any api call. IMO it is cleaner and easier to manage.
+
+
+> > +static struct usb_request *max3420_alloc_request(struct usb_ep *_ep,
+> > +                                                 gfp_t gfp_flags)
+> > +{
+> > +     struct max3420_ep *ep = to_max3420_ep(_ep);
+> > +     struct max3420_req *req;
+> > +
+> > +     req = kzalloc(sizeof(*req), gfp_flags);
+> > +     if (!req)
+> > +             return NULL;
+> > +
+> > +     req->ep = ep;
+> > +     INIT_LIST_HEAD(&req->queue);
+>
+> unnecessary list initialization
+>
+ok.
+
+Thank you!
