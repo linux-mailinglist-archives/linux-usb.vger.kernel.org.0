@@ -2,126 +2,184 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A08AF12997C
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Dec 2019 18:38:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D9F1299F2
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Dec 2019 19:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726756AbfLWRi3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 23 Dec 2019 12:38:29 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:37261 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726718AbfLWRi3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Dec 2019 12:38:29 -0500
-Received: from mail-pg1-f197.google.com ([209.85.215.197])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1ijRf0-0006jt-Va
-        for linux-usb@vger.kernel.org; Mon, 23 Dec 2019 17:38:27 +0000
-Received: by mail-pg1-f197.google.com with SMTP id l13so11000283pgt.5
-        for <linux-usb@vger.kernel.org>; Mon, 23 Dec 2019 09:38:26 -0800 (PST)
+        id S1726874AbfLWSqD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Dec 2019 13:46:03 -0500
+Received: from mail-wr1-f54.google.com ([209.85.221.54]:37809 "EHLO
+        mail-wr1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726817AbfLWSqC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Dec 2019 13:46:02 -0500
+Received: by mail-wr1-f54.google.com with SMTP id w15so4973539wru.4
+        for <linux-usb@vger.kernel.org>; Mon, 23 Dec 2019 10:46:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version;
+        bh=w5CMUkOgI9O50Lpl1QlGs5TpfGYKinCiTcdt0eBfYEo=;
+        b=1xfOpsDewZMEL8VURraPRYQC54Kr6g5gmBmvHkk+Wa4T+65VVoUvl5uQUYkQUlfjER
+         RTOMeycBczuwQiFOj0Ndy053ltaRrVXZzEIGIJmTL0hltq3d1RAUcf46EZ0KTlVG8mRI
+         oxVE2yNmnimz+Rw6yr4DtRKQtvSesKe7g8O628dbIs9zx8M6NPoZCXzYc01paKsZEcKK
+         5byZFlT947iY2xIYKNNORSOlMd4y+GDvuk7gaRasO0Gyh0Qr1ZKTtDmGGoMWC5t3oziu
+         gry34a4C+QIeIieVjX33VL8TUBlXws33je4Byo03PMQSLfqMB2VT0NdLTjWpWUazkg6z
+         Wm4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=DxkImzWVfef1xCpc56sb8FA6DnZxPPdiLSLtxzu4Snk=;
-        b=HCINTP94FcHEqUJFJKq7Yy8KgdEqF3BVcmZnIIHF9oQscaVZYrCGJ53WC8LXSGpXRH
-         DXHi/0RfNjVhU0CqQn65gNdmcsIrsMKXZh+gI+P9PeQIZejDxk40JB9GWqsTbUFUalMh
-         SF9LyTerhyF7P9JoePGTz7QAVwHo4YOjuuuft2Jd921ybl/qwMICPjRvgpnQdN4cPQjh
-         Dm133kD9IjwIrasq5PQwB2uHhVIal+kZ8zp3rS9ncE3OBAREI1z6rkg0PUqKPmRkfI7K
-         aMSTWU8cG656NXE0YcMabwWv/y8dMyNlS8I97yVMQfxF4y3U1BmlFDeJUK9r0lVTF1aI
-         s7OQ==
-X-Gm-Message-State: APjAAAVrZiuZpT9bh8RCKdlkIDbUj9CFH7VJLknlJz4048cJJHUNCerW
-        8iB8GNQ7ejMWB3EItdW/DHOSIFlTiTYmeAZ0ga8Jy3jGuNCgqjMqHNQMWCh0pLWj9L8nXofTnLo
-        rmBmf4ueRQXRTjjaQwmp1AfCSykJVrFXk4iTXQQ==
-X-Received: by 2002:a17:90a:8902:: with SMTP id u2mr167892pjn.85.1577122324526;
-        Mon, 23 Dec 2019 09:32:04 -0800 (PST)
-X-Google-Smtp-Source: APXvYqz95yQJjQxTt2znMb73aBoBh3sICPYV2Bs/djISQo4DnHkIWiWB5izrBxMRSwUF7z2lyuvb9g==
-X-Received: by 2002:a17:90a:8902:: with SMTP id u2mr167845pjn.85.1577122324151;
-        Mon, 23 Dec 2019 09:32:04 -0800 (PST)
-Received: from 2001-b011-380f-35a3-a059-d6a4-0e9a-8360.dynamic-ip6.hinet.net (2001-b011-380f-35a3-a059-d6a4-0e9a-8360.dynamic-ip6.hinet.net. [2001:b011:380f:35a3:a059:d6a4:e9a:8360])
-        by smtp.gmail.com with ESMTPSA id e10sm26233451pfj.7.2019.12.23.09.32.02
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 23 Dec 2019 09:32:03 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3608.40.2.2.4\))
-Subject: Re: [PATCH v2 2/2] USB: core: Attempt power cycle port when it's in
- eSS.Disabled state
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <c8fc54db-9037-3635-f6a7-d6220e5d02cb@linux.intel.com>
-Date:   Tue, 24 Dec 2019 01:32:00 +0800
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version;
+        bh=w5CMUkOgI9O50Lpl1QlGs5TpfGYKinCiTcdt0eBfYEo=;
+        b=iwMweYAWz5obPIW2GEtvP7Z+XQU/XMDoPQI9vWwCGAX+VVc7XYOlDJ2PuW9P8lfV9i
+         7jLW2s7OjKgKBRtON1LYcYu4HDpoGgkCb55eET8TKmKLZ5On1eOh7/AEHv1CBwVLJYvs
+         bSg6/UG9wAiiT9sLUB+1mlPJSfkwAcXtlXlZ1XZ1rImvn7Wor71/iiVvFdg9kBpdQxU5
+         2SzUxzq8vd0lCykH5fm4VVakY6d9ALt04I0G7u2i+JtPBGB2xwkr1G2vKXA862K+pWqy
+         5tl1IglZYKt/aPaSo7/1LzNfAeg2ZMqinHgTIQZBafke35d6yRLds5ro3u3tXKqUeaDX
+         vQjg==
+X-Gm-Message-State: APjAAAWD+IJMiCt3csVIoVTO7AM8P4ZoY4r29sciCRInS6cpjczh/NLB
+        zhzxv0JjzPKeCoZoP4b8V6u5OQ==
+X-Google-Smtp-Source: APXvYqyNnBk0/fE1k94km79FHzdxuXoFKLWnVDf7fsGDlDpvpLkztIYGych+tWyoVBZAKZfzOmxCSQ==
+X-Received: by 2002:a05:6000:1241:: with SMTP id j1mr33177089wrx.26.1577126759640;
+        Mon, 23 Dec 2019 10:45:59 -0800 (PST)
+Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
+        by smtp.gmail.com with ESMTPSA id k8sm21275041wrl.3.2019.12.23.10.45.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Dec 2019 10:45:58 -0800 (PST)
+Message-ID: <bb5d395fe47f033be0b8ed96cbebf8867d2416c4.camel@unipv.it>
+Subject: Re: AW: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+From:   Andrea Vai <andrea.vai@unipv.it>
+To:     "Theodore Y. Ts'o" <tytso@mit.edu>
+Cc:     Ming Lei <ming.lei@redhat.com>,
+        "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
         USB list <linux-usb@vger.kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <9883D946-77E0-4645-89FB-0B61D9E84178@canonical.com>
-References: <Pine.LNX.4.44L0.1912111006280.1549-100000@iolanthe.rowland.org>
- <c8fc54db-9037-3635-f6a7-d6220e5d02cb@linux.intel.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-X-Mailer: Apple Mail (2.3608.40.2.2.4)
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Date:   Mon, 23 Dec 2019 19:45:57 +0100
+In-Reply-To: <20191223172257.GB3282@mit.edu>
+References: <20191211024137.GB61323@mit.edu>
+         <20191211040058.GC6864@ming.t460p> <20191211160745.GA129186@mit.edu>
+         <20191211213316.GA14983@ming.t460p>
+         <f38db337cf26390f7c7488a0bc2076633737775b.camel@unipv.it>
+         <20191218094830.GB30602@ming.t460p>
+         <b1b6a0e9d690ecd9432025acd2db4ac09f834040.camel@unipv.it>
+         <20191223130828.GA25948@ming.t460p> <20191223162619.GA3282@mit.edu>
+         <4c85fd3f2ec58694cc1ff7ab5c88d6e11ab6efec.camel@unipv.it>
+         <20191223172257.GB3282@mit.edu>
+Content-Type: multipart/mixed; boundary="=-weAblMnQ5amPpzK4jcZ1"
+User-Agent: Evolution 3.32.5 (3.32.5-1.fc30) 
+MIME-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
+--=-weAblMnQ5amPpzK4jcZ1
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 
-> On Dec 17, 2019, at 19:16, Mathias Nyman <mathias.nyman@linux.intel.com> wrote:
+Il giorno lun, 23/12/2019 alle 12.22 -0500, Theodore Y. Ts'o ha
+scritto:
+> On Mon, Dec 23, 2019 at 05:29:27PM +0100, Andrea Vai wrote:
+> > I run the cp command from a bash script, or from a bash shell. I
+> don't
+> > know if this answer your question, otherwise feel free to tell me
+> a
+> > way to find the answer to give you.
 > 
-> On 11.12.2019 17.08, Alan Stern wrote:
->> On Wed, 11 Dec 2019, Kai-Heng Feng wrote:
->>> 
->>> 
->>>> On Nov 30, 2019, at 01:41, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
->>>> 
->>>> On Dell TB16, Realtek USB ethernet (r8152) connects to an SMSC hub which
->>>> then connects to ASMedia xHCI's root hub:
->>>> 
->>>> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
->>>>    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/7p, 5000M
->>>>            |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
->>>> 
->>>> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
->>>> Bus 004 Device 002: ID 0424:5537 Standard Microsystems Corp. USB5537B
->>>> Bus 004 Device 003: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
->>>> 
->>>> The SMSC hub may disconnect after system resume from suspend. When this
->>>> happens, the reset resume attempt fails, and the last resort to disable
->>>> the port and see something comes up later, also fails.
->>>> 
->>>> When the issue occurs, the link state stays in eSS.Disabled state
->>>> despite the warm reset attempts. Accoding to spec this can be caused by
->>>> invalid VBus, after some expiremets, the SMSC hub can be brought back
->>>> after a powercycle.
-> 
-> Could you open up a bit more how this happens, mainly codepaths how the
-> USB3 port ends up in eSS.Disabled state
+> What distro are you using, and/or what package is the cp command
+> coming from, and what is the package name and version?
 
-It happens right after hub_resume(), the first get_port_status():
-Dec 23 09:46:58 u-XPS-13-9370 kernel: usb usb4: usb resume
-Dec 23 09:46:58 u-XPS-13-9370 kernel: hub 4-0:1.0: hub_resume
-Dec 23 09:46:58 u-XPS-13-9370 kernel: xhci_hcd 0000:3f:00.0: Get port status 4-1 read: 0x280, return 0x280
-Dec 23 09:46:58 u-XPS-13-9370 kernel: usb usb4-port1: status 0280 change 0000
-Dec 23 09:46:58 u-XPS-13-9370 kernel: xhci_hcd 0000:3f:00.0: Get port status 4-2 read: 0x2a0, return 0x2a0
-Dec 23 09:46:58 u-XPS-13-9370 kernel: xhci_hcd 0000:3f:00.0: Get port status 4-1 read: 0x280, return 0x280
-Dec 23 09:46:58 u-XPS-13-9370 kernel: xhci_hcd 0000:3f:00.0: Get port status 4-1 read: 0x280, return 0x280
-Dec 23 09:46:58 u-XPS-13-9370 kernel: xhci_hcd 0000:3f:00.0: Get port status 4-1 read: 0x280, return 0x280
+Fedora 30
 
-And it keeps getting 0x280. It should mean PP = 1 and PLS = 4, so it's in Disabled state.
+$ rpm -qf `which cp`
+coreutils-8.31-6.fc30.x86_64
 
 > 
-> There might be something else wrong here.
-> My impression is that port should only end up in eSS.Disabled when directed
-> to with a Set_Port_Feature(PORT_LINK_STATE, eSS.Disabled) Request.
-> After this we shouldn't attempt warm resets, they won't work for USB3 ports in
-> ss.Disabled state.
+> Also, can you remind me what the bash script is and how many files
+> you are copying?
 
-Do you suggest that we should power cycle the port in xHCI instead of USB core?
+basically, it's:
 
-Kai-Heng
+  mount UUID=$uuid /mnt/pendrive
+  SECONDS=0
+  cp $testfile /mnt/pendrive
+  umount /mnt/pendrive
+  tempo=$SECONDS
+
+and it copies one file only. Anyway, you can find the whole script
+attached.
+
 
 > 
-> -Mathias
+> Can you change the script so that the cp command is prefixed by:
+> 
+> "strace -tTf -o /tmp/st "
+> 
+> e.g.,
+> 
+> 	strace -tTf -o /tmp/st cp <args>
+> 
+> And then send me
+btw, please tell me if "me" means only you or I cc: all the
+recipients, as usual
+
+>  the /tmp/st file.  This will significantly change the
+> time, so don't do this for measuring performance.  I just want to
+> see
+> what the /bin/cp command is *doing*.
+
+I will do it, but I have a doubt. Since the problem doesn't happen
+every time, is it useful to give you a trace of a "fast" run? And, if
+it's not, I think I should measure performance with the trace command
+prefix, to identify a "slow" run to report you. Does it make sense?
+
+Thanks,
+Andrea
+
+--=-weAblMnQ5amPpzK4jcZ1
+Content-Type: application/x-shellscript; name="test"
+Content-Disposition: attachment; filename="test"
+Content-Transfer-Encoding: base64
+
+IyEvYmluL2Jhc2gKCnRlc3RmaWxlPS9Ob0JhY2t1cC90ZXN0ZmlsZQpsb2dmaWxlPS9ob21lL2Fu
+ZHJlYS90cm91Ymxlc2hvb3RpbmcvMjAxOTA0MThfbGVudGV6emFEYXIvMjAxOTA0MThfbGVudGV6
+emFEYXIudHh0Cm5Ucmllcz0kMSAjIE51bWJlciBvZiB0cmllcyB3ZSBkbwoKIyB1dWlkPSI2YTlk
+M2MwNS02NzU4LTQ5YzAtYTQ2ZS02Y2UyMjE0NzhlYjMiICNPREQKIyB1dWlkPSI2OGNiYzQxMi1l
+N2MzLTQwN2MtODNjMS1jNzE4NTgwZTkzMGQiICNFVkVOCiMgdXVpZD0iNTcxNjM2ODAtYWI4NS00
+YzQzLWE5ZGEtODYxMzMyNjJmODE1IiAjIEVWRU4gYnRyZnMKdXVpZD0iYWE3ZWVjNTItY2I5NS00
+YWIzLTg1NTctZjBjZWNiYzFjMTBmIiAjIEVWRU4geGZzCiMgdXVpZD0iY2NiN2VlNmMtY2Y4ZC00
+Yjg3LWFlOWYtYTJlMTNmNWMwMGU4IiAjIFNTRAojIHV1aWQ9ImY4NzU0MWYwLWZjNzItNDU0NC05
+ZjFjLWUzZWU1MjEyZGFmOSIgI0czIGJpYW5jYQoKZWNobyAiU3RhcnRpbmcgJG5UcmllcyB0cmll
+cyB3aXRoOiIgfCB0ZWUgLWEgJGxvZ2ZpbGUKdW5hbWUgLWEgfCB0ZWUgLWEgJGxvZ2ZpbGUKbHMg
+LWxoICR0ZXN0ZmlsZSAyPiYxIHwgdGVlIC1hICRsb2dmaWxlCmJsa2lkIDI+JjEgfCB0ZWUgLWEg
+JGxvZ2ZpbGUKZWNobyAidXVpZD0kdXVpZCIKZWNobyAtbiAiY2F0IC9zeXMvYmxvY2svc2RmL3F1
+ZXVlL3NjaGVkdWxlciAtLT4gIiB8IHRlZSAtYSAkbG9nZmlsZQpjYXQgL3N5cy9ibG9jay9zZGYv
+cXVldWUvc2NoZWR1bGVyIDI+JjEgfCB0ZWUgLWEgJGxvZ2ZpbGUKZm9yICgoIGs9MTsgazw9JG5U
+cmllczsgaysrICkpOyBkbyAKICBlY2hvIC1uICJJbml6aW86ICIgfCB0ZWUgLWEgJGxvZ2ZpbGUK
+ICBkYXRlIHwgdHIgLWQgIlxuIiB8IHRlZSAtYSAkbG9nZmlsZQogIHRvdWNoIGluaXppbyAyPiYx
+IHx0ZWUgLWEgJGxvZ2ZpbGUKICBtb3VudCBVVUlEPSR1dWlkIC9tbnQvcGVuZHJpdmUgMj4mMSB8
+dGVlIC1hICRsb2dmaWxlCiAgU0VDT05EUz0wCiAgY3AgJHRlc3RmaWxlIC9tbnQvcGVuZHJpdmUg
+Mj4mMSB8dGVlIC1hICRsb2dmaWxlCiMgIGRkIGlmPSR0ZXN0ZmlsZSBvZj0vbW50L3BlbmRyaXZl
+L3Rlc3RmaWxlIGJzPTFNIG9mbGFnPWRpcmVjdAojICBkZCBpZj0kdGVzdGZpbGUgb2Y9L21udC9w
+ZW5kcml2ZS90ZXN0ZmlsZSBicz0xTQogIHVtb3VudCAvbW50L3BlbmRyaXZlIDI+JjEgfHRlZSAt
+YSAkbG9nZmlsZQogIHRlbXBvPSRTRUNPTkRTCiAgdG91Y2ggZmluZSAyPiYxIHx0ZWUgLWEgJGxv
+Z2ZpbGUKICBlY2hvIC1uICIuLi5maW5lOiAiIHwgdGVlIC1hICRsb2dmaWxlCiAgZGF0ZSB8IHRy
+IC1kICJcbiIgfCB0ZWUgLWEgJGxvZ2ZpbGUKICBlY2hvICIgLS0+IGNpIGhvIG1lc3NvICR0ZW1w
+byBzZWNvbmRpISIgfCB0ZWUgLWEgJGxvZ2ZpbGUKZG9uZQo=
+
+
+--=-weAblMnQ5amPpzK4jcZ1--
 
