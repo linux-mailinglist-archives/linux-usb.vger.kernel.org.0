@@ -2,199 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9110F12994D
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Dec 2019 18:23:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A08AF12997C
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Dec 2019 18:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726840AbfLWRXq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Dec 2019 12:23:46 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:38564 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726754AbfLWRXq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Dec 2019 12:23:46 -0500
-Received: by mail-lj1-f196.google.com with SMTP id k8so18419001ljh.5;
-        Mon, 23 Dec 2019 09:23:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=u+GgTQ7ybWZ7C8xjZYQV6OBNXZmHXRlNnZIqFKfsmh0=;
-        b=ZggbavCYF9R03LN/GA6A8IAjFSb2I19CLDSBWQ1cQjNoQHj5a7Cb5dLLQ0uuvjh4dt
-         2c/EYAH0FjqszqiRQsgRk0oaOz9p0XWQiqmebWcRycVX92AGQU280HM2wSK0mOrtV3ZW
-         THBmUoPVoBx5qVJnVpEhwQr99eL+zZW6R4SFlEPUZpaylRjFkKApK9YUkxmmFxE6QQ3e
-         L0Mu04D0CmHyaG7ULHT42Eci7sdBnJ5Oteai40TGYjG/4ARyoKCDDwBUrPk4fwqcJkRH
-         2/ZZ5M6bS3m/fGY4SwcMs2wSgVDalGauOVsWZQ3K6oeYAOdHXdsEYYWIbCgCCQMBMZcW
-         /zhg==
+        id S1726756AbfLWRi3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 23 Dec 2019 12:38:29 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:37261 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726718AbfLWRi3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Dec 2019 12:38:29 -0500
+Received: from mail-pg1-f197.google.com ([209.85.215.197])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1ijRf0-0006jt-Va
+        for linux-usb@vger.kernel.org; Mon, 23 Dec 2019 17:38:27 +0000
+Received: by mail-pg1-f197.google.com with SMTP id l13so11000283pgt.5
+        for <linux-usb@vger.kernel.org>; Mon, 23 Dec 2019 09:38:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=u+GgTQ7ybWZ7C8xjZYQV6OBNXZmHXRlNnZIqFKfsmh0=;
-        b=F9uH5IY9EhncLZHOfQvFGMisPHsW6cyBm324yUiNSf3DRNSdqENwX5OBsAz4RjYCiN
-         trFr6RvgwJrN2HJ60IFNmuFxMLiKx2GXSo35i38XAkfvRP/3ky5eJ1miPDF2KV9CNoY0
-         MjnxqtFppOGSXKXFLp0mj3k8F6PV2jbAgBmHZoglHmrjmeq/ICWJEqKF65A4mm/bdkjX
-         FEVEh50K2KJLJDzrLxuacdOYRpniNl8h/sFe+yOwUlGjerUH7oQJrMyihxlms2EVFjcp
-         C6w0UtQONCKWWsCqLsOHRQWd2O5v0IUCPPvYxaXbxAXefJTCTgQKxDlcoUO3dPGEeQPC
-         /ymg==
-X-Gm-Message-State: APjAAAUEKoycboNfGYgRMaSuxOonx2e9AiMg3etsNBb6unttNFmtPbRZ
-        v1G75MclpNC+YqtDNQdTqMw=
-X-Google-Smtp-Source: APXvYqznVHMwk4z0zRQUa244lrNFQoo8AGsEqJjn52aZ+3QFYFwDs9N4TOHu5uO+eUBLwMuv73DHlw==
-X-Received: by 2002:a05:651c:282:: with SMTP id b2mr18236642ljo.41.1577121823402;
-        Mon, 23 Dec 2019 09:23:43 -0800 (PST)
-Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id q26sm8568568lfc.52.2019.12.23.09.23.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Dec 2019 09:23:42 -0800 (PST)
-Subject: Re: [PATCH v2 10/10] usb: chipidea: tegra: Add USB_TEGRA_PHY module
- to driver's dependencies
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>
-References: <20191220015238.9228-1-digetx@gmail.com>
- <20191220015238.9228-11-digetx@gmail.com>
- <20191220035650.GC19921@b29397-desktop>
- <fb7dee6e-e645-fe45-126c-c5f1e280bc26@gmail.com>
- <20191223063958.GD19921@b29397-desktop>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <1d2e3ea0-a7ff-3e83-57d1-05ffddb0da07@gmail.com>
-Date:   Mon, 23 Dec 2019 20:23:40 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
-MIME-Version: 1.0
-In-Reply-To: <20191223063958.GD19921@b29397-desktop>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=DxkImzWVfef1xCpc56sb8FA6DnZxPPdiLSLtxzu4Snk=;
+        b=HCINTP94FcHEqUJFJKq7Yy8KgdEqF3BVcmZnIIHF9oQscaVZYrCGJ53WC8LXSGpXRH
+         DXHi/0RfNjVhU0CqQn65gNdmcsIrsMKXZh+gI+P9PeQIZejDxk40JB9GWqsTbUFUalMh
+         SF9LyTerhyF7P9JoePGTz7QAVwHo4YOjuuuft2Jd921ybl/qwMICPjRvgpnQdN4cPQjh
+         Dm133kD9IjwIrasq5PQwB2uHhVIal+kZ8zp3rS9ncE3OBAREI1z6rkg0PUqKPmRkfI7K
+         aMSTWU8cG656NXE0YcMabwWv/y8dMyNlS8I97yVMQfxF4y3U1BmlFDeJUK9r0lVTF1aI
+         s7OQ==
+X-Gm-Message-State: APjAAAVrZiuZpT9bh8RCKdlkIDbUj9CFH7VJLknlJz4048cJJHUNCerW
+        8iB8GNQ7ejMWB3EItdW/DHOSIFlTiTYmeAZ0ga8Jy3jGuNCgqjMqHNQMWCh0pLWj9L8nXofTnLo
+        rmBmf4ueRQXRTjjaQwmp1AfCSykJVrFXk4iTXQQ==
+X-Received: by 2002:a17:90a:8902:: with SMTP id u2mr167892pjn.85.1577122324526;
+        Mon, 23 Dec 2019 09:32:04 -0800 (PST)
+X-Google-Smtp-Source: APXvYqz95yQJjQxTt2znMb73aBoBh3sICPYV2Bs/djISQo4DnHkIWiWB5izrBxMRSwUF7z2lyuvb9g==
+X-Received: by 2002:a17:90a:8902:: with SMTP id u2mr167845pjn.85.1577122324151;
+        Mon, 23 Dec 2019 09:32:04 -0800 (PST)
+Received: from 2001-b011-380f-35a3-a059-d6a4-0e9a-8360.dynamic-ip6.hinet.net (2001-b011-380f-35a3-a059-d6a4-0e9a-8360.dynamic-ip6.hinet.net. [2001:b011:380f:35a3:a059:d6a4:e9a:8360])
+        by smtp.gmail.com with ESMTPSA id e10sm26233451pfj.7.2019.12.23.09.32.02
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 23 Dec 2019 09:32:03 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3608.40.2.2.4\))
+Subject: Re: [PATCH v2 2/2] USB: core: Attempt power cycle port when it's in
+ eSS.Disabled state
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <c8fc54db-9037-3635-f6a7-d6220e5d02cb@linux.intel.com>
+Date:   Tue, 24 Dec 2019 01:32:00 +0800
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 8BIT
+Message-Id: <9883D946-77E0-4645-89FB-0B61D9E84178@canonical.com>
+References: <Pine.LNX.4.44L0.1912111006280.1549-100000@iolanthe.rowland.org>
+ <c8fc54db-9037-3635-f6a7-d6220e5d02cb@linux.intel.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+X-Mailer: Apple Mail (2.3608.40.2.2.4)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-23.12.2019 09:40, Peter Chen пишет:
-> On 19-12-20 07:31:08, Dmitry Osipenko wrote:
->> 20.12.2019 06:56, Peter Chen пишет:
->>> On 19-12-20 04:52:38, Dmitry Osipenko wrote:
->>>> Now, when ci_hdrc_tegra kernel module is loaded, the phy_tegra_usb module
->>>> is loaded too regardless of kernel's configuration. Previously this
->>>> problem was masked because Tegra's EHCI driver is usually enabled in
->>>> kernel's config and thus PHY driver was getting loaded because of it, but
->>>> now I was making some more thorough testing and noticed that PHY's module
->>>> isn't getting auto-loaded without the host driver.
->>>>
->>>> Note that ChipIdea's driver doesn't use any of the exported functions of
->>>> phy_tegra_usb module and thus the module needs to be requested explicitly.
->>>>
->>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->>>> ---
->>>>  drivers/usb/chipidea/Kconfig         | 1 +
->>>>  drivers/usb/chipidea/ci_hdrc_tegra.c | 6 ++++++
->>>>  2 files changed, 7 insertions(+)
->>>>
->>>> diff --git a/drivers/usb/chipidea/Kconfig b/drivers/usb/chipidea/Kconfig
->>>> index ae850b3fddf2..d53db520e209 100644
->>>> --- a/drivers/usb/chipidea/Kconfig
->>>> +++ b/drivers/usb/chipidea/Kconfig
->>>> @@ -7,6 +7,7 @@ config USB_CHIPIDEA
->>>>  	select RESET_CONTROLLER
->>>>  	select USB_ULPI_BUS
->>>>  	select USB_ROLE_SWITCH
->>>> +	select USB_TEGRA_PHY if ARCH_TEGRA
->>>>  	help
->>>>  	  Say Y here if your system has a dual role high speed USB
->>>>  	  controller based on ChipIdea silicon IP. It supports:
->>>> diff --git a/drivers/usb/chipidea/ci_hdrc_tegra.c b/drivers/usb/chipidea/ci_hdrc_tegra.c
->>>> index 7455df0ede49..8bc11100245d 100644
->>>> --- a/drivers/usb/chipidea/ci_hdrc_tegra.c
->>>> +++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
->>>> @@ -53,6 +53,12 @@ static int tegra_udc_probe(struct platform_device *pdev)
->>>>  	struct tegra_udc *udc;
->>>>  	int err;
->>>>  
->>>> +	if (IS_MODULE(CONFIG_USB_TEGRA_PHY)) {
->>>> +		err = request_module("phy_tegra_usb");
->>>> +		if (err)
->>>> +			return err;
->>>> +	}
->>>> +
->>>
->>> Why you do this dependency, if this controller driver can't
->>> get USB PHY, it should return error. What's the return value
->>> after calling below:
->>>
->>> 	udc->phy = devm_usb_get_phy_by_phandle(&pdev->dev, "nvidia,phy", 0);
->>
->> It returns -EPROBE_DEFER when phy_tegra_usb isn't loaded.
->>
->> So if you'll do:
->>
->> # rmmod ci_hdrc_tegra; rmmod ci_hdrc; rmmod phy_tegra_usb;
->> # modprobe ci_hdrc_tegra
->> # lsmod
->> Module                  Size  Used by
->> ci_hdrc_tegra          16384  0
->> ci_hdrc                45056  1 ci_hdrc_tegra
->>
->> After this patch:
->>
->> # rmmod ci_hdrc_tegra; rmmod ci_hdrc; rmmod phy_tegra_usb;
->> # modprobe ci_hdrc_tegra
->> # lsmod
->> Module                  Size  Used by
->> Module                  Size  Used by
->> phy_tegra_usb          20480  1
->> ci_hdrc_tegra          16384  0
->> ci_hdrc                45056  1 ci_hdrc_tegra
+
+
+> On Dec 17, 2019, at 19:16, Mathias Nyman <mathias.nyman@linux.intel.com> wrote:
 > 
-> I wonder why the driver needs such dependency? If there are two phy
-> drivers could work with this controller driver, you may request two
-> modules.
+> On 11.12.2019 17.08, Alan Stern wrote:
+>> On Wed, 11 Dec 2019, Kai-Heng Feng wrote:
+>>> 
+>>> 
+>>>> On Nov 30, 2019, at 01:41, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
+>>>> 
+>>>> On Dell TB16, Realtek USB ethernet (r8152) connects to an SMSC hub which
+>>>> then connects to ASMedia xHCI's root hub:
+>>>> 
+>>>> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
+>>>>    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/7p, 5000M
+>>>>            |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
+>>>> 
+>>>> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+>>>> Bus 004 Device 002: ID 0424:5537 Standard Microsystems Corp. USB5537B
+>>>> Bus 004 Device 003: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
+>>>> 
+>>>> The SMSC hub may disconnect after system resume from suspend. When this
+>>>> happens, the reset resume attempt fails, and the last resort to disable
+>>>> the port and see something comes up later, also fails.
+>>>> 
+>>>> When the issue occurs, the link state stays in eSS.Disabled state
+>>>> despite the warm reset attempts. Accoding to spec this can be caused by
+>>>> invalid VBus, after some expiremets, the SMSC hub can be brought back
+>>>> after a powercycle.
+> 
+> Could you open up a bit more how this happens, mainly codepaths how the
+> USB3 port ends up in eSS.Disabled state
 
-Well, if somebody wants to use some PHY driver other than the upstream's
-standard one, then that person could simply load the custom driver
-module first, such that it will bind to the PHY's device first.
+It happens right after hub_resume(), the first get_port_status():
+Dec 23 09:46:58 u-XPS-13-9370 kernel: usb usb4: usb resume
+Dec 23 09:46:58 u-XPS-13-9370 kernel: hub 4-0:1.0: hub_resume
+Dec 23 09:46:58 u-XPS-13-9370 kernel: xhci_hcd 0000:3f:00.0: Get port status 4-1 read: 0x280, return 0x280
+Dec 23 09:46:58 u-XPS-13-9370 kernel: usb usb4-port1: status 0280 change 0000
+Dec 23 09:46:58 u-XPS-13-9370 kernel: xhci_hcd 0000:3f:00.0: Get port status 4-2 read: 0x2a0, return 0x2a0
+Dec 23 09:46:58 u-XPS-13-9370 kernel: xhci_hcd 0000:3f:00.0: Get port status 4-1 read: 0x280, return 0x280
+Dec 23 09:46:58 u-XPS-13-9370 kernel: xhci_hcd 0000:3f:00.0: Get port status 4-1 read: 0x280, return 0x280
+Dec 23 09:46:58 u-XPS-13-9370 kernel: xhci_hcd 0000:3f:00.0: Get port status 4-1 read: 0x280, return 0x280
 
-It is also possible to manually unbind the standard driver from PHY's
-device and then bind whatever driver you want.
+And it keeps getting 0x280. It should mean PP = 1 and PLS = 4, so it's in Disabled state.
 
-> Doesn't such dependency should be done by the board
-> level script?
+> 
+> There might be something else wrong here.
+> My impression is that port should only end up in eSS.Disabled when directed
+> to with a Set_Port_Feature(PORT_LINK_STATE, eSS.Disabled) Request.
+> After this we shouldn't attempt warm resets, they won't work for USB3 ports in
+> ss.Disabled state.
 
-This patch only improves the default behaviour that is common for all
-NVIDIA Tegra boards, it doesn't prevent from doing any special
-customizations.
+Do you suggest that we should power cycle the port in xHCI instead of USB core?
 
-Perhaps the Kconfig change could be dropped from this patch in order to
-provide a bit more flexibility in regards to kernel's configuration, but
-I'm very doubtful that realistically anyone would want to replace the
-default driver with anything else on Tegra. The Kconfig change also puts
-ChipIdea's UDC driver in line with the Tegra's EHCI driver that selects
-USB_TEGRA_PHY, please see drivers/usb/host/Kconfig.
+Kai-Heng
 
-> Do you know are there any other drivers do such things?
+> 
+> -Mathias
 
-I don't think that any of the USB host drivers are currently doing such
-things, but in general there are quite a lot of drivers in kernel that
-are using request_module [1].
-
-[1] https://elixir.bootlin.com/linux/latest/ident/request_module
-
-Please note that drivers/usb/host/ehci-tegra.c uses exported symbols
-from usb/phy/phy-tegra-usb.c and that is why the EHCI driver doesn't
-need to explicitly load the phy_tegra_usb module, the load happens
-automatically because of the missing symbols.
-
-Also, please note that it is possible to squash the Tegra EHCI driver
-into ci_hdrc_tegra.c and then the explicit dependency on the
-phy_tegra_usb won't be needed anymore since it will be replaced with an
-implicit dependency. We (me and Peter Geis) already had some
-experimental patches that do the successful squashing of the drivers,
-but looks like Peter got sidetracked for a more important things for
-now, we'll probably return to that work later on.
