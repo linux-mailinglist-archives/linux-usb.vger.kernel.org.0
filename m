@@ -2,36 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A970B12A2F4
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2019 16:23:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA26912A2F8
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2019 16:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726269AbfLXPXN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Dec 2019 10:23:13 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:49525 "HELO
+        id S1726178AbfLXP2J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Dec 2019 10:28:09 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:39415 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726245AbfLXPXN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Dec 2019 10:23:13 -0500
-Received: (qmail 29034 invoked by uid 500); 24 Dec 2019 10:23:12 -0500
+        with SMTP id S1726140AbfLXP2I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Dec 2019 10:28:08 -0500
+Received: (qmail 29107 invoked by uid 500); 24 Dec 2019 10:28:07 -0500
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 24 Dec 2019 10:23:12 -0500
-Date:   Tue, 24 Dec 2019 10:23:12 -0500 (EST)
+  by localhost with SMTP; 24 Dec 2019 10:28:07 -0500
+Date:   Tue, 24 Dec 2019 10:28:07 -0500 (EST)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@netrider.rowland.org
-To:     AceLan Kao <acelan.kao@canonical.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Harry Pan <harry.pan@intel.com>,
-        David Heinzelmann <heinzelmann.david@gmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Mathieu Malaterre <malat@debian.org>,
-        <linux-usb@vger.kernel.org>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: hub: move resume delay at the head of all USB access
- functions
-In-Reply-To: <CAFv23Qn9h=pwaHkiMB2ci-OaR54gY6fdc1Q_7ZMz5mH7wHr9+w@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.1912241021580.28718-100000@netrider.rowland.org>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+cc:     "Rene D. Obermueller" <cmdrrdo@gmail.com>,
+        <linux-usb@vger.kernel.org>
+Subject: Re: ERROR: unexpected command completion code 0x11 for DJ-Tech CTRL
+ (resending as plain text ;)
+In-Reply-To: <98997f07-80ef-b86a-6702-448e68ff4ffa@linux.intel.com>
+Message-ID: <Pine.LNX.4.44L0.1912241023260.28718-100000@netrider.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -39,27 +31,26 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 23 Dec 2019, AceLan Kao wrote:
+On Mon, 23 Dec 2019, Mathias Nyman wrote:
 
-> > > you'll encounter the below errors sometime.
-> > > After the issue happens, have to re-plug the USB cable to recover.
-> > >
-> > > [ 837.483573] hub 2-3:1.0: hub_ext_port_status failed (err = -71)
-> > > [ 837.490889] hub 2-3:1.0: hub_ext_port_status failed (err = -71)
-> > > [ 837.506780] usb 2-3-port4: cannot disable (err = -71)
-> >
-> > You need to do a better job of figuring out why these errors occur.  It
-> > is not connected to the resume delay; there must be a different reason.
-> > Hint: This is the sort of error you would expect to see if the kernel
-> > tried to resume a device while its parent hub was still suspended.
-> Once this error shows, the USB port doesn't work until re-plug the cable.
-> I have no idea what else I can do to this, do you have any idea that I
-> could try?
-> Thanks.
+> The Maximum Packet Size of the full-speed bulk endpoint looks a bit suspicious (maxp 4)
+> 
+> 12478.521580: xhci_add_endpoint: State disabled mult 1 max P. Streams 0 interval 125 us max ESIT payload 0 CErr 3 Type Bulk OUT burst 0 maxp 4 deq 00000000fff71001
+> 
+> For full speed bulk endpoints only support 8, 16, 32 and 64 bytes Max Packet sizes.
+> Host are not required to support other values. See USB2 spec section 5.8.3 for details
+> 
+> Maybe forcing it to one of the allowed values could work.
+> Does the below hack help? (untested)?
 
-Maybe you can collect a usbmon trace showing what happens when the 
-error occurs.  There's probably something going on that you aren't 
-aware of.
+Is this the sort of thing we should handle in 
+config.c:usb_parse_endpoint()?
+
+Even though 4 is not a valid maxpacket size for full-speed bulk
+endpoints, many host controllers and hubs will handle it okay.  Much
+the same is true for devices that have a high-speed bulk endpoint with
+maxpacket set to 1024.  Should we try to treat these two errors the
+same way?
 
 Alan Stern
 
