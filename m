@@ -2,73 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C1E129D0D
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2019 04:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 041D4129D2A
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2019 04:52:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726847AbfLXDQT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Dec 2019 22:16:19 -0500
-Received: from mail-il1-f179.google.com ([209.85.166.179]:38153 "EHLO
-        mail-il1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726747AbfLXDQS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Dec 2019 22:16:18 -0500
-Received: by mail-il1-f179.google.com with SMTP id f5so15569018ilq.5
-        for <linux-usb@vger.kernel.org>; Mon, 23 Dec 2019 19:16:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QAv7FHFnFuVuFyAY9TV+CIfNDmLzQr+KZT7BVX47nmM=;
-        b=O8eyFfPlNH95OpJxXDyvhJjQLasG7JB3tl0EIsequM2cWscK95UadonZPz8M2RA8Nf
-         Rlq359BxQAKUF/7PBA7NJDTGRMoVNoG21sGnw6iBdJJSXtgxshXL/T7Q6Mw97GcPHkj3
-         dZO86iCuUhBa82HsCRJO0picZkmev8GAxuMixhmXzRdC2Nx4DXO0O/sTI3Q6ymrXmU4g
-         YmGzRKJXv7ICnwLD6oXM7enxLG9VzotCS2fFUNPUnlkz5b1DnyRBfpqTFx267/g+VmQc
-         oYC8L0Hu1Kb93I9Re+24CG2Rj6b3B7b2SNArLISYeIdvzE5KO+7Ol50f92yHD3iKdRUt
-         +gxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QAv7FHFnFuVuFyAY9TV+CIfNDmLzQr+KZT7BVX47nmM=;
-        b=W2HWui5DPh6z8R3AYhLU/JyiAZmTI62FppP2fEiqrK8mnk4SI1DAd1sxsk42Z4LHGC
-         A7glH1MT19OPNnxvwRNcVIXzUMb+oGv77MlxyAQKzukiiyRkORrvhQT+2MZzIc447fYN
-         lt50ivT2OcUd1DynyQ0WUxrDaKf+CHNT1yzGjwZlv3iWuqQBcj8GMp7Hnj/CHWADWXAk
-         6AYAKBeR9C3ezH9wbyYgA0xQr8oZxwq02JgVh0OR4BOH5b3m6XfXMkAeKyE80Qs+u8Rk
-         QyTsHQrMQl5LyLVoT0BMukFCxkLkUJL4wy3YmGYCFYTVXTrcpiLJOaJasmCTz8+E6WMT
-         U/fQ==
-X-Gm-Message-State: APjAAAVOMEYKKcmgf7ppzSuUSXp80AJ0HbMcm01gnrW2v92/TRZ1R1Os
-        8CISfq+Sk02dZbs2z9yCNp5e2oeuD9OqInLaK5IBEbqD
-X-Google-Smtp-Source: APXvYqz4wdC5KBL0tZHDuW93XqVCTR/ZssdOJ526DMSSrxoaQDdM+MfvYAjY78orCBYNaKBgntgrp3denFrRdsPQhE8=
-X-Received: by 2002:a92:4604:: with SMTP id t4mr29448339ila.237.1577157378151;
- Mon, 23 Dec 2019 19:16:18 -0800 (PST)
+        id S1726866AbfLXDw4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Dec 2019 22:52:56 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7737 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726747AbfLXDw4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 23 Dec 2019 22:52:56 -0500
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 99CE0BD3E0E93DEBEFC4;
+        Tue, 24 Dec 2019 11:52:54 +0800 (CST)
+Received: from HGHY4L002753561.china.huawei.com (10.133.215.186) by
+ DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
+ 14.3.439.0; Tue, 24 Dec 2019 11:52:45 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Hillf Danton <hdanton@sina.com>
+Subject: [PATCH 1/1] HID: hiddev: remove a duplicated check
+Date:   Tue, 24 Dec 2019 11:51:17 +0800
+Message-ID: <20191224035117.98816-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.21.0.windows.1
 MIME-Version: 1.0
-References: <d8d929f3-9479-85fe-915e-ef1f1386bf6d@ivitera.com>
-In-Reply-To: <d8d929f3-9479-85fe-915e-ef1f1386bf6d@ivitera.com>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Tue, 24 Dec 2019 11:16:06 +0800
-Message-ID: <CAL411-rxfwOGXNbuhCkXPAsQZYquPc2wxkx7Gf+enn3BKv=kYg@mail.gmail.com>
-Subject: Re: USB: UAC2: Custom bInterval values
-To:     Pavel Hofman <pavel.hofman@ivitera.com>
-Cc:     USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.133.215.186]
+X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Dec 21, 2019 at 4:35 PM Pavel Hofman <pavel.hofman@ivitera.com> wrote:
->
-> Hi,
->
-> I would like to add support for custom EP IN and EP OUT bInterval values
-> in f_uac2.c, to allow fine-tuning the gadget for higher samplerates.
->
-> For now the easiest way to me seems to add the params to uac2_opts and
-> add module params to  g_audio module (to the existing params p_chmask,
-> p_srate, etc.). Please will such change be accepted to upstream?
->
+After commit 9c09b214f30e ("HID: hiddev: avoid opening a disconnected
+device"), the original check "list->hiddev->exist" become unnecessary.
 
-I think you could add this support for uac2_opts first, the configfs
-is the suggested
-way to support gadget now.
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ drivers/hid/usbhid/hiddev.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-Peter
+diff --git a/drivers/hid/usbhid/hiddev.c b/drivers/hid/usbhid/hiddev.c
+index e421cdf2d1a4ec5..e04cf95fca094a8 100644
+--- a/drivers/hid/usbhid/hiddev.c
++++ b/drivers/hid/usbhid/hiddev.c
+@@ -292,16 +292,16 @@ static int hiddev_open(struct inode *inode, struct file *file)
+ 		res = -ENODEV;
+ 		goto bail_unlock;
+ 	}
+-	if (!list->hiddev->open++)
+-		if (list->hiddev->exist) {
+-			struct hid_device *hid = hiddev->hid;
+-			res = hid_hw_power(hid, PM_HINT_FULLON);
+-			if (res < 0)
+-				goto bail_unlock;
+-			res = hid_hw_open(hid);
+-			if (res < 0)
+-				goto bail_normal_power;
+-		}
++	if (!list->hiddev->open++) {
++		struct hid_device *hid = hiddev->hid;
++
++		res = hid_hw_power(hid, PM_HINT_FULLON);
++		if (res < 0)
++			goto bail_unlock;
++		res = hid_hw_open(hid);
++		if (res < 0)
++			goto bail_normal_power;
++	}
+ 	mutex_unlock(&hiddev->existancelock);
+ 	return 0;
+ bail_normal_power:
+-- 
+1.8.3
+
+
