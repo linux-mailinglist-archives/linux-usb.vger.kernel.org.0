@@ -2,317 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 261FE129B69
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Dec 2019 23:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07554129C66
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2019 02:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726832AbfLWWPo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Dec 2019 17:15:44 -0500
-Received: from mail-wr1-f46.google.com ([209.85.221.46]:45419 "EHLO
-        mail-wr1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726866AbfLWWPn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Dec 2019 17:15:43 -0500
-Received: by mail-wr1-f46.google.com with SMTP id j42so18104069wrj.12
-        for <linux-usb@vger.kernel.org>; Mon, 23 Dec 2019 14:15:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ABszHV/pyWQELmtP75obrwWlndE917OuXavdaAgSe8M=;
-        b=aYPY1zmBzx6x85WkCPAjWYP6etOpjOr33vs0L7nxvtw8W/N+uLxgtzDqlrWyNCNKtd
-         HVQgWNSHv8d58x/HiYhafrnZ0Qx7GG/hVUpmQT9IIOwkW0IAcBFlOXlcBCTbwoVGhoI3
-         wrzz86I/++yqBnyTrvgJJ8XqrqvLF/y6C/xEbkK9ED871QALWGImJMYYRg+qbvWQEUy4
-         H1K+TT2fP5/CM/mljA3zHAfkYYqAgTz5Jg5wLdqUW0wiAf8VI8C29fdVGtP6nVZp6qAn
-         KaMP7L9O4liwrPxx8dx0Nr3le8YXgGMtiywzYKxo+Mo944dTKhC0Z82T+ceRPI9gQyCf
-         GxDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ABszHV/pyWQELmtP75obrwWlndE917OuXavdaAgSe8M=;
-        b=hg4sqPQuMRKCaNxTBU+pEq21PaIbBYHYpZug0y5pEKsjBPy2ML1Duwi8Y6kdyZs9Ka
-         FjLrpY6/vX+oUslsH47IuWzHByaeU4NuAZF0KwP0r5VrHcvr0/Y7bql0Yg+E6ncuElpf
-         Md7yCuuApK/1wa+jxm3BFz5GhMEBVNowRX+r1/36iyyzRI4WdnNAkjcMhpkMZGybDNN2
-         O8+uEfq7Ywzd0xeJYjzj+kDdjss9gL6pmPTB/TwBszz/ErEn41A9Q5RXoZilI+g7fFNK
-         UJSMBf3psIrylMOlP8j8233eAgpEgshoBHkPU+09MYqunmYctgUtrUxvrHnOvk4MmC1C
-         BsmQ==
-X-Gm-Message-State: APjAAAVCpLB2BWj39Dyv1e0x7BLEYgO4zii+7Ojw9UbXoq46LZptjGhX
-        IZn8mmbFGlrVExWc6+UHi1pBCgCg
-X-Google-Smtp-Source: APXvYqxmAdQmG9B8OVl3bwL6Ah8NrGDIpI+0VZ1POc8m/yQiPrgvWp9M6SANtNC7v4AHFdBL1B7cpw==
-X-Received: by 2002:adf:f501:: with SMTP id q1mr70066wro.263.1577139339578;
-        Mon, 23 Dec 2019 14:15:39 -0800 (PST)
-Received: from ?IPv6:2a02:908:4b12:d272:3fa5:df5b:b0f6:e46? ([2a02:908:4b12:d272:3fa5:df5b:b0f6:e46])
-        by smtp.gmail.com with ESMTPSA id a1sm688062wmj.40.2019.12.23.14.15.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Dec 2019 14:15:38 -0800 (PST)
-Subject: Re: ERROR: unexpected command completion code 0x11 for DJ-Tech CTRL
- (resending as plain text ;)
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-References: <348c50de-f922-8295-ef87-cf5cdea5c7f4@gmail.com>
- <0a9215c0-99b3-cf8f-381b-e4997e3f5cfe@linux.intel.com>
- <d65f140c-0854-62a5-f21e-5d92f0575635@gmail.com>
- <98997f07-80ef-b86a-6702-448e68ff4ffa@linux.intel.com>
-From:   "Rene D. Obermueller" <cmdrrdo@gmail.com>
-Message-ID: <35205ad4-9a10-c576-017a-db8d6520ae6b@gmail.com>
-Date:   Mon, 23 Dec 2019 23:15:37 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727033AbfLXB1k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Dec 2019 20:27:40 -0500
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:34667 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727008AbfLXB1k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Dec 2019 20:27:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1577150858;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VtuJDTK8A0+oPEcdARBW6M8N5bDF9QRZRZAmHYybdxk=;
+        b=cphZH9rV2o6QWa/aRabQ1nI8tgYQ3yeDxghLNGvLlQuewbYWXaufrDM0Namp3rjsyPzvTI
+        iYk/0NqdWowesEsmNsUof70RvCRgoicvUapQC7l25NNyxhnUAI24RtvmAcuMTL1i9OkHg0
+        HF4hC3ZIDt8fNtVSveA09HROY4QkCGs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-144-l9zVJDJeNcCIE8UkJAbTHw-1; Mon, 23 Dec 2019 20:27:34 -0500
+X-MC-Unique: l9zVJDJeNcCIE8UkJAbTHw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0B68463CD9;
+        Tue, 24 Dec 2019 01:27:32 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-20.pek2.redhat.com [10.72.8.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 927BC80B38;
+        Tue, 24 Dec 2019 01:27:13 +0000 (UTC)
+Date:   Tue, 24 Dec 2019 09:27:07 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     "Theodore Y. Ts'o" <tytso@mit.edu>
+Cc:     Andrea Vai <andrea.vai@unipv.it>,
+        "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: AW: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+Message-ID: <20191224012707.GA13083@ming.t460p>
+References: <20191211213316.GA14983@ming.t460p>
+ <f38db337cf26390f7c7488a0bc2076633737775b.camel@unipv.it>
+ <20191218094830.GB30602@ming.t460p>
+ <b1b6a0e9d690ecd9432025acd2db4ac09f834040.camel@unipv.it>
+ <20191223130828.GA25948@ming.t460p>
+ <20191223162619.GA3282@mit.edu>
+ <4c85fd3f2ec58694cc1ff7ab5c88d6e11ab6efec.camel@unipv.it>
+ <20191223172257.GB3282@mit.edu>
+ <bb5d395fe47f033be0b8ed96cbebf8867d2416c4.camel@unipv.it>
+ <20191223195301.GC3282@mit.edu>
 MIME-Version: 1.0
-In-Reply-To: <98997f07-80ef-b86a-6702-448e68ff4ffa@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191223195301.GC3282@mit.edu>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Mathias,
+Hi Ted,
 
-
-On 23.12.19 13:14, Mathias Nyman wrote:
-
-> The Maximum Packet Size of the full-speed bulk endpoint looks a bit 
-> suspicious (maxp 4)
+On Mon, Dec 23, 2019 at 02:53:01PM -0500, Theodore Y. Ts'o wrote:
+> On Mon, Dec 23, 2019 at 07:45:57PM +0100, Andrea Vai wrote:
+> > basically, it's:
+> > 
+> >   mount UUID=$uuid /mnt/pendrive
+> >   SECONDS=0
+> >   cp $testfile /mnt/pendrive
+> >   umount /mnt/pendrive
+> >   tempo=$SECONDS
+> > 
+> > and it copies one file only. Anyway, you can find the whole script
+> > attached.
 > 
-> 12478.521580: xhci_add_endpoint: State disabled mult 1 max P. Streams 0 
-> interval 125 us max ESIT payload 0 CErr 3 Type Bulk OUT burst 0 maxp 4 
-> deq 00000000fff71001
+> OK, so whether we are doing the writeback at the end of cp, or when
+> you do the umount, it's probably not going to make any difference.  We
+> can get rid of the stack trace in question by changing the script to
+> be basically:
 > 
-> For full speed bulk endpoints only support 8, 16, 32 and 64 bytes Max 
-> Packet sizes.
-> Host are not required to support other values. See USB2 spec section 
-> 5.8.3 for details
-
-thanks for the explanation!
-
-
-> Maybe forcing it to one of the allowed values could work.
-> Does the below hack help? (untested)?
+> mount UUID=$uuid /mnt/pendrive
+> SECONDS=0
+> rm -f /mnt/pendrive/$testfile
+> cp $testfile /mnt/pendrive
+> umount /mnt/pendrive
+> tempo=$SECONDS
 > 
-> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> index 3b1388fa2f36..29102776baed 100644
-> --- a/drivers/usb/host/xhci-mem.c
-> +++ b/drivers/usb/host/xhci-mem.c
-> @@ -1476,8 +1476,12 @@ int xhci_endpoint_init(struct xhci_hcd *xhci,
->          if (!usb_endpoint_xfer_isoc(&ep->desc))
->                  err_count = 3;
->          /* Some devices get this wrong */
-> -       if (usb_endpoint_xfer_bulk(&ep->desc) && udev->speed == 
-> USB_SPEED_HIGH)
-> -               max_packet = 512;
-> +       if (usb_endpoint_xfer_bulk(&ep->desc) {
+> I predict if you do that, you'll see that all of the time is spent in
+> the umount, when we are trying to write back the file.
+> 
+> I really don't think then this is a file system problem at all.  It's
+> just that USB I/O is slow, for whatever reason.  We'll see a stack
+> trace in the writeback code waiting for the I/O to be completed, but
+> that doesn't mean that the root cause is in the writeback code or in
+> the file system which is triggering the writeback.
 
-I changed this line for missing closing bracket...
+Wrt. the slow write on this usb storage, it is caused by two writeback
+path, one is the writeback wq, another is from ext4_release_file() which
+is triggered from exit_to_usermode_loop().
 
+When the two write path is run concurrently, the sequential write order
+is broken, then write performance drops much on this particular usb
+storage.
 
-> +                       if (udev->speed == USB_SPEED_HIGH)
-> +                               max_packet = 512;
-> +                       if (udev->speed == USB_SPEED_FULL)
-> +                               max_packet = 1 << 
-> (fls(clamp_val(max_packet, 8, 64)) - 1);
-> +               }
->          /* xHCI 1.0 and 1.1 indicates that ctrl ep avg TRB Length 
-> should be 8 */
->          if (usb_endpoint_xfer_control(&ep->desc) && xhci->hci_version 
->  >= 0x100)
->                  avg_trb_len = 8;
+The ext4_release_file() should be run from read() or write() syscall if
+Fedora 30's 'cp' is implemented correctly. IMO, it isn't expected behavior
+for ext4_release_file() to be run thousands of times when just
+running 'cp' once, see comment of ext4_release_file():
 
-...and with the new kernel, connecting the device works [1], and lsusb 
-reports the device as well. [2]
+	/*
+	 * Called when an inode is released. Note that this is different
+	 * from ext4_file_open: open gets called at every open, but release
+	 * gets called only when /all/ the files are closed.
+	 */
+	static int ext4_release_file(struct inode *inode, struct file *filp)
 
-Only thing that looks different on my workstation is this
+> 
+> I suspect the next step is use a blktrace, to see what kind of I/O is
+> being sent to the USB drive, and how long it takes for the I/O to
+> complete.  You might also try to capture the output of "iostat -x 1"
+> while the script is running, and see what the difference might be
+> between a kernel version that has the problem and one that doesn't,
+> and see if that gives us a clue.
 
--  iManufacturer           1 (error)
--  iProduct                2 (error)
--  iSerial                 3 (error)
-+  iManufacturer           1
-+  iProduct                2
-+  iSerial                 3
+That isn't necessary, given we have concluded that the bad write
+performance is caused by broken write order.
 
+> 
+> > > And then send me
+> > btw, please tell me if "me" means only you or I cc: all the
+> > recipients, as usual
+> 
+> Well, I don't think we know what the root cause is.  Ming is focusing
+> on that stack trace, but I think it's a red herring.....  And if it's
+> not a file system problem, then other people will be best suited to
+> debug the issue.
 
-Now, I had connected the device after reboot with the new kernel and 
-went afk for 4h. When I returned, aseqdump did not show anything.
+So far, the reason points to the extra writeback path from exit_to_usermode_loop().
+If it is not from close() syscall, the issue should be related with file reference
+count. If it is from close() syscall, the issue might be in 'cp''s
+implementation.
 
-But after reconnecting the device, I can read data from it with aseqdump 
-and also use the device in mixxx.
+Andrea, please collect the following log or the strace log requested by Ted, then
+we can confirm if the extra writeback is from close() or read/write() syscall:
 
-I can't put my finger on why it stopped working, and I will probably 
-have to have a closer look at this during the next days, but at first 
-glance it may not be related to USB at all.
-
-So for now I'll say the hack gets the device to work. Thank you very 
-much for your help!
-
-
--René
-
-
-
-[1]
-[15189.483381] xhci_hcd:process_ctrl_td:2094: xhci_hcd 0000:05:00.4: 
-Waiting for status stage event
-[15189.486515] xhci_hcd:process_ctrl_td:2094: xhci_hcd 0000:05:00.4: 
-Waiting for status stage event
-[15189.489512] xhci_hcd:process_ctrl_td:2094: xhci_hcd 0000:05:00.4: 
-Waiting for status stage event
-[15189.492514] xhci_hcd:process_ctrl_td:2094: xhci_hcd 0000:05:00.4: 
-Waiting for status stage event
-[15189.493396] usb 3-2.3: New USB device found, idVendor=2485, 
-idProduct=504f, bcdDevice= 2.54
-[15189.493400] usb 3-2.3: New USB device strings: Mfr=1, Product=2, 
-SerialNumber=3
-[15189.493402] usb 3-2.3: Product: CTRL
-[15189.493404] usb 3-2.3: Manufacturer: CTRL
-[15189.493406] usb 3-2.3: SerialNumber: CTRL
-[15189.493683] xhci_hcd:xhci_add_endpoint:1917: xhci_hcd 0000:05:00.4: 
-add ep 0x1, slot id 9, new drop flags = 0x0, new add flags = 0x5
-[15189.493703] xhci_hcd:xhci_add_endpoint:1917: xhci_hcd 0000:05:00.4: 
-add ep 0x81, slot id 9, new drop flags = 0x0, new add flags = 0xd
-[15189.493709] xhci_hcd:xhci_check_bandwidth:2878: xhci_hcd 
-0000:05:00.4: xhci_check_bandwidth called for udev 00000000972d7af8
-[15189.493716] xhci_hcd:xhci_ring_cmd_db:282: xhci_hcd 0000:05:00.4: // 
-Ding dong!
-[15189.493773] xhci_hcd:xhci_dbg_trace:31: xhci_hcd 0000:05:00.4: 
-Successful Endpoint Configure command
-[15189.493781] xhci_hcd:xhci_ring_cmd_db:282: xhci_hcd 0000:05:00.4: // 
-Ding dong!
-[15189.493818] xhci_hcd:handle_tx_event:2395: xhci_hcd 0000:05:00.4: 
-Stopped on No-op or Link TRB for slot 9 ep 1
-[15189.493828] xhci_hcd:xhci_ring_cmd_db:282: xhci_hcd 0000:05:00.4: // 
-Ding dong!
-[15189.493869] xhci_hcd:xhci_ring_cmd_db:282: xhci_hcd 0000:05:00.4: // 
-Ding dong!
-[15189.493918] xhci_hcd:handle_tx_event:2395: xhci_hcd 0000:05:00.4: 
-Stopped on No-op or Link TRB for slot 9 ep 2
-[15189.493926] xhci_hcd:xhci_ring_cmd_db:282: xhci_hcd 0000:05:00.4: // 
-Ding dong!
-[15189.497485] xhci_hcd:process_ctrl_td:2094: xhci_hcd 0000:05:00.4: 
-Waiting for status stage event
-[15189.500488] xhci_hcd:process_ctrl_td:2094: xhci_hcd 0000:05:00.4: 
-Waiting for status stage event
-[15189.564944] xhci_hcd:process_bulk_intr_td:2257: xhci_hcd 
-0000:05:00.4: ep 0x87 - asked for 16384 bytes, 16068 bytes untransferred
-[15191.568180] xhci_hcd:process_bulk_intr_td:2257: xhci_hcd 
-0000:05:00.4: ep 0x87 - asked for 16384 bytes, 16068 bytes untransferred
-[15193.571621] xhci_hcd:process_bulk_intr_td:2257: xhci_hcd 
-0000:05:00.4: ep 0x87 - asked for 16384 bytes, 16068 bytes untransferred
+# pass PID of 'cp' to this script
+#!/bin/sh
+PID=$1
+/usr/share/bcc/tools/trace -P $PID  -t -C \
+    't:block:block_rq_insert "%s %d %d", args->rwbs, args->sector, args->nr_sector' \
+    't:syscalls:sys_exit_close ' \
+    't:syscalls:sys_exit_read ' \
+    't:syscalls:sys_exit_write '
 
 
+Thanks,
+Ming
 
-
-[2]
-Bus 003 Device 011: ID 2485:504f
-Device Descriptor:
-   bLength                18
-   bDescriptorType         1
-   bcdUSB               1.10
-   bDeviceClass            0
-   bDeviceSubClass         0
-   bDeviceProtocol         0
-   bMaxPacketSize0         8
-   idVendor           0x2485
-   idProduct          0x504f
-   bcdDevice            2.54
-   iManufacturer           1 (error)
-   iProduct                2 (error)
-   iSerial                 3 (error)
-   bNumConfigurations      1
-   Configuration Descriptor:
-     bLength                 9
-     bDescriptorType         2
-     wTotalLength       0x0053
-     bNumInterfaces          1
-     bConfigurationValue     1
-     iConfiguration          0
-     bmAttributes         0x40
-       (Missing must-be-set bit!)
-       Self Powered
-     MaxPower              500mA
-     Interface Descriptor:
-       bLength                 9
-       bDescriptorType         4
-       bInterfaceNumber        0
-       bAlternateSetting       0
-       bNumEndpoints           2
-       bInterfaceClass         1 Audio
-       bInterfaceSubClass      3 MIDI Streaming
-       bInterfaceProtocol      0
-       iInterface              0
-       MIDIStreaming Interface Descriptor:
-         bLength                 7
-         bDescriptorType        36
-         bDescriptorSubtype      1 (HEADER)
-         bcdADC               1.00
-         wTotalLength       0x0041
-       MIDIStreaming Interface Descriptor:
-         bLength                 6
-         bDescriptorType        36
-         bDescriptorSubtype      2 (MIDI_IN_JACK)
-         bJackType               1 Embedded
-         bJackID                 1
-         iJack                   0
-       MIDIStreaming Interface Descriptor:
-         bLength                 6
-         bDescriptorType        36
-         bDescriptorSubtype      2 (MIDI_IN_JACK)
-         bJackType               2 External
-         bJackID                 2
-         iJack                   0
-       MIDIStreaming Interface Descriptor:
-         bLength                 9
-         bDescriptorType        36
-         bDescriptorSubtype      3 (MIDI_OUT_JACK)
-         bJackType               1 Embedded
-         bJackID                 3
-         bNrInputPins            1
-         baSourceID( 0)          2
-         BaSourcePin( 0)         1
-         iJack                   0
-       MIDIStreaming Interface Descriptor:
-         bLength                 9
-         bDescriptorType        36
-         bDescriptorSubtype      3 (MIDI_OUT_JACK)
-         bJackType               2 External
-         bJackID                 4
-         bNrInputPins            1
-         baSourceID( 0)          1
-         BaSourcePin( 0)         1
-         iJack                   0
-       Endpoint Descriptor:
-         bLength                 9
-         bDescriptorType         5
-         bEndpointAddress     0x01  EP 1 OUT
-         bmAttributes            2
-           Transfer Type            Bulk
-           Synch Type               None
-           Usage Type               Data
-         wMaxPacketSize     0x0004  1x 4 bytes
-         bInterval               0
-         bRefresh                0
-         bSynchAddress           0
-         MIDIStreaming Endpoint Descriptor:
-           bLength                 5
-           bDescriptorType        37
-           bDescriptorSubtype      1 (GENERAL)
-           bNumEmbMIDIJack         1
-           baAssocJackID( 0)       1
-       Endpoint Descriptor:
-         bLength                 9
-         bDescriptorType         5
-         bEndpointAddress     0x81  EP 1 IN
-         bmAttributes            2
-           Transfer Type            Bulk
-           Synch Type               None
-           Usage Type               Data
-         wMaxPacketSize     0x0004  1x 4 bytes
-         bInterval               0
-         bRefresh                0
-         bSynchAddress           0
-         MIDIStreaming Endpoint Descriptor:
-           bLength                 5
-           bDescriptorType        37
-           bDescriptorSubtype      1 (GENERAL)
-           bNumEmbMIDIJack         1
-           baAssocJackID( 0)       3
