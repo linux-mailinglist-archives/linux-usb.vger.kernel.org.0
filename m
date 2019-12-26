@@ -2,91 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C0212A9FF
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Dec 2019 04:31:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B3112AA24
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Dec 2019 05:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726961AbfLZDbs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Dec 2019 22:31:48 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:39769 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726885AbfLZDbs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Dec 2019 22:31:48 -0500
-Received: from callcc.thunk.org (96-72-84-49-static.hfc.comcastbusiness.net [96.72.84.49] (may be forged))
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id xBQ3UwCB011594
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Dec 2019 22:30:59 -0500
-Received: by callcc.thunk.org (Postfix, from userid 15806)
-        id BD883420485; Wed, 25 Dec 2019 22:30:57 -0500 (EST)
-Date:   Wed, 25 Dec 2019 22:30:57 -0500
-From:   "Theodore Y. Ts'o" <tytso@mit.edu>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Andrea Vai <andrea.vai@unipv.it>,
-        "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: AW: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-Message-ID: <20191226033057.GA10794@mit.edu>
-References: <b1b6a0e9d690ecd9432025acd2db4ac09f834040.camel@unipv.it>
- <20191223130828.GA25948@ming.t460p>
- <20191223162619.GA3282@mit.edu>
- <4c85fd3f2ec58694cc1ff7ab5c88d6e11ab6efec.camel@unipv.it>
- <20191223172257.GB3282@mit.edu>
- <bb5d395fe47f033be0b8ed96cbebf8867d2416c4.camel@unipv.it>
- <20191223195301.GC3282@mit.edu>
- <20191224012707.GA13083@ming.t460p>
- <20191225051722.GA119634@mit.edu>
- <20191226022702.GA2901@ming.t460p>
+        id S1726908AbfLZEOC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 25 Dec 2019 23:14:02 -0500
+Received: from mga12.intel.com ([192.55.52.136]:25113 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726741AbfLZEOC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 25 Dec 2019 23:14:02 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Dec 2019 20:14:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,357,1571727600"; 
+   d="scan'208";a="230019852"
+Received: from pgsmsx108.gar.corp.intel.com ([10.221.44.103])
+  by orsmga002.jf.intel.com with ESMTP; 25 Dec 2019 20:13:59 -0800
+Received: from pgsmsx102.gar.corp.intel.com ([169.254.6.183]) by
+ PGSMSX108.gar.corp.intel.com ([169.254.8.26]) with mapi id 14.03.0439.000;
+ Thu, 26 Dec 2019 12:13:58 +0800
+From:   "Pan, Harry" <harry.pan@intel.com>
+To:     AceLan Kao <acelan.kao@canonical.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        David Heinzelmann <heinzelmann.david@gmail.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Mathieu Malaterre <malat@debian.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] usb: hub: move resume delay at the head of all USB
+ access functions
+Thread-Topic: [PATCH] usb: hub: move resume delay at the head of all USB
+ access functions
+Thread-Index: AQHVtuF8vF42Fbh98kKiQOV38Geg2KfCpgQAgAP5R4CAAkjxAIAAxuoAgAIoH9Q=
+Date:   Thu, 26 Dec 2019 04:13:58 +0000
+Message-ID: <6089B7674E6F464F847AB76B599E0EAA78A86A7A@PGSMSX102.gar.corp.intel.com>
+References: <CAFv23Qn9h=pwaHkiMB2ci-OaR54gY6fdc1Q_7ZMz5mH7wHr9+w@mail.gmail.com>
+ <Pine.LNX.4.44L0.1912241021580.28718-100000@netrider.rowland.org>,<CAFv23Qmc82p3o=1vDvmX5jkfbcOzoQFX7grxrKGwf1KD_vebig@mail.gmail.com>
+In-Reply-To: <CAFv23Qmc82p3o=1vDvmX5jkfbcOzoQFX7grxrKGwf1KD_vebig@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.3.86.137]
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191226022702.GA2901@ming.t460p>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 26, 2019 at 10:27:02AM +0800, Ming Lei wrote:
-> Maybe we need to be careful for HDD., since the request count in scheduler
-> queue is double of in-flight request count, and in theory NCQ should only
-> cover all in-flight 32 requests. I will find a sata HDD., and see if
-> performance drop can be observed in the similar 'cp' test.
+Hi AceLan,
 
-Please try to measure it, but I'd be really surprised if it's
-significant with with modern HDD's.  That because they typically have
-a queue depth of 16, and a max_sectors_kb of 32767 (e.g., just under
-32 MiB).  Sort seeks are typically 1-2 ms, with full stroke seeks
-8-10ms.  Typical sequential write speeds on a 7200 RPM drive is
-125-150 MiB/s.  So suppose every other request sent to the HDD is from
-the other request stream.  The disk will chose the 8 requests from its
-queue that are contiguous, and so it will be writing around 256 MiB,
-which will take 2-3 seconds.  If it then needs to spend between 1 and
-10 ms seeking to another location of the disk, before it writes the
-next 256 MiB, the worst case overhead of that seek is 10ms / 2s, or
-0.5%.  That may very well be within your measurements' error bars.
+Would you mind to read this thread and evaluate whether it is helpful or not by kernel downgrade?
+https://bugzilla.kernel.org/show_bug.cgi?id=202541
 
-And of course, note that in real life, we are very *often* writing to
-multiple files in parallel, for example, during a "make -j16" while
-building the kernel.  Writing a single large file is certainly
-something people do (but even there people who are burning a 4G DVD
-rip are often browsing the web while they are waiting for it to
-complete, and the browser will be writing cache files, etc.).  So
-whether or not this is something where we should be stressing over
-this specific workload is going to be quite debateable.
+BTW, would you mind to the shared pcap file permission as well? 
 
-						- Ted
+-Harry
+________________________________________
+從: AceLan Kao [acelan.kao@canonical.com]
+寄件日期: 2019年12月25日 上午 11:15
+至: Alan Stern
+副本: Greg Kroah-Hartman; Kai-Heng Feng; Thinh Nguyen; Pan, Harry; David Heinzelmann; Andrey Konovalov; Nicolas Saenz Julienne; Mathieu Malaterre; linux-usb@vger.kernel.org; Linux-Kernel@Vger. Kernel. Org
+主旨: Re: [PATCH] usb: hub: move resume delay at the head of all USB access functions
+
+Here[1] are the dmesg and the usbmon log from wireshark, and
+/sys/kernel/debug/usb/usbmon/0u.
+
+I verified this issue on Dell XPS 13 + Dell Salomon WD19 docking
+station(plug-in 3 USB disk on it)
+After s2idle 7 times, 2 usb disks lost. But from wireshark log, the
+packets look normal, no error.
+
+So, I re-do the test again and log the usbmon/0u output, but it's greek to me.
+Hope you can help to find some clues in the logs.
+Thanks.
+
+1. https://people.canonical.com/~acelan/bugs/usb_issue/
