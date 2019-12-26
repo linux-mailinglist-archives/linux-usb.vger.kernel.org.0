@@ -2,98 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B47A12AB2A
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Dec 2019 10:08:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C83D12AB4C
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Dec 2019 10:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726476AbfLZJHz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 26 Dec 2019 04:07:55 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:49636 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726229AbfLZJHy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Dec 2019 04:07:54 -0500
-Received: from mail-wm1-f71.google.com ([209.85.128.71])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <chia-lin.kao@canonical.com>)
-        id 1ikP7X-0003yY-P4
-        for linux-usb@vger.kernel.org; Thu, 26 Dec 2019 09:07:51 +0000
-Received: by mail-wm1-f71.google.com with SMTP id y125so1460376wmg.1
-        for <linux-usb@vger.kernel.org>; Thu, 26 Dec 2019 01:07:51 -0800 (PST)
+        id S1726418AbfLZJbP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Dec 2019 04:31:15 -0500
+Received: from mail-ed1-f50.google.com ([209.85.208.50]:35939 "EHLO
+        mail-ed1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726229AbfLZJbP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Dec 2019 04:31:15 -0500
+Received: by mail-ed1-f50.google.com with SMTP id j17so22109289edp.3
+        for <linux-usb@vger.kernel.org>; Thu, 26 Dec 2019 01:31:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=/nmn4YJh2mSRsFqiML/jYxjaa0kKiTQhQqqheiLJa+A=;
+        b=FyQ/fNylvSkndiUh1ewecdxt8ISPPnJ9idi69e4b9xY4xY/t592+oDdw0F1BkLzuU9
+         olMixkUn/Fz4+VQulXxNvvJEh4tCgn6it2t0f6thJszikQCOwcEdMnqI+VCFHTstnRy9
+         Zu5cRewi2WUH+mk6QGKs4OxiC1dLFpBueRr5qYIyoj5nt75lBWPaSIl4jA3nmudI8ihe
+         eFKUTz9KMp86UVDdlptVAW0KFEJPcQ+oL2N6RfEs9XEpdL1Z4Bj/EBoVaAmDarrsVblz
+         NhxYBzrzgqyL32uzNNizi7Oj4yiGGiVAVmILqBp1KLMZQVm0vINaYduhe/XVTecNXdOH
+         CJTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=oFTyBe48cc1VjVZVOZfgQ9vfLk7JKDJXzBm/i7Z9r/E=;
-        b=aFkhdJcv5jkcXMwcHYmiEFwiDcPhXclQ5yJjWPMDW8yYAMLL1g07yy+BNqSbGPV6y6
-         6WlwyKQTpCrasuRNzRem53IWS1IeDWLsv8FmGa3AXyLmRMjoMBNxroFzfHQhQp2w0D8b
-         GNcD12Ov1ilTzqUyQiyeLflOTTCix4VHteP1AIlklpSuuHjLUCjnHsyErrxm3jsfUMyC
-         PxxVnUiRbz4/q0P3Rzpf7xUiAn8EXJcP241cussSZVWjnC/Ql2mSgUjZNh160gsASOc3
-         N4ZNQZJzYyo1jliQlX9Z39qshB3EnXTuAVTui/r5HoewLqCoSIMrjryu8gbIzvgoSvzW
-         T1xQ==
-X-Gm-Message-State: APjAAAWd/+SPOnCRFfnAGy3JZjc0NUwQD6MjfJ8bk9U1BCLzPlc7IQmm
-        91sBk/0h1KBgsMQarKWYL+RzyV6fQEEetleAuAt6xzzYljro/CRahOyI5KIWgyZlwFVybDcNV5K
-        sdlHDFDVbtc3R8Jk/NmW08fc5Cp/gWh3ergdeuru2GGPYfZpG+HnElw==
-X-Received: by 2002:adf:f3d1:: with SMTP id g17mr45243401wrp.378.1577351271499;
-        Thu, 26 Dec 2019 01:07:51 -0800 (PST)
-X-Google-Smtp-Source: APXvYqw1A2F3oktQrSoq8rmLU+7uy69CPrTZ3xYgzR76K+4Csr/oogvawT604ZUoQGdJ1Y0l2qq0YU5ZYR2zN7KsPWk=
-X-Received: by 2002:adf:f3d1:: with SMTP id g17mr45243380wrp.378.1577351271224;
- Thu, 26 Dec 2019 01:07:51 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=/nmn4YJh2mSRsFqiML/jYxjaa0kKiTQhQqqheiLJa+A=;
+        b=Cvr5P6o+jYq3IN6VC+YJTNVBSv1jATSWsS5bp7WEcm6Y6CUq3Bc3yhhp8wzOBGY943
+         FKRZWhivlyFULK327bVqmATWefRPMghpmr186MtfB5+QWjiHX7T7UnMWWDM64SFj2NZn
+         va65ynldLsP6VWfiG7SN7VDrlJ/8gXAnqNri1LjJNvApYRmazAJWZfjFHA/dQM13pz1V
+         PG3yTSvm6bvIkquS27pfn/4PChDcXwxA30T2QXUEyppIkLe8dirbw9KEZxzcseH33fg+
+         XB9g4WtIHlLc3gwpPXEJz58h7oHnMyNGdQiSCCPQnua1XJoN3MAYbwg9fpmGGL1uq6a1
+         5iPQ==
+X-Gm-Message-State: APjAAAUkGntuMMYQamdWPfhH89aSqwbYKzktvOOqpit2H50Ct1mVOnON
+        KL9hws0ONu60vQ4NeqbYC4EN4cofaeNAHB9QnPb0pEP03mA=
+X-Google-Smtp-Source: APXvYqzva6EOcQr3K3vJKDtTAMY/em5QVfFBK0QDv9Fa4SNbf26DffBGML0CRFzO9bRIp5SZZM0H+ZAD10XyRWIQXDQ=
+X-Received: by 2002:a17:906:ae8f:: with SMTP id md15mr47577530ejb.35.1577352672924;
+ Thu, 26 Dec 2019 01:31:12 -0800 (PST)
 MIME-Version: 1.0
-References: <CAFv23Qn9h=pwaHkiMB2ci-OaR54gY6fdc1Q_7ZMz5mH7wHr9+w@mail.gmail.com>
- <Pine.LNX.4.44L0.1912241021580.28718-100000@netrider.rowland.org>
- <CAFv23Qmc82p3o=1vDvmX5jkfbcOzoQFX7grxrKGwf1KD_vebig@mail.gmail.com> <6089B7674E6F464F847AB76B599E0EAA78A86A7A@PGSMSX102.gar.corp.intel.com>
-In-Reply-To: <6089B7674E6F464F847AB76B599E0EAA78A86A7A@PGSMSX102.gar.corp.intel.com>
-From:   AceLan Kao <acelan.kao@canonical.com>
-Date:   Thu, 26 Dec 2019 17:07:40 +0800
-Message-ID: <CAFv23Qm6+_KseMzjkdJG0W3My0yPVahiZ7gCrYybdz+czRMNCQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: hub: move resume delay at the head of all USB access functions
-To:     "Pan, Harry" <harry.pan@intel.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        David Heinzelmann <heinzelmann.david@gmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Mathieu Malaterre <malat@debian.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
+From:   RAJESH DASARI <raajeshdasari@gmail.com>
+Date:   Thu, 26 Dec 2019 15:01:03 +0530
+Message-ID: <CAPXMrf_d_uKZbohYWfO8rVEg7voBhESesU0w8Ng0M=wsw_75FQ@mail.gmail.com>
+Subject: Reg: USB network interface is down after the reboot
+To:     linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Sorry, I just corrected the file permission.
+Hi,
 
-Pan, Harry <harry.pan@intel.com> 於 2019年12月26日 週四 下午12:14寫道：
->
-> Hi AceLan,
->
-> Would you mind to read this thread and evaluate whether it is helpful or not by kernel downgrade?
-> https://bugzilla.kernel.org/show_bug.cgi?id=202541
->
-> BTW, would you mind to the shared pcap file permission as well?
->
-> -Harry
-> ________________________________________
-> 從: AceLan Kao [acelan.kao@canonical.com]
-> 寄件日期: 2019年12月25日 上午 11:15
-> 至: Alan Stern
-> 副本: Greg Kroah-Hartman; Kai-Heng Feng; Thinh Nguyen; Pan, Harry; David Heinzelmann; Andrey Konovalov; Nicolas Saenz Julienne; Mathieu Malaterre; linux-usb@vger.kernel.org; Linux-Kernel@Vger. Kernel. Org
-> 主旨: Re: [PATCH] usb: hub: move resume delay at the head of all USB access functions
->
-> Here[1] are the dmesg and the usbmon log from wireshark, and
-> /sys/kernel/debug/usb/usbmon/0u.
->
-> I verified this issue on Dell XPS 13 + Dell Salomon WD19 docking
-> station(plug-in 3 USB disk on it)
-> After s2idle 7 times, 2 usb disks lost. But from wireshark log, the
-> packets look normal, no error.
->
-> So, I re-do the test again and log the usbmon/0u output, but it's greek to me.
-> Hope you can help to find some clues in the logs.
-> Thanks.
->
-> 1. https://people.canonical.com/~acelan/bugs/usb_issue/
+I have an USB network Interface connected between two devices.
+
+                      usb0
+Device A       ---------      Device B
+
+Device A side:
+
+ifconfig usb0
+usb0      Link encap:Ethernet  HWaddr 72:81:17:44:9A:C6
+          inet addr:169.254.0.18  Bcast:0.0.0.0  Mask:255.255.240.0
+          inet6 addr: fe80::7081:17ff:fe44:9ac6/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:104 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:7553 (7.3 KiB)
+
+Device B side:
+
+ifconfig usb0
+usb0      Link encap:Ethernet  HWaddr DA:A4:50:01:5C:B8
+          inet addr:169.254.0.17  Bcast:169.254.15.255  Mask:255.255.240.0
+          inet6 addr: fe80::d8a4:50ff:fe01:5cb8/64 Scope:Link
+          UP BROADCAST RUNNING  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:913 errors:200 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:319658 (312.1 KiB)
+
+Ping from device A usb to device B usb interface is working fine.
+
+# ping 169.254.0.17
+PING 169.254.0.17 (169.254.0.17) 56(84) bytes of data.
+64 bytes from 169.254.0.17: icmp_seq=1 ttl=64 time=0.807 ms
+64 bytes from 169.254.0.17: icmp_seq=2 ttl=64 time=0.459 ms
+
+I have restarted the Device B and i could see the below logs on Device
+A console.
+
+usb 1-3.3: USB disconnect, device number 5
+cdc_ether 1-3.3:2.0 usb0: unregister 'cdc_ether' usb-0000:00:15.0-3.3,
+CDC Ethernet Device
+usb 1-3.4: USB disconnect, device number 6
+usb 1-3: USB disconnect, device number 4
+
+When the Device B was coming up  the below logs are seen on the device
+A console.
+
+usb 1-3.3: new high-speed USB device number 8 using xhci_hcd
+cdc_ether 1-3.3:2.0 usb0: register 'cdc_ether' at
+usb-0000:00:15.0-3.3, CDC Ethernet Device, 4e:7b:fc:19:ad:62
+
+Device B side usb0 interface is up and RUNNING after the Device B
+reboot but the usb0 interface  on the device A shows that interface is
+down and it is RUNNING bit
+is set not set.
+
+Device B side:
+ifconfig usb0
+usb0      Link encap:Ethernet  HWaddr 76:2D:4D:E7:76:73
+          inet addr:169.254.0.17  Bcast:169.254.15.255  Mask:255.255.240.0
+          inet6 addr: fe80::742d:4dff:fee7:7673/64 Scope:Link
+          UP BROADCAST RUNNING  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:8 errors:8 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:648 (648.0 B)
+
+Device A side:
+
+ifconfig usb0
+usb0      Link encap:Ethernet  HWaddr 72:81:17:44:9A:C6
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+Driver used at device A side:
+ethtool -i usb0
+driver: cdc_ether
+version: 22-Aug-2005
+firmware-version: CDC Ethernet Device
+expansion-rom-version:
+bus-info: usb-0000:00:15.0-3.3
+
+kernel version: 4.9.164
+
+Could someone please help, why the usb0 is down on Device A side and
+it there is any known issue or is this  expected behaviour?
+
+Regards,
+Rajesh.
