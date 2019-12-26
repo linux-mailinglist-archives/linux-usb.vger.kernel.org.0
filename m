@@ -2,146 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C83D12AB4C
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Dec 2019 10:31:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB5A12ABB1
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Dec 2019 11:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726418AbfLZJbP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Dec 2019 04:31:15 -0500
-Received: from mail-ed1-f50.google.com ([209.85.208.50]:35939 "EHLO
-        mail-ed1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726229AbfLZJbP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Dec 2019 04:31:15 -0500
-Received: by mail-ed1-f50.google.com with SMTP id j17so22109289edp.3
-        for <linux-usb@vger.kernel.org>; Thu, 26 Dec 2019 01:31:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=/nmn4YJh2mSRsFqiML/jYxjaa0kKiTQhQqqheiLJa+A=;
-        b=FyQ/fNylvSkndiUh1ewecdxt8ISPPnJ9idi69e4b9xY4xY/t592+oDdw0F1BkLzuU9
-         olMixkUn/Fz4+VQulXxNvvJEh4tCgn6it2t0f6thJszikQCOwcEdMnqI+VCFHTstnRy9
-         Zu5cRewi2WUH+mk6QGKs4OxiC1dLFpBueRr5qYIyoj5nt75lBWPaSIl4jA3nmudI8ihe
-         eFKUTz9KMp86UVDdlptVAW0KFEJPcQ+oL2N6RfEs9XEpdL1Z4Bj/EBoVaAmDarrsVblz
-         NhxYBzrzgqyL32uzNNizi7Oj4yiGGiVAVmILqBp1KLMZQVm0vINaYduhe/XVTecNXdOH
-         CJTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=/nmn4YJh2mSRsFqiML/jYxjaa0kKiTQhQqqheiLJa+A=;
-        b=Cvr5P6o+jYq3IN6VC+YJTNVBSv1jATSWsS5bp7WEcm6Y6CUq3Bc3yhhp8wzOBGY943
-         FKRZWhivlyFULK327bVqmATWefRPMghpmr186MtfB5+QWjiHX7T7UnMWWDM64SFj2NZn
-         va65ynldLsP6VWfiG7SN7VDrlJ/8gXAnqNri1LjJNvApYRmazAJWZfjFHA/dQM13pz1V
-         PG3yTSvm6bvIkquS27pfn/4PChDcXwxA30T2QXUEyppIkLe8dirbw9KEZxzcseH33fg+
-         XB9g4WtIHlLc3gwpPXEJz58h7oHnMyNGdQiSCCPQnua1XJoN3MAYbwg9fpmGGL1uq6a1
-         5iPQ==
-X-Gm-Message-State: APjAAAUkGntuMMYQamdWPfhH89aSqwbYKzktvOOqpit2H50Ct1mVOnON
-        KL9hws0ONu60vQ4NeqbYC4EN4cofaeNAHB9QnPb0pEP03mA=
-X-Google-Smtp-Source: APXvYqzva6EOcQr3K3vJKDtTAMY/em5QVfFBK0QDv9Fa4SNbf26DffBGML0CRFzO9bRIp5SZZM0H+ZAD10XyRWIQXDQ=
-X-Received: by 2002:a17:906:ae8f:: with SMTP id md15mr47577530ejb.35.1577352672924;
- Thu, 26 Dec 2019 01:31:12 -0800 (PST)
+        id S1726236AbfLZKpe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Dec 2019 05:45:34 -0500
+Received: from jabberwock.ucw.cz ([46.255.230.98]:46320 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725954AbfLZKpe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Dec 2019 05:45:34 -0500
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 124811C210C; Thu, 26 Dec 2019 11:45:32 +0100 (CET)
+Date:   Thu, 26 Dec 2019 11:45:31 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-omap@vger.kernel.org, Jacopo Mondi <jacopo@jmondi.org>,
+        Marcel Partap <mpartap@gmx.net>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Michael Scott <hashcode0f@gmail.com>,
+        NeKit <nekit1000@gmail.com>, Sebastian Reichel <sre@kernel.org>
+Subject: Re: [PATCHv2] phy: cpcap-usb: Fix flakey host idling and enumerating
+ of devices
+Message-ID: <20191226104531.GI4033@amd>
+References: <20191222180019.55417-1-tony@atomide.com>
 MIME-Version: 1.0
-From:   RAJESH DASARI <raajeshdasari@gmail.com>
-Date:   Thu, 26 Dec 2019 15:01:03 +0530
-Message-ID: <CAPXMrf_d_uKZbohYWfO8rVEg7voBhESesU0w8Ng0M=wsw_75FQ@mail.gmail.com>
-Subject: Reg: USB network interface is down after the reboot
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="sl5MdczEF/OU2Miu"
+Content-Disposition: inline
+In-Reply-To: <20191222180019.55417-1-tony@atomide.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
 
-I have an USB network Interface connected between two devices.
+--sl5MdczEF/OU2Miu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-                      usb0
-Device A       ---------      Device B
+On Sun 2019-12-22 10:00:19, Tony Lindgren wrote:
+> We must let the USB host idle things properly before we switch to debug
+> UART mode. Otherwise the USB host may never idle after disconnecting
+> devices, and that causes the next enumeration to be flakey.
+>=20
+> Cc: Jacopo Mondi <jacopo@jmondi.org>
+> Cc: Marcel Partap <mpartap@gmx.net>
+> Cc: Merlijn Wajer <merlijn@wizzup.org>
+> Cc: Michael Scott <hashcode0f@gmail.com>
+> Cc: NeKit <nekit1000@gmail.com>
 
-Device A side:
+Acked-by: Pavel Machek <pavel@ucw.cz>
 
-ifconfig usb0
-usb0      Link encap:Ethernet  HWaddr 72:81:17:44:9A:C6
-          inet addr:169.254.0.18  Bcast:0.0.0.0  Mask:255.255.240.0
-          inet6 addr: fe80::7081:17ff:fe44:9ac6/64 Scope:Link
-          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
-          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:104 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:1000
-          RX bytes:0 (0.0 B)  TX bytes:7553 (7.3 KiB)
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Fixes: 6d6ce40f63af ("phy: cpcap-usb: Add CPCAP PMIC USB support")
+> Signed-off-by: Tony Lindgren <tony@atomide.com>
 
-Device B side:
+But it does not apply on top of 5.5-rc3 AFAICT.
 
-ifconfig usb0
-usb0      Link encap:Ethernet  HWaddr DA:A4:50:01:5C:B8
-          inet addr:169.254.0.17  Bcast:169.254.15.255  Mask:255.255.240.0
-          inet6 addr: fe80::d8a4:50ff:fe01:5cb8/64 Scope:Link
-          UP BROADCAST RUNNING  MTU:1500  Metric:1
-          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:913 errors:200 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:0
-          RX bytes:0 (0.0 B)  TX bytes:319658 (312.1 KiB)
+Best regards,
+									Pavel
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
 
-Ping from device A usb to device B usb interface is working fine.
+--sl5MdczEF/OU2Miu
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
-# ping 169.254.0.17
-PING 169.254.0.17 (169.254.0.17) 56(84) bytes of data.
-64 bytes from 169.254.0.17: icmp_seq=1 ttl=64 time=0.807 ms
-64 bytes from 169.254.0.17: icmp_seq=2 ttl=64 time=0.459 ms
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
 
-I have restarted the Device B and i could see the below logs on Device
-A console.
+iEYEARECAAYFAl4Ej0sACgkQMOfwapXb+vIpXgCgpw8ow7BAI9AIa4DhiKn1Aloe
+6RIAn13zm1SNFtJWZ+ZLsyiIZou3MwFe
+=eChF
+-----END PGP SIGNATURE-----
 
-usb 1-3.3: USB disconnect, device number 5
-cdc_ether 1-3.3:2.0 usb0: unregister 'cdc_ether' usb-0000:00:15.0-3.3,
-CDC Ethernet Device
-usb 1-3.4: USB disconnect, device number 6
-usb 1-3: USB disconnect, device number 4
-
-When the Device B was coming up  the below logs are seen on the device
-A console.
-
-usb 1-3.3: new high-speed USB device number 8 using xhci_hcd
-cdc_ether 1-3.3:2.0 usb0: register 'cdc_ether' at
-usb-0000:00:15.0-3.3, CDC Ethernet Device, 4e:7b:fc:19:ad:62
-
-Device B side usb0 interface is up and RUNNING after the Device B
-reboot but the usb0 interface  on the device A shows that interface is
-down and it is RUNNING bit
-is set not set.
-
-Device B side:
-ifconfig usb0
-usb0      Link encap:Ethernet  HWaddr 76:2D:4D:E7:76:73
-          inet addr:169.254.0.17  Bcast:169.254.15.255  Mask:255.255.240.0
-          inet6 addr: fe80::742d:4dff:fee7:7673/64 Scope:Link
-          UP BROADCAST RUNNING  MTU:1500  Metric:1
-          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:8 errors:8 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:0
-          RX bytes:0 (0.0 B)  TX bytes:648 (648.0 B)
-
-Device A side:
-
-ifconfig usb0
-usb0      Link encap:Ethernet  HWaddr 72:81:17:44:9A:C6
-          BROADCAST MULTICAST  MTU:1500  Metric:1
-          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:1000
-          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
-
-Driver used at device A side:
-ethtool -i usb0
-driver: cdc_ether
-version: 22-Aug-2005
-firmware-version: CDC Ethernet Device
-expansion-rom-version:
-bus-info: usb-0000:00:15.0-3.3
-
-kernel version: 4.9.164
-
-Could someone please help, why the usb0 is down on Device A side and
-it there is any known issue or is this  expected behaviour?
-
-Regards,
-Rajesh.
+--sl5MdczEF/OU2Miu--
