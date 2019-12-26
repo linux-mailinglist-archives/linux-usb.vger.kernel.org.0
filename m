@@ -2,122 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA9212AAB8
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Dec 2019 08:03:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 880DC12AAFD
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Dec 2019 09:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726308AbfLZHDr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Dec 2019 02:03:47 -0500
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:19068 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725268AbfLZHDq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Dec 2019 02:03:46 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e045b450000>; Wed, 25 Dec 2019 23:03:33 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 25 Dec 2019 23:03:46 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 25 Dec 2019 23:03:46 -0800
-Received: from [10.19.108.118] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 26 Dec
- 2019 07:03:43 +0000
-Subject: Re: [Patch V2 05/18] phy: tegra: xusb: Add support to get companion
- USB 3 port
-To:     Nagarjuna Kristam <nkristam@nvidia.com>, <balbi@kernel.org>,
-        <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <mark.rutland@arm.com>,
-        <robh+dt@kernel.org>, <kishon@ti.com>
-CC:     <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1576660591-10383-1-git-send-email-nkristam@nvidia.com>
- <1576660591-10383-6-git-send-email-nkristam@nvidia.com>
-X-Nvconfidentiality: public
-From:   JC Kuo <jckuo@nvidia.com>
-Message-ID: <e37a083d-e5de-1b7c-f175-ec4234f60441@nvidia.com>
-Date:   Thu, 26 Dec 2019 15:03:42 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1726425AbfLZIhf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Dec 2019 03:37:35 -0500
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:46287 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725878AbfLZIhf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Dec 2019 03:37:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1577349453;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Jfbrd9Z7j74xAHhDaL9AjCoXjd1Y0h7EWv4zCc5ymZY=;
+        b=WPk2QWBg00C+5ydyid8SLCifBrgJCdkgekmDJHRzOhBFZAdshBfbXyE9uFsWc0SW/BHOdw
+        h94idMW6tIXMmICHiszLmNXaoZy6jrmJLBRKxjf7cL12AvgTqllVLmMEb1XXFpNuubZf5Z
+        2UoPY//LPJMhTykXQxx60hspPv1NlW4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-264-tUAIxXGPPKKwhZCfc1EHbA-1; Thu, 26 Dec 2019 03:37:28 -0500
+X-MC-Unique: tUAIxXGPPKKwhZCfc1EHbA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2EA85477;
+        Thu, 26 Dec 2019 08:37:25 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-19.pek2.redhat.com [10.72.8.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6988360BEC;
+        Thu, 26 Dec 2019 08:37:10 +0000 (UTC)
+Date:   Thu, 26 Dec 2019 16:37:06 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     "Theodore Y. Ts'o" <tytso@mit.edu>
+Cc:     Andrea Vai <andrea.vai@unipv.it>,
+        "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: AW: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+Message-ID: <20191226083706.GA17974@ming.t460p>
+References: <20191223130828.GA25948@ming.t460p>
+ <20191223162619.GA3282@mit.edu>
+ <4c85fd3f2ec58694cc1ff7ab5c88d6e11ab6efec.camel@unipv.it>
+ <20191223172257.GB3282@mit.edu>
+ <bb5d395fe47f033be0b8ed96cbebf8867d2416c4.camel@unipv.it>
+ <20191223195301.GC3282@mit.edu>
+ <20191224012707.GA13083@ming.t460p>
+ <20191225051722.GA119634@mit.edu>
+ <20191226022702.GA2901@ming.t460p>
+ <20191226033057.GA10794@mit.edu>
 MIME-Version: 1.0
-In-Reply-To: <1576660591-10383-6-git-send-email-nkristam@nvidia.com>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1577343813; bh=tMcZd/vUVLSibr+qNoQapk0JfXa5Y2ZYS9MCE9nZAEs=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=F6J4cbKedi3SNU0TEmkuAFJGd+YQREX5vKbEVHpOXAiKCtAzbjNhJ3qTwITDW5evk
-         D5q3x3hgSMpUmh4jlqn2TgdrjicvH3WgnzmazLoGnTE4Opz9hOfJ9C6Y57FTDVk7py
-         6BVfXUz5JOSL9+SNMSSLbM2dUru/litHn7pgc7Sg/mcPTU05fXpKGafdsR1sZbq38/
-         49qJ3Ed2jhEczOAmasIUqmYDufGfg1tD/RDD0XODoIFAK+Pm72uYd9yhzGa4+0KfEZ
-         iuaoqRtp7gKN+lnLVsbhjRgEUHSulhyfid5hSSfD6eYTQxgJvYZYSRduxOGPVJVySq
-         7YenrpWPV4DDQ==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20191226033057.GA10794@mit.edu>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, Dec 25, 2019 at 10:30:57PM -0500, Theodore Y. Ts'o wrote:
+> On Thu, Dec 26, 2019 at 10:27:02AM +0800, Ming Lei wrote:
+> > Maybe we need to be careful for HDD., since the request count in sche=
+duler
+> > queue is double of in-flight request count, and in theory NCQ should =
+only
+> > cover all in-flight 32 requests. I will find a sata HDD., and see if
+> > performance drop can be observed in the similar 'cp' test.
+>=20
+> Please try to measure it, but I'd be really surprised if it's
+> significant with with modern HDD's.
 
-On 12/18/19 5:16 PM, Nagarjuna Kristam wrote:
-> Tegra XUSB host, device mode driver requires the USB 3 companion port
-> number for corresponding USB 2 port. Add API to retrieve the same.
-> 
-> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
-> ---
-> V2:
->  - Added -ENODEV as return instead of -1, to sync other errors.
-> ---
->  drivers/phy/tegra/xusb.c       | 21 +++++++++++++++++++++
->  include/linux/phy/tegra/xusb.h |  2 ++
->  2 files changed, 23 insertions(+)
-> 
-> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
-> index 5bde8f1..e75cd71 100644
-> --- a/drivers/phy/tegra/xusb.c
-> +++ b/drivers/phy/tegra/xusb.c
-> @@ -1256,6 +1256,27 @@ int tegra_phy_xusb_utmi_port_reset(struct phy *phy)
->  }
->  EXPORT_SYMBOL_GPL(tegra_phy_xusb_utmi_port_reset);
->  
-> +int tegra_xusb_padctl_get_usb3_companion(struct tegra_xusb_padctl *padctl,
-> +				    unsigned int port)
-> +{
-> +	struct tegra_xusb_usb2_port *usb2 = tegra_xusb_find_usb2_port(padctl,
-> +								      port);
-> +	struct tegra_xusb_usb3_port *usb3;
-> +	int i;
-> +
-> +	if (!usb2)
-> +		return -EINVAL;
-> +
-> +	for (i = 0; i < padctl->soc->ports.usb3.count; i++) {
-> +		usb3 = tegra_xusb_find_usb3_port(padctl, i);
-> +		if (usb3 && usb3->port == usb2->base.index)
-> +			return usb3->base.index;
-> +	}
-> +
-> +	return -ENODEV;
-> +}
-> +EXPORT_SYMBOL_GPL(tegra_xusb_padctl_get_usb3_companion);
-> +
->  MODULE_AUTHOR("Thierry Reding <treding@nvidia.com>");
->  MODULE_DESCRIPTION("Tegra XUSB Pad Controller driver");
->  MODULE_LICENSE("GPL v2");
-> diff --git a/include/linux/phy/tegra/xusb.h b/include/linux/phy/tegra/xusb.h
-> index 1235865..71d9569 100644
-> --- a/include/linux/phy/tegra/xusb.h
-> +++ b/include/linux/phy/tegra/xusb.h
-> @@ -21,4 +21,6 @@ int tegra_xusb_padctl_usb3_set_lfps_detect(struct tegra_xusb_padctl *padctl,
->  int tegra_xusb_padctl_set_vbus_override(struct tegra_xusb_padctl *padctl,
->  					bool val);
->  int tegra_phy_xusb_utmi_port_reset(struct phy *phy);
-> +int tegra_xusb_padctl_get_usb3_companion(struct tegra_xusb_padctl *padctl,
-> +					 unsigned int port);
->  #endif /* PHY_TEGRA_XUSB_H */
-> 
-Reviewed-by: JC Kuo <jckuo@nvidia.com>
+Just find one machine with AHCI SATA, and run the following xfs
+overwrite test:
+
+#!/bin/bash
+DIR=3D$1
+echo 3 > /proc/sys/vm/drop_caches
+fio --readwrite=3Dwrite --filesize=3D5g --overwrite=3D1 --filename=3D$DIR=
+/fiofile \
+        --runtime=3D60s --time_based --ioengine=3Dpsync --direct=3D0 --bs=
+=3D4k
+		--iodepth=3D128 --numjobs=3D2 --group_reporting=3D1 --name=3Doverwrite
+
+FS is xfs, and disk is LVM over AHCI SATA with NCQ(depth 32), because the
+machine is picked up from RH beaker, and it is the only disk in the box.
+
+#lsblk
+NAME                            MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+sda                               8:0    0 931.5G  0 disk=20
+=E2=94=9C=E2=94=80sda1                            8:1    0     1G  0 part=
+ /boot
+=E2=94=94=E2=94=80sda2                            8:2    0 930.5G  0 part=
+=20
+  =E2=94=9C=E2=94=80rhel_hpe--ml10gen9--01-root 253:0    0    50G  0 lvm =
+ /
+  =E2=94=9C=E2=94=80rhel_hpe--ml10gen9--01-swap 253:1    0   3.9G  0 lvm =
+ [SWAP]
+  =E2=94=94=E2=94=80rhel_hpe--ml10gen9--01-home 253:2    0 876.6G  0 lvm =
+ /home
+
+
+kernel: 3a7ea2c483a53fc("scsi: provide mq_ops->busy() hook") which is
+the previous commit of f664a3cc17b7 ("scsi: kill off the legacy IO path")=
+.
+
+            |scsi_mod.use_blk_mq=3DN |scsi_mod.use_blk_mq=3DY |
+-----------------------------------------------------------
+throughput: |244MB/s               |169MB/s               |
+-----------------------------------------------------------
+
+Similar result can be observed on v5.4 kernel(184MB/s) with same test
+steps.
+
+
+> That because they typically have
+> a queue depth of 16, and a max_sectors_kb of 32767 (e.g., just under
+> 32 MiB).  Sort seeks are typically 1-2 ms, with full stroke seeks
+> 8-10ms.  Typical sequential write speeds on a 7200 RPM drive is
+> 125-150 MiB/s.  So suppose every other request sent to the HDD is from
+> the other request stream.  The disk will chose the 8 requests from its
+> queue that are contiguous, and so it will be writing around 256 MiB,
+> which will take 2-3 seconds.  If it then needs to spend between 1 and
+> 10 ms seeking to another location of the disk, before it writes the
+> next 256 MiB, the worst case overhead of that seek is 10ms / 2s, or
+> 0.5%.  That may very well be within your measurements' error bars.
+
+Looks you assume that disk seeking just happens once when writing around
+256MB. This assumption may not be true, given all data can be in page
+cache before writing. So when two tasks are submitting IOs concurrently,
+IOs from each single task is sequential, and NCQ may order the current ba=
+tch
+submitted from the two streams. However disk seeking may still be needed
+for the next batch handled by NCQ.
+
+> And of course, note that in real life, we are very *often* writing to
+> multiple files in parallel, for example, during a "make -j16" while
+> building the kernel.  Writing a single large file is certainly
+> something people do (but even there people who are burning a 4G DVD
+> rip are often browsing the web while they are waiting for it to
+> complete, and the browser will be writing cache files, etc.).  So
+> whether or not this is something where we should be stressing over
+> this specific workload is going to be quite debateable.
+
+Thanks,=20
+Ming
+
