@@ -2,87 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1B3112AA24
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Dec 2019 05:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77EE612AA6E
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Dec 2019 06:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726908AbfLZEOC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 25 Dec 2019 23:14:02 -0500
-Received: from mga12.intel.com ([192.55.52.136]:25113 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726741AbfLZEOC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 25 Dec 2019 23:14:02 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Dec 2019 20:14:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,357,1571727600"; 
-   d="scan'208";a="230019852"
-Received: from pgsmsx108.gar.corp.intel.com ([10.221.44.103])
-  by orsmga002.jf.intel.com with ESMTP; 25 Dec 2019 20:13:59 -0800
-Received: from pgsmsx102.gar.corp.intel.com ([169.254.6.183]) by
- PGSMSX108.gar.corp.intel.com ([169.254.8.26]) with mapi id 14.03.0439.000;
- Thu, 26 Dec 2019 12:13:58 +0800
-From:   "Pan, Harry" <harry.pan@intel.com>
-To:     AceLan Kao <acelan.kao@canonical.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        David Heinzelmann <heinzelmann.david@gmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Mathieu Malaterre <malat@debian.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] usb: hub: move resume delay at the head of all USB
- access functions
-Thread-Topic: [PATCH] usb: hub: move resume delay at the head of all USB
- access functions
-Thread-Index: AQHVtuF8vF42Fbh98kKiQOV38Geg2KfCpgQAgAP5R4CAAkjxAIAAxuoAgAIoH9Q=
-Date:   Thu, 26 Dec 2019 04:13:58 +0000
-Message-ID: <6089B7674E6F464F847AB76B599E0EAA78A86A7A@PGSMSX102.gar.corp.intel.com>
-References: <CAFv23Qn9h=pwaHkiMB2ci-OaR54gY6fdc1Q_7ZMz5mH7wHr9+w@mail.gmail.com>
- <Pine.LNX.4.44L0.1912241021580.28718-100000@netrider.rowland.org>,<CAFv23Qmc82p3o=1vDvmX5jkfbcOzoQFX7grxrKGwf1KD_vebig@mail.gmail.com>
-In-Reply-To: <CAFv23Qmc82p3o=1vDvmX5jkfbcOzoQFX7grxrKGwf1KD_vebig@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.3.86.137]
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: 8BIT
+        id S1726229AbfLZF4f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Dec 2019 00:56:35 -0500
+Received: from mail26.static.mailgun.info ([104.130.122.26]:15966 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725263AbfLZF4e (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Dec 2019 00:56:34 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1577339793; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=OBzp2vx5t+U+RC6FagxULdtyTXd6+xbZUL8IMXMmGv8=; b=DMm+e+PbrqALUAGEBs+o5IaBm8G792K8BNz6mrxqDNp/W4vbYGpO8iS/gYBU8K+srnkkj/dL
+ OdJ4ml308ETNo+tMZh3y54NXtK4uUbnk0qpZFl4cnR5V014smHy1hLlHQ9KeVtO8YefVkaWa
+ pN7NDkQUfbdl+IlFge3pvUPRQjU=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e044b91.7f315a318688-smtp-out-n03;
+ Thu, 26 Dec 2019 05:56:33 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id CB968C4479D; Thu, 26 Dec 2019 05:56:31 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.206.25.219] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sanm)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 969F9C43383;
+        Thu, 26 Dec 2019 05:56:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 969F9C43383
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sanm@codeaurora.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: usb: qcom,dwc3: Convert USB DWC3
+ bindings
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-usb@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Manu Gautam <mgautam@codeaurora.org>
+References: <1576474742-23409-1-git-send-email-sanm@codeaurora.org>
+ <1576474742-23409-2-git-send-email-sanm@codeaurora.org>
+ <CAD=FV=U48gdGHMbQ22M_59t6va2n41Zh1CDTqMJYpLCwiD35Mg@mail.gmail.com>
+From:   "Sandeep Maheswaram (Temp)" <sanm@codeaurora.org>
+Message-ID: <d0e0f983-1284-b641-0d74-bc4f49ef1d80@codeaurora.org>
+Date:   Thu, 26 Dec 2019 11:26:25 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
+In-Reply-To: <CAD=FV=U48gdGHMbQ22M_59t6va2n41Zh1CDTqMJYpLCwiD35Mg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi AceLan,
+Hi
 
-Would you mind to read this thread and evaluate whether it is helpful or not by kernel downgrade?
-https://bugzilla.kernel.org/show_bug.cgi?id=202541
+On 12/18/2019 12:44 AM, Doug Anderson wrote:
+> Hi,
+>
+> On Sun, Dec 15, 2019 at 9:40 PM Sandeep Maheswaram <sanm@codeaurora.org> wrote:
+>>
+>>
+>> +    items:
+>> +      - description: System Config NOC clock. Not present on "qcom,msm8996-dwc3" compatible.
+>> +      - description: Master/Core clock, have to be >= 125 MHz for SS operation and >= 60MHz for HS operation
+> To make the grammer gooder, s/have/has/
+>
+>
+>> +      - description: System bus AXI clock. Not present on "qcom,msm8996-dwc3" compatible.
+>> +      - description: Mock utmi clock needed for ITP/SOF generation in host mode.Its frequency should be 19.2MHz.
+>> +      - description: Sleep clock, used for wakeup when USB3 core goes into low power mode (U3).
+> * Please word wrap to ~80 chracters.
+> * As Stephen says, order matters.  Please match order of old bindings
+> (and in clock-names)
+> * Please end each with a period.
 
-BTW, would you mind to the shared pcap file permission as well? 
+Regarding the order of clocks, If I change the order  I am facing error 
+in make dtbs_check
 
--Harry
-________________________________________
-$BWO(B: AceLan Kao [acelan.kao@canonical.com]
-$B4s7oF|4|(B: 2019$BG/(B12$B7n(B25$BF|(B $B>e8a(B 11:15
-$B;j(B: Alan Stern
-$BI{K\(B: Greg Kroah-Hartman; Kai-Heng Feng; Thinh Nguyen; Pan, Harry; David Heinzelmann; Andrey Konovalov; Nicolas Saenz Julienne; Mathieu Malaterre; linux-usb@vger.kernel.org; Linux-Kernel@Vger. Kernel. Org
-$B<g;](B: Re: [PATCH] usb: hub: move resume delay at the head of all USB access functions
+linux-next/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml: usb@a6f8800: 
+clock-names:0: 'core' was expected
+linux-next/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml: usb@a6f8800: 
+clock-names:1: 'mock_utmi' was expected
+linux-next/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml: usb@a6f8800: 
+clock-names:2: 'sleep' was expected
+linux-next/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml: usb@a6f8800: 
+clock-names:3: 'cfg_noc' was expected
+linux-next/arch/arm64/boot/dts/qcom/sc7180-idp.dt.yaml: usb@a6f8800: 
+clock-names:4: 'iface' was expected
 
-Here[1] are the dmesg and the usbmon log from wireshark, and
-/sys/kernel/debug/usb/usbmon/0u.
+Need to modify in the sc7180.dtsi and sdm845.dtsi  to avoid the error  . 
+Please let me know how to proceed.
 
-I verified this issue on Dell XPS 13 + Dell Salomon WD19 docking
-station(plug-in 3 USB disk on it)
-After s2idle 7 times, 2 usb disks lost. But from wireshark log, the
-packets look normal, no error.
-
-So, I re-do the test again and log the usbmon/0u output, but it's greek to me.
-Hope you can help to find some clues in the logs.
-Thanks.
-
-1. https://people.canonical.com/~acelan/bugs/usb_issue/
+>
+>
+>> +  clock-names:
+>> +    minItems: 3
+>> +    items:
+>> +      - const: cfg_noc
+>> +      - const: core
+>> +      - const: iface
+>> +      - const: mock_utmi
+>> +      - const: sleep
+>> +
+>>
+>
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
