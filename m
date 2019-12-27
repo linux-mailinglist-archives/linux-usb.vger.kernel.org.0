@@ -2,205 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F5712B1AD
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2019 07:17:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6727A12B1CB
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2019 07:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726310AbfL0GQ5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Dec 2019 01:16:57 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:3768 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725904AbfL0GQ4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Dec 2019 01:16:56 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e05a1ca0000>; Thu, 26 Dec 2019 22:16:43 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 26 Dec 2019 22:16:56 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 26 Dec 2019 22:16:56 -0800
-Received: from [10.24.192.96] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 27 Dec
- 2019 06:16:52 +0000
-Subject: Re: [Patch V2 03/18] phy: tegra: xusb: Add usb-role-switch support
-To:     JC Kuo <jckuo@nvidia.com>, <balbi@kernel.org>,
-        <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <mark.rutland@arm.com>,
-        <robh+dt@kernel.org>, <kishon@ti.com>
-CC:     <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1576660591-10383-1-git-send-email-nkristam@nvidia.com>
- <1576660591-10383-4-git-send-email-nkristam@nvidia.com>
- <3f02b1c8-0d2e-700c-d1f5-80f9655f62e0@nvidia.com>
-X-Nvconfidentiality: public
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
-Message-ID: <5fc4c7b7-0005-2b55-71ed-92c249aa35d8@nvidia.com>
-Date:   Fri, 27 Dec 2019 11:48:56 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
+        id S1726270AbfL0Gg5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Dec 2019 01:36:57 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:54637 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725854AbfL0Gg4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Dec 2019 01:36:56 -0500
+Received: from droid10.amlogic.com (10.18.11.213) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.1591.10; Fri, 27 Dec 2019
+ 14:37:14 +0800
+From:   Hanjie Lin <hanjie.lin@amlogic.com>
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>
+CC:     Hanjie Lin <hanjie.lin@amlogic.com>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Carlo Caione <carlo@caione.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Yue Wang <yue.wang@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+Subject: [PATCH v3 0/6] arm64: meson: Add support for USB on Amlogic A1
+Date:   Fri, 27 Dec 2019 14:36:40 +0800
+Message-ID: <1577428606-69855-1-git-send-email-hanjie.lin@amlogic.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <3f02b1c8-0d2e-700c-d1f5-80f9655f62e0@nvidia.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1577427403; bh=lspnrc2CBLB6URvouestBX0L08KJ5pMq/n+NcpkMWcw=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=JsINGrCx41ms2ZJQcHJDxvZVJQH7iTCTHYI7dWhg3aUEVCNjgP5G9fM6s8Z+UuZXx
-         har9IArQEy67gcYXcHZztpeOhNTXRLvJSOsCelN6egZFPXac6oszcfrDXqxprmNEop
-         hXYAebDXYdtbieCFmkG2bBex7IrKolUDmvNezXgwD6secct/2Nr+cD818KmkjDvjnt
-         lk1aFUzK/15BC/d+K819/IwS3MoGDUpE517YgJ0clUyXFDXv7z7TZTvbATk8ndTxza
-         teBmYRJnaSkyfoBvBR+FogEi/KSfsUtUsVFatkrPhLb0ZhKvzebmHXMcSmMJ8vGxV6
-         WNvlmsC5rFEUA==
+Content-Type: text/plain
+X-Originating-IP: [10.18.11.213]
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This patchset adds support for USB on Amlogic A1 SoCs.
 
+This patchset is composed with :
+- bindings of the PHY
+- bindings of the USB Control Glue
+- PHY Driver
+- USB Control Glue driver
+- dts of the PHY
+- dts of the USB Controller
 
-On 26-12-2019 12:12, JC Kuo wrote:
-> 
-> On 12/18/19 5:16 PM, Nagarjuna Kristam wrote:
->> If usb-role-switch property is present in USB 2 port, register
->> usb-role-switch to receive usb role changes.
->>
->> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
->> ---
->> V2:
->>   - Removed dev_set_drvdata for port->dev.
->>   - Added of_platform_depopulate during error handling and driver removal.
->> ---
->>   drivers/phy/tegra/Kconfig |  1 +
->>   drivers/phy/tegra/xusb.c  | 42 ++++++++++++++++++++++++++++++++++++++++++
->>   drivers/phy/tegra/xusb.h  |  3 +++
->>   3 files changed, 46 insertions(+)
->>
->> diff --git a/drivers/phy/tegra/Kconfig b/drivers/phy/tegra/Kconfig
->> index f9817c3..df07c4d 100644
->> --- a/drivers/phy/tegra/Kconfig
->> +++ b/drivers/phy/tegra/Kconfig
->> @@ -2,6 +2,7 @@
->>   config PHY_TEGRA_XUSB
->>   	tristate "NVIDIA Tegra XUSB pad controller driver"
->>   	depends on ARCH_TEGRA
->> +	select USB_CONN_GPIO
->>   	help
->>   	  Choose this option if you have an NVIDIA Tegra SoC.
->>   
->> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
->> index f98ec39..dc00b42 100644
->> --- a/drivers/phy/tegra/xusb.c
->> +++ b/drivers/phy/tegra/xusb.c
->> @@ -523,6 +523,7 @@ static int tegra_xusb_port_init(struct tegra_xusb_port *port,
->>   	port->dev.type = &tegra_xusb_port_type;
->>   	port->dev.of_node = of_node_get(np);
->>   	port->dev.parent = padctl->dev;
->> +	port->dev.driver = padctl->dev->driver;
->>   
->>   	err = dev_set_name(&port->dev, "%s-%u", name, index);
->>   	if (err < 0)
->> @@ -541,6 +542,10 @@ static int tegra_xusb_port_init(struct tegra_xusb_port *port,
->>   
->>   static void tegra_xusb_port_unregister(struct tegra_xusb_port *port)
->>   {
->> +	if (!IS_ERR_OR_NULL(port->usb_role_sw)) {
->> +		of_platform_depopulate(&port->dev);
->> +		usb_role_switch_unregister(port->usb_role_sw);
->> +	}
->>   	device_unregister(&port->dev);
->>   }
->>   
->> @@ -551,11 +556,42 @@ static const char *const modes[] = {
->>   	[USB_DR_MODE_OTG] = "otg",
->>   };
->>   
->> +static int tegra_xusb_role_sw_set(struct device *dev, enum usb_role role)
->> +{
->> +	dev_dbg(dev, "%s calling notifier for role is %d\n", __func__, role);
->> +
->> +	return 0;
->> +}
->> +
->> +static int tegra_xusb_setup_usb_role_switch(struct tegra_xusb_port *port)
->> +{
->> +	int err = 0;
->> +	struct usb_role_switch_desc role_sx_desc = {
->> +					.set = tegra_xusb_role_sw_set,
->> +					.fwnode = dev_fwnode(&port->dev),
->> +						   };
->> +
->> +	port->usb_role_sw = usb_role_switch_register(&port->dev,
->> +						&role_sx_desc);
->> +	if (IS_ERR(port->usb_role_sw)) {
->> +		err = PTR_ERR(port->usb_role_sw);
->> +		if (err != EPROBE_DEFER)
->> +			dev_err(&port->dev, "Failed to register USB role SW: %d",
->> +				err);
->> +	}
->> +
->> +	/* populate connector entry */
->> +	of_platform_populate(port->dev.of_node, NULL, NULL, &port->dev);
->> +
->> +	return err;
->> +}
->> +
->>   static int tegra_xusb_usb2_port_parse_dt(struct tegra_xusb_usb2_port *usb2)
->>   {
->>   	struct tegra_xusb_port *port = &usb2->base;
->>   	struct device_node *np = port->dev.of_node;
->>   	const char *mode;
->> +	int err;
->>   
->>   	usb2->internal = of_property_read_bool(np, "nvidia,internal");
->>   
->> @@ -572,6 +608,12 @@ static int tegra_xusb_usb2_port_parse_dt(struct tegra_xusb_usb2_port *usb2)
->>   		usb2->mode = USB_DR_MODE_HOST;
->>   	}
->>   
-> "usb-role-switch" is not required for host mode port. If a otg or a peripheral
-> port doesn't have "usb-role-switch" property, .probe() should abort.
-> 
-> Thanks,
-> JC
-> 
+The Amlogic A1 USB Complex is composed of :
+- 1 DWC3 USB controller for USB2 Host functionality
+- 1 USB2 PHY for USB2 Host functionality
 
-Yes, will add the checks accordingly.
--nagarjuna
+The USB Control Glue setups the clocks and the reset about DWC3 USB
+controller, and binds to the USB2 PHY. It also configures the 8bit
+UTMI interfaces for the USB2 PHY, including setting USB2 phy mode.
 
->> +	if (of_property_read_bool(np, "usb-role-switch")) {
->> +		err = tegra_xusb_setup_usb_role_switch(port);
->> +		if (err < 0)
->> +			return err;
->> +	}
->> +
->>   	usb2->supply = devm_regulator_get(&port->dev, "vbus");
->>   	return PTR_ERR_OR_ZERO(usb2->supply);
->>   }
->> diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
->> index da94fcc..9f27899 100644
->> --- a/drivers/phy/tegra/xusb.h
->> +++ b/drivers/phy/tegra/xusb.h
->> @@ -12,6 +12,7 @@
->>   #include <linux/workqueue.h>
->>   
->>   #include <linux/usb/otg.h>
->> +#include <linux/usb/role.h>
->>   
->>   /* legacy entry points for backwards-compatibility */
->>   int tegra_xusb_padctl_legacy_probe(struct platform_device *pdev);
->> @@ -266,6 +267,8 @@ struct tegra_xusb_port {
->>   	struct list_head list;
->>   	struct device dev;
->>   
->> +	struct usb_role_switch *usb_role_sw;
->> +
->>   	const struct tegra_xusb_port_ops *ops;
->>   };
->>   
->>
+The USB2 PHY driver initializes the phy analog settings, phy PLL 
+setup and phy tuning.
+
+This patchset is based on A1 clock/power domain/reset series at [0].
+
+Changes since v1:[1]
+ - integrate glue and phy drivers into g12a's
+ 
+Changes since v2:[2]
+ - modify amlogic,meson-g12a-usb-ctrl.yaml with dt_binding_check tool
+ - phy/glue driver use of_device_get_match_data to distinguish A1 from G12A
+
+[0]
+https://patchwork.kernel.org/project/linux-amlogic/list/?series=185477
+https://patchwork.kernel.org/project/linux-amlogic/list/?series=180055
+https://patchwork.kernel.org/project/linux-amlogic/list/?series=189643
+
+[1] : https://lore.kernel.org/linux-amlogic/1574405757-76184-1-git-send-email-hanjie.lin@amlogic.com/
+
+[2] : https://lore.kernel.org/linux-amlogic/1576636944-196192-1-git-send-email-hanjie.lin@amlogic.com/
+
+Hanjie Lin (6):
+  dt-bindings: phy: Add Amlogic A1 USB2 PHY Bindings
+  dt-bindings: usb: dwc3: Add the Amlogic A1 Family DWC3 Glue Bindings
+  phy: amlogic: Add Amlogic A1 USB2 PHY Driver
+  usb: dwc3: Add Amlogic A1 DWC3 glue
+  arm64: dts: meson: a1: Enable USB2 PHY
+  arm64: dts: meson: a1: Enable DWC3 controller
+
+ .../bindings/phy/amlogic,meson-a1-usb2-phy.yaml    |  55 +++++++++++
+ .../bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml  |  57 +++++++++--
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi          |  44 +++++++++
+ drivers/phy/amlogic/phy-meson-g12a-usb2.c          |  93 ++++++++++++------
+ drivers/usb/dwc3/dwc3-meson-g12a.c                 | 105 +++++++++++++++------
+ 5 files changed, 292 insertions(+), 62 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/amlogic,meson-a1-usb2-phy.yaml
+
+-- 
+2.7.4
+
