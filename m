@@ -2,184 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 262C712B4B1
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2019 14:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9D912B54A
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2019 15:47:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727134AbfL0NAk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Dec 2019 08:00:40 -0500
-Received: from mail25.static.mailgun.info ([104.130.122.25]:18876 "EHLO
-        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726509AbfL0NAk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Dec 2019 08:00:40 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1577451639; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=elAZDYyWpHh1dEeZKdpEIhlxZZccEhpE0oQywbjr8TQ=; b=jdISPOh5v/3vGDtuhCo7x61I+0dsk7sWshA2g012ZmPCVlWA61nkzE/yDJNLbyDzEMIwmBRL
- s55eJbYxSb6Qzlwjg0H9J4LH/BCaJ6r1W7w0N22zIj74+TwNbbOBBbroS/kdLk3rhvk+45pw
- hmL261uVdjDJKJIVB/P+U8Eh5e8=
-X-Mailgun-Sending-Ip: 104.130.122.25
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e060072.7f7729b19420-smtp-out-n01;
- Fri, 27 Dec 2019 13:00:34 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 3BF47C447AF; Fri, 27 Dec 2019 13:00:34 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.0
-Received: from [10.204.79.138] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akdwived)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 36A09C447AD;
-        Fri, 27 Dec 2019 13:00:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 36A09C447AD
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akdwived@codeaurora.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: Documentation for qcom,eud
-To:     Rob Herring <robh@kernel.org>,
-        Prakruthi Deepak Heragu <pheragu@codeaurora.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ckadabi@codeaurora.org, tsoni@codeaurora.org,
-        rnayak@codeaurora.org, bryanh@codeaurora.org,
-        psodagud@codeaurora.org,
-        Satya Durga Srinivasu Prabhala <satyap@codeaurora.org>
-References: <1536096853-30473-1-git-send-email-pheragu@codeaurora.org>
- <1536096853-30473-2-git-send-email-pheragu@codeaurora.org>
- <20180925192507.GA19360@bogus>
-From:   "Dwivedi, Avaneesh Kumar (avani)" <akdwived@codeaurora.org>
-Message-ID: <03949a1b-ee93-ee71-ff6e-e1f045b15129@codeaurora.org>
-Date:   Fri, 27 Dec 2019 18:30:27 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        id S1726995AbfL0Or0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Dec 2019 09:47:26 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:36015 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726928AbfL0Or0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Dec 2019 09:47:26 -0500
+Received: (qmail 5815 invoked by uid 500); 27 Dec 2019 09:47:25 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 27 Dec 2019 09:47:25 -0500
+Date:   Fri, 27 Dec 2019 09:47:25 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Peter Chen <peter.chen@nxp.com>
+cc:     Guenter Roeck <linux@roeck-us.net>,
+        Peter Chen <peter.chen@freescale.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] usb: chipidea: host: Disable port power only if previously
+ enabled
+In-Reply-To: <20191227014459.GA5283@b29397-desktop>
+Message-ID: <Pine.LNX.4.44L0.1912270945001.5688-100000@netrider.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <20180925192507.GA19360@bogus>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rob,
+On Fri, 27 Dec 2019, Peter Chen wrote:
 
-We would like to revive this thread, We also would like to address your 
-comments on this patch set.
+> On 19-12-26 14:46:15, Alan Stern wrote:
+> > On Thu, 26 Dec 2019, Guenter Roeck wrote:
+> > 
+> > > On shutdown, ehci_power_off() is called unconditionally to power off
+> > > each port, even if it was never called to power on the port.
+> > > For chipidea, this results in a call to ehci_ci_portpower() with a request
+> > > to power off ports even if the port was never powered on.
+> > > This results in the following warning from the regulator code.
+> > 
+> > That's weird -- we should always power-on every port during hub 
+> > initialization.
+> > 
+> > It looks like there's a bug in hub.c:hub_activate(): The line under
+> > HUB_INIT which calls hub_power_on() should call
+> > usb_hub_set_port_power() instead.  In fact, the comment near the start
+> > of hub_power_on() is wrong.  It says "Enable power on each port", but
+> > in fact it only enables power for ports that had been powered-on
+> > previously (i.e., the port's bit in hub->power_bits was set).  
+> > Apparently this got messed up in commit ad493e5e5805 ("usb: add usb
+> > port auto power off mechanism").
+> > 
+> > Now, the chipidea driver may still need to be updated, because 
+> > ehci_turn_off_all_ports() will still be called during shutdown and it 
+> > will try to power-down all ports, even those which are already powered 
+> > down (for example, because the port is suspended).
+> > 
+> 
+> Hi Alan,
+> 
+> When the port is suspended, why it was turned off? If it was turned
+> off, how could respond wakeup event?
 
-Please consider our reply against your comments so that we can proceed.
+You're right; if a port is powered off then it can't respond to wakeup 
+events.
 
-On 9/26/2018 12:55 AM, Rob Herring wrote:
-> On Tue, Sep 04, 2018 at 02:34:12PM -0700, Prakruthi Deepak Heragu wrote:
->> Documentation for Embedded USB Debugger (EUD) device tree bindings.
->>
->> Signed-off-by: Satya Durga Srinivasu Prabhala <satyap@codeaurora.org>
->> Signed-off-by: Prakruthi Deepak Heragu <pheragu@codeaurora.org>
->> ---
->>   .../devicetree/bindings/soc/qcom/qcom,msm-eud.txt  | 41 ++++++++++++++++++++++
->>   1 file changed, 41 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,msm-eud.txt
->>
->> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,msm-eud.txt b/Documentation/devicetree/bindings/soc/qcom/qcom,msm-eud.txt
->> new file mode 100644
->> index 0000000..a03021a
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,msm-eud.txt
->> @@ -0,0 +1,41 @@
->> +* Qualcomm Technologies Inc Embedded USB Debugger (EUD)
->> +
->> +The EUD (Embedded USB Debugger) is a mini-USB hub implemented
->> +on chip to support the USB-based debug and trace capabilities.
-> Is it just for debug and normally bypassed?
-Yes, In normal mode EUD is bypassed.
->> +
->> +Required properties:
->> +
->> + - compatible:  Should be "qcom,msm-eud"
-> Needs to be SoC specific (though a fallback is fine).
+But if the power/wakeup attribute is set to "disabled" then the port 
+doesn't need to respond to wakeup events.  In that situation, usbcore 
+may decide to power-down the port.
 
-This IP will be present in all qcom SoC's that is why this is specific 
-to qcom, let us know if this is anyway problematic?
+Alan Stern
 
->> + - interrupts:  Interrupt number
->> + - reg: Should be address and size of EUD register space
->> +
->> +Driver notifies clients for VBUS attach/detach and charger enable/disable
-> Bindings are for h/w blocks, not drivers.
-This has been addressed in patch set v3 which is pending for your review.
->
->> +events. The link between client and EUD is established via a directed
->> +graph. EUD driver has one endpoint of the graph link mentioning EUD as an
->> +output link and clients registered for these notifications from the EUD
->> +should have the other endpoint of the graph link as an input link.
-> OF graph is for describing data flows (i.e. h/w connections), not
-> clients wanting some event.
-
-Will rephrasing above description as below would work?
-
-"The link between event receiver and EUD is established via a directed 
-graph. Where EUD act as output link and event receiver(ex. usb 
-controller or charger h/w)  as input link"
-
->> Each of
->> +these endpoints should contain a 'remote-endpoint' phandle property that
->> +points to the corresponding endpoint in the port of the remote device.
-> You don't need to describe how the graph binding works. Just what the
-> port assignments are.
-
-patch set v3 has removed the part describing how graph binding works.
-
->
-> I worry this is going to collide with using the graph binding for USB
-> connectors.
-
-Can you please elaborate your query little more? USB controller has 
-input connection from EUD as well as USB connectors.
-
-As mentioned earlier, usb controller receive event from EUD only in 
-debug mode while in normal mode USB connector supplies the event.
-
-does that address concern?
-
->
->> +
->> +An example for EUD device node:
->> +
->> +	eud: qcom,msm-eud@88e0000 {
->> +		compatible = "qcom,msm-eud";
->> +		interrupts = <GIC_SPI 492 IRQ_TYPE_LEVEL_HIGH>;
->> +		reg = <0x88e0000 0x4000>;
->> +		port {
->> +                	eud_output: endpoint {
->> +                        	remote-endpoint = <&usb3_input>;
->> +                        };
->> +        	};
->> +	};
->> +
->> +An example for EUD client:
-> What are possible clients? Could we want to switch clients at runtime?
-
-As of now clients are usb controller and charger hardware, and they are 
-fixed.
-
-EUD application decide events dynamically.
-
->
->> +
->> +	usb3 {
->> +		port {
->> +                	usb3_input: endpoint {
->> +                        	remote-endpoint = <&eud_output>;
->> +                        };
->> +        	};
->> +	};
->> -- 
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> a Linux Foundation Collaborative Project
->>
--- 
-Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project.
