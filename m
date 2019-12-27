@@ -2,97 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F6412B5F4
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2019 17:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7FB12B600
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2019 17:55:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726839AbfL0Qko (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Dec 2019 11:40:44 -0500
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:37683 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726379AbfL0Qko (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Dec 2019 11:40:44 -0500
-Received: by mail-ed1-f65.google.com with SMTP id cy15so25734358edb.4;
-        Fri, 27 Dec 2019 08:40:42 -0800 (PST)
+        id S1726984AbfL0Qzr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Dec 2019 11:55:47 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:39083 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726379AbfL0Qzq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Dec 2019 11:55:46 -0500
+Received: by mail-pf1-f195.google.com with SMTP id q10so14969297pfs.6;
+        Fri, 27 Dec 2019 08:55:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xgrOcm9k9IAQcFI+FWINNDCQ0Z4VaYkcjqiXu7nzoSs=;
-        b=Yf6Cu8DGYWlCJdHGMC0bCW0kyLJBuSPvgcu9lEwGombWcvTkBDMvNqz5BXObWo3yok
-         p5el38LSnq5WwV5xPaxH2kD1uC1zQLDc90NKaHzo5pMnK5IM3t5+g7M6Dy89kSbkesBD
-         PKuPfIb9Ne2DPhT2T1AyR9N4f1vZHB8G2afcutDR21ntb4f5EV1WNUttItuiRsGW8lO3
-         oagm92RwvJIfhFK20d9NRpGz+rCQDCS24AeDaFlUwM9TI5mAPRcuwVkhqJOw521B+iVu
-         Fw2LLTkI4p8vCWe4nn2jFEx3hCfknLrdce2dS+tW5Z5HpnuhBts1ssj/AkZzzy4Yc5KX
-         T1yg==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=4nsIk431IJE2Vk4G5K7I24soUyvvlcDR7eoVO3tZXDI=;
+        b=WhCmF3lfXiFeaDgdh8Zc4no994MMyy7RRNjNO3kp4sQAtoEC8jvl4bViEffarZPS8Q
+         OyGs55rjGjxyd98MBtFtV3PT+fNXmJS1V6Decc/gOiUrMGsGss+QjIRRV239f0cilRg5
+         tj/DC2EocfQvI9tfDYIzou/z6PgqvIBnysYOA1FQmgiB+eT6uWITC0O9qtgXynTQKyhy
+         tSinIq4wBl4o0ntM7G2w7AFfH98LNAd67r5jUx29l8zoFUSrgrK+32dhYpVg9YXAHGW0
+         /4a0TrPFLvwK4TE7mAJmdwglD3EpKpZ/qaV836dbxYAX1JlbvMQtwo4gTCFC2rJL1+Rc
+         PS5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xgrOcm9k9IAQcFI+FWINNDCQ0Z4VaYkcjqiXu7nzoSs=;
-        b=pmt/lep4OKT5bpw0G8jDFuhPRRjK97qYmncIp75afqTXy7JP2qiCJGgezxoMTjuq8l
-         H5lJ+M5bKY34erA7wg8f8a1YPLvNdXERLvpmJxDalOeeoJn4D+OSbPQ77SRE7xS4Tj7y
-         UjKyAz7xYbm5xHHarbTYqQpDYK0mreT4cxkEU5XfMKF/PuNVeOGBWch1iy+U1JbdW+Ig
-         15J70RRLi1FNwKwAp4AHpYTkc53ogfZwBPD5cNourVQYeCjtGtNnH9nRdzPCw5xl/HG6
-         D/8zXV0A07E9oSLYGtuX0hRBX+WrJX+2ey9BVbvdig+7EzIs8uxdglCWPtCRAAbiawKR
-         6q/w==
-X-Gm-Message-State: APjAAAXKUynsK6LQaevVZ4EID1r0LOXpT4lwRrV1UiFe9HEZhGrTCAsy
-        P9WgD5fBA3LgQ9B6lZtZwtx2jNCyneI9OCscGus=
-X-Google-Smtp-Source: APXvYqxkHYAyndioq3rkIDvgR0cbdviWKBnIZcDlDoZQCfu0BNG7PYKVTKcaxVPiAWtYOYRzgvoWo7ltBXVq83a0o5o=
-X-Received: by 2002:a50:bae1:: with SMTP id x88mr38955946ede.10.1577464842282;
- Fri, 27 Dec 2019 08:40:42 -0800 (PST)
-MIME-Version: 1.0
-References: <1577428606-69855-1-git-send-email-hanjie.lin@amlogic.com> <1577428606-69855-4-git-send-email-hanjie.lin@amlogic.com>
-In-Reply-To: <1577428606-69855-4-git-send-email-hanjie.lin@amlogic.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Fri, 27 Dec 2019 17:40:31 +0100
-Message-ID: <CAFBinCCEz-xezKatuHDPRURRWa3YNmgMObbr85GSvaT_bLFcNQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/6] phy: amlogic: Add Amlogic A1 USB2 PHY Driver
-To:     Hanjie Lin <hanjie.lin@amlogic.com>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4nsIk431IJE2Vk4G5K7I24soUyvvlcDR7eoVO3tZXDI=;
+        b=ZMVN+j6RZcdlIOQ9N9iK5nrvQj9Ig5UHOFJmqUxyjXILLW3rAKfMfEigftq6jnQf9K
+         pFG5xqAfUm5zGS0/2jW2YjAYNr09kjekF7xHwxaX0xVm0mLVMdUvlvCpfXX29YR7DGk2
+         5wJSQzgw4SfP+fxfu/dTFLQmJ4Dm3f4ZYtO7Dj1GBU1h2VSV0PWu5wOWUW3io3ZxMAs+
+         pD7OEPfHkVbHVPWupOhxUwSWlDyg4VfjwuhlGP4OzOI85Ey1AQSadJb7gTLTQqgO+laR
+         iKLsaXTKITYjGPdqOjvRoxYO7J3LTyhaDGOlCct931dprbcWa/+dZQChQEZETdF5f/Fj
+         iH+g==
+X-Gm-Message-State: APjAAAXF17Iw8rBisfugdELBoa6rU/hahu4cbAVhXB6BL53TEONDiJ2W
+        bRAgPi5vFqZUZier3i6t9D0=
+X-Google-Smtp-Source: APXvYqyOPBCF3FRS8/uziPFI11Vq570WtF+ynBSOXyBPpYleRxUNXfDxAsungHAaqmCnvy0UyewLqA==
+X-Received: by 2002:aa7:86d4:: with SMTP id h20mr51240296pfo.232.1577465745925;
+        Fri, 27 Dec 2019 08:55:45 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i23sm20166129pfo.11.2019.12.27.08.55.44
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 27 Dec 2019 08:55:45 -0800 (PST)
+Date:   Fri, 27 Dec 2019 08:55:43 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Peter Chen <peter.chen@freescale.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Yue Wang <yue.wang@amlogic.com>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, Carlo Caione <carlo@caione.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Qiufang Dai <qiufang.dai@amlogic.com>,
-        Jian Hu <jian.hu@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] usb: chipidea: host: Disable port power only if
+ previously enabled
+Message-ID: <20191227165543.GA15950@roeck-us.net>
+References: <20191226155754.25451-1-linux@roeck-us.net>
+ <Pine.LNX.4.44L0.1912261428310.6148-100000@netrider.rowland.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.1912261428310.6148-100000@netrider.rowland.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Hanjie,
+On Thu, Dec 26, 2019 at 02:46:15PM -0500, Alan Stern wrote:
+> On Thu, 26 Dec 2019, Guenter Roeck wrote:
+> 
+> > On shutdown, ehci_power_off() is called unconditionally to power off
+> > each port, even if it was never called to power on the port.
+> > For chipidea, this results in a call to ehci_ci_portpower() with a request
+> > to power off ports even if the port was never powered on.
+> > This results in the following warning from the regulator code.
+> 
+> That's weird -- we should always power-on every port during hub 
+> initialization.
+> 
+That is what I would have assumed, but test code shows that it doesn't
+happen.
 
-overall this looks good to me and I have one question
+> It looks like there's a bug in hub.c:hub_activate(): The line under
+> HUB_INIT which calls hub_power_on() should call
+> usb_hub_set_port_power() instead.  In fact, the comment near the start
 
-On Fri, Dec 27, 2019 at 7:37 AM Hanjie Lin <hanjie.lin@amlogic.com> wrote:
-[...]
-> +       if (priv->soc_id == MESON_SOC_A1)
-> +               value |= PHY_CTRL_R18_MPLL_DCO_CLK_SEL;
-...here we have some CLK_SEL bit
+usb_hub_set_port_power() operates on a port of the hub. hub_activate()
+operates on the hub itself, or at least I think it does. I don't know
+how to convert the calls. Also, there are more calls to hub_power_on()
+in the same function.  Can you provide more details on what to do,
+or even better a patch for me to test ?
 
-[...]
-> -       priv->clk = devm_clk_get(dev, "xtal");
-> -       if (IS_ERR(priv->clk))
-> -               return PTR_ERR(priv->clk);
-> +       if (priv->soc_id == MESON_SOC_G12A) {
-> +               priv->clk = devm_clk_get(dev, "xtal");
-> +               if (IS_ERR(priv->clk))
-> +                       return PTR_ERR(priv->clk);
-> +       }
-but here we don't need any parent/input clock?
-does this mean that the USB2 PHY on the A1 SoC doesn't have any clock
-inputs? how does it generate the correct clock for itself then?
+Thanks,
+Guenter
 
-
-Martin
+> of hub_power_on() is wrong.  It says "Enable power on each port", but
+> in fact it only enables power for ports that had been powered-on
+> previously (i.e., the port's bit in hub->power_bits was set).  
+> Apparently this got messed up in commit ad493e5e5805 ("usb: add usb
+> port auto power off mechanism").
+> 
+> Now, the chipidea driver may still need to be updated, because 
+> ehci_turn_off_all_ports() will still be called during shutdown and it 
+> will try to power-down all ports, even those which are already powered 
+> down (for example, because the port is suspended).
+> 
+> Alan Stern
+> 
