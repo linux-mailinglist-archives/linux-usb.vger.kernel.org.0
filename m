@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BAD312B748
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2019 18:48:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2872C12B71B
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2019 18:47:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728537AbfL0Ron (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Dec 2019 12:44:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42976 "EHLO mail.kernel.org"
+        id S1728649AbfL0RrN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Dec 2019 12:47:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43402 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728470AbfL0Rom (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 27 Dec 2019 12:44:42 -0500
+        id S1727961AbfL0RpA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Dec 2019 12:45:00 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DB857206CB;
-        Fri, 27 Dec 2019 17:44:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5F0E8222C2;
+        Fri, 27 Dec 2019 17:44:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577468681;
-        bh=ibZBkiorgbSlD1+KaQsW7L6oi5u2W/TPujsZDyZJGks=;
+        s=default; t=1577468700;
+        bh=mk1Dheni6cG1VPoktrykkcjXvZKF59DSkIlfQ+SO/cs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kpdLrf3qK6rUpEkzL9OzE4pbMgLWnS8NiZ4b7Wtmo0nJj0H/Yn9UHpKlcUGJYWQGT
-         Pfp0d2+p1PARu18unzdJk9PeUVMro7eH9PSXY8RGhqqzbFl5iZ1KfqK/CEx+ujCfrH
-         GmKmPuXzChHRB1ijaaSeMAGOhDVNj3m9s1TSBBH4=
+        b=benAKLcp9RWzk1NrCWPrHhYLx8ThSlCykgr/UCsHa01t0V6OGXkp7qCITZyaA+NET
+         p25Xnv8kYPEiCf1twdXbWeNNqjQfjDFJgjajQWi0KYKSGMDc2OcioumEdtXnu9vSBV
+         5+KPJ3S7tdFnSW2Vo6Yba+5vfi/sVBmnrzNiedXE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Cristian Birsan <cristian.birsan@microchip.com>,
-        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 40/84] net: usb: lan78xx: Fix suspend/resume PHY register access error
-Date:   Fri, 27 Dec 2019 12:43:08 -0500
-Message-Id: <20191227174352.6264-40-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 56/84] net: usb: lan78xx: Fix error message format specifier
+Date:   Fri, 27 Dec 2019 12:43:24 -0500
+Message-Id: <20191227174352.6264-56-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191227174352.6264-1-sashal@kernel.org>
 References: <20191227174352.6264-1-sashal@kernel.org>
@@ -46,35 +46,31 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Cristian Birsan <cristian.birsan@microchip.com>
 
-[ Upstream commit 20032b63586ac6c28c936dff696981159913a13f ]
+[ Upstream commit 858ce8ca62ea1530f2779d0e3f934b0176e663c3 ]
 
-Lan78xx driver accesses the PHY registers through MDIO bus over USB
-connection. When performing a suspend/resume, the PHY registers can be
-accessed before the USB connection is resumed. This will generate an
-error and will prevent the device to resume correctly.
-This patch adds the dependency between the MDIO bus and USB device to
-allow correct handling of suspend/resume.
+Display the return code as decimal integer.
 
-Fixes: ce85e13ad6ef ("lan78xx: Update to use phylib instead of mii_if_info.")
+Fixes: 55d7de9de6c3 ("Microchip's LAN7800 family USB 2/3 to 10/100/1000 Ethernet device driver")
 Signed-off-by: Cristian Birsan <cristian.birsan@microchip.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/lan78xx.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/usb/lan78xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-index 50bf4b2080d5..6dd24a1ca10d 100644
+index 6dd24a1ca10d..0f6b8d4689b3 100644
 --- a/drivers/net/usb/lan78xx.c
 +++ b/drivers/net/usb/lan78xx.c
-@@ -1823,6 +1823,7 @@ static int lan78xx_mdio_init(struct lan78xx_net *dev)
- 	dev->mdiobus->read = lan78xx_mdiobus_read;
- 	dev->mdiobus->write = lan78xx_mdiobus_write;
- 	dev->mdiobus->name = "lan78xx-mdiobus";
-+	dev->mdiobus->parent = &dev->udev->dev;
+@@ -522,7 +522,7 @@ static int lan78xx_read_stats(struct lan78xx_net *dev,
+ 		}
+ 	} else {
+ 		netdev_warn(dev->net,
+-			    "Failed to read stat ret = 0x%x", ret);
++			    "Failed to read stat ret = %d", ret);
+ 	}
  
- 	snprintf(dev->mdiobus->id, MII_BUS_ID_SIZE, "usb-%03d:%03d",
- 		 dev->udev->bus->busnum, dev->udev->devnum);
+ 	kfree(stats);
 -- 
 2.20.1
 
