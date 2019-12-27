@@ -2,80 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9D912B54A
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2019 15:47:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D5512B5EF
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2019 17:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726995AbfL0Or0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Dec 2019 09:47:26 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:36015 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726928AbfL0Or0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Dec 2019 09:47:26 -0500
-Received: (qmail 5815 invoked by uid 500); 27 Dec 2019 09:47:25 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 27 Dec 2019 09:47:25 -0500
-Date:   Fri, 27 Dec 2019 09:47:25 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Peter Chen <peter.chen@nxp.com>
-cc:     Guenter Roeck <linux@roeck-us.net>,
-        Peter Chen <peter.chen@freescale.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] usb: chipidea: host: Disable port power only if previously
- enabled
-In-Reply-To: <20191227014459.GA5283@b29397-desktop>
-Message-ID: <Pine.LNX.4.44L0.1912270945001.5688-100000@netrider.rowland.org>
+        id S1726885AbfL0QiU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Dec 2019 11:38:20 -0500
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:40499 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726379AbfL0QiU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Dec 2019 11:38:20 -0500
+Received: by mail-ed1-f68.google.com with SMTP id b8so25721610edx.7;
+        Fri, 27 Dec 2019 08:38:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6YTB1fNIm79m/hiZxeT3tYKFD5H8aAnuxvQfJh9UTTA=;
+        b=rCb6yLvYVvl/bhWTiHwA3cx/pPDMQSYDZjENCpcrW46hTqEU+37cxTsRfQbFZWgxnQ
+         8lAZ3VnOW6o4VNL4GLpbT+x7T62C1KAFCX6q78uC1Jqr2tffxf0f3GWDIYdHlOmMn6c0
+         D2gFJ28f+y57Us0+szO7vgqbXxMi15owj96gWUV2Vsc826+PMIOSLSe3X9FX6RzD8LA9
+         VHlwek/F+/vnefGNtzo/32g1LnHSVG9grbquv7p1Qafnn7SenyEgVHxIWNyfaCLBR8LU
+         uWOlhhWEOQpoGiItymVbpilrcKbra+UJRHiyIzE1CTuloR4yCh+mMaQiU/deAi2BA+j7
+         72Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6YTB1fNIm79m/hiZxeT3tYKFD5H8aAnuxvQfJh9UTTA=;
+        b=qvaHCbLG5LYoXZaNdS8Ncx6xRv+Rxe5uZt/GX8GgeBnzHg49bEyOEsyQ/xRrzZDglj
+         LFm4iv6v7UQDagL/STCnoBcGTTl95Qr5bOnN+pMfLvYP0bHLKplUOmveW5WYZC3RbDpM
+         ZGKkgLy5LiAhtXB/UQsEz2yJR49KSbAC5sPok0QREqdrMxDd2H8u9JBwyVn88yBtSGid
+         3xrp5r3ey4nHWD4AO6GkbNrXDrQehpnSEN65V2m4yQNVrKLp4FRHdWijIZQOB0Z3xwG6
+         FZ1Xi3Td4CfAUIXAODewHWUjleykuYVvxjVENB6JghDRgI0/l6m1BZUh08brjO/T53aD
+         DeQg==
+X-Gm-Message-State: APjAAAW8DGR5vpMvw2aIrB/AuMxvR0mPFpI6dcOqVle2hDV95Wh2S54x
+        qO0bcQ3jUV+w3Iqj3LDiKueIdhDIJ01pRbbKDRY=
+X-Google-Smtp-Source: APXvYqzXINFtgDqMBlIV6U4EBXznckvgHZpZ4LhokGGqjDtkp3WySsLLrOwjy/HccteQFMutQpmQt9YGz45Q+BIy3TM=
+X-Received: by 2002:a17:906:e219:: with SMTP id gf25mr54733718ejb.51.1577464697886;
+ Fri, 27 Dec 2019 08:38:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+References: <1577428606-69855-1-git-send-email-hanjie.lin@amlogic.com> <1577428606-69855-5-git-send-email-hanjie.lin@amlogic.com>
+In-Reply-To: <1577428606-69855-5-git-send-email-hanjie.lin@amlogic.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Fri, 27 Dec 2019 17:38:07 +0100
+Message-ID: <CAFBinCD8V-Swihz+VJ780sXJtM9cXprDcGCHVuHjjCx0DEOodQ@mail.gmail.com>
+Subject: Re: [PATCH v3 4/6] usb: dwc3: Add Amlogic A1 DWC3 glue
+To:     Hanjie Lin <hanjie.lin@amlogic.com>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Yue Wang <yue.wang@amlogic.com>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, Carlo Caione <carlo@caione.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 27 Dec 2019, Peter Chen wrote:
+Hello Hanjie,
 
-> On 19-12-26 14:46:15, Alan Stern wrote:
-> > On Thu, 26 Dec 2019, Guenter Roeck wrote:
-> > 
-> > > On shutdown, ehci_power_off() is called unconditionally to power off
-> > > each port, even if it was never called to power on the port.
-> > > For chipidea, this results in a call to ehci_ci_portpower() with a request
-> > > to power off ports even if the port was never powered on.
-> > > This results in the following warning from the regulator code.
-> > 
-> > That's weird -- we should always power-on every port during hub 
-> > initialization.
-> > 
-> > It looks like there's a bug in hub.c:hub_activate(): The line under
-> > HUB_INIT which calls hub_power_on() should call
-> > usb_hub_set_port_power() instead.  In fact, the comment near the start
-> > of hub_power_on() is wrong.  It says "Enable power on each port", but
-> > in fact it only enables power for ports that had been powered-on
-> > previously (i.e., the port's bit in hub->power_bits was set).  
-> > Apparently this got messed up in commit ad493e5e5805 ("usb: add usb
-> > port auto power off mechanism").
-> > 
-> > Now, the chipidea driver may still need to be updated, because 
-> > ehci_turn_off_all_ports() will still be called during shutdown and it 
-> > will try to power-down all ports, even those which are already powered 
-> > down (for example, because the port is suspended).
-> > 
-> 
-> Hi Alan,
-> 
-> When the port is suspended, why it was turned off? If it was turned
-> off, how could respond wakeup event?
+sorry that it took me so long to look at this
+you can find my comments below
 
-You're right; if a port is powered off then it can't respond to wakeup 
-events.
+On Fri, Dec 27, 2019 at 7:37 AM Hanjie Lin <hanjie.lin@amlogic.com> wrote:
+[...]
+> +static const struct clk_bulk_data meson_g12a_clocks[] = {
+> +       { .id = NULL},
+> +};
+> +
+> +static const struct clk_bulk_data meson_a1_clocks[] = {
+> +       { .id = "usb_ctrl"},
+> +       { .id = "usb_bus"},
+> +       { .id = "xtal_usb_phy"},
+> +       { .id = "xtal_usb_ctrl"},
+> +};
+nit-pick: the values in meson_g12a_clocks and meson_a1_clocks all have
+a space after the opening "{" but no space before the closing "}"
+we should be consistent here (personally I prefer the variant with
+space after "{" and before "}", but having no space in both cases is
+fine for me too)
 
-But if the power/wakeup attribute is set to "disabled" then the port 
-doesn't need to respond to wakeup events.  In that situation, usbcore 
-may decide to power-down the port.
+[...]
+>  static void dwc3_meson_g12a_usb2_set_mode(struct dwc3_meson_g12a *priv,
+> @@ -138,10 +156,13 @@ static int dwc3_meson_g12a_usb2_init(struct dwc3_meson_g12a *priv)
+>  {
+>         int i;
+>
+> -       if (priv->otg_mode == USB_DR_MODE_PERIPHERAL)
+> -               priv->otg_phy_mode = PHY_MODE_USB_DEVICE;
+> -       else
+> -               priv->otg_phy_mode = PHY_MODE_USB_HOST;
+> +       /* only G12A supports otg mode */
+> +       if (priv->soc_id == MESON_SOC_G12A) {
+> +               if (priv->otg_mode == USB_DR_MODE_PERIPHERAL)
+> +                       priv->otg_phy_mode = PHY_MODE_USB_DEVICE;
+> +               else
+> +                       priv->otg_phy_mode = PHY_MODE_USB_HOST;
+> +       }
+can you comment on future Amlogic SoCs and how this code will look in
+the future?
+I would like to avoid having to adjust this "if" for every new SoC,
+but I don't know if the majority of the SoCs will have OTG support
 
-Alan Stern
+also one idea that just came to my mind:
+you could define in the .yaml binding that for A1 only dr_mode =
+"host" is allowed
+then you may not need extra logic in the driver at all
 
+[...]
+> -               if (i == USB2_OTG_PHY) {
+> +               if (priv->soc_id == MESON_SOC_G12A && i == USB2_OTG_PHY) {
+on GXL we have two PHYs (0 and 1), the second one is OTG capable
+on GXM we have three PHYs (0..2), the second one is OTG capable
+on G12A/G12B we have two PHYs (0 and 1), the second one is OTG capable
+
+you already wrote that there is only one USB2 PHY on the A1 SoC
+is really only the second PHY port ("usb2-phy1" instead of
+"usb2-phy0") used on A1?
+if "usb2-phy0" is correct then you don't need these checks (there are
+more checks like this below)
+
+[...]
+> -       usb_role_switch_unregister(priv->role_switch);
+> +       if (priv->soc_id == MESON_SOC_G12A)
+> +               usb_role_switch_unregister(priv->role_switch);
+I didn't expect this because in _probe usb_role_switch_register is still called
+on A1 we now call usb_role_switch_register() but we never call
+usb_role_switch_unregister()
+
+
+Martin
