@@ -2,115 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6513F12B615
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2019 18:18:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C61C312B823
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2019 18:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726920AbfL0RS0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Dec 2019 12:18:26 -0500
-Received: from smtp.infotech.no ([82.134.31.41]:44083 "EHLO smtp.infotech.no"
+        id S1727952AbfL0Rmn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Dec 2019 12:42:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39760 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726495AbfL0RS0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 27 Dec 2019 12:18:26 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id E834D204191;
-        Fri, 27 Dec 2019 18:18:20 +0100 (CET)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id aVDQPiGlYM74; Fri, 27 Dec 2019 18:18:15 +0100 (CET)
-Received: from [192.168.48.23] (host-23-251-188-50.dyn.295.ca [23.251.188.50])
-        by smtp.infotech.no (Postfix) with ESMTPA id 92A0C20416A;
-        Fri, 27 Dec 2019 18:18:14 +0100 (CET)
-To:     linux-usb@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Reply-To: dgilbert@interlog.com
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Subject: usb-c pd: PD_MAX_PAYLOAD too small
-Message-ID: <f000d0e7-eb7f-5df6-ee2b-188e68f0baa9@interlog.com>
-Date:   Fri, 27 Dec 2019 12:18:11 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1727947AbfL0Rmm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Dec 2019 12:42:42 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1A4AD21744;
+        Fri, 27 Dec 2019 17:42:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1577468561;
+        bh=btxijgQeafxrlBq6FrXQk6LgJOls1zIVVBq1KL4GIBo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=D2bt21LKRHsJvtgLdzqViMGZofI2Kxs4HG/AvYEJP+iSWRkRk3ua03pq00GAXxxNB
+         +TvmJE15844w+FP7DwpdqHdUvwYuafdQFXL7FxLOWiawc6RTWfV6oaGndqphW+PujP
+         gCME2iz26L2V4WwDhPSrcSWyQB8H+TyDjdt+nA+I=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Cristian Birsan <cristian.birsan@microchip.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 087/187] net: usb: lan78xx: Fix suspend/resume PHY register access error
+Date:   Fri, 27 Dec 2019 12:39:15 -0500
+Message-Id: <20191227174055.4923-87-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191227174055.4923-1-sashal@kernel.org>
+References: <20191227174055.4923-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Samsung have an optional USB-C charger for their 10+
-tablet ***. This optional unit is one of the first PPS
-capable PD power adapters on the mass market at a
-reasonable price (around $50). Its part number is
-EP-TA485 and is described as a 45 Watt "Travel Adapter".
+From: Cristian Birsan <cristian.birsan@microchip.com>
 
-I have a rig using an Acme Arietta and a NXP OM 13588 board
-which can do USB-C sink/source. And the EP-TA485 is plugged
-into the OM 13588 which pushes that latter into (power)
-sink mode.
+[ Upstream commit 20032b63586ac6c28c936dff696981159913a13f ]
 
- From 'cat /sys/kernel/debug/usb/tcpm-1-0050' that adapter
-advertises these PDOs (and PDO[4] implies at 11 Volts it
-can supply 5 Amps which is worrying for a 45 Watt supply):
+Lan78xx driver accesses the PHY registers through MDIO bus over USB
+connection. When performing a suspend/resume, the PHY registers can be
+accessed before the USB connection is resumed. This will generate an
+error and will prevent the device to resume correctly.
+This patch adds the dependency between the MDIO bus and USB device to
+allow correct handling of suspend/resume.
 
-[   19.207338]  PDO 0: type 0, 5000 mV, 3000 mA [E]
-[   19.207361]  PDO 1: type 0, 9000 mV, 3000 mA []
-[   19.207383]  PDO 2: type 0, 15000 mV, 3000 mA []
-[   19.207428]  PDO 3: type 0, 20000 mV, 2250 mA []
-[   19.207448]  PDO 4: type 3, 3300-11000 mV, 5000 mA
-[   19.207466]  PDO 5: type 3, 3300-16000 mV, 3000 mA
-[   19.207484]  PDO 6: type 3, 3300-21000 mV, 2250 mA
+Fixes: ce85e13ad6ef ("lan78xx: Update to use phylib instead of mii_if_info.")
+Signed-off-by: Cristian Birsan <cristian.birsan@microchip.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/usb/lan78xx.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-And whenever drivers/usb/typec/tcpm/tcpci.c fetches those
-PDOs, it fires this warning at line 443 (lk 5.4.6):
+diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+index f24a1b0b801f..0becc79fd431 100644
+--- a/drivers/net/usb/lan78xx.c
++++ b/drivers/net/usb/lan78xx.c
+@@ -1808,6 +1808,7 @@ static int lan78xx_mdio_init(struct lan78xx_net *dev)
+ 	dev->mdiobus->read = lan78xx_mdiobus_read;
+ 	dev->mdiobus->write = lan78xx_mdiobus_write;
+ 	dev->mdiobus->name = "lan78xx-mdiobus";
++	dev->mdiobus->parent = &dev->udev->dev;
+ 
+ 	snprintf(dev->mdiobus->id, MII_BUS_ID_SIZE, "usb-%03d:%03d",
+ 		 dev->udev->bus->busnum, dev->udev->devnum);
+-- 
+2.20.1
 
-            if (WARN_ON(cnt > sizeof(msg.payload)))
-
-And that implies in include/linux/usb/pd.h
-
-struct pd_message {
-         __le16 header;
-         union {
-                 __le32 payload[PD_MAX_PAYLOAD];
-                 struct pd_chunked_ext_message_data ext_msg;
-         };
-} __packed;
-
-... that PD_MAX_PAYLOAD is too small (or off by one). It is 7
-in lk 5.4.6 and linux-stable.
-
-Doug Gilbert
-
-
-*** When 10+ tablet is purchased it comes with a less capable
-     (i.e. no PPS) 35 Watt adapter (I believe). Samsung say if
-     the owner wants "fast" charging to buy the EP-TA485.
-     If PPS catches one, it will effectively move power
-     electronics from the smartphone or tablet into the
-     power adapter. And that could be a win for laptops as well.
-
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1154 at drivers/usb/typec/tcpm/tcpci.c:443 
-tcpci_irq+0x1b4/0x1e0 [tcpci]
-Modules linked in: tcpci tcpm roles typec asix usbnet mii
-CPU: 0 PID: 1154 Comm: irq/37-1-0050 Tainted: G        W         5.4.6-armv5-r0 #1
-Hardware name: Atmel AT91SAM9
-[<c000f9b4>] (unwind_backtrace) from [<c000d7e0>] (show_stack+0x10/0x14)
-[<c000d7e0>] (show_stack) from [<c00188b8>] (__warn+0xac/0xd0)
-[<c00188b8>] (__warn) from [<c0018984>] (warn_slowpath_fmt+0xa8/0xb8)
-[<c0018984>] (warn_slowpath_fmt) from [<bf053398>] (tcpci_irq+0x1b4/0x1e0 [tcpci])
-[<bf053398>] (tcpci_irq [tcpci]) from [<c0050e78>] (irq_thread_fn+0x1c/0x78)
-[<c0050e78>] (irq_thread_fn) from [<c00510f0>] (irq_thread+0x104/0x1ec)
-[<c00510f0>] (irq_thread) from [<c0034460>] (kthread+0x11c/0x130)
-[<c0034460>] (kthread) from [<c00090e0>] (ret_from_fork+0x14/0x34)
-Exception stack(0xc55dffb0 to 0xc55dfff8)
-ffa0:                                     00000000 00000000 00000000 00000000
-ffc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-ffe0: 00000000 00000000 00000000 00000000 00000013 00000000
----[ end trace 2ab4ab025e97eabd ]---
-
-
-Finally:
- From other (non-Linux) equipment I can tell that the EP-TA485 adapter is
-only advertising 7 PDOs, so there is no 8th PDO being truncated in Linux.
