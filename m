@@ -2,178 +2,304 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 320B512B060
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2019 02:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F3CF12B196
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2019 07:02:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727012AbfL0BqH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Dec 2019 20:46:07 -0500
-Received: from mail-eopbgr60076.outbound.protection.outlook.com ([40.107.6.76]:32258
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726193AbfL0BqH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 26 Dec 2019 20:46:07 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IZLqSU5i9LFBMCrcerz+cCZj35Vshrq/GMmEhWywHxxnf1EeDdx9wUbCYibXCMNktbykWovqCuvH2OYmIPKXHLvFlsvnDo7z8UhrkC7KvnZZAIOtTM6XkqXapo+MtYk+Fal6TJRdhU9z2DjG7GxJY2JCUQeRuZITdA2fxMbRQUCgRo9aGXAOH9kjxUxbs8gPI4MtKhtbA5uLDjnp3XwTEBjhmIU3BUOOKZYr3MJqN2UceYTeoIpYCbProTRw3XpkAnIpREklFcAzKMqAkHdD18XpFIgMaRPFTob4GyKZUhFY1vCRl/d786XSpsxpbk5mNjgBxPz2AV8vC3OcU2bYKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qtd8tPSeqTssjbR64Q5CV/YxZyJfUBJybV6hbL303Do=;
- b=dosVoP7Jpc1x7lqTH3/6vaNcpzZAMYCAHQdlvLy8Gv2FDSbtD8S8LoLk0d9cmiIX+G5sSXbo9Qv61gpfzZaibrFJtEpL5GeBUgWtrO5BH5Lh3C42qhQchxbNHz8BtftnMSsu+TaeY8xEnLYeMgNBKvHEF6yUjyH/lNRgJoHQwJsArkfozVIoGUCzsX2T1kPGNwlUI4dli7aPHXt1a3OXT7p1LaV/YgzyODSQYE4LWzZU3zvNFKvA6WyGVf6UspW64jnmnUSw/jTTwhlgrBN+yNpx3kcrbPWSdk4kpDM1m4PFDCGFczkuFUD+3mUcd6DSDUmS0P+Hg3iVApTgSvc+Pw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qtd8tPSeqTssjbR64Q5CV/YxZyJfUBJybV6hbL303Do=;
- b=VsbuEvoeBh2lvodIlSNsKmIwV+MdobmWV8sU4je8U0as0QqK85NVRCghUX8g00ENqwTCB5k7yjtZwuYLqGX1Xda2J2QWswfvGAaYDZD2ELnD1XO0p5+S1SgEVVEM7EL4i6PMxO5UODzkX/7Wf+0AUmo/2sW3l5Yj3w5hvcQl5s4=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
- VI1PR04MB4318.eurprd04.prod.outlook.com (52.133.15.139) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2581.12; Fri, 27 Dec 2019 01:45:24 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::c7d:58a2:7265:407e]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::c7d:58a2:7265:407e%6]) with mapi id 15.20.2581.007; Fri, 27 Dec 2019
- 01:45:24 +0000
+        id S1726197AbfL0GC0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Dec 2019 01:02:26 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:47120 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726014AbfL0GCZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Dec 2019 01:02:25 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 4719C1A1042;
+        Fri, 27 Dec 2019 07:02:23 +0100 (CET)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 69B2A1A0E06;
+        Fri, 27 Dec 2019 07:02:19 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 15E26402DF;
+        Fri, 27 Dec 2019 14:02:15 +0800 (SGT)
 From:   Peter Chen <peter.chen@nxp.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     Peter Chen <peter.chen@freescale.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] usb: chipidea: host: Disable port power only if
- previously enabled
-Thread-Topic: [PATCH] usb: chipidea: host: Disable port power only if
- previously enabled
-Thread-Index: AQHVvAVIstmi2Z+Az0y8RyzR9GDiKqfNNo6A
-Date:   Fri, 27 Dec 2019 01:45:24 +0000
-Message-ID: <20191227014521.GB5283@b29397-desktop>
-References: <20191226155754.25451-1-linux@roeck-us.net>
-In-Reply-To: <20191226155754.25451-1-linux@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 7cf39e7c-a97d-40f7-3a08-08d78a6e712b
-x-ms-traffictypediagnostic: VI1PR04MB4318:|VI1PR04MB4318:
-x-microsoft-antispam-prvs: <VI1PR04MB4318BC516E93CEBE16EF6EF38B2A0@VI1PR04MB4318.eurprd04.prod.outlook.com>
-x-ms-exchange-transport-forked: True
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 0264FEA5C3
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(396003)(39860400002)(136003)(346002)(376002)(366004)(199004)(189003)(81166006)(8936002)(33656002)(66946007)(81156014)(1076003)(33716001)(45080400002)(91956017)(66446008)(53546011)(8676002)(6506007)(26005)(66556008)(64756008)(478600001)(66476007)(76116006)(186003)(6486002)(2906002)(6512007)(6916009)(316002)(44832011)(54906003)(71200400001)(86362001)(5660300002)(4326008)(9686003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4318;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: eKXrxEgw0+m5tZdt5tPcGPtZOg4+34TvzdqEKVx7jYt66kG3qU0QiIOE5w/33+we0Tef1A9JGzh89BCT62bTQ0BUkjOrQGgx08RWFVxntAmufg6waTSJWVg/ZVtrjlndau38gMriyE8Q9RdH4WLI+9FH9sbVn04wf32JDvdACGF0D53YNEU3yFfblaNOQEw8nMUlOHZCLV5DGZ5AZ1YlUlmtKyLdr0ihXRi6T5a2VbhgxrsRaEQagwWJvtz4itlsJIm32zvSB6MokRMWJxSGlZ+4lZfkXS2YPgE61FUp/j+n6fN5DV/BemHBfNx1HCuUfRrNGqZbp2a0H5JaEyg1cif4dRvsMjTMInYf1atsG0Mdwty2Ro0ztwbzxOVaZmntONAajgeg3E5g3sQfnmLzDsn+Hg3BoVGrEobNlcngf5VdrOUf8BSIiN67kWG/llb8
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <D0457B39C313C44B844764F716655117@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7cf39e7c-a97d-40f7-3a08-08d78a6e712b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Dec 2019 01:45:24.4289
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OFe4vjPoQpgqasM9+2eDyB1ULJFrrxrotbeugKcpN0JLZKf0jVfFFIwH5OJhhW4s0oPAYVTiWE+Uhfp59HrjjQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4318
+To:     balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, pawell@cadence.com,
+        rogerq@ti.com, gregkh@linuxfoundation.org,
+        Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH 1/1] usb: cdns3: add NXP imx8qm glue layer
+Date:   Fri, 27 Dec 2019 13:59:08 +0800
+Message-Id: <1577426348-31227-1-git-send-email-peter.chen@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19-12-26 07:57:54, Guenter Roeck wrote:
-> On shutdown, ehci_power_off() is called unconditionally to power off
-> each port, even if it was never called to power on the port.
-> For chipidea, this results in a call to ehci_ci_portpower() with a reques=
-t
-> to power off ports even if the port was never powered on.
-> This results in the following warning from the regulator code.
->=20
-> WARNING: CPU: 0 PID: 182 at drivers/regulator/core.c:2596 _regulator_disa=
-ble+0x1a8/0x210
-> unbalanced disables for usb_otg2_vbus
-> Modules linked in:
-> CPU: 0 PID: 182 Comm: init Not tainted 5.4.6 #1
-> Hardware name: Freescale i.MX7 Dual (Device Tree)
-> [<c0313658>] (unwind_backtrace) from [<c030d698>] (show_stack+0x10/0x14)
-> [<c030d698>] (show_stack) from [<c1133afc>] (dump_stack+0xe0/0x10c)
-> [<c1133afc>] (dump_stack) from [<c0349098>] (__warn+0xf4/0x10c)
-> [<c0349098>] (__warn) from [<c0349128>] (warn_slowpath_fmt+0x78/0xbc)
-> [<c0349128>] (warn_slowpath_fmt) from [<c09f36ac>] (_regulator_disable+0x=
-1a8/0x210)
-> [<c09f36ac>] (_regulator_disable) from [<c09f374c>] (regulator_disable+0x=
-38/0xe8)
-> [<c09f374c>] (regulator_disable) from [<c0df7bac>] (ehci_ci_portpower+0x3=
-8/0xdc)
-> [<c0df7bac>] (ehci_ci_portpower) from [<c0db4fa4>] (ehci_port_power+0x50/=
-0xa4)
-> [<c0db4fa4>] (ehci_port_power) from [<c0db5420>] (ehci_silence_controller=
-+0x5c/0xc4)
-> [<c0db5420>] (ehci_silence_controller) from [<c0db7644>] (ehci_stop+0x3c/=
-0xcc)
-> [<c0db7644>] (ehci_stop) from [<c0d5bdc4>] (usb_remove_hcd+0xe0/0x19c)
-> [<c0d5bdc4>] (usb_remove_hcd) from [<c0df7638>] (host_stop+0x38/0xa8)
-> [<c0df7638>] (host_stop) from [<c0df2f34>] (ci_hdrc_remove+0x44/0xe4)
-> ...
->=20
-> Keeping track of the power enable state avoids the warning and traceback.
->=20
-> Fixes: c8679a2fb8dec ("usb: chipidea: host: add portpower override")
-> Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> Cc: Peter Chen <peter.chen@freescale.com>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  drivers/usb/chipidea/host.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/usb/chipidea/host.c b/drivers/usb/chipidea/host.c
-> index b45ceb91c735..48e4a5ca1835 100644
-> --- a/drivers/usb/chipidea/host.c
-> +++ b/drivers/usb/chipidea/host.c
-> @@ -26,6 +26,7 @@ static int (*orig_bus_suspend)(struct usb_hcd *hcd);
-> =20
->  struct ehci_ci_priv {
->  	struct regulator *reg_vbus;
-> +	bool enabled;
->  };
-> =20
->  static int ehci_ci_portpower(struct usb_hcd *hcd, int portnum, bool enab=
-le)
-> @@ -37,7 +38,7 @@ static int ehci_ci_portpower(struct usb_hcd *hcd, int p=
-ortnum, bool enable)
->  	int ret =3D 0;
->  	int port =3D HCS_N_PORTS(ehci->hcs_params);
-> =20
-> -	if (priv->reg_vbus) {
-> +	if (priv->reg_vbus && enable !=3D priv->enabled) {
->  		if (port > 1) {
->  			dev_warn(dev,
->  				"Not support multi-port regulator control\n");
-> @@ -53,6 +54,7 @@ static int ehci_ci_portpower(struct usb_hcd *hcd, int p=
-ortnum, bool enable)
->  				enable ? "enable" : "disable", ret);
->  			return ret;
->  		}
-> +		priv->enabled =3D enable;
->  	}
-> =20
->  	if (enable && (ci->platdata->phy_mode =3D=3D USBPHY_INTERFACE_MODE_HSIC=
-)) {
-> --=20
+There is a Cadence USB3 core for imx8qm and imx8qxp SoCs, the cdns
+core is the child for this glue layer device.
 
-Acked-by: Peter Chen <peter.chen@nxp.com>
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
+---
+ drivers/usb/cdns3/Kconfig     |  10 ++
+ drivers/usb/cdns3/Makefile    |   1 +
+ drivers/usb/cdns3/cdns3-imx.c | 220 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 231 insertions(+)
+ create mode 100644 drivers/usb/cdns3/cdns3-imx.c
 
---=20
+diff --git a/drivers/usb/cdns3/Kconfig b/drivers/usb/cdns3/Kconfig
+index 2a1e89d12ed9..b1f526d20f03 100644
+--- a/drivers/usb/cdns3/Kconfig
++++ b/drivers/usb/cdns3/Kconfig
+@@ -53,4 +53,14 @@ config USB_CDNS3_TI
+ 
+ 	  e.g. J721e.
+ 
++config USB_CDNS3_IMX
++	tristate "Cadence USB3 support on NXP i.MX platforms"
++	depends on ARCH_MXC
++	default USB_CDNS3
++	help
++	  Say 'Y' or 'M' here if you are building for NXP i.MX
++	  platforms that contain Cadence USB3 controller core.
++
++	  For example, imx8qm and imx8qxp.
++
+ endif
+diff --git a/drivers/usb/cdns3/Makefile b/drivers/usb/cdns3/Makefile
+index 948e6b88d1a9..d47e341a6f39 100644
+--- a/drivers/usb/cdns3/Makefile
++++ b/drivers/usb/cdns3/Makefile
+@@ -15,3 +15,4 @@ cdns3-$(CONFIG_USB_CDNS3_HOST)		+= host.o
+ 
+ obj-$(CONFIG_USB_CDNS3_PCI_WRAP)	+= cdns3-pci-wrap.o
+ obj-$(CONFIG_USB_CDNS3_TI)		+= cdns3-ti.o
++obj-$(CONFIG_USB_CDNS3_IMX)		+= cdns3-imx.o
+diff --git a/drivers/usb/cdns3/cdns3-imx.c b/drivers/usb/cdns3/cdns3-imx.c
+new file mode 100644
+index 000000000000..53b47306bcc2
+--- /dev/null
++++ b/drivers/usb/cdns3/cdns3-imx.c
+@@ -0,0 +1,220 @@
++// SPDX-License-Identifier: GPL-2.0
++/**
++ * cdns3-imx.c - NXP i.MX specific Glue layer for Cadence USB Controller
++ *
++ * Copyright (C) 2019 NXP
++ */
++
++#include <linux/bits.h>
++#include <linux/clk.h>
++#include <linux/module.h>
++#include <linux/kernel.h>
++#include <linux/interrupt.h>
++#include <linux/platform_device.h>
++#include <linux/dma-mapping.h>
++#include <linux/io.h>
++#include <linux/of_platform.h>
++#include <linux/pm_runtime.h>
++#include <linux/iopoll.h>
++
++#define USB3_CORE_CTRL1    0x00
++#define USB3_CORE_CTRL2    0x04
++#define USB3_INT_REG       0x08
++#define USB3_CORE_STATUS   0x0c
++#define XHCI_DEBUG_LINK_ST 0x10
++#define XHCI_DEBUG_BUS     0x14
++#define USB3_SSPHY_CTRL1   0x40
++#define USB3_SSPHY_CTRL2   0x44
++#define USB3_SSPHY_STATUS  0x4c
++#define USB2_PHY_CTRL1     0x50
++#define USB2_PHY_CTRL2     0x54
++#define USB2_PHY_STATUS    0x5c
++
++/* Register bits definition */
++
++/* USB3_CORE_CTRL1 */
++#define SW_RESET_MASK	(0x3f << 26)
++#define PWR_SW_RESET	(1 << 31)
++#define APB_SW_RESET	(1 << 30)
++#define AXI_SW_RESET	(1 << 29)
++#define RW_SW_RESET	(1 << 28)
++#define PHY_SW_RESET	(1 << 27)
++#define PHYAHB_SW_RESET	(1 << 26)
++#define ALL_SW_RESET	(PWR_SW_RESET | APB_SW_RESET | AXI_SW_RESET | \
++		RW_SW_RESET | PHY_SW_RESET | PHYAHB_SW_RESET)
++#define OC_DISABLE	(1 << 9)
++#define MDCTRL_CLK_SEL	(1 << 7)
++#define MODE_STRAP_MASK	(0x7)
++#define DEV_MODE	(1 << 2)
++#define HOST_MODE	(1 << 1)
++#define OTG_MODE	(1 << 0)
++
++/* USB3_INT_REG */
++#define CLK_125_REQ	(1 << 29)
++#define LPM_CLK_REQ	(1 << 28)
++#define DEVU3_WAEKUP_EN	(1 << 14)
++#define OTG_WAKEUP_EN	(1 << 12)
++#define DEV_INT_EN (3 << 8) /* DEV INT b9:8 */
++#define HOST_INT1_EN (1 << 0) /* HOST INT b7:0 */
++
++/* USB3_CORE_STATUS */
++#define MDCTRL_CLK_STATUS	(1 << 15)
++#define DEV_POWER_ON_READY	(1 << 13)
++#define HOST_POWER_ON_READY	(1 << 12)
++
++/* USB3_SSPHY_STATUS */
++#define CLK_VALID_MASK		(0x3f << 26)
++#define CLK_VALID_COMPARE_BITS	(0xf << 28)
++#define PHY_REFCLK_REQ		(1 << 0)
++
++struct cdns_imx {
++	struct device *dev;
++	void __iomem *noncore;
++	struct clk_bulk_data *clks;
++	int num_clks;
++};
++
++static inline u32 cdns_imx_readl(struct cdns_imx *data, u32 offset)
++{
++	return readl(data->noncore + offset);
++}
++
++static inline void cdns_imx_writel(struct cdns_imx *data, u32 offset, u32 value)
++{
++	writel(value, data->noncore + offset);
++}
++
++static const struct clk_bulk_data imx_cdns3_core_clks[] = {
++	{ .id = "usb3_lpm_clk" },
++	{ .id = "usb3_bus_clk" },
++	{ .id = "usb3_aclk" },
++	{ .id = "usb3_ipg_clk" },
++	{ .id = "usb3_core_pclk" },
++};
++
++static int cdns_imx_noncore_init(struct cdns_imx *data)
++{
++	u32 value;
++	int ret;
++	struct device *dev = data->dev;
++
++	cdns_imx_writel(data, USB3_SSPHY_STATUS, CLK_VALID_MASK);
++	udelay(1);
++	ret = readl_poll_timeout(data->noncore + USB3_SSPHY_STATUS, value,
++		(value & CLK_VALID_COMPARE_BITS) == CLK_VALID_COMPARE_BITS,
++		10, 100000);
++	if (ret) {
++		dev_err(dev, "wait clkvld timeout\n");
++		return ret;
++	}
++
++	value = cdns_imx_readl(data, USB3_CORE_CTRL1);
++	value |= ALL_SW_RESET;
++	cdns_imx_writel(data, USB3_CORE_CTRL1, value);
++	udelay(1);
++
++	value = cdns_imx_readl(data, USB3_CORE_CTRL1);
++	value = (value & ~MODE_STRAP_MASK) | OTG_MODE | OC_DISABLE;
++	cdns_imx_writel(data, USB3_CORE_CTRL1, value);
++
++	value = cdns_imx_readl(data, USB3_INT_REG);
++	value |= HOST_INT1_EN | DEV_INT_EN;
++	cdns_imx_writel(data, USB3_INT_REG, value);
++
++	value = cdns_imx_readl(data, USB3_CORE_CTRL1);
++	value &= ~ALL_SW_RESET;
++	cdns_imx_writel(data, USB3_CORE_CTRL1, value);
++	return ret;
++}
++
++static int cdns_imx_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct device_node *node = dev->of_node;
++	struct cdns_imx *data;
++	int ret;
++
++	if (!node)
++		return -ENODEV;
++
++	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	platform_set_drvdata(pdev, data);
++	data->dev = dev;
++	data->noncore = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(data->noncore)) {
++		dev_err(dev, "can't map IOMEM resource\n");
++		return PTR_ERR(data->noncore);
++	}
++
++	data->num_clks = ARRAY_SIZE(imx_cdns3_core_clks);
++	data->clks = (struct clk_bulk_data *)imx_cdns3_core_clks;
++	ret = devm_clk_bulk_get(dev, data->num_clks, data->clks);
++	if (ret)
++		return ret;
++
++	ret = clk_bulk_prepare_enable(data->num_clks, data->clks);
++	if (ret)
++		return ret;
++
++	ret = cdns_imx_noncore_init(data);
++	if (ret)
++		goto err;
++
++	ret = of_platform_populate(node, NULL, NULL, dev);
++	if (ret) {
++		dev_err(dev, "failed to create children: %d\n", ret);
++		goto err;
++	}
++
++	return ret;
++
++err:
++	clk_bulk_disable_unprepare(data->num_clks, data->clks);
++	return ret;
++}
++
++static int cdns_imx_remove_core(struct device *dev, void *data)
++{
++	struct platform_device *pdev = to_platform_device(dev);
++
++	platform_device_unregister(pdev);
++
++	return 0;
++}
++
++static int cdns_imx_remove(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++
++	device_for_each_child(dev, NULL, cdns_imx_remove_core);
++	pm_runtime_put_sync(dev);
++	pm_runtime_disable(dev);
++
++	platform_set_drvdata(pdev, NULL);
++
++	return 0;
++}
++
++static const struct of_device_id cdns_imx_of_match[] = {
++	{ .compatible = "fsl,imx8qm-usb3", },
++	{},
++};
++MODULE_DEVICE_TABLE(of, cdns_imx_of_match);
++
++static struct platform_driver cdns_imx_driver = {
++	.probe		= cdns_imx_probe,
++	.remove		= cdns_imx_remove,
++	.driver		= {
++		.name	= "cdns3-imx",
++		.of_match_table	= cdns_imx_of_match,
++	},
++};
++module_platform_driver(cdns_imx_driver);
++
++MODULE_ALIAS("platform:cdns3-imx");
++MODULE_AUTHOR("Peter Chen <peter.chen@nxp.com>");
++MODULE_LICENSE("GPL v2");
++MODULE_DESCRIPTION("Cadence USB3 i.MX Glue Layer");
+-- 
+2.17.1
 
-Thanks,
-Peter Chen=
