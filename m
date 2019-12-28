@@ -2,150 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A6712BB9A
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2019 23:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 502AA12BC53
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Dec 2019 03:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726088AbfL0WaR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Dec 2019 17:30:17 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:37069 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725306AbfL0WaR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Dec 2019 17:30:17 -0500
-Received: by mail-pj1-f68.google.com with SMTP id m13so5497739pjb.2
-        for <linux-usb@vger.kernel.org>; Fri, 27 Dec 2019 14:30:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ZyneZl/G+ai0/NpoiLmhjrVLR8OnaQHKtfkH0OWX5U8=;
-        b=X6cQSfn7BnQZw89iIkZaGJ6ELj5kL14xvokkxsiEIGn509z9vIZQXmlWZ+wV3y0mr1
-         +fkP6bwtBO0Dl/8f1fVGtA/syFo6U1nVb9fg0c4chQXjaayQ50jOnbQeT5/9/CP0S1Ni
-         dafJrQlSi8DRLP6rPABpjQUmIQMrkxFOiG9yiqLsF6DobUJI8bVtq2lsMY0VfF/6Os4t
-         agW/eHHKFyW0KzfilQBcCVU6ZlSiDwHKrB/g4DpYneZ+SW9L4GTmcG/wSqua+uLUP8FL
-         IDFb/u2m+7ODWTB2aKQDVKthGUB8GvIUcStOE87aYOEUvZtP4H6va49EQ5nFYDdapVcg
-         55JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ZyneZl/G+ai0/NpoiLmhjrVLR8OnaQHKtfkH0OWX5U8=;
-        b=aedjKy/i5rCRreF3ezGEKh3FQq2oBga9h+OxWCKI7DwHb8+b1Ey7fu8De64Kin/0fv
-         sZgaSzxOkaRIaGlVeefOchYIihzDI+C0axoUV3K74YDPCDq1TDAaz4C/UP7JAQfLyMR8
-         V5Oa1HjfllRB2813nSr4IjtSLmOZ/fcJwR9+5//6g1HBwUmt+0P+t7E7NJzPxLaCP9JE
-         Q5VvUCfY9N5yHFZaDW6d9EGkjzzCacQkS/K7xR3cEIsdA4krY7WRXAubVehU3hp1bEon
-         QTGsALhlwP/kXtWP8oWCm99qIta7gYCC3DtYlp46O9brar0DzNwP5AdGsvD1tOM9T0oo
-         zsmw==
-X-Gm-Message-State: APjAAAVKAhcF4jiGJpyPIopYBcVjk2Gt3TRl0WPa75Yrgg0IZkTyHglf
-        m2igAdVEFSE7HW98x05w4ifeRGeD
-X-Google-Smtp-Source: APXvYqyB+BvuNUH9HXBAgO8h87YldYOBe64wJvbZvpOBrYJI2jCOEoUKQrXgrGiGyxHytH5Ajt0q7A==
-X-Received: by 2002:a17:90a:2201:: with SMTP id c1mr28590394pje.31.1577485816915;
-        Fri, 27 Dec 2019 14:30:16 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e25sm38294261pge.64.2019.12.27.14.30.15
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 27 Dec 2019 14:30:15 -0800 (PST)
-Date:   Fri, 27 Dec 2019 14:30:14 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Douglas Gilbert <dgilbert@interlog.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: usb-c pd: PD_MAX_PAYLOAD too small
-Message-ID: <20191227223014.GA29215@roeck-us.net>
-References: <f000d0e7-eb7f-5df6-ee2b-188e68f0baa9@interlog.com>
+        id S1726088AbfL1CyX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Dec 2019 21:54:23 -0500
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:60158 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725957AbfL1CyX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Dec 2019 21:54:23 -0500
+X-UUID: 6f8a195f94a94c1db1db6633e7a40227-20191228
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=DuK72F7gBZXvEYq3y3vW4ZuOMFEZduG7ni5TClqn+Jw=;
+        b=eD08jS+XMS6lxdLuWJZUq3UTil5RDa6ktIO9N6cibeIztxAFTT91MQJ8FSGMYEwZRUx1ccjQdhYxp65Iiyo2l90x/StMH8+yc9K2K46nu0dKpdtVKOcwYKOL4zkpxR/J6MfJpSfAaNsl7azmsCuv/wVjc2l+pTtUsY8FVYfcUuU=;
+X-UUID: 6f8a195f94a94c1db1db6633e7a40227-20191228
+Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1593761629; Sat, 28 Dec 2019 10:54:16 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS32N1.mediatek.inc
+ (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Sat, 28 Dec
+ 2019 10:53:43 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Sat, 28 Dec 2019 10:54:44 +0800
+Message-ID: <1577501595.21256.8.camel@mhfsdcap03>
+Subject: Re: [PATCH v3 3/6] phy: amlogic: Add Amlogic A1 USB2 PHY Driver
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Hanjie Lin <hanjie.lin@amlogic.com>
+CC:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Yue Wang <yue.wang@amlogic.com>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Carlo Caione <carlo@caione.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+Date:   Sat, 28 Dec 2019 10:53:15 +0800
+In-Reply-To: <1577428606-69855-4-git-send-email-hanjie.lin@amlogic.com>
+References: <1577428606-69855-1-git-send-email-hanjie.lin@amlogic.com>
+         <1577428606-69855-4-git-send-email-hanjie.lin@amlogic.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f000d0e7-eb7f-5df6-ee2b-188e68f0baa9@interlog.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-TM-SNTS-SMTP: 7D6A139BDF8753CECA92F2F08A4142A8071CBE782207FE70DB2AA7114E397CFB2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 27, 2019 at 12:18:11PM -0500, Douglas Gilbert wrote:
-> Samsung have an optional USB-C charger for their 10+
-> tablet ***. This optional unit is one of the first PPS
-> capable PD power adapters on the mass market at a
-> reasonable price (around $50). Its part number is
-> EP-TA485 and is described as a 45 Watt "Travel Adapter".
-> 
-> I have a rig using an Acme Arietta and a NXP OM 13588 board
-> which can do USB-C sink/source. And the EP-TA485 is plugged
-> into the OM 13588 which pushes that latter into (power)
-> sink mode.
-> 
-> From 'cat /sys/kernel/debug/usb/tcpm-1-0050' that adapter
-> advertises these PDOs (and PDO[4] implies at 11 Volts it
-> can supply 5 Amps which is worrying for a 45 Watt supply):
-> 
-> [   19.207338]  PDO 0: type 0, 5000 mV, 3000 mA [E]
-> [   19.207361]  PDO 1: type 0, 9000 mV, 3000 mA []
-> [   19.207383]  PDO 2: type 0, 15000 mV, 3000 mA []
-> [   19.207428]  PDO 3: type 0, 20000 mV, 2250 mA []
-> [   19.207448]  PDO 4: type 3, 3300-11000 mV, 5000 mA
-> [   19.207466]  PDO 5: type 3, 3300-16000 mV, 3000 mA
-> [   19.207484]  PDO 6: type 3, 3300-21000 mV, 2250 mA
-> 
-> And whenever drivers/usb/typec/tcpm/tcpci.c fetches those
-> PDOs, it fires this warning at line 443 (lk 5.4.6):
-> 
->            if (WARN_ON(cnt > sizeof(msg.payload)))
+T24gRnJpLCAyMDE5LTEyLTI3IGF0IDE0OjM2ICswODAwLCBIYW5qaWUgTGluIHdyb3RlOg0KPiBU
+aGlzIGFkZHMgc3VwcG9ydCBmb3IgdGhlIFVTQjIgUEhZIGZvdW5kIGluIHRoZSBBbWxvZ2ljIEEx
+IFNvQyBGYW1pbHkuDQo+IA0KPiBJdCBzdXBwb3J0cyBob3N0IG1vZGUgb25seS4NCj4gDQo+IFNp
+Z25lZC1vZmYtYnk6IEhhbmppZSBMaW4gPGhhbmppZS5saW5AYW1sb2dpYy5jb20+DQo+IFNpZ25l
+ZC1vZmYtYnk6IFl1ZSBXYW5nIDx5dWUud2FuZ0BhbWxvZ2ljLmNvbT4NCj4gLS0tDQo+ICBkcml2
+ZXJzL3BoeS9hbWxvZ2ljL3BoeS1tZXNvbi1nMTJhLXVzYjIuYyB8IDkzICsrKysrKysrKysrKysr
+KysrKysrKy0tLS0tLS0tLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCA2NCBpbnNlcnRpb25zKCspLCAy
+OSBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3BoeS9hbWxvZ2ljL3Bo
+eS1tZXNvbi1nMTJhLXVzYjIuYyBiL2RyaXZlcnMvcGh5L2FtbG9naWMvcGh5LW1lc29uLWcxMmEt
+dXNiMi5jDQo+IGluZGV4IDkwNjVmZmMuLmE1NjQ3NDcgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMv
+cGh5L2FtbG9naWMvcGh5LW1lc29uLWcxMmEtdXNiMi5jDQo+ICsrKyBiL2RyaXZlcnMvcGh5L2Ft
+bG9naWMvcGh5LW1lc29uLWcxMmEtdXNiMi5jDQo+IEBAIC0xNDYsMTEgKzE0NiwxNyBAQA0KWy4u
+Ll0NCj4gKwlwcml2LT5zb2NfaWQgPSAoZW51bSBtZXNvbl9zb2NfaWQpb2ZfZGV2aWNlX2dldF9t
+YXRjaF9kYXRhKCZwZGV2LT5kZXYpOw0KPiArDQo+ICAJcHJpdi0+cmVnbWFwID0gZGV2bV9yZWdt
+YXBfaW5pdF9tbWlvKGRldiwgYmFzZSwNCj4gIAkJCQkJICAgICAmcGh5X21lc29uX2cxMmFfdXNi
+Ml9yZWdtYXBfY29uZik7DQo+ICAJaWYgKElTX0VSUihwcml2LT5yZWdtYXApKQ0KPiAgCQlyZXR1
+cm4gUFRSX0VSUihwcml2LT5yZWdtYXApOw0KPiAgDQo+IC0JcHJpdi0+Y2xrID0gZGV2bV9jbGtf
+Z2V0KGRldiwgInh0YWwiKTsNCj4gLQlpZiAoSVNfRVJSKHByaXYtPmNsaykpDQo+IC0JCXJldHVy
+biBQVFJfRVJSKHByaXYtPmNsayk7DQo+ICsJaWYgKHByaXYtPnNvY19pZCA9PSBNRVNPTl9TT0Nf
+RzEyQSkgew0KPiArCQlwcml2LT5jbGsgPSBkZXZtX2Nsa19nZXQoZGV2LCAieHRhbCIpOw0KPiAr
+CQlpZiAoSVNfRVJSKHByaXYtPmNsaykpDQo+ICsJCQlyZXR1cm4gUFRSX0VSUihwcml2LT5jbGsp
+Ow0KPiArCX0NCkhvdyBhYm91dCB1c2UgZGV2bV9jbGtfZ2V0X29wdGlvbmFsKCksIHRoZW4gbWFr
+ZSBpdCBhcyBvcHRpb25hbCBjbG9jaw0KYWxzbyBpbiBkdC1iaW5kaW5nDQo+ICANCg0KPiAgDQoN
+Cg==
 
-Thanks a lot for the report.
-
-The question here is if cnt includes the header bytes, which would
-make it too large for the check if there are indeed 7 PDOs.
-I'll have to check in the specification after I am back from vacation
-(early January).
-
-Thanks,
-Guenter
-
-> 
-> And that implies in include/linux/usb/pd.h
-> 
-> struct pd_message {
->         __le16 header;
->         union {
->                 __le32 payload[PD_MAX_PAYLOAD];
->                 struct pd_chunked_ext_message_data ext_msg;
->         };
-> } __packed;
-> 
-> ... that PD_MAX_PAYLOAD is too small (or off by one). It is 7
-> in lk 5.4.6 and linux-stable.
-> 
-> Doug Gilbert
-> 
-> 
-> *** When 10+ tablet is purchased it comes with a less capable
->     (i.e. no PPS) 35 Watt adapter (I believe). Samsung say if
->     the owner wants "fast" charging to buy the EP-TA485.
->     If PPS catches one, it will effectively move power
->     electronics from the smartphone or tablet into the
->     power adapter. And that could be a win for laptops as well.
-> 
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 1154 at drivers/usb/typec/tcpm/tcpci.c:443
-> tcpci_irq+0x1b4/0x1e0 [tcpci]
-> Modules linked in: tcpci tcpm roles typec asix usbnet mii
-> CPU: 0 PID: 1154 Comm: irq/37-1-0050 Tainted: G        W         5.4.6-armv5-r0 #1
-> Hardware name: Atmel AT91SAM9
-> [<c000f9b4>] (unwind_backtrace) from [<c000d7e0>] (show_stack+0x10/0x14)
-> [<c000d7e0>] (show_stack) from [<c00188b8>] (__warn+0xac/0xd0)
-> [<c00188b8>] (__warn) from [<c0018984>] (warn_slowpath_fmt+0xa8/0xb8)
-> [<c0018984>] (warn_slowpath_fmt) from [<bf053398>] (tcpci_irq+0x1b4/0x1e0 [tcpci])
-> [<bf053398>] (tcpci_irq [tcpci]) from [<c0050e78>] (irq_thread_fn+0x1c/0x78)
-> [<c0050e78>] (irq_thread_fn) from [<c00510f0>] (irq_thread+0x104/0x1ec)
-> [<c00510f0>] (irq_thread) from [<c0034460>] (kthread+0x11c/0x130)
-> [<c0034460>] (kthread) from [<c00090e0>] (ret_from_fork+0x14/0x34)
-> Exception stack(0xc55dffb0 to 0xc55dfff8)
-> ffa0:                                     00000000 00000000 00000000 00000000
-> ffc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> ffe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> ---[ end trace 2ab4ab025e97eabd ]---
-> 
-> 
-> Finally:
-> From other (non-Linux) equipment I can tell that the EP-TA485 adapter is
-> only advertising 7 PDOs, so there is no 8th PDO being truncated in Linux.
