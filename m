@@ -2,90 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 502AA12BC53
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Dec 2019 03:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD0212BC82
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Dec 2019 05:10:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726088AbfL1CyX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Dec 2019 21:54:23 -0500
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:60158 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725957AbfL1CyX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Dec 2019 21:54:23 -0500
-X-UUID: 6f8a195f94a94c1db1db6633e7a40227-20191228
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=DuK72F7gBZXvEYq3y3vW4ZuOMFEZduG7ni5TClqn+Jw=;
-        b=eD08jS+XMS6lxdLuWJZUq3UTil5RDa6ktIO9N6cibeIztxAFTT91MQJ8FSGMYEwZRUx1ccjQdhYxp65Iiyo2l90x/StMH8+yc9K2K46nu0dKpdtVKOcwYKOL4zkpxR/J6MfJpSfAaNsl7azmsCuv/wVjc2l+pTtUsY8FVYfcUuU=;
-X-UUID: 6f8a195f94a94c1db1db6633e7a40227-20191228
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1593761629; Sat, 28 Dec 2019 10:54:16 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS32N1.mediatek.inc
- (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Sat, 28 Dec
- 2019 10:53:43 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Sat, 28 Dec 2019 10:54:44 +0800
-Message-ID: <1577501595.21256.8.camel@mhfsdcap03>
-Subject: Re: [PATCH v3 3/6] phy: amlogic: Add Amlogic A1 USB2 PHY Driver
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Hanjie Lin <hanjie.lin@amlogic.com>
-CC:     Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Yue Wang <yue.wang@amlogic.com>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Carlo Caione <carlo@caione.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Qiufang Dai <qiufang.dai@amlogic.com>,
-        Jian Hu <jian.hu@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
-Date:   Sat, 28 Dec 2019 10:53:15 +0800
-In-Reply-To: <1577428606-69855-4-git-send-email-hanjie.lin@amlogic.com>
-References: <1577428606-69855-1-git-send-email-hanjie.lin@amlogic.com>
-         <1577428606-69855-4-git-send-email-hanjie.lin@amlogic.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726234AbfL1EKz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Dec 2019 23:10:55 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:46754 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726195AbfL1EKz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Dec 2019 23:10:55 -0500
+Received: by mail-ot1-f67.google.com with SMTP id k8so21531428otl.13
+        for <linux-usb@vger.kernel.org>; Fri, 27 Dec 2019 20:10:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=fkzTob+3bW1xRTGZ343yDpkgmFJWtVEeh+6HnOW5xMw=;
+        b=uptAw3P9da1WotL3f3fcA5Sk2EIqh6amRf8tUlzO0AhJ8L26I9e/1+HqHeeIyBlknG
+         0MyKQZkUk1GSd47NX2tHoylh+8ZSpOTrex8mUuGTFz1WmO79OlDZWme9jHbPJtBimO/Y
+         NrSvubzMt9ymj++BupHvL5LLt9x1z58aaDKbtRSlDX5NtEsiRlzjKsdEqCfa68M1kU63
+         57hN48NHItm/qkpbDetpe+o+JwTDYDCpijyUFKjyc1BwH+GMeVJxvKBPQFoVLOsHDU9d
+         ULDCbvfQyytHBlJNrj7l8Mvom3P53mKjKV6XL6ZGo17OS50KcyaTFlt8Pc0bFmOp1q15
+         2P0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=fkzTob+3bW1xRTGZ343yDpkgmFJWtVEeh+6HnOW5xMw=;
+        b=bHoTkKjqU6G5T9yCeAaDWX6SDI5HZxzlwTIp4QuVrbriiS4ppNgHaCVrA2T6ernId6
+         HYUL7I+lTvV7cbcZHddEeNEKucPVlpkeVZluNIox1MiT7jNXqlkxbFpbOgaOujJ7VgGR
+         JD1dmV58QlX3bhVLzA3j9U+I4IUmU9GxvGnTY0CsnFnpQvByrxVMQmxiJU7+QNYMjwt3
+         gi5W65jYecX/3FwJ+NHGiIePEn3FVtDIlyiALUe1cujpx5qNRvHoVgnbQaP7NPQLs8LI
+         Cud7Xo49MmYl5R73ZXUZOczyx9/46G4vski8Iao1vj+PkmAHn39LwMCXEqytJVYfBWFy
+         52mQ==
+X-Gm-Message-State: APjAAAXzLAYRTnVzA9mB/gU72x3a8GwC8b9EKPkr0kYTv7gY8Bp3xZTP
+        3+zFjx1PG6JKhO5iBN4TGfolWfMfSUsUiWpM604=
+X-Google-Smtp-Source: APXvYqyL5rXIo/J7hh0UbX/oZX3z1DUnfZ90KJXZVAQEuPYAbQQqCPYcw+N9yR70f8E5Le/CBI/i3+PYA/yPAOcqTMY=
+X-Received: by 2002:a9d:3b23:: with SMTP id z32mr57781992otb.159.1577506254197;
+ Fri, 27 Dec 2019 20:10:54 -0800 (PST)
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 7D6A139BDF8753CECA92F2F08A4142A8071CBE782207FE70DB2AA7114E397CFB2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Received: by 2002:a9d:7117:0:0:0:0:0 with HTTP; Fri, 27 Dec 2019 20:10:53
+ -0800 (PST)
+Reply-To: diouf.mouka500@gmail.com
+From:   Diouf Mouka <diouf.mouka500@gmail.com>
+Date:   Sat, 28 Dec 2019 04:10:53 +0000
+Message-ID: <CAGi2SBAPW40OHVjHyUKGifbB1VB4je=E0ocXDD0mCLeR06Fszw@mail.gmail.com>
+Subject: Greetings To You Friend
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gRnJpLCAyMDE5LTEyLTI3IGF0IDE0OjM2ICswODAwLCBIYW5qaWUgTGluIHdyb3RlOg0KPiBU
-aGlzIGFkZHMgc3VwcG9ydCBmb3IgdGhlIFVTQjIgUEhZIGZvdW5kIGluIHRoZSBBbWxvZ2ljIEEx
-IFNvQyBGYW1pbHkuDQo+IA0KPiBJdCBzdXBwb3J0cyBob3N0IG1vZGUgb25seS4NCj4gDQo+IFNp
-Z25lZC1vZmYtYnk6IEhhbmppZSBMaW4gPGhhbmppZS5saW5AYW1sb2dpYy5jb20+DQo+IFNpZ25l
-ZC1vZmYtYnk6IFl1ZSBXYW5nIDx5dWUud2FuZ0BhbWxvZ2ljLmNvbT4NCj4gLS0tDQo+ICBkcml2
-ZXJzL3BoeS9hbWxvZ2ljL3BoeS1tZXNvbi1nMTJhLXVzYjIuYyB8IDkzICsrKysrKysrKysrKysr
-KysrKysrKy0tLS0tLS0tLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCA2NCBpbnNlcnRpb25zKCspLCAy
-OSBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3BoeS9hbWxvZ2ljL3Bo
-eS1tZXNvbi1nMTJhLXVzYjIuYyBiL2RyaXZlcnMvcGh5L2FtbG9naWMvcGh5LW1lc29uLWcxMmEt
-dXNiMi5jDQo+IGluZGV4IDkwNjVmZmMuLmE1NjQ3NDcgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMv
-cGh5L2FtbG9naWMvcGh5LW1lc29uLWcxMmEtdXNiMi5jDQo+ICsrKyBiL2RyaXZlcnMvcGh5L2Ft
-bG9naWMvcGh5LW1lc29uLWcxMmEtdXNiMi5jDQo+IEBAIC0xNDYsMTEgKzE0NiwxNyBAQA0KWy4u
-Ll0NCj4gKwlwcml2LT5zb2NfaWQgPSAoZW51bSBtZXNvbl9zb2NfaWQpb2ZfZGV2aWNlX2dldF9t
-YXRjaF9kYXRhKCZwZGV2LT5kZXYpOw0KPiArDQo+ICAJcHJpdi0+cmVnbWFwID0gZGV2bV9yZWdt
-YXBfaW5pdF9tbWlvKGRldiwgYmFzZSwNCj4gIAkJCQkJICAgICAmcGh5X21lc29uX2cxMmFfdXNi
-Ml9yZWdtYXBfY29uZik7DQo+ICAJaWYgKElTX0VSUihwcml2LT5yZWdtYXApKQ0KPiAgCQlyZXR1
-cm4gUFRSX0VSUihwcml2LT5yZWdtYXApOw0KPiAgDQo+IC0JcHJpdi0+Y2xrID0gZGV2bV9jbGtf
-Z2V0KGRldiwgInh0YWwiKTsNCj4gLQlpZiAoSVNfRVJSKHByaXYtPmNsaykpDQo+IC0JCXJldHVy
-biBQVFJfRVJSKHByaXYtPmNsayk7DQo+ICsJaWYgKHByaXYtPnNvY19pZCA9PSBNRVNPTl9TT0Nf
-RzEyQSkgew0KPiArCQlwcml2LT5jbGsgPSBkZXZtX2Nsa19nZXQoZGV2LCAieHRhbCIpOw0KPiAr
-CQlpZiAoSVNfRVJSKHByaXYtPmNsaykpDQo+ICsJCQlyZXR1cm4gUFRSX0VSUihwcml2LT5jbGsp
-Ow0KPiArCX0NCkhvdyBhYm91dCB1c2UgZGV2bV9jbGtfZ2V0X29wdGlvbmFsKCksIHRoZW4gbWFr
-ZSBpdCBhcyBvcHRpb25hbCBjbG9jaw0KYWxzbyBpbiBkdC1iaW5kaW5nDQo+ICANCg0KPiAgDQoN
-Cg==
+-- 
+Greetings To You Friend,
+I Am Mr. Diouf Mouka From Burkina Faso I Have A Genuine
+Business Transaction Of 30million U.S Dollars To Do With You
+If You Are Interested Send To Me The Following Information
+Immediately.
 
+Your Full Name......
+
+Your Occupation.....
+
+Your Age........
+
+Your Marital Status.....
+
+Your Phone Number.....
+
+Your Country/Nationality.....
+
+Best Regard,
+
+Diouf Mouka.
