@@ -2,123 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7362C12C21F
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Dec 2019 10:36:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DA412C364
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Dec 2019 17:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726406AbfL2Jg4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 29 Dec 2019 04:36:56 -0500
-Received: from mail-wr1-f48.google.com ([209.85.221.48]:37873 "EHLO
-        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726366AbfL2Jg4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Dec 2019 04:36:56 -0500
-Received: by mail-wr1-f48.google.com with SMTP id w15so17581717wru.4;
-        Sun, 29 Dec 2019 01:36:53 -0800 (PST)
+        id S1726602AbfL2Q2O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 29 Dec 2019 11:28:14 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:42148 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726410AbfL2Q2O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Dec 2019 11:28:14 -0500
+Received: by mail-pg1-f193.google.com with SMTP id s64so16905384pgb.9;
+        Sun, 29 Dec 2019 08:28:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=sR3nYQ6CRS7rINde7y6a1YRzAaLchoV1//sjucf9+ho=;
-        b=q6OllyeaEfYhO1LKr/NiiVewVNgwX+B+oWJas50yl5bW/RndFI5/y9/w+jXePW0l4S
-         GBlv0fzs/OFf4qCuc/AFqpuAuxVUacDlMKhOv3wO6WiaHGjfkTPJtWFu09IYd2t3Cdc5
-         VF27k4WOPwWi/OjDeLNS4oOy9fFUcZx5u06J4B5c114xjcWjsZ5mO/CmS05AISrWwq7j
-         xBHbW8Gj3gB7rqUTH16djzMyUnjx0AOQPMQPcTfqXiVPYU+RtofAJZQUUDx5pOVP1uez
-         jn9ThxJ8ROFEqLaOvFVH4ZqTIj9XXZ1AWHXOCY/SFt/LBo1v2d4KqIbAJdGx3EZ0YS1u
-         +2RQ==
+        bh=HvI5d4aaE+b1gi+5iN8aWxiRIjRZNL1uGE+EfHEfZQk=;
+        b=PBYGlJ0D9gPGe0FmW8TJD9OC0RPCKukP47iBau4B9fq4O14dzRwP4sesF4P5cjwfyw
+         dozPRoYbANtEjZnDVlxntKxNffKZaCWGR0304Y7TwOw5VodfSo6AOc8eePWIooNou/8q
+         bHe3jZZzaU7IIil2bzIzYZUU3kFffVHcNML/WQPoCvacxi+gyEBl0ZNrxzqEPu0wtej4
+         AzJaT7AZepxrPHiU/u0Vae4oIVtAwh+hxUK20nBm0koSLf/oMh8UDZDBdf37yswHZcQb
+         TGQ5U2yD5lSdJK2SOQlAkTpQiiHoSOJGqOOKtnSYkTh85FVB9Ug7XJXRIN1ppa+5qY5u
+         MzuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=sR3nYQ6CRS7rINde7y6a1YRzAaLchoV1//sjucf9+ho=;
-        b=hNvps+2BHEqD/ZPosoAm1dlx9mYvTKOyPE8ZXaBMwg4npQZRip8XAVXM2GfekH/ckP
-         4cTZKTUqCRZIBirMLNABzbRhEgfRHRXV7sSHof7Mqc/QRhKY8v9d4MBNbK9GMZ/ZcXUV
-         lE2OGrIOtg0EmoACjo/gtBy7DWAJ1uCtdOk7HaGuH2UKMfYcKWAOiH+6ahAWy97Xfj5U
-         0fGb6H3iWhb6mseug90+3j6dm+od+HNEl0yqZW37uKTf9s9/aI5IXPbjjsEnEFQhPfm1
-         WEbcd5cdfFZcPOTgJy3HS+kpg+vBK4zdpFJKEENQuXEpP//bGhgvjbpzkfv8ek5UiDgc
-         5/RQ==
-X-Gm-Message-State: APjAAAU3poCheZpDxqKiFWUN2D+w8Zkr9UCjsLipQS5ZBSUC16azJSB1
-        BgmUM+RBo+fqfWK4j/f7tO0=
-X-Google-Smtp-Source: APXvYqyV6pl2izDJGWUN9LPMWEU0+kWnRcK+bGnJz3lIzX7VtWVTPJi+pPUSRYAA2bxTXxBZt6V/3w==
-X-Received: by 2002:adf:c746:: with SMTP id b6mr57617981wrh.298.1577612212870;
-        Sun, 29 Dec 2019 01:36:52 -0800 (PST)
-Received: from localhost (p200300E41F32DD00021F3CFFFE37B91B.dip0.t-ipconnect.de. [2003:e4:1f32:dd00:21f:3cff:fe37:b91b])
-        by smtp.gmail.com with ESMTPSA id x10sm41510531wrp.58.2019.12.29.01.36.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Dec 2019 01:36:51 -0800 (PST)
-Date:   Sun, 29 Dec 2019 10:36:43 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Nagarjuna Kristam <nkristam@nvidia.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
-        mark.rutland@arm.com, robh+dt@kernel.org, kishon@ti.com,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Patch V2 03/18] phy: tegra: xusb: Add usb-role-switch support
-Message-ID: <20191229093643.GA47966@mithrandir>
-References: <1576660591-10383-1-git-send-email-nkristam@nvidia.com>
- <1576660591-10383-4-git-send-email-nkristam@nvidia.com>
- <20191219132650.GJ1440537@ulmo>
- <74d94004-2022-3b04-6cd9-d6b1e9eca230@nvidia.com>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=HvI5d4aaE+b1gi+5iN8aWxiRIjRZNL1uGE+EfHEfZQk=;
+        b=CYqKSlLWjuGUMjbhGspCa7KTG/ogWTK6WrVoYeXP73169SwXQ5DQwOizCHavp5OryW
+         hJdq+rlz8W9i3YXDzVvsuQPiwqLTMukXXCxxnQ1Ft4X2UKZR/4im/JTJxoOi8P3UY8um
+         rNuPLdD5mMS7F1DX42jmDdCvt4n/C8ne8O0OmIztkDCLVFrH5Yx/SzkOAgoGXOycJ8K7
+         kMN2pNZzXzaZe+PFfBC6kLNSvtX20RWONU48jppcU1UdJzWVkyreQ5iN4Q/GI82fitGw
+         YZJd9bH8Bo1ekrlyz2a6XqG9Jrj0QxwJ/nEtCErUrqbavozOV41v6IXd6bm4CjygcfRX
+         wSyA==
+X-Gm-Message-State: APjAAAXpswBjttI0KFly/LH9Ralv6pfxd8bfA8Tfar1XJVsvXXVplX+W
+        +SrS+eBWsaLXscdLybdtVqI=
+X-Google-Smtp-Source: APXvYqzh1668xttmkGagNpJIV4NcN8NMICBHJ5hpyXU8kB3s4sXZdyHSdkPIogj3gq18bZMYshW9ow==
+X-Received: by 2002:a63:3404:: with SMTP id b4mr66183401pga.438.1577636893413;
+        Sun, 29 Dec 2019 08:28:13 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j10sm21812709pjb.14.2019.12.29.08.28.12
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 29 Dec 2019 08:28:12 -0800 (PST)
+Date:   Sun, 29 Dec 2019 08:28:11 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Peter Chen <peter.chen@freescale.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] usb: chipidea: host: Disable port power only if
+ previously enabled
+Message-ID: <20191229162811.GA21566@roeck-us.net>
+References: <20191227165543.GA15950@roeck-us.net>
+ <Pine.LNX.4.44L0.1912281431190.18379-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="u3/rZRmxL6MmkK24"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <74d94004-2022-3b04-6cd9-d6b1e9eca230@nvidia.com>
-User-Agent: Mutt/1.13.2 (2019-12-18)
+In-Reply-To: <Pine.LNX.4.44L0.1912281431190.18379-100000@netrider.rowland.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Sat, Dec 28, 2019 at 02:33:01PM -0500, Alan Stern wrote:
+> 
+> Let's try a slightly different approach.  What happens with this patch?
+> 
+> Alan Stern
+> 
+> 
+> Index: usb-devel/drivers/usb/core/hub.c
+> ===================================================================
+> --- usb-devel.orig/drivers/usb/core/hub.c
+> +++ usb-devel/drivers/usb/core/hub.c
+> @@ -1065,6 +1065,7 @@ static void hub_activate(struct usb_hub
+>  		if (type == HUB_INIT) {
+>  			delay = hub_power_on_good_delay(hub);
+>  
+> +			hub->power_bits[0] = ~0UL;	/* All ports on */
+>  			hub_power_on(hub, false);
+>  			INIT_DELAYED_WORK(&hub->init_work, hub_init_func2);
+>  			queue_delayed_work(system_power_efficient_wq,
+> 
 
---u3/rZRmxL6MmkK24
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That doesn't make a difference - the traceback is still seen with this patch
+applied.
 
-On Fri, Dec 27, 2019 at 12:09:22PM +0530, Nagarjuna Kristam wrote:
-> On 19-12-2019 18:56, Thierry Reding wrote:
-> > On Wed, Dec 18, 2019 at 02:46:16PM +0530, Nagarjuna Kristam wrote:
-[...]
-> > > @@ -551,11 +556,42 @@ static const char *const modes[] =3D {
-> > >   	[USB_DR_MODE_OTG] =3D "otg",
-> > >   };
-> > > +static int tegra_xusb_role_sw_set(struct device *dev, enum usb_role =
-role)
-> > > +{
-> > > +	dev_dbg(dev, "%s calling notifier for role is %d\n", __func__, role=
-);
-> > I don't understand what "for role is %d" means here. I think perhaps you
-> > meant to simply say "for role %d"? Also, perhaps add parentheses after
-> > the "%s" to clarify that you're referring to a function.
-> >=20
-> Yes, intention is to print role, Will update as mentioned "for role %d"
-
-It might be better to print the name of the role here because I suspect
-very few people know the value of the role defines without looking them
-up. I thought there was already a function to return the role name for
-a given enum usb_role, but it seems like we only have name -> enum
-conversion. Might be worth adding that, but doesn't have to be as part
-of this series.
-
-Thierry
-
---u3/rZRmxL6MmkK24
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl4Ic6YACgkQ3SOs138+
-s6F9Qg//diLO90kPs0EI/W6HXy+wcF1k8DI9KuspMV5DRFTRcqtt6dBJ+2wK3uQh
-57OWWgV/+4Fu+QLNp20OSSm1s9GM//iV43ZfoT0J/flkuRLVQNu3rjLmHJG79oQb
-pozYgHxEfEqv2uB6ZZmtIN2ev+MEjHWbl9hJ/qwuNdPQTulsDjLk9TIodV/LRGyt
-QzAUcyhLfJuEqrVXEYUuvov5Vmf8qm/nQKKoRdcnLGz7pw2o9GlnhIgpXKupD08g
-6Z6FWMM3agKXcWB8dVb3UzSbbUrVP9lx9+bOfnVy1QzvjWaRXJFeh0AmNxqdtbJX
-NpFR3eZZUkrD2N4mtOqaaiVSoa8wQq5PLOOtIE6QvBBPxk003BmntrlKi3nuxScR
-k7YpBrWwxszHiGLEpuPGS9weGV0m7nbkp0x+YEc5JuGyj/HGmyl9P2CbFoHOdBll
-YsA90b4DXW2W9k3HV/tAYcQPjRqZ9vf6goHibQWjOgCqTVMwnJHo2i9ThNr2PPUT
-/lieJb5M837w/n67TCbwDLad/xX6DnpYts2yFSttElJALSxrPooChhN7Ky8p1hrd
-6sans1bQHa9itH4JQOK3ZmQtZEiBhAfXa1VXMiKjmmRUIhhRymediKJSfMucjqkZ
-3s+MXSWnzU+ZOqrPu+yf4jceuMDf3rM3Ngb6439HS6iWyOmEd0U=
-=tuXa
------END PGP SIGNATURE-----
-
---u3/rZRmxL6MmkK24--
+Guenter
