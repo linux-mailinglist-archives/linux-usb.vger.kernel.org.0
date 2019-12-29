@@ -2,159 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB7E12BFD1
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Dec 2019 02:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7362C12C21F
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Dec 2019 10:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726307AbfL2BGq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 28 Dec 2019 20:06:46 -0500
-Received: from smtp.infotech.no ([82.134.31.41]:52366 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726187AbfL2BGp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 28 Dec 2019 20:06:45 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id A1C32204191;
-        Sun, 29 Dec 2019 02:06:43 +0100 (CET)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id wb2tAiL6Dp6L; Sun, 29 Dec 2019 02:06:41 +0100 (CET)
-Received: from [192.168.48.23] (host-23-251-188-50.dyn.295.ca [23.251.188.50])
-        by smtp.infotech.no (Postfix) with ESMTPA id 3EABC20416A;
-        Sun, 29 Dec 2019 02:06:41 +0100 (CET)
-Reply-To: dgilbert@interlog.com
-Subject: Re: usb-c pd: PD_MAX_PAYLOAD too small
-From:   Douglas Gilbert <dgilbert@interlog.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-usb@vger.kernel.org
-References: <f000d0e7-eb7f-5df6-ee2b-188e68f0baa9@interlog.com>
- <20191227223014.GA29215@roeck-us.net>
- <46a6024c-4081-45db-1768-3fb69ac8deb8@interlog.com>
-Message-ID: <62cbce31-5cc0-ecad-aca1-40483900aeb1@interlog.com>
-Date:   Sat, 28 Dec 2019 20:06:39 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1726406AbfL2Jg4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 29 Dec 2019 04:36:56 -0500
+Received: from mail-wr1-f48.google.com ([209.85.221.48]:37873 "EHLO
+        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726366AbfL2Jg4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Dec 2019 04:36:56 -0500
+Received: by mail-wr1-f48.google.com with SMTP id w15so17581717wru.4;
+        Sun, 29 Dec 2019 01:36:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=sR3nYQ6CRS7rINde7y6a1YRzAaLchoV1//sjucf9+ho=;
+        b=q6OllyeaEfYhO1LKr/NiiVewVNgwX+B+oWJas50yl5bW/RndFI5/y9/w+jXePW0l4S
+         GBlv0fzs/OFf4qCuc/AFqpuAuxVUacDlMKhOv3wO6WiaHGjfkTPJtWFu09IYd2t3Cdc5
+         VF27k4WOPwWi/OjDeLNS4oOy9fFUcZx5u06J4B5c114xjcWjsZ5mO/CmS05AISrWwq7j
+         xBHbW8Gj3gB7rqUTH16djzMyUnjx0AOQPMQPcTfqXiVPYU+RtofAJZQUUDx5pOVP1uez
+         jn9ThxJ8ROFEqLaOvFVH4ZqTIj9XXZ1AWHXOCY/SFt/LBo1v2d4KqIbAJdGx3EZ0YS1u
+         +2RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=sR3nYQ6CRS7rINde7y6a1YRzAaLchoV1//sjucf9+ho=;
+        b=hNvps+2BHEqD/ZPosoAm1dlx9mYvTKOyPE8ZXaBMwg4npQZRip8XAVXM2GfekH/ckP
+         4cTZKTUqCRZIBirMLNABzbRhEgfRHRXV7sSHof7Mqc/QRhKY8v9d4MBNbK9GMZ/ZcXUV
+         lE2OGrIOtg0EmoACjo/gtBy7DWAJ1uCtdOk7HaGuH2UKMfYcKWAOiH+6ahAWy97Xfj5U
+         0fGb6H3iWhb6mseug90+3j6dm+od+HNEl0yqZW37uKTf9s9/aI5IXPbjjsEnEFQhPfm1
+         WEbcd5cdfFZcPOTgJy3HS+kpg+vBK4zdpFJKEENQuXEpP//bGhgvjbpzkfv8ek5UiDgc
+         5/RQ==
+X-Gm-Message-State: APjAAAU3poCheZpDxqKiFWUN2D+w8Zkr9UCjsLipQS5ZBSUC16azJSB1
+        BgmUM+RBo+fqfWK4j/f7tO0=
+X-Google-Smtp-Source: APXvYqyV6pl2izDJGWUN9LPMWEU0+kWnRcK+bGnJz3lIzX7VtWVTPJi+pPUSRYAA2bxTXxBZt6V/3w==
+X-Received: by 2002:adf:c746:: with SMTP id b6mr57617981wrh.298.1577612212870;
+        Sun, 29 Dec 2019 01:36:52 -0800 (PST)
+Received: from localhost (p200300E41F32DD00021F3CFFFE37B91B.dip0.t-ipconnect.de. [2003:e4:1f32:dd00:21f:3cff:fe37:b91b])
+        by smtp.gmail.com with ESMTPSA id x10sm41510531wrp.58.2019.12.29.01.36.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Dec 2019 01:36:51 -0800 (PST)
+Date:   Sun, 29 Dec 2019 10:36:43 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Nagarjuna Kristam <nkristam@nvidia.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
+        mark.rutland@arm.com, robh+dt@kernel.org, kishon@ti.com,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Patch V2 03/18] phy: tegra: xusb: Add usb-role-switch support
+Message-ID: <20191229093643.GA47966@mithrandir>
+References: <1576660591-10383-1-git-send-email-nkristam@nvidia.com>
+ <1576660591-10383-4-git-send-email-nkristam@nvidia.com>
+ <20191219132650.GJ1440537@ulmo>
+ <74d94004-2022-3b04-6cd9-d6b1e9eca230@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <46a6024c-4081-45db-1768-3fb69ac8deb8@interlog.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="u3/rZRmxL6MmkK24"
+Content-Disposition: inline
+In-Reply-To: <74d94004-2022-3b04-6cd9-d6b1e9eca230@nvidia.com>
+User-Agent: Mutt/1.13.2 (2019-12-18)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2019-12-28 7:57 p.m., Douglas Gilbert wrote:
-> On 2019-12-27 5:30 p.m., Guenter Roeck wrote:
->> On Fri, Dec 27, 2019 at 12:18:11PM -0500, Douglas Gilbert wrote:
->>> Samsung have an optional USB-C charger for their 10+
->>> tablet ***. This optional unit is one of the first PPS
->>> capable PD power adapters on the mass market at a
->>> reasonable price (around $50). Its part number is
->>> EP-TA485 and is described as a 45 Watt "Travel Adapter".
->>>
->>> I have a rig using an Acme Arietta and a NXP OM 13588 board
->>> which can do USB-C sink/source. And the EP-TA485 is plugged
->>> into the OM 13588 which pushes that latter into (power)
->>> sink mode.
->>>
->>>  From 'cat /sys/kernel/debug/usb/tcpm-1-0050' that adapter
->>> advertises these PDOs (and PDO[4] implies at 11 Volts it
->>> can supply 5 Amps which is worrying for a 45 Watt supply):
->>>
->>> [   19.207338]  PDO 0: type 0, 5000 mV, 3000 mA [E]
->>> [   19.207361]  PDO 1: type 0, 9000 mV, 3000 mA []
->>> [   19.207383]  PDO 2: type 0, 15000 mV, 3000 mA []
->>> [   19.207428]  PDO 3: type 0, 20000 mV, 2250 mA []
->>> [   19.207448]  PDO 4: type 3, 3300-11000 mV, 5000 mA
->>> [   19.207466]  PDO 5: type 3, 3300-16000 mV, 3000 mA
->>> [   19.207484]  PDO 6: type 3, 3300-21000 mV, 2250 mA
->>>
->>> And whenever drivers/usb/typec/tcpm/tcpci.c fetches those
->>> PDOs, it fires this warning at line 443 (lk 5.4.6):
->>>
->>>             if (WARN_ON(cnt > sizeof(msg.payload)))
->>
->> Thanks a lot for the report.
->>
->> The question here is if cnt includes the header bytes, which would
->> make it too large for the check if there are indeed 7 PDOs.
->> I'll have to check in the specification after I am back from vacation
->> (early January).
-> 
-> Placed a pr_info() before that WARN and got cnt=31 and
-> sizeof(msg.payload)=28. The spec says there can be no more than 7
-> (A)PDOs [Section 6.4.1 page 118 USB PD spec 'Revision 3.0,
-> Version 2.0']. So it looks like 'cnt' includes both the header (2
-> bytes) and the CRC.
-> 
-> So its probably been bad for a while, just needed a source with
-> 7 (A)PDOs to trip that over zealous warning.
-> 
-> Doug Gilbert
 
-Just another possibly unrelated datapoint. That Samsung 45 Watt
-PPS power adapter (EP-TA485) works on just about everything I have
-tested it on, apart from this laptop which is a Lenovo X270.
-When plugged into the X270, the laptop continually does hard
-resets on the PD protocol (i.e. on the CC lines). Could the X270
-have the same bug?
+--u3/rZRmxL6MmkK24
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-A Dell XPS (9380) which is more recent than the X270 has no problem.
-That is just as well because that XPS has 3 type-C receptacles, a
-3.5mm audio jack and a microSD reader (i.e. no other way to power
-(and thus charge) the laptop other than via USB PD).
+On Fri, Dec 27, 2019 at 12:09:22PM +0530, Nagarjuna Kristam wrote:
+> On 19-12-2019 18:56, Thierry Reding wrote:
+> > On Wed, Dec 18, 2019 at 02:46:16PM +0530, Nagarjuna Kristam wrote:
+[...]
+> > > @@ -551,11 +556,42 @@ static const char *const modes[] =3D {
+> > >   	[USB_DR_MODE_OTG] =3D "otg",
+> > >   };
+> > > +static int tegra_xusb_role_sw_set(struct device *dev, enum usb_role =
+role)
+> > > +{
+> > > +	dev_dbg(dev, "%s calling notifier for role is %d\n", __func__, role=
+);
+> > I don't understand what "for role is %d" means here. I think perhaps you
+> > meant to simply say "for role %d"? Also, perhaps add parentheses after
+> > the "%s" to clarify that you're referring to a function.
+> >=20
+> Yes, intention is to print role, Will update as mentioned "for role %d"
 
-> 
->>>
->>> And that implies in include/linux/usb/pd.h
->>>
->>> struct pd_message {
->>>          __le16 header;
->>>          union {
->>>                  __le32 payload[PD_MAX_PAYLOAD];
->>>                  struct pd_chunked_ext_message_data ext_msg;
->>>          };
->>> } __packed;
->>>
->>> ... that PD_MAX_PAYLOAD is too small (or off by one). It is 7
->>> in lk 5.4.6 and linux-stable.
->>>
->>> Doug Gilbert
->>>
->>>
->>> *** When 10+ tablet is purchased it comes with a less capable
->>>      (i.e. no PPS) 35 Watt adapter (I believe). Samsung say if
->>>      the owner wants "fast" charging to buy the EP-TA485.
->>>      If PPS catches one, it will effectively move power
->>>      electronics from the smartphone or tablet into the
->>>      power adapter. And that could be a win for laptops as well.
->>>
->>>
->>> ------------[ cut here ]------------
->>> WARNING: CPU: 0 PID: 1154 at drivers/usb/typec/tcpm/tcpci.c:443
->>> tcpci_irq+0x1b4/0x1e0 [tcpci]
->>> Modules linked in: tcpci tcpm roles typec asix usbnet mii
->>> CPU: 0 PID: 1154 Comm: irq/37-1-0050 Tainted: G        W         
->>> 5.4.6-armv5-r0 #1
->>> Hardware name: Atmel AT91SAM9
->>> [<c000f9b4>] (unwind_backtrace) from [<c000d7e0>] (show_stack+0x10/0x14)
->>> [<c000d7e0>] (show_stack) from [<c00188b8>] (__warn+0xac/0xd0)
->>> [<c00188b8>] (__warn) from [<c0018984>] (warn_slowpath_fmt+0xa8/0xb8)
->>> [<c0018984>] (warn_slowpath_fmt) from [<bf053398>] (tcpci_irq+0x1b4/0x1e0 
->>> [tcpci])
->>> [<bf053398>] (tcpci_irq [tcpci]) from [<c0050e78>] (irq_thread_fn+0x1c/0x78)
->>> [<c0050e78>] (irq_thread_fn) from [<c00510f0>] (irq_thread+0x104/0x1ec)
->>> [<c00510f0>] (irq_thread) from [<c0034460>] (kthread+0x11c/0x130)
->>> [<c0034460>] (kthread) from [<c00090e0>] (ret_from_fork+0x14/0x34)
->>> Exception stack(0xc55dffb0 to 0xc55dfff8)
->>> ffa0:                                     00000000 00000000 00000000 00000000
->>> ffc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
->>> ffe0: 00000000 00000000 00000000 00000000 00000013 00000000
->>> ---[ end trace 2ab4ab025e97eabd ]---
->>>
->>>
->>> Finally:
->>>  From other (non-Linux) equipment I can tell that the EP-TA485 adapter is
->>> only advertising 7 PDOs, so there is no 8th PDO being truncated in Linux.
-> 
+It might be better to print the name of the role here because I suspect
+very few people know the value of the role defines without looking them
+up. I thought there was already a function to return the role name for
+a given enum usb_role, but it seems like we only have name -> enum
+conversion. Might be worth adding that, but doesn't have to be as part
+of this series.
 
+Thierry
+
+--u3/rZRmxL6MmkK24
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl4Ic6YACgkQ3SOs138+
+s6F9Qg//diLO90kPs0EI/W6HXy+wcF1k8DI9KuspMV5DRFTRcqtt6dBJ+2wK3uQh
+57OWWgV/+4Fu+QLNp20OSSm1s9GM//iV43ZfoT0J/flkuRLVQNu3rjLmHJG79oQb
+pozYgHxEfEqv2uB6ZZmtIN2ev+MEjHWbl9hJ/qwuNdPQTulsDjLk9TIodV/LRGyt
+QzAUcyhLfJuEqrVXEYUuvov5Vmf8qm/nQKKoRdcnLGz7pw2o9GlnhIgpXKupD08g
+6Z6FWMM3agKXcWB8dVb3UzSbbUrVP9lx9+bOfnVy1QzvjWaRXJFeh0AmNxqdtbJX
+NpFR3eZZUkrD2N4mtOqaaiVSoa8wQq5PLOOtIE6QvBBPxk003BmntrlKi3nuxScR
+k7YpBrWwxszHiGLEpuPGS9weGV0m7nbkp0x+YEc5JuGyj/HGmyl9P2CbFoHOdBll
+YsA90b4DXW2W9k3HV/tAYcQPjRqZ9vf6goHibQWjOgCqTVMwnJHo2i9ThNr2PPUT
+/lieJb5M837w/n67TCbwDLad/xX6DnpYts2yFSttElJALSxrPooChhN7Ky8p1hrd
+6sans1bQHa9itH4JQOK3ZmQtZEiBhAfXa1VXMiKjmmRUIhhRymediKJSfMucjqkZ
+3s+MXSWnzU+ZOqrPu+yf4jceuMDf3rM3Ngb6439HS6iWyOmEd0U=
+=tuXa
+-----END PGP SIGNATURE-----
+
+--u3/rZRmxL6MmkK24--
