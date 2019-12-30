@@ -2,153 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC2312CBEE
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Dec 2019 03:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AED812CC2B
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Dec 2019 04:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726861AbfL3C1H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 29 Dec 2019 21:27:07 -0500
-Received: from mail-eopbgr70088.outbound.protection.outlook.com ([40.107.7.88]:42597
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726726AbfL3C1H (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 29 Dec 2019 21:27:07 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=et4KEosSb+NU5X4NbDnE7EwTtexu5DWymc8CjdIoQXzvAuC7iGSYIWJZagdc0EXz4lTGpbIJzhIixUGHWbBRTb0S3/k55Tm1Q7N1xL0UkzTjWqtfoUeNuVlU/vRyrQNG/4WYBQsGViJ9ihstw9bwrTg5I46JpoO+R9zd+VjX6cbJ0heOgy3QuxR9gfwM1egGos6jd696R1lYtlmYJWpcKm87Z5PFMQx6ragKMUAmG1RfRLJ4Hsk/JnqbFfUEx5210GXiGbZ3PQVFKpNJzLwJI5FtCFYFeiu+uCdGNgHllp6ARVXPcqA2kYr7XelWeIdCGbPTya1FPE1qohdZp52Mjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WH2WAdrD+nXXR02Dh3DYdxaQVAQrS4tEzK453EJq6fk=;
- b=MfYuIbWf75Lk/R50lLYUqKPTtqAPH2AYneZpZgMgukD/i6fk0sS8sQot8FniciPqwCOnNcLtPyLCmRjRSi6VP0R12riHSuBrPEmtt9rz44a181GnBq5LgziH/X4y/gzNxFj+sBH7rG9/8jmovkisifL05RE3lCHfft9PPoCW9U7r4w513sB76QZkSqIgEsK5cP1yy9YLveUqXnL96fbqK+KNo3gxX9UC56xnxnrnH5kSsna6qYhtW61L3VzcpWRFbvM4eTUbZY9983vOLwqykAWWys/PB7BNWRpA5AkEogBP9lzAygi54g00hWFzgRcvEAOG5V0HgPoqUiFHlog3bw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WH2WAdrD+nXXR02Dh3DYdxaQVAQrS4tEzK453EJq6fk=;
- b=rRoAVSLgVQfr9YYbZFb1kCoRLN3z+OA41r9T566sobcXytzTRQnp1h+s9jwMLimvDc2bYwq7ipWHE+rMD6IGMO6tJ1EwRATjhojsH5kaEk/d7VxEoxc5IAdtpxsEngJgkc3I8Ehf4h9/e6/RF7vmaGNWJS49Uwetaq//YV7e/gY=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
- VI1PR04MB2975.eurprd04.prod.outlook.com (10.170.228.145) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2581.12; Mon, 30 Dec 2019 02:27:03 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::c7d:58a2:7265:407e]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::c7d:58a2:7265:407e%6]) with mapi id 15.20.2581.007; Mon, 30 Dec 2019
- 02:27:03 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Jun Li <jun.li@nxp.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 1/2] usb: chipidea: handle single role for usb role class
-Thread-Topic: [PATCH 1/2] usb: chipidea: handle single role for usb role class
-Thread-Index: AQHVvKFNRg8RkjFKY0+13/boonDL96fR9/gA
-Date:   Mon, 30 Dec 2019 02:27:03 +0000
-Message-ID: <20191230022700.GE5283@b29397-desktop>
-References: <1577442705-6873-1-git-send-email-jun.li@nxp.com>
-In-Reply-To: <1577442705-6873-1-git-send-email-jun.li@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 4cad2d66-dc9a-452c-6e8f-08d78ccfc1fd
-x-ms-traffictypediagnostic: VI1PR04MB2975:|VI1PR04MB2975:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB297521C2C69783CD3F7C4A9F8B270@VI1PR04MB2975.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4941;
-x-forefront-prvs: 0267E514F9
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(396003)(39860400002)(136003)(346002)(376002)(366004)(199004)(189003)(66556008)(66446008)(8676002)(33716001)(1076003)(76116006)(64756008)(66946007)(81156014)(81166006)(8936002)(26005)(66476007)(478600001)(53546011)(6506007)(91956017)(33656002)(6486002)(186003)(5660300002)(44832011)(71200400001)(86362001)(6512007)(9686003)(6862004)(6636002)(2906002)(54906003)(4326008)(316002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB2975;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CtlZYY80Ki2bRXSMEyDwmEmNOSdyE11lWpdOPRJT13N3BcHGuANlzVmrKOzn0JuhEK7L3Tn+CKKUSUO2zwW8w8lmBtXMEdtqvUCnUZMT2BRKkiYjZ7AHgHtK9nUGqARcM4a+resx8CAH4LfsPpwgIrcpXGfLYlgP4HjEqJrByoqszS90zfijSHPW7vH3QF/65ezKM4g0PPJgoOTMq6QWi9VYE07ap5O50yhvF3cOM+5/1nggnlkuCsrerxDdA8oVMGKcSqcTI3sSm9yZNH8c9xF3n9seqoUFZyp8x0ST1No/pb8iaKDtRPxPMQQevgS/jlKXDAp+D32KY8WlOB9m1T48NjUYEs208K289xMb5oUrtIPtVU7RT3Pwx6uCYA8gcJobt2E1U5ARkCyEVP0+oPbIWm4TxkFVgURsytBHBJkhzw3c0m/krGWekhNuPuCi
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <C0B0AADB8AF4964189E9385ABFDB1E55@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1727079AbfL3Df6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 29 Dec 2019 22:35:58 -0500
+Received: from smtp.infotech.no ([82.134.31.41]:59458 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727065AbfL3Df6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 29 Dec 2019 22:35:58 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id C945B204247;
+        Mon, 30 Dec 2019 04:35:55 +0100 (CET)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 0AVJGC7Mh64q; Mon, 30 Dec 2019 04:35:48 +0100 (CET)
+Received: from xtwo70.bingwo.ca (host-23-251-188-50.dyn.295.ca [23.251.188.50])
+        by smtp.infotech.no (Postfix) with ESMTPA id 00741204157;
+        Mon, 30 Dec 2019 04:35:47 +0100 (CET)
+From:   Douglas Gilbert <dgilbert@interlog.com>
+To:     linux-usb@vger.kernel.org
+Cc:     linux@roeck-us.net, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] USB-PD tcpm: bad warning+size, PPS adapters
+Date:   Sun, 29 Dec 2019 22:35:44 -0500
+Message-Id: <20191230033544.1809-1-dgilbert@interlog.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4cad2d66-dc9a-452c-6e8f-08d78ccfc1fd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Dec 2019 02:27:03.5785
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OR7zsxMW5DnEvUsOzjWdv+gL/qbiw3X0B37AArYxxx5s/CGvEmcZcTx/Ai/f8Fkqd2UJS+4rJjZaFLBCWqz4HA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB2975
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19-12-27 10:35:05, Jun Li wrote:
-> From: Li Jun <jun.li@nxp.com>
->=20
-> If usb port is configed to be single role, but usb role class
+Augmented Power Delivery Objects (A)PDO_s are used by USB-C
+PD power adapters to advertize the voltages and currents
+they support. There can be up to 7 PDO_s but before PPS
+(programmable power supply) there were seldom more than 4
+or 5. Recently Samsung released an optional PPS 45 Watt power
+adapter (EP-TA485) that has 7 PDO_s. It is for the Galaxy 10+
+tablet and charges it quicker than the adapter supplied at
+purchase. The EP-TA485 causes an overzealous WARN_ON to soil
+the log plus it miscalculates the number of bytes to read.
 
-%s/configed/configured
+So this bug has been there for some time but goes
+undetected for the majority of USB-C PD power adapters on
+the market today that have 6 or less PDO_s. That may soon
+change as more USB-C PD adapters with PPS come to market.
 
-I will add above change, and apply it.
+Tested on a EP-TA485 and an older Lenovo PN: SA10M13950
+USB-C 65 Watt adapter (without PPS and has 4 PDO_s) plus
+several other PD power adapters.
 
-Peter
+Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+---
+ drivers/usb/typec/tcpm/tcpci.c | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-> is trying to set unavailable role, don't try to do role change.
->=20
-> Signed-off-by: Li Jun <jun.li@nxp.com>
-> ---
->  drivers/usb/chipidea/ci.h   | 10 ++++++++++
->  drivers/usb/chipidea/core.c |  4 +++-
->  2 files changed, 13 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h
-> index 6911aef..d49d5e1 100644
-> --- a/drivers/usb/chipidea/ci.h
-> +++ b/drivers/usb/chipidea/ci.h
-> @@ -302,6 +302,16 @@ static inline enum usb_role ci_role_to_usb_role(stru=
-ct ci_hdrc *ci)
->  		return USB_ROLE_NONE;
->  }
-> =20
-> +static inline enum ci_role usb_role_to_ci_role(enum usb_role role)
-> +{
-> +	if (role =3D=3D USB_ROLE_HOST)
-> +		return CI_ROLE_HOST;
-> +	else if (role =3D=3D USB_ROLE_DEVICE)
-> +		return CI_ROLE_GADGET;
-> +	else
-> +		return CI_ROLE_END;
-> +}
-> +
->  /**
->   * hw_read_id_reg: reads from a identification register
->   * @ci: the controller
-> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
-> index dce5db4..52139c2 100644
-> --- a/drivers/usb/chipidea/core.c
-> +++ b/drivers/usb/chipidea/core.c
-> @@ -618,9 +618,11 @@ static int ci_usb_role_switch_set(struct device *dev=
-, enum usb_role role)
->  	struct ci_hdrc *ci =3D dev_get_drvdata(dev);
->  	struct ci_hdrc_cable *cable =3D NULL;
->  	enum usb_role current_role =3D ci_role_to_usb_role(ci);
-> +	enum ci_role ci_role =3D usb_role_to_ci_role(role);
->  	unsigned long flags;
-> =20
-> -	if (current_role =3D=3D role)
-> +	if ((ci_role !=3D CI_ROLE_END && !ci->roles[ci_role]) ||
-> +	    (current_role =3D=3D role))
->  		return 0;
-> =20
->  	pm_runtime_get_sync(ci->dev);
-> --=20
-> 2.7.4
->=20
+diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+index c1f7073a56de..8b4ff9fff340 100644
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -432,20 +432,30 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
+ 
+ 	if (status & TCPC_ALERT_RX_STATUS) {
+ 		struct pd_message msg;
+-		unsigned int cnt;
++		unsigned int cnt, payload_cnt;
+ 		u16 header;
+ 
+ 		regmap_read(tcpci->regmap, TCPC_RX_BYTE_CNT, &cnt);
++		/*
++		 * 'cnt' corresponds to READABLE_BYTE_COUNT in section 4.4.14
++		 * of the TCPCI spec [Rev 2.0 Ver 1.0 October 2017] and is
++		 * defined in table 4-36 as one greater than the number of
++		 * bytes received. And that number includes the header. So:
++		 */
++		if (cnt > 3)
++			payload_cnt = cnt - (1 + sizeof(msg.header));
++		else
++			payload_cnt = 0;
+ 
+ 		tcpci_read16(tcpci, TCPC_RX_HDR, &header);
+ 		msg.header = cpu_to_le16(header);
+ 
+-		if (WARN_ON(cnt > sizeof(msg.payload)))
+-			cnt = sizeof(msg.payload);
++		if (WARN_ON(payload_cnt > sizeof(msg.payload)))
++			payload_cnt = sizeof(msg.payload);
+ 
+-		if (cnt > 0)
++		if (payload_cnt > 0)
+ 			regmap_raw_read(tcpci->regmap, TCPC_RX_DATA,
+-					&msg.payload, cnt);
++					&msg.payload, payload_cnt);
+ 
+ 		/* Read complete, clear RX status alert bit */
+ 		tcpci_write16(tcpci, TCPC_ALERT, TCPC_ALERT_RX_STATUS);
+-- 
+2.24.1
 
---=20
-
-Thanks,
-Peter Chen=
