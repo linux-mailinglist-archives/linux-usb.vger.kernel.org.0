@@ -2,104 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 672EF12CB82
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Dec 2019 01:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAB9012CBE5
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Dec 2019 03:24:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726706AbfL3A5p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 29 Dec 2019 19:57:45 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:44420 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726315AbfL3A5p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Dec 2019 19:57:45 -0500
-Received: by mail-pg1-f196.google.com with SMTP id x7so17241374pgl.11;
-        Sun, 29 Dec 2019 16:57:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=UVnprGvLewdhuWA7pzt73rmpOg554J2l+Ch1m7KvQNQ=;
-        b=M8nb6HdXs4EZh2oyQEe/0LpTjEerc6Qzg8fLvT8k+c4V7MauftFfWMIYuayRMs0NUY
-         6B4tLSAHGqBo2RAJgxA3waMxqHkEiHi2cdQZbBCwfADp+f/HHgvfzuzxYSrcL5k94/qx
-         7hKtxJHXBtP9vjC9Uk6lo4qKbRdQUpfrjRlvKoGsyWlHh/LlsQyEugNIlNzZNxJPZVao
-         aMyWljFroZzMNQfz56Zg+jafw7Z2bF6q27iC/lHlZZj0FjiHy7HJD3iCYvKAb55M/x95
-         yDQ+qlvNYCC3DnM84IahITsa0/mz4Csd2sIzVoQqOXsM/y3JNc4p+wG4xAWWLPz7rkht
-         f88Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=UVnprGvLewdhuWA7pzt73rmpOg554J2l+Ch1m7KvQNQ=;
-        b=fN2QeZ8ruzBIikiNZjL91iDO5lj52uZRni2loIa8f9YjopNz47rfhb0MJ27N5BYsM6
-         pbo6pz9NTj7NZ8b85sRR7bxBpL7MPX6QQYSZa651pTJeTlEK6ZaKbE35SC0z3domF0II
-         QLCxNk6FTzN//wQXHB/cw4pRgnLakNzHwaE3mjh8EQkbQd6ApNk8shST9x32zPy4XK2f
-         td5oS9DhZ80+Xv/nxrQQUEOnWMjAW3ZBb+vMaQshrjwN2rFDVfoTl6BufdR+cpR9nIOs
-         sT+CYBWpJZE4OIdYktgUJfF5GsSjXAVPPgT/uSczqoUkUcQd3Oqj8Q576KTUmzwWZSRj
-         WzUw==
-X-Gm-Message-State: APjAAAVvozQ1J27BX7+edk+14s6YUPLtYgnHYtHv1DN8Vp16pEk4mjDU
-        w1YJECaDIny41jtpzmd3BV/cBjZ/
-X-Google-Smtp-Source: APXvYqxwQcbGRxWsq5dg8Tr+u+V6Yx8Fqv406yJ4eqHhgpfiPLjgdTHOhSmj5+wXMxtGKxi12ud5cg==
-X-Received: by 2002:a63:d041:: with SMTP id s1mr69679419pgi.363.1577667464428;
-        Sun, 29 Dec 2019 16:57:44 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z13sm22222445pjz.15.2019.12.29.16.57.43
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 29 Dec 2019 16:57:43 -0800 (PST)
-Date:   Sun, 29 Dec 2019 16:57:42 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] usb: chipidea: host: Disable port power only if
- previously enabled
-Message-ID: <20191230005742.GA25100@roeck-us.net>
-References: <20191229162811.GA21566@roeck-us.net>
- <Pine.LNX.4.44L0.1912291137150.19645-100000@netrider.rowland.org>
+        id S1726876AbfL3CYq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 29 Dec 2019 21:24:46 -0500
+Received: from mail-eopbgr70071.outbound.protection.outlook.com ([40.107.7.71]:61250
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726729AbfL3CYp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 29 Dec 2019 21:24:45 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kE4CNj4dCVZnlhNFDMLzuSRuXjZ41l6mYq5/ei/9rNUeo2c5SzG7L4GmVt2RDmw6mNR32+5QD9Ah3QzD8XDRL60OqQ7cmXpbGpf1mTceV6B4Azyzy1bC3qdhh4pBHAzfQogii96CHvuY022KF5nRgMRKfcCPdcceYKIdWNRrzz+uNPOKpEfmFVa8G7OpgXGNAurFkB38uL6xqzlc2b4D5OnADggyQe8QT4CKvBlsevzMFXhv1unRZgYL33hoZ4x3oG/oyXky3lpkGEyt/UC0E3qpRusVONG7dtANSgFq3NXA/bW6cjisVz3apihmpDmnUTZnGWYqCfz/WOwU9yYkhw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=r+0MiultKootwcriXky49DJcMcWlfdqM4+o6p9mdmig=;
+ b=CKVFVS/1CFtIE5SNs+w6607/EJtVsAV4VQZpKvKwUsUmtU0nf128MAzcaEzJCPzcWVAz8f6SYs1K48BwFJ8LRxDR6pGoGMXOGaebYT4dpGs+/N9yzlq6F2+JHOTKwCqtS0ftJ47/GTZ05iCo+mV+P6z/3WeTqZCUHoindhXni3Hoc6/ILiPtKWpces7wb3uBK3nap1sqhQP1MjfwbIjXq6OP1CnBLc+ibZ5DE1MpJefrWoRe+4r+wxa3mkLvlxnMqIG7Bt0992rU8I9hddX+JyjAq9f2VljOXTywXqo6ThZBuiSsBEZh/bPrWx4/NSbajOzBSMob2ucZiuhwDgAgIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=r+0MiultKootwcriXky49DJcMcWlfdqM4+o6p9mdmig=;
+ b=kbfoNlHa2+LhCa+rY6LhpgRQmFznWHgtSaBSxIHhdLD2saWLrLETrG9JWszO6SrPQv0zLUxjR/QlL7u/1VarkbHXjSLkOkhWNK5Tk3tTkTbKB5x8qJ1U5dblHKFM4wAUY64DDZx4jTxunyfnBYEdCAs67XdnotrrIzILRFfeCSQ=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
+ VI1PR04MB2975.eurprd04.prod.outlook.com (10.170.228.145) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2581.12; Mon, 30 Dec 2019 02:24:40 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::c7d:58a2:7265:407e]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::c7d:58a2:7265:407e%6]) with mapi id 15.20.2581.007; Mon, 30 Dec 2019
+ 02:24:40 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 14/16] usb: chipidea: tegra: Stop managing PHY's power
+Thread-Topic: [PATCH v3 14/16] usb: chipidea: tegra: Stop managing PHY's power
+Thread-Index: AQHVvb5yypSAkWdzC0CHQHijrFydE6fR9ROA
+Date:   Mon, 30 Dec 2019 02:24:40 +0000
+Message-ID: <20191230022437.GC5283@b29397-desktop>
+References: <20191228203358.23490-1-digetx@gmail.com>
+ <20191228203358.23490-15-digetx@gmail.com>
+In-Reply-To: <20191228203358.23490-15-digetx@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 3c7b2348-ee29-4d0f-0ebb-08d78ccf6cdb
+x-ms-traffictypediagnostic: VI1PR04MB2975:
+x-microsoft-antispam-prvs: <VI1PR04MB29754C9776BFC95ED58CF9018B270@VI1PR04MB2975.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 0267E514F9
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(366004)(376002)(346002)(136003)(39860400002)(396003)(189003)(199004)(71200400001)(86362001)(5660300002)(44832011)(186003)(6486002)(7416002)(54906003)(2906002)(6916009)(4326008)(316002)(6512007)(9686003)(1076003)(33716001)(66556008)(66446008)(8676002)(6506007)(53546011)(91956017)(33656002)(66946007)(81156014)(64756008)(76116006)(81166006)(26005)(66476007)(478600001)(8936002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB2975;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: k9t5JzaYnzuTy8/L0O48LuMBiiw1Wx0wySQxOmW+EdJVLePcovRPs5vuGw7hSfRZIYU50qDiZ+ZWWKJ9oMwoYc6wd3JiIRUxZjq1B9O+TYYXCPVNvsLqEPUzEF4WKxWj4asbBlIN5H5YCY9zBiczfuJNQ4PEKLTzUS7i8AHzaIaZRfIDcys9nUxpWB/HIRKnbT2sHeGMm0mzKa8+d4igR5cPq5Yy4HCea9V4hLpNaZDbCQGXjncT/N2yUM4noSp8U6KPuUI8EhFYhU/IQiA+3kPdPqfgt/PIri05vx+J8hC2BON9h7JvalBvF5L+0eFHScqOj/NPbfAxsZn7hdtQSuZyH7AGen3hJa7to1L3mNKp4TvcuoytE57DK+nHx/tQmmko6d0lnWaG5RanYOM1s0Irm8w6QrkdAwxAuKeuz/L+9sJa6L+VNfTm8zt9Op4l
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <CA1EFAA76B873D4EB7085D0BBD969BC1@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.1912291137150.19645-100000@netrider.rowland.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3c7b2348-ee29-4d0f-0ebb-08d78ccf6cdb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Dec 2019 02:24:40.7159
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 3N6qAkn3QnAThoxb4hHwWcwRCvzc+dSgIC7WElW7nrzTSogdf/2zDhJ63Ce0toh2fY8NEx3byKhepVXTXbhz8A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB2975
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Dec 29, 2019 at 11:40:52AM -0500, Alan Stern wrote:
-> On Sun, 29 Dec 2019, Guenter Roeck wrote:
-> 
-> > On Sat, Dec 28, 2019 at 02:33:01PM -0500, Alan Stern wrote:
-> > > 
-> > > Let's try a slightly different approach.  What happens with this patch?
-> > > 
-> > > Alan Stern
-> > > 
-> > > 
-> > > Index: usb-devel/drivers/usb/core/hub.c
-> > > ===================================================================
-> > > --- usb-devel.orig/drivers/usb/core/hub.c
-> > > +++ usb-devel/drivers/usb/core/hub.c
-> > > @@ -1065,6 +1065,7 @@ static void hub_activate(struct usb_hub
-> > >  		if (type == HUB_INIT) {
-> > >  			delay = hub_power_on_good_delay(hub);
-> > >  
-> > > +			hub->power_bits[0] = ~0UL;	/* All ports on */
-> > >  			hub_power_on(hub, false);
-> > >  			INIT_DELAYED_WORK(&hub->init_work, hub_init_func2);
-> > >  			queue_delayed_work(system_power_efficient_wq,
-> > > 
-> > 
-> > That doesn't make a difference - the traceback is still seen with this patch
-> > applied.
-> 
-> Can you trace what's going on?  Does this code pathway now end up
-> calling ehci_port_power() for each root-hub port, and from there down
-> into the chipidea driver?  If not, can you find where it gets
-> sidetracked?
-> 
-Sure, I'll do that. It will have to wait for the new year, though -
-internet connectivity is terrible where I am right now,
+On 19-12-28 23:33:56, Dmitry Osipenko wrote:
+> Tegra's USB PHY driver now provides generic PHY init/shutdown callbacks
+> and thus the custom PHY management could be removed from Tegra-specific
+> part of the ChipIdea driver.
+>=20
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/usb/chipidea/ci_hdrc_tegra.c | 9 ---------
+>  1 file changed, 9 deletions(-)
+>=20
+> diff --git a/drivers/usb/chipidea/ci_hdrc_tegra.c b/drivers/usb/chipidea/=
+ci_hdrc_tegra.c
+> index 0c9911d44ee5..7455df0ede49 100644
+> --- a/drivers/usb/chipidea/ci_hdrc_tegra.c
+> +++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
+> @@ -83,13 +83,6 @@ static int tegra_udc_probe(struct platform_device *pde=
+v)
+>  		return err;
+>  	}
+> =20
+> -	/*
+> -	 * Tegra's USB PHY driver doesn't implement optional phy_init()
+> -	 * hook, so we have to power on UDC controller before ChipIdea
+> -	 * driver initialization kicks in.
+> -	 */
+> -	usb_phy_set_suspend(udc->phy, 0);
+> -
+>  	/* setup and register ChipIdea HDRC device */
+>  	udc->data.name =3D "tegra-udc";
+>  	udc->data.flags =3D soc->flags;
+> @@ -109,7 +102,6 @@ static int tegra_udc_probe(struct platform_device *pd=
+ev)
+>  	return 0;
+> =20
+>  fail_power_off:
+> -	usb_phy_set_suspend(udc->phy, 1);
+>  	clk_disable_unprepare(udc->clk);
+>  	return err;
+>  }
+> @@ -119,7 +111,6 @@ static int tegra_udc_remove(struct platform_device *p=
+dev)
+>  	struct tegra_udc *udc =3D platform_get_drvdata(pdev);
+> =20
+>  	ci_hdrc_remove_device(udc->dev);
+> -	usb_phy_set_suspend(udc->phy, 1);
+>  	clk_disable_unprepare(udc->clk);
+> =20
+>  	return 0;
+> --=20
+> 2.24.0
+>=20
 
-Guenter
+Acked-by: Peter Chen <peter.chen@nxp.com>
+
+--=20
+
+Thanks,
+Peter Chen=
