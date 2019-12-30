@@ -2,82 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CDB312D448
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Dec 2019 21:06:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4788012D486
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Dec 2019 21:37:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727687AbfL3UGW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Dec 2019 15:06:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49236 "EHLO mail.kernel.org"
+        id S1727775AbfL3Ugz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Dec 2019 15:36:55 -0500
+Received: from rere.qmqm.pl ([91.227.64.183]:60828 "EHLO rere.qmqm.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727667AbfL3UGV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 30 Dec 2019 15:06:21 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C5D0F20718;
-        Mon, 30 Dec 2019 20:06:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577736381;
-        bh=yQDvy7TJNkpK6gkIDKXU1GEX71zxmJFmFVTDc0zaUbo=;
+        id S1727667AbfL3Ugz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 30 Dec 2019 15:36:55 -0500
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 47mq3S30qFz7N;
+        Mon, 30 Dec 2019 21:36:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1577738212; bh=99TqEPrMZ5pkcNiavyKENCBAYULutWOYRq+K2R3BkDo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DHz+1zPhWKtXADuzWZ5QmqWaHex/R6xQV3Jasm0QwCeheJf/voBnJUB2wXq0mj1ey
-         2jMNTc43FJie1/ysuVBRercnSKCDi5crzem3MgC331DQ/202AwMQ6YiAgdg4NtEi95
-         tDlHD4GLmN6zLyRhOSQci9mQPHXnrzBkDoIq40Ek=
-Date:   Mon, 30 Dec 2019 21:06:18 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        b=HP9m2s6t5HtwMgqxwN3J7/TDzMYETXRnzQ5iyTP3mbyNmpAMQFp16tZkepK4QiLoP
+         oTn7NNmuZh2N2NUiSuntCgACPqE/dVqDzqTwxwB/cemuXbGDb5HMxo6aCj4kqH/khO
+         GFuTt6IHLM8VlLhRmKkwk2And0G1JPkqymFggFsF5mSkeJnzb9TL/R/M7H9uQQ9BLu
+         gaTvgoAwuYMRHp92ia5yLqjue43QDU3GaMxbK5KGrTNzUCVOsgyyQTpd8YGr74Mktj
+         BHR7fcbG5kpLpxZ4iVdiNVJBwM1Vmg4e1+25gziuq7XKOAe4pyyub99T9KLoOd9Qbb
+         LPWqb8o+bBCwQ==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.101.4 at mail
+Date:   Mon, 30 Dec 2019 21:36:48 +0100
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] usb: host: Enable compile testing for some of drivers
-Message-ID: <20191230200618.GA1882713@kroah.com>
-References: <20191230172215.17370-1-krzk@kernel.org>
- <20191230192956.GA1844196@kroah.com>
- <20191230193621.GA1856526@kroah.com>
- <20191230194249.GA26581@kozik-lap>
+Subject: Re: [PATCH v3 13/16] usb: phy: tegra: Keep CPU interrupts enabled
+Message-ID: <20191230203648.GA24135@qmqm.qmqm.pl>
+References: <20191228203358.23490-1-digetx@gmail.com>
+ <20191228203358.23490-14-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-2
 Content-Disposition: inline
-In-Reply-To: <20191230194249.GA26581@kozik-lap>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191228203358.23490-14-digetx@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 30, 2019 at 08:42:49PM +0100, Krzysztof Kozlowski wrote:
-> On Mon, Dec 30, 2019 at 08:36:21PM +0100, Greg Kroah-Hartman wrote:
-> > On Mon, Dec 30, 2019 at 08:29:56PM +0100, Greg Kroah-Hartman wrote:
-> > > On Mon, Dec 30, 2019 at 06:22:14PM +0100, Krzysztof Kozlowski wrote:
-> > > > Some of the USB host drivers can be compile tested to increase build
-> > > > coverage.  Add 'if' conditional to 'default y' so they will not get
-> > > > enabled by default on all other architectures.
-> > > > 
-> > > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > > > ---
-> > > >  drivers/usb/host/Kconfig | 54 ++++++++++++++++++++--------------------
-> > > >  1 file changed, 27 insertions(+), 27 deletions(-)
-> > > 
-> > > Nice, thanks for these, they should help out a lot with development.
-> > 
-> > And now I get this build warning with this patch:
-> > 
-> > WARNING: unmet direct dependencies detected for PHY_DA8XX_USB
-> >   Depends on [n]: ARCH_DAVINCI_DA8XX
-> >   Selected by [m]:
-> >   - USB_OHCI_HCD_DAVINCI [=m] && USB_SUPPORT [=y] && USB [=m] && (ARCH_DAVINCI_DA8XX || COMPILE_TEST [=y]) && USB_OHCI_HCD [=m]
-> > 
-> > 
-> > Care to provide a fix?
-> 
-> That's my fault. I was testing entire patchset which includes also other
-> trees. I sent patch for PHY here:
-> https://lore.kernel.org/lkml/20191230172449.17648-2-krzk@kernel.org/T/#u
-> 
-> Probably they should go together or we could ignore the error as it is
-> only for build testing.
+On Sat, Dec 28, 2019 at 11:33:55PM +0300, Dmitry Osipenko wrote:
+> There is no good reason for disabling of CPU interrupts in order to
+> protect the utmip_pad_count modification.
 
-If that patchset gets merged, all is fine.  If not, let me know and I
-can take it through my tree :)
+Since there are sleeping functions called outside of the locked sections,
+this should be a mutex instead. OTOH if the spin_lock is to protect register
+write against IRQ handler, then the patch is wrong.
 
-thanks,
+[...]
+> -	spin_unlock_irqrestore(&utmip_pad_lock, flags);
+> +	spin_unlock(&utmip_pad_lock);
+>  
+>  	clk_disable_unprepare(phy->pad_clk);
 
-greg k-h
+Best Regards,
+Micha³ Miros³aw
