@@ -2,155 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC08B12CE2B
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Dec 2019 10:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA52912CF12
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Dec 2019 12:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727299AbfL3JWc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Dec 2019 04:22:32 -0500
-Received: from mail-ed1-f48.google.com ([209.85.208.48]:41156 "EHLO
-        mail-ed1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727162AbfL3JWc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Dec 2019 04:22:32 -0500
-Received: by mail-ed1-f48.google.com with SMTP id c26so32048918eds.8
-        for <linux-usb@vger.kernel.org>; Mon, 30 Dec 2019 01:22:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=vUe0w7TDEfqQFOmBMK0L3YNRUeurEJcVAoTgIN6ZN5g=;
-        b=bXTkUYVhERxGsQ4NjqXFZd3KKAMFONpbcxhsm0t1C2kkrtBa8NqYYro3g9hAzdt0gB
-         wpYx8KvdbjgMWoLYsTlOR1imiwtEtkQUX0g++vxQS10vXNdgZRZ28eBNulEG0yt7I+3D
-         AQGXT2mUY0QYxBh46dI8y3R529ZQ8lizruZTbw2UzVHxfna9Jbdki4VKyZuUBTmy4HL9
-         gzfFqXTVGSrfmI/6o5qEEI6mHai0229DcU4aM5MxNHrMbhN+E+1XwLNbDZu74lKUkoo8
-         DHlXGVPcHzwbVGtETtcIGWXYeVftL6ufhdZaku/TBxVEA9QA5XL0S2lC5KHGNSyU64hC
-         OXJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=vUe0w7TDEfqQFOmBMK0L3YNRUeurEJcVAoTgIN6ZN5g=;
-        b=oHKy761tXZPJUlOStOdhDIr35lG5o51dDbE7+AHKz5sbm9beKm+ZxAOeL1YhXdsWvA
-         LZqOEpCOY+5jnGcDYvr5/e5zqXCEPchOqCupi/qzQ/fVh0puMzb7I9bDQ1jwvazMxgs4
-         LVNAn9TmY/1IW/BRQ0d4nMncI7aqVQH0ofrYggvRnin2EdYNgeAzm3b4iojgOjLPRXoe
-         m4KePLmqEfhyeYzRGMLKOCVPPSwBteSSnUze1oUXrJwX7PiVrLhXmWuDUFyCjvPb1oi2
-         xxLYDQv9dAsAKL4Ac8zN1F5mkKHsirzgf0wDSFLm5eu9z3zEJ/msQqjhwqdAAlyUWVid
-         pmzA==
-X-Gm-Message-State: APjAAAV/x24jkQWjdsYl5Qgrd2boMsvLGr+wOhd32NieH2zEPYFkLzxH
-        juG9TNvTF319At9TfzXJU75I2++b0QVAAbDkHJ2TubZV
-X-Google-Smtp-Source: APXvYqwaLjsRowLVB+VrWlf9GAgEpgYKNa6y5Oz8QWlD+GTQN9Ma0ebCyWJF/z517dhFDBX57iTpJSO5nzzlNQ5wMeI=
-X-Received: by 2002:a50:a824:: with SMTP id j33mr69836685edc.274.1577697750033;
- Mon, 30 Dec 2019 01:22:30 -0800 (PST)
+        id S1727377AbfL3LNj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Dec 2019 06:13:39 -0500
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:19379 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726196AbfL3LNj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Dec 2019 06:13:39 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e09dbd40000>; Mon, 30 Dec 2019 03:13:24 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 30 Dec 2019 03:13:38 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 30 Dec 2019 03:13:38 -0800
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 30 Dec
+ 2019 11:13:37 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 30 Dec 2019 11:13:37 +0000
+Received: from nkristam-ubuntu.nvidia.com (Not Verified[10.19.64.167]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5e09dbde0000>; Mon, 30 Dec 2019 03:13:37 -0800
+From:   Nagarjuna Kristam <nkristam@nvidia.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <mark.rutland@arm.com>, <robh+dt@kernel.org>, <kishon@ti.com>
+CC:     <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Nagarjuna Kristam <nkristam@nvidia.com>
+Subject: [Patch V3 00/18] Tegra XUSB OTG support
+Date:   Mon, 30 Dec 2019 16:39:37 +0530
+Message-ID: <1577704195-2535-1-git-send-email-nkristam@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-References: <CAPXMrf_d_uKZbohYWfO8rVEg7voBhESesU0w8Ng0M=wsw_75FQ@mail.gmail.com>
-In-Reply-To: <CAPXMrf_d_uKZbohYWfO8rVEg7voBhESesU0w8Ng0M=wsw_75FQ@mail.gmail.com>
-From:   RAJESH DASARI <raajeshdasari@gmail.com>
-Date:   Mon, 30 Dec 2019 14:52:25 +0530
-Message-ID: <CAPXMrf-kf9ZsYKUBffZW2MrMJVQr3M9dSb1djaBspOGoF63FFg@mail.gmail.com>
-Subject: Re: Reg: USB network interface is down after the reboot
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1577704404; bh=evRY4LcwVlsf9GhnD1/KSLXkWzEvRtLNadVq9ItdddI=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=LZMes3acl+VwvWbDQSNZovc1Y1f9jq6pvXQmUqjnk3eVtuWtQrI69Enju7nQCejB4
+         AkFMJCKket12dmXEG668VduzxsMy6AIRQ2k9epc8BoUQWwxH3VphCisqtqz/2ECDZK
+         bVodNXW+DU2cmGU2UsP8ezOuatmwieKYxTXxiEt9SZzZCAKzcNLIgo6ZlGfUsZkN4T
+         CVPABQURkqg51z9WUMTyIsNbxcTZLaG61td1LKMPuJPSooWL9xDeli9e7XyAvYov1F
+         LLWdCua4ZzObzMCqnPqt7LC5BlfNlIFnHZ/Jbk64fJPQTVaV0/kW57b8SVM4AJNnhT
+         a5ncYtIz8MHsQ==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Could someone please respond to my query.
-Thanks,
-Rajesh.
+This patch series adds OTG support on XUSB hardware used in Tegra210 and
+Tegra186 SoCs.
 
-On Thu, Dec 26, 2019 at 3:01 PM RAJESH DASARI <raajeshdasari@gmail.com> wrote:
->
-> Hi,
->
-> I have an USB network Interface connected between two devices.
->
->                       usb0
-> Device A       ---------      Device B
->
-> Device A side:
->
-> ifconfig usb0
-> usb0      Link encap:Ethernet  HWaddr 72:81:17:44:9A:C6
->           inet addr:169.254.0.18  Bcast:0.0.0.0  Mask:255.255.240.0
->           inet6 addr: fe80::7081:17ff:fe44:9ac6/64 Scope:Link
->           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
->           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
->           TX packets:104 errors:0 dropped:0 overruns:0 carrier:0
->           collisions:0 txqueuelen:1000
->           RX bytes:0 (0.0 B)  TX bytes:7553 (7.3 KiB)
->
-> Device B side:
->
-> ifconfig usb0
-> usb0      Link encap:Ethernet  HWaddr DA:A4:50:01:5C:B8
->           inet addr:169.254.0.17  Bcast:169.254.15.255  Mask:255.255.240.0
->           inet6 addr: fe80::d8a4:50ff:fe01:5cb8/64 Scope:Link
->           UP BROADCAST RUNNING  MTU:1500  Metric:1
->           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
->           TX packets:913 errors:200 dropped:0 overruns:0 carrier:0
->           collisions:0 txqueuelen:0
->           RX bytes:0 (0.0 B)  TX bytes:319658 (312.1 KiB)
->
-> Ping from device A usb to device B usb interface is working fine.
->
-> # ping 169.254.0.17
-> PING 169.254.0.17 (169.254.0.17) 56(84) bytes of data.
-> 64 bytes from 169.254.0.17: icmp_seq=1 ttl=64 time=0.807 ms
-> 64 bytes from 169.254.0.17: icmp_seq=2 ttl=64 time=0.459 ms
->
-> I have restarted the Device B and i could see the below logs on Device
-> A console.
->
-> usb 1-3.3: USB disconnect, device number 5
-> cdc_ether 1-3.3:2.0 usb0: unregister 'cdc_ether' usb-0000:00:15.0-3.3,
-> CDC Ethernet Device
-> usb 1-3.4: USB disconnect, device number 6
-> usb 1-3: USB disconnect, device number 4
->
-> When the Device B was coming up  the below logs are seen on the device
-> A console.
->
-> usb 1-3.3: new high-speed USB device number 8 using xhci_hcd
-> cdc_ether 1-3.3:2.0 usb0: register 'cdc_ether' at
-> usb-0000:00:15.0-3.3, CDC Ethernet Device, 4e:7b:fc:19:ad:62
->
-> Device B side usb0 interface is up and RUNNING after the Device B
-> reboot but the usb0 interface  on the device A shows that interface is
-> down and it is RUNNING bit
-> is set not set.
->
-> Device B side:
-> ifconfig usb0
-> usb0      Link encap:Ethernet  HWaddr 76:2D:4D:E7:76:73
->           inet addr:169.254.0.17  Bcast:169.254.15.255  Mask:255.255.240.0
->           inet6 addr: fe80::742d:4dff:fee7:7673/64 Scope:Link
->           UP BROADCAST RUNNING  MTU:1500  Metric:1
->           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
->           TX packets:8 errors:8 dropped:0 overruns:0 carrier:0
->           collisions:0 txqueuelen:0
->           RX bytes:0 (0.0 B)  TX bytes:648 (648.0 B)
->
-> Device A side:
->
-> ifconfig usb0
-> usb0      Link encap:Ethernet  HWaddr 72:81:17:44:9A:C6
->           BROADCAST MULTICAST  MTU:1500  Metric:1
->           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
->           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
->           collisions:0 txqueuelen:1000
->           RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
->
-> Driver used at device A side:
-> ethtool -i usb0
-> driver: cdc_ether
-> version: 22-Aug-2005
-> firmware-version: CDC Ethernet Device
-> expansion-rom-version:
-> bus-info: usb-0000:00:15.0-3.3
->
-> kernel version: 4.9.164
->
-> Could someone please help, why the usb0 is down on Device A side and
-> it there is any known issue or is this  expected behaviour?
->
-> Regards,
-> Rajesh.
+This patchset is composed with :
+ - dt bindings of XUSB Pad Controller
+ - dt bindings for XUSB device Driver
+ - Tegra PHY driver for usb-role-switch and usb-phy
+ - Tegra XUSB host mode driver to support OTG mode
+ - Tegra XUSB device mode driver to use usb-phy and multi device mode
+ - dts for XUSB pad controller
+ - dts for xudc
+
+Tegra Pad controller driver register for role switch updates for
+OTG/peripheral capable USB ports and adds usb-phy for that corresponding
+USB ports.
+
+Host and Device mode drivers gets usb-phy from USB2's phy and registers
+notifier for role changes to perform corresponding role tasks.
+
+Tests done:
+ - device mode support using micro-B USB cable connection between ubuntu
+   host and DUT on micro-AB port
+ - host mode support by connecting pen-drive to micro-AB USB port on DUT
+   using standard-A to micro-A converter.
+ - toggling between these 2 modes by hot plugging corresponding cables.
+
+DUT: Jetson-tx1, Jetson tx2.
+
+V3:
+ - Port and cable names updated in "Tests done" section of cover letter as
+   per JC inputs.
+ - Fixed arguments allignments in USB padctl driver.
+ - Padctl driver aborts if usb-role-switch is not present in dt for
+   peripheral/otg roles.
+ - Added Reviewed and ACKed details for corresponding patches.
+V2:
+ - Updated usb-role-switch documentation for Padctl driver.
+ - Update XUDC bindings doc as suggested by Rob.
+ - Used standard error codes for error return.
+ - Added of_platform_depopulate during error and driver removal.
+ - Updated error variable during phy initialization in XUDC driver.
+ - Updated Tegra210 soc dtb file as per changes to binding doc.
+
+Nagarjuna Kristam (18):
+  dt-bindings: phy: tegra-xusb: Add usb-role-switch
+  dt-bindings: usb: Add NVIDIA Tegra XUSB device mode controller binding
+  phy: tegra: xusb: Add usb-role-switch support
+  phy: tegra: xusb: Add usb-phy support
+  phy: tegra: xusb: Add support to get companion USB 3 port
+  phy: tegra: xusb: Add set_mode support for USB 2 phy on Tegra210
+  phy: tegra: xusb: Add set_mode support for utmi phy on Tegra186
+  usb: xhci-tegra: Add OTG support
+  usb: gadget: tegra-xudc: Remove usb-role-switch support
+  usb: gadget: tegra-xudc: Add usb-phy support
+  usb: gadget: tegra-xudc: use phy_set_mode to set/unset device mode
+  usb: gadget: tegra-xudc: support multiple device modes
+  arm64: tegra: update OTG port entries for jetson-tx1
+  arm64: tegra: update OTG port entries for jetson-tx2
+  arm64: tegra: Add xudc node for Tegra210
+  arm64: tegra: Enable xudc on Jetson TX1
+  arm64: tegra: Add xudc node for Tegra186
+  arm64: tegra: Enable xudc node on Jetson TX2
+
+ .../bindings/phy/nvidia,tegra124-xusb-padctl.txt   |   6 +
+ .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml | 190 ++++++++++++++
+ arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts |  23 +-
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi           |  19 ++
+ arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi     |  34 ++-
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi           |  19 ++
+ drivers/phy/tegra/Kconfig                          |   1 +
+ drivers/phy/tegra/xusb-tegra186.c                  | 109 ++++++--
+ drivers/phy/tegra/xusb-tegra210.c                  | 126 ++++++++--
+ drivers/phy/tegra/xusb.c                           | 152 ++++++++++++
+ drivers/phy/tegra/xusb.h                           |   5 +
+ drivers/usb/gadget/udc/tegra-xudc.c                | 276 ++++++++++++++-------
+ drivers/usb/host/xhci-tegra.c                      | 225 ++++++++++++++++-
+ include/linux/phy/tegra/xusb.h                     |   2 +
+ 14 files changed, 1049 insertions(+), 138 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+
+-- 
+2.7.4
+
