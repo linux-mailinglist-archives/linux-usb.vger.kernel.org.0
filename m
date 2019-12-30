@@ -2,90 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B0C12D188
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Dec 2019 16:38:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D4012D1B7
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Dec 2019 17:07:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727640AbfL3PiD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Dec 2019 10:38:03 -0500
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:35258 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727564AbfL3PiD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Dec 2019 10:38:03 -0500
-Received: by mail-ed1-f67.google.com with SMTP id f8so32937809edv.2;
-        Mon, 30 Dec 2019 07:38:02 -0800 (PST)
+        id S1727501AbfL3QHb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Dec 2019 11:07:31 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:42836 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727471AbfL3QHb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Dec 2019 11:07:31 -0500
+Received: by mail-pg1-f194.google.com with SMTP id s64so18198829pgb.9;
+        Mon, 30 Dec 2019 08:07:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=QQifhEvd0qlOro5mq55/v6MzZxcRB/EQ8GzsSLDvKvQ=;
+        b=NIqxuaZLjE0bnw2trLuyaKCZlOURs2/yVNquCgje//3TbuWs8CCcqgzfTuEQMYq5Gu
+         IdC2MuXxAmVo7Ke2A8LTaJXUKNePtWGOW09awQrpPWIpUBYPlbd9OnRk4BPT8Hdd3vAc
+         KrGMRAF+11XvtTWVQl1VOODUZuEv/qO/0lndaOrPSAaSuZF4DQ75WVukArcZmv2qaMXx
+         SiRVh4bi0dIO96A2XKy1qYT4k8ODlb/W/zB+wBruI55Kdqz+/NHk9yb517H6OAKavRGp
+         ww2lKDNMuyQwY1savCtFsgg1MlFNmm2FehvzRQvRXSn+vTBLRiGLxiNCFtNe9KV+5/CX
+         sM8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=S+fvXg7v5gstlV7QHJfLUPtEMEaeWdFQQ5WmiP5N1uk=;
-        b=IpW2WB6m9qxouJ5IGy4b1DkSfOQ1rR0UoptuUwpgDinShNusMrKuiwTjRvzjNT0RBz
-         /Ht1m2RZ8WyunkhQOfMev8ndnEGxoCo+W2T9uY4K7gZ7yIQcN+C1BfFxHD3QqdkEgqqM
-         kpAmEdwsrz9O7TbaFsnqSWiVPCTZ/zU3Zi0ncyp9EfkqKJaJHRxHfX2fx6CSCpKUhuKZ
-         +zT/fXLjSYmJm8cDaw5h7G5uVDKKROq8ARGo+ffyHcuOIxz7CMw4T+/PHbu/DTiEHG8i
-         1qCOUF8AYt4CL2aiWA/4i35+mcl2BcJsFc4JvoNQcbPnTbvULRIL1w4ZZIf0yzqYyGNT
-         3/iQ==
-X-Gm-Message-State: APjAAAXvwIiaxACY0l4ECtmf2+N2rcEu7tMSDyFO6s43ZTMv7LSAIfsX
-        dwcJAsMUT+70XIfNi+bZnec=
-X-Google-Smtp-Source: APXvYqy+53yBifFTLAmU8dsdQ8hL0cLkTBJ1uEgw7SYnSKdV/so5DE1tI+/hP+QWRy6KnJjmAet0wA==
-X-Received: by 2002:a17:906:5448:: with SMTP id d8mr39256290ejp.254.1577720281504;
-        Mon, 30 Dec 2019 07:38:01 -0800 (PST)
-Received: from pi3 ([194.230.155.138])
-        by smtp.googlemail.com with ESMTPSA id s22sm2765324ejm.43.2019.12.30.07.38.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Dec 2019 07:38:00 -0800 (PST)
-Date:   Mon, 30 Dec 2019 16:37:58 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Benjamin Gaignard <benjamin.gaignard@st.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, kgene@kernel.org, hminas@synopsys.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, m.szyprowski@samsung.com,
-        amelie.delaunay@st.com
-Subject: Re: [PATCH v2 2/2] ARM: dts: exynos: Remove unneeded "snps,dwc2"
- from hsotg node
-Message-ID: <20191230153758.GB4918@pi3>
-References: <20191219103536.25485-1-benjamin.gaignard@st.com>
- <20191219103536.25485-3-benjamin.gaignard@st.com>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=QQifhEvd0qlOro5mq55/v6MzZxcRB/EQ8GzsSLDvKvQ=;
+        b=Wx9V8BfWuedfE2xTbAS/bFm/fjJq/5RKEeOUMxXd+EMGvRPEQ4rKvGKi3+PDsOzvSv
+         UcwbBBmNGEUFuQKdYoP+uNNVFsgA8GAEbRXZRXx6jv5dmdQZjVJsfShMRC4TPxCJdH8z
+         TgAhiOiI6f6Kgr3asCuoJsU39JlyTgxuCoY5WK4Z9Y1q2izVkdPtEKhTT6TFxZuDtUj2
+         AiG+sZV2oOz6OpZiu461WOdJQ9VNtBYVx9C0MuTkfaR4bsaJOjh0cMu5mi/JXms5A1bd
+         xffqlRiPq0kNvWPK4s+HBMiNyB5RvMZvNXzzsigBpDSNaXljlmP0V2Sl98RukZMeqUEd
+         R1Pg==
+X-Gm-Message-State: APjAAAVr2FJCjYRUdGaqVlq/SkNEjfkmx+UDfqZ208lAQDBUxOiPfYSV
+        2uTcTJ+twExcvBns9/IcmqCX+msW
+X-Google-Smtp-Source: APXvYqw5acYxqgdINUs+FyQDAeNUkty8IHAD+FtPNa+5uPBm42ipxImSwOPnn/wLQLHeIRF091ukpw==
+X-Received: by 2002:a63:6fca:: with SMTP id k193mr75185418pgc.416.1577722050295;
+        Mon, 30 Dec 2019 08:07:30 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t63sm52734279pfb.70.2019.12.30.08.07.28
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 30 Dec 2019 08:07:29 -0800 (PST)
+Date:   Mon, 30 Dec 2019 08:07:27 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Douglas Gilbert <dgilbert@interlog.com>
+Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB-PD tcpm: bad warning+size, PPS adapters
+Message-ID: <20191230160727.GA12958@roeck-us.net>
+References: <20191230033544.1809-1-dgilbert@interlog.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191219103536.25485-3-benjamin.gaignard@st.com>
+In-Reply-To: <20191230033544.1809-1-dgilbert@interlog.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 19, 2019 at 11:35:36AM +0100, Benjamin Gaignard wrote:
-> Remove "snps,dwc2" from hsotg@12480000 node compatible list because
-> "samsung,s3c6400-hsotg" should be enough.
-
-The more detailed compatible is almost always "enough". Some other nodes
-also have detailed+generic compatible. In this case there is a driver
-matching "snps,dwc2" so why removing it?
-
-Best regards,
-Krzysztof
-
+On Sun, Dec 29, 2019 at 10:35:44PM -0500, Douglas Gilbert wrote:
+> Augmented Power Delivery Objects (A)PDO_s are used by USB-C
+> PD power adapters to advertize the voltages and currents
+> they support. There can be up to 7 PDO_s but before PPS
+> (programmable power supply) there were seldom more than 4
+> or 5. Recently Samsung released an optional PPS 45 Watt power
+> adapter (EP-TA485) that has 7 PDO_s. It is for the Galaxy 10+
+> tablet and charges it quicker than the adapter supplied at
+> purchase. The EP-TA485 causes an overzealous WARN_ON to soil
+> the log plus it miscalculates the number of bytes to read.
 > 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+> So this bug has been there for some time but goes
+> undetected for the majority of USB-C PD power adapters on
+> the market today that have 6 or less PDO_s. That may soon
+> change as more USB-C PD adapters with PPS come to market.
+> 
+> Tested on a EP-TA485 and an older Lenovo PN: SA10M13950
+> USB-C 65 Watt adapter (without PPS and has 4 PDO_s) plus
+> several other PD power adapters.
+> 
+> Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  arch/arm/boot/dts/exynos3250.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/usb/typec/tcpm/tcpci.c | 20 +++++++++++++++-----
+>  1 file changed, 15 insertions(+), 5 deletions(-)
 > 
-> diff --git a/arch/arm/boot/dts/exynos3250.dtsi b/arch/arm/boot/dts/exynos3250.dtsi
-> index b016b0b68306..d4866269f4ee 100644
-> --- a/arch/arm/boot/dts/exynos3250.dtsi
-> +++ b/arch/arm/boot/dts/exynos3250.dtsi
-> @@ -362,7 +362,7 @@
->  		};
+> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+> index c1f7073a56de..8b4ff9fff340 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.c
+> +++ b/drivers/usb/typec/tcpm/tcpci.c
+> @@ -432,20 +432,30 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
 >  
->  		hsotg: hsotg@12480000 {
-> -			compatible = "samsung,s3c6400-hsotg", "snps,dwc2";
-> +			compatible = "samsung,s3c6400-hsotg";
->  			reg = <0x12480000 0x20000>;
->  			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
->  			clocks = <&cmu CLK_USBOTG>;
+>  	if (status & TCPC_ALERT_RX_STATUS) {
+>  		struct pd_message msg;
+> -		unsigned int cnt;
+> +		unsigned int cnt, payload_cnt;
+>  		u16 header;
+>  
+>  		regmap_read(tcpci->regmap, TCPC_RX_BYTE_CNT, &cnt);
+> +		/*
+> +		 * 'cnt' corresponds to READABLE_BYTE_COUNT in section 4.4.14
+> +		 * of the TCPCI spec [Rev 2.0 Ver 1.0 October 2017] and is
+> +		 * defined in table 4-36 as one greater than the number of
+> +		 * bytes received. And that number includes the header. So:
+> +		 */
+> +		if (cnt > 3)
+> +			payload_cnt = cnt - (1 + sizeof(msg.header));
+> +		else
+> +			payload_cnt = 0;
+>  
+>  		tcpci_read16(tcpci, TCPC_RX_HDR, &header);
+>  		msg.header = cpu_to_le16(header);
+>  
+> -		if (WARN_ON(cnt > sizeof(msg.payload)))
+> -			cnt = sizeof(msg.payload);
+> +		if (WARN_ON(payload_cnt > sizeof(msg.payload)))
+> +			payload_cnt = sizeof(msg.payload);
+>  
+> -		if (cnt > 0)
+> +		if (payload_cnt > 0)
+>  			regmap_raw_read(tcpci->regmap, TCPC_RX_DATA,
+> -					&msg.payload, cnt);
+> +					&msg.payload, payload_cnt);
+>  
+>  		/* Read complete, clear RX status alert bit */
+>  		tcpci_write16(tcpci, TCPC_ALERT, TCPC_ALERT_RX_STATUS);
 > -- 
-> 2.15.0
+> 2.24.1
 > 
