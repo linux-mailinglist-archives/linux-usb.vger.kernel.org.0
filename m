@@ -2,31 +2,31 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6F512D171
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Dec 2019 16:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D4412D172
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Dec 2019 16:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727558AbfL3P3D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Dec 2019 10:29:03 -0500
+        id S1727564AbfL3P3E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Dec 2019 10:29:04 -0500
 Received: from mga01.intel.com ([192.55.52.88]:49571 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727397AbfL3P3C (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 30 Dec 2019 10:29:02 -0500
+        id S1727397AbfL3P3E (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 30 Dec 2019 10:29:04 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Dec 2019 07:29:02 -0800
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Dec 2019 07:29:04 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,375,1571727600"; 
-   d="scan'208";a="224240071"
+   d="scan'208";a="224240081"
 Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Dec 2019 07:29:01 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 30 Dec 2019 07:29:02 -0800
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org
-Subject: [RFC PATCH 2/3] usb: typec: Add attribute file showing the USB mode of the partner
-Date:   Mon, 30 Dec 2019 18:28:56 +0300
-Message-Id: <20191230152857.43917-3-heikki.krogerus@linux.intel.com>
+Subject: [RFC PATCH 3/3] usb: typec: Add driver for Thunderbolt 3 Alternate Mode
+Date:   Mon, 30 Dec 2019 18:28:57 +0300
+Message-Id: <20191230152857.43917-4-heikki.krogerus@linux.intel.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20191230152857.43917-1-heikki.krogerus@linux.intel.com>
 References: <20191230152857.43917-1-heikki.krogerus@linux.intel.com>
@@ -37,209 +37,360 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Exactly the same attribute that we have for the port. With
-partners this attribute will get the information from the
-Discover Identity Command response.
+Thunderbolt 3 Alternate Mode entry flow is described in
+USB Type-C Specification Release 2.0.
 
 Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- Documentation/ABI/testing/sysfs-class-typec | 22 ++++++
- drivers/usb/typec/class.c                   | 80 +++++++++++++++++++--
- include/linux/usb/typec.h                   |  2 +
- 3 files changed, 99 insertions(+), 5 deletions(-)
+ drivers/usb/typec/altmodes/Kconfig       |   9 +
+ drivers/usb/typec/altmodes/Makefile      |   2 +
+ drivers/usb/typec/altmodes/thunderbolt.c | 309 +++++++++++++++++++++++
+ 3 files changed, 320 insertions(+)
+ create mode 100644 drivers/usb/typec/altmodes/thunderbolt.c
 
-diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-index 8df6f599c967..f13c2b30fb3d 100644
---- a/Documentation/ABI/testing/sysfs-class-typec
-+++ b/Documentation/ABI/testing/sysfs-class-typec
-@@ -116,6 +116,12 @@ Description:	The supported USB Modes with the active one, that is to be used
- 		mode can be changed by writing to the file when the connector
- 		interface supports it.
+diff --git a/drivers/usb/typec/altmodes/Kconfig b/drivers/usb/typec/altmodes/Kconfig
+index 187690fd1a5b..e5c116067809 100644
+--- a/drivers/usb/typec/altmodes/Kconfig
++++ b/drivers/usb/typec/altmodes/Kconfig
+@@ -22,4 +22,13 @@ config TYPEC_NVIDIA_ALTMODE
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called typec_displayport.
  
-+		Note. This attribute file can not be used for resetting the mode
-+		after the connection has been established. The mode can be reset
-+		after connection by writing to the attribute file with the same
-+		name ("usb_mode") of the partner device (this is the port device
-+		that has the partner attached to).
++config TYPEC_TBT_ALTMODE
++	tristate "Thunderbolt3 Alternate Mode driver"
++	help
++	  Select this option if you have Thunderbolt3 hardware on your
++	  system.
 +
- 		Valid values:
- 		- usb2 (USB 2.0)
- 		- usb3 (USB 3.2)
-@@ -173,6 +179,22 @@ Description:
- 		will show 0 until Discover Identity command result becomes
- 		available. The value can be polled.
- 
-+What:		/sys/class/typec/<port>-partner/usb_mode
-+Date:		February 2020
-+Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-+Description:	The USB Modes that the partner device supports. This information
-+		requires the response from Discover Identity command, and will
-+		therefore not always be available (as some firmware interfaces
-+		do not share the information with the operating system). The
-+		currently used mode can be changed by writing to this file when
-+		the port driver is able to send Data Reset message to the
-+		partner.
++	  To compile this driver as a module, choose M here: the
++	  module will be called typec_thunderbolt.
 +
-+		Valid values:
-+		- usb2 (USB 2.0)
-+		- usb3 (USB 3.2)
-+		- usb4 (USB4)
+ endmenu
+diff --git a/drivers/usb/typec/altmodes/Makefile b/drivers/usb/typec/altmodes/Makefile
+index 45717548b396..508a68351bd2 100644
+--- a/drivers/usb/typec/altmodes/Makefile
++++ b/drivers/usb/typec/altmodes/Makefile
+@@ -4,3 +4,5 @@ obj-$(CONFIG_TYPEC_DP_ALTMODE)		+= typec_displayport.o
+ typec_displayport-y			:= displayport.o
+ obj-$(CONFIG_TYPEC_NVIDIA_ALTMODE)	+= typec_nvidia.o
+ typec_nvidia-y				:= nvidia.o
++obj-$(CONFIG_TYPEC_TBT_ALTMODE)		+= typec_thunderbolt.o
++typec_thunderbolt-y			:= thunderbolt.o
+diff --git a/drivers/usb/typec/altmodes/thunderbolt.c b/drivers/usb/typec/altmodes/thunderbolt.c
+new file mode 100644
+index 000000000000..abb6d2d0ffc9
+--- /dev/null
++++ b/drivers/usb/typec/altmodes/thunderbolt.c
+@@ -0,0 +1,309 @@
++// SPDX-License-Identifier: GPL-2.0
++/**
++ * USB Typec-C Thuderbolt3 Alternate Mode driver
++ *
++ * Copyright (C) 2019 Intel Corporation
++ * Author: Heikki Krogerus <heikki.krogerus@linux.intel.com>
++ */
 +
- 
- USB Type-C cable devices (eg. /sys/class/typec/port0-cable/)
- 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 07e4913f04c6..d318eee3b7ef 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -11,6 +11,7 @@
- #include <linux/mutex.h>
- #include <linux/property.h>
- #include <linux/slab.h>
++#include <linux/delay.h>
++#include <linux/mutex.h>
++#include <linux/module.h>
 +#include <linux/usb/pd_vdo.h>
- 
- #include "bus.h"
- 
-@@ -30,6 +31,7 @@ struct typec_cable {
- struct typec_partner {
- 	struct device			dev;
- 	unsigned int			usb_pd:1;
-+	enum usb_mode			usb_mode;
- 	struct usb_pd_identity		*identity;
- 	enum typec_accessory		accessory;
- 	struct ida			mode_ids;
-@@ -154,14 +156,45 @@ static const char * const usb_modes[] = {
- 	[USB_MODE_USB4] = "usb4"
- };
- 
-+static u8 typec_partner_mode(struct typec_partner *partner)
++#include <linux/usb/typec_altmode.h>
++
++#define USB_TYPEC_VENDOR_INTEL		0x8087
++
++/* TBT3 Device Discover Mode VDO bits */
++#define TBT_MODE			BIT(0)
++#define TBT_ADAPTER(_vdo_)		(((_vdo_) & BIT(16)) >> 16)
++#define   TBT_ADAPTER_LEGACY		0
++#define   TBT_ADAPTER_TBT3		1
++#define TBT_INTEL_SPECIFIC_B0		BIT(26)
++#define TBT_VENDOR_SPECIFIC_B0		BIT(30)
++#define TBT_VENDOR_SPECIFIC_B1		BIT(31)
++
++/* TBT3 Cable Discover Mode VDO bits */
++#define TBT_CABLE_SPEED(_vdo_)		(((_vdo_) & GENMASK(18, 16)) >> 16)
++#define   TBT_CABLE_USB3_GEN1		1
++#define   TBT_CABLE_USB3_PASSIVE	2
++#define   TBT_CABLE_10_AND_20GBPS	3
++#define TBT_CABLE_ROUNDED		BIT(19)
++#define TBT_CABLE_OPTICAL		BIT(21)
++#define TBT_CABLE_RETIMER		BIT(22)
++#define TBT_CABLE_LINK_TRAINING		BIT(23)
++
++/* TBT3 Device Enter Mode VDO bits */
++#define TBT_ENTER_MODE_CABLE_SPEED(_s_)	(((_s_) & GENMASK(2, 0)) << 16)
++#define TBT_ENTER_MODE_ACTIVE_CABLE	BIT(24)
++
++enum tbt_state {
++	TBT_STATE_IDLE,
++	TBT_STATE_SOP_P_ENTER,
++	TBT_STATE_SOP_PP_ENTER,
++	TBT_STATE_ENTER,
++	TBT_STATE_EXIT,
++	TBT_STATE_SOP_PP_EXIT,
++	TBT_STATE_SOP_P_EXIT
++};
++
++struct tbt_altmode {
++	enum tbt_state state;
++	struct typec_cable *cable;
++	struct typec_altmode *alt;
++	struct typec_altmode *plug[2];
++
++	struct work_struct work;
++	struct mutex lock; /* device lock */
++};
++
++static int tbt_enter_mode(struct tbt_altmode *tbt)
 +{
-+	struct typec_port *port = to_typec_port(partner->dev.parent);
-+	struct usb_pd_identity *id = partner->identity;
-+	u32 dev_cap;
-+	u8 cap = 0;
++	struct typec_altmode *plug = tbt->plug[TYPEC_PLUG_SOP_P];
++	u32 vdo;
 +
-+	if (port->data_role == TYPEC_HOST) {
-+		dev_cap = PD_VDO1_UFP_DEVCAP(id->vdo[0]);
++	vdo = tbt->alt->vdo & (TBT_VENDOR_SPECIFIC_B0 | TBT_VENDOR_SPECIFIC_B1);
++	vdo |= tbt->alt->vdo & TBT_INTEL_SPECIFIC_B0;
++	vdo |= TBT_MODE;
 +
-+		if (dev_cap & (DEV_USB2_CAPABLE | DEV_USB2_BILLBOARD))
-+			cap |= USB_CAPABILITY_USB2;
-+		if (dev_cap & DEV_USB3_CAPABLE)
-+			cap |= USB_CAPABILITY_USB3;
-+		if (dev_cap & DEV_USB4_CAPABLE)
-+			cap |= USB_CAPABILITY_USB4;
++	if (plug) {
++		if (typec_cable_is_active(tbt->cable))
++			vdo |= TBT_ENTER_MODE_ACTIVE_CABLE;
++
++		vdo |= TBT_ENTER_MODE_CABLE_SPEED(TBT_CABLE_SPEED(plug->vdo));
++		vdo |= plug->vdo & TBT_CABLE_ROUNDED;
++		vdo |= plug->vdo & TBT_CABLE_OPTICAL;
++		vdo |= plug->vdo & TBT_CABLE_RETIMER;
++		vdo |= plug->vdo & TBT_CABLE_LINK_TRAINING;
 +	} else {
-+		cap = PD_VDO_DFP_HOSTCAP(id->vdo[0]);
++		vdo |= TBT_ENTER_MODE_CABLE_SPEED(TBT_CABLE_USB3_PASSIVE);
 +	}
 +
-+	return cap;
++	return typec_altmode_enter(tbt->alt, &vdo);
 +}
 +
- static ssize_t
- usb_mode_show(struct device *dev, struct device_attribute *attr, char *buf)
- {
--	enum usb_mode mode = to_typec_port(dev)->usb_mode;
--	u8 cap = to_typec_port(dev)->cap->usb;
-+	enum usb_mode mode = 0;
- 	int len = 0;
-+	u8 cap = 0;
- 	int i;
- 
-+	if (is_typec_port(dev)) {
-+		cap = to_typec_port(dev)->cap->usb;
-+		mode = to_typec_port(dev)->usb_mode;
-+	} else if (is_typec_partner(dev)) {
-+		cap = typec_partner_mode(to_typec_partner(dev));
-+		mode = to_typec_partner(dev)->usb_mode;
-+	}
-+
- 	for (i = USB_MODE_USB2; i < USB_MODE_USB4 + 1; i++) {
- 		if (!(BIT(i - 1) & cap))
- 			continue;
-@@ -179,7 +212,7 @@ usb_mode_show(struct device *dev, struct device_attribute *attr, char *buf)
- static ssize_t usb_mode_store(struct device *dev, struct device_attribute *attr,
- 			      const char *buf, size_t size)
- {
--	struct typec_port *port = to_typec_port(dev);
-+	struct typec_port *port;
- 	int ret = 0;
- 	int mode;
- 
-@@ -187,7 +220,19 @@ static ssize_t usb_mode_store(struct device *dev, struct device_attribute *attr,
- 	if (mode < 0)
- 		return mode;
- 
--	ret = port->ops->usb_mode_set(port, mode);
-+	if (is_typec_port(dev)) {
-+		port = to_typec_port(dev);
-+		ret = port->ops->usb_mode_set(port, mode);
-+	} else if (is_typec_partner(dev)) {
-+		port = to_typec_port(dev->parent);
-+
-+		/* Checking does the port support the mode */
-+		if (mode && !(BIT(mode - 1) & port->cap->usb))
-+			return -EINVAL;
-+
-+		ret = port->ops->data_reset(port, mode);
-+	}
-+
- 	if (ret)
- 		return ret;
- 
-@@ -649,7 +694,32 @@ static struct attribute *typec_partner_attrs[] = {
- 	&dev_attr_usb_mode.attr,
- 	NULL
- };
--ATTRIBUTE_GROUPS(typec_partner);
-+
-+static umode_t typec_partner_attr_is_visible(struct kobject *kobj,
-+					     struct attribute *attr, int n)
++static void tbt_altmode_work(struct work_struct *work)
 +{
-+	struct typec_partner *partner = to_typec_partner(kobj_to_dev(kobj));
-+	struct typec_port *port = to_typec_port(partner->dev.parent);
++	struct tbt_altmode *tbt = container_of(work, struct tbt_altmode, work);
++	int ret;
 +
-+	if (attr == &dev_attr_usb_mode.attr) {
-+		if (!partner->identity)
-+			return 0;
-+		if (!port->ops || !port->ops->data_reset)
-+			return 0444;
++	mutex_lock(&tbt->lock);
++
++	switch (tbt->state) {
++	case TBT_STATE_SOP_P_ENTER:
++		ret = typec_altmode_enter(tbt->plug[TYPEC_PLUG_SOP_P], NULL);
++		if (ret)
++			dev_dbg(&tbt->plug[TYPEC_PLUG_SOP_P]->dev,
++				"failed to enter mode (%d)\n", ret);
++		break;
++	case TBT_STATE_SOP_PP_ENTER:
++		ret = typec_altmode_enter(tbt->plug[TYPEC_PLUG_SOP_PP], NULL);
++		if (ret)
++			dev_dbg(&tbt->plug[TYPEC_PLUG_SOP_PP]->dev,
++				"failed to enter mode (%d)\n", ret);
++		break;
++	case TBT_STATE_ENTER:
++		ret = tbt_enter_mode(tbt);
++		if (ret)
++			dev_dbg(&tbt->alt->dev, "failed to enter mode (%d)\n",
++				ret);
++		break;
++	case TBT_STATE_EXIT:
++		typec_altmode_exit(tbt->alt);
++		break;
++	case TBT_STATE_SOP_PP_EXIT:
++		typec_altmode_exit(tbt->plug[TYPEC_PLUG_SOP_PP]);
++		break;
++	case TBT_STATE_SOP_P_EXIT:
++		typec_altmode_exit(tbt->plug[TYPEC_PLUG_SOP_P]);
++		break;
++	default:
++		break;
 +	}
 +
-+	return attr->mode;
++	tbt->state = TBT_STATE_IDLE;
++
++	mutex_unlock(&tbt->lock);
 +}
 +
-+static struct attribute_group typec_partner_group = {
-+	.is_visible = typec_partner_attr_is_visible,
-+	.attrs = typec_partner_attrs
++static int tbt_altmode_vdm(struct typec_altmode *alt,
++			   const u32 hdr, const u32 *vdo, int count)
++{
++	struct tbt_altmode *tbt = typec_altmode_get_drvdata(alt);
++	int cmd_type = PD_VDO_CMDT(hdr);
++	int cmd = PD_VDO_CMD(hdr);
++
++	mutex_lock(&tbt->lock);
++
++	if (tbt->state != TBT_STATE_IDLE) {
++		mutex_unlock(&tbt->lock);
++		return -EBUSY;
++	}
++
++	switch (cmd_type) {
++	case CMDT_RSP_ACK:
++		switch (cmd) {
++		case CMD_ENTER_MODE:
++			/*
++			 * Following the order describeded in USB Type-C Spec
++			 * R2.0 Section 6.7.3.
++			 */
++			if (alt == tbt->plug[TYPEC_PLUG_SOP_P]) {
++				if (tbt->plug[TYPEC_PLUG_SOP_PP])
++					tbt->state = TBT_STATE_SOP_PP_ENTER;
++				else
++					tbt->state = TBT_STATE_ENTER;
++			} else if (alt == tbt->plug[TYPEC_PLUG_SOP_PP]) {
++				tbt->state = TBT_STATE_ENTER;
++			} else {
++				typec_altmode_notify(alt, TYPEC_STATE_MODAL,
++						     NULL);
++			}
++			break;
++		case CMD_EXIT_MODE:
++			if (alt == tbt->alt) {
++				if (tbt->plug[TYPEC_PLUG_SOP_PP])
++					tbt->state = TBT_STATE_SOP_PP_EXIT;
++				else if (tbt->plug[TYPEC_PLUG_SOP_P])
++					tbt->state = TBT_STATE_SOP_P_EXIT;
++			} else if (alt == tbt->plug[TYPEC_PLUG_SOP_PP]) {
++				tbt->state = TBT_STATE_SOP_P_EXIT;
++			}
++			break;
++		}
++		break;
++	case CMDT_RSP_NAK:
++		switch (cmd) {
++		case CMD_ENTER_MODE:
++			dev_warn(&alt->dev, "Enter Mode refused\n");
++			break;
++		default:
++			break;
++		}
++		break;
++	default:
++		break;
++	}
++
++	if (tbt->state != TBT_STATE_IDLE)
++		schedule_work(&tbt->work);
++
++	mutex_unlock(&tbt->lock);
++
++	return 0;
++}
++
++static int tbt_altmode_activate(struct typec_altmode *alt, int activate)
++{
++	struct tbt_altmode *tbt = typec_altmode_get_drvdata(alt);
++	int ret;
++
++	mutex_lock(&tbt->lock);
++
++	/* Preventing the user space from entering/exiting the cable alt mode */
++	if (alt != tbt->alt)
++		ret = -EPERM;
++	else if (activate)
++		ret = tbt_enter_mode(tbt);
++	else
++		ret = typec_altmode_exit(alt);
++
++	mutex_unlock(&tbt->lock);
++
++	return ret;
++}
++
++static const struct typec_altmode_ops tbt_altmode_ops = {
++	.vdm		= tbt_altmode_vdm,
++	.activate	= tbt_altmode_activate
 +};
 +
-+static const struct attribute_group *typec_partner_groups[] = {
-+	&typec_partner_group,
-+	NULL
++static int tbt_altmode_probe(struct typec_altmode *alt)
++{
++	struct typec_altmode *plug;
++	struct tbt_altmode *tbt;
++	int err;
++	int i;
++
++	tbt = devm_kzalloc(&alt->dev, sizeof(*tbt), GFP_KERNEL);
++	if (!tbt)
++		return -ENOMEM;
++
++	/* Thundebolt 3 requires a cable with eMarker */
++	tbt->cable = typec_cable_get(typec_altmode2port(alt));
++	if (!tbt->cable)
++		return -ENODEV;
++
++	for (i = 0; i < TYPEC_PLUG_SOP_PP + 1; i++) {
++		plug = typec_altmode_get_plug(alt, i);
++		if (IS_ERR(plug)) {
++			err = PTR_ERR(plug);
++			goto err_put_plugs;
++		}
++
++		if (!plug || plug->svid != USB_TYPEC_VENDOR_INTEL)
++			break;
++
++		plug->desc = "Thunderbolt3";
++		plug->ops = &tbt_altmode_ops;
++		typec_altmode_set_drvdata(plug, tbt);
++
++		tbt->plug[i] = plug;
++	}
++
++	INIT_WORK(&tbt->work, tbt_altmode_work);
++	mutex_init(&tbt->lock);
++	tbt->alt = alt;
++
++	alt->desc = "Thunderbolt3";
++	alt->ops = &tbt_altmode_ops;
++
++	typec_altmode_set_drvdata(alt, tbt);
++
++	if (tbt->plug[TYPEC_PLUG_SOP_PP])
++		tbt->state = TBT_STATE_SOP_PP_ENTER;
++	else if (tbt->plug[TYPEC_PLUG_SOP_P])
++		tbt->state = TBT_STATE_SOP_P_ENTER;
++	else
++		tbt->state = TBT_STATE_ENTER;
++	schedule_work(&tbt->work);
++
++	return 0;
++
++err_put_plugs:
++	typec_altmode_put_plug(tbt->plug[TYPEC_PLUG_SOP_PP]);
++	typec_altmode_put_plug(tbt->plug[TYPEC_PLUG_SOP_P]);
++	typec_cable_put(tbt->cable);
++
++	return err;
++}
++
++static void tbt_altmode_remove(struct typec_altmode *alt)
++{
++	struct tbt_altmode *tbt = typec_altmode_get_drvdata(alt);
++
++	typec_altmode_put_plug(tbt->plug[TYPEC_PLUG_SOP_PP]);
++	typec_altmode_put_plug(tbt->plug[TYPEC_PLUG_SOP_P]);
++	typec_cable_put(tbt->cable);
++}
++
++static const struct typec_device_id tbt_typec_id[] = {
++	{ USB_TYPEC_VENDOR_INTEL, TYPEC_ANY_MODE },
++	{ }
 +};
- 
- static void typec_partner_release(struct device *dev)
- {
-diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-index 1128c3b58618..e548e4d21908 100644
---- a/include/linux/usb/typec.h
-+++ b/include/linux/usb/typec.h
-@@ -192,6 +192,7 @@ struct typec_partner_desc {
-  * @vconn_set: Source VCONN
-  * @port_type_set: Set port type
-  * @usb_mode_set: Set the USB Mode to be used with Enter_USB message
-+ * @data_reset: Set new USB mode by using the Data Reset message
-  */
- struct typec_operations {
- 	int (*try_role)(struct typec_port *port, int role);
-@@ -201,6 +202,7 @@ struct typec_operations {
- 	int (*port_type_set)(struct typec_port *port,
- 			     enum typec_port_type type);
- 	int (*usb_mode_set)(struct typec_port *port, enum usb_mode mode);
-+	int (*data_reset)(struct typec_port *port, enum usb_mode mode);
- };
- 
- /*
++MODULE_DEVICE_TABLE(typec, tbt_typec_id);
++
++static struct typec_altmode_driver tbt_altmode_driver = {
++	.id_table = tbt_typec_id,
++	.probe = tbt_altmode_probe,
++	.remove = tbt_altmode_remove,
++	.driver = {
++		.name = "typec-thunderbolt",
++		.owner = THIS_MODULE,
++	}
++};
++module_typec_altmode_driver(tbt_altmode_driver);
++
++MODULE_AUTHOR("Heikki Krogerus <heikki.krogerus@linux.intel.com>");
++MODULE_LICENSE("GPL v2");
++MODULE_DESCRIPTION("Thunderbolt3 USB Type-C Alternate Mode");
 -- 
 2.24.1
 
