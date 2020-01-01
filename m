@@ -2,206 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCAC12DED9
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jan 2020 12:50:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B6912DF12
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jan 2020 14:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725884AbgAALuW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jan 2020 06:50:22 -0500
-Received: from mail-pf1-f182.google.com ([209.85.210.182]:33361 "EHLO
-        mail-pf1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725783AbgAALuV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jan 2020 06:50:21 -0500
-Received: by mail-pf1-f182.google.com with SMTP id z16so20744118pfk.0
-        for <linux-usb@vger.kernel.org>; Wed, 01 Jan 2020 03:50:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=Xj3V2oDYGI/kLv+zkR7Gm/0BWRstoAqjrUHUD1TyHfE=;
-        b=qwnTygXvxNQAfc9RCsqM/dNOb7/hK62hneeC5tefQOi7Jxs2iD3f145XOrtg9Atjc6
-         wA6ZWtdAiHfJ2LpCkO9WuvrtLFVJJkrK4PpNfxVdKMLPFbU7LjP4XLWXkvV52sDJhwai
-         hQEYSlcUhg317LmWRkuhgSm+YcUY1niDwxJqHpTYLxAAdjMW5fmPeMVREY1kSdfwl4vZ
-         rAu3iO2VbVzYJQvQbgbzoZ5fLOykZwpHYVSDvLwsu+Fiu/wl6ZwMQFeUXQufZRo2PZmJ
-         OyQ9rNlI4HmxbAn25p/9eDc9Zh//dYL2H2lZAXB/ny8EL+U215ZL01Ndl55D4RZGojpD
-         +j7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=Xj3V2oDYGI/kLv+zkR7Gm/0BWRstoAqjrUHUD1TyHfE=;
-        b=bTWJfGwpfp5GZ4ovvZQ3zekKP5OQnkEb8x4jtg7w4h75mXaRJULTDEVVan0xV1bNvI
-         KUFWV/JJO5y8W0croZkR4peF4REeuoiFpP0P6MncAIdJlj6s0v/RWaVVs6UvUbuWfD7o
-         CDV2rVKDcMmN1IeVFQgUK3dT8CFJhwiyT7aRN0MSHRAXN4GjHUFHWUHPNhXWfjcBiE00
-         Mgl5sKIOVw5ZS0OpzPd5df//0+1QI4xGp3ILlTMVd+cKlr8N4I9dNJ2ymJi4Mh1xe/iI
-         e87IagYgb8/oXf74AgqFzJGuv4wtsMiwduoPazW4ZB5+pc/RfZQZvkuoG0HpXhCKeicN
-         08XA==
-X-Gm-Message-State: APjAAAXKUl+kJ7pRE2SMKn7+B32WQ8yHZqE3IELOyaASPOpaX9azjnLS
-        91bJFj+npCYuCS7xt8xpBf3Z4JTqGeRpUw==
-X-Google-Smtp-Source: APXvYqwZTxIrh1MSLl5jCz/SkW7JDBk9106O7RObjQYmfnoaMSoDEic3YKVCCA+e1bkGh0h2XAiXjA==
-X-Received: by 2002:aa7:824d:: with SMTP id e13mr42539649pfn.247.1577879420569;
-        Wed, 01 Jan 2020 03:50:20 -0800 (PST)
-Received: from [0.0.0.0] (vps.kxuan.tech. [67.216.207.230])
-        by smtp.gmail.com with ESMTPSA id k1sm53455416pgq.70.2020.01.01.03.50.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jan 2020 03:50:19 -0800 (PST)
-Subject: Re: [issue] usbip: vhci-hcd: Device unable to get work after reset
-From:   Zhai Zhaoxuan <kxuanobj@gmail.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-References: <9b961779-abe7-f6a4-3f2b-f9303ef39c5b@gmail.com>
- <804f452e-e724-b508-80e7-cfd05da2ff84@linuxfoundation.org>
- <3e97b00c-ca87-0085-3f8e-6e85fd9b6c30@gmail.com>
- <6ee3a823-4359-41f1-0cd6-1b0b22d5dea3@linuxfoundation.org>
- <5333270a-e6c4-4aa1-1cbf-8f2e7ba81434@gmail.com>
-Message-ID: <0980a31b-8af7-02da-8780-ce8f5db36053@gmail.com>
-Date:   Wed, 1 Jan 2020 19:50:10 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1726837AbgAANx7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jan 2020 08:53:59 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:46864 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725809AbgAANx5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jan 2020 08:53:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1577886835;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HwvLbKIvcaSue/UhCU7AMwSy+1EPkPc59XQUGBzzxDI=;
+        b=iEEMJN4CHDBXwuQ3xAdvZuk7GFDMaHDbpv/TeojaKLLSzg09gaqsyyr4qrgCOXBC4sSxPo
+        TuzGJ2bm4kWCTmKHOKkMHqqysnapw/B1rWdlT4GMoyVfOxGR5RwQgD9XTTg5Pyuw2IXwrV
+        duFhibTOnTfmgKYrP7fe4FcxQGSAnDk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-364-ZpcFGxb5NUiWVoSkctzOjg-1; Wed, 01 Jan 2020 08:53:52 -0500
+X-MC-Unique: ZpcFGxb5NUiWVoSkctzOjg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DDCA8800D41;
+        Wed,  1 Jan 2020 13:53:48 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-21.pek2.redhat.com [10.72.8.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5917D5C3FD;
+        Wed,  1 Jan 2020 13:53:35 +0000 (UTC)
+Date:   Wed, 1 Jan 2020 21:53:31 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Andrea Vai <andrea.vai@unipv.it>,
+        "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: slow IO on USB media
+Message-ID: <20200101135331.GA7688@ming.t460p>
+References: <20191223162619.GA3282@mit.edu>
+ <4c85fd3f2ec58694cc1ff7ab5c88d6e11ab6efec.camel@unipv.it>
+ <20191223172257.GB3282@mit.edu>
+ <bb5d395fe47f033be0b8ed96cbebf8867d2416c4.camel@unipv.it>
+ <20191223195301.GC3282@mit.edu>
+ <20191224012707.GA13083@ming.t460p>
+ <20191225051722.GA119634@mit.edu>
+ <20191226022702.GA2901@ming.t460p>
+ <20191226033057.GA10794@mit.edu>
+ <20200101074310.10904-1-hdanton@sina.com>
 MIME-Version: 1.0
-In-Reply-To: <5333270a-e6c4-4aa1-1cbf-8f2e7ba81434@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200101074310.10904-1-hdanton@sina.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Shuah,
+On Wed, Jan 01, 2020 at 03:43:10PM +0800, Hillf Danton wrote:
+> 
+> On Thu, 26 Dec 2019 16:37:06 +0800 Ming Lei wrote:
+> > On Wed, Dec 25, 2019 at 10:30:57PM -0500, Theodore Y. Ts'o wrote:
+> > > On Thu, Dec 26, 2019 at 10:27:02AM +0800, Ming Lei wrote:
+> > > > Maybe we need to be careful for HDD., since the request count in scheduler
+> > > > queue is double of in-flight request count, and in theory NCQ should only
+> > > > cover all in-flight 32 requests. I will find a sata HDD., and see if
+> > > > performance drop can be observed in the similar 'cp' test.
+> > >
+> > > Please try to measure it, but I'd be really surprised if it's
+> > > significant with with modern HDD's.
+> > 
+> > Just find one machine with AHCI SATA, and run the following xfs
+> > overwrite test:
+> > 
+> > #!/bin/bash
+> > DIR=$1
+> > echo 3 > /proc/sys/vm/drop_caches
+> > fio --readwrite=write --filesize=5g --overwrite=1 --filename=$DIR/fiofile \
+> >         --runtime=60s --time_based --ioengine=psync --direct=0 --bs=4k
+> > 		--iodepth=128 --numjobs=2 --group_reporting=1 --name=overwrite
+> > 
+> > FS is xfs, and disk is LVM over AHCI SATA with NCQ(depth 32), because the
+> > machine is picked up from RH beaker, and it is the only disk in the box.
+> > 
+> > #lsblk
+> > NAME                            MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+> > sda                               8:0    0 931.5G  0 disk
+> > =E2=94=9C=E2=94=80sda1                            8:1    0     1G  0 part /boot
+> > =E2=94=94=E2=94=80sda2                            8:2    0 930.5G  0 part
+> >   =E2=94=9C=E2=94=80rhel_hpe--ml10gen9--01-root 253:0    0    50G  0 lvm  /
+> >   =E2=94=9C=E2=94=80rhel_hpe--ml10gen9--01-swap 253:1    0   3.9G  0 lvm  [SWAP]
+> >   =E2=94=94=E2=94=80rhel_hpe--ml10gen9--01-home 253:2    0 876.6G  0 lvm  /home
+> > 
+> > 
+> > kernel: 3a7ea2c483a53fc("scsi: provide mq_ops->busy() hook") which is
+> > the previous commit of f664a3cc17b7 ("scsi: kill off the legacy IO path").
+> > 
+> >             |scsi_mod.use_blk_mq=N |scsi_mod.use_blk_mq=Y |
+> > -----------------------------------------------------------
+> > throughput: |244MB/s               |169MB/s               |
+> > -----------------------------------------------------------
+> > 
+> > Similar result can be observed on v5.4 kernel(184MB/s) with same test
+> > steps.
+> 
+> 
+> The simple diff makes direct issue of requests take pending requests
+> also into account and goes the nornal enqueue-and-dequeue path if any
+> pending requests exist.
+> 
+> Then it sorts requests regardless of the number of hard queues in a
+> bid to make requests as sequencial as they are. Let's see if the
+> added sorting cost can make any sense.
+> 
+> --->8---
+> 
+> --- a/block/blk-mq-sched.c
+> +++ b/block/blk-mq-sched.c
+> @@ -410,6 +410,11 @@ run:
+>  		blk_mq_run_hw_queue(hctx, async);
+>  }
+>  
+> +static inline bool blk_mq_sched_hctx_has_pending_rq(struct blk_mq_hw_ctx *hctx)
+> +{
+> +	return sbitmap_any_bit_set(&hctx->ctx_map);
+> +}
+> +
+>  void blk_mq_sched_insert_requests(struct blk_mq_hw_ctx *hctx,
+>  				  struct blk_mq_ctx *ctx,
+>  				  struct list_head *list, bool run_queue_async)
+> @@ -433,7 +438,8 @@ void blk_mq_sched_insert_requests(struct
+>  		 * busy in case of 'none' scheduler, and this way may save
+>  		 * us one extra enqueue & dequeue to sw queue.
+>  		 */
+> -		if (!hctx->dispatch_busy && !e && !run_queue_async) {
+> +		if (!hctx->dispatch_busy && !e && !run_queue_async &&
+> +		    !blk_mq_sched_hctx_has_pending_rq(hctx)) {
+>  			blk_mq_try_issue_list_directly(hctx, list);
+>  			if (list_empty(list))
+>  				goto out;
+> --- a/block/blk-mq.c
+> +++ b/block/blk-mq.c
+> @@ -1692,7 +1692,7 @@ void blk_mq_flush_plug_list(struct blk_p
+>  
+>  	list_splice_init(&plug->mq_list, &list);
+>  
+> -	if (plug->rq_count > 2 && plug->multiple_queues)
+> +	if (plug->rq_count > 1)
+>  		list_sort(NULL, &list, plug_rq_cmp);
+>  
+>  	plug->rq_count = 0;
 
+I guess you may not understand the reason, and the issue is related
+with neither MQ nor plug.
 
-It has been almost 3 weeks since the last email.
+AHCI/SATA is single queue drive, and for HDD. IO throughput is very
+sensitive with IO order in case of sequential IO.
 
-Can you confirm if this is a bug or a feature?
+Legacy IO path supports ioc batching and BDI queue congestion. When
+there are more than one writeback IO paths, there may be only one
+active IO submission path, meantime others are blocked attributed to
+ioc batching, so writeback IO is still dispatched to disk in strict
+IO order.
 
+But ioc batching and BDI queue congestion is killed when converting to
+blk-mq.
 
-I am still looking forward to your reply. And hope this issue can be 
-resolved.
+Please see the following IO trace with legacy IO request path:
+
+https://lore.kernel.org/linux-scsi/f82fd5129e3dcacae703a689be60b20a7fedadf6.camel@unipv.it/2-log_ming_20191128_182751.zip
 
 
 Thanks,
+Ming
 
-Zhai Zhaoxuan
-
-On 12/13/19 11:01 AM, Zhai Zhaoxuan wrote:
-> Hi Shuah,
->
-> On 12/13/19 6:33 AM, Shuah Khan wrote:
->> Hi Zhai,
->>
->> On 12/11/19 8:19 PM, Zhai Zhaoxuan wrote:
->>> Hi Shuah,
->>>
->>> For me, I want to let the remote control software passing some 
->>> virtual device (e.g. ethernet device) to the remote computer.
->>>
->>> More specifically, the remote computer is connected to a private 
->>> network, and the local computer is connected to the Internet. And 
->>> the local can only connect to the remote computer using RDP/SPICE 
->>> protocols, some other softwares such as vmware client, or even 
->>> remote management cards.
->>>
->>> All these protocols or softwares support USB redirection.
->>
->> Does USB redirection support virtual devices? My understanding
->> it is usually a physical device connected to the local system.
->
-> Yes. At least "spicy" (a SPICE protocol client program) allows users 
-> choose virtual devices in the list.
->
-> But "spicy" is unable to reset devices. "spicy" redirection fails with 
-> the error: "Could not redirect [Device Product Name] at 6-2: error 
-> resetting device: LIBUSB_ERROR_NOT_FOUND".
->
->>
->> So I can
->>> create a virtual ethernet device with usbip, 
->>
->> How are you creating the virtual device?
->
-> usbip creates a virtual device and attach the device to the vhci.
->
-> It just like local usbip client connected to a virtual remote system. 
-> And the virtual remote system has a usb ethernet card.
->
-> But in my use case, the virtual remote system is emulated by the 
-> user-space program.
->
->
->>
->> let them
->>
->> Who is them here?
->> redirect the USB
->
-> "them" indicates SPICE/RDP protocols, remote control softwares (e.g 
-> vmware client), and remote management cards, etc.
->
-> They are protocols or programs which allows the user passing a local 
-> USB device to the remote system.
->
-> Let's call them "AGENT".
->
->
->>> ethernet device to the remote computer, and enable NAT forward.
->>>
->>
->> Is this virtual device is exported by USBIP host driver on your local
->> machine?
->
-> Yes, you are correct!
->
->
->>
->>> Then I am able to access the private network with local computer.
->>>
->>>
->>> Currently, I am writing a user-space program. It runs usbip 
->>> protocol, and can be connected and attached to the vhci.
->>
->> Why do you need to write a user-space program and what does it do?
->> Where does this vhci run? On the local system? I still don't fully
->> follow the use-case.
-> The vhci runs on local system.
->
-> The user-space program transfers the data from vhci to the network 
-> subsystem. I plans use TAP device to communicate with the network 
-> subsystem.
->
-> If the USB redirection sucessed, the full chain will be:
->
-> remote kernel network subsystem <--> remote USB bus <--> AGENT <--> 
-> local vhci <--> local user-space program <--> local TAP device <--> 
-> local kernel network subsystem
->
->
->>
->>>
->>> But the USB redirection will always reset the USB device before it 
->>> passing the device to the remote computer.
->>>
->> Does USB redirection support virtual devices?
-> Yes. The virtual devices are USB devices. The remote agents does not 
-> filter out the virtual devices.
->>
->>> And now, this "reset" results the device be disabled and never be 
->>> enabled again. So the redirection fails.
->>>
->>>
->>> In addition to this, I think usbip is a great module to allow the 
->>> user emulate some other devices and passing them to the remote 
->>> computer easily. For example, the virtual serial port can be 
->>> emulated in user-space, and communicate with the remote computer 
->>> over SPICE. And then, I can get the console output from the remote 
->>> computer or send console command to it.
->>>
->>>
->> thanks,
->> -- Shuah
->
-> Thanks,
-> Zhai Zhaoxuan
->
