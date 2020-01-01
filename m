@@ -2,194 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B6912DF12
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jan 2020 14:54:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC7312DF88
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jan 2020 17:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726837AbgAANx7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jan 2020 08:53:59 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:46864 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725809AbgAANx5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jan 2020 08:53:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1577886835;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HwvLbKIvcaSue/UhCU7AMwSy+1EPkPc59XQUGBzzxDI=;
-        b=iEEMJN4CHDBXwuQ3xAdvZuk7GFDMaHDbpv/TeojaKLLSzg09gaqsyyr4qrgCOXBC4sSxPo
-        TuzGJ2bm4kWCTmKHOKkMHqqysnapw/B1rWdlT4GMoyVfOxGR5RwQgD9XTTg5Pyuw2IXwrV
-        duFhibTOnTfmgKYrP7fe4FcxQGSAnDk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-364-ZpcFGxb5NUiWVoSkctzOjg-1; Wed, 01 Jan 2020 08:53:52 -0500
-X-MC-Unique: ZpcFGxb5NUiWVoSkctzOjg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DDCA8800D41;
-        Wed,  1 Jan 2020 13:53:48 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-21.pek2.redhat.com [10.72.8.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5917D5C3FD;
-        Wed,  1 Jan 2020 13:53:35 +0000 (UTC)
-Date:   Wed, 1 Jan 2020 21:53:31 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Andrea Vai <andrea.vai@unipv.it>,
-        "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: slow IO on USB media
-Message-ID: <20200101135331.GA7688@ming.t460p>
-References: <20191223162619.GA3282@mit.edu>
- <4c85fd3f2ec58694cc1ff7ab5c88d6e11ab6efec.camel@unipv.it>
- <20191223172257.GB3282@mit.edu>
- <bb5d395fe47f033be0b8ed96cbebf8867d2416c4.camel@unipv.it>
- <20191223195301.GC3282@mit.edu>
- <20191224012707.GA13083@ming.t460p>
- <20191225051722.GA119634@mit.edu>
- <20191226022702.GA2901@ming.t460p>
- <20191226033057.GA10794@mit.edu>
- <20200101074310.10904-1-hdanton@sina.com>
+        id S1727198AbgAAQi1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jan 2020 11:38:27 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:38656 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727154AbgAAQi1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jan 2020 11:38:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:
+        Subject:Sender:Reply-To:Cc:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=e9xmC6WZve72kHa7WhwPzTlTU4WTjL1WO/1gzCOJ5zo=; b=efIoY73QpMA4ZHweuOSr4KR7k
+        F/QRCsWO5WCO5ZOU+XHd62ji24UBRSDQU9EzyLPl2V0gEHXDd++oKBqOfbtd52htq0TCqpohg+riD
+        safH+ibGhGvx2esBP++fXKRmKkSSHwmcmgoekupvjRAv3JlGsC/hnRSbfsTVZej1qV7PW1n/WMD3h
+        MbcrFzkBO1NYXZH9ApA/eGZQoDN7I9kHZnZ3j7kxxCWp9T+LIZJg0gkhmLEolhuwoGHtpyzLdTpMx
+        IfWz2S23pTlupTNKuAkv4vaEK3bQbPaTgJ6A76oPL/M2zS58Ci0PDotf81ajSSd7BPYyh3CtolNVL
+        sGSrb7nDw==;
+Received: from [2601:1c0:6280:3f0::34d9]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1imh0s-0004pt-JU; Wed, 01 Jan 2020 16:38:26 +0000
+Subject: Re: Fw: usbcore missing parentheses in USE_NEW_SCHEME
+To:     atmgnd <atmgnd@protonmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+References: <7sP4K0IcPrf4Z5urpZjWaiquSFhnNSNGLGsuYj8jbRl8aGGboUyknXW1w7DSBIYNUY308G2QnfDOTmblnyPKyoWMeiYwtqS6mdTxKZqfBO8=@protonmail.com>
+ <S5_bTeKG4QYpmSUODHFha_LSjMOM5NMirKYBTHik11iEynJ-WjOAofdiOboo502BpM9CV2Z9xkU93MnoqGz7zdCzwLY7fpqiL5PZZ0-ByQk=@protonmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <ca600d41-d978-d799-a871-ce6e1438a4cc@infradead.org>
+Date:   Wed, 1 Jan 2020 08:38:25 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200101074310.10904-1-hdanton@sina.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+In-Reply-To: <S5_bTeKG4QYpmSUODHFha_LSjMOM5NMirKYBTHik11iEynJ-WjOAofdiOboo502BpM9CV2Z9xkU93MnoqGz7zdCzwLY7fpqiL5PZZ0-ByQk=@protonmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 01, 2020 at 03:43:10PM +0800, Hillf Danton wrote:
+[adding linux-usb mailing list]
+
+On 1/1/20 6:46 AM, atmgnd wrote:
+> I think there is missing parentheses in macro USE_NEW_SCHEME, it should be:
+> #define USE_NEW_SCHEME(i, scheme)      ((i) / 2 == (int)(scheme))
 > 
-> On Thu, 26 Dec 2019 16:37:06 +0800 Ming Lei wrote:
-> > On Wed, Dec 25, 2019 at 10:30:57PM -0500, Theodore Y. Ts'o wrote:
-> > > On Thu, Dec 26, 2019 at 10:27:02AM +0800, Ming Lei wrote:
-> > > > Maybe we need to be careful for HDD., since the request count in scheduler
-> > > > queue is double of in-flight request count, and in theory NCQ should only
-> > > > cover all in-flight 32 requests. I will find a sata HDD., and see if
-> > > > performance drop can be observed in the similar 'cp' test.
-> > >
-> > > Please try to measure it, but I'd be really surprised if it's
-> > > significant with with modern HDD's.
-> > 
-> > Just find one machine with AHCI SATA, and run the following xfs
-> > overwrite test:
-> > 
-> > #!/bin/bash
-> > DIR=$1
-> > echo 3 > /proc/sys/vm/drop_caches
-> > fio --readwrite=write --filesize=5g --overwrite=1 --filename=$DIR/fiofile \
-> >         --runtime=60s --time_based --ioengine=psync --direct=0 --bs=4k
-> > 		--iodepth=128 --numjobs=2 --group_reporting=1 --name=overwrite
-> > 
-> > FS is xfs, and disk is LVM over AHCI SATA with NCQ(depth 32), because the
-> > machine is picked up from RH beaker, and it is the only disk in the box.
-> > 
-> > #lsblk
-> > NAME                            MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
-> > sda                               8:0    0 931.5G  0 disk
-> > =E2=94=9C=E2=94=80sda1                            8:1    0     1G  0 part /boot
-> > =E2=94=94=E2=94=80sda2                            8:2    0 930.5G  0 part
-> >   =E2=94=9C=E2=94=80rhel_hpe--ml10gen9--01-root 253:0    0    50G  0 lvm  /
-> >   =E2=94=9C=E2=94=80rhel_hpe--ml10gen9--01-swap 253:1    0   3.9G  0 lvm  [SWAP]
-> >   =E2=94=94=E2=94=80rhel_hpe--ml10gen9--01-home 253:2    0 876.6G  0 lvm  /home
-> > 
-> > 
-> > kernel: 3a7ea2c483a53fc("scsi: provide mq_ops->busy() hook") which is
-> > the previous commit of f664a3cc17b7 ("scsi: kill off the legacy IO path").
-> > 
-> >             |scsi_mod.use_blk_mq=N |scsi_mod.use_blk_mq=Y |
-> > -----------------------------------------------------------
-> > throughput: |244MB/s               |169MB/s               |
-> > -----------------------------------------------------------
-> > 
-> > Similar result can be observed on v5.4 kernel(184MB/s) with same test
-> > steps.
+> causes a fail wiht "device descriptor read/64, error -110" using my usb drive on vmware using usb 3.0 hub.
+> from https://github.com/torvalds/linux/commit/25244227158e1502062041365a439a54cb8fe673#diff-28615d62e1250eadc353d804f49bc6d6
+> 
+> someone changed USE_NEW_SCHEME, but without parentheses for second parameter. as result. in fuction use_new_scheme when old_scheme_first is 1, use_new_scheme will return 1 always(actullay is should return 0). it also make https://github.com/torvalds/linux/commit/bd0e6c9614b95352eb31d0207df16dc156c527fa#diff-28615d62e1250eadc353d804f49bc6d6 fails.
+> 
+> I cannot use git send-mail, there some issue with my network provider. patch below, :
 > 
 > 
-> The simple diff makes direct issue of requests take pending requests
-> also into account and goes the nornal enqueue-and-dequeue path if any
-> pending requests exist.
+> From 85f01b89d050a988f4d9fc78232de47e793c6a7c Mon Sep 17 00:00:00 2001
+> From: atmgnd <atmgnd@outlook.com>
+> Date: Wed, 1 Jan 2020 21:27:13 +0800
+> Subject: [PATCH] usb: hub: missing parentheses in USE_NEW_SCHEME
 > 
-> Then it sorts requests regardless of the number of hard queues in a
-> bid to make requests as sequencial as they are. Let's see if the
-> added sorting cost can make any sense.
+> accroding to bd0e6c9#diff-28615d62e1250eadc353d804f49bc6d6, will try old enumeration
+> scheme first for high speed devices. for example, when a high speed device pluged in,
+> line 2720 should expand to 0 at the first time. USE_NEW_SCHEME(0, 0 || 0 || 1) === 0.
+> but it wrongly expand to 1(alway expand to 1 for high speed device), and change
+> USE_NEW_SCHEME to USE_NEW_SCHEME((i) % 2 == (int)(scheme)) may be better ?
 > 
-> --->8---
+> Signed-off-by: atmgnd <atmgnd@outlook.com>
+> ---
+>  drivers/usb/core/hub.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> --- a/block/blk-mq-sched.c
-> +++ b/block/blk-mq-sched.c
-> @@ -410,6 +410,11 @@ run:
->  		blk_mq_run_hw_queue(hctx, async);
->  }
->  
-> +static inline bool blk_mq_sched_hctx_has_pending_rq(struct blk_mq_hw_ctx *hctx)
-> +{
-> +	return sbitmap_any_bit_set(&hctx->ctx_map);
-> +}
-> +
->  void blk_mq_sched_insert_requests(struct blk_mq_hw_ctx *hctx,
->  				  struct blk_mq_ctx *ctx,
->  				  struct list_head *list, bool run_queue_async)
-> @@ -433,7 +438,8 @@ void blk_mq_sched_insert_requests(struct
->  		 * busy in case of 'none' scheduler, and this way may save
->  		 * us one extra enqueue & dequeue to sw queue.
->  		 */
-> -		if (!hctx->dispatch_busy && !e && !run_queue_async) {
-> +		if (!hctx->dispatch_busy && !e && !run_queue_async &&
-> +		    !blk_mq_sched_hctx_has_pending_rq(hctx)) {
->  			blk_mq_try_issue_list_directly(hctx, list);
->  			if (list_empty(list))
->  				goto out;
-> --- a/block/blk-mq.c
-> +++ b/block/blk-mq.c
-> @@ -1692,7 +1692,7 @@ void blk_mq_flush_plug_list(struct blk_p
->  
->  	list_splice_init(&plug->mq_list, &list);
->  
-> -	if (plug->rq_count > 2 && plug->multiple_queues)
-> +	if (plug->rq_count > 1)
->  		list_sort(NULL, &list, plug_rq_cmp);
->  
->  	plug->rq_count = 0;
-
-I guess you may not understand the reason, and the issue is related
-with neither MQ nor plug.
-
-AHCI/SATA is single queue drive, and for HDD. IO throughput is very
-sensitive with IO order in case of sequential IO.
-
-Legacy IO path supports ioc batching and BDI queue congestion. When
-there are more than one writeback IO paths, there may be only one
-active IO submission path, meantime others are blocked attributed to
-ioc batching, so writeback IO is still dispatched to disk in strict
-IO order.
-
-But ioc batching and BDI queue congestion is killed when converting to
-blk-mq.
-
-Please see the following IO trace with legacy IO request path:
-
-https://lore.kernel.org/linux-scsi/f82fd5129e3dcacae703a689be60b20a7fedadf6.camel@unipv.it/2-log_ming_20191128_182751.zip
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index f229ad6952c0..7d17deca7021 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -2692,7 +2692,7 @@ static unsigned hub_is_wusb(struct usb_hub *hub)
+>  #define SET_ADDRESS_TRIES 2
+>  #define GET_DESCRIPTOR_TRIES 2
+>  #define SET_CONFIG_TRIES (2 * (use_both_schemes + 1))
+> -#define USE_NEW_SCHEME(i, scheme) ((i) / 2 == (int)scheme)
+> +#define USE_NEW_SCHEME(i, scheme) ((i) / 2 == (int)(scheme))
+> 
+>  #define HUB_ROOT_RESET_TIME 60 /* times are in msec */
+>  #define HUB_SHORT_RESET_TIME 10
+> --
+> 2.17.1
+> 
 
 
-Thanks,
-Ming
+-- 
+~Randy
 
