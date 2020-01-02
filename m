@@ -2,115 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4038612E411
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 09:51:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82C7512E436
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 10:08:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727878AbgABIu6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jan 2020 03:50:58 -0500
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:58184 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727817AbgABIu5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 03:50:57 -0500
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0028mjoQ007721;
-        Thu, 2 Jan 2020 09:50:41 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=LRdbeTk9U+whaEXucHpmJKJIXLSTzy8TN4eCF8nKnlk=;
- b=rdW5FCjvJZp4jjB8Zq169+SO5I2yDOHHeVn9ffeFn0qfFuJbIkdLiqX37tZHl1losuIT
- K8xlccRILYvzn4OG7G7rjKj9+f8hSg0OvrEcF/fTaT4mLeehR26aGdvHRfq2WZEALEka
- d/WbwqX9C1YmDYto0kEaZ4KI7p68kBKNvvoZIvPXOTGaR3ggaYNWtAiYZVsjuZngvvv/
- uDH/MdR8jQjnoIRHltOPNuJH+7E76GyPeoZUIHGL/4PCFQ93dw7Dag2CC92UTRR4OQdu
- iYX04ChjY3jCq4AXgjpEU3puzFoNxPJvBMGcTjJHvhaez7pErnf08R9ypcmjMgTQr563 Ig== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2x5wd6a4bv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Jan 2020 09:50:41 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 897E8100034;
-        Thu,  2 Jan 2020 09:50:40 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 666FF21ED5A;
-        Thu,  2 Jan 2020 09:50:40 +0100 (CET)
-Received: from SFHDAG3NODE3.st.com (10.75.127.9) by SFHDAG3NODE3.st.com
- (10.75.127.9) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu, 2 Jan
- 2020 09:50:39 +0100
-Received: from SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476]) by
- SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476%20]) with mapi id
- 15.00.1347.000; Thu, 2 Jan 2020 09:50:39 +0100
-From:   Benjamin GAIGNARD <benjamin.gaignard@st.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "kgene@kernel.org" <kgene@kernel.org>,
-        "hminas@synopsys.com" <hminas@synopsys.com>,
+        id S1727861AbgABJIr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 2 Jan 2020 04:08:47 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:42184 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727842AbgABJIr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 04:08:47 -0500
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id uk-mta-1-pIIvPwufNpOpNDvQYajY9g-1;
+ Thu, 02 Jan 2020 09:08:43 +0000
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Thu, 2 Jan 2020 09:08:43 +0000
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Thu, 2 Jan 2020 09:08:43 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Tejas Joglekar' <Tejas.Joglekar@synopsys.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        Amelie DELAUNAY <amelie.delaunay@st.com>
-Subject: Re: [PATCH v2 2/2] ARM: dts: exynos: Remove unneeded "snps,dwc2" from
- hsotg node
-Thread-Topic: [PATCH v2 2/2] ARM: dts: exynos: Remove unneeded "snps,dwc2"
- from hsotg node
-Thread-Index: AQHVtlgQQnPVTv47G0+aNYZYg4bX66fS0MUAgARFMYA=
-Date:   Thu, 2 Jan 2020 08:50:39 +0000
-Message-ID: <bbc7e34c-75c2-dfe0-70f3-0685e8e54fed@st.com>
-References: <20191219103536.25485-1-benjamin.gaignard@st.com>
- <20191219103536.25485-3-benjamin.gaignard@st.com> <20191230153758.GB4918@pi3>
-In-Reply-To: <20191230153758.GB4918@pi3>
-Accept-Language: en-US
+        Mathias Nyman <mathias.nyman@intel.com>
+CC:     John Youn <John.Youn@synopsys.com>
+Subject: RE: [RFC PATCH 1/4] usb: xhci: Synopsys xHC consolidate TRBs
+Thread-Topic: [RFC PATCH 1/4] usb: xhci: Synopsys xHC consolidate TRBs
+Thread-Index: AQHVtzrjB/1wrvW8bUqvSt/jrU3hbqfXKWiw
+Date:   Thu, 2 Jan 2020 09:08:42 +0000
+Message-ID: <2c11ec9e579f4ead946d759aa4d7ed3e@AcuMS.aculab.com>
+References: <cover.1576848504.git.joglekar@synopsys.com>
+ <08d08f2fd6da50e382852d014a08e371f2182382.1576848504.git.joglekar@synopsys.com>
+In-Reply-To: <08d08f2fd6da50e382852d014a08e371f2182382.1576848504.git.joglekar@synopsys.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-x-ms-exchange-messagesentrepresentingtype: 1
 x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.48]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <189E2F8963AD1C41B89EA1A9DC82B15E@st.com>
-Content-Transfer-Encoding: base64
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2020-01-02_02:2019-12-30,2020-01-02 signatures=0
+X-MC-Unique: pIIvPwufNpOpNDvQYajY9g-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQpPbiAxMi8zMC8xOSA0OjM3IFBNLCBLcnp5c3p0b2YgS296bG93c2tpIHdyb3RlOg0KPiBPbiBU
-aHUsIERlYyAxOSwgMjAxOSBhdCAxMTozNTozNkFNICswMTAwLCBCZW5qYW1pbiBHYWlnbmFyZCB3
-cm90ZToNCj4+IFJlbW92ZSAic25wcyxkd2MyIiBmcm9tIGhzb3RnQDEyNDgwMDAwIG5vZGUgY29t
-cGF0aWJsZSBsaXN0IGJlY2F1c2UNCj4+ICJzYW1zdW5nLHMzYzY0MDAtaHNvdGciIHNob3VsZCBi
-ZSBlbm91Z2guDQo+IFRoZSBtb3JlIGRldGFpbGVkIGNvbXBhdGlibGUgaXMgYWxtb3N0IGFsd2F5
-cyAiZW5vdWdoIi4gU29tZSBvdGhlciBub2Rlcw0KPiBhbHNvIGhhdmUgZGV0YWlsZWQrZ2VuZXJp
-YyBjb21wYXRpYmxlLiBJbiB0aGlzIGNhc2UgdGhlcmUgaXMgYSBkcml2ZXINCj4gbWF0Y2hpbmcg
-InNucHMsZHdjMiIgc28gd2h5IHJlbW92aW5nIGl0Pw0KDQpGaXJzdCBiZWNhdXNlLCB1bmxpa2Ug
-dGhlIG90aGVycyBkd2MyIGRldmljZXMsIHRoaXMgY29tcGF0aWJsZSB3YXNuJ3QgDQpkZXNjcmli
-ZSBpbiB0aGUgYmluZGluZ3MgZmlsZQ0KDQpzbyBJIGhhZCB0byBpbnZlc3RpZ2F0ZWQgaG93IGl0
-IHNob3VsZCB3b3JrIGFuZCwgb24gc2Ftc3VuZyBEVCBmaWxlcywgDQpvbmx5ICJzYW1zdW5nLHMz
-YzY0MDAtaHNvdGciLg0KDQogRnJvbSBkcml2ZXIgY29kZSBwb2ludCBvZiB2aWV3IHRoYXQgc2Vl
-bXMgY29oZXJlbnQgKHdlIGRvIHRoZSBzYW1lIGZvciANCnN0bTMyKS4NCg0KV2l0aCB0aGF0IGlu
-IG1pbmQgSSBoYXZlIGRlY2lkZWQgdG8gcmVtb3ZlICJzbnBzLGR3YzIiIGZyb20gZXh5bm9zIERU
-IA0KZmlsZSByYXRoZXIgdGhhbiBhZGQgaXQgZXZlcnl3aGVyZSBlbHNlLg0KDQpCZW5qYW1pbg0K
-DQo+DQo+IEJlc3QgcmVnYXJkcywNCj4gS3J6eXN6dG9mDQo+DQo+PiBTaWduZWQtb2ZmLWJ5OiBC
-ZW5qYW1pbiBHYWlnbmFyZCA8YmVuamFtaW4uZ2FpZ25hcmRAc3QuY29tPg0KPj4gLS0tDQo+PiAg
-IGFyY2gvYXJtL2Jvb3QvZHRzL2V4eW5vczMyNTAuZHRzaSB8IDIgKy0NCj4+ICAgMSBmaWxlIGNo
-YW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+Pg0KPj4gZGlmZiAtLWdpdCBh
-L2FyY2gvYXJtL2Jvb3QvZHRzL2V4eW5vczMyNTAuZHRzaSBiL2FyY2gvYXJtL2Jvb3QvZHRzL2V4
-eW5vczMyNTAuZHRzaQ0KPj4gaW5kZXggYjAxNmIwYjY4MzA2Li5kNDg2NjI2OWY0ZWUgMTAwNjQ0
-DQo+PiAtLS0gYS9hcmNoL2FybS9ib290L2R0cy9leHlub3MzMjUwLmR0c2kNCj4+ICsrKyBiL2Fy
-Y2gvYXJtL2Jvb3QvZHRzL2V4eW5vczMyNTAuZHRzaQ0KPj4gQEAgLTM2Miw3ICszNjIsNyBAQA0K
-Pj4gICAJCX07DQo+PiAgIA0KPj4gICAJCWhzb3RnOiBoc290Z0AxMjQ4MDAwMCB7DQo+PiAtCQkJ
-Y29tcGF0aWJsZSA9ICJzYW1zdW5nLHMzYzY0MDAtaHNvdGciLCAic25wcyxkd2MyIjsNCj4+ICsJ
-CQljb21wYXRpYmxlID0gInNhbXN1bmcsczNjNjQwMC1oc290ZyI7DQo+PiAgIAkJCXJlZyA9IDww
-eDEyNDgwMDAwIDB4MjAwMDA+Ow0KPj4gICAJCQlpbnRlcnJ1cHRzID0gPEdJQ19TUEkgMTQxIElS
-UV9UWVBFX0xFVkVMX0hJR0g+Ow0KPj4gICAJCQljbG9ja3MgPSA8JmNtdSBDTEtfVVNCT1RHPjsN
-Cj4+IC0tIA0KPj4gMi4xNS4wDQo+Pg==
+From: Tejas Joglekar
+> Sent: 20 December 2019 13:39
+>
+> The Synopsys xHC has an internal TRB cache of size TRB_CACHE_SIZE for
+> each endpoint. The default value for TRB_CACHE_SIZE is 16 for SS and 8
+> for HS. The controller loads and updates the TRB cache from the transfer
+> ring in system memory whenever the driver issues a start transfer or
+> update transfer command.
+> 
+> For chained TRBs, the Synopsys xHC requires that the total amount of
+> bytes for all TRBs loaded in the TRB cache be greater than or equal to 1
+> MPS. Or the chain ends within the TRB cache (with a last TRB).
+> 
+> If this requirement is not met, the controller will not be able to send
+> or receive a packet and it will hang causing a driver timeout and error.
+
+This ought to be raised with Synopsys and they should be remake their
+silicon to meet the XHCI standard and then offer to fix all the
+boards that contain their broken version :-)
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
