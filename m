@@ -2,93 +2,200 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4D912E819
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 16:32:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B49112E858
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 16:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728676AbgABPcn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jan 2020 10:32:43 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:35017 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728561AbgABPcn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 10:32:43 -0500
-Received: by mail-lf1-f65.google.com with SMTP id 15so30135647lfr.2
-        for <linux-usb@vger.kernel.org>; Thu, 02 Jan 2020 07:32:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=X2bdc3I7CssYMJkFC+tUD4saLRW+PWs6uz/Nr7ULd2g=;
-        b=r0m+yau3EUGj6LpJksLkjV4Eywq1DWM3eiKRAQGLl3XQqTCPaJNGramTga8x0C9RuB
-         ce6szfKyVrh6m1JqsKNiByAXbCemgsWmnzvLiJPmDNsaUdKf3dANoiuSmv+2esGrSIBc
-         YpBnZpJqUNn0Y0NmTnkdMcWRIPL4cbQcQaAU/GZkcE6qtv5NAaC3fBrrFofc9Az4uUjD
-         Z7Unl9zBiCLwgP07DINO/lbv8NHaKP7xEgmKntyMF4xGR6h/1uzmVE2n57OjCmlUp1cO
-         SGVS6Fvux44NjrUA38aM+3V3bWSd31JluQB6fM9JwZFYddEIXjOIsIt9zgucRdg1mkck
-         tCLQ==
-X-Gm-Message-State: APjAAAXInsvwSXUSZvxa/f1V90hwLn56b8EjpqTSLhqryyAjKfnPwz4Z
-        Mnc45iM5BO1J5GhC1dwQJLw=
-X-Google-Smtp-Source: APXvYqyEBILDCDPMxr4TZIlbb5Xd/zJXetcKXUdnwE4xZ6cKtHJzg5CNSUHlz/tL87TmwtxqZHhPTA==
-X-Received: by 2002:a19:c3cc:: with SMTP id t195mr48466018lff.144.1577979161694;
-        Thu, 02 Jan 2020 07:32:41 -0800 (PST)
-Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
-        by smtp.gmail.com with ESMTPSA id m11sm23476223lfj.89.2020.01.02.07.32.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jan 2020 07:32:40 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@kernel.org>)
-        id 1in2Sn-0001HE-P0; Thu, 02 Jan 2020 16:32:41 +0100
-Date:   Thu, 2 Jan 2020 16:32:41 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Takashi Iwai <tiwai@suse.de>, Johan Hovold <johan@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Roger Whittaker <Roger.Whittaker@suse.com>,
-        Takashi Iwai <tiwai@suse.com>, linux-usb@vger.kernel.org
-Subject: Re: Certain cameras no longer working with uvcvideo on recent
- (openSUSE) kernels
-Message-ID: <20200102153241.GA4683@localhost>
-References: <s5hr20ingu5.wl-tiwai@suse.de>
- <Pine.LNX.4.44L0.2001021003130.1546-100000@iolanthe.rowland.org>
+        id S1728707AbgABPya (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jan 2020 10:54:30 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:53403 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728678AbgABPya (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 10:54:30 -0500
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1in2ns-0007n9-AQ; Thu, 02 Jan 2020 16:54:28 +0100
+Message-ID: <5d5b290572cb3aa8559fc3cc64d25161a7570b29.camel@pengutronix.de>
+Subject: Re: [PATCH] usb: phy: phy-gpio-vbus-usb: Convert to GPIO descriptors
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org,
+        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>
+Date:   Thu, 02 Jan 2020 16:54:26 +0100
+In-Reply-To: <20191231174848.741314-1-linus.walleij@linaro.org>
+References: <20191231174848.741314-1-linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.2001021003130.1546-100000@iolanthe.rowland.org>
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 02, 2020 at 10:06:33AM -0500, Alan Stern wrote:
-> On Thu, 2 Jan 2020, Takashi Iwai wrote:
-> > On Thu, 02 Jan 2020 12:20:45 +0100, Johan Hovold wrote:
-
-> > > Note that we also have this little gem in the ftdi usb-serial driver
-> > > (since 2009) overriding a zero max packet size for devices with broken
-> > > descriptors:
-> > > 
-> > > 	895f28badce9 ("USB: ftdi_sio: fix hi-speed device packet size calculation")
-> > > 
-> > > Note sure how common those are but they will no longer work after the
-> > > new sanity check in core. I guess we could add quirks for them (to core)
-> > > in case we get any reports, but perhaps reverting the check should be
-> > > considered.
-> > 
-> > FWIW, Roger confirmed that reverting the commit d482c7bb0541 does
-> > indeed fix the issue (with the latest 5.4.y kernel).
+On Tue, 2019-12-31 at 18:48 +0100, Linus Walleij wrote:
+> Instead of using the legacy GPIO API and keeping track on
+> polarity inversion semantics in the driver, switch to use
+> GPIO descriptors for this driver and change all consumers
+> in the process.
 > 
-> All right.  Suppose instead of reverting that commit, I change the code
-> so that it only logs a warning when it finds an endpoint descriptor
-> with maxpacket = 0 (and it skips the warning for isochronous endpoints
-> in altsetting 0).  At the same time, we can add a check to
-> usb_submit_urb() to refuse URBs if the endpoint's maxpacket is 0.
+> This makes it possible to retire platform data completely:
+> the only remaining platform data member was "wakeup" which
+> was intended to make the vbus interrupt wakeup capable,
+> but was not set by any users and thus remained unused. VBUS
+> was not waking any devices up. Leave a comment about it so
+> later developers using the platform can consider setting it
+> to always enabled so plugging in USB wakes up the platform.
 > 
-> Sounds good?
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Sylwester Nawrocki <sylvester.nawrocki@gmail.com>
+> Cc: Robert Jarzmik <robert.jarzmik@free.fr>
+> Cc: Daniel Mack <daniel@zonque.org>
+> Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> This change hits arch/arm/mach-pxa/* and
+> arch/arm/mach-s3c64* so I have CC to the most active
+> maintainers.
+> ---
+>  arch/arm/mach-pxa/colibri-pxa320.c  | 16 ++---
+>  arch/arm/mach-pxa/eseries.c         | 40 +++++++-----
+>  arch/arm/mach-pxa/gumstix.c         | 18 +++---
+>  arch/arm/mach-pxa/hx4700.c          | 22 ++++---
+>  arch/arm/mach-pxa/magician.c        | 22 ++++---
+>  arch/arm/mach-pxa/mioa701.c         | 15 +++--
+>  arch/arm/mach-pxa/palm27x.c         | 34 +++++------
+>  arch/arm/mach-pxa/palmt5.c          |  1 -
+>  arch/arm/mach-pxa/palmtc.c          | 18 +++---
+>  arch/arm/mach-pxa/palmte2.c         | 18 +++---
+>  arch/arm/mach-pxa/palmtx.c          |  1 -
+>  arch/arm/mach-pxa/palmz72.c         |  1 -
+>  arch/arm/mach-pxa/tosa.c            | 18 +++---
+>  arch/arm/mach-pxa/vpac270.c         | 15 ++---
+>  arch/arm/mach-s3c64xx/mach-smartq.c | 13 ++--
+>  drivers/usb/phy/phy-gpio-vbus-usb.c | 95 +++++++++++++----------------
+>  include/linux/usb/gpio_vbus.h       | 33 ----------
+>  17 files changed, 188 insertions(+), 192 deletions(-)
+>  delete mode 100644 include/linux/usb/gpio_vbus.h
+[...]
+> diff --git a/arch/arm/mach-pxa/hx4700.c b/arch/arm/mach-pxa/hx4700.c
+> index 311268d186ab..238a751a8797 100644
+> --- a/arch/arm/mach-pxa/hx4700.c
+> +++ b/arch/arm/mach-pxa/hx4700.c
+> @@ -34,7 +34,6 @@
+>  #include <linux/spi/ads7846.h>
+>  #include <linux/spi/spi.h>
+>  #include <linux/spi/pxa2xx_spi.h>
+> -#include <linux/usb/gpio_vbus.h>
+>  #include <linux/platform_data/i2c-pxa.h>
+>  
+>  #include <mach/hardware.h>
+> @@ -578,18 +577,24 @@ static struct pwm_lookup hx4700_pwm_lookup[] = {
+>   * USB "Transceiver"
+>   */
+>  
+> -static struct gpio_vbus_mach_info gpio_vbus_info = {
+> -	.gpio_pullup        = GPIO76_HX4700_USBC_PUEN,
+> -	.gpio_vbus          = GPIOD14_nUSBC_DETECT,
+> -	.gpio_vbus_inverted = 1,
+> +static struct gpiod_lookup_table gpio_vbus_gpiod_table = {
+> +	.dev_id = "gpio-vbus",
+> +	.table = {
+> +		/* This GPIO is on ASIC3 */
+> +		GPIO_LOOKUP("asic3",
+> +			    /* Convert to a local offset on the ASIC3 */
+> +			    GPIOD14_nUSBC_DETECT - HX4700_ASIC3_GPIO_BASE,
+> +			    "vbus", GPIO_ACTIVE_LOW),
+> +		/* This one is on the primary SOC GPIO */
+> +		GPIO_LOOKUP("gpio-pxa", GPIO76_HX4700_USBC_PUEN,
+> +			    "pullup", GPIO_ACTIVE_HIGH),
+> +		{ },
+> +	},
+>  };
+>  
+>  static struct platform_device gpio_vbus = {
+>  	.name          = "gpio-vbus",
+>  	.id            = -1,
+> -	.dev = {
+> -		.platform_data = &gpio_vbus_info,
+> -	},
+>  };
+>  
+>  static struct pxa2xx_udc_mach_info hx4700_udc_info;
+> @@ -883,6 +888,7 @@ static void __init hx4700_init(void)
+>  	pxa_set_stuart_info(NULL);
+>  
+>  	gpiod_add_lookup_table(&bq24022_gpiod_table);
+> +	gpiod_add_lookup_table(&gpio_vbus_gpiod_table);
+>  	platform_add_devices(devices, ARRAY_SIZE(devices));
+>  	pwm_add_table(hx4700_pwm_lookup, ARRAY_SIZE(hx4700_pwm_lookup));
+>  
+> diff --git a/arch/arm/mach-pxa/magician.c b/arch/arm/mach-pxa/magician.c
+> index e1a394ac3eea..5a1976e431e7 100644
+> --- a/arch/arm/mach-pxa/magician.c
+> +++ b/arch/arm/mach-pxa/magician.c
+> @@ -27,7 +27,6 @@
+>  #include <linux/regulator/fixed.h>
+>  #include <linux/regulator/gpio-regulator.h>
+>  #include <linux/regulator/machine.h>
+> -#include <linux/usb/gpio_vbus.h>
+>  #include <linux/platform_data/i2c-pxa.h>
+>  
+>  #include <mach/hardware.h>
+> @@ -506,9 +505,20 @@ static struct resource gpio_vbus_resource = {
+>  	.end	= IRQ_MAGICIAN_VBUS,
+>  };
+>  
+> -static struct gpio_vbus_mach_info gpio_vbus_info = {
+> -	.gpio_pullup	= GPIO27_MAGICIAN_USBC_PUEN,
+> -	.gpio_vbus	= EGPIO_MAGICIAN_CABLE_VBUS,
+> +static struct gpiod_lookup_table gpio_vbus_gpiod_table = {
+> +	.dev_id = "gpio-vbus",
+> +	.table = {
+> +		/*
+> +		 * EGPIO on register 4 index 1, the second EGPIO chip
+> +		 * starts at register 4 so this will be at index 1 on that
+> +		 * chip.
+> +		 */
+> +		GPIO_LOOKUP("htc-egpio-1", 1,
+> +			    "vbus", GPIO_ACTIVE_HIGH),
+> +		GPIO_LOOKUP("gpio-pxa", GPIO27_MAGICIAN_USBC_PUEN,
+> +			    "pullup", GPIO_ACTIVE_HIGH),
+> +		{ },
+> +	},
+>  };
+>  
+>  static struct platform_device gpio_vbus = {
+> @@ -516,9 +526,6 @@ static struct platform_device gpio_vbus = {
+>  	.id		= -1,
+>  	.num_resources	= 1,
+>  	.resource	= &gpio_vbus_resource,
+> -	.dev = {
+> -		.platform_data = &gpio_vbus_info,
+> -	},
+>  };
+>  
+>  /*
+> @@ -1032,6 +1039,7 @@ static void __init magician_init(void)
+>  		ARRAY_SIZE(pwm_backlight_supply), 5000000);
+>  
+>  	gpiod_add_lookup_table(&bq24022_gpiod_table);
+> +	gpiod_add_lookup_table(&gpio_vbus_gpiod_table);
+>  	platform_add_devices(ARRAY_AND_SIZE(devices));
+>  }
+[...]
 
-Sounds good to me.
+Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-Just make sure not to add a WARN() in usb_submit_urb() so that we end up
-having to add maxpacket checks to every USB driver when syzbot starts
-hitting this (only driver's doing maxpacket divisions or similar should
-need that).
+regards
+Philipp
 
-Johan
