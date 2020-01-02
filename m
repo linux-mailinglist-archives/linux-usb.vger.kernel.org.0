@@ -2,137 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD42C12E7E6
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 16:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2611212E7FC
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 16:17:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728635AbgABPGe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jan 2020 10:06:34 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:41508 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728612AbgABPGe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 10:06:34 -0500
-Received: (qmail 1780 invoked by uid 2102); 2 Jan 2020 10:06:33 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 2 Jan 2020 10:06:33 -0500
-Date:   Thu, 2 Jan 2020 10:06:33 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Takashi Iwai <tiwai@suse.de>
-cc:     Johan Hovold <johan@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Roger Whittaker <Roger.Whittaker@suse.com>,
-        Takashi Iwai <tiwai@suse.com>, <linux-usb@vger.kernel.org>
-Subject: Re: Certain cameras no longer working with uvcvideo on recent
- (openSUSE) kernels
-In-Reply-To: <s5hr20ingu5.wl-tiwai@suse.de>
-Message-ID: <Pine.LNX.4.44L0.2001021003130.1546-100000@iolanthe.rowland.org>
+        id S1728646AbgABPRv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jan 2020 10:17:51 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:42414 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728561AbgABPRv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 10:17:51 -0500
+Received: by mail-lj1-f194.google.com with SMTP id y4so26679199ljj.9;
+        Thu, 02 Jan 2020 07:17:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=BQek1hpGtAcuz3Vy94GFTxcBosOLuEGkc1EsxVOl7K0=;
+        b=rm6d9E+dTNWcbvvwgWbOuPY6szM3rkWylgsiKib7v/V9yznlEsOsFwX+N2GwxKm9U/
+         qWscJQCbsvRA5ARFjYODsuNr2mt8t0SjPKbFIkshsLU+B9PtUQVyieZ6wNEJCSZ6sohO
+         27i470vK8+FYTG4xMLLSr4GPKbk1cr4cg2CuUg8YdNrhaFOJoKzI6j/GRxnYq5rgDbcm
+         vUYKLKvwT1mRsooiqTSbboIB9xwD8NetwGWEp+sfnw6rvNm3hkxjiD80wZ7tMJ6r1QFz
+         O/4kShUi1C5bBOfNwHhevjBt45lkHKgqD6n2NoMawUeJDZDdSqm4KV4R6X2U2mmNryXO
+         4rKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BQek1hpGtAcuz3Vy94GFTxcBosOLuEGkc1EsxVOl7K0=;
+        b=ASVNTFb06OPMzozrwX9iDdOUWqBWV26aqWP9DeiSTxgtY8OudLWE8LDeu2tjsOCK/l
+         U+kpSjjJzQyWdTO2UULNGzzCmrLSLz2U1VL3cm1o+au8IJa9trJfrcTTFkAw2jeLiQSV
+         4ZvWfeTJYfXr01A81YkyfqK1b4uyZmRI39tR2RcxV77bIYOP/CbTIKLJw5M89QfZtzon
+         I9n2wwRkXpnpinRpaxhxTbZOlXOjCqgXxFGzR9EfoyqkTcO5nJI9dewnZU/CgAQ+DO8n
+         17A8tILf7ifhOEercnbI6gwOD2Rot/k/ZA3qi/niz2iQIG0UggZ7A2F8u61PotrKOodN
+         9W1g==
+X-Gm-Message-State: APjAAAW9JRPDrrYsJTJw6pzWVE7fvo7teUAJveskMlnSruAsDf9bYjap
+        aSj9XjgkdetlG/nsmmApeMaUVLoi
+X-Google-Smtp-Source: APXvYqxvkVFnhiPOxFv+7ZRxTUIFTDSny58aAUFqXUPm0qk5W3c5Kf0KO4HWqsPuKxknmCVge1rAdQ==
+X-Received: by 2002:a2e:943:: with SMTP id 64mr37257269ljj.17.1577978269110;
+        Thu, 02 Jan 2020 07:17:49 -0800 (PST)
+Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.googlemail.com with ESMTPSA id g27sm23515861lfj.49.2020.01.02.07.17.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jan 2020 07:17:48 -0800 (PST)
+Subject: Re: [PATCH v2 10/10] usb: chipidea: tegra: Add USB_TEGRA_PHY module
+ to driver's dependencies
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     Peter Chen <peter.chen@nxp.com>, Rob Herring <robh-dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20191220015238.9228-1-digetx@gmail.com>
+ <20191220015238.9228-11-digetx@gmail.com>
+ <20191220035650.GC19921@b29397-desktop>
+ <fb7dee6e-e645-fe45-126c-c5f1e280bc26@gmail.com>
+ <20191223213234.GA28786@qmqm.qmqm.pl>
+ <7174833f-8325-7fb4-d190-78ba4bed0cbb@gmail.com>
+ <20191230210259.GD24135@qmqm.qmqm.pl>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <b34972e3-569e-d74a-4d30-d52c89032a08@gmail.com>
+Date:   Thu, 2 Jan 2020 18:17:47 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <20191230210259.GD24135@qmqm.qmqm.pl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2 Jan 2020, Takashi Iwai wrote:
-
-> On Thu, 02 Jan 2020 12:20:45 +0100,
-> Johan Hovold wrote:
-> > 
-> > On Wed, Jan 01, 2020 at 03:09:35PM -0500, Alan Stern wrote:
-> > > On Wed, 1 Jan 2020, Greg KH wrote:
-> > > > On Wed, Jan 01, 2020 at 08:35:59PM +0200, Laurent Pinchart wrote:
-> > 
-> > > > > [  470.351700] usb 1-1.4.3.1: config 1 interface 2 altsetting 0 endpoint 0x82 has wMaxPacketSize 0, skipping
-> > > > > 
-> > > > > This seems to be the culprit, and it points to the USB core. One
-> > > > > interface is ignored due to its wMaxPacketSize value, and the uvcvideo
-> > > > > driver then fails to find it.
-> > > > > 
-> > > > > The wMaxPacketSize check was added in
-> > > > > 
-> > > > > commit d482c7bb0541d19dea8bff437a9f3c5563b5b2d2
-> > > > > Author: Alan Stern <stern@rowland.harvard.edu>
-> > > > > Date:   Mon Oct 28 10:52:35 2019 -0400
-> > > > > 
-> > > > >     USB: Skip endpoints with 0 maxpacket length
-> > > > > 
-> > > > >     Endpoints with a maxpacket length of 0 are probably useless.  They
-> > > > >     can't transfer any data, and it's not at all unlikely that an HCD will
-> > > > >     crash or hang when trying to handle an URB for such an endpoint.
-> > > > > 
-> > > > >     Currently the USB core does not check for endpoints having a maxpacket
-> > > > >     value of 0.  This patch adds a check, printing a warning and skipping
-> > > > >     over any endpoints it catches.
-> > > > > 
-> > > > >     Now, the USB spec does not rule out endpoints having maxpacket = 0.
-> > > > >     But since they wouldn't have any practical use, there doesn't seem to
-> > > > >     be any good reason for us to accept them.
-> > > > > 
-> > > > >     Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> > > > > 
-> > > > >     Link: https://lore.kernel.org/r/Pine.LNX.4.44L0.1910281050420.1485-100000@iolanthe.rowland.org
-> > > > >     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > > 
-> > > > > The commit was merged in v5.4 and backported to v5.3.11 in
-> > > > > 47aaab6377204cdbcd16f52a23c584f994fd0d15.
-> > > > > 
-> > > > > For reference for Alan and linux-usb, the issue being discussed is
-> > > > > described in https://bugzilla.suse.com/show_bug.cgi?id=1159811. The
-> > > > > above commit seems to cause a regression with several cameras. I've
-> > > > > attached to this e-mail the lsusb output provided by Roger.
-> > > > 
-> > > > How can a device work with an endpoint of 0 length?
-> > > > 
-> > > > What does the driver expect to do with those endpoints?  Does it expect
-> > > > it to be present but just ignore it?
-> > > 
-> > > I see what's going on.  The endpoint in question is isochronous, and
-> > > the bAlternateSetting value is 0, which makes this the default
-> > > altsetting for that interface.  The USB spec says (at the end of
-> > > section 5.6.3):
-> > > 
-> > > 	All device default interface settings must not include any
-> > > 	isochronous endpoints with non-zero data payload sizes
-> > > 	(specified via wMaxPacketSize in the endpoint descriptor).  
-> > > 	Alternate interface settings may specify non-zero data payload
-> > > 	sizes for isochronous endpoints.
-> > > 
-> > > That explains why the maxpacket size is set to 0.
-> > > 
-> > > So it looks like the endpoint-descriptor parsing code might want to
-> > > make a special case to accept isochronous endpoints with maxpacket 0 if
-> > > bAlternateSetting is 0.  But whether we do this or not, I would expect
-> > > the uvcvideo driver to look for isochronous endpoints in the alternate
-> > > settings it will actually use, not in altsetting 0.  Then the presence
-> > > or absence of that endpoint descriptor would make no difference to
-> > > uvcvideo.
-> > > 
-> > > (Unless the UVC spec _requires_ these endpoint descriptors to be
-> > > present.  If it does then we should simply change the core parsing code
-> > > and leave uvcvideo alone.)
-> > 
-> > Note that we also have this little gem in the ftdi usb-serial driver
-> > (since 2009) overriding a zero max packet size for devices with broken
-> > descriptors:
-> > 
-> > 	895f28badce9 ("USB: ftdi_sio: fix hi-speed device packet size calculation")
-> > 
-> > Note sure how common those are but they will no longer work after the
-> > new sanity check in core. I guess we could add quirks for them (to core)
-> > in case we get any reports, but perhaps reverting the check should be
-> > considered.
+31.12.2019 00:02, Michał Mirosław пишет:
+> On Tue, Dec 24, 2019 at 07:21:05AM +0300, Dmitry Osipenko wrote:
+>> 24.12.2019 00:32, Michał Mirosław пишет:
+>>> On Fri, Dec 20, 2019 at 07:31:08AM +0300, Dmitry Osipenko wrote:
+>>>> 20.12.2019 06:56, Peter Chen пишет:
+>>>>> On 19-12-20 04:52:38, Dmitry Osipenko wrote:
+>>> [...]
+>>>>>> --- a/drivers/usb/chipidea/ci_hdrc_tegra.c
+>>>>>> +++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
+>>>>>> @@ -53,6 +53,12 @@ static int tegra_udc_probe(struct platform_device *pdev)
+>>>>>>  	struct tegra_udc *udc;
+>>>>>>  	int err;
+>>>>>>  
+>>>>>> +	if (IS_MODULE(CONFIG_USB_TEGRA_PHY)) {
+>>>>>> +		err = request_module("phy_tegra_usb");
+>>>>>> +		if (err)
+>>>>>> +			return err;
+>>>>>> +	}
+>>>>>> +
+>>>>>
+>>>>> Why you do this dependency, if this controller driver can't
+>>>>> get USB PHY, it should return error. What's the return value
+>>>>> after calling below:
+>>>>>
+>>>>> 	udc->phy = devm_usb_get_phy_by_phandle(&pdev->dev, "nvidia,phy", 0);
+>>>>
+>>>> It returns -EPROBE_DEFER when phy_tegra_usb isn't loaded.
+>>>
+>>> How are other driver modules autoloaded? Isn't there an appropriate
+>>> MODALIAS or MODULE_DEVICE_TABLE in there?
+>>
+>> Hello Michał,
+>>
+>> The phy_tegra_usb module is fine by itself, it's getting autoloaded.
+>>
+>> The problem is that ci_hdrc_tegra module depends on the phy_tegra_usb
+>> module and thus the PHY module should be loaded before the CI module,
+>> otherwise CI driver fails with the EPROBE_DEFER.
 > 
-> FWIW, Roger confirmed that reverting the commit d482c7bb0541 does
-> indeed fix the issue (with the latest 5.4.y kernel).
+> Why, then, is CI driver not being probed again after PHY driver loads?
+> EPROBE_DEFER is what should cause driver core to re-probe a device after
+> other devices appear (PHY in this case).
 
-All right.  Suppose instead of reverting that commit, I change the code
-so that it only logs a warning when it finds an endpoint descriptor
-with maxpacket = 0 (and it skips the warning for isochronous endpoints
-in altsetting 0).  At the same time, we can add a check to
-usb_submit_urb() to refuse URBs if the endpoint's maxpacket is 0.
+CI driver is getting re-probed just fine if PHY's driver module is
+loaded manually after loading the CI's module. This patch removes this
+necessity to manually load PHY's module.
 
-Sounds good?
-
-Alan Stern
-
+This is just a minor convenience change that brings the CI's driver
+loading behaviour on par with the behaviour of loading Tegra's EHCI
+driver module.
