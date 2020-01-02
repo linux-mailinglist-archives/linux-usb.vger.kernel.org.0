@@ -2,168 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3AB12E14D
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 01:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C796B12E1B5
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 03:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727506AbgABAaX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jan 2020 19:30:23 -0500
-Received: from mail-sh.amlogic.com ([58.32.228.43]:55997 "EHLO
-        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727393AbgABAaX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jan 2020 19:30:23 -0500
-Received: from [10.18.38.198] (10.18.38.198) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 2 Jan
- 2020 08:30:43 +0800
-Subject: Re: [PATCH v3 4/6] usb: dwc3: Add Amlogic A1 DWC3 glue
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     Rob Herring <robh@kernel.org>, Victor Wan <victor.wan@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        <linux-usb@vger.kernel.org>, Yue Wang <yue.wang@amlogic.com>,
-        Qiufang Dai <qiufang.dai@amlogic.com>,
-        <devicetree@vger.kernel.org>, Liang Yang <liang.yang@amlogic.com>,
-        Jian Hu <jian.hu@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Carlo Caione <carlo@caione.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Jerome Brunet <jbrunet@baylibre.com>
-References: <1577428606-69855-1-git-send-email-hanjie.lin@amlogic.com>
- <1577428606-69855-5-git-send-email-hanjie.lin@amlogic.com>
- <CAFBinCD8V-Swihz+VJ780sXJtM9cXprDcGCHVuHjjCx0DEOodQ@mail.gmail.com>
-From:   Hanjie Lin <hanjie.lin@amlogic.com>
-Message-ID: <d66abc21-1440-503b-3515-6c495bf0db80@amlogic.com>
-Date:   Thu, 2 Jan 2020 08:30:43 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
+        id S1727524AbgABCaf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jan 2020 21:30:35 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:46733 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727516AbgABCaf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jan 2020 21:30:35 -0500
+Received: (qmail 30587 invoked by uid 500); 1 Jan 2020 21:30:34 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 1 Jan 2020 21:30:34 -0500
+Date:   Wed, 1 Jan 2020 21:30:34 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Guenter Roeck <linux@roeck-us.net>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        <stable@vger.kernel.org>
+Subject: Re: [PATCH] usb: chipidea: host: Disable port power only if previously
+ enabled
+In-Reply-To: <1fd709ce-04a3-4183-da39-c1921ec69ce7@roeck-us.net>
+Message-ID: <Pine.LNX.4.44L0.2001012117220.30059-100000@netrider.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <CAFBinCD8V-Swihz+VJ780sXJtM9cXprDcGCHVuHjjCx0DEOodQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.38.198]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, 1 Jan 2020, Guenter Roeck wrote:
 
-
-On 2019/12/28 0:38, Martin Blumenstingl wrote:
-> Hello Hanjie,
+> On 12/29/19 8:40 AM, Alan Stern wrote:
+> > On Sun, 29 Dec 2019, Guenter Roeck wrote:
+> > 
+> >> On Sat, Dec 28, 2019 at 02:33:01PM -0500, Alan Stern wrote:
+> >>>
+> >>> Let's try a slightly different approach.  What happens with this patch?
+> >>>
+> >>> Alan Stern
+> >>>
+> >>>
+> >>> Index: usb-devel/drivers/usb/core/hub.c
+> >>> ===================================================================
+> >>> --- usb-devel.orig/drivers/usb/core/hub.c
+> >>> +++ usb-devel/drivers/usb/core/hub.c
+> >>> @@ -1065,6 +1065,7 @@ static void hub_activate(struct usb_hub
+> >>>   		if (type == HUB_INIT) {
+> >>>   			delay = hub_power_on_good_delay(hub);
+> >>>   
+> >>> +			hub->power_bits[0] = ~0UL;	/* All ports on */
+> >>>   			hub_power_on(hub, false);
+> >>>   			INIT_DELAYED_WORK(&hub->init_work, hub_init_func2);
+> >>>   			queue_delayed_work(system_power_efficient_wq,
+> >>>
+> >>
+> >> That doesn't make a difference - the traceback is still seen with this patch
+> >> applied.
+> > 
+> > Can you trace what's going on?  Does this code pathway now end up
+> > calling ehci_port_power() for each root-hub port, and from there down
+> > into the chipidea driver?  If not, can you find where it gets
+> > sidetracked?
+> > 
 > 
-> sorry that it took me so long to look at this
-> you can find my comments below
+> A complete traceback is attached below, so, yes, I think it is safe to say that
+> ehci_port_power() is called unconditionally for each root-hub port on shutdown.
+
+I was really asking about hub activation and powering-up, but you found 
+the answer to that too, so okay.
+
+> The only mystery to me was why ehci_port_power() isn't called to enable port power
+> when the port comes up. As it turns out, HCS_PPC(ehci->hcs_params) is false on my
+> simulated hardware, and thus ehci_port_power(..., true) is not called from
+> ehci_hub_control().
 > 
-> On Fri, Dec 27, 2019 at 7:37 AM Hanjie Lin <hanjie.lin@amlogic.com> wrote:
-> [...]
->> +static const struct clk_bulk_data meson_g12a_clocks[] = {
->> +       { .id = NULL},
->> +};
->> +
->> +static const struct clk_bulk_data meson_a1_clocks[] = {
->> +       { .id = "usb_ctrl"},
->> +       { .id = "usb_bus"},
->> +       { .id = "xtal_usb_phy"},
->> +       { .id = "xtal_usb_ctrl"},
->> +};
-> nit-pick: the values in meson_g12a_clocks and meson_a1_clocks all have
-> a space after the opening "{" but no space before the closing "}"
-> we should be consistent here (personally I prefer the variant with
-> space after "{" and before "}", but having no space in both cases is
-> fine for me too)
+> Given that, it may well be that the problem is not seen on "real" hardware,
+> at least not with real mcimx7d-sabre hardware, if the hub on that hardware does
+> support power control. To test this idea, I modified qemu to claim hub power
+> control support by setting the "power control support" capability bit. With
+> that, the traceback is gone.
 > 
+> Any suggestion how to proceed ?
 
-Right, I will fix it.
+Given that HCS_PPC(ehci_hcs_params) is false, I would say that
+ehci_turn_off_all_ports() shouldn't call ehci_port_power().  You should
+add that test there.  (Although to tell the truth, I'm not really sure 
+we need to test HCS_PPC anywhere...)
 
-> [...]
->>  static void dwc3_meson_g12a_usb2_set_mode(struct dwc3_meson_g12a *priv,
->> @@ -138,10 +156,13 @@ static int dwc3_meson_g12a_usb2_init(struct dwc3_meson_g12a *priv)
->>  {
->>         int i;
->>
->> -       if (priv->otg_mode == USB_DR_MODE_PERIPHERAL)
->> -               priv->otg_phy_mode = PHY_MODE_USB_DEVICE;
->> -       else
->> -               priv->otg_phy_mode = PHY_MODE_USB_HOST;
->> +       /* only G12A supports otg mode */
->> +       if (priv->soc_id == MESON_SOC_G12A) {
->> +               if (priv->otg_mode == USB_DR_MODE_PERIPHERAL)
->> +                       priv->otg_phy_mode = PHY_MODE_USB_DEVICE;
->> +               else
->> +                       priv->otg_phy_mode = PHY_MODE_USB_HOST;
->> +       }
-> can you comment on future Amlogic SoCs and how this code will look in
-> the future?
-> I would like to avoid having to adjust this "if" for every new SoC,
-> but I don't know if the majority of the SoCs will have OTG support
-> 
-> also one idea that just came to my mind:
-> you could define in the .yaml binding that for A1 only dr_mode =
-> "host" is allowed
-> then you may not need extra logic in the driver at all
-> 
+Did you check what happens without the patch I sent you?  I would like
+to know if that patch really does make a difference.  If we don't send
+the Set-Port-Feature(power) request during hub activation without the
+patch then it does need to be merged.
 
-Good idea this different SoC extra logic could avoided by add constraints 
-to .yaml, also code will be more elegant.
+Alan Stern
 
-I will do this in next version.
-
-> [...]
->> -               if (i == USB2_OTG_PHY) {
->> +               if (priv->soc_id == MESON_SOC_G12A && i == USB2_OTG_PHY) {
-> on GXL we have two PHYs (0 and 1), the second one is OTG capable
-> on GXM we have three PHYs (0..2), the second one is OTG capable
-> on G12A/G12B we have two PHYs (0 and 1), the second one is OTG capable
-> 
-> you already wrote that there is only one USB2 PHY on the A1 SoC
-> is really only the second PHY port ("usb2-phy1" instead of
-> "usb2-phy0") used on A1?
-> if "usb2-phy0" is correct then you don't need these checks (there are
-> more checks like this below)
-
-Actually, A1 have same phys("usb2-phy0", "usb2-phy1", "usb3-phy0") and register base with G12A.
-But A1 driver is designed to support host mode with usb2-phy1 only.
-
-> 
-> [...]
->> -       usb_role_switch_unregister(priv->role_switch);
->> +       if (priv->soc_id == MESON_SOC_G12A)
->> +               usb_role_switch_unregister(priv->role_switch);
-> I didn't expect this because in _probe usb_role_switch_register is still called
-> on A1 we now call usb_role_switch_register() but we never call
-> usb_role_switch_unregister()
-> 
-
-Actually, usb_role_switch_register() can be called only in G12A.
-
-dwc3_meson_g12a_probe()
-         ...
-         if (priv->soc_id != MESON_SOC_G12A)
-                 goto setup_pm_runtime;
-
-
-Same with second suggestion, this different SoC extra logic could avoided by add constraints 
-to .yaml.
-I will do this in next version.
-
-Thanks,
-Hanjie
-
-> 
-> Martin
-> 
-> _______________________________________________
-> linux-amlogic mailing list
-> linux-amlogic@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-amlogic
-> 
-> .
-> 
