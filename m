@@ -2,200 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B49112E858
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 16:54:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3126012E85E
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 16:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728707AbgABPya (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jan 2020 10:54:30 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:53403 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728678AbgABPya (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 10:54:30 -0500
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1in2ns-0007n9-AQ; Thu, 02 Jan 2020 16:54:28 +0100
-Message-ID: <5d5b290572cb3aa8559fc3cc64d25161a7570b29.camel@pengutronix.de>
-Subject: Re: [PATCH] usb: phy: phy-gpio-vbus-usb: Convert to GPIO descriptors
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org,
-        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>
-Date:   Thu, 02 Jan 2020 16:54:26 +0100
-In-Reply-To: <20191231174848.741314-1-linus.walleij@linaro.org>
-References: <20191231174848.741314-1-linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5-1.1 
+        id S1728742AbgABP76 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jan 2020 10:59:58 -0500
+Received: from mga18.intel.com ([134.134.136.126]:57614 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728678AbgABP76 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 2 Jan 2020 10:59:58 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Jan 2020 07:59:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,387,1571727600"; 
+   d="scan'208";a="301999760"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga001.jf.intel.com with ESMTP; 02 Jan 2020 07:59:56 -0800
+Subject: Re: ERROR: unexpected command completion code 0x11 for DJ-Tech CTRL
+ (resending as plain text ;)
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     "Rene D. Obermueller" <cmdrrdo@gmail.com>,
+        linux-usb@vger.kernel.org
+References: <Pine.LNX.4.44L0.2001021024090.1546-100000@iolanthe.rowland.org>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <6fb5bd57-5209-3344-b52c-a1d311ac1644@linux.intel.com>
+Date:   Thu, 2 Jan 2020 18:01:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
+In-Reply-To: <Pine.LNX.4.44L0.2001021024090.1546-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2019-12-31 at 18:48 +0100, Linus Walleij wrote:
-> Instead of using the legacy GPIO API and keeping track on
-> polarity inversion semantics in the driver, switch to use
-> GPIO descriptors for this driver and change all consumers
-> in the process.
+On 2.1.2020 17.31, Alan Stern wrote:
+> On Thu, 2 Jan 2020, Mathias Nyman wrote:
 > 
-> This makes it possible to retire platform data completely:
-> the only remaining platform data member was "wakeup" which
-> was intended to make the vbus interrupt wakeup capable,
-> but was not set by any users and thus remained unused. VBUS
-> was not waking any devices up. Leave a comment about it so
-> later developers using the platform can consider setting it
-> to always enabled so plugging in USB wakes up the platform.
+>> On 24.12.2019 17.28, Alan Stern wrote:
+>>> On Mon, 23 Dec 2019, Mathias Nyman wrote:
+>>>
+>>>> The Maximum Packet Size of the full-speed bulk endpoint looks a bit suspicious (maxp 4)
+>>>>
+>>>> 12478.521580: xhci_add_endpoint: State disabled mult 1 max P. Streams 0 interval 125 us max ESIT payload 0 CErr 3 Type Bulk OUT burst 0 maxp 4 deq 00000000fff71001
+>>>>
+>>>> For full speed bulk endpoints only support 8, 16, 32 and 64 bytes Max Packet sizes.
+>>>> Host are not required to support other values. See USB2 spec section 5.8.3 for details
+>>>>
+>>>> Maybe forcing it to one of the allowed values could work.
+>>>> Does the below hack help? (untested)?
+>>>
+>>> Is this the sort of thing we should handle in
+>>> config.c:usb_parse_endpoint()?
+>>>
+>>> Even though 4 is not a valid maxpacket size for full-speed bulk
+>>> endpoints, many host controllers and hubs will handle it okay.  Much
+>>> the same is true for devices that have a high-speed bulk endpoint with
+>>> maxpacket set to 1024.  Should we try to treat these two errors the
+>>> same way?
+>>
+>> Makes sense.
+>> Looks like config.c:usb_parse_endpoint() shows a warning if maxpacket size is incorrect for
+>> high-speed bulk endpoints, but leaves the maxpacket size unchanged.
+>> If xhci is used then the xhci driver will later force the maxpacket to 512
 > 
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Sylwester Nawrocki <sylvester.nawrocki@gmail.com>
-> Cc: Robert Jarzmik <robert.jarzmik@free.fr>
-> Cc: Daniel Mack <daniel@zonque.org>
-> Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
-> This change hits arch/arm/mach-pxa/* and
-> arch/arm/mach-s3c64* so I have CC to the most active
-> maintainers.
-> ---
->  arch/arm/mach-pxa/colibri-pxa320.c  | 16 ++---
->  arch/arm/mach-pxa/eseries.c         | 40 +++++++-----
->  arch/arm/mach-pxa/gumstix.c         | 18 +++---
->  arch/arm/mach-pxa/hx4700.c          | 22 ++++---
->  arch/arm/mach-pxa/magician.c        | 22 ++++---
->  arch/arm/mach-pxa/mioa701.c         | 15 +++--
->  arch/arm/mach-pxa/palm27x.c         | 34 +++++------
->  arch/arm/mach-pxa/palmt5.c          |  1 -
->  arch/arm/mach-pxa/palmtc.c          | 18 +++---
->  arch/arm/mach-pxa/palmte2.c         | 18 +++---
->  arch/arm/mach-pxa/palmtx.c          |  1 -
->  arch/arm/mach-pxa/palmz72.c         |  1 -
->  arch/arm/mach-pxa/tosa.c            | 18 +++---
->  arch/arm/mach-pxa/vpac270.c         | 15 ++---
->  arch/arm/mach-s3c64xx/mach-smartq.c | 13 ++--
->  drivers/usb/phy/phy-gpio-vbus-usb.c | 95 +++++++++++++----------------
->  include/linux/usb/gpio_vbus.h       | 33 ----------
->  17 files changed, 188 insertions(+), 192 deletions(-)
->  delete mode 100644 include/linux/usb/gpio_vbus.h
-[...]
-> diff --git a/arch/arm/mach-pxa/hx4700.c b/arch/arm/mach-pxa/hx4700.c
-> index 311268d186ab..238a751a8797 100644
-> --- a/arch/arm/mach-pxa/hx4700.c
-> +++ b/arch/arm/mach-pxa/hx4700.c
-> @@ -34,7 +34,6 @@
->  #include <linux/spi/ads7846.h>
->  #include <linux/spi/spi.h>
->  #include <linux/spi/pxa2xx_spi.h>
-> -#include <linux/usb/gpio_vbus.h>
->  #include <linux/platform_data/i2c-pxa.h>
->  
->  #include <mach/hardware.h>
-> @@ -578,18 +577,24 @@ static struct pwm_lookup hx4700_pwm_lookup[] = {
->   * USB "Transceiver"
->   */
->  
-> -static struct gpio_vbus_mach_info gpio_vbus_info = {
-> -	.gpio_pullup        = GPIO76_HX4700_USBC_PUEN,
-> -	.gpio_vbus          = GPIOD14_nUSBC_DETECT,
-> -	.gpio_vbus_inverted = 1,
-> +static struct gpiod_lookup_table gpio_vbus_gpiod_table = {
-> +	.dev_id = "gpio-vbus",
-> +	.table = {
-> +		/* This GPIO is on ASIC3 */
-> +		GPIO_LOOKUP("asic3",
-> +			    /* Convert to a local offset on the ASIC3 */
-> +			    GPIOD14_nUSBC_DETECT - HX4700_ASIC3_GPIO_BASE,
-> +			    "vbus", GPIO_ACTIVE_LOW),
-> +		/* This one is on the primary SOC GPIO */
-> +		GPIO_LOOKUP("gpio-pxa", GPIO76_HX4700_USBC_PUEN,
-> +			    "pullup", GPIO_ACTIVE_HIGH),
-> +		{ },
-> +	},
->  };
->  
->  static struct platform_device gpio_vbus = {
->  	.name          = "gpio-vbus",
->  	.id            = -1,
-> -	.dev = {
-> -		.platform_data = &gpio_vbus_info,
-> -	},
->  };
->  
->  static struct pxa2xx_udc_mach_info hx4700_udc_info;
-> @@ -883,6 +888,7 @@ static void __init hx4700_init(void)
->  	pxa_set_stuart_info(NULL);
->  
->  	gpiod_add_lookup_table(&bq24022_gpiod_table);
-> +	gpiod_add_lookup_table(&gpio_vbus_gpiod_table);
->  	platform_add_devices(devices, ARRAY_SIZE(devices));
->  	pwm_add_table(hx4700_pwm_lookup, ARRAY_SIZE(hx4700_pwm_lookup));
->  
-> diff --git a/arch/arm/mach-pxa/magician.c b/arch/arm/mach-pxa/magician.c
-> index e1a394ac3eea..5a1976e431e7 100644
-> --- a/arch/arm/mach-pxa/magician.c
-> +++ b/arch/arm/mach-pxa/magician.c
-> @@ -27,7 +27,6 @@
->  #include <linux/regulator/fixed.h>
->  #include <linux/regulator/gpio-regulator.h>
->  #include <linux/regulator/machine.h>
-> -#include <linux/usb/gpio_vbus.h>
->  #include <linux/platform_data/i2c-pxa.h>
->  
->  #include <mach/hardware.h>
-> @@ -506,9 +505,20 @@ static struct resource gpio_vbus_resource = {
->  	.end	= IRQ_MAGICIAN_VBUS,
->  };
->  
-> -static struct gpio_vbus_mach_info gpio_vbus_info = {
-> -	.gpio_pullup	= GPIO27_MAGICIAN_USBC_PUEN,
-> -	.gpio_vbus	= EGPIO_MAGICIAN_CABLE_VBUS,
-> +static struct gpiod_lookup_table gpio_vbus_gpiod_table = {
-> +	.dev_id = "gpio-vbus",
-> +	.table = {
-> +		/*
-> +		 * EGPIO on register 4 index 1, the second EGPIO chip
-> +		 * starts at register 4 so this will be at index 1 on that
-> +		 * chip.
-> +		 */
-> +		GPIO_LOOKUP("htc-egpio-1", 1,
-> +			    "vbus", GPIO_ACTIVE_HIGH),
-> +		GPIO_LOOKUP("gpio-pxa", GPIO27_MAGICIAN_USBC_PUEN,
-> +			    "pullup", GPIO_ACTIVE_HIGH),
-> +		{ },
-> +	},
->  };
->  
->  static struct platform_device gpio_vbus = {
-> @@ -516,9 +526,6 @@ static struct platform_device gpio_vbus = {
->  	.id		= -1,
->  	.num_resources	= 1,
->  	.resource	= &gpio_vbus_resource,
-> -	.dev = {
-> -		.platform_data = &gpio_vbus_info,
-> -	},
->  };
->  
->  /*
-> @@ -1032,6 +1039,7 @@ static void __init magician_init(void)
->  		ARRAY_SIZE(pwm_backlight_supply), 5000000);
->  
->  	gpiod_add_lookup_table(&bq24022_gpiod_table);
-> +	gpiod_add_lookup_table(&gpio_vbus_gpiod_table);
->  	platform_add_devices(ARRAY_AND_SIZE(devices));
->  }
-[...]
+> Does the driver do this because otherwise the controller will refuse to
+> handle the endpoint?
+> 
+> There are indeed high-speed devices that have a bulk endpoint with
+> maxpacket set to 1024; I have used some.  They work okay with EHCI
+> because the driver and the controller will accept the invalid value.
+> But probably they won't work with xHCI.
 
-Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
+Looks like high-speed bulk endpoint maxpacket was forced to 512 to handle cases where
+wMaxPacketSize was smaller than 512. Some xHC controllers apparently couldn't handle that.
+This is done in a patch from 2013:
 
-regards
-Philipp
+e4f47e3675e6 USB: xHCI: override bogus bulk wMaxPacketSize values
 
+> 
+>> I'm all for both checking and forcing maxpacket sizes in usb_parse_endpoint(), but
+>> is there a risk that we break some devices that used to work. For example full-speed
+>> bulk devices with maxpacket 4 that work fine under EHCI, but device can't handle
+>> a new maxpacket size set to 8?
+> 
+> I haven't run across that combination before, so I don't know.  Maybe
+> the reason it worked okay until now is because those devices never need
+> to perform a bulk transfer containing more than 4 bytes?
+> 
+> In any case, making this sort of change would definitely break the
+> 1024-byte maxpacket devices mentioned above.
+> 
+>> Or should we only warn in config.c if the maxpacket sizes are not according to specifications,
+>> and leave it to the host controller drivers to force new maxpacket values?
+> 
+> I think that would be a lot safer.
+
+Ok, lets go with that
+
+-Mathias
