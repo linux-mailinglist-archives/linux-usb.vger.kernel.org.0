@@ -2,130 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2611212E7FC
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 16:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C830812E806
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 16:22:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728646AbgABPRv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jan 2020 10:17:51 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:42414 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728561AbgABPRv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 10:17:51 -0500
-Received: by mail-lj1-f194.google.com with SMTP id y4so26679199ljj.9;
-        Thu, 02 Jan 2020 07:17:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=BQek1hpGtAcuz3Vy94GFTxcBosOLuEGkc1EsxVOl7K0=;
-        b=rm6d9E+dTNWcbvvwgWbOuPY6szM3rkWylgsiKib7v/V9yznlEsOsFwX+N2GwxKm9U/
-         qWscJQCbsvRA5ARFjYODsuNr2mt8t0SjPKbFIkshsLU+B9PtUQVyieZ6wNEJCSZ6sohO
-         27i470vK8+FYTG4xMLLSr4GPKbk1cr4cg2CuUg8YdNrhaFOJoKzI6j/GRxnYq5rgDbcm
-         vUYKLKvwT1mRsooiqTSbboIB9xwD8NetwGWEp+sfnw6rvNm3hkxjiD80wZ7tMJ6r1QFz
-         O/4kShUi1C5bBOfNwHhevjBt45lkHKgqD6n2NoMawUeJDZDdSqm4KV4R6X2U2mmNryXO
-         4rKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=BQek1hpGtAcuz3Vy94GFTxcBosOLuEGkc1EsxVOl7K0=;
-        b=ASVNTFb06OPMzozrwX9iDdOUWqBWV26aqWP9DeiSTxgtY8OudLWE8LDeu2tjsOCK/l
-         U+kpSjjJzQyWdTO2UULNGzzCmrLSLz2U1VL3cm1o+au8IJa9trJfrcTTFkAw2jeLiQSV
-         4ZvWfeTJYfXr01A81YkyfqK1b4uyZmRI39tR2RcxV77bIYOP/CbTIKLJw5M89QfZtzon
-         I9n2wwRkXpnpinRpaxhxTbZOlXOjCqgXxFGzR9EfoyqkTcO5nJI9dewnZU/CgAQ+DO8n
-         17A8tILf7ifhOEercnbI6gwOD2Rot/k/ZA3qi/niz2iQIG0UggZ7A2F8u61PotrKOodN
-         9W1g==
-X-Gm-Message-State: APjAAAW9JRPDrrYsJTJw6pzWVE7fvo7teUAJveskMlnSruAsDf9bYjap
-        aSj9XjgkdetlG/nsmmApeMaUVLoi
-X-Google-Smtp-Source: APXvYqxvkVFnhiPOxFv+7ZRxTUIFTDSny58aAUFqXUPm0qk5W3c5Kf0KO4HWqsPuKxknmCVge1rAdQ==
-X-Received: by 2002:a2e:943:: with SMTP id 64mr37257269ljj.17.1577978269110;
-        Thu, 02 Jan 2020 07:17:49 -0800 (PST)
-Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id g27sm23515861lfj.49.2020.01.02.07.17.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jan 2020 07:17:48 -0800 (PST)
-Subject: Re: [PATCH v2 10/10] usb: chipidea: tegra: Add USB_TEGRA_PHY module
- to driver's dependencies
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Peter Chen <peter.chen@nxp.com>, Rob Herring <robh-dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20191220015238.9228-1-digetx@gmail.com>
- <20191220015238.9228-11-digetx@gmail.com>
- <20191220035650.GC19921@b29397-desktop>
- <fb7dee6e-e645-fe45-126c-c5f1e280bc26@gmail.com>
- <20191223213234.GA28786@qmqm.qmqm.pl>
- <7174833f-8325-7fb4-d190-78ba4bed0cbb@gmail.com>
- <20191230210259.GD24135@qmqm.qmqm.pl>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <b34972e3-569e-d74a-4d30-d52c89032a08@gmail.com>
-Date:   Thu, 2 Jan 2020 18:17:47 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1728757AbgABPWu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jan 2020 10:22:50 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:41550 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728561AbgABPWu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 10:22:50 -0500
+Received: (qmail 1847 invoked by uid 2102); 2 Jan 2020 10:22:49 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 2 Jan 2020 10:22:49 -0500
+Date:   Thu, 2 Jan 2020 10:22:49 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     atmgnd <atmgnd@protonmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Subject: Re: Fw: usbcore missing parentheses in USE_NEW_SCHEME
+In-Reply-To: <ca600d41-d978-d799-a871-ce6e1438a4cc@infradead.org>
+Message-ID: <Pine.LNX.4.44L0.2001021018330.1546-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <20191230210259.GD24135@qmqm.qmqm.pl>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-31.12.2019 00:02, Michał Mirosław пишет:
-> On Tue, Dec 24, 2019 at 07:21:05AM +0300, Dmitry Osipenko wrote:
->> 24.12.2019 00:32, Michał Mirosław пишет:
->>> On Fri, Dec 20, 2019 at 07:31:08AM +0300, Dmitry Osipenko wrote:
->>>> 20.12.2019 06:56, Peter Chen пишет:
->>>>> On 19-12-20 04:52:38, Dmitry Osipenko wrote:
->>> [...]
->>>>>> --- a/drivers/usb/chipidea/ci_hdrc_tegra.c
->>>>>> +++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
->>>>>> @@ -53,6 +53,12 @@ static int tegra_udc_probe(struct platform_device *pdev)
->>>>>>  	struct tegra_udc *udc;
->>>>>>  	int err;
->>>>>>  
->>>>>> +	if (IS_MODULE(CONFIG_USB_TEGRA_PHY)) {
->>>>>> +		err = request_module("phy_tegra_usb");
->>>>>> +		if (err)
->>>>>> +			return err;
->>>>>> +	}
->>>>>> +
->>>>>
->>>>> Why you do this dependency, if this controller driver can't
->>>>> get USB PHY, it should return error. What's the return value
->>>>> after calling below:
->>>>>
->>>>> 	udc->phy = devm_usb_get_phy_by_phandle(&pdev->dev, "nvidia,phy", 0);
->>>>
->>>> It returns -EPROBE_DEFER when phy_tegra_usb isn't loaded.
->>>
->>> How are other driver modules autoloaded? Isn't there an appropriate
->>> MODALIAS or MODULE_DEVICE_TABLE in there?
->>
->> Hello Michał,
->>
->> The phy_tegra_usb module is fine by itself, it's getting autoloaded.
->>
->> The problem is that ci_hdrc_tegra module depends on the phy_tegra_usb
->> module and thus the PHY module should be loaded before the CI module,
->> otherwise CI driver fails with the EPROBE_DEFER.
+On Wed, 1 Jan 2020, Randy Dunlap wrote:
+
+> [adding linux-usb mailing list]
 > 
-> Why, then, is CI driver not being probed again after PHY driver loads?
-> EPROBE_DEFER is what should cause driver core to re-probe a device after
-> other devices appear (PHY in this case).
+> On 1/1/20 6:46 AM, atmgnd wrote:
+> > I think there is missing parentheses in macro USE_NEW_SCHEME, it should be:
+> > #define USE_NEW_SCHEME(i, scheme)      ((i) / 2 == (int)(scheme))
+> > 
+> > causes a fail wiht "device descriptor read/64, error -110" using my usb drive on vmware using usb 3.0 hub.
+> > from https://github.com/torvalds/linux/commit/25244227158e1502062041365a439a54cb8fe673#diff-28615d62e1250eadc353d804f49bc6d6
+> > 
+> > someone changed USE_NEW_SCHEME, but without parentheses for second parameter. as result. in fuction use_new_scheme when old_scheme_first is 1, use_new_scheme will return 1 always(actullay is should return 0). it also make https://github.com/torvalds/linux/commit/bd0e6c9614b95352eb31d0207df16dc156c527fa#diff-28615d62e1250eadc353d804f49bc6d6 fails.
+> > 
+> > I cannot use git send-mail, there some issue with my network provider. patch below, :
+> > 
+> > 
+> > From 85f01b89d050a988f4d9fc78232de47e793c6a7c Mon Sep 17 00:00:00 2001
+> > From: atmgnd <atmgnd@outlook.com>
+> > Date: Wed, 1 Jan 2020 21:27:13 +0800
+> > Subject: [PATCH] usb: hub: missing parentheses in USE_NEW_SCHEME
+> > 
+> > accroding to bd0e6c9#diff-28615d62e1250eadc353d804f49bc6d6, will try old enumeration
+> > scheme first for high speed devices. for example, when a high speed device pluged in,
+> > line 2720 should expand to 0 at the first time. USE_NEW_SCHEME(0, 0 || 0 || 1) === 0.
+> > but it wrongly expand to 1(alway expand to 1 for high speed device), and change
+> > USE_NEW_SCHEME to USE_NEW_SCHEME((i) % 2 == (int)(scheme)) may be better ?
+> > 
+> > Signed-off-by: atmgnd <atmgnd@outlook.com>
+> > ---
+> >  drivers/usb/core/hub.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> > index f229ad6952c0..7d17deca7021 100644
+> > --- a/drivers/usb/core/hub.c
+> > +++ b/drivers/usb/core/hub.c
+> > @@ -2692,7 +2692,7 @@ static unsigned hub_is_wusb(struct usb_hub *hub)
+> >  #define SET_ADDRESS_TRIES 2
+> >  #define GET_DESCRIPTOR_TRIES 2
+> >  #define SET_CONFIG_TRIES (2 * (use_both_schemes + 1))
+> > -#define USE_NEW_SCHEME(i, scheme) ((i) / 2 == (int)scheme)
+> > +#define USE_NEW_SCHEME(i, scheme) ((i) / 2 == (int)(scheme))
+> > 
+> >  #define HUB_ROOT_RESET_TIME 60 /* times are in msec */
+> >  #define HUB_SHORT_RESET_TIME 10
+> > --
+> > 2.17.1
 
-CI driver is getting re-probed just fine if PHY's driver module is
-loaded manually after loading the CI's module. This patch removes this
-necessity to manually load PHY's module.
+atmgnd:
 
-This is just a minor convenience change that brings the CI's driver
-loading behaviour on par with the behaviour of loading Tegra's EHCI
-driver module.
+Please resend this patch to Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> with the appropriate CC's.  Also, your
+Signed-off-by: line should contain a real name, not an email userid
+(you probably don't use "atmgnd" as your signature on legal
+documents!).
+
+When you resend the patch, you can include:
+
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+Alan Stern
+
