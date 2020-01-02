@@ -2,110 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC92D12E129
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 01:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4524412E12D
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 01:13:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727468AbgABAMg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jan 2020 19:12:36 -0500
-Received: from mail-sh.amlogic.com ([58.32.228.43]:42143 "EHLO
-        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727393AbgABAMg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jan 2020 19:12:36 -0500
-Received: from [10.18.38.198] (10.18.38.198) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 2 Jan
- 2020 08:12:56 +0800
-Subject: Re: [PATCH v3 3/6] phy: amlogic: Add Amlogic A1 USB2 PHY Driver
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-CC:     Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Yue Wang <yue.wang@amlogic.com>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Carlo Caione <carlo@caione.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Qiufang Dai <qiufang.dai@amlogic.com>,
-        Jian Hu <jian.hu@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
-References: <1577428606-69855-1-git-send-email-hanjie.lin@amlogic.com>
- <1577428606-69855-4-git-send-email-hanjie.lin@amlogic.com>
- <1577501595.21256.8.camel@mhfsdcap03>
-From:   Hanjie Lin <hanjie.lin@amlogic.com>
-Message-ID: <edacb7ff-65b4-20a8-533f-71c980dcbef2@amlogic.com>
-Date:   Thu, 2 Jan 2020 08:12:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
+        id S1727472AbgABANu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jan 2020 19:13:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53694 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727393AbgABANt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Jan 2020 19:13:49 -0500
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 031A92072C;
+        Thu,  2 Jan 2020 00:13:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1577924029;
+        bh=alScVJ8JiASC+OnKeH0vbQnAkIsi9CP1LgoupJA4Fog=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=GLEmVnfvWitIjX3x315Uiw2mwZwrVJ31ftNKLQgVxxAvbUPDwskJoMHZ30ODv1+Qg
+         9M0QpBHzX5Woj24w6TMCbW0Vqku0IxtrlHambP86OxVouo00gClGa2Z0HZC0g9G53t
+         oKa2EAXUMYwk53ouBWlaAVXWoe1ic/MXwgHvs1m8=
+Subject: Re: [PATCH] tools: usb: usbip: Get rid of driver name printout in
+ README
+To:     Magnus Damm <magnus.damm@gmail.com>, valentina.manea.m@gmail.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shuah <shuah@kernel.org>
+References: <157677692518.684.15385402529285904844.sendpatchset@octo>
+From:   shuah <shuah@kernel.org>
+Message-ID: <bb773815-813c-1e6f-3cd7-e1e7ba48ee8d@kernel.org>
+Date:   Wed, 1 Jan 2020 17:13:48 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <1577501595.21256.8.camel@mhfsdcap03>
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <157677692518.684.15385402529285904844.sendpatchset@octo>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.38.198]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 2019/12/28 10:53, Chunfeng Yun wrote:
-> On Fri, 2019-12-27 at 14:36 +0800, Hanjie Lin wrote:
->> This adds support for the USB2 PHY found in the Amlogic A1 SoC Family.
->>
->> It supports host mode only.
->>
->> Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
->> Signed-off-by: Yue Wang <yue.wang@amlogic.com>
->> ---
->>  drivers/phy/amlogic/phy-meson-g12a-usb2.c | 93 +++++++++++++++++++++----------
->>  1 file changed, 64 insertions(+), 29 deletions(-)
->>
->> diff --git a/drivers/phy/amlogic/phy-meson-g12a-usb2.c b/drivers/phy/amlogic/phy-meson-g12a-usb2.c
->> index 9065ffc..a564747 100644
->> --- a/drivers/phy/amlogic/phy-meson-g12a-usb2.c
->> +++ b/drivers/phy/amlogic/phy-meson-g12a-usb2.c
->> @@ -146,11 +146,17 @@
-> [...]
->> +	priv->soc_id = (enum meson_soc_id)of_device_get_match_data(&pdev->dev);
->> +
->>  	priv->regmap = devm_regmap_init_mmio(dev, base,
->>  					     &phy_meson_g12a_usb2_regmap_conf);
->>  	if (IS_ERR(priv->regmap))
->>  		return PTR_ERR(priv->regmap);
->>  
->> -	priv->clk = devm_clk_get(dev, "xtal");
->> -	if (IS_ERR(priv->clk))
->> -		return PTR_ERR(priv->clk);
->> +	if (priv->soc_id == MESON_SOC_G12A) {
->> +		priv->clk = devm_clk_get(dev, "xtal");
->> +		if (IS_ERR(priv->clk))
->> +			return PTR_ERR(priv->clk);
->> +	}
-> How about use devm_clk_get_optional(), then make it as optional clock
-> also in dt-binding
->>  
+On 12/19/19 10:35 AM, Magnus Damm wrote:
+> From: Magnus Damm <damm+renesas@opensource.se>
 > 
->>  
+> Driver name is no longer printed out so update the README
+> examples to avoid confusion.
+> 
+> Signed-off-by: Magnus Damm <damm+renesas@opensource.se>
+> ---
+> 
+>   tools/usb/usbip/README |   22 +++++++++++-----------
+>   1 file changed, 11 insertions(+), 11 deletions(-)
 > 
 
-Hi Chunfeng 
+Thanks for the patch.
 
-Actually, there is a "xtal_usb_phy" clock in A1 ctrl driver, it seems it's
-better to be in the A1 phy driver.
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-I will move that clock here in next version.
-
-Thanks,
-
-Hanjie
+thanks,
+-- Shuah
