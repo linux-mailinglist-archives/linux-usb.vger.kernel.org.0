@@ -2,62 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D4B12E5B3
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 12:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B54012E5BE
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 12:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728245AbgABLam (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jan 2020 06:30:42 -0500
-Received: from mail-lf1-f50.google.com ([209.85.167.50]:46290 "EHLO
-        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728135AbgABLal (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 06:30:41 -0500
-Received: by mail-lf1-f50.google.com with SMTP id f15so29671403lfl.13;
-        Thu, 02 Jan 2020 03:30:40 -0800 (PST)
+        id S1728238AbgABLd1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jan 2020 06:33:27 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:40053 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726647AbgABLd1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 06:33:27 -0500
+Received: by mail-lj1-f196.google.com with SMTP id u1so40381067ljk.7;
+        Thu, 02 Jan 2020 03:33:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=d3dulXjQFXVkZX4ZQNVnL00Ue1i2kbFWKIQHBA/xvtE=;
-        b=Ufs1HBNV8DbSoFNg9hHko7POoRf9xSir2oprEOboSNzyqghhVX9IwG5eMU+j66N1Od
-         JMeTy5zH8D7kozKgZ7xHJgzqymMCvwDCtej1ZP6egJxsGvS46KHVCUH9khqP3f7HIDUQ
-         0cAL6Pb2pBP6himB+ATXRXkFmYwbUeiM1JvMtroe5tDJGI8gCsbszfGvE2ign4GZLe3K
-         LZqlBLj6iaTjPguSlMA5WAEfi/V7ywj/jSgKz4v+PKdqBrozdJPYjMFMl7E85BzdGOZK
-         ZJRTcf3QRA2sZJAnSRH98C6J10qo0Su0lMUUsHMiTccC/IcSqRThjfbZUgtCSOGzZCxy
-         gbfw==
+        bh=Yt1VY/j0TGIIB859c29ReVlv8mUX3f+l/kjMgy/It3M=;
+        b=jdcgdeu4Lk496FcrbhnaSzTx87bPtS3KWWDConCPBtRLilRhlL/KX5suSw72NqWaZe
+         D4QTr+X/H9Gz9iwzQIJ6pmbamICkD3t85K5xarQ5Yp3rf20lszhwH8G2CTYc6G6NTTDt
+         i3xsQK3kh1rJzb8Le4k32aE/RvAqVXtpX9fgH2gVGlZkeIYRVABkja02oTh8O93P7lRP
+         lICTIWuasf0Ucw5ihlYBP8Cp6mtPpYDpRpp5sFHH7yPoo8s5kcxR6zFC/J1i5XZYpT+Y
+         3hm7qL/+HHFtPgaHgYBUrN8SUyDPyCFXl+D5bDfMy7bhIBrnaNgC4P/b8RMwoSKboVHv
+         Netw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=d3dulXjQFXVkZX4ZQNVnL00Ue1i2kbFWKIQHBA/xvtE=;
-        b=NEO6srMLlM/Cw8ex9D90vsZlooVfZp81XJpUf2dLAKH2a+OshLUX2EgWthZSHOcUyQ
-         0nol/lOmnaMESzCtMb2UjNjxvJnlw3ASeOvuym/CBz2l3X5cwWQ9KxRZgJJzpE1hwNgv
-         j+2RDDhVQlzH4qmZ06Mk1UGeu2dcg3H0D/o3g3YfHM0OpRYW0JtxyZBWOZGyWB975mro
-         Z3ur4OeXN4seg8xr4jYyEvrjgEBs/6laYK1yE5gKpqf+a99flrJ/6MHrQ2tRk+Ux5oS7
-         Le9h82JGUA4vKxG5EBMLoakwj5egeyJ28qhHcgXxsjZKSQDLF3OzetEA/r2VyiTDRNxO
-         NHAA==
-X-Gm-Message-State: APjAAAV2E4r5STVbWWYzGBicIm+Itt2r3J8mFhGthkhg3UaHuh5kVbMI
-        NsMuVZdW5WL0/5UROujbDJM=
-X-Google-Smtp-Source: APXvYqydhz/yS3LGeOOAz21CKMjo5DUc3Su4P1UZuXNmhprFWKWkuDmBSprupL8KRIAruZLi6LRbTQ==
-X-Received: by 2002:ac2:5605:: with SMTP id v5mr48019847lfd.136.1577964639485;
-        Thu, 02 Jan 2020 03:30:39 -0800 (PST)
+        bh=Yt1VY/j0TGIIB859c29ReVlv8mUX3f+l/kjMgy/It3M=;
+        b=ULdRvkmIozPFt5usJ39dzJzAg01TXTnZ9efAfNI3AVSPuYs8EJVol+EpuCLnuYq+WT
+         xeWs1IXOs7kLS5tyOKhCIEO8jIsF40V2uGGOlD6auoOJfitrnaTj7FAOKmpzKXCM7dGo
+         hS73xk/qdVgX7MMxuwm66nQS+1CriObGAZNbaX9NEypF/sCqVpc0RiONhPvsu2j+USaa
+         LkNxgneZoMkK0tJrzTJbD0IF45U26ji+5QeLVZymKyZ+oFJjhikLsWREJJ81Cc3GXxVC
+         gB3/LoLCulnOboUQzh/HCZ0nQnEZwokCAM6V7Htw83ylo+Z+55JS9e6/8xTbdJU2EUuL
+         AShw==
+X-Gm-Message-State: APjAAAVfn4lCIV0zJcQRM3Ru1PzLCeuA8JEJklg21MWc+BS1JBbftfPn
+        ZOZAWUoshTD5VKkZ44vqnc8=
+X-Google-Smtp-Source: APXvYqygBYeKqrIrR2UfhmiCUnIcXOWBB9CsVGmFoEfPfmqE1tf5KYfGieECiO8eHB8aLzwbneFDkw==
+X-Received: by 2002:a2e:9243:: with SMTP id v3mr40422038ljg.73.1577964805303;
+        Thu, 02 Jan 2020 03:33:25 -0800 (PST)
 Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id i9sm22970376lfd.6.2020.01.02.03.30.38
+        by smtp.gmail.com with ESMTPSA id s22sm22615229ljm.41.2020.01.02.03.33.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jan 2020 03:30:38 -0800 (PST)
+        Thu, 02 Jan 2020 03:33:24 -0800 (PST)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Jassi Brar <jassisinghbrar@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jassi Brar <jaswinder.singh@linaro.org>
-Subject: Re: [PATCHv1 2/2] usb: gadget: add udc driver for max3420
-In-Reply-To: <CABb+yY00xOZw2uw6oK3N6RBcOurJjhiPXHs0ShCSVauwZn6TNw@mail.gmail.com>
-References: <20191210003135.32427-1-jassisinghbrar@gmail.com> <87eexclkj0.fsf@gmail.com> <CABb+yY00xOZw2uw6oK3N6RBcOurJjhiPXHs0ShCSVauwZn6TNw@mail.gmail.com>
-Date:   Thu, 02 Jan 2020 13:31:22 +0200
-Message-ID: <874kxeksc5.fsf@kernel.org>
+To:     Roger Quadros <rogerq@ti.com>
+Cc:     gregkh@linuxfoundation.org, nsekhar@ti.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roger Quadros <rogerq@ti.com>
+Subject: Re: [PATCH] usb: gadget: legacy: set max_speed to super-speed
+In-Reply-To: <20191223064735.24662-1-rogerq@ti.com>
+References: <20191223064735.24662-1-rogerq@ti.com>
+Date:   Thu, 02 Jan 2020 13:34:08 +0200
+Message-ID: <871rsiks7j.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -73,29 +69,19 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-Jassi Brar <jassisinghbrar@gmail.com> writes:
->> > +static void __max3420_start(struct max3420_udc *udc)
->> > +{
->> > +     u8 val;
->> > +
->> > +     /* Need this delay if bus-powered */
->> > +     msleep_interruptible(250);
->>
->> should you check if you're bus powered?
->>
-> for some reason, even for self-powered, it helped reliability.
+Roger Quadros <rogerq@ti.com> writes:
+> These interfaces do support super-speed so let's not
+> limit maximum speed to high-speed.
+>
+> Signed-off-by: Roger Quadros <rogerq@ti.com>
+> ---
+>
+> Hi Felipe,
+>
+> Please queue this for -rc. Thanks.
 
-Perhaps update the comment, in that case? It would be better if we had
-a proper explanation for this sleep here.
-
->> > +static int max3420_thread(void *dev_id)
->>
->> Why do you need this thread? Sure you can't live without it?
->>
-> All the slow spi-bus transfers are handled at one place here without
-> blocking any api call. IMO it is cleaner and easier to manage.
-
-Fair enough, I won't complain. But it looks odd :-p
+This is probably one of those "has never worked before" changes. Doesn't
+seem really important for the -rc. I'll add a Cc stable instead
 
 =2D-=20
 balbi
@@ -105,18 +91,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4N1IoACgkQzL64meEa
-mQYumA//SLi6nGyho7AKjNXUijFlpjaeLmciwptf1cywEjRc8vdVq699u6H+Z+yr
-bQq3iGahlsfYszmsGWsGUYauJyY3+gxBVJb7xmPMpzrzmM3bchdNGLyIJBDfoKoX
-OJSMSbll3C5cKEM+hImwnp4ikEoKp4yGdHaPKxH0RKfHMLfIWaOf5Q1NeTOnF1K7
-6Rw+8S97fVMwy8zL/roatNlC3Y6dSYjD4ahU3WVXL5CrC9IYhpIYomZ7+MzQ0iWN
-tDsT+QsLpBEIJaMMT9WCfnymCAKbvTvRq2S07SSbZMXx6g8TQtkGhA8E8zglt7hZ
-0tsCHi2kLBmKTKzOZ+/VEFFQaAuMFC6G3nMl70Pf5LIiYTQTUu3BBO1E1YwIGNOr
-ukWKCmBC48/wig/C/juMKotiP8gg8V1OX9rnHQjsHXq4jfj2DCu9bOBD3a5/bokn
-uwtC+ULssM4B7JqASQXygzsM1eN9daLGIqKdI10lnruPW2YuSXqEoYFQx0tDiZdD
-bqEmo+9UMBNVzH7ehawJ90FixIgrnxsFbd6vwuNGqUF09UDKzKRkEIljah2gkyK4
-Xfpo53Q4Y1QEAayrtycA05Wpilwf3sTAVg6cu0LvMsbbDcCw7kPMhjEC9HJA2Z2T
-HY3SbjksbpEqiqH3k4bVnall6ltCYdBOlFqXx70Aao0CCZhDP1E=
-=sA7L
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4N1TAACgkQzL64meEa
+mQZXXQ/8DyALVTCnVPskGXceUQRTlGV1vmU3pbijjMlMdf4FwpcE41UpTkmIOXzy
+6LxbuQJZvr0KJjaFIYQ5rTJSIj7OQjWH8ATHNToGMh8XITRzXdbq2lYLU+4XXYW5
+tHng7/zCqGU3N9HOAF+4iYR8zi0/An6Q8II0HienO0unUF+HhEsnIkPOFWnM/UES
+9zDktF0jlNSem/pjdGJExGcV894YTpd2tuxg9+IIBAYylETMYwIqiksZJIP+aCdf
+UK4ebDnYJozPGCEQS/tQmw4nSOeXf/Kwkl++L0cYRniElwpW5FjELxYg7mkjjn4Z
+JrDW+OjfAwqmT2lJUsXVYJU2fmV//YpzaZrZqOpk4w7iFOXjJMhCJBZX9IksnSN7
+WeMpKfU74ZFUeif1PL45auBEhfBgp6P7ZKxehjYTbcB3S7uwAHCxsQluIFDfcDl0
+34jKnE6pGAwrIECQNbsNKKS8heorsd32GqBveUG/iXmoDJBpIdL90IJ6LQuaIi9d
+G6uWVup2Yp+KTPOylCguwWQL8k75GAZmQ2hEBUImS/NpXRhS4vT2ZYpSeebRM6PP
+QU6MM+bBiP7vRcx7eacN5wmVL/sMZ3hh+enPeqLNU1lzfzmTtdvn97RJTXGo1ILU
+V2iGIgnMKUWgCpkGcyqbvaH1u7d5ZCxyjPD4N8sUO6yPzJa2cjg=
+=WRVQ
 -----END PGP SIGNATURE-----
 --=-=-=--
