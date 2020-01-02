@@ -2,94 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C830812E806
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 16:22:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ABB912E807
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 16:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728757AbgABPWu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jan 2020 10:22:50 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:41550 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728561AbgABPWu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 10:22:50 -0500
-Received: (qmail 1847 invoked by uid 2102); 2 Jan 2020 10:22:49 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 2 Jan 2020 10:22:49 -0500
-Date:   Thu, 2 Jan 2020 10:22:49 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     atmgnd <atmgnd@protonmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: Fw: usbcore missing parentheses in USE_NEW_SCHEME
-In-Reply-To: <ca600d41-d978-d799-a871-ce6e1438a4cc@infradead.org>
-Message-ID: <Pine.LNX.4.44L0.2001021018330.1546-100000@iolanthe.rowland.org>
+        id S1728647AbgABPYF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jan 2020 10:24:05 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:43313 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728561AbgABPYF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 10:24:05 -0500
+Received: by mail-oi1-f193.google.com with SMTP id p125so10766577oif.10
+        for <linux-usb@vger.kernel.org>; Thu, 02 Jan 2020 07:24:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m4dUfK4O76LeGW5xc8TGTXDvbkOnSX5v3rh5n9es6Rg=;
+        b=I7qEVkBlNxBkwH5beRCKOxv8w6xICSDw+bbI42w+HLEppCt5sGl8F5v6gCMLMsTlus
+         hnpbkjAdZcExADQVkZwgUfoCnZTD6QeyRxVXqtLZtV1JLlsuJRr+SnheuHPA5j544WaQ
+         RVC3nXKbEpzIImRczrL5k1Rl4eGIXmbQZ7Mimrw2vp/h1ZGS1wJTiYyuNINEiozBccrs
+         KMaa4udSs4JwjimiT4BkZ8p+rUUM+hpPJaWlzjwU2+S3ngY978ZAAIAJuC7cyO8axE4B
+         wN25PAIc6TiuCj9BRIwe4W0WkM432cHXVMx46YHFVDSLzOrYL7BgZl34xo/crjG4rtNS
+         7oCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m4dUfK4O76LeGW5xc8TGTXDvbkOnSX5v3rh5n9es6Rg=;
+        b=XA8rNfw7A20R8QP8Da6WUZgHNvgBPkNWaBOudf4/M6P8fXHh3FjZwte4y/xkwf2yDM
+         8DyNjU0Qj1/9KVqb9psJLn0w5jx5U2fymneswcEAdRAPQmPme1CbsGgSIIlErPBz3E5c
+         z7xHaZqZsTrjpTi8kABP0Nbs71i1qWhBHe/qRvKFKFHloC6aoLFNUEp27TFkUIrTZdy+
+         jKirpbnykEHBGdjhuzNT/fS3ygtIgcV+uhafAjkzrytw+LHasoz13U4PjmAjWLP2HcIa
+         r0Tn5rgxHCUv8pWXqcgkFIgdGba0mA37+5QoLMHSFLp1JfPlEIIkOAUTyfcSIn3OvoHa
+         DA1w==
+X-Gm-Message-State: APjAAAV5Zbtsbr7ddbvSY2/WU3lOSiau190xlEoI1j1ROO91oYreaa8Q
+        FYF5kneMEU40aKNJXbeYRrC8qkX4FIP/rhhUs+s=
+X-Google-Smtp-Source: APXvYqzv/+MfGAkU9LG36p03Dvr4CEYDI2GT6IEKXupoJFKL1IeXJnH2wRZDLVzlOA98iyhGoUlag4qKCPZWnM9yqyc=
+X-Received: by 2002:aca:1e0f:: with SMTP id m15mr2434296oic.58.1577978644459;
+ Thu, 02 Jan 2020 07:24:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+References: <20191231174848.741314-1-linus.walleij@linaro.org>
+In-Reply-To: <20191231174848.741314-1-linus.walleij@linaro.org>
+From:   Sylwester Nawrocki <sylvester.nawrocki@gmail.com>
+Date:   Thu, 2 Jan 2020 16:23:53 +0100
+Message-ID: <CAChTM2TOj-5LVz0XY_=WYo3n_hEhEav-+e=P=nA5HA81NdwXVg@mail.gmail.com>
+Subject: Re: [PATCH] usb: phy: phy-gpio-vbus-usb: Convert to GPIO descriptors
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 1 Jan 2020, Randy Dunlap wrote:
+Hi Linus,
 
-> [adding linux-usb mailing list]
-> 
-> On 1/1/20 6:46 AM, atmgnd wrote:
-> > I think there is missing parentheses in macro USE_NEW_SCHEME, it should be:
-> > #define USE_NEW_SCHEME(i, scheme)      ((i) / 2 == (int)(scheme))
-> > 
-> > causes a fail wiht "device descriptor read/64, error -110" using my usb drive on vmware using usb 3.0 hub.
-> > from https://github.com/torvalds/linux/commit/25244227158e1502062041365a439a54cb8fe673#diff-28615d62e1250eadc353d804f49bc6d6
-> > 
-> > someone changed USE_NEW_SCHEME, but without parentheses for second parameter. as result. in fuction use_new_scheme when old_scheme_first is 1, use_new_scheme will return 1 always(actullay is should return 0). it also make https://github.com/torvalds/linux/commit/bd0e6c9614b95352eb31d0207df16dc156c527fa#diff-28615d62e1250eadc353d804f49bc6d6 fails.
-> > 
-> > I cannot use git send-mail, there some issue with my network provider. patch below, :
-> > 
-> > 
-> > From 85f01b89d050a988f4d9fc78232de47e793c6a7c Mon Sep 17 00:00:00 2001
-> > From: atmgnd <atmgnd@outlook.com>
-> > Date: Wed, 1 Jan 2020 21:27:13 +0800
-> > Subject: [PATCH] usb: hub: missing parentheses in USE_NEW_SCHEME
-> > 
-> > accroding to bd0e6c9#diff-28615d62e1250eadc353d804f49bc6d6, will try old enumeration
-> > scheme first for high speed devices. for example, when a high speed device pluged in,
-> > line 2720 should expand to 0 at the first time. USE_NEW_SCHEME(0, 0 || 0 || 1) === 0.
-> > but it wrongly expand to 1(alway expand to 1 for high speed device), and change
-> > USE_NEW_SCHEME to USE_NEW_SCHEME((i) % 2 == (int)(scheme)) may be better ?
-> > 
-> > Signed-off-by: atmgnd <atmgnd@outlook.com>
-> > ---
-> >  drivers/usb/core/hub.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> > index f229ad6952c0..7d17deca7021 100644
-> > --- a/drivers/usb/core/hub.c
-> > +++ b/drivers/usb/core/hub.c
-> > @@ -2692,7 +2692,7 @@ static unsigned hub_is_wusb(struct usb_hub *hub)
-> >  #define SET_ADDRESS_TRIES 2
-> >  #define GET_DESCRIPTOR_TRIES 2
-> >  #define SET_CONFIG_TRIES (2 * (use_both_schemes + 1))
-> > -#define USE_NEW_SCHEME(i, scheme) ((i) / 2 == (int)scheme)
-> > +#define USE_NEW_SCHEME(i, scheme) ((i) / 2 == (int)(scheme))
-> > 
-> >  #define HUB_ROOT_RESET_TIME 60 /* times are in msec */
-> >  #define HUB_SHORT_RESET_TIME 10
-> > --
-> > 2.17.1
+On Tue, 31 Dec 2019 at 18:50, Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> Instead of using the legacy GPIO API and keeping track on
+> polarity inversion semantics in the driver, switch to use
+> GPIO descriptors for this driver and change all consumers
+> in the process.
+>
+> This makes it possible to retire platform data completely:
+> the only remaining platform data member was "wakeup" which
+> was intended to make the vbus interrupt wakeup capable,
+> but was not set by any users and thus remained unused. VBUS
+> was not waking any devices up. Leave a comment about it so
+> later developers using the platform can consider setting it
+> to always enabled so plugging in USB wakes up the platform.
+>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
 
-atmgnd:
+> Cc: Robert Jarzmik <robert.jarzmik@free.fr>
+> Cc: Daniel Mack <daniel@zonque.org>
+> Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-Please resend this patch to Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> with the appropriate CC's.  Also, your
-Signed-off-by: line should contain a real name, not an email userid
-(you probably don't use "atmgnd" as your signature on legal
-documents!).
+> ---
+>  arch/arm/mach-s3c64xx/mach-smartq.c | 13 ++--
 
-When you resend the patch, you can include:
+> --- a/arch/arm/mach-s3c64xx/mach-smartq.c
+> +++ b/arch/arm/mach-s3c64xx/mach-smartq.c
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+>  #include <asm/mach-types.h>
+> @@ -124,15 +123,16 @@ static struct s3c2410_hcd_info smartq_usb_host_info = {
+>         .enable_oc      = smartq_usb_host_enableoc,
+>  };
+>
+> -static struct gpio_vbus_mach_info smartq_usb_otg_vbus_pdata = {
+> -       .gpio_vbus              = S3C64XX_GPL(9),
+> -       .gpio_pullup            = -1,
+> -       .gpio_vbus_inverted     = true,
+> +static struct gpiod_lookup_table smartq_usb_otg_vbus_gpiod_table = {
+> +       .dev_id = "gpio-vbus",
+> +       .table = {
+> +               GPIO_LOOKUP("gpio-pxa", 9, "vbus", GPIO_ACTIVE_LOW),
 
-Alan Stern
+IIUC the chip_label here should be "GPL", so we match the GPIO bank
+properly. Otherwise looks good to me. With the typo fixed feel free to add
 
+Acked-by: Sylwester Nawrocki <snawrocki@kernel.org>
+
+> +               { },
+> +       },
+>  };
+
+--
+Regards,
+Sylwester
