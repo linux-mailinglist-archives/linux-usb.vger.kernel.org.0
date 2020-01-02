@@ -2,117 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABB912E807
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 16:24:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D20C312E818
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 16:31:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728647AbgABPYF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jan 2020 10:24:05 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:43313 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728561AbgABPYF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 10:24:05 -0500
-Received: by mail-oi1-f193.google.com with SMTP id p125so10766577oif.10
-        for <linux-usb@vger.kernel.org>; Thu, 02 Jan 2020 07:24:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m4dUfK4O76LeGW5xc8TGTXDvbkOnSX5v3rh5n9es6Rg=;
-        b=I7qEVkBlNxBkwH5beRCKOxv8w6xICSDw+bbI42w+HLEppCt5sGl8F5v6gCMLMsTlus
-         hnpbkjAdZcExADQVkZwgUfoCnZTD6QeyRxVXqtLZtV1JLlsuJRr+SnheuHPA5j544WaQ
-         RVC3nXKbEpzIImRczrL5k1Rl4eGIXmbQZ7Mimrw2vp/h1ZGS1wJTiYyuNINEiozBccrs
-         KMaa4udSs4JwjimiT4BkZ8p+rUUM+hpPJaWlzjwU2+S3ngY978ZAAIAJuC7cyO8axE4B
-         wN25PAIc6TiuCj9BRIwe4W0WkM432cHXVMx46YHFVDSLzOrYL7BgZl34xo/crjG4rtNS
-         7oCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m4dUfK4O76LeGW5xc8TGTXDvbkOnSX5v3rh5n9es6Rg=;
-        b=XA8rNfw7A20R8QP8Da6WUZgHNvgBPkNWaBOudf4/M6P8fXHh3FjZwte4y/xkwf2yDM
-         8DyNjU0Qj1/9KVqb9psJLn0w5jx5U2fymneswcEAdRAPQmPme1CbsGgSIIlErPBz3E5c
-         z7xHaZqZsTrjpTi8kABP0Nbs71i1qWhBHe/qRvKFKFHloC6aoLFNUEp27TFkUIrTZdy+
-         jKirpbnykEHBGdjhuzNT/fS3ygtIgcV+uhafAjkzrytw+LHasoz13U4PjmAjWLP2HcIa
-         r0Tn5rgxHCUv8pWXqcgkFIgdGba0mA37+5QoLMHSFLp1JfPlEIIkOAUTyfcSIn3OvoHa
-         DA1w==
-X-Gm-Message-State: APjAAAV5Zbtsbr7ddbvSY2/WU3lOSiau190xlEoI1j1ROO91oYreaa8Q
-        FYF5kneMEU40aKNJXbeYRrC8qkX4FIP/rhhUs+s=
-X-Google-Smtp-Source: APXvYqzv/+MfGAkU9LG36p03Dvr4CEYDI2GT6IEKXupoJFKL1IeXJnH2wRZDLVzlOA98iyhGoUlag4qKCPZWnM9yqyc=
-X-Received: by 2002:aca:1e0f:: with SMTP id m15mr2434296oic.58.1577978644459;
- Thu, 02 Jan 2020 07:24:04 -0800 (PST)
+        id S1728662AbgABPbx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jan 2020 10:31:53 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:41572 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728561AbgABPbx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 10:31:53 -0500
+Received: (qmail 1992 invoked by uid 2102); 2 Jan 2020 10:31:52 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 2 Jan 2020 10:31:52 -0500
+Date:   Thu, 2 Jan 2020 10:31:52 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+cc:     "Rene D. Obermueller" <cmdrrdo@gmail.com>,
+        <linux-usb@vger.kernel.org>
+Subject: Re: ERROR: unexpected command completion code 0x11 for DJ-Tech CTRL
+ (resending as plain text ;)
+In-Reply-To: <56774185-d171-d63c-5a87-ae8438dcbd0d@linux.intel.com>
+Message-ID: <Pine.LNX.4.44L0.2001021024090.1546-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-References: <20191231174848.741314-1-linus.walleij@linaro.org>
-In-Reply-To: <20191231174848.741314-1-linus.walleij@linaro.org>
-From:   Sylwester Nawrocki <sylvester.nawrocki@gmail.com>
-Date:   Thu, 2 Jan 2020 16:23:53 +0100
-Message-ID: <CAChTM2TOj-5LVz0XY_=WYo3n_hEhEav-+e=P=nA5HA81NdwXVg@mail.gmail.com>
-Subject: Re: [PATCH] usb: phy: phy-gpio-vbus-usb: Convert to GPIO descriptors
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Linus,
+On Thu, 2 Jan 2020, Mathias Nyman wrote:
 
-On Tue, 31 Dec 2019 at 18:50, Linus Walleij <linus.walleij@linaro.org> wrote:
->
-> Instead of using the legacy GPIO API and keeping track on
-> polarity inversion semantics in the driver, switch to use
-> GPIO descriptors for this driver and change all consumers
-> in the process.
->
-> This makes it possible to retire platform data completely:
-> the only remaining platform data member was "wakeup" which
-> was intended to make the vbus interrupt wakeup capable,
-> but was not set by any users and thus remained unused. VBUS
-> was not waking any devices up. Leave a comment about it so
-> later developers using the platform can consider setting it
-> to always enabled so plugging in USB wakes up the platform.
->
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> On 24.12.2019 17.28, Alan Stern wrote:
+> > On Mon, 23 Dec 2019, Mathias Nyman wrote:
+> > 
+> >> The Maximum Packet Size of the full-speed bulk endpoint looks a bit suspicious (maxp 4)
+> >>
+> >> 12478.521580: xhci_add_endpoint: State disabled mult 1 max P. Streams 0 interval 125 us max ESIT payload 0 CErr 3 Type Bulk OUT burst 0 maxp 4 deq 00000000fff71001
+> >>
+> >> For full speed bulk endpoints only support 8, 16, 32 and 64 bytes Max Packet sizes.
+> >> Host are not required to support other values. See USB2 spec section 5.8.3 for details
+> >>
+> >> Maybe forcing it to one of the allowed values could work.
+> >> Does the below hack help? (untested)?
+> > 
+> > Is this the sort of thing we should handle in
+> > config.c:usb_parse_endpoint()?
+> > 
+> > Even though 4 is not a valid maxpacket size for full-speed bulk
+> > endpoints, many host controllers and hubs will handle it okay.  Much
+> > the same is true for devices that have a high-speed bulk endpoint with
+> > maxpacket set to 1024.  Should we try to treat these two errors the
+> > same way?
+> 
+> Makes sense.
+> Looks like config.c:usb_parse_endpoint() shows a warning if maxpacket size is incorrect for
+> high-speed bulk endpoints, but leaves the maxpacket size unchanged.
+> If xhci is used then the xhci driver will later force the maxpacket to 512
 
-> Cc: Robert Jarzmik <robert.jarzmik@free.fr>
-> Cc: Daniel Mack <daniel@zonque.org>
-> Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Does the driver do this because otherwise the controller will refuse to
+handle the endpoint?
 
-> ---
->  arch/arm/mach-s3c64xx/mach-smartq.c | 13 ++--
+There are indeed high-speed devices that have a bulk endpoint with
+maxpacket set to 1024; I have used some.  They work okay with EHCI
+because the driver and the controller will accept the invalid value.  
+But probably they won't work with xHCI.
 
-> --- a/arch/arm/mach-s3c64xx/mach-smartq.c
-> +++ b/arch/arm/mach-s3c64xx/mach-smartq.c
+> I'm all for both checking and forcing maxpacket sizes in usb_parse_endpoint(), but
+> is there a risk that we break some devices that used to work. For example full-speed
+> bulk devices with maxpacket 4 that work fine under EHCI, but device can't handle
+> a new maxpacket size set to 8?
 
->  #include <asm/mach-types.h>
-> @@ -124,15 +123,16 @@ static struct s3c2410_hcd_info smartq_usb_host_info = {
->         .enable_oc      = smartq_usb_host_enableoc,
->  };
->
-> -static struct gpio_vbus_mach_info smartq_usb_otg_vbus_pdata = {
-> -       .gpio_vbus              = S3C64XX_GPL(9),
-> -       .gpio_pullup            = -1,
-> -       .gpio_vbus_inverted     = true,
-> +static struct gpiod_lookup_table smartq_usb_otg_vbus_gpiod_table = {
-> +       .dev_id = "gpio-vbus",
-> +       .table = {
-> +               GPIO_LOOKUP("gpio-pxa", 9, "vbus", GPIO_ACTIVE_LOW),
+I haven't run across that combination before, so I don't know.  Maybe
+the reason it worked okay until now is because those devices never need
+to perform a bulk transfer containing more than 4 bytes?
 
-IIUC the chip_label here should be "GPL", so we match the GPIO bank
-properly. Otherwise looks good to me. With the typo fixed feel free to add
+In any case, making this sort of change would definitely break the
+1024-byte maxpacket devices mentioned above.
 
-Acked-by: Sylwester Nawrocki <snawrocki@kernel.org>
+> Or should we only warn in config.c if the maxpacket sizes are not according to specifications,
+> and leave it to the host controller drivers to force new maxpacket values?
 
-> +               { },
-> +       },
->  };
+I think that would be a lot safer.
 
---
-Regards,
-Sylwester
+Alan Stern
+
