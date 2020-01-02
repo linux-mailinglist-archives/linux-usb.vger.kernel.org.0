@@ -2,31 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD38612E988
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 18:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E2512E9DD
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 19:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727815AbgABRtB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jan 2020 12:49:01 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:54782 "HELO
+        id S1727976AbgABSYd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jan 2020 13:24:33 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:54966 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727706AbgABRtB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 12:49:01 -0500
-Received: (qmail 2306 invoked by uid 2102); 2 Jan 2020 12:49:00 -0500
+        with SMTP id S1727942AbgABSYd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 13:24:33 -0500
+Received: (qmail 20177 invoked by uid 2102); 2 Jan 2020 13:24:32 -0500
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 2 Jan 2020 12:49:00 -0500
-Date:   Thu, 2 Jan 2020 12:49:00 -0500 (EST)
+  by localhost with SMTP; 2 Jan 2020 13:24:32 -0500
+Date:   Thu, 2 Jan 2020 13:24:32 -0500 (EST)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-cc:     Roger Whittaker <Roger.Whittaker@suse.com>,
-        Takashi Iwai <tiwai@suse.de>, Johan Hovold <johan@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+cc:     Takashi Iwai <tiwai@suse.de>, Greg KH <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Roger Whittaker <Roger.Whittaker@suse.com>,
+        Takashi Iwai <tiwai@suse.com>, <linux-usb@vger.kernel.org>
 Subject: Re: Certain cameras no longer working with uvcvideo on recent
  (openSUSE) kernels
-In-Reply-To: <20200102170310.GF4843@pendragon.ideasonboard.com>
-Message-ID: <Pine.LNX.4.44L0.2001021246480.1309-100000@iolanthe.rowland.org>
+In-Reply-To: <20200102153241.GA4683@localhost>
+Message-ID: <Pine.LNX.4.44L0.2001021321060.1309-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -34,43 +33,62 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2 Jan 2020, Laurent Pinchart wrote:
+On Thu, 2 Jan 2020, Johan Hovold wrote:
 
-> Hi Roger,
-> 
-> On Thu, Jan 02, 2020 at 04:57:42PM +0000, Roger Whittaker wrote:
-> > On Thu, Jan 02, 2020 at 06:38:07PM +0200, Laurent Pinchart wrote:
+> > > FWIW, Roger confirmed that reverting the commit d482c7bb0541 does
+> > > indeed fix the issue (with the latest 5.4.y kernel).
 > > 
-> > > Roger, would you be able to set the uvcvideo trace module parameter to
-> > > 0xffff before plugging the device, and provide the messages printed by
-> > > the driver to the kernel log both with and without the above commit ?
+> > All right.  Suppose instead of reverting that commit, I change the code
+> > so that it only logs a warning when it finds an endpoint descriptor
+> > with maxpacket = 0 (and it skips the warning for isochronous endpoints
+> > in altsetting 0).  At the same time, we can add a check to
+> > usb_submit_urb() to refuse URBs if the endpoint's maxpacket is 0.
 > > 
-> > With 5.3.12-2-default, loading uvcvideo with
-> > 
-> > options uvcvideo trace=0xffff
+> > Sounds good?
 > 
-> Thank you.
+> Sounds good to me.
 > 
-> > On plugging:
-> > 
-> > [   73.571566] usb 1-1.4.3.1: new high-speed USB device number 12 using xhci_hcd
-> > [   73.729180] usb 1-1.4.3.1: config 1 interface 2 altsetting 0 endpoint 0x82 has wMaxPacketSize 0, skipping
-> > [   73.729552] usb 1-1.4.3.1: New USB device found, idVendor=1778, idProduct=0214, bcdDevice= 7.07
-> > [   73.729558] usb 1-1.4.3.1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> > [   73.729561] usb 1-1.4.3.1: Product: IPEVO Point 2 View
-> > [   73.729564] usb 1-1.4.3.1: Manufacturer: IPEVO Inc.
-> > [   73.732670] hid-generic 0003:1778:0214.0009: hiddev98,hidraw8: USB HID v1.10 Device [IPEVO Inc. IPEVO Point 2 View] on usb-0000:00:14.0-1.4.3.1/input0
-> > [   73.781765] videodev: Linux video capture interface: v2.00
-> > [   73.807553] uvcvideo: Probing generic UVC device 1.4.3.1
-> > [   73.807693] uvcvideo: no class-specific streaming interface descriptors found.
-> 
-> It seems that Alan's patch causes more than the endpoint to be ignored.
+> Just make sure not to add a WARN() in usb_submit_urb() so that we end up
+> having to add maxpacket checks to every USB driver when syzbot starts
+> hitting this (only driver's doing maxpacket divisions or similar should
+> need that).
 
-Roger, you can get more information by plugging in the device and then
-posting the contents of /sys/kernel/debug/usb/devices (or just the
-portion that refers to the camera).  It would be interesting to compare 
-the values from the kernel with the commit present and the kernel with 
-the commit reverted.
+Heh.  Yes, syzbot interprets WARN() very differently from dev_warn().
+
+Okay, here's a patch for testing.  This is meant to go on top of the 
+existing commit; instead of rejecting bogus endpoints entirely it just 
+issues a warning.
+
+And it turns out that usb_submit_urb() already checks for maxpacket = 
+0, so no changes are needed there.
 
 Alan Stern
+
+
+
+Index: usb-devel/drivers/usb/core/config.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/config.c
++++ usb-devel/drivers/usb/core/config.c
+@@ -346,12 +346,16 @@ static int usb_parse_endpoint(struct dev
+ 			endpoint->desc.wMaxPacketSize = cpu_to_le16(8);
+ 	}
+ 
+-	/* Validate the wMaxPacketSize field */
++	/*
++	 * Validate the wMaxPacketSize field.
++	 * Some devices have isochronous endpoints in altsetting 0;
++	 * the USB-2 spec requires such endpoints to have wMaxPacketSize = 0
++	 * (see the end of section 5.6.3), so don't warn about them.
++	 */
+ 	maxp = usb_endpoint_maxp(&endpoint->desc);
+-	if (maxp == 0) {
+-		dev_warn(ddev, "config %d interface %d altsetting %d endpoint 0x%X has wMaxPacketSize 0, skipping\n",
++	if (maxp == 0 && !(usb_endpoint_xfer_isoc(d) && asnum == 0)) {
++		dev_warn(ddev, "config %d interface %d altsetting %d endpoint 0x%X has invalid wMaxPacketSize 0\n",
+ 		    cfgno, inum, asnum, d->bEndpointAddress);
+-		goto skip_to_next_endpoint_or_interface_descriptor;
+ 	}
+ 
+ 	/* Find the highest legal maxpacket size for this endpoint */
 
