@@ -2,105 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE1512E754
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 15:41:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 867FF12E758
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 15:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728569AbgABOkx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jan 2020 09:40:53 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:39573 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728425AbgABOkx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 09:40:53 -0500
-Received: by mail-lj1-f194.google.com with SMTP id l2so40907202lja.6;
-        Thu, 02 Jan 2020 06:40:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=YTVCjk10X6IDkXlg3Lj964r6euM3rxVqLQ0GPKfUCcY=;
-        b=AP5XweqgaDQb81JEDXXKrNOcYIEC2i4tvtdZSUGy93+DHN8A7ffo9TybljSB9VJ4j3
-         oZiC3JWlslj+PMJ13KpRrBZjp0emO2GobVqk+FEpnz5lFn8yuNZ+jFhEbwIMK73UeZB1
-         P0WN+b7kW6c8faslew/p/cfGYho0JQNrarwEKGJFRRB9bBNHI9/9YGZXVqzP1gMLeQQC
-         uwtOqNfEhpzbW6cUHtOSJ+bIzsO+UIoGEBAAxhZSmD/mI0CykOjgaCZixZZlYtfdKQ4T
-         iFUw53maeqLsVUL3PHWSSunz0Dv4NC0WQxDaawkoHV6HvLHzG0qBidaxdKLFxkN+F3YC
-         IR2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=YTVCjk10X6IDkXlg3Lj964r6euM3rxVqLQ0GPKfUCcY=;
-        b=LDuOcCxuIzJfZfPczf0dw4MAMxSmY8cy+2o79sBX1ERxzauk7Arga1GNQDMYqV8xJC
-         jHSFxqu8nhYMIeSpl1QKsUc/BypJtUQD0nc4gR3AuXjFjJBRbskhvSYU2kIumnSIa98R
-         jw6p9wcywLai6Vv4Bny0KS7zzJ37MIZDxBoJhl3V+A5KAr2FcGxVVODVugTBp9XKYs9Z
-         OQCl3CfhB/Kn5pJCzfVBaZJgOnTN2sh1Z/faJb0NTgtt9API0MPCco5Fm6TIphxcqY4M
-         nn8lg/jbhHiIyD/qYjqYzlRvguu5dvZcgsC8XknkUiToAKV74qN4bhi2yZoTJ7ohQ4Sj
-         fV8w==
-X-Gm-Message-State: APjAAAXQMfUwgsT+mXc7VcLE0VR6TczStRajVrtvWbBcelMdRiVfkcMy
-        N01fvBmjEyZcLgEuM+Id3UPxKcs1
-X-Google-Smtp-Source: APXvYqxW/kfrNuZymj/mH11dgfiJX4D4dMU5VfflYEafTsK943BzpUc401lim/Fq7EUQMnVZaeZkrg==
-X-Received: by 2002:a2e:88c5:: with SMTP id a5mr49355528ljk.201.1577976050485;
-        Thu, 02 Jan 2020 06:40:50 -0800 (PST)
-Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id g15sm18239966ljl.10.2020.01.02.06.40.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jan 2020 06:40:49 -0800 (PST)
-Subject: Re: [PATCH v3 13/16] usb: phy: tegra: Keep CPU interrupts enabled
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20191228203358.23490-1-digetx@gmail.com>
- <20191228203358.23490-14-digetx@gmail.com>
- <20191230203648.GA24135@qmqm.qmqm.pl>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <ad1a2b09-12b0-112e-1556-6faf6a01c330@gmail.com>
-Date:   Thu, 2 Jan 2020 17:40:48 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1728526AbgABOnL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jan 2020 09:43:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44912 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728425AbgABOnL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 2 Jan 2020 09:43:11 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5A07021734;
+        Thu,  2 Jan 2020 14:43:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1577976190;
+        bh=n4AM9LRCWJXAhltDcmCKVNCRSqTreCc4/lgTFxpkwDM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oOezIZcQfCHPx6kby/tHNLiYkc/GsZbuiwBqNvaPgPU5/jssAAf85gPNemTuag9UW
+         LHjY+KNFyyMQi3sPcZJMY0AR77+XBhWLIQM2Av6nB5nxHf+Mh3ctLIRzRNHb3DZadh
+         3f2/YIqAiBBvrKKp+Nmd+wgkYLRWhKE1ExwvN8Ho=
+Date:   Thu, 2 Jan 2020 15:43:08 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org
+Subject: Re: Changed commit author date of queued commits
+Message-ID: <20200102144308.GA4022303@kroah.com>
+References: <c1fe8040-b35d-70a0-6906-a82d20cc93f1@molgen.mpg.de>
+ <20200102142200.GA4020988@kroah.com>
+ <25813021-f136-fb30-71da-c2ff522141b1@molgen.mpg.de>
 MIME-Version: 1.0
-In-Reply-To: <20191230203648.GA24135@qmqm.qmqm.pl>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <25813021-f136-fb30-71da-c2ff522141b1@molgen.mpg.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-30.12.2019 23:36, Michał Mirosław пишет:
-> On Sat, Dec 28, 2019 at 11:33:55PM +0300, Dmitry Osipenko wrote:
->> There is no good reason for disabling of CPU interrupts in order to
->> protect the utmip_pad_count modification.
+On Thu, Jan 02, 2020 at 03:36:07PM +0100, Paul Menzel wrote:
+> Dear Greg,
 > 
-> Since there are sleeping functions called outside of the locked sections,
-> this should be a mutex instead. OTOH if the spin_lock is to protect register
-> write against IRQ handler, then the patch is wrong.
 > 
-> [...]
->> -	spin_unlock_irqrestore(&utmip_pad_lock, flags);
->> +	spin_unlock(&utmip_pad_lock);
->>  
->>  	clk_disable_unprepare(phy->pad_clk);
+> On 2020-01-02 15:22, Greg KH wrote:
+> > On Thu, Jan 02, 2020 at 03:15:04PM +0100, Paul Menzel wrote:
+> 
+> >> Looking at [1] and [2], the commit author timestamps differ. Mika’s commit
+> >> in Patchwork is from Nov. 13, 2019, 5:32 p.m. UTC, and you committed it the
+> >> day after.
+> >>
+> >> But, the date of the commit you sent is Wed, 11 Dec 2019 16:20:02 +0200 [2].
+> >>
+> >> Is that expected? Should the tag(?) be added in all “forwarded” commits
+> >> to the list?
+> > 
+> > What "tag" would that be?
+> > 
+> > Mathias sent the patches to me through email, and then I applied them to
+> > my tree.  The authorship timestamp ends up being that final email.
+> > 
+> > Nothing new here, this is how things have always worked :)
+> 
+> If you add
+> 
+>     Date: Thu Jan 2 13:16:21 2020 +0100
+> 
+> in the beginning of the message body, `git am` will take that as author date
+> instead of the date in the email header.
+> 
+> `git help am` does not state that, but `git help format-patch` and the
+> format it creates shows that this is how it works, and I just tested this,
+> and it works this way.
 
-Hello Michał,
+So how would one export the patches from git, and pass them to 'git
+send-email' in a way that would preserve this tag?
 
-This spinlock isn't for protecting from the IRQ handler, it's used
-solely to protect modification of the registers that are shared by all
-USB controllers.
+But step back here, why is this an issue at all?
 
-It's possible to use mutex instead of spinlock here, but it doesn't
-bring any benefits because mutex is more useful when protected code
-could block for a long time due to sleep or whatever, while spinlock is
-much more efficient when protected code doesn't sleep and takes no more
-than dozens microseconds to execute (which is the case here).
+thanks,
 
-In this particular case of the Tegra USB PHY driver, the chance of
-getting a block on taking the utmip_pad_lock is zero unless USB
-controller drivers will start to use asynchronous probing. So this patch
-does a very minor clean-up change and nothing more.
+greg k-h
