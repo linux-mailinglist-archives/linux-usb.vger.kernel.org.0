@@ -2,107 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3126012E85E
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 16:59:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F15412E8CB
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 17:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728742AbgABP76 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jan 2020 10:59:58 -0500
-Received: from mga18.intel.com ([134.134.136.126]:57614 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728678AbgABP76 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 2 Jan 2020 10:59:58 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Jan 2020 07:59:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,387,1571727600"; 
-   d="scan'208";a="301999760"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga001.jf.intel.com with ESMTP; 02 Jan 2020 07:59:56 -0800
-Subject: Re: ERROR: unexpected command completion code 0x11 for DJ-Tech CTRL
- (resending as plain text ;)
+        id S1728808AbgABQiU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jan 2020 11:38:20 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:45036 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728280AbgABQiU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 11:38:20 -0500
+Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 49323516;
+        Thu,  2 Jan 2020 17:38:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1577983097;
+        bh=EakE89tJOd3GObfS/u4FO++zBGtF8KQUPS8XEnOhKDg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c5V+EXMc239xu5RmVgPhxFxbA0Pmwd21gq2IDQYS8wAcg6/ZYS/kEERjdL/I78QtB
+         xwOlE45y5YpNUOyboCh9HfKwv3tKduJz/XLoOYlafzlIwdPwf7M42WoBFwQC0bJe+f
+         9p47Sx/GLq6HVPsZ4JPxeMENpRtGLAx0dLhD/p6M=
+Date:   Thu, 2 Jan 2020 18:38:07 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "Rene D. Obermueller" <cmdrrdo@gmail.com>,
-        linux-usb@vger.kernel.org
-References: <Pine.LNX.4.44L0.2001021024090.1546-100000@iolanthe.rowland.org>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <6fb5bd57-5209-3344-b52c-a1d311ac1644@linux.intel.com>
-Date:   Thu, 2 Jan 2020 18:01:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+Cc:     Takashi Iwai <tiwai@suse.de>, Johan Hovold <johan@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Roger Whittaker <Roger.Whittaker@suse.com>,
+        Takashi Iwai <tiwai@suse.com>, linux-usb@vger.kernel.org
+Subject: Re: Certain cameras no longer working with uvcvideo on recent
+ (openSUSE) kernels
+Message-ID: <20200102163807.GE4843@pendragon.ideasonboard.com>
+References: <s5hr20ingu5.wl-tiwai@suse.de>
+ <Pine.LNX.4.44L0.2001021003130.1546-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <Pine.LNX.4.44L0.2001021024090.1546-100000@iolanthe.rowland.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.2001021003130.1546-100000@iolanthe.rowland.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2.1.2020 17.31, Alan Stern wrote:
-> On Thu, 2 Jan 2020, Mathias Nyman wrote:
-> 
->> On 24.12.2019 17.28, Alan Stern wrote:
->>> On Mon, 23 Dec 2019, Mathias Nyman wrote:
->>>
->>>> The Maximum Packet Size of the full-speed bulk endpoint looks a bit suspicious (maxp 4)
->>>>
->>>> 12478.521580: xhci_add_endpoint: State disabled mult 1 max P. Streams 0 interval 125 us max ESIT payload 0 CErr 3 Type Bulk OUT burst 0 maxp 4 deq 00000000fff71001
->>>>
->>>> For full speed bulk endpoints only support 8, 16, 32 and 64 bytes Max Packet sizes.
->>>> Host are not required to support other values. See USB2 spec section 5.8.3 for details
->>>>
->>>> Maybe forcing it to one of the allowed values could work.
->>>> Does the below hack help? (untested)?
->>>
->>> Is this the sort of thing we should handle in
->>> config.c:usb_parse_endpoint()?
->>>
->>> Even though 4 is not a valid maxpacket size for full-speed bulk
->>> endpoints, many host controllers and hubs will handle it okay.  Much
->>> the same is true for devices that have a high-speed bulk endpoint with
->>> maxpacket set to 1024.  Should we try to treat these two errors the
->>> same way?
->>
->> Makes sense.
->> Looks like config.c:usb_parse_endpoint() shows a warning if maxpacket size is incorrect for
->> high-speed bulk endpoints, but leaves the maxpacket size unchanged.
->> If xhci is used then the xhci driver will later force the maxpacket to 512
-> 
-> Does the driver do this because otherwise the controller will refuse to
-> handle the endpoint?
-> 
-> There are indeed high-speed devices that have a bulk endpoint with
-> maxpacket set to 1024; I have used some.  They work okay with EHCI
-> because the driver and the controller will accept the invalid value.
-> But probably they won't work with xHCI.
+Hi Alan,
 
-Looks like high-speed bulk endpoint maxpacket was forced to 512 to handle cases where
-wMaxPacketSize was smaller than 512. Some xHC controllers apparently couldn't handle that.
-This is done in a patch from 2013:
+On Thu, Jan 02, 2020 at 10:06:33AM -0500, Alan Stern wrote:
+> On Thu, 2 Jan 2020, Takashi Iwai wrote:
+> > On Thu, 02 Jan 2020 12:20:45 +0100, Johan Hovold wrote:
+> > > On Wed, Jan 01, 2020 at 03:09:35PM -0500, Alan Stern wrote:
+> > > > On Wed, 1 Jan 2020, Greg KH wrote:
+> > > > > On Wed, Jan 01, 2020 at 08:35:59PM +0200, Laurent Pinchart wrote:
+> > > 
+> > > > > > [  470.351700] usb 1-1.4.3.1: config 1 interface 2 altsetting 0 endpoint 0x82 has wMaxPacketSize 0, skipping
+> > > > > > 
+> > > > > > This seems to be the culprit, and it points to the USB core. One
+> > > > > > interface is ignored due to its wMaxPacketSize value, and the uvcvideo
+> > > > > > driver then fails to find it.
+> > > > > > 
+> > > > > > The wMaxPacketSize check was added in
+> > > > > > 
+> > > > > > commit d482c7bb0541d19dea8bff437a9f3c5563b5b2d2
+> > > > > > Author: Alan Stern <stern@rowland.harvard.edu>
+> > > > > > Date:   Mon Oct 28 10:52:35 2019 -0400
+> > > > > > 
+> > > > > >     USB: Skip endpoints with 0 maxpacket length
+> > > > > > 
+> > > > > >     Endpoints with a maxpacket length of 0 are probably useless.  They
+> > > > > >     can't transfer any data, and it's not at all unlikely that an HCD will
+> > > > > >     crash or hang when trying to handle an URB for such an endpoint.
+> > > > > > 
+> > > > > >     Currently the USB core does not check for endpoints having a maxpacket
+> > > > > >     value of 0.  This patch adds a check, printing a warning and skipping
+> > > > > >     over any endpoints it catches.
+> > > > > > 
+> > > > > >     Now, the USB spec does not rule out endpoints having maxpacket = 0.
+> > > > > >     But since they wouldn't have any practical use, there doesn't seem to
+> > > > > >     be any good reason for us to accept them.
+> > > > > > 
+> > > > > >     Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> > > > > > 
+> > > > > >     Link: https://lore.kernel.org/r/Pine.LNX.4.44L0.1910281050420.1485-100000@iolanthe.rowland.org
+> > > > > >     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > > > 
+> > > > > > The commit was merged in v5.4 and backported to v5.3.11 in
+> > > > > > 47aaab6377204cdbcd16f52a23c584f994fd0d15.
+> > > > > > 
+> > > > > > For reference for Alan and linux-usb, the issue being discussed is
+> > > > > > described in https://bugzilla.suse.com/show_bug.cgi?id=1159811. The
+> > > > > > above commit seems to cause a regression with several cameras. I've
+> > > > > > attached to this e-mail the lsusb output provided by Roger.
+> > > > > 
+> > > > > How can a device work with an endpoint of 0 length?
+> > > > > 
+> > > > > What does the driver expect to do with those endpoints?  Does it expect
+> > > > > it to be present but just ignore it?
+> > > > 
+> > > > I see what's going on.  The endpoint in question is isochronous, and
+> > > > the bAlternateSetting value is 0, which makes this the default
+> > > > altsetting for that interface.  The USB spec says (at the end of
+> > > > section 5.6.3):
+> > > > 
+> > > > 	All device default interface settings must not include any
+> > > > 	isochronous endpoints with non-zero data payload sizes
+> > > > 	(specified via wMaxPacketSize in the endpoint descriptor).  
+> > > > 	Alternate interface settings may specify non-zero data payload
+> > > > 	sizes for isochronous endpoints.
+> > > > 
+> > > > That explains why the maxpacket size is set to 0.
+> > > > 
+> > > > So it looks like the endpoint-descriptor parsing code might want to
+> > > > make a special case to accept isochronous endpoints with maxpacket 0 if
+> > > > bAlternateSetting is 0.  But whether we do this or not, I would expect
+> > > > the uvcvideo driver to look for isochronous endpoints in the alternate
+> > > > settings it will actually use, not in altsetting 0.  Then the presence
+> > > > or absence of that endpoint descriptor would make no difference to
+> > > > uvcvideo.
+> > > > 
+> > > > (Unless the UVC spec _requires_ these endpoint descriptors to be
+> > > > present.  If it does then we should simply change the core parsing code
+> > > > and leave uvcvideo alone.)
+> > > 
+> > > Note that we also have this little gem in the ftdi usb-serial driver
+> > > (since 2009) overriding a zero max packet size for devices with broken
+> > > descriptors:
+> > > 
+> > > 	895f28badce9 ("USB: ftdi_sio: fix hi-speed device packet size calculation")
+> > > 
+> > > Note sure how common those are but they will no longer work after the
+> > > new sanity check in core. I guess we could add quirks for them (to core)
+> > > in case we get any reports, but perhaps reverting the check should be
+> > > considered.
+> > 
+> > FWIW, Roger confirmed that reverting the commit d482c7bb0541 does
+> > indeed fix the issue (with the latest 5.4.y kernel).
+> 
+> All right.  Suppose instead of reverting that commit, I change the code
+> so that it only logs a warning when it finds an endpoint descriptor
+> with maxpacket = 0 (and it skips the warning for isochronous endpoints
+> in altsetting 0).  At the same time, we can add a check to
+> usb_submit_urb() to refuse URBs if the endpoint's maxpacket is 0.
+> 
+> Sounds good?
 
-e4f47e3675e6 USB: xHCI: override bogus bulk wMaxPacketSize values
+It makes it easier for me as I won't have to adapt the uvcvideo driver,
+so it certainly sounds good :-)
 
-> 
->> I'm all for both checking and forcing maxpacket sizes in usb_parse_endpoint(), but
->> is there a risk that we break some devices that used to work. For example full-speed
->> bulk devices with maxpacket 4 that work fine under EHCI, but device can't handle
->> a new maxpacket size set to 8?
-> 
-> I haven't run across that combination before, so I don't know.  Maybe
-> the reason it worked okay until now is because those devices never need
-> to perform a bulk transfer containing more than 4 bytes?
-> 
-> In any case, making this sort of change would definitely break the
-> 1024-byte maxpacket devices mentioned above.
-> 
->> Or should we only warn in config.c if the maxpacket sizes are not according to specifications,
->> and leave it to the host controller drivers to force new maxpacket values?
-> 
-> I think that would be a lot safer.
+The USB specification allows different endpoint settings in different
+alternate settings, and unless I'm mistaken, it includes a different
+number of endpoints and different endpoint numbers. The UVC
+specification isn't very clear on this topic, but in practice most
+isochronous devices don't include any isochronous endpoint in altsetting
+0. Only 5 devices in my database of ~400 has an isochronous endpoint in
+altsetting 0, all of them with a wMaxPacketSize value set to 0. The
+above commit, if it only ignored the endpoint, should thus be fine, as
+the uvcvideo driver checks for endpoints in other alternate settings
+(the related code is the loop at the end of uvc_parse_streaming() in
+drivers/media/usb/uvc/uvc_driver.c). I thus wonder what's going wrong,
+and if the commit couldn't cause the interface to be mistakenly ignored
+as a whole ?
 
-Ok, lets go with that
+Roger, would you be able to set the uvcvideo trace module parameter to
+0xffff before plugging the device, and provide the messages printed by
+the driver to the kernel log both with and without the above commit ?
 
--Mathias
+-- 
+Regards,
+
+Laurent Pinchart
