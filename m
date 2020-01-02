@@ -2,118 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A3112EB8A
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 22:52:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9386212F1AF
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 00:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725883AbgABVw5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jan 2020 16:52:57 -0500
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:40993 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725837AbgABVw5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 16:52:57 -0500
-Received: by mail-ed1-f68.google.com with SMTP id c26so40227853eds.8;
-        Thu, 02 Jan 2020 13:52:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Hvu2XgZLIAybTxeXvSxciwNCDI/QTjrV4RLf06zuwtk=;
-        b=pt+8L1kfxsX0Xxqv1s32vYhKZ0Ehx0enq8/6v/tV9pcIelS/duSghfq9QbBGzbWmtr
-         K7ef23N6Wc1GG6zhr+FtBE1UzCgHZq33Wc4wop1pvAc0TwGWv6IyTQHw32qhdqEP0NTI
-         RnZKGzNyx4U9n+jtQVCpKI7TxoG5iNG8RtI7ULvxf1ivAPLvjrDrXBBi1/FZpnmJgHsI
-         5RWeO7GsrQe5v/h+OB2aOQVQYgU49ciDf8wFuizGVYTXnMFnbftDO+wSVmKi1/AUdeii
-         V1F8yfXoAWRUvHuq6Q8MfmZLQ5ENJYt5dIwrFo/vJ99osCuIDlsOPQJL7iKy/RNKzMS1
-         CAcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Hvu2XgZLIAybTxeXvSxciwNCDI/QTjrV4RLf06zuwtk=;
-        b=AYeGr3qZIx31mf9/1D+6lYyfebdJ+vSK7GUc3jXfa5gaeJQW7B6ZaS5SSGh9YR13BB
-         uSgcfyqaIp0w0Nes6Y4iOVuHc0zH8q5bJIwCqmKSn383UwDO/X3FIhA7ETAgPcxDDixB
-         Vd/hps4755cdHl3jISKCyXOJWiY2i9xNrDEWHe1XN4pgDh1xka8sgUc4b4RMUXksKyJZ
-         BWXXyyA0CJ8ULFhCNgP0HPsO9kWvojxD28MOUnbsPOu9IkKu0mIDAwTBZg9hZitNBrMv
-         FeCDJwHAWhY4x2y6F1WkqePmcbdYOQvdng5K7AepVOCx5k7XwslZam3KCNRSln3abRGh
-         XZSA==
-X-Gm-Message-State: APjAAAXgNreoetF5FFeQ4Lny+ziJ1aoiNDdTZ1wMNO+JoeXlfX21QG78
-        kQbWO8G7aS98GaW+khZRJXZ4tFv1K7BJwkIW4ANnYA==
-X-Google-Smtp-Source: APXvYqyLuGqANpkEmw72e7jynDm+fNMM49TQnwz/BBk2Zt26OUL6Fve8YN1sQTqqR68Jp8kkufLSn3wjnTCMkt89RHE=
-X-Received: by 2002:aa7:d6d1:: with SMTP id x17mr53418384edr.57.1578001975370;
- Thu, 02 Jan 2020 13:52:55 -0800 (PST)
+        id S1727159AbgABXLh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jan 2020 18:11:37 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:54936 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726647AbgABXLh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 18:11:37 -0500
+Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BF929516;
+        Fri,  3 Jan 2020 00:11:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1578006694;
+        bh=+8ka5EHYmQCUKqoahuGo9mz9keOCIa3B41PjQYozSV8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hJNvEn/iiIrXV7s2NCD5wT4zyR9xlU0EEXsMkRbxOxMXKGVqqyCesdHP/8zYY/fLc
+         zsQzWbDnXjx2e1/UtSSwejpE0LD/gdFESRHU1d5xKAkaLLW1gq2rpgThkFEd+cupqc
+         Z2tdsz9D65iFNmpHYh0yRX2JPzQamistoMSzTsm4=
+Date:   Fri, 3 Jan 2020 01:11:24 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Roger Whittaker <Roger.Whittaker@suse.com>,
+        Takashi Iwai <tiwai@suse.de>, Johan Hovold <johan@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Takashi Iwai <tiwai@suse.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: Certain cameras no longer working with uvcvideo on recent
+ (openSUSE) kernels
+Message-ID: <20200102231124.GH4843@pendragon.ideasonboard.com>
+References: <20200102170310.GF4843@pendragon.ideasonboard.com>
+ <Pine.LNX.4.44L0.2001021246480.1309-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-References: <1577428606-69855-1-git-send-email-hanjie.lin@amlogic.com>
- <1577428606-69855-5-git-send-email-hanjie.lin@amlogic.com>
- <CAFBinCD8V-Swihz+VJ780sXJtM9cXprDcGCHVuHjjCx0DEOodQ@mail.gmail.com> <d66abc21-1440-503b-3515-6c495bf0db80@amlogic.com>
-In-Reply-To: <d66abc21-1440-503b-3515-6c495bf0db80@amlogic.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Thu, 2 Jan 2020 22:52:44 +0100
-Message-ID: <CAFBinCAEO=c+5oZrUmW=YhqD5tQkm0NUSbgwxHYqL2UgcK4c5Q@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] usb: dwc3: Add Amlogic A1 DWC3 glue
-To:     Hanjie Lin <hanjie.lin@amlogic.com>
-Cc:     Rob Herring <robh@kernel.org>, Victor Wan <victor.wan@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-usb@vger.kernel.org, Yue Wang <yue.wang@amlogic.com>,
-        Qiufang Dai <qiufang.dai@amlogic.com>,
-        devicetree@vger.kernel.org, Liang Yang <liang.yang@amlogic.com>,
-        Jian Hu <jian.hu@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Carlo Caione <carlo@caione.org>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Jerome Brunet <jbrunet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.2001021246480.1309-100000@iolanthe.rowland.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Hanjie,
+Hi Alan,
 
-On Thu, Jan 2, 2020 at 1:30 AM Hanjie Lin <hanjie.lin@amlogic.com> wrote:
-[...]
-> >> -               if (i == USB2_OTG_PHY) {
-> >> +               if (priv->soc_id == MESON_SOC_G12A && i == USB2_OTG_PHY) {
-> > on GXL we have two PHYs (0 and 1), the second one is OTG capable
-> > on GXM we have three PHYs (0..2), the second one is OTG capable
-> > on G12A/G12B we have two PHYs (0 and 1), the second one is OTG capable
-> >
-> > you already wrote that there is only one USB2 PHY on the A1 SoC
-> > is really only the second PHY port ("usb2-phy1" instead of
-> > "usb2-phy0") used on A1?
-> > if "usb2-phy0" is correct then you don't need these checks (there are
-> > more checks like this below)
->
-> Actually, A1 have same phys("usb2-phy0", "usb2-phy1", "usb3-phy0") and register base with G12A.
-> But A1 driver is designed to support host mode with usb2-phy1 only.
-OK, thank you for clarifying this interesting decision made by the HW team
+On Thu, Jan 02, 2020 at 12:49:00PM -0500, Alan Stern wrote:
+> On Thu, 2 Jan 2020, Laurent Pinchart wrote:
+> > On Thu, Jan 02, 2020 at 04:57:42PM +0000, Roger Whittaker wrote:
+> > > On Thu, Jan 02, 2020 at 06:38:07PM +0200, Laurent Pinchart wrote:
+> > > 
+> > > > Roger, would you be able to set the uvcvideo trace module parameter to
+> > > > 0xffff before plugging the device, and provide the messages printed by
+> > > > the driver to the kernel log both with and without the above commit ?
+> > > 
+> > > With 5.3.12-2-default, loading uvcvideo with
+> > > 
+> > > options uvcvideo trace=0xffff
+> > 
+> > Thank you.
+> > 
+> > > On plugging:
+> > > 
+> > > [   73.571566] usb 1-1.4.3.1: new high-speed USB device number 12 using xhci_hcd
+> > > [   73.729180] usb 1-1.4.3.1: config 1 interface 2 altsetting 0 endpoint 0x82 has wMaxPacketSize 0, skipping
+> > > [   73.729552] usb 1-1.4.3.1: New USB device found, idVendor=1778, idProduct=0214, bcdDevice= 7.07
+> > > [   73.729558] usb 1-1.4.3.1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+> > > [   73.729561] usb 1-1.4.3.1: Product: IPEVO Point 2 View
+> > > [   73.729564] usb 1-1.4.3.1: Manufacturer: IPEVO Inc.
+> > > [   73.732670] hid-generic 0003:1778:0214.0009: hiddev98,hidraw8: USB HID v1.10 Device [IPEVO Inc. IPEVO Point 2 View] on usb-0000:00:14.0-1.4.3.1/input0
+> > > [   73.781765] videodev: Linux video capture interface: v2.00
+> > > [   73.807553] uvcvideo: Probing generic UVC device 1.4.3.1
+> > > [   73.807693] uvcvideo: no class-specific streaming interface descriptors found.
+> > 
+> > It seems that Alan's patch causes more than the endpoint to be ignored.
+> 
+> Roger, you can get more information by plugging in the device and then
+> posting the contents of /sys/kernel/debug/usb/devices (or just the
+> portion that refers to the camera).  It would be interesting to compare 
+> the values from the kernel with the commit present and the kernel with 
+> the commit reverted.
 
-...]
-> >> -       usb_role_switch_unregister(priv->role_switch);
-> >> +       if (priv->soc_id == MESON_SOC_G12A)
-> >> +               usb_role_switch_unregister(priv->role_switch);
-> > I didn't expect this because in _probe usb_role_switch_register is still called
-> > on A1 we now call usb_role_switch_register() but we never call
-> > usb_role_switch_unregister()
-> >
->
-> Actually, usb_role_switch_register() can be called only in G12A.
->
-> dwc3_meson_g12a_probe()
->          ...
->          if (priv->soc_id != MESON_SOC_G12A)
->                  goto setup_pm_runtime;
-I completely missed that, thank you for clarifying it
+I've investigated this a bit further.
 
->
-> Same with second suggestion, this different SoC extra logic could avoided by add constraints
-> to .yaml.
-> I will do this in next version.
-that would be awesome if it works out!
+UVC defines class-specific interface descriptors that are usually
+located right after the standard interface descriptor in altsetting 0.
+The uvcvideo driver accesses those descriptor through
+intf->altsetting[0].extra. However, some devices insert an isochronous
+endpoint descriptor with wMaxPAcketSize set to 0 between the standard
+interface descriptor and the UVC class-specific interface descriptors.
 
+Before your patch, these descriptors were recorded in the extra field of
+the endpoint, as they're located right after it:
 
-Martin
+static int usb_parse_endpoint(struct device *ddev, int cfgno, int inum,
+    int asnum, struct usb_host_interface *ifp, int num_ep,
+    unsigned char *buffer, int size)
+{
+...
+        /* Skip over any Class Specific or Vendor Specific descriptors;
+         * find the next endpoint or interface descriptor */
+        endpoint->extra = buffer;
+        i = find_next_descriptor(buffer, size, USB_DT_ENDPOINT,
+                        USB_DT_INTERFACE, &n);
+        endpoint->extralen = i;
+...
+}
+
+The uvcvideo driver looks at endpoint->extra when altsetting[0] has no
+extra data.
+
+With your patch, the endpoint is skipped, and the class-specific
+interface descriptors are dropped with it. The uvcvideo driver can't
+access them and fails.
+
+One solution may be to add to altsetting[0].extra all the extra
+class-specific descriptors, regardless of whether they're located before
+or after endpoints. I however fear we may not always be able to identify
+those descriptors properly, especially with the CS_INTERFACE descriptor
+type being defined in class specifications, not in the USB core
+specification. There's also a risk of breaking working devices if we do
+so (the uvcvideo driver should be able to cope, but other drivers may
+always look for descriptors in the endpoint).
+
+-- 
+Regards,
+
+Laurent Pinchart
