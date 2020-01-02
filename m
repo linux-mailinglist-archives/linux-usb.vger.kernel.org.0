@@ -2,88 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D20C312E818
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 16:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4D912E819
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2020 16:32:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728662AbgABPbx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jan 2020 10:31:53 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:41572 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728561AbgABPbx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 10:31:53 -0500
-Received: (qmail 1992 invoked by uid 2102); 2 Jan 2020 10:31:52 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 2 Jan 2020 10:31:52 -0500
-Date:   Thu, 2 Jan 2020 10:31:52 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-cc:     "Rene D. Obermueller" <cmdrrdo@gmail.com>,
-        <linux-usb@vger.kernel.org>
-Subject: Re: ERROR: unexpected command completion code 0x11 for DJ-Tech CTRL
- (resending as plain text ;)
-In-Reply-To: <56774185-d171-d63c-5a87-ae8438dcbd0d@linux.intel.com>
-Message-ID: <Pine.LNX.4.44L0.2001021024090.1546-100000@iolanthe.rowland.org>
+        id S1728676AbgABPcn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jan 2020 10:32:43 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:35017 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728561AbgABPcn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 10:32:43 -0500
+Received: by mail-lf1-f65.google.com with SMTP id 15so30135647lfr.2
+        for <linux-usb@vger.kernel.org>; Thu, 02 Jan 2020 07:32:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=X2bdc3I7CssYMJkFC+tUD4saLRW+PWs6uz/Nr7ULd2g=;
+        b=r0m+yau3EUGj6LpJksLkjV4Eywq1DWM3eiKRAQGLl3XQqTCPaJNGramTga8x0C9RuB
+         ce6szfKyVrh6m1JqsKNiByAXbCemgsWmnzvLiJPmDNsaUdKf3dANoiuSmv+2esGrSIBc
+         YpBnZpJqUNn0Y0NmTnkdMcWRIPL4cbQcQaAU/GZkcE6qtv5NAaC3fBrrFofc9Az4uUjD
+         Z7Unl9zBiCLwgP07DINO/lbv8NHaKP7xEgmKntyMF4xGR6h/1uzmVE2n57OjCmlUp1cO
+         SGVS6Fvux44NjrUA38aM+3V3bWSd31JluQB6fM9JwZFYddEIXjOIsIt9zgucRdg1mkck
+         tCLQ==
+X-Gm-Message-State: APjAAAXInsvwSXUSZvxa/f1V90hwLn56b8EjpqTSLhqryyAjKfnPwz4Z
+        Mnc45iM5BO1J5GhC1dwQJLw=
+X-Google-Smtp-Source: APXvYqyEBILDCDPMxr4TZIlbb5Xd/zJXetcKXUdnwE4xZ6cKtHJzg5CNSUHlz/tL87TmwtxqZHhPTA==
+X-Received: by 2002:a19:c3cc:: with SMTP id t195mr48466018lff.144.1577979161694;
+        Thu, 02 Jan 2020 07:32:41 -0800 (PST)
+Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
+        by smtp.gmail.com with ESMTPSA id m11sm23476223lfj.89.2020.01.02.07.32.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jan 2020 07:32:40 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@kernel.org>)
+        id 1in2Sn-0001HE-P0; Thu, 02 Jan 2020 16:32:41 +0100
+Date:   Thu, 2 Jan 2020 16:32:41 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Takashi Iwai <tiwai@suse.de>, Johan Hovold <johan@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Roger Whittaker <Roger.Whittaker@suse.com>,
+        Takashi Iwai <tiwai@suse.com>, linux-usb@vger.kernel.org
+Subject: Re: Certain cameras no longer working with uvcvideo on recent
+ (openSUSE) kernels
+Message-ID: <20200102153241.GA4683@localhost>
+References: <s5hr20ingu5.wl-tiwai@suse.de>
+ <Pine.LNX.4.44L0.2001021003130.1546-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.2001021003130.1546-100000@iolanthe.rowland.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2 Jan 2020, Mathias Nyman wrote:
+On Thu, Jan 02, 2020 at 10:06:33AM -0500, Alan Stern wrote:
+> On Thu, 2 Jan 2020, Takashi Iwai wrote:
+> > On Thu, 02 Jan 2020 12:20:45 +0100, Johan Hovold wrote:
 
-> On 24.12.2019 17.28, Alan Stern wrote:
-> > On Mon, 23 Dec 2019, Mathias Nyman wrote:
+> > > Note that we also have this little gem in the ftdi usb-serial driver
+> > > (since 2009) overriding a zero max packet size for devices with broken
+> > > descriptors:
+> > > 
+> > > 	895f28badce9 ("USB: ftdi_sio: fix hi-speed device packet size calculation")
+> > > 
+> > > Note sure how common those are but they will no longer work after the
+> > > new sanity check in core. I guess we could add quirks for them (to core)
+> > > in case we get any reports, but perhaps reverting the check should be
+> > > considered.
 > > 
-> >> The Maximum Packet Size of the full-speed bulk endpoint looks a bit suspicious (maxp 4)
-> >>
-> >> 12478.521580: xhci_add_endpoint: State disabled mult 1 max P. Streams 0 interval 125 us max ESIT payload 0 CErr 3 Type Bulk OUT burst 0 maxp 4 deq 00000000fff71001
-> >>
-> >> For full speed bulk endpoints only support 8, 16, 32 and 64 bytes Max Packet sizes.
-> >> Host are not required to support other values. See USB2 spec section 5.8.3 for details
-> >>
-> >> Maybe forcing it to one of the allowed values could work.
-> >> Does the below hack help? (untested)?
-> > 
-> > Is this the sort of thing we should handle in
-> > config.c:usb_parse_endpoint()?
-> > 
-> > Even though 4 is not a valid maxpacket size for full-speed bulk
-> > endpoints, many host controllers and hubs will handle it okay.  Much
-> > the same is true for devices that have a high-speed bulk endpoint with
-> > maxpacket set to 1024.  Should we try to treat these two errors the
-> > same way?
+> > FWIW, Roger confirmed that reverting the commit d482c7bb0541 does
+> > indeed fix the issue (with the latest 5.4.y kernel).
 > 
-> Makes sense.
-> Looks like config.c:usb_parse_endpoint() shows a warning if maxpacket size is incorrect for
-> high-speed bulk endpoints, but leaves the maxpacket size unchanged.
-> If xhci is used then the xhci driver will later force the maxpacket to 512
+> All right.  Suppose instead of reverting that commit, I change the code
+> so that it only logs a warning when it finds an endpoint descriptor
+> with maxpacket = 0 (and it skips the warning for isochronous endpoints
+> in altsetting 0).  At the same time, we can add a check to
+> usb_submit_urb() to refuse URBs if the endpoint's maxpacket is 0.
+> 
+> Sounds good?
 
-Does the driver do this because otherwise the controller will refuse to
-handle the endpoint?
+Sounds good to me.
 
-There are indeed high-speed devices that have a bulk endpoint with
-maxpacket set to 1024; I have used some.  They work okay with EHCI
-because the driver and the controller will accept the invalid value.  
-But probably they won't work with xHCI.
+Just make sure not to add a WARN() in usb_submit_urb() so that we end up
+having to add maxpacket checks to every USB driver when syzbot starts
+hitting this (only driver's doing maxpacket divisions or similar should
+need that).
 
-> I'm all for both checking and forcing maxpacket sizes in usb_parse_endpoint(), but
-> is there a risk that we break some devices that used to work. For example full-speed
-> bulk devices with maxpacket 4 that work fine under EHCI, but device can't handle
-> a new maxpacket size set to 8?
-
-I haven't run across that combination before, so I don't know.  Maybe
-the reason it worked okay until now is because those devices never need
-to perform a bulk transfer containing more than 4 bytes?
-
-In any case, making this sort of change would definitely break the
-1024-byte maxpacket devices mentioned above.
-
-> Or should we only warn in config.c if the maxpacket sizes are not according to specifications,
-> and leave it to the host controller drivers to force new maxpacket values?
-
-I think that would be a lot safer.
-
-Alan Stern
-
+Johan
