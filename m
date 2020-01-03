@@ -2,154 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C1D12FEEA
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 23:39:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DFCF12FF10
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2020 00:19:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728861AbgACWjs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jan 2020 17:39:48 -0500
-Received: from mail-il1-f194.google.com ([209.85.166.194]:34135 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728820AbgACWjp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 17:39:45 -0500
-Received: by mail-il1-f194.google.com with SMTP id s15so37919384iln.1
-        for <linux-usb@vger.kernel.org>; Fri, 03 Jan 2020 14:39:45 -0800 (PST)
+        id S1726232AbgACXTG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jan 2020 18:19:06 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:38112 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726052AbgACXTG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 18:19:06 -0500
+Received: by mail-lf1-f66.google.com with SMTP id r14so32875535lfm.5;
+        Fri, 03 Jan 2020 15:19:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=plPVBn5B05KxG9Buj5t41WutJV0n3H/IAkieAwZIPiw=;
+        b=Rs43lxKNvkJWQWSxOMFj5HImDnbdW7tn96edGbjhtRbuIiqiMdOoKci2Ue3mtExYm2
+         h8aw4WmdaQOUZdvV0OML3IKvoUM8vz0vhLvQcDV8olxP1ZZptdXNcFG5ofa0leTksW29
+         uxF641QofPpFOcyLoJ0fcjG2ANyqpCEKSFZGafqo+UvSyTW8MqOod+7Uxu9QdKYKq34e
+         e0blXEHs57SWhSkA/RFier4IIEv1SemZE2SpHIEncShEZkFOG+RCQ9sfxp4RssmVfkAB
+         +XXBCTVW6KFrsilyEN8lj7hPDzcYXs+wRB+PxNCsPXkxDAvwBNLngE2fWgzgkBMCLH1C
+         Zz5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zkpAQHH/RoZyf/tc8qpSyGyxg+iM3EC4X8NtpzdVpM0=;
-        b=WJSdmGXf9ZoIlrana7qRsn1niyOU3U6o+8TgJLrdn8cjlazWKzXljjak0SHDFtaxDl
-         FmFQQgUm3eSek5xKY6cLH4Iye57Pxm8pUEzXDvEvHXWQMDHaBkMD5+hAhdghycsMfj7v
-         OmRvwh+LixncQqSnzdgS8fVq7e5LyJvMMIF3B2mklit5k163Jb832v+4H36jBc8WiKgY
-         Xeoc8cs64NLhN8qrcayiyNsqi3xiP0Bb1f3Thy+Oe7IQ0srq6qg8m+2lZMb+tCA9lkBU
-         N4p1FQ+6Oa19VrRz+G8eqrQvRdvPifmJJfjezM4fy0fR6qKIa0kniURqmxDpuNLAT085
-         oujw==
-X-Gm-Message-State: APjAAAUSueoh8GFlj989qsHMBUs8YrsjPiZOBsm7Osm/krcHrZTDB8Ar
-        jVmXXfdEsgQzHuFlDm//85tPADo=
-X-Google-Smtp-Source: APXvYqzrCw/rzqp8geonZl/+1vAPs7XpG0D7wJ7N5/JebxApZPph5gpN6B1OdteUZy0NkoNNK6ctmQ==
-X-Received: by 2002:a92:3646:: with SMTP id d6mr71196966ilf.148.1578091184048;
-        Fri, 03 Jan 2020 14:39:44 -0800 (PST)
-Received: from rob-hp-laptop ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id n5sm21219169ila.7.2020.01.03.14.39.42
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jan 2020 14:39:42 -0800 (PST)
-Received: from rob (uid 1000)
-        (envelope-from rob@rob-hp-laptop)
-        id 2219b7
-        by rob-hp-laptop (DragonFly Mail Agent v0.11);
-        Fri, 03 Jan 2020 15:39:40 -0700
-Date:   Fri, 3 Jan 2020 15:39:40 -0700
-From:   Rob Herring <robh@kernel.org>
-To:     JC Kuo <jckuo@nvidia.com>
-Cc:     gregkh@linuxfoundation.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, kishon@ti.com, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, nkristam@nvidia.com
-Subject: Re: [PATCH v5 3/5] dt-bindings: phy: tegra: Add Tegra194 support
-Message-ID: <20200103223940.GA9205@bogus>
-References: <20200103081814.9848-1-jckuo@nvidia.com>
- <20200103081814.9848-4-jckuo@nvidia.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=plPVBn5B05KxG9Buj5t41WutJV0n3H/IAkieAwZIPiw=;
+        b=MmuHxtLBCci3TfLn+gnlvXkS/W2npWk1oeHsuHjYLlveW0+I9sxyAQM+uozW1JuP1p
+         TIOXKrpS+IODfhhH2RsndbKgs5IlIUjdEOvM/XjYjcDlEIZfP0E4MY7d2dDNJKbQYg+u
+         +MLwCY7SOQARzAwlWHimbLwP3nY3TWltsnRr9LWIR9IBa6UWAJ0ohIxx7hKY0c6QacUl
+         y9Q+kLatGd6ixfbaAh5QHwLcxZEDkUqw4PmBCkRaqFJLsmHox3ofNsEGw4EKezc/YEAn
+         rA9EMX/iqGfPkm3YjE+vm6ELejGP9QiWLcXHEnPqRuzFvgLQhzkn/GOeQ/KxBubn5ttz
+         ruEw==
+X-Gm-Message-State: APjAAAVFP2QjaX0zDSzr/5/f3Kygvq6yC0IohrNKgYxsIVIbJESwmYzv
+        2Ac/Y8VnUGjIwwyxGqKYViv14f0T
+X-Google-Smtp-Source: APXvYqyHpJll+Sl4MRgtwD+Fd2ygwv3MNH63zAjKk+0jlLGSGSkAAJxRGfgGeahH+vVWr/AsqzF5sA==
+X-Received: by 2002:a19:ae04:: with SMTP id f4mr51629831lfc.64.1578093543753;
+        Fri, 03 Jan 2020 15:19:03 -0800 (PST)
+Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.googlemail.com with ESMTPSA id i5sm25432335ljj.29.2020.01.03.15.19.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jan 2020 15:19:03 -0800 (PST)
+Subject: Re: [PATCH v2 10/10] usb: chipidea: tegra: Add USB_TEGRA_PHY module
+ to driver's dependencies
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     Peter Chen <peter.chen@nxp.com>, Rob Herring <robh-dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20191220015238.9228-1-digetx@gmail.com>
+ <20191220015238.9228-11-digetx@gmail.com>
+ <20191220035650.GC19921@b29397-desktop>
+ <fb7dee6e-e645-fe45-126c-c5f1e280bc26@gmail.com>
+ <20191223213234.GA28786@qmqm.qmqm.pl>
+ <7174833f-8325-7fb4-d190-78ba4bed0cbb@gmail.com>
+ <20191230210259.GD24135@qmqm.qmqm.pl>
+ <b34972e3-569e-d74a-4d30-d52c89032a08@gmail.com>
+ <20200103072536.GA14228@qmqm.qmqm.pl>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <51ecc509-e277-591d-3db5-fc9d46eee326@gmail.com>
+Date:   Sat, 4 Jan 2020 02:19:01 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200103081814.9848-4-jckuo@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200103072536.GA14228@qmqm.qmqm.pl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 03, 2020 at 04:18:12PM +0800, JC Kuo wrote:
-> Extend the bindings to cover the set of features found in Tegra194.
-> Note that, technically, there are four more supplies connected to the
-> XUSB pad controller (DVDD_PEX, DVDD_PEX_PLL, HVDD_PEX and HVDD_PEX_PLL)
-> , but the power sequencing requirements of Tegra194 require these to be
-> under the control of the PMIC.
+03.01.2020 10:25, Michał Mirosław пишет:
+> On Thu, Jan 02, 2020 at 06:17:47PM +0300, Dmitry Osipenko wrote:
+>> 31.12.2019 00:02, Michał Mirosław пишет:
+>>> On Tue, Dec 24, 2019 at 07:21:05AM +0300, Dmitry Osipenko wrote:
+>>>> 24.12.2019 00:32, Michał Mirosław пишет:
+>>>>> On Fri, Dec 20, 2019 at 07:31:08AM +0300, Dmitry Osipenko wrote:
+>>>>>> 20.12.2019 06:56, Peter Chen пишет:
+>>>>>>> On 19-12-20 04:52:38, Dmitry Osipenko wrote:
+>>>>> [...]
+>>>>>>>> --- a/drivers/usb/chipidea/ci_hdrc_tegra.c
+>>>>>>>> +++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
+>>>>>>>> @@ -53,6 +53,12 @@ static int tegra_udc_probe(struct platform_device *pdev)
+>>>>>>>>  	struct tegra_udc *udc;
+>>>>>>>>  	int err;
+>>>>>>>>  
+>>>>>>>> +	if (IS_MODULE(CONFIG_USB_TEGRA_PHY)) {
+>>>>>>>> +		err = request_module("phy_tegra_usb");
+>>>>>>>> +		if (err)
+>>>>>>>> +			return err;
+>>>>>>>> +	}
+>>>>>>>> +
+>>>>>>>
+>>>>>>> Why you do this dependency, if this controller driver can't
+>>>>>>> get USB PHY, it should return error. What's the return value
+>>>>>>> after calling below:
+>>>>>>>
+>>>>>>> 	udc->phy = devm_usb_get_phy_by_phandle(&pdev->dev, "nvidia,phy", 0);
+>>>>>>
+>>>>>> It returns -EPROBE_DEFER when phy_tegra_usb isn't loaded.
+>>>>>
+>>>>> How are other driver modules autoloaded? Isn't there an appropriate
+>>>>> MODALIAS or MODULE_DEVICE_TABLE in there?
+>>>>
+>>>> Hello Michał,
+>>>>
+>>>> The phy_tegra_usb module is fine by itself, it's getting autoloaded.
+>>>>
+>>>> The problem is that ci_hdrc_tegra module depends on the phy_tegra_usb
+>>>> module and thus the PHY module should be loaded before the CI module,
+>>>> otherwise CI driver fails with the EPROBE_DEFER.
+>>>
+>>> Why, then, is CI driver not being probed again after PHY driver loads?
+>>> EPROBE_DEFER is what should cause driver core to re-probe a device after
+>>> other devices appear (PHY in this case).
+>>
+>> CI driver is getting re-probed just fine if PHY's driver module is
+>> loaded manually after loading the CI's module. This patch removes this
+>> necessity to manually load PHY's module.
+>>
+>> This is just a minor convenience change that brings the CI's driver
+>> loading behaviour on par with the behaviour of loading Tegra's EHCI
+>> driver module.
 > 
-> Tegra194 XUSB PADCTL supports up to USB 3.1 Gen 2 speed, however, it
-> is possible for some platforms have long signal trace that could not
-> provide sufficient electrical environment for Gen 2 speed. This patch
-> adds a "maximum-speed" property to usb3 ports which can be used to
-> specify the maximum supported speed for any particular USB 3.1 port.
-> For a port that is not capable of SuperSpeedPlus, "maximum-speed"
-> property should carry "super-speed".
-> 
-> Signed-off-by: JC Kuo <jckuo@nvidia.com>
-> ---
-> Changes in v5:
-> - re-use "maximum-speed" instead of adding "nvidia,disable-gen2"
-> Changes in v4: none
-> Changes in v3: none
-> Changes in v2:
-> - fix a typo
-> 
->  .../phy/nvidia,tegra124-xusb-padctl.txt        | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt b/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt
-> index 9fb682e47c29..7d0089006e67 100644
-> --- a/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt
-> +++ b/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt
-> @@ -37,6 +37,7 @@ Required properties:
->    - Tegra132: "nvidia,tegra132-xusb-padctl", "nvidia,tegra124-xusb-padctl"
->    - Tegra210: "nvidia,tegra210-xusb-padctl"
->    - Tegra186: "nvidia,tegra186-xusb-padctl"
-> +  - Tegra194: "nvidia,tegra194-xusb-padctl"
->  - reg: Physical base address and length of the controller's registers.
->  - resets: Must contain an entry for each entry in reset-names.
->  - reset-names: Must include the following entries:
-> @@ -62,6 +63,10 @@ For Tegra186:
->  - vclamp-usb-supply: Bias rail for USB pad. Must supply 1.8 V.
->  - vddio-hsic-supply: HSIC PHY power supply. Must supply 1.2 V.
->  
-> +For Tegra194:
-> +- avdd-usb-supply: USB I/Os, VBUS, ID, REXT, D+/D- power supply. Must supply
-> +  3.3 V.
-> +- vclamp-usb-supply: Bias rail for USB pad. Must supply 1.8 V.
->  
->  Pad nodes:
->  ==========
-> @@ -154,6 +159,11 @@ For Tegra210, the list of valid PHY nodes is given below:
->  - sata: sata-0
->    - functions: "usb3-ss", "sata"
->  
-> +For Tegra194, the list of valid PHY nodes is given below:
-> +- usb2: usb2-0, usb2-1, usb2-2, usb2-3
-> +  - functions: "xusb"
-> +- usb3: usb3-0, usb3-1, usb3-2, usb3-3
-> +  - functions: "xusb"
->  
->  Port nodes:
->  ===========
-> @@ -221,6 +231,11 @@ Optional properties:
->    is internal. In the absence of this property the port is considered to be
->    external.
->  
-> +- maximum-speed: Only for Tegra194. A string property that specifies maximum
-> +  supported speed of a usb3 port. Valid values are:
-> +  - "super-speed-plus": default, the usb3 port supports USB 3.1 Gen 2 speed.
+> I fully understand the goal, but what I'm missing is that why this
+> doesn't work out of the box? If the PHY module is autoloaded, and so is
+> CI driver, and (as I understand) the driver's probe() correctly returns
+> EPROBE_DEFER when PHY is not probed yet, then I guess that means bug
+> somewhere else and the patch just covers it up.
 
-Not defined as a valid value in usb/generic.txt. '-gen2' instead of 
-'-plus' would be clearer IMO. However, is there any need to define the 
-maximum speed possible? The purpose of this property is to limit the 
-speed below the max.
-
-> +  - "super-speed": the usb3 port supports USB 3.1 Gen 1 speed only.
-> +
->  For Tegra124 and Tegra132, the XUSB pad controller exposes the following
->  ports:
->  - 3x USB2: usb2-0, usb2-1, usb2-2
-> @@ -233,6 +248,9 @@ For Tegra210, the XUSB pad controller exposes the following ports:
->  - 2x HSIC: hsic-0, hsic-1
->  - 4x super-speed USB: usb3-0, usb3-1, usb3-2, usb3-3
->  
-> +For Tegra194, the XUSB pad controller exposes the following ports:
-> +- 4x USB2: usb2-0, usb2-1, usb2-2, usb2-3
-> +- 4x super-speed USB: usb3-0, usb3-1, usb3-2, usb3-3
->  
->  Examples:
->  =========
-> -- 
-> 2.17.1
-> 
+It works out of the box, but it also could work a bit better in a case
+of manually reloading modules. Perhaps it should be possible to derive
+module dependencies from the Kconfig dependencies, apparently kernel
+doesn't support it yet or maybe there is some reason why it can't be done.
