@@ -2,147 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 072FF12FB48
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 18:12:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B947912FDB8
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 21:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728247AbgACRMZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jan 2020 12:12:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46898 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728216AbgACRMX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 3 Jan 2020 12:12:23 -0500
-Received: from localhost.localdomain (unknown [194.230.155.149])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C02A4222C3;
-        Fri,  3 Jan 2020 17:12:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578071542;
-        bh=tikjmOkXzl67kgxwPdvLRaRJqpldgktGgrS2H4m1wPk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v8E9zX4UIDLzAd5zOxAsedGIcpvNFV5QzvrJO9liwyDUdG5pRAfWIR/WCSA7Dazjh
-         YqU2FZ0UlUVfA9KpckU7TXkL0418Ra24J7/qwELuAIJG5kF7NmcO4E6zBi+TC9BXUR
-         q/jTgkFKzInc7v4lKvkcNEXn4bJMnx+aH14vSPgY=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Arnd Bergmann <arnd@arndb.de>, Johan Hovold <johan@kernel.org>,
-        Ran Wang <ran.wang_1@nxp.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 07/19] usb: exynos: Rename Samsung and Exynos to lowercase
-Date:   Fri,  3 Jan 2020 18:11:19 +0100
-Message-Id: <20200103171131.9900-8-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200103171131.9900-1-krzk@kernel.org>
-References: <20200103171131.9900-1-krzk@kernel.org>
+        id S1728786AbgACUUO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jan 2020 15:20:14 -0500
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:33384 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728782AbgACUUK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 15:20:10 -0500
+Received: by mail-qk1-f194.google.com with SMTP id d71so26882457qkc.0
+        for <linux-usb@vger.kernel.org>; Fri, 03 Jan 2020 12:20:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
+        b=JHYDNcOHsw5Vg59sFwNh4MhnXNKJfQKDhV3JhQemZ8O0wjy4NOClQJHVO9/XZY1B2e
+         7N2r8FlVbF9YCIZf1O8PJKqvP+J732CrXrgkZLQFQD6r8xa5PmtrOPXurr4eE1D10/dY
+         mFNu91hy8xJJRta6mrMYIQyNs0OE0ozgPWJvUT4Jmr91vUmPG9p04hCqKp3daJ6nspkN
+         ZTnUyt7jeaXiRVZmI5OCw3hnhqJr3CafoKv3hfbaHkDpeu4215n4LA4JUWv5RDO6VsPp
+         wo4bmuxUPsJ+VBxSxq4NIVVGqRtUU4TTV0YA8c6/GhqTjpJxCcyOyITBnIawjrG3MRiM
+         hUyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
+        b=YHUG+tBeX2HUxTMKpMJIz/tV1RbTyFyWPspR23lCjcM80N9QBNFJyHW9rhZiqdWD5G
+         jke6AFPvf4IQaY23Z/ntNOCqQK7w/E8yp63kaLWlL/TGsrQIsLg2lfrqp2ijg19rXIG0
+         9YNatU7gsAA9FdnjdMs/YXK/yd+h6WeuCBsbVM94MeoljxY3utSF+wuFJtATwEZbThnS
+         pEnuCC4F2HGstPQV4u+iIOA9ABZOUROs5g3cI5/eHByPcMLy9DRd9ix3kYbNVhqxOmhm
+         wFcYIQsTiNFbS/Qa1/mE7owQXFSnIZIMbIgTQQ/hxkS/JDJBGayjLYpgiApVcajCw25S
+         pmkA==
+X-Gm-Message-State: APjAAAUJHvdb89Xy1AEOB/x6FdB+hqKSqBUFAvPrLxP58epOVY08Q7Qj
+        BSUSWEZ08DS5ugHFRIncWHqChradKQbH/IzE99J0wmAXaHI=
+X-Google-Smtp-Source: APXvYqzazOZ1eDGwLjA5b5joJwHBsXYUc3xk3mwbut9BpsYKwbpZffl6B/gnfGOg4rASQDOizOWq9gQ5QJjCh6l6GTs=
+X-Received: by 2002:a37:4141:: with SMTP id o62mr70745354qka.282.1578082808591;
+ Fri, 03 Jan 2020 12:20:08 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:ac8:4410:0:0:0:0:0 with HTTP; Fri, 3 Jan 2020 12:20:08 -0800 (PST)
+From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" 
+        <westernunion.benin982@gmail.com>
+Date:   Fri, 3 Jan 2020 21:20:08 +0100
+Message-ID: <CAP=nHBJWiJ9KpSSbF4jP9u5UiU5d_kGjSUyPYDmdB2x1uiJFMw@mail.gmail.com>
+Subject: I promise you must be happy today, God has uplifted you and your
+ family ok
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix up inconsistent usage of upper and lowercase letters in "Samsung"
-and "Exynos" names.
+Dear Friend
 
-"SAMSUNG" and "EXYNOS" are not abbreviations but regular trademarked
-names.  Therefore they should be written with lowercase letters starting
-with capital letter.
+i hope all is well with you,if so, glory be to God almighty. I'm very
+happy to inform you, about my success in getting payment funds under
+the cooperation of a new partner from United States of
+America.Presently I am in uk for investment projects with my own share
+of the total sum. I didn't forget your past efforts. IMF finally
+approved your compensation payment funds this morning by prepaid (ATM)
+Debit card of US$12,500.000.00Million Dollars, Since you not received
+this payment yet, I was not certified
+but it is not your fault and not my fault, I hold nothing against
+you.than bank official whom has been detaining the transfer in the
+bank, trying to claim your funds by themselves.
 
-The lowercase "Exynos" name is promoted by its manufacturer Samsung
-Electronics Co., Ltd., in advertisement materials and on website.
+Therefore, in appreciation of your effort I have raised an
+International prepaid (ATM) Debit card of US$12,500.000.00 in your
+favor as compensation to you.
 
-Although advertisement materials usually use uppercase "SAMSUNG", the
-lowercase version is used in all legal aspects (e.g. on Wikipedia and in
-privacy/legal statements on
-https://www.samsung.com/semiconductor/privacy-global/).
+Now, i want you to contact my Diplomatic Agent, His name is Mike Benz
+on His  e-mail Address (mikebenz550@aol.com
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- drivers/usb/dwc3/dwc3-exynos.c | 4 ++--
- drivers/usb/host/Kconfig       | 4 ++--
- drivers/usb/host/ehci-exynos.c | 4 ++--
- drivers/usb/host/ohci-exynos.c | 2 +-
- 4 files changed, 7 insertions(+), 7 deletions(-)
+ask Him to send the Prepaid (ATM) Debit card to you. Bear in mind that
+the money is in Prepaid (ATM) Debit card, not cash, so you need to
+send to him,
+your full name
+address  where the prepaid (ATM) Debit card will be delivered to you,
+including your cell phone number. Finally, I left explicit
+instructions with him, on how to send the (ATM CARD) to you.
 
-diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-exynos.c
-index c1e9ea621f41..90bb022737da 100644
---- a/drivers/usb/dwc3/dwc3-exynos.c
-+++ b/drivers/usb/dwc3/dwc3-exynos.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /**
-- * dwc3-exynos.c - Samsung EXYNOS DWC3 Specific Glue layer
-+ * dwc3-exynos.c - Samsung Exynos DWC3 Specific Glue layer
-  *
-  * Copyright (c) 2012 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com
-@@ -255,4 +255,4 @@ module_platform_driver(dwc3_exynos_driver);
- 
- MODULE_AUTHOR("Anton Tikhomirov <av.tikhomirov@samsung.com>");
- MODULE_LICENSE("GPL v2");
--MODULE_DESCRIPTION("DesignWare USB3 EXYNOS Glue Layer");
-+MODULE_DESCRIPTION("DesignWare USB3 Exynos Glue Layer");
-diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index 8d730180db06..ed49d08f2f9e 100644
---- a/drivers/usb/host/Kconfig
-+++ b/drivers/usb/host/Kconfig
-@@ -269,7 +269,7 @@ config USB_EHCI_SH
- 	  If you use the PCI EHCI controller, this option is not necessary.
- 
- config USB_EHCI_EXYNOS
--	tristate "EHCI support for Samsung S5P/EXYNOS SoC Series"
-+	tristate "EHCI support for Samsung S5P/Exynos SoC Series"
- 	depends on ARCH_S5PV210 || ARCH_EXYNOS
- 	help
- 	  Enable support for the Samsung Exynos SOC's on-chip EHCI controller.
-@@ -542,7 +542,7 @@ config USB_OHCI_SH
- 	  If you use the PCI OHCI controller, this option is not necessary.
- 
- config USB_OHCI_EXYNOS
--	tristate "OHCI support for Samsung S5P/EXYNOS SoC Series"
-+	tristate "OHCI support for Samsung S5P/Exynos SoC Series"
- 	depends on ARCH_S5PV210 || ARCH_EXYNOS
- 	help
- 	  Enable support for the Samsung Exynos SOC's on-chip OHCI controller.
-diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
-index 01debfd03d4a..a4e9abcbdc4f 100644
---- a/drivers/usb/host/ehci-exynos.c
-+++ b/drivers/usb/host/ehci-exynos.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0+
- /*
-- * SAMSUNG EXYNOS USB HOST EHCI Controller
-+ * Samsung Exynos USB HOST EHCI Controller
-  *
-  * Copyright (C) 2011 Samsung Electronics Co.Ltd
-  * Author: Jingoo Han <jg1.han@samsung.com>
-@@ -21,7 +21,7 @@
- 
- #include "ehci.h"
- 
--#define DRIVER_DESC "EHCI EXYNOS driver"
-+#define DRIVER_DESC "EHCI Exynos driver"
- 
- #define EHCI_INSNREG00(base)			(base + 0x90)
- #define EHCI_INSNREG00_ENA_INCR16		(0x1 << 25)
-diff --git a/drivers/usb/host/ohci-exynos.c b/drivers/usb/host/ohci-exynos.c
-index d5ce98e205c7..bd40e597f256 100644
---- a/drivers/usb/host/ohci-exynos.c
-+++ b/drivers/usb/host/ohci-exynos.c
-@@ -19,7 +19,7 @@
- 
- #include "ohci.h"
- 
--#define DRIVER_DESC "OHCI EXYNOS driver"
-+#define DRIVER_DESC "OHCI Exynos driver"
- 
- static const char hcd_name[] = "ohci-exynos";
- static struct hc_driver __read_mostly exynos_ohci_hc_driver;
--- 
-2.17.1
+The Prepaid (ATM) Debit card, will be send to you through my
+Diplomatic Agent Mr. Mike Benz immediately you contact him. So contact
+my Diplomatic Agent Mr. Mike Benz immediately you receive this letter.
+Below is his contact information:
 
+NAME : MIKE BENZ
+EMAIL ADDRESS: mikebenz550@aol.com
+Text Him, (256) 284-4886
+
+Request for Delivery of the Prepaid (ATM) Debit card  to you today.
+Note, please I have paid for the whole service fees for you, so the
+only money you will send to my Diplomatic Agent Mr. Mike Benz is
+$50.00 for your prepaid (ATM) Debit card DELIVERY FEE to your address
+ok.
+Let me know once you receive this Card at your address.
+Best regards,
+Rev.Dr, George Adadar
