@@ -2,129 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9386212F1AF
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 00:11:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1098012F2F3
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 03:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727159AbgABXLh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jan 2020 18:11:37 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:54936 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726647AbgABXLh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 18:11:37 -0500
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BF929516;
-        Fri,  3 Jan 2020 00:11:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1578006694;
-        bh=+8ka5EHYmQCUKqoahuGo9mz9keOCIa3B41PjQYozSV8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hJNvEn/iiIrXV7s2NCD5wT4zyR9xlU0EEXsMkRbxOxMXKGVqqyCesdHP/8zYY/fLc
-         zsQzWbDnXjx2e1/UtSSwejpE0LD/gdFESRHU1d5xKAkaLLW1gq2rpgThkFEd+cupqc
-         Z2tdsz9D65iFNmpHYh0yRX2JPzQamistoMSzTsm4=
-Date:   Fri, 3 Jan 2020 01:11:24 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Roger Whittaker <Roger.Whittaker@suse.com>,
-        Takashi Iwai <tiwai@suse.de>, Johan Hovold <johan@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Takashi Iwai <tiwai@suse.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: Certain cameras no longer working with uvcvideo on recent
- (openSUSE) kernels
-Message-ID: <20200102231124.GH4843@pendragon.ideasonboard.com>
-References: <20200102170310.GF4843@pendragon.ideasonboard.com>
- <Pine.LNX.4.44L0.2001021246480.1309-100000@iolanthe.rowland.org>
+        id S1727296AbgACCbY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jan 2020 21:31:24 -0500
+Received: from mail-eopbgr130070.outbound.protection.outlook.com ([40.107.13.70]:48366
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726089AbgACCbY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 2 Jan 2020 21:31:24 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dLivXOJ2IhIsLHZsNAZ8AZ9mWRMgncqsCItpylqGB4rt+bO1iYezqI8xxZCwk8NXtdI0ofjrZBo7QxQ2KIxNNVfy9Gl7IviOtHgzMbZvfXxzNrofrJIehkXg3rkqjBm+hddqS/GMIAh5lxP1e7wx6LJTo15G+CVbe7FvQUr8GPmhL0hgVIIrXKL5tZWi66W0WO7mA7srdOl8YwuJDZ6rpvLaugJDxjJiFFGX7RZZWW6n6AL+Kti1c+bWQoJSjU3A09xi1VaPPRtEEGXqrm+7nzT+S0ve0hCelpcCH4BuS30TtBAIbh9keb0IDeontQ0AwmUAqdK/M6FsqBUUaOqvyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yB230d9PDpCkeiTsuIuXxPAS38CURcGZSpkeH4HoyQs=;
+ b=TtW7gzFP6dp5mjY3Sgrli0E0Tgmv41zNxFiQ/Lnt5Fwg8f3wpk3EU1XeGsbXygo7j1YwMdqN37MkWcWdZRlAibLBmeau7RH++rqhs4Ij9Lrv1rPKEW7H/VljgTb1+k99sX3jDMmVkkumJvKdOoha8tykNxmToUoxGo8G1y/ZVTPlOwsHvDLeNua8iR3kgzJtUBQA1YkXCiKiU0RMYCb6JTib1C+JEJt9egxuOYja4FSX5X4w7+VaMfxtvEmrvp09yK8p1DoyWUjkXK9fyFX/NC2RC8kHUhKeGRfTQjjzCK+Gi9PlP/8M1iwRBJ0YL5spwc48aQz/GkhPpq5iqs/zvg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yB230d9PDpCkeiTsuIuXxPAS38CURcGZSpkeH4HoyQs=;
+ b=X/8L7wDN9SEZOnf+3MTatsy7lN1XTrxW/iBCbKgLOXXqmE3SXv2YSHO4kObi89oMnNL7Hj96DL14QsfdcDCVQcaB4FaUNTjiDEeeW6JF0bvlYe+opij2MvAZuZXHrCupwjleMAd8aYULcSVr284T4LbHbkA8bDPH4ef8P7YItnc=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
+ VI1PR04MB4142.eurprd04.prod.outlook.com (52.134.31.144) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2602.12; Fri, 3 Jan 2020 02:31:20 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::c7d:58a2:7265:407e]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::c7d:58a2:7265:407e%6]) with mapi id 15.20.2602.010; Fri, 3 Jan 2020
+ 02:31:20 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Felipe Balbi <balbi@kernel.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "pawell@cadence.com" <pawell@cadence.com>,
+        "rogerq@ti.com" <rogerq@ti.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Subject: RE: [PATCH 1/1] usb: cdns3: add NXP imx8qm glue layer
+Thread-Topic: [PATCH 1/1] usb: cdns3: add NXP imx8qm glue layer
+Thread-Index: AQHVvHs151j0fHhAcE+5mb4ylkF2s6fXRheAgAD8RMA=
+Date:   Fri, 3 Jan 2020 02:31:20 +0000
+Message-ID: <VI1PR04MB532770282A2C0701BD2A0EBA8B230@VI1PR04MB5327.eurprd04.prod.outlook.com>
+References: <1577426348-31227-1-git-send-email-peter.chen@nxp.com>
+ <878smqksjo.fsf@kernel.org>
+In-Reply-To: <878smqksjo.fsf@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: ae077936-e6bc-4ada-8499-08d78ff504b1
+x-ms-traffictypediagnostic: VI1PR04MB4142:|VI1PR04MB4142:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB414206561D1C343F0EC195C98B230@VI1PR04MB4142.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 0271483E06
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(376002)(39860400002)(136003)(366004)(396003)(199004)(189003)(71200400001)(54906003)(6506007)(8676002)(4744005)(66946007)(26005)(186003)(66556008)(66476007)(66446008)(64756008)(86362001)(81156014)(478600001)(316002)(81166006)(52536014)(7696005)(4326008)(5660300002)(2906002)(33656002)(6916009)(8936002)(9686003)(55016002)(44832011)(76116006)(32563001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4142;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: lbaGG8v1NcTOCnciGpsYGPZ80woR3IvvldtiZpj7D0onb/HADU3KWXhit2kjtooW68iEvQSW6kc/H1T7Y5Gb7gxBm42AsWzARWnURQkyaTa4WDBAYZMDQ5UES+pXrRCGylnDrMEkGY7AoseJvU4qeyIRAy8o58XwRJyDHt7ZUGLUsSL8npyC3fHGJWCIJR2wIz3bzv2/0JN8Rt8Cw3eiEXy5daa70mthoIWmuKfxcrKbZMFuz2TO5SL5RHzE1i3GMKVtJsmN8Fds8f2webt8Ks/++5TcOlEN/hZskhxd7oAMVqFT3BPQdp83vXRTm67mV0j4y+P0VLJWwvtuEC8twuOCIoUWpm/XvwhO7lyXB0kC/ofsVM6P7th7PiMhhRNpyqp0p6876w/hWIT7121Ywm3aWTyBUqFn+fdMLbDwdPntj13HrkjVfTTboPFbVoc/cKUCxp/D0ZInw3lTsgLaaA9S5IOduRXPcflhWNlNg7E=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.2001021246480.1309-100000@iolanthe.rowland.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae077936-e6bc-4ada-8499-08d78ff504b1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jan 2020 02:31:20.3667
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kLN0pKvupgL/91Ghoxqup1e9JpqGg+32ZzFiINhEpDYmpPQ7bULdeTZ5asbi1v7C/gLaQ6mo5Ckiu8CCskfxsA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4142
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
+=20
+> > ++++++++++++++++++++++++++++++++++
+> >  3 files changed, 231 insertions(+)
+> >  create mode 100644 drivers/usb/cdns3/cdns3-imx.c
+> >
+> > diff --git a/drivers/usb/cdns3/Kconfig b/drivers/usb/cdns3/Kconfig
+> > index 2a1e89d12ed9..b1f526d20f03 100644
+> > --- a/drivers/usb/cdns3/Kconfig
+> > +++ b/drivers/usb/cdns3/Kconfig
+> > @@ -53,4 +53,14 @@ config USB_CDNS3_TI
+> >
+> >  	  e.g. J721e.
+> >
+> > +config USB_CDNS3_IMX
+> > +	tristate "Cadence USB3 support on NXP i.MX platforms"
+> > +	depends on ARCH_MXC
+>=20
+> I want to be able to compile this in any arch. Please add COMPILE_TEST an=
+d
+> make sure it works
+>=20
 
-On Thu, Jan 02, 2020 at 12:49:00PM -0500, Alan Stern wrote:
-> On Thu, 2 Jan 2020, Laurent Pinchart wrote:
-> > On Thu, Jan 02, 2020 at 04:57:42PM +0000, Roger Whittaker wrote:
-> > > On Thu, Jan 02, 2020 at 06:38:07PM +0200, Laurent Pinchart wrote:
-> > > 
-> > > > Roger, would you be able to set the uvcvideo trace module parameter to
-> > > > 0xffff before plugging the device, and provide the messages printed by
-> > > > the driver to the kernel log both with and without the above commit ?
-> > > 
-> > > With 5.3.12-2-default, loading uvcvideo with
-> > > 
-> > > options uvcvideo trace=0xffff
-> > 
-> > Thank you.
-> > 
-> > > On plugging:
-> > > 
-> > > [   73.571566] usb 1-1.4.3.1: new high-speed USB device number 12 using xhci_hcd
-> > > [   73.729180] usb 1-1.4.3.1: config 1 interface 2 altsetting 0 endpoint 0x82 has wMaxPacketSize 0, skipping
-> > > [   73.729552] usb 1-1.4.3.1: New USB device found, idVendor=1778, idProduct=0214, bcdDevice= 7.07
-> > > [   73.729558] usb 1-1.4.3.1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> > > [   73.729561] usb 1-1.4.3.1: Product: IPEVO Point 2 View
-> > > [   73.729564] usb 1-1.4.3.1: Manufacturer: IPEVO Inc.
-> > > [   73.732670] hid-generic 0003:1778:0214.0009: hiddev98,hidraw8: USB HID v1.10 Device [IPEVO Inc. IPEVO Point 2 View] on usb-0000:00:14.0-1.4.3.1/input0
-> > > [   73.781765] videodev: Linux video capture interface: v2.00
-> > > [   73.807553] uvcvideo: Probing generic UVC device 1.4.3.1
-> > > [   73.807693] uvcvideo: no class-specific streaming interface descriptors found.
-> > 
-> > It seems that Alan's patch causes more than the endpoint to be ignored.
-> 
-> Roger, you can get more information by plugging in the device and then
-> posting the contents of /sys/kernel/debug/usb/devices (or just the
-> portion that refers to the camera).  It would be interesting to compare 
-> the values from the kernel with the commit present and the kernel with 
-> the commit reverted.
+Hi Felipe,
 
-I've investigated this a bit further.
+How to make sure it works? Except for enabling CONFIG_COMPLIE_TEST, what el=
+se
+I need to do? Thanks.
 
-UVC defines class-specific interface descriptors that are usually
-located right after the standard interface descriptor in altsetting 0.
-The uvcvideo driver accesses those descriptor through
-intf->altsetting[0].extra. However, some devices insert an isochronous
-endpoint descriptor with wMaxPAcketSize set to 0 between the standard
-interface descriptor and the UVC class-specific interface descriptors.
-
-Before your patch, these descriptors were recorded in the extra field of
-the endpoint, as they're located right after it:
-
-static int usb_parse_endpoint(struct device *ddev, int cfgno, int inum,
-    int asnum, struct usb_host_interface *ifp, int num_ep,
-    unsigned char *buffer, int size)
-{
-...
-        /* Skip over any Class Specific or Vendor Specific descriptors;
-         * find the next endpoint or interface descriptor */
-        endpoint->extra = buffer;
-        i = find_next_descriptor(buffer, size, USB_DT_ENDPOINT,
-                        USB_DT_INTERFACE, &n);
-        endpoint->extralen = i;
-...
-}
-
-The uvcvideo driver looks at endpoint->extra when altsetting[0] has no
-extra data.
-
-With your patch, the endpoint is skipped, and the class-specific
-interface descriptors are dropped with it. The uvcvideo driver can't
-access them and fails.
-
-One solution may be to add to altsetting[0].extra all the extra
-class-specific descriptors, regardless of whether they're located before
-or after endpoints. I however fear we may not always be able to identify
-those descriptors properly, especially with the CS_INTERFACE descriptor
-type being defined in class specifications, not in the USB core
-specification. There's also a risk of breaking working devices if we do
-so (the uvcvideo driver should be able to cope, but other drivers may
-always look for descriptors in the endpoint).
-
--- 
-Regards,
-
-Laurent Pinchart
+Peter
