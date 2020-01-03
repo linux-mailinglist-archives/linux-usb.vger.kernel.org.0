@@ -2,229 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C384D12F43D
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 06:26:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 662AD12F4EE
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 08:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726313AbgACF0X convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 3 Jan 2020 00:26:23 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:55713 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725916AbgACF0X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 00:26:23 -0500
-Received: from mail-pf1-f200.google.com ([209.85.210.200])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1inFTY-0007Ta-Ep
-        for linux-usb@vger.kernel.org; Fri, 03 Jan 2020 05:26:20 +0000
-Received: by mail-pf1-f200.google.com with SMTP id v14so2242249pfm.21
-        for <linux-usb@vger.kernel.org>; Thu, 02 Jan 2020 21:26:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=OmslvZ6fFzpAiikeOhX15iBaA2LRxmJBqsOZa9p7TaY=;
-        b=R2qaTDEdc+F/xfDD817FYk7D5RkdcG7IL5ZErZWOdhdhgf2Dis2JZYevEMLg0CKHTG
-         B//hAErI3lPB2pSzYcV4hMEL88B6nHGlhkVBKQNlspbnMEouRI+K+7VdJ79IvIiX/QRD
-         7O206IP6AV/5nfHd1qZKRmkBuDMOJ4joaTBr4QkRnsFeT6vzBqjzFvK/qeIfubEDkHKt
-         +PvAdfOWFc6nRbGgzyKrbkHLQi/WEgijuzjSptJdvJVGAa9yd3AKjslFCHyWSeD/c2T+
-         n58Z2IE/xVs75QpEP0E7ApZmibMsQlxnAL4KWaMmj/y+e8BvXN84u+SE5kEklqXcM5+P
-         eIAA==
-X-Gm-Message-State: APjAAAU5e98jJZLDg1WBY9Qder5wFrTQwKioml126so9Rewg4Q8jk5G7
-        MHQSbUI+V46zlkBjq4tHdvUfv73trL0uiEUiQ78z+rwdSo9lzWM+/0teiLASQMfsgmb8mGtpTIz
-        hcfc8YofRVEgShzfhrh/ugbiuD9TFpB+8MDAQ4A==
-X-Received: by 2002:a63:2ad8:: with SMTP id q207mr94586694pgq.45.1578029177348;
-        Thu, 02 Jan 2020 21:26:17 -0800 (PST)
-X-Google-Smtp-Source: APXvYqyW1Jwb+vKX4prQ9ief65n8kbJvQf7s7agRn9JvZXdB5fFq/SFtHMRr5B4kzSWwH2WtSd0aqw==
-X-Received: by 2002:a63:2ad8:: with SMTP id q207mr94586653pgq.45.1578029176949;
-        Thu, 02 Jan 2020 21:26:16 -0800 (PST)
-Received: from 2001-b011-380f-35a3-58a8-ce0f-e12f-6096.dynamic-ip6.hinet.net (2001-b011-380f-35a3-58a8-ce0f-e12f-6096.dynamic-ip6.hinet.net. [2001:b011:380f:35a3:58a8:ce0f:e12f:6096])
-        by smtp.gmail.com with ESMTPSA id h12sm50428144pfo.12.2020.01.02.21.26.14
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 02 Jan 2020 21:26:16 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3608.40.2.2.4\))
-Subject: Re: [PATCH] usb: hub: move resume delay at the head of all USB access
- functions
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <Pine.LNX.4.44L0.2001021605410.20954-100000@iolanthe.rowland.org>
-Date:   Fri, 3 Jan 2020 13:26:13 +0800
-Cc:     AceLan Kao <acelan.kao@canonical.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
+        id S1726133AbgACHZm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jan 2020 02:25:42 -0500
+Received: from rere.qmqm.pl ([91.227.64.183]:42383 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725928AbgACHZm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 3 Jan 2020 02:25:42 -0500
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 47pxJf6qxmz7s;
+        Fri,  3 Jan 2020 08:25:38 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1578036339; bh=01dE5Uj2UX6Z3xkoH4ovrHrnnZMZ0qsgpPflyJoviKk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N2xLPdFB7kkCfcrgZqjz286M4Iq2z2R0bQRr2/j2GroNvf2U1wd814qwT24QmYTsK
+         wtaalcj/wRagy+2bqMZogxgtMskLYpXndjpv4m8npeG3DMrRFU1rPnh3wmowiVo4Ou
+         0xQTSVD6iaFUGeiSfOR7qjhuL5FJ9zqUoOYydPfLX6wXI93/0W1xQeB8CtV/z7yaxW
+         qM8FlTiLHeAtcRALqEFsX+IqGkj6s/Rv0nNR3hhYvlUUmpwtYbOLjwXRHgZDwDhjm5
+         Zf5TYIJPES8884u6RB2erVtdPji6I9QiTT0evrg/3Ms7WSe3qF17uIEvZYToyfFR+N
+         0/vREuSglWQdw==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.101.4 at mail
+Date:   Fri, 3 Jan 2020 08:25:36 +0100
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Peter Chen <peter.chen@nxp.com>, Rob Herring <robh-dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Harry Pan <harry.pan@intel.com>,
-        David Heinzelmann <heinzelmann.david@gmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Mathieu Malaterre <malat@debian.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <C434F324-5498-4629-8C03-5B1BD01F3A8F@canonical.com>
-References: <Pine.LNX.4.44L0.2001021605410.20954-100000@iolanthe.rowland.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-X-Mailer: Apple Mail (2.3608.40.2.2.4)
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 10/10] usb: chipidea: tegra: Add USB_TEGRA_PHY module
+ to driver's dependencies
+Message-ID: <20200103072536.GA14228@qmqm.qmqm.pl>
+References: <20191220015238.9228-1-digetx@gmail.com>
+ <20191220015238.9228-11-digetx@gmail.com>
+ <20191220035650.GC19921@b29397-desktop>
+ <fb7dee6e-e645-fe45-126c-c5f1e280bc26@gmail.com>
+ <20191223213234.GA28786@qmqm.qmqm.pl>
+ <7174833f-8325-7fb4-d190-78ba4bed0cbb@gmail.com>
+ <20191230210259.GD24135@qmqm.qmqm.pl>
+ <b34972e3-569e-d74a-4d30-d52c89032a08@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b34972e3-569e-d74a-4d30-d52c89032a08@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
+On Thu, Jan 02, 2020 at 06:17:47PM +0300, Dmitry Osipenko wrote:
+> 31.12.2019 00:02, Michał Mirosław пишет:
+> > On Tue, Dec 24, 2019 at 07:21:05AM +0300, Dmitry Osipenko wrote:
+> >> 24.12.2019 00:32, Michał Mirosław пишет:
+> >>> On Fri, Dec 20, 2019 at 07:31:08AM +0300, Dmitry Osipenko wrote:
+> >>>> 20.12.2019 06:56, Peter Chen пишет:
+> >>>>> On 19-12-20 04:52:38, Dmitry Osipenko wrote:
+> >>> [...]
+> >>>>>> --- a/drivers/usb/chipidea/ci_hdrc_tegra.c
+> >>>>>> +++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
+> >>>>>> @@ -53,6 +53,12 @@ static int tegra_udc_probe(struct platform_device *pdev)
+> >>>>>>  	struct tegra_udc *udc;
+> >>>>>>  	int err;
+> >>>>>>  
+> >>>>>> +	if (IS_MODULE(CONFIG_USB_TEGRA_PHY)) {
+> >>>>>> +		err = request_module("phy_tegra_usb");
+> >>>>>> +		if (err)
+> >>>>>> +			return err;
+> >>>>>> +	}
+> >>>>>> +
+> >>>>>
+> >>>>> Why you do this dependency, if this controller driver can't
+> >>>>> get USB PHY, it should return error. What's the return value
+> >>>>> after calling below:
+> >>>>>
+> >>>>> 	udc->phy = devm_usb_get_phy_by_phandle(&pdev->dev, "nvidia,phy", 0);
+> >>>>
+> >>>> It returns -EPROBE_DEFER when phy_tegra_usb isn't loaded.
+> >>>
+> >>> How are other driver modules autoloaded? Isn't there an appropriate
+> >>> MODALIAS or MODULE_DEVICE_TABLE in there?
+> >>
+> >> Hello Michał,
+> >>
+> >> The phy_tegra_usb module is fine by itself, it's getting autoloaded.
+> >>
+> >> The problem is that ci_hdrc_tegra module depends on the phy_tegra_usb
+> >> module and thus the PHY module should be loaded before the CI module,
+> >> otherwise CI driver fails with the EPROBE_DEFER.
+> > 
+> > Why, then, is CI driver not being probed again after PHY driver loads?
+> > EPROBE_DEFER is what should cause driver core to re-probe a device after
+> > other devices appear (PHY in this case).
+> 
+> CI driver is getting re-probed just fine if PHY's driver module is
+> loaded manually after loading the CI's module. This patch removes this
+> necessity to manually load PHY's module.
+> 
+> This is just a minor convenience change that brings the CI's driver
+> loading behaviour on par with the behaviour of loading Tegra's EHCI
+> driver module.
 
-> On Jan 3, 2020, at 05:37, Alan Stern <stern@rowland.harvard.edu> wrote:
-> 
-> On Wed, 25 Dec 2019, AceLan Kao wrote:
-> 
->> Here[1] are the dmesg and the usbmon log from wireshark, and
->> /sys/kernel/debug/usb/usbmon/0u.
->> 
->> I verified this issue on Dell XPS 13 + Dell Salomon WD19 docking
->> station(plug-in 3 USB disk on it)
->> After s2idle 7 times, 2 usb disks lost. But from wireshark log, the
->> packets look normal, no error.
->> 
->> So, I re-do the test again and log the usbmon/0u output, but it's greek to me.
->> Hope you can help to find some clues in the logs.
->> Thanks.
->> 
->> 1. https://people.canonical.com/~acelan/bugs/usb_issue/
-> 
-> Maybe Mathias can help figure out what's going on.  It clearly is an 
-> xHCI-related problem of some sort.
+I fully understand the goal, but what I'm missing is that why this
+doesn't work out of the box? If the PHY module is autoloaded, and so is
+CI driver, and (as I understand) the driver's probe() correctly returns
+EPROBE_DEFER when PHY is not probed yet, then I guess that means bug
+somewhere else and the patch just covers it up.
 
-I think I figured this issue out and I'll send out a patch series soon.
-
-> 
-> I can't get much out of these logs.  For one thing, the time period
-> covered by the usbmon trace is different from the time period in your
-> dmesg log.  When you collect two kinds of logs for a test, it's
-> important that they should be collected at the _same_ time!  Otherwise 
-> they record different events, which is no use.
-> 
-> For another, your usbmon trace used the 0u file, but you should have
-> used the 2u file instead.  All the errors you get involve devices on 
-> bus 2; including other buses in the trace just makes it more confusing 
-> and causes more entries to be dropped.
-> 
-> Also, I don't understand why your Dell Dock devices show up the way
-> they do.  The SuperSpeed dock is on bus 2, and the high speed dock is
-> on bus 3, which is attached to a different xHCI controller!  A hub
-> (which is what a dock is) should show up twice, and both instances
-> should be attached to the same controller.
-
-I think this is how Ice Lake xHCI works, the Thunderbolt xHCI is also part of SoC on Ice Lake.
-
-> 
-> In any case, it's clear that you've got some problem involving the xHCI
-> controller and the SuperSpeed Dell Dock (device 2-1).  Here's an
-> excerpt from the dmesg log showing what goes wrong.  This occurs during
-> a system resume; apparently the dock's connection drops while the
-> system is suspended and there are errors when the system tries to
-> re-activate it:
-> 
-> [  721.507202] usb 2-1: USB disconnect, device number 32
-> [  721.507206] usb 2-1.3: USB disconnect, device number 33
-> [  721.507209] usb 2-1.3.1: USB disconnect, device number 35
-> [  721.540214] usb 2-1.3.3: USB disconnect, device number 36
-> [  721.584518] usb 2-1.4: USB disconnect, device number 34
-> [  721.647466] xhci_hcd 0000:00:0d.0: WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state.
-> 
-> That's the first problem.
-> 
-> [  721.919433] usb 2-1: new SuperSpeedPlus Gen 2 USB device number 38 using xhci_hcd
-> [  721.942597] usb 2-1: New USB device found, idVendor=0bda, idProduct=0487, bcdDevice= 1.47
-> [  721.942600] usb 2-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> [  721.942602] usb 2-1: Product: Dell dock
-> [  721.942604] usb 2-1: Manufacturer: Dell Inc.
-> [  721.944849] hub 2-1:1.0: USB hub found
-> [  721.945232] hub 2-1:1.0: 4 ports detected
-> [  722.178395] hub 2-1:1.0: hub_ext_port_status failed (err = -71)
-> [  722.178570] usb 2-1-port3: attempt power cycle
-> [  722.559212] usb 2-1: USB disconnect, device number 38
-> [  722.559311] usb 2-1: Failed to suspend device, error -19
-> 
-> And that's a second error.  Then the system tries again:
-> 
-> [  722.831431] usb 2-1: new SuperSpeedPlus Gen 2 USB device number 43 using xhci_hcd
-> [  722.854608] usb 2-1: New USB device found, idVendor=0bda, idProduct=0487, bcdDevice= 1.47
-> [  722.854611] usb 2-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> [  722.854614] usb 2-1: Product: Dell dock
-> [  722.854616] usb 2-1: Manufacturer: Dell Inc.
-> [  722.857034] hub 2-1:1.0: USB hub found
-> [  722.857440] hub 2-1:1.0: 4 ports detected
-> [  723.090106] hub 2-1:1.0: hub_ext_port_status failed (err = -71)
-> [  723.090316] usb 2-1-port3: attempt power cycle
-> [  723.471212] usb 2-1: USB disconnect, device number 43
-> [  723.471274] usb 2-1: Failed to suspend device, error -19
-> 
-> And it fails in the same way.  A third try ends up succeeding:
-> 
-> [  723.743465] usb 2-1: new SuperSpeedPlus Gen 2 USB device number 48 using xhci_hcd
-> ...
-> 
-> I don't see why the device numbers jump around in such a crazy manner.  
-> When device 38 disconnects, the next device is number 43.  And when 
-> that fails, the next number is 48!  It looks like device numbers are 
-> somehow being allocated for the four child devices even though the log 
-> doesn't show them being detected.
-> 
-> Here's a portion of the usbmon trace that apparently corresponds
-> somewhat to part of the log above, although it's hard to be certain.  
-> In this trace, device 77 on bus 2 is 2-1.  Unlike the log above, it
-> only has a child attached to port 3, not to port 4:
-> 
-> ffff9879b43ff840 291366827 S Ci:2:001:0 s a3 00 0000 0001 0004 4 <
-> ffff9879b43ff840 291366846 C Ci:2:001:0 0 4 = 03020000
-> ffff9879b2f54780 291469875 S Ci:2:077:0 s a3 00 0000 0001 0004 4 <
-> ffff9879b2f54780 291470062 C Ci:2:077:0 0 4 = a0020000
-> ffff9879b2f54780 291470069 S Ci:2:077:0 s a3 00 0000 0002 0004 4 <
-> ffff9879b2f54780 291470208 C Ci:2:077:0 0 4 = a0020000
-> ffff9879b2f54780 291470214 S Ci:2:077:0 s a3 00 0000 0003 0004 4 <
-> ffff9879b2f54780 291470387 C Ci:2:077:0 0 4 = 03021000
-> ffff9879b2f54780 291470392 S Co:2:077:0 s 23 01 0014 0003 0000 0
-> ffff9879b2f54780 291470527 C Co:2:077:0 0 0
-> ffff9879b2f54780 291470533 S Ci:2:077:0 s a3 00 0000 0004 0004 4 <
-> ffff9879b2f54780 291470709 C Ci:2:077:0 0 4 = a0020000
-> ffff9879b43ff480 291573804 S Ii:2:077:1 -115:128 2 <
-> ffff9879b2f54780 291573839 S Ci:2:077:0 s a3 00 0000 0003 0004 4 <
-> ffff9879b2f54780 291574068 C Ci:2:077:0 0 4 = 03020000
-> ffff9879b2f54780 291574166 S Ci:2:077:0 s a3 00 0000 0003 0004 4 <
-> ffff9879b2f54780 291574363 C Ci:2:077:0 0 4 = 03020000
-> ffff9879b2f54780 291574383 S Co:2:077:0 s 23 03 0004 0003 0000 0
-> ffff9879b2f54780 291574580 C Co:2:077:0 0 0
-> ffff9879b2f54780 291593804 S Ci:2:077:0 s a3 00 0002 0003 0008 8 <
-> ffff9879ae2969c0 291595804 C Ii:2:001:1 0:2048 1 = 02
-> ffff9879ae2969c0 291595824 S Ii:2:001:1 -115:2048 4 <
-> ffff9879ba3476c0 291595843 S Ci:2:001:0 s a3 00 0000 0001 0004 4 <
-> ffff9879ba3476c0 291595857 C Ci:2:001:0 0 4 = c0024100
-> 
-> As far as I can tell, the device was working fine until at this point
-> it disconnected itself.
-> 
-> ffff9879ba3476c0 291595863 S Co:2:001:0 s 23 01 0010 0001 0000 0
-> ffff9879ba3476c0 291595867 C Co:2:001:0 0 0
-> ffff9879ba3476c0 291595870 S Co:2:001:0 s 23 01 0019 0001 0000 0
-> ffff9879ba3476c0 291595875 C Co:2:001:0 0 0
-> ffff9879ba3476c0 291595879 S Co:2:001:0 s 23 03 001c 0001 0000 0
-> ffff9879ba3476c0 291595884 C Co:2:001:0 0 0
-> ffff9879b2f54780 291600949 C Ci:2:077:0 -71 0
-> ffff9879b2f54780 291600997 S Co:2:077:0 s 23 03 0004 0003 0000 0
-> ffff9879b2f54780 291601000 E Co:2:077:0 -19 0
-> 
-> Mathias, any suggestions on how Acelan can track down the reasons for 
-> these problems?
-
-There are three issues for this hub:
-- It may not be in U3 after suspend
-- It may not be in U0 after resume
-- It disconnects when setting downstream ports to U0 while the hub itself is not in U0.
-
-I'll send a patch series soon.
-
-Kai-Heng
-
-> 
-> Alan Stern
-
+Best Regards,
+Michał Mirosław
