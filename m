@@ -2,81 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CACA12FA85
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 17:35:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A33312FAAD
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 17:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728004AbgACQfX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jan 2020 11:35:23 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:34908 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727859AbgACQfX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 11:35:23 -0500
-Received: (qmail 5097 invoked by uid 2102); 3 Jan 2020 11:35:22 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 3 Jan 2020 11:35:22 -0500
-Date:   Fri, 3 Jan 2020 11:35:22 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     syzbot <syzbot+10e5f68920f13587ab12@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
-        <gustavo@embeddedor.com>, <ingrassia@epigenesys.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <syzkaller-bugs@googlegroups.com>
-Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (2)
-In-Reply-To: <00000000000043a9a3059ae3c8ef@google.com>
-Message-ID: <Pine.LNX.4.44L0.2001031133050.1560-100000@iolanthe.rowland.org>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+        id S1727988AbgACQkj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jan 2020 11:40:39 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47792 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727817AbgACQkj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 3 Jan 2020 11:40:39 -0500
+Received: from localhost.localdomain (unknown [194.230.155.149])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 899F7206E6;
+        Fri,  3 Jan 2020 16:40:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578069638;
+        bh=TKY5B9he46GmvnJkwdmWtHvRFw0gy4YRKbRubwq1RA8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Em97YJUgy6L/J6qOkZ0wcXXcvgQ/C7FOEeXnwiJpPmr965ilT7u13CyoUSNfUVCyu
+         UqhslCV7HveGSB/AK7Lo9297ReXVPlt854Q5lFNM9zw3U8EyAQEzd62x90baVVyOpg
+         kivksL5aalawykbk6/M0NTpvcvRPBi5d1kuivKP8=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH] usb: ehci-mv: Fix missing iomem in cast
+Date:   Fri,  3 Jan 2020 17:40:31 +0100
+Message-Id: <20200103164031.4089-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 29 Dec 2019, syzbot wrote:
+Fix missing __iomem in cast to struct ehci_caps.  This fixes the Sparse
+warning visible on x86_64 compile test:
 
-> syzbot has found a reproducer for the following crash on:
-> 
-> HEAD commit:    ecdf2214 usb: gadget: add raw-gadget interface
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=17416885e00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=b06a019075333661
-> dashboard link: https://syzkaller.appspot.com/bug?extid=10e5f68920f13587ab12
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13598885e00000
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+10e5f68920f13587ab12@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> usb 1-1: BOGUS urb xfer, pipe 2 != type 2
-> WARNING: CPU: 0 PID: 2388 at drivers/usb/core/urb.c:478  
-> usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:478
+   drivers/usb/host/ehci-mv.c:167:23: warning: cast removes address space '<asn:2>' of expression
+   drivers/usb/host/ehci-mv.c:167:20: warning: incorrect type in assignment (different address spaces)
+   drivers/usb/host/ehci-mv.c:167:20:    expected struct ehci_caps [noderef] <asn:2> *caps
+   drivers/usb/host/ehci-mv.c:167:20:    got struct ehci_caps *
 
-That's a strange diagnostic.  Let's see what's really going on.
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ drivers/usb/host/ehci-mv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Alan Stern
-
-#syz test: https://github.com/google/kasan.git ecdf2214
-
-Index: usb-devel/drivers/usb/core/urb.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/urb.c
-+++ usb-devel/drivers/usb/core/urb.c
-@@ -204,10 +204,14 @@ int usb_urb_ep_type_check(const struct u
- 	const struct usb_host_endpoint *ep;
+diff --git a/drivers/usb/host/ehci-mv.c b/drivers/usb/host/ehci-mv.c
+index 66ec1fdf9fe7..16df3cfbed26 100644
+--- a/drivers/usb/host/ehci-mv.c
++++ b/drivers/usb/host/ehci-mv.c
+@@ -164,7 +164,7 @@ static int mv_ehci_probe(struct platform_device *pdev)
+ 	}
  
- 	ep = usb_pipe_endpoint(urb->dev, urb->pipe);
--	if (!ep)
-+	if (!ep) {
-+		dev_info(&urb->dev->dev, "Pipe 0x%x, no ep\n", urb->pipe);
- 		return -EINVAL;
--	if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
-+	}
-+	if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)]) {
-+		dev_info(&urb->dev->dev, "Pipe/ep type mismatch\n");
- 		return -EINVAL;
-+	}
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(usb_urb_ep_type_check);
+ 	ehci = hcd_to_ehci(hcd);
+-	ehci->caps = (struct ehci_caps *) ehci_mv->cap_regs;
++	ehci->caps = (struct ehci_caps __iomem *) ehci_mv->cap_regs;
+ 
+ 	if (ehci_mv->mode == MV_USB_MODE_OTG) {
+ 		ehci_mv->otg = devm_usb_get_phy(&pdev->dev, USB_PHY_TYPE_USB2);
+-- 
+2.17.1
 
