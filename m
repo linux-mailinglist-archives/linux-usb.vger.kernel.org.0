@@ -2,93 +2,229 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3929F12F391
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 04:35:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C384D12F43D
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 06:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726481AbgACDf6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jan 2020 22:35:58 -0500
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:39937 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726282AbgACDf6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jan 2020 22:35:58 -0500
-Received: by mail-qk1-f196.google.com with SMTP id c17so32885089qkg.7
-        for <linux-usb@vger.kernel.org>; Thu, 02 Jan 2020 19:35:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MJwycnhREsJfbVIVuYDvQOrzNMSv0nef4o4ri7/3xCk=;
-        b=Ii4EgNxhOYcZNJBSZJFp+S05VQ5tn3Fr7tXyJ9oCcsXbTDMZxYvNInCiizAAEJjmQG
-         5SVvQwfAnTmFRYMZ0sevHsV5kqFVhJbQM4dvK4gR1lMEdDei6Uw1VEQw8RnAQRFjv2Vb
-         f0LlTJRD6dZMtmWObYtBrou9NOxoqi8C8M5/S0oGe99R1ulA72op5sAw9kPSO8MonF4A
-         Fjoc/dlmvrTrdDcD6p8Wu7PXeCk03PwSwqqGMEOtjs22KRBI+x2JQw0k9ycMp7OA8dVd
-         2xvDuyLEFXA+XLtMmtaf7RUGUu9koBfvHEkKw1u7VJVMWIchrLNVDz3rp0YJdzm4vrcu
-         JOcg==
+        id S1726313AbgACF0X convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 3 Jan 2020 00:26:23 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:55713 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725916AbgACF0X (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 00:26:23 -0500
+Received: from mail-pf1-f200.google.com ([209.85.210.200])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1inFTY-0007Ta-Ep
+        for linux-usb@vger.kernel.org; Fri, 03 Jan 2020 05:26:20 +0000
+Received: by mail-pf1-f200.google.com with SMTP id v14so2242249pfm.21
+        for <linux-usb@vger.kernel.org>; Thu, 02 Jan 2020 21:26:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MJwycnhREsJfbVIVuYDvQOrzNMSv0nef4o4ri7/3xCk=;
-        b=EyE6D5flTPFfSsyYIMZpZxXrJ68pvIsEU6TJclqmuCsaivkBhjZrje49hbwhOIjDkZ
-         TUwuNj6IaVGurcZtB76LP5V5ON+bG1EOqKX91ZUopQ9mRNr0nj5kPIDhH2LL49D5mznp
-         vjIktAkk2MFxTld8kkCwytDl8SzF8DyVdfYGc4Zvf1VJt6Mz8btj7iS2KKUa6g5o9Dq8
-         Tqaoe9yFr1I6/yJ76jrcbM2lndxq7Z64TT3lJPRBXj+g+Ds7FoB5jLWOgEgRz5mieIFv
-         bDqAzSMueIJLoQv74UPgAIKQ1gQBsL4Guit3+Q3J40/Tm2E90gl/XxAjhivL/sb9Xmhb
-         jGvQ==
-X-Gm-Message-State: APjAAAUDeys84y5kEvKJh018FyDPnAlFJCdo8Idw9roM4ZvolpYug9Nk
-        pRy9I0tyqo1ES3/+fwwIYEW/QfK9vSLUa3U10p8Es1oOXpc=
-X-Google-Smtp-Source: APXvYqygqVmX96N/ilMC+hGTO5iAOaRuc4GgTxs6fL0Tr7nFJiR5qIIiaSN8mrVQA21GjlB88f5ye6W8Xt0iHahyRn8=
-X-Received: by 2002:a05:620a:1298:: with SMTP id w24mr68169207qki.170.1578022557175;
- Thu, 02 Jan 2020 19:35:57 -0800 (PST)
-MIME-Version: 1.0
-References: <1577426348-31227-1-git-send-email-peter.chen@nxp.com>
- <878smqksjo.fsf@kernel.org> <VI1PR04MB532770282A2C0701BD2A0EBA8B230@VI1PR04MB5327.eurprd04.prod.outlook.com>
- <CADBw62roaEi6UWV3X2NtqQ55w_SONactEn=JxrPShMV7oj98vQ@mail.gmail.com> <VI1PR04MB53274DD899A84806D84C5FBB8B230@VI1PR04MB5327.eurprd04.prod.outlook.com>
-In-Reply-To: <VI1PR04MB53274DD899A84806D84C5FBB8B230@VI1PR04MB5327.eurprd04.prod.outlook.com>
-From:   Baolin Wang <baolin.wang7@gmail.com>
-Date:   Fri, 3 Jan 2020 11:35:45 +0800
-Message-ID: <CADBw62p_vLUusBH64312LDJAZQCd=7UqDonHVotYges0JA0cNw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] usb: cdns3: add NXP imx8qm glue layer
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "pawell@cadence.com" <pawell@cadence.com>,
-        "rogerq@ti.com" <rogerq@ti.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=OmslvZ6fFzpAiikeOhX15iBaA2LRxmJBqsOZa9p7TaY=;
+        b=R2qaTDEdc+F/xfDD817FYk7D5RkdcG7IL5ZErZWOdhdhgf2Dis2JZYevEMLg0CKHTG
+         B//hAErI3lPB2pSzYcV4hMEL88B6nHGlhkVBKQNlspbnMEouRI+K+7VdJ79IvIiX/QRD
+         7O206IP6AV/5nfHd1qZKRmkBuDMOJ4joaTBr4QkRnsFeT6vzBqjzFvK/qeIfubEDkHKt
+         +PvAdfOWFc6nRbGgzyKrbkHLQi/WEgijuzjSptJdvJVGAa9yd3AKjslFCHyWSeD/c2T+
+         n58Z2IE/xVs75QpEP0E7ApZmibMsQlxnAL4KWaMmj/y+e8BvXN84u+SE5kEklqXcM5+P
+         eIAA==
+X-Gm-Message-State: APjAAAU5e98jJZLDg1WBY9Qder5wFrTQwKioml126so9Rewg4Q8jk5G7
+        MHQSbUI+V46zlkBjq4tHdvUfv73trL0uiEUiQ78z+rwdSo9lzWM+/0teiLASQMfsgmb8mGtpTIz
+        hcfc8YofRVEgShzfhrh/ugbiuD9TFpB+8MDAQ4A==
+X-Received: by 2002:a63:2ad8:: with SMTP id q207mr94586694pgq.45.1578029177348;
+        Thu, 02 Jan 2020 21:26:17 -0800 (PST)
+X-Google-Smtp-Source: APXvYqyW1Jwb+vKX4prQ9ief65n8kbJvQf7s7agRn9JvZXdB5fFq/SFtHMRr5B4kzSWwH2WtSd0aqw==
+X-Received: by 2002:a63:2ad8:: with SMTP id q207mr94586653pgq.45.1578029176949;
+        Thu, 02 Jan 2020 21:26:16 -0800 (PST)
+Received: from 2001-b011-380f-35a3-58a8-ce0f-e12f-6096.dynamic-ip6.hinet.net (2001-b011-380f-35a3-58a8-ce0f-e12f-6096.dynamic-ip6.hinet.net. [2001:b011:380f:35a3:58a8:ce0f:e12f:6096])
+        by smtp.gmail.com with ESMTPSA id h12sm50428144pfo.12.2020.01.02.21.26.14
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 Jan 2020 21:26:16 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3608.40.2.2.4\))
+Subject: Re: [PATCH] usb: hub: move resume delay at the head of all USB access
+ functions
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <Pine.LNX.4.44L0.2001021605410.20954-100000@iolanthe.rowland.org>
+Date:   Fri, 3 Jan 2020 13:26:13 +0800
+Cc:     AceLan Kao <acelan.kao@canonical.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Harry Pan <harry.pan@intel.com>,
+        David Heinzelmann <heinzelmann.david@gmail.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Mathieu Malaterre <malat@debian.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 8BIT
+Message-Id: <C434F324-5498-4629-8C03-5B1BD01F3A8F@canonical.com>
+References: <Pine.LNX.4.44L0.2001021605410.20954-100000@iolanthe.rowland.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+X-Mailer: Apple Mail (2.3608.40.2.2.4)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Peter,
+Hi Alan,
 
-On Fri, Jan 3, 2020 at 11:20 AM Peter Chen <peter.chen@nxp.com> wrote:
->
->
-> > > Hi Felipe,
-> > >
-> > > How to make sure it works? Except for enabling CONFIG_COMPLIE_TEST,
-> > > what else I need to do? Thanks.
-> >
-> > Felipe's suggestion is you should change your config dependency as:
-> > depends on ARCH_MXC || COMPILE_TEST
-> >
-> > Then user can compile your driver to find warning or something else though the
-> > ARCH_MXC config is not enabled.
->
-> Hi Baolin,
->
-> I know that, I have already changed that,  unset ARCH_MXC and enable
-> CONFIG_COMPILE_TEST.
+> On Jan 3, 2020, at 05:37, Alan Stern <stern@rowland.harvard.edu> wrote:
+> 
+> On Wed, 25 Dec 2019, AceLan Kao wrote:
+> 
+>> Here[1] are the dmesg and the usbmon log from wireshark, and
+>> /sys/kernel/debug/usb/usbmon/0u.
+>> 
+>> I verified this issue on Dell XPS 13 + Dell Salomon WD19 docking
+>> station(plug-in 3 USB disk on it)
+>> After s2idle 7 times, 2 usb disks lost. But from wireshark log, the
+>> packets look normal, no error.
+>> 
+>> So, I re-do the test again and log the usbmon/0u output, but it's greek to me.
+>> Hope you can help to find some clues in the logs.
+>> Thanks.
+>> 
+>> 1. https://people.canonical.com/~acelan/bugs/usb_issue/
+> 
+> Maybe Mathias can help figure out what's going on.  It clearly is an 
+> xHCI-related problem of some sort.
 
-OK. I think this is enough if you can compile successfully.
+I think I figured this issue out and I'll send out a patch series soon.
 
-> What else I could do to make sure it could compile OK
-> at every architecture?
+> 
+> I can't get much out of these logs.  For one thing, the time period
+> covered by the usbmon trace is different from the time period in your
+> dmesg log.  When you collect two kinds of logs for a test, it's
+> important that they should be collected at the _same_ time!  Otherwise 
+> they record different events, which is no use.
+> 
+> For another, your usbmon trace used the 0u file, but you should have
+> used the 2u file instead.  All the errors you get involve devices on 
+> bus 2; including other buses in the trace just makes it more confusing 
+> and causes more entries to be dropped.
+> 
+> Also, I don't understand why your Dell Dock devices show up the way
+> they do.  The SuperSpeed dock is on bus 2, and the high speed dock is
+> on bus 3, which is attached to a different xHCI controller!  A hub
+> (which is what a dock is) should show up twice, and both instances
+> should be attached to the same controller.
 
-I think Felipe's meaning is we should not only compile drivers under
-the specific ARCH limitation, we can add COMPILE_TEST dependency to
-allow drivers to be complied in any ARCHs. And you've done that, so I
-think nothing else need to do here.
+I think this is how Ice Lake xHCI works, the Thunderbolt xHCI is also part of SoC on Ice Lake.
+
+> 
+> In any case, it's clear that you've got some problem involving the xHCI
+> controller and the SuperSpeed Dell Dock (device 2-1).  Here's an
+> excerpt from the dmesg log showing what goes wrong.  This occurs during
+> a system resume; apparently the dock's connection drops while the
+> system is suspended and there are errors when the system tries to
+> re-activate it:
+> 
+> [  721.507202] usb 2-1: USB disconnect, device number 32
+> [  721.507206] usb 2-1.3: USB disconnect, device number 33
+> [  721.507209] usb 2-1.3.1: USB disconnect, device number 35
+> [  721.540214] usb 2-1.3.3: USB disconnect, device number 36
+> [  721.584518] usb 2-1.4: USB disconnect, device number 34
+> [  721.647466] xhci_hcd 0000:00:0d.0: WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state.
+> 
+> That's the first problem.
+> 
+> [  721.919433] usb 2-1: new SuperSpeedPlus Gen 2 USB device number 38 using xhci_hcd
+> [  721.942597] usb 2-1: New USB device found, idVendor=0bda, idProduct=0487, bcdDevice= 1.47
+> [  721.942600] usb 2-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+> [  721.942602] usb 2-1: Product: Dell dock
+> [  721.942604] usb 2-1: Manufacturer: Dell Inc.
+> [  721.944849] hub 2-1:1.0: USB hub found
+> [  721.945232] hub 2-1:1.0: 4 ports detected
+> [  722.178395] hub 2-1:1.0: hub_ext_port_status failed (err = -71)
+> [  722.178570] usb 2-1-port3: attempt power cycle
+> [  722.559212] usb 2-1: USB disconnect, device number 38
+> [  722.559311] usb 2-1: Failed to suspend device, error -19
+> 
+> And that's a second error.  Then the system tries again:
+> 
+> [  722.831431] usb 2-1: new SuperSpeedPlus Gen 2 USB device number 43 using xhci_hcd
+> [  722.854608] usb 2-1: New USB device found, idVendor=0bda, idProduct=0487, bcdDevice= 1.47
+> [  722.854611] usb 2-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+> [  722.854614] usb 2-1: Product: Dell dock
+> [  722.854616] usb 2-1: Manufacturer: Dell Inc.
+> [  722.857034] hub 2-1:1.0: USB hub found
+> [  722.857440] hub 2-1:1.0: 4 ports detected
+> [  723.090106] hub 2-1:1.0: hub_ext_port_status failed (err = -71)
+> [  723.090316] usb 2-1-port3: attempt power cycle
+> [  723.471212] usb 2-1: USB disconnect, device number 43
+> [  723.471274] usb 2-1: Failed to suspend device, error -19
+> 
+> And it fails in the same way.  A third try ends up succeeding:
+> 
+> [  723.743465] usb 2-1: new SuperSpeedPlus Gen 2 USB device number 48 using xhci_hcd
+> ...
+> 
+> I don't see why the device numbers jump around in such a crazy manner.  
+> When device 38 disconnects, the next device is number 43.  And when 
+> that fails, the next number is 48!  It looks like device numbers are 
+> somehow being allocated for the four child devices even though the log 
+> doesn't show them being detected.
+> 
+> Here's a portion of the usbmon trace that apparently corresponds
+> somewhat to part of the log above, although it's hard to be certain.  
+> In this trace, device 77 on bus 2 is 2-1.  Unlike the log above, it
+> only has a child attached to port 3, not to port 4:
+> 
+> ffff9879b43ff840 291366827 S Ci:2:001:0 s a3 00 0000 0001 0004 4 <
+> ffff9879b43ff840 291366846 C Ci:2:001:0 0 4 = 03020000
+> ffff9879b2f54780 291469875 S Ci:2:077:0 s a3 00 0000 0001 0004 4 <
+> ffff9879b2f54780 291470062 C Ci:2:077:0 0 4 = a0020000
+> ffff9879b2f54780 291470069 S Ci:2:077:0 s a3 00 0000 0002 0004 4 <
+> ffff9879b2f54780 291470208 C Ci:2:077:0 0 4 = a0020000
+> ffff9879b2f54780 291470214 S Ci:2:077:0 s a3 00 0000 0003 0004 4 <
+> ffff9879b2f54780 291470387 C Ci:2:077:0 0 4 = 03021000
+> ffff9879b2f54780 291470392 S Co:2:077:0 s 23 01 0014 0003 0000 0
+> ffff9879b2f54780 291470527 C Co:2:077:0 0 0
+> ffff9879b2f54780 291470533 S Ci:2:077:0 s a3 00 0000 0004 0004 4 <
+> ffff9879b2f54780 291470709 C Ci:2:077:0 0 4 = a0020000
+> ffff9879b43ff480 291573804 S Ii:2:077:1 -115:128 2 <
+> ffff9879b2f54780 291573839 S Ci:2:077:0 s a3 00 0000 0003 0004 4 <
+> ffff9879b2f54780 291574068 C Ci:2:077:0 0 4 = 03020000
+> ffff9879b2f54780 291574166 S Ci:2:077:0 s a3 00 0000 0003 0004 4 <
+> ffff9879b2f54780 291574363 C Ci:2:077:0 0 4 = 03020000
+> ffff9879b2f54780 291574383 S Co:2:077:0 s 23 03 0004 0003 0000 0
+> ffff9879b2f54780 291574580 C Co:2:077:0 0 0
+> ffff9879b2f54780 291593804 S Ci:2:077:0 s a3 00 0002 0003 0008 8 <
+> ffff9879ae2969c0 291595804 C Ii:2:001:1 0:2048 1 = 02
+> ffff9879ae2969c0 291595824 S Ii:2:001:1 -115:2048 4 <
+> ffff9879ba3476c0 291595843 S Ci:2:001:0 s a3 00 0000 0001 0004 4 <
+> ffff9879ba3476c0 291595857 C Ci:2:001:0 0 4 = c0024100
+> 
+> As far as I can tell, the device was working fine until at this point
+> it disconnected itself.
+> 
+> ffff9879ba3476c0 291595863 S Co:2:001:0 s 23 01 0010 0001 0000 0
+> ffff9879ba3476c0 291595867 C Co:2:001:0 0 0
+> ffff9879ba3476c0 291595870 S Co:2:001:0 s 23 01 0019 0001 0000 0
+> ffff9879ba3476c0 291595875 C Co:2:001:0 0 0
+> ffff9879ba3476c0 291595879 S Co:2:001:0 s 23 03 001c 0001 0000 0
+> ffff9879ba3476c0 291595884 C Co:2:001:0 0 0
+> ffff9879b2f54780 291600949 C Ci:2:077:0 -71 0
+> ffff9879b2f54780 291600997 S Co:2:077:0 s 23 03 0004 0003 0000 0
+> ffff9879b2f54780 291601000 E Co:2:077:0 -19 0
+> 
+> Mathias, any suggestions on how Acelan can track down the reasons for 
+> these problems?
+
+There are three issues for this hub:
+- It may not be in U3 after suspend
+- It may not be in U0 after resume
+- It disconnects when setting downstream ports to U0 while the hub itself is not in U0.
+
+I'll send a patch series soon.
+
+Kai-Heng
+
+> 
+> Alan Stern
+
