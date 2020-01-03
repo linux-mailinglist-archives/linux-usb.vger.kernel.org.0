@@ -2,211 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE17912F549
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 09:18:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D4A12F59D
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 09:40:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727516AbgACISh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jan 2020 03:18:37 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:17291 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726295AbgACISb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 03:18:31 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e0ef8ab0000>; Fri, 03 Jan 2020 00:17:47 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 03 Jan 2020 00:18:30 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 03 Jan 2020 00:18:30 -0800
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 3 Jan
- 2020 08:18:30 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Fri, 3 Jan 2020 08:18:30 +0000
-Received: from jckuo-lt.nvidia.com (Not Verified[10.19.108.118]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e0ef8d40000>; Fri, 03 Jan 2020 00:18:29 -0800
-From:   JC Kuo <jckuo@nvidia.com>
-To:     <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
-        <robh@kernel.org>, <jonathanh@nvidia.com>, <kishon@ti.com>
-CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <nkristam@nvidia.com>, JC Kuo <jckuo@nvidia.com>
-Subject: [PATCH v5 5/5] arm64: tegra: Enable XUSB host in P2972-0000 board
-Date:   Fri, 3 Jan 2020 16:18:14 +0800
-Message-ID: <20200103081814.9848-6-jckuo@nvidia.com>
+        id S1726313AbgACIkT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jan 2020 03:40:19 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:58172 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726181AbgACIkT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 03:40:19 -0500
+Received: from 61-220-137-37.hinet-ip.hinet.net ([61.220.137.37] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1inIVC-0003Sp-4G; Fri, 03 Jan 2020 08:40:14 +0000
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        stern@rowland.harvard.edu
+Cc:     acelan.kao@canonical.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: [PATCH 1/3] xhci: Ensure link state is U3 after setting USB_SS_PORT_LS_U3
+Date:   Fri,  3 Jan 2020 16:40:06 +0800
+Message-Id: <20200103084008.3579-1-kai.heng.feng@canonical.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200103081814.9848-1-jckuo@nvidia.com>
-References: <20200103081814.9848-1-jckuo@nvidia.com>
-X-NVConfidentiality: public
-MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1578039467; bh=HFCFVfUkHlCBFcm+mlAAgYHn7YBPtjgDr4lQB1CTZcw=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=c7rQivYZa+VBoaZTJTfKUIU5r4NIWxXDCZ1jzkLX4H7tz0eLb3toVyTcTPKa/bll0
-         wBXAFEtQp/O2S7UjylZ7HDfx0lLcmLk/du5V+aGFjXOiDU6j/kqBFJBRtRWpuhloOx
-         odULfqHugoVkI3LFm9+1Tz4s4mNDb8OhbsMLElOcjsUOhqOPPg5h2qFj/7Ja9pxzSV
-         2+fFsgg/7GEuisXGKEPWwllLftyGWv0/gn4CZtwUa0k7izYoByDb1Fm4hriPpoE1Z1
-         nCeIc9Amg30z4C+GNXhYHIPKyV4JYoAFrriCYiGZ8SI5HNZ6KU9RwKJBJ8mD/UoBxU
-         PwbIcciaHh2hQ==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This commit enables XUSB host and pad controller in Tegra194
-P2972-0000 board.
+The xHCI spec doesn't specify the upper bound of U3 transition time. For
+some devices 20ms is not enough, so we need to make sure the link state
+is in U3 before further actions.
 
-Signed-off-by: JC Kuo <jckuo@nvidia.com>
+I've tried to use U3 Entry Capability by setting U3 Entry Enable in
+config register, however the port change event for U3 transition
+interrupts the system suspend process.
+
+For now let's use the less ideal method by polling PLS.
+
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 ---
-Changes in v5: none
-Changes in v4: none
-Changes in v3: none
-Changes in v2:
-- use capitalization of regulator names
-- fix gpio property of VDD_5V_SATA regulator
+ drivers/usb/host/xhci-hub.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
- .../arm64/boot/dts/nvidia/tegra194-p2888.dtsi | 36 ++++++++++-
- .../boot/dts/nvidia/tegra194-p2972-0000.dts   | 63 +++++++++++++++++++
- 2 files changed, 98 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi b/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
-index c7f2a20e6b02..014e18b2d52a 100644
---- a/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
-@@ -67,6 +67,29 @@
- 			vmmc-supply = <&vdd_emmc_3v3>;
- 		};
+diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+index 7a3a29e5e9d2..2b2e9d004dbf 100644
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -1228,6 +1228,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 			break;
+ 		case USB_PORT_FEAT_LINK_STATE:
+ 			temp = readl(ports[wIndex]->addr);
++			xhci_dbg(xhci, "before setting link state, actual port %d-%d status = 0x%0x\n", hcd->self.busnum, wIndex + 1, temp);
+ 			/* Disable port */
+ 			if (link_state == USB_SS_PORT_LS_SS_DISABLED) {
+ 				xhci_dbg(xhci, "Disable port %d\n", wIndex);
+@@ -1316,9 +1317,17 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 			msleep(20); /* wait device to enter */
+ 			spin_lock_irqsave(&xhci->lock, flags);
  
-+		padctl@3520000 {
-+			avdd-usb-supply = <&vdd_usb_3v3>;
-+			vclamp-usb-supply = <&vdd_1v8ao>;
+-			temp = readl(ports[wIndex]->addr);
+-			if (link_state == USB_SS_PORT_LS_U3)
++			if (link_state == USB_SS_PORT_LS_U3) {
++				retval = xhci_handshake(ports[wIndex]->addr, PORT_PLS_MASK, XDEV_U3, 80 * 1000);
++				if (retval)
++					xhci_dbg(xhci, "polling XDEV_U3 on port %d-%d timeout\n", hcd->self.busnum, wIndex + 1);
 +
-+			ports {
-+				usb2-1 {
-+					vbus-supply = <&vdd_5v0_sys>;
-+				};
+ 				bus_state->suspended_ports |= 1 << wIndex;
++			}
 +
-+				usb2-3 {
-+					vbus-supply = <&vdd_5v_sata>;
-+				};
++			temp = readl(ports[wIndex]->addr);
++			xhci_dbg(xhci, "after setting link state, port %d-%d status = 0x%0x\n", hcd->self.busnum, wIndex + 1, temp);
 +
-+				usb3-0 {
-+					vbus-supply = <&vdd_5v0_sys>;
-+				};
-+
-+				usb3-3 {
-+					vbus-supply = <&vdd_5v0_sys>;
-+				};
-+			};
-+		};
-+
- 		rtc@c2a0000 {
- 			status = "okay";
- 		};
-@@ -230,7 +253,7 @@
- 						regulator-max-microvolt = <3300000>;
- 					};
- 
--					ldo5 {
-+					vdd_usb_3v3: ldo5 {
- 						regulator-name = "VDD_USB_3V3";
- 						regulator-min-microvolt = <3300000>;
- 						regulator-max-microvolt = <3300000>;
-@@ -313,5 +336,16 @@
- 			gpio = <&gpio TEGRA194_MAIN_GPIO(A, 1) GPIO_ACTIVE_HIGH>;
- 			regulator-boot-on;
- 		};
-+
-+		vdd_5v_sata: regulator@4 {
-+			compatible = "regulator-fixed";
-+			reg = <4>;
-+
-+			regulator-name = "VDD_5V_SATA";
-+			regulator-min-microvolt = <5000000>;
-+			regulator-max-microvolt = <5000000>;
-+			gpio = <&gpio TEGRA194_MAIN_GPIO(Z, 1) GPIO_ACTIVE_HIGH>;
-+			enable-active-high;
-+		};
- 	};
- };
-diff --git a/arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts b/arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts
-index 353a6a22196d..2cbcae39d1b0 100644
---- a/arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts
-+++ b/arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts
-@@ -37,6 +37,69 @@
- 			status = "okay";
- 		};
- 
-+		padctl@3520000 {
-+			status = "okay";
-+
-+			pads {
-+				usb2 {
-+					lanes {
-+						usb2-1 {
-+							status = "okay";
-+						};
-+
-+						usb2-3 {
-+							status = "okay";
-+						};
-+					};
-+				};
-+
-+				usb3 {
-+					lanes {
-+						usb3-0 {
-+							status = "okay";
-+						};
-+
-+						usb3-3 {
-+							status = "okay";
-+						};
-+					};
-+				};
-+			};
-+
-+			ports {
-+				usb2-1 {
-+					mode = "host";
-+					status = "okay";
-+				};
-+
-+				usb2-3 {
-+					mode = "host";
-+					status = "okay";
-+				};
-+
-+				usb3-0 {
-+					nvidia,usb2-companion = <1>;
-+					status = "okay";
-+				};
-+
-+				usb3-3 {
-+					nvidia,usb2-companion = <3>;
-+					nvidia,disable-gen2;
-+					status = "okay";
-+				};
-+			};
-+		};
-+
-+		usb@3610000 {
-+			status = "okay";
-+
-+			phys =	<&{/cbb@0/padctl@3520000/pads/usb2/lanes/usb2-1}>,
-+				<&{/cbb@0/padctl@3520000/pads/usb2/lanes/usb2-3}>,
-+				<&{/cbb@0/padctl@3520000/pads/usb3/lanes/usb3-0}>,
-+				<&{/cbb@0/padctl@3520000/pads/usb3/lanes/usb3-3}>;
-+			phy-names = "usb2-1", "usb2-3", "usb3-0", "usb3-3";
-+		};
-+
- 		pwm@c340000 {
- 			status = "okay";
- 		};
+ 			break;
+ 		case USB_PORT_FEAT_POWER:
+ 			/*
 -- 
 2.17.1
 
