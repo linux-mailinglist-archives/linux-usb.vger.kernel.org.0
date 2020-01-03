@@ -2,67 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65AD912FB0E
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 18:01:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 072FF12FB48
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 18:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728008AbgACRBp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jan 2020 12:01:45 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:34964 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727769AbgACRBp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 12:01:45 -0500
-Received: (qmail 5214 invoked by uid 2102); 3 Jan 2020 12:01:44 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 3 Jan 2020 12:01:44 -0500
-Date:   Fri, 3 Jan 2020 12:01:44 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     andreyknvl@google.com,
-        syzbot <syzbot+10e5f68920f13587ab12@syzkaller.appspotmail.com>
-cc:     gregkh@linuxfoundation.org, <gustavo@embeddedor.com>,
-        <ingrassia@epigenesys.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        <syzkaller-bugs@googlegroups.com>
-Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (2)
-In-Reply-To: <000000000000d29687059b3f32aa@google.com>
-Message-ID: <Pine.LNX.4.44L0.2001031159280.1560-100000@iolanthe.rowland.org>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+        id S1728247AbgACRMZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jan 2020 12:12:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46898 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728216AbgACRMX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 3 Jan 2020 12:12:23 -0500
+Received: from localhost.localdomain (unknown [194.230.155.149])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C02A4222C3;
+        Fri,  3 Jan 2020 17:12:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578071542;
+        bh=tikjmOkXzl67kgxwPdvLRaRJqpldgktGgrS2H4m1wPk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=v8E9zX4UIDLzAd5zOxAsedGIcpvNFV5QzvrJO9liwyDUdG5pRAfWIR/WCSA7Dazjh
+         YqU2FZ0UlUVfA9KpckU7TXkL0418Ra24J7/qwELuAIJG5kF7NmcO4E6zBi+TC9BXUR
+         q/jTgkFKzInc7v4lKvkcNEXn4bJMnx+aH14vSPgY=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Arnd Bergmann <arnd@arndb.de>, Johan Hovold <johan@kernel.org>,
+        Ran Wang <ran.wang_1@nxp.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH 07/19] usb: exynos: Rename Samsung and Exynos to lowercase
+Date:   Fri,  3 Jan 2020 18:11:19 +0100
+Message-Id: <20200103171131.9900-8-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200103171131.9900-1-krzk@kernel.org>
+References: <20200103171131.9900-1-krzk@kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 3 Jan 2020, syzbot wrote:
+Fix up inconsistent usage of upper and lowercase letters in "Samsung"
+and "Exynos" names.
 
-> Hello,
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger  
-> crash:
-> 
-> Reported-and-tested-by:  
-> syzbot+10e5f68920f13587ab12@syzkaller.appspotmail.com
-> 
-> Tested on:
-> 
-> commit:         ecdf2214 usb: gadget: add raw-gadget interface
-> git tree:       https://github.com/google/kasan.git
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=b06a019075333661
-> dashboard link: https://syzkaller.appspot.com/bug?extid=10e5f68920f13587ab12
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=177f06e1e00000
-> 
-> Note: testing is done by a robot and is best-effort only.
+"SAMSUNG" and "EXYNOS" are not abbreviations but regular trademarked
+names.  Therefore they should be written with lowercase letters starting
+with capital letter.
 
-Andrey:
+The lowercase "Exynos" name is promoted by its manufacturer Samsung
+Electronics Co., Ltd., in advertisement materials and on website.
 
-Clearly something strange is going on here.  First, the patch should 
-not have changed the behavior; all it did was add some log messages.  
-Second, I don't see how the warning could have been triggered at all -- 
-it seems to be complaining that 2 != 2.
+Although advertisement materials usually use uppercase "SAMSUNG", the
+lowercase version is used in all legal aspects (e.g. on Wikipedia and in
+privacy/legal statements on
+https://www.samsung.com/semiconductor/privacy-global/).
 
-Does the reproducer really work?
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ drivers/usb/dwc3/dwc3-exynos.c | 4 ++--
+ drivers/usb/host/Kconfig       | 4 ++--
+ drivers/usb/host/ehci-exynos.c | 4 ++--
+ drivers/usb/host/ohci-exynos.c | 2 +-
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-Alan Stern
+diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-exynos.c
+index c1e9ea621f41..90bb022737da 100644
+--- a/drivers/usb/dwc3/dwc3-exynos.c
++++ b/drivers/usb/dwc3/dwc3-exynos.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /**
+- * dwc3-exynos.c - Samsung EXYNOS DWC3 Specific Glue layer
++ * dwc3-exynos.c - Samsung Exynos DWC3 Specific Glue layer
+  *
+  * Copyright (c) 2012 Samsung Electronics Co., Ltd.
+  *		http://www.samsung.com
+@@ -255,4 +255,4 @@ module_platform_driver(dwc3_exynos_driver);
+ 
+ MODULE_AUTHOR("Anton Tikhomirov <av.tikhomirov@samsung.com>");
+ MODULE_LICENSE("GPL v2");
+-MODULE_DESCRIPTION("DesignWare USB3 EXYNOS Glue Layer");
++MODULE_DESCRIPTION("DesignWare USB3 Exynos Glue Layer");
+diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+index 8d730180db06..ed49d08f2f9e 100644
+--- a/drivers/usb/host/Kconfig
++++ b/drivers/usb/host/Kconfig
+@@ -269,7 +269,7 @@ config USB_EHCI_SH
+ 	  If you use the PCI EHCI controller, this option is not necessary.
+ 
+ config USB_EHCI_EXYNOS
+-	tristate "EHCI support for Samsung S5P/EXYNOS SoC Series"
++	tristate "EHCI support for Samsung S5P/Exynos SoC Series"
+ 	depends on ARCH_S5PV210 || ARCH_EXYNOS
+ 	help
+ 	  Enable support for the Samsung Exynos SOC's on-chip EHCI controller.
+@@ -542,7 +542,7 @@ config USB_OHCI_SH
+ 	  If you use the PCI OHCI controller, this option is not necessary.
+ 
+ config USB_OHCI_EXYNOS
+-	tristate "OHCI support for Samsung S5P/EXYNOS SoC Series"
++	tristate "OHCI support for Samsung S5P/Exynos SoC Series"
+ 	depends on ARCH_S5PV210 || ARCH_EXYNOS
+ 	help
+ 	  Enable support for the Samsung Exynos SOC's on-chip OHCI controller.
+diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
+index 01debfd03d4a..a4e9abcbdc4f 100644
+--- a/drivers/usb/host/ehci-exynos.c
++++ b/drivers/usb/host/ehci-exynos.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0+
+ /*
+- * SAMSUNG EXYNOS USB HOST EHCI Controller
++ * Samsung Exynos USB HOST EHCI Controller
+  *
+  * Copyright (C) 2011 Samsung Electronics Co.Ltd
+  * Author: Jingoo Han <jg1.han@samsung.com>
+@@ -21,7 +21,7 @@
+ 
+ #include "ehci.h"
+ 
+-#define DRIVER_DESC "EHCI EXYNOS driver"
++#define DRIVER_DESC "EHCI Exynos driver"
+ 
+ #define EHCI_INSNREG00(base)			(base + 0x90)
+ #define EHCI_INSNREG00_ENA_INCR16		(0x1 << 25)
+diff --git a/drivers/usb/host/ohci-exynos.c b/drivers/usb/host/ohci-exynos.c
+index d5ce98e205c7..bd40e597f256 100644
+--- a/drivers/usb/host/ohci-exynos.c
++++ b/drivers/usb/host/ohci-exynos.c
+@@ -19,7 +19,7 @@
+ 
+ #include "ohci.h"
+ 
+-#define DRIVER_DESC "OHCI EXYNOS driver"
++#define DRIVER_DESC "OHCI Exynos driver"
+ 
+ static const char hcd_name[] = "ohci-exynos";
+ static struct hc_driver __read_mostly exynos_ohci_hc_driver;
+-- 
+2.17.1
 
