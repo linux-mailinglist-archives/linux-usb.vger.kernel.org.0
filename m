@@ -2,98 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D81C412F70C
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 12:17:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CFC012F73E
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 12:29:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727521AbgACLRB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jan 2020 06:17:01 -0500
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:36290 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727220AbgACLRB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 06:17:01 -0500
-Received: by mail-ed1-f68.google.com with SMTP id j17so41375831edp.3;
-        Fri, 03 Jan 2020 03:16:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4Cz1bHF5KTHAkw4Fc68MgiqMwjrbDHHdLD3F5Ae3Ezo=;
-        b=U2kTEpxLUAwEzsGJfscFLX4v3GZNYiWttCWG/tuuKQMPovjtkmn1KZLDYMoeQut83F
-         yHhvVzsyVrme/DdSeVPB/7jDi84eVMOwNp6Lzie1s0Z8V+V6y+zLiXcX2764dV70CUjk
-         KdQb8IahE44EdKgNppBWj+oLPApaDTZvOhsRG6Q4BA8WlwNRh6/hdR6HgpEN7PGnKIOu
-         xu455aZUdKO2ePCYERlWuyToYZbY9K6iOjyb9VTX0Q1JAI8KwDb6HZo975d/ujcXcV37
-         cO6r1vGJoYj6sCAX/nMFBhOT2r3N44Cz68blkwriz9rjdWlTjUBmxXMpsyw4tYLHEm4s
-         5yYw==
-X-Gm-Message-State: APjAAAXqMiq1fl11ua07wVnr/ulIpyQwhT/RiLUlPMIrzcPuOxbTjEJb
-        bPXRnBAvD55+rzReCCq9cRQ=
-X-Google-Smtp-Source: APXvYqwm0Aou1t/E4yDsF/8shNlUmMED7vothBxjbyR0PYteuXhZsEv8NzzR+qZMCInWvdpwvwuN7A==
-X-Received: by 2002:a17:906:a88e:: with SMTP id ha14mr91081234ejb.169.1578050218870;
-        Fri, 03 Jan 2020 03:16:58 -0800 (PST)
-Received: from pi3 ([194.230.155.149])
-        by smtp.googlemail.com with ESMTPSA id y4sm7699793ejr.41.2020.01.03.03.16.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jan 2020 03:16:58 -0800 (PST)
-Date:   Fri, 3 Jan 2020 12:16:55 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Benjamin GAIGNARD <benjamin.gaignard@st.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "kgene@kernel.org" <kgene@kernel.org>,
-        "hminas@synopsys.com" <hminas@synopsys.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        Amelie DELAUNAY <amelie.delaunay@st.com>
-Subject: Re: [PATCH v2 2/2] ARM: dts: exynos: Remove unneeded "snps,dwc2"
- from hsotg node
-Message-ID: <20200103111655.GA1605@pi3>
-References: <20191219103536.25485-1-benjamin.gaignard@st.com>
- <20191219103536.25485-3-benjamin.gaignard@st.com>
- <20191230153758.GB4918@pi3>
- <bbc7e34c-75c2-dfe0-70f3-0685e8e54fed@st.com>
+        id S1727470AbgACL3q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jan 2020 06:29:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50766 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727453AbgACL3q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 3 Jan 2020 06:29:46 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5A67E21835;
+        Fri,  3 Jan 2020 11:29:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578050985;
+        bh=jGTAZmQH3VcE7Hq/VICBM3pSA54SULev1rW4U5TitnQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HC/X789E/XSEPuv9y/YF+VYdPlWN6QCFjAe6txV9UKAGQGGp2tRjS55Kfak4ozswl
+         i/tFshKc4anbvUWJhSpY8JCY00jNieVOp2X5Mt4PBiPt2mcvdvgZFyeBLEhOwRkSF0
+         Qk7cfWI30se2+jryRc9mn+vfxRPFnqoDvdFj5ciY=
+Date:   Fri, 3 Jan 2020 12:29:43 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Bryan Gillespie <rpgillespie6@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Is Duplicate Sequence Number an Issue?
+Message-ID: <20200103112943.GA1051129@kroah.com>
+References: <CAPVsg6LXr-fsz=FG8BDMqOPd73vcgageTk++Bt+fEP4-6DVT6A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bbc7e34c-75c2-dfe0-70f3-0685e8e54fed@st.com>
+In-Reply-To: <CAPVsg6LXr-fsz=FG8BDMqOPd73vcgageTk++Bt+fEP4-6DVT6A@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 02, 2020 at 08:50:39AM +0000, Benjamin GAIGNARD wrote:
+On Tue, Dec 17, 2019 at 11:33:55AM -0500, Bryan Gillespie wrote:
+> Hello,
 > 
-> On 12/30/19 4:37 PM, Krzysztof Kozlowski wrote:
-> > On Thu, Dec 19, 2019 at 11:35:36AM +0100, Benjamin Gaignard wrote:
-> >> Remove "snps,dwc2" from hsotg@12480000 node compatible list because
-> >> "samsung,s3c6400-hsotg" should be enough.
-> > The more detailed compatible is almost always "enough". Some other nodes
-> > also have detailed+generic compatible. In this case there is a driver
-> > matching "snps,dwc2" so why removing it?
-> 
-> First because, unlike the others dwc2 devices, this compatible wasn't 
-> describe in the bindings file
-> 
-> so I had to investigated how it should work and, on samsung DT files, 
-> only "samsung,s3c6400-hsotg".
-> 
->  From driver code point of view that seems coherent (we do the same for 
-> stm32).
-> 
-> With that in mind I have decided to remove "snps,dwc2" from exynos DT 
-> file rather than add it everywhere else.
->
+> I am trying to debug a USB 3.0 issue under linux 4.4/4.14 where device
+> endpoints become unresponsive when sending small packet iperf traffic
+> through them. I have a protocol analyzer (Beagle 5000), and I see the
+> following at the moment of breakage:
 
-Actually fine with me, although I would be happy if Rob or Mark could
-confirm that it is a preferred approach.
+Does 5.4 also show this issue?
 
-Rob, Mark, could you share your thoughts?
+> https://i.stack.imgur.com/CrCV7.png
+> 
+> If I expand the packets, I notice that the last good transaction looks
+> like this:
+> 
+> https://i.stack.imgur.com/sWxne.png
+> 
+> And the first bad transaction looks like this:
+> 
+> https://i.stack.imgur.com/l85xJ.png
+> 
+> This looks like only a partial transaction? The only thing that stuck
+> out to me was that the two data transactions have the exact same
+> Sequence Number (SeqNum), which seems like it might be out of spec
+> with USB 3.0 (I read that you can only have duplicate sequence numbers
+> if it is a retransmission, and it looks like it isn't)? Is xhci under
+> linux setting these sequence numbers or is that at the hardware level?
+> This issue seems to bubble up the linux usb stack as -EPROTO which has
+> no information.
 
-Best regards,
-Krzysztof
+The hardware handles the sequence number, so you might want to make sure
+you are using up-to-date silicon.
 
+thanks,
+
+greg k-h
