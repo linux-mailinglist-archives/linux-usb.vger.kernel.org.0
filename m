@@ -2,98 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 027DA12F522
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 08:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 616AB12F555
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 09:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727059AbgACH6I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jan 2020 02:58:08 -0500
-Received: from rere.qmqm.pl ([91.227.64.183]:2573 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725890AbgACH6I (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 3 Jan 2020 02:58:08 -0500
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 47py251QD8z7s;
-        Fri,  3 Jan 2020 08:58:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1578038285; bh=zkjL1hrrT7myfigooh6KuldpzOYUcI60uVQjI24wYgU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XQtTcmZehlZS0vz8AgGQh39LrS0ZLMZt+Cu2ZBfahf4+0srsdcEM/v4U8O0M9+z0R
-         2TyHJE4T9+Iri+aNHvZwbg5ZK5iD19iDcrrih4GqSgMf7iYahVDOLLGll5UlwMNjZ6
-         Cpze4GbbHQvWUHh6wJYaRZ1JnlmcMfbxQsEF2S0HmQRXDptkx8X/H61byUAx5rFzSg
-         6wg9jXnR6E4UiZw6gT3W+FTeNgXSw4Hlo+XGpBDZwyuW52fQDClh82sswT5NRMZTQ8
-         pt3udMMRzshnrNsy1v28z2GL3WCU1G0HPIKWO8cz1ZSbWU6JPzzlFsVc3MpqThhwVg
-         KVWqhQ0aByorQ==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.101.4 at mail
-Date:   Fri, 3 Jan 2020 08:58:04 +0100
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 10/16] usb: phy: tegra: Use device-tree notion of
- reset-GPIO's active-state
-Message-ID: <20200103075803.GC14228@qmqm.qmqm.pl>
-References: <20191228203358.23490-1-digetx@gmail.com>
- <20191228203358.23490-11-digetx@gmail.com>
+        id S1727429AbgACISV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jan 2020 03:18:21 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:17270 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726054AbgACISU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 03:18:20 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e0ef8a00000>; Fri, 03 Jan 2020 00:17:36 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 03 Jan 2020 00:18:19 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Fri, 03 Jan 2020 00:18:19 -0800
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 3 Jan
+ 2020 08:18:19 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Fri, 3 Jan 2020 08:18:19 +0000
+Received: from jckuo-lt.nvidia.com (Not Verified[10.19.108.118]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5e0ef8c90000>; Fri, 03 Jan 2020 00:18:18 -0800
+From:   JC Kuo <jckuo@nvidia.com>
+To:     <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
+        <robh@kernel.org>, <jonathanh@nvidia.com>, <kishon@ti.com>
+CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <nkristam@nvidia.com>, JC Kuo <jckuo@nvidia.com>
+Subject: [PATCH v5 0/5] add Tegra194 XUSB host and pad controller support
+Date:   Fri, 3 Jan 2020 16:18:09 +0800
+Message-ID: <20200103081814.9848-1-jckuo@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191228203358.23490-11-digetx@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1578039456; bh=X4mjGDVLvOOMu/CS3QJZ3IdBByzNIMa6AL45A4t9lns=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=He0cTCOwtP8g6qSPimI+NDkH7F+JLDLil9kihoklJw0rJ3eHBXe14F9kXpF/UoBZs
+         ryKacQfOzrf2uxRHGSPjeOlRW0CKwK3beXbbBgBUwyGFttfpemaNhpMpO53fYaP/B2
+         QOA1RXpbx7uBMttqhCT3pEhb7ibaFjZ/DdAECdE7UN1ltl3GnLgxOMo0D9zKHul6Ie
+         447mKg6LkvlhYL5aWKQxsgiEF2teJyY9IJDbRg0LDgXLPGTPIhRZFwadQjFXZGJzpP
+         GDd/FjafmHzzKv3go38Ca3ybcWu8qhLxaVU3SEjVUnx0Pl/b9IWZZT4uod1WuAJmsS
+         PIfNiXBA56ueA==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Dec 28, 2019 at 11:33:52PM +0300, Dmitry Osipenko wrote:
-[...]
->  static int ulpi_open(struct tegra_usb_phy *phy)
->  {
-> -	int err;
-> -
-> -	err = gpio_direction_output(phy->reset_gpio, 0);
-> -	if (err) {
-> -		dev_err(phy->u_phy.dev,
-> -			"ULPI reset GPIO %d direction not deasserted: %d\n",
-> -			phy->reset_gpio, err);
-> -		return err;
-> -	}
-> +	gpiod_set_value_cansleep(phy->reset_gpio, 1);
->  
->  	return 0;
->  }
+This series introduces support for Tegra194 XUSB host and pad
+controller. Tegra194 XUSB host and pad controller are highly
+similar to the controllers found on Tegra186. Therefore, it's
+possible to resue xhci-tegra.c and xusb-tegra186.c for Tegra194.
 
-The message now removed seems inverted to the meaning of the code. Is
-this a bug, or the reset really should be asserted here? I can see that
-it is deasserted in phy_power_up, but that goes before or after ulpi_open()?
-After the change below, the reset is asserted at probe() time now.
+Changelog:
+v5:
+  phy: tegra: xusb: Protect Tegra186 soc with config
+   - no change
 
-[...]
-> -		err = devm_gpio_request(&pdev->dev, tegra_phy->reset_gpio,
-> -					"ulpi_phy_reset_b");
-> +		gpiod = devm_gpiod_get_from_of_node(&pdev->dev, np,
-> +						    "nvidia,phy-reset-gpio",
-> +						    0, GPIOD_OUT_HIGH,
-> +						    "ulpi_phy_reset_b");
-> +		err = PTR_ERR_OR_ZERO(gpiod);
->  		if (err) {
-> -			dev_err(&pdev->dev, "Request failed for GPIO %d: %d\n",
-> -				tegra_phy->reset_gpio, err);
-> +			dev_err(&pdev->dev,
-> +				"Request failed for reset GPIO: %d\n", err);
->  			return err;
->  		}
-> +		tegra_phy->reset_gpio = gpiod;
+  phy: tegra: xusb: Add Tegra194 support
+   - re-use "maximum-speed" instead of adding "nvidia,disable-gen2"
 
-A nice extension to kernel's printf - "%pe" format - has just landed in
-Linus' master tree.
+  dt-bindings: phy: tegra: Add Tegra194 support
+   - re-use "maximum-speed" instead of adding "nvidia,disable-gen2"
 
-Best Regards,
-Micha³ Miros³aw
+  arm64: tegra: Add XUSB and pad controller on Tegra194
+   - no change
+
+  arm64: tegra: Enable XUSB host in P2972-0000 board
+   - no change
+
+v4:
+  xhci: tegra: Parameterize mailbox register addresses
+   - removed from v4 as it has been accepted in v3
+  
+  usb: host: xhci-tegra: Add Tegra194 XHCI support
+   - removed from v4 as it has been accepted in v3
+
+  phy: tegra: xusb: Add Tegra194 support
+   - no change
+
+  dt-bindings: phy: tegra: Add Tegra194 support
+   - no change
+
+  arm64: tegra: Add XUSB and pad controller on Tegra194
+   - no change
+
+  arm64: tegra: Enable XUSB host in P2972-0000 board
+   - no change
+
+v3:
+  add change log to cover latter
+
+v2:
+  xhci: tegra: Parameterize mailbox register addresses
+   - no change
+
+  usb: host: xhci-tegra: Add Tegra194 XHCI support
+   - no change
+
+  phy: tegra: xusb: Protect Tegra186 soc with config
+   - new patch to protect Tegra186 soc data with config
+
+  phy: tegra: xusb: Add Tegra194 support
+   - removed unnecessary #if/#endif pairs
+   - introduce new soc->supports_gen2 flag which indicate whether or not
+     a soc supports USB 3.1 Gen 2 speed
+
+  dt-bindings: phy: tegra: Add Tegra194 support
+   - fix a typo
+
+  arm64: tegra: Add XUSB and pad controller on Tegra194
+   - renamed xhci@3610000 with usb@3610000
+   - moved padctl@3520000 and usb@3610000 inside /cbb
+   - cleaned up "clocks" property of usb@3610000 node
+   - added blanks lines to visually separate blocks
+
+  arm64: tegra: Enable XUSB host in P2972-0000 board
+   - use capitalization of regulator names
+   - fix gpio property of VDD_5V_SATA regulator
+
+JC Kuo (5):
+  phy: tegra: xusb: Protect Tegra186 soc with config
+  phy: tegra: xusb: Add Tegra194 support
+  dt-bindings: phy: tegra: Add Tegra194 support
+  arm64: tegra: Add XUSB and pad controller on Tegra194
+  arm64: tegra: Enable XUSB host in P2972-0000 board
+
+ .../phy/nvidia,tegra124-xusb-padctl.txt       |  18 +++
+ .../arm64/boot/dts/nvidia/tegra194-p2888.dtsi |  36 ++++-
+ .../boot/dts/nvidia/tegra194-p2972-0000.dts   |  63 ++++++++
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi      | 139 +++++++++++++++++
+ drivers/phy/tegra/Makefile                    |   1 +
+ drivers/phy/tegra/xusb-tegra186.c             | 143 +++++++++++++-----
+ drivers/phy/tegra/xusb.c                      |  17 +++
+ drivers/phy/tegra/xusb.h                      |   5 +
+ 8 files changed, 387 insertions(+), 35 deletions(-)
+
+-- 
+2.17.1
+
