@@ -2,77 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DFCF12FF10
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2020 00:19:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 911CA12FF4C
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2020 00:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726232AbgACXTG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jan 2020 18:19:06 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:38112 "EHLO
+        id S1726647AbgACXx3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jan 2020 18:53:29 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:45423 "EHLO
         mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726052AbgACXTG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 18:19:06 -0500
-Received: by mail-lf1-f66.google.com with SMTP id r14so32875535lfm.5;
-        Fri, 03 Jan 2020 15:19:04 -0800 (PST)
+        with ESMTP id S1726229AbgACXx3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 18:53:29 -0500
+Received: by mail-lf1-f66.google.com with SMTP id 203so32818857lfa.12;
+        Fri, 03 Jan 2020 15:53:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=plPVBn5B05KxG9Buj5t41WutJV0n3H/IAkieAwZIPiw=;
-        b=Rs43lxKNvkJWQWSxOMFj5HImDnbdW7tn96edGbjhtRbuIiqiMdOoKci2Ue3mtExYm2
-         h8aw4WmdaQOUZdvV0OML3IKvoUM8vz0vhLvQcDV8olxP1ZZptdXNcFG5ofa0leTksW29
-         uxF641QofPpFOcyLoJ0fcjG2ANyqpCEKSFZGafqo+UvSyTW8MqOod+7Uxu9QdKYKq34e
-         e0blXEHs57SWhSkA/RFier4IIEv1SemZE2SpHIEncShEZkFOG+RCQ9sfxp4RssmVfkAB
-         +XXBCTVW6KFrsilyEN8lj7hPDzcYXs+wRB+PxNCsPXkxDAvwBNLngE2fWgzgkBMCLH1C
-         Zz5Q==
+        bh=IkWuwHhNqLcza831ZlMeVrnl9ktIFXitOGr/KLniDZ8=;
+        b=fiMkZOvkxr3/Ka139fV+tAEu9JXx99jZA4+ujYgmvL2yF5YWP9Tr04cRPJCjwQI2pU
+         +gdWogmZwiOzXVseFUmxw0YnlKA2rfini6TsZF/LPKJkcoSFgv0s9b5Zmy+soFK41Z7Q
+         D2NSm2hUtbVWTA2Q1rlnTJ6Hw4ddY30CNW6emOCNeg5E0lsuvwso2CgBYXneKD/J11vl
+         qofxNzKLDUrHuUe1j0dw0eUMG7LAegBar2VMCh3hgIzMkoXDxMO3uhe5HoqGPw0F6fT5
+         QG47+r4diPjGqUYAlHclycTZL8TqgY2vHyKGeuJx9lN6oBJt8Dzc2f/aoS1ZGF45w0+s
+         ECtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=plPVBn5B05KxG9Buj5t41WutJV0n3H/IAkieAwZIPiw=;
-        b=MmuHxtLBCci3TfLn+gnlvXkS/W2npWk1oeHsuHjYLlveW0+I9sxyAQM+uozW1JuP1p
-         TIOXKrpS+IODfhhH2RsndbKgs5IlIUjdEOvM/XjYjcDlEIZfP0E4MY7d2dDNJKbQYg+u
-         +MLwCY7SOQARzAwlWHimbLwP3nY3TWltsnRr9LWIR9IBa6UWAJ0ohIxx7hKY0c6QacUl
-         y9Q+kLatGd6ixfbaAh5QHwLcxZEDkUqw4PmBCkRaqFJLsmHox3ofNsEGw4EKezc/YEAn
-         rA9EMX/iqGfPkm3YjE+vm6ELejGP9QiWLcXHEnPqRuzFvgLQhzkn/GOeQ/KxBubn5ttz
-         ruEw==
-X-Gm-Message-State: APjAAAVFP2QjaX0zDSzr/5/f3Kygvq6yC0IohrNKgYxsIVIbJESwmYzv
-        2Ac/Y8VnUGjIwwyxGqKYViv14f0T
-X-Google-Smtp-Source: APXvYqyHpJll+Sl4MRgtwD+Fd2ygwv3MNH63zAjKk+0jlLGSGSkAAJxRGfgGeahH+vVWr/AsqzF5sA==
-X-Received: by 2002:a19:ae04:: with SMTP id f4mr51629831lfc.64.1578093543753;
-        Fri, 03 Jan 2020 15:19:03 -0800 (PST)
+        bh=IkWuwHhNqLcza831ZlMeVrnl9ktIFXitOGr/KLniDZ8=;
+        b=XC1rGZT2pr1shVxoGXUb1Z1TV8U2cIT14IzDtThjgMGl8ZhRNg0NcPZXHJBtmv3TrR
+         DZtBl0/tJ0f3I+T1p5SuM4DrVXBPoVQ9IrhrPtO8RBm5Tb/3rVDsQdrtOlKqwjkts3kN
+         qo5Q6A3BsLGLD/UGqiGmxaqHu4/suf1MGY2PdhkWqmSx6n/0s+KZkBsagkOP/mFHHuf9
+         5JUvLej/ZbpzXcU0fkCTURiBt9tlMe7Kt8jwSZ3v8laDDtN/PEVgZa+LbHF7pgqpywR7
+         /quAOXNx6u2BT4L9DsCz0J44CAvmrV+RozejqZz4YEEUy0mAijdnG8RfEdgfHzUIzMyS
+         1mbw==
+X-Gm-Message-State: APjAAAV9K5+dGX5z+IVVXphtilIBX800YSF0Ysggz8N+X2Di2jXlkBR3
+        7aWTvzU0L+gdLQE1cQBr7laa7w6b
+X-Google-Smtp-Source: APXvYqxYnPraSPjUxGGCPLBWOykvd7sszKxpAFINbaJxoztv8+s1SAv8apNOvOV/UaIcDOph2saGKA==
+X-Received: by 2002:a19:ca59:: with SMTP id h25mr50410860lfj.27.1578095606543;
+        Fri, 03 Jan 2020 15:53:26 -0800 (PST)
 Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id i5sm25432335ljj.29.2020.01.03.15.19.02
+        by smtp.googlemail.com with ESMTPSA id q11sm17503060ljm.76.2020.01.03.15.53.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jan 2020 15:19:03 -0800 (PST)
-Subject: Re: [PATCH v2 10/10] usb: chipidea: tegra: Add USB_TEGRA_PHY module
- to driver's dependencies
+        Fri, 03 Jan 2020 15:53:25 -0800 (PST)
+Subject: Re: [PATCH v3 10/16] usb: phy: tegra: Use device-tree notion of
+ reset-GPIO's active-state
 To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Peter Chen <peter.chen@nxp.com>, Rob Herring <robh-dt@kernel.org>,
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <Peter.Chen@nxp.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20191220015238.9228-1-digetx@gmail.com>
- <20191220015238.9228-11-digetx@gmail.com>
- <20191220035650.GC19921@b29397-desktop>
- <fb7dee6e-e645-fe45-126c-c5f1e280bc26@gmail.com>
- <20191223213234.GA28786@qmqm.qmqm.pl>
- <7174833f-8325-7fb4-d190-78ba4bed0cbb@gmail.com>
- <20191230210259.GD24135@qmqm.qmqm.pl>
- <b34972e3-569e-d74a-4d30-d52c89032a08@gmail.com>
- <20200103072536.GA14228@qmqm.qmqm.pl>
+        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20191228203358.23490-1-digetx@gmail.com>
+ <20191228203358.23490-11-digetx@gmail.com>
+ <20200103075803.GC14228@qmqm.qmqm.pl>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <51ecc509-e277-591d-3db5-fc9d46eee326@gmail.com>
-Date:   Sat, 4 Jan 2020 02:19:01 +0300
+Message-ID: <42f1d6c9-99f2-b829-0d2c-649fcdfb156d@gmail.com>
+Date:   Sat, 4 Jan 2020 02:53:24 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.3.0
 MIME-Version: 1.0
-In-Reply-To: <20200103072536.GA14228@qmqm.qmqm.pl>
+In-Reply-To: <20200103075803.GC14228@qmqm.qmqm.pl>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -81,66 +74,68 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-03.01.2020 10:25, Michał Mirosław пишет:
-> On Thu, Jan 02, 2020 at 06:17:47PM +0300, Dmitry Osipenko wrote:
->> 31.12.2019 00:02, Michał Mirosław пишет:
->>> On Tue, Dec 24, 2019 at 07:21:05AM +0300, Dmitry Osipenko wrote:
->>>> 24.12.2019 00:32, Michał Mirosław пишет:
->>>>> On Fri, Dec 20, 2019 at 07:31:08AM +0300, Dmitry Osipenko wrote:
->>>>>> 20.12.2019 06:56, Peter Chen пишет:
->>>>>>> On 19-12-20 04:52:38, Dmitry Osipenko wrote:
->>>>> [...]
->>>>>>>> --- a/drivers/usb/chipidea/ci_hdrc_tegra.c
->>>>>>>> +++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
->>>>>>>> @@ -53,6 +53,12 @@ static int tegra_udc_probe(struct platform_device *pdev)
->>>>>>>>  	struct tegra_udc *udc;
->>>>>>>>  	int err;
->>>>>>>>  
->>>>>>>> +	if (IS_MODULE(CONFIG_USB_TEGRA_PHY)) {
->>>>>>>> +		err = request_module("phy_tegra_usb");
->>>>>>>> +		if (err)
->>>>>>>> +			return err;
->>>>>>>> +	}
->>>>>>>> +
->>>>>>>
->>>>>>> Why you do this dependency, if this controller driver can't
->>>>>>> get USB PHY, it should return error. What's the return value
->>>>>>> after calling below:
->>>>>>>
->>>>>>> 	udc->phy = devm_usb_get_phy_by_phandle(&pdev->dev, "nvidia,phy", 0);
->>>>>>
->>>>>> It returns -EPROBE_DEFER when phy_tegra_usb isn't loaded.
->>>>>
->>>>> How are other driver modules autoloaded? Isn't there an appropriate
->>>>> MODALIAS or MODULE_DEVICE_TABLE in there?
->>>>
->>>> Hello Michał,
->>>>
->>>> The phy_tegra_usb module is fine by itself, it's getting autoloaded.
->>>>
->>>> The problem is that ci_hdrc_tegra module depends on the phy_tegra_usb
->>>> module and thus the PHY module should be loaded before the CI module,
->>>> otherwise CI driver fails with the EPROBE_DEFER.
->>>
->>> Why, then, is CI driver not being probed again after PHY driver loads?
->>> EPROBE_DEFER is what should cause driver core to re-probe a device after
->>> other devices appear (PHY in this case).
->>
->> CI driver is getting re-probed just fine if PHY's driver module is
->> loaded manually after loading the CI's module. This patch removes this
->> necessity to manually load PHY's module.
->>
->> This is just a minor convenience change that brings the CI's driver
->> loading behaviour on par with the behaviour of loading Tegra's EHCI
->> driver module.
+03.01.2020 10:58, Michał Mirosław пишет:
+> On Sat, Dec 28, 2019 at 11:33:52PM +0300, Dmitry Osipenko wrote:
+> [...]
+>>  static int ulpi_open(struct tegra_usb_phy *phy)
+>>  {
+>> -	int err;
+>> -
+>> -	err = gpio_direction_output(phy->reset_gpio, 0);
+>> -	if (err) {
+>> -		dev_err(phy->u_phy.dev,
+>> -			"ULPI reset GPIO %d direction not deasserted: %d\n",
+>> -			phy->reset_gpio, err);
+>> -		return err;
+>> -	}
+>> +	gpiod_set_value_cansleep(phy->reset_gpio, 1);
+>>  
+>>  	return 0;
+>>  }
 > 
-> I fully understand the goal, but what I'm missing is that why this
-> doesn't work out of the box? If the PHY module is autoloaded, and so is
-> CI driver, and (as I understand) the driver's probe() correctly returns
-> EPROBE_DEFER when PHY is not probed yet, then I guess that means bug
-> somewhere else and the patch just covers it up.
+> The message now removed seems inverted to the meaning of the code. Is
+> this a bug, or the reset really should be asserted here?
 
-It works out of the box, but it also could work a bit better in a case
-of manually reloading modules. Perhaps it should be possible to derive
-module dependencies from the Kconfig dependencies, apparently kernel
-doesn't support it yet or maybe there is some reason why it can't be done.
+The removed message was added in patch #2 and indeed it should say
+"asserted". Good catch, thanks!
+
+> I can see that
+> it is deasserted in phy_power_up, but that goes before or after ulpi_open()?
+
+The ulpi_phy_power_on happens after the ulpi_open, please take a look at
+tegra_usb_phy_init().
+
+> After the change below, the reset is asserted at probe() time now.
+
+Yes, the probe now asserts the reset. It is an intended change because
+it should be a bit better to explicitly per-initialize the GPIO state to
+an expected state during of the GPIO retrieval, like most of other
+drivers do and which should be a "generic/common way".
+
+Actually, the reset assertion of ulpi_open() could be removed safely now
+since it doesn't do anything useful, given that probe asserts the reset.
+
+> [...]
+>> -		err = devm_gpio_request(&pdev->dev, tegra_phy->reset_gpio,
+>> -					"ulpi_phy_reset_b");
+>> +		gpiod = devm_gpiod_get_from_of_node(&pdev->dev, np,
+>> +						    "nvidia,phy-reset-gpio",
+>> +						    0, GPIOD_OUT_HIGH,
+>> +						    "ulpi_phy_reset_b");
+>> +		err = PTR_ERR_OR_ZERO(gpiod);
+>>  		if (err) {
+>> -			dev_err(&pdev->dev, "Request failed for GPIO %d: %d\n",
+>> -				tegra_phy->reset_gpio, err);
+>> +			dev_err(&pdev->dev,
+>> +				"Request failed for reset GPIO: %d\n", err);
+>>  			return err;
+>>  		}
+>> +		tegra_phy->reset_gpio = gpiod;
+> 
+> A nice extension to kernel's printf - "%pe" format - has just landed in
+> Linus' master tree.
+
+Thank you very much, I didn't know about that.
+
+I'll prepare v4 with the above things addressed, thank you again and
+please let me know if you'll spot anything else!
