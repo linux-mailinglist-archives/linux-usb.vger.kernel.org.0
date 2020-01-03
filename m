@@ -2,93 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A94AE12FADD
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 17:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C986512FAF0
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2020 17:57:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728061AbgACQyG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jan 2020 11:54:06 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:34940 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727952AbgACQyG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 11:54:06 -0500
-Received: (qmail 5175 invoked by uid 2102); 3 Jan 2020 11:54:05 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 3 Jan 2020 11:54:05 -0500
-Date:   Fri, 3 Jan 2020 11:54:05 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        <gregkh@linuxfoundation.org>, <acelan.kao@canonical.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/3] USB: Disable LPM on WD19's Realtek Hub during setting
- its ports to U0
-In-Reply-To: <B3E0C8C0-3E45-42B3-86D9-E34D669E1F4A@canonical.com>
-Message-ID: <Pine.LNX.4.44L0.2001031137290.1560-100000@iolanthe.rowland.org>
+        id S1728108AbgACQ5D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jan 2020 11:57:03 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:52901 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727963AbgACQ5D (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 11:57:03 -0500
+Received: by mail-il1-f198.google.com with SMTP id n9so36559972ilm.19
+        for <linux-usb@vger.kernel.org>; Fri, 03 Jan 2020 08:57:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=CV8CkChElFjf0jDvkRmO/Avuy2yoeDOeDMEHSWAyFO8=;
+        b=fWYv73KXBPjF0Oz4XVUAA2oJakqHphh9+ublKr7nrB5XYGrMIJ7bzIyMH+kswRFxnX
+         wHUzefzCioiVjkQSrbtDx5Skc2kzKs8QT/RirFrr5ySpdRXFyjmZu9PduMAn9Wgif0/b
+         gpxx9r8/H5wkEqQktEWFU/tDBJs11zqA7i4aMGeD3LUNNMQSOqQ7vbz0dSA/RsaWH29h
+         qIihbvmLVsE5RQi/MX9GQabeQyTHhUyDkhezLjYJKH2vVc83K4G/mnFbioQY5fSLWNto
+         6tuIM92ZlEpAvALrE/yt52puGu0qux6Gg+i/q1YjzYqMfauj3kkuyoJenZj2+N21AlNy
+         P0XQ==
+X-Gm-Message-State: APjAAAWXvPiU5SyDpBjuD/A40kcqS2XzhI/HllGdImE5rMzFZANWDoMv
+        WM1mF1yubPt8TWQikB8Xm1PfdN1XK96vuIHETgdUezxEHhlK
+X-Google-Smtp-Source: APXvYqx7P/ms+QWeGK7fF3ZjlJWamv6WKPaEzHR2v2UJEcHFQ/rUZIhA4hcdyh1xvvPjmodbWjlUXFEMQuyp8rnVj9u0+67bUzE8
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Received: by 2002:a92:9c48:: with SMTP id h69mr68019925ili.222.1578070621457;
+ Fri, 03 Jan 2020 08:57:01 -0800 (PST)
+Date:   Fri, 03 Jan 2020 08:57:01 -0800
+In-Reply-To: <Pine.LNX.4.44L0.2001031133050.1560-100000@iolanthe.rowland.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d29687059b3f32aa@google.com>
+Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (2)
+From:   syzbot <syzbot+10e5f68920f13587ab12@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, ingrassia@epigenesys.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 4 Jan 2020, Kai-Heng Feng wrote:
+Hello,
 
-> Hi Alan,
-> 
-> > On Jan 3, 2020, at 23:21, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > 
-> > On Fri, 3 Jan 2020, Kai-Heng Feng wrote:
-> > 
-> >> Realtek Hub (0bda:0x0487) used in Dell Dock WD19 sometimes drops off the
-> >> bus when bringing underlying ports from U3 to U0.
-> >> 
-> >> After some expirements and guessworks, the hub itself needs to be U0
-> >> during setting its port's link state back to U0.
-> >> 
-> >> So add a new quirk to let the hub disables LPM on setting U0 for its
-> >> downstream facing ports.
-> >> 
-> >> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> >> ---
-> >> drivers/usb/core/hub.c     | 12 ++++++++++--
-> >> drivers/usb/core/quirks.c  |  7 +++++++
-> >> include/linux/usb/quirks.h |  3 +++
-> >> 3 files changed, 20 insertions(+), 2 deletions(-)
-> >> 
-> >> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> >> index f229ad6952c0..35a035781c5a 100644
-> >> --- a/drivers/usb/core/hub.c
-> >> +++ b/drivers/usb/core/hub.c
-> >> @@ -3533,9 +3533,17 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
-> >> 	}
-> >> 
-> >> 	/* see 7.1.7.7; affects power usage, but not budgeting */
-> >> -	if (hub_is_superspeed(hub->hdev))
-> >> +	if (hub_is_superspeed(hub->hdev)) {
-> >> +		if (hub->hdev->quirks & USB_QUIRK_DISABLE_LPM_ON_U0) {
-> >> +			usb_lock_device(hub->hdev);
-> >> +			usb_unlocked_disable_lpm(hub->hdev);
-> >> +		}
-> >> 		status = hub_set_port_link_state(hub, port1, USB_SS_PORT_LS_U0);
-> >> -	else
-> >> +		if (hub->hdev->quirks & USB_QUIRK_DISABLE_LPM_ON_U0) {
-> >> +			usb_unlocked_enable_lpm(hub->hdev);
-> >> +			usb_unlock_device(hub->hdev);
-> > 
-> > The locking here seems questionable.  Doesn't this code sometimes get
-> > called with the hub already locked?  Or with the child device locked
-> > (in which case locking the hub would violate the normal locking order:  
-> > parent first, child second)?
+syzbot has tested the proposed patch and the reproducer did not trigger  
+crash:
 
-I did a little checking.  In many cases the child device _will_ be 
-locked at this point.
+Reported-and-tested-by:  
+syzbot+10e5f68920f13587ab12@syzkaller.appspotmail.com
 
-> Maybe introduce a new lock? The lock however will only be used by this specific hub.
-> But I still want the LPM can be enabled for this hub.
+Tested on:
 
-Do you really need to lock the hub at all?  What would the lock protect 
-against?
+commit:         ecdf2214 usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b06a019075333661
+dashboard link: https://syzkaller.appspot.com/bug?extid=10e5f68920f13587ab12
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=177f06e1e00000
 
-Alan Stern
-
+Note: testing is done by a robot and is best-effort only.
