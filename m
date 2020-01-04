@@ -2,140 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 911CA12FF4C
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2020 00:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A4C12FF92
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2020 01:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726647AbgACXx3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jan 2020 18:53:29 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:45423 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726229AbgACXx3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 18:53:29 -0500
-Received: by mail-lf1-f66.google.com with SMTP id 203so32818857lfa.12;
-        Fri, 03 Jan 2020 15:53:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=IkWuwHhNqLcza831ZlMeVrnl9ktIFXitOGr/KLniDZ8=;
-        b=fiMkZOvkxr3/Ka139fV+tAEu9JXx99jZA4+ujYgmvL2yF5YWP9Tr04cRPJCjwQI2pU
-         +gdWogmZwiOzXVseFUmxw0YnlKA2rfini6TsZF/LPKJkcoSFgv0s9b5Zmy+soFK41Z7Q
-         D2NSm2hUtbVWTA2Q1rlnTJ6Hw4ddY30CNW6emOCNeg5E0lsuvwso2CgBYXneKD/J11vl
-         qofxNzKLDUrHuUe1j0dw0eUMG7LAegBar2VMCh3hgIzMkoXDxMO3uhe5HoqGPw0F6fT5
-         QG47+r4diPjGqUYAlHclycTZL8TqgY2vHyKGeuJx9lN6oBJt8Dzc2f/aoS1ZGF45w0+s
-         ECtA==
+        id S1726703AbgADAaK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jan 2020 19:30:10 -0500
+Received: from mail-il1-f193.google.com ([209.85.166.193]:36130 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726229AbgADAaK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 19:30:10 -0500
+Received: by mail-il1-f193.google.com with SMTP id b15so38039105iln.3
+        for <linux-usb@vger.kernel.org>; Fri, 03 Jan 2020 16:30:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=IkWuwHhNqLcza831ZlMeVrnl9ktIFXitOGr/KLniDZ8=;
-        b=XC1rGZT2pr1shVxoGXUb1Z1TV8U2cIT14IzDtThjgMGl8ZhRNg0NcPZXHJBtmv3TrR
-         DZtBl0/tJ0f3I+T1p5SuM4DrVXBPoVQ9IrhrPtO8RBm5Tb/3rVDsQdrtOlKqwjkts3kN
-         qo5Q6A3BsLGLD/UGqiGmxaqHu4/suf1MGY2PdhkWqmSx6n/0s+KZkBsagkOP/mFHHuf9
-         5JUvLej/ZbpzXcU0fkCTURiBt9tlMe7Kt8jwSZ3v8laDDtN/PEVgZa+LbHF7pgqpywR7
-         /quAOXNx6u2BT4L9DsCz0J44CAvmrV+RozejqZz4YEEUy0mAijdnG8RfEdgfHzUIzMyS
-         1mbw==
-X-Gm-Message-State: APjAAAV9K5+dGX5z+IVVXphtilIBX800YSF0Ysggz8N+X2Di2jXlkBR3
-        7aWTvzU0L+gdLQE1cQBr7laa7w6b
-X-Google-Smtp-Source: APXvYqxYnPraSPjUxGGCPLBWOykvd7sszKxpAFINbaJxoztv8+s1SAv8apNOvOV/UaIcDOph2saGKA==
-X-Received: by 2002:a19:ca59:: with SMTP id h25mr50410860lfj.27.1578095606543;
-        Fri, 03 Jan 2020 15:53:26 -0800 (PST)
-Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id q11sm17503060ljm.76.2020.01.03.15.53.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jan 2020 15:53:25 -0800 (PST)
-Subject: Re: [PATCH v3 10/16] usb: phy: tegra: Use device-tree notion of
- reset-GPIO's active-state
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7In7Tco29iuCsOLy3g6JjgD5lKC+PYNDMM0DSnAitvg=;
+        b=Wgc66G9LeOzZp72+ej7p5Z4O+iJVWvtuAoD0JoiShbcTGl8J/e4c3vZdmKYpEbxEAG
+         yDWVojzi+DljSxBG5xh7S/vzbqlnKZBHuC2VeK/1FppD+piSv2XQ0j5FNBSZSNFncscL
+         pi6RoYJzqABRhX9una3s6tVuIT1IPvbtzucxY/hoKKe7ZPTaYeDLdeYQW28WlsIWrSxD
+         PhOlHgpMG2B/hO7radRgW+cjZKlAqeXdLs4EOfaUCpIk8ScqsSn5Cdvycxg7VfaUNkPz
+         OAVpcVLq4ngtf2MvObzAAx48P/aw5aW8w9kiqbDkV9d9Nw+StoVzx5sGnLtig5BYsYiI
+         vnyA==
+X-Gm-Message-State: APjAAAXweQCq/4Ot2qbrRvebhk4+/wOwH0edTHwKytX8PsSsj3Y5nyVK
+        Jsn9/MUPL/R+RkwuEQcijcaH/Jk=
+X-Google-Smtp-Source: APXvYqz5tkNkBa65cFmHk8NWHr/pTAWBa+g1cLAcFv9Dl8cu6yDv7b/dBPzwvIoVJONghJTmrCrwYA==
+X-Received: by 2002:a92:5d8d:: with SMTP id e13mr59588822ilg.285.1578097809139;
+        Fri, 03 Jan 2020 16:30:09 -0800 (PST)
+Received: from rob-hp-laptop ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id y18sm14150648ilm.9.2020.01.03.16.30.08
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jan 2020 16:30:09 -0800 (PST)
+Received: from rob (uid 1000)
+        (envelope-from rob@rob-hp-laptop)
+        id 2219b7
+        by rob-hp-laptop (DragonFly Mail Agent v0.11);
+        Fri, 03 Jan 2020 17:28:06 -0700
+Date:   Fri, 3 Jan 2020 17:28:06 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     Hanjie Lin <hanjie.lin@amlogic.com>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20191228203358.23490-1-digetx@gmail.com>
- <20191228203358.23490-11-digetx@gmail.com>
- <20200103075803.GC14228@qmqm.qmqm.pl>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <42f1d6c9-99f2-b829-0d2c-649fcdfb156d@gmail.com>
-Date:   Sat, 4 Jan 2020 02:53:24 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        Kevin Hilman <khilman@baylibre.com>,
+        Yue Wang <yue.wang@amlogic.com>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, Carlo Caione <carlo@caione.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+Subject: Re: [PATCH v3 1/6] dt-bindings: phy: Add Amlogic A1 USB2 PHY Bindings
+Message-ID: <20200104002806.GA24214@bogus>
+References: <1577428606-69855-1-git-send-email-hanjie.lin@amlogic.com>
+ <1577428606-69855-2-git-send-email-hanjie.lin@amlogic.com>
 MIME-Version: 1.0
-In-Reply-To: <20200103075803.GC14228@qmqm.qmqm.pl>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1577428606-69855-2-git-send-email-hanjie.lin@amlogic.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-03.01.2020 10:58, Michał Mirosław пишет:
-> On Sat, Dec 28, 2019 at 11:33:52PM +0300, Dmitry Osipenko wrote:
-> [...]
->>  static int ulpi_open(struct tegra_usb_phy *phy)
->>  {
->> -	int err;
->> -
->> -	err = gpio_direction_output(phy->reset_gpio, 0);
->> -	if (err) {
->> -		dev_err(phy->u_phy.dev,
->> -			"ULPI reset GPIO %d direction not deasserted: %d\n",
->> -			phy->reset_gpio, err);
->> -		return err;
->> -	}
->> +	gpiod_set_value_cansleep(phy->reset_gpio, 1);
->>  
->>  	return 0;
->>  }
+On Fri, Dec 27, 2019 at 02:36:41PM +0800, Hanjie Lin wrote:
+> Add the Amlogic A1 Family USB2 PHY Bindings
 > 
-> The message now removed seems inverted to the meaning of the code. Is
-> this a bug, or the reset really should be asserted here?
-
-The removed message was added in patch #2 and indeed it should say
-"asserted". Good catch, thanks!
-
-> I can see that
-> it is deasserted in phy_power_up, but that goes before or after ulpi_open()?
-
-The ulpi_phy_power_on happens after the ulpi_open, please take a look at
-tegra_usb_phy_init().
-
-> After the change below, the reset is asserted at probe() time now.
-
-Yes, the probe now asserts the reset. It is an intended change because
-it should be a bit better to explicitly per-initialize the GPIO state to
-an expected state during of the GPIO retrieval, like most of other
-drivers do and which should be a "generic/common way".
-
-Actually, the reset assertion of ulpi_open() could be removed safely now
-since it doesn't do anything useful, given that probe asserts the reset.
-
-> [...]
->> -		err = devm_gpio_request(&pdev->dev, tegra_phy->reset_gpio,
->> -					"ulpi_phy_reset_b");
->> +		gpiod = devm_gpiod_get_from_of_node(&pdev->dev, np,
->> +						    "nvidia,phy-reset-gpio",
->> +						    0, GPIOD_OUT_HIGH,
->> +						    "ulpi_phy_reset_b");
->> +		err = PTR_ERR_OR_ZERO(gpiod);
->>  		if (err) {
->> -			dev_err(&pdev->dev, "Request failed for GPIO %d: %d\n",
->> -				tegra_phy->reset_gpio, err);
->> +			dev_err(&pdev->dev,
->> +				"Request failed for reset GPIO: %d\n", err);
->>  			return err;
->>  		}
->> +		tegra_phy->reset_gpio = gpiod;
+> It supports Host mode only.
 > 
-> A nice extension to kernel's printf - "%pe" format - has just landed in
-> Linus' master tree.
+> Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
+> Signed-off-by: Yue Wang <yue.wang@amlogic.com>
+> ---
+>  .../bindings/phy/amlogic,meson-a1-usb2-phy.yaml    | 55 ++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/amlogic,meson-a1-usb2-phy.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/amlogic,meson-a1-usb2-phy.yaml b/Documentation/devicetree/bindings/phy/amlogic,meson-a1-usb2-phy.yaml
+> new file mode 100644
+> index 00000000..2b2c526
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/amlogic,meson-a1-usb2-phy.yaml
+> @@ -0,0 +1,55 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2019 Amlogic, Inc
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/phy/amlogic,meson-a1-usb2-phy.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Amlogic A1 USB2 PHY
+> +
+> +maintainers:
+> +  - Yue Wang <yue.wang@amlogic.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - amlogic,meson-a1-usb2-phy
 
-Thank you very much, I didn't know about that.
+Use 'const' if there's only 1.
 
-I'll prepare v4 with the above things addressed, thank you again and
-please let me know if you'll spot anything else!
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  reset-names:
+> +    items:
+> +      - const: phy
+
+Don't need *-names when there's a single entry.
+
+> +
+> +  "#phy-cells":
+> +    const: 0
+> +
+> +  power-domains:
+> +     maxItems: 1
+> +     description:
+> +       a phandle to respective power domain node as described by generic
+> +       PM domain bindings (see power/power_domain.txt for more information).
+
+Drop the generic description. No need to duplicate everywhere.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - resets
+> +  - reset-names
+> +  - "#phy-cells"
+> +  - power-domains
+> +
+> +examples:
+> +  - |
+> +    usb2_phy1: phy@40000 {
+> +      status = "okay";
+> +      compatible = "amlogic,a1-usb2-phy";
+> +      reg = <0x0 0x40000 0x0 0x2000>;
+> +      resets = <&reset RESET_USBPHY>;
+> +      reset-names = "phy";
+> +      #phy-cells = <0>;
+> +      power-domains = <&pwrc PWRC_USB_ID>;
+> +    };
+> -- 
+> 2.7.4
+> 
