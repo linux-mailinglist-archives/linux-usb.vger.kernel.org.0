@@ -2,76 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F26C130237
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2020 12:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E44C13027A
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2020 14:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725943AbgADLqG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Jan 2020 06:46:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38268 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725796AbgADLqG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 4 Jan 2020 06:46:06 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5EF09215A4;
-        Sat,  4 Jan 2020 11:46:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578138365;
-        bh=BIfs1NixzYretDBMD+eLD0lOwz5l1r8LwnPk2qddhaM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aSo0ppJF1kT3u0Rw9MZLTSYurBo81qyT++5jI8nw7Poi9LvhHpgvbcY/oRV+ka6n4
-         034dzlZU0/ow4g85zwAa6BVOGB+fkqxCaN3RVY4kRmP0prsNKO1TekeFRDt27ihEeo
-         +dv7y9u6dezO0LUybYGdVrDhtuv3GcwNaUYTH9qY=
-Date:   Sat, 4 Jan 2020 12:46:03 +0100
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     atmgnd <atmgnd@protonmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: missing parentheses in USE_NEW_SCHEME
-Message-ID: <20200104114603.GB1288021@kroah.com>
-References: <ht4mtag8ZP-HKEhD0KkJhcFnVlOFV8N8eNjJVRD9pDkkLUNhmEo8_cL_sl7xy9mdajdH-T8J3TFQsjvoYQT61NFjQXy469Ed_BbBw_x4S1E=@protonmail.com>
+        id S1725946AbgADNJ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Jan 2020 08:09:26 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:37988 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725805AbgADNJZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Jan 2020 08:09:25 -0500
+Received: by mail-pl1-f195.google.com with SMTP id f20so20071074plj.5;
+        Sat, 04 Jan 2020 05:09:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=pytAZE1wLxvgM4YSYnv0kR/qJALM41c0sm7W1RQJOg8=;
+        b=q3w4MI7lHMYVfkdgcXv1fz3H3efAV/xM6iBJsatX1uz1JD514XuVGyeI2R6+P1cxkY
+         T8rU4icU68JrgkDNw62vqyUoiGemcguArSH62PRD4VT/AaY9DkHywjK/xK6Bc/T9kmqm
+         IH3uZl2CECk06rMAvcjS7oFsaJBnT1mdCVxTEWY3sD6QftgmBdreYr2MNlefH231+7l1
+         qkYM6jz2u4lelEFr6qG5nHQGJ+u98p+rk/dBmdwYxcZhZeul6hZTEBFNELCgRbTSaTKp
+         3oZBn4aneUdsVXZwA86xDPATdL3O8PuVJtrcH4z3E8hw7nHbt49wlhi+MreMw7Fz41ar
+         wG6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pytAZE1wLxvgM4YSYnv0kR/qJALM41c0sm7W1RQJOg8=;
+        b=tNTM26XFTyuJpizfDgh8RY7fvjXs2YSxKXz4XMioYiymsmcFyqTOMKkTHGKz5g+iij
+         W+jbRUjmmKIkdRUDQ7zxI9Rb55aKmlL5Eb1RL+xMPx/EPoYJ2Lgg/7x7kHI/mrsRFv+U
+         WTrn+mXTyBdxd5bVQD6mfTb7j8WHr77nQxDeRTY02Sjob2mOvaYXh8ZpgU06xcdwkca8
+         wlpiRdboKrXKWgGFH5savcImSBwKJo5E8CU87nZC1MoYXuKjYCU/PZUOhIA4/37p12Nu
+         mMsSRj0Ihwb0bzVDdPVnXhbtmZKVfjbOHXBN8FTwwpPLPbmQyJIzZogQ5E0S6QQlZOj+
+         VpUQ==
+X-Gm-Message-State: APjAAAV23q/c8cxQxQ73Jy4242Z6EqmCyRqhoKkQcfdb/CMeE1p6/6m2
+        8u+xdokel4+CeW34BQtdLUM=
+X-Google-Smtp-Source: APXvYqzUIQxYHRHTJBEFVdh3yVD2nN8QL8MAhfOlRbyM5yUQVqEEnV9NPS3PgIkdtEiv1bBAe3VA6g==
+X-Received: by 2002:a17:902:6909:: with SMTP id j9mr71230416plk.269.1578143365194;
+        Sat, 04 Jan 2020 05:09:25 -0800 (PST)
+Received: from localhost (199.168.140.36.16clouds.com. [199.168.140.36])
+        by smtp.gmail.com with ESMTPSA id b1sm18037406pjw.4.2020.01.04.05.09.23
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 04 Jan 2020 05:09:24 -0800 (PST)
+Date:   Sat, 4 Jan 2020 21:09:21 +0800
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     balbi@kernel.org, stern@rowland.harvard.edu, rogerq@ti.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: udc: core: Warn about failed to find udc
+Message-ID: <20200104130921.GA28574@nuc8i5>
+References: <20200104112836.28036-1-zhengdejin5@gmail.com>
+ <20200104114530.GA1288021@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ht4mtag8ZP-HKEhD0KkJhcFnVlOFV8N8eNjJVRD9pDkkLUNhmEo8_cL_sl7xy9mdajdH-T8J3TFQsjvoYQT61NFjQXy469Ed_BbBw_x4S1E=@protonmail.com>
+In-Reply-To: <20200104114530.GA1288021@kroah.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jan 04, 2020 at 11:02:01AM +0000, atmgnd wrote:
-> accroding to bd0e6c9#diff-28615d62e1250eadc353d804f49bc6d6, will try old enumeration
-> scheme first for high speed devices. for example, when a high speed device pluged in,
-> line 2720 should expand to 0 at the first time. USE_NEW_SCHEME(0, 0 || 0 || 1) === 0.
-> but it wrongly expand to 1(alway expand to 1 for high speed device), and change
-> USE_NEW_SCHEME to USE_NEW_SCHEME((i) % 2 == (int)(scheme)) may be better ?
+On Sat, Jan 04, 2020 at 12:45:30PM +0100, Greg KH wrote:
+> On Sat, Jan 04, 2020 at 07:28:36PM +0800, Dejin Zheng wrote:
+> > If we do not warn here, the user may not know failed to
+> > find udc class driver because it silently fails.
+> > Let's print a warning in that case so developers find
+> > these problems faster.
+> > 
+> > Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+> > ---
+> >  drivers/usb/gadget/udc/core.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+> > index 51fa614b4079..9b11046480fe 100644
+> > --- a/drivers/usb/gadget/udc/core.c
+> > +++ b/drivers/usb/gadget/udc/core.c
+> > @@ -1414,6 +1414,8 @@ int usb_gadget_probe_driver(struct usb_gadget_driver *driver)
+> >  	}
+> >  
+> >  	mutex_unlock(&udc_lock);
+> > +	if (ret)
+> > +		pr_warn("udc-core: couldn't find an available UDC or it's busy\n");
+> >  	return ret;
+> >  found:
+> >  	ret = udc_bind_to_driver(udc, driver);
+> > -- 
+> > 2.17.1
+> > 
 > 
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> Signed-off-by: Qi Zhou <atmgnd@outlook.com>
-> ---
->  drivers/usb/core/hub.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index f229ad6952c0..7d17deca7021 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -2692,7 +2692,7 @@ static unsigned hub_is_wusb(struct usb_hub *hub)
->  #define SET_ADDRESS_TRIES	2
->  #define GET_DESCRIPTOR_TRIES	2
->  #define SET_CONFIG_TRIES	(2 * (use_both_schemes + 1))
-> -#define USE_NEW_SCHEME(i, scheme)	((i) / 2 == (int)scheme)
-> +#define USE_NEW_SCHEME(i, scheme)	((i) / 2 == (int)(scheme))
-> 
->  #define HUB_ROOT_RESET_TIME	60	/* times are in msec */
->  #define HUB_SHORT_RESET_TIME	10
-> --
-> 2.17.1
-> 
->
+> Isn't this going to cause a lot more messages than is really needed?
 
-Much better, but your From: name does not match your signed-off-by name :(
+I think this should not happen. here just for a gadget driver to find
+an udc device by the same name. one driver only call this function once.
+if it found, the udc device will bind this driver. otherwise, print this
+warning.
 
+I also searched for the caller of this function, For example:
+gadget_dev_desc_UDC_store() and usb_composite_probe(), They also
+failed silently without any warning messages for return error of
+this function. 
+
+> 
+> And as you have a device, shouldn't this be dev_warn()?
+
+Sorry, my comments has some mistake. I did not have a device when the
+gadget driver failed to find an udc device by the same name. I will
+fix it on patch v2.
+
+> 
+> thanks,
+> 
+> greg k-h
