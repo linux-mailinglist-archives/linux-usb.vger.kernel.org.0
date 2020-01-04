@@ -2,72 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 085D312FF9D
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2020 01:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5698312FFB3
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2020 01:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727158AbgADAdp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jan 2020 19:33:45 -0500
-Received: from mail-il1-f193.google.com ([209.85.166.193]:34383 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726968AbgADAdp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 19:33:45 -0500
-Received: by mail-il1-f193.google.com with SMTP id s15so38063389iln.1
-        for <linux-usb@vger.kernel.org>; Fri, 03 Jan 2020 16:33:44 -0800 (PST)
+        id S1727257AbgADAhY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jan 2020 19:37:24 -0500
+Received: from mail-io1-f48.google.com ([209.85.166.48]:33643 "EHLO
+        mail-io1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727228AbgADAhT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 19:37:19 -0500
+Received: by mail-io1-f48.google.com with SMTP id z8so43113437ioh.0
+        for <linux-usb@vger.kernel.org>; Fri, 03 Jan 2020 16:37:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=2jtU2GwA92LWxQFkeCrbjyJNc+9eRgZ+rt7rVVu7gPA=;
-        b=Lt94AwlXCO4yhnvkq6TH/2aETIXM4v/dRwGwL5XNmFxP1KN3EJdle2U9fuZBYe1fzh
-         LYhIKlUoJMb5zseeQJF1tCIn0BzctG0AHfcmMNi4E9tyRuwCSgZwktfgu9ZGot+o9gOe
-         wkIZ6wEZ3S4RZh2ygtDumEkQpyIn7ffhXatvG9YHZ+0zUyksDlp3ndzVpBA858je94zj
-         ds+9PCcHit4tXiUkdEY0f6b1df9zLg20sL8K1ibq8mC+RF/slVdPv+C2n2JOxufaqlZk
-         ybxfXzhP1ce7UiCdmFfjr8pZNWNZ/h2L+DNKhxuaRn7ZcnDF6mtzd/rkOfyGhsqq8e1T
-         Oncw==
-X-Gm-Message-State: APjAAAWml99+2QCFJU8sbEdhnTDi7V3xJi3SRh0biVKutIcFwW4twnZD
-        0cVgLNMCd2KKdoEIHtxyMwGuIP8=
-X-Google-Smtp-Source: APXvYqwuprLY1m5EUZ8x6S86snR9cvfjGnnf8/kBKLtDsaM+J4t3wSfHYRJ768fOVa8GeySHrkHD/w==
-X-Received: by 2002:a05:6e02:cc5:: with SMTP id c5mr62053704ilj.47.1578098024028;
-        Fri, 03 Jan 2020 16:33:44 -0800 (PST)
+        bh=DyH66go0qsvcEZgmTI6bctw9NNe8CYLjRZjlFnsO2lI=;
+        b=FczkugBarosy0TFO1YXSMSo2+OD/Ir5sFQhDDuckBqSkrTjw5h8LmCBDyZ++3tCumt
+         6qzgRFSV9KyoviHAx6zPpOr7aEw76FmpnNxYCU3s5+s/meUxIzxZCvmLSaC/Bd7Xj1+W
+         9vcU1zkkrqc2JlTsH3vRAmOIgTcG0Ef1ZGSgbXL0JdaoOT7HJTUqKhlSLLCg8qD3eLd0
+         VOVM433uWz8fiKlU495pshjF7EpvOhSmPqDtC5aHfezqSZtcGb0IssbNpTatCiY9gOjR
+         rhuCYTxgWvJV3r6N6RcDc5Kw631Dm4qtE/QCSKWgt7r3SFeaFvSngpyb+eAUK7LEgTpO
+         6Bjg==
+X-Gm-Message-State: APjAAAXUBRtoKWm8ZDmHXL7oav00yrRd1ncwJfVLBZJqTv0zS12duui9
+        91bqdNPLjllO16awyt10AQVDlRg=
+X-Google-Smtp-Source: APXvYqwvSSDcrTuqW8gjnPQBQ3PDJFSgAtRzeemIMFkWncCV7zgcV3/oopOEnqcRYtZAVdS1Ppmt4w==
+X-Received: by 2002:a02:cdcb:: with SMTP id m11mr72001455jap.125.1578098238629;
+        Fri, 03 Jan 2020 16:37:18 -0800 (PST)
 Received: from rob-hp-laptop ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id e184sm9102506iof.77.2020.01.03.16.33.42
+        by smtp.gmail.com with ESMTPSA id m90sm17530111ilh.56.2020.01.03.16.37.17
         for <linux-usb@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jan 2020 16:33:43 -0800 (PST)
+        Fri, 03 Jan 2020 16:37:17 -0800 (PST)
 Received: from rob (uid 1000)
         (envelope-from rob@rob-hp-laptop)
-        id 221a53
+        id 2219a5
         by rob-hp-laptop (DragonFly Mail Agent v0.11);
-        Fri, 03 Jan 2020 17:33:41 -0700
-Date:   Fri, 3 Jan 2020 17:33:41 -0700
+        Fri, 03 Jan 2020 17:37:17 -0700
+Date:   Fri, 3 Jan 2020 17:37:17 -0700
 From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 01/16] dt-binding: usb: ci-hdrc-usb2: Document NVIDIA
- Tegra support
-Message-ID: <20200104003341.GA5889@bogus>
-References: <20191228203358.23490-1-digetx@gmail.com>
- <20191228203358.23490-2-digetx@gmail.com>
+To:     Nagarjuna Kristam <nkristam@nvidia.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        mark.rutland@arm.com, robh+dt@kernel.org, kishon@ti.com,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nagarjuna Kristam <nkristam@nvidia.com>
+Subject: Re: [Patch V3 01/18] dt-bindings: phy: tegra-xusb: Add
+ usb-role-switch
+Message-ID: <20200104003717.GA11747@bogus>
+References: <1577704195-2535-1-git-send-email-nkristam@nvidia.com>
+ <1577704195-2535-2-git-send-email-nkristam@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191228203358.23490-2-digetx@gmail.com>
+In-Reply-To: <1577704195-2535-2-git-send-email-nkristam@nvidia.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 28 Dec 2019 23:33:43 +0300, Dmitry Osipenko wrote:
-> NVIDIA Tegra SoCs use ChipIdea silicon IP for the USB controllers.
+On Mon, 30 Dec 2019 16:39:38 +0530, Nagarjuna Kristam wrote:
+> Add usb-role-switch property for Tegra210 and Tegra186 platforms. This
+> entry is used by XUSB pad controller driver to register for role changes
+> for OTG/Peripheral capable USB 2 ports.
 > 
-> Acked-by: Peter Chen <peter.chen@nxp.com>
+> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
 > Acked-by: Thierry Reding <treding@nvidia.com>
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt | 4 ++++
->  1 file changed, 4 insertions(+)
+> V3:
+>  - Added Acked-by updates to commit message.
+> ---
+> V2:
+>  - Moved usb-role-switch to seperate Required section as suggested by Thierry.
+>  - Added reference to usb/usb-conn-gpio.txt for connector subnode.
+> ---
+>  .../devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt         | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
