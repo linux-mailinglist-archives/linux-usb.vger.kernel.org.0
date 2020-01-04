@@ -2,84 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 721DC13000D
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2020 03:04:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F4F13005F
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2020 04:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727222AbgADCEm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jan 2020 21:04:42 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:43093 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727189AbgADCEm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 21:04:42 -0500
-Received: by mail-lf1-f67.google.com with SMTP id 9so32996281lfq.10;
-        Fri, 03 Jan 2020 18:04:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=DP1fYoznEacFSbgWsSDZL+rwUQxQG8vzPv53EveY774=;
-        b=ENw57qnUM0Ch8wLUwrLe0Lhf0ax96F+wK9PrLkOSXC9hQkS9xluescyFCdr7bG4Twq
-         U7KgCZ/+R28tGTo/Pe09DwKX9piauepr8pDeEdYeOhpt7AluAGpAhD8BWac9nCJDqvzp
-         +BW9G4twPl5CUD8+4LsHs5sI3waUDns3Kygx9LqNlTvIAbDSmzjSjYjH1C1wos8F6fl6
-         cBxfcD6bZTdztSDMu9vKRvbnNJELYatMk/3t9JDKYPZogages1aI6PxkbLLNyrI9xWe8
-         4rqeRsZ/6fuuQZp+PtAeMPBTyLDIDoRq6h1HFD5e+j9THOyK3BH4ZJq6lSHn0cosnPSX
-         3ZNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=DP1fYoznEacFSbgWsSDZL+rwUQxQG8vzPv53EveY774=;
-        b=FcD5inX0Asg+UMn+GQV+e2bAbOiQVBA9F0IW/Ss+bqUfT+X0n1pSs+s2MCeU2TO1jH
-         Yho+EN8jotbLtDfWa5U9WIUI3TZmrftO/Zo+baVtThoYyS5AMmmgPHPbWyYkfuABjGcJ
-         qgMVYQ7S4WMRk+OwGjb3FqohuPvcwYduTIQqYYVC3LaKlH3FueH6SU1YERYnaOJorn+3
-         uyLDyPZsn2Bwadd8+9wVSyRELMn4ITUzicHMiGpRiN/+mw/CB+1cMWQwrR8++YkGL9AF
-         JXiQJvwTmIEsG+NPQ0c56EVq7Wn6+cMp5zIi7sz4tHh1DKfrGa/puMBJujh/+QPngeHN
-         80Hw==
-X-Gm-Message-State: APjAAAV3A0q/UC6l1EtZhV8F5pYJXv+QKxvEDywDCzTsV6iRsY9u8Jq0
-        SFnMOQTRNb16NoCMZo9MYUUZTRG9
-X-Google-Smtp-Source: APXvYqz/P3UeuIynbTD2ACZJlI96d20BxjSLSMXbG6FDOyMTE8bhGAkaJyn6xBZGCOqVbhw89Cl+EQ==
-X-Received: by 2002:ac2:46dc:: with SMTP id p28mr51678437lfo.23.1578103480073;
-        Fri, 03 Jan 2020 18:04:40 -0800 (PST)
-Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id e8sm30021439ljb.45.2020.01.03.18.04.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jan 2020 18:04:39 -0800 (PST)
-Subject: Re: [PATCH v3 01/16] dt-binding: usb: ci-hdrc-usb2: Document NVIDIA
- Tegra support
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191228203358.23490-1-digetx@gmail.com>
- <20191228203358.23490-2-digetx@gmail.com> <20200104003341.GA5889@bogus>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <b24a37f2-1515-9586-ae87-864272b87410@gmail.com>
-Date:   Sat, 4 Jan 2020 05:04:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1727278AbgADDVz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jan 2020 22:21:55 -0500
+Received: from mail-40135.protonmail.ch ([185.70.40.135]:29638 "EHLO
+        mail-40135.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727255AbgADDVz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 22:21:55 -0500
+Date:   Sat, 04 Jan 2020 03:21:41 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=default; t=1578108110;
+        bh=VdseeMBzHGRC0ODSp5TYUOy1uhNPZvnSaTxlOa+pGws=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:
+         Feedback-ID:From;
+        b=yZy4GrPFBr0jHrElY9i0B+Q7DOUE0helyiA7bX1JQPd7Ws+nYuhItU3V1yyWngHnp
+         dXwbfguLzBDxP9UpbURVwpBi0bt3/A/pAmypwTjQeHMGf1rEeiUfgy200WY3VcdS/B
+         1BzYudnYNlrYJJzr6WCyrDVd1AwVd+pXo0OPkl6w=
+To:     Alan Stern <stern@rowland.harvard.edu>
+From:   atmgnd <atmgnd@protonmail.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Reply-To: atmgnd <atmgnd@protonmail.com>
+Subject: Re: Fw: usbcore missing parentheses in USE_NEW_SCHEME
+Message-ID: <hvpNcWudqm2gGi4YyoDbARHTmDy9NjoUNlShE5RcE6WKeMKqipb6cHXs58sJvjyyR0f4NGNkYPc0WybcVRA2QiXzZFSmUlhg4zxctXyJ7Js=@protonmail.com>
+In-Reply-To: <Pine.LNX.4.44L0.2001021018330.1546-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.2001021018330.1546-100000@iolanthe.rowland.org>
+Feedback-ID: py-oVO8Vt0vS1FKaKugS2_MTpFC3lKhHMurhoXPAalWk9Eh40Mo1lZOn2CI1vswSSKJBwBLYgn_VKFu9qW3csg==:Ext:ProtonMail
 MIME-Version: 1.0
-In-Reply-To: <20200104003341.GA5889@bogus>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.8 required=7.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        HK_RANDOM_REPLYTO shortcircuit=no autolearn=no autolearn_force=no
+        version=3.4.2
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.protonmail.ch
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-04.01.2020 03:33, Rob Herring пишет:
-> On Sat, 28 Dec 2019 23:33:43 +0300, Dmitry Osipenko wrote:
->> NVIDIA Tegra SoCs use ChipIdea silicon IP for the USB controllers.
->>
->> Acked-by: Peter Chen <peter.chen@nxp.com>
->> Acked-by: Thierry Reding <treding@nvidia.com>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt | 4 ++++
->>  1 file changed, 4 insertions(+)
->>
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
-> 
+Greg Kroah-Hartman:
+here is the new patch:
 
-Thanks!
+
+From 85f01b89d050a988f4d9fc78232de47e793c6a7c Mon Sep 17 00:00:00 2001
+From: Qi.Zhou <atmgnd@outlook.com>
+Date: Wed, 1 Jan 2020 21:27:13 +0800
+Subject: [PATCH] usb: hub: missing parentheses in USE_NEW_SCHEME
+
+accroding to bd0e6c9#diff-28615d62e1250eadc353d804f49bc6d6, will try old en=
+umeration
+scheme first for high speed devices. for example, when a high speed device =
+pluged in,
+line 2720 should expand to 0 at the first time. USE_NEW_SCHEME(0, 0 || 0 ||=
+ 1) =3D=3D=3D 0.
+but it wrongly expand to 1(alway expand to 1 for high speed device), and ch=
+ange
+USE_NEW_SCHEME to USE_NEW_SCHEME((i) % 2 =3D=3D (int)(scheme)) may be bette=
+r ?
+
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Qi.Zhou <atmgnd@outlook.com>
+---
+ drivers/usb/core/hub.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index f229ad6952c0..7d17deca7021 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -2692,7 +2692,7 @@ static unsigned hub_is_wusb(struct usb_hub *hub)
+ #define SET_ADDRESS_TRIES=092
+ #define GET_DESCRIPTOR_TRIES=092
+ #define SET_CONFIG_TRIES=09(2 * (use_both_schemes + 1))
+-#define USE_NEW_SCHEME(i, scheme)=09((i) / 2 =3D=3D (int)scheme)
++#define USE_NEW_SCHEME(i, scheme)=09((i) / 2 =3D=3D (int)(scheme))
+
+ #define HUB_ROOT_RESET_TIME=0960=09/* times are in msec */
+ #define HUB_SHORT_RESET_TIME=0910
+--
+2.17.1
+
+
+
+Sent with ProtonMail Secure Email.
+
+=E2=80=90=E2=80=90=E2=80=90=E2=80=90=E2=80=90=E2=80=90=E2=80=90 Original Me=
+ssage =E2=80=90=E2=80=90=E2=80=90=E2=80=90=E2=80=90=E2=80=90=E2=80=90
+On Thursday, January 2, 2020 11:22 PM, Alan Stern <stern@rowland.harvard.ed=
+u> wrote:
+
+> On Wed, 1 Jan 2020, Randy Dunlap wrote:
+>
+> > [adding linux-usb mailing list]
+> > On 1/1/20 6:46 AM, atmgnd wrote:
+> >
+> > > I think there is missing parentheses in macro USE_NEW_SCHEME, it shou=
+ld be:
+> > > #define USE_NEW_SCHEME(i, scheme) ((i) / 2 =3D=3D (int)(scheme))
+> > > causes a fail wiht "device descriptor read/64, error -110" using my u=
+sb drive on vmware using usb 3.0 hub.
+> > > from https://github.com/torvalds/linux/commit/25244227158e15020620413=
+65a439a54cb8fe673#diff-28615d62e1250eadc353d804f49bc6d6
+> > > someone changed USE_NEW_SCHEME, but without parentheses for second pa=
+rameter. as result. in fuction use_new_scheme when old_scheme_first is 1, u=
+se_new_scheme will return 1 always(actullay is should return 0). it also ma=
+ke https://github.com/torvalds/linux/commit/bd0e6c9614b95352eb31d0207df16dc=
+156c527fa#diff-28615d62e1250eadc353d804f49bc6d6 fails.
+> > > I cannot use git send-mail, there some issue with my network provider=
+. patch below, :
+> > > From 85f01b89d050a988f4d9fc78232de47e793c6a7c Mon Sep 17 00:00:00 200=
+1
+> > > From: atmgnd atmgnd@outlook.com
+> > > Date: Wed, 1 Jan 2020 21:27:13 +0800
+> > > Subject: [PATCH] usb: hub: missing parentheses in USE_NEW_SCHEME
+> > > accroding to bd0e6c9#diff-28615d62e1250eadc353d804f49bc6d6, will try =
+old enumeration
+> > > scheme first for high speed devices. for example, when a high speed d=
+evice pluged in,
+> > > line 2720 should expand to 0 at the first time. USE_NEW_SCHEME(0, 0 |=
+| 0 || 1) =3D=3D=3D 0.
+> > > but it wrongly expand to 1(alway expand to 1 for high speed device), =
+and change
+> > > USE_NEW_SCHEME to USE_NEW_SCHEME((i) % 2 =3D=3D (int)(scheme)) may be=
+ better ?
+> > >
+> > > Signed-off-by: atmgnd atmgnd@outlook.com
+> > >
+> > > -----------------------------------------
+> > >
+> > > drivers/usb/core/hub.c | 2 +-
+> > > 1 file changed, 1 insertion(+), 1 deletion(-)
+> > > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> > > index f229ad6952c0..7d17deca7021 100644
+> > > --- a/drivers/usb/core/hub.c
+> > > +++ b/drivers/usb/core/hub.c
+> > > @@ -2692,7 +2692,7 @@ static unsigned hub_is_wusb(struct usb_hub *hub=
+)
+> > > #define SET_ADDRESS_TRIES 2
+> > > #define GET_DESCRIPTOR_TRIES 2
+> > > #define SET_CONFIG_TRIES (2 * (use_both_schemes + 1))
+> > > -#define USE_NEW_SCHEME(i, scheme) ((i) / 2 =3D=3D (int)scheme)
+> > > +#define USE_NEW_SCHEME(i, scheme) ((i) / 2 =3D=3D (int)(scheme))
+> > >
+> > > #define HUB_ROOT_RESET_TIME 60 /* times are in msec */
+> > > #define HUB_SHORT_RESET_TIME 10
+> > >
+> > > ---------------------------------------------------------------------=
+------------------
+> > >
+> > > 2.17.1
+>
+> atmgnd:
+>
+> Please resend this patch to Greg Kroah-Hartman
+> gregkh@linuxfoundation.org with the appropriate CC's. Also, your
+> Signed-off-by: line should contain a real name, not an email userid
+> (you probably don't use "atmgnd" as your signature on legal
+> documents!).
+>
+> When you resend the patch, you can include:
+>
+> Acked-by: Alan Stern stern@rowland.harvard.edu
+>
+> Alan Stern
+
+
