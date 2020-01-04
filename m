@@ -2,109 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C48C912FFD5
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2020 01:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 721DC13000D
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2020 03:04:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727232AbgADA6k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jan 2020 19:58:40 -0500
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:44889 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727180AbgADA6h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 19:58:37 -0500
-Received: by mail-qk1-f196.google.com with SMTP id w127so35154779qkb.11
-        for <linux-usb@vger.kernel.org>; Fri, 03 Jan 2020 16:58:36 -0800 (PST)
+        id S1727222AbgADCEm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jan 2020 21:04:42 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:43093 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727189AbgADCEm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jan 2020 21:04:42 -0500
+Received: by mail-lf1-f67.google.com with SMTP id 9so32996281lfq.10;
+        Fri, 03 Jan 2020 18:04:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZRdWoFnLcGhdSNkzPjq96WZNa9VKZ4N6myQKP167eEs=;
-        b=nl7/txdEUJxXi8ORcJkafYP6hgnLlTYmtsjh23ngJtNS23Bov6v+T4rd4LfaM8SjLo
-         dGgZ8U545CN8FDRfXbysuYeNmZuYazSQUV430FhU0xPkbTnzRt4UcvKCjPimcT4ygqWf
-         4fJ89NgN+fSMxvFDcweTY7ud6aEX/TtNYyMv8=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=DP1fYoznEacFSbgWsSDZL+rwUQxQG8vzPv53EveY774=;
+        b=ENw57qnUM0Ch8wLUwrLe0Lhf0ax96F+wK9PrLkOSXC9hQkS9xluescyFCdr7bG4Twq
+         U7KgCZ/+R28tGTo/Pe09DwKX9piauepr8pDeEdYeOhpt7AluAGpAhD8BWac9nCJDqvzp
+         +BW9G4twPl5CUD8+4LsHs5sI3waUDns3Kygx9LqNlTvIAbDSmzjSjYjH1C1wos8F6fl6
+         cBxfcD6bZTdztSDMu9vKRvbnNJELYatMk/3t9JDKYPZogages1aI6PxkbLLNyrI9xWe8
+         4rqeRsZ/6fuuQZp+PtAeMPBTyLDIDoRq6h1HFD5e+j9THOyK3BH4ZJq6lSHn0cosnPSX
+         3ZNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZRdWoFnLcGhdSNkzPjq96WZNa9VKZ4N6myQKP167eEs=;
-        b=RNlqDanPbZrQMf+SCYGp2fb26Yxf+/+Ur0bKwh5r5VVGQXkK3cpUEF52kdfPGolFpI
-         2zDNuSEbNyEhWWU3oC53NcFnNzzU8Jfc0yH5oTVX5HBNHxZNw3iKHnjJUvUwI+8Gtzll
-         3fxVrWuh+EiAOuv6sITa/k6DwegMnBPHvT6DMhrGnHCzyIAimN3dz7QPfX0MBToFOQuP
-         brxq5NB95vu9uJddPKuHVqRKId8IrF20OKc/PpmLSphStBH2zACkmTW8EadJm72pKkWH
-         pw6yb1tQIIol/risQZn49IgneQrtinaKPqzZHjC0upX+pcUE2O3g3MFykJg0IawtDNYI
-         CqeA==
-X-Gm-Message-State: APjAAAXSzkOyj1EL5M845MVAJcHacRqLAz1RVwIgdEn17ZvwTWzZmEYm
-        gs9O8A+JRAkP6WSBQJuyfe5ynr+JxEkjw4TfBNCp3Q==
-X-Google-Smtp-Source: APXvYqxv/R1AKmGaIvVzszdSZ5I/Pw3nR5j+296CXLuFg4+F3ZatRztWZsxCBRIMO/6OO/xXNCPhHrw1zMdbEaGmfY4=
-X-Received: by 2002:ae9:e910:: with SMTP id x16mr72476969qkf.90.1578099516166;
- Fri, 03 Jan 2020 16:58:36 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=DP1fYoznEacFSbgWsSDZL+rwUQxQG8vzPv53EveY774=;
+        b=FcD5inX0Asg+UMn+GQV+e2bAbOiQVBA9F0IW/Ss+bqUfT+X0n1pSs+s2MCeU2TO1jH
+         Yho+EN8jotbLtDfWa5U9WIUI3TZmrftO/Zo+baVtThoYyS5AMmmgPHPbWyYkfuABjGcJ
+         qgMVYQ7S4WMRk+OwGjb3FqohuPvcwYduTIQqYYVC3LaKlH3FueH6SU1YERYnaOJorn+3
+         uyLDyPZsn2Bwadd8+9wVSyRELMn4ITUzicHMiGpRiN/+mw/CB+1cMWQwrR8++YkGL9AF
+         JXiQJvwTmIEsG+NPQ0c56EVq7Wn6+cMp5zIi7sz4tHh1DKfrGa/puMBJujh/+QPngeHN
+         80Hw==
+X-Gm-Message-State: APjAAAV3A0q/UC6l1EtZhV8F5pYJXv+QKxvEDywDCzTsV6iRsY9u8Jq0
+        SFnMOQTRNb16NoCMZo9MYUUZTRG9
+X-Google-Smtp-Source: APXvYqz/P3UeuIynbTD2ACZJlI96d20BxjSLSMXbG6FDOyMTE8bhGAkaJyn6xBZGCOqVbhw89Cl+EQ==
+X-Received: by 2002:ac2:46dc:: with SMTP id p28mr51678437lfo.23.1578103480073;
+        Fri, 03 Jan 2020 18:04:40 -0800 (PST)
+Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.googlemail.com with ESMTPSA id e8sm30021439ljb.45.2020.01.03.18.04.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jan 2020 18:04:39 -0800 (PST)
+Subject: Re: [PATCH v3 01/16] dt-binding: usb: ci-hdrc-usb2: Document NVIDIA
+ Tegra support
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191228203358.23490-1-digetx@gmail.com>
+ <20191228203358.23490-2-digetx@gmail.com> <20200104003341.GA5889@bogus>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <b24a37f2-1515-9586-ae87-864272b87410@gmail.com>
+Date:   Sat, 4 Jan 2020 05:04:38 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-References: <3edaf835-7cde-37d9-5a0a-5a9b21a02968@gmx.at> <4dfc2bca-e333-4f05-e795-23cbe481d53e@linux.intel.com>
- <485bd962-2a2d-1e15-54c6-3685fb7597a3@gmx.at> <50ecb110-8ab6-929b-e33e-025e04a12bc8@linux.intel.com>
- <CACeCKaezMBWH+cnmOdOc+hizW3SNU+Sb5h5PWXdt9f2GcOVfFQ@mail.gmail.com> <06beef2f-e1e1-a95e-87d2-597566d1edd3@linux.intel.com>
-In-Reply-To: <06beef2f-e1e1-a95e-87d2-597566d1edd3@linux.intel.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Fri, 3 Jan 2020 16:58:25 -0800
-Message-ID: <CACeCKaeoPER7wmE7uj-R0a=8eRC64TpRcP0=bg=mvtx7h72DfQ@mail.gmail.com>
-Subject: Re: Regression: USB/xhci issues on some systems with newer kernel versions
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Bernhard Gebetsberger <bernhard.gebetsberger@gmx.at>,
-        linux-usb@vger.kernel.org, Hayes Wang <hayeswang@realtek.com>,
-        Grant Grundler <grundler@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200104003341.GA5889@bogus>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias
+04.01.2020 03:33, Rob Herring пишет:
+> On Sat, 28 Dec 2019 23:33:43 +0300, Dmitry Osipenko wrote:
+>> NVIDIA Tegra SoCs use ChipIdea silicon IP for the USB controllers.
+>>
+>> Acked-by: Peter Chen <peter.chen@nxp.com>
+>> Acked-by: Thierry Reding <treding@nvidia.com>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>>
+> 
+> Acked-by: Rob Herring <robh@kernel.org>
+> 
 
-On Mon, Dec 16, 2019 at 5:27 AM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
->
-> Hi Prashant
->
-> On 5.12.2019 22.34, Prashant Malani wrote:
-> > Hi Mathias and Bernhard,
-> >
-> > I was interested in knowing if this issue was resolved (sounded like
-> > this was deemed to be a hardware error, but I'm not sure).
-> > The reason I ask is that we've recently noticed a similar error
-> > popping up while using Realtek rtl8153a-based ethernet USB dongles
-> > (these use the r8152 driver) on kernel 4.19 :
-> > " hci_hcd 0000:00:14.0: WARN Set TR Deq Ptr cmd failed due to
-> > incorrect slot or ep state."
-> > This is generally followed by the dongle getting reset, and the
-> > process repeats itself continuously.
->
-> Sorry about the delay, your traces show a transaction error, and the port link
-> going to inactive error state.
->
-> xhci driver tries to recover from the transaction error with a soft retry
-> (endpoint reset), while hub thread will need to reset the whole device to recover
-> from the inactive link error state.
->
-> Can you try reverting commit:
-> "f8f80be501aa xhci: Use soft retry to recover faster from transaction errors"
->
-> If you still see "Transfer error for slot x ep y on endpoint" in dmesg,
-> but device is not reset and works normally, then it's possible that the soft retry
-> makes things worse.
-
-Thanks for your analysis, and sorry for the delayed response. I
-reverted the aforementioned commit. While the transfer error no longer
-appears, I still see the repeated resets, so there is likely an issue
-either on the Host Controller, or the device firmware itself.
-I'll continue digging, but seems safe to rule out soft retry as a culprit.
-
-Best regards,
->
-> If not, then the transaction error and the link inactive error are most likely symptoms
-> of some other cause.
->
-> The hci_hcd 0000:00:14.0: WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state."
-> is as in Bernhard's case due to xhci driver trying to issue a command for a slot in context error
-> state, this part needs to be fixed in the driver, but should not matter much. Device must be reset
-> anyway to recover from the link inactive error state.
->
-> -Mathias
->
+Thanks!
