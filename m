@@ -2,147 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFE2130312
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2020 16:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4DCC130375
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2020 17:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726803AbgADPWT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Jan 2020 10:22:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60078 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726005AbgADPWS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 4 Jan 2020 10:22:18 -0500
-Received: from localhost.localdomain (unknown [194.230.155.149])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BD4112464E;
-        Sat,  4 Jan 2020 15:22:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578151338;
-        bh=tikjmOkXzl67kgxwPdvLRaRJqpldgktGgrS2H4m1wPk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pHilspwWEnO281JnujkfdogQ91Q+zQ10wWQ4FabbvKQDCdR2Iw86srrth6OFo+cei
-         OE0Ts5Vwo5rW34zLK/svMvzO8fS6N5j9oYdaCJHGIliAIDHEB7krBUaiZDNMy7Mw7J
-         K989ng+VUfN10+sMjTvDbEPD2CJsQWV2CENn6Pes=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Arnd Bergmann <arnd@arndb.de>, Johan Hovold <johan@kernel.org>,
-        Ran Wang <ran.wang_1@nxp.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v2 08/20] usb: exynos: Rename Samsung and Exynos to lowercase
-Date:   Sat,  4 Jan 2020 16:20:55 +0100
-Message-Id: <20200104152107.11407-9-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200104152107.11407-1-krzk@kernel.org>
-References: <20200104152107.11407-1-krzk@kernel.org>
+        id S1726061AbgADQU7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Jan 2020 11:20:59 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:36527 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726004AbgADQU7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Jan 2020 11:20:59 -0500
+Received: (qmail 7682 invoked by uid 500); 4 Jan 2020 11:20:57 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 4 Jan 2020 11:20:57 -0500
+Date:   Sat, 4 Jan 2020 11:20:57 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        <gregkh@linuxfoundation.org>, <acelan.kao@canonical.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/3] USB: Disable LPM on WD19's Realtek Hub during setting
+ its ports to U0
+In-Reply-To: <97F72C66-8D9B-4316-B096-1993FD18CF56@canonical.com>
+Message-ID: <Pine.LNX.4.44L0.2001041117130.7125-100000@netrider.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix up inconsistent usage of upper and lowercase letters in "Samsung"
-and "Exynos" names.
+On Sat, 4 Jan 2020, Kai-Heng Feng wrote:
 
-"SAMSUNG" and "EXYNOS" are not abbreviations but regular trademarked
-names.  Therefore they should be written with lowercase letters starting
-with capital letter.
+> >>>> @@ -3533,9 +3533,17 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
+> >>>> 	}
+> >>>> 
+> >>>> 	/* see 7.1.7.7; affects power usage, but not budgeting */
+> >>>> -	if (hub_is_superspeed(hub->hdev))
+> >>>> +	if (hub_is_superspeed(hub->hdev)) {
+> >>>> +		if (hub->hdev->quirks & USB_QUIRK_DISABLE_LPM_ON_U0) {
+> >>>> +			usb_lock_device(hub->hdev);
+> >>>> +			usb_unlocked_disable_lpm(hub->hdev);
+> >>>> +		}
+> >>>> 		status = hub_set_port_link_state(hub, port1, USB_SS_PORT_LS_U0);
+> >>>> -	else
+> >>>> +		if (hub->hdev->quirks & USB_QUIRK_DISABLE_LPM_ON_U0) {
+> >>>> +			usb_unlocked_enable_lpm(hub->hdev);
+> >>>> +			usb_unlock_device(hub->hdev);
+> >>> 
+> >>> The locking here seems questionable.  Doesn't this code sometimes get
+> >>> called with the hub already locked?  Or with the child device locked
+> >>> (in which case locking the hub would violate the normal locking order:  
+> >>> parent first, child second)?
+> > 
+> > I did a little checking.  In many cases the child device _will_ be 
+> > locked at this point.
+> > 
+> >> Maybe introduce a new lock? The lock however will only be used by this specific hub.
+> >> But I still want the LPM can be enabled for this hub.
+> > 
+> > Do you really need to lock the hub at all?  What would the lock protect 
+> > against?
+> 
+> There can be multiple usb_port_resume() run at the same time for different ports, so this is to prevent LPM enable/disable race.
 
-The lowercase "Exynos" name is promoted by its manufacturer Samsung
-Electronics Co., Ltd., in advertisement materials and on website.
+But there can't really be an LPM enable/disable race, can there?  The 
+individual function calls are protected by the bandwidth mutex taken by 
+the usb_unlocked_{en|dis}able_lpm routines, and the overall LPM setting 
+is controlled by the hub device's lpm_disable_counter.
 
-Although advertisement materials usually use uppercase "SAMSUNG", the
-lowercase version is used in all legal aspects (e.g. on Wikipedia and in
-privacy/legal statements on
-https://www.samsung.com/semiconductor/privacy-global/).
+So I think you don't need to lock the hub here.
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- drivers/usb/dwc3/dwc3-exynos.c | 4 ++--
- drivers/usb/host/Kconfig       | 4 ++--
- drivers/usb/host/ehci-exynos.c | 4 ++--
- drivers/usb/host/ohci-exynos.c | 2 +-
- 4 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-exynos.c
-index c1e9ea621f41..90bb022737da 100644
---- a/drivers/usb/dwc3/dwc3-exynos.c
-+++ b/drivers/usb/dwc3/dwc3-exynos.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /**
-- * dwc3-exynos.c - Samsung EXYNOS DWC3 Specific Glue layer
-+ * dwc3-exynos.c - Samsung Exynos DWC3 Specific Glue layer
-  *
-  * Copyright (c) 2012 Samsung Electronics Co., Ltd.
-  *		http://www.samsung.com
-@@ -255,4 +255,4 @@ module_platform_driver(dwc3_exynos_driver);
- 
- MODULE_AUTHOR("Anton Tikhomirov <av.tikhomirov@samsung.com>");
- MODULE_LICENSE("GPL v2");
--MODULE_DESCRIPTION("DesignWare USB3 EXYNOS Glue Layer");
-+MODULE_DESCRIPTION("DesignWare USB3 Exynos Glue Layer");
-diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index 8d730180db06..ed49d08f2f9e 100644
---- a/drivers/usb/host/Kconfig
-+++ b/drivers/usb/host/Kconfig
-@@ -269,7 +269,7 @@ config USB_EHCI_SH
- 	  If you use the PCI EHCI controller, this option is not necessary.
- 
- config USB_EHCI_EXYNOS
--	tristate "EHCI support for Samsung S5P/EXYNOS SoC Series"
-+	tristate "EHCI support for Samsung S5P/Exynos SoC Series"
- 	depends on ARCH_S5PV210 || ARCH_EXYNOS
- 	help
- 	  Enable support for the Samsung Exynos SOC's on-chip EHCI controller.
-@@ -542,7 +542,7 @@ config USB_OHCI_SH
- 	  If you use the PCI OHCI controller, this option is not necessary.
- 
- config USB_OHCI_EXYNOS
--	tristate "OHCI support for Samsung S5P/EXYNOS SoC Series"
-+	tristate "OHCI support for Samsung S5P/Exynos SoC Series"
- 	depends on ARCH_S5PV210 || ARCH_EXYNOS
- 	help
- 	  Enable support for the Samsung Exynos SOC's on-chip OHCI controller.
-diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
-index 01debfd03d4a..a4e9abcbdc4f 100644
---- a/drivers/usb/host/ehci-exynos.c
-+++ b/drivers/usb/host/ehci-exynos.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0+
- /*
-- * SAMSUNG EXYNOS USB HOST EHCI Controller
-+ * Samsung Exynos USB HOST EHCI Controller
-  *
-  * Copyright (C) 2011 Samsung Electronics Co.Ltd
-  * Author: Jingoo Han <jg1.han@samsung.com>
-@@ -21,7 +21,7 @@
- 
- #include "ehci.h"
- 
--#define DRIVER_DESC "EHCI EXYNOS driver"
-+#define DRIVER_DESC "EHCI Exynos driver"
- 
- #define EHCI_INSNREG00(base)			(base + 0x90)
- #define EHCI_INSNREG00_ENA_INCR16		(0x1 << 25)
-diff --git a/drivers/usb/host/ohci-exynos.c b/drivers/usb/host/ohci-exynos.c
-index d5ce98e205c7..bd40e597f256 100644
---- a/drivers/usb/host/ohci-exynos.c
-+++ b/drivers/usb/host/ohci-exynos.c
-@@ -19,7 +19,7 @@
- 
- #include "ohci.h"
- 
--#define DRIVER_DESC "OHCI EXYNOS driver"
-+#define DRIVER_DESC "OHCI Exynos driver"
- 
- static const char hcd_name[] = "ohci-exynos";
- static struct hc_driver __read_mostly exynos_ohci_hc_driver;
--- 
-2.17.1
+Alan Stern
 
