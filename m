@@ -2,81 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D16413054E
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Jan 2020 02:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1559130589
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Jan 2020 03:44:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726313AbgAEBRv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Jan 2020 20:17:51 -0500
-Received: from mail-40130.protonmail.ch ([185.70.40.130]:19981 "EHLO
-        mail-40130.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726205AbgAEBRu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Jan 2020 20:17:50 -0500
-Date:   Sun, 05 Jan 2020 01:17:37 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=default; t=1578187067;
-        bh=7fJ4/nZMCgGkt3iClr7P8F3vEiULPha8P9RtGXfYdBU=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:
-         Feedback-ID:From;
-        b=uV+MIHBp/mI+EySO45jrHGKkvGKmmosSrGf+9YVlvjrHmEZbA9GTf2NL6hwn7FgXX
-         acKecDt8Z0DNpVUI+cBY26z/PT66g71izcEfEi2YF5wEK0LwtfMDeVdLvjfG/9xI2R
-         i5iA/UbItI2fKiX1E5Gi8ItM48v5js4gxRonCyhE=
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-From:   atmgnd <atmgnd@protonmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Reply-To: atmgnd <atmgnd@protonmail.com>
-Subject: Re: [PATCH] usb: missing parentheses in USE_NEW_SCHEME
-Message-ID: <1sQHSwRkA-KeDp45Cjv26EwcAgaa6a8jR82DI_6snZ1sEbX-2O0MwfUJcfidMO-j46WK4D1wBafzsUyQslEuGOpNOHaILyRaHF8V1AMlyV0=@protonmail.com>
-In-Reply-To: <HdXgMrky4rCGyM4q7eTsrfOB4yGZRUNwV9YSXBPh98r2UZeFzREQj35K60r-8Lf9LYVgVuKCcmQ2l7ihAD9DoqAdluQrA3zbQrF03VtNC-0=@protonmail.com>
-References: <ht4mtag8ZP-HKEhD0KkJhcFnVlOFV8N8eNjJVRD9pDkkLUNhmEo8_cL_sl7xy9mdajdH-T8J3TFQsjvoYQT61NFjQXy469Ed_BbBw_x4S1E=@protonmail.com>
- <20200104114603.GB1288021@kroah.com>
- <HdXgMrky4rCGyM4q7eTsrfOB4yGZRUNwV9YSXBPh98r2UZeFzREQj35K60r-8Lf9LYVgVuKCcmQ2l7ihAD9DoqAdluQrA3zbQrF03VtNC-0=@protonmail.com>
-Feedback-ID: py-oVO8Vt0vS1FKaKugS2_MTpFC3lKhHMurhoXPAalWk9Eh40Mo1lZOn2CI1vswSSKJBwBLYgn_VKFu9qW3csg==:Ext:ProtonMail
+        id S1726307AbgAECo2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Jan 2020 21:44:28 -0500
+Received: from m12-14.163.com ([220.181.12.14]:53338 "EHLO m12-14.163.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726240AbgAECo2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 4 Jan 2020 21:44:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=loA+f
+        h82oJEFLrqTKPjK+Z1T06WrO7Cp5uXbAIvuy+M=; b=P4NKNCDjiALljmrhiHjSp
+        594iJFkLK7XRT32xzCQ+1kFc3nQXeF/V2hLbZRoz+O/YvA1Ab7IKbS+wf93b3Uiy
+        CULkwGurYiesdany8/R8H5lduAPYwv5hR7SEA0bamA+tYhyQ77jKkLXnqhxYaBB4
+        ywcFXsaEgxHupk3UPKVqSc=
+Received: from localhost.localdomain (unknown [101.87.142.123])
+        by smtp10 (Coremail) with SMTP id DsCowADHXr+GTRFeqRzuKQ--.1012S2;
+        Sun, 05 Jan 2020 10:44:22 +0800 (CST)
+From:   yuan linyu <cugyly@163.com>
+To:     linux-usb@vger.kernel.org
+Cc:     yuan linyu <cugyly@163.com>
+Subject: [PATCH] usb: gadget: configfs: unregister gadget only when udc name exist
+Date:   Sun,  5 Jan 2020 10:44:20 +0800
+Message-Id: <20200105024420.18990-1-cugyly@163.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=7.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_REPLYTO
-        shortcircuit=no autolearn=no autolearn_force=no version=3.4.2
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on mail.protonmail.ch
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: DsCowADHXr+GTRFeqRzuKQ--.1012S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tryfAF47uw4UXFyDZFWkZwb_yoW8Wr13pF
+        4ag34Fyr4UXrZ0qr4DJr4DZayqkan7tryDurZ7tw42y3Z5Xry7C398GFyYvF4xAa4xCrWa
+        yFs5Kr1S9FWUAFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U17K3UUUUU=
+X-Originating-IP: [101.87.142.123]
+X-CM-SenderInfo: pfxj5zr16rljoofrz/1tbiwAah41XlpdcemAAAsA
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-accroding to bd0e6c9#diff-28615d62e1250eadc353d804f49bc6d6, will try old en=
-umeration
-scheme first for high speed devices. for example, when a high speed device =
-pluged in,
-line 2720 should expand to 0 at the first time. USE_NEW_SCHEME(0, 0 || 0 ||=
- 1) =3D=3D=3D 0.
-but it wrongly expand to 1(alway expand to 1 for high speed device), and ch=
-ange
-USE_NEW_SCHEME to USE_NEW_SCHEME((i) % 2 =3D=3D (int)(scheme)) may be bette=
-r ?
+When drop usb config link file, gadget will unregistered,
+then if set UDC name to empty, it will return ENODEV.
+this change will check udc name to avoid unregister gadget twice
+and avoid user space warning message for ENODEV.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Qi Zhou <atmgnd@protonmail.com>
+Signed-off-by: yuan linyu <cugyly@163.com>
 ---
- drivers/usb/core/hub.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/gadget/configfs.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index f229ad6952c0..7d17deca7021 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -2692,7 +2692,7 @@ static unsigned hub_is_wusb(struct usb_hub *hub)
- #define SET_ADDRESS_TRIES=092
- #define GET_DESCRIPTOR_TRIES=092
- #define SET_CONFIG_TRIES=09(2 * (use_both_schemes + 1))
--#define USE_NEW_SCHEME(i, scheme)=09((i) / 2 =3D=3D (int)scheme)
-+#define USE_NEW_SCHEME(i, scheme)=09((i) / 2 =3D=3D (int)(scheme))
-
- #define HUB_ROOT_RESET_TIME=0960=09/* times are in msec */
- #define HUB_SHORT_RESET_TIME=0910
---
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index ab9ac48a751a..88a56bf47c0e 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -242,9 +242,6 @@ static int unregister_gadget(struct gadget_info *gi)
+ {
+ 	int ret;
+ 
+-	if (!gi->composite.gadget_driver.udc_name)
+-		return -ENODEV;
+-
+ 	ret = usb_gadget_unregister_driver(&gi->composite.gadget_driver);
+ 	if (ret)
+ 		return ret;
+@@ -269,9 +266,11 @@ static ssize_t gadget_dev_desc_UDC_store(struct config_item *item,
+ 	mutex_lock(&gi->lock);
+ 
+ 	if (!strlen(name)) {
+-		ret = unregister_gadget(gi);
+-		if (ret)
+-			goto err;
++		if (gi->composite.gadget_driver.udc_name) {
++			ret = unregister_gadget(gi);
++			if (ret)
++				goto err;
++		}
+ 		kfree(name);
+ 	} else {
+ 		if (gi->composite.gadget_driver.udc_name) {
+@@ -1598,7 +1597,8 @@ void unregister_gadget_item(struct config_item *item)
+ 	struct gadget_info *gi = to_gadget_info(item);
+ 
+ 	mutex_lock(&gi->lock);
+-	unregister_gadget(gi);
++	if (gi->composite.gadget_driver.udc_name)
++		unregister_gadget(gi);
+ 	mutex_unlock(&gi->lock);
+ }
+ EXPORT_SYMBOL_GPL(unregister_gadget_item);
+-- 
 2.17.1
 
 
