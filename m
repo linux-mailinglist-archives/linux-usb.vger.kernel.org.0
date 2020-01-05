@@ -2,95 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1559130589
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Jan 2020 03:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4130C1306C6
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Jan 2020 09:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726307AbgAECo2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Jan 2020 21:44:28 -0500
-Received: from m12-14.163.com ([220.181.12.14]:53338 "EHLO m12-14.163.com"
+        id S1725955AbgAEIRZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Jan 2020 03:17:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55816 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726240AbgAECo2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 4 Jan 2020 21:44:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=loA+f
-        h82oJEFLrqTKPjK+Z1T06WrO7Cp5uXbAIvuy+M=; b=P4NKNCDjiALljmrhiHjSp
-        594iJFkLK7XRT32xzCQ+1kFc3nQXeF/V2hLbZRoz+O/YvA1Ab7IKbS+wf93b3Uiy
-        CULkwGurYiesdany8/R8H5lduAPYwv5hR7SEA0bamA+tYhyQ77jKkLXnqhxYaBB4
-        ywcFXsaEgxHupk3UPKVqSc=
-Received: from localhost.localdomain (unknown [101.87.142.123])
-        by smtp10 (Coremail) with SMTP id DsCowADHXr+GTRFeqRzuKQ--.1012S2;
-        Sun, 05 Jan 2020 10:44:22 +0800 (CST)
-From:   yuan linyu <cugyly@163.com>
-To:     linux-usb@vger.kernel.org
-Cc:     yuan linyu <cugyly@163.com>
-Subject: [PATCH] usb: gadget: configfs: unregister gadget only when udc name exist
-Date:   Sun,  5 Jan 2020 10:44:20 +0800
-Message-Id: <20200105024420.18990-1-cugyly@163.com>
-X-Mailer: git-send-email 2.17.1
+        id S1725828AbgAEIRZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 5 Jan 2020 03:17:25 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 42486217F4;
+        Sun,  5 Jan 2020 08:17:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578212244;
+        bh=LqM9zIbStZx6zb0OXX8znhaKl/1ObykLsIUQMpp85M4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bmPavKNJljFGe7eXVmB1ZmJ/yHeeN6iV2xfGwO5+RdUoemXGYF1Q26rmR6iNeaa9d
+         PGI6EXAEWIQ9OCYEef4cB4H+44MaFftRWsimOxJnECQiBtDV/1V3GU+NNIZkLCGQb6
+         Fk0aK6JZOnJnUcdlm5QkrcctdPqS4ruA4zLB5E5o=
+Date:   Sun, 5 Jan 2020 09:17:21 +0100
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     atmgnd <atmgnd@protonmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: missing parentheses in USE_NEW_SCHEME
+Message-ID: <20200105081721.GC1667342@kroah.com>
+References: <ht4mtag8ZP-HKEhD0KkJhcFnVlOFV8N8eNjJVRD9pDkkLUNhmEo8_cL_sl7xy9mdajdH-T8J3TFQsjvoYQT61NFjQXy469Ed_BbBw_x4S1E=@protonmail.com>
+ <20200104114603.GB1288021@kroah.com>
+ <HdXgMrky4rCGyM4q7eTsrfOB4yGZRUNwV9YSXBPh98r2UZeFzREQj35K60r-8Lf9LYVgVuKCcmQ2l7ihAD9DoqAdluQrA3zbQrF03VtNC-0=@protonmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: DsCowADHXr+GTRFeqRzuKQ--.1012S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7tryfAF47uw4UXFyDZFWkZwb_yoW8Wr13pF
-        4ag34Fyr4UXrZ0qr4DJr4DZayqkan7tryDurZ7tw42y3Z5Xry7C398GFyYvF4xAa4xCrWa
-        yFs5Kr1S9FWUAFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U17K3UUUUU=
-X-Originating-IP: [101.87.142.123]
-X-CM-SenderInfo: pfxj5zr16rljoofrz/1tbiwAah41XlpdcemAAAsA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <HdXgMrky4rCGyM4q7eTsrfOB4yGZRUNwV9YSXBPh98r2UZeFzREQj35K60r-8Lf9LYVgVuKCcmQ2l7ihAD9DoqAdluQrA3zbQrF03VtNC-0=@protonmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When drop usb config link file, gadget will unregistered,
-then if set UDC name to empty, it will return ENODEV.
-this change will check udc name to avoid unregister gadget twice
-and avoid user space warning message for ENODEV.
+On Sun, Jan 05, 2020 at 01:15:41AM +0000, atmgnd wrote:
+> Is that ok ? Ordinarily I dont use protonmail, only because outlook mail is blocked by kernel email system.
+> So I register this email to send plain/text emails.
+> I will resend it.
 
-Signed-off-by: yuan linyu <cugyly@163.com>
----
- drivers/usb/gadget/configfs.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+Just add a "From:" line in the first line of the changelog text to match
+up with your "real" email address.  The kernel and git documentation
+should show this.
 
-diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-index ab9ac48a751a..88a56bf47c0e 100644
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -242,9 +242,6 @@ static int unregister_gadget(struct gadget_info *gi)
- {
- 	int ret;
- 
--	if (!gi->composite.gadget_driver.udc_name)
--		return -ENODEV;
--
- 	ret = usb_gadget_unregister_driver(&gi->composite.gadget_driver);
- 	if (ret)
- 		return ret;
-@@ -269,9 +266,11 @@ static ssize_t gadget_dev_desc_UDC_store(struct config_item *item,
- 	mutex_lock(&gi->lock);
- 
- 	if (!strlen(name)) {
--		ret = unregister_gadget(gi);
--		if (ret)
--			goto err;
-+		if (gi->composite.gadget_driver.udc_name) {
-+			ret = unregister_gadget(gi);
-+			if (ret)
-+				goto err;
-+		}
- 		kfree(name);
- 	} else {
- 		if (gi->composite.gadget_driver.udc_name) {
-@@ -1598,7 +1597,8 @@ void unregister_gadget_item(struct config_item *item)
- 	struct gadget_info *gi = to_gadget_info(item);
- 
- 	mutex_lock(&gi->lock);
--	unregister_gadget(gi);
-+	if (gi->composite.gadget_driver.udc_name)
-+		unregister_gadget(gi);
- 	mutex_unlock(&gi->lock);
- }
- EXPORT_SYMBOL_GPL(unregister_gadget_item);
--- 
-2.17.1
+thanks,
 
-
+greg k-h
