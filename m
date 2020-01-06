@@ -2,73 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 742E8131C19
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 00:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED099131C32
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 00:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726794AbgAFXJu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jan 2020 18:09:50 -0500
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:27585 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726721AbgAFXJu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jan 2020 18:09:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1578352189;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4yvpeUCKWQFvii1V6lPkSYNB3R9g2FXMlvIvs+njHFM=;
-        b=AYeYWIf8rrcUn4KLRhfL5VvxUG7JSzMM4KCPtpl3K7RuO+/4xzNduJdlMHHGQjmdiCOCIw
-        v/y/O4MP+2+9BnxvVHDngaMrdYP5LfVMECqygBy9KazlezAWPSKayJACug8GqHczpc6mBR
-        QKRz/fOyl4wXTcYUEAaR/oG1rUXMYN8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-170-FGQV8fGnM6OZE-jIoy_yBg-1; Mon, 06 Jan 2020 18:09:46 -0500
-X-MC-Unique: FGQV8fGnM6OZE-jIoy_yBg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 15642801E77;
-        Mon,  6 Jan 2020 23:09:45 +0000 (UTC)
-Received: from suzdal.zaitcev.lan (ovpn-116-146.phx2.redhat.com [10.3.116.146])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8B5061001920;
-        Mon,  6 Jan 2020 23:09:44 +0000 (UTC)
-Date:   Mon, 6 Jan 2020 17:09:44 -0600
-From:   Pete Zaitcev <zaitcev@redhat.com>
-To:     Tomasz =?UTF-8?B?TW/FhA==?= <desowin@gmail.com>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH] usbmon: Report device address assigned to USB device
-Message-ID: <20200106170944.03a97034@suzdal.zaitcev.lan>
-In-Reply-To: <20200106093724.22947-1-desowin@gmail.com>
-References: <20200106093724.22947-1-desowin@gmail.com>
-Organization: Red Hat, Inc.
+        id S1727025AbgAFXTc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jan 2020 18:19:32 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:37614 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726599AbgAFXTc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jan 2020 18:19:32 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: gtucker)
+        with ESMTPSA id AE4212911A6
+Subject: Re: next/master bisection: boot on sun7i-a20-olinuxino-lime2
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        enric.balletbo@collabora.com, khilman@baylibre.com,
+        tomeu.vizoso@collabora.com, mgalka@collabora.com,
+        Alexandre Torgue <alexandre.torgue@st.com>, broonie@kernel.org
+Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <5e13b89c.1c69fb81.c8c2e.1609@mx.google.com>
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+Message-ID: <499551d9-5f65-70e7-91af-3b7d57118cfc@collabora.com>
+Date:   Mon, 6 Jan 2020 23:19:27 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+In-Reply-To: <5e13b89c.1c69fb81.c8c2e.1609@mx.google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon,  6 Jan 2020 10:37:17 +0100
-Tomasz Mo=C5=84 <desowin@gmail.com> wrote:
+On 06/01/2020 22:45, kernelci.org bot wrote:
+> * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+> * This automated bisection report was sent to you on the basis  *
+> * that you may be involved with the breaking commit it has      *
+> * found.  No manual investigation has been done to verify it,   *
+> * and the root cause of the problem may be somewhere else.      *
+> *                                                               *
+> * If you do send a fix, please include this trailer:            *
+> *   Reported-by: "kernelci.org bot" <bot@kernelci.org>          *
+> *                                                               *
+> * Hope this helps!                                              *
+> * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+> 
+> next/master bisection: boot on sun7i-a20-olinuxino-lime2
+> 
+> Summary:
+>   Start:      9eb1b48ca4ce Add linux-next specific files for 20200106
+>   Details:    https://kernelci.org/boot/id/5e12e663019cf4926197312f
+>   Plain log:  https://storage.kernelci.org//next/master/next-20200106/arm/multi_v7_defconfig+CONFIG_SMP=n/gcc-8/lab-baylibre/boot-sun7i-a20-olinuxino-lime2.txt
+>   HTML log:   https://storage.kernelci.org//next/master/next-20200106/arm/multi_v7_defconfig+CONFIG_SMP=n/gcc-8/lab-baylibre/boot-sun7i-a20-olinuxino-lime2.html
+>   Result:     5253fe05bb47 phy: core: Add consumer device link support
 
-> Make USB device addresses match while sniffing USB communication
-> with usbmon and hardware USB sniffer (OpenVizsla) at the same time.
-> On xHCI root hubs the address is assigned by hardware and can be
-> different than devnum.
+This report should have been sent only once, it looks like a
+corner case bug.  Taking a look now, sorry for the noise.
 
-> -	unsigned char devnum;	/*     Device address */
-> +	unsigned char devaddr;	/*     Device address */
-
-I think it's fine, the name of the field is not exported by a header
-anyway, so there's no impact.
-
-Acked-by: Pete Zaitcev <zaitcev@redhat.com>
-
--- Pete
-
+Guillaume
