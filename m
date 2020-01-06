@@ -2,389 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B22481314ED
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2020 16:36:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1048131505
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2020 16:43:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726518AbgAFPgj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jan 2020 10:36:39 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:38885 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726478AbgAFPgj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jan 2020 10:36:39 -0500
-Received: by mail-wr1-f68.google.com with SMTP id y17so50118193wrh.5
-        for <linux-usb@vger.kernel.org>; Mon, 06 Jan 2020 07:36:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from:cc;
-        bh=FTJTzBTLMpjG2AeS3hwST+G6v5CePvpkRGMk6a8hEWk=;
-        b=A1MTOM4AjAKHZvZoRaLJMZTd+ZkYZVBDSJsJxPAx/ZE/H4X/4KBKlJHTMkVLsTP9QI
-         xidQGay3rpzQIfa0gGRdFAAR/+Uyi3c0m2Cg50pPBCx3y3zo0602QDONx1X+eh5U/seJ
-         9fXXD0WgfPMdYZFFVoh9C9L+m7XesPVTEdGGnDp9M6BllI9A6POL6pVqykqP5mXYrnGk
-         UADZkKc945OjObUtAktB1maHNsuDZwRwNiaki8rQnSX8s9taOpRqNcIdWL7I59bHQr7e
-         n5B0yTL++ECE7d0Yg+LK0ElBblbkOlOXdIfmHSl4fqrgQIgMywyJ1okEMmTsA3Y5TkEF
-         BNrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from:cc;
-        bh=FTJTzBTLMpjG2AeS3hwST+G6v5CePvpkRGMk6a8hEWk=;
-        b=sVXFBvcQDp3f4XIIoJSl2rkRkXSNg1Syp4ejZRgwHsxTnzxgWlWfAo9aaf1fWqnWwJ
-         UXLlMq5QT/pEmX3OCl2uKADRpKkZ8ny+uSSF4dxSkhCUvwRjvMKvYRFyRKvM+Y91cW34
-         Ic0n0e2lB5qpejqo2eDWvvaqeUZn+TFnFayzfDi/Xvt8Dh/ZcN/1WB2qIPiG58z2fEOh
-         6OM/RzyKNRwzMch4PsOf2NzVvIozk8CZpOdhbwo2Szwt38oOdp7TiS+4RW2LnH5VwlLn
-         i+ipBEK/zGlN7x2fyrRlFr3/41yHQZkDkfwAWFE7hhyA1duBxUV+nYAlNzTKeH4C1gZN
-         f3nw==
-X-Gm-Message-State: APjAAAVFM4w559kly+rNHRMQUCErKOvbwF9aWFGLlNqv9iO3mumjrgjv
-        yKk2e1ELQHlAzEhQC2Y+XW5nBw==
-X-Google-Smtp-Source: APXvYqxnA79/Qo7AOG1ZgppcxQD/8srtYRqVd/r8V2ayb372uuxFbsCUmxELj4r1m/lyCtizoolqiw==
-X-Received: by 2002:a5d:5491:: with SMTP id h17mr107249021wrv.374.1578324995476;
-        Mon, 06 Jan 2020 07:36:35 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id c15sm73427098wrt.1.2020.01.06.07.36.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jan 2020 07:36:34 -0800 (PST)
-Message-ID: <5e135402.1c69fb81.60a2a.c76e@mx.google.com>
-Date:   Mon, 06 Jan 2020 07:36:34 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1726477AbgAFPnn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jan 2020 10:43:43 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:53246 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726296AbgAFPnn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jan 2020 10:43:43 -0500
+Received: (qmail 2560 invoked by uid 2102); 6 Jan 2020 10:43:42 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 6 Jan 2020 10:43:42 -0500
+Date:   Mon, 6 Jan 2020 10:43:42 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Greg KH <greg@kroah.com>
+cc:     Roger Whittaker <Roger.Whittaker@suse.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Takashi Iwai <tiwai@suse.de>, Johan Hovold <johan@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Subject: [PATCH] USB: Fix: Don't skip endpoint descriptors with maxpacket=0
+In-Reply-To: <20200105122846.GA6776@suse.com>
+Message-ID: <Pine.LNX.4.44L0.2001061040270.1514-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Lab-Name: lab-baylibre
-X-Kernelci-Kernel: next-20200106
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: bisect
-X-Kernelci-Branch: master
-Subject: next/master bisection: boot on sun4i-a10-olinuxino-lime
-To:     guillaume.tucker@collabora.com,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        khilman@baylibre.com, tomeu.vizoso@collabora.com,
-        enric.balletbo@collabora.com,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        mgalka@collabora.com, broonie@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-Cc:     Chris Brandt <chris.brandt@renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        "kernelci.org bot" <bot@kernelci.org>, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-* This automated bisection report was sent to you on the basis  *
-* that you may be involved with the breaking commit it has      *
-* found.  No manual investigation has been done to verify it,   *
-* and the root cause of the problem may be somewhere else.      *
-*                                                               *
-* If you do send a fix, please include this trailer:            *
-*   Reported-by: "kernelci.org bot" <bot@kernelci.org>          *
-*                                                               *
-* Hope this helps!                                              *
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+It turns out that even though endpoints with a maxpacket length of 0
+aren't useful for data transfer, the descriptors do serve other
+purposes.  In particular, skipping them will also skip over other
+class-specific descriptors for classes such as UVC.  This unexpected
+side effect has caused some UVC cameras to stop working.
 
-next/master bisection: boot on sun4i-a10-olinuxino-lime
+In addition, the USB spec requires that when isochronous endpoint
+descriptors are present in an interface's altsetting 0 (which is true
+on some devices), the maxpacket size _must_ be set to 0.  Warning
+about such things seems like a bad idea.
 
-Summary:
-  Start:      9eb1b48ca4ce Add linux-next specific files for 20200106
-  Details:    https://kernelci.org/boot/id/5e12deb784ca874b9797313d
-  Plain log:  https://storage.kernelci.org//next/master/next-20200106/arm/s=
-unxi_defconfig/gcc-8/lab-baylibre/boot-sun4i-a10-olinuxino-lime.txt
-  HTML log:   https://storage.kernelci.org//next/master/next-20200106/arm/s=
-unxi_defconfig/gcc-8/lab-baylibre/boot-sun4i-a10-olinuxino-lime.html
-  Result:     5253fe05bb47 phy: core: Add consumer device link support
+This patch updates an earlier commit which would log a warning and
+skip these endpoint descriptors.  Now we only log a warning, and we
+don't even do that for isochronous endpoints in altsetting 0.
 
-Checks:
-  revert:     PASS
-  verify:     PASS
+We don't need to worry about preventing endpoints with maxpacket = 0
+from ever being used for data transfers; usb_submit_urb() already
+checks for this.
 
-Parameters:
-  Tree:       next
-  URL:        git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  Branch:     master
-  Target:     sun4i-a10-olinuxino-lime
-  CPU arch:   arm
-  Lab:        lab-baylibre
-  Compiler:   gcc-8
-  Config:     sunxi_defconfig
-  Test suite: boot
+Reported-and-tested-by: Roger Whittaker <Roger.Whittaker@suse.com>
+Fixes: d482c7bb0541 ("USB: Skip endpoints with 0 maxpacket length")
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+CC: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Link: https://marc.info/?l=linux-usb&m=157790377329882&w=2
 
-Breaking commit found:
+---
 
----------------------------------------------------------------------------=
-----
-commit 5253fe05bb47a2402f471d76078b3dcc66442d6c
-Author: Alexandre Torgue <alexandre.torgue@st.com>
-Date:   Mon Nov 4 15:37:13 2019 +0100
 
-    phy: core: Add consumer device link support
-    =
+[as1928]
 
-    In order to enforce suspend/resume ordering, this commit creates link
-    between phy consumers and phy devices. This link avoids to suspend phy
-    before phy consumers.
-    =
 
-    Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
-    Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
+ drivers/usb/core/config.c |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
-index b04f4fe85ac2..8dfb4868c8c3 100644
---- a/drivers/phy/phy-core.c
-+++ b/drivers/phy/phy-core.c
-@@ -29,7 +29,7 @@ static void devm_phy_release(struct device *dev, void *re=
-s)
- {
- 	struct phy *phy =3D *(struct phy **)res;
- =
-
--	phy_put(phy);
-+	phy_put(dev, phy);
- }
- =
-
- static void devm_phy_provider_release(struct device *dev, void *res)
-@@ -566,12 +566,12 @@ struct phy *of_phy_get(struct device_node *np, const =
-char *con_id)
- EXPORT_SYMBOL_GPL(of_phy_get);
- =
-
- /**
-- * phy_put() - release the PHY
-- * @phy: the phy returned by phy_get()
-+ * of_phy_put() - release the PHY
-+ * @phy: the phy returned by of_phy_get()
-  *
-- * Releases a refcount the caller received from phy_get().
-+ * Releases a refcount the caller received from of_phy_get().
-  */
--void phy_put(struct phy *phy)
-+void of_phy_put(struct phy *phy)
- {
- 	if (!phy || IS_ERR(phy))
- 		return;
-@@ -584,6 +584,20 @@ void phy_put(struct phy *phy)
- 	module_put(phy->ops->owner);
- 	put_device(&phy->dev);
- }
-+EXPORT_SYMBOL_GPL(of_phy_put);
-+
-+/**
-+ * phy_put() - release the PHY
-+ * @dev: device that wants to release this phy
-+ * @phy: the phy returned by phy_get()
-+ *
-+ * Releases a refcount the caller received from phy_get().
-+ */
-+void phy_put(struct device *dev, struct phy *phy)
-+{
-+	device_link_remove(dev, &phy->dev);
-+	of_phy_put(phy);
-+}
- EXPORT_SYMBOL_GPL(phy_put);
- =
-
- /**
-@@ -651,6 +665,7 @@ struct phy *phy_get(struct device *dev, const char *str=
-ing)
- {
- 	int index =3D 0;
- 	struct phy *phy;
-+	struct device_link *link;
- =
-
- 	if (string =3D=3D NULL) {
- 		dev_WARN(dev, "missing string\n");
-@@ -672,6 +687,13 @@ struct phy *phy_get(struct device *dev, const char *st=
-ring)
- =
-
- 	get_device(&phy->dev);
- =
-
-+	link =3D device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
-+	if (!link) {
-+		dev_err(dev, "failed to create device link to %s\n",
-+			dev_name(phy->dev.parent));
-+		return ERR_PTR(-EINVAL);
-+	}
-+
- 	return phy;
- }
- EXPORT_SYMBOL_GPL(phy_get);
-@@ -765,6 +787,7 @@ struct phy *devm_of_phy_get(struct device *dev, struct =
-device_node *np,
- 			    const char *con_id)
- {
- 	struct phy **ptr, *phy;
-+	struct device_link *link;
- =
-
- 	ptr =3D devres_alloc(devm_phy_release, sizeof(*ptr), GFP_KERNEL);
- 	if (!ptr)
-@@ -778,6 +801,13 @@ struct phy *devm_of_phy_get(struct device *dev, struct=
- device_node *np,
- 		devres_free(ptr);
+Index: usb-devel/drivers/usb/core/config.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/config.c
++++ usb-devel/drivers/usb/core/config.c
+@@ -346,12 +346,16 @@ static int usb_parse_endpoint(struct dev
+ 			endpoint->desc.wMaxPacketSize = cpu_to_le16(8);
  	}
- =
-
-+	link =3D device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
-+	if (!link) {
-+		dev_err(dev, "failed to create device link to %s\n",
-+			dev_name(phy->dev.parent));
-+		return ERR_PTR(-EINVAL);
-+	}
-+
- 	return phy;
- }
- EXPORT_SYMBOL_GPL(devm_of_phy_get);
-@@ -798,6 +828,7 @@ struct phy *devm_of_phy_get_by_index(struct device *dev=
-, struct device_node *np,
- 				     int index)
- {
- 	struct phy **ptr, *phy;
-+	struct device_link *link;
- =
-
- 	ptr =3D devres_alloc(devm_phy_release, sizeof(*ptr), GFP_KERNEL);
- 	if (!ptr)
-@@ -819,6 +850,13 @@ struct phy *devm_of_phy_get_by_index(struct device *de=
-v, struct device_node *np,
- 	*ptr =3D phy;
- 	devres_add(dev, ptr);
- =
-
-+	link =3D device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
-+	if (!link) {
-+		dev_err(dev, "failed to create device link to %s\n",
-+			dev_name(phy->dev.parent));
-+		return ERR_PTR(-EINVAL);
-+	}
-+
- 	return phy;
- }
- EXPORT_SYMBOL_GPL(devm_of_phy_get_by_index);
-diff --git a/drivers/usb/renesas_usbhs/rcar2.c b/drivers/usb/renesas_usbhs/=
-rcar2.c
-index 440d213e1749..791908f8cf73 100644
---- a/drivers/usb/renesas_usbhs/rcar2.c
-+++ b/drivers/usb/renesas_usbhs/rcar2.c
-@@ -34,7 +34,7 @@ static int usbhs_rcar2_hardware_exit(struct platform_devi=
-ce *pdev)
- 	struct usbhs_priv *priv =3D usbhs_pdev_to_priv(pdev);
- =
-
- 	if (priv->phy) {
--		phy_put(priv->phy);
-+		phy_put(&pdev->dev, priv->phy);
- 		priv->phy =3D NULL;
+ 
+-	/* Validate the wMaxPacketSize field */
++	/*
++	 * Validate the wMaxPacketSize field.
++	 * Some devices have isochronous endpoints in altsetting 0;
++	 * the USB-2 spec requires such endpoints to have wMaxPacketSize = 0
++	 * (see the end of section 5.6.3), so don't warn about them.
++	 */
+ 	maxp = usb_endpoint_maxp(&endpoint->desc);
+-	if (maxp == 0) {
+-		dev_warn(ddev, "config %d interface %d altsetting %d endpoint 0x%X has wMaxPacketSize 0, skipping\n",
++	if (maxp == 0 && !(usb_endpoint_xfer_isoc(d) && asnum == 0)) {
++		dev_warn(ddev, "config %d interface %d altsetting %d endpoint 0x%X has invalid wMaxPacketSize 0\n",
+ 		    cfgno, inum, asnum, d->bEndpointAddress);
+-		goto skip_to_next_endpoint_or_interface_descriptor;
  	}
- =
+ 
+ 	/* Find the highest legal maxpacket size for this endpoint */
 
-diff --git a/drivers/usb/renesas_usbhs/rza2.c b/drivers/usb/renesas_usbhs/r=
-za2.c
-index 021749594389..3eed3334a17f 100644
---- a/drivers/usb/renesas_usbhs/rza2.c
-+++ b/drivers/usb/renesas_usbhs/rza2.c
-@@ -29,7 +29,7 @@ static int usbhs_rza2_hardware_exit(struct platform_devic=
-e *pdev)
- {
- 	struct usbhs_priv *priv =3D usbhs_pdev_to_priv(pdev);
- =
-
--	phy_put(priv->phy);
-+	phy_put(&pdev->dev, priv->phy);
- 	priv->phy =3D NULL;
- =
-
- 	return 0;
-diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
-index 56d3a100006a..19eddd64c8f6 100644
---- a/include/linux/phy/phy.h
-+++ b/include/linux/phy/phy.h
-@@ -234,7 +234,8 @@ struct phy *devm_of_phy_get(struct device *dev, struct =
-device_node *np,
- 			    const char *con_id);
- struct phy *devm_of_phy_get_by_index(struct device *dev, struct device_nod=
-e *np,
- 				     int index);
--void phy_put(struct phy *phy);
-+void of_phy_put(struct phy *phy);
-+void phy_put(struct device *dev, struct phy *phy);
- void devm_phy_put(struct device *dev, struct phy *phy);
- struct phy *of_phy_get(struct device_node *np, const char *con_id);
- struct phy *of_phy_simple_xlate(struct device *dev,
-@@ -419,7 +420,11 @@ static inline struct phy *devm_of_phy_get_by_index(str=
-uct device *dev,
- 	return ERR_PTR(-ENOSYS);
- }
- =
-
--static inline void phy_put(struct phy *phy)
-+static inline void of_phy_put(struct phy *phy)
-+{
-+}
-+
-+static inline void phy_put(struct device *dev, struct phy *phy)
- {
- }
----------------------------------------------------------------------------=
-----
-
-
-Git bisection log:
-
----------------------------------------------------------------------------=
-----
-git bisect start
-# good: [768fc661d12559b0dbd99d941b3bf28fe92fd365] Merge tag 'riscv/for-v5.=
-5-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux
-git bisect good 768fc661d12559b0dbd99d941b3bf28fe92fd365
-# bad: [9eb1b48ca4ce1406628ffe1a11b684a96e83ca08] Add linux-next specific f=
-iles for 20200106
-git bisect bad 9eb1b48ca4ce1406628ffe1a11b684a96e83ca08
-# good: [14f98ad9cf39f6dba9a0ee4d5a7844f72fb5dd6c] Merge remote-tracking br=
-anch 'crypto/master'
-git bisect good 14f98ad9cf39f6dba9a0ee4d5a7844f72fb5dd6c
-# good: [7e83dfa54c9d473f0a79775c97c2ec265300d748] Merge remote-tracking br=
-anch 'sound/for-next'
-git bisect good 7e83dfa54c9d473f0a79775c97c2ec265300d748
-# good: [9b19f21b01e41b56d0c4ebb29713058858db4254] Merge remote-tracking br=
-anch 'driver-core/driver-core-next'
-git bisect good 9b19f21b01e41b56d0c4ebb29713058858db4254
-# bad: [abe0382594f8afadbbf9774bfa1accb41e9afe39] Merge remote-tracking bra=
-nch 'vhost/linux-next'
-git bisect bad abe0382594f8afadbbf9774bfa1accb41e9afe39
-# bad: [3c4bafba69e79c34abcf9f2853d6756bf4b6bc1c] Merge remote-tracking bra=
-nch 'staging/staging-next'
-git bisect bad 3c4bafba69e79c34abcf9f2853d6756bf4b6bc1c
-# bad: [9b1e5f8654cffaf96e0194d107ffef4b118a47b8] Merge remote-tracking bra=
-nch 'tty/tty-next'
-git bisect bad 9b1e5f8654cffaf96e0194d107ffef4b118a47b8
-# good: [5e637d2be26385286748f494fdca30079bbe916f] tty/serial: Migrate suns=
-u to use has_sysrq
-git bisect good 5e637d2be26385286748f494fdca30079bbe916f
-# good: [71a1fa0df2a3728b8ccb97394be420d1f03df40e] usb: typec: ucsi: Store =
-the notification mask
-git bisect good 71a1fa0df2a3728b8ccb97394be420d1f03df40e
-# bad: [f17cb451270ca75198eed922da64b076a7176df6] phy: qcom-qmp: Add SW res=
-et register
-git bisect bad f17cb451270ca75198eed922da64b076a7176df6
-# bad: [7c118f6da9b7e46db7c815fd64090ec289f02d19] dt-bindings: phy: drop #c=
-lock-cells from rockchip,px30-dsi-dphy
-git bisect bad 7c118f6da9b7e46db7c815fd64090ec289f02d19
-# good: [24dbe0aaa0030231d4d35886d3552121d208df69] phy: ti-pipe3: make clk =
-operations symmetric in probe and remove
-git bisect good 24dbe0aaa0030231d4d35886d3552121d208df69
-# bad: [df0d0e07be73ccb21a8851f777fe4bf49f998bb8] phy: qualcomm: Adjust ind=
-entation in read_poll_timeout
-git bisect bad df0d0e07be73ccb21a8851f777fe4bf49f998bb8
-# bad: [5253fe05bb47a2402f471d76078b3dcc66442d6c] phy: core: Add consumer d=
-evice link support
-git bisect bad 5253fe05bb47a2402f471d76078b3dcc66442d6c
-# first bad commit: [5253fe05bb47a2402f471d76078b3dcc66442d6c] phy: core: A=
-dd consumer device link support
----------------------------------------------------------------------------=
-----
