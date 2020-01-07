@@ -2,102 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE80C132383
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 11:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8F2132395
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 11:30:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727746AbgAGKZo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jan 2020 05:25:44 -0500
-Received: from mga05.intel.com ([192.55.52.43]:16723 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727084AbgAGKZn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 7 Jan 2020 05:25:43 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Jan 2020 02:25:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,405,1571727600"; 
-   d="scan'208";a="225647117"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 07 Jan 2020 02:25:41 -0800
-Received: by lahna (sSMTP sendmail emulation); Tue, 07 Jan 2020 12:25:40 +0200
-Date:   Tue, 7 Jan 2020 12:25:40 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [bug report] thunderbolt: Add initial support for USB4
-Message-ID: <20200107102540.GQ465886@lahna.fi.intel.com>
-References: <20200107052424.pidwn5f7wyayany2@kili.mountain>
+        id S1727559AbgAGKak (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jan 2020 05:30:40 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:48946 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726558AbgAGKak (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 05:30:40 -0500
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1iom8B-0004H2-FH; Tue, 07 Jan 2020 10:30:35 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][V2] usb: ohci-da8xx: ensure error return on variable error is set
+Date:   Tue,  7 Jan 2020 10:30:35 +0000
+Message-Id: <20200107103035.19481-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200107052424.pidwn5f7wyayany2@kili.mountain>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 07, 2020 at 08:24:24AM +0300, Dan Carpenter wrote:
-> [ Should linux-usb be listed in MAINTAINERS? - dan]
+From: Colin Ian King <colin.king@canonical.com>
 
-Yes, I think so. I'll make a patch for that.
+Currently when an error in da8xx_ohci->oc_gpio occurs it causes an
+uninitialized error return in variable 'error' to be returned.  Fix
+this by ensuring the error variable is set to the error value in
+da8xx_ohci->oc_gpio.
 
-> Hello Mika Westerberg,
-> 
-> The patch b04079837b20: "thunderbolt: Add initial support for USB4"
-> from Dec 17, 2019, leads to the following static checker warning:
-> 
-> 	drivers/thunderbolt/usb4.c:242 usb4_switch_setup()
-> 	warn: bool mask it always valse 'xhci & ((((1))) << (18))'
-> 
-> drivers/thunderbolt/usb4.c
->    206          bool tbt3, xhci;
->                 ^^^^       ^^^^
-> 
->    207          u32 val = 0;
->    208          int ret;
->    209  
->    210          if (!tb_route(sw))
->    211                  return 0;
->    212  
->    213          ret = tb_sw_read(sw, &val, TB_CFG_SWITCH, ROUTER_CS_6, 1);
->    214          if (ret)
->    215                  return ret;
->    216  
->    217          xhci = val & ROUTER_CS_6_HCI;
->    218          tbt3 = !(val & ROUTER_CS_6_TNS);
->    219  
->    220          tb_sw_dbg(sw, "TBT3 support: %s, xHCI: %s\n",
->    221                    tbt3 ? "yes" : "no", xhci ? "yes" : "no");
->    222  
->    223          ret = tb_sw_read(sw, &val, TB_CFG_SWITCH, ROUTER_CS_5, 1);
->    224          if (ret)
->    225                  return ret;
->    226  
->    227          parent = tb_switch_parent(sw);
->    228  
->    229          if (tb_switch_find_port(parent, TB_TYPE_USB3_DOWN)) {
->    230                  val |= ROUTER_CS_5_UTO;
->    231                  xhci = false;
->    232          }
->    233  
->    234          /* Only enable PCIe tunneling if the parent router supports it */
->    235          if (tb_switch_find_port(parent, TB_TYPE_PCIE_DOWN)) {
->    236                  val |= ROUTER_CS_5_PTO;
->    237                  /*
->    238                   * xHCI can be enabled if PCIe tunneling is supported
->    239                   * and the parent does not have any USB3 dowstream
->    240                   * adapters (so we cannot do USB 3.x tunneling).
->    241                   */
->    242                  if (xhci & ROUTER_CS_6_HCI)
->                             ^^^^^^^^^^^^^^^^^^^^^^
-> "xhci" is bool so BIT(18) is not set.
+Addresses-Coverity: ("Uninitialized scalar variable")
+Fixes: d193abf1c913 ("usb: ohci-da8xx: add vbus and overcurrent gpios")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
 
-Good finding. It should be
+V2: fix typo and grammar in commit message
 
-	if (xhci)
-		val |= ROUTER_CS_5_HCO;
+---
+ drivers/usb/host/ohci-da8xx.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-I think. I'll make patch fixing it as well.
+diff --git a/drivers/usb/host/ohci-da8xx.c b/drivers/usb/host/ohci-da8xx.c
+index 38183ac438c6..9cdf787055b7 100644
+--- a/drivers/usb/host/ohci-da8xx.c
++++ b/drivers/usb/host/ohci-da8xx.c
+@@ -415,8 +415,10 @@ static int ohci_da8xx_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	da8xx_ohci->oc_gpio = devm_gpiod_get_optional(dev, "oc", GPIOD_IN);
+-	if (IS_ERR(da8xx_ohci->oc_gpio))
++	if (IS_ERR(da8xx_ohci->oc_gpio)) {
++		error = PTR_ERR(da8xx_ohci->oc_gpio);
+ 		goto err;
++	}
+ 
+ 	if (da8xx_ohci->oc_gpio) {
+ 		oc_irq = gpiod_to_irq(da8xx_ohci->oc_gpio);
+-- 
+2.24.0
+
