@@ -2,128 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7A9131F14
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 06:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81AEA13204C
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 08:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726492AbgAGFYi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jan 2020 00:24:38 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:56322 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725835AbgAGFYh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 00:24:37 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00758v2Q110093;
-        Tue, 7 Jan 2020 05:24:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
- bh=Z2Q55XaPt/0JP/wEuk5ZQ8JAYBRzoi0bmzbjPqCpt/U=;
- b=HnlHsrC1pdLighxh6jsmGrNRr0+8mB3NqCxkaU/xb4gVfEJzaiCfpYfnt6BCwOc+ntR0
- NzNwC7Vi/yYM4nYDtbn6dzglHpWPVmC0YQcEveZdKdy2RyxPJMFITGsRMapbJzkvXzXO
- TGHTEGBDshxzuNdrNHClKgXgE4UOXoE8UZthLEzFGzbhec2qKphTftSsuRUJ65ZtsUQG
- JwEGZAPpJuUydSesk2YnmXtsnv8/Yu3m7PxKkfbFfRNVMk+vSUKpWvgaj0CqRCWDwQYn
- XCSZMeJvwQzMeFnlPql8XmbH5qkbETSUK0JpVzVDZQLnPGxqnyw1BIkR+6Zd+jurjuaE Rg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 2xakbqk0w5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 07 Jan 2020 05:24:34 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 0075Djn1009542;
-        Tue, 7 Jan 2020 05:24:33 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 2xb4uqc5pu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 07 Jan 2020 05:24:33 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0075OW6N006954;
-        Tue, 7 Jan 2020 05:24:32 GMT
-Received: from kili.mountain (/129.205.23.165)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 06 Jan 2020 21:24:31 -0800
-Date:   Tue, 7 Jan 2020 08:24:24 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     mika.westerberg@linux.intel.com
-Cc:     linux-usb@vger.kernel.org
-Subject: [bug report] thunderbolt: Add initial support for USB4
-Message-ID: <20200107052424.pidwn5f7wyayany2@kili.mountain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9492 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=703
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001070042
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9492 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=756 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001070042
+        id S1727192AbgAGHQ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jan 2020 02:16:28 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:58024 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725781AbgAGHQ1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 Jan 2020 02:16:27 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 2C06C1A0837;
+        Tue,  7 Jan 2020 08:16:26 +0100 (CET)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 87DDE1A00D2;
+        Tue,  7 Jan 2020 08:16:21 +0100 (CET)
+Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 09236402C7;
+        Tue,  7 Jan 2020 15:16:15 +0800 (SGT)
+From:   Ran Wang <ran.wang_1@nxp.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        Jun Li <jun.li@nxp.com>, Peter Chen <peter.chen@nxp.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ran Wang <ran.wang_1@nxp.com>, stable@vger.kernel.org
+Subject: [PATCH] usb: dwc3: gadget: Fix controller get stuck when kicking extra transfer in wrong case
+Date:   Tue,  7 Jan 2020 15:14:41 +0800
+Message-Id: <20200107071441.480-1-ran.wang_1@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[ Should linux-usb be listed in MAINTAINERS? - dan]
+According to original commit c96e6725db9d6a ("usb: dwc3: gadget: Correct the
+logic for queuing sgs"), we would only kick off another transfer in case of
+req->num_pending_sgs > 0.
 
-Hello Mika Westerberg,
+However, current logic will do this as long as req->remaining > 0, this will
+include the case of non-sgs (both dwc3_gadget_ep_request_completed(req) and
+req->num_pending_sgs are 0) that we did not want to.
 
-The patch b04079837b20: "thunderbolt: Add initial support for USB4"
-from Dec 17, 2019, leads to the following static checker warning:
+Without this fix, we observed dwc3 got stuck on Layerscape plaftorms (such as
+LS1088ARDB) when enabling gadget (mass storage function) as below:
 
-	drivers/thunderbolt/usb4.c:242 usb4_switch_setup()
-	warn: bool mask it always valse 'xhci & ((((1))) << (18))'
+[   27.923959] Mass Storage Function, version: 2009/09/11
+[   27.929115] LUN: removable file: (no medium)
+[   27.933432] LUN: file: /run/media/sda1/419/test
+[   27.937963] Number of LUNs=1
+[   27.941042] g_mass_storage gadget: Mass Storage Gadget, version: 2009/09/11
+[   27.948019] g_mass_storage gadget: userspace failed to provide iSerialNumber
+[   27.955069] g_mass_storage gadget: g_mass_storage ready
+[   28.411188] g_mass_storage gadget: super-speed config #1: Linux File-Backed Storage
+[   48.319766] g_mass_storage gadget: super-speed config #1: Linux File-Backed Storage
+[   68.320794] g_mass_storage gadget: super-speed config #1: Linux File-Backed Storage
+[   88.319898] g_mass_storage gadget: super-speed config #1: Linux File-Backed Storage
+[  108.320808] g_mass_storage gadget: super-speed config #1: Linux File-Backed Storage
+[  128.323419] g_mass_storage gadget: super-speed config #1: Linux File-Backed Storage
+[  148.320857] g_mass_storage gadget: super-speed config #1: Linux File-Backed Storage
+[  148.362023] g_mass_storage gadget: super-speed config #0: unconfigured
 
-drivers/thunderbolt/usb4.c
-   206          bool tbt3, xhci;
-                ^^^^       ^^^^
+Fixes: 8c7d4b7b3d43 ("usb: dwc3: gadget: Fix logical condition")
 
-   207          u32 val = 0;
-   208          int ret;
-   209  
-   210          if (!tb_route(sw))
-   211                  return 0;
-   212  
-   213          ret = tb_sw_read(sw, &val, TB_CFG_SWITCH, ROUTER_CS_6, 1);
-   214          if (ret)
-   215                  return ret;
-   216  
-   217          xhci = val & ROUTER_CS_6_HCI;
-   218          tbt3 = !(val & ROUTER_CS_6_TNS);
-   219  
-   220          tb_sw_dbg(sw, "TBT3 support: %s, xHCI: %s\n",
-   221                    tbt3 ? "yes" : "no", xhci ? "yes" : "no");
-   222  
-   223          ret = tb_sw_read(sw, &val, TB_CFG_SWITCH, ROUTER_CS_5, 1);
-   224          if (ret)
-   225                  return ret;
-   226  
-   227          parent = tb_switch_parent(sw);
-   228  
-   229          if (tb_switch_find_port(parent, TB_TYPE_USB3_DOWN)) {
-   230                  val |= ROUTER_CS_5_UTO;
-   231                  xhci = false;
-   232          }
-   233  
-   234          /* Only enable PCIe tunneling if the parent router supports it */
-   235          if (tb_switch_find_port(parent, TB_TYPE_PCIE_DOWN)) {
-   236                  val |= ROUTER_CS_5_PTO;
-   237                  /*
-   238                   * xHCI can be enabled if PCIe tunneling is supported
-   239                   * and the parent does not have any USB3 dowstream
-   240                   * adapters (so we cannot do USB 3.x tunneling).
-   241                   */
-   242                  if (xhci & ROUTER_CS_6_HCI)
-                            ^^^^^^^^^^^^^^^^^^^^^^
-"xhci" is bool so BIT(18) is not set.
+Cc: stable@vger.kernel.org
+Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+---
+ drivers/usb/dwc3/gadget.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-   243                          val |= ROUTER_CS_5_HCO;
-   244          }
-   245  
-   246          /* TBT3 supported by the CM */
-   247          val |= ROUTER_CS_5_C3S;
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 0c960a9..5b0f02f 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2491,7 +2491,7 @@ static int dwc3_gadget_ep_cleanup_completed_request(struct dwc3_ep *dep,
+ 
+ 	req->request.actual = req->request.length - req->remaining;
+ 
+-	if (!dwc3_gadget_ep_request_completed(req) ||
++	if (!dwc3_gadget_ep_request_completed(req) &&
+ 			req->num_pending_sgs) {
+ 		__dwc3_gadget_kick_transfer(dep);
+ 		goto out;
+-- 
+2.7.4
 
-
-regards,
-dan carpenter
