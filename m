@@ -2,134 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE0B131CC5
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 01:29:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83BFD131DAE
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 03:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727260AbgAGA3Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jan 2020 19:29:24 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:39074 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727163AbgAGA3Y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jan 2020 19:29:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1578356962; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:references; bh=nDpaTHAJN6PnaV/NUe5XTLxwtko/PI3XInMzN1gqSog=;
-        b=IaTVRP+ZrStoqzsgKqnWJM4j6qwUryJ+LTPdbaYmvcUYcFtj4SnzP1wZdS7bzYGWwiDdAn
-        OoYZJoGT2Ue72mMspsDx52CUii50p5BpULeOr+s5TZmHiqsf8EEkWayk9ba0j91xuXOj4k
-        +eD9JQroJMh606esKCzzJKnk3Cn+/5k=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>, od@zcrc.me,
-        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH] usb: common: usb-conn-gpio: Register charger
-Date:   Tue,  7 Jan 2020 01:29:01 +0100
-Message-Id: <20200107002901.940297-1-paul@crapouillou.net>
+        id S1727384AbgAGCfN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jan 2020 21:35:13 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:30798 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727295AbgAGCfN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jan 2020 21:35:13 -0500
+Received: from [10.18.38.198] (10.18.38.198) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Tue, 7 Jan
+ 2020 10:35:34 +0800
+Subject: Re: [PATCH v3 1/6] dt-bindings: phy: Add Amlogic A1 USB2 PHY Bindings
+To:     Rob Herring <robh@kernel.org>
+CC:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Yue Wang <yue.wang@amlogic.com>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Carlo Caione <carlo@caione.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+References: <1577428606-69855-1-git-send-email-hanjie.lin@amlogic.com>
+ <1577428606-69855-2-git-send-email-hanjie.lin@amlogic.com>
+ <20200104002806.GA24214@bogus>
+From:   Hanjie Lin <hanjie.lin@amlogic.com>
+Message-ID: <dca2c600-fb07-4071-4cf0-0392e64f450c@amlogic.com>
+Date:   Tue, 7 Jan 2020 10:35:34 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200104002806.GA24214@bogus>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.18.38.198]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Register a power supply charger, whose online state depends on whether
-the USB role is set to device or not.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/usb/common/usb-conn-gpio.c | 45 ++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
 
-diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
-index ed204cbb63ea..08a411388d3c 100644
---- a/drivers/usb/common/usb-conn-gpio.c
-+++ b/drivers/usb/common/usb-conn-gpio.c
-@@ -17,6 +17,7 @@
- #include <linux/of.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
-+#include <linux/power_supply.h>
- #include <linux/regulator/consumer.h>
- #include <linux/usb/role.h>
- 
-@@ -38,6 +39,9 @@ struct usb_conn_info {
- 	struct gpio_desc *vbus_gpiod;
- 	int id_irq;
- 	int vbus_irq;
-+
-+	struct power_supply_desc desc;
-+	struct power_supply *charger;
- };
- 
- /**
-@@ -98,6 +102,8 @@ static void usb_conn_detect_cable(struct work_struct *work)
- 		ret = regulator_enable(info->vbus);
- 		if (ret)
- 			dev_err(info->dev, "enable vbus regulator failed\n");
-+	} else {
-+		power_supply_changed(info->charger);
- 	}
- 
- 	info->last_role = role;
-@@ -121,10 +127,35 @@ static irqreturn_t usb_conn_isr(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
-+static enum power_supply_property usb_charger_properties[] = {
-+	POWER_SUPPLY_PROP_ONLINE,
-+};
-+
-+static int usb_charger_get_property(struct power_supply *psy,
-+				    enum power_supply_property psp,
-+				    union power_supply_propval *val)
-+{
-+	struct usb_conn_info *info = power_supply_get_drvdata(psy);
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		val->intval = info->last_role == USB_ROLE_DEVICE;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- static int usb_conn_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-+	struct power_supply_desc *desc;
- 	struct usb_conn_info *info;
-+	struct power_supply_config cfg = {
-+		.of_node = dev->of_node,
-+	};
- 	int ret = 0;
- 
- 	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
-@@ -203,6 +234,20 @@ static int usb_conn_probe(struct platform_device *pdev)
- 		}
- 	}
- 
-+	desc = &info->desc;
-+	desc->name = "usb-charger";
-+	desc->properties = usb_charger_properties;
-+	desc->num_properties = ARRAY_SIZE(usb_charger_properties);
-+	desc->get_property = usb_charger_get_property;
-+	desc->type = POWER_SUPPLY_TYPE_USB;
-+	cfg.drv_data = info;
-+
-+	info->charger = devm_power_supply_register(dev, desc, &cfg);
-+	if (IS_ERR(info->charger)) {
-+		dev_err(dev, "Unable to register charger");
-+		return PTR_ERR(info->charger);
-+	}
-+
- 	platform_set_drvdata(pdev, info);
- 
- 	/* Perform initial detection */
--- 
-2.24.1
+On 2020/1/4 8:28, Rob Herring wrote:
+> On Fri, Dec 27, 2019 at 02:36:41PM +0800, Hanjie Lin wrote:
+>> Add the Amlogic A1 Family USB2 PHY Bindings
+>>
+>> It supports Host mode only.
+>>
+>> Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
+>> Signed-off-by: Yue Wang <yue.wang@amlogic.com>
+>> ---
+>>  .../bindings/phy/amlogic,meson-a1-usb2-phy.yaml    | 55 ++++++++++++++++++++++
+>>  1 file changed, 55 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/phy/amlogic,meson-a1-usb2-phy.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/phy/amlogic,meson-a1-usb2-phy.yaml b/Documentation/devicetree/bindings/phy/amlogic,meson-a1-usb2-phy.yaml
+>> new file mode 100644
+>> index 00000000..2b2c526
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/phy/amlogic,meson-a1-usb2-phy.yaml
+>> @@ -0,0 +1,55 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +# Copyright 2019 Amlogic, Inc
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/phy/amlogic,meson-a1-usb2-phy.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>> +
+>> +title: Amlogic A1 USB2 PHY
+>> +
+>> +maintainers:
+>> +  - Yue Wang <yue.wang@amlogic.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - amlogic,meson-a1-usb2-phy
+> 
+> Use 'const' if there's only 1.
+> 
 
+Ok
+
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  resets:
+>> +    maxItems: 1
+>> +
+>> +  reset-names:
+>> +    items:
+>> +      - const: phy
+> 
+> Don't need *-names when there's a single entry.
+> 
+
+Ok
+
+>> +
+>> +  "#phy-cells":
+>> +    const: 0
+>> +
+>> +  power-domains:
+>> +     maxItems: 1
+>> +     description:
+>> +       a phandle to respective power domain node as described by generic
+>> +       PM domain bindings (see power/power_domain.txt for more information).
+> 
+> Drop the generic description. No need to duplicate everywhere.
+> 
+
+Ok, I will modify these issues.
+
+Thanks
+
+Hanjie
+
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - resets
+>> +  - reset-names
+>> +  - "#phy-cells"
+>> +  - power-domains
+>> +
+>> +examples:
+>> +  - |
+>> +    usb2_phy1: phy@40000 {
+>> +      status = "okay";
+>> +      compatible = "amlogic,a1-usb2-phy";
+>> +      reg = <0x0 0x40000 0x0 0x2000>;
+>> +      resets = <&reset RESET_USBPHY>;
+>> +      reset-names = "phy";
+>> +      #phy-cells = <0>;
+>> +      power-domains = <&pwrc PWRC_USB_ID>;
+>> +    };
+>> -- 
+>> 2.7.4
+>>
+> 
+> .
+> 
