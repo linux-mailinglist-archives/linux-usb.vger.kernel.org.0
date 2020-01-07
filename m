@@ -2,116 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3FB01325BD
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 13:10:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B40132672
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 13:39:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727882AbgAGMKl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jan 2020 07:10:41 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:54696 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727177AbgAGMKk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 07:10:40 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 007C4jgC070313;
-        Tue, 7 Jan 2020 12:10:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2019-08-05;
- bh=fSKSjlLTPjWUAzNU/T9Nml0/rwLj5FBYEeuVAecNbms=;
- b=QrGRTgNZh/Q51zDbQ+Ta514KXQS2KfaBVXsHvx6h1K89k6sDwBKV1MHn0kabLGwcXT97
- RbFwJfrbLVljkf5WqHpb6z3WuixBpldjTmk0IDgOrpN9lHxCE3XDiZNS/ndSWzOimvBl
- bogBlh8g1J/xDB719aE9qKJdWbijvfvXrtGrIxb8sJftZLmWKrU9g2P2bAy+LQd+Fc/F
- Z0WCjvO1YaHD0CLTx3vKw06sId+//vUgJskX1VV5cTvDV/kO5QnHI2dlAaZWUG+JYY2c
- Jg/cCx+Tu9S+xHSSsVY93Q+5ko3rUkvsuOydB6mjWgkig/LVfP6YEyXy1tEqx1RXb4NH bA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 2xaj4tw7tx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 07 Jan 2020 12:10:23 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 007C9IGp187178;
-        Tue, 7 Jan 2020 12:10:23 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 2xcjvd1cr7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 07 Jan 2020 12:10:23 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 007CAKYA017404;
-        Tue, 7 Jan 2020 12:10:20 GMT
-Received: from kadam (/129.205.23.165)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 07 Jan 2020 04:10:19 -0800
-Date:   Tue, 7 Jan 2020 15:10:10 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Colin King <colin.king@canonical.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        id S1728156AbgAGMjG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jan 2020 07:39:06 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:51918 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728138AbgAGMjF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 07:39:05 -0500
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1ioo8T-0002Dm-Op; Tue, 07 Jan 2020 12:39:01 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sekhar Nori <nsekhar@ti.com>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][V2] usb: ohci-da8xx: ensure error return on variable
- error is set
-Message-ID: <20200107121010.GN3911@kadam>
-References: <20200107103035.19481-1-colin.king@canonical.com>
+        linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][V3] usb: ohci-da8xx: ensure error return on variable error is set
+Date:   Tue,  7 Jan 2020 12:39:01 +0000
+Message-Id: <20200107123901.101190-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200107103035.19481-1-colin.king@canonical.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9492 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001070100
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9492 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001070100
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 07, 2020 at 10:30:35AM +0000, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
-> 
-> Currently when an error in da8xx_ohci->oc_gpio occurs it causes an
-> uninitialized error return in variable 'error' to be returned.  Fix
-> this by ensuring the error variable is set to the error value in
-> da8xx_ohci->oc_gpio.
-> 
-> Addresses-Coverity: ("Uninitialized scalar variable")
-> Fixes: d193abf1c913 ("usb: ohci-da8xx: add vbus and overcurrent gpios")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> ---
-> 
-> V2: fix typo and grammar in commit message
-> 
-> ---
->  drivers/usb/host/ohci-da8xx.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/ohci-da8xx.c b/drivers/usb/host/ohci-da8xx.c
-> index 38183ac438c6..9cdf787055b7 100644
-> --- a/drivers/usb/host/ohci-da8xx.c
-> +++ b/drivers/usb/host/ohci-da8xx.c
-> @@ -415,8 +415,10 @@ static int ohci_da8xx_probe(struct platform_device *pdev)
->  	}
->  
->  	da8xx_ohci->oc_gpio = devm_gpiod_get_optional(dev, "oc", GPIOD_IN);
-> -	if (IS_ERR(da8xx_ohci->oc_gpio))
-> +	if (IS_ERR(da8xx_ohci->oc_gpio)) {
-> +		error = PTR_ERR(da8xx_ohci->oc_gpio);
->  		goto err;
-> +	}
->  
->  	if (da8xx_ohci->oc_gpio) {
->  		oc_irq = gpiod_to_irq(da8xx_ohci->oc_gpio);
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Also uninitialized here.
+From: Colin Ian King <colin.king@canonical.com>
 
-regards,
-dan carpenter
+Currently when an error occurs when calling devm_gpiod_get_optional or
+calling gpiod_to_irq it causes an uninitialized error return in variable
+'error' to be returned.  Fix this by ensuring the error variable is set
+from da8xx_ohci->oc_gpio and oc_irq.
+
+Thanks to Dan Carpenter for spotting the uninitialized error in the
+gpiod_to_irq failure case.
+
+Addresses-Coverity: ("Uninitialized scalar variable")
+Fixes: d193abf1c913 ("usb: ohci-da8xx: add vbus and overcurrent gpios")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+
+V2: fix typo and grammar in commit message
+V3: fix gpiod_to_irq error case, re-write commit message
+
+---
+ drivers/usb/host/ohci-da8xx.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/host/ohci-da8xx.c b/drivers/usb/host/ohci-da8xx.c
+index 38183ac438c6..1371b0c249ec 100644
+--- a/drivers/usb/host/ohci-da8xx.c
++++ b/drivers/usb/host/ohci-da8xx.c
+@@ -415,13 +415,17 @@ static int ohci_da8xx_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	da8xx_ohci->oc_gpio = devm_gpiod_get_optional(dev, "oc", GPIOD_IN);
+-	if (IS_ERR(da8xx_ohci->oc_gpio))
++	if (IS_ERR(da8xx_ohci->oc_gpio)) {
++		error = PTR_ERR(da8xx_ohci->oc_gpio);
+ 		goto err;
++	}
+ 
+ 	if (da8xx_ohci->oc_gpio) {
+ 		oc_irq = gpiod_to_irq(da8xx_ohci->oc_gpio);
+-		if (oc_irq < 0)
++		if (oc_irq < 0) {
++			error = oc_irq;
+ 			goto err;
++		}
+ 
+ 		error = devm_request_threaded_irq(dev, oc_irq, NULL,
+ 				ohci_da8xx_oc_thread, IRQF_TRIGGER_RISING |
+-- 
+2.24.0
 
