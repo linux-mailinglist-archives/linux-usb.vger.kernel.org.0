@@ -2,139 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D25813288D
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 15:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B181328E3
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 15:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727959AbgAGOOK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jan 2020 09:14:10 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:38982 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727730AbgAGOOK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 09:14:10 -0500
-Received: by mail-io1-f72.google.com with SMTP id p6so279443iol.6
-        for <linux-usb@vger.kernel.org>; Tue, 07 Jan 2020 06:14:10 -0800 (PST)
+        id S1728329AbgAGO2o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jan 2020 09:28:44 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:40012 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728048AbgAGO2n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 09:28:43 -0500
+Received: by mail-pg1-f196.google.com with SMTP id k25so28570216pgt.7
+        for <linux-usb@vger.kernel.org>; Tue, 07 Jan 2020 06:28:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m5lSdpvKrQdoMNKY33r6vQZFxtEtwTJgacT6S/p15LA=;
+        b=V29OXUfwm4o6nbaaQVxAuVrKbGji3meV4j+OhIqD7BlXBrA2oYC9ni7MOCSdJb9nBr
+         FIR4XXV6k57HZCW4swIB5KLVE+viDHImvGR8BZyhdjbn3X9Y9KJ2OveARgiZu5Ws4oyu
+         pI9QwBt7aqRgr4yDb/ym+/NBbv82apnB2AIzh3RRNNAD+VUd15KC6X+YVeMSi2ejBQIK
+         ifc5TpiLEXgcZuMPZJd9iPpQwSZsEh+k39If7oIt2A7GM7vKRvXuwZjMtCEew37dToe5
+         PeUNiii9ntNBSYDcmHRIlOSmtHg+eNmXB9NsUhsqhvuVqx9m6ukydwBa64MmfAOoODes
+         C7pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=JXRYv9+UcfxN9G9rRDARlLgJ3UdPoCZZf5aUdAOiYv0=;
-        b=tXwOexJMACroS5QRQzH67wfnyLBP8+0HLrv5FJc41n3SfzoVda6zu8TkxUUuybmpig
-         YeKyHKfRBa+QCPmESUyt1xRkzKfvyw1VihOanL+Ia77A9k5jIK0df7yIgl8tmYQhwG3B
-         W1iJcp+eJ/byZcHENM3iBlqED9VT+NTVZ4w6R0gMymTWZUlSKIO5fKpHlb0ohmjhMwi1
-         jlufT3Bba3dPpAQj98P84t9LmqiGIHkHoblrxangimtpy4aSFI9tvZUvKX9bSEAy4Bab
-         G7sdf7Ct5tmIx4fUCcRY6jG1PYu0uEMdjtFB9/WkGI/+N8WQR3CBk+Bolk+NuAmbwfju
-         4vjQ==
-X-Gm-Message-State: APjAAAVLdq0BFkKSg3lyzoP0u30aSUmtMgrue2qIknwvtZDipNq4nDpI
-        SSHbgXcFo6aFFYvQw4F0q+ElormUA88LCFAiodMmH076d3iX
-X-Google-Smtp-Source: APXvYqxKkhdPR0xm9EcRZmWKEtDhE8VQWFimXadzllxS5Y/O9MeNoWuwVrfMpDBrpfdQ68XDHY/NiobQs4BMJmmD1Fk86J0JwM12
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m5lSdpvKrQdoMNKY33r6vQZFxtEtwTJgacT6S/p15LA=;
+        b=V79Y+1m/4bKi0wqcB8ASBPnFqvrzXw3YKf0iZQ1x+O5i3LvUkFnF4V0xCeLnL2bJav
+         lvyyksMNk2wIkjiWzNTS9vsxudVF7+motWSGqmmC/K1pbUeG9mOS495c+Fqez40lzSKx
+         txPTCjil1pOwHaz7+JNjfXDGxgD4PF/VRB2DrCjL5RsFPQKQgdIk1MXiPQ/D6qzS11q2
+         1PZKNE4sb/LUc1ku0KHc70G9msi9TefEdi5q2VxHdJQrs64NT382MkvxwLp5TOwviafC
+         Ru1ir2HGI3Fm5CfQRiDfhrYPlyS7uY+l7TiyUULOSiV21ugjiSBpOzEtZXUbQYYZZS78
+         mHkQ==
+X-Gm-Message-State: APjAAAUHg+FvzKYFoxnGeXlX/x2NF42+XStRdYsmPlbKiGExbM697tl1
+        mLlPeLdDTI4AYwygwh/xIIXxTxqxtXXlSwbNShG/uA==
+X-Google-Smtp-Source: APXvYqwsvDKv31NioKb+iBX2xS/6+IXQu9qBpvBlOsvPE2Rnfz2aPjulQZ9cl4M3VPWvg1mHrdOQmsWs9sBNXW+eJTo=
+X-Received: by 2002:aa7:9629:: with SMTP id r9mr82321097pfg.51.1578407321830;
+ Tue, 07 Jan 2020 06:28:41 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a92:168d:: with SMTP id 13mr82513972ilw.253.1578406450072;
- Tue, 07 Jan 2020 06:14:10 -0800 (PST)
-Date:   Tue, 07 Jan 2020 06:14:10 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c4972d059b8d6305@google.com>
-Subject: WARNING in port100_send_cmd_async/usb_submit_urb (2)
-From:   syzbot <syzbot+e7687d3c762f267e48f7@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, ingrassia@epigenesys.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+References: <000000000000d29687059b3f32aa@google.com> <Pine.LNX.4.44L0.2001031159280.1560-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.2001031159280.1560-100000@iolanthe.rowland.org>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Tue, 7 Jan 2020 15:28:30 +0100
+Message-ID: <CAAeHK+z5sY=CpPhO0QZGE_o1Bo8XA4PG4NT=mprO=9=Rg+1kkQ@mail.gmail.com>
+Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (2)
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     syzbot <syzbot+10e5f68920f13587ab12@syzkaller.appspotmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        ingrassia@epigenesys.com,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Fri, Jan 3, 2020 at 6:01 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Fri, 3 Jan 2020, syzbot wrote:
+>
+> > Hello,
+> >
+> > syzbot has tested the proposed patch and the reproducer did not trigger
+> > crash:
+> >
+> > Reported-and-tested-by:
+> > syzbot+10e5f68920f13587ab12@syzkaller.appspotmail.com
+> >
+> > Tested on:
+> >
+> > commit:         ecdf2214 usb: gadget: add raw-gadget interface
+> > git tree:       https://github.com/google/kasan.git
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=b06a019075333661
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=10e5f68920f13587ab12
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > patch:          https://syzkaller.appspot.com/x/patch.diff?x=177f06e1e00000
+> >
+> > Note: testing is done by a robot and is best-effort only.
+>
+> Andrey:
+>
+> Clearly something strange is going on here.  First, the patch should
+> not have changed the behavior; all it did was add some log messages.
+> Second, I don't see how the warning could have been triggered at all --
+> it seems to be complaining that 2 != 2.
 
-syzbot found the following crash on:
+Hi Alan,
 
-HEAD commit:    ecdf2214 usb: gadget: add raw-gadget interface
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=1727e059e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b06a019075333661
-dashboard link: https://syzkaller.appspot.com/bug?extid=e7687d3c762f267e48f7
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17e6d885e00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=178b549ee00000
+It looks like some kind of race in involved here.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+e7687d3c762f267e48f7@syzkaller.appspotmail.com
+There are a few indications of that: 1. there's no C reproducer
+generated for this crash (usually happens because of timing
+differences when executing syz repro vs C repro), 2. syz repro has
+threaded, collide and repeat flags turned on (which means it gets
+executed many times with some syscalls scheduled asynchronously).
 
-usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-usb 1-1: config 0 descriptor??
-------------[ cut here ]------------
-URB 000000007bfb3747 submitted while active
-WARNING: CPU: 1 PID: 22 at drivers/usb/core/urb.c:363  
-usb_submit_urb+0x10c1/0x13b0 drivers/usb/core/urb.c:363
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 1 PID: 22 Comm: kworker/1:1 Not tainted 5.5.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xef/0x16e lib/dump_stack.c:118
-  panic+0x2aa/0x6e1 kernel/panic.c:221
-  __warn.cold+0x2f/0x30 kernel/panic.c:582
-  report_bug+0x27b/0x2f0 lib/bug.c:195
-  fixup_bug arch/x86/kernel/traps.c:174 [inline]
-  fixup_bug arch/x86/kernel/traps.c:169 [inline]
-  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
-  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
-  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-RIP: 0010:usb_submit_urb+0x10c1/0x13b0 drivers/usb/core/urb.c:363
-Code: 89 de e8 72 92 e7 fd 84 db 0f 85 42 f6 ff ff e8 35 91 e7 fd 4c 89 fe  
-48 c7 c7 00 59 15 86 c6 05 20 c3 4e 04 01 e8 e7 ad bc fd <0f> 0b e9 20 f6  
-ff ff c7 44 24 14 01 00 00 00 e9 d7 f6 ff ff 41 bd
-RSP: 0018:ffff8881d8c370e0 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff81295dad RDI: ffffed103b186e0e
-RBP: ffff8881d32c5f80 R08: ffff8881da24e200 R09: ffffed103b66439f
-R10: ffffed103b66439e R11: ffff8881db321cf3 R12: ffff8881d5aabb00
-R13: 00000000fffffff0 R14: ffff8881d2037448 R15: ffff8881d5aab800
-  port100_send_frame_async drivers/nfc/port100.c:780 [inline]
-  port100_send_cmd_async+0x801/0xb80 drivers/nfc/port100.c:876
-  port100_send_cmd_sync+0xaa/0x130 drivers/nfc/port100.c:916
-  port100_set_command_type drivers/nfc/port100.c:987 [inline]
-  port100_probe+0xa12/0xea0 drivers/nfc/port100.c:1567
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0x1480/0x1c20 drivers/base/core.c:2487
-  usb_set_configuration+0xe67/0x1740 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0x1480/0x1c20 drivers/base/core.c:2487
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2537
-  hub_port_connect drivers/usb/core/hub.c:5184 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
-  port_event drivers/usb/core/hub.c:5470 [inline]
-  hub_event+0x1e59/0x3860 drivers/usb/core/hub.c:5552
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2264
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2410
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+This also explains the weirdness around the 2 != 2 check being failed.
+First the comparison failed, then another thread updated one of the
+numbers being compared, and then the printk statement got executed.
 
+>
+> Does the reproducer really work?
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Yes, it worked for syzbot at the very least. It looks like your patch
+introduced some delays which made the bug untriggerable by the same
+reproducer. Since this is a race it might be quite difficult to
+reproduce this manually (due to timing differences caused by a
+different environment setup) as well unfortunately.
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Perhaps giving a less invasive patch (that minimizes timing changes
+introduced to the code that is suspected of being racy) to syzbot
+could be used to debug this.
+
+Thanks!
