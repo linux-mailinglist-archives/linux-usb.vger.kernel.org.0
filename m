@@ -2,143 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3971327B2
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 14:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D25813288D
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 15:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728118AbgAGNcW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jan 2020 08:32:22 -0500
-Received: from mail-wr1-f45.google.com ([209.85.221.45]:45088 "EHLO
-        mail-wr1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727880AbgAGNcW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 08:32:22 -0500
-Received: by mail-wr1-f45.google.com with SMTP id j42so53896745wrj.12;
-        Tue, 07 Jan 2020 05:32:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:references:message-id:date:user-agent:mime-version
-         :in-reply-to:content-transfer-encoding:content-language;
-        bh=iwseRYdnEFLKIiL5+UtUR55Qh0pC+BNHbWOaIgon+Ss=;
-        b=ETcBOF7Xb21BVbDersgBk+meXnCTfjhZMdJR0KK1d12YLN9NS0odJG/OVCRGpPmfzC
-         vHMlTWb5LVrDzQJQkjEr2ZRJEA3inJjJshTdoWH3brNWFKho8vReZq8rD0D/af9yO+wT
-         SdKY4xiR3AbnAf0zeTZ0OCq89lZ/r6uMG/WxWbD0xUHvd1z5pucEgFk32pJt9ZvAKUHF
-         XYxX9+qRsnFaeqqrG068hy/QeAIURsBs5nvP7eGuA5Vn9T+9AotB6UlnJniXP1U0zU/9
-         eVAo99E/oG+KSXTEdC7TExth4fXcS+Y0NxrUTl1SNX2XSevcP7qTDy1FQ5i7mmjN3Yj/
-         2F+Q==
+        id S1727959AbgAGOOK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jan 2020 09:14:10 -0500
+Received: from mail-io1-f72.google.com ([209.85.166.72]:38982 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727730AbgAGOOK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 09:14:10 -0500
+Received: by mail-io1-f72.google.com with SMTP id p6so279443iol.6
+        for <linux-usb@vger.kernel.org>; Tue, 07 Jan 2020 06:14:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=iwseRYdnEFLKIiL5+UtUR55Qh0pC+BNHbWOaIgon+Ss=;
-        b=l/SSfLNpdByIrpTBybPujxGU/X4KWojK40Vtihddq/tuIAQf43AH7UCxurCqWcEDe9
-         H61CgDC8BFH24I9X7giyv8VTj8wxmqazWjhGoXbZqVC1tMNT91lVYDnN498stB/tO7yn
-         UvJuoVMywihnBbSINUrVTbH7+BMDPyMrVQgwb7k0tPruPi0wz+ld11LTzZ8DsB5VOAr5
-         ObTrFB8NvAGVMmNC3O/JQ/9W5bxG951FNCYpE7BKR1MRxwkDWAU6O4hiTPs1nvHa1NyA
-         AsdXDWPI7QSR7pOJyUWJbfTi9I4BhFR+QlEEEREhhIymLA4ykP2MI9fGuVwC7iyvbOZ3
-         gfjw==
-X-Gm-Message-State: APjAAAXFCzESstjH2dFdb7L2SfGRzhVaz7StKEA4xGC7qaDdTmRiR0DH
-        ZM2tELN4/x3OC0KoKDyse4k=
-X-Google-Smtp-Source: APXvYqxWqLEKNyzSpq4WliWRICCKbiiiUFNUw2tpqjv46UrW6bDtkpWyW+Pe9VzWbgMw9YbrveJcTw==
-X-Received: by 2002:adf:eb89:: with SMTP id t9mr111039655wrn.5.1578403939586;
-        Tue, 07 Jan 2020 05:32:19 -0800 (PST)
-Received: from xps13.intranet.net (82-64-122-65.subs.proxad.net. [82.64.122.65])
-        by smtp.googlemail.com with ESMTPSA id m3sm75970007wrs.53.2020.01.07.05.32.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jan 2020 05:32:18 -0800 (PST)
-Subject: Re: [RPI 3B+ / TSO / lan78xx ]
-From:   RENARD Pierre-Francois <pfrenard@gmail.com>
-To:     nsaenzjulienne@suse.de, woojung.huh@microchip.com,
-        UNGLinuxDriver@microchip.com, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, stefan.wahren@i2se.com
-References: <5267da21-8f12-2750-c0c5-4ed31b03833b@gmail.com>
-Message-ID: <78b94ba2-9a87-78bb-8916-e6ef5a0668ae@gmail.com>
-Date:   Tue, 7 Jan 2020 14:32:17 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=JXRYv9+UcfxN9G9rRDARlLgJ3UdPoCZZf5aUdAOiYv0=;
+        b=tXwOexJMACroS5QRQzH67wfnyLBP8+0HLrv5FJc41n3SfzoVda6zu8TkxUUuybmpig
+         YeKyHKfRBa+QCPmESUyt1xRkzKfvyw1VihOanL+Ia77A9k5jIK0df7yIgl8tmYQhwG3B
+         W1iJcp+eJ/byZcHENM3iBlqED9VT+NTVZ4w6R0gMymTWZUlSKIO5fKpHlb0ohmjhMwi1
+         jlufT3Bba3dPpAQj98P84t9LmqiGIHkHoblrxangimtpy4aSFI9tvZUvKX9bSEAy4Bab
+         G7sdf7Ct5tmIx4fUCcRY6jG1PYu0uEMdjtFB9/WkGI/+N8WQR3CBk+Bolk+NuAmbwfju
+         4vjQ==
+X-Gm-Message-State: APjAAAVLdq0BFkKSg3lyzoP0u30aSUmtMgrue2qIknwvtZDipNq4nDpI
+        SSHbgXcFo6aFFYvQw4F0q+ElormUA88LCFAiodMmH076d3iX
+X-Google-Smtp-Source: APXvYqxKkhdPR0xm9EcRZmWKEtDhE8VQWFimXadzllxS5Y/O9MeNoWuwVrfMpDBrpfdQ68XDHY/NiobQs4BMJmmD1Fk86J0JwM12
 MIME-Version: 1.0
-In-Reply-To: <5267da21-8f12-2750-c0c5-4ed31b03833b@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+X-Received: by 2002:a92:168d:: with SMTP id 13mr82513972ilw.253.1578406450072;
+ Tue, 07 Jan 2020 06:14:10 -0800 (PST)
+Date:   Tue, 07 Jan 2020 06:14:10 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c4972d059b8d6305@google.com>
+Subject: WARNING in port100_send_cmd_async/usb_submit_urb (2)
+From:   syzbot <syzbot+e7687d3c762f267e48f7@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, ingrassia@epigenesys.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello,
 
-Hello all
+syzbot found the following crash on:
 
-I am facing an issue related to Raspberry PI 3B+ and onboard ethernet card.
+HEAD commit:    ecdf2214 usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=1727e059e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b06a019075333661
+dashboard link: https://syzkaller.appspot.com/bug?extid=e7687d3c762f267e48f7
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17e6d885e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=178b549ee00000
 
-When doing a huge transfer (more than 1GB) in a row, transfer hanges and 
-failed after a few minutes.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+e7687d3c762f267e48f7@syzkaller.appspotmail.com
+
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+------------[ cut here ]------------
+URB 000000007bfb3747 submitted while active
+WARNING: CPU: 1 PID: 22 at drivers/usb/core/urb.c:363  
+usb_submit_urb+0x10c1/0x13b0 drivers/usb/core/urb.c:363
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 22 Comm: kworker/1:1 Not tainted 5.5.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xef/0x16e lib/dump_stack.c:118
+  panic+0x2aa/0x6e1 kernel/panic.c:221
+  __warn.cold+0x2f/0x30 kernel/panic.c:582
+  report_bug+0x27b/0x2f0 lib/bug.c:195
+  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+  fixup_bug arch/x86/kernel/traps.c:169 [inline]
+  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
+  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
+  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
+RIP: 0010:usb_submit_urb+0x10c1/0x13b0 drivers/usb/core/urb.c:363
+Code: 89 de e8 72 92 e7 fd 84 db 0f 85 42 f6 ff ff e8 35 91 e7 fd 4c 89 fe  
+48 c7 c7 00 59 15 86 c6 05 20 c3 4e 04 01 e8 e7 ad bc fd <0f> 0b e9 20 f6  
+ff ff c7 44 24 14 01 00 00 00 e9 d7 f6 ff ff 41 bd
+RSP: 0018:ffff8881d8c370e0 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff81295dad RDI: ffffed103b186e0e
+RBP: ffff8881d32c5f80 R08: ffff8881da24e200 R09: ffffed103b66439f
+R10: ffffed103b66439e R11: ffff8881db321cf3 R12: ffff8881d5aabb00
+R13: 00000000fffffff0 R14: ffff8881d2037448 R15: ffff8881d5aab800
+  port100_send_frame_async drivers/nfc/port100.c:780 [inline]
+  port100_send_cmd_async+0x801/0xb80 drivers/nfc/port100.c:876
+  port100_send_cmd_sync+0xaa/0x130 drivers/nfc/port100.c:916
+  port100_set_command_type drivers/nfc/port100.c:987 [inline]
+  port100_probe+0xa12/0xea0 drivers/nfc/port100.c:1567
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0x1480/0x1c20 drivers/base/core.c:2487
+  usb_set_configuration+0xe67/0x1740 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0x1480/0x1c20 drivers/base/core.c:2487
+  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2537
+  hub_port_connect drivers/usb/core/hub.c:5184 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
+  port_event drivers/usb/core/hub.c:5470 [inline]
+  hub_event+0x1e59/0x3860 drivers/usb/core/hub.c:5552
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2264
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2410
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
 
-I have two ways to reproduce this issue
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-
-using NFS (v3 or v4)
-
-     dd if=/dev/zero of=/NFSPATH/file bs=4M count=1000 status=progress
-
-
-     we can see that at some point dd hangs and becomes non interrutible 
-(no way to ctrl-c it or kill it)
-
-     after afew minutes, dd dies and a bunch of NFS server not 
-responding / NFS server is OK are seens into the journal
-
-
-Using SCP
-
-     dd if=/dev/zero of=/tmp/file bs=4M count=1000
-
-     scp /tmp/file user@server:/directory
-
-
-     scp hangs after 1GB and after a few minutes scp is failing with 
-message "client_loop: send disconnect: Broken pipe lostconnection"
-
-
-
-
-It appears, this is a known bug relatted to TCP Segmentation Offload & 
-Selective Acknowledge.
-
-disabling this TSO (ethtool -K eth0 tso off & ethtool -K eth0 gso off) 
-solves the issue.
-
-A patch has been created to disable the feature by default by the 
-raspberry team and is by default applied wihtin raspbian.
-
-comment from the patch :
-
-/* TSO seems to be having some issue with Selective Acknowledge (SACK) that
-  * results in lost data never being retransmitted.
-  * Disable it by default now, but adds a module parameter to enable it for
-  * debug purposes (the full cause is not currently understood).
-  */
-
-
-For reference you can find
-
-a link to the issue I created yesterday : 
-https://github.com/raspberrypi/linux/issues/3395
-
-links to raspberry dev team : 
-https://github.com/raspberrypi/linux/issues/2482 & 
-https://github.com/raspberrypi/linux/issues/2449
-
-
-
-If you need me to test things, or give you more informations, I ll be 
-pleased to help.
-
-
-
-Fox
-
-
-PS : this is a resent in with plain text because vger rejected the first 
-one with html formating ...:)
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
