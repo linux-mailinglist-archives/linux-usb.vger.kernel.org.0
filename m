@@ -2,194 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF3F1320BB
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 08:51:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C80F513217E
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 09:37:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727514AbgAGHvq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jan 2020 02:51:46 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:50798 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726492AbgAGHvq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 02:51:46 -0500
-Received: by mail-wm1-f65.google.com with SMTP id a5so17834135wmb.0
-        for <linux-usb@vger.kernel.org>; Mon, 06 Jan 2020 23:51:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=unipv-it.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=JeiqdmtUMyWOTftvNLubB0ZlSpHFDswOnC4RjW6U6GE=;
-        b=SlkuC2H9D5qWyaQ8qcx3F+xQydYl+QJcDgYjhvL4rtZQwX4HIrQo4UgAuLTY7BfB75
-         PUeh0Dq+H0Lmi7EtK7cBvCCoww5Kp3sGm9mU/3mOkZSw69UhjD+dCEyocHKQzVFBOd/f
-         1hwCcKM1Jvr1F0sNP7oAEe9J0ArUT1iAGTQbRCmMofqUGZfdbWQ22aWbnK6QGFNM/taU
-         qqGf8Zcd7yvzxKWY8xV2IPz3IF3sQfTXtFPQdTwi3R8+4tYmOFdNmQIeynklFPby/TXs
-         f4cDx6dhVDp86rGW02rMNHn6GVKqhBo0PIficdDSpRPP8cpoOPEqbZuJ0bNnB52K6viV
-         oc7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=JeiqdmtUMyWOTftvNLubB0ZlSpHFDswOnC4RjW6U6GE=;
-        b=Yq2TAA7am5+AeQ26OTA6tZmPs7L1R+3PnbQOEGcC8JHtMS4l2IelROwRMRKdVXPP9g
-         //YJ5a/u/v0c8zth9aXiNme9PN9C11q1U6k6wSFNKxzvpxaB51lF/PVFw3Vz6dXyuxrQ
-         fyhTS5jqfd0MrUBfJrTijD6OASuNLLf08obgex2cAlLCFJjTyfv8b4e6NNlBnoRdwk5z
-         wHHDk6S8S7ZW7NepQEuCItvD2jgDKEVG4AE61ylGcfuzJZAJ9an4lmJ/WKVyi1NWq9qo
-         uJxKFzYHYIPU9IEMN6aYhZkfkNSsBDiJ7wcaD+Xfjk2Jl5x8qSUUrUbzBna1AeTsJ4DT
-         8OAw==
-X-Gm-Message-State: APjAAAVNgad3qBQ3422rQO/h54onSrKdS/e5386xt4JoGke0igMHbItB
-        142qbbCam+ilbCEM6ns5Z7bhNA==
-X-Google-Smtp-Source: APXvYqwbTzi4da5sYoYBNersGjGd0bPEnenG66OEdAADR5SYHnHw2lSWqTjx0cyI8PP76Y14jUTwNg==
-X-Received: by 2002:a05:600c:2150:: with SMTP id v16mr35755682wml.156.1578383503183;
-        Mon, 06 Jan 2020 23:51:43 -0800 (PST)
-Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
-        by smtp.gmail.com with ESMTPSA id s10sm76197003wrw.12.2020.01.06.23.51.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jan 2020 23:51:42 -0800 (PST)
-Message-ID: <5bd51904b1b6511748c5454bce437bdc038eeb1f.camel@unipv.it>
-Subject: Re: AW: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-From:   Andrea Vai <andrea.vai@unipv.it>
-To:     Ming Lei <ming.lei@redhat.com>, "Theodore Y. Ts'o" <tytso@mit.edu>
-Cc:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Date:   Tue, 07 Jan 2020 08:51:41 +0100
-In-Reply-To: <20191226083706.GA17974@ming.t460p>
-References: <20191223130828.GA25948@ming.t460p>
-         <20191223162619.GA3282@mit.edu>
-         <4c85fd3f2ec58694cc1ff7ab5c88d6e11ab6efec.camel@unipv.it>
-         <20191223172257.GB3282@mit.edu>
-         <bb5d395fe47f033be0b8ed96cbebf8867d2416c4.camel@unipv.it>
-         <20191223195301.GC3282@mit.edu> <20191224012707.GA13083@ming.t460p>
-         <20191225051722.GA119634@mit.edu> <20191226022702.GA2901@ming.t460p>
-         <20191226033057.GA10794@mit.edu> <20191226083706.GA17974@ming.t460p>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.5 (3.32.5-1.fc30) 
+        id S1727677AbgAGIgx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jan 2020 03:36:53 -0500
+Received: from mga14.intel.com ([192.55.52.115]:52636 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726485AbgAGIgx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 Jan 2020 03:36:53 -0500
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Jan 2020 00:36:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,405,1571727600"; 
+   d="scan'208";a="225629527"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 07 Jan 2020 00:36:28 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 07 Jan 2020 10:36:28 +0200
+Date:   Tue, 7 Jan 2020 10:36:28 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Colin King <colin.king@canonical.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Ajay Gupta <ajayg@nvidia.com>, linux-usb@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] usb: typec: ucsi: fix spelling mistake "connetor"
+ -> "connector"
+Message-ID: <20200107083628.GA7440@kuha.fi.intel.com>
+References: <20200106111124.28100-1-colin.king@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200106111124.28100-1-colin.king@canonical.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Il giorno gio, 26/12/2019 alle 16.37 +0800, Ming Lei ha scritto:
-> On Wed, Dec 25, 2019 at 10:30:57PM -0500, Theodore Y. Ts'o wrote:
-> > On Thu, Dec 26, 2019 at 10:27:02AM +0800, Ming Lei wrote:
-> > > Maybe we need to be careful for HDD., since the request count in
-> scheduler
-> > > queue is double of in-flight request count, and in theory NCQ
-> should only
-> > > cover all in-flight 32 requests. I will find a sata HDD., and
-> see if
-> > > performance drop can be observed in the similar 'cp' test.
-> > 
-> > Please try to measure it, but I'd be really surprised if it's
-> > significant with with modern HDD's.
+On Mon, Jan 06, 2020 at 11:11:24AM +0000, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 > 
-> Just find one machine with AHCI SATA, and run the following xfs
-> overwrite test:
+> There is a spelling mistake in a dev_dbg message. Fix it.
 > 
-> #!/bin/bash
-> DIR=$1
-> echo 3 > /proc/sys/vm/drop_caches
-> fio --readwrite=write --filesize=5g --overwrite=1 --
-> filename=$DIR/fiofile \
->         --runtime=60s --time_based --ioengine=psync --direct=0 --
-> bs=4k
-> 		--iodepth=128 --numjobs=2 --group_reporting=1 --
-> name=overwrite
-> 
-> FS is xfs, and disk is LVM over AHCI SATA with NCQ(depth 32),
-> because the
-> machine is picked up from RH beaker, and it is the only disk in the
-> box.
-> 
-> #lsblk
-> NAME                            MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
-> sda                               8:0    0 931.5G  0 disk 
-> ├─sda1                            8:1    0     1G  0 part /boot
-> └─sda2                            8:2    0 930.5G  0 part 
->   ├─rhel_hpe--ml10gen9--01-root 253:0    0    50G  0 lvm  /
->   ├─rhel_hpe--ml10gen9--01-swap 253:1    0   3.9G  0 lvm  [SWAP]
->   └─rhel_hpe--ml10gen9--01-home 253:2    0 876.6G  0 lvm  /home
-> 
-> 
-> kernel: 3a7ea2c483a53fc("scsi: provide mq_ops->busy() hook") which
-> is
-> the previous commit of f664a3cc17b7 ("scsi: kill off the legacy IO
-> path").
-> 
->             |scsi_mod.use_blk_mq=N |scsi_mod.use_blk_mq=Y |
-> -----------------------------------------------------------
-> throughput: |244MB/s               |169MB/s               |
-> -----------------------------------------------------------
-> 
-> Similar result can be observed on v5.4 kernel(184MB/s) with same
-> test
-> steps.
-> 
-> 
-> > That because they typically have
-> > a queue depth of 16, and a max_sectors_kb of 32767 (e.g., just
-> under
-> > 32 MiB).  Sort seeks are typically 1-2 ms, with full stroke seeks
-> > 8-10ms.  Typical sequential write speeds on a 7200 RPM drive is
-> > 125-150 MiB/s.  So suppose every other request sent to the HDD is
-> from
-> > the other request stream.  The disk will chose the 8 requests from
-> its
-> > queue that are contiguous, and so it will be writing around 256
-> MiB,
-> > which will take 2-3 seconds.  If it then needs to spend between 1
-> and
-> > 10 ms seeking to another location of the disk, before it writes
-> the
-> > next 256 MiB, the worst case overhead of that seek is 10ms / 2s,
-> or
-> > 0.5%.  That may very well be within your measurements' error bars.
-> 
-> Looks you assume that disk seeking just happens once when writing
-> around
-> 256MB. This assumption may not be true, given all data can be in
-> page
-> cache before writing. So when two tasks are submitting IOs
-> concurrently,
-> IOs from each single task is sequential, and NCQ may order the
-> current batch
-> submitted from the two streams. However disk seeking may still be
-> needed
-> for the next batch handled by NCQ.
-> 
-> > And of course, note that in real life, we are very *often* writing
-> to
-> > multiple files in parallel, for example, during a "make -j16"
-> while
-> > building the kernel.  Writing a single large file is certainly
-> > something people do (but even there people who are burning a 4G
-> DVD
-> > rip are often browsing the web while they are waiting for it to
-> > complete, and the browser will be writing cache files, etc.).  So
-> > whether or not this is something where we should be stressing over
-> > this specific workload is going to be quite debateable.
-> 
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 
-Hi,
-  is there any update on this? Sorry if I am making noise, but I would
-like to help to improve the kernel (or fix it) if I can help.
-Otherwise, please let me know how to consider this case,
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Thanks, and bye
-Andrea
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 466bd8afceea..1b1e36178317 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -669,7 +669,7 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num)
+>  	struct ucsi_connector *con = &ucsi->connector[num - 1];
+>  
+>  	if (!(ucsi->ntfy & UCSI_ENABLE_NTFY_CONNECTOR_CHANGE)) {
+> -		dev_dbg(ucsi->dev, "Bogus connetor change event\n");
+> +		dev_dbg(ucsi->dev, "Bogus connector change event\n");
+>  		return;
+>  	}
+>  
+> -- 
+> 2.24.0
 
+-- 
+heikki
