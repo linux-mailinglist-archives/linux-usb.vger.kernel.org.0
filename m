@@ -2,100 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09496133520
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 22:44:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9C013359A
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 23:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727170AbgAGVoI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jan 2020 16:44:08 -0500
-Received: from mout.kundenserver.de ([217.72.192.74]:33119 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726594AbgAGVoI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 16:44:08 -0500
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.145]) with ESMTPA (Nemesis) id
- 1MqJyX-1jTAsg2bXn-00nOpV; Tue, 07 Jan 2020 22:43:57 +0100
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Oleksandr Natalenko <oleksandr@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Colin Ian King <colin.king@canonical.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: host: oxu210hp-hcd: fix gcc warning
-Date:   Tue,  7 Jan 2020 22:43:46 +0100
-Message-Id: <20200107214354.1008937-1-arnd@arndb.de>
-X-Mailer: git-send-email 2.20.0
+        id S1727213AbgAGWTB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jan 2020 17:19:01 -0500
+Received: from mail-io1-f70.google.com ([209.85.166.70]:55913 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727127AbgAGWTB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 17:19:01 -0500
+Received: by mail-io1-f70.google.com with SMTP id z21so771177iob.22
+        for <linux-usb@vger.kernel.org>; Tue, 07 Jan 2020 14:19:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=EdYBfb9elhNzCS6nVfUUeF91E19TZISwHJvUe8cvhIY=;
+        b=O5CFnZXM0sD4LVa8fWmhbf5qGxkNQx7gsg88L7p41VtkmU7klU25auKWLBU6ekn6q6
+         40n/Ap/3Sbt1D/eHjNqEo41qzX0wzyJbuSnQ4j/NhWPwVMOZ5fZashVAU+XXMEv3hk9Q
+         gKpbuwZ37AxBxSwt8bT9qJt1fw4FkLDQRVb7QRzozwkbeTC8ePb8T9z677MVSiY3WXGS
+         lzU1wvV95SoMJLzofBgYchvES9zGGwMC+QHiYQGEvlFBaK6vZso9mwKPJw//6BGYUcqG
+         FBHV89oxotHk01cld96P3oG7YZYQpHhf6xPMnw9Leqrns3LyQrIIJYWr5+P9uvZL3lc8
+         v3vQ==
+X-Gm-Message-State: APjAAAVTS56bQ09JiN9ow3frO84pfWNyzHaglPmVeCAs/fyieM8RVRMe
+        dnGLEZ5qsVIMek/+rvpmNPKn4tIqQiRG1FzLp8f7elAJrSMm
+X-Google-Smtp-Source: APXvYqw4ziw6b0NOCP0C+XN7LSo85RyAPU0ikCkIYra/xOmqW2R+353h9sekM1tp7raPU7gtiJfNXipkNXEZP28R2uljf4K2iqbm
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:u/ytrvgdvpHgxcX8GjwpWa6Af54BI3w1VDFyYZI9vnfeynUjOy3
- ofGBPPWyyjdYVlh872IwYSN7PvKXmMh0PRXqYLWKWO5881hshyH2kNXawfh/aSluCSu2J+Z
- XWYRqos4HKG1iWxAjXnJQm79u3Oms+nN5h8cCzFzvrY0Q14c4qYYxxBSWqQvVU7SgjuxzIc
- i7TGH5kInsgBc3rkL8bWw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ZMoTU0wa2ac=:lvE9Be0DhiEfjAyWJoDnPO
- qYN/G9FRzWWHg4OyIzjCfzC5K6R3ylqkk7fp531bS+lsK2HLb0zkXpnvdXn9tkHWCZjeC5uqx
- cPJkGyD3ZoXwi8hORzkLCMVmXV4GdzEDW+XoTXKvv4VQIv/BMyzTmgjAUZqXMCn5wKDLICIFI
- e0Kjof50BTUdEpLjGJwU8yzG+HGVCRrV056H734Nt3Jw4sWCrWdvf+amUbYIqObr85oNAGt49
- H3ca/1Op3PgiFiqwMFb/yTVSv2VN5FXSGw3Ab2A44RXB9YzYXXhNFH5i6kuPOdPqEFT01QFkc
- YEdugzRemJxdJeBjZLyJ0NPJ8CgfTkoFI9FJp7NTNqm1qvDyjM/jdtKhuJQAuJrs6V0wobWk1
- VebsZQm15DVkfb6UxSxr8JlVcPsTiIlkpgXyIlVnvsYCTsGPtFT8EZm4V7Gsu+wl9MRfqI/0q
- 6/cV3rYlg0XJbxMh2UGX9/DTPO9Xk++rKtthJ8v0JtUkm33t/0MTMjsdgxR5z8y5/aWpbcESU
- MN3jQVWkHh2aC59Pl3kCE0u5f/mCrAs+/1C4DT5Mr94XsNSb1eE09NnoTE2ovEJMUQ3RM+PhC
- Zm04nmceuVCGZlTLHBc2Y5KwmwOWNip4H9t5ks9ugG3vb8OsqgZY2IPfy+uChMZukkW+CcPfz
- qDzJouVKzJxBUwtPu/1EI5DuMiiAEPyqBSoWeucfSR9iDCmDq/O9jVr2fP6JyWfsoFWRGTS0+
- b/+22nr9dEZYovv/+YBBousiscNu/O3DzhFsSSrK9OIAHxK3b/QOTBdNAAYVeL1Yb3XRg7Zbv
- 7ON7v17xYK/ol8gwun7NuiRjsPoCtKvfDhnwS/h+qe44oXtwK597sxmjE6wedArQAz/Bbb022
- QzMNkx7ahA9JoNmzsLNw==
+X-Received: by 2002:a5e:dd4c:: with SMTP id u12mr980111iop.144.1578435541031;
+ Tue, 07 Jan 2020 14:19:01 -0800 (PST)
+Date:   Tue, 07 Jan 2020 14:19:01 -0800
+In-Reply-To: <Pine.LNX.4.44L0.2001071624021.1567-100000@iolanthe.rowland.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b962af059b9429bd@google.com>
+Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (2)
+From:   syzbot <syzbot+10e5f68920f13587ab12@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, ingrassia@epigenesys.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-gcc -O3 warns about correct code:
+Hello,
 
-    inlined from 'oxu_hub_control.constprop' at drivers/usb/host/oxu210hp-hcd.c:3652:3:
-include/linux/string.h:411:9: error: argument 1 null where non-null expected [-Werror=nonnull]
-  return __builtin_memset(p, c, size);
-         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/usb/host/oxu210hp-hcd.c: In function 'oxu_hub_control.constprop':
-include/linux/string.h:411:9: note: in a call to built-in function '__builtin_memset'
+syzbot has tested the proposed patch but the reproducer still triggered  
+crash:
+WARNING in usbhid_raw_request/usb_submit_urb
 
-Expand the code slightly to let gcc better understand it and
-not warn any more.
+------------[ cut here ]------------
+usb 4-1: BOGUS urb xfer, pipe 2 != type 2
+WARNING: CPU: 0 PID: 4185 at drivers/usb/core/urb.c:478  
+usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:478
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 4185 Comm: syz-executor.3 Not tainted 5.5.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xef/0x16e lib/dump_stack.c:118
+  panic+0x2aa/0x6e1 kernel/panic.c:221
+  __warn.cold+0x2f/0x30 kernel/panic.c:582
+  report_bug+0x27b/0x2f0 lib/bug.c:195
+  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+  fixup_bug arch/x86/kernel/traps.c:169 [inline]
+  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
+  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
+  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
+RIP: 0010:usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:478
+Code: 4d 85 ed 74 2c e8 68 90 e7 fd 4c 89 f7 e8 60 2c 1d ff 41 89 d8 44 89  
+e1 4c 89 ea 48 89 c6 48 c7 c7 80 59 15 86 e8 10 ad bc fd <0f> 0b e9 20 f4  
+ff ff e8 3c 90 e7 fd 4c 89 f2 48 b8 00 00 00 00 00
+RSP: 0018:ffff8881c0017b30 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff81295dad RDI: ffffed1038002f58
+RBP: 0000000000000000 R08: ffff8881cf3b6200 R09: fffffbfff11f1ec0
+R10: fffffbfff11f1ebf R11: ffffffff88f8f5ff R12: 0000000000000002
+R13: ffff8881d884d0a8 R14: ffff8881da3c70a0 R15: ffff8881ca8f1c00
+  usb_start_wait_urb+0x108/0x2b0 drivers/usb/core/message.c:57
+  usb_internal_control_msg drivers/usb/core/message.c:101 [inline]
+  usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:152
+  usbhid_set_raw_report drivers/hid/usbhid/hid-core.c:917 [inline]
+  usbhid_raw_request+0x21f/0x640 drivers/hid/usbhid/hid-core.c:1265
+  hid_hw_raw_request include/linux/hid.h:1079 [inline]
+  hidraw_send_report+0x296/0x500 drivers/hid/hidraw.c:151
+  hidraw_write+0x34/0x50 drivers/hid/hidraw.c:164
+  __vfs_write+0x76/0x100 fs/read_write.c:494
+  vfs_write+0x262/0x5c0 fs/read_write.c:558
+  ksys_write+0x127/0x250 fs/read_write.c:611
+  do_syscall_64+0xb6/0x5c0 arch/x86/entry/common.c:294
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x45a919
+Code: ad b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 7b b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007f996c966c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 000000000045a919
+RDX: 0000000000000002 RSI: 0000000020000040 RDI: 0000000000000007
+RBP: 000000000075bfc8 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f996c9676d4
+R13: 00000000004cbe90 R14: 00000000004e5ce0 R15: 00000000ffffffff
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
-Fixes: mmtom ("init/Kconfig: enable -O3 for all arches")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/usb/host/oxu210hp-hcd.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/host/oxu210hp-hcd.c b/drivers/usb/host/oxu210hp-hcd.c
-index fe09b8626329..120666a0d590 100644
---- a/drivers/usb/host/oxu210hp-hcd.c
-+++ b/drivers/usb/host/oxu210hp-hcd.c
-@@ -2783,11 +2783,15 @@ static void ehci_port_power(struct oxu_hcd *oxu, int is_on)
- 		return;
- 
- 	oxu_dbg(oxu, "...power%s ports...\n", is_on ? "up" : "down");
--	for (port = HCS_N_PORTS(oxu->hcs_params); port > 0; )
--		(void) oxu_hub_control(oxu_to_hcd(oxu),
--				is_on ? SetPortFeature : ClearPortFeature,
--				USB_PORT_FEAT_POWER,
--				port--, NULL, 0);
-+	for (port = HCS_N_PORTS(oxu->hcs_params); port > 0; ) {
-+		if (is_on)
-+			oxu_hub_control(oxu_to_hcd(oxu), SetPortFeature,
-+				USB_PORT_FEAT_POWER, port--, NULL, 0);
-+		else
-+			oxu_hub_control(oxu_to_hcd(oxu), ClearPortFeature,
-+				USB_PORT_FEAT_POWER, port--, NULL, 0);
-+	}
-+
- 	msleep(20);
- }
- 
--- 
-2.20.0
+Tested on:
+
+commit:         ecdf2214 usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=12b2e656e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b06a019075333661
+dashboard link: https://syzkaller.appspot.com/bug?extid=10e5f68920f13587ab12
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=16c162aee00000
 
