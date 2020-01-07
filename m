@@ -2,68 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A16C132AD5
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 17:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3445132C71
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 18:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728156AbgAGQNR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jan 2020 11:13:17 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:39313 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727559AbgAGQNR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 11:13:17 -0500
-Received: by mail-lf1-f65.google.com with SMTP id y1so118268lfb.6;
-        Tue, 07 Jan 2020 08:13:15 -0800 (PST)
+        id S1728457AbgAGRE2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jan 2020 12:04:28 -0500
+Received: from mail-wr1-f41.google.com ([209.85.221.41]:33947 "EHLO
+        mail-wr1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728365AbgAGRE1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 12:04:27 -0500
+Received: by mail-wr1-f41.google.com with SMTP id t2so258338wrr.1;
+        Tue, 07 Jan 2020 09:04:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ymg9tFhRWBlYC+u+Mak0dVXKfWnjuwdtb1AElirNlro=;
-        b=ZJF0sSU3ozdLy8r2JHnOWFm4CsgC2u7WWLvFAqvX8M+DlLjjE1D+jLaQD6zP82uWWB
-         3IHKO46Gj+0Q++15yyc23fS4nrSK168BuzRwpNcl37LRATkan90NNwJCdM1F4pXdw1B6
-         57adez0n6w0vrRusR8p89wkdiYGb9vvgiByRUUB3Mg9Ox2QC+KV7ZUxpR7btJXkaTcxt
-         dRyigVTF8OQN59tlZ8Z61KCdlI54RaZWZXsOKSi1DWLO6vdy8tUjF2p2zaSiGQvFz8Jj
-         UuYP09fSfJSdHGeewe42mtUReKHJH1FtDiCfXb+PuL2NPib0G9XikhzKPf9LoDy4TaNp
-         qjuA==
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=IYfcm5h1cwl8bkXOp1RiSEGJOTmPBd55Dmd0o2oSeVY=;
+        b=iUNmmeSuzydmOzkjxeb7cBBjSaJZwUMi4TFoMv6AkTIkb/2kZnFionSLEChAR0x6Fr
+         78+sa1u3EOMp0UH2Nx6aWwNh9m9Q9GmTZFc461po2HquNCB6UATaRwf4f08kwKnyXj/t
+         uAFuH5DMQ+cwRAQkMyPArGajdkyuiCSrfukSXgDNGwLnG7PH6Y6iwajBZtg6wlipMBrB
+         HYdl6+O2IOocjapDE9AkyBfW/QQkAW3LppqCKjOotj9oWcKGZBk+F579wSSMToKKeRim
+         LPZh/Z+EZFxgMS008ce4vYgUlmlf34Pw2XmZ2950ucUvlgzJuo051KNKKebsers/pLMi
+         m8kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:subject:to:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=ymg9tFhRWBlYC+u+Mak0dVXKfWnjuwdtb1AElirNlro=;
-        b=qc6oJygq5VWH9LJrLr/MQkxEV34xO7yWni2v8De6Dt/zEDz7UNXu9lCs85NC2+vLaS
-         E4hBCNLsyxb+GDf/XNwMpHTOx6jwhFgl5qdPVNX0Z+ymUZwsB5RVwIfppGfM7QoV2iw6
-         8FWHBSulC0HSdltZbvF8wUq4/2UvUwvQ5EDtsbBwQpeoiE6tc9u8MCjYqPXXrN9iG7ZP
-         3wUnQTgaNnCRsTJ0Wl6ojJlMeDFYmmb+N8gY1l//XGAKhz5uuE/rDPFcFq0rApwe+biO
-         /ps/Mpjwx6o9N1wF7Hwdr/g9Zw4gVoh9qPXgcGUyTopSJdTbza93c/VuKUPuOw6kmFYF
-         Ul2A==
-X-Gm-Message-State: APjAAAUoia2VrvyUR56p3A757VHXylketfSWZ9q8oMydAKPCQ/ziV5P8
-        BjJ4uflzrdTmQjjBpl3Lp82UJdyo
-X-Google-Smtp-Source: APXvYqwncxIuEnNaBcuSFBD5ZgFQQ+d1c9tv03aE3H2OKwXUAxS9g9k6dKPyff5Sn/NM8qT502+u+Q==
-X-Received: by 2002:a19:888:: with SMTP id 130mr117981lfi.167.1578413594903;
-        Tue, 07 Jan 2020 08:13:14 -0800 (PST)
-Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id n30sm78066lfi.54.2020.01.07.08.13.13
+        bh=IYfcm5h1cwl8bkXOp1RiSEGJOTmPBd55Dmd0o2oSeVY=;
+        b=JEpPJlYKWt2CkvCuf9hU1rFaTgexAUaaBW+7wXexaHVHdDMpCPzoaWOnLWWhZYW/d6
+         YKdBHqsCW4nKGZClAkaE+1KgK99X+4g+gHl5fEzljqdhgS07uwtFpBT4KFvCVM0tE4Ih
+         NImTTDIAKxZbuq/T/FBJP9JOBHNlfpeFewuVwK29S1qiWzp1JvJqkyWTjSuRb+yIwBKK
+         W0V9+XUygRLB5lCItfFdvoVOMDTyz1QEhovncqsJWISKR/DkOhpGHRuvUe+kvFCEP3JU
+         YdsB66tb6ZmkDSSqjQYXyklPSfem6uO4hgBjZRvlBe3uQwlh2uFrgRDpJm6R2JN4TWgV
+         PpyA==
+X-Gm-Message-State: APjAAAWMceknJZoa1v/QhugJ/XbfKvkx/0sdp1tlooOMnRf4tOXhPlp2
+        fjr/Pcxu20wZptgCCV3DEdM3SIx1
+X-Google-Smtp-Source: APXvYqySIve4GD71YKIDS+ZHu0rPQM3EZ0gXw1AB2UPcUSIEWhuQfQhTFe5d2dZcmPPwZHqjWi+Y3w==
+X-Received: by 2002:a5d:6284:: with SMTP id k4mr46915wru.398.1578416665218;
+        Tue, 07 Jan 2020 09:04:25 -0800 (PST)
+Received: from [192.168.8.147] (118.164.185.81.rev.sfr.net. [81.185.164.118])
+        by smtp.gmail.com with ESMTPSA id n1sm541472wrw.52.2020.01.07.09.04.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jan 2020 08:13:13 -0800 (PST)
-Subject: Re: [PATCH v4 20/20] usb: host: ehci-tegra: Remove unused fields from
- tegra_ehci_hcd
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <Pine.LNX.4.44L0.2001061014430.1514-100000@iolanthe.rowland.org>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <b5c262a9-4a7f-6293-e3c4-31ba4822cd12@gmail.com>
-Date:   Tue, 7 Jan 2020 19:13:12 +0300
+        Tue, 07 Jan 2020 09:04:24 -0800 (PST)
+Subject: Re: [RPI 3B+ / TSO / lan78xx ]
+To:     RENARD Pierre-Francois <pfrenard@gmail.com>,
+        nsaenzjulienne@suse.de, woojung.huh@microchip.com,
+        UNGLinuxDriver@microchip.com, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, stefan.wahren@i2se.com
+References: <5267da21-8f12-2750-c0c5-4ed31b03833b@gmail.com>
+ <78b94ba2-9a87-78bb-8916-e6ef5a0668ae@gmail.com>
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+Message-ID: <863777f2-3a7b-0736-d0a4-d9966bea3f96@gmail.com>
+Date:   Tue, 7 Jan 2020 09:04:23 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <Pine.LNX.4.44L0.2001061014430.1514-100000@iolanthe.rowland.org>
+In-Reply-To: <78b94ba2-9a87-78bb-8916-e6ef5a0668ae@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -72,40 +67,71 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-06.01.2020 18:16, Alan Stern пишет:
-> On Mon, 6 Jan 2020, Dmitry Osipenko wrote:
-> 
->> There are few stale fields in tegra_ehci_hcd structure, let's remove them.
->>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/usb/host/ehci-tegra.c | 2 --
->>  1 file changed, 2 deletions(-)
->>
->> diff --git a/drivers/usb/host/ehci-tegra.c b/drivers/usb/host/ehci-tegra.c
->> index 1eb94205a5ac..d6433f206c17 100644
->> --- a/drivers/usb/host/ehci-tegra.c
->> +++ b/drivers/usb/host/ehci-tegra.c
->> @@ -42,12 +42,10 @@ struct tegra_ehci_soc_config {
->>  };
->>  
->>  struct tegra_ehci_hcd {
->> -	struct tegra_usb_phy *phy;
->>  	struct clk *clk;
->>  	struct reset_control *rst;
->>  	int port_resuming;
->>  	bool needs_double_reset;
->> -	enum tegra_usb_phy_port_speed port_speed;
->>  };
->>  
->>  static int tegra_reset_usb_controller(struct platform_device *pdev)
-> 
-> For patches 2, 19, and 20:
-> 
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> 
-> It's nice to see that patch 2 makes the sequence of events in 
-> tegra_ehci_remove() exactly the same as the failure pathway in 
-> tegra_ehci_probe().
 
-Thank you very much for taking a look at the patches!
+
+On 1/7/20 5:32 AM, RENARD Pierre-Francois wrote:
+> 
+> Hello all
+> 
+> I am facing an issue related to Raspberry PI 3B+ and onboard ethernet card.
+> 
+> When doing a huge transfer (more than 1GB) in a row, transfer hanges and failed after a few minutes.
+> 
+> 
+> I have two ways to reproduce this issue
+> 
+> 
+> using NFS (v3 or v4)
+> 
+>     dd if=/dev/zero of=/NFSPATH/file bs=4M count=1000 status=progress
+> 
+> 
+>     we can see that at some point dd hangs and becomes non interrutible (no way to ctrl-c it or kill it)
+> 
+>     after afew minutes, dd dies and a bunch of NFS server not responding / NFS server is OK are seens into the journal
+> 
+> 
+> Using SCP
+> 
+>     dd if=/dev/zero of=/tmp/file bs=4M count=1000
+> 
+>     scp /tmp/file user@server:/directory
+> 
+> 
+>     scp hangs after 1GB and after a few minutes scp is failing with message "client_loop: send disconnect: Broken pipe lostconnection"
+> 
+> 
+> 
+> 
+> It appears, this is a known bug relatted to TCP Segmentation Offload & Selective Acknowledge.
+> 
+> disabling this TSO (ethtool -K eth0 tso off & ethtool -K eth0 gso off) solves the issue.
+> 
+> A patch has been created to disable the feature by default by the raspberry team and is by default applied wihtin raspbian.
+> 
+> comment from the patch :
+> 
+> /* TSO seems to be having some issue with Selective Acknowledge (SACK) that
+>  * results in lost data never being retransmitted.
+>  * Disable it by default now, but adds a module parameter to enable it for
+>  * debug purposes (the full cause is not currently understood).
+>  */
+> 
+> 
+> For reference you can find
+> 
+> a link to the issue I created yesterday : https://github.com/raspberrypi/linux/issues/3395
+> 
+> links to raspberry dev team : https://github.com/raspberrypi/linux/issues/2482 & https://github.com/raspberrypi/linux/issues/2449
+> 
+> 
+> 
+> If you need me to test things, or give you more informations, I ll be pleased to help.
+>
+
+
+I doubt TSO and SACK have a serious generic bug like that.
+
+Most likely the TSO implementation on the driver/NIC has a bug .
+
+Anyway you do not provide a kernel version, I am not sure what you expect from us.
