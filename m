@@ -2,130 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F00D132423
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 11:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE781132491
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 12:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727882AbgAGKtq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jan 2020 05:49:46 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:43190 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727589AbgAGKtq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 05:49:46 -0500
-Received: by mail-lj1-f194.google.com with SMTP id a13so54202160ljm.10;
-        Tue, 07 Jan 2020 02:49:44 -0800 (PST)
+        id S1727650AbgAGLNZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jan 2020 06:13:25 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:35446 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726937AbgAGLNZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 06:13:25 -0500
+Received: by mail-lj1-f195.google.com with SMTP id j1so46890256lja.2
+        for <linux-usb@vger.kernel.org>; Tue, 07 Jan 2020 03:13:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=igqXhyBK3Tw7qA7fPi39REnLMkJjJzXKeEqTbYMsdYc=;
-        b=l0jHNItq2YYyLLI71+2CMZbLiSREa/SoFLNKA8bzoB5kmQTT4AZExaG9MAYUFi1Po7
-         G6ojapTgMtFvQ6+siaUyi+408Bh3dj3w6eY9Q/IQ1+1IkltZ9edHl6u/5XfXFjOQFyOf
-         R4CtJFR+AhtvrFPOO2+o+JPJCV8AitRFi35ViK0yFexuCyiX6RYpnykK7iFVeYxU8TPd
-         Rlq7pS9nUSlwPZXdmSmxBEz3nUJixt5bLz4fAkUNNMCb5e0umTjXbkNkgshi+6xSyxF6
-         0bKn7EF+gTbBCjab6/1lRV/Jj7Ob5oX5LGQD+tTZgzP0tXVkPx8lUHvem3kQi7cFOnFy
-         8MLA==
-X-Gm-Message-State: APjAAAUrsf6YQOJOgeHuI3DlizmWBCyq2Wy74vpkEG7X3OQM3DDla77Y
-        mjVDxSQUuk87UqDds9gRZUCTIlLC
-X-Google-Smtp-Source: APXvYqyk7taw7aH61gPaO4/Bcm/IwyyD5N215qxAFhujxVFAEo3QZ8nXKpzfCjkOxDNawX2QfScHWg==
-X-Received: by 2002:a2e:a168:: with SMTP id u8mr54938973ljl.5.1578394183491;
-        Tue, 07 Jan 2020 02:49:43 -0800 (PST)
+        bh=FxQaIttWNUxFXZymPRq1sSS3XWp3fui8Af2ZnQ/t0u4=;
+        b=gEbRRBHDj4UoWmYYpxvaIX23P5OELCjgNOeUFTaPjRCj10SCyLU0Rm8VTHsKL/Vh/M
+         3yl0E57GC7EcYVDD4c0c2NEaOFrllLotROeXGMwOzKdlfCFTD4q+q/f1iXq1Hx4jYB/L
+         dRJKB3fBN57VUPj3nPEQXvrvFaCLrg4Sk78TPknOgjnTPv32MrxbqDeF1h7iOooFn5Dm
+         /RGU7EfzgbYGQG+TbMWWYpDEO9UD6eQzMXuhLhWanyE00lLlQFq+xx78cJ3I4Pl0GyXi
+         KeGNqldHTPx24ONzgofSt+BeprCRyY6k/emXjw0JaQT1iBzUG45OHBBhEirpVRChbnMW
+         Qc7A==
+X-Gm-Message-State: APjAAAUbhWmsI99/+D9egwG7Jjm7dSl/za48qxUzZL8WCf8YrajSJhvY
+        bUWx8ov1XNKQhDFls/OLj9KMgCN8
+X-Google-Smtp-Source: APXvYqyEO95W0NS6xbCfHIIR/lhu2jVCl9C94Yvjtct2FSAc8COC+x+1qYPNu2iNL/hI+AMjSjJKJQ==
+X-Received: by 2002:a2e:b60d:: with SMTP id r13mr62713824ljn.40.1578395603571;
+        Tue, 07 Jan 2020 03:13:23 -0800 (PST)
 Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
-        by smtp.gmail.com with ESMTPSA id i4sm30438434ljg.102.2020.01.07.02.49.42
+        by smtp.gmail.com with ESMTPSA id z22sm23057255ljm.24.2020.01.07.03.13.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2020 02:49:42 -0800 (PST)
+        Tue, 07 Jan 2020 03:13:22 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.92.3)
         (envelope-from <johan@kernel.org>)
-        id 1iomQo-0005N9-Nw; Tue, 07 Jan 2020 11:49:50 +0100
-Date:   Tue, 7 Jan 2020 11:49:50 +0100
+        id 1iomni-0005Uq-U0; Tue, 07 Jan 2020 12:13:30 +0100
+Date:   Tue, 7 Jan 2020 12:13:30 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Brant Merryman <Brant.Merryman@silabs.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Richard Hendricks <Richard.Hendricks@silabs.com>
-Subject: Re: [PATCH] Proper RTS control when buffers fill
-Message-ID: <20200107104950.GD30908@localhost>
-References: <4C7B31CD-2DD2-4824-AE67-9280199703BE@silabs.com>
+To:     Charles Yeh <charlesyeh522@gmail.com>
+Cc:     gregkh@linuxfoundation.org, johan@kernel.org,
+        linux-usb@vger.kernel.org, charles-yeh@prolific.com.tw
+Subject: Re: [PATCH] USB: serial: pl2303: PL2303HXN can support baud rate are
+ set directly
+Message-ID: <20200107111330.GE30908@localhost>
+References: <20191225133005.1617-1-charlesyeh522@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4C7B31CD-2DD2-4824-AE67-9280199703BE@silabs.com>
+In-Reply-To: <20191225133005.1617-1-charlesyeh522@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 18, 2019 at 08:40:48PM +0000, Brant Merryman wrote:
+On Wed, Dec 25, 2019 at 09:30:05PM +0800, Charles Yeh wrote:
+> PL2303HXN (TYPE_HXN) can program form 1 bps to 12000000 bps and
+> support standard & non-standard baud rates (Note 1) are set directly
+> It doesn't need complicated baud rate division calculation.
 
-You forgot to add the Subject prefix.
+What's the benefit of this over using divisors directly?
 
-> CP210x hardware disables auto-RTS but leaves auto-CTS when
-> in hardware flow control mode and UART on cp210x hardware
-> is disabled. This allows data to flow out, but new data
-> will not come into the port. When re-opening the port, if
-> auto-CTS is enabled on the cp210x, then auto-RTS must be
-> re-enabled in the driver.
+If there's something wrong with that algorithm I think we should fix
+that instead so that all device types benefit.
+
+> Note 1:
+> Standard baud rate:
+> 75, 150, 300, 600, 1200, 1800, 2400, 3600, 4800, 7200, 9600,14400,
+> 19200, 28800, 38400, 57600, 115200, 230400, 460800,614400, 921600,
+> 1228800, 2457600, 3000000, 6000000
 > 
-> Signed-off-by: Brant Merryman <brant.merryman@silabs.com>
+> Non-standard baud rate (1 ~ 12000000):
+> 1, 2, 5, 22, 55, 60, 75, 80, 123, 130, 150, 180, 187, 200, 300, 340,
+> 400,..... 115200, 230400, 460800, 474747, 515151, 614400, 921600,
+> .. 1000000,.. 7000000,.. 12000000
+
+Which rate does HXN pick if it's not in either of these lists (e.g.
+next lower/higher, etc)?
+
+> Signed-off-by: Charles Yeh <charlesyeh522@gmail.com>
 > ---
->  drivers/usb/serial/cp210x.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
+> ---
+>  drivers/usb/serial/pl2303.c | 24 ++++++++++++++----------
+>  1 file changed, 14 insertions(+), 10 deletions(-)
 > 
-> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-> index bcceb4ad8be0..74c9f3822bd2 100644
-> --- a/drivers/usb/serial/cp210x.c
-> +++ b/drivers/usb/serial/cp210x.c
-> @@ -917,6 +917,7 @@ static void cp210x_get_termios_port(struct usb_serial_port *port,
->  	u32 baud;
->  	u16 bits;
->  	u32 ctl_hs;
-> +	u32 flow_repl;
+> diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
+> index aab737e1e7b6..63d354a92db9 100644
+> --- a/drivers/usb/serial/pl2303.c
+> +++ b/drivers/usb/serial/pl2303.c
+> @@ -565,17 +565,21 @@ static void pl2303_encode_baud_rate(struct tty_struct *tty,
+>  	if (!baud)
+>  		return;
 >  
->  	cp210x_read_u32_reg(port, CP210X_GET_BAUDRATE, &baud);
->  
-> @@ -1015,8 +1016,24 @@ static void cp210x_get_termios_port(struct usb_serial_port *port,
->  	cp210x_read_reg_block(port, CP210X_GET_FLOW, &flow_ctl,
->  			sizeof(flow_ctl));
->  	ctl_hs = le32_to_cpu(flow_ctl.ulControlHandshake);
-> +	flow_repl = le32_to_cpu(flow_ctl.ulFlowReplace);
+> -	if (spriv->type->max_baud_rate)
+> -		baud = min_t(speed_t, baud, spriv->type->max_baud_rate);
 
-Move inside the if block (after the comment).
+You still need this for HXN I guess.
 
->  	if (ctl_hs & CP210X_SERIAL_CTS_HANDSHAKE) {
->  		dev_dbg(dev, "%s - flow control = CRTSCTS\n", __func__);
+> -	/*
+> -	 * Use direct method for supported baud rates, otherwise use divisors.
+> -	 */
+> -	baud_sup = pl2303_get_supported_baud_rate(baud);
+> -
+> -	if (baud == baud_sup)
+> +	if (spriv->type == &pl2303_type_data[TYPE_HXN]) {
+>  		baud = pl2303_encode_baud_rate_direct(buf, baud);
+> -	else
+> -		baud = pl2303_encode_baud_rate_divisor(buf, baud);
+> +	} else {
+> +		if (spriv->type->max_baud_rate)
+> +			baud = min_t(speed_t, baud, spriv->type->max_baud_rate);
 > +		/*
-> +		 * CP210x hardware disables auto-RTS but leaves auto-CTS when
-> +		 * in hardware flow control mode and UART on cp210x hardware
-> +		 * is disabled. This allows data to flow out, but new data
-> +		 * will not come into the port. When re-opening the port, if
-> +		 * auto-CTS is enabled on the cp210x, then auto-RTS must be
-> +		 * re-enabled in the driver.
+> +		 * Use direct method for supported baud rates, otherwise use divisors.
 > +		 */
-
-Maybe drop the "allows data to flow out" bit, the uart has been disabled
-after all, right? And RTS is asserted on open by the TTY layer anyway so
-data should flow in once opened.
-
-As I asked you before, could you be more specific about what state
-RTS-line end up in when disabling the UART (e.g. 0x00: statically
-inactive)?
-
-> +		flow_repl &= ~CP210X_SERIAL_RTS_MASK;
-> +		flow_repl |= CP210X_SERIAL_RTS_SHIFT(CP210X_SERIAL_RTS_FLOW_CTL);
+> +		baud_sup = pl2303_get_supported_baud_rate(baud);
 > +
-> +		flow_ctl.ulControlHandshake = cpu_to_le32(ctl_hs);
+> +		if (baud == baud_sup)
+> +			baud = pl2303_encode_baud_rate_direct(buf, baud);
+> +		else
+> +			baud = pl2303_encode_baud_rate_divisor(buf, baud);
+> +	}
 
-Again, this line is not needed.
+You need to find a better way to abstract this. We can't just add
+conditionals like this throughout the code without reorganising it or it
+will become very hard to read and maintain.
 
-> +		flow_ctl.ulFlowReplace = cpu_to_le32(flow_repl);
-> +		cp210x_write_reg_block(port, CP210X_SET_FLOW, &flow_ctl, sizeof(flow_ctl));
-
-You still need to break this line. 
-
-> +
->  		cflag |= CRTSCTS;
->  	} else {
->  		dev_dbg(dev, "%s - flow control = NONE\n", __func__);
+>  
+>  	/* Save resulting baud rate */
+>  	tty_encode_baud_rate(tty, baud, baud);
 
 Johan
