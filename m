@@ -2,170 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 886A01324EA
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 12:32:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB31132535
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 12:51:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727805AbgAGLch (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jan 2020 06:32:37 -0500
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:50349 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727559AbgAGLch (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 06:32:37 -0500
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200107113235euoutp02062b6d621cf5f56578e75eaa56c5c521~nl3yGAHjU3106431064euoutp02N
-        for <linux-usb@vger.kernel.org>; Tue,  7 Jan 2020 11:32:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200107113235euoutp02062b6d621cf5f56578e75eaa56c5c521~nl3yGAHjU3106431064euoutp02N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1578396755;
-        bh=ZpHmTs0uJvuMs8mkZW+0snMhdt1maNdaJnzN8zhd98g=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=WbQMl8Q51QXJ9l2O+g2qHLVVKQVuPVCfJqlojrf1a/T1cNiYKob6sMd9xnLAXc+Wu
-         bnwHnwvunqKv+YrQMWCrA2mQkwbRIOPc3WUL3klXRw9p06dPqqEVwq3S6a9G3dkYPj
-         BvdbKDBPbcO2RdVQabVQH0mU04bwTK8FC3PYNdOM=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200107113235eucas1p143fb5cd1bb80064e2c5254f5a3ff2f8e~nl3xvyytl2625126251eucas1p1-;
-        Tue,  7 Jan 2020 11:32:35 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 60.E4.61286.35C641E5; Tue,  7
-        Jan 2020 11:32:35 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200107113234eucas1p270ac654ada73edf9301acee9ab431b13~nl3xJnWjD3226932269eucas1p2c;
-        Tue,  7 Jan 2020 11:32:34 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200107113234eusmtrp1a7fa29f00f05fe903095d0d78f0d99e9~nl3xI9vli2458124581eusmtrp1D;
-        Tue,  7 Jan 2020 11:32:34 +0000 (GMT)
-X-AuditID: cbfec7f2-ef1ff7000001ef66-04-5e146c53c1e8
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id CE.DC.08375.25C641E5; Tue,  7
-        Jan 2020 11:32:34 +0000 (GMT)
-Received: from [106.120.51.15] (unknown [106.120.51.15]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200107113234eusmtip15edd9f58d885624922c8e37789999248~nl3wuYE0y0293302933eusmtip1Y;
-        Tue,  7 Jan 2020 11:32:33 +0000 (GMT)
-Subject: Re: [PATCH] usb: dwc3: use proper initializers for property entries
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <f2f41b28-2ca5-7fad-5b19-2ad51c689e5a@samsung.com>
-Date:   Tue, 7 Jan 2020 12:32:33 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
-        Thunderbird/68.3.1
+        id S1727913AbgAGLvg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jan 2020 06:51:36 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:16259 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726690AbgAGLvg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 06:51:36 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e1470970000>; Tue, 07 Jan 2020 03:50:47 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 07 Jan 2020 03:51:35 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Tue, 07 Jan 2020 03:51:35 -0800
+Received: from [10.26.11.139] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 7 Jan
+ 2020 11:51:33 +0000
+From:   Jon Hunter <jonathanh@nvidia.com>
+Subject: Re: [PATCH] phy: core: Add consumer device link support
+To:     Alexandre Torgue <alexandre.torgue@st.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+References: <20191104143713.11137-1-alexandre.torgue@st.com>
+Message-ID: <146b2971-d51a-164c-aea8-9b6b4ff5f420@nvidia.com>
+Date:   Tue, 7 Jan 2020 11:51:31 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <2a8a5e6b-9372-978e-03d0-350ab65a2d0a@redhat.com>
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNKsWRmVeSWpSXmKPExsWy7djP87rBOSJxBtMusVgca3vCbnF40QtG
-        i+bF69ks3hyfzmRxedccNotFy1qZLeZ+mcrswO6xc9Zddo9NqzrZPPbPXcPu8X7fVTaPz5vk
-        AlijuGxSUnMyy1KL9O0SuDIedL1iKlgmUnH/9C2mBsZewS5GTg4JAROJZ8uXsHYxcnEICaxg
-        lGjY2sgC4XxhlGj+f5MNwvnMKDGlcwIzTMvfzi6oluWMEqum/4Fy3jJKbFx+kAWkSljAR+Lc
-        vY2MIAkRgUWMEs8vNbKBJJgF8iQOn7/DCmKzCRhKdL3tAovzCthJbJw9hRHEZhFQkTg/5Qc7
-        iC0qECvxf+ZWJogaQYmTM5+ALeAEqj/xfgUTxEx5ieats5khbHGJW0/mM0Gcuo5dYsedmi5G
-        DiDbRaJ7BjtEWFji1fEtULaMxOnJPWA/Swg0M0o8PLeWHcLpYZS43DSDEaLKWuLOuV9sIIOY
-        BTQl1u/Shwg7Smx7d5MdYj6fxI23ghAn8ElM2jadGSLMK9HRJgRRrSYx6/g6uLUHL1xinsCo
-        NAvJY7OQPDMLyTOzEPYuYGRZxSieWlqcm55abJiXWq5XnJhbXJqXrpecn7uJEZiETv87/mkH
-        49dLSYcYBTgYlXh4J8gIxwmxJpYVV+YeYpTgYFYS4dXSEYkT4k1JrKxKLcqPLyrNSS0+xCjN
-        waIkzmu86GWskEB6YklqdmpqQWoRTJaJg1OqgbFZc5vZvf0nD/Z+el/L8lVt3oz9NXpT1iT/
-        9l8eMvVXqFATo4JJlXTSp2hrltfeEbX8/CIfRDiYAhrZtwctf9M2a/uGq7Od2c0EnCWZGoSS
-        uRjSZh7Z/NfFe02mV8/l34GpjmVuaw5M6v5tyu7pfd+5+5fm5h6Wvlopp5vPK+5JenJ12qu8
-        VmIpzkg01GIuKk4EAFA5+5g+AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPIsWRmVeSWpSXmKPExsVy+t/xu7pBOSJxBjdfS1oca3vCbnF40QtG
-        i+bF69ks3hyfzmRxedccNotFy1qZLeZ+mcrswO6xc9Zddo9NqzrZPPbPXcPu8X7fVTaPz5vk
-        Alij9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S9DIe
-        dL1iKlgmUnH/9C2mBsZewS5GTg4JAROJv51drF2MXBxCAksZJZZcPsQGkZCRODmtgRXCFpb4
-        c62LDaLoNaPEzmOfwBLCAj4S5+5tZARJiAgsYpS49u86WIJZIE/i3d4N7BAdWxglln/cywiS
-        YBMwlOh62wW2glfATmLj7ClgcRYBFYnzU36wg9iiArES2zc/ZIaoEZQ4OfMJC4jNCVR/4v0K
-        JogFZhLzoGqYBeQlmrfOhrLFJW49mc80gVFoFpL2WUhaZiFpmYWkZQEjyypGkdTS4tz03GJD
-        veLE3OLSvHS95PzcTYzAyNt27OfmHYyXNgYfYhTgYFTi4Z0gIxwnxJpYVlyZe4hRgoNZSYRX
-        S0ckTog3JbGyKrUoP76oNCe1+BCjKdBzE5mlRJPzgUkhryTe0NTQ3MLS0NzY3NjMQkmct0Pg
-        YIyQQHpiSWp2ampBahFMHxMHp1QDo2x3xMGzPkdTWB+G37d89c/6d/gE17c6cu7/j7XvbZxa
-        //bwJKcdy0+2Ln+WZyqdwxFWqy7IVrBVadG9/ZmO9tOW1H2urXzm1vmL39V1ifLRP/2ch888
-        VdGK5Fb7OSn1bbd/t6sRW9yfWdYF2o9fMc84UXbr4K3MVfcXBjXydUS4b1+hFxf7QImlOCPR
-        UIu5qDgRAM32K3PSAgAA
-X-CMS-MailID: 20200107113234eucas1p270ac654ada73edf9301acee9ab431b13
-X-Msg-Generator: CA
+In-Reply-To: <20191104143713.11137-1-alexandre.torgue@st.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20191215164117eucas1p159471bd0b90b76b6ff64f26f17a6580e
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20191215164117eucas1p159471bd0b90b76b6ff64f26f17a6580e
-References: <20191213174623.GA20267@dtor-ws>
-        <CGME20191215164117eucas1p159471bd0b90b76b6ff64f26f17a6580e@eucas1p1.samsung.com>
-        <2a8a5e6b-9372-978e-03d0-350ab65a2d0a@redhat.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1578397847; bh=w732UG42NDGrozK5jikFXG1HubiPs32gMkkg0N1evz4=;
+        h=X-PGP-Universal:From:Subject:To:CC:References:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=lOLqqmhSpXpca397Ft27DSG4j7J38rn8PWXyZy/3uzRilSBIhqTcX7buXfnn0K9OJ
+         v2wicIhp/PddrhvKc3jprCeIO2qOw/mijcv6aNOY54Q2j9rZqsv5zSHADC/rrlhRSn
+         HOUqeIjJfytHCcOHolztY4JQZUaKk5dgq0YOhf/rV1umDGb+GHlcXSCpZf07ifKlx4
+         YOP8XppX14oTp2nTCrKHKsGz9/kqc4snNPAYgp+XOFvaTlAZnugF+tDh8VbR6j1G1J
+         smJSoAwfK3JNih3qOBgIMQePSGHZkBz0iqVtzf6y8vvDsnKCL5HEo+dyzDPD+Q2xPe
+         EwQUPwsPf6Y/Q==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi All,
 
-On 15.12.2019 17:41, Hans de Goede wrote:
-> Hi,
->
-> On 13-12-2019 18:46, Dmitry Torokhov wrote:
->> We should not be reaching into property entries and initialize them by
->> hand, but rather use proper initializer macros. This way we can alter
->> internal representation of property entries with no visible changes to
->> their users.
->>
->> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
->> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
->> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
->> ---
->>
->> It would be good if this could go through Rafael's tree as it is needed
->> for the rest of my software_node/property_entry rework patch series
->> which I would love not to delay till 5.6.
->
-> Patch looks good to me:
->
-> Acked-by: Hans de Goede <hdegoede@redhat.com>
+On 04/11/2019 14:37, Alexandre Torgue wrote:
+> In order to enforce suspend/resume ordering, this commit creates link
+> between phy consumers and phy devices. This link avoids to suspend phy
+> before phy consumers.
+> 
+> Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
 
-This patch is instantly needed as the issue it fixes is again triggered 
-in current (20200107) linux-next by commit e6bff4665c59 "software node: 
-replace is_array with is_inline".
+With next-20200106 we are seeing a boot regression on Tegra124 Jetson
+TK1 board. Bisect is pointing to this commit and reverting this on top
+of -next fixes the problem.
 
-Felipe: could You ack it, so it could be merged via Rafael's tree 
-together with related device property changes?
+The bootlog is showing the following crash on boot ...
 
->>
->>   drivers/usb/dwc3/host.c | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
->> index 5567ed2cddbec..fa252870c926f 100644
->> --- a/drivers/usb/dwc3/host.c
->> +++ b/drivers/usb/dwc3/host.c
->> @@ -88,10 +88,10 @@ int dwc3_host_init(struct dwc3 *dwc)
->>       memset(props, 0, sizeof(struct property_entry) * 
->> ARRAY_SIZE(props));
->>         if (dwc->usb3_lpm_capable)
->> -        props[prop_idx++].name = "usb3-lpm-capable";
->> +        props[prop_idx++] = PROPERTY_ENTRY_BOOL("usb3-lpm-capable");
->>         if (dwc->usb2_lpm_disable)
->> -        props[prop_idx++].name = "usb2-lpm-disable";
->> +        props[prop_idx++] = PROPERTY_ENTRY_BOOL("usb2-lpm-disable");
->>         /**
->>        * WORKAROUND: dwc3 revisions <=3.00a have a limitation
->> @@ -103,7 +103,7 @@ int dwc3_host_init(struct dwc3 *dwc)
->>        * This following flag tells XHCI to do just that.
->>        */
->>       if (dwc->revision <= DWC3_REVISION_300A)
->> -        props[prop_idx++].name = "quirk-broken-port-ped";
->> +        props[prop_idx++] = 
->> PROPERTY_ENTRY_BOOL("quirk-broken-port-ped");
->>         if (prop_idx) {
->>           ret = platform_device_add_properties(xhci, props);
->>
->
-Best regards
+[    1.730024] 8<--- cut here ---
+[    1.733079] Unable to handle kernel paging request at virtual address fffffe7f
+[    1.740318] pgd = (ptrval)
+[    1.743021] [fffffe7f] *pgd=affff841, *pte=00000000, *ppte=00000000
+[    1.749304] Internal error: Oops: 27 [#1] SMP ARM
+[    1.754001] Modules linked in:
+[    1.757057] CPU: 3 PID: 1 Comm: swapper/0 Not tainted 5.5.0-rc4-next-20200106-g9eb1b48ca4ce #1
+[    1.765654] Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+[    1.771919] PC is at device_link_add+0x68/0x4d4
+[    1.776444] LR is at device_link_add+0x68/0x4d4
+[    1.780967] pc : [<c09832e4>]    lr : [<c09832e4>]    psr: 60000013
+[    1.787223] sp : ee0e1d60  ip : 60000013  fp : 00000005
+[    1.792439] r10: 00000000  r9 : 00000000  r8 : eefedd88
+[    1.797657] r7 : ee269c10  r6 : fffffdfb  r5 : 00000001  r4 : 00000001
+[    1.804173] r3 : ee0d8000  r2 : 00000000  r1 : 00000000  r0 : c1858f88
+[    1.810691] Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+[    1.817815] Control: 10c5387d  Table: 8020406a  DAC: 00000051
+[    1.823552] Process swapper/0 (pid: 1, stack limit = 0x(ptrval))
+[    1.829549] Stack: (0xee0e1d60 to 0xee0e2000)
+[    1.833904] 1d60: eefedd88 00000040 c07087a0 fffffdfb ee269c10 ee737640 00000000 eefedd88
+[    1.842073] 1d80: 00000000 00000000 00000005 c0707d34 00000000 ee3c8a00 ee7375c0 ee269c10
+[    1.850242] 1da0: eefedd88 c0a0bd2c c1704e48 ee269c10 ee269c00 ee3c8a00 00000000 c0a0c4a8
+[    1.858409] 1dc0: ee269c10 c1704e48 c186603c 00000000 c186603c 00000000 00000000 bc98ab22
+[    1.866577] 1de0: ffffffff ee269c10 00000000 c186603c ee269c00 c186603c 00000000 00000000
+[    1.874744] 1e00: c1656690 c0a0ffe0 00000000 bc98ab22 ee269c10 ee269c10 00000000 c186603c
+[    1.882913] 1e20: 00000000 c186603c 00000000 c09887e0 c18ff9dc ee269c10 c18ff9e0 c0986860
+[    1.891082] 1e40: ee269c10 c186603c c186603c c1704e48 00000000 c15003f0 c15c3854 c0986af0
+[    1.899249] 1e60: c15c3854 c0d128b4 c10e48ec ee269c10 00000000 c186603c c1704e48 00000000
+[    1.907416] 1e80: c15003f0 c15c3854 c1656690 c0986da0 00000000 c186603c ee269c10 c0986e28
+[    1.915583] 1ea0: 00000000 c186603c c0986da8 c0984ba0 c15003f0 ee20c058 ee242334 bc98ab22
+[    1.923752] 1ec0: c18588c8 c186603c ee737200 c18588c8 00000000 c0985b94 c133ef10 ffffe000
+[    1.931919] 1ee0: c186603c c186603c c18aaf80 ffffe000 c158b72c c09878ac c1704e48 c18aaf80
+[    1.940088] 1f00: ffffe000 c0302f80 00000168 c0367d84 c143e5b4 c1371000 00000000 00000006
+[    1.948255] 1f20: 00000006 c125b1b4 00000000 c1704e48 c126f324 c125b228 00000000 efffec88
+[    1.956424] 1f40: 00000000 bc98ab22 00000000 c18b6bc0 c18b6bc0 bc98ab22 c18b6bc0 c18b6bc0
+[    1.964591] 1f60: 00000007 c15c3834 00000169 c1500f28 00000006 00000006 00000000 c15003f0
+[    1.972758] 1f80: 00000000 00000000 c0ef1cdc 00000000 00000000 00000000 00000000 00000000
+[    1.980924] 1fa0: 00000000 c0ef1ce4 00000000 c03010e8 00000000 00000000 00000000 00000000
+[    1.989092] 1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[    1.997260] 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000 00000000 00000000
+[    2.005440] [<c09832e4>] (device_link_add) from [<c0707d34>] (devm_of_phy_get+0x6c/0xb0)
+[    2.013528] [<c0707d34>] (devm_of_phy_get) from [<c0a0bd2c>] (ahci_platform_get_phy+0x28/0xd0)
+[    2.022134] [<c0a0bd2c>] (ahci_platform_get_phy) from [<c0a0c4a8>] (ahci_platform_get_resources+0x384/0x468)
+[    2.031952] [<c0a0c4a8>] (ahci_platform_get_resources) from [<c0a0ffe0>] (tegra_ahci_probe+0x14/0x650)
+[    2.041254] [<c0a0ffe0>] (tegra_ahci_probe) from [<c09887e0>] (platform_drv_probe+0x48/0x98)
+[    2.049686] [<c09887e0>] (platform_drv_probe) from [<c0986860>] (really_probe+0x234/0x34c)
+[    2.057944] [<c0986860>] (really_probe) from [<c0986af0>] (driver_probe_device+0x60/0x168)
+[    2.066202] [<c0986af0>] (driver_probe_device) from [<c0986da0>] (device_driver_attach+0x58/0x60)
+[    2.075064] [<c0986da0>] (device_driver_attach) from [<c0986e28>] (__driver_attach+0x80/0xbc)
+[    2.083582] [<c0986e28>] (__driver_attach) from [<c0984ba0>] (bus_for_each_dev+0x74/0xb4)
+[    2.091751] [<c0984ba0>] (bus_for_each_dev) from [<c0985b94>] (bus_add_driver+0x164/0x1e8)
+[    2.100008] [<c0985b94>] (bus_add_driver) from [<c09878ac>] (driver_register+0x7c/0x114)
+[    2.108094] [<c09878ac>] (driver_register) from [<c0302f80>] (do_one_initcall+0x54/0x22c)
+[    2.116271] [<c0302f80>] (do_one_initcall) from [<c1500f28>] (kernel_init_freeable+0x14c/0x1b0)
+[    2.124967] [<c1500f28>] (kernel_init_freeable) from [<c0ef1ce4>] (kernel_init+0x8/0x10c)
+[    2.133139] [<c0ef1ce4>] (kernel_init) from [<c03010e8>] (ret_from_fork+0x14/0x2c)
+[    2.140697] Exception stack(0xee0e1fb0 to 0xee0e1ff8)
+[    2.145743] 1fa0:                                     00000000 00000000 00000000 00000000
+[    2.153910] 1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[    2.162076] 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+[    2.168686] Code: e59f0470 03844040 eb15cb16 eb004c8a (e5d63084) 
+[    2.174824] ---[ end trace fddbf111e88ec722 ]---
+
+
+I believe that there is a bug in this patch and the following fixed it for me ...
+
+diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+index 8dfb4868c8c3..2eb28cc2d2dc 100644
+--- a/drivers/phy/phy-core.c
++++ b/drivers/phy/phy-core.c
+@@ -799,6 +799,7 @@ struct phy *devm_of_phy_get(struct device *dev, struct device_node *np,
+                devres_add(dev, ptr);
+        } else {
+                devres_free(ptr);
++               return phy;
+        }
+ 
+        link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
+
+Cheers
+Jon
+
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+nvpublic
