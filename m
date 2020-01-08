@@ -2,90 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A84D1339F5
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 05:07:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8554E133BAA
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 07:24:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726276AbgAHEHM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jan 2020 23:07:12 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44078 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726142AbgAHEHM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 7 Jan 2020 23:07:12 -0500
-Received: from localhost (unknown [122.167.102.68])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 432B12070A;
-        Wed,  8 Jan 2020 04:07:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578456432;
-        bh=VtZDsDEpwz+n4uP+f5e+0gPqa19onC19Eezd4Lm0vnE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RZ+58PD4BE+wkzl8l9mi1tHfylBa/A3LY5uWdWymS+Gv2ss3a1SVkjWtp4wSMyTx1
-         HmhCM1uAt0Nl/H6QUUzQ5GDCHsbq6wK46D2UZdoHt+mAgBO+Cf92A2CZ6It1gnk+kS
-         wiBpYHqpHdFc8yiD03qvkImxv+gwXPivGp0pDFN8=
-Date:   Wed, 8 Jan 2020 09:37:07 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     John Stultz <john.stultz@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Todd Kjos <tkjos@google.com>,
-        Alistair Delva <adelva@google.com>
-Subject: Re: [PATCH v5 0/4] usb: xhci: Add support for Renesas USB controllers
-Message-ID: <20200108040707.GU2818@vkoul-mobl>
-References: <20191106083843.1718437-1-vkoul@kernel.org>
- <CANcMJZDqX6-+naGEbBiyM+1cZS6jfMoP9bm5Uk4ZuP_mw5aNWw@mail.gmail.com>
+        id S1725907AbgAHGYx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jan 2020 01:24:53 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:49802 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725773AbgAHGYx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jan 2020 01:24:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Date:Message-ID:Subject:From:To:Sender:Reply-To:Cc:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=WT/rG7jijmtmrCTVpB+o87x6rPrZk8gutV/ruMgIFEw=; b=eZpdrQjSU+iBQzkbjozuyST/8
+        orX71swmInBRpgVjVIDUx3Nj79D8dO89hxRuHBtUs4ru3mXLwYVqt4MSvOvLEP1AGJHHBV1+DqIwt
+        sk8Kj5HmfZVEA6D7C4Q9lBGqZkvEl3cFVwYRnLho4PcyoJHdfE+jqN7x3rN8gDN//lvghyfsc25ZK
+        cIa2dv1/jSiwbthFnp86YFjLzuNn+nutSfx1nqQIBrN3KPLFfDryBTliji28x7PqMy4HWVlZcYXm6
+        LloG4QqHYzZUtWz/XxrDH+N8rAf1daYyY/DhmMTXvO1tDcJYkKRvXJQUWWWVHGAxQF2rPjKS0dPjD
+        mfZiR7NZg==;
+Received: from [2601:1c0:6280:3f0::ed68]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1ip4lv-0001kD-1H; Wed, 08 Jan 2020 06:24:51 +0000
+To:     USB list <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] usb: typec: fix non-kernel-doc comments
+Message-ID: <88821011-2128-a8dd-68b8-c5ae8f43271f@infradead.org>
+Date:   Tue, 7 Jan 2020 22:24:50 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANcMJZDqX6-+naGEbBiyM+1cZS6jfMoP9bm5Uk4ZuP_mw5aNWw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi John,
+From: Randy Dunlap <rdunlap@infradead.org>
 
-On 07-01-20, 11:51, John Stultz wrote:
-> On Wed, Nov 6, 2019 at 12:40 AM Vinod Koul <vkoul@kernel.org> wrote:
-> >
-> > This series add support for Renesas USB controllers uPD720201 and uPD720202.
-> > These require firmware to be loaded and in case devices have ROM those can
-> > also be programmed if empty. If ROM is programmed, it runs from ROM as well.
-> >
-> > This includes two patches from Christian which supported these controllers
-> > w/o ROM and later my patches for ROM support and multiple firmware versions.
-> >
-> 
-> Hey Vinod!
->    In pushing this series to one of the Android trees for the db845c,
-> there was some concern raised that this series is adding a lot of
-> renesas specific logic to the more generic xhci-pci driver. There was
-> some question if instead that logic should be added to its own
-> file/module? Do you have any thoughts on this?
+Use "/*" for non-kernel-doc comments instead of "/**", which is
+intended to be used only for kernel-doc notation.
 
-TBH I have not thought about that and in previous post neither Greg or
-Mathias gave a feedback that this was not acceptable...
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/typec/bus.c |    2 +-
+ drivers/usb/typec/mux.c |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-We can think about splitting but apart from firmware load there is not
-much extra functionality that we need to add, the controller behaviour
-as a standard xhci-pci. So i am not sure if we gain much by splitting.
+--- lnx-55-rc5.orig/drivers/usb/typec/bus.c
++++ lnx-55-rc5/drivers/usb/typec/bus.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+-/**
++/*
+  * Bus for USB Type-C Alternate Modes
+  *
+  * Copyright (C) 2018 Intel Corporation
+--- lnx-55-rc5.orig/drivers/usb/typec/mux.c
++++ lnx-55-rc5/drivers/usb/typec/mux.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+-/**
++/*
+  * USB Type-C Multiplexer/DeMultiplexer Switch support
+  *
+  * Copyright (C) 2018 Intel Corporation
 
-> Also, It seems there hasn't been much feedback on this for a few
-> months now. Is there a newer version of the patchset I should sync
-> with? Do you have plans to resubmit soon?
-
-Well am still waiting for feedback :( I dont have any update on top of
-this, I can repost but I dont think that really serves a purpose.
-
-I would really like to hear from Greg if this series is acceptable and
-if not what would he like to see changed.
-
-Thanks
--- 
-~Vinod
