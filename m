@@ -2,87 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 121C71349EC
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 18:58:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8280134A5C
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 19:18:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727490AbgAHR6h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jan 2020 12:58:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32784 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727127AbgAHR6h (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 Jan 2020 12:58:37 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 797722067D;
-        Wed,  8 Jan 2020 17:58:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578506316;
-        bh=SdtmN8vMPYr6lvvcJ19d5FHoncte7Ipmo58T/30pIBE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KahEnhp61ZYr9Kt8C5+kMPQ74X4OJW/0iqGXeJ3xTIyK7mqeMOzuAb/MC4MxIS22E
-         HPP86YtIG54fmcXdabmpLcq7fn/79xIv0ZuyMCtQKTAInevdfFigJ4Y42NSSqa19DJ
-         f/N51BQoshrnlRUZrqr78i/GNE+V7jIt/AtumAb8=
-Date:   Wed, 8 Jan 2020 18:58:34 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>, od@zcrc.me,
-        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: common: usb-conn-gpio: Register charger
-Message-ID: <20200108175834.GC2546185@kroah.com>
-References: <20200107002901.940297-1-paul@crapouillou.net>
- <20200108165323.GA2506374@kroah.com>
- <1578504370.3.1@crapouillou.net>
+        id S1729057AbgAHSSz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jan 2020 13:18:55 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:49290 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727507AbgAHSSz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jan 2020 13:18:55 -0500
+Received: (qmail 5455 invoked by uid 2102); 8 Jan 2020 13:18:54 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 8 Jan 2020 13:18:54 -0500
+Date:   Wed, 8 Jan 2020 13:18:54 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     syzbot <syzbot+10e5f68920f13587ab12@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
+        <gustavo@embeddedor.com>, <ingrassia@epigenesys.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (2)
+In-Reply-To: <000000000000b962af059b9429bd@google.com>
+Message-ID: <Pine.LNX.4.44L0.2001081314471.1468-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1578504370.3.1@crapouillou.net>
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 08, 2020 at 02:26:10PM -0300, Paul Cercueil wrote:
-> Hi Greg,
-> 
-> 
-> Le mer., janv. 8, 2020 at 17:53, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> a écrit :
-> > On Tue, Jan 07, 2020 at 01:29:01AM +0100, Paul Cercueil wrote:
-> > >  Register a power supply charger, whose online state depends on
-> > > whether
-> > >  the USB role is set to device or not.
-> > 
-> > That says _what_ you are doing, but I have no idea _why_ you want to do
-> > this.
-> > 
-> > What is this going to cause to have happen?  What new userspace api is
-> > going to result?  What will a user do with this?
-> 
-> This is useful when the USB role is the only way to know if the device is
-> charging from USB.
-> 
-> The API is the standard power supply charger API, you get a
-> /sys/class/power_supply/xxx/online node which tells you the state of the
-> charger.
-> 
-> The sole purpose of this is to give userspace applications a way to know
-> whether or not the charger is plugged.
+On Tue, 7 Jan 2020, syzbot wrote:
 
-Ok, this is all good info that should go into the changelog text for
-when you resend this.
-
-> > Is this going to always show up, no matter if the role is not even
-> > relevant for a power supply?
+> Hello,
 > 
-> I guess it'd always show up, yes. In which case would the role not be
-> relevant for a power supply? Is gpio-b-connector not always used for OTG
-> connectors?
+> syzbot has tested the proposed patch but the reproducer still triggered  
+> crash:
+> WARNING in usbhid_raw_request/usb_submit_urb
 
-I do not know, I thought OTG was dead :)
+Given this result, let's try again the slightly larger patch.  The
+difference between the patch just tested and this one is very small
+indeed, although it's hard to predict how that difference will affect
+the object code.
 
-thanks,
+Alan Stern
 
-greg k-h
+#syz test: https://github.com/google/kasan.git ecdf2214
+
+Index: usb-devel/drivers/usb/core/urb.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/urb.c
++++ usb-devel/drivers/usb/core/urb.c
+@@ -205,7 +205,7 @@ int usb_urb_ep_type_check(const struct u
+ 
+ 	ep = usb_pipe_endpoint(urb->dev, urb->pipe);
+ 	if (!ep)
+-		return -EINVAL;
++		return -EBADF;
+ 	if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
+ 		return -EINVAL;
+ 	return 0;
+@@ -356,6 +356,7 @@ int usb_submit_urb(struct urb *urb, gfp_
+ 	struct usb_host_endpoint	*ep;
+ 	int				is_out;
+ 	unsigned int			allowed;
++	int				c;
+ 
+ 	if (!urb || !urb->complete)
+ 		return -EINVAL;
+@@ -474,9 +475,10 @@ int usb_submit_urb(struct urb *urb, gfp_
+ 	 */
+ 
+ 	/* Check that the pipe's type matches the endpoint's type */
+-	if (usb_urb_ep_type_check(urb))
+-		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x != type %x\n",
+-			usb_pipetype(urb->pipe), pipetypes[xfertype]);
++	c = usb_urb_ep_type_check(urb);
++	if (c)
++		dev_WARN(&dev->dev, "BOGUS urb xfer %d, pipe %x != type %x\n",
++			c, usb_pipetype(urb->pipe), pipetypes[xfertype]);
+ 
+ 	/* Check against a simple/standard policy */
+ 	allowed = (URB_NO_TRANSFER_DMA_MAP | URB_NO_INTERRUPT | URB_DIR_MASK |
+
