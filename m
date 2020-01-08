@@ -2,140 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD30134CF6
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 21:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0553134D1F
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 21:24:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbgAHUPc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jan 2020 15:15:32 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:37360 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725941AbgAHUPc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jan 2020 15:15:32 -0500
-Received: by mail-pf1-f193.google.com with SMTP id p14so2176349pfn.4
-        for <linux-usb@vger.kernel.org>; Wed, 08 Jan 2020 12:15:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=f5jGtDQk4W/7kwbhzU422zx3kqGO5CGZj+6s6uDuarU=;
-        b=HCXL15JGGpFaynGNaL35XNOBOhFcVvFiz86bi5HRcq3rPFIk85hjdnNO9yc4y4Gugo
-         rkYq0StJw4ZX5lEmrcWGyvfDiy8pSkVtHwZboU695QuhKFWVA4L/H7M75pa0EFcO5iFf
-         e8GZNpNMzFRbgSPJcQ/Skm06ncZUpZPlvO9Ax71bWUFSBa02IkHW/2/Oh6rKTsBtY0Xt
-         2yUOve/P8iTosvZLexlSdmE8xdSubQJAtfqaoA1xslqStZfCyTVH8HB7UQqyh4hCFsRT
-         b3T1dGMPjztHMhivo/IKz0zJ/u1pZYgZIm84/k3a+e7zdw7Dx5wv23FwAzNo9AC+5DwT
-         6kwA==
+        id S1726784AbgAHUYL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jan 2020 15:24:11 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:42227 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726155AbgAHUYL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jan 2020 15:24:11 -0500
+Received: by mail-il1-f200.google.com with SMTP id c5so2984225ilo.9
+        for <linux-usb@vger.kernel.org>; Wed, 08 Jan 2020 12:24:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=f5jGtDQk4W/7kwbhzU422zx3kqGO5CGZj+6s6uDuarU=;
-        b=YoAuTIL1jxwerouHJzXe4lNDefH34VMBIz9z8t4w1TQz5V9Q5lsaeN+yPGqGYYRcnP
-         22NLeHaTokwkYAWyz0NlKSYHS7Ks1Qpz0sM026eqWMbQ0ITRAaZ8yev7i3GSeCtuwdL4
-         jKXFnx7uRIOX9i/IS3nDS+jKSsJGp0R3nF2tos2RwUuYCHNkX+7nAD5UAXEUTJ8c/NXi
-         dDY0oV1TXsK4v89vTcx/wVv80wLpY/2ykFSQzvvJ9IOwNRbia7z4s7V6wKU6j7CBepU0
-         NB0kHzOw4E+VJGNqBXht6jGJncuQIQenBzAm7PNuPKYV40LvBb1uNjGe5IPrlgkBfS3d
-         JjKQ==
-X-Gm-Message-State: APjAAAU+jCdwiwo9Xy7zrYng0cMmbS4sFfvjcWAKCnX7MLmtzSY9mlSZ
-        5jCRBEGpBHCEvo9fDhCkaDRu9A8cP2LDoVrnwZ5ujjyb/LI=
-X-Google-Smtp-Source: APXvYqx4CBdSrQfhaOLOac9tubqeO/y0WB3biPm8WlBtKUwxlgvmmGxE7IIroMkJWyqCRH6CB/DvdVrVkBEbZ+PyGNk=
-X-Received: by 2002:aa7:9629:: with SMTP id r9mr7091599pfg.51.1578514531446;
- Wed, 08 Jan 2020 12:15:31 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=GVyssDLFxQI959y01fNygLsmfKd3ROHK3Ad8toVgtQY=;
+        b=qSLEy+iG9DpRhr6h5uE2+MAHgA15sR8t2XyqatzWObof6FA51Pp6/jBOfFM/DJggQV
+         Iq2DgfqdKE5JWGI5IsBvQi7H2XfzidkH6IYl/u3h+Emu4M4DFmnoOHhenDDqHu4aqBOD
+         IDo7cQ+pU2d4UiU4tWlzxnwfXyR+FBxDlS8Q20raCwK3rlRvbMRD8ZdkFUb/FvmO7oSq
+         5iA1aXwHd2HOFce4wsVlQTdjXGe4beQrl64bjpUAQ1rVqpsT2r0OGHusvP0c8iqmk7EZ
+         14hBHVQJ/MgKVVkz0BPuM8NrEF21hFpmU0r97zccpYDGkfP8BHk0k+lktiDXdxr+XPQ+
+         H4eQ==
+X-Gm-Message-State: APjAAAVpi1fUqAyjrCJceC8IoxKnyudH2KaF/WLU6oQWuq/f+99fQmzo
+        32bpHmxyQiEwWKkshujZizaBfZuJx1G/OhnDV6tT/s1GZ+wZ
+X-Google-Smtp-Source: APXvYqyrzrk7LZE87usAyPXhFDdakLa5pq1NK+nqagWQYrm0vR1eCjRYKJXoTDm/Vum3Zn+GUflvzjFoS5D6SFMcFbRw/Hp1/jcM
 MIME-Version: 1.0
-References: <cover.1576697098.git.andreyknvl@google.com>
-In-Reply-To: <cover.1576697098.git.andreyknvl@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 8 Jan 2020 21:15:20 +0100
-Message-ID: <CAAeHK+xDNwRat=BS7Jv02tNJcFZQefozuTW=CaGfUvGoUMg+DQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/1] usb: gadget: add raw-gadget interface
-To:     USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Felipe Balbi <balbi@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Received: by 2002:a02:9a08:: with SMTP id b8mr5557555jal.1.1578515050611;
+ Wed, 08 Jan 2020 12:24:10 -0800 (PST)
+Date:   Wed, 08 Jan 2020 12:24:10 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000de50d7059ba6acd5@google.com>
+Subject: KASAN: use-after-free Read in v4l2_release (3)
+From:   syzbot <syzbot+75287f75e2fedd69d680@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, bnvandana@gmail.com,
+        hverkuil-cisco@xs4all.nl, laurent.pinchart@ideasonboard.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 18, 2019 at 8:27 PM Andrey Konovalov <andreyknvl@google.com> wrote:
->
-> This patchset (currently a single patch) adds a new userspace interface
-> for the USB Gadget subsystem called USB Raw Gadget (I don't mind changing
-> the name to something else if there are better ideas). This is what
-> currently being used to enable coverage-buided USB fuzzing with syzkaller:
->
-> https://github.com/google/syzkaller/blob/master/docs/linux/external_fuzzing_usb.md
->
-> Initially I was using GadgetFS (together with the Dummy HCD/UDC module)
-> to perform emulation of USB devices for fuzzing, but later switched to a
-> custom written interface. The incentive to implement a different interface
-> was to provide a somewhat raw and direct access to the USB Gadget layer
-> for the userspace, where every USB request is passed to the userspace to
-> get a response. See documentation for the list of differences between
-> Raw Gadget and GadgetFS.
->
-> This patchset has been pushed to the public Linux kernel Gerrit instance:
->
-> https://linux-review.googlesource.com/c/linux/kernel/git/torvalds/linux/+/2144
+Hello,
 
-Hi Greg,
+syzbot found the following crash on:
 
-Just an after holidays reminder that I've sent v4 of this patchset and
-looking forward to a review.
+HEAD commit:    ae179410 usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=132aa915e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=57adcee0a60380e2
+dashboard link: https://syzkaller.appspot.com/bug?extid=75287f75e2fedd69d680
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
-Thanks!
+Unfortunately, I don't have any reproducer for this crash yet.
 
->
-> Changes v3 -> v4:
-> - Print debug message when maxpacket check fails.
-> - Use module_misc_device() instead of module_init/exit().
-> - Reuse DRIVER_NAME macro in raw_device struct definition.
-> - Don't print WARNING in raw_release().
-> - Add comment that explains locking into raw_event_queue_fetch().
-> - Print a WARNING when event queue size is exceeded.
-> - Rename raw.c to raw_gadget.c.
-> - Mention module name in Kconfig.
-> - Reworked logging to use dev_err/dbg() instead of pr_err/debug().
->
-> Changes v2 -> v3:
-> - Updated device path in documentation.
-> - Changed usb_raw_init struct layout to make it the same for 32 bit compat
->   mode.
-> - Added compat_ioctl to raw_fops.
-> - Changed raw_ioctl_init() to return EINVAL for invalid USB speeds, except
->   for USB_SPEED_UNKNOWN, which defaults to USB_SPEED_HIGH.
-> - Reject endpoints with maxpacket = 0 in raw_ioctl_ep_enable().
->
-> Changes v1 -> v2:
-> - Moved raw.c to legacy/.
-> - Changed uapi header to use __u* types.
-> - Switched from debugfs entry to a misc device.
-> - Changed raw_dev from refcount to kref.
-> - Moved UDC_NAME_LENGTH_MAX to uapi headers.
-> - Used usb_endpoint_type() and usb_endpoint_dir_in/out() functions instead
->   of open coding them.
-> - Added "WITH Linux-syscall-note" to SPDX id in the uapi header.
-> - Removed pr_err() if case dev_new() fails.
-> - Reduced the number of debugging messages.
->
-> Andrey Konovalov (1):
->   usb: gadget: add raw-gadget interface
->
->  Documentation/usb/index.rst            |    1 +
->  Documentation/usb/raw-gadget.rst       |   59 ++
->  drivers/usb/gadget/legacy/Kconfig      |   11 +
->  drivers/usb/gadget/legacy/Makefile     |    1 +
->  drivers/usb/gadget/legacy/raw_gadget.c | 1071 ++++++++++++++++++++++++
->  include/uapi/linux/usb/raw_gadget.h    |  167 ++++
->  6 files changed, 1310 insertions(+)
->  create mode 100644 Documentation/usb/raw-gadget.rst
->  create mode 100644 drivers/usb/gadget/legacy/raw_gadget.c
->  create mode 100644 include/uapi/linux/usb/raw_gadget.h
->
-> --
-> 2.24.1.735.g03f4e72817-goog
->
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+75287f75e2fedd69d680@syzkaller.appspotmail.com
+
+usbvision_radio_close: Final disconnect
+==================================================================
+BUG: KASAN: use-after-free in v4l2_release+0x2f1/0x390  
+drivers/media/v4l2-core/v4l2-dev.c:459
+Read of size 4 at addr ffff8881d13b5068 by task v4l_id/20136
+
+CPU: 1 PID: 20136 Comm: v4l_id Not tainted 5.5.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xef/0x16e lib/dump_stack.c:118
+  print_address_description.constprop.0+0x16/0x200 mm/kasan/report.c:374
+  __kasan_report.cold+0x37/0x7f mm/kasan/report.c:506
+  kasan_report+0xe/0x20 mm/kasan/common.c:639
+  v4l2_release+0x2f1/0x390 drivers/media/v4l2-core/v4l2-dev.c:459
+  __fput+0x2d7/0x840 fs/file_table.c:280
+  task_work_run+0x13f/0x1c0 kernel/task_work.c:113
+  tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+  exit_to_usermode_loop+0x1d2/0x200 arch/x86/entry/common.c:164
+  prepare_exit_to_usermode arch/x86/entry/common.c:195 [inline]
+  syscall_return_slowpath arch/x86/entry/common.c:278 [inline]
+  do_syscall_64+0x4e0/0x5c0 arch/x86/entry/common.c:304
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x7f70446a32b0
+Code: 40 75 0b 31 c0 48 83 c4 08 e9 0c ff ff ff 48 8d 3d c5 32 08 00 e8 c0  
+07 02 00 83 3d 45 a3 2b 00 00 75 10 b8 03 00 00 00 0f 05 <48> 3d 01 f0 ff  
+ff 73 31 c3 48 83 ec 08 e8 ce 8a 01 00 48 89 04 24
+RSP: 002b:00007ffee1722fd8 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 00007f70446a32b0
+RDX: 0000000000000013 RSI: 0000000080685600 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000400884
+R13: 00007ffee1723130 R14: 0000000000000000 R15: 0000000000000000
+
+Allocated by task 14633:
+  save_stack+0x1b/0x80 mm/kasan/common.c:72
+  set_track mm/kasan/common.c:80 [inline]
+  __kasan_kmalloc mm/kasan/common.c:513 [inline]
+  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:486
+  kmalloc include/linux/slab.h:556 [inline]
+  kzalloc include/linux/slab.h:670 [inline]
+  usbvision_alloc drivers/media/usb/usbvision/usbvision-video.c:1315 [inline]
+  usbvision_probe.cold+0x5c5/0x1f21  
+drivers/media/usb/usbvision/usbvision-video.c:1469
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0x141f/0x1bc0 drivers/base/core.c:2487
+  usb_set_configuration+0xe38/0x16c0 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0x141f/0x1bc0 drivers/base/core.c:2487
+  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2537
+  hub_port_connect drivers/usb/core/hub.c:5184 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
+  port_event drivers/usb/core/hub.c:5470 [inline]
+  hub_event+0x1e59/0x3860 drivers/usb/core/hub.c:5552
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2264
+  process_scheduled_works kernel/workqueue.c:2326 [inline]
+  worker_thread+0x7ab/0xe20 kernel/workqueue.c:2412
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Freed by task 20136:
+  save_stack+0x1b/0x80 mm/kasan/common.c:72
+  set_track mm/kasan/common.c:80 [inline]
+  kasan_set_free_info mm/kasan/common.c:335 [inline]
+  __kasan_slab_free+0x129/0x170 mm/kasan/common.c:474
+  slab_free_hook mm/slub.c:1425 [inline]
+  slab_free_freelist_hook mm/slub.c:1458 [inline]
+  slab_free mm/slub.c:3005 [inline]
+  kfree+0xda/0x310 mm/slub.c:3957
+  usbvision_release+0x181/0x1c0  
+drivers/media/usb/usbvision/usbvision-video.c:1364
+  usbvision_radio_close.cold+0x2b/0x74  
+drivers/media/usb/usbvision/usbvision-video.c:1130
+  v4l2_release+0x2e7/0x390 drivers/media/v4l2-core/v4l2-dev.c:455
+  __fput+0x2d7/0x840 fs/file_table.c:280
+  task_work_run+0x13f/0x1c0 kernel/task_work.c:113
+  tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+  exit_to_usermode_loop+0x1d2/0x200 arch/x86/entry/common.c:164
+  prepare_exit_to_usermode arch/x86/entry/common.c:195 [inline]
+  syscall_return_slowpath arch/x86/entry/common.c:278 [inline]
+  do_syscall_64+0x4e0/0x5c0 arch/x86/entry/common.c:304
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+
+The buggy address belongs to the object at ffff8881d13b4000
+  which belongs to the cache kmalloc-8k of size 8192
+The buggy address is located 4200 bytes inside of
+  8192-byte region [ffff8881d13b4000, ffff8881d13b6000)
+The buggy address belongs to the page:
+page:ffffea000744ec00 refcount:1 mapcount:0 mapping:ffff8881da40c500  
+index:0x0 compound_mapcount: 0
+raw: 0200000000010200 ffffea0007392a00 0000000300000003 ffff8881da40c500
+raw: 0000000000000000 0000000000020002 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+  ffff8881d13b4f00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff8881d13b4f80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> ffff8881d13b5000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                           ^
+  ffff8881d13b5080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff8881d13b5100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
