@@ -2,82 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3570F133FEF
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 12:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D73ED134248
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 13:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727522AbgAHLLE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jan 2020 06:11:04 -0500
-Received: from mga06.intel.com ([134.134.136.31]:14673 "EHLO mga06.intel.com"
+        id S1728270AbgAHMxW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jan 2020 07:53:22 -0500
+Received: from mga11.intel.com ([192.55.52.93]:49509 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727606AbgAHLLE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 Jan 2020 06:11:04 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1728261AbgAHMxV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 Jan 2020 07:53:21 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Jan 2020 03:11:02 -0800
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Jan 2020 04:53:21 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,409,1571727600"; 
-   d="scan'208";a="225883270"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 08 Jan 2020 03:11:00 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 08 Jan 2020 13:10:59 +0200
-Date:   Wed, 8 Jan 2020 13:10:59 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] usb: typec: fix non-kernel-doc comments
-Message-ID: <20200108111059.GD7440@kuha.fi.intel.com>
-References: <88821011-2128-a8dd-68b8-c5ae8f43271f@infradead.org>
+X-IronPort-AV: E=Sophos;i="5.69,410,1571727600"; 
+   d="scan'208";a="211526404"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga007.jf.intel.com with ESMTP; 08 Jan 2020 04:53:18 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 12A731AD; Wed,  8 Jan 2020 14:53:17 +0200 (EET)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH 0/2] thunderbolt: Fix and MAINTAINERS update
+Date:   Wed,  8 Jan 2020 15:53:15 +0300
+Message-Id: <20200108125317.36444-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <88821011-2128-a8dd-68b8-c5ae8f43271f@infradead.org>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 07, 2020 at 10:24:50PM -0800, Randy Dunlap wrote:
-> From: Randy Dunlap <rdunlap@infradead.org>
-> 
-> Use "/*" for non-kernel-doc comments instead of "/**", which is
-> intended to be used only for kernel-doc notation.
-> 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Hi,
 
-OK by me.
+The first patch fixes an issue reported by Dan Carpenter and the second
+updates MAINTAINERS to use linux-usb as mailing list for Thunderbolt and
+USB4 related patches.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Greg, can you pick these to your usb-next branch if there are no
+objections?
 
-> ---
->  drivers/usb/typec/bus.c |    2 +-
->  drivers/usb/typec/mux.c |    2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> --- lnx-55-rc5.orig/drivers/usb/typec/bus.c
-> +++ lnx-55-rc5/drivers/usb/typec/bus.c
-> @@ -1,5 +1,5 @@
->  // SPDX-License-Identifier: GPL-2.0
-> -/**
-> +/*
->   * Bus for USB Type-C Alternate Modes
->   *
->   * Copyright (C) 2018 Intel Corporation
-> --- lnx-55-rc5.orig/drivers/usb/typec/mux.c
-> +++ lnx-55-rc5/drivers/usb/typec/mux.c
-> @@ -1,5 +1,5 @@
->  // SPDX-License-Identifier: GPL-2.0
-> -/**
-> +/*
->   * USB Type-C Multiplexer/DeMultiplexer Switch support
->   *
->   * Copyright (C) 2018 Intel Corporation
+Mika Westerberg (2):
+  thunderbolt: Fix xhci check in usb4_switch_setup()
+  MAINTAINERS: Use linux-usb mailing list for Thunderbolt and USB4 patches
 
-thanks,
+ MAINTAINERS                | 1 +
+ drivers/thunderbolt/usb4.c | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
 -- 
-heikki
+2.24.1
+
