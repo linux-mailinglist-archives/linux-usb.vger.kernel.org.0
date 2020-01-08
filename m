@@ -2,39 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ACDA1346BD
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 16:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0B91346E0
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 17:00:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728834AbgAHPyv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jan 2020 10:54:51 -0500
-Received: from mga03.intel.com ([134.134.136.65]:29686 "EHLO mga03.intel.com"
+        id S1729165AbgAHP6u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jan 2020 10:58:50 -0500
+Received: from mga12.intel.com ([192.55.52.136]:43702 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728499AbgAHPyv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 Jan 2020 10:54:51 -0500
+        id S1727746AbgAHP6t (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 Jan 2020 10:58:49 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Jan 2020 07:54:50 -0800
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Jan 2020 07:58:49 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,410,1571727600"; 
-   d="scan'208";a="303589888"
+   d="scan'208";a="303590872"
 Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga001.jf.intel.com with ESMTP; 08 Jan 2020 07:54:49 -0800
-Subject: Re: [RFT PATCH] xhci: Fix memory leak when caching protocol extended
- capability PSI tables
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     pmenzel@molgen.mpg.de, mika.westerberg@linux.intel.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <572bea6f-06d4-938a-802e-93386acf59d9@linux.intel.com>
- <20200108151730.21022-1-mathias.nyman@linux.intel.com>
- <20200108154008.GA2448418@kroah.com>
+  by orsmga001.jf.intel.com with ESMTP; 08 Jan 2020 07:58:46 -0800
+Subject: Re: [PATCH v5 0/4] usb: xhci: Add support for Renesas USB controllers
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        Alistair Delva <adelva@google.com>
+References: <20191106083843.1718437-1-vkoul@kernel.org>
+ <CANcMJZDqX6-+naGEbBiyM+1cZS6jfMoP9bm5Uk4ZuP_mw5aNWw@mail.gmail.com>
+ <20200108040707.GU2818@vkoul-mobl> <20200108062436.GA2276347@kroah.com>
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <9e91c6a7-94a5-6ed7-22c7-ebc956403e8f@linux.intel.com>
-Date:   Wed, 8 Jan 2020 17:56:50 +0200
+Message-ID: <b0dc038b-cc25-1d37-9339-689bb5b61ff7@linux.intel.com>
+Date:   Wed, 8 Jan 2020 18:00:48 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200108154008.GA2448418@kroah.com>
+In-Reply-To: <20200108062436.GA2276347@kroah.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -43,33 +51,53 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8.1.2020 17.40, Greg KH wrote:
-> On Wed, Jan 08, 2020 at 05:17:30PM +0200, Mathias Nyman wrote:
->> xhci driver assumed that xHC controllers have at most one custom
->> supported speed table (PSI) for all usb 3.x ports.
->> Memory was allocated for one PSI table under the xhci hub structure.
+On 8.1.2020 8.24, Greg Kroah-Hartman wrote:
+> On Wed, Jan 08, 2020 at 09:37:07AM +0530, Vinod Koul wrote:
+>> Hi John,
 >>
->> Turns out this is not the case, some controllers have a separate
->> "supported protocol capability" entry with a PSI table for each port.
->> This means each usb3 port can in theory support different custom speeds.
+>> On 07-01-20, 11:51, John Stultz wrote:
+>>> On Wed, Nov 6, 2019 at 12:40 AM Vinod Koul <vkoul@kernel.org> wrote:
+>>>>
+>>>> This series add support for Renesas USB controllers uPD720201 and uPD720202.
+>>>> These require firmware to be loaded and in case devices have ROM those can
+>>>> also be programmed if empty. If ROM is programmed, it runs from ROM as well.
+>>>>
+>>>> This includes two patches from Christian which supported these controllers
+>>>> w/o ROM and later my patches for ROM support and multiple firmware versions.
+>>>>
+>>>
+>>> Hey Vinod!
+>>>     In pushing this series to one of the Android trees for the db845c,
+>>> there was some concern raised that this series is adding a lot of
+>>> renesas specific logic to the more generic xhci-pci driver. There was
+>>> some question if instead that logic should be added to its own
+>>> file/module? Do you have any thoughts on this?
+>>
+>> TBH I have not thought about that and in previous post neither Greg or
+>> Mathias gave a feedback that this was not acceptable...
+>>
+>> We can think about splitting but apart from firmware load there is not
+>> much extra functionality that we need to add, the controller behaviour
+>> as a standard xhci-pci. So i am not sure if we gain much by splitting.
+>>
+>>> Also, It seems there hasn't been much feedback on this for a few
+>>> months now. Is there a newer version of the patchset I should sync
+>>> with? Do you have plans to resubmit soon?
+>>
+>> Well am still waiting for feedback :( I dont have any update on top of
+>> this, I can repost but I dont think that really serves a purpose.
+>>
+>> I would really like to hear from Greg if this series is acceptable and
+>> if not what would he like to see changed.
 > 
-> Is there a "max" number of port capabilities that can happen?  Or this
-> this truely dynamic?
-
-Almost truly dynamic, each capability points to the next, last points to 0
-
-But we can't have more "supported protocol capabilities" than xHC ports.
-(MaxPorts value in xHC HCSPARAMS1 register)
-
+> Greg is not the xhci maintainer :)
 > 
->> +	for (i = 0; i < xhci->num_port_caps; i++) {
->> +		kfree(xhci->port_caps[i].psi);
->> +		xhci->port_caps[i].psi = NULL;
->> +	}
-> 
-> Nit, no need to set to NULL here :)
 
-Thanks, will remove that
+Reviewing this always got bumped down on my todo list as other urgent issues
+came up.
 
+I think the concern about adding this amount of renesas specific code to
+xhci-pci.c is valid. This series adds over 900 lines of Renesas FW loading
+code to a 600 line xhci-pci.c
+  
 -Mathias
-
