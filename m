@@ -2,86 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8280134A5C
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 19:18:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00770134A79
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 19:29:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729057AbgAHSSz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jan 2020 13:18:55 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:49290 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727507AbgAHSSz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jan 2020 13:18:55 -0500
-Received: (qmail 5455 invoked by uid 2102); 8 Jan 2020 13:18:54 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 8 Jan 2020 13:18:54 -0500
-Date:   Wed, 8 Jan 2020 13:18:54 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     syzbot <syzbot+10e5f68920f13587ab12@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
-        <gustavo@embeddedor.com>, <ingrassia@epigenesys.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <syzkaller-bugs@googlegroups.com>
-Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (2)
-In-Reply-To: <000000000000b962af059b9429bd@google.com>
-Message-ID: <Pine.LNX.4.44L0.2001081314471.1468-100000@iolanthe.rowland.org>
+        id S1727752AbgAHS3K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jan 2020 13:29:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33394 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727169AbgAHS3K (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 Jan 2020 13:29:10 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C321820692;
+        Wed,  8 Jan 2020 18:29:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578508149;
+        bh=6zjORTcadsJG3lFVKDoJP+hFIkS8FvrSkmNU0jxtPCg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ueYpDdxRfD3k2XWZcytTO0CgtCwh87hNnBlLDtjVzQXfFuf6yAPXiGv7hfYyhQkKY
+         YIz+nGrpqqoZDev5qkDrpp0QDRHLeoLmjJuHNMHXj0VFkcRvCsDOFLC53uVkyHNa4W
+         EzP3RimgDB/VO/QLWGydZ3gnxtlCFi4LCMAVCFFA=
+Date:   Wed, 8 Jan 2020 19:29:07 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        Alistair Delva <adelva@google.com>
+Subject: Re: [PATCH v5 0/4] usb: xhci: Add support for Renesas USB controllers
+Message-ID: <20200108182907.GB2549996@kroah.com>
+References: <20191106083843.1718437-1-vkoul@kernel.org>
+ <CANcMJZDqX6-+naGEbBiyM+1cZS6jfMoP9bm5Uk4ZuP_mw5aNWw@mail.gmail.com>
+ <20200108040707.GU2818@vkoul-mobl>
+ <20200108062436.GA2276347@kroah.com>
+ <b0dc038b-cc25-1d37-9339-689bb5b61ff7@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b0dc038b-cc25-1d37-9339-689bb5b61ff7@linux.intel.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 7 Jan 2020, syzbot wrote:
-
-> Hello,
+On Wed, Jan 08, 2020 at 06:00:48PM +0200, Mathias Nyman wrote:
+> On 8.1.2020 8.24, Greg Kroah-Hartman wrote:
+> > On Wed, Jan 08, 2020 at 09:37:07AM +0530, Vinod Koul wrote:
+> > > Hi John,
+> > > 
+> > > On 07-01-20, 11:51, John Stultz wrote:
+> > > > On Wed, Nov 6, 2019 at 12:40 AM Vinod Koul <vkoul@kernel.org> wrote:
+> > > > > 
+> > > > > This series add support for Renesas USB controllers uPD720201 and uPD720202.
+> > > > > These require firmware to be loaded and in case devices have ROM those can
+> > > > > also be programmed if empty. If ROM is programmed, it runs from ROM as well.
+> > > > > 
+> > > > > This includes two patches from Christian which supported these controllers
+> > > > > w/o ROM and later my patches for ROM support and multiple firmware versions.
+> > > > > 
+> > > > 
+> > > > Hey Vinod!
+> > > >     In pushing this series to one of the Android trees for the db845c,
+> > > > there was some concern raised that this series is adding a lot of
+> > > > renesas specific logic to the more generic xhci-pci driver. There was
+> > > > some question if instead that logic should be added to its own
+> > > > file/module? Do you have any thoughts on this?
+> > > 
+> > > TBH I have not thought about that and in previous post neither Greg or
+> > > Mathias gave a feedback that this was not acceptable...
+> > > 
+> > > We can think about splitting but apart from firmware load there is not
+> > > much extra functionality that we need to add, the controller behaviour
+> > > as a standard xhci-pci. So i am not sure if we gain much by splitting.
+> > > 
+> > > > Also, It seems there hasn't been much feedback on this for a few
+> > > > months now. Is there a newer version of the patchset I should sync
+> > > > with? Do you have plans to resubmit soon?
+> > > 
+> > > Well am still waiting for feedback :( I dont have any update on top of
+> > > this, I can repost but I dont think that really serves a purpose.
+> > > 
+> > > I would really like to hear from Greg if this series is acceptable and
+> > > if not what would he like to see changed.
+> > 
+> > Greg is not the xhci maintainer :)
+> > 
 > 
-> syzbot has tested the proposed patch but the reproducer still triggered  
-> crash:
-> WARNING in usbhid_raw_request/usb_submit_urb
+> Reviewing this always got bumped down on my todo list as other urgent issues
+> came up.
+> 
+> I think the concern about adding this amount of renesas specific code to
+> xhci-pci.c is valid. This series adds over 900 lines of Renesas FW loading
+> code to a 600 line xhci-pci.c
 
-Given this result, let's try again the slightly larger patch.  The
-difference between the patch just tested and this one is very small
-indeed, although it's hard to predict how that difference will affect
-the object code.
+Yeah, that's not good, should be simple to split it into a separate file
+that's only build if that hardware is selected.
 
-Alan Stern
+thanks,
 
-#syz test: https://github.com/google/kasan.git ecdf2214
-
-Index: usb-devel/drivers/usb/core/urb.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/urb.c
-+++ usb-devel/drivers/usb/core/urb.c
-@@ -205,7 +205,7 @@ int usb_urb_ep_type_check(const struct u
- 
- 	ep = usb_pipe_endpoint(urb->dev, urb->pipe);
- 	if (!ep)
--		return -EINVAL;
-+		return -EBADF;
- 	if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
- 		return -EINVAL;
- 	return 0;
-@@ -356,6 +356,7 @@ int usb_submit_urb(struct urb *urb, gfp_
- 	struct usb_host_endpoint	*ep;
- 	int				is_out;
- 	unsigned int			allowed;
-+	int				c;
- 
- 	if (!urb || !urb->complete)
- 		return -EINVAL;
-@@ -474,9 +475,10 @@ int usb_submit_urb(struct urb *urb, gfp_
- 	 */
- 
- 	/* Check that the pipe's type matches the endpoint's type */
--	if (usb_urb_ep_type_check(urb))
--		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x != type %x\n",
--			usb_pipetype(urb->pipe), pipetypes[xfertype]);
-+	c = usb_urb_ep_type_check(urb);
-+	if (c)
-+		dev_WARN(&dev->dev, "BOGUS urb xfer %d, pipe %x != type %x\n",
-+			c, usb_pipetype(urb->pipe), pipetypes[xfertype]);
- 
- 	/* Check against a simple/standard policy */
- 	allowed = (URB_NO_TRANSFER_DMA_MAP | URB_NO_INTERRUPT | URB_DIR_MASK |
-
+greg k-h
