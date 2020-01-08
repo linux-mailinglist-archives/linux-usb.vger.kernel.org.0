@@ -2,155 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DED3133E5C
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 10:32:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC2613401C
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 12:17:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727490AbgAHJcX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jan 2020 04:32:23 -0500
-Received: from mga01.intel.com ([192.55.52.88]:3452 "EHLO mga01.intel.com"
+        id S1728053AbgAHLRc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jan 2020 06:17:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55122 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727205AbgAHJcW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 Jan 2020 04:32:22 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Jan 2020 01:32:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,409,1571727600"; 
-   d="scan'208";a="303510529"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga001.jf.intel.com with ESMTP; 08 Jan 2020 01:32:20 -0800
-Subject: Re: BUG: KASAN: use-after-free in
- xhci_trb_virt_to_dma.part.24+0x1c/0x80
-To:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Greg KH <greg@kroah.com>, Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-References: <95b4bdb2-962f-561e-ac14-79cd44395915@molgen.mpg.de>
- <20180720095410.GA11904@kroah.com>
- <107dbdd1-4e45-836f-7f8f-85bc63374e4f@molgen.mpg.de>
- <30b069b5-63f6-dd9e-b323-668f06bff6cf@molgen.mpg.de>
- <20200103110451.GJ465886@lahna.fi.intel.com>
- <81c6f906-3f5a-729d-f3b4-1ac6ac607c05@linux.intel.com>
- <84369435-d355-0462-98ab-91bb1c5d3871@molgen.mpg.de>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <572bea6f-06d4-938a-802e-93386acf59d9@linux.intel.com>
-Date:   Wed, 8 Jan 2020 11:34:22 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728045AbgAHLRc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 Jan 2020 06:17:32 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id F144320673;
+        Wed,  8 Jan 2020 11:17:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578482251;
+        bh=K5a1FOPcyRp0DCp/auw2go40HmDbbxw4Ibqe87jWEbc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=THqQZPcVvjC+wUPF3+29t3zF6xnYfYeYidcDePpV7b32VACrK9oGbLXd/UyWldH9t
+         tHrsowP1uTWquWgELlF37kxzuMxK1GRMcPT46tf5+Nxu9L+N4CxGNYaJCSEAmSq31E
+         4F8KHd8A0ugKdG9epSYOsK+CeWK557snvitFzsZA=
+Date:   Wed, 8 Jan 2020 07:24:36 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        Alistair Delva <adelva@google.com>
+Subject: Re: [PATCH v5 0/4] usb: xhci: Add support for Renesas USB controllers
+Message-ID: <20200108062436.GA2276347@kroah.com>
+References: <20191106083843.1718437-1-vkoul@kernel.org>
+ <CANcMJZDqX6-+naGEbBiyM+1cZS6jfMoP9bm5Uk4ZuP_mw5aNWw@mail.gmail.com>
+ <20200108040707.GU2818@vkoul-mobl>
 MIME-Version: 1.0
-In-Reply-To: <84369435-d355-0462-98ab-91bb1c5d3871@molgen.mpg.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200108040707.GU2818@vkoul-mobl>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7.1.2020 17.35, Paul Menzel wrote:
-> Dear Mathias, dear Mika,
+On Wed, Jan 08, 2020 at 09:37:07AM +0530, Vinod Koul wrote:
+> Hi John,
 > 
+> On 07-01-20, 11:51, John Stultz wrote:
+> > On Wed, Nov 6, 2019 at 12:40 AM Vinod Koul <vkoul@kernel.org> wrote:
+> > >
+> > > This series add support for Renesas USB controllers uPD720201 and uPD720202.
+> > > These require firmware to be loaded and in case devices have ROM those can
+> > > also be programmed if empty. If ROM is programmed, it runs from ROM as well.
+> > >
+> > > This includes two patches from Christian which supported these controllers
+> > > w/o ROM and later my patches for ROM support and multiple firmware versions.
+> > >
+> > 
+> > Hey Vinod!
+> >    In pushing this series to one of the Android trees for the db845c,
+> > there was some concern raised that this series is adding a lot of
+> > renesas specific logic to the more generic xhci-pci driver. There was
+> > some question if instead that logic should be added to its own
+> > file/module? Do you have any thoughts on this?
 > 
-> On 2020-01-07 13:09, Mathias Nyman wrote:
->> On 3.1.2020 13.04, Mika Westerberg wrote:
->>> On Thu, Jan 02, 2020 at 03:10:14PM +0100, Paul Menzel wrote:
->>>> Mika, as you fixed the other leak, any idea, how to continue from the
->>>> kmemleak log below?
->>>>
->>>> ```
->>>> unreferenced object 0xffff8c207a1e1408 (size 8):
->>>>     comm "systemd-udevd", pid 183, jiffies 4294667978 (age 752.292s)
->>>>     hex dump (first 8 bytes):
->>>>       34 01 05 00 00 00 00 00                          4.......
->>>>     backtrace:
->>>>       [<00000000aea7b46d>] xhci_mem_init+0xcfa/0xec0 [xhci_hcd]
->>>
->>> There are probably better ways for doing this but you can use objdump
->>> for example:
->>>
->>>     $ objdump -l --prefix-addresses -j .text --disassemble=xhci_mem_init drivers/usb/host/xhci-hcd.ko
->>>
->>> then find the offset xhci_mem_init+0xcfa. It should show you the line
->>> numbers as well if you have compiled your kernel with debug info. This
->>> should be close to the line that allocated the memory that was leaked.
+> TBH I have not thought about that and in previous post neither Greg or
+> Mathias gave a feedback that this was not acceptable...
 > 
-> Thank you. I actually remembered `script/f2addr2line`.
+> We can think about splitting but apart from firmware load there is not
+> much extra functionality that we need to add, the controller behaviour
+> as a standard xhci-pci. So i am not sure if we gain much by splitting.
 > 
->      $ scripts/faddr2line drivers/usb/host/xhci-hcd.o xhci_mem_init+0xcfa
->      xhci_mem_init+0xcfa/0xec0:
->      xhci_add_in_port at /mnt/drivers/usb/host/xhci-mem.c:2161
->      (inlined by) xhci_setup_port_arrays at /mnt/drivers/usb/host/xhci-mem.c:2309
->      (inlined by) xhci_mem_init at /mnt/drivers/usb/host/xhci-mem.c:2538
+> > Also, It seems there hasn't been much feedback on this for a few
+> > months now. Is there a newer version of the patchset I should sync
+> > with? Do you have plans to resubmit soon?
 > 
->> Paul, it possible that your xhci controller has several
->> supported protocol extended capabilities for usb 3 ports, each
->> with their own custom protocol speed ID table.
->>
->> xhci driver assumes there is only one custome PSI table per roothub,
->> and we will end up allocating the second PSI table on top of the first,
->> leaking the first.
->>
->> Could you boot with xhci dynamic debug enabled, and show dmesg after boot, add:
->> xhci_hcd.dyndbg=+p
->> to you kernel cmdline.
->>
->> Or as an alternative, show output of:
->>
->> sudo cat /sys/kernel/debug/usb/xhci/*/reg-ext-protocol*
+> Well am still waiting for feedback :( I dont have any update on top of
+> this, I can repost but I dont think that really serves a purpose.
 > 
-> `/sys/kernel/debug/` cannot be read by unprivileged users, so the wildcard does
-> not work with `sudo`.
-> 
-> ```
-> $ sudo ls /sys/kernel/debug/usb/xhci
-> 0000:12:00.0  0000:26:00.3  0000:26:00.4
-> # cat /sys/kernel/debug/usb/xhci/*/reg-ext-protocol*
+> I would really like to hear from Greg if this series is acceptable and
+> if not what would he like to see changed.
 
-problematic xhci:
-capability for first four USB 2 ports
-> EXTCAP_REVISION = 0x02000402
-> EXTCAP_NAME = 0x20425355
-> EXTCAP_PORTINFO = 0x00180401
-> EXTCAP_PORTTYPE = 0x00000000
+Greg is not the xhci maintainer :)
 
-capability for one USB 3.1 port (5th port)
-> EXTCAP_REVISION = 0x03100802
-> EXTCAP_NAME = 0x20425355
-> EXTCAP_PORTINFO = 0x10000105
-> EXTCAP_PORTTYPE = 0x00000000
-> EXTCAP_MANTISSA1 = 0x00050134
-capability for one USB 3.1 port (6th port)
-> EXTCAP_REVISION = 0x03100802
-> EXTCAP_NAME = 0x20425355
-> EXTCAP_PORTINFO = 0x10000106
-> EXTCAP_PORTTYPE = 0x00000000
-> EXTCAP_MANTISSA1 = 0x00050134
-capability for one USB 3.1 port (7th port)
-> EXTCAP_REVISION = 0x03100802
-> EXTCAP_NAME = 0x20425355
-> EXTCAP_PORTINFO = 0x10000107
-> EXTCAP_PORTTYPE = 0x00000000
-> EXTCAP_MANTISSA1 = 0x00050134
-capability for one USB 3.1 port (8th port)
-> EXTCAP_REVISION = 0x03100802
-> EXTCAP_NAME = 0x20425355
-> EXTCAP_PORTINFO = 0x10000108
-> EXTCAP_PORTTYPE = 0x00000000
-> EXTCAP_MANTISSA1 = 0x00050134
 
-It has eight ports.  last four of them are USB 3.1 ports.
-It has a very odd setup where each 3.1 port has their own
-supported protocol capability with a custom PSI, but all the PSI's are similar,
-telling the port only support a 5Gbps speed.
-
-We leak all the custom PSI tables for USB 3.1 ports except the last,
-these would be the EXTCAP_MANTISSA1 = 0x00050134, which is the same as
-the hex dump of the unreferenced object you posted earlier (considering byte order):
-
-hex dump (first 8 bytes):
-34 01 05 00 00 00 00 00                          4.......
-
-I'm working on a patch for this
-
--Mathias
