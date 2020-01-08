@@ -2,95 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C4A134DE5
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 21:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF6E134EA0
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 22:13:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726836AbgAHUtv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jan 2020 15:49:51 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:41745 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726155AbgAHUtv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jan 2020 15:49:51 -0500
-Received: by mail-oi1-f196.google.com with SMTP id i1so3908731oie.8
-        for <linux-usb@vger.kernel.org>; Wed, 08 Jan 2020 12:49:50 -0800 (PST)
+        id S1727069AbgAHVNk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jan 2020 16:13:40 -0500
+Received: from mail-io1-f66.google.com ([209.85.166.66]:41205 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726836AbgAHVNk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jan 2020 16:13:40 -0500
+Received: by mail-io1-f66.google.com with SMTP id c16so4781484ioo.8;
+        Wed, 08 Jan 2020 13:13:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NF2iAzKqLye3p4CHVHM567AecN0C/BH8Y1Ur9sjobCA=;
+        b=um9UbIA80csKtHl8AeihiuTfvTRvK8bOX1bT/8+/0wl++bihWaQfWo1G8wMJFArwx4
+         YevDL5p7ZfnAK/P73p/WZwWcJC8Ys+c0LQ9KWWN+BB6/nLWLEaXKFhXvla3hoRNeXGuQ
+         NvwhZ9TT2hBH0ZrCTKUG5V67AE4q46nUdeybv8OUA8tyOtGB9jBXKhvlyz9Zg6Hk5X21
+         lDPnpx/fNPqwxWOk5+vb23q/fBeC0VTzEYRp9ZvBZl93YF+PLvhXS7hRQrx+fpsXNLqh
+         ZycS6JVTrsnZEps9g/F9JckEfo3QinEvzucC0jnXVUNBuk2zojPpJFp4Lfgk29QGg2Wj
+         +Lfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Y2blFDS/4xPh5DF4rW8+xU8LHc7BSZTKgnRIfuXGUCs=;
-        b=EcRVFaxyTpv16MMsGI3niT4eQh1xrhX6WYJazGZfo4luSrSnxN408pYG/oOB5Y8hrk
-         YtoSOHYlI/zMBMjb5mhyozTnI2VCoznnNjmPoWrDe4HcxFVeM765AQGC09SNW8b5kM5v
-         XP9jE4zang3EULDA1NwKUCuklEEqXvAGyCVPiytCd3/TUL9Uu7mov/pQ6NL2WEo1Gur1
-         WmmMlZqmvBTakpL2sfCsBme89TXfQJgdoioNRKETUyCet55LX2DcwH/tQCo5hWf+/hmz
-         w40jr1XIq8iSaZIGl9Szrg2tpfDqhmEL2hvFaKqVLj4Dz54suwEdV3DDrDn0ID6k3FsG
-         RcQA==
-X-Gm-Message-State: APjAAAUtFAGYWT3oOqXzpiqmGn5xpVIMlqkPR+jCvXACvjpU07ILVGJr
-        s6otb0tjrFCUc9SRVSDGW94MVsQ=
-X-Google-Smtp-Source: APXvYqzsortdxZV+S204AUGJUGrsxzJPopm1u5xiU3aHood/dkta35um3Mc7owo3IIyLBunLxA7wTA==
-X-Received: by 2002:aca:f507:: with SMTP id t7mr427590oih.156.1578516590084;
-        Wed, 08 Jan 2020 12:49:50 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id l82sm1461083oib.41.2020.01.08.12.49.48
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jan 2020 12:49:49 -0800 (PST)
-Received: from rob (uid 1000)
-        (envelope-from rob@rob-hp-laptop)
-        id 220333
-        by rob-hp-laptop (DragonFly Mail Agent v0.11);
-        Wed, 08 Jan 2020 14:49:48 -0600
-Date:   Wed, 8 Jan 2020 14:49:48 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Benjamin Gaignard <benjamin.gaignard@st.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, kgene@kernel.org, krzk@kernel.org,
-        hminas@synopsys.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, m.szyprowski@samsung.com,
-        amelie.delaunay@st.com,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: Re: [PATCH v3] dt-bindings: usb: Convert DWC2 bindings to json-schema
-Message-ID: <20200108204948.GA9782@bogus>
-References: <20200107091630.12796-1-benjamin.gaignard@st.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NF2iAzKqLye3p4CHVHM567AecN0C/BH8Y1Ur9sjobCA=;
+        b=VF8+P3ds3Wge3++lXvXM9iSIhvS+ZjZOrEtH8K6eK3COWsyOfZ9Ge2rPKNweqV/0jT
+         5CJRGRdah6MMp4ReOaeDYyRR8c0tgADbP/njuQYnxF7UJ6NMHto2amXASEucbE2OOj3u
+         E0pl4V4nnrxWxLejHSIkuSJmLU+4QVqDfCIfF2eS8qpfuhdUxA4p+iy+9Jcy6yV8RPgf
+         /76QqnpEuw/W9CuoUIebrgZH3prPcRrBh2xwPW38Agv4twzdeEDh5sZL+LlXmESK987A
+         uG1XzW/BqrDcxbC9vz6eoerou/xxGld12zAV+ai5ivIKllx4e7GdMEmSuy5TcRgn7mre
+         E16A==
+X-Gm-Message-State: APjAAAWIfO+eh3iQYUARTwmcRXBMLzbgXTFZS4H5P2SvfcJnGN25I6g6
+        G8zPkBIPKkBW1nT57VMeWeWaAfcsZP/Xrpd5OHw=
+X-Google-Smtp-Source: APXvYqwJtdhvSfSSES4KVqbmZ0C6eMdcEeC3zEc9ASOXYCYC03N6gzLGtw0eroyLCJWVv732eVK+WCvk5qR89rY4sYA=
+X-Received: by 2002:a5e:8d06:: with SMTP id m6mr4926187ioj.69.1578518019790;
+ Wed, 08 Jan 2020 13:13:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200107091630.12796-1-benjamin.gaignard@st.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200105225509.21590-1-jassisinghbrar@gmail.com>
+ <20200105225557.21729-1-jassisinghbrar@gmail.com> <20200108164159.GA2494836@kroah.com>
+In-Reply-To: <20200108164159.GA2494836@kroah.com>
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Wed, 8 Jan 2020 15:13:29 -0600
+Message-ID: <CABb+yY1cSGZRZJEenweRFNPVfkMKiMwowTdnURuFoXnB5+FKGA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] usb: gadget: add udc driver for max3420
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Felipe Balbi <balbi@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jassi Brar <jaswinder.singh@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 7 Jan 2020 10:16:30 +0100, Benjamin Gaignard wrote:
-> Convert DWC2 bindings to DT schema format using json-schema.
-> DWC2 is widely use but a couple of compatibles and properties
-> (vusb_d-supply,vusb_a-supply) were missing in dwc2.txt, the
-> patch add them.
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
-> ---
-> CC: Minas Harutyunyan <hminas@synopsys.com>
-> CC: Krzysztof Kozlowski <krzk@kernel.org>
-> 
-> changes in version 3:
-> - put Rob Herring as maintainer
-> - change the example to use one of the listed compatible
-> 
-> changes in version 2:
-> - put Minas Harutyunyan <hminas@synopsys.com> as maintainer
-> - remove type and description from phy property
-> - remove description from compatible items
-> - simplify samsung,s3c6400-hsotg compatible handling
-> 
->  Documentation/devicetree/bindings/usb/dwc2.txt  |  64 ----------
->  Documentation/devicetree/bindings/usb/dwc2.yaml | 151 ++++++++++++++++++++++++
->  2 files changed, 151 insertions(+), 64 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/usb/dwc2.txt
->  create mode 100644 Documentation/devicetree/bindings/usb/dwc2.yaml
-> 
+On Wed, Jan 8, 2020 at 10:42 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Sun, Jan 05, 2020 at 04:55:57PM -0600, jassisinghbrar@gmail.com wrote:
+> > --- /dev/null
+> > +++ b/drivers/usb/gadget/udc/max3420_udc.c
+> > @@ -0,0 +1,1333 @@
+> > +// SPDX-License-Identifier: GPL-2.0+
+> > +/*
+> > + * MAX3420 Device Controller driver for USB.
+> > + *
+> > + * Author: Jaswinder Singh Brar <jaswinder.singh@linaro.org>
+> > + * (C) Copyright 2019 Linaro Ltd
+> > + *
+> > + * Based on:
+> > + *   o MAX3420E datasheet
+> > + *           http://datasheets.maximintegrated.com/en/ds/MAX3420E.pdf
+> > + *   o MAX342{0,1}E Programming Guides
+> > + *           https://pdfserv.maximintegrated.com/en/an/AN3598.pdf
+> > + *           https://pdfserv.maximintegrated.com/en/an/AN3785.pdf
+> > + *
+> > + * This file is licenced under the GPL v2.
+>
+> This line says that the SPDX line above is a lie :(
+>
+> Please fix this.
+>
+Sorry, that is a relic from forward porting the driver. I updated the
+copyright year (guess need to again) but missed that line.
 
-Applied, thanks.
+> As pennance, please re-read Documentation/process/license-rules.rst.
+>
+I will take a dozen lines each day before bed.
 
-Rob
+Cheers still !
