@@ -2,110 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00770134A79
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 19:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE16A134A97
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 19:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727752AbgAHS3K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jan 2020 13:29:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33394 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727169AbgAHS3K (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 Jan 2020 13:29:10 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C321820692;
-        Wed,  8 Jan 2020 18:29:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578508149;
-        bh=6zjORTcadsJG3lFVKDoJP+hFIkS8FvrSkmNU0jxtPCg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ueYpDdxRfD3k2XWZcytTO0CgtCwh87hNnBlLDtjVzQXfFuf6yAPXiGv7hfYyhQkKY
-         YIz+nGrpqqoZDev5qkDrpp0QDRHLeoLmjJuHNMHXj0VFkcRvCsDOFLC53uVkyHNa4W
-         EzP3RimgDB/VO/QLWGydZ3gnxtlCFi4LCMAVCFFA=
-Date:   Wed, 8 Jan 2020 19:29:07 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Todd Kjos <tkjos@google.com>,
-        Alistair Delva <adelva@google.com>
-Subject: Re: [PATCH v5 0/4] usb: xhci: Add support for Renesas USB controllers
-Message-ID: <20200108182907.GB2549996@kroah.com>
-References: <20191106083843.1718437-1-vkoul@kernel.org>
- <CANcMJZDqX6-+naGEbBiyM+1cZS6jfMoP9bm5Uk4ZuP_mw5aNWw@mail.gmail.com>
- <20200108040707.GU2818@vkoul-mobl>
- <20200108062436.GA2276347@kroah.com>
- <b0dc038b-cc25-1d37-9339-689bb5b61ff7@linux.intel.com>
+        id S1727497AbgAHSnC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jan 2020 13:43:02 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:50648 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725941AbgAHSnC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jan 2020 13:43:02 -0500
+Received: by mail-il1-f198.google.com with SMTP id z12so2737643ilh.17
+        for <linux-usb@vger.kernel.org>; Wed, 08 Jan 2020 10:43:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=gsmhaJiI7IosyrLbk8vnuiA+k0qhktKDo7fbqvkMYO8=;
+        b=Bwa4PXQ0GeQIMfCoQN/jogCXeCyD0CcNqgtPRrfMeHmFYbEkkcxZIqB02I3cZ0g28A
+         U+UWmoyPB5OGDV/5QoTYyfH3Mi5TcWuRMwKTN4FOfslFxbXsCQULm+Xlm2Okoa285uYY
+         OIZ4pkZrfAonYnZ2bIkgsiL/jTVdh8/76gbADBGd6RiReseRrJvVYCvAPSFd7otX+eAG
+         y+xtM59xfKIahawyDTnainERV+lhfr+yj49MfEbYuZyjDw/KXIs8w0FGIspZybzIGYEA
+         VAPz7UKI9e3ZrAEM5vEvKOGAHRumrUPmjuhC7OWbXqODvcDzjaPl7sOr6y/f8125TN+S
+         b7Ig==
+X-Gm-Message-State: APjAAAV5FgX2zj+1P6Nm5ItWj3+IQiYFhoCnKNWe3DgC/Y1wuF6viBNa
+        raTE8ZFXi3UprwSxzy7/FbG1WWk6in8gUk1hQbybcFhl990B
+X-Google-Smtp-Source: APXvYqxKYtLzbfqyaoDRR2KCFDYl//WXawATjjjbkROCvej4q2Dpbzny1vJo/YnpX4N4MXb2NMJgKVp5e90UuK6XRdSrl8qOlYy2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b0dc038b-cc25-1d37-9339-689bb5b61ff7@linux.intel.com>
+X-Received: by 2002:a05:6602:3c5:: with SMTP id g5mr4478792iov.161.1578508981277;
+ Wed, 08 Jan 2020 10:43:01 -0800 (PST)
+Date:   Wed, 08 Jan 2020 10:43:01 -0800
+In-Reply-To: <Pine.LNX.4.44L0.2001081314471.1468-100000@iolanthe.rowland.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001b53f8059ba5431a@google.com>
+Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (2)
+From:   syzbot <syzbot+10e5f68920f13587ab12@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, ingrassia@epigenesys.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 08, 2020 at 06:00:48PM +0200, Mathias Nyman wrote:
-> On 8.1.2020 8.24, Greg Kroah-Hartman wrote:
-> > On Wed, Jan 08, 2020 at 09:37:07AM +0530, Vinod Koul wrote:
-> > > Hi John,
-> > > 
-> > > On 07-01-20, 11:51, John Stultz wrote:
-> > > > On Wed, Nov 6, 2019 at 12:40 AM Vinod Koul <vkoul@kernel.org> wrote:
-> > > > > 
-> > > > > This series add support for Renesas USB controllers uPD720201 and uPD720202.
-> > > > > These require firmware to be loaded and in case devices have ROM those can
-> > > > > also be programmed if empty. If ROM is programmed, it runs from ROM as well.
-> > > > > 
-> > > > > This includes two patches from Christian which supported these controllers
-> > > > > w/o ROM and later my patches for ROM support and multiple firmware versions.
-> > > > > 
-> > > > 
-> > > > Hey Vinod!
-> > > >     In pushing this series to one of the Android trees for the db845c,
-> > > > there was some concern raised that this series is adding a lot of
-> > > > renesas specific logic to the more generic xhci-pci driver. There was
-> > > > some question if instead that logic should be added to its own
-> > > > file/module? Do you have any thoughts on this?
-> > > 
-> > > TBH I have not thought about that and in previous post neither Greg or
-> > > Mathias gave a feedback that this was not acceptable...
-> > > 
-> > > We can think about splitting but apart from firmware load there is not
-> > > much extra functionality that we need to add, the controller behaviour
-> > > as a standard xhci-pci. So i am not sure if we gain much by splitting.
-> > > 
-> > > > Also, It seems there hasn't been much feedback on this for a few
-> > > > months now. Is there a newer version of the patchset I should sync
-> > > > with? Do you have plans to resubmit soon?
-> > > 
-> > > Well am still waiting for feedback :( I dont have any update on top of
-> > > this, I can repost but I dont think that really serves a purpose.
-> > > 
-> > > I would really like to hear from Greg if this series is acceptable and
-> > > if not what would he like to see changed.
-> > 
-> > Greg is not the xhci maintainer :)
-> > 
-> 
-> Reviewing this always got bumped down on my todo list as other urgent issues
-> came up.
-> 
-> I think the concern about adding this amount of renesas specific code to
-> xhci-pci.c is valid. This series adds over 900 lines of Renesas FW loading
-> code to a 600 line xhci-pci.c
+Hello,
 
-Yeah, that's not good, should be simple to split it into a separate file
-that's only build if that hardware is selected.
+syzbot has tested the proposed patch and the reproducer did not trigger  
+crash:
 
-thanks,
+Reported-and-tested-by:  
+syzbot+10e5f68920f13587ab12@syzkaller.appspotmail.com
 
-greg k-h
+Tested on:
+
+commit:         ecdf2214 usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b06a019075333661
+dashboard link: https://syzkaller.appspot.com/bug?extid=10e5f68920f13587ab12
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1583963ee00000
+
+Note: testing is done by a robot and is best-effort only.
