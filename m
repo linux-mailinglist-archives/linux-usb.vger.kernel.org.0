@@ -2,140 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A49A133DD1
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 10:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DED3133E5C
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 10:32:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727234AbgAHJGq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jan 2020 04:06:46 -0500
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:53996 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726891AbgAHJGq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jan 2020 04:06:46 -0500
-Received: from mailhost.synopsys.com (badc-mailhost2.synopsys.com [10.192.0.18])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 883594016E;
-        Wed,  8 Jan 2020 09:06:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1578474405; bh=5WU7s3fuKPSImRBkNVD6MJh/UOcuYXmgsl8ADr8fvgk=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=bXKUEXfKzCZbQaHkkW/jcse2DTcLIMduLUk2hm+81RwkO0ZDkvLcyxjkbfRNbYt02
-         9uZVAVAjxf3+aqC0yrFokvswgvfsA1AVtCpGBYRqHfaXZN0XyLJOLN78ISz3gE3OB6
-         wrI+vS9GmAjTJlz6wHsrC9UyQD6crMtWLWo48pcmirAUiITREz6gTPwWAgew/RuvIa
-         G70u/RRslRhvnX/wICaiydk5k3R3gw0O5RoIfLvobvfsSAP7HqKSQASUfkWX7zudFj
-         hA+1fxiWY2YHwCEPQr5Spie5jsoET/ioGMCk9vHdWe835/BgsNaXI8v0+glYAZyqE/
-         oydqs6R6PZYew==
-Received: from US01WEHTC3.internal.synopsys.com (us01wehtc3.internal.synopsys.com [10.15.84.232])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 2B4B0A006C;
-        Wed,  8 Jan 2020 09:06:42 +0000 (UTC)
-Received: from US01HYBRID2.internal.synopsys.com (10.15.246.24) by
- US01WEHTC3.internal.synopsys.com (10.15.84.232) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Wed, 8 Jan 2020 01:06:36 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.202.3.67) by
- mrs.synopsys.com (10.15.246.24) with Microsoft SMTP Server (TLS) id
- 14.3.408.0; Wed, 8 Jan 2020 01:06:36 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NJABM+RCwZ9/syV7YZw8Z+yHhy2/pZ7xtkmDBUg5Lh6xE37861sUTrpTvvLC7IcNf+ieOSXpWx+Ia80If6q2WkqOeEQRxSIKhHusgmVuO9ivj0yFF1938FSQW6tfbAdQpfBVdUJGQJvIxQhVLH5nMNf5duMA4a1ZlZgfR+2GLApNlJ6LEo9SATJnarcHrIBPQyRCEN7qz8kbpn2LHN1TzZfLKJym/49fvT/j3JnEjMQpMR9jws5+r1DW2X7k7fy5Ly1olwoYAzphni0+JBJKQzk4D8HL5VyKA5GJMrTYC+DwW0zbSMYfT2lyOb/SOvnF5XEGl1xR6PrmSzhcGIhRDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5WU7s3fuKPSImRBkNVD6MJh/UOcuYXmgsl8ADr8fvgk=;
- b=KWIszj4v40zInddRXpwAuBPXJAD+Ut1CmtiRZ/BrirYv/iu1ciBw6tLEoRHA/xCkxU1VWou4cAdoN2Zzif2cixf01EdMC5C4doWBfvCFvh7RH8hIgcVruds2da+6/4LT7mnWIGulY7OMmRQzItKU+q6OWUqKVIoIcWL2+Rc9ncxxp4GI0kwb0PkgEIv7jg6ymXKPeMZpeicpJpp/rkXfiYZAvC/eeaZ8fBcXOfJobVFHPGJtP/4XJVtdsoge3v/7pzeNfsZuGrdJaNFyw2nUWjUolmAD5yWyVoD8H4MPp/ZYNtuXAmZGICkrdUhD7BH9wQfWJA0NUMTBzCASj11QxQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=synopsys.onmicrosoft.com; s=selector2-synopsys-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5WU7s3fuKPSImRBkNVD6MJh/UOcuYXmgsl8ADr8fvgk=;
- b=A8NA/g5+EfSKAkSNcKlrnky5TKDpvAl2+G/WDe26ZcPAxR5FAC7TFI8/NteD7PRxVew3nmLyMnM+ZtDAnbrLUB3Wf59ZhWWC7wOv3GVXW7GaDRaFe7jqjxoguuboMfmgc/dqr6kaOgiq8hgdJ3x+SPmNGlq0KA514W3DEh/HoRw=
-Received: from BN7PR12MB2802.namprd12.prod.outlook.com (20.176.27.97) by
- BN7PR12MB2755.namprd12.prod.outlook.com (20.176.178.139) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2602.10; Wed, 8 Jan 2020 09:06:34 +0000
-Received: from BN7PR12MB2802.namprd12.prod.outlook.com
- ([fe80::e420:5711:3657:f3ca]) by BN7PR12MB2802.namprd12.prod.outlook.com
- ([fe80::e420:5711:3657:f3ca%3]) with mapi id 15.20.2623.008; Wed, 8 Jan 2020
- 09:06:34 +0000
-From:   Tejas Joglekar <Tejas.Joglekar@synopsys.com>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Discussions about the Letux Kernel" <letux-kernel@openphoenux.org>,
-        "kernel@pyra-handheld.com" <kernel@pyra-handheld.com>,
-        Linux-OMAP <linux-omap@vger.kernel.org>
-Subject: Re: [BUG]: usb: dwc3: gadget: broken on OMAP5432
-Thread-Topic: [BUG]: usb: dwc3: gadget: broken on OMAP5432
-Thread-Index: AQHVxgIdUvY8PDkJv0e4ULUpdkC8K6fgedIA
-Date:   Wed, 8 Jan 2020 09:06:34 +0000
-Message-ID: <7daf64ba-7efb-e2f1-a449-f5f3791a3c8e@synopsys.com>
-References: <703DD239-8E3B-405C-A531-FF7DEEED38DC@goldelico.com>
-In-Reply-To: <703DD239-8E3B-405C-A531-FF7DEEED38DC@goldelico.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=joglekar@synopsys.com; 
-x-originating-ip: [198.182.52.26]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 603c1523-1e4c-452d-3cc7-08d7941a0f6c
-x-ms-traffictypediagnostic: BN7PR12MB2755:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BN7PR12MB2755132D07B3FA466F3E4BF9A43E0@BN7PR12MB2755.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 02760F0D1C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(39860400002)(376002)(366004)(396003)(136003)(189003)(199004)(2906002)(54906003)(86362001)(26005)(6512007)(110136005)(6506007)(186003)(966005)(71200400001)(53546011)(66556008)(8936002)(81166006)(81156014)(66446008)(64756008)(5660300002)(76116006)(91956017)(478600001)(8676002)(2616005)(4326008)(31686004)(66946007)(31696002)(316002)(6486002)(66476007)(36756003);DIR:OUT;SFP:1102;SCL:1;SRVR:BN7PR12MB2755;H:BN7PR12MB2802.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: synopsys.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QH8joqfYbsMGETjpTuRP9c6UzOnhEzTqtC/KjJ3p1YScMhdlvFWg/mfH4rmwyTurXW3XGHNjxG+my1NRQoIjl/q4ZdBU9r23zIiQPP7rPZtWPiEbBi2dcK0NkcxBxEQ8JhauS+3ZLNtcRKVq6aR7rCcvKvO04Uy19787lyFmnb9ufh4Yn31lQ6nP+hfpJ0zL5RnR3gIl1Cc4fasaHrRx5bkcPM7Y0O4sqJyzMHeEjTvaHQXYTmUbRL4mv7oLjomg1VowxdWkwEBGuHeK8+tqZufQVsQOAJM/vdvv9KbTywEWdtrKD21s5zG8r1P5JAZeA8cGiANsTw8OPlJoo/qGqRR8IZU91UIKwuUMf7Wr1KckbtKQgn+d8bstPCFaGWs7O2CFt1ujKzbYLnfhDsUdIExiTAlxAexACATqFf9bO2A5LXMnF/TfFYm+QldqsRWgflTLfknNEZCVjvxMjrOURi/w43F+63MccopZK9c2LHs=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <666903A83C10EE4E9B4A21EC16F6DBCE@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1727490AbgAHJcX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jan 2020 04:32:23 -0500
+Received: from mga01.intel.com ([192.55.52.88]:3452 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727205AbgAHJcW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 Jan 2020 04:32:22 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Jan 2020 01:32:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,409,1571727600"; 
+   d="scan'208";a="303510529"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga001.jf.intel.com with ESMTP; 08 Jan 2020 01:32:20 -0800
+Subject: Re: BUG: KASAN: use-after-free in
+ xhci_trb_virt_to_dma.part.24+0x1c/0x80
+To:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Greg KH <greg@kroah.com>, Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+References: <95b4bdb2-962f-561e-ac14-79cd44395915@molgen.mpg.de>
+ <20180720095410.GA11904@kroah.com>
+ <107dbdd1-4e45-836f-7f8f-85bc63374e4f@molgen.mpg.de>
+ <30b069b5-63f6-dd9e-b323-668f06bff6cf@molgen.mpg.de>
+ <20200103110451.GJ465886@lahna.fi.intel.com>
+ <81c6f906-3f5a-729d-f3b4-1ac6ac607c05@linux.intel.com>
+ <84369435-d355-0462-98ab-91bb1c5d3871@molgen.mpg.de>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <572bea6f-06d4-938a-802e-93386acf59d9@linux.intel.com>
+Date:   Wed, 8 Jan 2020 11:34:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 603c1523-1e4c-452d-3cc7-08d7941a0f6c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jan 2020 09:06:34.3597
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zxOlL6skl9P32ieUmJ2kHGgipUzAU2hrho1lvtRMijf2R0Ro+DYZAYdlQBb04eXOkS58OsNCBVSxpeU+dXjpFQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR12MB2755
-X-OriginatorOrg: synopsys.com
+In-Reply-To: <84369435-d355-0462-98ab-91bb1c5d3871@molgen.mpg.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGksDQpPbiAxLzgvMjAyMCAyOjI5IFBNLCBILiBOaWtvbGF1cyBTY2hhbGxlciB3cm90ZToNCj4g
-SGksDQo+IEkgbm90aWNlZCB0aGF0IHRoZSB1c2IgZXRoZXJuZXQgZ2FkZ2V0IGRyaXZlciBpcyBi
-cm9rZW4gc2luY2UgdjUuNS1yYzINCj4gYW5kIDUuNC40LCBidXQgb25seSBmb3Igb3VyIE9NQVA1
-IGJvYXJkLiBPdXIgT01BUDMgYm9hcmRzIHdvcmsgd2l0aA0KPiB0aGUgc2FtZSB0cmVlLCBrZXJu
-ZWwgYmluYXJ5IGFuZCB1c2VyLXNwYWNlIChEZWJpYW4gU3RyZXRjaCkuDQo+IA0KPiBUaGUgc3lt
-cHRvbSBpcyB0aGF0IEkgY2FuIHNlZSB0aGUgaW50ZXJmYWNlIG9uIHRoZSBob3N0IFBDIGJlaW5n
-DQo+IGVudW1lcmF0ZWQgYW5kIElQIGFkZHJlc3NlcyBldGMuIGFyZSBzZXQgdXAuIEJ1dCBhIHBp
-bmcgaW4gZWl0aGVyDQo+IGRpcmVjdGlvbiBmYWlscy90aW1lcyBvdXQuDQo+IA0KPiBBZnRlciBp
-bnNwZWN0aW5nIGRpZmZzIEkgZm91bmQgc29tZSBjaGFuZ2VzIGluIGR3YzM6Z2FkZ2V0DQo+IGFu
-ZCBpbmRlZWQgb21hcDMvdHdsNDAzMCB1c2VzIG11c2IgYW5kIG9tYXA1IHVzZXMgZHdjMy4NCj4g
-DQo+IFJldmVydGluZw0KPiANCj4gYTdmN2U2MTI3MGYxICgidXNiOiBkd2MzOiBnYWRnZXQ6IEZp
-eCBsb2dpY2FsIGNvbmRpdGlvbiIpOw0KPiANCj4gb24gdjUuNS1yYyBtYWtlcyBpdCB3b3JrIGFn
-YWluLg0KPiANCj4gQlRXOiB2NC4xOS45MCB3b3JrcyBhbHRob3VnaCBpdCBpbmNsdWRlcyB0aGlz
-IGxvZ2ljYWwgY29uZGl0aW9uIGZpeC4NCj4gU28gdGhlIHJlYWwgZGlmZmVyZW5jZSBiZXR3ZWVu
-IHY0LjE5IGFuZCB2NS41IG1heSBiZSBlbHNld2hlcmUgaW4NCj4gbmV3ZXIga2VybmVscyBhbmQg
-b25seSBiZSByZXZlYWxlZCBieSB0aGUgcGF0Y2guDQo+IA0KPiBJZiBpbXBvcnRhbnQ6IG15IHNl
-dHVwIGlzIHJ1bm5pbmcgd2l0aCBVU0IyIGNhYmxlIGFuZCBzcGVlZA0KPiBvbmx5Lg0KPiANCj4g
-U28gcGxlYXNlIGNoZWNrIHRoaXMgYW5kIG90aGVyIHJlY2VudCBkd2MzIHBhdGNoZXMgZm9yIGlu
-dHJvZHVjaW5nDQo+IGEgc3RhbGwgb2YgY29tbXVuaWNhdGlvbi4NCj4gDQpBbm90aGVyIGdhZGdl
-dCBkcml2ZXIgaXNzdWUgd2FzIHJlcG9ydGVkIGJ5IFRoaW5oIGFmdGVyIG15IGZpeCwgYW5kIGhl
-IGhhcyBzdWJtaXR0ZWQgYSBwYXRjaCBmb3IgdGhlIHNhbWUuIFlvdSBjYW4gcmVmZXIgdGhlIGRp
-c2N1c3Npb24gaHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9wYXRjaC8xMTI5MjA4Ny8uDQpD
-YW4geW91IGNoZWNrIGlmIHRoYXQgcGF0Y2ggd29ya3MgZm9yIHlvdSA/DQoNCj4gQlIgYW5kIHRo
-YW5rcywNCj4gTmlrb2xhdXMgU2NoYWxsZXINCj4gDQo+IA0KDQpUaGFua3MgJiBSZWdhcmRzLA0K
-IFRlamFzIEpvZ2xla2FyDQo=
+On 7.1.2020 17.35, Paul Menzel wrote:
+> Dear Mathias, dear Mika,
+> 
+> 
+> On 2020-01-07 13:09, Mathias Nyman wrote:
+>> On 3.1.2020 13.04, Mika Westerberg wrote:
+>>> On Thu, Jan 02, 2020 at 03:10:14PM +0100, Paul Menzel wrote:
+>>>> Mika, as you fixed the other leak, any idea, how to continue from the
+>>>> kmemleak log below?
+>>>>
+>>>> ```
+>>>> unreferenced object 0xffff8c207a1e1408 (size 8):
+>>>>     comm "systemd-udevd", pid 183, jiffies 4294667978 (age 752.292s)
+>>>>     hex dump (first 8 bytes):
+>>>>       34 01 05 00 00 00 00 00                          4.......
+>>>>     backtrace:
+>>>>       [<00000000aea7b46d>] xhci_mem_init+0xcfa/0xec0 [xhci_hcd]
+>>>
+>>> There are probably better ways for doing this but you can use objdump
+>>> for example:
+>>>
+>>>     $ objdump -l --prefix-addresses -j .text --disassemble=xhci_mem_init drivers/usb/host/xhci-hcd.ko
+>>>
+>>> then find the offset xhci_mem_init+0xcfa. It should show you the line
+>>> numbers as well if you have compiled your kernel with debug info. This
+>>> should be close to the line that allocated the memory that was leaked.
+> 
+> Thank you. I actually remembered `script/f2addr2line`.
+> 
+>      $ scripts/faddr2line drivers/usb/host/xhci-hcd.o xhci_mem_init+0xcfa
+>      xhci_mem_init+0xcfa/0xec0:
+>      xhci_add_in_port at /mnt/drivers/usb/host/xhci-mem.c:2161
+>      (inlined by) xhci_setup_port_arrays at /mnt/drivers/usb/host/xhci-mem.c:2309
+>      (inlined by) xhci_mem_init at /mnt/drivers/usb/host/xhci-mem.c:2538
+> 
+>> Paul, it possible that your xhci controller has several
+>> supported protocol extended capabilities for usb 3 ports, each
+>> with their own custom protocol speed ID table.
+>>
+>> xhci driver assumes there is only one custome PSI table per roothub,
+>> and we will end up allocating the second PSI table on top of the first,
+>> leaking the first.
+>>
+>> Could you boot with xhci dynamic debug enabled, and show dmesg after boot, add:
+>> xhci_hcd.dyndbg=+p
+>> to you kernel cmdline.
+>>
+>> Or as an alternative, show output of:
+>>
+>> sudo cat /sys/kernel/debug/usb/xhci/*/reg-ext-protocol*
+> 
+> `/sys/kernel/debug/` cannot be read by unprivileged users, so the wildcard does
+> not work with `sudo`.
+> 
+> ```
+> $ sudo ls /sys/kernel/debug/usb/xhci
+> 0000:12:00.0  0000:26:00.3  0000:26:00.4
+> # cat /sys/kernel/debug/usb/xhci/*/reg-ext-protocol*
+
+problematic xhci:
+capability for first four USB 2 ports
+> EXTCAP_REVISION = 0x02000402
+> EXTCAP_NAME = 0x20425355
+> EXTCAP_PORTINFO = 0x00180401
+> EXTCAP_PORTTYPE = 0x00000000
+
+capability for one USB 3.1 port (5th port)
+> EXTCAP_REVISION = 0x03100802
+> EXTCAP_NAME = 0x20425355
+> EXTCAP_PORTINFO = 0x10000105
+> EXTCAP_PORTTYPE = 0x00000000
+> EXTCAP_MANTISSA1 = 0x00050134
+capability for one USB 3.1 port (6th port)
+> EXTCAP_REVISION = 0x03100802
+> EXTCAP_NAME = 0x20425355
+> EXTCAP_PORTINFO = 0x10000106
+> EXTCAP_PORTTYPE = 0x00000000
+> EXTCAP_MANTISSA1 = 0x00050134
+capability for one USB 3.1 port (7th port)
+> EXTCAP_REVISION = 0x03100802
+> EXTCAP_NAME = 0x20425355
+> EXTCAP_PORTINFO = 0x10000107
+> EXTCAP_PORTTYPE = 0x00000000
+> EXTCAP_MANTISSA1 = 0x00050134
+capability for one USB 3.1 port (8th port)
+> EXTCAP_REVISION = 0x03100802
+> EXTCAP_NAME = 0x20425355
+> EXTCAP_PORTINFO = 0x10000108
+> EXTCAP_PORTTYPE = 0x00000000
+> EXTCAP_MANTISSA1 = 0x00050134
+
+It has eight ports.  last four of them are USB 3.1 ports.
+It has a very odd setup where each 3.1 port has their own
+supported protocol capability with a custom PSI, but all the PSI's are similar,
+telling the port only support a 5Gbps speed.
+
+We leak all the custom PSI tables for USB 3.1 ports except the last,
+these would be the EXTCAP_MANTISSA1 = 0x00050134, which is the same as
+the hex dump of the unreferenced object you posted earlier (considering byte order):
+
+hex dump (first 8 bytes):
+34 01 05 00 00 00 00 00                          4.......
+
+I'm working on a patch for this
+
+-Mathias
