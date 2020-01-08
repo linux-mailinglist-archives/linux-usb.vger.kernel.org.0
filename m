@@ -2,120 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9C013359A
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2020 23:19:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C81C133916
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2020 03:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727213AbgAGWTB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jan 2020 17:19:01 -0500
-Received: from mail-io1-f70.google.com ([209.85.166.70]:55913 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727127AbgAGWTB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 17:19:01 -0500
-Received: by mail-io1-f70.google.com with SMTP id z21so771177iob.22
-        for <linux-usb@vger.kernel.org>; Tue, 07 Jan 2020 14:19:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=EdYBfb9elhNzCS6nVfUUeF91E19TZISwHJvUe8cvhIY=;
-        b=O5CFnZXM0sD4LVa8fWmhbf5qGxkNQx7gsg88L7p41VtkmU7klU25auKWLBU6ekn6q6
-         40n/Ap/3Sbt1D/eHjNqEo41qzX0wzyJbuSnQ4j/NhWPwVMOZ5fZashVAU+XXMEv3hk9Q
-         gKpbuwZ37AxBxSwt8bT9qJt1fw4FkLDQRVb7QRzozwkbeTC8ePb8T9z677MVSiY3WXGS
-         lzU1wvV95SoMJLzofBgYchvES9zGGwMC+QHiYQGEvlFBaK6vZso9mwKPJw//6BGYUcqG
-         FBHV89oxotHk01cld96P3oG7YZYQpHhf6xPMnw9Leqrns3LyQrIIJYWr5+P9uvZL3lc8
-         v3vQ==
-X-Gm-Message-State: APjAAAVTS56bQ09JiN9ow3frO84pfWNyzHaglPmVeCAs/fyieM8RVRMe
-        dnGLEZ5qsVIMek/+rvpmNPKn4tIqQiRG1FzLp8f7elAJrSMm
-X-Google-Smtp-Source: APXvYqw4ziw6b0NOCP0C+XN7LSo85RyAPU0ikCkIYra/xOmqW2R+353h9sekM1tp7raPU7gtiJfNXipkNXEZP28R2uljf4K2iqbm
+        id S1726145AbgAHCYF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jan 2020 21:24:05 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:44408 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725812AbgAHCYF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jan 2020 21:24:05 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0082O3DX050123;
+        Tue, 7 Jan 2020 20:24:03 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1578450243;
+        bh=qOCATyhJgjSifdZz4D8QGpWJEaB/JxXHEotxf/GrBYA=;
+        h=From:To:CC:Subject:Date;
+        b=taaV/f8ZC/TZro0SNEiDF1MGqoV29Q1vbaWvg/5cYDMC1x/bhikpwlKCQpObjdKGY
+         4tBjYMqRVzskdis6Y2XUMwYCt43kluec104F5qz9WnJjQq4DwkZsqV06esuJX33k2/
+         9HAUr+E9tz+2frzqyVnHSiuAmOq3Exb82d6d3DQ0=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0082O32P117688
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 7 Jan 2020 20:24:03 -0600
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 7 Jan
+ 2020 20:24:02 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Tue, 7 Jan 2020 20:24:02 -0600
+Received: from uda0271908.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0082O26M084221;
+        Tue, 7 Jan 2020 20:24:02 -0600
+From:   Bin Liu <b-liu@ti.com>
+To:     <linux-usb@vger.kernel.org>
+CC:     Tony Lindgren <tony@atomide.com>, Bin Liu <b-liu@ti.com>
+Subject: [PATCH] usb: musb: remove dummy driver musb_am335x.c
+Date:   Tue, 7 Jan 2020 20:28:06 -0600
+Message-ID: <20200108022806.32061-1-b-liu@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-Received: by 2002:a5e:dd4c:: with SMTP id u12mr980111iop.144.1578435541031;
- Tue, 07 Jan 2020 14:19:01 -0800 (PST)
-Date:   Tue, 07 Jan 2020 14:19:01 -0800
-In-Reply-To: <Pine.LNX.4.44L0.2001071624021.1567-100000@iolanthe.rowland.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b962af059b9429bd@google.com>
-Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (2)
-From:   syzbot <syzbot+10e5f68920f13587ab12@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, ingrassia@epigenesys.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Since commit 0782e8572ce4 ("ARM: dts: Probe am335x musb with ti-sysc"),
+the dummy driver musb_am335x.c is no longer needed, let's drop it.
 
-syzbot has tested the proposed patch but the reproducer still triggered  
-crash:
-WARNING in usbhid_raw_request/usb_submit_urb
+Signed-off-by: Bin Liu <b-liu@ti.com>
+---
+ drivers/usb/musb/Kconfig       |  4 ----
+ drivers/usb/musb/Makefile      |  3 ---
+ drivers/usb/musb/musb_am335x.c | 44 ----------------------------------
+ 3 files changed, 51 deletions(-)
+ delete mode 100644 drivers/usb/musb/musb_am335x.c
 
-------------[ cut here ]------------
-usb 4-1: BOGUS urb xfer, pipe 2 != type 2
-WARNING: CPU: 0 PID: 4185 at drivers/usb/core/urb.c:478  
-usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:478
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 4185 Comm: syz-executor.3 Not tainted 5.5.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xef/0x16e lib/dump_stack.c:118
-  panic+0x2aa/0x6e1 kernel/panic.c:221
-  __warn.cold+0x2f/0x30 kernel/panic.c:582
-  report_bug+0x27b/0x2f0 lib/bug.c:195
-  fixup_bug arch/x86/kernel/traps.c:174 [inline]
-  fixup_bug arch/x86/kernel/traps.c:169 [inline]
-  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
-  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
-  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-RIP: 0010:usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:478
-Code: 4d 85 ed 74 2c e8 68 90 e7 fd 4c 89 f7 e8 60 2c 1d ff 41 89 d8 44 89  
-e1 4c 89 ea 48 89 c6 48 c7 c7 80 59 15 86 e8 10 ad bc fd <0f> 0b e9 20 f4  
-ff ff e8 3c 90 e7 fd 4c 89 f2 48 b8 00 00 00 00 00
-RSP: 0018:ffff8881c0017b30 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff81295dad RDI: ffffed1038002f58
-RBP: 0000000000000000 R08: ffff8881cf3b6200 R09: fffffbfff11f1ec0
-R10: fffffbfff11f1ebf R11: ffffffff88f8f5ff R12: 0000000000000002
-R13: ffff8881d884d0a8 R14: ffff8881da3c70a0 R15: ffff8881ca8f1c00
-  usb_start_wait_urb+0x108/0x2b0 drivers/usb/core/message.c:57
-  usb_internal_control_msg drivers/usb/core/message.c:101 [inline]
-  usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:152
-  usbhid_set_raw_report drivers/hid/usbhid/hid-core.c:917 [inline]
-  usbhid_raw_request+0x21f/0x640 drivers/hid/usbhid/hid-core.c:1265
-  hid_hw_raw_request include/linux/hid.h:1079 [inline]
-  hidraw_send_report+0x296/0x500 drivers/hid/hidraw.c:151
-  hidraw_write+0x34/0x50 drivers/hid/hidraw.c:164
-  __vfs_write+0x76/0x100 fs/read_write.c:494
-  vfs_write+0x262/0x5c0 fs/read_write.c:558
-  ksys_write+0x127/0x250 fs/read_write.c:611
-  do_syscall_64+0xb6/0x5c0 arch/x86/entry/common.c:294
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x45a919
-Code: ad b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7  
-48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 7b b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007f996c966c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 000000000045a919
-RDX: 0000000000000002 RSI: 0000000020000040 RDI: 0000000000000007
-RBP: 000000000075bfc8 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f996c9676d4
-R13: 00000000004cbe90 R14: 00000000004e5ce0 R15: 00000000ffffffff
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
-
-
-Tested on:
-
-commit:         ecdf2214 usb: gadget: add raw-gadget interface
-git tree:       https://github.com/google/kasan.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=12b2e656e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b06a019075333661
-dashboard link: https://syzkaller.appspot.com/bug?extid=10e5f68920f13587ab12
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=16c162aee00000
+diff --git a/drivers/usb/musb/Kconfig b/drivers/usb/musb/Kconfig
+index 63376d494f0f..eb2ded1026ee 100644
+--- a/drivers/usb/musb/Kconfig
++++ b/drivers/usb/musb/Kconfig
+@@ -101,7 +101,6 @@ config USB_MUSB_AM35X
+ 
+ config USB_MUSB_DSPS
+ 	tristate "TI DSPS platforms"
+-	select USB_MUSB_AM335X_CHILD
+ 	depends on ARCH_OMAP2PLUS || COMPILE_TEST
+ 	depends on OF_IRQ
+ 
+@@ -122,9 +121,6 @@ config USB_MUSB_MEDIATEK
+ 	depends on GENERIC_PHY
+ 	select USB_ROLE_SWITCH
+ 
+-config USB_MUSB_AM335X_CHILD
+-	tristate
+-
+ comment "MUSB DMA mode"
+ 
+ config MUSB_PIO_ONLY
+diff --git a/drivers/usb/musb/Makefile b/drivers/usb/musb/Makefile
+index 63d82d0fab67..932247360a9f 100644
+--- a/drivers/usb/musb/Makefile
++++ b/drivers/usb/musb/Makefile
+@@ -26,9 +26,6 @@ obj-$(CONFIG_USB_MUSB_JZ4740)			+= jz4740.o
+ obj-$(CONFIG_USB_MUSB_SUNXI)			+= sunxi.o
+ obj-$(CONFIG_USB_MUSB_MEDIATEK)      		+= mediatek.o
+ 
+-
+-obj-$(CONFIG_USB_MUSB_AM335X_CHILD)		+= musb_am335x.o
+-
+ # the kconfig must guarantee that only one of the
+ # possible I/O schemes will be enabled at a time ...
+ # PIO only, or DMA (several potential schemes).
+diff --git a/drivers/usb/musb/musb_am335x.c b/drivers/usb/musb/musb_am335x.c
+deleted file mode 100644
+index 5f04f8e3a640..000000000000
+-- 
+2.17.1
 
