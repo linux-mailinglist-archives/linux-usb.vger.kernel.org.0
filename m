@@ -2,170 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A8B13517A
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 03:37:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2D913517C
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 03:38:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727749AbgAIChM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jan 2020 21:37:12 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:42988 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726913AbgAIChM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jan 2020 21:37:12 -0500
-Received: by mail-pf1-f196.google.com with SMTP id 4so2583879pfz.9;
-        Wed, 08 Jan 2020 18:37:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Zb0XpDdzhr2HSaCU2kbgbQrO7aw5OHk2GOMpmnAv0rw=;
-        b=ZWJ0u+DIjR48pCEpu4933sMA128ctTEGce5OoG+LclUFtc8ny1N9d9GkrQN8wz4/j9
-         z/2iyrT0vHtDVeVLBYYMuu1waVJbVgQKFim5jMQMx9A1tT31eRpQtC/Fkxyry7jH62KL
-         GdQW4PrfmhBdAhqWx23xs6KnKr61vAzJJTCXw8YuqeTGCNZ7F6CmXWqhE/wtmakLUVts
-         EInw/HpWzWPNFHp0GHOj1mOsN2yQ2u0+i5HoJZRIDhccZQXDzeXWgiR/Feetsx0zS4NW
-         K8jJOZc2SHuYyhluS0ugoN53mtgcTqb96KHHXG7NWBNExA2RCLumcwQKIsDW/5AJNoCg
-         u+Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Zb0XpDdzhr2HSaCU2kbgbQrO7aw5OHk2GOMpmnAv0rw=;
-        b=f7Ax4Y8++HKZwNIkiY3Tgk2mUc+iA2/Al5Z9WEw3/G3vcGFkgu4NdOz0TzG+r2uwp3
-         LxC1bhJucucZPrsmpmU2qZ/5euU/ineD4RoAgPz4YBg+Bt+PDqxciu/04WL1m41ScdX9
-         SO/f0kO/XGmIrBnfNUtuKCSry840thsuIyOTm+TyLuM2gbI5lyCf44FMQk5dnlP0vCir
-         korDjsd/SFysHi0vcUsfqk3HRZkn1iD6s4X2V/N31mn9n9UgrKH/kWa+t0fYOYrAmPB6
-         bndU4gsnJcIwUTH6yu26otXIQf4hVeXnapk0/NXE4gGalBiSZMeBnFhq/wXAUMB+VMUG
-         wAMw==
-X-Gm-Message-State: APjAAAWZGDv0IhX58QFT0inOKpOffzEq2v/yMFBEW0Ldq7UyULTY16Se
-        fm8OlKcthFu9HFcExfhZoy2Z6vJI
-X-Google-Smtp-Source: APXvYqzmsBDRySn86DX3ytKuvHh1LQOPcTi7GJlphbL9+4pdnS2HjV3bAw6dF8BBoqDcxlcoHQHg+g==
-X-Received: by 2002:a63:2a8b:: with SMTP id q133mr8478254pgq.72.1578537431296;
-        Wed, 08 Jan 2020 18:37:11 -0800 (PST)
-Received: from [192.168.1.60] (59-120-186-245.HINET-IP.hinet.net. [59.120.186.245])
-        by smtp.gmail.com with ESMTPSA id v9sm625959pja.26.2020.01.08.18.37.09
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 08 Jan 2020 18:37:10 -0800 (PST)
-Subject: Re: [PATCH V2 5/7] USB: serial: f81232: Set F81534A serial port with
- RS232 mode
-To:     Johan Hovold <johan@kernel.org>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, peter_hong@fintek.com.tw,
-        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-References: <20190923022449.10952-1-hpeter+linux_kernel@gmail.com>
- <20190923022449.10952-6-hpeter+linux_kernel@gmail.com>
- <20191023115300.GU24768@localhost>
- <f3a8b0bd-79f7-3bef-4d07-69774c87873a@gmail.com>
- <20200108143502.GJ30908@localhost>
-From:   "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
-Message-ID: <3c79f786-de34-550e-3964-d7fb334f6d56@gmail.com>
-Date:   Thu, 9 Jan 2020 10:37:09 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
-MIME-Version: 1.0
-In-Reply-To: <20200108143502.GJ30908@localhost>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1727417AbgAICiO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jan 2020 21:38:14 -0500
+Received: from us03-smtprelay2.synopsys.com ([149.117.87.133]:41342 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726758AbgAICiN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jan 2020 21:38:13 -0500
+Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 90D46C0094;
+        Thu,  9 Jan 2020 02:38:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1578537492; bh=F+VjaBfPdwMBDLvq4ZzOx3kFbGnZ4juft2Naut8Sml4=;
+        h=Date:From:Subject:To:From;
+        b=MgpqNL7E6rzrZyLBhuhCCRhczttvyzQE0ow+pttpN6SpWfD1nBUFEGtu6n5m6A95G
+         MyXslHOsqsfX8Fgo0ozd3c64NsrLvpGSHTuhF2SBNbfbwJF/gF9kmBGKjYXuiv5+0M
+         6IaId9TQVuHzsyzH2aoU7LjvJdtKnQ35pEjXjHQeUplRBKq+lAhhMGt3BKCEfG76P0
+         PrESsLa3LSXMeiqNnbzrJUhIQSYIoIa30KRqGRAITm7pjfJHUP1e8mvBqi2Q/zEHk2
+         Cj7bjKHhaOlYRn4S0QCgsFzzn8JbSZ3dsMb2lc+B8eivLVRcX6oenvrlxHkvRKhK+T
+         A86Xw9I5SCgpQ==
+Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 1E774A007A;
+        Thu,  9 Jan 2020 02:38:10 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Wed, 08 Jan 2020 18:38:10 -0800
+Date:   Wed, 08 Jan 2020 18:38:10 -0800
+Message-Id: <c4a428ec617a954dc27221d8a9133d22c38b2447.1578537372.git.thinhn@synopsys.com>
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH] usb: gadget: configfs: Add max_speed setting
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Johan,
+Some functions support speeds other than SuperSpeed. Add max_speed
+attribute to configfs gadget allowing user to specify the maximum speed
+the composite driver supports. The valid input speed names are
+super-speed-plus, super-speed, high-speed, full-speed, and low-speed.
 
-Johan Hovold 於 2020/1/8 下午 10:35 寫道:
->> Yes, when 1 F81534A connect to Host, it'll report device as following.
->> 	virtual HUB
->> 		GPIO Device.
->> 		serial port 1
->> 		...
->> 		serial port n
-> 
-> Could you post lsusb -v output for this with a couple of UARTs enabled?
+Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+---
+ Documentation/ABI/testing/configfs-usb-gadget |  4 +++
+ drivers/usb/gadget/configfs.c                 | 43 +++++++++++++++++++++++++++
+ 2 files changed, 47 insertions(+)
 
-The following lsusb log is F81536 informations
-2c42:1608 => HUB
-2c42:16f8 => GPIO device
-2c42:163x => UART (need driver enable)
-
-*before insmod driver
-Bus 002 Device 003: ID 05e3:0620 Genesys Logic, Inc.
-Bus 002 Device 002: ID 05e3:0620 Genesys Logic, Inc.
-Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 001 Device 007: ID 0603:00f2 Novatek Microelectronics Corp. Keyboard 
-(Labtec Ultra Flat Keyboard)
-Bus 001 Device 005: ID 046d:c05a Logitech, Inc. M90/M100 Optical Mouse
-Bus 001 Device 044: ID 2c42:16f8
-Bus 001 Device 043: ID 2c42:1608
-Bus 001 Device 003: ID 05e3:0610 Genesys Logic, Inc. 4-port hub
-Bus 001 Device 002: ID 05e3:0610 Genesys Logic, Inc. 4-port hub
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-
-*after insmod driver and wait for complete
-Bus 002 Device 003: ID 05e3:0620 Genesys Logic, Inc.
-Bus 002 Device 002: ID 05e3:0620 Genesys Logic, Inc.
-Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 001 Device 007: ID 0603:00f2 Novatek Microelectronics Corp. Keyboard 
-(Labtec Ultra Flat Keyboard)
-Bus 001 Device 005: ID 046d:c05a Logitech, Inc. M90/M100 Optical Mouse
-Bus 001 Device 052: ID 2c42:1636
-Bus 001 Device 051: ID 2c42:1636
-Bus 001 Device 050: ID 2c42:1636
-Bus 001 Device 049: ID 2c42:1636
-Bus 001 Device 048: ID 2c42:1636
-Bus 001 Device 047: ID 2c42:1636
-Bus 001 Device 046: ID 2c42:1636
-Bus 001 Device 045: ID 2c42:1636
-Bus 001 Device 056: ID 2c42:1636
-Bus 001 Device 055: ID 2c42:1636
-Bus 001 Device 054: ID 2c42:1636
-Bus 001 Device 053: ID 2c42:1636
-Bus 001 Device 044: ID 2c42:16f8
-Bus 001 Device 043: ID 2c42:1608
-Bus 001 Device 003: ID 05e3:0610 Genesys Logic, Inc. 4-port hub
-Bus 001 Device 002: ID 05e3:0610 Genesys Logic, Inc. 4-port hub
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-
->> The link are F81534A pin-out:
->> 	https://imgur.com/a/AZHqQ1N
-> 
-> Do you have a datasheet for the device?
-> 
-> I think I'm starting to get an idea of how this work, but I really don't
-> like having to spend this much time on detective work just to understand
-> how the hw works.
-
-The following link is F81536 spec:
-https://drive.google.com/drive/folders/1oA8DvpevFXoTLCDfPZHzaBWKr32ch5xc?usp=sharing
-
->> So we can control F81534A series all GPIO pins via GPIO Device.
->> Serial ports are also control MODE0_x,  MODE1_x,  MODE2_x
->> (e.g. UART1 MODE0_1,  MODE1_1,  MODE2_1), but when Serial ports
->> is h/w disabled (DTR pull low), the mode pin will change to GPIO pin.
-> 
-> So you tie a ports DTR pin, even though it's normally an output, and use
-> that at boot to determine whether the UART should be enabled or not?
-> 
-> And the GPIO device can only control a pin if the corresponding port is
-> disabled?
-> 
-> Can you read back the enable state of each port?
-
-DTR pin of the F81534A series are strap pin on power on, when IC detect
-it pulled to low, the UART device can't enable and DTR change to input
-mode.
-
-I can read the UART enable state from GPIO Device, so I can do when the
-GPIO is associated with UART enabled, change it as output only otherwise
-can be set to input/output. Is this OK ??
-
-> What about devices using a different tranceiver? Should the state of the
-> mode pins ultimately be tied to VID/PID (can your customers change
-> VID/PID)?
-> 
-
-Our device VID/PID is changeable, but we assume don't change it.
-
+diff --git a/Documentation/ABI/testing/configfs-usb-gadget b/Documentation/ABI/testing/configfs-usb-gadget
+index 95a36589a66b..4594cc2435e8 100644
+--- a/Documentation/ABI/testing/configfs-usb-gadget
++++ b/Documentation/ABI/testing/configfs-usb-gadget
+@@ -16,6 +16,10 @@ Description:
+ 				write UDC's name found in /sys/class/udc/*
+ 				to bind a gadget, empty string "" to unbind.
+ 
++		max_speed	- maximum speed the driver supports. Valid
++				names are super-speed-plus, super-speed,
++				high-speed, full-speed, and low-speed.
++
+ 		bDeviceClass	- USB device class code
+ 		bDeviceSubClass	- USB device subclass code
+ 		bDeviceProtocol	- USB device protocol code
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index ab9ac48a751a..32b637e3e1fa 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -293,6 +293,47 @@ static ssize_t gadget_dev_desc_UDC_store(struct config_item *item,
+ 	return ret;
+ }
+ 
++static ssize_t gadget_dev_desc_max_speed_show(struct config_item *item,
++					      char *page)
++{
++	enum usb_device_speed speed = to_gadget_info(item)->composite.max_speed;
++
++	return sprintf(page, "%s\n", usb_speed_string(speed));
++}
++
++static ssize_t gadget_dev_desc_max_speed_store(struct config_item *item,
++					       const char *page, size_t len)
++{
++	struct gadget_info *gi = to_gadget_info(item);
++
++	mutex_lock(&gi->lock);
++
++	/* Prevent changing of max_speed after the driver is binded */
++	if (gi->composite.gadget_driver.udc_name)
++		goto err;
++
++	if (strncmp(page, "super-speed-plus", 16) == 0)
++		gi->composite.max_speed = USB_SPEED_SUPER_PLUS;
++	else if (strncmp(page, "super-speed", 11) == 0)
++		gi->composite.max_speed = USB_SPEED_SUPER;
++	else if (strncmp(page, "high-speed", 10) == 0)
++		gi->composite.max_speed = USB_SPEED_HIGH;
++	else if (strncmp(page, "full-speed", 10) == 0)
++		gi->composite.max_speed = USB_SPEED_FULL;
++	else if (strncmp(page, "low-speed", 9) == 0)
++		gi->composite.max_speed = USB_SPEED_LOW;
++	else
++		goto err;
++
++	gi->composite.gadget_driver.max_speed = gi->composite.max_speed;
++
++	mutex_unlock(&gi->lock);
++	return len;
++err:
++	mutex_unlock(&gi->lock);
++	return -EINVAL;
++}
++
+ CONFIGFS_ATTR(gadget_dev_desc_, bDeviceClass);
+ CONFIGFS_ATTR(gadget_dev_desc_, bDeviceSubClass);
+ CONFIGFS_ATTR(gadget_dev_desc_, bDeviceProtocol);
+@@ -302,6 +343,7 @@ CONFIGFS_ATTR(gadget_dev_desc_, idProduct);
+ CONFIGFS_ATTR(gadget_dev_desc_, bcdDevice);
+ CONFIGFS_ATTR(gadget_dev_desc_, bcdUSB);
+ CONFIGFS_ATTR(gadget_dev_desc_, UDC);
++CONFIGFS_ATTR(gadget_dev_desc_, max_speed);
+ 
+ static struct configfs_attribute *gadget_root_attrs[] = {
+ 	&gadget_dev_desc_attr_bDeviceClass,
+@@ -313,6 +355,7 @@ static struct configfs_attribute *gadget_root_attrs[] = {
+ 	&gadget_dev_desc_attr_bcdDevice,
+ 	&gadget_dev_desc_attr_bcdUSB,
+ 	&gadget_dev_desc_attr_UDC,
++	&gadget_dev_desc_attr_max_speed,
+ 	NULL,
+ };
+ 
 -- 
-With Best Regards,
-Peter Hong
+2.11.0
+
