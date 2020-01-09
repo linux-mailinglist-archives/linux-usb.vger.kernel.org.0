@@ -2,97 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0539F1355EC
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 10:38:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8123C135600
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 10:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729734AbgAIJiR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jan 2020 04:38:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49282 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729727AbgAIJiP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Jan 2020 04:38:15 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1217220678;
-        Thu,  9 Jan 2020 09:38:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578562694;
-        bh=B8Vy7Qc/JmhHxytf6QW/GNyZc4W736SnXEDytIHhZaE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hIRDGUFEScKQC8f2kDjY16KIhbuSJj5ICaJWJfXBbOKqwqWx16O/JeVmayvc9EMbF
-         vLo/yMCUXL8WXkaqBvM+8TJ87FL4EqbGdtZStq6nrzKxx6gkecYr1DmJm/jnpwZrhS
-         /OUvAVwax6WXEhP1+L/6vKhizuywUAtt6zqzwAR4=
-Date:   Thu, 9 Jan 2020 10:38:12 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "rogerq@ti.com" <rogerq@ti.com>,
-        "jbergsagel@ti.com" <jbergsagel@ti.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>, "nm@ti.com" <nm@ti.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        Rahul Kumar <kurahul@cadence.com>,
-        Sanket Parmar <sparmar@cadence.com>,
-        Peter Chan <peter.chan@nxp.com>
-Subject: Re: [PATCH] usb: cdns3: Fix: ARM core hang after connect/disconnect
- operation.
-Message-ID: <20200109093812.GC44349@kroah.com>
-References: <20200108113719.21551-1-pawell@cadence.com>
- <20200108142829.GB2383861@kroah.com>
- <BYAPR07MB4709983A2DF70AA0058C737FDD390@BYAPR07MB4709.namprd07.prod.outlook.com>
- <20200109063841.GA2579094@kroah.com>
- <BYAPR07MB4709AA109700B4BCAD1C1ED8DD390@BYAPR07MB4709.namprd07.prod.outlook.com>
+        id S1728925AbgAIJmj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jan 2020 04:42:39 -0500
+Received: from mail-io1-f65.google.com ([209.85.166.65]:40609 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728660AbgAIJmg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jan 2020 04:42:36 -0500
+Received: by mail-io1-f65.google.com with SMTP id x1so6402603iop.7;
+        Thu, 09 Jan 2020 01:42:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JTVqPFCFqKIu52p3Shf6ezDJo+AR70XrI4KPt0+xR+I=;
+        b=RGTilTOrxQnMK01eRyQ8ReEqYHttPvhypdA3W8vBn4figPeRjW5Pte/cZZPIUFzJMM
+         907zGoBLh1Ve2yWDhfzmAb8MBNmNkAr0VyYX5aBNoJZhTuChx1Ev0h+xrYYXIwbxN8fq
+         V+34bkOLYoRj+iVwq0QTr3J2t/3iOvZyMQIJNhF3ju5BK7kxvnrlP5QE/5Iuaqc/nWKX
+         Kj/2xIlR1cUcMIJ/bad+h1QTViJYRQEvAViUsAWaG/e+EDvTHJYJ6hpEcm1CPWp7DXa+
+         rytjj2oj+6GfjSB/rkCGWu1SeWXZgb0q2Eb6htyozeFF20V6ja/A8TRX1rbL8hrTrmpT
+         r7ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JTVqPFCFqKIu52p3Shf6ezDJo+AR70XrI4KPt0+xR+I=;
+        b=TamGad+R67bADlC3GBx+XASMLKq11fYH9SmSMaFFrkt008nyYGkbuEjFJ+/Mx2Fg9B
+         sO3dO8CFwJ6glXzfAJs/Uvg79qc3mNoXb8gqG3rUQ1rl1nxd9SXPVS8qdqMyr58UmRz8
+         sRBoMRUncMoKRoTgCzm3gjCrWPVrjK4bAhd24+ZHXlcaza9TrJOpIzbrUiaXb4BDHzrI
+         8nNZmHi44H/tJhL2Pq49EukX3jwVg2fSVdHC+ls7dgq+qRDl8QEPuWkkh9WDpNFb6sbC
+         3o7KHUv07aw86doQaynVcEoLpwBAkqehlS1uJPtsI/RuJJrfM6feE+WXncxf7nEtr3WO
+         f9nQ==
+X-Gm-Message-State: APjAAAWvARy/pyyZ9r4tQX3w08sJaCbaGk0hFEWCVoKU36rRhlxiu9mz
+        95HSqCui/JDbjogLRosKIvWsJUNiOWVxD8xi10Y=
+X-Google-Smtp-Source: APXvYqyganuPeYpaKDTdpCjlFATUP46sC8jymaDLN3+HM2uZ93qHvpnJ1NmCmsJNEY+fcfOnjjB341Ch76gOlVRwfvg=
+X-Received: by 2002:a5d:9dd9:: with SMTP id 25mr7057853ioo.287.1578562955274;
+ Thu, 09 Jan 2020 01:42:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR07MB4709AA109700B4BCAD1C1ED8DD390@BYAPR07MB4709.namprd07.prod.outlook.com>
+References: <1576139703-9409-1-git-send-email-peter.chen@nxp.com>
+In-Reply-To: <1576139703-9409-1-git-send-email-peter.chen@nxp.com>
+From:   Peter Chen <hzpeterchen@gmail.com>
+Date:   Thu, 9 Jan 2020 17:42:23 +0800
+Message-ID: <CAL411-o4FYWYs2A15fAre8eym4R0ka8SRo5XqhiaMyk+A-KDcQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] usb: gadget: f_fs: set req->num_sgs as 0 for
+ non-sg transfer
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     balbi@kernel.org, USB list <linux-usb@vger.kernel.org>,
+        linux-imx@nxp.com, Jun Li <jun.li@nxp.com>,
+        stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 09, 2020 at 08:34:12AM +0000, Pawel Laszczak wrote:
-> >
-> >On Thu, Jan 09, 2020 at 06:27:02AM +0000, Pawel Laszczak wrote:
-> >> >> +	writel(EP_CMD_EPRST, &priv_dev->regs->ep_cmd);
-> >> >> +
-> >> >> +	ret = readl_poll_timeout_atomic(&priv_dev->regs->ep_cmd, val,
-> >> >> +					!(val & (EP_CMD_CSTALL | EP_CMD_EPRST)),
-> >> >> +					1, 1000);
-> >> >> +
-> >> >> +	if (unlikely(ret))
-> >> >
-> >> >Unless you can measure the difference of using/not using a
-> >> >unlikely/likely mark, NEVER use it.  The compiler and cpu can almost
-> >> >always do better than you can, we have the tests to prove it.
-> >> >
-> >>
-> >> The both of the above timeout should never occur. If they occurred it would be a
-> >> critical controller bug. In this case driver can only inform  about this event.
-> >
-> >"Should never occur" is a fun thing to say :)
-> >
-> >If it can never occur, then don't even check for it.
-> 
-> Yes, on existing platforms it can never occur. 
-> 
-> >
-> >If it can, then check for it and handle it properly.
-> >
-> >What about this controller in systems with removable busses (like PCI?)
-> >What happens then (hint, I bet this could occur...)
-> 
-> It's good question.  Nobody from our customer currently use such system. 
-> The only platform with PCI is used by me for testing purpose.  
+On Thu, Dec 12, 2019 at 4:38 PM Peter Chen <peter.chen@nxp.com> wrote:
+>
+> The UDC core uses req->num_sgs to judge if scatter buffer list is used.
+> Eg: usb_gadget_map_request_by_dev. For f_fs sync io mode, the request
+> is re-used for each request, so if the 1st request->length > PAGE_SIZE,
+> and the 2nd request->length is <= PAGE_SIZE, the f_fs uses the 1st
+> req->num_sgs for the 2nd request, it causes the UDC core get the wrong
+> req->num_sgs value (The 2nd request doesn't use sg). For f_fs async
+> io mode, it is not harm to initialize req->num_sgs as 0 either, in case,
+> the UDC driver doesn't zeroed request structure.
+>
+> Cc: Jun Li <jun.li@nxp.com>
+> Cc: stable <stable@vger.kernel.org>
+> Fixes: 772a7a724f69 ("usb: gadget: f_fs: Allow scatter-gather buffers")
+> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> ---
+> Changes for v2:
+> - Using the correct patch, and initialize req->num_sgs as 0 for aio too.
+>
+>  drivers/usb/gadget/function/f_fs.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index 59d9d512dcda..ced2581cf99f 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -1062,6 +1062,7 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+>                         req->num_sgs = io_data->sgt.nents;
+>                 } else {
+>                         req->buf = data;
+> +                       req->num_sgs = 0;
+>                 }
+>                 req->length = data_len;
+>
+> @@ -1105,6 +1106,7 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+>                         req->num_sgs = io_data->sgt.nents;
+>                 } else {
+>                         req->buf = data;
+> +                       req->num_sgs = 0;
+>                 }
+>                 req->length = data_len;
+>
+> --
+> 2.17.1
+>
 
-So if you do have a PCI device, then you need to handle PCI reads
-failing and returning all 1s.  Hopefully you can gracefully handle this :)
+A gental ping...
 
-Adding timeout handling here, where it is totally obvious to do so,
-would be a good thing.
-
-thanks,
-
-greg k-h
+Thanks,
+Peter
