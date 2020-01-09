@@ -2,140 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B01D9135C10
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 16:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5800D135C8B
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 16:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732055AbgAIO7C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jan 2020 09:59:02 -0500
-Received: from mail25.static.mailgun.info ([104.130.122.25]:55486 "EHLO
-        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730889AbgAIO7C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jan 2020 09:59:02 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1578581941; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=iSl+LB/3BIrP2Fa1QYnWMrI84wPYNQRIyqOJ3huP4hI=; b=XmZuGz1Y1wMEPeUP89RCN/wJpAMTW4Gm+zqNV4iXefB/g+lCwbgfK45n3g+SJMSBoKNUcLeE
- s7fmNOYWx1yAHV8lJLOvskMgsf+69EiESwlf3ck7tYeAgDPkCxVtJNk09kZt4gIrwguGaMpP
- 2sd3Yq+S13EaEyEjmTgLGqsbdTI=
-X-Mailgun-Sending-Ip: 104.130.122.25
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e173fb1.7fa221314848-smtp-out-n02;
- Thu, 09 Jan 2020 14:58:57 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id A9DD4C4479C; Thu,  9 Jan 2020 14:58:57 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.204.79.138] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: akdwived)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id B7A33C433CB;
-        Thu,  9 Jan 2020 14:58:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B7A33C433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akdwived@codeaurora.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: Documentation for qcom,eud
-To:     Rob Herring <robh@kernel.org>,
-        Prakruthi Deepak Heragu <pheragu@codeaurora.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ckadabi@codeaurora.org, tsoni@codeaurora.org,
-        bryanh@codeaurora.org, psodagud@codeaurora.org,
-        rnayak@codeaurora.org,
-        Satya Durga Srinivasu Prabhala <satyap@codeaurora.org>
-References: <1542310374-18474-1-git-send-email-pheragu@codeaurora.org>
- <1542310374-18474-2-git-send-email-pheragu@codeaurora.org>
- <20181117144705.GA18155@bogus>
-From:   "Dwivedi, Avaneesh Kumar (avani)" <akdwived@codeaurora.org>
-Message-ID: <7308d80f-7d0c-62bd-5b7d-63813e420c47@codeaurora.org>
-Date:   Thu, 9 Jan 2020 20:28:51 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        id S1732314AbgAIPWB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jan 2020 10:22:01 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:52406 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727945AbgAIPWB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jan 2020 10:22:01 -0500
+Received: (qmail 2198 invoked by uid 2102); 9 Jan 2020 10:22:00 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 9 Jan 2020 10:22:00 -0500
+Date:   Thu, 9 Jan 2020 10:22:00 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Keiya Nobuta <nobuta.keiya@fujitsu.com>
+cc:     gregkh@linuxfoundation.org, <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: core: hub: Improved device recognition on remote
+ wakeup
+In-Reply-To: <20200109051448.28150-1-nobuta.keiya@fujitsu.com>
+Message-ID: <Pine.LNX.4.44L0.2001091019520.1614-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <20181117144705.GA18155@bogus>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Thu, 9 Jan 2020, Keiya Nobuta wrote:
 
-On 11/17/2018 8:17 PM, Rob Herring wrote:
-> On Thu, Nov 15, 2018 at 11:32:53AM -0800, Prakruthi Deepak Heragu wrote:
->> Documentation for Embedded USB Debugger (EUD) device tree bindings.
-> I asked questions on v2 which were never answered.
+> If hub_activate() is called before D+ has stabilized after remote
+> wakeup, the following situation might occur:
+> 
+>          __      ___________________
+>         /  \    /
+> D+   __/    \__/
+> 
+> Hub  _______________________________
+>           |  ^   ^           ^
+>           |  |   |           |
+> Host _____v__|___|___________|______
+>           |  |   |           |
+>           |  |   |           \-- Interrupt Transfer (*3)
+>           |  |    \-- ClearPortFeature (*2)
+>           |   \-- GetPortStatus (*1)
+>           \-- Host detects remote wakeup
+> 
+> - D+ goes high, Host starts running by remote wakeup
+> - D+ is not stable, goes low
+> - Host requests GetPortStatus at (*1) and gets the following hub status:
+>   - Current Connect Status bit is 0
+>   - Connect Status Change bit is 1
+> - D+ stabilizes, goes high
+> - Host requests ClearPortFeature and thus Connect Status Change bit is
+>   cleared at (*2)
+> - After waiting 100 ms, Host starts the Interrupt Transfer at (*3)
+> - Since the Connect Status Change bit is 0, Hub returns NAK.
+> 
+> In this case, port_event() is not called in hub_event() and Host cannot
+> recognize device. To solve this issue, flag change_bits even if only
+> Connect Status Change bit is 1 when got in the first GetPortStatus.
+> 
+> This issue occurs rarely because it only if D+ changes during a very
+> short time between GetPortStatus and ClearPortFeature. However, it is
+> fatal if it occurs in embedded system.
+> 
+> Signed-off-by: Keiya Nobuta <nobuta.keiya@fujitsu.com>
+> ---
+>  drivers/usb/core/hub.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index f229ad6..77f8eb1 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -1192,6 +1192,7 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+>  			 * PORT_OVER_CURRENT is not. So check for any of them.
+>  			 */
+>  			if (udev || (portstatus & USB_PORT_STAT_CONNECTION) ||
+> +			    (portchange & USB_PORT_STAT_C_CONNECTION) ||
+>  			    (portstatus & USB_PORT_STAT_OVERCURRENT) ||
+>  			    (portchange & USB_PORT_STAT_C_OVERCURRENT))
+>  				set_bit(port1, hub->change_bits);
 
-HI Rob,
+I would have added the new test one line lower, so that all the
+portstatus checks were adjacent and all the portchange checks were 
+adjacent.  But that's a very small thing...
 
-Can you please review my replies against your comments on patchset v2?
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
->
->> Signed-off-by: Satya Durga Srinivasu Prabhala <satyap@codeaurora.org>
->> Signed-off-by: Prakruthi Deepak Heragu <pheragu@codeaurora.org>
->> ---
->>   .../devicetree/bindings/soc/qcom/qcom,msm-eud.txt  | 43 ++++++++++++++++++++++
->>   1 file changed, 43 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,msm-eud.txt
->>
->> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,msm-eud.txt b/Documentation/devicetree/bindings/soc/qcom/qcom,msm-eud.txt
->> new file mode 100644
->> index 0000000..6d339e7
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,msm-eud.txt
->> @@ -0,0 +1,43 @@
->> +* Qualcomm Technologies Inc Embedded USB Debugger (EUD)
->> +
->> +The EUD (Embedded USB Debugger) is a mini-USB hub implemented
->> +on chip to support the USB-based debug and trace capabilities.
->> +
->> +Required properties:
->> +
->> + - compatible:  Should be "qcom,msm-eud"
->> + - interrupts:  Interrupt number
->> + - reg: Should be address and size of EUD register space
->> +
->> +EUD notifies clients for VBUS attach/detach and charger enable/disable
->> +events. The link between client and EUD is established via a directed
->> +graph. EUD has one endpoint of the graph link mentioning EUD as an
->> +output link and clients of EUD should have the other endpoint of the
->> +graph link as an input link.
->> +
->> +An example for EUD device node:
->> +
->> +	eud: qcom,msm-eud@88e0000 {
->> +		compatible = "qcom,msm-eud";
->> +		interrupts = <GIC_SPI 492 IRQ_TYPE_LEVEL_HIGH>;
->> +		reg = <0x88e0000 0x4000>;
->> +		usb_con: connector {
->> +                compatible = "usb-c-connector";
->> +                label = "USB-C";
->> +                port {
->> +                	    eud_usb_output: endpoint {
->> +                        	    remote-endpoint = <&eud_usb3_input>;
->> +                        };
->> +        	    };
->> +        };
->> +	};
->> +
->> +An example for EUD client:
->> +
->> +	usb3 {
->> +		port {
->> +                eud_usb3_input: endpoint {
->> +                        remote-endpoint = <&eud_usb_output>;
->> +                };
->> +        };
->> +	};
->> -- 
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> a Linux Foundation Collaborative Project
->>
--- 
-Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project.
