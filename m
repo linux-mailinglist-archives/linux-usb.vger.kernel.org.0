@@ -2,93 +2,261 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5800D135C8B
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 16:22:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF52135CB5
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 16:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732314AbgAIPWB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jan 2020 10:22:01 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:52406 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727945AbgAIPWB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jan 2020 10:22:01 -0500
-Received: (qmail 2198 invoked by uid 2102); 9 Jan 2020 10:22:00 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 9 Jan 2020 10:22:00 -0500
-Date:   Thu, 9 Jan 2020 10:22:00 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Keiya Nobuta <nobuta.keiya@fujitsu.com>
-cc:     gregkh@linuxfoundation.org, <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: core: hub: Improved device recognition on remote
- wakeup
-In-Reply-To: <20200109051448.28150-1-nobuta.keiya@fujitsu.com>
-Message-ID: <Pine.LNX.4.44L0.2001091019520.1614-100000@iolanthe.rowland.org>
+        id S1730772AbgAIP0w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jan 2020 10:26:52 -0500
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:41670 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730049AbgAIP0v (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jan 2020 10:26:51 -0500
+Received: by mail-qt1-f193.google.com with SMTP id k40so6141885qtk.8
+        for <linux-usb@vger.kernel.org>; Thu, 09 Jan 2020 07:26:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=M2wOckotxOzM6ekMiDpizI1kiXHylocDhDMMhXrUiMc=;
+        b=hKjrU4mtiCSeR+5caFJcpvslko3ZHIaE5Mrj29FGqWebOaOxKEkE/dBxtQ4ksF60CB
+         61OZkWMFVFvy2KklYVLma/PLaXGjSbfL15zF0YkDyT5jqmekyDVUYlq/KymZ+oRz62P6
+         xr48OrC00lnwjWzh8wKck/FwERHIxS1QAdULtdX9b/q6ckbh4BI1bznyUWfe/LBsUBps
+         yM+YFKIOIg5fShSrHbkTdzB8Z+mPHgYg+N7lezoBv/s/MaydvLW1E+FuMDxjaVBgcRrv
+         bH3g50khN4VdC7Ts7PiEgunyYCFbZpVNacH8/UsZeNH97IVh+eXKtUI163nZ4te5VyrM
+         k/eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=M2wOckotxOzM6ekMiDpizI1kiXHylocDhDMMhXrUiMc=;
+        b=XxScNmN3OLd1fVOYCQ4D1uUcxJ4LnD27jFTE8c8guc0CcQyAa7jYCNn1mnqvIc0hH2
+         K5SvEGKvkQVEj5SSx8JCR6EZrFGS5mbsb+PV7ibBQ5LSGdBlCAzo2ZPOgfC1tdh4vSZn
+         LyvyvUu6muYV3R7ZTMHaaxpVbR8OPlAStmHOxH5tImTCSoTcySmiRPmfzXR/CitA2grv
+         VB5CQps9oqO5vXzbmtQLO1r+/D2cGPgZhG+WDBP59FanvEIja8MhVmwDn/0HliB7eMDq
+         ElW6krH1I9OhyHJpYEf0m3Gm96WLBGMNDycioYa6sR5BQ0FFvU9iu6wvKNTtTsmTxNnn
+         c3eQ==
+X-Gm-Message-State: APjAAAX3mDJGY7BIra3VhS0aPCzoc6t7kAxo3qa2/FWF19QgnJ28mn9F
+        hnTR2yTaIoWd6DaR3wwZEZawpATz3sA=
+X-Google-Smtp-Source: APXvYqx4vwLY65QkOKAdEDygML1eLjl0uaereccu7KRWPNaUpdKnqJVf2lr806CIvIfl499o0FVlTw==
+X-Received: by 2002:aed:3e53:: with SMTP id m19mr6146174qtf.32.1578583609698;
+        Thu, 09 Jan 2020 07:26:49 -0800 (PST)
+Received: from billcipher.corp.mot.com ([200.110.218.188])
+        by smtp.gmail.com with ESMTPSA id x16sm3120645qki.110.2020.01.09.07.26.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jan 2020 07:26:49 -0800 (PST)
+From:   =?UTF-8?q?Jer=C3=B3nimo=20Borque?= <jeronimo@borque.com.ar>
+To:     linux-usb@vger.kernel.org
+Cc:     johan@kernel.org, greg@kroah.com,
+        =?UTF-8?q?Jer=C3=B3nimo=20Borque?= <jeronimo@borque.com.ar>
+Subject: [PATCH] USB: serial: simple: Add Motorola Solutions TETRA MTP3xxx and MTP85xx
+Date:   Thu,  9 Jan 2020 12:23:34 -0300
+Message-Id: <20200109152334.21077-1-jeronimo@borque.com.ar>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 9 Jan 2020, Keiya Nobuta wrote:
+Add device-ids for the Motorola Solutions TETRA radios MTP3xxx series
+and MTP85xx series
 
-> If hub_activate() is called before D+ has stabilized after remote
-> wakeup, the following situation might occur:
-> 
->          __      ___________________
->         /  \    /
-> D+   __/    \__/
-> 
-> Hub  _______________________________
->           |  ^   ^           ^
->           |  |   |           |
-> Host _____v__|___|___________|______
->           |  |   |           |
->           |  |   |           \-- Interrupt Transfer (*3)
->           |  |    \-- ClearPortFeature (*2)
->           |   \-- GetPortStatus (*1)
->           \-- Host detects remote wakeup
-> 
-> - D+ goes high, Host starts running by remote wakeup
-> - D+ is not stable, goes low
-> - Host requests GetPortStatus at (*1) and gets the following hub status:
->   - Current Connect Status bit is 0
->   - Connect Status Change bit is 1
-> - D+ stabilizes, goes high
-> - Host requests ClearPortFeature and thus Connect Status Change bit is
->   cleared at (*2)
-> - After waiting 100 ms, Host starts the Interrupt Transfer at (*3)
-> - Since the Connect Status Change bit is 0, Hub returns NAK.
-> 
-> In this case, port_event() is not called in hub_event() and Host cannot
-> recognize device. To solve this issue, flag change_bits even if only
-> Connect Status Change bit is 1 when got in the first GetPortStatus.
-> 
-> This issue occurs rarely because it only if D+ changes during a very
-> short time between GetPortStatus and ClearPortFeature. However, it is
-> fatal if it occurs in embedded system.
-> 
-> Signed-off-by: Keiya Nobuta <nobuta.keiya@fujitsu.com>
-> ---
->  drivers/usb/core/hub.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index f229ad6..77f8eb1 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -1192,6 +1192,7 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
->  			 * PORT_OVER_CURRENT is not. So check for any of them.
->  			 */
->  			if (udev || (portstatus & USB_PORT_STAT_CONNECTION) ||
-> +			    (portchange & USB_PORT_STAT_C_CONNECTION) ||
->  			    (portstatus & USB_PORT_STAT_OVERCURRENT) ||
->  			    (portchange & USB_PORT_STAT_C_OVERCURRENT))
->  				set_bit(port1, hub->change_bits);
+$ lsusb -vd 0cad:
 
-I would have added the new test one line lower, so that all the
-portstatus checks were adjacent and all the portchange checks were 
-adjacent.  But that's a very small thing...
+Bus 001 Device 009: ID 0cad:9015 Motorola CGISS TETRA PEI interface
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            0
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x0cad Motorola CGISS
+  idProduct          0x9015
+  bcdDevice           24.16
+  iManufacturer           1
+  iProduct                2
+  iSerial                 0
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0037
+    bNumInterfaces          2
+    bConfigurationValue     1
+    iConfiguration          3
+    bmAttributes         0x80
+      (Bus Powered)
+    MaxPower              500mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Bus 001 Device 010: ID 0cad:9013 Motorola CGISS TETRA PEI interface
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            0
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x0cad Motorola CGISS
+  idProduct          0x9013
+  bcdDevice           24.16
+  iManufacturer           1
+  iProduct                2
+  iSerial                 0
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0037
+    bNumInterfaces          2
+    bConfigurationValue     1
+    iConfiguration          3
+    bmAttributes         0x80
+      (Bus Powered)
+    MaxPower              500mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+
+Signed-off-by: Jerónimo Borque <jeronimo@borque.com.ar>
+---
+ drivers/usb/serial/usb-serial-simple.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
+index edbbb13d6de6..bd23a7cb1be2 100644
+--- a/drivers/usb/serial/usb-serial-simple.c
++++ b/drivers/usb/serial/usb-serial-simple.c
+@@ -86,6 +86,8 @@ DEVICE(moto_modem, MOTO_IDS);
+ #define MOTOROLA_TETRA_IDS()			\
+ 	{ USB_DEVICE(0x0cad, 0x9011) },	/* Motorola Solutions TETRA PEI */ \
+ 	{ USB_DEVICE(0x0cad, 0x9012) },	/* MTP6550 */ \
++	{ USB_DEVICE(0x0cad, 0x9013) },	/* MTP3xxx */ \
++	{ USB_DEVICE(0x0cad, 0x9015) },	/* MTP85xx */ \
+ 	{ USB_DEVICE(0x0cad, 0x9016) }	/* TPG2200 */
+ DEVICE(motorola_tetra, MOTOROLA_TETRA_IDS);
+ 
+-- 
+2.24.1
 
