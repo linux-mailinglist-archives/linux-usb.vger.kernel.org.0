@@ -2,142 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2D913517C
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 03:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A153C13518E
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 03:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727417AbgAICiO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jan 2020 21:38:14 -0500
-Received: from us03-smtprelay2.synopsys.com ([149.117.87.133]:41342 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726758AbgAICiN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jan 2020 21:38:13 -0500
-Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 90D46C0094;
-        Thu,  9 Jan 2020 02:38:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1578537492; bh=F+VjaBfPdwMBDLvq4ZzOx3kFbGnZ4juft2Naut8Sml4=;
-        h=Date:From:Subject:To:From;
-        b=MgpqNL7E6rzrZyLBhuhCCRhczttvyzQE0ow+pttpN6SpWfD1nBUFEGtu6n5m6A95G
-         MyXslHOsqsfX8Fgo0ozd3c64NsrLvpGSHTuhF2SBNbfbwJF/gF9kmBGKjYXuiv5+0M
-         6IaId9TQVuHzsyzH2aoU7LjvJdtKnQ35pEjXjHQeUplRBKq+lAhhMGt3BKCEfG76P0
-         PrESsLa3LSXMeiqNnbzrJUhIQSYIoIa30KRqGRAITm7pjfJHUP1e8mvBqi2Q/zEHk2
-         Cj7bjKHhaOlYRn4S0QCgsFzzn8JbSZ3dsMb2lc+B8eivLVRcX6oenvrlxHkvRKhK+T
-         A86Xw9I5SCgpQ==
-Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 1E774A007A;
-        Thu,  9 Jan 2020 02:38:10 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Wed, 08 Jan 2020 18:38:10 -0800
-Date:   Wed, 08 Jan 2020 18:38:10 -0800
-Message-Id: <c4a428ec617a954dc27221d8a9133d22c38b2447.1578537372.git.thinhn@synopsys.com>
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH] usb: gadget: configfs: Add max_speed setting
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org
+        id S1727905AbgAICnu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jan 2020 21:43:50 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:39426 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727884AbgAICnu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jan 2020 21:43:50 -0500
+Received: by mail-pf1-f196.google.com with SMTP id q10so2601997pfs.6;
+        Wed, 08 Jan 2020 18:43:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=RhY8GTZhfaP75ugnG9uBkRt3jDLbfbf7XwKJDnHpA9g=;
+        b=Jy21N5M1F7zTvapQPSsyY98ki9Gnih+f9EhbCGKrt1iBrY3BAmOHsEbt4eqdxlR7Im
+         /bM99l2z64BFfp6GUik7nNmnzGI+VCc/jUMwkO6Go0wt2ChVqEmeKizmYPUk9wZzZDII
+         zQSXomeQauss0DNPLOudoLFK3XsWk2wgxtfigpiUjwXcEO+m9Hm1Y7Aod2uIjyJ3JPcm
+         y/FQuwHgeM/L2Yh8PtvY2b7/U2vciMDFTs0n+FosJjUCLsWgQuArKfAHPxciv8dtwwCo
+         QUQmalVqCHibfjpvSJStnCEOO+IlgGXhszwUCGkCh5QeWQhs8vmRT1aNmEwdwep/UknP
+         BADg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=RhY8GTZhfaP75ugnG9uBkRt3jDLbfbf7XwKJDnHpA9g=;
+        b=D60BgHKqPCQZRJjcLFXG0VKm79O8uK1vdxjNcxwnujgop47/FCnDHh/yGRmLrBi/T8
+         STFylw09UFLO9mbqVRBdxSMsZuxav0KBAHuex1yYBoaj5xKaOPxWQkf5OF2uSRcbVVGr
+         X7/zGzJ4eaAkQUyIWAmIZW/k/9s5qU80z57vAikPjhhKJ1GL+r1TcdKzHMaNecghCM2N
+         IgXInOB1KmrjHvNuuVebJGy2qoZ3+V7STJ73sxiTnzhAhkiR+Po7w4UY1Fzed8VR7duh
+         GQmBW6927UKJWU5+/705DzHHz+N3EcMGdohzsTXBUS/1wMwJvHr7GEv2pJL2xRjvOkC2
+         xJ2g==
+X-Gm-Message-State: APjAAAWajUHThxphDaCjZpiRbCBYK6wYQDEQHZVZWoSujO+Uw0JbRCAC
+        Tz8S/ScSI7qVFl3Kc7dySw0=
+X-Google-Smtp-Source: APXvYqyPlo6A/2anGMn9odETNKUmUN3DtimATDHq05U8OR2czkMBBNhG97e69o3fBqO48PRYc6inrg==
+X-Received: by 2002:aa7:8e13:: with SMTP id c19mr8741487pfr.227.1578537830015;
+        Wed, 08 Jan 2020 18:43:50 -0800 (PST)
+Received: from [192.168.1.60] (59-120-186-245.HINET-IP.hinet.net. [59.120.186.245])
+        by smtp.gmail.com with ESMTPSA id r2sm4876361pgv.16.2020.01.08.18.43.47
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 08 Jan 2020 18:43:49 -0800 (PST)
+Subject: Re: [PATCH V2 7/7] USB: serial: f81232: Add gpiolib to GPIO device
+To:     Johan Hovold <johan@kernel.org>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, peter_hong@fintek.com.tw,
+        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+References: <20190923022449.10952-1-hpeter+linux_kernel@gmail.com>
+ <20190923022449.10952-8-hpeter+linux_kernel@gmail.com>
+ <20191023122208.GW24768@localhost>
+ <ef91b42d-e81d-ecdd-c688-0cb3f0b94906@gmail.com>
+ <20200108144600.GK30908@localhost>
+From:   "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
+Message-ID: <2908e99e-ae4e-9385-92af-58381aa119a9@gmail.com>
+Date:   Thu, 9 Jan 2020 10:43:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
+MIME-Version: 1.0
+In-Reply-To: <20200108144600.GK30908@localhost>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some functions support speeds other than SuperSpeed. Add max_speed
-attribute to configfs gadget allowing user to specify the maximum speed
-the composite driver supports. The valid input speed names are
-super-speed-plus, super-speed, high-speed, full-speed, and low-speed.
+Hi Johan,
 
-Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
----
- Documentation/ABI/testing/configfs-usb-gadget |  4 +++
- drivers/usb/gadget/configfs.c                 | 43 +++++++++++++++++++++++++++
- 2 files changed, 47 insertions(+)
+Johan Hovold 於 2020/1/8 下午 10:46 寫道:
+> On Wed, Oct 30, 2019 at 10:00:12AM +0800, Ji-Ze Hong (Peter Hong) wrote:
 
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget b/Documentation/ABI/testing/configfs-usb-gadget
-index 95a36589a66b..4594cc2435e8 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget
-+++ b/Documentation/ABI/testing/configfs-usb-gadget
-@@ -16,6 +16,10 @@ Description:
- 				write UDC's name found in /sys/class/udc/*
- 				to bind a gadget, empty string "" to unbind.
- 
-+		max_speed	- maximum speed the driver supports. Valid
-+				names are super-speed-plus, super-speed,
-+				high-speed, full-speed, and low-speed.
-+
- 		bDeviceClass	- USB device class code
- 		bDeviceSubClass	- USB device subclass code
- 		bDeviceProtocol	- USB device protocol code
-diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-index ab9ac48a751a..32b637e3e1fa 100644
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -293,6 +293,47 @@ static ssize_t gadget_dev_desc_UDC_store(struct config_item *item,
- 	return ret;
- }
- 
-+static ssize_t gadget_dev_desc_max_speed_show(struct config_item *item,
-+					      char *page)
-+{
-+	enum usb_device_speed speed = to_gadget_info(item)->composite.max_speed;
-+
-+	return sprintf(page, "%s\n", usb_speed_string(speed));
-+}
-+
-+static ssize_t gadget_dev_desc_max_speed_store(struct config_item *item,
-+					       const char *page, size_t len)
-+{
-+	struct gadget_info *gi = to_gadget_info(item);
-+
-+	mutex_lock(&gi->lock);
-+
-+	/* Prevent changing of max_speed after the driver is binded */
-+	if (gi->composite.gadget_driver.udc_name)
-+		goto err;
-+
-+	if (strncmp(page, "super-speed-plus", 16) == 0)
-+		gi->composite.max_speed = USB_SPEED_SUPER_PLUS;
-+	else if (strncmp(page, "super-speed", 11) == 0)
-+		gi->composite.max_speed = USB_SPEED_SUPER;
-+	else if (strncmp(page, "high-speed", 10) == 0)
-+		gi->composite.max_speed = USB_SPEED_HIGH;
-+	else if (strncmp(page, "full-speed", 10) == 0)
-+		gi->composite.max_speed = USB_SPEED_FULL;
-+	else if (strncmp(page, "low-speed", 9) == 0)
-+		gi->composite.max_speed = USB_SPEED_LOW;
-+	else
-+		goto err;
-+
-+	gi->composite.gadget_driver.max_speed = gi->composite.max_speed;
-+
-+	mutex_unlock(&gi->lock);
-+	return len;
-+err:
-+	mutex_unlock(&gi->lock);
-+	return -EINVAL;
-+}
-+
- CONFIGFS_ATTR(gadget_dev_desc_, bDeviceClass);
- CONFIGFS_ATTR(gadget_dev_desc_, bDeviceSubClass);
- CONFIGFS_ATTR(gadget_dev_desc_, bDeviceProtocol);
-@@ -302,6 +343,7 @@ CONFIGFS_ATTR(gadget_dev_desc_, idProduct);
- CONFIGFS_ATTR(gadget_dev_desc_, bcdDevice);
- CONFIGFS_ATTR(gadget_dev_desc_, bcdUSB);
- CONFIGFS_ATTR(gadget_dev_desc_, UDC);
-+CONFIGFS_ATTR(gadget_dev_desc_, max_speed);
- 
- static struct configfs_attribute *gadget_root_attrs[] = {
- 	&gadget_dev_desc_attr_bDeviceClass,
-@@ -313,6 +355,7 @@ static struct configfs_attribute *gadget_root_attrs[] = {
- 	&gadget_dev_desc_attr_bcdDevice,
- 	&gadget_dev_desc_attr_bcdUSB,
- 	&gadget_dev_desc_attr_UDC,
-+	&gadget_dev_desc_attr_max_speed,
- 	NULL,
- };
- 
+>> We had 2 type about GPIO pins, MODEx_y & GPIOxx. All MODEx_y & GPIOxx
+>> are GPIOs and can be controlled by GPIO device, but they had some
+>> difference about usage.
+>> 	MODEx_y:
+>> 		1. 3 pins(x: 0/1/2) can be access by UART port y.
+>> 		2. Used to control UART's transceiver normally, but it
+>> 		   also can be configure as GPIO when UART disabled by
+>> 		   H/W (DTR strap to GND).
+>> 	GPIOxx:
+>> 		1. Access only by GPIO device.
+>>
+>> The series patch only support RS233 mode for all serial port, So we'll
+>> direct set all MODEx_y to (0/0/1) for our demo board for default. If
+>> user really want to use the pin, we had provide the gpiolib with GPIO
+>> device, but we'll recommend user to use GPIOxy first.
+> 
+> Do you mean that you'd need to register a separate gpio chip per port in
+> order to expose an interface for changing the MODEx_y pins for an
+> enabled UART? Or can you do that through the "global" gpio device?
+
+No, I still implement the gpiolib in GPIO Device. Sorry for bad
+describe.
+
+>> Is any suggest about this ? Could I maintain this for this series patch?
+> 
+> I understood from your other mail that the gpio device would not be able
+> to control the pins of an enabled port. In either case, I think you need
+> to refuse a request for a pin that's already in use by the corresponding
+> port.
+
+OK, I'll change the code as previous mail as following:
+
+I can read the UART enable state from GPIO Device, so I can do when the
+GPIO is associated with UART enabled, change it as output only otherwise
+can be set to input/output.
+
+> Also is there a way to determine the number of available pins by
+> detecting the chip/package type? I'm assuming not all 36 pins are always
+> accessible?
+
+Yes, we had register to get package type, I'll add UART enable & package
+type to determinate final GPIO pin out.
+
 -- 
-2.11.0
-
+With Best Regards,
+Peter Hong
