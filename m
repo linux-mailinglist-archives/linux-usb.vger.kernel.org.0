@@ -2,58 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2401354CF
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 09:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EBE3135513
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 10:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728908AbgAIIw5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jan 2020 03:52:57 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:34605 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728690AbgAIIw5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jan 2020 03:52:57 -0500
-Received: by mail-lj1-f195.google.com with SMTP id z22so6366900ljg.1;
-        Thu, 09 Jan 2020 00:52:55 -0800 (PST)
+        id S1729106AbgAIJBb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jan 2020 04:01:31 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:38366 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728919AbgAIJBb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jan 2020 04:01:31 -0500
+Received: by mail-lf1-f66.google.com with SMTP id r14so4606761lfm.5
+        for <linux-usb@vger.kernel.org>; Thu, 09 Jan 2020 01:01:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+        h=sender:from:to:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=pa+VUcms1G+AHxJVPMm8WUTSFExJoXoBaf03mkKjAPQ=;
-        b=i1OJEqeUqzz80wI9KuHtx8elrrKZEAg6QEAf/+T0NZiZV3NWOiB2mon6n2XW6eEN7c
-         Dedv7mbW+bMXdVzSfa0mK8Pb3k3R7tlQ0z5Q59DkFla9Q7RagRS+IbwFPQDKtDr0CvGz
-         CqZExJ/4oZadn96A4otTrDnPM445qXH/ayo9/lFqUghe8cUfiDnN5OzSOF9fFim8+sXO
-         eSacaDVVVyWkE6btZ4PVXykxl9YXvZV+ZjmYByxEM28VEQlbInGZ5hTVhLPPeps8+M9E
-         CGvxVesjFd69DjoVi5xbVJ4vbT643PH0Gc6Sl4fUrMLprbbD5rkh/jug5mJ6339LphLV
-         DDYQ==
+        bh=ou1k8PiZPzhGhubPZdM0cztRAzO70l425JYoCytzVqM=;
+        b=QF+f7oBZzWIEgl3t4ck7XLALpGE4TBIr7lqllPQrOAR9qHwp0HauDip8wjfG6EiJfp
+         iQtm/0vqsiQ/Y2/JVpwtZNTj1GYJ6tCX2pOlVBxxH9r/szySbfLTEW6w8wAWOvrxUT6x
+         V4yw7lf9VdU5YJ2b+EwP+8D7DKWdtDZA+S25+MpTX9sGQircHmtoSD0iAgMdVRQEyW5M
+         Cv7dTNpLWd6ewYTj8BztNClnP6N5DNgdRcgMr7jCQP6WpCRz5+G17j2kAalBBitI6Twl
+         brwvLq0ey9otFx3+YQWnTDm3PvwtipKWgnaevrXgIow4DNaU9SY1l36SlfMaukHfKugv
+         BFkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+        h=x-gm-message-state:sender:from:to:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=pa+VUcms1G+AHxJVPMm8WUTSFExJoXoBaf03mkKjAPQ=;
-        b=Kqj311kochfDC0yGFudbrgcFgchEQ5MDsK4Kx7ArVGgOFnuhHMLCulwpnv0YvnZj+q
-         HhOW/GZoYRqn6ikPyO9McFPfotKARzmt7AFqzxac1aLhs4BQaQtrOMpJf5vjj8nMmDRd
-         K0ym2M0j9DA1uUUZZki3sQ8GZq+PyGUE9fBZGPnDa62Kpazt4tHnAOHBd3/fqvhpRY0Z
-         mNxbCaPEgOT7lpwLsoIOT6rgV8AW3oimAEd8opNm+Hs26QWrLz9gx0G9a6++/lybzDa1
-         CLlzia9t3B8CtirBR/R7xsg+WqfJH2uReIksYg3wJhk/RphR/ixlpRcRGehL1141ORn9
-         oDKg==
-X-Gm-Message-State: APjAAAWgMqoguiV6BfOmrvjAxByXmA9DLbWFScizOTEqaRWdWFXr8sxY
-        9meRhCBXcPBb20+/aJ9uHXsncPIK
-X-Google-Smtp-Source: APXvYqzUJoCsI+xbEXodTQHbFziiCC+PJyVFaPj/trjiB8M+aEjN4sfGzdga/OrJGOYkPXLOHEJu9g==
-X-Received: by 2002:a2e:9692:: with SMTP id q18mr5670714lji.177.1578559974763;
-        Thu, 09 Jan 2020 00:52:54 -0800 (PST)
+        bh=ou1k8PiZPzhGhubPZdM0cztRAzO70l425JYoCytzVqM=;
+        b=WQmRRQs46p7G1FebKhsyhHck9udr3NHojruc+zFrcg5SIomcpdZROA0n3PFpP1ilGb
+         eCG3DaNOWtu/meJenjl1zZXQ4JMKb4qXmdZnTfhZLXhSc/vGgyR65H8DMHHZCs5t54Fb
+         VoB5BEHuYyxFdVZWbGsIaf7VnhkT5JoTm+v4qaSrB7kfVEwvQJISzpoUxCM4INUY+w+F
+         D3lwOyXlv2hzmoJTdR0Kocu1FB+GBA7RjESk3NuVM2iRsftLoXXNdAN0Znx8NvX0bTSz
+         JaKRbXZqH0HCGcjPhnAqzYtQEcjC9wW3J8GbSY/ujnADSDjMdfOH+nfkU3003PxSdnfb
+         dVmQ==
+X-Gm-Message-State: APjAAAXfLbHwZiDbCpAGt1lprpp1q46yh3fYp6sbjnVtyc59K3xEq4Ur
+        +TFtwvWElLah2JyT/3oHgfzsH135
+X-Google-Smtp-Source: APXvYqyVrWp3Em/pdEVtNsqdYfzp5he/gx2/8omJOAiW+dYwTnLw21jYzDOqYpx3uFFmUghH2AJGNA==
+X-Received: by 2002:ac2:4316:: with SMTP id l22mr5648898lfh.115.1578560489600;
+        Thu, 09 Jan 2020 01:01:29 -0800 (PST)
 Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id w19sm2664474lfl.55.2020.01.09.00.52.53
+        by smtp.gmail.com with ESMTPSA id q13sm2905796ljj.63.2020.01.09.01.01.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jan 2020 00:52:53 -0800 (PST)
+        Thu, 09 Jan 2020 01:01:28 -0800 (PST)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Greg KH <greg@kroah.com>, Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: BUG: KASAN: use-after-free in xhci_trb_virt_to_dma.part.24+0x1c/0x80
-In-Reply-To: <20200103110451.GJ465886@lahna.fi.intel.com>
-References: <95b4bdb2-962f-561e-ac14-79cd44395915@molgen.mpg.de> <20180720095410.GA11904@kroah.com> <107dbdd1-4e45-836f-7f8f-85bc63374e4f@molgen.mpg.de> <30b069b5-63f6-dd9e-b323-668f06bff6cf@molgen.mpg.de> <20200103110451.GJ465886@lahna.fi.intel.com>
-Date:   Thu, 09 Jan 2020 10:53:47 +0200
-Message-ID: <875zhlt3hg.fsf@kernel.org>
+To:     Jonathan Thibault <jonathan@navigue.com>, linux-usb@vger.kernel.org
+Subject: Re: USB_DWC3_OF_SIMPLE
+In-Reply-To: <c3a1c48c-1ac7-e5c2-e09a-3b55100735ab@navigue.com>
+References: <c3a1c48c-1ac7-e5c2-e09a-3b55100735ab@navigue.com>
+Date:   Thu, 09 Jan 2020 11:02:21 +0200
+Message-ID: <871rs9t336.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -63,37 +60,54 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 --=-=-=
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
 
 Hi,
 
-Mika Westerberg <mika.westerberg@linux.intel.com> writes:
+Jonathan Thibault <jonathan@navigue.com> writes:
 
-> On Thu, Jan 02, 2020 at 03:10:14PM +0100, Paul Menzel wrote:
->> Mika, as you fixed the other leak, any idea, how to continue from the
->> kmemleak log below?
->>=20
->> ```
->> unreferenced object 0xffff8c207a1e1408 (size 8):
->>   comm "systemd-udevd", pid 183, jiffies 4294667978 (age 752.292s)
->>   hex dump (first 8 bytes):
->>     34 01 05 00 00 00 00 00                          4.......
->>   backtrace:
->>     [<00000000aea7b46d>] xhci_mem_init+0xcfa/0xec0 [xhci_hcd]
+> Greetings,
 >
-> There are probably better ways for doing this but you can use objdump
-> for example:
+> I am currently trying to port OpenWRT to Ubiquiti's EdgeRouter 4 which=20
+> is a Cavium Octeon 7130.=C2=A0 While investigating to support XHCI (the=20
+> device has a single USB3 port), I ran into the dwc3 driver which=20
+> apparently supports that very chipset via the dwc3-of-simple glue.
 >
->   $ objdump -l --prefix-addresses -j .text --disassemble=3Dxhci_mem_init =
-drivers/usb/host/xhci-hcd.ko
+> Looking at Ubiquiti's own firmware, it seems they are using a modified=20
+> version of the standard xhci-platform driver.
 >
-> then find the offset xhci_mem_init+0xcfa. It should show you the line
-> numbers as well if you have compiled your kernel with debug info. This
-> should be close to the line that allocated the memory that was leaked.
+> So now I am faced with two different approaches:
+>
+> 1- Attempt to replicate Ubiquiti's modifications to xhci-plat.
+>
+> 2- Switch to dwc3-of-simple.
+>
+> With option 1, so far, I can get xhci to load by merely adding a=20
+> '.compatible =3D' member to usb_xhci_of_match[], but the driver complains=
+=20
+> about LPM algorithms and disables LPM (which may be fine, I don't know=20
+> if it is even supported on this device).
+>
+> Option 2 (where you might hopefully help), potentially involves more=20
+> modification to the OpenWRT since their Octeon kernel config does not=20
+> appear to enable CONFIG_COMMON_CLK, which the driver depends on.=C2=A0 An=
+d I=20
+> do not know if I should also disable standard ohci and ehci drivers once=
+=20
+> I manage to enable the USB_DWC3_OF_SIMPLE.
+>
+> I'm looking for recommendations on the best approach.=C2=A0 Keep in mind =
+that=20
+> while I can cobble together some ugly but functional hacks, I am not an=20
+> experienced kernel dev.
 
-addr2line helps here. So does gdb (gdb vmlinux l *(xhci_mem_init+0xcfa))
+Just switch to dwc3-of-simple, it already supports the SoC you're
+dealing with. Try removing the dependency on CONFIG_COMMON_CLK. I think
+we already get empty stubs when common clk is disabled.
+
+If that works for you, that's an easy patch.
 
 =2D-=20
 balbi
@@ -103,18 +117,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4W6hsACgkQzL64meEa
-mQahAw//eVR5E4c0CZ9GI782MazL/BmWTpoHqKhbEONjRiqeFy8tdytMt7Ea4j1g
-VTo/hWfLp7JIR7TY6DL1OYHBTjjM/vWG5NNI5qzXKAZJ8pAc/33IWlUnhrF35sks
-DTsB0H0IJdwvqDgcNGBCSwufVbaHbk7M65fxkjcmLGiYUJ/YaZn5qIHi/5/4OHff
-PGuZhV8fvrYMAUyfyVnlks3rN+545nW2yaiQfuVGZEK+QGupMTgGZMYh7ZfkMnAh
-l/uWczDQKLAuIu/NvRin+nZWSIvc5JJn8DbIlI3Y8e8J0oHUSV2Icfkou6TW/c7J
-YB7rIr74QOfS6PqG1xvLtCO1wv/JWsBpbdwUV8F0nrbYp7AupN1QKhVaYMBukESP
-9KJTEYYjG0RdYVwE3SnjSiMJXGnIwt/s7bcZN7kbeHPFPE3DdIJ2yVCK22JeN7fp
-scts2s15m+FWb+bsPO1wve5rci7L5uDrUpq45fnPqIE/W0r5ffUXdYnEyKuLbMoJ
-/e61PNRLrXL2ptSsYq7eu4HybBlJzFBj8t9tMDdg4YAuChjVUD1YIvOIcBPCq4L3
-MbLW3CbG8AjFDHpWWMFK/F010lvemVDMuSEJFF2afc5ZuHK4915Urve1gncWB0CF
-OsJW0wA+3YafO8ULyn+BTUEc13SBJsFRIW90ojcQDRrDCXsdP6c=
-=152o
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4W7B0ACgkQzL64meEa
+mQYTpxAAhOO1atmbZ0HhAYngD/Fras0HsT8iT6vn5kuVNFeHppvAlp9hqoBa6hD9
+GFRQYqSejYBcSwc9xFQtpYOidPuEaVOY6pXOvz9SCdp/qOQe05DaHOhJ0j+gGTew
+6YIWOFzmfvGAP39bqSOSD+n88PA68niqlM+++kcZVPAh6HoDjNYNCy8Mn/669lzf
+g1nCj+YCO+APuQia8KtH2f3iRexQQw/EUmEqc7SPc9m0p0wDn86MOoWqc9hGRfBx
+xxJpJnQWjHRp87TbWDIwQ0hTN4bPNlzw9gtJF2ekH9bXpLbHsV4TjVPowWrAmzqi
+OOZOxOkjSWaEMYQxyEJ6fBYeQlDDyC20r7gEQEoUm57sdWDJTCDwYZZfAJficQ7e
+muvhhLt073rkJ4ZXkcVCX0awfcW6uF6WZamHnKzalWHU5adYEJDVdy7mULxCW8QT
+Oj9IzbmELFPloc8qBFdDuOLBaPAgzWRnuMmrVjcyAGwHHfiOasofgUKL4W9OMYTS
+0igkoYI8eVMNrAvftnOn1ikwsTqnznCPC0Zfn8CzL1rfzkSjPPG5epRMxhLZWSKc
+F6x5F0vyIQmi6w3Jd81t9Xz7j/FpV2bVl57So6hmjUrosBXjzCdaNu3qnyhY/2pp
+qQtoBtsha+lu8/LfyNKOIDOuALBPm8aBmjZGkFcphgMPa2N8R5w=
+=kPeZ
 -----END PGP SIGNATURE-----
 --=-=-=--
