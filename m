@@ -2,109 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8123C135600
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 10:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D83613560E
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 10:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728925AbgAIJmj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jan 2020 04:42:39 -0500
-Received: from mail-io1-f65.google.com ([209.85.166.65]:40609 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728660AbgAIJmg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jan 2020 04:42:36 -0500
-Received: by mail-io1-f65.google.com with SMTP id x1so6402603iop.7;
-        Thu, 09 Jan 2020 01:42:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JTVqPFCFqKIu52p3Shf6ezDJo+AR70XrI4KPt0+xR+I=;
-        b=RGTilTOrxQnMK01eRyQ8ReEqYHttPvhypdA3W8vBn4figPeRjW5Pte/cZZPIUFzJMM
-         907zGoBLh1Ve2yWDhfzmAb8MBNmNkAr0VyYX5aBNoJZhTuChx1Ev0h+xrYYXIwbxN8fq
-         V+34bkOLYoRj+iVwq0QTr3J2t/3iOvZyMQIJNhF3ju5BK7kxvnrlP5QE/5Iuaqc/nWKX
-         Kj/2xIlR1cUcMIJ/bad+h1QTViJYRQEvAViUsAWaG/e+EDvTHJYJ6hpEcm1CPWp7DXa+
-         rytjj2oj+6GfjSB/rkCGWu1SeWXZgb0q2Eb6htyozeFF20V6ja/A8TRX1rbL8hrTrmpT
-         r7ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JTVqPFCFqKIu52p3Shf6ezDJo+AR70XrI4KPt0+xR+I=;
-        b=TamGad+R67bADlC3GBx+XASMLKq11fYH9SmSMaFFrkt008nyYGkbuEjFJ+/Mx2Fg9B
-         sO3dO8CFwJ6glXzfAJs/Uvg79qc3mNoXb8gqG3rUQ1rl1nxd9SXPVS8qdqMyr58UmRz8
-         sRBoMRUncMoKRoTgCzm3gjCrWPVrjK4bAhd24+ZHXlcaza9TrJOpIzbrUiaXb4BDHzrI
-         8nNZmHi44H/tJhL2Pq49EukX3jwVg2fSVdHC+ls7dgq+qRDl8QEPuWkkh9WDpNFb6sbC
-         3o7KHUv07aw86doQaynVcEoLpwBAkqehlS1uJPtsI/RuJJrfM6feE+WXncxf7nEtr3WO
-         f9nQ==
-X-Gm-Message-State: APjAAAWvARy/pyyZ9r4tQX3w08sJaCbaGk0hFEWCVoKU36rRhlxiu9mz
-        95HSqCui/JDbjogLRosKIvWsJUNiOWVxD8xi10Y=
-X-Google-Smtp-Source: APXvYqyganuPeYpaKDTdpCjlFATUP46sC8jymaDLN3+HM2uZ93qHvpnJ1NmCmsJNEY+fcfOnjjB341Ch76gOlVRwfvg=
-X-Received: by 2002:a5d:9dd9:: with SMTP id 25mr7057853ioo.287.1578562955274;
- Thu, 09 Jan 2020 01:42:35 -0800 (PST)
+        id S1729533AbgAIJq2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jan 2020 04:46:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33410 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729493AbgAIJq2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Jan 2020 04:46:28 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0500620678;
+        Thu,  9 Jan 2020 09:46:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578563187;
+        bh=Vc1pOy+Wyt70LGFk04Nuw/UUegLUIV6WKPZoIMr2Cbg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a3E2BJX2u+nDIOlWOHIP6H6cGUj8RES3N1ZebwBFyrEvQhSoa8hj+oq1XZLSvUIh+
+         39ed8lM6PCAykQYyO5om3+Crf35mVmYHLAZBE8v22xyrUcbjGH0o79Jx9mH2vhWruC
+         vo/32xUAwqVs/8bSia6GQe8v/MS9FNWBJgMDHNOc=
+Date:   Thu, 9 Jan 2020 10:46:25 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 04/15] usb: typec: Make the attributes read-only when
+ writing is not possible
+Message-ID: <20200109094625.GA50000@kroah.com>
+References: <20191230142611.24921-1-heikki.krogerus@linux.intel.com>
+ <20191230142611.24921-5-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
-References: <1576139703-9409-1-git-send-email-peter.chen@nxp.com>
-In-Reply-To: <1576139703-9409-1-git-send-email-peter.chen@nxp.com>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Thu, 9 Jan 2020 17:42:23 +0800
-Message-ID: <CAL411-o4FYWYs2A15fAre8eym4R0ka8SRo5XqhiaMyk+A-KDcQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] usb: gadget: f_fs: set req->num_sgs as 0 for
- non-sg transfer
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     balbi@kernel.org, USB list <linux-usb@vger.kernel.org>,
-        linux-imx@nxp.com, Jun Li <jun.li@nxp.com>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191230142611.24921-5-heikki.krogerus@linux.intel.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 12, 2019 at 4:38 PM Peter Chen <peter.chen@nxp.com> wrote:
->
-> The UDC core uses req->num_sgs to judge if scatter buffer list is used.
-> Eg: usb_gadget_map_request_by_dev. For f_fs sync io mode, the request
-> is re-used for each request, so if the 1st request->length > PAGE_SIZE,
-> and the 2nd request->length is <= PAGE_SIZE, the f_fs uses the 1st
-> req->num_sgs for the 2nd request, it causes the UDC core get the wrong
-> req->num_sgs value (The 2nd request doesn't use sg). For f_fs async
-> io mode, it is not harm to initialize req->num_sgs as 0 either, in case,
-> the UDC driver doesn't zeroed request structure.
->
-> Cc: Jun Li <jun.li@nxp.com>
-> Cc: stable <stable@vger.kernel.org>
-> Fixes: 772a7a724f69 ("usb: gadget: f_fs: Allow scatter-gather buffers")
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> ---
-> Changes for v2:
-> - Using the correct patch, and initialize req->num_sgs as 0 for aio too.
->
->  drivers/usb/gadget/function/f_fs.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> index 59d9d512dcda..ced2581cf99f 100644
-> --- a/drivers/usb/gadget/function/f_fs.c
-> +++ b/drivers/usb/gadget/function/f_fs.c
-> @@ -1062,6 +1062,7 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
->                         req->num_sgs = io_data->sgt.nents;
->                 } else {
->                         req->buf = data;
-> +                       req->num_sgs = 0;
->                 }
->                 req->length = data_len;
->
-> @@ -1105,6 +1106,7 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
->                         req->num_sgs = io_data->sgt.nents;
->                 } else {
->                         req->buf = data;
-> +                       req->num_sgs = 0;
->                 }
->                 req->length = data_len;
->
-> --
-> 2.17.1
->
+On Mon, Dec 30, 2019 at 05:26:00PM +0300, Heikki Krogerus wrote:
+> For now the read-writable attribute files have made a check
+> in their store callback function to see does the underlying
+> port interface support changing the value or not, and when
+> it didn't, the callbacks returned -EOPNOTSUPP. From user
+> perspective that is not ideal, as there is no way to know is
+> changing the value possible beforehand.
+> 
+> Instead of returning -EOPNOTSUPP, making the attribute file
+> read-only when the operation is not supported.
 
-A gental ping...
+As fun as this is, if someone then changes the permission on the sysfs
+file, trying to write to them will now crash the kernel, right?
 
-Thanks,
-Peter
+So I think you need to leave this check in:
+
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 08923637cd88..3abcfa09ecdf 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -373,12 +373,9 @@ static ssize_t active_store(struct device *dev, struct device_attribute *attr,
+>  		}
+>  	}
+>  
+> -	/* Note: If there is no driver, the mode will not be entered */
+> -	if (adev->ops && adev->ops->activate) {
+> -		ret = adev->ops->activate(adev, enter);
+> -		if (ret)
+> -			return ret;
+> -	}
+> +	ret = adev->ops->activate(adev, enter);
+> +	if (ret)
+> +		return ret;
+>  
+>  	return size;
+>  }
+
+We had to go add this type of check to some subsystems recently that had
+this same problem, I don't want to have to go and add it back for this
+one as well :)
+
+thanks,
+
+greg k-h
