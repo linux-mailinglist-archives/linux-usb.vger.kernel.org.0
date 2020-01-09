@@ -2,78 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1CD135EE9
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 18:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8DE135EF8
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 18:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731560AbgAIRKH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jan 2020 12:10:07 -0500
-Received: from wp126.webpack.hosteurope.de ([80.237.132.133]:34802 "EHLO
-        wp126.webpack.hosteurope.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731544AbgAIRKH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jan 2020 12:10:07 -0500
-X-Greylist: delayed 2455 seconds by postgrey-1.27 at vger.kernel.org; Thu, 09 Jan 2020 12:10:06 EST
-Received: from [2003:a:659:3f00:1e6f:65ff:fe31:d1d5] (helo=hermes.fivetechno.de); authenticated
-        by wp126.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1ipagH-0005oH-AL; Thu, 09 Jan 2020 17:29:09 +0100
-X-Virus-Scanned: by amavisd-new 2.11.1 using newest ClamAV at
-        linuxbbg.five-lan.de
-Received: from [192.168.34.101] (p5098d998.dip0.t-ipconnect.de [80.152.217.152])
-        (authenticated bits=0)
-        by hermes.fivetechno.de (8.15.2/8.14.5/SuSE Linux 0.8) with ESMTPSA id 009GT7fs001705
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Thu, 9 Jan 2020 17:29:07 +0100
-From:   Markus Reichl <m.reichl@fivetechno.de>
-Organization: five technologies GmbH
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        linux-rockchip@lists.infradead.org,
-        Markus Reichl <m.reichl@fivetechno.de>
-Subject: [Bug ?] usb :typec :tcpm :fusb302
-Message-ID: <0ac6bbe7-6395-526d-213c-ac58a19d8673@fivetechno.de>
-Date:   Thu, 9 Jan 2020 17:29:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1731589AbgAIRMX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jan 2020 12:12:23 -0500
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:33782 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728406AbgAIRMX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jan 2020 12:12:23 -0500
+Received: by mail-ed1-f66.google.com with SMTP id r21so6301606edq.0;
+        Thu, 09 Jan 2020 09:12:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m5bKqTGzATt6X20fwIM187YSSZ5nrekRXnj5LVqJY7Y=;
+        b=NZk8QVJ4WAq4R3o1D9+VK4ZSDQSQK7dvbRBf4AMuCjvRavx3veVI/WQdqKnErpQRCi
+         Eds8ghTPfv2hOFlO+55g+LMIJEC7O2+PJrmajsk7a7ZfOWWf5KbxCbL/TWpXi++9cpKv
+         8aBr2fKChY5SkaGsOnqjfiEUsrybPtHq9g0CK6+sssK3HgBu9YUvbopeuATcEF0PO0xI
+         tnC5vORlB623hwx5NeI+ql2fbwiqXj1AbZ3c4BjnMQ4f+ysx6m5kguWC8Xg/dyYQZMHs
+         84dkmKBvzqz1rcILrG2brbxH8W0Sy9kKfMjsWi3uGO/8Fpsg4osgxmdB1wnTfL9aO7BA
+         1/yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m5bKqTGzATt6X20fwIM187YSSZ5nrekRXnj5LVqJY7Y=;
+        b=LUJDij+H1uFL0KNaCOS3YO9lU3OJa4LZXgjk7WB1MoxAhTt1P5Ayt7o6wknskqq4As
+         8Hoo9c+p9GkGHHLtxJ2ctegerQ5XAw+qVtKz8xzw3btQbkR9C7GFWE3byxcYzkouRUFh
+         o+HwyEXpaqV6LydbfDeHJaED1cpDQILrEeMKJHzk8RsbuRhyrJ8yV6Gcjldwrpkq8NCS
+         SB8kO262G/w9MytU2I1IAiO3R88YW3e05oMZZqRRd9Tet7TRyuHVDfj1V2P5ATR9LCUc
+         p/NIP8bpDk4+vI3TgVY/O3cxItQrL54KhZPplReuWaeTAcc37ylMsc15oFhed1IofySs
+         1SBA==
+X-Gm-Message-State: APjAAAWAGwKOl15iWpLP4/RHK07kCNwEJLfbIn3Zvnk/MktLTaGDee7h
+        BlTa9wDABsVFKIKDVjmhxyW7K6mfzKrWF2207M8=
+X-Google-Smtp-Source: APXvYqyLdglBvA5azqE41oQ6/P+wJuoQqzv1gmvgl8pOyKv1FX2KnStTQwNTBWRxCdUkXCCfXmw+cXn4c4ssjYI5N3Y=
+X-Received: by 2002:a50:fb96:: with SMTP id e22mr12160409edq.18.1578589941734;
+ Thu, 09 Jan 2020 09:12:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: de-DE
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;m.reichl@fivetechno.de;1578589806;e5dbc83c;
-X-HE-SMSGID: 1ipagH-0005oH-AL
+References: <1578537045-23260-1-git-send-email-hanjie.lin@amlogic.com> <1578537045-23260-2-git-send-email-hanjie.lin@amlogic.com>
+In-Reply-To: <1578537045-23260-2-git-send-email-hanjie.lin@amlogic.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Thu, 9 Jan 2020 18:12:10 +0100
+Message-ID: <CAFBinCDt97E4236obhm0GV58MtoC2qYAZbqPoJd8tyROGW4cvw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/6] dt-bindings: phy: Add Amlogic A1 USB2 PHY Bindings
+To:     Hanjie Lin <hanjie.lin@amlogic.com>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Yue Wang <yue.wang@amlogic.com>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, Carlo Caione <carlo@caione.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Thu, Jan 9, 2020 at 3:30 AM Hanjie Lin <hanjie.lin@amlogic.com> wrote:
+[...]
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: xtal_usb_phy
+the "usb_phy" part of "xtal_usb_phy" seems redundant to me:
+it's the XTAL clock input (this is what I'd expect as clock-name) of
+the USB PHY (this is already part of the node name).
+in addition to keeping the reset-names consistent (as Neil suggested)
+please also use the same clock-names as G12
 
-I'm working with a ROC-RK3399-PC arm64 board from firefly, circuit sheet [1].
-The board is powered from an USB-C type connector via an FUSB302 PD controller.
-With measured 15W+ power consumption it should use higher voltage PD modes than
-the standard 5V USB-C mode.
 
-When I add the related connector node in DTS [2] the FUSB302 initializes
-the right PD mode (e.g. 15V/3A).
-
-But during initialisation the PD is switched off shortly and the board has a blackout.
-When I inject a backup supply voltage behind the FUSB302 (e.g. at SYS_12V line) during boot
-I can remove the backup after succesfull setting up the PD and the board will run fine.
-
-Is it possible to change the behaviour of the fusb302 driver to not power down the PD supply
-during init?
-
-In vendor kernel (4.4) this is done somehow but the sources are too different for me to find
-out how.
-
-Gruß,
--- 
-Markus Reichl
-
-[1]
-http://download.t-firefly.com/product/RK3399/Docs/Hardware/%E5%8E%9F%E7%90%86%E5%9B%BE%E5%92%8C%E8%B4%B4%E7%89%87%E5%9B%BE/ROC-RK3399-PC/ROC-3399-PC-V10-A-20180804_%E5%8E%9F%E7%90%86%E5%9B%BE.pdf
-
-[2]
-https://lkml.org/lkml/2019/12/10/517
+Thank you!
+Martin
