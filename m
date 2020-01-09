@@ -2,55 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EBE3135513
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 10:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FDDA13551A
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 10:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729106AbgAIJBb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jan 2020 04:01:31 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:38366 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728919AbgAIJBb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jan 2020 04:01:31 -0500
-Received: by mail-lf1-f66.google.com with SMTP id r14so4606761lfm.5
-        for <linux-usb@vger.kernel.org>; Thu, 09 Jan 2020 01:01:30 -0800 (PST)
+        id S1729118AbgAIJEk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jan 2020 04:04:40 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:40096 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728593AbgAIJEk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jan 2020 04:04:40 -0500
+Received: by mail-lj1-f196.google.com with SMTP id u1so6364111ljk.7;
+        Thu, 09 Jan 2020 01:04:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:subject:in-reply-to:references:date:message-id
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=ou1k8PiZPzhGhubPZdM0cztRAzO70l425JYoCytzVqM=;
-        b=QF+f7oBZzWIEgl3t4ck7XLALpGE4TBIr7lqllPQrOAR9qHwp0HauDip8wjfG6EiJfp
-         iQtm/0vqsiQ/Y2/JVpwtZNTj1GYJ6tCX2pOlVBxxH9r/szySbfLTEW6w8wAWOvrxUT6x
-         V4yw7lf9VdU5YJ2b+EwP+8D7DKWdtDZA+S25+MpTX9sGQircHmtoSD0iAgMdVRQEyW5M
-         Cv7dTNpLWd6ewYTj8BztNClnP6N5DNgdRcgMr7jCQP6WpCRz5+G17j2kAalBBitI6Twl
-         brwvLq0ey9otFx3+YQWnTDm3PvwtipKWgnaevrXgIow4DNaU9SY1l36SlfMaukHfKugv
-         BFkA==
+        bh=1wEOto74WtWWVBt7hzzCLvY/HjBRw+30JpsajXmQoEk=;
+        b=VotdQx0hBmaNiqYwnMQi/EoFgHh8UCayXB4uXSKGMi1WrsslgqIiMk59yLYmePW/jr
+         UX4X7OlHN1wka3AG+U7v53aOSLZrO6JLZiCfDYCucZVVijrOdaq/sx+VIYgYXuTddXKh
+         HErVa3kc1zbVXwjCK9ABRN80F+eWwLWplp5TcBYnDlfVdQcGmyMocfoTCSD++pWq9rZT
+         8+b4E9RJdzBq2saGIqWgAiuKRKAkLFCN22MLVOGvl564Rd6NiZXie7FPJw5lDC/L9f7E
+         ujtVV/TvXH9WuNheVFI0GN72woG0jjR6C2kwmb4Hpk6bH2UzgNZAE9Pa9zVuAB+4wwsx
+         Jn4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:subject:in-reply-to:references
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=ou1k8PiZPzhGhubPZdM0cztRAzO70l425JYoCytzVqM=;
-        b=WQmRRQs46p7G1FebKhsyhHck9udr3NHojruc+zFrcg5SIomcpdZROA0n3PFpP1ilGb
-         eCG3DaNOWtu/meJenjl1zZXQ4JMKb4qXmdZnTfhZLXhSc/vGgyR65H8DMHHZCs5t54Fb
-         VoB5BEHuYyxFdVZWbGsIaf7VnhkT5JoTm+v4qaSrB7kfVEwvQJISzpoUxCM4INUY+w+F
-         D3lwOyXlv2hzmoJTdR0Kocu1FB+GBA7RjESk3NuVM2iRsftLoXXNdAN0Znx8NvX0bTSz
-         JaKRbXZqH0HCGcjPhnAqzYtQEcjC9wW3J8GbSY/ujnADSDjMdfOH+nfkU3003PxSdnfb
-         dVmQ==
-X-Gm-Message-State: APjAAAXfLbHwZiDbCpAGt1lprpp1q46yh3fYp6sbjnVtyc59K3xEq4Ur
-        +TFtwvWElLah2JyT/3oHgfzsH135
-X-Google-Smtp-Source: APXvYqyVrWp3Em/pdEVtNsqdYfzp5he/gx2/8omJOAiW+dYwTnLw21jYzDOqYpx3uFFmUghH2AJGNA==
-X-Received: by 2002:ac2:4316:: with SMTP id l22mr5648898lfh.115.1578560489600;
-        Thu, 09 Jan 2020 01:01:29 -0800 (PST)
+        bh=1wEOto74WtWWVBt7hzzCLvY/HjBRw+30JpsajXmQoEk=;
+        b=YfAj7FduZ+lHwQ87EolwzgfeM7wDTHHpjco/5P2oQKeo7z+ER5MykxV6PgnTSUDyuZ
+         DRU9qeE73dBFb84jtuenHIO/54rTfXeid6jqRnuvj71nkQyApQ1xKCg7DOEVnQh3nyCn
+         dL7uWM9wn5axhJpauqSQuBQhMHBUSIBuOSWDMu9tMTVdyRzY7KfX0XFjhIa8QRMB5Dx1
+         gH6swkRSvbUHav2GcLbZnuO/A47vOinGMQaRMCFD1vufgiy+Q77no6WvnUbkc1s4ohnc
+         lBnJqQyyMAzdeB4CmnJ0VSwHfojOfq6NtF+07HwMYK2fU0ldMKZq6LvhxsXpJo1EIrCy
+         bwQw==
+X-Gm-Message-State: APjAAAVR2Kiek7kx2337kzuGVQ8AFjtn9N/YKjIfIJAvuc72XocicaeC
+        xB8uFlMwGMc2p0XJEytV+oUHR25Ztnw=
+X-Google-Smtp-Source: APXvYqzlF6/2MuHY8a8TVJoWkGCaL58M640PRwVGM5HPTEGrm05lpplLJqVg2vc2CwGADNtR1gTPSQ==
+X-Received: by 2002:a2e:804c:: with SMTP id p12mr5681606ljg.31.1578560677836;
+        Thu, 09 Jan 2020 01:04:37 -0800 (PST)
 Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id q13sm2905796ljj.63.2020.01.09.01.01.28
+        by smtp.gmail.com with ESMTPSA id u66sm2615261lje.7.2020.01.09.01.04.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jan 2020 01:01:28 -0800 (PST)
+        Thu, 09 Jan 2020 01:04:37 -0800 (PST)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Jonathan Thibault <jonathan@navigue.com>, linux-usb@vger.kernel.org
-Subject: Re: USB_DWC3_OF_SIMPLE
-In-Reply-To: <c3a1c48c-1ac7-e5c2-e09a-3b55100735ab@navigue.com>
-References: <c3a1c48c-1ac7-e5c2-e09a-3b55100735ab@navigue.com>
-Date:   Thu, 09 Jan 2020 11:02:21 +0200
-Message-ID: <871rs9t336.fsf@kernel.org>
+To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        Ran Wang <ran.wang_1@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        Jun Li <jun.li@nxp.com>, Peter Chen <peter.chen@nxp.com>
+Cc:     "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable\@vger.kernel.org" <stable@vger.kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: Re: [PATCH] usb: dwc3: gadget: Fix controller get stuck when kicking extra transfer in wrong case
+In-Reply-To: <9f9d0193-8fe6-33b3-4f5c-95a1181e6681@synopsys.com>
+References: <20200107071441.480-1-ran.wang_1@nxp.com> <9f9d0193-8fe6-33b3-4f5c-95a1181e6681@synopsys.com>
+Date:   Thu, 09 Jan 2020 11:05:30 +0200
+Message-ID: <87woa1rodh.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -60,54 +68,44 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 --=-=-=
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
 
 Hi,
 
-Jonathan Thibault <jonathan@navigue.com> writes:
+(Tejas, please break your lines at 80-columns. You shouldn't have to be
+reminded of this)
 
-> Greetings,
->
-> I am currently trying to port OpenWRT to Ubiquiti's EdgeRouter 4 which=20
-> is a Cavium Octeon 7130.=C2=A0 While investigating to support XHCI (the=20
-> device has a single USB3 port), I ran into the dwc3 driver which=20
-> apparently supports that very chipset via the dwc3-of-simple glue.
->
-> Looking at Ubiquiti's own firmware, it seems they are using a modified=20
-> version of the standard xhci-platform driver.
->
-> So now I am faced with two different approaches:
->
-> 1- Attempt to replicate Ubiquiti's modifications to xhci-plat.
->
-> 2- Switch to dwc3-of-simple.
->
-> With option 1, so far, I can get xhci to load by merely adding a=20
-> '.compatible =3D' member to usb_xhci_of_match[], but the driver complains=
-=20
-> about LPM algorithms and disables LPM (which may be fine, I don't know=20
-> if it is even supported on this device).
->
-> Option 2 (where you might hopefully help), potentially involves more=20
-> modification to the OpenWRT since their Octeon kernel config does not=20
-> appear to enable CONFIG_COMMON_CLK, which the driver depends on.=C2=A0 An=
-d I=20
-> do not know if I should also disable standard ohci and ehci drivers once=
-=20
-> I manage to enable the USB_DWC3_OF_SIMPLE.
->
-> I'm looking for recommendations on the best approach.=C2=A0 Keep in mind =
-that=20
-> while I can cobble together some ugly but functional hacks, I am not an=20
-> experienced kernel dev.
+Tejas Joglekar <Tejas.Joglekar@synopsys.com> writes:
 
-Just switch to dwc3-of-simple, it already supports the SoC you're
-dealing with. Try removing the dependency on CONFIG_COMMON_CLK. I think
-we already get empty stubs when common clk is disabled.
+> Hi,
+> On 1/7/2020 12:44 PM, Ran Wang wrote:
+>> According to original commit c96e6725db9d6a ("usb: dwc3: gadget: Correct=
+ the
+>> logic for queuing sgs"), we would only kick off another transfer in case=
+ of
+>> req->num_pending_sgs > 0.
+>>=20
+> The commit 8c7d4b7b3d43 ("usb: dwc3: gadget: Fix logical condition")
+> fixes the commit f38e35dd84e2 (usb: dwc3: gadget: split
+> dwc3_gadget_ep_cleanup_completed_requests()).
+>
+>> However, current logic will do this as long as req->remaining > 0, this =
+will
+>> include the case of non-sgs (both dwc3_gadget_ep_request_completed(req) =
+and
+>> req->num_pending_sgs are 0) that we did not want to.
+>>=20
+>> Without this fix, we observed dwc3 got stuck on Layerscape plaftorms (su=
+ch as
+>> LS1088ARDB) when enabling gadget (mass storage function) as below:
+>>
+> Similar issue was reported by Thinh after my fix, and he has submitted
+> a patch for the same. You can refer the discussion
+> https://patchwork.kernel.org/patch/11292087/.
 
-If that works for you, that's an easy patch.
+Based on this, I'm assuming we don't need this patch.
 
 =2D-=20
 balbi
@@ -117,18 +115,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4W7B0ACgkQzL64meEa
-mQYTpxAAhOO1atmbZ0HhAYngD/Fras0HsT8iT6vn5kuVNFeHppvAlp9hqoBa6hD9
-GFRQYqSejYBcSwc9xFQtpYOidPuEaVOY6pXOvz9SCdp/qOQe05DaHOhJ0j+gGTew
-6YIWOFzmfvGAP39bqSOSD+n88PA68niqlM+++kcZVPAh6HoDjNYNCy8Mn/669lzf
-g1nCj+YCO+APuQia8KtH2f3iRexQQw/EUmEqc7SPc9m0p0wDn86MOoWqc9hGRfBx
-xxJpJnQWjHRp87TbWDIwQ0hTN4bPNlzw9gtJF2ekH9bXpLbHsV4TjVPowWrAmzqi
-OOZOxOkjSWaEMYQxyEJ6fBYeQlDDyC20r7gEQEoUm57sdWDJTCDwYZZfAJficQ7e
-muvhhLt073rkJ4ZXkcVCX0awfcW6uF6WZamHnKzalWHU5adYEJDVdy7mULxCW8QT
-Oj9IzbmELFPloc8qBFdDuOLBaPAgzWRnuMmrVjcyAGwHHfiOasofgUKL4W9OMYTS
-0igkoYI8eVMNrAvftnOn1ikwsTqnznCPC0Zfn8CzL1rfzkSjPPG5epRMxhLZWSKc
-F6x5F0vyIQmi6w3Jd81t9Xz7j/FpV2bVl57So6hmjUrosBXjzCdaNu3qnyhY/2pp
-qQtoBtsha+lu8/LfyNKOIDOuALBPm8aBmjZGkFcphgMPa2N8R5w=
-=kPeZ
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4W7NoACgkQzL64meEa
+mQZPbBAAglbugDsFjPT9ikTC9/5AsAxJ+HS5SorFeA9dP3g1FIQ/m+ktbTeSnVlJ
+j4dMLFA/6URa7v+Tsfq9U8lM2BJfHOoyE89lQwTZ45emLwdt10YdOTcN6LwbC9KB
+YRsR7ezdI78Nwaq0tIIinJMefjgEtQZWXfNGAkgKCAG7j9SKgRSJYd9J7sck5+FD
+w26iKRioC/ZTcnX8XLiDDbE2s9hpshCxWmH7XiZ93+b8pPkdada+/alFDFIDbrr+
+kYsyFtFSL5w+WiNp+Ls4FSHddmF0iHs+E0Jeft7uSnPTRRcg5Ns4YcjmQgh+Bxkz
+jJwp+LnYOI3wPjpK5JiG6BuZVqOB0hzWF0Xzb/Uz57Mx3fIKpx1bvJsuH9zZMAKX
+4Qn6kmsxHs2vhuX+YJwzdMQLvF/M6Jg9+CwckLcE2TZJ7hKW26bgyfkiJG7EID7D
+E+y2MBc3MtRO5p0kO6fGpJmbWLw7y46gnu8DgRWmdcEZr7BDzx4JTeZ7pHSP0UMn
+ulJGntcsYKX2FighVVMjJCLRYjQOVfzzeh76kIoEJSMlW8qAKdVPgZp530LFWB6c
+Ak84Nxf6jhcVnj7GofYZwPUXvpedHCDQqXK+ZB5aj228ypSiVnD8yRp5/Xh0sdJD
+67ZBtVd0/rzn8Iez4RnR/psGJUNDt50tQVW9xasGn5Rjd+IywOg=
+=Q3Sj
 -----END PGP SIGNATURE-----
 --=-=-=--
