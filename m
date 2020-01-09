@@ -2,261 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF52135CB5
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 16:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD20135CB9
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 16:27:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730772AbgAIP0w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jan 2020 10:26:52 -0500
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:41670 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730049AbgAIP0v (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jan 2020 10:26:51 -0500
-Received: by mail-qt1-f193.google.com with SMTP id k40so6141885qtk.8
-        for <linux-usb@vger.kernel.org>; Thu, 09 Jan 2020 07:26:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=M2wOckotxOzM6ekMiDpizI1kiXHylocDhDMMhXrUiMc=;
-        b=hKjrU4mtiCSeR+5caFJcpvslko3ZHIaE5Mrj29FGqWebOaOxKEkE/dBxtQ4ksF60CB
-         61OZkWMFVFvy2KklYVLma/PLaXGjSbfL15zF0YkDyT5jqmekyDVUYlq/KymZ+oRz62P6
-         xr48OrC00lnwjWzh8wKck/FwERHIxS1QAdULtdX9b/q6ckbh4BI1bznyUWfe/LBsUBps
-         yM+YFKIOIg5fShSrHbkTdzB8Z+mPHgYg+N7lezoBv/s/MaydvLW1E+FuMDxjaVBgcRrv
-         bH3g50khN4VdC7Ts7PiEgunyYCFbZpVNacH8/UsZeNH97IVh+eXKtUI163nZ4te5VyrM
-         k/eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=M2wOckotxOzM6ekMiDpizI1kiXHylocDhDMMhXrUiMc=;
-        b=XxScNmN3OLd1fVOYCQ4D1uUcxJ4LnD27jFTE8c8guc0CcQyAa7jYCNn1mnqvIc0hH2
-         K5SvEGKvkQVEj5SSx8JCR6EZrFGS5mbsb+PV7ibBQ5LSGdBlCAzo2ZPOgfC1tdh4vSZn
-         LyvyvUu6muYV3R7ZTMHaaxpVbR8OPlAStmHOxH5tImTCSoTcySmiRPmfzXR/CitA2grv
-         VB5CQps9oqO5vXzbmtQLO1r+/D2cGPgZhG+WDBP59FanvEIja8MhVmwDn/0HliB7eMDq
-         ElW6krH1I9OhyHJpYEf0m3Gm96WLBGMNDycioYa6sR5BQ0FFvU9iu6wvKNTtTsmTxNnn
-         c3eQ==
-X-Gm-Message-State: APjAAAX3mDJGY7BIra3VhS0aPCzoc6t7kAxo3qa2/FWF19QgnJ28mn9F
-        hnTR2yTaIoWd6DaR3wwZEZawpATz3sA=
-X-Google-Smtp-Source: APXvYqx4vwLY65QkOKAdEDygML1eLjl0uaereccu7KRWPNaUpdKnqJVf2lr806CIvIfl499o0FVlTw==
-X-Received: by 2002:aed:3e53:: with SMTP id m19mr6146174qtf.32.1578583609698;
-        Thu, 09 Jan 2020 07:26:49 -0800 (PST)
-Received: from billcipher.corp.mot.com ([200.110.218.188])
-        by smtp.gmail.com with ESMTPSA id x16sm3120645qki.110.2020.01.09.07.26.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jan 2020 07:26:49 -0800 (PST)
-From:   =?UTF-8?q?Jer=C3=B3nimo=20Borque?= <jeronimo@borque.com.ar>
-To:     linux-usb@vger.kernel.org
-Cc:     johan@kernel.org, greg@kroah.com,
-        =?UTF-8?q?Jer=C3=B3nimo=20Borque?= <jeronimo@borque.com.ar>
-Subject: [PATCH] USB: serial: simple: Add Motorola Solutions TETRA MTP3xxx and MTP85xx
-Date:   Thu,  9 Jan 2020 12:23:34 -0300
-Message-Id: <20200109152334.21077-1-jeronimo@borque.com.ar>
-X-Mailer: git-send-email 2.24.1
+        id S1730802AbgAIP1P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jan 2020 10:27:15 -0500
+Received: from mail.navigue.com ([74.117.40.3]:52961 "EHLO mail.navigue.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730112AbgAIP1P (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Jan 2020 10:27:15 -0500
+Received: from [192.168.7.178] (bureau.navigue.com [74.117.40.10])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.navigue.com (Postfix) with ESMTPSA id A4D64140069;
+        Thu,  9 Jan 2020 10:29:10 -0500 (EST)
+Subject: Re: USB_DWC3_OF_SIMPLE
+To:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org
+References: <c3a1c48c-1ac7-e5c2-e09a-3b55100735ab@navigue.com>
+ <871rs9t336.fsf@kernel.org>
+From:   Jonathan Thibault <jonathan@navigue.com>
+Message-ID: <f07f375c-9096-c94b-f457-42d4e83093c3@navigue.com>
+Date:   Thu, 9 Jan 2020 10:27:09 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <871rs9t336.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-GB
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add device-ids for the Motorola Solutions TETRA radios MTP3xxx series
-and MTP85xx series
+Thanks for the quick reply.
 
-$ lsusb -vd 0cad:
+On 2020-01-09 4:02 a.m., Felipe Balbi wrote:
+> Hi,
+>
+> Jonathan Thibault <jonathan@navigue.com> writes:
+>
+>> Greetings,
+>>
+>> I am currently trying to port OpenWRT to Ubiquiti's EdgeRouter 4 which
+>> is a Cavium Octeon 7130.  While investigating to support XHCI (the
+>> device has a single USB3 port), I ran into the dwc3 driver which
+>> apparently supports that very chipset via the dwc3-of-simple glue.
+>>
+>> Looking at Ubiquiti's own firmware, it seems they are using a modified
+>> version of the standard xhci-platform driver.
+>>
+>> So now I am faced with two different approaches:
+>>
+>> 1- Attempt to replicate Ubiquiti's modifications to xhci-plat.
+>>
+>> 2- Switch to dwc3-of-simple.
+>>
+>> With option 1, so far, I can get xhci to load by merely adding a
+>> '.compatible =' member to usb_xhci_of_match[], but the driver complains
+>> about LPM algorithms and disables LPM (which may be fine, I don't know
+>> if it is even supported on this device).
+>>
+>> Option 2 (where you might hopefully help), potentially involves more
+>> modification to the OpenWRT since their Octeon kernel config does not
+>> appear to enable CONFIG_COMMON_CLK, which the driver depends on.  And I
+>> do not know if I should also disable standard ohci and ehci drivers once
+>> I manage to enable the USB_DWC3_OF_SIMPLE.
+>>
+>> I'm looking for recommendations on the best approach.  Keep in mind that
+>> while I can cobble together some ugly but functional hacks, I am not an
+>> experienced kernel dev.
+> Just switch to dwc3-of-simple, it already supports the SoC you're
+> dealing with. Try removing the dependency on CONFIG_COMMON_CLK. I think
+> we already get empty stubs when common clk is disabled.
+>
+> If that works for you, that's an easy patch.
+>
 
-Bus 001 Device 009: ID 0cad:9015 Motorola CGISS TETRA PEI interface
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass            0
-  bDeviceSubClass         0
-  bDeviceProtocol         0
-  bMaxPacketSize0        64
-  idVendor           0x0cad Motorola CGISS
-  idProduct          0x9015
-  bcdDevice           24.16
-  iManufacturer           1
-  iProduct                2
-  iSerial                 0
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x0037
-    bNumInterfaces          2
-    bConfigurationValue     1
-    iConfiguration          3
-    bmAttributes         0x80
-      (Bus Powered)
-    MaxPower              500mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass      0
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass      0
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
+Sadly, while it does build without the COMMON_CLK dependency, probing fails:
 
-Bus 001 Device 010: ID 0cad:9013 Motorola CGISS TETRA PEI interface
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass            0
-  bDeviceSubClass         0
-  bDeviceProtocol         0
-  bMaxPacketSize0        64
-  idVendor           0x0cad Motorola CGISS
-  idProduct          0x9013
-  bcdDevice           24.16
-  iManufacturer           1
-  iProduct                2
-  iSerial                 0
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x0037
-    bNumInterfaces          2
-    bConfigurationValue     1
-    iConfiguration          3
-    bmAttributes         0x80
-      (Bus Powered)
-    MaxPower              500mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass      0
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass      0
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
+[    4.881646] dwc3 1680000000000.xhci: Configuration mismatch. dr_mode 
+forced to host
+[    4.889574] dwc3 1690000000000.xhci: Configuration mismatch. dr_mode 
+forced to host
+[    4.897546] dwc3-of-simple: probe of 1180068000000.uctl failed with 
+error -12
+[    4.904715] dwc3-of-simple: probe of 1180069000000.uctl failed with 
+error -12
 
-Signed-off-by: Jerónimo Borque <jeronimo@borque.com.ar>
----
- drivers/usb/serial/usb-serial-simple.c | 2 ++
- 1 file changed, 2 insertions(+)
+The return value suggests that it's from the if(!simple->clks) check in 
+dwc3_of_simple_clk_init().
 
-diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
-index edbbb13d6de6..bd23a7cb1be2 100644
---- a/drivers/usb/serial/usb-serial-simple.c
-+++ b/drivers/usb/serial/usb-serial-simple.c
-@@ -86,6 +86,8 @@ DEVICE(moto_modem, MOTO_IDS);
- #define MOTOROLA_TETRA_IDS()			\
- 	{ USB_DEVICE(0x0cad, 0x9011) },	/* Motorola Solutions TETRA PEI */ \
- 	{ USB_DEVICE(0x0cad, 0x9012) },	/* MTP6550 */ \
-+	{ USB_DEVICE(0x0cad, 0x9013) },	/* MTP3xxx */ \
-+	{ USB_DEVICE(0x0cad, 0x9015) },	/* MTP85xx */ \
- 	{ USB_DEVICE(0x0cad, 0x9016) }	/* TPG2200 */
- DEVICE(motorola_tetra, MOTOROLA_TETRA_IDS);
- 
+The configuration mismatch warning is a bit of a mystery to me as well 
+since the only mode available in kernel config is USB_DWC3_HOST and what 
+I selected.  Would this be because the controller itself is reporting 
+another configuration?
+
 -- 
-2.24.1
+Jonathan Thibault
+Analyste/Administrateur Réseau
+Navigue
+97, route 132, Saint-Godefroi (Québec) G0C 3C0
+581-357-2015
+jonathan@navigue.com
+www.navigue.com
 
