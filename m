@@ -2,63 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FDDA13551A
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 10:04:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8234135527
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 10:07:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729118AbgAIJEk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jan 2020 04:04:40 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:40096 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728593AbgAIJEk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jan 2020 04:04:40 -0500
-Received: by mail-lj1-f196.google.com with SMTP id u1so6364111ljk.7;
-        Thu, 09 Jan 2020 01:04:38 -0800 (PST)
+        id S1729202AbgAIJHL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jan 2020 04:07:11 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:39265 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729182AbgAIJHJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jan 2020 04:07:09 -0500
+Received: by mail-lj1-f193.google.com with SMTP id l2so6372172lja.6;
+        Thu, 09 Jan 2020 01:07:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=1wEOto74WtWWVBt7hzzCLvY/HjBRw+30JpsajXmQoEk=;
-        b=VotdQx0hBmaNiqYwnMQi/EoFgHh8UCayXB4uXSKGMi1WrsslgqIiMk59yLYmePW/jr
-         UX4X7OlHN1wka3AG+U7v53aOSLZrO6JLZiCfDYCucZVVijrOdaq/sx+VIYgYXuTddXKh
-         HErVa3kc1zbVXwjCK9ABRN80F+eWwLWplp5TcBYnDlfVdQcGmyMocfoTCSD++pWq9rZT
-         8+b4E9RJdzBq2saGIqWgAiuKRKAkLFCN22MLVOGvl564Rd6NiZXie7FPJw5lDC/L9f7E
-         ujtVV/TvXH9WuNheVFI0GN72woG0jjR6C2kwmb4Hpk6bH2UzgNZAE9Pa9zVuAB+4wwsx
-         Jn4w==
+        bh=7ijlsxO5qpHVbbD9AH/UiDDCD0d1uP1ULQl/KoHVbKE=;
+        b=mbvN23WkxkzyAeGFGMmksrguPrkbgtLRHlUSGLJ2rjr+Tfv+gTdV7LfXta4iNLkyOz
+         rDHnPfyWQArKbuHLsWLGxOnNh0E/Cu0cHVqO5/AObYI8LiqD4bNTgqGGQKREJ/I3krAq
+         puX04Kgpz6Fh3lyosjFj86UyRUvc04x/IL0EvkLfacRRb9NQZ3Fb/SSlUYwTOqETsIOY
+         o799IFfe9cGY1lynomvjgLdZYkhm/TpUYB46wAgy2kFXcVXxgTEw0Q6/xLyVuQyAlYla
+         Ba9BIJEdBBMOZr+7aLONbfSuv57BbbwQIuiaUi+YD27mlpdC/1aDgd9x4CKWHTJpEVuL
+         VhvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=1wEOto74WtWWVBt7hzzCLvY/HjBRw+30JpsajXmQoEk=;
-        b=YfAj7FduZ+lHwQ87EolwzgfeM7wDTHHpjco/5P2oQKeo7z+ER5MykxV6PgnTSUDyuZ
-         DRU9qeE73dBFb84jtuenHIO/54rTfXeid6jqRnuvj71nkQyApQ1xKCg7DOEVnQh3nyCn
-         dL7uWM9wn5axhJpauqSQuBQhMHBUSIBuOSWDMu9tMTVdyRzY7KfX0XFjhIa8QRMB5Dx1
-         gH6swkRSvbUHav2GcLbZnuO/A47vOinGMQaRMCFD1vufgiy+Q77no6WvnUbkc1s4ohnc
-         lBnJqQyyMAzdeB4CmnJ0VSwHfojOfq6NtF+07HwMYK2fU0ldMKZq6LvhxsXpJo1EIrCy
-         bwQw==
-X-Gm-Message-State: APjAAAVR2Kiek7kx2337kzuGVQ8AFjtn9N/YKjIfIJAvuc72XocicaeC
-        xB8uFlMwGMc2p0XJEytV+oUHR25Ztnw=
-X-Google-Smtp-Source: APXvYqzlF6/2MuHY8a8TVJoWkGCaL58M640PRwVGM5HPTEGrm05lpplLJqVg2vc2CwGADNtR1gTPSQ==
-X-Received: by 2002:a2e:804c:: with SMTP id p12mr5681606ljg.31.1578560677836;
-        Thu, 09 Jan 2020 01:04:37 -0800 (PST)
+        bh=7ijlsxO5qpHVbbD9AH/UiDDCD0d1uP1ULQl/KoHVbKE=;
+        b=M8La2w3CzR0v5Dsl6X7mUA++JS2+lDJBxM0CPYkiYnnCTcRasR3Mtkc4zRYb2jmJ3y
+         SV9M9q7o4avSC/48lIyS6ViXpKzgZ9iwDisGf6oqAJWCDiwwGn8Sz2lS13xolP4XozKK
+         UPY8leyPcsMr6XCWYHfd/HqniaHBX7PaD5PwcWGynLuef1zzfufENOLrtSZZOzBlQX9J
+         OIsxmVfkM6Zq6RSWvRpR7fiXcaboNGikR0ed8mQQhX9IfkogkUKgEiE8cjfRPO+/YiW2
+         LoZRxPSC0fl8c/8esqccuzYW5Pwo1FvsUWqrtCrT/DsM5nLIVpT6pFANr+14wqZXoVe3
+         jqoQ==
+X-Gm-Message-State: APjAAAWsAyrC6uHvu83+2UmW1tJKcI48ysjyIHPDQ3fEbwL1aT0rXakd
+        hovbvkTe9iJ6OewdCfLPwihRPcXcq6I=
+X-Google-Smtp-Source: APXvYqzjxyoI8lpPmUnidfRlJULNwJVBfodIWtKVM612k4LVbYMzVcl7WPlOIz/LFzq71vTKGKgbGw==
+X-Received: by 2002:a2e:9ad8:: with SMTP id p24mr5878891ljj.148.1578560827442;
+        Thu, 09 Jan 2020 01:07:07 -0800 (PST)
 Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id u66sm2615261lje.7.2020.01.09.01.04.36
+        by smtp.gmail.com with ESMTPSA id w17sm2691756lfn.22.2020.01.09.01.07.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jan 2020 01:04:37 -0800 (PST)
+        Thu, 09 Jan 2020 01:07:06 -0800 (PST)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
-        Ran Wang <ran.wang_1@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
-        Jun Li <jun.li@nxp.com>, Peter Chen <peter.chen@nxp.com>
-Cc:     "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable\@vger.kernel.org" <stable@vger.kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: Re: [PATCH] usb: dwc3: gadget: Fix controller get stuck when kicking extra transfer in wrong case
-In-Reply-To: <9f9d0193-8fe6-33b3-4f5c-95a1181e6681@synopsys.com>
-References: <20200107071441.480-1-ran.wang_1@nxp.com> <9f9d0193-8fe6-33b3-4f5c-95a1181e6681@synopsys.com>
-Date:   Thu, 09 Jan 2020 11:05:30 +0200
-Message-ID: <87woa1rodh.fsf@kernel.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: use proper initializers for property entries
+In-Reply-To: <f2f41b28-2ca5-7fad-5b19-2ad51c689e5a@samsung.com>
+References: <20191213174623.GA20267@dtor-ws> <CGME20191215164117eucas1p159471bd0b90b76b6ff64f26f17a6580e@eucas1p1.samsung.com> <2a8a5e6b-9372-978e-03d0-350ab65a2d0a@redhat.com> <f2f41b28-2ca5-7fad-5b19-2ad51c689e5a@samsung.com>
+Date:   Thu, 09 Jan 2020 11:08:00 +0200
+Message-ID: <87tv55ro9b.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -74,38 +71,44 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-(Tejas, please break your lines at 80-columns. You shouldn't have to be
-reminded of this)
+Marek Szyprowski <m.szyprowski@samsung.com> writes:
 
-Tejas Joglekar <Tejas.Joglekar@synopsys.com> writes:
-
-> Hi,
-> On 1/7/2020 12:44 PM, Ran Wang wrote:
->> According to original commit c96e6725db9d6a ("usb: dwc3: gadget: Correct=
- the
->> logic for queuing sgs"), we would only kick off another transfer in case=
- of
->> req->num_pending_sgs > 0.
->>=20
-> The commit 8c7d4b7b3d43 ("usb: dwc3: gadget: Fix logical condition")
-> fixes the commit f38e35dd84e2 (usb: dwc3: gadget: split
-> dwc3_gadget_ep_cleanup_completed_requests()).
+> Hi All,
 >
->> However, current logic will do this as long as req->remaining > 0, this =
-will
->> include the case of non-sgs (both dwc3_gadget_ep_request_completed(req) =
-and
->> req->num_pending_sgs are 0) that we did not want to.
->>=20
->> Without this fix, we observed dwc3 got stuck on Layerscape plaftorms (su=
-ch as
->> LS1088ARDB) when enabling gadget (mass storage function) as below:
+> On 15.12.2019 17:41, Hans de Goede wrote:
+>> Hi,
 >>
-> Similar issue was reported by Thinh after my fix, and he has submitted
-> a patch for the same. You can refer the discussion
-> https://patchwork.kernel.org/patch/11292087/.
+>> On 13-12-2019 18:46, Dmitry Torokhov wrote:
+>>> We should not be reaching into property entries and initialize them by
+>>> hand, but rather use proper initializer macros. This way we can alter
+>>> internal representation of property entries with no visible changes to
+>>> their users.
+>>>
+>>> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>>> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>>> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+>>> ---
+>>>
+>>> It would be good if this could go through Rafael's tree as it is needed
+>>> for the rest of my software_node/property_entry rework patch series
+>>> which I would love not to delay till 5.6.
+>>
+>> Patch looks good to me:
+>>
+>> Acked-by: Hans de Goede <hdegoede@redhat.com>
+>
+> This patch is instantly needed as the issue it fixes is again triggered=20
+> in current (20200107) linux-next by commit e6bff4665c59 "software node:=20
+> replace is_array with is_inline".
+>
+> Felipe: could You ack it, so it could be merged via Rafael's tree=20
+> together with related device property changes?
 
-Based on this, I'm assuming we don't need this patch.
+Here you go:
+
+Acked-by: Felipe Balbi <balbi@kernel.org>
+
+cheers
 
 =2D-=20
 balbi
@@ -115,18 +118,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4W7NoACgkQzL64meEa
-mQZPbBAAglbugDsFjPT9ikTC9/5AsAxJ+HS5SorFeA9dP3g1FIQ/m+ktbTeSnVlJ
-j4dMLFA/6URa7v+Tsfq9U8lM2BJfHOoyE89lQwTZ45emLwdt10YdOTcN6LwbC9KB
-YRsR7ezdI78Nwaq0tIIinJMefjgEtQZWXfNGAkgKCAG7j9SKgRSJYd9J7sck5+FD
-w26iKRioC/ZTcnX8XLiDDbE2s9hpshCxWmH7XiZ93+b8pPkdada+/alFDFIDbrr+
-kYsyFtFSL5w+WiNp+Ls4FSHddmF0iHs+E0Jeft7uSnPTRRcg5Ns4YcjmQgh+Bxkz
-jJwp+LnYOI3wPjpK5JiG6BuZVqOB0hzWF0Xzb/Uz57Mx3fIKpx1bvJsuH9zZMAKX
-4Qn6kmsxHs2vhuX+YJwzdMQLvF/M6Jg9+CwckLcE2TZJ7hKW26bgyfkiJG7EID7D
-E+y2MBc3MtRO5p0kO6fGpJmbWLw7y46gnu8DgRWmdcEZr7BDzx4JTeZ7pHSP0UMn
-ulJGntcsYKX2FighVVMjJCLRYjQOVfzzeh76kIoEJSMlW8qAKdVPgZp530LFWB6c
-Ak84Nxf6jhcVnj7GofYZwPUXvpedHCDQqXK+ZB5aj228ypSiVnD8yRp5/Xh0sdJD
-67ZBtVd0/rzn8Iez4RnR/psGJUNDt50tQVW9xasGn5Rjd+IywOg=
-=Q3Sj
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4W7XAACgkQzL64meEa
+mQZvdhAAsehbAbHtoUuojeSDyiU+fSa02kFNFXtBkJFnvQED6w3Z9z0aNs4hyUnT
+jQQB9AI84fnR6u8c1XbuMSaQbpfdlzynqfUqEvVTgAizKsyQu4+I10E1/DM6Axhx
+1o79WwM31uQbp96+C4BdJGLeSmgKMZLezYY+Sh63DwbTPH4oUg0VNUgVVA4wSD4r
+nz8XZ3dRDjD/neCMqAJh1ILGh9RDMle+LRBRzgNCeDlRIilkRq0WpyNev1aNvc7Q
+DxvS4AUt1vI0CNsLj4aatjUOaLaMsVRXX1Yszn8sG7EotSxMrqzxBFDQJKAuyYkI
+lsL9uDA+daI173P26eELf0rCrsv0E7FGCefW2qKMNr1SD7rx7Bz/5ZiC34xLKKab
+IHf/2B6al5psi/eqmGa1Sby0noY+kfPMZYLsPOjlahl7HPz1Ecq2L20DHI3uqsfs
+sRBiz6oGKsvbQ5ht2vG7aKG1MIunklhUj/gpVxyA8A2ax7PMC4/ytXFL/qImMeTI
+dRBXgiGWG4G4z1aeuJ0xMe5PMLQ62xwLe5orhsQx+Z/D8vgKyKfFGHV4bK7E5aU/
+If0dW7VWGfo83ZmnzcXzCmfdr8f3vwNO5kuV3ChEJWNMFHXa2Yl/zLKAbMjOR3Gv
+nn5wrZ3Hlsv788ebZgai13E3LwkO98HuFyhtEsNlhdW1axqbx9Y=
+=m1L8
 -----END PGP SIGNATURE-----
 --=-=-=--
