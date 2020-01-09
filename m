@@ -2,51 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3845135555
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 10:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFFCE1355A1
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2020 10:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729252AbgAIJOE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jan 2020 04:14:04 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:44698 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728991AbgAIJOD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jan 2020 04:14:03 -0500
-Received: by mail-wr1-f65.google.com with SMTP id q10so6489110wrm.11
-        for <linux-usb@vger.kernel.org>; Thu, 09 Jan 2020 01:14:00 -0800 (PST)
+        id S1729509AbgAIJVo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jan 2020 04:21:44 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:36721 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729464AbgAIJVn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jan 2020 04:21:43 -0500
+Received: by mail-wm1-f65.google.com with SMTP id p17so1982154wma.1
+        for <linux-usb@vger.kernel.org>; Thu, 09 Jan 2020 01:21:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=subject:to:cc:references:from:autocrypt:organization:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=iLS78tVSPbq6tpG6+smVU0QZ1I3wWNq5Ss9YZL6AVzY=;
-        b=DXLVF5iLprJ3DEwP2caG7/RNJAR7A9fWdSDcAtPKaotyqe9hiJa7yosovyicxBsRGO
-         PfarmKKGZs/8mIdvIqBO/Sxnyoj7KsYk9ZBZL73WtnjVItQ86m7N6O57iVtyIecLb7Uo
-         iYfqyGXb02YNldQMHixWfPEQ2/8mYLDqzOUOrYl3Gec0r+C7AgYlf0MJHf1CgO0hJ3eb
-         HfmR8Og5w9MIMwVd1DXHzhl4wNxMCEFYiOiNxe6Bset9tqbYV+9bxIoePzi7I+IPR/EK
-         3MZUacTYl1pZPAYmGHCIwxB003PE1LD6A0OVUyvJJGo9lr/V/NW3nEB3C5zkOp07Rgrp
-         mtvA==
+        bh=t6UNQFtRacKJyEDWwFPJhdMqRhPoesdyIbzHGHay9SE=;
+        b=PLZCOuNnQimBu5ob7CqBR0wDv6BEk8+CaXb0CD4ikJ+9ZpHYx+PfdqdMJl3AXescoo
+         QsQd9oEE/wTkzS4FLy2NqXTLKKNpBYxMLj43FT/liklKdXEKYow11XyRICJx8G6AqGNR
+         J4FSJo4cf1D/w0NVeQ590+yoWxt8mToFw0C1IkrcQ1RHFbC7b2cDhfpvq5aEKlIa0YiE
+         vJo3Pul83a1c8Nlvm0bSMdM7NuJhUPRWz4h482FrzKE0DIqwnq0EQJhfmPt85hde9BSp
+         RKpXDINB5vG/c53ErnB1Zl6wvln37KI7JZCC/C2Xh1iDVXfifja4AozmLQCWDIZA3HeY
+         9Y5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :organization:message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=iLS78tVSPbq6tpG6+smVU0QZ1I3wWNq5Ss9YZL6AVzY=;
-        b=fOan7tqm7ORkEr3+YfGyBrX20F4LtguMqY/K5uJ1FcF3yJZHge2Gio8NkWFR8WLTaQ
-         Jabzveoza59I5yVgPd9iajF8HzKnEyZmckIQvSovVRIFRkzqso6S6Jj7iCoRW4t0J6EF
-         6WURp/1IxH+iE9Vd9cWWebcMYFseHaMtcXDsXtlcSxdgmjYRAEPp/VuaCMJtvqMihj6F
-         2UcPLrrSiRIoWj58vuaJfs96KeQBpwuzybPx5Nsx56VsyhOaTnZ89CYI1GvTYcF+P5fY
-         BI9PZOjbDQBKbqN8dc0EcCKvSlrMpt5i+xN60cnFkoLlmQukKgmhweMi6wVJf9DZ/4Bf
-         nyvw==
-X-Gm-Message-State: APjAAAWOamdSFVWS3XNALGweLTjdh3YKxI9kR4hjpuYtHUzZxiGcQEt1
-        PpqrC0FY4urSKHK9kAxJ++EOdA==
-X-Google-Smtp-Source: APXvYqy6O3d54tIw2heMKyh4C8jmsBAPW9bU7NUXO0uRFtGsgGgi9vQoo5Bc1OyDs6WawAuaQQOrEA==
-X-Received: by 2002:adf:ec4c:: with SMTP id w12mr9474963wrn.124.1578561239967;
-        Thu, 09 Jan 2020 01:13:59 -0800 (PST)
+        bh=t6UNQFtRacKJyEDWwFPJhdMqRhPoesdyIbzHGHay9SE=;
+        b=Mxw2RwgftrKOUjd0Ioa5F5Lign/B2O+CM3ziogORVU7eqWqhWQNTveR7ZM0MpZbFJb
+         7Y/M6wq8Wn4G0gbsP4LElS0+E1cEUBgvh6kVAEnpl/oDzM/fzj/6yxc5k79GrQpkEQHE
+         Df7SKMA7rfiFLjtd6YE+PKVrKIrLkHtP0QoDDaoZdmmprQTkvSph+2oeLXI4r4Tircgr
+         fFh6EChSJqFrLgxJuV600UMIjy3NxN3IAY1bjNWyuBTXk+70CtM5ZWe3yB1/xg0+7yAY
+         3iTslAH026AOCtgMOR9rjxmq7sD++Yui5b8fbMTNGXTLMyGtz/YES83wI6jrOBLxBirM
+         Dw1A==
+X-Gm-Message-State: APjAAAUhNBBdB2IwWWFgZYGfO7rMLaJKPYA1AZOhZrvAl4Sb5dbHFtCr
+        80GiOn2vomZV4396OdB3o5ZAjQ==
+X-Google-Smtp-Source: APXvYqzR5nO41yNToUvTq5mKGuJ+qBRgV5QaavHu4mL4vLjOb9C5d7kiXti+VFogFpbpXN87AE999g==
+X-Received: by 2002:a05:600c:48a:: with SMTP id d10mr3584601wme.87.1578561701085;
+        Thu, 09 Jan 2020 01:21:41 -0800 (PST)
 Received: from [10.1.2.12] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id m21sm2167857wmi.27.2020.01.09.01.13.58
+        by smtp.gmail.com with ESMTPSA id c17sm7391547wrr.87.2020.01.09.01.21.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jan 2020 01:13:59 -0800 (PST)
-Subject: Re: [PATCH v4 4/6] usb: dwc3: Add Amlogic A1 DWC3 glue
+        Thu, 09 Jan 2020 01:21:40 -0800 (PST)
+Subject: Re: [PATCH v4 1/6] dt-bindings: phy: Add Amlogic A1 USB2 PHY Bindings
 To:     Hanjie Lin <hanjie.lin@amlogic.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
         Rob Herring <robh@kernel.org>,
@@ -65,7 +65,7 @@ Cc:     Yue Wang <yue.wang@amlogic.com>, linux-amlogic@lists.infradead.org,
         Victor Wan <victor.wan@amlogic.com>,
         Xingyu Chen <xingyu.chen@amlogic.com>
 References: <1578537045-23260-1-git-send-email-hanjie.lin@amlogic.com>
- <1578537045-23260-5-git-send-email-hanjie.lin@amlogic.com>
+ <1578537045-23260-2-git-send-email-hanjie.lin@amlogic.com>
 From:   Neil Armstrong <narmstrong@baylibre.com>
 Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
  xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
@@ -117,12 +117,12 @@ Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
  zR8QplXA5kogS4kLe/7/JmlDMO8Zgm9vKLHSUeesLOrjdZ59EcjldNNBszRZQgEhwaarfz46
  BSwxi7g3Mu7u5kUByanqHyA=
 Organization: Baylibre
-Message-ID: <c2d45106-f564-668f-e12a-1fe4206429c0@baylibre.com>
-Date:   Thu, 9 Jan 2020 10:13:58 +0100
+Message-ID: <f69e38e8-4f31-3297-9f21-9ceb5be27f6e@baylibre.com>
+Date:   Thu, 9 Jan 2020 10:21:39 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <1578537045-23260-5-git-send-email-hanjie.lin@amlogic.com>
+In-Reply-To: <1578537045-23260-2-git-send-email-hanjie.lin@amlogic.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -131,266 +131,84 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
 On 09/01/2020 03:30, Hanjie Lin wrote:
-> Adds support for Amlogic A1 USB Control Glue HW.
+> Add the Amlogic A1 Family USB2 PHY Bindings
 > 
-> The Amlogic A1 SoC Family embeds 1 USB Controllers:
-> - a DWC3 IP configured as Host for USB2 and USB3
-> 
-> A glue connects the controllers to the USB2 PHY of A1 SoC.
+> It supports Host mode only.
 > 
 > Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
 > Signed-off-by: Yue Wang <yue.wang@amlogic.com>
 > ---
->  drivers/usb/dwc3/dwc3-meson-g12a.c | 99 +++++++++++++++++++++++++++-----------
->  1 file changed, 71 insertions(+), 28 deletions(-)
+>  .../bindings/phy/amlogic,meson-a1-usb2-phy.yaml    | 56 ++++++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/amlogic,meson-a1-usb2-phy.yaml
 > 
-> diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
-> index 8a3ec1a..957eda2 100644
-> --- a/drivers/usb/dwc3/dwc3-meson-g12a.c
-> +++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
-> @@ -96,6 +96,11 @@
->  	#define USB_R5_ID_DIG_TH_MASK				GENMASK(15, 8)
->  	#define USB_R5_ID_DIG_CNT_MASK				GENMASK(23, 16)
->  
-> +enum meson_soc_id {
-> +	MESON_SOC_G12A = 0,
-> +	MESON_SOC_A1,
-> +};
+> diff --git a/Documentation/devicetree/bindings/phy/amlogic,meson-a1-usb2-phy.yaml b/Documentation/devicetree/bindings/phy/amlogic,meson-a1-usb2-phy.yaml
+> new file mode 100644
+> index 00000000..dd2e3a6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/amlogic,meson-a1-usb2-phy.yaml
+> @@ -0,0 +1,56 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2019 Amlogic, Inc
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/phy/amlogic,meson-a1-usb2-phy.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 > +
->  enum {
->  	USB2_HOST_PHY = 0,
->  	USB2_OTG_PHY,
-> @@ -107,10 +112,21 @@ static const char *phy_names[PHY_COUNT] = {
->  	"usb2-phy0", "usb2-phy1", "usb3-phy0",
->  };
->  
-> +static const struct clk_bulk_data meson_g12a_clocks[] = {
-> +	{ .id = NULL },
-> +};
+> +title: Amlogic A1 USB2 PHY
 > +
-> +static const struct clk_bulk_data meson_a1_clocks[] = {
-> +	{ .id = "usb_ctrl" },
-> +	{ .id = "usb_bus" },
-> +	{ .id = "xtal_usb_ctrl" },
-> +};
+> +maintainers:
+> +  - Yue Wang <yue.wang@amlogic.com>
 > +
->  struct dwc3_meson_g12a {
->  	struct device		*dev;
->  	struct regmap		*regmap;
-> -	struct clk		*clk;
-> +	struct clk_bulk_data    *clks;
-> +	int num_clks;
->  	struct reset_control	*reset;
->  	struct phy		*phys[PHY_COUNT];
->  	enum usb_dr_mode	otg_mode;
-> @@ -120,6 +136,7 @@ struct dwc3_meson_g12a {
->  	struct regulator	*vbus;
->  	struct usb_role_switch_desc switch_desc;
->  	struct usb_role_switch	*role_switch;
-> +	int                     soc_id;
->  };
->  
->  static void dwc3_meson_g12a_usb2_set_mode(struct dwc3_meson_g12a *priv,
-> @@ -151,7 +168,7 @@ static int dwc3_meson_g12a_usb2_init(struct dwc3_meson_g12a *priv)
->  				   U2P_R0_POWER_ON_RESET,
->  				   U2P_R0_POWER_ON_RESET);
->  
-> -		if (i == USB2_OTG_PHY) {
-> +		if (priv->otg_mode == USB_DR_MODE_OTG && i == USB2_OTG_PHY) {
-
-I as said on v2, this is wrong, we can/need/must allow switching even if the dr_mode is not USB_DR_MODE_OTG.
-
-Please add a struct used in match data with a simple bool like "otg_switch_support" and use it here and below
-instead of using USB_DR_MODE_OTG.
-
->  			regmap_update_bits(priv->regmap,
->  				U2P_R0 + (U2P_REG_SIZE * i),
->  				U2P_R0_ID_PULLUP | U2P_R0_DRV_VBUS,
-> @@ -295,7 +312,7 @@ static int dwc3_meson_g12a_otg_mode_set(struct dwc3_meson_g12a *priv,
->  {
->  	int ret;
->  
-> -	if (!priv->phys[USB2_OTG_PHY])
-> +	if (priv->otg_mode != USB_DR_MODE_OTG || !priv->phys[USB2_OTG_PHY])
-
-Ditto
-
->  		return -EINVAL;
->  
->  	if (mode == PHY_MODE_USB_HOST)
-> @@ -409,17 +426,32 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->  		priv->vbus = NULL;
->  	}
->  
-> -	priv->clk = devm_clk_get(dev, NULL);
-> -	if (IS_ERR(priv->clk))
-> -		return PTR_ERR(priv->clk);
-> +	priv->soc_id = (enum meson_soc_id)of_device_get_match_data(&pdev->dev);
+> +properties:
+> +  compatible:
+> +    const: amlogic,meson-a1-usb2-phy
 > +
-> +	if (priv->soc_id == MESON_SOC_G12A) {
-> +		priv->clks = devm_kmemdup(dev, meson_g12a_clocks,
-> +					  sizeof(meson_g12a_clocks),
-> +					  GFP_KERNEL);
-> +		priv->num_clks = ARRAY_SIZE(meson_g12a_clocks);
-> +	} else if (priv->soc_id == MESON_SOC_A1) {
-> +		priv->clks = devm_kmemdup(dev, meson_a1_clocks,
-> +					  sizeof(meson_a1_clocks),
-> +					  GFP_KERNEL);
-> +		priv->num_clks = ARRAY_SIZE(meson_a1_clocks);
-> +	} else {
-> +		return -EINVAL;
-> +	}
+> +  reg:
+> +    maxItems: 1
 > +
-> +	if (!priv->clks)
-> +		return -ENOMEM;
->  
-> -	ret = clk_prepare_enable(priv->clk);
-> +	ret = devm_clk_bulk_get(dev, priv->num_clks, priv->clks);
->  	if (ret)
->  		return ret;
->  
-> -	devm_add_action_or_reset(dev,
-> -				 (void(*)(void *))clk_disable_unprepare,
-> -				 priv->clk);
-> +	ret = clk_bulk_prepare_enable(priv->num_clks, priv->clks);
-> +	if (ret)
-> +		return ret;
->  
->  	platform_set_drvdata(pdev, priv);
->  	priv->dev = dev;
-> @@ -433,16 +465,16 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->  
->  	ret = reset_control_reset(priv->reset);
->  	if (ret)
-> -		return ret;
-> +		goto err_disable_clks;
->  
->  	ret = dwc3_meson_g12a_get_phys(priv);
->  	if (ret)
-> -		return ret;
-> +		goto err_disable_clks;
->  
->  	if (priv->vbus) {
->  		ret = regulator_enable(priv->vbus);
->  		if (ret)
-> -			return ret;
-> +			goto err_disable_clks;
->  	}
->  
->  	/* Get dr_mode */
-> @@ -458,7 +490,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->  						dwc3_meson_g12a_irq_thread,
->  						IRQF_ONESHOT, pdev->name, priv);
->  		if (ret)
-> -			return ret;
-> +			goto err_disable_clks;
->  	}
->  
->  	dwc3_meson_g12a_usb_init(priv);
-> @@ -467,7 +499,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->  	for (i = 0 ; i < PHY_COUNT ; ++i) {
->  		ret = phy_init(priv->phys[i]);
->  		if (ret)
-> -			return ret;
-> +			goto err_disable_clks;
->  	}
->  
->  	/* Set PHY Power */
-> @@ -478,18 +510,17 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->  	}
->  
->  	ret = of_platform_populate(np, NULL, NULL, dev);
-> -	if (ret) {
-> -		clk_disable_unprepare(priv->clk);
-> +	if (ret)
->  		goto err_phys_power;
-> -	}
+> +  clocks:
+> +    maxItems: 1
 > +
-> +	if (priv->otg_mode != USB_DR_MODE_OTG)
-> +		goto setup_pm_runtime;
->  
->  	/* Setup OTG mode corresponding to the ID pin */
-> -	if (priv->otg_mode == USB_DR_MODE_OTG) {
-> -		otg_id = dwc3_meson_g12a_get_id(priv);
-> -		if (otg_id != priv->otg_phy_mode) {
-> -			if (dwc3_meson_g12a_otg_mode_set(priv, otg_id))
-> -				dev_warn(dev, "Failed to switch OTG mode\n");
-> -		}
-> +	otg_id = dwc3_meson_g12a_get_id(priv);
-> +	if (otg_id != priv->otg_phy_mode) {
-> +		if (dwc3_meson_g12a_otg_mode_set(priv, otg_id))
-> +			dev_warn(dev, "Failed to switch OTG mode\n");
->  	}
->  
->  	/* Setup role switcher */
-> @@ -504,6 +535,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->  	if (IS_ERR(priv->role_switch))
->  		dev_warn(dev, "Unable to register Role Switch\n");
->  
-> +setup_pm_runtime:
+> +  clock-names:
+> +    items:
+> +      - const: xtal_usb_phy
+> +
+> +  resets:
+> +    maxItems: 1
 
-Ditto
-
->  	pm_runtime_set_active(dev);
->  	pm_runtime_enable(dev);
->  	pm_runtime_get_sync(dev);
-> @@ -518,6 +550,9 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->  	for (i = 0 ; i < PHY_COUNT ; ++i)
->  		phy_exit(priv->phys[i]);
->  
-> +err_disable_clks:
-> +	clk_bulk_disable_unprepare(priv->num_clks, priv->clks);
-> +
->  	return ret;
->  }
->  
-> @@ -527,7 +562,8 @@ static int dwc3_meson_g12a_remove(struct platform_device *pdev)
->  	struct device *dev = &pdev->dev;
->  	int i;
->  
-> -	usb_role_switch_unregister(priv->role_switch);
-> +	if (priv->otg_mode == USB_DR_MODE_OTG)
-> +		usb_role_switch_unregister(priv->role_switch);
->  
->  	of_platform_depopulate(dev);
->  
-> @@ -547,7 +583,7 @@ static int __maybe_unused dwc3_meson_g12a_runtime_suspend(struct device *dev)
->  {
->  	struct dwc3_meson_g12a	*priv = dev_get_drvdata(dev);
->  
-> -	clk_disable(priv->clk);
-> +	clk_bulk_disable_unprepare(priv->num_clks, priv->clks);
->  
->  	return 0;
->  }
-> @@ -556,7 +592,7 @@ static int __maybe_unused dwc3_meson_g12a_runtime_resume(struct device *dev)
->  {
->  	struct dwc3_meson_g12a	*priv = dev_get_drvdata(dev);
->  
-> -	return clk_enable(priv->clk);
-> +	return clk_bulk_prepare_enable(priv->num_clks, priv->clks);
->  }
->  
->  static int __maybe_unused dwc3_meson_g12a_suspend(struct device *dev)
-> @@ -619,7 +655,14 @@ static const struct dev_pm_ops dwc3_meson_g12a_dev_pm_ops = {
->  };
->  
->  static const struct of_device_id dwc3_meson_g12a_match[] = {
-> -	{ .compatible = "amlogic,meson-g12a-usb-ctrl" },
-> +	{
-> +		.compatible = "amlogic,meson-g12a-usb-ctrl",
-> +		.data = (void *)MESON_SOC_G12A,
-> +	},
-> +	{
-> +		.compatible = "amlogic,meson-a1-usb-ctrl",
-> +		.data = (void *)MESON_SOC_A1,
-> +	},
->  	{ /* Sentinel */ }
->  };
->  MODULE_DEVICE_TABLE(of, dwc3_meson_g12a_match);
-> 
+Please use reset-names like the g12a bindings.
 
 Neil
+
+> +
+> +  "#phy-cells":
+> +    const: 0
+> +
+> +  power-domains:
+> +     maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +  - "#phy-cells"
+> +  - power-domains
+> +
+> +examples:
+> +  - |
+> +    usb2_phy1: phy@40000 {
+> +      status = "okay";
+> +      compatible = "amlogic,a1-usb2-phy";
+> +      clocks = <&clkc_periphs 2>;
+> +      clock-names = "xtal_usb_phy";
+> +      reg = <0x0 0x40000 0x0 0x2000>;
+> +      resets = <&reset RESET_USBPHY>;
+> +      #phy-cells = <0>;
+> +      power-domains = <&pwrc PWRC_USB_ID>;
+> +    };
+> 
+
