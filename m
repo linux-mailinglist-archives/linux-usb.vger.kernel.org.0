@@ -2,124 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF47136BED
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jan 2020 12:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2D1113712B
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jan 2020 16:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727710AbgAJL2Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Jan 2020 06:28:24 -0500
-Received: from dougal.metanate.com ([90.155.101.14]:24966 "EHLO metanate.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727685AbgAJL2Y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 10 Jan 2020 06:28:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/simple; d=metanate.com;
-         s=stronger; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References
-        :In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=9UVcHhyzY5K16TcQ5yTzjUzazOe1PQWT54GHNs0Y9a8=; b=dDg0x7rwv9gCKvSXDhQ2xX5Cb/
-        eCGjC6upLQL5CFktP1F2mmMi+l40JdgfuFFtd35BHyt5QSui71eZcTjByod9wW5hzVU5x6+HzgN6s
-        OEs3M6yRxsUea4CFAt3yT5L+LDBoe8VNXjEi0UCKxRYStnOadrIP74ciYLXNkwJeTyTUegmuR1OwQ
-        kCndl0yJ6QjQntbUAZ0ez4NTEy9nO5duuU/ao7U2mZhj8nZ745bjyfZqv60+pKTgVTbO2RYYVsNz0
-        tCcNUXv4pVi/NjYoGClgnu8C4vJ9dUkGvhmhYqpTtYmVbkd0MAeo3L0OqHfsLv/9g4J6/2HxJ5sww
-        96wPG8bg==;
-Received: from johnkeeping.plus.com ([81.174.171.191] helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1ipsSj-0003gJ-GL; Fri, 10 Jan 2020 11:28:21 +0000
-Date:   Fri, 10 Jan 2020 11:28:14 +0000
-From:   John Keeping <john@metanate.com>
-To:     Pavel Hofman <pavel.hofman@ivitera.com>
-Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>
-Subject: [PATCH] usb: gadget: f_uac2: fix packet size calculation
-Message-ID: <20200110112814.1abf2075.john@metanate.com>
-In-Reply-To: <4f2df2bc-e208-fffb-48e2-3e14cd093103@ivitera.com>
-References: <4f2df2bc-e208-fffb-48e2-3e14cd093103@ivitera.com>
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1728239AbgAJP1W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Jan 2020 10:27:22 -0500
+Received: from mga18.intel.com ([134.134.136.126]:15565 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727866AbgAJP1W (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 10 Jan 2020 10:27:22 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jan 2020 07:27:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,417,1571727600"; 
+   d="scan'208";a="304201494"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga001.jf.intel.com with ESMTP; 10 Jan 2020 07:27:19 -0800
+Subject: Re: [PATCH 2/3] xhci: Wait until link state trainsits to U0 after
+ setting USB_SS_PORT_LS_U0
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        stern@rowland.harvard.edu
+Cc:     acelan.kao@canonical.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200103084008.3579-1-kai.heng.feng@canonical.com>
+ <20200103084008.3579-2-kai.heng.feng@canonical.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <17701887-a249-eade-eecb-541df6c2c704@linux.intel.com>
+Date:   Fri, 10 Jan 2020 17:29:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20200103084008.3579-2-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Authenticated: YES
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 10 Jan 2020 08:29:06 +0100
-Pavel Hofman <pavel.hofman@ivitera.com> wrote:
-
-> Together with dwc2 maintainer Minas Harutyunyan we have been
-> troubleshooting various issues of dwc2 on RPi4. We hit a problem where
-> the g_audio in capture (EP OUT, playback from USB host) requests req->
-> length larger than maxpacket*mc.
+On 3.1.2020 10.40, Kai-Heng Feng wrote:
+> Like U3 case, xHCI spec doesn't specify the upper bound of U0 transition
+> time. The 20ms is not enough for some devices.
 > 
-> As a workaround we removed the check in dwc2/gadget.c, however that is
-> not a proper solution. Minas with his team decided to add a patch where 
-> dwc2 will rejecting this type of wrong requests in dwc2_hsotg_ep_queue()
-> function, to not process these request at all. The f_uac2 + g_audio
-> gadget should restrain from sending such requests.
+> Intead of polling PLS or PLC, we can facilitate the port change event to
+> know that the link transits to U0 is completed.
 > 
-> Steps to reproduce:
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+>   drivers/usb/host/xhci-hub.c  | 8 +++++++-
+>   drivers/usb/host/xhci-mem.c  | 1 +
+>   drivers/usb/host/xhci-ring.c | 1 +
+>   drivers/usb/host/xhci.h      | 1 +
+>   4 files changed, 10 insertions(+), 1 deletion(-)
 > 
-> * Changing fs_epout_desc.bInterval in f_uac2.c from 4 (1ms) to 1 (125us) 
-> - the goal is to maximize available throughput of the audio gadget
-> 
-> * Loading the g_audio module with c_srate=48000, c_ssize=2, c_chmask=2 - 
-> i.e. standard 48kHz/16bit/2ch USB playback -> alsa capture
-> 
-> This combination produces mps=24 and mc=1 for EP OUT. Yet the audio 
-> function driver sometimes queues request with req->length 192.
+> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+> index 2b2e9d004dbf..07886a1bce62 100644
+> --- a/drivers/usb/host/xhci-hub.c
+> +++ b/drivers/usb/host/xhci-hub.c
+> @@ -1310,11 +1310,17 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+>   					spin_lock_irqsave(&xhci->lock, flags);
+>   				}
+>   			}
+> +			if (link_state == USB_SS_PORT_LS_U0)
+> +				reinit_completion(&ports[wIndex]->link_state_changed);
 
-This sounded familiar to me, and I realised that I've been running with
-a patch for this case that I never submitted upstream.
+All the other suspend and resume related port flags/completions are
+in struct xhci_bus_state. See for example rexit_done[].
+Not sure that is a better place but at least it would be consistent.
 
-Does the patch below fix the issue you're seeing?
+Could actually make sense to move more of them to the xhci_port structure,
+but perhaps in some later suspend/resume rework patch.
+>   
+>   			xhci_set_link_state(xhci, ports[wIndex], link_state);
+>   
+>   			spin_unlock_irqrestore(&xhci->lock, flags);
+> -			msleep(20); /* wait device to enter */
+> +			if (link_state == USB_SS_PORT_LS_U0) {
+> +				if (!wait_for_completion_timeout(&ports[wIndex]->link_state_changed, msecs_to_jiffies(100)))
+> +					xhci_dbg(xhci, "missing U0 port change event for port %d-%d\n", hcd->self.busnum, wIndex + 1);
 
--- >8 --
-The packet size for USB audio must always be a multiple of the frame
-size, otherwise we are transmitting a partial frame which omits some
-channels (and these end up at the wrong offset in the next packet).
-Furthermore, it breaks the residue handling such that we end up trying
-to send a packet exceeding the maximum packet size for the endpoint.
+We might be waiting for completion here in unnecessary.
+No completion is called if port is already in U0, either set by
+xhci_bus_resume(), or we race with a device initiated resume.
 
-Signed-off-by: John Keeping <john@metanate.com>
----
- drivers/usb/gadget/function/u_audio.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+Maybe read the current port link state first, and don't do anything if it's
+already in U0, or fail if it's in a state where we can't resume to U0.
 
-diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
-index cf4f2358889b..6d956f190f5a 100644
---- a/drivers/usb/gadget/function/u_audio.c
-+++ b/drivers/usb/gadget/function/u_audio.c
-@@ -407,7 +407,7 @@ int u_audio_start_playback(struct g_audio *audio_dev)
- 	struct usb_ep *ep;
- 	struct uac_rtd_params *prm;
- 	struct uac_params *params = &audio_dev->params;
--	unsigned int factor, rate;
-+	unsigned int factor;
- 	const struct usb_endpoint_descriptor *ep_desc;
- 	int req_len, i;
- 
-@@ -426,13 +426,15 @@ int u_audio_start_playback(struct g_audio *audio_dev)
- 	/* pre-compute some values for iso_complete() */
- 	uac->p_framesize = params->p_ssize *
- 			    num_channels(params->p_chmask);
--	rate = params->p_srate * uac->p_framesize;
- 	uac->p_interval = factor / (1 << (ep_desc->bInterval - 1));
--	uac->p_pktsize = min_t(unsigned int, rate / uac->p_interval,
-+	uac->p_pktsize = min_t(unsigned int,
-+				uac->p_framesize *
-+					(params->p_srate / uac->p_interval),
- 				prm->max_psize);
- 
- 	if (uac->p_pktsize < prm->max_psize)
--		uac->p_pktsize_residue = rate % uac->p_interval;
-+		uac->p_pktsize_residue = uac->p_framesize *
-+			(params->p_srate % uac->p_interval);
- 	else
- 		uac->p_pktsize_residue = 0;
- 
--- 
-2.24.1
+> +			} else
+> +				msleep(20); /* wait device to enter */
+>   			spin_lock_irqsave(&xhci->lock, flags);
 
+Code might also be cleaner if we have separate if() statements for U0 and U3 link
+states, and skip the generic xhci_set_link_state()
+
+USB 3.2 specs only support PORT_LINK_STATE request feature selectors for
+U0, U1, U2, U3, SS.Disabled, Rx.Detect and Compliance mode.
+Out of these xhci driver already handles the SS.Disabled, Rx.detect and Compliance in
+separate if statements, and xHC hardware can't force a U1 or U2 state by writing
+the PLS field of the PORTSC register, so the xhci_set_link_state() here
+is only useful for U0 and U3.
+
+So maybe something like this:
+
+if (link_state == U0)
+   if (active_link_state == U0)
+     break
+   else if (active_link_state != a proper link state)
+     return error	
+   xhci_set_link_state(U0)
+   wait_for_completion_timeout()
+   break;
+
+if (link_state == U3)
+   xhci_stop_device(slot_id)
+   xhci_set_link_state(U3)
+   for (max 10 tries) {
+     msleep_range(~10ms)
+     if (readl(PORTSC(PLS) == U3)
+       break
+   }
+   break
+>   
+>   			if (link_state == USB_SS_PORT_LS_U3) {
+> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+> index 3b1388fa2f36..c760a28e3556 100644
+> --- a/drivers/usb/host/xhci-mem.c
+> +++ b/drivers/usb/host/xhci-mem.c
+> @@ -2268,6 +2268,7 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
+>   		xhci->hw_ports[i].addr = &xhci->op_regs->port_status_base +
+>   			NUM_PORT_REGS * i;
+>   		xhci->hw_ports[i].hw_portnum = i;
+> +		init_completion(&xhci->hw_ports[i].link_state_changed);
+>   	}
+>   
+>   	xhci->rh_bw = kcalloc_node(num_ports, sizeof(*xhci->rh_bw), flags,
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index d23f7408c81f..44d91a53bf07 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -1677,6 +1677,7 @@ static void handle_port_status(struct xhci_hcd *xhci,
+>   	     (portsc & PORT_PLS_MASK) == XDEV_U1 ||
+>   	     (portsc & PORT_PLS_MASK) == XDEV_U2)) {
+>   		xhci_dbg(xhci, "resume SS port %d finished\n", port_id);
+> +		complete(&port->link_state_changed);
+
+Completion will only be called if there was a port link change (PLC bit set)
+and link is in U0/U1/U2. Completion will also be called for device
+initiated resume even when no one is waiting for it. (probably harmless)
+
+-Mathias
