@@ -2,300 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 471C3136BE9
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jan 2020 12:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF47136BED
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jan 2020 12:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727735AbgAJL04 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Jan 2020 06:26:56 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:42015 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727704AbgAJL04 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jan 2020 06:26:56 -0500
-Received: by mail-wr1-f67.google.com with SMTP id q6so1439875wro.9;
-        Fri, 10 Jan 2020 03:26:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=7lM5EykiimtNQTD/KeOIq/kmlySHaycP9krZGDQj34k=;
-        b=iGzYOnRHF8qfJE+2CKjjnemWNCfW7MyrWra/6FzdtbtueYzzDybIsAv14CDBaGzkGG
-         cIEx+aJSw71lkIJT3ELVtbjM3VEBoI562qwWsKkoe0AJLGuTjqnTRikw+9yGPWs4mkhH
-         K0UDoi+s3pF3np7igHTs31MfHyQ6Audje8BGb4xKOPaNHzvIkD6D5DFestWhxUHzEPGO
-         glp9A5ntoKEWhfPSOJT06r++lhcXTorsr2qGWBAxPLTe/fIA8e3CoJcyLusYqnhXnqxL
-         V/3fblVDIhkPIrff4g0KX0HP0hCm4KQg0DuvGEZIwlh2omaVV2q0uLxD1MAMARrcuYne
-         nrTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7lM5EykiimtNQTD/KeOIq/kmlySHaycP9krZGDQj34k=;
-        b=P43CIQgqsQng0XoX1vyoRCsGVp2vC8RsJZYNBellaKSQmjQt+8cwFSnMIzSnMVGfXH
-         dFhXlQ3/X9F5CmAwfUBtB6m1gk9B+QvmKARRLp7tWV8wtO3W/mrVCt6D9zyCSKptRnU/
-         Dh3jb0B0dvvcYIf1PNk0RemqvQ7jwXpx3DmKEzUAH9HXqPVCXG74SnuJTl4+9Gy1LTyW
-         cxlS+WaBFrIBUwdp3kTb8COmz+NUg8AyK6MHxF9X/YqCEHtWadwER05K0Ufzu4NqK8he
-         yEtxsxVWgvCABRkGs22w3U5WzfPuMyzCeNI43wwHlQt+Ld+y5B0a0yFRj6vHmjzDm+r8
-         wGVQ==
-X-Gm-Message-State: APjAAAVSsKET43SjD478bsAk/Qxn53j82Zxm/yxnvtKQw+WRnnD4edeJ
-        R/GrfhRApfWCuxA+xKVJCiO1NeHn
-X-Google-Smtp-Source: APXvYqxbH08xte7p/ODV3ZKqaFgBmEEdfTUofihVlEjgah++iyPw71yh8uOedNov2pQFaladGCt0Lw==
-X-Received: by 2002:a5d:6346:: with SMTP id b6mr3024170wrw.354.1578655612703;
-        Fri, 10 Jan 2020 03:26:52 -0800 (PST)
-Received: from localhost (p2E5BEF3F.dip0.t-ipconnect.de. [46.91.239.63])
-        by smtp.gmail.com with ESMTPSA id u22sm1902080wru.30.2020.01.10.03.26.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jan 2020 03:26:51 -0800 (PST)
-Date:   Fri, 10 Jan 2020 12:26:50 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     JC Kuo <jckuo@nvidia.com>
-Cc:     Rob Herring <robh@kernel.org>, gregkh@linuxfoundation.org,
-        jonathanh@nvidia.com, kishon@ti.com, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, nkristam@nvidia.com
-Subject: Re: [PATCH v5 3/5] dt-bindings: phy: tegra: Add Tegra194 support
-Message-ID: <20200110112650.GB2233456@ulmo>
-References: <20200103081814.9848-1-jckuo@nvidia.com>
- <20200103081814.9848-4-jckuo@nvidia.com>
- <20200103223940.GA9205@bogus>
- <baa9b5f4-74be-0ab4-0b24-bf926cf3207c@nvidia.com>
- <4c3f3776-65e2-aafd-7bb9-fa69df301cb6@nvidia.com>
+        id S1727710AbgAJL2Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Jan 2020 06:28:24 -0500
+Received: from dougal.metanate.com ([90.155.101.14]:24966 "EHLO metanate.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727685AbgAJL2Y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 10 Jan 2020 06:28:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/simple; d=metanate.com;
+         s=stronger; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References
+        :In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=9UVcHhyzY5K16TcQ5yTzjUzazOe1PQWT54GHNs0Y9a8=; b=dDg0x7rwv9gCKvSXDhQ2xX5Cb/
+        eCGjC6upLQL5CFktP1F2mmMi+l40JdgfuFFtd35BHyt5QSui71eZcTjByod9wW5hzVU5x6+HzgN6s
+        OEs3M6yRxsUea4CFAt3yT5L+LDBoe8VNXjEi0UCKxRYStnOadrIP74ciYLXNkwJeTyTUegmuR1OwQ
+        kCndl0yJ6QjQntbUAZ0ez4NTEy9nO5duuU/ao7U2mZhj8nZ745bjyfZqv60+pKTgVTbO2RYYVsNz0
+        tCcNUXv4pVi/NjYoGClgnu8C4vJ9dUkGvhmhYqpTtYmVbkd0MAeo3L0OqHfsLv/9g4J6/2HxJ5sww
+        96wPG8bg==;
+Received: from johnkeeping.plus.com ([81.174.171.191] helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1ipsSj-0003gJ-GL; Fri, 10 Jan 2020 11:28:21 +0000
+Date:   Fri, 10 Jan 2020 11:28:14 +0000
+From:   John Keeping <john@metanate.com>
+To:     Pavel Hofman <pavel.hofman@ivitera.com>
+Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>
+Subject: [PATCH] usb: gadget: f_uac2: fix packet size calculation
+Message-ID: <20200110112814.1abf2075.john@metanate.com>
+In-Reply-To: <4f2df2bc-e208-fffb-48e2-3e14cd093103@ivitera.com>
+References: <4f2df2bc-e208-fffb-48e2-3e14cd093103@ivitera.com>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="DBIVS5p969aUjpLe"
-Content-Disposition: inline
-In-Reply-To: <4c3f3776-65e2-aafd-7bb9-fa69df301cb6@nvidia.com>
-User-Agent: Mutt/1.13.1 (2019-12-14)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Authenticated: YES
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, 10 Jan 2020 08:29:06 +0100
+Pavel Hofman <pavel.hofman@ivitera.com> wrote:
 
---DBIVS5p969aUjpLe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Together with dwc2 maintainer Minas Harutyunyan we have been
+> troubleshooting various issues of dwc2 on RPi4. We hit a problem where
+> the g_audio in capture (EP OUT, playback from USB host) requests req->
+> length larger than maxpacket*mc.
+> 
+> As a workaround we removed the check in dwc2/gadget.c, however that is
+> not a proper solution. Minas with his team decided to add a patch where 
+> dwc2 will rejecting this type of wrong requests in dwc2_hsotg_ep_queue()
+> function, to not process these request at all. The f_uac2 + g_audio
+> gadget should restrain from sending such requests.
+> 
+> Steps to reproduce:
+> 
+> * Changing fs_epout_desc.bInterval in f_uac2.c from 4 (1ms) to 1 (125us) 
+> - the goal is to maximize available throughput of the audio gadget
+> 
+> * Loading the g_audio module with c_srate=48000, c_ssize=2, c_chmask=2 - 
+> i.e. standard 48kHz/16bit/2ch USB playback -> alsa capture
+> 
+> This combination produces mps=24 and mc=1 for EP OUT. Yet the audio 
+> function driver sometimes queues request with req->length 192.
 
-On Thu, Jan 09, 2020 at 09:31:27AM +0800, JC Kuo wrote:
-> Hi Rob,
-> For now we have two options.
-> 1. reusing the existing "maximum-speed" which is documented in usb/generi=
-c.txt
-> Pro: no need to add new property
-> Con: only "super-speed" and "super-speed-plus" are valid for Tegra XUSB P=
-ADCTL,
-> therefore extra code/document change is required.
->=20
-> +	if (device_property_present(&port->dev, "maximum-speed")) {
-> +		maximum_speed =3D  usb_get_maximum_speed(&port->dev);
-> +		if (maximum_speed =3D=3D USB_SPEED_SUPER)
-> +			usb3->disable_gen2 =3D true;
-> +		else if (maximum_speed =3D=3D USB_SPEED_SUPER_PLUS)
-> +			usb3->disable_gen2 =3D false;
-> +		else
-> +			return -EINVAL;
-> +	}
->=20
-> 2. introducing a new proprietary "nvidia,disable-gen2" property
-> Pro: its logic perfectly matches the need, and code change is minimum
->=20
-> +        usb3->disable_gen2 =3D of_property_read_bool(np, "nvidia,disable=
--gen2");
->=20
-> Con: it's a new and proprietary property.
->=20
-> Please let me know which one do you prefer or there is something else
-> works better.
+This sounded familiar to me, and I realised that I've been running with
+a patch for this case that I never submitted upstream.
 
-I think the first version is much clearer. maximum-speed =3D "super-speed"
-is very clear and explicit. nvidia,disable-gen2 is less so. While it may
-be true in this case what "disable-gen2" does, using the generic
-bindings has the advantage that it'll be more familiar to people already
-familiar with other USB device tree bindings.
+Does the patch below fix the issue you're seeing?
 
-Also, the nvidia,disable-gen2 property only perfectly matches the need
-because it reflects the name of the variable. If you rewrote the code to
-do something like this:
+-- >8 --
+The packet size for USB audio must always be a multiple of the frame
+size, otherwise we are transmitting a partial frame which omits some
+channels (and these end up at the wrong offset in the next packet).
+Furthermore, it breaks the residue handling such that we end up trying
+to send a packet exceeding the maximum packet size for the endpoint.
 
-	if (port->maximum_speed <=3D USB_SPEED_SUPER) {
-		/* disable gen2 */
-		...
-	}
+Signed-off-by: John Keeping <john@metanate.com>
+---
+ drivers/usb/gadget/function/u_audio.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-Then all of a sudden the "maximum-speed" property is a perfect match. In
-general, bindings should be natural to the domain of the bus or device
-that they describe rather than a reflection of how the driver programs
-the device's registers.
+diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+index cf4f2358889b..6d956f190f5a 100644
+--- a/drivers/usb/gadget/function/u_audio.c
++++ b/drivers/usb/gadget/function/u_audio.c
+@@ -407,7 +407,7 @@ int u_audio_start_playback(struct g_audio *audio_dev)
+ 	struct usb_ep *ep;
+ 	struct uac_rtd_params *prm;
+ 	struct uac_params *params = &audio_dev->params;
+-	unsigned int factor, rate;
++	unsigned int factor;
+ 	const struct usb_endpoint_descriptor *ep_desc;
+ 	int req_len, i;
+ 
+@@ -426,13 +426,15 @@ int u_audio_start_playback(struct g_audio *audio_dev)
+ 	/* pre-compute some values for iso_complete() */
+ 	uac->p_framesize = params->p_ssize *
+ 			    num_channels(params->p_chmask);
+-	rate = params->p_srate * uac->p_framesize;
+ 	uac->p_interval = factor / (1 << (ep_desc->bInterval - 1));
+-	uac->p_pktsize = min_t(unsigned int, rate / uac->p_interval,
++	uac->p_pktsize = min_t(unsigned int,
++				uac->p_framesize *
++					(params->p_srate / uac->p_interval),
+ 				prm->max_psize);
+ 
+ 	if (uac->p_pktsize < prm->max_psize)
+-		uac->p_pktsize_residue = rate % uac->p_interval;
++		uac->p_pktsize_residue = uac->p_framesize *
++			(params->p_srate % uac->p_interval);
+ 	else
+ 		uac->p_pktsize_residue = 0;
+ 
+-- 
+2.24.1
 
-On a side-note: we should also update the usb/generic.txt binding to
-describe the "super-speed-plus" value for the maximum-speed property.
-
-Thierry
-
-> Thanks,
-> JC
->=20
->=20
-> On 1/6/20 3:10 PM, JC Kuo wrote:
-> > On 1/4/20 6:39 AM, Rob Herring wrote:
-> >> On Fri, Jan 03, 2020 at 04:18:12PM +0800, JC Kuo wrote:
-> >>> Extend the bindings to cover the set of features found in Tegra194.
-> >>> Note that, technically, there are four more supplies connected to the
-> >>> XUSB pad controller (DVDD_PEX, DVDD_PEX_PLL, HVDD_PEX and HVDD_PEX_PL=
-L)
-> >>> , but the power sequencing requirements of Tegra194 require these to =
-be
-> >>> under the control of the PMIC.
-> >>>
-> >>> Tegra194 XUSB PADCTL supports up to USB 3.1 Gen 2 speed, however, it
-> >>> is possible for some platforms have long signal trace that could not
-> >>> provide sufficient electrical environment for Gen 2 speed. This patch
-> >>> adds a "maximum-speed" property to usb3 ports which can be used to
-> >>> specify the maximum supported speed for any particular USB 3.1 port.
-> >>> For a port that is not capable of SuperSpeedPlus, "maximum-speed"
-> >>> property should carry "super-speed".
-> >>>
-> >>> Signed-off-by: JC Kuo <jckuo@nvidia.com>
-> >>> ---
-> >>> Changes in v5:
-> >>> - re-use "maximum-speed" instead of adding "nvidia,disable-gen2"
-> >>> Changes in v4: none
-> >>> Changes in v3: none
-> >>> Changes in v2:
-> >>> - fix a typo
-> >>>
-> >>>  .../phy/nvidia,tegra124-xusb-padctl.txt        | 18 ++++++++++++++++=
-++
-> >>>  1 file changed, 18 insertions(+)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/phy/nvidia,tegra124-xu=
-sb-padctl.txt b/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-=
-padctl.txt
-> >>> index 9fb682e47c29..7d0089006e67 100644
-> >>> --- a/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padc=
-tl.txt
-> >>> +++ b/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padc=
-tl.txt
-> >>> @@ -37,6 +37,7 @@ Required properties:
-> >>>    - Tegra132: "nvidia,tegra132-xusb-padctl", "nvidia,tegra124-xusb-p=
-adctl"
-> >>>    - Tegra210: "nvidia,tegra210-xusb-padctl"
-> >>>    - Tegra186: "nvidia,tegra186-xusb-padctl"
-> >>> +  - Tegra194: "nvidia,tegra194-xusb-padctl"
-> >>>  - reg: Physical base address and length of the controller's register=
-s.
-> >>>  - resets: Must contain an entry for each entry in reset-names.
-> >>>  - reset-names: Must include the following entries:
-> >>> @@ -62,6 +63,10 @@ For Tegra186:
-> >>>  - vclamp-usb-supply: Bias rail for USB pad. Must supply 1.8 V.
-> >>>  - vddio-hsic-supply: HSIC PHY power supply. Must supply 1.2 V.
-> >>> =20
-> >>> +For Tegra194:
-> >>> +- avdd-usb-supply: USB I/Os, VBUS, ID, REXT, D+/D- power supply. Mus=
-t supply
-> >>> +  3.3 V.
-> >>> +- vclamp-usb-supply: Bias rail for USB pad. Must supply 1.8 V.
-> >>> =20
-> >>>  Pad nodes:
-> >>>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>> @@ -154,6 +159,11 @@ For Tegra210, the list of valid PHY nodes is giv=
-en below:
-> >>>  - sata: sata-0
-> >>>    - functions: "usb3-ss", "sata"
-> >>> =20
-> >>> +For Tegra194, the list of valid PHY nodes is given below:
-> >>> +- usb2: usb2-0, usb2-1, usb2-2, usb2-3
-> >>> +  - functions: "xusb"
-> >>> +- usb3: usb3-0, usb3-1, usb3-2, usb3-3
-> >>> +  - functions: "xusb"
-> >>> =20
-> >>>  Port nodes:
-> >>>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>> @@ -221,6 +231,11 @@ Optional properties:
-> >>>    is internal. In the absence of this property the port is considere=
-d to be
-> >>>    external.
-> >>> =20
-> >>> +- maximum-speed: Only for Tegra194. A string property that specifies=
- maximum
-> >>> +  supported speed of a usb3 port. Valid values are:
-> >>> +  - "super-speed-plus": default, the usb3 port supports USB 3.1 Gen =
-2 speed.
-> >>
-> >> Not defined as a valid value in usb/generic.txt. '-gen2' instead of=20
-> >> '-plus' would be clearer IMO. However, is there any need to define the=
-=20
-> >> maximum speed possible? The purpose of this property is to limit the=
-=20
-> >> speed below the max.
-> >>
-> > usb_get_maximum_speed(), which parses "maximum-speed" property, indeed =
-handles
-> > string "super-speed-plus". Should "super-speed-plus" be documented in
-> > usb/generic.txt"?
-> >=20
-> > static const char *const speed_names[] =3D {
-> > 	[USB_SPEED_UNKNOWN] =3D "UNKNOWN",
-> > 	[USB_SPEED_LOW] =3D "low-speed",
-> > 	[USB_SPEED_FULL] =3D "full-speed",
-> > 	[USB_SPEED_HIGH] =3D "high-speed",
-> > 	[USB_SPEED_WIRELESS] =3D "wireless",
-> > 	[USB_SPEED_SUPER] =3D "super-speed",
-> > 	[USB_SPEED_SUPER_PLUS] =3D "super-speed-plus",
-> > };
-> >=20
-> > A proprietary "nvidia,disable-gen2" property was proposed in earlier re=
-vision to
-> > "limit the speed below the max". I like it because it fit our needs bet=
-ter and
-> > requires only one line of code change.
-> >=20
-> >    usb3->disable_gen2 =3D of_property_read_bool(np, "nvidia,disable-gen=
-2");
-> >=20
-> > Should I fallback to that approach?
-> >=20
-> > Thanks,
-> > JC
-> >=20
-> >>> +  - "super-speed": the usb3 port supports USB 3.1 Gen 1 speed only.
-> >>> +
-> >>>  For Tegra124 and Tegra132, the XUSB pad controller exposes the follo=
-wing
-> >>>  ports:
-> >>>  - 3x USB2: usb2-0, usb2-1, usb2-2
-> >>> @@ -233,6 +248,9 @@ For Tegra210, the XUSB pad controller exposes the=
- following ports:
-> >>>  - 2x HSIC: hsic-0, hsic-1
-> >>>  - 4x super-speed USB: usb3-0, usb3-1, usb3-2, usb3-3
-> >>> =20
-> >>> +For Tegra194, the XUSB pad controller exposes the following ports:
-> >>> +- 4x USB2: usb2-0, usb2-1, usb2-2, usb2-3
-> >>> +- 4x super-speed USB: usb3-0, usb3-1, usb3-2, usb3-3
-> >>> =20
-> >>>  Examples:
-> >>>  =3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>> --=20
-> >>> 2.17.1
-> >>>
-
---DBIVS5p969aUjpLe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl4YX3cACgkQ3SOs138+
-s6FCxg//arY/AcuyLR3BTqpXwVbyi6/GMzL/P1M6/9Lv1Em51mQ0la0M6rj+rCVo
-88caAAiTbOx7MWCjtoQYO3DJUSNEloTzVd0RLLQfia6o6Im+LbKvaUoES+ivcGAk
-/x/IydkBw4UXq4AOiuRemmp4Su1jDaE8mr/lBNXw2w/xQ2whAOEQSUY2I57N47ll
-rFbG1Zl/biyexIO9WWdbdG7SbytehczuOMVZNkObM995/KxkCV/59vsbyeo6citr
-0hNKR1kWC5MT5NGLO0xNmz/hMadz6tg2jH4HwEzKT9n24MUtNln99FoX0z0xe98q
-SpVwOCGlpEc93bu6ynuW4ego4YzJbdWBwL9QIG8hp2gb6LuUNrlrI3ZAvw8/tfbG
-anDexKUpl9tKUlf/yfQ0/yeDc2oogzasy7/J0aG1OYuyZ/ttMqUNoJY990QDU0iC
-eORngBWk7LjdBJUcfNo9QfQ9EpXQct1qose8xoV6gYiTttSDTEAa813R+c2BlsXf
-qe48w75g2uTNcQU4q9vtKNzI4b/AccJG7fGl5oG1ykNi1x4tPd6QWTHI7MVnIDCT
-k3UJbFEwfMMqs6qz3msUMp7yn56ExwCT10WnRPiXW7TK2HKk+vIu94ZoX7QhI8pW
-k8RuQ/u9oofeZqs+yueUlxnxX4BUEauewTefaVYod+i+pSalZDw=
-=fxbc
------END PGP SIGNATURE-----
-
---DBIVS5p969aUjpLe--
