@@ -2,88 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3681D1364B7
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jan 2020 02:27:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 313911366C7
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jan 2020 06:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730575AbgAJB1Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jan 2020 20:27:24 -0500
-Received: from mail-sh.amlogic.com ([58.32.228.43]:35351 "EHLO
+        id S1726512AbgAJFnE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Jan 2020 00:43:04 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:21526 "EHLO
         mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730557AbgAJB1Y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jan 2020 20:27:24 -0500
-Received: from [10.18.38.198] (10.18.38.198) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Fri, 10 Jan
- 2020 09:27:47 +0800
-Subject: Re: [PATCH v4 1/6] dt-bindings: phy: Add Amlogic A1 USB2 PHY Bindings
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     Jerome Brunet <jbrunet@baylibre.com>,
+        with ESMTP id S1726096AbgAJFnD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jan 2020 00:43:03 -0500
+Received: from droid10.amlogic.com (10.18.11.213) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.1591.10; Fri, 10 Jan 2020
+ 13:43:28 +0800
+From:   Hanjie Lin <hanjie.lin@amlogic.com>
+To:     Jerome Brunet <jbrunet@baylibre.com>,
         Neil Armstrong <narmstrong@baylibre.com>,
         Rob Herring <robh@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Yue Wang <yue.wang@amlogic.com>,
+        Kevin Hilman <khilman@baylibre.com>
+CC:     Hanjie Lin <hanjie.lin@amlogic.com>,
         <linux-amlogic@lists.infradead.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Carlo Caione <carlo@caione.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Liang Yang <liang.yang@amlogic.com>,
         Jianxin Pan <jianxin.pan@amlogic.com>,
         Qiufang Dai <qiufang.dai@amlogic.com>,
         Jian Hu <jian.hu@amlogic.com>,
         Victor Wan <victor.wan@amlogic.com>,
+        Yue Wang <yue.wang@amlogic.com>,
         Xingyu Chen <xingyu.chen@amlogic.com>
-References: <1578537045-23260-1-git-send-email-hanjie.lin@amlogic.com>
- <1578537045-23260-2-git-send-email-hanjie.lin@amlogic.com>
- <CAFBinCDt97E4236obhm0GV58MtoC2qYAZbqPoJd8tyROGW4cvw@mail.gmail.com>
-From:   Hanjie Lin <hanjie.lin@amlogic.com>
-Message-ID: <9fc103f4-a388-a65e-f621-846f03f77b3a@amlogic.com>
-Date:   Fri, 10 Jan 2020 09:27:46 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
+Subject: [PATCH v5 0/6] arm64: meson: Add support for USB on Amlogic A1
+Date:   Fri, 10 Jan 2020 13:42:31 +0800
+Message-ID: <1578634957-54826-1-git-send-email-hanjie.lin@amlogic.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <CAFBinCDt97E4236obhm0GV58MtoC2qYAZbqPoJd8tyROGW4cvw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.38.198]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
+Content-Type: text/plain
+X-Originating-IP: [10.18.11.213]
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This patchset adds support for USB on Amlogic A1 SoCs.
 
+This patchset is composed with :
+- bindings of the PHY
+- bindings of the USB Control Glue
+- PHY Driver
+- USB Control Glue driver
+- dts of the PHY
+- dts of the USB Controller
 
-On 2020/1/10 1:12, Martin Blumenstingl wrote:
-> On Thu, Jan 9, 2020 at 3:30 AM Hanjie Lin <hanjie.lin@amlogic.com> wrote:
-> [...]
->> +  clocks:
->> +    maxItems: 1
->> +
->> +  clock-names:
->> +    items:
->> +      - const: xtal_usb_phy
-> the "usb_phy" part of "xtal_usb_phy" seems redundant to me:
-> it's the XTAL clock input (this is what I'd expect as clock-name) of
-> the USB PHY (this is already part of the node name).
-> in addition to keeping the reset-names consistent (as Neil suggested)
-> please also use the same clock-names as G12
-> 
+The Amlogic A1 USB Complex is composed of :
+- 1 DWC3 USB controller for USB2 Host functionality
+- 1 USB2 PHY for USB2 Host functionality
 
-Of course.
+The USB Control Glue setups the clocks and the reset about DWC3 USB
+controller, and binds to the USB2 PHY. It also configures the 8bit
+UTMI interfaces for the USB2 PHY, including setting USB2 phy mode.
 
-I will use "xtal" name in next version.
+The USB2 PHY driver initializes the phy analog settings, phy PLL 
+setup and phy tuning.
 
-Thanks,
-Hanjie
+This patchset is based on A1 clock/power domain/reset series at [0].
 
-> 
-> Thank you!
-> Martin
-> 
-> .
-> 
+Changes since v1:[1]
+ - integrate glue and phy drivers into g12a's
+ 
+Changes since v2:[2]
+ - modify amlogic,meson-g12a-usb-ctrl.yaml with dt_binding_check tool
+ - phy/glue driver use of_device_get_match_data to distinguish A1 from G12A
+
+Changes since v3:[3]
+ - fix bindings mistakes of the PHY according Rob's comments
+ - fix bindings mistakes of the USB Control Glue according Rob's comments
+ - phy driver add xtal_usb_phy clock which moved from glue driver
+ - glue driver use otg_mode instead of soc_id to support otg function
+
+Changes since v4:[4]
+ - phy driver revert reset-names changes
+ - phy driver change clock name to "xtal" to consistent with g12a
+ - glue driver add drvdata otg_switch_supported
+
+[0]
+https://patchwork.kernel.org/project/linux-amlogic/list/?series=185477
+https://patchwork.kernel.org/project/linux-amlogic/list/?series=180055
+https://patchwork.kernel.org/project/linux-amlogic/list/?series=189643
+
+[1] : https://lore.kernel.org/linux-amlogic/1574405757-76184-1-git-send-email-hanjie.lin@amlogic.com
+
+[2] : https://lore.kernel.org/linux-amlogic/1576636944-196192-1-git-send-email-hanjie.lin@amlogic.com
+
+[3] : https://lore.kernel.org/linux-amlogic/1577428606-69855-1-git-send-email-hanjie.lin@amlogic.com
+
+[4] : https://lore.kernel.org/linux-amlogic/1578537045-23260-1-git-send-email-hanjie.lin@amlogic.com
+
+Hanjie Lin (6):
+  dt-bindings: phy: Add Amlogic A1 USB2 PHY Bindings
+  dt-bindings: usb: dwc3: Add the Amlogic A1 Family DWC3 Glue Bindings
+  phy: amlogic: Add Amlogic A1 USB2 PHY Driver
+  usb: dwc3: Add Amlogic A1 DWC3 glue
+  arm64: dts: meson: a1: Enable USB2 PHY
+  arm64: dts: meson: a1: Enable DWC3 controller
+
+ .../bindings/phy/amlogic,meson-a1-usb2-phy.yaml    | 62 +++++++++++++++
+ .../bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml  | 11 +++
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi          | 44 +++++++++++
+ drivers/phy/amlogic/phy-meson-g12a-usb2.c          | 85 ++++++++++++++-------
+ drivers/usb/dwc3/dwc3-meson-g12a.c                 | 89 ++++++++++++++++------
+ 5 files changed, 243 insertions(+), 48 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/amlogic,meson-a1-usb2-phy.yaml
+
+-- 
+2.7.4
+
