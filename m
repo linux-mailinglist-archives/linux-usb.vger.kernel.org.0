@@ -2,62 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F51C1368BA
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jan 2020 09:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BC6136A08
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jan 2020 10:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726932AbgAJICY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Jan 2020 03:02:24 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:42382 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726401AbgAJICX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jan 2020 03:02:23 -0500
-Received: from 61-220-137-37.hinet-ip.hinet.net ([61.220.137.37] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1ippFL-0003l1-Md; Fri, 10 Jan 2020 08:02:20 +0000
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        id S1727196AbgAJJc6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Jan 2020 04:32:58 -0500
+Received: from mga11.intel.com ([192.55.52.93]:48527 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726814AbgAJJc6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 10 Jan 2020 04:32:58 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jan 2020 01:32:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,415,1571727600"; 
+   d="scan'208";a="304118739"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga001.jf.intel.com with ESMTP; 10 Jan 2020 01:32:55 -0800
+Subject: Re: [PATCH 1/3] xhci: Ensure link state is U3 after setting
+ USB_SS_PORT_LS_U3
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        mathias.nyman@intel.com, gregkh@linuxfoundation.org,
         stern@rowland.harvard.edu
 Cc:     acelan.kao@canonical.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [PATCH v2 3/3] USB: Disable LPM on WD19's Realtek Hub
-Date:   Fri, 10 Jan 2020 16:02:11 +0800
-Message-Id: <20200110080211.22626-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200103084008.3579-3-kai.heng.feng@canonical.com>
-References: <20200103084008.3579-3-kai.heng.feng@canonical.com>
+        linux-kernel@vger.kernel.org
+References: <20200103084008.3579-1-kai.heng.feng@canonical.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <607e395f-21ce-3c9f-eff7-2fa6aaa74595@linux.intel.com>
+Date:   Fri, 10 Jan 2020 11:34:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <20200103084008.3579-1-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Realtek Hub (0bda:0x0487) used in Dell Dock WD19 sometimes drops off the
-bus when bringing underlying ports from U3 to U0.
+On 3.1.2020 10.40, Kai-Heng Feng wrote:
+> The xHCI spec doesn't specify the upper bound of U3 transition time. For
+> some devices 20ms is not enough, so we need to make sure the link state
+> is in U3 before further actions.
 
-Disabling LPM on the hub during setting link state is not enough, so
-let's disable LPM completely for this hub.
+Looking at the USB 3.2 spec (7.2.4.2 Link Power management and Flow) it seems
+most timers related to U3 entry are a lot less than a millisecond (4-16us)
+If port is in U1/U2,  Ux_EXIT_TIMER is 6ms which seems to be the longest timeout.
 
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
- drivers/usb/core/quirks.c | 3 +++
- 1 file changed, 3 insertions(+)
+If we anyway are polling for the U3 state we could shorten the initial 20ms sleep
+down to 10ms. I think many devices, especially if they are already in U0
+could manage this.
 
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index 6b6413073584..2fb7c1602280 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -371,6 +371,9 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	{ USB_DEVICE(0x0b05, 0x17e0), .driver_info =
- 			USB_QUIRK_IGNORE_REMOTE_WAKEUP },
- 
-+	/* Realtek hub in Dell WD19 (Type-C) */
-+	{ USB_DEVICE(0x0bda, 0x0487), .driver_info = USB_QUIRK_NO_LPM },
-+
- 	/* Action Semiconductor flash disk */
- 	{ USB_DEVICE(0x10d6, 0x2200), .driver_info =
- 			USB_QUIRK_STRING_FETCH_255 },
--- 
-2.17.1
+are >
+> I've tried to use U3 Entry Capability by setting U3 Entry Enable in
+> config register, however the port change event for U3 transition
+> interrupts the system suspend process.
+> 
+> For now let's use the less ideal method by polling PLS.
+> 
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+>   drivers/usb/host/xhci-hub.c | 13 +++++++++++--
+>   1 file changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+> index 7a3a29e5e9d2..2b2e9d004dbf 100644
+> --- a/drivers/usb/host/xhci-hub.c
+> +++ b/drivers/usb/host/xhci-hub.c
+> @@ -1228,6 +1228,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+>   			break;
+>   		case USB_PORT_FEAT_LINK_STATE:
+>   			temp = readl(ports[wIndex]->addr);
+> +			xhci_dbg(xhci, "before setting link state, actual port %d-%d status = 0x%0x\n", hcd->self.busnum, wIndex + 1, temp);
 
+xhci_set_link_state() already shows similar debugging,
+
+>   			/* Disable port */
+>   			if (link_state == USB_SS_PORT_LS_SS_DISABLED) {
+>   				xhci_dbg(xhci, "Disable port %d\n", wIndex);
+> @@ -1316,9 +1317,17 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+>   			msleep(20); /* wait device to enter */
+>   			spin_lock_irqsave(&xhci->lock, flags);
+>   
+> -			temp = readl(ports[wIndex]->addr);
+> -			if (link_state == USB_SS_PORT_LS_U3)
+> +			if (link_state == USB_SS_PORT_LS_U3) {
+> +				retval = xhci_handshake(ports[wIndex]->addr, PORT_PLS_MASK, XDEV_U3, 80 * 1000);
+> +				if (retval)
+> +					xhci_dbg(xhci, "polling XDEV_U3 on port %d-%d timeout\n", hcd->self.busnum, wIndex + 1);
+
+In worst case we are busylooping for 80ms here, keeping the cpu busy.
+It should be ok to sleep here, so how about just reading the register
+every 10ms max 10 times, sleeping in between.
+
+-Mathias
