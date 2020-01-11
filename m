@@ -2,78 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49839138367
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Jan 2020 21:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F30138369
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Jan 2020 21:02:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731056AbgAKUBx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 11 Jan 2020 15:01:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55678 "EHLO mail.kernel.org"
+        id S1731061AbgAKUB6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 11 Jan 2020 15:01:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55762 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731003AbgAKUBx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 11 Jan 2020 15:01:53 -0500
+        id S1731003AbgAKUB6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 11 Jan 2020 15:01:58 -0500
 Received: from localhost (unknown [62.119.166.9])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6C5CB2146E;
-        Sat, 11 Jan 2020 20:01:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 95E482082E;
+        Sat, 11 Jan 2020 20:01:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578772913;
-        bh=x7anT0WviHjXwoOAzsSA65nKLbQryrmcSAqwqUoZu9E=;
+        s=default; t=1578772917;
+        bh=HhPDLLL17aVBcq2CTWlrH10b+8vgm49G9JMbYET2lFo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=woaBIiKHMkMP+pPg/yr+H45f+xqHLBJwLeT9taBWl88GrqCHOgq7YQ3ECA9F+VPVm
-         6e0KNylssaR0EvkBf0+Rwh6GYk3pYTmu1fcH9rXsKkhEFjUaHvFkb6pjbzY1iRl1yZ
-         M1mHdCC+hybN+ggbjSijlTVWDr598qFBnQem5yDs=
-Date:   Sat, 11 Jan 2020 20:25:59 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org, linux-imx@nxp.com,
-        pawell@cadence.com, rogerq@ti.com, jun.li@nxp.com
-Subject: Re: [PATCH v2 1/1] usb: cdns3: add NXP imx8qm glue layer
-Message-ID: <20200111192559.GB435222@kroah.com>
-References: <1578562558-32462-1-git-send-email-peter.chen@nxp.com>
+        b=FOYJSJFj+K/oMzKqDmSGXkXeIpuo9sB4qFxR2ePfRaENgzjXVkSMkNIf0km7XjgHz
+         2OYWiiUFGIZEraIOKnR0lgCxgfoC0JqGQqQvGhd5SBskmaNYeFDa3DhDL3cdt3Pvt+
+         eW6yTlKbEkKWAn77iYSHKXXnSYmZb8H3EnOSQYN0=
+Date:   Sat, 11 Jan 2020 20:31:56 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Felipe Balbi <balbi@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>
+Subject: Re: [PATCH v4 1/1] usb: gadget: add raw-gadget interface
+Message-ID: <20200111193156.GC435222@kroah.com>
+References: <cover.1576697098.git.andreyknvl@google.com>
+ <6cd46f8512dc12e20667c2b02d487591868cb20f.1576697098.git.andreyknvl@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1578562558-32462-1-git-send-email-peter.chen@nxp.com>
+In-Reply-To: <6cd46f8512dc12e20667c2b02d487591868cb20f.1576697098.git.andreyknvl@google.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 09, 2020 at 05:35:58PM +0800, Peter Chen wrote:
-> There is a Cadence USB3 core for imx8qm and imx8qxp SoCs, the cdns
-> core is the child for this glue layer device.
+On Wed, Dec 18, 2019 at 08:26:57PM +0100, Andrey Konovalov wrote:
+> USB Raw Gadget is a kernel module that provides a userspace interface for
+> the USB Gadget subsystem. Essentially it allows to emulate USB devices
+> from userspace. Enabled with CONFIG_USB_RAW_GADGET. Raw Gadget is
+> currently a strictly debugging feature and shouldn't be used in
+> production.
 > 
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> ---
-> Changes for v2:
-> - Add COMPILE_TEST Kconfig option
-> - Using BIT Macro for definition
-> - Delete runtime pm operation
+> Raw Gadget is similar to GadgetFS, but provides a more low-level and
+> direct access to the USB Gadget layer for the userspace. The key
+> differences are:
 > 
->  drivers/usb/cdns3/Kconfig     |  10 ++
->  drivers/usb/cdns3/Makefile    |   1 +
->  drivers/usb/cdns3/cdns3-imx.c | 216 ++++++++++++++++++++++++++++++++++
->  3 files changed, 227 insertions(+)
->  create mode 100644 drivers/usb/cdns3/cdns3-imx.c
+> 1. Every USB request is passed to the userspace to get a response, while
+>    GadgetFS responds to some USB requests internally based on the provided
+>    descriptors. However note, that the UDC driver might respond to some
+>    requests on its own and never forward them to the Gadget layer.
 > 
-> diff --git a/drivers/usb/cdns3/Kconfig b/drivers/usb/cdns3/Kconfig
-> index 2a1e89d12ed9..84716d216ae5 100644
-> --- a/drivers/usb/cdns3/Kconfig
-> +++ b/drivers/usb/cdns3/Kconfig
-> @@ -53,4 +53,14 @@ config USB_CDNS3_TI
->  
->  	  e.g. J721e.
->  
-> +config USB_CDNS3_IMX
-> +	tristate "Cadence USB3 support on NXP i.MX platforms"
-> +	depends on ARCH_MXC || COMPILE_TEST
-> +	default USB_CDNS3
-> +	help
-> +	  Say 'Y' or 'M' here if you are building for NXP i.MX
-> +	  platforms that contain Cadence USB3 controller core.
+> 2. GadgetFS performs some sanity checks on the provided USB descriptors,
+>    while Raw Gadget allows you to provide arbitrary data as responses to
+>    USB requests.
+> 
+> 3. Raw Gadget provides a way to select a UDC device/driver to bind to,
+>    while GadgetFS currently binds to the first available UDC.
+> 
+> 4. Raw Gadget uses predictable endpoint names (handles) across different
+>    UDCs (as long as UDCs have enough endpoints of each required transfer
+>    type).
+> 
+> 5. Raw Gadget has ioctl-based interface instead of a filesystem-based one.
+> 
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+
+This looks good to me, with the one minor problem below that you can fix
+with a follow-on patch.  This should probably go through Felipe's tree
+though, so I'll wait for him to review the gadget side and then queue it
+up in his tree:
+
+
+> +/* The type of event fetched with the USB_RAW_IOCTL_EVENT_FETCH ioctl. */
+> +enum usb_raw_event_type {
+> +	USB_RAW_EVENT_INVALID,
 > +
-> +	  For example, imx8qm and imx8qxp.
+> +	/* This event is queued when the driver has bound to a UDC. */
+> +	USB_RAW_EVENT_CONNECT,
+> +
+> +	/* This event is queued when a new control request arrived to ep0. */
+> +	USB_RAW_EVENT_CONTROL,
+> +
+> +	/* The list might grow in the future. */
+> +};
 
-What will the module name be?
+You have to manually specify the enum values in the .h file for all
+entries in order to assure that both userspace and the kernel will be in
+sync with the same values.  I think that's documented in the "how to
+write an ioctl interface" document that is somewhere in
+Documentation/...
 
+thanks,
+
+greg k-h
