@@ -2,86 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B288138616
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Jan 2020 12:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 185C5138627
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Jan 2020 13:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732750AbgALLyi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 12 Jan 2020 06:54:38 -0500
-Received: from smtp11.smtpout.orange.fr ([80.12.242.133]:18598 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732748AbgALLyi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Jan 2020 06:54:38 -0500
-Received: from belgarion ([90.89.233.68])
-        by mwinf5d34 with ME
-        id pPuZ210031VCWxW03PuZMQ; Sun, 12 Jan 2020 12:54:35 +0100
-X-ME-Helo: belgarion
-X-ME-Auth: amFyem1pay5yb2JlcnRAb3JhbmdlLmZy
-X-ME-Date: Sun, 12 Jan 2020 12:54:35 +0100
-X-ME-IP: 90.89.233.68
-From:   Robert Jarzmik <robert.jarzmik@free.fr>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH v2] usb: phy: phy-gpio-vbus-usb: Convert to GPIO descriptors
-References: <20200106151005.321983-1-linus.walleij@linaro.org>
-X-URL:  http://belgarath.falguerolles.org/
-Date:   Sun, 12 Jan 2020 12:54:33 +0100
-In-Reply-To: <20200106151005.321983-1-linus.walleij@linaro.org> (Linus
-        Walleij's message of "Mon, 6 Jan 2020 16:10:05 +0100")
-Message-ID: <87a76syjnq.fsf@belgarion.home>
-User-Agent: Gnus/5.130008 (Ma Gnus v0.8) Emacs/26 (gnu/linux)
+        id S1732767AbgALMGl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 Jan 2020 07:06:41 -0500
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:33458 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732687AbgALMGk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Jan 2020 07:06:40 -0500
+Received: by mail-ot1-f54.google.com with SMTP id b18so6451658otp.0
+        for <linux-usb@vger.kernel.org>; Sun, 12 Jan 2020 04:06:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=0RzGBu12ZQ8abE6gWjl8/M+37TpP43Q/7emVdEaMzeo=;
+        b=tE4+aIA8kSkrqCd17v/uoTbmS/DD3QJmYc4lTUdnf/5M2YpwBWKpszsETmu0XcHY6u
+         pd1i2XmoDL+nLRSQibNNHhgGh/FxbPZ2RwFf6H1GqfNPUpp97MqV0OZkrYfXJWgtvhuM
+         luNS/76KVT9aWQA58HWI2PbPna/ejtGNdNM3lk97glVhHAdgZ7ZQAO6tNMJnEt7YNLep
+         XLtHxzS35BghMaAT5yQEkNKbpNG+vWChKjJH0W9j7zJ0WxhmB+NmZ1XIGEVhMfT576vR
+         7jKhy6COhaRbV87AMbelbgFsdJQPRMlY1pPLGavhZRU42hh+LeoVHMkkyxLLryFHG1xv
+         IQWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=0RzGBu12ZQ8abE6gWjl8/M+37TpP43Q/7emVdEaMzeo=;
+        b=HyjpmJXhqjpy0DUA/NGhPzEHVDwvPZR9rMFwQi6kha7eyn6bXNDYf4ptUcpsix3mz6
+         SKVJwrLdKVSKfo8m4nnjDRBhALvf86pRYnFHYdVPFZutg++YJTbivUZUrJjhCT0gHWCg
+         c1x5O8XNq1dzejNhPO8SqhanodiKNKqjTvX6z0OBRiK3uCqp0TIuAXtqMkvjX2NMk8I1
+         yNsyZaq6uJEU2fC734N/uKaIZw4RKnPvPPG1Iy1V0cROCuWUQTmofeR7ddHC8/51HuKG
+         wvuKzYTlRDhTPoGqXd7XdrB9p4lGau50r580RfSmi+2mfGeMSzrQ+HPuWgFaL5Q0C7PC
+         /BXg==
+X-Gm-Message-State: APjAAAX6F0vz+LqP2yQK3Pt1jE7dq9dvmR2XnVlndut2G2iVTb1NRklY
+        nV9rzcUVFkppu5NO/ODWOaWP1DRQcfVgUhR7XbQwEd30YPE=
+X-Google-Smtp-Source: APXvYqzeBvMGXf3IW1+Yaus6pZvtv2ebZY+eyc8GJ9n5dJXHQmGQbURgs6JrR95PjVJAoNc7RLgz0cg/vhDrFxoYDeI=
+X-Received: by 2002:a9d:6b17:: with SMTP id g23mr9179290otp.265.1578830800020;
+ Sun, 12 Jan 2020 04:06:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+From:   Richard Dodd <richard.o.dodd@gmail.com>
+Date:   Sun, 12 Jan 2020 12:06:29 +0000
+Message-ID: <CAAWug1d8wv3Thu0b==j6fLajU965unYKs552j+s9t13MOytmng@mail.gmail.com>
+Subject: Usb midi device does not work on wake
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Linus Walleij <linus.walleij@linaro.org> writes:
+Hello
 
-> Instead of using the legacy GPIO API and keeping track on
-> polarity inversion semantics in the driver, switch to use
-> GPIO descriptors for this driver and change all consumers
-> in the process.
->
-> This makes it possible to retire platform data completely:
-> the only remaining platform data member was "wakeup" which
-> was intended to make the vbus interrupt wakeup capable,
-> but was not set by any users and thus remained unused. VBUS
-> was not waking any devices up. Leave a comment about it so
-> later developers using the platform can consider setting it
-> to always enabled so plugging in USB wakes up the platform.
->
-> Cc: Robert Jarzmik <robert.jarzmik@free.fr>
-> Cc: Daniel Mack <daniel@zonque.org>
-> Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
-> Acked-by: Felipe Balbi <balbi@kernel.org>
-> Acked-by: Sylwester Nawrocki <snawrocki@kernel.org>
-> Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
-> ChangeLog v1->v2:
-> - Fix a chip label typo in mach-s3c64xx
-> - Collect the ACKs!
+I've got a Novation midi-over-usb device (LaunchControl XL) that works
+correctly on boot, but remains in power-off mode when waking from
+sleep.
 
-Hi Linus,
+I suspect that there is some sort of initialisation that needs to be
+applied. Could anyone suggest possible causes, or point me in the
+direction of the relevant source code. I found `sound/usb/quirks.c`,
+which seems to be the place to handle this kind of thing, but there is
+no mention of my device anywhere in the source tree at present
+(1235:0061).
 
-Throughout this patch, if I get it right, you suppose that :
- - the gpio_request() for the vbus is called as gpio_request(xx, gpio, "vbus")
- - the gpio_request() for the pullup is called as gpio_request(xx, gpio, "pullup")
-
-My understanding from drivers/usb/phy/phy-gpio-vbus-usb.c is that these name are
-:
- - "vbus_detect"
- - "udc_pullup"
-
-Have I missed something ?
-
-Cheers.
-
---
-Robert
+Thanks in advance for your help
+Richard
