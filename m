@@ -2,46 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B22D1139316
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2020 15:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 121511392FC
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2020 15:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728765AbgAMOF6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Jan 2020 09:05:58 -0500
-Received: from mx2.suse.de ([195.135.220.15]:55862 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726943AbgAMOF6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 13 Jan 2020 09:05:58 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 59F02B031;
-        Mon, 13 Jan 2020 14:05:57 +0000 (UTC)
-Message-ID: <1578923319.2590.13.camel@suse.com>
-Subject: Re: Reg: USB network interface is down after the reboot
-From:   Oliver Neukum <oneukum@suse.com>
-To:     RAJESH DASARI <raajeshdasari@gmail.com>, linux-usb@vger.kernel.org
-Date:   Mon, 13 Jan 2020 14:48:39 +0100
-In-Reply-To: <CAPXMrf_d_uKZbohYWfO8rVEg7voBhESesU0w8Ng0M=wsw_75FQ@mail.gmail.com>
-References: <CAPXMrf_d_uKZbohYWfO8rVEg7voBhESesU0w8Ng0M=wsw_75FQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        id S1728695AbgAMOCI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Jan 2020 09:02:08 -0500
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:56743 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728512AbgAMOCH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jan 2020 09:02:07 -0500
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200113140206euoutp0273c96a53419d85679e6384e8f2ca07d9~pdyCM_Vai0645906459euoutp02N
+        for <linux-usb@vger.kernel.org>; Mon, 13 Jan 2020 14:02:06 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200113140206euoutp0273c96a53419d85679e6384e8f2ca07d9~pdyCM_Vai0645906459euoutp02N
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1578924126;
+        bh=Q76juxHEkfagvYhP5sjzFgIpF/yAGbHi9ChyXpJi2so=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=tzgXTIJIXYsaKO8a/feX4dBTzL+c1/1loNAr/bV2wOz+0Ymw1Q0fCAUUCcAxHlSuc
+         ve0fqYTunXK0+fsUmtWze8gaSyQRlUx1kEgvq+dWiSgaUNgeLkb6NsSzkBSGUVNarG
+         QglwRu9wXh1qO8evSNJZh78l+eU2ED4JtD821I8Y=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20200113140205eucas1p1a4f06b8a8c8249831a4b33c7bb01dbf8~pdyCBMxS-0437304373eucas1p1P;
+        Mon, 13 Jan 2020 14:02:05 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 5E.04.61286.D587C1E5; Mon, 13
+        Jan 2020 14:02:05 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200113140205eucas1p1ad988fd90cc2c9bf0efc28269a374bd0~pdyBozjN70437104371eucas1p1u;
+        Mon, 13 Jan 2020 14:02:05 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20200113140205eusmtrp2e51b92d9c8eda43b736af98ed1a3916b~pdyBoPk-f1632916329eusmtrp29;
+        Mon, 13 Jan 2020 14:02:05 +0000 (GMT)
+X-AuditID: cbfec7f2-f0bff7000001ef66-95-5e1c785d3bb4
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id B7.F3.07950.D587C1E5; Mon, 13
+        Jan 2020 14:02:05 +0000 (GMT)
+Received: from [106.120.51.15] (unknown [106.120.51.15]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200113140205eusmtip1fdc55511c22a6ebde4c2b8fb548c6de7~pdyBRd_oU1947319473eusmtip1L;
+        Mon, 13 Jan 2020 14:02:05 +0000 (GMT)
+Subject: Re: [PATCH RESEND] phy: exynos5-usbdrd: Calibrating makes sense
+ only for USB2.0 PHY
+To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Message-ID: <1c5da6e3-d62e-9aa9-8c0c-e028c2c8c444@samsung.com>
+Date:   Mon, 13 Jan 2020 15:02:04 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+        Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <20191213083157.9220-1-m.szyprowski@samsung.com>
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrIKsWRmVeSWpSXmKPExsWy7djP87qxFTJxBpNW6ltsnLGe1eLC0x42
+        i/PnN7BbXN41h81ixvl9TBaLlrUyO7B5bFrVyebRt2UVo8fxG9uZPD5vkgtgieKySUnNySxL
+        LdK3S+DK2PZjNnPBa86Ku0e3MzcwLuLoYuTkkBAwkTj8v4+1i5GLQ0hgBaPE9l1f2CGcL4wS
+        VxpXQWU+M0q8WfydFaZl4YEDUFXLGSV27rgOVfWWUeLtx43sIFXCAnES299sYwOxRQQcJJYs
+        vQNmMwusZJR4/9wdxGYTMJToetsFFucVsJPoO3IAbAOLgKrE696nLCC2qECsxP3VUxkhagQl
+        Ts58AhbnFLCVaHj+mhFiprzE9rdzmCFscYlbT+YzgRwkIbCMXWLZvgdQZ7tITJo3mRnCFpZ4
+        dXwLO4QtI/F/J0xDM6PEw3Nr2SGcHkaJy00zGCGqrCXunPsFdCoH0ApNifW79EFMCQFHid1f
+        XCBMPokbbwUhbuCTmLRtOjNEmFeio00IYoaaxKzj6+C2HrxwiXkCo9IsJJ/NQvLNLCTfzEJY
+        u4CRZRWjeGppcW56arFhXmq5XnFibnFpXrpecn7uJkZgwjn97/inHYxfLyUdYhTgYFTi4W3I
+        k4kTYk0sK67MPcQowcGsJMK76ZxUnBBvSmJlVWpRfnxRaU5q8SFGaQ4WJXFe40UvY4UE0hNL
+        UrNTUwtSi2CyTBycUg2MHK5BetGneE2PmqoxSfVMs+Zc8zjmpItTzE1T6y7bzmIp5QvStxr7
+        v2x4kW8e9aIhx6GX9f1j06BHvwqnT9Nd47TDu5PV8dNf4+oY71TDB6d5Tygprpg3bcLXkrgL
+        Hu/Vw+t+p7Akr3I89+qXOZuivHWQxv5iDjOR1IvTyn31wxbULDsXWKDEUpyRaKjFXFScCAAj
+        D3WTNAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCIsWRmVeSWpSXmKPExsVy+t/xu7qxFTJxBifWS1hsnLGe1eLC0x42
+        i/PnN7BbXN41h81ixvl9TBaLlrUyO7B5bFrVyebRt2UVo8fxG9uZPD5vkgtgidKzKcovLUlV
+        yMgvLrFVija0MNIztLTQMzKx1DM0No+1MjJV0rezSUnNySxLLdK3S9DL2PZjNnPBa86Ku0e3
+        MzcwLuLoYuTkkBAwkVh44AB7FyMXh5DAUkaJpyf/MEMkZCROTmtghbCFJf5c62IDsYUEXjNK
+        vJpkCmILC8RJnDndxwhiiwg4SCxZeocNZBCzwEpGiZ4JJ5kgpk5glJhypwNsEpuAoUTXW4hJ
+        vAJ2En1HDoDFWQRUJV73PmUBsUUFYiX+n7kGVSMocXLmE7A4p4CtRMPz12DbmAXMJOZtfsgM
+        YctLbH87B8oWl7j1ZD7TBEahWUjaZyFpmYWkZRaSlgWMLKsYRVJLi3PTc4uN9IoTc4tL89L1
+        kvNzNzECY2zbsZ9bdjB2vQs+xCjAwajEw6uRIxMnxJpYVlyZe4hRgoNZSYR30zmpOCHelMTK
+        qtSi/Pii0pzU4kOMpkDPTWSWEk3OB8Z/Xkm8oamhuYWlobmxubGZhZI4b4fAwRghgfTEktTs
+        1NSC1CKYPiYOTqkGRt67p1T7eRe83euxv2Gj3PsrHjffadhc3noxjjUm6+82ryOLVr6y+1Wn
+        Ij8/febbM3dn3WVre7Xi3P4ztrcOaoYbFCUoxYW5z/w4+7pOis2fnKcRfpLB+5d2p0u7X9Zj
+        0nyac+bclfue3j1V69SC39baMSouerZxdo62qt3ZXZG7vrvnP177ZbsSS3FGoqEWc1FxIgDF
+        u2YtxwIAAA==
+X-CMS-MailID: 20200113140205eucas1p1ad988fd90cc2c9bf0efc28269a374bd0
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20191213083209eucas1p1459831639297fc7c37089c8fef4e0248
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20191213083209eucas1p1459831639297fc7c37089c8fef4e0248
+References: <CGME20191213083209eucas1p1459831639297fc7c37089c8fef4e0248@eucas1p1.samsung.com>
+        <20191213083157.9220-1-m.szyprowski@samsung.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Donnerstag, den 26.12.2019, 15:01 +0530 schrieb RAJESH DASARI:
-> Could someone please help, why the usb0 is down on Device A side and
-> it there is any known issue or is this  expected behaviour?
 
-Hi,
+On 13.12.2019 09:31, Marek Szyprowski wrote:
+> PHY calibration is needed only for USB2.0 (UTMI) PHY, so skip calling
+> calibration code when phy_calibrate() is called for USB3.0 (PIPE3) PHY.
+>
+> Fixes: d8c80bb3b55b ("phy: exynos5-usbdrd: Calibrate LOS levels for exynos5420/5800")
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-the kernel cannot just set devices running. Does it work if you up
-the device (with "ip" or "ifconfig")? Your device on side A has no
-IP. It cannot work. We need to determine whether this is a kernel
-issue or your setup in user space.
+gentle ping
 
-	HTH
-		Oliver
+> ---
+>   drivers/phy/samsung/phy-exynos5-usbdrd.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/phy/samsung/phy-exynos5-usbdrd.c b/drivers/phy/samsung/phy-exynos5-usbdrd.c
+> index 646259bee909..f07edd80d2f3 100644
+> --- a/drivers/phy/samsung/phy-exynos5-usbdrd.c
+> +++ b/drivers/phy/samsung/phy-exynos5-usbdrd.c
+> @@ -714,7 +714,9 @@ static int exynos5_usbdrd_phy_calibrate(struct phy *phy)
+>   	struct phy_usb_instance *inst = phy_get_drvdata(phy);
+>   	struct exynos5_usbdrd_phy *phy_drd = to_usbdrd_phy(inst);
+>   
+> -	return exynos5420_usbdrd_phy_calibrate(phy_drd);
+> +	if (inst->phy_cfg->id == EXYNOS5_DRDPHY_UTMI)
+> +		return exynos5420_usbdrd_phy_calibrate(phy_drd);
+> +	return 0;
+>   }
+>   
+>   static const struct phy_ops exynos5_usbdrd_phy_ops = {
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
