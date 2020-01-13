@@ -2,70 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7EF1394B1
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2020 16:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3551394BD
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2020 16:24:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728558AbgAMPVl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Jan 2020 10:21:41 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:56062 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727286AbgAMPVl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jan 2020 10:21:41 -0500
-Received: (qmail 1669 invoked by uid 2102); 13 Jan 2020 10:21:40 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 13 Jan 2020 10:21:40 -0500
-Date:   Mon, 13 Jan 2020 10:21:40 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Oliver Neukum <oneukum@suse.com>
-cc:     EJ Hsu <ejh@nvidia.com>, <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: uas: fix a plug & unplug racing
-In-Reply-To: <1578908680.2590.10.camel@suse.com>
-Message-ID: <Pine.LNX.4.44L0.2001131018320.1502-100000@iolanthe.rowland.org>
+        id S1728643AbgAMPYK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Jan 2020 10:24:10 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:39784 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726567AbgAMPYJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jan 2020 10:24:09 -0500
+Received: by mail-lj1-f196.google.com with SMTP id l2so10509865lja.6;
+        Mon, 13 Jan 2020 07:24:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=JePuBeBt6EnoL+3kn/xgq5rquMyVPay3z8pk7Z13gvY=;
+        b=USZdufscWmBeBgPByQ8G8/YHOBB9WKd10y9b5KoVh7QEf5nGUgL/VpnW0VyM6GlntE
+         vzU8bCvIwZzphaZTr0AOiSERedHLpnfRS/LgFeF3CRoPStu+x2eOPLWyDOvUx66w3bqI
+         1Q3mcbyvelRnyd1EZ2ac3L+Sowq8QU75ukVjE2aP656j+b/yxCDlFgl5V22UZkX3+Wce
+         v/bFGfbdLQ79jbzLrxcycP/NZ4i7CSRhITafwtWea+pa8RMxw7slRN0XDylj66Pg0zUk
+         kHOFLINvHS3FHfLrdlpeB9moVsL0hk8O49ldo+ZwoZs7qvKns1nxWTmqcBaZpf+xS+Pa
+         acbA==
+X-Gm-Message-State: APjAAAX0iizRFjd2P0G+Nw3aDD1Tstqa6QOT+rswTmKt5B4cFsVwto/X
+        ZBDrq6Y46jJ+Bqn4NPcE2hs=
+X-Google-Smtp-Source: APXvYqx9y5a9WxQbAroR31etc8GZA8cMjFK1xEM8Er7Tn8MjDxEn7c84sQbAkH2LDyWV3aXl0/Xcag==
+X-Received: by 2002:a2e:2283:: with SMTP id i125mr11452435lji.244.1578929047657;
+        Mon, 13 Jan 2020 07:24:07 -0800 (PST)
+Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
+        by smtp.gmail.com with ESMTPSA id u24sm6100821ljo.77.2020.01.13.07.24.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jan 2020 07:24:06 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@kernel.org>)
+        id 1ir1ZW-0005nf-Ga; Mon, 13 Jan 2020 16:24:06 +0100
+Date:   Mon, 13 Jan 2020 16:24:06 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peter_hong@fintek.com.tw,
+        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+Subject: Re: [PATCH V2 7/7] USB: serial: f81232: Add gpiolib to GPIO device
+Message-ID: <20200113152406.GD2301@localhost>
+References: <20190923022449.10952-1-hpeter+linux_kernel@gmail.com>
+ <20190923022449.10952-8-hpeter+linux_kernel@gmail.com>
+ <20191023122208.GW24768@localhost>
+ <ef91b42d-e81d-ecdd-c688-0cb3f0b94906@gmail.com>
+ <20200108144600.GK30908@localhost>
+ <2908e99e-ae4e-9385-92af-58381aa119a9@gmail.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2908e99e-ae4e-9385-92af-58381aa119a9@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 13 Jan 2020, Oliver Neukum wrote:
+On Thu, Jan 09, 2020 at 10:43:48AM +0800, Ji-Ze Hong (Peter Hong) wrote:
 
-> Am Sonntag, den 12.01.2020, 19:30 -0800 schrieb EJ Hsu:
+> Johan Hovold 於 2020/1/8 下午 10:46 寫道:
+
+> > I understood from your other mail that the gpio device would not be able
+> > to control the pins of an enabled port. In either case, I think you need
+> > to refuse a request for a pin that's already in use by the corresponding
+> > port.
 > 
-> Hi,
+> OK, I'll change the code as previous mail as following:
 > 
-> first, thank you for diagnosing this unusual bug.
+> I can read the UART enable state from GPIO Device, so I can do when the
+> GPIO is associated with UART enabled, change it as output only otherwise
+> can be set to input/output.
 > 
-> > When a uas disk is plugged into an external hub, uas_probe()
-> > will be called by the hub thread to do the probe. It will
-> > first create a SCSI host and then do the scan for this host.
-> > During the scan, it will probe the LUN using SCSI INQUERY command
-> > which will be packed in the URB and submitted to uas disk.
-> > 
-> > There might be a chance that this external hub with uas disk
-> > attached is unplugged during the scan. In this case, uas driver
-> > will fail to submit the URB (due to the NOTATTACHED state of uas
-> > device) and try to put this SCSI command back to request queue
-> > waiting for next chance to run.
+> > Also is there a way to determine the number of available pins by
+> > detecting the chip/package type? I'm assuming not all 36 pins are always
+> > accessible?
 > 
-> Isn't that the bug? A command to a detached device should fail.
-> Could you please elaborate? This issue would not be limited to uas.
+> Yes, we had register to get package type, I'll add UART enable & package
+> type to determinate final GPIO pin out.
 
-> It is not enough to do this in disconnect()
-> We are guarded against runtime PM, but not against system sleep.
-> You'd need to handle this in suspend() and resume(), too.
-> And, unfortunately, the device could be reset from another interface.
+I suggest you start without any gpiochip, just add a simple control
+driver which enables each UART (only the ones available in the package
+and which have not been hardware disabled perhaps).
 
-This is more or less a copy of the way usb-storage works.  That driver
-doesn't have any protection here against suspend/resume or reset, and
-it's not clear that any such protection is needed.
+We don't want a user to be able to change the tranceiver mode behind the
+serial driver's back so to speak.
 
-> Is this approach really necessary? It solves the problem, but
-> if you want to get it right, the corner cases are ugly.
+Exposing GPIO pins (not MODE pins) in packages which have those enabled
+should be fine, but you can add that later.
 
-Minimizing the amount of time spent running in the context of the hub 
-thread is generally a good thing to do.
-
-Alan Stern
-
+Johan
