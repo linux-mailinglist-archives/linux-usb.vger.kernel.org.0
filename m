@@ -2,65 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9468513956E
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2020 17:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BF91396C8
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2020 17:50:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727331AbgAMQEn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Jan 2020 11:04:43 -0500
-Received: from mail-lj1-f171.google.com ([209.85.208.171]:44845 "EHLO
-        mail-lj1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726567AbgAMQEm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jan 2020 11:04:42 -0500
-Received: by mail-lj1-f171.google.com with SMTP id u71so10653980lje.11
-        for <linux-usb@vger.kernel.org>; Mon, 13 Jan 2020 08:04:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=l4fjAZTpTf0tcx4gXNPK7iV5jfHPr0pV3Z/M1vtvTiY=;
-        b=j0tHwCUNCma5FiGc8g2ntIVDiFuj/I/vYSeecce2Jg/eE9mrGBGr4jW5YKkIlHCBId
-         xCgD2jCFlW2apjphUAWBE7W78DKbL5eG2Mjz1bRN7rNGJ7eILGl24UdxZpi4F6Mts/NG
-         auBbrtARmX1TCheWDlCgZISQchWVlt2FhXEN5vWjN1KfLP5gQKCcFs0tpx9qDMFy0y/x
-         clhXWAC12u+2GsoU9Gip3LvF1yQxsTgr10NveRDuUqLYXBngH4Fv2S8sGqN6x0tRGafW
-         eE9NwGUUOAWE/6TxMDpuNVGYCVxfCV/gMGTsnVnpfk+YctbWsR3lI81tI4kE/9WL4i/O
-         RESw==
-X-Gm-Message-State: APjAAAUKyQXojliLBMakugOIIcUohyT1mT5D0Vs3gm609gdPBrTq9rPR
-        TkNhPXwcNs11AqnWHFvvd90=
-X-Google-Smtp-Source: APXvYqy0z/mNFb/vSeqt+4kBJUs7IDaznYdFNbAes+PdnSO51C/bOgXxig5sKvnEixxYuJVDxlK/Fg==
-X-Received: by 2002:a2e:b60d:: with SMTP id r13mr11512407ljn.40.1578931480636;
-        Mon, 13 Jan 2020 08:04:40 -0800 (PST)
-Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
-        by smtp.gmail.com with ESMTPSA id 204sm5926440lfj.47.2020.01.13.08.04.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jan 2020 08:04:38 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@kernel.org>)
-        id 1ir2Ck-0001CH-JN; Mon, 13 Jan 2020 17:04:38 +0100
-Date:   Mon, 13 Jan 2020 17:04:38 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Kristian Evensen <kristian.evensen@gmail.com>
-Cc:     linux-usb@vger.kernel.org, johan@kernel.org
-Subject: Re: [PATCH] USB: serial: option: Add support for Quectel RM500Q
-Message-ID: <20200113160438.GE2301@localhost>
-References: <20200113141405.32267-1-kristian.evensen@gmail.com>
+        id S1728734AbgAMQuy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Jan 2020 11:50:54 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:56354 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728641AbgAMQuy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jan 2020 11:50:54 -0500
+Received: (qmail 2814 invoked by uid 2102); 13 Jan 2020 11:50:53 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 13 Jan 2020 11:50:53 -0500
+Date:   Mon, 13 Jan 2020 11:50:53 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Andrey Konovalov <andreyknvl@google.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>
+Subject: Re: [PATCH v4 1/1] usb: gadget: add raw-gadget interface
+In-Reply-To: <CAAeHK+z2+_UHNp4_D2iL9FzPtDoU1YBohCaDJG8sAy12uc_-ew@mail.gmail.com>
+Message-ID: <Pine.LNX.4.44L0.2001131049090.1502-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200113141405.32267-1-kristian.evensen@gmail.com>
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 13, 2020 at 03:14:05PM +0100, Kristian Evensen wrote:
-> RM500Q is a 5G module from Quectel, supporting both standalone and
-> non-standalone modes. Unlike other recent Quectel modems, it is possible
-> to identify the diagnostic interface (bInterfaceProtocol is unique).
-> Thus, there is no need to check for the number of endpoints or reserve
-> interfaces. The interface number is still dynamic though, so matching on
-> interface number is not possible and two entries have to be added to the
-> table.
+On Mon, 13 Jan 2020, Andrey Konovalov wrote:
 
-Applied, thanks.
+> I've also found an issue, but I'm not sure if that is the bug in Raw
+> Gadget, or in the gadget layer (in the former case I'll add this fix
+> to v5 as well). What I believe I'm seeing is
+> __fput()->usb_gadget_unregister_driver()->usb_gadget_remove_driver()->gadget_unbind()
+> racing with dummy_timer()->gadget_setup(). In my case it results in
+> gadget_unbind() doing set_gadget_data(gadget, NULL), and then
+> gadget_setup() dereferencing get_gadget_data(gadget).
+> 
+> Alan, does it look possible for those two functions to race? Should
+> this be prevented by the gadget layer, or should I use some kind of
+> locking in my gadget driver to prevent this?
 
-Johan
+In your situation this race shouldn't happen, because before
+udc->driver->unbind() is invoked we call usb_gadget_disconnect().  If
+that routine succeeds -- which it always does under dummy-hcd -- then
+there can't be any more setup callbacks, because find_endpoint() will
+always return NULL (the is_active() test fails; see the various
+set_link_state* routines).  So I don't see how you could have ended up
+with the race you describe.
+
+However, a real UDC might not be able to perform a disconnect under
+software control.  In that case usb_gadget_disconnect() would not
+change the pullup state, and there would be a real possibility of a
+setup callback racing with an unbind callback.  This seems like a 
+genuine problem and I can't think of a solution offhand.
+
+What we would need is a way to tell the UDC driver to stop invoking
+gadget callbacks, _before_ the UDC driver's stop callback gets called.
+Maybe this should be merged into the pullup callback somehow.
+
+Alan Stern
+
