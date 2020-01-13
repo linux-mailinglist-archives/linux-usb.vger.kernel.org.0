@@ -2,258 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F0A138976
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2020 03:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7F11389BE
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2020 04:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732970AbgAMCPU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 12 Jan 2020 21:15:20 -0500
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:11469 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732487AbgAMCPU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Jan 2020 21:15:20 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e1bd2a20000>; Sun, 12 Jan 2020 18:14:58 -0800
+        id S1733271AbgAMDb1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 Jan 2020 22:31:27 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:16393 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732961AbgAMDb0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Jan 2020 22:31:26 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e1be4790001>; Sun, 12 Jan 2020 19:31:05 -0800
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Sun, 12 Jan 2020 18:15:17 -0800
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Sun, 12 Jan 2020 19:31:25 -0800
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Sun, 12 Jan 2020 18:15:17 -0800
-Received: from [10.19.108.118] (10.124.1.5) by HQMAIL107.nvidia.com
+        by hqpgpgate102.nvidia.com on Sun, 12 Jan 2020 19:31:25 -0800
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL107.nvidia.com
  (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 13 Jan
- 2020 02:15:15 +0000
-Subject: Re: [PATCH v5 3/5] dt-bindings: phy: tegra: Add Tegra194 support
-To:     Thierry Reding <thierry.reding@gmail.com>
-CC:     Rob Herring <robh@kernel.org>, <gregkh@linuxfoundation.org>,
-        <jonathanh@nvidia.com>, <kishon@ti.com>,
-        <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <nkristam@nvidia.com>
-References: <20200103081814.9848-1-jckuo@nvidia.com>
- <20200103081814.9848-4-jckuo@nvidia.com> <20200103223940.GA9205@bogus>
- <baa9b5f4-74be-0ab4-0b24-bf926cf3207c@nvidia.com>
- <4c3f3776-65e2-aafd-7bb9-fa69df301cb6@nvidia.com>
- <20200110112650.GB2233456@ulmo>
-X-Nvconfidentiality: public
-From:   JC Kuo <jckuo@nvidia.com>
-Message-ID: <dc6853d2-2178-b781-6bc6-23e4ed38ccb2@nvidia.com>
-Date:   Mon, 13 Jan 2020 10:15:09 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+ 2020 03:31:25 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 13 Jan 2020 03:31:24 +0000
+Received: from ubuntu.nvidia.com (Not Verified[10.19.108.185]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5e1be48c0000>; Sun, 12 Jan 2020 19:31:24 -0800
+From:   EJ Hsu <ejh@nvidia.com>
+To:     <oneukum@suse.com>
+CC:     <linux-usb@vger.kernel.org>, <ejh@nvidia.com>
+Subject: [PATCH] usb: uas: fix a plug & unplug racing
+Date:   Sun, 12 Jan 2020 19:30:35 -0800
+Message-ID: <20200113033035.50875-1-ejh@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-In-Reply-To: <20200110112650.GB2233456@ulmo>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1578881698; bh=VfhchbKgOZx7krVcK3EI9o3Udj7ufQOUyty7hnxpDjw=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=fvY0DzsKMOOEqRT5BycfN+QfhdLFNzZrPo4ySYR0Dbnu4h80Tb01qr+tiBDRMalQi
-         8+5CTyvq2vvpIUb7a7vwsIfIDe9ceONUS7pE1eUr37N6pgggRi9rptcealfIXEs+RG
-         HmPwIbNGtECrVx8GxcsdXRAm9TIpa7p/xVIq0j6H/4jySFoHoM7XjJ2x51zKgTRuxk
-         KvU2SOtZLPEvUPC+VE4cMZ6OoaGsSb4hW6YkX9Vsrktgr6rw6w/+aJhdhAt93r4UVY
-         9dFI3aHZX9gLn+yZVqVJ6dzLMm1GP5OiTdXRbBvzECRKf7Au8PlpwGmrq9ou+4wNwC
-         HUj16VGTgMNJA==
+        t=1578886266; bh=SHTMPGGVzYYZv1Mtm7Ic7bFvZ5XUMpPZzATlro7BtqI=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=AXyn/0mok/QhrBb82WlqIbfHuzJFywAZU364j66aAz9T6MAviA/SDa03UT0pB+1B6
+         RTZSD1OS6fGmwKsui8oo8VEn6eMc9guajkqyDd8ceAoKQT3IaqjowXU32hhiCtBwzK
+         SP6qikG4pwB/w5xnxaWJh6lXEqRBGD2ka2g3EpIhIAOqO96LIc2MpGJPZnrDmIMS3b
+         8pBHaPp5MdfIov1Tq46MSAAX9vvDn37UA2icrjYPJ0KZQYwxF4K3xM215DXtASKZsE
+         pwxnf1f20Rl7k5MKKd10fnPAUGrLy6wWwjOfBtNexw6WgU+Cmx3zAmmtNDaWlf75+V
+         9itB16SCT4eog==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 1/10/20 7:26 PM, Thierry Reding wrote:
-> On Thu, Jan 09, 2020 at 09:31:27AM +0800, JC Kuo wrote:
->> Hi Rob,
->> For now we have two options.
->> 1. reusing the existing "maximum-speed" which is documented in usb/generic.txt
->> Pro: no need to add new property
->> Con: only "super-speed" and "super-speed-plus" are valid for Tegra XUSB PADCTL,
->> therefore extra code/document change is required.
->>
->> +	if (device_property_present(&port->dev, "maximum-speed")) {
->> +		maximum_speed =  usb_get_maximum_speed(&port->dev);
->> +		if (maximum_speed == USB_SPEED_SUPER)
->> +			usb3->disable_gen2 = true;
->> +		else if (maximum_speed == USB_SPEED_SUPER_PLUS)
->> +			usb3->disable_gen2 = false;
->> +		else
->> +			return -EINVAL;
->> +	}
->>
->> 2. introducing a new proprietary "nvidia,disable-gen2" property
->> Pro: its logic perfectly matches the need, and code change is minimum
->>
->> +        usb3->disable_gen2 = of_property_read_bool(np, "nvidia,disable-gen2");
->>
->> Con: it's a new and proprietary property.
->>
->> Please let me know which one do you prefer or there is something else
->> works better.
-> 
-> I think the first version is much clearer. maximum-speed = "super-speed"
-> is very clear and explicit. nvidia,disable-gen2 is less so. While it may
-> be true in this case what "disable-gen2" does, using the generic
-> bindings has the advantage that it'll be more familiar to people already
-> familiar with other USB device tree bindings.
-> 
-> Also, the nvidia,disable-gen2 property only perfectly matches the need
-> because it reflects the name of the variable. If you rewrote the code to
-> do something like this:
-> 
-> 	if (port->maximum_speed <= USB_SPEED_SUPER) {
-> 		/* disable gen2 */
-> 		...
-> 	}
+When a uas disk is plugged into an external hub, uas_probe()
+will be called by the hub thread to do the probe. It will
+first create a SCSI host and then do the scan for this host.
+During the scan, it will probe the LUN using SCSI INQUERY command
+which will be packed in the URB and submitted to uas disk.
 
-"low-speed/full-speed/high-speed/wireless" options are invalid to a usb3 port
-because a usb3 port is not capable of operating at
-low-/full-/high-speed/wireless protocols. Therefore,
-maximum-speed="low-/full-/high-speed/wireless" is something more like completely
-disabling the usb3 port than just disabling super-speed-plus.
+There might be a chance that this external hub with uas disk
+attached is unplugged during the scan. In this case, uas driver
+will fail to submit the URB (due to the NOTATTACHED state of uas
+device) and try to put this SCSI command back to request queue
+waiting for next chance to run.
 
-I see using an existing "maximum-speed" is preferred. Please review code change
-in v5 and let me know if anything could be improved further.
+In normal case, this cycle will terminate when hub thread gets
+disconnection event and calls into uas_disconnect() accordingly.
+But in this case, uas_disconnect() will not be called because
+hub thread of external hub gets stuck waiting for the completion
+of this SCSI command. A deadlock happened.
 
-> 
-> Then all of a sudden the "maximum-speed" property is a perfect match. In
-> general, bindings should be natural to the domain of the bus or device
-> that they describe rather than a reflection of how the driver programs
-> the device's registers.
-> 
-> On a side-note: we should also update the usb/generic.txt binding to
-> describe the "super-speed-plus" value for the maximum-speed property.
-Yes, I feel the same. I will send a patch for it.
+In this fix, uas will call scsi_scan_host() asynchronously to
+avoid the blocking of hub thread.
 
-Thanks,
-JC
+Signed-off-by: EJ Hsu <ejh@nvidia.com>
+---
+ drivers/usb/storage/uas.c | 31 ++++++++++++++++++++++++++++++-
+ 1 file changed, 30 insertions(+), 1 deletion(-)
 
-> 
-> Thierry
-> 
->> Thanks,
->> JC
->>
->>
->> On 1/6/20 3:10 PM, JC Kuo wrote:
->>> On 1/4/20 6:39 AM, Rob Herring wrote:
->>>> On Fri, Jan 03, 2020 at 04:18:12PM +0800, JC Kuo wrote:
->>>>> Extend the bindings to cover the set of features found in Tegra194.
->>>>> Note that, technically, there are four more supplies connected to the
->>>>> XUSB pad controller (DVDD_PEX, DVDD_PEX_PLL, HVDD_PEX and HVDD_PEX_PLL)
->>>>> , but the power sequencing requirements of Tegra194 require these to be
->>>>> under the control of the PMIC.
->>>>>
->>>>> Tegra194 XUSB PADCTL supports up to USB 3.1 Gen 2 speed, however, it
->>>>> is possible for some platforms have long signal trace that could not
->>>>> provide sufficient electrical environment for Gen 2 speed. This patch
->>>>> adds a "maximum-speed" property to usb3 ports which can be used to
->>>>> specify the maximum supported speed for any particular USB 3.1 port.
->>>>> For a port that is not capable of SuperSpeedPlus, "maximum-speed"
->>>>> property should carry "super-speed".
->>>>>
->>>>> Signed-off-by: JC Kuo <jckuo@nvidia.com>
->>>>> ---
->>>>> Changes in v5:
->>>>> - re-use "maximum-speed" instead of adding "nvidia,disable-gen2"
->>>>> Changes in v4: none
->>>>> Changes in v3: none
->>>>> Changes in v2:
->>>>> - fix a typo
->>>>>
->>>>>  .../phy/nvidia,tegra124-xusb-padctl.txt        | 18 ++++++++++++++++++
->>>>>  1 file changed, 18 insertions(+)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt b/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt
->>>>> index 9fb682e47c29..7d0089006e67 100644
->>>>> --- a/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt
->>>>> +++ b/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt
->>>>> @@ -37,6 +37,7 @@ Required properties:
->>>>>    - Tegra132: "nvidia,tegra132-xusb-padctl", "nvidia,tegra124-xusb-padctl"
->>>>>    - Tegra210: "nvidia,tegra210-xusb-padctl"
->>>>>    - Tegra186: "nvidia,tegra186-xusb-padctl"
->>>>> +  - Tegra194: "nvidia,tegra194-xusb-padctl"
->>>>>  - reg: Physical base address and length of the controller's registers.
->>>>>  - resets: Must contain an entry for each entry in reset-names.
->>>>>  - reset-names: Must include the following entries:
->>>>> @@ -62,6 +63,10 @@ For Tegra186:
->>>>>  - vclamp-usb-supply: Bias rail for USB pad. Must supply 1.8 V.
->>>>>  - vddio-hsic-supply: HSIC PHY power supply. Must supply 1.2 V.
->>>>>  
->>>>> +For Tegra194:
->>>>> +- avdd-usb-supply: USB I/Os, VBUS, ID, REXT, D+/D- power supply. Must supply
->>>>> +  3.3 V.
->>>>> +- vclamp-usb-supply: Bias rail for USB pad. Must supply 1.8 V.
->>>>>  
->>>>>  Pad nodes:
->>>>>  ==========
->>>>> @@ -154,6 +159,11 @@ For Tegra210, the list of valid PHY nodes is given below:
->>>>>  - sata: sata-0
->>>>>    - functions: "usb3-ss", "sata"
->>>>>  
->>>>> +For Tegra194, the list of valid PHY nodes is given below:
->>>>> +- usb2: usb2-0, usb2-1, usb2-2, usb2-3
->>>>> +  - functions: "xusb"
->>>>> +- usb3: usb3-0, usb3-1, usb3-2, usb3-3
->>>>> +  - functions: "xusb"
->>>>>  
->>>>>  Port nodes:
->>>>>  ===========
->>>>> @@ -221,6 +231,11 @@ Optional properties:
->>>>>    is internal. In the absence of this property the port is considered to be
->>>>>    external.
->>>>>  
->>>>> +- maximum-speed: Only for Tegra194. A string property that specifies maximum
->>>>> +  supported speed of a usb3 port. Valid values are:
->>>>> +  - "super-speed-plus": default, the usb3 port supports USB 3.1 Gen 2 speed.
->>>>
->>>> Not defined as a valid value in usb/generic.txt. '-gen2' instead of 
->>>> '-plus' would be clearer IMO. However, is there any need to define the 
->>>> maximum speed possible? The purpose of this property is to limit the 
->>>> speed below the max.
->>>>
->>> usb_get_maximum_speed(), which parses "maximum-speed" property, indeed handles
->>> string "super-speed-plus". Should "super-speed-plus" be documented in
->>> usb/generic.txt"?
->>>
->>> static const char *const speed_names[] = {
->>> 	[USB_SPEED_UNKNOWN] = "UNKNOWN",
->>> 	[USB_SPEED_LOW] = "low-speed",
->>> 	[USB_SPEED_FULL] = "full-speed",
->>> 	[USB_SPEED_HIGH] = "high-speed",
->>> 	[USB_SPEED_WIRELESS] = "wireless",
->>> 	[USB_SPEED_SUPER] = "super-speed",
->>> 	[USB_SPEED_SUPER_PLUS] = "super-speed-plus",
->>> };
->>>
->>> A proprietary "nvidia,disable-gen2" property was proposed in earlier revision to
->>> "limit the speed below the max". I like it because it fit our needs better and
->>> requires only one line of code change.
->>>
->>>    usb3->disable_gen2 = of_property_read_bool(np, "nvidia,disable-gen2");
->>>
->>> Should I fallback to that approach?
->>>
->>> Thanks,
->>> JC
->>>
->>>>> +  - "super-speed": the usb3 port supports USB 3.1 Gen 1 speed only.
->>>>> +
->>>>>  For Tegra124 and Tegra132, the XUSB pad controller exposes the following
->>>>>  ports:
->>>>>  - 3x USB2: usb2-0, usb2-1, usb2-2
->>>>> @@ -233,6 +248,9 @@ For Tegra210, the XUSB pad controller exposes the following ports:
->>>>>  - 2x HSIC: hsic-0, hsic-1
->>>>>  - 4x super-speed USB: usb3-0, usb3-1, usb3-2, usb3-3
->>>>>  
->>>>> +For Tegra194, the XUSB pad controller exposes the following ports:
->>>>> +- 4x USB2: usb2-0, usb2-1, usb2-2, usb2-3
->>>>> +- 4x super-speed USB: usb3-0, usb3-1, usb3-2, usb3-3
->>>>>  
->>>>>  Examples:
->>>>>  =========
->>>>> -- 
->>>>> 2.17.1
->>>>>
+diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+index 95bba3ba6ac6..d367718fef45 100644
+--- a/drivers/usb/storage/uas.c
++++ b/drivers/usb/storage/uas.c
+@@ -42,9 +42,11 @@ struct uas_dev_info {
+ 	unsigned cmd_pipe, status_pipe, data_in_pipe, data_out_pipe;
+ 	unsigned use_streams:1;
+ 	unsigned shutdown:1;
++	unsigned scan_pending:1;
+ 	struct scsi_cmnd *cmnd[MAX_CMNDS];
+ 	spinlock_t lock;
+ 	struct work_struct work;
++	struct work_struct scan_work;      /* for async scanning */
+ };
+ 
+ enum {
+@@ -114,6 +116,20 @@ static void uas_do_work(struct work_struct *work)
+ 	spin_unlock_irqrestore(&devinfo->lock, flags);
+ }
+ 
++static void uas_scan_work(struct work_struct *work)
++{
++	struct uas_dev_info *devinfo =
++		container_of(work, struct uas_dev_info, scan_work);
++	struct Scsi_Host *shost = usb_get_intfdata(devinfo->intf);
++
++	dev_dbg(&devinfo->intf->dev, "starting scan\n");
++	scsi_scan_host(shost);
++	dev_dbg(&devinfo->intf->dev, "scan complete\n");
++
++	usb_autopm_put_interface(devinfo->intf);
++	devinfo->scan_pending = 0;
++}
++
+ static void uas_add_work(struct uas_cmd_info *cmdinfo)
+ {
+ 	struct scsi_pointer *scp = (void *)cmdinfo;
+@@ -982,6 +998,7 @@ static int uas_probe(struct usb_interface *intf, const struct usb_device_id *id)
+ 	init_usb_anchor(&devinfo->data_urbs);
+ 	spin_lock_init(&devinfo->lock);
+ 	INIT_WORK(&devinfo->work, uas_do_work);
++	INIT_WORK(&devinfo->scan_work, uas_scan_work);
+ 
+ 	result = uas_configure_endpoints(devinfo);
+ 	if (result)
+@@ -998,7 +1015,11 @@ static int uas_probe(struct usb_interface *intf, const struct usb_device_id *id)
+ 	if (result)
+ 		goto free_streams;
+ 
+-	scsi_scan_host(shost);
++	/* Submit the delayed_work for SCSI-device scanning */
++	usb_autopm_get_interface_no_resume(intf);
++	devinfo->scan_pending = 1;
++	schedule_work(&devinfo->scan_work);
++
+ 	return result;
+ 
+ free_streams:
+@@ -1166,6 +1187,14 @@ static void uas_disconnect(struct usb_interface *intf)
+ 	usb_kill_anchored_urbs(&devinfo->data_urbs);
+ 	uas_zap_pending(devinfo, DID_NO_CONNECT);
+ 
++	/*
++	 * Prevent SCSI scanning (if it hasn't started yet)
++	 * or wait for the SCSI-scanning routine to stop.
++	 */
++	cancel_work_sync(&devinfo->scan_work);
++	if (devinfo->scan_pending)
++		usb_autopm_put_interface_no_suspend(intf);
++
+ 	scsi_remove_host(shost);
+ 	uas_free_streams(devinfo);
+ 	scsi_host_put(shost);
+-- 
+2.17.1
+
