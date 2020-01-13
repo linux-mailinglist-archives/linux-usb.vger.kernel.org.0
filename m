@@ -2,52 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D69138D66
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2020 10:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F19138D6C
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2020 10:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726277AbgAMJHH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Jan 2020 04:07:07 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:34539 "EHLO
+        id S1726336AbgAMJKS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Jan 2020 04:10:18 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:34769 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725268AbgAMJHH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jan 2020 04:07:07 -0500
-Received: from mail-ot1-f70.google.com ([209.85.210.70])
+        with ESMTP id S1726138AbgAMJKR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jan 2020 04:10:17 -0500
+Received: from mail-oi1-f199.google.com ([209.85.167.199])
         by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <kai.heng.feng@canonical.com>)
-        id 1iqvgf-0000SS-Ri
-        for linux-usb@vger.kernel.org; Mon, 13 Jan 2020 09:07:06 +0000
-Received: by mail-ot1-f70.google.com with SMTP id m18so6051253otp.20
-        for <linux-usb@vger.kernel.org>; Mon, 13 Jan 2020 01:07:05 -0800 (PST)
+        id 1iqvji-0000pb-L3
+        for linux-usb@vger.kernel.org; Mon, 13 Jan 2020 09:10:14 +0000
+Received: by mail-oi1-f199.google.com with SMTP id x75so2904373oix.3
+        for <linux-usb@vger.kernel.org>; Mon, 13 Jan 2020 01:10:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=y08y1Vf0ul0EzKQPAWCtvf/eaBmNdOl4Jj/XRj2SI+s=;
-        b=dR5ewKnoiNBCqMvix3GuBKAbbuxQNpdpmFZ4mejjDq1FpFukVmvoxniVE+e+83ltzj
-         lE/q7jVKF3hFGCUx4dLtZYKWDZIIU8KuM71T3aVZuRDZs6SFa26wumCFb4EdqKTYvHSa
-         rFl77g+cfnznT8BzL3zQpn1TfLZ451Fej211BTX0vDukfvxrsvo1XtTIb86pRzPrgRUC
-         gO6pWhIq/on6XOIwozaAxKO3FLb5UKsekxbheq6cehNiYQKSEohIs9jklSbgNbVoVNOR
-         02hqJYr21pv63Ku4oqLLGBfOhvAewwT5mQJfQ8xQ+BGelo4ttttJJv6oShpSM6GkEIAb
-         Zy/g==
-X-Gm-Message-State: APjAAAXcrG0xPGFCJiKdETR42doEAdPx22SF+XVAnqXoO5DCVeepl4/E
-        DPte/Xx59hTz17OJSS7zXlZbWtwlSopsibR/QOlbzbU+xKPyU56uynzd/FEbeE+PzktBf0hlYhZ
-        jeywd3sCsBx2kFGhaAGyvha7SSK0G+tAkLUXs6lb14r6P7ab1mM8dFA==
-X-Received: by 2002:a05:6830:2116:: with SMTP id i22mr12883833otc.0.1578906424884;
-        Mon, 13 Jan 2020 01:07:04 -0800 (PST)
-X-Google-Smtp-Source: APXvYqz1UBoFSpWRN87k5IpNKV/5s81VoSSDYKOfWs3DY7xagcs1yYHS47D0v7UYSuf8nrzns+dxZirJyN7rjK/r7b4=
-X-Received: by 2002:a05:6830:2116:: with SMTP id i22mr12883821otc.0.1578906424631;
- Mon, 13 Jan 2020 01:07:04 -0800 (PST)
+        bh=mEdQLRNNr60Uq1X2SB+y192Ftk0ynyhp3ZNDXSiOKAQ=;
+        b=lQ5oIKeJWfx9TGz54OoNaxExiCOkbUpwC7yDJYGqIljjIrdYhX+YDgkM43Lkwep8kv
+         KaJUO7Zqbz8YhFOv4mxCwYW7u74O+Zrex4VzGQ9Daly+ZLREJiSO6B3qgtYHd4ZJfOMh
+         +/zMQcX266OMaucHa0FhSE7hHZhO75663zl3q17h6oJP/DkOFNwZT4191anQ/PCYFDR2
+         pHehaFZhcZeLrLXY7o3+hgxrEi1lTy6Wsjr/yTll/xXC3mnDwgG1DT2sPTuiCyBkOQzT
+         FbcgRXFdWQ7pBVhxRiH/sgGO3T2UON4bgm1xaR+bWwwBG03O0O0kGrmr3kuMPMzZR9uW
+         cKlQ==
+X-Gm-Message-State: APjAAAWmhTMDAVM/WEF/OdkxtzIxYB7GJkxqPFU/m1zBqHxdaBsnsOJC
+        PqWE/dFaTEs6ds6vcjT2Zns6Fmqdu3cOH/Qf5/+8ZoTjekrP7dqs2+gJ/20s8CM/Xz7iocf+/Cw
+        Ug9JmFqTg6NEc8GCx/aYhiu25gpWePzeLiJgKTuxJZh/kitVfyCKpuw==
+X-Received: by 2002:a05:6830:2116:: with SMTP id i22mr12892755otc.0.1578906613625;
+        Mon, 13 Jan 2020 01:10:13 -0800 (PST)
+X-Google-Smtp-Source: APXvYqzbkSKjuRTgR1fq86s85YJnJMUaFmgpHoY0wic8O0U5gnrpy6eHqN8bmmjRA09V5O4NRND1ZioaeJVWGm5KziM=
+X-Received: by 2002:a05:6830:2116:: with SMTP id i22mr12892740otc.0.1578906613363;
+ Mon, 13 Jan 2020 01:10:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20200103084008.3579-3-kai.heng.feng@canonical.com>
- <20200110080211.22626-1-kai.heng.feng@canonical.com> <20200111192353.GA435222@kroah.com>
-In-Reply-To: <20200111192353.GA435222@kroah.com>
+References: <20200103084008.3579-1-kai.heng.feng@canonical.com> <607e395f-21ce-3c9f-eff7-2fa6aaa74595@linux.intel.com>
+In-Reply-To: <607e395f-21ce-3c9f-eff7-2fa6aaa74595@linux.intel.com>
 From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Mon, 13 Jan 2020 17:06:53 +0800
-Message-ID: <CAAd53p6vGpv0L+XFa1raA2HzO+3LYvHwPW968CEuW8aDbNC7BQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] USB: Disable LPM on WD19's Realtek Hub
-To:     Greg KH <gregkh@linuxfoundation.org>
+Date:   Mon, 13 Jan 2020 17:10:02 +0800
+Message-ID: <CAAd53p5a2RFpZuHGvuNO_9kgv4dGhHCYU0jeq44FtKJv0Ky8uA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] xhci: Ensure link state is U3 after setting USB_SS_PORT_LS_U3
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
 Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
         AceLan Kao <acelan.kao@canonical.com>,
         USB list <linux-usb@vger.kernel.org>,
@@ -58,36 +58,73 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jan 12, 2020 at 4:01 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+On Fri, Jan 10, 2020 at 5:33 PM Mathias Nyman
+<mathias.nyman@linux.intel.com> wrote:
 >
-> On Fri, Jan 10, 2020 at 04:02:11PM +0800, Kai-Heng Feng wrote:
-> > Realtek Hub (0bda:0x0487) used in Dell Dock WD19 sometimes drops off the
-> > bus when bringing underlying ports from U3 to U0.
+> On 3.1.2020 10.40, Kai-Heng Feng wrote:
+> > The xHCI spec doesn't specify the upper bound of U3 transition time. For
+> > some devices 20ms is not enough, so we need to make sure the link state
+> > is in U3 before further actions.
+>
+> Looking at the USB 3.2 spec (7.2.4.2 Link Power management and Flow) it seems
+> most timers related to U3 entry are a lot less than a millisecond (4-16us)
+> If port is in U1/U2,  Ux_EXIT_TIMER is 6ms which seems to be the longest timeout.
+>
+> If we anyway are polling for the U3 state we could shorten the initial 20ms sleep
+> down to 10ms. I think many devices, especially if they are already in U0
+> could manage this.
+
+Ok.
+
+>
+> are >
+> > I've tried to use U3 Entry Capability by setting U3 Entry Enable in
+> > config register, however the port change event for U3 transition
+> > interrupts the system suspend process.
 > >
-> > Disabling LPM on the hub during setting link state is not enough, so
-> > let's disable LPM completely for this hub.
+> > For now let's use the less ideal method by polling PLS.
 > >
 > > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 > > ---
-> >  drivers/usb/core/quirks.c | 3 +++
-> >  1 file changed, 3 insertions(+)
+> >   drivers/usb/host/xhci-hub.c | 13 +++++++++++--
+> >   1 file changed, 11 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+> > index 7a3a29e5e9d2..2b2e9d004dbf 100644
+> > --- a/drivers/usb/host/xhci-hub.c
+> > +++ b/drivers/usb/host/xhci-hub.c
+> > @@ -1228,6 +1228,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+> >                       break;
+> >               case USB_PORT_FEAT_LINK_STATE:
+> >                       temp = readl(ports[wIndex]->addr);
+> > +                     xhci_dbg(xhci, "before setting link state, actual port %d-%d status = 0x%0x\n", hcd->self.busnum, wIndex + 1, temp);
 >
-> What changed from v1?  Always put that below the --- line.
->
-> Also I only see 1 patch here, what happened to the first two?
+> xhci_set_link_state() already shows similar debugging,
 
-The first two are can be actually treat separately, since they are
-more generic fixes for xHCI.
+Ok, will remove it.
 
 >
-> Please resend the whole series, and properly document what went on, you
-> know this...
+> >                       /* Disable port */
+> >                       if (link_state == USB_SS_PORT_LS_SS_DISABLED) {
+> >                               xhci_dbg(xhci, "Disable port %d\n", wIndex);
+> > @@ -1316,9 +1317,17 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+> >                       msleep(20); /* wait device to enter */
+> >                       spin_lock_irqsave(&xhci->lock, flags);
+> >
+> > -                     temp = readl(ports[wIndex]->addr);
+> > -                     if (link_state == USB_SS_PORT_LS_U3)
+> > +                     if (link_state == USB_SS_PORT_LS_U3) {
+> > +                             retval = xhci_handshake(ports[wIndex]->addr, PORT_PLS_MASK, XDEV_U3, 80 * 1000);
+> > +                             if (retval)
+> > +                                     xhci_dbg(xhci, "polling XDEV_U3 on port %d-%d timeout\n", hcd->self.busnum, wIndex + 1);
+>
+> In worst case we are busylooping for 80ms here, keeping the cpu busy.
+> It should be ok to sleep here, so how about just reading the register
+> every 10ms max 10 times, sleeping in between.
 
-I forgot that, will do in next version.
+Ok. Is the polling safe outside of spin_lock_irqsave()?
 
 Kai-Heng
 
 >
-> thanks,
->
-> greg k-h
+> -Mathias
