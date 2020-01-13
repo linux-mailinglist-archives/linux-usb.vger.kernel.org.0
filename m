@@ -2,96 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3551394BD
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2020 16:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9468513956E
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2020 17:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728643AbgAMPYK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Jan 2020 10:24:10 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:39784 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726567AbgAMPYJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jan 2020 10:24:09 -0500
-Received: by mail-lj1-f196.google.com with SMTP id l2so10509865lja.6;
-        Mon, 13 Jan 2020 07:24:08 -0800 (PST)
+        id S1727331AbgAMQEn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Jan 2020 11:04:43 -0500
+Received: from mail-lj1-f171.google.com ([209.85.208.171]:44845 "EHLO
+        mail-lj1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726567AbgAMQEm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jan 2020 11:04:42 -0500
+Received: by mail-lj1-f171.google.com with SMTP id u71so10653980lje.11
+        for <linux-usb@vger.kernel.org>; Mon, 13 Jan 2020 08:04:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=JePuBeBt6EnoL+3kn/xgq5rquMyVPay3z8pk7Z13gvY=;
-        b=USZdufscWmBeBgPByQ8G8/YHOBB9WKd10y9b5KoVh7QEf5nGUgL/VpnW0VyM6GlntE
-         vzU8bCvIwZzphaZTr0AOiSERedHLpnfRS/LgFeF3CRoPStu+x2eOPLWyDOvUx66w3bqI
-         1Q3mcbyvelRnyd1EZ2ac3L+Sowq8QU75ukVjE2aP656j+b/yxCDlFgl5V22UZkX3+Wce
-         v/bFGfbdLQ79jbzLrxcycP/NZ4i7CSRhITafwtWea+pa8RMxw7slRN0XDylj66Pg0zUk
-         kHOFLINvHS3FHfLrdlpeB9moVsL0hk8O49ldo+ZwoZs7qvKns1nxWTmqcBaZpf+xS+Pa
-         acbA==
-X-Gm-Message-State: APjAAAX0iizRFjd2P0G+Nw3aDD1Tstqa6QOT+rswTmKt5B4cFsVwto/X
-        ZBDrq6Y46jJ+Bqn4NPcE2hs=
-X-Google-Smtp-Source: APXvYqx9y5a9WxQbAroR31etc8GZA8cMjFK1xEM8Er7Tn8MjDxEn7c84sQbAkH2LDyWV3aXl0/Xcag==
-X-Received: by 2002:a2e:2283:: with SMTP id i125mr11452435lji.244.1578929047657;
-        Mon, 13 Jan 2020 07:24:07 -0800 (PST)
+         :mime-version:content-disposition:in-reply-to;
+        bh=l4fjAZTpTf0tcx4gXNPK7iV5jfHPr0pV3Z/M1vtvTiY=;
+        b=j0tHwCUNCma5FiGc8g2ntIVDiFuj/I/vYSeecce2Jg/eE9mrGBGr4jW5YKkIlHCBId
+         xCgD2jCFlW2apjphUAWBE7W78DKbL5eG2Mjz1bRN7rNGJ7eILGl24UdxZpi4F6Mts/NG
+         auBbrtARmX1TCheWDlCgZISQchWVlt2FhXEN5vWjN1KfLP5gQKCcFs0tpx9qDMFy0y/x
+         clhXWAC12u+2GsoU9Gip3LvF1yQxsTgr10NveRDuUqLYXBngH4Fv2S8sGqN6x0tRGafW
+         eE9NwGUUOAWE/6TxMDpuNVGYCVxfCV/gMGTsnVnpfk+YctbWsR3lI81tI4kE/9WL4i/O
+         RESw==
+X-Gm-Message-State: APjAAAUKyQXojliLBMakugOIIcUohyT1mT5D0Vs3gm609gdPBrTq9rPR
+        TkNhPXwcNs11AqnWHFvvd90=
+X-Google-Smtp-Source: APXvYqy0z/mNFb/vSeqt+4kBJUs7IDaznYdFNbAes+PdnSO51C/bOgXxig5sKvnEixxYuJVDxlK/Fg==
+X-Received: by 2002:a2e:b60d:: with SMTP id r13mr11512407ljn.40.1578931480636;
+        Mon, 13 Jan 2020 08:04:40 -0800 (PST)
 Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
-        by smtp.gmail.com with ESMTPSA id u24sm6100821ljo.77.2020.01.13.07.24.06
+        by smtp.gmail.com with ESMTPSA id 204sm5926440lfj.47.2020.01.13.08.04.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jan 2020 07:24:06 -0800 (PST)
+        Mon, 13 Jan 2020 08:04:38 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.92.3)
         (envelope-from <johan@kernel.org>)
-        id 1ir1ZW-0005nf-Ga; Mon, 13 Jan 2020 16:24:06 +0100
-Date:   Mon, 13 Jan 2020 16:24:06 +0100
+        id 1ir2Ck-0001CH-JN; Mon, 13 Jan 2020 17:04:38 +0100
+Date:   Mon, 13 Jan 2020 17:04:38 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peter_hong@fintek.com.tw,
-        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-Subject: Re: [PATCH V2 7/7] USB: serial: f81232: Add gpiolib to GPIO device
-Message-ID: <20200113152406.GD2301@localhost>
-References: <20190923022449.10952-1-hpeter+linux_kernel@gmail.com>
- <20190923022449.10952-8-hpeter+linux_kernel@gmail.com>
- <20191023122208.GW24768@localhost>
- <ef91b42d-e81d-ecdd-c688-0cb3f0b94906@gmail.com>
- <20200108144600.GK30908@localhost>
- <2908e99e-ae4e-9385-92af-58381aa119a9@gmail.com>
+To:     Kristian Evensen <kristian.evensen@gmail.com>
+Cc:     linux-usb@vger.kernel.org, johan@kernel.org
+Subject: Re: [PATCH] USB: serial: option: Add support for Quectel RM500Q
+Message-ID: <20200113160438.GE2301@localhost>
+References: <20200113141405.32267-1-kristian.evensen@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2908e99e-ae4e-9385-92af-58381aa119a9@gmail.com>
+In-Reply-To: <20200113141405.32267-1-kristian.evensen@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 09, 2020 at 10:43:48AM +0800, Ji-Ze Hong (Peter Hong) wrote:
+On Mon, Jan 13, 2020 at 03:14:05PM +0100, Kristian Evensen wrote:
+> RM500Q is a 5G module from Quectel, supporting both standalone and
+> non-standalone modes. Unlike other recent Quectel modems, it is possible
+> to identify the diagnostic interface (bInterfaceProtocol is unique).
+> Thus, there is no need to check for the number of endpoints or reserve
+> interfaces. The interface number is still dynamic though, so matching on
+> interface number is not possible and two entries have to be added to the
+> table.
 
-> Johan Hovold 於 2020/1/8 下午 10:46 寫道:
-
-> > I understood from your other mail that the gpio device would not be able
-> > to control the pins of an enabled port. In either case, I think you need
-> > to refuse a request for a pin that's already in use by the corresponding
-> > port.
-> 
-> OK, I'll change the code as previous mail as following:
-> 
-> I can read the UART enable state from GPIO Device, so I can do when the
-> GPIO is associated with UART enabled, change it as output only otherwise
-> can be set to input/output.
-> 
-> > Also is there a way to determine the number of available pins by
-> > detecting the chip/package type? I'm assuming not all 36 pins are always
-> > accessible?
-> 
-> Yes, we had register to get package type, I'll add UART enable & package
-> type to determinate final GPIO pin out.
-
-I suggest you start without any gpiochip, just add a simple control
-driver which enables each UART (only the ones available in the package
-and which have not been hardware disabled perhaps).
-
-We don't want a user to be able to change the tranceiver mode behind the
-serial driver's back so to speak.
-
-Exposing GPIO pins (not MODE pins) in packages which have those enabled
-should be fine, but you can add that later.
+Applied, thanks.
 
 Johan
