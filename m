@@ -2,71 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07BF91396C8
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2020 17:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 144D5139755
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2020 18:17:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728734AbgAMQuy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Jan 2020 11:50:54 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:56354 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728641AbgAMQuy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jan 2020 11:50:54 -0500
-Received: (qmail 2814 invoked by uid 2102); 13 Jan 2020 11:50:53 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 13 Jan 2020 11:50:53 -0500
-Date:   Mon, 13 Jan 2020 11:50:53 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Andrey Konovalov <andreyknvl@google.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>
-Subject: Re: [PATCH v4 1/1] usb: gadget: add raw-gadget interface
-In-Reply-To: <CAAeHK+z2+_UHNp4_D2iL9FzPtDoU1YBohCaDJG8sAy12uc_-ew@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.2001131049090.1502-100000@iolanthe.rowland.org>
+        id S1728669AbgAMRR3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Jan 2020 12:17:29 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:37119 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727222AbgAMRR2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jan 2020 12:17:28 -0500
+Received: by mail-lf1-f67.google.com with SMTP id b15so7446300lfc.4;
+        Mon, 13 Jan 2020 09:17:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9m41qUTzIRJJakUykLj2yxJoWCGlTXPYpdoX2xvbBMA=;
+        b=lzaTqvwrqH+kg3+wnCI/Kmr+M07/jTN/r9WZSmgifyEbY9KUkJKxmTi2YCPv8rdVsr
+         HXSevYGRmvWvHCL5ecva1CNhnrUOorC7sOk3J1pA5SOzq1LfDtp5vvC6bWXHvWbB3ck8
+         +7Fzanf3JVY9lzOVEGLP+UUXduwFS92lr6aPWENd5IwYV5vs7+ulBw4AQKvaMis7rVDK
+         TQWwY1sLuqKYwpb3BLdWQh84caDyix9IcK8u7KeV3tRZSLqLQfTNGz3GRJNOZlWpS0s6
+         8KeE66Ew0sU/1y5uZZWaQl1vRu45Mc+Y/cfCRHp2BgJjve1Kj1i6tBIvgONInEIMpq7N
+         fhFg==
+X-Gm-Message-State: APjAAAUXzgRCXTEzJwDMTAxew48pd7QmfdGUNsIECm39582viz7FpAH1
+        jbgy1m4/pzM1L5Jt2cKa1Lo=
+X-Google-Smtp-Source: APXvYqyL9cG3pPXjlHZhqSEBycmTM3iVOEX2hFl/z4oMBIvFShLBEcF8/uJMYti83XXCiqPbjwLa1A==
+X-Received: by 2002:a19:c7c5:: with SMTP id x188mr10208572lff.22.1578935846285;
+        Mon, 13 Jan 2020 09:17:26 -0800 (PST)
+Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
+        by smtp.gmail.com with ESMTPSA id e17sm6313349ljg.101.2020.01.13.09.17.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jan 2020 09:17:25 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@xi.terra>)
+        id 1ir3LB-0007ye-NK; Mon, 13 Jan 2020 18:17:25 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        stable <stable@vger.kernel.org>
+Subject: [PATCH] Input: keyspan-remote: fix control-message timeouts
+Date:   Mon, 13 Jan 2020 18:17:15 +0100
+Message-Id: <20200113171715.30621-1-johan@kernel.org>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 13 Jan 2020, Andrey Konovalov wrote:
+The driver was issuing synchronous uninterruptible control requests
+without using a timeout. This could lead to the driver hanging on probe
+due to a malfunctioning (or malicious) device until the device is
+physically disconnected. While sleeping in probe the driver prevents
+other devices connected to the same hub from being added to (or removed
+from) the bus.
 
-> I've also found an issue, but I'm not sure if that is the bug in Raw
-> Gadget, or in the gadget layer (in the former case I'll add this fix
-> to v5 as well). What I believe I'm seeing is
-> __fput()->usb_gadget_unregister_driver()->usb_gadget_remove_driver()->gadget_unbind()
-> racing with dummy_timer()->gadget_setup(). In my case it results in
-> gadget_unbind() doing set_gadget_data(gadget, NULL), and then
-> gadget_setup() dereferencing get_gadget_data(gadget).
-> 
-> Alan, does it look possible for those two functions to race? Should
-> this be prevented by the gadget layer, or should I use some kind of
-> locking in my gadget driver to prevent this?
+The USB upper limit of five seconds per request should be more than
+enough.
 
-In your situation this race shouldn't happen, because before
-udc->driver->unbind() is invoked we call usb_gadget_disconnect().  If
-that routine succeeds -- which it always does under dummy-hcd -- then
-there can't be any more setup callbacks, because find_endpoint() will
-always return NULL (the is_active() test fails; see the various
-set_link_state* routines).  So I don't see how you could have ended up
-with the race you describe.
+Fixes: 99f83c9c9ac9 ("[PATCH] USB: add driver for Keyspan Digital Remote")
+Cc: stable <stable@vger.kernel.org>     # 2.6.13
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/input/misc/keyspan_remote.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-However, a real UDC might not be able to perform a disconnect under
-software control.  In that case usb_gadget_disconnect() would not
-change the pullup state, and there would be a real possibility of a
-setup callback racing with an unbind callback.  This seems like a 
-genuine problem and I can't think of a solution offhand.
-
-What we would need is a way to tell the UDC driver to stop invoking
-gadget callbacks, _before_ the UDC driver's stop callback gets called.
-Maybe this should be merged into the pullup callback somehow.
-
-Alan Stern
+diff --git a/drivers/input/misc/keyspan_remote.c b/drivers/input/misc/keyspan_remote.c
+index 83368f1e7c4e..4650f4a94989 100644
+--- a/drivers/input/misc/keyspan_remote.c
++++ b/drivers/input/misc/keyspan_remote.c
+@@ -336,7 +336,8 @@ static int keyspan_setup(struct usb_device* dev)
+ 	int retval = 0;
+ 
+ 	retval = usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
+-				 0x11, 0x40, 0x5601, 0x0, NULL, 0, 0);
++				 0x11, 0x40, 0x5601, 0x0, NULL, 0,
++				 USB_CTRL_SET_TIMEOUT);
+ 	if (retval) {
+ 		dev_dbg(&dev->dev, "%s - failed to set bit rate due to error: %d\n",
+ 			__func__, retval);
+@@ -344,7 +345,8 @@ static int keyspan_setup(struct usb_device* dev)
+ 	}
+ 
+ 	retval = usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
+-				 0x44, 0x40, 0x0, 0x0, NULL, 0, 0);
++				 0x44, 0x40, 0x0, 0x0, NULL, 0,
++				 USB_CTRL_SET_TIMEOUT);
+ 	if (retval) {
+ 		dev_dbg(&dev->dev, "%s - failed to set resume sensitivity due to error: %d\n",
+ 			__func__, retval);
+@@ -352,7 +354,8 @@ static int keyspan_setup(struct usb_device* dev)
+ 	}
+ 
+ 	retval = usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
+-				 0x22, 0x40, 0x0, 0x0, NULL, 0, 0);
++				 0x22, 0x40, 0x0, 0x0, NULL, 0,
++				 USB_CTRL_SET_TIMEOUT);
+ 	if (retval) {
+ 		dev_dbg(&dev->dev, "%s - failed to turn receive on due to error: %d\n",
+ 			__func__, retval);
+-- 
+2.24.1
 
