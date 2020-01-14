@@ -2,96 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E1313A3F3
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2020 10:37:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D47813A404
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2020 10:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725956AbgANJhN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jan 2020 04:37:13 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:33370 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725820AbgANJhN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jan 2020 04:37:13 -0500
-Received: by mail-lj1-f196.google.com with SMTP id y6so13576009lji.0
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jan 2020 01:37:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XLx4qq9uUzZ99AFdfnXR8SnbOBHwZV2ncppkEMuA1W0=;
-        b=z7ALV2pm+CFTLbge2d5roopzRYpFGENLJM2ErmidJYafOI2S1T8B4Lbp6dqjEouEQl
-         U4auQPArXelE14NYPJWsCuXfUNg30Q04LWafsM7cMz+r3FqnEg0C0sTG26S9uTlrqRVw
-         ECtzF1rUqvI6dBK+jtRU/ldMsAUBjl3UtfqXcDEWvqgPHeOaw9gUnfugBZnCfyXgGaDA
-         Si1NGv/Ucccloh4SrVRAfpQiVt04bnD+GPP47RZGTT2H+CxovOakuixH3SsKPOnTYiyy
-         v50QrqbAXNnUeDNxYt/ftnI51Bq/Xe8SQTDtK84MUs29IFaowMDIOAud2GY6vm13b5pK
-         Zl1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XLx4qq9uUzZ99AFdfnXR8SnbOBHwZV2ncppkEMuA1W0=;
-        b=g/MoDE7nVjE7ydJCndtd3LLftXi1/kiquhvhw/GPtLkplZsS763AQznUGCqD66C1dJ
-         VO52sgQmK5p7spx3uE47WkCdO9tVbBV1bgAC6auHwEeIWXKYCLrfxZZLJa9mKDnkI6Kw
-         MwJlRHVV61FVYETBWo74dL1x3pFKJO/vDzIv2bYVEwziAWWGqQBN5gDG6TzAeVk/du/w
-         EZa/HYUTs+wKsLXYvA90kMvGNRKZDGNDV/VmTbVA+8oglck8Vp5M4rFxHUzYjsNMO4Se
-         hxNvebvVVatOD7W/xI3AupwP0fsZmuOSC1kw9WHROv8rrEUrjq7dEXx1oNqrEEX/nzkk
-         o2ow==
-X-Gm-Message-State: APjAAAXTITo5QxfMdeNPkCroDjplLRB0E9xpyA9mauFqos/1x5+cP7g4
-        3adSr+rsJPgzorJVv2UT4gy0LQ==
-X-Google-Smtp-Source: APXvYqw+unYwvpSRiboljBIs6s338ZMiEt/AbuDmOqPxVAToiYBSl2NALflmT6r/H9ueBjpb0B5H4g==
-X-Received: by 2002:a05:651c:21c:: with SMTP id y28mr13207807ljn.164.1578994631080;
-        Tue, 14 Jan 2020 01:37:11 -0800 (PST)
-Received: from ?IPv6:2a00:1fa0:687:73d7:3054:f7b0:e9b:40d5? ([2a00:1fa0:687:73d7:3054:f7b0:e9b:40d5])
-        by smtp.gmail.com with ESMTPSA id h24sm7247316ljc.84.2020.01.14.01.37.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jan 2020 01:37:10 -0800 (PST)
-Subject: Re: [PATCH] usb: dwc2: Fix in ISOC request length checking
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>
-References: <d96e104b1913f11f0d3763f3badb0aaf9b3dae77.1578925847.git.hminas@synopsys.com>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <4a9df018-c5a6-9e3e-7f4a-78a49fdec4e8@cogentembedded.com>
-Date:   Tue, 14 Jan 2020 12:36:49 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <d96e104b1913f11f0d3763f3badb0aaf9b3dae77.1578925847.git.hminas@synopsys.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1728876AbgANJnF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jan 2020 04:43:05 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:50206 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725820AbgANJnE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 14 Jan 2020 04:43:04 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 43B821A04B3;
+        Tue, 14 Jan 2020 10:43:03 +0100 (CET)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 47B431A048B;
+        Tue, 14 Jan 2020 10:43:00 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 536AA402A8;
+        Tue, 14 Jan 2020 17:42:56 +0800 (SGT)
+From:   Peter Chen <peter.chen@nxp.com>
+To:     balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com,
+        gregkh@linuxfoundation.org, Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH v3 1/2] usb: phy: show USB charger type for user
+Date:   Tue, 14 Jan 2020 17:38:57 +0800
+Message-Id: <1578994738-8872-1-git-send-email-peter.chen@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+Current USB charger framework only shows charger state for user, but the
+user may also need charger type for further use, add support for it.
 
-On 13.01.2020 17:32, Minas Harutyunyan wrote:
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
+---
+Changes for v3:
+- No changes.
 
-> Move ISOC request length cheking from dwc2_hsotg_start_req() function to
+ drivers/usb/phy/phy.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-    Checking. :-)
-
-> dwc2_hsotg_ep_queue().
-> 
-> Fixes: 4fca54aa58293 "usb: gadget: s3c-hsotg: add multi count support"
-
-    You also need () around the patch summary: ("<summary>")...
-
-> Robert Baldyga <r.baldyga@samsung.com>
-
-    What's that?
-
-> 
-
-    All tags should be listed without new lines in between.
-
-> Signed-off-by: Minas Harutyunyan <hmina
-[...]
-
-MBR, Sergei
-
+diff --git a/drivers/usb/phy/phy.c b/drivers/usb/phy/phy.c
+index 0277f62739a2..ad2554630889 100644
+--- a/drivers/usb/phy/phy.c
++++ b/drivers/usb/phy/phy.c
+@@ -34,6 +34,14 @@ struct phy_devm {
+ 	struct notifier_block *nb;
+ };
+ 
++static const char *const usb_chger_type[] = {
++	[UNKNOWN_TYPE]			= "USB_CHARGER_UNKNOWN_TYPE",
++	[SDP_TYPE]			= "USB_CHARGER_SDP_TYPE",
++	[CDP_TYPE]			= "USB_CHARGER_CDP_TYPE",
++	[DCP_TYPE]			= "USB_CHARGER_DCP_TYPE",
++	[ACA_TYPE]			= "USB_CHARGER_ACA_TYPE",
++};
++
+ static struct usb_phy *__usb_find_phy(struct list_head *list,
+ 	enum usb_phy_type type)
+ {
+@@ -98,7 +106,8 @@ static void usb_phy_notify_charger_work(struct work_struct *work)
+ {
+ 	struct usb_phy *usb_phy = container_of(work, struct usb_phy, chg_work);
+ 	char uchger_state[50] = { 0 };
+-	char *envp[] = { uchger_state, NULL };
++	char uchger_type[50] = { 0 };
++	char *envp[] = { uchger_state, uchger_type, NULL };
+ 	unsigned int min, max;
+ 
+ 	switch (usb_phy->chg_state) {
+@@ -122,6 +131,8 @@ static void usb_phy_notify_charger_work(struct work_struct *work)
+ 		return;
+ 	}
+ 
++	snprintf(uchger_type, ARRAY_SIZE(uchger_type),
++		 "USB_CHARGER_TYPE=%s", usb_chger_type[usb_phy->chg_type]);
+ 	kobject_uevent_env(&usb_phy->dev->kobj, KOBJ_CHANGE, envp);
+ }
+ 
+-- 
+2.17.1
 
