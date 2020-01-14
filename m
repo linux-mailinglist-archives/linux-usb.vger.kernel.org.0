@@ -2,94 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C8A13A392
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2020 10:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C5D13A3B4
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2020 10:22:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726156AbgANJQW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jan 2020 04:16:22 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:51092 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725820AbgANJQW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 14 Jan 2020 04:16:22 -0500
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 5A532F973300C3E58AB3;
-        Tue, 14 Jan 2020 17:16:19 +0800 (CST)
-Received: from [127.0.0.1] (10.133.215.186) by DGGEMS404-HUB.china.huawei.com
- (10.3.19.204) with Microsoft SMTP Server id 14.3.439.0; Tue, 14 Jan 2020
- 17:16:18 +0800
-Subject: Re: [PATCH 1/1] HID: hiddev: remove a duplicated check
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>
-CC:     Hillf Danton <hdanton@sina.com>
-References: <20191224035117.98816-1-thunder.leizhen@huawei.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <50fd522f-e276-420c-3c6a-0f193bc16ca2@huawei.com>
-Date:   Tue, 14 Jan 2020 17:16:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <20191224035117.98816-1-thunder.leizhen@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.133.215.186]
-X-CFilter-Loop: Reflected
+        id S1728797AbgANJWw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 14 Jan 2020 04:22:52 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:41999 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726044AbgANJWu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jan 2020 04:22:50 -0500
+Received: from mail-pg1-f198.google.com ([209.85.215.198])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1irIPP-0006qe-If
+        for linux-usb@vger.kernel.org; Tue, 14 Jan 2020 09:22:47 +0000
+Received: by mail-pg1-f198.google.com with SMTP id 4so8122987pgn.7
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jan 2020 01:22:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=ZWAvW0Rz1fE7AgqGVyczDvEbs9mU6QRWoYteCf8IMgY=;
+        b=oHTmxYJ/vLP06TpKhJouFFlwhzZrOKSVKITXa51WaETZyaf0dP9bcCS2GKV3JHi/wT
+         VyDUYVyXS9IlbNigYvL0NZevZhV1lVjmEO2nFJoe182yX0mmyHWfomnoF/SFryUfL3Ts
+         kw8Hd9aIv3YXC/E+BOzjSgXMU5N/qjOsdyOkOwNaDVg23BJmkDf1ciuv3sbh8KkakdeX
+         9ldKknyfTKedEA9HfkebxHl7HzusZ7R44D7WzJ9YfpuUb5mOYQ3SF3TKGA2H8jGahkLQ
+         QpNrel837gJJz2S+qk+NZ6Psd5q3b7S8D+zY55UZ2zFGt9phFFN0TON6CWGR3kKnz14I
+         FyZA==
+X-Gm-Message-State: APjAAAU6CtyrjfDNe+xASxPMCSLDb8smnTQWuVL++Ofwk+P8XmhVgjji
+        gdPYtyeiWdDbXB998TSKl9DDGLDfLlHOh8Nxh5nzJyh++xytLKgWWdkoxIpWfUlWq5bmOFwSdhW
+        Tp5jUnn4E0jX6HFl0u6X4/BLZmP/qyu0/qXaQTQ==
+X-Received: by 2002:a17:90a:cb83:: with SMTP id a3mr27325367pju.80.1578993766159;
+        Tue, 14 Jan 2020 01:22:46 -0800 (PST)
+X-Google-Smtp-Source: APXvYqz/dfKdh6hyfCjf7/vtp3J9v7vz7wJtppmbIjvVArkf4ZL6hlcXyW/MQU84uBegDfMHDLn6Tg==
+X-Received: by 2002:a17:90a:cb83:: with SMTP id a3mr27325337pju.80.1578993765891;
+        Tue, 14 Jan 2020 01:22:45 -0800 (PST)
+Received: from 2001-b011-380f-35a3-5d99-e277-e07f-4d26.dynamic-ip6.hinet.net (2001-b011-380f-35a3-5d99-e277-e07f-4d26.dynamic-ip6.hinet.net. [2001:b011:380f:35a3:5d99:e277:e07f:4d26])
+        by smtp.gmail.com with ESMTPSA id a6sm15893776pgg.25.2020.01.14.01.22.43
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 14 Jan 2020 01:22:45 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3608.40.2.2.4\))
+Subject: Re: [PATCH] r8152: Add MAC passthrough support to new device
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <1578990223.15925.0.camel@suse.com>
+Date:   Tue, 14 Jan 2020 17:22:39 +0800
+Cc:     David Miller <davem@davemloft.net>,
+        Hayes Wang <hayeswang@realtek.com>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Grant Grundler <grundler@chromium.org>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        David Chen <david.chen7@dell.com>,
+        "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 8BIT
+Message-Id: <A3D0DBA9-7014-48BF-8001-6F34EC2200B1@canonical.com>
+References: <20200114044127.20085-1-kai.heng.feng@canonical.com>
+ <1578990223.15925.0.camel@suse.com>
+To:     Oliver Neukum <oneukum@suse.com>
+X-Mailer: Apple Mail (2.3608.40.2.2.4)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Does no one pay attention to this problem? Although there is no
-functional problem, but it seems confusing.
 
-        if (!list->hiddev->exist) {                 <---------
-                res = -ENODEV;                                |
-                goto bail_unlock;                             |
-        }                                                     |
-        if (!list->hiddev->open++)                            |
-                if (list->hiddev->exist) {          <--------- //It's always true.
 
-On 2019/12/24 11:51, Zhen Lei wrote:
-> After commit 9c09b214f30e ("HID: hiddev: avoid opening a disconnected
-> device"), the original check "list->hiddev->exist" become unnecessary.
+> On Jan 14, 2020, at 16:23, Oliver Neukum <oneukum@suse.com> wrote:
 > 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> ---
->  drivers/hid/usbhid/hiddev.c | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
+> Am Dienstag, den 14.01.2020, 12:41 +0800 schrieb Kai-Heng Feng:
+>> Device 0xa387 also supports MAC passthrough, therefore add it to the
+>> whitelst.
 > 
-> diff --git a/drivers/hid/usbhid/hiddev.c b/drivers/hid/usbhid/hiddev.c
-> index e421cdf2d1a4ec5..e04cf95fca094a8 100644
-> --- a/drivers/hid/usbhid/hiddev.c
-> +++ b/drivers/hid/usbhid/hiddev.c
-> @@ -292,16 +292,16 @@ static int hiddev_open(struct inode *inode, struct file *file)
->  		res = -ENODEV;
->  		goto bail_unlock;
->  	}
-> -	if (!list->hiddev->open++)
-> -		if (list->hiddev->exist) {
-> -			struct hid_device *hid = hiddev->hid;
-> -			res = hid_hw_power(hid, PM_HINT_FULLON);
-> -			if (res < 0)
-> -				goto bail_unlock;
-> -			res = hid_hw_open(hid);
-> -			if (res < 0)
-> -				goto bail_normal_power;
-> -		}
-> +	if (!list->hiddev->open++) {
-> +		struct hid_device *hid = hiddev->hid;
-> +
-> +		res = hid_hw_power(hid, PM_HINT_FULLON);
-> +		if (res < 0)
-> +			goto bail_unlock;
-> +		res = hid_hw_open(hid);
-> +		if (res < 0)
-> +			goto bail_normal_power;
-> +	}
->  	mutex_unlock(&hiddev->existancelock);
->  	return 0;
->  bail_normal_power:
+> Hi,
+> 
+> this list is getting longer and longer. Isn't there a way to do
+> this generically? ACPI?
+
+ACPI only provides the MAC address, to write the MAC to r8152 it still requires hardware support.
+So we need to use whitelist here, not all r8152 support this feature.
+
+Kai-Heng
+
+> 
+> 	Regards
+> 		Oliver
 > 
 
