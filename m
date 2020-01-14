@@ -2,87 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D47813A404
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2020 10:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4EE13A405
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2020 10:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728876AbgANJnF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jan 2020 04:43:05 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:50206 "EHLO inva020.nxp.com"
+        id S1728899AbgANJnG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jan 2020 04:43:06 -0500
+Received: from inva021.nxp.com ([92.121.34.21]:51938 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725820AbgANJnE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 14 Jan 2020 04:43:04 -0500
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 43B821A04B3;
+        id S1728819AbgANJnF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 14 Jan 2020 04:43:05 -0500
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id CF1D1201108;
         Tue, 14 Jan 2020 10:43:03 +0100 (CET)
 Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 47B431A048B;
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id D375020009C;
         Tue, 14 Jan 2020 10:43:00 +0100 (CET)
 Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 536AA402A8;
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id DF535402B0;
         Tue, 14 Jan 2020 17:42:56 +0800 (SGT)
 From:   Peter Chen <peter.chen@nxp.com>
 To:     balbi@kernel.org
 Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com,
         gregkh@linuxfoundation.org, Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH v3 1/2] usb: phy: show USB charger type for user
-Date:   Tue, 14 Jan 2020 17:38:57 +0800
-Message-Id: <1578994738-8872-1-git-send-email-peter.chen@nxp.com>
+Subject: [PATCH v3 2/2] Doc: ABI: add usb charger uevent
+Date:   Tue, 14 Jan 2020 17:38:58 +0800
+Message-Id: <1578994738-8872-2-git-send-email-peter.chen@nxp.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1578994738-8872-1-git-send-email-peter.chen@nxp.com>
+References: <1578994738-8872-1-git-send-email-peter.chen@nxp.com>
 X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Current USB charger framework only shows charger state for user, but the
-user may also need charger type for further use, add support for it.
+When the USB charger is inserted or removed, the users could get
+USB charger state and type through the uevent.
 
 Signed-off-by: Peter Chen <peter.chen@nxp.com>
 ---
 Changes for v3:
-- No changes.
+- Change kernel version for 5.6, and delete the kernel printk time
 
- drivers/usb/phy/phy.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ Documentation/ABI/testing/usb-charger-uevent | 45 ++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 Documentation/ABI/testing/usb-charger-uevent
 
-diff --git a/drivers/usb/phy/phy.c b/drivers/usb/phy/phy.c
-index 0277f62739a2..ad2554630889 100644
---- a/drivers/usb/phy/phy.c
-+++ b/drivers/usb/phy/phy.c
-@@ -34,6 +34,14 @@ struct phy_devm {
- 	struct notifier_block *nb;
- };
- 
-+static const char *const usb_chger_type[] = {
-+	[UNKNOWN_TYPE]			= "USB_CHARGER_UNKNOWN_TYPE",
-+	[SDP_TYPE]			= "USB_CHARGER_SDP_TYPE",
-+	[CDP_TYPE]			= "USB_CHARGER_CDP_TYPE",
-+	[DCP_TYPE]			= "USB_CHARGER_DCP_TYPE",
-+	[ACA_TYPE]			= "USB_CHARGER_ACA_TYPE",
-+};
+diff --git a/Documentation/ABI/testing/usb-charger-uevent b/Documentation/ABI/testing/usb-charger-uevent
+new file mode 100644
+index 000000000000..94ab16768e49
+--- /dev/null
++++ b/Documentation/ABI/testing/usb-charger-uevent
+@@ -0,0 +1,45 @@
++What:		Raise a uevent when a USB charger is inserted or removed
++Date:		2020-01-14
++KernelVersion:	5.6
++Contact:	linux-usb@vger.kernel.org
++Description:	There are two USB charger states:
++		USB_CHARGER_ABSENT
++		USB_CHARGER_PRESENT
++		There are five USB charger types:
++		USB_CHARGER_UNKNOWN_TYPE
++		USB_CHARGER_SDP_TYPE
++		USB_CHARGER_CDP_TYPE
++		USB_CHARGER_DCP_TYPE
++		USB_CHARGER_ACA_TYPE
 +
- static struct usb_phy *__usb_find_phy(struct list_head *list,
- 	enum usb_phy_type type)
- {
-@@ -98,7 +106,8 @@ static void usb_phy_notify_charger_work(struct work_struct *work)
- {
- 	struct usb_phy *usb_phy = container_of(work, struct usb_phy, chg_work);
- 	char uchger_state[50] = { 0 };
--	char *envp[] = { uchger_state, NULL };
-+	char uchger_type[50] = { 0 };
-+	char *envp[] = { uchger_state, uchger_type, NULL };
- 	unsigned int min, max;
- 
- 	switch (usb_phy->chg_state) {
-@@ -122,6 +131,8 @@ static void usb_phy_notify_charger_work(struct work_struct *work)
- 		return;
- 	}
- 
-+	snprintf(uchger_type, ARRAY_SIZE(uchger_type),
-+		 "USB_CHARGER_TYPE=%s", usb_chger_type[usb_phy->chg_type]);
- 	kobject_uevent_env(&usb_phy->dev->kobj, KOBJ_CHANGE, envp);
- }
- 
++		Here are two examples taken using udevadm monitor -p when
++		USB charger is online:
++		UDEV  change   /devices/soc0/usbphynop1 (platform)
++		ACTION=change
++		DEVPATH=/devices/soc0/usbphynop1
++		DRIVER=usb_phy_generic
++		MODALIAS=of:Nusbphynop1T(null)Cusb-nop-xceiv
++		OF_COMPATIBLE_0=usb-nop-xceiv
++		OF_COMPATIBLE_N=1
++		OF_FULLNAME=/usbphynop1
++		OF_NAME=usbphynop1
++		SEQNUM=2493
++		SUBSYSTEM=platform
++		USB_CHARGER_STATE=USB_CHARGER_PRESENT
++		USB_CHARGER_TYPE=USB_CHARGER_SDP_TYPE
++		USEC_INITIALIZED=227422826
++
++		USB charger is offline:
++		KERNEL change   /devices/soc0/usbphynop1 (platform)
++		ACTION=change
++		DEVPATH=/devices/soc0/usbphynop1
++		DRIVER=usb_phy_generic
++		MODALIAS=of:Nusbphynop1T(null)Cusb-nop-xceiv
++		OF_COMPATIBLE_0=usb-nop-xceiv
++		OF_COMPATIBLE_N=1
++		OF_FULLNAME=/usbphynop1
++		OF_NAME=usbphynop1
++		SEQNUM=2494
++		SUBSYSTEM=platform
++		USB_CHARGER_STATE=USB_CHARGER_ABSENT
++		USB_CHARGER_TYPE=USB_CHARGER_UNKNOWN_TYPE
 -- 
 2.17.1
 
