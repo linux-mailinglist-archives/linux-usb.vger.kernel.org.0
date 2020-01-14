@@ -2,94 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C5D13A3B4
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2020 10:22:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E1313A3F3
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2020 10:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728797AbgANJWw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 14 Jan 2020 04:22:52 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:41999 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726044AbgANJWu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jan 2020 04:22:50 -0500
-Received: from mail-pg1-f198.google.com ([209.85.215.198])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1irIPP-0006qe-If
-        for linux-usb@vger.kernel.org; Tue, 14 Jan 2020 09:22:47 +0000
-Received: by mail-pg1-f198.google.com with SMTP id 4so8122987pgn.7
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jan 2020 01:22:47 -0800 (PST)
+        id S1725956AbgANJhN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jan 2020 04:37:13 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:33370 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725820AbgANJhN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jan 2020 04:37:13 -0500
+Received: by mail-lj1-f196.google.com with SMTP id y6so13576009lji.0
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jan 2020 01:37:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=XLx4qq9uUzZ99AFdfnXR8SnbOBHwZV2ncppkEMuA1W0=;
+        b=z7ALV2pm+CFTLbge2d5roopzRYpFGENLJM2ErmidJYafOI2S1T8B4Lbp6dqjEouEQl
+         U4auQPArXelE14NYPJWsCuXfUNg30Q04LWafsM7cMz+r3FqnEg0C0sTG26S9uTlrqRVw
+         ECtzF1rUqvI6dBK+jtRU/ldMsAUBjl3UtfqXcDEWvqgPHeOaw9gUnfugBZnCfyXgGaDA
+         Si1NGv/Ucccloh4SrVRAfpQiVt04bnD+GPP47RZGTT2H+CxovOakuixH3SsKPOnTYiyy
+         v50QrqbAXNnUeDNxYt/ftnI51Bq/Xe8SQTDtK84MUs29IFaowMDIOAud2GY6vm13b5pK
+         Zl1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=ZWAvW0Rz1fE7AgqGVyczDvEbs9mU6QRWoYteCf8IMgY=;
-        b=oHTmxYJ/vLP06TpKhJouFFlwhzZrOKSVKITXa51WaETZyaf0dP9bcCS2GKV3JHi/wT
-         VyDUYVyXS9IlbNigYvL0NZevZhV1lVjmEO2nFJoe182yX0mmyHWfomnoF/SFryUfL3Ts
-         kw8Hd9aIv3YXC/E+BOzjSgXMU5N/qjOsdyOkOwNaDVg23BJmkDf1ciuv3sbh8KkakdeX
-         9ldKknyfTKedEA9HfkebxHl7HzusZ7R44D7WzJ9YfpuUb5mOYQ3SF3TKGA2H8jGahkLQ
-         QpNrel837gJJz2S+qk+NZ6Psd5q3b7S8D+zY55UZ2zFGt9phFFN0TON6CWGR3kKnz14I
-         FyZA==
-X-Gm-Message-State: APjAAAU6CtyrjfDNe+xASxPMCSLDb8smnTQWuVL++Ofwk+P8XmhVgjji
-        gdPYtyeiWdDbXB998TSKl9DDGLDfLlHOh8Nxh5nzJyh++xytLKgWWdkoxIpWfUlWq5bmOFwSdhW
-        Tp5jUnn4E0jX6HFl0u6X4/BLZmP/qyu0/qXaQTQ==
-X-Received: by 2002:a17:90a:cb83:: with SMTP id a3mr27325367pju.80.1578993766159;
-        Tue, 14 Jan 2020 01:22:46 -0800 (PST)
-X-Google-Smtp-Source: APXvYqz/dfKdh6hyfCjf7/vtp3J9v7vz7wJtppmbIjvVArkf4ZL6hlcXyW/MQU84uBegDfMHDLn6Tg==
-X-Received: by 2002:a17:90a:cb83:: with SMTP id a3mr27325337pju.80.1578993765891;
-        Tue, 14 Jan 2020 01:22:45 -0800 (PST)
-Received: from 2001-b011-380f-35a3-5d99-e277-e07f-4d26.dynamic-ip6.hinet.net (2001-b011-380f-35a3-5d99-e277-e07f-4d26.dynamic-ip6.hinet.net. [2001:b011:380f:35a3:5d99:e277:e07f:4d26])
-        by smtp.gmail.com with ESMTPSA id a6sm15893776pgg.25.2020.01.14.01.22.43
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 14 Jan 2020 01:22:45 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3608.40.2.2.4\))
-Subject: Re: [PATCH] r8152: Add MAC passthrough support to new device
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <1578990223.15925.0.camel@suse.com>
-Date:   Tue, 14 Jan 2020 17:22:39 +0800
-Cc:     David Miller <davem@davemloft.net>,
-        Hayes Wang <hayeswang@realtek.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Grant Grundler <grundler@chromium.org>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        David Chen <david.chen7@dell.com>,
-        "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <A3D0DBA9-7014-48BF-8001-6F34EC2200B1@canonical.com>
-References: <20200114044127.20085-1-kai.heng.feng@canonical.com>
- <1578990223.15925.0.camel@suse.com>
-To:     Oliver Neukum <oneukum@suse.com>
-X-Mailer: Apple Mail (2.3608.40.2.2.4)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=XLx4qq9uUzZ99AFdfnXR8SnbOBHwZV2ncppkEMuA1W0=;
+        b=g/MoDE7nVjE7ydJCndtd3LLftXi1/kiquhvhw/GPtLkplZsS763AQznUGCqD66C1dJ
+         VO52sgQmK5p7spx3uE47WkCdO9tVbBV1bgAC6auHwEeIWXKYCLrfxZZLJa9mKDnkI6Kw
+         MwJlRHVV61FVYETBWo74dL1x3pFKJO/vDzIv2bYVEwziAWWGqQBN5gDG6TzAeVk/du/w
+         EZa/HYUTs+wKsLXYvA90kMvGNRKZDGNDV/VmTbVA+8oglck8Vp5M4rFxHUzYjsNMO4Se
+         hxNvebvVVatOD7W/xI3AupwP0fsZmuOSC1kw9WHROv8rrEUrjq7dEXx1oNqrEEX/nzkk
+         o2ow==
+X-Gm-Message-State: APjAAAXTITo5QxfMdeNPkCroDjplLRB0E9xpyA9mauFqos/1x5+cP7g4
+        3adSr+rsJPgzorJVv2UT4gy0LQ==
+X-Google-Smtp-Source: APXvYqw+unYwvpSRiboljBIs6s338ZMiEt/AbuDmOqPxVAToiYBSl2NALflmT6r/H9ueBjpb0B5H4g==
+X-Received: by 2002:a05:651c:21c:: with SMTP id y28mr13207807ljn.164.1578994631080;
+        Tue, 14 Jan 2020 01:37:11 -0800 (PST)
+Received: from ?IPv6:2a00:1fa0:687:73d7:3054:f7b0:e9b:40d5? ([2a00:1fa0:687:73d7:3054:f7b0:e9b:40d5])
+        by smtp.gmail.com with ESMTPSA id h24sm7247316ljc.84.2020.01.14.01.37.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jan 2020 01:37:10 -0800 (PST)
+Subject: Re: [PATCH] usb: dwc2: Fix in ISOC request length checking
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>
+References: <d96e104b1913f11f0d3763f3badb0aaf9b3dae77.1578925847.git.hminas@synopsys.com>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <4a9df018-c5a6-9e3e-7f4a-78a49fdec4e8@cogentembedded.com>
+Date:   Tue, 14 Jan 2020 12:36:49 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <d96e104b1913f11f0d3763f3badb0aaf9b3dae77.1578925847.git.hminas@synopsys.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello!
 
+On 13.01.2020 17:32, Minas Harutyunyan wrote:
 
-> On Jan 14, 2020, at 16:23, Oliver Neukum <oneukum@suse.com> wrote:
-> 
-> Am Dienstag, den 14.01.2020, 12:41 +0800 schrieb Kai-Heng Feng:
->> Device 0xa387 also supports MAC passthrough, therefore add it to the
->> whitelst.
-> 
-> Hi,
-> 
-> this list is getting longer and longer. Isn't there a way to do
-> this generically? ACPI?
+> Move ISOC request length cheking from dwc2_hsotg_start_req() function to
 
-ACPI only provides the MAC address, to write the MAC to r8152 it still requires hardware support.
-So we need to use whitelist here, not all r8152 support this feature.
+    Checking. :-)
 
-Kai-Heng
+> dwc2_hsotg_ep_queue().
+> 
+> Fixes: 4fca54aa58293 "usb: gadget: s3c-hsotg: add multi count support"
+
+    You also need () around the patch summary: ("<summary>")...
+
+> Robert Baldyga <r.baldyga@samsung.com>
+
+    What's that?
 
 > 
-> 	Regards
-> 		Oliver
-> 
+
+    All tags should be listed without new lines in between.
+
+> Signed-off-by: Minas Harutyunyan <hmina
+[...]
+
+MBR, Sergei
+
 
