@@ -2,73 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ABA913AD0B
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2020 16:05:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D01D13AD44
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2020 16:16:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729174AbgANPFi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jan 2020 10:05:38 -0500
-Received: from mga17.intel.com ([192.55.52.151]:46632 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726450AbgANPFh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 14 Jan 2020 10:05:37 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Jan 2020 07:05:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,433,1571727600"; 
-   d="scan'208";a="305168940"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga001.jf.intel.com with ESMTP; 14 Jan 2020 07:05:34 -0800
-Subject: Re: [PATCH 1/3] xhci: Ensure link state is U3 after setting
- USB_SS_PORT_LS_U3
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        AceLan Kao <acelan.kao@canonical.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20200103084008.3579-1-kai.heng.feng@canonical.com>
- <607e395f-21ce-3c9f-eff7-2fa6aaa74595@linux.intel.com>
- <CAAd53p5a2RFpZuHGvuNO_9kgv4dGhHCYU0jeq44FtKJv0Ky8uA@mail.gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <7719f382-e36d-7d31-024c-459ca0fcd91b@linux.intel.com>
-Date:   Tue, 14 Jan 2020 17:07:39 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728935AbgANPQE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jan 2020 10:16:04 -0500
+Received: from outils.crapouillou.net ([89.234.176.41]:47598 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727083AbgANPQE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jan 2020 10:16:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1579014962; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kann6zCyNBbdeCYKcxlAxIyBSoLFOxdoAfrds4Ykqew=;
+        b=m2bfD8zkD7c1NMMwpd4j5EvVeSrnaEjcN+Zirav8BO5gKVRc73sv4NiqrnLvmj9fUZ9rww
+        tqLLASDOGtM1ES8AoU9N1o3/Ph2OERksgOoE0mCmt8XE4KT+HljF9mi1q+T2qWxRl4XH12
+        119cIoASr+kLxZ+E8c8LvtBOD5lIWFQ=
+Date:   Tue, 14 Jan 2020 12:15:48 -0300
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH] usb: common: usb-conn-gpio: Register charger
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, od@zcrc.me,
+        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <1579014948.3.0@crapouillou.net>
+In-Reply-To: <1578536872.21256.25.camel@mhfsdcap03>
+References: <20200107002901.940297-1-paul@crapouillou.net>
+        <20200108165323.GA2506374@kroah.com> <1578504370.3.1@crapouillou.net>
+        <1578536872.21256.25.camel@mhfsdcap03>
 MIME-Version: 1.0
-In-Reply-To: <CAAd53p5a2RFpZuHGvuNO_9kgv4dGhHCYU0jeq44FtKJv0Ky8uA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 13.1.2020 11.10, Kai-Heng Feng wrote:
-> On Fri, Jan 10, 2020 at 5:33 PM Mathias Nyman
-> <mathias.nyman@linux.intel.com> wrote:
->>> @@ -1316,9 +1317,17 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
->>>                        msleep(20); /* wait device to enter */
->>>                        spin_lock_irqsave(&xhci->lock, flags);
->>>
->>> -                     temp = readl(ports[wIndex]->addr);
->>> -                     if (link_state == USB_SS_PORT_LS_U3)
->>> +                     if (link_state == USB_SS_PORT_LS_U3) {
->>> +                             retval = xhci_handshake(ports[wIndex]->addr, PORT_PLS_MASK, XDEV_U3, 80 * 1000);
->>> +                             if (retval)
->>> +                                     xhci_dbg(xhci, "polling XDEV_U3 on port %d-%d timeout\n", hcd->self.busnum, wIndex + 1);
->>
->> In worst case we are busylooping for 80ms here, keeping the cpu busy.
->> It should be ok to sleep here, so how about just reading the register
->> every 10ms max 10 times, sleeping in between.
-> 
-> Ok. Is the polling safe outside of spin_lock_irqsave()?
-> 
+Hi Chunfeng,
 
-Should be, we only read one 32 bit register, and we anyway used to release
-and re-acquire the lock right before this anyway.
+Le jeu., janv. 9, 2020 at 10:27, Chunfeng Yun=20
+<chunfeng.yun@mediatek.com> a =E9crit :
+> Hi Paul,
+>=20
+> On Wed, 2020-01-08 at 14:26 -0300, Paul Cercueil wrote:
+>>  Hi Greg,
+>>=20
+>>=20
+>>  Le mer., janv. 8, 2020 at 17:53, Greg Kroah-Hartman
+>>  <gregkh@linuxfoundation.org> a =E9crit :
+>>  > On Tue, Jan 07, 2020 at 01:29:01AM +0100, Paul Cercueil wrote:
+>>  >>  Register a power supply charger, whose online state depends on
+>>  >> whether
+>>  >>  the USB role is set to device or not.
+>>  >
+>>  > That says _what_ you are doing, but I have no idea _why_ you want=20
+>> to
+>>  > do
+>>  > this.
+>>  >
+>>  > What is this going to cause to have happen?  What new userspace=20
+>> api is
+>>  > going to result?  What will a user do with this?
+>>=20
+>>  This is useful when the USB role is the only way to know if the=20
+>> device
+>>  is charging from USB.
+> There is no charger IC on your platform?
 
--Mathias
+Correct.
+
+>=20
+>>=20
+>>  The API is the standard power supply charger API, you get a
+>>  /sys/class/power_supply/xxx/online node which tells you the state of
+>>  the charger.
+>>=20
+>>  The sole purpose of this is to give userspace applications a way to
+>>  know whether or not the charger is plugged.
+>>=20
+>>  > Is this going to always show up, no matter if the role is not even
+>>  > relevant for a power supply?
+>>=20
+>>  I guess it'd always show up, yes. In which case would the role not=20
+>> be
+>>  relevant for a power supply?
+> Do you also need it if the platform don't have battery?
+
+I guess not. Would you prefer it to be disabled by default? If so, what=20
+would be the way to have it enabled? A flag in devicetree?
+
+>=20
+>>  Is gpio-b-connector not always used for
+>>  OTG connectors?
+> It also supports device only mode, usually uses vBus pin to
+> enable/disable controller
+
+Yes, that would work too. The problem would be a host-only=20
+gpio-b-connector.
+
+-Paul
+
+=
+
