@@ -2,94 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0220413AC7E
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2020 15:41:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB2013AC96
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2020 15:46:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728741AbgANOln (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jan 2020 09:41:43 -0500
-Received: from mx2.suse.de ([195.135.220.15]:56086 "EHLO mx2.suse.de"
+        id S1725904AbgANOqk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jan 2020 09:46:40 -0500
+Received: from mga14.intel.com ([192.55.52.115]:51924 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725904AbgANOln (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 14 Jan 2020 09:41:43 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 3E417BED6;
-        Tue, 14 Jan 2020 14:41:41 +0000 (UTC)
-Message-ID: <1579012899.15925.7.camel@suse.com>
-Subject: Re: [PATCH] usb: uas: fix a plug & unplug racing
-From:   Oliver Neukum <oneukum@suse.com>
-To:     EJ Hsu <ejh@nvidia.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Date:   Tue, 14 Jan 2020 15:41:39 +0100
-In-Reply-To: <MN2PR12MB4126334FBC97B5AC4CC442AECF340@MN2PR12MB4126.namprd12.prod.outlook.com>
-References: <20200113033035.50875-1-ejh@nvidia.com>
-         <1578908680.2590.10.camel@suse.com>
-         <MN2PR12MB4126334FBC97B5AC4CC442AECF340@MN2PR12MB4126.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        id S1726106AbgANOqk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 14 Jan 2020 09:46:40 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Jan 2020 06:46:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,433,1571727600"; 
+   d="scan'208";a="305163859"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga001.jf.intel.com with ESMTP; 14 Jan 2020 06:46:36 -0800
+Subject: Re: [PATCH 2/3] xhci: Wait until link state trainsits to U0 after
+ setting USB_SS_PORT_LS_U0
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        AceLan Kao <acelan.kao@canonical.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20200103084008.3579-1-kai.heng.feng@canonical.com>
+ <20200103084008.3579-2-kai.heng.feng@canonical.com>
+ <17701887-a249-eade-eecb-541df6c2c704@linux.intel.com>
+ <CAAd53p56oXDsPBKqZA_HJbtajWNBQz_LfK-fpOiuxoTrn3WU5w@mail.gmail.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <7f6d4742-6e68-ea1d-4266-c69c27a19df6@linux.intel.com>
+Date:   Tue, 14 Jan 2020 16:48:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <CAAd53p56oXDsPBKqZA_HJbtajWNBQz_LfK-fpOiuxoTrn3WU5w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Dienstag, den 14.01.2020, 03:28 +0000 schrieb EJ Hsu:
-> Oliver Neukum wrote:
+On 13.1.2020 11.18, Kai-Heng Feng wrote:
+> On Fri, Jan 10, 2020 at 11:27 PM Mathias Nyman
+> <mathias.nyman@linux.intel.com> wrote:
+>>
+>> On 3.1.2020 10.40, Kai-Heng Feng wrote:
+>>> Like U3 case, xHCI spec doesn't specify the upper bound of U0 transition
+>>> time. The 20ms is not enough for some devices.
+>>>
+>>> Intead of polling PLS or PLC, we can facilitate the port change event to
+>>> know that the link transits to U0 is completed.
+>>>
+>>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+>>> ---
+>>>    drivers/usb/host/xhci-hub.c  | 8 +++++++-
+>>>    drivers/usb/host/xhci-mem.c  | 1 +
+>>>    drivers/usb/host/xhci-ring.c | 1 +
+>>>    drivers/usb/host/xhci.h      | 1 +
+>>>    4 files changed, 10 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+>>> index 2b2e9d004dbf..07886a1bce62 100644
+>>> --- a/drivers/usb/host/xhci-hub.c
+>>> +++ b/drivers/usb/host/xhci-hub.c
+>>> @@ -1310,11 +1310,17 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+>>>                                        spin_lock_irqsave(&xhci->lock, flags);
+>>>                                }
+>>>                        }
+>>> +                     if (link_state == USB_SS_PORT_LS_U0)
+>>> +                             reinit_completion(&ports[wIndex]->link_state_changed);
+>>
+>> All the other suspend and resume related port flags/completions are
+>> in struct xhci_bus_state. See for example rexit_done[].
+>> Not sure that is a better place but at least it would be consistent.
+>>
+>> Could actually make sense to move more of them to the xhci_port structure,
+>> but perhaps in some later suspend/resume rework patch.
 > 
-> > Am Sonntag, den 12.01.2020, 19:30 -0800 schrieb EJ Hsu:
-> > 
-> > Isn't that the bug? A command to a detached device should fail.
-> > Could you please elaborate? This issue would not be limited to uas.
-> > 
+> Ok. Should I keep this part of the patch as is? Or move it to
+> xhci_bus_state and probably move it back to xhci_port in later rework
+> patch?
+
+Maybe move it to xhci_bus_state for now.
+
 > 
-> In the case I mentioned, the hub thread of external hub running 
-> uas_probe() will get stuck waiting for the completion of scsi scan. 
+>>>
+>>>                        xhci_set_link_state(xhci, ports[wIndex], link_state);
+>>>
+>>>                        spin_unlock_irqrestore(&xhci->lock, flags);
+>>> -                     msleep(20); /* wait device to enter */
+>>> +                     if (link_state == USB_SS_PORT_LS_U0) {
+>>> +                             if (!wait_for_completion_timeout(&ports[wIndex]->link_state_changed, msecs_to_jiffies(100)))
+>>> +                                     xhci_dbg(xhci, "missing U0 port change event for port %d-%d\n", hcd->self.busnum, wIndex + 1);
+>>
+>> We might be waiting for completion here in unnecessary.
+>> No completion is called if port is already in U0, either set by
+>> xhci_bus_resume(), or we race with a device initiated resume.
 > 
-> The scsi scan will try to probe a single LUN using a SCSI INQUIRY.
-> If the external hub has been unplugged before LUN probe, the device 
-> state of uas device will be set to USB_STATE_NOTATTACHED by the 
-> root hub thread. So, all the following calls to usb_submit_urb() in 
-> uas driver will return -NODEV, and accordingly uas_queuecommand_lck() 
-> will return SCSI_MLQUEUE_DEVICE_BUSY to scsi_request_fn().
+> Is there a way to know if device initiated resume is inplace?
 
-And that looks like the root cause. The queue isn't busy.
-It is dead.
+Yes, before xhci interrupt handler handles the device initiated resume PLS
+is XDEV_RESUME and PLC is set.
 
-> scsi_request_fn() then puts this scsi command back into request queue.
-> Because this scsi device is just created and during LUN probe process, 
-> this scsi command is the only one in the request queue. So, it will be picked
-> up soon and dispatched to uas driver again. This cycle will continue until
-> uas_disconnect() is called and its "resetting" flag is set. However, the 
-> hub thread of external hub still got stuck waiting for the completion of
-> this scsi command, and may not be able to run uas_disconnect(). 
-> A deadlock happened.
+After the interrupt handler PLS goes from XDEV_RESUME to XDEV_RECOVERY to XDEV_U0.
+A bit is set for bus_state->port_remote_wakeup, and on usb core side
+also bus->resuming_ports |= bit is set, (having both may be a bit redundant, we might
+be able to get rid of bus_state->port_remote_wakeup, but not right now)
 
-I see. But we are working around insufficient error reporting in the
-SCSI midlayer.
-
-> > > +static void uas_scan_work(struct work_struct *work) {
-> > > +     struct uas_dev_info *devinfo =
-> > > +             container_of(work, struct uas_dev_info, scan_work);
-> > > +     struct Scsi_Host *shost = usb_get_intfdata(devinfo->intf);
-> > > +
-> > > +     dev_dbg(&devinfo->intf->dev, "starting scan\n");
-> > > +     scsi_scan_host(shost);
-> > > +     dev_dbg(&devinfo->intf->dev, "scan complete\n");
-> > > +
-> > > +     usb_autopm_put_interface(devinfo->intf);
-> > 
-> > scsi_scan_host() does runtime PM on the SCSI level. There is no need for us to
-> > duplicate that.
-> > 
 > 
-> In my opinion, if scsi_scan_host() will be run asynchronously, this interface 
-> needs to be guarded against runtime PM between uas_probe() & uas_scan_work().
+>>
+>> Maybe read the current port link state first, and don't do anything if it's
+>> already in U0, or fail if it's in a state where we can't resume to U0.
+> 
+> What happens if device initiated resume happens right after we query the PLS?
 
-Yes it does. But it has a child, the SCSI host, which has an elevated
-count. It is already guarded.
+Not sure, fortunately the drivers task is to write XDEV_U0 to PLS both when
+we want a host initiated resume, or when we want to react on a device initiated
+resume. So hopefully that's ok, but this race exists.
 
-	Regards
-		Oliver
-
+Better keep calling completion for both host and device initiated resume cases
+when port reaches U0/U1/U2 to avoid waiting for the completion unnecessary,
+like you current patch does.
+  
+-Mathias
