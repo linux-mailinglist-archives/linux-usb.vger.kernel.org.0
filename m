@@ -2,62 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1206913CDF9
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 21:18:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B7513CE9D
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 22:07:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729045AbgAOUSF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jan 2020 15:18:05 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:37448 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726220AbgAOUSE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 15:18:04 -0500
-Received: by mail-lj1-f195.google.com with SMTP id o13so19985345ljg.4
-        for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2020 12:18:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V37Vo/FBhU5kltccCSOcOaOV/u6sTU75u7lgAerRHWk=;
-        b=OrYEwmU6lkXsGZWCHNNhtVtpsE6fs3wEj0m6dC3WrtWTeidQt6E9H+zSvKowaPh1ec
-         ugRczy3F4djq+5tAM9KSePUrrGy8RTZj+3Nsfw0drc5nlDq0wGY+b9DTqALVC2112QUl
-         PU4s1hiA953qkOxsAyvqyWsjNb5gpuGJJ8PeA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V37Vo/FBhU5kltccCSOcOaOV/u6sTU75u7lgAerRHWk=;
-        b=JBERA+AdxWXDaNiKztVj1WDCYHwE/vwYEtxX9CkwTkImTg72kHSLChBSumnxKEcyPc
-         BrLF3LRmxNBrg0fsKIKNWpstg9IRJXIAS4E8j/5WiXdCIBNou9QgEL4/xFBupt3KZvFi
-         bC6DOy7z8KPOfmqYXKaoIbTxCkxvYIJTQ85GD091snrH0AxLWNGZbruP163MOZVwXryV
-         yY0YpKQMPz9SlYG+ntGY3HaWqFTlWsE4SUSO9PuNv8GfkOeLVRjgBe4wDTPjaiD+RMn9
-         B5jtkKspGr30bozWVFAfO7HGVT/5Fiyidvay3dRcLhMqWKESrz7/YloNdbN1aH5GwtqB
-         syRg==
-X-Gm-Message-State: APjAAAWKVWlzUrZFhdYY6ssU9tmbpb8AMkHixDw9MSX7METnNo8vYrlk
-        /HRec9JJpM01SYNuIM2DoJp0P8v/nm0=
-X-Google-Smtp-Source: APXvYqxffEu5eFVmV9+Mw7XrOfK6/xCY4ZBMrqKuNgk0O+vYAAxgNoVOkMeMTpkHJLDADDCMz8QB4Q==
-X-Received: by 2002:a2e:8119:: with SMTP id d25mr102214ljg.76.1579119483008;
-        Wed, 15 Jan 2020 12:18:03 -0800 (PST)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
-        by smtp.gmail.com with ESMTPSA id s2sm9617827lji.53.2020.01.15.12.18.02
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jan 2020 12:18:02 -0800 (PST)
-Received: by mail-lj1-f172.google.com with SMTP id j1so19986812lja.2
-        for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2020 12:18:02 -0800 (PST)
-X-Received: by 2002:a2e:990e:: with SMTP id v14mr74215lji.23.1579119048131;
- Wed, 15 Jan 2020 12:10:48 -0800 (PST)
-MIME-Version: 1.0
-References: <157909503552.20155.3030058841911628518.stgit@warthog.procyon.org.uk>
-In-Reply-To: <157909503552.20155.3030058841911628518.stgit@warthog.procyon.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 15 Jan 2020 12:10:32 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjrrOgznCy3yUmcmQY1z_7vXVr6GbvKiy8cLvWbxpmzcw@mail.gmail.com>
-Message-ID: <CAHk-=wjrrOgznCy3yUmcmQY1z_7vXVr6GbvKiy8cLvWbxpmzcw@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/14] pipe: Keyrings, Block and USB notifications
- [ver #3]
-To:     David Howells <dhowells@redhat.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
+        id S1729762AbgAOVHt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jan 2020 16:07:49 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:53639 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729418AbgAOVHp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 16:07:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1579122464;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LdDxJ4TaImd6q6K/Midoj6ftwyCpFTFDZIo2bBl0h+Y=;
+        b=geGugIIvxmNu6yxzJmIxe7A2O4ZbQlU8CmZWo6NZXo6n6sDgAWva3N2yHz8Al8x9lTTToS
+        hFjOoe4SEhAEA7PJO5VAKDr36WfXX7VN5VMD/pBfSyLhYU35tB3ip5sVsTmLrxTLeeb4o/
+        DHhT7cR9XIJXaLUs8XJSw2l/6Oq47dg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-248-Nm7f_jTgN36eBJiQzWf3_A-1; Wed, 15 Jan 2020 16:07:41 -0500
+X-MC-Unique: Nm7f_jTgN36eBJiQzWf3_A-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C4A13801E6C;
+        Wed, 15 Jan 2020 21:07:38 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-52.rdu2.redhat.com [10.10.120.52])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 97A721000329;
+        Wed, 15 Jan 2020 21:07:35 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CAHk-=wjrrOgznCy3yUmcmQY1z_7vXVr6GbvKiy8cLvWbxpmzcw@mail.gmail.com>
+References: <CAHk-=wjrrOgznCy3yUmcmQY1z_7vXVr6GbvKiy8cLvWbxpmzcw@mail.gmail.com> <157909503552.20155.3030058841911628518.stgit@warthog.procyon.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     dhowells@redhat.com, Casey Schaufler <casey@schaufler-ca.com>,
         Stephen Smalley <sds@tycho.nsa.gov>,
         Nicolas Dichtel <nicolas.dichtel@6wind.com>,
         Ian Kent <raven@themaw.net>,
@@ -68,23 +52,33 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         Linux API <linux-api@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [RFC PATCH 00/14] pipe: Keyrings, Block and USB notifications [ver #3]
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <24898.1579122454.1@warthog.procyon.org.uk>
+Date:   Wed, 15 Jan 2020 21:07:34 +0000
+Message-ID: <24899.1579122454@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-So I no longer hate the implementation, but I do want to see the
-actual user space users come out of the woodwork and try this out for
-their use cases.
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-I'd hate to see a new event queue interface that people then can't
-really use due to it not fulfilling their needs, or can't use for some
-other reason.
+> So I no longer hate the implementation, but I do want to see the
+> actual user space users come out of the woodwork and try this out for
+> their use cases.
 
-We've had a fair number of kernel interfaces that ended up not being
-used all that much, but had one or two minor users and ended up being
-nasty long-term maintenance issues.. I don't want this to become yet
-another such one.
+I'll see if I can get someone to help fix this:
 
-                 Linus
+	https://bugzilla.redhat.com/show_bug.cgi?id=1551648
+
+for the KEYRING kerberos cache using notifications.  Note that the primary
+thrust of this BZ is with KCM cache, but it affects KEYRING as well.
+
+Also, I'll poke Greg, since he was interested in using it for USB
+notifications.
+
+David
+
