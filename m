@@ -2,91 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA3913C132
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 13:41:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1896513C13C
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 13:41:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726220AbgAOMlD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jan 2020 07:41:03 -0500
-Received: from aer-iport-2.cisco.com ([173.38.203.52]:44286 "EHLO
-        aer-iport-2.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725999AbgAOMlD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 07:41:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=1547; q=dns/txt; s=iport;
-  t=1579092062; x=1580301662;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CMGeFI10SCO4txSLVhLua/jUV9cB9Rr/f8iwv0XLNnQ=;
-  b=hRtWYbe2s8kDgJqw6z5DIjY4F6hXWMyL2+r9EFdDX65VFoYlcI1m+BEi
-   FK1rhIZDoXC8ouk6pEGbiC2zH4/949pLgu5rylBbwAZRVcxBGRb4LWZMJ
-   vFFTri9ssaQneK4GrhWPa3rYey80SXwRnn1ulb9hSB/RMj1DH4dOtGirK
-   U=;
-X-IronPort-AV: E=Sophos;i="5.70,322,1574121600"; 
-   d="scan'208";a="21832071"
-Received: from aer-iport-nat.cisco.com (HELO aer-core-4.cisco.com) ([173.38.203.22])
-  by aer-iport-2.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 15 Jan 2020 12:33:52 +0000
-Received: from localhost.rd.cisco.com ([10.47.76.148])
-        by aer-core-4.cisco.com (8.15.2/8.15.2) with ESMTP id 00FCXoHe008119;
-        Wed, 15 Jan 2020 12:33:52 GMT
-From:   Johan Korsnes <jkorsnes@cisco.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Johan Korsnes <jkorsnes@cisco.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Armando Visconti <armando.visconti@st.com>,
-        Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH 2/2] HID: core: increase HID report buffer size to 8KiB
-Date:   Wed, 15 Jan 2020 13:33:44 +0100
-Message-Id: <20200115123344.4650-2-jkorsnes@cisco.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200115123344.4650-1-jkorsnes@cisco.com>
-References: <20200115123344.4650-1-jkorsnes@cisco.com>
+        id S1728899AbgAOMls (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jan 2020 07:41:48 -0500
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:45298 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726483AbgAOMls (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 07:41:48 -0500
+Received: by mail-ed1-f68.google.com with SMTP id v28so15334932edw.12;
+        Wed, 15 Jan 2020 04:41:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VYFrUZfFIn1ih4ZXmSMoxrgE6FJJjwb6w+otiOxvkzc=;
+        b=pK2KQsH0vQ8EelC3J81rzuMSl1QXiwz/YzhdEBimsT1vaLFmTbd6rhrzyJF6w7Rwd8
+         oj1fc0rcth0QnkpoHlcq73rgVLIAaDyC3llMqh2Iba24SuyhlVK6CIKdF43KCkZ5gm6i
+         ic54s1NSI0kqk4Sq2kzGiL8DKzOAqgM0S5fbfcKIiHaERa7k1F+4D7xIZJ66YeQla6cB
+         3eDcMrsp1GkUJrQ6yGragpalYQNLJRuU9Czt2a5sErK6XpACiS3LQCDcVyh1Lejk9u3F
+         +TTJMyObPAMrx0OTtcZzySwYrJI7wEUxJ0vt5vUkBrsN/KxSnWArQ6ZFTFjLVqM4fZkx
+         iplA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VYFrUZfFIn1ih4ZXmSMoxrgE6FJJjwb6w+otiOxvkzc=;
+        b=Vxa4hJ/p0Cyn3m9fKBvufrQyuZDvKeL6tGgTiRJ0RGF3y0EnnAQk1cXXJn/4cpPYfw
+         xfBHgS3MSfC/FMNMVyqjlnfgXlsz9cKVqLUEV/IYz1TK0EQ3LVcVGjbzt9RhdNs1yDYz
+         7pd9PMR/5GyjIZE1D8E0ZlbScmPs7ixZzTDiuheDypK2ZJWCchS7/cC5JCrtnj+7TebT
+         pRN4CRGxT3DkgeSPbKdYjQ6PJc1LE16xMmsCr+G13cyyfmg+SAFYpFEcR8DaeijLRrAj
+         0rD7oGF/PaXW4n3VEm9b8XZcxDgj5MItR5kwsdJA4ARMwTQa1s2x+beVa0hjGIG/u7+r
+         SUPw==
+X-Gm-Message-State: APjAAAWRi6sWm3jVMsPx9yeMoK/1IcsyZuchdELwfbc3gunVsi130HKS
+        uEDedcYsCYbQbzgR1DKeZLZkN9ElxsPBoGhzjPc=
+X-Google-Smtp-Source: APXvYqzJn0AHc4rPAk1+z4TbdT44aLhxu4nuRPnA4DwJwNpOXOAUvpMX9n6siNHGAePH0mzJTVYZg+aJCTMA3i24XeI=
+X-Received: by 2002:a50:875c:: with SMTP id 28mr10542048edv.271.1579092106272;
+ Wed, 15 Jan 2020 04:41:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Outbound-SMTP-Client: 10.47.76.148, [10.47.76.148]
-X-Outbound-Node: aer-core-4.cisco.com
+References: <1578537045-23260-1-git-send-email-hanjie.lin@amlogic.com>
+ <1578537045-23260-5-git-send-email-hanjie.lin@amlogic.com> <87pnfl6rdk.fsf@kernel.org>
+In-Reply-To: <87pnfl6rdk.fsf@kernel.org>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Wed, 15 Jan 2020 13:41:35 +0100
+Message-ID: <CAFBinCD0DJgYDhPRHqMQuouq+ZyF6Wg_LkuCMpHj2UG6vvvdbA@mail.gmail.com>
+Subject: Re: [PATCH v4 4/6] usb: dwc3: Add Amlogic A1 DWC3 glue
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Hanjie Lin <hanjie.lin@amlogic.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Yue Wang <yue.wang@amlogic.com>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, Carlo Caione <carlo@caione.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We have a touch device that reports its opens and shorts test results
-in HID buffers of size 8184 bytes. With this patch we're able to
-successfully obtain these reports.
+On Wed, Jan 15, 2020 at 9:43 AM Felipe Balbi <balbi@kernel.org> wrote:
+[...]
+> > -     priv->clk = devm_clk_get(dev, NULL);
+> > -     if (IS_ERR(priv->clk))
+> > -             return PTR_ERR(priv->clk);
+> > +     priv->soc_id = (enum meson_soc_id)of_device_get_match_data(&pdev->dev);
+> > +
+> > +     if (priv->soc_id == MESON_SOC_G12A) {
+>
+> you can use of_device_is_compatible() and get rid of the enumeration you added.
+Hanjie switched to a struct (instead of an enum) that is passed as
+"match data" in v5 [0] of this series
+personally I prefer what Hanjie has in v5 over
+of_device_is_compatible() (because that match data pattern is what we
+also use on other Amlogic drivers)
 
-Alan Stern: Your commit 8ec321e96e05 ("HID: Fix slab-out-of-bounds
-read in hid_field_extract") states:
 
-"This patch fixes the problem by rejecting any report whose total
-length exceeds the HID_MAX_BUFFER_SIZE limit (minus one byte to allow
-for a possible report index). In theory a device could have a report
-longer than that, but if there was such a thing we wouldn't handle it
-correctly anyway."
+Martin
 
-Is this something we have to worry about when increasing the buffer
-size? Or are you referring to the fact that we previously truncated
-the reports if they exceeded max buffer size?
 
-Signed-off-by: Johan Korsnes <jkorsnes@cisco.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: Armando Visconti <armando.visconti@st.com>
-Cc: Jiri Kosina <jkosina@suse.cz>
----
- include/linux/hid.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/hid.h b/include/linux/hid.h
-index cd41f209043f..875f71132b14 100644
---- a/include/linux/hid.h
-+++ b/include/linux/hid.h
-@@ -492,7 +492,7 @@ struct hid_report_enum {
- };
- 
- #define HID_MIN_BUFFER_SIZE	64		/* make sure there is at least a packet size of space */
--#define HID_MAX_BUFFER_SIZE	4096		/* 4kb */
-+#define HID_MAX_BUFFER_SIZE	8192		/* 8kb */
- #define HID_CONTROL_FIFO_SIZE	256		/* to init devices with >100 reports */
- #define HID_OUTPUT_FIFO_SIZE	64
- 
--- 
-2.24.1
-
+[0] https://patchwork.kernel.org/patch/11326669/
