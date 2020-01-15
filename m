@@ -2,26 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6EC913C723
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 16:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A28D13C731
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 16:17:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728911AbgAOPO7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jan 2020 10:14:59 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:32818 "HELO
+        id S1729005AbgAOPRB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jan 2020 10:17:01 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:32828 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728909AbgAOPO7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 10:14:59 -0500
-Received: (qmail 2660 invoked by uid 2102); 15 Jan 2020 10:14:58 -0500
+        with SMTP id S1728921AbgAOPRB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 10:17:01 -0500
+Received: (qmail 2682 invoked by uid 2102); 15 Jan 2020 10:17:00 -0500
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 15 Jan 2020 10:14:58 -0500
-Date:   Wed, 15 Jan 2020 10:14:58 -0500 (EST)
+  by localhost with SMTP; 15 Jan 2020 10:17:00 -0500
+Date:   Wed, 15 Jan 2020 10:17:00 -0500 (EST)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     "Andrew P. Lentvorski" <bsder@allcaps.org>
-cc:     linux-usb@vger.kernel.org
-Subject: Re: Unable to set "iInterface" in usb gadget via configfs
-In-Reply-To: <994f33ae-fa5f-460c-67c8-92fc5352ebae@allcaps.org>
-Message-ID: <Pine.LNX.4.44L0.2001151011520.1788-100000@iolanthe.rowland.org>
+To:     Oliver Neukum <oneukum@suse.com>
+cc:     EJ Hsu <ejh@nvidia.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: uas: fix a plug & unplug racing
+In-Reply-To: <1579080683.15925.24.camel@suse.com>
+Message-ID: <Pine.LNX.4.44L0.2001151015100.1788-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -29,46 +30,79 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 14 Jan 2020, Andrew P. Lentvorski wrote:
+On Wed, 15 Jan 2020, Oliver Neukum wrote:
 
-> I've been trying to report what I think is a bug, but I can't seem to
-> get through to the mailing list.  If these are coming through
-> duplicated, please let me know so I can quit sending them.
-
-I don't think any earlier messages in this thread made it through the 
-mailing list, but this one definitely did.
-
-> Thanks,
-> -a
+> Am Dienstag, den 14.01.2020, 10:04 -0500 schrieb Alan Stern:
+> > On Tue, 14 Jan 2020, Oliver Neukum wrote:
+> > 
+> > > Am Dienstag, den 14.01.2020, 03:28 +0000 schrieb EJ Hsu:
+> > > > Oliver Neukum wrote:
+> > > > 
+> > > > > Am Sonntag, den 12.01.2020, 19:30 -0800 schrieb EJ Hsu:
+> > > > > 
+> > > > > Isn't that the bug? A command to a detached device should fail.
+> > > > > Could you please elaborate? This issue would not be limited to uas.
+> > > > > 
+> > > > 
+> > > > In the case I mentioned, the hub thread of external hub running 
+> > > > uas_probe() will get stuck waiting for the completion of scsi scan. 
+> > > > 
+> > > > The scsi scan will try to probe a single LUN using a SCSI INQUIRY.
+> > > > If the external hub has been unplugged before LUN probe, the device 
+> > > > state of uas device will be set to USB_STATE_NOTATTACHED by the 
+> > > > root hub thread. So, all the following calls to usb_submit_urb() in 
+> > > > uas driver will return -NODEV, and accordingly uas_queuecommand_lck() 
+> > > > will return SCSI_MLQUEUE_DEVICE_BUSY to scsi_request_fn().
+> > > 
+> > > And that looks like the root cause. The queue isn't busy.
+> > > It is dead.
+> > 
+> > No.  The discussion has gotten a little confused.  EJ's point is that
+> > if SCSI scanning takes place in the context of the hub worker thread,
+> > then that thread won't be available to process a disconnect
+> > notification.  The device will be unplugged, but the kernel won't 
+> > realize it until the SCSI scanning is finished.
 > 
+> OK, I think we have two possible code paths at least
 > 
-> > I've been trying to set "iInterface" in my usb gadget to a specific string, but I simply can't find a way to make configfs accept this.
-> > 
-> > When I set my gadget up on my Beaglebone Black (uname -a: Linux beaglebone 4.14.108-ti-r113 #1 SMP PREEMPT Wed Jul 31 00:01:10 UTC 2019 armv7l GNU/Linux).
-> > 
-> > I get (output from lsusb):
-> > 
-> > iInterface 5 HID Interface
-> > 
-> > 
-> > But I want it to be something like:
-> > 
-> > iInterface 4 LPC-LINK2 CMSIS-DAP V5.224
-> > 
-> > 
-> > This seems to be wired up as a fixed value in f_hid.c and doesn't seem to have a corresponding way to actually change it via configfs.
-> > 
-> > 
-> > #define CT_FUNC_HID_IDX 0
-> > 
-> > static struct usb_string ct_func_string_defs[] = {
-> >         [CT_FUNC_HID_IDX].s     = "HID Interface",
-> >         {},                     /* end of list */
-> > };
+> First:
+> uas_queuecommand_lck() -> uas_submit_urbs() -> -ENODEV -> return
+> SCSI_MLQUEUE_DEVICE_BUSY
+> 
+> That looks wrong to me.
 
-Then maybe you need to fix f_hid.c.  Or maybe configfs isn't meant to
-allow the user to specify these string index values (I don't know any
-of the configfs details).
+Agreed.  Although it isn't the subject of this patch.
+
+> Second:
+> The submission actually works and we eventually terminate the URB
+> with an error. In that case nothing happens and eventually SCSI core
+> retries, times out and does error handling. 
+> 
+> > > > scsi_request_fn() then puts this scsi command back into request queue.
+> > > > Because this scsi device is just created and during LUN probe process, 
+> > > > this scsi command is the only one in the request queue. So, it will be picked
+> > > > up soon and dispatched to uas driver again. This cycle will continue until
+> > > > uas_disconnect() is called and its "resetting" flag is set. However, the 
+> > > > hub thread of external hub still got stuck waiting for the completion of
+> > > > this scsi command, and may not be able to run uas_disconnect(). 
+> > > > A deadlock happened.
+> > > 
+> > > I see. But we are working around insufficient error reporting in the
+> > > SCSI midlayer.
+> > 
+> > No, the error reporting there is correct.  URBs will complete with
+> > errors like -EPROTO but no other indication that the device is gone, so
+> > the midlayer believes that a retry is appropriate.
+> > 
+> > Perhaps uas should treat -EPROTO, -EILSEQ, and -ETIME as fatal errors.
+> 
+> They could happen due to bad cables.
+> 
+> Now, another work queue would solve the second error case, but I think
+> the first error case still exists and we would paper over it.
+
+Then you do agree with this patch, and you or EJ ought to create 
+another patch to handle the first error case.
 
 Alan Stern
 
