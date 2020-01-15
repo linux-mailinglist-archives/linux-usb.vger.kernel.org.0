@@ -2,105 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC7013CB57
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 18:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1206913CDF9
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 21:18:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729026AbgAORs4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jan 2020 12:48:56 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:49894 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729012AbgAORsz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 12:48:55 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00FHmKXS053853;
-        Wed, 15 Jan 2020 17:48:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type : in-reply-to;
- s=corp-2019-08-05; bh=YbWh9/KT2LGMmOyRVkj1TC9eOP8jW/x+M/Q9ZVfRcSs=;
- b=it64FJ854+XG7LbFSU0DKjYvxWgHHeDmSUJBpOyRfNgPJ4pf7crNKOjcBek0ht/izJWK
- HcCw0TN5WcPt6RqlG2GFiMiUk/OdoNwh7gqaHw2fFE1SNjTR77jrEdShDtDW6Q3KOEmM
- UCweRx/LN7But1MoV+eCZdPw78SMmotzz8+sCgeaRMzNPFk+BxP69xn3z5tH2AqTnm5V
- 2soYlORAmIWnwMpgMBbpfh/qnEOQf5oEgyw89k05Vg23EeyLocN4hbgeCEZIQlO1fbIN
- fSODo/tD9JmjWEPmwniL7LJamcHIkjipq2R9U9cYXx3/Gh94zgqWe5PbNn1YaxJNeBtb KA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 2xf73twkr4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Jan 2020 17:48:40 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00FHd2Oh019577;
-        Wed, 15 Jan 2020 17:46:39 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 2xhy21t33w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Jan 2020 17:46:39 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 00FHkbhc016060;
-        Wed, 15 Jan 2020 17:46:37 GMT
-Received: from kili.mountain (/129.205.23.165)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 15 Jan 2020 09:46:37 -0800
-Date:   Wed, 15 Jan 2020 20:46:28 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>,
-        syzbot <syzbot+784ccb935f9900cc7c9e@syzkaller.appspotmail.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>, andreyknvl@google.com,
-        syzkaller-bugs@googlegroups.com
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] HID: hiddev: Fix race in in hiddev_disconnect()
-Message-ID: <20200115174628.zxpxbpa6bwspjajg@kili.mountain>
+        id S1729045AbgAOUSF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jan 2020 15:18:05 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:37448 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726220AbgAOUSE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 15:18:04 -0500
+Received: by mail-lj1-f195.google.com with SMTP id o13so19985345ljg.4
+        for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2020 12:18:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=V37Vo/FBhU5kltccCSOcOaOV/u6sTU75u7lgAerRHWk=;
+        b=OrYEwmU6lkXsGZWCHNNhtVtpsE6fs3wEj0m6dC3WrtWTeidQt6E9H+zSvKowaPh1ec
+         ugRczy3F4djq+5tAM9KSePUrrGy8RTZj+3Nsfw0drc5nlDq0wGY+b9DTqALVC2112QUl
+         PU4s1hiA953qkOxsAyvqyWsjNb5gpuGJJ8PeA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=V37Vo/FBhU5kltccCSOcOaOV/u6sTU75u7lgAerRHWk=;
+        b=JBERA+AdxWXDaNiKztVj1WDCYHwE/vwYEtxX9CkwTkImTg72kHSLChBSumnxKEcyPc
+         BrLF3LRmxNBrg0fsKIKNWpstg9IRJXIAS4E8j/5WiXdCIBNou9QgEL4/xFBupt3KZvFi
+         bC6DOy7z8KPOfmqYXKaoIbTxCkxvYIJTQ85GD091snrH0AxLWNGZbruP163MOZVwXryV
+         yY0YpKQMPz9SlYG+ntGY3HaWqFTlWsE4SUSO9PuNv8GfkOeLVRjgBe4wDTPjaiD+RMn9
+         B5jtkKspGr30bozWVFAfO7HGVT/5Fiyidvay3dRcLhMqWKESrz7/YloNdbN1aH5GwtqB
+         syRg==
+X-Gm-Message-State: APjAAAWKVWlzUrZFhdYY6ssU9tmbpb8AMkHixDw9MSX7METnNo8vYrlk
+        /HRec9JJpM01SYNuIM2DoJp0P8v/nm0=
+X-Google-Smtp-Source: APXvYqxffEu5eFVmV9+Mw7XrOfK6/xCY4ZBMrqKuNgk0O+vYAAxgNoVOkMeMTpkHJLDADDCMz8QB4Q==
+X-Received: by 2002:a2e:8119:: with SMTP id d25mr102214ljg.76.1579119483008;
+        Wed, 15 Jan 2020 12:18:03 -0800 (PST)
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
+        by smtp.gmail.com with ESMTPSA id s2sm9617827lji.53.2020.01.15.12.18.02
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jan 2020 12:18:02 -0800 (PST)
+Received: by mail-lj1-f172.google.com with SMTP id j1so19986812lja.2
+        for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2020 12:18:02 -0800 (PST)
+X-Received: by 2002:a2e:990e:: with SMTP id v14mr74215lji.23.1579119048131;
+ Wed, 15 Jan 2020 12:10:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.2001141100290.1593-100000@iolanthe.rowland.org>
-X-Mailer: git-send-email haha only kidding
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9501 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=978
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001150135
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9501 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=2 phishscore=0 bulkscore=0 spamscore=0 clxscore=1034
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001150136
+References: <157909503552.20155.3030058841911628518.stgit@warthog.procyon.org.uk>
+In-Reply-To: <157909503552.20155.3030058841911628518.stgit@warthog.procyon.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 15 Jan 2020 12:10:32 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjrrOgznCy3yUmcmQY1z_7vXVr6GbvKiy8cLvWbxpmzcw@mail.gmail.com>
+Message-ID: <CAHk-=wjrrOgznCy3yUmcmQY1z_7vXVr6GbvKiy8cLvWbxpmzcw@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/14] pipe: Keyrings, Block and USB notifications
+ [ver #3]
+To:     David Howells <dhowells@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+        Ian Kent <raven@themaw.net>,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Syzbot reports that "hiddev" is used after it's free in hiddev_disconnect().
-The hiddev_disconnect() function sets "hiddev->exist = 0;" so
-hiddev_release() can free it as soon as we drop the "existancelock"
-lock.  This patch moves the mutex_unlock(&hiddev->existancelock) until
-after we have finished using it.
+So I no longer hate the implementation, but I do want to see the
+actual user space users come out of the woodwork and try this out for
+their use cases.
 
-Reported-by: syzbot+784ccb935f9900cc7c9e@syzkaller.appspotmail.com
-Fixes: 7f77897ef2b6 ("HID: hiddev: fix potential use-after-free")
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- drivers/hid/usbhid/hiddev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'd hate to see a new event queue interface that people then can't
+really use due to it not fulfilling their needs, or can't use for some
+other reason.
 
-diff --git a/drivers/hid/usbhid/hiddev.c b/drivers/hid/usbhid/hiddev.c
-index a970b809d778..4140dea693e9 100644
---- a/drivers/hid/usbhid/hiddev.c
-+++ b/drivers/hid/usbhid/hiddev.c
-@@ -932,9 +932,9 @@ void hiddev_disconnect(struct hid_device *hid)
- 	hiddev->exist = 0;
- 
- 	if (hiddev->open) {
--		mutex_unlock(&hiddev->existancelock);
- 		hid_hw_close(hiddev->hid);
- 		wake_up_interruptible(&hiddev->wait);
-+		mutex_unlock(&hiddev->existancelock);
- 	} else {
- 		mutex_unlock(&hiddev->existancelock);
- 		kfree(hiddev);
--- 
-2.11.0
+We've had a fair number of kernel interfaces that ended up not being
+used all that much, but had one or two minor users and ended up being
+nasty long-term maintenance issues.. I don't want this to become yet
+another such one.
 
+                 Linus
