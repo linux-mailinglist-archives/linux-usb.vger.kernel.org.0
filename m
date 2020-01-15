@@ -2,106 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13CBA13BF39
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 13:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D158113C131
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 13:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730196AbgAOMKC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jan 2020 07:10:02 -0500
-Received: from mail-lj1-f174.google.com ([209.85.208.174]:33132 "EHLO
-        mail-lj1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726165AbgAOMKB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 07:10:01 -0500
-Received: by mail-lj1-f174.google.com with SMTP id y6so18317856lji.0
-        for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2020 04:10:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=cvS2LSNNM8/ibzNW2MtTZk0AbsDbGmksvtGWXLochu4=;
-        b=I4CPw8SkRWyBbZaUDlufFdawqGGdHD0ALRpzRXXRLWR9C8H0pDta/APPWKkjKZ99bq
-         R9f75kDal8+C+nVAHI123uMKpVOw2inUyd5Muv0Bvn31P5ui1cuA81Bh7PQSQN6bRmmf
-         FASkKDNmV2pRIHalGh9Iy6s5iK33VHim5giKUL1r+xCs6+3EugskmYEXKz6IqGWyVbwP
-         EWVBWd1AVSPKCbRHAROfoPqyRdlJqZIf9pMd7dlRoJI0mp5FNOkEMsANBXeilMZccce+
-         y5wHeGtSauhgGhXY4bqctMaOk3yDYwxI6nMjFu0nQuaMr4RE44JHoDZwkoETzcCHkwib
-         8bfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=cvS2LSNNM8/ibzNW2MtTZk0AbsDbGmksvtGWXLochu4=;
-        b=ETTeYHdwZNM0jCy04v5WgNQjycxEtCsuagW8m0dZezD4Y+YeE2a29ekmJ048ktxEOm
-         OFexY0CW+hRdtD0K2SIbx+lfICfpkeHSCepAhSCGDzyUIvdFvUiy9v6Do2L+BGzJABQ8
-         HDgNFcHNHc6tpKLx76u1OuUoPPro2P017RJ1crnRDInQNUg6YCVug+Q8m5GbIAuj0UY8
-         0n8nANrrbsmN95jmUw8OqNtR4zIJyKcqGmB30ktwDvjD/QZnDRPaKtKsNp8CNlPLzQMX
-         dbCGGxXu4qlBKEr9RHQHOaFCy3NtE+JLC/TKgu2zkPOY+Y1ODleTY8zm2NeMIvpKQ5sN
-         l2sA==
-X-Gm-Message-State: APjAAAU9fOaJaPmYWsqSDu0JaYQ6uExZHHLRHItQPDLNhgRIEKtoftoa
-        WdMjxS+Br4/FIu/jtElFwmNn11s8WYdcpA==
-X-Google-Smtp-Source: APXvYqxRYiMLkOUocjsDD6UMDAUECSEqLdbQg5f6Lk9aiz+An7JnZ5rHG3EaSvDF0Eb1FbBjZzKAvw==
-X-Received: by 2002:a2e:9f52:: with SMTP id v18mr1605767ljk.30.1579090199611;
-        Wed, 15 Jan 2020 04:09:59 -0800 (PST)
-Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id y8sm9085749lji.56.2020.01.15.04.09.58
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 15 Jan 2020 04:09:59 -0800 (PST)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [GIT PULL] USB: changes for v5.6 merge window
-In-Reply-To: <87zheo6i14.fsf@kernel.org>
-References: <878sm96pzf.fsf@kernel.org> <20200115092813.GA3153837@kroah.com> <20200115093746.GA3177342@kroah.com> <8736ch6mbe.fsf@kernel.org> <20200115120334.GB3270387@kroah.com> <87zheo6i14.fsf@kernel.org>
-Date:   Wed, 15 Jan 2020 14:11:00 +0200
-Message-ID: <87wo9s6ht7.fsf@kernel.org>
+        id S1726165AbgAOMlA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jan 2020 07:41:00 -0500
+Received: from aer-iport-1.cisco.com ([173.38.203.51]:21314 "EHLO
+        aer-iport-1.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725999AbgAOMlA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 07:41:00 -0500
+X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Jan 2020 07:40:59 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=1610; q=dns/txt; s=iport;
+  t=1579092059; x=1580301659;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=aRG6Mvhhkx841M802BVUu4RpDXt3XjDAd9oCXEtLuRs=;
+  b=dWPel/yW6ZtONj+9hFzUduNLcfq5M0K/gMjasxdirc68ljIJSL+8cuFJ
+   i2phMyEjp2gEm8myisfLFbD7V75edpskNEFXFLzL6lRc7SUHA0osdNB1r
+   ebYkiYE8WmCQZ/+udm4d731Z2WXssTK60tfWjGMmfB7EtqLLVmWRsTxyC
+   4=;
+X-IronPort-AV: E=Sophos;i="5.70,322,1574121600"; 
+   d="scan'208";a="21831667"
+Received: from aer-iport-nat.cisco.com (HELO aer-core-4.cisco.com) ([173.38.203.22])
+  by aer-iport-1.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 15 Jan 2020 12:33:51 +0000
+Received: from localhost.rd.cisco.com ([10.47.76.148])
+        by aer-core-4.cisco.com (8.15.2/8.15.2) with ESMTP id 00FCXoHd008119;
+        Wed, 15 Jan 2020 12:33:51 GMT
+From:   Johan Korsnes <jkorsnes@cisco.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Johan Korsnes <jkorsnes@cisco.com>,
+        Armando Visconti <armando.visconti@st.com>,
+        Jiri Kosina <jkosina@suse.cz>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH 1/2] HID: core: fix off-by-one memset in hid_report_raw_event()
+Date:   Wed, 15 Jan 2020 13:33:43 +0100
+Message-Id: <20200115123344.4650-1-jkorsnes@cisco.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Transfer-Encoding: 8bit
+X-Outbound-SMTP-Client: 10.47.76.148, [10.47.76.148]
+X-Outbound-Node: aer-core-4.cisco.com
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+In case a report is greater than HID_MAX_BUFFER_SIZE it is truncated,
+but the report-number byte is not correctly handled. This results in a
+off-by-one in the following memset, causing a kernel Oops and ensuing
+system crash.
 
+Note: With commit 8ec321e96e05 ("HID: Fix slab-out-of-bounds read in
+hid_field_extract") I no longer hit the kernel Oops as we instead fail
+"controlled" at probe if there is a report too long in the HID
+report descriptor. I still believe this is worth fixing though, as
+hid_report_raw_event() should have its logic correct. But if we fail at
+probe for too large reports, a better solution might be to remove this
+truncation logic entirely.
 
-Hi again,
+Fixes: 966922f26c7f ("HID: fix a crash in hid_report_raw_event()
+                     function.")
+Signed-off-by: Johan Korsnes <jkorsnes@cisco.com>
+Cc: Armando Visconti <armando.visconti@st.com>
+Cc: Jiri Kosina <jkosina@suse.cz>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+---
+ drivers/hid/hid-core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Felipe Balbi <balbi@kernel.org> writes:
->>> Out of curiosity, what are you using to flag those? Is checkpatch doing
->>> that now?
->>
->> No, I'm using some scripts originally based on code that Stephen uses
->> for linux-next (you would have got the same report from him when he
->> merges in your tree.)  I published them on the workflows@vger.k.o
->> mailing list a while back if you are interested in them.
->
-> Cool, I'll look for them. Thanks
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index 851fe54ea59e..359616e3efbb 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -1741,7 +1741,9 @@ int hid_report_raw_event(struct hid_device *hid, int type, u8 *data, u32 size,
+ 
+ 	rsize = ((report->size - 1) >> 3) + 1;
+ 
+-	if (rsize > HID_MAX_BUFFER_SIZE)
++	if (report_enum->numbered && rsize >= HID_MAX_BUFFER_SIZE)
++		rsize = HID_MAX_BUFFER_SIZE - 1;
++	else if (rsize > HID_MAX_BUFFER_SIZE)
+ 		rsize = HID_MAX_BUFFER_SIZE;
+ 
+ 	if (csize < rsize) {
+-- 
+2.24.1
 
-For anyone interested:
-
-https://lore.kernel.org/workflows/20190926195143.GA1742392@kroah.com/
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4fAVQACgkQzL64meEa
-mQaiYxAAhGmhHclzfhpQU8JjxIHE998xrZ69sZgK5dxAJq2yDvDUF4agHxzWsFgu
-Iv+cJ3Ch+CI5RPYvfbIR91w5BgGlLTOGRZx/YXqZUJUcD9DU8e6zRm4LHkzeTtrD
-KFYcOyicVp04hXAh+mJ5Pq7fG+07bk5Van3ryakD3kT4NPuvu0dQEvl3qm8Ha0Tc
-2sRkHG2GwUvF98HqucY/mlsRuJnckJ3SbIH+aO5kqv8nM02VxHy0MXcxWDQSXUGb
-ESpomYgc2Nk2cZ0i05QGrO3E4OpWMm97d8okqkysDUSslYAe/zpIjT2cfKv43j3p
-teODjwuQSViRd60MbK2gnDB6SUhxosPAdCY70RRQnfKAjHrM3KBWsLNqcoTW3tZD
-FtnaScj3SHPe6Q99C1St6Na1bWPLZpM1EJwghQMxFZOTNKJzSeUvDgtAlB0T38PK
-6efV+Bd7LuKWogtfh/FP5Qc/B1W9VY6OD/tKwDbGWr4lYpEkmAjEMoboBu7uLxpX
-kWJ7QprCSBpwYWfJHjKKOmvMi57jxv6EJr/kkAkjJtRUuXG81YDKSjUAc5y6RwzR
-AQucLjGYkugsRIi3jvPtUqnkwZLHg6VL7vGlFyRDx3HlW8QRq7S+HSw+Y7SkDXD3
-f4cSo/SCYl3/H3Y1npQwr3naLlZq2kTm8flwV3AyzzUasmxGXp8=
-=O7ka
------END PGP SIGNATURE-----
---=-=-=--
