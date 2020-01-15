@@ -2,141 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 207DD13BB70
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 09:44:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 155DF13BB9F
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 09:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728939AbgAOIn0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jan 2020 03:43:26 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:45679 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728911AbgAOIn0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 03:43:26 -0500
-Received: by mail-lf1-f68.google.com with SMTP id 203so12030834lfa.12;
-        Wed, 15 Jan 2020 00:43:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=Z/YS02c1TwDm4fzEdyAro9aD0jq2KhJ8uk8GHgLnCGk=;
-        b=fQa/lqqe1G4ZA5nZyEaSWefREZoNM3o2XddUf51vA48tYZ8nt2SpLGiTC3Yx8JL7rY
-         2BS7pZKcgnit8y7b5JTX0okELFgiZMp+17SwVjG0IL0ck6gGX7s4LZIcVBr0GbOX8qrx
-         PR5WPkZBqZO/SBLtwvkcVXCrm8oi6/gQv988ZHXX8SKH3oqimuJAlyOmoYQFSIA1NJ8M
-         zjVfgLHPFzdwGKfcjXB1K9eoI7luM2ROaK7aFlqJG+0/xKOxroj6mDMFDwr9LwIh7qof
-         Y4OaTSYfrqPR2J32rt75LHSpZG7K6uCQRQ5/MFz2xkRT2u1oQzx/dJPowXJ3owlpXJiW
-         IsXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=Z/YS02c1TwDm4fzEdyAro9aD0jq2KhJ8uk8GHgLnCGk=;
-        b=VLswKvhBlX1a7Z4TDOQVJxB/UvrU+HYSKNgwuZvJV8Tw7t4mbbMmjO88TkrSZwc+nZ
-         iXSe4GT39DeO4CPb5++k/h+ecC8RPxOyHWHuZDctbgVrH1C6ypYbEe84azCWeqyHvoqi
-         Sra0KJvsQp0AtptuZcYtkgonru5dAfK8m3XxNnDx+YaAeGR/ZOwW9o60VDqeKQ1juLT2
-         xY56v84nWfmotxm6wGftiMHj+pIHn/wh8h42qBw94yd427YOWCJSszOq5w2M6t3zhb28
-         0mPgGTmkla1df3ErMaoKvSOTGWJRJGLKsoTJV1E6f8k3JmMEq8O5VlNjzRH+6Emf3Nuh
-         kB/A==
-X-Gm-Message-State: APjAAAVhJaIcRl0hRl0v9AEWr+V/5oquD7I9v2Kv5Ee2rMMly6yVMm/9
-        Vm56hjGuBeqgaJsAhR9lsUg=
-X-Google-Smtp-Source: APXvYqyopiD+cXnqJ096h1Jrq1D8XyPRz5Dh2ChG/ePnwC7zEu53MzS8S88Fo9mm2rYEdlGUpXrqBA==
-X-Received: by 2002:ac2:4194:: with SMTP id z20mr4115478lfh.20.1579077803634;
-        Wed, 15 Jan 2020 00:43:23 -0800 (PST)
-Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id x23sm8491572lff.24.2020.01.15.00.43.21
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 15 Jan 2020 00:43:22 -0800 (PST)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Hanjie Lin <hanjie.lin@amlogic.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>
-Cc:     Hanjie Lin <hanjie.lin@amlogic.com>,
-        Yue Wang <yue.wang@amlogic.com>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, Carlo Caione <carlo@caione.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Qiufang Dai <qiufang.dai@amlogic.com>,
-        Jian Hu <jian.hu@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
-Subject: Re: [PATCH v4 4/6] usb: dwc3: Add Amlogic A1 DWC3 glue
-In-Reply-To: <1578537045-23260-5-git-send-email-hanjie.lin@amlogic.com>
-References: <1578537045-23260-1-git-send-email-hanjie.lin@amlogic.com> <1578537045-23260-5-git-send-email-hanjie.lin@amlogic.com>
-Date:   Wed, 15 Jan 2020 10:44:23 +0200
-Message-ID: <87pnfl6rdk.fsf@kernel.org>
+        id S1729141AbgAOI5r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jan 2020 03:57:47 -0500
+Received: from smtp.qindel.com ([89.140.90.34]:56840 "EHLO thor.qindel.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729044AbgAOI5q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 15 Jan 2020 03:57:46 -0500
+X-Greylist: delayed 300 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Jan 2020 03:57:46 EST
+Received: from localhost (localhost [127.0.0.1])
+        by thor.qindel.com (Postfix) with ESMTP id D551B602CB;
+        Wed, 15 Jan 2020 09:52:44 +0100 (CET)
+Received: from thor.qindel.com ([127.0.0.1])
+        by localhost (thor.qindel.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id kfg-ZpTGDLIC; Wed, 15 Jan 2020 09:52:44 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by thor.qindel.com (Postfix) with ESMTP id 9F19A602CC;
+        Wed, 15 Jan 2020 09:52:44 +0100 (CET)
+X-Virus-Scanned: amavisd-new at thor.qindel.com
+Received: from thor.qindel.com ([127.0.0.1])
+        by localhost (thor.qindel.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id EuQOVuYwOyNN; Wed, 15 Jan 2020 09:52:44 +0100 (CET)
+Received: from superman.qindel.com (superman.qindel.com [172.26.4.138])
+        by thor.qindel.com (Postfix) with ESMTP id 297BC602CB;
+        Wed, 15 Jan 2020 09:52:41 +0100 (CET)
+Date:   Wed, 15 Jan 2020 09:52:40 +0100 (CET)
+From:   Vadim Troshchinskiy <vtroshchinskiy@qindel.com>
+To:     shuah <shuah@kernel.org>
+Cc:     linux-usb@vger.kernel.org,
+        Valentina Manea <valentina.manea.m@gmail.com>
+Message-ID: <783453790.2802069.1579078360600.JavaMail.zimbra@qindel.com>
+In-Reply-To: <86e6dfbf-cf51-1467-3a78-fd72377385b7@kernel.org>
+References: <5176009.64u6Zm7RkX@gverdu.qindel.com> <86e6dfbf-cf51-1467-3a78-fd72377385b7@kernel.org>
+Subject: Re: [PATCH] usbip: Remove unaligned pointer usage from usbip tools
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.26.0.51]
+X-Mailer: Zimbra 8.0.6_GA_5922 (ZimbraWebClient - GC77 (Linux)/8.0.6_GA_5922)
+Thread-Topic: usbip: Remove unaligned pointer usage from usbip tools
+Thread-Index: +rhF6qW7fw7UqOfMwhrOIKL4HzRpvA==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
 
 
-Hi,
-
-Hanjie Lin <hanjie.lin@amlogic.com> writes:
-
-> Adds support for Amlogic A1 USB Control Glue HW.
->
-> The Amlogic A1 SoC Family embeds 1 USB Controllers:
-> - a DWC3 IP configured as Host for USB2 and USB3
->
-> A glue connects the controllers to the USB2 PHY of A1 SoC.
->
-> Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
-> Signed-off-by: Yue Wang <yue.wang@amlogic.com>
-
-you're not really adding a new glue. Rather, you're adding support for a
-new platform in an existing glue. Make sure subject is clearer
-
-> @@ -409,17 +426,32 @@ static int dwc3_meson_g12a_probe(struct platform_de=
-vice *pdev)
->  		priv->vbus =3D NULL;
->  	}
->=20=20
-> -	priv->clk =3D devm_clk_get(dev, NULL);
-> -	if (IS_ERR(priv->clk))
-> -		return PTR_ERR(priv->clk);
-> +	priv->soc_id =3D (enum meson_soc_id)of_device_get_match_data(&pdev->dev=
-);
-> +
-> +	if (priv->soc_id =3D=3D MESON_SOC_G12A) {
-
-you can use of_device_is_compatible() and get rid of the enumeration you ad=
-ded.
+----- Mensaje original -----
+> De: "shuah" <shuah@kernel.org>
+> Para: "Vadim Troshchinskiy" <vtroshchinskiy@qindel.com>, linux-usb@vger.kernel.org
+> CC: "Valentina Manea" <valentina.manea.m@gmail.com>, "shuah" <shuah@kernel.org>
+> Enviados: Jueves, 2 de Enero 2020 1:01:24
+> Asunto: Re: [PATCH] usbip: Remove unaligned pointer usage from usbip tools
+> 
+> Hi Vadim,
+> 
 
 
-=2D-=20
-balbi
+Hello! Sorry for the late reply, I was on vacation.
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+> On 12/10/19 8:50 AM, Vadim Troshchinskiy wrote:
+> > The usbip tools use packed structs for network communication. Taking the
+> > address of a packed member of a struct can crash the program with SIGBUS
+> > on architectures with strict alignment requirements.
+> > 
+> 
+> Can you be more specific on which architectures?
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4e0OcACgkQzL64meEa
-mQYg7hAA3b0X6pzchiGHghxKiosXFmzOQiX2dHylXsAnC1vrb2qhE18bHFR+1bBV
-R2w3SJE9PG0ohQN7JGOhL0SFHXbMs1DkRODizU6bvahZdgZy+/303lGKoKHwROaY
-xY0BVakqO6it+5Kvuk0HR4FcHRNKmePWF3Eh86UBClVON/O8xxGaIiUaTzGNM8d4
-thCM+xTDuBqhUsucX2VStmiL7I0vfFXVk8K/vWPLPEEoYvVZVkU4fEu0RZQnLXtn
-yqrGAw/YNEG9e1RLiLILZeNEA0d22hQS3tFiS3bi6AOe124C0Cmok592uypCyhaI
-+9kllsLmVroR26xEw1edqA2aQ/WzQV5ALagTa1QAjRwp72Do2ls8efc1lyyRgxro
-JlH/XiRV4vS+Rt8E5Z1Sz7uteVU32Qnvc6vEqAXa0DBRAnDxSNL/zEfZe4mvI5jx
-hE+0NNRbyK+cvmvzAIinsAueFgngGMUxr/ssX8Gogibipp2yCYs5QWMQ6iXRDdWU
-TG2J39+gfrJWHmd9fJp8hsb/lxTwEe1qhZCQPNH3YB7PcIiyNbDDnjhqPNm3DtbQ
-771yDsiOxNo0lfb135GHYW+HblXqLHbmRlW0c8SZ9gm0Bs5V4eppjDUVdWyL1W1P
-3fk3G2/nxHKRTD8sc8T3EPCIc19dbCTOKrO9rHnM/aOuzE9TXmU=
-=/llC
------END PGP SIGNATURE-----
---=-=-=--
+
+To my knowledge, older ARM processors, SPARC, probably others mostly of the low
+power/embedded kinds. I personally work with x86, so this isn't a critical issue
+for me, but I'm noting it's a portability concern.
+
+On architectures which don't produce an error it's typically a significant
+performance penalty (though it wouldn't be that big of a deal in this case in
+particular)
+
+In my case the main issue is that recent versions of GCC warn about this and
+fail when -Werror is used. Sure, one could disable the warning or remove -Werror,
+but that would obscure the issue and could cause hard to figure out problems
+for somebody else down the line.
+
+
+
+> >   
+> > -void usbip_net_pack_uint16_t(int pack, uint16_t *num)
+> > +void usbip_net_pack_uint16_t(int pack, uint8_t *num)
+> 
+> Is there a reason to change this to uint8_t?
+> 
+
+
+On architectures that require alignment, access must be done on multiples
+of the data size. So for instance a 16 bit value must be located at byte
+addresses 0, 2, 4, 6, etc, and a 32 bit value would have to be at addresses
+0, 4, 8, etc.
+
+So taking a pointer to a 16 bit value located at address 3 is a problem, but
+accessing a byte at the same address is just fine.
+
+malloc always aligns allocations to the maximum amount necessary for any
+value on the architecture, but that only goes for the first byte. If you take
+the address of the second one you're not in alignment anymore.
+
+So what the patch does is to copy a value byte by byte into a temporary
+variable the compiler has made sure is correctly aligned, do the 16/32 bit
+operation on that, then copy it back. For that to work it has to operate on
+uint8_t.
+
+
+
+
