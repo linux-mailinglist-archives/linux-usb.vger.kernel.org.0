@@ -2,50 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30CB113B7F2
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 03:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E470413B804
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 03:58:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728890AbgAOCor (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jan 2020 21:44:47 -0500
-Received: from shards.monkeyblade.net ([23.128.96.9]:51694 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728862AbgAOCor (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jan 2020 21:44:47 -0500
-Received: from localhost (unknown [8.46.75.2])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 25338158099BF;
-        Tue, 14 Jan 2020 18:44:34 -0800 (PST)
-Date:   Tue, 14 Jan 2020 18:44:27 -0800 (PST)
-Message-Id: <20200114.184427.389937353174651227.davem@davemloft.net>
-To:     johan@kernel.org
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hayeswang@realtek.com
-Subject: Re: [PATCH] r8152: add missing endpoint sanity check
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200114082729.24063-1-johan@kernel.org>
-References: <20200114082729.24063-1-johan@kernel.org>
-X-Mailer: Mew version 6.8 on Emacs 26.3
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
+        id S1728896AbgAOC6q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jan 2020 21:58:46 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:49052 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728883AbgAOC6q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 14 Jan 2020 21:58:46 -0500
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 25934B7FB7549D8DC35F;
+        Wed, 15 Jan 2020 10:58:43 +0800 (CST)
+Received: from [127.0.0.1] (10.133.215.186) by DGGEMS403-HUB.china.huawei.com
+ (10.3.19.203) with Microsoft SMTP Server id 14.3.439.0; Wed, 15 Jan 2020
+ 10:58:39 +0800
+Subject: Re: [PATCH 1/1] HID: hiddev: remove a duplicated check
+To:     Jiri Kosina <jikos@kernel.org>
+CC:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        "Hillf Danton" <hdanton@sina.com>
+References: <20191224035117.98816-1-thunder.leizhen@huawei.com>
+ <50fd522f-e276-420c-3c6a-0f193bc16ca2@huawei.com>
+ <nycvar.YFH.7.76.2001141518000.31058@cbobk.fhfr.pm>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <358ce05d-a01b-fa54-802c-995724d506f6@huawei.com>
+Date:   Wed, 15 Jan 2020 10:58:39 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <nycvar.YFH.7.76.2001141518000.31058@cbobk.fhfr.pm>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Tue, 14 Jan 2020 18:44:46 -0800 (PST)
+X-Originating-IP: [10.133.215.186]
+X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
-Date: Tue, 14 Jan 2020 09:27:29 +0100
 
-> Add missing endpoint sanity check to probe in order to prevent a
-> NULL-pointer dereference (or slab out-of-bounds access) when retrieving
-> the interrupt-endpoint bInterval on ndo_open() in case a device lacks
-> the expected endpoints.
+
+On 2020/1/14 22:19, Jiri Kosina wrote:
+> On Tue, 14 Jan 2020, Leizhen (ThunderTown) wrote:
 > 
-> Fixes: 40a82917b1d3 ("net/usb/r8152: enable interrupt transfer")
-> Cc: hayeswang <hayeswang@realtek.com>
-> Signed-off-by: Johan Hovold <johan@kernel.org>
+>> Does no one pay attention to this problem? Although there is no
+>> functional problem, but it seems confusing.
+>>
+>>         if (!list->hiddev->exist) {                 <---------
+>>                 res = -ENODEV;                                |
+>>                 goto bail_unlock;                             |
+>>         }                                                     |
+>>         if (!list->hiddev->open++)                            |
+>>                 if (list->hiddev->exist) {          <--------- //It's always true.
+> 
+> This code no longer exists after refactoring that happened in commit 
+> 18a1b06e5b91d47.
+OK
 
-Applied and queued up for -stable, thank you.
+> 
+
