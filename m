@@ -2,58 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D19F813BBA1
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 09:58:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D523B13BBEC
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 10:06:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729031AbgAOI63 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jan 2020 03:58:29 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:40954 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729016AbgAOI63 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 03:58:29 -0500
-Received: by mail-lj1-f193.google.com with SMTP id u1so17632329ljk.7
-        for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2020 00:58:27 -0800 (PST)
+        id S1729318AbgAOJGc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jan 2020 04:06:32 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:44825 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729151AbgAOJGc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 04:06:32 -0500
+Received: by mail-lf1-f68.google.com with SMTP id v201so12088178lfa.11;
+        Wed, 15 Jan 2020 01:06:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=fHu/NwA4NTJNoJ0radcC3JqAj5S9NzKhljImujJbmrE=;
-        b=o5mM1aAgT9KWcJyrr35TGk0H6nz76PdN73djp6ZWUiHONG/I4kxRnDvC8Mu33203lR
-         6SCyPRGgEEotL4eQm4a7CCgOylzshJrTSz9Ckb9R/LlROR4w7yNSXkplZ6mrqecGQoOR
-         VrllQW029tdxfXn+BKW8U5KKB5ycR8XW586EPWxsDmNGj3ZK9uAE5/VyOrhOXAH934Sn
-         2PnWO3Sjy+xP1WYU5zKHefbYTHoUDvUjvVTpFDxySxxfoBGU8SSwsNhFoUi8q/pbcMRz
-         ng6ur4n5JVlWFJGXycpwYgR5k/uVquioTBHCTy6wlvWb3sSzzAEV89fRpx5LZTazAGOK
-         4mig==
+        bh=6AldIE67S8Ag3ULVZL8qb57JXlXSeD4TiXfBseUC3zw=;
+        b=Z+5x34kwyxz0nFpBsx92Q0nKhwW1ETXv7xfMI+K8Nl3cSq41eC3BGxeHUTT6fCUCbQ
+         6jNd8CJezyj8xVX7NnV6rbbb5qet5llzNyBEASl+wWtjcXJ1J09i/BQjVRlin2Z8/WxX
+         px9rQzg8KVyI4utYsMUzfQ/PT7GSO5w3zbqIMPla5Sop3hYyW1LwLVEmkq2GqnCiPFki
+         gUEzi/QznEr68+sYeKDSh36ogDWMIknLloOkqKEmEa0WiBq7opTtaNNCsVP0XpIPgcNk
+         anCoMtEfCP5Y5KYcanfqi/4QQjuhTvTWAoZ8qjhGVnN3PQ9LdggIpuU/RdsIXBVr9W72
+         qIiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=fHu/NwA4NTJNoJ0radcC3JqAj5S9NzKhljImujJbmrE=;
-        b=kNLprsuVbztwh0WEffKVZ8sDO8Wxsj2WgnjK57XLQtpGbolNOD1Ldnw+pbib32Yrxh
-         AzR5vF9LoUXxyBh9HWb4qiMw1+NCHZiIi0QMhkYgf7grZ+Clq6n6rDkjn7nSUgXG9zcv
-         GSPiqhOmBZ8qZrmfTS7tuCedbMyPO6UMB3OiyPgB6M0sur3R6fM2uchtPPiPRirFiJFI
-         UuiRThrrI2Ahefv1fhFuln4Lmp4CMjX5vroZfYOX1UJMsy8fPsf2xqAT+qf6W0tLXyQC
-         YhuB+NPY6WlJISnWbUBS4TGITAQ1b9cXL7ekuH7FhXeUYrsFWDg9J7DNpQi11xZ3OUVr
-         kp8w==
-X-Gm-Message-State: APjAAAXnBS6JVQQp3dk+pSzpi9SPGg1DrdOKrN60zDNla3kpS1lRbkfw
-        zpZS+MlMAYDkwl2cnvT6tQfaCwoFWJI+wA==
-X-Google-Smtp-Source: APXvYqx57o7rOWNgdj+iGywIxtNrYxxQ/poYvjvEt+RJaxer+Sbwph18uq3SDE08IlqvN1CFZyWygA==
-X-Received: by 2002:a05:651c:104:: with SMTP id a4mr1161818ljb.104.1579078706777;
-        Wed, 15 Jan 2020 00:58:26 -0800 (PST)
+        bh=6AldIE67S8Ag3ULVZL8qb57JXlXSeD4TiXfBseUC3zw=;
+        b=ta5Npbz+SCxmk/AQyLRqzkckvmYKx1X/+diAgjyjqW2sWCG5+ehonNyUQ/NvpvWj0/
+         RO9eXz8qGZasC0sx4tOsF8lfuIOTi7bAdGgpDe4Zv/h1iCz+RLZVSe9FWw3BE7YOrT8x
+         BEHo/ABEAwEDbpngzrKBYYfHeTk3pGTW1Ce1tharVxWnih4hHhJXG+zKJ9IuMfk/HZI7
+         r45UlwCAL3W5MLovoVlqjNWsVpKA8sCqOLSXnBzKQ4s7TalYqnucccIlGYEdPIDrAjgA
+         Q7NYhPuqBrkSr5XF20+ZYvwcJv9oKf59RYVNiox3Zic+LC+Pc7Ym1vpszpsywc8Ff38w
+         ckDw==
+X-Gm-Message-State: APjAAAUWeLMMgU7m7b0reng6MIrL9vpxMO8po79p/yM8b4JuPaBLvQwF
+        p3jGePnV3iWE2aoSqVLY7x0=
+X-Google-Smtp-Source: APXvYqzEcr7K/+984fd8BDcQrV2NM9ZufnTiP/jJatQSOrRYDNtGwYh4PyRjMXSiJ/90sron88cdgQ==
+X-Received: by 2002:ac2:46c2:: with SMTP id p2mr4030621lfo.139.1579079189701;
+        Wed, 15 Jan 2020 01:06:29 -0800 (PST)
 Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id y29sm8687422ljd.88.2020.01.15.00.58.25
+        by smtp.gmail.com with ESMTPSA id f22sm8879991ljh.74.2020.01.15.01.06.28
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 15 Jan 2020 00:58:25 -0800 (PST)
+        Wed, 15 Jan 2020 01:06:28 -0800 (PST)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Lukas Wunner <lukas@wunner.de>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc2: Drop unlock/lock upon queueing a work item
-In-Reply-To: <20200109123617.5ovxwkfnmf7ou4z4@wunner.de>
-References: <77c07f00a6a9d94323c4a060a3c72817b0703b97.1574244795.git.lukas@wunner.de> <20200109123617.5ovxwkfnmf7ou4z4@wunner.de>
-Date:   Wed, 15 Jan 2020 10:59:27 +0200
-Message-ID: <87h80x6qog.fsf@kernel.org>
+To:     Jayshri Pawar <jpawar@cadence.com>, linux-usb@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
+        rogerq@ti.com, linux-kernel@vger.kernel.org, jbergsagel@ti.com,
+        nsekhar@ti.com, nm@ti.com, peter.chen@nxp.com, kurahul@cadence.com,
+        pawell@cadence.com, sparmar@cadence.com, jpawar@cadence.com
+Subject: Re: [PATCH v2] usb: cdns3: Add streams support to cadence USB3 DRD driver
+In-Reply-To: <1578733666-354-1-git-send-email-jpawar@cadence.com>
+References: <1578733666-354-1-git-send-email-jpawar@cadence.com>
+Date:   Wed, 15 Jan 2020 11:07:30 +0200
+Message-ID: <87eew16qb1.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -69,14 +70,45 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-Lukas Wunner <lukas@wunner.de> writes:
-> Hi Felipe,
+Jayshri Pawar <jpawar@cadence.com> writes:
+> This patch includes streams implementation changes.
+> The current changes has been validated on FPGA platform.
 >
-> just a gentle ping:  The below patch was submitted more than 8 weeks ago
-> and I'm neither seeing it on one of your branches nor have there been
-> any comments on the list.  Are there objections to this patch?
+> Enabled streams related interrupts only for streams capable endpoints.
+> Processed  PRIME and IOT interrupts related to streams capable endpoints.
+> Based on PRIME interrupt prime_flag is set and transfer is armed
+> otherwise just adding request to the deferred request queue.
+> For streams capable endpoints preparing TD with correct stream ID.
+>
+> TDL calculation:
+> Updated tdl calculation based on controller versions.
+> 1. For controller version DEV_VER_V2 :We have enabled USB_CONF2_EN_TDL_TRB
+>    bit in usb_conf2 register in DMULT configuration.
+>    This enables TDL calculation based on TRB, hence setting TDL in TRB.
+> 2. For controller Version < DEV_VER_V2 : Writing TDL and STDL in ep_cmd
+>    register
+> 3. For controller version > DEV_VER_V2 : Writing TDL in ep_tdl register.
 
-I don't see an Acked-by Minas, so I can't take the patch, sorry.
+> Writing ERDY with correct Stream ID to ep_cmd register.
+> Added stream id related information to trace logs.
+>
+> Signed-off-by: Jayshri Pawar <jpawar@cadence.com>
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> Signed-off-by: Rahul Kumar <kurahul@cadence.com>
+> ---
+>
+> Version History:
+> v2: Patch generated on top of linux-next.git master branch
+>
+>  drivers/usb/cdns3/gadget.c | 533 +++++++++++++++++++++++++++++++++----
+>  drivers/usb/cdns3/gadget.h |  26 +-
+>  drivers/usb/cdns3/trace.h  |  93 ++++++-
+>  3 files changed, 596 insertions(+), 56 deletions(-)
+
+This patch is enormous. Are you sure there's no way to break it down
+into smaller pieces?
+
+(Hint: there is)
 
 =2D-=20
 balbi
@@ -86,18 +118,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4e1G8ACgkQzL64meEa
-mQZ/6Q//TblxGT4XpqGrpl2mn7RVkAn1gXeRtxnJoD4UtaJAWTqpGNz6LSInOGTu
-rJLP3y4ZLymoziKJd2S/xSMDXV1DK8B+bLiSiVr4yey6TJeCOD9OouCx61vm9D1K
-8yFLMxk6ixT5cYJ32nyE7/hazSs6o+xB5tqctWXkSE/kMs5tmhu02gg5SxHHcUea
-fCmvV2JS9GzAJP7U9wgoRvsSbwC4aHTt6lDFln0pMEAoZRb1zXRO32IxUfVJbhFO
-wMBS8YnAyayuau3jH2HMDC51t04TTIiKmVtEnEzFK/T8DajRvBsSzvRmNjcFJ3vX
-h7lGQt8XMaAPx4550Plvb7Qw3F2MlWEj7JML2B/ZNC3qdodItxRT779DHN/oFVQ+
-9qs+c4QVgCZL6Z9kG3mFX6/ibHefen6GD+dQ+tPusXl9VoRhm6tmMSDBDx7AC87e
-jJnqXRv+KfzDrvcOt7nF9LZKybfFyC3vicsJVgIDXwrPkMOmTzAHn+DzunaGv36t
-b/nVinZWONionM1T1gTgur2gyXnczJpiSEzBsy3cbsU27nMtyvnDWvqbZ0XgboUp
-axdsFthtU+GbIxrVUh/mol/cUtCfGaXOCGOEWu5bhSz0yxBePlurabY26zc7btRz
-aDkSm8yDNSSJYNR4c1NZVV/VUE7iGi9AhE5iQA2iexZDsn1uigE=
-=2LYL
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4e1lIACgkQzL64meEa
+mQYVOxAAxyx6gyof7t4YhI8gU6cxEASdvVcAhH1XX/0RYvzuGiWC1YrfS2c/rjMh
+ieX6K+QHUmi46cL8T4HosQoHgd6X8cRQKMk8y2ovvgcEi7tXj7uMMMA4UJ9eso0x
+iv1qxVX+nPZ0S4Kde9rYEhwArOYj98a4vrevT1wHbjJX7Iz0HV5U+m+qV2mLUukJ
+DlvRXmh/xJB/6O69SmW0iZe97+5EWC3nJoicKLvE8X4wPHQKbok1rGA8/K4wgjr9
+jxOmOvdvGbGQWT46Dha2OYtfhzOCd9wr00eFgtSmguIt9ZHGtMT6r4z32uKadI6b
+g4bgvrY6b+IfU23eLu5UfG+/YxeZ5mZOH0j2lG9abG27p4xb43P3p9ljVMeeOFm9
+JccVxY1IxHaYx0wgn+nyugow2YW2l+Iu9Mw6XyEcjdd2xrUMPt1+Os4USpvkOWFr
+eJPO711lQtF9SWuTqqrtEi6QMuqpXKqOgPJROHYru8sOEmMQWmD9DcrTNca1WOA0
+ks1zfCn+SfN8wxSQUkF/SEHD8XQTYAljuIpQgesp/L+Ld7xbCWM/CLgl7GcIjLQ9
+TDIbYpktx4hiLKVcfmIVrMknxe2A46nRXlYIitPdfYQeWbLFQH4tNS2TSr1FS9iQ
+Aa+09zKLoxZQ0jXwWggoXqC/60cjm4kjzDrXJ4mzlOGV2mhgJlY=
+=BZ2r
 -----END PGP SIGNATURE-----
 --=-=-=--
