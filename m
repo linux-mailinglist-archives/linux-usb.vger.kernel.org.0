@@ -2,61 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4FEE13BF2C
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 13:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B6213BF21
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 13:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730158AbgAOMFf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jan 2020 07:05:35 -0500
-Received: from bmailout1.hostsharing.net ([83.223.95.100]:53545 "EHLO
-        bmailout1.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726165AbgAOMFf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 07:05:35 -0500
-X-Greylist: delayed 506 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Jan 2020 07:05:34 EST
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        id S1729892AbgAOMDi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jan 2020 07:03:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60106 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726165AbgAOMDh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 15 Jan 2020 07:03:37 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id A825A3000BB4B;
-        Wed, 15 Jan 2020 12:57:07 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 81D4C40EB1; Wed, 15 Jan 2020 12:57:07 +0100 (CET)
-Date:   Wed, 15 Jan 2020 12:57:07 +0100
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: dwc2: Drop unlock/lock upon queueing a work item
-Message-ID: <20200115115707.c4l7t64r5obanvg3@wunner.de>
-References: <77c07f00a6a9d94323c4a060a3c72817b0703b97.1574244795.git.lukas@wunner.de>
- <20200109123617.5ovxwkfnmf7ou4z4@wunner.de>
- <87h80x6qog.fsf@kernel.org>
- <788fc4ab-28f4-f4de-66b3-8c39ab841c3e@synopsys.com>
- <20200115113039.lmz6kzwqspq2vugc@wunner.de>
- <d11f5537-f0f8-20cd-ff5c-c4951e60d3dc@synopsys.com>
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A8D752187F;
+        Wed, 15 Jan 2020 12:03:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579089817;
+        bh=/tUx1Wbe5U7ScFEYlDhpM8gvGVLYPR4gr6BFFZmJhNk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K65HMpVVO9w7+zRJ7dtP0b3NfTyByXS7KubzJ8ChqmvN22ivWrWUg/oeBjmCUvE0K
+         pPXV3R2f859YkfL8JdFnR2cXYDoV6uWGyLbKVWmu1L/T73G+NZVBARC8WG5q0OOUhE
+         lr78qZTCHXP6K2GoCZrbLBNT9BsgyExRE8lzRRKw=
+Date:   Wed, 15 Jan 2020 13:03:34 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] USB: changes for v5.6 merge window
+Message-ID: <20200115120334.GB3270387@kroah.com>
+References: <878sm96pzf.fsf@kernel.org>
+ <20200115092813.GA3153837@kroah.com>
+ <20200115093746.GA3177342@kroah.com>
+ <8736ch6mbe.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d11f5537-f0f8-20cd-ff5c-c4951e60d3dc@synopsys.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <8736ch6mbe.fsf@kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 15, 2020 at 11:44:14AM +0000, Minas Harutyunyan wrote:
-> On 1/15/2020 3:30 PM, Lukas Wunner wrote:
-> > https://urldefense.proofpoint.com/v2/url?u=https-3A__lore.kernel.org_linux-2Dusb_77c07f00a6a9d94323c4a060a3c72817b0703b97.1574244795.git.lukas-40wunner.de_&d=DwIBAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=6z9Al9FrHR_ZqbbtSAsD16pvOL2S3XHxQnSzq8kusyI&m=RvUQvVjq5dj9CVUu3njmpdm88GS6B3rFv7iB9Rj8k4Y&s=p4AmQK1vx63kNa3BDdfxaOO1C80AvmgTQY5wtKJcXbc&e=
+On Wed, Jan 15, 2020 at 12:33:41PM +0200, Felipe Balbi wrote:
 > 
-> Actually I agree with you on unnecessary unlock/lock here. Currently I'm 
-> going to test your patch before Ack.
-> Just, want to check with you - did you see any issue in driver flow 
-> without this patch? or it just code cleanup?
+> Hi,
+> 
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+> > On Wed, Jan 15, 2020 at 10:28:13AM +0100, Greg Kroah-Hartman wrote:
+> >> On Wed, Jan 15, 2020 at 11:14:28AM +0200, Felipe Balbi wrote:
+> >> > 
+> >> > Hi Greg,
+> >> > 
+> >> > here's my pull request for v5.6 merge window. If you want anything to be
+> >> > changed, let me know.
+> >> 
+> >> Did you send this twice?  Any difference?
+> >> 
+> >
+> > I did a pull, and get this problem when checking the patches:
+> >
+> > Commit: 6a6ae4e8e926 ("usb: gadget: f_ncm: Use atomic_t to track in-flight request")
+> > 	Fixes tag: Fixes: 40d133d7f5426 ("usb: gadget: f_ncm: convert to new function interface
+> > 	Has these problem(s):
+> > 	        - Subject has leading but no trailing parentheses
+> > 	        - Subject has leading but no trailing quotes
+> 
+> Oh, I missed those.
+> 
+> > I'll go fix it up, but that will break your tree if you try to merge as
+> 
+> Thanks for fixing. I'll reset my tree to yours.
+> 
+> > I will have to rebase :(
+> 
+> no worries.
+> 
+> Out of curiosity, what are you using to flag those? Is checkpatch doing
+> that now?
 
-Just a cleanup.  I was looking through dwc_otg (which is still used by the
-Raspberry Pi Foundation's downstream tree) and checked to what extent the
-antipatterns found there are still present in dwc2, thereby found this
-occurrence.
+No, I'm using some scripts originally based on code that Stephen uses
+for linux-next (you would have got the same report from him when he
+merges in your tree.)  I published them on the workflows@vger.k.o
+mailing list a while back if you are interested in them.
 
-Thanks,
+thanks,
 
-Lukas
+greg k-h
