@@ -2,102 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AC713C6FB
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 16:08:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6EC913C723
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 16:15:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729066AbgAOPIp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jan 2020 10:08:45 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:58217 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729015AbgAOPIo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 10:08:44 -0500
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1irkHg-0002o3-J0; Wed, 15 Jan 2020 16:08:40 +0100
-Message-ID: <09e1c98df542ea3abf636ba5c109391ff0025e2c.camel@pengutronix.de>
-Subject: Re: [PATCH 05/19] phy: qualcomm: usb: Add SuperSpeed PHY driver
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org, jackp@codeaurora.org, balbi@kernel.org,
-        bjorn.andersson@linaro.org
-Cc:     linux-kernel@vger.kernel.org,
-        Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>,
-        Jorge Ramirez-Ortiz <jorge.ramirez.ortiz@gmail.com>,
-        Sriharsha Allenki's <sallenki@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Date:   Wed, 15 Jan 2020 16:08:40 +0100
-In-Reply-To: <20200115141333.1222676-6-bryan.odonoghue@linaro.org>
-References: <20200115141333.1222676-1-bryan.odonoghue@linaro.org>
-         <20200115141333.1222676-6-bryan.odonoghue@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5-1.1 
+        id S1728911AbgAOPO7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jan 2020 10:14:59 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:32818 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728909AbgAOPO7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 10:14:59 -0500
+Received: (qmail 2660 invoked by uid 2102); 15 Jan 2020 10:14:58 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 15 Jan 2020 10:14:58 -0500
+Date:   Wed, 15 Jan 2020 10:14:58 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     "Andrew P. Lentvorski" <bsder@allcaps.org>
+cc:     linux-usb@vger.kernel.org
+Subject: Re: Unable to set "iInterface" in usb gadget via configfs
+In-Reply-To: <994f33ae-fa5f-460c-67c8-92fc5352ebae@allcaps.org>
+Message-ID: <Pine.LNX.4.44L0.2001151011520.1788-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2020-01-15 at 14:13 +0000, Bryan O'Donoghue wrote:
-> From: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
-> 
-> Controls Qualcomm's SS phy 1.0.0 implemented in the QCS404 and some
-> other Qualcomm platforms.
-> 
-> Based on Sriharsha Allenki's <sallenki@codeaurora.org> original code.
-> 
-> [bod: Removed dependency on extcon.
->       Switched to gpio-usb-conn to handle VBUS On/Off
->       Switched to usb-role-switch to bind gpio-usb-conn to DWC3]
-> Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
-> Cc: Jorge Ramirez-Ortiz <jorge.ramirez.ortiz@gmail.com>
-> Cc: Sriharsha Allenki's <sallenki@codeaurora.org>
-> Cc: Andy Gross <agross@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: linux-arm-msm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  drivers/phy/qualcomm/Kconfig           |  11 ++
->  drivers/phy/qualcomm/Makefile          |   1 +
->  drivers/phy/qualcomm/phy-qcom-usb-ss.c | 246 +++++++++++++++++++++++++
->  3 files changed, 258 insertions(+)
->  create mode 100644 drivers/phy/qualcomm/phy-qcom-usb-ss.c
-> 
-[...]
-> diff --git a/drivers/phy/qualcomm/phy-qcom-usb-ss.c b/drivers/phy/qualcomm/phy-qcom-usb-ss.c
-> new file mode 100644
-> index 000000000000..109e455cb509
-> --- /dev/null
-> +++ b/drivers/phy/qualcomm/phy-qcom-usb-ss.c
-> @@ -0,0 +1,246 @@
-[...]
-> +static int qcom_ssphy_init_reset(struct ssphy_priv *priv)
-> +{
-> +	priv->reset_com = devm_reset_control_get_optional(priv->dev, "com");
+On Tue, 14 Jan 2020, Andrew P. Lentvorski wrote:
 
-Please use devm_reset_control_get_optional_exclusive() here ...
+> I've been trying to report what I think is a bug, but I can't seem to
+> get through to the mailing list.  If these are coming through
+> duplicated, please let me know so I can quit sending them.
 
-> +	if (IS_ERR(priv->reset_com)) {
-> +		dev_err(priv->dev, "Failed to get reset control com\n");
-> +		return PTR_ERR(priv->reset_com);
-> +	}
-> +
-> +	if (priv->reset_com) {
-> +		/* if reset_com is present, reset_phy is no longer optional */
-> +		priv->reset_phy = devm_reset_control_get(priv->dev, "phy");
+I don't think any earlier messages in this thread made it through the 
+mailing list, but this one definitely did.
 
-... and devm_reset_control_get_exclusive() here.
+> Thanks,
+> -a
+> 
+> 
+> > I've been trying to set "iInterface" in my usb gadget to a specific string, but I simply can't find a way to make configfs accept this.
+> > 
+> > When I set my gadget up on my Beaglebone Black (uname -a: Linux beaglebone 4.14.108-ti-r113 #1 SMP PREEMPT Wed Jul 31 00:01:10 UTC 2019 armv7l GNU/Linux).
+> > 
+> > I get (output from lsusb):
+> > 
+> > iInterface 5 HID Interface
+> > 
+> > 
+> > But I want it to be something like:
+> > 
+> > iInterface 4 LPC-LINK2 CMSIS-DAP V5.224
+> > 
+> > 
+> > This seems to be wired up as a fixed value in f_hid.c and doesn't seem to have a corresponding way to actually change it via configfs.
+> > 
+> > 
+> > #define CT_FUNC_HID_IDX 0
+> > 
+> > static struct usb_string ct_func_string_defs[] = {
+> >         [CT_FUNC_HID_IDX].s     = "HID Interface",
+> >         {},                     /* end of list */
+> > };
 
-regards
-Philipp
+Then maybe you need to fix f_hid.c.  Or maybe configfs isn't meant to
+allow the user to specify these string index values (I don't know any
+of the configfs details).
+
+Alan Stern
 
