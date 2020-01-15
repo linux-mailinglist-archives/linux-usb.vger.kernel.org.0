@@ -2,65 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E470413B804
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 03:58:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB4213B940
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 06:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728896AbgAOC6q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jan 2020 21:58:46 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:49052 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728883AbgAOC6q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 14 Jan 2020 21:58:46 -0500
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 25934B7FB7549D8DC35F;
-        Wed, 15 Jan 2020 10:58:43 +0800 (CST)
-Received: from [127.0.0.1] (10.133.215.186) by DGGEMS403-HUB.china.huawei.com
- (10.3.19.203) with Microsoft SMTP Server id 14.3.439.0; Wed, 15 Jan 2020
- 10:58:39 +0800
-Subject: Re: [PATCH 1/1] HID: hiddev: remove a duplicated check
-To:     Jiri Kosina <jikos@kernel.org>
-CC:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        "Hillf Danton" <hdanton@sina.com>
-References: <20191224035117.98816-1-thunder.leizhen@huawei.com>
- <50fd522f-e276-420c-3c6a-0f193bc16ca2@huawei.com>
- <nycvar.YFH.7.76.2001141518000.31058@cbobk.fhfr.pm>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <358ce05d-a01b-fa54-802c-995724d506f6@huawei.com>
-Date:   Wed, 15 Jan 2020 10:58:39 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <nycvar.YFH.7.76.2001141518000.31058@cbobk.fhfr.pm>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.133.215.186]
-X-CFilter-Loop: Reflected
+        id S1726165AbgAOFzq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jan 2020 00:55:46 -0500
+Received: from sv2-smtprelay2.synopsys.com ([149.117.73.133]:44176 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725962AbgAOFzq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 00:55:46 -0500
+Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 943A3406E6;
+        Wed, 15 Jan 2020 05:55:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1579067746; bh=58RCWf0esTGTXB2WWpwacE9UNEjRZTkDQCJ7K0y5p9I=;
+        h=Date:From:Subject:To:Cc:From;
+        b=KrnMldqKnXE9XO9L9dbonHMisuZPRveVb49SvsqEWRyyQF9tecU7mCVt6b9XX8s6m
+         7TiwZaNqf/aK2DSgdZ3fPNuwtesxnvNY8Y9Wh75Lqwn5Czl2pUrPR4GGBiYKXmgqnd
+         ccSNioET4AyB/b26Ehn69EHTavqWraXy5znIVZXzJci04YsOq5s4OxQGW93epMhK9B
+         MIQglAmbMzKDLulubeVg//HdAWB41LJGhjoMSv0PmQixz5dPIheDDDdcILAdOzy29n
+         9V8NnqqrhxxdFTXg+qqu4Pt2xq5J0W7vIpUvzCTo1mJbDsoRYVl2pkZMIH8hVCEVFG
+         OBoHQYEXSu7zQ==
+Received: from hminas-z420 (hminas-z420.internal.synopsys.com [10.116.126.211])
+        (using TLSv1 with cipher AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id A767FA005C;
+        Wed, 15 Jan 2020 05:55:41 +0000 (UTC)
+Received: by hminas-z420 (sSMTP sendmail emulation); Wed, 15 Jan 2020 09:55:40 +0400
+Date:   Wed, 15 Jan 2020 09:55:40 +0400
+Message-Id: <8c5bd0c646737fe97770d33355b8e197ea28f303.1579067350.git.hminas@synopsys.com>
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Subject: [PATCH v3] usb: dwc2: Fix in ISOC request length checking
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>,
+        Robert Baldyga <r.baldyga@samsung.com>,
+        Felipe Balbi <balbi@ti.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Moved ISOC request length checking from dwc2_hsotg_start_req() function to
+dwc2_hsotg_ep_queue().
 
+Fixes: 4fca54aa58293 ("usb: gadget: s3c-hsotg: add multi count support")
+Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
+---
+Changes for v3:
+- Fix commit message format
+Changes for v2:
+- Fix typo in commit message
+- Fix tags formatting
 
-On 2020/1/14 22:19, Jiri Kosina wrote:
-> On Tue, 14 Jan 2020, Leizhen (ThunderTown) wrote:
-> 
->> Does no one pay attention to this problem? Although there is no
->> functional problem, but it seems confusing.
->>
->>         if (!list->hiddev->exist) {                 <---------
->>                 res = -ENODEV;                                |
->>                 goto bail_unlock;                             |
->>         }                                                     |
->>         if (!list->hiddev->open++)                            |
->>                 if (list->hiddev->exist) {          <--------- //It's always true.
-> 
-> This code no longer exists after refactoring that happened in commit 
-> 18a1b06e5b91d47.
-OK
+drivers/usb/dwc2/gadget.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-> 
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 88f7d6d4ff2d..7b40cf5bdc2f 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -1083,11 +1083,6 @@ static void dwc2_hsotg_start_req(struct dwc2_hsotg *hsotg,
+ 	else
+ 		packets = 1;	/* send one packet if length is zero. */
+ 
+-	if (hs_ep->isochronous && length > (hs_ep->mc * hs_ep->ep.maxpacket)) {
+-		dev_err(hsotg->dev, "req length > maxpacket*mc\n");
+-		return;
+-	}
+-
+ 	if (dir_in && index != 0)
+ 		if (hs_ep->isochronous)
+ 			epsize = DXEPTSIZ_MC(packets);
+@@ -1391,6 +1386,13 @@ static int dwc2_hsotg_ep_queue(struct usb_ep *ep, struct usb_request *req,
+ 	req->actual = 0;
+ 	req->status = -EINPROGRESS;
+ 
++	/* Don't queue ISOC request if length greater than mps*mc */
++	if (hs_ep->isochronous &&
++	    req->length > (hs_ep->mc * hs_ep->ep.maxpacket)) {
++		dev_err(hs->dev, "req length > maxpacket*mc\n");
++		return -EINVAL;
++	}
++
+ 	/* In DDMA mode for ISOC's don't queue request if length greater
+ 	 * than descriptor limits.
+ 	 */
+-- 
+2.11.0
 
