@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4282113BC1F
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 10:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E63313BC20
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 10:13:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728963AbgAOJM4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jan 2020 04:12:56 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:33911 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726472AbgAOJM4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 04:12:56 -0500
-Received: by mail-lj1-f195.google.com with SMTP id z22so17711334ljg.1
-        for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2020 01:12:54 -0800 (PST)
+        id S1729048AbgAOJNa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jan 2020 04:13:30 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:42320 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726472AbgAOJNa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 04:13:30 -0500
+Received: by mail-lf1-f68.google.com with SMTP id y19so12113917lfl.9
+        for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2020 01:13:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:mime-version;
-        bh=2ifwLGTtd29dCZtpbLy7YngaE9x47uAwghr6gi3NHZc=;
-        b=tD+Y+CokLjIjvafYZENl/h8OxUUMf7Cs6YulLoYwm+X6d8bYWlh8wF4PUgi40PgWBx
-         86qNxOaOfu3lSeYwYEw4l14tToTpqGIdf+QMeTUERhLaUE35qeJ0aBIdp7SolJm15frF
-         5e64mZXCAgv+3A0Uowow+1tCVovCI8AmJDlg1hiVkhk9yE3lqkGi5S8Mi2qW6x5aN4pX
-         rDZc4ClN7/O1OZC0R+i9jntWYORs9mP2ziJ6cKz0WhyjkBOCM027b7yWub97rQf4jo3y
-         DH/bQILZu0F0o59jr6szOQleGNGxaPO5TkvZfRm8xr1vDFhiSrQ4b6ii06xX1EmEFmyE
-         K9GQ==
+        bh=nRBQOHw4Z5izn/Wsr8AytPNgrWfFSlrAHrea5jgEmRQ=;
+        b=R6dh5vBPhpBCcx7Y5ucqwdAIn+/5wWTfogmjhiXVlp7R//PxyoSg5bX1NS9sEE//94
+         kgpTGQca0lE+Qlj06vmk2onoma+QcPcX+mQEgYYdnp9E0PDN1yYFk+sAwh08buBnPeTs
+         tuIPsGT9cOJ9WfaLIvUoh0k1spaZ179RA/yz7tVsFF8FekksbxGtO9QT+4zAWlbU/hF9
+         56zmXk1lYN0/S5iNsL4X1uYf3QCwK5B5pwr1+kGgf4PRCHG6RGviMdmvU2nGTtdqZ6TS
+         HjpwAHFSBWl1gaoB3znZs3t9fL6LtHgzfAwLbf2TC2uU+1GvWMwfO5ywHJwIC1IOmqZx
+         lMnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :mime-version;
-        bh=2ifwLGTtd29dCZtpbLy7YngaE9x47uAwghr6gi3NHZc=;
-        b=RWhQVjna7U5YuCK/IOxIuNGuWn9p1/5/zMfUnhT2BSTw8pAOeoyTXGknjs/49DiMZR
-         fcUyrSYYVppj6qtYCkPbQd+gNUrzGMI3lMshwt8JI0sR9e9Wq3n42PGiHzRwCuNjNZ52
-         GqOgci3L7JAxvSdVvuCeUKMt8Q3jxuczeLXzc/8wM1jZzZ67i7UpWfvYykCM8fDigMYt
-         WUEg8BE8PKh0NUma0tF0yebHSo568i3q3Om7NL3rGZVd3rnIPnY9pY+YcBgdDiy/j7Be
-         wd5q3nrH5Y8xV3Jg055LMk0oE4qw8mGmcjRc4y6gI2Iz0cPZyFthjJleyXg/HTfSheKP
-         Acbg==
-X-Gm-Message-State: APjAAAUT2kRtrg6ZVyxazsnMhLJG86cH+BlwXreiRABdeUVnFk4X7aw5
-        jRRpRVNWIFlVt4Z6GlaEMJvk00YHDnPn8Q==
-X-Google-Smtp-Source: APXvYqwr5T8tuFV4akpxtDmPhDnXXioXb4fndTkvMQgQ050p9rJVlBQNy5fFBbppV28W59CJJpCAvw==
-X-Received: by 2002:a2e:6c13:: with SMTP id h19mr1130748ljc.221.1579079573680;
-        Wed, 15 Jan 2020 01:12:53 -0800 (PST)
+        bh=nRBQOHw4Z5izn/Wsr8AytPNgrWfFSlrAHrea5jgEmRQ=;
+        b=aBfjJJ17gpYh642BPNHpYKAFjp8QaoSH+V9UKhEkZrYA3phNvwBnm7voCaHourryhJ
+         xdibYd/rFe7JR7hssu4JCW1bX/eaAzcQ0FqEkZ0q8WzhHFowmndbHCCh9jAdh0u0e6/+
+         prXKUxajA70Eb9TXAYcnHD+2XJDIOU+tUfKa9dXRUw3gGsH55F8DnqNIAO6h+TQVbvq0
+         ZnVKOOW1Y+SCZ4i9lBDTENwgzfBBgS1isx/6QQUTtapV84UIB0ZXyK6fMCPh4zLXFGEB
+         /hi0Z/WGIACAEgzxfpjSMpzYyajvg+kL9E2bLbiC5zSfHTHVEwGXgpRlBTaykas8N2eH
+         Jj5w==
+X-Gm-Message-State: APjAAAXy/QpucHofDms6J2FmfpfF9Ciwa9m55NpQQljRBvO3LnQAgg+6
+        9wft94+ZVVjbFqvdvm+J4CqvlfUxujtmFQ==
+X-Google-Smtp-Source: APXvYqyKhApI6rWUQyEuHfC3d+Hcm9VtqN84prIZvS2N3/npMCxINK2jKEShZHF9Ii7CFatreSuQGQ==
+X-Received: by 2002:ac2:508e:: with SMTP id f14mr3810147lfm.72.1579079607110;
+        Wed, 15 Jan 2020 01:13:27 -0800 (PST)
 Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id q17sm8897219ljg.23.2020.01.15.01.12.52
+        by smtp.gmail.com with ESMTPSA id i4sm8796007ljg.102.2020.01.15.01.13.26
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 15 Jan 2020 01:12:52 -0800 (PST)
+        Wed, 15 Jan 2020 01:13:26 -0800 (PST)
 From:   Felipe Balbi <balbi@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
 Subject: [GIT PULL] USB: changes for v5.6 merge window
-Date:   Wed, 15 Jan 2020 11:13:54 +0200
-Message-ID: <87blr56q0d.fsf@kernel.org>
+Date:   Wed, 15 Jan 2020 11:14:28 +0200
+Message-ID: <878sm96pzf.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -64,7 +64,10 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi Greg,
 
-here's my pull request for v5.6 merge window
+here's my pull request for v5.6 merge window. If you want anything to be
+changed, let me know.
+
+cheers
 
 The following changes since commit 845f081002eebd7a1216fc0a5ef2c862dc6d093e:
 
@@ -184,18 +187,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4e19IACgkQzL64meEa
-mQaHhQ/+KyNIlZkzUzzNxOwD94yVnzxXUzYan38OvsL/YvL9nhQl9DAfBXoS5jAq
-+TybvCPJ57Tl3ciViRzAtMOLjqtcUHW/ak2zP2ZSo9TIhLDaTVJTRL90rz2IcJWq
-F7BlBgFGIE1MwF9zyknpyR0Jy6h1qzCDibABRLg2z13bV45clCPjFF8GhCEK8brE
-Fz7Rxw7SyD6ReL6h5udj6FLRY3WePoqxq0kci0AKi1zfmiMZiQ1sg4mOEM0eqFE3
-sKp8RrHZUI20tcwKAnvdh6BipidpyFhWumalbl5/ZOFb3bK5wE3pADyIW/1Vma6w
-lzHCuX2mex1HhkUr9ZZpZty99Dw7LqTXxFF/FyobFRz2QjAfkB3TxHFKuW17Rs6f
-wO3q4xeRO+BUgT/4rvTjmiCJcOJrTQoRXeM8aLqra4LItxB4wK1WWgOQommW1dnd
-n2sKhmI2GDarvHyQM/Kl7tzFAbrh6xtE8cZgPshqWxxBafMdTeWdsfdAV1mGOGls
-H8UgyyEZf+vzJyroiRcggxdQ2SDmvFvSAV9x0DP8c7MLVc8dyQSfhLcVCarbrsxi
-v0XqdfEljIySk4z6Ra+HYMDRbKWWqYpmr6rM/sJQ87iQnienIoqzrJVJKT1Sl6hx
-VgePGAD4dtgdQCb5E2hCrrYgZi9HEiPLhqRkZZQvMdzyKdV0TBU=
-=aE3U
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4e1/QACgkQzL64meEa
+mQbM0hAAj8+GAg8pvXcgSzIzz/UTfL5uaKIDhyqGOfyywSzXUm8NmghgTs1N7SEB
+bPwiPmLaNWVEWCr8zQ/B19dZ82gM1Z3xatpnHP3TUarNz2lYA7+5hb7yFEGBTnWf
+s76vfozaCavTYgBfhqsOg88eEqIy3lvomj1G0DfYc9+oolc7fWDV8Qthy1nPzzrn
+R1ujl1WJDhd/JPczXX7poPF09+mGKeruFJxYu/592OFkJHureAmE+sCfuuvZAbbS
+oN6F4AaCUDWxBKCPgmxcYH2ypM06XXdJtKbE2Fe6P9mZoGvCBeh6rSfrvbUy9QWP
+tmaNI17f/XoNBM0aeQ3/nXlgNzinXn7LrMn4KHg9DaYUJLfy2CcXpOwoD/LsX88c
+QaLDFcdSyDlv1PPgjn832uXE/0iFMF54NZ0JuXiPwkt8WuyisBeMNzSDWoYXdN2h
+Al+s4+zFqB0yeLpjhrmkJobDKbqztXF1RFqn2DqTuv/OunJ4OvHXPGFfYPxnNcSJ
+fby7bXxHbiouI8ZXF6hj6byrNKy7L+y65V2aZcz3SKtYzLqgwYSIUIYYfweaD3UW
+ciSV73Y4t68GTClMszYo9Rbvi9f1klW4zZVzSrPUS5e1eY5qbNE2EAZZnmW0WV+A
+Onxkm8FEbUKdbjJFnd+zflGjtzUKdJ075+22XRzsqDgQDlVy44I=
+=5n6w
 -----END PGP SIGNATURE-----
 --=-=-=--
