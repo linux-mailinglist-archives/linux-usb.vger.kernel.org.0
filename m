@@ -2,97 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB4213B940
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 06:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CDB813B970
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 07:19:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726165AbgAOFzq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jan 2020 00:55:46 -0500
-Received: from sv2-smtprelay2.synopsys.com ([149.117.73.133]:44176 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725962AbgAOFzq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 00:55:46 -0500
-Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 943A3406E6;
-        Wed, 15 Jan 2020 05:55:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1579067746; bh=58RCWf0esTGTXB2WWpwacE9UNEjRZTkDQCJ7K0y5p9I=;
-        h=Date:From:Subject:To:Cc:From;
-        b=KrnMldqKnXE9XO9L9dbonHMisuZPRveVb49SvsqEWRyyQF9tecU7mCVt6b9XX8s6m
-         7TiwZaNqf/aK2DSgdZ3fPNuwtesxnvNY8Y9Wh75Lqwn5Czl2pUrPR4GGBiYKXmgqnd
-         ccSNioET4AyB/b26Ehn69EHTavqWraXy5znIVZXzJci04YsOq5s4OxQGW93epMhK9B
-         MIQglAmbMzKDLulubeVg//HdAWB41LJGhjoMSv0PmQixz5dPIheDDDdcILAdOzy29n
-         9V8NnqqrhxxdFTXg+qqu4Pt2xq5J0W7vIpUvzCTo1mJbDsoRYVl2pkZMIH8hVCEVFG
-         OBoHQYEXSu7zQ==
-Received: from hminas-z420 (hminas-z420.internal.synopsys.com [10.116.126.211])
-        (using TLSv1 with cipher AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id A767FA005C;
-        Wed, 15 Jan 2020 05:55:41 +0000 (UTC)
-Received: by hminas-z420 (sSMTP sendmail emulation); Wed, 15 Jan 2020 09:55:40 +0400
-Date:   Wed, 15 Jan 2020 09:55:40 +0400
-Message-Id: <8c5bd0c646737fe97770d33355b8e197ea28f303.1579067350.git.hminas@synopsys.com>
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: [PATCH v3] usb: dwc2: Fix in ISOC request length checking
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>,
-        Robert Baldyga <r.baldyga@samsung.com>,
-        Felipe Balbi <balbi@ti.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>
+        id S1726408AbgAOGTZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 15 Jan 2020 01:19:25 -0500
+Received: from rtits2.realtek.com ([211.75.126.72]:59415 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726075AbgAOGTZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 01:19:25 -0500
+Authenticated-By: 
+X-SpamFilter-By: BOX Solutions SpamTrap 5.62 with qID 00F6J4nI010830, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (RTITCASV01.realtek.com.tw[172.21.6.18])
+        by rtits2.realtek.com.tw (8.15.2/2.57/5.78) with ESMTPS id 00F6J4nI010830
+        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Wed, 15 Jan 2020 14:19:05 +0800
+Received: from RTEXMB03.realtek.com.tw (172.21.6.96) by
+ RTITCASV01.realtek.com.tw (172.21.6.18) with Microsoft SMTP Server (TLS) id
+ 14.3.468.0; Wed, 15 Jan 2020 14:19:04 +0800
+Received: from RTEXMB04.realtek.com.tw (172.21.6.97) by
+ RTEXMB03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Wed, 15 Jan 2020 14:19:04 +0800
+Received: from RTEXMB04.realtek.com.tw ([fe80::d9c5:a079:495e:b999]) by
+ RTEXMB04.realtek.com.tw ([fe80::d9c5:a079:495e:b999%6]) with mapi id
+ 15.01.1779.005; Wed, 15 Jan 2020 14:19:04 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "davem@davemloft.net" <davem@davemloft.net>
+CC:     Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Grant Grundler <grundler@chromium.org>,
+        "Mario Limonciello" <mario.limonciello@dell.com>,
+        David Chen <david.chen7@dell.com>,
+        "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] r8152: Add MAC passthrough support to new device
+Thread-Topic: [PATCH] r8152: Add MAC passthrough support to new device
+Thread-Index: AQHVypTrvWsj1nE3Z02rCzrvB8fQNKfrP9uQ
+Date:   Wed, 15 Jan 2020 06:19:04 +0000
+Message-ID: <383516f7b54247bda694bf2a999e68f7@realtek.com>
+References: <20200114044127.20085-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20200114044127.20085-1-kai.heng.feng@canonical.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.214]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Moved ISOC request length checking from dwc2_hsotg_start_req() function to
-dwc2_hsotg_ep_queue().
+Kai-Heng Feng [mailto:kai.heng.feng@canonical.com]
+> Sent: Tuesday, January 14, 2020 12:41 PM
+[...]
+>  	if (le16_to_cpu(udev->descriptor.idVendor) == VENDOR_ID_LENOVO &&
+> -	    le16_to_cpu(udev->descriptor.idProduct) == 0x3082)
+> +	    (le16_to_cpu(udev->descriptor.idProduct) == 0x3082 ||
+> +	     le16_to_cpu(udev->descriptor.idProduct) == 0xa387))
 
-Fixes: 4fca54aa58293 ("usb: gadget: s3c-hsotg: add multi count support")
-Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
----
-Changes for v3:
-- Fix commit message format
-Changes for v2:
-- Fix typo in commit message
-- Fix tags formatting
+How about using
+switch (le16_to_cpu(udev->descriptor.idProduct)) {
+...
+}
 
-drivers/usb/dwc2/gadget.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+>  		set_bit(LENOVO_MACPASSTHRU, &tp->flags);
+> 
+>  	if (le16_to_cpu(udev->descriptor.bcdDevice) == 0x3011 && udev->serial
+> &&
+> --
+> 2.17.1
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 88f7d6d4ff2d..7b40cf5bdc2f 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -1083,11 +1083,6 @@ static void dwc2_hsotg_start_req(struct dwc2_hsotg *hsotg,
- 	else
- 		packets = 1;	/* send one packet if length is zero. */
- 
--	if (hs_ep->isochronous && length > (hs_ep->mc * hs_ep->ep.maxpacket)) {
--		dev_err(hsotg->dev, "req length > maxpacket*mc\n");
--		return;
--	}
--
- 	if (dir_in && index != 0)
- 		if (hs_ep->isochronous)
- 			epsize = DXEPTSIZ_MC(packets);
-@@ -1391,6 +1386,13 @@ static int dwc2_hsotg_ep_queue(struct usb_ep *ep, struct usb_request *req,
- 	req->actual = 0;
- 	req->status = -EINPROGRESS;
- 
-+	/* Don't queue ISOC request if length greater than mps*mc */
-+	if (hs_ep->isochronous &&
-+	    req->length > (hs_ep->mc * hs_ep->ep.maxpacket)) {
-+		dev_err(hs->dev, "req length > maxpacket*mc\n");
-+		return -EINVAL;
-+	}
-+
- 	/* In DDMA mode for ISOC's don't queue request if length greater
- 	 * than descriptor limits.
- 	 */
--- 
-2.11.0
+
+Best Regards,
+Hayes
+
 
