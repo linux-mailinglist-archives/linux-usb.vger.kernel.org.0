@@ -2,46 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6051C13C2A4
+	by mail.lfdr.de (Postfix) with ESMTP id 1E63713C2A3
 	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2020 14:25:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729076AbgAONZx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jan 2020 08:25:53 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:49160 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729064AbgAONZv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 08:25:51 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 00FDPouL069018;
+        id S1729077AbgAONZy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jan 2020 08:25:54 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:53868 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728904AbgAONZw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jan 2020 08:25:52 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 00FDPolr073267;
         Wed, 15 Jan 2020 07:25:50 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1579094750;
-        bh=4GNsoyd8uuZtA3OYKGb7rQmg0MuT7RXDTbV0HtZH4gc=;
+        bh=YVFdkc5lkW+O80b4FQmhNiJEra5Z05Aen0FpFrdx/RU=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=HcN3vC980p0wukjXvw+7r7m2mbz7EhD+KXrec0y4alPthdpAH2CiKzMOU5vJW5qHf
-         /YlZFzpjM7mp2jew+EudFsIx9dWNG0ghdPAnRVhL8rVepdP65r42cMkYlNpJy2gqcL
-         TyZ8skdBLliGGcdvyTugEHIkvlMR9VRurbBHBkyU=
+        b=HSZLr53QwX2/JdE9jAuErkEVUeebSz3d/aABTM4b47BKIHAKdfTi+0dEJ7DAfb0JV
+         Ka/GyvvhfCZL4Sk6VcPQN3aTFWZwiOCoxrcXZ3iS8+iwsukpVNDaCuGQX7ztcL4TYr
+         rDnZbz3u20EefFZrDgJJJHIG9X34wMg4HX/dKFeA=
 Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 00FDPout086476
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 00FDPo7t019854
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Wed, 15 Jan 2020 07:25:50 -0600
 Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE100.ent.ti.com
  (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 15
- Jan 2020 07:25:49 -0600
+ Jan 2020 07:25:50 -0600
 Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE111.ent.ti.com
  (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
  Frontend Transport; Wed, 15 Jan 2020 07:25:49 -0600
 Received: from uda0271908.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 00FDPm3M066537;
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 00FDPm3N066537;
         Wed, 15 Jan 2020 07:25:49 -0600
 From:   Bin Liu <b-liu@ti.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     <linux-usb@vger.kernel.org>, Bin Liu <b-liu@ti.com>
-Subject: [PATCH 24/25] usb: musb: davinci: Convert to use GPIO descriptor
-Date:   Wed, 15 Jan 2020 07:25:46 -0600
-Message-ID: <20200115132547.364-25-b-liu@ti.com>
+Subject: [PATCH 25/25] usb: musb: remove dummy driver musb_am335x.c
+Date:   Wed, 15 Jan 2020 07:25:47 -0600
+Message-ID: <20200115132547.364-26-b-liu@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200115132547.364-1-b-liu@ti.com>
 References: <20200115132547.364-1-b-liu@ti.com>
@@ -53,178 +53,104 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Linus Walleij <linus.walleij@linaro.org>
+Since commit 0782e8572ce4 ("ARM: dts: Probe am335x musb with ti-sysc"),
+the dummy driver musb_am335x.c is no longer needed, let's drop it.
 
-The DaVinci MUSB glue contains an optional GPIO line to
-control VBUS power, convert this to use a GPIO descriptor
-and augment the EVM board file to provide this descriptor.
-
-I can't get this driver to compile properly and it depends
-on broken but when I didn get it to compile brokenly, it
-did at least not complain about THIS code being broken so
-I don't think I broke the driver any more than what it
-already is.
-
-I did away with the ifdefs that do not work with
-multiplatform anyway so the day someone decides to
-resurrect the code, the path to get it working should be
-easier as well since DaVinci is now multiplatform.
-
-Cc: Sekhar Nori <nsekhar@ti.com>
-Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc: Tony Lindgren <tony@atomide.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-[b-liu@ti.com: fixed one instance still ref to global variable vbus_state]
+Acked-by: Tony Lindgren <tony@atomide.com>
 Signed-off-by: Bin Liu <b-liu@ti.com>
 ---
- arch/arm/mach-davinci/board-dm644x-evm.c | 12 +++++
- drivers/usb/musb/davinci.c               | 57 ++++++++++++++----------
- 2 files changed, 45 insertions(+), 24 deletions(-)
+ drivers/usb/musb/Kconfig       |  4 ----
+ drivers/usb/musb/Makefile      |  3 ---
+ drivers/usb/musb/musb_am335x.c | 44 ----------------------------------
+ 3 files changed, 51 deletions(-)
+ delete mode 100644 drivers/usb/musb/musb_am335x.c
 
-diff --git a/arch/arm/mach-davinci/board-dm644x-evm.c b/arch/arm/mach-davinci/board-dm644x-evm.c
-index 9d87d4e440ea..040c949414fa 100644
---- a/arch/arm/mach-davinci/board-dm644x-evm.c
-+++ b/arch/arm/mach-davinci/board-dm644x-evm.c
-@@ -823,6 +823,17 @@ static int davinci_phy_fixup(struct phy_device *phydev)
+diff --git a/drivers/usb/musb/Kconfig b/drivers/usb/musb/Kconfig
+index 63376d494f0f..eb2ded1026ee 100644
+--- a/drivers/usb/musb/Kconfig
++++ b/drivers/usb/musb/Kconfig
+@@ -101,7 +101,6 @@ config USB_MUSB_AM35X
  
- #define HAS_NAND	IS_ENABLED(CONFIG_MTD_NAND_DAVINCI)
+ config USB_MUSB_DSPS
+ 	tristate "TI DSPS platforms"
+-	select USB_MUSB_AM335X_CHILD
+ 	depends on ARCH_OMAP2PLUS || COMPILE_TEST
+ 	depends on OF_IRQ
  
-+#define GPIO_nVBUS_DRV		160
-+
-+static struct gpiod_lookup_table dm644evm_usb_gpio_table = {
-+	.dev_id = "musb-davinci",
-+	.table = {
-+		GPIO_LOOKUP("davinci_gpio", GPIO_nVBUS_DRV, NULL,
-+			    GPIO_ACTIVE_HIGH),
-+		{ }
-+	},
-+};
-+
- static __init void davinci_evm_init(void)
- {
- 	int ret;
-@@ -875,6 +886,7 @@ static __init void davinci_evm_init(void)
- 	dm644x_init_asp();
+@@ -122,9 +121,6 @@ config USB_MUSB_MEDIATEK
+ 	depends on GENERIC_PHY
+ 	select USB_ROLE_SWITCH
  
- 	/* irlml6401 switches over 1A, in under 8 msec */
-+	gpiod_add_lookup_table(&dm644evm_usb_gpio_table);
- 	davinci_setup_usb(1000, 8);
- 
- 	if (IS_BUILTIN(CONFIG_PHYLIB)) {
-diff --git a/drivers/usb/musb/davinci.c b/drivers/usb/musb/davinci.c
-index fb6bbd254ab7..704435526394 100644
---- a/drivers/usb/musb/davinci.c
-+++ b/drivers/usb/musb/davinci.c
-@@ -13,7 +13,7 @@
- #include <linux/clk.h>
- #include <linux/err.h>
- #include <linux/io.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/platform_device.h>
- #include <linux/dma-mapping.h>
- #include <linux/usb/usb_phy_generic.h>
-@@ -25,10 +25,6 @@
- 
- #include "musb_core.h"
- 
--#ifdef CONFIG_MACH_DAVINCI_EVM
--#define GPIO_nVBUS_DRV		160
--#endif
+-config USB_MUSB_AM335X_CHILD
+-	tristate
 -
- #include "davinci.h"
- #include "cppi_dma.h"
+ comment "MUSB DMA mode"
  
-@@ -40,6 +36,9 @@ struct davinci_glue {
- 	struct device		*dev;
- 	struct platform_device	*musb;
- 	struct clk		*clk;
-+	bool			vbus_state;
-+	struct gpio_desc	*vbus;
-+	struct work_struct	vbus_work;
- };
+ config MUSB_PIO_ONLY
+diff --git a/drivers/usb/musb/Makefile b/drivers/usb/musb/Makefile
+index 63d82d0fab67..932247360a9f 100644
+--- a/drivers/usb/musb/Makefile
++++ b/drivers/usb/musb/Makefile
+@@ -26,9 +26,6 @@ obj-$(CONFIG_USB_MUSB_JZ4740)			+= jz4740.o
+ obj-$(CONFIG_USB_MUSB_SUNXI)			+= sunxi.o
+ obj-$(CONFIG_USB_MUSB_MEDIATEK)      		+= mediatek.o
  
- /* REVISIT (PM) we should be able to keep the PHY in low power mode most
-@@ -135,43 +134,44 @@ static void davinci_musb_disable(struct musb *musb)
-  * when J10 is out, and TI documents it as handling OTG.
-  */
- 
--#ifdef CONFIG_MACH_DAVINCI_EVM
 -
--static int vbus_state = -1;
+-obj-$(CONFIG_USB_MUSB_AM335X_CHILD)		+= musb_am335x.o
 -
- /* I2C operations are always synchronous, and require a task context.
-  * With unloaded systems, using the shared workqueue seems to suffice
-  * to satisfy the 100msec A_WAIT_VRISE timeout...
-  */
--static void evm_deferred_drvvbus(struct work_struct *ignored)
-+static void evm_deferred_drvvbus(struct work_struct *work)
- {
--	gpio_set_value_cansleep(GPIO_nVBUS_DRV, vbus_state);
--	vbus_state = !vbus_state;
+ # the kconfig must guarantee that only one of the
+ # possible I/O schemes will be enabled at a time ...
+ # PIO only, or DMA (several potential schemes).
+diff --git a/drivers/usb/musb/musb_am335x.c b/drivers/usb/musb/musb_am335x.c
+deleted file mode 100644
+index 5f04f8e3a640..000000000000
+--- a/drivers/usb/musb/musb_am335x.c
++++ /dev/null
+@@ -1,44 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-#include <linux/platform_device.h>
+-#include <linux/pm_runtime.h>
+-#include <linux/module.h>
+-#include <linux/of_platform.h>
+-
+-static int am335x_child_probe(struct platform_device *pdev)
+-{
+-	int ret;
+-
+-	pm_runtime_enable(&pdev->dev);
+-
+-	ret = of_platform_populate(pdev->dev.of_node, NULL, NULL, &pdev->dev);
+-	if (ret)
+-		goto err;
+-
+-	return 0;
+-err:
+-	pm_runtime_disable(&pdev->dev);
+-	return ret;
 -}
-+	struct davinci_glue *glue = container_of(work, struct davinci_glue,
-+						 vbus_work);
- 
--#endif	/* EVM */
-+	gpiod_set_value_cansleep(glue->vbus, glue->vbus_state);
-+	glue->vbus_state = !glue->vbus_state;
-+}
- 
--static void davinci_musb_source_power(struct musb *musb, int is_on, int immediate)
-+static void davinci_musb_source_power(struct musb *musb, int is_on,
-+				      int immediate)
- {
--#ifdef CONFIG_MACH_DAVINCI_EVM
-+	struct davinci_glue *glue = dev_get_drvdata(musb->controller->parent);
-+
-+	/* This GPIO handling is entirely optional */
-+	if (!glue->vbus)
-+		return;
-+
- 	if (is_on)
- 		is_on = 1;
- 
--	if (vbus_state == is_on)
-+	if (glue->vbus_state == is_on)
- 		return;
--	vbus_state = !is_on;		/* 0/1 vs "-1 == unknown/init" */
-+	/* 0/1 vs "-1 == unknown/init" */
-+	glue->vbus_state = !is_on;
- 
- 	if (machine_is_davinci_evm()) {
--		static DECLARE_WORK(evm_vbus_work, evm_deferred_drvvbus);
 -
- 		if (immediate)
--			gpio_set_value_cansleep(GPIO_nVBUS_DRV, vbus_state);
-+			gpiod_set_value_cansleep(glue->vbus, glue->vbus_state);
- 		else
--			schedule_work(&evm_vbus_work);
-+			schedule_work(&glue->vbus_work);
- 	}
- 	if (immediate)
--		vbus_state = is_on;
--#endif
-+		glue->vbus_state = is_on;
- }
- 
- static void davinci_musb_set_vbus(struct musb *musb, int is_on)
-@@ -524,6 +524,15 @@ static int davinci_probe(struct platform_device *pdev)
- 
- 	pdata->platform_ops		= &davinci_ops;
- 
-+	glue->vbus = devm_gpiod_get_optional(&pdev->dev, NULL, GPIOD_OUT_LOW);
-+	if (IS_ERR(glue->vbus)) {
-+		ret = PTR_ERR(glue->vbus);
-+		goto err0;
-+	} else {
-+		glue->vbus_state = -1;
-+		INIT_WORK(&glue->vbus_work, evm_deferred_drvvbus);
-+	}
-+
- 	usb_phy_generic_register();
- 	platform_set_drvdata(pdev, glue);
- 
+-static const struct of_device_id am335x_child_of_match[] = {
+-	{ .compatible = "ti,am33xx-usb" },
+-	{  },
+-};
+-MODULE_DEVICE_TABLE(of, am335x_child_of_match);
+-
+-static struct platform_driver am335x_child_driver = {
+-	.probe		= am335x_child_probe,
+-	.driver         = {
+-		.name   = "am335x-usb-childs",
+-		.of_match_table	= am335x_child_of_match,
+-	},
+-};
+-
+-static int __init am335x_child_init(void)
+-{
+-	return platform_driver_register(&am335x_child_driver);
+-}
+-module_init(am335x_child_init);
+-
+-MODULE_DESCRIPTION("AM33xx child devices");
+-MODULE_LICENSE("GPL v2");
 -- 
 2.17.1
 
