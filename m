@@ -2,35 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 773F113EC5F
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 18:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E259A13EBB7
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 18:52:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394026AbgAPRnz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jan 2020 12:43:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34444 "EHLO mail.kernel.org"
+        id S2404619AbgAPRwG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jan 2020 12:52:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37192 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394021AbgAPRny (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:43:54 -0500
+        id S2406206AbgAPRp2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:45:28 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9FE2E2473E;
-        Thu, 16 Jan 2020 17:43:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F1F4D2477F;
+        Thu, 16 Jan 2020 17:45:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579196634;
-        bh=g/YGBqeroqkxDgUBykYtK8KfBGkUxXI54w48aAXNL9Q=;
+        s=default; t=1579196727;
+        bh=8Kog/HwWweJAruQTahLvXXinDSbs+edbNmKROmnFBT4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CPhqVmQfSRl187lAE/y/KhDHhgQb8VRFGN/8tdifhGKGn5jJR1hggtbaVZMREu+qr
-         iD5nSHLPB4C/IXxtFTXzZ0IlP93rSJ1362hYA9D4E/uvyO7sg9dWEKGAP/HOxchfdK
-         MiZhsokifNEXfrMkFzCOJCEYtfvnR0iQ9yAs+Ig4=
+        b=hE4gmjrGfTjCQPuGdI//npecErsiNF7fu22HKWSegUeKjencg9RNtiAFG9e8rVFBF
+         nDQpP+p6CeEeZi/lwPZaPtXf7XFec7NgaGKMsIeVH2j8XIsE7Yi7E3KPVxtP+yJNHj
+         eebm7aI0ryyEeJX42C2cwvsI1ETni752cob0d5jY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     YueHaibing <yuehaibing@huawei.com>,
+Cc:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 047/174] cdc-wdm: pass return value of recover_from_urb_loss
-Date:   Thu, 16 Jan 2020 12:40:44 -0500
-Message-Id: <20200116174251.24326-47-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 112/174] usb: host: xhci-hub: fix extra endianness conversion
+Date:   Thu, 16 Jan 2020 12:41:49 -0500
+Message-Id: <20200116174251.24326-112-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116174251.24326-1-sashal@kernel.org>
 References: <20200116174251.24326-1-sashal@kernel.org>
@@ -43,33 +44,42 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: YueHaibing <yuehaibing@huawei.com>
+From: Ruslan Bilovol <ruslan.bilovol@gmail.com>
 
-[ Upstream commit 0742a338f5b3446a26de551ad8273fb41b2787f2 ]
+[ Upstream commit 6269e4c76eacabaea0d0099200ae1a455768d208 ]
 
-'rv' is the correct return value, pass it upstream instead of 0
+Don't do extra cpu_to_le32 conversion for
+put_unaligned_le32 because it is already implemented
+in this function.
 
-Fixes: 17d80d562fd7 ("USB: autosuspend for cdc-wdm")
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Fixes sparse error:
+xhci-hub.c:1152:44: warning: incorrect type in argument 1 (different base types)
+xhci-hub.c:1152:44:    expected unsigned int [usertype] val
+xhci-hub.c:1152:44:    got restricted __le32 [usertype]
+
+Fixes: 395f540 "xhci: support new USB 3.1 hub request to get extended port status"
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
+Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Link: https://lore.kernel.org/r/1562501839-26522-1-git-send-email-ruslan.bilovol@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/class/cdc-wdm.c | 2 +-
+ drivers/usb/host/xhci-hub.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
-index 71ad04d54212..1a1d1cfc3704 100644
---- a/drivers/usb/class/cdc-wdm.c
-+++ b/drivers/usb/class/cdc-wdm.c
-@@ -1098,7 +1098,7 @@ static int wdm_post_reset(struct usb_interface *intf)
- 	rv = recover_from_urb_loss(desc);
- 	mutex_unlock(&desc->wlock);
- 	mutex_unlock(&desc->rlock);
--	return 0;
-+	return rv;
- }
- 
- static struct usb_driver wdm_driver = {
+diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+index 40c95ed6afbf..3ef80c2c0dcc 100644
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -965,7 +965,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 			}
+ 			port_li = readl(port_array[wIndex] + PORTLI);
+ 			status = xhci_get_ext_port_status(temp, port_li);
+-			put_unaligned_le32(cpu_to_le32(status), &buf[4]);
++			put_unaligned_le32(status, &buf[4]);
+ 		}
+ 		break;
+ 	case SetPortFeature:
 -- 
 2.20.1
 
