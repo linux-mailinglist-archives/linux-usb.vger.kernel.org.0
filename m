@@ -2,38 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69ADA13EACC
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 18:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E049813F115
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 19:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406655AbgAPRqW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jan 2020 12:46:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39020 "EHLO mail.kernel.org"
+        id S2387457AbgAPS0L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jan 2020 13:26:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35814 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406651AbgAPRqV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:46:21 -0500
+        id S2404027AbgAPR0o (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:26:44 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 90F0B246DE;
-        Thu, 16 Jan 2020 17:46:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 883A7246BC;
+        Thu, 16 Jan 2020 17:26:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579196781;
-        bh=MwSgVhG+pTafHyYyuQL3MwKEqFMypOUPahmZrsashQo=;
+        s=default; t=1579195604;
+        bh=Ex7beX8B0uBCb6owvoU+lXPoJuQfKrE4JeXVwBoIk1A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uyyuOhmADeFjifvnVXF3/EQS6Ao40c+nnccvT5cWrcGE6sbwTJD2BzAxoBgBaYA5x
-         ylPGgRFtSBe/7tJmxE2Zf5yzHzoFwnmf+el0paqdYfvznrSR6kuU082hL0YPfCY41I
-         73BGVAUrRddIuE/ojaIkeCHU5MjGGV64w0Kx3zvQ=
+        b=yTwjEZPrmd2oylq4F6TyxGwTwloMYKJXCF1lRS9Kz+ZraOgNXSC6igz5lWc7rx8/I
+         LhlI9YbW7STXZaLJ/wFNHYHvN5fV/UdcFyJHmQCHqEgh0nGJrno7IoMhIyVU7Mf3pJ
+         tGHvaGKS2rqTspARFVcSTJLW9YoBWaTTM0k2q6rs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc:     Minas Harutyunyan <minas.harutyunyan@synopsys.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 147/174] USB: usb-skeleton: fix use-after-free after driver unbind
-Date:   Thu, 16 Jan 2020 12:42:24 -0500
-Message-Id: <20200116174251.24326-147-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 179/371] dwc2: gadget: Fix completed transfer size calculation in DDMA
+Date:   Thu, 16 Jan 2020 12:20:51 -0500
+Message-Id: <20200116172403.18149-122-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116174251.24326-1-sashal@kernel.org>
-References: <20200116174251.24326-1-sashal@kernel.org>
+In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
+References: <20200116172403.18149-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,35 +44,37 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Minas Harutyunyan <minas.harutyunyan@synopsys.com>
 
-[ Upstream commit 6353001852776e7eeaab4da78922d4c6f2b076af ]
+[ Upstream commit 5acb4b970184d189d901192d075997c933b82260 ]
 
-The driver failed to stop its read URB on disconnect, something which
-could lead to a use-after-free in the completion handler after driver
-unbind in case the character device has been closed.
+Fix calculation of transfer size on completion in function
+dwc2_gadget_get_xfersize_ddma().
 
-Fixes: e7389cc9a7ff ("USB: skel_read really sucks royally")
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Link: https://lore.kernel.org/r/20191009170944.30057-3-johan@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Added increment of descriptor pointer to move to next descriptor in
+the loop.
+
+Fixes: aa3e8bc81311 ("usb: dwc2: gadget: DDMA transfer start and complete")
+
+Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
+Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/usb-skeleton.c | 1 +
+ drivers/usb/dwc2/gadget.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/usb-skeleton.c b/drivers/usb/usb-skeleton.c
-index 871c366d9229..efc716f26cf5 100644
---- a/drivers/usb/usb-skeleton.c
-+++ b/drivers/usb/usb-skeleton.c
-@@ -592,6 +592,7 @@ static void skel_disconnect(struct usb_interface *interface)
- 	dev->disconnected = 1;
- 	mutex_unlock(&dev->io_mutex);
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index e164439b2154..4af9a1c652ed 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -2276,6 +2276,7 @@ static unsigned int dwc2_gadget_get_xfersize_ddma(struct dwc2_hsotg_ep *hs_ep)
+ 		if (status & DEV_DMA_STS_MASK)
+ 			dev_err(hsotg->dev, "descriptor %d closed with %x\n",
+ 				i, status & DEV_DMA_STS_MASK);
++		desc++;
+ 	}
  
-+	usb_kill_urb(dev->bulk_in_urb);
- 	usb_kill_anchored_urbs(&dev->submitted);
- 
- 	/* decrement our usage count */
+ 	return bytes_rem;
 -- 
 2.20.1
 
