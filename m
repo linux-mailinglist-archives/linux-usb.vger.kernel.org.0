@@ -2,57 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD74513DAFE
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 14:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1D713DB0C
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 14:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726343AbgAPNBQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jan 2020 08:01:16 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:41689 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726018AbgAPNBQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jan 2020 08:01:16 -0500
-Received: by mail-lf1-f68.google.com with SMTP id m30so15466951lfp.8
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jan 2020 05:01:14 -0800 (PST)
+        id S1726535AbgAPNDw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jan 2020 08:03:52 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:33440 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726418AbgAPNDw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jan 2020 08:03:52 -0500
+Received: by mail-lj1-f193.google.com with SMTP id y6so22579025lji.0;
+        Thu, 16 Jan 2020 05:03:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=1x1YXKs94Hx43n2QuSWjLfkzm2K8Cuc1cIeZXBvHJ5k=;
-        b=JBjL/Y/u1O7r7k7MH2sgYRaDH+H5Ea7GI3/939DRLflNbwplmcQemknYKb0yKzq2nx
-         4KycbVdOgwTSrHaneyh6MSetHMuFlKrxE8qOS9bMlrP4FkSQFu1PTtmRwshhi01ANz8q
-         RbR12mQI456tQOMliUZsqavgPU9p4jlCbYhBCGh/Wf6PBBHX1cFJ+HT1j23Le11pNkBU
-         p00wIXVEkKuR4LkDp1r/dPPKrWd09hLqnUubuoosAYVO3Ro5HNGzMJKn0a9fU/r/E5cQ
-         rWaauzH8Rqrcooj7SZiFwtIH1CPsakXp4AeGxUACfOv3t2QK09fF4iIIZn5tZnBqPbDy
-         FJkQ==
+        bh=nLa4mzUCNNQXbakZ76zVNx2Q2EDa/HNeuL9ET/YDcbk=;
+        b=q2FLat57Vdgj4Ns6HyBDp4JT8kAFvmECtrIIJywTUmVweK0FpvgbjV4aa37Xgiprkf
+         NKlntky4x005cVJpHMov1qq2wdt0NshfeLDOSorFN9NMbBpXH20mUCOqaI850ql1pIax
+         IqkkguPvCR957Wfq63PIvsbZVjutJ8ulP+lcUCz20EjDiclY8cj1rciifmoxLgB4qhc4
+         aRGsV7uCPe8PVFrUL0PBVHn1LJFrC0Lj+TOVEewVTrZ9nfQdfsb9JN/AE6adqz86OGk8
+         46Gs7oUMG1LMOAAPMJu21ltHHXZPZlMdTpr3/UXwRKEqKkhyt+eh6kvfd0DXlh7EDaV0
+         Rs2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=1x1YXKs94Hx43n2QuSWjLfkzm2K8Cuc1cIeZXBvHJ5k=;
-        b=eZ7/vLPMpReHSVRXDn4NY4mLyWn3IkHLweScwARY7rEhOZq17xtdvv3dmTLz5Kh4Ts
-         rCFN0E/3F7ggLzS6oylYfLU0l6FJEQh5j9feszoWZaYufdIvrUYTOl6iq1hKhJwBrRto
-         biHXDOMmT2Kju3a/ce8ObaMieZL8oESEcg5iiI0iPLEBHEqKapeUJ9mKm+YAx7kbr75U
-         qXBjlpCfbL03mAstCsjdw+x1zdK4TIzTZt69iCmJROroj9BAaE801zH4hBZLprcn/2dE
-         i+Lgdwcj9hxCoB8mlayG/CoaR2Gusxczh+sA430l7Gjow7sJgAYLODEXUXhopVG2Ynp6
-         K2hw==
-X-Gm-Message-State: APjAAAV8tXAKRBuWHA909QKCa/1IPoGGKEOlQmlTvVKMsXW3u274Su6e
-        VBLlKaddOhVsYMXqUPX0egq/r+gL1G6ryw==
-X-Google-Smtp-Source: APXvYqztFBXdjUImF3PUmf4NRRtnHiaNIWXyCfFVV2IwH85RByBtxcGOfdCF0S4snmrJQmQXk9Tnsg==
-X-Received: by 2002:ac2:5635:: with SMTP id b21mr2397366lff.127.1579179673593;
-        Thu, 16 Jan 2020 05:01:13 -0800 (PST)
+        bh=nLa4mzUCNNQXbakZ76zVNx2Q2EDa/HNeuL9ET/YDcbk=;
+        b=fDzbVcD4W1i2gS0lSKIF0KHobFDXGTcsIjtJZUaWS+ED4D10//JFmdnS9QQXMLxMkX
+         2pvhn2abWqZWypeQEnmyZMhijwloag3Wez85OPD8uIcGOImWRZOXKcokiZD+Se5DQKpE
+         F0fYEWQPQlaK216msyiWjiK0v8GQHjuQsV2GSm1/fMFpK/+9j+8Gtqkb19XvJc/MkjT+
+         jhwrx9NKXzIbaAxug/VrwkvDhlsP6ZZh9A90GXX3FzJlKTeRLzzqzdq4/ktYmDa2Uikd
+         JGroyh1SIvaA1D3tUq3CKaP54lK/mbTlwzgRobjJJKwRIfOHAwhqjvdOpX47sCeuB8Kc
+         gyMg==
+X-Gm-Message-State: APjAAAVCe3fJlZX2oOpHzQu3+8uozgsJdFskTiBrCgsaBHOEU5ZsfN1W
+        nVqf5B29rbpaEuCAy056TdE=
+X-Google-Smtp-Source: APXvYqymJ6PvxMs6ozkarUeChMAsDOucSalTg5WW4l5iWlh+uuIvWzkv8S7yoJ1vjFnWb8NBFaGIQw==
+X-Received: by 2002:a2e:804c:: with SMTP id p12mr2162976ljg.31.1579179829636;
+        Thu, 16 Jan 2020 05:03:49 -0800 (PST)
 Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id d24sm10674705lfb.94.2020.01.16.05.01.11
+        by smtp.gmail.com with ESMTPSA id p136sm10661388lfa.8.2020.01.16.05.03.48
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 16 Jan 2020 05:01:12 -0800 (PST)
+        Thu, 16 Jan 2020 05:03:48 -0800 (PST)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     "Andrew P. Lentvorski" <bsder@allcaps.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Unable to set "iInterface" in usb gadget via configfs
-In-Reply-To: <0453184e-353e-2a98-4f7a-c97b9dddf57a@allcaps.org>
-References: <Pine.LNX.4.44L0.2001151011520.1788-100000@iolanthe.rowland.org> <0453184e-353e-2a98-4f7a-c97b9dddf57a@allcaps.org>
-Date:   Thu, 16 Jan 2020 15:02:12 +0200
-Message-ID: <87lfq75zcb.fsf@kernel.org>
+To:     "Ardelean\, Alexandru" <alexandru.Ardelean@analog.com>,
+        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "mina86\@mina86.com" <mina86@mina86.com>,
+        "lars\@metafoo.de" <lars@metafoo.de>
+Subject: Re: [PATCH] usb: gadget: ffs: ffs_aio_cancel(): Save/restore IRQ flags
+In-Reply-To: <f3f8e2a6480da78ba23ddedb68beee71f47e178f.camel@analog.com>
+References: <20191106120219.15028-1-alexandru.ardelean@analog.com> <f3f8e2a6480da78ba23ddedb68beee71f47e178f.camel@analog.com>
+Date:   Thu, 16 Jan 2020 15:04:48 +0200
+Message-ID: <87imlb5z7z.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -66,72 +69,29 @@ Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
 
-hi,
+Hi,
 
-"Andrew P. Lentvorski" <bsder@allcaps.org> writes:
-> On 1/15/20 7:14 AM, Alan Stern wrote:
+"Ardelean, Alexandru" <alexandru.Ardelean@analog.com> writes:
+
+> On Wed, 2019-11-06 at 14:02 +0200, Alexandru Ardelean wrote:
+>> From: Lars-Peter Clausen <lars@metafoo.de>
+>>=20
+>> ffs_aio_cancel() can be called from both interrupt and thread context.
+>> Make
+>> sure that the current IRQ state is saved and restored by using
+>> spin_{un,}lock_irq{save,restore}().
+>>=20
+>> Otherwise undefined behavior might occur.
 >
->> I don't think any earlier messages in this thread made it through the=20
->> mailing list, but this one definitely did.
+> Hey,
 >
-> Yay!  I also saw this one in the archives so I was hopeful.
->
->>>> I've been trying to set "iInterface" in my usb gadget to a specific
->>>> string, but I simply can't find a way to make configfs accept this.
+> This is a patch-ping.
 
-iInterface is not a string. It's the index to a string descriptor table.
+Please read:
 
->>>> When I set my gadget up on my Beaglebone Black (uname -a: Linux
->>>> beaglebone 4.14.108-ti-r113 #1 SMP PREEMPT Wed Jul 31 00:01:10 UTC
->>>> 2019 armv7l GNU/Linux).
->>>>
->>>> I get (output from lsusb):
->>>>
->>>> iInterface 5 HID Interface
->>>>
->>>>
->>>> But I want it to be something like:
->>>>
->>>> iInterface 4 LPC-LINK2 CMSIS-DAP V5.224
+https://lore.kernel.org/linux-usb/875zhd6pw0.fsf@kernel.org/T/#u
 
-Why? Oh, you want your beaglebone to behave as a CMSIS-DAP to trick some
-other SW?
-
-Do we need to support that upstream, though? It seems like this is a
-one-off thing. Does anybody else need to configure interface string
-descriptor?
-
->> Then maybe you need to fix f_hid.c.  Or maybe configfs isn't meant to
->> allow the user to specify these string index values (I don't know any
->> of the configfs details).
->
-> That's kind of my problem in that I was hoping to get someone far more
-> knowledegable than me to at least flag these before attacking it:
->
-> A) I didn't overlook something stupid and this really is hardwired with
-> no way to change it (either in configfs or ... some other? kernel mechani=
-sm)
-
-yes, it really is hardwired
-
-> B) This is an *actual* bug.
-
-Not a bug, just was never a requirement.
-
-> C) This is an actual bug *that should be fixed* and isn't that way
-> intentionally for some Linux reason.
-
-Up until now, it has been intentional. Currently, I don't see a need to
-change it. I may be persuaded otherwise, but I need to see arguments
-other than "I want to trick some SW into thinking I'm something else".
-
-> D) This is actually the right place to fix it.  Obviously there is going
-> to be something at the configfs level, too, and I have *zero* idea where
-> to start looking for that.
-
-drivers/usb/gadget/configfs.c, look for GS_STRINGS_RW(). Note, also,
-that you should *not* allow for strings to be changed after the device
-has been enumerated.
+We're gonna need a resend, sorry
 
 =2D-=20
 balbi
@@ -141,18 +101,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4gXtQACgkQzL64meEa
-mQb1oQ/8Dw2TM57OmJPDuK16d7lLy/7v0jFqZK09vhCZ9RZdRWqBxqeqetw+Wme4
-7osBPjqUxxMaN9ueLyxEWWwcR+dHthWTw27cTy7AB1jboJwXOxDPvOIzVgPrUr2C
-bRH+sdH2rfvNi3sZmFpeOV2E/mZJCLn1iLCjE5z46zwrXBW2+1Q3ew5HxNfkblfX
-loCqDkinNSHcPaIfID/+k4dn0Luwz2xl+hePFD3pQsf57NZqungXTbH5wVr13FXw
-ZDfoTni/HdqYkHvVOEk7sMjVT/I3ivXlxXFWuZIottot9VUNolinsGTLHOxJH6TA
-OEYGiDiaOpo8Y722Z/TlBR2+pRyx+2NzvzoBOgtQ4Jx54YcU1paLQWgwwtF41kJu
-J1vomViImLmPUNpQ33U5LDTFA7rBPX8cRcc0QkqOEH73/DecFWDmGjNpobRfKxjF
-W9Xvozn7pLDvEabuMAICfK35L7nPxZ6j/hYP2G4iiZohALyhORqA/YyVEySWD5X+
-tK+bS80WMWYT5DF/jlxdc9mB0PhE5RyO7tBBqaEpKLH4Ow8bQw2H9sASjLxRz+z6
-J8iCugCrBYlkveslRRdIKYUqblb90jIjFcVvGKx3BeQqbl4JgKDMH9oidusIVytB
-QjaHMmwz5koADTBpRLClBmdoYSuP5NwKf2EZZ0uLheq1xAcUk6U=
-=9Cqh
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4gX3AACgkQzL64meEa
+mQYQoA//WcHl7hIiiJpsfMSQdRklVLngnMyd9E7svXw1JVCkXUzWv6wfuxscFwJR
+esBETg7bFT84K1bt+j9Dt582gkXidGUvQBkTevW5Dhhvk/7EdeptjmGlK8ImsZf4
+MgAqTa+6L59KjtbtvmCzEOF031c/7Yi2luHibZ7enaiE7swuiSZV362MNQEs6uvE
+VUeTet+1yIlkqCh1ckwAPTzpYYxfWTaNvzv5EV8yrkiPQe3AHpIdQUPtJJ+POWNd
+PCoeVh4RH8BVFIAIVgmyGDHuGeo9nTr7E/lhzbENk5s5JkaMkRZF8f27NdgxswOP
+49vjqcRIlaJJexj+oZi0yvKju0k08tE93Z7OMuNhnU8SLOEtDH9iWDaOROk+JDOC
+QK7bGEX37B7GVOUdEMMX7VyTZiq2XKmoAfy9vpzpYAc6iKWjtxHJSOu3ZcOuBsVh
+lrhLFl5iK95HUezj4OuUZbCAwqN9CZqCH7J7ofMd0pjcNp7rEO3IOaY26EcuBOP+
+PN/CtJS86Wg4Ab/RQeAT4zzsQxteuQwDxkaxyKBA6zMXkdgx3LzxEHbF82Uq5eOr
+sl+RTVXRTNVqtRB+MyCjdB9LXDPwwePONnUu3dWy2YerRCDS0bWNfnv7HCoPSbRj
+RfPLTdyHGKJNMIvJC9gdjUUBJqNSvmVcNfTHgwdxggWjyPgHFeo=
+=NnEc
 -----END PGP SIGNATURE-----
 --=-=-=--
