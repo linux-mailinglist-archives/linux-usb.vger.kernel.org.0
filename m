@@ -2,92 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14EC913DF71
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 17:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 709D713DF97
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 17:07:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726853AbgAPQAU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jan 2020 11:00:20 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:40869 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726566AbgAPQAT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jan 2020 11:00:19 -0500
-Received: by mail-lf1-f66.google.com with SMTP id i23so15864799lfo.7
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jan 2020 08:00:18 -0800 (PST)
+        id S1726587AbgAPQHg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jan 2020 11:07:36 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:46843 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726151AbgAPQHg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jan 2020 11:07:36 -0500
+Received: by mail-lf1-f68.google.com with SMTP id f15so15870291lfl.13;
+        Thu, 16 Jan 2020 08:07:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NJ7aZMxm3RzPvb52TF7pvFQmIY3/JMjgi+gugvR/Zm4=;
-        b=DyTn1fPq/hLi2x4t7YXYLBFfq/qksbplwCuvQdKW00UHemPYY6a+ELjhtIN/0t/OG/
-         DPaFCq7oxIiib2HzjIuKsQg+Ky2vXAlbtP62x1/spA9Se288Q/begYIQ8VWHZ0M97K9U
-         5QmT6E5jfrRzjsmOrUqepwaTfDCHesYJiLDPTbNgQiMGNdvLFCFkhngQWFIhu/p2dg2k
-         0ZJoV244PZENwmVrm0srQqO7l2nx8IGV/JsNFAongY+eveVP9FTZwtcouyNyufZW1U4v
-         P10s75sp/MPDysVst6NPEqwr39idSOC7DkkhzFzTcddUijkyrsTxXRfWai+vPh6j577U
-         BREg==
-X-Gm-Message-State: APjAAAX4QC7U735d+ituhsyb/WaL5B2hCxj3HZ1G5QgqYJaG9olXZcaW
-        /53tJMPNne8ltxB61i3bNE4=
-X-Google-Smtp-Source: APXvYqyPb9J+p9ZgwPwRP1rJc60LrEBC/r3HGBmXaPkgS2x0qvRrkoOhVFA3VDkpbDK6CLRQUISCFQ==
-X-Received: by 2002:a05:6512:40e:: with SMTP id u14mr2772138lfk.161.1579190417625;
-        Thu, 16 Jan 2020 08:00:17 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X7zIxyWlHfUnsts+zL7CHW2fbwLeLj1IwWGG26ZSXOw=;
+        b=tl//qmU9u5AD36ruODlxZEFq5DRlrlsf71/d6J+DlwXvNTmJRBDVNxU1hxuE8YP+1I
+         8lQ6U3Y4QidHE5OLpKAy1qx9DXo2Dp3Qu0IE5He9LukhpNnDXuOg7RCNoypDrbN0cvVL
+         wLSDZUOiG1b0r5zkG4aWYZKA6ramHz4rvhZv/sNyl/u3Ur8cPCIsYsAhZ/4XZ+XMTWw8
+         9xih/U5NRc+hRK3DOEBdkt6fyMvKUgQ9M2vS/FiSHuqdaqvNAVPbMJM36r/rnmxaX3Kp
+         AHyPU94LdqdsImZM8J6oTS49Fe8o02WDcPkPpVGijy/HZFQZwJDWd4wVMWp3rqKD0c7r
+         de8A==
+X-Gm-Message-State: APjAAAVrmfmZafugpTXYoqeQWrVAHZ2snxGk0aPqAyLB5FCLpw01I4SN
+        wc+Jffx+Xdh+yMDHfVNBPhU=
+X-Google-Smtp-Source: APXvYqzq1RrjazRqlBnasBSeDY4GvnCwdXWEyBqhQ+ZbM4VbOLZRge45xaF3mJXwZRKUS6pLmqLP2A==
+X-Received: by 2002:a19:5057:: with SMTP id z23mr2670778lfj.132.1579190853693;
+        Thu, 16 Jan 2020 08:07:33 -0800 (PST)
 Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
-        by smtp.gmail.com with ESMTPSA id r12sm10894718ljh.105.2020.01.16.08.00.16
+        by smtp.gmail.com with ESMTPSA id n14sm10812449lfe.5.2020.01.16.08.07.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2020 08:00:17 -0800 (PST)
+        Thu, 16 Jan 2020 08:07:33 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@kernel.org>)
-        id 1is7ZA-0007Cg-GL; Thu, 16 Jan 2020 17:00:16 +0100
-Date:   Thu, 16 Jan 2020 17:00:16 +0100
+        (envelope-from <johan@xi.terra>)
+        id 1is7gC-0001Mi-IM; Thu, 16 Jan 2020 17:07:32 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Reinhard Speyerer <rspmn@arcor.de>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Kristian Evensen <kristian.evensen@gmail.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add support for Quectel RM500Q in
- QDL mode
-Message-ID: <20200116160016.GN2301@localhost>
-References: <20200114132923.GA18330@arcor.de>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, stable <stable@vger.kernel.org>
+Subject: [PATCH] USB: serial: suppress driver bind attributes
+Date:   Thu, 16 Jan 2020 17:07:05 +0100
+Message-Id: <20200116160705.5199-1-johan@kernel.org>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200114132923.GA18330@arcor.de>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 14, 2020 at 02:29:23PM +0100, Reinhard Speyerer wrote:
-> Add support for Quectel RM500Q in QDL mode.
-> 
-> T:  Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 24 Spd=480  MxCh= 0
-> D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=2c7c ProdID=0800 Rev= 0.00
-> S:  Manufacturer=Qualcomm CDMA Technologies MSM
-> S:  Product=QUSB_BULK_SN:xxxxxxxx
-> S:  SerialNumber=xxxxxxxx
-> C:* #Ifs= 1 Cfg#= 1 Atr=a0 MxPwr=  2mA
-> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=10 Driver=option
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> It is assumed that the ZLP flag required for other Qualcomm-based
-> 5G devices also applies to Quectel RM500Q.
-> 
-> Signed-off-by: Reinhard Speyerer <rspmn@arcor.de>
-> ---
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 62bad1b2c18e..084cc2fff3ae 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -1107,6 +1107,8 @@ static const struct usb_device_id option_ids[] = {
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM12, 0xff, 0, 0) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x30) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0, 0) },
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x10),
-> +	  .driver_info = ZLP },
+USB-serial drivers must not be unbound from their ports before the
+corresponding USB driver is unbound from the parent interface so
+suppress the bind and unbind attributes.
 
-By the way, don't you want NCTRL(0) here too (cf. Telit SBL FN980).
+Unbinding a serial driver while it's port is open is a sure way to
+trigger a crash as any driver state is released on unbind while port
+hangup is handled on the parent USB interface level. Drivers for
+multiport devices where ports share a resource such as an interrupt
+endpoint also generally cannot handle individual ports going away.
 
->  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
->  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_CMU_300) },
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/serial/usb-serial.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Johan
+diff --git a/drivers/usb/serial/usb-serial.c b/drivers/usb/serial/usb-serial.c
+index 8f066bb55d7d..dc7a65b9ec98 100644
+--- a/drivers/usb/serial/usb-serial.c
++++ b/drivers/usb/serial/usb-serial.c
+@@ -1317,6 +1317,9 @@ static int usb_serial_register(struct usb_serial_driver *driver)
+ 		return -EINVAL;
+ 	}
+ 
++	/* Prevent individual ports from being unbound. */
++	driver->driver.suppress_bind_attrs = true;
++
+ 	usb_serial_operations_init(driver);
+ 
+ 	/* Add this device to our list of devices */
+-- 
+2.24.1
+
