@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A5C513DF54
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 16:56:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14EC913DF71
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 17:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726887AbgAPP4g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jan 2020 10:56:36 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:46771 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726370AbgAPP4g (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jan 2020 10:56:36 -0500
-Received: by mail-lf1-f68.google.com with SMTP id f15so15841104lfl.13
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jan 2020 07:56:35 -0800 (PST)
+        id S1726853AbgAPQAU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jan 2020 11:00:20 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:40869 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726566AbgAPQAT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jan 2020 11:00:19 -0500
+Received: by mail-lf1-f66.google.com with SMTP id i23so15864799lfo.7
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jan 2020 08:00:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=xdwyJS4JOKP06Lh2uqCg4lcXTdRwjpXxTyvLEWDMt3g=;
-        b=MGz25EkgPJwyYyuvMUzNlMydnQRAorj8tLMRerFv3QezidM6NvzV5wQfYIbEGIPb/t
-         GUiji9f905YyOu/md2lTjWu2Cot60QtG1qHKcz+dDffWM6aRwfvJIFqDBnDrCDL3gzNU
-         4ZfPllViX2L/AQXet1EyTHLe3oDm/PJ6UWRaP2CoIB+giWVTiOFS36QZblE19tXNtMI3
-         d+86S0bhC7xVBMfup6jKU9LIJU0GP9clW7kJZwdyqjji3Y9zZXmTwgjfZEG2fUD189G8
-         mQnzuuUjSJHhQgE2S1UQAmNfLwTzWMiT81fYS304kZcmAMYQDgT6gC2VTAGyl0WI5Y+9
-         S62g==
-X-Gm-Message-State: APjAAAVx37molSbns+wAoYEn6l+9+eh69A6Z1xVqfMHMKtpkwz0zUaWy
-        YAQvOq/musbEWwOxzzApOWg=
-X-Google-Smtp-Source: APXvYqxKxmO7lHpgJyf0KpTkFyuNJyw06n3HQ4hl6oN/JVecTFNdGFi5H6uXnF620bJLlSh5CZOcCg==
-X-Received: by 2002:a19:5013:: with SMTP id e19mr2930197lfb.8.1579190194703;
-        Thu, 16 Jan 2020 07:56:34 -0800 (PST)
+        bh=NJ7aZMxm3RzPvb52TF7pvFQmIY3/JMjgi+gugvR/Zm4=;
+        b=DyTn1fPq/hLi2x4t7YXYLBFfq/qksbplwCuvQdKW00UHemPYY6a+ELjhtIN/0t/OG/
+         DPaFCq7oxIiib2HzjIuKsQg+Ky2vXAlbtP62x1/spA9Se288Q/begYIQ8VWHZ0M97K9U
+         5QmT6E5jfrRzjsmOrUqepwaTfDCHesYJiLDPTbNgQiMGNdvLFCFkhngQWFIhu/p2dg2k
+         0ZJoV244PZENwmVrm0srQqO7l2nx8IGV/JsNFAongY+eveVP9FTZwtcouyNyufZW1U4v
+         P10s75sp/MPDysVst6NPEqwr39idSOC7DkkhzFzTcddUijkyrsTxXRfWai+vPh6j577U
+         BREg==
+X-Gm-Message-State: APjAAAX4QC7U735d+ituhsyb/WaL5B2hCxj3HZ1G5QgqYJaG9olXZcaW
+        /53tJMPNne8ltxB61i3bNE4=
+X-Google-Smtp-Source: APXvYqyPb9J+p9ZgwPwRP1rJc60LrEBC/r3HGBmXaPkgS2x0qvRrkoOhVFA3VDkpbDK6CLRQUISCFQ==
+X-Received: by 2002:a05:6512:40e:: with SMTP id u14mr2772138lfk.161.1579190417625;
+        Thu, 16 Jan 2020 08:00:17 -0800 (PST)
 Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
-        by smtp.gmail.com with ESMTPSA id n11sm10947045ljg.15.2020.01.16.07.56.33
+        by smtp.gmail.com with ESMTPSA id r12sm10894718ljh.105.2020.01.16.08.00.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2020 07:56:33 -0800 (PST)
+        Thu, 16 Jan 2020 08:00:17 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.92.3)
         (envelope-from <johan@kernel.org>)
-        id 1is7VZ-0004nJ-6o; Thu, 16 Jan 2020 16:56:33 +0100
-Date:   Thu, 16 Jan 2020 16:56:33 +0100
+        id 1is7ZA-0007Cg-GL; Thu, 16 Jan 2020 17:00:16 +0100
+Date:   Thu, 16 Jan 2020 17:00:16 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     Reinhard Speyerer <rspmn@arcor.de>
 Cc:     Johan Hovold <johan@kernel.org>,
@@ -44,7 +44,7 @@ Cc:     Johan Hovold <johan@kernel.org>,
         linux-usb@vger.kernel.org
 Subject: Re: [PATCH] USB: serial: option: add support for Quectel RM500Q in
  QDL mode
-Message-ID: <20200116155633.GM2301@localhost>
+Message-ID: <20200116160016.GN2301@localhost>
 References: <20200114132923.GA18330@arcor.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -73,7 +73,21 @@ On Tue, Jan 14, 2020 at 02:29:23PM +0100, Reinhard Speyerer wrote:
 > 5G devices also applies to Quectel RM500Q.
 > 
 > Signed-off-by: Reinhard Speyerer <rspmn@arcor.de>
+> ---
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index 62bad1b2c18e..084cc2fff3ae 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -1107,6 +1107,8 @@ static const struct usb_device_id option_ids[] = {
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM12, 0xff, 0, 0) },
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x30) },
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0, 0) },
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500Q, 0xff, 0xff, 0x10),
+> +	  .driver_info = ZLP },
 
-Applied, thanks.
+By the way, don't you want NCTRL(0) here too (cf. Telit SBL FN980).
+
+>  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
+>  	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_CMU_300) },
 
 Johan
