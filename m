@@ -2,94 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F7B13F58D
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 19:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C27213F5CF
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 19:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389458AbgAPS4x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jan 2020 13:56:53 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:38368 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726892AbgAPS4w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jan 2020 13:56:52 -0500
-Received: by mail-pf1-f193.google.com with SMTP id x185so10660889pfc.5
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jan 2020 10:56:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=e1hPnAGJzQjzVaN7LMtGbDC+VKlYHzG/ED+64kYaGrI=;
-        b=IqEUWJ/l9j+vDhIStoS5gcfw4PfL/wBYR7hBxLeS0jsAvDZ6CAvCazaGAkrN5RFk5G
-         VDPM1Fbg72swG3QTJC7U65umy0PmLADKpjzozqH9f942oscCiVsVZrZi6320I9JhyYC8
-         NyHjSyw72Q+l1fZ7puE5SPEf3Sogwn1dhAwYfYYPxw9a9lKMGcjJi4IF/K2DyfGZxHNV
-         yatOJ0bCWNe0G6d7sjIm+mSO5+nQE6A8yyIEWAnU0//F7mVwFWV2UyY8+Q9ZkG8MdQi5
-         2epuSmibmrviI0DRfuaDAWMcYkdu+ActSmyxna7V4slEkR18Xq5Ezxl3Pp/i8OEAazCU
-         Um1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=e1hPnAGJzQjzVaN7LMtGbDC+VKlYHzG/ED+64kYaGrI=;
-        b=ddzjpK8HhinkatXMlpNNvef8KiNnE66FY5y+aaI+cEYPLDluA3KvShrKIa7Zdr/m45
-         UQEXHUwf9Nju/lTMcqvSo8t2lK0pWWUspROVWL4p+W5FgnXHI5enV8vWGX23Tk9vZOLy
-         GKzcTtSMr/Bvt3qBdgKGhOVwyVfkuZm2/+ALr0G5CMcmSTGEX1L74ONel3nyJQTPH/00
-         3Kzcj4wFyVh/CARvTL5/DlSMt3RjMloBB8H1mXggPgy3+f0QLI92vzeH8wBfIKSQZcEU
-         7/Di3P4QCKuRI3KYYvJ75Y/vZA+CctdiOreYJPMCtF2rfLpjDik1TFP2LvkVGztJbl3y
-         0CIg==
-X-Gm-Message-State: APjAAAXxpQXdJBz0ns6/8lDjuB51BmeKHu4+t0qBI9osI57jEDHCLKtW
-        5HdPYBkT+oGxbNokY4ajyP4=
-X-Google-Smtp-Source: APXvYqzBrjalHzUntGeA1rtxl9lVUwoM7GDV+GOSmvhgnho3lcEojfjvPeArkvgAORZ+isrZx8NhvQ==
-X-Received: by 2002:a62:148a:: with SMTP id 132mr39160103pfu.158.1579201011524;
-        Thu, 16 Jan 2020 10:56:51 -0800 (PST)
-Received: from ajayg.nvidia.com (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id z26sm24611709pgu.80.2020.01.16.10.56.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2020 10:56:50 -0800 (PST)
-From:   Ajay Gupta <ajaykuee@gmail.com>
-X-Google-Original-From: Ajay Gupta <ajayg@nvidia.com>
-To:     heikki.krogerus@linux.intel.com
-Cc:     linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>
-Subject: [PATCH 2/2] usb: ucsi: ccg: disable runtime pm during fw flashing
-Date:   Wed, 15 Jan 2020 17:32:47 -0800
-Message-Id: <20200116013247.16507-2-ajayg@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200116013247.16507-1-ajayg@nvidia.com>
-References: <20200116013247.16507-1-ajayg@nvidia.com>
-X-NVConfidentiality: public
+        id S2388967AbgAPRGl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jan 2020 12:06:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37230 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388658AbgAPRGk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:06:40 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CCCC321582;
+        Thu, 16 Jan 2020 17:06:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579194399;
+        bh=I5NEqjUH5eHmMFIlF9a4vO0wCDNHBH7imRYFsG9qCUM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=KUlE5zytm4MeBjK4MEBa4cYL55RJt30N1+mCjgkucT33FBeXefYhF6H9qJ2DNhIaj
+         vQ2bj66+X+YmgPFia3SfRLuWcCH+oYTNlumfEp00GYeQRas/OmFJiCLXQQeSWwT+Bc
+         hq8hxUIFDoTCq7VrvxatqbbubTjMlrQj4KJijruI=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 325/671] usb: gadget: fsl: fix link error against usb-gadget module
+Date:   Thu, 16 Jan 2020 11:59:23 -0500
+Message-Id: <20200116170509.12787-62-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
+References: <20200116170509.12787-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Ajay Gupta <ajayg@nvidia.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-Ucsi ppm is unregistered during fw flashing so disable
-runtime pm also and reenable after fw flashing is completed
-and ppm is re-registered.
+[ Upstream commit 2100e3ca3676e894fa48b8f6f01d01733387fe81 ]
 
-Signed-off-by: Ajay Gupta <ajayg@nvidia.com>
+The dependency to ensure this driver links correctly fails since
+it can not be a loadable module:
+
+drivers/usb/phy/phy-fsl-usb.o: In function `fsl_otg_set_peripheral':
+phy-fsl-usb.c:(.text+0x2224): undefined reference to `usb_gadget_vbus_disconnect'
+
+Make the option 'tristate' so it can work correctly.
+
+Fixes: 5a8d651a2bde ("usb: gadget: move gadget API functions to udc-core")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/typec/ucsi/ucsi_ccg.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/phy/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index a5b8530490db..2658cda5da11 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -1219,6 +1219,7 @@ static int ccg_restart(struct ucsi_ccg *uc)
- 		return status;
- 	}
+diff --git a/drivers/usb/phy/Kconfig b/drivers/usb/phy/Kconfig
+index 91ea3083e7ad..affb5393c4c6 100644
+--- a/drivers/usb/phy/Kconfig
++++ b/drivers/usb/phy/Kconfig
+@@ -20,7 +20,7 @@ config AB8500_USB
+ 	  in host mode, low speed.
  
-+	pm_runtime_enable(uc->dev);
- 	return 0;
- }
- 
-@@ -1234,6 +1235,7 @@ static void ccg_update_firmware(struct work_struct *work)
- 
- 	if (flash_mode != FLASH_NOT_NEEDED) {
- 		ucsi_unregister(uc->ucsi);
-+		pm_runtime_disable(uc->dev);
- 		free_irq(uc->irq, uc);
- 
- 		ccg_fw_update(uc, flash_mode);
+ config FSL_USB2_OTG
+-	bool "Freescale USB OTG Transceiver Driver"
++	tristate "Freescale USB OTG Transceiver Driver"
+ 	depends on USB_EHCI_FSL && USB_FSL_USB2 && USB_OTG_FSM=y && PM
+ 	depends on USB_GADGET || !USB_GADGET # if USB_GADGET=m, this can't be 'y'
+ 	select USB_PHY
 -- 
-2.17.1
+2.20.1
 
