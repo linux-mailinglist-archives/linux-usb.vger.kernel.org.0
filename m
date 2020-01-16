@@ -2,39 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6E513F03F
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 19:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC30413EEDE
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 19:12:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395455AbgAPSTg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jan 2020 13:19:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39538 "EHLO mail.kernel.org"
+        id S2393184AbgAPRhV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jan 2020 12:37:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52502 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392559AbgAPR21 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:28:27 -0500
+        id S2405332AbgAPRhV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:37:21 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B511B246F5;
-        Thu, 16 Jan 2020 17:28:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7C5CA246AD;
+        Thu, 16 Jan 2020 17:37:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579195706;
-        bh=4njscMVRamwTD/3+ApG2GUvE64k++H3GsbZ2/ieNP3g=;
+        s=default; t=1579196240;
+        bh=QrbJSSFGZoHv8Kamr1uDkgCuY3Gp7yodECR1MkQoYUE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ihIIAoh+zJKDMzPDs7yZhR6bQkSdDRHErvU43/MAhJ5lp0QxmjcmI/fOfuMqK0hqV
-         D+VDFr2dGqKX7PdYtA8tFFL/+Mv4kTpQljiJVDFLNZNl514dD+EpVf8LUN/V/Styat
-         kLWtpVTCzt9iWuT1pU1qEOUt2duqVrW9crttPTqI=
+        b=chkNu0AwsCxlDZaggyuODNp2g5mQ595K678IEpslIEmTAVN7eS73PWyNXKj+to6j4
+         gs7A8VaMBGtORmuuTw+U0gwvTfBvBPy0eG2ohmtsrZzjgPhdSY5Bqqfr2UGE/Ta/jS
+         VgxpN6Wa7WiWLrLWom4Evcs6BbRkgCQxg50fuECo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc:     Sven Van Asbroeck <thesven73@gmail.com>,
+        Tony Lindgren <tony@atomide.com>, Bin Liu <b-liu@ti.com>,
+        Sven Van Asbroeck <TheSven73@gmail.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 253/371] usb: host: xhci-hub: fix extra endianness conversion
-Date:   Thu, 16 Jan 2020 12:22:05 -0500
-Message-Id: <20200116172403.18149-196-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 070/251] usb: phy: twl6030-usb: fix possible use-after-free on remove
+Date:   Thu, 16 Jan 2020 12:33:39 -0500
+Message-Id: <20200116173641.22137-30-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
-References: <20200116172403.18149-1-sashal@kernel.org>
+In-Reply-To: <20200116173641.22137-1-sashal@kernel.org>
+References: <20200116173641.22137-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,42 +45,39 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+From: Sven Van Asbroeck <thesven73@gmail.com>
 
-[ Upstream commit 6269e4c76eacabaea0d0099200ae1a455768d208 ]
+[ Upstream commit 5895d311d28f2605e2f71c1a3e043ed38f3ac9d2 ]
 
-Don't do extra cpu_to_le32 conversion for
-put_unaligned_le32 because it is already implemented
-in this function.
+In remove(), use cancel_delayed_work_sync() to cancel the
+delayed work. Otherwise there's a chance that this work
+will continue to run until after the device has been removed.
 
-Fixes sparse error:
-xhci-hub.c:1152:44: warning: incorrect type in argument 1 (different base types)
-xhci-hub.c:1152:44:    expected unsigned int [usertype] val
-xhci-hub.c:1152:44:    got restricted __le32 [usertype]
+This issue was detected with the help of Coccinelle.
 
-Fixes: 395f540 "xhci: support new USB 3.1 hub request to get extended port status"
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
-Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Link: https://lore.kernel.org/r/1562501839-26522-1-git-send-email-ruslan.bilovol@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Tony Lindgren <tony@atomide.com>
+Cc: Bin Liu <b-liu@ti.com>
+Fixes: b6a619a883c3 ("usb: phy: Check initial state for twl6030")
+Signed-off-by: Sven Van Asbroeck <TheSven73@gmail.com>
+Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-hub.c | 2 +-
+ drivers/usb/phy/phy-twl6030-usb.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index d1363f3fabfa..3bb38d9dc45b 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -1118,7 +1118,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 			}
- 			port_li = readl(port_array[wIndex] + PORTLI);
- 			status = xhci_get_ext_port_status(temp, port_li);
--			put_unaligned_le32(cpu_to_le32(status), &buf[4]);
-+			put_unaligned_le32(status, &buf[4]);
- 		}
- 		break;
- 	case SetPortFeature:
+diff --git a/drivers/usb/phy/phy-twl6030-usb.c b/drivers/usb/phy/phy-twl6030-usb.c
+index a72e8d670adc..cf0b67433ac9 100644
+--- a/drivers/usb/phy/phy-twl6030-usb.c
++++ b/drivers/usb/phy/phy-twl6030-usb.c
+@@ -422,7 +422,7 @@ static int twl6030_usb_remove(struct platform_device *pdev)
+ {
+ 	struct twl6030_usb *twl = platform_get_drvdata(pdev);
+ 
+-	cancel_delayed_work(&twl->get_status_work);
++	cancel_delayed_work_sync(&twl->get_status_work);
+ 	twl6030_interrupt_mask(TWL6030_USBOTG_INT_MASK,
+ 		REG_INT_MSK_LINE_C);
+ 	twl6030_interrupt_mask(TWL6030_USBOTG_INT_MASK,
 -- 
 2.20.1
 
