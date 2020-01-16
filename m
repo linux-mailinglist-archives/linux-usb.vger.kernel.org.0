@@ -2,68 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C6313DD27
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 15:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9940413DD37
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 15:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726827AbgAPOOt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jan 2020 09:14:49 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:9178 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726084AbgAPOOt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 16 Jan 2020 09:14:49 -0500
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 9C402C06E83C7C35574F;
-        Thu, 16 Jan 2020 22:14:46 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS413-HUB.china.huawei.com
- (10.3.19.213) with Microsoft SMTP Server id 14.3.439.0; Thu, 16 Jan 2020
- 22:14:37 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <yuehaibing@huawei.com>, <nkristam@nvidia.com>,
-        <felipe.balbi@linux.intel.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] usb: gadget: xudc: Remove redundant platform_get_irq error message
-Date:   Thu, 16 Jan 2020 22:14:33 +0800
-Message-ID: <20200116141433.57056-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1726552AbgAPOQu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jan 2020 09:16:50 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:38627 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726189AbgAPOQu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jan 2020 09:16:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1579184206;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+eM791Q4Hey50CwTWaFap7VYvLNXZAugVxwugwJGukU=;
+        b=K9c1ANRoMygFJVZKkYi45P1fbFIvHXiEov5fheSN9AsPRmQt0+RGadr/598VfsvDQNy//d
+        0DnGOlsCCIhmvC/Rd7wdKn5YYyFZMrwbL2SF7Kgw/i+SUJPtsL3GueMvR9m6MD2Cc6GqUL
+        qRUY3QgPWtW7tvzdgMoVQPTp9SOntbc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-218-Fn1Oq7pOPN6uTqzQsN5PzA-1; Thu, 16 Jan 2020 09:16:44 -0500
+X-MC-Unique: Fn1Oq7pOPN6uTqzQsN5PzA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 77C5F102C860;
+        Thu, 16 Jan 2020 14:16:43 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-52.rdu2.redhat.com [10.10.120.52])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7A59A80A5C;
+        Thu, 16 Jan 2020 14:16:42 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+To:     Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Spyridon Papageorgiou <spapageorgiou@de.adit-jv.com>
+cc:     dhowells@redhat.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: Do you have a sink for USB notifications?
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.133.213.239]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <8179.1579184166.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+From:   David Howells <dhowells@redhat.com>
+Date:   Thu, 16 Jan 2020 14:16:41 +0000
+Message-ID: <8232.1579184201@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-platform_get_irq() will call dev_err() itself on failure,
-so there is no need for the driver to also do this.
-This is detected by coccinelle.
+Hi Eugeniu, Spyridon,
 
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/usb/gadget/udc/tegra-xudc.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Do you have a consumer program for USB notification events?  I'm would lik=
+e to
+get my general notification queue patches upstream in this merge window, b=
+ut
+it appears that Linus would like there to be userspace consumers first.
 
-diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
-index 634c2c1..fc1eafc 100644
---- a/drivers/usb/gadget/udc/tegra-xudc.c
-+++ b/drivers/usb/gadget/udc/tegra-xudc.c
-@@ -3492,11 +3492,8 @@ static int tegra_xudc_probe(struct platform_device *pdev)
- 	}
- 
- 	xudc->irq = platform_get_irq(pdev, 0);
--	if (xudc->irq < 0) {
--		dev_err(xudc->dev, "failed to get IRQ: %d\n",
--				xudc->irq);
-+	if (xudc->irq < 0)
- 		return xudc->irq;
--	}
- 
- 	err = devm_request_irq(&pdev->dev, xudc->irq, tegra_xudc_irq, 0,
- 			       dev_name(&pdev->dev), xudc);
--- 
-2.7.4
+Greg pointed me at your patch:
 
+	https://lore.kernel.org/lkml/20190605090556.17792-1-erosca@de.adit-jv.com=
+/
+
+My latest patch set is here:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log=
+/?h=3Dnotifications-pipe-core
+
+This provides access to keyring, usb and block device notifications.
+
+Thanks,
+David
 
