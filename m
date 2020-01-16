@@ -2,35 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5AD13E793
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 18:27:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A276913E8D2
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 18:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389795AbgAPR0o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jan 2020 12:26:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35768 "EHLO mail.kernel.org"
+        id S2404870AbgAPRe0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jan 2020 12:34:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42474 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404020AbgAPR0n (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:26:43 -0500
+        id S2392971AbgAPRaI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:30:08 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6A3E9246C8;
-        Thu, 16 Jan 2020 17:26:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 465342471F;
+        Thu, 16 Jan 2020 17:30:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579195603;
-        bh=b5bbwaFLgQvjArAtfG/H2/8OOvBX8ntW6iaFKtCKbvE=;
+        s=default; t=1579195808;
+        bh=r567kJllO7l6ZFL/EKiqPTZlPdMaYe+6YV6/jG8CsyQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M6vwuRJTTc0FcAuJ8twtbrO1E6x3m40Pxl/ZfBnxS/G3Y4egCnZ2QK5v9iV9GmV6h
-         BwL1JIv+6fy9BwDGQtz7YD9eJ96kSj96aHsHzwdd/++d9u3b9wUIf9U0ldInVUOnGB
-         AVTbB4urKFHHed0VGNbu+517gJgbdrTsLE1QS7KY=
+        b=uJ1NQ45UDW5irQ+lErE4/MYaShlyUGvwgUILbH5nnU5wOSch43wxT+6UBW5qnrUzz
+         3ESRU3okGhJkZ46+R8+BsYHM73zLajqJgM7oNT4tRRLYlB8Jq/99aw1OJ0rYA4G2no
+         5SQOqggWeT+6g3a14BqVgJ99Dksf1je2ffDZTAqU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 178/371] usb: gadget: fsl: fix link error against usb-gadget module
-Date:   Thu, 16 Jan 2020 12:20:50 -0500
-Message-Id: <20200116172403.18149-121-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 321/371] USB: usb-skeleton: fix use-after-free after driver unbind
+Date:   Thu, 16 Jan 2020 12:23:13 -0500
+Message-Id: <20200116172403.18149-264-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116172403.18149-1-sashal@kernel.org>
 References: <20200116172403.18149-1-sashal@kernel.org>
@@ -43,39 +43,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Johan Hovold <johan@kernel.org>
 
-[ Upstream commit 2100e3ca3676e894fa48b8f6f01d01733387fe81 ]
+[ Upstream commit 6353001852776e7eeaab4da78922d4c6f2b076af ]
 
-The dependency to ensure this driver links correctly fails since
-it can not be a loadable module:
+The driver failed to stop its read URB on disconnect, something which
+could lead to a use-after-free in the completion handler after driver
+unbind in case the character device has been closed.
 
-drivers/usb/phy/phy-fsl-usb.o: In function `fsl_otg_set_peripheral':
-phy-fsl-usb.c:(.text+0x2224): undefined reference to `usb_gadget_vbus_disconnect'
-
-Make the option 'tristate' so it can work correctly.
-
-Fixes: 5a8d651a2bde ("usb: gadget: move gadget API functions to udc-core")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+Fixes: e7389cc9a7ff ("USB: skel_read really sucks royally")
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Link: https://lore.kernel.org/r/20191009170944.30057-3-johan@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/phy/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/usb-skeleton.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/phy/Kconfig b/drivers/usb/phy/Kconfig
-index 85a92d0813dd..440238061edd 100644
---- a/drivers/usb/phy/Kconfig
-+++ b/drivers/usb/phy/Kconfig
-@@ -20,7 +20,7 @@ config AB8500_USB
- 	  in host mode, low speed.
+diff --git a/drivers/usb/usb-skeleton.c b/drivers/usb/usb-skeleton.c
+index 7140d06ae04f..baf047c0be6c 100644
+--- a/drivers/usb/usb-skeleton.c
++++ b/drivers/usb/usb-skeleton.c
+@@ -575,6 +575,7 @@ static void skel_disconnect(struct usb_interface *interface)
+ 	dev->disconnected = 1;
+ 	mutex_unlock(&dev->io_mutex);
  
- config FSL_USB2_OTG
--	bool "Freescale USB OTG Transceiver Driver"
-+	tristate "Freescale USB OTG Transceiver Driver"
- 	depends on USB_EHCI_FSL && USB_FSL_USB2 && USB_OTG_FSM=y && PM
- 	depends on USB_GADGET || !USB_GADGET # if USB_GADGET=m, this can't be 'y'
- 	select USB_PHY
++	usb_kill_urb(dev->bulk_in_urb);
+ 	usb_kill_anchored_urbs(&dev->submitted);
+ 
+ 	/* decrement our usage count */
 -- 
 2.20.1
 
