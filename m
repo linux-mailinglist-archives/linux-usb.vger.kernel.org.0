@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13CAA13F5D1
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 19:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3221013F40C
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 19:47:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390320AbgAPS7H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jan 2020 13:59:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37250 "EHLO mail.kernel.org"
+        id S2389826AbgAPRKD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jan 2020 12:10:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47296 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388966AbgAPRGl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:06:41 -0500
+        id S2389472AbgAPRKD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:10:03 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4523F2192A;
-        Thu, 16 Jan 2020 17:06:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C300E2468B;
+        Thu, 16 Jan 2020 17:10:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579194401;
-        bh=NkGpowe9FnmmpR6ORNdzBt56niZjn5inrN0I8s/L6Y0=;
+        s=default; t=1579194602;
+        bh=TJeYjIHhNMiZ37QzlXdwOSx5qNMJPZ9IvTSccoEPWic=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DY8XlMhkTXzhWCjgwA/8kJU4mHJ2xcGz12/XjzxhPom8palkKMmSVPs5XWZAUlxGT
-         1Pt5EqXApsawyCSE6P39+L0b6xba4Gs9+VLgL+pF9vROW8DBYReLc7EMi/J3lx/MiO
-         WeAWxYvvMZhqwhXj9LkStbSfxRtfUqEfM9Xp732c=
+        b=A5r9ZtMD/Xkf2pkecLYcP1Folb3hWpATx/l/HKsd7OiVqpw3AbLdx/cSIrZRLergw
+         HJGFjTxvEeIbB5+rRO/iick8M0bhLlWQmONRTB+/aEK/vsqn6179JAdblOR4d854TY
+         ISipe1oP/VgOGfzTiz/hXmg/+jY1lVYhXZ0iOacU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Minas Harutyunyan <minas.harutyunyan@synopsys.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
+Cc:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 326/671] dwc2: gadget: Fix completed transfer size calculation in DDMA
-Date:   Thu, 16 Jan 2020 11:59:24 -0500
-Message-Id: <20200116170509.12787-63-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 470/671] usb: host: xhci-hub: fix extra endianness conversion
+Date:   Thu, 16 Jan 2020 12:01:48 -0500
+Message-Id: <20200116170509.12787-207-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
 References: <20200116170509.12787-1-sashal@kernel.org>
@@ -44,37 +44,42 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Minas Harutyunyan <minas.harutyunyan@synopsys.com>
+From: Ruslan Bilovol <ruslan.bilovol@gmail.com>
 
-[ Upstream commit 5acb4b970184d189d901192d075997c933b82260 ]
+[ Upstream commit 6269e4c76eacabaea0d0099200ae1a455768d208 ]
 
-Fix calculation of transfer size on completion in function
-dwc2_gadget_get_xfersize_ddma().
+Don't do extra cpu_to_le32 conversion for
+put_unaligned_le32 because it is already implemented
+in this function.
 
-Added increment of descriptor pointer to move to next descriptor in
-the loop.
+Fixes sparse error:
+xhci-hub.c:1152:44: warning: incorrect type in argument 1 (different base types)
+xhci-hub.c:1152:44:    expected unsigned int [usertype] val
+xhci-hub.c:1152:44:    got restricted __le32 [usertype]
 
-Fixes: aa3e8bc81311 ("usb: dwc2: gadget: DDMA transfer start and complete")
-
-Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
-Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+Fixes: 395f540 "xhci: support new USB 3.1 hub request to get extended port status"
+Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
+Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Link: https://lore.kernel.org/r/1562501839-26522-1-git-send-email-ruslan.bilovol@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc2/gadget.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/host/xhci-hub.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 3f68edde0f03..f64d1cd08fb6 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -2230,6 +2230,7 @@ static unsigned int dwc2_gadget_get_xfersize_ddma(struct dwc2_hsotg_ep *hs_ep)
- 		if (status & DEV_DMA_STS_MASK)
- 			dev_err(hsotg->dev, "descriptor %d closed with %x\n",
- 				i, status & DEV_DMA_STS_MASK);
-+		desc++;
- 	}
- 
- 	return bytes_rem;
+diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+index 8f180bf7561a..9772c0de59b7 100644
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -1104,7 +1104,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 			}
+ 			port_li = readl(ports[wIndex]->addr + PORTLI);
+ 			status = xhci_get_ext_port_status(temp, port_li);
+-			put_unaligned_le32(cpu_to_le32(status), &buf[4]);
++			put_unaligned_le32(status, &buf[4]);
+ 		}
+ 		break;
+ 	case SetPortFeature:
 -- 
 2.20.1
 
