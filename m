@@ -2,88 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC44813FB9E
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 22:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E0F13FBA5
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2020 22:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729413AbgAPVef (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jan 2020 16:34:35 -0500
-Received: from mail-vs1-f54.google.com ([209.85.217.54]:38081 "EHLO
-        mail-vs1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729305AbgAPVee (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jan 2020 16:34:34 -0500
-Received: by mail-vs1-f54.google.com with SMTP id v12so13647917vsv.5
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jan 2020 13:34:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=AGt3KcOzBwBCMk+MQvi9CtXSfDZ24gssKIJht6EMKLc=;
-        b=FeNvY6ARudp71xkWsih/wsG2G5HJnXewWS6uA18HyfuPUaGuXUo+ELglRh8b7qWvSC
-         Ff5MXi95j1EBIx6Pv16l7WBuXF3LJfpJiGvu7vKm2+/2+nUdtiJz1gABO/7hMU1US6b3
-         wtmSbVAr6fFjm0j39rBWz/nrEZOMQmwhbHWbXSvLMK9R6P3WPGS1RrLKcVh1f48MJGbC
-         A5zjF0KJIRf9JgGvoRoPh6tjG+EwnlLjw3rrNs6gzsdzyHRHpcwuaAr2Pm6+qKlNdg+Q
-         2faXr1AK/N/HzSY9itD1+iKe765LCpmtrF3kweejAPsZ010fUyN8yj+IPckaFu9tdruV
-         ov9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=AGt3KcOzBwBCMk+MQvi9CtXSfDZ24gssKIJht6EMKLc=;
-        b=EmiFePIx80nUbO9nYzYX5CigP2l1QYgKAXfQYc+/RbkSGdMGgoIOcgVQ+LLnJ82sob
-         8KyX+tIfWz+ONS+CC0ksQwBDTWC1j/f1V/1HdJjK+wq2I5LWAD4FeXzScgyrVwDbh6lR
-         E5+e6KvH0aDz2D7vix9pcZshL9sL5nDhfI0KG4LMVJ3JjHY1CErG4c4w9iAK6VFEtzaI
-         /PTc9hIuwojhEV6yBmVEQR65uCJZQYRzmK6+6n2uusABWzeX5U8wY9ToteM/OkOA8eEI
-         hZk1VlBdUZwaYjWjQNOK1mS+fJQ/7b5avZSQXlb+DUJjIN506RStFri6WP25f0bISt2A
-         S5tw==
-X-Gm-Message-State: APjAAAUimIwnMZufsHlOnOTXfX4qpf1OH6+9UC6bK/0ZNRwvihTRgjld
-        lJRN9cNjIMRG4qr/CB5VhgaQ3tC2Ahu41aMYHhItoAU3
-X-Google-Smtp-Source: APXvYqy/ezypUsr9DZFlCC0C1UnvKVhuljjUP3oAv/9yeHzTNPryFqWVSAUgBOGPBth/ZDcCA/BoL9XCTZuEsgNfUyM=
-X-Received: by 2002:a67:6f46:: with SMTP id k67mr2986904vsc.2.1579210473496;
- Thu, 16 Jan 2020 13:34:33 -0800 (PST)
-MIME-Version: 1.0
-From:   Chris Dickens <christopher.a.dickens@gmail.com>
-Date:   Thu, 16 Jan 2020 13:34:21 -0800
-Message-ID: <CAL-1MmW7_DVGyOQytz=_fDeswUT=n_sfePS5yNm7SRU2ORSomQ@mail.gmail.com>
-Subject: Inconsistency in how URBs are unlinked
-To:     linux-usb <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1730166AbgAPVki (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jan 2020 16:40:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44284 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730059AbgAPVki (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 Jan 2020 16:40:38 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AE5BB2072B;
+        Thu, 16 Jan 2020 21:40:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579210837;
+        bh=Nbq/4U3v4JSzNciz+0MlD4VwuQP2bHM83+ItJHJQykA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I+o7KKsALUea1SW/LP3lWzoH8CstrXo/WDYkAhtEI1S4GXLMHHQilNse8blbquoTO
+         EArvpNy7YV+rHBuwZDtGo32sE+ZX4c7yfdfk+CAZAUR9cPhBihyH1WmhMVNuzVz88u
+         Eyh8Xr7JzKRFu6q00UdWz/MZG9fqV/b3AujjGaiE=
+Date:   Thu, 16 Jan 2020 22:40:34 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Chris Dickens <christopher.a.dickens@gmail.com>
+Cc:     linux-usb <linux-usb@vger.kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: Inconsistency in how URBs are unlinked
+Message-ID: <20200116214034.GA1250873@kroah.com>
+References: <CAL-1MmW7_DVGyOQytz=_fDeswUT=n_sfePS5yNm7SRU2ORSomQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL-1MmW7_DVGyOQytz=_fDeswUT=n_sfePS5yNm7SRU2ORSomQ@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Thu, Jan 16, 2020 at 01:34:21PM -0800, Chris Dickens wrote:
+> Hi,
+> 
+> A bug [1] has been reported against libusb about a segfault that
+> occurs when a device is disconnected while processing isochronous
+> transfers.  In my investigation I discovered an interesting
+> inconsistency in how URBs are unlinked across the USB core.
+> 
+> The usbfs driver will unlink URBs in the same order they are
+> submitted.  From what I can see this code is executed when
+> setting/releasing an interface or when alloc'ing/freeing streams.  I
+> see there is also a call within the usbfs driver's disconnect
+> function, but that appears to be a no-op (is this really the case?) as
+> by the time that function is called the interface would have already
+> been disabled and thus usb_hcd_flush_endpoint() would have been
+> called.
+> 
+> Since commit 2eac136243 ("usb: core: unlink urbs from the tail of the
+> endpoint's urb_list"), the usb_hcd_flush_endpoint() function will
+> unlink URBs in the reverse order of submission.  This subtle change is
+> what led to the crash within libusb.  The bug manifests when transfers
+> within libusb are split into multiple URBs.  Prior to this change, the
+> order in which URBs were reaped matched the order in which they were
+> submitted.  Internally libusb expects this order to match and frees
+> memory when it encounters the last URB in a multi-URB transfer, but
+> since it reaps the last URB first the memory is freed right away and
+> things take a turn when the freed memory is accessed when reaping the
+> other URB(s) in that same transfer.
 
-A bug [1] has been reported against libusb about a segfault that
-occurs when a device is disconnected while processing isochronous
-transfers.  In my investigation I discovered an interesting
-inconsistency in how URBs are unlinked across the USB core.
+That commit was from July 2017, has no one really noticed since then?
 
-The usbfs driver will unlink URBs in the same order they are
-submitted.  From what I can see this code is executed when
-setting/releasing an interface or when alloc'ing/freeing streams.  I
-see there is also a call within the usbfs driver's disconnect
-function, but that appears to be a no-op (is this really the case?) as
-by the time that function is called the interface would have already
-been disabled and thus usb_hcd_flush_endpoint() would have been
-called.
+Anyway, who is splitting the urb up, libusb or usbfs?  I'm guessing
+libusb here as otherwise this wouldn't be an issue, but if you are
+splitting them up, shouldn't you never count on the order in which they
+are handled as some host controllers can reorder them (I think xhci
+can).  So this type of fix for libusb is to be expected I would think,
+you can't count on an async interface ever working in an ordered manner,
+right?
 
-Since commit 2eac136243 ("usb: core: unlink urbs from the tail of the
-endpoint's urb_list"), the usb_hcd_flush_endpoint() function will
-unlink URBs in the reverse order of submission.  This subtle change is
-what led to the crash within libusb.  The bug manifests when transfers
-within libusb are split into multiple URBs.  Prior to this change, the
-order in which URBs were reaped matched the order in which they were
-submitted.  Internally libusb expects this order to match and frees
-memory when it encounters the last URB in a multi-URB transfer, but
-since it reaps the last URB first the memory is freed right away and
-things take a turn when the freed memory is accessed when reaping the
-other URB(s) in that same transfer.
+Also, what does other operating systems do here?
 
-I will fix libusb to account for this behavior, but I thought it worth
-mentioning as this new behavior isn't what I (and possibly others)
-necessarily expect.
+> I will fix libusb to account for this behavior, but I thought it worth
+> mentioning as this new behavior isn't what I (and possibly others)
+> necessarily expect.
 
-Chris
+New as of 2017 :)
 
-[1] https://github.com/libusb/libusb/issues/607
+thanks,
+
+greg k-h
