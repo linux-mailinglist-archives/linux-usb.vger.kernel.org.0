@@ -2,106 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE10140937
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 12:45:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DBE14097C
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 13:08:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726892AbgAQLoy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jan 2020 06:44:54 -0500
-Received: from mail-wr1-f52.google.com ([209.85.221.52]:40101 "EHLO
-        mail-wr1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726689AbgAQLoy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jan 2020 06:44:54 -0500
-Received: by mail-wr1-f52.google.com with SMTP id c14so22387953wrn.7;
-        Fri, 17 Jan 2020 03:44:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Cvl/0riDWi1vWOlhaM1KIHjFuBbtXHuUf7sN7cIcdUQ=;
-        b=pd/AEEOiXtlnl56Ztp+4tpU0did/dgcZlz3vv9cGoAAp58rnIV5zqsR4APWP9wU++u
-         b4W7mM+H46hBk9MzYmr3m9Pq8edDfmWI2k6oq4MGS/adTu5L4Hfjrl62LoezI+JqDmAl
-         c2ZikBHmdrpnpaRnDPntKS6UFWR4DGn2sKx5DcBVkGQhb5MSUFScAcSPr8Aikwv1se55
-         e9NvdgFAtdgnHEBh/ddNqoaAQganuNQlZ+FynoeqNSuGL1cRiKJuBy92dVjZoVe3TXSN
-         LsvJzKEkrVTPlMLhAvcDx20q8rzXVedeZEszrAFrBRUyrw2IogkgEGnq3sGxu5LcLW3/
-         2JoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Cvl/0riDWi1vWOlhaM1KIHjFuBbtXHuUf7sN7cIcdUQ=;
-        b=dqToYzINsOBPT0uqeO2+dGhvd1DBJZEr0ClDI6amfOT/gYtk6HsMYNs82AS1poFVZ4
-         snxTcQAs+DboC4cLMm0Uup+aYeKIfPufxUL90KNWMJ1ffMZ6QUe5qtmJ7ySi/r9wKoR+
-         IcOShTcw4jMUeu0BTxtdIpYcV0z74nI6t9yeWY4+nNeoYd3RbhgerYumnne7fZm1F5Zg
-         ZdM55G2XZUZm+VHj0qDMseqHXvHrU5QTWUVggO/zngld2F6R8eR5eaWvkuariUY2XYQi
-         qnSDj8AsHVS5yzORkITiNC3nOZzT8CVJEvJN7tCM3wLj+LbY95tPZ3Ka1PYsx0q0yhkS
-         9hDQ==
-X-Gm-Message-State: APjAAAWrWl/Qu9q8GHWcNraJdDmIWGuZDrClFmsO5Fk+bIdcvucvf0xW
-        24X1SUDhk/TQN6evmaKAmG0=
-X-Google-Smtp-Source: APXvYqxpTfsgq8itcwVKHQ+rQTht6l9AeOGj8QC+aRCPB4ihGNgIclf4SeUlF/ohhCr/WxH0s19xQw==
-X-Received: by 2002:a5d:6406:: with SMTP id z6mr2635993wru.294.1579261492500;
-        Fri, 17 Jan 2020 03:44:52 -0800 (PST)
-Received: from localhost (p2E5BEF3F.dip0.t-ipconnect.de. [46.91.239.63])
-        by smtp.gmail.com with ESMTPSA id e16sm33587122wrs.73.2020.01.17.03.44.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jan 2020 03:44:51 -0800 (PST)
-Date:   Fri, 17 Jan 2020 12:44:50 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
-        nkristam@nvidia.com, felipe.balbi@linux.intel.com,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] usb: gadget: xudc: Remove redundant
- platform_get_irq error message
-Message-ID: <20200117114450.GB166525@ulmo>
-References: <20200116141433.57056-1-yuehaibing@huawei.com>
+        id S1726973AbgAQMIl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jan 2020 07:08:41 -0500
+Received: from aer-iport-1.cisco.com ([173.38.203.51]:36416 "EHLO
+        aer-iport-1.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726898AbgAQMIk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jan 2020 07:08:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=1567; q=dns/txt; s=iport;
+  t=1579262920; x=1580472520;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=zlQBFIc9S6kZTsHEQTM7RGQDsvJHeiO3cabTgGOBT6Y=;
+  b=JGslkMtFyHfZwFsIZi9AZHuXyzAJjDNqx/GqljqtKV2eymZyUsxKHrHi
+   UVLtUg+rrtHPf9OQ5450lKUmmar9KsoprXIm2vSKLeWjRLFDDMdBC5Xh9
+   +F5pa3AR5g8Jzcy2+sU9jXLypY+Io3o6m8oamVoocorzh2xMdRvg+af6U
+   c=;
+X-IronPort-AV: E=Sophos;i="5.70,330,1574121600"; 
+   d="scan'208";a="21935992"
+Received: from aer-iport-nat.cisco.com (HELO aer-core-4.cisco.com) ([173.38.203.22])
+  by aer-iport-1.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 17 Jan 2020 12:08:39 +0000
+Received: from localhost.localdomain.rd.cisco.com ([10.47.76.148])
+        by aer-core-4.cisco.com (8.15.2/8.15.2) with ESMTP id 00HC8cRt022797;
+        Fri, 17 Jan 2020 12:08:38 GMT
+From:   Johan Korsnes <jkorsnes@cisco.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Johan Korsnes <jkorsnes@cisco.com>,
+        Armando Visconti <armando.visconti@st.com>,
+        Jiri Kosina <jkosina@suse.cz>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH v2 1/2] HID: core: fix off-by-one memset in hid_report_raw_event()
+Date:   Fri, 17 Jan 2020 13:08:35 +0100
+Message-Id: <20200117120836.2354966-1-jkorsnes@cisco.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="s/l3CgOIzMHHjg/5"
-Content-Disposition: inline
-In-Reply-To: <20200116141433.57056-1-yuehaibing@huawei.com>
-User-Agent: Mutt/1.13.1 (2019-12-14)
+Content-Transfer-Encoding: 8bit
+X-Outbound-SMTP-Client: 10.47.76.148, [10.47.76.148]
+X-Outbound-Node: aer-core-4.cisco.com
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+In case a report is greater than HID_MAX_BUFFER_SIZE, it is truncated,
+but the report-number byte is not correctly handled. This results in a
+off-by-one in the following memset, causing a kernel Oops and ensuing
+system crash.
 
---s/l3CgOIzMHHjg/5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Note: With commit 8ec321e96e05 ("HID: Fix slab-out-of-bounds read in
+hid_field_extract") I no longer hit the kernel Oops as we instead fail
+"controlled" at probe if there is a report too long in the HID
+report-descriptor. hid_report_raw_event() is an exported symbol, so
+presumabely we cannot always rely on this being the case.
 
-On Thu, Jan 16, 2020 at 10:14:33PM +0800, YueHaibing wrote:
-> platform_get_irq() will call dev_err() itself on failure,
-> so there is no need for the driver to also do this.
-> This is detected by coccinelle.
->=20
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> ---
->  drivers/usb/gadget/udc/tegra-xudc.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
+Fixes: 966922f26c7f ("HID: fix a crash in hid_report_raw_event()
+                     function.")
+Signed-off-by: Johan Korsnes <jkorsnes@cisco.com>
+Cc: Armando Visconti <armando.visconti@st.com>
+Cc: Jiri Kosina <jkosina@suse.cz>
+Cc: Alan Stern <stern@rowland.harvard.edu>
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+---
+v1 -> v2:
+ * Clean-up of patch description (commit message)
+---
+ drivers/hid/hid-core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---s/l3CgOIzMHHjg/5
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index 851fe54ea59e..359616e3efbb 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -1741,7 +1741,9 @@ int hid_report_raw_event(struct hid_device *hid, int type, u8 *data, u32 size,
+ 
+ 	rsize = ((report->size - 1) >> 3) + 1;
+ 
+-	if (rsize > HID_MAX_BUFFER_SIZE)
++	if (report_enum->numbered && rsize >= HID_MAX_BUFFER_SIZE)
++		rsize = HID_MAX_BUFFER_SIZE - 1;
++	else if (rsize > HID_MAX_BUFFER_SIZE)
+ 		rsize = HID_MAX_BUFFER_SIZE;
+ 
+ 	if (csize < rsize) {
+-- 
+2.24.1
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl4hnjIACgkQ3SOs138+
-s6G+ehAArX6J/MT8QnvA7i1DoizXGjeNN6C9t/2MrckIK9iyek+eMIIPaGfq0eF5
-xzbgIC3XSRrjolAepid+edS44UXQU2sRkQsRwAs3JhHS+BJnbSg3m4Ekd8LY3fl4
-McsE+Or8JUAhcnd7a5mFsPt6GCWCIe4bfkEycxGCifs9rgcy2kR9ltPlz0oVBsrH
-Na5acjzmr5Lm4yu8cpRtKJIFPqnS47/8xrPAsC+5l4PuXRlFumy1jSGQ4bDBw54B
-ThddVgBD/flrlbs7C9cV4imrc62gphEZ0fMM1OFD0mI6xxL3dNpVmWEXWb1EJRE1
-i2FzxT9Iy8zL/aHtqJ+DbUlhAlUxmwe49LAKHjmdwTtwCxhQFYE9os4silhzgw45
-nMIbGoNkS6HyR+OjCs5OgiSljuOXSq1ZG8ZSiUiJGBG8p3m8sdgDjcVKxdUEtIr/
-s+idDzZrrA06TEA9qAp++a4oICaX36tIezjGxtRoBA3x40RjSXUvxC+7E+xqqdUt
-kw97vMRuDEpkK+xhBd/8Vsoc+GJ/x51ByFwHYTdf31E30jG6vUa3EJtq5j94L4PM
-rAaHfYxgFdm7iYLV+F3XR5tLcwTl3UvP+aoY59j6/dSlF20OyAP5tMO6HxEo+MiG
-ikVV7exgW/qHv9ENKHDhrDVJMaNXRZOEwprUcUVKSzw4RTq1p6A=
-=QX2u
------END PGP SIGNATURE-----
-
---s/l3CgOIzMHHjg/5--
