@@ -2,86 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3B7140C78
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 15:29:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AA8140C9E
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 15:35:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726988AbgAQO3k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jan 2020 09:29:40 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:46006 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726827AbgAQO3k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jan 2020 09:29:40 -0500
-Received: by mail-lf1-f65.google.com with SMTP id 203so18481010lfa.12;
-        Fri, 17 Jan 2020 06:29:38 -0800 (PST)
+        id S1728904AbgAQOfm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jan 2020 09:35:42 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:36725 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728816AbgAQOfm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jan 2020 09:35:42 -0500
+Received: by mail-lj1-f195.google.com with SMTP id r19so26701382ljg.3;
+        Fri, 17 Jan 2020 06:35:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+1Hk/Q5L9FpcoIunUGfxi3OKJO1DIyZBiZordWi4mlY=;
-        b=c8G9/1UnJFreMm2U8s6OrhwTeis8cJ0NzcPuHhQAk7gMXkQpgXxiXyFgTegojWF1sF
-         Nn2mM9Op7BCHRI7HY5PEoEs0roFUjWdAWhhVZZU4kDBp/OjGIeSM5/z9cnDjGJBxTgdb
-         ak+a7vitvwI8dU52XKV4MnW5ytspsATli6fffEW32DXBUA+ZNhVvMn0LNa8u0PhQPsT1
-         aZRI6OPG9bEUAD+k9k4mQ04EScc1LmbHZa9heuLzLZCAVNk+i/KznOocOzyHWwX1rWld
-         rfRqMWhfhsW78LM503oCZTywHj1JrWg3Bo8m/NbwJC63A5U6HnItoL4jOdL3A7e/1XPy
-         MreA==
-X-Gm-Message-State: APjAAAXj1fTiesem+Na1MjKdOU89Ng+uAkS90Uekdq5BDaUKx5b1NQAU
-        6G6ysLfxdwaET9Pjqj/qXxezQZYb
-X-Google-Smtp-Source: APXvYqx2BY8Yxsbql5D5153/I4Oajr4wVrWnmsHemfZoHv9K+x5F4/Axst3hr8oMmMIUQP4iSHPkvQ==
-X-Received: by 2002:ac2:4c2b:: with SMTP id u11mr5645205lfq.46.1579271378069;
-        Fri, 17 Jan 2020 06:29:38 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kdJveTlmi2+Fpg8OnkLnEuQpdQrxVQF3RU2697aMjxo=;
+        b=Oqr7NJVoCRMs4KMHs8JC0ikQLmo0gELNQopujeJJRfIa8zVRxUgQreBAdkvbtyKFyX
+         4OPs48qwZr5sGJ6ymBFbpNGl7/gS+eIl66jwWti9Nk59NxDN17zWifXgxldvp9MzCB2o
+         jAY7tr4EV7jt36oA8EhjNU35zFd8JHf9ZKIfefmSvjkse04Wd40ycWeAhxCh3ZVuPJ0I
+         NsDRPTW65DV6wfe5HBDYNVMWVZ38xyywYSE8Q8eV7whvHgNrZhPoC2h9BbHObPX/NEEE
+         7rN6LgNgDzbssoB6a/RXN1eJtsP+Y2zKZxgqlAFNZ4J+0sLxGsLSnwkAB32M6dZ4TY/L
+         6KAw==
+X-Gm-Message-State: APjAAAU2Ov9I8/IMEf+dVCMMKbJtCcQKM6EMbQVwI6E09+Oy1pz8k/VU
+        tK+D2CxLs7ENnunxCKyC7Pc=
+X-Google-Smtp-Source: APXvYqwoTzojqUdGcCb/ABR1sXLBRqqwyw3Xaz4jZ2M3ht6px5aqaBJLokFtVSX1d24D+BMnoTLR8A==
+X-Received: by 2002:a05:651c:232:: with SMTP id z18mr5817879ljn.85.1579271740280;
+        Fri, 17 Jan 2020 06:35:40 -0800 (PST)
 Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
-        by smtp.gmail.com with ESMTPSA id g25sm12273212ljn.107.2020.01.17.06.29.37
+        by smtp.gmail.com with ESMTPSA id a14sm11801355lfh.50.2020.01.17.06.35.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jan 2020 06:29:37 -0800 (PST)
+        Fri, 17 Jan 2020 06:35:39 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@kernel.org>)
-        id 1isScz-0007FJ-7l; Fri, 17 Jan 2020 15:29:37 +0100
-Date:   Fri, 17 Jan 2020 15:29:37 +0100
+        (envelope-from <johan@xi.terra>)
+        id 1isSip-0001K9-Ka; Fri, 17 Jan 2020 15:35:39 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Greg KH <greg@kroah.com>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH 5/5] USB: serial: quatech2: handle unbound ports
-Message-ID: <20200117142937.GV2301@localhost>
-References: <20200117095026.27655-1-johan@kernel.org>
- <20200117095026.27655-6-johan@kernel.org>
- <20200117103639.GA1835567@kroah.com>
- <20200117105317.GU2301@localhost>
- <20200117131356.GB1848214@kroah.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, stable <stable@vger.kernel.org>
+Subject: [PATCH v2] USB: serial: quatech2: handle unbound ports
+Date:   Fri, 17 Jan 2020 15:35:26 +0100
+Message-Id: <20200117143526.5048-1-johan@kernel.org>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200117131356.GB1848214@kroah.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 17, 2020 at 02:13:56PM +0100, Greg Kroah-Hartman wrote:
-> On Fri, Jan 17, 2020 at 11:53:17AM +0100, Johan Hovold wrote:
-> > On Fri, Jan 17, 2020 at 11:36:39AM +0100, Greg Kroah-Hartman wrote:
-> > > On Fri, Jan 17, 2020 at 10:50:26AM +0100, Johan Hovold wrote:
-> > > > Check for NULL port data in the event handlers to avoid dereferencing a
-> > > > NULL pointer in the unlikely case where a port device isn't bound to a
-> > > > driver (e.g. after an allocation failure on port probe).
-> > > > 
-> > > > Fixes: f7a33e608d9a ("USB: serial: add quatech2 usb to serial driver")
-> > > > Cc: stable <stable@vger.kernel.org>     # 3.5
-> > > > Signed-off-by: Johan Hovold <johan@kernel.org>
+Check for NULL port data in the modem- and line-status handlers to avoid
+dereferencing a NULL pointer in the unlikely case where a port device
+isn't bound to a driver (e.g. after an allocation failure on port
+probe).
 
-> > I'll respin this last one in some way, thanks.
-> 
-> Nah, that's fine, this is ok as-is, thanks.
+Note that the other (stubbed) event handlers qt2_process_xmit_empty()
+and qt2_process_flush() would need similar sanity checks in case they
+are ever implemented.
 
-I wasn't too happy with this myself, so I reverted to my first version
-of simply adding the checks the lsr/msr helper where the actual
-dereference takes place.
+Fixes: f7a33e608d9a ("USB: serial: add quatech2 usb to serial driver")
+Cc: stable <stable@vger.kernel.org>     # 3.5
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
 
-The downside is that it's a bit disconnected from where the actual port
-lookup takes place (qt2_process_read_urb()). But I thinks it's still
-preferred over adding sanity checks to those event-handler stubs, which
-admittedly looks quite weird.
+v2
+ - move sanity checks to where the actual dereferences take place
+ - drop sanity checks from the stubbed event handlers
 
-I've applied the first four and will send a v2 of this one.
 
-Johan
+ drivers/usb/serial/quatech2.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/usb/serial/quatech2.c b/drivers/usb/serial/quatech2.c
+index a62981ca7a73..f93b81a297d6 100644
+--- a/drivers/usb/serial/quatech2.c
++++ b/drivers/usb/serial/quatech2.c
+@@ -841,7 +841,10 @@ static void qt2_update_msr(struct usb_serial_port *port, unsigned char *ch)
+ 	u8 newMSR = (u8) *ch;
+ 	unsigned long flags;
+ 
++	/* May be called from qt2_process_read_urb() for an unbound port. */
+ 	port_priv = usb_get_serial_port_data(port);
++	if (!port_priv)
++		return;
+ 
+ 	spin_lock_irqsave(&port_priv->lock, flags);
+ 	port_priv->shadowMSR = newMSR;
+@@ -869,7 +872,10 @@ static void qt2_update_lsr(struct usb_serial_port *port, unsigned char *ch)
+ 	unsigned long flags;
+ 	u8 newLSR = (u8) *ch;
+ 
++	/* May be called from qt2_process_read_urb() for an unbound port. */
+ 	port_priv = usb_get_serial_port_data(port);
++	if (!port_priv)
++		return;
+ 
+ 	if (newLSR & UART_LSR_BI)
+ 		newLSR &= (u8) (UART_LSR_OE | UART_LSR_BI);
+-- 
+2.24.1
+
