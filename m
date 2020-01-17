@@ -2,207 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8FE1403B2
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 06:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D6E140488
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 08:42:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726578AbgAQFvT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jan 2020 00:51:19 -0500
-Received: from mga06.intel.com ([134.134.136.31]:17858 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726312AbgAQFvT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 Jan 2020 00:51:19 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Jan 2020 21:51:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,328,1574150400"; 
-   d="scan'208";a="249125306"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 16 Jan 2020 21:51:17 -0800
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1isKXN-0006r4-1k; Fri, 17 Jan 2020 13:51:17 +0800
-Date:   Fri, 17 Jan 2020 13:50:23 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- beac08af711ea1a373b3382fdf374af865b19a9c
-Message-ID: <5e214b1f.SnoOVRHyP70m3YWq%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1729207AbgAQHmN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jan 2020 02:42:13 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:42877 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729159AbgAQHmN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jan 2020 02:42:13 -0500
+X-UUID: 91eeb4d187c7412cb5fc19a8ebfeeb86-20200117
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=XlVHRJUiQa0Jm/lTprpguXiXjS3b7Bht7uRo2za199k=;
+        b=izdTNWFqdjMNAZtC4TMrjRJqR7uydOUzTwPTMWwgbMNFRRdhKsruhxQ8XqwdwQ4H8QCQqE5VeuCoCE3HFk+Ph51sqchHrDhIXo1LRH24121x0aoe/J6YDu29INUT94yIJAtVCrgS7TCTgU4DcYzk5IvilT4rA7hFFswPLfzAvHA=;
+X-UUID: 91eeb4d187c7412cb5fc19a8ebfeeb86-20200117
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 17940661; Fri, 17 Jan 2020 15:42:06 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Fri, 17 Jan 2020 15:41:33 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Fri, 17 Jan 2020 15:41:10 +0800
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+CC:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        Sriharsha Allenki <sallenki@codeaurora.org>
+Subject: [PATCH] xhci-mtk: Fix NULL pointer dereference with xhci_irq() for shared_hcd
+Date:   Fri, 17 Jan 2020 15:41:50 +0800
+Message-ID: <1579246910-22736-1-git-send-email-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: beac08af711ea1a373b3382fdf374af865b19a9c  Merge tag 'phy-for-5.6' of git://git.kernel.org/pub/scm/linux/kernel/git/kishon/linux-phy into usb-next
+QWNjb3JkaW5nIHRvIE5VTEwgcG9pbnRlciBmaXg6IGh0dHBzOi8vdGlueXVybC5jb20vdXFmdDVy
+YQ0KeGhjaTogRml4IE5VTEwgcG9pbnRlciBkZXJlZmVyZW5jZSB3aXRoIHhoY2lfaXJxKCkgZm9y
+IHNoYXJlZF9oY2QNClRoZSBzaW1pbGFyIGlzc3VlIGhhcyBhbHNvIGJlZW4gZm91bmQgaW4gUUMg
+YWN0aXZpdGllcyBpbiBNZWRpYXRlay4NCg0KSGVyZSBxdW90ZSB0aGUgZGVzY3JpcHRpb24gZnJv
+bSB0aGUgcmVmZXJlbmNlZCBwYXRjaCBhcyBmb2xsb3dzLg0KIkNvbW1pdCAoImYwNjgwOTA0MjZl
+YSB4aGNpOiBGaXggbGVha2luZyBVU0IzIHNoYXJlZF9oY2QNCmF0IHhoY2kgcmVtb3ZhbCIpIHNl
+dHMgeGhjaV9zaGFyZWRfaGNkIHRvIE5VTEwgd2l0aG91dA0Kc3RvcHBpbmcgeGhjaSBob3N0LiBU
+aGlzIHJlc3VsdHMgaW50byBhIHJhY2UgY29uZGl0aW9uDQp3aGVyZSBzaGFyZWRfaGNkIChzdXBl
+ciBzcGVlZCByb290aHViKSByZWxhdGVkIGludGVycnVwdHMNCmFyZSBiZWluZyBoYW5kbGVkIHdp
+dGggeGhjaV9pcnEgaGFwcGVucyB3aGVuIHRoZQ0KeGhjaV9wbGF0X3JlbW92ZSBpcyBjYWxsZWQg
+YW5kIHNoYXJlZF9oY2QgaXMgc2V0IHRvIE5VTEwuDQpGaXggdGhpcyBieSBzZXR0aW5nIHRoZSBz
+aGFyZWRfaGNkIHRvIE5VTEwgb25seSBhZnRlciB0aGUNCmNvbnRyb2xsZXIgaXMgaGFsdGVkIGFu
+ZCBubyBpbnRlcnJ1cHRzIGFyZSBnZW5lcmF0ZWQuIg0KDQpTaWduZWQtb2ZmLWJ5OiBTcmloYXJz
+aGEgQWxsZW5raSA8c2FsbGVua2lAY29kZWF1cm9yYS5vcmc+DQpTaWduZWQtb2ZmLWJ5OiBNYWNw
+YXVsIExpbiA8bWFjcGF1bC5saW5AbWVkaWF0ZWsuY29tPg0KLS0tDQogZHJpdmVycy91c2IvaG9z
+dC94aGNpLW10ay5jIHwgMiArLQ0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBk
+ZWxldGlvbigtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay5jIGIv
+ZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay5jDQppbmRleCBiMThhNmJhZWYyMDQuLmMyMjdjNjdm
+NWRjNSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGsuYw0KKysrIGIvZHJp
+dmVycy91c2IvaG9zdC94aGNpLW10ay5jDQpAQCAtNTkzLDExICs1OTMsMTEgQEAgc3RhdGljIGlu
+dCB4aGNpX210a19yZW1vdmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqZGV2KQ0KIAlzdHJ1Y3Qg
+dXNiX2hjZCAgKnNoYXJlZF9oY2QgPSB4aGNpLT5zaGFyZWRfaGNkOw0KIA0KIAl1c2JfcmVtb3Zl
+X2hjZChzaGFyZWRfaGNkKTsNCi0JeGhjaS0+c2hhcmVkX2hjZCA9IE5VTEw7DQogCWRldmljZV9p
+bml0X3dha2V1cCgmZGV2LT5kZXYsIGZhbHNlKTsNCiANCiAJdXNiX3JlbW92ZV9oY2QoaGNkKTsN
+CiAJdXNiX3B1dF9oY2Qoc2hhcmVkX2hjZCk7DQorCXhoY2ktPnNoYXJlZF9oY2QgPSBOVUxMOw0K
+IAl1c2JfcHV0X2hjZChoY2QpOw0KIAl4aGNpX210a19zY2hfZXhpdChtdGspOw0KIAl4aGNpX210
+a19jbGtzX2Rpc2FibGUobXRrKTsNCi0tIA0KMi4xOC4wDQo=
 
-elapsed time: 479m
-
-configs tested: 152
-configs skipped: 0
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-c6x                              allyesconfig
-c6x                        evmc6678_defconfig
-nios2                         10m50_defconfig
-nios2                         3c120_defconfig
-openrisc                    or1ksim_defconfig
-openrisc                 simple_smp_defconfig
-xtensa                       common_defconfig
-xtensa                          iss_defconfig
-c6x                  randconfig-a001-20200117
-h8300                randconfig-a001-20200117
-microblaze           randconfig-a001-20200117
-nios2                randconfig-a001-20200117
-sparc64              randconfig-a001-20200117
-alpha                               defconfig
-csky                                defconfig
-nds32                             allnoconfig
-nds32                               defconfig
-parisc                            allnoconfig
-parisc                            allyesonfig
-parisc                         b180_defconfig
-parisc                        c3000_defconfig
-parisc                              defconfig
-i386                             alldefconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64               randconfig-e001-20200117
-x86_64               randconfig-e002-20200117
-x86_64               randconfig-e003-20200117
-i386                 randconfig-e001-20200117
-i386                 randconfig-e002-20200117
-i386                 randconfig-e003-20200117
-x86_64                              fedora-25
-x86_64                                  kexec
-x86_64                                    lkp
-x86_64                                   rhel
-x86_64                               rhel-7.6
-um                                  defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-sparc64                          allmodconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                             defconfig
-x86_64               randconfig-b001-20200117
-x86_64               randconfig-b002-20200117
-x86_64               randconfig-b003-20200117
-i386                 randconfig-b001-20200117
-i386                 randconfig-b002-20200117
-i386                 randconfig-b003-20200117
-alpha                randconfig-a001-20200117
-m68k                 randconfig-a001-20200117
-mips                 randconfig-a001-20200117
-nds32                randconfig-a001-20200117
-parisc               randconfig-a001-20200117
-riscv                randconfig-a001-20200117
-s390                             alldefconfig
-s390                             allmodconfig
-s390                              allnoconfig
-s390                             allyesconfig
-s390                          debug_defconfig
-s390                                defconfig
-s390                       zfcpdump_defconfig
-x86_64               randconfig-c001-20200117
-x86_64               randconfig-c002-20200117
-x86_64               randconfig-c003-20200117
-i386                 randconfig-c001-20200117
-i386                 randconfig-c002-20200117
-i386                 randconfig-c003-20200117
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-ia64                                defconfig
-csky                 randconfig-a001-20200117
-openrisc             randconfig-a001-20200117
-s390                 randconfig-a001-20200117
-sh                   randconfig-a001-20200117
-xtensa               randconfig-a001-20200117
-sh                               allmodconfig
-sh                                allnoconfig
-sh                          rsk7269_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                            titan_defconfig
-h8300                     edosk2674_defconfig
-h8300                    h8300h-sim_defconfig
-h8300                       h8s-sim_defconfig
-m68k                             allmodconfig
-m68k                       m5475evb_defconfig
-m68k                          multi_defconfig
-m68k                           sun3_defconfig
-mips                           32r2_defconfig
-mips                         64r6el_defconfig
-mips                             allmodconfig
-mips                              allnoconfig
-mips                             allyesconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-arc                              allyesconfig
-arc                                 defconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-powerpc                           allnoconfig
-powerpc                             defconfig
-powerpc                       ppc64_defconfig
-powerpc                          rhel-kconfig
-x86_64               randconfig-d001-20200117
-x86_64               randconfig-d002-20200117
-x86_64               randconfig-d003-20200117
-i386                 randconfig-d001-20200117
-i386                 randconfig-d002-20200117
-i386                 randconfig-d003-20200117
-x86_64               randconfig-g001-20200117
-x86_64               randconfig-g002-20200117
-x86_64               randconfig-g003-20200117
-i386                 randconfig-g001-20200117
-i386                 randconfig-g002-20200117
-i386                 randconfig-g003-20200117
-arc                  randconfig-a001-20200117
-arm                  randconfig-a001-20200117
-arm64                randconfig-a001-20200117
-ia64                 randconfig-a001-20200117
-powerpc              randconfig-a001-20200117
-sparc                randconfig-a001-20200117
-arm                              allmodconfig
-arm                               allnoconfig
-arm                              allyesconfig
-arm                         at91_dt_defconfig
-arm                           efm32_defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                        multi_v7_defconfig
-arm                        shmobile_defconfig
-arm                           sunxi_defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                            allyesconfig
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-x86_64               randconfig-h001-20200117
-x86_64               randconfig-h002-20200117
-x86_64               randconfig-h003-20200117
-i386                 randconfig-h001-20200117
-i386                 randconfig-h002-20200117
-i386                 randconfig-h003-20200117
-
----
-0-DAY kernel test infrastructure                 Open Source Technology Center
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
