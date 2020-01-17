@@ -2,139 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F55D140810
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 11:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B061140823
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 11:40:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726513AbgAQKgn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jan 2020 05:36:43 -0500
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:33121 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726085AbgAQKgm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jan 2020 05:36:42 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6AAD421B2B;
-        Fri, 17 Jan 2020 05:36:41 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Fri, 17 Jan 2020 05:36:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=zysE2vfsh8RYHDgl7OqOaN4tYLh
-        R2XvhvACmMgZFGng=; b=GSzG5OiDDy1rYVC+OygEUkgG/hmot7g5uaukIiWA4EM
-        8e5IyoxR/dMQWNPnAH3sxuB0XNhDdIGMzk7DqFELM3CMwydID6ZqjqbvmIaUnjG8
-        iy1S4EX6aXvGqJdudz5KXw5aG0OLJDGjBvapdCuuhA2uCDOFa7tTQ/FWPVW3bxso
-        ttDYtiKbh/MlNm+Q9T/eWawcyGwrr3ImaXfu8kBILWfd+DZGUOL8bht5A1T/WP+O
-        LeZNDP5GilkOOhhkDd6t10S9+kPOh8GHkI4qJCz/NRMmeuqdSi50kxjZiJpol4fE
-        i59Hs83AnYlsy4MdN+GnQwxPE5FJGzmWesWntRwhvJQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=zysE2v
-        fsh8RYHDgl7OqOaN4tYLhR2XvhvACmMgZFGng=; b=XmrTQkrB2lhUW5SW/C0IXj
-        TYjwfiUWVaYolcy1+Xl1ZuuJFQgGagnpYchGFHTyX1FEC2zzcgLPfy7BcoxvBuXY
-        04AS61I0J4CzU7SeWEUnX/T7PITR/NiAcbsXGAnzDTXAO2ivDSu1l56F+fxdzOKS
-        lC8JyUfBbK/DRN4cequ56EGx+nL14UR1oS/XQJR5Bl4pDVzagatsA4uXE7msYhBC
-        jVEi0q4+I0++sp4zfwKARfeB43ZlycuGIJ+uX9ZD6A10E0o0c/jtTkmclYpEkuqj
-        //z+rSQuN4lobtH9G1FxviP9otP9OoVuKiANofhwrrg/9dZ3J1UBSvZ5MOmRAvMA
-        ==
-X-ME-Sender: <xms:OY4hXudSsFir1jfFpDYyO0rTlWtubXRA2Zp78g4kFROce6ZcWlnDnA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrtdejgddujecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
-    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledruddtje
-    enucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecuvehl
-    uhhsthgvrhfuihiivgeptd
-X-ME-Proxy: <xmx:OY4hXqn89M-AH0dju1h0OdSWAakLDf3qCbnBp3PoqoAygOf_x6dQjg>
-    <xmx:OY4hXoxrrhkw0fyDEs7ePDd71vLFN6wRexo7s9KcvV8X-xuc6eB6TA>
-    <xmx:OY4hXvE9tLywBmuZnKuRp5EjTAVZiQiaWnzRGWm3sGLR-TqAS5TjsQ>
-    <xmx:OY4hXscfvbQk5tF6JAcYAW8DS9zMPZzZQVp5j1H6Jh6_E9fkp11BYQ>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id A87428005B;
-        Fri, 17 Jan 2020 05:36:40 -0500 (EST)
-Date:   Fri, 17 Jan 2020 11:36:39 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, stable <stable@vger.kernel.org>
-Subject: Re: [PATCH 5/5] USB: serial: quatech2: handle unbound ports
-Message-ID: <20200117103639.GA1835567@kroah.com>
-References: <20200117095026.27655-1-johan@kernel.org>
- <20200117095026.27655-6-johan@kernel.org>
+        id S1726684AbgAQKk2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jan 2020 05:40:28 -0500
+Received: from dougal.metanate.com ([90.155.101.14]:16916 "EHLO metanate.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726085AbgAQKk2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 17 Jan 2020 05:40:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/simple; d=metanate.com;
+         s=stronger; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References
+        :In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=0gTzcCMTsUwDKWsISkssm8z26Q8j9Dmeq01vPExB8Oc=; b=MU2kiHWt7h7Lu1aXg3DV8grub+
+        56JreiVv6BS65JbzlkLA6Cq0lEIblL/1DuQ5B/p0sDO4XPgls2LW/mHX2uzwYBijhBIQno4Csk/jL
+        fvle0f48xM2jBT14UTmNlebTjaAIik6idPuDFB5VVPXfNxrOEqmNY8xI2d9oK2yaLcb5VndaemYNa
+        baGYnSQdVG6CUoQkII60JYcj12P6PtK/nc98JNxCEdYrIQksIovt756s9WK/KhWUs3vVmZHMVFmdf
+        te2OtyGWA0tTzN5ER16mVRZQqDTxzyXxDSqpiqWnj72ENlHJBlTROZ4gRBVFR3osf++Z+25/o24Fs
+        ZAwExMYQ==;
+Received: from johnkeeping.plus.com ([81.174.171.191] helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1isP3B-0003ir-PC; Fri, 17 Jan 2020 10:40:26 +0000
+Date:   Fri, 17 Jan 2020 10:40:22 +0000
+From:   John Keeping <john@metanate.com>
+To:     Pavel Hofman <pavel.hofman@ivitera.com>
+Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>
+Subject: [PATCH] usb: gadget: u_audio: Fix high-speed max packet size
+Message-ID: <20200117104022.5bb769f2.john@metanate.com>
+In-Reply-To: <24f0935d-16a7-4301-78f4-fa459e356ca9@ivitera.com>
+References: <4f2df2bc-e208-fffb-48e2-3e14cd093103@ivitera.com>
+        <60bf144a-2039-8832-b6f1-f972de6a6846@ivitera.com>
+        <cfcef91b-799e-7d02-4a4c-26ee95e85ff7@ivitera.com>
+        <20200114200450.064cd521.john@metanate.com>
+        <24f0935d-16a7-4301-78f4-fa459e356ca9@ivitera.com>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200117095026.27655-6-johan@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Authenticated: YES
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 17, 2020 at 10:50:26AM +0100, Johan Hovold wrote:
-> Check for NULL port data in the event handlers to avoid dereferencing a
-> NULL pointer in the unlikely case where a port device isn't bound to a
-> driver (e.g. after an allocation failure on port probe).
+On Thu, 16 Jan 2020 16:39:50 +0100
+Pavel Hofman <pavel.hofman@ivitera.com> wrote:
+
+> > I've taken a look at this and the patch below fixes it in my simple
+> > testing.  But note that this doesn't adjust the PCM's min_period_bytes
+> > which will be necessary if you want to minimize latency with an adjusted
+> > high-speed bInterval setting.
+> >   
 > 
-> Fixes: f7a33e608d9a ("USB: serial: add quatech2 usb to serial driver")
-> Cc: stable <stable@vger.kernel.org>     # 3.5
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
->  drivers/usb/serial/quatech2.c | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/quatech2.c b/drivers/usb/serial/quatech2.c
-> index a62981ca7a73..c76a2c0c32ff 100644
-> --- a/drivers/usb/serial/quatech2.c
-> +++ b/drivers/usb/serial/quatech2.c
-> @@ -470,6 +470,13 @@ static int get_serial_info(struct tty_struct *tty,
->  
->  static void qt2_process_status(struct usb_serial_port *port, unsigned char *ch)
->  {
-> +	struct qt2_port_private *port_priv;
-> +
-> +	/* May be called from qt2_process_read_urb() for an unbound port. */
-> +	port_priv = usb_get_serial_port_data(port);
-> +	if (!port_priv)
-> +		return;
-> +
+> Please can I ask you to submit your patch? IMO your perhaps slightly 
+> suboptimal solution is much better than the current broken version.
 
-Where is the null dereference here?  Will port be NULL somehow?
+Yes, the patch is definitely an improvement.  I thought it would be
+picked up from the earlier mail, but I think Patchwork requires the
+subject to match, so I'm including it again here.
 
->  	switch (*ch) {
->  	case QT2_LINE_STATUS:
->  		qt2_update_lsr(port, ch + 1);
-> @@ -484,14 +491,27 @@ static void qt2_process_status(struct usb_serial_port *port, unsigned char *ch)
->  static void qt2_process_xmit_empty(struct usb_serial_port *port,
->  				   unsigned char *ch)
->  {
-> +	struct qt2_port_private *port_priv;
->  	int bytes_written;
->  
-> +	/* May be called from qt2_process_read_urb() for an unbound port. */
-> +	port_priv = usb_get_serial_port_data(port);
-> +	if (!port_priv)
-> +		return;
-> +
->  	bytes_written = (int)(*ch) + (int)(*(ch + 1) << 4);
+Are you able to provide a Tested-by for this change?
 
-What's the harm in doing a pointless calculation here?  Nothing seems to
-happen in this function at all.
+-- >8 --
+Prior to commit eb9fecb9e69b ("usb: gadget: f_uac2: split out audio
+core") the maximum packet size was calculated only from the high-speed
+descriptor but now we use the largest of the full-speed and high-speed
+descriptors.
 
->  }
->  
->  /* not needed, kept to document functionality */
->  static void qt2_process_flush(struct usb_serial_port *port, unsigned char *ch)
->  {
-> +	struct qt2_port_private *port_priv;
-> +
-> +	/* May be called from qt2_process_read_urb() for an unbound port. */
-> +	port_priv = usb_get_serial_port_data(port);
-> +	if (!port_priv)
-> +		return;
-> +
->  	return;
->  }
+This is correct, but the full-speed value is likely to be higher than
+that for high-speed and this leads to submitting requests for OUT
+transfers (received by the gadget) which are larger than the endpoint's
+maximum packet size.  These are rightly rejected by the gadget core.
 
-This whole function can just be removed, right?
+config_ep_by_speed() already sets up the correct maximum packet size for
+the enumerated speed in the usb_ep structure, so we can simply use this
+instead of the overall value that has been used to allocate buffers for
+requests.
 
-thanks,
+Note that the minimum period for ALSA is still set from the largest
+value, and this is unavoidable because it's possible to open the audio
+device before the gadget has been enumerated.
 
-greg k-h
+Signed-off-by: John Keeping <john@metanate.com>
+---
+ drivers/usb/gadget/function/u_audio.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+index 6d956f190f5a..e6d32c536781 100644
+--- a/drivers/usb/gadget/function/u_audio.c
++++ b/drivers/usb/gadget/function/u_audio.c
+@@ -361,7 +361,7 @@ int u_audio_start_capture(struct g_audio *audio_dev)
+ 	ep = audio_dev->out_ep;
+ 	prm = &uac->c_prm;
+ 	config_ep_by_speed(gadget, &audio_dev->func, ep);
+-	req_len = prm->max_psize;
++	req_len = ep->maxpacket;
+ 
+ 	prm->ep_enabled = true;
+ 	usb_ep_enable(ep);
+@@ -379,7 +379,7 @@ int u_audio_start_capture(struct g_audio *audio_dev)
+ 			req->context = &prm->ureq[i];
+ 			req->length = req_len;
+ 			req->complete = u_audio_iso_complete;
+-			req->buf = prm->rbuf + i * prm->max_psize;
++			req->buf = prm->rbuf + i * ep->maxpacket;
+ 		}
+ 
+ 		if (usb_ep_queue(ep, prm->ureq[i].req, GFP_ATOMIC))
+@@ -430,9 +430,9 @@ int u_audio_start_playback(struct g_audio *audio_dev)
+ 	uac->p_pktsize = min_t(unsigned int,
+ 				uac->p_framesize *
+ 					(params->p_srate / uac->p_interval),
+-				prm->max_psize);
++				ep->maxpacket);
+ 
+-	if (uac->p_pktsize < prm->max_psize)
++	if (uac->p_pktsize < ep->maxpacket)
+ 		uac->p_pktsize_residue = uac->p_framesize *
+ 			(params->p_srate % uac->p_interval);
+ 	else
+@@ -457,7 +457,7 @@ int u_audio_start_playback(struct g_audio *audio_dev)
+ 			req->context = &prm->ureq[i];
+ 			req->length = req_len;
+ 			req->complete = u_audio_iso_complete;
+-			req->buf = prm->rbuf + i * prm->max_psize;
++			req->buf = prm->rbuf + i * ep->maxpacket;
+ 		}
+ 
+ 		if (usb_ep_queue(ep, prm->ureq[i].req, GFP_ATOMIC))
+-- 
+2.24.1
+
