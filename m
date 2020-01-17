@@ -2,182 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6B3C140109
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 01:39:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 238161402C2
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 05:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729044AbgAQAjf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jan 2020 19:39:35 -0500
-Received: from wsip-184-185-158-229.sd.sd.cox.net ([184.185.158.229]:65391
-        "EHLO s0-postfix.allcaps.org" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726378AbgAQAjf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jan 2020 19:39:35 -0500
-Received: from MacBook-Pro.local (unknown [12.197.118.92])
-        by s0-postfix.allcaps.org (Postfix) with ESMTPSA id C93B01C6404A;
-        Thu, 16 Jan 2020 15:29:57 -0800 (PST)
-Subject: Re: Unable to set "iInterface" in usb gadget via configfs
-To:     Felipe Balbi <balbi@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org
-References: <Pine.LNX.4.44L0.2001151011520.1788-100000@iolanthe.rowland.org>
- <0453184e-353e-2a98-4f7a-c97b9dddf57a@allcaps.org>
- <87lfq75zcb.fsf@kernel.org>
-From:   "Andrew P. Lentvorski" <bsder@allcaps.org>
-Autocrypt: addr=bsder@allcaps.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <26ebfc08-0952-8c26-b9f4-01da14ea4846@allcaps.org>
-Date:   Thu, 16 Jan 2020 16:39:34 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
- Gecko/20100101 Thunderbird/68.4.1
+        id S1728949AbgAQEEh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jan 2020 23:04:37 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:12732 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728897AbgAQEEh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jan 2020 23:04:37 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e21323f0000>; Thu, 16 Jan 2020 20:04:15 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Thu, 16 Jan 2020 20:04:36 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Thu, 16 Jan 2020 20:04:36 -0800
+Received: from [10.24.192.96] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 17 Jan
+ 2020 04:04:32 +0000
+Subject: Re: [PATCH -next] usb: gadget: xudc: Remove redundant
+ platform_get_irq error message
+To:     YueHaibing <yuehaibing@huawei.com>, <balbi@kernel.org>,
+        <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <felipe.balbi@linux.intel.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20200116141433.57056-1-yuehaibing@huawei.com>
+X-Nvconfidentiality: public
+From:   Nagarjuna Kristam <nkristam@nvidia.com>
+Message-ID: <0a693269-3727-bb71-414e-856eab485353@nvidia.com>
+Date:   Fri, 17 Jan 2020 09:36:31 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <87lfq75zcb.fsf@kernel.org>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200116141433.57056-1-yuehaibing@huawei.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1579233855; bh=Fb1kRMcCe2hRuzZ7Zne1iDJNmB9ylql0TIEaGqeED9g=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=l5MRmsD3V1v2EaaSAD7R5o4KbSjpbRsoMG7yVcwRrRT4A9o8SUESim+GX+YCAiVtW
+         /DMf7hUqa+H6sc0KfHs/KYHtHai+jiFPNoCHFqK+Old/fMu9iOV+PL+ohSLbGCxli7
+         UMOAOWI5Eo4w4a/9QE755VDUPvYaoznEbpoS3uYULmwmKPjFb0+UwY0QCiZyOfiSaF
+         fS8ZNitT2rtRyPx2cwYGSP17HH8xph9InPgN49Z5X0an2JHuVC+XV/sW+BX5zpMSPk
+         EtsH4MFWGPTYLNYmn6OxA/wkZjFtfVDm94OfLqrgXSmIVuIHX9ehhaCCP5S6hrAgBu
+         zYTdUMODrWKRQ==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 1/16/20 5:02 AM, Felipe Balbi wrote:
+Reviewed-by: Nagarjuna Kristam <nkristam@nvidia.com>
 
->>>>> When I set my gadget up on my Beaglebone Black (uname -a: Linux
->>>>> beaglebone 4.14.108-ti-r113 #1 SMP PREEMPT Wed Jul 31 00:01:10 UTC
->>>>> 2019 armv7l GNU/Linux).
->>>>>
->>>>> I get (output from lsusb):
->>>>>
->>>>> iInterface 5 HID Interface
->>>>>
->>>>>
->>>>> But I want it to be something like:
->>>>>
->>>>> iInterface 4 LPC-LINK2 CMSIS-DAP V5.224
+On 16-01-2020 19:44, YueHaibing wrote:
+> External email: Use caution opening links or attachments
 > 
-> Why? Oh, you want your beaglebone to behave as a CMSIS-DAP to trick some
-> other SW?
 > 
-> Do we need to support that upstream, though? It seems like this is a
-> one-off thing. Does anybody else need to configure interface string
-> descriptor?
-
-I ... don't know, actually.  That's probably a good question.
-
-What I *can* tell you is that a quick survey of the various USB devices
-in my office with lsusb shows the majority of iInterface are 0x00, but
-that everything else is a smattering of all manner of stuff: "Integrated
-Camera", "Bulk Control Interface", "Volume Control", "Firmware Upgrade
-Port", etc.
-
-Microchip's PIC32 USB HID sample code sets the value to 0x00.
-
-USB Complete (5th Edition) also shows this as 0x00 on page 267 for a
-configuration_descriptor for a vendor-specific HID.
-
-
->> C) This is an actual bug *that should be fixed* and isn't that way
->> intentionally for some Linux reason.
+> platform_get_irq() will call dev_err() itself on failure,
+> so there is no need for the driver to also do this.
+> This is detected by coccinelle.
 > 
-> Up until now, it has been intentional. Currently, I don't see a need to
-> change it. 
-
-Clearly, some HID devices *are* using this field.  So, this probably
-should be made changeable if we want the HID gadget to be maximally useful.
-
-As for the technical details I can see from the code:
-
-
-A bit of code archaeology shows that .iInterface was expected to be
-dynamic as of the origin commit for f_hid.c (commit
-71adf118946957839a13aa4d1094183e05c6c094).  This still persists in the
-file today.
-
-
-The allocation of usb_gstrings_attach comes in at Nov 6, 2014 as of
-(commit 5ca8d3ec9970f4798e68bd21a9d44db3d0ff4da7) with the message:
-
-"Before configfs is integrated the usb_gstrings_attach() interface
-must be used."
-
-This looks like a case of something that simply got lost in the shuffle
-in the upgrade path to configfs, and I'm just the first poor slob who
-tripped over the oversight.
-
-
-However, I'm a little concerned as to why this was set *at all* (which
-seems to be what is actually tripping me up), and I'd be interested as
-to what drove the specific choice of 0x05 "HID Interface".  I don't see
-this in any spec anywhere obvious and this seems to be a deliberate
-change from previous behavior.
-
-If this isn't user configurable, then it's probably a highly
-questionable choice to give this any default value other than 0x00.
-This would have been quite a bit easier to code, too, so I'm *really*
-scratching my head about this.
-
-
-> I may be persuaded otherwise, but I need to see arguments
-> other than "I want to trick some SW into thinking I'm something else".
-
-Obviously I'm biased and scratching my own itch, but why would you
-consider that not to be an important argument?
-
-Being able to fake being a particular piece of USB hardware that's
-currently tied to some ancient Windows binary driver is a great way to
-insert Linux into industrial and lab control pipelines.  Giving a
-control board the ability to now also be accessed via ethernet or
-wireless (or even a better USB protocol) and thus now has an upgrade or
-higher performance path is a *really* useful thing.  And the Beaglebone
-Black is a really good "protocol engine".  Finally, after making the usb
-gadget emulation work, I can probably blow a bunch of Windows machines
-away completely since something like a Beaglebone Black is more than
-sufficient to handle the control without any outside intervention.
-
-My end target isn't "CMSIS-DAP"--there are a zillion really cheap
-CMSIS-DAP devices so emulating CMSIS-DAP would be mostly pointless
-pedantry (although perhaps a good usb gadget tutorial).  CMSIS-DAP just
-happens to be a really good test case as it is an extremely well
-documented HID-based protocol and has extensive tests to validate it.
-Consequently, I can be sure that most bugs and difficulties are
-localized to my gadget implementation code or the gadget driver.
-
-
-
-Anyhow, let me know whether I should attack the problem or not.  I
-suspect my biggest issue is simply that I will have to do all the work
-on a Beaglebone Black as I really don't know of any other way to test
-that gadget subsystem.  This will probably be okay if I can build it as
-a module--if I have to do a full kernel build it will probably demand
-that I set up a cross-compiling environment (and that isn't trivial).
-
-
-Thanks,
--a
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>   drivers/usb/gadget/udc/tegra-xudc.c | 5 +----
+>   1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
+> index 634c2c1..fc1eafc 100644
+> --- a/drivers/usb/gadget/udc/tegra-xudc.c
+> +++ b/drivers/usb/gadget/udc/tegra-xudc.c
+> @@ -3492,11 +3492,8 @@ static int tegra_xudc_probe(struct platform_device *pdev)
+>          }
+> 
+>          xudc->irq = platform_get_irq(pdev, 0);
+> -       if (xudc->irq < 0) {
+> -               dev_err(xudc->dev, "failed to get IRQ: %d\n",
+> -                               xudc->irq);
+> +       if (xudc->irq < 0)
+>                  return xudc->irq;
+> -       }
+> 
+>          err = devm_request_irq(&pdev->dev, xudc->irq, tegra_xudc_irq, 0,
+>                                 dev_name(&pdev->dev), xudc);
+> --
+> 2.7.4
+> 
+> 
