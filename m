@@ -2,40 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F92140EFF
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 17:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F15F140F13
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 17:36:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726876AbgAQQcW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jan 2020 11:32:22 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:33780 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726506AbgAQQcW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jan 2020 11:32:22 -0500
-Received: by mail-ot1-f65.google.com with SMTP id b18so23065320otp.0;
-        Fri, 17 Jan 2020 08:32:21 -0800 (PST)
+        id S1726857AbgAQQgp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jan 2020 11:36:45 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:35695 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726506AbgAQQgp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jan 2020 11:36:45 -0500
+Received: by mail-oi1-f193.google.com with SMTP id k4so22741987oik.2;
+        Fri, 17 Jan 2020 08:36:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=/iHqFPp4gfD5oSMGWpTJjMZQbTl3nDjXtKJqZJn6JG8=;
-        b=iC0E/w9lEWn7CiltqNv46rE1vzbRbLmUo0F1SLLxsQsTSAOuFoV4GjQGYzSmzGblIf
-         JGf4cqZt4WGmYLBz31Nqdpbo4H6y8KNgFtW9Ice3n2CfA/cCgqqhMOpeJY2JmXYY3YTP
-         YUKaWQd7UGEis76uvE6CM7sJQnEoG1PtFp0gvuB0KpSxiNBT+yEofXdG4fctusIpxJwj
-         EkaLPgekKMkXvX2mvlYSfhGBOp+OzbJO8fy+DeRbR0ZKjfcZ/Yisi/miBUfLrzshctp/
-         06YmOCl3P654e0V1MNU4DCll9dgAjXC7DDKrLlE5N6Xoyy45Mz7wtGecGuNjPpOXNeF6
-         myRA==
-X-Gm-Message-State: APjAAAWUtXcJOJxeGI4ITxkMn5JyaTwxKuleJHa6Tma0POOdhNelG52H
-        eYpq8bSQmevfKz9McUmg0w==
-X-Google-Smtp-Source: APXvYqxVhhZJDntpTYO8RXp+1uUVt/4zWCDaLKGWVf9eFo48zxLv0olgodVWAXp81LRL5u91AiObWw==
-X-Received: by 2002:a9d:68cc:: with SMTP id i12mr6668144oto.207.1579278741150;
-        Fri, 17 Jan 2020 08:32:21 -0800 (PST)
+        bh=IewFuBKmGoCSK8RfRVXaLBq0CbcaGKATXKy1D8qkvcQ=;
+        b=CNdxLkfMZOH4uYVBS3IAEyb8j7xNfHnkXCw7wDCo6z4beChe0f8nCi6nDuar0N2kA5
+         Pt03+2ddEonDLrWQuBVz6eWNMUj/hvb5y7u1HwduXVda2IjwJdyqCTlVayuiN7fMJW/T
+         CjLvHrMre2Ch5JmXGXn6sj7FvqHqC5YBPVFeacquJkd+5vWDZsX1SY0EC5+QUxiaEuRB
+         1ElEe1opIZ7gHEWFpHy84/HNhIoX00sgb1cQAEAAU8CZhw3L9K+aoPcaSEmq143rtiDO
+         aaJQ8coTkSkuxf33EgvnRcNLrnbjkUIcxqWZt4/ddOy5RMj5igCOqKNE6DIdNh4DVCwY
+         KITA==
+X-Gm-Message-State: APjAAAUH9OgIxtx4RSr0GkPFpN7rBTt51PcxQ6FNgmaL+xK67jvUe0Mv
+        erNUFbRVIuBNMjA1Kyq/TyiJuZ4=
+X-Google-Smtp-Source: APXvYqyOFq+xE1QS2BO3+poxNMtpcUaYiXNpuJ/xk/dtoMC4kTw/mVBLr9Fbc+codyaUFKv0ygnNUQ==
+X-Received: by 2002:a05:6808:9b4:: with SMTP id e20mr3833973oig.37.1579279004339;
+        Fri, 17 Jan 2020 08:36:44 -0800 (PST)
 Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id d7sm7928734oic.46.2020.01.17.08.32.19
+        by smtp.gmail.com with ESMTPSA id z21sm8975604oto.52.2020.01.17.08.36.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jan 2020 08:32:20 -0800 (PST)
-Received: (nullmailer pid 26008 invoked by uid 1000);
-        Fri, 17 Jan 2020 16:32:19 -0000
-Date:   Fri, 17 Jan 2020 10:32:19 -0600
+        Fri, 17 Jan 2020 08:36:43 -0800 (PST)
+Received: (nullmailer pid 1692 invoked by uid 1000);
+        Fri, 17 Jan 2020 16:36:42 -0000
+Date:   Fri, 17 Jan 2020 10:36:42 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Hanjie Lin <hanjie.lin@amlogic.com>
 Cc:     Jerome Brunet <jbrunet@baylibre.com>,
@@ -57,44 +57,30 @@ Cc:     Jerome Brunet <jbrunet@baylibre.com>,
         Jian Hu <jian.hu@amlogic.com>,
         Victor Wan <victor.wan@amlogic.com>,
         Xingyu Chen <xingyu.chen@amlogic.com>
-Subject: Re: [PATCH v6 2/6] dt-bindings: usb: dwc3: Add the Amlogic A1 Family
- DWC3 Glue Bindings
-Message-ID: <20200117163219.GA25603@bogus>
+Subject: Re: [PATCH v6 1/6] dt-bindings: phy: Add Amlogic A1 USB2 PHY Bindings
+Message-ID: <20200117163642.GA1636@bogus>
 References: <1579220504-110067-1-git-send-email-hanjie.lin@amlogic.com>
- <1579220504-110067-3-git-send-email-hanjie.lin@amlogic.com>
+ <1579220504-110067-2-git-send-email-hanjie.lin@amlogic.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1579220504-110067-3-git-send-email-hanjie.lin@amlogic.com>
+In-Reply-To: <1579220504-110067-2-git-send-email-hanjie.lin@amlogic.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 17 Jan 2020 08:21:40 +0800, Hanjie Lin wrote:
-> The Amlogic A1 SoC Family embeds 1 USB Controllers:
->  - a DWC3 IP configured as Host for USB2 and USB3
+On Fri, 17 Jan 2020 08:21:39 +0800, Hanjie Lin wrote:
+> Add the Amlogic A1 Family USB2 PHY Bindings
 > 
-> A glue connects the controllers to the USB2 PHY of A1 SoC.
+> It supports Host mode only.
 > 
 > Signed-off-by: Yue Wang <yue.wang@amlogic.com>
 > Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
 > ---
->  .../bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml  | 38 ++++++++++++++++++++--
->  1 file changed, 35 insertions(+), 3 deletions(-)
+>  .../bindings/phy/amlogic,meson-g12a-usb2-phy.yaml         | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 > 
 
-My bot found errors running 'make dt_binding_check' on your patch:
-
-Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml:  while parsing a block mapping
-  in "<unicode string>", line 107, column 7
-did not find expected key
-  in "<unicode string>", line 111, column 8
-Documentation/devicetree/bindings/Makefile:12: recipe for target 'Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.example.dts' failed
-make[1]: *** [Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.example.dts] Error 1
-Makefile:1263: recipe for target 'dt_binding_check' failed
-make: *** [dt_binding_check] Error 2
-
-See https://patchwork.ozlabs.org/patch/1224563
-Please check and re-submit.
+Reviewed-by: Rob Herring <robh@kernel.org>
