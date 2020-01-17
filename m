@@ -2,113 +2,240 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A121406EC
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 10:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 300F9140705
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 10:57:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728773AbgAQJvM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jan 2020 04:51:12 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:42458 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728733AbgAQJvK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jan 2020 04:51:10 -0500
-Received: by mail-lj1-f196.google.com with SMTP id y4so25806701ljj.9;
-        Fri, 17 Jan 2020 01:51:08 -0800 (PST)
+        id S1726744AbgAQJ5L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jan 2020 04:57:11 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:33729 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726343AbgAQJ5L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jan 2020 04:57:11 -0500
+Received: by mail-il1-f199.google.com with SMTP id s9so18362783ilk.0
+        for <linux-usb@vger.kernel.org>; Fri, 17 Jan 2020 01:57:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=40JSScTYyOWPofT3nlZNpI9vXYe97j1JnSkOaEKoYOo=;
-        b=IcH3jEwiTz8EjUV82Ni3vQbgHgvGlPleQPVNNPrOyWH/8Kux8m8wk35Yq9qixSeYOn
-         6TXyexiWAgCv5tMUxp8CrNWEl9A6JrjWepdvaAunxUlAs0FN53QznzIx5e7TiFKa6bz7
-         9oP+3tGg9762C/R0bDsWD5o2SZXgjFURLQgg4qdMpsIHxQNKlzSzSWM+pwHnFd8V/YUt
-         2WlgdSJEPSKfkZTdp/VNaxmoWLVOtTmEbaOgiMAKObho2hvygWOQRFrql2Kiw2rTM/xB
-         v5g+hp032qECNNQ6JipnciCZvuks/HwJd113T4vjjAEM+0y2YmsezTDSiZq0Devg8DA/
-         7b1g==
-X-Gm-Message-State: APjAAAUzJEzHjsyMksQHuYd7xO2NoficxwCLjfZcRc9s/2vORfMO8I2n
-        XNTvMCuejDfMwjCfm5R8d6g=
-X-Google-Smtp-Source: APXvYqwjbimfxL+ouk5jb1yXFuN5jRAjSxk677pM16ltU2pIWlmSmTQAOx3qvjwZlNopkCXf20uKBA==
-X-Received: by 2002:a05:651c:1129:: with SMTP id e9mr4943525ljo.239.1579254667686;
-        Fri, 17 Jan 2020 01:51:07 -0800 (PST)
-Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
-        by smtp.gmail.com with ESMTPSA id y29sm11974808ljd.88.2020.01.17.01.51.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jan 2020 01:51:06 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@xi.terra>)
-        id 1isOHQ-0007DX-Kz; Fri, 17 Jan 2020 10:51:04 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, stable <stable@vger.kernel.org>
-Subject: [PATCH 5/5] USB: serial: quatech2: handle unbound ports
-Date:   Fri, 17 Jan 2020 10:50:26 +0100
-Message-Id: <20200117095026.27655-6-johan@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200117095026.27655-1-johan@kernel.org>
-References: <20200117095026.27655-1-johan@kernel.org>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=jvd+XDcLUiNTgZf2ffx4vK9HLkx9bi+qfHlaOUZsns0=;
+        b=bxPo9oQBPBE0C0NjJQzf+POLllFLAfawseXzeB5wKarqhzbw2PLNmg3Yl7YbpQaEwR
+         jXSfJ9cLu1rhg9OOebf7FO1hBrifftCkA/My6ajf/ZQ13UTuqYvxWPDY6u2erYm7QbSi
+         ssw/ZHWF/xAO8IZUd3PsNhi49+6SoGlFFyvuvkPcPbxjHm/t9rvNwNvXuuluFneDMxlJ
+         PxPyfhESe6NHCyobzUgsQJS4OPIdIy5QPOznHSW707oRmDSK7yyRI5XUYx6Qm2rp1GnZ
+         B0UdCo4iLjdHxaNf/NfcowweZqgJWfg9VH9pd7e11AasUPzCm6jQBlbpNFpQ6M1/kr6K
+         e8IQ==
+X-Gm-Message-State: APjAAAWkZrheLWSbX4ZkDDrXCThTD+5j5wBh7rvNYshcphtC9rzOmsdA
+        ObE4jn0i3yqjif2qO1SwuuJ5A7tdlSqHJoFclKkbI2tW7X5m
+X-Google-Smtp-Source: APXvYqyG6FGOWIiAI1ZbABmLLBIo8ME5plAKAEezIubwTdN7xCMJQFUUmcLGBp3rpb9hJYrXxFphaiBsWGWKG5BTTQ1rw4r87Rv5
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a92:2550:: with SMTP id l77mr2166053ill.21.1579255030515;
+ Fri, 17 Jan 2020 01:57:10 -0800 (PST)
+Date:   Fri, 17 Jan 2020 01:57:10 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001a91f9059c52f727@google.com>
+Subject: linux-next boot error: KASAN: slab-out-of-bounds Read in post_usb_notification
+From:   syzbot <syzbot+afeecc39f502a8681560@syzkaller.appspotmail.com>
+To:     arnd@arndb.de, dhowells@redhat.com, dmitry.torokhov@gmail.com,
+        ebiederm@xmission.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Check for NULL port data in the event handlers to avoid dereferencing a
-NULL pointer in the unlikely case where a port device isn't bound to a
-driver (e.g. after an allocation failure on port probe).
+Hello,
 
-Fixes: f7a33e608d9a ("USB: serial: add quatech2 usb to serial driver")
-Cc: stable <stable@vger.kernel.org>     # 3.5
-Signed-off-by: Johan Hovold <johan@kernel.org>
+syzbot found the following crash on:
+
+HEAD commit:    de970dff Add linux-next specific files for 20200117
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=163472d1e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c59155180d08b1f7
+dashboard link: https://syzkaller.appspot.com/bug?extid=afeecc39f502a8681560
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+
+Unfortunately, I don't have any reproducer for this crash yet.
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+afeecc39f502a8681560@syzkaller.appspotmail.com
+
+usbcore: registered new interface driver usb-storage
+usbcore: registered new interface driver ums-realtek
+usbcore: registered new interface driver usbserial_generic
+usbserial: USB Serial support registered for generic
+usbcore: registered new interface driver ch341
+usbserial: USB Serial support registered for ch341-uart
+usbcore: registered new interface driver cp210x
+usbserial: USB Serial support registered for cp210x
+usbcore: registered new interface driver ftdi_sio
+usbserial: USB Serial support registered for FTDI USB Serial Device
+usbcore: registered new interface driver keyspan
+usbserial: USB Serial support registered for Keyspan - (without firmware)
+usbserial: USB Serial support registered for Keyspan 1 port adapter
+usbserial: USB Serial support registered for Keyspan 2 port adapter
+usbserial: USB Serial support registered for Keyspan 4 port adapter
+usbcore: registered new interface driver option
+usbserial: USB Serial support registered for GSM modem (1-port)
+usbcore: registered new interface driver oti6858
+usbserial: USB Serial support registered for oti6858
+usbcore: registered new interface driver pl2303
+usbserial: USB Serial support registered for pl2303
+usbcore: registered new interface driver qcserial
+usbserial: USB Serial support registered for Qualcomm USB modem
+usbcore: registered new interface driver sierra
+usbserial: USB Serial support registered for Sierra USB modem
+usbcore: registered new interface driver usb_serial_simple
+usbserial: USB Serial support registered for carelink
+usbserial: USB Serial support registered for zio
+usbserial: USB Serial support registered for funsoft
+usbserial: USB Serial support registered for flashloader
+usbserial: USB Serial support registered for google
+usbserial: USB Serial support registered for libtransistor
+usbserial: USB Serial support registered for vivopay
+usbserial: USB Serial support registered for moto_modem
+usbserial: USB Serial support registered for motorola_tetra
+usbserial: USB Serial support registered for novatel_gps
+usbserial: USB Serial support registered for hp4x
+usbserial: USB Serial support registered for suunto
+usbserial: USB Serial support registered for siemens_mpi
+dummy_hcd dummy_hcd.0: USB Host+Gadget Emulator, driver 02 May 2005
+dummy_hcd dummy_hcd.0: Dummy host controller
+dummy_hcd dummy_hcd.0: new USB bus registered, assigned bus number 1
+usb usb1: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice=  
+5.05
+usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb1: Product: Dummy host controller
+usb usb1: Manufacturer: Linux 5.5.0-rc6-next-20200117-syzkaller dummy_hcd
+usb usb1: SerialNumber: dummy_hcd.0
+hub 1-0:1.0: USB hub found
+hub 1-0:1.0: 1 port detected
+==================================================================
+BUG: KASAN: slab-out-of-bounds in memcpy include/linux/string.h:426 [inline]
+BUG: KASAN: slab-out-of-bounds in post_usb_notification+0xe5/0x170  
+drivers/usb/core/devio.c:2771
+Read of size 21 at addr ffff88809ef1d5c0 by task swapper/0/1
+
+CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.5.0-rc6-next-20200117-syzkaller  
+#0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x197/0x210 lib/dump_stack.c:118
+  print_address_description.constprop.0.cold+0xd4/0x30b mm/kasan/report.c:374
+  __kasan_report.cold+0x1b/0x32 mm/kasan/report.c:506
+  kasan_report+0x12/0x20 mm/kasan/common.c:641
+  check_memory_region_inline mm/kasan/generic.c:185 [inline]
+  check_memory_region+0x134/0x1a0 mm/kasan/generic.c:192
+  memcpy+0x24/0x50 mm/kasan/common.c:127
+  memcpy include/linux/string.h:426 [inline]
+  post_usb_notification+0xe5/0x170 drivers/usb/core/devio.c:2771
+  post_usb_device_notification drivers/usb/core/devio.c:2785 [inline]
+  usbdev_notify+0x2c0/0x4a0 drivers/usb/core/devio.c:2800
+  notifier_call_chain+0xc2/0x230 kernel/notifier.c:83
+  __blocking_notifier_call_chain kernel/notifier.c:284 [inline]
+  __blocking_notifier_call_chain kernel/notifier.c:271 [inline]
+  blocking_notifier_call_chain kernel/notifier.c:295 [inline]
+  blocking_notifier_call_chain+0x94/0xb0 kernel/notifier.c:292
+  usb_notify_add_device+0x22/0x30 drivers/usb/core/notify.c:51
+  generic_probe+0x8c/0xde drivers/usb/core/generic.c:220
+  usb_probe_device+0xa0/0xf0 drivers/usb/core/driver.c:266
+  really_probe+0x291/0x700 drivers/base/dd.c:551
+  driver_probe_device+0x110/0x220 drivers/base/dd.c:724
+  __device_attach_driver+0x1c9/0x230 drivers/base/dd.c:831
+  bus_for_each_drv+0x172/0x1f0 drivers/base/bus.c:431
+  __device_attach+0x237/0x390 drivers/base/dd.c:897
+  device_initial_probe+0x1b/0x20 drivers/base/dd.c:944
+  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:491
+  device_add+0x14fe/0x1d00 drivers/base/core.c:2487
+  usb_new_device.cold+0x74c/0x1063 drivers/usb/core/hub.c:2539
+  register_root_hub drivers/usb/core/hcd.c:1008 [inline]
+  usb_add_hcd.cold+0x10f8/0x1496 drivers/usb/core/hcd.c:2790
+  dummy_hcd_probe+0x1ae/0x32c drivers/usb/gadget/udc/dummy_hcd.c:2639
+  platform_drv_probe+0x8d/0x140 drivers/base/platform.c:727
+  really_probe+0x291/0x700 drivers/base/dd.c:551
+  driver_probe_device+0x110/0x220 drivers/base/dd.c:724
+  __device_attach_driver+0x1c9/0x230 drivers/base/dd.c:831
+  bus_for_each_drv+0x172/0x1f0 drivers/base/bus.c:431
+  __device_attach+0x237/0x390 drivers/base/dd.c:897
+  device_initial_probe+0x1b/0x20 drivers/base/dd.c:944
+  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:491
+  device_add+0x14fe/0x1d00 drivers/base/core.c:2487
+  platform_device_add+0x365/0x6e0 drivers/base/platform.c:564
+  init+0x534/0xab8 arch/x86/crypto/chacha_glue.c:293
+  do_one_initcall+0x120/0x820 init/main.c:1109
+  do_initcall_level init/main.c:1182 [inline]
+  do_initcalls init/main.c:1198 [inline]
+  do_basic_setup init/main.c:1218 [inline]
+  kernel_init_freeable+0x522/0x5d0 init/main.c:1402
+  kernel_init+0x12/0x1bf init/main.c:1309
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Allocated by task 1:
+  save_stack+0x23/0x90 mm/kasan/common.c:72
+  set_track mm/kasan/common.c:80 [inline]
+  __kasan_kmalloc mm/kasan/common.c:515 [inline]
+  __kasan_kmalloc.constprop.0+0xcf/0xe0 mm/kasan/common.c:488
+  kasan_kmalloc+0x9/0x10 mm/kasan/common.c:529
+  __do_kmalloc mm/slab.c:3656 [inline]
+  __kmalloc_track_caller+0x15f/0x760 mm/slab.c:3671
+  kvasprintf+0xc8/0x170 lib/kasprintf.c:25
+  kvasprintf_const+0x65/0x190 lib/kasprintf.c:49
+  kobject_set_name_vargs+0x5b/0x150 lib/kobject.c:289
+  dev_set_name+0xbb/0xf0 drivers/base/core.c:2265
+  usb_alloc_dev+0xcc4/0xf86 drivers/usb/core/usb.c:641
+  usb_add_hcd.cold+0x3c1/0x1496 drivers/usb/core/hcd.c:2697
+  dummy_hcd_probe+0x1ae/0x32c drivers/usb/gadget/udc/dummy_hcd.c:2639
+  platform_drv_probe+0x8d/0x140 drivers/base/platform.c:727
+  really_probe+0x291/0x700 drivers/base/dd.c:551
+  driver_probe_device+0x110/0x220 drivers/base/dd.c:724
+  __device_attach_driver+0x1c9/0x230 drivers/base/dd.c:831
+  bus_for_each_drv+0x172/0x1f0 drivers/base/bus.c:431
+  __device_attach+0x237/0x390 drivers/base/dd.c:897
+  device_initial_probe+0x1b/0x20 drivers/base/dd.c:944
+  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:491
+  device_add+0x14fe/0x1d00 drivers/base/core.c:2487
+  platform_device_add+0x365/0x6e0 drivers/base/platform.c:564
+  init+0x534/0xab8 arch/x86/crypto/chacha_glue.c:293
+  do_one_initcall+0x120/0x820 init/main.c:1109
+  do_initcall_level init/main.c:1182 [inline]
+  do_initcalls init/main.c:1198 [inline]
+  do_basic_setup init/main.c:1218 [inline]
+  kernel_init_freeable+0x522/0x5d0 init/main.c:1402
+  kernel_init+0x12/0x1bf init/main.c:1309
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Freed by task 0:
+(stack is not available)
+
+The buggy address belongs to the object at ffff88809ef1d5c0
+  which belongs to the cache kmalloc-32 of size 32
+The buggy address is located 0 bytes inside of
+  32-byte region [ffff88809ef1d5c0, ffff88809ef1d5e0)
+The buggy address belongs to the page:
+page:ffffea00027bc740 refcount:1 mapcount:0 mapping:ffff8880aa4001c0  
+index:0xffff88809ef1dfc1
+flags: 0xfffe0000000200(slab)
+raw: 00fffe0000000200 ffffea00027bf048 ffffea00027bf788 ffff8880aa4001c0
+raw: ffff88809ef1dfc1 ffff88809ef1d000 000000010000003f 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+  ffff88809ef1d480: fb fb fb fb fc fc fc fc fb fb fb fb fc fc fc fc
+  ffff88809ef1d500: 00 00 00 01 fc fc fc fc fb fb fb fb fc fc fc fc
+> ffff88809ef1d580: fb fb fb fb fc fc fc fc 05 fc fc fc fc fc fc fc
+                                            ^
+  ffff88809ef1d600: 00 fc fc fc fc fc fc fc 00 04 fc fc fc fc fc fc
+  ffff88809ef1d680: fb fb fb fb fc fc fc fc 00 04 fc fc fc fc fc fc
+==================================================================
+
+
 ---
- drivers/usb/serial/quatech2.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/usb/serial/quatech2.c b/drivers/usb/serial/quatech2.c
-index a62981ca7a73..c76a2c0c32ff 100644
---- a/drivers/usb/serial/quatech2.c
-+++ b/drivers/usb/serial/quatech2.c
-@@ -470,6 +470,13 @@ static int get_serial_info(struct tty_struct *tty,
- 
- static void qt2_process_status(struct usb_serial_port *port, unsigned char *ch)
- {
-+	struct qt2_port_private *port_priv;
-+
-+	/* May be called from qt2_process_read_urb() for an unbound port. */
-+	port_priv = usb_get_serial_port_data(port);
-+	if (!port_priv)
-+		return;
-+
- 	switch (*ch) {
- 	case QT2_LINE_STATUS:
- 		qt2_update_lsr(port, ch + 1);
-@@ -484,14 +491,27 @@ static void qt2_process_status(struct usb_serial_port *port, unsigned char *ch)
- static void qt2_process_xmit_empty(struct usb_serial_port *port,
- 				   unsigned char *ch)
- {
-+	struct qt2_port_private *port_priv;
- 	int bytes_written;
- 
-+	/* May be called from qt2_process_read_urb() for an unbound port. */
-+	port_priv = usb_get_serial_port_data(port);
-+	if (!port_priv)
-+		return;
-+
- 	bytes_written = (int)(*ch) + (int)(*(ch + 1) << 4);
- }
- 
- /* not needed, kept to document functionality */
- static void qt2_process_flush(struct usb_serial_port *port, unsigned char *ch)
- {
-+	struct qt2_port_private *port_priv;
-+
-+	/* May be called from qt2_process_read_urb() for an unbound port. */
-+	port_priv = usb_get_serial_port_data(port);
-+	if (!port_priv)
-+		return;
-+
- 	return;
- }
- 
--- 
-2.24.1
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
