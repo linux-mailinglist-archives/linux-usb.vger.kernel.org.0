@@ -2,140 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B061140823
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 11:40:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93880140836
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 11:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726684AbgAQKk2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jan 2020 05:40:28 -0500
-Received: from dougal.metanate.com ([90.155.101.14]:16916 "EHLO metanate.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726085AbgAQKk2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 Jan 2020 05:40:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/simple; d=metanate.com;
-         s=stronger; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References
-        :In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=0gTzcCMTsUwDKWsISkssm8z26Q8j9Dmeq01vPExB8Oc=; b=MU2kiHWt7h7Lu1aXg3DV8grub+
-        56JreiVv6BS65JbzlkLA6Cq0lEIblL/1DuQ5B/p0sDO4XPgls2LW/mHX2uzwYBijhBIQno4Csk/jL
-        fvle0f48xM2jBT14UTmNlebTjaAIik6idPuDFB5VVPXfNxrOEqmNY8xI2d9oK2yaLcb5VndaemYNa
-        baGYnSQdVG6CUoQkII60JYcj12P6PtK/nc98JNxCEdYrIQksIovt756s9WK/KhWUs3vVmZHMVFmdf
-        te2OtyGWA0tTzN5ER16mVRZQqDTxzyXxDSqpiqWnj72ENlHJBlTROZ4gRBVFR3osf++Z+25/o24Fs
-        ZAwExMYQ==;
-Received: from johnkeeping.plus.com ([81.174.171.191] helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1isP3B-0003ir-PC; Fri, 17 Jan 2020 10:40:26 +0000
-Date:   Fri, 17 Jan 2020 10:40:22 +0000
-From:   John Keeping <john@metanate.com>
-To:     Pavel Hofman <pavel.hofman@ivitera.com>
-Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>
-Subject: [PATCH] usb: gadget: u_audio: Fix high-speed max packet size
-Message-ID: <20200117104022.5bb769f2.john@metanate.com>
-In-Reply-To: <24f0935d-16a7-4301-78f4-fa459e356ca9@ivitera.com>
-References: <4f2df2bc-e208-fffb-48e2-3e14cd093103@ivitera.com>
-        <60bf144a-2039-8832-b6f1-f972de6a6846@ivitera.com>
-        <cfcef91b-799e-7d02-4a4c-26ee95e85ff7@ivitera.com>
-        <20200114200450.064cd521.john@metanate.com>
-        <24f0935d-16a7-4301-78f4-fa459e356ca9@ivitera.com>
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726506AbgAQKqP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jan 2020 05:46:15 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:44420 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726196AbgAQKqP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jan 2020 05:46:15 -0500
+Received: by mail-lf1-f66.google.com with SMTP id v201so17957652lfa.11;
+        Fri, 17 Jan 2020 02:46:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8jgHsmJwPHMIlC0HcDCT8ZD+TRcaXxlZELNYlF3LKZY=;
+        b=pj0drvNwtZsKmxGu1XWnkVg0SV0yMeEnYeOdHirOL0/qsgDrfMEfbrLRDqNfQG8M2Z
+         rySvklceeBcLvLdtczBvdxRcve4zX0M7WG1NLrG04tcQfwIWMuGewrCB9QW6qpbJkfOn
+         SRyUNc/h9jePw+Wbp7EyDoCludOEGNAbIy/CYlZb2D/SYm/AWtoI/MEaWpRXrGELk6Ow
+         QxEDt01C/rDD2NvvvHSoVweL3pF7xxhdsDAtjgl3/xlb1JWN+YHt4SrbXPHqJC3xVX9C
+         2C8RdhSzTwByO1tk4vudDXHPl+m70bOL/jIn3xxyN8Y7pKctZAm8mpwhDZuVIRsr4w8r
+         RFVg==
+X-Gm-Message-State: APjAAAX0KJekWh6GI3OIRzCHZ+Cl0NN519WXd8WwrM5UCrJYaKJZ3kbp
+        Rdoou/u9zOXjPqhsD+UeD23veozw
+X-Google-Smtp-Source: APXvYqxi/K6htkK284Rv6M81KJynrrAskgHoyO/TVif8r0RPYjT4Zw4f1JU7qDM5J4LbQ3cBAca4gQ==
+X-Received: by 2002:a19:7015:: with SMTP id h21mr4988560lfc.68.1579257973228;
+        Fri, 17 Jan 2020 02:46:13 -0800 (PST)
+Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
+        by smtp.gmail.com with ESMTPSA id t10sm12066002lji.61.2020.01.17.02.46.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jan 2020 02:46:12 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@kernel.org>)
+        id 1isP8m-0001ib-2d; Fri, 17 Jan 2020 11:46:12 +0100
+Date:   Fri, 17 Jan 2020 11:46:12 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: garmin_gps: Use flexible-array member
+Message-ID: <20200117104612.GT2301@localhost>
+References: <20200116220327.GA12537@embeddedor.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Authenticated: YES
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200116220327.GA12537@embeddedor.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 16 Jan 2020 16:39:50 +0100
-Pavel Hofman <pavel.hofman@ivitera.com> wrote:
-
-> > I've taken a look at this and the patch below fixes it in my simple
-> > testing.  But note that this doesn't adjust the PCM's min_period_bytes
-> > which will be necessary if you want to minimize latency with an adjusted
-> > high-speed bInterval setting.
-> >   
+On Thu, Jan 16, 2020 at 04:03:27PM -0600, Gustavo A. R. Silva wrote:
+> Old code in the kernel uses 1-byte and 0-byte arrays to indicate the
+> presence of a "variable length array":
 > 
-> Please can I ask you to submit your patch? IMO your perhaps slightly 
-> suboptimal solution is much better than the current broken version.
+> struct something {
+>     int length;
+>     u8 data[1];
+> };
+> 
+> struct something *instance;
+> 
+> instance = kmalloc(sizeof(*instance) + size, GFP_KERNEL);
+> instance->length = size;
+> memcpy(instance->data, source, size);
+> 
+> There is also 0-byte arrays. Both cases pose confusion for things like
+> sizeof(), CONFIG_FORTIFY_SOURCE, etc.[1] Instead, the preferred mechanism
+> to declare variable-length types such as the one above is a flexible array
+> member[2] which need to be the last member of a structure and empty-sized:
+> 
+> struct something {
+>         int stuff;
+>         u8 data[];
+> };
+> 
+> Also, by making use of the mechanism above, we will get a compiler warning
+> in case the flexible array does not occur last in the structure, which
+> will help us prevent some kind of undefined behavior bugs from being
+> unadvertenly introduced[3] to the codebase from now on.
+> 
+> [1] https://github.com/KSPP/linux/issues/21
+> [2] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+> [3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
+> 
+> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
 
-Yes, the patch is definitely an improvement.  I thought it would be
-picked up from the earlier mail, but I think Patchwork requires the
-subject to match, so I'm including it again here.
+Applied, thanks.
 
-Are you able to provide a Tested-by for this change?
-
--- >8 --
-Prior to commit eb9fecb9e69b ("usb: gadget: f_uac2: split out audio
-core") the maximum packet size was calculated only from the high-speed
-descriptor but now we use the largest of the full-speed and high-speed
-descriptors.
-
-This is correct, but the full-speed value is likely to be higher than
-that for high-speed and this leads to submitting requests for OUT
-transfers (received by the gadget) which are larger than the endpoint's
-maximum packet size.  These are rightly rejected by the gadget core.
-
-config_ep_by_speed() already sets up the correct maximum packet size for
-the enumerated speed in the usb_ep structure, so we can simply use this
-instead of the overall value that has been used to allocate buffers for
-requests.
-
-Note that the minimum period for ALSA is still set from the largest
-value, and this is unavoidable because it's possible to open the audio
-device before the gadget has been enumerated.
-
-Signed-off-by: John Keeping <john@metanate.com>
----
- drivers/usb/gadget/function/u_audio.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
-index 6d956f190f5a..e6d32c536781 100644
---- a/drivers/usb/gadget/function/u_audio.c
-+++ b/drivers/usb/gadget/function/u_audio.c
-@@ -361,7 +361,7 @@ int u_audio_start_capture(struct g_audio *audio_dev)
- 	ep = audio_dev->out_ep;
- 	prm = &uac->c_prm;
- 	config_ep_by_speed(gadget, &audio_dev->func, ep);
--	req_len = prm->max_psize;
-+	req_len = ep->maxpacket;
- 
- 	prm->ep_enabled = true;
- 	usb_ep_enable(ep);
-@@ -379,7 +379,7 @@ int u_audio_start_capture(struct g_audio *audio_dev)
- 			req->context = &prm->ureq[i];
- 			req->length = req_len;
- 			req->complete = u_audio_iso_complete;
--			req->buf = prm->rbuf + i * prm->max_psize;
-+			req->buf = prm->rbuf + i * ep->maxpacket;
- 		}
- 
- 		if (usb_ep_queue(ep, prm->ureq[i].req, GFP_ATOMIC))
-@@ -430,9 +430,9 @@ int u_audio_start_playback(struct g_audio *audio_dev)
- 	uac->p_pktsize = min_t(unsigned int,
- 				uac->p_framesize *
- 					(params->p_srate / uac->p_interval),
--				prm->max_psize);
-+				ep->maxpacket);
- 
--	if (uac->p_pktsize < prm->max_psize)
-+	if (uac->p_pktsize < ep->maxpacket)
- 		uac->p_pktsize_residue = uac->p_framesize *
- 			(params->p_srate % uac->p_interval);
- 	else
-@@ -457,7 +457,7 @@ int u_audio_start_playback(struct g_audio *audio_dev)
- 			req->context = &prm->ureq[i];
- 			req->length = req_len;
- 			req->complete = u_audio_iso_complete;
--			req->buf = prm->rbuf + i * prm->max_psize;
-+			req->buf = prm->rbuf + i * ep->maxpacket;
- 		}
- 
- 		if (usb_ep_queue(ep, prm->ureq[i].req, GFP_ATOMIC))
--- 
-2.24.1
-
+Johan
