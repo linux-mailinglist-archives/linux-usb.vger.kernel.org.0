@@ -2,222 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A0314086A
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 11:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE10140937
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 12:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726845AbgAQKyK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jan 2020 05:54:10 -0500
-Received: from relmlor2.renesas.com ([210.160.252.172]:13132 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726362AbgAQKyJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jan 2020 05:54:09 -0500
-X-IronPort-AV: E=Sophos;i="5.70,329,1574089200"; 
-   d="scan'208";a="36733500"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 17 Jan 2020 19:54:07 +0900
-Received: from localhost.localdomain (unknown [10.166.17.210])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id AC77F400C722;
-        Fri, 17 Jan 2020 19:54:07 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        linux@prisktech.co.nz, robh+dt@kernel.org, mark.rutland@arm.com
-Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH 2/2] usb: host: ehci-platform: add a quirk to avoid stuck
-Date:   Fri, 17 Jan 2020 19:54:07 +0900
-Message-Id: <1579258447-28135-3-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1579258447-28135-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-References: <1579258447-28135-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+        id S1726892AbgAQLoy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jan 2020 06:44:54 -0500
+Received: from mail-wr1-f52.google.com ([209.85.221.52]:40101 "EHLO
+        mail-wr1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726689AbgAQLoy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jan 2020 06:44:54 -0500
+Received: by mail-wr1-f52.google.com with SMTP id c14so22387953wrn.7;
+        Fri, 17 Jan 2020 03:44:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Cvl/0riDWi1vWOlhaM1KIHjFuBbtXHuUf7sN7cIcdUQ=;
+        b=pd/AEEOiXtlnl56Ztp+4tpU0did/dgcZlz3vv9cGoAAp58rnIV5zqsR4APWP9wU++u
+         b4W7mM+H46hBk9MzYmr3m9Pq8edDfmWI2k6oq4MGS/adTu5L4Hfjrl62LoezI+JqDmAl
+         c2ZikBHmdrpnpaRnDPntKS6UFWR4DGn2sKx5DcBVkGQhb5MSUFScAcSPr8Aikwv1se55
+         e9NvdgFAtdgnHEBh/ddNqoaAQganuNQlZ+FynoeqNSuGL1cRiKJuBy92dVjZoVe3TXSN
+         LsvJzKEkrVTPlMLhAvcDx20q8rzXVedeZEszrAFrBRUyrw2IogkgEGnq3sGxu5LcLW3/
+         2JoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Cvl/0riDWi1vWOlhaM1KIHjFuBbtXHuUf7sN7cIcdUQ=;
+        b=dqToYzINsOBPT0uqeO2+dGhvd1DBJZEr0ClDI6amfOT/gYtk6HsMYNs82AS1poFVZ4
+         snxTcQAs+DboC4cLMm0Uup+aYeKIfPufxUL90KNWMJ1ffMZ6QUe5qtmJ7ySi/r9wKoR+
+         IcOShTcw4jMUeu0BTxtdIpYcV0z74nI6t9yeWY4+nNeoYd3RbhgerYumnne7fZm1F5Zg
+         ZdM55G2XZUZm+VHj0qDMseqHXvHrU5QTWUVggO/zngld2F6R8eR5eaWvkuariUY2XYQi
+         qnSDj8AsHVS5yzORkITiNC3nOZzT8CVJEvJN7tCM3wLj+LbY95tPZ3Ka1PYsx0q0yhkS
+         9hDQ==
+X-Gm-Message-State: APjAAAWrWl/Qu9q8GHWcNraJdDmIWGuZDrClFmsO5Fk+bIdcvucvf0xW
+        24X1SUDhk/TQN6evmaKAmG0=
+X-Google-Smtp-Source: APXvYqxpTfsgq8itcwVKHQ+rQTht6l9AeOGj8QC+aRCPB4ihGNgIclf4SeUlF/ohhCr/WxH0s19xQw==
+X-Received: by 2002:a5d:6406:: with SMTP id z6mr2635993wru.294.1579261492500;
+        Fri, 17 Jan 2020 03:44:52 -0800 (PST)
+Received: from localhost (p2E5BEF3F.dip0.t-ipconnect.de. [46.91.239.63])
+        by smtp.gmail.com with ESMTPSA id e16sm33587122wrs.73.2020.01.17.03.44.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jan 2020 03:44:51 -0800 (PST)
+Date:   Fri, 17 Jan 2020 12:44:50 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
+        nkristam@nvidia.com, felipe.balbi@linux.intel.com,
+        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] usb: gadget: xudc: Remove redundant
+ platform_get_irq error message
+Message-ID: <20200117114450.GB166525@ulmo>
+References: <20200116141433.57056-1-yuehaibing@huawei.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="s/l3CgOIzMHHjg/5"
+Content-Disposition: inline
+In-Reply-To: <20200116141433.57056-1-yuehaibing@huawei.com>
+User-Agent: Mutt/1.13.1 (2019-12-14)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since EHCI/OHCI controllers on R-Car Gen3 SoCs are possible to
-be getting stuck very rarely after a full/low usb device was
-disconnected. To detect/recover from such a situation, the controllers
-require a special way which poll the EHCI PORTSC register and changes
-the OHCI functional state.
 
-So, this patch adds a polling timer into the ehci-platform driver,
-and if the ehci driver detects the issue by the EHCI PORTSC register,
-the ehci driver removes a companion device (= the OHCI controller)
-to change the OHCI functional state to USB Reset once. And then,
-the ehci driver adds the companion device again.
+--s/l3CgOIzMHHjg/5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
----
- drivers/usb/host/ehci-platform.c | 104 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 104 insertions(+)
+On Thu, Jan 16, 2020 at 10:14:33PM +0800, YueHaibing wrote:
+> platform_get_irq() will call dev_err() itself on failure,
+> so there is no need for the driver to also do this.
+> This is detected by coccinelle.
+>=20
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>  drivers/usb/gadget/udc/tegra-xudc.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
-index 769749c..fc6bb06 100644
---- a/drivers/usb/host/ehci-platform.c
-+++ b/drivers/usb/host/ehci-platform.c
-@@ -29,6 +29,7 @@
- #include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/reset.h>
-+#include <linux/timer.h>
- #include <linux/usb.h>
- #include <linux/usb/hcd.h>
- #include <linux/usb/ehci_pdriver.h>
-@@ -44,6 +45,9 @@ struct ehci_platform_priv {
- 	struct clk *clks[EHCI_MAX_CLKS];
- 	struct reset_control *rsts;
- 	bool reset_on_resume;
-+	bool quirk_poll;
-+	struct timer_list poll_timer;
-+	struct work_struct poll_work;
- };
- 
- static const char hcd_name[] = "ehci-platform";
-@@ -118,6 +122,88 @@ static struct usb_ehci_pdata ehci_platform_defaults = {
- 	.power_off =		ehci_platform_power_off,
- };
- 
-+static bool ehci_platform_quirk_poll_check_condition(struct ehci_hcd *ehci)
-+{
-+	u32 port_status = ehci_readl(ehci, &ehci->regs->port_status[0]);
-+
-+	if (!(port_status & PORT_OWNER) &&	/* PO == 0b */
-+	    port_status & PORT_POWER &&		/* PP == 1b */
-+	    !(port_status & PORT_CONNECT) &&	/* CCS == 0b */
-+	    port_status & GENMASK(11, 10))	/* LS != 00b */
-+		return true;
-+
-+	return false;
-+}
-+
-+static void ehci_platform_quirk_poll_rebind_companion(struct ehci_hcd *ehci)
-+{
-+	struct device *companion_dev;
-+	struct usb_hcd *hcd = ehci_to_hcd(ehci);
-+
-+	companion_dev = usb_of_get_companion_dev(hcd->self.controller);
-+	if (!companion_dev)
-+		return;
-+
-+	device_release_driver(companion_dev);
-+	if (device_attach(companion_dev) < 0)
-+		ehci_err(ehci, "%s: failed\n", __func__);
-+
-+	put_device(companion_dev);
-+}
-+
-+static void ehci_platform_quirk_poll_start_timer(struct ehci_platform_priv *p)
-+{
-+	mod_timer(&p->poll_timer, jiffies + msecs_to_jiffies(1000));
-+}
-+
-+static void ehci_platform_quirk_poll_work(struct work_struct *work)
-+{
-+	struct ehci_platform_priv *priv =
-+		container_of(work, struct ehci_platform_priv, poll_work);
-+	struct ehci_hcd *ehci = container_of((void *)priv, struct ehci_hcd,
-+					     priv);
-+	int i;
-+
-+	usleep_range(4000, 8000);
-+
-+	for (i = 0; i < 2; i++) {
-+		udelay(10);
-+		if (!ehci_platform_quirk_poll_check_condition(ehci))
-+			goto out;
-+	}
-+
-+	ehci_dbg(ehci, "%s: detected getting stuck. rebind now!\n", __func__);
-+	ehci_platform_quirk_poll_rebind_companion(ehci);
-+
-+out:
-+	ehci_platform_quirk_poll_start_timer(priv);
-+}
-+
-+static void ehci_platform_quirk_poll_timer(struct timer_list *t)
-+{
-+	struct ehci_platform_priv *priv = from_timer(priv, t, poll_timer);
-+	struct ehci_hcd *ehci = container_of((void *)priv, struct ehci_hcd,
-+					     priv);
-+
-+	if (ehci_platform_quirk_poll_check_condition(ehci))
-+		schedule_work(&priv->poll_work);
-+	else
-+		ehci_platform_quirk_poll_start_timer(priv);
-+}
-+
-+static void ehci_platform_quirk_poll_init(struct ehci_platform_priv *priv)
-+{
-+	INIT_WORK(&priv->poll_work, ehci_platform_quirk_poll_work);
-+	timer_setup(&priv->poll_timer, ehci_platform_quirk_poll_timer, 0);
-+	ehci_platform_quirk_poll_start_timer(priv);
-+}
-+
-+static void ehci_platform_quirk_poll_end(struct ehci_platform_priv *priv)
-+{
-+	del_timer_sync(&priv->poll_timer);
-+	flush_work(&priv->poll_work);
-+}
-+
- static int ehci_platform_probe(struct platform_device *dev)
- {
- 	struct usb_hcd *hcd;
-@@ -176,6 +262,10 @@ static int ehci_platform_probe(struct platform_device *dev)
- 					  "has-transaction-translator"))
- 			hcd->has_tt = 1;
- 
-+		if (of_property_read_bool(dev->dev.of_node,
-+					  "needs-polling-to-avoid-stuck"))
-+			priv->quirk_poll = true;
-+
- 		for (clk = 0; clk < EHCI_MAX_CLKS; clk++) {
- 			priv->clks[clk] = of_clk_get(dev->dev.of_node, clk);
- 			if (IS_ERR(priv->clks[clk])) {
-@@ -247,6 +337,9 @@ static int ehci_platform_probe(struct platform_device *dev)
- 	device_enable_async_suspend(hcd->self.controller);
- 	platform_set_drvdata(dev, hcd);
- 
-+	if (priv->quirk_poll)
-+		ehci_platform_quirk_poll_init(priv);
-+
- 	return err;
- 
- err_power:
-@@ -273,6 +366,9 @@ static int ehci_platform_remove(struct platform_device *dev)
- 	struct ehci_platform_priv *priv = hcd_to_ehci_priv(hcd);
- 	int clk;
- 
-+	if (priv->quirk_poll)
-+		ehci_platform_quirk_poll_end(priv);
-+
- 	usb_remove_hcd(hcd);
- 
- 	if (pdata->power_off)
-@@ -297,9 +393,13 @@ static int ehci_platform_suspend(struct device *dev)
- 	struct usb_hcd *hcd = dev_get_drvdata(dev);
- 	struct usb_ehci_pdata *pdata = dev_get_platdata(dev);
- 	struct platform_device *pdev = to_platform_device(dev);
-+	struct ehci_platform_priv *priv = hcd_to_ehci_priv(hcd);
- 	bool do_wakeup = device_may_wakeup(dev);
- 	int ret;
- 
-+	if (priv->quirk_poll)
-+		ehci_platform_quirk_poll_end(priv);
-+
- 	ret = ehci_suspend(hcd, do_wakeup);
- 	if (ret)
- 		return ret;
-@@ -331,6 +431,10 @@ static int ehci_platform_resume(struct device *dev)
- 	}
- 
- 	ehci_resume(hcd, priv->reset_on_resume);
-+
-+	if (priv->quirk_poll)
-+		ehci_platform_quirk_poll_init(priv);
-+
- 	return 0;
- }
- #endif /* CONFIG_PM_SLEEP */
--- 
-2.7.4
+Acked-by: Thierry Reding <treding@nvidia.com>
 
+--s/l3CgOIzMHHjg/5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl4hnjIACgkQ3SOs138+
+s6G+ehAArX6J/MT8QnvA7i1DoizXGjeNN6C9t/2MrckIK9iyek+eMIIPaGfq0eF5
+xzbgIC3XSRrjolAepid+edS44UXQU2sRkQsRwAs3JhHS+BJnbSg3m4Ekd8LY3fl4
+McsE+Or8JUAhcnd7a5mFsPt6GCWCIe4bfkEycxGCifs9rgcy2kR9ltPlz0oVBsrH
+Na5acjzmr5Lm4yu8cpRtKJIFPqnS47/8xrPAsC+5l4PuXRlFumy1jSGQ4bDBw54B
+ThddVgBD/flrlbs7C9cV4imrc62gphEZ0fMM1OFD0mI6xxL3dNpVmWEXWb1EJRE1
+i2FzxT9Iy8zL/aHtqJ+DbUlhAlUxmwe49LAKHjmdwTtwCxhQFYE9os4silhzgw45
+nMIbGoNkS6HyR+OjCs5OgiSljuOXSq1ZG8ZSiUiJGBG8p3m8sdgDjcVKxdUEtIr/
+s+idDzZrrA06TEA9qAp++a4oICaX36tIezjGxtRoBA3x40RjSXUvxC+7E+xqqdUt
+kw97vMRuDEpkK+xhBd/8Vsoc+GJ/x51ByFwHYTdf31E30jG6vUa3EJtq5j94L4PM
+rAaHfYxgFdm7iYLV+F3XR5tLcwTl3UvP+aoY59j6/dSlF20OyAP5tMO6HxEo+MiG
+ikVV7exgW/qHv9ENKHDhrDVJMaNXRZOEwprUcUVKSzw4RTq1p6A=
+=QX2u
+-----END PGP SIGNATURE-----
+
+--s/l3CgOIzMHHjg/5--
