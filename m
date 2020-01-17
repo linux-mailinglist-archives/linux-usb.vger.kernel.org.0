@@ -2,101 +2,207 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E21140395
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 06:30:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8FE1403B2
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2020 06:51:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726552AbgAQF3i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jan 2020 00:29:38 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:33100 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725813AbgAQF3i (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jan 2020 00:29:38 -0500
-Received: by mail-lj1-f195.google.com with SMTP id y6so25182844lji.0;
-        Thu, 16 Jan 2020 21:29:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:user-agent:mime-version;
-        bh=u2ShXKy2k7kn6Z4PvqU+3uG8mylbjCNEvUcCrTSLmls=;
-        b=TQqWLK8Cc6iaeyBH1scBvbFDtlYg42Cb7phaV2BVFQXqvwbvwkryR7ZbDpvfRr53tq
-         vO+fXctNG4FvcDYeHZZdx2qq71ErHCPEeDOKNqE7+CIb50ZIfamdUOJjvDZsSPZkcTFV
-         tj5YP6R+ZgN+3YmptTYaf1DFDuK30n06RCiKWePqaJ+hFzFOT8Ic9iSA3akbGVss3jlR
-         +XzmB6JUlEDtLwoqxZ1rSJvn7WQ/YsKzPEfF6bJE+E/pexGQdm2KMZMxI2nmVrxuqPk8
-         3BnVorZ1e3Z8V62Ju9DyS+8SuQxMg4DXb9yBu+WdGDDVzwBlmisnA4RnKTpS91+u3rAc
-         HIbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:user-agent
-         :mime-version;
-        bh=u2ShXKy2k7kn6Z4PvqU+3uG8mylbjCNEvUcCrTSLmls=;
-        b=erO+KBMCyjf8AwdwOYGM4wrJoeKi4J4vuydLY/fckpFErJGpurIuk+Pk1DCe9Sj7IH
-         afHXx8GOl85VBkDJtXJeeHaXRYLMg72k5wj+FDEnpCjyv0aZOrJTGULWssEke/x9Y9aV
-         VDaP974QHFWi2SSER7Drs8GmRciXg0TpvBlQNmJUx5Oe8dll3muklk+SHHqojpiBk2uA
-         0wqw+4ko+u1mnL9JG53BWbH2AJRUznJIA8qoH+nAi43aHuKLWaPNMT1x0ullPqANgbwM
-         i6moCx5yt7fozAJSFSz4ypUkLDxcceJkPlftWg1USM2926wnKDnCA+VST0zMYpT1P8dY
-         pLNA==
-X-Gm-Message-State: APjAAAVfatBPNj+zuuxNpCjwhQPhO1kmND2e+nm0WJ3cTpPA4TAjf/JI
-        ap2xVAJryraI0WCRgMDRero=
-X-Google-Smtp-Source: APXvYqxA5uYD4sYpItoBgbNFyociuqkAECSQWyzhlWPFkgrSZ0cqkqzWXbUYREpwQssy8/98MEbuOw==
-X-Received: by 2002:a2e:8804:: with SMTP id x4mr4590317ljh.187.1579238975166;
-        Thu, 16 Jan 2020 21:29:35 -0800 (PST)
-Received: from osv.localdomain ([89.175.180.246])
-        by smtp.gmail.com with ESMTPSA id b22sm14345507lji.99.2020.01.16.21.29.33
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 16 Jan 2020 21:29:34 -0800 (PST)
-From:   Sergey Organov <sorganov@gmail.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        =?utf-8?Q?Micha=C5=82_Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        linux-serial@vger.kernel.org, Sergey Organov <sorganov@gmail.com>
-Subject: [PATCH] usb: gadget: serial: fix Tx stall after buffer overflow
-Date:   Fri, 17 Jan 2020 08:29:33 +0300
-Message-ID: <87pnfi8xc2.fsf@osv.gnss.ru>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.4 (gnu/linux)
+        id S1726578AbgAQFvT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jan 2020 00:51:19 -0500
+Received: from mga06.intel.com ([134.134.136.31]:17858 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726312AbgAQFvT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 17 Jan 2020 00:51:19 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Jan 2020 21:51:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,328,1574150400"; 
+   d="scan'208";a="249125306"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 16 Jan 2020 21:51:17 -0800
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1isKXN-0006r4-1k; Fri, 17 Jan 2020 13:51:17 +0800
+Date:   Fri, 17 Jan 2020 13:50:23 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ beac08af711ea1a373b3382fdf374af865b19a9c
+Message-ID: <5e214b1f.SnoOVRHyP70m3YWq%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: beac08af711ea1a373b3382fdf374af865b19a9c  Merge tag 'phy-for-5.6' of git://git.kernel.org/pub/scm/linux/kernel/git/kishon/linux-phy into usb-next
 
-Symptom: application opens /dev/ttyGS0 and starts sending (writing) to
-it while either USB cable is not connected, or nobody listens on the
-other side of the cable. If driver circular buffer overflows before
-connection is established, no data will be written to the USB layer
-until/unless /dev/ttyGS0 is closed and re-opened again by the
-application (the latter besides having no means of being notified about
-the event of establishing of the connection.)
+elapsed time: 479m
 
-Fix: on open and/or connect, kick Tx to flush circular buffer data to
-USB layer.
+configs tested: 152
+configs skipped: 0
 
-NOTE: current version of the driver leaks data from one connection to
-another through its internal circular buffer. It might be a good idea
-to clear the buffer on open/close/connect/disconnect, in which case
-the problem this patch solves would have been fixed in a different
-manner. However, not only that's a more dramatic change, but to do it
-right TTY-layer buffers are to be considered as well.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Signed-off-by: Sergey Organov <sorganov@gmail.com>
+c6x                              allyesconfig
+c6x                        evmc6678_defconfig
+nios2                         10m50_defconfig
+nios2                         3c120_defconfig
+openrisc                    or1ksim_defconfig
+openrisc                 simple_smp_defconfig
+xtensa                       common_defconfig
+xtensa                          iss_defconfig
+c6x                  randconfig-a001-20200117
+h8300                randconfig-a001-20200117
+microblaze           randconfig-a001-20200117
+nios2                randconfig-a001-20200117
+sparc64              randconfig-a001-20200117
+alpha                               defconfig
+csky                                defconfig
+nds32                             allnoconfig
+nds32                               defconfig
+parisc                            allnoconfig
+parisc                            allyesonfig
+parisc                         b180_defconfig
+parisc                        c3000_defconfig
+parisc                              defconfig
+i386                             alldefconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+x86_64               randconfig-e001-20200117
+x86_64               randconfig-e002-20200117
+x86_64               randconfig-e003-20200117
+i386                 randconfig-e001-20200117
+i386                 randconfig-e002-20200117
+i386                 randconfig-e003-20200117
+x86_64                              fedora-25
+x86_64                                  kexec
+x86_64                                    lkp
+x86_64                                   rhel
+x86_64                               rhel-7.6
+um                                  defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+sparc64                          allmodconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                             defconfig
+x86_64               randconfig-b001-20200117
+x86_64               randconfig-b002-20200117
+x86_64               randconfig-b003-20200117
+i386                 randconfig-b001-20200117
+i386                 randconfig-b002-20200117
+i386                 randconfig-b003-20200117
+alpha                randconfig-a001-20200117
+m68k                 randconfig-a001-20200117
+mips                 randconfig-a001-20200117
+nds32                randconfig-a001-20200117
+parisc               randconfig-a001-20200117
+riscv                randconfig-a001-20200117
+s390                             alldefconfig
+s390                             allmodconfig
+s390                              allnoconfig
+s390                             allyesconfig
+s390                          debug_defconfig
+s390                                defconfig
+s390                       zfcpdump_defconfig
+x86_64               randconfig-c001-20200117
+x86_64               randconfig-c002-20200117
+x86_64               randconfig-c003-20200117
+i386                 randconfig-c001-20200117
+i386                 randconfig-c002-20200117
+i386                 randconfig-c003-20200117
+ia64                             alldefconfig
+ia64                             allmodconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+ia64                                defconfig
+csky                 randconfig-a001-20200117
+openrisc             randconfig-a001-20200117
+s390                 randconfig-a001-20200117
+sh                   randconfig-a001-20200117
+xtensa               randconfig-a001-20200117
+sh                               allmodconfig
+sh                                allnoconfig
+sh                          rsk7269_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                            titan_defconfig
+h8300                     edosk2674_defconfig
+h8300                    h8300h-sim_defconfig
+h8300                       h8s-sim_defconfig
+m68k                             allmodconfig
+m68k                       m5475evb_defconfig
+m68k                          multi_defconfig
+m68k                           sun3_defconfig
+mips                           32r2_defconfig
+mips                         64r6el_defconfig
+mips                             allmodconfig
+mips                              allnoconfig
+mips                             allyesconfig
+mips                      fuloong2e_defconfig
+mips                      malta_kvm_defconfig
+arc                              allyesconfig
+arc                                 defconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
+powerpc                           allnoconfig
+powerpc                             defconfig
+powerpc                       ppc64_defconfig
+powerpc                          rhel-kconfig
+x86_64               randconfig-d001-20200117
+x86_64               randconfig-d002-20200117
+x86_64               randconfig-d003-20200117
+i386                 randconfig-d001-20200117
+i386                 randconfig-d002-20200117
+i386                 randconfig-d003-20200117
+x86_64               randconfig-g001-20200117
+x86_64               randconfig-g002-20200117
+x86_64               randconfig-g003-20200117
+i386                 randconfig-g001-20200117
+i386                 randconfig-g002-20200117
+i386                 randconfig-g003-20200117
+arc                  randconfig-a001-20200117
+arm                  randconfig-a001-20200117
+arm64                randconfig-a001-20200117
+ia64                 randconfig-a001-20200117
+powerpc              randconfig-a001-20200117
+sparc                randconfig-a001-20200117
+arm                              allmodconfig
+arm                               allnoconfig
+arm                              allyesconfig
+arm                         at91_dt_defconfig
+arm                           efm32_defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                        multi_v7_defconfig
+arm                        shmobile_defconfig
+arm                           sunxi_defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                            allyesconfig
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+x86_64               randconfig-h001-20200117
+x86_64               randconfig-h002-20200117
+x86_64               randconfig-h003-20200117
+i386                 randconfig-h001-20200117
+i386                 randconfig-h002-20200117
+i386                 randconfig-h003-20200117
+
 ---
-
- drivers/usb/gadget/function/u_serial.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index f986e5c..d333cda 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -563,6 +563,8 @@ static int gs_start_io(struct gs_port *port)
- 
-        /* unblock any pending writes into our circular buffer */
-        if (started) {
-+               pr_debug("gs_start_tx: ttyGS%d\n", port->port_num);
-+               gs_start_tx(port);
-                tty_wakeup(port->port.tty);
-        } else {
-                gs_free_requests(ep, head, &port->read_allocated);
--- 
-2.10.0.1.g57b01a3
+0-DAY kernel test infrastructure                 Open Source Technology Center
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
