@@ -2,207 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B516814168D
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Jan 2020 09:30:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7F514179D
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Jan 2020 14:18:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726563AbgARIaS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Jan 2020 03:30:18 -0500
-Received: from mga07.intel.com ([134.134.136.100]:50095 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726534AbgARIaS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 18 Jan 2020 03:30:18 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Jan 2020 00:30:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,333,1574150400"; 
-   d="scan'208";a="219154186"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 18 Jan 2020 00:30:16 -0800
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1isjUm-000CVs-Bg; Sat, 18 Jan 2020 16:30:16 +0800
-Date:   Sat, 18 Jan 2020 16:30:00 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- fdd64df7b9d1e20dbe28c9c205682b66ad821e6c
-Message-ID: <5e22c208./gfpDdI/A/lauDBw%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1729074AbgARNSe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sat, 18 Jan 2020 08:18:34 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:45824 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728688AbgARNSd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Jan 2020 08:18:33 -0500
+Received: by mail-wr1-f65.google.com with SMTP id j42so25161573wrj.12;
+        Sat, 18 Jan 2020 05:18:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=3M4ZjZLxqwNY1d3VEgK180VUD4b24X/dDEbhOgpWU6g=;
+        b=SwRFDk/Gp+sL2UjCHAIKjbjiXeKR9cryRJiZ9L18P1Kj2ptt0NegAJetZVEIWUVR0Z
+         cEeml+cJo28i7Y9LvCjelMARnkrRzDaOJIn0CXP4mw2OD8U36IFfNB7PWBohVMmjEn0V
+         S9VLXrT5SnldvNqW2wOrJBX8K2p3LcUGzUO/K1e1Um/Qfei2tHjDZTug2lZUB5T0M/57
+         SQWh8JfbEk8Tc/s7J+kfl21SzjSyQFdXPZuTSvIbxMIKUIzfXdBbc2cqUpoUwHEssiVF
+         rz+KNjYMxZvclDEtyspvYdEx0kj5X+QKYTIou+yN9UT3KPCBWUbk/TInnQuRQPG5/HC7
+         DeMQ==
+X-Gm-Message-State: APjAAAUvAdSs+/HBxeUAoR6QSKYMiv4BMXNoi/aQ0U40pss6USELg4Ac
+        O/s/1WFtyDeCuq3fN/fuer7rSyDsO1MX8ePHfCUvI8UG
+X-Google-Smtp-Source: APXvYqxR/GvQvWoRh2G02bIHuRXJTaoflf3QgcqLAkmSYEKLZ92iFEDEakk266yNKrASQAL5RTz33vE+6RVjrPOu0P8=
+X-Received: by 2002:adf:90ee:: with SMTP id i101mr8265714wri.417.1579353511444;
+ Sat, 18 Jan 2020 05:18:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20191106120219.15028-1-alexandru.ardelean@analog.com> <20200116132901.23977-1-alexandru.ardelean@analog.com>
+In-Reply-To: <20200116132901.23977-1-alexandru.ardelean@analog.com>
+From:   =?UTF-8?Q?Micha=C5=82_Nazarewicz?= <mina86@mina86.com>
+Date:   Sat, 18 Jan 2020 13:18:20 +0000
+Message-ID: <CA+pa1O1bCTgAg=7MFYsF1o2P2UTvppt92x0GfzVvDZ1+Ch-74Q@mail.gmail.com>
+Subject: Re: [PATCH][RESEND] usb: gadget: ffs: ffs_aio_cancel(): Save/restore
+ IRQ flags
+To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
+Cc:     USB list <linux-usb@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: fdd64df7b9d1e20dbe28c9c205682b66ad821e6c  USB: usbfs: Always unlink URBs in reverse order
+On Thu, 16 Jan 2020 at 13:27, Alexandru Ardelean
+<alexandru.ardelean@analog.com> wrote:
+>
+> From: Lars-Peter Clausen <lars@metafoo.de>
+>
+> ffs_aio_cancel() can be called from both interrupt and thread context. Make
+> sure that the current IRQ state is saved and restored by using
+> spin_{un,}lock_irq{save,restore}().
+>
+> Otherwise undefined behavior might occur.
+>
+> Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
+> Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
 
-elapsed time: 731m
+Acked-by: Michal Nazarewicz <mina86@mina86.com>
 
-configs tested: 152
-configs skipped: 0
+> ---
+>  drivers/usb/gadget/function/f_fs.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index 6f8b67e61771..bdac92d3a8d0 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -1162,18 +1162,19 @@ static int ffs_aio_cancel(struct kiocb *kiocb)
+>  {
+>         struct ffs_io_data *io_data = kiocb->private;
+>         struct ffs_epfile *epfile = kiocb->ki_filp->private_data;
+> +       unsigned long flags;
+>         int value;
+>
+>         ENTER();
+>
+> -       spin_lock_irq(&epfile->ffs->eps_lock);
+> +       spin_lock_irqsave(&epfile->ffs->eps_lock, flags);
+>
+>         if (likely(io_data && io_data->ep && io_data->req))
+>                 value = usb_ep_dequeue(io_data->ep, io_data->req);
+>         else
+>                 value = -EINVAL;
+>
+> -       spin_unlock_irq(&epfile->ffs->eps_lock);
+> +       spin_unlock_irqrestore(&epfile->ffs->eps_lock, flags);
+>
+>         return value;
+>  }
+> --
+> 2.20.1
+>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-csky                 randconfig-a001-20200118
-openrisc             randconfig-a001-20200118
-s390                 randconfig-a001-20200118
-sh                   randconfig-a001-20200118
-xtensa               randconfig-a001-20200118
-parisc                            allnoconfig
-parisc                            allyesonfig
-parisc                         b180_defconfig
-parisc                        c3000_defconfig
-parisc                              defconfig
-alpha                               defconfig
-csky                                defconfig
-nds32                             allnoconfig
-nds32                               defconfig
-arc                              allyesconfig
-arc                                 defconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-powerpc                           allnoconfig
-powerpc                             defconfig
-powerpc                       ppc64_defconfig
-powerpc                          rhel-kconfig
-sparc                            allyesconfig
-sparc                               defconfig
-sparc64                          allmodconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                             defconfig
-i386                             allyesconfig
-x86_64               randconfig-g001-20200118
-x86_64               randconfig-g002-20200118
-x86_64               randconfig-g003-20200118
-i386                 randconfig-g001-20200118
-i386                 randconfig-g002-20200118
-i386                 randconfig-g003-20200118
-x86_64                              fedora-25
-x86_64                                  kexec
-x86_64                                    lkp
-x86_64                                   rhel
-x86_64                               rhel-7.6
-sh                               allmodconfig
-sh                                allnoconfig
-sh                          rsk7269_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                            titan_defconfig
-alpha                randconfig-a001-20200118
-m68k                 randconfig-a001-20200118
-mips                 randconfig-a001-20200118
-nds32                randconfig-a001-20200118
-parisc               randconfig-a001-20200118
-riscv                randconfig-a001-20200118
-c6x                  randconfig-a001-20200118
-h8300                randconfig-a001-20200118
-microblaze           randconfig-a001-20200118
-nios2                randconfig-a001-20200118
-sparc64              randconfig-a001-20200118
-mips                           32r2_defconfig
-mips                         64r6el_defconfig
-mips                             allmodconfig
-mips                              allnoconfig
-mips                             allyesconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-x86_64               randconfig-f001-20200118
-x86_64               randconfig-f002-20200118
-x86_64               randconfig-f003-20200118
-i386                 randconfig-f001-20200118
-i386                 randconfig-f002-20200118
-i386                 randconfig-f003-20200118
-um                                  defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-h8300                     edosk2674_defconfig
-h8300                    h8300h-sim_defconfig
-h8300                       h8s-sim_defconfig
-m68k                             allmodconfig
-m68k                       m5475evb_defconfig
-m68k                          multi_defconfig
-m68k                           sun3_defconfig
-s390                              allnoconfig
-c6x                              allyesconfig
-c6x                        evmc6678_defconfig
-nios2                         10m50_defconfig
-nios2                         3c120_defconfig
-openrisc                    or1ksim_defconfig
-openrisc                 simple_smp_defconfig
-xtensa                       common_defconfig
-xtensa                          iss_defconfig
-ia64                                defconfig
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                            allyesconfig
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-i386                             alldefconfig
-i386                              allnoconfig
-i386                                defconfig
-s390                             alldefconfig
-s390                             allmodconfig
-s390                             allyesconfig
-s390                          debug_defconfig
-s390                                defconfig
-s390                       zfcpdump_defconfig
-x86_64               randconfig-b001-20200118
-x86_64               randconfig-b002-20200118
-x86_64               randconfig-b003-20200118
-i386                 randconfig-b001-20200118
-i386                 randconfig-b002-20200118
-i386                 randconfig-b003-20200118
-x86_64               randconfig-e001-20200118
-x86_64               randconfig-e002-20200118
-x86_64               randconfig-e003-20200118
-i386                 randconfig-e001-20200118
-i386                 randconfig-e002-20200118
-i386                 randconfig-e003-20200118
-arm                              allmodconfig
-arm                               allnoconfig
-arm                              allyesconfig
-arm                         at91_dt_defconfig
-arm                           efm32_defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                        multi_v7_defconfig
-arm                        shmobile_defconfig
-arm                           sunxi_defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-x86_64               randconfig-h001-20200118
-x86_64               randconfig-h002-20200118
-x86_64               randconfig-h003-20200118
-i386                 randconfig-h001-20200118
-i386                 randconfig-h002-20200118
-i386                 randconfig-h003-20200118
-x86_64               randconfig-c001-20200118
-x86_64               randconfig-c002-20200118
-x86_64               randconfig-c003-20200118
-i386                 randconfig-c001-20200118
-i386                 randconfig-c002-20200118
-i386                 randconfig-c003-20200118
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-arc                  randconfig-a001-20200118
-arm                  randconfig-a001-20200118
-arm64                randconfig-a001-20200118
-ia64                 randconfig-a001-20200118
-powerpc              randconfig-a001-20200118
-sparc                randconfig-a001-20200118
-
----
-0-DAY kernel test infrastructure                 Open Source Technology Center
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
+-- 
+Best regards
+ミハウ “𝓶𝓲𝓷𝓪86” ナザレヴイツ
+«If at first you don’t succeed, give up skydiving»
