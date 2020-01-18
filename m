@@ -2,72 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 114171419F6
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Jan 2020 23:01:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A00171419FC
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Jan 2020 23:05:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbgARWBH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Jan 2020 17:01:07 -0500
-Received: from smtp06.smtpout.orange.fr ([80.12.242.128]:45883 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727043AbgARWBG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Jan 2020 17:01:06 -0500
-Received: from belgarion ([90.89.233.68])
-        by mwinf5d41 with ME
-        id ry0w210021VCWxW03y136Y; Sat, 18 Jan 2020 23:01:05 +0100
-X-ME-Helo: belgarion
-X-ME-Auth: amFyem1pay5yb2JlcnRAb3JhbmdlLmZy
-X-ME-Date: Sat, 18 Jan 2020 23:01:05 +0100
-X-ME-IP: 90.89.233.68
-From:   Robert Jarzmik <robert.jarzmik@free.fr>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH v2] usb: phy: phy-gpio-vbus-usb: Convert to GPIO descriptors
-References: <20200106151005.321983-1-linus.walleij@linaro.org>
-        <87a76syjnq.fsf@belgarion.home>
-        <CACRpkdYrGB4qYa09TiucDWV0wdOfc4pskXULRTHFKdmCeXd41w@mail.gmail.com>
-X-URL:  http://belgarath.falguerolles.org/
-Date:   Sat, 18 Jan 2020 23:00:55 +0100
-In-Reply-To: <CACRpkdYrGB4qYa09TiucDWV0wdOfc4pskXULRTHFKdmCeXd41w@mail.gmail.com>
-        (Linus Walleij's message of "Tue, 14 Jan 2020 01:29:06 +0100")
-Message-ID: <87k15o1l2g.fsf@belgarion.home>
-User-Agent: Gnus/5.130008 (Ma Gnus v0.8) Emacs/26 (gnu/linux)
+        id S1727104AbgARWFy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Jan 2020 17:05:54 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:38383 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726997AbgARWFy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Jan 2020 17:05:54 -0500
+Received: by mail-ed1-f67.google.com with SMTP id i16so25881496edr.5;
+        Sat, 18 Jan 2020 14:05:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IZo36abDKqjdvzc5GwhroDqR39xgOE1dZtSOdvhsHaY=;
+        b=rrWBZd43dKN2kOfO+ejr5Z7+dyqYVVj50e+wGMqTbZBEstOVS6YXQyRUpr0Y+7R5h9
+         FjlQICJh7caGHGRWzQpSCOqXZUnhH6y2uHCnal9eJNho/+TEdrP9BNWZWERYWrrlJVq2
+         BEDYyjW6IgnNOM1Qov5RBgUBP6gAByvEzSGyUMV9Yg3aXnxU4WKsfMdB3ZeiHsuNCTfU
+         ikTwlAJcNycKOPvnbJ7sIKy3vHNuReSSHgSASLXzfJRbNPt/zeDkqDkWEgO35WzvZsYL
+         vTzVHHy44Ism6FVpp8/k7o81pySIKU2xH2qxB+KrRC8I8j8+cO8bROIyf7qokKdW9ViY
+         vDHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IZo36abDKqjdvzc5GwhroDqR39xgOE1dZtSOdvhsHaY=;
+        b=qy4zv2EA8y79O11H6Vjqv3CVAPFJtlkvG7RkertY1Z+XjrHt76Ogedp8zmacyBSokO
+         0zxgWn/cotRhkhY8uW430Xq3pjGmWo6aTGmOrIBdkDkeZPJg2KHiVnieUhmYTDcCOfN+
+         uNDXHU3gIEgAgAgt54k3J/VNskOr6BEH+bSzej2K41PE4suh+CWt+zO8FDHxEAUyfivc
+         h3d65BBKzmxN7zYEyGOI/hjXcBl6Hp6GOZxdQrc5B+PazR24AWqiWfh7x+NPGaufTw7k
+         zvyxdA+6SF1aUAw7VkrDIFT1OsUSRCSuFW9RFwdiLqmiODlEBn1H7MQiUqbLHfbDThLu
+         JQ5A==
+X-Gm-Message-State: APjAAAULdS2/aBZUKRot99qigpDPFdbqimaFvD7ZpsUXamjWygt85RtW
+        YqGduqWbRX5PCzBKUcmHMjKZGjCcf/cjHiLy8XHNL8gO
+X-Google-Smtp-Source: APXvYqyNH1kS9f9T6kQko9VTwsuHR9OgAGx0Ogkz4TN5x/HgDfDbqpYogNZD1zO4DAwEf3ZVTRNcAK5Ra6gnLeWPTDs=
+X-Received: by 2002:a17:906:90c3:: with SMTP id v3mr14156897ejw.30.1579385151960;
+ Sat, 18 Jan 2020 14:05:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <1579220504-110067-1-git-send-email-hanjie.lin@amlogic.com> <1579220504-110067-6-git-send-email-hanjie.lin@amlogic.com>
+In-Reply-To: <1579220504-110067-6-git-send-email-hanjie.lin@amlogic.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sat, 18 Jan 2020 23:05:41 +0100
+Message-ID: <CAFBinCD9iwBHYArqU55kg_uG3xc=JnL=F1P0KW1+6BP2xHoN0g@mail.gmail.com>
+Subject: Re: [PATCH v6 5/6] arm64: dts: meson: a1: Enable USB2 PHY
+To:     Hanjie Lin <hanjie.lin@amlogic.com>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Yue Wang <yue.wang@amlogic.com>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, Carlo Caione <carlo@caione.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Linus Walleij <linus.walleij@linaro.org> writes:
+Hi Hanjie,
 
-> On Sun, Jan 12, 2020 at 12:54 PM Robert Jarzmik <robert.jarzmik@free.fr> wrote:
-> There are two names. The lookup name that I just invented to be
-> "vbus" and "pullup". One reason to choose these names is that
-> if someone migrates the platforms to device tree they can name
-> the DT property vbus-gpios = <...>; pullup-gpios = <...>;
-> which I think makes sense.
+On Fri, Jan 17, 2020 at 1:22 AM Hanjie Lin <hanjie.lin@amlogic.com> wrote:
 >
-> Then there is the consumer name that is shown in debugfs etc.
+> Enable USB2 PHY for Meson A1 SoC.
 >
-> That is preserved with these calls:
->
-> +       gpiod_set_consumer_name(gpio_vbus->vbus_gpiod, "vbus_detect");
-> (...)
-> +       if (gpio_vbus->pullup_gpiod)
-> +               gpiod_set_consumer_name(gpio_vbus->pullup_gpiod, "udc_pullup");
+> Signed-off-by: Yue Wang <yue.wang@amlogic.com>
+> Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
+> ---
+>  arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+personally I would squash this with patch 6/6 because it's only useful
+together with patch 6/6
+on the other hand: it's not worth sending a v7 just for this
 
-Ah yes, I see it now.
+> @@ -100,6 +101,18 @@
+>                                 #power-domain-cells = <1>;
+>                                 status = "okay";
+>                         };
+> +
+> +                       usb2_phy1: phy@40000 {
+> +                               status = "okay";
+we typically use one of the following patterns:
+- status = "disabled" in SoC.dts
+- status = "okay" in board.dts whenever the peripheral should be used
+(example: I2C, USB, ...)
+OR
+- no status property if the peripheral is mandatory on all boards (for
+example: clock controller, ...)
 
-For the mach-pxa part :
-Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
+so for consistency with other Amlogic .dts I would either drop the
+status property or set it to disabled (and enable it in
+meson-a1-ad401.dts)
+same applies to patch 6/6
 
-Cheers.
 
--- 
-Robert
+Martin
