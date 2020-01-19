@@ -2,224 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98511141F34
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Jan 2020 18:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7DE141F6E
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Jan 2020 19:44:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727740AbgASRcD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Jan 2020 12:32:03 -0500
-Received: from mga14.intel.com ([192.55.52.115]:48193 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727007AbgASRcD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 19 Jan 2020 12:32:03 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Jan 2020 09:31:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,338,1574150400"; 
-   d="scan'208";a="258460687"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 19 Jan 2020 09:31:57 -0800
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1itEQX-000Iey-Ix; Mon, 20 Jan 2020 01:31:57 +0800
-Date:   Mon, 20 Jan 2020 01:31:24 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- 42bbdd99221bac206dde2b5e87098177fcd2a48e
-Message-ID: <5e24926c.e+c4e6lLXXtChVDq%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1728827AbgASSoW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Jan 2020 13:44:22 -0500
+Received: from mail-io1-f65.google.com ([209.85.166.65]:46994 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728760AbgASSoU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Jan 2020 13:44:20 -0500
+Received: by mail-io1-f65.google.com with SMTP id t26so31378059ioi.13
+        for <linux-usb@vger.kernel.org>; Sun, 19 Jan 2020 10:44:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
+        b=MveYcniUJUB532f0dlOoihdmkjAHV60cDj8LBHI8M4h+3H+egt8ZCsWSnQoG7CEhld
+         h286H+k74rDzfRQOoY/f9M81WRQr88YRuubiH3HanhIDyXki4cyulA7bNdgdh/npcklQ
+         CvJo43u8PBPBkMgEH5HatRsI+u5tlB3wEJ1Th3FBUvpApZQxsvg7pL4HfvgLhjM/SAbt
+         Wln7BJPpvNYZtoiRQX3zkLZKrm4kgBMldFao5RktgQ8gLQFv0TsxI7xopop5Q61lnjsD
+         O+Nqof9tzp5qXVHsDImBQ0OOhN8D0ZvK4JC9Zw+KV08LpajVcASte5dFUKOIeqnCFHwC
+         Gp1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
+        b=r8gPweijEzpdAxTWctMrkC2kJZSNz1hRJZ/wSrlf7U9qri4YlEiK86PgIyz01p4caV
+         tQKBuV9SJMtZPjQ1HlJ9UWXIgfA+JI3NDhGsb0+QOubWUJTQNlHZTUZRQ9wrvcSh3Zqr
+         bQOWpmM4XyFbiypGpJWFhGx9bs68uJ9BnrPswc/UvGY2kEddgRLi90fV/5oUEf3jEifV
+         0G9uVTt/KTEg/RT9JnebpPdukfdB01qEi3Y25xMf1wmV75G4p+NsCzRihQDmXgRSEaGJ
+         Nqayh1jOJt5U5ZUn8S7wqHTA8PTVGvq7fG4qoyULiS9zN025a8JytPTUM/6sq35YHLIb
+         FSUQ==
+X-Gm-Message-State: APjAAAXdgCai5+uWQFADnZL+aAf3ZXaS4d/ixJ+Fl/RN313M2Tca7SeW
+        iEvDfVjTag/qgCjcD6lfvsLizqQKmk3NaET7QpERMnQP+mE6PQ==
+X-Google-Smtp-Source: APXvYqzrfoOpFYdPx6ke6uIX585SnMDBN6pXKvD7iN8x9MT//+KimK2aFC33ps3ZC6gjq3Pi1pIlacgfKiFCQZrpYZA=
+X-Received: by 2002:a92:d1c1:: with SMTP id u1mr7477573ilg.66.1579459459106;
+ Sun, 19 Jan 2020 10:44:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a02:95c8:0:0:0:0:0 with HTTP; Sun, 19 Jan 2020 10:44:18
+ -0800 (PST)
+Reply-To: favordens@email.com
+From:   Favor Desmond <contecindy5@gmail.com>
+Date:   Sun, 19 Jan 2020 18:44:18 +0000
+Message-ID: <CAOfCPNxgSoAU_ns0j9jYL-ArKfcD=i8NkJvHsR4-OGvFBVDMZg@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-next
-branch HEAD: 42bbdd99221bac206dde2b5e87098177fcd2a48e  phy: ti: j721e-wiz: Fix build error without CONFIG_OF_ADDRESS
-
-elapsed time: 2345m
-
-configs tested: 169
-configs skipped: 0
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-x86_64               randconfig-g001-20200119
-x86_64               randconfig-g002-20200119
-x86_64               randconfig-g003-20200119
-i386                 randconfig-g001-20200119
-i386                 randconfig-g002-20200119
-i386                 randconfig-g003-20200119
-x86_64               randconfig-c001-20200119
-x86_64               randconfig-c002-20200119
-x86_64               randconfig-c003-20200119
-i386                 randconfig-c001-20200119
-i386                 randconfig-c002-20200119
-i386                 randconfig-c003-20200119
-alpha                               defconfig
-csky                                defconfig
-nds32                             allnoconfig
-nds32                               defconfig
-x86_64               randconfig-f001-20200119
-x86_64               randconfig-f002-20200119
-x86_64               randconfig-f003-20200119
-i386                 randconfig-f001-20200119
-i386                 randconfig-f002-20200119
-i386                 randconfig-f003-20200119
-microblaze                      mmu_defconfig
-um                             i386_defconfig
-x86_64               randconfig-e001-20200119
-x86_64               randconfig-e002-20200119
-x86_64               randconfig-e003-20200119
-i386                 randconfig-e001-20200119
-i386                 randconfig-e002-20200119
-i386                 randconfig-e003-20200119
-arm                              allmodconfig
-arm64                            allmodconfig
-parisc                            allnoconfig
-parisc                            allyesonfig
-parisc                         b180_defconfig
-parisc                        c3000_defconfig
-parisc                              defconfig
-arc                              allyesconfig
-arc                                 defconfig
-microblaze                    nommu_defconfig
-powerpc                           allnoconfig
-powerpc                             defconfig
-powerpc                       ppc64_defconfig
-powerpc                          rhel-kconfig
-x86_64               randconfig-h001-20200119
-x86_64               randconfig-h002-20200119
-x86_64               randconfig-h003-20200119
-i386                 randconfig-h001-20200119
-i386                 randconfig-h002-20200119
-i386                 randconfig-h003-20200119
-i386                             alldefconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                                defconfig
-arc                  randconfig-a001-20200119
-arm                  randconfig-a001-20200119
-arm64                randconfig-a001-20200119
-ia64                 randconfig-a001-20200119
-powerpc              randconfig-a001-20200119
-sparc                randconfig-a001-20200119
-sparc                            allyesconfig
-x86_64               randconfig-b001-20200119
-x86_64               randconfig-b002-20200119
-x86_64               randconfig-b003-20200119
-i386                 randconfig-b001-20200119
-i386                 randconfig-b002-20200119
-i386                 randconfig-b003-20200119
-mips                           32r2_defconfig
-mips                         64r6el_defconfig
-mips                             allmodconfig
-mips                              allnoconfig
-mips                             allyesconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-c6x                              allyesconfig
-c6x                        evmc6678_defconfig
-nios2                         10m50_defconfig
-nios2                         3c120_defconfig
-openrisc                    or1ksim_defconfig
-openrisc                 simple_smp_defconfig
-xtensa                       common_defconfig
-xtensa                          iss_defconfig
-sparc                               defconfig
-sparc64                          allmodconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                             defconfig
-x86_64                              fedora-25
-x86_64                                  kexec
-x86_64                                    lkp
-x86_64                                   rhel
-x86_64                               rhel-7.6
-h8300                     edosk2674_defconfig
-h8300                    h8300h-sim_defconfig
-h8300                       h8s-sim_defconfig
-m68k                             allmodconfig
-m68k                       m5475evb_defconfig
-m68k                          multi_defconfig
-m68k                           sun3_defconfig
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-ia64                                defconfig
-c6x                  randconfig-a001-20200119
-h8300                randconfig-a001-20200119
-microblaze           randconfig-a001-20200119
-nios2                randconfig-a001-20200119
-sparc64              randconfig-a001-20200119
-csky                 randconfig-a001-20200119
-openrisc             randconfig-a001-20200119
-s390                 randconfig-a001-20200119
-sh                   randconfig-a001-20200119
-xtensa               randconfig-a001-20200119
-x86_64               randconfig-d001-20200119
-x86_64               randconfig-d002-20200119
-x86_64               randconfig-d003-20200119
-i386                 randconfig-d001-20200119
-i386                 randconfig-d002-20200119
-i386                 randconfig-d003-20200119
-sh                  sh7785lcr_32bit_defconfig
-x86_64               randconfig-a001-20200119
-x86_64               randconfig-a002-20200119
-x86_64               randconfig-a003-20200119
-i386                 randconfig-a001-20200119
-i386                 randconfig-a002-20200119
-i386                 randconfig-a003-20200119
-arm                               allnoconfig
-arm                              allyesconfig
-arm                         at91_dt_defconfig
-arm                           efm32_defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                        multi_v7_defconfig
-arm                        shmobile_defconfig
-arm                           sunxi_defconfig
-arm64                             allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-um                                  defconfig
-um                           x86_64_defconfig
-alpha                randconfig-a001-20200119
-m68k                 randconfig-a001-20200119
-mips                 randconfig-a001-20200119
-nds32                randconfig-a001-20200119
-parisc               randconfig-a001-20200119
-riscv                randconfig-a001-20200119
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                            allyesconfig
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-s390                             alldefconfig
-s390                             allmodconfig
-s390                              allnoconfig
-s390                             allyesconfig
-s390                          debug_defconfig
-s390                                defconfig
-s390                       zfcpdump_defconfig
-sh                               allmodconfig
-sh                                allnoconfig
-sh                          rsk7269_defconfig
-sh                            titan_defconfig
-c6x                  randconfig-a001-20200120
-h8300                randconfig-a001-20200120
-microblaze           randconfig-a001-20200120
-nios2                randconfig-a001-20200120
-sparc64              randconfig-a001-20200120
-
----
-0-DAY kernel test infrastructure                 Open Source Technology Center
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
+Hello Dear
+Greetings to you,I am Favor Desmond from Ivory coast currently living
+in  Togo Republic,I would like to know you more, so that i can tell
+you little amount myself and my photo, email address is
+favordens@email.com
+Thanks
+Favor
