@@ -2,87 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42044141E24
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Jan 2020 14:19:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39761141E5D
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Jan 2020 14:58:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726874AbgASNTu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Jan 2020 08:19:50 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:34031 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726778AbgASNTu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Jan 2020 08:19:50 -0500
-Received: by mail-wm1-f66.google.com with SMTP id w5so12827238wmi.1
-        for <linux-usb@vger.kernel.org>; Sun, 19 Jan 2020 05:19:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:references:in-reply-to:subject:date:message-id
-         :mime-version:content-transfer-encoding:thread-index
-         :content-language;
-        bh=aN5la1RwlPqyXGkrWZy4Sf7hSMIhr02vQL3IqZP0R6g=;
-        b=IankWgt959DtUKd96zqmL/ItvVbvlmVhHyd5rj+xNWHGxNfPFdRhmARp9TZAsvhzrU
-         pz8iQSMkNDugxDTSwEbqD5DcvJq+LHY34j3UVq+MB+ioXfib647hmfd/PpAjY7+iAbkt
-         PNUHVei2lKNqpt94D2aHcj54kQO1K9KFSf9envNTaEXA8O216KVftRRT1u1iZx+dsf3X
-         /Qi+PJBWDRI9WUTOQ1VqPprAaG6PgvxoT5Y8ro+1rxyu7vmQfTz3BY5t0RbVWJgWTeM1
-         64aTq+hX4svyAD/H3hqMQ7Wl+ZK/mP5bbaow/5PYM/qIk4g3q2HXGI/K/bhKfqGwARbJ
-         1eGw==
+        id S1726890AbgASN6Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Jan 2020 08:58:16 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:39038 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726798AbgASN6P (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Jan 2020 08:58:15 -0500
+Received: by mail-lj1-f193.google.com with SMTP id l2so31083049lja.6
+        for <linux-usb@vger.kernel.org>; Sun, 19 Jan 2020 05:58:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
-         :message-id:mime-version:content-transfer-encoding:thread-index
-         :content-language;
-        bh=aN5la1RwlPqyXGkrWZy4Sf7hSMIhr02vQL3IqZP0R6g=;
-        b=R8Mcs6N5mI/Tw4Ot8zI0gFsYIki3+jt+pf0bNZO5Fs96u80lnc2xeTIjaDTUDdno0x
-         eAA+CJX7vPBXndr7DcGk0Z9WfWFjY5kYXflQLEvA933JcyxzLwjAmIlOcbFFEnrZ9XB8
-         yFkFX/WTG+BVFPyxs9M8cGBsiNfVvWcMhrjhdr8JYstrJPBzneIetemGKtVOAu+44PgZ
-         dGnWin774+eFfeOdIajTNUZ18eLWJXYJ7L07/j1bdVHxcknNq0luDy+aKcHFEhNfG6v1
-         8joc0R5haydCSVmidQVfhb8HfNREyC22J0Qb64mUIJH1k4M+uPF+gHWmLjLMkcskN5Re
-         /q4Q==
-X-Gm-Message-State: APjAAAVK45BHyKGNpmkknnSTQchFlKQVOME8QxkZYR+IIHRgjY/NpmbP
-        ck/wVmC9dpnJNaawe5/Ihr8=
-X-Google-Smtp-Source: APXvYqxKrNWpH3jyrOJg+IeKxmsZZRuK2D3VBaJZDCyYQm5l3dLmOwsLmYr5fHwiMOthvjd6wK5z4Q==
-X-Received: by 2002:a05:600c:2509:: with SMTP id d9mr14109098wma.148.1579439987777;
-        Sun, 19 Jan 2020 05:19:47 -0800 (PST)
-Received: from AnsuelXPS (93-39-149-95.ip76.fastwebnet.it. [93.39.149.95])
-        by smtp.gmail.com with ESMTPSA id t1sm18492327wma.43.2020.01.19.05.19.46
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 19 Jan 2020 05:19:47 -0800 (PST)
-From:   <ansuelsmth@gmail.com>
-To:     "'Greg KH'" <gregkh@linuxfoundation.org>
-Cc:     <mathias.nyman@intel.com>, <linux-usb@vger.kernel.org>
-References: <20200118235828.14131-1-ansuelsmth@gmail.com> <20200119125315.GA149506@kroah.com>
-In-Reply-To: <20200119125315.GA149506@kroah.com>
-Subject: [PATCH] usb: host: fix implicit declaration error
-Date:   Sun, 19 Jan 2020 14:19:45 +0100
-Message-ID: <000f01d5cecb$1ead1440$5c073cc0$@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wjFkDDbAsZjsCzH50yncFrTBX7WuMD2ZXqcZ76ijr1k=;
+        b=XOeqQ9EJNc5+1+5gahGdwfTW3dIhAx/PDnYchvh4zjPHIxDQlmaSDt//TWdyfaWOWD
+         8fxFC6/ehszBbKjcHBG/PNew+6kOOVQvLhek17BnpuyT1EIiMjsZiFDH2Gd+04SDFGbY
+         v0gE47MfIwW5VHepKOwo3PfrdtkZgx3xT0sa4JilKCZ8lTYJUYlh76P0DisF77A8Y6qY
+         k1UX83S96p681zdnJc9Gr7Z2wWfKT+iqx2n+WW/fxaFs0ZKJey++MFR6D+u/S/ho6bAI
+         tod+KSn4zOyCDlnO4m01W+Rka1w0uq0q769JWhMX6NkBf5CF3FJtRqOMrAfoA0XjpNPp
+         Z7Eg==
+X-Gm-Message-State: APjAAAVPTHMwU4V1Y6rjMBn0l38XSsVfWiXplaxK8irmztznLVk7GJKk
+        n4IYH2f6S5LormOaiK4FiA4=
+X-Google-Smtp-Source: APXvYqy1gyPwbN0cvVoEoN9h94mL5anZlx+6gwuKqr3W9bhTaTzIgT9Owy/1ojtOKrrUmRfHOvyFRA==
+X-Received: by 2002:a05:651c:1214:: with SMTP id i20mr11298207lja.107.1579442293921;
+        Sun, 19 Jan 2020 05:58:13 -0800 (PST)
+Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
+        by smtp.gmail.com with ESMTPSA id a12sm15256107ljk.48.2020.01.19.05.58.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jan 2020 05:58:12 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@kernel.org>)
+        id 1itB5f-0007B5-4B; Sun, 19 Jan 2020 14:58:11 +0100
+Date:   Sun, 19 Jan 2020 14:58:11 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Steve Markgraf <steve@steve-m.de>
+Cc:     linux-usb@vger.kernel.org, johan@kernel.org
+Subject: Re: Regression in 5.5.0-rc6 for FL2000 USB 3.0 to VGA adapter
+Message-ID: <20200119135811.GY2301@localhost>
+References: <9cadc6b9-16f7-e072-abee-53ac5c143198@steve-m.de>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQIqGlYU/giIFpy4t1o1jqICEaMUcgIj3UeApzhCdBA=
-Content-Language: it
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9cadc6b9-16f7-e072-abee-53ac5c143198@steve-m.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> On Sun, Jan 19, 2020 at 12:58:28AM +0100, Ansuel Smith wrote:
-> > If USB_PCI is not enabled, this error is triggered.
-> > drivers/usb/host/ehci-pci.c:152:7:
-> > error: implicit declaration of function 'usb_amd_quirk_pll_check';
-> >   152 |   if (usb_amd_quirk_pll_check())
-> >       |       ^~~~~~~~~~~~~~~~~~~~~~~
-> >       |       usb_amd_quirk_pll_enable
-> >
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+On Sun, Jan 19, 2020 at 12:52:40AM +0100, Steve Markgraf wrote:
+> Hi list,
 > 
-> Is this a new issue?  What commit caused this problem?
-> 
-> thanks,
-> 
-> greg k-h
+> Commit 3e4f8e21c4f27bcf30a48486b9dcc269512b79ff "USB: core: fix check
+> for duplicate endpoints" is causing a regression with devices based on
+> the Fresco Logic FL2000 chip, i.e. it is totally unusable.
+>
+> The issue was first reported on the osmocom-sdr mailing list [1] and I
+> can reproduce it on my machine with 5.5.0-rc6, with rc5 everything is
+> working fine. By reverting the commit mentioned above, it is working as
+> well.
 
-Looks like this is caused by 4fbb8aa75836c3361987f431d9451aecc1830bdd
-and ad93562bdeecdded7d02eaaaf1aa5705ab57b1b7.
-Looks like it was never added to the header file else condition.
+Thanks for the detailed report.
 
+> When connecting the device with rc6, I see the following dmesg output:
+> https://steve-m.de/files/fl2000_dmesg.txt
+> 
+> The output of lsusb -v:
+> https://steve-m.de/files/fl2000_lsusb.txt
+> 
+> Output of the Windows tool "USB Device Tree Viewer":
+> https://steve-m.de/files/fl2000_usbtreeview.txt
+> 
+> Output of the USB-IF USB 3.0 Chapter 9 tests with a version from around
+> the time the FL2000 was released to market (passing):
+> https://steve-m.de/files/fl2000_chapter9.html
+> 
+> By looking at the lsusb output, it almost seems like a descriptor
+> parsing issue, that now causes trouble after introducing the duplicate
+> endpoint testing.
+
+Looks like you indeed have two interfaces (0 and 1) claiming the same
+endpoints (0x01 and 0x81), so the new sanity check is working as
+intended.
+
+I just took a quick look at the libosmo-fl2k code and it appears that
+you claim both interfaces but never set alternate setting 1 for
+interface 0, which would enable those endpoints.
+
+Could you see if that's all that's needed to get your application
+working again?
+
+Johan
