@@ -2,32 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E023141E9A
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Jan 2020 15:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE41141E9F
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Jan 2020 15:53:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726890AbgASOmk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Jan 2020 09:42:40 -0500
-Received: from metropolis.steve-m.de ([78.46.204.175]:33756 "EHLO
-        metropolis.steve-m.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726778AbgASOmk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Jan 2020 09:42:40 -0500
-Received: from [192.168.3.100] (p57AF1C03.dip0.t-ipconnect.de [87.175.28.3])
-        (Authenticated sender: steve@steve-m.de)
-        by metropolis.steve-m.de (Postfix) with ESMTPSA id 7C1E81A0041;
-        Sun, 19 Jan 2020 15:42:38 +0100 (CET)
-Subject: Re: Regression in 5.5.0-rc6 for FL2000 USB 3.0 to VGA adapter
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-References: <9cadc6b9-16f7-e072-abee-53ac5c143198@steve-m.de>
- <20200119135811.GY2301@localhost>
-From:   Steve Markgraf <steve@steve-m.de>
-Message-ID: <734d9503-29ef-2fa0-5df8-6ef5701d3d61@steve-m.de>
-Date:   Sun, 19 Jan 2020 15:48:32 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1727022AbgASOxn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Jan 2020 09:53:43 -0500
+Received: from cable.insite.cz ([84.242.75.189]:36604 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726778AbgASOxn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 19 Jan 2020 09:53:43 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id 9227EA1A40B10;
+        Sun, 19 Jan 2020 15:53:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1579445619; bh=mCv85dR/pt7vmGEHzTW93IBcePCyWvclCADZaGfBAZs=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=EOfaJPRFW91fv25MVejFuv2gf5MbKbJPEunMSIMEEUb8DqF5m3uVNzXc5dk1RzqYx
+         MCoqcITUNYBWHiGQ0hPq+rAIMuAitYuM1tBpy0ykwCSjn8VLASuui32SPm2zLPy3IH
+         WhAmGTmCgmGisRLFTgowQWlt2yOJk3wnZ9GCbeV4=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id udjzAKw8bDtw; Sun, 19 Jan 2020 15:53:34 +0100 (CET)
+Received: from [192.168.105.151] (ip28.insite.cz [81.0.237.28])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 78FD4A1A40B09;
+        Sun, 19 Jan 2020 15:53:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1579445613; bh=mCv85dR/pt7vmGEHzTW93IBcePCyWvclCADZaGfBAZs=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=f864In09RgqbtC30oSBUfPMFNYejTBNLTaxRJWy7RVBddpnV5Vjxtp849i8hC4GYq
+         Jb+70A+FF+KiZd3xYBdScZPy4ObwdCwDBANNEQMLqCRwFzlhyqWfnov25a0cwq532K
+         p3Og+m1c48wjwAbUxDhLJrWcZa8KOy24Oxnaor2Y=
+Subject: Re: [PATCH] usb: gadget: u_audio: Fix high-speed max packet size
+To:     John Keeping <john@metanate.com>
+Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>
+References: <4f2df2bc-e208-fffb-48e2-3e14cd093103@ivitera.com>
+ <60bf144a-2039-8832-b6f1-f972de6a6846@ivitera.com>
+ <cfcef91b-799e-7d02-4a4c-26ee95e85ff7@ivitera.com>
+ <20200114200450.064cd521.john@metanate.com>
+ <24f0935d-16a7-4301-78f4-fa459e356ca9@ivitera.com>
+ <20200117104022.5bb769f2.john@metanate.com>
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+Message-ID: <495ccd06-9059-2249-ce70-aa9647609319@ivitera.com>
+Date:   Sun, 19 Jan 2020 15:53:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200119135811.GY2301@localhost>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20200117104022.5bb769f2.john@metanate.com>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -35,31 +57,28 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Johan,
 
-On 19.01.20 14:58, Johan Hovold wrote:
-> I just took a quick look at the libosmo-fl2k code and it appears that
-> you claim both interfaces but never set alternate setting 1 for
-> interface 0, which would enable those endpoints.
+Dne 17. 01. 20 v 11:40 John Keeping napsal(a):
+> On Thu, 16 Jan 2020 16:39:50 +0100
+> Pavel Hofman <pavel.hofman@ivitera.com> wrote:
 > 
-> Could you see if that's all that's needed to get your application
-> working again?
+>>> I've taken a look at this and the patch below fixes it in my simple
+>>> testing.  But note that this doesn't adjust the PCM's min_period_bytes
+>>> which will be necessary if you want to minimize latency with an adjusted
+>>> high-speed bInterval setting.
+>>>    
+>>
+>> Please can I ask you to submit your patch? IMO your perhaps slightly
+>> suboptimal solution is much better than the current broken version.
+> 
+> Yes, the patch is definitely an improvement.  I thought it would be
+> picked up from the earlier mail, but I think Patchwork requires the
+> subject to match, so I'm including it again here.
+> 
+> Are you able to provide a Tested-by for this change?
 
-Yes, you are right, I had another look at it today and tried exactly
-that, and it's working now with altsetting 1 of interface 0.
-I will push a change to osmo-fl2k shortly.
 
-There is also an out-of-tree kernel driver that makes use of this
-device, and might even need interface 1, but I haven't verified this so
-far:
+Testing looks OK, thanks a lot!
 
-https://github.com/FrescoLogic/FL2000
+Tested-by: Pavel Hofman  <pavel.hofman@ivitera.com>
 
-The question is if there are other devices out there where there are
-duplicate endpoints on different interfaces. The spec clearly states
-that this is forbidden, but the USBx0CV Chapter 9 tests do not test for
-this and pass just fine, so I assume the FL2000 will not be the only
-device in the market where this mistake has been made.
-
-Regards,
-Steve
