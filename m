@@ -2,598 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB611142252
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 05:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D23C1422E6
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 06:55:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729039AbgATELv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Jan 2020 23:11:51 -0500
-Received: from mail-pj1-f48.google.com ([209.85.216.48]:39040 "EHLO
-        mail-pj1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729011AbgATELu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Jan 2020 23:11:50 -0500
-Received: by mail-pj1-f48.google.com with SMTP id e11so6475382pjt.4;
-        Sun, 19 Jan 2020 20:11:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kqTipXcERxxNQzN84wIRq5T5s8OHmc89Bmr44Qlf0GU=;
-        b=AVPHj78My0r52Ba4rwkgO5mgJiq1tZzFT/JcmfjP74B4HAUUZDTwn2GvS7qvhv4Nvz
-         YmxXkIdXsb5/Cho7WBFrSI0tSBz1zUk9MufCsPZ+tgK7VJfJyZjPDNnA2riooFPOIk6k
-         /xXYSg4tr3UcSo9SHwhTSDl4OkorruIyrfmffZvgK04NWbCBZOEPX5Xn8tYBiCRyCxWW
-         FspOJm0m2ys3UuAQJDCWbcigRwK23XX275jlf/hPJYUYGuCu9gWSgh7VKdpxFrDbVfZt
-         F2uOKgTL/UAMnwfo29wdeCjh7H6j0LCmu2dziEYBEIq2h5xqEQJGzuQ04zn/r0di/Tqd
-         54LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kqTipXcERxxNQzN84wIRq5T5s8OHmc89Bmr44Qlf0GU=;
-        b=Da6286J3R5ZJGZtHgpVLucopUwT8eT//SAVoFhL5gnwymaBnvrS/1+X6tsWD7pe2Gc
-         MZEWnoA/uGYMiiHDK6v6j121J0M4cZhy32JPzc2C13C9iLRAC+kjw+nQO7ZG6J5DCoQ+
-         FF00Vrgx7REAhBZZ3ZQbZCzj4N8zQfWkcb1GD00KZLGyhPp5cFVN3tSig25mvzNPfuOt
-         3nYNbSBY1MA0R32P2ZpBem8eKbew+/LswlkvOiZGKxTlpUtYrpzZCAUqrgmkIanJFoyX
-         csv2ccLLthPstwh3pv+ieZeyPMqDQA62amck5Ul0/Qh167ciiFRJAO1IqCo/5hgGw/ZI
-         x/FA==
-X-Gm-Message-State: APjAAAUDS2D0QgNovBYAOwoxoGxwiFfMfgOw1RxSwV1CSt33PnuyOedx
-        TqfrDnzkDtft9D3T8VFsPyDGGoh9KWg=
-X-Google-Smtp-Source: APXvYqyeAj5Ukf8ypCq0JvWXDSjT2kyKH3fdbmQPovVu8APgJUYToPgZngmBLzhiJiJ8CNhJQZyolQ==
-X-Received: by 2002:a17:90a:c390:: with SMTP id h16mr21658747pjt.131.1579493509259;
-        Sun, 19 Jan 2020 20:11:49 -0800 (PST)
-Received: from EliteBook (174-17-125-110.phnx.qwest.net. [174.17.125.110])
-        by smtp.gmail.com with ESMTPSA id e19sm15457288pjr.10.2020.01.19.20.11.48
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 19 Jan 2020 20:11:48 -0800 (PST)
-Date:   Sun, 19 Jan 2020 21:11:45 -0700
-From:   Paul Zimmerman <pauldzim@gmail.com>
-To:     David Heinzelmann <heinzelmann.david@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [REGRESSION][BISECTED] 5.5-rc suspend/resume failure caused by
- patch a4f55d8b8c14 ("usb: hub: Check device descriptor before
- resusciation")
-Message-ID: <20200119211145.7dcc86ec@EliteBook>
-In-Reply-To: <20200115153714.03d5b3aa@EliteBook>
-References: <20200115153714.03d5b3aa@EliteBook>
+        id S1725837AbgATFzb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jan 2020 00:55:31 -0500
+Received: from mail-vi1eur05on2077.outbound.protection.outlook.com ([40.107.21.77]:32801
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725783AbgATFzb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 Jan 2020 00:55:31 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IMLIBu3VCbzEHpKe4YcoisFynxyI+5FdMZNPA44zkjv1KU4sOAtMNSpdpWJ9bXlT0UnpDJDRB/XNTMfazjN+AMz/CUpt8PsySuh8d/+SN/MH/Y4tmYoCIZrbbOB/zdkjJzTnsVDjAoGbuyQ/pemC4Nlcxeez0Vo81IwCIFBLFPiqJ/6LhOjXCsP2vDT+Zxy4wUygUI/NylCynVyR1uuF8UvsTP/6XoATB6U4U8REtLEWvqL8IydYTBjTf2u88To0DX0LEJcpiKAb/Jpj8ZsVosi8B32tL5QepyFOSRMUiy+GveiECb/OROOBTD1ttWH8UiN4ceJ3ysAyn1mopTJTVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oVZADzi9pcjJKxYFSlNWguBpFslrjGu2/kK8yXooDmc=;
+ b=N3RfapFQa1uC5zWsuT8jrNwbdTDytMwFv8oFpdGvGxG1v9Xc8LHAh5AE5udTC396SZpXqa5WYvGrbsSDnQS3/CMVxXEUGr8yFX5Q4bQSXhmABA+Zu78xJ/oRCx/3acoB4kz+z/zxWcPEkMnpc8iTykGi71pqCA73qks5483EV89slPpJw/dcVP696khVA8SpQlHK+EKynkQRWP+dKa0RFrfek1CBtdX5RXSN2XMdelzWMrr79b+rGopgWq2Oeundc9gXcUWJAclHu6mX998uXqxnrKoTk/Qww/fYEUIPuJ/KhpHYM5iPz4wKSudQt3yXJ75FoMZprExTPQj6f1B/sQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oVZADzi9pcjJKxYFSlNWguBpFslrjGu2/kK8yXooDmc=;
+ b=nuJgkBrrdhzAhzkFExCybmbM4EGXtlfUmX9BUDELIZ4LG1IY+hOsVdUtJVxOZrR4YhK/tDeXThgC4GwMhhzPOTRDcLhhs0wSn2GPQ2d/NHktAqE9cx4AAM/kv5vICxEq+3Lwb4E3kJE/HXubAhhPlahvq2MVbVWS7hxY35NqrgU=
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (20.179.235.146) by
+ VE1PR04MB6669.eurprd04.prod.outlook.com (20.179.235.33) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2644.24; Mon, 20 Jan 2020 05:55:27 +0000
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::fc52:45c6:88a1:b5e3]) by VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::fc52:45c6:88a1:b5e3%7]) with mapi id 15.20.2644.024; Mon, 20 Jan 2020
+ 05:55:27 +0000
+Received: from localhost.localdomain (119.31.174.66) by HK2PR06CA0024.apcprd06.prod.outlook.com (2603:1096:202:2e::36) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.2644.20 via Frontend Transport; Mon, 20 Jan 2020 05:55:24 +0000
+From:   Jun Li <jun.li@nxp.com>
+To:     "linux@roeck-us.net" <linux@roeck-us.net>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: [PATCH v2] usb: typec: tcpci: mask event interrupts when remove
+ driver
+Thread-Topic: [PATCH v2] usb: typec: tcpci: mask event interrupts when remove
+ driver
+Thread-Index: AQHVz1Y2u7sfBLh5k061yelxtRo6wg==
+Date:   Mon, 20 Jan 2020 05:55:27 +0000
+Message-ID: <1579499461-13076-1-git-send-email-jun.li@nxp.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.7.4
+x-clientproxiedby: HK2PR06CA0024.apcprd06.prod.outlook.com
+ (2603:1096:202:2e::36) To VE1PR04MB6528.eurprd04.prod.outlook.com
+ (2603:10a6:803:127::18)
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=jun.li@nxp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: c88623c2-279b-4e93-551c-08d79d6d5912
+x-ms-traffictypediagnostic: VE1PR04MB6669:|VE1PR04MB6669:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VE1PR04MB6669D23B8FCB3E0C844888FE89320@VE1PR04MB6669.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:519;
+x-forefront-prvs: 0288CD37D9
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(366004)(376002)(346002)(136003)(39860400002)(199004)(189003)(6486002)(86362001)(66476007)(69590400006)(2906002)(66946007)(66556008)(64756008)(66446008)(478600001)(26005)(71200400001)(4744005)(36756003)(6512007)(2616005)(6506007)(956004)(5660300002)(316002)(16526019)(110136005)(8936002)(81166006)(81156014)(8676002)(44832011)(54906003)(52116002)(4326008)(186003);DIR:OUT;SFP:1101;SCL:1;SRVR:VE1PR04MB6669;H:VE1PR04MB6528.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qqBQXdb+9/sHBsdDBkzL/FmYOpymoG6eIFtftIDoUBPhlaEi2ryKZIbYj9r3/2EQHV7ROpdasOS5L+XLxIVPq2Aw6Nt0e89JLGgrMBR4oimVur6hNDb64DpCjoBRIp/vdv+JIRInQSK24Q/ZTI0N2zL346kOBuKM3Qfy23XgTaaNu1Dvvc7EMImBxxSyybJF6uPqFT7N5NYWrOYMUQI4klPiaiSvt+z9B/G6u6sbYUutd0BcQl/73yKC7mjtsu+zlCZiFGAx77Cw8FtbMLJdYXfUVGXGut6OGJha1Htb3t3OzDCWLwNxTD5KXOAO98JkEp9ZbP/FB5dnS/Bytc7dyx3eC9KVnEB6Nsg7dGVA7n+Isdtxy28RUGwXdXc0k6341ZWmHkB2fGtn6cM33f446YlMqt2Uy5Fx6LSYYofT5YEje1pzapO0JaboIOymLONGUtT5xNtRF17+exv4xeNrCZi6r1ck5SH2vzbA8DG+eip7EyLlqW8m4SEYVurF4rtn
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c88623c2-279b-4e93-551c-08d79d6d5912
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jan 2020 05:55:27.1641
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: bxt4nrD43RbolSw3lBiVo6Jg5AUbHRNbgiD2ISXuMycjDLVAkpr7QAmgv5SVDPni
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6669
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I reported this regression last week (see
-https://lore.kernel.org/linux-usb/20200115153714.03d5b3aa@EliteBook/T/#u)
-but I got no response to my email. Today I have retested with 5.5-rc7
-and verified that the problem still exists. So I am resending with a
-different subject line to see if anyone responds.
+This is to prevent any possible events generated while unregister
+tpcm port.
 
-The $subject patch causes a regression on my HP EliteBook laptop with a
-built-in USB bluetooth adapter. About 50% of the time, a suspend/resume
-cycle will cause the bluetooth adapter to stop working.
+Fixes: 74e656d6b0551 ("staging: typec: Type-C Port Controller Interface dri=
+ver (tcpci)")
+Signed-off-by: Li Jun <jun.li@nxp.com>
+---
+ drivers/usb/typec/tcpm/tcpci.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-The dmesg log below shows two suspend/resume cycles. At time 63.928 you can
-see the bluetooth adapter being successfully resumed, and at time 140.969
-you can see it fail. After reverting the patch, the bluetooth adapter
-resumes 100% of the time.
+diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.=
+c
+index c1f7073..fb9f2c1 100644
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -581,6 +581,12 @@ static int tcpci_probe(struct i2c_client *client,
+ static int tcpci_remove(struct i2c_client *client)
+ {
+ 	struct tcpci_chip *chip =3D i2c_get_clientdata(client);
++	int err;
++
++	/* Disable chip interrupts before unregistger port */
++	err =3D tcpci_write16(chip->tcpci, TCPC_ALERT_MASK, 0);
++	if (err < 0)
++		return err;
+=20
+ 	tcpci_unregister_port(chip->tcpci);
+=20
+--=20
+2.7.4
 
-I also included below a lsusb -v of the bluetooth adapter. Is there any
-other debugging info you'd like me to send?
-
-This misbehavior goes back at least to 5.5-rc1.
-
-[   49.249536] wlo1: deauthenticating from 58:8b:f3:44:8f:5c by local choice (Reason: 3=DEAUTH_LEAVING)
-[   59.300552] PM: suspend entry (deep)
-[   59.305440] Filesystems sync: 0.004 seconds
-[   59.305859] Freezing user space processes ... (elapsed 0.001 seconds) done.
-[   59.307450] OOM killer disabled.
-[   59.307451] Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
-[   59.308604] printk: Suspending console(s) (use no_console_suspend to debug)
-[   59.343478] sd 0:0:0:0: [sda] Synchronizing SCSI cache
-[   59.344508] sd 0:0:0:0: [sda] Stopping disk
-[   59.424472] e1000e: EEE TX LPI TIMER: 00000011
-[   59.852914] radeon 0000:03:00.0: 16.000 Gb/s available PCIe bandwidth, limited by 5 GT/s x4 link at 0000:00:1c.4 (capable of 63.008 Gb/s with 8 GT/s x8 link)
-[   59.876708] [drm] PCIE gen 2 link speeds already enabled
-[   59.886714] [drm] PCIE GART of 2048M enabled (table at 0x00000000001D6000).
-[   59.886808] radeon 0000:03:00.0: WB enabled
-[   59.886810] radeon 0000:03:00.0: fence driver on ring 0 use gpu addr 0x0000000040000c00 and cpu addr 0x000000000c629f9f
-[   59.886810] radeon 0000:03:00.0: fence driver on ring 1 use gpu addr 0x0000000040000c04 and cpu addr 0x00000000dee9b232
-[   59.886811] radeon 0000:03:00.0: fence driver on ring 2 use gpu addr 0x0000000040000c08 and cpu addr 0x00000000eddb39fc
-[   59.886812] radeon 0000:03:00.0: fence driver on ring 3 use gpu addr 0x0000000040000c0c and cpu addr 0x0000000004e1d27c
-[   59.886813] radeon 0000:03:00.0: fence driver on ring 4 use gpu addr 0x0000000040000c10 and cpu addr 0x0000000043709b8a
-[   59.887627] radeon 0000:03:00.0: fence driver on ring 5 use gpu addr 0x0000000000075a18 and cpu addr 0x00000000fa6308aa
-[   59.988072] radeon 0000:03:00.0: failed VCE resume (-110).
-[   60.220341] [drm] ring test on 0 succeeded in 1 usecs
-[   60.220346] [drm] ring test on 1 succeeded in 1 usecs
-[   60.220351] [drm] ring test on 2 succeeded in 1 usecs
-[   60.220359] [drm] ring test on 3 succeeded in 5 usecs
-[   60.220367] [drm] ring test on 4 succeeded in 5 usecs
-[   60.396050] [drm] ring test on 5 succeeded in 2 usecs
-[   60.396056] [drm] UVD initialized successfully.
-[   60.396117] [drm] ib test on ring 0 succeeded in 0 usecs
-[   60.396179] [drm] ib test on ring 1 succeeded in 0 usecs
-[   60.396225] [drm] ib test on ring 2 succeeded in 0 usecs
-[   60.396267] [drm] ib test on ring 3 succeeded in 0 usecs
-[   60.396321] [drm] ib test on ring 4 succeeded in 0 usecs
-[   61.075516] [drm] ib test on ring 5 succeeded
-[   61.987920] ACPI: EC: interrupt blocked
-[   62.031807] ACPI: Preparing to enter system sleep state S3
-[   62.034281] ACPI: EC: event blocked
-[   62.034282] ACPI: EC: EC stopped
-[   62.034282] PM: Saving platform NVS memory
-[   62.034294] Disabling non-boot CPUs ...
-[   62.034559] IRQ 42: no longer affine to CPU1
-[   62.034562] IRQ 43: no longer affine to CPU1
-[   62.034566] IRQ 45: no longer affine to CPU1
-[   62.034569] IRQ 46: no longer affine to CPU1
-[   62.034573] IRQ 51: no longer affine to CPU1
-[   62.035897] smpboot: CPU 1 is now offline
-[   62.036390] IRQ 53: no longer affine to CPU2
-[   62.037397] smpboot: CPU 2 is now offline
-[   62.037937] IRQ 1: no longer affine to CPU3
-[   62.037940] IRQ 8: no longer affine to CPU3
-[   62.037942] IRQ 9: no longer affine to CPU3
-[   62.037944] IRQ 12: no longer affine to CPU3
-[   62.038958] smpboot: CPU 3 is now offline
-[   62.040172] ACPI: Low-level resume complete
-[   62.040270] ACPI: EC: EC started
-[   62.040271] PM: Restoring platform NVS memory
-[   62.047040] Enabling non-boot CPUs ...
-[   62.047141] x86: Booting SMP configuration:
-[   62.047144] smpboot: Booting Node 0 Processor 1 APIC 0x1
-[   62.049459] CPU1 is up
-[   62.049539] smpboot: Booting Node 0 Processor 2 APIC 0x2
-[   62.055736] CPU2 is up
-[   62.055797] smpboot: Booting Node 0 Processor 3 APIC 0x3
-[   62.057475] CPU3 is up
-[   62.060610] ACPI: Waking up from system sleep state S3
-[   62.202438] ACPI: EC: interrupt unblocked
-[   62.313530] ACPI: EC: event unblocked
-[   62.324891] sd 0:0:0:0: [sda] Starting disk
-[   62.327013] [drm] PCIE gen 2 link speeds already enabled
-[   62.337552] [drm] PCIE GART of 2048M enabled (table at 0x00000000001D6000).
-[   62.337645] radeon 0000:03:00.0: WB enabled
-[   62.337647] radeon 0000:03:00.0: fence driver on ring 0 use gpu addr 0x0000000040000c00 and cpu addr 0x000000000c629f9f
-[   62.337648] radeon 0000:03:00.0: fence driver on ring 1 use gpu addr 0x0000000040000c04 and cpu addr 0x00000000dee9b232
-[   62.337648] radeon 0000:03:00.0: fence driver on ring 2 use gpu addr 0x0000000040000c08 and cpu addr 0x00000000eddb39fc
-[   62.337649] radeon 0000:03:00.0: fence driver on ring 3 use gpu addr 0x0000000040000c0c and cpu addr 0x0000000004e1d27c
-[   62.337650] radeon 0000:03:00.0: fence driver on ring 4 use gpu addr 0x0000000040000c10 and cpu addr 0x0000000043709b8a
-[   62.338447] radeon 0000:03:00.0: fence driver on ring 5 use gpu addr 0x0000000000075a18 and cpu addr 0x00000000fa6308aa
-[   62.439210] radeon 0000:03:00.0: failed VCE resume (-110).
-[   62.609068] usb 2-5: reset full-speed USB device number 3 using xhci_hcd
-[   62.635003] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-[   62.643521] ata1.00: supports DRM functions and may not be fully accessible
-[   62.673227] [drm] ring test on 0 succeeded in 1 usecs
-[   62.673232] [drm] ring test on 1 succeeded in 1 usecs
-[   62.673237] [drm] ring test on 2 succeeded in 1 usecs
-[   62.673246] [drm] ring test on 3 succeeded in 5 usecs
-[   62.673253] [drm] ring test on 4 succeeded in 5 usecs
-[   62.692012] ata1.00: ATA Identify Device Log not supported
-[   62.692013] ata1.00: Security Log not supported
-[   62.740856] ata1.00: supports DRM functions and may not be fully accessible
-[   62.789506] ata1.00: ATA Identify Device Log not supported
-[   62.789506] ata1.00: Security Log not supported
-[   62.789509] ata1.00: configured for UDMA/100
-[   62.837092] usb 2-3.2: reset full-speed USB device number 4 using xhci_hcd
-[   62.849223] [drm] ring test on 5 succeeded in 2 usecs
-[   62.849228] [drm] UVD initialized successfully.
-[   62.849290] [drm] ib test on ring 0 succeeded in 0 usecs
-[   62.849355] [drm] ib test on ring 1 succeeded in 0 usecs
-[   62.849414] [drm] ib test on ring 2 succeeded in 0 usecs
-[   62.849461] [drm] ib test on ring 3 succeeded in 0 usecs
-[   62.849514] [drm] ib test on ring 4 succeeded in 0 usecs
-[   63.509106] [drm] ib test on ring 5 succeeded
-[   63.901356] tpm tpm0: tpm_try_transmit: send(): error -5
-[   63.906084] acpi LNXPOWER:02: Turning OFF
-[   63.906128] acpi LNXPOWER:01: Turning OFF
-[   63.906162] OOM killer enabled.
-[   63.906163] Restarting tasks ... 
-[   63.906304] acpi PNP0501:00: Still not present
-[   63.910752] done.
-[   63.928642] Bluetooth: hci0: read Intel version: 370710018002030d00
-[   63.928646] Bluetooth: hci0: Intel Bluetooth firmware file: intel/ibt-hw-37.7.10-fw-1.80.2.3.d.bseq
-[   63.985337] PM: suspend exit
-[   64.035638] Bluetooth: hci0: unexpected event for opcode 0xfc2f
-[   64.051657] Bluetooth: hci0: Intel firmware patch completed and activated
-[   64.161465] e1000e: enp0s25 NIC Link is Down
-[   65.270730] psmouse serio3: synaptics: queried max coordinates: x [..5658], y [..4706]
-[   65.305008] psmouse serio3: synaptics: queried min coordinates: x [1368..], y [1234..]
-[   68.471403] e1000e: enp0s25 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: Rx/Tx
-[   68.471457] IPv6: ADDRCONF(NETDEV_CHANGE): enp0s25: link becomes ready
-[   71.144846] wlo1: authenticate with 58:8b:f3:44:8f:5c
-[   71.149124] wlo1: send auth to 58:8b:f3:44:8f:5c (try 1/3)
-[   71.153318] wlo1: authenticated
-[   71.157026] wlo1: associate with 58:8b:f3:44:8f:5c (try 1/3)
-[   71.160772] wlo1: RX AssocResp from 58:8b:f3:44:8f:5c (capab=0x1011 status=0 aid=8)
-[   71.162365] wlo1: associated
-[   71.197208] IPv6: ADDRCONF(NETDEV_CHANGE): wlo1: link becomes ready
-[  126.321068] wlo1: deauthenticating from 58:8b:f3:44:8f:5c by local choice (Reason: 3=DEAUTH_LEAVING)
-[  136.367748] PM: suspend entry (deep)
-[  136.377378] Filesystems sync: 0.009 seconds
-[  136.378191] Freezing user space processes ... (elapsed 0.002 seconds) done.
-[  136.381154] OOM killer disabled.
-[  136.381155] Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
-[  136.382553] printk: Suspending console(s) (use no_console_suspend to debug)
-[  136.411098] sd 0:0:0:0: [sda] Synchronizing SCSI cache
-[  136.412116] sd 0:0:0:0: [sda] Stopping disk
-[  136.477379] e1000e: EEE TX LPI TIMER: 00000011
-[  136.883799] radeon 0000:03:00.0: 16.000 Gb/s available PCIe bandwidth, limited by 5 GT/s x4 link at 0000:00:1c.4 (capable of 63.008 Gb/s with 8 GT/s x8 link)
-[  136.909481] [drm] PCIE gen 2 link speeds already enabled
-[  136.920054] [drm] PCIE GART of 2048M enabled (table at 0x00000000001D6000).
-[  136.920147] radeon 0000:03:00.0: WB enabled
-[  136.920148] radeon 0000:03:00.0: fence driver on ring 0 use gpu addr 0x0000000040000c00 and cpu addr 0x000000000c629f9f
-[  136.920149] radeon 0000:03:00.0: fence driver on ring 1 use gpu addr 0x0000000040000c04 and cpu addr 0x00000000dee9b232
-[  136.920150] radeon 0000:03:00.0: fence driver on ring 2 use gpu addr 0x0000000040000c08 and cpu addr 0x00000000eddb39fc
-[  136.920151] radeon 0000:03:00.0: fence driver on ring 3 use gpu addr 0x0000000040000c0c and cpu addr 0x0000000004e1d27c
-[  136.920152] radeon 0000:03:00.0: fence driver on ring 4 use gpu addr 0x0000000040000c10 and cpu addr 0x0000000043709b8a
-[  136.920945] radeon 0000:03:00.0: fence driver on ring 5 use gpu addr 0x0000000000075a18 and cpu addr 0x00000000fa6308aa
-[  137.021396] radeon 0000:03:00.0: failed VCE resume (-110).
-[  137.254078] [drm] ring test on 0 succeeded in 1 usecs
-[  137.254083] [drm] ring test on 1 succeeded in 1 usecs
-[  137.254088] [drm] ring test on 2 succeeded in 1 usecs
-[  137.254097] [drm] ring test on 3 succeeded in 5 usecs
-[  137.254105] [drm] ring test on 4 succeeded in 5 usecs
-[  137.429787] [drm] ring test on 5 succeeded in 2 usecs
-[  137.429792] [drm] UVD initialized successfully.
-[  137.429843] [drm] ib test on ring 0 succeeded in 0 usecs
-[  137.429889] [drm] ib test on ring 1 succeeded in 0 usecs
-[  137.429934] [drm] ib test on ring 2 succeeded in 0 usecs
-[  137.429977] [drm] ib test on ring 3 succeeded in 0 usecs
-[  137.430021] [drm] ib test on ring 4 succeeded in 0 usecs
-[  138.107123] [drm] ib test on ring 5 succeeded
-[  139.027561] ACPI: EC: interrupt blocked
-[  139.067824] ACPI: Preparing to enter system sleep state S3
-[  139.070169] ACPI: EC: event blocked
-[  139.070170] ACPI: EC: EC stopped
-[  139.070172] PM: Saving platform NVS memory
-[  139.070190] Disabling non-boot CPUs ...
-[  139.070688] irq_migrate_all_off_this_cpu: 5 callbacks suppressed
-[  139.070691] IRQ 42: no longer affine to CPU1
-[  139.070698] IRQ 43: no longer affine to CPU1
-[  139.070705] IRQ 45: no longer affine to CPU1
-[  139.070713] IRQ 50: no longer affine to CPU1
-[  139.070719] IRQ 51: no longer affine to CPU1
-[  139.072626] smpboot: CPU 1 is now offline
-[  139.073667] IRQ 53: no longer affine to CPU2
-[  139.074689] smpboot: CPU 2 is now offline
-[  139.076006] IRQ 1: no longer affine to CPU3
-[  139.076013] IRQ 8: no longer affine to CPU3
-[  139.076017] IRQ 9: no longer affine to CPU3
-[  139.076022] IRQ 12: no longer affine to CPU3
-[  139.077062] smpboot: CPU 3 is now offline
-[  139.079093] ACPI: Low-level resume complete
-[  139.079199] ACPI: EC: EC started
-[  139.079201] PM: Restoring platform NVS memory
-[  139.086013] Enabling non-boot CPUs ...
-[  139.086111] x86: Booting SMP configuration:
-[  139.086114] smpboot: Booting Node 0 Processor 1 APIC 0x1
-[  139.088429] CPU1 is up
-[  139.088507] smpboot: Booting Node 0 Processor 2 APIC 0x2
-[  139.094759] CPU2 is up
-[  139.094820] smpboot: Booting Node 0 Processor 3 APIC 0x3
-[  139.096582] CPU3 is up
-[  139.100117] ACPI: Waking up from system sleep state S3
-[  139.240985] ACPI: EC: interrupt unblocked
-[  139.354665] ACPI: EC: event unblocked
-[  139.358374] sd 0:0:0:0: [sda] Starting disk
-[  139.370787] [drm] PCIE gen 2 link speeds already enabled
-[  139.380867] [drm] PCIE GART of 2048M enabled (table at 0x00000000001D6000).
-[  139.380960] radeon 0000:03:00.0: WB enabled
-[  139.380961] radeon 0000:03:00.0: fence driver on ring 0 use gpu addr 0x0000000040000c00 and cpu addr 0x000000000c629f9f
-[  139.380962] radeon 0000:03:00.0: fence driver on ring 1 use gpu addr 0x0000000040000c04 and cpu addr 0x00000000dee9b232
-[  139.380963] radeon 0000:03:00.0: fence driver on ring 2 use gpu addr 0x0000000040000c08 and cpu addr 0x00000000eddb39fc
-[  139.380964] radeon 0000:03:00.0: fence driver on ring 3 use gpu addr 0x0000000040000c0c and cpu addr 0x0000000004e1d27c
-[  139.380965] radeon 0000:03:00.0: fence driver on ring 4 use gpu addr 0x0000000040000c10 and cpu addr 0x0000000043709b8a
-[  139.381803] radeon 0000:03:00.0: fence driver on ring 5 use gpu addr 0x0000000000075a18 and cpu addr 0x00000000fa6308aa
-[  139.482569] radeon 0000:03:00.0: failed VCE resume (-110).
-[  139.645301] usb 2-5: reset full-speed USB device number 3 using xhci_hcd
-[  139.675546] ata1: SATA link up 6.0 Gbps (SStatus 133 SControl 300)
-[  139.682220] ata1.00: supports DRM functions and may not be fully accessible
-[  139.716719] [drm] ring test on 0 succeeded in 1 usecs
-[  139.716724] [drm] ring test on 1 succeeded in 1 usecs
-[  139.716729] [drm] ring test on 2 succeeded in 1 usecs
-[  139.716738] [drm] ring test on 3 succeeded in 5 usecs
-[  139.716746] [drm] ring test on 4 succeeded in 5 usecs
-[  139.730748] ata1.00: ATA Identify Device Log not supported
-[  139.730749] ata1.00: Security Log not supported
-[  139.779570] ata1.00: supports DRM functions and may not be fully accessible
-[  139.828221] ata1.00: ATA Identify Device Log not supported
-[  139.828222] ata1.00: Security Log not supported
-[  139.828224] ata1.00: configured for UDMA/100
-[  139.873303] usb 2-3.2: reset full-speed USB device number 4 using xhci_hcd
-[  139.892715] [drm] ring test on 5 succeeded in 2 usecs
-[  139.892721] [drm] UVD initialized successfully.
-[  139.892785] [drm] ib test on ring 0 succeeded in 0 usecs
-[  139.892850] [drm] ib test on ring 1 succeeded in 0 usecs
-[  139.892926] [drm] ib test on ring 2 succeeded in 0 usecs
-[  139.892980] [drm] ib test on ring 3 succeeded in 0 usecs
-[  139.893023] [drm] ib test on ring 4 succeeded in 0 usecs
-[  140.573268] [drm] ib test on ring 5 succeeded
-[  140.941885] tpm tpm0: tpm_try_transmit: send(): error -5
-[  140.952149] acpi LNXPOWER:02: Turning OFF
-[  140.952214] acpi LNXPOWER:01: Turning OFF
-[  140.952256] OOM killer enabled.
-[  140.952257] Restarting tasks ... 
-[  140.952433] acpi PNP0501:00: Still not present
-[  140.953050] done.
-[  140.969200] Bluetooth: hci0: read Intel version: 370710018002030d00
-[  140.969204] Bluetooth: hci0: Intel Bluetooth firmware file: intel/ibt-hw-37.7.10-fw-1.80.2.3.d.bseq
-[  140.971196] Bluetooth: hci0: sending Intel patch command (0xfc8e) failed (-16)
-[  140.977133] usb 2-3.2: USB disconnect, device number 4
-[  141.034495] PM: suspend exit
-[  141.193736] e1000e: enp0s25 NIC Link is Down
-[  142.320662] psmouse serio3: synaptics: queried max coordinates: x [..5658], y [..4706]
-[  142.354225] psmouse serio3: synaptics: queried min coordinates: x [1368..], y [1234..]
-[  142.973317] Bluetooth: hci0: Exiting manufacturer mode failed (-110)
-[  142.973321] Bluetooth: hci0: command 0xfc11 tx timeout
-[  143.261354] usb 2-3.2: new full-speed USB device number 8 using xhci_hcd
-[  143.363390] usb 2-3.2: New USB device found, idVendor=8087, idProduct=07dc, bcdDevice= 0.01
-[  143.363394] usb 2-3.2: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-[  143.372219] Bluetooth: hci0: unexpected event for opcode 0xfc11
-[  145.405426] Bluetooth: hci0: command 0xfc05 tx timeout
-[  145.405431] Bluetooth: hci0: Reading Intel version information failed (-110)
-[  145.535740] e1000e: enp0s25 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: Rx/Tx
-[  145.535782] IPv6: ADDRCONF(NETDEV_CHANGE): enp0s25: link becomes ready
-[  147.421518] Bluetooth: hci0: command 0x0c03 tx timeout
-[  148.122192] wlo1: authenticate with 58:8b:f3:44:8f:5c
-[  148.125506] wlo1: send auth to 58:8b:f3:44:8f:5c (try 1/3)
-[  148.128140] wlo1: authenticated
-[  148.129567] wlo1: associate with 58:8b:f3:44:8f:5c (try 1/3)
-[  148.134895] wlo1: RX AssocResp from 58:8b:f3:44:8f:5c (capab=0x1011 status=0 aid=8)
-[  148.136495] wlo1: associated
-[  148.172360] IPv6: ADDRCONF(NETDEV_CHANGE): wlo1: link becomes ready
-[  155.517826] Bluetooth: hci0: sending initial HCI reset command failed (-110)
-
-Bus 002 Device 004: ID 8087:07dc Intel Corp. 
-Couldn't open device, some information will be missing
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass          224 Wireless
-  bDeviceSubClass         1 Radio Frequency
-  bDeviceProtocol         1 Bluetooth
-  bMaxPacketSize0        64
-  idVendor           0x8087 Intel Corp.
-  idProduct          0x07dc 
-  bcdDevice            0.01
-  iManufacturer           0 
-  iProduct                0 
-  iSerial                 0 
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength          177
-    bNumInterfaces          2
-    bConfigurationValue     1
-    iConfiguration          0 
-    bmAttributes         0xe0
-      Self Powered
-      Remote Wakeup
-    MaxPower              100mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       224 Wireless
-      bInterfaceSubClass      1 Radio Frequency
-      bInterfaceProtocol      1 Bluetooth
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               1
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               1
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               1
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       224 Wireless
-      bInterfaceSubClass      1 Radio Frequency
-      bInterfaceProtocol      1 Bluetooth
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x03  EP 3 OUT
-        bmAttributes            1
-          Transfer Type            Isochronous
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0000  1x 0 bytes
-        bInterval               1
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            1
-          Transfer Type            Isochronous
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0000  1x 0 bytes
-        bInterval               1
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       1
-      bNumEndpoints           2
-      bInterfaceClass       224 Wireless
-      bInterfaceSubClass      1 Radio Frequency
-      bInterfaceProtocol      1 Bluetooth
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x03  EP 3 OUT
-        bmAttributes            1
-          Transfer Type            Isochronous
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0009  1x 9 bytes
-        bInterval               1
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            1
-          Transfer Type            Isochronous
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0009  1x 9 bytes
-        bInterval               1
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       2
-      bNumEndpoints           2
-      bInterfaceClass       224 Wireless
-      bInterfaceSubClass      1 Radio Frequency
-      bInterfaceProtocol      1 Bluetooth
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x03  EP 3 OUT
-        bmAttributes            1
-          Transfer Type            Isochronous
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0011  1x 17 bytes
-        bInterval               1
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            1
-          Transfer Type            Isochronous
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0011  1x 17 bytes
-        bInterval               1
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       3
-      bNumEndpoints           2
-      bInterfaceClass       224 Wireless
-      bInterfaceSubClass      1 Radio Frequency
-      bInterfaceProtocol      1 Bluetooth
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x03  EP 3 OUT
-        bmAttributes            1
-          Transfer Type            Isochronous
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0019  1x 25 bytes
-        bInterval               1
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            1
-          Transfer Type            Isochronous
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0019  1x 25 bytes
-        bInterval               1
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       4
-      bNumEndpoints           2
-      bInterfaceClass       224 Wireless
-      bInterfaceSubClass      1 Radio Frequency
-      bInterfaceProtocol      1 Bluetooth
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x03  EP 3 OUT
-        bmAttributes            1
-          Transfer Type            Isochronous
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0021  1x 33 bytes
-        bInterval               1
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            1
-          Transfer Type            Isochronous
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0021  1x 33 bytes
-        bInterval               1
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       5
-      bNumEndpoints           2
-      bInterfaceClass       224 Wireless
-      bInterfaceSubClass      1 Radio Frequency
-      bInterfaceProtocol      1 Bluetooth
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x03  EP 3 OUT
-        bmAttributes            1
-          Transfer Type            Isochronous
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0031  1x 49 bytes
-        bInterval               1
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            1
-          Transfer Type            Isochronous
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0031  1x 49 bytes
-        bInterval               1
-
-Thanks, 
-Paul
