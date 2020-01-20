@@ -2,98 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43343142D1C
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 15:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8636142D34
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 15:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727740AbgATOUI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jan 2020 09:20:08 -0500
-Received: from mail-io1-f67.google.com ([209.85.166.67]:33934 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726988AbgATOUH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jan 2020 09:20:07 -0500
-Received: by mail-io1-f67.google.com with SMTP id z193so33834031iof.1;
-        Mon, 20 Jan 2020 06:20:07 -0800 (PST)
+        id S1728901AbgATOVZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jan 2020 09:21:25 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:36475 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727048AbgATOVZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jan 2020 09:21:25 -0500
+Received: by mail-pg1-f195.google.com with SMTP id k3so15626195pgc.3;
+        Mon, 20 Jan 2020 06:21:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XCkITs3PBe9eHkSuW9jLCvHZEhc7O5PaZef/lj9dJnw=;
-        b=Z6BzsswLYTKdYv2mChidjinXbBtsRQdVCZSAnPnMaI7qJ0Ghng+0/b9RV9fydLPE5Q
-         x84foME1KpuH0gnYyZ0b80ue3fHiEGtNfaT9+NRGcED4MytSVBxu9RkcMzQs6REyHmW9
-         dVqCRqGpVVNdylbhyqP6mKn5yoYF/VJ/4iaPAwD+mjOmj63eSi/ll2SEXZeJRFzkrK+L
-         qYydNFaTlfseYaOuluV6rg7W+OjwycIUaTUWta29ecxDVCMwsY3GkOuQL3y05MmVeX68
-         JqrPmw839WCC81/Tdn1FIgd68y7b64JUKoa3pfzkoK27DzdOBX5G2rhBLnxhbhAE7ulA
-         urUw==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=8E3LRqxKWSJfkkJ8nF8BrhNVWHzr4oovt9xNy2ECPZw=;
+        b=MrGpEq5f95RjzKX+K9agMHoOO/DR9lCooXV9nSQor1+iUOs5bjVIMQRkZRlnrSpzEv
+         r9IGrEYlAPlU0NBC0Yh/FIstYIIle18S1d5za6NJkNmqBlfXJIGUMHvPPhq6d7rl4Uem
+         mkZyeuw+JXdokXpLl3ezX6lzhQr396xs350Nkk0RU7lHFDl/rBe11B//6o+udFkZ89Qi
+         T3I0C1/66EvJAOelxMHyCuEGeWqIYdIVJM4Jxq54CGtGLiyD6J7AK0ZlMfi7qrUyTegz
+         oSc1r+BlIINicegh2kPjvLn96/xGLBh2/gWT6tqwo1BTkI2FDhuiMJhnie+9FK6gXS9t
+         udbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=XCkITs3PBe9eHkSuW9jLCvHZEhc7O5PaZef/lj9dJnw=;
-        b=PpJze7UdPO7+oykcTnk+TeKxQXFIi2QdD2MLPBaN0si9MBgNuIwZydmZCbie2+mxIl
-         65oZ35NEfVc8QpmBUsGaY+bSBK8zdIMhB0Y/6BVFu0mdnwXiMiStkggu/9qVog3HxuZW
-         pkf05+vLbibLH9ShjiMV/xLt8VTppT4QmuMZaYcjkdofcxC/DOKY0JKBnvakwl7B3Dmc
-         QCze/z/tFcZ2mE1HGyWhy7+d8XIKme760EkJXOULwxfxNTT/gimifSPK88/0ow2tcLj9
-         tKGgy+aggbzs5EELuO9RB0onPosX4W7uNc7KxjFDu1zMJNgNbiDwArTjKM+hE5KcoSMd
-         WDnQ==
-X-Gm-Message-State: APjAAAWfQhqh/KN8yLyuy8rvOZ+MHznZV+tx02B4FI42SL0UhWIIRpGr
-        TT63c/b/F+Z40KVLvkBPX0U=
-X-Google-Smtp-Source: APXvYqz8t722UdEvKgdPqj5K0M49rw+ungPTR5qINz+lLKabnDklZNNf2lJ99rg7fkcGYbQK8e00tg==
-X-Received: by 2002:a5d:878c:: with SMTP id f12mr42025424ion.164.1579530006570;
-        Mon, 20 Jan 2020 06:20:06 -0800 (PST)
-Received: from morpheus.roving-it.com ([8.46.76.46])
-        by smtp.googlemail.com with ESMTPSA id u8sm8601217iol.55.2020.01.20.06.19.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jan 2020 06:20:05 -0800 (PST)
-From:   Peter Robinson <pbrobinson@gmail.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org
-Cc:     Peter Robinson <pbrobinson@gmail.com>
-Subject: [PATCH v2] usb: host: xhci-tegra: set MODULE_FIRMWARE for tegra186
-Date:   Mon, 20 Jan 2020 14:19:10 +0000
-Message-Id: <20200120141910.116097-1-pbrobinson@gmail.com>
-X-Mailer: git-send-email 2.24.1
+        bh=8E3LRqxKWSJfkkJ8nF8BrhNVWHzr4oovt9xNy2ECPZw=;
+        b=V0/Ln2JaPtNF08MaIGr4OuJ6T56L7HrEYoxWmGtw3sSp5CVbB3+aO54Wf8PsmGiieK
+         mWWoBj0+qU6U2YUOThrZRU3C5QW4Jpi5obvnqIkSMGKW2ozhy6nKKxsaEB/96y9pnxMO
+         lMBynFwzWVN+zO2QbnZwTsiS7QItVis2y5W/m0XnCGYzXXNXNCeCLz+1dyVFBAqJcWUG
+         MWKarbi0rTZqiZhz8ZkovbxoIRQG9RXNvld5WcQh3Gkjs67uyqK7Db6RswVyVdyUK1Re
+         OOVx/IdEgnOfe8ccWApWnPycdUth31DBPRmQYlvZtbr4WHrk21mOSwNQU0JEW2L/VAn1
+         xF4g==
+X-Gm-Message-State: APjAAAV8LzO+LQOSoXE1i064Rw4v16QwD9RpHEsdF7row96VQCHpEQ1p
+        G0Ptj73keU6xv0riP3lU42A=
+X-Google-Smtp-Source: APXvYqy5CAGjZ7NT2LD5lX6OlrEIwIIRCga5Q5oavOeqTRD4chaXDJD4yFNzZEWW+AbQp/4/4WdGHQ==
+X-Received: by 2002:a63:cb06:: with SMTP id p6mr60103196pgg.236.1579530083959;
+        Mon, 20 Jan 2020 06:21:23 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g9sm40314223pfm.150.2020.01.20.06.21.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jan 2020 06:21:21 -0800 (PST)
+Subject: Re: [Bug ?] usb :typec :tcpm :fusb302
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Markus Reichl <m.reichl@fivetechno.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        linux-rockchip@lists.infradead.org
+References: <0ac6bbe7-6395-526d-213c-ac58a19d8673@fivetechno.de>
+ <20200120115828.GC32175@kuha.fi.intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <e05b6c1f-5e00-c000-23b9-1683230fd9f7@roeck-us.net>
+Date:   Mon, 20 Jan 2020 06:21:19 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
+In-Reply-To: <20200120115828.GC32175@kuha.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Set the MODULE_FIRMWARE for tegra186, it's registered for 124/210 and
-ensures the firmware is available at the appropriate time such as in
-the initrd, else if the firmware is unavailable the driver fails with
-the following errors:
+On 1/20/20 3:58 AM, Heikki Krogerus wrote:
+> Hi Markus,
+> 
+> On Thu, Jan 09, 2020 at 05:29:07PM +0100, Markus Reichl wrote:
+>> Hi,
+>>
+>> I'm working with a ROC-RK3399-PC arm64 board from firefly, circuit sheet [1].
+>> The board is powered from an USB-C type connector via an FUSB302 PD controller.
+>> With measured 15W+ power consumption it should use higher voltage PD modes than
+>> the standard 5V USB-C mode.
+>>
+>> When I add the related connector node in DTS [2] the FUSB302 initializes
+>> the right PD mode (e.g. 15V/3A).
+>>
+>> But during initialisation the PD is switched off shortly and the board has a blackout.
+>> When I inject a backup supply voltage behind the FUSB302 (e.g. at SYS_12V line) during boot
+>> I can remove the backup after succesfull setting up the PD and the board will run fine.
+>>
+>> Is it possible to change the behaviour of the fusb302 driver to not power down the PD supply
+>> during init?
+> 
+> I guess it's also possible that the problem is with tcpm.c instead of
+> fusb302.c. tcpm.c provides the USB PD state matchines. Guenter! Can
+> you take a look at this?
+> 
 
-tegra-xusb 3530000.usb: Direct firmware load for nvidia/tegra186/xusb.bin failed with error -2
-tegra-xusb 3530000.usb: failed to request firmware: -2
-tegra-xusb 3530000.usb: failed to load firmware: -2
-tegra-xusb: probe of 3530000.usb failed with error -2
+There was always a problem with handoff from the bootloader. tcpm_init() calls
+tcpm_reset_port() which turns vbus and vconn off, which I imagine can
+trigger the situation.
 
-Fixes: 5f9be5f3f899 ("usb: host: xhci-tegra: Add Tegra186 XUSB support")
-Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
-Acked-by: Thierry Reding <treding@nvidia.com>
----
+Unfortunately I was never able to solve the puzzle. The Type-C protocol does
+not support any kind of "hand-off" from one component in the system to another.
+If the state machine doesn't start from a clean state, there is pretty
+much no guarantee that it ever synchronizes.
 
-v2: Update for usb-next and add Thierry's ack
+Maybe someone can find a better solution, but when I wrote the code I just
+could not get it to work reliably without resetting everything during
+registration.
 
- drivers/usb/host/xhci-tegra.c | 1 +
- 1 file changed, 1 insertion(+)
+Note that v4.4 did not include the upstream tcpm code, suggesting the
+code in the vendor kernel was possibly using a different or backported
+state machine. Impossible to say what was done there without access
+to the code.
 
-diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-index bf9065438320..7b0d175ad708 100644
---- a/drivers/usb/host/xhci-tegra.c
-+++ b/drivers/usb/host/xhci-tegra.c
-@@ -1432,6 +1432,7 @@ MODULE_FIRMWARE("nvidia/tegra210/xusb.bin");
- 
- static const char * const tegra186_supply_names[] = {
- };
-+MODULE_FIRMWARE("nvidia/tegra186/xusb.bin");
- 
- static const struct tegra_xusb_phy_type tegra186_phy_types[] = {
- 	{ .name = "usb3", .num = 3, },
--- 
-2.24.1
+Guenter
+
+> Both tcpm.c and fusb302.c create debugfs entries that have a more
+> detailed log about things that are happening. Can you check what you
+> have in those (when you boot with the mains cable plugged it)?
+> 
+>          % mount debugfs -t debugfs /sys/kernel/debug
+>          % cat /sys/kernel/debug/tcpm*
+>          % cat /sys/kernel/debug/fusb302/*
+> 
+> Which kernel are you running by the way?
+> 
+>> In vendor kernel (4.4) this is done somehow but the sources are too different for me to find
+>> out how.
+>>
+>> Gruß,
+>> -- 
+>> Markus Reichl
+>>
+>> [1]
+>> http://download.t-firefly.com/product/RK3399/Docs/Hardware/%E5%8E%9F%E7%90%86%E5%9B%BE%E5%92%8C%E8%B4%B4%E7%89%87%E5%9B%BE/ROC-RK3399-PC/ROC-3399-PC-V10-A-20180804_%E5%8E%9F%E7%90%86%E5%9B%BE.pdf
+>>
+>> [2]
+>> https://lkml.org/lkml/2019/12/10/517
+> 
 
