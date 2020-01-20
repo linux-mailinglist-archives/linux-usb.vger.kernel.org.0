@@ -2,122 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E760142C37
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 14:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1229142C8B
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 14:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727092AbgATNiT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jan 2020 08:38:19 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:40011 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726626AbgATNiT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jan 2020 08:38:19 -0500
-Received: by mail-lf1-f66.google.com with SMTP id i23so24078445lfo.7;
-        Mon, 20 Jan 2020 05:38:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=Rmp6M8pqwaOCr0CQdZ4MTpfCrYUT7wbrwG2fLRW4cYY=;
-        b=QMTya1IGwsa/HPVuHv7uzaUAacmOduxdxgcW3fthEz+WhHrDo8q3QhyEiGpAq+/cN5
-         LXaiHcx8eQ2DtWTiUou9z0fcOzY1XjOQkhkobdLFdImU4XeX3GemdVhZPpZrBOPx0ncT
-         9yWl9x8gTDFO7XNATZC5Tr49ZO/RB51PCbt9+QApMTU+VCJd/X7K7a1ddYqETdnmFT3S
-         Gm0CSlZiRD6VMuFA3VFuOxrZJBVB+5N5vS4gYfH+SiLBXbZmUBJlYsEY54zAY0NAlsV1
-         LmyypDxvrRXw9mMXXPbgix7GOKCYfJNoEjR4shxIQDXnd+uXU2WwMJNapLzSvrlJrJF+
-         6CTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
-         :message-id:user-agent:mime-version:content-transfer-encoding;
-        bh=Rmp6M8pqwaOCr0CQdZ4MTpfCrYUT7wbrwG2fLRW4cYY=;
-        b=jQn3dS1QXEWpHcabGll+sEo2Ei6RdV9znug02T/fdljWJlhBw6FXzleEPQJ+FfIkcu
-         fwEE0pYDioxbmdz7UAWqYaftTymYTO9NjiXYiKH85zAlYA8jSpxCcvFuHuPrgAWWRjya
-         BhQkZzRmRseJwF/OTkJ93z4m/vape//Il3j86lghT7qqZEFfSK8NnjBiouDZz8AyteHN
-         Zdq81YkMIJKDV3h8MHeERFNmajaJRZFWUcAyc1F/LkREX4HjoMrq6O2AWx1/Y39Y7Wao
-         Wm0Fa1jRR7s7VbieXGRWHoOJ73DOe9X8ZlM0rT93FF5LklVf+jGuqC9sOYhsjCE5sOhb
-         Y3MQ==
-X-Gm-Message-State: APjAAAXVLcdciL8MJD4P6pFoWbm7mOyXSqIEEtx/XQvFzIhQOwpFmxto
-        ZFseBHZIn9ovNqC6lkZc0SNpUQJj
-X-Google-Smtp-Source: APXvYqz5T8tKc1LnEfdTgXsi+YtywuD9Es8VybJLt2HcIlvlJPew9X90SkQT97QUd48OBRsUGA4Lcg==
-X-Received: by 2002:a19:ca59:: with SMTP id h25mr13606211lfj.27.1579527497765;
-        Mon, 20 Jan 2020 05:38:17 -0800 (PST)
-Received: from osv.localdomain ([89.175.180.246])
-        by smtp.gmail.com with ESMTPSA id f16sm16701379ljn.17.2020.01.20.05.38.16
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 20 Jan 2020 05:38:17 -0800 (PST)
-From:   Sergey Organov <sorganov@gmail.com>
-To:     =?utf-8?Q?Micha=C5=82_Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-serial@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: serial: fix Tx stall after buffer overflow
-References: <87pnfi8xc2.fsf@osv.gnss.ru> <20200117203414.GA11783@qmqm.qmqm.pl>
-        <87sgkak6g5.fsf@osv.gnss.ru> <20200120094551.GA14000@qmqm.qmqm.pl>
-Date:   Mon, 20 Jan 2020 16:38:16 +0300
-In-Reply-To: <20200120094551.GA14000@qmqm.qmqm.pl> (=?utf-8?Q?=22Micha?=
- =?utf-8?Q?=C5=82_Miros=C5=82aw=22's?=
-        message of "Mon, 20 Jan 2020 10:45:51 +0100")
-Message-ID: <87ftgagsdz.fsf@osv.gnss.ru>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.4 (gnu/linux)
+        id S1727011AbgATNvL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jan 2020 08:51:11 -0500
+Received: from mga11.intel.com ([192.55.52.93]:10642 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726819AbgATNvL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 Jan 2020 08:51:11 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Jan 2020 05:51:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,342,1574150400"; 
+   d="scan'208";a="275397834"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 20 Jan 2020 05:51:08 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 20 Jan 2020 15:51:07 +0200
+Date:   Mon, 20 Jan 2020 15:51:07 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Jun Li <jun.li@nxp.com>
+Cc:     "linux@roeck-us.net" <linux@roeck-us.net>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 2/2] usb: typec: tcpm: set correct data role for non-DRD
+Message-ID: <20200120135107.GD32175@kuha.fi.intel.com>
+References: <1577442957-6921-1-git-send-email-jun.li@nxp.com>
+ <20200109115224.GC29437@kuha.fi.intel.com>
+ <VE1PR04MB65285B642821DAD91C2F692389380@VE1PR04MB6528.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <VE1PR04MB65285B642821DAD91C2F692389380@VE1PR04MB6528.eurprd04.prod.outlook.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Michał Mirosław <mirq-linux@rere.qmqm.pl> writes:
+Hi Jun,
 
-> On Mon, Jan 20, 2020 at 09:06:18AM +0300, Sergey Organov wrote:
->> Michał Mirosław <mirq-linux@rere.qmqm.pl> writes:
->> 
->> > On Fri, Jan 17, 2020 at 08:29:33AM +0300, Sergey Organov wrote:
->> >> --- a/drivers/usb/gadget/function/u_serial.c
->> >> +++ b/drivers/usb/gadget/function/u_serial.c
->> >> @@ -563,6 +563,8 @@ static int gs_start_io(struct gs_port *port)
->> >>  
->> >>         /* unblock any pending writes into our circular buffer */
->> >>         if (started) {
->> >> +               pr_debug("gs_start_tx: ttyGS%d\n", port->port_num);
->> >> +               gs_start_tx(port);
->> >>                 tty_wakeup(port->port.tty);
->> >
->> > The tty_wakeup() will be called from gs_start_tx(), so should be removed
->> > from here.
->> 
->> Not exactly. tty_wakeup() will be called from gs_start_tx() only when
->> there has been something actually transferred from the buffer. I didn't
->> want to change behavior when the buffer is empty, so I kept the explicit
->> tty_wakeup() call in place, intentionally. Please let me know if you
->> still think it should be removed.
->
-> Indeed it is as you describe. You might add an argument that initializes
-> do_tty_wake, but I'm not sure saving one tty_wakeup() on open is worth
-> the trouble.
+On Fri, Jan 10, 2020 at 10:41:31AM +0000, Jun Li wrote:
+> > -----Original Message-----
+> > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Sent: 2020年1月9日 19:52
+> > To: Jun Li <jun.li@nxp.com>
+> > Cc: linux@roeck-us.net; gregkh@linuxfoundation.org; dl-linux-imx
+> > <linux-imx@nxp.com>; linux-usb@vger.kernel.org
+> > Subject: Re: [PATCH 2/2] usb: typec: tcpm: set correct data role for non-DRD
+> > 
+> > Hi Jun,
+> > 
+> > Where's the 1/2 of this series?
+> 
+> 1/2 patch is for controller driver change, so not TO or CC you in mail list.
+> Will pay attention this to avoid confuse.
+> 
+> > 
+> > On Fri, Dec 27, 2019 at 10:39:17AM +0000, Jun Li wrote:
+> > > From: Li Jun <jun.li@nxp.com>
+> > >
+> > > Since the typec port data role is separated from power role, so check
+> > > the port data capability when setting data role.
+> > >
+> > > Signed-off-by: Li Jun <jun.li@nxp.com>
+> > > ---
+> > >  drivers/usb/typec/tcpm/tcpm.c | 24 +++++++++++++++++-------
+> > >  1 file changed, 17 insertions(+), 7 deletions(-)
+> > >
+> > > diff --git a/drivers/usb/typec/tcpm/tcpm.c
+> > > b/drivers/usb/typec/tcpm/tcpm.c index 56fc356..1f0d82e 100644
+> > > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > > @@ -780,7 +780,7 @@ static int tcpm_set_roles(struct tcpm_port *port,
+> > bool attached,
+> > >  			  enum typec_role role, enum typec_data_role data)  {
+> > >  	enum typec_orientation orientation;
+> > > -	enum usb_role usb_role;
+> > > +	enum usb_role usb_role = USB_ROLE_NONE;
+> > >  	int ret;
+> > >
+> > >  	if (port->polarity == TYPEC_POLARITY_CC1) @@ -788,10 +788,20 @@
+> > > static int tcpm_set_roles(struct tcpm_port *port, bool attached,
+> > >  	else
+> > >  		orientation = TYPEC_ORIENTATION_REVERSE;
+> > >
+> > > -	if (data == TYPEC_HOST)
+> > > -		usb_role = USB_ROLE_HOST;
+> > > -	else
+> > > -		usb_role = USB_ROLE_DEVICE;
+> > > +	if (port->typec_caps.data == TYPEC_PORT_DRD) {
+> > > +		if (data == TYPEC_HOST)
+> > > +			usb_role = USB_ROLE_HOST;
+> > > +		else
+> > > +			usb_role = USB_ROLE_DEVICE;
+> > > +	} else if (port->typec_caps.data == TYPEC_PORT_DFP) {
+> > > +		if (data == TYPEC_HOST)
+> > > +			usb_role = USB_ROLE_HOST;
+> > > +		data = TYPEC_HOST;
+> > 
+> > So if data != host, tcpc is told that data == host, but the mux is set to
+> > USB_ROLE_NONE. So why tcpc needs to think the role is host in that case?
+> 
+> enum usb_role {
+> 	USB_ROLE_NONE,
+> 	USB_ROLE_HOST,
+> 	USB_ROLE_DEVICE,
+> };
+> 
+> enum typec_data_role {
+> 	TYPEC_DEVICE,
+> 	TYPEC_HOST,
+> };
+> 
+> If the port only support DFP(host), I think we should never tell tcpc the data
+> is TYPEC_DEVICE, so TYPEC_HOST. 
 
-OK, so let's leave it as is, at least for now.
+But we should also not have to "lie" and force the role into something
+that works.
 
->
->> > The pr_debug() in other callers of gs_start_tx() say:
->> > "caller: start ttyGS%d".
->> 
->> ???
->> 
->> $ git co gregkh/tty-next && grep -r 'caller: start tty' .
->> HEAD is now at 7788f54... serial_core: Remove unused member in uart_port
->> $ 
->
-> Replace 'caller' with a function calling gs_start_io().
+> > Shouldn't this function actually return error if the port is DFP only, and
+> > TYPEC_DEVICE is requested?
+> 
+> Current TCPM use one API to set both power and data role, doesn't consider
+> the case of dual power role but single data role. Return error in tcpm_set_roles()
+> may lose the setting for power role, I think the current change is use correct
+> data role value when call to tcpm_set_roles().
+> For simple, I didn't change the caller places of tcpm_set_roles(), so just override the
+> data and usb_role to be reasonable value here.
 
-Thanks, now I see... Do you prefer:
+I think the correct thing to do would be to fix the places where the
+function is called, and here return error if the unsupported role is
+attempted. I hate to be picky, but this looks like a workaround that
+may potentially hide real issues in the code.
 
-   pr_debug("gs_start_io: start Tx on ttyGS%d\n", port->port_num);
 
-then?
+> > > +	} else {
+> > > +		if (data == TYPEC_DEVICE)
+> > > +			usb_role = USB_ROLE_DEVICE;
+> > > +		data = TYPEC_DEVICE;
+> > > +	}
+> > >
+> > >  	ret = tcpm_mux_set(port, TYPEC_STATE_USB, usb_role, orientation);
+> > >  	if (ret < 0)
+> > > @@ -1817,7 +1827,7 @@ static void tcpm_pd_ctrl_request(struct
+> > tcpm_port *port,
+> > >  		tcpm_set_state(port, SOFT_RESET, 0);
+> > >  		break;
+> > >  	case PD_CTRL_DR_SWAP:
+> > > -		if (port->port_type != TYPEC_PORT_DRP) {
+> > > +		if (port->typec_caps.data != TYPEC_PORT_DRD) {
+> > >  			tcpm_queue_message(port, PD_MSG_CTRL_REJECT);
+> > >  			break;
+> > >  		}
+> > > @@ -3969,7 +3979,7 @@ static int tcpm_dr_set(struct typec_port *p,
+> > enum typec_data_role data)
+> > >  	mutex_lock(&port->swap_lock);
+> > >  	mutex_lock(&port->lock);
+> > >
+> > > -	if (port->port_type != TYPEC_PORT_DRP) {
+> > > +	if (port->typec_caps.data != TYPEC_PORT_DRD) {
+> > >  		ret = -EINVAL;
+> > >  		goto port_unlock;
+> > >  	}
+> > > --
+> > > 2.7.4
 
-Alternatively, I'm OK with removing this new debug print.
+thanks,
 
-What do you think?
-
-Thanks,
--- Sergey Organov
+-- 
+heikki
