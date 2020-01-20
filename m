@@ -2,82 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC1F142CC8
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 15:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ADA8142CCA
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 15:05:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726860AbgATOFp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jan 2020 09:05:45 -0500
-Received: from rere.qmqm.pl ([91.227.64.183]:42159 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726626AbgATOFp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 Jan 2020 09:05:45 -0500
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 481YNQ6J6jz5Y;
-        Mon, 20 Jan 2020 15:05:42 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1579529143; bh=UttGkM4lKy1cVnEi2fPzcIVdzsgtM5DrsP9uvDo15bc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UZSSKUO8b7miiXYU78hVZh2ji14WEqBZ0b9wSwuzO/vxH+nowzZtdNjkitbvRXtDW
-         EId2WvdFy1NozUMIF9ZRrEZqVJz7Zw31Mdt2NzOQhIdSAfUwJhIB2TGbaAghvxYG71
-         tDLARonvWj0k2YMGPQndpXpB6Gg5gjY0SuSDl0+YrFVBOiOtTZGz8w8dhFrv1zrhXp
-         C3o8I9ef0dPCchuSsLEttKpBFl23V6xBu0jzjvwJIyK82ZZnzBwQoZA0YAvu97lEZY
-         5Sk7ItWmgUAj725Xu40KL5Z4VmWrExaSbbfTLUSpvirh9yAF5V/355Zxthc8ix5SLm
-         CGsb5ehJDyD+w==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.101.4 at mail
-Date:   Mon, 20 Jan 2020 15:05:40 +0100
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Sergey Organov <sorganov@gmail.com>
-Cc:     linux-usb@vger.kernel.org,
+        id S1727289AbgATOFu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jan 2020 09:05:50 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:39199 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726876AbgATOFu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jan 2020 09:05:50 -0500
+Received: by mail-pl1-f195.google.com with SMTP id g6so13237308plp.6;
+        Mon, 20 Jan 2020 06:05:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/v1IzDSLfJvfKfWBZua8/9zmrUBTaByJf1uzQJas5Wc=;
+        b=ElLgojf+YrtHVzJCr9kbn2bG4YjALZxIq7P1KG85hf4xWO8aOu25uJfsu7eqQvJvXx
+         Kp9D/3v1TYjMpm6Apkilc24M9Ou7Lohn15ioUO0W3c1kN2B/nBuFr+XliJR7dFlwng1k
+         Eav86HDp1P/QXLD/czDXFPgEeFvSRAcNbtkt5d0IwPHOhrqWv9yXdAg6bBlGhWek6l96
+         RuiSeh+Lk+t+uX5KwAk3Fdd813JArg446/GB3eI1GVlIAUXLBTAMvLhnl0S50/e1PeE3
+         MSOsi2I6Bf1DX94OV4BszhB7maP20RWbsoe4cZxa7dPgOt/UMhEKJnooxZ4TI6bWJC8M
+         SQyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/v1IzDSLfJvfKfWBZua8/9zmrUBTaByJf1uzQJas5Wc=;
+        b=EvhlJcovAyVc5BM9FqneQPFZhVFqNoYV+/csj/1s0o501nGsfgiGgGWDhCG8Evt5ed
+         igQYfgezKi+Qrp36xRdPETpmj+ZKX1EMnBerXYaD5rzYC/E6UgjRJ8qkVoYGvNiC4WmP
+         bLtFxYpKZ727uaK1og/tfSumZjHsyj1Ape0Zly40i4++0U6y/0tEdK8ouuI6z3FEHSVY
+         RUl9dFPeE2g18XyiCuvtFlvUVKvNl12SAMAx+yUNWtnuGFwfWfGCR1XWCzOeiP1cBmhH
+         pf1GthDEhNRR6C5uY+/ZqsJtsfWq9+nPbDkJspji98bn55QHquWCRN7sMwyER7xvwZNm
+         /PnQ==
+X-Gm-Message-State: APjAAAWGeu+Wzwi4encOxAXHKMDfNQxuwWSQmdICwkg5uI1tBgIgNYEV
+        Tt8d5Yl723CvZ2Nf7UyW3VT571MmkHtEzA==
+X-Google-Smtp-Source: APXvYqx8oijiciBf5VQCSc1j5Qt/mwD0QWcVLLM8S5xmmTZ1bWDMyHqHKbM5FEDFyLHOWSgJDhfeag==
+X-Received: by 2002:a17:902:9a96:: with SMTP id w22mr4839458plp.107.1579529149530;
+        Mon, 20 Jan 2020 06:05:49 -0800 (PST)
+Received: from glados.lan ([2601:647:4c01:6541:fa16:54ff:fed1:1bd6])
+        by smtp.gmail.com with ESMTPSA id b42sm188991pjc.27.2020.01.20.06.05.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jan 2020 06:05:49 -0800 (PST)
+From:   Thomas Hebb <tommyhebb@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-stable@vger.kernel.org, Thomas Hebb <tommyhebb@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-serial@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: serial: fix Tx stall after buffer overflow
-Message-ID: <20200120140540.GA31291@qmqm.qmqm.pl>
-References: <87pnfi8xc2.fsf@osv.gnss.ru>
- <20200117203414.GA11783@qmqm.qmqm.pl>
- <87sgkak6g5.fsf@osv.gnss.ru>
- <20200120094551.GA14000@qmqm.qmqm.pl>
- <87ftgagsdz.fsf@osv.gnss.ru>
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v2 1/2] usb: typec: wcove: fix "op-sink-microwatt" default that was in mW
+Date:   Mon, 20 Jan 2020 06:05:40 -0800
+Message-Id: <0eac53c4878423a9abd49d2142fe4cb1136db4e2.1579529138.git.tommyhebb@gmail.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <87ftgagsdz.fsf@osv.gnss.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 20, 2020 at 04:38:16PM +0300, Sergey Organov wrote:
-> Micha³ Miros³aw <mirq-linux@rere.qmqm.pl> writes:
-> 
-> > On Mon, Jan 20, 2020 at 09:06:18AM +0300, Sergey Organov wrote:
-> >> Micha³ Miros³aw <mirq-linux@rere.qmqm.pl> writes:
-> >> > The pr_debug() in other callers of gs_start_tx() say:
-> >> > "caller: start ttyGS%d".
-> >> 
-> >> ???
-> >> 
-> >> $ git co gregkh/tty-next && grep -r 'caller: start tty' .
-> >> HEAD is now at 7788f54... serial_core: Remove unused member in uart_port
-> >> $ 
-> >
-> > Replace 'caller' with a function calling gs_start_io().
-> 
-> Thanks, now I see... Do you prefer:
-> 
->    pr_debug("gs_start_io: start Tx on ttyGS%d\n", port->port_num);
-> 
-> then?
-> 
-> Alternatively, I'm OK with removing this new debug print.
+commit 4c912bff46cc ("usb: typec: wcove: Provide fwnode for the port")
+didn't convert this value from mW to uW when migrating to a new
+specification format like it should have.
 
-Let's remove it. I was convinced that this is a caller of gs_start_io()
-and not the function itself.  In this case callers already do the print.
+Fixes: 4c912bff46cc ("usb: typec: wcove: Provide fwnode for the port")
+Cc: linux-stable@vger.kernel.org
+Signed-off-by: Thomas Hebb <tommyhebb@gmail.com>
 
-BTW, the callers silently ignore (error) returns from this function. It
-might be useful to add pr_err() catching the errors.
+---
 
-Best Regards,
-Micha³ Miros³aw
+Changes in v2:
+- Split fix into two patches
+- Added stable cc
+
+ drivers/usb/typec/tcpm/wcove.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/typec/tcpm/wcove.c b/drivers/usb/typec/tcpm/wcove.c
+index edc271da14f4..9b745f432c91 100644
+--- a/drivers/usb/typec/tcpm/wcove.c
++++ b/drivers/usb/typec/tcpm/wcove.c
+@@ -597,7 +597,7 @@ static const struct property_entry wcove_props[] = {
+ 	PROPERTY_ENTRY_STRING("try-power-role", "sink"),
+ 	PROPERTY_ENTRY_U32_ARRAY("source-pdos", src_pdo),
+ 	PROPERTY_ENTRY_U32_ARRAY("sink-pdos", snk_pdo),
+-	PROPERTY_ENTRY_U32("op-sink-microwatt", 15000),
++	PROPERTY_ENTRY_U32("op-sink-microwatt", 15000000),
+ 	{ }
+ };
+ 
+-- 
+2.24.1
+
