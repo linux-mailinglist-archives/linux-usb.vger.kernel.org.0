@@ -2,79 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0DC142CC0
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 15:04:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC1F142CC8
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 15:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727740AbgATOEK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jan 2020 09:04:10 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:46636 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726626AbgATOEJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jan 2020 09:04:09 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 00KE46cM114806;
-        Mon, 20 Jan 2020 08:04:07 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1579529047;
-        bh=+Xv3pRHSeD5+/rifxAd4m2FjGsvidIUYqZb4HrDmSXQ=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=BA3YxcrFmBPZM1+WdJ8GlunF2BXoKDJpNoFlR5A2KP6BvwXTXIOUnrgcBMtM3dxsv
-         lpNhi6mpF3EfGWJhNubzZbXBBP8puwbfj9DiCmt6PqzgFnTWo4+gciaEgwMz50ZhNQ
-         5cmFRcLZ4GlXlnTlcl2vjA5pcJMwYsGYZ7FrLeMw=
-Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 00KE462Q049612
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Jan 2020 08:04:06 -0600
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Mon, 20
- Jan 2020 08:04:06 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Mon, 20 Jan 2020 08:04:06 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 00KE46Yk064611;
-        Mon, 20 Jan 2020 08:04:06 -0600
-Date:   Mon, 20 Jan 2020 08:04:06 -0600
-From:   Bin Liu <b-liu@ti.com>
-To:     Colin King <colin.king@canonical.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH][next] usb: musb: fix spelling mistake: "periperal" ->
- "peripheral"
-Message-ID: <20200120140406.GA9789@iaqt7>
-Mail-Followup-To: Bin Liu <b-liu@ti.com>,
-        Colin King <colin.king@canonical.com>,
+        id S1726860AbgATOFp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jan 2020 09:05:45 -0500
+Received: from rere.qmqm.pl ([91.227.64.183]:42159 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726626AbgATOFp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 Jan 2020 09:05:45 -0500
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 481YNQ6J6jz5Y;
+        Mon, 20 Jan 2020 15:05:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1579529143; bh=UttGkM4lKy1cVnEi2fPzcIVdzsgtM5DrsP9uvDo15bc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UZSSKUO8b7miiXYU78hVZh2ji14WEqBZ0b9wSwuzO/vxH+nowzZtdNjkitbvRXtDW
+         EId2WvdFy1NozUMIF9ZRrEZqVJz7Zw31Mdt2NzOQhIdSAfUwJhIB2TGbaAghvxYG71
+         tDLARonvWj0k2YMGPQndpXpB6Gg5gjY0SuSDl0+YrFVBOiOtTZGz8w8dhFrv1zrhXp
+         C3o8I9ef0dPCchuSsLEttKpBFl23V6xBu0jzjvwJIyK82ZZnzBwQoZA0YAvu97lEZY
+         5Sk7ItWmgUAj725Xu40KL5Z4VmWrExaSbbfTLUSpvirh9yAF5V/355Zxthc8ix5SLm
+         CGsb5ehJDyD+w==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.101.4 at mail
+Date:   Mon, 20 Jan 2020 15:05:40 +0100
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Sergey Organov <sorganov@gmail.com>
+Cc:     linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200117093124.97965-1-colin.king@canonical.com>
+        Felipe Balbi <balbi@kernel.org>, linux-serial@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: serial: fix Tx stall after buffer overflow
+Message-ID: <20200120140540.GA31291@qmqm.qmqm.pl>
+References: <87pnfi8xc2.fsf@osv.gnss.ru>
+ <20200117203414.GA11783@qmqm.qmqm.pl>
+ <87sgkak6g5.fsf@osv.gnss.ru>
+ <20200120094551.GA14000@qmqm.qmqm.pl>
+ <87ftgagsdz.fsf@osv.gnss.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=iso-8859-2
 Content-Disposition: inline
-In-Reply-To: <20200117093124.97965-1-colin.king@canonical.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87ftgagsdz.fsf@osv.gnss.ru>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
-
-On Fri, Jan 17, 2020 at 09:31:24AM +0000, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
+On Mon, Jan 20, 2020 at 04:38:16PM +0300, Sergey Organov wrote:
+> Micha³ Miros³aw <mirq-linux@rere.qmqm.pl> writes:
 > 
-> There is a spelling mistake in a dev_err error message. Fix it.
+> > On Mon, Jan 20, 2020 at 09:06:18AM +0300, Sergey Organov wrote:
+> >> Micha³ Miros³aw <mirq-linux@rere.qmqm.pl> writes:
+> >> > The pr_debug() in other callers of gs_start_tx() say:
+> >> > "caller: start ttyGS%d".
+> >> 
+> >> ???
+> >> 
+> >> $ git co gregkh/tty-next && grep -r 'caller: start tty' .
+> >> HEAD is now at 7788f54... serial_core: Remove unused member in uart_port
+> >> $ 
+> >
+> > Replace 'caller' with a function calling gs_start_io().
 > 
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> Thanks, now I see... Do you prefer:
+> 
+>    pr_debug("gs_start_io: start Tx on ttyGS%d\n", port->port_num);
+> 
+> then?
+> 
+> Alternatively, I'm OK with removing this new debug print.
 
-Do you mind to take this directly? Here is my Acked-by:
+Let's remove it. I was convinced that this is a caller of gs_start_io()
+and not the function itself.  In this case callers already do the print.
 
-Acked-by: Bin Liu <b-liu@ti.com>
+BTW, the callers silently ignore (error) returns from this function. It
+might be useful to add pr_err() catching the errors.
 
-Thanks,
--Bin.
-
+Best Regards,
+Micha³ Miros³aw
