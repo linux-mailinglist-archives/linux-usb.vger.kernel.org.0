@@ -2,48 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 448DB142AFE
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 13:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C37C142BEB
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 14:15:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727114AbgATMgf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jan 2020 07:36:35 -0500
-Received: from mx2.suse.de ([195.135.220.15]:59838 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726728AbgATMge (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 Jan 2020 07:36:34 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 8D50AAF22;
-        Mon, 20 Jan 2020 12:36:33 +0000 (UTC)
-Message-ID: <1579523791.17973.31.camel@suse.com>
-Subject: Can't we have stricter matching for vendor specific devices?
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        linux-usb@vger.kernel.org
-Date:   Mon, 20 Jan 2020 13:36:31 +0100
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1727531AbgATNPv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jan 2020 08:15:51 -0500
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:59459 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726619AbgATNPv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jan 2020 08:15:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1579526149;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2lf+TJXDtlpY1pLKgkkU89rddl+SS/0hPfh7anuZY6s=;
+        b=SJ3XuwMDxY3AqoxymeIRHLoFPA4Hb/X+5pw+cxwBQGwThnEwFto569WaL5C719VemZD4Il
+        mqp53DqC+fhPI7Wl3iSMOPoqvSXPqvaHo3N8stXmnF+gq0ihhhL4GiS5/IvMs+Ez7UFpVe
+        W1p4Zi49bG54nviqFzftejO38dO0VxI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-333-jujFIrIBOQy1v6cv6l-gZw-1; Mon, 20 Jan 2020 08:15:46 -0500
+X-MC-Unique: jujFIrIBOQy1v6cv6l-gZw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 106F8DBA3;
+        Mon, 20 Jan 2020 13:15:44 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-49.rdu2.redhat.com [10.10.120.49])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E2CB45D9E2;
+        Mon, 20 Jan 2020 13:15:41 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20200120082335.GD21151@kadam>
+References: <20200120082335.GD21151@kadam> <0000000000001a91f9059c52f727@google.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     dhowells@redhat.com,
+        syzbot <syzbot+afeecc39f502a8681560@syzkaller.appspotmail.com>,
+        arnd@arndb.de, dmitry.torokhov@gmail.com, ebiederm@xmission.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: linux-next boot error: KASAN: slab-out-of-bounds Read in post_usb_notification
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <929067.1579526141.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 20 Jan 2020 13:15:41 +0000
+Message-ID: <929068.1579526141@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Johan,
+Dan Carpenter <dan.carpenter@oracle.com> wrote:
 
-I have looked at your heroic efforts at sanity checking
-and I cannot help myself wondering whether this is a winning
-strategy. Shall we really specify for each device how many
-endpoints it is suposed to have in the probe() method?
+>   2759          struct {
+>   2760                  struct usb_notification n;
+>   2761                  char more_name[USB_NOTIFICATION_MAX_NAME_LEN -
+>   2762                                 (sizeof(struct usb_notification) =
+-
+>   2763                                  offsetof(struct usb_notification=
+, name))];
+>   2764          } n;
+>   2765  =
 
-Could we extend the matching by a minimum and maximum number
-of endpoints and masks for permissible endpoint types?
+>   2766          name_len =3D strlen(devname);
+>   2767          name_len =3D min_t(size_t, name_len, USB_NOTIFICATION_MA=
+X_NAME_LEN);
+>                                                    ^^^^^^^^^^^^^^^^^^^^^=
+^^^^^^^^
+> This limit is too high.  It should be USB_NOTIFICATION_MAX_NAME_LEN -
+> sizeof(struct usb_notification). or just
+> "min_t(size_t, name_len, sizeof(n.more_name));".  n.n.name[] is a
+> zero size array.
 
-For class devices this is impossible, but the majority of
-drivers are for vendor specific devices.
+No.  It's not that simple.  If you look at the struct:
 
-	Regards
-		Oliver
- 
+	struct usb_notification {
+		struct watch_notification watch;
+		__u32	error;
+		__u32	reserved;
+		__u8	name_len;
+		__u8	name[0];
+	};
+
+There are at least 3, if not 7, bytes of padding after name[] as the struc=
+t is
+not packed - and isn't necessarily rounded up to a multiple of 8 bytes eit=
+her.
+If you look at the definition of more_name[] above, you'll see:
+
+	USB_NOTIFICATION_MAX_NAME_LEN -
+	(sizeof(struct usb_notification) -
+	 offsetof(struct usb_notification, name))
+
+That calculates the amount of padding and then subtracts it from the amoun=
+t of
+name bufferage required.
+
+USB_NOTIFICATION_MAX_NAME_LEN is 63, which is 64 minus one for the length.
+
+>   2771          memcpy(n.n.name, devname, n_len);
+>                                           ^^^^^
+> name_len was intended here.
+
+Yeah.  I think that's actually the bug.  n_len is the length of the entire
+notification record.
+
+David
+
