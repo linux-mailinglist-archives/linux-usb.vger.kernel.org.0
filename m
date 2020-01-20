@@ -2,84 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82881142E54
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 16:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1FD142E88
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 16:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729126AbgATPGA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jan 2020 10:06:00 -0500
-Received: from mga03.intel.com ([134.134.136.65]:5464 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729076AbgATPF7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 Jan 2020 10:05:59 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Jan 2020 07:05:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,342,1574150400"; 
-   d="scan'208";a="275592142"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 20 Jan 2020 07:05:55 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 20 Jan 2020 17:05:54 +0200
-Date:   Mon, 20 Jan 2020 17:05:54 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Thomas Hebb <tommyhebb@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] usb: typec: fusb302: fix "op-sink-microwatt"
- default that was in mW
-Message-ID: <20200120150554.GH32175@kuha.fi.intel.com>
-References: <d8be32512efd31995ad7d65b27df9d443131b07c.1579529334.git.tommyhebb@gmail.com>
- <0da564559af75ec829c6c7e3aa4024f857c91bee.1579529334.git.tommyhebb@gmail.com>
+        id S1726901AbgATPMG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jan 2020 10:12:06 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:34045 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729080AbgATPMG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jan 2020 10:12:06 -0500
+Received: (qmail 17758 invoked by uid 500); 20 Jan 2020 10:12:05 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 20 Jan 2020 10:12:05 -0500
+Date:   Mon, 20 Jan 2020 10:12:05 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux@prisktech.co.nz" <linux@prisktech.co.nz>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH 2/2] usb: host: ehci-platform: add a quirk to avoid stuck
+In-Reply-To: <TYAPR01MB45443178BFBB9C16CF3BC32AD8320@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+Message-ID: <Pine.LNX.4.44L0.2001201009480.16814-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0da564559af75ec829c6c7e3aa4024f857c91bee.1579529334.git.tommyhebb@gmail.com>
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 20, 2020 at 06:09:06AM -0800, Thomas Hebb wrote:
-> commit 8f6244055bd3 ("usb: typec: fusb302: Always provide fwnode for the
-> port") didn't convert this value from mW to uW when migrating to a new
-> specification format like it should have.
-> 
-> Fixes: 8f6244055bd3 ("usb: typec: fusb302: Always provide fwnode for the port")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Thomas Hebb <tommyhebb@gmail.com>
+On Mon, 20 Jan 2020, Yoshihiro Shimoda wrote:
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
+> > > +static void ehci_platform_quirk_poll_work(struct work_struct *work)
+> > > +{
+> > > +	struct ehci_platform_priv *priv =
+> > > +		container_of(work, struct ehci_platform_priv, poll_work);
+> > > +	struct ehci_hcd *ehci = container_of((void *)priv, struct ehci_hcd,
+> > > +					     priv);
+> > > +	int i;
+> > > +
+> > > +	usleep_range(4000, 8000);
+> > 
+> > You have just waited 1000 ms for the timer.  Why will sleeping an
+> > additional 4 - 8 ms make any difference?
 > 
-> Changes in v3: None
-> Changes in v2: None
+> This sleeping can avoid a misdetection between this work function and
+> reconnection. If user reconnects the usb within 4 ms, the PORTSC
+> condition is possible to be the same as the issue's condition.
+> I think I should have described this information into the code.
 > 
->  drivers/usb/typec/tcpm/fusb302.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
-> index ed8655c6af8c..b498960ff72b 100644
-> --- a/drivers/usb/typec/tcpm/fusb302.c
-> +++ b/drivers/usb/typec/tcpm/fusb302.c
-> @@ -1666,7 +1666,7 @@ static const struct property_entry port_props[] = {
->  	PROPERTY_ENTRY_STRING("try-power-role", "sink"),
->  	PROPERTY_ENTRY_U32_ARRAY("source-pdos", src_pdo),
->  	PROPERTY_ENTRY_U32_ARRAY("sink-pdos", snk_pdo),
-> -	PROPERTY_ENTRY_U32("op-sink-microwatt", 2500),
-> +	PROPERTY_ENTRY_U32("op-sink-microwatt", 2500000),
->  	{ }
->  };
->  
-> -- 
-> 2.24.1
+> However, if I used schedule_delayed_work() instead, we can remove
+> the usleep_range().
 
-thanks,
+Why not just make the timer delay be 1004 or 1008 ms instead of adding
+this extra delay here?
 
--- 
-heikki
+Alan Stern
+
