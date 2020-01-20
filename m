@@ -2,64 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E82142EB2
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 16:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9251B142F31
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 17:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726897AbgATPXN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jan 2020 10:23:13 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:37343 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726642AbgATPXM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jan 2020 10:23:12 -0500
-Received: (qmail 18294 invoked by uid 500); 20 Jan 2020 10:23:11 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 20 Jan 2020 10:23:11 -0500
-Date:   Mon, 20 Jan 2020 10:23:11 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Paul Zimmerman <pauldzim@gmail.com>
-cc:     David Heinzelmann <heinzelmann.david@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-Subject: Re: [REGRESSION][BISECTED] 5.5-rc suspend/resume failure caused by
- patch a4f55d8b8c14 ("usb: hub: Check device descriptor before resusciation")
-In-Reply-To: <20200119211145.7dcc86ec@EliteBook>
-Message-ID: <Pine.LNX.4.44L0.2001201016300.16814-100000@netrider.rowland.org>
+        id S1729147AbgATQEp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jan 2020 11:04:45 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:39122 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726876AbgATQEp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jan 2020 11:04:45 -0500
+Received: by mail-pj1-f65.google.com with SMTP id e11so7409259pjt.4;
+        Mon, 20 Jan 2020 08:04:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=6RxjFM/GfKD5nyo9iA2+9b4lmEgTQWkl8cQBrKwCqZs=;
+        b=baBZ/42WJWI6QSYxH+wVyJ6ueuMXRsDRjwuDLiKmzBE8yYQBWc/dX0suG7sywu0bJX
+         7J1AJmQ28lW0dNoBwWupBCEr8EZLYZjjpKmz3LOtuinAavVoNblnG1O3KUMYuxgLQ91x
+         1X+mNDtAgaZBM1jtiUMy3rXdpxywElcY6Yj4IlZ3lZqwiXYanHcD+zG7EjihroeLY/Kd
+         XLApWQENwqJqVpyYHrGzvk2FNQ4+0aMV8rclnbQW1i5VUiW5PtaUUwPMpiB8OMpxLFC/
+         2p3AjZ9+YarLjLWfRYHakMPCDUwNQOpTQBzKKXUnWKFkC1e3X2q7O1W1p1k8D4jqKaCI
+         pUVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6RxjFM/GfKD5nyo9iA2+9b4lmEgTQWkl8cQBrKwCqZs=;
+        b=ozP+jA0u22M8l1uH/OqPJKT+BFWJTgWpz4wCzbTOElu9QUYHdy7T6lQhlmELnN2Dvp
+         rOvadEgj9YdQ1tBltJKw3EkR08ENNMNDRZsFbL5QwAOqgtwvLBAtDSf6vMBDhlrOdawt
+         Tg9xiwacW0Vg9x+476EmogK/dvP/WY2SGtsfy6fPSP255SUZRqplPxGO/VtwkV6wSH7I
+         W0c0YGu61MGUQzsUto7FNuwkxh1AfEpZBsAgdehAMd0D+j+yYuCg19iq76yQhg50RIwj
+         0aUD3uSkSBZqWHqrBDTtHqUBYoxIDyLrmgUESDA+xRxKCKfly4ody9goZpGWxqQvOkgK
+         1a4A==
+X-Gm-Message-State: APjAAAVKj1+ufhXsUqwtczLE1yJiTieidAKyB0z1eZGlG8msRaiZn1tm
+        lvb9Q10kDE+JKZtpVxym/ewzVgoV
+X-Google-Smtp-Source: APXvYqy+etnS5/3xrC+jjUrFU6lqSkzhah2jdFw43oEIu9cb2x9nHMTrcuxahaQB+/qkjeH7eaLfHw==
+X-Received: by 2002:a17:90a:db48:: with SMTP id u8mr291512pjx.54.1579536284631;
+        Mon, 20 Jan 2020 08:04:44 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c22sm39332864pfo.50.2020.01.20.08.04.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jan 2020 08:04:43 -0800 (PST)
+Subject: Re: [Bug ?] usb :typec :tcpm :fusb302
+To:     Markus Reichl <m.reichl@fivetechno.de>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        linux-rockchip@lists.infradead.org
+References: <0ac6bbe7-6395-526d-213c-ac58a19d8673@fivetechno.de>
+ <20200120115828.GC32175@kuha.fi.intel.com>
+ <e05b6c1f-5e00-c000-23b9-1683230fd9f7@roeck-us.net>
+ <546a5723-a974-ed0a-93e3-b46c919b0f7e@fivetechno.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <2e739a08-191b-d7c9-1273-4000cbbca423@roeck-us.net>
+Date:   Mon, 20 Jan 2020 08:04:41 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <546a5723-a974-ed0a-93e3-b46c919b0f7e@fivetechno.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 19 Jan 2020, Paul Zimmerman wrote:
-
-> I reported this regression last week (see
-> https://lore.kernel.org/linux-usb/20200115153714.03d5b3aa@EliteBook/T/#u)
-> but I got no response to my email. Today I have retested with 5.5-rc7
-> and verified that the problem still exists. So I am resending with a
-> different subject line to see if anyone responds.
+On 1/20/20 6:34 AM, Markus Reichl wrote:
+> Hi Guenter,
 > 
-> The $subject patch causes a regression on my HP EliteBook laptop with a
-> built-in USB bluetooth adapter. About 50% of the time, a suspend/resume
-> cycle will cause the bluetooth adapter to stop working.
+> Am 20.01.20 um 15:21 schrieb Guenter Roeck:
+>> On 1/20/20 3:58 AM, Heikki Krogerus wrote:
+>>> Hi Markus,
+>>>
+>>> On Thu, Jan 09, 2020 at 05:29:07PM +0100, Markus Reichl wrote:
+>>>> Hi,
+>>>>
+>>>> I'm working with a ROC-RK3399-PC arm64 board from firefly, circuit sheet [1].
+>>>> The board is powered from an USB-C type connector via an FUSB302 PD controller.
+>>>> With measured 15W+ power consumption it should use higher voltage PD modes than
+>>>> the standard 5V USB-C mode.
+>>>>
+>>>> When I add the related connector node in DTS [2] the FUSB302 initializes
+>>>> the right PD mode (e.g. 15V/3A).
+>>>>
+>>>> But during initialisation the PD is switched off shortly and the board has a blackout.
+>>>> When I inject a backup supply voltage behind the FUSB302 (e.g. at SYS_12V line) during boot
+>>>> I can remove the backup after succesfull setting up the PD and the board will run fine.
+>>>>
+>>>> Is it possible to change the behaviour of the fusb302 driver to not power down the PD supply
+>>>> during init?
+>>>
+>>> I guess it's also possible that the problem is with tcpm.c instead of
+>>> fusb302.c. tcpm.c provides the USB PD state matchines. Guenter! Can
+>>> you take a look at this?
+>>>
+>>
+>> There was always a problem with handoff from the bootloader. tcpm_init() calls
+>> tcpm_reset_port() which turns vbus and vconn off, which I imagine can
+>> trigger the situation.
+>>
+>> Unfortunately I was never able to solve the puzzle. The Type-C protocol does
+>> not support any kind of "hand-off" from one component in the system to another.
+>> If the state machine doesn't start from a clean state, there is pretty
+>> much no guarantee that it ever synchronizes.
+>>
+>> Maybe someone can find a better solution, but when I wrote the code I just
+>> could not get it to work reliably without resetting everything during
+>> registration.
+>>
+>> Note that v4.4 did not include the upstream tcpm code, suggesting the
+>> code in the vendor kernel was possibly using a different or backported
+>> state machine. Impossible to say what was done there without access
+>> to the code.
 > 
-> The dmesg log below shows two suspend/resume cycles. At time 63.928 you can
-> see the bluetooth adapter being successfully resumed, and at time 140.969
-> you can see it fail. After reverting the patch, the bluetooth adapter
-> resumes 100% of the time.
+> The vendor code for fusb302 is here:
+> https://github.com/FireflyTeam/kernel/tree/rk3399/firefly/drivers/mfd
 > 
-> I also included below a lsusb -v of the bluetooth adapter. Is there any
-> other debugging info you'd like me to send?
 
-It looks like your dmesg log was made without enabling debugging 
-messages in usbcore.  Can you collect another log with debugging 
-messages turned on?
+AFAICS the vendor code don't reset VBUS, and selectively (only) resets the
+PD state machine in the fusb302 on startup. The tcpm state machine is embedded
+in the fusb302 driver, making this easier to control.
 
-	echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
+The fusb302 Linux kernel driver, on the other side, resets the entire fusb302
+on initialization, not just PD (bit 0 of the reset register). Question is if
+that can be changed to just reset PD (bit 1 of the reset register).
+Maybe that would already fix the problem. Can you give it a try ?
 
-Also, it might not hurt to collect and post a usbmon trace for a bad
-suspend-resume cycle.
-
-Alan Stern
-
+Guenter
