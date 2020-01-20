@@ -2,77 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BCB814273C
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 10:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2AF142743
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 10:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726130AbgATJ1q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jan 2020 04:27:46 -0500
-Received: from mga14.intel.com ([192.55.52.115]:34346 "EHLO mga14.intel.com"
+        id S1726867AbgATJ3k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jan 2020 04:29:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33568 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725872AbgATJ1q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 Jan 2020 04:27:46 -0500
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Jan 2020 01:27:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,341,1574150400"; 
-   d="scan'208";a="274641245"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 20 Jan 2020 01:27:43 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 20 Jan 2020 11:27:42 +0200
-Date:   Mon, 20 Jan 2020 11:27:42 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Jun Li <jun.li@nxp.com>
-Cc:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH v3] usb: typec: tcpci: mask event interrupts when remove
- driver
-Message-ID: <20200120092742.GA32175@kuha.fi.intel.com>
-References: <1579502333-4145-1-git-send-email-jun.li@nxp.com>
+        id S1726039AbgATJ3k (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 Jan 2020 04:29:40 -0500
+Received: from localhost (unknown [89.205.136.67])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C8ABE207FF;
+        Mon, 20 Jan 2020 09:29:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579512578;
+        bh=X7Znlgcot6reTv9zZCpQDNBB7rGSbipmza2STDBU18c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=y0x+bJojzICm/olETUUkND3oB5sXAWoNbHOKHpOOpCuSsJJ6I98yWKtf3yWh+Uzp7
+         jebDGfHYpQVo8wNEgYmBs5kwHUTtOUVqRybeIPKIw/wRCC0yvbQNpXDBF4CTk5gxg3
+         FZuNwiJSv0MUFCP6MWC6BI08eYhk7GKkdtGip5S0=
+Date:   Mon, 20 Jan 2020 10:29:34 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: Re: No message is showed after USB gadget has configured
+Message-ID: <20200120092934.GA382520@kroah.com>
+References: <20200120090357.GB19938@b29397-desktop>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1579502333-4145-1-git-send-email-jun.li@nxp.com>
+In-Reply-To: <20200120090357.GB19938@b29397-desktop>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 20, 2020 at 06:43:19AM +0000, Jun Li wrote:
-> This is to prevent any possible events generated while unregister
-> tpcm port.
+On Mon, Jan 20, 2020 at 09:03:59AM +0000, Peter Chen wrote:
+> Hi all,
 > 
-> Fixes: 74e656d6b0551 ("staging: typec: Type-C Port Controller Interface driver (tcpci)")
-> Signed-off-by: Li Jun <jun.li@nxp.com>
+> >From commit 1cbfb8c4f62d ("usb: gadget: Quieten gadget config message"),
+> there is no any message from gadget side after it connects to host
+> and works correctly. Although we could cat "state" under
+> /sys/class/udc/$CONTROLLER/ to know its state, we can't easily
+> know if the gadget works or not from console, USB host could have
+> many messages after one device has connected, why we can't keep one
+> for USB gadget?
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Why not make "normal" USB devices quieter too? :)
 
-> ---
->  drivers/usb/typec/tcpm/tcpci.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index c1f7073..dfae41f 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -581,6 +581,12 @@ static int tcpci_probe(struct i2c_client *client,
->  static int tcpci_remove(struct i2c_client *client)
->  {
->  	struct tcpci_chip *chip = i2c_get_clientdata(client);
-> +	int err;
-> +
-> +	/* Disable chip interrupts before unregistering port */
-> +	err = tcpci_write16(chip->tcpci, TCPC_ALERT_MASK, 0);
-> +	if (err < 0)
-> +		return err;
->  
->  	tcpci_unregister_port(chip->tcpci);
->  
-> -- 
-> 2.7.4
+Surely you do not have tools that watch syslog to determine if a device
+is working properly or not, right?  That's what sysfs is for, not syslog
+entries.
 
--- 
-heikki
+thanks,
+
+greg k-h
