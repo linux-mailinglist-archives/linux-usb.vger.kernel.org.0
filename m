@@ -2,122 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D23C1422E6
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 06:55:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA331422FD
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 07:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725837AbgATFzb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jan 2020 00:55:31 -0500
-Received: from mail-vi1eur05on2077.outbound.protection.outlook.com ([40.107.21.77]:32801
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725783AbgATFzb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 Jan 2020 00:55:31 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IMLIBu3VCbzEHpKe4YcoisFynxyI+5FdMZNPA44zkjv1KU4sOAtMNSpdpWJ9bXlT0UnpDJDRB/XNTMfazjN+AMz/CUpt8PsySuh8d/+SN/MH/Y4tmYoCIZrbbOB/zdkjJzTnsVDjAoGbuyQ/pemC4Nlcxeez0Vo81IwCIFBLFPiqJ/6LhOjXCsP2vDT+Zxy4wUygUI/NylCynVyR1uuF8UvsTP/6XoATB6U4U8REtLEWvqL8IydYTBjTf2u88To0DX0LEJcpiKAb/Jpj8ZsVosi8B32tL5QepyFOSRMUiy+GveiECb/OROOBTD1ttWH8UiN4ceJ3ysAyn1mopTJTVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oVZADzi9pcjJKxYFSlNWguBpFslrjGu2/kK8yXooDmc=;
- b=N3RfapFQa1uC5zWsuT8jrNwbdTDytMwFv8oFpdGvGxG1v9Xc8LHAh5AE5udTC396SZpXqa5WYvGrbsSDnQS3/CMVxXEUGr8yFX5Q4bQSXhmABA+Zu78xJ/oRCx/3acoB4kz+z/zxWcPEkMnpc8iTykGi71pqCA73qks5483EV89slPpJw/dcVP696khVA8SpQlHK+EKynkQRWP+dKa0RFrfek1CBtdX5RXSN2XMdelzWMrr79b+rGopgWq2Oeundc9gXcUWJAclHu6mX998uXqxnrKoTk/Qww/fYEUIPuJ/KhpHYM5iPz4wKSudQt3yXJ75FoMZprExTPQj6f1B/sQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oVZADzi9pcjJKxYFSlNWguBpFslrjGu2/kK8yXooDmc=;
- b=nuJgkBrrdhzAhzkFExCybmbM4EGXtlfUmX9BUDELIZ4LG1IY+hOsVdUtJVxOZrR4YhK/tDeXThgC4GwMhhzPOTRDcLhhs0wSn2GPQ2d/NHktAqE9cx4AAM/kv5vICxEq+3Lwb4E3kJE/HXubAhhPlahvq2MVbVWS7hxY35NqrgU=
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (20.179.235.146) by
- VE1PR04MB6669.eurprd04.prod.outlook.com (20.179.235.33) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2644.24; Mon, 20 Jan 2020 05:55:27 +0000
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::fc52:45c6:88a1:b5e3]) by VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::fc52:45c6:88a1:b5e3%7]) with mapi id 15.20.2644.024; Mon, 20 Jan 2020
- 05:55:27 +0000
-Received: from localhost.localdomain (119.31.174.66) by HK2PR06CA0024.apcprd06.prod.outlook.com (2603:1096:202:2e::36) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.2644.20 via Frontend Transport; Mon, 20 Jan 2020 05:55:24 +0000
-From:   Jun Li <jun.li@nxp.com>
-To:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: [PATCH v2] usb: typec: tcpci: mask event interrupts when remove
- driver
-Thread-Topic: [PATCH v2] usb: typec: tcpci: mask event interrupts when remove
- driver
-Thread-Index: AQHVz1Y2u7sfBLh5k061yelxtRo6wg==
-Date:   Mon, 20 Jan 2020 05:55:27 +0000
-Message-ID: <1579499461-13076-1-git-send-email-jun.li@nxp.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.7.4
-x-clientproxiedby: HK2PR06CA0024.apcprd06.prod.outlook.com
- (2603:1096:202:2e::36) To VE1PR04MB6528.eurprd04.prod.outlook.com
- (2603:10a6:803:127::18)
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=jun.li@nxp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: c88623c2-279b-4e93-551c-08d79d6d5912
-x-ms-traffictypediagnostic: VE1PR04MB6669:|VE1PR04MB6669:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VE1PR04MB6669D23B8FCB3E0C844888FE89320@VE1PR04MB6669.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:519;
-x-forefront-prvs: 0288CD37D9
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(366004)(376002)(346002)(136003)(39860400002)(199004)(189003)(6486002)(86362001)(66476007)(69590400006)(2906002)(66946007)(66556008)(64756008)(66446008)(478600001)(26005)(71200400001)(4744005)(36756003)(6512007)(2616005)(6506007)(956004)(5660300002)(316002)(16526019)(110136005)(8936002)(81166006)(81156014)(8676002)(44832011)(54906003)(52116002)(4326008)(186003);DIR:OUT;SFP:1101;SCL:1;SRVR:VE1PR04MB6669;H:VE1PR04MB6528.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: qqBQXdb+9/sHBsdDBkzL/FmYOpymoG6eIFtftIDoUBPhlaEi2ryKZIbYj9r3/2EQHV7ROpdasOS5L+XLxIVPq2Aw6Nt0e89JLGgrMBR4oimVur6hNDb64DpCjoBRIp/vdv+JIRInQSK24Q/ZTI0N2zL346kOBuKM3Qfy23XgTaaNu1Dvvc7EMImBxxSyybJF6uPqFT7N5NYWrOYMUQI4klPiaiSvt+z9B/G6u6sbYUutd0BcQl/73yKC7mjtsu+zlCZiFGAx77Cw8FtbMLJdYXfUVGXGut6OGJha1Htb3t3OzDCWLwNxTD5KXOAO98JkEp9ZbP/FB5dnS/Bytc7dyx3eC9KVnEB6Nsg7dGVA7n+Isdtxy28RUGwXdXc0k6341ZWmHkB2fGtn6cM33f446YlMqt2Uy5Fx6LSYYofT5YEje1pzapO0JaboIOymLONGUtT5xNtRF17+exv4xeNrCZi6r1ck5SH2vzbA8DG+eip7EyLlqW8m4SEYVurF4rtn
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1725851AbgATGGX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jan 2020 01:06:23 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:32932 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725783AbgATGGX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jan 2020 01:06:23 -0500
+Received: by mail-lj1-f193.google.com with SMTP id y6so32572778lji.0;
+        Sun, 19 Jan 2020 22:06:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:references:date:in-reply-to:message-id
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=W1JIXHfXLk3MBN8q4UB67xLKe5M2gcb3jjoZNOy3eF0=;
+        b=qL9ZWFcf+4HeLzNH7LM35cH3xyLKfqouiP0N7ADEgLutGwj/F6KgEPYH0qxNILY4e9
+         u8oUU+gmeU8UrHuv0mdsVczsqjGHpAjuwHGwvxuMWUpw9M6XjAYKTUSkMR477Wkzldio
+         /egzxQq5zQtt3T8qlGCm9bWX5mPW01QOWMfKERZCk8aVaVpdzpl7bOEqh7xskuplJGig
+         kNMluUCW6WOc1jntYPZK5TsuprW0c+xDDIRa6b2uw5pKkTnc4RcdR8Ib0bRc++9xAJa4
+         pGUM1Xl0mFvqXvKE9iwC9cSQ6vlxiJGsLsRcM6XKG6Iamc0TVmgNBqjRO6+FN0q8FjDA
+         8QRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
+         :message-id:user-agent:mime-version:content-transfer-encoding;
+        bh=W1JIXHfXLk3MBN8q4UB67xLKe5M2gcb3jjoZNOy3eF0=;
+        b=SIIaRwGSL0eTEtnbFeaZvA2Lt1G/jD63XTM7mgMIbeC70myIZgHLfvBbwzMw2Z1QxV
+         cfEq+nZF6cd95AvJpE8bvWMlVo8cvmJTTVos3KHmBw8sCm7Bea5UhE7RGI8HB7o3Lh87
+         I3tkqhHS2GIlCJcuxFwyZ/d6umFx8msow3HMIWrEId1FNR5ejJ49WFhGq2TpC14rdsre
+         D6SOVOjNOgNnjbn3L3a0n8zFKd792YJ9JITFfBTfweTSTYnVSHa3vGOiRE2Fzpom9nyk
+         8DyTpzdHaw4Ri3YpLKEN8WPcr8U+0w+f0heZqddzsoQFHHeG+3bzJwWWgThnXEjujjqL
+         miwg==
+X-Gm-Message-State: APjAAAWVow6gI/O84rbGehpurjHMkbqFCSSj4b9Yux8v5UWP7esmvhmV
+        z8SXaBGznJpHabG9wkea5AGDSIrL
+X-Google-Smtp-Source: APXvYqzb7u+VwESHZIjk53+KBPWZ4kZVTJDCITTX6FCnpS8abU6CP4IJMxROoyBdDTL1aZEQHvCn5Q==
+X-Received: by 2002:a2e:918c:: with SMTP id f12mr12845605ljg.66.1579500380449;
+        Sun, 19 Jan 2020 22:06:20 -0800 (PST)
+Received: from osv.localdomain ([89.175.180.246])
+        by smtp.gmail.com with ESMTPSA id t1sm16092908lji.98.2020.01.19.22.06.19
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 19 Jan 2020 22:06:19 -0800 (PST)
+From:   Sergey Organov <sorganov@gmail.com>
+To:     =?utf-8?Q?Micha=C5=82_Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-serial@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: serial: fix Tx stall after buffer overflow
+References: <87pnfi8xc2.fsf@osv.gnss.ru> <20200117203414.GA11783@qmqm.qmqm.pl>
+Date:   Mon, 20 Jan 2020 09:06:18 +0300
+In-Reply-To: <20200117203414.GA11783@qmqm.qmqm.pl> (=?utf-8?Q?=22Micha?=
+ =?utf-8?Q?=C5=82_Miros=C5=82aw=22's?=
+        message of "Fri, 17 Jan 2020 21:34:14 +0100")
+Message-ID: <87sgkak6g5.fsf@osv.gnss.ru>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.4 (gnu/linux)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c88623c2-279b-4e93-551c-08d79d6d5912
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jan 2020 05:55:27.1641
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bxt4nrD43RbolSw3lBiVo6Jg5AUbHRNbgiD2ISXuMycjDLVAkpr7QAmgv5SVDPni
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6669
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is to prevent any possible events generated while unregister
-tpcm port.
+Michał Mirosław <mirq-linux@rere.qmqm.pl> writes:
 
-Fixes: 74e656d6b0551 ("staging: typec: Type-C Port Controller Interface dri=
-ver (tcpci)")
-Signed-off-by: Li Jun <jun.li@nxp.com>
----
- drivers/usb/typec/tcpm/tcpci.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+> On Fri, Jan 17, 2020 at 08:29:33AM +0300, Sergey Organov wrote:
+> [...]
+>> NOTE: current version of the driver leaks data from one connection to
+>> another through its internal circular buffer. It might be a good idea
+>> to clear the buffer on open/close/connect/disconnect, in which case
+>> the problem this patch solves would have been fixed in a different
+>> manner. However, not only that's a more dramatic change, but to do it
+>> right TTY-layer buffers are to be considered as well.
+>
+> This is normal for serial devices, as they don't have any means to
+> signal connection and will usually transmit anyway when not connected.
+> In case of a console on the USB gadget-emulated serial port, it might
+> actually be convenient that the data is kept until connection.
 
-diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.=
-c
-index c1f7073..fb9f2c1 100644
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -581,6 +581,12 @@ static int tcpci_probe(struct i2c_client *client,
- static int tcpci_remove(struct i2c_client *client)
- {
- 	struct tcpci_chip *chip =3D i2c_get_clientdata(client);
-+	int err;
-+
-+	/* Disable chip interrupts before unregistger port */
-+	err =3D tcpci_write16(chip->tcpci, TCPC_ALERT_MASK, 0);
-+	if (err < 0)
-+		return err;
-=20
- 	tcpci_unregister_port(chip->tcpci);
-=20
---=20
-2.7.4
+Yeah, just wanted to make sure I did select the right way of fixing the
+issue.
 
+>
+>> --- a/drivers/usb/gadget/function/u_serial.c
+>> +++ b/drivers/usb/gadget/function/u_serial.c
+>> @@ -563,6 +563,8 @@ static int gs_start_io(struct gs_port *port)
+>>  
+>>         /* unblock any pending writes into our circular buffer */
+>>         if (started) {
+>> +               pr_debug("gs_start_tx: ttyGS%d\n", port->port_num);
+>> +               gs_start_tx(port);
+>>                 tty_wakeup(port->port.tty);
+>
+> The tty_wakeup() will be called from gs_start_tx(), so should be removed
+> from here.
+
+Not exactly. tty_wakeup() will be called from gs_start_tx() only when
+there has been something actually transferred from the buffer. I didn't
+want to change behavior when the buffer is empty, so I kept the explicit
+tty_wakeup() call in place, intentionally. Please let me know if you
+still think it should be removed.
+
+> The pr_debug() in other callers of gs_start_tx() say:
+> "caller: start ttyGS%d".
+
+???
+
+$ git co gregkh/tty-next && grep -r 'caller: start tty' .
+HEAD is now at 7788f54... serial_core: Remove unused member in uart_port
+$ 
+
+-- Sergey
