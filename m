@@ -2,123 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6986142C28
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 14:34:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E760142C37
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 14:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727041AbgATNei (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jan 2020 08:34:38 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:36784 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726626AbgATNei (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jan 2020 08:34:38 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00KDX2dB045765;
-        Mon, 20 Jan 2020 13:34:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2019-08-05;
- bh=4RZ/iUBw64s4UkNe4jkVsvA9CN5NJnP7F69TwV/NGVo=;
- b=eHtTY6c6KWRKZXDPTNU+vmhH+9B+LIypChrEtFpt+0u75e4IdnuFPIYUO3Ir3nrhg9t8
- rokp6/k59MhoGHeO/Gjop1grLGxQo+VyLSOVwzt/sYS9E+CpJ+NOXay/S+1cbPW6V1qI
- U51QKiAq4d5404tTkliPGRmnrXqV0OmS0GjRASj1oHNIl8pCfNKTKdrJaZQ16NGU51iW
- OQYkDEslJV/TwmUC+tY4qmRm6lSUXEV9MH53kmIquaAXvHxMWo3ARpMHC01NGh575+m8
- jaOa2+tdBd+k0kIobA5vcrPv/f691riU7cJkifbAvSoGRr72Hkfr3lrDbC9MdOrrIjS9 TA== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 2xkseu7kpw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Jan 2020 13:34:26 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00KDYLWk055891;
-        Mon, 20 Jan 2020 13:34:25 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 2xmbj1wsef-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Jan 2020 13:34:25 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 00KDY3wb012785;
-        Mon, 20 Jan 2020 13:34:03 GMT
-Received: from kadam (/129.205.23.165)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 20 Jan 2020 05:34:02 -0800
-Date:   Mon, 20 Jan 2020 16:37:58 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     syzbot <syzbot+afeecc39f502a8681560@syzkaller.appspotmail.com>,
-        arnd@arndb.de, dmitry.torokhov@gmail.com, ebiederm@xmission.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: linux-next boot error: KASAN: slab-out-of-bounds Read in
- post_usb_notification
-Message-ID: <20200120133758.GK19765@kadam>
-References: <20200120082335.GD21151@kadam>
- <0000000000001a91f9059c52f727@google.com>
- <929068.1579526141@warthog.procyon.org.uk>
+        id S1727092AbgATNiT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jan 2020 08:38:19 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:40011 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726626AbgATNiT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jan 2020 08:38:19 -0500
+Received: by mail-lf1-f66.google.com with SMTP id i23so24078445lfo.7;
+        Mon, 20 Jan 2020 05:38:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:references:date:in-reply-to:message-id
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=Rmp6M8pqwaOCr0CQdZ4MTpfCrYUT7wbrwG2fLRW4cYY=;
+        b=QMTya1IGwsa/HPVuHv7uzaUAacmOduxdxgcW3fthEz+WhHrDo8q3QhyEiGpAq+/cN5
+         LXaiHcx8eQ2DtWTiUou9z0fcOzY1XjOQkhkobdLFdImU4XeX3GemdVhZPpZrBOPx0ncT
+         9yWl9x8gTDFO7XNATZC5Tr49ZO/RB51PCbt9+QApMTU+VCJd/X7K7a1ddYqETdnmFT3S
+         Gm0CSlZiRD6VMuFA3VFuOxrZJBVB+5N5vS4gYfH+SiLBXbZmUBJlYsEY54zAY0NAlsV1
+         LmyypDxvrRXw9mMXXPbgix7GOKCYfJNoEjR4shxIQDXnd+uXU2WwMJNapLzSvrlJrJF+
+         6CTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
+         :message-id:user-agent:mime-version:content-transfer-encoding;
+        bh=Rmp6M8pqwaOCr0CQdZ4MTpfCrYUT7wbrwG2fLRW4cYY=;
+        b=jQn3dS1QXEWpHcabGll+sEo2Ei6RdV9znug02T/fdljWJlhBw6FXzleEPQJ+FfIkcu
+         fwEE0pYDioxbmdz7UAWqYaftTymYTO9NjiXYiKH85zAlYA8jSpxCcvFuHuPrgAWWRjya
+         BhQkZzRmRseJwF/OTkJ93z4m/vape//Il3j86lghT7qqZEFfSK8NnjBiouDZz8AyteHN
+         Zdq81YkMIJKDV3h8MHeERFNmajaJRZFWUcAyc1F/LkREX4HjoMrq6O2AWx1/Y39Y7Wao
+         Wm0Fa1jRR7s7VbieXGRWHoOJ73DOe9X8ZlM0rT93FF5LklVf+jGuqC9sOYhsjCE5sOhb
+         Y3MQ==
+X-Gm-Message-State: APjAAAXVLcdciL8MJD4P6pFoWbm7mOyXSqIEEtx/XQvFzIhQOwpFmxto
+        ZFseBHZIn9ovNqC6lkZc0SNpUQJj
+X-Google-Smtp-Source: APXvYqz5T8tKc1LnEfdTgXsi+YtywuD9Es8VybJLt2HcIlvlJPew9X90SkQT97QUd48OBRsUGA4Lcg==
+X-Received: by 2002:a19:ca59:: with SMTP id h25mr13606211lfj.27.1579527497765;
+        Mon, 20 Jan 2020 05:38:17 -0800 (PST)
+Received: from osv.localdomain ([89.175.180.246])
+        by smtp.gmail.com with ESMTPSA id f16sm16701379ljn.17.2020.01.20.05.38.16
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 20 Jan 2020 05:38:17 -0800 (PST)
+From:   Sergey Organov <sorganov@gmail.com>
+To:     =?utf-8?Q?Micha=C5=82_Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-serial@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: serial: fix Tx stall after buffer overflow
+References: <87pnfi8xc2.fsf@osv.gnss.ru> <20200117203414.GA11783@qmqm.qmqm.pl>
+        <87sgkak6g5.fsf@osv.gnss.ru> <20200120094551.GA14000@qmqm.qmqm.pl>
+Date:   Mon, 20 Jan 2020 16:38:16 +0300
+In-Reply-To: <20200120094551.GA14000@qmqm.qmqm.pl> (=?utf-8?Q?=22Micha?=
+ =?utf-8?Q?=C5=82_Miros=C5=82aw=22's?=
+        message of "Mon, 20 Jan 2020 10:45:51 +0100")
+Message-ID: <87ftgagsdz.fsf@osv.gnss.ru>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.4 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <929068.1579526141@warthog.procyon.org.uk>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9505 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001200117
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9505 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001200117
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 20, 2020 at 01:15:41PM +0000, David Howells wrote:
-> Dan Carpenter <dan.carpenter@oracle.com> wrote:
-> 
-> >   2759          struct {
-> >   2760                  struct usb_notification n;
-> >   2761                  char more_name[USB_NOTIFICATION_MAX_NAME_LEN -
-> >   2762                                 (sizeof(struct usb_notification) -
-> >   2763                                  offsetof(struct usb_notification, name))];
-> >   2764          } n;
-> >   2765  
-> >   2766          name_len = strlen(devname);
-> >   2767          name_len = min_t(size_t, name_len, USB_NOTIFICATION_MAX_NAME_LEN);
-> >                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> > This limit is too high.  It should be USB_NOTIFICATION_MAX_NAME_LEN -
-> > sizeof(struct usb_notification). or just
-> > "min_t(size_t, name_len, sizeof(n.more_name));".  n.n.name[] is a
-> > zero size array.
-> 
-> No.  It's not that simple.  If you look at the struct:
-> 
-> 	struct usb_notification {
-> 		struct watch_notification watch;
-> 		__u32	error;
-> 		__u32	reserved;
-> 		__u8	name_len;
-> 		__u8	name[0];
-> 	};
-> 
-> There are at least 3, if not 7, bytes of padding after name[] as the struct is
-> not packed - and isn't necessarily rounded up to a multiple of 8 bytes either.
-> If you look at the definition of more_name[] above, you'll see:
-> 
-> 	USB_NOTIFICATION_MAX_NAME_LEN -
-> 	(sizeof(struct usb_notification) -
-> 	 offsetof(struct usb_notification, name))
-> 
-> That calculates the amount of padding and then subtracts it from the amount of
-> name bufferage required.
-> 
-> USB_NOTIFICATION_MAX_NAME_LEN is 63, which is 64 minus one for the length.
+Michał Mirosław <mirq-linux@rere.qmqm.pl> writes:
 
-Ah yes...  You're right.  I didn't think about padding.  And even if I
-had, I would have thought the hole would have gone before name[] but
-it comes after as you say.
+> On Mon, Jan 20, 2020 at 09:06:18AM +0300, Sergey Organov wrote:
+>> Michał Mirosław <mirq-linux@rere.qmqm.pl> writes:
+>> 
+>> > On Fri, Jan 17, 2020 at 08:29:33AM +0300, Sergey Organov wrote:
+>> >> --- a/drivers/usb/gadget/function/u_serial.c
+>> >> +++ b/drivers/usb/gadget/function/u_serial.c
+>> >> @@ -563,6 +563,8 @@ static int gs_start_io(struct gs_port *port)
+>> >>  
+>> >>         /* unblock any pending writes into our circular buffer */
+>> >>         if (started) {
+>> >> +               pr_debug("gs_start_tx: ttyGS%d\n", port->port_num);
+>> >> +               gs_start_tx(port);
+>> >>                 tty_wakeup(port->port.tty);
+>> >
+>> > The tty_wakeup() will be called from gs_start_tx(), so should be removed
+>> > from here.
+>> 
+>> Not exactly. tty_wakeup() will be called from gs_start_tx() only when
+>> there has been something actually transferred from the buffer. I didn't
+>> want to change behavior when the buffer is empty, so I kept the explicit
+>> tty_wakeup() call in place, intentionally. Please let me know if you
+>> still think it should be removed.
+>
+> Indeed it is as you describe. You might add an argument that initializes
+> do_tty_wake, but I'm not sure saving one tty_wakeup() on open is worth
+> the trouble.
 
-regards,
-dan carpenter
+OK, so let's leave it as is, at least for now.
+
+>
+>> > The pr_debug() in other callers of gs_start_tx() say:
+>> > "caller: start ttyGS%d".
+>> 
+>> ???
+>> 
+>> $ git co gregkh/tty-next && grep -r 'caller: start tty' .
+>> HEAD is now at 7788f54... serial_core: Remove unused member in uart_port
+>> $ 
+>
+> Replace 'caller' with a function calling gs_start_io().
+
+Thanks, now I see... Do you prefer:
+
+   pr_debug("gs_start_io: start Tx on ttyGS%d\n", port->port_num);
+
+then?
+
+Alternatively, I'm OK with removing this new debug print.
+
+What do you think?
+
+Thanks,
+-- Sergey Organov
