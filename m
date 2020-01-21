@@ -2,97 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA627143ADF
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2020 11:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E635143B5D
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2020 11:48:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729260AbgAUKYL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jan 2020 05:24:11 -0500
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:36804 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728512AbgAUKYL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jan 2020 05:24:11 -0500
-Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id AEF47C0538;
-        Tue, 21 Jan 2020 10:24:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1579602250; bh=58RCWf0esTGTXB2WWpwacE9UNEjRZTkDQCJ7K0y5p9I=;
-        h=Date:From:Subject:To:Cc:From;
-        b=KkqVKS7AgIRf0eJpzmJypP0l4vDAodOsmD6qOeU1khvesBzZO1AcnxuqRlbaN5Wu3
-         t3RntpVqj8i1dszX2G0IKIS9JkB0HTR6hP4vqhF9dx5zWUHR8fFyuw3YS9cFE257G1
-         nuSLs+e3vgN5EI7ksoX52zGI2XLhACndo/Xxkfhwj4czaLj2kBduH5sFdbf+UWlhpu
-         bYvZCQoo7D2C189Wo3hHBoG3oA9ea0ojqmdZFZDYA8ArB4fziWW4O9sKAVzSO32ubD
-         c0MZhCfrTz7Dnrd8XpeSwV7kScWmerjAu2UsAF9q4HEgnX+z+fJb8E2chEXkP2xOEp
-         vynqOj+ksrHGA==
-Received: from hminas-z420 (hminas-z420.internal.synopsys.com [10.116.126.211])
-        (using TLSv1 with cipher AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 1F099A005D;
-        Tue, 21 Jan 2020 10:24:06 +0000 (UTC)
-Received: by hminas-z420 (sSMTP sendmail emulation); Tue, 21 Jan 2020 14:24:04 +0400
-Date:   Tue, 21 Jan 2020 14:24:04 +0400
-Message-Id: <8c5bd0c646737fe97770d33355b8e197ea28f303.1579602107.git.hminas@synopsys.com>
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: [PATCH v3] usb: dwc2: Fix in ISOC request length checking
-To:     Felipe Balbi <balbi@kernel.org>,
+        id S1729064AbgAUKsH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jan 2020 05:48:07 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:5502 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728792AbgAUKsH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jan 2020 05:48:07 -0500
+X-UUID: 7e1ae8c026604aa78f3c52e97c15b4b8-20200121
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=nrD/+39k4zqN28HCQYUHnInVNtyVGduO5k2QMQrSOxw=;
+        b=NKSCsxDy5MGyyxduMGB+olbe8/Rdjgb14wWL1dVqazsDql7+x5fRZih0udfkd/mlB3JDPqhSvBm2s8onF40uWloI9AgtFu8dXhFJcKdDCT53hymlA0Ge0CzO+J3sUdJqnso8LvAfMydueyXCStdV7bD1KYJ8kTVCBzvpTrnkGtQ=;
+X-UUID: 7e1ae8c026604aa78f3c52e97c15b4b8-20200121
+Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1620369439; Tue, 21 Jan 2020 18:48:00 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Tue, 21 Jan 2020 18:48:50 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 21 Jan 2020 18:46:44 +0800
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Bin Liu <b-liu@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>,
-        Robert Baldyga <r.baldyga@samsung.com>,
-        Felipe Balbi <balbi@ti.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <Min.Guo@mediatek.com>, <Chunfeng.Yun@mediatek.com>
+CC:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH] usb: musb: tusb6010: fix a possible missing data type replacement
+Date:   Tue, 21 Jan 2020 18:47:50 +0800
+Message-ID: <1579603670-10970-1-git-send-email-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Moved ISOC request length checking from dwc2_hsotg_start_req() function to
-dwc2_hsotg_ep_queue().
-
-Fixes: 4fca54aa58293 ("usb: gadget: s3c-hsotg: add multi count support")
-Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
----
-Changes for v3:
-- Fix commit message format
-Changes for v2:
-- Fix typo in commit message
-- Fix tags formatting
-
-drivers/usb/dwc2/gadget.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 88f7d6d4ff2d..7b40cf5bdc2f 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -1083,11 +1083,6 @@ static void dwc2_hsotg_start_req(struct dwc2_hsotg *hsotg,
- 	else
- 		packets = 1;	/* send one packet if length is zero. */
- 
--	if (hs_ep->isochronous && length > (hs_ep->mc * hs_ep->ep.maxpacket)) {
--		dev_err(hsotg->dev, "req length > maxpacket*mc\n");
--		return;
--	}
--
- 	if (dir_in && index != 0)
- 		if (hs_ep->isochronous)
- 			epsize = DXEPTSIZ_MC(packets);
-@@ -1391,6 +1386,13 @@ static int dwc2_hsotg_ep_queue(struct usb_ep *ep, struct usb_request *req,
- 	req->actual = 0;
- 	req->status = -EINPROGRESS;
- 
-+	/* Don't queue ISOC request if length greater than mps*mc */
-+	if (hs_ep->isochronous &&
-+	    req->length > (hs_ep->mc * hs_ep->ep.maxpacket)) {
-+		dev_err(hs->dev, "req length > maxpacket*mc\n");
-+		return -EINVAL;
-+	}
-+
- 	/* In DDMA mode for ISOC's don't queue request if length greater
- 	 * than descriptor limits.
- 	 */
--- 
-2.11.0
+UmVwbGFjZSAidW5zaWduZWQiIHRvICJ1MzIiIGZvciBjaGVja3BhdGNoIGZpeCB0byB0dXNiX3dy
+aXRlYigpLg0KDQpTaWduZWQtb2ZmLWJ5OiBNYWNwYXVsIExpbiA8bWFjcGF1bC5saW5AbWVkaWF0
+ZWsuY29tPg0KLS0tDQogZHJpdmVycy91c2IvbXVzYi90dXNiNjAxMC5jIHwgMiArLQ0KIDEgZmls
+ZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KDQpkaWZmIC0tZ2l0IGEv
+ZHJpdmVycy91c2IvbXVzYi90dXNiNjAxMC5jIGIvZHJpdmVycy91c2IvbXVzYi90dXNiNjAxMC5j
+DQppbmRleCA1ZDQ0OTA4OWUzYWQuLjk5ODkwZDFiYmZjYiAxMDA2NDQNCi0tLSBhL2RyaXZlcnMv
+dXNiL211c2IvdHVzYjYwMTAuYw0KKysrIGIvZHJpdmVycy91c2IvbXVzYi90dXNiNjAxMC5jDQpA
+QCAtMTU2LDcgKzE1Niw3IEBAIHN0YXRpYyB1OCB0dXNiX3JlYWRiKHZvaWQgX19pb21lbSAqYWRk
+ciwgdTMyIG9mZnNldCkNCiAJcmV0dXJuIHZhbDsNCiB9DQogDQotc3RhdGljIHZvaWQgdHVzYl93
+cml0ZWIodm9pZCBfX2lvbWVtICphZGRyLCB1bnNpZ25lZCBvZmZzZXQsIHU4IGRhdGEpDQorc3Rh
+dGljIHZvaWQgdHVzYl93cml0ZWIodm9pZCBfX2lvbWVtICphZGRyLCB1MzIgb2Zmc2V0LCB1OCBk
+YXRhKQ0KIHsNCiAJdTE2IHRtcDsNCiANCi0tIA0KMi4xOC4wDQo=
 
