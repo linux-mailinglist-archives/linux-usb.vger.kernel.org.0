@@ -2,167 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8576414332C
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2020 22:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9036D14353E
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2020 02:37:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726867AbgATVCf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jan 2020 16:02:35 -0500
-Received: from wp126.webpack.hosteurope.de ([80.237.132.133]:49366 "EHLO
-        wp126.webpack.hosteurope.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726586AbgATVCe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jan 2020 16:02:34 -0500
-Received: from [2003:a:659:3f00:1e6f:65ff:fe31:d1d5] (helo=hermes.fivetechno.de); authenticated
-        by wp126.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1iteBq-0001ch-FN; Mon, 20 Jan 2020 22:02:30 +0100
-X-Virus-Scanned: by amavisd-new 2.11.1 using newest ClamAV at
-        linuxbbg.five-lan.de
-Received: from dell2.five-lan.de (pD9E89C03.dip0.t-ipconnect.de [217.232.156.3])
-        (authenticated bits=0)
-        by hermes.fivetechno.de (8.15.2/8.14.5/SuSE Linux 0.8) with ESMTPSA id 00KL2SSg007612
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
-        Mon, 20 Jan 2020 22:02:28 +0100
-Subject: Re: [Bug ?] usb :typec :tcpm :fusb302
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        linux-rockchip@lists.infradead.org
-References: <0ac6bbe7-6395-526d-213c-ac58a19d8673@fivetechno.de>
- <20200120115828.GC32175@kuha.fi.intel.com>
- <e05b6c1f-5e00-c000-23b9-1683230fd9f7@roeck-us.net>
- <546a5723-a974-ed0a-93e3-b46c919b0f7e@fivetechno.de>
- <2e739a08-191b-d7c9-1273-4000cbbca423@roeck-us.net>
- <d985890e-f1a4-a9b4-8f08-1860ea4486f7@fivetechno.de>
- <d3c847f7-2c8a-3cc0-00db-f46668fd83ca@roeck-us.net>
-From:   Markus Reichl <m.reichl@fivetechno.de>
-Message-ID: <9d4b25e4-0b88-bf3d-7265-e43026325e2d@fivetechno.de>
-Date:   Mon, 20 Jan 2020 22:02:28 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1728935AbgAUBha (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jan 2020 20:37:30 -0500
+Received: from mail-eopbgr1410095.outbound.protection.outlook.com ([40.107.141.95]:36205
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727009AbgAUBha (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 Jan 2020 20:37:30 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nefxPy1mqEjMYftYbKD4BMAGfKR3PzsYJYLmVWXl335cgimoJO0u6cBiAHnvnydj/tI3585XmV00h8Ame9xLdYWhisBTummrZcsLLPfCMQbNJTqpJXEvZ96xLp0lsMIjgarD91PQWwbLciaSwrC4G4AwMlXfNKwKQdhwVDMH5BdG3PV4DzgqczPZnQaysj/eyFybGGzLUTaqqDz0Sl1gii0x8ldnhL2muNeMtTyhlw6m7J0c1lAnf5xw2nE0dlz9FEkq0nP3QcuttlVdOq3L7MtaGb6tNrawRUNvFcvgH2au/zWGA47ILVpAQ9JrisVRk26r8wy7dKgpFFM975kR+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=00bC2ojDBfZnDqdpDRVWky9lykHTqO+NumW717tO/zw=;
+ b=oOidRKoPFIYo/zi3ugEsXzYICsKvESMLv+KaYdhKjxWlqPNY4X8mhBbgHEqnzAHU2ULrgICok74iumUANzGyGmREpfq3R6Zmd1knExkdF4nf96ZFeGwwpPwDo6imabJ634Bw5Gv4rxpOc+HGRLtRhIHtrUNnOhKIA9aj+5K9Eiz0t6tOHGJRyiQQsgxahoegXCyb/16ZPU3nPUSoArI5ojKBSeVgSVz4nv/B4/ogpXTsPI+nRHJeiaE3Sy0tjkkWjdEDb/kVJhR57Zjn6y/QLlfu+35Ze4u2nMkOic/pZr10xzIQtOhb+bsKR8PR4BJJwoH551+B6rLvKzdZA5EIqw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=00bC2ojDBfZnDqdpDRVWky9lykHTqO+NumW717tO/zw=;
+ b=glwYn1FiajIKf3+0wTguAPhXJQfTkPRuLdMzpr+l696QIWyAFJZW9SwZFc5I3fkAV+iJ6SstD2PlHSMEPgVpD7RSthX7Olvo6r5X43/xYe3gJJDpDctshIh38N5xM0O9EJcCcHVvRDOUfL0YbsdDHQseK5dyHf1XKOsbCsOEM38=
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.175.203) by
+ TYAPR01MB4431.jpnprd01.prod.outlook.com (20.179.186.209) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2644.21; Tue, 21 Jan 2020 01:37:26 +0000
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::318b:31aa:4212:bd49]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::318b:31aa:4212:bd49%7]) with mapi id 15.20.2644.027; Tue, 21 Jan 2020
+ 01:37:26 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux@prisktech.co.nz" <linux@prisktech.co.nz>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH 2/2] usb: host: ehci-platform: add a quirk to avoid stuck
+Thread-Topic: [PATCH 2/2] usb: host: ehci-platform: add a quirk to avoid stuck
+Thread-Index: AQHVzSRz1q4eI+Sg7UOxqpRra7mKKqfvC4WAgAQwcHCAAHG1gIAAqcfg
+Date:   Tue, 21 Jan 2020 01:37:25 +0000
+Message-ID: <TYAPR01MB4544F9647CD645BEB2DC99D8D80D0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+References: <TYAPR01MB45443178BFBB9C16CF3BC32AD8320@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+ <Pine.LNX.4.44L0.2001201009480.16814-100000@netrider.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.2001201009480.16814-100000@netrider.rowland.org>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [150.249.235.54]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 59fbd058-c94d-4a27-54b6-08d79e12783e
+x-ms-traffictypediagnostic: TYAPR01MB4431:
+x-microsoft-antispam-prvs: <TYAPR01MB4431B35D510C7809A9D64CD4D80D0@TYAPR01MB4431.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-forefront-prvs: 0289B6431E
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(376002)(136003)(346002)(396003)(366004)(39860400002)(189003)(199004)(86362001)(478600001)(9686003)(55016002)(4326008)(8936002)(6916009)(33656002)(186003)(7696005)(316002)(54906003)(71200400001)(81166006)(26005)(2906002)(81156014)(52536014)(66556008)(66446008)(66946007)(76116006)(6506007)(64756008)(5660300002)(8676002)(66476007);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB4431;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: N2QL1Jux08V5TkVDfFvhA1dujNCee+6mhIt5yGV+t1n73RSCOYGecHkwV4rNbZLMJ9xYqaaZAdFAhB1iOy9XsdsmraM7tAatsxpmBcgH8SPHrJVeWdbSwbvt4KTbcGoAOSk++33T0Wjg9tXjKVhsXrYItECx1KIYohkgbA4qRHVBZjGEowsi036xmlDJlcGn9PI/Ne4c5q8E63TpRLwP7cEKC9Vz7rGO0ZUbVdXI7Yhks7qAYiVKdEx3xTngmlMdPDI8mezbeIhfLIemC/EQXwrLgIS4Xe7fx2AdkmzpD17vgAyVCG/2pXqYnjYPsDWn2Zm+fg2UXgnEte9o0asMvtW6G56o9U9t1drglOGfrHmWrtGDfFKoPR/rStCPTDHmQloxKUm4L+oS21jiXrLWG98whI/NVlJti4taVtrto6xR7/SftS/qzkxan/mdnCI2
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <d3c847f7-2c8a-3cc0-00db-f46668fd83ca@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;m.reichl@fivetechno.de;1579554153;dda5b6af;
-X-HE-SMSGID: 1iteBq-0001ch-FN
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59fbd058-c94d-4a27-54b6-08d79e12783e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jan 2020 01:37:25.8476
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wza4ZM7RsppZaa0qgXQit8fq22MxbrkK7ijW2bxeR6kUdsJKOdpVa3GeKGoIc6PMcYddTBf48mCpN17h1px6Ng7eEaXu2dkOY4JdFjcdpdE1+oLTwnyk3guy1azQ/02i
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB4431
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Guenter,
+Hi Alan,
 
-Am 20.01.20 um 21:26 schrieb Guenter Roeck:
-> On 1/20/20 12:14 PM, Markus Reichl wrote:
->> Hi Guenter,
->>
->> Am 20.01.20 um 17:04 schrieb Guenter Roeck:
->>> On 1/20/20 6:34 AM, Markus Reichl wrote:
->>>> Hi Guenter,
->>>>
->>>> Am 20.01.20 um 15:21 schrieb Guenter Roeck:
->>>>> On 1/20/20 3:58 AM, Heikki Krogerus wrote:
->>>>>> Hi Markus,
->>>>>>
->>>>>> On Thu, Jan 09, 2020 at 05:29:07PM +0100, Markus Reichl wrote:
->>>>>>> Hi,
->>>>>>>
->>>>>>> I'm working with a ROC-RK3399-PC arm64 board from firefly, circuit sheet [1].
->>>>>>> The board is powered from an USB-C type connector via an FUSB302 PD controller.
->>>>>>> With measured 15W+ power consumption it should use higher voltage PD modes than
->>>>>>> the standard 5V USB-C mode.
->>>>>>>
->>>>>>> When I add the related connector node in DTS [2] the FUSB302 initializes
->>>>>>> the right PD mode (e.g. 15V/3A).
->>>>>>>
->>>>>>> But during initialisation the PD is switched off shortly and the board has a blackout.
->>>>>>> When I inject a backup supply voltage behind the FUSB302 (e.g. at SYS_12V line) during boot
->>>>>>> I can remove the backup after succesfull setting up the PD and the board will run fine.
->>>>>>>
->>>>>>> Is it possible to change the behaviour of the fusb302 driver to not power down the PD supply
->>>>>>> during init?
->>>>>>
->>>>>> I guess it's also possible that the problem is with tcpm.c instead of
->>>>>> fusb302.c. tcpm.c provides the USB PD state matchines. Guenter! Can
->>>>>> you take a look at this?
->>>>>>
->>>>>
->>>>> There was always a problem with handoff from the bootloader. tcpm_init() calls
->>>>> tcpm_reset_port() which turns vbus and vconn off, which I imagine can
->>>>> trigger the situation.
->>>>>
->>>>> Unfortunately I was never able to solve the puzzle. The Type-C protocol does
->>>>> not support any kind of "hand-off" from one component in the system to another.
->>>>> If the state machine doesn't start from a clean state, there is pretty
->>>>> much no guarantee that it ever synchronizes.
->>>>>
->>>>> Maybe someone can find a better solution, but when I wrote the code I just
->>>>> could not get it to work reliably without resetting everything during
->>>>> registration.
->>>>>
->>>>> Note that v4.4 did not include the upstream tcpm code, suggesting the
->>>>> code in the vendor kernel was possibly using a different or backported
->>>>> state machine. Impossible to say what was done there without access
->>>>> to the code.
->>>>
->>>> The vendor code for fusb302 is here:
->>>> https://github.com/FireflyTeam/kernel/tree/rk3399/firefly/drivers/mfd
->>>>
->>>
->>> AFAICS the vendor code don't reset VBUS, and selectively (only) resets the
->>> PD state machine in the fusb302 on startup. The tcpm state machine is embedded
->>> in the fusb302 driver, making this easier to control.
->>>
->>> The fusb302 Linux kernel driver, on the other side, resets the entire fusb302
->>> on initialization, not just PD (bit 0 of the reset register). Question is if
->>> that can be changed to just reset PD (bit 1 of the reset register).
->>> Maybe that would already fix the problem. Can you give it a try ?
->>>
->>> Guenter
->>
->> I tried
->>
->> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
->> index ed8655c6af8c..6e15e7b22064 100644
->> --- a/drivers/usb/typec/tcpm/fusb302.c
->> +++ b/drivers/usb/typec/tcpm/fusb302.c
->> @@ -334,11 +334,11 @@ static int fusb302_sw_reset(struct fusb302_chip *chip)
->>          int ret = 0;
->>            ret = fusb302_i2c_write(chip, FUSB_REG_RESET,
->> -                               FUSB_REG_RESET_SW_RESET);
->> +                               FUSB_REG_RESET_PD_RESET);
->>          if (ret < 0)
->> -               fusb302_log(chip, "cannot sw reset the chip, ret=%d", ret);
->> +               fusb302_log(chip, "cannot pd reset the chip, ret=%d", ret);
->>          else
->> -               fusb302_log(chip, "sw reset");
->> +               fusb302_log(chip, "pd reset");
->>            return ret;
->>   }
->>
->> but did not help, after mmc and ehci initializing the PD-supply gets switched off at 1.95s.
-> 
-> Next step to try would be to skip vbus initialization - drop tcpm_init_vbus()
-> from tcpm_reset_port(). Can you do that as well ?
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index f3087ef8265c..db2a75d67bc7 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -2698,7 +2698,7 @@ static void tcpm_reset_port(struct tcpm_port *port)
-        port->rx_msgid = -1;
- 
-        port->tcpc->set_pd_rx(port->tcpc, false);
--       tcpm_init_vbus(port);   /* also disables charging */
-+//     tcpm_init_vbus(port);   /* also disables charging */
-        tcpm_init_vconn(port);
-        tcpm_set_current_limit(port, 0, 0);
-        tcpm_set_polarity(port, TYPEC_POLARITY_CC1);
+> From: Alan Stern, Sent: Tuesday, January 21, 2020 12:12 AM
+>=20
+> On Mon, 20 Jan 2020, Yoshihiro Shimoda wrote:
+>=20
+> > > > +static void ehci_platform_quirk_poll_work(struct work_struct *work=
+)
+> > > > +{
+> > > > +	struct ehci_platform_priv *priv =3D
+> > > > +		container_of(work, struct ehci_platform_priv, poll_work);
+> > > > +	struct ehci_hcd *ehci =3D container_of((void *)priv, struct ehci_=
+hcd,
+> > > > +					     priv);
+> > > > +	int i;
+> > > > +
+> > > > +	usleep_range(4000, 8000);
+> > >
+> > > You have just waited 1000 ms for the timer.  Why will sleeping an
+> > > additional 4 - 8 ms make any difference?
+> >
+> > This sleeping can avoid a misdetection between this work function and
+> > reconnection. If user reconnects the usb within 4 ms, the PORTSC
+> > condition is possible to be the same as the issue's condition.
+> > I think I should have described this information into the code.
+> >
+> > However, if I used schedule_delayed_work() instead, we can remove
+> > the usleep_range().
+>=20
+> Why not just make the timer delay be 1004 or 1008 ms instead of adding
+> this extra delay here?
 
-Did not help, but instead of switching off, reboots now most of the time.
-I watch with an USB-C-Power meter (V and A).
-> 
-> Thanks,
-> Guenter
+My concern is a race condition when the issue doesn't happen. If
+the workaround code has an extra delay, we can detect misdetection like bel=
+ow.
+This is related to the EHCI/OHCI controllers on R-Car Gen3 SoCs though,
+updating the CCS status is possible to be delayed. To be clear of the reaso=
+n,
+I should have described this CCS status behavior too.
+
+Timer routine		workqueue		EHCI PORTSC	USB connection
+								disconnect
+						CCS=3D0		connect (within 4 ms)
+condition =3D true (misdetection)			CCS=3D0
+			usleep_range(4000,8000)	CCS=3D1
+			condition =3D false
+
+Best regards,
+Yoshihiro Shimoda
+
+> Alan Stern
+
