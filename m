@@ -2,73 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D67DD1445B6
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2020 21:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 222991445E9
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2020 21:27:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729107AbgAUUPw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 21 Jan 2020 15:15:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39446 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727829AbgAUUPw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Jan 2020 15:15:52 -0500
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 206271] New: Trackpoint stops working after updating from
- Kernel 5.4.11 to 5.4.12
-Date:   Tue, 21 Jan 2020 20:15:51 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: goepfert.johannes@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression
-Message-ID: <bug-206271-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1729061AbgAUU0t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jan 2020 15:26:49 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:34295 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729022AbgAUU0t (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jan 2020 15:26:49 -0500
+Received: by mail-ot1-f65.google.com with SMTP id a15so4223513otf.1;
+        Tue, 21 Jan 2020 12:26:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=huthel+GYazN/w+4NQrVBhFyJ8fOofBu6y0OM4VOExE=;
+        b=PHdZxySBOGJu7nX6RrERvEBIImUuFC/XREChIwjJBVH6I3HeBwsIte6IjFrJ9ELLa1
+         Qg5xgcZjhbOF1bAOKsO7Zr707BmrE/UC6dye60kLEGB2AjjhtUwItD4ab1EF5u7dZkQH
+         C6KwCyaugo88wM1E0+V3xUQr6LocpLkh0DaAC6jRm0S/BzVb9J5CLpb68ZHuIK2h5Ho7
+         Ejg5fWMGFDypMLYYaXUQyGcwFz4eofDNZuHoNtAOPbGwXHSCwUqrrvVjblJaUPRxfLjj
+         N9fF7KNdh3zm3B0Qw4FGBokbMD/EgMI8kYr8A/0xw/kZsivJ0byKuSwul60o0coObFUI
+         aaSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=huthel+GYazN/w+4NQrVBhFyJ8fOofBu6y0OM4VOExE=;
+        b=eJsJ9s8cbigBVRgBtnfMi1GyV0JBQvmGGXVDLV7ld95uz16cKBVImvZq8Js84lHntX
+         fUjhULa9EIsVD16NGoWvBfdmGa8WPYrpB8o4k5ZgVi0SpTa+64LEIwRLxmsCpQ8/pITZ
+         CJIcZqoSiBjFhb3D2OKduZVU0aZ9KX5y334OHTgmeguOOYGnTg/ZJK4YdR/8E1xEvHPv
+         70Ql1LTWJzaPNLRhdsdxfeniZtfRlWmGT+Yo2Y0pHtetFnGUBzx4vFx409vBXKHoM4/Q
+         UXccYYZkwigff9BJ9FK5BtPk7KSpJhiQzJRLyGmCeo1txZa1zOPwZvePZ8/DM/Jtg7+C
+         dgZw==
+X-Gm-Message-State: APjAAAVIGlNTmPsaI7iWhE7PQU+oJSzxC+/No6c48ytzm6zd4a7vGrjD
+        XIKqfoOIsWhoRjQYPQsL9qXUEjLXrs1J+nHZvi+hgjTH
+X-Google-Smtp-Source: APXvYqxVkIScTalyju4KUbjWgD8VE3P18faAzgbh803zzoaKztEzIC61Wcs20g50NLKutuaplTw4pq6DW7NdAMgnvFU=
+X-Received: by 2002:a9d:6b03:: with SMTP id g3mr4900385otp.200.1579638408335;
+ Tue, 21 Jan 2020 12:26:48 -0800 (PST)
 MIME-Version: 1.0
+References: <20200113084005.849071-1-vkoul@kernel.org> <CANcMJZC1w+J=cdp0OiR5XDn9fFSPht70Jaf9F5S5BryFxVXVoQ@mail.gmail.com>
+ <CAAd0S9Aaw8G+=EivfC-g4Lt3Xf_kpjFh6WwQk2E8pFxJUmteKQ@mail.gmail.com> <20200121064608.GA2841@vkoul-mobl>
+In-Reply-To: <20200121064608.GA2841@vkoul-mobl>
+From:   Christian Lamparter <chunkeey@gmail.com>
+Date:   Tue, 21 Jan 2020 21:26:34 +0100
+Message-ID: <CAAd0S9Dd7Ygx7TgV3E_A6z29efG7jsE1-xy48_cHotroWuk_ZA@mail.gmail.com>
+Subject: Re: [PATCH v6 0/5] usb: xhci: Add support for Renesas USB controllers
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=206271
+Hello,
 
-            Bug ID: 206271
-           Summary: Trackpoint stops working after updating from Kernel
-                    5.4.11 to 5.4.12
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 5.4.13
-          Hardware: x86-64
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: normal
-          Priority: P1
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: goepfert.johannes@gmail.com
-        Regression: No
+On Tue, Jan 21, 2020 at 7:46 AM Vinod Koul <vkoul@kernel.org> wrote:
+>
+> hey Christian,
+>
+> On 13-01-20, 21:33, Christian Lamparter wrote:
+> > On Mon, Jan 13, 2020 at 9:10 PM John Stultz <john.stultz@linaro.org> wrote:
+> > >
+> > > On Mon, Jan 13, 2020 at 12:42 AM Vinod Koul <vkoul@kernel.org> wrote:
+> > > >
+> > > > This series add support for Renesas USB controllers uPD720201 and uPD720202.
+> > > > These require firmware to be loaded and in case devices have ROM those can
+> > > > also be programmed if empty. If ROM is programmed, it runs from ROM as well.
+> > > >
+> > > > This includes two patches from Christian which supported these controllers
+> > > > w/o ROM and later my patches for ROM support and multiple firmware versions,
+> > > > debugfs hook for rom erase and export of xhci-pci functions.
+> > > >
+> > >
+> > > Thanks so much for updating these! They are working ok for me in my
+> > > testing on db845c.
+> > >
+> > > Tested-by: John Stultz <john.stultz@linaro.org>
+> >
+> > Nice! I'll definitely give this series another try on my WNDR4700 too
+> > (PowerPC Arch)
+> > this weekend.
+> >
+> > and from me: Thanks!
+>
+> Did you get around to test these?
 
-The Trackpoint from my Lenovo X1 Tablet Gen 3 stopped working after updating to
-Kernel version 5.4.12. The Trackpoint is recognized by "usbmon" (usbmon gives
-an output) and also "libinput list-devices". But there is no output for "cat
-/dev/input/eventX".
+Not yet, I was too optimistic that I could get current linux-usb with the
+patches running on the WNDR4700 (due to APM82181) over the
+weekend. Do you think that It still counts, if I'm going with 5.4.11 on
+OpenWrt instead? Because then I just swap out the old patches from
+my OpenWrt APM821XX branch:
+<https://git.openwrt.org/?p=openwrt/staging/chunkeey.git;a=commit;h=4dd6f62a36a3724f0363d639cd9e29e04d7b62c0>
 
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+and don't have to figure out what broke with linux-usb on the APM821xx.
+
+Cheers,
+Christian
