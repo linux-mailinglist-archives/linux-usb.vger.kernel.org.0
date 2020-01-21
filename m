@@ -2,80 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2942714373B
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2020 07:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C70143AAA
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2020 11:17:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727847AbgAUGqO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jan 2020 01:46:14 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54080 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725789AbgAUGqO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Jan 2020 01:46:14 -0500
-Received: from localhost (unknown [171.76.119.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1728794AbgAUKRP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jan 2020 05:17:15 -0500
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:36532 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727220AbgAUKRP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jan 2020 05:17:15 -0500
+Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6D63221734;
-        Tue, 21 Jan 2020 06:46:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579589173;
-        bh=5lyKz2WJ66jauwJC9zB1qdVzSeZVINSbDiBMl95z2Vg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jyusqERheasz+lFPzj8XPdjRzmL2K/rflgqSZd7Ce/1VQchUJvGzwoUC3g7ZMTWdV
-         uvC/2I9IIEmELOA2cSxVVQeVxchtNN+29wzPKWjMdj6tiOD4Nsm9CH02V/5bnSOfuc
-         twKgIBHY0tgz6uHQx+TxZMQc/XSC/REWWEzEyIbE=
-Date:   Tue, 21 Jan 2020 12:16:08 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Christian Lamparter <chunkeey@gmail.com>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id E906AC053B;
+        Tue, 21 Jan 2020 10:17:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1579601833; bh=ZSnJe/sDHjqHR04nYRc/QcWb8luiF4hHfxr5i1bGYvk=;
+        h=Date:From:Subject:To:Cc:From;
+        b=ZeEj25cC3IAvGeq0j+5OWOxjkcJlFxaBvsNtlDToZkd4BAmZ7MhIdKbNFv3VrEgIP
+         CEA/QABLY1FyXpWuE24uHdcVP/i4JsjV7U0d9brBtCSpcWh6xOB0O5PMLf7aswwX+k
+         4ncNgh/J2OmLyWXU7Mz74hHzKqgJE70ahBytiEqZt9ft3uoF0sVnXROhoap03XFkRJ
+         58rDC/b/VfwKMuHeBKoad22qladgA0411yx74JQouEFwlXG0AdgG1LdhftjbEBqh9u
+         izC57eeyDadH/1kFWukJ1ZTkGiuKX/t5lIbt7nvBRoSS7lIB45kXiXh1n/miBLLWVP
+         Op/powbuaymPw==
+Received: from hminas-z420 (hminas-z420.internal.synopsys.com [10.116.126.211])
+        (using TLSv1 with cipher AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id B61DEA005C;
+        Tue, 21 Jan 2020 10:17:08 +0000 (UTC)
+Received: by hminas-z420 (sSMTP sendmail emulation); Tue, 21 Jan 2020 14:17:07 +0400
+Date:   Tue, 21 Jan 2020 14:17:07 +0400
+Message-Id: <283e1161d597892c0b67aeeeb5b01e829dea9ae7.1579593275.git.hminas@synopsys.com>
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Subject: [PATCH v2] usb: dwc2: Fix SET/CLEAR_FEATURE and GET_STATUS flows
+To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 0/5] usb: xhci: Add support for Renesas USB controllers
-Message-ID: <20200121064608.GA2841@vkoul-mobl>
-References: <20200113084005.849071-1-vkoul@kernel.org>
- <CANcMJZC1w+J=cdp0OiR5XDn9fFSPht70Jaf9F5S5BryFxVXVoQ@mail.gmail.com>
- <CAAd0S9Aaw8G+=EivfC-g4Lt3Xf_kpjFh6WwQk2E8pFxJUmteKQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAd0S9Aaw8G+=EivfC-g4Lt3Xf_kpjFh6WwQk2E8pFxJUmteKQ@mail.gmail.com>
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>,
+        Vardan Mikayelyan <Vardan.Mikayelyan@synopsys.com>,
+        Grigor Tovmasyan <Grigor.Tovmasyan@synopsys.com>,
+        stable@vger.kernel.org, Jack Mitchell <ml@embed.me.uk>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-hey Christian,
+SET/CLEAR_FEATURE for Remote Wakeup allowance not handled correctly.
+GET_STATUS handling provided not correct data on DATA Stage.
+Issue seen when gadget's dr_mode set to "otg" mode and connected
+to MacOS.
+Both are fixed and tested using USBCV Ch.9 tests.
 
-On 13-01-20, 21:33, Christian Lamparter wrote:
-> On Mon, Jan 13, 2020 at 9:10 PM John Stultz <john.stultz@linaro.org> wrote:
-> >
-> > On Mon, Jan 13, 2020 at 12:42 AM Vinod Koul <vkoul@kernel.org> wrote:
-> > >
-> > > This series add support for Renesas USB controllers uPD720201 and uPD720202.
-> > > These require firmware to be loaded and in case devices have ROM those can
-> > > also be programmed if empty. If ROM is programmed, it runs from ROM as well.
-> > >
-> > > This includes two patches from Christian which supported these controllers
-> > > w/o ROM and later my patches for ROM support and multiple firmware versions,
-> > > debugfs hook for rom erase and export of xhci-pci functions.
-> > >
-> >
-> > Thanks so much for updating these! They are working ok for me in my
-> > testing on db845c.
-> >
-> > Tested-by: John Stultz <john.stultz@linaro.org>
-> 
-> Nice! I'll definitely give this series another try on my WNDR4700 too
-> (PowerPC Arch)
-> this weekend.
-> 
-> and from me: Thanks!
+Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
+Fixes: fa389a6d7726 ("usb: dwc2: gadget: Add remote_wakeup_allowed flag")
+Tested-by: Jack Mitchell <ml@embed.me.uk>
+Cc: stable@vger.kernel.org
+---
+Changes in v2:
+- Add Fixes tag
+- Add Tested-by tag
 
-Did you get around to test these?
+ drivers/usb/dwc2/gadget.c | 28 ++++++++++++++++------------
+ 1 file changed, 16 insertions(+), 12 deletions(-)
 
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 6be10e496e10..3a6176c22371 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -1632,6 +1632,7 @@ static int dwc2_hsotg_process_req_status(struct dwc2_hsotg *hsotg,
+ 	struct dwc2_hsotg_ep *ep0 = hsotg->eps_out[0];
+ 	struct dwc2_hsotg_ep *ep;
+ 	__le16 reply;
++	u16 status;
+ 	int ret;
+ 
+ 	dev_dbg(hsotg->dev, "%s: USB_REQ_GET_STATUS\n", __func__);
+@@ -1643,11 +1644,10 @@ static int dwc2_hsotg_process_req_status(struct dwc2_hsotg *hsotg,
+ 
+ 	switch (ctrl->bRequestType & USB_RECIP_MASK) {
+ 	case USB_RECIP_DEVICE:
+-		/*
+-		 * bit 0 => self powered
+-		 * bit 1 => remote wakeup
+-		 */
+-		reply = cpu_to_le16(0);
++		status = 1 << USB_DEVICE_SELF_POWERED;
++		status |= hsotg->remote_wakeup_allowed <<
++			  USB_DEVICE_REMOTE_WAKEUP;
++		reply = cpu_to_le16(status);
+ 		break;
+ 
+ 	case USB_RECIP_INTERFACE:
+@@ -1758,7 +1758,10 @@ static int dwc2_hsotg_process_req_feature(struct dwc2_hsotg *hsotg,
+ 	case USB_RECIP_DEVICE:
+ 		switch (wValue) {
+ 		case USB_DEVICE_REMOTE_WAKEUP:
+-			hsotg->remote_wakeup_allowed = 1;
++			if (set)
++				hsotg->remote_wakeup_allowed = 1;
++			else
++				hsotg->remote_wakeup_allowed = 0;
+ 			break;
+ 
+ 		case USB_DEVICE_TEST_MODE:
+@@ -1768,16 +1771,17 @@ static int dwc2_hsotg_process_req_feature(struct dwc2_hsotg *hsotg,
+ 				return -EINVAL;
+ 
+ 			hsotg->test_mode = wIndex >> 8;
+-			ret = dwc2_hsotg_send_reply(hsotg, ep0, NULL, 0);
+-			if (ret) {
+-				dev_err(hsotg->dev,
+-					"%s: failed to send reply\n", __func__);
+-				return ret;
+-			}
+ 			break;
+ 		default:
+ 			return -ENOENT;
+ 		}
++
++		ret = dwc2_hsotg_send_reply(hsotg, ep0, NULL, 0);
++		if (ret) {
++			dev_err(hsotg->dev,
++				"%s: failed to send reply\n", __func__);
++			return ret;
++		}
+ 		break;
+ 
+ 	case USB_RECIP_ENDPOINT:
 -- 
-~Vinod
+2.11.0
+
