@@ -2,229 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD174145CB7
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2020 20:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A55145E97
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2020 23:28:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726796AbgAVTwM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jan 2020 14:52:12 -0500
-Received: from mga04.intel.com ([192.55.52.120]:51678 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725946AbgAVTwM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 Jan 2020 14:52:12 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Jan 2020 11:52:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,350,1574150400"; 
-   d="scan'208";a="275705816"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Jan 2020 11:52:10 -0800
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1iuM2s-000H6i-4b; Thu, 23 Jan 2020 03:52:10 +0800
-Date:   Thu, 23 Jan 2020 03:51:52 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- 9d69cd82fe02619ec68e5d770283576712188874
-Message-ID: <5e28a7d8.vEDGODtaOKKxAwxj%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S1726004AbgAVW0v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jan 2020 17:26:51 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:37574 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726054AbgAVW0v (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jan 2020 17:26:51 -0500
+Received: by mail-pj1-f67.google.com with SMTP id m13so226110pjb.2
+        for <linux-usb@vger.kernel.org>; Wed, 22 Jan 2020 14:26:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=cxNVjgQGWzacnqlCZNmJQJkdYDIqlJE10RKfm1uE9mM=;
+        b=pOv4DwOm5vOgZ+PrlXxtrPOfWsAyaYxbfU0ipKfrLvdyaCWIZfNb3Tng6PIcTsdm0L
+         ptJZCs9pnIt/C29i4j2b84lpo9l50BBU61Ouw2z41al6f33wRE/NdYF2iVzvLlb/6xBZ
+         e/xmNQSI16yFl3/XernW55vcPqz8JpeiVTq4YKG9NOrD+4+pJOVyk3xoMA6jnIJwjKQi
+         4fs9zHCqRJAdjI2c5RirLb7u0ddIDol/VF//LhFEDDx4xDKLymEfbLlMjiDFaBI99kEV
+         pnIxClfbDRiNjxCEHchG1D9XUAl32oxJRBRlSd5OAx/ZLJUOQgaJYg1KXShxMTVer1kH
+         x8EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=cxNVjgQGWzacnqlCZNmJQJkdYDIqlJE10RKfm1uE9mM=;
+        b=jS3ATWGUxUeOAn6P7zAtC6Way+SQCl6xT1u/acP4vJ45l0Nw5jLElHFUcgcJooZaca
+         GxJhGdI3l9iGtzAJE48iLeSUtH/mo/efPXyiO71GuG4DtqKXOSJ8JufFJ3vpgmyxal2z
+         6AZOiDqFUG79MjDGx1gxZui1/NdypUIXYeE7hq8frANdWvHUntf55dScD03URt8861Y8
+         MhvNdAxUyiSE67keKbtCVtX6qwGJPxFBYmPmmK20euQFYqVlQldjFKbo7gN4Xg80Q7JF
+         LkBOMg8p6OigPZH1yIQ8cjZ6fAdZgZcqcEmb0KpmC9OS7xz2mKwOR9GGRMaiBqdQLPoq
+         bN8w==
+X-Gm-Message-State: APjAAAUHwZT/jP3Kl2y3WUHdSfdieL4tuph+oMsRITI8Mu+h/EaWHEjE
+        fobhVAsJ/cqD7qdy/M0tpPiL2g==
+X-Google-Smtp-Source: APXvYqwTOHRjwf4d8GAH3/wqyQXJ/KEyA6qmWmh3w2qWEbuYZc+PmC1vhzKke3graUr1g49XLUJdlw==
+X-Received: by 2002:a17:90a:d0c5:: with SMTP id y5mr808414pjw.126.1579732010599;
+        Wed, 22 Jan 2020 14:26:50 -0800 (PST)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id a28sm47793509pfh.119.2020.01.22.14.26.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jan 2020 14:26:50 -0800 (PST)
+From:   John Stultz <john.stultz@linaro.org>
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Yang Fei <fei.yang@intel.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        stable <stable@vger.kernel.org>
+Subject: [RFC][PATCH 0/2] Avoiding DWC3 transfer stalls/hangs when using adb over f_fs
+Date:   Wed, 22 Jan 2020 22:26:43 +0000
+Message-Id: <20200122222645.38805-1-john.stultz@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-next
-branch HEAD: 9d69cd82fe02619ec68e5d770283576712188874  usb: chipidea: add inline for ci_hdrc_host_driver_init if host is not defined
+Hey all,
+  I wanted to send these out for comment and thoughts.
 
-elapsed time: 659m
+Since ~4.20, when the functionfs gadget enabled scatter-gather
+support, we have seen problems with adb connections stalling and
+stopping to function on hardware with dwc3 usb controllers.
+Specifically, HiKey960, Dragonboard 845c, and Pixel3 devices.
 
-configs tested: 174
-configs skipped: 1
+Initally the workaround we used was to simply disable scatter
+gather support on the dwc3 by commenting out the
+"dwc->gadget.sg_supported = true;" line.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+After working with Fei Yang, who was seeing similar trouble on
+Intel dwc3 based hardare, Thinh Nguyen mentioned that a fix had
+already been found and pointed me to one of Anurag's patches.
 
-x86_64                              fedora-25
-x86_64                                  kexec
-x86_64                                    lkp
-x86_64                                   rhel
-x86_64                               rhel-7.6
-alpha                randconfig-a001-20200122
-m68k                 randconfig-a001-20200122
-mips                 randconfig-a001-20200122
-nds32                randconfig-a001-20200122
-parisc               randconfig-a001-20200122
-riscv                randconfig-a001-20200122
-csky                 randconfig-a001-20200122
-openrisc             randconfig-a001-20200122
-s390                 randconfig-a001-20200122
-sh                   randconfig-a001-20200122
-xtensa               randconfig-a001-20200122
-sparc                            allyesconfig
-sparc                               defconfig
-sparc64                          allmodconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                             defconfig
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-ia64                                defconfig
-s390                             alldefconfig
-s390                             allmodconfig
-s390                              allnoconfig
-s390                             allyesconfig
-s390                          debug_defconfig
-s390                                defconfig
-s390                       zfcpdump_defconfig
-arc                  randconfig-a001-20200123
-arm                  randconfig-a001-20200123
-arm64                randconfig-a001-20200123
-ia64                 randconfig-a001-20200123
-powerpc              randconfig-a001-20200123
-sparc                randconfig-a001-20200123
-x86_64               randconfig-g001-20200122
-x86_64               randconfig-g002-20200122
-x86_64               randconfig-g003-20200122
-i386                 randconfig-g001-20200122
-i386                 randconfig-g002-20200122
-i386                 randconfig-g003-20200122
-i386                                defconfig
-parisc                            allnoconfig
-parisc                            allyesonfig
-parisc                         b180_defconfig
-parisc                        c3000_defconfig
-parisc                              defconfig
-h8300                     edosk2674_defconfig
-h8300                    h8300h-sim_defconfig
-h8300                       h8s-sim_defconfig
-m68k                             allmodconfig
-m68k                       m5475evb_defconfig
-m68k                          multi_defconfig
-m68k                           sun3_defconfig
-um                                  defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64               randconfig-c001-20200122
-x86_64               randconfig-c002-20200122
-x86_64               randconfig-c003-20200122
-i386                 randconfig-c001-20200122
-i386                 randconfig-c002-20200122
-i386                 randconfig-c003-20200122
-microblaze                      mmu_defconfig
-alpha                               defconfig
-csky                                defconfig
-nds32                             allnoconfig
-nds32                               defconfig
-c6x                  randconfig-a001-20200122
-h8300                randconfig-a001-20200122
-microblaze           randconfig-a001-20200122
-nios2                randconfig-a001-20200122
-sparc64              randconfig-a001-20200122
-x86_64               randconfig-d001-20200122
-x86_64               randconfig-d002-20200122
-x86_64               randconfig-d003-20200122
-i386                 randconfig-d001-20200122
-i386                 randconfig-d002-20200122
-i386                 randconfig-d003-20200122
-mips                           32r2_defconfig
-mips                         64r6el_defconfig
-mips                             allmodconfig
-mips                              allnoconfig
-mips                             allyesconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-openrisc                    or1ksim_defconfig
-nios2                         3c120_defconfig
-c6x                        evmc6678_defconfig
-c6x                              allyesconfig
-nios2                         10m50_defconfig
-x86_64               randconfig-b001-20200122
-x86_64               randconfig-b002-20200122
-x86_64               randconfig-b003-20200122
-i386                 randconfig-b001-20200122
-i386                 randconfig-b002-20200122
-i386                 randconfig-b003-20200122
-i386                             alldefconfig
-i386                              allnoconfig
-i386                             allyesconfig
-openrisc                 simple_smp_defconfig
-xtensa                       common_defconfig
-xtensa                          iss_defconfig
-riscv                            allmodconfig
-arc                  randconfig-a001-20200122
-arm                  randconfig-a001-20200122
-arm64                randconfig-a001-20200122
-ia64                 randconfig-a001-20200122
-powerpc              randconfig-a001-20200122
-sparc                randconfig-a001-20200122
-arc                              allyesconfig
-arc                                 defconfig
-microblaze                    nommu_defconfig
-powerpc                           allnoconfig
-powerpc                             defconfig
-powerpc                       ppc64_defconfig
-powerpc                          rhel-kconfig
-arm                              allmodconfig
-arm64                            allmodconfig
-sh                               allmodconfig
-sh                                allnoconfig
-sh                          rsk7269_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                            titan_defconfig
-riscv                             allnoconfig
-riscv                            allyesconfig
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-alpha                randconfig-a001-20200123
-m68k                 randconfig-a001-20200123
-mips                 randconfig-a001-20200123
-nds32                randconfig-a001-20200123
-parisc               randconfig-a001-20200123
-riscv                randconfig-a001-20200123
-x86_64               randconfig-b001-20200123
-x86_64               randconfig-b002-20200123
-x86_64               randconfig-b003-20200123
-i386                 randconfig-b001-20200123
-i386                 randconfig-b002-20200123
-i386                 randconfig-b003-20200123
-x86_64               randconfig-e001-20200122
-x86_64               randconfig-e002-20200122
-x86_64               randconfig-e003-20200122
-i386                 randconfig-e001-20200122
-i386                 randconfig-e002-20200122
-i386                 randconfig-e003-20200122
-csky                 randconfig-a001-20200123
-openrisc             randconfig-a001-20200123
-s390                 randconfig-a001-20200123
-sh                   randconfig-a001-20200123
-xtensa               randconfig-a001-20200123
-arm                               allnoconfig
-arm                              allyesconfig
-arm                         at91_dt_defconfig
-arm                           efm32_defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                        multi_v7_defconfig
-arm                        shmobile_defconfig
-arm                           sunxi_defconfig
-arm64                             allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-c6x                  randconfig-a001-20200123
-h8300                randconfig-a001-20200123
-microblaze           randconfig-a001-20200123
-nios2                randconfig-a001-20200123
-sparc64              randconfig-a001-20200123
+This solved the issue on HiKey960 and I sent it out to the list
+but didn't get any feedback.
 
----
-0-DAY kernel test infrastructure                 Open Source Technology Center
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
+Additional testing with the Dragonboard 845c found that that
+first fix was not sufficient, and so I've sat on the fix
+thinking something deeper was amiss and went back to the hack
+of disabling sg_supported on all dwc3 platforms. 
+
+In the following months Fei's continued and repeated efforts
+didn't seem to get enough review to result in a fix, and they've
+since moved on to other work.
+
+Recently, I found that folks at qcom have seen similer issues
+and pointed me to the second patch in this series, which does
+seem to resolve the issue on the Dragonboard 845c, but not the
+HiKey960 on its own.
+
+So I wanted to send these patches out for comment. There's
+clearly a number of folks seeing broken behavior for ahwile on
+dwc3 hardware, and we're all seeemingly working around it in our
+own ways, so either those individual fixes need to get upstream
+or we need to figure out some deeper solution to the issue.
+
+So I wanted to send these two out for review and feedback.
+
+thanks
+-john
+
+Cc: Felipe Balbi <felipe.balbi@linux.intel.com>
+Cc: Yang Fei <fei.yang@intel.com>
+Cc: Thinh Nguyen <thinhn@synopsys.com>
+Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
+Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc: Jack Pham <jackp@codeaurora.org>
+Cc: Todd Kjos <tkjos@google.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linux USB List <linux-usb@vger.kernel.org>
+Cc: stable <stable@vger.kernel.org>
+
+Anurag Kumar Vulisha (2):
+  usb: dwc3: gadget: Check for IOC/LST bit in both event->status and
+    TRB->ctrl fields
+  usb: dwc3: gadget: Correct the logic for finding last SG entry
+
+ drivers/usb/dwc3/gadget.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+-- 
+2.17.1
+
