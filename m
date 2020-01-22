@@ -2,189 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7A3145369
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2020 12:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B923145526
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2020 14:20:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728733AbgAVLFf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jan 2020 06:05:35 -0500
-Received: from mail-eopbgr1400119.outbound.protection.outlook.com ([40.107.140.119]:43473
-        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725911AbgAVLFe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 Jan 2020 06:05:34 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jKKCyvoh0/pM5JnvkbOUUvwz/O4JkmzaXhStNZ2e1fCLfVXYVRrDDqHs4PMGifFjHnsVDEQB7Egvuu0V5whjqin8aEHzNy0uY+aV4PFHTPEhrwozLq11LrfG94c9P9Kgm7O1FtA9DSGgyEkBbitZYi770i41OsjjeYB/qZJfVTxEoSyVelYWgQ1rPosBCy8dUhsDoErMyW0TtLllifFcPavPqbe/E35Hr1rnZms4eAApBxAN77YEKyGadVBKrBAx0NHuAWmeWx6Y1/iby7hH8o5DN4Jsov9JmamZh/KW91aVww5iEH6QsGFkvNQixfWXTV2y+4tyguiNo9K9ZYuWWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/5CdcRb+3IFLUbw92sfYq1AIuexGlQOfCIS8R+oBf+A=;
- b=GLTXxtY/qJ1WanHBjPa03uAsAQ7kFYQlBHU2dPmG8x/BBLul80zRTB0FHwfH4cHuaku0uovZhMIL4kx3CAO5tsapZmW1rHNCT9vaj7tYS0mDSYIlqC5+JC2SMEY036igsCXqUewf8Wm4scnFb+JQBw7ZKGo6bSPEoRkoIC4DeNCYWC+qe3gza8T6HKG0lL+jyX4tlyCwoBXMky9mWkYDm98tVasqtSYG+H1ikEXJsvDnBrYfPHOtPFYqHDi8XGYxL8NDVUKL6OPnFaGIA0YuJu9vYDY/BQiZdF6NXFXNBGubFKKWcJr75CKIfIUHj3pLN1P/xuAZMGXytK8eDucYWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
+        id S1728803AbgAVNTW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jan 2020 08:19:22 -0500
+Received: from mail-io1-f67.google.com ([209.85.166.67]:37532 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728665AbgAVNTV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jan 2020 08:19:21 -0500
+Received: by mail-io1-f67.google.com with SMTP id k24so6590669ioc.4
+        for <linux-usb@vger.kernel.org>; Wed, 22 Jan 2020 05:19:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/5CdcRb+3IFLUbw92sfYq1AIuexGlQOfCIS8R+oBf+A=;
- b=tJbPChRVQOB5T9OpYZgtG374Lu2WdEakGO9Hn+IeopHb7Mal2A8eCp317RinT4/NXvDXOhu7jb51md8glkokhgldbmfVGEE2ASfgX/ix1gvHBEffORSzdM3pZ+8440ez0pZbEUEXAINVsDMrtS2wLt0GtLlw7d/KspGOmuZKp4w=
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.175.203) by
- TYAPR01MB4512.jpnprd01.prod.outlook.com (20.179.175.151) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2644.20; Wed, 22 Jan 2020 11:05:29 +0000
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::318b:31aa:4212:bd49]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::318b:31aa:4212:bd49%7]) with mapi id 15.20.2644.027; Wed, 22 Jan 2020
- 11:05:29 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux@prisktech.co.nz" <linux@prisktech.co.nz>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH 2/2] usb: host: ehci-platform: add a quirk to avoid stuck
-Thread-Topic: [PATCH 2/2] usb: host: ehci-platform: add a quirk to avoid stuck
-Thread-Index: AQHVzSRz1q4eI+Sg7UOxqpRra7mKKqfvC4WAgAQwcHCAAHG1gIAAqcfggADn94CAAUqI4A==
-Date:   Wed, 22 Jan 2020 11:05:29 +0000
-Message-ID: <TYAPR01MB4544998EECD346105AE75494D80C0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-References: <TYAPR01MB4544F9647CD645BEB2DC99D8D80D0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
- <Pine.LNX.4.44L0.2001211003430.1511-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.2001211003430.1511-100000@iolanthe.rowland.org>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [150.249.235.54]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 04d6697b-ee88-428d-163d-08d79f2afe17
-x-ms-traffictypediagnostic: TYAPR01MB4512:
-x-microsoft-antispam-prvs: <TYAPR01MB4512C9601435A617C4D3646BD80C0@TYAPR01MB4512.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 029097202E
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(39860400002)(366004)(376002)(346002)(136003)(396003)(189003)(199004)(81166006)(8936002)(8676002)(81156014)(54906003)(76116006)(316002)(6916009)(52536014)(64756008)(186003)(66476007)(6506007)(66556008)(26005)(66446008)(2906002)(478600001)(7696005)(66946007)(55016002)(5660300002)(71200400001)(86362001)(4326008)(33656002)(9686003);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB4512;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 837P3qh+l3mwKvKa8B15bNUy4uDUA2b31RDxulg/e73+cSdF77t6HHax0lWNhcEjlYGM3jYyR+Cp7UFqZX6ctzaGEwgl7KhHeU9TRhFVxqtXBtPbGDje3c1G8aBvE5iZzuAPK63Y2mwn2Sj5DPcXjKCfIfR2sfIazWcZ2eCXxHp05QDQbYPsuX9W02UVW7QUWfugNFbxhcYVkagIJJm6Bwd6AxuYYUAosN5+MSItSjuksTvqGef1Rq7MPD3rYVlgjLx6D1PqcDBMo7YG8LAeUCmJPQ6EEPifV7fArHpGZaGGhAAfF6zrEimJSLCjPapc8HRN4Obw55dJqHsysy3xX1bYxNLszCh+JJECJXo65Avvb1CRrOyP2I4HVGQ8o44JsDr2SmjtGr6pKoFfdiJ3N9KGvyR2wg8KjX+aFvHsaMHtjCzz5sUKSIUnquX8uPtc
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=1J3Ek3Ut/HibCPWTaeZcFcahiAOBpaVPgGR6tt9JfHQ=;
+        b=HQqb9WWvnkdDfS220M/yXavz7AgYF6A9LDToy68Mqg9SsXi9TPPR9cKqm7njleqdNz
+         7ENI1XujqOheW0TeWb+vO4Dl7BxO59431jiVNewGvCguz2wzHnh8xv1TjKaI8ccN57Z0
+         2EysSZHt5YpMxYsM51tj0DwS0X4iNyulbVDoFR3w1AJnuRIo5i4/4JKVuWPhEfdHDfoC
+         gJQC+ga4Tear5ngmFkqmkzMqB3pOaMBve8R0ASit356Tmr0/6sHatwiZPBFW6qWPqlNc
+         R6Uc9AM1/nxTVbD3CA/DtUcO7Vzz9YMDtRwPRMD5I1b5VCrM0BkyDDkrKnpTHpUGBM8q
+         8UjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=1J3Ek3Ut/HibCPWTaeZcFcahiAOBpaVPgGR6tt9JfHQ=;
+        b=JswUWhegDgwb0w5jM3NGntRvbrKhs2dSZuKjG347y9x2ynSvaEBtCJw637p48Vz9pQ
+         xrWeuylTuK3avdr+QrLknpE44qIAZn/W2CKfnu4UQokmuRpPdHGBL7efSmcKTsFXC03E
+         N3riLjTrZLCymy69vs27PA1CwcaUMsZSFkHEHjvEGKqCLsnG2TesdBZiTwq9hI6fTE98
+         Q/VaH3kdFMQp9EEFoEAZgoP0eg0asudvScxIR/tk/rdTfn6UBWr9PH//w4YjNFni1lGe
+         RZEYcVVV+e+WW1+nEYdIOU+qZYL2LD1CAW7t1+UTMTNDYpRaYtR33TqfcDhLvatXdD7z
+         K73Q==
+X-Gm-Message-State: APjAAAVJWyKF2HJcw6yPU9s5bK1mIy0jaGMFaawFO1S+q5TOBRG1eVnJ
+        H1JyrhI3NPc30yNH6FfHjdV99NCuG8fX+pDfHfA=
+X-Google-Smtp-Source: APXvYqxqfsxYt2ImfhfJkbPHcdGMGNRY52lG9BgZwKReUwxF5bee80WfBjL05Knxf4vlPlYRxviPim9OC9bAyUBPv6c=
+X-Received: by 2002:a5d:8889:: with SMTP id d9mr6565871ioo.281.1579699160387;
+ Wed, 22 Jan 2020 05:19:20 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 04d6697b-ee88-428d-163d-08d79f2afe17
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jan 2020 11:05:29.4674
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: DPCkEPQvEw8isxvqNS019LyqD7FjF0SX27D1szcFrrYytKfHc1afja+/oi/MeR1yDgMbEDhoLE7s7R1yCxsoOG2+6ZGTwMnQnYVjrGqHDvRiTWfas25mbH4uM08G/nl2
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB4512
+Received: by 2002:ac0:e1a7:0:0:0:0:0 with HTTP; Wed, 22 Jan 2020 05:19:20
+ -0800 (PST)
+From:   Abibatu Ali <abibatu22ali@gmail.com>
+Date:   Wed, 22 Jan 2020 13:19:20 +0000
+X-Google-Sender-Auth: rCu876719cxNfxA98QacTaFYb1Y
+Message-ID: <CAKFm-kFSQ9_i6kAEo5U0nJaa3uBqEzqFyZMPxww-pJ_a4R83ng@mail.gmail.com>
+Subject: KINDLY REPLY
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
+Greetings to you
 
-> From: Alan Stern, Sent: Wednesday, January 22, 2020 12:10 AM
-<snip>
-> On Tue, 21 Jan 2020, Yoshihiro Shimoda wrote:
->=20
-> > Hi Alan,
-> >
-> > > From: Alan Stern, Sent: Tuesday, January 21, 2020 12:12 AM
-> > >
-> > > On Mon, 20 Jan 2020, Yoshihiro Shimoda wrote:
-> > >
-> > > > > > +static void ehci_platform_quirk_poll_work(struct work_struct *=
-work)
-> > > > > > +{
-> > > > > > +	struct ehci_platform_priv *priv =3D
-> > > > > > +		container_of(work, struct ehci_platform_priv, poll_work);
-> > > > > > +	struct ehci_hcd *ehci =3D container_of((void *)priv, struct e=
-hci_hcd,
-> > > > > > +					     priv);
-> > > > > > +	int i;
-> > > > > > +
-> > > > > > +	usleep_range(4000, 8000);
-> > > > >
-> > > > > You have just waited 1000 ms for the timer.  Why will sleeping an
-> > > > > additional 4 - 8 ms make any difference?
-> > > >
-> > > > This sleeping can avoid a misdetection between this work function a=
-nd
-> > > > reconnection. If user reconnects the usb within 4 ms, the PORTSC
-> > > > condition is possible to be the same as the issue's condition.
-> > > > I think I should have described this information into the code.
-> > > >
-> > > > However, if I used schedule_delayed_work() instead, we can remove
-> > > > the usleep_range().
-> > >
-> > > Why not just make the timer delay be 1004 or 1008 ms instead of addin=
-g
-> > > this extra delay here?
-> >
-> > My concern is a race condition when the issue doesn't happen. If
-> > the workaround code has an extra delay, we can detect misdetection like=
- below.
-> > This is related to the EHCI/OHCI controllers on R-Car Gen3 SoCs though,
-> > updating the CCS status is possible to be delayed. To be clear of the r=
-eason,
-> > I should have described this CCS status behavior too.
-> >
-> > Timer routine		workqueue		EHCI PORTSC	USB connection
-> > 								disconnect
-> > 						CCS=3D0		connect (within 4 ms)
-> > condition =3D true (misdetection)			CCS=3D0
-> > 			usleep_range(4000,8000)	CCS=3D1
-> > 			condition =3D false
->=20
-> Okay, now I understand.  I misread the code in the original patch.
-> But now it looks like the code does roughly this:
->=20
-> Timer routine:	if (ehci_platform_quirk_poll_check_condition(ehci))
-> 			schedule_work();
->=20
-> Work routine:	usleep_range(4000, 8000);
-> 		udelay(10);
-> 		if (!ehci_platform_quirk_poll_check_condition(ehci))
-> 			return;
-> 		udelay(10);
-> 		if (!ehci_platform_quirk_poll_check_condition(ehci))
-> 			return;
-> 		ehci_platform_quirk_poll_rebind_companion(ehci);
->=20
-> So there are three calls to quirk_poll_check_condition, with 4 - 8 ms
-> between the first and second, and 10 us between the second and third.
-> Do you really need to have this combination of a long delay followed by
-> a short delay?  Wouldn't two check_condition calls with only one delay
-> be good enough?
 
-I had implemented this code by using hardware team's suggestion without
-any doubt. So, I asked hardware team about this combination of delays.
-The hardware team said this combination can reduce misdetection ratio
-from noise and so on. They also said we can wait single 5 ms instead
-this combination (but this cannot reduce misdetection ratio).
+Let me start by introducing myself, I am miss. Abibatu Ali lives in
+West Africa Ouagadougou precisley. I hope this mail meant well to you,
+because am having a business proposal that i need both of us to
+handle. And it means no harm to you and is risk free as well, because
+as a banker i will not introduce you to a business that will not
+profit us. Try and follow my instruction and directives of this
+business.
 
-So, now I'm thinking that the following process (single wait) is
-enough and it can improve readability. But, what do you think?
 
-Timer routine:	if (ehci_platform_quirk_poll_check_condition(ehci))
- 			schedule_delayed_work(5 ms);
+A brief introduction about a reputable client;
 
-Delayed work routine:
-		if (!ehci_platform_quirk_poll_check_condition(ehci))
- 			return;
- 		ehci_platform_quirk_poll_rebind_companion(ehci);
 
-Best regards,
-Yoshihiro Shimoda
+There is a man who's name is Mr. Boas Nicholson who lost his life in a
+plane crash along with all his family members and left no one alive to
+claim his funds that is in our custody here in United Bank For Africa
+(UBA).
 
-> Alan Stern
 
+Mr. Nicholson which is my close friend and also i happen to be his
+account officer, why because on the day of depositing his money into
+the bank, I was the only one that is aware of this urge amount that
+was credited into an ATM VISA CARD that worth the sum of $9.250
+Million US Dollar.
+
+
+And their is nobody to claim this said fund i just mention above,
+becasue according to our board meeting held few days ago, and it was
+concluded that it will be shifted to the government account, which i
+know truely well that is a bloody lie, why because it will be
+embezzled by the top officials of the bank.
+
+
+That is why i have decided to contact you so we can come in hand to
+hand to make sure we claim this fund and start a better life in your
+country, so i have all information on how you will receive this credit
+card without delay or disappointment.
+
+
+I will front you as a bonified member of Mr. Nicholson family which we
+make the board authority to believe you that truely you are his family
+member to enable you claim the credit card with an immediate effect.
+And also bear it in mind that if there is any question about this said
+fund, am here to guid you, so please if you know you're not interested
+to follow the instruction of this business then please kindly do me a
+favour by not repling back.
+
+
+Now let me brief you on how you can receive the credit card, which it
+will be delivered to you by DHL Courier Service and the amount of the
+delivery is $360 dollar, and also the amount for the registration it
+cost $620 dollar, so please tell me the amount you will be able to
+handle to enable the successfulness of this business, please once
+again if you know you are not ready to follow up my instruction, do
+not reply back to me, because i am sure of this business venture am
+introducing to you with %100 assurance.
+
+So be inform after the success of this deal is going to be share %50
+for me and %50 for you.
+
+Am waiting for your respond to enable me give you the contact of the
+department were you can claim the fund.
+
+Thanks for your understanding
+
+Yours Sincerely
+Miss Abibatu Ali
