@@ -2,63 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A050C145837
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2020 15:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C49E145854
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2020 15:58:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725989AbgAVOwB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jan 2020 09:52:01 -0500
-Received: from mga18.intel.com ([134.134.136.126]:14242 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725827AbgAVOwA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 Jan 2020 09:52:00 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Jan 2020 06:52:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,350,1574150400"; 
-   d="scan'208";a="307545445"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga001.jf.intel.com with ESMTP; 22 Jan 2020 06:51:57 -0800
-Subject: Re: [PATCH v2] usb: host: xhci-tegra: set MODULE_FIRMWARE for
- tegra186
-To:     Peter Robinson <pbrobinson@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20200120141910.116097-1-pbrobinson@gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <ee78d12c-d3f5-e122-e4bd-b43b2cc79a3c@linux.intel.com>
-Date:   Wed, 22 Jan 2020 16:54:05 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1725911AbgAVO6k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jan 2020 09:58:40 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:38760 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729074AbgAVO6j (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jan 2020 09:58:39 -0500
+Received: (qmail 1734 invoked by uid 2102); 22 Jan 2020 09:58:38 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 22 Jan 2020 09:58:38 -0500
+Date:   Wed, 22 Jan 2020 09:58:38 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux@prisktech.co.nz" <linux@prisktech.co.nz>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH 2/2] usb: host: ehci-platform: add a quirk to avoid stuck
+In-Reply-To: <TYAPR01MB4544998EECD346105AE75494D80C0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+Message-ID: <Pine.LNX.4.44L0.2001220956510.1636-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <20200120141910.116097-1-pbrobinson@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20.1.2020 16.19, Peter Robinson wrote:
-> Set the MODULE_FIRMWARE for tegra186, it's registered for 124/210 and
-> ensures the firmware is available at the appropriate time such as in
-> the initrd, else if the firmware is unavailable the driver fails with
-> the following errors:
-> 
-> tegra-xusb 3530000.usb: Direct firmware load for nvidia/tegra186/xusb.bin failed with error -2
-> tegra-xusb 3530000.usb: failed to request firmware: -2
-> tegra-xusb 3530000.usb: failed to load firmware: -2
-> tegra-xusb: probe of 3530000.usb failed with error -2
-> 
-> Fixes: 5f9be5f3f899 ("usb: host: xhci-tegra: Add Tegra186 XUSB support")
-> Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
-> Acked-by: Thierry Reding <treding@nvidia.com>
-> ---
+On Wed, 22 Jan 2020, Yoshihiro Shimoda wrote:
 
-Thanks, added to queue
+> > Okay, now I understand.  I misread the code in the original patch.
+> > But now it looks like the code does roughly this:
+> > 
+> > Timer routine:	if (ehci_platform_quirk_poll_check_condition(ehci))
+> > 			schedule_work();
+> > 
+> > Work routine:	usleep_range(4000, 8000);
+> > 		udelay(10);
+> > 		if (!ehci_platform_quirk_poll_check_condition(ehci))
+> > 			return;
+> > 		udelay(10);
+> > 		if (!ehci_platform_quirk_poll_check_condition(ehci))
+> > 			return;
+> > 		ehci_platform_quirk_poll_rebind_companion(ehci);
+> > 
+> > So there are three calls to quirk_poll_check_condition, with 4 - 8 ms
+> > between the first and second, and 10 us between the second and third.
+> > Do you really need to have this combination of a long delay followed by
+> > a short delay?  Wouldn't two check_condition calls with only one delay
+> > be good enough?
+> 
+> I had implemented this code by using hardware team's suggestion without
+> any doubt. So, I asked hardware team about this combination of delays.
+> The hardware team said this combination can reduce misdetection ratio
+> from noise and so on. They also said we can wait single 5 ms instead
+> this combination (but this cannot reduce misdetection ratio).
 
--Mathias
+Sure, the more times you delay and recheck, the better the error rate.  
+But you don't want to go too far.
+
+> So, now I'm thinking that the following process (single wait) is
+> enough and it can improve readability. But, what do you think?
+> 
+> Timer routine:	if (ehci_platform_quirk_poll_check_condition(ehci))
+>  			schedule_delayed_work(5 ms);
+> 
+> Delayed work routine:
+> 		if (!ehci_platform_quirk_poll_check_condition(ehci))
+>  			return;
+>  		ehci_platform_quirk_poll_rebind_companion(ehci);
+
+That looks good to me.
+
+Alan Stern
+
