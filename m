@@ -2,68 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4773C145C08
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2020 19:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39794145C0A
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2020 19:57:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729112AbgAVS4Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jan 2020 13:56:24 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:53553 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729075AbgAVS4Y (ORCPT
+        id S1729016AbgAVS5i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jan 2020 13:57:38 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:55141 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729099AbgAVS4Y (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jan 2020 13:56:24 -0500
-Received: by mail-wm1-f66.google.com with SMTP id m24so191557wmc.3
-        for <linux-usb@vger.kernel.org>; Wed, 22 Jan 2020 10:56:22 -0800 (PST)
+Received: by mail-wm1-f65.google.com with SMTP id b19so185393wmj.4
+        for <linux-usb@vger.kernel.org>; Wed, 22 Jan 2020 10:56:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=e20aOreCjy5ntKA5ZsHalS2qITKl4gNKBg3VYWDWJIk=;
-        b=j4gg33he6QJ2c386vn81AJsPFHfI+70MiI8+ym17dWNgYjjKdYVH5MGuMI/+Ab0qe7
-         vZaZsdfGYmYhNB4z08fOchVPnoQcScFgWKR8e5fp7TAGTVoCpNLFrq4kuljONQMej9bW
-         HGhBnXDlFORCrxJf8rSGEg9KX84bIblY9Kfz6qN5sYAOPHjgu5NBGI6HQD/R0v8TZjuH
-         vm2CeyW1OuOaxfXd+m7NcR/KFHUQbnwzL8aTrHpglFBhkRVxTs9r5kKD/tBQWoSGrj9X
-         RSwy423fNbbP5j0pMRVok3nfZPMtTSrlbqnkzfEtMB+lHYhmgeGTb6+YZUs8pJQC9Htg
-         28bw==
+        bh=sJ/NH1WxmyLs0OgxjuKXd3vxc/cRe0agzDtoq0wTKtI=;
+        b=WuuvYkZepoSj1DAbQe7m4TsyNlVsFr+bx+qJnWfKQkJF7XGpfoJroUNQfXcYq21Uxq
+         A7lkDuQA/vGg9TcflM62Rt9CzCZNnSDQR6iPVcv6wsBv8dUDaBqfxzpU8ZTdYZjNyClx
+         n5GUlRzbmlvLvy+iKLcvI4PaAy6O1kd9eolHgiO8pqf1lJW+DWol/PL7edH45O9/G8+O
+         QGbJrBjOcRMhzvOcOyfNuvn91gwt789hfaQ0bRKCJm6XzuAaijFhV4RrHr5F5pEAomj3
+         1sHTCqj+Ou7j0FpYjmflYh60kyLG9L5wruGqiVGSYmqz4ymdC8RIflxeMi+0JOlxSr/4
+         UI/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=e20aOreCjy5ntKA5ZsHalS2qITKl4gNKBg3VYWDWJIk=;
-        b=USTEmum0DotLBsmgtrertA7Qv/uqEqxY/UM9n/rXBCE7Kj2MwFa4XJfh/7LqN3mJZJ
-         t/8L934cQTJd8z8pQQG3RX1IwOFp7mOmEG/3j4YlWKoL4F8iVQtvivWuDmRJ/PvDmSiB
-         Y0+ypRtc8qMC20/hhP4YPKh1GpHw7U1VZWXK7e9UP2h0Ff9D5u0xwAuZrRB7S+ncmYWW
-         9w2+MLrfZfXnLgV7VJVNLjdsGq6cyqNGTaE0jWArAi/TIqT6cMKIWdldd0yU05Ajrr4Q
-         HiTVEUeeUxCwprNWgajv/z19BHhtk4bBZ96zEAtfzc8JJWkqJf9lYMP+OPNvoyCw4ANr
-         mLlQ==
-X-Gm-Message-State: APjAAAUYoDU4malwYDCGKy7OYGWIDGIUw51HAeigr451M9Qgqt88lIs0
-        +sHD8RuT+RNZekgdJcc92KO4gA==
-X-Google-Smtp-Source: APXvYqwXeWoG2onacSMWnlS4tpaerCB/ga1YCp+p1JkM9aIPxTeBZhRjV7R07Q8v/rvxPpE14Gyd+g==
-X-Received: by 2002:a7b:cc81:: with SMTP id p1mr4192690wma.62.1579719381920;
-        Wed, 22 Jan 2020 10:56:21 -0800 (PST)
+        bh=sJ/NH1WxmyLs0OgxjuKXd3vxc/cRe0agzDtoq0wTKtI=;
+        b=GIFdATfBzWwg9b6DeiPUZDeQmuzT43+zlT24+2W5bZ/v5QjOjWR74d+WP9dCFHohzK
+         FcmQr8ZniE72jUmvy784JcixiMl6rxW6jen66kXJzyDeV/guznIfCi9xl1Vi3Iotx6So
+         zDScRGj+DW/ip5a9v9sh7fSEWhcr0FWtpPclZfOYygpMqRiIDtbQaidhLPuNmd2Nk9jZ
+         Knxv8rfipY8Ax8nkhzoNKIP9voIh7iIntMgIfZbc45bvp48ZdrycOM3FUJ+0US4P1ry5
+         bov+fiv0lwDbcJmxMBk5O4KeedPFsZA79Cr74C+pBoI7I1qSSr0LnA0h44+L53aRSMyQ
+         70Yg==
+X-Gm-Message-State: APjAAAXN397zcjyBvPNjlPebDOUISSVGDmGzG8h8i3mqN6pFcnMHdl5y
+        2krQGC6ieoVyj/Htl7wYg7DTBQ==
+X-Google-Smtp-Source: APXvYqyK0D6ouCyxn6AqKCSBlXuZdgOeWCsIwjG7XDEmnmPtjdig8rPedOjaG+TeQqut2aI0pA+R0w==
+X-Received: by 2002:a7b:cc82:: with SMTP id p2mr4193744wma.159.1579719383226;
+        Wed, 22 Jan 2020 10:56:23 -0800 (PST)
 Received: from localhost.localdomain ([176.61.57.127])
-        by smtp.gmail.com with ESMTPSA id q15sm58590390wrr.11.2020.01.22.10.56.20
+        by smtp.gmail.com with ESMTPSA id q15sm58590390wrr.11.2020.01.22.10.56.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jan 2020 10:56:21 -0800 (PST)
+        Wed, 22 Jan 2020 10:56:22 -0800 (PST)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         gregkh@linuxfoundation.org, jackp@codeaurora.org, balbi@kernel.org,
         bjorn.andersson@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Yu Chen <chenyu56@huawei.com>,
+Cc:     linux-kernel@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         ShuFan Lee <shufan_lee@richtek.com>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Yu Chen <chenyu56@huawei.com>,
         Hans de Goede <hdegoede@redhat.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         Jun Li <lijun.kernel@gmail.com>,
         Valentin Schneider <valentin.schneider@arm.com>,
-        devicetree@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
         Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: [PATCH v3 07/19] usb: dwc3: Registering a role switch in the DRD code.
-Date:   Wed, 22 Jan 2020 18:55:58 +0000
-Message-Id: <20200122185610.131930-8-bryan.odonoghue@linaro.org>
+Subject: [PATCH v3 08/19] dt-bindings: usb: generic: Add role-switch-default-mode binding
+Date:   Wed, 22 Jan 2020 18:55:59 +0000
+Message-Id: <20200122185610.131930-9-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200122185610.131930-1-bryan.odonoghue@linaro.org>
 References: <20200122185610.131930-1-bryan.odonoghue@linaro.org>
@@ -74,12 +75,10 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Yu Chen <chenyu56@huawei.com>
+From: John Stultz <john.stultz@linaro.org>
 
-The Type-C drivers use USB role switch API to inform the
-system about the negotiated data role, so registering a role
-switch in the DRD code in order to support platforms with
-USB Type-C connectors.
+Add binding to configure the default role the controller
+assumes is host mode when the usb role is USB_ROLE_NONE.
 
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Rob Herring <robh+dt@kernel.org>
@@ -97,145 +96,30 @@ Cc: Valentin Schneider <valentin.schneider@arm.com>
 Cc: Jack Pham <jackp@codeaurora.org>
 Cc: linux-usb@vger.kernel.org
 Cc: devicetree@vger.kernel.org
-Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Yu Chen <chenyu56@huawei.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: John Stultz <john.stultz@linaro.org>
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- drivers/usb/dwc3/core.h |  3 ++
- drivers/usb/dwc3/drd.c  | 77 ++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 79 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/usb/generic.txt | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 77c4a9abe365..a99e57636172 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -25,6 +25,7 @@
- #include <linux/usb/ch9.h>
- #include <linux/usb/gadget.h>
- #include <linux/usb/otg.h>
-+#include <linux/usb/role.h>
- #include <linux/ulpi/interface.h>
+diff --git a/Documentation/devicetree/bindings/usb/generic.txt b/Documentation/devicetree/bindings/usb/generic.txt
+index cf5a1ad456e6..dd733fa81fad 100644
+--- a/Documentation/devicetree/bindings/usb/generic.txt
++++ b/Documentation/devicetree/bindings/usb/generic.txt
+@@ -34,6 +34,12 @@ Optional properties:
+ 			the USB data role (USB host or USB device) for a given
+ 			USB connector, such as Type-C, Type-B(micro).
+ 			see connector/usb-connector.txt.
++ - role-switch-default-mode: indicating if usb-role-switch is enabled, the
++			device default operation mode of controller while usb
++			role is USB_ROLE_NONE. Valid arguments are "host" and
++			"peripheral". Defaults to "peripheral" if not
++			specified.
++
  
- #include <linux/phy/phy.h>
-@@ -953,6 +954,7 @@ struct dwc3_scratchpad_array {
-  * @hsphy_mode: UTMI phy mode, one of following:
-  *		- USBPHY_INTERFACE_MODE_UTMI
-  *		- USBPHY_INTERFACE_MODE_UTMIW
-+ * @role_sw: usb_role_switch handle
-  * @usb2_phy: pointer to USB2 PHY
-  * @usb3_phy: pointer to USB3 PHY
-  * @usb2_generic_phy: pointer to USB2 PHY
-@@ -1086,6 +1088,7 @@ struct dwc3 {
- 	struct extcon_dev	*edev;
- 	struct notifier_block	edev_nb;
- 	enum usb_phy_interface	hsphy_mode;
-+	struct usb_role_switch	*role_sw;
+ This is an attribute to a USB controller such as:
  
- 	u32			fladj;
- 	u32			irq_gadget;
-diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-index c946d64142ad..3b57d2ddda93 100644
---- a/drivers/usb/dwc3/drd.c
-+++ b/drivers/usb/dwc3/drd.c
-@@ -476,6 +476,73 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
- 	return edev;
- }
- 
-+#ifdef CONFIG_USB_ROLE_SWITCH
-+#define ROLE_SWITCH 1
-+static int dwc3_usb_role_switch_set(struct device *dev, enum usb_role role)
-+{
-+	struct dwc3 *dwc = dev_get_drvdata(dev);
-+	u32 mode;
-+
-+	switch (role) {
-+	case USB_ROLE_HOST:
-+		mode = DWC3_GCTL_PRTCAP_HOST;
-+		break;
-+	case USB_ROLE_DEVICE:
-+		mode = DWC3_GCTL_PRTCAP_DEVICE;
-+		break;
-+	default:
-+		mode = DWC3_GCTL_PRTCAP_DEVICE;
-+		break;
-+	}
-+
-+	dwc3_set_mode(dwc, mode);
-+	return 0;
-+}
-+
-+static enum usb_role dwc3_usb_role_switch_get(struct device *dev)
-+{
-+	struct dwc3 *dwc = dev_get_drvdata(dev);
-+	unsigned long flags;
-+	enum usb_role role;
-+
-+	spin_lock_irqsave(&dwc->lock, flags);
-+	switch (dwc->current_dr_role) {
-+	case DWC3_GCTL_PRTCAP_HOST:
-+		role = USB_ROLE_HOST;
-+		break;
-+	case DWC3_GCTL_PRTCAP_DEVICE:
-+		role = USB_ROLE_DEVICE;
-+		break;
-+	case DWC3_GCTL_PRTCAP_OTG:
-+		role = dwc->current_otg_role;
-+		break;
-+	default:
-+		role = USB_ROLE_DEVICE;
-+		break;
-+	}
-+	spin_unlock_irqrestore(&dwc->lock, flags);
-+	return role;
-+}
-+
-+static int dwc3_setup_role_switch(struct dwc3 *dwc)
-+{
-+	struct usb_role_switch_desc dwc3_role_switch = {NULL};
-+
-+	dwc3_role_switch.fwnode = dev_fwnode(dwc->dev);
-+	dwc3_role_switch.set = dwc3_usb_role_switch_set;
-+	dwc3_role_switch.get = dwc3_usb_role_switch_get;
-+	dwc->role_sw = usb_role_switch_register(dwc->dev, &dwc3_role_switch);
-+	if (IS_ERR(dwc->role_sw))
-+		return PTR_ERR(dwc->role_sw);
-+
-+	dwc3_set_mode(dwc, DWC3_GCTL_PRTCAP_DEVICE);
-+	return 0;
-+}
-+#else
-+#define ROLE_SWITCH 0
-+#define dwc3_setup_role_switch(x) 0
-+#endif
-+
- int dwc3_drd_init(struct dwc3 *dwc)
- {
- 	int ret, irq;
-@@ -484,7 +551,12 @@ int dwc3_drd_init(struct dwc3 *dwc)
- 	if (IS_ERR(dwc->edev))
- 		return PTR_ERR(dwc->edev);
- 
--	if (dwc->edev) {
-+	if (ROLE_SWITCH &&
-+	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
-+		ret = dwc3_setup_role_switch(dwc);
-+		if (ret < 0)
-+			return ret;
-+	} else if (dwc->edev) {
- 		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
- 		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
- 					       &dwc->edev_nb);
-@@ -531,6 +603,9 @@ void dwc3_drd_exit(struct dwc3 *dwc)
- {
- 	unsigned long flags;
- 
-+	if (dwc->role_sw)
-+		usb_role_switch_unregister(dwc->role_sw);
-+
- 	if (dwc->edev)
- 		extcon_unregister_notifier(dwc->edev, EXTCON_USB_HOST,
- 					   &dwc->edev_nb);
 -- 
 2.25.0
 
