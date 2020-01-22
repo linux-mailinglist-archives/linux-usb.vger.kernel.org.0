@@ -2,170 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 44ED8145E9B
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2020 23:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D07145ED8
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2020 23:58:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728853AbgAVW0y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jan 2020 17:26:54 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:43764 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726061AbgAVW0x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jan 2020 17:26:53 -0500
-Received: by mail-pf1-f193.google.com with SMTP id x6so495000pfo.10
-        for <linux-usb@vger.kernel.org>; Wed, 22 Jan 2020 14:26:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=swWbt3aJL3q8h4lz+/4twKGtWH3pxZbO2/WppH1VqRE=;
-        b=K0ohNbHMOAsVb4M6Ck8cIf3BM8XchMabhMit1TMM4M9rA7DOOGd/sgBcVKqk4Dkfyl
-         MzkiSn6mrkDn4Rzo4C7qixNHdL/CFF78glRDZyCApSy9ECeubN35sr+56Jowj5rwc1qX
-         P0nCx7C1QsIOrrIqxRuZIJCWeIkHckFcMN5GGbk1NVw9Y/JbCuMS4i3CzwgBPRDfpjcq
-         SBIyfImGz9ImHeT0LopgirqAnevkSzpfLi+UMd7UT0MkGdqNkR32HmrLKL2wP3KNBLbp
-         aDB8LJZb1z0/CHBTLZbYRBbK4qL9hHXMe7uTtYP/yX1g1i8LefORegdQRnX/eR1YsnR8
-         UbNA==
+        id S1726205AbgAVW6J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jan 2020 17:58:09 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:42987 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725911AbgAVW6I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jan 2020 17:58:08 -0500
+Received: by mail-io1-f71.google.com with SMTP id e7so774430iog.9
+        for <linux-usb@vger.kernel.org>; Wed, 22 Jan 2020 14:58:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=swWbt3aJL3q8h4lz+/4twKGtWH3pxZbO2/WppH1VqRE=;
-        b=CwC5N7srpa0WKIyiVdUCA6DRbMrKbJdD4FAlA29pK0ypRM8R48WlNunvdjMY/EiiDz
-         KsJOssWEhGxDDXobfMyV2upnH3/apkiZ9b5Zx+bQHpxP+T3imhYTM+ptU4KggQdECqNH
-         D4NUnM3qSIrqQpRm1/oPl+udXPEWOhweC/XPY4TmkZlvzadN5h8IbIGjHd95aV0HqbrU
-         IjqHkv+6m6CZMQvMQfXHTVP70XhOALCDbGGbyz/LqqsNGcpxV4SQ2lJK5yrLEVB0qkMc
-         zrrmWnMuKpS0eFg0pBO0gAPCs4v6OjZqdKmqyDmdEjxczZjRek2Ja6Df86BqtCFWJsin
-         iO0w==
-X-Gm-Message-State: APjAAAWQt8zww5QlS8Klcyio7GCPeZS+U3LdyXiuwa0su6NR1f1KkjY6
-        FnZAVoLEFdpZsLKn2/QroD6O1A==
-X-Google-Smtp-Source: APXvYqxjWJnBDQWDLfs492qyC8m1YgOMNGISqY5eu6Q4wsVKzbqlsokkc0qtDmoQD/wqOD4EOckAOw==
-X-Received: by 2002:a62:3892:: with SMTP id f140mr4552209pfa.190.1579732012776;
-        Wed, 22 Jan 2020 14:26:52 -0800 (PST)
-Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id a28sm47793509pfh.119.2020.01.22.14.26.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jan 2020 14:26:52 -0800 (PST)
-From:   John Stultz <john.stultz@linaro.org>
-To:     lkml <linux-kernel@vger.kernel.org>
-Cc:     Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Yang Fei <fei.yang@intel.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
-        Tejas Joglekar <tejas.joglekar@synopsys.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        John Stultz <john.stultz@linaro.org>
-Subject: [RFC][PATCH 2/2] usb: dwc3: gadget: Correct the logic for finding last SG entry
-Date:   Wed, 22 Jan 2020 22:26:45 +0000
-Message-Id: <20200122222645.38805-3-john.stultz@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200122222645.38805-1-john.stultz@linaro.org>
-References: <20200122222645.38805-1-john.stultz@linaro.org>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=pmeMxbWQ6wl2cb2vu9yDocNVRieqKicTUlv6dyeXBWY=;
+        b=eGMadBN8Gfkzk06pNPms5K1Ty/RcyMGrqSPyo+C1frnNiaKFqXLHtyXldnAsEk3etX
+         1ltHECNwKhrdNVirW8DVY/fFGCFC4LEC/9eWEgX1owQQJy926yKs/iSJEw9jLwzQxFhN
+         c4eManatjBxM+aaQrAMOiDrITrkSgBKTOmMVgKZIfatWvETovzrUq17VBA/+pvkCgbmm
+         Lgi3/C3PAdPgReN39uUTsUc3HmpyAscH+Uc9pLZPQ+Wkep+nRmgs7vAuBvL8kXNm0k3a
+         zi5vykXs0+1CVfbKY+SVrw4CYGuGvHtxp40T9bPid0yUu9mrgwieb1TtoSNpvA4WqSX3
+         gbKg==
+X-Gm-Message-State: APjAAAXa4dR4+iTllPNWT48KdrguDlHA0FCgyGrebjwiE82tVixPvcwx
+        3nbuwMwedLCDD/ba/Mr7gRtVQ2qK+RUv6oYjUCy8ytK1S+3W
+X-Google-Smtp-Source: APXvYqzXLkDDsC6ww6FF8B05eKmDWNktPk3hOkAS2IWHITpAcLcHBMw3boLbGQ/KrDbSqHRQkL+lr3ueogAs2lRHgersDa4X6jGJ
+MIME-Version: 1.0
+X-Received: by 2002:a5d:9514:: with SMTP id d20mr9019317iom.198.1579733888227;
+ Wed, 22 Jan 2020 14:58:08 -0800 (PST)
+Date:   Wed, 22 Jan 2020 14:58:08 -0800
+In-Reply-To: <000000000000de50d7059ba6acd5@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003f62d6059cc27590@google.com>
+Subject: Re: KASAN: use-after-free Read in v4l2_release (3)
+From:   syzbot <syzbot+75287f75e2fedd69d680@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, bnvandana@gmail.com,
+        hverkuil-cisco@xs4all.nl, laurent.pinchart@ideasonboard.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+syzbot has found a reproducer for the following crash on:
 
-As a process of preparing TRBs usb_gadget_map_request_by_dev() is
-called from dwc3_prepare_trbs() for mapping the request. This will
-call dma_map_sg() if req->num_sgs are greater than 0. dma_map_sg()
-will map the sg entries in sglist and return the number of mapped SGs.
-As a part of mapping, some sg entries having contigous memory may be
-merged together into a single sg (when IOMMU used). So, the number of
-mapped sg entries may not be equal to the number of orginal sg entries
-in the request (req->num_sgs).
+HEAD commit:    4cc301ee usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=17f5a721e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9ba75825443d54bd
+dashboard link: https://syzkaller.appspot.com/bug?extid=75287f75e2fedd69d680
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16a0b6f1e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1327dd76e00000
 
-As a part of preparing the TRBs, dwc3_prepare_one_trb_sg() iterates over
-the sg entries present in the sglist and calls sg_is_last() to identify
-whether the sg entry is last and set IOC bit for the last sg entry. The
-sg_is_last() determines last sg if SG_END is set in sg->page_link. When
-IOMMU used, dma_map_sg() merges 2 or more sgs into a single sg and it
-doesn't retain the page_link properties. Because of this reason the
-sg_is_last() may not find SG_END and thus resulting in IOC bit never
-getting set.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+75287f75e2fedd69d680@syzkaller.appspotmail.com
 
-For example:
+usbvision_set_audio: can't write iopin register for audio switching
+usbvision_radio_close: Final disconnect
+==================================================================
+BUG: KASAN: use-after-free in v4l2_release+0x2f1/0x390 drivers/media/v4l2-core/v4l2-dev.c:459
+Read of size 4 at addr ffff8881caba1068 by task v4l_id/1913
 
-Consider a request having 8 sg entries with each entry having a length of
-4096 bytes. Assume that sg1 & sg2, sg3 & sg4, sg5 & sg6, sg7 & sg8 are
-having contigous memory regions.
+CPU: 1 PID: 1913 Comm: v4l_id Not tainted 5.5.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xef/0x16e lib/dump_stack.c:118
+ print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
+ __kasan_report.cold+0x37/0x85 mm/kasan/report.c:506
+ kasan_report+0xe/0x20 mm/kasan/common.c:639
+ v4l2_release+0x2f1/0x390 drivers/media/v4l2-core/v4l2-dev.c:459
+ __fput+0x2d7/0x840 fs/file_table.c:280
+ task_work_run+0x13f/0x1c0 kernel/task_work.c:113
+ tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+ exit_to_usermode_loop+0x1d2/0x200 arch/x86/entry/common.c:164
+ prepare_exit_to_usermode arch/x86/entry/common.c:195 [inline]
+ syscall_return_slowpath arch/x86/entry/common.c:278 [inline]
+ do_syscall_64+0x4e0/0x5a0 arch/x86/entry/common.c:304
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x7fbeb0b822b0
+Code: 40 75 0b 31 c0 48 83 c4 08 e9 0c ff ff ff 48 8d 3d c5 32 08 00 e8 c0 07 02 00 83 3d 45 a3 2b 00 00 75 10 b8 03 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 ce 8a 01 00 48 89 04 24
+RSP: 002b:00007ffe52d6b158 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 00007fbeb0b822b0
+RDX: 0000000000000013 RSI: 0000000080685600 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000400884
+R13: 00007ffe52d6b2b0 R14: 0000000000000000 R15: 0000000000000000
 
-Before calling dma_map_sg():
-            sg1-->sg2-->sg3-->sg4-->sg6-->sg7-->sg8
-dma_length: 4K    4K    4K    4K    4K    4K    4K
-SG_END:     False False False False False False True
-num_sgs = 8
-num_mapped_sgs = 0
+Allocated by task 94:
+ save_stack+0x1b/0x80 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ __kasan_kmalloc mm/kasan/common.c:513 [inline]
+ __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:486
+ kmalloc include/linux/slab.h:556 [inline]
+ kzalloc include/linux/slab.h:670 [inline]
+ usbvision_alloc drivers/media/usb/usbvision/usbvision-video.c:1315 [inline]
+ usbvision_probe.cold+0x5c5/0x1f21 drivers/media/usb/usbvision/usbvision-video.c:1469
+ usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:361
+ really_probe+0x290/0xad0 drivers/base/dd.c:548
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:721
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+ __device_attach+0x217/0x390 drivers/base/dd.c:894
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+ device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+ usb_set_configuration+0xe47/0x17d0 drivers/usb/core/message.c:2023
+ generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+ usb_probe_device+0xaf/0x140 drivers/usb/core/driver.c:266
+ really_probe+0x290/0xad0 drivers/base/dd.c:548
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:721
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+ __device_attach+0x217/0x390 drivers/base/dd.c:894
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+ device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+ usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2537
+ hub_port_connect drivers/usb/core/hub.c:5184 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
+ port_event drivers/usb/core/hub.c:5470 [inline]
+ hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5552
+ process_one_work+0x945/0x15c0 kernel/workqueue.c:2264
+ process_scheduled_works kernel/workqueue.c:2326 [inline]
+ worker_thread+0x7ab/0xe20 kernel/workqueue.c:2412
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 
-The dma_map_sg() merges sg1 & sg2 memory regions into sg1->dma_address.
-Similarly sg3 & sg4 into sg2->dma_address, sg5 & sg6 into the
-sg3->dma_address and sg6 & sg8 into sg4->dma_address. Here the memory
-regions are merged but the page_link properties like SG_END are not
-retained into the merged sgs.
+Freed by task 1913:
+ save_stack+0x1b/0x80 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ kasan_set_free_info mm/kasan/common.c:335 [inline]
+ __kasan_slab_free+0x117/0x160 mm/kasan/common.c:474
+ slab_free_hook mm/slub.c:1425 [inline]
+ slab_free_freelist_hook mm/slub.c:1458 [inline]
+ slab_free mm/slub.c:3005 [inline]
+ kfree+0xd5/0x300 mm/slub.c:3957
+ usbvision_release+0x181/0x1c0 drivers/media/usb/usbvision/usbvision-video.c:1364
+ usbvision_radio_close.cold+0x2b/0x74 drivers/media/usb/usbvision/usbvision-video.c:1130
+ v4l2_release+0x2e7/0x390 drivers/media/v4l2-core/v4l2-dev.c:455
+ __fput+0x2d7/0x840 fs/file_table.c:280
+ task_work_run+0x13f/0x1c0 kernel/task_work.c:113
+ tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+ exit_to_usermode_loop+0x1d2/0x200 arch/x86/entry/common.c:164
+ prepare_exit_to_usermode arch/x86/entry/common.c:195 [inline]
+ syscall_return_slowpath arch/x86/entry/common.c:278 [inline]
+ do_syscall_64+0x4e0/0x5a0 arch/x86/entry/common.c:304
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
 
-After calling dma_map_sg();
-            sg1-->sg2-->sg3-->sg4-->sg6-->sg7-->sg8
-dma_length: 8K    8K    8K    8K    0K    0K     0K
-SG_END:     False False False False False False True
-num_sgs = 8
-num_mapped_sgs = 4
+The buggy address belongs to the object at ffff8881caba0000
+ which belongs to the cache kmalloc-8k of size 8192
+The buggy address is located 4200 bytes inside of
+ 8192-byte region [ffff8881caba0000, ffff8881caba2000)
+The buggy address belongs to the page:
+page:ffffea00072ae800 refcount:1 mapcount:0 mapping:ffff8881da00c500 index:0x0 compound_mapcount: 0
+raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da00c500
+raw: 0000000000000000 0000000080020002 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
 
-After calling dma_map_sg(), sg1,sg2,sg3,sg4 are having dma_length of
-8096 bytes each and remaining sg4,sg5,sg6,sg7 are having 0 bytes of
-dma_length.
-
-After dma_map_sg() is performed dma_perpare_trb_sg() iterates on all sg
-entries and sets IOC bit only for the sg8 (since sg_is_last() returns true
-only for sg8). But after calling dma_map_sg() the valid data are present
-only till sg4 and the IOC bit should be set for sg4 TRB only (which is not
-happening in the present code)
-
-The above mentioned issue can be fixed by determining last sg based on the
-req->num_queued_sgs instead of sg_is_last(). If (req->num_queued_sgs + 1)
-is equal to req->num_mapped_sgs, then this sg is the last sg. In the above
-example, the dwc3 driver has already queued 3 sgs (upto sg3), so the
-num_queued_sgs = 3. On preparing the next sg (i.e sg4), check for last sg
-(num_queued_sgs + 1) == num_mapped_sgs becomes true. So, the driver sets
-IOC bit for sg4. This patch does the same.
-
-At a practical level, this patch resolves USB transfer stalls
-seen with adb on dwc3 based db845c, pixel3 and other qcom
-hardware after functionfs gadget added scatter-gather support
-around v4.20.
-
-Cc: Felipe Balbi <felipe.balbi@linux.intel.com>
-Cc: Yang Fei <fei.yang@intel.com>
-Cc: Thinh Nguyen <thinhn@synopsys.com>
-Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
-Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc: Jack Pham <jackp@codeaurora.org>
-Cc: Todd Kjos <tkjos@google.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>
-Cc: Linux USB List <linux-usb@vger.kernel.org>
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
-[jstultz: Add note to end of commit message on specific issue this resovles]
-Signed-off-by: John Stultz <john.stultz@linaro.org>
----
- drivers/usb/dwc3/gadget.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 1edce3bbb55c..30a80bc97cfe 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1068,7 +1068,7 @@ static void dwc3_prepare_one_trb_sg(struct dwc3_ep *dep,
- 		unsigned int rem = length % maxp;
- 		unsigned chain = true;
- 
--		if (sg_is_last(s))
-+		if ((req->num_queued_sgs + 1) == req->request.num_mapped_sgs)
- 			chain = false;
- 
- 		if (rem && usb_endpoint_dir_out(dep->endpoint.desc) && !chain) {
--- 
-2.17.1
+Memory state around the buggy address:
+ ffff8881caba0f00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8881caba0f80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff8881caba1000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                          ^
+ ffff8881caba1080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8881caba1100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
