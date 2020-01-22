@@ -2,136 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D35E144C42
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2020 08:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 907DA144C7F
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2020 08:32:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726005AbgAVHCq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jan 2020 02:02:46 -0500
-Received: from mail-yb1-f194.google.com ([209.85.219.194]:34274 "EHLO
-        mail-yb1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725836AbgAVHCq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jan 2020 02:02:46 -0500
-Received: by mail-yb1-f194.google.com with SMTP id l7so2686969ybp.1
-        for <linux-usb@vger.kernel.org>; Tue, 21 Jan 2020 23:02:45 -0800 (PST)
+        id S1726191AbgAVHcg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jan 2020 02:32:36 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:54353 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725883AbgAVHcg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jan 2020 02:32:36 -0500
+Received: by mail-wm1-f66.google.com with SMTP id b19so5682292wmj.4;
+        Tue, 21 Jan 2020 23:32:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AaX0HZcPwl0YS02WEUsbNoZs+84h6QQErJ2NiHAQQt4=;
-        b=DQdXjdRolxFhDjUI/My5vjFZRIeQIF4rTa+uE1+W4OOVi7BTICAa583VYBOP9w5Bfs
-         fCUZsP2zBOhLxrhQ+mQsHo3HavflweOvSGnl5LeRpkiLuc82SHsybXLcDZn92RiHXDXi
-         pdxsCwRlYVOnEGtJjL2RyYEWHxV/W7mYYSuJU=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=fm/bzorqFXGRjSleITF9pD+r1ENd6CB0azL8igPUALM=;
+        b=VDzeQxeEhDd8ZKku1Vsa6Rm+0dEX0MsSrnfFkdfeGLwJy/mHgwEerx7eS8/YGXEbxr
+         fyEL+uolSK2w7xtim5NpnRib0fMpIpzzD4fTzsPKUkHpTmHE2AJMShtmpCJAYDJkeJfi
+         V9M2aHfVdu8ai4eNZ8fDRxLyX+uaMPI3rK/B5Dv5n6RV0aIWB2x6tFbIRGtF93S+yJD7
+         P4Km/plRniTRmu24NArSI3NaiO9WS4KR483rANpvgUlGIQ/eFZh9G5TaKcRj/x4m86MZ
+         yWIy330NA0EvuDPtSQ2KQbJIFWWKPn32Q6b3HiCm6rvGSriyBRD4L3WquLLdMYnW+ei2
+         hV3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AaX0HZcPwl0YS02WEUsbNoZs+84h6QQErJ2NiHAQQt4=;
-        b=DSXfs7fyRKvNU9g6jlUsxR47xKTvwWMof7zUY9MGArMit+Z3Z8ptyWLdTV5A5W8WDz
-         eqFBuop1MfYyRcPH/rn+8SerxtCrALwUdpN7/ynEgrZYCYKewB1vbrKegpNOSed6jEVO
-         HqX265LPGAPK56qWWZ/YYSSuWxIft/2bnXApMtQJyN210WrSZXMOWwQ8HyjEVDv0RLdJ
-         jaEpITmVrpYN19Jl8fnNpF/TuMKLhYu5NluqxXd5jUer6w9eQTFzOBXCuTOvC9PPoRee
-         oapTDZDNsXdZ1FZ4A8aobnhf1niLCuE6FfMCMrm+sf85h5pnnW3Goqv6Ruo8cK4RaM5h
-         SF+Q==
-X-Gm-Message-State: APjAAAVOz/LuvR3zVR3Z+5JG41t6yEa+5daU3lLjlbtbQ2WqY9vdZKhg
-        QrK7vnkbYPJjDhL/5xRGoeH/2w6ZT01NXsK1aKYMWg==
-X-Google-Smtp-Source: APXvYqw3lgzzHaQ6O1QvLGLfo9XXd6gDdSmwm2wKGrSHozPz8hXQ4/w9BOwAI9Ltz1u1Z45qP5VaYFilIK8vrwXzo9Y=
-X-Received: by 2002:a25:bd08:: with SMTP id f8mr6737555ybk.77.1579676564950;
- Tue, 21 Jan 2020 23:02:44 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fm/bzorqFXGRjSleITF9pD+r1ENd6CB0azL8igPUALM=;
+        b=glXZx9tBqWzQV8e5dxs0Q3m6plOiWkbBHYmubFfqtXgy/Ie5c9IhG+Lt/tJKdmBjgj
+         HyCcABnvB+ZJoEgRRkie7ai+PJD2OmgBr/62lw00Qq9FZ9W6C0937NyfUft6eFIZZtEo
+         WKNFPxHa1SBvaDPO+zMuoOQN/XecCFN1Tvn+OeO98w+VMs+RUKV3WLKaPwVf7BTg9rze
+         jWea9lx+1/dbBCYuikRkKSilKsEgodzjxGSekTz6grrMksUS3KGln0wyoIJFIeIRibvE
+         zi6dkFDljcweW+iANLMhP3N8fPWzSi5wwahWCjmQB6+Zs/uPD+yvqpbqYi16ewYVnHq7
+         f+LQ==
+X-Gm-Message-State: APjAAAUDMHIXp1qHxqA55Bda7lXyiwy6IA/BDaPeANMWovS36puYbIw+
+        45b1vg1BG7VqNql9+N20EdEjpAWT
+X-Google-Smtp-Source: APXvYqxsj7I9WlzOG+WOoPFUiCwN4qWOvJotIYRZmaWyfy5/ihC4mSOyzoLZoK6R3hu9TVPC7u6gzA==
+X-Received: by 2002:a7b:cf0d:: with SMTP id l13mr1458811wmg.13.1579678354144;
+        Tue, 21 Jan 2020 23:32:34 -0800 (PST)
+Received: from ?IPv6:2003:ea:8f36:6800:9425:8dfb:676f:4467? (p200300EA8F36680094258DFB676F4467.dip0.t-ipconnect.de. [2003:ea:8f36:6800:9425:8dfb:676f:4467])
+        by smtp.googlemail.com with ESMTPSA id a132sm2495983wme.3.2020.01.21.23.32.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jan 2020 23:32:33 -0800 (PST)
+Subject: Re: [PATCH v2 net-next] net: convert suitable drivers to use
+ phy_do_ioctl_running
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        David Miller <davem@davemloft.net>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, Doug Berger <opendmb@gmail.com>,
+        Pantelis Antoniou <pantelis.antoniou@gmail.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Timur Tabi <timur@kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        bcm-kernel-feedback-list@broadcom.com,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+References: <2db5d899-a550-456d-a725-f7cf009f53a3@gmail.com>
+ <9d2dbcc0-7e22-601a-35f6-135f2a9e6f99@gmail.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Message-ID: <ec2a401d-e504-da38-8bc7-1826f5de7941@gmail.com>
+Date:   Wed, 22 Jan 2020 08:28:06 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-References: <1394712342-15778-338-Taiwan-albertk@realtek.com> <1394712342-15778-347-Taiwan-albertk@realtek.com>
-In-Reply-To: <1394712342-15778-347-Taiwan-albertk@realtek.com>
-From:   Grant Grundler <grundler@chromium.org>
-Date:   Tue, 21 Jan 2020 23:02:31 -0800
-Message-ID: <CANEJEGs+K9rFqzFG_4cPaQvi9FV3L5jMdCi4KYtcfpg1x+nwjw@mail.gmail.com>
-Subject: Re: [PATCH net 9/9] r8152: disable DelayPhyPwrChg
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     netdev <netdev@vger.kernel.org>, nic_swsd <nic_swsd@realtek.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org,
-        Prashant Malani <pmalani@chromium.org>,
-        Grant Grundler <grundler@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <9d2dbcc0-7e22-601a-35f6-135f2a9e6f99@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jan 21, 2020 at 4:43 AM Hayes Wang <hayeswang@realtek.com> wrote:
->
-> Enable DelayPhyPwrChg let the device fail enter the power saving mode
-> of P3.
+On 22.01.2020 05:04, Florian Fainelli wrote:
+> 
+> 
+> On 1/21/2020 1:09 PM, Heiner Kallweit wrote:
+>> Convert suitable drivers to use new helper phy_do_ioctl_running.
+>>
+>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> The vast majority of drivers that you are converting use the following
+> convention:
+> 
+> - !netif_running -> return -EINVAL
+> - !dev->phydev -> return -ENODEV
+> 
+> so it may make sense to change the helper to accommodate the majority
+> here, not that I believe this is going to make much practical
+> difference, but if there were test cases that were specifically looking
+> for such an error code, they could be failing after this changeset.
+> 
+Right, I also stumbled across the different error codes, mainly as you
+say -EINVAL. However there is no "wrong value", if netdev isn't running,
+then typically the PHY is not attached, and from a netdev point of view
+it's not there. So ENODEV seems to be best suited.
+In kernel code the changed return code doesn't make a difference,
+but yes, in theory there could be userspace programs checking for
+-EINVAL. However such userspace programs should check for ENODEV too
+anyway to cover the second check that already returns -ENODEV.
 
-
-Hayes,
-I'm very curious about this commit message: why would one want this to fail?
-
-Did you mean "don't allow the phy to enter P3 power saving mode"?
-If P3 power saving mode is broken, what is the symptom?
-How long is the delay when this is still enabled? (to help identify
-failures when this is still enabled)
-
-BTW, I've reviewed all the patches and don't see any obvious issues
-with them - though I don't have the technical documents to verify any
-changes in behavior.
-
-I did see two typos in the commit messages that could be corrected if
-you need to send out v3:
-[PATCH net 5/9] r8152: Disable PLA MCU clock speed down
-   s/packet lost/packet loss/
-
-[PATCH net 6/9] r8152: disable test IO for RTL8153B
-   s/casue/cause
-
-cheers,
-grant
-
->
-> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
-> ---
->  drivers/net/usb/r8152.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index 0998b9587943..c999a58ddda9 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -31,7 +31,7 @@
->  #define NETNEXT_VERSION                "11"
->
->  /* Information for net */
-> -#define NET_VERSION            "10"
-> +#define NET_VERSION            "11"
->
->  #define DRIVER_VERSION         "v1." NETNEXT_VERSION "." NET_VERSION
->  #define DRIVER_AUTHOR "Realtek linux nic maintainers <nic_swsd@realtek.com>"
-> @@ -109,6 +109,7 @@
->  #define PLA_BP_EN              0xfc38
->
->  #define USB_USB2PHY            0xb41e
-> +#define USB_SSPHYLINK1         0xb426
->  #define USB_SSPHYLINK2         0xb428
->  #define USB_U2P3_CTRL          0xb460
->  #define USB_CSR_DUMMY1         0xb464
-> @@ -384,6 +385,9 @@
->  #define USB2PHY_SUSPEND                0x0001
->  #define USB2PHY_L1             0x0002
->
-> +/* USB_SSPHYLINK1 */
-> +#define DELAY_PHY_PWR_CHG      BIT(1)
-> +
->  /* USB_SSPHYLINK2 */
->  #define pwd_dn_scale_mask      0x3ffe
->  #define pwd_dn_scale(x)                ((x) << 1)
-> @@ -4993,6 +4997,10 @@ static void rtl8153_up(struct r8152 *tp)
->         ocp_data &= ~LANWAKE_PIN;
->         ocp_write_byte(tp, MCU_TYPE_PLA, PLA_LWAKE_CTRL_REG, ocp_data);
->
-> +       ocp_data = ocp_read_word(tp, MCU_TYPE_USB, USB_SSPHYLINK1);
-> +       ocp_data &= ~DELAY_PHY_PWR_CHG;
-> +       ocp_write_word(tp, MCU_TYPE_USB, USB_SSPHYLINK1, ocp_data);
-> +
->         r8153_aldps_en(tp, true);
->
->         switch (tp->version) {
-> --
-> 2.21.0
->
+> For bgmac.c, bcmgenet.c and cpmac.c:
+> 
+> Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+> 
+> Whether you decide to spin another version or not.
+> 
+Heiner
