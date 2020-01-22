@@ -2,120 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A3914498A
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2020 02:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5099F1449D2
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2020 03:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727847AbgAVBrH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jan 2020 20:47:07 -0500
-Received: from mail-eopbgr20050.outbound.protection.outlook.com ([40.107.2.50]:8523
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726968AbgAVBrH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Jan 2020 20:47:07 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L4J7b0+y/FE/YbXNnkafnBl5UdT1UfVbEV+JvpliXi8PH4kDz4xV50cu2D+61/M/SYQsSVx/aPnoPp8Hf9eFsASINDWdvoDoHsUl4+6So7egDvEKxbvr1q3KYv5MG2D6Ij6bpOKwAfdCiaRDDu+0UrUPrbT1yn6qCUfp1SyLUSljh7ZNDWCDYGBEVWc1iQ00vUk6ko8uZFHWPEkZAnIq0dzj12LwUQGmSiC47WY3Fs1bKxJyB5TldA9KaUhpeJdUayA/oSAK/ZFq1ff5XRVfXPdFf9lzOEM1vsOoxIJ0LwvNo27KYfcsb18ZXMgyH9sHYguxOpv7e57rz8ltNVfB2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tZz0JLBuAFDwch8Zn/G56fLMdBIHN/P9ayT3hTCZ+1M=;
- b=F5MRlD50i0oaF9vutnx5ItrcIhLrazXG5X8shr5TTlujDGKxHf+cYJ/jqncE4MC80UbMboQPkJaY3k5p4q9JLQ9aBN+EwtpmOQeNTxfMFPGPMIQ7KRZI1yux4HtSEcwPmxeeJEHV6lxsvzCVM+KEK60uJgfsX7TTInR+YyUSSqExXa86ZgmJoAs0m6FpPOvRAAJPj3i5sAfglNeWxnwUElsa5zV9dw/LDwmrlREqD9qqKGmFnmhE1FsEnVkZhjlgFjCLLPB2K7AjAM1xtcZfUYVxaWOcMlQY1EO+jlodLJ+JFVsFr1JvLZAsOkNkhK/XsKL8mHOiiAwh7oTa9HecFA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tZz0JLBuAFDwch8Zn/G56fLMdBIHN/P9ayT3hTCZ+1M=;
- b=LYST9dtmht4XbSnD/6fgOUHzT23n42PduwrkOSeHuTSTfby9bMQ+W0s+ACwBdybJeOzyR9H3qN/pRYQ4r2j587ACHLM37LsdqI9we0ZPUAm87NUafoYuboeDHH7VE27rAr6KpMT7ZOihGkWZvnSPiV2imClbaq8pI2A3VSsIJaQ=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
- VI1PR04MB5997.eurprd04.prod.outlook.com (20.178.122.25) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2644.19; Wed, 22 Jan 2020 01:47:03 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::c7d:58a2:7265:407e]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::c7d:58a2:7265:407e%6]) with mapi id 15.20.2644.027; Wed, 22 Jan 2020
- 01:47:03 +0000
-Received: from b29397-desktop.ap.freescale.net (119.31.174.66) by HK2PR04CA0087.apcprd04.prod.outlook.com (2603:1096:202:15::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2644.18 via Frontend Transport; Wed, 22 Jan 2020 01:47:01 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Jun Li <jun.li@nxp.com>, Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH 2/2] usb: chipidea: add inline for ci_hdrc_host_driver_init if
- host is not defined
-Thread-Topic: [PATCH 2/2] usb: chipidea: add inline for
- ci_hdrc_host_driver_init if host is not defined
-Thread-Index: AQHV0MXY+0CWOEZ2mUCxFM3i5GTD8Q==
-Date:   Wed, 22 Jan 2020 01:47:02 +0000
-Message-ID: <20200122014639.22667-3-peter.chen@nxp.com>
-References: <20200122014639.22667-1-peter.chen@nxp.com>
-In-Reply-To: <20200122014639.22667-1-peter.chen@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.17.1
-x-clientproxiedby: HK2PR04CA0087.apcprd04.prod.outlook.com
- (2603:1096:202:15::31) To VI1PR04MB5327.eurprd04.prod.outlook.com
- (2603:10a6:803:5c::23)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 29969453-c86b-40b4-ec9c-08d79edcfa51
-x-ms-traffictypediagnostic: VI1PR04MB5997:|VI1PR04MB5997:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB5997C253A284BF4E9B268E828B0C0@VI1PR04MB5997.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:40;
-x-forefront-prvs: 029097202E
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(39860400002)(136003)(346002)(396003)(376002)(199004)(189003)(86362001)(1076003)(52116002)(26005)(66476007)(66446008)(66946007)(66556008)(6512007)(64756008)(5660300002)(8676002)(71200400001)(2616005)(316002)(6916009)(956004)(2906002)(4744005)(4326008)(54906003)(6506007)(478600001)(6486002)(8936002)(81166006)(81156014)(44832011)(186003)(16526019)(36756003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5997;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Vb6Lz1NYsX5PW9pS0EBXOaVRvd1d/VudwPo3gWCMG3ZFD8wToffl+V3IdDfsMJPHveNkX7vFHF4vUhxpjsLqvq2UPRLhNX193a8xPBuVlNpfnuU3bi7M+WLRj4n/C92rqUfoePme+ik3pi+BTa4BiW+VRy/dnsj+gTRptHPxacgWdZqjAxI/cVbffvi3awaYG2cfkIZlvemah1/4xlXeYauGzCKCPtG0QZ249ZEuT3Puk4KH8ov3bBtYyY9KJ6m2/xt3Beo44PeRXJT/Ngv+keGkXEuebRrITakD36B2STLWSERsR1E+Y2Nmo9eo72k6v6GcE/Vphf6vO0nmmp5FSI+N1nnv6fGlMUODImRfTEfA3ljPs81SbTEeh0pZpvmMyzj2Z2vJqSV3FKnWIk9jLbBnbwkKeWar21PllX3v/kdH8uEx7Lr504DtchGiDpPY
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1727816AbgAVCbf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jan 2020 21:31:35 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:34905 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726407AbgAVCbe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jan 2020 21:31:34 -0500
+Received: by mail-pf1-f194.google.com with SMTP id i23so2547003pfo.2;
+        Tue, 21 Jan 2020 18:31:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7aOoEW/v4ZBMRBcWQsOtFSrMdeixlozJh486/30lCpI=;
+        b=UsZXbwYv6ZPR85IYYFx6cqsS88eCBPdn2suqm1SAcOc4k6M/j0Ef6wsF9JpKi42CJm
+         f/+/3ZXJNLNqOl05qIJcJQv65XodmdZagSLhLBttR5OKdWdcD8m4VkOsiSowhCeFJMSO
+         jp6BcPOlAKICFeM+ugu4wWnnsFgWIFYB0lPIeoPcJhN1gASSlATGTfJOnnDlHSicjz2Z
+         1TxY1buC/UXzrHcEND4KdRiZMGpIPOBDIzI1ooXSIpRZopvqlROX3GMcUepjiW7mdZOA
+         vVPEqlU/EbCJ/4oa2epCd618Yo9Dsvze9IzY0qycqpFkPqDhGXIVTxsZaQ6X675Bw+dO
+         EK+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7aOoEW/v4ZBMRBcWQsOtFSrMdeixlozJh486/30lCpI=;
+        b=UYD6KAlrHV8FBmqmEgdtprG6WzoZKdwoca8VTZQ2k5LjNLwAidsM6Qk/rSeSnMuGON
+         QyA4ZPX6/u2MMDCSXzv7cZwciGmC9yxVhB1QZvTc7SPuLqHsTerRLkAhKbQmHHwGIXGJ
+         gPNbEsBYaCjMCI2+IZM5lHmVM2TER/yGp+Dshk5YpqhCcbUoGwd1AxhOFxT0WblKvPNN
+         vjKiinK++p1wO0u3rgM7JKb6JRZw9E74xMYZS0o4ySAIqQG7iiqD5fyQQVmSvRdYoaCk
+         aPVQcwtzyoQmB9/CzzZrtgQswpkw7SQuJu01fszOS8hNVXlbRcHTEZbKHQrd80mcg93K
+         NIAw==
+X-Gm-Message-State: APjAAAVA+Vka8pehft0rT5LqsdjbzzmSTrRyKLYxHBqWZBaVQUIRfniK
+        8VKFhIa/+0GOEoNhwrf2fuI=
+X-Google-Smtp-Source: APXvYqzzykB4VB6XmCbFShAZ7DHf/87RgXhEgonHv5Eezjy7eiPDckPWa7PJMHXnCFN0xgBC272P5A==
+X-Received: by 2002:a63:780d:: with SMTP id t13mr8373607pgc.82.1579660293931;
+        Tue, 21 Jan 2020 18:31:33 -0800 (PST)
+Received: from EliteBook (174-17-125-110.phnx.qwest.net. [174.17.125.110])
+        by smtp.gmail.com with ESMTPSA id 11sm46222260pfz.25.2020.01.21.18.31.33
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 21 Jan 2020 18:31:33 -0800 (PST)
+Date:   Tue, 21 Jan 2020 19:31:31 -0700
+From:   Paul Zimmerman <pauldzim@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Heinzelmann <heinzelmann.david@gmail.com>
+Cc:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Subject: Re: [REGRESSION][BISECTED] 5.5-rc suspend/resume failure caused by
+ patch a4f55d8b8c14 ("usb: hub: Check device descriptor before
+ resusciation")
+Message-ID: <20200121193131.070a28bf@EliteBook>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 29969453-c86b-40b4-ec9c-08d79edcfa51
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jan 2020 01:47:02.9279
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: L4XgDQ5ZDPZW08bpvw5QDUKiTpbG/24IQ2t/N7trYuDw4j+EYlxOvGK2fhjphLsJckkPIjSQPjP0ARux7vKW/Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5997
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jun Li <jun.li@nxp.com>
+On Mon, 20 Jan 2020 13:52:15 -0700 Paul Zimmerman <pauldzim@gmail.com> wrote:
 
-Otherwise, there is a build warning if this header file is included
-by non host source file, eg, otg.c.
+> On Mon, 20 Jan 2020 10:23:11 -0500 (EST) Alan Stern <stern@rowland.harvard.edu> wrote:
+>   
+> > On Sun, 19 Jan 2020, Paul Zimmerman wrote:
+> >     
+> > > I reported this regression last week (see
+> > > https://lore.kernel.org/linux-usb/20200115153714.03d5b3aa@EliteBook/T/#u)
+> > > but I got no response to my email. Today I have retested with
+> > > 5.5-rc7 and verified that the problem still exists. So I am
+> > > resending with a different subject line to see if anyone responds.
+> > > 
+> > > The $subject patch causes a regression on my HP EliteBook laptop
+> > > with a built-in USB bluetooth adapter. About 50% of the time, a
+> > > suspend/resume cycle will cause the bluetooth adapter to stop
+> > > working.
+> > > 
+> > > The dmesg log below shows two suspend/resume cycles. At time
+> > > 63.928 you can see the bluetooth adapter being successfully
+> > > resumed, and at time 140.969 you can see it fail. After reverting
+> > > the patch, the bluetooth adapter resumes 100% of the time.
+> > > 
+> > > I also included below a lsusb -v of the bluetooth adapter. Is
+> > > there any other debugging info you'd like me to send?      
+> > 
+> > It looks like your dmesg log was made without enabling debugging 
+> > messages in usbcore.  Can you collect another log with debugging 
+> > messages turned on?
+> > 
+> > 	echo 'module usbcore =p'    
+> > >/sys/kernel/debug/dynamic_debug/control    
+> > 
+> > Also, it might not hurt to collect and post a usbmon trace for a bad
+> > suspend-resume cycle.    
+> 
+> Hi Alan,
+> 
+> Thanks for responding. The new dmesg log and the usbmon trace are
+> below. The dmesg shows a good suspend/resume followed by a bad one.
+> The bluetooth device is usb 2-3.2 I believe. The usbmon trace is only
+> for the failed suspend/resume case.  
 
-Signed-off-by: Jun Li <jun.li@nxp.com>
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
----
- drivers/usb/chipidea/host.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I did some more debugging on this using ftrace, here is an annotated
+log that shows what I think is happening on a failed resume. Note that
+hub_port_connect_change() is the function that the patch modified to
+call usb_get_device_descriptor() in some circumstances.
 
-diff --git a/drivers/usb/chipidea/host.h b/drivers/usb/chipidea/host.h
-index 70112cf0f195..2625aa01a911 100644
---- a/drivers/usb/chipidea/host.h
-+++ b/drivers/usb/chipidea/host.h
-@@ -20,7 +20,7 @@ static inline void ci_hdrc_host_destroy(struct ci_hdrc *c=
-i)
-=20
- }
-=20
--static void ci_hdrc_host_driver_init(void)
-+static inline void ci_hdrc_host_driver_init(void)
- {
-=20
- }
---=20
-2.17.1
+This first call to hub_port_connect_change() is for a different device,
+not the failing one. There are multiple other calls to that function in
+the trace, but they are not for the device in question:
+     kworker/1:6-19987 [001]  7803.175058: funcgraph_entry:                      |  hub_port_connect_change() {
+     kworker/1:6-19987 [001]  7803.175069: funcgraph_entry:      ! 11911.151 us  |    usb_get_device_descriptor();
+     kworker/2:5-20675 [002]  7803.179333: funcgraph_entry:                      |  usb_probe_interface() {
 
+Starting here is a worker thread that is trying to setup the bluetooth
+adapter after the resume:
+   kworker/u17:1-3175  [002]  7803.179457: funcgraph_entry:                      |  hci_power_on() {
+   kworker/u17:1-3175  [002]  7803.179458: funcgraph_entry:                      |    hci_dev_do_open() {
+   kworker/u17:1-3175  [002]  7803.179468: funcgraph_entry:                      |      btusb_setup_intel() {
+     kworker/2:5-20675 [002]  7803.179480: funcgraph_exit:       ! 147.596 us    |  }
+
+And here is a worker thread that is handling the connect change on the USB
+port with the bluetooth device. This happens while the btusb_setup_intel()
+function called by the other thread above is still running:
+     kworker/3:1-16790 [003]  7803.181323: funcgraph_entry:                      |  hub_port_connect_change() {
+     kworker/3:1-16790 [003]  7803.181330: funcgraph_entry:                      |    usb_get_device_descriptor() {
+     kworker/0:2-19962 [000]  7803.184885: funcgraph_entry:        6.016 us      |  hub_port_connect_change();
+     kworker/0:2-19962 [000]  7803.187208: funcgraph_entry:        5.462 us      |  hub_port_connect_change();
+     kworker/1:6-19987 [001]  7803.187835: funcgraph_exit:       ! 12776.810 us  |  }
+     kworker/1:6-19987 [001]  7803.187846: funcgraph_entry:      ! 767445.344 us |  hub_port_connect_change();
+
+By this point the failure has happened ("Bluetooth: hci0: Reading Intel
+version information failed (-110)") , and it looks like somebody
+queues another work to try setting up the bluetooth adapter again:
+       hciconfig-21074 [000]  7803.193549: funcgraph_entry:                      |  hci_dev_open() {
+     kworker/1:6-19987 [001]  7803.955315: funcgraph_entry:      ! 144039.307 us |  hub_port_connect_change();
+   kworker/u17:1-3175  [003]  7805.203325: funcgraph_exit:       ! 2023855 us    |      }
+   kworker/u17:1-3175  [003]  7805.211728: funcgraph_exit:       ! 2032269 us    |    }
+   kworker/u17:1-3175  [003]  7805.211731: funcgraph_exit:       ! 2032273 us    |  }
+       hciconfig-21074 [000]  7805.211760: funcgraph_entry:                      |    hci_dev_do_open() {
+       hciconfig-21074 [000]  7805.211777: funcgraph_entry:      ! 3069605 us    |      btusb_setup_intel();
+
+And here the usb_get_device_descriptor() call made by the USB worker thread
+finally completes. It also fails ("kworker/3:1 timed out on ep0in len=0/18"):
+     kworker/3:1-16790 [003]  7808.277224: funcgraph_exit:       ! 5095893 us    |    }
+       hciconfig-21074 [001]  7808.283313: funcgraph_exit:       ! 3071554 us    |    }
+       hciconfig-21074 [001]  7808.283315: funcgraph_exit:       ! 5089767 us    |  }
+
+So if I'm understanding this correctly, there are two threads that are
+trying to access the USB bluetooth device at the same time. I have no
+idea if that is how it's supposed to work.
+
+Thanks,
+Paul
