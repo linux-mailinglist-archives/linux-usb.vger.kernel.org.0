@@ -2,84 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB1F14509F
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2020 10:48:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDF1145128
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2020 10:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732012AbgAVJr5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jan 2020 04:47:57 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:39863 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731092AbgAVJr5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jan 2020 04:47:57 -0500
-Received: by mail-lj1-f194.google.com with SMTP id o11so5743661ljc.6
-        for <linux-usb@vger.kernel.org>; Wed, 22 Jan 2020 01:47:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=UZA8MvhgTjR1Db93Kl8ZE7I1AjnzSwS3ydOzQHANga8=;
-        b=wC0p0y6lCM/wUPS/IfTODzcD7cUkMCgxGcO/Ls1M4lnxeAF25AhC2C4Vq95flX9Cqq
-         xswljYa8WRGoOcWSXm2W6pX2i6tbrYZl/tb8PK/KF9zkamDnl/8pfd8ewgUZPz+/5fUN
-         96AHMmL0Xyt0c2MJApHZI/9syXmJZFx4J7GGEUVjJGKldYUqhWiheRD41HKTG6nv1vZ5
-         Un8WBaJ9FkkGTQC6qxUyq7cuVinhs2Dm1yIk1WWhjGE+FZDGLeYEP5xap+gN/v6mU1v2
-         ErTBn5SK/sVESEgcAgTGOTxhVZ6ZhyvAtPn6ooVjh7EqlhaL+k0gItHCbJzd4la/PwJk
-         2nyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=UZA8MvhgTjR1Db93Kl8ZE7I1AjnzSwS3ydOzQHANga8=;
-        b=L3XWDnQ1cIAHCZwKxKvd6o+Gf2deEBrqSRJ3NtpQAQiCDK+otxi4s+EeW9pp10bs5m
-         H5QP3RO8iwxfyg6sA02iV65rzO4FzqtgpBEEZMkqi9m7v7xk1s5Xn8L8cD7s7GWANmWl
-         LPlD7G3pMFhiJpNUgbQ4RiJczrVJGIrcxCgMTQrggoAyhKCnIbU1BHxOM46Up7u2dGvS
-         yINa9dc5oKRZ4XWFfpZZQQ8j74kTdgx7gZ/2X9mhwii+xDCF98DN39sUWk3WsSqnsKcQ
-         lqjabV8hfLudPRq5y7cyt570TLkiZE7RmJjClf88tQGPVpwjYMO2vzmtSSM5ih31tMXd
-         Gx5A==
-X-Gm-Message-State: APjAAAU+QGTCTAepUFLbarPU2oRq48KNk/RTP4t9JvftUS6e1aYVH/EN
-        IB1qc60NHy9yvswu+DPivGOPuA==
-X-Google-Smtp-Source: APXvYqyLk8hqyXbvO8Cs28biGHLs880vO3AoEuMqCtu7rpPoP/AP/GFODe0/mn2xfn4dxkEXiyQ0Mw==
-X-Received: by 2002:a2e:5357:: with SMTP id t23mr19259412ljd.227.1579686475289;
-        Wed, 22 Jan 2020 01:47:55 -0800 (PST)
-Received: from ?IPv6:2a00:1fa0:468a:1e6d:e8e4:fead:7539:293d? ([2a00:1fa0:468a:1e6d:e8e4:fead:7539:293d])
-        by smtp.gmail.com with ESMTPSA id r9sm23922473lfc.72.2020.01.22.01.47.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jan 2020 01:47:54 -0800 (PST)
-Subject: Re: [PATCH net 1/9] r8152: fix runtime resume for linking change
-To:     Hayes Wang <hayeswang@realtek.com>, netdev@vger.kernel.org
-Cc:     nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, pmalani@chromium.org,
-        grundler@chromium.org
-References: <1394712342-15778-338-Taiwan-albertk@realtek.com>
- <1394712342-15778-339-Taiwan-albertk@realtek.com>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <62c3af7b-0e94-c069-0d35-4b5f41031a4e@cogentembedded.com>
-Date:   Wed, 22 Jan 2020 12:47:44 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1730878AbgAVJwN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jan 2020 04:52:13 -0500
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:14233 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729537AbgAVJwM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jan 2020 04:52:12 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e281b3c0001>; Wed, 22 Jan 2020 01:51:56 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 22 Jan 2020 01:52:10 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 22 Jan 2020 01:52:10 -0800
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 22 Jan
+ 2020 09:52:10 +0000
+Received: from NAM04-CO1-obe.outbound.protection.outlook.com (104.47.45.54) by
+ HQMAIL111.nvidia.com (172.20.187.18) with Microsoft SMTP Server (TLS) id
+ 15.0.1473.3 via Frontend Transport; Wed, 22 Jan 2020 09:52:10 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lGwCHzpH9oFrq5X8xf5XkP0a6IA3i2g0bcVtEsBlOvLSMa6+6FOyl2TRZM9ArLY+ar2UpXPxeRF/4KM+bh8Wa4J7dw0nNnfC0s5rd2KJWTR2BbjPMPPVIGFqVgjBbu+sW4m5oZTD0Oum+TzJ4MfS5FqUYNE2HeQ8zisancWDsCsVCl2X4FOWCDvPaP+bZ9B6Wmx4gcpR9NYBNR+Pe5A2KABefaBBmp32DnfQ8vfB5X4lcqaesPVXut1pBe6L/XRf8il2mcTDwM1U/HZi/OuFCCjmeThXfmUlRBRh3vU9sSQq7juiuJDeTcOhP+ihnZ/c8Juxjqbekww9zccMdoQ7jg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oGpz8SmHZ5o0un2cqTswzrfEG7MGkkOBeijFklCGjt0=;
+ b=KYnyHwgcSW8DLGWAhd7WX1OB8AJvPNjMolZhDeIkima38t+YqTzRJlJwdpWyUhe10LL9nO7fJsCTmBCf3LXBd3nf82z0GdFAKzgR4TAVIluJdsa873rsJmvda2lyxNsmq6BrvnV5jDzF3f2xhrnMzgt8den9mO5V3tcHhi2/sk+qvd3//ikIXFAkyAXVrA9fwEo0uam2VoT3cAUMkI6yE3NtOeekqIERxL9HZfphCKNmk23qCUo1pE0wSijLqu3H8eIPQamtvI//lNMN6Dvo9eARtH7AKIhV5AaUMJIxK0bWn06bgOKtjaE5idoX4J3RGZgGHAEpXuSZeyJeTCf3gQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+Received: from MN2PR12MB4126.namprd12.prod.outlook.com (10.255.125.12) by
+ MN2PR12MB3613.namprd12.prod.outlook.com (20.178.240.81) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2644.23; Wed, 22 Jan 2020 09:52:09 +0000
+Received: from MN2PR12MB4126.namprd12.prod.outlook.com
+ ([fe80::cd37:66e9:2ab1:b349]) by MN2PR12MB4126.namprd12.prod.outlook.com
+ ([fe80::cd37:66e9:2ab1:b349%5]) with mapi id 15.20.2644.027; Wed, 22 Jan 2020
+ 09:52:09 +0000
+From:   EJ Hsu <ejh@nvidia.com>
+To:     Oliver Neukum <oneukum@suse.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH] usb: uas: fix a plug & unplug racing
+Thread-Topic: [PATCH] usb: uas: fix a plug & unplug racing
+Thread-Index: AQHVycHw0Tn7jTscuEWM2br6Fy2U56foWKIAgAEXieCAAM3GgIAABnmAgAE1LICAAGJiAIAHe0gAgAGm5wCAAXvZ4A==
+Date:   Wed, 22 Jan 2020 09:52:09 +0000
+Message-ID: <MN2PR12MB4126A6A761F168E03E751E5ACF0C0@MN2PR12MB4126.namprd12.prod.outlook.com>
+References: <Pine.LNX.4.44L0.2001140956040.1593-100000@iolanthe.rowland.org>
+         <1579080683.15925.24.camel@suse.com>
+         <MN2PR12MB41262435500D3FC463DBFC32CF370@MN2PR12MB4126.namprd12.prod.outlook.com>
+ <1579513114.17973.13.camel@suse.com>
+ <MN2PR12MB4126317E9BA1D269BE83E4EDCF0D0@MN2PR12MB4126.namprd12.prod.outlook.com>
+In-Reply-To: <MN2PR12MB4126317E9BA1D269BE83E4EDCF0D0@MN2PR12MB4126.namprd12.prod.outlook.com>
+Accept-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Enabled=True;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SiteId=43083d15-7273-40c1-b7db-39efd9ccc17a;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Owner=ejh@nvidia.com;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2020-01-21T11:29:08.8625895Z;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Name=Unrestricted;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Application=Microsoft Azure
+ Information Protection;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_ActionId=bed02c3e-6b5c-40a0-8609-c924db6b29ae;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Extended_MSFT_Method=Automatic
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=ejh@nvidia.com; 
+x-originating-ip: [59.124.78.18]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d2bc1903-0865-462c-20b6-08d79f20bf4c
+x-ms-traffictypediagnostic: MN2PR12MB3613:
+x-microsoft-antispam-prvs: <MN2PR12MB361382D0863E3B9B2ACF691ECF0C0@MN2PR12MB3613.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 029097202E
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(396003)(376002)(136003)(39860400002)(366004)(199004)(189003)(7696005)(71200400001)(5660300002)(76116006)(66946007)(66446008)(33656002)(66476007)(478600001)(66556008)(64756008)(8676002)(52536014)(26005)(6506007)(110136005)(316002)(186003)(2906002)(8936002)(4326008)(55016002)(9686003)(86362001)(81156014)(81166006);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR12MB3613;H:MN2PR12MB4126.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nvidia.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DGklO1ITMIGE4EN3FBUKVEaUzRKzCXydlpfplmozip5SjXROM5zgiU6Awb+Niau5C0EneQWkY9QdetDWWFN+cmc7PqvrZYZM5HwXMUqpKVCW1u3l8Wi/q/HkwCNbQExdGrg/HVyoC4Q/onFtsbm2gDMYrpnilX8D7dtpPEQNMkqRKI7Wmo4YaO1vAuS5AyLROum6jCFTwA97q0ApOdfGDBtLyUeHs92iarZRIfx0Vw8a7DaMBNkmv7999pMD4v/eyW4lHVfrHVzuvy9734RyTe/d2qP1JBPLQzt0dOLqPjCkjOO9oVMeVPtU9wtfWrPzbrEgswJSb/8lwYNpoMxBnauVb1YDaSZykYHeqChvz2gtN1C7op9bGZWIDjEVFt6XB3DHOp19qbfgofrChhb3Oz3G8Kw8catepByXSakkB+apExjb+PATUXXMMtbvbRXs
+x-ms-exchange-transport-forked: True
 MIME-Version: 1.0
-In-Reply-To: <1394712342-15778-339-Taiwan-albertk@realtek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2bc1903-0865-462c-20b6-08d79f20bf4c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jan 2020 09:52:09.1500
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ePLEK7B+DjNJ77drqdRHsxcBFJaid67JvYUTCiOL/7IyMiM8HmNh0MrFugSLtVlA
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3613
+X-OriginatorOrg: Nvidia.com
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1579686716; bh=oGpz8SmHZ5o0un2cqTswzrfEG7MGkkOBeijFklCGjt0=;
+        h=X-PGP-Universal:ARC-Seal:ARC-Message-Signature:
+         ARC-Authentication-Results:From:To:CC:Subject:Thread-Topic:
+         Thread-Index:Date:Message-ID:References:In-Reply-To:
+         Accept-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:msip_labels:
+         authentication-results:x-originating-ip:x-ms-publictraffictype:
+         x-ms-office365-filtering-correlation-id:x-ms-traffictypediagnostic:
+         x-microsoft-antispam-prvs:x-ms-oob-tlc-oobclassifiers:
+         x-forefront-prvs:x-forefront-antispam-report:received-spf:
+         x-ms-exchange-senderadcheck:x-microsoft-antispam:
+         x-microsoft-antispam-message-info:x-ms-exchange-transport-forked:
+         MIME-Version:X-MS-Exchange-CrossTenant-Network-Message-Id:
+         X-MS-Exchange-CrossTenant-originalarrivaltime:
+         X-MS-Exchange-CrossTenant-fromentityheader:
+         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
+         X-MS-Exchange-CrossTenant-userprincipalname:
+         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
+         Content-Language:Content-Type:Content-Transfer-Encoding;
+        b=ctxka0QBAfo1ZFsXS5b3nlxJ3b4FI+ld+kcCM06BGPlEBlAlsy9fhur9vOebGPlzC
+         KlZkSK6idtV5PJMVJ9Ady9iz2yQdcUKiDDQy/5euIL/COOaZOi7zBzX8PDyjgmj6AO
+         idiEaXjTSQ9K9f5poNtJ/kydAvMhF5XSYE6S5ZT54wU8NPYqVpQYbQBrrYbR0KoCKV
+         GgujrhU46Lw+K3l6O7dz3YM6OE8YW4vkuUOgIdy3MIEfzIyIX4rrUvFxnh5PxHz/VE
+         8EOs2JWEkqAfubmYybG+ppehmuoHGD3aKL9ZEMuhjcO14IpLJpf540vjM3QKxfslRV
+         hScKVFURqv1xA==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
-
-On 21.01.2020 15:40, Hayes Wang wrote:
-
-> Fix the runtime resume doesn't work normally for linking change.
-
-    s/doesn't work/not working/?
-
-> 1. Reset the settings and status of runtime suspend.
-> 2. Sync the linking status.
-> 3. Poll the linking change.
-> 
-> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
-[...]
-
-MBR, Sergei
+RUogSHN1IHdyb3RlOg0KDQo+IE9saXZlciBOZXVrdW0gd3JvdGU6DQo+IA0KPiA+ID4gSSBqdXN0
+IGNoZWNrZWQgdGhlIGNvZGUsIGFuZCB0aGUgcmVmZXJlbmNlIGNvdW50IHdpbGwgYmUgaW5jcmVt
+ZW50ZWQNCj4gPiA+IGluIHNjc2lfc2Nhbl9ob3N0KCksIHByZWNpc2VseSBzcGVha2luZywgaW4g
+c2NzaV9hdXRvcG1fZ2V0X2hvc3QoKS4NCj4gPiA+IFNvLCBJIHN0aWxsIHRoaW5rIHdlIG5lZWQg
+dG8gbWFudWFsbHkgYWRkIHJlZmVyZW5jZSBjb3VudCBvZiBpbnRlcmZhY2UgaGVyZS4NCj4gPiA+
+IFBsZWFzZSBjb3JyZWN0IG1lIGlmIHRoZXJlIGlzIGFueXRoaW5nIHdyb25nLg0KPiA+DQo+ID4g
+QUZBSUNUIHRoZSBnZW5lcmljIHBvd2VyIG1vZGVsIHdpbGwgbm90IHN1c3BlbmQgYSBwYXJlbnQg
+d2hpbGUgYSBjaGlsZA0KPiA+IGlzIGFjdGl2ZS4gVGhlIGluY2x1ZGVzIFNDU0kgY2hpbGRyZW4g
+b2YgVVNCIHBhcmVudHMuIFNvIEkgdGhpbmsgd2UNCj4gPiBhcmUgc2FmZS4gQ291bGQgeW91IHJl
+c3VibWl0IHlvdXIgcGF0Y2ggd2l0aG91dCB0aGUgUE0gY291bnRlcg0KPiA+IG1hbmlwdWxhdGlv
+biBhbmQgd2UgY2FuIGZpeCBhbnkgaXNzdWUgdGhhdCBtYXkgZXhpc3QgaW4gdGhlb3J5IGxhdGVy
+Pw0KPiA+DQo+IA0KPiBUaGUgY2hpbGRfY291bnQgb2YgdXNiIGRldmljZSBzaG91bGQgYmUgaW5j
+cmVtZW50ZWQgaW4gdGhlIHNjc2lfc2Nhbl9ob3N0KCkuDQo+IEkgY2FuIHNpbXVsYXRlIHRoaXMg
+c2l0dWF0aW9uIGJ5IGZvcmNpYmx5IGVuYWJsZSB0aGUgYXV0b3N1c3BlbmQgb2YgdWFzIGRyaXZl
+cg0KPiBhbmQgYWRkIGEgZGVsYXkgYmVmb3JlIHNjc2lfc2Nhbl9ob3N0KCkgaXMgY2FsbGVkIGlu
+IGFzeW5jaHJvbm91cyB3YXkuDQo+IA0KPiBCdXQgZm9yIG5vdywgYXMgdWFzIGRyaXZlciBkb2Vz
+IG5vdCBzdXBwb3J0IGF1dG9zdXNwZW5kLCBpdCBpcyBpbmRlZWQgc2FmZSB0bw0KPiByZW1vdmUg
+dGhlIFBNIGNvdW50ZXIgbWFuaXB1bGF0aW9uLiBJZiB5b3UgaGF2ZSBjb25jZXJuIGFib3V0IGl0
+LCBpdCdzIE9LIHRvDQo+IG1lIHRvIHJlLXN1Ym1pdCBpdC4NCj4gDQoNCkJ5IHRoZSB3YXksIGlm
+IGF1dG9zdXNwZW5kIHdpbGwgYmUgZW5hYmxlZCBpbiB1YXMgZHJpdmVyIGluIHRoZSBmdXR1cmUs
+IA0KdGhlIFBNIGNvdW50ZXIgbWFuaXB1bGF0aW9uIHNob3VsZCBiZSBhZGRlZCBiZWZvcmUgc2Nz
+aV9hZGRfaG9zdCgpLCANCmp1c3QgYXMgTVNDIGRyaXZlciBkaWQuIE90aGVyd2lzZSwgdGhlIGNo
+aWxkX2NvdW50IG9mIHVzYiBkZXZpY2UgbWlnaHQgYmUNCmFjY2lkZW50YWxseSBkZWNyZW1lbnRl
+ZC4gKHRoZSBycG0gImlkbGUiIG1lc3NhZ2Ugd2lsbCBiZSBwcm9wYWdhdGVkDQpmcm9tIHNjc2kg
+aG9zdCB0byB1c2IgaW50ZXJmYWNlIGFuZCB1c2IgZGV2aWNlKQ0KDQpUaGFua3MsDQpFSg0KLS1u
+dnB1YmxpYw0K
