@@ -2,34 +2,34 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C956B144DD9
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2020 09:45:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59014144E14
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2020 09:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726026AbgAVIpO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jan 2020 03:45:14 -0500
-Received: from mga03.intel.com ([134.134.136.65]:1126 "EHLO mga03.intel.com"
+        id S1728890AbgAVI50 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jan 2020 03:57:26 -0500
+Received: from mga11.intel.com ([192.55.52.93]:61732 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726004AbgAVIpO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 Jan 2020 03:45:14 -0500
+        id S1726231AbgAVI50 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 Jan 2020 03:57:26 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Jan 2020 00:45:13 -0800
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Jan 2020 00:57:25 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,348,1574150400"; 
-   d="scan'208";a="399941190"
+   d="scan'208";a="215834337"
 Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 22 Jan 2020 00:45:12 -0800
+  by orsmga007.jf.intel.com with ESMTP; 22 Jan 2020 00:57:24 -0800
 Received: from kbuild by lkp-server01 with local (Exim 4.89)
         (envelope-from <lkp@intel.com>)
-        id 1iuBdP-000Eyi-JI; Wed, 22 Jan 2020 16:45:11 +0800
-Date:   Wed, 22 Jan 2020 16:44:58 +0800
+        id 1iuBpE-000Eyr-BX; Wed, 22 Jan 2020 16:57:24 +0800
+Date:   Wed, 22 Jan 2020 16:57:12 +0800
 From:   kbuild test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- dd7d99dc688d0fc448976f52f8517fbdeccdccda
-Message-ID: <5e280b8a.XjkDSevI8Bk/gX6Q%lkp@intel.com>
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 1e31d3caa262cffa728e007ad209fb8e72b276a8
+Message-ID: <5e280e68.n8hFroJqTUKbewNM%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -39,12 +39,12 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-next
-branch HEAD: dd7d99dc688d0fc448976f52f8517fbdeccdccda  Merge 5.5-rc7 into usb-next
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: 1e31d3caa262cffa728e007ad209fb8e72b276a8  usb: musb: fix spelling mistake: "periperal" -> "peripheral"
 
-elapsed time: 603m
+elapsed time: 614m
 
-configs tested: 152
+configs tested: 146
 configs skipped: 0
 
 The following configs have been built successfully.
@@ -91,23 +91,7 @@ parisc                            allyesonfig
 parisc                         b180_defconfig
 parisc                        c3000_defconfig
 parisc                              defconfig
-arc                  randconfig-a001-20200122
-arm                  randconfig-a001-20200122
-arm64                randconfig-a001-20200122
-ia64                 randconfig-a001-20200122
-powerpc              randconfig-a001-20200122
-sparc                randconfig-a001-20200122
 ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-ia64                                defconfig
-x86_64               randconfig-f001-20200122
-x86_64               randconfig-f002-20200122
-x86_64               randconfig-f003-20200122
-i386                 randconfig-f001-20200122
-i386                 randconfig-f002-20200122
-i386                 randconfig-f003-20200122
 sparc                               defconfig
 sparc64                          allmodconfig
 sparc64                           allnoconfig
@@ -126,13 +110,15 @@ x86_64               randconfig-c003-20200122
 i386                 randconfig-c001-20200122
 i386                 randconfig-c002-20200122
 i386                 randconfig-c003-20200122
-alpha                               defconfig
-csky                                defconfig
-nds32                             allnoconfig
-nds32                               defconfig
 um                                  defconfig
 um                             i386_defconfig
 um                           x86_64_defconfig
+arc                  randconfig-a001-20200122
+arm                  randconfig-a001-20200122
+arm64                randconfig-a001-20200122
+ia64                 randconfig-a001-20200122
+powerpc              randconfig-a001-20200122
+sparc                randconfig-a001-20200122
 c6x                  randconfig-a001-20200122
 h8300                randconfig-a001-20200122
 microblaze           randconfig-a001-20200122
@@ -151,16 +137,14 @@ mips                 randconfig-a001-20200122
 nds32                randconfig-a001-20200122
 parisc               randconfig-a001-20200122
 riscv                randconfig-a001-20200122
-x86_64               randconfig-b001-20200122
-x86_64               randconfig-b002-20200122
-x86_64               randconfig-b003-20200122
-i386                 randconfig-b001-20200122
-i386                 randconfig-b002-20200122
-i386                 randconfig-b003-20200122
 i386                             alldefconfig
 i386                              allnoconfig
 i386                             allyesconfig
 i386                                defconfig
+alpha                               defconfig
+csky                                defconfig
+nds32                             allnoconfig
+nds32                               defconfig
 x86_64               randconfig-d001-20200122
 x86_64               randconfig-d002-20200122
 x86_64               randconfig-d003-20200122
@@ -173,6 +157,11 @@ riscv                            allyesconfig
 riscv                               defconfig
 riscv                    nommu_virt_defconfig
 riscv                          rv32_defconfig
+csky                 randconfig-a001-20200122
+openrisc             randconfig-a001-20200122
+s390                 randconfig-a001-20200122
+sh                   randconfig-a001-20200122
+xtensa               randconfig-a001-20200122
 arm                               allnoconfig
 arm                              allyesconfig
 arm                         at91_dt_defconfig
@@ -185,17 +174,22 @@ arm                           sunxi_defconfig
 arm64                             allnoconfig
 arm64                            allyesconfig
 arm64                               defconfig
-csky                 randconfig-a001-20200122
-openrisc             randconfig-a001-20200122
-s390                 randconfig-a001-20200122
-sh                   randconfig-a001-20200122
-xtensa               randconfig-a001-20200122
 x86_64               randconfig-a001-20200122
 x86_64               randconfig-a002-20200122
 x86_64               randconfig-a003-20200122
 i386                 randconfig-a001-20200122
 i386                 randconfig-a002-20200122
 i386                 randconfig-a003-20200122
+x86_64               randconfig-b001-20200122
+x86_64               randconfig-b002-20200122
+x86_64               randconfig-b003-20200122
+i386                 randconfig-b001-20200122
+i386                 randconfig-b002-20200122
+i386                 randconfig-b003-20200122
+ia64                             allmodconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+ia64                                defconfig
 x86_64               randconfig-g001-20200122
 x86_64               randconfig-g002-20200122
 x86_64               randconfig-g003-20200122
