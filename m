@@ -2,122 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 133A61463FC
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2020 09:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2682F14648C
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2020 10:24:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726188AbgAWI5N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jan 2020 03:57:13 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:40251 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726118AbgAWI5M (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jan 2020 03:57:12 -0500
-Received: by mail-oi1-f196.google.com with SMTP id c77so2212907oib.7;
-        Thu, 23 Jan 2020 00:57:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FOcU+zqIj0p8y5XagUPuXt5O53Xv6iFTqJ28oqGaybI=;
-        b=E/eoxx0dMwXMAJQ9ORnjvKIjkD1Q6/ZsNCSBY0gC0CAxzQ38KexGurcJeueSYqHczM
-         kW8mNvcRS35jnQkWttueVlWgsTPFm1/p0W+N7xgLlF/zBSam5e+KOjbfkMJq3mXguXZP
-         l6G+SPpm5alSXQ5TaT9mtbxJZF/Z4SGb/yCwiqGjxjHW9uvvLSttxviBBc1Gx92MIFmv
-         GtjhdBeuThG2/fNuwVe9rvL1kEBs3fEO4OhUZP67OHgfmCNn/pSLJAHI+dYf2WkM2f/7
-         xeBq6XOCCdP+8oixluTNssP3rASXEr402WQ2F5L2KWzpRc5ZYKODqvX5si37gqx1XJ95
-         9dug==
-X-Gm-Message-State: APjAAAUgPsn82YgNEMedkAbj0aFxTeFPAlBWdLgo71Mi/ajQtjgGABBq
-        ol9o7O9bBjXUI7EsquhU0bBiy2V2gsFW2i/799c=
-X-Google-Smtp-Source: APXvYqxU4h1Hy9pdmgwCUc/udQj6duwROInvBWOHO0tGLntJf9S8IeHFQPb/0iuHnI57fa5N+GOsn7vyiUcibjVZckg=
-X-Received: by 2002:aca:5905:: with SMTP id n5mr10070165oib.54.1579769831776;
- Thu, 23 Jan 2020 00:57:11 -0800 (PST)
+        id S1726170AbgAWJY5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jan 2020 04:24:57 -0500
+Received: from mga14.intel.com ([192.55.52.115]:37375 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725785AbgAWJY5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Jan 2020 04:24:57 -0500
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Jan 2020 01:24:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,353,1574150400"; 
+   d="scan'208";a="287358541"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 23 Jan 2020 01:24:54 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 23 Jan 2020 11:24:54 +0200
+Date:   Thu, 23 Jan 2020 11:24:54 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Ajay Gupta <ajaykuee@gmail.com>
+Cc:     linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>
+Subject: Re: [PATCH 1/2] usb: typec: ucsi: register DP only for NVIDIA DP VDO
+Message-ID: <20200123092454.GA2905@kuha.fi.intel.com>
+References: <20200116013247.16507-1-ajayg@nvidia.com>
 MIME-Version: 1.0
-References: <1579258447-28135-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
- <1579258447-28135-2-git-send-email-yoshihiro.shimoda.uh@renesas.com>
- <CAMuHMdU3SyOTSt2E1JkZsTbqfRgCOSOWrugd4uhmJ05p+azwYw@mail.gmail.com>
- <TYAPR01MB4544EF1219B2670289410772D8320@TYAPR01MB4544.jpnprd01.prod.outlook.com>
- <TYAPR01MB4544596E4415FBD3101934D8D80F0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-In-Reply-To: <TYAPR01MB4544596E4415FBD3101934D8D80F0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 23 Jan 2020 09:57:00 +0100
-Message-ID: <CAMuHMdU8yepTTE6FmBToeOXGWK9SQOQ-hjJBjPX-z3NAPYr7EA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: usb: generic-ehci: add a quirk property
- to avoid stuck
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Tony Prisk <linux@prisktech.co.nz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200116013247.16507-1-ajayg@nvidia.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Shimoda-san,
+Hi Ajay,
 
-On Thu, Jan 23, 2020 at 9:17 AM Yoshihiro Shimoda
-<yoshihiro.shimoda.uh@renesas.com> wrote:
-> > From: Yoshihiro Shimoda, Sent: Monday, January 20, 2020 5:05 PM
-> > > > --- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-> > > > +++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-> > > > @@ -63,6 +63,11 @@ properties:
-> > > >      description:
-> > > >        Set this flag to force EHCI reset after resume.
-> > > >
-> > > > +  needs-polling-to-avoid-stuck:
-> > > > +    $ref: /schemas/types.yaml#/definitions/flag
-> > > > +    description:
-> > > > +      Set this flag to avoid getting EHCI stuck.
-> > > > +
-> > > >    companion:
-> > > >      $ref: /schemas/types.yaml#/definitions/phandle
-> > > >      description:
-> > >
-> > > If this issue is specific to the EHCI/OHCI implementation on R-Car Gen3,
-> > > I don't think this is the best solution to handle it.
-> > > It might be better to add family/SoC-specific compatible values for the
-> > > EHCI/OHCI controllers in R-Car Gen3 SoCs, cfr. the (undocumented)
-> > > "ibm,usb-ehci-440epx" and "allwinner,sun4i-a10-ehci" compatible values
-> > > in the example in the DT bindings file (probably we should have done so
-> > > from the start, like for all other devices).
-> > > Then the driver can handle the issue based on the compatible value.
-> >
-> > I understood it. And I'm also think adding family/SoC-specific compatible
-> > values are better.
->
-> I'm trying to add some undocumented compatible values, but it seems hard
-> to add because:
-> - Some dts[i] files have undocumented compatible strings.
->  # We can find it by using the following command:
->  # $ grep "generic-ehci" `find -name "*.dts*"` | grep ","
->
-> - I tried to use "oneOf:" and "contains:" combination, but it failed.
->
-> - This generic-ehci.yaml uses "contains:" for the compatible now.
->   So, even if compatible property has undocumented compatible string,
->   make dtbs_check command succeeded (except node names).
+On Wed, Jan 15, 2020 at 05:32:46PM -0800, Ajay Gupta wrote:
+> From: Ajay Gupta <ajayg@nvidia.com>
+> 
+> NVIDIA VirtualLink (svid 0x955) has two altmode with vdo values
+> of vdo=0x1 for VirtualLink DP mode and vdo=0x3 for NVIDIA test
+> mode. Register display altmode driver only for vdo=0x1
+> 
+> Signed-off-by: Ajay Gupta <ajayg@nvidia.com>
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 12 ++++++++++--
+>  include/linux/usb/typec_dp.h  |  2 ++
+>  2 files changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index d5a6aac86327..eca9d598a42f 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -270,9 +270,16 @@ static int ucsi_register_altmode(struct ucsi_connector *con,
+>  
+>  		switch (desc->svid) {
+>  		case USB_TYPEC_DP_SID:
+> -		case USB_TYPEC_NVIDIA_VLINK_SID:
+>  			alt = ucsi_register_displayport(con, override, i, desc);
+>  			break;
+> +		case USB_TYPEC_NVIDIA_VLINK_SID:
+> +			if (desc->vdo == USB_TYPEC_NVIDIA_VLINK_DBG_VDO)
+> +				alt = typec_port_register_altmode(con->port,
+> +								  desc);
+> +			else
+> +				alt = ucsi_register_displayport(con, override,
+> +								i, desc);
+> +			break;
+>  		default:
+>  			alt = typec_port_register_altmode(con->port, desc);
+>  			break;
+> @@ -475,7 +482,8 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
+>  	while (adev[i]) {
+>  		if (recipient == UCSI_RECIPIENT_SOP &&
+>  		    (adev[i]->svid == USB_TYPEC_DP_SID ||
+> -			adev[i]->svid == USB_TYPEC_NVIDIA_VLINK_SID)) {
+> +			(adev[i]->svid == USB_TYPEC_NVIDIA_VLINK_SID &&
+> +			adev[i]->vdo != USB_TYPEC_NVIDIA_VLINK_DBG_VDO))) {
+>  			pdev = typec_altmode_get_partner(adev[i]);
+>  			ucsi_displayport_remove_partner((void *)pdev);
+>  		}
+> diff --git a/include/linux/usb/typec_dp.h b/include/linux/usb/typec_dp.h
+> index fc4c7edb2e8a..848321c4498e 100644
+> --- a/include/linux/usb/typec_dp.h
+> +++ b/include/linux/usb/typec_dp.h
+> @@ -10,6 +10,8 @@
+>   * IDs as the SVID.
+>   */
+>  #define USB_TYPEC_NVIDIA_VLINK_SID	0x955	/* NVIDIA VirtualLink */
+> +#define USB_TYPEC_NVIDIA_VLINK_DP_VDO	0x1
+> +#define USB_TYPEC_NVIDIA_VLINK_DBG_VDO	0x3
 
-Probably you'll have to write a separate DT binding doc file for R-Car Gen3,
-referring to generic-ehci.yaml using $ref.
+I think those should be defined in ucsi.c for now. We can move them to
+the header if there is another user.
 
-> - In my opinion, almost all user (excect R-Car SoCs) doesn't needs
->   specific compatible values, so that adding such compatible values
->   causes less usability in the future.
->
-> So, I suspended adding specific compatible values and I'll use
-> soc_device_match() for this workaround for now...
-
-Which has the advantage that it will enable the quirk with old DTBs, too ;-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
+thanks,
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+heikki
