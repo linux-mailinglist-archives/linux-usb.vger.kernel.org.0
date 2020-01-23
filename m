@@ -2,211 +2,220 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1B414628C
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2020 08:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C6A1462B0
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2020 08:29:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726092AbgAWHYz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jan 2020 02:24:55 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:44652 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725785AbgAWHYz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jan 2020 02:24:55 -0500
-Received: by mail-lj1-f196.google.com with SMTP id q8so2035087ljj.11;
-        Wed, 22 Jan 2020 23:24:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=PO+/EdtxmoIB337Uw05Y/8H8Ge6zwOpflVL5MWt26PY=;
-        b=G0fds4rIEiyIfLJHqvfVgDDOj1X4PQddS9IFWnrCIb0JSNo2SbYipZrqG2y8oayiuC
-         VOMgzOa/youe9ap0jgRM7ap3JaJCY2b1/xVKK6rziVZefT70k97pLulMPTsr+pxetOxC
-         sI+CnbNaaq2hIDw2bd1GK0CtzXb5kFXcugEOBNBXd7Cgv/dPMJQfoV4DFUSJpWDjIoGp
-         zDQs9P3rd3hd8ATvzMzskQuce0OPDMzoy14O0p/njhv8canVsfVxhWQrJ1ytX7uPwwVe
-         YRg8nwLa09rR6J+r3/98FJs295/Tftbq0zy/CIyGrdP68gZ5MovXWV55Lgr5kmiHmWtx
-         ESMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=PO+/EdtxmoIB337Uw05Y/8H8Ge6zwOpflVL5MWt26PY=;
-        b=qu7K58e1L4YJNFx2Q7EzAvBBUWvLwdIU2CQMGjdnC4wUbdKolQAPBx1fsCJYWLkBtm
-         YO6wJFuZEvyW+ByUll9oYjYQ/xdcylzfUcV+5aYRMrqDQ6qUgSaMDaJ0dCpVTWOZEXQ/
-         yulW2QZvP0rDYvTM45UlBknrQ8XAwNn46u6Ateio1onqcj2tyUHTgEdjNvj1dYCtifdT
-         ULm75Gx35915Bk2pSVv6ZiVETYcjoSlwhGOe/ezFrOXVDNVJHEj1u4Ad6aevkFv/Z5jY
-         VQRcg6+U6S7yTeN2J5SAlccPIjcpG5mMkb0AUgmuw3dlrd9hHp2h+dcKfH8qtqz2qC3i
-         MPHA==
-X-Gm-Message-State: APjAAAUgRxGJSOLPAi8VtTCRDfNjnfaYpn6GBndU4yar4E7a+zXGMr9l
-        sa1JGciHWGCkazuYF2EWSoI=
-X-Google-Smtp-Source: APXvYqyL5kKScDlEz+0IBCoUuFQTzXQhJEUjdjWCkW35DBPBwbvEvZfdfDleC0OjDRAiD9xYmfmn4g==
-X-Received: by 2002:a2e:880c:: with SMTP id x12mr22004208ljh.44.1579764291777;
-        Wed, 22 Jan 2020 23:24:51 -0800 (PST)
-Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id m15sm620655ljg.4.2020.01.22.23.24.50
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 22 Jan 2020 23:24:50 -0800 (PST)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     John Stultz <john.stultz@linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Cc:     Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Yang Fei <fei.yang@intel.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
-        Tejas Joglekar <tejas.joglekar@synopsys.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        John Stultz <john.stultz@linaro.org>
-Subject: Re: [RFC][PATCH 2/2] usb: dwc3: gadget: Correct the logic for finding last SG entry
-In-Reply-To: <20200122222645.38805-3-john.stultz@linaro.org>
-References: <20200122222645.38805-1-john.stultz@linaro.org> <20200122222645.38805-3-john.stultz@linaro.org>
-Date:   Thu, 23 Jan 2020 09:25:40 +0200
-Message-ID: <87r1zq4osr.fsf@kernel.org>
+        id S1725989AbgAWH3m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jan 2020 02:29:42 -0500
+Received: from mga02.intel.com ([134.134.136.20]:35614 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725777AbgAWH3l (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Jan 2020 02:29:41 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Jan 2020 23:29:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,353,1574150400"; 
+   d="scan'208";a="227919949"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 22 Jan 2020 23:29:39 -0800
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1iuWvr-0005Qf-Cx; Thu, 23 Jan 2020 15:29:39 +0800
+Date:   Thu, 23 Jan 2020 15:28:28 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ eb7a3bb8c955b3694e0e0998413ce1563c02f90c
+Message-ID: <5e294b1c.Leg3sKIh8N9pUi8/%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: eb7a3bb8c955b3694e0e0998413ce1563c02f90c  usb: typec: fusb302: fix "op-sink-microwatt" default that was in mW
 
+elapsed time: 971m
 
-Hi,
+configs tested: 165
+configs skipped: 0
 
-John Stultz <john.stultz@linaro.org> writes:
-> From: Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
->
-> As a process of preparing TRBs usb_gadget_map_request_by_dev() is
-> called from dwc3_prepare_trbs() for mapping the request. This will
-> call dma_map_sg() if req->num_sgs are greater than 0. dma_map_sg()
-> will map the sg entries in sglist and return the number of mapped SGs.
-> As a part of mapping, some sg entries having contigous memory may be
-> merged together into a single sg (when IOMMU used). So, the number of
-> mapped sg entries may not be equal to the number of orginal sg entries
-> in the request (req->num_sgs).
->
-> As a part of preparing the TRBs, dwc3_prepare_one_trb_sg() iterates over
-> the sg entries present in the sglist and calls sg_is_last() to identify
-> whether the sg entry is last and set IOC bit for the last sg entry. The
-> sg_is_last() determines last sg if SG_END is set in sg->page_link. When
-> IOMMU used, dma_map_sg() merges 2 or more sgs into a single sg and it
-> doesn't retain the page_link properties. Because of this reason the
-> sg_is_last() may not find SG_END and thus resulting in IOC bit never
-> getting set.
->
-> For example:
->
-> Consider a request having 8 sg entries with each entry having a length of
-> 4096 bytes. Assume that sg1 & sg2, sg3 & sg4, sg5 & sg6, sg7 & sg8 are
-> having contigous memory regions.
->
-> Before calling dma_map_sg():
->             sg1-->sg2-->sg3-->sg4-->sg6-->sg7-->sg8
-> dma_length: 4K    4K    4K    4K    4K    4K    4K
-> SG_END:     False False False False False False True
-> num_sgs =3D 8
-> num_mapped_sgs =3D 0
->
-> The dma_map_sg() merges sg1 & sg2 memory regions into sg1->dma_address.
-> Similarly sg3 & sg4 into sg2->dma_address, sg5 & sg6 into the
-> sg3->dma_address and sg6 & sg8 into sg4->dma_address. Here the memory
-> regions are merged but the page_link properties like SG_END are not
-> retained into the merged sgs.
->
-> After calling dma_map_sg();
->             sg1-->sg2-->sg3-->sg4-->sg6-->sg7-->sg8
-> dma_length: 8K    8K    8K    8K    0K    0K     0K
-> SG_END:     False False False False False False True
-> num_sgs =3D 8
-> num_mapped_sgs =3D 4
->
-> After calling dma_map_sg(), sg1,sg2,sg3,sg4 are having dma_length of
-> 8096 bytes each and remaining sg4,sg5,sg6,sg7 are having 0 bytes of
-> dma_length.
->
-> After dma_map_sg() is performed dma_perpare_trb_sg() iterates on all sg
-> entries and sets IOC bit only for the sg8 (since sg_is_last() returns true
-> only for sg8). But after calling dma_map_sg() the valid data are present
-> only till sg4 and the IOC bit should be set for sg4 TRB only (which is not
-> happening in the present code)
->
-> The above mentioned issue can be fixed by determining last sg based on the
-> req->num_queued_sgs instead of sg_is_last(). If (req->num_queued_sgs + 1)
-> is equal to req->num_mapped_sgs, then this sg is the last sg. In the above
-> example, the dwc3 driver has already queued 3 sgs (upto sg3), so the
-> num_queued_sgs =3D 3. On preparing the next sg (i.e sg4), check for last =
-sg
-> (num_queued_sgs + 1) =3D=3D num_mapped_sgs becomes true. So, the driver s=
-ets
-> IOC bit for sg4. This patch does the same.
->
-> At a practical level, this patch resolves USB transfer stalls
-> seen with adb on dwc3 based db845c, pixel3 and other qcom
-> hardware after functionfs gadget added scatter-gather support
-> around v4.20.
->
-> Cc: Felipe Balbi <felipe.balbi@linux.intel.com>
-> Cc: Yang Fei <fei.yang@intel.com>
-> Cc: Thinh Nguyen <thinhn@synopsys.com>
-> Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
-> Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-> Cc: Jack Pham <jackp@codeaurora.org>
-> Cc: Todd Kjos <tkjos@google.com>
-> Cc: Greg KH <gregkh@linuxfoundation.org>
-> Cc: Linux USB List <linux-usb@vger.kernel.org>
-> Cc: stable <stable@vger.kernel.org>
-> Signed-off-by: Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
-> [jstultz: Add note to end of commit message on specific issue this resovl=
-es]
-> Signed-off-by: John Stultz <john.stultz@linaro.org>
-> ---
->  drivers/usb/dwc3/gadget.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 1edce3bbb55c..30a80bc97cfe 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -1068,7 +1068,7 @@ static void dwc3_prepare_one_trb_sg(struct dwc3_ep =
-*dep,
->  		unsigned int rem =3D length % maxp;
->  		unsigned chain =3D true;
->=20=20
-> -		if (sg_is_last(s))
-> +		if ((req->num_queued_sgs + 1) =3D=3D req->request.num_mapped_sgs)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-This is probably a bug on DMA API. If it combines pages from
-scatter-list, then it should also move the last SG so sg_is_last()
-continues to work.
+parisc                            allnoconfig
+parisc                            allyesonfig
+parisc                         b180_defconfig
+parisc                        c3000_defconfig
+parisc                              defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+sparc64                          allmodconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                             defconfig
+sh                               allmodconfig
+sh                                allnoconfig
+sh                          rsk7269_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                            titan_defconfig
+c6x                              allyesconfig
+c6x                        evmc6678_defconfig
+nios2                         10m50_defconfig
+nios2                         3c120_defconfig
+openrisc                    or1ksim_defconfig
+openrisc                 simple_smp_defconfig
+xtensa                       common_defconfig
+xtensa                          iss_defconfig
+s390                             alldefconfig
+s390                             allmodconfig
+s390                              allnoconfig
+s390                             allyesconfig
+s390                          debug_defconfig
+s390                                defconfig
+s390                       zfcpdump_defconfig
+x86_64               randconfig-e001-20200123
+x86_64               randconfig-e002-20200123
+x86_64               randconfig-e003-20200123
+i386                 randconfig-e001-20200123
+i386                 randconfig-e002-20200123
+i386                 randconfig-e003-20200123
+arc                              allyesconfig
+arc                                 defconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
+powerpc                           allnoconfig
+powerpc                             defconfig
+powerpc                       ppc64_defconfig
+powerpc                          rhel-kconfig
+x86_64               randconfig-a001-20200123
+x86_64               randconfig-a002-20200123
+x86_64               randconfig-a003-20200123
+i386                 randconfig-a001-20200123
+i386                 randconfig-a002-20200123
+i386                 randconfig-a003-20200123
+x86_64                              fedora-25
+x86_64                                  kexec
+x86_64                                    lkp
+x86_64                                   rhel
+x86_64                               rhel-7.6
+um                                  defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+arm                           sunxi_defconfig
+ia64                              allnoconfig
+x86_64               randconfig-h001-20200123
+x86_64               randconfig-h002-20200123
+x86_64               randconfig-h003-20200123
+i386                 randconfig-h001-20200123
+i386                 randconfig-h002-20200123
+i386                 randconfig-h003-20200123
+ia64                             alldefconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+alpha                               defconfig
+csky                                defconfig
+nds32                             allnoconfig
+nds32                               defconfig
+h8300                     edosk2674_defconfig
+h8300                    h8300h-sim_defconfig
+h8300                       h8s-sim_defconfig
+m68k                             allmodconfig
+m68k                       m5475evb_defconfig
+m68k                          multi_defconfig
+m68k                           sun3_defconfig
+x86_64               randconfig-f001-20200123
+x86_64               randconfig-f002-20200123
+x86_64               randconfig-f003-20200123
+i386                 randconfig-f001-20200123
+i386                 randconfig-f002-20200123
+i386                 randconfig-f003-20200123
+csky                 randconfig-a001-20200123
+openrisc             randconfig-a001-20200123
+s390                 randconfig-a001-20200123
+sh                   randconfig-a001-20200123
+xtensa               randconfig-a001-20200123
+x86_64               randconfig-d001-20200123
+x86_64               randconfig-d002-20200123
+x86_64               randconfig-d003-20200123
+i386                 randconfig-d001-20200123
+i386                 randconfig-d002-20200123
+i386                 randconfig-d003-20200123
+arc                  randconfig-a001-20200123
+arm                  randconfig-a001-20200123
+arm64                randconfig-a001-20200123
+ia64                 randconfig-a001-20200123
+powerpc              randconfig-a001-20200123
+sparc                randconfig-a001-20200123
+x86_64               randconfig-g001-20200123
+x86_64               randconfig-g002-20200123
+x86_64               randconfig-g003-20200123
+i386                 randconfig-g001-20200123
+i386                 randconfig-g002-20200123
+i386                 randconfig-g003-20200123
+alpha                randconfig-a001-20200123
+m68k                 randconfig-a001-20200123
+mips                 randconfig-a001-20200123
+nds32                randconfig-a001-20200123
+parisc               randconfig-a001-20200123
+riscv                randconfig-a001-20200123
+arm                        shmobile_defconfig
+arm                         at91_dt_defconfig
+x86_64               randconfig-c001-20200123
+x86_64               randconfig-c002-20200123
+x86_64               randconfig-c003-20200123
+i386                 randconfig-c001-20200123
+i386                 randconfig-c002-20200123
+i386                 randconfig-c003-20200123
+i386                             alldefconfig
+i386                              allnoconfig
+i386                                defconfig
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                            allyesconfig
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+x86_64               randconfig-b001-20200123
+x86_64               randconfig-b002-20200123
+x86_64               randconfig-b003-20200123
+i386                 randconfig-b001-20200123
+i386                 randconfig-b002-20200123
+i386                 randconfig-b003-20200123
+x86_64                         rhel-7.2-clear
+mips                           32r2_defconfig
+mips                         64r6el_defconfig
+mips                             allmodconfig
+mips                              allnoconfig
+mips                             allyesconfig
+mips                      fuloong2e_defconfig
+mips                      malta_kvm_defconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm                              allyesconfig
+arm                           efm32_defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                        multi_v7_defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+c6x                  randconfig-a001-20200123
+h8300                randconfig-a001-20200123
+microblaze           randconfig-a001-20200123
+nios2                randconfig-a001-20200123
+sparc64              randconfig-a001-20200123
 
-I had asked author to discuss this with DMA API maintainers. Can you do
-that?
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4pSnQACgkQzL64meEa
-mQb7Yg/+PnSb51d1HUUeuHT8QUblsTEKU68Qb06aygcf99oZctcC0jsnQvaaPTTq
-ceDuG2AOT7IL4OMBOUibjUUYy1HS0194D9Zrq1/xUqu6DcIo3ZgDb2QVUX27jOuX
-qRYyag5uj5mmOpJSCHOC6X71wLPU/CMPBlDTK27+Ogtqtke2jiFnLz8bZoW8rZKM
-7xxZ0t892oR5Qr/kqdJrDQUDvfjXiRl0hjzudywE0HwH77uxALFjYi8UAZ868qv3
-MERgNMIGV35UZZDSs5fhTQp79YUgJjmDfiZblUhr3vphDQsuzykYXKJ3ZWYtvXHz
-XOEUTTc0dVRbtYoKEZh3727Grv4nVqZ+IqzmI7uZQtTNr38DB5X9b/psWPm7nZS/
-MlIYUpfeIBXXW5XwLG6f1JZ+K33sTfjVeTyrHs8/2V+BOGoVnuXBMjKEoSAlEI6K
-NOxZvJVfUOG+gemezrgMCb7TJFCTVjCI1v7qwbWRiYsy+SNezs05iv+H69JysYiG
-oqybEgcHV7jGijr3myV51Rr+oWadqTjVYO7nntyJjtXJENf+/ULWzZsL1pauihtJ
-Fz8xrFNhwGYuUnvgbSUExBY7F1CY86C66chY9HpBKFXywbOSL8yoOflTrGKasq1X
-VkGbxKq4vRIdN9Enii/VaTyFlG+tXV4glH3YZlbTG75uU8ckEmg=
-=j5rc
------END PGP SIGNATURE-----
---=-=-=--
+---
+0-DAY kernel test infrastructure                 Open Source Technology Center
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
