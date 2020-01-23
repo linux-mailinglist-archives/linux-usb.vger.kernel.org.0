@@ -2,143 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D20D146FF8
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2020 18:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 603B21470AB
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2020 19:23:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728797AbgAWRqG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jan 2020 12:46:06 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:41733 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727022AbgAWRqG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jan 2020 12:46:06 -0500
-Received: by mail-lf1-f67.google.com with SMTP id m30so2958559lfp.8;
-        Thu, 23 Jan 2020 09:46:04 -0800 (PST)
+        id S1729037AbgAWSXC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jan 2020 13:23:02 -0500
+Received: from mail-pf1-f173.google.com ([209.85.210.173]:33177 "EHLO
+        mail-pf1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729031AbgAWSXC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jan 2020 13:23:02 -0500
+Received: by mail-pf1-f173.google.com with SMTP id z16so1924502pfk.0
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jan 2020 10:23:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=9SUGR8QdPMNh7QLWat7AGgDe3jaF2rbpW1KxZ9s3AOs=;
-        b=sbFxacSfBCAGBU7s2TQJY0DzNNQymStUoOtlfwJBSEBZcT6Z/Mj9byWnE1Za5HXWkB
-         HHwxRj5HnyQLx0JTKC4L1ghcKf8AgKcqkc0Mu1b3SgdH3LMU04PsjcLonuH3Zfl5M3G9
-         6NQIneG0d0c6MgKlDpopQtJsg1qegmt59z8gBdm9BZpq1CaZNJoXQwCBrmGd8Fe15rxu
-         D2YrNynapEEOiHCGsaeWp/u0+6G+N/JmhB9+x1g0kzrNyYxKT11DedfTf4m+q4oSgv+t
-         KPkmLkX+JhNE+2xMdYCHXC+g2G5NN+FZJTf5cmsBCMXqE2RXSYPnWNeh5xQf+pmZJ5zT
-         6s6Q==
+        h=from:to:cc:subject:date:message-id;
+        bh=bo/OsYyrQ5f4c1n/3+jslyR1BtB3QudbiUsZXeQtoB0=;
+        b=C2575JY+42hNxHRyXWgEJ++HZhVDt0hiFtcJ//ZB5CizFSpKD7Kx3WrsdKZjUnZiyR
+         NZJD1CYc2WH4A0HAuSsQldwEvqZEmDv2RoWh3U4iEZ4TJ7SPbOFBjdigY9VQRzPECb+X
+         h7WSY7fDqBB47+fD5up6q+oob0erG/sR1bbkUrxfK4R6P5oEanm0uS+Av5mYVUfwWFNV
+         WDkrgEtZfTG6BHnC1fYMF8HOzC9n2cPRDc+DAoMnTvhCWzLIJ8aN4aB5VDEm0hdqcIXi
+         FgKDIFlXeFJSEedhUdi15exZYBRdMmuvJ+LcQ5WPAVPKS8uZIHwZGGR9eWWV6mZxQ42J
+         g61g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=9SUGR8QdPMNh7QLWat7AGgDe3jaF2rbpW1KxZ9s3AOs=;
-        b=acUccFWUpfaY+2pX5apMWCetRGDrBrGKyZd440RRxbLbGGAC+qh1T12R2T678qHkPH
-         vsyx7n/CMw7C/lyGpDzUFeXKDkiEm+ZHGKnt2isGLbDhjcmXTolQyss3BNqWSkp/lu56
-         EhoT3fDZia8+Nap48+AFGlV8vDPG+81hkVP23myBnHGBv9KL/HQsds9loBMp9TEEANPz
-         kIy2WerDSgDgwEDZs7wPflxZhIONlNr0YultupEGBKfg0e6WWnKmO/BSpa/J4jgDPcpx
-         /vODQO1IFdtaSOrUj6enwE/blg2SMnWBSpUiaFXKsG+dXuAdYw26dUqhjnAJTMk7skrL
-         vO+g==
-X-Gm-Message-State: APjAAAXpqRJpW6mw3xr2kzQHTwYx1xPcjQh5ALL42Lqv1X7nMTV2OWGG
-        UhBTHYZXaiDTOqYWqAobmRls03iykySScw==
-X-Google-Smtp-Source: APXvYqx1D1Oq970OIGQK6so+TTaZuGf+dWk0DQrGNPBalH7w5tCE1RWZJXmyIiFu0n1PWuhk49C2MQ==
-X-Received: by 2002:ac2:4a91:: with SMTP id l17mr5353742lfp.75.1579801563345;
-        Thu, 23 Jan 2020 09:46:03 -0800 (PST)
-Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id r2sm1668668lff.63.2020.01.23.09.46.01
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 23 Jan 2020 09:46:02 -0800 (PST)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     "Yang\, Fei" <fei.yang@intel.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        John Stultz <john.stultz@linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
-        Tejas Joglekar <tejas.joglekar@synopsys.com>,
-        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        stable <stable@vger.kernel.org>
-Subject: RE: [RFC][PATCH 0/2] Avoiding DWC3 transfer stalls/hangs when using adb over f_fs
-In-Reply-To: <02E7334B1630744CBDC55DA8586225837F9EE335@ORSMSX102.amr.corp.intel.com>
-References: <20200122222645.38805-1-john.stultz@linaro.org> <ef64036f-7621-50d9-0e23-0f7141a40d7a@collabora.com> <02E7334B1630744CBDC55DA8586225837F9EE280@ORSMSX102.amr.corp.intel.com> <87o8uu3wqd.fsf@kernel.org> <02E7334B1630744CBDC55DA8586225837F9EE335@ORSMSX102.amr.corp.intel.com>
-Date:   Thu, 23 Jan 2020 19:46:51 +0200
-Message-ID: <87lfpy3w1g.fsf@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=bo/OsYyrQ5f4c1n/3+jslyR1BtB3QudbiUsZXeQtoB0=;
+        b=caBHsfo8jWlM7cX4eoj/HYonXKOO2wCMot+zoN/HulpI8Fnd0pEMEGtyGCrBAXGp19
+         EkW+myt7jwPt7LC7w8yQABV9NjRDYP/FzEgtNKRVbN/p0GmiwBABwIb2L6mzclvUWe8g
+         Z7hesYyxtUODoZg4A96Fr8tmHYkyy7YdsY6/X4DUNeDK4gAVUTBsGiZou5On5OpHM6ii
+         jcbndNPbE6UMoKAsmxqa2JfATROllwiUSaT/s6pAUb0BHqr7f719qZQZfcp+NH2B92e5
+         Vqlmx5DvSKcVRKCQcwM1gKN5gHp6vJqL7oBofs/LlkUors5ea4DWZhoxOsO1L9joF4fm
+         nMZg==
+X-Gm-Message-State: APjAAAXPkHQBmoZojoc79niZDbPj5llafAGTYs1l/FKah0x8dW7KXB3c
+        n2MfQKwnq5asBY1W2hyh80I=
+X-Google-Smtp-Source: APXvYqxwKE747kyZoAPf2q6DIqaIMbkCWkGf50xc0tuqY86f7vAKBU8L30JvLCHfYGksx7EiIvhsYA==
+X-Received: by 2002:aa7:8708:: with SMTP id b8mr8703071pfo.184.1579803781634;
+        Thu, 23 Jan 2020 10:23:01 -0800 (PST)
+Received: from ajayg.nvidia.com (searspoint.nvidia.com. [216.228.112.21])
+        by smtp.gmail.com with ESMTPSA id p21sm3427894pfn.103.2020.01.23.10.23.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jan 2020 10:23:00 -0800 (PST)
+From:   Ajay Gupta <ajaykuee@gmail.com>
+X-Google-Original-From: Ajay Gupta <ajayg@nvidia.com>
+To:     heikki.krogerus@linux.intel.com
+Cc:     linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>
+Subject: [PATCH v2 1/2] usb: typec: ucsi: register DP only for NVIDIA DP VDO
+Date:   Wed, 22 Jan 2020 16:58:58 -0800
+Message-Id: <20200123005859.13194-1-ajayg@nvidia.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+From: Ajay Gupta <ajayg@nvidia.com>
 
+NVIDIA VirtualLink (svid 0x955) has two altmode, vdo=0x1 for
+VirtualLink DP mode and vdo=0x3 for NVIDIA test mode.
+Register display altmode driver only for vdo=0x1
 
-Hi,
+Signed-off-by: Ajay Gupta <ajayg@nvidia.com>
+---
+Changes from v1->v2:
+ Moved defines from typec_dp.h to ucsi.h based on comments
+ from Heikki.
 
-"Yang, Fei" <fei.yang@intel.com> writes:
->>>>> Hey all,
->>>>>    I wanted to send these out for comment and thoughts.
->>>>>=20
->>>>> Since ~4.20, when the functionfs gadget enabled scatter-gather=20
->>>>> support, we have seen problems with adb connections stalling and=20
->>>>> stopping to function on hardware with dwc3 usb controllers.
->>>>> Specifically, HiKey960, Dragonboard 845c, and Pixel3 devices.
->>>>
->>>> Any chance this:
->>>>=20
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git/commit/
->>>> ?h=3Dtesting/next&id=3Df63333e8e4fd63d8d8ae83b89d2c38cf21d64801
->>> This is a different issue. I have tried initializing num_sgs when debug=
-ging this adb stall problem, but it didn't help.
->>
->> So multiple folks have run through this problem, but not *one* has trace=
-points collected from the issue? C'mon guys. Can someone, please, collect t=
-racepoints so we can figure out what's actually going on?
->>
->> I'm pretty sure this should be solved at the DMA API level, just want to=
- confirm.
->
-> I have sent you the tracepoints long time ago. Also my analysis of the
-> problem (BTW, I don't think the tracepoints helped much). It's
-> basically a logic problem in function dwc3_gadget_ep_reclaim_trb_sg().
+ drivers/usb/typec/ucsi/ucsi.c | 12 ++++++++++--
+ drivers/usb/typec/ucsi/ucsi.h |  7 +++++++
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
-AFAICT, this is caused by DMA API merging pages together when map an
-sglist for DMA. While doing that, it does *not* move the SG_END flag
-which sg_is_last() checks.
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index d5a6aac86327..eca9d598a42f 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -270,9 +270,16 @@ static int ucsi_register_altmode(struct ucsi_connector *con,
+ 
+ 		switch (desc->svid) {
+ 		case USB_TYPEC_DP_SID:
+-		case USB_TYPEC_NVIDIA_VLINK_SID:
+ 			alt = ucsi_register_displayport(con, override, i, desc);
+ 			break;
++		case USB_TYPEC_NVIDIA_VLINK_SID:
++			if (desc->vdo == USB_TYPEC_NVIDIA_VLINK_DBG_VDO)
++				alt = typec_port_register_altmode(con->port,
++								  desc);
++			else
++				alt = ucsi_register_displayport(con, override,
++								i, desc);
++			break;
+ 		default:
+ 			alt = typec_port_register_altmode(con->port, desc);
+ 			break;
+@@ -475,7 +482,8 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
+ 	while (adev[i]) {
+ 		if (recipient == UCSI_RECIPIENT_SOP &&
+ 		    (adev[i]->svid == USB_TYPEC_DP_SID ||
+-			adev[i]->svid == USB_TYPEC_NVIDIA_VLINK_SID)) {
++			(adev[i]->svid == USB_TYPEC_NVIDIA_VLINK_SID &&
++			adev[i]->vdo != USB_TYPEC_NVIDIA_VLINK_DBG_VDO))) {
+ 			pdev = typec_altmode_get_partner(adev[i]);
+ 			ucsi_displayport_remove_partner((void *)pdev);
+ 		}
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index e434b9c9a9eb..a89112b69cd5 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -340,4 +340,11 @@ static inline void
+ ucsi_displayport_remove_partner(struct typec_altmode *adev) { }
+ #endif /* CONFIG_TYPEC_DP_ALTMODE */
+ 
++/*
++ * NVIDIA VirtualLink (svid 0x955) has two altmode. VirtualLink
++ * DP mode with vdo=0x1 and NVIDIA test mode with vdo=0x3
++ */
++#define USB_TYPEC_NVIDIA_VLINK_DP_VDO	0x1
++#define USB_TYPEC_NVIDIA_VLINK_DBG_VDO	0x3
++
+ #endif /* __DRIVER_USB_TYPEC_UCSI_H */
+-- 
+2.17.1
 
-I consider that an overlook on the DMA API, wouldn't you? Why should DMA
-API users care if pages were merged or not while mapping the sglist? We
-have for_each_sg() and sg_is_last() for a reason.
-
-> I can try dig into my old emails and resend, but that is a bit hard to fi=
-nd.
-
-Don't bother, I'm still not convinced we should fix at the driver level
-when sg_is_last() should be working here, unless we should iterate over
-num_sgs instead of num_mapped_sgs, though I don't think that's the case
-since in that case we would have to chain buffers of size zero.
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4p3AsACgkQzL64meEa
-mQaTdA/+PpmXuec0fjzp1yy6MejaVnnPEOFDVaOYvpaYkbH9C/UhwT42e5ZuaVg1
-abC2wFsKPer2Xbtb9rmJflvqiD+smblgDpkLyFHEwZRC0a7o+c6CkFYMPNNM9+w/
-sNWVwM3sfLGQ9Wcx0hQueLmhksBbvGcAqnph/MwFJcz81k77/BEYFqo/8n7c6o7K
-YBJrySxFqi6y/jCv0u+FDG449XOdh2Udydp/7UPCXrOZis6D2nxiiU8H7taKGZuO
-jluTVDFsFQK9CA8GVLMocciLUPSQlSDlac3cUH4lQnVqDGNGfjSN37AkFzeUKSNL
-HgOJA0E4ewtZFe3EM1JKQU968a3OrPYkdzZi0pvwnDxfJ8pyo1/jqQInz518etwq
-SHqM2r/Pwwtem+wwbi6Z+WKmfwHI445Jht3DoC1dSnREXSG5VzXJzyIWVrAvtexN
-kWDaqp4tBVQqVbsmOIQVBio46kBe/yNlhFgycnaXGSlz7JLJXvfMqhA4xSAbr6Vt
-rob9DoX879dS0JS3YN6tOHQeP0eVZjq/xUwTjhVDA1l/XNb7WM4lx//5o8hqn1VW
-XMP9VBC4W0NZoRmhi4pcp7zXHxTal68rLJkYL78yi8R9N3ERuo3XylA40jAOaR0E
-najiMxtEwxPalArWq9qbWI/EcMEMMiom03pZnFnHAiTsj7alMhE=
-=ZK9D
------END PGP SIGNATURE-----
---=-=-=--
