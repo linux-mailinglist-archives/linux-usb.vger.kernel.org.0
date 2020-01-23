@@ -2,61 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 887151463B6
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2020 09:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA9C1463FA
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2020 09:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726205AbgAWInx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jan 2020 03:43:53 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:42994 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725785AbgAWInx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jan 2020 03:43:53 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id D7AAB29311A
-Subject: Re: [RFC][PATCH 0/2] Avoiding DWC3 transfer stalls/hangs when using
- adb over f_fs
-To:     John Stultz <john.stultz@linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Yang Fei <fei.yang@intel.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
-        Tejas Joglekar <tejas.joglekar@synopsys.com>,
-        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        stable <stable@vger.kernel.org>
-References: <20200122222645.38805-1-john.stultz@linaro.org>
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Message-ID: <ef64036f-7621-50d9-0e23-0f7141a40d7a@collabora.com>
-Date:   Thu, 23 Jan 2020 09:43:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726442AbgAWI4b convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 23 Jan 2020 03:56:31 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:33929 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726170AbgAWI4a (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jan 2020 03:56:30 -0500
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1iuYHs-0002M0-HA; Thu, 23 Jan 2020 09:56:28 +0100
+Received: from pza by lupine with local (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1iuYHr-0002Ta-HM; Thu, 23 Jan 2020 09:56:27 +0100
+Message-ID: <c4ca5fb09bf1ce319381cc14000d303a2840ac09.camel@pengutronix.de>
+Subject: Re: [PATCH v3 05/19] phy: qualcomm: usb: Add SuperSpeed PHY driver
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org, jackp@codeaurora.org, balbi@kernel.org,
+        bjorn.andersson@linaro.org
+Cc:     linux-kernel@vger.kernel.org,
+        Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>,
+        Jorge Ramirez-Ortiz <jorge.ramirez.ortiz@gmail.com>,
+        Sriharsha Allenki's <sallenki@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Date:   Thu, 23 Jan 2020 09:56:27 +0100
+In-Reply-To: <20200122185610.131930-6-bryan.odonoghue@linaro.org>
+References: <20200122185610.131930-1-bryan.odonoghue@linaro.org>
+         <20200122185610.131930-6-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-In-Reply-To: <20200122222645.38805-1-john.stultz@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi John,
+Hi Bryan,
 
-W dniu 22.01.2020 o 23:26, John Stultz pisze:
-> Hey all,
->    I wanted to send these out for comment and thoughts.
+On Wed, 2020-01-22 at 18:55 +0000, Bryan O'Donoghue wrote:
+> From: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
 > 
-> Since ~4.20, when the functionfs gadget enabled scatter-gather
-> support, we have seen problems with adb connections stalling and
-> stopping to function on hardware with dwc3 usb controllers.
-> Specifically, HiKey960, Dragonboard 845c, and Pixel3 devices.
+> Controls Qualcomm's SS phy 1.0.0 implemented in the QCS404 and some
+> other Qualcomm platforms.
+> 
+> Based on Sriharsha Allenki's <sallenki@codeaurora.org> original code.
+> 
+> [bod: Removed dependency on extcon.
+>       Switched to gpio-usb-conn to handle VBUS On/Off
+>       Switched to usb-role-switch to bind gpio-usb-conn to DWC3]
+> Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+> Cc: Jorge Ramirez-Ortiz <jorge.ramirez.ortiz@gmail.com>
+> Cc: Sriharsha Allenki's <sallenki@codeaurora.org>
+> Cc: Andy Gross <agross@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: linux-arm-msm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-Any chance this:
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git/commit/?h=testing/next&id=f63333e8e4fd63d8d8ae83b89d2c38cf21d64801
-
-has something to do with the problem you are reporting?
-
-Andrzej
+regards
+Philipp
