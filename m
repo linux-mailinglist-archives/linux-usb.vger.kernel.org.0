@@ -2,248 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE8BB1467CB
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2020 13:20:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E66A1468DF
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2020 14:17:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726871AbgAWMUH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jan 2020 07:20:07 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:41640 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726260AbgAWMUH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jan 2020 07:20:07 -0500
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 53C2A2E5;
-        Thu, 23 Jan 2020 13:20:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1579782004;
-        bh=KS0S74C+5Es7JUWtsilPuRHFWN733L55ph0HVxLpqHY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i9jdhgddanDCQJA6Zc3nf2w3S0iPgVATfRoYu1H4h2uxOIL6RWbOr6hvsRj0ALJF7
-         uNbOsZWDofXwDBkgpETkiVaEQdUjATbX0J0LMGb5/Qtig7RtwmZ3J9wGRstvyjUC0t
-         0B5a1Awm7OHSTnQpof7w40BDNdQp7qF3rwS0Hl1A=
-Date:   Thu, 23 Jan 2020 14:19:47 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     syzbot <syzbot+75287f75e2fedd69d680@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, bnvandana@gmail.com,
-        hverkuil-cisco@xs4all.nl, linux-kernel@vger.kernel.org,
+        id S1726968AbgAWNRM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jan 2020 08:17:12 -0500
+Received: from mail-io1-f70.google.com ([209.85.166.70]:56903 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726232AbgAWNRL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jan 2020 08:17:11 -0500
+Received: by mail-io1-f70.google.com with SMTP id d13so1929828ioo.23
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jan 2020 05:17:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=M/T56jh5ZjLwzBjohUJv3CPw6EZc5CaN+pPMp5UPMi8=;
+        b=ssv/PIY8512cNPOkCo3H9pen2lvzPIyStHV+lT6j++38OalMXg3YReJH0aRSS9Kx1t
+         tJraZ4GNpCvKMqXe/T87O2JtVws1QQ524EDjfLMzMFHbN9oQ7dVtZtwivjnC/5z1jTVN
+         s9cFHjlbMj0B+HE8tb2JDfr+jtXZ9nKw73XNQl6pmYv9VkhpK66RqZQQFCJ613a3wxpl
+         vqj7pKmQlf/gtqP1ntIqXSFeg+aKaN/xuQ6fD/n30ugloRzknBSIv5yBlClgUKl1CX5l
+         s6o9hND732NaPDSDQ4qdXL65jb6MHswgwjPc5kAxN6b1rqgoPJOOUo1rhH2ZKTwJE+pd
+         L12g==
+X-Gm-Message-State: APjAAAULsG4/CWKoOBqnHP2JUi3QnZFyfE1zKr9/yAx1+2aW6fl4s1/P
+        W8EPiohNS82pY3rd+eBfrnu/jwyN3tI2taVjKHUffLv6KGmv
+X-Google-Smtp-Source: APXvYqwsg5y57hY5025HrdixFMdwrZEyUk/g+pM7hsnTs15k9799/GGmSVH6lvg8jb7EHZSh1E0VDLugipmv5mqvJ1+Ipylnthdw
+MIME-Version: 1.0
+X-Received: by 2002:a5d:8451:: with SMTP id w17mr5679243ior.303.1579785430679;
+ Thu, 23 Jan 2020 05:17:10 -0800 (PST)
+Date:   Thu, 23 Jan 2020 05:17:10 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006ac90f059cce75d4@google.com>
+Subject: BUG: corrupted list in em28xx_init_extension
+From:   syzbot <syzbot+a6969ef522a36d3344c9@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
         mchehab@kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: KASAN: use-after-free Read in v4l2_release (3)
-Message-ID: <20200123121947.GA13922@pendragon.ideasonboard.com>
-References: <000000000000de50d7059ba6acd5@google.com>
- <20200123102707.2596-1-hdanton@sina.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200123102707.2596-1-hdanton@sina.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Hillf,
+Hello,
 
-On Thu, Jan 23, 2020 at 06:27:07PM +0800, Hillf Danton wrote:
-> Wed, 22 Jan 2020 14:58:08 -0800 (PST)
-> > syzbot has found a reproducer for the following crash on:
-> > 
-> > HEAD commit:    4cc301ee usb: gadget: add raw-gadget interface
-> > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=17f5a721e00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=9ba75825443d54bd
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=75287f75e2fedd69d680
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16a0b6f1e00000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1327dd76e00000
-> > 
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+75287f75e2fedd69d680@syzkaller.appspotmail.com
-> > 
-> > usbvision_set_audio: can't write iopin register for audio switching
-> > usbvision_radio_close: Final disconnect
-> > ==================================================================
-> > BUG: KASAN: use-after-free in v4l2_release+0x2f1/0x390 drivers/media/v4l2-core/v4l2-dev.c:459
-> > Read of size 4 at addr ffff8881caba1068 by task v4l_id/1913
-> > 
-> > CPU: 1 PID: 1913 Comm: v4l_id Not tainted 5.5.0-rc6-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > Call Trace:
-> >  __dump_stack lib/dump_stack.c:77 [inline]
-> >  dump_stack+0xef/0x16e lib/dump_stack.c:118
-> >  print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
-> >  __kasan_report.cold+0x37/0x85 mm/kasan/report.c:506
-> >  kasan_report+0xe/0x20 mm/kasan/common.c:639
-> >  v4l2_release+0x2f1/0x390 drivers/media/v4l2-core/v4l2-dev.c:459
-> >  __fput+0x2d7/0x840 fs/file_table.c:280
-> >  task_work_run+0x13f/0x1c0 kernel/task_work.c:113
-> >  tracehook_notify_resume include/linux/tracehook.h:188 [inline]
-> >  exit_to_usermode_loop+0x1d2/0x200 arch/x86/entry/common.c:164
-> >  prepare_exit_to_usermode arch/x86/entry/common.c:195 [inline]
-> >  syscall_return_slowpath arch/x86/entry/common.c:278 [inline]
-> >  do_syscall_64+0x4e0/0x5a0 arch/x86/entry/common.c:304
-> >  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> > RIP: 0033:0x7fbeb0b822b0
-> > Code: 40 75 0b 31 c0 48 83 c4 08 e9 0c ff ff ff 48 8d 3d c5 32 08 00 e8 c0 07 02 00 83 3d 45 a3 2b 00 00 75 10 b8 03 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 ce 8a 01 00 48 89 04 24
-> > RSP: 002b:00007ffe52d6b158 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
-> > RAX: 0000000000000000 RBX: 0000000000000003 RCX: 00007fbeb0b822b0
-> > RDX: 0000000000000013 RSI: 0000000080685600 RDI: 0000000000000003
-> > RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-> > R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000400884
-> > R13: 00007ffe52d6b2b0 R14: 0000000000000000 R15: 0000000000000000
-> > 
-> > Allocated by task 94:
-> >  save_stack+0x1b/0x80 mm/kasan/common.c:72
-> >  set_track mm/kasan/common.c:80 [inline]
-> >  __kasan_kmalloc mm/kasan/common.c:513 [inline]
-> >  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:486
-> >  kmalloc include/linux/slab.h:556 [inline]
-> >  kzalloc include/linux/slab.h:670 [inline]
-> >  usbvision_alloc drivers/media/usb/usbvision/usbvision-video.c:1315 [inline]
-> >  usbvision_probe.cold+0x5c5/0x1f21 drivers/media/usb/usbvision/usbvision-video.c:1469
-> >  usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:361
-> >  really_probe+0x290/0xad0 drivers/base/dd.c:548
-> >  driver_probe_device+0x223/0x350 drivers/base/dd.c:721
-> >  __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
-> >  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-> >  __device_attach+0x217/0x390 drivers/base/dd.c:894
-> >  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-> >  device_add+0x1459/0x1bf0 drivers/base/core.c:2487
-> >  usb_set_configuration+0xe47/0x17d0 drivers/usb/core/message.c:2023
-> >  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-> >  usb_probe_device+0xaf/0x140 drivers/usb/core/driver.c:266
-> >  really_probe+0x290/0xad0 drivers/base/dd.c:548
-> >  driver_probe_device+0x223/0x350 drivers/base/dd.c:721
-> >  __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
-> >  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-> >  __device_attach+0x217/0x390 drivers/base/dd.c:894
-> >  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-> >  device_add+0x1459/0x1bf0 drivers/base/core.c:2487
-> >  usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2537
-> >  hub_port_connect drivers/usb/core/hub.c:5184 [inline]
-> >  hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
-> >  port_event drivers/usb/core/hub.c:5470 [inline]
-> >  hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5552
-> >  process_one_work+0x945/0x15c0 kernel/workqueue.c:2264
-> >  process_scheduled_works kernel/workqueue.c:2326 [inline]
-> >  worker_thread+0x7ab/0xe20 kernel/workqueue.c:2412
-> >  kthread+0x318/0x420 kernel/kthread.c:255
-> >  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-> > 
-> > Freed by task 1913:
-> >  save_stack+0x1b/0x80 mm/kasan/common.c:72
-> >  set_track mm/kasan/common.c:80 [inline]
-> >  kasan_set_free_info mm/kasan/common.c:335 [inline]
-> >  __kasan_slab_free+0x117/0x160 mm/kasan/common.c:474
-> >  slab_free_hook mm/slub.c:1425 [inline]
-> >  slab_free_freelist_hook mm/slub.c:1458 [inline]
-> >  slab_free mm/slub.c:3005 [inline]
-> >  kfree+0xd5/0x300 mm/slub.c:3957
-> >  usbvision_release+0x181/0x1c0 drivers/media/usb/usbvision/usbvision-video.c:1364
-> >  usbvision_radio_close.cold+0x2b/0x74 drivers/media/usb/usbvision/usbvision-video.c:1130
-> >  v4l2_release+0x2e7/0x390 drivers/media/v4l2-core/v4l2-dev.c:455
-> >  __fput+0x2d7/0x840 fs/file_table.c:280
-> >  task_work_run+0x13f/0x1c0 kernel/task_work.c:113
-> >  tracehook_notify_resume include/linux/tracehook.h:188 [inline]
-> >  exit_to_usermode_loop+0x1d2/0x200 arch/x86/entry/common.c:164
-> >  prepare_exit_to_usermode arch/x86/entry/common.c:195 [inline]
-> >  syscall_return_slowpath arch/x86/entry/common.c:278 [inline]
-> >  do_syscall_64+0x4e0/0x5a0 arch/x86/entry/common.c:304
-> >  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> > 
-> > The buggy address belongs to the object at ffff8881caba0000
-> >  which belongs to the cache kmalloc-8k of size 8192
-> > The buggy address is located 4200 bytes inside of
-> >  8192-byte region [ffff8881caba0000, ffff8881caba2000)
-> > The buggy address belongs to the page:
-> > page:ffffea00072ae800 refcount:1 mapcount:0 mapping:ffff8881da00c500 index:0x0 compound_mapcount: 0
-> > raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da00c500
-> > raw: 0000000000000000 0000000080020002 00000001ffffffff 0000000000000000
-> > page dumped because: kasan: bad access detected
-> > 
-> > Memory state around the buggy address:
-> >  ffff8881caba0f00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> >  ffff8881caba0f80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > >ffff8881caba1000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> >                                                           ^
-> >  ffff8881caba1080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> >  ffff8881caba1100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > ==================================================================
-> 
-> 
-> Add the release callback for usbvision video device and use it to release
-> resources when the last reference to the device goes away.
+syzbot found the following crash on:
 
-Would you be able to submit this with a commit message and your
-Signed-off-by line ?
+HEAD commit:    4cc301ee usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=15de59c9e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9ba75825443d54bd
+dashboard link: https://syzkaller.appspot.com/bug?extid=a6969ef522a36d3344c9
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11934d85e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10c70721e00000
 
-> --- a/drivers/media/usb/usbvision/usbvision-video.c
-> +++ b/drivers/media/usb/usbvision/usbvision-video.c
-> @@ -401,7 +401,6 @@ static int usbvision_v4l2_close(struct f
->  
->  	if (r) {
->  		printk(KERN_INFO "%s: Final disconnect\n", __func__);
-> -		usbvision_release(usbvision);
->  		return 0;
->  	}
->  
-> @@ -409,6 +408,11 @@ static int usbvision_v4l2_close(struct f
->  	return v4l2_fh_release(file);
->  }
->  
-> +static void usbvision_video_device_release(struct video_device *vdev)
-> +{
-> +	struct usb_usbvision *usbvision = video_get_drvdata(vdev);
-> +	usbvision_release(usbvision);
-> +}
->  
->  /*
->   * usbvision_ioctl()
-> @@ -1181,7 +1185,7 @@ static struct video_device usbvision_vid
->  	.fops		= &usbvision_fops,
->  	.ioctl_ops	= &usbvision_ioctl_ops,
->  	.name           = "usbvision-video",
-> -	.release	= video_device_release_empty,
-> +	.release	= usbvision_video_device_release,
->  	.tvnorms        = USBVISION_NORMS,
->  };
->  
-> --- a/drivers/media/v4l2-core/v4l2-dev.c
-> +++ b/drivers/media/v4l2-core/v4l2-dev.c
-> @@ -206,7 +206,10 @@ static void v4l2_device_release(struct d
->  	}
->  #endif
->  
-> -	/* Do not call v4l2_device_put if there is no release callback set.
-> +	/*
-> +	 * Decrease v4l2_device refcount
-> +	 *
-> +	 * Do not call v4l2_device_put if there is no release callback set.
->  	 * Drivers that have no v4l2_device release callback might free the
->  	 * v4l2_dev instance in the video_device release callback below, so we
->  	 * must perform this check here.
-> @@ -214,16 +217,12 @@ static void v4l2_device_release(struct d
->  	 * TODO: In the long run all drivers that use v4l2_device should use the
->  	 * v4l2_device release callback. This check will then be unnecessary.
->  	 */
-> -	if (v4l2_dev->release == NULL)
-> -		v4l2_dev = NULL;
-> +	if (v4l2_dev->release)
-> +		v4l2_device_put(v4l2_dev);
->  
->  	/* Release video_device and perform other
->  	   cleanups as needed. */
->  	vdev->release(vdev);
-> -
-> -	/* Decrease v4l2_device refcount */
-> -	if (v4l2_dev)
-> -		v4l2_device_put(v4l2_dev);
->  }
->  
->  static struct class video_class = {
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+a6969ef522a36d3344c9@syzkaller.appspotmail.com
 
--- 
-Regards,
+em28xx 1-1:0.200: Audio interface 200 found (Vendor Class)
+em28xx 1-1:0.200: unknown em28xx chip ID (0)
+em28xx 1-1:0.200: Config register raw data: 0xfffffffb
+em28xx 1-1:0.200: AC97 chip type couldn't be determined
+em28xx 1-1:0.200: No AC97 audio processor
+list_add corruption. prev->next should be next (ffffffff87a1a960), but was ffffffff85a00184. (prev=ffff8881cd5e0240).
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:26!
+invalid opcode: 0000 [#1] SMP KASAN
+CPU: 1 PID: 94 Comm: kworker/1:2 Not tainted 5.5.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:__list_add_valid.cold+0x3a/0x3c lib/list_debug.c:26
+Code: 0b 48 89 f2 4c 89 e1 48 89 ee 48 c7 c7 a0 fc fb 85 e8 04 17 40 ff 0f 0b 48 89 f1 48 c7 c7 20 fc fb 85 4c 89 e6 e8 f0 16 40 ff <0f> 0b 48 89 ee 48 c7 c7 c0 fd fb 85 e8 df 16 40 ff 0f 0b 4c 89 ea
+RSP: 0018:ffff8881d5d570c8 EFLAGS: 00010282
+RAX: 0000000000000075 RBX: ffff8881cd764120 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8129598d RDI: ffffed103abaae0b
+RBP: ffff8881cd764240 R08: 0000000000000075 R09: ffffed103b666210
+R10: ffffed103b66620f R11: ffff8881db33107f R12: ffffffff87a1a960
+R13: ffff8881cd764000 R14: ffff8881cd76412c R15: ffff8881cd5a2000
+FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f7f37b26000 CR3: 00000001c5fe1000 CR4: 00000000001406e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ __list_add include/linux/list.h:60 [inline]
+ list_add_tail include/linux/list.h:93 [inline]
+ em28xx_init_extension+0x44/0x1f0 drivers/media/usb/em28xx/em28xx-core.c:1125
+ em28xx_init_dev.isra.0+0xa7b/0x15d8 drivers/media/usb/em28xx/em28xx-cards.c:3540
+ em28xx_usb_probe.cold+0xcac/0x2515 drivers/media/usb/em28xx/em28xx-cards.c:3889
+ usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:361
+ really_probe+0x290/0xad0 drivers/base/dd.c:548
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:721
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+ __device_attach+0x217/0x390 drivers/base/dd.c:894
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+ device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+ usb_set_configuration+0xe47/0x17d0 drivers/usb/core/message.c:2023
+ generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+ usb_probe_device+0xaf/0x140 drivers/usb/core/driver.c:266
+ really_probe+0x290/0xad0 drivers/base/dd.c:548
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:721
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+ __device_attach+0x217/0x390 drivers/base/dd.c:894
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+ device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+ usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2537
+ hub_port_connect drivers/usb/core/hub.c:5184 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
+ port_event drivers/usb/core/hub.c:5470 [inline]
+ hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5552
+ process_one_work+0x945/0x15c0 kernel/workqueue.c:2264
+ process_scheduled_works kernel/workqueue.c:2326 [inline]
+ worker_thread+0x7ab/0xe20 kernel/workqueue.c:2412
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Modules linked in:
+---[ end trace 8bae0db31a929c42 ]---
+RIP: 0010:__list_add_valid.cold+0x3a/0x3c lib/list_debug.c:26
+Code: 0b 48 89 f2 4c 89 e1 48 89 ee 48 c7 c7 a0 fc fb 85 e8 04 17 40 ff 0f 0b 48 89 f1 48 c7 c7 20 fc fb 85 4c 89 e6 e8 f0 16 40 ff <0f> 0b 48 89 ee 48 c7 c7 c0 fd fb 85 e8 df 16 40 ff 0f 0b 4c 89 ea
+RSP: 0018:ffff8881d5d570c8 EFLAGS: 00010282
+RAX: 0000000000000075 RBX: ffff8881cd764120 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8129598d RDI: ffffed103abaae0b
+RBP: ffff8881cd764240 R08: 0000000000000075 R09: ffffed103b666210
+R10: ffffed103b66620f R11: ffff8881db33107f R12: ffffffff87a1a960
+R13: ffff8881cd764000 R14: ffff8881cd76412c R15: ffff8881cd5a2000
+FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f7f37b26000 CR3: 00000001c5fe1000 CR4: 00000000001406e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-Laurent Pinchart
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
