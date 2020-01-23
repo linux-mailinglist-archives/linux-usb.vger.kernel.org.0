@@ -2,54 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 603B21470AB
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2020 19:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8471470AD
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2020 19:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729037AbgAWSXC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jan 2020 13:23:02 -0500
-Received: from mail-pf1-f173.google.com ([209.85.210.173]:33177 "EHLO
-        mail-pf1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729031AbgAWSXC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jan 2020 13:23:02 -0500
-Received: by mail-pf1-f173.google.com with SMTP id z16so1924502pfk.0
-        for <linux-usb@vger.kernel.org>; Thu, 23 Jan 2020 10:23:02 -0800 (PST)
+        id S1729045AbgAWSXF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jan 2020 13:23:05 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:34764 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729030AbgAWSXF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jan 2020 13:23:05 -0500
+Received: by mail-pl1-f193.google.com with SMTP id q13so981191pls.1
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jan 2020 10:23:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=bo/OsYyrQ5f4c1n/3+jslyR1BtB3QudbiUsZXeQtoB0=;
-        b=C2575JY+42hNxHRyXWgEJ++HZhVDt0hiFtcJ//ZB5CizFSpKD7Kx3WrsdKZjUnZiyR
-         NZJD1CYc2WH4A0HAuSsQldwEvqZEmDv2RoWh3U4iEZ4TJ7SPbOFBjdigY9VQRzPECb+X
-         h7WSY7fDqBB47+fD5up6q+oob0erG/sR1bbkUrxfK4R6P5oEanm0uS+Av5mYVUfwWFNV
-         WDkrgEtZfTG6BHnC1fYMF8HOzC9n2cPRDc+DAoMnTvhCWzLIJ8aN4aB5VDEm0hdqcIXi
-         FgKDIFlXeFJSEedhUdi15exZYBRdMmuvJ+LcQ5WPAVPKS8uZIHwZGGR9eWWV6mZxQ42J
-         g61g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=OFUvWCgmfRBKh1qgMuTmkB1yrgtzYhWKuC/q6gp0Heo=;
+        b=vZNlSpU4zYFva5bDpBvh1LI5/u9K359NpuFJ3EtzFHVz2yolgGRfC+o3GtqJaYdOEP
+         gkiZfJHG5Xs0vDv+XZL6f7phQrkIXUFTsVQHOsLFSrvS44Y7CZijvEyHKAuYaN3wbANF
+         rYO+A58n70JGGK0t3QTenwXUAGTZ5Xq2Uoiak244sDhRNZ+S66zSde3qWK2GPLRTJ2of
+         jEpzOH7Az9s2apKgIKWAXozxtvjRvy3Vk+aEJe1Qo0k5upd1ztCoHAjVTpuYHojgPfbi
+         CjzW0MCKyWcdeJ+5K6i6oR+HkJABxlctyXpHrOtfkxaQCvuakLgiQI5DCd6NXoLLtnMv
+         /REw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=bo/OsYyrQ5f4c1n/3+jslyR1BtB3QudbiUsZXeQtoB0=;
-        b=caBHsfo8jWlM7cX4eoj/HYonXKOO2wCMot+zoN/HulpI8Fnd0pEMEGtyGCrBAXGp19
-         EkW+myt7jwPt7LC7w8yQABV9NjRDYP/FzEgtNKRVbN/p0GmiwBABwIb2L6mzclvUWe8g
-         Z7hesYyxtUODoZg4A96Fr8tmHYkyy7YdsY6/X4DUNeDK4gAVUTBsGiZou5On5OpHM6ii
-         jcbndNPbE6UMoKAsmxqa2JfATROllwiUSaT/s6pAUb0BHqr7f719qZQZfcp+NH2B92e5
-         Vqlmx5DvSKcVRKCQcwM1gKN5gHp6vJqL7oBofs/LlkUors5ea4DWZhoxOsO1L9joF4fm
-         nMZg==
-X-Gm-Message-State: APjAAAXPkHQBmoZojoc79niZDbPj5llafAGTYs1l/FKah0x8dW7KXB3c
-        n2MfQKwnq5asBY1W2hyh80I=
-X-Google-Smtp-Source: APXvYqxwKE747kyZoAPf2q6DIqaIMbkCWkGf50xc0tuqY86f7vAKBU8L30JvLCHfYGksx7EiIvhsYA==
-X-Received: by 2002:aa7:8708:: with SMTP id b8mr8703071pfo.184.1579803781634;
-        Thu, 23 Jan 2020 10:23:01 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=OFUvWCgmfRBKh1qgMuTmkB1yrgtzYhWKuC/q6gp0Heo=;
+        b=nwwVVREz/YLrNJLEDCLNBYcTYxknzeYm5S4o35tHs57HXNb6xJjG/AhVo9dbgtvOyt
+         mcc8fe+wzS67vyGg/BRbhnWCYqO0gQej+2YGNCmUZPimqxRRtp2R2xevKSUGEJsFFWMO
+         4HYcM9GYipBsRfHcEl8XJqZ10i4S7EKXW/Z4qflkV4d2XtspdgPP2th3hulkqMuFY1BE
+         QqR+zN9KBm3FmxZEe3XLuAVOhBKV9xLI9peQCITkbj15+jCoV3TJt8NU1vPdyLUbs0Pj
+         DSVmsBEe2LVI3Ri1LDpgT7bRvkhJaWpWiSwBy/5EPxjVWCnI3Fo2KbYlNlKxmpqh+Ykw
+         D2hg==
+X-Gm-Message-State: APjAAAVdBYGSQFz6wSVt/ksG/Gd3O1Q4YlGuj/YhNjL4FW9nVDg1Jmgc
+        frBIKv+onfpwshX1/sNz6ydtnKMYB4c=
+X-Google-Smtp-Source: APXvYqz7GS8exZa+Z5CPIWzSiuWWFYqsrHtIWuVkh5tepN6MZm5t2iJVNBCwPRSOtjzR0MhJ9W/X2g==
+X-Received: by 2002:a17:90a:cf07:: with SMTP id h7mr5837294pju.66.1579803784554;
+        Thu, 23 Jan 2020 10:23:04 -0800 (PST)
 Received: from ajayg.nvidia.com (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id p21sm3427894pfn.103.2020.01.23.10.23.00
+        by smtp.gmail.com with ESMTPSA id p21sm3427894pfn.103.2020.01.23.10.23.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2020 10:23:00 -0800 (PST)
+        Thu, 23 Jan 2020 10:23:04 -0800 (PST)
 From:   Ajay Gupta <ajaykuee@gmail.com>
 X-Google-Original-From: Ajay Gupta <ajayg@nvidia.com>
 To:     heikki.krogerus@linux.intel.com
 Cc:     linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>
-Subject: [PATCH v2 1/2] usb: typec: ucsi: register DP only for NVIDIA DP VDO
-Date:   Wed, 22 Jan 2020 16:58:58 -0800
-Message-Id: <20200123005859.13194-1-ajayg@nvidia.com>
+Subject: [PATCH v2 2/2] usb: ucsi: ccg: disable runtime pm during fw flashing
+Date:   Wed, 22 Jan 2020 16:58:59 -0800
+Message-Id: <20200123005859.13194-2-ajayg@nvidia.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200123005859.13194-1-ajayg@nvidia.com>
+References: <20200123005859.13194-1-ajayg@nvidia.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
@@ -57,68 +60,37 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Ajay Gupta <ajayg@nvidia.com>
 
-NVIDIA VirtualLink (svid 0x955) has two altmode, vdo=0x1 for
-VirtualLink DP mode and vdo=0x3 for NVIDIA test mode.
-Register display altmode driver only for vdo=0x1
+Ucsi ppm is unregistered during fw flashing so disable
+runtime pm also and reenable after fw flashing is completed
+and ppm is re-registered.
 
 Signed-off-by: Ajay Gupta <ajayg@nvidia.com>
 ---
-Changes from v1->v2:
- Moved defines from typec_dp.h to ucsi.h based on comments
- from Heikki.
+Change from v1->v2: None
 
- drivers/usb/typec/ucsi/ucsi.c | 12 ++++++++++--
- drivers/usb/typec/ucsi/ucsi.h |  7 +++++++
- 2 files changed, 17 insertions(+), 2 deletions(-)
+ drivers/usb/typec/ucsi/ucsi_ccg.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index d5a6aac86327..eca9d598a42f 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -270,9 +270,16 @@ static int ucsi_register_altmode(struct ucsi_connector *con,
+diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+index a5b8530490db..2658cda5da11 100644
+--- a/drivers/usb/typec/ucsi/ucsi_ccg.c
++++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+@@ -1219,6 +1219,7 @@ static int ccg_restart(struct ucsi_ccg *uc)
+ 		return status;
+ 	}
  
- 		switch (desc->svid) {
- 		case USB_TYPEC_DP_SID:
--		case USB_TYPEC_NVIDIA_VLINK_SID:
- 			alt = ucsi_register_displayport(con, override, i, desc);
- 			break;
-+		case USB_TYPEC_NVIDIA_VLINK_SID:
-+			if (desc->vdo == USB_TYPEC_NVIDIA_VLINK_DBG_VDO)
-+				alt = typec_port_register_altmode(con->port,
-+								  desc);
-+			else
-+				alt = ucsi_register_displayport(con, override,
-+								i, desc);
-+			break;
- 		default:
- 			alt = typec_port_register_altmode(con->port, desc);
- 			break;
-@@ -475,7 +482,8 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
- 	while (adev[i]) {
- 		if (recipient == UCSI_RECIPIENT_SOP &&
- 		    (adev[i]->svid == USB_TYPEC_DP_SID ||
--			adev[i]->svid == USB_TYPEC_NVIDIA_VLINK_SID)) {
-+			(adev[i]->svid == USB_TYPEC_NVIDIA_VLINK_SID &&
-+			adev[i]->vdo != USB_TYPEC_NVIDIA_VLINK_DBG_VDO))) {
- 			pdev = typec_altmode_get_partner(adev[i]);
- 			ucsi_displayport_remove_partner((void *)pdev);
- 		}
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index e434b9c9a9eb..a89112b69cd5 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -340,4 +340,11 @@ static inline void
- ucsi_displayport_remove_partner(struct typec_altmode *adev) { }
- #endif /* CONFIG_TYPEC_DP_ALTMODE */
++	pm_runtime_enable(uc->dev);
+ 	return 0;
+ }
  
-+/*
-+ * NVIDIA VirtualLink (svid 0x955) has two altmode. VirtualLink
-+ * DP mode with vdo=0x1 and NVIDIA test mode with vdo=0x3
-+ */
-+#define USB_TYPEC_NVIDIA_VLINK_DP_VDO	0x1
-+#define USB_TYPEC_NVIDIA_VLINK_DBG_VDO	0x3
-+
- #endif /* __DRIVER_USB_TYPEC_UCSI_H */
+@@ -1234,6 +1235,7 @@ static void ccg_update_firmware(struct work_struct *work)
+ 
+ 	if (flash_mode != FLASH_NOT_NEEDED) {
+ 		ucsi_unregister(uc->ucsi);
++		pm_runtime_disable(uc->dev);
+ 		free_irq(uc->irq, uc);
+ 
+ 		ccg_fw_update(uc, flash_mode);
 -- 
 2.17.1
 
