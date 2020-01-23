@@ -2,165 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FFB145F86
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2020 00:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 255FA1460CB
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2020 03:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726780AbgAVXy7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jan 2020 18:54:59 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:41273 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725911AbgAVXy6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jan 2020 18:54:58 -0500
-Received: by mail-pl1-f194.google.com with SMTP id t14so504787plr.8;
-        Wed, 22 Jan 2020 15:54:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xH3k99ZFUTR2CTX6CDQPWZxKFVJIF0Rpq9Ykd9dMlnc=;
-        b=bY/fyKJ2GJG6of8/QmD1qZPxkEg1xqMmWqhMxq2unytiurzZeU1WcNs7D2KI9t+GKk
-         j7fUqFnukAhMNvnmrCvCf0Sk552UpUJasJeue+zVvmTR6TdpwnsS1p4y7cHJpNOsFFR7
-         oWESmeZnK2nVmyAA8e3HZfjqTL2P93ZSPlo/+lX2DGnEiFkbAzXKPmsaDzadYFOZqtkz
-         +yaGf2YzIFJOoCzDaNxc/xy8pEZxRJHJl8wCwJGfMZ1SBJQ3SipIsw7TM1GcjgOpi4UZ
-         6945R8Vvzz01duF2NEiUGzfc5uGJjsuNnGornNt27XIxVs1JdgSH92OrtGAOL/UfIGkI
-         G8dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xH3k99ZFUTR2CTX6CDQPWZxKFVJIF0Rpq9Ykd9dMlnc=;
-        b=Ax6OU4Pkto/Sztm6uToivL7ZyANipTSrVk/luXzVlBp9NIGDmCQcpYRvWcZsczyxVB
-         3Ebw62LY9Z1+SaNUBre569uFOwa0JDLmHBWg1CT9hd10pjVSkidRJUGCVbBZIynDBeti
-         f/h0STKANEzYPZvuPYRx31is5QPz5GTveD/Q3roF1KMu3ZCyUsUXernwOlB1KFILUi2q
-         l2Ko1CW8tCq6rbiET4PSKLV6HceULobxyiwuNveNdqnbactjwr8qKggO6FCCIp/hN8+E
-         MBwGHNDkYzbQPISEp6enskCSJk1cEBmEUE4CN25yFP1AbkFPsxMvMeL5/p0VRAeOGUwb
-         smog==
-X-Gm-Message-State: APjAAAVDOEqtld6bYzeuXO8sAXuVerc/Vi2QOm3ALUwn8arTDZgoKCAp
-        qNiMxLn04zorO0+/xcVYp9ZMcz0COVs=
-X-Google-Smtp-Source: APXvYqzPl1vPqbDpHWjbAyGl/KPtd2lqs2YfGKY2C5PIFmDzIuiwbYPPKsm7oCQaImJGFM5Rb0+PMg==
-X-Received: by 2002:a17:90a:9b88:: with SMTP id g8mr1210521pjp.72.1579737297713;
-        Wed, 22 Jan 2020 15:54:57 -0800 (PST)
-Received: from EliteBook (174-17-125-110.phnx.qwest.net. [174.17.125.110])
-        by smtp.gmail.com with ESMTPSA id b15sm66479pft.58.2020.01.22.15.54.57
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 Jan 2020 15:54:57 -0800 (PST)
-Date:   Wed, 22 Jan 2020 16:54:54 -0700
-From:   Paul Zimmerman <pauldzim@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Heinzelmann <heinzelmann.david@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-Subject: Re: [REGRESSION][BISECTED] 5.5-rc suspend/resume failure caused by
- patch a4f55d8b8c14 ("usb: hub: Check device descriptor before
- resusciation")
-Message-ID: <20200122165454.757aaa25@EliteBook>
-In-Reply-To: <Pine.LNX.4.44L0.2001221249190.1636-100000@iolanthe.rowland.org>
-References: <20200121193131.070a28bf@EliteBook>
-        <Pine.LNX.4.44L0.2001221249190.1636-100000@iolanthe.rowland.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1725943AbgAWCxs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jan 2020 21:53:48 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:42656 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725911AbgAWCxs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 Jan 2020 21:53:48 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id D63BE1A3F4E;
+        Thu, 23 Jan 2020 03:53:45 +0100 (CET)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 3597A1A3FEE;
+        Thu, 23 Jan 2020 03:53:44 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id CB6B6402C4;
+        Thu, 23 Jan 2020 10:53:41 +0800 (SGT)
+From:   Peter Chen <peter.chen@nxp.com>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-imx@nxp.com, Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH 1/1] usb: chipidea: udc: using structure ci_hdrc device for runtime PM
+Date:   Thu, 23 Jan 2020 10:49:19 +0800
+Message-Id: <1579747759-32526-1-git-send-email-peter.chen@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 22 Jan 2020 14:31:29 -0500 (EST)
-Alan Stern <stern@rowland.harvard.edu> wrote:
+At current code, it doesn't maintain ci->gadget.dev's runtime PM
+status well, eg, during the PM operation, the PM counter for
+ci->gadget.dev doesn't be changed accordingly.
 
-> On Tue, 21 Jan 2020, Paul Zimmerman wrote:
-> 
-> > On Mon, 20 Jan 2020 13:52:15 -0700 Paul Zimmerman <pauldzim@gmail.com> wrote:
-> >   
-> > > On Mon, 20 Jan 2020 10:23:11 -0500 (EST) Alan Stern <stern@rowland.harvard.edu> wrote:
-> > >     
-> > > > On Sun, 19 Jan 2020, Paul Zimmerman wrote:
-> > > >       
-> > > > > I reported this regression last week (see
-> > > > > https://lore.kernel.org/linux-usb/20200115153714.03d5b3aa@EliteBook/T/#u)
-> > > > > but I got no response to my email. Today I have retested with
-> > > > > 5.5-rc7 and verified that the problem still exists. So I am
-> > > > > resending with a different subject line to see if anyone responds.
-> > > > > 
-> > > > > The $subject patch causes a regression on my HP EliteBook laptop
-> > > > > with a built-in USB bluetooth adapter. About 50% of the time, a
-> > > > > suspend/resume cycle will cause the bluetooth adapter to stop
-> > > > > working.
-> > > > > 
-> > > > > The dmesg log below shows two suspend/resume cycles. At time
-> > > > > 63.928 you can see the bluetooth adapter being successfully
-> > > > > resumed, and at time 140.969 you can see it fail. After reverting
-> > > > > the patch, the bluetooth adapter resumes 100% of the time.
-> > > > > 
-> > > > > I also included below a lsusb -v of the bluetooth adapter. Is
-> > > > > there any other debugging info you'd like me to send?        
-> > > > 
-> > > > It looks like your dmesg log was made without enabling debugging 
-> > > > messages in usbcore.  Can you collect another log with debugging 
-> > > > messages turned on?
-> > > > 
-> > > > 	echo 'module usbcore =p'      
-> > > > >/sys/kernel/debug/dynamic_debug/control      
-> > > > 
-> > > > Also, it might not hurt to collect and post a usbmon trace for a bad
-> > > > suspend-resume cycle.      
-> > > 
-> > > Hi Alan,
-> > > 
-> > > Thanks for responding. The new dmesg log and the usbmon trace are
-> > > below. The dmesg shows a good suspend/resume followed by a bad one.
-> > > The bluetooth device is usb 2-3.2 I believe. The usbmon trace is only
-> > > for the failed suspend/resume case.    
-> 
-> It might be interesting to have a usbmon trace of a successful resume 
-> as well, for comparison.  However I suspect it would just show that 
-> the new Get-Device-Descriptor request worked and everything else 
-> continued on normally.
+In this commit, we use ci_hdrc device instead of ci->gadget.dev
+for runtime PM APIs at udc driver, in the way, we handle runtime
+PM APIs using unify device structure between core and udc driver.
 
-< snip >
+Reviewed-by: Jun Li <jun.li@nxp.com>
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
+---
+ drivers/usb/chipidea/udc.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-> > So if I'm understanding this correctly, there are two threads that are
-> > trying to access the USB bluetooth device at the same time. I have no
-> > idea if that is how it's supposed to work.  
-> 
-> In fact it isn't, although in principle this shouldn't cause any
-> trouble.  It looks like your bluetooth device is deficient: It
-> sometimes crashes if it receives a Get-Device-Descriptor request while
-> it is busy with something else.
-> 
-> Still, since there was no real connection change at the port, there's
-> no reason to call hub_port_connect_change() here.  Let's see if the
-> patch below fixes your problem.
-> 
-> Alan Stern
-> 
-> 
-> 
-> Index: usb-devel/drivers/usb/core/hub.c
-> ===================================================================
-> --- usb-devel.orig/drivers/usb/core/hub.c
-> +++ usb-devel/drivers/usb/core/hub.c
-> @@ -1216,11 +1216,6 @@ static void hub_activate(struct usb_hub
->  #ifdef CONFIG_PM
->  			udev->reset_resume = 1;
->  #endif
-> -			/* Don't set the change_bits when the device
-> -			 * was powered off.
-> -			 */
-> -			if (test_bit(port1, hub->power_bits))
-> -				set_bit(port1, hub->change_bits);
->  
->  		} else {
->  			/* The power session is gone; tell hub_wq */
-> 
+diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+index ffaf46f5d062..ffa6caee1f3b 100644
+--- a/drivers/usb/chipidea/udc.c
++++ b/drivers/usb/chipidea/udc.c
+@@ -1533,7 +1533,7 @@ static void ci_hdrc_gadget_connect(struct usb_gadget *_gadget, int is_active)
+ 	unsigned long flags;
+ 
+ 	if (is_active) {
+-		pm_runtime_get_sync(&_gadget->dev);
++		pm_runtime_get_sync(ci->dev);
+ 		hw_device_reset(ci);
+ 		spin_lock_irqsave(&ci->lock, flags);
+ 		if (ci->driver) {
+@@ -1551,7 +1551,7 @@ static void ci_hdrc_gadget_connect(struct usb_gadget *_gadget, int is_active)
+ 			ci->platdata->notify_event(ci,
+ 			CI_HDRC_CONTROLLER_STOPPED_EVENT);
+ 		_gadget_stop_activity(&ci->gadget);
+-		pm_runtime_put_sync(&_gadget->dev);
++		pm_runtime_put_sync(ci->dev);
+ 		usb_gadget_set_state(_gadget, USB_STATE_NOTATTACHED);
+ 	}
+ }
+@@ -1636,12 +1636,12 @@ static int ci_udc_pullup(struct usb_gadget *_gadget, int is_on)
+ 	if (ci_otg_is_fsm_mode(ci) || ci->role == CI_ROLE_HOST)
+ 		return 0;
+ 
+-	pm_runtime_get_sync(&ci->gadget.dev);
++	pm_runtime_get_sync(ci->dev);
+ 	if (is_on)
+ 		hw_write(ci, OP_USBCMD, USBCMD_RS, USBCMD_RS);
+ 	else
+ 		hw_write(ci, OP_USBCMD, USBCMD_RS, 0);
+-	pm_runtime_put_sync(&ci->gadget.dev);
++	pm_runtime_put_sync(ci->dev);
+ 
+ 	return 0;
+ }
+@@ -1839,7 +1839,7 @@ static int ci_udc_stop(struct usb_gadget *gadget)
+ 			CI_HDRC_CONTROLLER_STOPPED_EVENT);
+ 		_gadget_stop_activity(&ci->gadget);
+ 		spin_lock_irqsave(&ci->lock, flags);
+-		pm_runtime_put(&ci->gadget.dev);
++		pm_runtime_put(ci->dev);
+ 	}
+ 
+ 	spin_unlock_irqrestore(&ci->lock, flags);
+@@ -1970,9 +1970,6 @@ static int udc_start(struct ci_hdrc *ci)
+ 	if (retval)
+ 		goto destroy_eps;
+ 
+-	pm_runtime_no_callbacks(&ci->gadget.dev);
+-	pm_runtime_enable(&ci->gadget.dev);
+-
+ 	return retval;
+ 
+ destroy_eps:
+-- 
+2.17.1
 
-I can confirm this fixes the issue for me, I did a couple dozen
-suspend/resume cycles without seeing a failure.
-
-I see the code you removed was added by Lan Tianyu in commit
-ad493e5e5805 ("usb: add usb port auto power off mechanism"). I
-wonder if your patch would break that? I don't know what that is
-or how to test it.
-
-In any case:
-Tested-by: Paul Zimmerman <pauldzim@gmail.com>
