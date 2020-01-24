@@ -2,241 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C59714854C
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2020 13:41:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C7114856B
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2020 13:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732872AbgAXMlS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jan 2020 07:41:18 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:35715 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730904AbgAXMlS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jan 2020 07:41:18 -0500
-Received: by mail-pg1-f196.google.com with SMTP id l24so989519pgk.2
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2020 04:41:18 -0800 (PST)
+        id S2387794AbgAXMwF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jan 2020 07:52:05 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:41774 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387709AbgAXMwF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jan 2020 07:52:05 -0500
+Received: by mail-lf1-f65.google.com with SMTP id m30so1031808lfp.8
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2020 04:52:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=znYwEP8BlT5JhAqIxI23u4NVyVYxwHFg1esi8lZ0b3I=;
-        b=fdaKR2SLA5vNu+qBklTanXoToNYa6WgLoP22kqdCYdS3CvCCGl1MaVzdq0R/BSs/Gj
-         +NdsCcir6+RhE8r/7nww9QwERmL3s4rZ+WLCzKKVmB2emp2sh87RyRYw9QTsZRjBrEj5
-         fwIYq3k9B/WqoYYcPn8Az9gEH6fvU1QNAURlf0liOeGr8kYXPrv98mUy7Q6zkp0YbV8d
-         iTXcsRobQxfsjrr5E3e+V+cr/dGnyK0pNyvGisNxKxyG1iNq9hICQBNiuivcYMojTEIJ
-         FsO+YzEXggI8E48jcAzSpNQm33LvsIjgMYaSW93GqEapvqnmBY/Ac6jGcXjoVhhMyl4V
-         VzOA==
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=jLOjncvs0tqhzwWUHPM+IJzvjSXlrufV+vR/RJ8ji8Q=;
+        b=p0ApriS+5cF4zGgGYogvaxWFS9IqDzMXSH81uQOtPjyODeOThWPNHrmdm5YOoyUqaY
+         gJ+fbclb8Bm2F5QvcQ2z1iMVh+JcMOZdewATp54XztChnXR2RYQcSYF2gdKP+EYKYO/c
+         8v7LIrOB2rvk/bPJ8TJoBjPhhvlw6iviqfm4EereAbUiVIqTa41aa04/cjIKzs2vO1e+
+         /QYoS6FsCJXdkY64aOZWV+Vu/bLLlVhccCl30iRtCHQ+3PCmsH0LJtZH74atE6/1eAjP
+         0a90AxaMIkhZA4PtfacqsTwLx+p1xmNTdU5Wv8WnvrRlC2LyGnFV4u4NaSwzBAZcdYO/
+         +dgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=znYwEP8BlT5JhAqIxI23u4NVyVYxwHFg1esi8lZ0b3I=;
-        b=Tr28tKTd6hQdu5wP5j/fF87Bog/8atOqjiCrMx9fUCcVx6KULsPhpcnwLlbQjgwbJu
-         d0k4QKONxe+HVb6qWHx/arE2fvBmjeSfpcY6fin0zpLSENjZbzqJoJ1nA8UZiaYDlZax
-         3lkHgAn97R01vtfaDgUnvMRS6LAViWd82k8NrdPGhnjhYiiQPqH8oY4V2igki9KccJB1
-         pW9bBcMPw4Sb995RZ+egir23uHZttgOAr5kdsVAFbDE2KrhorThYNd363AqFmN5QkBJz
-         3cH5i2l8aoa+TKwa6awYAL6kQWrjymz/XXe4serwQb709oRgwDZUbd8XfReDbVXtwEyB
-         GPpQ==
-X-Gm-Message-State: APjAAAWd4LDsoiaavUuWKyxPWzJSjpL5rNHs84SkNOdb08Vv7PyF+lZx
-        Ay/pmP1JEs3n3igYlsdv3Q2FXaLuQCy7VwW/LiStsw==
-X-Google-Smtp-Source: APXvYqzid1qXDZZJNwycxElhu5/AfgZByrUXYujmLVPV1dVARwiXBDpF6hO1aoMHSiS205Uo0dD3VVOFhGH4Eunowts=
-X-Received: by 2002:a63:358a:: with SMTP id c132mr4045045pga.286.1579869677153;
- Fri, 24 Jan 2020 04:41:17 -0800 (PST)
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=jLOjncvs0tqhzwWUHPM+IJzvjSXlrufV+vR/RJ8ji8Q=;
+        b=VBrSMZ2uCv93pVTH8APqytWBekNZ3Jh2nvHd0YMVgS3fqHSPj2ibQmms4DjSdehqiH
+         yoChmuZMIL7UFjyI7njG9/m4NhJxPxS46XOpx9e/M3iiEVPbi/5NW/KHMZUCgiTq5WGr
+         mPa3w/vQJD6GDhCD7JlpElr/Y2eiYFRr1Xeqv1JTtEiVvLyyrU8nEt62n4cHyJa5uXxc
+         YAWN8NPhQgW+eJPFraj78HovR7304br5LBL1oy4Rq1cf02w4mOQKE9vMnElMEoG4Z+to
+         EhID56LTUKKBO7M7pfKCwzIj/JBDHO8paprrSawE0t4feXQ+HI8Uu6+8Q1bYhSx+yTRO
+         nmjQ==
+X-Gm-Message-State: APjAAAU4U5M0zIX2g18ZCfflZzPR42rHb+NfxaItP1uAsW+wKRT4fqkG
+        5Zu0+R1oQ2lRTqDuoLcUhip6FY+mnj4=
+X-Google-Smtp-Source: APXvYqwW9u8jy6Q7bu8GNOpNvsdhhFff7KSZWZKMf06fcLkrka0DKFMnbyupvpOoDmBWtk5YqZOxlQ==
+X-Received: by 2002:ac2:5196:: with SMTP id u22mr1245616lfi.123.1579870322490;
+        Fri, 24 Jan 2020 04:52:02 -0800 (PST)
+Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
+        by smtp.gmail.com with ESMTPSA id q11sm2985803ljm.76.2020.01.24.04.52.01
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 24 Jan 2020 04:52:01 -0800 (PST)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     John Keeping <john@metanate.com>,
+        Pavel Hofman <pavel.hofman@ivitera.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: u_audio: Fix high-speed max packet size
+In-Reply-To: <20200117104022.5bb769f2.john@metanate.com>
+References: <4f2df2bc-e208-fffb-48e2-3e14cd093103@ivitera.com> <60bf144a-2039-8832-b6f1-f972de6a6846@ivitera.com> <cfcef91b-799e-7d02-4a4c-26ee95e85ff7@ivitera.com> <20200114200450.064cd521.john@metanate.com> <24f0935d-16a7-4301-78f4-fa459e356ca9@ivitera.com> <20200117104022.5bb769f2.john@metanate.com>
+Date:   Fri, 24 Jan 2020 14:52:49 +0200
+Message-ID: <87ftg53tjy.fsf@kernel.org>
 MIME-Version: 1.0
-References: <000000000000de50d7059ba6acd5@google.com> <20200123102707.2596-1-hdanton@sina.com>
- <20200124022847.11244-1-hdanton@sina.com>
-In-Reply-To: <20200124022847.11244-1-hdanton@sina.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 24 Jan 2020 13:41:05 +0100
-Message-ID: <CAAeHK+whRFCF9WzUr55MoMiFsn83Ykr9jGGUFE4CTKVbBsZu6Q@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in v4l2_release (3)
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        syzbot <syzbot+75287f75e2fedd69d680@syzkaller.appspotmail.com>,
-        bnvandana@gmail.com, hverkuil-cisco@xs4all.nl,
-        LKML <linux-kernel@vger.kernel.org>, linux-media@vger.kernel.org,
-        USB list <linux-usb@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>
-Content-Type: multipart/mixed; boundary="000000000000e671c4059ce2127a"
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---000000000000e671c4059ce2127a
-Content-Type: text/plain; charset="UTF-8"
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 24, 2020 at 3:29 AM Hillf Danton <hdanton@sina.com> wrote:
->
->
-> On Thu, 23 Jan 2020 14:19:47 +0200 Laurent Pinchart wrote:
-> > On Thu, Jan 23, 2020 at 06:27:07PM +0800, Hillf Danton wrote:
-> > > Wed, 22 Jan 2020 14:58:08 -0800 (PST)
-> > > > syzbot has found a reproducer for the following crash on:
-> > > >
-> > > > HEAD commit:    4cc301ee usb: gadget: add raw-gadget interface
-> > > > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=17f5a721e00000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=9ba75825443d54bd
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=75287f75e2fedd69d680
-> > > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16a0b6f1e00000
-> > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1327dd76e00000
-> > > >
-> > > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > > > Reported-by: syzbot+75287f75e2fedd69d680@syzkaller.appspotmail.com
-> > > >
-> > > > usbvision_set_audio: can't write iopin register for audio switching
-> > > > usbvision_radio_close: Final disconnect
-> > > > ==================================================================
-> > > > BUG: KASAN: use-after-free in v4l2_release+0x2f1/0x390 drivers/media/v4l2-core/v4l2-dev.c:459
-> > > > Read of size 4 at addr ffff8881caba1068 by task v4l_id/1913
->
-> <snip>
->
-> > > Add the release callback for usbvision video device and use it to release
-> > > resources when the last reference to the device goes away.
-> >
-> > Would you be able to submit this with a commit message and your
-> > Signed-off-by line ?
->
-> ---8<---
-> Subject: [PATCH] media: usbvision: add the release callback for video device
-> From: Hillf Danton <hdanton@sina.com>
->
-> To fix the UAF syzbot reported,
->
-> BUG: KASAN: use-after-free in v4l2_release+0x2f1/0x390 drivers/media/v4l2-core/v4l2-dev.c:459
->
-> a release cb which is a simple wrapper of usbvision_release() is added
-> for releasing resources as the last reference to the usbvision video
-> device goes away.
->
-> Reported-by: syzbot <syzbot+75287f75e2fedd69d680@syzkaller.appspotmail.com>
-> Fixes: 2aa689dd8057 ("[media] usbvision: embed video_device")
-> Cc: Hans Verkuil <hans.verkuil@cisco.com>
-> Signed-off-by: Hillf Danton <hdanton@sina.com>
-> ---
->
-> --- a/drivers/media/usb/usbvision/usbvision-video.c
-> +++ b/drivers/media/usb/usbvision/usbvision-video.c
-> @@ -401,7 +401,6 @@ static int usbvision_v4l2_close(struct f
->
->         if (r) {
->                 printk(KERN_INFO "%s: Final disconnect\n", __func__);
-> -               usbvision_release(usbvision);
->                 return 0;
->         }
->
-> @@ -409,6 +408,11 @@ static int usbvision_v4l2_close(struct f
->         return v4l2_fh_release(file);
->  }
->
-> +static void usbvision_video_device_release(struct video_device *vdev)
-> +{
-> +       struct usb_usbvision *usbvision = video_get_drvdata(vdev);
-> +       usbvision_release(usbvision);
-> +}
->
->  /*
->   * usbvision_ioctl()
-> @@ -1181,7 +1185,7 @@ static struct video_device usbvision_vid
->         .fops           = &usbvision_fops,
->         .ioctl_ops      = &usbvision_ioctl_ops,
->         .name           = "usbvision-video",
-> -       .release        = video_device_release_empty,
-> +       .release        = usbvision_video_device_release,
->         .tvnorms        = USBVISION_NORMS,
->  };
->
-> --- a/drivers/media/v4l2-core/v4l2-dev.c
-> +++ b/drivers/media/v4l2-core/v4l2-dev.c
-> @@ -206,7 +206,10 @@ static void v4l2_device_release(struct d
->         }
->  #endif
->
-> -       /* Do not call v4l2_device_put if there is no release callback set.
-> +       /*
-> +        * Decrease v4l2_device refcount
-> +        *
-> +        * Do not call v4l2_device_put if there is no release callback set.
->          * Drivers that have no v4l2_device release callback might free the
->          * v4l2_dev instance in the video_device release callback below, so we
->          * must perform this check here.
-> @@ -214,16 +217,12 @@ static void v4l2_device_release(struct d
->          * TODO: In the long run all drivers that use v4l2_device should use the
->          * v4l2_device release callback. This check will then be unnecessary.
->          */
-> -       if (v4l2_dev->release == NULL)
-> -               v4l2_dev = NULL;
-> +       if (v4l2_dev->release)
-> +               v4l2_device_put(v4l2_dev);
->
->         /* Release video_device and perform other
->            cleanups as needed. */
->         vdev->release(vdev);
-> -
-> -       /* Decrease v4l2_device refcount */
-> -       if (v4l2_dev)
-> -               v4l2_device_put(v4l2_dev);
->  }
->
->  static struct class video_class = {
-> --
 
-#syz test: https://github.com/google/kasan.git ae179410
+Hi,
 
---000000000000e671c4059ce2127a
-Content-Type: application/x-patch; name="usbvision.patch"
-Content-Disposition: attachment; filename="usbvision.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_k5s5l7xp0>
-X-Attachment-Id: f_k5s5l7xp0
+John Keeping <john@metanate.com> writes:
 
-U3ViamVjdDogW1BBVENIXSBtZWRpYTogdXNidmlzaW9uOiBhZGQgdGhlIHJlbGVhc2UgY2FsbGJh
-Y2sgZm9yIHZpZGVvIGRldmljZQpGcm9tOiBIaWxsZiBEYW50b24gPGhkYW50b25Ac2luYS5jb20+
-CgpUbyBmaXggdGhlIFVBRiBzeXpib3QgcmVwb3J0ZWQsCgpCVUc6IEtBU0FOOiB1c2UtYWZ0ZXIt
-ZnJlZSBpbiB2NGwyX3JlbGVhc2UrMHgyZjEvMHgzOTAgZHJpdmVycy9tZWRpYS92NGwyLWNvcmUv
-djRsMi1kZXYuYzo0NTkKCmEgcmVsZWFzZSBjYiB3aGljaCBpcyBhIHNpbXBsZSB3cmFwcGVyIG9m
-IHVzYnZpc2lvbl9yZWxlYXNlKCkgaXMgYWRkZWQKZm9yIHJlbGVhc2luZyByZXNvdXJjZXMgYXMg
-dGhlIGxhc3QgcmVmZXJlbmNlIHRvIHRoZSB1c2J2aXNpb24gdmlkZW8KZGV2aWNlIGdvZXMgYXdh
-eS4KClJlcG9ydGVkLWJ5OiBzeXpib3QgPHN5emJvdCs3NTI4N2Y3NWUyZmVkZDY5ZDY4MEBzeXpr
-YWxsZXIuYXBwc3BvdG1haWwuY29tPgpGaXhlczogMmFhNjg5ZGQ4MDU3ICgiW21lZGlhXSB1c2J2
-aXNpb246IGVtYmVkIHZpZGVvX2RldmljZSIpCkNjOiBIYW5zIFZlcmt1aWwgPGhhbnMudmVya3Vp
-bEBjaXNjby5jb20+ClNpZ25lZC1vZmYtYnk6IEhpbGxmIERhbnRvbiA8aGRhbnRvbkBzaW5hLmNv
-bT4KLS0tCgotLS0gYS9kcml2ZXJzL21lZGlhL3VzYi91c2J2aXNpb24vdXNidmlzaW9uLXZpZGVv
-LmMKKysrIGIvZHJpdmVycy9tZWRpYS91c2IvdXNidmlzaW9uL3VzYnZpc2lvbi12aWRlby5jCkBA
-IC00MDEsNyArNDAxLDYgQEAgc3RhdGljIGludCB1c2J2aXNpb25fdjRsMl9jbG9zZShzdHJ1Y3Qg
-ZgogCiAJaWYgKHIpIHsKIAkJcHJpbnRrKEtFUk5fSU5GTyAiJXM6IEZpbmFsIGRpc2Nvbm5lY3Rc
-biIsIF9fZnVuY19fKTsKLQkJdXNidmlzaW9uX3JlbGVhc2UodXNidmlzaW9uKTsKIAkJcmV0dXJu
-IDA7CiAJfQogCkBAIC00MDksNiArNDA4LDExIEBAIHN0YXRpYyBpbnQgdXNidmlzaW9uX3Y0bDJf
-Y2xvc2Uoc3RydWN0IGYKIAlyZXR1cm4gdjRsMl9maF9yZWxlYXNlKGZpbGUpOwogfQogCitzdGF0
-aWMgdm9pZCB1c2J2aXNpb25fdmlkZW9fZGV2aWNlX3JlbGVhc2Uoc3RydWN0IHZpZGVvX2Rldmlj
-ZSAqdmRldikKK3sKKwlzdHJ1Y3QgdXNiX3VzYnZpc2lvbiAqdXNidmlzaW9uID0gdmlkZW9fZ2V0
-X2RydmRhdGEodmRldik7CisJdXNidmlzaW9uX3JlbGVhc2UodXNidmlzaW9uKTsKK30KIAogLyoK
-ICAqIHVzYnZpc2lvbl9pb2N0bCgpCkBAIC0xMTgxLDcgKzExODUsNyBAQCBzdGF0aWMgc3RydWN0
-IHZpZGVvX2RldmljZSB1c2J2aXNpb25fdmlkCiAJLmZvcHMJCT0gJnVzYnZpc2lvbl9mb3BzLAog
-CS5pb2N0bF9vcHMJPSAmdXNidmlzaW9uX2lvY3RsX29wcywKIAkubmFtZSAgICAgICAgICAgPSAi
-dXNidmlzaW9uLXZpZGVvIiwKLQkucmVsZWFzZQk9IHZpZGVvX2RldmljZV9yZWxlYXNlX2VtcHR5
-LAorCS5yZWxlYXNlCT0gdXNidmlzaW9uX3ZpZGVvX2RldmljZV9yZWxlYXNlLAogCS50dm5vcm1z
-ICAgICAgICA9IFVTQlZJU0lPTl9OT1JNUywKIH07CiAKLS0tIGEvZHJpdmVycy9tZWRpYS92NGwy
-LWNvcmUvdjRsMi1kZXYuYworKysgYi9kcml2ZXJzL21lZGlhL3Y0bDItY29yZS92NGwyLWRldi5j
-CkBAIC0yMDYsNyArMjA2LDEwIEBAIHN0YXRpYyB2b2lkIHY0bDJfZGV2aWNlX3JlbGVhc2Uoc3Ry
-dWN0IGQKIAl9CiAjZW5kaWYKIAotCS8qIERvIG5vdCBjYWxsIHY0bDJfZGV2aWNlX3B1dCBpZiB0
-aGVyZSBpcyBubyByZWxlYXNlIGNhbGxiYWNrIHNldC4KKwkvKgorCSAqIERlY3JlYXNlIHY0bDJf
-ZGV2aWNlIHJlZmNvdW50CisJICoKKwkgKiBEbyBub3QgY2FsbCB2NGwyX2RldmljZV9wdXQgaWYg
-dGhlcmUgaXMgbm8gcmVsZWFzZSBjYWxsYmFjayBzZXQuCiAJICogRHJpdmVycyB0aGF0IGhhdmUg
-bm8gdjRsMl9kZXZpY2UgcmVsZWFzZSBjYWxsYmFjayBtaWdodCBmcmVlIHRoZQogCSAqIHY0bDJf
-ZGV2IGluc3RhbmNlIGluIHRoZSB2aWRlb19kZXZpY2UgcmVsZWFzZSBjYWxsYmFjayBiZWxvdywg
-c28gd2UKIAkgKiBtdXN0IHBlcmZvcm0gdGhpcyBjaGVjayBoZXJlLgpAQCAtMjE0LDE2ICsyMTcs
-MTIgQEAgc3RhdGljIHZvaWQgdjRsMl9kZXZpY2VfcmVsZWFzZShzdHJ1Y3QgZAogCSAqIFRPRE86
-IEluIHRoZSBsb25nIHJ1biBhbGwgZHJpdmVycyB0aGF0IHVzZSB2NGwyX2RldmljZSBzaG91bGQg
-dXNlIHRoZQogCSAqIHY0bDJfZGV2aWNlIHJlbGVhc2UgY2FsbGJhY2suIFRoaXMgY2hlY2sgd2ls
-bCB0aGVuIGJlIHVubmVjZXNzYXJ5LgogCSAqLwotCWlmICh2NGwyX2Rldi0+cmVsZWFzZSA9PSBO
-VUxMKQotCQl2NGwyX2RldiA9IE5VTEw7CisJaWYgKHY0bDJfZGV2LT5yZWxlYXNlKQorCQl2NGwy
-X2RldmljZV9wdXQodjRsMl9kZXYpOwogCiAJLyogUmVsZWFzZSB2aWRlb19kZXZpY2UgYW5kIHBl
-cmZvcm0gb3RoZXIKIAkgICBjbGVhbnVwcyBhcyBuZWVkZWQuICovCiAJdmRldi0+cmVsZWFzZSh2
-ZGV2KTsKLQotCS8qIERlY3JlYXNlIHY0bDJfZGV2aWNlIHJlZmNvdW50ICovCi0JaWYgKHY0bDJf
-ZGV2KQotCQl2NGwyX2RldmljZV9wdXQodjRsMl9kZXYpOwogfQogCiBzdGF0aWMgc3RydWN0IGNs
-YXNzIHZpZGVvX2NsYXNzID0gewo=
---000000000000e671c4059ce2127a--
+> On Thu, 16 Jan 2020 16:39:50 +0100
+> Pavel Hofman <pavel.hofman@ivitera.com> wrote:
+>
+>> > I've taken a look at this and the patch below fixes it in my simple
+>> > testing.  But note that this doesn't adjust the PCM's min_period_bytes
+>> > which will be necessary if you want to minimize latency with an adjust=
+ed
+>> > high-speed bInterval setting.
+>> >=20=20=20
+>>=20
+>> Please can I ask you to submit your patch? IMO your perhaps slightly=20
+>> suboptimal solution is much better than the current broken version.
+>
+> Yes, the patch is definitely an improvement.  I thought it would be
+> picked up from the earlier mail, but I think Patchwork requires the
+> subject to match, so I'm including it again here.
+>
+> Are you able to provide a Tested-by for this change?
+>
+> -- >8 --
+> Prior to commit eb9fecb9e69b ("usb: gadget: f_uac2: split out audio
+> core") the maximum packet size was calculated only from the high-speed
+> descriptor but now we use the largest of the full-speed and high-speed
+> descriptors.
+>
+> This is correct, but the full-speed value is likely to be higher than
+> that for high-speed and this leads to submitting requests for OUT
+> transfers (received by the gadget) which are larger than the endpoint's
+> maximum packet size.  These are rightly rejected by the gadget core.
+>
+> config_ep_by_speed() already sets up the correct maximum packet size for
+> the enumerated speed in the usb_ep structure, so we can simply use this
+> instead of the overall value that has been used to allocate buffers for
+> requests.
+>
+> Note that the minimum period for ALSA is still set from the largest
+> value, and this is unavoidable because it's possible to open the audio
+> device before the gadget has been enumerated.
+>
+> Signed-off-by: John Keeping <john@metanate.com>
+
+Acked-by: Felipe Balbi <balbi@kernel.org>
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4q6KEACgkQzL64meEa
+mQZMwxAAyZxPpzextNBu+zsip3XNyuoZMfajZCaZji4iKsl11vbOahER4EKkViFy
+auqJAQOWxwsnhV+hhjjsaC99bXSWwSXa3bxKs7vj/TuSB4fTWoic9PdlmUF9MnXU
+0Adx9H/C2BJqXOBP6IUmZ0RT4NPfmGqazcV/YQGwXyacj7dlAbLQJOWtwKIePHOj
+ibRzZdxLavC48ouJR1NhU4rC02OXkxB863PhPiRh0uDJRkv8N/YDYBTyGOygX3iu
+DamtZggtKpWqRN+OA4qlJpT/RFRr1RQNLB0d4mSuSnlB/k3QoTl2/hseC0FKhokZ
+IpjThmO7gfWjAYddgnzHIJbKv42hPjwfxJrsS2AEECEBJfL3TZJ+PnIifpEUVIh2
+KxXeC8wjhDBP2LTV707NBPz+GgIUEGYqee9qfOpi3P1Z2e+c3FNw0LorVzAtkX0G
+8br/e6kxQ/bK3XQWT7EeBXnno+ScQkwa9abazTQ/AO6Qxr2avcOJR6vTNCntOWBq
+jAjULbVZqYSsFeut76ydTZ2ZB8gsuo4E+RuTY4/sCOO+8Y2dFuJmO+owYXBDYY1I
+J8IaEEgdqnC2XPq9sU2vvt22AYNyY5K8U4TkSy0u86EadLEeLXtWbfDV1lJ4iQKJ
+b1/EBc83V9gNAlF0m8/RsW2QQOGhbZanLoFRg7/I1QZpGnYwK3E=
+=lzgV
+-----END PGP SIGNATURE-----
+--=-=-=--
