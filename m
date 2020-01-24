@@ -2,152 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD31D148BF5
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2020 17:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B711148FDA
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2020 22:00:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388102AbgAXQY4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jan 2020 11:24:56 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:41017 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387995AbgAXQY4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jan 2020 11:24:56 -0500
-Received: by mail-lj1-f196.google.com with SMTP id h23so3117672ljc.8
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2020 08:24:54 -0800 (PST)
+        id S1729623AbgAXVAr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jan 2020 16:00:47 -0500
+Received: from mail-io1-f50.google.com ([209.85.166.50]:44878 "EHLO
+        mail-io1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729604AbgAXVAr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jan 2020 16:00:47 -0500
+Received: by mail-io1-f50.google.com with SMTP id e7so3338673iof.11
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2020 13:00:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=2ZKQV9EUYn6O4Dwbxq9ZK3GxrnLNGiu/KoVo8Ur0eNc=;
-        b=1mGfJTx6KGaWGxumVkRlwu8JFX/T7ZxAi/ZPOibqWqzJC0d3Q6qE/tOOl1kSg0+arG
-         D+PfJu2DBY2lwp7fRrB9iFZ8Kr5f8m1MnAXwgNUfBLiHhOplxnUQLiRv/XHQI6S+EYuH
-         rpbt9IJH9DSh8+FVausrel1GvuhSQ6rZXs5HYp/wKDRdwASexD4MFTHeJ/MlErj+G0Dl
-         KFa4TU/4uMQL8oFQEGVlSczqhIBQiIhhNyMfoLHbPL6rVEBHh/jdu4mapAPNAS/p5I6M
-         VQgNDC1USFdKJQfbBnSsLWvtMEcip/ygylNCs8Vloj9hboY9ZfPNvoEYtqHp2P4ZcRCK
-         D51A==
+        d=gmail.com; s=20161025;
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+         :cc;
+        bh=UlITP+nLm4otxb0HNjKcgULIGExg7DRjW9XZ4jBa830=;
+        b=A3s3JrBlMqwGV5SJWtKcePh9D+u3u0vBwIH4rPPOWPSvHMKuzWJ+w5gf+DMuXk27ot
+         hn4dZiWr2nN6fsuaGSL6RgLv+pEOP9hV2L5r5N7gvaX6D2A7S3nZMbqWxBIvP4Bj9g08
+         4fxNBY4BBLv8WTsbtIA1bDKO8LvmcPuHcbTvS0Oh527T47OGQ4Mr9cmCFyAemAwlfFHz
+         k3Yf0SmsYfsribI047Ek06+HGf1bmxfF3bpr09p4KN+qN9QSHQub3DCkqUVnfnsXwbkr
+         c9M4I4rWAVy7VoGYW1koJolsuYlu3++Lj4cgBOQhOdP3dewaHlkAVRb4xDzDgzA7wPPL
+         qMbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=2ZKQV9EUYn6O4Dwbxq9ZK3GxrnLNGiu/KoVo8Ur0eNc=;
-        b=krfA9n/DYUt90TG4S7s/m66hX6+vAjsspj/eIyfm0lPDfWjWkd9xuZrriFrOSboQR4
-         Xscv3ON1JJrcz8wOIsyUqPPGPVi4aVkGMPv/PoKXnOag3T1vEZhpTEN9JkEljS+dD7R7
-         /9iYMgSWlQ0Y0dE4o8GTcDz0qiKzgjppp7vvrnvF77NKq6RwPjnqys4NL3pivZznLVFW
-         Jch3wtxLLfusLihUOMAA5MHDbBVN0jBV2XQ1frRhWNom4IfC5siiCgdCxtItXhYJu5er
-         MY6ehT77YWJiC3zMKZRee/NH+l9Rf1cU/REtFKHDIU3IplMYmYnO5YnaJd0YqPlf74aP
-         NyGw==
-X-Gm-Message-State: APjAAAUEuhEW1xyq+J7p37OpBWTXHzemcD71z/uCerCGwB6uO1UIhchh
-        klQQj/KyIGfc9IXDREdrudRAkA==
-X-Google-Smtp-Source: APXvYqwD3R6qmy6UAfp7uxu+afZInN2SHuLh7/0SKxfwyTm+CAMduCTdKlx73HrpU5r6GS5WWyvYzQ==
-X-Received: by 2002:a2e:3a13:: with SMTP id h19mr2778997lja.16.1579883094015;
-        Fri, 24 Jan 2020 08:24:54 -0800 (PST)
-Received: from localhost (h-93-159.A463.priv.bahnhof.se. [46.59.93.159])
-        by smtp.gmail.com with ESMTPSA id q14sm2974605lfc.60.2020.01.24.08.24.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jan 2020 08:24:53 -0800 (PST)
-Date:   Fri, 24 Jan 2020 17:24:52 +0100
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gilad Ben-Yossef <gilad@benyossef.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Bin Liu <b-liu@ti.com>, linux-crypto@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] Fix debugfs register access while suspended
-Message-ID: <20200124162452.GC286344@oden.dyn.berto.se>
-References: <20200124132957.15769-1-geert+renesas@glider.be>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+         :message-id:subject:to:cc;
+        bh=UlITP+nLm4otxb0HNjKcgULIGExg7DRjW9XZ4jBa830=;
+        b=QPghqwLxrJCJk6BCajPJoTK7/BuVuu4Zp3mECU/cHpHWpJKsNUyPRN9TY3hgpv8VxM
+         8MG/0TPwuXZ5wB5pnLs5lQBS2vxuO9R6WJ0wL5hnc/vuRsLeHt1IKQgVqaer8is5TA8S
+         4QLLAKkWI9xYzqag+MzPVxoEUoW4tpDC0sBXOMsD3CC2oDzqCFnQ1KQzUs1eHNu2VyVS
+         RUsegq1+njFBqBuwmCRwPh+k+ZtQbche1Epl2TMYFWVN+gtCPp/GwaUDbFHZbAzI3+6v
+         2lafemqtBP4b0ySi1T74rolcUyedmLxgLk0aV+DJA70gQTMvQzurP3RO5mklRo0czeS7
+         uj4Q==
+X-Gm-Message-State: APjAAAUPwAaNZ7WlWAyOC7+v2zGdnP19PgdlXLWrdcCGhEOBgiNbTb79
+        bIf4hnKXhAePzCxh1G9BD+jWatNP01ckrd7O86B4CE3e
+X-Google-Smtp-Source: APXvYqxMddE+cRyc67H3CFK+xw769LkUIBdDGoaxFTZ0tCzeZMIChNRXH9I6RKJFkVPSj7W83OzJoulhKtGlTciLZqE=
+X-Received: by 2002:a6b:d912:: with SMTP id r18mr3545396ioc.306.1579899646443;
+ Fri, 24 Jan 2020 13:00:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200124132957.15769-1-geert+renesas@glider.be>
+Received: by 2002:ad5:5d0d:0:0:0:0:0 with HTTP; Fri, 24 Jan 2020 13:00:46
+ -0800 (PST)
+In-Reply-To: <Pine.LNX.4.44L0.2001241007350.1610-100000@iolanthe.rowland.org>
+References: <CAA=hcWSKCryEZVhWptN9iz1dbh_4rMNp0X1LMop0SA7LjYWRVQ@mail.gmail.com>
+ <Pine.LNX.4.44L0.2001241007350.1610-100000@iolanthe.rowland.org>
+From:   JH <jupiter.hce@gmail.com>
+Date:   Sat, 25 Jan 2020 08:00:46 +1100
+Message-ID: <CAA=hcWSKXboOcvySVksL3eceRuWnPt=c7nv1gPPX3AQKgPGhCw@mail.gmail.com>
+Subject: Re: qmi_wwan error
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Geert,
+Hi Alan,
 
-Thanks for your series.
+On 1/25/20, Alan Stern <stern@rowland.harvard.edu> wrote:
+> On Fri, 24 Jan 2020, JH wrote:
+>
+>> Hi,
+>>
+>> I am running kernel 4.19.75 on iMX6 with a uBlox SARA-R4 LTE modem,
+>> the modem manager is oFono, connect manager is connman. It could
+>> connect to LTE between half hours to hours, then it dropped LTE
+>> connection randomly, here are error messages, what could cause the
+>> qmi_wwan status received: -71 and qmi_wwan usb_submit_urb failed with
+>> result -19 errors?
+>
+> The most likely cause is that the modem's firmware crashed, or it
+> disconnected itself electronically from the USB bus.  Or else somebody
+> unplugged the USB cable.
 
-On 2020-01-24 14:29:55 +0100, Geert Uytterhoeven wrote:
-> 	Hi all,
-> 
-> While comparing register values read from debugfs files under
-> /sys/kernel/debug/ccree/, I noticed some oddities.
-> Apparently there is no guarantee these registers are read from the
-> device while it is resumed.  This may lead to bogus values, or crashes
-> and lock-ups.
-> 
-> This patch series:
->   1. Allows debugfs_create_regset32() to be used for devices whose
->      registers must be accessed when resumed,
->   2. Fixes the CCREE driver to make use of this.
-> 
-> I have identified several other drivers that may be affected (i.e.
-> using debugfs_create_regset32() and pm_runtime_*()):
->   - drivers/gpu/drm/msm/disp/dpu1
->   - drivers/usb/dwc3
->   - drivers/usb/host/ehci-omap.c
->   - drivers/usb/host/ehci-tegra.c
->   - drivers/usb/host/ohci-platform.c
->   - drivers/usb/host/xhci.c
->   - drivers/usb/host/xhci-dbgcap.c
->   - drivers/usb/host/xhci-histb.c
->   - drivers/usb/host/xhci-hub.c
->   - drivers/usb/host/xhci-mtk.c
->   - drivers/usb/host/xhci-pci.c
->   - drivers/usb/host/xhci-plat.c
->   - drivers/usb/host/xhci-tegra.c
->   - drivers/usb/mtu3
->   - drivers/usb/musb
-> 
-> Some of these call pm_runtime_forbid(), but given the comment "users
-> should enable runtime pm using power/control in sysfs", this can be
-> overridden from userspace, so these are unsafe, too?
-> 
-> Thanks for your comments!
+There is no physical USB cable to connect to the device, the device
+USB power supply is from its internal DC source which converted and
+connected from external normal AC power. If it is a USB electronic
+fault, the firmware is using Linux kernel USB, oFono and connman,
+which one could be the source to cause the crash, Linux kernel USB
+driver, oFono or connman?
 
-Looks good to me,
+I am diagnosing the issue, I try to narrow down the source to cause
+the problem, is it fair to say that the higher layer software package
+including oFono, connman or our software applications is unlikely the
+source to cause the problem?
 
-Reviewed-by: Niklas Söderlund <niklas.soderlund@ragnatech.se>
+Appreciate if you could advise which components could be the issue,
+what could be a solution to fix it.
 
-> 
-> Geert Uytterhoeven (2):
->   debugfs: regset32: Add Runtime PM support
->   crypto: ccree - fix debugfs register access while suspended
-> 
->  drivers/crypto/ccree/cc_debugfs.c | 2 ++
->  fs/debugfs/file.c                 | 8 ++++++++
->  include/linux/debugfs.h           | 1 +
->  3 files changed, 11 insertions(+)
-> 
-> -- 
-> 2.17.1
-> 
-> Gr{oetje,eeting}s,
-> 
-> 						Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
-> 							    -- Linus Torvalds
+Thank you.
 
--- 
-Regards,
-Niklas Söderlund
+Kind regards,
+
+- jh
+
+> Alan Stern
+>
+>>
+>> [ 1018.944840] usb 1-1: USB disconnect, device number 2
+>> [ 1019.072845] option1 ttyUSB0: GSM modem (1-port) converter now
+>> disconnected from ttyUSB0
+>> [ 1019.130834] option 1-1:1.0: device disconnected
+>> [ 1019.142012] qmi_wwan 1-1:1.3: nonzero urb status received: -71
+>> [ 1019.147909] qmi_wwan 1-1:1.3: wdm_int_callback - 0 bytes
+>> [ 1019.153254] qmi_wwan 1-1:1.3: wdm_int_callback - usb_submit_urb
+>> failed with result -19
+>> [ 1019.228197] option1 ttyUSB1: GSM modem (1-port) converter now
+>> disconnected from ttyUSB1
+>> [ 1019.274475] option 1-1:1.2: device disconnected
+>> [ 1019.340442] qmi_wwan 1-1:1.3 wwan0: unregister 'qmi_wwan'
+>> usb-ci_hdrc.1-1, WWAN/QMI device
+>> [ 1022.827992] usb 1-1: new high-speed USB device number 3 using ci_hdrc
+>> [ 1023.057165] option 1-1:1.0: GSM modem (1-port) converter detected
+>> [ 1023.097815] usb 1-1: GSM modem (1-port) converter now attached to
+>> ttyUSB0
+>> [ 1023.157293] option 1-1:1.2: GSM modem (1-port) converter detected
+>> [ 1023.178163] usb 1-1: GSM modem (1-port) converter now attached to
+>> ttyUSB1
+>> [ 1023.201251] qmi_wwan 1-1:1.3: cdc-wdm0: USB WDM device
+>> [ 1023.243783] qmi_wwan 1-1:1.3 wwan0: register 'qmi_wwan' at
+>> usb-ci_hdrc.1-1, WWAN/QMI device, 16:ed:38:aa:c5:90
+>>
+>> Thank you.
+>>
+>> Kind regards,
+>>
+>> - jh
+>
+>
