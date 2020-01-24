@@ -2,132 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B711148FDA
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2020 22:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A19DE14903E
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2020 22:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729623AbgAXVAr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jan 2020 16:00:47 -0500
-Received: from mail-io1-f50.google.com ([209.85.166.50]:44878 "EHLO
-        mail-io1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729604AbgAXVAr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jan 2020 16:00:47 -0500
-Received: by mail-io1-f50.google.com with SMTP id e7so3338673iof.11
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2020 13:00:46 -0800 (PST)
+        id S1726569AbgAXVi1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jan 2020 16:38:27 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:41134 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725821AbgAXVi1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jan 2020 16:38:27 -0500
+Received: by mail-wr1-f68.google.com with SMTP id c9so3744576wrw.8;
+        Fri, 24 Jan 2020 13:38:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc;
-        bh=UlITP+nLm4otxb0HNjKcgULIGExg7DRjW9XZ4jBa830=;
-        b=A3s3JrBlMqwGV5SJWtKcePh9D+u3u0vBwIH4rPPOWPSvHMKuzWJ+w5gf+DMuXk27ot
-         hn4dZiWr2nN6fsuaGSL6RgLv+pEOP9hV2L5r5N7gvaX6D2A7S3nZMbqWxBIvP4Bj9g08
-         4fxNBY4BBLv8WTsbtIA1bDKO8LvmcPuHcbTvS0Oh527T47OGQ4Mr9cmCFyAemAwlfFHz
-         k3Yf0SmsYfsribI047Ek06+HGf1bmxfF3bpr09p4KN+qN9QSHQub3DCkqUVnfnsXwbkr
-         c9M4I4rWAVy7VoGYW1koJolsuYlu3++Lj4cgBOQhOdP3dewaHlkAVRb4xDzDgzA7wPPL
-         qMbg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=JPUjZ35jiwDXQW49rwcMtsfq6BXn4MFG9FEiV5U41rE=;
+        b=ZaLoFyM1kPanZnCOnNPKAXSWQthVDcubhVQQFC7AiDABfafPmmH+RneRSfuqgIkqt+
+         XVso8jc6ybReoxy90PpCsQZ+/4FThRCiP27TlXS7fZgetK10FK67TRcZOokBLB9ti+jt
+         2yawyQMTq5cMJTJBqrtEwQjHplr6byjYyitomfLWwHB5aeHu4mviemP/b4sHOGW5+0V+
+         LmiwosOL2HWgvH/4OamcAxRIxbbqJa+O8vfYRCqLppaIEVuexaEX01TE4VrCWYKOYmVN
+         1R9bvOtk3lm0m7ocr8t9K5AO8T51liS3G0iJTZG1ho3SVB4JseLCKfkOdS1N6/9l4Xml
+         Inrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc;
-        bh=UlITP+nLm4otxb0HNjKcgULIGExg7DRjW9XZ4jBa830=;
-        b=QPghqwLxrJCJk6BCajPJoTK7/BuVuu4Zp3mECU/cHpHWpJKsNUyPRN9TY3hgpv8VxM
-         8MG/0TPwuXZ5wB5pnLs5lQBS2vxuO9R6WJ0wL5hnc/vuRsLeHt1IKQgVqaer8is5TA8S
-         4QLLAKkWI9xYzqag+MzPVxoEUoW4tpDC0sBXOMsD3CC2oDzqCFnQ1KQzUs1eHNu2VyVS
-         RUsegq1+njFBqBuwmCRwPh+k+ZtQbche1Epl2TMYFWVN+gtCPp/GwaUDbFHZbAzI3+6v
-         2lafemqtBP4b0ySi1T74rolcUyedmLxgLk0aV+DJA70gQTMvQzurP3RO5mklRo0czeS7
-         uj4Q==
-X-Gm-Message-State: APjAAAUPwAaNZ7WlWAyOC7+v2zGdnP19PgdlXLWrdcCGhEOBgiNbTb79
-        bIf4hnKXhAePzCxh1G9BD+jWatNP01ckrd7O86B4CE3e
-X-Google-Smtp-Source: APXvYqxMddE+cRyc67H3CFK+xw769LkUIBdDGoaxFTZ0tCzeZMIChNRXH9I6RKJFkVPSj7W83OzJoulhKtGlTciLZqE=
-X-Received: by 2002:a6b:d912:: with SMTP id r18mr3545396ioc.306.1579899646443;
- Fri, 24 Jan 2020 13:00:46 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=JPUjZ35jiwDXQW49rwcMtsfq6BXn4MFG9FEiV5U41rE=;
+        b=g9Q5f/V9QSTRizoqGPsKKuH3Nags0g6NCDKR94L8jmxHjm9EZ6wGRRRvElKa+99+pV
+         Ipm9hGO3Ks6j9EzumhuN3MFsGIF0gd9ctEwxRE7dewf/gBEMt1vHADBAQweIx+64fI2r
+         JtRfp46Q3madeO4d/+eYQBanNP3jXP1ZuGCMzYxuQDEbwUDy315z9r81qe7Wibhtpv11
+         oSgQJ2fhDaD4rV5R39dkRVsnKZpxLgMnjcGtRM4kWg/qFucH1LVFpK9/uT8Ys1RKcAXS
+         U8zmmCy2bZgXU8tTtZIRtXncRkTYPU/IObNVlmKpmyHmTZHdornMFAk4EudKp93JcS+e
+         iTGA==
+X-Gm-Message-State: APjAAAVdoc1VwcFLiYPg6otKs38tpZusEOrHNRIK57t/0G2lF1gxlxq1
+        WjYANf7T3Ym5ji4NlxRg4Qmgud3Q
+X-Google-Smtp-Source: APXvYqzBetlE4PI7hVXmwd69Hyjm8pHO5DtljMJmQ6DmTZU5Q2rsglnlOi5d1FdzdFmhB2Hffz/COg==
+X-Received: by 2002:a5d:50d2:: with SMTP id f18mr6448507wrt.366.1579901903966;
+        Fri, 24 Jan 2020 13:38:23 -0800 (PST)
+Received: from debian64.daheim (p4FD0967A.dip0.t-ipconnect.de. [79.208.150.122])
+        by smtp.gmail.com with ESMTPSA id n8sm9016719wrx.42.2020.01.24.13.38.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jan 2020 13:38:22 -0800 (PST)
+Received: from localhost.daheim ([127.0.0.1] helo=debian64.localnet)
+        by debian64.daheim with esmtp (Exim 4.93)
+        (envelope-from <chunkeey@gmail.com>)
+        id 1iv6ej-0024sy-TR; Fri, 24 Jan 2020 22:38:21 +0100
+From:   Christian Lamparter <chunkeey@gmail.com>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 0/5] usb: xhci: Add support for Renesas USB controllers
+Date:   Fri, 24 Jan 2020 22:38:21 +0100
+Message-ID: <5878067.luYmtVZgP3@debian64>
+In-Reply-To: <CAAd0S9Dd7Ygx7TgV3E_A6z29efG7jsE1-xy48_cHotroWuk_ZA@mail.gmail.com>
+References: <20200113084005.849071-1-vkoul@kernel.org> <20200121064608.GA2841@vkoul-mobl> <CAAd0S9Dd7Ygx7TgV3E_A6z29efG7jsE1-xy48_cHotroWuk_ZA@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:ad5:5d0d:0:0:0:0:0 with HTTP; Fri, 24 Jan 2020 13:00:46
- -0800 (PST)
-In-Reply-To: <Pine.LNX.4.44L0.2001241007350.1610-100000@iolanthe.rowland.org>
-References: <CAA=hcWSKCryEZVhWptN9iz1dbh_4rMNp0X1LMop0SA7LjYWRVQ@mail.gmail.com>
- <Pine.LNX.4.44L0.2001241007350.1610-100000@iolanthe.rowland.org>
-From:   JH <jupiter.hce@gmail.com>
-Date:   Sat, 25 Jan 2020 08:00:46 +1100
-Message-ID: <CAA=hcWSKXboOcvySVksL3eceRuWnPt=c7nv1gPPX3AQKgPGhCw@mail.gmail.com>
-Subject: Re: qmi_wwan error
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
+On Tuesday, 21 January 2020 21:26:34 CET Christian Lamparter wrote:
+> Hello,
+> 
+> On Tue, Jan 21, 2020 at 7:46 AM Vinod Koul <vkoul@kernel.org> wrote:
+> >
+> > hey Christian,
+> >
+> > On 13-01-20, 21:33, Christian Lamparter wrote:
+> > > On Mon, Jan 13, 2020 at 9:10 PM John Stultz <john.stultz@linaro.org> wrote:
+> > > >
+> > > > On Mon, Jan 13, 2020 at 12:42 AM Vinod Koul <vkoul@kernel.org> wrote:
+> > > > >
+> > > > > This series add support for Renesas USB controllers uPD720201 and uPD720202.
+> > > > > These require firmware to be loaded and in case devices have ROM those can
+> > > > > also be programmed if empty. If ROM is programmed, it runs from ROM as well.
+> > > > >
+> > > > > This includes two patches from Christian which supported these controllers
+> > > > > w/o ROM and later my patches for ROM support and multiple firmware versions,
+> > > > > debugfs hook for rom erase and export of xhci-pci functions.
+> > > > >
+> > > >
+> > > > Thanks so much for updating these! They are working ok for me in my
+> > > > testing on db845c.
+> > > >
+> > > > Tested-by: John Stultz <john.stultz@linaro.org>
+> > >
+> > > Nice! I'll definitely give this series another try on my WNDR4700 too
+> > > (PowerPC Arch)
+> > > this weekend.
+> > >
+> > > and from me: Thanks!
+> >
+> > Did you get around to test these?
+> 
+> Not yet, I was too optimistic that I could get current linux-usb with the
+> patches running on the WNDR4700 (due to APM82181) over the
+> weekend. Do you think that It still counts, if I'm going with 5.4.11 on
+> OpenWrt instead? Because then I just swap out the old patches from
+> my OpenWrt APM821XX branch:
+> <https://git.openwrt.org/?p=openwrt/staging/chunkeey.git;a=commit;h=4dd6f62a36a3724f0363d639cd9e29e04d7b62c0>
+> 
+> and don't have to figure out what broke with linux-usb on the APM821xx.
 
-On 1/25/20, Alan Stern <stern@rowland.harvard.edu> wrote:
-> On Fri, 24 Jan 2020, JH wrote:
->
->> Hi,
->>
->> I am running kernel 4.19.75 on iMX6 with a uBlox SARA-R4 LTE modem,
->> the modem manager is oFono, connect manager is connman. It could
->> connect to LTE between half hours to hours, then it dropped LTE
->> connection randomly, here are error messages, what could cause the
->> qmi_wwan status received: -71 and qmi_wwan usb_submit_urb failed with
->> result -19 errors?
->
-> The most likely cause is that the modem's firmware crashed, or it
-> disconnected itself electronically from the USB bus.  Or else somebody
-> unplugged the USB cable.
+I could get 5.4.11 to boot on the Netgear WNDR4700 :-).
+(This has a APM82181 SoC (PowerPC 464))
 
-There is no physical USB cable to connect to the device, the device
-USB power supply is from its internal DC source which converted and
-connected from external normal AC power. If it is a USB electronic
-fault, the firmware is using Linux kernel USB, oFono and connman,
-which one could be the source to cause the crash, Linux kernel USB
-driver, oFono or connman?
+Here's faillog from the "plain xhci-pci" driver: 
 
-I am diagnosing the issue, I try to narrow down the source to cause
-the problem, is it fair to say that the higher layer software package
-including oFono, connman or our software applications is unlikely the
-source to cause the problem?
+[  375.481868] xhci_hcd 0000:45:00.0: xHCI Host Controller
+[  375.487149] xhci_hcd 0000:45:00.0: new USB bus registered, assigned bus number 1
+[  385.494590] xhci_hcd 0000:45:00.0: can't setup: -110
+[  385.499558] xhci_hcd 0000:45:00.0: USB bus 1 deregistered
+[  385.504963] xhci_hcd 0000:45:00.0: init 0000:45:00.0 fail, -110
+[  385.510889] xhci_hcd: probe of 0000:45:00.0 failed with error -110
 
-Appreciate if you could advise which components could be the issue,
-what could be a solution to fix it.
+(Notice how it gets stuck for 10 seconds there).
 
-Thank you.
+And this is the successlog from the xhci-pci-renesas module
 
-Kind regards,
+[  391.555559] renesas xhci 0000:45:00.0: xHCI Host Controller
+[  391.561171] renesas xhci 0000:45:00.0: new USB bus registered, assigned bus number 1
+[  391.575068] renesas xhci 0000:45:00.0: hcc params 0x014051cf hci version 0x100 quirks 0x0000000101000090
+[  391.586750] hub 1-0:1.0: USB hub found
+[  391.592601] hub 1-0:1.0: 2 ports detected
+[  391.597199] renesas xhci 0000:45:00.0: xHCI Host Controller
+[  391.602797] renesas xhci 0000:45:00.0: new USB bus registered, assigned bus number 2
+[  391.610537] renesas xhci 0000:45:00.0: Host supports USB 3.0 SuperSpeed
+[  391.617719] usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
+[  391.626495] hub 2-0:1.0: USB hub found
+[  391.630570] hub 2-0:1.0: 2 ports detected
 
-- jh
+this is when I added the usb 3.0-stick:
 
-> Alan Stern
->
->>
->> [ 1018.944840] usb 1-1: USB disconnect, device number 2
->> [ 1019.072845] option1 ttyUSB0: GSM modem (1-port) converter now
->> disconnected from ttyUSB0
->> [ 1019.130834] option 1-1:1.0: device disconnected
->> [ 1019.142012] qmi_wwan 1-1:1.3: nonzero urb status received: -71
->> [ 1019.147909] qmi_wwan 1-1:1.3: wdm_int_callback - 0 bytes
->> [ 1019.153254] qmi_wwan 1-1:1.3: wdm_int_callback - usb_submit_urb
->> failed with result -19
->> [ 1019.228197] option1 ttyUSB1: GSM modem (1-port) converter now
->> disconnected from ttyUSB1
->> [ 1019.274475] option 1-1:1.2: device disconnected
->> [ 1019.340442] qmi_wwan 1-1:1.3 wwan0: unregister 'qmi_wwan'
->> usb-ci_hdrc.1-1, WWAN/QMI device
->> [ 1022.827992] usb 1-1: new high-speed USB device number 3 using ci_hdrc
->> [ 1023.057165] option 1-1:1.0: GSM modem (1-port) converter detected
->> [ 1023.097815] usb 1-1: GSM modem (1-port) converter now attached to
->> ttyUSB0
->> [ 1023.157293] option 1-1:1.2: GSM modem (1-port) converter detected
->> [ 1023.178163] usb 1-1: GSM modem (1-port) converter now attached to
->> ttyUSB1
->> [ 1023.201251] qmi_wwan 1-1:1.3: cdc-wdm0: USB WDM device
->> [ 1023.243783] qmi_wwan 1-1:1.3 wwan0: register 'qmi_wwan' at
->> usb-ci_hdrc.1-1, WWAN/QMI device, 16:ed:38:aa:c5:90
->>
->> Thank you.
->>
->> Kind regards,
->>
->> - jh
->
->
+[  775.403928] usb 2-2: new SuperSpeed Gen 1 USB device number 3 using renesas xhci
+[  775.432684] usb-storage 2-2:1.0: USB Mass Storage device detected
+[  775.439238] scsi host1: usb-storage 2-2:1.0
+[  776.482556] scsi 1:0:0:0: Direct-Access     SanDisk  Ultra            1.00 PQ: 0 ANSI: 6
+[  776.492181] sd 1:0:0:0: [sda] 60063744 512-byte logical blocks: (30.8 GB/28.6 GiB)
+[  776.501193] sd 1:0:0:0: [sda] Write Protect is off
+[  776.507047] sd 1:0:0:0: [sda] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
+[  776.524893]  sda: sda1 sda2
+[  776.531062] sd 1:0:0:0: [sda] Attached SCSI removable disk
+
+root@(none):/dev# hdparm -t /dev/sda
+
+/dev/sda:
+ Timing buffered disk reads: 466 MB in  3.01 seconds = 154.98 MB/sec
+
+and this is the log from my usb 2.0-memorystick:
+
+[ 1187.113650] usb 2-2: USB disconnect, device number 3
+[ 1195.867397] usb 1-2: new high-speed USB device number 2 using renesas xhci
+[ 1195.895171] usb-storage 1-2:1.0: USB Mass Storage device detected
+[ 1195.901848] scsi host1: usb-storage 1-2:1.0
+[ 1196.962583] scsi 1:0:0:0: Direct-Access     SanDisk  Cruzer Blade     1.00 PQ: 0 ANSI: 6
+[ 1196.978772] sd 1:0:0:0: [sda] 30031872 512-byte logical blocks: (15.4 GB/14.3 GiB)
+[ 1196.988529] sd 1:0:0:0: [sda] Write Protect is off
+[ 1196.994498] sd 1:0:0:0: [sda] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
+[ 1197.020407]  sda: sda1
+[ 1197.030458] sd 1:0:0:0: [sda] Attached SCSI removable disk
+
+root@(none):/dev# hdparm -t /dev/sda
+
+/dev/sda:
+ Timing buffered disk reads:  64 MB in  3.01 seconds =  21.28 MB/sec
+
+These speeds for usb3 and usb2 are within what the device can do.
+So, everything is working fine with the v6.
+
+Tested-by: Christian Lamparter <chunkeey@gmail.com>
+
+Cheers,
+Christian
+
+
