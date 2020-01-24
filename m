@@ -2,126 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 417B314856F
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2020 13:54:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDDA1148621
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2020 14:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388015AbgAXMyE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jan 2020 07:54:04 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:44565 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387709AbgAXMyD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jan 2020 07:54:03 -0500
-Received: by mail-io1-f69.google.com with SMTP id t17so1208027ioi.11
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2020 04:54:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=37DnHe8ofxjxgHB//lHANRdEDN8gOWB1O7s+JZGwEiY=;
-        b=cdTXpmhwbvS3wdFHGJaARfTJwOKaSEr+F49Uw9Lx0kOjCQPnF6IKmBdNaCTOeQQUkU
-         fWjolDoYjNJ3hRIC1p0/0MM+XiP6Xc4CI3DHbEHoRS1Vdqa54aXLTFHv24tuR4JDoJmv
-         ++uwoVBvvfZCWWdm08CCjVZ2kDu/4g+XLNEShQWb3VIipnmTI0wz/0Lh7lsTRqNDFAAG
-         NZo3/+RLuz0rSQzfHDVwwPZ8Dp14+L0Xdn2cOUdpfNVMhHEewfzWM1RnR4lFFZIZovID
-         Tu+kafxaRmEZFhi1D6C4NH9GW7Ms5pMbHkXw4/JTTNdCb2SVMByXMpH3SAyIVeFqi2cr
-         HjcQ==
-X-Gm-Message-State: APjAAAWVCbD7ez1ZlD68ro3Lwzz+X4CaCMCgWLRBht+6D0AhOHsUfvEL
-        GeoOF8qzpSw0ij2p02tvA79usD/OEZUbAPw9s/CiefAFPzu/
-X-Google-Smtp-Source: APXvYqz/hMYvG1nydnnU7Hb3i/y0X5oIx63T3wtDOB6iSu/Hgch9G3vdKnVe/Gf7+Rb5GIs7sb178IxwEbe73EcJkLESuBieVF+H
-MIME-Version: 1.0
-X-Received: by 2002:a92:8847:: with SMTP id h68mr1400708ild.212.1579870443103;
- Fri, 24 Jan 2020 04:54:03 -0800 (PST)
-Date:   Fri, 24 Jan 2020 04:54:03 -0800
-In-Reply-To: <CAAeHK+whRFCF9WzUr55MoMiFsn83Ykr9jGGUFE4CTKVbBsZu6Q@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008d6b69059ce24053@google.com>
-Subject: Re: KASAN: use-after-free Read in v4l2_release (3)
-From:   syzbot <syzbot+75287f75e2fedd69d680@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, bnvandana@gmail.com, hans.verkuil@cisco.com,
-        hdanton@sina.com, hverkuil-cisco@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+        id S2389612AbgAXNaS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jan 2020 08:30:18 -0500
+Received: from andre.telenet-ops.be ([195.130.132.53]:42542 "EHLO
+        andre.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388129AbgAXNaS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jan 2020 08:30:18 -0500
+Received: from ramsan ([84.195.182.253])
+        by andre.telenet-ops.be with bizsmtp
+        id uDW42100T5USYZQ01DW4BW; Fri, 24 Jan 2020 14:30:17 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1iuz2C-0007bG-Cp; Fri, 24 Jan 2020 14:30:04 +0100
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1iuz2C-00047A-AH; Fri, 24 Jan 2020 14:30:04 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gilad Ben-Yossef <gilad@benyossef.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Bin Liu <b-liu@ti.com>, linux-crypto@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH 0/2] Fix debugfs register access while suspended
+Date:   Fri, 24 Jan 2020 14:29:55 +0100
+Message-Id: <20200124132957.15769-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+	Hi all,
 
-syzbot has tested the proposed patch but the reproducer still triggered crash:
-WARNING in kernfs_remove_by_name_ns
+While comparing register values read from debugfs files under
+/sys/kernel/debug/ccree/, I noticed some oddities.
+Apparently there is no guarantee these registers are read from the
+device while it is resumed.  This may lead to bogus values, or crashes
+and lock-ups.
 
-------------[ cut here ]------------
-kernfs: can not remove 'version', no directory
-WARNING: CPU: 1 PID: 94 at fs/kernfs/dir.c:1507 kernfs_remove_by_name_ns+0x98/0xb0 fs/kernfs/dir.c:1507
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 1 PID: 94 Comm: kworker/1:2 Not tainted 5.5.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- panic+0x2aa/0x6e1 kernel/panic.c:221
- __warn.cold+0x2f/0x30 kernel/panic.c:582
- report_bug+0x27b/0x2f0 lib/bug.c:195
- fixup_bug arch/x86/kernel/traps.c:174 [inline]
- fixup_bug arch/x86/kernel/traps.c:169 [inline]
- do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
- do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
- invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-RIP: 0010:kernfs_remove_by_name_ns+0x98/0xb0 fs/kernfs/dir.c:1507
-Code: b1 ff 48 c7 c7 20 13 1d 87 41 bc fe ff ff ff e8 2e fe fe 03 eb d9 e8 47 4d b1 ff 4c 89 e6 48 c7 c7 c0 51 f1 85 e8 20 33 86 ff <0f> 0b 41 bc fe ff ff ff eb bb 0f 1f 40 00 66 2e 0f 1f 84 00 00 00
-RSP: 0018:ffff8881d5d47708 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: ffff8881cba58390 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff812959ad RDI: ffffed103aba8ed3
-RBP: 0000000000000000 R08: ffff8881d6d2c980 R09: fffffbfff1269aae
-R10: fffffbfff1269aad R11: ffffffff8934d56f R12: ffffffff8671eb40
-R13: 0000000000000000 R14: 0000000000000000 R15: 000000000000000c
- sysfs_remove_file include/linux/sysfs.h:536 [inline]
- device_remove_file+0x25/0x30 drivers/base/core.c:1869
- usbvision_remove_sysfs drivers/media/usb/usbvision/usbvision-video.c:287 [inline]
- usbvision_release+0x88/0x1c0 drivers/media/usb/usbvision/usbvision-video.c:1360
- v4l2_device_release+0x29a/0x3e0 drivers/media/v4l2-core/v4l2-dev.c:225
- device_release+0x71/0x200 drivers/base/core.c:1358
- kobject_cleanup lib/kobject.c:693 [inline]
- kobject_release lib/kobject.c:722 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x256/0x550 lib/kobject.c:739
- put_device drivers/base/core.c:2586 [inline]
- device_unregister+0x34/0xc0 drivers/base/core.c:2697
- video_unregister_device+0xa2/0xc0 drivers/media/v4l2-core/v4l2-dev.c:1075
- usbvision_unregister_video drivers/media/usb/usbvision/usbvision-video.c:1255 [inline]
- usbvision_unregister_video+0xfb/0x120 drivers/media/usb/usbvision/usbvision-video.c:1242
- usbvision_release+0x10d/0x1c0 drivers/media/usb/usbvision/usbvision-video.c:1361
- usbvision_disconnect+0x171/0x1e0 drivers/media/usb/usbvision/usbvision-video.c:1593
- usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
- __device_release_driver drivers/base/dd.c:1134 [inline]
- device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1165
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:532
- device_del+0x481/0xd30 drivers/base/core.c:2664
- usb_disable_device+0x23d/0x790 drivers/usb/core/message.c:1237
- usb_disconnect+0x293/0x900 drivers/usb/core/hub.c:2200
- hub_port_connect drivers/usb/core/hub.c:5035 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
- port_event drivers/usb/core/hub.c:5470 [inline]
- hub_event+0x1a1d/0x4300 drivers/usb/core/hub.c:5552
- process_one_work+0x945/0x15c0 kernel/workqueue.c:2264
- worker_thread+0x96/0xe20 kernel/workqueue.c:2410
- kthread+0x318/0x420 kernel/kthread.c:255
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+This patch series:
+  1. Allows debugfs_create_regset32() to be used for devices whose
+     registers must be accessed when resumed,
+  2. Fixes the CCREE driver to make use of this.
 
+I have identified several other drivers that may be affected (i.e.
+using debugfs_create_regset32() and pm_runtime_*()):
+  - drivers/gpu/drm/msm/disp/dpu1
+  - drivers/usb/dwc3
+  - drivers/usb/host/ehci-omap.c
+  - drivers/usb/host/ehci-tegra.c
+  - drivers/usb/host/ohci-platform.c
+  - drivers/usb/host/xhci.c
+  - drivers/usb/host/xhci-dbgcap.c
+  - drivers/usb/host/xhci-histb.c
+  - drivers/usb/host/xhci-hub.c
+  - drivers/usb/host/xhci-mtk.c
+  - drivers/usb/host/xhci-pci.c
+  - drivers/usb/host/xhci-plat.c
+  - drivers/usb/host/xhci-tegra.c
+  - drivers/usb/mtu3
+  - drivers/usb/musb
 
-Tested on:
+Some of these call pm_runtime_forbid(), but given the comment "users
+should enable runtime pm using power/control in sysfs", this can be
+overridden from userspace, so these are unsafe, too?
 
-commit:         ae179410 usb: gadget: add raw-gadget interface
-git tree:       https://github.com/google/kasan.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=133b3611e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ad1d751a3a72ae57
-dashboard link: https://syzkaller.appspot.com/bug?extid=75287f75e2fedd69d680
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=15921b69e00000
+Thanks for your comments!
 
+Geert Uytterhoeven (2):
+  debugfs: regset32: Add Runtime PM support
+  crypto: ccree - fix debugfs register access while suspended
+
+ drivers/crypto/ccree/cc_debugfs.c | 2 ++
+ fs/debugfs/file.c                 | 8 ++++++++
+ include/linux/debugfs.h           | 1 +
+ 3 files changed, 11 insertions(+)
+
+-- 
+2.17.1
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
