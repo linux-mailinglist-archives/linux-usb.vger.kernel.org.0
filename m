@@ -2,138 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C7114856B
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2020 13:52:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 417B314856F
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2020 13:54:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387794AbgAXMwF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jan 2020 07:52:05 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:41774 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387709AbgAXMwF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jan 2020 07:52:05 -0500
-Received: by mail-lf1-f65.google.com with SMTP id m30so1031808lfp.8
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2020 04:52:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=jLOjncvs0tqhzwWUHPM+IJzvjSXlrufV+vR/RJ8ji8Q=;
-        b=p0ApriS+5cF4zGgGYogvaxWFS9IqDzMXSH81uQOtPjyODeOThWPNHrmdm5YOoyUqaY
-         gJ+fbclb8Bm2F5QvcQ2z1iMVh+JcMOZdewATp54XztChnXR2RYQcSYF2gdKP+EYKYO/c
-         8v7LIrOB2rvk/bPJ8TJoBjPhhvlw6iviqfm4EereAbUiVIqTa41aa04/cjIKzs2vO1e+
-         /QYoS6FsCJXdkY64aOZWV+Vu/bLLlVhccCl30iRtCHQ+3PCmsH0LJtZH74atE6/1eAjP
-         0a90AxaMIkhZA4PtfacqsTwLx+p1xmNTdU5Wv8WnvrRlC2LyGnFV4u4NaSwzBAZcdYO/
-         +dgQ==
+        id S2388015AbgAXMyE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jan 2020 07:54:04 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:44565 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387709AbgAXMyD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jan 2020 07:54:03 -0500
+Received: by mail-io1-f69.google.com with SMTP id t17so1208027ioi.11
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2020 04:54:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=jLOjncvs0tqhzwWUHPM+IJzvjSXlrufV+vR/RJ8ji8Q=;
-        b=VBrSMZ2uCv93pVTH8APqytWBekNZ3Jh2nvHd0YMVgS3fqHSPj2ibQmms4DjSdehqiH
-         yoChmuZMIL7UFjyI7njG9/m4NhJxPxS46XOpx9e/M3iiEVPbi/5NW/KHMZUCgiTq5WGr
-         mPa3w/vQJD6GDhCD7JlpElr/Y2eiYFRr1Xeqv1JTtEiVvLyyrU8nEt62n4cHyJa5uXxc
-         YAWN8NPhQgW+eJPFraj78HovR7304br5LBL1oy4Rq1cf02w4mOQKE9vMnElMEoG4Z+to
-         EhID56LTUKKBO7M7pfKCwzIj/JBDHO8paprrSawE0t4feXQ+HI8Uu6+8Q1bYhSx+yTRO
-         nmjQ==
-X-Gm-Message-State: APjAAAU4U5M0zIX2g18ZCfflZzPR42rHb+NfxaItP1uAsW+wKRT4fqkG
-        5Zu0+R1oQ2lRTqDuoLcUhip6FY+mnj4=
-X-Google-Smtp-Source: APXvYqwW9u8jy6Q7bu8GNOpNvsdhhFff7KSZWZKMf06fcLkrka0DKFMnbyupvpOoDmBWtk5YqZOxlQ==
-X-Received: by 2002:ac2:5196:: with SMTP id u22mr1245616lfi.123.1579870322490;
-        Fri, 24 Jan 2020 04:52:02 -0800 (PST)
-Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id q11sm2985803ljm.76.2020.01.24.04.52.01
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 24 Jan 2020 04:52:01 -0800 (PST)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     John Keeping <john@metanate.com>,
-        Pavel Hofman <pavel.hofman@ivitera.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: u_audio: Fix high-speed max packet size
-In-Reply-To: <20200117104022.5bb769f2.john@metanate.com>
-References: <4f2df2bc-e208-fffb-48e2-3e14cd093103@ivitera.com> <60bf144a-2039-8832-b6f1-f972de6a6846@ivitera.com> <cfcef91b-799e-7d02-4a4c-26ee95e85ff7@ivitera.com> <20200114200450.064cd521.john@metanate.com> <24f0935d-16a7-4301-78f4-fa459e356ca9@ivitera.com> <20200117104022.5bb769f2.john@metanate.com>
-Date:   Fri, 24 Jan 2020 14:52:49 +0200
-Message-ID: <87ftg53tjy.fsf@kernel.org>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=37DnHe8ofxjxgHB//lHANRdEDN8gOWB1O7s+JZGwEiY=;
+        b=cdTXpmhwbvS3wdFHGJaARfTJwOKaSEr+F49Uw9Lx0kOjCQPnF6IKmBdNaCTOeQQUkU
+         fWjolDoYjNJ3hRIC1p0/0MM+XiP6Xc4CI3DHbEHoRS1Vdqa54aXLTFHv24tuR4JDoJmv
+         ++uwoVBvvfZCWWdm08CCjVZ2kDu/4g+XLNEShQWb3VIipnmTI0wz/0Lh7lsTRqNDFAAG
+         NZo3/+RLuz0rSQzfHDVwwPZ8Dp14+L0Xdn2cOUdpfNVMhHEewfzWM1RnR4lFFZIZovID
+         Tu+kafxaRmEZFhi1D6C4NH9GW7Ms5pMbHkXw4/JTTNdCb2SVMByXMpH3SAyIVeFqi2cr
+         HjcQ==
+X-Gm-Message-State: APjAAAWVCbD7ez1ZlD68ro3Lwzz+X4CaCMCgWLRBht+6D0AhOHsUfvEL
+        GeoOF8qzpSw0ij2p02tvA79usD/OEZUbAPw9s/CiefAFPzu/
+X-Google-Smtp-Source: APXvYqz/hMYvG1nydnnU7Hb3i/y0X5oIx63T3wtDOB6iSu/Hgch9G3vdKnVe/Gf7+Rb5GIs7sb178IxwEbe73EcJkLESuBieVF+H
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+X-Received: by 2002:a92:8847:: with SMTP id h68mr1400708ild.212.1579870443103;
+ Fri, 24 Jan 2020 04:54:03 -0800 (PST)
+Date:   Fri, 24 Jan 2020 04:54:03 -0800
+In-Reply-To: <CAAeHK+whRFCF9WzUr55MoMiFsn83Ykr9jGGUFE4CTKVbBsZu6Q@mail.gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008d6b69059ce24053@google.com>
+Subject: Re: KASAN: use-after-free Read in v4l2_release (3)
+From:   syzbot <syzbot+75287f75e2fedd69d680@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, bnvandana@gmail.com, hans.verkuil@cisco.com,
+        hdanton@sina.com, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Hello,
+
+syzbot has tested the proposed patch but the reproducer still triggered crash:
+WARNING in kernfs_remove_by_name_ns
+
+------------[ cut here ]------------
+kernfs: can not remove 'version', no directory
+WARNING: CPU: 1 PID: 94 at fs/kernfs/dir.c:1507 kernfs_remove_by_name_ns+0x98/0xb0 fs/kernfs/dir.c:1507
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 94 Comm: kworker/1:2 Not tainted 5.5.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xef/0x16e lib/dump_stack.c:118
+ panic+0x2aa/0x6e1 kernel/panic.c:221
+ __warn.cold+0x2f/0x30 kernel/panic.c:582
+ report_bug+0x27b/0x2f0 lib/bug.c:195
+ fixup_bug arch/x86/kernel/traps.c:174 [inline]
+ fixup_bug arch/x86/kernel/traps.c:169 [inline]
+ do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
+ do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
+ invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
+RIP: 0010:kernfs_remove_by_name_ns+0x98/0xb0 fs/kernfs/dir.c:1507
+Code: b1 ff 48 c7 c7 20 13 1d 87 41 bc fe ff ff ff e8 2e fe fe 03 eb d9 e8 47 4d b1 ff 4c 89 e6 48 c7 c7 c0 51 f1 85 e8 20 33 86 ff <0f> 0b 41 bc fe ff ff ff eb bb 0f 1f 40 00 66 2e 0f 1f 84 00 00 00
+RSP: 0018:ffff8881d5d47708 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: ffff8881cba58390 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff812959ad RDI: ffffed103aba8ed3
+RBP: 0000000000000000 R08: ffff8881d6d2c980 R09: fffffbfff1269aae
+R10: fffffbfff1269aad R11: ffffffff8934d56f R12: ffffffff8671eb40
+R13: 0000000000000000 R14: 0000000000000000 R15: 000000000000000c
+ sysfs_remove_file include/linux/sysfs.h:536 [inline]
+ device_remove_file+0x25/0x30 drivers/base/core.c:1869
+ usbvision_remove_sysfs drivers/media/usb/usbvision/usbvision-video.c:287 [inline]
+ usbvision_release+0x88/0x1c0 drivers/media/usb/usbvision/usbvision-video.c:1360
+ v4l2_device_release+0x29a/0x3e0 drivers/media/v4l2-core/v4l2-dev.c:225
+ device_release+0x71/0x200 drivers/base/core.c:1358
+ kobject_cleanup lib/kobject.c:693 [inline]
+ kobject_release lib/kobject.c:722 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x256/0x550 lib/kobject.c:739
+ put_device drivers/base/core.c:2586 [inline]
+ device_unregister+0x34/0xc0 drivers/base/core.c:2697
+ video_unregister_device+0xa2/0xc0 drivers/media/v4l2-core/v4l2-dev.c:1075
+ usbvision_unregister_video drivers/media/usb/usbvision/usbvision-video.c:1255 [inline]
+ usbvision_unregister_video+0xfb/0x120 drivers/media/usb/usbvision/usbvision-video.c:1242
+ usbvision_release+0x10d/0x1c0 drivers/media/usb/usbvision/usbvision-video.c:1361
+ usbvision_disconnect+0x171/0x1e0 drivers/media/usb/usbvision/usbvision-video.c:1593
+ usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
+ __device_release_driver drivers/base/dd.c:1134 [inline]
+ device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1165
+ bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:532
+ device_del+0x481/0xd30 drivers/base/core.c:2664
+ usb_disable_device+0x23d/0x790 drivers/usb/core/message.c:1237
+ usb_disconnect+0x293/0x900 drivers/usb/core/hub.c:2200
+ hub_port_connect drivers/usb/core/hub.c:5035 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
+ port_event drivers/usb/core/hub.c:5470 [inline]
+ hub_event+0x1a1d/0x4300 drivers/usb/core/hub.c:5552
+ process_one_work+0x945/0x15c0 kernel/workqueue.c:2264
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2410
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
 
-Hi,
+Tested on:
 
-John Keeping <john@metanate.com> writes:
+commit:         ae179410 usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=133b3611e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ad1d751a3a72ae57
+dashboard link: https://syzkaller.appspot.com/bug?extid=75287f75e2fedd69d680
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=15921b69e00000
 
-> On Thu, 16 Jan 2020 16:39:50 +0100
-> Pavel Hofman <pavel.hofman@ivitera.com> wrote:
->
->> > I've taken a look at this and the patch below fixes it in my simple
->> > testing.  But note that this doesn't adjust the PCM's min_period_bytes
->> > which will be necessary if you want to minimize latency with an adjust=
-ed
->> > high-speed bInterval setting.
->> >=20=20=20
->>=20
->> Please can I ask you to submit your patch? IMO your perhaps slightly=20
->> suboptimal solution is much better than the current broken version.
->
-> Yes, the patch is definitely an improvement.  I thought it would be
-> picked up from the earlier mail, but I think Patchwork requires the
-> subject to match, so I'm including it again here.
->
-> Are you able to provide a Tested-by for this change?
->
-> -- >8 --
-> Prior to commit eb9fecb9e69b ("usb: gadget: f_uac2: split out audio
-> core") the maximum packet size was calculated only from the high-speed
-> descriptor but now we use the largest of the full-speed and high-speed
-> descriptors.
->
-> This is correct, but the full-speed value is likely to be higher than
-> that for high-speed and this leads to submitting requests for OUT
-> transfers (received by the gadget) which are larger than the endpoint's
-> maximum packet size.  These are rightly rejected by the gadget core.
->
-> config_ep_by_speed() already sets up the correct maximum packet size for
-> the enumerated speed in the usb_ep structure, so we can simply use this
-> instead of the overall value that has been used to allocate buffers for
-> requests.
->
-> Note that the minimum period for ALSA is still set from the largest
-> value, and this is unavoidable because it's possible to open the audio
-> device before the gadget has been enumerated.
->
-> Signed-off-by: John Keeping <john@metanate.com>
-
-Acked-by: Felipe Balbi <balbi@kernel.org>
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4q6KEACgkQzL64meEa
-mQZMwxAAyZxPpzextNBu+zsip3XNyuoZMfajZCaZji4iKsl11vbOahER4EKkViFy
-auqJAQOWxwsnhV+hhjjsaC99bXSWwSXa3bxKs7vj/TuSB4fTWoic9PdlmUF9MnXU
-0Adx9H/C2BJqXOBP6IUmZ0RT4NPfmGqazcV/YQGwXyacj7dlAbLQJOWtwKIePHOj
-ibRzZdxLavC48ouJR1NhU4rC02OXkxB863PhPiRh0uDJRkv8N/YDYBTyGOygX3iu
-DamtZggtKpWqRN+OA4qlJpT/RFRr1RQNLB0d4mSuSnlB/k3QoTl2/hseC0FKhokZ
-IpjThmO7gfWjAYddgnzHIJbKv42hPjwfxJrsS2AEECEBJfL3TZJ+PnIifpEUVIh2
-KxXeC8wjhDBP2LTV707NBPz+GgIUEGYqee9qfOpi3P1Z2e+c3FNw0LorVzAtkX0G
-8br/e6kxQ/bK3XQWT7EeBXnno+ScQkwa9abazTQ/AO6Qxr2avcOJR6vTNCntOWBq
-jAjULbVZqYSsFeut76ydTZ2ZB8gsuo4E+RuTY4/sCOO+8Y2dFuJmO+owYXBDYY1I
-J8IaEEgdqnC2XPq9sU2vvt22AYNyY5K8U4TkSy0u86EadLEeLXtWbfDV1lJ4iQKJ
-b1/EBc83V9gNAlF0m8/RsW2QQOGhbZanLoFRg7/I1QZpGnYwK3E=
-=lzgV
------END PGP SIGNATURE-----
---=-=-=--
