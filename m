@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F7EF14760A
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2020 02:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3552C147612
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2020 02:18:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730667AbgAXBRj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jan 2020 20:17:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60738 "EHLO mail.kernel.org"
+        id S1730811AbgAXBR5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jan 2020 20:17:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33024 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730656AbgAXBRi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Jan 2020 20:17:38 -0500
+        id S1729316AbgAXBR5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Jan 2020 20:17:57 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B21A4206A2;
-        Fri, 24 Jan 2020 01:17:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 563E721D7E;
+        Fri, 24 Jan 2020 01:17:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579828657;
+        s=default; t=1579828676;
         bh=xjiIuT2evy8epx2GISn700fzYHTLGE7gpt2NB0cwO60=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mhf8VvsmofmyoN59NrisBDNTQnqteliPkpphYbdsZM6QzjujQPf1Jpnc71lkO4rS1
-         bjmsJ0feVsuNUP2CjdXTqKKDzqQ0I5bmmZ5K0cCHbzI3+UjJJZYV1kq5In3wthPYNn
-         5c0uR97qiS+PADpieIqjaCaahFg5P2euq1wWoWNM=
+        b=2lEpOucFuMhjdV97nN50aalPNQfiAjn0tiqKQutag4+oFEQlu2W35BU9okjRFNpUR
+         pONDzLncejMEcVedeADipaQWxB1V+tbKHjLm0ezNaP7SXELnw4pf+obkRLwqzy0FNx
+         NvWqm99hWn1BB7MPXOaIhwemDHKksI5A48g4BGy4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Laura Abbott <labbott@fedoraproject.org>,
@@ -31,12 +31,12 @@ Cc:     Laura Abbott <labbott@fedoraproject.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         usb-storage@lists.one-eyed-alien.net
-Subject: [PATCH AUTOSEL 5.4 25/33] usb-storage: Disable UAS on JMicron SATA enclosure
-Date:   Thu, 23 Jan 2020 20:17:00 -0500
-Message-Id: <20200124011708.18232-25-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 07/11] usb-storage: Disable UAS on JMicron SATA enclosure
+Date:   Thu, 23 Jan 2020 20:17:43 -0500
+Message-Id: <20200124011747.18575-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200124011708.18232-1-sashal@kernel.org>
-References: <20200124011708.18232-1-sashal@kernel.org>
+In-Reply-To: <20200124011747.18575-1-sashal@kernel.org>
+References: <20200124011747.18575-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
