@@ -2,80 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4839148B4B
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2020 16:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD31D148BF5
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2020 17:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388115AbgAXPcu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jan 2020 10:32:50 -0500
-Received: from unicorn.mansr.com ([81.2.72.234]:38112 "EHLO unicorn.mansr.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387599AbgAXPct (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 24 Jan 2020 10:32:49 -0500
-X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Fri, 24 Jan 2020 10:32:49 EST
-Received: by unicorn.mansr.com (Postfix, from userid 51770)
-        id CF222118E4; Fri, 24 Jan 2020 15:25:40 +0000 (GMT)
-From:   Mans Rullgard <mans@mansr.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RESEND][PATCH 2/2] usb: hub: use non-removable-ports DT property
-Date:   Fri, 24 Jan 2020 15:25:04 +0000
-Message-Id: <20200124152504.23411-2-mans@mansr.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200124152504.23411-1-mans@mansr.com>
-References: <20200124152504.23411-1-mans@mansr.com>
+        id S2388102AbgAXQY4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jan 2020 11:24:56 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:41017 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387995AbgAXQY4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jan 2020 11:24:56 -0500
+Received: by mail-lj1-f196.google.com with SMTP id h23so3117672ljc.8
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2020 08:24:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=2ZKQV9EUYn6O4Dwbxq9ZK3GxrnLNGiu/KoVo8Ur0eNc=;
+        b=1mGfJTx6KGaWGxumVkRlwu8JFX/T7ZxAi/ZPOibqWqzJC0d3Q6qE/tOOl1kSg0+arG
+         D+PfJu2DBY2lwp7fRrB9iFZ8Kr5f8m1MnAXwgNUfBLiHhOplxnUQLiRv/XHQI6S+EYuH
+         rpbt9IJH9DSh8+FVausrel1GvuhSQ6rZXs5HYp/wKDRdwASexD4MFTHeJ/MlErj+G0Dl
+         KFa4TU/4uMQL8oFQEGVlSczqhIBQiIhhNyMfoLHbPL6rVEBHh/jdu4mapAPNAS/p5I6M
+         VQgNDC1USFdKJQfbBnSsLWvtMEcip/ygylNCs8Vloj9hboY9ZfPNvoEYtqHp2P4ZcRCK
+         D51A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=2ZKQV9EUYn6O4Dwbxq9ZK3GxrnLNGiu/KoVo8Ur0eNc=;
+        b=krfA9n/DYUt90TG4S7s/m66hX6+vAjsspj/eIyfm0lPDfWjWkd9xuZrriFrOSboQR4
+         Xscv3ON1JJrcz8wOIsyUqPPGPVi4aVkGMPv/PoKXnOag3T1vEZhpTEN9JkEljS+dD7R7
+         /9iYMgSWlQ0Y0dE4o8GTcDz0qiKzgjppp7vvrnvF77NKq6RwPjnqys4NL3pivZznLVFW
+         Jch3wtxLLfusLihUOMAA5MHDbBVN0jBV2XQ1frRhWNom4IfC5siiCgdCxtItXhYJu5er
+         MY6ehT77YWJiC3zMKZRee/NH+l9Rf1cU/REtFKHDIU3IplMYmYnO5YnaJd0YqPlf74aP
+         NyGw==
+X-Gm-Message-State: APjAAAUEuhEW1xyq+J7p37OpBWTXHzemcD71z/uCerCGwB6uO1UIhchh
+        klQQj/KyIGfc9IXDREdrudRAkA==
+X-Google-Smtp-Source: APXvYqwD3R6qmy6UAfp7uxu+afZInN2SHuLh7/0SKxfwyTm+CAMduCTdKlx73HrpU5r6GS5WWyvYzQ==
+X-Received: by 2002:a2e:3a13:: with SMTP id h19mr2778997lja.16.1579883094015;
+        Fri, 24 Jan 2020 08:24:54 -0800 (PST)
+Received: from localhost (h-93-159.A463.priv.bahnhof.se. [46.59.93.159])
+        by smtp.gmail.com with ESMTPSA id q14sm2974605lfc.60.2020.01.24.08.24.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jan 2020 08:24:53 -0800 (PST)
+Date:   Fri, 24 Jan 2020 17:24:52 +0100
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gilad Ben-Yossef <gilad@benyossef.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Bin Liu <b-liu@ti.com>, linux-crypto@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] Fix debugfs register access while suspended
+Message-ID: <20200124162452.GC286344@oden.dyn.berto.se>
+References: <20200124132957.15769-1-geert+renesas@glider.be>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200124132957.15769-1-geert+renesas@glider.be>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Mark any ports listed in the non-removable-ports DT property as
-hardwired. This is useful for boards with built-in USB devices
-that cannot be (or have not been) marked as fixed in hardware.
+Hi Geert,
 
-Signed-off-by: Mans Rullgard <mans@mansr.com>
----
- drivers/usb/core/hub.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+Thanks for your series.
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 4ac74b354801..97f8f15fb632 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -1366,6 +1366,9 @@ static int hub_configure(struct usb_hub *hub,
- 	unsigned unit_load;
- 	unsigned full_load;
- 	unsigned maxchild;
-+	struct property *prop;
-+	const __be32 *cur;
-+	u32 val;
- 
- 	hub->buffer = kmalloc(sizeof(*hub->buffer), GFP_KERNEL);
- 	if (!hub->buffer) {
-@@ -1667,6 +1670,19 @@ static int hub_configure(struct usb_hub *hub,
- 		}
- 	}
- 
-+	of_property_for_each_u32(hub_dev->of_node, "non-removable-ports",
-+				 prop, cur, val) {
-+		if (val < 1 || val > hdev->maxchild) {
-+			dev_warn(hub_dev,
-+				 "bad port number %u in non-removable-ports\n",
-+				 val);
-+			continue;
-+		}
-+
-+		hub->ports[val - 1]->connect_type =
-+			USB_PORT_CONNECT_TYPE_HARD_WIRED;
-+	}
-+
- 	usb_hub_adjust_deviceremovable(hdev, hub->descriptor);
- 
- 	hub_activate(hub, HUB_INIT);
+On 2020-01-24 14:29:55 +0100, Geert Uytterhoeven wrote:
+> 	Hi all,
+> 
+> While comparing register values read from debugfs files under
+> /sys/kernel/debug/ccree/, I noticed some oddities.
+> Apparently there is no guarantee these registers are read from the
+> device while it is resumed.  This may lead to bogus values, or crashes
+> and lock-ups.
+> 
+> This patch series:
+>   1. Allows debugfs_create_regset32() to be used for devices whose
+>      registers must be accessed when resumed,
+>   2. Fixes the CCREE driver to make use of this.
+> 
+> I have identified several other drivers that may be affected (i.e.
+> using debugfs_create_regset32() and pm_runtime_*()):
+>   - drivers/gpu/drm/msm/disp/dpu1
+>   - drivers/usb/dwc3
+>   - drivers/usb/host/ehci-omap.c
+>   - drivers/usb/host/ehci-tegra.c
+>   - drivers/usb/host/ohci-platform.c
+>   - drivers/usb/host/xhci.c
+>   - drivers/usb/host/xhci-dbgcap.c
+>   - drivers/usb/host/xhci-histb.c
+>   - drivers/usb/host/xhci-hub.c
+>   - drivers/usb/host/xhci-mtk.c
+>   - drivers/usb/host/xhci-pci.c
+>   - drivers/usb/host/xhci-plat.c
+>   - drivers/usb/host/xhci-tegra.c
+>   - drivers/usb/mtu3
+>   - drivers/usb/musb
+> 
+> Some of these call pm_runtime_forbid(), but given the comment "users
+> should enable runtime pm using power/control in sysfs", this can be
+> overridden from userspace, so these are unsafe, too?
+> 
+> Thanks for your comments!
+
+Looks good to me,
+
+Reviewed-by: Niklas Söderlund <niklas.soderlund@ragnatech.se>
+
+> 
+> Geert Uytterhoeven (2):
+>   debugfs: regset32: Add Runtime PM support
+>   crypto: ccree - fix debugfs register access while suspended
+> 
+>  drivers/crypto/ccree/cc_debugfs.c | 2 ++
+>  fs/debugfs/file.c                 | 8 ++++++++
+>  include/linux/debugfs.h           | 1 +
+>  3 files changed, 11 insertions(+)
+> 
+> -- 
+> 2.17.1
+> 
+> Gr{oetje,eeting}s,
+> 
+> 						Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+> 							    -- Linus Torvalds
+
 -- 
-2.25.0
-
+Regards,
+Niklas Söderlund
