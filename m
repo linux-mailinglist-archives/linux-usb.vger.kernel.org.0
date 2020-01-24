@@ -2,40 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6666414875E
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2020 15:23:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECA6148988
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2020 15:36:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392395AbgAXOWc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jan 2020 09:22:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44612 "EHLO mail.kernel.org"
+        id S2392073AbgAXOfl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jan 2020 09:35:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39792 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392384AbgAXOW3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 24 Jan 2020 09:22:29 -0500
+        id S2391673AbgAXOT3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 24 Jan 2020 09:19:29 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 55BFA2467B;
-        Fri, 24 Jan 2020 14:22:28 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8940221556;
+        Fri, 24 Jan 2020 14:19:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579875749;
-        bh=WYGlAtvcJ/zNOfMgmNDpYqZxUajZ9NfxlUM6gXF4sE4=;
+        s=default; t=1579875568;
+        bh=oeW6U2MkcM5rIUI9vPpzZNq4TO61iMRDiVW1cUgizZw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x6eCKr4vXFJiiFkQullnVIwfuP0tzNIydPubrNRgm7qiH+rdcOD16+qASELmv+pB5
-         NR4gcQnfTokDuNV7Le6TFcbdL2+UAeWOI4n+xFRjxL0mT7xkJURCg25KD5BQPyfSsW
-         St6/UIFG2FOQpfpUFASfuNoryFxjA9kprmTaID8c=
+        b=qcWUxSfbN1pNWtwMh5zEVeqKfQP4HmrhmG3GuNq3SryGsWkjr40Cjb8zj9jzVb1zn
+         tYXmWkeAx8sHMQZGsI5CH4Nc85lytPVX75Q98QFmkB4Up3RomCUF5eukAj9bl40cRn
+         oB24fBm/TtKOFEP+CDlwGQ3MzZgLF+f8AKtdoAU8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Johan Hovold <johan@kernel.org>, hayeswang <hayeswang@realtek.com>,
-        "David S . Miller" <davem@davemloft.net>,
+Cc:     Kristian Evensen <kristian.evensen@gmail.com>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 6/9] r8152: add missing endpoint sanity check
-Date:   Fri, 24 Jan 2020 09:22:18 -0500
-Message-Id: <20200124142221.31201-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 061/107] qmi_wwan: Add support for Quectel RM500Q
+Date:   Fri, 24 Jan 2020 09:17:31 -0500
+Message-Id: <20200124141817.28793-61-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200124142221.31201-1-sashal@kernel.org>
-References: <20200124142221.31201-1-sashal@kernel.org>
+In-Reply-To: <20200124141817.28793-1-sashal@kernel.org>
+References: <20200124141817.28793-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -44,38 +46,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Kristian Evensen <kristian.evensen@gmail.com>
 
-[ Upstream commit 86f3f4cd53707ceeec079b83205c8d3c756eca93 ]
+[ Upstream commit a9ff44f0e61d074f29770413fef6a5452be7b83e ]
 
-Add missing endpoint sanity check to probe in order to prevent a
-NULL-pointer dereference (or slab out-of-bounds access) when retrieving
-the interrupt-endpoint bInterval on ndo_open() in case a device lacks
-the expected endpoints.
+RM500Q is a 5G module from Quectel, supporting both standalone and
+non-standalone modes. The normal Quectel quirks apply (DTR and dynamic
+interface numbers).
 
-Fixes: 40a82917b1d3 ("net/usb/r8152: enable interrupt transfer")
-Cc: hayeswang <hayeswang@realtek.com>
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Kristian Evensen <kristian.evensen@gmail.com>
+Acked-by: Bjørn Mork <bjorn@mork.no>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/r8152.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 10dd307593e89..db8b489b0513c 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -4243,6 +4243,9 @@ static int rtl8152_probe(struct usb_interface *intf,
- 		return -ENODEV;
- 	}
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 4196c0e327403..9485c8d1de8a3 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1062,6 +1062,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_QUIRK_QUECTEL_DYNCFG(0x2c7c, 0x0125)},	/* Quectel EC25, EC20 R2.0  Mini PCIe */
+ 	{QMI_QUIRK_QUECTEL_DYNCFG(0x2c7c, 0x0306)},	/* Quectel EP06/EG06/EM06 */
+ 	{QMI_QUIRK_QUECTEL_DYNCFG(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
++	{QMI_QUIRK_QUECTEL_DYNCFG(0x2c7c, 0x0800)},	/* Quectel RM500Q-GL */
  
-+	if (intf->cur_altsetting->desc.bNumEndpoints < 3)
-+		return -ENODEV;
-+
- 	usb_reset_device(udev);
- 	netdev = alloc_etherdev(sizeof(struct r8152));
- 	if (!netdev) {
+ 	/* 3. Combined interface devices matching on interface number */
+ 	{QMI_FIXED_INTF(0x0408, 0xea42, 4)},	/* Yota / Megafon M100-1 */
 -- 
 2.20.1
 
