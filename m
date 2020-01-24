@@ -2,26 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9516148AFE
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2020 16:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0AC7148B25
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2020 16:18:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730252AbgAXPJh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jan 2020 10:09:37 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:48930 "HELO
+        id S2389457AbgAXPSZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jan 2020 10:18:25 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:48940 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728816AbgAXPJg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jan 2020 10:09:36 -0500
-Received: (qmail 1719 invoked by uid 2102); 24 Jan 2020 10:09:35 -0500
+        with SMTP id S2388021AbgAXPSY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jan 2020 10:18:24 -0500
+Received: (qmail 1782 invoked by uid 2102); 24 Jan 2020 10:18:23 -0500
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 24 Jan 2020 10:09:35 -0500
-Date:   Fri, 24 Jan 2020 10:09:35 -0500 (EST)
+  by localhost with SMTP; 24 Jan 2020 10:18:23 -0500
+Date:   Fri, 24 Jan 2020 10:18:23 -0500 (EST)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     JH <jupiter.hce@gmail.com>
-cc:     linux-usb <linux-usb@vger.kernel.org>
-Subject: Re: qmi_wwan error
-In-Reply-To: <CAA=hcWSKCryEZVhWptN9iz1dbh_4rMNp0X1LMop0SA7LjYWRVQ@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.2001241007350.1610-100000@iolanthe.rowland.org>
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+cc:     gregkh@linuxfoundation.org, <linux@prisktech.co.nz>,
+        <linux-usb@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v3] usb: host: ehci-platform: add a quirk to avoid stuck
+In-Reply-To: <1579840923-10709-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+Message-ID: <Pine.LNX.4.44L0.2001241012160.1610-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -29,49 +30,43 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 24 Jan 2020, JH wrote:
+On Fri, 24 Jan 2020, Yoshihiro Shimoda wrote:
 
-> Hi,
+> Since EHCI/OHCI controllers on R-Car Gen3 SoCs are possible to
+> be getting stuck very rarely after a full/low usb device was
+> disconnected. To detect/recover from such a situation, the controllers
+> require a special way which poll the EHCI PORTSC register and changes
+> the OHCI functional state.
 > 
-> I am running kernel 4.19.75 on iMX6 with a uBlox SARA-R4 LTE modem,
-> the modem manager is oFono, connect manager is connman. It could
-> connect to LTE between half hours to hours, then it dropped LTE
-> connection randomly, here are error messages, what could cause the
-> qmi_wwan status received: -71 and qmi_wwan usb_submit_urb failed with
-> result -19 errors?
+> So, this patch adds a polling timer into the ehci-platform driver,
+> and if the ehci driver detects the issue by the EHCI PORTSC register,
+> the ehci driver removes a companion device (= the OHCI controller)
+> to change the OHCI functional state to USB Reset once. And then,
+> the ehci driver adds the companion device again.
+> 
+> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
-The most likely cause is that the modem's firmware crashed, or it 
-disconnected itself electronically from the USB bus.  Or else somebody 
-unplugged the USB cable.
+All good, except for one thing at the end...
+
+> diff --git a/include/linux/usb/ehci_def.h b/include/linux/usb/ehci_def.h
+> index a15ce99..0ebfa74 100644
+> --- a/include/linux/usb/ehci_def.h
+> +++ b/include/linux/usb/ehci_def.h
+> @@ -150,6 +150,7 @@ struct ehci_regs {
+>  #define PORT_LED_MASK	(3<<14)
+>  #define PORT_OWNER	(1<<13)		/* true: companion hc owns this port */
+>  #define PORT_POWER	(1<<12)		/* true: has power (see PPC) */
+> +#define PORT_LS_MASK	(3<<10)		/* USB 1.1 device */
+
+The comment should say: /* Link status (SE0, K, or J) */ 
+
+>  #define PORT_USB11(x) (((x)&(3<<10)) == (1<<10))	/* USB 1.1 device */
+>  /* 11:10 for detecting lowspeed devices (reset vs release ownership) */
+
+You can remove this comment now.  Since there is an actual macro for
+bits 11:10, we don't need a separate comment saying what they are.
 
 Alan Stern
 
-> 
-> [ 1018.944840] usb 1-1: USB disconnect, device number 2
-> [ 1019.072845] option1 ttyUSB0: GSM modem (1-port) converter now
-> disconnected from ttyUSB0
-> [ 1019.130834] option 1-1:1.0: device disconnected
-> [ 1019.142012] qmi_wwan 1-1:1.3: nonzero urb status received: -71
-> [ 1019.147909] qmi_wwan 1-1:1.3: wdm_int_callback - 0 bytes
-> [ 1019.153254] qmi_wwan 1-1:1.3: wdm_int_callback - usb_submit_urb
-> failed with result -19
-> [ 1019.228197] option1 ttyUSB1: GSM modem (1-port) converter now
-> disconnected from ttyUSB1
-> [ 1019.274475] option 1-1:1.2: device disconnected
-> [ 1019.340442] qmi_wwan 1-1:1.3 wwan0: unregister 'qmi_wwan'
-> usb-ci_hdrc.1-1, WWAN/QMI device
-> [ 1022.827992] usb 1-1: new high-speed USB device number 3 using ci_hdrc
-> [ 1023.057165] option 1-1:1.0: GSM modem (1-port) converter detected
-> [ 1023.097815] usb 1-1: GSM modem (1-port) converter now attached to ttyUSB0
-> [ 1023.157293] option 1-1:1.2: GSM modem (1-port) converter detected
-> [ 1023.178163] usb 1-1: GSM modem (1-port) converter now attached to ttyUSB1
-> [ 1023.201251] qmi_wwan 1-1:1.3: cdc-wdm0: USB WDM device
-> [ 1023.243783] qmi_wwan 1-1:1.3 wwan0: register 'qmi_wwan' at
-> usb-ci_hdrc.1-1, WWAN/QMI device, 16:ed:38:aa:c5:90
-> 
-> Thank you.
-> 
-> Kind regards,
-> 
-> - jh
+>  /* 9 reserved */
 
