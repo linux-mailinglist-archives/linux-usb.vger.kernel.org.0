@@ -2,168 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D33461493B2
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jan 2020 06:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6E81493D4
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jan 2020 07:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725996AbgAYFco (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Jan 2020 00:32:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41362 "EHLO mail.kernel.org"
+        id S1725887AbgAYG5B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Jan 2020 01:57:01 -0500
+Received: from mout.gmx.net ([212.227.17.21]:59919 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725781AbgAYFcn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 25 Jan 2020 00:32:43 -0500
-Received: from localhost (unknown [122.181.212.88])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 684802071A;
-        Sat, 25 Jan 2020 05:32:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579930362;
-        bh=Xx1+ur3lE4Jj0egyyY3++sVwcP+whPpqBcx5ffuZgco=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hkAK80tJX2RXuqEgaPCwRlVALqppsoJhph8gwLLvbs57xpHmFALaItpbJMHfDXE7B
-         3nypie7ulbvbPqSvvplfzmJLRZc7/e/d2oGlSgVnDIXWFU428WAdcwlA031Mh+q90j
-         WACEOdJ+4YVtjkDPyyQknJKvQHT534Wt8qQl38d0=
-Date:   Sat, 25 Jan 2020 11:02:37 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Christian Lamparter <chunkeey@gmail.com>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 0/5] usb: xhci: Add support for Renesas USB controllers
-Message-ID: <20200125053237.GG2841@vkoul-mobl>
-References: <20200113084005.849071-1-vkoul@kernel.org>
- <20200121064608.GA2841@vkoul-mobl>
- <CAAd0S9Dd7Ygx7TgV3E_A6z29efG7jsE1-xy48_cHotroWuk_ZA@mail.gmail.com>
- <5878067.luYmtVZgP3@debian64>
+        id S1725781AbgAYG5B (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 25 Jan 2020 01:57:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1579935419;
+        bh=Pyp1Nu1ufI5bta/P31WpriK/UXcofmAdUmNwxcEi44s=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=e9YXXj4avWz6uJ5x7dOjlvLjZVihgNirp0quUr1OAUUSMNGCMu1r8uHLAX9AMWbQl
+         Tgusxc8luoM9hRazbALNn7vJ4d6lVwbzo8kHBCk3KgVGy+VTyQQIYaEWxkYNcAlvTb
+         OAA4BYZAerVtj3z7XopYACDgvCpkRS3x6QxJSQ0I=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from b450.fritz.box ([79.213.222.219]) by mail.gmx.com (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mn2WF-1jLk5d46JL-00k8GT; Sat, 25
+ Jan 2020 07:56:59 +0100
+From:   Tim Schumacher <timschumi@gmx.de>
+To:     stern@rowland.harvard.edu
+Cc:     linux-usb@vger.kernel.org, timschumi@gmx.de, stable@vger.kernel.org
+Subject: [PATCH] USB: uas: Add the no-UAS quirk for JMicron JMS561U
+Date:   Sat, 25 Jan 2020 07:48:38 +0100
+Message-Id: <20200125064838.2511-1-timschumi@gmx.de>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5878067.luYmtVZgP3@debian64>
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:2Szw5nCdli4UyPDgdZc6J706v5cIOblg7OaOuGGujjBkPPf4sSW
+ nXFHQUauZIK3bq3ZoirYloImhvc0sYxoJwjLNsbb4wYgWxIzd17Qn/DDuZZEjchrKJfXQjk
+ JnhJu51uXDU2diA2GX/lTeRNbDEK6FzbnLJZDiNksZFXYh6zVVLFb37vooQRhZU9pcY1HaQ
+ GcscTdu2gqSWPafEYI4RA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:NrTWlySXpVY=:mPTYSNjNhMIVq+Z8QD1cKW
+ emrM/SE+4Xsx+Fdt3Tgv0b/DZHvcZZtN3SkBX8duqffLJwSZxf11fKIMKAoTNvhSFQzsIN0mg
+ NNIGQ6x9tl69HmQ3SnxiKZaYVba+7FP32KcjLg9OScQcpqmiTzglfEqh9wkBzZTksUk8AHMuF
+ FRHnbbxu9AX531PLR+izeBFEYqTi5kFefPT8dlRPJTkKzhwdZPD8i8C9K7UVBwICrVmkmaV2b
+ UmJcOHnu8PigUmaWo9zThBP/p06/57Q++5gpgI3DPPc8dq8vLVJcbyVJS3MxSCFgPakn3OUPX
+ rmaPRCAyVjSBUCuJyzHSELI6UmOW0CcPZbH5eIwpvZHH+7qVANeWHK5pmDM0raqNJN41TFr87
+ yFmh+8nIZqzv+FeQSxPvBie0qouPjsYppnTpIzH78f//V0IZGc3baCclEryPWxOcr87cCqMOW
+ rnGhHT2YnULIsOZmd8WZvWSSIBZvp3d67Arv2DDd4qYrKP6XwnbmDsXZ+k6TPa88Qhmibwnj8
+ htqDej2lt/Z6rbIJUIt6/0ufUPDWejpjT75jG+Xuq/OWSGBExXrdLygrj/5aB+SxiRDie1ILV
+ SzDZD1lATXFLaW+VU74Y/REJeih8ZNJXcbE/5vxuCXwXvxUtOa9Dyma+0lPIY5cK1457xfrVW
+ WP7VCPdbMV8ElBDU7Z10csr94lwnFcAfFGUkDURL2nNSd00+s9ZuwOwmzhaB4y+x9A5cR+sBC
+ GprKSQ30PCGHTcygSSa6wnm8P6zIbZX7Fu7VEbJWbdU9ELlCDxIf6hTtmvb01FJka5bjM9Zqv
+ xNHl9RgN1WDCz6r/NBGSbZ9fWBI2EUntZ5427RR2h+AoZsIIG7pXB4JtQZvgF3FI2enAAIZnE
+ mWmt3C8btr2WWza5hApOqqs3nbRkjHSzEQ6DAj5a2kWXyoLKda8U4gCuiQ0yQ5E/GA+9pM47i
+ I6ej2ZCCIUdyp1hEfGIFezRRIfbAhhQngYZ8iRL4qr6cvb1Ry5WeQX2+VFy+18ZsxKpc/hUmu
+ vr3w+Js0p4W1U5bOfg6IGLDK4PCVNc74NMKYDjKUVSWItrqGMPy63ZtI0Ka2WbHpd/iu06C7E
+ DaeD7usT2BK/CFkF3BQUEv/yP2VVIWzLkvFloriF00h/4SWboF4PlAJpuRyB5Y+/8SARX/Yt7
+ /9KkLNzvFS2R+bJLgOaFVaaPUm5wZAvQHpACLhkxP5QFWjm6jd7MWKRYQcSy0FX1HrSMwWIwP
+ c44Zrd52aQTNqb38G
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24-01-20, 22:38, Christian Lamparter wrote:
-> On Tuesday, 21 January 2020 21:26:34 CET Christian Lamparter wrote:
-> > Hello,
-> > 
-> > On Tue, Jan 21, 2020 at 7:46 AM Vinod Koul <vkoul@kernel.org> wrote:
-> > >
-> > > hey Christian,
-> > >
-> > > On 13-01-20, 21:33, Christian Lamparter wrote:
-> > > > On Mon, Jan 13, 2020 at 9:10 PM John Stultz <john.stultz@linaro.org> wrote:
-> > > > >
-> > > > > On Mon, Jan 13, 2020 at 12:42 AM Vinod Koul <vkoul@kernel.org> wrote:
-> > > > > >
-> > > > > > This series add support for Renesas USB controllers uPD720201 and uPD720202.
-> > > > > > These require firmware to be loaded and in case devices have ROM those can
-> > > > > > also be programmed if empty. If ROM is programmed, it runs from ROM as well.
-> > > > > >
-> > > > > > This includes two patches from Christian which supported these controllers
-> > > > > > w/o ROM and later my patches for ROM support and multiple firmware versions,
-> > > > > > debugfs hook for rom erase and export of xhci-pci functions.
-> > > > > >
-> > > > >
-> > > > > Thanks so much for updating these! They are working ok for me in my
-> > > > > testing on db845c.
-> > > > >
-> > > > > Tested-by: John Stultz <john.stultz@linaro.org>
-> > > >
-> > > > Nice! I'll definitely give this series another try on my WNDR4700 too
-> > > > (PowerPC Arch)
-> > > > this weekend.
-> > > >
-> > > > and from me: Thanks!
-> > >
-> > > Did you get around to test these?
-> > 
-> > Not yet, I was too optimistic that I could get current linux-usb with the
-> > patches running on the WNDR4700 (due to APM82181) over the
-> > weekend. Do you think that It still counts, if I'm going with 5.4.11 on
-> > OpenWrt instead? Because then I just swap out the old patches from
-> > my OpenWrt APM821XX branch:
-> > <https://git.openwrt.org/?p=openwrt/staging/chunkeey.git;a=commit;h=4dd6f62a36a3724f0363d639cd9e29e04d7b62c0>
-> > 
-> > and don't have to figure out what broke with linux-usb on the APM821xx.
-> 
-> I could get 5.4.11 to boot on the Netgear WNDR4700 :-).
-> (This has a APM82181 SoC (PowerPC 464))
-> 
-> Here's faillog from the "plain xhci-pci" driver: 
-> 
-> [  375.481868] xhci_hcd 0000:45:00.0: xHCI Host Controller
-> [  375.487149] xhci_hcd 0000:45:00.0: new USB bus registered, assigned bus number 1
-> [  385.494590] xhci_hcd 0000:45:00.0: can't setup: -110
-> [  385.499558] xhci_hcd 0000:45:00.0: USB bus 1 deregistered
-> [  385.504963] xhci_hcd 0000:45:00.0: init 0000:45:00.0 fail, -110
-> [  385.510889] xhci_hcd: probe of 0000:45:00.0 failed with error -110
-> 
-> (Notice how it gets stuck for 10 seconds there).
-> 
-> And this is the successlog from the xhci-pci-renesas module
-> 
-> [  391.555559] renesas xhci 0000:45:00.0: xHCI Host Controller
-> [  391.561171] renesas xhci 0000:45:00.0: new USB bus registered, assigned bus number 1
-> [  391.575068] renesas xhci 0000:45:00.0: hcc params 0x014051cf hci version 0x100 quirks 0x0000000101000090
-> [  391.586750] hub 1-0:1.0: USB hub found
-> [  391.592601] hub 1-0:1.0: 2 ports detected
-> [  391.597199] renesas xhci 0000:45:00.0: xHCI Host Controller
-> [  391.602797] renesas xhci 0000:45:00.0: new USB bus registered, assigned bus number 2
-> [  391.610537] renesas xhci 0000:45:00.0: Host supports USB 3.0 SuperSpeed
-> [  391.617719] usb usb2: We don't know the algorithms for LPM for this host, disabling LPM.
-> [  391.626495] hub 2-0:1.0: USB hub found
-> [  391.630570] hub 2-0:1.0: 2 ports detected
-> 
-> this is when I added the usb 3.0-stick:
-> 
-> [  775.403928] usb 2-2: new SuperSpeed Gen 1 USB device number 3 using renesas xhci
-> [  775.432684] usb-storage 2-2:1.0: USB Mass Storage device detected
-> [  775.439238] scsi host1: usb-storage 2-2:1.0
-> [  776.482556] scsi 1:0:0:0: Direct-Access     SanDisk  Ultra            1.00 PQ: 0 ANSI: 6
-> [  776.492181] sd 1:0:0:0: [sda] 60063744 512-byte logical blocks: (30.8 GB/28.6 GiB)
-> [  776.501193] sd 1:0:0:0: [sda] Write Protect is off
-> [  776.507047] sd 1:0:0:0: [sda] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
-> [  776.524893]  sda: sda1 sda2
-> [  776.531062] sd 1:0:0:0: [sda] Attached SCSI removable disk
-> 
-> root@(none):/dev# hdparm -t /dev/sda
-> 
-> /dev/sda:
->  Timing buffered disk reads: 466 MB in  3.01 seconds = 154.98 MB/sec
-> 
-> and this is the log from my usb 2.0-memorystick:
-> 
-> [ 1187.113650] usb 2-2: USB disconnect, device number 3
-> [ 1195.867397] usb 1-2: new high-speed USB device number 2 using renesas xhci
-> [ 1195.895171] usb-storage 1-2:1.0: USB Mass Storage device detected
-> [ 1195.901848] scsi host1: usb-storage 1-2:1.0
-> [ 1196.962583] scsi 1:0:0:0: Direct-Access     SanDisk  Cruzer Blade     1.00 PQ: 0 ANSI: 6
-> [ 1196.978772] sd 1:0:0:0: [sda] 30031872 512-byte logical blocks: (15.4 GB/14.3 GiB)
-> [ 1196.988529] sd 1:0:0:0: [sda] Write Protect is off
-> [ 1196.994498] sd 1:0:0:0: [sda] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
-> [ 1197.020407]  sda: sda1
-> [ 1197.030458] sd 1:0:0:0: [sda] Attached SCSI removable disk
-> 
-> root@(none):/dev# hdparm -t /dev/sda
-> 
-> /dev/sda:
->  Timing buffered disk reads:  64 MB in  3.01 seconds =  21.28 MB/sec
-> 
-> These speeds for usb3 and usb2 are within what the device can do.
-> So, everything is working fine with the v6.
-> 
-> Tested-by: Christian Lamparter <chunkeey@gmail.com>
+The JMicron JMS561U (notably used in the Sabrent SATA-to-USB
+bridge) appears to have UAS-related issues when copying large
+amounts of data, causing it to stall.
 
-Thanks a lot Christian for again testing this.
+Disabling the advertised UAS (either through a command-line
+quirk or through this patch) mitigates those issues.
 
-Mathias, any comments on this series..?
+Cc: stable@vger.kernel.org
+Signed-off-by: Tim Schumacher <timschumi@gmx.de>
+=2D--
+ drivers/usb/storage/unusual_uas.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
--- 
-~Vinod
+diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusu=
+al_uas.h
+index 1b23741036ee..eaec7d4973b7 100644
+=2D-- a/drivers/usb/storage/unusual_uas.h
++++ b/drivers/usb/storage/unusual_uas.h
+@@ -97,6 +97,13 @@ UNUSUAL_DEV(0x357d, 0x7788, 0x0000, 0x9999,
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 		US_FL_NO_REPORT_OPCODES | US_FL_IGNORE_UAS),
+
++/* Reported-by: Tim Schumacher <timschumi@gmx.de> */
++UNUSUAL_DEV(0x152d, 0x1561, 0x0000, 0x9999,
++		"JMicron",
++		"JMS561U",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_IGNORE_UAS),
++
+ /* Reported-by: Hans de Goede <hdegoede@redhat.com> */
+ UNUSUAL_DEV(0x4971, 0x1012, 0x0000, 0x9999,
+ 		"Hitachi",
+=2D-
+2.25.0
+
