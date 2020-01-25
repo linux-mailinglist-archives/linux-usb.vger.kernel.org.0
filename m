@@ -2,117 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B02A5149689
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jan 2020 17:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 163B61496C1
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jan 2020 18:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726240AbgAYQOJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Jan 2020 11:14:09 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:45749 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725843AbgAYQOJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Jan 2020 11:14:09 -0500
-Received: (qmail 20487 invoked by uid 500); 25 Jan 2020 11:14:08 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 25 Jan 2020 11:14:08 -0500
-Date:   Sat, 25 Jan 2020 11:14:08 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     JH <jupiter.hce@gmail.com>
-cc:     linux-usb <linux-usb@vger.kernel.org>
-Subject: Re: qmi_wwan error
-In-Reply-To: <CAA=hcWSKXboOcvySVksL3eceRuWnPt=c7nv1gPPX3AQKgPGhCw@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.2001251111060.20113-100000@netrider.rowland.org>
+        id S1726294AbgAYRAk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Jan 2020 12:00:40 -0500
+Received: from mout.gmx.net ([212.227.17.22]:42339 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725843AbgAYRAk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 25 Jan 2020 12:00:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1579971636;
+        bh=wNH9BllkKG8EE89X1RLE191MHeXHVB0YQd5SRPjfqIc=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=WPjHJJDM6kWflVCUCbkaD1/m5QGDrqzmQQcbCVNxBS9ofarOCtaGzHXfWSFoPn519
+         6Nqh0LH2fss3hxIbCxmF2lK4Xo/rCY0jF1B1rbowTyiSsvRou2lmMJAuZH1U6JZmAz
+         Ki0ce7zKDx/3snf9CkSFQ76Yt014oumIVpwTNhxk=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from b450.fritz.box ([79.213.222.219]) by mail.gmx.com (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N4Qwg-1jcsZ3223q-011OIm; Sat, 25
+ Jan 2020 18:00:36 +0100
+From:   Tim Schumacher <timschumi@gmx.de>
+To:     hdegoede@redhat.com
+Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+        timschumi@gmx.de, stable@vger.kernel.org
+Subject: [PATCH v2] USB: uas: Add the no-UAS quirk for JMicron JMS561U
+Date:   Sat, 25 Jan 2020 18:00:30 +0100
+Message-Id: <20200125170030.25331-1-timschumi@gmx.de>
+X-Mailer: git-send-email 2.25.0
+In-Reply-To: <20200125064838.2511-1-timschumi@gmx.de>
+References: <20200125064838.2511-1-timschumi@gmx.de>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:q8k5tYkzfGEoYPSnVRjumFwBh321VZgrtFo3RV3n4nyIhdgtCSd
+ NrORl2I4lZV5f9fqvXgyUBGg79f7b2zT+Q8a5UdmGauQFfvkDB+oKyYKYKZB0OUVXZ4c7iF
+ Qb2ZyijkC77we2YBPa/ZWlpuN9xtsYHcO5H9CHFOkS8ojxFB0aRmszIvmJT6DNWYvaIQR+0
+ HEqKcjHiZc4K9c9w+SfCA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1qrIIkD+eXk=:zombyqa2IrTvhdexNqjuRq
+ DGxj/nMhONMv4EE28RV+zc1Frx5W4TZjniH3kzNQCvUZ7hGadOilKvfUtAwzd8AFMv0Zn5hB7
+ bUyQEkKseZ4Pn2cZzUf93qGOj4AXUQXseujOGLTHPLDS+IR1VznyGqXQjoDIO5jsujIlKqxW0
+ iQAcPq3OJmirDyjX3CsvO+6ibtbqwjBWlsjXzFdJ4UxlSgFUeIClP9hrmaB/j6rTV8DrTjIRz
+ nYq6bffB1Q6icXdiY9heqE6N6b1XmPRG3sSxP0wKw03a+lq5wZlhenJnIbKp+kHkBjFA5+ZO3
+ eV0YfPhMW44TvfRCPdou56qGY1Ny4pFqmR/EwqxDRsrIZoJEzjIYAvF+wLLkdsMtRtsgxQIrW
+ IBcNzVYBkDKz0JuB9XAZL+Mvpe9re4rZ9xuSx7cGan8SOzHrNg5eNXbCUQ1IjMSwq5Gxpl0UQ
+ v06fnSXZ9L0su/Caw4Qn58HFO0SYQ6rKBNq3+ZPxUnjsO0cnY+DI084sbkOS3O5chjDKI2ehf
+ nms/FBzk8iSaPu135NihHdIDaRGnjhN3bravtt2Z0DLpCe/xOZRY+UA1kCk/FlyRdmAyL+Ky3
+ j58XY1AxszvLtq+QUrfLuDvXiDRCDBeTfQoC4ZIGcvGRmYK049rY4SE4qnjIHEFGHj/wK6v4t
+ EbVzU5i/VFoVaMA/BPOmxPv8tlP68TjvSA6COLYcPYf8ZnSkgvHVGZaEQnAaNx3Kgjr3tED9p
+ v7T9Omq/VrJIpHkUY53hiuP2M4r6IEOhreiLX6qOxNRGsUF30Ryei3pKwyv0SABK7SrorM3Jc
+ uyiqtXUVNPhd0thbkxDdmqjlxxqdY24qHMFYFyz+etszaYrXVEXe3VoGbne+NejiBdDPaMioc
+ 5OFT15Qh7uCdzGPi5aWksxGb0/lBIUWo2n8pFTANN9jf74hNj0YYsDKXIdD6r+TZcBJWnG/+O
+ K71em4eEPGJecQMxpQ2ZmO6akg+gMHosN1L26B3SFxxAMNImV5U6nV2NlbHWnqvIGiHueOh9e
+ hDaQnSgbG9dfCASg/HGP9n35A0y49enBU/ifxRqHG0MoBBszfK4k2G9hm5dThll0kkwvYYehB
+ uffAw7kq1CtN2pzUl26bXJoKgW9SWB0GWpR7mB1byoplULGgXhYn2sqk5voEGWivkriS3AxCI
+ +p6EPlb9TuubGThEk/ja81lXw8APh+zg8x8br5Xcu5UZ3fZefaaP/MTD9LuNoq5fP2PpZ0cNd
+ twf8kHLtdaI87de9J
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 25 Jan 2020, JH wrote:
+The JMicron JMS561U (notably used in the Sabrent SATA-to-USB
+bridge) appears to have UAS-related issues when copying large
+amounts of data, causing it to stall.
 
-> Hi Alan,
-> 
-> On 1/25/20, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > On Fri, 24 Jan 2020, JH wrote:
-> >
-> >> Hi,
-> >>
-> >> I am running kernel 4.19.75 on iMX6 with a uBlox SARA-R4 LTE modem,
-> >> the modem manager is oFono, connect manager is connman. It could
-> >> connect to LTE between half hours to hours, then it dropped LTE
-> >> connection randomly, here are error messages, what could cause the
-> >> qmi_wwan status received: -71 and qmi_wwan usb_submit_urb failed with
-> >> result -19 errors?
-> >
-> > The most likely cause is that the modem's firmware crashed, or it
-> > disconnected itself electronically from the USB bus.  Or else somebody
-> > unplugged the USB cable.
-> 
-> There is no physical USB cable to connect to the device, the device
-> USB power supply is from its internal DC source which converted and
-> connected from external normal AC power. If it is a USB electronic
-> fault, the firmware is using Linux kernel USB, oFono and connman,
-> which one could be the source to cause the crash, Linux kernel USB
-> driver, oFono or connman?
+Disabling the advertised UAS (either through a command-line
+quirk or through this patch) mitigates those issues.
 
-I have no idea.  In fact, I know nothing at all about qmi_wwan, oFono,
-or connman.
+Cc: stable@vger.kernel.org
+Signed-off-by: Tim Schumacher <timschumi@gmx.de>
+=2D--
+v2: Fixed entry order. Also, CCing the correct people now.
+=2D--
+ drivers/usb/storage/unusual_uas.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Have you tried looking at the kernel log on the device to see if it 
-gives any clues?
+diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusu=
+al_uas.h
+index 1b23741036ee..a590f4a0d4b9 100644
+=2D-- a/drivers/usb/storage/unusual_uas.h
++++ b/drivers/usb/storage/unusual_uas.h
+@@ -73,6 +73,13 @@ UNUSUAL_DEV(0x152d, 0x0578, 0x0000, 0x9999,
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 		US_FL_BROKEN_FUA),
 
-> I am diagnosing the issue, I try to narrow down the source to cause
-> the problem, is it fair to say that the higher layer software package
-> including oFono, connman or our software applications is unlikely the
-> source to cause the problem?
-
-No, it isn't fair to say that.  The problem could lie anywhere.
-
-Alan Stern
-
-> Appreciate if you could advise which components could be the issue,
-> what could be a solution to fix it.
-> 
-> Thank you.
-> 
-> Kind regards,
-> 
-> - jh
-> 
-> > Alan Stern
-> >
-> >>
-> >> [ 1018.944840] usb 1-1: USB disconnect, device number 2
-> >> [ 1019.072845] option1 ttyUSB0: GSM modem (1-port) converter now
-> >> disconnected from ttyUSB0
-> >> [ 1019.130834] option 1-1:1.0: device disconnected
-> >> [ 1019.142012] qmi_wwan 1-1:1.3: nonzero urb status received: -71
-> >> [ 1019.147909] qmi_wwan 1-1:1.3: wdm_int_callback - 0 bytes
-> >> [ 1019.153254] qmi_wwan 1-1:1.3: wdm_int_callback - usb_submit_urb
-> >> failed with result -19
-> >> [ 1019.228197] option1 ttyUSB1: GSM modem (1-port) converter now
-> >> disconnected from ttyUSB1
-> >> [ 1019.274475] option 1-1:1.2: device disconnected
-> >> [ 1019.340442] qmi_wwan 1-1:1.3 wwan0: unregister 'qmi_wwan'
-> >> usb-ci_hdrc.1-1, WWAN/QMI device
-> >> [ 1022.827992] usb 1-1: new high-speed USB device number 3 using ci_hdrc
-> >> [ 1023.057165] option 1-1:1.0: GSM modem (1-port) converter detected
-> >> [ 1023.097815] usb 1-1: GSM modem (1-port) converter now attached to
-> >> ttyUSB0
-> >> [ 1023.157293] option 1-1:1.2: GSM modem (1-port) converter detected
-> >> [ 1023.178163] usb 1-1: GSM modem (1-port) converter now attached to
-> >> ttyUSB1
-> >> [ 1023.201251] qmi_wwan 1-1:1.3: cdc-wdm0: USB WDM device
-> >> [ 1023.243783] qmi_wwan 1-1:1.3 wwan0: register 'qmi_wwan' at
-> >> usb-ci_hdrc.1-1, WWAN/QMI device, 16:ed:38:aa:c5:90
-> >>
-> >> Thank you.
-> >>
-> >> Kind regards,
-> >>
-> >> - jh
-> >
-> >
-> 
++/* Reported-by: Tim Schumacher <timschumi@gmx.de> */
++UNUSUAL_DEV(0x152d, 0x1561, 0x0000, 0x9999,
++		"JMicron",
++		"JMS561U",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_IGNORE_UAS),
++
+ /* Reported-by: Hans de Goede <hdegoede@redhat.com> */
+ UNUSUAL_DEV(0x2109, 0x0711, 0x0000, 0x9999,
+ 		"VIA",
+=2D-
+2.25.0
 
