@@ -2,152 +2,251 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B4814149AD3
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Jan 2020 14:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1AD149B5D
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Jan 2020 16:21:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726275AbgAZNdK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 Jan 2020 08:33:10 -0500
-Received: from mail-vk1-f194.google.com ([209.85.221.194]:34345 "EHLO
-        mail-vk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726599AbgAZNdJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Jan 2020 08:33:09 -0500
-Received: by mail-vk1-f194.google.com with SMTP id w67so1946726vkf.1
-        for <linux-usb@vger.kernel.org>; Sun, 26 Jan 2020 05:33:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=benyossef-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=emKfjakMK0JQ5BS5YCFkbZaOfKcUBqnq7Vw1qMXzarA=;
-        b=ai+SUiF/UB+ocFDZG4bWX3gairRXyO3KEZs3g3zkaG+2pYyYWK3fd9bt+E7Rar+SD4
-         EIwg+XvovGF4K2Odgt+HUesXodKNd95varMryoGJqOHTWZQOv6S1c9horPbB6zQHQUFj
-         z9zcOiYdUC0xWDGg/8FTElf80uvRJry+UUYvrQXpXo/t3fWys/BSnSQ76GW5zuNCsO1l
-         pZM6EFHBmDXPG3u5Ed5vydQglmNUzoQYPbUyeuzEM07UGxpDHAax8tnbup1DAOHP7Yde
-         /cxPg5ADJdZmZUlDdaVtddv2qRPpZENEBJutlRleqIojB4JNHjUkH8vvrlvOeC3MPHmZ
-         7vyA==
+        id S1726079AbgAZPVc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 Jan 2020 10:21:32 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:22523 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725907AbgAZPVb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Jan 2020 10:21:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1580052089;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LchZJ++dV82ZQxtETGePbP8/DG4nvTQIBe9OJdc8KAw=;
+        b=Y0ksEBCIkXiE5OELeao62unpBwrjx3RJ/xwnebttDm1a1s3VA0cHwfK0eT5A/X1HNGO9yd
+        bZ4S/lEFsI77aWBb/bpHalik/BajVZhubZLLQeVEyPYTIxJvpMXwApjJ+oiL2JjVHtG2O/
+        D5uVgZ4wd2jbRMPEmn288vgllqyrd4s=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-366-bi5jrTj0PNWYn2LI_EaOlg-1; Sun, 26 Jan 2020 10:21:26 -0500
+X-MC-Unique: bi5jrTj0PNWYn2LI_EaOlg-1
+Received: by mail-wr1-f72.google.com with SMTP id u18so4450992wrn.11
+        for <linux-usb@vger.kernel.org>; Sun, 26 Jan 2020 07:21:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=emKfjakMK0JQ5BS5YCFkbZaOfKcUBqnq7Vw1qMXzarA=;
-        b=f9oeCErP0aXn2VdfXKMn9CCuOJcRZG5c38BBdQHyD3EnlV9QM3Zx54UhOjQczlTm5i
-         sgmNja3T38EXV6jdjxAHkc4zwlnBBFi9gkXnLLg+5gdJJ6Po11HYfRrUBZ477U/XWVs3
-         iiqUVnNDd2DVPok0aggGQADgzOj+NssQwXlyanUyqdi9TXi4A1d6Dr9ck4QfQq3IqdIa
-         7BtvZxW3+SPWYnY67A94iq7XLtsVo80Qmh6KBEp7eIpJVAfHeIyXepgmAMZQyop55g25
-         Yd62REGyKs+iUnfdXPKoGVpQwy1Lrmx+ZmtRIDa6T9U1MmfdidmEF8YFtO2qIZ60UIjO
-         dhSw==
-X-Gm-Message-State: APjAAAUyYAe7rlAz5X6me6jkSZMZBuuWs5FW1ue6VDAqUjFQA5y59Duw
-        9tSidA+mfPHIOba7DHyHMcCdg6vRA5F4M75wtT+XHw==
-X-Google-Smtp-Source: APXvYqwbEI5BxpWOjvqHw3OF1B1QFbz8m5/83C3fLpV6wDo9RxMYmlGUd3KSZPynqahIUdu2vYZLu7TpEP7jm7Xn4b4=
-X-Received: by 2002:ac5:cd8c:: with SMTP id i12mr5971417vka.100.1580045588469;
- Sun, 26 Jan 2020 05:33:08 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LchZJ++dV82ZQxtETGePbP8/DG4nvTQIBe9OJdc8KAw=;
+        b=qzAq4MYC+y1bKRh6AKKq6yu976RsCWTvQml87gHhsucWsJY+7Xl3G0CJM0/hUhPn8n
+         VdTz1RyqnRGGYqysO7qqRkI2MsxCCl/0zcRb3bUGJvjZQsFt565Y4CLHYd7he9LiUEfo
+         rK1smwlwTj5nM3DwCVXD3m4rrhtNTGb0Vvq3A53HdnC/9lBnn5vVpPpoMYzAHIixhn5c
+         5gSgNyd7DMpbP7wb0iEQBT784ebwljMv9SspXjUu6ZTOtUJriL5TBcZZk4SrUeuKGPFW
+         BXnwAT4mf/Xx0qAw8QznLl4bgNuwP7OA3Cp0SKl63P3nppmYlcn34V+7QYz96qopnKAV
+         NTpQ==
+X-Gm-Message-State: APjAAAU+1OhG41OkTjIXc9dz6thym+/JilB6t53K6VLWYdlQdB3UKWFB
+        zn1KexVkW+YNgXIsJV4pjynvylE70/m+uQ6R98wbVOemVZjtVjsOgI65NWqVWqDQYCHqpdM/0qT
+        1S9xZZcgteXOTaEtk2NHA
+X-Received: by 2002:adf:9144:: with SMTP id j62mr16101173wrj.168.1580052085154;
+        Sun, 26 Jan 2020 07:21:25 -0800 (PST)
+X-Google-Smtp-Source: APXvYqxP5Y6bAR0d45JY6z5RNn+gPPGT2je6DvUcKh3z/eztl5Y+1hrH7gSFm6w1R+aE0rCXfJ1uOw==
+X-Received: by 2002:adf:9144:: with SMTP id j62mr16101145wrj.168.1580052084841;
+        Sun, 26 Jan 2020 07:21:24 -0800 (PST)
+Received: from shalem.localdomain (2001-1c00-0c0c-fe00-7e79-4dac-39d0-9c14.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:7e79:4dac:39d0:9c14])
+        by smtp.gmail.com with ESMTPSA id s15sm16234502wrp.4.2020.01.26.07.21.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Jan 2020 07:21:24 -0800 (PST)
+Subject: Re: [PATCH v2] USB: uas: Add the no-UAS quirk for JMicron JMS561U
+To:     Tim Schumacher <timschumi@gmx.de>
+Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20200125064838.2511-1-timschumi@gmx.de>
+ <20200125170030.25331-1-timschumi@gmx.de>
+ <fccf2105-d415-7f44-e111-729d2d517ea7@redhat.com>
+ <f9643202-c029-efe1-c213-b54b2ccf9c47@gmx.de>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <f6153a2c-fdad-09e4-53f9-0bc99d383c0f@redhat.com>
+Date:   Sun, 26 Jan 2020 16:21:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-References: <20200124132957.15769-1-geert+renesas@glider.be> <20200124132957.15769-3-geert+renesas@glider.be>
-In-Reply-To: <20200124132957.15769-3-geert+renesas@glider.be>
-From:   Gilad Ben-Yossef <gilad@benyossef.com>
-Date:   Sun, 26 Jan 2020 15:32:50 +0200
-Message-ID: <CAOtvUMdA2aD9DJBmSpOJOFRw=1_9OcaG4Y915q5L7dgo7n7HTA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] crypto: ccree - fix debugfs register access while suspended
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Bin Liu <b-liu@ti.com>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-usb@vger.kernel.org,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <f9643202-c029-efe1-c213-b54b2ccf9c47@gmx.de>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 24, 2020 at 3:30 PM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
->
-> Reading the debugfs files under /sys/kernel/debug/ccree/ can be done by
-> the user at any time.  On R-Car SoCs, the CCREE device is power-managed
-> using a moduile clock, and if this clock is not running, bogus register
-> values may be read.
->
-> Fix this by filling in the debugfs_regset32.dev field, so debugfs will
-> make sure the device is resumed while its registers are being read.
->
-> This fixes the bogus values (0x00000260) in the register dumps on R-Car
-> H3 ES1.0:
->
->     -e6601000.crypto/regs:HOST_IRR =3D 0x00000260
->     -e6601000.crypto/regs:HOST_POWER_DOWN_EN =3D 0x00000260
->     +e6601000.crypto/regs:HOST_IRR =3D 0x00000038
->     +e6601000.crypto/regs:HOST_POWER_DOWN_EN =3D 0x00000038
->      e6601000.crypto/regs:AXIM_MON_ERR =3D 0x00000000
->      e6601000.crypto/regs:DSCRPTR_QUEUE_CONTENT =3D 0x000002aa
->     -e6601000.crypto/regs:HOST_IMR =3D 0x00000260
->     +e6601000.crypto/regs:HOST_IMR =3D 0x017ffeff
->      e6601000.crypto/regs:AXIM_CFG =3D 0x001f0007
->      e6601000.crypto/regs:AXIM_CACHE_PARAMS =3D 0x00000000
->     -e6601000.crypto/regs:GPR_HOST =3D 0x00000260
->     +e6601000.crypto/regs:GPR_HOST =3D 0x017ffeff
->      e6601000.crypto/regs:AXIM_MON_COMP =3D 0x00000000
->     -e6601000.crypto/version:SIGNATURE =3D 0x00000260
->     -e6601000.crypto/version:VERSION =3D 0x00000260
->     +e6601000.crypto/version:SIGNATURE =3D 0xdcc63000
->     +e6601000.crypto/version:VERSION =3D 0xaf400001
->
-> Note that this behavior is system-dependent, and the issue does not show
-> up on all R-Car Gen3 SoCs and boards.  Even when the device is
-> suspended, the module clock may be left enabled, if configured by the
-> firmware for Secure Mode, or when controlled by the Real-Time Core.
->
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  drivers/crypto/ccree/cc_debugfs.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/crypto/ccree/cc_debugfs.c b/drivers/crypto/ccree/cc_=
-debugfs.c
-> index 5669997386988055..35f3a2137502bd96 100644
-> --- a/drivers/crypto/ccree/cc_debugfs.c
-> +++ b/drivers/crypto/ccree/cc_debugfs.c
-> @@ -81,6 +81,7 @@ int cc_debugfs_init(struct cc_drvdata *drvdata)
->         regset->regs =3D debug_regs;
->         regset->nregs =3D ARRAY_SIZE(debug_regs);
->         regset->base =3D drvdata->cc_base;
-> +       regset->dev =3D dev;
->
->         ctx->dir =3D debugfs_create_dir(drvdata->plat_dev->name, cc_debug=
-fs_dir);
->
-> @@ -102,6 +103,7 @@ int cc_debugfs_init(struct cc_drvdata *drvdata)
->                 verset->nregs =3D ARRAY_SIZE(pid_cid_regs);
->         }
->         verset->base =3D drvdata->cc_base;
-> +       verset->dev =3D dev;
->
->         debugfs_create_regset32("version", 0400, ctx->dir, verset);
->
-> --
-> 2.17.1
->
+Hi,
+
+On 25-01-2020 20:59, Tim Schumacher wrote:
+> On 25.01.20 19:37, Hans de Goede wrote:> Hi,
+>>
+>> On 1/25/20 6:00 PM, Tim Schumacher wrote:
+>>> The JMicron JMS561U (notably used in the Sabrent SATA-to-USB
+>>> bridge) appears to have UAS-related issues when copying large
+>>> amounts of data, causing it to stall.
+>>>
+>>> Disabling the advertised UAS (either through a command-line
+>>> quirk or through this patch) mitigates those issues.
+>>>
+>>> Cc: stable@vger.kernel.org
+>>> Signed-off-by: Tim Schumacher <timschumi@gmx.de>
+>>
+>> Hmm, this is a quiete popular usb2sata bridge and disabling uas
+>> is quite bad for performance.
+> 
+> I haven't been able to notice any slowdown myself, averaging 350MB/s
+> while copying large files, before and after the patch. However, from
+> what I've been able to grasp, the actual advantage of UAS seems to
+> be located in even higher speeds, which I can't properly test with my
+> equipment.
+
+The big difference is not so much linear throughput, as well as
+iops / random access patterns. UAS allows sending multiple data
+requests to the disk at once, which the old bulk mass storage
+protocol does not allow.
+
+Chances are that the times when you are seeing the hangs you
+are also accessing the disk in some other way while copying a large
+file. With the old mass storage protocol in this case the copy
+will pause and then your other access will happen and then the copy
+will resume. UAS allows both to happen "at once" and SSDs are very good
+at this. As you can imagine making the SSD do multiple things at once
+it is also something which really pushes the power-requirements up.
+
+> It's a valid concern though, since SATA 3 theoretically goes way
+> higher than what I can reach.
+> 
+>>
+>> I notice that there is no link to a bug report and AFAIK we have
+>> no one else reporting this issue.
+> 
+> I haven't specifically looked on the kernel bug tracker yet, but I
+> found similiar UAS-related issues talking about the JMicron JMS567
+> and JMS579 on the Ubuntu kernel bug tracker [1], as well as the
+> Raspberry Pi bug tracker [2].
+> 
+> If it helps, I can make this a proper bug report first so that other
+> people can chime in, instead of burying the discussion in the mailing
+> list.
+> 
+> [1] https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1789589
+
+"When the device is under load and more than 1 hardrive is acessed,
+the USB enclosure frequently restarts."
+
+In other words, when I cause the power consumption to go through the
+roof things crash. This smells very much like (yet another) power-supply
+problem.
+
+> [2] https://github.com/raspberrypi/linux/issues/3070
+
+Raspberry Pi's are notorious for having issues supplying enough power
+to their USB ports due to the self-resetting electronic fuses they
+are using, which increase there resistance when the current demand
+peaks, which causes a voltage drop.
 
 
-Acked-by: Gilad Ben-Yossef <gilad@benyossef.com>
+> 
+>>
+>> So this feels like a much too big hammer for the problem which you
+>> are seeing.
+>>
+>> When you say "stall" what exactly happens? Do you see any errors
+>> in dmesg for example?
+> 
+> Basically, the transfer just freezes at one point (be it an actual
+> file transfer or just browsing directories quite fast), and a few
+> seconds later, UAS-related errors start appearing in dmesg.
+> 
+> At this point, the device either never recovers and requires a reconnect
+> to work correctly or it eventually recovers (after about 15 to 20
+> seconds) and continues the transfer as expected.
+> 
+> A dmesg of the device failing to recover can be found here: [3]
+> 
+> I can't reproduce a case where the device recovers right now, but
+> I found a StackExchange question with the same problem and an attached
+> dmesg. The general content of those error messages (maybe apart
+> from the hex output) is similiar to what I've been seeing: [4]
+> 
+> I'll try and see if I can hit a recoverable error myself in the next
+> few days.
+> 
+> [3] https://pastebin.com/raw/ny128rB4
 
-Thanks,
-Gilad
---=20
-Gilad Ben-Yossef
-Chief Coffee Drinker
+Ok, so what we are seeing there is that the usb-sata bridge has basically
+completely crashed. Normally it should always recover from a crash.
 
-values of =CE=B2 will give rise to dom!
+This really feels like a brownout (supply voltage too low) event has
+happened, as that is typically the only thing which will hang the
+bridge like this.
+
+> [4] https://pastebin.com/raw/i7KLzy6i
+> 
+>>
+>> Also note that using UAS, since it has much better performance,
+>> will often expose bugs which are not caused by it. One typical
+>> example is bus-powered devices where the USB port does not deliver
+>> enough power (typically the driver draws more then the port
+>> guanrantees). Copying large amounts of data on a fast device is
+>> a good way to make the current consumption go up and thus
+>> trigger these kind of issues.  Does the driver enclosure
+>> you see this on use a separate power supply, or is it
+>> bus-powered?
+> 
+> It is indeed a bus-powered enclosure/adapter, which I'm using with
+> an USB 3.0 port. The attached SSD is rated for 5V/0.7A. However,
+> (as mentioned above) I am reaching the same read speeds with and
+> without UAS, so I'm not quite sure whether it really is a power limit
+> caused by heavy load.
+
+As I've tried to explain above, UAS allows more then one command
+to be outstanding at once. Even if you are only copying a single file
+then the Linux kernel will send more requests for blocks further ahead
+in the file. This will make the SSD work harder to put the data in its
+buffer, so even if the average through put stays the same the peak
+energy consumption of the SSD may increase.
+
+So far I've not really heard or seen anything which indicates that
+there is a systematic problem with the JMS561U bridge. I'm actually
+pretty sure you will find similar bug reports for Windows...
+
+Have you tried using the drive in a different USB-3 port (on
+a different machine perhaps) and/or with a different (shorter) USB3
+cable?
+
+Regards,
+
+Hans
+
+
+
+>>> ---
+>>> v2: Fixed entry order. Also, CCing the correct people now.
+>>> ---
+>>>    drivers/usb/storage/unusual_uas.h | 7 +++++++
+>>>    1 file changed, 7 insertions(+)
+>>>
+>>> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+>>> index 1b23741036ee..a590f4a0d4b9 100644
+>>> --- a/drivers/usb/storage/unusual_uas.h
+>>> +++ b/drivers/usb/storage/unusual_uas.h
+>>> @@ -73,6 +73,13 @@ UNUSUAL_DEV(0x152d, 0x0578, 0x0000, 0x9999,
+>>>            USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>>>            US_FL_BROKEN_FUA),
+>>>
+>>> +/* Reported-by: Tim Schumacher <timschumi@gmx.de> */
+>>> +UNUSUAL_DEV(0x152d, 0x1561, 0x0000, 0x9999,
+>>> +        "JMicron",
+>>> +        "JMS561U",
+>>> +        USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>>> +        US_FL_IGNORE_UAS),
+>>> +
+>>>    /* Reported-by: Hans de Goede <hdegoede@redhat.com> */
+>>>    UNUSUAL_DEV(0x2109, 0x0711, 0x0000, 0x9999,
+>>>            "VIA",
+>>> -- 
+>>> 2.25.0
+>>>
+>>
+> 
+
