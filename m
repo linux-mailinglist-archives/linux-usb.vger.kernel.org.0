@@ -2,251 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1AD149B5D
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Jan 2020 16:21:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F34149B9E
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Jan 2020 16:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726079AbgAZPVc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 Jan 2020 10:21:32 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:22523 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725907AbgAZPVb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Jan 2020 10:21:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1580052089;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LchZJ++dV82ZQxtETGePbP8/DG4nvTQIBe9OJdc8KAw=;
-        b=Y0ksEBCIkXiE5OELeao62unpBwrjx3RJ/xwnebttDm1a1s3VA0cHwfK0eT5A/X1HNGO9yd
-        bZ4S/lEFsI77aWBb/bpHalik/BajVZhubZLLQeVEyPYTIxJvpMXwApjJ+oiL2JjVHtG2O/
-        D5uVgZ4wd2jbRMPEmn288vgllqyrd4s=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-366-bi5jrTj0PNWYn2LI_EaOlg-1; Sun, 26 Jan 2020 10:21:26 -0500
-X-MC-Unique: bi5jrTj0PNWYn2LI_EaOlg-1
-Received: by mail-wr1-f72.google.com with SMTP id u18so4450992wrn.11
-        for <linux-usb@vger.kernel.org>; Sun, 26 Jan 2020 07:21:26 -0800 (PST)
+        id S1728939AbgAZPre (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 Jan 2020 10:47:34 -0500
+Received: from mail-yb1-f196.google.com ([209.85.219.196]:45690 "EHLO
+        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726911AbgAZPrd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Jan 2020 10:47:33 -0500
+Received: by mail-yb1-f196.google.com with SMTP id x191so3689882ybg.12;
+        Sun, 26 Jan 2020 07:47:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=2xbk8AdWIZmse3B+nB63l0NWf7gcst2GZzaX7cH6+Rk=;
+        b=Sny0GkweHawfCGschvMy3kTofssyVxPCS0Xe31agFEXH2DnfkqrnpH9Qyfc0gNUm2S
+         7/AxdrHFGQwY2H2dwiP6rvG6tCa7XACRTKzmPzFznJhJj08lAQpMtHczqCjOGVCU3x+i
+         zKP8nUcKQMAGb+UYmJb/7ryPB9Mw/U2oiz1UKb0fPoF4mF5BudiQ2dEx90xLxw5otSAp
+         9fmRu8WNfNuljNOayIvT5boniU6zQErTGsj2ZcYbdPf9aYoDfo7PhcvB8UrjlDlca8ve
+         jVuxbKvrGw1ydhKIIlA+chqZ+AFVeyamBxcdcAyYqTIT47/2VyegmFJdmAFCjlMdBUt1
+         zm2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=LchZJ++dV82ZQxtETGePbP8/DG4nvTQIBe9OJdc8KAw=;
-        b=qzAq4MYC+y1bKRh6AKKq6yu976RsCWTvQml87gHhsucWsJY+7Xl3G0CJM0/hUhPn8n
-         VdTz1RyqnRGGYqysO7qqRkI2MsxCCl/0zcRb3bUGJvjZQsFt565Y4CLHYd7he9LiUEfo
-         rK1smwlwTj5nM3DwCVXD3m4rrhtNTGb0Vvq3A53HdnC/9lBnn5vVpPpoMYzAHIixhn5c
-         5gSgNyd7DMpbP7wb0iEQBT784ebwljMv9SspXjUu6ZTOtUJriL5TBcZZk4SrUeuKGPFW
-         BXnwAT4mf/Xx0qAw8QznLl4bgNuwP7OA3Cp0SKl63P3nppmYlcn34V+7QYz96qopnKAV
-         NTpQ==
-X-Gm-Message-State: APjAAAU+1OhG41OkTjIXc9dz6thym+/JilB6t53K6VLWYdlQdB3UKWFB
-        zn1KexVkW+YNgXIsJV4pjynvylE70/m+uQ6R98wbVOemVZjtVjsOgI65NWqVWqDQYCHqpdM/0qT
-        1S9xZZcgteXOTaEtk2NHA
-X-Received: by 2002:adf:9144:: with SMTP id j62mr16101173wrj.168.1580052085154;
-        Sun, 26 Jan 2020 07:21:25 -0800 (PST)
-X-Google-Smtp-Source: APXvYqxP5Y6bAR0d45JY6z5RNn+gPPGT2je6DvUcKh3z/eztl5Y+1hrH7gSFm6w1R+aE0rCXfJ1uOw==
-X-Received: by 2002:adf:9144:: with SMTP id j62mr16101145wrj.168.1580052084841;
-        Sun, 26 Jan 2020 07:21:24 -0800 (PST)
-Received: from shalem.localdomain (2001-1c00-0c0c-fe00-7e79-4dac-39d0-9c14.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:7e79:4dac:39d0:9c14])
-        by smtp.gmail.com with ESMTPSA id s15sm16234502wrp.4.2020.01.26.07.21.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jan 2020 07:21:24 -0800 (PST)
-Subject: Re: [PATCH v2] USB: uas: Add the no-UAS quirk for JMicron JMS561U
-To:     Tim Schumacher <timschumi@gmx.de>
-Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20200125064838.2511-1-timschumi@gmx.de>
- <20200125170030.25331-1-timschumi@gmx.de>
- <fccf2105-d415-7f44-e111-729d2d517ea7@redhat.com>
- <f9643202-c029-efe1-c213-b54b2ccf9c47@gmx.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <f6153a2c-fdad-09e4-53f9-0bc99d383c0f@redhat.com>
-Date:   Sun, 26 Jan 2020 16:21:23 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=2xbk8AdWIZmse3B+nB63l0NWf7gcst2GZzaX7cH6+Rk=;
+        b=sE1iBQhXJKqk3dnxjrV84NaUng/MThGt9t4HXisR7umWdEscNHW3Sg/wEZ0zaf7OvN
+         oJ8oyJhABgxVxqkMNOsr1Ccfr5NMiCPVfiwQZa/tOm1nH2z0OJvqoIUQz4h6l5S6HWO4
+         P8y5GyZ6Eni1VpMdG2xJtoL5L7DkgTMXLQL95dTz7N1Ly6mAwbu85aT2M5ENkvzrFU5u
+         SBFlnZlX4U1aKEhqW8Zx+IT+sutIXZQxlM8Qb0BNH+hXha4ygBYjxcSOfnAPOVtOQnvi
+         M91hy0QxtPf9zbiyYlzjEDtljPThXRgQ8vpmoaRIf1QSrK+0afZtOfXmb90dVaDyrFye
+         ZU1Q==
+X-Gm-Message-State: APjAAAW5L59UXXt3D77Rzc/IUjwT4Y7uevQMB8UGCTGWmIJxIdcE/y4j
+        WiNsddUUqxQM4MK/QIM/ldw=
+X-Google-Smtp-Source: APXvYqxvf/6JwAOXZhkX95ONMDryWNE+o/mE5fN9F9087lRqh1nXGJlr9CV8HaTXjy7HRjgfZPOGKQ==
+X-Received: by 2002:a25:ef51:: with SMTP id w17mr10381069ybm.477.1580053652415;
+        Sun, 26 Jan 2020 07:47:32 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d188sm1747466ywe.50.2020.01.26.07.47.31
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 26 Jan 2020 07:47:31 -0800 (PST)
+Date:   Sun, 26 Jan 2020 07:47:30 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     David Howells <dhowells@redhat.com>
+Cc:     torvalds@linux-foundation.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>, nicolas.dichtel@6wind.com,
+        raven@themaw.net, Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 07/14] Add sample notification program [ver #3]
+Message-ID: <20200126154730.GA18893@roeck-us.net>
+References: <157909503552.20155.3030058841911628518.stgit@warthog.procyon.org.uk>
+ <157909509882.20155.1159021562184142124.stgit@warthog.procyon.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <f9643202-c029-efe1-c213-b54b2ccf9c47@gmx.de>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <157909509882.20155.1159021562184142124.stgit@warthog.procyon.org.uk>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 25-01-2020 20:59, Tim Schumacher wrote:
-> On 25.01.20 19:37, Hans de Goede wrote:> Hi,
->>
->> On 1/25/20 6:00 PM, Tim Schumacher wrote:
->>> The JMicron JMS561U (notably used in the Sabrent SATA-to-USB
->>> bridge) appears to have UAS-related issues when copying large
->>> amounts of data, causing it to stall.
->>>
->>> Disabling the advertised UAS (either through a command-line
->>> quirk or through this patch) mitigates those issues.
->>>
->>> Cc: stable@vger.kernel.org
->>> Signed-off-by: Tim Schumacher <timschumi@gmx.de>
->>
->> Hmm, this is a quiete popular usb2sata bridge and disabling uas
->> is quite bad for performance.
+On Wed, Jan 15, 2020 at 01:31:38PM +0000, David Howells wrote:
+> The sample program is run like:
 > 
-> I haven't been able to notice any slowdown myself, averaging 350MB/s
-> while copying large files, before and after the patch. However, from
-> what I've been able to grasp, the actual advantage of UAS seems to
-> be located in even higher speeds, which I can't properly test with my
-> equipment.
-
-The big difference is not so much linear throughput, as well as
-iops / random access patterns. UAS allows sending multiple data
-requests to the disk at once, which the old bulk mass storage
-protocol does not allow.
-
-Chances are that the times when you are seeing the hangs you
-are also accessing the disk in some other way while copying a large
-file. With the old mass storage protocol in this case the copy
-will pause and then your other access will happen and then the copy
-will resume. UAS allows both to happen "at once" and SSDs are very good
-at this. As you can imagine making the SSD do multiple things at once
-it is also something which really pushes the power-requirements up.
-
-> It's a valid concern though, since SATA 3 theoretically goes way
-> higher than what I can reach.
+> 	./samples/watch_queue/watch_test
 > 
->>
->> I notice that there is no link to a bug report and AFAIK we have
->> no one else reporting this issue.
+> and watches "/" for mount changes and the current session keyring for key
+> changes:
 > 
-> I haven't specifically looked on the kernel bug tracker yet, but I
-> found similiar UAS-related issues talking about the JMicron JMS567
-> and JMS579 on the Ubuntu kernel bug tracker [1], as well as the
-> Raspberry Pi bug tracker [2].
+> 	# keyctl add user a a @s
+> 	1035096409
+> 	# keyctl unlink 1035096409 @s
 > 
-> If it helps, I can make this a proper bug report first so that other
-> people can chime in, instead of burying the discussion in the mailing
-> list.
+> producing:
 > 
-> [1] https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1789589
-
-"When the device is under load and more than 1 hardrive is acessed,
-the USB enclosure frequently restarts."
-
-In other words, when I cause the power consumption to go through the
-roof things crash. This smells very much like (yet another) power-supply
-problem.
-
-> [2] https://github.com/raspberrypi/linux/issues/3070
-
-Raspberry Pi's are notorious for having issues supplying enough power
-to their USB ports due to the self-resetting electronic fuses they
-are using, which increase there resistance when the current demand
-peaks, which causes a voltage drop.
-
-
+> 	# ./watch_test
+> 	read() = 16
+> 	NOTIFY[000]: ty=000001 sy=02 i=00000110
+> 	KEY 2ffc2e5d change=2[linked] aux=1035096409
+> 	read() = 16
+> 	NOTIFY[000]: ty=000001 sy=02 i=00000110
+> 	KEY 2ffc2e5d change=3[unlinked] aux=1035096409
 > 
->>
->> So this feels like a much too big hammer for the problem which you
->> are seeing.
->>
->> When you say "stall" what exactly happens? Do you see any errors
->> in dmesg for example?
+> Other events may be produced, such as with a failing disk:
 > 
-> Basically, the transfer just freezes at one point (be it an actual
-> file transfer or just browsing directories quite fast), and a few
-> seconds later, UAS-related errors start appearing in dmesg.
+> 	read() = 22
+> 	NOTIFY[000]: ty=000003 sy=02 i=00000416
+> 	USB 3-7.7 dev-reset e=0 r=0
+> 	read() = 24
+> 	NOTIFY[000]: ty=000002 sy=06 i=00000418
+> 	BLOCK 00800050 e=6[critical medium] s=64000ef8
 > 
-> At this point, the device either never recovers and requires a reconnect
-> to work correctly or it eventually recovers (after about 15 to 20
-> seconds) and continues the transfer as expected.
+> This corresponds to:
 > 
-> A dmesg of the device failing to recover can be found here: [3]
+> 	blk_update_request: critical medium error, dev sdf, sector 1677725432 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
 > 
-> I can't reproduce a case where the device recovers right now, but
-> I found a StackExchange question with the same problem and an attached
-> dmesg. The general content of those error messages (maybe apart
-> from the hex output) is similiar to what I've been seeing: [4]
+> in dmesg.
 > 
-> I'll try and see if I can hit a recoverable error myself in the next
-> few days.
-> 
-> [3] https://pastebin.com/raw/ny128rB4
+> Signed-off-by: David Howells <dhowells@redhat.com>
 
-Ok, so what we are seeing there is that the usb-sata bridge has basically
-completely crashed. Normally it should always recover from a crash.
+mips:allmodconfig:
 
-This really feels like a brownout (supply voltage too low) event has
-happened, as that is typically the only thing which will hang the
-bridge like this.
+samples/watch_queue/watch_test.c: In function â€˜keyctl_watch_keyâ€™:
+samples/watch_queue/watch_test.c:34:17: error: â€˜__NR_keyctlâ€™ undeclared
 
-> [4] https://pastebin.com/raw/i7KLzy6i
-> 
->>
->> Also note that using UAS, since it has much better performance,
->> will often expose bugs which are not caused by it. One typical
->> example is bus-powered devices where the USB port does not deliver
->> enough power (typically the driver draws more then the port
->> guanrantees). Copying large amounts of data on a fast device is
->> a good way to make the current consumption go up and thus
->> trigger these kind of issues.  Does the driver enclosure
->> you see this on use a separate power supply, or is it
->> bus-powered?
-> 
-> It is indeed a bus-powered enclosure/adapter, which I'm using with
-> an USB 3.0 port. The attached SSD is rated for 5V/0.7A. However,
-> (as mentioned above) I am reaching the same read speeds with and
-> without UAS, so I'm not quite sure whether it really is a power limit
-> caused by heavy load.
-
-As I've tried to explain above, UAS allows more then one command
-to be outstanding at once. Even if you are only copying a single file
-then the Linux kernel will send more requests for blocks further ahead
-in the file. This will make the SSD work harder to put the data in its
-buffer, so even if the average through put stays the same the peak
-energy consumption of the SSD may increase.
-
-So far I've not really heard or seen anything which indicates that
-there is a systematic problem with the JMS561U bridge. I'm actually
-pretty sure you will find similar bug reports for Windows...
-
-Have you tried using the drive in a different USB-3 port (on
-a different machine perhaps) and/or with a different (shorter) USB3
-cable?
-
-Regards,
-
-Hans
-
-
-
->>> ---
->>> v2: Fixed entry order. Also, CCing the correct people now.
->>> ---
->>>    drivers/usb/storage/unusual_uas.h | 7 +++++++
->>>    1 file changed, 7 insertions(+)
->>>
->>> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
->>> index 1b23741036ee..a590f4a0d4b9 100644
->>> --- a/drivers/usb/storage/unusual_uas.h
->>> +++ b/drivers/usb/storage/unusual_uas.h
->>> @@ -73,6 +73,13 @@ UNUSUAL_DEV(0x152d, 0x0578, 0x0000, 0x9999,
->>>            USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->>>            US_FL_BROKEN_FUA),
->>>
->>> +/* Reported-by: Tim Schumacher <timschumi@gmx.de> */
->>> +UNUSUAL_DEV(0x152d, 0x1561, 0x0000, 0x9999,
->>> +        "JMicron",
->>> +        "JMS561U",
->>> +        USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->>> +        US_FL_IGNORE_UAS),
->>> +
->>>    /* Reported-by: Hans de Goede <hdegoede@redhat.com> */
->>>    UNUSUAL_DEV(0x2109, 0x0711, 0x0000, 0x9999,
->>>            "VIA",
->>> -- 
->>> 2.25.0
->>>
->>
-> 
-
+Guenter
