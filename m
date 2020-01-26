@@ -2,154 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8987149AAE
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Jan 2020 14:07:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4814149AD3
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Jan 2020 14:33:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726761AbgAZNHr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 Jan 2020 08:07:47 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:38548 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726275AbgAZNHr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Jan 2020 08:07:47 -0500
-Received: by mail-wr1-f66.google.com with SMTP id y17so7644949wrh.5;
-        Sun, 26 Jan 2020 05:07:45 -0800 (PST)
+        id S1726275AbgAZNdK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 Jan 2020 08:33:10 -0500
+Received: from mail-vk1-f194.google.com ([209.85.221.194]:34345 "EHLO
+        mail-vk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726599AbgAZNdJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Jan 2020 08:33:09 -0500
+Received: by mail-vk1-f194.google.com with SMTP id w67so1946726vkf.1
+        for <linux-usb@vger.kernel.org>; Sun, 26 Jan 2020 05:33:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=AInU9jEfF+3yWDuqYPlj88z1dwAMsWqWDrRRvQfEaJs=;
-        b=ClC3mylOJzOZ82nh3T6d53RMLeBNqf9vv10iofrKwYwdXmwi5MaHV3bHXEy9Fmtqdn
-         DIvWm0rTD5twWN6wVXjBII9GDncZfMqs/1Hj6rrA8xLs5sp+gc5vlIMoiJgnpldvvV4t
-         hfPJ3soRfQlqIsVYIIjBAcQuCYbtU+q/slF2wX5ZayxxCOKD86qd/MpLXUoTBgxYowkN
-         JRI866UzTCCMnnM++eNiwBcZLbbWaCk4r0M7nC3i5En/OzCEKknfkf1xezG9P7FKXTiM
-         EfMz2miUm48NcQRhVK92SNNnn6RZhOmFYB86P8r8BuXTqEQ6glG5BovxCi9K3FbM0SJo
-         Lh3A==
+        d=benyossef-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=emKfjakMK0JQ5BS5YCFkbZaOfKcUBqnq7Vw1qMXzarA=;
+        b=ai+SUiF/UB+ocFDZG4bWX3gairRXyO3KEZs3g3zkaG+2pYyYWK3fd9bt+E7Rar+SD4
+         EIwg+XvovGF4K2Odgt+HUesXodKNd95varMryoGJqOHTWZQOv6S1c9horPbB6zQHQUFj
+         z9zcOiYdUC0xWDGg/8FTElf80uvRJry+UUYvrQXpXo/t3fWys/BSnSQ76GW5zuNCsO1l
+         pZM6EFHBmDXPG3u5Ed5vydQglmNUzoQYPbUyeuzEM07UGxpDHAax8tnbup1DAOHP7Yde
+         /cxPg5ADJdZmZUlDdaVtddv2qRPpZENEBJutlRleqIojB4JNHjUkH8vvrlvOeC3MPHmZ
+         7vyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=AInU9jEfF+3yWDuqYPlj88z1dwAMsWqWDrRRvQfEaJs=;
-        b=pvPOyDhHMaCTCljeDy7Q+2GqU/QDbk0DHTC3liozKP8Tx66RglVX63QkL77LS3jSB/
-         eg89m3PmEl2Ccma76Sglyks8sR0814lxFPSAfh/Y5AOb93U0QqHJY5LpD6VpegWSa2a9
-         1Y9v0Sf/TfRJhQFpGRZoJV31lB/Qg3VhqaFDpc/wkJ2FZMRWHPMs8+mYxoJ1a5WcfXXF
-         hjcZv5dh35uN8prvHwrgtjc6zJ7I7XTxJOQm/OA8nP0JUtnH1FELMlQivq7wGz7oqyZA
-         bcgH4TXQZeMwBQ6xUYp7wC7WbCCr3PCRJELDVObP3iPLpOtCtE4++8aQmqgMk/pVk+mt
-         TVmQ==
-X-Gm-Message-State: APjAAAWQtxTbv+b7ZaGfrnAs95A5/cS72JzhjVCd5OL4oiYnW1s3RBDu
-        iCvczCtOVjdHyc2QhUS1WDs=
-X-Google-Smtp-Source: APXvYqx5XlmZYou0Skb71KJcM/U9yJ3iwNcSkjDlmKzhAD9dUArq3wO/sxIvFyKSktYRCS3nqregUw==
-X-Received: by 2002:a5d:5706:: with SMTP id a6mr15374180wrv.108.1580044064975;
-        Sun, 26 Jan 2020 05:07:44 -0800 (PST)
-Received: from debian64.daheim (p4FD09AEC.dip0.t-ipconnect.de. [79.208.154.236])
-        by smtp.gmail.com with ESMTPSA id a22sm11553039wmd.20.2020.01.26.05.07.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jan 2020 05:07:44 -0800 (PST)
-Received: from localhost.daheim ([127.0.0.1] helo=debian64.localnet)
-        by debian64.daheim with esmtp (Exim 4.93)
-        (envelope-from <chunkeey@gmail.com>)
-        id 1ivhdf-000dre-5g; Sun, 26 Jan 2020 14:07:43 +0100
-From:   Christian Lamparter <chunkeey@gmail.com>
-To:     Andreas =?ISO-8859-1?Q?B=F6hler?= <dev@aboehler.at>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 0/5] usb: xhci: Add support for Renesas USB controllers
-Date:   Sun, 26 Jan 2020 14:07:42 +0100
-Message-ID: <3802988.9TbF58Ff0q@debian64>
-In-Reply-To: <9b63675e-36f4-292a-4bcc-579cb59ed855@aboehler.at>
-References: <20200113084005.849071-1-vkoul@kernel.org> <9b63675e-36f4-292a-4bcc-579cb59ed855@aboehler.at>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=emKfjakMK0JQ5BS5YCFkbZaOfKcUBqnq7Vw1qMXzarA=;
+        b=f9oeCErP0aXn2VdfXKMn9CCuOJcRZG5c38BBdQHyD3EnlV9QM3Zx54UhOjQczlTm5i
+         sgmNja3T38EXV6jdjxAHkc4zwlnBBFi9gkXnLLg+5gdJJ6Po11HYfRrUBZ477U/XWVs3
+         iiqUVnNDd2DVPok0aggGQADgzOj+NssQwXlyanUyqdi9TXi4A1d6Dr9ck4QfQq3IqdIa
+         7BtvZxW3+SPWYnY67A94iq7XLtsVo80Qmh6KBEp7eIpJVAfHeIyXepgmAMZQyop55g25
+         Yd62REGyKs+iUnfdXPKoGVpQwy1Lrmx+ZmtRIDa6T9U1MmfdidmEF8YFtO2qIZ60UIjO
+         dhSw==
+X-Gm-Message-State: APjAAAUyYAe7rlAz5X6me6jkSZMZBuuWs5FW1ue6VDAqUjFQA5y59Duw
+        9tSidA+mfPHIOba7DHyHMcCdg6vRA5F4M75wtT+XHw==
+X-Google-Smtp-Source: APXvYqwbEI5BxpWOjvqHw3OF1B1QFbz8m5/83C3fLpV6wDo9RxMYmlGUd3KSZPynqahIUdu2vYZLu7TpEP7jm7Xn4b4=
+X-Received: by 2002:ac5:cd8c:: with SMTP id i12mr5971417vka.100.1580045588469;
+ Sun, 26 Jan 2020 05:33:08 -0800 (PST)
 MIME-Version: 1.0
+References: <20200124132957.15769-1-geert+renesas@glider.be> <20200124132957.15769-3-geert+renesas@glider.be>
+In-Reply-To: <20200124132957.15769-3-geert+renesas@glider.be>
+From:   Gilad Ben-Yossef <gilad@benyossef.com>
+Date:   Sun, 26 Jan 2020 15:32:50 +0200
+Message-ID: <CAOtvUMdA2aD9DJBmSpOJOFRw=1_9OcaG4Y915q5L7dgo7n7HTA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] crypto: ccree - fix debugfs register access while suspended
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Bin Liu <b-liu@ti.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-usb@vger.kernel.org,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sunday, 26 January 2020 01:11:35 CET Andreas B=F6hler wrote:
->=20
-> On 13/01/2020 09:40, Vinod Koul wrote:
-> > This series add support for Renesas USB controllers uPD720201 and uPD72=
-0202.
-> > These require firmware to be loaded and in case devices have ROM those =
-can
-> > also be programmed if empty. If ROM is programmed, it runs from ROM as =
-well.
-> >=20
-> > This includes two patches from Christian which supported these controll=
-ers
-> > w/o ROM and later my patches for ROM support and multiple firmware vers=
-ions,
-> > debugfs hook for rom erase and export of xhci-pci functions.
-> >=20
-> I tested this on an AVM FRITZ!Box 3490, backported to 4.19: Firmware
-> upload works fine.
->=20
-> However, I'm seeing read errors afterwards which, I suppose, are a
-> different story.
->=20
-> Here is the log:
->=20
-> [  498.115808] ifx_pcie_bios_map_irq port 0 dev 0000:01:00.0 slot 0 pin 1
-> [  498.121154] ifx_pcie_bios_map_irq dev 0000:01:00.0 irq 144 assigned
-> [  498.488541] renesas xhci 0000:01:00.0: xHCI Host Controller
-> [  498.492820] renesas xhci 0000:01:00.0: new USB bus registered,
-> assigned bus number 1
-> [  498.506123] renesas xhci 0000:01:00.0: hcc params 0x014051cf hci
-> version 0x100 quirks 0x0000000101000090
-> [  498.516869] hub 1-0:1.0: USB hub found
-> [  498.519631] hub 1-0:1.0: 2 ports detected
-> [  498.525641] renesas xhci 0000:01:00.0: xHCI Host Controller
-> [  498.530217] renesas xhci 0000:01:00.0: new USB bus registered,
-> assigned bus number 2
-> [  498.537846] renesas xhci 0000:01:00.0: Host supports USB 3.0 SuperSpeed
-> [  498.545095] usb usb2: We don't know the algorithms for LPM for this
-> host, disabling LPM.
-> [  498.554921] hub 2-0:1.0: USB hub found
-> [  498.557588] hub 2-0:1.0: 2 ports detected
-> [  523.013361] usb 1-1: new full-speed USB device number 2 using renesas
-> xhci
-> [  523.182725] usb 1-1: no configurations
-> [  523.185085] usb 1-1: can't read configurations, error -22
-> [  523.317423] usb 1-1: new full-speed USB device number 3 using renesas
-> xhci
-> [  523.493710] usb 1-1: no configurations
-> [  523.496069] usb 1-1: can't read configurations, error -22
-> [  523.501951] usb usb1-port1: attempt power cycle
->=20
-Hm, I don't think lantiq's PCI code is upstream... And now that I've seen
-more errors from your forum post at:=20
-<https://forum.openwrt.org/t/fix-xhci-errors-on-renesas-upd70202-fritz-box-=
-3490/53620>
-
-I wonder if this has something to do with a similar issue I was facing with
-the ath9k chip loader in commit:
-5a4f2040fd07 ("ath9k: add loader for AR92XX (and older) pci(e)")
-
-which later needed a fix for a specifc lantiq byteswap problem in commit:
-22d0d5ae7a08 ("ath9k: use iowrite32 over __raw_writel"):
-|    This patch changes the ath9k_pci_owl_loader to use the
-|    same iowrite32 memory accessor that ath9k_pci is using
-|    to communicate with the PCI(e) chip.
-|  =20
-|   This will fix endian issues that came up during testing
-|   with loaned AVM Fritz!Box 7360 (Lantiq MIPS SoCs + AR9287).
-
-
-The reason was that apparently (I gave back the loaned device), the lantiq
-PCI silicon does some sneaky byteswaps in special cases. Could this be
-related? You mentioned in another post that AVM did changes to the xhci
-driver, can you look if they added changes to the memory accessors?
-Because this would explain why the APM82181 (PowerPC which is also a
-BigEndian) had no issues (as it's using a entirely different pcie hardware
-and code).
-
-Cheers,
-Christian
+On Fri, Jan 24, 2020 at 3:30 PM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+> Reading the debugfs files under /sys/kernel/debug/ccree/ can be done by
+> the user at any time.  On R-Car SoCs, the CCREE device is power-managed
+> using a moduile clock, and if this clock is not running, bogus register
+> values may be read.
+>
+> Fix this by filling in the debugfs_regset32.dev field, so debugfs will
+> make sure the device is resumed while its registers are being read.
+>
+> This fixes the bogus values (0x00000260) in the register dumps on R-Car
+> H3 ES1.0:
+>
+>     -e6601000.crypto/regs:HOST_IRR =3D 0x00000260
+>     -e6601000.crypto/regs:HOST_POWER_DOWN_EN =3D 0x00000260
+>     +e6601000.crypto/regs:HOST_IRR =3D 0x00000038
+>     +e6601000.crypto/regs:HOST_POWER_DOWN_EN =3D 0x00000038
+>      e6601000.crypto/regs:AXIM_MON_ERR =3D 0x00000000
+>      e6601000.crypto/regs:DSCRPTR_QUEUE_CONTENT =3D 0x000002aa
+>     -e6601000.crypto/regs:HOST_IMR =3D 0x00000260
+>     +e6601000.crypto/regs:HOST_IMR =3D 0x017ffeff
+>      e6601000.crypto/regs:AXIM_CFG =3D 0x001f0007
+>      e6601000.crypto/regs:AXIM_CACHE_PARAMS =3D 0x00000000
+>     -e6601000.crypto/regs:GPR_HOST =3D 0x00000260
+>     +e6601000.crypto/regs:GPR_HOST =3D 0x017ffeff
+>      e6601000.crypto/regs:AXIM_MON_COMP =3D 0x00000000
+>     -e6601000.crypto/version:SIGNATURE =3D 0x00000260
+>     -e6601000.crypto/version:VERSION =3D 0x00000260
+>     +e6601000.crypto/version:SIGNATURE =3D 0xdcc63000
+>     +e6601000.crypto/version:VERSION =3D 0xaf400001
+>
+> Note that this behavior is system-dependent, and the issue does not show
+> up on all R-Car Gen3 SoCs and boards.  Even when the device is
+> suspended, the module clock may be left enabled, if configured by the
+> firmware for Secure Mode, or when controlled by the Real-Time Core.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  drivers/crypto/ccree/cc_debugfs.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/crypto/ccree/cc_debugfs.c b/drivers/crypto/ccree/cc_=
+debugfs.c
+> index 5669997386988055..35f3a2137502bd96 100644
+> --- a/drivers/crypto/ccree/cc_debugfs.c
+> +++ b/drivers/crypto/ccree/cc_debugfs.c
+> @@ -81,6 +81,7 @@ int cc_debugfs_init(struct cc_drvdata *drvdata)
+>         regset->regs =3D debug_regs;
+>         regset->nregs =3D ARRAY_SIZE(debug_regs);
+>         regset->base =3D drvdata->cc_base;
+> +       regset->dev =3D dev;
+>
+>         ctx->dir =3D debugfs_create_dir(drvdata->plat_dev->name, cc_debug=
+fs_dir);
+>
+> @@ -102,6 +103,7 @@ int cc_debugfs_init(struct cc_drvdata *drvdata)
+>                 verset->nregs =3D ARRAY_SIZE(pid_cid_regs);
+>         }
+>         verset->base =3D drvdata->cc_base;
+> +       verset->dev =3D dev;
+>
+>         debugfs_create_regset32("version", 0400, ctx->dir, verset);
+>
+> --
+> 2.17.1
+>
 
 
+Acked-by: Gilad Ben-Yossef <gilad@benyossef.com>
+
+Thanks,
+Gilad
+--=20
+Gilad Ben-Yossef
+Chief Coffee Drinker
+
+values of =CE=B2 will give rise to dom!
