@@ -2,119 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F34149B9E
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Jan 2020 16:47:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF09C149BD5
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Jan 2020 17:12:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728939AbgAZPre (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 Jan 2020 10:47:34 -0500
-Received: from mail-yb1-f196.google.com ([209.85.219.196]:45690 "EHLO
-        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726911AbgAZPrd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Jan 2020 10:47:33 -0500
-Received: by mail-yb1-f196.google.com with SMTP id x191so3689882ybg.12;
-        Sun, 26 Jan 2020 07:47:32 -0800 (PST)
+        id S1726155AbgAZQME (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 Jan 2020 11:12:04 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:40318 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725838AbgAZQMD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Jan 2020 11:12:03 -0500
+Received: by mail-pl1-f193.google.com with SMTP id p12so2432469plr.7;
+        Sun, 26 Jan 2020 08:12:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
          :user-agent;
-        bh=2xbk8AdWIZmse3B+nB63l0NWf7gcst2GZzaX7cH6+Rk=;
-        b=Sny0GkweHawfCGschvMy3kTofssyVxPCS0Xe31agFEXH2DnfkqrnpH9Qyfc0gNUm2S
-         7/AxdrHFGQwY2H2dwiP6rvG6tCa7XACRTKzmPzFznJhJj08lAQpMtHczqCjOGVCU3x+i
-         zKP8nUcKQMAGb+UYmJb/7ryPB9Mw/U2oiz1UKb0fPoF4mF5BudiQ2dEx90xLxw5otSAp
-         9fmRu8WNfNuljNOayIvT5boniU6zQErTGsj2ZcYbdPf9aYoDfo7PhcvB8UrjlDlca8ve
-         jVuxbKvrGw1ydhKIIlA+chqZ+AFVeyamBxcdcAyYqTIT47/2VyegmFJdmAFCjlMdBUt1
-         zm2g==
+        bh=XwJ6zbJ/GSlSVPf4lzbzpyTBgRVNbLfcCsMPH563P88=;
+        b=BiStINCETi47ij8Ysmz/ZI6Xft7bnO7sX0KTqlynJ43w3wtDW3h8/vXHDpu1M4G1EI
+         Z7qILlsMhg6N3GCDjIivcJnYyNAmsbbJ5w7O9Y4e//ZPTwGHe8/vsirz2DJaeB9PM2FG
+         Rgj0FymK4Qj2uZ2KFXemJFoHrrXCK1kt12ln9pOPT+HoOC0ctxQnZ1YJRXurhM/FFh+B
+         B2quLBtZOsOjJpzuMc49HQSJMoE1sl4TrfwX8BnIFl+y8G71bMxDudxyOXPv3BpoJsmF
+         SlQbnLHou74cDjs7TWPSE+QDIHWqP7pF2a8gzn5EQE1XVf6rmyCIREu1WiHzDBNryPMB
+         ywXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=2xbk8AdWIZmse3B+nB63l0NWf7gcst2GZzaX7cH6+Rk=;
-        b=sE1iBQhXJKqk3dnxjrV84NaUng/MThGt9t4HXisR7umWdEscNHW3Sg/wEZ0zaf7OvN
-         oJ8oyJhABgxVxqkMNOsr1Ccfr5NMiCPVfiwQZa/tOm1nH2z0OJvqoIUQz4h6l5S6HWO4
-         P8y5GyZ6Eni1VpMdG2xJtoL5L7DkgTMXLQL95dTz7N1Ly6mAwbu85aT2M5ENkvzrFU5u
-         SBFlnZlX4U1aKEhqW8Zx+IT+sutIXZQxlM8Qb0BNH+hXha4ygBYjxcSOfnAPOVtOQnvi
-         M91hy0QxtPf9zbiyYlzjEDtljPThXRgQ8vpmoaRIf1QSrK+0afZtOfXmb90dVaDyrFye
-         ZU1Q==
-X-Gm-Message-State: APjAAAW5L59UXXt3D77Rzc/IUjwT4Y7uevQMB8UGCTGWmIJxIdcE/y4j
-        WiNsddUUqxQM4MK/QIM/ldw=
-X-Google-Smtp-Source: APXvYqxvf/6JwAOXZhkX95ONMDryWNE+o/mE5fN9F9087lRqh1nXGJlr9CV8HaTXjy7HRjgfZPOGKQ==
-X-Received: by 2002:a25:ef51:: with SMTP id w17mr10381069ybm.477.1580053652415;
-        Sun, 26 Jan 2020 07:47:32 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d188sm1747466ywe.50.2020.01.26.07.47.31
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 26 Jan 2020 07:47:31 -0800 (PST)
-Date:   Sun, 26 Jan 2020 07:47:30 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     David Howells <dhowells@redhat.com>
-Cc:     torvalds@linux-foundation.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>, nicolas.dichtel@6wind.com,
-        raven@themaw.net, Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 07/14] Add sample notification program [ver #3]
-Message-ID: <20200126154730.GA18893@roeck-us.net>
-References: <157909503552.20155.3030058841911628518.stgit@warthog.procyon.org.uk>
- <157909509882.20155.1159021562184142124.stgit@warthog.procyon.org.uk>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=XwJ6zbJ/GSlSVPf4lzbzpyTBgRVNbLfcCsMPH563P88=;
+        b=s4tbXhvT3kmIXE/nt9EO5WihO/oS68ITyfwH1MnZQYB0ff1QwiDRiy5J73UAsShCDy
+         eFkzcf+5qRDipSjg/HkRi4jGTHrPnMLMcI9s1lyVHHpsG1jCYLWedrotwXD+L/ayWGEQ
+         KH5ISczgAeL2GmYUXLUyM2CLv4cneriqZOHicBWETVwf55UeTxDQmUOHDOr9GcpHZ8Qg
+         vci5SofuCbCztGjywlmPSeTUFnydTocRqKIrQQdrQqwRQQjPPHnXbt4iST420uCWQdHC
+         gDXmnj0v6zc0FbmwUdGqU14i4EF8ARlIXmJSeqGPcnJiko4bwARGR1SaOxM01QlVMFZd
+         L7/Q==
+X-Gm-Message-State: APjAAAWT5LRdj/oo166+IZ7WoyQGQwSMhs97/n9hAS/DA8upN7qVV88P
+        X7Cy/hM6hBiGPNk0OyOcDVY=
+X-Google-Smtp-Source: APXvYqyTm+GQ8cYQOS3FgVtTBy17aXa0SG63dsPQsZ2G9M59rQvA3+6BjsIjLUOhSPBkaeFQkZRlaA==
+X-Received: by 2002:a17:90b:4396:: with SMTP id in22mr3009157pjb.83.1580055122957;
+        Sun, 26 Jan 2020 08:12:02 -0800 (PST)
+Received: from google.com ([123.201.105.2])
+        by smtp.gmail.com with ESMTPSA id g9sm13056717pfm.150.2020.01.26.08.12.00
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sun, 26 Jan 2020 08:12:02 -0800 (PST)
+Date:   Sun, 26 Jan 2020 21:41:56 +0530
+From:   Saurav Girepunje <saurav.girepunje@gmail.com>
+To:     b-liu@ti.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     saurav.girepunje@hotmail.com
+Subject: [PATCH] usb: musb: Fix external abort on non-linefetch
+Message-ID: <20200126161156.GA20401@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <157909509882.20155.1159021562184142124.stgit@warthog.procyon.org.uk>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+User-Agent: Mutt/1.6.2-neo (NetBSD/sparc64)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 15, 2020 at 01:31:38PM +0000, David Howells wrote:
-> The sample program is run like:
-> 
-> 	./samples/watch_queue/watch_test
-> 
-> and watches "/" for mount changes and the current session keyring for key
-> changes:
-> 
-> 	# keyctl add user a a @s
-> 	1035096409
-> 	# keyctl unlink 1035096409 @s
-> 
-> producing:
-> 
-> 	# ./watch_test
-> 	read() = 16
-> 	NOTIFY[000]: ty=000001 sy=02 i=00000110
-> 	KEY 2ffc2e5d change=2[linked] aux=1035096409
-> 	read() = 16
-> 	NOTIFY[000]: ty=000001 sy=02 i=00000110
-> 	KEY 2ffc2e5d change=3[unlinked] aux=1035096409
-> 
-> Other events may be produced, such as with a failing disk:
-> 
-> 	read() = 22
-> 	NOTIFY[000]: ty=000003 sy=02 i=00000416
-> 	USB 3-7.7 dev-reset e=0 r=0
-> 	read() = 24
-> 	NOTIFY[000]: ty=000002 sy=06 i=00000418
-> 	BLOCK 00800050 e=6[critical medium] s=64000ef8
-> 
-> This corresponds to:
-> 
-> 	blk_update_request: critical medium error, dev sdf, sector 1677725432 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
-> 
-> in dmesg.
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
+While accessing the usb mode/vbus from sysfs. Below error came on kernel
+version 4.19.
 
-mips:allmodconfig:
+On latest kernel vserion api name changed. Therefore API
+name and backtrace API names are different.
 
-samples/watch_queue/watch_test.c: In function ‘keyctl_watch_key’:
-samples/watch_queue/watch_test.c:34:17: error: ‘__NR_keyctl’ undeclared
+     [  821.908066] Backtrace:
+     [  821.910695] [<bf078fc0>] (musb_default_readl [musb_hdrc]) from [<bf0af738>] (dsps_musb_set_mode+0x38/0x12c [musb_dsps])
+     [  821.922059] [<bf0af700>] (dsps_musb_set_mode [musb_dsps]) from [<bf07899c>] (musb_mode_store+0xc8/0x12c [musb_hdrc])
+     [  821.933105]  r7:a0010013 r6:0000000b r5:cd79d200 r4:cb634010
+     [  821.939096] [<bf0788d4>] (musb_mode_store [musb_hdrc]) from [<c0425184>] (dev_attr_store+0x20/0x2c)
+     [  821.948593]  r7:cd79d200 r6:c5abbf78 r5:00000000 r4:bf0788d4
+     [  821.954549] [<c0425164>] (dev_attr_store) from [<c0285b08>] (sysfs_kf_write+0x48/0x4c)
+     [  821.962859]  r5:00000000 r4:c0425164
+     [  821.966620] [<c0285ac0>] (sysfs_kf_write) from [<c0285274>] (kernfs_fop_write+0xfc/0x1fc)
+     [  821.975200]  r5:00000000 r4:cd79d080
+     [  821.978966] [<c0285178>] (kernfs_fop_write) from [<c020ec00>] (__vfs_write+0x34/0x120)
+     [  821.987280]  r10:00000000 r9:0000000b r8:00000000 r7:0000000b r6:c5abbf78 r5:c0285178
+     [  821.995493]  r4:cb67a3c0
+     [  821.998160] [<c020ebcc>] (__vfs_write) from [<c020fae8>] (vfs_write+0xa8/0x170)
+     [  822.005835]  r9:0000000b r8:00000000 r7:c5abbf78 r6:000def80 r5:cb67a3c0 r4:0000000b
+     [  822.013969] [<c020fa40>] (vfs_write) from [<c02108d0>] (SyS_write+0x44/0x98)
+     [  822.021371]  r9:0000000b r8:000def80 r7:00000000 r6:00000000 r5:cb67a3c0 r4:cb67a3c0
+     [  822.029517] [<c021088c>] (SyS_write) from [<c010d8a0>] (ret_fast_syscall+0x0/0x3c)
+     [  822.037467]  r9:c5aba000 r8:c010daa8 r7:00000004 r6:b6f0ad58 r5:000def80 r4:0000000b
+     [  822.045599] Code: e1a0c00d e92dd800 e24cb004 e0801001 (e5910000)
 
-Guenter
+Without pm_runtime_{get,put}_sync calls in place,
+Similar issue come on "mode_show" and "vbus_store" also.
+
+fix- call pm_runtime_{get,put}_sync before reading/writing
+usb mode/vbus from sysfs.
+
+Signed-off-by: Saurav Girepunje <saurav.girepunje@gmail.com>
+---
+  drivers/usb/musb/musb_core.c | 6 ++++++
+  1 file changed, 6 insertions(+)
+
+diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
+index 5ebf30b..a1ca8380 100644
+--- a/drivers/usb/musb/musb_core.c
++++ b/drivers/usb/musb/musb_core.c
+@@ -1723,9 +1723,11 @@ int musb_mailbox(enum musb_vbus_id_status status)
+  	unsigned long flags;
+  	int ret;
+  
++	pm_runtime_get_sync(dev);
+  	spin_lock_irqsave(&musb->lock, flags);
+  	ret = sprintf(buf, "%s\n", usb_otg_state_string(musb->xceiv->otg->state));
+  	spin_unlock_irqrestore(&musb->lock, flags);
++	pm_runtime_put_sync(dev);
+  
+  	return ret;
+  }
+@@ -1738,6 +1740,7 @@ int musb_mailbox(enum musb_vbus_id_status status)
+  	unsigned long	flags;
+  	int		status;
+  
++	pm_runtime_get_sync(dev);
+  	spin_lock_irqsave(&musb->lock, flags);
+  	if (sysfs_streq(buf, "host"))
+  		status = musb_platform_set_mode(musb, MUSB_HOST);
+@@ -1748,6 +1751,7 @@ int musb_mailbox(enum musb_vbus_id_status status)
+  	else
+  		status = -EINVAL;
+  	spin_unlock_irqrestore(&musb->lock, flags);
++	pm_runtime_put_sync(dev);
+  
+  	return (status == 0) ? n : status;
+  }
+@@ -1766,6 +1770,7 @@ int musb_mailbox(enum musb_vbus_id_status status)
+  		return -EINVAL;
+  	}
+  
++	pm_runtime_get_sync(dev);
+  	spin_lock_irqsave(&musb->lock, flags);
+  	/* force T(a_wait_bcon) to be zero/unlimited *OR* valid */
+  	musb->a_wait_bcon = val ? max_t(int, val, OTG_TIME_A_WAIT_BCON) : 0 ;
+@@ -1773,6 +1778,7 @@ int musb_mailbox(enum musb_vbus_id_status status)
+  		musb->is_active = 0;
+  	musb_platform_try_idle(musb, jiffies + msecs_to_jiffies(val));
+  	spin_unlock_irqrestore(&musb->lock, flags);
++	pm_runtime_put_sync(dev);
+  
+  	return n;
+  }
+-- 
+1.9.1
+
