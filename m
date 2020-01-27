@@ -2,151 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7095C14A774
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2020 16:46:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 781FB14A786
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2020 16:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729557AbgA0Pqw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 27 Jan 2020 10:46:52 -0500
-Received: from smtp1.de.adit-jv.com ([93.241.18.167]:37187 "EHLO
-        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729133AbgA0Pqw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jan 2020 10:46:52 -0500
-Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
-        by smtp1.de.adit-jv.com (Postfix) with ESMTP id A63533C00C5;
-        Mon, 27 Jan 2020 16:46:48 +0100 (CET)
-Received: from smtp1.de.adit-jv.com ([127.0.0.1])
-        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 1y22QhEBcS61; Mon, 27 Jan 2020 16:46:40 +0100 (CET)
-Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id 7DDE43C009E;
-        Mon, 27 Jan 2020 16:46:40 +0100 (CET)
-Received: from HI2EXCH01.adit-jv.com ([fe80::69bf:8148:2f13:f289]) by
- HI2EXCH01.adit-jv.com ([fe80::69bf:8148:2f13:f289%12]) with mapi id
- 14.03.0468.000; Mon, 27 Jan 2020 16:46:40 +0100
-From:   "Gajjar, Hardik (TCP GmbH; ADITG/ESM1)" <hgajjar@de.adit-jv.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "thinhn@synopsys.com" <thinhn@synopsys.com>,
-        "Kento.A.Kobayashi@sony.com" <Kento.A.Kobayashi@sony.com>,
-        "atmgnd@outlook.com" <atmgnd@outlook.com>,
-        "andrew_gabbasov@mentor.com" <andrew_gabbasov@mentor.com>,
-        "Rosca, Eugeniu (ADITG/ESM1)" <erosca@de.adit-jv.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH] USB: hub: Fix the broken detection of USB3 device in
- SMSC hub
-Thread-Topic: [PATCH] USB: hub: Fix the broken detection of USB3 device in
- SMSC hub
-Thread-Index: AQHV0sgC1cDUaLSO2EetRqRI6tgIr6f+pZiw
-Date:   Mon, 27 Jan 2020 15:46:39 +0000
-Message-ID: <566F12E844DDE64E9951EDD6C85D69282942AE@HI2EXCH01.adit-jv.com>
-References: <1579876573-13741-1-git-send-email-hgajjar@de.adit-jv.com>
- <Pine.LNX.4.44L0.2001241002090.1610-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.2001241002090.1610-100000@iolanthe.rowland.org>
-Accept-Language: de-DE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.72.92.125]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1729522AbgA0PvS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jan 2020 10:51:18 -0500
+Received: from mail-qk1-f174.google.com ([209.85.222.174]:45072 "EHLO
+        mail-qk1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729402AbgA0PvS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jan 2020 10:51:18 -0500
+Received: by mail-qk1-f174.google.com with SMTP id x1so10011891qkl.12
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jan 2020 07:51:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2bynkYO/VfrflNCUOpdCEBQtWE9uevrxves93+nkBNg=;
+        b=QKQOioEPrUVeKSj7Lk3b6riyhYFvcUoN9UrIRxyVKhPk6si/ExnvFLr7SfVnfG+0eT
+         kdPIDRiseXehUgtuwLNOJ6RdynHXa2HPOYPta2ivqOmnLIfiU7TcYg0x352BSMaCnQd5
+         jKFnCxrXe3lDYI5TNtiiVmDkqOP++3c0nHBwczGhJ/0ce6lTDNgy6wzwSklyT9f8iOMy
+         euLEQ8YyP4vtpI4Xi72cQ5ZJvIU6qvaE2ijgo68//OrnzIVFfxMw4VH14ZaeX1DgLY4J
+         Y7HQhL72QaEbY66iRVcma/UtbK3Kw6HxA8AiT2tXwRN/Qwu2wFE25usgOpDILFlrCnqW
+         OUaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2bynkYO/VfrflNCUOpdCEBQtWE9uevrxves93+nkBNg=;
+        b=tSmjk1uTJmp/CMyskNgm0yoKkmPhkv3lqTVrlufrn4EdoM0yNpefyReClRzY+LVuw4
+         SOmYUw1No2gEIjmapn6WVFA94ynMneXx2/KDtuYZHLL+UpeGOcU2Iqvd9ZehgMSyf+jN
+         lG7s8ziuXQYX5NhX4I6e8q3BNUAQhilXeETXMJr1MFcEpqvLiWMpf1RTvBEOmkZ2OYWd
+         ItaVCiFDGQHCUKAcoHE2Pib5V065zss6ymzEksvGv65Y24/KLNBlq/5SBe788h+nV4Tx
+         j3YwSQg9EGgtMXS/rp9SqLUYXkH8k0tqdryGCvsD19UzsdPo0vYXh399yfI3f4whNhLC
+         S9xA==
+X-Gm-Message-State: APjAAAUa2ZdQ2QqkU1cBV4esNDacQf/BjTSuszS265lubuU2thjKdl0d
+        cIjD5cXeApzUsOUON6HFCJ2qwbMqRrfW/GF+9aZwUQ==
+X-Google-Smtp-Source: APXvYqyW/Dv+r7IzLVHyn5vKXp9eLH03u8Oq1EucWp83Jstsj4ATT35HA7fr3z/q5ImHk9D4Fcu5s28HtcVbBYCRrgs=
+X-Received: by 2002:ae9:e50c:: with SMTP id w12mr15641083qkf.407.1580140276809;
+ Mon, 27 Jan 2020 07:51:16 -0800 (PST)
 MIME-Version: 1.0
+References: <0000000000004dbaf2059c193a36@google.com> <20200126024957.11392-1-hdanton@sina.com>
+ <20200127092850.GX1847@kadam> <CACT4Y+ag59G4p=DO3Dg7jnFt3wQb=dtjzBujADtGHKn-97O8_g@mail.gmail.com>
+ <20200127151135.GM1870@kadam>
+In-Reply-To: <20200127151135.GM1870@kadam>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 27 Jan 2020 16:51:05 +0100
+Message-ID: <CACT4Y+Ya-GEPAezCceKadsXGD0WdAHMeNH=hkkGaM50nP7S6ww@mail.gmail.com>
+Subject: Re: KASAN: use-after-free Read in hiddev_disconnect
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     syzkaller <syzkaller@googlegroups.com>,
+        Hillf Danton <hdanton@sina.com>,
+        syzbot <syzbot+106b378813251e52fc5e@syzkaller.appspotmail.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
+On Mon, Jan 27, 2020 at 4:12 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> One possible option would be to list the similar bugs at the start of
+> the bug report.
+>
+> See also:
+>
+>         KASAN: use-after-free Write in hiddev_disconnect
+>         https://syzkaller.appspot.com/bug?extid=784ccb935f9900cc7c9e
+>
+> Then we could just copy and paste to the "#syz dup:" command.  The
+> bitmap_port_list() stuff was reported something like 15 times so it was
+> really complicated to track.  Hopefully if it were easier to mark things
+> as duplicate that would help.
+>
+> regards,
+> dan carpenter
 
-Thank you so much for the speedy reply.  I have used the usb_autopm_get_interface() and it is working like a charm.
-
-Best regards
-Hardik Gajjar
-
-Advanced Driver Information Technology GmbH
-Engineering Software Multimedia 1 (ADITG/ESM1)
-Robert-Bosch-Str. 200
-31139 Hildesheim
-Germany
-
-Tel. +49 5121 49 6977
-Fax +49 5121 49 6999
-hgajjar@de.adit-jv.com
-www.adit-jv.com
-
-ADIT is a joint venture company of Robert Bosch GmbH/Robert Bosch Car Multimedia GmbH and DENSO Corporation
-Sitz: Hildesheim, Registergericht: Amtsgericht Hildesheim HRB 3438
-Geschaeftsfuehrung: Wilhelm Grabow, Ken Yaguchi
-
-Data protection information: We use your contact information and e-mail communication to process your inquiry and for internal and possibly tax documentation purposes. Your information will only be passed on to third parties if this is necessary to carry out your request or if we are legally obliged to do so.
-
-
------Original Message-----
-From: Alan Stern <stern@rowland.harvard.edu> 
-Sent: Freitag, 24. Januar 2020 16:08
-To: Gajjar, Hardik (TCP GmbH; ADITG/ESM1) <hgajjar@de.adit-jv.com>
-Cc: gregkh@linuxfoundation.org; thinhn@synopsys.com; Kento.A.Kobayashi@sony.com; atmgnd@outlook.com; andrew_gabbasov@mentor.com; Rosca, Eugeniu (ADITG/ESM1) <erosca@de.adit-jv.com>; linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] USB: hub: Fix the broken detection of USB3 device in SMSC hub
-
-On Fri, 24 Jan 2020, Hardik Gajjar wrote:
-
-> This patch disables the auto-suspend feature for SMSC USB hub.
-> Renesas-RCAR3-H3-KF board was not able to detect the USB3.0 devices.
-> The XHCI driver was going to sleep and not wake up again on connection 
-> of the USB3.0 device. According to Renesas, This is because of some 
-> hardware issue.
-> 
-> Renesas-RCAR3-H3-KF has USB5534B 4-port SuperSpeed/Hi-Speed, 
-> low-power, configurable hub controller.
-> 
-> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
-> ---
->  drivers/usb/core/hub.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c index 
-> 939dd73a..ffc7abf 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -36,7 +36,9 @@
->  #include "otg_whitelist.h"
->  
->  #define USB_VENDOR_GENESYS_LOGIC		0x05e3
-> +#define USB_VENDOR_SMSC    			0x0424
->  #define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	0x01
-> +#define HUB_QUIRK_DISABLE_AUTOSUSPEND		0x02
->  
->  #define USB_VENDOR_UNWIRED			0x2996
->  #define USB_VENDOR_DELPHI			0x2C48
-> @@ -1822,6 +1824,9 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
->  	if (id->driver_info & HUB_QUIRK_NO_LOGICAL_DISCONNECT)
->  		hub->quirk_no_logical_disconnect = 1;
->  
-> +	if (id->driver_info & HUB_QUIRK_DISABLE_AUTOSUSPEND)
-> +		pm_runtime_set_autosuspend_delay(&hdev->dev, -1);
-
-This is not a good way to prevent autosuspend, because the user can override it.  If you really want to prevent the hub from autosuspending, you should call usb_autoresume_device() or usb_autopm_get_interface().  Either way, it is then necessary to issue a corresponding call to usb_autosuspend_device() or
-usb_autopm_put_interface_no_suspend() later on.
-
-Alan Stern
-
-> +
->  	if (hub_configure(hub, &desc->endpoint[0].desc) >= 0)
->  		return 0;
->  
-> @@ -5313,6 +5318,10 @@ static void hub_event(struct work_struct *work)  
-> }
->  
->  static const struct usb_device_id hub_id_table[] = {
-> +    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR | USB_DEVICE_ID_MATCH_INT_CLASS,
-> +      .idVendor = USB_VENDOR_SMSC,
-> +      .bInterfaceClass = USB_CLASS_HUB,
-> +      .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
->      { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
->  			| USB_DEVICE_ID_MATCH_INT_CLASS,
->        .idVendor = USB_VENDOR_GENESYS_LOGIC,
-> 
-
+Interesting. This should be doable. I've filed
+https://github.com/google/syzkaller/issues/1575 to keep track of this.
+If it detects potential dups, then it could auto-dup as well, but it's
+not completely trivial (some things are mentioned on the issue).
+But note it won't help if the bug happens in different functions (e.g.
+I think lots of bitmap_port_list were actually in different
+functions). And this is also common for racy bugs -- a racy free
+catches use in another thread at different locations.
