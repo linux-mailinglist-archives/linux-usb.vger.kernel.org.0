@@ -2,84 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A1C14A0C6
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2020 10:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 816A414A3D4
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2020 13:28:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729508AbgA0J3n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jan 2020 04:29:43 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:34940 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727872AbgA0J3n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jan 2020 04:29:43 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00R9DDEP054968;
-        Mon, 27 Jan 2020 09:29:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2019-08-05;
- bh=dqtak0Ip1v1fu40eyS07aEJt+TSWkVxnjJJIK8PU5JU=;
- b=FehyzrEO2zhzN5U4IqRc/54MG6VUkpCZQxx5DJKM2lyXsufyEqZHzUOS7Q7JH7IcXeZp
- hP5NIOXHbi9UoNufThTJ5/vt3vRAd5OlBpFe3/86+dv0y4Y64hOCBZyGdPRfTRBfRuut
- Ds7nY0xZFvYbA13ZT5rBbuANyxTZFKyNhJIwLtw4Db+zYF0IvQTmyT09C27V/eOSG6Ke
- 3YjWgfxu4NRmImfF5D4UptRorAZO0dDaqOvqi9knfYpaZO5MfUDFCHb6cRKjm1r4Zgey
- uUeJ9PSAFRQTNHz972N8q2UNshZ8jzvdB9BzpPcleSuOuzaNrFINkaDWYzHNMJBPk2Jf 5Q== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 2xrdmq61kc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Jan 2020 09:29:06 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00R9Dev7147737;
-        Mon, 27 Jan 2020 09:29:05 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 2xry6rrt2a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Jan 2020 09:29:05 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 00R9T3fq014947;
-        Mon, 27 Jan 2020 09:29:03 GMT
-Received: from kadam (/129.205.23.165)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 27 Jan 2020 01:29:02 -0800
-Date:   Mon, 27 Jan 2020 12:28:50 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     syzbot <syzbot+106b378813251e52fc5e@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, benjamin.tissoires@redhat.com,
-        jikos@kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: KASAN: use-after-free Read in hiddev_disconnect
-Message-ID: <20200127092850.GX1847@kadam>
-References: <0000000000004dbaf2059c193a36@google.com>
- <20200126024957.11392-1-hdanton@sina.com>
+        id S1730593AbgA0M2K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jan 2020 07:28:10 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:32837 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729465AbgA0M2J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jan 2020 07:28:09 -0500
+Received: by mail-pg1-f193.google.com with SMTP id 6so5093650pgk.0
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jan 2020 04:28:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cyKi2C2E/DAzDkpv5Bc8WYZz4cP/WF80nTy9kORAPME=;
+        b=EV78N2yaNyur/ZLKrvmzkt7S1u7530+tYPA0SV6rAJ/bY8UyEqtU3oIx8TPXiWAh4+
+         v6FLzakE+serof6o+wNI48WjZPub3p1OyfcskqfxSfi3G86L/FXJrnkjp0pmyTumxm3A
+         YLmRWV6tnK5PKcjYpkj/nXnYwCZpi0w5f+VYcqIFeHdqAG9XjTQxF5l59hNuw1HtQrai
+         nk7h0JXSKpL0emDeQC95VYwa0kjVvUjv8sS6w+mzAL9aSyJhCGjqw3tCz8qJdumcLAEC
+         SKCeALbMGNadYxApuDHLkB1ax3fJKDjvlAojAsLRwVcOPOYZtWQ43NlXPNONAtI/6wSR
+         pmaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cyKi2C2E/DAzDkpv5Bc8WYZz4cP/WF80nTy9kORAPME=;
+        b=p7C9RkDwwCyNfus+ktHpAdwx1Hb0JfP2dgfg4jkTyBD+sjcHTj4uxbQtNqRwzmhE16
+         GIkULvW//O9POc58f73r++NsYsr74nGWU8jv/ygRz32LsI45eL063ENeUbOIEF8TRyJD
+         v5i1+8q6Jof1cY0B68WWQ8NR7r3ci3AKmpq8X0p3OLgxWd2Ol40SeB22cPeJIuZByRA0
+         B4FCnBSOPh/QprRrof6fqOgpKLSo/vqxxDhy1Zu7MUZHgmkpIBvUsva3iprjv0kJMma6
+         BUqd0mqCTpBdK9eP/sRyPn7hnt9EqrQ3AycM7d6rb4IB+KgNcmYWN6irJOFhwwyM6cDY
+         1nNA==
+X-Gm-Message-State: APjAAAW66lDjE3X3WKAWAbOUdXJ5qd8ZgWFXqcgCvhCkr11iHiljfzJ3
+        qmAYeFCx4i/9oTwx9D7TPbrPon646KiryuYF+VbC7Q==
+X-Google-Smtp-Source: APXvYqzkc5LvBv1czBSlpohSy32KHfPPbYvVuxg1l19yqW3ryxB3bm5KIKRPhPdwTOrRZKiUXYCREAAmPkPBw8w+WcI=
+X-Received: by 2002:a63:d906:: with SMTP id r6mr19362630pgg.440.1580128088829;
+ Mon, 27 Jan 2020 04:28:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200126024957.11392-1-hdanton@sina.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9512 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=309
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001270081
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9512 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=2 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=388 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001270081
+References: <cover.1579007786.git.andreyknvl@google.com> <461a787e63a9a01d83edc563575b8585bc138e8d.1579007786.git.andreyknvl@google.com>
+ <CAAeHK+wGijhTaCdoD+xcUY=PRWLUOv5uwg7OjD=uMrU8nqqrdw@mail.gmail.com> <20200122145012.GB59473@kroah.com>
+In-Reply-To: <20200122145012.GB59473@kroah.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Mon, 27 Jan 2020 13:27:57 +0100
+Message-ID: <CAAeHK+xJ_Xhy96vVXQLk2G_DqVtjh+3ivNM=yFVXFPBjZ6P3iA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/1] usb: gadget: add raw-gadget interface
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I already fixed this bug in an earlier thread.
+On Wed, Jan 22, 2020 at 3:50 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Jan 22, 2020 at 03:37:46PM +0100, Andrey Konovalov wrote:
+> > On Tue, Jan 14, 2020 at 2:24 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+> > >
+> > > USB Raw Gadget is a kernel module that provides a userspace interface for
+> > > the USB Gadget subsystem. Essentially it allows to emulate USB devices
+> > > from userspace. Enabled with CONFIG_USB_RAW_GADGET. Raw Gadget is
+> > > currently a strictly debugging feature and shouldn't be used in
+> > > production.
+> > >
+> > > Raw Gadget is similar to GadgetFS, but provides a more low-level and
+> > > direct access to the USB Gadget layer for the userspace. The key
+> > > differences are:
+> > >
+> > > 1. Every USB request is passed to the userspace to get a response, while
+> > >    GadgetFS responds to some USB requests internally based on the provided
+> > >    descriptors. However note, that the UDC driver might respond to some
+> > >    requests on its own and never forward them to the Gadget layer.
+> > >
+> > > 2. GadgetFS performs some sanity checks on the provided USB descriptors,
+> > >    while Raw Gadget allows you to provide arbitrary data as responses to
+> > >    USB requests.
+> > >
+> > > 3. Raw Gadget provides a way to select a UDC device/driver to bind to,
+> > >    while GadgetFS currently binds to the first available UDC.
+> > >
+> > > 4. Raw Gadget uses predictable endpoint names (handles) across different
+> > >    UDCs (as long as UDCs have enough endpoints of each required transfer
+> > >    type).
+> > >
+> > > 5. Raw Gadget has ioctl-based interface instead of a filesystem-based one.
+> > >
+> > > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> > > ---
+> > >
+> > > Greg, I've assumed your LGTM meant that I can add a Reviewed-by from you.
+> > >
+> > > Felipe, looking forward to your review, thanks!
+> >
+> > Hi Greg and Felipe,
+> >
+> > I was wondering if it's feasible to get this reviewed and merged
+> > during the upcoming merge window? This patch is the only piece missing
+> > to enable USB fuzzing for Android common kernels on syzbot.
+>
+> No objection from me, if Felipe acks it I can take it...
 
-Syzbot always reports a use after free as two separate bugs, a read
-after free and a write after free.  It's too much hassle to mark all
-the duplicates.
+Hi Felipe,
 
-regards,
-dan carpenter
+Any idea if you'll be able to look at this?
 
-
+Thanks!
