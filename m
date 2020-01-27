@@ -2,78 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB30814A3D9
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2020 13:29:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B6314A592
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2020 14:59:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730617AbgA0M3H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jan 2020 07:29:07 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:40803 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730206AbgA0M3H (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jan 2020 07:29:07 -0500
-Received: by mail-pj1-f65.google.com with SMTP id 12so1650758pjb.5
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jan 2020 04:29:07 -0800 (PST)
+        id S1728057AbgA0N7C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jan 2020 08:59:02 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:34251 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726303AbgA0N7C (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jan 2020 08:59:02 -0500
+Received: by mail-pg1-f196.google.com with SMTP id r11so5209499pgf.1;
+        Mon, 27 Jan 2020 05:59:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h1R6WgPaLfjprnwT2K/UdFzkWhfqg+Wgh1Aa2jhCg0M=;
-        b=kyngqvLLf3+MJMnVXsCplq5vDbb0JfZH1dTrEG0ryUa7zh+3I64JbYu9R3L1CxVb/a
-         Xo6urOcr8ADLoISKgDXoGJSd/zkVFTiRv174duzJgZPi8UOfUvkGdgcHMT08TCrGH3AA
-         Hr0pSULJWzoHk0pkXOUQiq7JrmKOGqqsQTxMU37WobJ9OPtBtemdL585dgUDsC7GBMdR
-         iKHXbSk+Qdks7U32g84daLQ5o2ekHG4kOPnoUeWM3kTy6S8SUxJhMtQDpx1AKg2IeDHP
-         o248tw9F0wR/82oFB1vZqwc6+srMdD/0TxOOVQlgJtC3CvYA32rel3tI/xG4O8LUvUJY
-         FvPw==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SHolRPg0m8smXLQiIHsWoHZ6uEiJ6L4xqwMHqTUOZII=;
+        b=CMClr8xR/vzMlFHSniodUnq6hdXQ5SJE3d0Ue+KnUKivbaZc5HsyCTI0b8378iD04/
+         /YUTxGrzskbemiYG+C1fFUdmP8IwlIWd7cDus87oqgqCl8lSIWVgffIe7+xkB2tuTVpj
+         ZYgj/qfvpkopSGAOEDTTVl6WbwCYR0fHapSgUewkutkjQabAFh4Pe2tNiOVvl3+t3q6t
+         Ar50RTjQyvawr3UXX0rcd5PV6loT2VEcAvaJhAwokfzFoCc6RaVYwtq1ru1wfFEK5rmn
+         dB390ZUtqQXJG77ZvEGp+lj3lkAgAIhRHVFcHpB47rNHHkrh+aSu4pVjXruQDu5AOhsM
+         cJLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h1R6WgPaLfjprnwT2K/UdFzkWhfqg+Wgh1Aa2jhCg0M=;
-        b=if4uBuyWL9oxoAuiKufPvrOkgp7XAzlqRp47uBvN76II3AWml/zEZdJyG2/ZX8ETXv
-         bq8qMLXC4RlC4LTxml0nBKWZJZreSIzL7FMM1vB4ZaPdotHa61pzNunf/aItDWGfxXBY
-         VGFK7WQrffxR8B9vseVn8zJ4gM+BQvyDlB/83HArrlyTNffHA7u7+alcUwB5f9dl3Edg
-         wwHFMBd+9tPezCh8Vps0pc56cOxkS4ArWyrAqZk37CHz2hyxBZYW4WiE0BO/N2WFRkuG
-         DIRoj1TosN/Q0NaH/Jc/JM7wZHZd3HSLRZw8mxqEOJYhFa8wnDtmWN/9ahLG8TqW4b7R
-         dxWA==
-X-Gm-Message-State: APjAAAXagMcMERebFE8l9BHL2IlLtkulnjzXP8it4USnM5XfO+7BZuAJ
-        t2wuzIVNNa1UE2Owx6ASnMw9E6UyNLRQlt0Qd1vtqg==
-X-Google-Smtp-Source: APXvYqwbkq6UEFBP55j3Hu+JAlu5Cyx+6MQ4jxtADqpUnjtOkwWS78sgZ2BBaiYS2fpkGLv6HL6e7mZyBq8tqwh4L+8=
-X-Received: by 2002:a17:902:704b:: with SMTP id h11mr18100629plt.147.1580128146719;
- Mon, 27 Jan 2020 04:29:06 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SHolRPg0m8smXLQiIHsWoHZ6uEiJ6L4xqwMHqTUOZII=;
+        b=mz1n6YT4/aZl53UKcZ0FDuMWgnrhxiEyZ9+y7cIvHfLI+h33XMlT+FhUMFjW22iiyy
+         40yIz2AkpteohEnUCI9m6jfC0fAWg2OJJx+EwscNeOSpPV+FbLr+i3jTfYquwH6UGz5S
+         5bU9+5oF6pwOdBgF3+ThtrmuZ+VcnMrLEL/dgt1a1av4eooC33E5NBmF6qv26ahRGnnW
+         4ZlySSphP+5y1M7nNUsVqGQMbbfAj/1mZZmukIqWnSVFiY363htuY7q+33GDx53dFrXI
+         Ja6n6tBzZuVvwi0FHscTBv3+OIiAkbzkwfGLQQ1UXuYtMpQNot0ihG56/IFGW+DLh+ux
+         V8gw==
+X-Gm-Message-State: APjAAAX9kBE8rtQold+niCujhoxDMcJf5+YgHFJcbvhztA0JD4QzV2h+
+        9M5rL/MGtQpI0FTUz9KlMmY=
+X-Google-Smtp-Source: APXvYqyLLUIJ53lGLIXCrkyyudP6ClzJQ22YcI076etIWIaq1vR0oag7wSYwsNZihwn75Mvl1ZKm8w==
+X-Received: by 2002:a63:2d44:: with SMTP id t65mr20803705pgt.112.1580133541647;
+        Mon, 27 Jan 2020 05:59:01 -0800 (PST)
+Received: from localhost ([216.24.177.237])
+        by smtp.gmail.com with ESMTPSA id b24sm15872895pfo.55.2020.01.27.05.58.58
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 27 Jan 2020 05:59:01 -0800 (PST)
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     gregkh@linuxfoundation.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com
+Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dejin Zheng <zhengdejin5@gmail.com>
+Subject: [PATCH] usb: phy: tegra: make the code simple by devm_platform_ioremap_resource()
+Date:   Mon, 27 Jan 2020 21:58:41 +0800
+Message-Id: <20200127135841.17935-1-zhengdejin5@gmail.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-References: <0000000000004dbaf2059c193a36@google.com> <20200126024957.11392-1-hdanton@sina.com>
- <20200127092850.GX1847@kadam>
-In-Reply-To: <20200127092850.GX1847@kadam>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 27 Jan 2020 13:28:55 +0100
-Message-ID: <CAAeHK+wddN62F0JAVfma8aUHy4FtkfSViSQuXB1ESNjQXLSD0Q@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in hiddev_disconnect
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Hillf Danton <hdanton@sina.com>,
-        syzbot <syzbot+106b378813251e52fc5e@syzkaller.appspotmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 27, 2020 at 10:29 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> I already fixed this bug in an earlier thread.
->
-> Syzbot always reports a use after free as two separate bugs, a read
-> after free and a write after free.  It's too much hassle to mark all
-> the duplicates.
->
-> regards,
-> dan carpenter
->
->
+make the code simple by use devm_platform_ioremap_resource() function
+to replace platform_get_resource() and devm_ioremap().
 
-#syz dup: KASAN: use-after-free Write in hiddev_disconnect
+Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+---
+ drivers/usb/phy/phy-tegra-usb.c | 20 ++------------------
+ 1 file changed, 2 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
+index ea7ef1dc0b42..8220bb4ce1ed 100644
+--- a/drivers/usb/phy/phy-tegra-usb.c
++++ b/drivers/usb/phy/phy-tegra-usb.c
+@@ -944,20 +944,12 @@ static int read_utmi_param(struct platform_device *pdev, const char *param,
+ static int utmi_phy_probe(struct tegra_usb_phy *tegra_phy,
+ 			  struct platform_device *pdev)
+ {
+-	struct resource *res;
+ 	int err;
+ 	struct tegra_utmip_config *config;
+ 
+ 	tegra_phy->is_ulpi_phy = false;
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+-	if (!res) {
+-		dev_err(&pdev->dev, "Failed to get UTMI pad regs\n");
+-		return  -ENXIO;
+-	}
+-
+-	tegra_phy->pad_regs = devm_ioremap(&pdev->dev, res->start,
+-		resource_size(res));
++	tegra_phy->pad_regs = devm_platform_ioremap_resource(pdev, 1);
+ 	if (!tegra_phy->pad_regs) {
+ 		dev_err(&pdev->dev, "Failed to remap UTMI pad regs\n");
+ 		return -ENOMEM;
+@@ -1054,7 +1046,6 @@ MODULE_DEVICE_TABLE(of, tegra_usb_phy_id_table);
+ static int tegra_usb_phy_probe(struct platform_device *pdev)
+ {
+ 	const struct of_device_id *match;
+-	struct resource *res;
+ 	struct tegra_usb_phy *tegra_phy = NULL;
+ 	struct device_node *np = pdev->dev.of_node;
+ 	enum usb_phy_interface phy_type;
+@@ -1071,14 +1062,7 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
+ 	}
+ 	tegra_phy->soc_config = match->data;
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!res) {
+-		dev_err(&pdev->dev, "Failed to get I/O memory\n");
+-		return  -ENXIO;
+-	}
+-
+-	tegra_phy->regs = devm_ioremap(&pdev->dev, res->start,
+-		resource_size(res));
++	tegra_phy->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (!tegra_phy->regs) {
+ 		dev_err(&pdev->dev, "Failed to remap I/O memory\n");
+ 		return -ENOMEM;
+-- 
+2.25.0
+
