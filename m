@@ -2,93 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 781FB14A786
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2020 16:51:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4F714A887
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2020 18:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729522AbgA0PvS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jan 2020 10:51:18 -0500
-Received: from mail-qk1-f174.google.com ([209.85.222.174]:45072 "EHLO
-        mail-qk1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729402AbgA0PvS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jan 2020 10:51:18 -0500
-Received: by mail-qk1-f174.google.com with SMTP id x1so10011891qkl.12
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jan 2020 07:51:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2bynkYO/VfrflNCUOpdCEBQtWE9uevrxves93+nkBNg=;
-        b=QKQOioEPrUVeKSj7Lk3b6riyhYFvcUoN9UrIRxyVKhPk6si/ExnvFLr7SfVnfG+0eT
-         kdPIDRiseXehUgtuwLNOJ6RdynHXa2HPOYPta2ivqOmnLIfiU7TcYg0x352BSMaCnQd5
-         jKFnCxrXe3lDYI5TNtiiVmDkqOP++3c0nHBwczGhJ/0ce6lTDNgy6wzwSklyT9f8iOMy
-         euLEQ8YyP4vtpI4Xi72cQ5ZJvIU6qvaE2ijgo68//OrnzIVFfxMw4VH14ZaeX1DgLY4J
-         Y7HQhL72QaEbY66iRVcma/UtbK3Kw6HxA8AiT2tXwRN/Qwu2wFE25usgOpDILFlrCnqW
-         OUaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2bynkYO/VfrflNCUOpdCEBQtWE9uevrxves93+nkBNg=;
-        b=tSmjk1uTJmp/CMyskNgm0yoKkmPhkv3lqTVrlufrn4EdoM0yNpefyReClRzY+LVuw4
-         SOmYUw1No2gEIjmapn6WVFA94ynMneXx2/KDtuYZHLL+UpeGOcU2Iqvd9ZehgMSyf+jN
-         lG7s8ziuXQYX5NhX4I6e8q3BNUAQhilXeETXMJr1MFcEpqvLiWMpf1RTvBEOmkZ2OYWd
-         ItaVCiFDGQHCUKAcoHE2Pib5V065zss6ymzEksvGv65Y24/KLNBlq/5SBe788h+nV4Tx
-         j3YwSQg9EGgtMXS/rp9SqLUYXkH8k0tqdryGCvsD19UzsdPo0vYXh399yfI3f4whNhLC
-         S9xA==
-X-Gm-Message-State: APjAAAUa2ZdQ2QqkU1cBV4esNDacQf/BjTSuszS265lubuU2thjKdl0d
-        cIjD5cXeApzUsOUON6HFCJ2qwbMqRrfW/GF+9aZwUQ==
-X-Google-Smtp-Source: APXvYqyW/Dv+r7IzLVHyn5vKXp9eLH03u8Oq1EucWp83Jstsj4ATT35HA7fr3z/q5ImHk9D4Fcu5s28HtcVbBYCRrgs=
-X-Received: by 2002:ae9:e50c:: with SMTP id w12mr15641083qkf.407.1580140276809;
- Mon, 27 Jan 2020 07:51:16 -0800 (PST)
+        id S1725985AbgA0RDh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 27 Jan 2020 12:03:37 -0500
+Received: from unicorn.mansr.com ([81.2.72.234]:34980 "EHLO unicorn.mansr.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725845AbgA0RDf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 Jan 2020 12:03:35 -0500
+X-Greylist: delayed 437 seconds by postgrey-1.27 at vger.kernel.org; Mon, 27 Jan 2020 12:03:34 EST
+Received: by unicorn.mansr.com (Postfix, from userid 51770)
+        id EB3581B0D9; Mon, 27 Jan 2020 16:56:15 +0000 (GMT)
+From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND][PATCH 1/2] dt-bindings: usb: add non-removable-ports hub property
+References: <20200124152504.23411-1-mans@mansr.com>
+        <20200127153506.GA4589@bogus>
+Date:   Mon, 27 Jan 2020 16:56:15 +0000
+In-Reply-To: <20200127153506.GA4589@bogus> (Rob Herring's message of "Mon, 27
+        Jan 2020 09:35:06 -0600")
+Message-ID: <yw1xy2tsvnww.fsf@mansr.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.3 (gnu/linux)
 MIME-Version: 1.0
-References: <0000000000004dbaf2059c193a36@google.com> <20200126024957.11392-1-hdanton@sina.com>
- <20200127092850.GX1847@kadam> <CACT4Y+ag59G4p=DO3Dg7jnFt3wQb=dtjzBujADtGHKn-97O8_g@mail.gmail.com>
- <20200127151135.GM1870@kadam>
-In-Reply-To: <20200127151135.GM1870@kadam>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 27 Jan 2020 16:51:05 +0100
-Message-ID: <CACT4Y+Ya-GEPAezCceKadsXGD0WdAHMeNH=hkkGaM50nP7S6ww@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in hiddev_disconnect
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     syzkaller <syzkaller@googlegroups.com>,
-        Hillf Danton <hdanton@sina.com>,
-        syzbot <syzbot+106b378813251e52fc5e@syzkaller.appspotmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 27, 2020 at 4:12 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> One possible option would be to list the similar bugs at the start of
-> the bug report.
->
-> See also:
->
->         KASAN: use-after-free Write in hiddev_disconnect
->         https://syzkaller.appspot.com/bug?extid=784ccb935f9900cc7c9e
->
-> Then we could just copy and paste to the "#syz dup:" command.  The
-> bitmap_port_list() stuff was reported something like 15 times so it was
-> really complicated to track.  Hopefully if it were easier to mark things
-> as duplicate that would help.
->
-> regards,
-> dan carpenter
+Rob Herring <robh@kernel.org> writes:
 
-Interesting. This should be doable. I've filed
-https://github.com/google/syzkaller/issues/1575 to keep track of this.
-If it detects potential dups, then it could auto-dup as well, but it's
-not completely trivial (some things are mentioned on the issue).
-But note it won't help if the bug happens in different functions (e.g.
-I think lots of bitmap_port_list were actually in different
-functions). And this is also common for racy bugs -- a racy free
-catches use in another thread at different locations.
+> On Fri, Jan 24, 2020 at 03:25:03PM +0000, Mans Rullgard wrote:
+>> Add a non-removable-ports property that lists the hardwired downstream
+>> ports of a hub.  Although hubs can provide this information, they are
+>> not always configured correctly.  An alternate means of indicating this
+>> for built-in USB devices is thus useful.
+>> 
+>> Signed-off-by: Mans Rullgard <mans@mansr.com>
+>
+> I reviewed this already, but since you didn't add my reviewed-by, I'm 
+> looking at it again and having 2nd thoughts.
+>
+>> ---
+>>  Documentation/devicetree/bindings/usb/usb-device.txt | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>> 
+>> diff --git a/Documentation/devicetree/bindings/usb/usb-device.txt b/Documentation/devicetree/bindings/usb/usb-device.txt
+>> index 036be172b1ae..92d863cc96b6 100644
+>> --- a/Documentation/devicetree/bindings/usb/usb-device.txt
+>> +++ b/Documentation/devicetree/bindings/usb/usb-device.txt
+>> @@ -66,6 +66,10 @@ Required properties for host-controller nodes with device nodes:
+>>  - #size-cells: shall be 0
+>>  
+>>  
+>> +Optional properties for hub and host-controller nodes:
+>> +- non-removable-ports: list of hardwired downstream ports
+>
+> If you have a hardwired device and need to know that, doesn't that imply 
+> there's some other stuff you need to describe beyond what a standard USB 
+> device has. Such as a power supply that's not Vbus from the hub.
+
+I suppose there could be, but there isn't in my actual situation.
+
+> At a minimum, I think this should be a per port property.
+
+That's what I suggested first.  Greg told me to do it like this instead.
+
+> Though really, I think this should just be implied by describing the
+> device in DT. I'm not sure if there's a case for hotpluggable devices
+> described in DT.  Maybe with overlays.
+
+That's also an option.  Greg, what do you think?
+
+-- 
+Måns Rullgård
