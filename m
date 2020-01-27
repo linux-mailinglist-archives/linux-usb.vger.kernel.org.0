@@ -2,122 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B6314A592
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2020 14:59:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B888D14A611
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2020 15:29:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728057AbgA0N7C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jan 2020 08:59:02 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:34251 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726303AbgA0N7C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jan 2020 08:59:02 -0500
-Received: by mail-pg1-f196.google.com with SMTP id r11so5209499pgf.1;
-        Mon, 27 Jan 2020 05:59:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SHolRPg0m8smXLQiIHsWoHZ6uEiJ6L4xqwMHqTUOZII=;
-        b=CMClr8xR/vzMlFHSniodUnq6hdXQ5SJE3d0Ue+KnUKivbaZc5HsyCTI0b8378iD04/
-         /YUTxGrzskbemiYG+C1fFUdmP8IwlIWd7cDus87oqgqCl8lSIWVgffIe7+xkB2tuTVpj
-         ZYgj/qfvpkopSGAOEDTTVl6WbwCYR0fHapSgUewkutkjQabAFh4Pe2tNiOVvl3+t3q6t
-         Ar50RTjQyvawr3UXX0rcd5PV6loT2VEcAvaJhAwokfzFoCc6RaVYwtq1ru1wfFEK5rmn
-         dB390ZUtqQXJG77ZvEGp+lj3lkAgAIhRHVFcHpB47rNHHkrh+aSu4pVjXruQDu5AOhsM
-         cJLg==
+        id S1728866AbgA0O3o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jan 2020 09:29:44 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:45190 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725828AbgA0O3n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jan 2020 09:29:43 -0500
+Received: by mail-oi1-f195.google.com with SMTP id l7so6769577oil.12;
+        Mon, 27 Jan 2020 06:29:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SHolRPg0m8smXLQiIHsWoHZ6uEiJ6L4xqwMHqTUOZII=;
-        b=mz1n6YT4/aZl53UKcZ0FDuMWgnrhxiEyZ9+y7cIvHfLI+h33XMlT+FhUMFjW22iiyy
-         40yIz2AkpteohEnUCI9m6jfC0fAWg2OJJx+EwscNeOSpPV+FbLr+i3jTfYquwH6UGz5S
-         5bU9+5oF6pwOdBgF3+ThtrmuZ+VcnMrLEL/dgt1a1av4eooC33E5NBmF6qv26ahRGnnW
-         4ZlySSphP+5y1M7nNUsVqGQMbbfAj/1mZZmukIqWnSVFiY363htuY7q+33GDx53dFrXI
-         Ja6n6tBzZuVvwi0FHscTBv3+OIiAkbzkwfGLQQ1UXuYtMpQNot0ihG56/IFGW+DLh+ux
-         V8gw==
-X-Gm-Message-State: APjAAAX9kBE8rtQold+niCujhoxDMcJf5+YgHFJcbvhztA0JD4QzV2h+
-        9M5rL/MGtQpI0FTUz9KlMmY=
-X-Google-Smtp-Source: APXvYqyLLUIJ53lGLIXCrkyyudP6ClzJQ22YcI076etIWIaq1vR0oag7wSYwsNZihwn75Mvl1ZKm8w==
-X-Received: by 2002:a63:2d44:: with SMTP id t65mr20803705pgt.112.1580133541647;
-        Mon, 27 Jan 2020 05:59:01 -0800 (PST)
-Received: from localhost ([216.24.177.237])
-        by smtp.gmail.com with ESMTPSA id b24sm15872895pfo.55.2020.01.27.05.58.58
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 27 Jan 2020 05:59:01 -0800 (PST)
-From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     gregkh@linuxfoundation.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com
-Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Dejin Zheng <zhengdejin5@gmail.com>
-Subject: [PATCH] usb: phy: tegra: make the code simple by devm_platform_ioremap_resource()
-Date:   Mon, 27 Jan 2020 21:58:41 +0800
-Message-Id: <20200127135841.17935-1-zhengdejin5@gmail.com>
-X-Mailer: git-send-email 2.25.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4bDe7p5lO4KINhYrTu+OYHhd26DPw/LYZ6CdLSLXKHM=;
+        b=Lm/ZfUr7efO/+U3kex224yJyA0c/+PUOtsoxZ4IoqU4KbnyXWjPfjdQJ9vl7mOae8X
+         9EpTApmxI/Tg9lsiiDB9kDTlRyb8TQUP8/7B6ZUQrdDQVaLaFk3lAL5rJwm9fBRIrfjd
+         wykKf9u3KemR4g8KmNvSnwy/dRRb/8UgJVoKg8bNHdccVfJHXTt6GH3Do0rmHk3Ovczv
+         9z8SDfaFmH1j1YJf9+UYvvgBjOgm9vyFUsosx5LJc5nbhfKmYFGGb1+kGwJYhRNjirLR
+         nBFxbEk2aAQWghQaTTJZjAOoCg4ljj0w9dMpbeRh3H9D9LqJ0eJa9XLI38QGQQKt8UNJ
+         stng==
+X-Gm-Message-State: APjAAAWd5jtl8dGFNfpu3bS3BmXrpYWstOOEIfdkAREwAKVk+UrGd5pf
+        HyRW1zPXZy8p1Ijx2xrf1Q==
+X-Google-Smtp-Source: APXvYqyzZSLvp1ganhAJqIPTmgAZZt+s9TrSOix9chh8UUg49shFxxAcDVWGzOHjVBgKh0nBQrQ3gQ==
+X-Received: by 2002:a54:4f04:: with SMTP id e4mr7262766oiy.111.1580135382917;
+        Mon, 27 Jan 2020 06:29:42 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id a5sm369420otl.45.2020.01.27.06.29.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jan 2020 06:29:42 -0800 (PST)
+Received: (nullmailer pid 4191 invoked by uid 1000);
+        Mon, 27 Jan 2020 14:29:41 -0000
+Date:   Mon, 27 Jan 2020 08:29:41 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Amelie Delaunay <amelie.delaunay@st.com>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: usb: dwc2: add support for STM32MP15
+ SoCs USB OTG HS and FS
+Message-ID: <20200127142941.GA3436@bogus>
+References: <20200124084131.23749-1-amelie.delaunay@st.com>
+ <20200124084131.23749-2-amelie.delaunay@st.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200124084131.23749-2-amelie.delaunay@st.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-make the code simple by use devm_platform_ioremap_resource() function
-to replace platform_get_resource() and devm_ioremap().
+On Fri, Jan 24, 2020 at 09:41:30AM +0100, Amelie Delaunay wrote:
+> Add the specific compatible string for the DWC2 IP found in the STM32MP15
+> SoCs.
+> STM32MP15 SoCs uses sensing comparators to detect Vbus valid levels and
+> ID pin state. usb33d-supply described the regulator supplying Vbus and ID
+> sensing comparators.
+> 
+> Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
+> ---
+>  Documentation/devicetree/bindings/usb/dwc2.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
----
- drivers/usb/phy/phy-tegra-usb.c | 20 ++------------------
- 1 file changed, 2 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
-index ea7ef1dc0b42..8220bb4ce1ed 100644
---- a/drivers/usb/phy/phy-tegra-usb.c
-+++ b/drivers/usb/phy/phy-tegra-usb.c
-@@ -944,20 +944,12 @@ static int read_utmi_param(struct platform_device *pdev, const char *param,
- static int utmi_phy_probe(struct tegra_usb_phy *tegra_phy,
- 			  struct platform_device *pdev)
- {
--	struct resource *res;
- 	int err;
- 	struct tegra_utmip_config *config;
- 
- 	tegra_phy->is_ulpi_phy = false;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
--	if (!res) {
--		dev_err(&pdev->dev, "Failed to get UTMI pad regs\n");
--		return  -ENXIO;
--	}
--
--	tegra_phy->pad_regs = devm_ioremap(&pdev->dev, res->start,
--		resource_size(res));
-+	tegra_phy->pad_regs = devm_platform_ioremap_resource(pdev, 1);
- 	if (!tegra_phy->pad_regs) {
- 		dev_err(&pdev->dev, "Failed to remap UTMI pad regs\n");
- 		return -ENOMEM;
-@@ -1054,7 +1046,6 @@ MODULE_DEVICE_TABLE(of, tegra_usb_phy_id_table);
- static int tegra_usb_phy_probe(struct platform_device *pdev)
- {
- 	const struct of_device_id *match;
--	struct resource *res;
- 	struct tegra_usb_phy *tegra_phy = NULL;
- 	struct device_node *np = pdev->dev.of_node;
- 	enum usb_phy_interface phy_type;
-@@ -1071,14 +1062,7 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
- 	}
- 	tegra_phy->soc_config = match->data;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res) {
--		dev_err(&pdev->dev, "Failed to get I/O memory\n");
--		return  -ENXIO;
--	}
--
--	tegra_phy->regs = devm_ioremap(&pdev->dev, res->start,
--		resource_size(res));
-+	tegra_phy->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (!tegra_phy->regs) {
- 		dev_err(&pdev->dev, "Failed to remap I/O memory\n");
- 		return -ENOMEM;
--- 
-2.25.0
-
+Reviewed-by: Rob Herring <robh@kernel.org>
