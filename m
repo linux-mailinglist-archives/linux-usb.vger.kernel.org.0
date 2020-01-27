@@ -2,98 +2,276 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D411D149FE0
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2020 09:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1814149FF1
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2020 09:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729210AbgA0I3R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jan 2020 03:29:17 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:34242 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725938AbgA0I3R (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jan 2020 03:29:17 -0500
-Received: by mail-lj1-f195.google.com with SMTP id x7so9649282ljc.1
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jan 2020 00:29:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=7Ixi3iVJvjBw8edlXpkFpc1CxXFIElI3oJmIC2hrbDg=;
-        b=BWNKUGFEhQmJA7fmAC5Tlt7fOIOPYRAduxiMS/szGPsjADyQkRlegyS0eP5JmO7QNK
-         bYrTZq/e1pfRYSCHALCzvwYfiUJVPv5ApUuVOgJWAnvHhDSul6GQbV9BihDkkI65OWzS
-         wPLAfIWJaxHk0GhfjCgFXdB54QStmO5i4Grdrn3zOrdJb/lSgs/Gxm5B9gkobw1/YnyT
-         +vvgWh84ridTDzHYuKXwZQPkUFSYpQaKbFTbqWHqvHfJsN63x2LlmvPkSmrSCa1TXAZa
-         Pika8wfYYyHKoWHkapF8YQameeGUUTr8CwgHxfY63+g6LJDklfgM7wcw8C1E5za/pliq
-         w1yg==
-X-Gm-Message-State: APjAAAW4ZPCRTn2KOwSolf4QaUlSKj4jg5XsaPm9XQU2nWUsuRgxYeZz
-        S1zbjrWEKDVNME7g0rAr5yPJ4grX
-X-Google-Smtp-Source: APXvYqyLPeCIX8K2OuDbWjwZj1o92ldoR1Y0pUNdkKKSP9avt7nk3otB2iv3/UwQQFuAq3Q4wwlNmg==
-X-Received: by 2002:a2e:9692:: with SMTP id q18mr9493179lji.177.1580113755038;
-        Mon, 27 Jan 2020 00:29:15 -0800 (PST)
-Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
-        by smtp.gmail.com with ESMTPSA id b64sm7674370lfg.7.2020.01.27.00.29.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jan 2020 00:29:14 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@kernel.org>)
-        id 1ivzlj-0002Vx-9Y; Mon, 27 Jan 2020 09:29:15 +0100
-Date:   Mon, 27 Jan 2020 09:29:15 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB-serial updates for 5.6-rc1
-Message-ID: <20200127082915.GA9636@localhost>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+        id S1728847AbgA0Iho (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jan 2020 03:37:44 -0500
+Received: from relmlor2.renesas.com ([210.160.252.172]:15488 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725955AbgA0Iho (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jan 2020 03:37:44 -0500
+X-IronPort-AV: E=Sophos;i="5.70,369,1574089200"; 
+   d="scan'208";a="37497247"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 27 Jan 2020 17:37:42 +0900
+Received: from localhost.localdomain (unknown [10.166.17.210])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 688B341C6658;
+        Mon, 27 Jan 2020 17:37:42 +0900 (JST)
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        linux@prisktech.co.nz
+Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: [PATCH v4] usb: host: ehci-platform: add a quirk to avoid stuck
+Date:   Mon, 27 Jan 2020 17:37:42 +0900
+Message-Id: <1580114262-25029-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit b3a987b0264d3ddbb24293ebff10eddfc472f653:
+Since EHCI/OHCI controllers on R-Car Gen3 SoCs are possible to
+be getting stuck very rarely after a full/low usb device was
+disconnected. To detect/recover from such a situation, the controllers
+require a special way which poll the EHCI PORTSC register and changes
+the OHCI functional state.
 
-  Linux 5.5-rc6 (2020-01-12 16:55:08 -0800)
+So, this patch adds a polling timer into the ehci-platform driver,
+and if the ehci driver detects the issue by the EHCI PORTSC register,
+the ehci driver removes a companion device (= the OHCI controller)
+to change the OHCI functional state to USB Reset once. And then,
+the ehci driver adds the companion device again.
 
-are available in the Git repository at:
+Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+---
+ Changes from v3:
+ - Fix the comment of PORT_LS_MASK.
+ - Remove a comment about the bit 11:10 of PORTSC register.
+ https://patchwork.kernel.org/patch/11349733/
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.6-rc1
+ Changes from v2:
+ - Use .family instead of .soc_id members on quirk_poll_match.
+ https://patchwork.kernel.org/patch/11347521/
 
-for you to fetch changes up to 19c64e7354e50d19e7b5ddf94bfb5fa24d69594c:
+ Changes from v1:
+ - Remove adding a new property into the generic-ehci.yaml.
+ - Add kerneldoc sections.
+ - Remove prefix "ehci_platform_" from function names.
+ - Rename quirk_poll_check_condition() with quirk_poll_check_port_status().
+ - Fix some coding style.
+ - Remove "start_timer" function and use HZ on mod_timer().
+ - Use delayed_work instead of usleep_range().
+ https://patchwork.kernel.org/project/linux-renesas-soc/list/?series=229861
 
-  USB: serial: cyberjack: fix spelling mistake "To" -> "Too" (2020-01-23 09:14:52 +0100)
+ drivers/usb/host/ehci-platform.c | 127 +++++++++++++++++++++++++++++++++++++++
+ include/linux/usb/ehci_def.h     |   2 +-
+ 2 files changed, 128 insertions(+), 1 deletion(-)
 
-----------------------------------------------------------------
-Here are the USB-serial updates for 5.6-rc1, including:
+diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
+index 769749c..e4fc3f6 100644
+--- a/drivers/usb/host/ehci-platform.c
++++ b/drivers/usb/host/ehci-platform.c
+@@ -29,6 +29,8 @@
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/reset.h>
++#include <linux/sys_soc.h>
++#include <linux/timer.h>
+ #include <linux/usb.h>
+ #include <linux/usb/hcd.h>
+ #include <linux/usb/ehci_pdriver.h>
+@@ -44,6 +46,9 @@ struct ehci_platform_priv {
+ 	struct clk *clks[EHCI_MAX_CLKS];
+ 	struct reset_control *rsts;
+ 	bool reset_on_resume;
++	bool quirk_poll;
++	struct timer_list poll_timer;
++	struct delayed_work poll_work;
+ };
+ 
+ static const char hcd_name[] = "ehci-platform";
+@@ -118,6 +123,111 @@ static struct usb_ehci_pdata ehci_platform_defaults = {
+ 	.power_off =		ehci_platform_power_off,
+ };
+ 
++/**
++ * quirk_poll_check_port_status - Poll port_status if the device sticks
++ * @ehci: the ehci hcd pointer
++ *
++ * Since EHCI/OHCI controllers on R-Car Gen3 SoCs are possible to be getting
++ * stuck very rarely after a full/low usb device was disconnected. To
++ * detect such a situation, the controllers require a special way which poll
++ * the EHCI PORTSC register.
++ *
++ * Return: true if the controller's port_status indicated getting stuck
++ */
++static bool quirk_poll_check_port_status(struct ehci_hcd *ehci)
++{
++	u32 port_status = ehci_readl(ehci, &ehci->regs->port_status[0]);
++
++	if (!(port_status & PORT_OWNER) &&
++	     (port_status & PORT_POWER) &&
++	    !(port_status & PORT_CONNECT) &&
++	     (port_status & PORT_LS_MASK))
++		return true;
++
++	return false;
++}
++
++/**
++ * quirk_poll_rebind_companion - rebind comanion device to recover
++ * @ehci: the ehci hcd pointer
++ *
++ * Since EHCI/OHCI controllers on R-Car Gen3 SoCs are possible to be getting
++ * stuck very rarely after a full/low usb device was disconnected. To
++ * recover from such a situation, the controllers require changing the OHCI
++ * functional state.
++ */
++static void quirk_poll_rebind_companion(struct ehci_hcd *ehci)
++{
++	struct device *companion_dev;
++	struct usb_hcd *hcd = ehci_to_hcd(ehci);
++
++	companion_dev = usb_of_get_companion_dev(hcd->self.controller);
++	if (!companion_dev)
++		return;
++
++	device_release_driver(companion_dev);
++	if (device_attach(companion_dev) < 0)
++		ehci_err(ehci, "%s: failed\n", __func__);
++
++	put_device(companion_dev);
++}
++
++static void quirk_poll_work(struct work_struct *work)
++{
++	struct ehci_platform_priv *priv =
++		container_of(to_delayed_work(work), struct ehci_platform_priv,
++			     poll_work);
++	struct ehci_hcd *ehci = container_of((void *)priv, struct ehci_hcd,
++					     priv);
++
++	/* check the status twice to reduce misdetection rate */
++	if (!quirk_poll_check_port_status(ehci))
++		return;
++	udelay(10);
++	if (!quirk_poll_check_port_status(ehci))
++		return;
++
++	ehci_dbg(ehci, "%s: detected getting stuck. rebind now!\n", __func__);
++	quirk_poll_rebind_companion(ehci);
++}
++
++static void quirk_poll_timer(struct timer_list *t)
++{
++	struct ehci_platform_priv *priv = from_timer(priv, t, poll_timer);
++	struct ehci_hcd *ehci = container_of((void *)priv, struct ehci_hcd,
++					     priv);
++
++	if (quirk_poll_check_port_status(ehci)) {
++		/*
++		 * Now scheduling the work for testing the port more. Note that
++		 * updating the status is possible to be delayed when
++		 * reconnection. So, this uses delayed work with 5 ms delay
++		 * to avoid misdetection.
++		 */
++		schedule_delayed_work(&priv->poll_work, msecs_to_jiffies(5));
++	}
++
++	mod_timer(&priv->poll_timer, jiffies + HZ);
++}
++
++static void quirk_poll_init(struct ehci_platform_priv *priv)
++{
++	INIT_DELAYED_WORK(&priv->poll_work, quirk_poll_work);
++	timer_setup(&priv->poll_timer, quirk_poll_timer, 0);
++	mod_timer(&priv->poll_timer, jiffies + HZ);
++}
++
++static void quirk_poll_end(struct ehci_platform_priv *priv)
++{
++	del_timer_sync(&priv->poll_timer);
++	cancel_delayed_work(&priv->poll_work);
++}
++
++static const struct soc_device_attribute quirk_poll_match[] = {
++	{ .family = "R-Car Gen3" },
++	{ /* sentinel*/ }
++};
++
+ static int ehci_platform_probe(struct platform_device *dev)
+ {
+ 	struct usb_hcd *hcd;
+@@ -176,6 +286,9 @@ static int ehci_platform_probe(struct platform_device *dev)
+ 					  "has-transaction-translator"))
+ 			hcd->has_tt = 1;
+ 
++		if (soc_device_match(quirk_poll_match))
++			priv->quirk_poll = true;
++
+ 		for (clk = 0; clk < EHCI_MAX_CLKS; clk++) {
+ 			priv->clks[clk] = of_clk_get(dev->dev.of_node, clk);
+ 			if (IS_ERR(priv->clks[clk])) {
+@@ -247,6 +360,9 @@ static int ehci_platform_probe(struct platform_device *dev)
+ 	device_enable_async_suspend(hcd->self.controller);
+ 	platform_set_drvdata(dev, hcd);
+ 
++	if (priv->quirk_poll)
++		quirk_poll_init(priv);
++
+ 	return err;
+ 
+ err_power:
+@@ -273,6 +389,9 @@ static int ehci_platform_remove(struct platform_device *dev)
+ 	struct ehci_platform_priv *priv = hcd_to_ehci_priv(hcd);
+ 	int clk;
+ 
++	if (priv->quirk_poll)
++		quirk_poll_end(priv);
++
+ 	usb_remove_hcd(hcd);
+ 
+ 	if (pdata->power_off)
+@@ -297,9 +416,13 @@ static int ehci_platform_suspend(struct device *dev)
+ 	struct usb_hcd *hcd = dev_get_drvdata(dev);
+ 	struct usb_ehci_pdata *pdata = dev_get_platdata(dev);
+ 	struct platform_device *pdev = to_platform_device(dev);
++	struct ehci_platform_priv *priv = hcd_to_ehci_priv(hcd);
+ 	bool do_wakeup = device_may_wakeup(dev);
+ 	int ret;
+ 
++	if (priv->quirk_poll)
++		quirk_poll_end(priv);
++
+ 	ret = ehci_suspend(hcd, do_wakeup);
+ 	if (ret)
+ 		return ret;
+@@ -331,6 +454,10 @@ static int ehci_platform_resume(struct device *dev)
+ 	}
+ 
+ 	ehci_resume(hcd, priv->reset_on_resume);
++
++	if (priv->quirk_poll)
++		quirk_poll_init(priv);
++
+ 	return 0;
+ }
+ #endif /* CONFIG_PM_SLEEP */
+diff --git a/include/linux/usb/ehci_def.h b/include/linux/usb/ehci_def.h
+index a15ce99..78e0063 100644
+--- a/include/linux/usb/ehci_def.h
++++ b/include/linux/usb/ehci_def.h
+@@ -151,7 +151,7 @@ struct ehci_regs {
+ #define PORT_OWNER	(1<<13)		/* true: companion hc owns this port */
+ #define PORT_POWER	(1<<12)		/* true: has power (see PPC) */
+ #define PORT_USB11(x) (((x)&(3<<10)) == (1<<10))	/* USB 1.1 device */
+-/* 11:10 for detecting lowspeed devices (reset vs release ownership) */
++#define PORT_LS_MASK	(3<<10)		/* Link status (SE0, K or J */
+ /* 9 reserved */
+ #define PORT_LPM	(1<<9)		/* LPM transaction */
+ #define PORT_RESET	(1<<8)		/* reset port */
+-- 
+2.7.4
 
- - a missing ir-usb endpoint sanity check
- - fixes for two long-standing regressions in ir-usb
- - opticon chars_in_buffer support
-
-Included are also various clean ups.
-
-All have been in linux-next with no reported issues.
-
-Signed-off-by: Johan Hovold <johan@kernel.org>
-
-----------------------------------------------------------------
-Colin Ian King (1):
-      USB: serial: cyberjack: fix spelling mistake "To" -> "Too"
-
-Gustavo A. R. Silva (1):
-      USB: serial: garmin_gps: Use flexible-array member
-
-Johan Hovold (7):
-      USB: serial: opticon: add chars_in_buffer() implementation
-      USB: serial: opticon: stop all I/O on close()
-      USB: serial: ir-usb: add missing endpoint sanity check
-      USB: serial: ir-usb: fix link-speed handling
-      USB: serial: ir-usb: fix IrLAP framing
-      USB: serial: ir-usb: make set_termios synchronous
-      USB: serial: ir-usb: simplify endpoint check
-
- drivers/usb/serial/cyberjack.c  |   2 +-
- drivers/usb/serial/garmin_gps.c |   2 +-
- drivers/usb/serial/ir-usb.c     | 185 +++++++++++++++++++++++++---------------
- drivers/usb/serial/opticon.c    |  61 +++++++++----
- include/linux/usb/irda.h        |  13 ++-
- 5 files changed, 172 insertions(+), 91 deletions(-)
