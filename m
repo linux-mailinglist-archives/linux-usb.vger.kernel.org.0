@@ -2,95 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 281FF14A728
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2020 16:26:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A7F14A744
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2020 16:35:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729416AbgA0P0L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jan 2020 10:26:11 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:44317 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729321AbgA0P0K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jan 2020 10:26:10 -0500
-Received: by mail-qk1-f193.google.com with SMTP id v195so9920263qkb.11;
-        Mon, 27 Jan 2020 07:26:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=G5tTERXc24SbVitg6xNzcYxUuuAPTVEFl1xDNy1GGDo=;
-        b=sfl7dQzVAUi3OV8GAxoBiUM3regkNgsyLLNj8FlKVKrcoNXp7HV6uoDXJUNzgZMiRQ
-         uFBMJR3AlxAM1Vw83MKSCep3Q3V3SzS6nNPle3qMWYipGB2b5Q7fGUGa556IeLWC2aJF
-         l4AyKgwJ2SEeQ+WM5hIuNWx+792PDZRLnSQOUpD1ejsN8Qbn6SEfdHTzmCaIPIPzGrN4
-         GGtZSCNgTlxXeIW4W9FS742fMthxrGo4EuGgX9YKOIsXQ3cl761W3aNqQxmW2CBnN8if
-         9AIlvs9OA7FDR5kz8YGKpFAT7xPqDYhjQsHJamOmUdcFLagklGiurULV1fRd+OelAWpz
-         /1jQ==
+        id S1729496AbgA0PfJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jan 2020 10:35:09 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:35290 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729085AbgA0PfI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jan 2020 10:35:08 -0500
+Received: by mail-oi1-f193.google.com with SMTP id b18so3077424oie.2;
+        Mon, 27 Jan 2020 07:35:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=G5tTERXc24SbVitg6xNzcYxUuuAPTVEFl1xDNy1GGDo=;
-        b=fKF0h2vwyDF0CkPSiF1xNCPitkJCEm1ftWGJJZe6/II1s3NsJXb2j7/22p4Gpl/h/m
-         /QbI5+h/FEQCh8iMoX+apbnV5dhmtgNRl7qdqltLjOai3gxR5v/8hoGs9/VgSf+kafuh
-         /zcC2KVBTeyWUGOUqRYzB2Nwse3ISP/txKTfMkQlHqw2KDjBsX0JRQoWhYWnN2txmE/v
-         Tnx17xSsZq2SKpwgZwdXPlNp/P3rzpA8dpyjsKH41w3K/XpCQYbszkhC/aWBbfDyzEQZ
-         cm5yw/xQlGxNQlhwpHZU45nLsOPJWi0fdemLiF4e4TCyTvUb8rB3PJBZqrUn1qu15A/x
-         sVzg==
-X-Gm-Message-State: APjAAAX5mDF75c15zD+AFP06XyuYWqK3Tlq8avOjzkn+KNpNnSAzD0WR
-        Barj80RiukZoHLkMK7GA31LLoSanYSg20NqFH6s=
-X-Google-Smtp-Source: APXvYqw8ITbxq5m4f5dYC/keJMppOJazV3Z6TxBrD0ijf60oNOfK4XvfeZDlhUIWTr0uSDeEfG3mmQ6/gnVBnJE5Ouw=
-X-Received: by 2002:a05:620a:1324:: with SMTP id p4mr17301424qkj.497.1580138769708;
- Mon, 27 Jan 2020 07:26:09 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=omtnsWBjbVm/NZL/pqX4cwBZTFhWoiBZO939OVp2MOA=;
+        b=JlmgtMQp5lo1ph99hEYYeebBX4WCrk4C9Qzl3cHJZoYMMoHGy0kMDrzzLMPt8fDkMT
+         FsqsVGsGRjGCCU/a+txb4LAk64jRGNaM/82B4rXuPBwTKG9lbo65nr1teT+ZqCktQ2/w
+         GLAqLaxkV2C1FOKW7rIYeJGP0xr1YtvD4keRvFPB6MEhQnJf5c24vN2BWFv6T09o8EL9
+         cgxilNdqE+ApzW7SucgtGGBiUNLzNwaUHw8NSrRk3syzNfiITgpebaTedabV6xks/j8L
+         9gA5TbHPxMwuE/UURlf2CxQg0xfQUs/UAQGvnE8RsegBA2icPAdlQ8YPy4xznM12Cuv6
+         AIWQ==
+X-Gm-Message-State: APjAAAXR+JPoxmKBTeuA2OyAzfIWtVi78Zs8UZeZKlkfmHzj5UP5ad/Y
+        oqpL0bwX025ufsJ7ADj0kQ==
+X-Google-Smtp-Source: APXvYqyifQ9wAgKfHNoCNFNZQ8VQ+kHY+fZ5ztdZiqbY8OQhMgLbLTtW7aWY56EDCLmmEoxxJSqgHw==
+X-Received: by 2002:aca:e146:: with SMTP id y67mr7414091oig.93.1580139307777;
+        Mon, 27 Jan 2020 07:35:07 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id l1sm4872297oic.22.2020.01.27.07.35.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jan 2020 07:35:06 -0800 (PST)
+Received: (nullmailer pid 29568 invoked by uid 1000);
+        Mon, 27 Jan 2020 15:35:06 -0000
+Date:   Mon, 27 Jan 2020 09:35:06 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mans Rullgard <mans@mansr.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RESEND][PATCH 1/2] dt-bindings: usb: add non-removable-ports
+ hub property
+Message-ID: <20200127153506.GA4589@bogus>
+References: <20200124152504.23411-1-mans@mansr.com>
 MIME-Version: 1.0
-References: <20200127023548.27107-1-pgwipeout@gmail.com> <20200127071758.GD279449@kroah.com>
-In-Reply-To: <20200127071758.GD279449@kroah.com>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Mon, 27 Jan 2020 10:25:33 -0500
-Message-ID: <CAMdYzYqctkfqhHN0-WDvX9kKdXH-AVir193SpcrR_t3K=VN=0w@mail.gmail.com>
-Subject: Re: [PATCH] usb: chipidea: tegra: fix hardlock with invalid dr mode
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Peter Chen <peter.chen@nxp.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200124152504.23411-1-mans@mansr.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 27, 2020 at 2:18 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Sun, Jan 26, 2020 at 09:35:48PM -0500, Peter Geis wrote:
-> > The ci_hdrc_tegra driver does not currently support dual role mode, but
-> > it does not explicitly prevent its use.
-> > Certain devices support dual role mode, but not automatic role switch.
-> > This can cause the device to lock up during initialization of the
-> > driver.
-> >
-> > Detect this state by checking for the extcon phandle when dual role mode
-> > is set to otg.
-> > If it doesn't exist request the driver to only enable manual role
-> > switching.
-> >
-> > Fixes: dfebb5f ("usb: chipidea: Add support for Tegra20/30/114/124")
->
-> Please use 12 digits for kernel sha1 values, this should be:
-> Fixes: dfebb5f43a78 ("usb: chipidea: Add support for Tegra20/30/114/124")
+On Fri, Jan 24, 2020 at 03:25:03PM +0000, Mans Rullgard wrote:
+> Add a non-removable-ports property that lists the hardwired downstream
+> ports of a hub.  Although hubs can provide this information, they are
+> not always configured correctly.  An alternate means of indicating this
+> for built-in USB devices is thus useful.
+> 
+> Signed-off-by: Mans Rullgard <mans@mansr.com>
 
-Understood, thank you.
-I will ensure that is the case in the future.
+I reviewed this already, but since you didn't add my reviewed-by, I'm 
+looking at it again and having 2nd thoughts.
 
->
-> As proof of the need of this, just using the values you gave here causes
-> git to complain:
->
-> $ git show dfebb5f
-> error: short SHA1 dfebb5f is ambiguous
-> hint: The candidates are:
-> hint:   dfebb5f43a78 commit 2017-08-16 - usb: chipidea: Add support for Tegra20/30/114/124
-> hint:   dfebb5fec744 tree
-> fatal: ambiguous argument 'dfebb5f': unknown revision or path not in the working tree.
->
-> thanks,
->
-> greg k-h
+> ---
+>  Documentation/devicetree/bindings/usb/usb-device.txt | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/usb-device.txt b/Documentation/devicetree/bindings/usb/usb-device.txt
+> index 036be172b1ae..92d863cc96b6 100644
+> --- a/Documentation/devicetree/bindings/usb/usb-device.txt
+> +++ b/Documentation/devicetree/bindings/usb/usb-device.txt
+> @@ -66,6 +66,10 @@ Required properties for host-controller nodes with device nodes:
+>  - #size-cells: shall be 0
+>  
+>  
+> +Optional properties for hub and host-controller nodes:
+> +- non-removable-ports: list of hardwired downstream ports
+
+If you have a hardwired device and need to know that, doesn't that imply 
+there's some other stuff you need to describe beyond what a standard USB 
+device has. Such as a power supply that's not Vbus from the hub.
+
+At a minimum, I think this should be a per port property. Though really, 
+I think this should just be implied by describing the device in DT. I'm 
+not sure if there's a case for hotpluggable devices described in DT. 
+Maybe with overlays.
+
+Rob
