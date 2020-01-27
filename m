@@ -2,133 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D44B314AA7C
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2020 20:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CF2A14AAB8
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2020 20:47:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725972AbgA0Tau (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jan 2020 14:30:50 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:39513 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725845AbgA0Tau (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jan 2020 14:30:50 -0500
-Received: by mail-pl1-f194.google.com with SMTP id g6so4102613plp.6
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jan 2020 11:30:50 -0800 (PST)
+        id S1726054AbgA0Trl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jan 2020 14:47:41 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:36129 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725893AbgA0Trl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jan 2020 14:47:41 -0500
+Received: by mail-lf1-f68.google.com with SMTP id f24so7171705lfh.3;
+        Mon, 27 Jan 2020 11:47:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=4FpDeS7FVDfifQejKt5Fo3FpOuyI3aVXyTigplJTJKg=;
-        b=elJrTPL4i5D0s3VuCe3A4IDJCMJuckpknfF6RIj8HfDon93rN/Eqzm8gM7opbJMwtg
-         +olHjcgUyYyCp6ww5p5oyoHP5iI0CRYn81PHwx0DJxXLDgTpxKOJQ9U87JTTzHWG7Q0Q
-         ZU7VDPNvyMmPVgsEaV3yLk0o2tiP1EGvzlAy/THV0fNIp2kl8NcYAicRC8bdPPvYXuiN
-         nftlTxOTXAO2K0Z4hKH7cYPykfFl9cqSVl11uuxm6YXeRxO8g9DdkB8Fw+8Ux5+dO+1k
-         EpKJAVe9HrdQX3VpnlSo8njj5kQdqYeb5f6yjOXsP3e4VhjxFigNXszMJNPAujQRe42Y
-         PQRQ==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=8N56+uwNzL4BtEV3m9/SZahhJM7vJj2lXnrPv331uNA=;
+        b=GS4Cs8/z2H+nsAyIfkIssh2nPOu2dPROaVu1LjaSkVN2FxE7AIdvTaBysC+gP+WeNU
+         HFRwweqZeek8jHre2PRJRpwWpbpB4YIKr1FzOyJx00TnlMGabzvp+Z9n1BO+J3r7KYrC
+         6zkYmGPdizAJxly9h7WwK+a7iP46YWU6LqmRHT2Cpi+/KZbLyrT/FctCi0x8KfjV3J4R
+         tDRj9xS93hifbwrIwrJYZE+YGYlQ6DhkBkRLQwKw/e2pKQEhw8PzqXMkwtBNjfps1QNL
+         oppuNRJXVaDWjteTPI+ZNbKpVqL73icMsK3xJbO5JOmY0xyY7q3hND70yR2NSTqOhOXs
+         G4+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=4FpDeS7FVDfifQejKt5Fo3FpOuyI3aVXyTigplJTJKg=;
-        b=XdHaBsyezzWzgv0FphsHdvkyje5xmsQSvmmyMTGQF96Ad9TnULNOKPD27X5ZPB1Q/k
-         mY5V2blZUXvviMj0bOjEtatBH/Yz9R/iMyz2p7BMAUqdifQAwM/l5kkwBomiaemgeeIr
-         dQtthzgaX7fOeIfFCEdq/82VTS/UMwkTjenef+tERKqhPQK05W0gmgs9QTXvpfhLffbM
-         TmYYaDg031Eu9Fj34HBw/QXQd92d3O5DQWfcmGuKHHixIgx+YuR6LLNEHdpGvSLp5JwA
-         inPqAfcMf1nRABGnCw1iKWUu6Yc7Wvw26cpEfhu3ANU8fmcDs1lKG2NSyV6rs6OvGB1p
-         +fbg==
-X-Gm-Message-State: APjAAAWJL2yiRf9WufPHhJpkXxfes9aNuszk96ug5DesBYGpc/4pFvsy
-        DeVdOuWLNJGWcu03taIYiYYxJQ==
-X-Google-Smtp-Source: APXvYqzh/Vr2MusTZAdq4TOlr4ztx3Wty77tirQdE63vSY4MuktYCgn7bpoGIcSfXi+Hff+43HUCfw==
-X-Received: by 2002:a17:90a:858a:: with SMTP id m10mr200813pjn.117.1580153450023;
-        Mon, 27 Jan 2020 11:30:50 -0800 (PST)
-Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id k26sm9349186pfp.47.2020.01.27.11.30.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jan 2020 11:30:49 -0800 (PST)
-From:   John Stultz <john.stultz@linaro.org>
-To:     lkml <linux-kernel@vger.kernel.org>
-Cc:     Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
-        Felipe Balbi <balbi@kernel.org>, Yang Fei <fei.yang@intel.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
-        Tejas Joglekar <tejas.joglekar@synopsys.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        John Stultz <john.stultz@linaro.org>
-Subject: [PATCH v2] usb: dwc3: gadget: Check for IOC/LST bit in TRB->ctrl fields
-Date:   Mon, 27 Jan 2020 19:30:46 +0000
-Message-Id: <20200127193046.110258-1-john.stultz@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=8N56+uwNzL4BtEV3m9/SZahhJM7vJj2lXnrPv331uNA=;
+        b=cqwu60apsbe6rUqhUqTwJFryJ1+RZh8ICToT8SwKtE9AqApm1nh+Vsw8QRtgVWyTj3
+         P405IPVPEA/w2L3wCUNJubqZ0ns4HvpvWsEwXSHFmTYggPLD/cxywlpMsKbIdUKe45xt
+         sCRvq2NBt+pSQ+SIPstUJQS5HeG1EaEyJ7qOmXtZ6O9SnK7A0yHB6gs45dgpIHSDr0GE
+         CSP1H7qMKIVNxfmCzPeF1Ol4gVYJzPOgiCP/IKmi9+cjrNrsad6R7luGNQrfUdiJhcN0
+         9KrHzR6CjViy2ULBqswwhqiwhrEyNaJYwSEi/hfEUNMSWAFpFbMjjVuKn2JSX8lP5YM8
+         YTYA==
+X-Gm-Message-State: APjAAAUu2JPxgcSZlKDYfsWH8M0IhPudAjv2oDP+kYNG2JPYZpOBFg7x
+        +8s5TY8wS8fdP0ttvSUBlxrjjGAF
+X-Google-Smtp-Source: APXvYqw7ijbIubuYLfC7tAZAuVvjYs89FTtBLA619TrkVJ+yACKs6MXi5U9K1mv44MDLYMLGftXRdw==
+X-Received: by 2002:ac2:4c84:: with SMTP id d4mr159657lfl.64.1580154458315;
+        Mon, 27 Jan 2020 11:47:38 -0800 (PST)
+Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.googlemail.com with ESMTPSA id w19sm8581143lfl.55.2020.01.27.11.47.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jan 2020 11:47:37 -0800 (PST)
+Subject: Re: [PATCH] usb: phy: tegra: make the code simple by
+ devm_platform_ioremap_resource()
+To:     Dejin Zheng <zhengdejin5@gmail.com>, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com
+Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200127135841.17935-1-zhengdejin5@gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <ebb395ec-89ef-12e9-b3a9-2fc35f764ee2@gmail.com>
+Date:   Mon, 27 Jan 2020 22:47:36 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
+MIME-Version: 1.0
+In-Reply-To: <20200127135841.17935-1-zhengdejin5@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+27.01.2020 16:58, Dejin Zheng пишет:
+> make the code simple by use devm_platform_ioremap_resource() function
+> to replace platform_get_resource() and devm_ioremap().
+> 
+> Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+> ---
+>  drivers/usb/phy/phy-tegra-usb.c | 20 ++------------------
+>  1 file changed, 2 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
+> index ea7ef1dc0b42..8220bb4ce1ed 100644
+> --- a/drivers/usb/phy/phy-tegra-usb.c
+> +++ b/drivers/usb/phy/phy-tegra-usb.c
+> @@ -944,20 +944,12 @@ static int read_utmi_param(struct platform_device *pdev, const char *param,
+>  static int utmi_phy_probe(struct tegra_usb_phy *tegra_phy,
+>  			  struct platform_device *pdev)
+>  {
+> -	struct resource *res;
+>  	int err;
+>  	struct tegra_utmip_config *config;
+>  
+>  	tegra_phy->is_ulpi_phy = false;
+>  
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> -	if (!res) {
+> -		dev_err(&pdev->dev, "Failed to get UTMI pad regs\n");
+> -		return  -ENXIO;
+> -	}
+> -
+> -	tegra_phy->pad_regs = devm_ioremap(&pdev->dev, res->start,
+> -		resource_size(res));
+> +	tegra_phy->pad_regs = devm_platform_ioremap_resource(pdev, 1);
+>  	if (!tegra_phy->pad_regs) {
+>  		dev_err(&pdev->dev, "Failed to remap UTMI pad regs\n");
+>  		return -ENOMEM;
+> @@ -1054,7 +1046,6 @@ MODULE_DEVICE_TABLE(of, tegra_usb_phy_id_table);
+>  static int tegra_usb_phy_probe(struct platform_device *pdev)
+>  {
+>  	const struct of_device_id *match;
+> -	struct resource *res;
+>  	struct tegra_usb_phy *tegra_phy = NULL;
+>  	struct device_node *np = pdev->dev.of_node;
+>  	enum usb_phy_interface phy_type;
+> @@ -1071,14 +1062,7 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
+>  	}
+>  	tegra_phy->soc_config = match->data;
+>  
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	if (!res) {
+> -		dev_err(&pdev->dev, "Failed to get I/O memory\n");
+> -		return  -ENXIO;
+> -	}
+> -
+> -	tegra_phy->regs = devm_ioremap(&pdev->dev, res->start,
+> -		resource_size(res));
+> +	tegra_phy->regs = devm_platform_ioremap_resource(pdev, 0);
+>  	if (!tegra_phy->regs) {
+>  		dev_err(&pdev->dev, "Failed to remap I/O memory\n");
+>  		return -ENOMEM;
+> 
 
-The current code in dwc3_gadget_ep_reclaim_completed_trb() will
-check for IOC/LST bit in the event->status and returns if
-IOC/LST bit is set. This logic doesn't work if multiple TRBs
-are queued per request and the IOC/LST bit is set on the last
-TRB of that request.
+Hello Dejin,
 
-Consider an example where a queued request has multiple queued
-TRBs and IOC/LST bit is set only for the last TRB. In this case,
-the core generates XferComplete/XferInProgress events only for
-the last TRB (since IOC/LST are set only for the last TRB). As
-per the logic in dwc3_gadget_ep_reclaim_completed_trb()
-event->status is checked for IOC/LST bit and returns on the
-first TRB. This leaves the remaining TRBs left unhandled.
-
-Similarly, if the gadget function enqueues an unaligned request
-with sglist already in it, it should fail the same way, since we
-will append another TRB to something that already uses more than
-one TRB.
-
-To aviod this, this patch changes the code to check for IOC/LST
-bits in TRB->ctrl instead.
-
-At a practical level, this patch resolves USB transfer stalls seen
-with adb on dwc3 based HiKey960 after functionfs gadget added
-scatter-gather support around v4.20.
-
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Yang Fei <fei.yang@intel.com>
-Cc: Thinh Nguyen <thinhn@synopsys.com>
-Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
-Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc: Jack Pham <jackp@codeaurora.org>
-Cc: Todd Kjos <tkjos@google.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>
-Cc: Linux USB List <linux-usb@vger.kernel.org>
-Cc: stable <stable@vger.kernel.org>
-Tested-by: Tejas Joglekar <tejas.joglekar@synopsys.com>
-Reviewed-by: Thinh Nguyen <thinhn@synopsys.com>
-Signed-off-by: Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
-[jstultz: forward ported to mainline, reworded commit log, reworked
- to only check trb->ctrl as suggested by Felipe]
-Signed-off-by: John Stultz <john.stultz@linaro.org>
----
-v2:
-* Rework to only check trb->ctrl as suggested by Felipe
-* Reword the commit message to include more of Felipe's assessment
----
- drivers/usb/dwc3/gadget.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 154f3f3e8cff..9a085eee1ae3 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2420,7 +2420,8 @@ static int dwc3_gadget_ep_reclaim_completed_trb(struct dwc3_ep *dep,
- 	if (event->status & DEPEVT_STATUS_SHORT && !chain)
- 		return 1;
- 
--	if (event->status & DEPEVT_STATUS_IOC)
-+	if ((trb->ctrl & DWC3_TRB_CTRL_IOC) ||
-+	    (trb->ctrl & DWC3_TRB_CTRL_LST))
- 		return 1;
- 
- 	return 0;
--- 
-2.17.1
-
+Unfortunately this is not a correct change because registers are shared
+by both PHY and USB controllers on Tegra SoCs. The
+devm_platform_ioremap_resource() can't be used here because it makes the
+mapping exclusive for a single driver, while it should be shared.
