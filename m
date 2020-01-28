@@ -2,141 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EEFB314AEDB
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2020 06:06:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A06914AFEC
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2020 07:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725835AbgA1FGv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Jan 2020 00:06:51 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:54720 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725283AbgA1FGv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jan 2020 00:06:51 -0500
-Received: by mail-pj1-f68.google.com with SMTP id dw13so465506pjb.4;
-        Mon, 27 Jan 2020 21:06:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=EOkHPlApR03+KhenapKgHCCTfxWORvo9CWa7thX8FjQ=;
-        b=Q7Xqv/Ibjua4Tt2a8EOs16LRmagni8jh3H0Cmuoli7nocDi388E7DfsZU+nCzL964V
-         B5yJjQNSEDLXqoLUV4NtWg4ITl36qnKwWlOI+cH38K08zZunrEImrxtvJVJf6NERNIcu
-         oE7v5RmNVWz45efpchd6T8Gbst86Kxe/V6oRAbDnORtMTaZhKw49QiE6wF5sKNFZp4dW
-         P6JfMrb98Rk78ELB8PuOGCvJU+lCX9swioyzKHB1Tv79mmSN6e/mcD3rP8Q9sq8CLDcq
-         VJPLFAmMUrAqStKU9ym6kDBj2WN73YgnPDznP4t7DoUo99qcIX+b64g5wL0EoydtKDmg
-         k4nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=EOkHPlApR03+KhenapKgHCCTfxWORvo9CWa7thX8FjQ=;
-        b=iXGKnD4YEKn6MvlL1Y1HmGEbld8bIUEa2Meds6QYXtqSw2bU0K7/C6Bx8lEZMv5Pbi
-         ktzm8O6cl88G+z2UsujEqqMwt21zgiZ/fDTBjCkbsZOYTAZoL1ucXnJ0RYz9iFpf+lnI
-         1Zr8VfLiPsg+OF3OxfJz9WgTwejDd1nBQr/b8GIA30yR1VnHgZwTMAGLpt+VeQqxRPcO
-         9Wwm0nGvGpSwLVR+KEWJOV42b0wz8RhKhLYHudkSQM+fqvRVEqxeIjQSi5mg/O2Fc4W6
-         yPoRe+4AzgPMWIjWRf0d85lFkqq1PhFQ1fzf6Hkvr7ubyWJ2E0I64pzCn04CLlehTbbq
-         7nqQ==
-X-Gm-Message-State: APjAAAXg2Sm68tZqfaKAcModchLHo8YhjjLJbIiOjqaWHAVmy/nqE6Z2
-        3JWRa7hIbdXKHAECIGsg5KurNc3M
-X-Google-Smtp-Source: APXvYqyq0chQkUfWzXQt0f00xhGVoq7nPt6jm/29yCitMbJQ4xtiepXpGnHxxZ475RfX+sQDgETshQ==
-X-Received: by 2002:a17:902:34d:: with SMTP id 71mr20148831pld.316.1580188010847;
-        Mon, 27 Jan 2020 21:06:50 -0800 (PST)
-Received: from localhost (216.24.177.237.16clouds.com. [216.24.177.237])
-        by smtp.gmail.com with ESMTPSA id b1sm762486pjw.4.2020.01.27.21.06.49
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 27 Jan 2020 21:06:50 -0800 (PST)
-Date:   Tue, 28 Jan 2020 13:06:46 +0800
-From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     gregkh@linuxfoundation.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: phy: tegra: make the code simple by
- devm_platform_ioremap_resource()
-Message-ID: <20200128050356.GA21357@nuc8i5>
-References: <20200127135841.17935-1-zhengdejin5@gmail.com>
- <ebb395ec-89ef-12e9-b3a9-2fc35f764ee2@gmail.com>
+        id S1725855AbgA1GlG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Jan 2020 01:41:06 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:44786 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725799AbgA1GlG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jan 2020 01:41:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=hj3x6hGuIsjrHf6MaVRlpxCrQuBrNOlZdi/Yvl7xCTw=; b=I9I6B4Vyf92AdCWGghUchQa66
+        cfrK8tVpsL5VfzWuyMOq3547Goq0cjr8u4knuj0rb8pW5Q5LBuJUHzrfCFrpRPAWYiDdO8EpMylKV
+        mVlJ5XSymhORk/1S2nVylpsmZmKbqG25wNCTpCQFa7kGr+jcV+g44e/rybR3IbYvZFb2QexR3Avv7
+        jRBvHzJKPYkgddJsFhHRZeOP7sKTksy5rt11mb7ozVKib2ajz3tJZi6yojXKRNmuQBpxofrwYWP6i
+        CaKp8n8wW4oagIaBCxaIhlpIDGH/zDPjtUgbtgpDQXVk83NuRBFHVxmVL373iRKLrJWbwvPjFLaA6
+        18tDpe/vQ==;
+Received: from [80.156.29.194] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iwKYb-00077m-Vt; Tue, 28 Jan 2020 06:41:06 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.3)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1iwKYa-001Ae7-1G; Tue, 28 Jan 2020 07:41:04 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-usb@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH 1/2] docs: usb: remove some broken references
+Date:   Tue, 28 Jan 2020 07:41:00 +0100
+Message-Id: <00008303fde6b4e06d027d3b76ae7032614a7030.1580193653.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ebb395ec-89ef-12e9-b3a9-2fc35f764ee2@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 27, 2020 at 10:47:36PM +0300, Dmitry Osipenko wrote:
-> 27.01.2020 16:58, Dejin Zheng пишет:
-> > make the code simple by use devm_platform_ioremap_resource() function
-> > to replace platform_get_resource() and devm_ioremap().
-> > 
-> > Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
-> > ---
-> >  drivers/usb/phy/phy-tegra-usb.c | 20 ++------------------
-> >  1 file changed, 2 insertions(+), 18 deletions(-)
-> > 
-> > diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
-> > index ea7ef1dc0b42..8220bb4ce1ed 100644
-> > --- a/drivers/usb/phy/phy-tegra-usb.c
-> > +++ b/drivers/usb/phy/phy-tegra-usb.c
-> > @@ -944,20 +944,12 @@ static int read_utmi_param(struct platform_device *pdev, const char *param,
-> >  static int utmi_phy_probe(struct tegra_usb_phy *tegra_phy,
-> >  			  struct platform_device *pdev)
-> >  {
-> > -	struct resource *res;
-> >  	int err;
-> >  	struct tegra_utmip_config *config;
-> >  
-> >  	tegra_phy->is_ulpi_phy = false;
-> >  
-> > -	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> > -	if (!res) {
-> > -		dev_err(&pdev->dev, "Failed to get UTMI pad regs\n");
-> > -		return  -ENXIO;
-> > -	}
-> > -
-> > -	tegra_phy->pad_regs = devm_ioremap(&pdev->dev, res->start,
-> > -		resource_size(res));
-> > +	tegra_phy->pad_regs = devm_platform_ioremap_resource(pdev, 1);
-> >  	if (!tegra_phy->pad_regs) {
-> >  		dev_err(&pdev->dev, "Failed to remap UTMI pad regs\n");
-> >  		return -ENOMEM;
-> > @@ -1054,7 +1046,6 @@ MODULE_DEVICE_TABLE(of, tegra_usb_phy_id_table);
-> >  static int tegra_usb_phy_probe(struct platform_device *pdev)
-> >  {
-> >  	const struct of_device_id *match;
-> > -	struct resource *res;
-> >  	struct tegra_usb_phy *tegra_phy = NULL;
-> >  	struct device_node *np = pdev->dev.of_node;
-> >  	enum usb_phy_interface phy_type;
-> > @@ -1071,14 +1062,7 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
-> >  	}
-> >  	tegra_phy->soc_config = match->data;
-> >  
-> > -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > -	if (!res) {
-> > -		dev_err(&pdev->dev, "Failed to get I/O memory\n");
-> > -		return  -ENXIO;
-> > -	}
-> > -
-> > -	tegra_phy->regs = devm_ioremap(&pdev->dev, res->start,
-> > -		resource_size(res));
-> > +	tegra_phy->regs = devm_platform_ioremap_resource(pdev, 0);
-> >  	if (!tegra_phy->regs) {
-> >  		dev_err(&pdev->dev, "Failed to remap I/O memory\n");
-> >  		return -ENOMEM;
-> > 
-> 
-> Hello Dejin,
-> 
-> Unfortunately this is not a correct change because registers are shared
-> by both PHY and USB controllers on Tegra SoCs. The
-> devm_platform_ioremap_resource() can't be used here because it makes the
-> mapping exclusive for a single driver, while it should be shared.
+It seems that some files were removed from USB documentation.
 
-Dmitry, Thanks a lot for your comment! and abandon this commit.
+Update the links accordingly.
 
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ Documentation/usb/index.rst      | 2 --
+ Documentation/usb/text_files.rst | 6 ------
+ 2 files changed, 8 deletions(-)
+
+diff --git a/Documentation/usb/index.rst b/Documentation/usb/index.rst
+index e55386a4abfb..36b6ebd9a9d9 100644
+--- a/Documentation/usb/index.rst
++++ b/Documentation/usb/index.rst
+@@ -22,11 +22,9 @@ USB support
+     misc_usbsevseg
+     mtouchusb
+     ohci
+-    rio
+     usbip_protocol
+     usbmon
+     usb-serial
+-    wusb-design-overview
+ 
+     usb-help
+     text_files
+diff --git a/Documentation/usb/text_files.rst b/Documentation/usb/text_files.rst
+index 6a8d3fcf64b6..1c18c05c3920 100644
+--- a/Documentation/usb/text_files.rst
++++ b/Documentation/usb/text_files.rst
+@@ -16,12 +16,6 @@ USB devfs drop permissions source
+ .. literalinclude:: usbdevfs-drop-permissions.c
+     :language: c
+ 
+-WUSB command line script to manipulate auth credentials
+--------------------------------------------------------
+-
+-.. literalinclude:: wusb-cbaf
+-   :language: shell
+-
+ Credits
+ -------
+ 
+-- 
+2.24.1
 
