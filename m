@@ -2,89 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E21D014B97F
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2020 15:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4191314BCA8
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2020 16:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387670AbgA1Oc5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Jan 2020 09:32:57 -0500
-Received: from mga07.intel.com ([134.134.136.100]:38430 "EHLO mga07.intel.com"
+        id S1726327AbgA1PPN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 28 Jan 2020 10:15:13 -0500
+Received: from unicorn.mansr.com ([81.2.72.234]:39866 "EHLO unicorn.mansr.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387604AbgA1Oc4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 28 Jan 2020 09:32:56 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Jan 2020 06:29:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,374,1574150400"; 
-   d="scan'208";a="217626888"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 28 Jan 2020 06:29:58 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 0DB3313F; Tue, 28 Jan 2020 16:29:56 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     linux-kernel@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1] MAINTAINERS: Sort entries in database for USB TYPEC
-Date:   Tue, 28 Jan 2020 16:29:56 +0200
-Message-Id: <20200128142956.39604-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.24.1
+        id S1726063AbgA1PPN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 28 Jan 2020 10:15:13 -0500
+Received: by unicorn.mansr.com (Postfix, from userid 51770)
+        id 321851B0DA; Tue, 28 Jan 2020 15:15:11 +0000 (GMT)
+From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RESEND][PATCH 1/2] dt-bindings: usb: add non-removable-ports hub property
+References: <20200124152504.23411-1-mans@mansr.com>
+        <20200127153506.GA4589@bogus> <yw1xy2tsvnww.fsf@mansr.com>
+        <20200128134745.GA3048749@kroah.com>
+Date:   Tue, 28 Jan 2020 15:15:11 +0000
+In-Reply-To: <20200128134745.GA3048749@kroah.com> (Greg Kroah-Hartman's
+        message of "Tue, 28 Jan 2020 14:47:45 +0100")
+Message-ID: <yw1xpnf3vchs.fsf@mansr.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.3 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Run parse-maintainers.pl and choose USB TYPEC records. Fix them accordingly.
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- MAINTAINERS | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+> On Mon, Jan 27, 2020 at 04:56:15PM +0000, Måns Rullgård wrote:
+>> Rob Herring <robh@kernel.org> writes:
+>> 
+>> > On Fri, Jan 24, 2020 at 03:25:03PM +0000, Mans Rullgard wrote:
+>> >> Add a non-removable-ports property that lists the hardwired downstream
+>> >> ports of a hub.  Although hubs can provide this information, they are
+>> >> not always configured correctly.  An alternate means of indicating this
+>> >> for built-in USB devices is thus useful.
+>> >> 
+>> >> Signed-off-by: Mans Rullgard <mans@mansr.com>
+>> >
+>> > I reviewed this already, but since you didn't add my reviewed-by, I'm 
+>> > looking at it again and having 2nd thoughts.
+>> >
+>> >> ---
+>> >>  Documentation/devicetree/bindings/usb/usb-device.txt | 4 ++++
+>> >>  1 file changed, 4 insertions(+)
+>> >> 
+>> >> diff --git a/Documentation/devicetree/bindings/usb/usb-device.txt b/Documentation/devicetree/bindings/usb/usb-device.txt
+>> >> index 036be172b1ae..92d863cc96b6 100644
+>> >> --- a/Documentation/devicetree/bindings/usb/usb-device.txt
+>> >> +++ b/Documentation/devicetree/bindings/usb/usb-device.txt
+>> >> @@ -66,6 +66,10 @@ Required properties for host-controller nodes with device nodes:
+>> >>  - #size-cells: shall be 0
+>> >>  
+>> >>  
+>> >> +Optional properties for hub and host-controller nodes:
+>> >> +- non-removable-ports: list of hardwired downstream ports
+>> >
+>> > If you have a hardwired device and need to know that, doesn't that imply 
+>> > there's some other stuff you need to describe beyond what a standard USB 
+>> > device has. Such as a power supply that's not Vbus from the hub.
+>> 
+>> I suppose there could be, but there isn't in my actual situation.
+>> 
+>> > At a minimum, I think this should be a per port property.
+>> 
+>> That's what I suggested first.  Greg told me to do it like this instead.
+>
+> I said that?  I do not remember discussing this at all, when did that
+> happen?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1e7bb6da3ea3..0608e3195bb1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17407,11 +17407,14 @@ F:	drivers/usb/
- F:	include/linux/usb.h
- F:	include/linux/usb/
- 
--USB TYPEC PI3USB30532 MUX DRIVER
--M:	Hans de Goede <hdegoede@redhat.com>
-+USB TYPEC BUS FOR ALTERNATE MODES
-+M:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
- L:	linux-usb@vger.kernel.org
- S:	Maintained
--F:	drivers/usb/typec/mux/pi3usb30532.c
-+F:	Documentation/ABI/testing/sysfs-bus-typec
-+F:	Documentation/driver-api/usb/typec_bus.rst
-+F:	drivers/usb/typec/altmodes/
-+F:	include/linux/usb/typec_altmode.h
- 
- USB TYPEC CLASS
- M:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-@@ -17422,14 +17425,11 @@ F:	Documentation/driver-api/usb/typec.rst
- F:	drivers/usb/typec/
- F:	include/linux/usb/typec.h
- 
--USB TYPEC BUS FOR ALTERNATE MODES
--M:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-+USB TYPEC PI3USB30532 MUX DRIVER
-+M:	Hans de Goede <hdegoede@redhat.com>
- L:	linux-usb@vger.kernel.org
- S:	Maintained
--F:	Documentation/ABI/testing/sysfs-bus-typec
--F:	Documentation/driver-api/usb/typec_bus.rst
--F:	drivers/usb/typec/altmodes/
--F:	include/linux/usb/typec_altmode.h
-+F:	drivers/usb/typec/mux/pi3usb30532.c
- 
- USB TYPEC PORT CONTROLLER DRIVERS
- M:	Guenter Roeck <linux@roeck-us.net>
+https://lore.kernel.org/lkml/20190228155241.GC12050@kroah.com/
+
+>> > Though really, I think this should just be implied by describing the
+>> > device in DT. I'm not sure if there's a case for hotpluggable devices
+>> > described in DT.  Maybe with overlays.
+>> 
+>> That's also an option.  Greg, what do you think?
+>
+> I have no idea, sorry, I'm totally lost here...
+
+Background: I need to differentiate between on-board and external USB
+devices on a few boards.  Although hubs can indicate the removable
+status of each port, the configuration options are often limited and may
+not be capable of describing the actual wiring.  Also, if a device is
+hard-wired directly to a host port, there is no way of indicating this.
+
+While I could match the full device path using per-board lists, I'd
+prefer a generic solution.  To this end, it is necessary to add the
+ability for DT to supply this information.  Three variants have been
+discussed:
+
+1. Add a "non-removable" property to the USB device node similar to how
+   it's done for MMC.
+
+2. Add a "non-removable-ports" property to the hub node.  Apparently
+   ACPI can supply the information in this manner.
+
+3. Make any USB device with a DT node implicitly non-removable.
+
+Either one will work for me.
+
 -- 
-2.24.1
-
+Måns Rullgård
