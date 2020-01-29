@@ -2,88 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E385714D14B
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2020 20:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F9E14D297
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2020 22:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726484AbgA2Tmh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jan 2020 14:42:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36910 "EHLO mail.kernel.org"
+        id S1726487AbgA2VfE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jan 2020 16:35:04 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:41485 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726183AbgA2Tmh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 29 Jan 2020 14:42:37 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726283AbgA2VfE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 29 Jan 2020 16:35:04 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D186D206D4;
-        Wed, 29 Jan 2020 19:42:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580326956;
-        bh=YrONd6rD40U8Mex7x/vOc2QZ9yRG98Ce7Hq82CFeTeE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BMOnfzI9mRtQMBVe/AXpjgfl6rqq1DMN638afHGSXz0fOCltDUPQAYybZZkAzWq2R
-         iHlTkM8OtvJRV6GXMOw2FJaIfGmRXGf4nDhqn001kfd67kXrKS80JR/d7CdWYAPMM7
-         t41bW5aPDoFBguU2wZY1CE8AsmZM4dYr21FhP/wU=
-Date:   Wed, 29 Jan 2020 20:42:33 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 487Gwj5vrBz9sP6;
+        Thu, 30 Jan 2020 08:35:01 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1580333702;
+        bh=eyqY0mX0PpMaEAdMEpXg3iL7rJwWR82QGrbDc86uKi4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RixzmimKY9L05wQIdgnb0QTs3Hs23KiKVcOFVnJ/haklsMLLioCCEpy3IN3k3uLuj
+         Q0LjvOjEreaZHePDJ2GNfPaWmytM3B+BAQdIwlz5jppGHMrM069FJVjdWJOZAc1kWe
+         786eBW8xLts309Stl8GWmXIpS1qzNUPq9fK6kibtzYVWTM+Pm6ZVITO7i+H647afWW
+         VpERWXxo3z6SoyfzeBSfM0Ug4CDgHnQnd8N0yxoIdQTFHESZB9CVM0d3eEb1+hDaky
+         8DaLWXlkxiUxRkZlCx+2lqlGUIKiHIoQqXqMg0JMYvAE35qtq3Xynn1wTR7tFemlvD
+         r5y9chlNxWxFw==
+Date:   Thu, 30 Jan 2020 08:34:59 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-usb@vger.kernel.org
 Subject: Re: [GIT PULL] USB/Thunderbolt/PHY patches for 5.6-rc1
-Message-ID: <20200129194233.GA578620@kroah.com>
-References: <20200129101401.GA3858221@kroah.com>
- <CAHk-=wgwBfz0CtAFZMDy=A_Wz0+=dzrfWWiHESUD9CxnV=Xyjw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-ID: <20200130083459.206fc0d9@canb.auug.org.au>
 In-Reply-To: <CAHk-=wgwBfz0CtAFZMDy=A_Wz0+=dzrfWWiHESUD9CxnV=Xyjw@mail.gmail.com>
+References: <20200129101401.GA3858221@kroah.com>
+        <CAHk-=wgwBfz0CtAFZMDy=A_Wz0+=dzrfWWiHESUD9CxnV=Xyjw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Hv/8lCC5NcF2=3iM0zHgW3F";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 29, 2020 at 10:11:26AM -0800, Linus Torvalds wrote:
-> On Wed, Jan 29, 2020 at 2:14 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > Here is the big USB and Thunderbolt and PHY driver updates for 5.6-rc1.
-> 
-> Hmm. This actually causes a new warning even before I start building it:
-> 
->   WARNING: unmet direct dependencies detected for I2C_S3C2410
->     Depends on [n]: I2C [=y] && HAS_IOMEM [=y] && HAVE_S3C2410_I2C [=n]
->     Selected by [m]:
->     - PHY_EXYNOS5250_SATA [=m] && (SOC_EXYNOS5250 || COMPILE_TEST
-> [=y]) && HAS_IOMEM [=y] && OF [=y]
-> 
-> and the cause seems to be
-> 
->   203b7ee14d3a ("phy: Enable compile testing for some of drivers")
-> 
-> where PHY_EXYNOS5250_SATA now has a
-> 
->   depends on SOC_EXYNOS5250 || COMPILE_TEST
->   depends on HAS_IOMEM
->   depends on OF
-> 
-> and then blindly does a
-> 
->   select I2C_S3C2410
-> 
-> without having the dependencies that I2C_S3C2410 has.
-> 
-> How did this ever pass any testing in linux-next without being
-> noticed, when I noticed within five seconds of pulling it? It
-> literally warns immediately on "make allmodconfig".
+--Sig_/Hv/8lCC5NcF2=3iM0zHgW3F
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-linux-next was fine as the fix was in the i2c tree.  Sorry for not
-realizing it here as well, it didn't show up on my test builds as I
-wasn't doing 'allmodconfig' for USB stuff.
+Hi Linus,
 
-If it's any consolation, it was a lot worse, I did take some fixups for
-other issues like this that came in through here :)
+On Wed, 29 Jan 2020 10:11:26 -0800 Linus Torvalds <torvalds@linux-foundatio=
+n.org> wrote:
+>
+> Stephen, does linux-next perhaps miss these config-time warnings?
 
-But I should have caught this as well, sorry, and thanks for merging.
+I saw it when it first happened and reported it, but since I merge the
+ic2 tree before the usb tree, the warning went away for me after the
+fix was added to the i2c tree.
 
-greg k-h
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Hv/8lCC5NcF2=3iM0zHgW3F
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4x+oMACgkQAVBC80lX
+0GxB6gf9GfpZmBKW4JuE0Us6SJ7R03W90WIp5GKHm1m8RMUKR6kGUe+Qi+EihvYC
+H2o9mTQch46KzQBBzZTRumnBlvzv6QpuygvNEhKOgI4+deAYCWDYTO0nKXW2FUFU
+FXqcNzUEdo98bjiZftz+09iL52/9TOw6zGY47UTLX4ZprlIPr+UHfA0oZ9XW0aAI
+KaDfoJviDNIoL4k8wRWCFYmur5L/qxbUJeydVa0J14euXePRHFnn7QkpAyXksISu
+P1aMf5Q2bUG4e6Xth0EhNeA2KCbkrjLxuwJ2B0Ix+njk6J2aRck22g0rS0g+x7ba
+eDsBdsHewA1i9y3qzOYlAWWkoItpyg==
+=pk4o
+-----END PGP SIGNATURE-----
+
+--Sig_/Hv/8lCC5NcF2=3iM0zHgW3F--
