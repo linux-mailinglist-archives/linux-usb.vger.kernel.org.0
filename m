@@ -2,100 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8870214C6F9
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2020 08:39:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA8D14C7E2
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2020 10:13:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726213AbgA2Hjp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jan 2020 02:39:45 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:43521 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726076AbgA2Hjo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jan 2020 02:39:44 -0500
-Received: by mail-lj1-f194.google.com with SMTP id a13so17320302ljm.10
-        for <linux-usb@vger.kernel.org>; Tue, 28 Jan 2020 23:39:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xgwM+w6XVZYo71U2Uq6kyQ57Gx39td3yB0DOJ1qIVpQ=;
-        b=SWt6s2ULx3P/vOeg0KoXKyIMwzqV0zJJGUVtcXddM29q0InoH5e3OtW77FI0m8Sd0L
-         XksV527Mx8FFbeLRSAZF/11NnZTddhTOVA5i74i9r8XkwT4UHm82ySa8l3SauKBelDtV
-         iHrVxCB9/rUgX/WQKAe06J0gBQui5/euFhQRJbLReRZ1MQgFQ1ujBBjIIIj4iegyfprX
-         syHXNw6Qb16TbAaslu1mySjTtj9545lIRwm8S38iREHpd0iDRTSsQ4t6DVJbKuwAh7KI
-         3swlxeY561C0hSfEXLmm240pQXOF9PMynIXkQKMkD5UfSJnjBq8q9Ua4j8KHW+Ay3DMj
-         nvNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=xgwM+w6XVZYo71U2Uq6kyQ57Gx39td3yB0DOJ1qIVpQ=;
-        b=dUqwAp25bbkHjWTeN+91sbBpqA0VjxgNrJCL8QsYiO1OQQpKzjihTLvVaaB1kyJdgE
-         uWp6PLGMIYMLu1Odc7Bfh2pcY8T6EmbLZsp8CoJjJoRuv/az/HwuHkBVULsOiCa/v3Yb
-         JCKoWxzYMb+WAml9z55YRZdRESUAJ3ec8Iz14KfQvY2nNhtUJh+I9C3fxXJshGaDlYSh
-         x1tBYwCTNwuEI8KPQqRW/XZ2Bqlo0VYjsjxgehxRAkN7CBiDHkIvrx1onTX3NCQAeMOx
-         7nkv4j+EQtUYiexeBfY0mS8BFZyFfz9E3MsTPOuwzxfGsdYJdSTpAI8uoXq8V7kyV2eD
-         Bcpw==
-X-Gm-Message-State: APjAAAXiNrvXgLbHENCQvm6ohHdZyc19NKnSuDlwKeO82QLGo5hwo1pd
-        0jkiMlJAjfCheheetAKibS/IkgdgdGM=
-X-Google-Smtp-Source: APXvYqxcJsh+VM1W5cnzzKNpoyXyPEUdJyYOxfAPuZw2837FXahjdhKJ9K8WmUJ1zdO7T1RcLddNSg==
-X-Received: by 2002:a05:651c:232:: with SMTP id z18mr16074297ljn.85.1580283582525;
-        Tue, 28 Jan 2020 23:39:42 -0800 (PST)
-Received: from saruman.home (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id m16sm432526ljb.47.2020.01.28.23.39.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jan 2020 23:39:42 -0800 (PST)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Linux USB <linux-usb@vger.kernel.org>
-Cc:     Felipe Balbi <balbi@kernel.org>
-Subject: [PATCH] usb: dwc3: trace: print enqueue/dequeue pointers too
-Date:   Wed, 29 Jan 2020 09:39:39 +0200
-Message-Id: <20200129073939.56001-1-balbi@kernel.org>
-X-Mailer: git-send-email 2.25.0
+        id S1726096AbgA2JNc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jan 2020 04:13:32 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:17471 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725951AbgA2JNc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jan 2020 04:13:32 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e314c880000>; Wed, 29 Jan 2020 01:12:40 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Wed, 29 Jan 2020 01:13:30 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Wed, 29 Jan 2020 01:13:30 -0800
+Received: from [10.19.66.205] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 29 Jan
+ 2020 09:13:27 +0000
+Subject: Re: [Patch V3 03/18] phy: tegra: xusb: Add usb-role-switch support
+To:     Thierry Reding <thierry.reding@gmail.com>
+CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <jonathanh@nvidia.com>, <mark.rutland@arm.com>,
+        <robh+dt@kernel.org>, <kishon@ti.com>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1577704195-2535-1-git-send-email-nkristam@nvidia.com>
+ <1577704195-2535-4-git-send-email-nkristam@nvidia.com>
+ <20200128173244.GA2293590@ulmo>
+X-Nvconfidentiality: public
+From:   Nagarjuna Kristam <nkristam@nvidia.com>
+Message-ID: <b6de0078-f1cd-31a1-70bd-dfc320eab70e@nvidia.com>
+Date:   Wed, 29 Jan 2020 14:45:38 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200128173244.GA2293590@ulmo>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1580289160; bh=AfKsN9drip9fGF1J0qLuc6MudsZ5rcBopOsTLJQmYOU=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=MBAooP6zorBL94Rw5yws9+pE/JuBQTCObfMRTLoCqHa7DkGpdPFUVTuyxJNMrl2Yn
+         uNS7Ry4YpvrYeuh4Vtez6/SPp7MiOVe8GMHYaqMmNnhUptibVxL8XLaDTPUVSUepM+
+         AmhQ0jo5hhnn+7fnT+I4soRC6ZpbeO9ZV0MUdGO04iVKOqpITv+LRl0JqvHk6JVXzm
+         D66WU5Mtr+iC9LEgwd+GPB9RKWzvt275lKagF6mHDNM/8HCwOmK7EOXKatldBrWuoA
+         iWfnXwllUpw96TA64d9dVETfJIVNZQp0nIEOtTNpmDWGUk6pz9SU2gUoMXyeAxXwTM
+         tPZGwOIA1GCeQ==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-By printing enqueue/dequeue pointers, we can make sure that our TRB
-handling is correct. We've had a recent situation where we were not
-always dequeueing all TRBs in an SG list and this helped figure out
-what the problem was.
 
-Signed-off-by: Felipe Balbi <balbi@kernel.org>
----
- drivers/usb/dwc3/trace.h | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/dwc3/trace.h b/drivers/usb/dwc3/trace.h
-index 9edff17111f7..b2f5a504a5af 100644
---- a/drivers/usb/dwc3/trace.h
-+++ b/drivers/usb/dwc3/trace.h
-@@ -227,6 +227,8 @@ DECLARE_EVENT_CLASS(dwc3_log_trb,
- 		__field(u32, size)
- 		__field(u32, ctrl)
- 		__field(u32, type)
-+		__field(u32, enqueue)
-+		__field(u32, dequeue)
- 	),
- 	TP_fast_assign(
- 		__assign_str(name, dep->name);
-@@ -236,9 +238,12 @@ DECLARE_EVENT_CLASS(dwc3_log_trb,
- 		__entry->size = trb->size;
- 		__entry->ctrl = trb->ctrl;
- 		__entry->type = usb_endpoint_type(dep->endpoint.desc);
-+		__entry->enqueue = dep->trb_enqueue
-+		__entry->dequeue = dep->trb_dequeue
- 	),
--	TP_printk("%s: trb %p buf %08x%08x size %s%d ctrl %08x (%c%c%c%c:%c%c:%s)",
--		__get_str(name), __entry->trb, __entry->bph, __entry->bpl,
-+	TP_printk("%s: trb %p (E%d:D%d) buf %08x%08x size %s%d ctrl %08x (%c%c%c%c:%c%c:%s)",
-+		__get_str(name), __entry->trb, __entry->enqueue,
-+		__entry->dequeue, __entry->bph, __entry->bpl,
- 		({char *s;
- 		int pcm = ((__entry->size >> 24) & 3) + 1;
- 		switch (__entry->type) {
--- 
-2.25.0
+On 28-01-2020 23:02, Thierry Reding wrote:
+> On Mon, Dec 30, 2019 at 04:39:40PM +0530, Nagarjuna Kristam wrote:
+>> If usb-role-switch property is present in USB 2 port, register
+>> usb-role-switch to receive usb role changes.
+>>
+>> Signed-off-by: Nagarjuna Kristam<nkristam@nvidia.com>
+>> ---
+>> V3:
+>>   - Driver aborts if usb-role-switch is not added in dt forotg/peripheral
+>>     roles.
+>>   - Added role name strings instead of enum values in debug prints.
+>>   - Updated arguments and variable allignments as per Thierry inputs.
+>> ---
+>> V2:
+>>   - Removed dev_set_drvdata for port->dev.
+>>   - Added of_platform_depopulate during error handling and driver removal.
+>> ---
+>>   drivers/phy/tegra/Kconfig |  1 +
+>>   drivers/phy/tegra/xusb.c  | 57 +++++++++++++++++++++++++++++++++++++++++++++++
+>>   drivers/phy/tegra/xusb.h  |  3 +++
+>>   3 files changed, 61 insertions(+)
+>>
+>> diff --git a/drivers/phy/tegra/Kconfig b/drivers/phy/tegra/Kconfig
+>> index f9817c3..df07c4d 100644
+>> --- a/drivers/phy/tegra/Kconfig
+>> +++ b/drivers/phy/tegra/Kconfig
+>> @@ -2,6 +2,7 @@
+>>   config PHY_TEGRA_XUSB
+>>   	tristate "NVIDIA Tegra XUSB pad controller driver"
+>>   	depends on ARCH_TEGRA
+>> +	select USB_CONN_GPIO
+>>   	help
+>>   	  Choose this option if you have an NVIDIA Tegra SoC.
+>>   
+>> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
+>> index f98ec39..11ea9b5 100644
+>> --- a/drivers/phy/tegra/xusb.c
+>> +++ b/drivers/phy/tegra/xusb.c
+>> @@ -523,6 +523,7 @@ static int tegra_xusb_port_init(struct tegra_xusb_port *port,
+>>   	port->dev.type = &tegra_xusb_port_type;
+>>   	port->dev.of_node = of_node_get(np);
+>>   	port->dev.parent = padctl->dev;
+>> +	port->dev.driver = padctl->dev->driver;
+> This looks wrong. I don't think driver's are supposed to set this
+> because it basically means that the device is being attached to the
+> driver, but in this case it doesn't get probed by the driver and in
+> fact the ports don't match the pad controller, so they can't really
+> be driven by the same driver.
+> 
+> Is there any particular reason why you need this?
+> 
+> Thierry
 
+Yes, port->dev.driver->owner is accessed in USB role switch driver in 
+API usb_role_switch_get. If driver param is not updated, it causes NULL 
+pointer exception. Based on your inputs, since this assignment is not 
+supposed to used, I believe option available is to create a new 
+device_driver structure and assign the same here.
+Please share your thoughts.
+
+- Nagarjuna
