@@ -2,106 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F059414D057
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2020 19:20:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E1014D069
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2020 19:24:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727462AbgA2SUc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jan 2020 13:20:32 -0500
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:39086 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727035AbgA2SUc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jan 2020 13:20:32 -0500
-Received: by mail-ed1-f65.google.com with SMTP id m13so774466edb.6;
-        Wed, 29 Jan 2020 10:20:30 -0800 (PST)
+        id S1727274AbgA2SYO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jan 2020 13:24:14 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:40535 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727035AbgA2SYO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jan 2020 13:24:14 -0500
+Received: by mail-lj1-f196.google.com with SMTP id n18so397384ljo.7
+        for <linux-usb@vger.kernel.org>; Wed, 29 Jan 2020 10:24:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NX2pG5BX85VkfelsTQdQ5JSd3AKoTwJ5pQ15xJEg30w=;
+        b=ft/bm56u/CHiacuUMpJVmiZTRiwYgPTGIFMn1KyMwkwFHcceIQDeEuHCQVcP0XkAkb
+         GRbhwtph7yBEfVt8vH0xT458zagqsZ+cjaUICagYsOP8yTXD9a7Rkj6TVmnBfEmzreuQ
+         /pULlOVyxrpWNkJJSL79mlPSddOb4L7DMs0as=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=yAlt9sUhm5zn3CkiuoYhtDJJhOfJezTwh/rQdwcy2qo=;
-        b=eJRQTd+UmPmkPeVCidfgtok3ECCsOhxDAtf2V1lu1Jm1LFsOLwaQkP+TNA3tAy6Bcf
-         SDn+HWH8CjKEurIHA1eJxmZpUeXTX+qXseSGh20j8FncSonzqK8pprKkKZkzt0DqGGPt
-         UeU+ZeHCK8qfopA9V8wlLgvupSiapbI9caE5HA5OgKqun6qCrxbrjw3VyoF1k3DciLQR
-         WsaZDNHnaBrtVqwsfN9kHr3B9tj0jD/Mxu9epEbKl1wsvI7M3bHUJ/Mn0uQGkITlgFBX
-         R5ixb6lteoMasgLcaUWYZdT6UXstz8VGSazUDeC/Lick12exoeCiPk355CBYdBujDRBt
-         djBQ==
-X-Gm-Message-State: APjAAAXBbnV8jEm2tacxEukq+Tk8Zq9LDLBqf0KAuz16YCsI34mbZG1R
-        N+e9FZ+WSqLv0E3VqbcmGOk=
-X-Google-Smtp-Source: APXvYqyM76d1tXBOIO/kDgSXHenjgUCHVzUXMOBkFUyHNley4ZSGxzdiDbG0DVWYM1y6KBWr7W0ByQ==
-X-Received: by 2002:a05:6402:1764:: with SMTP id da4mr264387edb.24.1580322030093;
-        Wed, 29 Jan 2020 10:20:30 -0800 (PST)
-Received: from kozik-lap ([194.230.155.229])
-        by smtp.googlemail.com with ESMTPSA id e22sm315486edq.75.2020.01.29.10.20.28
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 29 Jan 2020 10:20:29 -0800 (PST)
-Date:   Wed, 29 Jan 2020 19:20:27 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NX2pG5BX85VkfelsTQdQ5JSd3AKoTwJ5pQ15xJEg30w=;
+        b=n3dsWhF8dQYF8CpdErt3bXdI7dyMbdOa7iX8ovsTSRLQIoY+092cAp/COmXM3dwfST
+         Bwon/3/R3en3vn6wPu327ahXWwC0zyZLCE82rF1HqT+0gsKYgnaH0lVfrMrQepJWNmGP
+         QDhfNKi7WKC5cUgKu/E3tNQtLZAa6PERiH4Bxa1kQeYwiFVzOtIOAL1dq8H0Ro9EuMNV
+         jLa7+P6v9+616R7UrcMZad3hxyCCC54teb3+Igh6YyUYaE8truPqOgVSP94GjpIAAQ1e
+         SS9QuZNzRb/n/PMmaIJZ5E9cwhzlOo/bbDHjpxl+cQmdBTqCdVPVEDSKomg93cJcXv33
+         fn5Q==
+X-Gm-Message-State: APjAAAWDV8d7vAYFpSiss8dRTGK1ELygAylhaB5Zh3Sh8mlw6GJxwScu
+        KPyI/BHoayH1sSwWuZVNQTqZ8CilYBw=
+X-Google-Smtp-Source: APXvYqwbtn+IB9ALrCBdzHLI03sYlefYKWk5FGc1tijs3qZi6V+g04SXl/xaDzXRDGND+z+CPsjPCQ==
+X-Received: by 2002:a2e:9118:: with SMTP id m24mr254363ljg.105.1580322252234;
+        Wed, 29 Jan 2020 10:24:12 -0800 (PST)
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
+        by smtp.gmail.com with ESMTPSA id 135sm1459099lfb.28.2020.01.29.10.24.11
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jan 2020 10:24:11 -0800 (PST)
+Received: by mail-lj1-f169.google.com with SMTP id q8so437017ljb.2
+        for <linux-usb@vger.kernel.org>; Wed, 29 Jan 2020 10:24:11 -0800 (PST)
+X-Received: by 2002:a2e:97cc:: with SMTP id m12mr235022ljj.241.1580322250961;
+ Wed, 29 Jan 2020 10:24:10 -0800 (PST)
+MIME-Version: 1.0
+References: <20200129101401.GA3858221@kroah.com> <CAHk-=wgwBfz0CtAFZMDy=A_Wz0+=dzrfWWiHESUD9CxnV=Xyjw@mail.gmail.com>
+ <20200129182027.GA13142@kozik-lap>
+In-Reply-To: <20200129182027.GA13142@kozik-lap>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 29 Jan 2020 10:23:54 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wg67HWkPawJRFffOS25CL0tjzF7tbk-mJot9oT8siqPfg@mail.gmail.com>
+Message-ID: <CAHk-=wg67HWkPawJRFffOS25CL0tjzF7tbk-mJot9oT8siqPfg@mail.gmail.com>
+Subject: Re: [GIT PULL] USB/Thunderbolt/PHY patches for 5.6-rc1
+To:     Krzysztof Kozlowski <krzk@kernel.org>
 Cc:     Greg KH <gregkh@linuxfoundation.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-usb@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>
-Subject: Re: [GIT PULL] USB/Thunderbolt/PHY patches for 5.6-rc1
-Message-ID: <20200129182027.GA13142@kozik-lap>
-References: <20200129101401.GA3858221@kroah.com>
- <CAHk-=wgwBfz0CtAFZMDy=A_Wz0+=dzrfWWiHESUD9CxnV=Xyjw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgwBfz0CtAFZMDy=A_Wz0+=dzrfWWiHESUD9CxnV=Xyjw@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 29, 2020 at 10:11:26AM -0800, Linus Torvalds wrote:
-> On Wed, Jan 29, 2020 at 2:14 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > Here is the big USB and Thunderbolt and PHY driver updates for 5.6-rc1.
-> 
-> Hmm. This actually causes a new warning even before I start building it:
-> 
->   WARNING: unmet direct dependencies detected for I2C_S3C2410
->     Depends on [n]: I2C [=y] && HAS_IOMEM [=y] && HAVE_S3C2410_I2C [=n]
->     Selected by [m]:
->     - PHY_EXYNOS5250_SATA [=m] && (SOC_EXYNOS5250 || COMPILE_TEST
-> [=y]) && HAS_IOMEM [=y] && OF [=y]
-> 
-> and the cause seems to be
-> 
->   203b7ee14d3a ("phy: Enable compile testing for some of drivers")
-> 
-> where PHY_EXYNOS5250_SATA now has a
-> 
->   depends on SOC_EXYNOS5250 || COMPILE_TEST
->   depends on HAS_IOMEM
->   depends on OF
-> 
-> and then blindly does a
-> 
->   select I2C_S3C2410
-> 
-> without having the dependencies that I2C_S3C2410 has.
-> 
-> How did this ever pass any testing in linux-next without being
-> noticed, when I noticed within five seconds of pulling it? It
-> literally warns immediately on "make allmodconfig".
-> 
-> The warnings happen during the build too, as it does the silentconfig.
-> So I'm not sure how this was missed.
-> 
-> Stephen, does linux-next perhaps miss these config-time warnings?
-> 
-> I have partially reverted that commit in my merge (removing the "||
-> COMPILE_TEST" for that PHY_EXYNOS5250_SATA entry) because warnings are
-> not acceptable.
+On Wed, Jan 29, 2020 at 10:20 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>
+> The I2C fix for this is in Wolfram's tree already:
 
-Hi Linus,
+It was never an i2c error.
 
-The I2C fix for this is in Wolfram's tree already:
-https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git/log/?h=i2c/for-next
+It was an error in that commit that made a change that introduced a new warning.
 
-Best regards,
-Krzysztof
+It is *not* acceptable to break things and say "somebody else will fix
+it up later".
 
+If it's broken in the PHY tree, then the PHY tree is broken. It's that simple.
+
+We don't enable compile testing that causes warnings.
+
+                  Linus
