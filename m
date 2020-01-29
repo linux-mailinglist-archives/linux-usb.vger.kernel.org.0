@@ -2,85 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1F9E14D297
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2020 22:35:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2B9D14D341
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2020 23:53:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726487AbgA2VfE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jan 2020 16:35:04 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:41485 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726283AbgA2VfE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 29 Jan 2020 16:35:04 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 487Gwj5vrBz9sP6;
-        Thu, 30 Jan 2020 08:35:01 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1580333702;
-        bh=eyqY0mX0PpMaEAdMEpXg3iL7rJwWR82QGrbDc86uKi4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RixzmimKY9L05wQIdgnb0QTs3Hs23KiKVcOFVnJ/haklsMLLioCCEpy3IN3k3uLuj
-         Q0LjvOjEreaZHePDJ2GNfPaWmytM3B+BAQdIwlz5jppGHMrM069FJVjdWJOZAc1kWe
-         786eBW8xLts309Stl8GWmXIpS1qzNUPq9fK6kibtzYVWTM+Pm6ZVITO7i+H647afWW
-         VpERWXxo3z6SoyfzeBSfM0Ug4CDgHnQnd8N0yxoIdQTFHESZB9CVM0d3eEb1+hDaky
-         8DaLWXlkxiUxRkZlCx+2lqlGUIKiHIoQqXqMg0JMYvAE35qtq3Xynn1wTR7tFemlvD
-         r5y9chlNxWxFw==
-Date:   Thu, 30 Jan 2020 08:34:59 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S1726707AbgA2WxP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jan 2020 17:53:15 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:59629 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726222AbgA2WxP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jan 2020 17:53:15 -0500
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1iwwCr-0007iy-Me; Wed, 29 Jan 2020 23:53:09 +0100
+Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1iwwCo-0006yK-FW; Wed, 29 Jan 2020 23:53:06 +0100
+Date:   Wed, 29 Jan 2020 23:53:06 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
+        rjw@rjwysocki.net, pavel@ucw.cz, len.brown@intel.com,
+        kernel@pengutronix.de, linux-pm@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: Re: [GIT PULL] USB/Thunderbolt/PHY patches for 5.6-rc1
-Message-ID: <20200130083459.206fc0d9@canb.auug.org.au>
-In-Reply-To: <CAHk-=wgwBfz0CtAFZMDy=A_Wz0+=dzrfWWiHESUD9CxnV=Xyjw@mail.gmail.com>
-References: <20200129101401.GA3858221@kroah.com>
-        <CAHk-=wgwBfz0CtAFZMDy=A_Wz0+=dzrfWWiHESUD9CxnV=Xyjw@mail.gmail.com>
+Subject: Re: USB Port Power-Off during suspend Bug?
+Message-ID: <20200129225306.dmtoemf62qhogysh@pengutronix.de>
+References: <20200129095442.3exfzwp3vrubfxir@pengutronix.de>
+ <Pine.LNX.4.44L0.2001291254080.1429-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Hv/8lCC5NcF2=3iM0zHgW3F";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.2001291254080.1429-100000@iolanthe.rowland.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 23:46:04 up 75 days, 14:04, 71 users,  load average: 0.22, 0.17,
+ 0.07
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---Sig_/Hv/8lCC5NcF2=3iM0zHgW3F
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 20-01-29 12:59, Alan Stern wrote:
+> On Wed, 29 Jan 2020, Marco Felsch wrote:
+> 
+> > Hi Alan, Rafael, Greg,
+> > 
+> > long story short: I want to disable a usb-port completely during suspend
+> 
+> You're talking about what happens during a full system suspend, right?
 
-Hi Linus,
+Yes.
 
-On Wed, 29 Jan 2020 10:11:26 -0800 Linus Torvalds <torvalds@linux-foundatio=
-n.org> wrote:
->
-> Stephen, does linux-next perhaps miss these config-time warnings?
+> > because it isn't needed and we need to save energy, because is a 32bit ARM
+> > (OF-based) handheld device. I use the port to connect a usb-ethernet
+> > dongle (all needed drivers are builtin no modules) which is needed for
+> > the NFS. The usb-ethernet dongle supports the persist setting because it
+> > does a hw-reset during resume anyway.
+> > 
+> > So what I did is:
+> >  1) Set the persist bit for the usb device
+> >  2) Set the control to auto for the usb device
+> >  3) Unset the pm_qos_no_power_off flag for the usb-port
+> > 
+> > But the port gets not disabled. I debugged it and found a problem in
+> > usb_port_suspend() logic [1] and the generic PM-framework more precisely
+> > the dpm mechanism. The usbcore does the correct pm_runtime counting but
+> > the call [2] don't trigger the usb_port_runtime_suspend() [3] because
+> > the dpm enables all runtime-pm device before the shutdown is executed.
+> 
+> That's right; it's supposed to work that way.  We don't want runtime 
+> suspend kicking in and messing things up during a system suspend.
 
-I saw it when it first happened and reported it, but since I merge the
-ic2 tree before the usb tree, the warning went away for me after the
-fix was added to the i2c tree.
+I'm absolutly fine with that behaviour.
 
---=20
-Cheers,
-Stephen Rothwell
+> > IMHO both subsystem behaviours are correct and I don't know the
+> > _correct_ fix, therefore I wrote this email.
+> 
+> The correct fix is to add support for system suspend to the USB port 
+> driver.  Currently it only supports runtime suspend, as you can see 
+> from the definition of usb_port_pm_ops in port.c.
 
---Sig_/Hv/8lCC5NcF2=3iM0zHgW3F
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+I tought that this was intentionally to support only the runtime-pm ops.
+Okay so this means that we need to check the:
+  - persist
+  - do_wakeup
+  - pm_qos_power_off
+bits again for the suspend case. I tought I miss something and we can
+reuse the current checks.
 
------BEGIN PGP SIGNATURE-----
+Regards,
+  Marco
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4x+oMACgkQAVBC80lX
-0GxB6gf9GfpZmBKW4JuE0Us6SJ7R03W90WIp5GKHm1m8RMUKR6kGUe+Qi+EihvYC
-H2o9mTQch46KzQBBzZTRumnBlvzv6QpuygvNEhKOgI4+deAYCWDYTO0nKXW2FUFU
-FXqcNzUEdo98bjiZftz+09iL52/9TOw6zGY47UTLX4ZprlIPr+UHfA0oZ9XW0aAI
-KaDfoJviDNIoL4k8wRWCFYmur5L/qxbUJeydVa0J14euXePRHFnn7QkpAyXksISu
-P1aMf5Q2bUG4e6Xth0EhNeA2KCbkrjLxuwJ2B0Ix+njk6J2aRck22g0rS0g+x7ba
-eDsBdsHewA1i9y3qzOYlAWWkoItpyg==
-=pk4o
------END PGP SIGNATURE-----
+> Alan Stern
+> 
+> > As far as I understood it all non-ACPI platforms are affected.
+> > 
+> > Regards,
+> >   Marco
+> > 
+> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/core/hub.c?h=v5.5#n3238
+> > [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/core/hub.c?h=v5.5#n3328
+> > [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/core/port.c?h=v5.5#n247
+> 
+> 
 
---Sig_/Hv/8lCC5NcF2=3iM0zHgW3F--
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
