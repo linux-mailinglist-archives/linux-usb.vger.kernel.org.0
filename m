@@ -2,168 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3036A14CAD5
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2020 13:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C15814CCA5
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2020 15:39:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726633AbgA2M1S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jan 2020 07:27:18 -0500
-Received: from mail-il1-f200.google.com ([209.85.166.200]:39876 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726358AbgA2M1K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jan 2020 07:27:10 -0500
-Received: by mail-il1-f200.google.com with SMTP id n6so12995660ile.6
-        for <linux-usb@vger.kernel.org>; Wed, 29 Jan 2020 04:27:10 -0800 (PST)
+        id S1726385AbgA2Ojp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jan 2020 09:39:45 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:34758 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726178AbgA2Ojp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jan 2020 09:39:45 -0500
+Received: by mail-lj1-f196.google.com with SMTP id x7so18674159ljc.1
+        for <linux-usb@vger.kernel.org>; Wed, 29 Jan 2020 06:39:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=D38QWv/1k1xwSmzwUpW2I6wnVFaWZUd/4wBXcnKeWxE=;
+        b=BumFl8rr+Z1jt6iydy5R/quchS2Je5WPiuBN6Gfyy6zOG54QBTbN10KJ2jysKjiXJJ
+         bXrCvNHS7IdxzRM3mXnGAhs92bQCmLRN7yW5HefsDh1pB6M4hL4WoMHsJYR3wisGZ6pu
+         SQ5E3HR+bIDJCBV5rtdHcpResazeIFegQi7rjo/11bMqlkOcNFJAo2ZWcjzOeul5UqtF
+         DdXHsKw8Wkqt6xQ2anC2mh/Qh8qE14S4zJC+ydwOg42KIeL35B0aDFbcqqJ4OIXjd9ds
+         WLHE82YJp4UOkWRVGZXWtet/m8KEdKhZIbdBscAe/r6IBYPt0kbVf4oD8xkGz7as9hjP
+         3mPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=x2c2rAUs5VjWNl2yVpMiXXd6LGKNk8O648CMLyi/yxs=;
-        b=ZsX1hHKo+uXoruU+Sj6863dtDr0YHLPnKQks4jEDl1AXASd4Eg+6RzpTTdlOLOjkeT
-         QTtrnEyvghwLTwYbTvOASlkPQUFCESOc8ajuM3ndgPnVgLPVhAJT483peQEV8xMNhduh
-         xCMhDbaveE5tgGl7Feg1zHCHZtHGh2OJUQPOWtqvRdrzHc7AqkFawvh7dVkwzrAltDC8
-         JrSp9Q4ta+zHclIwOhAJdRmuRBN4VevzJsbmHikASz0JYpWwFdNIiZ13rRNzF6W8fB9I
-         cZ6mmvIm22qa4vEBGLcmWgY4ex1XS8IR2ZvxmaASbMntCavhnzgfAeIPUfxlXD18wh7a
-         iVMg==
-X-Gm-Message-State: APjAAAU+fhpdDDS55cpynelj+oYWahJr0TG/uU9chQmJYgLeFACqGxoF
-        zhYJUuLne/o7OEJjqsD+Zq0EfP7IuVczC0p12LvZJNo4GMXv
-X-Google-Smtp-Source: APXvYqy/vSrWy9MZoQS72VuYFVeLhSUiZRHRekQs1zZiXtmnAz1jlL1FLLfxa/VhRcEv5gf8cg+Dl8N9Fc2cXjhbsDyIjihK+7Zu
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=D38QWv/1k1xwSmzwUpW2I6wnVFaWZUd/4wBXcnKeWxE=;
+        b=cTM4cN+sW+1Sf36noxhsYq2JNgPNSnUEXHYOqEW+JIMPzypJSrWKnGHIV9q8Lw/eqp
+         qNn1WYr2lgeA6gKyXtN8KaNjX85zx/37lnLyOLXchZsayYpmWhEMc2+fHypknSiSkzV8
+         2/COskHTnD8KFCiwVKYQG/reB8Hvn317yEKZUKR+PveyTxdQWFcya5yDEMBQxE32FhKP
+         teZcQcIKNVYAYCYvX+rq7GtXzX7Duk/OdQGz16IOAGklqlzeA/sR+05HfJI5sxSRQPjw
+         FLJtFz8vy6GknGFiiXOyCQWIgi+uLCI+n85WRVIcMqxooaWvfYWIdlFA60cdrmGTdasF
+         NbsQ==
+X-Gm-Message-State: APjAAAVMCqGUBf/1dJYtZ8MGIl8JXXEX1WvCtj460RdeZAZEZuRimbwp
+        r4dC2xzvOJPHr4jnF2tdW/DH2vH87cE=
+X-Google-Smtp-Source: APXvYqwrPp5EUKUE2tSUo26VgKIuK9wzppv1HPQ/fxH6FMHY/Oug7OAGIug4jYpLUyROm6ZoZjcWDQ==
+X-Received: by 2002:a2e:9955:: with SMTP id r21mr16262342ljj.283.1580308783077;
+        Wed, 29 Jan 2020 06:39:43 -0800 (PST)
+Received: from saruman.home (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
+        by smtp.gmail.com with ESMTPSA id o69sm1157597lff.14.2020.01.29.06.39.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jan 2020 06:39:42 -0800 (PST)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Linux USB <linux-usb@vger.kernel.org>
+Cc:     Felipe Balbi <balbi@kernel.org>
+Subject: [PATCH v2] usb: dwc3: trace: print enqueue/dequeue pointers too
+Date:   Wed, 29 Jan 2020 16:39:40 +0200
+Message-Id: <20200129143940.637341-1-balbi@kernel.org>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:5806:: with SMTP id m6mr24436789ilb.234.1580300829812;
- Wed, 29 Jan 2020 04:27:09 -0800 (PST)
-Date:   Wed, 29 Jan 2020 04:27:09 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000996f3c059d46757a@google.com>
-Subject: KASAN: use-after-free Write in chaoskey_disconnect
-From:   syzbot <syzbot+73163a4458e7367880a0@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, arnd@arndb.de, gregkh@linuxfoundation.org,
-        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        lvivier@redhat.com, mchehab+samsung@kernel.org, mpm@selenic.com,
-        swboyd@chromium.org, syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+By printing enqueue/dequeue pointers, we can make sure that our TRB
+handling is correct. We've had a recent situation where we were not
+always dequeueing all TRBs in an SG list and this helped figure out
+what the problem was.
 
-syzbot found the following crash on:
-
-HEAD commit:    cd234325 usb: gadget: add raw-gadget interface
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=140e49bee00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bb745005307bc641
-dashboard link: https://syzkaller.appspot.com/bug?extid=73163a4458e7367880a0
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-
-Unfortunately, I don't have any reproducer for this crash yet.
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+73163a4458e7367880a0@syzkaller.appspotmail.com
-
-usb 2-1: USB disconnect, device number 45
-==================================================================
-BUG: KASAN: use-after-free in atomic_fetch_add include/asm-generic/atomic-instrumented.h:111 [inline]
-BUG: KASAN: use-after-free in refcount_add include/linux/refcount.h:188 [inline]
-BUG: KASAN: use-after-free in refcount_inc include/linux/refcount.h:228 [inline]
-BUG: KASAN: use-after-free in get_task_struct include/linux/sched/task.h:113 [inline]
-BUG: KASAN: use-after-free in kthread_stop+0x90/0x780 kernel/kthread.c:554
-Write of size 4 at addr ffff8881ca88e220 by task kworker/0:10/18542
-
-CPU: 0 PID: 18542 Comm: kworker/0:10 Not tainted 5.5.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
- __kasan_report.cold+0x37/0x85 mm/kasan/report.c:506
- kasan_report+0xe/0x20 mm/kasan/common.c:639
- check_memory_region_inline mm/kasan/generic.c:185 [inline]
- check_memory_region+0x152/0x1c0 mm/kasan/generic.c:192
- atomic_fetch_add include/asm-generic/atomic-instrumented.h:111 [inline]
- refcount_add include/linux/refcount.h:188 [inline]
- refcount_inc include/linux/refcount.h:228 [inline]
- get_task_struct include/linux/sched/task.h:113 [inline]
- kthread_stop+0x90/0x780 kernel/kthread.c:554
- hwrng_unregister+0x24f/0x330 drivers/char/hw_random/core.c:556
- chaoskey_disconnect+0x216/0x290 drivers/usb/misc/chaoskey.c:232
- usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
- __device_release_driver drivers/base/dd.c:1134 [inline]
- device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1165
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:532
- device_del+0x481/0xd30 drivers/base/core.c:2664
- usb_disable_device+0x23d/0x790 drivers/usb/core/message.c:1237
- usb_disconnect+0x293/0x900 drivers/usb/core/hub.c:2201
- hub_port_connect drivers/usb/core/hub.c:5036 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5325 [inline]
- port_event drivers/usb/core/hub.c:5471 [inline]
- hub_event+0x1a1d/0x4300 drivers/usb/core/hub.c:5553
- process_one_work+0x945/0x15c0 kernel/workqueue.c:2264
- worker_thread+0x96/0xe20 kernel/workqueue.c:2410
- kthread+0x318/0x420 kernel/kthread.c:255
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Allocated by task 1824:
- save_stack+0x1b/0x80 mm/kasan/common.c:72
- set_track mm/kasan/common.c:80 [inline]
- __kasan_kmalloc mm/kasan/common.c:513 [inline]
- __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:486
- slab_post_alloc_hook mm/slab.h:584 [inline]
- slab_alloc_node mm/slub.c:2759 [inline]
- kmem_cache_alloc_node+0xdc/0x330 mm/slub.c:2795
- alloc_task_struct_node kernel/fork.c:169 [inline]
- dup_task_struct kernel/fork.c:868 [inline]
- copy_process+0x43e3/0x6710 kernel/fork.c:1911
- _do_fork+0x12d/0xfd0 kernel/fork.c:2421
- __do_sys_clone kernel/fork.c:2576 [inline]
- __se_sys_clone kernel/fork.c:2557 [inline]
- __x64_sys_clone+0x182/0x210 kernel/fork.c:2557
- do_syscall_64+0xb6/0x5a0 arch/x86/entry/common.c:294
- entry_SYSCALL_64_after_hwframe+0x49/0xbe
-
-Freed by task 1824:
- save_stack+0x1b/0x80 mm/kasan/common.c:72
- set_track mm/kasan/common.c:80 [inline]
- kasan_set_free_info mm/kasan/common.c:335 [inline]
- __kasan_slab_free+0x117/0x160 mm/kasan/common.c:474
- slab_free_hook mm/slub.c:1425 [inline]
- slab_free_freelist_hook mm/slub.c:1458 [inline]
- slab_free mm/slub.c:3005 [inline]
- kmem_cache_free+0x9b/0x360 mm/slub.c:3021
- __put_task_struct+0x220/0x510 kernel/fork.c:751
- put_task_struct include/linux/sched/task.h:122 [inline]
- delayed_put_task_struct+0x22a/0x370 kernel/exit.c:182
- __rcu_reclaim kernel/rcu/rcu.h:222 [inline]
- rcu_do_batch kernel/rcu/tree.c:2183 [inline]
- rcu_core+0x664/0x1e10 kernel/rcu/tree.c:2408
- __do_softirq+0x21e/0x950 kernel/softirq.c:292
-
-The buggy address belongs to the object at ffff8881ca88e200
- which belongs to the cache task_struct of size 6016
-The buggy address is located 32 bytes inside of
- 6016-byte region [ffff8881ca88e200, ffff8881ca88f980)
-The buggy address belongs to the page:
-page:ffffea00072a2200 refcount:1 mapcount:0 mapping:ffff8881da116000 index:0x0 compound_mapcount: 0
-raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da116000
-raw: 0000000000000000 0000000000050005 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff8881ca88e100: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff8881ca88e180: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff8881ca88e200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                               ^
- ffff8881ca88e280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8881ca88e300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
+Signed-off-by: Felipe Balbi <balbi@kernel.org>
 ---
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+argh, commit the missing ;
+
+ drivers/usb/dwc3/trace.h | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/dwc3/trace.h b/drivers/usb/dwc3/trace.h
+index 9edff17111f7..3054b89512ff 100644
+--- a/drivers/usb/dwc3/trace.h
++++ b/drivers/usb/dwc3/trace.h
+@@ -227,6 +227,8 @@ DECLARE_EVENT_CLASS(dwc3_log_trb,
+ 		__field(u32, size)
+ 		__field(u32, ctrl)
+ 		__field(u32, type)
++		__field(u32, enqueue)
++		__field(u32, dequeue)
+ 	),
+ 	TP_fast_assign(
+ 		__assign_str(name, dep->name);
+@@ -236,9 +238,12 @@ DECLARE_EVENT_CLASS(dwc3_log_trb,
+ 		__entry->size = trb->size;
+ 		__entry->ctrl = trb->ctrl;
+ 		__entry->type = usb_endpoint_type(dep->endpoint.desc);
++		__entry->enqueue = dep->trb_enqueue;
++		__entry->dequeue = dep->trb_dequeue;
+ 	),
+-	TP_printk("%s: trb %p buf %08x%08x size %s%d ctrl %08x (%c%c%c%c:%c%c:%s)",
+-		__get_str(name), __entry->trb, __entry->bph, __entry->bpl,
++	TP_printk("%s: trb %p (E%d:D%d) buf %08x%08x size %s%d ctrl %08x (%c%c%c%c:%c%c:%s)",
++		__get_str(name), __entry->trb, __entry->enqueue,
++		__entry->dequeue, __entry->bph, __entry->bpl,
+ 		({char *s;
+ 		int pcm = ((__entry->size >> 24) & 3) + 1;
+ 		switch (__entry->type) {
+-- 
+2.25.0
+
