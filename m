@@ -2,126 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA8D14C7E2
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2020 10:13:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22C1914C7F1
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2020 10:18:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726096AbgA2JNc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jan 2020 04:13:32 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:17471 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725951AbgA2JNc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jan 2020 04:13:32 -0500
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e314c880000>; Wed, 29 Jan 2020 01:12:40 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Wed, 29 Jan 2020 01:13:30 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Wed, 29 Jan 2020 01:13:30 -0800
-Received: from [10.19.66.205] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 29 Jan
- 2020 09:13:27 +0000
-Subject: Re: [Patch V3 03/18] phy: tegra: xusb: Add usb-role-switch support
-To:     Thierry Reding <thierry.reding@gmail.com>
-CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <jonathanh@nvidia.com>, <mark.rutland@arm.com>,
-        <robh+dt@kernel.org>, <kishon@ti.com>,
-        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1577704195-2535-1-git-send-email-nkristam@nvidia.com>
- <1577704195-2535-4-git-send-email-nkristam@nvidia.com>
- <20200128173244.GA2293590@ulmo>
-X-Nvconfidentiality: public
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
-Message-ID: <b6de0078-f1cd-31a1-70bd-dfc320eab70e@nvidia.com>
-Date:   Wed, 29 Jan 2020 14:45:38 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1726107AbgA2JSw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jan 2020 04:18:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44072 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725951AbgA2JSw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 29 Jan 2020 04:18:52 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 61B7520708;
+        Wed, 29 Jan 2020 09:18:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1580289531;
+        bh=p+StNdrQPhe5TRP4cV0PXfeprQUAfp3qbEgGzHDBO08=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OTUw+XVjCA4im92+j5Z5IaFbazOzdd75tzw7gMJTLo/20l8vfWWGQvfH2aDfZzB30
+         14tU2M+hh2pw2Sc/K21fX96odNVu43V4s2UfeoihxxwP/2EggHv8ARqi4gZbnz5wcq
+         Bvce2ZWjCSnZZmu3sBq83KiGRauaVKPK7BSs5O20=
+Date:   Wed, 29 Jan 2020 10:18:49 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-usb@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 1/2] docs: usb: remove some broken references
+Message-ID: <20200129091849.GA3802307@kroah.com>
+References: <00008303fde6b4e06d027d3b76ae7032614a7030.1580193653.git.mchehab+huawei@kernel.org>
+ <20200128134228.3c6f56b9@lwn.net>
+ <244ed240-46aa-aa73-6f89-df7944d42cbf@infradead.org>
+ <20200129074146.5f6077ca@kernel.org>
+ <20200129064535.GA3771222@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <20200128173244.GA2293590@ulmo>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1580289160; bh=AfKsN9drip9fGF1J0qLuc6MudsZ5rcBopOsTLJQmYOU=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=MBAooP6zorBL94Rw5yws9+pE/JuBQTCObfMRTLoCqHa7DkGpdPFUVTuyxJNMrl2Yn
-         uNS7Ry4YpvrYeuh4Vtez6/SPp7MiOVe8GMHYaqMmNnhUptibVxL8XLaDTPUVSUepM+
-         AmhQ0jo5hhnn+7fnT+I4soRC6ZpbeO9ZV0MUdGO04iVKOqpITv+LRl0JqvHk6JVXzm
-         D66WU5Mtr+iC9LEgwd+GPB9RKWzvt275lKagF6mHDNM/8HCwOmK7EOXKatldBrWuoA
-         iWfnXwllUpw96TA64d9dVETfJIVNZQp0nIEOtTNpmDWGUk6pz9SU2gUoMXyeAxXwTM
-         tPZGwOIA1GCeQ==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200129064535.GA3771222@kroah.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 28-01-2020 23:02, Thierry Reding wrote:
-> On Mon, Dec 30, 2019 at 04:39:40PM +0530, Nagarjuna Kristam wrote:
->> If usb-role-switch property is present in USB 2 port, register
->> usb-role-switch to receive usb role changes.
->>
->> Signed-off-by: Nagarjuna Kristam<nkristam@nvidia.com>
->> ---
->> V3:
->>   - Driver aborts if usb-role-switch is not added in dt forotg/peripheral
->>     roles.
->>   - Added role name strings instead of enum values in debug prints.
->>   - Updated arguments and variable allignments as per Thierry inputs.
->> ---
->> V2:
->>   - Removed dev_set_drvdata for port->dev.
->>   - Added of_platform_depopulate during error handling and driver removal.
->> ---
->>   drivers/phy/tegra/Kconfig |  1 +
->>   drivers/phy/tegra/xusb.c  | 57 +++++++++++++++++++++++++++++++++++++++++++++++
->>   drivers/phy/tegra/xusb.h  |  3 +++
->>   3 files changed, 61 insertions(+)
->>
->> diff --git a/drivers/phy/tegra/Kconfig b/drivers/phy/tegra/Kconfig
->> index f9817c3..df07c4d 100644
->> --- a/drivers/phy/tegra/Kconfig
->> +++ b/drivers/phy/tegra/Kconfig
->> @@ -2,6 +2,7 @@
->>   config PHY_TEGRA_XUSB
->>   	tristate "NVIDIA Tegra XUSB pad controller driver"
->>   	depends on ARCH_TEGRA
->> +	select USB_CONN_GPIO
->>   	help
->>   	  Choose this option if you have an NVIDIA Tegra SoC.
->>   
->> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
->> index f98ec39..11ea9b5 100644
->> --- a/drivers/phy/tegra/xusb.c
->> +++ b/drivers/phy/tegra/xusb.c
->> @@ -523,6 +523,7 @@ static int tegra_xusb_port_init(struct tegra_xusb_port *port,
->>   	port->dev.type = &tegra_xusb_port_type;
->>   	port->dev.of_node = of_node_get(np);
->>   	port->dev.parent = padctl->dev;
->> +	port->dev.driver = padctl->dev->driver;
-> This looks wrong. I don't think driver's are supposed to set this
-> because it basically means that the device is being attached to the
-> driver, but in this case it doesn't get probed by the driver and in
-> fact the ports don't match the pad controller, so they can't really
-> be driven by the same driver.
+On Wed, Jan 29, 2020 at 07:45:35AM +0100, Greg Kroah-Hartman wrote:
+> On Wed, Jan 29, 2020 at 07:41:46AM +0100, Mauro Carvalho Chehab wrote:
+> > Em Tue, 28 Jan 2020 15:47:18 -0800
+> > Randy Dunlap <rdunlap@infradead.org> escreveu:
+> > 
+> > > On 1/28/20 12:42 PM, Jonathan Corbet wrote:
+> > > > On Tue, 28 Jan 2020 07:41:00 +0100
+> > > > Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
+> > > >   
+> > > >> It seems that some files were removed from USB documentation.
+> > > >>
+> > > >> Update the links accordingly.
+> > > >>
+> > > >> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>  
+> > > > 
+> > > > Applied, thanks.
+> > > > 
+> > > > jon  
+> > > 
+> > > This warning has been around for quite awhile now:
+> > > 
+> > > lnx-55/Documentation/usb/text_files.rst:22: WARNING: Include file u'lnx/lnx-55/Documentation/usb/wusb-cbaf' not found or reading it failed
+> > > 
+> > > Looks like it has been moved to drivers/staging/wusbcore/Documentation/wusb-cbaf.
+> > 
+> > From the log of the patch that moved it:
+> > 
+> >   commit 71ed79b0e4be0db254640c3beb9a1a0316eb5f61
+> >   Author: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> >   Date:   Tue Aug 6 12:15:09 2019 +0200
+> > 
+> >     USB: Move wusbcore and UWB to staging as it is obsolete
+> >     
+> >     The UWB and wusbcore code is long obsolete, so let us just move the code
+> >     out of the real part of the kernel and into the drivers/staging/
+> >     location with plans to remove it entirely in a few releases.
+> >     
+> >     Link: https://lore.kernel.org/r/20190806101509.GA11280@kroah.com
+> >     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > 
+> > The plan seems to remove it in the future.
+> > 
+> > In any case, it makes sense to remove the broken link from the 
+> > documentation.
 > 
-> Is there any particular reason why you need this?
-> 
-> Thierry
+> Yes, please just remove it, that code is about to go away in the
+> 5.6-rc1.
 
-Yes, port->dev.driver->owner is accessed in USB role switch driver in 
-API usb_role_switch_get. If driver param is not updated, it causes NULL 
-pointer exception. Based on your inputs, since this assignment is not 
-supposed to used, I believe option available is to create a new 
-device_driver structure and assign the same here.
-Please share your thoughts.
-
-- Nagarjuna
+Oops, not yet, in 5.7-rc1.
