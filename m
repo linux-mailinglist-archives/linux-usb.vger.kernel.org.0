@@ -2,97 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C1914C7F1
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2020 10:18:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DE0214C801
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2020 10:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726107AbgA2JSw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jan 2020 04:18:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44072 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725951AbgA2JSw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 29 Jan 2020 04:18:52 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 61B7520708;
-        Wed, 29 Jan 2020 09:18:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580289531;
-        bh=p+StNdrQPhe5TRP4cV0PXfeprQUAfp3qbEgGzHDBO08=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OTUw+XVjCA4im92+j5Z5IaFbazOzdd75tzw7gMJTLo/20l8vfWWGQvfH2aDfZzB30
-         14tU2M+hh2pw2Sc/K21fX96odNVu43V4s2UfeoihxxwP/2EggHv8ARqi4gZbnz5wcq
-         Bvce2ZWjCSnZZmu3sBq83KiGRauaVKPK7BSs5O20=
-Date:   Wed, 29 Jan 2020 10:18:49 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-usb@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/2] docs: usb: remove some broken references
-Message-ID: <20200129091849.GA3802307@kroah.com>
-References: <00008303fde6b4e06d027d3b76ae7032614a7030.1580193653.git.mchehab+huawei@kernel.org>
- <20200128134228.3c6f56b9@lwn.net>
- <244ed240-46aa-aa73-6f89-df7944d42cbf@infradead.org>
- <20200129074146.5f6077ca@kernel.org>
- <20200129064535.GA3771222@kroah.com>
+        id S1726225AbgA2J0N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jan 2020 04:26:13 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:40817 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726010AbgA2J0M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jan 2020 04:26:12 -0500
+Received: by mail-wm1-f67.google.com with SMTP id t14so5564932wmi.5;
+        Wed, 29 Jan 2020 01:26:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=C5FR3KDweP6mgB/gUrjId83AFc5dsG2FHxcfHuDP3Nk=;
+        b=XWPs3YfhoZhgZ49WSridwi1KL+p6zWe4PrD0xfpxieWsY/sye5pk9qb3nJTy7EB4pJ
+         mpJrvC9koAEjr0WWj9Xj6MoqQBe0OrnVmwwoy/K352EFLAud7HicR0FLCJB7oE+0KX+1
+         3H++iI9hyoLPstvU96Vd8q+nkogZvjYTGBHLg76ZTmb3lHwgoi33wgloQlMEWU8Z+APz
+         AuwAW+aJQSGppGdqgACTps+67h/yGPnfbMQtb96DffgW29jNj4JKe1S0btshPiRDR+kj
+         JQ2Qu+GND23OaCHSEzOonYb8oPawtwhxtBCfSsn3xKO8PKFopfqrp9thrUVtiQAes5Dz
+         FbYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=C5FR3KDweP6mgB/gUrjId83AFc5dsG2FHxcfHuDP3Nk=;
+        b=lsRsssBvKmpH3myuNd9QmvERc24m78oFoQpx1NW0dDof9iJ8WzeH4WetKRfY2a1PD2
+         +PoSg13AIEHrRk3IQrmipND9pXL1zvDJYWlj97wEK3ZvbR4lvZ1gayPFa/vRXY+T3jNJ
+         wCQFCVGLYTZpxFrg6mHjM8z6FuSMOUg17z8UfC5eODhqLU3oxonnatCzoMzc5+51D4oj
+         lBy6e8UIjX0qh6elGr6o3RIMUOh6Auav0pa4+74E9+Ca3pFsnEPiFnnQ2d6r3LF2hCZm
+         DJoUGDC5PZrM9+LxN2TzNmJCWHS91Bd2uF4/4ex+CH0dyMe1df6m0IMuTzKxAXNejtb3
+         VfNQ==
+X-Gm-Message-State: APjAAAW1zv7W7AKaTVFT6YK14H5yl+gk1GXehoxp36SVUTXV8IGnMXiA
+        oH7ypE9oWf31o3TreQRfVbY=
+X-Google-Smtp-Source: APXvYqxRIXERmuEjll6+nCJOcZ8zT2G/LmRprlxssw2+Z9UuQupmkMh6GjWfWtXgajV1GbXVe6eCbQ==
+X-Received: by 2002:a05:600c:22d3:: with SMTP id 19mr10206267wmg.20.1580289970274;
+        Wed, 29 Jan 2020 01:26:10 -0800 (PST)
+Received: from localhost (p2E5BEF3F.dip0.t-ipconnect.de. [46.91.239.63])
+        by smtp.gmail.com with ESMTPSA id h2sm2107589wrt.45.2020.01.29.01.26.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jan 2020 01:26:08 -0800 (PST)
+Date:   Wed, 29 Jan 2020 10:26:07 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Nagarjuna Kristam <nkristam@nvidia.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
+        mark.rutland@arm.com, robh+dt@kernel.org, kishon@ti.com,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Patch V3 03/18] phy: tegra: xusb: Add usb-role-switch support
+Message-ID: <20200129092607.GA2479935@ulmo>
+References: <1577704195-2535-1-git-send-email-nkristam@nvidia.com>
+ <1577704195-2535-4-git-send-email-nkristam@nvidia.com>
+ <20200128173244.GA2293590@ulmo>
+ <b6de0078-f1cd-31a1-70bd-dfc320eab70e@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="lrZ03NoBR/3+SXJZ"
 Content-Disposition: inline
-In-Reply-To: <20200129064535.GA3771222@kroah.com>
+In-Reply-To: <b6de0078-f1cd-31a1-70bd-dfc320eab70e@nvidia.com>
+User-Agent: Mutt/1.13.1 (2019-12-14)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jan 29, 2020 at 07:45:35AM +0100, Greg Kroah-Hartman wrote:
-> On Wed, Jan 29, 2020 at 07:41:46AM +0100, Mauro Carvalho Chehab wrote:
-> > Em Tue, 28 Jan 2020 15:47:18 -0800
-> > Randy Dunlap <rdunlap@infradead.org> escreveu:
-> > 
-> > > On 1/28/20 12:42 PM, Jonathan Corbet wrote:
-> > > > On Tue, 28 Jan 2020 07:41:00 +0100
-> > > > Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
-> > > >   
-> > > >> It seems that some files were removed from USB documentation.
-> > > >>
-> > > >> Update the links accordingly.
-> > > >>
-> > > >> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>  
-> > > > 
-> > > > Applied, thanks.
-> > > > 
-> > > > jon  
-> > > 
-> > > This warning has been around for quite awhile now:
-> > > 
-> > > lnx-55/Documentation/usb/text_files.rst:22: WARNING: Include file u'lnx/lnx-55/Documentation/usb/wusb-cbaf' not found or reading it failed
-> > > 
-> > > Looks like it has been moved to drivers/staging/wusbcore/Documentation/wusb-cbaf.
-> > 
-> > From the log of the patch that moved it:
-> > 
-> >   commit 71ed79b0e4be0db254640c3beb9a1a0316eb5f61
-> >   Author: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> >   Date:   Tue Aug 6 12:15:09 2019 +0200
-> > 
-> >     USB: Move wusbcore and UWB to staging as it is obsolete
-> >     
-> >     The UWB and wusbcore code is long obsolete, so let us just move the code
-> >     out of the real part of the kernel and into the drivers/staging/
-> >     location with plans to remove it entirely in a few releases.
-> >     
-> >     Link: https://lore.kernel.org/r/20190806101509.GA11280@kroah.com
-> >     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > 
-> > The plan seems to remove it in the future.
-> > 
-> > In any case, it makes sense to remove the broken link from the 
-> > documentation.
-> 
-> Yes, please just remove it, that code is about to go away in the
-> 5.6-rc1.
 
-Oops, not yet, in 5.7-rc1.
+--lrZ03NoBR/3+SXJZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Jan 29, 2020 at 02:45:38PM +0530, Nagarjuna Kristam wrote:
+>=20
+>=20
+> On 28-01-2020 23:02, Thierry Reding wrote:
+> > On Mon, Dec 30, 2019 at 04:39:40PM +0530, Nagarjuna Kristam wrote:
+> > > If usb-role-switch property is present in USB 2 port, register
+> > > usb-role-switch to receive usb role changes.
+> > >=20
+> > > Signed-off-by: Nagarjuna Kristam<nkristam@nvidia.com>
+> > > ---
+> > > V3:
+> > >   - Driver aborts if usb-role-switch is not added in dt forotg/periph=
+eral
+> > >     roles.
+> > >   - Added role name strings instead of enum values in debug prints.
+> > >   - Updated arguments and variable allignments as per Thierry inputs.
+> > > ---
+> > > V2:
+> > >   - Removed dev_set_drvdata for port->dev.
+> > >   - Added of_platform_depopulate during error handling and driver rem=
+oval.
+> > > ---
+> > >   drivers/phy/tegra/Kconfig |  1 +
+> > >   drivers/phy/tegra/xusb.c  | 57 ++++++++++++++++++++++++++++++++++++=
++++++++++++
+> > >   drivers/phy/tegra/xusb.h  |  3 +++
+> > >   3 files changed, 61 insertions(+)
+> > >=20
+> > > diff --git a/drivers/phy/tegra/Kconfig b/drivers/phy/tegra/Kconfig
+> > > index f9817c3..df07c4d 100644
+> > > --- a/drivers/phy/tegra/Kconfig
+> > > +++ b/drivers/phy/tegra/Kconfig
+> > > @@ -2,6 +2,7 @@
+> > >   config PHY_TEGRA_XUSB
+> > >   	tristate "NVIDIA Tegra XUSB pad controller driver"
+> > >   	depends on ARCH_TEGRA
+> > > +	select USB_CONN_GPIO
+> > >   	help
+> > >   	  Choose this option if you have an NVIDIA Tegra SoC.
+> > > diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
+> > > index f98ec39..11ea9b5 100644
+> > > --- a/drivers/phy/tegra/xusb.c
+> > > +++ b/drivers/phy/tegra/xusb.c
+> > > @@ -523,6 +523,7 @@ static int tegra_xusb_port_init(struct tegra_xusb=
+_port *port,
+> > >   	port->dev.type =3D &tegra_xusb_port_type;
+> > >   	port->dev.of_node =3D of_node_get(np);
+> > >   	port->dev.parent =3D padctl->dev;
+> > > +	port->dev.driver =3D padctl->dev->driver;
+> > This looks wrong. I don't think driver's are supposed to set this
+> > because it basically means that the device is being attached to the
+> > driver, but in this case it doesn't get probed by the driver and in
+> > fact the ports don't match the pad controller, so they can't really
+> > be driven by the same driver.
+> >=20
+> > Is there any particular reason why you need this?
+> >=20
+> > Thierry
+>=20
+> Yes, port->dev.driver->owner is accessed in USB role switch driver in API
+> usb_role_switch_get. If driver param is not updated, it causes NULL point=
+er
+> exception. Based on your inputs, since this assignment is not supposed to
+> used, I believe option available is to create a new device_driver structu=
+re
+> and assign the same here.
+> Please share your thoughts.
+
+Sounds to me more like what we want is to make the module_get() and
+module_put() calls conditional to avoid the NULL pointer dereference.
+Another common variant that I've seen in other subsystems is to make
+drivers pass in an owner explicitly via some operations structure to
+allow more fine-grained control over the reference count.
+
+In this particular case one option to do this would be to add a struct
+module *owner field to usb_role_switch_desc and that's copied to struct
+usb_role_switch in usb_role_switch_register() so that that can be used
+for reference counting (perhaps with the current code as fallback).
+
+That would allow using simple devices (i.e. not bound to a driver) to
+work with this framework as well.
+
+Thierry
+
+--lrZ03NoBR/3+SXJZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl4xT60ACgkQ3SOs138+
+s6G/uA//YgHnzWFjeDa1ZwWsKGhC1WNt8IJjC2xeJ/pryhlhg2NeANB+/JosYFWz
+RRLRUYZ13Z4uvB/j2I437JXluVs3QZ9GKtdjxbWDqpJYX4l0c4Nk3ZBnxLeoG1Zn
+QFM6j+ZLfbYTeSacA0EX+sKC/qK5EJuFZ8pW+D8wf9EE2VO6O8qB6/k4/sKHUwyv
+hUokfc6zwlVfrZ7YDKRtleaiPbABS7frYnel5Mio6tFpyEKSw94KyyD5wBFSF6K+
+En806WquNFG8c9LgfFszwLBinbCOML93TbFiz4gLuWtwqzik5XtwBdkOQVAQoHK7
+kPp6D91/1PuG9zIVe6WWePjiCWXdbka9ScfYKdYMFDkRnkETsThbKZfdmien3X3H
+Zzn4iFU4PzoRpLP//ctdv4PtX8TbEbdD/fmkMI1LxyqflF3XTNujpqQ8XOM1+ifg
+BwNrM+MvfHdo4iCgZVMKF38QRKzRdTaq8G9NlDBqy06pZwKsDBWuAIydybwvfw9b
+PekrIuhSRHWaKvtznDKBKy/pHv0RFdjVx6DYb8SNGJ3U28kXeYyjqi0RHX7VzENF
+FlIGWZLbFmWa6TNipcN5GvlKfi8oCHy+hcpVUBLf0OBCzvkOAIjano7Mf7xugcHt
+ea/keKxOJjLCdgMD1kpOVhbbgrjtlLVoYA0JLzq3OqXGXUf1c3E=
+=exCt
+-----END PGP SIGNATURE-----
+
+--lrZ03NoBR/3+SXJZ--
