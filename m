@@ -2,172 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A032214DEAE
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2020 17:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D496314DF82
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2020 17:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727356AbgA3QN7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Jan 2020 11:13:59 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:41707 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727158AbgA3QN7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jan 2020 11:13:59 -0500
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1ixCRy-0002D5-6i; Thu, 30 Jan 2020 17:13:50 +0100
-Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1ixCRv-0006ru-EY; Thu, 30 Jan 2020 17:13:47 +0100
-Date:   Thu, 30 Jan 2020 17:13:47 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
-        rjw@rjwysocki.net, pavel@ucw.cz, len.brown@intel.com,
-        kernel@pengutronix.de, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: USB Port Power-Off during suspend Bug?
-Message-ID: <20200130161347.upni5rztqc5fm3nd@pengutronix.de>
-References: <20200129225306.dmtoemf62qhogysh@pengutronix.de>
- <Pine.LNX.4.44L0.2001301030430.1441-100000@iolanthe.rowland.org>
+        id S1727332AbgA3Q66 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Jan 2020 11:58:58 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:33326 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727158AbgA3Q66 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jan 2020 11:58:58 -0500
+Received: by mail-ot1-f67.google.com with SMTP id b18so3841654otp.0
+        for <linux-usb@vger.kernel.org>; Thu, 30 Jan 2020 08:58:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VkkAC/29FIiJsIoqn1/IGPQLhGYJQdYouYstDqlFPgM=;
+        b=coBk1dC2VHCUDBwNDaf0tYDsfTzR4g6me2T9f8kdluZttCiZfZkpFOqJAyoBu2gQS4
+         A3tx5kH/TIJOEyMdNfrFYUZiyCtmi9uD9cBqRCDNqNYmeOkImSAePiX7D4FtyXeBVlwG
+         9dh3h1btqM9Qlu9B311uHJ/iVBUqh9z8pzfAQKzEDnatx8vi8gQY/cEQdv5RiDMxd0QX
+         a7tdJMRRuFtJWM1a6kOy8G5GAOnMoMIdDv7xRViar2an6l/GMd6IDxIYwACU6i2vcwH0
+         VOppFD/OBU7l92OKgqoRVmXIKxmtQ5Cj0OmVtetBovHMVkjw4Z4ZIgfCN3pmIMh8P72l
+         C2lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VkkAC/29FIiJsIoqn1/IGPQLhGYJQdYouYstDqlFPgM=;
+        b=Qc482D5AtwQtnbmT7xdg88hL9ENbJfpbXamV7wUnMU5UIXU6bcv3TVnRQOE3wN35Nd
+         euBiNpYrhlFAQOHQuc1JsNmPU4ivQqXIwFy88jGwH7c9RwM6yKqVB7hJ6iDH7oBf+lww
+         Ott7xvbdi30dIlFrFQGQ+JwPHsy4CYL08p9y3t+O7m1GgKxIDrjrNCu+aPs8zsMxObxm
+         QkdfNem7vZfrJTaFScXHHRWHREEmUd/fsasv+kqZIUE6zWlQR2bcdm5JCfMja8F4EtKQ
+         8u73opY70kKfGW+5Pu8FJObkd8ktOcUrEG9LqgdlBc9d+AJVPCw/BgCtpNI5nY0trw8K
+         E+wA==
+X-Gm-Message-State: APjAAAXaQjos4lx1rBPw9YWYXHqqXSrss7MWKQyUZqBwlxh1mY+emI/Y
+        Uo+WdTCUNYIw1MBCnj8BM55kMRQ/JsOUMiknCf0=
+X-Google-Smtp-Source: APXvYqz6rJsGpWJnxbE1zXySPAGUcZjYqNmdZ/mvkXVyF+fjsfupl1DkUnl2ACZEc9evQiEvBWkpIJuQrFGoiWbrKR0=
+X-Received: by 2002:a9d:7653:: with SMTP id o19mr4174700otl.118.1580403537519;
+ Thu, 30 Jan 2020 08:58:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.2001301030430.1441-100000@iolanthe.rowland.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 17:11:17 up 76 days,  7:29, 80 users,  load average: 0.61, 0.33,
- 0.15
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+References: <CAAWug1d8wv3Thu0b==j6fLajU965unYKs552j+s9t13MOytmng@mail.gmail.com>
+ <1578907421.2590.2.camel@suse.com> <CAAWug1eZiDgMGH9qDi=_Cj_=-HU2icVpNCzeaRYJLzQBChJDJA@mail.gmail.com>
+ <20200130063403.GB628384@kroah.com>
+In-Reply-To: <20200130063403.GB628384@kroah.com>
+From:   Richard Dodd <richard.o.dodd@gmail.com>
+Date:   Thu, 30 Jan 2020 16:58:46 +0000
+Message-ID: <CAAWug1erbkau-P5hdJ1F3hJBea_nmpiiOiNVJ2-HM2fZ==TS-A@mail.gmail.com>
+Subject: Re: Usb midi device does not work on wake
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
+Content-Type: multipart/mixed; boundary="00000000000074c800059d5e5fcb"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-01-30 10:32, Alan Stern wrote:
-> On Wed, 29 Jan 2020, Marco Felsch wrote:
-> 
-> > On 20-01-29 12:59, Alan Stern wrote:
-> > > On Wed, 29 Jan 2020, Marco Felsch wrote:
-> > > 
-> > > > Hi Alan, Rafael, Greg,
-> > > > 
-> > > > long story short: I want to disable a usb-port completely during suspend
-> > > 
-> > > You're talking about what happens during a full system suspend, right?
-> > 
-> > Yes.
-> > 
-> > > > because it isn't needed and we need to save energy, because is a 32bit ARM
-> > > > (OF-based) handheld device. I use the port to connect a usb-ethernet
-> > > > dongle (all needed drivers are builtin no modules) which is needed for
-> > > > the NFS. The usb-ethernet dongle supports the persist setting because it
-> > > > does a hw-reset during resume anyway.
-> > > > 
-> > > > So what I did is:
-> > > >  1) Set the persist bit for the usb device
-> > > >  2) Set the control to auto for the usb device
-> > > >  3) Unset the pm_qos_no_power_off flag for the usb-port
-> > > > 
-> > > > But the port gets not disabled. I debugged it and found a problem in
-> > > > usb_port_suspend() logic [1] and the generic PM-framework more precisely
-> > > > the dpm mechanism. The usbcore does the correct pm_runtime counting but
-> > > > the call [2] don't trigger the usb_port_runtime_suspend() [3] because
-> > > > the dpm enables all runtime-pm device before the shutdown is executed.
-> > > 
-> > > That's right; it's supposed to work that way.  We don't want runtime 
-> > > suspend kicking in and messing things up during a system suspend.
-> > 
-> > I'm absolutly fine with that behaviour.
-> > 
-> > > > IMHO both subsystem behaviours are correct and I don't know the
-> > > > _correct_ fix, therefore I wrote this email.
-> > > 
-> > > The correct fix is to add support for system suspend to the USB port 
-> > > driver.  Currently it only supports runtime suspend, as you can see 
-> > > from the definition of usb_port_pm_ops in port.c.
-> > 
-> > I tought that this was intentionally to support only the runtime-pm ops.
-> 
-> No, it wasn't intentional as far as I know.
+--00000000000074c800059d5e5fcb
+Content-Type: text/plain; charset="UTF-8"
 
-Okay, adding a suspend handler seemed to be to easy ^^
+Hi Greg
 
-> > Okay so this means that we need to check the:
-> >   - persist
-> >   - do_wakeup
-> >   - pm_qos_power_off
-> > bits again for the suspend case. I tought I miss something and we can
-> > reuse the current checks.
-> 
-> We can.  Something like the patch below ought to work.  But I have not 
-> tested it, and it may very well cause problems for some people.
+Hopefully I followed the correct instructions. I have attached the patch.
 
-Yes, something like that with a few more checks for the bits listed
-above except the pm_qos_power_off. Thanks for your reply I will prepare
-a patch next week.
+Rich
 
-Regards,
-  Marco
+On Thu, Jan 30, 2020 at 6:34 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Jan 29, 2020 at 03:47:29PM +0000, Richard Dodd wrote:
+> > On Mon, Jan 13, 2020 at 9:40 AM Oliver Neukum <oneukum@suse.com> wrote:
+> > >
+> > > Am Sonntag, den 12.01.2020, 12:06 +0000 schrieb Richard Dodd:
+> > > > Hello
+> > > >
+> > > > I've got a Novation midi-over-usb device (LaunchControl XL) that works
+> > > > correctly on boot, but remains in power-off mode when waking from
+> > > > sleep.
+> > > >
+> > > > I suspect that there is some sort of initialisation that needs to be
+> > > > applied. Could anyone suggest possible causes, or point me in the
+> > > > direction of the relevant source code. I found `sound/usb/quirks.c`,
+> > > > which seems to be the place to handle this kind of thing, but there is
+> > > > no mention of my device anywhere in the source tree at present
+> > > > (1235:0061).
+> > >
+> > > Hi,
+> > >
+> > > some devices need an additional reset. They have the quirk RESET_RESUME
+> > > in that file. Try adding your device to that list and recompile your
+> > > kernel.
+> > >
+> > >         HTH
+> > >                 Oliver
+> > >
+> >
+> > Hi
+> >
+> > I found the list you are talking about in `drivers/usb/core/quirks.c`,
+> > and when I patched it, my device correctly woke up after suspend. :)
+> >
+> > Can I upstream the patch by posting it here. The patch is attached to
+> > this email.
+>
+> Can you please resend this in the format described in the documentation
+> so that we can apply it to the tree?
+>
+> thanks,
+>
+> greg k-h
 
-> 
-> Alan Stern
-> 
-> 
-> 
-> Index: usb-devel/drivers/usb/core/port.c
-> ===================================================================
-> --- usb-devel.orig/drivers/usb/core/port.c
-> +++ usb-devel/drivers/usb/core/port.c
-> @@ -283,7 +283,23 @@ static int usb_port_runtime_suspend(stru
->  
->  	return retval;
->  }
-> +
-> +#ifdef CONFIG_PM_SLEEP
-> +
-> +/* Same as runtime suspend, but no error return */
-> +static int usb_port_system_suspend(struct device *dev)
-> +{
-> +	usb_port_runtime_suspend(dev);
-> +	return 0;
-> +}
-> +
-> +static int usb_port_system_resume(struct device *dev)
-> +{
-> +	return usb_port_runtime_resume(dev);
-> +}
-> +
->  #endif
-> +#endif /* CONFIG_PM */
->  
->  static void usb_port_shutdown(struct device *dev)
->  {
-> @@ -294,10 +310,8 @@ static void usb_port_shutdown(struct dev
->  }
->  
->  static const struct dev_pm_ops usb_port_pm_ops = {
-> -#ifdef CONFIG_PM
-> -	.runtime_suspend =	usb_port_runtime_suspend,
-> -	.runtime_resume =	usb_port_runtime_resume,
-> -#endif
-> +SET_RUNTIME_PM_OPS(usb_port_runtime_suspend, usb_port_runtime_resume, NULL)
-> +SET_SYSTEM_SLEEP_PM_OPS(usb_port_system_suspend, usb_port_system_resume)
->  };
->  
->  struct device_type usb_port_device_type = {
-> 
-> 
+--00000000000074c800059d5e5fcb
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-USB-Fix-novation-SourceControl-XL-after-suspend.patch"
+Content-Disposition: attachment; 
+	filename="0001-USB-Fix-novation-SourceControl-XL-after-suspend.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_k60zflue0>
+X-Attachment-Id: f_k60zflue0
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+RnJvbSA3ZDk5MWRmNjlkMmM0N2FjNDFmNDY1NzEwOWNlZTUxNGVlZjY4NzI4IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBSaWNoYXJkIERvZGQgPHJpY2hhcmQuby5kb2RkQGdtYWlsLmNv
+bT4KRGF0ZTogVGh1LCAzMCBKYW4gMjAyMCAxNjo1Mzo1MSArMDAwMApTdWJqZWN0OiBbUEFUQ0hd
+IFVTQjogRml4IG5vdmF0aW9uIFNvdXJjZUNvbnRyb2wgWEwgYWZ0ZXIgc3VzcGVuZAoKQ3VycmVu
+dGx5LCB0aGUgU291cmNlQ29udHJvbCB3aWxsIHN0YXkgaW4gcG93ZXItZG93biBtb2RlIGFmdGVy
+IHJlc3VtaW5nCmZyb20gc3VzcGVuZC4gVGhpcyBwYXRjaCByZXNldHMgdGhlIGRldmljZSBhZnRl
+ciBzdXNwZW5kIHRvIHBvd2VyIGl0IHVwLgoKU2lnbmVkLW9mZi1ieTogUmljaGFyZCBEb2RkIDxy
+aWNoYXJkLm8uZG9kZEBnbWFpbC5jb20+Ci0tLQogZHJpdmVycy91c2IvY29yZS9xdWlya3MuYyB8
+IDMgKysrCiAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvZHJp
+dmVycy91c2IvY29yZS9xdWlya3MuYyBiL2RyaXZlcnMvdXNiL2NvcmUvcXVpcmtzLmMKaW5kZXgg
+NmI2NDEzMDczNTg0Li4zZGI2YzA1YWFhNGIgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNiL2NvcmUv
+cXVpcmtzLmMKKysrIGIvZHJpdmVycy91c2IvY29yZS9xdWlya3MuYwpAQCAtNDQ1LDYgKzQ0NSw5
+IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgdXNiX2RldmljZV9pZCB1c2JfcXVpcmtfbGlzdFtdID0g
+ewogCS8qIElOVEVMIFZBTFVFIFNTRCAqLwogCXsgVVNCX0RFVklDRSgweDgwODYsIDB4ZjFhNSks
+IC5kcml2ZXJfaW5mbyA9IFVTQl9RVUlSS19SRVNFVF9SRVNVTUUgfSwKIAorCS8qIG5vdmF0aW9u
+IFNvdW5kQ29udHJvbCBYTCAqLworCXsgVVNCX0RFVklDRSgweDEyMzUsIDB4MDA2MSksIC5kcml2
+ZXJfaW5mbyA9IFVTQl9RVUlSS19SRVNFVF9SRVNVTUUgfSwKKwogCXsgfSAgLyogdGVybWluYXRp
+bmcgZW50cnkgbXVzdCBiZSBsYXN0ICovCiB9OwogCi0tIAoyLjI1LjAKCg==
+--00000000000074c800059d5e5fcb--
