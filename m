@@ -2,121 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B9D14D341
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2020 23:53:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8717114D63C
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2020 06:48:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726707AbgA2WxP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jan 2020 17:53:15 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:59629 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726222AbgA2WxP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jan 2020 17:53:15 -0500
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1iwwCr-0007iy-Me; Wed, 29 Jan 2020 23:53:09 +0100
-Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1iwwCo-0006yK-FW; Wed, 29 Jan 2020 23:53:06 +0100
-Date:   Wed, 29 Jan 2020 23:53:06 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
-        rjw@rjwysocki.net, pavel@ucw.cz, len.brown@intel.com,
-        kernel@pengutronix.de, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: USB Port Power-Off during suspend Bug?
-Message-ID: <20200129225306.dmtoemf62qhogysh@pengutronix.de>
-References: <20200129095442.3exfzwp3vrubfxir@pengutronix.de>
- <Pine.LNX.4.44L0.2001291254080.1429-100000@iolanthe.rowland.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.2001291254080.1429-100000@iolanthe.rowland.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 23:46:04 up 75 days, 14:04, 71 users,  load average: 0.22, 0.17,
- 0.07
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+        id S1726875AbgA3Fr5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Jan 2020 00:47:57 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:39901 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725798AbgA3Fr5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jan 2020 00:47:57 -0500
+Received: by mail-pg1-f193.google.com with SMTP id 4so1056841pgd.6;
+        Wed, 29 Jan 2020 21:47:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=JgTX40zcozu1pIq38hokOFeu1RslbKauSmp+/sBiQgY=;
+        b=bapl5xqAOEbJm4v5NM89kCOkaf95CdGOFMi8UIv3ub9+diADUePj1yJinvZDZuvAKn
+         Zz13DBHIVI5ky3TjS3O5f15mvkJQ4+gRHwqYiLgCe1SPhaWBaB/tEDKVUJXBoddk5Mbk
+         loE1eRLtUxf9gxxsZ1g1rOKwDJ+rG9EOw3S71esWnLK36SBgW63hBn/wRj2URfEKn/4E
+         tCDPXDnS69vLgzlj0hEZJNMgkWoN1/TeAgjzeyfikyjpejSf0XeEjtv5+zBqz6ZsWoVG
+         c19FidVD4+oHr/yShB/hn+McueKhhkZs88/nB7JryqRmfZJsBALUFn22809cGSvFAAwx
+         9RFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=JgTX40zcozu1pIq38hokOFeu1RslbKauSmp+/sBiQgY=;
+        b=ppvJvPRFRKIi78WRL8epsjs2Bicp0f3osQHumK2vtUyHqICphRzeFZajqBli8CUrWw
+         SmyvOr6YB/Ve1/aS+KFRf89IDltVnE1qUebBKr2s3DczN4Fv3WGipOmMh3CbA2xoqbnu
+         Tb0UaAACMdLxeknpONzJkI7eZN0cg37exbpTLFSN9ydGZ1AF//iHm+LDFr9nqCJJXkxU
+         NrSmrVANe655CshC5Ad4BSo5Mb65hr8ScpldmxuJaGztJu3tSL0AR+VYyZiIxZfYu4/p
+         pRAQsktQZw1gPNKFXFfPaGtsVuoq4JAqDYzuJiI/PhAuum2GbqKZSRwa/VDoQpptxsNv
+         6JmA==
+X-Gm-Message-State: APjAAAXXyJSeJ6kXnguhR83NOxMskK+/LGPcE3ey6N7Z6NcnMVC0xW8V
+        YQC2kmZMnDwmUOSsLqXJKRo=
+X-Google-Smtp-Source: APXvYqwio8GshL/8kxEK7HOrxKKcI1xaaSoJPqHKTHItUR1SVn0SFxCzOqexkU++RtA4Vj6GqluM+w==
+X-Received: by 2002:a63:5657:: with SMTP id g23mr2864050pgm.452.1580363276340;
+        Wed, 29 Jan 2020 21:47:56 -0800 (PST)
+Received: from localhost (59-120-186-245.HINET-IP.hinet.net. [59.120.186.245])
+        by smtp.gmail.com with ESMTPSA id l37sm4852549pjb.15.2020.01.29.21.47.55
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 29 Jan 2020 21:47:55 -0800 (PST)
+From:   "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
+X-Google-Original-From: "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+To:     johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, peter_hong@fintek.com.tw,
+        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+Subject: [PATCH V3 0/6] Add Fintek F81534A series usb-to-serial driver
+Date:   Thu, 30 Jan 2020 13:47:46 +0800
+Message-Id: <20200130054752.9368-1-hpeter+linux_kernel@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-01-29 12:59, Alan Stern wrote:
-> On Wed, 29 Jan 2020, Marco Felsch wrote:
-> 
-> > Hi Alan, Rafael, Greg,
-> > 
-> > long story short: I want to disable a usb-port completely during suspend
-> 
-> You're talking about what happens during a full system suspend, right?
+The Fintek F81532A/534A/535/536 is USB-to-2/4/8/12 serial ports device
+and the serial port is default disabled when plugin computer.
 
-Yes.
+The part number is a bit same with F81532/534, but F81534A series UART
+core is enhanced from F81232, not F81532/534.
 
-> > because it isn't needed and we need to save energy, because is a 32bit ARM
-> > (OF-based) handheld device. I use the port to connect a usb-ethernet
-> > dongle (all needed drivers are builtin no modules) which is needed for
-> > the NFS. The usb-ethernet dongle supports the persist setting because it
-> > does a hw-reset during resume anyway.
-> > 
-> > So what I did is:
-> >  1) Set the persist bit for the usb device
-> >  2) Set the control to auto for the usb device
-> >  3) Unset the pm_qos_no_power_off flag for the usb-port
-> > 
-> > But the port gets not disabled. I debugged it and found a problem in
-> > usb_port_suspend() logic [1] and the generic PM-framework more precisely
-> > the dpm mechanism. The usbcore does the correct pm_runtime counting but
-> > the call [2] don't trigger the usb_port_runtime_suspend() [3] because
-> > the dpm enables all runtime-pm device before the shutdown is executed.
-> 
-> That's right; it's supposed to work that way.  We don't want runtime 
-> suspend kicking in and messing things up during a system suspend.
+The IC is contains devices as following:
+	1. HUB (all devices is connected with this hub)
+	2. GPIO/Control device. (enable serial port and control all GPIOs)
+	   but this series patch not implement GPIO control.
+	3. serial port 1 to x (2/4/8/12)
 
-I'm absolutly fine with that behaviour.
+It's most same with F81232, the UART device is difference as follow:
+	1. TX/RX bulk size is 128/512bytes
+	2. RX bulk layout change:
+		F81232: [LSR(1Byte)+DATA(1Byte)][LSR(1Byte)+DATA(1Byte)]...
+		F81534A:[LEN][Data.....][LSR]
 
-> > IMHO both subsystem behaviours are correct and I don't know the
-> > _correct_ fix, therefore I wrote this email.
-> 
-> The correct fix is to add support for system suspend to the USB port 
-> driver.  Currently it only supports runtime suspend, as you can see 
-> from the definition of usb_port_pm_ops in port.c.
+We'll try to do some code refacting before add F81534A series.
 
-I tought that this was intentionally to support only the runtime-pm ops.
-Okay so this means that we need to check the:
-  - persist
-  - do_wakeup
-  - pm_qos_power_off
-bits again for the suspend case. I tought I miss something and we can
-reuse the current checks.
+Ji-Ze Hong (Peter Hong) (6):
+  USB: serial: f81232: Extract LSR handler
+  USB: serial: f81232: Add tx_empty function
+  USB: serial: f81232: Use devm_kzalloc
+  USB: serial: f81232: Add F81534A support
+  USB: serial: f81232: Set F81534A serial port with RS232 mode
+  USB: serial: f81232: Add generator for F81534A
 
-Regards,
-  Marco
-
-> Alan Stern
-> 
-> > As far as I understood it all non-ACPI platforms are affected.
-> > 
-> > Regards,
-> >   Marco
-> > 
-> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/core/hub.c?h=v5.5#n3238
-> > [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/core/hub.c?h=v5.5#n3328
-> > [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/core/port.c?h=v5.5#n247
-> 
-> 
+ drivers/usb/serial/f81232.c | 353 ++++++++++++++++++++++++++++++++----
+ 1 file changed, 317 insertions(+), 36 deletions(-)
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.17.1
+
