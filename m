@@ -2,84 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7FD14DCBC
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2020 15:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BAF314DDE3
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2020 16:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727463AbgA3OWn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Jan 2020 09:22:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37432 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727107AbgA3OWn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 30 Jan 2020 09:22:43 -0500
-Received: from localhost (unknown [84.241.198.181])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D95E720674;
-        Thu, 30 Jan 2020 14:22:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580394162;
-        bh=HL2XcW3hlVb13HwEQxD5dNVZ2aqbQM5YFJYsSBUrSZA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CXcoXdWDLC0kusEKiJYoyCEDdTaSiLgm98IuBA1Q3mTe8UBOoTHBF+YJYDq8BDxeL
-         VwmvgTKUmvgTm4GNKLpiY13SbdFlPnAKIYqXSy8PUCWpsDDC/MJoOcixPCljxSoROq
-         So2HD8dX29NPPym4xZqlqGg9kvtlHsKbvehdl7ts=
-Date:   Thu, 30 Jan 2020 15:22:39 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>, Jun Li <jun.li@nxp.com>
-Subject: Re: [PATCH v4 1/2] usb: phy: show USB charger type for user
-Message-ID: <20200130142239.GA963335@kroah.com>
-References: <1579145333-1657-1-git-send-email-peter.chen@nxp.com>
- <20200124084039.GB2923791@kroah.com>
- <VI1PR04MB5327245DEABD688CC88F88548B040@VI1PR04MB5327.eurprd04.prod.outlook.com>
+        id S1727283AbgA3PcY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Jan 2020 10:32:24 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:47306 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727186AbgA3PcY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jan 2020 10:32:24 -0500
+Received: (qmail 3771 invoked by uid 2102); 30 Jan 2020 10:32:22 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 30 Jan 2020 10:32:22 -0500
+Date:   Thu, 30 Jan 2020 10:32:22 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Marco Felsch <m.felsch@pengutronix.de>
+cc:     Thinh.Nguyen@synopsys.com, <gregkh@linuxfoundation.org>,
+        <rjw@rjwysocki.net>, <pavel@ucw.cz>, <len.brown@intel.com>,
+        <kernel@pengutronix.de>, <linux-pm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+Subject: Re: USB Port Power-Off during suspend Bug?
+In-Reply-To: <20200129225306.dmtoemf62qhogysh@pengutronix.de>
+Message-ID: <Pine.LNX.4.44L0.2001301030430.1441-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <VI1PR04MB5327245DEABD688CC88F88548B040@VI1PR04MB5327.eurprd04.prod.outlook.com>
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 30, 2020 at 02:05:17PM +0000, Peter Chen wrote:
->  
-> > > Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> > > ---
-> > > Changes for v4:
-> > > - No changes.
-> > >
-> > >  drivers/usb/phy/phy.c | 13 ++++++++++++-
-> > >  1 file changed, 12 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/usb/phy/phy.c b/drivers/usb/phy/phy.c index
-> > > 0277f62739a2..ad2554630889 100644
-> > > --- a/drivers/usb/phy/phy.c
-> > > +++ b/drivers/usb/phy/phy.c
-> > > @@ -34,6 +34,14 @@ struct phy_devm {
-> > >  	struct notifier_block *nb;
-> > >  };
-> > >
-> > > +static const char *const usb_chger_type[] = {
-> > > +	[UNKNOWN_TYPE]			=
-> > "USB_CHARGER_UNKNOWN_TYPE",
-> > > +	[SDP_TYPE]			= "USB_CHARGER_SDP_TYPE",
-> > > +	[CDP_TYPE]			= "USB_CHARGER_CDP_TYPE",
-> > > +	[DCP_TYPE]			= "USB_CHARGER_DCP_TYPE",
-> > > +	[ACA_TYPE]			= "USB_CHARGER_ACA_TYPE",
-> > > +};
+On Wed, 29 Jan 2020, Marco Felsch wrote:
+
+> On 20-01-29 12:59, Alan Stern wrote:
+> > On Wed, 29 Jan 2020, Marco Felsch wrote:
 > > 
-> > As these are exported values (CDP_TYPE and friends), they really need to have
-> > explicit values on the .h file, otherwise it might not work properly on all systems.
+> > > Hi Alan, Rafael, Greg,
+> > > 
+> > > long story short: I want to disable a usb-port completely during suspend
 > > 
+> > You're talking about what happens during a full system suspend, right?
 > 
-> Sorry, what do you mean? These values are defined at include/uapi/linux/usb/charger.h
+> Yes.
+> 
+> > > because it isn't needed and we need to save energy, because is a 32bit ARM
+> > > (OF-based) handheld device. I use the port to connect a usb-ethernet
+> > > dongle (all needed drivers are builtin no modules) which is needed for
+> > > the NFS. The usb-ethernet dongle supports the persist setting because it
+> > > does a hw-reset during resume anyway.
+> > > 
+> > > So what I did is:
+> > >  1) Set the persist bit for the usb device
+> > >  2) Set the control to auto for the usb device
+> > >  3) Unset the pm_qos_no_power_off flag for the usb-port
+> > > 
+> > > But the port gets not disabled. I debugged it and found a problem in
+> > > usb_port_suspend() logic [1] and the generic PM-framework more precisely
+> > > the dpm mechanism. The usbcore does the correct pm_runtime counting but
+> > > the call [2] don't trigger the usb_port_runtime_suspend() [3] because
+> > > the dpm enables all runtime-pm device before the shutdown is executed.
+> > 
+> > That's right; it's supposed to work that way.  We don't want runtime 
+> > suspend kicking in and messing things up during a system suspend.
+> 
+> I'm absolutly fine with that behaviour.
+> 
+> > > IMHO both subsystem behaviours are correct and I don't know the
+> > > _correct_ fix, therefore I wrote this email.
+> > 
+> > The correct fix is to add support for system suspend to the USB port 
+> > driver.  Currently it only supports runtime suspend, as you can see 
+> > from the definition of usb_port_pm_ops in port.c.
+> 
+> I tought that this was intentionally to support only the runtime-pm ops.
 
-Yes, but they are not set to a specific value, so they can really be
-"anything".  That .h file needs to have specific numbers set to the
-enum values in order for this to work properly on all arches/compilers.
+No, it wasn't intentional as far as I know.
 
-thanks,
+> Okay so this means that we need to check the:
+>   - persist
+>   - do_wakeup
+>   - pm_qos_power_off
+> bits again for the suspend case. I tought I miss something and we can
+> reuse the current checks.
 
-greg k-h
+We can.  Something like the patch below ought to work.  But I have not 
+tested it, and it may very well cause problems for some people.
+
+Alan Stern
+
+
+
+Index: usb-devel/drivers/usb/core/port.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/port.c
++++ usb-devel/drivers/usb/core/port.c
+@@ -283,7 +283,23 @@ static int usb_port_runtime_suspend(stru
+ 
+ 	return retval;
+ }
++
++#ifdef CONFIG_PM_SLEEP
++
++/* Same as runtime suspend, but no error return */
++static int usb_port_system_suspend(struct device *dev)
++{
++	usb_port_runtime_suspend(dev);
++	return 0;
++}
++
++static int usb_port_system_resume(struct device *dev)
++{
++	return usb_port_runtime_resume(dev);
++}
++
+ #endif
++#endif /* CONFIG_PM */
+ 
+ static void usb_port_shutdown(struct device *dev)
+ {
+@@ -294,10 +310,8 @@ static void usb_port_shutdown(struct dev
+ }
+ 
+ static const struct dev_pm_ops usb_port_pm_ops = {
+-#ifdef CONFIG_PM
+-	.runtime_suspend =	usb_port_runtime_suspend,
+-	.runtime_resume =	usb_port_runtime_resume,
+-#endif
++SET_RUNTIME_PM_OPS(usb_port_runtime_suspend, usb_port_runtime_resume, NULL)
++SET_SYSTEM_SLEEP_PM_OPS(usb_port_system_suspend, usb_port_system_resume)
+ };
+ 
+ struct device_type usb_port_device_type = {
+
