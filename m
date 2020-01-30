@@ -2,125 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD7414DF9F
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2020 18:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBCFC14DF99
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2020 18:05:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727291AbgA3RHD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Jan 2020 12:07:03 -0500
-Received: from smtp1.de.adit-jv.com ([93.241.18.167]:32916 "EHLO
-        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727158AbgA3RHD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jan 2020 12:07:03 -0500
-Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
-        by smtp1.de.adit-jv.com (Postfix) with ESMTP id A461D3C057C;
-        Thu, 30 Jan 2020 18:07:00 +0100 (CET)
-Received: from smtp1.de.adit-jv.com ([127.0.0.1])
-        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id wmaWBuuFRJ4P; Thu, 30 Jan 2020 18:06:54 +0100 (CET)
-Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id CF2B33C0579;
-        Thu, 30 Jan 2020 18:06:54 +0100 (CET)
-Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by HI2EXCH01.adit-jv.com
- (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.468.0; Thu, 30 Jan
- 2020 18:06:54 +0100
-From:   Hardik Gajjar <hgajjar@de.adit-jv.com>
-To:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
-        <thinhn@synopsys.com>, <Kento.A.Kobayashi@sony.com>,
-        <atmgnd@outlook.com>, <linux-usb@vger.kernel.org>
-CC:     <andrew_gabbasov@mentor.com>, <erosca@de.adit-jv.com>,
-        <linux-renesas-soc@vger.kernel.org>, <hgajjar@de.adit-jv.com>
-Subject: [PATCH v2] USB: hub: Fix the broken detection of USB3 device in SMSC hub
-Date:   Thu, 30 Jan 2020 18:06:34 +0100
-Message-ID: <1580403994-21076-1-git-send-email-hgajjar@de.adit-jv.com>
-X-Mailer: git-send-email 2.7.4
+        id S1727270AbgA3RFf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Jan 2020 12:05:35 -0500
+Received: from mga09.intel.com ([134.134.136.24]:16487 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727158AbgA3RFf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 Jan 2020 12:05:35 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Jan 2020 09:05:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,382,1574150400"; 
+   d="scan'208";a="309759519"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga001.jf.intel.com with ESMTP; 30 Jan 2020 09:05:13 -0800
+Subject: Re: [PATCH v6 0/5] usb: xhci: Add support for Renesas USB controllers
+To:     Vinod Koul <vkoul@kernel.org>,
+        Christian Lamparter <chunkeey@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+References: <20200113084005.849071-1-vkoul@kernel.org>
+ <20200121064608.GA2841@vkoul-mobl>
+ <CAAd0S9Dd7Ygx7TgV3E_A6z29efG7jsE1-xy48_cHotroWuk_ZA@mail.gmail.com>
+ <5878067.luYmtVZgP3@debian64> <20200125053237.GG2841@vkoul-mobl>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <64340358-6682-4ae0-9c06-d72d5a4ff259@linux.intel.com>
+Date:   Thu, 30 Jan 2020 19:07:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.72.93.77]
+In-Reply-To: <20200125053237.GG2841@vkoul-mobl>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Renesas R-Car H3ULCB + Kingfisher Infotainment Board is either not able
-to detect the USB3.0 mass storage devices or is detecting those as
-USB2.0 high speed devices.
+On 25.1.2020 7.32, Vinod Koul wrote:
+>>>>>>
+>>>>>> On Mon, Jan 13, 2020 at 12:42 AM Vinod Koul <vkoul@kernel.org> wrote:
+>>>>>>>
+>>>>>>> This series add support for Renesas USB controllers uPD720201 and uPD720202.
+>>>>>>> These require firmware to be loaded and in case devices have ROM those can
+>>>>>>> also be programmed if empty. If ROM is programmed, it runs from ROM as well.
+>>>>>>>
+>>>>>>> This includes two patches from Christian which supported these controllers
+>>>>>>> w/o ROM and later my patches for ROM support and multiple firmware versions,
+>>>>>>> debugfs hook for rom erase and export of xhci-pci functions.
+>>>>>>>
+...
+> 
+> Mathias, any comments on this series..?
+> 
 
-The explanation given by Renesas is that, due to a HW issue, the XHCI
-driver does not wake up after going to sleep on connecting a USB3.0
-device.
+Hi Vinod
 
-In order to mitigate that, disable the auto-suspend feature
-specifically for SMSC hubs from hub_probe() function, as a quirk.
+Sorry about the delay.
 
-Renesas Kingfisher Infotainment Board has two USB3.0 ports (CN2) which
-are connected via USB5534B 4-port SuperSpeed/Hi-Speed, low-power,
-configurable hub controller.
+Maybe a firmware loading driver like this that wraps the xhci pci driver could
+work.
 
-[1] SanDisk USB 3.0 device detected as USB-2.0 before the patch
- [   74.036390] usb 5-1.1: new high-speed USB device number 4 using xhci-hcd
- [   74.061598] usb 5-1.1: New USB device found, idVendor=0781, idProduct=5581, bcdDevice= 1.00
- [   74.069976] usb 5-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
- [   74.077303] usb 5-1.1: Product: Ultra
- [   74.080980] usb 5-1.1: Manufacturer: SanDisk
- [   74.085263] usb 5-1.1: SerialNumber: 4C530001110208116550
+One benefit is that we could skip searching for the right firmware name based
+on PCI ID. Each of these Renesas controllers now have their own pci_device_id
+entry in the pci_ids[] table, and could have the supported firmware name(s)
+in .driver_data. This way we wouldn't need to add the renesas_fw_table[] or
+maybe even the renesas_needs_fw_dl() function in this series.
 
-[2] SanDisk USB 3.0 device detected as USB-3.0 after the patch
- [   34.565078] usb 6-1.1: new SuperSpeed Gen 1 USB device number 3 using xhci-hcd
- [   34.588719] usb 6-1.1: New USB device found, idVendor=0781, idProduct=5581, bcdDevice= 1.00
- [   34.597098] usb 6-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
- [   34.604430] usb 6-1.1: Product: Ultra
- [   34.608110] usb 6-1.1: Manufacturer: SanDisk
- [   34.612397] usb 6-1.1: SerialNumber: 4C530001110208116550
+I realize this can't be easily changed because usb_hcd_pci_probe() takes the
+pci_device_id pointer as an argument, and expects id.driver_data to be a
+HC driver pointer.
 
-Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
----
-Changes in v2:
- - [Alan Stern] Switched from pm_runtime_set_autosuspend_delay()
-   to usb_autopm_get_interface()
- - Improved commit description
- - Rebased against v5.5
- - https://lore.kernel.org/linux-renesas-soc/1579876573-13741-1-git-send-email-hgajjar@de.adit-jv.com/
+So this turns out to be a question for Greg and Alan:
 
- drivers/usb/core/hub.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Would it make sense to change usb_hcd_pci_probe() to take a HC driver pointer
+as an argument instead of a pointer to pci_device_id?
+pci_device_id pointer is only used to extract the HC driver handle.
+This way the driver_data could be used for, well, driver data.
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 3405b14..4152f44 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -38,7 +38,9 @@
- #include "otg_whitelist.h"
- 
- #define USB_VENDOR_GENESYS_LOGIC		0x05e3
-+#define USB_VENDOR_SMSC				0x0424
- #define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	0x01
-+#define HUB_QUIRK_DISABLE_AUTOSUSPEND		0x02
- 
- #define USB_TP_TRANSMISSION_DELAY	40	/* ns */
- #define USB_TP_TRANSMISSION_DELAY_MAX	65535	/* ns */
-@@ -1863,6 +1865,9 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
- 	if (id->driver_info & HUB_QUIRK_CHECK_PORT_AUTOSUSPEND)
- 		hub->quirk_check_port_auto_suspend = 1;
- 
-+	if (id->driver_info & HUB_QUIRK_DISABLE_AUTOSUSPEND)
-+		usb_autopm_get_interface(intf);
-+
- 	if (hub_configure(hub, &desc->endpoint[0].desc) >= 0)
- 		return 0;
- 
-@@ -5599,6 +5604,10 @@ static void hub_event(struct work_struct *work)
- }
- 
- static const struct usb_device_id hub_id_table[] = {
-+    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR | USB_DEVICE_ID_MATCH_INT_CLASS,
-+      .idVendor = USB_VENDOR_SMSC,
-+      .bInterfaceClass = USB_CLASS_HUB,
-+      .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
-     { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
- 			| USB_DEVICE_ID_MATCH_INT_CLASS,
-       .idVendor = USB_VENDOR_GENESYS_LOGIC,
--- 
-2.7.4
+Heikki actually suggested this some time ago to me, back then the idea was to
+improve xhci quirks code by using driver_data for quirk flags instead of
+finding and setting them later.
 
+There are a few other opens regarding this series. Mostly because I'm not (yet)
+familiar with all the details, so I'll just just list them here.
+
+- Is it really enough to add the Renesas driver to Makefile before xhci-pci
+   driver to make sure it gets matched and probed based on vendor/device id
+   before xhci-pci driver is matched and probed based on pci class?
+   What if the Renesas driver is a module and xhci-pci compiled in?
+
+- Previously probe didn't return before hcd's were added and everything set up.
+   Now with request_firmware_nowait() probe returns early successfully, and the
+   old xhci_pci_probe() which sets up everything is called later by the request
+   firmware callback. So there could be whole new set of races possible.
+   For example pci remove can be called mid firmware loading, or when the old
+   xhci_pci_probe is still setting up things.
+
+   I understood that a synchronous request_firmware() in probe has its own
+   issues, not sure if there is a good solution for this.
+
+- Before the firmware is written to the controller the firmware version is
+   compared against a hardcoded number in the drivers renesas_fw_table[].
+   This means new firmware versions can't be supported without patching the driver.
+   Is this intentional?
+
+- Mathias
