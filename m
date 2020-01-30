@@ -2,88 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C266914D8A8
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2020 11:08:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 794E214D8BC
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2020 11:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726945AbgA3KH7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Jan 2020 05:07:59 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:37380 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726873AbgA3KH7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jan 2020 05:07:59 -0500
-Received: by mail-lj1-f194.google.com with SMTP id v17so2673887ljg.4;
-        Thu, 30 Jan 2020 02:07:58 -0800 (PST)
+        id S1727069AbgA3KMq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Jan 2020 05:12:46 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:33214 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726873AbgA3KMq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jan 2020 05:12:46 -0500
+Received: by mail-lf1-f66.google.com with SMTP id n25so1926152lfl.0;
+        Thu, 30 Jan 2020 02:12:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TRXV/R/FJjlldRcej4nDJXC0nf1bwm0Dx6qU6xuluz8=;
-        b=jEqeZZtgvc5Go758UJAUgzYXRDftsyDh09xIxKNizpgYy0kJW24y0bnRPB3Wba+xMS
-         YQdRzYYpOmTDWkqhPb7uBIf4529L0NXIUXKWE7W/NUX8oHEZJrokDfJQzPe1D4TUSXZd
-         dtZzEdEl9TDeDypLtqYYk8o/6z6YD8OmvqB2lUH4keyY553CANetcJhcdMqDWTmWlxEk
-         3fUZFP+u1UyKl2O1PAVbRFCvByAbtBwjkBuScwNIDr+C9VXTqW9PtG6/+GrHr+qQmZII
-         Hn+2aVEeuXNXTSWPsHmzn5YC8uQ4rhfgMWF0+1nLH16INiM9kqZdi9vfgwsfGvr/3ePr
-         oJIA==
-X-Gm-Message-State: APjAAAXkyMARLRchSC8kN6Kf7f+i/5NB/Ax8DCxbu0ZGySp3jeuyd75a
-        dPnM6kQLmC+g0sx0YckE/qrNUJd2
-X-Google-Smtp-Source: APXvYqyZX0txkc7CTZ6KZgmtq3Tuka+XSMLsxaFc3ZaPtExrTA0sR8R4zzN9hyC74fU/7JFNUzsE9g==
-X-Received: by 2002:a2e:7818:: with SMTP id t24mr2244584ljc.195.1580378877292;
-        Thu, 30 Jan 2020 02:07:57 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=t34ozib48UgJTKZw3pjG8Zw0StLaVvJ9LaBH/uiswSs=;
+        b=o5RZrLs8ZiTD+VcNNyFojhsnVngxuyRzWdV30UX9Xk/mBRF7TbbmhAUFtCCWkhxHrJ
+         pYVqyyaUYwUpK/76Wm0iD2pMGtKyqyR30HJk8nbBKWeyFzLhF//wBYHpNujWnhFYt0ec
+         OZC3Ob5rQlKyWKbPdWF2jAQCruzbnm61WIMvdpZy9XrajSO7AjIaeETyneg3ERu8X1J6
+         iiQNlyFSr74U7P9ZRpZ4grs9ZENvmT2jvbndEuHmcjFXHrg9edl+kHUBX9yxGdYlh+rv
+         mKT79qUrf9oiPJKulwY/SPLC47Mr8OlN0Yx64rS4kQXuOAGTKv3b/rXd28FSgynYdQND
+         oI5w==
+X-Gm-Message-State: APjAAAXuO1Kqqx3ey4yLLcGrMF/ZpDImE2iqFqiubmegYcs4+FfKFulS
+        7iHRCB77YvIrxy0vcF8DkZQ=
+X-Google-Smtp-Source: APXvYqwdV37BvbKtQUJC8YOIzREL70imDWSEU6rvapJHknci4Jx7KKf3qUcC4cUdW/+mQhl4oAIk1A==
+X-Received: by 2002:a19:cc11:: with SMTP id c17mr2156146lfg.161.1580379164267;
+        Thu, 30 Jan 2020 02:12:44 -0800 (PST)
 Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
-        by smtp.gmail.com with ESMTPSA id l8sm2561503ljh.65.2020.01.30.02.07.56
+        by smtp.gmail.com with ESMTPSA id i5sm2609623ljj.29.2020.01.30.02.12.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jan 2020 02:07:56 -0800 (PST)
+        Thu, 30 Jan 2020 02:12:43 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@xi.terra>)
-        id 1ix6jw-0000C3-UZ; Thu, 30 Jan 2020 11:08:01 +0100
+        (envelope-from <johan@kernel.org>)
+        id 1ix6oa-0000Em-0A; Thu, 30 Jan 2020 11:12:48 +0100
+Date:   Thu, 30 Jan 2020 11:12:47 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Davidlohr Bueso <dave@stgolabs.net>
-Subject: [PATCH] USB: serial: relax unthrottle memory barrier
-Date:   Thu, 30 Jan 2020 11:06:58 +0100
-Message-Id: <20200130100658.683-1-johan@kernel.org>
-X-Mailer: git-send-email 2.24.1
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: ir-usb: Silence harmless uninitialized
+ variable warning
+Message-ID: <20200130101247.GB8871@localhost>
+References: <20200129173037.cvrb3lcddsml54h5@kili.mountain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200129173037.cvrb3lcddsml54h5@kili.mountain>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit a8d78d9f3856 ("USB: serial: clean up throttle handling")
-converted the throttle handling to use atomic bitops. This means that we
-can relax the smp_mb() in unthrottle() to smp_mb__after_atomic(), which
-for example is a no-op on architectures like x86 that provide fully
-ordered atomics.
+On Wed, Jan 29, 2020 at 08:30:37PM +0300, Dan Carpenter wrote:
+> The "actual_length" variable might be uninitialized on some failure
+> paths.  It's harmless but static analysis tools like Smatch complain
+> and at runtime the UBSan tool will likely complain as well.
+> 
+> Fixes: e7542bc382f8 ("USB: serial: ir-usb: make set_termios synchronous")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/generic.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Nice catch, I'll queue this up for 5.6-rc.
 
-diff --git a/drivers/usb/serial/generic.c b/drivers/usb/serial/generic.c
-index 1be8bea372a2..546a1c2ce2f2 100644
---- a/drivers/usb/serial/generic.c
-+++ b/drivers/usb/serial/generic.c
-@@ -417,7 +417,7 @@ void usb_serial_generic_read_bulk_callback(struct urb *urb)
- 	/*
- 	 * Make sure URB is marked as free before checking the throttled flag
- 	 * to avoid racing with unthrottle() on another CPU. Matches the
--	 * smp_mb() in unthrottle().
-+	 * smp_mb__after_atomic() in unthrottle().
- 	 */
- 	smp_mb__after_atomic();
- 
-@@ -489,7 +489,7 @@ void usb_serial_generic_unthrottle(struct tty_struct *tty)
- 	 * Matches the smp_mb__after_atomic() in
- 	 * usb_serial_generic_read_bulk_callback().
- 	 */
--	smp_mb();
-+	smp_mb__after_atomic();
- 
- 	usb_serial_generic_submit_read_urbs(port, GFP_KERNEL);
- }
--- 
-2.24.1
+> ---
+>  drivers/usb/serial/ir-usb.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/serial/ir-usb.c b/drivers/usb/serial/ir-usb.c
+> index 79d0586e2b33..172261a908d8 100644
+> --- a/drivers/usb/serial/ir-usb.c
+> +++ b/drivers/usb/serial/ir-usb.c
+> @@ -448,7 +448,7 @@ static void ir_set_termios(struct tty_struct *tty,
+>  			usb_sndbulkpipe(udev, port->bulk_out_endpointAddress),
+>  			transfer_buffer, 1, &actual_length, 5000);
+>  	if (ret || actual_length != 1) {
+> -		if (actual_length != 1)
+> +		if (!ret)
+>  			ret = -EIO;
+>  		dev_err(&port->dev, "failed to change line speed: %d\n", ret);
+>  	}
 
+Johan
