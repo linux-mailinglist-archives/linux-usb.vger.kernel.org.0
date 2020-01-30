@@ -2,44 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2405F14D8DD
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2020 11:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F209014D94E
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2020 11:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726932AbgA3KXD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Jan 2020 05:23:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54502 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726893AbgA3KXD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 30 Jan 2020 05:23:03 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 68EAD206D5;
-        Thu, 30 Jan 2020 10:23:02 +0000 (UTC)
-Date:   Thu, 30 Jan 2020 11:23:00 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Davidlohr Bueso <dave@stgolabs.net>
-Subject: Re: [PATCH] USB: serial: relax unthrottle memory barrier
-Message-ID: <20200130102300.GA927405@kroah.com>
-References: <20200130100658.683-1-johan@kernel.org>
+        id S1727099AbgA3KxD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Jan 2020 05:53:03 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:43322 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726873AbgA3KxD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jan 2020 05:53:03 -0500
+Received: by mail-lj1-f194.google.com with SMTP id a13so2784588ljm.10;
+        Thu, 30 Jan 2020 02:53:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=VInSeZzfvgmHREHYseWhKaEskYTeZJwjVw1nVI3mDSM=;
+        b=BSL0whsJQB7pKHlTpIwBLCkb5I+yKv0mb9bqNx3DgSN0w1F5FvibJkbn+PcudtlPSk
+         42yHTkhzFMCnWWGMSXFUUA2HG4bau7e+LimBepJYU8eLo0yUNE9kUiy7+60osRUyCUv5
+         pLy53BA9mSVRMjk5BGySw8/DtVerKeqDA0TRiZ+57fbXBaO1aTl/TWADcxkloBX6EdqX
+         1VtdALsPD2cMuoFztqcewiAL462c45MRrH7gLbLjjPSG6qihYRTOoj1HFd8SSOKj4a/u
+         NGgWwS70kCwCefymZhvQf/RPF61ek4ncmffmWrmWqNHRAykOAUZVOvM567mltqETz0hN
+         CzJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=VInSeZzfvgmHREHYseWhKaEskYTeZJwjVw1nVI3mDSM=;
+        b=NCuAQ+9R1a5J2MxdyGBhhl5Wm0+8X1PDvfHQpxRQFdRbBV5fkvmp+PuvqXoUperIIU
+         vWHK8onK10VxNRc3fHLIu4kygd6+/E5BrFabnxfLE2oFeEEzmdEeXVIJwabK3GrlvcX8
+         KH9Iv1wWIV/8FEF19wOrmBUEiT9+CchOXX9KnMRE0MWNnDgW9uoPxZiwnLL+V+9sXH0e
+         33cO+i16esY+eZNMTw6prn03sEPLH60+ewZ8lepU+TGQVaXNFREsszUClGKzE4pe2f5r
+         a/bojC6B/PwyGzbgnRRIoiE8LBIh9BI5UL7n6EzVH519w42WNKokQXPsMvPk9x+3y8vy
+         /rsA==
+X-Gm-Message-State: APjAAAVohmaAe8z0vs1e+poFbvtG5zsfn+321tKUXxoa/WcdSa+Dnx84
+        yWPnCdDK5AoKnQleYkuhahSOK38Mr/M=
+X-Google-Smtp-Source: APXvYqyW8YU5DPRtzWUe9otRvtCWmRlLF4jZgF/dLQpWz7GpFGNLMnob8wZ6nL95k2aVYKoq93G16A==
+X-Received: by 2002:a2e:98c4:: with SMTP id s4mr2512389ljj.102.1580381581018;
+        Thu, 30 Jan 2020 02:53:01 -0800 (PST)
+Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
+        by smtp.gmail.com with ESMTPSA id h14sm2612603lfc.2.2020.01.30.02.52.59
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 30 Jan 2020 02:52:59 -0800 (PST)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] USB/Thunderbolt/PHY patches for 5.6-rc1
+In-Reply-To: <20200130083459.206fc0d9@canb.auug.org.au>
+References: <20200129101401.GA3858221@kroah.com> <CAHk-=wgwBfz0CtAFZMDy=A_Wz0+=dzrfWWiHESUD9CxnV=Xyjw@mail.gmail.com> <20200130083459.206fc0d9@canb.auug.org.au>
+Date:   Thu, 30 Jan 2020 12:52:55 +0200
+Message-ID: <87ftfx8bco.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200130100658.683-1-johan@kernel.org>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 30, 2020 at 11:06:58AM +0100, Johan Hovold wrote:
-> Commit a8d78d9f3856 ("USB: serial: clean up throttle handling")
-> converted the throttle handling to use atomic bitops. This means that we
-> can relax the smp_mb() in unthrottle() to smp_mb__after_atomic(), which
-> for example is a no-op on architectures like x86 that provide fully
-> ordered atomics.
-> 
-> Signed-off-by: Johan Hovold <johan@kernel.org>
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+Hi,
+
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
+> On Wed, 29 Jan 2020 10:11:26 -0800 Linus Torvalds <torvalds@linux-foundat=
+ion.org> wrote:
+>>
+>> Stephen, does linux-next perhaps miss these config-time warnings?
+>
+> I saw it when it first happened and reported it, but since I merge the
+> ic2 tree before the usb tree, the warning went away for me after the
+> fix was added to the i2c tree.
+
+I wonder if we should start shuffling the order of merges in
+linux-next in order to have a chance of finding these issues.
+
+cheers
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4ytYcACgkQzL64meEa
+mQazdRAA0z0M7brv/67q3vlMfMM9M8uyx+sk6vaS3NCEg1l0YXfWhwdk3fx/0FCf
+DXW+S3BcjgZXUD+U6nNvjp92z7yvoPjaqAUzf4/1vs5/TsuVniJy5hrd5R2rSMR6
+lZnuQ7ilCQvDiRjnSc3WM/sdVh+/mf/d7caxBwq0W6ojry9Hx8PjPoArg9iYcxfm
+UYHVz8oMW3SCyBWZE0a8ZHj9jWa8AcdF8E20ulBL0z/lLpmSN6Oux8+Zd7+Nylw8
+ElL8KW/I/wxQOANQYt22U6vsj4MxItHsejZr3JQ1SPAyr/VgmArGFM435CeDviMr
+Y1hOByIhtT4F2wJ0LvGuIZ95/LHdvttwp2ETtbSyVHlGTiizGZaIMJplvj8ZN7O6
+SNQjWI5ZdhcIIGJzlojGDhO/HBqGG9ED1/0RHG8DLaKho7ntuHifKxxRLO4jEH7T
+dgZ9ResVOysGcaIQgBkh+/c3CXh5WGhjkqm9NpO270ZHW7EgUJKI/kaC/Igi/Z1i
+vvinuicDmayWMOS/+6sd321AWtSIvWvQQS5YD4YmpTi7oor5YYyGfvrKG30ZT7FM
+0H6VqRm+j6+TCEYwzF0yUNaibuOzcFwQ89Upc563FbvY7w2uBYP+JqM7w1/8wfaE
+YCe8SpShKtN/CuDFmz2W0iBy43+mqFtgFZ7G0lhQrWz7KvZSeRg=
+=Io0V
+-----END PGP SIGNATURE-----
+--=-=-=--
