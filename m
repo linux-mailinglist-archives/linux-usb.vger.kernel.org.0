@@ -2,169 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7027E14DA4D
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2020 13:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E443A14DC6A
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2020 15:05:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727171AbgA3MCN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Jan 2020 07:02:13 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:44422 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727186AbgA3MCN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jan 2020 07:02:13 -0500
-Received: by mail-lj1-f193.google.com with SMTP id q8so2998701ljj.11;
-        Thu, 30 Jan 2020 04:02:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=CbriAO+YYaiW8OHBrskHol8fuQgG0MiL80JrFGJ4VkU=;
-        b=GieZAgTO7yJC2xV9LQSQzlexrQv1xAzIbArjSVsjF/UQ6sRD5l+n37p6UWh5ImVjbD
-         CPEbE8hVZfFXzuHyhT1cKbKy8BczbXLDba0jDWXMseIYgEaS2hvMbN+Gpf6e+1xCg4Qn
-         7xDmpVmrHNz0kFY1aU2zJp+5BPFVvD/2y0oWaZxnx0bcJW4L4O5Rvyd9buX8k6M9vd1L
-         3TvecjiGY6F56qCAPI94sPVDGVPnp8ycI6m4eDKccq8Eb+8qaPg0nhDQP0xWJDdOmfR3
-         ef3T0CC9nUWl3fjYJOUsHOFWbdxLdXKdNzjgpuij1XPujePgrmHUgNf9E4GT99g/Cbd6
-         /HkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=CbriAO+YYaiW8OHBrskHol8fuQgG0MiL80JrFGJ4VkU=;
-        b=QNRSnQHWWcMRY58wF4CrRn2XmGUla2k+mJrq75oIAwvujhMfdxcLptMY+xdE4ripmQ
-         Xa5RkAu+xB3PN0JTFfC5f7JGqQqlAZw944Caqjrfac2cP1gjeMy9OP6PuWAUaA7+zxKd
-         USAFiWCl149YZPzMlFjj5Lg9GdevizI93cPyMMyEuZYtD3gz1uyyM7hlXNVloZfU1oqE
-         92lLn0/S19dmENoQ44nUAbn+xZtYv8Fiowb7PkVesrq9wjbL318Mvgp3WDS2DWfNS2lE
-         ZqTsIqxqOAmZs4sCoFSXZbbUmTgykLwwMItrAE5fIX1+Jn+5qys7T+Td/ByiY2LrVlXE
-         Cvog==
-X-Gm-Message-State: APjAAAUhLz4rzRGkpx1P7LrtIpfvVqfswCUpY9I5hj5V+mjf7Ue7xgEF
-        DlgdAMk4R+5p0T/5x3prras=
-X-Google-Smtp-Source: APXvYqy+RM59IGhHmXCuppva3qQWf3mfMzt7K1mfteyOWdFXq1P548w6Hc+gLb3RWWm1szJQCH80wQ==
-X-Received: by 2002:a2e:9a01:: with SMTP id o1mr2647487lji.247.1580385731111;
-        Thu, 30 Jan 2020 04:02:11 -0800 (PST)
-Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id f29sm2702633ljo.76.2020.01.30.04.02.09
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 30 Jan 2020 04:02:10 -0800 (PST)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, bigeasy@linutronix.de,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Olbrich <m.olbrich@pengutronix.de>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>
-Subject: Re: [PATCH][RESEND] usb: dwc3: gadget: Handle dequeuing of non queued URB gracefully
-In-Reply-To: <20200116132459.22383-1-alexandru.ardelean@analog.com>
-References: <20191106144553.16956-1-alexandru.ardelean@analog.com> <20200116132459.22383-1-alexandru.ardelean@analog.com>
-Date:   Thu, 30 Jan 2020 14:02:05 +0200
-Message-ID: <87d0b1885e.fsf@kernel.org>
+        id S1727354AbgA3OFU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Jan 2020 09:05:20 -0500
+Received: from mail-am6eur05on2057.outbound.protection.outlook.com ([40.107.22.57]:6167
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727161AbgA3OFU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 Jan 2020 09:05:20 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Umn1QMJ8nuqJhulNjTC4W3m9qsKZVcDnnG3yid5MXiR6kB2nZyccl5AaMDabs2T/6pClXma2bmao7ErSHh2N/GzWX6v+U0OowULrOjXl9suLNh36LNgZBEBtUNSECCjXeqBe+H3OsOtu68AFKGMfM4yuxQZVgIdSdXjWhg5DT3+5NHGweWzy+tlmTg5wfBuL8x9/KbIwr95XlQXLEzkYC0CiGZ56DpfgDtSXNHMcHMxETBPGeO3qZbrAnEY5ClQ1VOlK0zUoVKVLO8aPGeml29JCDc6a+RcUqAZ0vXLMbHglFyLGVQ4EW4epltITCbG9eS7BkCeWz5W/1e5GNCgRwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pFHQqZgP5MmXLH1PlEuYy7xmClLE9NcOwzGTjv2nZNY=;
+ b=ErWsmwi1bbEK5fY7q97PaaVslr5KG84UxBTCT7j7UQSqyA7/nre92wKSqFxv5QiOnx0AmFRz3HWbHiWFK58+wa+bzDoy/L1W5vaGT8KcIQGxcil7YNipxebtlQ8t7AS6Q6l81eNUgYZrJ+n8+atPJL6iXyny+ld2bsbJ/oMkwPeVQWZjQyI7XTNNG6s4g12mLjm47X88rJGIS8MSu1FTfHV+BTvBkR/E3s4FjRMIZqF6xq31L/ywSg6mCxt6FJ0BDdAXcPuMSq8SPyx08DHc30FAhhhliNVGJbCd0i9BUUz1AzcCguMiOzT6WqoIoCsX+gjwQmFG8ejBTpm1rPkFpA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pFHQqZgP5MmXLH1PlEuYy7xmClLE9NcOwzGTjv2nZNY=;
+ b=FoJVXlLnzbOJ67Ga0OFsQ+oMeDEcLcuX91E5MOFFGu15vdtWpPoh4NNuK6tfUfEOSOOFI9npWcJDDtMalwP7HrINyT+TBiDNhaHoHG6ZGXwVhiLKI4iB+YWc+BViTtARv1JkY3/REz7hS0U/R0BDUXRH3BamW7jG8EUAGF2gvzg=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
+ VI1PR04MB7167.eurprd04.prod.outlook.com (10.186.158.71) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2686.27; Thu, 30 Jan 2020 14:05:17 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::c7d:58a2:7265:407e]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::c7d:58a2:7265:407e%6]) with mapi id 15.20.2686.025; Thu, 30 Jan 2020
+ 14:05:17 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>, Jun Li <jun.li@nxp.com>
+Subject: RE: [PATCH v4 1/2] usb: phy: show USB charger type for user
+Thread-Topic: [PATCH v4 1/2] usb: phy: show USB charger type for user
+Thread-Index: AQHVzB2pVcQEN3ljtEqlpMwLUsf3maf5i62AgAnIO5A=
+Date:   Thu, 30 Jan 2020 14:05:17 +0000
+Message-ID: <VI1PR04MB5327245DEABD688CC88F88548B040@VI1PR04MB5327.eurprd04.prod.outlook.com>
+References: <1579145333-1657-1-git-send-email-peter.chen@nxp.com>
+ <20200124084039.GB2923791@kroah.com>
+In-Reply-To: <20200124084039.GB2923791@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.68]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: d5fdc521-1553-4d68-459f-08d7a58d6f80
+x-ms-traffictypediagnostic: VI1PR04MB7167:|VI1PR04MB7167:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB716769715D8807579A75500E8B040@VI1PR04MB7167.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4714;
+x-forefront-prvs: 02981BE340
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(136003)(366004)(396003)(346002)(376002)(199004)(189003)(478600001)(8676002)(2906002)(55016002)(33656002)(7696005)(316002)(5660300002)(4744005)(44832011)(81166006)(186003)(6506007)(52536014)(6916009)(81156014)(8936002)(9686003)(76116006)(64756008)(66446008)(71200400001)(66946007)(86362001)(66556008)(66476007)(54906003)(4326008)(26005);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB7167;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: bDZRKCl62RV/Trs4ELp+sCm4ZnwX1+ZXjbsE+GIoLTrF41ebtqIykp2VAtsXfhkBFgzHjqs9Zun6zFdumbyEnVGuB8nVENTBEZBUoRygBgkHoN2Gip9Nw+QbHDAHNIcivvm+a8adAdFrs6Jym8dEvf8OkdVfbkLi1+YkCS6eTxdKZCEhEUjrVWkRfXVHIiywHTtFkU35arJZXqAkdLHyh+927mPe7nZj0w0rwKhBwMQV2IsBwHe5E7DEXvTZuD+yI0Ii6eNbKGhxGHSPJtYE9/p7DRiKdEMOLMBHcbFICAf75iKBEydVNqg5xvvjp3sUgSb0hroPNC5zYdSPd1V83AeQn8dGQtDwExHbiKN+5fhmIdofBZrnzmgNV60KNLHjVrVF0YEmRQU7ePeh2EhkW/lVx/SwHWKtTm9WIH8sR4/OWUzsFO8I+Db3o/IjMhEa
+x-ms-exchange-antispam-messagedata: Xx1/hSlNdh2lFjwrtWKk0gnYw0kHSzwt4zBd/yAgsBepCOzPigNzmq1e0QbIGtK3dNmvDgBOAzOkrS+hm1Cm2SfjbhJUvAVFkldqH6xCnQGseSgwsleOh2OHFZ/DGr4u/d7hqemsTZaCqeMK3deCSA==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5fdc521-1553-4d68-459f-08d7a58d6f80
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2020 14:05:17.4164
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: bP/EEGqCE0F5kjhLuFAE1KZ6YOmDolcNyWzeyHecaNCJ6p1Iv8eSn3FbOk4XVWGH5bJXZz0sF42JFvd3mrel6Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7167
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+=20
+> > Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> > ---
+> > Changes for v4:
+> > - No changes.
+> >
+> >  drivers/usb/phy/phy.c | 13 ++++++++++++-
+> >  1 file changed, 12 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/phy/phy.c b/drivers/usb/phy/phy.c index
+> > 0277f62739a2..ad2554630889 100644
+> > --- a/drivers/usb/phy/phy.c
+> > +++ b/drivers/usb/phy/phy.c
+> > @@ -34,6 +34,14 @@ struct phy_devm {
+> >  	struct notifier_block *nb;
+> >  };
+> >
+> > +static const char *const usb_chger_type[] =3D {
+> > +	[UNKNOWN_TYPE]			=3D
+> "USB_CHARGER_UNKNOWN_TYPE",
+> > +	[SDP_TYPE]			=3D "USB_CHARGER_SDP_TYPE",
+> > +	[CDP_TYPE]			=3D "USB_CHARGER_CDP_TYPE",
+> > +	[DCP_TYPE]			=3D "USB_CHARGER_DCP_TYPE",
+> > +	[ACA_TYPE]			=3D "USB_CHARGER_ACA_TYPE",
+> > +};
+>=20
+> As these are exported values (CDP_TYPE and friends), they really need to =
+have
+> explicit values on the .h file, otherwise it might not work properly on a=
+ll systems.
+>=20
 
+Sorry, what do you mean? These values are defined at include/uapi/linux/usb=
+/charger.h
 
-Hi,
-
-Alexandru Ardelean <alexandru.ardelean@analog.com> writes:
-
-> From: Lars-Peter Clausen <lars@metafoo.de>
->
-> Trying to dequeue and URB that is currently not queued should be a no-op
-> and be handled gracefully.
->
-> Use the list field of the URB to indicate whether it is queued or not by
-> setting it to the empty list when it is not queued.
->
-> Handling this gracefully allows for race condition free synchronization
-> between the complete callback being called to to a completed transfer and
-> trying to call usb_ep_dequeue() at the same time.
-
-We need a little more information here. Can you further explain what
-happens and how you caught this?
-
-> Tested-by: Michael Olbrich <m.olbrich@pengutronix.de>
-> Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-> Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
-> ---
->
-> * Added Michael Olbrich's Tested-by tag
->   https://lore.kernel.org/linux-usb/20191112144108.GA1859@pengutronix.de/
->
->  drivers/usb/dwc3/gadget.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 1b8014ab0b25..22a78eb41a5b 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -177,7 +177,7 @@ static void dwc3_gadget_del_and_unmap_request(struct =
-dwc3_ep *dep,
->  {
->  	struct dwc3			*dwc =3D dep->dwc;
->=20=20
-> -	list_del(&req->list);
-> +	list_del_init(&req->list);
-
-this should *not* be necessary. Neither the INIT_LIST_HEAD() below.
-
->  	req->remaining =3D 0;
->  	req->needs_extra_trb =3D false;
->=20=20
-> @@ -847,6 +847,7 @@ static struct usb_request *dwc3_gadget_ep_alloc_reque=
-st(struct usb_ep *ep,
->  	req->epnum	=3D dep->number;
->  	req->dep	=3D dep;
->  	req->status	=3D DWC3_REQUEST_STATUS_UNKNOWN;
-> +	INIT_LIST_HEAD(&req->list);
->=20=20
->  	trace_dwc3_alloc_request(req);
->=20=20
-> @@ -1549,6 +1550,10 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *e=
-p,
->=20=20
->  	spin_lock_irqsave(&dwc->lock, flags);
->=20=20
-> +	/* Not queued, nothing to do */
-> +	if (list_empty(&req->list))
-> +		goto out0;
-
-The loop below is actually looking for the request in our lists. You
-just made the entire loop below unnecessary, but you didn't change it
-accordingly. Moreover, I think that a user dequeueing a request that
-wasn't queued for the current endpoint indicates a possible bug in the
-gadget driver which needs to be fixed.
-
-If you really disagree, suffice to change "ret =3D -EINVAL;" to "ret =3D
-0;" and you would get what you want, without any of the extra cruft.
-
-cheers
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4yxb0ACgkQzL64meEa
-mQa6yRAA3qZXokGaKbxI6YrzLjwzLNFTAfuzXmIzXQdyzTU5RKaFW/QMno+DKv/B
-vBdYcrsuBInSw74GU4IRTwDTsy9q2Xpyn2lsRqQqjfGys0XzCX/b47HxdiPDlClT
-rGwBXjp96qxcr/eeOLELxrH6EjhRBptD85/tK91Vqi0PmaAt1mt/7kPk80df92PH
-h7kcxC0ZgsERFU3O5maWlNo5oHzWqr0aiRWOV8wsbWpecCk3UJhS00cQb0y+BHQ3
-ByiQjIBCNpOxXvA7cerSeMTuJd2IaQ1GOzAwynGE+2VCzNR91/xJ24GMysD25KD2
-XoiKOqgG1fm38UjI0WYdYRzTyuQwhvch+8FuBVO1grH55bJ1y16m4g9ZrMkv9LJP
-ciob6UlmsuuYBBHBD/puZmeAPW4DPmhS7ZYaa1OdYwjIMf1EOO/iEiyENyysDHE+
-ZnmOj4lO8Loip1HeFOE+HmmPi3Gg4zPlzdrtHSGGJFhVgciQ46SAHfRGf7+6TGR2
-4U3pAZGsR69tuirwCbVWKRVmrH1ybxnuOOzM//rUhrK/IMRrFWnROCU57WXnDAh5
-v8c8mxKiHTQ3aN4tD5P6w7DDC528gT555g6J3iyc1/85vrkdkFu3JEO+gMRNSuea
-ubV8SgriXmYHAd4+ggcRed6AYUtpYAAIrt+8f9yV57PpH3gP0OE=
-=BG5P
------END PGP SIGNATURE-----
---=-=-=--
+Peter
