@@ -2,125 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7480C14E08B
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2020 19:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4580F14E4B6
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2020 22:17:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728130AbgA3SJM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Jan 2020 13:09:12 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:47734 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727476AbgA3SJM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jan 2020 13:09:12 -0500
-Received: (qmail 9080 invoked by uid 2102); 30 Jan 2020 13:09:10 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 30 Jan 2020 13:09:10 -0500
-Date:   Thu, 30 Jan 2020 13:09:10 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Hardik Gajjar <hgajjar@de.adit-jv.com>
-cc:     gregkh@linuxfoundation.org, <thinhn@synopsys.com>,
-        <Kento.A.Kobayashi@sony.com>, <atmgnd@outlook.com>,
-        <linux-usb@vger.kernel.org>, <andrew_gabbasov@mentor.com>,
-        <erosca@de.adit-jv.com>, <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v2] USB: hub: Fix the broken detection of USB3 device in
- SMSC hub
-In-Reply-To: <1580403994-21076-1-git-send-email-hgajjar@de.adit-jv.com>
-Message-ID: <Pine.LNX.4.44L0.2001301306330.1441-100000@iolanthe.rowland.org>
+        id S1727224AbgA3VRA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Jan 2020 16:17:00 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:38690 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726739AbgA3VQ7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jan 2020 16:16:59 -0500
+Received: by mail-pl1-f193.google.com with SMTP id t6so1827847plj.5;
+        Thu, 30 Jan 2020 13:16:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9z1ji1XI9x2ElU3JVLNHC7IHbODO5Yx8KS5lA50OWDQ=;
+        b=is7/Ki7qeNGRZqe0Km8A5jUlEAXkI1wDK/+YG7VPYiPEk29SbSYxW0Dv1mbuXSIyR6
+         vuS9PsvapTy8ncL1Gzh8ldUrB39x5FSMakIuk6zDLk55zGp2aaA6JY5+Mt4XDQI9H7/J
+         FSb9d1E/P50QonRK+QNen2zUVG/HObb5VrlpSc2B9+X7djx3nzepyisCOBGhBDVEwHwz
+         dRXPaKYC+lLj080/rwtbf9/xG39DgqGJg36GC/6sCiSAkAE5D7l1x9mpWA9PIvvGYLcU
+         Tp7Vt6YClp0RBuEWX53UEP98SWkIibYB09KVhJz3oCSIIPaoGapq24rlMO3wj8+XssRp
+         NqEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9z1ji1XI9x2ElU3JVLNHC7IHbODO5Yx8KS5lA50OWDQ=;
+        b=TAsLT1Pvg0vSDND2ppLyHSIUZH17/FmNewMOpv1jAbxVF45aWGQHDjwzBJn1jzSCXH
+         vrtrmB8OWNRFXoOMW1SDvi84sSl2PD+W0Oq9NSUGiwNdNbQanW1DwCpTgKFRRfnDLYLg
+         2g2nTX4+rfW/kNHXY+GR2x/SBTp4LyCIk6vtllvzDaAGginDI+bv9G2JRFd81bmhRN+f
+         GwfHuueV31EPNbg2/1gZ0BwtDP+o4ikZ/YO1M0qcjv68Zk56RpnQ8bXIqWBm0xIDFh5Q
+         s6alBGB3OrlA7XJrVTVy1K6ptw5Z2LSmhe1t67dOsarjzJHD90p4zmWcsFkysz60/F0r
+         AEpQ==
+X-Gm-Message-State: APjAAAU5jwYASvHowXY4jHPdomJrmXT8ATCexUlywBZoNTPTAZ7V0+bT
+        ypFunqqjmTY+MUo2yvRbzCzM2ydF
+X-Google-Smtp-Source: APXvYqyAxiLT8RkiPIpI9BPPOn+XovBZeBsYegjSLOJM+l5K7R3lODPuNbxMhuukJ+NxGREahe2nsQ==
+X-Received: by 2002:a17:902:7b92:: with SMTP id w18mr6584659pll.72.1580419019050;
+        Thu, 30 Jan 2020 13:16:59 -0800 (PST)
+Received: from [192.168.0.16] ([75.167.220.149])
+        by smtp.gmail.com with ESMTPSA id e6sm7694489pfh.32.2020.01.30.13.16.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jan 2020 13:16:58 -0800 (PST)
+Subject: Re: [REGRESSION][BISECTED] 5.5-rc suspend/resume failure caused by
+ patch a4f55d8b8c14 ("usb: hub: Check device descriptor before resusciation")
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     David Heinzelmann <heinzelmann.david@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <Pine.LNX.4.44L0.2001231035250.1518-100000@iolanthe.rowland.org>
+From:   Paul Zimmerman <pauldzim@gmail.com>
+Message-ID: <482da576-e945-b804-3d36-65aee142e645@gmail.com>
+Date:   Thu, 30 Jan 2020 14:16:57 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <Pine.LNX.4.44L0.2001231035250.1518-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 30 Jan 2020, Hardik Gajjar wrote:
+Hi Alan,
 
-> Renesas R-Car H3ULCB + Kingfisher Infotainment Board is either not able
-> to detect the USB3.0 mass storage devices or is detecting those as
-> USB2.0 high speed devices.
+On 1/23/20 8:50 AM, Alan Stern wrote:
+> On Wed, 22 Jan 2020, Paul Zimmerman wrote:
 > 
-> The explanation given by Renesas is that, due to a HW issue, the XHCI
-> driver does not wake up after going to sleep on connecting a USB3.0
-> device.
+>>> Still, since there was no real connection change at the port, there's
+>>> no reason to call hub_port_connect_change() here.  Let's see if the
+>>> patch below fixes your problem.
+>>>
+>>> Alan Stern
+>>>
+>>>
+>>>
+>>> Index: usb-devel/drivers/usb/core/hub.c
+>>> ===================================================================
+>>> --- usb-devel.orig/drivers/usb/core/hub.c
+>>> +++ usb-devel/drivers/usb/core/hub.c
+>>> @@ -1216,11 +1216,6 @@ static void hub_activate(struct usb_hub
+>>>   #ifdef CONFIG_PM
+>>>   			udev->reset_resume = 1;
+>>>   #endif
+>>> -			/* Don't set the change_bits when the device
+>>> -			 * was powered off.
+>>> -			 */
+>>> -			if (test_bit(port1, hub->power_bits))
+>>> -				set_bit(port1, hub->change_bits);
+>>>   
+>>>   		} else {
+>>>   			/* The power session is gone; tell hub_wq */
+>>>
+>>
+>> I can confirm this fixes the issue for me, I did a couple dozen
+>> suspend/resume cycles without seeing a failure.
+>>
+>> I see the code you removed was added by Lan Tianyu in commit
+>> ad493e5e5805 ("usb: add usb port auto power off mechanism"). I
 > 
-> In order to mitigate that, disable the auto-suspend feature
-> specifically for SMSC hubs from hub_probe() function, as a quirk.
+> No, not really.  The set_bit() call was added by me in a much earlier
+> commit (8808f00c7adf, merged in 2008).  Lan Tianyu merely added the
+> "if" test, so that set_bit() doesn't always get called.  Now with this
+> change, set_bit() never gets called.
 > 
-> Renesas Kingfisher Infotainment Board has two USB3.0 ports (CN2) which
-> are connected via USB5534B 4-port SuperSpeed/Hi-Speed, low-power,
-> configurable hub controller.
+>> wonder if your patch would break that? I don't know what that is
+>> or how to test it.
 > 
-> [1] SanDisk USB 3.0 device detected as USB-2.0 before the patch
->  [   74.036390] usb 5-1.1: new high-speed USB device number 4 using xhci-hcd
->  [   74.061598] usb 5-1.1: New USB device found, idVendor=0781, idProduct=5581, bcdDevice= 1.00
->  [   74.069976] usb 5-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
->  [   74.077303] usb 5-1.1: Product: Ultra
->  [   74.080980] usb 5-1.1: Manufacturer: SanDisk
->  [   74.085263] usb 5-1.1: SerialNumber: 4C530001110208116550
+> While some code review by people who are familiar with this material
+> wouldn't hurt, I don't think you need to worry about any additional
+> testing.
 > 
-> [2] SanDisk USB 3.0 device detected as USB-3.0 after the patch
->  [   34.565078] usb 6-1.1: new SuperSpeed Gen 1 USB device number 3 using xhci-hcd
->  [   34.588719] usb 6-1.1: New USB device found, idVendor=0781, idProduct=5581, bcdDevice= 1.00
->  [   34.597098] usb 6-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
->  [   34.604430] usb 6-1.1: Product: Ultra
->  [   34.608110] usb 6-1.1: Manufacturer: SanDisk
->  [   34.612397] usb 6-1.1: SerialNumber: 4C530001110208116550
+>> In any case:
+>> Tested-by: Paul Zimmerman <pauldzim@gmail.com>
 > 
-> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
-> ---
-> Changes in v2:
->  - [Alan Stern] Switched from pm_runtime_set_autosuspend_delay()
->    to usb_autopm_get_interface()
->  - Improved commit description
->  - Rebased against v5.5
->  - https://lore.kernel.org/linux-renesas-soc/1579876573-13741-1-git-send-email-hgajjar@de.adit-jv.com/
+> Thank you.  I'll submit the patch soon.
 > 
->  drivers/usb/core/hub.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 3405b14..4152f44 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -38,7 +38,9 @@
->  #include "otg_whitelist.h"
->  
->  #define USB_VENDOR_GENESYS_LOGIC		0x05e3
-> +#define USB_VENDOR_SMSC				0x0424
->  #define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	0x01
-> +#define HUB_QUIRK_DISABLE_AUTOSUSPEND		0x02
->  
->  #define USB_TP_TRANSMISSION_DELAY	40	/* ns */
->  #define USB_TP_TRANSMISSION_DELAY_MAX	65535	/* ns */
-> @@ -1863,6 +1865,9 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
->  	if (id->driver_info & HUB_QUIRK_CHECK_PORT_AUTOSUSPEND)
->  		hub->quirk_check_port_auto_suspend = 1;
->  
-> +	if (id->driver_info & HUB_QUIRK_DISABLE_AUTOSUSPEND)
-> +		usb_autopm_get_interface(intf);
-> +
->  	if (hub_configure(hub, &desc->endpoint[0].desc) >= 0)
->  		return 0;
->  
+> Alan Stern
 
-This isn't right.  If you call usb_autopm_get_interface() then at some 
-later point you _must_ call usb_autopm_put_interface().  In this case, 
-you would have to add these calls following the hub_configure() call 
-(in the case where it returns an error) and in the hub_disconnect() 
-routine.
+Ping? Unfortunately 5.5 was released with this regression, do you plan
+to submit this patch soon?
 
-Alan Stern
-
-> @@ -5599,6 +5604,10 @@ static void hub_event(struct work_struct *work)
->  }
->  
->  static const struct usb_device_id hub_id_table[] = {
-> +    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR | USB_DEVICE_ID_MATCH_INT_CLASS,
-> +      .idVendor = USB_VENDOR_SMSC,
-> +      .bInterfaceClass = USB_CLASS_HUB,
-> +      .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
->      { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
->  			| USB_DEVICE_ID_MATCH_INT_CLASS,
->        .idVendor = USB_VENDOR_GENESYS_LOGIC,
-> 
-
+-- 
+Paul
