@@ -2,107 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7099014EF3E
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 16:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C00BF14EF77
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 16:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728958AbgAaPM3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jan 2020 10:12:29 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:55850 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728893AbgAaPM3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 10:12:29 -0500
-Received: (qmail 2571 invoked by uid 2102); 31 Jan 2020 10:12:28 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 31 Jan 2020 10:12:28 -0500
-Date:   Fri, 31 Jan 2020 10:12:28 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Hardik Gajjar <hgajjar@de.adit-jv.com>
-cc:     gregkh@linuxfoundation.org, <thinhn@synopsys.com>,
-        <Kento.A.Kobayashi@sony.com>, <atmgnd@outlook.com>,
-        <linux-usb@vger.kernel.org>, <andrew_gabbasov@mentor.com>,
-        <erosca@de.adit-jv.com>, <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v2] USB: hub: Fix the broken detection of USB3 device in
- SMSC hub
-In-Reply-To: <20200131103239.GA21056@vmlxhi-118.adit-jv.com>
-Message-ID: <Pine.LNX.4.44L0.2001311009560.1577-100000@iolanthe.rowland.org>
+        id S1729068AbgAaPWi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jan 2020 10:22:38 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:40375 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728839AbgAaPWi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 10:22:38 -0500
+Received: by mail-lj1-f194.google.com with SMTP id n18so7465855ljo.7;
+        Fri, 31 Jan 2020 07:22:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=OVgIO1CzZRl+XabsXK7plCCJlzTLJUz3Sk5kA7wDx1A=;
+        b=L4S/CsXt8WqpVAnU2Fv0ZF2b0G6y71MulvbvxkJxiikxNPvbButZkMKmXPvVg14UBm
+         9U+LjVgry8SalWOEDFCemTZPCbVWH2o4Ns+rQNgfUvuTmzntubP3DrmhY1l7jr3AU6F4
+         bG7MtSo8m5iRO+AGjj2sUL32VdV4wHqMpevzfIKyJq1rukYs3ReRfo7EuHWM+yQ1k9vh
+         MGc6OHS5Sbf1job77UmAnEmD4fK5p2EL3+kNv1lLAiywsLVma616iqIPyyt2RA5oLBhu
+         pChtNmro4TCzpzofayFVG1yGn/6SwKUgsxPLlMsCoTR7FpfQNkNj2yifZdnZzIZbmlJS
+         LHxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=OVgIO1CzZRl+XabsXK7plCCJlzTLJUz3Sk5kA7wDx1A=;
+        b=eIL29JG4tn8C1nVDP2+Nz9mSvTMOV2hfQmRzCf2Cq59hz0fYk0EF/qQbk1dAA0UOrr
+         Kc2WJGfUu1oHkbxaEIZdMgTxtMF6NbKIDzCR2NnUm2wgIZD+/o8KSMjpPhpVzrUw+0Ed
+         8mcJGJk7+AHgpwbt2Kfhneo/LYcIcNC9kEgFa/FJQi7dl3hdltCkby4M6oH4D389YzS+
+         zmubLwbmb4B7Ej9eUyJyceyx2FYyC1p6Gnphhcx3GILb9FdudzEyeA2+JUH4pIJ5Rob4
+         ICyF+s+Q1ftGzajs066BMXFv5skwD1GjKTMcwURzbJ3h2CQFW6aYn5z+WT+6tLbXzMvW
+         woYA==
+X-Gm-Message-State: APjAAAWmUAzuMfSByMT2RtPTfLEALEGIVVMLfFpNxDor507X6140+DzX
+        x4HtSj6gAaEieJxcx3XTOWQ=
+X-Google-Smtp-Source: APXvYqwZxMkzW5sa1W44mtWMkHUwHmnYmN6N25z2/mNDH1Xd6lzfKe4ojSTZX+H9mUmc0we/Pih87Q==
+X-Received: by 2002:a2e:9955:: with SMTP id r21mr6031405ljj.283.1580484155402;
+        Fri, 31 Jan 2020 07:22:35 -0800 (PST)
+Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
+        by smtp.gmail.com with ESMTPSA id q10sm4947154ljj.60.2020.01.31.07.22.34
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 31 Jan 2020 07:22:34 -0800 (PST)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>
+Subject: Re: [PATCH v5 1/1] usb: gadget: add raw-gadget interface
+In-Reply-To: <CAAeHK+wwmis4z9ifPAnkM36AnfG2oESSLAkKvDkuAa0QUM2wRg@mail.gmail.com>
+References: <cover.1579007786.git.andreyknvl@google.com> <461a787e63a9a01d83edc563575b8585bc138e8d.1579007786.git.andreyknvl@google.com> <87ftfv7nf0.fsf@kernel.org> <CAAeHK+wwmis4z9ifPAnkM36AnfG2oESSLAkKvDkuAa0QUM2wRg@mail.gmail.com>
+Date:   Fri, 31 Jan 2020 17:22:09 +0200
+Message-ID: <87a7637ise.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 31 Jan 2020, Hardik Gajjar wrote:
-
-> > > @@ -1863,6 +1865,9 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
-> > >  	if (id->driver_info & HUB_QUIRK_CHECK_PORT_AUTOSUSPEND)
-> > >  		hub->quirk_check_port_auto_suspend = 1;
-> > >  
-> > > +	if (id->driver_info & HUB_QUIRK_DISABLE_AUTOSUSPEND)
-> > > +		usb_autopm_get_interface(intf);
-> > > +
-> > >  	if (hub_configure(hub, &desc->endpoint[0].desc) >= 0)
-> > >  		return 0;
-> > >  
-> > 
-> > This isn't right.  If you call usb_autopm_get_interface() then at some 
-> > later point you _must_ call usb_autopm_put_interface().  In this case, 
-> > you would have to add these calls following the hub_configure() call 
-> > (in the case where it returns an error) and in the hub_disconnect() 
-> > routine.
-> > 
-> 
-> Thanks for feedback.
-> 
-> I tried to call the usb_autopm_put_interface() after hub_configure()[1] but then,
-> detection of USB3 device is stopped. Perhaps, It will increase the counter
-> again and allow the hub to go into suspend/sleep Mode. I need to disable auto
-> suspend permanently for SMSC hub. 
-> 
-> Please,  give some suggestion. 
-
-What I mean is, you need to do something like this...
-
-Alan Stern
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
 
-Index: usb-devel/drivers/usb/core/hub.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hub.c
-+++ usb-devel/drivers/usb/core/hub.c
-@@ -1730,6 +1730,9 @@ static void hub_disconnect(struct usb_in
- 	kfree(hub->buffer);
- 
- 	pm_suspend_ignore_children(&intf->dev, false);
-+	if (hub->quirk_disable_autosuspend)
-+		usb_autopm_put_interface(intf);
-+
- 	kref_put(&hub->kref, hub_release);
- }
- 
-@@ -1862,6 +1865,11 @@ static int hub_probe(struct usb_interfac
- 	if (id->driver_info & HUB_QUIRK_CHECK_PORT_AUTOSUSPEND)
- 		hub->quirk_check_port_auto_suspend = 1;
- 
-+	if (id->driver_info & HUB_QUIRK_DISABLE_AUTOSUSPEND) {
-+		hub->quirk_disable_autosuspend = 1;
-+		usb_autopm_get_interface(intf);
-+	}
-+
- 	if (hub_configure(hub, &desc->endpoint[0].desc) >= 0)
- 		return 0;
- 
-Index: usb-devel/drivers/usb/core/hub.h
-===================================================================
---- usb-devel.orig/drivers/usb/core/hub.h
-+++ usb-devel/drivers/usb/core/hub.h
-@@ -63,6 +63,7 @@ struct usb_hub {
- 	unsigned		in_reset:1;
- 
- 	unsigned		quirk_check_port_auto_suspend:1;
-+	unsigned		quirk_disable_autosuspend:1;
- 
- 	unsigned		has_indicators:1;
- 	u8			indicator[USB_MAXCHILDREN];
+Hi,
 
+Andrey Konovalov <andreyknvl@google.com> writes:
+>> > diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadg=
+et/legacy/raw_gadget.c
+>> > new file mode 100644
+>> > index 000000000000..51796af48069
+>> > --- /dev/null
+>> > +++ b/drivers/usb/gadget/legacy/raw_gadget.c
+>> > @@ -0,0 +1,1068 @@
+>> > +// SPDX-License-Identifier: GPL-2.0
+>>
+>> V2 only
+>
+> Like this: SPDX-License-Identifier: GPL-2.0 only ?
+
+Right, you need to choose if you want 2.0-only or 2.0-or-later and make
+sure spdx and module_license() agree.
+
+https://spdx.org/licenses/GPL-2.0-only.html
+
+What you had before, implies GPL-2.0-only...
+
+>> > +MODULE_LICENSE("GPL");
+
+but this is GPL 2+
+
+/me goes look
+
+Actually Thomas Gleixner changed the meaning of MODULE_LICENSE("GPL"),
+so I don't really know how this should look today.
+
+>> > +static int raw_event_queue_add(struct raw_event_queue *queue,
+>> > +     enum usb_raw_event_type type, size_t length, const void *data)
+>> > +{
+>> > +     unsigned long flags;
+>> > +     struct usb_raw_event *event;
+>> > +
+>> > +     spin_lock_irqsave(&queue->lock, flags);
+>> > +     if (WARN_ON(queue->size >=3D RAW_EVENT_QUEUE_SIZE)) {
+>> > +             spin_unlock_irqrestore(&queue->lock, flags);
+>> > +             return -ENOMEM;
+>> > +     }
+>> > +     event =3D kmalloc(sizeof(*event) + length, GFP_ATOMIC);
+>>
+>> I would very much prefer dropping GFP_ATOMIC here. Must you have this
+>> allocation under a spinlock?
+>
+> The issue here is not the spinlock, but that this might be called in
+> interrupt context. The number of atomic allocations here is restricted
+> by 128, and we can reduce the limit even further (until some point in
+> the future when and if we'll report more different events). Another
+> option would be to preallocate the required number of objects
+> (although we don't know the required size in advance, so we'll waste
+> some memory) and use those. What would you prefer?
+
+I think you shouldn't do either :-) Here's what I think you should do:
+
+1. support O_NONBLOCK. This just means conditionally removing your
+   wait_for_completion_interruptible().
+
+2. Every time user calls write(), you usb_ep_alloc(), allocate a buffer
+   with the write size, copy buffer to kernel space,
+   usb_ep_queue(). When complete() callback is called, then you free the
+   request. This would allow us to amortize the cost of copy_from_user()
+   with several requests being queued to USB controller.
+
+3. Have a pre-allocated list of requests (128?) for read(). Enqueue them
+   all during set_alt(). When user calls read() you will:
+
+   a) check if there are completed requests to be copied over to
+      userspace. Recycle the request.
+
+   b) if there are no completed requests, then it depends on O_NONBLOCK
+
+      i) If O_NONBLOCK, return -EWOULDBLOCK
+      ii) otherwise, wait_for_completion
+
+I think this can all be done without any GFP_ATOMIC allocations.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl40RiMACgkQzL64meEa
+mQYV4Q//ePpfN2tBzCDehixHUQTXhIq4ew54FBKuq5CG4qbTYTxFIRyRt7P9FyEV
+/NUmAbR1CWvhmWzwV1+5ovClrKNrym1l/cp19y8vErqfQRMAhTad/PgA4oErL6Wc
+oxguUrspkvwywX2T+8WhynEijLoHrofVQKDpxZ1sDXIobNabFpIKTf6uGfs4+nP5
+KKt0dmRfs3+r363SslfkCahjwbnggkenKH3R4pVtcImrDjq16Mxqfgf8XY0CMVge
+zihwa9SMxT4D4Yp/g6vc9UKlHLIDKk/Xuon++TaeCxiSgH/E+S0SM538nrsiWDoD
+B2X/aopWmS36QDf4sq86GEYZvaZbhcUIYWvMOhNPg8kcvbtOeKk05/AXYtoHH48i
+7ubvT/gl5k254b37NZRU8pkBxQZ1E/JNtQtMpG2AcQNljvYLoC2TYP7AnLj8ZanN
+O84PpwkI7gUCMU+bkBWaxlvMuDmA1jhm7KNrLtyyhM5/q2puEMVjYvh9pUtyOuiT
+AB2k4S0JHIsatIUVD0w6dCyZpbVLxAabmZpNkpkc6ix8JHR8b4nI3hnOsyGq4xsL
+J6knw+9i27uYhQEnryjCxD7Dw9Ui1n8B13+n13waP9wS4Qd7E4fNuZAd/4obHzUA
+V/JmqrX4GG2gWk1BpuQGdxSWZfXlcKUXgTqfXJ/GRx1JwPN5NvY=
+=mPo5
+-----END PGP SIGNATURE-----
+--=-=-=--
