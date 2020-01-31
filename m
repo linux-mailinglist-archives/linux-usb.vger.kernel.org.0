@@ -2,161 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 030EB14E96C
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 09:08:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D241914E981
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 09:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728119AbgAaIIP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jan 2020 03:08:15 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:36725 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728027AbgAaIIO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 03:08:14 -0500
-Received: by mail-lf1-f66.google.com with SMTP id f24so4231125lfh.3;
-        Fri, 31 Jan 2020 00:08:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=DdiQpoauwZ0XveZynAvz0EuxVeGMQJtzs/ooDkpKNvU=;
-        b=DzQ76bHrpu8+pQblpwwBPuNLdHXFIm0kNFIZiTjA+MjKRr8U4gAibdFiOqR9mL3S4V
-         GkR+7CddV/m6XOVuuV9JIgz1+Q/INEnqKTGRM0a+nqPxzEZYXDL/gsL9EVaMsiNmMWnR
-         ObfsKZOSb5uaI1euhJnHWAGbXBQ0SopAYbeP4X9UMSOjpgHA5KaGLDowN+9vD4I3GT1i
-         KvsB2bznZbBDB8UfqEKkNFtGrog7frbs3mO0YEVHGwm0dXNugW3jJ5hnHUwAOdO6yLxQ
-         MmRh9+BIFOMMxavFHLfzHlaK8EouEM0E3+RlDfl7BDRaYKr1lw3qZXJz2c5jP9gTH6wa
-         anRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=DdiQpoauwZ0XveZynAvz0EuxVeGMQJtzs/ooDkpKNvU=;
-        b=f/a1BvCo+Hn0DYRePYBx9nP2UeyO4/+ECcU36T56/BrbJh3sb+u/xBudb16/7md03h
-         3MYd88wFudshOY3SxTI6GjmQ1amu4wK/YkAHZNYz3YLmEdcUL4MG49cylmCzNzInUn9N
-         F2pstCqTkYSB0xRaOFwIRCz9ATiSE+tZzvVvhhPVRa9U1BWoNSUjgEt6Eq4HSzx8lK6n
-         0ICDBNqSzdhgekWEOsDmUU2UIxdH78mPMVU4VWka3cJoNbXZ0giT7T+rxugkNhvOYSsO
-         OHkEEt8T725RntiUZKGCRi+J7oAUdqTMuxBUAvVpozI4EbL7Al7TckKKKjWlbYh60mbE
-         2gTA==
-X-Gm-Message-State: APjAAAWQAKBuQoOMDcred2oXUjg8l3s7V9dLxqunpSCq9oWGRi5wffJ7
-        7Rc5ta81hhx8TxbIWtZdCk1ASSg2Dqa/Ow==
-X-Google-Smtp-Source: APXvYqxshHjWAsmzOJGT3Cf0C4+PzkGUFCvYcshZZNADr4m7aryuqd8CyXyTGv4kUPWu++OT8wAtsQ==
-X-Received: by 2002:a05:6512:78:: with SMTP id i24mr4844576lfo.10.1580458092287;
-        Fri, 31 Jan 2020 00:08:12 -0800 (PST)
-Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id d24sm4103880lfl.58.2020.01.31.00.08.10
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 31 Jan 2020 00:08:11 -0800 (PST)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Jack Pham <jackp@codeaurora.org>,
-        Tejas Joglekar <Tejas.Joglekar@synopsys.com>
-Cc:     linux-usb@vger.kernel.org, John Youn <John.Youn@synopsys.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: gadget: Fix logical condition
-In-Reply-To: <20200131032501.GA10078@jackp-linux.qualcomm.com>
-References: <cedf287bd185a5cbe31095d74e75b392f6c5263d.1573624581.git.joglekar@synopsys.com> <20200131032501.GA10078@jackp-linux.qualcomm.com>
-Date:   Fri, 31 Jan 2020 10:07:57 +0200
-Message-ID: <87a76482w2.fsf@kernel.org>
+        id S1728120AbgAaIWy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 31 Jan 2020 03:22:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33164 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728027AbgAaIWy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 31 Jan 2020 03:22:54 -0500
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 206365] New: kernel NULL pointer dereference when charger is
+ unplugged
+Date:   Fri, 31 Jan 2020 08:22:53 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: andrea.lagala@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression attachments.created
+Message-ID: <bug-206365-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+https://bugzilla.kernel.org/show_bug.cgi?id=206365
 
+            Bug ID: 206365
+           Summary: kernel NULL pointer dereference when charger is
+                    unplugged
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.3.4-300.fc31.x86_64
+          Hardware: x86-64
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: high
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: andrea.lagala@gmail.com
+        Regression: No
 
-Hi,
+Created attachment 287039
+  --> https://bugzilla.kernel.org/attachment.cgi?id=287039&action=edit
+lshw output
 
-Jack Pham <jackp@codeaurora.org> writes:
-> Hi Tejas & Felipe,
->
-> On Wed, Nov 13, 2019 at 11:45:16AM +0530, Tejas Joglekar wrote:
->> This patch corrects the condition to kick the transfer without
->> giving back the requests when either request has remaining data
->> or when there are pending SGs. The && check was introduced during
->> spliting up the dwc3_gadget_ep_cleanup_completed_requests() function.
->>=20
->> Fixes: f38e35dd84e2 ("usb: dwc3: gadget: split dwc3_gadget_ep_cleanup_co=
-mpleted_requests()")
->>=20
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
->> ---
->>  drivers/usb/dwc3/gadget.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>=20
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index 86dc1db788a9..e07159e06f9a 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -2485,7 +2485,7 @@ static int dwc3_gadget_ep_cleanup_completed_reques=
-t(struct dwc3_ep *dep,
->>=20=20
->>  	req->request.actual =3D req->request.length - req->remaining;
->>=20=20
->> -	if (!dwc3_gadget_ep_request_completed(req) &&
->> +	if (!dwc3_gadget_ep_request_completed(req) ||
->>  			req->num_pending_sgs) {
->>  		__dwc3_gadget_kick_transfer(dep);
->>  		goto out;
->
-> Been staring at this for a while--I think I see a potential issue but
-> not sure if it is or not.
->
-> If this condition is true and causes an early return, the 'ret' value
-> could be 0 which could allow the caller in cleanup_completed_requests()
-> to continue looping over the started_list and calling
-> cleanup_completed_request() again on the next req. But we just issued
-> another START or UPDATE transfer command on the previous incomplete req
-> and now the loop continued to try to reclaim the next TRB (and increment
-> the dequeue pointer and whatnot) when it might actually be in progress.
->
-> According to the code before f38e35dd84e2,
->
-> 	list_for_each_entry_safe(req, tmp, &dep->started_list, list) {
->
-> 	...
-> 		if (!dwc3_gadget_ep_request_completed(req) ||
-> 				req->num_pending_sgs) {
-> 			__dwc3_gadget_kick_transfer(dep);
-> 			break;
-> 		}
->
-> The 'goto out' used to be a 'break', which terminates the list loop. But
-> with the refactored code, the loop can only terminate if 'ret' is
-> non-zero.
+Every time I unplug my charger, I get a oops about a NULL pointer dereference.
+The computer then slows down to a crawl, up until it fully freezes. ABRT tries
+to get a report, but never gets to write any data. I installed kdump and forced
+the panic on oops setting to get as much data as possible. I initially thought
+that tlp was the culprit; deactivating it yielded no improvements. Then,
+reading dmesg while troubleshooting I noticed lockdown was blocking direct
+writes to registers. I disabled Secure Boot but the problem still is there.
 
-ret is initialized properly by dwc3_gadget_ep_reclaim*(). That goto is
-correct.
-
-> I haven't seen any real issue with the code as-is yet, but was just
-> wondering if the 'goto out' should be replaced with a return 1?
-
-let us know if you find any problems
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIyBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4z4F8ACgkQzL64meEa
-mQak0A/3d500IX3EHlRzhhzlXOaCvqvu9pr9CGFFf6EHRB9C/wHbStuLRL+SSriE
-OzmCL1vDRUowej9I10ymCs9b57SyMRbrmBmAjCSUixAGlzAJjvIJZu+WC/ZuADAN
-eQJ1foBlrvc1i2FtLj5jFDOaDLle+9z26AICwTXgIC+40sCYReKXh2wdXGhcB1jb
-ZsL2v6th/h1mNokUKgpQvn5R78ZdyTtLmCepZUk1w9HMT65MwT4aFihO25QMbvwD
-pr1p8p0P4Njf/+yzaSxDYaDkxTzW52/gpyKk46joAuwyGhyi+T4MaBYOf+lxPlrW
-KoclWmcB4pRdQ6OisAQsv87XwQLvLV92C2s1PLebxcCzljpvO4rvFv7hJ/4GxLmp
-nnLKYm/LApLjYGl1NnBIxAV2njjZa5WX90G4J0kfBGqyl435tFoZ04qAaVzrASqZ
-6cdHamO5nU+UPSwig1Bgt5D/3//aUmpvJzhMFObWs5JSvSd23E5smEHUSK0pS8Lg
-jcDSsypNV/4RRgv2hUb1wpNwV70vkuTMDLhGTsh50LoleHIP9lxYByEblYQIWY8j
-pABCyLwla1/Tf2Bqe3ttwGfsvVvVv9ZvDbKUwRmcLXH+hDuurMMa39ZYOjRUWSug
-5dmN0Re2cbQ+3ETBxIRmD73XPW393XTVvNF9aJlTTGhj8wH8ug==
-=F62y
------END PGP SIGNATURE-----
---=-=-=--
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
