@@ -2,113 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F77814F449
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 23:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80CD614F49B
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 23:22:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726385AbgAaWJ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jan 2020 17:09:28 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:38583 "EHLO
+        id S1726330AbgAaWWJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jan 2020 17:22:09 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:44509 "EHLO
         mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726163AbgAaWJ2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 17:09:28 -0500
-Received: by mail-pg1-f196.google.com with SMTP id a33so4217813pgm.5
-        for <linux-usb@vger.kernel.org>; Fri, 31 Jan 2020 14:09:27 -0800 (PST)
+        with ESMTP id S1726163AbgAaWWJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 17:22:09 -0500
+Received: by mail-pg1-f196.google.com with SMTP id x7so4218885pgl.11;
+        Fri, 31 Jan 2020 14:22:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=k/cguSbdjfoUpsjktbp/rdoz4/zZPT5tyDc0hffYMeM=;
-        b=iH1aMcvKe6Py+AIXOQPxXnP/pneIRY2qvysuFuxn67+s9bLJMsoD9OkCUJ0oXTme41
-         bQ90iLPW+mn08vpCOpPcP8vnC3Ko3pwPMTG/xUP8/tLRy9MhfPDOW3Og+H2TYkqSiAoq
-         12F28dLM9T+Fysg0/UauEHaIJkNA6gPu7cRWEqxb3Wt9dz0QD+a6Le3OMMQFWE1AWK7+
-         TBMeW2p2KryvlUF8NglgTZxGQK4HRZ3pWxDSgdzfXraFpEgHluR+HFSx4qzuhct3puW6
-         waLNosPUIC39DR+80VyzGGnjK1weMspDfWKuTsW/QlSs0W/MQ+ubAlvk1ohr7s855tFh
-         dl5w==
+        h=from:to:cc:subject:date:message-id;
+        bh=/HFcoQMFwoF5gwXFjCOgMWeMPSstLjSDHZ4Dum+BpLY=;
+        b=DatComwmXGtiPYRomdkOy0XFknlTGW4jw8cqnPXUs3c1PayQQ01hJkqNdNRCG8/3as
+         pZ/HWMofmFNsf38uGdGoFb3KtxSkVedmPKnu1jwNA2VWD0/4lpfh7rRv7HJc7BHC4AJa
+         O02dRGqtmspUgZGqsDhaanNF5EdARykMjcLg8SgyQktv9O3aCgdAdKUh2t+uFNq/6oBb
+         9tKZ9w8vkAtdC8LszUYhH4MUge04bpiWX+0BGuCp8I892FKG/uCFih4C0Sz3kVIhKEqk
+         IM6KyEzpAP0RXQ1QsP0P5JnzqdRzaJdfvyMe4Y6yG5V9RDGEL7j/Dw0JyZdCWhnGly0V
+         pSSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=k/cguSbdjfoUpsjktbp/rdoz4/zZPT5tyDc0hffYMeM=;
-        b=Fpj4udpkyUwZahrOobofak0tViPd/S631u2vX1UIjSR2vrEtMZ9QIxuqYs/SV+HG0I
-         Owq7cy/aN3nAAWmtBqcVxt0HMBFC+gooySo/SFHQhsGJe3d8nuMhXjAZ47cYK5Op1VVr
-         iKIFyfVrIIPgAdaydki+DrYBEWuv7bohH761tESvjRJn6Uu1h4krXNoo0ZmL7kUKTle9
-         iaZCEqpI21sCooV7RRXk8tr6/jctyWBB3TVHugttJM7YC3W8q8VoTyC/tLIF0YhKOiDG
-         DD1nDFm17fEOrRZ9GRttG7xZXKd1jWFT6Sdwg3WDaiIBOqNoTPXphkDFy29MzqBsLqkn
-         ok4Q==
-X-Gm-Message-State: APjAAAV2K1d6dHmRL8FT46KtxullvaMXdnh+fcQLv0/RZvhhV3+8jvBD
-        mmBCIQrkeQeBO7mfz6RM4P8=
-X-Google-Smtp-Source: APXvYqwPKsofFvf/q/X/WrwWcSWinBk5PG0TUvrg0jljOXX6wQza93SbCXsEkGHApCGq4fnDREOUcg==
-X-Received: by 2002:a63:dc0a:: with SMTP id s10mr12917218pgg.235.1580508567277;
-        Fri, 31 Jan 2020 14:09:27 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z26sm11803487pfa.90.2020.01.31.14.09.25
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 31 Jan 2020 14:09:26 -0800 (PST)
-Date:   Fri, 31 Jan 2020 14:09:25 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Boris ARZUR <boris@konbu.org>
-Cc:     linux-usb@vger.kernel.org,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=/HFcoQMFwoF5gwXFjCOgMWeMPSstLjSDHZ4Dum+BpLY=;
+        b=rMaHTIZKmrRTJ+Z4TuawucBLdRtbxzHaUI4oLWn45kGp6bwxcIqkQJh9Xbc40NPFCK
+         RVyYIWoZozaiMl3YDSex7mjhcS16tBtA68yC23Jq0gZFtiRJqpccVBgH5zhl/1ADO/u6
+         DYhfFu2TVCTdunlsQHkeV1Yy8jpQsbP84+Q2EmiSRYiFy7Igb7hjvv/wm5TR5P20vk9J
+         bylwZiOjnu7WvQTqNE5/JFjbRYWtIYnFV1fQEdANDAoFngYyAFt3y94siud5e31X+d26
+         QaMFGDBBSLXpgXA9cPo7DC+hgOJksdDmbEzZtckK/PNsoYXrdkg5wqMnsoO/vcMzm83E
+         IC9Q==
+X-Gm-Message-State: APjAAAWKmuXW2jpQNhY+qrnvwYGlZ17bnul31l9GHQZs+6MQjOW3Zmnl
+        Y0g2kJsns65HVuQst4zd/Ss=
+X-Google-Smtp-Source: APXvYqx7oLNYYYIoBn05Sgk8HxhcExQrlyg5hCf0aIq/sj8/mwAJ8Vjgu7X4e0+MgzPbAFocAsrZ6Q==
+X-Received: by 2002:a62:ddd0:: with SMTP id w199mr12425962pff.1.1580509327790;
+        Fri, 31 Jan 2020 14:22:07 -0800 (PST)
+Received: from taoren-ubuntu-R90MNF91.thefacebook.com ([2620:10d:c090:200::1:a521])
+        by smtp.gmail.com with ESMTPSA id v8sm11201515pff.151.2020.01.31.14.22.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Jan 2020 14:22:07 -0800 (PST)
+From:   rentao.bupt@gmail.com
+To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Grigor Tovmasyan <Grigor.Tovmasyan@synopsys.com>,
-        Gevorg Sahakyan <Gevorg.Sahakyan@synopsys.com>,
-        John Youn <John.Youn@synopsys.com>,
-        Sevak Arakelyan <sevaka@synopsys.com>,
-        William Wu <william.wu@rock-chips.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: Re: [PATCH] usb: dwc2: extend treatment for incomplete transfer
-Message-ID: <20200131220925.GA26896@roeck-us.net>
-References: <20191105032922.GA3041@tungsten>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191105032922.GA3041@tungsten>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+Cc:     Tao Ren <rentao.bupt@gmail.com>
+Subject: [PATCH 0/3] aspeed-g6: enable usb support
+Date:   Fri, 31 Jan 2020 14:21:54 -0800
+Message-Id: <20200131222157.20849-1-rentao.bupt@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Boris,
+From: Tao Ren <rentao.bupt@gmail.com>
 
-On Tue, Nov 05, 2019 at 12:29:22PM +0900, Boris ARZUR wrote:
-> Channel halt can happen with BULK endpoints when the
-> cpu is under high load. Treating it as an error leads
-> to a null-pointer dereference in dwc2_free_dma_aligned_buffer().
-> 
+The patch series aims at enabling USB Host and Gadget support on AST2600
+platforms.
 
-good find, and good analysis. We stated to see this problem as well in the
-latest ChromeOS kernel.
+Patch #1 moves hardcoded vhub attributes (number of downstream ports and
+endpoints) to "struct ast_hub_config" which is then attached to "struct
+of_device_id". By doing this, it will be easier to enable ast2600 vhub
+which supports more ports and endpoints.
 
-I am still trying understand what exactly happens. To do that, I'll need to
-be able to reproduce the problem. Maybe you can help me. How do you tether
-your phone through USB ?
+Patch #2 enables AST2600 support in aspeed-vhub gadget driver.
 
-Thanks,
-Guenter
+Patch #3 adds USB devices and according pin groups in aspeed-g6 dtsi.
 
-> Signed-off-by: Boris Arzur <boris@konbu.org>
-> ---
->  drivers/usb/dwc2/hcd_intr.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
->                                  * A periodic transfer halted with no other
-> --
-> 2.23.0
-> 
-> diff --git a/drivers/usb/dwc2/hcd_intr.c b/drivers/usb/dwc2/hcd_intr.c
-> index a052d39b4375..697fed530aeb 100644
-> --- a/drivers/usb/dwc2/hcd_intr.c
-> +++ b/drivers/usb/dwc2/hcd_intr.c
-> @@ -1944,7 +1944,8 @@ static void dwc2_hc_chhltd_intr_dma(struct dwc2_hsotg
-> *hsotg,
->                          */
->                         dwc2_hc_ack_intr(hsotg, chan, chnum, qtd);
->                 } else {
-> -                       if (chan->ep_type == USB_ENDPOINT_XFER_INT ||
-> +                       if (chan->ep_type == USB_ENDPOINT_XFER_BULK ||
-> +                           chan->ep_type == USB_ENDPOINT_XFER_INT ||
->                             chan->ep_type == USB_ENDPOINT_XFER_ISOC) {
->                                 /*
+Tao Ren (3):
+  usb: gadget: aspeed: read vhub config from of_device_id
+  usb: gadget: aspeed: add ast2600 vhub support
+  ARM: dts: aspeed-g6: add usb functions
+
+ arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi   |  25 +++++
+ arch/arm/boot/dts/aspeed-g6.dtsi           |  43 ++++++++
+ drivers/usb/gadget/udc/aspeed-vhub/Kconfig |   4 +-
+ drivers/usb/gadget/udc/aspeed-vhub/core.c  | 109 ++++++++++++++-------
+ drivers/usb/gadget/udc/aspeed-vhub/dev.c   |  30 ++++--
+ drivers/usb/gadget/udc/aspeed-vhub/epn.c   |   4 +-
+ drivers/usb/gadget/udc/aspeed-vhub/hub.c   |  26 +++--
+ drivers/usb/gadget/udc/aspeed-vhub/vhub.h  |  23 ++---
+ 8 files changed, 191 insertions(+), 73 deletions(-)
+
+-- 
+2.17.1
+
