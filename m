@@ -2,105 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8909414EA8A
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 11:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C324B14EAA1
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 11:30:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728284AbgAaKSj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jan 2020 05:18:39 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:54290 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728071AbgAaKSj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 05:18:39 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00VAD4Ua028738;
-        Fri, 31 Jan 2020 10:17:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2019-08-05;
- bh=Zfla5rQyVxYn0Di8J8A2YPJxSH/lgFnbZbSWE8cDuM8=;
- b=friOxLkUmslb6FZEXR5OcAwqULRuPe3sMXNoy4xGj5HbPjFxWelwOgmJ3m43+CV7d+8C
- 3BQbzOO1k9tdMMO+ljs1LXQm4S675fDCcHjdyLCxu66/uYtZbrpf/4obDO/Pt3wT3DmN
- spZlZZfd+BQuAgyUlFEZM70oFT6Zoy50R4IbB+vSucuA3HvtE+880wP+anOPS76ehQ2p
- L0S4l8wmVgLVCAam7R9nmzNqWaq/lIu5qzPJWkeJ3TSm8/gA95N3G6sHo+7YT1JnwtMX
- zpcekgZrzbYAmkfBXwhZmIsOopBriT754IC3cJpRsJ9RaCvNJjFqTnRo7Ck9u3hNC01Q tA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 2xrearsd2d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 31 Jan 2020 10:17:01 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00VAEEsS041154;
-        Fri, 31 Jan 2020 10:17:00 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 2xv9bwepff-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 31 Jan 2020 10:17:00 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 00VAGv2D014997;
-        Fri, 31 Jan 2020 10:16:58 GMT
-Received: from kadam (/129.205.23.165)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 31 Jan 2020 02:16:57 -0800
-Date:   Fri, 31 Jan 2020 13:16:44 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     gregkh@linuxfoundation.org, Alan Stern <stern@rowland.harvard.edu>,
-        syzbot <syzbot+1bc2c2afd44f820a669f@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, ingrassia@epigenesys.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] usb: core: urb: change a dev_WARN() to dev_err() for
- syzbot
-Message-ID: <20200131101644.GE11068@kadam>
-References: <00000000000095e1d8059d4675ac@google.com>
- <20200131090510.7112-1-hdanton@sina.com>
+        id S1728326AbgAaKaP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jan 2020 05:30:15 -0500
+Received: from cable.insite.cz ([84.242.75.189]:40493 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728291AbgAaKaP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 31 Jan 2020 05:30:15 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id 19C50A1A40B06;
+        Fri, 31 Jan 2020 11:30:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1580466612; bh=WMM/hNyFGH0VhatdIpzlhIkjRY0jRU5k9/y3v1BLepU=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=fBm/NK4x8hgwRHhFjiSfhFyIxn48qvFF67Zsv8pgIm59sQCxu/lcD9jk77yJBiNu1
+         66sidqS443JXY94vjr76YQYK/Zdv592VjrcXRRZ9KAiyo8ojVELXbq/ENJ9kFm12GQ
+         SxrBSg5BipQ9QCF8vdU1yeKkqNfEPYVBRNphPGV4=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id heLgFnI4yAbm; Fri, 31 Jan 2020 11:30:12 +0100 (CET)
+Received: from [192.168.100.32] (unknown [192.168.100.32])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id DD183A1A40B05;
+        Fri, 31 Jan 2020 11:30:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1580466611; bh=WMM/hNyFGH0VhatdIpzlhIkjRY0jRU5k9/y3v1BLepU=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=Xw43KvZFrKWWmo1WGKC0iKaPEihVRL8OQEnfJRRwZ4SBHmleUyo0li5lGLla9+MTb
+         Sp6y0ToJyLDbH4zqAYDqzE8d2Dlfs4E8XsUT4RAH4gRKZ55Trf6dQyrlW+jj0pUxjV
+         eSxv0WusmJor2ZalzTETwfji/BMEJXJPrkDIsB0o=
+Subject: Re: [PATCH] usb: gadget: u_audio: Fix high-speed max packet size
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+To:     John Keeping <john@metanate.com>
+Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>
+References: <4f2df2bc-e208-fffb-48e2-3e14cd093103@ivitera.com>
+ <60bf144a-2039-8832-b6f1-f972de6a6846@ivitera.com>
+ <cfcef91b-799e-7d02-4a4c-26ee95e85ff7@ivitera.com>
+ <20200114200450.064cd521.john@metanate.com>
+ <24f0935d-16a7-4301-78f4-fa459e356ca9@ivitera.com>
+ <20200117104022.5bb769f2.john@metanate.com>
+ <495ccd06-9059-2249-ce70-aa9647609319@ivitera.com>
+ <9607a759-c08c-97bd-a0a7-f506ca64435f@ivitera.com>
+Message-ID: <4588dcf7-7e2a-8bdd-48e5-e835f3503f5a@ivitera.com>
+Date:   Fri, 31 Jan 2020 11:30:11 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200131090510.7112-1-hdanton@sina.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9516 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001310091
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9516 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=2 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001310091
+In-Reply-To: <9607a759-c08c-97bd-a0a7-f506ca64435f@ivitera.com>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 31, 2020 at 05:05:10PM +0800, Hillf Danton wrote:
+
+Dne 24. 01. 20 v 13:16 Pavel Hofman napsal(a):
 > 
-> On Fri, 31 Jan 2020 08:06:52 +0300 Dan Carpenter wrote:
-> > We changed this from dev_err() to dev_WARN() in commit 0cb54a3e47cb
-> > ("USB: debugging code shouldn't alter control flow").
-> > 
-> > The difference between dev_WARN() and dev_err() is that dev_WARN()
-> > prints a stack trace and if you have panic on OOPS enabled then it leads
-> > to a panic.  The dev_err() function just prints the error message.
-> > 
-> > Back in the day we didn't have usb emulators fuzz testing the kernel
-> > so dev_WARN() didn't cause a problem for anyone, but these days the
+> Dne 19. 01. 20 v 15:53 Pavel Hofman napsal(a):
+>>
+>> Dne 17. 01. 20 v 11:40 John Keeping napsal(a):
+>>> On Thu, 16 Jan 2020 16:39:50 +0100
+>>> Pavel Hofman <pavel.hofman@ivitera.com> wrote:
+>>>
+>>>>> I've taken a look at this and the patch below fixes it in my simple
+>>>>> testing.  But note that this doesn't adjust the PCM's min_period_bytes
+>>>>> which will be necessary if you want to minimize latency with an 
+>>>>> adjusted
+>>>>> high-speed bInterval setting.
+>>>>
+>>>> Please can I ask you to submit your patch? IMO your perhaps slightly
+>>>> suboptimal solution is much better than the current broken version.
+>>>
+>>> Yes, the patch is definitely an improvement.  I thought it would be
+>>> picked up from the earlier mail, but I think Patchwork requires the
+>>> subject to match, so I'm including it again here.
+>>>
+>>> Are you able to provide a Tested-by for this change?
+>>
+>>
+>> Testing looks OK, thanks a lot!
+>>
+>> Tested-by: Pavel Hofman  <pavel.hofman@ivitera.com>
+>>
 > 
-> Another free option is perhaps to keep the devoted bot agile if it's
-> difficult to list anybody who was mauled by its articulate reports.
 
-It's difficult to parse this email.  I get that you're being sarcastic
-but I can't tell what you're being sarcastic about.  :P
+I apologize for a basic question - please which official repository to 
+check status of a gadget patch after being accepted? Thanks a lot for 
+the information.
 
-I think you're basically saying that syzbot should maintain a white
-list of ignored Oopses.  There are two problems with this:  1) Other
-people run syzbot so everyone has to run into this bug and then add it
-to their own white list.  2)  If the kernel OOpes here then we cannot
-test what happens next so it could be hiding bugs.
+Best regards,
 
-One idea is that there could be a kernel function which generates a
-stack trace but is not an Oops.
-
-regards,
-dan carpenter
+Pavel.
