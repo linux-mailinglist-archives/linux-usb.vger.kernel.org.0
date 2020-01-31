@@ -2,67 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 424B614F389
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 22:04:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E5D14F3E2
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 22:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726206AbgAaVEO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jan 2020 16:04:14 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:56558 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726102AbgAaVEO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 16:04:14 -0500
-Received: (qmail 20846 invoked by uid 2102); 31 Jan 2020 16:04:12 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 31 Jan 2020 16:04:12 -0500
-Date:   Fri, 31 Jan 2020 16:04:12 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Paul Zimmerman <pauldzim@gmail.com>
-cc:     Greg KH <greg@kroah.com>,
-        David Heinzelmann <heinzelmann.david@gmail.com>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] USB: hub: Don't record a connect-change event during
- reset-resume
-In-Reply-To: <20200131123653.2ef373e4@EliteBook>
-Message-ID: <Pine.LNX.4.44L0.2001311559490.1577-100000@iolanthe.rowland.org>
+        id S1726163AbgAaVkk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jan 2020 16:40:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53776 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726105AbgAaVkk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 31 Jan 2020 16:40:40 -0500
+Received: from localhost (unknown [83.216.75.91])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E8C6720707;
+        Fri, 31 Jan 2020 21:40:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1580506839;
+        bh=udfnxMQtCRGZ78VuTx5Nkd4EJHm/g8HSjOLy0u//yNU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R1SN3NyawKMP2ZYybQ7dmQugMQBF/5cF1zXHMBT+LOy/ITX0v8IWU5x4382Cb5VOJ
+         1syyuwsVpYGHa2hul6OjqdCVpw8ADH38JsJxgHDd0rgT2a9psJsxBVZ8vhkSA93HhF
+         U40rACny0uz4sTF84vtL3Sp64HtoukLAL6UDC2PU=
+Date:   Fri, 31 Jan 2020 22:40:36 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Richard Dodd <richard.o.dodd@gmail.com>
+Cc:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
+Subject: Re: Usb midi device does not work on wake
+Message-ID: <20200131214036.GA2280058@kroah.com>
+References: <CAAWug1d8wv3Thu0b==j6fLajU965unYKs552j+s9t13MOytmng@mail.gmail.com>
+ <1578907421.2590.2.camel@suse.com>
+ <CAAWug1eZiDgMGH9qDi=_Cj_=-HU2icVpNCzeaRYJLzQBChJDJA@mail.gmail.com>
+ <20200130063403.GB628384@kroah.com>
+ <CAAWug1erbkau-P5hdJ1F3hJBea_nmpiiOiNVJ2-HM2fZ==TS-A@mail.gmail.com>
+ <20200130173325.GA1037012@kroah.com>
+ <CAAWug1d7u1bGhkyYRbEk1g4a3oMPgxCrppeTPtjLT-uuHhf83g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAWug1d7u1bGhkyYRbEk1g4a3oMPgxCrppeTPtjLT-uuHhf83g@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 31 Jan 2020, Paul Zimmerman wrote:
-
-> > Note that performing the unnecessary check is not actually a bug.
-> > Devices are supposed to be able to send descriptors back to the host
-> > even when they are busy doing something else.  The underlying cause of
-> > Paul's problem lies in his Bluetooth adapter.  Nevertheless, we
-> > shouldn't perform the same check twice in a row -- and as a nice side
-> > benefit, removing the extra check allows the Bluetooth adapter to work
-> > more reliably.
+On Fri, Jan 31, 2020 at 05:24:27PM +0000, Richard Dodd wrote:
+> >From 7d991df69d2c47ac41f4657109cee514eef68728 Mon Sep 17 00:00:00 2001
+> From: Richard Dodd <richard.o.dodd@gmail.com>
+> Date: Thu, 30 Jan 2020 16:53:51 +0000
+> Subject: [PATCH] USB: Fix novation SourceControl XL after suspend
 > 
-> Actually, at the time the failure happens, the bluetooth driver is putting
-> the device into a "manufacturer mode" and downloading a firmware patch to
-> the device. So I don't think we can fault the device for not responding to
-> a get-descriptor request at that point. Probably there should be some kind
-> of locking in the driver while that is being done.
-
-Heh.  We don't have any locking of that sort in the kernel.  Any user 
-at any time can run "lsusb -v" and that program will try to communicate 
-with every attached USB device.  There's no way to claim exclusive 
-rights to a device.
-
-The fact that firmware loading works at all is more or less a matter of
-luck (although the odds are with us).
-
-> Nevertheless, your patch makes everything work again, so I think it's
-> "good enough" :)
+> Currently, the SourceControl will stay in power-down mode after resuming
+> from suspend. This patch resets the device after suspend to power it up.
 > 
-> Thanks,
-> Paul
+> Signed-off-by: Richard Dodd <richard.o.dodd@gmail.com>
+> ---
+>  drivers/usb/core/quirks.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+> index 6b6413073584..3db6c05aaa4b 100644
+> --- a/drivers/usb/core/quirks.c
+> +++ b/drivers/usb/core/quirks.c
+> @@ -445,6 +445,9 @@ static const struct usb_device_id usb_quirk_list[] = {
+>   /* INTEL VALUE SSD */
+>   { USB_DEVICE(0x8086, 0xf1a5), .driver_info = USB_QUIRK_RESET_RESUME },
+> 
+> + /* novation SoundControl XL */
+> + { USB_DEVICE(0x1235, 0x0061), .driver_info = USB_QUIRK_RESET_RESUME },
+> +
+>   { }  /* terminating entry must be last */
+>  };
+> 
 
-You're welcome.
+Whitespace is all corrupted, tabs are turned into spaces :(
 
-Alan Stern
+Can you just use git send-email?  Don't use a web email client, they do
+not work.
 
+thanks,
+
+greg k-h
