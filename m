@@ -2,95 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEEC14EEBA
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 15:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7099014EF3E
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 16:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729108AbgAaOsA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jan 2020 09:48:00 -0500
-Received: from mga06.intel.com ([134.134.136.31]:50390 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729090AbgAaOsA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 31 Jan 2020 09:48:00 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 Jan 2020 06:47:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,386,1574150400"; 
-   d="scan'208";a="310020734"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga001.jf.intel.com with ESMTP; 31 Jan 2020 06:47:56 -0800
-Subject: Re: [PATCH] xhci-mtk: Fix NULL pointer dereference with xhci_irq()
- for shared_hcd
-To:     Macpaul Lin <macpaul.lin@mediatek.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Sriharsha Allenki <sallenki@codeaurora.org>
-References: <1579246910-22736-1-git-send-email-macpaul.lin@mediatek.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <08f69bab-2ada-d6ab-7bf7-d960e9f148a0@linux.intel.com>
-Date:   Fri, 31 Jan 2020 16:50:08 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728958AbgAaPM3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jan 2020 10:12:29 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:55850 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728893AbgAaPM3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 10:12:29 -0500
+Received: (qmail 2571 invoked by uid 2102); 31 Jan 2020 10:12:28 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 31 Jan 2020 10:12:28 -0500
+Date:   Fri, 31 Jan 2020 10:12:28 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Hardik Gajjar <hgajjar@de.adit-jv.com>
+cc:     gregkh@linuxfoundation.org, <thinhn@synopsys.com>,
+        <Kento.A.Kobayashi@sony.com>, <atmgnd@outlook.com>,
+        <linux-usb@vger.kernel.org>, <andrew_gabbasov@mentor.com>,
+        <erosca@de.adit-jv.com>, <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v2] USB: hub: Fix the broken detection of USB3 device in
+ SMSC hub
+In-Reply-To: <20200131103239.GA21056@vmlxhi-118.adit-jv.com>
+Message-ID: <Pine.LNX.4.44L0.2001311009560.1577-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <1579246910-22736-1-git-send-email-macpaul.lin@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 17.1.2020 9.41, Macpaul Lin wrote:
-> According to NULL pointer fix: https://tinyurl.com/uqft5ra
-> xhci: Fix NULL pointer dereference with xhci_irq() for shared_hcd
-> The similar issue has also been found in QC activities in Mediatek.
-> 
-> Here quote the description from the referenced patch as follows.
-> "Commit ("f068090426ea xhci: Fix leaking USB3 shared_hcd
-> at xhci removal") sets xhci_shared_hcd to NULL without
-> stopping xhci host. This results into a race condition
-> where shared_hcd (super speed roothub) related interrupts
-> are being handled with xhci_irq happens when the
-> xhci_plat_remove is called and shared_hcd is set to NULL.
-> Fix this by setting the shared_hcd to NULL only after the
-> controller is halted and no interrupts are generated."
-> 
-> Signed-off-by: Sriharsha Allenki <sallenki@codeaurora.org>
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> ---
->   drivers/usb/host/xhci-mtk.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-> index b18a6baef204..c227c67f5dc5 100644
-> --- a/drivers/usb/host/xhci-mtk.c
-> +++ b/drivers/usb/host/xhci-mtk.c
-> @@ -593,11 +593,11 @@ static int xhci_mtk_remove(struct platform_device *dev)
->   	struct usb_hcd  *shared_hcd = xhci->shared_hcd;
->   
->   	usb_remove_hcd(shared_hcd);
-> -	xhci->shared_hcd = NULL;
->   	device_init_wakeup(&dev->dev, false);
->   
->   	usb_remove_hcd(hcd);
->   	usb_put_hcd(shared_hcd);
-> +	xhci->shared_hcd = NULL;
->   	usb_put_hcd(hcd);
->   	xhci_mtk_sch_exit(mtk);
->   	xhci_mtk_clks_disable(mtk);
-> 
+On Fri, 31 Jan 2020, Hardik Gajjar wrote:
 
-Could you share details of the NULL pointer dereference, (backtrace).
+> > > @@ -1863,6 +1865,9 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
+> > >  	if (id->driver_info & HUB_QUIRK_CHECK_PORT_AUTOSUSPEND)
+> > >  		hub->quirk_check_port_auto_suspend = 1;
+> > >  
+> > > +	if (id->driver_info & HUB_QUIRK_DISABLE_AUTOSUSPEND)
+> > > +		usb_autopm_get_interface(intf);
+> > > +
+> > >  	if (hub_configure(hub, &desc->endpoint[0].desc) >= 0)
+> > >  		return 0;
+> > >  
+> > 
+> > This isn't right.  If you call usb_autopm_get_interface() then at some 
+> > later point you _must_ call usb_autopm_put_interface().  In this case, 
+> > you would have to add these calls following the hub_configure() call 
+> > (in the case where it returns an error) and in the hub_disconnect() 
+> > routine.
+> > 
+> 
+> Thanks for feedback.
+> 
+> I tried to call the usb_autopm_put_interface() after hub_configure()[1] but then,
+> detection of USB3 device is stopped. Perhaps, It will increase the counter
+> again and allow the hub to go into suspend/sleep Mode. I need to disable auto
+> suspend permanently for SMSC hub. 
+> 
+> Please,  give some suggestion. 
 
-The USB3 hcd is already removed when xhci->shared_hcd is set to NULL.
-We might want to add some checks to make sure we are not using the removed
-hcd anymore in that codepath anymore.
+What I mean is, you need to do something like this...
 
--Mathias
+Alan Stern
+
+
+Index: usb-devel/drivers/usb/core/hub.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/hub.c
++++ usb-devel/drivers/usb/core/hub.c
+@@ -1730,6 +1730,9 @@ static void hub_disconnect(struct usb_in
+ 	kfree(hub->buffer);
+ 
+ 	pm_suspend_ignore_children(&intf->dev, false);
++	if (hub->quirk_disable_autosuspend)
++		usb_autopm_put_interface(intf);
++
+ 	kref_put(&hub->kref, hub_release);
+ }
+ 
+@@ -1862,6 +1865,11 @@ static int hub_probe(struct usb_interfac
+ 	if (id->driver_info & HUB_QUIRK_CHECK_PORT_AUTOSUSPEND)
+ 		hub->quirk_check_port_auto_suspend = 1;
+ 
++	if (id->driver_info & HUB_QUIRK_DISABLE_AUTOSUSPEND) {
++		hub->quirk_disable_autosuspend = 1;
++		usb_autopm_get_interface(intf);
++	}
++
+ 	if (hub_configure(hub, &desc->endpoint[0].desc) >= 0)
+ 		return 0;
+ 
+Index: usb-devel/drivers/usb/core/hub.h
+===================================================================
+--- usb-devel.orig/drivers/usb/core/hub.h
++++ usb-devel/drivers/usb/core/hub.h
+@@ -63,6 +63,7 @@ struct usb_hub {
+ 	unsigned		in_reset:1;
+ 
+ 	unsigned		quirk_check_port_auto_suspend:1;
++	unsigned		quirk_disable_autosuspend:1;
+ 
+ 	unsigned		has_indicators:1;
+ 	u8			indicator[USB_MAXCHILDREN];
+
