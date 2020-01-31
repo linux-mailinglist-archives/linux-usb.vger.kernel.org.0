@@ -2,57 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EDD14ECF2
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 14:09:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12CD714ED21
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 14:21:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728566AbgAaNJV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jan 2020 08:09:21 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:39049 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728514AbgAaNJV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 08:09:21 -0500
-Received: by mail-lj1-f194.google.com with SMTP id o15so1488956ljg.6
-        for <linux-usb@vger.kernel.org>; Fri, 31 Jan 2020 05:09:19 -0800 (PST)
+        id S1728641AbgAaNVJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jan 2020 08:21:09 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:38775 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728579AbgAaNVJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 08:21:09 -0500
+Received: by mail-lf1-f67.google.com with SMTP id r14so4862309lfm.5;
+        Fri, 31 Jan 2020 05:21:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=JMGZVMTqAz1kiR409mz3Cv6daFAIOrYUTZ4PomAMPBQ=;
-        b=OuEGx2wW1QJ48MKh4z5Ul7vruWAxuhSHL2hqfR4sXKIDx0KngSUif94FNFYPtaUnH0
-         DA6o6dYbbdmvW4ZuTXiC2afw16lkFI22b0vumxpHwGOXZuz3Hfzqu8JsHczSaTF1k4Y2
-         oxQa6Kobo/8P8hp+DW6ybZ5z/kyeL78zt0p0hVpFxi+Gi8Wz0Pw26csRI0Bbs6ZqYydu
-         uBEiv+6b+FCXd0V3I5wh5ThciTswxrwMwUKa1DT0bwaUm9n5lng6bSO0L1x/cA9umtWc
-         ZDown7eFCY4/ADWa8zzbYCgGRrLnYYuAB80UpJzsXEgTCjogMWwIpzXz5sSn1tXqZZgD
-         +e3Q==
+        bh=EVZ7gvWnAO8ObBd60YbtUt6FN90G7Un0YuJYzA17AjA=;
+        b=P7rEeoZ9bR6Z1oevGGptf7dLFbr/FFg+dClLOSl1ViCZNRXrMaNhrdwBBbKz6HMDxP
+         KIX/oiLqGpQrUhq3nK2YqEcCTd3YJEoNBMZMlDJGsipMMq2R3ieY/Z4+fqElGYqda8+s
+         NNkCS3SgoQORZLnbCUHrK5pXauBS0Ao6ejdKflLCR21JowFtjjc9XXNXjqmo7W9hF0CV
+         uvFOjMyhHSQN+eR15+WzApJAj44aU5fX1jsEc4mdW35OwP2E7B5tGm5QNc3bolaUmlhq
+         n3R7Mts4oztgX/p26Dg1Jw+GuMedWGL8FgrZTgAi8YX9sgkUwj6auKn4evPiGKQU7pWx
+         S9Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=JMGZVMTqAz1kiR409mz3Cv6daFAIOrYUTZ4PomAMPBQ=;
-        b=GHVyu7u6EHlUxk+L2TxR3sEs1mpEp6nhkiYsTuQj2alOjtkn7zf87C7RJrpAXZfN/T
-         Q+tWchvlgYK62+fObwcZrHNkJJx9uUYEDmFWGvvQCpIAu1HMEL5h39iQjngzeWRn+RSj
-         jR9Haep+9UUvfnUSFobziNSOjKqRUU5vaX1zRumvUxvSolMTe1BeWpAnYUFYebdtK50l
-         6oF7mGVCp3tWOOlPap2CFKc2NNr+QZaB9a203EapvicaXUbxRpLtCO5rZKiKXPQrDkCT
-         83s+gM0tmC+NI4NCO0sTBwGzK6zpWaRwzU6GrIe3HtQBJ9GT287bNCH6VZXeI8s0xzf5
-         mA3w==
-X-Gm-Message-State: APjAAAUFMTO9qruTtYtMoQwd7TE+bHrDqZbStfGKtGY4LNdfDhw5yVuG
-        2pes5r08tFy2S/LpsfWPO9OSwl1Q48hakg==
-X-Google-Smtp-Source: APXvYqx1cCaddI7HAxy/eB8wF0JUkboLGYWGj0X+i2WaYtBREy7JLOfsqKrEhn3pIMKxPahN6UJULA==
-X-Received: by 2002:a2e:965a:: with SMTP id z26mr6210976ljh.104.1580476158786;
-        Fri, 31 Jan 2020 05:09:18 -0800 (PST)
+        bh=EVZ7gvWnAO8ObBd60YbtUt6FN90G7Un0YuJYzA17AjA=;
+        b=aX4I8HJHV3VHNYL//I/lzM6ug6zOXVZHYGp4BLsGHrQR0BCoWi0+oVctsrVGC87htE
+         /tF7boiIYxviVz9uX9O5fkpCRdR6MDxnAuzuEbQBqEO//l3pE7mVtPL1DDuuTvKfqkWF
+         Y6E+t536orjX9/ChKshwV5c2Eo0MF9zVx7JbtX2rRaYNGeGWLfPwWdirqyyylQ5QENIK
+         XV2Ft+SV4A6gjU1VU4a2R/BHpzsfwzQFfjqvrqjdtsu0dtY1if0tfyD9u5pRfPC+xGTl
+         wdnCWMbtCsLN5nmeYWGUgi6C46UQ9EIj8h/PN9ikVg3f5S6mFTAgsAwLisi6cRQWxapr
+         tWEw==
+X-Gm-Message-State: APjAAAW0Nvil5kesWX8XDd8uwy7Gq7pJpcQcRte1/kxi7iBYhLNCy/ZO
+        Oe5CvuvHchQWL+bJ4qnd/Etn8MGDSTaBIQ==
+X-Google-Smtp-Source: APXvYqxBwHBS8TL1hwso4HWmWDKFsziwoBeFHuoemign5Ohv5V3P0+2btm7+7Z8BI/vEKzkAYZGW2g==
+X-Received: by 2002:a19:4cc6:: with SMTP id z189mr5302555lfa.171.1580476866627;
+        Fri, 31 Jan 2020 05:21:06 -0800 (PST)
 Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id h24sm4717328ljl.80.2020.01.31.05.09.17
+        by smtp.gmail.com with ESMTPSA id u13sm4628454lfq.19.2020.01.31.05.21.05
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 31 Jan 2020 05:09:17 -0800 (PST)
+        Fri, 31 Jan 2020 05:21:05 -0800 (PST)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Pavel Hofman <pavel.hofman@ivitera.com>,
-        John Keeping <john@metanate.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: u_audio: Fix high-speed max packet size
-In-Reply-To: <2dfd0136-ebfd-102c-e944-0a04b405968e@ivitera.com>
-References: <4f2df2bc-e208-fffb-48e2-3e14cd093103@ivitera.com> <60bf144a-2039-8832-b6f1-f972de6a6846@ivitera.com> <cfcef91b-799e-7d02-4a4c-26ee95e85ff7@ivitera.com> <20200114200450.064cd521.john@metanate.com> <24f0935d-16a7-4301-78f4-fa459e356ca9@ivitera.com> <20200117104022.5bb769f2.john@metanate.com> <495ccd06-9059-2249-ce70-aa9647609319@ivitera.com> <9607a759-c08c-97bd-a0a7-f506ca64435f@ivitera.com> <4588dcf7-7e2a-8bdd-48e5-e835f3503f5a@ivitera.com> <20200131112733.758ab77c.john@metanate.com> <2dfd0136-ebfd-102c-e944-0a04b405968e@ivitera.com>
-Date:   Fri, 31 Jan 2020 15:09:05 +0200
-Message-ID: <877e1793im.fsf@kernel.org>
+To:     Dejin Zheng <zhengdejin5@gmail.com>, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com
+Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dejin Zheng <zhengdejin5@gmail.com>
+Subject: Re: [PATCH] usb: phy: tegra: make the code simple by devm_platform_ioremap_resource()
+In-Reply-To: <20200127135841.17935-1-zhengdejin5@gmail.com>
+References: <20200127135841.17935-1-zhengdejin5@gmail.com>
+Date:   Fri, 31 Jan 2020 15:21:01 +0200
+Message-ID: <874kwb92yq.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -65,37 +66,23 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-Pavel Hofman <pavel.hofman@ivitera.com> writes:
 
-> Hi John,
->
->>> I apologize for a basic question - please which official repository to
->>> check status of a gadget patch after being accepted? Thanks a lot for
->>> the information.
->>=20
->> If you have a kernel tree, you can ask the MAINTAINERS file:
->>=20
->> 	./scripts/get_maintainer.pl --scm -f drivers/usb/gadget/function/u_audi=
-o.c
->>=20
->> I'd expect this to appear in Felipe's tree first at:
->>=20
->> 	https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git
->>=20
->> but I don't see it yet.  I guess it won't be picked up until after the
->> merge window.
->>=20
->
-> Thanks a lot for you info. How does the maintainer pick a patch from the=
-=20
-> flood of messages? Some extra headers (Tested:by, Acked-by:) are sent=20
-> separately by different people, does the maintainer have to keep track=20
-> of all of that manually?
+Hi,
 
-I had acked it, so I was under the expectation that Greg would pick it
-up. Unfortunately, it seems like it has slipped through the cracks. I
-have now queued it in my testing/fixes branch. It'll be sent forward
-after -rc1 is tagged.
+Dejin Zheng <zhengdejin5@gmail.com> writes:
+
+> make the code simple by use devm_platform_ioremap_resource() function
+> to replace platform_get_resource() and devm_ioremap().
+>
+> Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+
+checking file drivers/usb/phy/phy-tegra-usb.c
+Hunk #1 FAILED at 944.
+Hunk #2 FAILED at 1054.
+Hunk #3 FAILED at 1071.
+3 out of 3 hunks FAILED
+
+unfortunately, it doesn't apply.
 
 =2D-=20
 balbi
@@ -105,18 +92,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl40JvEACgkQzL64meEa
-mQZCdw/+N7ypduvJ8zMKyxnZodiLT8lcZnjCr1JGQsGklnQNXnf3aAJhyES9OvYL
-icVpu0u5ldwFneMuOsGq+HMEST1odbFleeWs1V9t3sBgtNvzxwc6DuL40MWgif4c
-/RgKH8cCg2NO5880cJEj5N4rZwhMukmtzumawDaRwRuZ9qFeGXBfPA95JJytItYf
-+KVxYhSXhNYim+seCqQmn+OyTHnTJLNc/T+JCOgREC+GNwQ/B4rlqkPvJJUpHfqz
-hMyNUr2Np8npUPJyISQsPz/AZpsqUhCFtT/7jN8UTI2zQWjOWVocwM7QkEjdXHtm
-ADDJHTRNud8ysC3TbySmNIOHhkQNOxNafRJqaZq92XXkqzv/dm4P2EdsYKPr7nKP
-XkoLprSiyxbmzl3EoBeVt6Nyq6H6JuNXPAl1citW4CAjGApuRLq1EClBF/JY4cFN
-cNFaXN1QBF7Ko0sJDVlXFGcOjzZqyY99aaxpkBacUPPJg2Eh6EtYzk2q/4dyl1CR
-uR8l9zY+/A9WRBEWhED4F1ixiig6k/mcKli/n99xJXPYmnkdTQ8EPBabQuT3oLD1
-PASCXePJ3vRqeiKcp/Kymw1gH66r7ZtIT35vI8FUxajHGu1WyuL7IU47lnfymYWj
-1bF6KrCl8jx38lpLeGCzBJdHnFRwOd/iazDTdTRWKVk/QNtlP3U=
-=lakk
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl40Kb0ACgkQzL64meEa
+mQa9oQ/+N8kMk+Fj6NEXBzM8cCr8usoHA7A7qOqstj20pLW3cE8yLXehv64Brcio
+QromC9dq9QqoFEQmvK7VkZYAMu1rZJxZysZNTO/bNpVdA3mF1/yqKME92oJCg7X5
+5+ouEFUQNGvyxNuWX5Uo7SycH66xZm8/vyPwK3dUNA64Ex/gqoDMJomSpdhI7PiS
+VUf3Fr+BQNAJ9w5Z+IEsQj/E6dQpVITr17gt426oEQmmhzHmwHX5viypc+jys/Dn
+y02SCHcx8IbzBBzNnH31pFFQ+COtT7NbBjTbkeqs0BOGaLSWpFROp/80Jnn2/4l/
+d2QNytRnoy9uXpqo3zLAVAJcFakqofr6mgqoEO6FOJ3o+B0uXI3u2JHUkenAUM+v
+V/ugEbWI3LHtCCGsWIZHmNtfPxQtxKXyGVEOq7KSvHFMjoVExln+kI7TOrtgZdkM
+fpqvqr8uUZiDxSXr2ScF0vtlkZW5ECZPZ74aRl+iznIyYaPHy0ma6vxm12K40HGV
+Xdwhdn9D/VD2Zn01rBusPn1wJoZI/E6nhEpe/6XqEEWCghusWP3UpI6u+pTGNyrY
+T80o58Ay/F4vGx57vpX5iLWvwFItX3IIfVVbyoV1SlQeLLMChVfX5GaQIzLNJVdi
+6naoDsgqekY33RmJ3YqRupMO/gJUu9diGEYyiow1WabipwFNz68=
+=doA5
 -----END PGP SIGNATURE-----
 --=-=-=--
