@@ -2,122 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1190114E78E
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 04:25:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7224314E7F8
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 05:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727862AbgAaDZT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Jan 2020 22:25:19 -0500
-Received: from mail26.static.mailgun.info ([104.130.122.26]:33416 "EHLO
+        id S1727986AbgAaEnt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Jan 2020 23:43:49 -0500
+Received: from mail26.static.mailgun.info ([104.130.122.26]:19428 "EHLO
         mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727739AbgAaDZS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jan 2020 22:25:18 -0500
+        by vger.kernel.org with ESMTP id S1727963AbgAaEns (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jan 2020 23:43:48 -0500
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1580441118; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=WAfvMiZMUEfhKLTfw1eNZwP5qhJuiGUZbkD7wChQu+c=; b=u7uV6T6ue5HpnWP/3b9OMs4xsmyeYI+C9vSQBb2yauHj36ljjJWjX0hzxE93civ8pIFIV1tm
- 10Zc3RXtlR77D7pzRkCSv1s+sok7+LmuhZNv/H9urzdC1huZAnv1UnaFibWG1F/Jm3ZJix1u
- jVCG44dvMaaYR6uLse6zhl4OjSs=
+ s=smtp; t=1580445828; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=Ll0wcKc1k7IzcI6Q0ZHQPG6BHe+VN/nY0QZPu5GmLGY=; b=kBN2T6XTaIW43e+mNE5Nb4494r4H7yZAzewy5zVaiqrpWcNW+zVDUOER97ZiRXe0wtuCqLsk
+ tVbzXJLaR7yo82Tn2lBGhjrnYgW8yW0ZBNWu+lMzx49XJaTZrD4HUZ6dDU449Fr5msieIfOa
+ BgwMad295hRXN2e4eJ5W8Rar2M4=
 X-Mailgun-Sending-Ip: 104.130.122.26
 X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
 Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e339e16.7fb6c37f5dc0-smtp-out-n03;
- Fri, 31 Jan 2020 03:25:10 -0000 (UTC)
+ by mxa.mailgun.org with ESMTP id 5e33b082.7f8d58e4b180-smtp-out-n02;
+ Fri, 31 Jan 2020 04:43:46 -0000 (UTC)
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 75017C4479C; Fri, 31 Jan 2020 03:25:09 +0000 (UTC)
+        id B7A2DC433A2; Fri, 31 Jan 2020 04:43:46 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+        autolearn=ham autolearn_force=no version=3.4.0
+Received: from akdwived-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7079CC433CB;
-        Fri, 31 Jan 2020 03:25:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 7079CC433CB
+        (Authenticated sender: akdwived)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C87ADC43383;
+        Fri, 31 Jan 2020 04:43:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C87ADC43383
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=jackp@codeaurora.org
-Date:   Thu, 30 Jan 2020 19:25:01 -0800
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        John Youn <John.Youn@synopsys.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: gadget: Fix logical condition
-Message-ID: <20200131032501.GA10078@jackp-linux.qualcomm.com>
-References: <cedf287bd185a5cbe31095d74e75b392f6c5263d.1573624581.git.joglekar@synopsys.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cedf287bd185a5cbe31095d74e75b392f6c5263d.1573624581.git.joglekar@synopsys.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akdwived@codeaurora.org
+From:   Avaneesh Kumar Dwivedi <akdwived@codeaurora.org>
+To:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, ckadabi@codeaurora.org,
+        tsoni@codeaurora.org, bryanh@codeaurora.org,
+        psodagud@codeaurora.org, rnayak@codeaurora.org,
+        satyap@codeaurora.org, pheragu@codeaurora.org,
+        Avaneesh Kumar Dwivedi <akdwived@codeaurora.org>
+Subject: [PATCH v4 0/2] Add Embedded USB Debugger (EUD) driver
+Date:   Fri, 31 Jan 2020 10:13:29 +0530
+Message-Id: <1580445811-15948-1-git-send-email-akdwived@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Tejas & Felipe,
+This is a series of patches that implements a driver for the control
+peripheral, EUD (Embedded USB Debugger). The EUD is a mini-USB hub 
+implemented on chip to support the USB-based debug and trace capabilities.
+Apart from debug capabilities, EUD has a control peripheral. Control 
+Peripheral is on when EUD is on and gets signals like USB attach, pet EUD,
+charge phone etc. EUD driver listens to events like USB attach or detach 
+and charger enable or disable and then notifies the USB driver or PMIC 
+driver respectively about these events via EXTCON. At regular intervals, 
+the EUD driver receives an interrupt to pet the driver indicating that 
+the software is functional.
 
-On Wed, Nov 13, 2019 at 11:45:16AM +0530, Tejas Joglekar wrote:
-> This patch corrects the condition to kick the transfer without
-> giving back the requests when either request has remaining data
-> or when there are pending SGs. The && check was introduced during
-> spliting up the dwc3_gadget_ep_cleanup_completed_requests() function.
-> 
-> Fixes: f38e35dd84e2 ("usb: dwc3: gadget: split dwc3_gadget_ep_cleanup_completed_requests()")
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
-> ---
->  drivers/usb/dwc3/gadget.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 86dc1db788a9..e07159e06f9a 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -2485,7 +2485,7 @@ static int dwc3_gadget_ep_cleanup_completed_request(struct dwc3_ep *dep,
->  
->  	req->request.actual = req->request.length - req->remaining;
->  
-> -	if (!dwc3_gadget_ep_request_completed(req) &&
-> +	if (!dwc3_gadget_ep_request_completed(req) ||
->  			req->num_pending_sgs) {
->  		__dwc3_gadget_kick_transfer(dep);
->  		goto out;
+Changes since v3:
+- Remove power supply type check in the enable path of EUD
+- Use default attribute group to create sysfs attribute
+- Updated the dt-binding
+Changes since v2:
+- Remove module_param and add sysfs support instead
+- Simplify if-else condition
+- Change if-elseif to switch case
+- Return -ENOMEM
+- Got rid of unnecessary checks in sysfs store function
+- Updated the dt-binding
+Changes since v1:
+- Remove EUD_NR as it is an unused macro
+Changes since v0:
+- Remove select SERIAL_CORE from Kconfig as this patch doesn't involve
+  anything related to serial console
+- Changed the dt-bindings to remove extcon and replace it with graphs
+  to represent a connection with client
 
-Been staring at this for a while--I think I see a potential issue but
-not sure if it is or not.
+Avaneesh Kumar Dwivedi (2):
+  dt-bindings: Documentation for qcom,eud
+  Embedded USB Debugger (EUD) driver
 
-If this condition is true and causes an early return, the 'ret' value
-could be 0 which could allow the caller in cleanup_completed_requests()
-to continue looping over the started_list and calling
-cleanup_completed_request() again on the next req. But we just issued
-another START or UPDATE transfer command on the previous incomplete req
-and now the loop continued to try to reclaim the next TRB (and increment
-the dequeue pointer and whatnot) when it might actually be in progress.
+ Documentation/ABI/stable/sysfs-driver-msm-eud      |   5 +
+ .../devicetree/bindings/soc/qcom/qcom,msm-eud.txt  |  43 +++
+ drivers/soc/qcom/Kconfig                           |  12 +
+ drivers/soc/qcom/Makefile                          |   1 +
+ drivers/soc/qcom/eud.c                             | 329 +++++++++++++++++++++
+ 5 files changed, 390 insertions(+)
+ create mode 100644 Documentation/ABI/stable/sysfs-driver-msm-eud
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,msm-eud.txt
+ create mode 100644 drivers/soc/qcom/eud.c
 
-According to the code before f38e35dd84e2,
-
-	list_for_each_entry_safe(req, tmp, &dep->started_list, list) {
-
-	...
-		if (!dwc3_gadget_ep_request_completed(req) ||
-				req->num_pending_sgs) {
-			__dwc3_gadget_kick_transfer(dep);
-			break;
-		}
-
-The 'goto out' used to be a 'break', which terminates the list loop. But
-with the refactored code, the loop can only terminate if 'ret' is
-non-zero.
-
-I haven't seen any real issue with the code as-is yet, but was just
-wondering if the 'goto out' should be replaced with a return 1?
-
-Jack
 -- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project.
