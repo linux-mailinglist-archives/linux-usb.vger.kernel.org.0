@@ -2,81 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4521D14E9D6
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 09:55:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC6714EA7D
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 11:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728206AbgAaIz5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jan 2020 03:55:57 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:43139 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728151AbgAaIz5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 03:55:57 -0500
-Received: by mail-lj1-f194.google.com with SMTP id a13so6265930ljm.10
-        for <linux-usb@vger.kernel.org>; Fri, 31 Jan 2020 00:55:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=2S9wxqWKmAask0cSmOXArpFefQZ8Zs4WIsmkzwTxodA=;
-        b=qwCBgOXOZyBRvz9NOySlnT7zC6Fci8iA7N8LSlPoyi9HrJKhTT23KXR/ydhItyxJHn
-         JBumoZHevQF2yiPTSVX2QMKJMPM5Ctb62+cHd3vV/Lc9XxmwRfmv4ffKiYqon8MKl/oz
-         RZSmAzC/MA8uq/h7mKFYwVNDZ7vbexFQbg0PISRhfOErdYiGgMhE+LK3WlwcGlapSyyk
-         SYiKXJn3ZZrlpHlHg4CTePg7SXn1+SAFmGjbz0TxzDJmQ3WkT4zo77502ko8A85vIFnR
-         0INXOWqsKe3FJTIC9Xo+2ZzTN8yr1YsOWnIKvIoes5hwcwInvvO/mDjOG+NEfiWtHTXz
-         KtXA==
+        id S1728302AbgAaKLl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jan 2020 05:11:41 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:39327 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728160AbgAaKLl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 05:11:41 -0500
+Received: by mail-ot1-f65.google.com with SMTP id 77so6075430oty.6;
+        Fri, 31 Jan 2020 02:11:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2S9wxqWKmAask0cSmOXArpFefQZ8Zs4WIsmkzwTxodA=;
-        b=SM3z4IEBe/QJy46S2JgnQWw65eMSqoOrwi71zIsnmYPBWrHqOcoz7GJhX4N1wFUoPG
-         lfINhTWa08zjvrCPlyURGiobgBy1pN689JKILgkTNdqHOFwL3hpNGsBk4c6BgYhcy7os
-         aStIrOAegXFwgZqp3+uPsaEe3iQPPqtQWBwuwOSKrT/D47192mMbIKK1kHgc5NVW5vhi
-         nkL/ErIo3X1RKv5eKyUn3NVwTivJTXIf8SgqHtGuA715SWFLjcFbancMWjjKtMn2TPcr
-         ghX496aTAAdVwxueC1k6STEFGzO5FbBbWtWz2mqKPuLs4+sm/r+vovdKFM+PxUKaf7zx
-         TSyQ==
-X-Gm-Message-State: APjAAAUqwWE9MnuM4z1Il6UUMMTygb61AraOEPzBk+2yc6fFfUjzwAxA
-        sPSaEXYim3tlWGkGohFw10wYi+6hICjY9g==
-X-Google-Smtp-Source: APXvYqyEQx9QVHoxefeuUkR77FDHUFpUOqbmL+owXhzwgkpsiLTrZhbAk1FgHrGOxFJXROkSqmE+Ew==
-X-Received: by 2002:a2e:8145:: with SMTP id t5mr5383167ljg.144.1580460953581;
-        Fri, 31 Jan 2020 00:55:53 -0800 (PST)
-Received: from ?IPv6:2a00:1fa0:8e8:c09b:ed38:3474:b1a8:ff23? ([2a00:1fa0:8e8:c09b:ed38:3474:b1a8:ff23])
-        by smtp.gmail.com with ESMTPSA id w8sm586635ljj.75.2020.01.31.00.55.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Jan 2020 00:55:52 -0800 (PST)
-Subject: Re: [PATCH 1/1] usb: charger: assign specific number for enum value
-To:     Peter Chen <peter.chen@nxp.com>, balbi@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com,
-        gregkh@linuxfoundation.org
-References: <1580436213-8862-1-git-send-email-peter.chen@nxp.com>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <a23885dc-c804-5a0c-df78-fe18292360cf@cogentembedded.com>
-Date:   Fri, 31 Jan 2020 11:55:45 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dSq/O5z4OiKt2gIxWlmYXDdfWXOXBwGpqYL0q2hrwZQ=;
+        b=hfxHnOabjLtHmshzS23bvfpf6uonOdaofUKFUkaVj5ngOjGYLfQ8VPomyRR76zQclQ
+         4IhWIphL2avzbuhgaHKVm2gPD/eh1F9STX5LKAKQV+yWFLGa7x4izC0H1svzeNNLH3QS
+         H5wcnDKJZ0jRx6MTwY7CQy1tcav8wO2pvp4ZGJTwSpdWyiQS9Rb/wpYAYwJVPxomSNjD
+         D3HwopchQJ4sd2Z57vy0Vv12D3VK3Vi7VP4KbtW2fmd0JZ/hF6JpnnKgwDd/NAGoLOO2
+         N1MR4eGOLUNMD4T23f8jpAGfTocYvOkZq6cpSU+pZqdtC2ESVDgoIkx8ABgOMm77peCk
+         5SXQ==
+X-Gm-Message-State: APjAAAU7fAoTAh5EFhxb+sDvC9prRU3ibipRaBk5qoi4Ae+6zxI/hKln
+        iVfhukU4T7u5rYcoWUC47SzvHceDW2XrsWnOMdo=
+X-Google-Smtp-Source: APXvYqzvE5/+Pbp+3XgX3B4B6R/3TqiKaD+1/9bs8HNzUkgVsARShDsPlW5lSa4ht2ZHeJy9a0d6wVgWmSFh7YrtAg8=
+X-Received: by 2002:a9d:67d7:: with SMTP id c23mr7192372otn.262.1580465499703;
+ Fri, 31 Jan 2020 02:11:39 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <1580436213-8862-1-git-send-email-peter.chen@nxp.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200124132957.15769-1-geert+renesas@glider.be> <20200124132957.15769-3-geert+renesas@glider.be>
+In-Reply-To: <20200124132957.15769-3-geert+renesas@glider.be>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 31 Jan 2020 11:11:28 +0100
+Message-ID: <CAJZ5v0hqzs1GaJ+qs=8DHhe-zK4QSNGJiKn1B9qsp0jcK3pSuQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] crypto: ccree - fix debugfs register access while suspended
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gilad Ben-Yossef <gilad@benyossef.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Bin Liu <b-liu@ti.com>, linux-crypto@vger.kernel.org,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+On Fri, Jan 24, 2020 at 2:30 PM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+> Reading the debugfs files under /sys/kernel/debug/ccree/ can be done by
+> the user at any time.  On R-Car SoCs, the CCREE device is power-managed
+> using a moduile clock, and if this clock is not running, bogus register
+> values may be read.
+>
+> Fix this by filling in the debugfs_regset32.dev field, so debugfs will
+> make sure the device is resumed while its registers are being read.
+>
+> This fixes the bogus values (0x00000260) in the register dumps on R-Car
+> H3 ES1.0:
+>
+>     -e6601000.crypto/regs:HOST_IRR = 0x00000260
+>     -e6601000.crypto/regs:HOST_POWER_DOWN_EN = 0x00000260
+>     +e6601000.crypto/regs:HOST_IRR = 0x00000038
+>     +e6601000.crypto/regs:HOST_POWER_DOWN_EN = 0x00000038
+>      e6601000.crypto/regs:AXIM_MON_ERR = 0x00000000
+>      e6601000.crypto/regs:DSCRPTR_QUEUE_CONTENT = 0x000002aa
+>     -e6601000.crypto/regs:HOST_IMR = 0x00000260
+>     +e6601000.crypto/regs:HOST_IMR = 0x017ffeff
+>      e6601000.crypto/regs:AXIM_CFG = 0x001f0007
+>      e6601000.crypto/regs:AXIM_CACHE_PARAMS = 0x00000000
+>     -e6601000.crypto/regs:GPR_HOST = 0x00000260
+>     +e6601000.crypto/regs:GPR_HOST = 0x017ffeff
+>      e6601000.crypto/regs:AXIM_MON_COMP = 0x00000000
+>     -e6601000.crypto/version:SIGNATURE = 0x00000260
+>     -e6601000.crypto/version:VERSION = 0x00000260
+>     +e6601000.crypto/version:SIGNATURE = 0xdcc63000
+>     +e6601000.crypto/version:VERSION = 0xaf400001
+>
+> Note that this behavior is system-dependent, and the issue does not show
+> up on all R-Car Gen3 SoCs and boards.  Even when the device is
+> suspended, the module clock may be left enabled, if configured by the
+> firmware for Secure Mode, or when controlled by the Real-Time Core.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-On 31.01.2020 5:03, Peter Chen wrote:
+LGTM:
 
-> For work properly on every architectures and compilers, the enum value
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-    "For working properly"? Or maybe "to work properly"?
-
-> needs to be specific numbers.
-> 
-> Suggested-by: Greg KH <gregkh@linuxfoundation.org>
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-[...]
-
-MBR, Sergei
+> ---
+>  drivers/crypto/ccree/cc_debugfs.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/crypto/ccree/cc_debugfs.c b/drivers/crypto/ccree/cc_debugfs.c
+> index 5669997386988055..35f3a2137502bd96 100644
+> --- a/drivers/crypto/ccree/cc_debugfs.c
+> +++ b/drivers/crypto/ccree/cc_debugfs.c
+> @@ -81,6 +81,7 @@ int cc_debugfs_init(struct cc_drvdata *drvdata)
+>         regset->regs = debug_regs;
+>         regset->nregs = ARRAY_SIZE(debug_regs);
+>         regset->base = drvdata->cc_base;
+> +       regset->dev = dev;
+>
+>         ctx->dir = debugfs_create_dir(drvdata->plat_dev->name, cc_debugfs_dir);
+>
+> @@ -102,6 +103,7 @@ int cc_debugfs_init(struct cc_drvdata *drvdata)
+>                 verset->nregs = ARRAY_SIZE(pid_cid_regs);
+>         }
+>         verset->base = drvdata->cc_base;
+> +       verset->dev = dev;
+>
+>         debugfs_create_regset32("version", 0400, ctx->dir, verset);
+>
+> --
+> 2.17.1
+>
