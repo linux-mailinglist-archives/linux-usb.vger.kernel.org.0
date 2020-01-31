@@ -2,65 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C8C514F3E7
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 22:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F77814F449
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 23:09:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726322AbgAaVmO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jan 2020 16:42:14 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53976 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726105AbgAaVmO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 31 Jan 2020 16:42:14 -0500
-Received: from localhost (unknown [83.216.75.91])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3FA7420707;
-        Fri, 31 Jan 2020 21:42:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580506933;
-        bh=C17MI6rx4oXMJKcGmdqHqYU8ry9fA6NGeOV3I5Bann0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZmVNHpXI9SnOfNYrVXDKT0MZ9IAGFFTAm9rdeypN3aQDIApgkwqQrCVFF5xFnzlfc
-         2MRY8smR65sd8LaUuwmOUqT94J1sDz2Cq8AaPsMnYdbT3nXTd8GZkCZzH68iVQAN9M
-         tguTUcUuyUe+nedHcDFx9xx2lxscfYcG/9+Ui8NE=
-Date:   Fri, 31 Jan 2020 22:42:11 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>
-Subject: Re: [PATCH v5 1/1] usb: gadget: add raw-gadget interface
-Message-ID: <20200131214211.GB2280058@kroah.com>
-References: <cover.1579007786.git.andreyknvl@google.com>
- <461a787e63a9a01d83edc563575b8585bc138e8d.1579007786.git.andreyknvl@google.com>
- <87ftfv7nf0.fsf@kernel.org>
+        id S1726385AbgAaWJ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jan 2020 17:09:28 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:38583 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726163AbgAaWJ2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 17:09:28 -0500
+Received: by mail-pg1-f196.google.com with SMTP id a33so4217813pgm.5
+        for <linux-usb@vger.kernel.org>; Fri, 31 Jan 2020 14:09:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=k/cguSbdjfoUpsjktbp/rdoz4/zZPT5tyDc0hffYMeM=;
+        b=iH1aMcvKe6Py+AIXOQPxXnP/pneIRY2qvysuFuxn67+s9bLJMsoD9OkCUJ0oXTme41
+         bQ90iLPW+mn08vpCOpPcP8vnC3Ko3pwPMTG/xUP8/tLRy9MhfPDOW3Og+H2TYkqSiAoq
+         12F28dLM9T+Fysg0/UauEHaIJkNA6gPu7cRWEqxb3Wt9dz0QD+a6Le3OMMQFWE1AWK7+
+         TBMeW2p2KryvlUF8NglgTZxGQK4HRZ3pWxDSgdzfXraFpEgHluR+HFSx4qzuhct3puW6
+         waLNosPUIC39DR+80VyzGGnjK1weMspDfWKuTsW/QlSs0W/MQ+ubAlvk1ohr7s855tFh
+         dl5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=k/cguSbdjfoUpsjktbp/rdoz4/zZPT5tyDc0hffYMeM=;
+        b=Fpj4udpkyUwZahrOobofak0tViPd/S631u2vX1UIjSR2vrEtMZ9QIxuqYs/SV+HG0I
+         Owq7cy/aN3nAAWmtBqcVxt0HMBFC+gooySo/SFHQhsGJe3d8nuMhXjAZ47cYK5Op1VVr
+         iKIFyfVrIIPgAdaydki+DrYBEWuv7bohH761tESvjRJn6Uu1h4krXNoo0ZmL7kUKTle9
+         iaZCEqpI21sCooV7RRXk8tr6/jctyWBB3TVHugttJM7YC3W8q8VoTyC/tLIF0YhKOiDG
+         DD1nDFm17fEOrRZ9GRttG7xZXKd1jWFT6Sdwg3WDaiIBOqNoTPXphkDFy29MzqBsLqkn
+         ok4Q==
+X-Gm-Message-State: APjAAAV2K1d6dHmRL8FT46KtxullvaMXdnh+fcQLv0/RZvhhV3+8jvBD
+        mmBCIQrkeQeBO7mfz6RM4P8=
+X-Google-Smtp-Source: APXvYqwPKsofFvf/q/X/WrwWcSWinBk5PG0TUvrg0jljOXX6wQza93SbCXsEkGHApCGq4fnDREOUcg==
+X-Received: by 2002:a63:dc0a:: with SMTP id s10mr12917218pgg.235.1580508567277;
+        Fri, 31 Jan 2020 14:09:27 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z26sm11803487pfa.90.2020.01.31.14.09.25
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 31 Jan 2020 14:09:26 -0800 (PST)
+Date:   Fri, 31 Jan 2020 14:09:25 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Boris ARZUR <boris@konbu.org>
+Cc:     linux-usb@vger.kernel.org,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Grigor Tovmasyan <Grigor.Tovmasyan@synopsys.com>,
+        Gevorg Sahakyan <Gevorg.Sahakyan@synopsys.com>,
+        John Youn <John.Youn@synopsys.com>,
+        Sevak Arakelyan <sevaka@synopsys.com>,
+        William Wu <william.wu@rock-chips.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>
+Subject: Re: [PATCH] usb: dwc2: extend treatment for incomplete transfer
+Message-ID: <20200131220925.GA26896@roeck-us.net>
+References: <20191105032922.GA3041@tungsten>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87ftfv7nf0.fsf@kernel.org>
+In-Reply-To: <20191105032922.GA3041@tungsten>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 31, 2020 at 03:42:11PM +0200, Felipe Balbi wrote:
-> > +// SPDX-License-Identifier: GPL-2.0
+Hi Boris,
+
+On Tue, Nov 05, 2019 at 12:29:22PM +0900, Boris ARZUR wrote:
+> Channel halt can happen with BULK endpoints when the
+> cpu is under high load. Treating it as an error leads
+> to a null-pointer dereference in dwc2_free_dma_aligned_buffer().
 > 
-> V2 only
 
-Nope, this is ok, see the kernel license documentation, that means the
-same thing.
+good find, and good analysis. We stated to see this problem as well in the
+latest ChromeOS kernel.
 
-> > +MODULE_LICENSE("GPL");
+I am still trying understand what exactly happens. To do that, I'll need to
+be able to reproduce the problem. Maybe you can help me. How do you tether
+your phone through USB ?
+
+Thanks,
+Guenter
+
+> Signed-off-by: Boris Arzur <boris@konbu.org>
+> ---
+>  drivers/usb/dwc2/hcd_intr.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> v2+. Care to fix?
-
-What?  No, read module.h, this is fine.
-
-thanks,
-
-greg "I talk to too many license lawyers" k-h
+>                                  * A periodic transfer halted with no other
+> --
+> 2.23.0
+> 
+> diff --git a/drivers/usb/dwc2/hcd_intr.c b/drivers/usb/dwc2/hcd_intr.c
+> index a052d39b4375..697fed530aeb 100644
+> --- a/drivers/usb/dwc2/hcd_intr.c
+> +++ b/drivers/usb/dwc2/hcd_intr.c
+> @@ -1944,7 +1944,8 @@ static void dwc2_hc_chhltd_intr_dma(struct dwc2_hsotg
+> *hsotg,
+>                          */
+>                         dwc2_hc_ack_intr(hsotg, chan, chnum, qtd);
+>                 } else {
+> -                       if (chan->ep_type == USB_ENDPOINT_XFER_INT ||
+> +                       if (chan->ep_type == USB_ENDPOINT_XFER_BULK ||
+> +                           chan->ep_type == USB_ENDPOINT_XFER_INT ||
+>                             chan->ep_type == USB_ENDPOINT_XFER_ISOC) {
+>                                 /*
