@@ -2,100 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DCDAF14F2D3
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 20:36:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 042FA14F30B
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 21:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726154AbgAaTg5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jan 2020 14:36:57 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:40330 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726086AbgAaTg5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 14:36:57 -0500
-Received: by mail-pf1-f193.google.com with SMTP id q8so3829727pfh.7
-        for <linux-usb@vger.kernel.org>; Fri, 31 Jan 2020 11:36:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=H500U7AxkRvelxApN+urqqo/2yVbfr5vZr0IVmQ3Nec=;
-        b=i1XoWGVoLQbEXgmvo4oG4PWhA5M9ZP4NOHk+omlGlW7/pRO5h2d+k8anRiz9c8qdWa
-         t3h7CbXOQL3C5fuGz2ElrnPI/W2tbb6HcfGwQLV82rX5RTsSdxjQnLKch42F5Szb3MUQ
-         kwBWL6dsO4h7GwukMAcoid0+rrOmd/c4xs1tuaYYbfcEjGKUdHA/mDNF359nPcnlAGD+
-         KpP7Btbaw0cT9TKGVq4aAeewjrNc8+kUG2RAHf0bSlCyJsQsFAzUo/Hk8s8V0wAat7qb
-         CmUGEXFp/zL3kYZSJraqqaQItPn+v05NAwraN16B18i/xtkJZ2+RPH2eqD44qASb40Hg
-         RNoA==
+        id S1726154AbgAaUGq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jan 2020 15:06:46 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:33483 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725978AbgAaUGp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 15:06:45 -0500
+Received: by mail-ot1-f68.google.com with SMTP id b18so7797425otp.0;
+        Fri, 31 Jan 2020 12:06:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=H500U7AxkRvelxApN+urqqo/2yVbfr5vZr0IVmQ3Nec=;
-        b=TG0aKJ2XlUFSPDI6sD/eSYdwBAJEPm57FVi+6eq3TBqwRmeq2rIxpllZcl/kNTHB5C
-         pn3CctY+Wo9X0/oWeVfzb444XCF6j6x1L1Zwx8b97nXaRW7kIqsSwRwXiG6tbwKUPYd0
-         7f7um7v1HDkoQU7JT3bTf4cEAMSyZsVPleUUKEzB95phqDtC52AUPSM1A19kpTxl07QD
-         lsEZr5Qar9GLzo5QaE15noOafQlUbx1ACs9QODv5JbpYiXxoXPGXEgrp+fN1Hhck3FeY
-         I6J1Xefnbp1eqGaKUswpILb6VByJJjpf3lX0I3hkqQt8cFzOzvey9EsFiT7K9ZQTIL8L
-         oHmQ==
-X-Gm-Message-State: APjAAAU4pERfwMkYCj/8pZgCXyVJO42yCOPAbi6ujluSzi96DiFJf3oE
-        vNUKXFhljRfiNqGelmiZwOoitP1TxFc=
-X-Google-Smtp-Source: APXvYqwgAkLkZhoYUiACRWRIV+kbJHbe8stRTvMLcippHTt57tgxKOuz01lFw4uETvLLVM8aEvNsnw==
-X-Received: by 2002:a63:5964:: with SMTP id j36mr11968514pgm.225.1580499416737;
-        Fri, 31 Jan 2020 11:36:56 -0800 (PST)
-Received: from EliteBook ([75.167.220.149])
-        by smtp.gmail.com with ESMTPSA id g19sm11306594pfh.134.2020.01.31.11.36.56
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 31 Jan 2020 11:36:56 -0800 (PST)
-Date:   Fri, 31 Jan 2020 12:36:53 -0700
-From:   Paul Zimmerman <pauldzim@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg KH <greg@kroah.com>,
-        David Heinzelmann <heinzelmann.david@gmail.com>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] USB: hub: Don't record a connect-change event during
- reset-resume
-Message-ID: <20200131123653.2ef373e4@EliteBook>
-In-Reply-To: <Pine.LNX.4.44L0.2001311037460.1577-100000@iolanthe.rowland.org>
-References: <Pine.LNX.4.44L0.2001311037460.1577-100000@iolanthe.rowland.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=AbO+gon8QEJiqD6b6PW0TmWlbcPnG39Yyju/1Ptva7A=;
+        b=CSFqi4tWPaGCbRL0rt5X2fhm9yGQMfmvSL6nWVICdsp2h/l96m1f8GJ2T96+toxDDv
+         VMoaAGvZasdDKkHS61oc3FyOW0c6hTNagf1Wwiuzti12QKXwqqNEli2vroYN6YoGjbqc
+         MJ/MLULi4S/RteItU7U0vI5rfewj/15Shd1wgwHU4qRpmYsPZDKRRDsayLyuem3ijCtL
+         Kvm5Wxau/giI3DpMdNoV070ei21PYqbw6RmCgI6+bOc7sB0hVxKdMhGW67EqD+bjnVOP
+         i7TVjX4EW7TgThcbtcSfIIbenaKbi4W7wdkquaEeWixNgzH8c9nDuU7gCDPajcddApFE
+         PIrw==
+X-Gm-Message-State: APjAAAXxrdE20HqQ8nNplB5tYdORDxjoTT1Hd7M7JuwGnbb5TfF6/zom
+        SYXawu7CSZAiVQRKdYnB4g==
+X-Google-Smtp-Source: APXvYqypW7CmmlNjveScb/uhps8dAYhHTYKvur2n/FPc2Yr0pzCb4xGJ80xks8YoGnMim8R/3fHxsg==
+X-Received: by 2002:a9d:1706:: with SMTP id i6mr9325576ota.151.1580501203331;
+        Fri, 31 Jan 2020 12:06:43 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id w201sm2978724oif.29.2020.01.31.12.06.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Jan 2020 12:06:42 -0800 (PST)
+Received: (nullmailer pid 26745 invoked by uid 1000);
+        Fri, 31 Jan 2020 20:06:41 -0000
+Date:   Fri, 31 Jan 2020 14:06:41 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Amelie DELAUNAY <amelie.delaunay@st.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: usb: dwc2: add support for STM32MP15
+ SoCs USB OTG HS and FS
+Message-ID: <20200131200641.GA24534@bogus>
+References: <20200124084131.23749-1-amelie.delaunay@st.com>
+ <20200124084131.23749-2-amelie.delaunay@st.com>
+ <87imkr7nou.fsf@kernel.org>
+ <c29867bd-8056-a82f-2273-101470395e78@st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c29867bd-8056-a82f-2273-101470395e78@st.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 31 Jan 2020 10:39:26 -0500 (EST)
-Alan Stern <stern@rowland.harvard.edu> wrote:
-
-> Paul Zimmerman reports that his USB Bluetooth adapter sometimes
-> crashes following system resume, when it receives a
-> Get-Device-Descriptor request while it is busy doing something else.
+On Fri, Jan 31, 2020 at 05:13:25PM +0100, Amelie DELAUNAY wrote:
+> Hi,
 > 
-> Such a request was added by commit a4f55d8b8c14 ("usb: hub: Check
-> device descriptor before resusciation").  It gets sent when the hub
-> driver's work thread checks whether a connect-change event on an
-> enabled port really indicates a new device has been connected, as
-> opposed to an old device momentarily disconnecting and then
-> reconnecting (which can happen with xHCI host controllers, since they
-> automatically enable connected ports).
+> On 1/31/20 2:36 PM, Felipe Balbi wrote:
+> > Hi,
+> > 
+> > Amelie Delaunay <amelie.delaunay@st.com> writes:
+> > 
+> > > Add the specific compatible string for the DWC2 IP found in the STM32MP15
+> > > SoCs.
+> > > STM32MP15 SoCs uses sensing comparators to detect Vbus valid levels and
+> > > ID pin state. usb33d-supply described the regulator supplying Vbus and ID
+> > > sensing comparators.
+> > > 
+> > > Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
+> > 
+> > This doesn't apply. dwc2 bindings is still in .txt format. I have taken
+> > patch 2, though.
+> > 
+> 
+> Thanks for taking driver patch.
+> 
+> Rob, would you mind to take patch 1 (Yaml binding update) in your tree ?
 
-< snip > 
+Done.
 
-> Note that performing the unnecessary check is not actually a bug.
-> Devices are supposed to be able to send descriptors back to the host
-> even when they are busy doing something else.  The underlying cause of
-> Paul's problem lies in his Bluetooth adapter.  Nevertheless, we
-> shouldn't perform the same check twice in a row -- and as a nice side
-> benefit, removing the extra check allows the Bluetooth adapter to work
-> more reliably.
-
-Actually, at the time the failure happens, the bluetooth driver is putting
-the device into a "manufacturer mode" and downloading a firmware patch to
-the device. So I don't think we can fault the device for not responding to
-a get-descriptor request at that point. Probably there should be some kind
-of locking in the driver while that is being done.
-
-Nevertheless, your patch makes everything work again, so I think it's
-"good enough" :)
-
-Thanks,
-Paul
+Rob
