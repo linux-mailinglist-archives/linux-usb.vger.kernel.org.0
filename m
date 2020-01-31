@@ -2,97 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D2E014F07C
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 17:13:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 548EF14F113
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 18:08:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729294AbgAaQNk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jan 2020 11:13:40 -0500
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:29552 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729162AbgAaQNk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 11:13:40 -0500
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00VG8Ufu012526;
-        Fri, 31 Jan 2020 17:13:31 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=HUDBBixwA13IQ1SSxhBd1lmaKx9dqoz2nLZDQib/1NY=;
- b=M+YcKaeJ2bnVCl5PayaMJx+tFQAQGf39itcySN6HFpedQJV60UeyQR+C3dnWO5cUftet
- GbGDnNSjoRvGb9p5bocMIOMMVwwq6udnrw3lR1x5yiYRmZ1YDuGEt2eXJNuD+ssGRoYx
- DjnZc2l2lbGzI7hEmfHpDQSH0dYvYPFdkMCxSkvSBI/IvDSKrIvzxHaLm2ARDTIwEYTc
- BYlmU1xUEQVqRMpTLmrVAQC3dHPdMcbckmJMZvJe+QMnLRdD24sLLFwULK9Avg3kl0JA
- 6pgph/GNCKKc7UGzCSmm2hWL1nyDuQWkHvTU2pEuyecFki1KCmFXRjOvMEDRpx3H4opv oQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2xrc13pvvx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 31 Jan 2020 17:13:31 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BC12810002A;
-        Fri, 31 Jan 2020 17:13:26 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A0DEE2D3796;
-        Fri, 31 Jan 2020 17:13:26 +0100 (CET)
-Received: from lmecxl0995.lme.st.com (10.75.127.48) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Fri, 31 Jan
- 2020 17:13:25 +0100
-Subject: Re: [PATCH v3 1/2] dt-bindings: usb: dwc2: add support for STM32MP15
- SoCs USB OTG HS and FS
-To:     Felipe Balbi <balbi@kernel.org>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-References: <20200124084131.23749-1-amelie.delaunay@st.com>
- <20200124084131.23749-2-amelie.delaunay@st.com> <87imkr7nou.fsf@kernel.org>
-From:   Amelie DELAUNAY <amelie.delaunay@st.com>
-Message-ID: <c29867bd-8056-a82f-2273-101470395e78@st.com>
-Date:   Fri, 31 Jan 2020 17:13:25 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726859AbgAaRIa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jan 2020 12:08:30 -0500
+Received: from mail-yw1-f65.google.com ([209.85.161.65]:38912 "EHLO
+        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726668AbgAaRIa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 12:08:30 -0500
+Received: by mail-yw1-f65.google.com with SMTP id h126so5389956ywc.6
+        for <linux-usb@vger.kernel.org>; Fri, 31 Jan 2020 09:08:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=6TOn7hetpzexePyC3zDNSvTDjokJ92bxYNUjM3RdHnA=;
+        b=GEiXa0CBumVICbaZBrh35GtVnvUzrugcji6SFEP0NAbXGtCBx4tTcroYV/QtcdzpgD
+         HMASzyRGFvCUCIqL5Fp9+PLYUTtti7T7KuL/CBTwOOa5DSo1sHd5KtpCyn+OSdFUB0KT
+         sG0oUncO8ak5NC1Rxe+IlmgGy+VB8s9k+ieLkvES/vqaQt2cI7Qf/bAL6bsvBiWRE4uQ
+         yy5ssSWj76uc3kt81sLVYEnX9dhoES0KrvaMZrVus2KE1D9Uap9ajhyVfPl9/UciWQm4
+         B3AE5es7PxQs4LbV9/V5tEdCUpbYwzbuhgObjlW6zIwYSwXFoICowCRhga7psXfcKb5a
+         jOEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=6TOn7hetpzexePyC3zDNSvTDjokJ92bxYNUjM3RdHnA=;
+        b=qNNwVaYELp/8JvP6kZfCzkdkRRY7XYN+5HjzMY9dBT1pqs/86c5CtpeF5pcw7YCK0R
+         bp0GvmAZuaKvmDmt/N0lkhsrs7uPP1qH0Pd2k2jOEgnL6cuHNNfS85bitb8FDMX7OyMm
+         saJPKrSqRw6oYMVseT+V/NK9SijuVe8t/nVEUrm2AyOVfsZ+IJvouAmOcQhifzkrAkF7
+         6caDpPPO6Avq4e/GblKuDnPxXUDki4gfYjqPU88NgT+PskPIhn+Cz052MsMpI8mh3uRH
+         mpiGEJ1hi/lR8fsDfxhrtJhtcOlk+izHIH2250jch5KxUZxRjMcW4dIJ6Qz516fRmffr
+         PfcA==
+X-Gm-Message-State: APjAAAXVOJyk45XTGiSMS9xXIioV5sWQ2l4C8LRh3lKbPtLgAJVJ3dhR
+        mwI1p4yU748GuNGbqs8cdnQ5yy4dxdaopleucK8=
+X-Google-Smtp-Source: APXvYqzY/i0PYydtDnMYa2pbbggJ83g2QOv6/VVZFSHIUfPBEeyNONMh38paEw9i/CCIEv4bpCGq0VkfHuD51COqP4M=
+X-Received: by 2002:a25:3848:: with SMTP id f69mr9659866yba.498.1580490508077;
+ Fri, 31 Jan 2020 09:08:28 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <87imkr7nou.fsf@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG6NODE1.st.com (10.75.127.16) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-31_04:2020-01-31,2020-01-31 signatures=0
+Received: by 2002:a25:bd43:0:0:0:0:0 with HTTP; Fri, 31 Jan 2020 09:08:27
+ -0800 (PST)
+Reply-To: passey300@hotmail.com
+From:   Emerald Passey <godwinekpe8@gmail.com>
+Date:   Fri, 31 Jan 2020 17:08:27 +0000
+Message-ID: <CADq6EG+rzHqub_p=QcTXs2AcjbFz5D99mvf8iywKnP7QeTa_Og@mail.gmail.com>
+Subject: Hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 1/31/20 2:36 PM, Felipe Balbi wrote:
-> Hi,
-> 
-> Amelie Delaunay <amelie.delaunay@st.com> writes:
-> 
->> Add the specific compatible string for the DWC2 IP found in the STM32MP15
->> SoCs.
->> STM32MP15 SoCs uses sensing comparators to detect Vbus valid levels and
->> ID pin state. usb33d-supply described the regulator supplying Vbus and ID
->> sensing comparators.
->>
->> Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
-> 
-> This doesn't apply. dwc2 bindings is still in .txt format. I have taken
-> patch 2, though.
->
-
-Thanks for taking driver patch.
-
-Rob, would you mind to take patch 1 (Yaml binding update) in your tree ?
-
-Regards,
-Amelie
-
+-- 
+Ahoj
