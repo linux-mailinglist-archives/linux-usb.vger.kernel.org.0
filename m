@@ -2,58 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8A314F008
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 16:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2E014F07C
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 17:13:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729190AbgAaPr2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jan 2020 10:47:28 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:56024 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729161AbgAaPr2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 10:47:28 -0500
-Received: (qmail 3508 invoked by uid 2102); 31 Jan 2020 10:47:27 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 31 Jan 2020 10:47:27 -0500
-Date:   Fri, 31 Jan 2020 10:47:27 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-cc:     Vinod Koul <vkoul@kernel.org>,
-        Christian Lamparter <chunkeey@gmail.com>,
+        id S1729294AbgAaQNk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jan 2020 11:13:40 -0500
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:29552 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729162AbgAaQNk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 11:13:40 -0500
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00VG8Ufu012526;
+        Fri, 31 Jan 2020 17:13:31 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=HUDBBixwA13IQ1SSxhBd1lmaKx9dqoz2nLZDQib/1NY=;
+ b=M+YcKaeJ2bnVCl5PayaMJx+tFQAQGf39itcySN6HFpedQJV60UeyQR+C3dnWO5cUftet
+ GbGDnNSjoRvGb9p5bocMIOMMVwwq6udnrw3lR1x5yiYRmZ1YDuGEt2eXJNuD+ssGRoYx
+ DjnZc2l2lbGzI7hEmfHpDQSH0dYvYPFdkMCxSkvSBI/IvDSKrIvzxHaLm2ARDTIwEYTc
+ BYlmU1xUEQVqRMpTLmrVAQC3dHPdMcbckmJMZvJe+QMnLRdD24sLLFwULK9Avg3kl0JA
+ 6pgph/GNCKKc7UGzCSmm2hWL1nyDuQWkHvTU2pEuyecFki1KCmFXRjOvMEDRpx3H4opv oQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2xrc13pvvx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 31 Jan 2020 17:13:31 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BC12810002A;
+        Fri, 31 Jan 2020 17:13:26 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A0DEE2D3796;
+        Fri, 31 Jan 2020 17:13:26 +0100 (CET)
+Received: from lmecxl0995.lme.st.com (10.75.127.48) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Fri, 31 Jan
+ 2020 17:13:25 +0100
+Subject: Re: [PATCH v3 1/2] dt-bindings: usb: dwc2: add support for STM32MP15
+ SoCs USB OTG HS and FS
+To:     Felipe Balbi <balbi@kernel.org>,
+        Minas Harutyunyan <hminas@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: Re: [PATCH v6 0/5] usb: xhci: Add support for Renesas USB controllers
-In-Reply-To: <64340358-6682-4ae0-9c06-d72d5a4ff259@linux.intel.com>
-Message-ID: <Pine.LNX.4.44L0.2001311045470.1577-100000@iolanthe.rowland.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>
+References: <20200124084131.23749-1-amelie.delaunay@st.com>
+ <20200124084131.23749-2-amelie.delaunay@st.com> <87imkr7nou.fsf@kernel.org>
+From:   Amelie DELAUNAY <amelie.delaunay@st.com>
+Message-ID: <c29867bd-8056-a82f-2273-101470395e78@st.com>
+Date:   Fri, 31 Jan 2020 17:13:25 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <87imkr7nou.fsf@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG6NODE1.st.com (10.75.127.16) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-31_04:2020-01-31,2020-01-31 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 30 Jan 2020, Mathias Nyman wrote:
+Hi,
 
-> I realize this can't be easily changed because usb_hcd_pci_probe() takes the
-> pci_device_id pointer as an argument, and expects id.driver_data to be a
-> HC driver pointer.
+On 1/31/20 2:36 PM, Felipe Balbi wrote:
+> Hi,
 > 
-> So this turns out to be a question for Greg and Alan:
+> Amelie Delaunay <amelie.delaunay@st.com> writes:
 > 
-> Would it make sense to change usb_hcd_pci_probe() to take a HC driver pointer
-> as an argument instead of a pointer to pci_device_id?
-> pci_device_id pointer is only used to extract the HC driver handle.
-> This way the driver_data could be used for, well, driver data.
+>> Add the specific compatible string for the DWC2 IP found in the STM32MP15
+>> SoCs.
+>> STM32MP15 SoCs uses sensing comparators to detect Vbus valid levels and
+>> ID pin state. usb33d-supply described the regulator supplying Vbus and ID
+>> sensing comparators.
+>>
+>> Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
+> 
+> This doesn't apply. dwc2 bindings is still in .txt format. I have taken
+> patch 2, though.
+>
 
-That seems like a good idea to me.  There aren't very many drivers that 
-use usb_hcd_pci_probe(); changing them all should be fairly easy.
+Thanks for taking driver patch.
 
-Alan Stern
+Rob, would you mind to take patch 1 (Yaml binding update) in your tree ?
+
+Regards,
+Amelie
 
