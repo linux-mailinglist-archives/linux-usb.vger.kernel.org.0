@@ -2,83 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F77314ED81
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 14:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA0414ED94
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 14:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728681AbgAaNhY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jan 2020 08:37:24 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:46314 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728500AbgAaNhY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 08:37:24 -0500
-Received: by mail-lj1-f194.google.com with SMTP id x14so7060817ljd.13;
-        Fri, 31 Jan 2020 05:37:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/KmFerTMrLQTt2owFkJV50/D5+cJT9X+Wd/6C7uz3Ec=;
-        b=bRRmAK9ZfpdBVFKcUBnoQye4cfhiPjwR2BAEEKodDRqQTcSnzTPUXknMU/p+W9zLAd
-         COXUIhRrDhWgLaUv8VmZG8lR3gqzh9AWP+zzQwlanFEAwce3EDYN/YwyEbiwLOXNG2YC
-         JLGdQ5e/qVux4iQewc1kZA78j+EEZm1ayOHubAkcPPrbJLOOB+8kMeE4zvyV2rEY5sl0
-         fuW678gvn0nJCI+Ykl0K04gw3+ANpa5aCwwzN924sGuCYFZxFTm4hykTwDRKUB7D17WS
-         umFyDt5kOcl9CHTXBxBE3H6QVIfjZNyAeeVs7L2KXoxmTxjWXZuyzMQGsxB1qi86h72h
-         D5PQ==
-X-Gm-Message-State: APjAAAV+eH/e3mSz+PSBVT1L1EScYrphSbJe6ksoqn5BHz50Q6speELd
-        XRFfSJAeN2FvQzaLstd3RWI=
-X-Google-Smtp-Source: APXvYqxOCliooekvLeL52WUPxjK2FtRWB9QFwu7qunXvZLWFKp1TSq8LfW0dNc9qdr/aRPTNJkM+NA==
-X-Received: by 2002:a2e:3609:: with SMTP id d9mr6069080lja.188.1580477842351;
-        Fri, 31 Jan 2020 05:37:22 -0800 (PST)
-Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
-        by smtp.gmail.com with ESMTPSA id h19sm4736692ljl.57.2020.01.31.05.37.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jan 2020 05:37:21 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@kernel.org>)
-        id 1ixWUA-0005cm-DW; Fri, 31 Jan 2020 14:37:26 +0100
-Date:   Fri, 31 Jan 2020 14:37:26 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Hillf Danton <hdanton@sina.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
+        id S1728763AbgAaNlc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jan 2020 08:41:32 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:35460 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728752AbgAaNlb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 08:41:31 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00VDc8Oh018434;
+        Fri, 31 Jan 2020 13:41:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2019-08-05;
+ bh=fRv6nSdD+7TwnjcbDVjABJLy48Vs5zG5zSY2q7qXhMM=;
+ b=HY5JHAEqrx0Dq85hL91OO3mRXUHGrqPmtChDkK5sZ7pGfG9UbCYSrnSEVs9NIBNBVr7B
+ EvtR+mu96aoyIwHT5HbYvkxRbjluX65gk9SvxMuscoz/7O843EWXexuhVybF6zZ4LTCl
+ dqzxW3F+1hRE0Z+pn9Vt2zavcr2gmKMrQAbKeWQsYYZXt3XOKmawPnz5aDjnCgOdRjxv
+ OZ/edcQcOgMqql5G2iRwO+w9b+ANBXcxG5yPkGxRHY/9oY/ZDBduHn7501bnc5xXAJAS
+ enFvPCw3g8gredgOhFecsptATzUBsbGB9tTVfpKlLycXhDTnpb9o2XbKhA5xH3S0R2kq 5A== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 2xrd3uteyw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 31 Jan 2020 13:41:19 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00VDcj5p178688;
+        Fri, 31 Jan 2020 13:39:18 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 2xv8nr0cpu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 31 Jan 2020 13:39:18 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 00VDdGkk020706;
+        Fri, 31 Jan 2020 13:39:16 GMT
+Received: from kadam (/129.205.23.165)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 31 Jan 2020 05:39:15 -0800
+Date:   Fri, 31 Jan 2020 16:39:07 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     gregkh@linuxfoundation.org, Alan Stern <stern@rowland.harvard.edu>,
         syzbot <syzbot+1bc2c2afd44f820a669f@syzkaller.appspotmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        ingrassia@epigenesys.com, LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+        andreyknvl@google.com, ingrassia@epigenesys.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Subject: Re: [PATCH] usb: core: urb: change a dev_WARN() to dev_err() for
  syzbot
-Message-ID: <20200131133726.GE10381@localhost>
+Message-ID: <20200131133907.GG11068@kadam>
 References: <00000000000095e1d8059d4675ac@google.com>
- <20200131090510.7112-1-hdanton@sina.com>
- <20200131101644.GE11068@kadam>
- <CACT4Y+YmUBUzZQNrHZtCV-LDxvmgoJtaoPYYP9OgRpAa59qF-g@mail.gmail.com>
+ <20200131050651.hlq27kehtir3agf2@kili.mountain>
+ <20200131133004.GD10381@localhost>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACT4Y+YmUBUzZQNrHZtCV-LDxvmgoJtaoPYYP9OgRpAa59qF-g@mail.gmail.com>
+In-Reply-To: <20200131133004.GD10381@localhost>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9516 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-2001310118
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9516 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-2001310118
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 31, 2020 at 12:19:39PM +0100, Dmitry Vyukov wrote:
- 
-> I see lots of people also mention panic_on_warn in the context of
-> these reports. panic_on_warn here is only a red herring. It really
-> does not change anything. We could remove it, but still report
-> WARNINGs. But syzkaller also reports some things that don't panic
-> anyway. This is really about the criteria for kernel bug vs non-bug
-> (something that needs to be reported or not).
+On Fri, Jan 31, 2020 at 02:30:04PM +0100, Johan Hovold wrote:
+> > Reported-by: syzbot+1bc2c2afd44f820a669f@syzkaller.appspotmail.com
+> > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > ---
+> > 
+> >  drivers/usb/core/urb.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+> > index da923ec17612..0980c1d2253d 100644
+> > --- a/drivers/usb/core/urb.c
+> > +++ b/drivers/usb/core/urb.c
+> > @@ -475,7 +475,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
+> >  
+> >  	/* Check that the pipe's type matches the endpoint's type */
+> >  	if (usb_urb_ep_type_check(urb))
+> > -		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x != type %x\n",
+> > +		dev_err(&dev->dev, "BOGUS urb xfer, pipe %x != type %x\n",
+> >  			usb_pipetype(urb->pipe), pipetypes[xfertype]);
+> >  
+> >  	/* Check against a simple/standard policy */
+> 
+> It seems this change would just be papering over these driver bugs. The
+> dev_WARN() is there in the first place to allow us to catch them.
+> 
+> Even if it takes some work, it should be doable to track down and add
+> the missing sanity checks to the drivers that lack them. Some have
+> already been fixed, and I have some more pending patches to fix or add
+> helpers to simplify fixing the remaining ones.
 
-Mentioning panic_on_warn is relevant to determine whether a fix needs to
-be backported or not. Some of the bugs in question are mostly benign in
-the sense that they are unlikely to crash your machine, but we'd still
-want them in in stable due to panic_on_warn and automatic testing.
+Ah, fine.  I misunderstood what the warning message was about.
 
-Johan
+regards,
+dan carpenter
+
