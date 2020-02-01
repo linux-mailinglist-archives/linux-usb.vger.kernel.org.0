@@ -2,118 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6049114F79A
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Feb 2020 12:21:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97AAE14F800
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Feb 2020 14:58:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726385AbgBALUt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Feb 2020 06:20:49 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:4717 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726265AbgBALUt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Feb 2020 06:20:49 -0500
-X-UUID: ff97da01dd944c2c9f0feda24c8c3132-20200201
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=XTEY6dMzjjkyr9jLk6HV6IbqAj2VEs2vvVsCYlO1zCo=;
-        b=okgZ6fLQhJowbyiwEa9oqF6V0EM8nHcd6fUReOIUAHLh9aMwO41MwLkvJyJ+PcDmG2PeGaFSoKMaBeciMpt+/YB8XPq2nxr175dBiTaVGXF9EDUrD+uZaQUyhCO1KaduCjEoxQiGaN3r6vWpa8VENhlB2KrDb3R8rf9OSCN/M88=;
-X-UUID: ff97da01dd944c2c9f0feda24c8c3132-20200201
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1575815744; Sat, 01 Feb 2020 19:20:40 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Sat, 1 Feb 2020 19:20:01 +0800
-Received: from [172.21.77.33] (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Sat, 1 Feb 2020 19:18:14 +0800
-Message-ID: <1580556039.10835.3.camel@mtkswgap22>
-Subject: Re: [PATCH] xhci-mtk: Fix NULL pointer dereference with xhci_irq()
- for shared_hcd
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-CC:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Chunfeng Yun" <chunfeng.yun@mediatek.com>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Sriharsha Allenki <sallenki@codeaurora.org>
-Date:   Sat, 1 Feb 2020 19:20:39 +0800
-In-Reply-To: <08f69bab-2ada-d6ab-7bf7-d960e9f148a0@linux.intel.com>
-References: <1579246910-22736-1-git-send-email-macpaul.lin@mediatek.com>
-         <08f69bab-2ada-d6ab-7bf7-d960e9f148a0@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S1726593AbgBAN6g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Feb 2020 08:58:36 -0500
+Received: from mout.gmx.net ([212.227.15.19]:38927 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726505AbgBAN6g (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 1 Feb 2020 08:58:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1580565515;
+        bh=DMmmkxPfvWTgnefRIWa5E6yg7hEUmkhU2X3UrLbt2Io=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=QFytIJRrUAVV/0hxPlwvObvVMv3e1s5HuYGlC4WKJv4uhbubtl3l9Al23W5No2jEV
+         X7jbeFDfOc8+FeWwlpz97fiPvRdIHRivwx/kN1n6YIOt60Ybq79m5cOaXrNWTuWbjG
+         Ap9ZYJbEMRB2EIUrHEUIBbjpQGe16GWB7fA03zcU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from acme7.acmenet ([186.48.107.113]) by mail.gmx.com (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MSbxD-1j8jDP1tdZ-00SwSX; Sat, 01
+ Feb 2020 14:58:35 +0100
+Date:   Sat, 1 Feb 2020 10:58:29 -0300
+From:   edes <edes@gmx.net>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: kernel 5.4.11: problems with usb sound cards
+Message-ID: <20200201105829.5682c887@acme7.acmenet>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:vuU4VgO+oL3qiyvbR1bfKwce0AWh0pUYaLxsanAHBIYHsToaNtS
+ 4ta/hUK74/cFScNgZJpGy/QpdbRQOGgul0ERzd1f9aHesbhVgR5C8FeS1VDG6g3MS+7SANr
+ a6K4TyR3KQEBpW2kFK9TOSh/U+36pFFumFNwjXSR95F7kVWrwFhcV3AKhHbC8ajwRQjLGa7
+ kJqWPbhl7zcq+A3SrYWcA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:vcN37QN5H0A=:+or3ihHr6Jy/Iq4JiEjTjv
+ nil2ECcda9XpPCj0P/Pa0Kw2NwW5sXF5yFah/04u/n7Ydy7bfLXz/Hi9k4aPRceidrOwxXWCf
+ I5SgipR2cYjcIXuLdyhDqwTr719GmbzWqZNyoqU9kVca0UaCVvctpV5l863XDvtwbyFZApdID
+ 0xADnyGeoXKzIWgV9lFSBiDPGQRBACth+x+bAE2ZNNhN2vdvIJpTfN7/pXsf2upOtjdUoEeBd
+ G229RKHErw+BcNx+HHTfgUWngBd+VtF8UV8bzp0vwSgioz6rTvUnuEUu6m2x19h3vYyx89CPE
+ RxJ0U3ehmFTRlvYtkWFZ2xOGtVhn2AtZYc+RLlk1yOKHCS7wKtNEQoO366uwFx29sBWiIkwvC
+ RvqY/5dNNVZRmEBKy08BBy+aJTSvaTbjCMGrDaVBvm7VhIo7EGYr7/hcLjJtSSmAjdAvT5/Mo
+ pTfvT29fv0iYZCtEgdT7GWyFCm7zkCcEMblA8M2/OMZ9roBI4IQ94FQxnpKss0fpHKdBQp8GD
+ hhm31jMsdbVpWAQaP9cuEU2RUGErNYQ6i8LYcShZhVmcFjifIz2Qn70R+f+8vYeiKrcF/VHbV
+ 6/oCeul9xkE1NloTDjB+YLVMAqG7N+wcEWC3M+P3hfHGrwD7Lur8jN5yPqk5mnXRf9VgzLGe+
+ BWy5yhVqCVO1Y1xvgf4jMCTkqKQntuiinjMCW9q4ZJ1SQ3goI8xopW7biR8XyeWf4mK7oy+1L
+ +79Poy5JnpgMQBSRMFLNFRzQZ92WiYuS1pTiXrYJyxH4GQqaWrfr8+q/GCOXK0K4UjtRnN5qD
+ CUCOHFCL6OH3wUvrwg075a5HDiUy6dRWpN3b8n57No8lONhyx0Fm3FICfNX72IQC51TFSCbWO
+ IGQtwBUQkqUDQ7TiJ1oaVMU086jYioCUqwGGMPH3qy8oTXI4HSRTT0tyJR0dSvWbejHcVGUKK
+ SPdRg/FNsJCLxxa0vLi2ftSBLMNifYhD3yBbk/q9n80O4X6Dyv+eAqmBzxoLG/+d/4K2hr8JB
+ 7mg9IlBsvhEweROv+dX/D5IFpzF26pxzGb+IM4sJ5MVveKfLOGhnb8hOE/9ntwE8MtDXDa00K
+ wA2GfjWrobVNskyHEkPj276uo1GQqf4rwQXiYTylEk3KL7XOvH6DRSIzV0Ve3x7HrGyz4+kAf
+ xMrwqU67TGmWxi4XQdrflwfpFBeR9jmlQ/bBW0KdS6t5NZD57HtEUChZCJAJboAhMpVOol3el
+ d0MDTFlUlMjN3eslJ
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gRnJpLCAyMDIwLTAxLTMxIGF0IDE2OjUwICswMjAwLCBNYXRoaWFzIE55bWFuIHdyb3RlOg0K
-PiBPbiAxNy4xLjIwMjAgOS40MSwgTWFjcGF1bCBMaW4gd3JvdGU6DQo+ID4gQWNjb3JkaW5nIHRv
-IE5VTEwgcG9pbnRlciBmaXg6IGh0dHBzOi8vdGlueXVybC5jb20vdXFmdDVyYQ0KPiA+IHhoY2k6
-IEZpeCBOVUxMIHBvaW50ZXIgZGVyZWZlcmVuY2Ugd2l0aCB4aGNpX2lycSgpIGZvciBzaGFyZWRf
-aGNkDQo+ID4gVGhlIHNpbWlsYXIgaXNzdWUgaGFzIGFsc28gYmVlbiBmb3VuZCBpbiBRQyBhY3Rp
-dml0aWVzIGluIE1lZGlhdGVrLg0KPiA+IA0KPiA+IEhlcmUgcXVvdGUgdGhlIGRlc2NyaXB0aW9u
-IGZyb20gdGhlIHJlZmVyZW5jZWQgcGF0Y2ggYXMgZm9sbG93cy4NCj4gPiAiQ29tbWl0ICgiZjA2
-ODA5MDQyNmVhIHhoY2k6IEZpeCBsZWFraW5nIFVTQjMgc2hhcmVkX2hjZA0KPiA+IGF0IHhoY2kg
-cmVtb3ZhbCIpIHNldHMgeGhjaV9zaGFyZWRfaGNkIHRvIE5VTEwgd2l0aG91dA0KPiA+IHN0b3Bw
-aW5nIHhoY2kgaG9zdC4gVGhpcyByZXN1bHRzIGludG8gYSByYWNlIGNvbmRpdGlvbg0KPiA+IHdo
-ZXJlIHNoYXJlZF9oY2QgKHN1cGVyIHNwZWVkIHJvb3RodWIpIHJlbGF0ZWQgaW50ZXJydXB0cw0K
-PiA+IGFyZSBiZWluZyBoYW5kbGVkIHdpdGggeGhjaV9pcnEgaGFwcGVucyB3aGVuIHRoZQ0KPiA+
-IHhoY2lfcGxhdF9yZW1vdmUgaXMgY2FsbGVkIGFuZCBzaGFyZWRfaGNkIGlzIHNldCB0byBOVUxM
-Lg0KPiA+IEZpeCB0aGlzIGJ5IHNldHRpbmcgdGhlIHNoYXJlZF9oY2QgdG8gTlVMTCBvbmx5IGFm
-dGVyIHRoZQ0KPiA+IGNvbnRyb2xsZXIgaXMgaGFsdGVkIGFuZCBubyBpbnRlcnJ1cHRzIGFyZSBn
-ZW5lcmF0ZWQuIg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IFNyaWhhcnNoYSBBbGxlbmtpIDxz
-YWxsZW5raUBjb2RlYXVyb3JhLm9yZz4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBNYWNwYXVsIExpbiA8
-bWFjcGF1bC5saW5AbWVkaWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+ICAgZHJpdmVycy91c2IvaG9z
-dC94aGNpLW10ay5jIHwgMiArLQ0KPiA+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCsp
-LCAxIGRlbGV0aW9uKC0pDQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2hvc3Qv
-eGhjaS1tdGsuYyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGsuYw0KPiA+IGluZGV4IGIxOGE2
-YmFlZjIwNC4uYzIyN2M2N2Y1ZGM1IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvdXNiL2hvc3Qv
-eGhjaS1tdGsuYw0KPiA+ICsrKyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGsuYw0KPiA+IEBA
-IC01OTMsMTEgKzU5MywxMSBAQCBzdGF0aWMgaW50IHhoY2lfbXRrX3JlbW92ZShzdHJ1Y3QgcGxh
-dGZvcm1fZGV2aWNlICpkZXYpDQo+ID4gICAJc3RydWN0IHVzYl9oY2QgICpzaGFyZWRfaGNkID0g
-eGhjaS0+c2hhcmVkX2hjZDsNCj4gPiAgIA0KPiA+ICAgCXVzYl9yZW1vdmVfaGNkKHNoYXJlZF9o
-Y2QpOw0KPiA+IC0JeGhjaS0+c2hhcmVkX2hjZCA9IE5VTEw7DQo+ID4gICAJZGV2aWNlX2luaXRf
-d2FrZXVwKCZkZXYtPmRldiwgZmFsc2UpOw0KPiA+ICAgDQo+ID4gICAJdXNiX3JlbW92ZV9oY2Qo
-aGNkKTsNCj4gPiAgIAl1c2JfcHV0X2hjZChzaGFyZWRfaGNkKTsNCj4gPiArCXhoY2ktPnNoYXJl
-ZF9oY2QgPSBOVUxMOw0KPiA+ICAgCXVzYl9wdXRfaGNkKGhjZCk7DQo+ID4gICAJeGhjaV9tdGtf
-c2NoX2V4aXQobXRrKTsNCj4gPiAgIAl4aGNpX210a19jbGtzX2Rpc2FibGUobXRrKTsNCj4gPiAN
-Cj4gDQo+IENvdWxkIHlvdSBzaGFyZSBkZXRhaWxzIG9mIHRoZSBOVUxMIHBvaW50ZXIgZGVyZWZl
-cmVuY2UsIChiYWNrdHJhY2UpLg0KDQpUaGlzIGJ1ZyB3YXMgZm91bmQgYnkgb3VyIFFBIHN0YWZm
-IHdoaWxlIGRvaW5nIDUwMCB0aW1lcyBwbHVnLWluIGFuZA0KcGx1Zy1vdXQgZGV2aWNlcy4gVGhl
-IGJhY2t0cmFjZSBJIGhhdmUgd2FzIHJlY29yZGVkIGJ5IFFBIGFuZCBJIGRpZG4ndA0KcmVwcm9k
-dWNlIHRoaXMgaXNzdWUgb24gbXkgb3duIGVudmlyb25tZW50LiBIb3dldmVyLCBhZnRlciBhcHBs
-aWVkIHRoaXMNCnBhdGNoIHRoZSBpc3N1ZSBzZWVtcyByZXNvbHZlLiBIZXJlIGlzIHRoZSBiYWNr
-dHJhY2U6DQoNCkV4Y2VwdGlvbiBDbGFzczogS2VybmVsIChLRSkNClBDIGlzIGF0IFs8ZmZmZmZm
-ODAwOGNjY2JjMD5dIHhoY2lfaXJxKzB4NzI4LzB4MjM2NA0KTFIgaXMgYXQgWzxmZmZmZmY4MDA4
-Y2NjNzg4Pl0geGhjaV9pcnErMHgyZjAvMHgyMzY0DQoNCkN1cnJlbnQgRXhlY3V0aW5nIFByb2Nl
-c3M6DQpbaXB0YWJsZXMsIDg1OV1bbmV0ZGFnZW50LCA3NzBdDQoNCkJhY2t0cmFjZToNCls8ZmZm
-ZmZmODAwODBlYWQ1OD5dIF9fYXRvbWljX25vdGlmaWVyX2NhbGxfY2hhaW4rMHhhOC8weDEzMCAg
-IA0KWzxmZmZmZmY4MDA4MGViNmQ0Pl0gbm90aWZ5X2RpZSsweDg0LzB4YWMgICAgICANCls8ZmZm
-ZmZmODAwODA4ZTg3ND5dIGRpZSsweDFkOC8weDNiOCAgIA0KWzxmZmZmZmY4MDA4MGE4OWIwPl0g
-X19kb19rZXJuZWxfZmF1bHQrMHgxNzgvMHgxODggICAgIA0KWzxmZmZmZmY4MDA4MGE4MWI0Pl0g
-ZG9fcGFnZV9mYXVsdCsweDQ0LzB4M2IwICANCls8ZmZmZmZmODAwODBhODExYz5dIGRvX3RyYW5z
-bGF0aW9uX2ZhdWx0KzB4NDQvMHg5OCAgICANCls8ZmZmZmZmODAwODA4MGUwOD5dIGRvX21lbV9h
-Ym9ydCsweDRjLzB4MTI4ICAgDQpbPGZmZmZmZjgwMDgwODMyZDA+XSBlbDFfZGErMHgyNC8weDNj
-ICANCls8ZmZmZmZmODAwOGNjY2JjMD5dIHhoY2lfaXJxKzB4NzI4LzB4MjM2NCAgICAgDQpbPGZm
-ZmZmZjgwMDhjOTg4MDQ+XSB1c2JfaGNkX2lycSsweDJjLzB4NDQgICAgIA0KWzxmZmZmZmY4MDA4
-MTc5YmIwPl0gX19oYW5kbGVfaXJxX2V2ZW50X3BlcmNwdSsweDI2Yy8weDRhNCAgICAgDQpbPGZm
-ZmZmZjgwMDgxNzllYzg+XSBoYW5kbGVfaXJxX2V2ZW50KzB4NWMvMHhkMA0KWzxmZmZmZmY4MDA4
-MTdlM2MwPl0gaGFuZGxlX2Zhc3Rlb2lfaXJxKzB4MTBjLzB4MWUwICAgIA0KWzxmZmZmZmY4MDA4
-MTc4N2IwPl0gX19oYW5kbGVfZG9tYWluX2lycSsweDMyYy8weDczOCAgIA0KWzxmZmZmZmY4MDA4
-MDgxNTljPl0gZ2ljX2hhbmRsZV9pcnErMHgxNzQvMHgxYzQNCls8ZmZmZmZmODAwODA4M2NmOD5d
-IGVsMF9pcnFfbmFrZWQrMHg1MC8weDVjICAgDQpbPGZmZmZmZmZmZmZmZmZmZmY+XSAweGZmZmZm
-ZmZmZmZmZmZmZmYNCg0KPiBUaGUgVVNCMyBoY2QgaXMgYWxyZWFkeSByZW1vdmVkIHdoZW4geGhj
-aS0+c2hhcmVkX2hjZCBpcyBzZXQgdG8gTlVMTC4NCj4gV2UgbWlnaHQgd2FudCB0byBhZGQgc29t
-ZSBjaGVja3MgdG8gbWFrZSBzdXJlIHdlIGFyZSBub3QgdXNpbmcgdGhlIHJlbW92ZWQNCj4gaGNk
-IGFueW1vcmUgaW4gdGhhdCBjb2RlcGF0aCBhbnltb3JlLg0KPiANCj4gLU1hdGhpYXMNCg0KVGhh
-bmtzLA0KTWFjcGF1bCBMaW4NCg0K
+Hello, list, I hope this is the right place to post this problem.
+
+Changes introduced in 5.4.11 (seemingly, in drivers/usb/core/config.c)
+cause problems with at least some models of USB sound cards.
+
+I have a Sound Devices USBPre2, a high quality sound card that until
+5.4.10 always worked perfectly out of the box as a standard USB audio
+device.
+
+Beginning with 5.4.11 and up to 5.5.0, when the sound card is connected,
+dmesg shows:
+
+[ 1310.743135] usb 3-10.3: new high-speed USB device number 6 using
+xhci_hcd
+[ 1310.755472] usb 3-10.3: config 1 interface 2 altsetting 1 has
+a duplicate endpoint with address 0x85, skipping
+[ 1310.755474] usb 3-10.3: config 1 interface 2 altsetting 2 has a
+duplicate endpoint with address 0x85, skipping
+[ 1310.755852] usb 3-10.3: New USB device found, idVendor=3D0926,
+idProduct=3D0202, bcdDevice=3D 1.00
+[ 1310.755853] usb 3-10.3: New USB device strings: Mfr=3D1, Product=3D2,
+SerialNumber=3D3
+[ 1310.755854] usb 3-10.3: Product: USBPre2
+[ 1310.755855] usb 3-10.3: Manufacturer: Sound Devices
+[ 1310.755855] usb 3-10.3: SerialNumber: HB1116132005
+[ 1310.756803] usb 3-10.3: 1:3 : UAC_AS_GENERAL descriptor not found
+[ 1310.757550] hid-generic 0003:0926:0202.0005: hiddev96: USB HID v1.01
+Device
+[Sound Devices USBPre2] on usb-0000:00:14.0-10.3/input3
+[ 1310.773161] systemd-udevd[3856]: controlC0: Process '/usr/sbin/alsactl
+restore 0' failed with exit code 99.
+
+No capture device is created under /dev/snd, and the card works only as a
+playback device.
+
+ls -l /dev/snd
+total 0
+drwxr-xr-x  2 root root       60 feb  1 10:36 by-id
+drwxr-xr-x  2 root root       60 feb  1 10:36 by-path
+crw-rw----+ 1 root audio 116,  0 feb  1 10:36 controlC0
+crw-rw----+ 1 root audio 116, 16 feb  1 10:36 pcmC0D0p
+crw-rw----+ 1 root audio 116,  1 feb  1 10:14 seq
+crw-rw----+ 1 root audio 116, 33 feb  1 10:14 timer
+
+aplay -l
+**** List of PLAYBACK Hardware Devices ****
+card 0: USBPre2 [USBPre2], device 0: USB Audio [USB Audio]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+
+
+arecord -l
+**** List of CAPTURE Hardware Devices ****
+
+
+
+
+=2D-
+
 
