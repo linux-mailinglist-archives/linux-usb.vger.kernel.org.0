@@ -2,103 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 599DC14F78B
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Feb 2020 11:36:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6049114F79A
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Feb 2020 12:21:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726336AbgBAKgU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Feb 2020 05:36:20 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:40100 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726297AbgBAKgU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Feb 2020 05:36:20 -0500
-Received: by mail-lf1-f65.google.com with SMTP id c23so6578486lfi.7
-        for <linux-usb@vger.kernel.org>; Sat, 01 Feb 2020 02:36:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=qaP1Hv45YWUmmbRN6rGXef2D65ZwxNd7PqOjbNh9QUQ=;
-        b=l0Ty91zyRFdvoAihhZMaA4gLQMxuc/ja/Wt63AVgGJsCfahsR73rqySM0ITT2DpOTG
-         DMJt9rNntpDPXnBsAQ5vhBM9tJhLFL0KqjK9v7SyjCxw7nt0TUFXNUB+wEFHOAQm3xbC
-         Fb4QiNSW13b8ez24jrLllwlVUwsFChVusR6FM9YfvuwrQ036q6tYD76sBL9ATYBFeeXX
-         qFiqMikS0S7/Nm827rfgZDvpg0scquGLgdEbYTUJ8fDpryVkh6npqwYkhFtI25XU161I
-         ysBW7ZkgVcagk01NbghFfaFVnwdZNlxHBfpePdMtQNN+BTrITMVOXLeMaKIf+VQoe3VS
-         qSKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=qaP1Hv45YWUmmbRN6rGXef2D65ZwxNd7PqOjbNh9QUQ=;
-        b=p0mz2DW/uZUJ4Asn79KkTw52qzBX4an8Q8TIpEP/AvIzkpDvJhMlurKLIN6/sGwRJu
-         y1pnpY4Ft1VMr0cXZNlbe0izc4EWiYQyi5kuD6htOsXaOsMhHPN8L1e9QxyadaYocEht
-         DzsWCoL47EtH5vGURUtWmqPgu0oBbEQOau+vawdSEOKoxXUMgnJc/3w+FA5MGYco5hgE
-         H782Gbtx1UsjlrAriMpzQDUpEUwRWm/krHEMTkZFCl+qDL3kwe1mosDtielV2OmKrJHc
-         NoWaP6lnSSJ5gjId+wvJd/JbgWLnyze7azY7zsopcpnVKUZDluFAikFE5Vu4IcUFTAhA
-         OJFA==
-X-Gm-Message-State: APjAAAVfMSAIz2/jT5yeiny6VcjfzYGAckmzBrvAQiSsQ8TYXvX3zXmn
-        ZorT6PDx/lV15fGR3ws7mPTO1vImHSU=
-X-Google-Smtp-Source: APXvYqx1m44aON1Ys/F6C7uc+7WSAE3mYAXFTbwURipIN+5UNzJuWiSbcUMV8wcVGl1rWH+8FqcG4A==
-X-Received: by 2002:ac2:44d5:: with SMTP id d21mr7464476lfm.188.1580553377440;
-        Sat, 01 Feb 2020 02:36:17 -0800 (PST)
-Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id w9sm6228264ljh.106.2020.02.01.02.36.15
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 01 Feb 2020 02:36:16 -0800 (PST)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        id S1726385AbgBALUt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 Feb 2020 06:20:49 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:4717 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726265AbgBALUt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Feb 2020 06:20:49 -0500
+X-UUID: ff97da01dd944c2c9f0feda24c8c3132-20200201
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=XTEY6dMzjjkyr9jLk6HV6IbqAj2VEs2vvVsCYlO1zCo=;
+        b=okgZ6fLQhJowbyiwEa9oqF6V0EM8nHcd6fUReOIUAHLh9aMwO41MwLkvJyJ+PcDmG2PeGaFSoKMaBeciMpt+/YB8XPq2nxr175dBiTaVGXF9EDUrD+uZaQUyhCO1KaduCjEoxQiGaN3r6vWpa8VENhlB2KrDb3R8rf9OSCN/M88=;
+X-UUID: ff97da01dd944c2c9f0feda24c8c3132-20200201
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1575815744; Sat, 01 Feb 2020 19:20:40 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Sat, 1 Feb 2020 19:20:01 +0800
+Received: from [172.21.77.33] (172.21.77.33) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Sat, 1 Feb 2020 19:18:14 +0800
+Message-ID: <1580556039.10835.3.camel@mtkswgap22>
+Subject: Re: [PATCH] xhci-mtk: Fix NULL pointer dereference with xhci_irq()
+ for shared_hcd
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+CC:     Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@ti.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: composite: Inform controller driver of self-powered
-In-Reply-To: <87bd6e525dbc59cd636c3cf5a4fa1758e9da6727.1580525268.git.thinhn@synopsys.com>
-References: <87bd6e525dbc59cd636c3cf5a4fa1758e9da6727.1580525268.git.thinhn@synopsys.com>
-Date:   Sat, 01 Feb 2020 12:36:05 +0200
-Message-ID: <877e167fxm.fsf@kernel.org>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Chunfeng Yun" <chunfeng.yun@mediatek.com>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Sriharsha Allenki <sallenki@codeaurora.org>
+Date:   Sat, 1 Feb 2020 19:20:39 +0800
+In-Reply-To: <08f69bab-2ada-d6ab-7bf7-d960e9f148a0@linux.intel.com>
+References: <1579246910-22736-1-git-send-email-macpaul.lin@mediatek.com>
+         <08f69bab-2ada-d6ab-7bf7-d960e9f148a0@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+T24gRnJpLCAyMDIwLTAxLTMxIGF0IDE2OjUwICswMjAwLCBNYXRoaWFzIE55bWFuIHdyb3RlOg0K
+PiBPbiAxNy4xLjIwMjAgOS40MSwgTWFjcGF1bCBMaW4gd3JvdGU6DQo+ID4gQWNjb3JkaW5nIHRv
+IE5VTEwgcG9pbnRlciBmaXg6IGh0dHBzOi8vdGlueXVybC5jb20vdXFmdDVyYQ0KPiA+IHhoY2k6
+IEZpeCBOVUxMIHBvaW50ZXIgZGVyZWZlcmVuY2Ugd2l0aCB4aGNpX2lycSgpIGZvciBzaGFyZWRf
+aGNkDQo+ID4gVGhlIHNpbWlsYXIgaXNzdWUgaGFzIGFsc28gYmVlbiBmb3VuZCBpbiBRQyBhY3Rp
+dml0aWVzIGluIE1lZGlhdGVrLg0KPiA+IA0KPiA+IEhlcmUgcXVvdGUgdGhlIGRlc2NyaXB0aW9u
+IGZyb20gdGhlIHJlZmVyZW5jZWQgcGF0Y2ggYXMgZm9sbG93cy4NCj4gPiAiQ29tbWl0ICgiZjA2
+ODA5MDQyNmVhIHhoY2k6IEZpeCBsZWFraW5nIFVTQjMgc2hhcmVkX2hjZA0KPiA+IGF0IHhoY2kg
+cmVtb3ZhbCIpIHNldHMgeGhjaV9zaGFyZWRfaGNkIHRvIE5VTEwgd2l0aG91dA0KPiA+IHN0b3Bw
+aW5nIHhoY2kgaG9zdC4gVGhpcyByZXN1bHRzIGludG8gYSByYWNlIGNvbmRpdGlvbg0KPiA+IHdo
+ZXJlIHNoYXJlZF9oY2QgKHN1cGVyIHNwZWVkIHJvb3RodWIpIHJlbGF0ZWQgaW50ZXJydXB0cw0K
+PiA+IGFyZSBiZWluZyBoYW5kbGVkIHdpdGggeGhjaV9pcnEgaGFwcGVucyB3aGVuIHRoZQ0KPiA+
+IHhoY2lfcGxhdF9yZW1vdmUgaXMgY2FsbGVkIGFuZCBzaGFyZWRfaGNkIGlzIHNldCB0byBOVUxM
+Lg0KPiA+IEZpeCB0aGlzIGJ5IHNldHRpbmcgdGhlIHNoYXJlZF9oY2QgdG8gTlVMTCBvbmx5IGFm
+dGVyIHRoZQ0KPiA+IGNvbnRyb2xsZXIgaXMgaGFsdGVkIGFuZCBubyBpbnRlcnJ1cHRzIGFyZSBn
+ZW5lcmF0ZWQuIg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IFNyaWhhcnNoYSBBbGxlbmtpIDxz
+YWxsZW5raUBjb2RlYXVyb3JhLm9yZz4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBNYWNwYXVsIExpbiA8
+bWFjcGF1bC5saW5AbWVkaWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+ICAgZHJpdmVycy91c2IvaG9z
+dC94aGNpLW10ay5jIHwgMiArLQ0KPiA+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCsp
+LCAxIGRlbGV0aW9uKC0pDQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2hvc3Qv
+eGhjaS1tdGsuYyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGsuYw0KPiA+IGluZGV4IGIxOGE2
+YmFlZjIwNC4uYzIyN2M2N2Y1ZGM1IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvdXNiL2hvc3Qv
+eGhjaS1tdGsuYw0KPiA+ICsrKyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGsuYw0KPiA+IEBA
+IC01OTMsMTEgKzU5MywxMSBAQCBzdGF0aWMgaW50IHhoY2lfbXRrX3JlbW92ZShzdHJ1Y3QgcGxh
+dGZvcm1fZGV2aWNlICpkZXYpDQo+ID4gICAJc3RydWN0IHVzYl9oY2QgICpzaGFyZWRfaGNkID0g
+eGhjaS0+c2hhcmVkX2hjZDsNCj4gPiAgIA0KPiA+ICAgCXVzYl9yZW1vdmVfaGNkKHNoYXJlZF9o
+Y2QpOw0KPiA+IC0JeGhjaS0+c2hhcmVkX2hjZCA9IE5VTEw7DQo+ID4gICAJZGV2aWNlX2luaXRf
+d2FrZXVwKCZkZXYtPmRldiwgZmFsc2UpOw0KPiA+ICAgDQo+ID4gICAJdXNiX3JlbW92ZV9oY2Qo
+aGNkKTsNCj4gPiAgIAl1c2JfcHV0X2hjZChzaGFyZWRfaGNkKTsNCj4gPiArCXhoY2ktPnNoYXJl
+ZF9oY2QgPSBOVUxMOw0KPiA+ICAgCXVzYl9wdXRfaGNkKGhjZCk7DQo+ID4gICAJeGhjaV9tdGtf
+c2NoX2V4aXQobXRrKTsNCj4gPiAgIAl4aGNpX210a19jbGtzX2Rpc2FibGUobXRrKTsNCj4gPiAN
+Cj4gDQo+IENvdWxkIHlvdSBzaGFyZSBkZXRhaWxzIG9mIHRoZSBOVUxMIHBvaW50ZXIgZGVyZWZl
+cmVuY2UsIChiYWNrdHJhY2UpLg0KDQpUaGlzIGJ1ZyB3YXMgZm91bmQgYnkgb3VyIFFBIHN0YWZm
+IHdoaWxlIGRvaW5nIDUwMCB0aW1lcyBwbHVnLWluIGFuZA0KcGx1Zy1vdXQgZGV2aWNlcy4gVGhl
+IGJhY2t0cmFjZSBJIGhhdmUgd2FzIHJlY29yZGVkIGJ5IFFBIGFuZCBJIGRpZG4ndA0KcmVwcm9k
+dWNlIHRoaXMgaXNzdWUgb24gbXkgb3duIGVudmlyb25tZW50LiBIb3dldmVyLCBhZnRlciBhcHBs
+aWVkIHRoaXMNCnBhdGNoIHRoZSBpc3N1ZSBzZWVtcyByZXNvbHZlLiBIZXJlIGlzIHRoZSBiYWNr
+dHJhY2U6DQoNCkV4Y2VwdGlvbiBDbGFzczogS2VybmVsIChLRSkNClBDIGlzIGF0IFs8ZmZmZmZm
+ODAwOGNjY2JjMD5dIHhoY2lfaXJxKzB4NzI4LzB4MjM2NA0KTFIgaXMgYXQgWzxmZmZmZmY4MDA4
+Y2NjNzg4Pl0geGhjaV9pcnErMHgyZjAvMHgyMzY0DQoNCkN1cnJlbnQgRXhlY3V0aW5nIFByb2Nl
+c3M6DQpbaXB0YWJsZXMsIDg1OV1bbmV0ZGFnZW50LCA3NzBdDQoNCkJhY2t0cmFjZToNCls8ZmZm
+ZmZmODAwODBlYWQ1OD5dIF9fYXRvbWljX25vdGlmaWVyX2NhbGxfY2hhaW4rMHhhOC8weDEzMCAg
+IA0KWzxmZmZmZmY4MDA4MGViNmQ0Pl0gbm90aWZ5X2RpZSsweDg0LzB4YWMgICAgICANCls8ZmZm
+ZmZmODAwODA4ZTg3ND5dIGRpZSsweDFkOC8weDNiOCAgIA0KWzxmZmZmZmY4MDA4MGE4OWIwPl0g
+X19kb19rZXJuZWxfZmF1bHQrMHgxNzgvMHgxODggICAgIA0KWzxmZmZmZmY4MDA4MGE4MWI0Pl0g
+ZG9fcGFnZV9mYXVsdCsweDQ0LzB4M2IwICANCls8ZmZmZmZmODAwODBhODExYz5dIGRvX3RyYW5z
+bGF0aW9uX2ZhdWx0KzB4NDQvMHg5OCAgICANCls8ZmZmZmZmODAwODA4MGUwOD5dIGRvX21lbV9h
+Ym9ydCsweDRjLzB4MTI4ICAgDQpbPGZmZmZmZjgwMDgwODMyZDA+XSBlbDFfZGErMHgyNC8weDNj
+ICANCls8ZmZmZmZmODAwOGNjY2JjMD5dIHhoY2lfaXJxKzB4NzI4LzB4MjM2NCAgICAgDQpbPGZm
+ZmZmZjgwMDhjOTg4MDQ+XSB1c2JfaGNkX2lycSsweDJjLzB4NDQgICAgIA0KWzxmZmZmZmY4MDA4
+MTc5YmIwPl0gX19oYW5kbGVfaXJxX2V2ZW50X3BlcmNwdSsweDI2Yy8weDRhNCAgICAgDQpbPGZm
+ZmZmZjgwMDgxNzllYzg+XSBoYW5kbGVfaXJxX2V2ZW50KzB4NWMvMHhkMA0KWzxmZmZmZmY4MDA4
+MTdlM2MwPl0gaGFuZGxlX2Zhc3Rlb2lfaXJxKzB4MTBjLzB4MWUwICAgIA0KWzxmZmZmZmY4MDA4
+MTc4N2IwPl0gX19oYW5kbGVfZG9tYWluX2lycSsweDMyYy8weDczOCAgIA0KWzxmZmZmZmY4MDA4
+MDgxNTljPl0gZ2ljX2hhbmRsZV9pcnErMHgxNzQvMHgxYzQNCls8ZmZmZmZmODAwODA4M2NmOD5d
+IGVsMF9pcnFfbmFrZWQrMHg1MC8weDVjICAgDQpbPGZmZmZmZmZmZmZmZmZmZmY+XSAweGZmZmZm
+ZmZmZmZmZmZmZmYNCg0KPiBUaGUgVVNCMyBoY2QgaXMgYWxyZWFkeSByZW1vdmVkIHdoZW4geGhj
+aS0+c2hhcmVkX2hjZCBpcyBzZXQgdG8gTlVMTC4NCj4gV2UgbWlnaHQgd2FudCB0byBhZGQgc29t
+ZSBjaGVja3MgdG8gbWFrZSBzdXJlIHdlIGFyZSBub3QgdXNpbmcgdGhlIHJlbW92ZWQNCj4gaGNk
+IGFueW1vcmUgaW4gdGhhdCBjb2RlcGF0aCBhbnltb3JlLg0KPiANCj4gLU1hdGhpYXMNCg0KVGhh
+bmtzLA0KTWFjcGF1bCBMaW4NCg0K
 
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
-
-> Different configuration may draw different power. Inform the controller
-> driver of the change so it can respond properly (e.g. GET_STATUS
-> request). This fixes an issue with setting MaxPower from configfs. The
-> composite driver doesn't check this value when setting self-powered.
->
-> Fixes: 88af8bbe4ef7 ("usb: gadget: the start of the configfs interface")
-> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
-
-we need a Cc stable here
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl41VJcACgkQzL64meEa
-mQZAWA//d2AG+Qrq8raumO2jWJmlPCzEz0IOb8sqt2VoMS9vZRz1LiLdOdcx9gcG
-ZwrdFrGJAuYOdKroYVOARWuLgquPP39q757jpKy2OoTI0Nz49VgnkCWvayi1TIAN
-z5xAUK8MtNs+TiUVOdkihOcJaMPXJx5VVs353djlfhhqY6u+ffLxODFCevME007D
-lwEukPsfuIpTKP1zMWlAMzq36wrpJjVlyJVijch9ueUM/EOoNSOrzzFDnnC6/g7J
-nHshKma/Y3E7CYUTcHxh5YC/4eiZWs+UtJwjpvfrB3Sg9WXHFMO2u0i8DzC7GHfZ
-I41cZmyBTfUiXG+I6b+ez1qaL+Wv76uQtC31JuxDKNQ5xImEEG4GqaU4DsHkj0hr
-cWTdD4Ad2qa1zsth3Lm2tD8OUP2HgbUvMmOdx2ixUPY2hp6e/6u/lBI3xg0jT+nt
-9zi+8PGhxy4Nmpka196vUKnj13FyhpNmnkFeBLMLnF3XpHLRXlR05952zkRzttY5
-E8x6+/JwO6Xx7FvMyeElBaO2ZKwW6X4XBWkygFzZbW4ssoo8Mn9P6TmNR3P+Cl8H
-0wOoGNnLyyiAEb2Nqk1uDcQUj0bVxwqMJBr2Fe2gDXQ0Nz2v3gvlSteI2SKjXBzR
-o/NA0RofEozr8Xi1wXUEPWR9qUSy9zMMcpfO1Xd2JqaMYx7/0CU=
-=adzA
------END PGP SIGNATURE-----
---=-=-=--
