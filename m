@@ -2,174 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C16414F4A2
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2020 23:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EDDD14F565
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Feb 2020 01:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726749AbgAaWWV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jan 2020 17:22:21 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:39985 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726505AbgAaWWN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 17:22:13 -0500
-Received: by mail-pg1-f196.google.com with SMTP id k25so4232987pgt.7;
-        Fri, 31 Jan 2020 14:22:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=i4A6iS3d4v/SDXbDNLzH3HRItLiF9tqu3vO4L3thEV4=;
-        b=efT6ccLLp725L6rmbzhCKHhoXCUWhEwmpCzY1M+jmHhTKSv68aEPvW/DqEUQIeY5Bb
-         Ha7TcJomL0rg5YLj5Xq1aukFl6aIdrkbdV4pUmRQaT2XCAY/5i5w+KLDBYQ2R4EoW4pF
-         EgBs1rHu2empMUuaQNXCM0U4M1QIurIvJubCyJxhk1IcWfsQuOADPNLu75YqMsx5OWVY
-         iR3JEiyuFMRmUNQjT2Blkz8ajOFdobI7mgOOHuTM+ZIJ3dvD9NaqVad1/tTMd76JFzLe
-         xyXREL2FrL6L8XsWZTAM3O3nmii846OgGb3o3Njc4BWIXNRW1O42+VuNFDDEiWlsvjZh
-         WVDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=i4A6iS3d4v/SDXbDNLzH3HRItLiF9tqu3vO4L3thEV4=;
-        b=Wo1dKGbsD7faLF3xuLLrowz5f91RdGEx+8mlPuqOh1T2SwCbdwUMEtNvjIkasglM3K
-         6rhnuM3MKBXilSpPjMHnQml4tJTHyEnGIKMIRRKHJrkgg3uQRjavwhU7i9UFi0JchwoK
-         TNGfEEFMe99HcumfevEUnsT3zpTRb7vYk/JXf7EebMJFf12fexpc1durm7cVvAjb1WHY
-         d7NVNPpiWuIsrnhpmBcdODl//xLf+JgoHHyEYls4wVeMasVaALjjHzrBr5FkkJFGEt2h
-         OV9iYsecOAsh2B2ABuN5kQUSEqTNT892ORsyvRiMTQ/Cg2hTFolJsd0SzlIcOLQpOOsw
-         Ellw==
-X-Gm-Message-State: APjAAAW1+0SNrxD3y7qh+EGFvWFZVEJZ8NcVVPOvNL1G6SihfVcuV9s2
-        yQSchTv4ycJk5ecne/BG9Dc=
-X-Google-Smtp-Source: APXvYqzsvIXic1sYRK0SB3cYQOIXBh9Yp6xjO2Hj+C+T4Jdwwae0tMAZ9/O1DNXBWbW0RMAk+sN7GA==
-X-Received: by 2002:a63:1204:: with SMTP id h4mr12135526pgl.288.1580509332195;
-        Fri, 31 Jan 2020 14:22:12 -0800 (PST)
-Received: from taoren-ubuntu-R90MNF91.thefacebook.com ([2620:10d:c090:200::1:a521])
-        by smtp.gmail.com with ESMTPSA id v8sm11201515pff.151.2020.01.31.14.22.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jan 2020 14:22:11 -0800 (PST)
-From:   rentao.bupt@gmail.com
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
-Cc:     Tao Ren <rentao.bupt@gmail.com>
-Subject: [PATCH 3/3] ARM: dts: aspeed-g6: add usb functions
-Date:   Fri, 31 Jan 2020 14:21:57 -0800
-Message-Id: <20200131222157.20849-4-rentao.bupt@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200131222157.20849-1-rentao.bupt@gmail.com>
-References: <20200131222157.20849-1-rentao.bupt@gmail.com>
+        id S1727074AbgBAAZy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jan 2020 19:25:54 -0500
+Received: from us03-smtprelay2.synopsys.com ([149.117.87.133]:38086 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726319AbgBAAZy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jan 2020 19:25:54 -0500
+Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id E0303C0080;
+        Sat,  1 Feb 2020 00:25:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1580516753; bh=7JZgtHNCURp2lEh6F4Zh8drxO8LLv1fpp3XCFPN/N/0=;
+        h=Date:From:Subject:To:Cc:From;
+        b=iuAOjkb6zHOUkrBSB4EAvlImCfxlJd8FbsMvCZ9lNN9WjRsSXNndxd2o4UvB2/3wC
+         p0PgVU24RwBPYK9gUiq6WSlkqEs1lkoGEqNZuOzt/H8fU6ggm80QfNlTFmqnJm0XnM
+         0XmuHvmvSfxn4IJtx9VAwnViRiftvMi0L0i5Iy6YDGfwNp1kTK4SJPzuwBVhO2kvj5
+         Fng9pZyR//SDX3I+qgLXXLUwUYS/oxOqM3CkzXFUMkWfRq4mTLOjkHxJGrE7drZPTw
+         rtSJF2KWZSzMJ2A9W1se/X3WM4BcXPSrVhAV+hCETQvbzLURtCyP0VfnZ9bGkpLKEN
+         4opZ74gW6W9og==
+Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 4E1C3A007C;
+        Sat,  1 Feb 2020 00:25:51 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Fri, 31 Jan 2020 16:25:50 -0800
+Date:   Fri, 31 Jan 2020 16:25:50 -0800
+Message-Id: <20c05d4e60c97b03314ede8d7f2d7c29b34f665f.1576028945.git.thinhn@synopsys.com>
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [RESEND PATCH v2] usb: dwc3: gadget: Do link recovery for SS and SSP
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     John Youn <John.Youn@synopsys.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Tao Ren <rentao.bupt@gmail.com>
+The controller always supports link recovery for device in SS and SSP.
+Remove the speed limit check. Also, when the device is in RESUME or
+RESET state, it means the controller received the resume/reset request.
+The driver must send the link recovery to acknowledge the request. They
+are valid states for the driver to send link recovery.
 
-Add USB components and according pin groups in aspeed-g6 dtsi.
-
-Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
-Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
+Fixes: 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
+Fixes: ee5cd41c9117 ("usb: dwc3: Update speed checks for SuperSpeedPlus")
+Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
 ---
- arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi | 25 ++++++++++++++
- arch/arm/boot/dts/aspeed-g6.dtsi         | 43 ++++++++++++++++++++++++
- 2 files changed, 68 insertions(+)
 
-diff --git a/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi b/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
-index 045ce66ca876..7028e21bdd98 100644
---- a/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
-+++ b/arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi
-@@ -1112,6 +1112,31 @@
- 		groups = "UART9";
- 	};
+Resend note -
+  This was on Felipe's next branch some time ago,
+  but it was lost somehow.
+
+Changes in v2 -
+  Added Fixes tags
+
+ drivers/usb/dwc3/gadget.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index a9aba716bf80..3dcdde9080f5 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1712,7 +1712,6 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
+ 	u32			reg;
  
-+	pinctrl_usb2ah_default: usb2ah_default {
-+		function = "USB2AH";
-+		groups = "USBA";
-+	};
-+
-+	pinctrl_usb2ad_default: usb2ad_default {
-+		function = "USB2AD";
-+		groups = "USBA";
-+	};
-+
-+	pinctrl_usb2bh_default: usb2bh_default {
-+		function = "USB2BH";
-+		groups = "USBB";
-+	};
-+
-+	pinctrl_usb2bd_default: usb2bd_default {
-+		function = "USB2BD";
-+		groups = "USBB";
-+	};
-+
-+	pinctrl_usb11bhid_default: usb11bhid_default {
-+		function = "USB11BHID";
-+		groups = "USBB";
-+	};
-+
- 	pinctrl_vb_default: vb_default {
- 		function = "VB";
- 		groups = "VB";
-diff --git a/arch/arm/boot/dts/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed-g6.dtsi
-index 5f6142d99eeb..02c21c15c19f 100644
---- a/arch/arm/boot/dts/aspeed-g6.dtsi
-+++ b/arch/arm/boot/dts/aspeed-g6.dtsi
-@@ -265,6 +265,49 @@
- 			status = "disabled";
- 		};
+ 	u8			link_state;
+-	u8			speed;
  
-+		ehci0: usb@1e6a1000 {
-+			compatible = "aspeed,ast2600-ehci", "generic-ehci";
-+			reg = <0x1e6a1000 0x100>;
-+			interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&syscon ASPEED_CLK_GATE_USBPORT1CLK>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&pinctrl_usb2ah_default>;
-+			status = "disabled";
-+		};
-+
-+		ehci1: usb@1e6a3000 {
-+			compatible = "aspeed,ast2600-ehci", "generic-ehci";
-+			reg = <0x1e6a3000 0x100>;
-+			interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&syscon ASPEED_CLK_GATE_USBPORT2CLK>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&pinctrl_usb2bh_default>;
-+			status = "disabled";
-+		};
-+
-+		uhci: usb@1e6b0000 {
-+			compatible = "aspeed,ast2600-uhci", "generic-uhci";
-+			reg = <0x1e6b0000 0x100>;
-+			interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
-+			#ports = <2>;
-+			clocks = <&syscon ASPEED_CLK_GATE_USBUHCICLK>;
-+			status = "disabled";
-+			/*
-+			 * No default pinmux, it will follow EHCI, use an
-+			 * explicit pinmux override if EHCI is not enabled.
-+			 */
-+		};
-+
-+		vhub: usb-vhub@1e6a0000 {
-+			compatible = "aspeed,ast2600-usb-vhub";
-+			reg = <0x1e6a0000 0x350>;
-+			interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&syscon ASPEED_CLK_GATE_USBPORT1CLK>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&pinctrl_usb2ad_default>;
-+			status = "disabled";
-+		};
-+
- 		apb {
- 			compatible = "simple-bus";
- 			#address-cells = <1>;
+ 	/*
+ 	 * According to the Databook Remote wakeup request should
+@@ -1722,16 +1721,13 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
+ 	 */
+ 	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
+ 
+-	speed = reg & DWC3_DSTS_CONNECTSPD;
+-	if ((speed == DWC3_DSTS_SUPERSPEED) ||
+-	    (speed == DWC3_DSTS_SUPERSPEED_PLUS))
+-		return 0;
+-
+ 	link_state = DWC3_DSTS_USBLNKST(reg);
+ 
+ 	switch (link_state) {
++	case DWC3_LINK_STATE_RESET:
+ 	case DWC3_LINK_STATE_RX_DET:	/* in HS, means Early Suspend */
+ 	case DWC3_LINK_STATE_U3:	/* in HS, means SUSPEND */
++	case DWC3_LINK_STATE_RESUME:
+ 		break;
+ 	default:
+ 		return -EINVAL;
 -- 
-2.17.1
+2.11.0
 
