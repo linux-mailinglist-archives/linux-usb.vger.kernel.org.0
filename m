@@ -2,174 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A1514FC92
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Feb 2020 11:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD7C714FD60
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Feb 2020 14:41:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726379AbgBBKT3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 2 Feb 2020 05:19:29 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:45313 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725956AbgBBKT2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Feb 2020 05:19:28 -0500
-Received: by mail-lj1-f196.google.com with SMTP id f25so11535906ljg.12;
-        Sun, 02 Feb 2020 02:19:26 -0800 (PST)
+        id S1726814AbgBBNlz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 2 Feb 2020 08:41:55 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:38734 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726387AbgBBNly (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Feb 2020 08:41:54 -0500
+Received: by mail-lj1-f193.google.com with SMTP id w1so11865497ljh.5;
+        Sun, 02 Feb 2020 05:41:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=KbZhK4eiEfC8B9hj7RYWwm4vi0wSDmiVDkqX6tXrqSk=;
-        b=WyNctkVD92W5Zo5okgP3pijP49S6fSxWYgYHcizXbfYrUKOH2PhITs/0a/pQEzk1YY
-         5xMwOFUroNNjM9BdO1EwXNkbk7cp7qIpq4DskpPIXG5emYlly5IR+xnXcw0zIA/6y3mc
-         6JN19zf+LQQl0FgyYCbW5zfMo3wbYhtNrcFN5V00eKJ1TVDTTMDGESV6NTJEEKuNOtS3
-         5E2BdhRhfxrW0/PabgeFDdE5wbq8E2yZ/3mV/M+YDyMh8en0C1iF6mo3urBWF8oxB7g7
-         zeUH4ngfSizeJJlipAvd0bCzXxJmUeuzJofnn304F19if4RhPlOP73fzDb+zDF0KcBE4
-         Qqrw==
-X-Gm-Message-State: APjAAAW149f3UfxYwN1wdJMkdio1jhngtfETDJkjn9LMct9YdYXcpN2Z
-        xNf+7k1FDSvdYhhoVx0waE4=
-X-Google-Smtp-Source: APXvYqyjioxR0Waw/lsP+2544J5hsUPeUMXhRKM96QkyLQezDZ78Q42rqjZ4IJDsFkmfrnapIiweXw==
-X-Received: by 2002:a2e:85cd:: with SMTP id h13mr11017543ljj.191.1580638766146;
-        Sun, 02 Feb 2020 02:19:26 -0800 (PST)
+        bh=sClwc243rx1Kc3kGspzVWVFHpzaWriLjgFC0oBv6Nss=;
+        b=hYTEN3Y1MHS+AorTMhqTZsRaxveZoqYyXF3A5kmO8oWiMVDAViPJADo4zjlSKKH/nH
+         ScqdwzHjSKoy56Ak1msSjaAiS43FuGaK8DPOLQ+QW6Zo/v5mTZk9lFLiDwDNwLx19Kyv
+         zl6v5/mjDcyVW1SjDlgck4n1lyJ+R5w/ZYcWMJ1zLnalXX7cPcwdxDULs32SAVh2D9uE
+         AJK17PBWN1cVlti0kxBOs81tFr4ngpkCf4YreGLc7RnPJO/O6bqlHI89NqoKaJ1LmQQr
+         nvYp38jAQHWtTFlu8tKTnrLDYX9M5AUhbmfRMeKTlir81fphrO4TWxkQdvhAYp13vcmj
+         cF+w==
+X-Gm-Message-State: APjAAAUmxCrAEgF2E81TYeSSh5MVg8W2X+UzuTXErNbq8IHTgPqtg+fU
+        zjZbfbBWg/qdwglRzuttnrh6TYSB
+X-Google-Smtp-Source: APXvYqzu0XeKGVI2m1+xIVv9XEHnCQ1jM0D87PStc3fgHGZTAn0ko4urhXBDbVOJ5D+FBIqcRDDrNA==
+X-Received: by 2002:a2e:a0d0:: with SMTP id f16mr11124588ljm.130.1580650912215;
+        Sun, 02 Feb 2020 05:41:52 -0800 (PST)
 Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
-        by smtp.gmail.com with ESMTPSA id u16sm7837548ljl.34.2020.02.02.02.19.24
+        by smtp.gmail.com with ESMTPSA id z13sm8089354ljh.21.2020.02.02.05.41.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Feb 2020 02:19:25 -0800 (PST)
+        Sun, 02 Feb 2020 05:41:51 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.92.3)
         (envelope-from <johan@kernel.org>)
-        id 1iyCLl-0008Sx-2W; Sun, 02 Feb 2020 11:19:33 +0100
-Date:   Sun, 2 Feb 2020 11:19:33 +0100
+        id 1iyFVf-0002Uv-Ou; Sun, 02 Feb 2020 14:41:59 +0100
+Date:   Sun, 2 Feb 2020 14:41:59 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     edes <edes@gmx.net>
 Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
         linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
 Subject: Re: kernel 5.4.11: problems with usb sound cards
-Message-ID: <20200202101933.GL10381@localhost>
+Message-ID: <20200202134159.GM10381@localhost>
 References: <20200201105829.5682c887@acme7.acmenet>
  <20200201141009.GK10381@localhost>
  <20200201132616.09857152@acme7.acmenet>
+ <20200202101933.GL10381@localhost>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200201132616.09857152@acme7.acmenet>
+In-Reply-To: <20200202101933.GL10381@localhost>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[ +CC: Takashi ]
+On Sun, Feb 02, 2020 at 11:19:33AM +0100, Johan Hovold wrote:
 
-On Sat, Feb 01, 2020 at 01:26:16PM -0300, edes wrote:
+> Since commit 3e4f8e21c4f2 ("USB: core: fix check for duplicate
+> endpoints") USB core ignores any duplicate endpoints, but in this case
+> we really want to ignore the first instance.
 > 
-> > Can you please post the output of "lsusb -v" for this device on 5.4.10
-> > and 5.4.11, respectively?
-> 
-> 
-> Hello, thanks for your prompt response. Please see attached (I hope that
-> is OK) the output of lsusb -v on both 5.4.10 and 5.4.11.
-> 
-> The device in question is the Sound Devices USBPre2, Bus 003 Device 004:
-> ID 0926:0202, beginning at line 808.
+> Can you try the below patch, which adds a blacklist quirk for the broken
+> endpoint descriptor?
 
-Ok, so the device has a broken altsetting 3 for interface 1, where
-endpoint 0x85 is declared as an isochronous endpoint, despite being used
-by interface 2 as an audio endpoint:
-
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       3
-      bNumEndpoints           2
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass      0 
-      bInterfaceProtocol      0 
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x85  EP 5 IN
-        bmAttributes            5
-          Transfer Type            Isochronous
-          Synch Type               Asynchronous
-          Usage Type               Data
-        wMaxPacketSize     0x0126  1x 294 bytes
-        bInterval               1
-
-...
-
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        2
-      bAlternateSetting       1
-      bNumEndpoints           1
-      bInterfaceClass         1 Audio
-      bInterfaceSubClass      2 Streaming
-      bInterfaceProtocol      0 
-      iInterface              0 
-      AudioStreaming Interface Descriptor:
-        bLength                 7
-        bDescriptorType        36
-        bDescriptorSubtype      1 (AS_GENERAL)
-        bTerminalLink           4
-        bDelay                  1 frames
-        wFormatTag         0x0001 PCM
-      AudioStreaming Interface Descriptor:
-        bLength                26
-        bDescriptorType        36
-        bDescriptorSubtype      2 (FORMAT_TYPE)
-        bFormatType             1 (FORMAT_TYPE_I)
-        bNrChannels             2
-        bSubframeSize           2
-        bBitResolution         16
-        bSamFreqType            6 Discrete
-        tSamFreq[ 0]         8000
-        tSamFreq[ 1]        16000
-        tSamFreq[ 2]        24000
-        tSamFreq[ 3]        32000
-        tSamFreq[ 4]        44100
-        tSamFreq[ 5]        48000
-      Endpoint Descriptor:
-        bLength                 9
-        bDescriptorType         5
-        bEndpointAddress     0x85  EP 5 IN
-        bmAttributes            5
-          Transfer Type            Isochronous
-          Synch Type               Asynchronous
-          Usage Type               Data
-        wMaxPacketSize     0x0126  1x 294 bytes
-        bInterval               4
-        bRefresh                0
-        bSynchAddress           0
-        AudioStreaming Endpoint Descriptor:
-          bLength                 7
-          bDescriptorType        37
-          bDescriptorSubtype      1 (EP_GENERAL)
-          bmAttributes         0x01
-            Sampling Frequency
-          bLockDelayUnits         2 Decoded PCM samples
-          wLockDelay         0x0000
-
-
-Since commit 3e4f8e21c4f2 ("USB: core: fix check for duplicate
-endpoints") USB core ignores any duplicate endpoints, but in this case
-we really want to ignore the first instance.
-
-Can you try the below patch, which adds a blacklist quirk for the broken
-endpoint descriptor?
-
-Note that the broken altsetting probably should be using endpoint 0x81
-just like the other altsettings for that interface, but hopefully you
-don't really use this setting so that simply ignoring the endpoint will
-make the device work again.
-
-Interestingly enough, in your lsusb output from 5.4.11, the device
-reports a second configuration in which this broken altsetting doesn't
-exist. Switching to that config should also make the problem go away.
+I realised I forgot the test to match on the device descriptor when
+applying the blacklist. It doesn't matter currently since I only enable
+the quirk for your device, but if you haven't tested the patch already,
+would you mind testing the below patch instead?
 
 Johan
 
 
-From c8980be317939eb7fae73960b0c6fa641c45bd7d Mon Sep 17 00:00:00 2001
+From c01e64edf751b2079c30d57f57c9a2d20d00b80a Mon Sep 17 00:00:00 2001
 From: Johan Hovold <johan@kernel.org>
 Date: Sun, 2 Feb 2020 10:39:05 +0100
 Subject: [PATCH] USB: core: add endpoint blacklist quirk
@@ -187,10 +91,10 @@ to add a blacklist.
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
  drivers/usb/core/config.c  | 11 +++++++++++
- drivers/usb/core/quirks.c  | 32 ++++++++++++++++++++++++++++++++
+ drivers/usb/core/quirks.c  | 35 +++++++++++++++++++++++++++++++++++
  drivers/usb/core/usb.h     |  3 +++
  include/linux/usb/quirks.h |  3 +++
- 4 files changed, 49 insertions(+)
+ 4 files changed, 52 insertions(+)
 
 diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
 index 26bc05e48d8a..7df22bcefa9d 100644
@@ -222,7 +126,7 @@ index 26bc05e48d8a..7df22bcefa9d 100644
  	++ifp->desc.bNumEndpoints;
  
 diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index 6b6413073584..a677a47a6438 100644
+index 6b6413073584..9925b18e2154 100644
 --- a/drivers/usb/core/quirks.c
 +++ b/drivers/usb/core/quirks.c
 @@ -354,6 +354,9 @@ static const struct usb_device_id usb_quirk_list[] = {
@@ -235,7 +139,7 @@ index 6b6413073584..a677a47a6438 100644
  	/* Keytouch QWERTY Panel keyboard */
  	{ USB_DEVICE(0x0926, 0x3333), .driver_info =
  			USB_QUIRK_CONFIG_INTF_STRINGS },
-@@ -472,6 +475,35 @@ static const struct usb_device_id usb_amd_resume_quirk_list[] = {
+@@ -472,6 +475,38 @@ static const struct usb_device_id usb_amd_resume_quirk_list[] = {
  	{ }  /* terminating entry must be last */
  };
  
@@ -257,12 +161,15 @@ index 6b6413073584..a677a47a6438 100644
 +	unsigned int address;
 +
 +	for (id = usb_endpoint_blacklist_quirk_list; id->match_flags; ++id) {
-+		if (usb_match_one_id_intf(udev, intf, id)) {
-+			address = id->driver_info;
++		if (!usb_match_device(udev, id))
++			continue;
 +
-+			if (address == epd->bEndpointAddress)
-+				return true;
-+		}
++		if (!usb_match_one_id_intf(udev, intf, id))
++			continue;
++
++		address = id->driver_info;
++		if (address == epd->bEndpointAddress)
++			return true;
 +	}
 +
 +	return false;
