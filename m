@@ -2,116 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA3914FEDE
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Feb 2020 20:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A535F14FF2B
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Feb 2020 21:52:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726909AbgBBT3P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 2 Feb 2020 14:29:15 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:38222 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726290AbgBBT3O (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Feb 2020 14:29:14 -0500
-Received: by mail-pg1-f193.google.com with SMTP id a33so6600961pgm.5;
-        Sun, 02 Feb 2020 11:29:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=83XBXAdF60qQhjfbLi9bwa5VGB/pa56aRpXZec7GZUQ=;
-        b=phTQ09+j8Vr2PTCfUXpoYipZuNKH07aPv2Zc4kKmqWltkBWIFf9lbdsKaJi04tqGKB
-         89O9EaYkOjA51Y7sM+LHx35FD96pzQrI8ycxQF5cEY/yC1ssICLlZEQUycHoZWIVUWt2
-         q16FVK+zhYaWdLk8XAHU1LN0lvwpKUL99e4YsRBtm7+KfvKJwYQvUyk+CtcydCMaq+ET
-         221+uh0dgiGXI2gstojGhDXQ1o8QOETUOOtvRTfRA68FI1vzrH0FMON1RKItRVa6CRuq
-         g8b3vyU06z53cNAR6K9+60lftqNVoGeOuyjvd2bJRGZh6EoIfJa1jV/TIfNInWanSkyq
-         RaVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=83XBXAdF60qQhjfbLi9bwa5VGB/pa56aRpXZec7GZUQ=;
-        b=VN8H8mCN2nmRVpbvUQ1jbu9U5uQDwy8dP6fwvMAMeAKOHWyxQE000z3BAmfxISjkF2
-         1l5ci0nmLwrhnKJmjaGCVJHzxQfFqHKYIuuIE4d4kHGx5W/EdgprH34JdKuANGQVKTJf
-         3RaMHW+bg8gU7EXOR1ciT9vXFIBQ8JIky8mm5CCvUYOzyH8HMk4DY3qqnqOfu9MAA74m
-         5ddu6PqJmmdfMxipSHcw7W72GA693MqMxZ49n9rak8xYEWvuWa3otYvjQ6Fk18AJWDcG
-         T/4j0jKfc5+tQnt7qMSmrIq3qd76u9mHknroHOzrgDapaPiwi5VArSjPH8UvE1+lcvb7
-         3oKg==
-X-Gm-Message-State: APjAAAXIYN+rIn9rYVJ+yBqCkllJuwprJWOO/UYQ6H4LTLQxKJrozHfK
-        aWmhrFDa6SJv74qkUlAFZhQWiFnG
-X-Google-Smtp-Source: APXvYqzJztCs5B5fO2HsKuk9KrOTKzLnJc/BQ7QWxXvbl/crt2aXnI7p1PJyFU1wfbUJKbCsn2dMEA==
-X-Received: by 2002:a63:8dc4:: with SMTP id z187mr5569042pgd.68.1580671754231;
-        Sun, 02 Feb 2020 11:29:14 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b4sm17987390pfd.18.2020.02.02.11.29.13
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 02 Feb 2020 11:29:13 -0800 (PST)
-Date:   Sun, 2 Feb 2020 11:29:12 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Macpaul Lin <macpaul.lin@mediatek.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Sriharsha Allenki <sallenki@codeaurora.org>
-Subject: Re: [PATCH] xhci-mtk: Fix NULL pointer dereference with xhci_irq()
- for shared_hcd
-Message-ID: <20200202192912.GA20763@roeck-us.net>
-References: <1579246910-22736-1-git-send-email-macpaul.lin@mediatek.com>
+        id S1726987AbgBBUw6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 2 Feb 2020 15:52:58 -0500
+Received: from sonic305-37.consmr.mail.bf2.yahoo.com ([74.6.133.236]:34651
+        "EHLO sonic305-37.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726967AbgBBUw6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Feb 2020 15:52:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1580676777; bh=3gwbdpD6fpTnU3AIhQs1dw9/oeXqxu71NA+1nQpVq+I=; h=Date:From:Reply-To:Subject:References:From:Subject; b=XxhT3WlE7UWjB/9yaJbTGFGWElDU0PSzmW3dkZoFleOEBvd9VI7qjMyiYN9tecKMZk+ADDxFRkiUnX1zsYTE2b7mV3WGwac17X3jPWzhUjc7WL1WsVFZPTQbtGsujBkBxNFWil+E6ykrLYZ2CL+hGy+k7vjfILW1/u4ktx7IMkX95zTqhIw/Sl2SUmMgsPKyNhd6PQQXglMXjWHIJLuH7Dl3jqC2IcKWcgDDbZixlI/yZc3WXnkQ6QMerqHli0M+I8OCYtRH98domCZL8lGzkXgfY9OLLIxEC9SAwn48V/bVmmURhgcdRsy5xfGorT7MHQYksC/cMMeUA2/JVDXPag==
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.bf2.yahoo.com with HTTP; Sun, 2 Feb 2020 20:52:57 +0000
+Date:   Sun, 2 Feb 2020 20:40:53 +0000 (UTC)
+From:   "Mrs. Maureen Hinckley" <dd7@gczao.com>
+Reply-To: maurhinck7@gmail.com
+Message-ID: <419847631.488854.1580676053942@mail.yahoo.com>
+Subject: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1579246910-22736-1-git-send-email-macpaul.lin@mediatek.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+References: <419847631.488854.1580676053942.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.15149 YMailNodin Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36 OPR/66.0.3515.44
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 17, 2020 at 03:41:50PM +0800, Macpaul Lin wrote:
-> According to NULL pointer fix: https://tinyurl.com/uqft5ra
-> xhci: Fix NULL pointer dereference with xhci_irq() for shared_hcd
-> The similar issue has also been found in QC activities in Mediatek.
-> 
-> Here quote the description from the referenced patch as follows.
-> "Commit ("f068090426ea xhci: Fix leaking USB3 shared_hcd
-> at xhci removal") sets xhci_shared_hcd to NULL without
-> stopping xhci host. This results into a race condition
-> where shared_hcd (super speed roothub) related interrupts
-> are being handled with xhci_irq happens when the
-> xhci_plat_remove is called and shared_hcd is set to NULL.
-> Fix this by setting the shared_hcd to NULL only after the
-> controller is halted and no interrupts are generated."
-> 
-> Signed-off-by: Sriharsha Allenki <sallenki@codeaurora.org>
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> ---
->  drivers/usb/host/xhci-mtk.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-> index b18a6baef204..c227c67f5dc5 100644
-> --- a/drivers/usb/host/xhci-mtk.c
-> +++ b/drivers/usb/host/xhci-mtk.c
-> @@ -593,11 +593,11 @@ static int xhci_mtk_remove(struct platform_device *dev)
->  	struct usb_hcd  *shared_hcd = xhci->shared_hcd;
->  
->  	usb_remove_hcd(shared_hcd);
-> -	xhci->shared_hcd = NULL;
->  	device_init_wakeup(&dev->dev, false);
->  
->  	usb_remove_hcd(hcd);
->  	usb_put_hcd(shared_hcd);
-> +	xhci->shared_hcd = NULL;
 
-I may be wrong, but I have some concerns that this replaces
-the NULL pointer access with a UAF.
 
-Guenter
+I am Maureen Hinckley and my foundation is donating (Five hundred and fifty=
+ thousand USD) to you. Contact us via my email at (maurhinck7@gmail.com) fo=
+r further details.
 
->  	usb_put_hcd(hcd);
->  	xhci_mtk_sch_exit(mtk);
->  	xhci_mtk_clks_disable(mtk);
-> -- 
-> 2.18.0
+Best Regards,
+Mrs. Maureen Hinckley,
+Copyright =C2=A92020 The Maureen Hinckley Foundation All Rights Reserved.
