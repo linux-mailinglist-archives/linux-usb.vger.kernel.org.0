@@ -2,176 +2,216 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4142114FE63
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Feb 2020 17:47:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA8014FECD
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Feb 2020 20:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726913AbgBBQrv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 2 Feb 2020 11:47:51 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:53111 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726900AbgBBQrv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Feb 2020 11:47:51 -0500
-Received: (qmail 21778 invoked by uid 500); 2 Feb 2020 11:47:50 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 2 Feb 2020 11:47:50 -0500
-Date:   Sun, 2 Feb 2020 11:47:49 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Sven Schnelle <svens@stackframe.org>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>,
-        <usb-storage@lists.one-eyed-alien.net>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] usb-storage: Add support for Ratoc U2SCX multiple
- device mode
-In-Reply-To: <20200202093750.4439-3-svens@stackframe.org>
-Message-ID: <Pine.LNX.4.44L0.2002021139010.20768-100000@netrider.rowland.org>
+        id S1726934AbgBBSwR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 2 Feb 2020 13:52:17 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:39526 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726907AbgBBSwR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 2 Feb 2020 13:52:17 -0500
+Received: by mail-pl1-f194.google.com with SMTP id g6so4930655plp.6
+        for <linux-usb@vger.kernel.org>; Sun, 02 Feb 2020 10:52:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=TNFPl0Gt5urN5k3aQVQKIP8diJ5nsrvgMbztJjoYZrc=;
+        b=pChSVu1ds6vkAuvsLmrDI1Ta+AO/dCfldvYc0tVB5cREJACZnBkXeGyQANpjiwtExa
+         hsYvPlftUBwPKfSQ60QMcNRAEb2HCTZBnFex/Gx1Dhju1rh8evnhQ805VukDOZpNExrT
+         smOPQk4LtVTKSM00oa42jaMMjdpy40zSCvmKjERA3AglHU0KZ5vgWTxMGR3eD2M8xhSi
+         lEltudDukdBZSkgIb56O50RuH/qQChnYDrrmuO4vaiS9u23S2yn4m1uifHxyNnLhg7FT
+         5ipMjCaV1JbWclyQgwotoVwbVWsji0J2pkEsEMVq1MeMSv8rrf/xxgwcpkB01kMPGnHa
+         GzJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=TNFPl0Gt5urN5k3aQVQKIP8diJ5nsrvgMbztJjoYZrc=;
+        b=Z7rGbLARJ+QRIKRgJNiRoT1vTrAf20nA7zC0oDKEoBK0V80VlmsjpIrVjyH8yZoQsx
+         UqD0PsxwQx31RvrzSAzORV/4d11Z2JaQ0zyZN2xMScYJA/MF9CKDDBe1VUwaC27YLrJC
+         hwwHWHMTlrRvxSCWlZRzsQmOLFQr/1sN3k/LUlicFA/9p+H4cFDLj6qnrTXjTumkBZ9T
+         PPubakf71Z2N1dsvHjcfeixB59hfcntxZKN3LLx59vJkmT/vu/nu1X8pP5tvDLjL/78Y
+         Txg4DND4OL9NLpKlmNNNeptVmKifC1JL7VfYpwoEsFcTKJ9OhWnHH/QCqPA4c7J/msE2
+         AU+A==
+X-Gm-Message-State: APjAAAXgxezxA0uCkt7aVgb+v/fQIPxTOslzT+t+GLF6xXv0ZgfKfKAv
+        lTwQiK4V1lkXmVmsHu5U0JQ=
+X-Google-Smtp-Source: APXvYqxTkMHqK7jSF7DtI3gnEtTZqHPvKfoUUlcOf4FT3Dw7S4bMb6kVl/BU3M0awfss0xLmYMN1oA==
+X-Received: by 2002:a17:902:7006:: with SMTP id y6mr20669643plk.84.1580669536553;
+        Sun, 02 Feb 2020 10:52:16 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t66sm2722686pgb.91.2020.02.02.10.52.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Feb 2020 10:52:15 -0800 (PST)
+Subject: Re: [PATCH] usb: dwc2: extend treatment for incomplete transfer
+To:     Boris ARZUR <boris@konbu.org>
+Cc:     linux-usb@vger.kernel.org,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        William Wu <william.wu@rock-chips.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>
+References: <20191105032922.GA3041@tungsten>
+ <20200131220925.GA26896@roeck-us.net> <20200202051520.GA971@tungsten>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <92d9e54d-205f-0f45-ada4-de1d48c72fcb@roeck-us.net>
+Date:   Sun, 2 Feb 2020 10:52:13 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <20200202051520.GA971@tungsten>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 2 Feb 2020, Sven Schnelle wrote:
+Hi Boris,
 
-> The Ratoc U2SCX can support more than one device but uses another
-> USB ID in that case (0584:0222) with a Vendor specific class. The
-> used protocol is still USB Mass storage, but we need to fetch the
-> maximum LUN number as otherwise the controller would address all
-> devices on the SCSI bus when an invalid LUN is probed. It looks like
-> U2SCX maps SCSI ID to LUN numbers, so we must not enable
-> US_FL_SCM_MULT_TARG.
+On 2/1/20 9:15 PM, Boris ARZUR wrote:
+> Hello Guenter,
 > 
-> dmesg with the driver enabled looks like this:
 > 
-> [  133.157337] usb 1-2: new high-speed USB device number 6 using xhci_hcd
-> [  133.170273] usb 1-2: New USB device found, idVendor=0584, idProduct=0222, bcdDevice= 1.11
-> [  133.170279] usb 1-2: New USB device strings: Mfr=1, Product=3, SerialNumber=2
-> [  133.170283] usb 1-2: Product: USB-SCSI Converter
-> [  133.170286] usb 1-2: Manufacturer: RATOCSystems,Inc.
-> [  133.170289] usb 1-2: SerialNumber: 020301002197
-> [  133.171576] usb-storage 1-2:1.0: USB Mass Storage device detected
-> [  133.172084] scsi host1: usb-storage 1-2:1.0
-> [  134.199245] scsi 1:0:0:0: CD-ROM            HL-DT-ST DVDRAM GSA-4163B A100 PQ: 0 ANSI: 2
-> [  134.202744] scsi 1:0:0:1: Direct-Access     SyQuest  SQ5200C          A0L  PQ: 0 ANSI: 2
-> [  134.219300] scsi 1:0:0:2: Direct-Access     SyQuest  SQ3270S          1_24 PQ: 0 ANSI: 2
-> [  134.224660] sr 1:0:0:0: Power-on or device reset occurred
-> [  134.343256] sr 1:0:0:0: [sr0] scsi3-mmc drive: 40x/40x writer dvd-ram cd/rw xa/form2 cdda tray
-> [  134.343262] cdrom: Uniform CD-ROM driver Revision: 3.20
-> [  134.350873] sr 1:0:0:0: Attached scsi CD-ROM sr0
-> [  134.351120] sr 1:0:0:0: Attached scsi generic sg1 type 5
-> [  134.351438] sd 1:0:0:1: Attached scsi generic sg2 type 0
-> [  134.351685] sd 1:0:0:2: Attached scsi generic sg3 type 0
-> [  134.362141] sd 1:0:0:1: Power-on or device reset occurred
-> [  134.483977] sd 1:0:0:1: [sdb] Attached SCSI removable disk
-> [  134.513922] sd 1:0:0:2: Power-on or device reset occurred
-> [  134.579802] sd 1:0:0:2: [sdc] Spinning up disk...
-> [  135.602397] ......
-> [  141.707017] sd 1:0:0:1: [sdb] Spinning up disk...
-> [  151.346332] .ready
-> [  151.353990] sd 1:0:0:2: [sdc] 524288 512-byte logical blocks: (268 MB/256 MiB)
-> [  151.361560] sd 1:0:0:2: [sdc] Write Protect is off
-> [  151.361566] sd 1:0:0:2: [sdc] Mode Sense: 99 00 00 08
-> [  151.368868] sd 1:0:0:2: [sdc] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
-> [  151.428485]  sdc: sdc1
-> [  151.465364] sd 1:0:0:2: [sdc] Attached SCSI removable disk
-> [  152.178231] .....ready
-> [  156.535115] sd 1:0:0:1: [sdb] 173456 512-byte logical blocks: (88.8 MB/84.7 MiB)
-> [  156.606445]  sdb: sdb1
-
-Isn't this the same as we would see for any multi-LUN device?  What's 
-so special about this log that you thought including it here was 
-important?
-
-> Signed-off-by: Sven Schnelle <svens@stackframe.org>
-> ---
->  drivers/usb/storage/initializers.c | 27 +++++++++++++++++++++++++++
->  drivers/usb/storage/initializers.h |  2 ++
->  drivers/usb/storage/unusual_devs.h |  5 +++++
->  3 files changed, 34 insertions(+)
+>> good find, and good analysis. We stated to see this problem as well in the
+>> latest ChromeOS kernel.
+> I'm glad you find my report helpful.
 > 
-> diff --git a/drivers/usb/storage/initializers.c b/drivers/usb/storage/initializers.c
-> index f8f9ce8dc710..089d67e99aa9 100644
-> --- a/drivers/usb/storage/initializers.c
-> +++ b/drivers/usb/storage/initializers.c
-> @@ -44,6 +44,33 @@ int usb_stor_euscsi_init(struct us_data *us)
->  	return 0;
->  }
->  
-> +/* Function to get the maximum LUN (Logical Unit number) from Ratoc. */
-
-People reading this code almost certainly already know what "LUN" 
-stands for.  You don't have to remind them.
-
-> +int usb_stor_ratoc_u2scx_init(struct us_data *us)
-> +{
-> +	int i, result;
-> +	uint8_t *idmap = (uint8_t *)us->iobuf;
-> +
-> +	result = usb_stor_control_msg(us, us->recv_ctrl_pipe,
-> +					0xe6, USB_DIR_IN | USB_TYPE_VENDOR |
-> +					USB_RECIP_INTERFACE,
-> +					0x0, 0x0, idmap, 8, 5 * HZ);
-> +
-> +	if (result < 0) {
-> +		usb_stor_dbg(us, "fetching max lun failed: %d\n", result);
-> +		return result;
-> +	}
-
-You don't want to check that the device actually returned 8 bytes of 
-data?  What if it returned fewer?
-
-> +
-> +	for (i = 0; i < 7; i++) {
-> +		if (idmap[i] == 0xff)
-
-You didn't initialize the contents of idmap.  So if the device returned
-fewer than 7 bytes, what makes you think the extra value will be 0xff?
-
-> +			break;
-> +	}
-> +
-> +	if (i == 0)
-> +		return -EIO;
-> +
-> +	us->max_lun = i - 1;
-> +	return 0;
-> +}
->  /*
->   * This function is required to activate all four slots on the UCR-61S2B
->   * flash reader
-> diff --git a/drivers/usb/storage/initializers.h b/drivers/usb/storage/initializers.h
-> index 2dbf9c7d9749..b3ad7bfadf41 100644
-> --- a/drivers/usb/storage/initializers.h
-> +++ b/drivers/usb/storage/initializers.h
-> @@ -37,3 +37,5 @@ int usb_stor_ucr61s2b_init(struct us_data *us);
->  
->  /* This places the HUAWEI E220 devices in multi-port mode */
->  int usb_stor_huawei_e220_init(struct us_data *us);
-> +
-> +int usb_stor_ratoc_u2scx_init(struct us_data *us);
-> diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
-> index 1cd9b6305b06..46b95944533c 100644
-> --- a/drivers/usb/storage/unusual_devs.h
-> +++ b/drivers/usb/storage/unusual_devs.h
-> @@ -2372,6 +2372,11 @@ UNUSUAL_DEV( 0xed10, 0x7636, 0x0001, 0x0001,
->  		"Digital MP3 Audio Player",
->  		USB_SC_DEVICE, USB_PR_DEVICE, NULL, US_FL_NOT_LOCKABLE ),
->  
-> +UNUSUAL_DEV(0x0584, 0x0222, 0x0000, 0xffff,
-> +		"Ratoc",
-> +		"U2SCX USB SCSI converter",
-> +		USB_SC_DEVICE, USB_PR_DEVICE, usb_stor_ratoc_u2scx_init, 0),
-> +
-
-Please read the comments at the start of the file, in particular the 
-part describing how the entries should e sorted.
-
-Alan Stern
-
->  /* Unusual uas devices */
->  #if IS_ENABLED(CONFIG_USB_UAS)
->  #include "unusual_uas.h"
 > 
+>> be able to reproduce the problem. Maybe you can help me. How do you tether
+>> your phone through USB ?
+> You mention thethering, so I think you have read my follow-up:
+> https://www.spinics.net/lists/linux-usb/msg187497.html
+> 
+> 
+> My setup is as follows:
+> - 'kenzo' phone (https://wiki.lineageos.org/devices/kenzo) on AICP 12.1
+>    (android 7.1.2 linux 3.10.105);
+> - 'veyron speedy' chromebook (https://wiki.gentoo.org/wiki/Asus_Chromebook_C201)
+>    on Arch Linux ARM, vanilla linux 5.2.14;
+> 
+> 
+> Here are my repro steps, sorry if tedious, I'm not sure of the level of
+> details you want, so I will go verbose squared :) :
+> 
+> 0. plug in phone to chromebook, with a USB2 micro b cable;
+> 
+> 1. activate usb tethering in phone settings:
+>     settings> more> tethering & portable hotspot> USB tethering
+>     click and confirm "tethered";
+> 
+> 2. chromebook sees phone as:
+> [ 2128.080551] rndis_host 2-1:1.0 usb0: register 'rndis_host' at usb-ff580000.usb-1, RNDIS device, 4a:5e:0c:89:ec:09
+> 
+> 3. chromebook$ sudo dhcpcd --noarp usb0
+> usb0: adding default route via 192.168.42.129
+> 
+> 4. on phone, start termux (https://f-droid.org/en/packages/com.termux/)
+> 
+> 5. phone$ dd if=/dev/urandom of=blob count=50 bs=1M
+> 
+> 6. phone$ sha512sum blob
+> b9e...14d blob
+> 
+> 7. phone$ pkg install netcat
+> 
+> 8. phone$ while true; do <blob netcat -l -p 9999; done
+> 
+> 9. chromebook$ sudo pacman -Syu extra/gnu-netcat community/pigz
+> 
+> 10. chromebook$ dd if=/dev/urandom of=job count=10 bs=1M
+> 
+> 11. chromebook terminal 0$ while true; do <job pigz -11 -i -p 1024 >/dev/null; done
+> 
+> 12. chromebook terminal 1$ cat /proc/loadavg
+> 28.18 8.76 3.74 54/521 8826
+>   
+> 13. chromebook terminal 1$ while true; do netcat 192.168.42.129 9999 | sha512sum; done
+> b9e...14d -
+> 
+> 13. chromebook will panic soon (I see repros in tens of seconds);
+> 
+Thanks a lot for the information. I'll see if I can reproduce the problem using
+this (or a similar) approach. Tethering an Android phone isn't really difficult,
+but the traffic pattern seems to play a role as well.
+
+> I managed to track the issue to:
+>> The kernel will write to 0 at line 2494 below in file drivers/usb/dwc2/hcd.c
+>> 2474 static void dwc2_free_dma_aligned_buffer(struct urb *urb)
+>> 2494 		memcpy(stored_xfer_buffer, urb->transfer_buffer, length);
+> 
+> 
+> I discussed the below patch with hminas@synopsys.com, who expressed doubts about its
+> correctness.
+> 
+> I tested it a while back and it seemed solid (no crash & correct hashes), but while
+> writing this mail I see that sometimes the output of sha512sum on the
+> chromebook is wrong... also, I'm thinking that the fix below may be a memory
+> leak.
+> 
+> 
+> In conclusion, do not commit, the fix needs more work :)
+> 
+Yes, I suspect that your patch is not a real fix but rather a bandage; that is why I
+want to reproduce the problem and spend some time trying to figure out what is
+going on. In a nutshell, even if the current code doesn't handle the situation well,
+it should not result in the observed problem (which looks like a memory overwrite).
+
+> I hope to restart experimenting in a short while, when I get a bit more free
+> time.
+> 
+> 
+> I am waiting for any question you may have, thank you for your time.
+> Boris.
+> 
+Thanks!
+
+Guenter
+
+> Guenter Roeck wrote:
+>> Hi Boris,
+>>
+>> On Tue, Nov 05, 2019 at 12:29:22PM +0900, Boris ARZUR wrote:
+>>> Channel halt can happen with BULK endpoints when the
+>>> cpu is under high load. Treating it as an error leads
+>>> to a null-pointer dereference in dwc2_free_dma_aligned_buffer().
+>>>
+>>
+>> good find, and good analysis. We stated to see this problem as well in the
+>> latest ChromeOS kernel.
+>>
+>> I am still trying understand what exactly happens. To do that, I'll need to
+>> be able to reproduce the problem. Maybe you can help me. How do you tether
+>> your phone through USB ?
+>>
+>> Thanks,
+>> Guenter
+>>
+>>> Signed-off-by: Boris Arzur <boris@konbu.org>
+>>> ---
+>>>   drivers/usb/dwc2/hcd_intr.c | 3 ++-
+>>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>>                                   * A periodic transfer halted with no other
+>>> --
+>>> 2.23.0
+>>>
+>>> diff --git a/drivers/usb/dwc2/hcd_intr.c b/drivers/usb/dwc2/hcd_intr.c
+>>> index a052d39b4375..697fed530aeb 100644
+>>> --- a/drivers/usb/dwc2/hcd_intr.c
+>>> +++ b/drivers/usb/dwc2/hcd_intr.c
+>>> @@ -1944,7 +1944,8 @@ static void dwc2_hc_chhltd_intr_dma(struct dwc2_hsotg
+>>> *hsotg,
+>>>                           */
+>>>                          dwc2_hc_ack_intr(hsotg, chan, chnum, qtd);
+>>>                  } else {
+>>> -                       if (chan->ep_type == USB_ENDPOINT_XFER_INT ||
+>>> +                       if (chan->ep_type == USB_ENDPOINT_XFER_BULK ||
+>>> +                           chan->ep_type == USB_ENDPOINT_XFER_INT ||
+>>>                              chan->ep_type == USB_ENDPOINT_XFER_ISOC) {
+>>>                                  /*
 
