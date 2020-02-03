@@ -2,149 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA361509FF
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2020 16:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 259E1150DFD
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2020 17:48:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727494AbgBCPlo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Feb 2020 10:41:44 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:46321 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728172AbgBCPln (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Feb 2020 10:41:43 -0500
-Received: by mail-lj1-f195.google.com with SMTP id x14so15083662ljd.13;
-        Mon, 03 Feb 2020 07:41:41 -0800 (PST)
+        id S1728966AbgBCQ0I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Feb 2020 11:26:08 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:41773 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728924AbgBCQ0I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Feb 2020 11:26:08 -0500
+Received: by mail-lj1-f194.google.com with SMTP id h23so15302739ljc.8;
+        Mon, 03 Feb 2020 08:26:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Nipj/cxzSXajSeH/pNRriKao/+feW9WqUQbThjwnQuk=;
+        b=dfBDKCIh6kq4KivMuNKwO9Dub+A9DsCYd3GXV9IVUNwPpJ9GMDBmq8vQddES0RX+s2
+         YINM3Crm4ORBw54telWxF/D1rh5gUB9NqgOC+3JxMPAWCsEeH2TUVDVupWGd2djOgX6R
+         IXvAwWJTzNUutgVH/tp/vYF001elX9YNVr1PBxvFLejQcAZOQ9CgNOG/WoEonvFIsuMi
+         Ii9wFrlEaCl4aP1H4RzquBLeIa1+VHiVGDrIhRvQoSFpg6PebWHfIOZhyJFFyqQKaFGT
+         pmsgiGcGJlS97t6rs7QrN70zjLobQCHeNNgGsHc+H7tCxzXMj5U2jIdgmFLmdWzuJ/cZ
+         xbJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YEPnTpJ1A58+RhxHoD7vJrWSnZtvCUZLE3PCLpJiyt8=;
-        b=EHrWohtxgyhT2FTpFEZo+V6vbr1RISI5+QKFVGCUmfW1xn5AJPJhZU86uBHrU9ltJe
-         zr0g5b2C3V54Gt00oNMwxHPquYU7v+CBvc/yKt2MhqvP8pubceXvwuaBBVgNlg3IH4Ri
-         +XNJebYyOpLXt4KCWKo3svnUB/gOwhG2Uus/AdJDMGKNfSCqCVVEWeCdt1R45/fHCWXu
-         yRHysqxXEAvT5siwcpAgdMOBDdtNKsdyRSRstJNPwKQCuNcXgn012KdS+Lc7UJ/tkelb
-         KrjbPjSGMb83d5qEpOCsQBTIi/QlCpwEc+wBxMlMmQD6Wkx8HhIKcYlJ/0x4OgfXDI/4
-         NbTQ==
-X-Gm-Message-State: APjAAAUmx5+VDm3hLNIWJVLcf/KouvWgqWCl4OeWnHp4eLKUbPxesGwB
-        YI8XfXh29ZoS/9MyAxEJaS0=
-X-Google-Smtp-Source: APXvYqyEciuyfMkxCvyoadEDctvTyOVKQG9hGQSXBntS3wekh4Qlmu58TCz84YpAkaJcciuIxzwMsw==
-X-Received: by 2002:a2e:818e:: with SMTP id e14mr14219544ljg.2.1580744501178;
-        Mon, 03 Feb 2020 07:41:41 -0800 (PST)
-Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
-        by smtp.gmail.com with ESMTPSA id f26sm9844917ljn.104.2020.02.03.07.41.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2020 07:41:39 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@xi.terra>)
-        id 1iydrA-0006tK-Dt; Mon, 03 Feb 2020 16:41:48 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, edes <edes@gmx.net>,
-        Takashi Iwai <tiwai@suse.de>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: [PATCH 3/3] USB: core: clean up endpoint-descriptor parsing
-Date:   Mon,  3 Feb 2020 16:38:30 +0100
-Message-Id: <20200203153830.26394-4-johan@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200203153830.26394-1-johan@kernel.org>
-References: <20200203153830.26394-1-johan@kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Nipj/cxzSXajSeH/pNRriKao/+feW9WqUQbThjwnQuk=;
+        b=f6g9lfKHs0QvU5QMElakU0iVqEEOPVvvFHvDxR10OTn+oYK9arLyAAJy+k7P68CLu2
+         xXI8HX90CAzkCR4hZcbRNmGsLZTXsW9PS4O7OmYht1B3tIZyXSn03uU9YSCOVJ+5a5W7
+         ZWo/2/2KzIjQFTWT/Gr1Uv1b/vtxk6hGGsO6oU4NST+hGVzeaDxVJqRq+ugtpXKMyy9C
+         Z4JNwOEtZDFI4Z58cSig8DykxjKWetT07nkoVA+2o3t6bUBG3tdLGJzufyGup5QeST6X
+         jdzOSV7XcsvzncQnAH8ury8maAryVFBR+lfkU773fTaGPyvt2QH7RSt8oR85C4MaDodL
+         +LMg==
+X-Gm-Message-State: APjAAAWjLtI+qlNzrGTZ95mdFUoZhH8X7SkazYxwtTvMLg2neG8QKCxs
+        JfAWJoVwoPXYflnFyBhsaNgg9m8k
+X-Google-Smtp-Source: APXvYqxnIgvFbNfj+L3K+M0hDUSPPCAAsx8IZCA9VLlq3Wd8OOJ3JiUFYhco4qUWH9fB7mgth5mIOg==
+X-Received: by 2002:a2e:9090:: with SMTP id l16mr14584028ljg.281.1580747165772;
+        Mon, 03 Feb 2020 08:26:05 -0800 (PST)
+Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.googlemail.com with ESMTPSA id 5sm10015424lju.69.2020.02.03.08.26.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Feb 2020 08:26:05 -0800 (PST)
+Subject: Re: [PATCH v1] usb: phy: tegra: Add clarifying comments about the
+ shared registers
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200202224259.29187-1-digetx@gmail.com>
+ <20200203112818.GA3506060@ulmo>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <5a8d6489-e8ce-5a6e-3e23-8de97c3bad76@gmail.com>
+Date:   Mon, 3 Feb 2020 19:26:04 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
+In-Reply-To: <20200203112818.GA3506060@ulmo>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use the new usb-device pointer instead of back-casting when accessing
-the struct usb_device when parsing endpoints.
+03.02.2020 14:28, Thierry Reding пишет:
+> On Mon, Feb 03, 2020 at 01:42:59AM +0300, Dmitry Osipenko wrote:
+>> Tools like Coccinelle may erroneously recommend to use the
+>> devm_platform_ioremap_resource() API for the registers mapping because
+>> these tools are not aware about the implementation details of the driver.
+>> Let's add a clarifying comments to the code, which should help to stop
+>> future attempts to break the driver.
+>>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  drivers/usb/phy/phy-tegra-usb.c | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
+>>
+>> diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
+>> index 037e8eee737d..6153cc35aba0 100644
+>> --- a/drivers/usb/phy/phy-tegra-usb.c
+>> +++ b/drivers/usb/phy/phy-tegra-usb.c
+>> @@ -969,6 +969,10 @@ static int utmi_phy_probe(struct tegra_usb_phy *tegra_phy,
+>>  		return  -ENXIO;
+>>  	}
+>>  
+>> +	/*
+>> +	 * Note that UTMI pad registers are shared by all PHYs, therefore
+>> +	 * devm_platform_ioremap_resource() can't be used here.
+>> +	 */
+>>  	tegra_phy->pad_regs = devm_ioremap(&pdev->dev, res->start,
+>>  					   resource_size(res));
+>>  	if (!tegra_phy->pad_regs) {
+>> @@ -1087,6 +1091,10 @@ static int tegra_usb_phy_probe(struct platform_device *pdev)
+>>  		return  -ENXIO;
+>>  	}
+>>  
+>> +	/*
+>> +	 * Note that PHY and USB controller are using shared registers,
+>> +	 * therefore devm_platform_ioremap_resource() can't be used here.
+>> +	 */
+>>  	tegra_phy->regs = devm_ioremap(&pdev->dev, res->start,
+>>  				       resource_size(res));
+>>  	if (!tegra_phy->regs) {
+> 
+> I'm not sure it's really going to stop *all* attempts. But at least for
+> people that go through the trouble of reading the comments, yes, this
+> should do the trick, so:
+> 
+> Acked-by: Thierry Reding <treding@nvidia.com>
 
-Note that this introduces two lines that are longer than 80 chars on
-purpose.
-
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/core/config.c | 20 ++++++++------------
- 1 file changed, 8 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
-index 7df22bcefa9d..b7918f695434 100644
---- a/drivers/usb/core/config.c
-+++ b/drivers/usb/core/config.c
-@@ -322,7 +322,7 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
- 	j = 255;
- 	if (usb_endpoint_xfer_int(d)) {
- 		i = 1;
--		switch (to_usb_device(ddev)->speed) {
-+		switch (udev->speed) {
- 		case USB_SPEED_SUPER_PLUS:
- 		case USB_SPEED_SUPER:
- 		case USB_SPEED_HIGH:
-@@ -343,8 +343,7 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
- 			/*
- 			 * This quirk fixes bIntervals reported in ms.
- 			 */
--			if (to_usb_device(ddev)->quirks &
--				USB_QUIRK_LINEAR_FRAME_INTR_BINTERVAL) {
-+			if (udev->quirks & USB_QUIRK_LINEAR_FRAME_INTR_BINTERVAL) {
- 				n = clamp(fls(d->bInterval) + 3, i, j);
- 				i = j = n;
- 			}
-@@ -352,8 +351,7 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
- 			 * This quirk fixes bIntervals reported in
- 			 * linear microframes.
- 			 */
--			if (to_usb_device(ddev)->quirks &
--				USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL) {
-+			if (udev->quirks & USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL) {
- 				n = clamp(fls(d->bInterval), i, j);
- 				i = j = n;
- 			}
-@@ -370,7 +368,7 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
- 	} else if (usb_endpoint_xfer_isoc(d)) {
- 		i = 1;
- 		j = 16;
--		switch (to_usb_device(ddev)->speed) {
-+		switch (udev->speed) {
- 		case USB_SPEED_HIGH:
- 			n = 7;		/* 8 ms = 2^(7-1) uframes */
- 			break;
-@@ -392,8 +390,7 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
- 	 * explicitly forbidden by the USB spec.  In an attempt to make
- 	 * them usable, we will try treating them as Interrupt endpoints.
- 	 */
--	if (to_usb_device(ddev)->speed == USB_SPEED_LOW &&
--			usb_endpoint_xfer_bulk(d)) {
-+	if (udev->speed == USB_SPEED_LOW && usb_endpoint_xfer_bulk(d)) {
- 		dev_warn(ddev, "config %d interface %d altsetting %d "
- 		    "endpoint 0x%X is Bulk; changing to Interrupt\n",
- 		    cfgno, inum, asnum, d->bEndpointAddress);
-@@ -417,7 +414,7 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
- 
- 	/* Find the highest legal maxpacket size for this endpoint */
- 	i = 0;		/* additional transactions per microframe */
--	switch (to_usb_device(ddev)->speed) {
-+	switch (udev->speed) {
- 	case USB_SPEED_LOW:
- 		maxpacket_maxes = low_speed_maxpacket_maxes;
- 		break;
-@@ -453,8 +450,7 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
- 	 * maxpacket sizes other than 512.  High speed HCDs may not
- 	 * be able to handle that particular bug, so let's warn...
- 	 */
--	if (to_usb_device(ddev)->speed == USB_SPEED_HIGH
--			&& usb_endpoint_xfer_bulk(d)) {
-+	if (udev->speed == USB_SPEED_HIGH && usb_endpoint_xfer_bulk(d)) {
- 		if (maxp != 512)
- 			dev_warn(ddev, "config %d interface %d altsetting %d "
- 				"bulk endpoint 0x%X has invalid maxpacket %d\n",
-@@ -463,7 +459,7 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
- 	}
- 
- 	/* Parse a possible SuperSpeed endpoint companion descriptor */
--	if (to_usb_device(ddev)->speed >= USB_SPEED_SUPER)
-+	if (udev->speed >= USB_SPEED_SUPER)
- 		usb_parse_ss_endpoint_companion(ddev, cfgno,
- 				inum, asnum, endpoint, buffer, size);
- 
--- 
-2.24.1
-
+Will see, thanks :)
