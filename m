@@ -2,142 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 068C7150544
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2020 12:28:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A864915072F
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2020 14:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727943AbgBCL2Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Feb 2020 06:28:25 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:44433 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727093AbgBCL2Y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Feb 2020 06:28:24 -0500
-Received: by mail-wr1-f66.google.com with SMTP id m16so17515234wrx.11;
-        Mon, 03 Feb 2020 03:28:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=mruua/QXPoTkXaZhNOYpWNabFdF8EK/IibXlAO62+YU=;
-        b=oLPeepQ4OmcmZWIMZhZz4kN7jRFEusSQTjPYJMIO5e2Z6+DYYeOE1qXkrOFZdvDkkO
-         PF4J0pvYoTRV2t7ObAtfC9FLVoJt9iN+o3CGo2m8ILE2y857JDTmMmoL8slH49xpJ2+w
-         xR8pVrr5m6fp0HHusTTqIhVUyoYY8OORaOxAPyuhXPeAPipwpcQzKInoKWG98DesfBKT
-         0dLMInU0ZPqiHCki8VS08cHkbmSRy58rc3t+A7PaktDfxaXmABsjKJ1DJ8PuiAn3Q0It
-         hR32DWDelAgLfcDqo6ev3VAElU75NU8SoYGxHVwlRdj76b2hHG57/5oxEscL5wo8Qwe0
-         Rm8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mruua/QXPoTkXaZhNOYpWNabFdF8EK/IibXlAO62+YU=;
-        b=qrUXNwXaY8Jk14oO/YG6RuAF6kWG0EuoBg+QU6yp6I+2Ot4/zs4kPqoWvnqmq+sZYL
-         fMIgHst93jT7kNQQqVd/eW7d9tZQKXXBq04xjQstMyQLzxkv1sFobeZmQDiUlK6cZCsV
-         TuW6Q8PnhrSq6jcJxyp5aYhq3vMD3vOQKbM8rZZ50eq0KwpIjln63P7sK2j/9bxnPG//
-         fQGj00tN5J54u+pIOrUTawD9ILWlAehsq+WBPOtlSTvrfUESISuSCdAcbEbhs6NoO2kK
-         8BdUqroXHBLHEaSVWTBKDWmJ6LXthK8rKu0rwRh1bVmOAiwXORmeEJSIwW0J9KRsskfe
-         ew0Q==
-X-Gm-Message-State: APjAAAVgErIRIkF/inKka7FqVUzcFZtcDTxgvYKgHjKJivcUfnu80C8A
-        xDpblxkhlJ2/xKR1yG3fJhc=
-X-Google-Smtp-Source: APXvYqwMpxTMmmlsdRwzY/RHj7AI8BNd6KDvoBuz0NnnyIvpnZ+xNuu086sGC67YKFU4I4fgFjydhg==
-X-Received: by 2002:adf:e70d:: with SMTP id c13mr14776864wrm.248.1580729301361;
-        Mon, 03 Feb 2020 03:28:21 -0800 (PST)
-Received: from localhost (p2E5BEF3F.dip0.t-ipconnect.de. [46.91.239.63])
-        by smtp.gmail.com with ESMTPSA id b16sm22600565wmj.39.2020.02.03.03.28.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2020 03:28:19 -0800 (PST)
-Date:   Mon, 3 Feb 2020 12:28:18 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] usb: phy: tegra: Add clarifying comments about the
- shared registers
-Message-ID: <20200203112818.GA3506060@ulmo>
-References: <20200202224259.29187-1-digetx@gmail.com>
+        id S1727646AbgBCN2M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Feb 2020 08:28:12 -0500
+Received: from mga18.intel.com ([134.134.136.126]:23552 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727606AbgBCN2M (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 3 Feb 2020 08:28:12 -0500
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Feb 2020 05:28:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,398,1574150400"; 
+   d="scan'208";a="337184723"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 03 Feb 2020 05:28:09 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 03 Feb 2020 15:28:08 +0200
+Date:   Mon, 3 Feb 2020 15:28:08 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     "Shah, Nehal-bakulchandra" <nbshah@amd.com>
+Cc:     ajayg@nvidia.com, linux-usb@vger.kernel.org
+Subject: Re: UCSI:CCG: AMD Platform
+Message-ID: <20200203132808.GA29050@kuha.fi.intel.com>
+References: <0fa0fc36-ce51-046a-32ae-9dbb7452c1c4@amd.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="OXfL5xGRrasGEqWY"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200202224259.29187-1-digetx@gmail.com>
-User-Agent: Mutt/1.13.1 (2019-12-14)
+In-Reply-To: <0fa0fc36-ce51-046a-32ae-9dbb7452c1c4@amd.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
 
---OXfL5xGRrasGEqWY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, Feb 03, 2020 at 10:52:52AM +0530, Shah, Nehal-bakulchandra wrote:
+> Currently i am working on enabling UCSI support
+> for CCGx based controller on AMD GPU Cards.
+> 
+> Now i am observing the issue reported here when
+> i unplug the cable.
+> 
+> https://bugzilla.redhat.com/show_bug.cgi?id=1762031
+> 
+> Also would like to know is there any way we can
+> get user level notifications for UCSI?
 
-On Mon, Feb 03, 2020 at 01:42:59AM +0300, Dmitry Osipenko wrote:
-> Tools like Coccinelle may erroneously recommend to use the
-> devm_platform_ioremap_resource() API for the registers mapping because
-> these tools are not aware about the implementation details of the driver.
-> Let's add a clarifying comments to the code, which should help to stop
-> future attempts to break the driver.
->=20
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/usb/phy/phy-tegra-usb.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->=20
-> diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-=
-usb.c
-> index 037e8eee737d..6153cc35aba0 100644
-> --- a/drivers/usb/phy/phy-tegra-usb.c
-> +++ b/drivers/usb/phy/phy-tegra-usb.c
-> @@ -969,6 +969,10 @@ static int utmi_phy_probe(struct tegra_usb_phy *tegr=
-a_phy,
->  		return  -ENXIO;
->  	}
-> =20
-> +	/*
-> +	 * Note that UTMI pad registers are shared by all PHYs, therefore
-> +	 * devm_platform_ioremap_resource() can't be used here.
-> +	 */
->  	tegra_phy->pad_regs =3D devm_ioremap(&pdev->dev, res->start,
->  					   resource_size(res));
->  	if (!tegra_phy->pad_regs) {
-> @@ -1087,6 +1091,10 @@ static int tegra_usb_phy_probe(struct platform_dev=
-ice *pdev)
->  		return  -ENXIO;
->  	}
-> =20
-> +	/*
-> +	 * Note that PHY and USB controller are using shared registers,
-> +	 * therefore devm_platform_ioremap_resource() can't be used here.
-> +	 */
->  	tegra_phy->regs =3D devm_ioremap(&pdev->dev, res->start,
->  				       resource_size(res));
->  	if (!tegra_phy->regs) {
+If you want to see the actual UCSI notification in user space, then
+that is not possible, but the driver does produce trace output, and I
+would actually like to see what we got there. You need debugfs to be
+mounted. Then try the following:
 
-I'm not sure it's really going to stop *all* attempts. But at least for
-people that go through the trouble of reading the comments, yes, this
-should do the trick, so:
+        # Unload all UCSI modules
+        modprobe -r ucsi_acpi
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+        # At this point you should plug-in the problematic device
 
---OXfL5xGRrasGEqWY
-Content-Type: application/pgp-signature; name="signature.asc"
+        # Reload the UCSI core module
+        modprobe typec_ucsi
 
------BEGIN PGP SIGNATURE-----
+        # Enable UCSI tracing
+        echo 1 > /sys/kernel/debug/tracing/events/ucsi/enable
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl44A9AACgkQ3SOs138+
-s6E5LA//eA+l0WY720Az8s4VDR4EoNCATb9zoF8BYUaqhMGRF3PGFK2ih0Fblls4
-U8foPI8ezcnxqIVwfI8dzfFhGMlAf0lKyJbEmPfBofwLjrprH9jDDcD2aYBEqDtB
-Hco1ZZRHmRcSLvzSIZIf5oOfm2aGzqHVjbCbi+eKS4k2LYg3pJbEbZVwV0QYUCkV
-bgrxv9+RfTm3umKVXd9pL41j8zhVrvSgE7ta32AilhU7BSSIAQjBD3o/COr2H8w5
-rgIPHVlIRgoEEfGUdGc0yk/xHY5uaLy2LX98HZ8O3sI7LdveevDtlUaDowDHU4+k
-Y3uZio3jNsUccxRm3lmIB2hpjjJ06J0A1r0Aa6Z/pEpJL3d6Z9U8WoB73SHJGX0t
-rNUzt3KC2h4w38sYAUtYm0r2YRc1vcRN6xE+gA74VUn48H2T8Ih3BLSCExaOVwbw
-FtAcmq5KYYCHAe2GLITEGqjJ98P5RiG8Irda9N2IRD87HMFUwFFbr5ZRSbDZklpV
-WAWCHxf8K6QAjk0HBbSCG1HqMJ0iOVjEXWj48wjJvrLchyrpYnFV9A3TGKTQfUZB
-FwVqrua3RIEtzxzstc+z3/6ywa7cg/BOZobL0NiFHqE3s546zymlG7fjqu35xeX+
-cWebVl3Pvt/ueJ16bAhtr8ippPBFS9sDlZ9uacJqfBRN7R0d0mM=
-=GgDd
------END PGP SIGNATURE-----
+        # Now reload the ACPI glue driver
+        modprobe ucsi_acpi
 
---OXfL5xGRrasGEqWY--
+        # Unplug the problematic device so that you see the error
+
+        # Finally dump the trace output
+        cat /sys/kernel/debug/tracing/trace
+
+So if that works, please send the trace output to me.
+
+Thanks,
+
+-- 
+heikki
