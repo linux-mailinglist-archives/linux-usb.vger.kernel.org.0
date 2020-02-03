@@ -2,178 +2,556 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4C1150F1D
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2020 19:08:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DDE151055
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2020 20:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728889AbgBCSIz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Feb 2020 13:08:55 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36070 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728319AbgBCSIz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Feb 2020 13:08:55 -0500
-Received: by mail-pg1-f195.google.com with SMTP id k3so8231661pgc.3
-        for <linux-usb@vger.kernel.org>; Mon, 03 Feb 2020 10:08:53 -0800 (PST)
+        id S1726287AbgBCTfi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Feb 2020 14:35:38 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:34343 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726187AbgBCTfi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Feb 2020 14:35:38 -0500
+Received: by mail-pf1-f193.google.com with SMTP id i6so8101358pfc.1
+        for <linux-usb@vger.kernel.org>; Mon, 03 Feb 2020 11:35:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b2IyM27KyGz4uJ+vHY0/xwqTCFrd9ysYN6CzGQ8O0cA=;
-        b=cyf3WXeo+GEVwg/4OZISbxU2gp/IhQjjuTpf8rT81hx7LGyqXIgw1pC1AHBtKK8cOg
-         Ed5B57Gd7EuRpya4U0ZQS6SYWIUt8ZmLpczD7cuVp0vHxXG0p3wgIY6YroY1V6mw3uFJ
-         u6zQCQj+nWL4HUPvvseKDYTAEkkA4aYHxmYv42odgtN5Eq9hY/er5NgCwIpXfbCRdF72
-         PLJNxPgE3dYbWh1wBM2XCpA/oqdBLfctvl2Bdsj0p/5V9Be+l2blYWAmdtlsq6WQisHZ
-         In3pLgrZAuQIpEHrj69GmUsPJIEV/HoMa9JP9MMVn62C8VLvfFA2sEL2vwJTPdevw9TI
-         dkNQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=7YpQxLX4U2GQICWgq80GxBdSsHfJwYraOcMspQmkaJ0=;
+        b=bg3fYC3RKmgV/sMcfmvy1pggK34Ib5VpRewrB0Mi9lfNDp7rPMEVJYKYtR1ljj7MyQ
+         2372WDE0bcx4LBrx9UNo+Cd+eTdGA1zMEygaiz6jPMKNinxRwXLVS5rK8QfhaHs52G9z
+         EAVeLiASBPUMv/m3fRYGZLs+dabTOvp6Y1GzWU92IQi2wvSEEYtltk9cQU6GtrRKYrr0
+         njwqIAthBzuOVbgk4NPkQqmBuzKfYNBk/U6nAHccCR/NnPI8gFLYh64O5fAQuCRoC2MU
+         0uM+Rl7lT340ZzqiQrDIvp6l7Rk1p+OCUnOY8zhFbGt0OWRSdLWW9C2QogsBhxYKPTda
+         4Z6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b2IyM27KyGz4uJ+vHY0/xwqTCFrd9ysYN6CzGQ8O0cA=;
-        b=lvULxC5Z3ca2Bc+Ad8NwwYJxgMpyU790DWAYhSdsbBRGpSbh6mRv0ghws8iulbyz7z
-         75vQS4MkZLU6BEqS/4zc4on6TP0pGc4KFdFDEJBB6b6sOMHJAbwgvOXGpRHSz1GrKYF2
-         PDPX6cSHhd4l4o97lxINP0eAFMHY6eO03LKQMUhaD3ujUKa0nxntAI2FHIJDrgSc1rSp
-         lCadJ1O6YECiyhcy2TP0bj4UqR6k+2Su8sQnFwMOIsk5vPIKXi5Kfw0AkDbSKWlm08S2
-         Ucvzumhr20bOJ9pVggnJF8E+VJoeJgczTskz4Ekg+MEQBdZ3Xi9HsEC0cgLEfEes7aDS
-         91uw==
-X-Gm-Message-State: APjAAAVJbt+7i32AHN8L5kVN4a/wVlVHtJrw8UCADZIBdrAp4ATsJ5m5
-        grhWk09gry9yx4VCeweKdaCaVQnwJlPslKshDfntgg==
-X-Google-Smtp-Source: APXvYqyhUchSG2HsKkW7TBXJrPuGOTXzynXq+EVVt9qQtbLQHc/WCqbzSLTWdw+gfP4BBVQ/xDXtvq95tbTf5V4kZD4=
-X-Received: by 2002:a65:678f:: with SMTP id e15mr26594774pgr.130.1580753332411;
- Mon, 03 Feb 2020 10:08:52 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7YpQxLX4U2GQICWgq80GxBdSsHfJwYraOcMspQmkaJ0=;
+        b=HM1DunkdXMg4flYQlZ+1hzOOzwzNOR5a7UdGnw076QvQW9VGH/LRqOByfQtSqm5S4g
+         9iO4RPOlA96a10Tuh6AmApjldvHRnFzIfIINM8Xxl8k43K/qbsILiYqG2P/0sTdQpBxQ
+         zPemRwlcRa31xBOeRFaxiejDowOQwnTzUc9ZgI6NK0NckJ8sqIA/yQWeDclKGFBFbIkQ
+         iF6J1qL6SBf3//KygE7zTRghyAv+AYJTL4NUt4qCXD61zhoMPquwiehrpQavxAohv+n2
+         UIh8MyH0BUbnrdtjXkJrtEFr9vaSx1m0L/VD6LmoqhrMxQJNjLTtN360DyfAYhJfEPqY
+         4a2A==
+X-Gm-Message-State: APjAAAUJsK00NctK5B0Ke8sFgo9gKSB+RbIXgKpKJzXrmdaWmHWx8J6D
+        BSS/vUeVhJQpIxNKAUDlL+ibNg==
+X-Google-Smtp-Source: APXvYqx33SiywJBS8WUBgtOsFbiFeFhOY3NEGlPquTjtqr8k4+o2FiX22dJlysQXLts2+O+Augxa2Q==
+X-Received: by 2002:a62:be0a:: with SMTP id l10mr27375113pff.110.1580758536897;
+        Mon, 03 Feb 2020 11:35:36 -0800 (PST)
+Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id h10sm20820459pfo.181.2020.02.03.11.35.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Feb 2020 11:35:36 -0800 (PST)
+Date:   Mon, 3 Feb 2020 11:35:33 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Avaneesh Kumar Dwivedi <akdwived@codeaurora.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ckadabi@codeaurora.org, tsoni@codeaurora.org,
+        bryanh@codeaurora.org, psodagud@codeaurora.org,
+        rnayak@codeaurora.org, satyap@codeaurora.org,
+        pheragu@codeaurora.org
+Subject: Re: [PATCH v4 2/2] Embedded USB Debugger (EUD) driver
+Message-ID: <20200203193533.GL3948@builder>
+References: <1580445811-15948-1-git-send-email-akdwived@codeaurora.org>
+ <1580445811-15948-3-git-send-email-akdwived@codeaurora.org>
 MIME-Version: 1.0
-References: <cover.1579007786.git.andreyknvl@google.com> <461a787e63a9a01d83edc563575b8585bc138e8d.1579007786.git.andreyknvl@google.com>
- <87ftfv7nf0.fsf@kernel.org> <CAAeHK+wwmis4z9ifPAnkM36AnfG2oESSLAkKvDkuAa0QUM2wRg@mail.gmail.com>
- <87a7637ise.fsf@kernel.org>
-In-Reply-To: <87a7637ise.fsf@kernel.org>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 3 Feb 2020 19:08:41 +0100
-Message-ID: <CAAeHK+zNuqwmHG4NJwZNtQHizdaOpriHxoQffZHMffeke_hsGQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/1] usb: gadget: add raw-gadget interface
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1580445811-15948-3-git-send-email-akdwived@codeaurora.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 31, 2020 at 4:22 PM Felipe Balbi <balbi@kernel.org> wrote:
->
->
-> Hi,
->
-> Andrey Konovalov <andreyknvl@google.com> writes:
-> >> > diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-> >> > new file mode 100644
-> >> > index 000000000000..51796af48069
-> >> > --- /dev/null
-> >> > +++ b/drivers/usb/gadget/legacy/raw_gadget.c
-> >> > @@ -0,0 +1,1068 @@
-> >> > +// SPDX-License-Identifier: GPL-2.0
-> >>
-> >> V2 only
-> >
-> > Like this: SPDX-License-Identifier: GPL-2.0 only ?
->
-> Right, you need to choose if you want 2.0-only or 2.0-or-later and make
-> sure spdx and module_license() agree.
->
-> https://spdx.org/licenses/GPL-2.0-only.html
->
-> What you had before, implies GPL-2.0-only...
->
-> >> > +MODULE_LICENSE("GPL");
->
-> but this is GPL 2+
->
-> /me goes look
->
-> Actually Thomas Gleixner changed the meaning of MODULE_LICENSE("GPL"),
-> so I don't really know how this should look today.
->
-> >> > +static int raw_event_queue_add(struct raw_event_queue *queue,
-> >> > +     enum usb_raw_event_type type, size_t length, const void *data)
-> >> > +{
-> >> > +     unsigned long flags;
-> >> > +     struct usb_raw_event *event;
-> >> > +
-> >> > +     spin_lock_irqsave(&queue->lock, flags);
-> >> > +     if (WARN_ON(queue->size >= RAW_EVENT_QUEUE_SIZE)) {
-> >> > +             spin_unlock_irqrestore(&queue->lock, flags);
-> >> > +             return -ENOMEM;
-> >> > +     }
-> >> > +     event = kmalloc(sizeof(*event) + length, GFP_ATOMIC);
-> >>
-> >> I would very much prefer dropping GFP_ATOMIC here. Must you have this
-> >> allocation under a spinlock?
-> >
-> > The issue here is not the spinlock, but that this might be called in
-> > interrupt context. The number of atomic allocations here is restricted
-> > by 128, and we can reduce the limit even further (until some point in
-> > the future when and if we'll report more different events). Another
-> > option would be to preallocate the required number of objects
-> > (although we don't know the required size in advance, so we'll waste
-> > some memory) and use those. What would you prefer?
->
-> I think you shouldn't do either :-) Here's what I think you should do:
->
-> 1. support O_NONBLOCK. This just means conditionally removing your
->    wait_for_completion_interruptible().
+On Thu 30 Jan 20:43 PST 2020, Avaneesh Kumar Dwivedi wrote:
 
-I don't think non blocking read/writes will work for us. We do
-coverage-guided fuzzing and need to collect coverage for each syscall.
-In the USB case "syscall" means processing a USB request from start to
-end, and thus we need to wait until the kernel finishes processing it,
-otherwise we'll fail to associate coverage properly (It's actually a
-bit more complex, as we collect coverage for the whole initial
-enumeration process as for one "syscall", but the general idea stands,
-that we need to wait until the operation finishes.)
+> Add support for control peripheral of EUD (Embedded USB Debugger) to
+> listen to events such as USB attach/detach, charger enable/disable, pet
+> EUD to indicate software is functional. Reusing the platform device kobj,
+> sysfs entry 'enable' is created to enable or disable EUD.
+> 
+> Signed-off-by: Satya Durga Srinivasu Prabhala <satyap@codeaurora.org>
+> Signed-off-by: Prakruthi Deepak Heragu <pheragu@codeaurora.org>
+> Signed-off-by: Avaneesh Kumar Dwivedi <akdwived@codeaurora.org>
 
->
-> 2. Every time user calls write(), you usb_ep_alloc(), allocate a buffer
->    with the write size, copy buffer to kernel space,
->    usb_ep_queue(). When complete() callback is called, then you free the
->    request. This would allow us to amortize the cost of copy_from_user()
->    with several requests being queued to USB controller.
+Either ensure Satya is the author, or add some Co-developed-by to
+indicate that all three of you have authored the patch.
 
-I'm not sure I really get this part. We'll still need to call
-copy_from_user() and usb_ep_queue() once per each operation/request.
-How does it get amortized? Or do you mean that having multiple
-requests queued will allow USB controller to process them in bulk?
-This makes sense, but again, we"ll then have an issue with coverage
-association.
+> ---
+>  Documentation/ABI/stable/sysfs-driver-msm-eud |   5 +
+>  drivers/soc/qcom/Kconfig                      |  12 +
+>  drivers/soc/qcom/Makefile                     |   1 +
+>  drivers/soc/qcom/eud.c                        | 329 ++++++++++++++++++++++++++
+>  4 files changed, 347 insertions(+)
+>  create mode 100644 Documentation/ABI/stable/sysfs-driver-msm-eud
+>  create mode 100644 drivers/soc/qcom/eud.c
+> 
+> diff --git a/Documentation/ABI/stable/sysfs-driver-msm-eud b/Documentation/ABI/stable/sysfs-driver-msm-eud
+> new file mode 100644
+> index 0000000..d96ae05
+> --- /dev/null
+> +++ b/Documentation/ABI/stable/sysfs-driver-msm-eud
+> @@ -0,0 +1,5 @@
+> +What:           /sys/bus/platform/drivers/msm-eud/enable
+> +Date:           Jan 2020
+> +Contact:        Avaneesh Kumar Dwivedi <akdwived@codeaurora.org>
+> +Description:    Enable/Disable use of eud device.
+> +Users:          User space debug application which intend to use EUD h/w block.
+> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+> index d0a73e7..6b7c9d0 100644
+> --- a/drivers/soc/qcom/Kconfig
+> +++ b/drivers/soc/qcom/Kconfig
+> @@ -202,4 +202,16 @@ config QCOM_APR
+>  	  application processor and QDSP6. APR is
+>  	  used by audio driver to configure QDSP6
+>  	  ASM, ADM and AFE modules.
+> +
+> +config QCOM_EUD
 
->
-> 3. Have a pre-allocated list of requests (128?) for read(). Enqueue them
->    all during set_alt(). When user calls read() you will:
->
->    a) check if there are completed requests to be copied over to
->       userspace. Recycle the request.
->
->    b) if there are no completed requests, then it depends on O_NONBLOCK
->
->       i) If O_NONBLOCK, return -EWOULDBLOCK
->       ii) otherwise, wait_for_completion
+Please aim for keeping the sort order in this file (ignore QCOM_APR
+which obviously is in the wrong place)
 
-See response to #1, if we prequeue requests, then the kernel will
-start handling them before we do read(), and we'll fail to associate
-coverage properly. (This will also require adding another ioctl to
-imitate set_alt(), like the USB_RAW_IOCTL_CONFIGURE that we have.)
+> +       tristate "QTI Embedded USB Debugger (EUD)"
+> +       depends on ARCH_QCOM
+> +       help
+> +         The Embedded USB Debugger (EUD) driver is a driver for the
+> +         control peripheral which waits on events like USB attach/detach
+> +         and charger enable/disable. The control peripheral further helps
+> +         support the USB-based debug and trace capabilities.
+> +         This module enables support for Qualcomm Technologies, Inc.
+> +         Embedded USB Debugger (EUD).
+> +         If unsure, say N.
+>  endmenu
+> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
+> index 9fb35c8..c15be68 100644
+> --- a/drivers/soc/qcom/Makefile
+> +++ b/drivers/soc/qcom/Makefile
+> @@ -25,3 +25,4 @@ obj-$(CONFIG_QCOM_APR) += apr.o
+>  obj-$(CONFIG_QCOM_LLCC) += llcc-qcom.o
+>  obj-$(CONFIG_QCOM_RPMHPD) += rpmhpd.o
+>  obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
+> +obj-$(CONFIG_QCOM_EUD) += eud.o
+> diff --git a/drivers/soc/qcom/eud.c b/drivers/soc/qcom/eud.c
+> new file mode 100644
+> index 0000000..e6c3604
+> --- /dev/null
+> +++ b/drivers/soc/qcom/eud.c
+> @@ -0,0 +1,329 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2016-2018, The Linux Foundation. All rights reserved.
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/slab.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/err.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/extcon.h>
+> +#include <linux/extcon-provider.h>
+> +#include <linux/delay.h>
+> +#include <linux/sysfs.h>
+> +#include <linux/io.h>
+> +#include <linux/bitops.h>
+> +#include <linux/workqueue.h>
+> +#include <linux/power_supply.h>
 
-> I think this can all be done without any GFP_ATOMIC allocations.
+Please sort these.
 
-Overall, supporting O_NONBLOCK might be a useful feature for people
-who are doing something else other than fuzzing, We can account for
-potential future extensions that'll support it, so detecting
-O_NONBLOCK and returning an error for now makes sense.
+> +
+> +#define EUD_ENABLE_CMD 1
+> +#define EUD_DISABLE_CMD 0
 
-WDYT?
+These defines doesn't add much value.
 
-Thanks!
+> +
+> +#define EUD_REG_INT1_EN_MASK	0x0024
+> +#define EUD_REG_INT_STATUS_1	0x0044
+> +#define EUD_REG_CTL_OUT_1	0x0074
+> +#define EUD_REG_VBUS_INT_CLR	0x0080
+> +#define EUD_REG_CHGR_INT_CLR	0x0084
+> +#define EUD_REG_CSR_EUD_EN	0x1014
+> +#define EUD_REG_SW_ATTACH_DET	0x1018
+> +
+> +#define EUD_INT_VBUS		BIT(2)
+> +#define EUD_INT_CHGR		BIT(3)
+> +#define EUD_INT_SAFE_MODE	BIT(4)
+> +#define EUD_INT_ALL		(EUD_INT_VBUS|EUD_INT_CHGR|\
+> +				EUD_INT_SAFE_MODE)
+> +
+> +struct eud_chip {
+> +	struct device			*dev;
+> +	int				eud_irq;
+> +	unsigned int			extcon_id;
+> +	unsigned int			int_status;
+> +	bool				usb_attach;
+> +	bool				chgr_enable;
+> +	void __iomem			*eud_reg_base;
+> +	struct extcon_dev		*extcon;
+> +	int				enable;
+> +	struct work_struct		eud_work;
+> +};
+> +
+> +static const unsigned int eud_extcon_cable[] = {
+> +	EXTCON_USB,
+> +	EXTCON_CHG_USB_SDP,
+> +	EXTCON_NONE,
+> +};
+> +
+> +static int enable_eud(struct eud_chip *priv)
+> +{
+> +	int ret;
+> +
+> +	/* write into CSR to enable EUD */
+
+Make up a define for BIT(0) and the next line is self explanatory - i.e.
+drop the comment..
+
+> +	writel_relaxed(BIT(0), priv->eud_reg_base + EUD_REG_CSR_EUD_EN);
+
+Don't use _relaxed version of writel/readl unless you have a really good
+reason - and if so provide a comment to why this is.
+
+> +	/* Enable vbus, chgr & safe mode warning interrupts */
+
+This just repeats exactly what can be read from the next line.
+
+> +	writel_relaxed(EUD_INT_VBUS | EUD_INT_CHGR | EUD_INT_SAFE_MODE,
+> +			priv->eud_reg_base + EUD_REG_INT1_EN_MASK);
+> +
+> +	/* Ensure Register Writes Complete */
+
+wmb() ensures ordering, it deosn't wait for the operation to complete,
+if you need that readl() the register.
+
+> +	wmb();
+> +
+> +	/*
+> +	 * Set the default cable state to usb connect and charger
+> +	 * enable
+> +	 */
+> +	ret = extcon_set_state_sync(priv->extcon, EXTCON_USB, true);
+> +	if (ret)
+> +		return ret;
+> +	ret = extcon_set_state_sync(priv->extcon,
+> +			EXTCON_CHG_USB_SDP, true);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static void disable_eud(struct eud_chip *priv)
+> +{
+> +	/* write into CSR to disable EUD */
+> +	writel_relaxed(0, priv->eud_reg_base + EUD_REG_CSR_EUD_EN);
+
+Use writel() and drop the comment.
+
+> +}
+> +
+> +static ssize_t enable_show(struct device *dev,
+> +				struct device_attribute *attr, char *buf)
+> +{
+> +	struct eud_chip *chip = dev_get_drvdata(dev);
+> +
+> +	return snprintf(buf, sizeof(int), "%d", chip->enable);
+
+buf is not sizeof(int) big...Just do sprintf()...
+
+> +}
+> +
+> +static ssize_t enable_store(struct device *dev,
+> +				struct device_attribute *attr,
+> +				const char *buf, size_t count)
+> +{
+> +	struct eud_chip *chip = dev_get_drvdata(dev);
+> +	int enable = 0;
+
+You shouldn't need to initialize this as you're checking the return
+value of sscanf().
+
+> +	int ret = 0;
+> +
+> +	if (sscanf(buf, "%du", &enable) != 1)
+> +		return -EINVAL;
+> +
+> +	if (enable == EUD_ENABLE_CMD)
+> +		ret = enable_eud(chip);
+
+If ret is !0 you should probably return that, rather than count...
+
+> +	else if (enable == EUD_DISABLE_CMD)
+> +		disable_eud(chip);
+> +	if (!ret)
+
+...and then you don't need this check, or initialize ret to 0 above.
+
+> +		chip->enable = enable;
+
+So if I write 42 to "enable" nothing will change in the hardware, but
+chip->enable will be 42...
+
+> +	return count;
+> +}
+> +
+> +static DEVICE_ATTR_RW(enable);
+> +
+> +static struct attribute *attrs[] = {
+> +	&dev_attr_enable.attr,
+> +	NULL
+> +};
+> +
+> +static struct attribute_group attr_group = {
+> +	.attrs = attrs,
+> +};
+> +
+> +static const struct attribute_group *attr_groups[] = {
+> +	&attr_group,
+> +	NULL
+> +};
+> +
+> +static void eud_event_notifier(struct work_struct *eud_work)
+
+Why do you need a worker for this? Why not just use a threaded handler
+and execute this directly in that context?
+
+> +{
+> +	struct eud_chip *chip = container_of(eud_work, struct eud_chip,
+> +					eud_work);
+> +	int ret;
+> +
+> +	if (chip->int_status == EUD_INT_VBUS) {
+
+And if you just call this function from the handler, you don't need
+chip->int_status to pass parameters between the handler and the worker.
+
+> +		ret = extcon_set_state_sync(chip->extcon, chip->extcon_id,
+> +					chip->usb_attach);
+> +		if (ret)
+> +			return;
+> +	} else if (chip->int_status == EUD_INT_CHGR) {
+> +		ret = extcon_set_state_sync(chip->extcon, chip->extcon_id,
+> +					chip->chgr_enable);
+> +		if (ret)
+> +			return;
+> +	}
+> +}
+> +
+> +static void usb_attach_detach(struct eud_chip *chip)
+> +{
+> +	u32 reg;
+> +
+> +	chip->extcon_id = EXTCON_USB;
+> +	/* read ctl_out_1[4] to find USB attach or detach event */
+> +	reg = readl_relaxed(chip->eud_reg_base + EUD_REG_CTL_OUT_1);
+> +	if (reg & BIT(4))
+
+Give this bit a define
+
+> +		chip->usb_attach = true;
+> +	else
+> +		chip->usb_attach = false;
+> +
+> +	schedule_work(&chip->eud_work);
+> +
+> +	/* set and clear vbus_int_clr[0] to clear interrupt */
+> +	writel_relaxed(BIT(0), chip->eud_reg_base + EUD_REG_VBUS_INT_CLR);
+> +	/* Ensure Register Writes Complete */
+> +	wmb();
+
+Use writel() and you probably don't need the wmb() here.
+
+> +	writel_relaxed(0, chip->eud_reg_base + EUD_REG_VBUS_INT_CLR);
+> +}
+> +
+> +static void chgr_enable_disable(struct eud_chip *chip)
+> +{
+> +	u32 reg;
+> +
+> +	chip->extcon_id = EXTCON_CHG_USB_SDP;
+> +	/* read ctl_out_1[6] to find charger enable or disable event */
+> +	reg = readl_relaxed(chip->eud_reg_base + EUD_REG_CTL_OUT_1);
+> +	if (reg & BIT(6))
+
+Again, this deserves a define
+
+> +		chip->chgr_enable = true;
+> +	else
+> +		chip->chgr_enable = false;
+> +
+> +	schedule_work(&chip->eud_work);
+> +
+> +	/* set and clear chgr_int_clr[0] to clear interrupt */
+> +	writel_relaxed(BIT(0), chip->eud_reg_base + EUD_REG_CHGR_INT_CLR);
+> +	/* Ensure Register Writes Complete */
+> +	wmb();
+> +	writel_relaxed(0, chip->eud_reg_base + EUD_REG_CHGR_INT_CLR);
+> +}
+> +
+> +static void pet_eud(struct eud_chip *chip)
+> +{
+> +	u32 reg;
+> +
+> +	/* read sw_attach_det[0] to find attach/detach event */
+> +	reg = readl_relaxed(chip->eud_reg_base + EUD_REG_SW_ATTACH_DET);
+> +	if (reg & BIT(0)) {
+
+define
+
+> +		/* Detach & Attach pet for EUD */
+
+All comments in this driver relates to the very next line, but this
+seems to document the next two writes - i.e. this seems to be a proper
+comment.
+
+> +		writel_relaxed(0, chip->eud_reg_base + EUD_REG_SW_ATTACH_DET);
+> +		/* Ensure Register Writes Complete */
+> +		wmb();
+> +		/* Delay to make sure detach pet is done before attach pet */
+> +		udelay(100);
+
+Better read back the value if you want to ensure the length of the delay
+between the two writes.
+
+> +		writel_relaxed(BIT(0), chip->eud_reg_base +
+> +					EUD_REG_SW_ATTACH_DET);
+> +		/* Ensure Register Writes Complete */
+> +		wmb();
+> +	} else {
+> +		/* Attach pet for EUD */
+> +		writel_relaxed(BIT(0), chip->eud_reg_base +
+> +					EUD_REG_SW_ATTACH_DET);
+> +		/* Ensure Register Writes Complete */
+> +		wmb();
+
+It will complete, if you need to wait for it to have completed read back
+the value.
+
+> +	}
+> +}
+> +
+> +static irqreturn_t handle_eud_irq(int irq, void *data)
+> +{
+> +	struct eud_chip *chip = data;
+> +	u32 reg;
+> +
+> +	/* read status register and find out which interrupt triggered */
+> +	reg = readl_relaxed(chip->eud_reg_base + EUD_REG_INT_STATUS_1);
+> +	switch (reg & EUD_INT_ALL) {
+
+What is the expected outcome if for some reason more than one of these
+bits are set?
+
+> +	case EUD_INT_VBUS:
+> +		chip->int_status = EUD_INT_VBUS;
+> +		usb_attach_detach(chip);
+> +		break;
+> +	case EUD_INT_CHGR:
+> +		chip->int_status = EUD_INT_CHGR;
+> +		chgr_enable_disable(chip);
+> +		break;
+> +	case EUD_INT_SAFE_MODE:
+> +		pet_eud(chip);
+> +		break;
+> +	default:
+> +		return IRQ_NONE;
+> +	}
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int msm_eud_probe(struct platform_device *pdev)
+> +{
+> +	struct eud_chip *chip;
+> +	struct resource *res;
+> +	int ret;
+> +
+> +	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
+> +	if (!chip)
+> +		return -ENOMEM;
+> +
+> +	chip->dev = &pdev->dev;
+> +	platform_set_drvdata(pdev, chip);
+> +
+> +	chip->extcon = devm_extcon_dev_allocate(&pdev->dev, eud_extcon_cable);
+
+Aren't we moving away from extcon in favor of the usb role switching
+thing?
+
+> +	if (IS_ERR(chip->extcon))
+> +		return PTR_ERR(chip->extcon);
+> +
+> +	ret = devm_extcon_dev_register(&pdev->dev, chip->extcon);
+> +	if (ret)
+> +		return ret;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (!res)
+> +		return -ENOMEM;
+> +
+> +	chip->eud_reg_base = devm_ioremap_resource(&pdev->dev, res);
+
+Use devm_platform_ioremap_resource() instead
+
+> +	if (IS_ERR(chip->eud_reg_base))
+> +		return PTR_ERR(chip->eud_reg_base);
+> +
+> +	chip->eud_irq = platform_get_irq(pdev, 0);
+> +
+> +	ret = devm_request_irq(&pdev->dev, chip->eud_irq, handle_eud_irq,
+> +				IRQF_TRIGGER_HIGH, NULL, chip);
+
+Omit the irq trigger information here and let it come from devicetree.
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	device_init_wakeup(&pdev->dev, true);
+> +	enable_irq_wake(chip->eud_irq);
+> +
+> +	INIT_WORK(&chip->eud_work, eud_event_notifier);
+> +
+> +	if (ret)
+
+Duplicate of the same check 8 lines up.
+
+> +		return ret;
+> +
+> +	/* Enable EUD */
+> +	if (chip->enable)
+
+I'm not seeing where this would have been written during probe.
+
+> +		enable_eud(chip);
+> +
+> +	return 0;
+> +}
+> +
+> +static int msm_eud_remove(struct platform_device *pdev)
+> +{
+> +	struct eud_chip *chip = platform_get_drvdata(pdev);
+> +
+> +	if (chip->enable)
+> +		disable_eud(chip);
+> +	device_init_wakeup(&pdev->dev, false);
+> +	disable_irq_wake(chip->eud_irq);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id msm_eud_dt_match[] = {
+> +	{.compatible = "qcom,msm-eud"},
+
+Is this the one and only, past and future, version of the EUD hardware
+block? Or do we need this compatible to be more specific?
+
+Nit. Please add a space after { and before }
+
+Regards,
+Bjorn
