@@ -2,150 +2,334 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70917152046
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2020 19:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 216791520BC
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2020 20:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727390AbgBDSPp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Feb 2020 13:15:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50586 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727355AbgBDSPp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 Feb 2020 13:15:45 -0500
-Received: from localhost (unknown [167.98.85.149])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A8BD12082E;
-        Tue,  4 Feb 2020 18:15:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580840144;
-        bh=C4dZbtbxCP+NfpJwttHNh1gdX8huQVEhH6UPfXRkksA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VZhOVr6Ja+kObt4OaPSGI74BYX0hEACHN8zidY2Hiv6u6nl5M3yyhA/4TwrKo0S4q
-         YB47VXkOmBV5WDncCAcn7lgaulF81Nm3a9vAmoMJsM629CXgR+mmcuW16i/TkSgder
-         6YZiKmPpejRIXI++ov45QKDfIvKTZ8dfHQjhhqK8=
-Date:   Tue, 4 Feb 2020 18:15:42 +0000
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Lauri Jakku <lja@iki.fi>
-Cc:     oneukum@suse.com, benjamin.tissoires@redhat.com, jikos@kernel.org,
-        linux-input@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v5] USB: HID: random timeout failures tackle try.
-Message-ID: <20200204181542.GB1115743@kroah.com>
-References: <20200204175238.3817-1-lja@iki.fi>
+        id S1727369AbgBDTGX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Feb 2020 14:06:23 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:46760 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727314AbgBDTGW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Feb 2020 14:06:22 -0500
+Received: by mail-lf1-f68.google.com with SMTP id z26so12914272lfg.13
+        for <linux-usb@vger.kernel.org>; Tue, 04 Feb 2020 11:06:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8bClit+L1+WoVffp+is4tAUYwivuBDyFOrRgkOZDdvg=;
+        b=NlPksnkFkkmQQs8xs8wtfwgmJgK6rHzfRunUuLKjz8Ctq1a6yEGICDiwuNhmGyBDz2
+         llonkyMnmZUkTUyyQOqNWVeUclO2mhxH395E/elkqECUZ6NOQTc2PRBWeT9GEbulXfMQ
+         ydHL5Yl2QvxPqltjc6pYZN3lt5C6GpiVC7g9M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8bClit+L1+WoVffp+is4tAUYwivuBDyFOrRgkOZDdvg=;
+        b=ae0ZiNIoy5howYWgnxmVnK6Donr2If+MnEr3FBpsnzhK1wm9iD00cl9gq37JINy7zA
+         d02pD1l8Ic+MMJnV0PB50mT9tt8L9yvkhr1A+Xh7HsTk7UE0/Dy7L3RglCKFLZnO0Ic8
+         OdcqIhLv2Q8SmAW1hhzpjmCqLqBurqWLjqPfoRzLAcHyFSjk7c5spTqrNxEAHSSixQ+5
+         6GrsykJ4xK6fkftQEp7IXsFS34Du1pJRgnCoeUBdhuue3fyIs9Rmyns5ALdi4Q62o0qS
+         tsbzTgVt30rSQg/fQq3A6OaujXalqFplORP9ZvBH9aNfzQEmeM9Sr0OzUTY9wnFg/aVh
+         8/Ig==
+X-Gm-Message-State: APjAAAXkByMVse7CsMtXFeCuvXQ+B9ZmveshHmJn3fUPRqbnCF+HdCs2
+        1+Xs2q0LCxo6CB90JnIv7ZX8LzpIwzA=
+X-Google-Smtp-Source: APXvYqwMzvEqn7fHoWSNJcojrSRByigmzFXDyAKFiJSnn12pHRWq8M5lUxEi/vzZ5vtkiceoocyr4w==
+X-Received: by 2002:a19:23d7:: with SMTP id j206mr15719420lfj.108.1580843179248;
+        Tue, 04 Feb 2020 11:06:19 -0800 (PST)
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
+        by smtp.gmail.com with ESMTPSA id a8sm12082160ljn.74.2020.02.04.11.06.18
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Feb 2020 11:06:18 -0800 (PST)
+Received: by mail-lj1-f178.google.com with SMTP id o15so14247077ljg.6
+        for <linux-usb@vger.kernel.org>; Tue, 04 Feb 2020 11:06:18 -0800 (PST)
+X-Received: by 2002:a2e:81c7:: with SMTP id s7mr18444187ljg.3.1580843177358;
+ Tue, 04 Feb 2020 11:06:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200204175238.3817-1-lja@iki.fi>
+References: <1568718649-20124-1-git-send-email-cchiluve@codeaurora.org> <1568718649-20124-3-git-send-email-cchiluve@codeaurora.org>
+In-Reply-To: <1568718649-20124-3-git-send-email-cchiluve@codeaurora.org>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Tue, 4 Feb 2020 11:05:41 -0800
+X-Gmail-Original-Message-ID: <CAE=gft4ZM3H2eODOwdpOC5tBkRV9BBHPnya_rOy3mNmqH2Y3+Q@mail.gmail.com>
+Message-ID: <CAE=gft4ZM3H2eODOwdpOC5tBkRV9BBHPnya_rOy3mNmqH2Y3+Q@mail.gmail.com>
+Subject: Re: [PATCH V3 2/3] usb: dwc3: qcom: Add interconnect support in dwc3 driver
+To:     Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+Cc:     balbi@kernel.org, Andy Gross <agross@kernel.org>,
+        David Brown <david.brown@linaro.org>,
+        linux-usb@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 04, 2020 at 07:52:39PM +0200, Lauri Jakku wrote:
-> diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-> index 5adf489428aa..2e0bfe70f7c5 100644
-> --- a/drivers/usb/core/message.c
-> +++ b/drivers/usb/core/message.c
+Hi Chandana,
+Are you going to spin this series? My comments are below, I see
+Matthias also has comments. Please CC us both on the next spin.
+-Evan
 
-Ok, changelog issues aside:
+On Tue, Sep 17, 2019 at 4:11 AM Chandana Kishori Chiluveru
+<cchiluve@codeaurora.org> wrote:
+>
+> Add interconnect support in dwc3-qcom driver to vote for bus
+> bandwidth.
+>
+> This requires for two different paths - from USB master to
+> DDR slave. The other is from APPS master to USB slave.
+>
+> Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 145 ++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 143 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 184df4d..2a2f5af 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/module.h>
+>  #include <linux/kernel.h>
+>  #include <linux/extcon.h>
+> +#include <linux/interconnect.h>
+>  #include <linux/of_platform.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/phy/phy.h>
+> @@ -59,8 +60,13 @@ struct dwc3_qcom {
+>         enum usb_dr_mode        mode;
+>         bool                    is_suspended;
+>         bool                    pm_suspended;
+> +       struct icc_path         *usb_ddr_icc_path;
+> +       struct icc_path         *apps_usb_icc_path;
+>  };
+>
+> +static int dwc3_qcom_interconnect_enable(struct dwc3_qcom *qcom);
+> +static int dwc3_qcom_interconnect_disable(struct dwc3_qcom *qcom);
 
+Is there any reason you didn't just define these functions earlier?
 
-> @@ -20,6 +20,7 @@
->  #include <linux/usb/hcd.h>	/* for usbcore internals */
->  #include <linux/usb/of.h>
->  #include <asm/byteorder.h>
-> +#include <linux/errno.h>
->  
->  #include "usb.h"
->  
-> @@ -137,7 +138,10 @@ int usb_control_msg(struct usb_device *dev, unsigned int pipe, __u8 request,
->  		    __u16 size, int timeout)
+> +
+>  static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32 val)
 >  {
->  	struct usb_ctrlrequest *dr;
-> -	int ret;
-> +	int ret = -ETIMEDOUT;
+>         u32 reg;
+> @@ -222,7 +228,7 @@ static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
+>  static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
+>  {
+>         u32 val;
+> -       int i;
+> +       int i, ret;
+>
+>         if (qcom->is_suspended)
+>                 return 0;
+> @@ -234,6 +240,10 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
+>         for (i = qcom->num_clocks - 1; i >= 0; i--)
+>                 clk_disable_unprepare(qcom->clks[i]);
+>
+> +       ret = dwc3_qcom_interconnect_disable(qcom);
+> +       if (ret)
+> +               dev_warn(qcom->dev, "failed to disable interconnect %d\n", ret);
 
-No need to initialize this.
-
-> +
-> +	/* retry_cnt * 20ms, max retry time set to 400ms */
-> +	int retry_cnt = 20;
-
-Why?  You just now changed how all drivers will deal with timeouts.  And
-you didn't change any drivers :(
-
-
->  
->  	dr = kmalloc(sizeof(struct usb_ctrlrequest), GFP_NOIO);
->  	if (!dr)
-> @@ -149,11 +153,52 @@ int usb_control_msg(struct usb_device *dev, unsigned int pipe, __u8 request,
->  	dr->wIndex = cpu_to_le16(index);
->  	dr->wLength = cpu_to_le16(size);
->  
-> -	ret = usb_internal_control_msg(dev, pipe, dr, data, size, timeout);
-> +	do {
-> +		ret = usb_internal_control_msg(dev,
-> +					pipe,
-> +					dr,
-> +					data,
-> +					size,
-> +					timeout);
-> +
-> +		/*
-> +		 * Linger a bit, prior to the next control message
-> +		 * or if return value is timeout, but do try few
-> +		 * times (max 400ms) before quitting. Adapt timeout
-> +		 * to be smaller when we have timeout'd first time.
-> +		 */
-> +		if (dev->quirks & USB_QUIRK_DELAY_CTRL_MSG)
-> +			msleep(200);
-> +		else if (ret == -ETIMEDOUT) {
-> +			static int timeout_happened = 0;
-
-Woah, what about this function being called multiple times from
-different devices all at the same time?
-
-Are you _SURE_ you want this to be static?
-
-Hint, no way, not at all, this doesn't do at all what you think it does.
-We support more than one USB device in the system at a time :)
+Shouldn't you propagate the failure if this doesn't work?
 
 > +
-> +			if ( ! timeout_happened ) {
-> +				timeout_happened = 1;
+>         qcom->is_suspended = true;
+>         dwc3_qcom_enable_interrupts(qcom);
+>
+> @@ -259,6 +269,10 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
+>                 }
+>         }
+>
+> +       ret = dwc3_qcom_interconnect_enable(qcom);
+> +       if (ret)
+> +               dev_warn(qcom->dev, "failed to enable interconnect %d\n", ret);
+
+Same here, isn't this important? In theory, if you cannot enable
+bandwidth to the device, you aren't really allowed to touch it (with
+odd exceptions for boot proxy votes, which might now be gone).
+
 > +
-> +				/* 
-> +				 * If timeout is given, divide it
-> +				 * by 100, if not, put 10ms timeout.
-> +				 * 
+>         /* Clear existing events from PHY related to L2 in/out */
+>         dwc3_qcom_setbits(qcom->qscratch_base, PWR_EVNT_IRQ_STAT_REG,
+>                           PWR_EVNT_LPM_IN_L2_MASK | PWR_EVNT_LPM_OUT_L2_MASK);
+> @@ -268,6 +282,124 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
+>         return 0;
+>  }
+>
+> +/* Interconnect path bandwidths in MBps */
+> +#define USB_MEMORY_AVG_HS_BW MBps_to_icc(240)
+> +#define USB_MEMORY_PEAK_HS_BW MBps_to_icc(700)
+> +#define USB_MEMORY_AVG_SS_BW  MBps_to_icc(1000)
+> +#define USB_MEMORY_PEAK_SS_BW MBps_to_icc(2500)
+> +#define APPS_USB_AVG_BW 0
+> +#define APPS_USB_PEAK_BW MBps_to_icc(40)
 
-Always run scripts/checkpatch.pl on your patches so you do not get
-grumpy maintainers telling you to run scripts/checkpatch.pl on your
-patches.
+Can you share at all how these numbers were arrived at? I thought HS
+for instance was 480MB/s.
 
-
-> +				 * Then safeguard: if timeout is under
-> +				 * 10ms, make timeout to be 10ms.
-> +				 */
 > +
-> +				if (timeout > 0)
-> +					timeout /= 100;
-> +				else
-> +					timeout = 10;
+> +/**
+> + * dwc3_qcom_interconnect_init() - Get interconnect path handles
+> + * @qcom:                      Pointer to the concerned usb core.
+> + *
+> + */
+> +static int dwc3_qcom_interconnect_init(struct dwc3_qcom *qcom)
+> +{
+> +       struct device *dev = qcom->dev;
+> +       int ret;
 > +
-> +				if (timeout < 10)
-> +					timeout = 10;
+> +       qcom->usb_ddr_icc_path = of_icc_get(dev, "usb-ddr");
+> +       if (IS_ERR(qcom->usb_ddr_icc_path)) {
+> +               dev_err(dev, "Error: (%ld) failed getting usb-ddr path\n",
+> +                       PTR_ERR(qcom->usb_ddr_icc_path));
+> +               return PTR_ERR(qcom->usb_ddr_icc_path);
+> +       }
+> +
+> +       qcom->apps_usb_icc_path = of_icc_get(dev, "apps-usb");
+> +       if (IS_ERR(qcom->apps_usb_icc_path)) {
+> +               dev_err(dev, "Error: (%ld) failed getting apps-usb path\n",
+> +                               PTR_ERR(qcom->apps_usb_icc_path));
 
-What is with this "backing off"?  Why?
+You're leaking usb_ddr_icc_path here.
 
-Again, you just broke how all USB drivers treat the timeout value here,
-what happens for devices that do NOT want this retried?
+> +               return PTR_ERR(qcom->apps_usb_icc_path);
+> +       }
+> +
+> +       ret = dwc3_qcom_interconnect_enable(qcom);
+> +       if (ret) {
+> +               dev_err(dev, "failed to enable interconnect %d\n", ret);
+> +               return ret;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +/**
+> + * dwc3_qcom_interconnect_exit() - Release interconnect path handles
+> + * @qcom:                      Pointer to the concerned usb core.
+> + *
+> + * This function is used to release interconnect path handle.
+> + */
+> +static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
+> +{
+> +       icc_put(qcom->usb_ddr_icc_path);
+> +       icc_put(qcom->apps_usb_icc_path);
+> +}
+> +
+> +/* Currently we only use bandwidth level, so just "enable" interconnects */
+> +static int dwc3_qcom_interconnect_enable(struct dwc3_qcom *qcom)
+> +{
+> +       struct dwc3 *dwc;
+> +       int ret;
+> +
+> +       dwc = platform_get_drvdata(qcom->dwc3);
+> +       if (!dwc) {
+> +               dev_err(qcom->dev, "Failed to get dwc3 device\n");
+> +               return -EPROBE_DEFER;
+> +       }
+> +
+> +       if (dwc->maximum_speed == USB_SPEED_SUPER) {
+> +               ret = icc_set_bw(qcom->usb_ddr_icc_path,
+> +                       USB_MEMORY_AVG_SS_BW, USB_MEMORY_PEAK_SS_BW);
+> +               if (ret)
+> +                       return ret;
+> +       } else {
+> +               ret = icc_set_bw(qcom->usb_ddr_icc_path,
+> +                       USB_MEMORY_AVG_HS_BW, USB_MEMORY_PEAK_HS_BW);
+> +               if (ret)
+> +                       return ret;
+> +       }
+> +
+> +       ret = icc_set_bw(qcom->apps_usb_icc_path,
+> +               APPS_USB_AVG_BW, APPS_USB_PEAK_BW);
+> +       if (ret)
+> +               goto err_disable_mem_path;
+> +
+> +       return 0;
+> +
+> +err_disable_mem_path:
+> +       icc_set_bw(qcom->usb_ddr_icc_path, 0, 0);
+> +
+> +       return ret;
+> +}
+> +
+> +/* To disable an interconnect, we just set its bandwidth to 0 */
+> +static int dwc3_qcom_interconnect_disable(struct dwc3_qcom *qcom)
+> +{
+> +       struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+> +       int ret;
+> +
+> +       ret = icc_set_bw(qcom->usb_ddr_icc_path, 0, 0);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = icc_set_bw(qcom->apps_usb_icc_path, 0, 0);
+> +       if (ret)
+> +               goto err_reenable_memory_path;
+> +
+> +       return 0;
+> +
+> +       /* Re-enable things in the event of an error */
+> +err_reenable_memory_path:
+> +       if (dwc->maximum_speed == USB_SPEED_SUPER)
+> +               icc_set_bw(qcom->usb_ddr_icc_path,
+> +                       USB_MEMORY_AVG_SS_BW, USB_MEMORY_PEAK_SS_BW);
+> +       else
+> +               icc_set_bw(qcom->usb_ddr_icc_path,
+> +                       USB_MEMORY_AVG_HS_BW, USB_MEMORY_PEAK_HS_BW);
 
-We do not want to retry in the USB core, _UNLESS_ the caller asks us to
-do so.  Otherwise we will break things.
+Yeah, this is weird. If you're failing to clear your votes, things are
+in a pretty broken state, and these calls to re-enable bandwidth have
+almost no chance of succeeding. Maybe just return failure here.
 
-I understand this works for your one device, but realize we need to
-support all devices in existance, at the same time :)
-
-thanks,
-
-greg k-h
+> +
+> +       return ret;
+> +}
+> +
+>  static irqreturn_t qcom_dwc3_resume_irq(int irq, void *data)
+>  {
+>         struct dwc3_qcom *qcom = data;
+> @@ -494,6 +626,12 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>                 goto depopulate;
+>         }
+>
+> +       ret = dwc3_qcom_interconnect_init(qcom);
+> +       if (ret) {
+> +               dev_err(dev, "failed to init interconnect handles %d\n", ret);
+> +               goto depopulate;
+> +       }
+> +
+>         qcom->mode = usb_get_dr_mode(&qcom->dwc3->dev);
+>
+>         /* enable vbus override for device mode */
+> @@ -503,7 +641,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>         /* register extcon to override sw_vbus on Vbus change later */
+>         ret = dwc3_qcom_register_extcon(qcom);
+>         if (ret)
+> -               goto depopulate;
+> +               goto interconnect_exit;
+>
+>         device_init_wakeup(&pdev->dev, 1);
+>         qcom->is_suspended = false;
+> @@ -513,6 +651,8 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>
+>         return 0;
+>
+> +interconnect_exit:
+> +       dwc3_qcom_interconnect_exit(qcom);
+>  depopulate:
+>         of_platform_depopulate(&pdev->dev);
+>  clk_disable:
+> @@ -540,6 +680,7 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
+>         }
+>         qcom->num_clocks = 0;
+>
+> +       dwc3_qcom_interconnect_exit(qcom);
+>         reset_control_assert(qcom->resets);
+>
+>         pm_runtime_allow(dev);
+> --
+> Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
+> is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+>
