@@ -2,164 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C27CB1521F1
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2020 22:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B0215223B
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2020 23:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727494AbgBDV0f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Feb 2020 16:26:35 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:36131 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727389AbgBDV0e (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Feb 2020 16:26:34 -0500
-Received: by mail-lj1-f193.google.com with SMTP id r19so184196ljg.3
-        for <linux-usb@vger.kernel.org>; Tue, 04 Feb 2020 13:26:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vTz8PyXQJRb4I9mgRpSeVED8uN8WJjpsQd/YEaL6wbU=;
-        b=Iv+Dvxf9ibUn6XLo7EOWou0R1/YLP2nqcWiLJMoA7iC5TvwOPtx7AkHqjBwEjfVrpa
-         LarOj+yWziH3WQia2I525km8uAjQ6cBZDGOXWUMp31h4cci5m+GiSS3DR+WxVtXqfzPB
-         Jko9F1avg1kWRPh70ECQ8MnpOpO3HrcMy+5gc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vTz8PyXQJRb4I9mgRpSeVED8uN8WJjpsQd/YEaL6wbU=;
-        b=LTlvUl28uCoYVmZnUaddPafuRXkSNQ0iex0DuxJD1Mw6yH6N5WrJR0Nnw4hu3YpuEn
-         EFSdqwVDOWd7vQrrcRTP/NoVkiRaku5wN9Y++29X20ZaciSyiAUuRYCoBcqU8/yZ+sqK
-         DUAA1TO67/XHvuu/wbTMCi1OkUCPVZUo+HFLk0f1Ar3HfzChXmlzdzNQ0+nlXysq6jqW
-         wexh1NrcCyH44S1CQFNZ5m3ItyD2g0jKUlKgyMBszOedNtq7N+MSj6+/yudfeliwLzR7
-         zmh5F/jDIu6QuWIJ/X2J/qEi7n+74fGacJCBA5dtEnln2/e0T7kc8AcgjjGFpFxnyJ0l
-         yMLg==
-X-Gm-Message-State: APjAAAWid1g7oEtAHR/kTeyblNMZjM8jKtZoy7v7Ra5hhE6YrD/mOa2R
-        gR6URz3GaUI1e1VOGn4JzgMfma5H3SE=
-X-Google-Smtp-Source: APXvYqwIcUYVPmlWo3vOSvJq2/x71ilJ8KDoJzYPX4QQCRzqansQjfnG6SQezylrFLWq4zfG2KUAMQ==
-X-Received: by 2002:a2e:9b95:: with SMTP id z21mr18685943lji.291.1580851591467;
-        Tue, 04 Feb 2020 13:26:31 -0800 (PST)
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
-        by smtp.gmail.com with ESMTPSA id q26sm11119182lfp.85.2020.02.04.13.26.30
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Feb 2020 13:26:30 -0800 (PST)
-Received: by mail-lj1-f178.google.com with SMTP id a13so147638ljm.10
-        for <linux-usb@vger.kernel.org>; Tue, 04 Feb 2020 13:26:30 -0800 (PST)
-X-Received: by 2002:a2e:85ce:: with SMTP id h14mr18520973ljj.41.1580851589968;
- Tue, 04 Feb 2020 13:26:29 -0800 (PST)
+        id S1727562AbgBDWH6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Feb 2020 17:07:58 -0500
+Received: from smtp.mujha-vel.cz ([81.30.225.246]:60701 "EHLO
+        smtp.mujha-vel.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727500AbgBDWH6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Feb 2020 17:07:58 -0500
+X-Greylist: delayed 345 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Feb 2020 17:07:57 EST
+Received: from [81.30.250.3] (helo=[172.16.1.2])
+        by smtp.mujha-vel.cz with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.90_1)
+        (envelope-from <jn@forever.cz>)
+        id 1iz6Gl-0004sm-CW
+        for linux-usb@vger.kernel.org; Tue, 04 Feb 2020 23:02:08 +0100
+To:     linux-usb@vger.kernel.org
+From:   jakub nantl <jn@forever.cz>
+Subject: ch341 garbage read with 5.5.x kernel
+Message-ID: <b23691c8-9219-b360-6114-93e86a8bd997@forever.cz>
+Date:   Tue, 4 Feb 2020 23:02:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-References: <1568718649-20124-1-git-send-email-cchiluve@codeaurora.org> <1568718649-20124-3-git-send-email-cchiluve@codeaurora.org>
-In-Reply-To: <1568718649-20124-3-git-send-email-cchiluve@codeaurora.org>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Tue, 4 Feb 2020 13:25:53 -0800
-X-Gmail-Original-Message-ID: <CAE=gft7KaKJ9BhFvJaBt9m=mNi63SeBWWoxQ3e2eQVZ0t3HEzA@mail.gmail.com>
-Message-ID: <CAE=gft7KaKJ9BhFvJaBt9m=mNi63SeBWWoxQ3e2eQVZ0t3HEzA@mail.gmail.com>
-Subject: Re: [PATCH V3 2/3] usb: dwc3: qcom: Add interconnect support in dwc3 driver
-To:     Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
-Cc:     balbi@kernel.org, Andy Gross <agross@kernel.org>,
-        David Brown <david.brown@linaro.org>,
-        linux-usb@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 17, 2019 at 4:11 AM Chandana Kishori Chiluveru
-<cchiluve@codeaurora.org> wrote:
->
-> Add interconnect support in dwc3-qcom driver to vote for bus
-> bandwidth.
->
-> This requires for two different paths - from USB master to
-> DDR slave. The other is from APPS master to USB slave.
->
-> Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 145 ++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 143 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 184df4d..2a2f5af 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -12,6 +12,7 @@
->  #include <linux/module.h>
->  #include <linux/kernel.h>
->  #include <linux/extcon.h>
-> +#include <linux/interconnect.h>
->  #include <linux/of_platform.h>
->  #include <linux/platform_device.h>
->  #include <linux/phy/phy.h>
-> @@ -59,8 +60,13 @@ struct dwc3_qcom {
->         enum usb_dr_mode        mode;
->         bool                    is_suspended;
->         bool                    pm_suspended;
-> +       struct icc_path         *usb_ddr_icc_path;
-> +       struct icc_path         *apps_usb_icc_path;
->  };
->
-> +static int dwc3_qcom_interconnect_enable(struct dwc3_qcom *qcom);
-> +static int dwc3_qcom_interconnect_disable(struct dwc3_qcom *qcom);
-> +
->  static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32 val)
->  {
->         u32 reg;
-> @@ -222,7 +228,7 @@ static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
->  static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
->  {
->         u32 val;
-> -       int i;
-> +       int i, ret;
->
->         if (qcom->is_suspended)
->                 return 0;
-> @@ -234,6 +240,10 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
->         for (i = qcom->num_clocks - 1; i >= 0; i--)
->                 clk_disable_unprepare(qcom->clks[i]);
->
-> +       ret = dwc3_qcom_interconnect_disable(qcom);
-> +       if (ret)
-> +               dev_warn(qcom->dev, "failed to disable interconnect %d\n", ret);
-> +
->         qcom->is_suspended = true;
->         dwc3_qcom_enable_interrupts(qcom);
->
-> @@ -259,6 +269,10 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
->                 }
->         }
->
-> +       ret = dwc3_qcom_interconnect_enable(qcom);
-> +       if (ret)
-> +               dev_warn(qcom->dev, "failed to enable interconnect %d\n", ret);
-> +
->         /* Clear existing events from PHY related to L2 in/out */
->         dwc3_qcom_setbits(qcom->qscratch_base, PWR_EVNT_IRQ_STAT_REG,
->                           PWR_EVNT_LPM_IN_L2_MASK | PWR_EVNT_LPM_OUT_L2_MASK);
-> @@ -268,6 +282,124 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
->         return 0;
->  }
->
-> +/* Interconnect path bandwidths in MBps */
-> +#define USB_MEMORY_AVG_HS_BW MBps_to_icc(240)
-> +#define USB_MEMORY_PEAK_HS_BW MBps_to_icc(700)
-> +#define USB_MEMORY_AVG_SS_BW  MBps_to_icc(1000)
-> +#define USB_MEMORY_PEAK_SS_BW MBps_to_icc(2500)
-> +#define APPS_USB_AVG_BW 0
-> +#define APPS_USB_PEAK_BW MBps_to_icc(40)
-> +
-> +/**
-> + * dwc3_qcom_interconnect_init() - Get interconnect path handles
-> + * @qcom:                      Pointer to the concerned usb core.
-> + *
-> + */
-> +static int dwc3_qcom_interconnect_init(struct dwc3_qcom *qcom)
-> +{
-> +       struct device *dev = qcom->dev;
+Hi,
 
-I'm not subscribed to linux-usb, so I don't have the V4 edition. So
-I'm commenting here. In the v4 version there's a line:
- struct dwc3 *dwc;
+I have arduino nano (ch341) connected to my pc and after upgrading
+kernel to 5.5.x  I am getting garbage instead of text while reading it
+(with both 5.5.1 and 5.5.2 kernels):
 
-that results in an unused local variable compiler warning.
--Evan
+Feb  4 09:24:20 sopa read.pl[2070]: StX.XXA(aurXXXŅstXC#021XX XJXR
+FuX,#027XX#005
+Feb  4 09:24:20 sopa read.pl[2070]: XtX,+XX HXX#026XX go.XXRXXXXXng*Xery
+XXX5XUXiXY'XX4
+Feb  4 09:24:20 sopa read.pl[2070]: XP5逮#013XXteXX11XS4
+Feb  4 09:24:20 sopa read.pl[2070]:
+XP5逮#013XXhuXZ.XX=6SHX#005XAXXXpXKVX}XXt=MXXj
+Feb  4 09:24:20 sopa read.pl[2070]: DXUu X#013X-XXXXXeXNMSX
+Feb  4 09:24:20 sopa read.pl[2070]: XP)}XNXC
+
+with 5.4.17 I get:
+
+Feb  4 22:43:10 sopa read.pl[2040]: Started (auriol_last)
+Feb  4 22:43:11 sopa read.pl[2040]: Reporting every 300s
+Feb  4 22:43:11 sopa read.pl[2040]: Uptime: 60
+Feb  4 22:43:11 sopa read.pl[2040]: DATA: sopa-temp=11.21
+Feb  4 22:43:11 sopa read.pl[2040]: DATA: sopa-humidity=60
+Feb  4 22:43:11 sopa read.pl[2040]: DATA: sopa-dewpoint=3.68
+Feb  4 22:43:11 sopa read.pl[2040]: DATA: sopa-pressure=97136
+Feb  4 22:43:11 sopa read.pl[2040]: DATA_END
+
+any suggestions?
+
+jn
+
+
+
+00:15.0 USB controller: Intel Corporation Device 31a8 (rev 03) (prog-if
+30 [XHCI])
+    Subsystem: ASRock Incorporation Device 31a8
+    Flags: bus master, medium devsel, latency 0, IRQ 126
+    Memory at a1300000 (64-bit, non-prefetchable) [size=64K]
+    Capabilities: [70] Power Management version 2
+    Capabilities: [80] MSI: Enable+ Count=1/8 Maskable- 64bit+
+    Capabilities: [90] Vendor Specific Information: Len=14 <?>
+    Kernel driver in use: xhci_hcd
+
+Bus 001 Device 003: ID 1a86:7523 QinHeng Electronics HL-340 USB-Serial
+adapter
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               1.10
+  bDeviceClass          255 Vendor Specific Class
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0         8
+  idVendor           0x1a86 QinHeng Electronics
+  idProduct          0x7523 HL-340 USB-Serial adapter
+  bcdDevice            2.63
+  iManufacturer           0
+  iProduct                2 USB2.0-Serial
+  iSerial                 0
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength           39
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0x80
+      (Bus Powered)
+    MaxPower              482mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           3
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass      1
+      bInterfaceProtocol      2
+      iInterface              0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0020  1x 32 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0020  1x 32 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0008  1x 8 bytes
+        bInterval               1
+Device Status:     0x0000
+  (Bus Powered)
+
