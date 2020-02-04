@@ -2,28 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75FE6152035
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2020 19:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51103152038
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2020 19:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727443AbgBDSHc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Feb 2020 13:07:32 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:47050 "HELO
+        id S1727369AbgBDSKM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Feb 2020 13:10:12 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:47080 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727355AbgBDSHc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Feb 2020 13:07:32 -0500
-Received: (qmail 9526 invoked by uid 2102); 4 Feb 2020 13:07:31 -0500
+        with SMTP id S1727361AbgBDSKM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Feb 2020 13:10:12 -0500
+Received: (qmail 9544 invoked by uid 2102); 4 Feb 2020 13:10:11 -0500
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 4 Feb 2020 13:07:31 -0500
-Date:   Tue, 4 Feb 2020 13:07:31 -0500 (EST)
+  by localhost with SMTP; 4 Feb 2020 13:10:11 -0500
+Date:   Tue, 4 Feb 2020 13:10:11 -0500 (EST)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     Lauri Jakku <lja@iki.fi>
-cc:     oneukum@suse.com, <benjamin.tissoires@redhat.com>,
-        <jikos@kernel.org>, <linux-input@vger.kernel.org>,
-        <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v5] USB: HID: random timeout failures tackle try.
-In-Reply-To: <20200204175238.3817-1-lja@iki.fi>
-Message-ID: <Pine.LNX.4.44L0.2002041306100.1587-100000@iolanthe.rowland.org>
+To:     Hardik Gajjar <hgajjar@de.adit-jv.com>
+cc:     gregkh@linuxfoundation.org, <thinhn@synopsys.com>,
+        <Kento.A.Kobayashi@sony.com>, <atmgnd@outlook.com>,
+        <linux-usb@vger.kernel.org>, <andrew_gabbasov@mentor.com>,
+        <erosca@de.adit-jv.com>, <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v3] USB: hub: Fix the broken detection of USB3 device in
+ SMSC hub
+In-Reply-To: <1580838253-31822-1-git-send-email-hgajjar@de.adit-jv.com>
+Message-ID: <Pine.LNX.4.44L0.2002041309350.1587-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -31,40 +33,119 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 4 Feb 2020, Lauri Jakku wrote:
+On Tue, 4 Feb 2020, Hardik Gajjar wrote:
 
-> -- v1 ------------------------------------------------------------
-> send, 20ms apart, control messages, if error is timeout.
+> Renesas R-Car H3ULCB + Kingfisher Infotainment Board is either not able
+> to detect the USB3.0 mass storage devices or is detecting those as
+> USB2.0 high speed devices.
 > 
-> There is multiple reports of random behaviour of USB HID devices.
+> The explanation given by Renesas is that, due to a HW issue, the XHCI
+> driver does not wake up after going to sleep on connecting a USB3.0
+> device.
 > 
-> I have mouse that acts sometimes quite randomly, I debugged with
-> logs others have published that there is HW timeouts that leave
-> device in state that it is errorneus.
+> In order to mitigate that, disable the auto-suspend feature
+> specifically for SMSC hubs from hub_probe() function, as a quirk.
 > 
-> To fix this I introduced retry mechanism in root of USB HID drivers.
+> Renesas Kingfisher Infotainment Board has two USB3.0 ports (CN2) which
+> are connected via USB5534B 4-port SuperSpeed/Hi-Speed, low-power,
+> configurable hub controller.
 > 
-> Fix does not slow down operations at all if there is no -ETIMEDOUT
-> got from control message sending. If there is one, then sleep 20ms
-> and try again. Retry count is 20 witch translates maximium of 400ms
-> before giving up.
+> [1] SanDisk USB 3.0 device detected as USB-2.0 before the patch
+>  [   74.036390] usb 5-1.1: new high-speed USB device number 4 using xhci-hcd
+>  [   74.061598] usb 5-1.1: New USB device found, idVendor=0781, idProduct=5581, bcdDevice= 1.00
+>  [   74.069976] usb 5-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+>  [   74.077303] usb 5-1.1: Product: Ultra
+>  [   74.080980] usb 5-1.1: Manufacturer: SanDisk
+>  [   74.085263] usb 5-1.1: SerialNumber: 4C530001110208116550
 > 
-> NOTE: This does not sleep anymore then before, if all is golden.
+> [2] SanDisk USB 3.0 device detected as USB-3.0 after the patch
+>  [   34.565078] usb 6-1.1: new SuperSpeed Gen 1 USB device number 3 using xhci-hcd
+>  [   34.588719] usb 6-1.1: New USB device found, idVendor=0781, idProduct=5581, bcdDevice= 1.00
+>  [   34.597098] usb 6-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+>  [   34.604430] usb 6-1.1: Product: Ultra
+>  [   34.608110] usb 6-1.1: Manufacturer: SanDisk
+>  [   34.612397] usb 6-1.1: SerialNumber: 4C530001110208116550
 > 
-> -- v2 ------------------------------------------------------------
-> 
-> If there is timeout, then sleep 20ms and try again. Retry count is 20
-> witch translates maximium of 400ms before giving up. If the 400ms
-> boundary is reached the HW is really bad.
-> 
-> JUST to be clear:
->     This does not make USB HID devices to sleep anymore than
->     before, if all is golden.
-> 
-> Why modify usb-hid-core: No need to modify driver by driver.
+> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
 
-Please note: Your patch does _not_ modify usb-hid-core (that is, 
-drivers/hid/usbhid).  It modifies usb-core (that is, drivers/usb/core).
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Alan Stern
+> ---
+> Changes in v2:
+>  - [Alan Stern] Switched from pm_runtime_set_autosuspend_delay()
+>    to usb_autopm_get_interface()
+>  - Improved commit description
+>  - Rebased against v5.5
+>  - https://lore.kernel.org/linux-renesas-soc/1579876573-13741-1-git-send-email-hgajjar@de.adit-jv.com/
+> 
+> Changes in v3:
+>  - [Alan Stern] Called usb_autopm_put_interface() from
+>    hub_disconnect() to enable auto suspend for interface.
+>  - https://lore.kernel.org/linux-renesas-soc/1580403994-21076-1-git-send-email-hgajjar@de.adit-jv.com/
+> 
+>  drivers/usb/core/hub.c | 15 +++++++++++++++
+>  drivers/usb/core/hub.h |  1 +
+>  2 files changed, 16 insertions(+)
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 3405b14..1c74485 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -38,7 +38,9 @@
+>  #include "otg_whitelist.h"
+>  
+>  #define USB_VENDOR_GENESYS_LOGIC		0x05e3
+> +#define USB_VENDOR_SMSC				0x0424
+>  #define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	0x01
+> +#define HUB_QUIRK_DISABLE_AUTOSUSPEND		0x02
+>  
+>  #define USB_TP_TRANSMISSION_DELAY	40	/* ns */
+>  #define USB_TP_TRANSMISSION_DELAY_MAX	65535	/* ns */
+> @@ -1731,6 +1733,10 @@ static void hub_disconnect(struct usb_interface *intf)
+>  	kfree(hub->buffer);
+>  
+>  	pm_suspend_ignore_children(&intf->dev, false);
+> +
+> +	if (hub->quirk_disable_autosuspend)
+> +		usb_autopm_put_interface(intf);
+> +
+>  	kref_put(&hub->kref, hub_release);
+>  }
+>  
+> @@ -1863,6 +1869,11 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
+>  	if (id->driver_info & HUB_QUIRK_CHECK_PORT_AUTOSUSPEND)
+>  		hub->quirk_check_port_auto_suspend = 1;
+>  
+> +	if (id->driver_info & HUB_QUIRK_DISABLE_AUTOSUSPEND) {
+> +		hub->quirk_disable_autosuspend = 1;
+> +		usb_autopm_get_interface(intf);
+> +	}
+> +
+>  	if (hub_configure(hub, &desc->endpoint[0].desc) >= 0)
+>  		return 0;
+>  
+> @@ -5599,6 +5610,10 @@ static void hub_event(struct work_struct *work)
+>  }
+>  
+>  static const struct usb_device_id hub_id_table[] = {
+> +    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR | USB_DEVICE_ID_MATCH_INT_CLASS,
+> +      .idVendor = USB_VENDOR_SMSC,
+> +      .bInterfaceClass = USB_CLASS_HUB,
+> +      .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
+>      { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
+>  			| USB_DEVICE_ID_MATCH_INT_CLASS,
+>        .idVendor = USB_VENDOR_GENESYS_LOGIC,
+> diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
+> index a9e24e4..2fe9c9f 100644
+> --- a/drivers/usb/core/hub.h
+> +++ b/drivers/usb/core/hub.h
+> @@ -61,6 +61,7 @@ struct usb_hub {
+>  	unsigned		quiescing:1;
+>  	unsigned		disconnected:1;
+>  	unsigned		in_reset:1;
+> +	unsigned                quirk_disable_autosuspend:1;
+>  
+>  	unsigned		quirk_check_port_auto_suspend:1;
+>  
+> 
 
