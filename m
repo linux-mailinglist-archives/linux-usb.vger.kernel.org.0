@@ -2,116 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD779151998
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2020 12:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78018151978
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2020 12:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727419AbgBDLT2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Feb 2020 06:19:28 -0500
-Received: from mta-out1.inet.fi ([62.71.2.226]:34846 "EHLO johanna3.inet.fi"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727067AbgBDLT2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 Feb 2020 06:19:28 -0500
-X-Greylist: delayed 378 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Feb 2020 06:19:26 EST
-Received: from MinistryOfSillyWalk.home (84.248.30.195) by johanna3.inet.fi (9.0.019.26-1)
-        id 5E1C39D515F02B02; Tue, 4 Feb 2020 13:13:00 +0200
-From:   Lauri Jakku <lja@iki.fi>
-To:     oneukum@suse.com, benjamin.tissoires@redhat.com
-Cc:     jikos@kernel.org, linux-input@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        Lauri Jakku <lja@iki.fi>
-Subject: [PATCH v2] USB: HID: random timeout failures tackle try.
-Date:   Tue,  4 Feb 2020 13:06:59 +0200
-Message-Id: <20200204110658.32454-1-lja@iki.fi>
-X-Mailer: git-send-email 2.25.0
+        id S1727128AbgBDLSz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Feb 2020 06:18:55 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:19169 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726965AbgBDLSy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Feb 2020 06:18:54 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e3953060000>; Tue, 04 Feb 2020 03:18:30 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Tue, 04 Feb 2020 03:18:53 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Tue, 04 Feb 2020 03:18:53 -0800
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 4 Feb
+ 2020 11:18:53 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Tue, 4 Feb 2020 11:18:52 +0000
+Received: from nkristam-ubuntu.nvidia.com (Not Verified[10.19.67.128]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5e3953190001>; Tue, 04 Feb 2020 03:18:52 -0800
+From:   Nagarjuna Kristam <nkristam@nvidia.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <mark.rutland@arm.com>, <robh+dt@kernel.org>, <kishon@ti.com>
+CC:     <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Nagarjuna Kristam <nkristam@nvidia.com>
+Subject: [Patch V4 00/19] Tegra XUSB OTG support
+Date:   Tue, 4 Feb 2020 16:46:46 +0530
+Message-ID: <1580815025-10915-1-git-send-email-nkristam@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1580815110; bh=tmb9g4gv3VYfntztkatNk0Docrr1cqVXwSKnSSY/suM=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=hDIJPX0Zw8Yag4pofBWD+qHwBwBbPulxSRzyjBykspE1zDZB4bWR+ZBiVAtGZbUDi
+         FBdSm4clELfmZ2unh2xE94m5Nsetfm8dA2R4cxgj/018ZpEXiUGDCYUNRQSOnOQp6F
+         5OgTLzHcFSvpjCwDxwTPLC2gqC/hsFSBcuMtLZ9B05srWA7uXUZufyLxPg9cvDFESJ
+         XlervIYoNdF1KKBbc62Ab6bCg3WRx8K0hXOHqLU41jRvn5L+FpsIxQ8stlqYdl6DYd
+         dsMcaFV1KT/v1of0vKj8HwBMRzk3r0UzkHq6RqcuzYtiBIJ877UYW4FM572L+P6l0/
+         FsS7bCtVmn1Sw==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There is multiple reports of random behaviour of USB HID devices.
+This patch series adds OTG support on XUSB hardware used in Tegra210 and
+Tegra186 SoCs.
 
-I have mouse that acts sometimes quite randomly, I debugged with
-logs others have published: that there is HW timeouts that leave
-device in state that it is errorneus.
+This patchset is composed with :
+ - dt bindings of XUSB Pad Controller
+ - dt bindings for XUSB device Driver
+ - Tegra PHY driver for usb-role-switch and usb-phy
+ - Tegra XUSB host mode driver to support OTG mode
+ - Tegra XUSB device mode driver to use usb-phy and multi device mode
+ - dts for XUSB pad controller
+ - dts for xudc for Jetson TX1 and TX2
+ - dts for Jetson-TK1
 
-To fix this, I introduce retry mechanism in root of USB HID drivers.
+Tegra Pad controller driver register for role switch updates for
+OTG/peripheral capable USB ports and adds usb-phy for that corresponding
+USB ports.
 
-Fix does not slow down operations at all if there is no -ETIMEDOUT
-got from control message sending. 
+Host and Device mode drivers gets usb-phy from USB2's phy and registers
+notifier for role changes to perform corresponding role tasks.
 
-If there is one, then sleep 20ms and try again. Retry count is 20
-witch translates maximium of 400ms before giving up. If the 400ms
-boundary is reached the HW is really bad.
+Tests done:
+ - device mode support using micro-B USB cable connection between ubuntu
+   host and DUT on micro-AB port
+ - host mode support by connecting pen-drive to micro-AB USB port on DUT
+   using standard-A to micro-A converter.
+ - toggling between these 2 modes by hot plugging corresponding cables.
 
-JUST to be clear:
-    This does not make USB HID devices to sleep anymore than
-    before, if all is golden.
+DUT: Jetson-tx1, Jetson tx2.
 
-Why modify usb-hid-core: No need to modify driver by driver.
+V4:
+ - Owner info is updated to port->dev for which USB role switch is used.
+ - Updated function name in logs, unsigned int usage as per comments.
+ - usb_phy_event is used instead of usb_role to detect role changes as
+   notifier arguments of usb-phy is used for charging current updates.
+ - Added ACKed-by info for corresponding patches.
+V3:
+ - Port and cable names updated in "Tests done" section of cover letter as
+   per JC inputs.
+ - Fixed arguments allignments in USB padctl driver.
+ - Padctl driver aborts if usb-role-switch is not present in dt for
+   peripheral/otg roles.
+ - Added Reviewed and ACKed details for corresponding patches.
+V2:
+ - Updated usb-role-switch documentation for Padctl driver.
+ - Update XUDC bindings doc as suggested by Rob.
+ - Used standard error codes for error return.
+ - Added of_platform_depopulate during error and driver removal.
+ - Updated error variable during phy initialization in XUDC driver.
+ - Updated Tegra210 soc dtb file as per changes to binding doc.
 
-Signed-off-by: Lauri Jakku <lja@iki.fi>
----
- drivers/usb/core/message.c | 30 +++++++++++++++++++++++++-----
- 1 file changed, 25 insertions(+), 5 deletions(-)
+Nagarjuna Kristam (19):
+  dt-bindings: phy: tegra-xusb: Add usb-role-switch
+  dt-bindings: usb: Add NVIDIA Tegra XUSB device mode controller binding
+  phy: tegra: xusb: Add usb-role-switch support
+  phy: tegra: xusb: Add usb-phy support
+  phy: tegra: xusb: Add support to get companion USB 3 port
+  phy: tegra: xusb: Add set_mode support for USB 2 phy on Tegra210
+  phy: tegra: xusb: Add set_mode support for UTMI phy on Tegra186
+  usb: xhci-tegra: Add OTG support
+  usb: gadget: tegra-xudc: Remove usb-role-switch support
+  usb: gadget: tegra-xudc: Add usb-phy support
+  usb: gadget: tegra-xudc: use phy_set_mode to set/unset device mode
+  usb: gadget: tegra-xudc: support multiple device modes
+  arm64: tegra: update OTG port entries for jetson-tx1
+  arm64: tegra: update OTG port entries for jetson-tx2
+  arm64: tegra: Add xudc node for Tegra210
+  arm64: tegra: Enable xudc on Jetson TX1
+  arm64: tegra: Add xudc node for Tegra186
+  arm64: tegra: Enable xudc node on Jetson TX2
+  ARM: tegra: Remove USB 2-0 port from Jetson TK1 padctl
 
-diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-index 5adf489428aa..b375e376ea22 100644
---- a/drivers/usb/core/message.c
-+++ b/drivers/usb/core/message.c
-@@ -20,6 +20,7 @@
- #include <linux/usb/hcd.h>	/* for usbcore internals */
- #include <linux/usb/of.h>
- #include <asm/byteorder.h>
-+#include <linux/errno.h>
- 
- #include "usb.h"
- 
-@@ -137,7 +138,10 @@ int usb_control_msg(struct usb_device *dev, unsigned int pipe, __u8 request,
- 		    __u16 size, int timeout)
- {
- 	struct usb_ctrlrequest *dr;
--	int ret;
-+	int ret = -ETIMEDOUT;
-+
-+	/* retry_cnt * 20ms, max retry time set to 400ms */
-+	int retry_cnt = 20;
- 
- 	dr = kmalloc(sizeof(struct usb_ctrlrequest), GFP_NOIO);
- 	if (!dr)
-@@ -149,11 +153,27 @@ int usb_control_msg(struct usb_device *dev, unsigned int pipe, __u8 request,
- 	dr->wIndex = cpu_to_le16(index);
- 	dr->wLength = cpu_to_le16(size);
- 
--	ret = usb_internal_control_msg(dev, pipe, dr, data, size, timeout);
-+	do {
-+		ret = usb_internal_control_msg(dev,
-+					pipe,
-+					dr,
-+					data,
-+					size,
-+					timeout);
-+
-+		/*
-+		 * Linger a bit, prior to the next control message
-+		 * or if return value is timeout, but do try few
-+		 * times (max 400ms) before quitting.
-+		 */
-+		if (dev->quirks & USB_QUIRK_DELAY_CTRL_MSG)
-+			msleep(200);
-+		else if (ret == -ETIMEDOUT)
-+			msleep(20);
-+
-+		/* Loop while timeout, max loops: retry_cnt times. */
-+	} while ((retry_cnt-- > 0) && (ret == -ETIMEDOUT));
- 
--	/* Linger a bit, prior to the next control message. */
--	if (dev->quirks & USB_QUIRK_DELAY_CTRL_MSG)
--		msleep(200);
- 
- 	kfree(dr);
- 
+ .../bindings/phy/nvidia,tegra124-xusb-padctl.txt   |   6 +
+ .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml | 190 ++++++++++++++
+ arch/arm/boot/dts/tegra124-jetson-tk1.dts          |   6 -
+ arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts |  23 +-
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi           |  19 ++
+ arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi     |  34 ++-
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi           |  19 ++
+ drivers/phy/tegra/Kconfig                          |   1 +
+ drivers/phy/tegra/xusb-tegra186.c                  | 114 +++++++--
+ drivers/phy/tegra/xusb-tegra210.c                  | 131 ++++++++--
+ drivers/phy/tegra/xusb.c                           | 172 +++++++++++++
+ drivers/phy/tegra/xusb.h                           |   5 +
+ drivers/usb/gadget/udc/tegra-xudc.c                | 273 ++++++++++++++-------
+ drivers/usb/host/xhci-tegra.c                      | 228 ++++++++++++++++-
+ include/linux/phy/tegra/xusb.h                     |   2 +
+ 15 files changed, 1078 insertions(+), 145 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+
 -- 
-2.25.0
+2.7.4
 
