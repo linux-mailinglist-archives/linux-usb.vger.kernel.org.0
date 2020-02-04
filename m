@@ -2,90 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E176C1519C2
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2020 12:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54091151A14
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2020 12:45:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727599AbgBDLUH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Feb 2020 06:20:07 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:19289 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727154AbgBDLUF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Feb 2020 06:20:05 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e39534d0000>; Tue, 04 Feb 2020 03:19:41 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 04 Feb 2020 03:20:04 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 04 Feb 2020 03:20:04 -0800
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 4 Feb
- 2020 11:20:04 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Tue, 4 Feb 2020 11:20:03 +0000
-Received: from nkristam-ubuntu.nvidia.com (Not Verified[10.19.67.128]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e3953600002>; Tue, 04 Feb 2020 03:20:03 -0800
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <mark.rutland@arm.com>, <robh+dt@kernel.org>, <kishon@ti.com>
-CC:     <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Nagarjuna Kristam <nkristam@nvidia.com>
-Subject: [Patch V4 19/19] ARM: tegra: Remove USB 2-0 port from Jetson TK1 padctl
-Date:   Tue, 4 Feb 2020 16:47:05 +0530
-Message-ID: <1580815025-10915-20-git-send-email-nkristam@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1580815025-10915-1-git-send-email-nkristam@nvidia.com>
-References: <1580815025-10915-1-git-send-email-nkristam@nvidia.com>
-X-NVConfidentiality: public
+        id S1727100AbgBDLpq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Feb 2020 06:45:46 -0500
+Received: from dougal.metanate.com ([90.155.101.14]:39523 "EHLO metanate.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727004AbgBDLpq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 4 Feb 2020 06:45:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/simple; d=metanate.com;
+         s=stronger; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References
+        :In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=9ePgwnBjgekiWrBjs2uDftk3kIrbG4c/To6D7KPceM8=; b=Ib6TftNUMcJvsP9NZX8goMA5eE
+        xdkdFhS2m9eRPr5ibPCCfbcQduhZMK34mwPqmQTt9cEeZ0XH8cxkePwiBTbqq3kO7fiXcX+LI9QIJ
+        VLoxJFKf9or5b3A9NrGyY+1kiff8pVHqPPLaJKEPGnMd+DGfqWtL3Nw5bjRnjYFxh8czyFnoYLzQy
+        GFyb2sXh3PDpItr1DZ2Xvifg+VzJ/EZSZRVFXlpG54cod/sdyoSP6wLN1eoByYoFLSwePaOgmNyfR
+        uUVY4Nx7uhk035kXM/Abmv0KvAmkrMbFfNVB2X1CLj3jWFVifJ5qmHu0sH5MsPo7TxiPiPk5wUkTU
+        QR74/6vQ==;
+Received: from dougal.metanate.com ([192.168.88.1] helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1iyweA-0001Eb-LU; Tue, 04 Feb 2020 11:45:38 +0000
+Date:   Tue, 4 Feb 2020 11:45:38 +0000
+From:   John Keeping <john@metanate.com>
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        John Youn <John.Youn@synopsys.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] usb: dwc2: Fix SET/CLEAR_FEATURE and GET_STATUS flows
+Message-ID: <20200204114538.12af5d84.john@metanate.com>
+In-Reply-To: <d89dc76f-ab19-e7e7-1375-534cd2cfaa1c@synopsys.com>
+References: <f8af9e4b892a8d005f0ae3d42401fee532f44a27.1574938826.git.hminas@synopsys.com>
+        <8736dsl4u4.fsf@gmail.com>
+        <e314d265-6d87-eb7a-997e-52d77ccdb725@synopsys.com>
+        <d89dc76f-ab19-e7e7-1375-534cd2cfaa1c@synopsys.com>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1580815181; bh=UZPndxJaS6exdoWA+8qZB2sYlM6GTteSHhoz8vK44JU=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=pv3brgodZD9Z9So0D+oNlB0/adP3C6bCPz7RZfGAkog3ecSZsqBgmfXnQDu1JdWfh
-         nLZRyKDXJ1/Q+Oa2MFYQCGXn19xDfGMzBU+lJrk88qClHWeI1fuaGc1az5A8cRZo/H
-         8Eo9ON7YwdDQ6XvXpChVIh0E2WKWAKntXVhps2Oj3NqOOU15Qi3E1h6LQSvkuYrU+i
-         UcyHRsSPImRg3QuZ8LAsbX8Z/BnGH3D/3ZOBx0W9es+NqA5nBgSZ6rYA5UpZIvSpOE
-         UW9+ggGkfeTUBsP7pgOfG8XFKhU20eMA6RkQrEo3j1d9DM4A3vPqkt0k4v/HMcGvY6
-         aac5MLR8KCXRw==
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Authenticated: YES
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Jetson TK1 USB 2-0 port is controlled by phy-tegra-usb driver
-rather than padctl driver. Remove the entry for the same.
+Hi Minas,
 
-Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
----
-V4:
- - New patch in the series.
----
- arch/arm/boot/dts/tegra124-jetson-tk1.dts | 6 ------
- 1 file changed, 6 deletions(-)
+On Fri, 13 Dec 2019 11:54:11 +0000
+Minas Harutyunyan <Minas.Harutyunyan@synopsys.com> wrote:
+> On 12/10/2019 6:19 PM, Minas Harutyunyan wrote:
+> > On 12/10/2019 4:53 PM, Felipe Balbi wrote:  
+> >> Minas Harutyunyan <Minas.Harutyunyan@synopsys.com> writes:
+> >>  
+> >>> SET/CLEAR_FEATURE for Remote Wakeup allowance not handled correctly.
+> >>> GET_STATUS handling provided not correct data on DATA Stage.
+> >>> Issue seen when gadget's dr_mode set to "otg" mode and connected
+> >>> to MacOS.
+> >>> Both are fixed and tested using USBCV Ch.9 tests.
+> >>>
+> >>> Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>  
+> >>
+> >> do you want to add a Fixes tag here?  
+> > 
+> > Fixes: fa389a6d7726 ("usb: dwc2: gadget: Add remote_wakeup_allowed flag")
+> >   
+> Got tested tag by issue reported.
+> 
+> Tested-By: Jack Mitchell <ml@embed.me.uk>
+> 
+> Should I resubmit patch as v2 with added "Fixes" and "Tested-by" tags.
 
-diff --git a/arch/arm/boot/dts/tegra124-jetson-tk1.dts b/arch/arm/boot/dts/tegra124-jetson-tk1.dts
-index d5fd642..54600ff 100644
---- a/arch/arm/boot/dts/tegra124-jetson-tk1.dts
-+++ b/arch/arm/boot/dts/tegra124-jetson-tk1.dts
-@@ -1782,12 +1782,6 @@
- 		};
- 
- 		ports {
--			/* Micro A/B */
--			usb2-0 {
--				status = "okay";
--				mode = "otg";
--			};
--
- 			/* Mini PCIe */
- 			usb2-1 {
- 				status = "okay";
--- 
-2.7.4
+Was this patch ever picked up?  I don't see it in current next.
 
+Given Felipe's message [1], I guess it might have got lost.
+
+Would you mind resending?
+
+[1] https://lore.kernel.org/linux-usb/875zhd6pw0.fsf@kernel.org/
+
+
+Thanks,
+John
