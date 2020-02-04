@@ -2,63 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC561517CC
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2020 10:27:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4613315180D
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2020 10:42:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726375AbgBDJ1c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Feb 2020 04:27:32 -0500
-Received: from mta-out1.inet.fi ([62.71.2.202]:51026 "EHLO julia1.inet.fi"
+        id S1726596AbgBDJmW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Feb 2020 04:42:22 -0500
+Received: from mga02.intel.com ([134.134.136.20]:8712 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726151AbgBDJ1c (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 Feb 2020 04:27:32 -0500
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedugedrgeelgddthecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfupfevtfenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepnfgruhhrihculfgrkhhkuhcuoehlrghurhhirdhjrghkkhhusehpphdrihhnvghtrdhfiheqnecukfhppeekgedrvdegkedrfedtrdduleehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurddufeegngdpihhnvghtpeekgedrvdegkedrfedtrdduleehpdhmrghilhhfrhhomhepoehlrghujhgrkhdqfeesmhgsohigrdhinhgvthdrfhhiqecuuefqffgjpeekuefkvffokffogfdprhgtphhtthhopeeosggvnhhjrghmihhnrdhtihhsshhoihhrvghssehrvgguhhgrthdrtghomheqpdhrtghpthhtohepoehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrgheqpdhrtghpthhtohepoehjihhkohhssehkvghrnhgvlhdrohhrgheqpdhrtghpthhtohepoehlihhnuhigqdhinhhpuhhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgqedprhgtphhtthhopeeolhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgvlhdrohhrgheqpdhrtghpthhtohepoehonhgvuhhkuhhmsehsuhhsvgdrtghomheq
-Received: from [192.168.1.134] (84.248.30.195) by julia1.inet.fi (9.0.019.26-1) (authenticated as laujak-3)
-        id 5E37D3E200048C87; Tue, 4 Feb 2020 11:27:29 +0200
-Subject: Re: USB HID fix: Retry sending timedout device commands 20 times
-To:     Oliver Neukum <oneukum@suse.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        id S1726151AbgBDJmW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 4 Feb 2020 04:42:22 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Feb 2020 01:42:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,401,1574150400"; 
+   d="scan'208";a="310993361"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga001.jf.intel.com with ESMTP; 04 Feb 2020 01:42:18 -0800
+Subject: Re: [PATCH] xhci-mtk: Fix NULL pointer dereference with xhci_irq()
+ for shared_hcd
+To:     Macpaul Lin <macpaul.lin@mediatek.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-References: <9cf20b6f-5bfa-2346-ca9f-5ca81245bfff@pp.inet.fi>
- <CAO-hwJJDkFh+ZS7pCZLhfuoXeAByFLzKbPW8mHtF=N_e-hn+Dg@mail.gmail.com>
- <1580807154.11089.0.camel@suse.com>
-From:   Lauri Jakku <lauri.jakku@pp.inet.fi>
-Message-ID: <11338553-09e7-5201-d829-4c52eb86f50e@pp.inet.fi>
-Date:   Tue, 4 Feb 2020 11:27:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Sriharsha Allenki <sallenki@codeaurora.org>
+References: <1579246910-22736-1-git-send-email-macpaul.lin@mediatek.com>
+ <08f69bab-2ada-d6ab-7bf7-d960e9f148a0@linux.intel.com>
+ <1580556039.10835.3.camel@mtkswgap22>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <39ec1610-1686-6509-02ac-6e73d8be2453@linux.intel.com>
+Date:   Tue, 4 Feb 2020 11:44:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <1580807154.11089.0.camel@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <1580556039.10835.3.camel@mtkswgap22>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 1.2.2020 13.20, Macpaul Lin wrote:
+> On Fri, 2020-01-31 at 16:50 +0200, Mathias Nyman wrote:
+>> On 17.1.2020 9.41, Macpaul Lin wrote:
+>>> According to NULL pointer fix: https://tinyurl.com/uqft5ra
+>>> xhci: Fix NULL pointer dereference with xhci_irq() for shared_hcd
+>>> The similar issue has also been found in QC activities in Mediatek.
+>>>
+>>> Here quote the description from the referenced patch as follows.
+>>> "Commit ("f068090426ea xhci: Fix leaking USB3 shared_hcd
+>>> at xhci removal") sets xhci_shared_hcd to NULL without
+>>> stopping xhci host. This results into a race condition
+>>> where shared_hcd (super speed roothub) related interrupts
+>>> are being handled with xhci_irq happens when the
+>>> xhci_plat_remove is called and shared_hcd is set to NULL.
+>>> Fix this by setting the shared_hcd to NULL only after the
+>>> controller is halted and no interrupts are generated."
+>>>
+>>> Signed-off-by: Sriharsha Allenki <sallenki@codeaurora.org>
+>>> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+>>> ---
+>>>    drivers/usb/host/xhci-mtk.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
+>>> index b18a6baef204..c227c67f5dc5 100644
+>>> --- a/drivers/usb/host/xhci-mtk.c
+>>> +++ b/drivers/usb/host/xhci-mtk.c
+>>> @@ -593,11 +593,11 @@ static int xhci_mtk_remove(struct platform_device *dev)
+>>>    	struct usb_hcd  *shared_hcd = xhci->shared_hcd;
+>>>    
+>>>    	usb_remove_hcd(shared_hcd);
+>>> -	xhci->shared_hcd = NULL;
+>>>    	device_init_wakeup(&dev->dev, false);
+>>>    
+>>>    	usb_remove_hcd(hcd);
+>>>    	usb_put_hcd(shared_hcd);
+>>> +	xhci->shared_hcd = NULL;
+>>>    	usb_put_hcd(hcd);
+>>>    	xhci_mtk_sch_exit(mtk);
+>>>    	xhci_mtk_clks_disable(mtk);
+>>>
+>>
+>> Could you share details of the NULL pointer dereference, (backtrace).
+> 
+> This bug was found by our QA staff while doing 500 times plug-in and
+> plug-out devices. The backtrace I have was recorded by QA and I didn't
+> reproduce this issue on my own environment. However, after applied this
+> patch the issue seems resolve. Here is the backtrace:
+> 
+> Exception Class: Kernel (KE)
+> PC is at [<ffffff8008cccbc0>] xhci_irq+0x728/0x2364
+> LR is at [<ffffff8008ccc788>] xhci_irq+0x2f0/0x2364
+> 
+> Current Executing Process:
+> [iptables, 859][netdagent, 770]
+> 
+> Backtrace:
+> [<ffffff80080ead58>] __atomic_notifier_call_chain+0xa8/0x130
+> [<ffffff80080eb6d4>] notify_die+0x84/0xac
+> [<ffffff800808e874>] die+0x1d8/0x3b8
+> [<ffffff80080a89b0>] __do_kernel_fault+0x178/0x188
+> [<ffffff80080a81b4>] do_page_fault+0x44/0x3b0
+> [<ffffff80080a811c>] do_translation_fault+0x44/0x98
+> [<ffffff8008080e08>] do_mem_abort+0x4c/0x128
+> [<ffffff80080832d0>] el1_da+0x24/0x3c
+> [<ffffff8008cccbc0>] xhci_irq+0x728/0x2364
+> [<ffffff8008c98804>] usb_hcd_irq+0x2c/0x44
+> [<ffffff8008179bb0>] __handle_irq_event_percpu+0x26c/0x4a4
+> [<ffffff8008179ec8>] handle_irq_event+0x5c/0xd0
+> [<ffffff800817e3c0>] handle_fasteoi_irq+0x10c/0x1e0
+> [<ffffff80081787b0>] __handle_domain_irq+0x32c/0x738
+> [<ffffff800808159c>] gic_handle_irq+0x174/0x1c4
+> [<ffffff8008083cf8>] el0_irq_naked+0x50/0x5c
+> [<ffffffffffffffff>] 0xffffffffffffffff
+> 
 
-On 4.2.2020 11.05, Oliver Neukum wrote:
-> Am Dienstag, den 04.02.2020, 09:17 +0100 schrieb Benjamin Tissoires:
->> Ouch, very much ouch. Resending 20 times on a generic path when the
->> timeout can be several seconds is pretty much a bad thing. Again, this
->> should be limited to the device you are talking to, and not be
->> generic. Or maybe you are encountering a usb controller issue.
-> Yes. You need a least to consider teh unplug case.
->
-> 	Regards
-> 		Oliver
+Thanks,
+Could you help me find out which line of code xhci_irq+0x728 is in your case.
 
-The patch does not loop in normal case, only if there are timeouts, and
+As Guenter pointed out there is a risk of turning the NULL pointer dereference
+into a use after free if we just solve this by setting xhci->shared_hcd = NULL
+later.
 
-even then not more than 400ms .. 20ms sleep while retry.
+If you still have that kernel around, and xhci is compiled in:
+gdb vmlinux
+gdb li *(xhci_irq+0x728)
 
-
--- 
-Br,
-Lauri J.
-
+-Mathias
