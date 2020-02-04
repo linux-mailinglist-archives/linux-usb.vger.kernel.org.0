@@ -2,82 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BDBE8151D5C
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2020 16:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08252151D9E
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2020 16:48:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727320AbgBDPgK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Feb 2020 10:36:10 -0500
-Received: from muru.com ([72.249.23.125]:52652 "EHLO muru.com"
+        id S1727321AbgBDPsQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Feb 2020 10:48:16 -0500
+Received: from mta-out1.inet.fi ([62.71.2.226]:58200 "EHLO julia1.inet.fi"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727258AbgBDPgJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 Feb 2020 10:36:09 -0500
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id 9E0BA8107;
-        Tue,  4 Feb 2020 15:36:51 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
-To:     Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-omap@vger.kernel.org, Marcel Partap <mpartap@gmx.net>,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Michael Scott <hashcode0f@gmail.com>,
-        NeKit <nekit1000@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Sebastian Reichel <sre@kernel.org>
-Subject: [PATCH] phy: mapphone-mdm6600: Fix write timeouts with shorter GPIO toggle interval
-Date:   Tue,  4 Feb 2020 07:36:02 -0800
-Message-Id: <20200204153602.60507-1-tony@atomide.com>
-X-Mailer: git-send-email 2.25.0
+        id S1727317AbgBDPsQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 4 Feb 2020 10:48:16 -0500
+Received: from [192.168.1.134] (84.248.30.195) by julia1.inet.fi (9.0.019.26-1) (authenticated as laujak-3)
+        id 5E37D3E20005F751; Tue, 4 Feb 2020 17:48:13 +0200
+Subject: Re: [PATCH v4] USB: HID: random timeout failures tackle try.
+To:     Alan Stern <stern@rowland.harvard.edu>, Lauri Jakku <lja@iki.fi>
+Cc:     oneukum@suse.com, benjamin.tissoires@redhat.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+References: <Pine.LNX.4.44L0.2002040954190.1587-100000@iolanthe.rowland.org>
+From:   Lauri Jakku <lauri.jakku@pp.inet.fi>
+Message-ID: <10da971f-2935-7883-1283-d9f22e73a21a@pp.inet.fi>
+Date:   Tue, 4 Feb 2020 17:48:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <Pine.LNX.4.44L0.2002040954190.1587-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I've noticed that when writing data to the modem the writes can time out
-at some point eventually. Looks like kicking the modem idle GPIO every
-600 ms instead of once a second fixes the issue. Note that this rate is
-different from our runtime PM autosuspend rate MDM6600_MODEM_IDLE_DELAY_MS
-that we still want to keep at 1 second, so let's add a separate define for
-PHY_MDM6600_IDLE_KICK_MS.
 
-Fixes: f7f50b2a7b05 ("phy: mapphone-mdm6600: Add runtime PM support for n_gsm on USB suspend")
-Cc: Marcel Partap <mpartap@gmx.net>
-Cc: Merlijn Wajer <merlijn@wizzup.org>
-Cc: Michael Scott <hashcode0f@gmail.com>
-Cc: NeKit <nekit1000@gmail.com>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Sebastian Reichel <sre@kernel.org>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
----
- drivers/phy/motorola/phy-mapphone-mdm6600.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+On 4.2.2020 16.57, Alan Stern wrote:
+> On Tue, 4 Feb 2020, Lauri Jakku wrote:
+>
+>> -- v1 ------------------------------------------------------------
+>> send, 20ms apart, control messages, if error is timeout.
+>>
+>> There is multiple reports of random behaviour of USB HID devices.
+>>
+>> I have mouse that acts sometimes quite randomly, I debugged with
+>> logs others have published that there is HW timeouts that leave
+>> device in state that it is errorneus.
+>>
+>> To fix this I introduced retry mechanism in root of USB HID drivers.
+>>
+>> Fix does not slow down operations at all if there is no -ETIMEDOUT
+>> got from control message sending. If there is one, then sleep 20ms
+>> and try again. Retry count is 20 witch translates maximium of 400ms
+>> before giving up.
+>>
+>> NOTE: This does not sleep anymore then before, if all is golden.
+> How do other operating systems handle these problems?  Perhaps we 
+> should use the same approach.
+>
+> Also, if this problem only affects USB HID devices, why not put the 
+> fix in the usbhid driver rather than the USB core?
+>
+> Alan Stern
 
-diff --git a/drivers/phy/motorola/phy-mapphone-mdm6600.c b/drivers/phy/motorola/phy-mapphone-mdm6600.c
---- a/drivers/phy/motorola/phy-mapphone-mdm6600.c
-+++ b/drivers/phy/motorola/phy-mapphone-mdm6600.c
-@@ -20,6 +20,7 @@
- 
- #define PHY_MDM6600_PHY_DELAY_MS	4000	/* PHY enable 2.2s to 3.5s */
- #define PHY_MDM6600_ENABLED_DELAY_MS	8000	/* 8s more total for MDM6600 */
-+#define PHY_MDM6600_WAKE_KICK_MS	600	/* time on after GPIO toggle */
- #define MDM6600_MODEM_IDLE_DELAY_MS	1000	/* modem after USB suspend */
- #define MDM6600_MODEM_WAKE_DELAY_MS	200	/* modem response after idle */
- 
-@@ -525,8 +526,14 @@ static void phy_mdm6600_modem_wake(struct work_struct *work)
- 
- 	ddata = container_of(work, struct phy_mdm6600, modem_wake_work.work);
- 	phy_mdm6600_wake_modem(ddata);
-+
-+	/*
-+	 * The modem does not always stay awake 1.2 seconds after toggling
-+	 * the wake GPIO, and sometimes it idles after about some 600 ms
-+	 * making writes time out.
-+	 */
- 	schedule_delayed_work(&ddata->modem_wake_work,
--			      msecs_to_jiffies(MDM6600_MODEM_IDLE_DELAY_MS));
-+			      msecs_to_jiffies(PHY_MDM6600_WAKE_KICK_MS));
- }
- 
- static int __maybe_unused phy_mdm6600_runtime_suspend(struct device *dev)
+hmm, i investigate, what i know now is few mentions about mouse
+
+acting up etc.
+
+
+I do more research, tomorrow.
+
+
+I think in my mind, that the core is good place, the thing ppl are forgetting
+
+that it does not make any unnecessary sleeps and when it does it it is
+
+about 70-100ms max per loop, and they are restricted to 20.
+
+
+The patch does not enforce any different use, in non-timeout case it is
+
+as fast as without the patch.
+
+
+I can easilly debug, cause my mouse acts up and that 5 loop version that
+
+I tried on my PC+ usb keyboard + usb mouse. It was way better.
+
+
+And now i got confirmation from my dad (Suse user) that with latest kernel,
+
+there have been acting up.
+
+
+The timeout retry loop done in patch within the USB core activates only
+
+when the timeout happens, and latest version adapts the 5000ms (common)
+
+to 50ms timeout, and sleeps 20ms per loop.
+
+
+But, keep comments coming & suggestions .. and if someone could test too,
+
+so I do not be only one to test this :) ..
+
+
+
 -- 
-2.25.0
+Br,
+Lauri J.
+
