@@ -2,130 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 898291527A4
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2020 09:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC79015286F
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2020 10:35:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728028AbgBEIug (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Feb 2020 03:50:36 -0500
-Received: from mail-lj1-f181.google.com ([209.85.208.181]:40001 "EHLO
-        mail-lj1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727459AbgBEIug (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Feb 2020 03:50:36 -0500
-Received: by mail-lj1-f181.google.com with SMTP id n18so1458641ljo.7
-        for <linux-usb@vger.kernel.org>; Wed, 05 Feb 2020 00:50:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=k32FpIieMHgsQ+cGHjbrPiIA7G5rCIEiSGPLCV5q90A=;
-        b=jinHOHtaQ1V3PX+ftKSEJziwkn/KPBRjGVFOKinuPRarYN2VNPCUHVWyPb3OWfAh1n
-         lQ3pKuXz6aV1yYEVobNVf2HCORqb1dX8LTZadbh6laqi5Om3TgF2fA/mDJ2pqWPJAwiO
-         /w8MgY7h1nVTTwaduj2uRLpmaYHvKObl/p8qSRLy8M1/1v9ggxflk9BiC/a5Sj1VyIgH
-         Ly3fNxSkxNh46VDMlB/6PvbPIhHu/wi2T8uvKlKc7quMDMLxicxbBAMJD7bqWSp5nFLS
-         n0k6bE5hFHpGJEHP0xbbqDLUBZR2V1AYyNFLVp70zeOvo5l2wbdjzbuqs23NEoC76KLd
-         F6xQ==
-X-Gm-Message-State: APjAAAXbxWMt+y2cjFPwMsF91Jk5SDsA137+9QEyruC20xOrvDa41WOK
-        uNRA2OGz6Tx74bRCyDBeGpCZY2qU
-X-Google-Smtp-Source: APXvYqycAEepyR9OhzyKAZ+pY/dmQvIY80q+/hXb2/MdiyF9enAu0HEq+HK/C1ucIE75aBF6gVjH9g==
-X-Received: by 2002:a2e:8119:: with SMTP id d25mr19847845ljg.76.1580892634528;
-        Wed, 05 Feb 2020 00:50:34 -0800 (PST)
-Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
-        by smtp.gmail.com with ESMTPSA id n3sm12665096ljc.100.2020.02.05.00.50.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Feb 2020 00:50:33 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@kernel.org>)
-        id 1izGOR-0003r8-5R; Wed, 05 Feb 2020 09:50:43 +0100
-Date:   Wed, 5 Feb 2020 09:50:43 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     jakub nantl <jn@forever.cz>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: ch341 garbage read with 5.5.x kernel
-Message-ID: <20200205085043.GR26725@localhost>
-References: <b23691c8-9219-b360-6114-93e86a8bd997@forever.cz>
- <20200205074312.GP26725@localhost>
- <fb82eb2f-ff8d-1e02-2f48-9667c86742a4@forever.cz>
+        id S1728151AbgBEJfU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Feb 2020 04:35:20 -0500
+Received: from mga17.intel.com ([192.55.52.151]:18567 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728078AbgBEJfT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 Feb 2020 04:35:19 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Feb 2020 01:35:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,405,1574150400"; 
+   d="scan'208";a="311314489"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga001.jf.intel.com with ESMTP; 05 Feb 2020 01:35:16 -0800
+Subject: Re: TI PCIe xHCI and kexec
+To:     Joel Stanley <joel@jms.id.au>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+References: <CACPK8XdFUWoEr6YvVHf-g28hREFOWMX0g5=Vsdxq9Asq=ftOVQ@mail.gmail.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <26635edf-2df3-df0f-5644-e016e1e20248@linux.intel.com>
+Date:   Wed, 5 Feb 2020 11:37:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fb82eb2f-ff8d-1e02-2f48-9667c86742a4@forever.cz>
+In-Reply-To: <CACPK8XdFUWoEr6YvVHf-g28hREFOWMX0g5=Vsdxq9Asq=ftOVQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 05, 2020 at 08:53:55AM +0100, jakub nantl wrote:
-> On 05. 02. 20 8:43, Johan Hovold wrote:
-> > There were some fixes to the baudrate handling that went into 5.5 that
-> > are likely related to this.
-> >
-> > These changes provide more accurate output rates, but I have since
-> > received one report that it may inadvertently have made the device more
-> > sensitive to errors in the input rate. In that case, the reporter
-> > switched to a baudrate that matches his actual rate which was 117647
-> > rather than 115200 (i.e. 2.1% error) and that addressed the problem.
-> >
-> > Which baudrate are you using here?
+On 5.2.2020 2.55, Joel Stanley wrote:
+> I'm supporting a system that uses Linux-as-a-bootloader to load a
+> distro kernel via kexec, The systems have a TI TUSB73x0 PCIe
+> controller which goes out to lunch after a kexec. This is the distro
+> (post-kexec) kernel:
 > 
-> my baudrate is 115200, how can I get "my" actual rate ?
+> [    0.235411] pci 0003:01:00.0: xHCI HW did not halt within 16000
+> usec status = 0x0
+> [    1.037298] xhci_hcd 0003:01:00.0: xHCI Host Controller
+> [    1.037367] xhci_hcd 0003:01:00.0: new USB bus registered, assigned
+> bus number 1
+> [    1.053481] xhci_hcd 0003:01:00.0: Host halt failed, -110
+> [    1.053523] xhci_hcd 0003:01:00.0: can't setup: -110
+> [    1.053565] xhci_hcd 0003:01:00.0: USB bus 1 deregistered
+> [    1.053629] xhci_hcd 0003:01:00.0: init 0003:01:00.0 fail, -110
+> [    1.053703] xhci_hcd: probe of 0003:01:00.0 failed with error -110
+> 
+> There were some fixes made a few years back to improve the situation,
+> but we've still had to carry some form of the patch below in the
+> bootloader kernel. I would like to rework it so it can be merged.
+> 
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index dbac0fa9748d..eaa94456dd9d 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -789,6 +789,9 @@ void xhci_shutdown(struct usb_hcd *hcd)
+>       xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+>               "xhci_shutdown completed - status = %x",
+>               readl(&xhci->op_regs->status));
+> +
+> +    /* TI XHCI controllers do not come back after kexec without this hack */
+> +    pci_reset_function_locked(to_pci_dev(hcd->self.sysdev));
+>   }
+>   EXPORT_SYMBOL_GPL(xhci_shutdown);
+> 
+> I would like some advice on how to implement it in a way that is
+> acceptable. Would a quirk on the pci id in xhci_shutdown be ok?
 
-You can always use a scope or logic analyser, but you can derive it
-theoretically if you know what oscillator frequency the arduino is
-using. You should be able to find more details in the datasheet for the
-MCU in question.
+Yes, but as this is a pci specific workaround the quirk should go to
+xhci-pci.c: xhci_pci_shutdown(), which was added in v5.5
 
-For example, if you look at section 19.11 in the ATmega238p datasheet
-you see that with a 16 MHz clock you may end up with a -3.5% or 2.1%
-error at 115200. The latter is likely the 117647 rate mentioned above.
+Is the rootcause known?
+Is the only possible solution to reset the pci function?.
+Have you tried, or seen this issue on any other controller than this TUSB73x0?
 
-That said, I have a hypothesis for how we may get the best of both
-worlds here.
+> 
+> 0003:01:00.0 USB controller: Texas Instruments TUSB73x0 SuperSpeed USB
+> 3.0 xHCI Host Controller (rev 02)
+> 
+> The full debug log of the distro kernel booting is below.
+> 
+> [    1.037833] xhci_hcd 0003:01:00.0: USBCMD 0x0:
+> [    1.037835] xhci_hcd 0003:01:00.0:   HC is being stopped
+> [    1.037837] xhci_hcd 0003:01:00.0:   HC has finished hard reset
+> [    1.037839] xhci_hcd 0003:01:00.0:   Event Interrupts disabled
+> [    1.037841] xhci_hcd 0003:01:00.0:   Host System Error Interrupts disabled
+> [    1.037843] xhci_hcd 0003:01:00.0:   HC has finished light reset
+> [    1.037846] xhci_hcd 0003:01:00.0: USBSTS 0x0:
+> [    1.037847] xhci_hcd 0003:01:00.0:   Event ring is empty
+> [    1.037849] xhci_hcd 0003:01:00.0:   No Host System Error
+> [    1.037851] xhci_hcd 0003:01:00.0:   HC is running
 
-Can you try the below patch which restores a component included in the
-first version of the new algorithm, but which I ultimately deemed
-redundant?
+Hmm, all bits in both USBCMD and USBSTS are 0. This is a bit suspicious.
+Normally at least USBCMD Run/Stop bit, and USBSTS HCHalted bit have
+opposite values.
 
-Johan
-
-
-From 0b833ae9dde819ffb41c8d16d3591484d1eab04c Mon Sep 17 00:00:00 2001
-From: Johan Hovold <johan@kernel.org>
-Date: Wed, 5 Feb 2020 09:33:15 +0100
-Subject: [PATCH] USB: serial: ch341: prefer lower divisors
-
-Although it was assumed to not make a difference, not using the factor 2
-prescaler appears to make the receiver more susceptible for errors in
-the input rate. Specifically, there are reports of problems with devices
-that cannot generate a 115200 rate with a smaller error than 2.1% (e.g.
-117647 bps).
-
-So whenever possible, enable the factor 2 prescaler and halve the
-divisor in order to use settings closer to that of the previous
-algorithm.
-
-Fixes: 35714565089e ("USB: serial: ch341: reimplement line-speed handling")
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/ch341.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-index df582fe855f0..86686e60238a 100644
---- a/drivers/usb/serial/ch341.c
-+++ b/drivers/usb/serial/ch341.c
-@@ -205,6 +205,12 @@ static int ch341_get_divisor(speed_t speed)
- 			16 * speed - 16 * CH341_CLKRATE / (clk_div * (div + 1)))
- 		div++;
- 
-+	/* Prefer lower base clock (fact = 0) if even divisor. */
-+	if (fact == 1 && div % 2 == 0) {
-+		div >>= 1;
-+		fact = 0;
-+	}
-+
- 	return (0x100 - div) << 8 | fact << 2 | ps;
- }
- 
--- 
-2.24.1
-
+-Mathias
