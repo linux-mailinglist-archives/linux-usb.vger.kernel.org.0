@@ -2,145 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5D61539DF
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2020 22:04:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC5391539FD
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2020 22:18:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727149AbgBEVED (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Feb 2020 16:04:03 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:46961 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727104AbgBEVED (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Feb 2020 16:04:03 -0500
-Received: by mail-ot1-f67.google.com with SMTP id g64so3333564otb.13
-        for <linux-usb@vger.kernel.org>; Wed, 05 Feb 2020 13:04:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jhhrbRrU672kDfFvJ/EE5w3I5wNtcQx8aaM6dlL4Ong=;
-        b=YszJYyBcS4DOYwixJ/e1RscrCZo6Yl869OtkWsZPh/TX7OxgmffJyik12Zbfsk9T4t
-         Si/FvvYgIj+xeVHtf8JfJ6t0G0TptFr0d7IE3nfLEdtoL4nKP2PYNQeP/eN2NWXiqoYY
-         ttgAEXvDYCfedt3To6+LFyxnEAsHbfam/9SvSP1Zi+Xrb0YtBNQKFJKosabsEMgy3ZDT
-         AeJEsLiEXE6hOinKHlfBxXtXhg22JBKGJGycc3HbrQkpr1rLXoZjVFI9ecy64YvI6yEE
-         DMTHYH78o6h4YKj7mmrx3GgA0YfjmIgJyUnyYzETcJTVkGOUiaGTkQtl8FIJoa6c2URd
-         GK+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jhhrbRrU672kDfFvJ/EE5w3I5wNtcQx8aaM6dlL4Ong=;
-        b=UJ4HR0S+Q+RDTqtfpzN576KTrwlW1pazBk+DkJ61M9k7VNEoQS/1pYdYBYEBb3h+k8
-         6IeBZccsQ+vHW+Ee2KpWlx/xdNpnUQK5wLRSUqWwDRLu6912M529ebOXOLIImUeQK58I
-         0Nl2y24cGcv32Dv4IQ+V192F/3xba8BjLFVDZhXJcL6bzygHvvHuhtexqi+nAQuk+/dQ
-         T/t/myG2Y7NgU9wC/6rbc7S5xlZfCkRIgHZanJjvIjxPyR886qoet7b2ZGYISXjgpqTs
-         vnTjRy1UhP+JRgc1+YFDec809hXk2gRs0sV2zetbb8lal7ajL4SNtM/Q3JlCYLUlJB5M
-         vWOw==
-X-Gm-Message-State: APjAAAVuEjjmq1Lk0svPTwkMcgZKVmKxlhRNE6uY9FxHo372h9abhztq
-        6YE0AQlvxHI4dtPzFNhAoJCJmSaFgXM85P0VcDHiDQ==
-X-Google-Smtp-Source: APXvYqwEZgLTmny3kZxqipEZCRMaUGI2QI9rcoYlZUPDPd6XFWVDdfFX2KipP2EpgaU5XEPCIU7MbwfXtslZUoAGmwI=
-X-Received: by 2002:a9d:7493:: with SMTP id t19mr14936423otk.332.1580936642315;
- Wed, 05 Feb 2020 13:04:02 -0800 (PST)
-MIME-Version: 1.0
-References: <20200122222645.38805-1-john.stultz@linaro.org>
- <ef64036f-7621-50d9-0e23-0f7141a40d7a@collabora.com> <02E7334B1630744CBDC55DA8586225837F9EE280@ORSMSX102.amr.corp.intel.com>
- <87o8uu3wqd.fsf@kernel.org> <02E7334B1630744CBDC55DA8586225837F9EE335@ORSMSX102.amr.corp.intel.com>
- <87lfpy3w1g.fsf@kernel.org>
-In-Reply-To: <87lfpy3w1g.fsf@kernel.org>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Wed, 5 Feb 2020 13:03:51 -0800
-Message-ID: <CALAqxLUQ0ciJTLrmEAu9WKCJHAbpY9szuVm=+VapN2QWWGnNjA@mail.gmail.com>
-Subject: Re: [RFC][PATCH 0/2] Avoiding DWC3 transfer stalls/hangs when using
- adb over f_fs
+        id S1727104AbgBEVSP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Feb 2020 16:18:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36272 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727033AbgBEVSP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 Feb 2020 16:18:15 -0500
+Received: from localhost (unknown [193.117.204.200])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7F3BA2082E;
+        Wed,  5 Feb 2020 21:18:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1580937494;
+        bh=cw/Q+0LM9/vBqCHeBQby87XziAnC/q/ln5gJPgJs8uY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fxZmdrSJHuMsidDfa1uOS3dF6qWrcd1OHMT1o9OuFBK9hKVzLWq7ojVN9lkrLp9/k
+         cF9aetR05NynOQvt76sMmLt2xxkuh8qCkTsMdM+ed5sarRKiug2OPwj2qmL9e6pAQT
+         NouQx1+BIg6NaqlbvNVRh2Df1uZIZd/PLtErLRgw=
+Date:   Wed, 5 Feb 2020 21:18:12 +0000
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Felipe Balbi <balbi@kernel.org>
-Cc:     "Yang, Fei" <fei.yang@intel.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
-        Tejas Joglekar <tejas.joglekar@synopsys.com>,
-        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        stable <stable@vger.kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>
+Subject: Re: [PATCH v5 1/1] usb: gadget: add raw-gadget interface
+Message-ID: <20200205211812.GD1399643@kroah.com>
+References: <cover.1579007786.git.andreyknvl@google.com>
+ <461a787e63a9a01d83edc563575b8585bc138e8d.1579007786.git.andreyknvl@google.com>
+ <87ftfv7nf0.fsf@kernel.org>
+ <CAAeHK+wwmis4z9ifPAnkM36AnfG2oESSLAkKvDkuAa0QUM2wRg@mail.gmail.com>
+ <87a7637ise.fsf@kernel.org>
+ <CAAeHK+zNuqwmHG4NJwZNtQHizdaOpriHxoQffZHMffeke_hsGQ@mail.gmail.com>
+ <87tv4556ke.fsf@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87tv4556ke.fsf@kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jan 23, 2020 at 9:46 AM Felipe Balbi <balbi@kernel.org> wrote:
-> >>>>>
-> >>>>> Since ~4.20, when the functionfs gadget enabled scatter-gather
-> >>>>> support, we have seen problems with adb connections stalling and
-> >>>>> stopping to function on hardware with dwc3 usb controllers.
-> >>>>> Specifically, HiKey960, Dragonboard 845c, and Pixel3 devices.
-...
-> >>
-> >> I'm pretty sure this should be solved at the DMA API level, just want to confirm.
+On Wed, Feb 05, 2020 at 06:42:41PM +0200, Felipe Balbi wrote:
+> > Overall, supporting O_NONBLOCK might be a useful feature for people
+> > who are doing something else other than fuzzing, We can account for
+> > potential future extensions that'll support it, so detecting
+> > O_NONBLOCK and returning an error for now makes sense.
 > >
-> > I have sent you the tracepoints long time ago. Also my analysis of the
-> > problem (BTW, I don't think the tracepoints helped much). It's
-> > basically a logic problem in function dwc3_gadget_ep_reclaim_trb_sg().
->
-> AFAICT, this is caused by DMA API merging pages together when map an
-> sglist for DMA. While doing that, it does *not* move the SG_END flag
-> which sg_is_last() checks.
->
-> I consider that an overlook on the DMA API, wouldn't you? Why should DMA
-> API users care if pages were merged or not while mapping the sglist? We
-> have for_each_sg() and sg_is_last() for a reason.
->
+> > WDYT?
+> 
+> If that's the way you want to go, that's okay. But let's, then, prepare
+> the code for extension later on. For example, let's add an IOCTL which
+> returns the "version" of the ABI. Based on that, userspace can detect
+> features and so on.
 
-From an initial look, I agree this is pretty confusing.   dma_map_sg()
-can coalesce entries in the sg list, modifying the sg entires
-themselves, however, in doing so it doesn't modify the number of
-entries in the sglist (nor the end state bit).  That's pretty subtle!
+Ick, no, no version mess.  If you have a new api, just add a new ioctl
+and away you go, userspace can easily test for that.  Don't go down the
+path of trying to version your api, that way never works.
 
-My initial naive attempt to fix the dma-iommu path to set the end bit
-at the tail of __finalize_sg() which does the sg entry modifications,
-only caused trouble elsewhere, as there's plenty of logic that expects
-the number of entries to not change, so having sg_next() return NULL
-before that point results in lots of null pointer traversals.
+Trust me, been there, got the t-shirt, lived to regret it.
 
-Further, looking at the history, while apparently quirky, this has
-been the documented behavior in DMA-API.txt for over almost 14 years
-(at least).  It clearly states that that dma_map_api can return fewer
-mapped entries then sg entries, and one should loop only that many
-times (for_each_sg() having a max number of entries to iterate over
-seems specifically for this purpose).  Additionally, it says one must
-preserve the original number of entries (not # mapped entries) for
-dma_unmap_sg().
-
-So I'm not sure that sg_is_last() is really valid for iterating on
-mapped sg lists.
-
-Should it be? Probably (at least with my unfamiliar eyes), but
-sg_is_last() has been around for almost as long coexisting with this
-behavioral quirk, so I'm also not sure this is the best hill for the
-dwc3 driver to die on. :)
-
-The fix here:
-  https://lore.kernel.org/lkml/20200122222645.38805-3-john.stultz@linaro.org/
-Or maybe the slightly cleaner varient here:
-  https://git.linaro.org/people/john.stultz/android-dev.git/commit/?h=dev/db845c-mainline-WIP&id=61a5816aa71ec719e77df9f2260dbbf6bcec7c99
-seems like it would correctly address things following the
-documentation and avoid the failures we're seeing.
-
-As to if dma_map_sg() should fixup the state bits or properly shrink
-the sg list when it coalesces entries, that seems like it would be a
-much more intrusive change across quite a bit of the kernel that was
-written to follow the documented method. So my confidence that such a
-change would make it upstream in a reasonable amount of time isn't
-very high, and it seems like a bad idea to block the driver from
-working properly in the meantime.
-
-Pulling in Christoph and Jens as I suspect they have more context on
-this, and maybe can explain thats its not so quirky with the right
-perspective?
-
-Thoughts? Maybe there is an easier way to make it less quirky then
-what I imagine?
-
-thanks
--john
+greg k-h
