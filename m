@@ -2,65 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 664E2152A14
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2020 12:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5687E15303E
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2020 12:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727085AbgBELmM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Feb 2020 06:42:12 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:54762 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726960AbgBELmM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Feb 2020 06:42:12 -0500
-Received: from 61-220-137-37.hinet-ip.hinet.net ([61.220.137.37] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1izIpQ-0003XC-TM; Wed, 05 Feb 2020 11:26:45 +0000
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        stern@rowland.harvard.edu
-Cc:     acelan.kao@canonical.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [RESEND] [PATCH v2 3/3] USB: Disable LPM on WD19's Realtek Hub
-Date:   Wed,  5 Feb 2020 19:26:33 +0800
-Message-Id: <20200205112633.25995-3-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200205112633.25995-1-kai.heng.feng@canonical.com>
-References: <20200205112633.25995-1-kai.heng.feng@canonical.com>
+        id S1727868AbgBEL5E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Feb 2020 06:57:04 -0500
+Received: from dougal.metanate.com ([90.155.101.14]:20693 "EHLO metanate.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727833AbgBEL5E (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 Feb 2020 06:57:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/simple; d=metanate.com;
+         s=stronger; h=Content-Transfer-Encoding:Content-Type:References:In-Reply-To:
+        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+         bh=QIyjQ/REztIDNpy2jOk34jtYI7tAwWjPcGdUhfZavRk=; b=pBDIT5N2UMu5EENFL3Aj9/v5X
+        KoYRuZfpCHcB/lOGydqgH2wb5j8sp5sj2Iz0OYjvCJDaGy+N/daqjvBAyiF3NV4iyAshxRFWxtb1x
+        KYZrLnYYs+sXgrTq84bVhdhC+TQ57T1lFIT4U5o9k4BpmJA0H7J6z/Tne8QDpD3G1nXiKRh7pqqJa
+        I7snvwoFf7Ng9W4pp7Ds9ZmoJ0YYZRCBoL4BjhRYOzGounUE597/nep5+sR+ywPHQOotgQazkPzR4
+        EKrGpge5oHOPXmIbSHgTpekIykjzih2JCjwtjz/ObFgxhjjKgT+834Eb2x7bqV31ven21LXUMWTWd
+        3j0ESHxQg==;
+Received: from dougal.metanate.com ([192.168.88.1] helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1izJIe-0006L1-Td; Wed, 05 Feb 2020 11:56:56 +0000
+Date:   Wed, 5 Feb 2020 11:56:56 +0000
+From:   John Keeping <john@metanate.com>
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: dwc2: Implement set_selfpowered()
+Message-ID: <20200205115656.3c698385.john@metanate.com>
+In-Reply-To: <34b74e48-a3ea-f68f-540e-121ae98afb31@synopsys.com>
+References: <20200204152933.2216615-1-john@metanate.com>
+        <34b74e48-a3ea-f68f-540e-121ae98afb31@synopsys.com>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Authenticated: YES
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Realtek Hub (0bda:0x0487) used in Dell Dock WD19 sometimes drops off the
-bus when bringing underlying ports from U3 to U0.
+Hi Minas,
 
-Disabling LPM on the hub during setting link state is not enough, so
-let's disable LPM completely for this hub.
+On Wed, 5 Feb 2020 07:59:48 +0000
+Minas Harutyunyan <Minas.Harutyunyan@synopsys.com> wrote:
 
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
-v2:
- - Use quirk instead of the original approach.
+> On 2/4/2020 7:29 PM, John Keeping wrote:
+> > dwc2 always reports as self-powered in response to a device status
+> > request.  Implement the set_selfpowered() operations so that the gadget
+> > can report as bus-powered when appropriate.
+> > 
+> > This is modelled on the dwc3 implementation.
+> > 
+> > Signed-off-by: John Keeping <john@metanate.com>  
+> 
+> Good catch. Just one concern. Your patch partially fix my patch this is 
+> why I think you need to add Fixes tag otherwise it can create merge 
+> conflict if your patch will be merged to next earlier than my.
 
- drivers/usb/core/quirks.c | 3 +++
- 1 file changed, 3 insertions(+)
+I don't think this is actually a fix for your patch, it's a separate fix
+which happens to touch the same code.
 
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index 6b6413073584..2fb7c1602280 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -371,6 +371,9 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	{ USB_DEVICE(0x0b05, 0x17e0), .driver_info =
- 			USB_QUIRK_IGNORE_REMOTE_WAKEUP },
- 
-+	/* Realtek hub in Dell WD19 (Type-C) */
-+	{ USB_DEVICE(0x0bda, 0x0487), .driver_info = USB_QUIRK_NO_LPM },
-+
- 	/* Action Semiconductor flash disk */
- 	{ USB_DEVICE(0x10d6, 0x2200), .driver_info =
- 			USB_QUIRK_STRING_FETCH_255 },
--- 
-2.17.1
+Since dwc2 has never supported the set_selfpowered() operation, I'm not
+really sure if this counts as a bugfix or a feature.
+
+I'm happy to re-send with a fixes tag if you think it's necessary, but I
+don't think it's accurate in this case - your patch did not introduce a
+bug here :-)
+
+
+Regards,
+John
+
+> > ---
+> >   drivers/usb/dwc2/gadget.c | 24 +++++++++++++++++++++++-
+> >   1 file changed, 23 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+> > index 2717f4401b97..76c0a5242175 100644
+> > --- a/drivers/usb/dwc2/gadget.c
+> > +++ b/drivers/usb/dwc2/gadget.c
+> > @@ -1646,7 +1646,8 @@ static int dwc2_hsotg_process_req_status(struct dwc2_hsotg *hsotg,
+> >   
+> >   	switch (ctrl->bRequestType & USB_RECIP_MASK) {
+> >   	case USB_RECIP_DEVICE:
+> > -		status = 1 << USB_DEVICE_SELF_POWERED;
+> > +		status = hsotg->gadget.is_selfpowered <<
+> > +			 USB_DEVICE_SELF_POWERED;
+> >   		status |= hsotg->remote_wakeup_allowed <<
+> >   			  USB_DEVICE_REMOTE_WAKEUP;
+> >   		reply = cpu_to_le16(status);
+> > @@ -4530,6 +4531,26 @@ static int dwc2_hsotg_gadget_getframe(struct usb_gadget *gadget)
+> >   	return dwc2_hsotg_read_frameno(to_hsotg(gadget));
+> >   }
+> >   
+> > +/**
+> > + * dwc2_hsotg_set_selfpowered - set if device is self/bus powered
+> > + * @gadget: The usb gadget state
+> > + * @is_selfpowered: Whether the device is self-powered
+> > + *
+> > + * Set if the device is self or bus powered.
+> > + */
+> > +static int dwc2_hsotg_set_selfpowered(struct usb_gadget *gadget,
+> > +				      int is_selfpowered)
+> > +{
+> > +	struct dwc2_hsotg *hsotg = to_hsotg(gadget);
+> > +	unsigned long flags;
+> > +
+> > +	spin_lock_irqsave(&hsotg->lock, flags);
+> > +	gadget->is_selfpowered = !!is_selfpowered;
+> > +	spin_unlock_irqrestore(&hsotg->lock, flags);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >   /**
+> >    * dwc2_hsotg_pullup - connect/disconnect the USB PHY
+> >    * @gadget: The usb gadget state
+> > @@ -4621,6 +4642,7 @@ static int dwc2_hsotg_vbus_draw(struct usb_gadget *gadget, unsigned int mA)
+> >   
+> >   static const struct usb_gadget_ops dwc2_hsotg_gadget_ops = {
+> >   	.get_frame	= dwc2_hsotg_gadget_getframe,
+> > +	.set_selfpowered	= dwc2_hsotg_set_selfpowered,
+> >   	.udc_start		= dwc2_hsotg_udc_start,
+> >   	.udc_stop		= dwc2_hsotg_udc_stop,
+> >   	.pullup                 = dwc2_hsotg_pullup,
+> >   
 
