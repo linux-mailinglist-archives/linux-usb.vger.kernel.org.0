@@ -2,138 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A2C1523A2
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2020 00:54:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A08C7152453
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2020 01:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727674AbgBDXyF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Feb 2020 18:54:05 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:33780 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727687AbgBDXyE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Feb 2020 18:54:04 -0500
-Received: by mail-wm1-f65.google.com with SMTP id m10so3250119wmc.0
-        for <linux-usb@vger.kernel.org>; Tue, 04 Feb 2020 15:54:01 -0800 (PST)
+        id S1727701AbgBEA4A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Feb 2020 19:56:00 -0500
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:37713 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727627AbgBEA4A (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Feb 2020 19:56:00 -0500
+Received: by mail-qt1-f196.google.com with SMTP id w47so278428qtk.4;
+        Tue, 04 Feb 2020 16:55:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=cvoP7lZgiwSyZwuJ6SgoCnR+QwZx+ZUXmOk9VybwWHc=;
-        b=TLCMKNZ0axj3G166T58C7Sp4+/lPY9ERE4TqklTXOUd1T5UYNseLgzUkR0vgGtRRkV
-         kNcrF2cDKVlBBGtuMpbLwkXyOb8rZRQ6y2dPEwbpQ9bIE3kajAlVA3soOdK1lNyjlrDA
-         WGJmxCrJvnt30F5kraxb7BbzIaP0m/IL9zTm+GVXjdSqyskpvlTiDbNQjzQbgt5ij25d
-         w3M8iG8ti11aQeSWIHyxkmRuA4R5EZ217lUskN7dfSjSZxeohHZGcW4Y+ZhTLDIvlMz0
-         K6YpG1C+DDO60oNVoj0oh9NOgECcCj4m89UEzBf0vUmNlq3l86Zk2OpU9vUSzqv85j8q
-         7oSA==
+        d=jms.id.au; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=yC9xIL1dNyShbeFS2/Wyo+h8MlTkNrKRjdXdXeCa2a4=;
+        b=Pk8YUnCduMXLnvgA1FG4sxxGzi4T+lap2zlAsuptyOvqk+jHVAT0PFPiunxwbLAUMX
+         VIvF4xJpbwiyTNBX1SThGCDGK97BR3uHAX2Ae/jqTf9+7T1QYuTkl7hmF4pRZG/p5kqL
+         IIhn3SePpGLXpFQ4ZAzn6MrKuZn6E0dYI67AY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=cvoP7lZgiwSyZwuJ6SgoCnR+QwZx+ZUXmOk9VybwWHc=;
-        b=O0H0QI2N1v7O8X3GNLciuXVXmp/cTjZ2GKY/hl6/yUW3jdMlvzyq9Bu9NRHXWn8gGp
-         PQBPy041lSx8WM5zjOT4aUijs8AIed72eoefq78DnB5NxBqs68CRK7hpWz6o+sQ4F+Gh
-         mMTTIjFD5e1zOmsA7G+6wxStRD0pS+YjrHK1gps+50gGCr/TL2D+uKY1axIK9BaE4pE/
-         jQCuQycg9xqfNAv/98+j1SC5k0DIzMKesnlX2xfADOBsdlknNBh3OtPe7BIkuiuIikl8
-         hHVXDR+d10FECki6Yddpm+KzEHeYmUVLVIEZ3UFcWG7cNrT2s7qpyOOGvJu5yCTXo87/
-         RK3g==
-X-Gm-Message-State: APjAAAVqD/TRhUjOEskU+YGthWRfBfxbtPGZ8mRcRV/Lsp2LNyg6PcLK
-        +tOkOQ8zpyPFypeCRziFvdcQeQ==
-X-Google-Smtp-Source: APXvYqyOXzkai8qWgypxtKPWk6WKI4lwtfqFxlYd+cqmJP1x94P3MZO3zqLYUDXUsWBTP/ztsSlKnA==
-X-Received: by 2002:a05:600c:20f:: with SMTP id 15mr1491633wmi.128.1580860440987;
-        Tue, 04 Feb 2020 15:54:00 -0800 (PST)
-Received: from [192.168.0.38] ([176.61.57.127])
-        by smtp.gmail.com with ESMTPSA id d204sm5718653wmd.30.2020.02.04.15.53.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Feb 2020 15:54:00 -0800 (PST)
-Subject: Re: [PATCH v3 06/19] dt-bindings: usb: dwc3: Add a gpio-usb-connector
- description
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org, jackp@codeaurora.org, balbi@kernel.org,
-        bjorn.andersson@linaro.org, linux-kernel@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org
-References: <20200122185610.131930-1-bryan.odonoghue@linaro.org>
- <20200122185610.131930-7-bryan.odonoghue@linaro.org>
- <20200127184347.GA27080@bogus>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Message-ID: <25c146fd-26f9-dee5-a693-45cc5774dbef@linaro.org>
-Date:   Tue, 4 Feb 2020 23:54:03 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=yC9xIL1dNyShbeFS2/Wyo+h8MlTkNrKRjdXdXeCa2a4=;
+        b=cn3LXX93ePM3PIC3NgCNm7eJeAyda64VrwXhyVu6+Q4xkqIcrqzyinrnkhlEum1jwF
+         Lt/mcUs/4Hl1rDgs3GU04Tx89S1VV9t/aR39jWsc/7dzA2NtOhxDo223n40u6zfZckHL
+         xK9c2NSyRtlDZxs2QLYTKQmP3sJ7nK1UGOnnsLUkh0e0VP/7bcsVOup8EHaGi+Z/1ogg
+         jI1mW2JPce49mT7vEOeP4qcZbYXYZnls+g2+c2NewjCNaKBCRio3zszEMt6CIKizPZ9s
+         K2uEpSUVLRGa5UQ1jRTx1/n4vUaGiQFMbh44kmaiLJh/TEopBsaOCarI6janRQvlOW9D
+         H40Q==
+X-Gm-Message-State: APjAAAX+XvukWa7DeV8QCpQEoysnfow5BG9VbnVzejUiTJ7gDIgHtGR8
+        NO0r4A1Mu8Wen7ccZGiC/w7PONe24/ZhaRbSbUN/Amxc
+X-Google-Smtp-Source: APXvYqwraToRypAJColuSwSVdeBtc5ThkSYjFxUK+9tSBJHfeqQDTqCSDSwoG54gwHk3fP2ja0HbEGQ3J1EHVXULTz4=
+X-Received: by 2002:ac8:754e:: with SMTP id b14mr31535858qtr.220.1580864158382;
+ Tue, 04 Feb 2020 16:55:58 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200127184347.GA27080@bogus>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 5 Feb 2020 00:55:46 +0000
+Message-ID: <CACPK8XdFUWoEr6YvVHf-g28hREFOWMX0g5=Vsdxq9Asq=ftOVQ@mail.gmail.com>
+Subject: TI PCIe xHCI and kexec
+To:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 27/01/2020 18:43, Rob Herring wrote:
-> On Wed, Jan 22, 2020 at 06:55:57PM +0000, Bryan O'Donoghue wrote:
->> A USB connector should be a child node of the USB controller
->> connector/usb-connector.txt. This patch adds a property
->> "gpio_usb_connector" which declares a connector child device. Code in the
->> DWC3 driver will then
->>
->> - Search for "gpio_usb_controller"
->> - Do an of_platform_populate() if found
->>
->> This will have the effect of making the declared node a child of the USB
->> controller and will make sure that USB role-switch events detected with the
->> gpio_usb_controller driver propagate into the DWC3 controller code
->> appropriately.
-> 
-> This is all driver specifics. This is a binding patch.
-> 
->>
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Cc: Rob Herring <robh+dt@kernel.org>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: linux-usb@vger.kernel.org
->> Cc: devicetree@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->> ---
->>   Documentation/devicetree/bindings/usb/dwc3.txt | 11 +++++++++++
->>   1 file changed, 11 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
->> index 66780a47ad85..b019bd472f83 100644
->> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
->> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
->> @@ -108,6 +108,9 @@ Optional properties:
->>   			When just one value, which means INCRX burst mode enabled. When
->>   			more than one value, which means undefined length INCR burst type
->>   			enabled. The values can be 1, 4, 8, 16, 32, 64, 128 and 256.
->> + - gpio_usb_connector: Declares a USB connector named 'gpio_usb_connector' as a
->> +		       child node of the DWC3 block. Use when modelling a USB
->> +		       connector based on the gpio-usb-b-connector driver.
-> 
-> Should be just 'connector'. That's already implicitly allowed for any
-> USB controller, so you don't really need a binding change. And the
-> specific type of connector is outside the scope of the DWC3 binding.
-> 
->>   
->>    - in addition all properties from usb-xhci.txt from the current directory are
->>      supported as well
->> @@ -121,4 +124,12 @@ dwc3@4a030000 {
->>   	interrupts = <0 92 4>
->>   	usb-phy = <&usb2_phy>, <&usb3,phy>;
->>   	snps,incr-burst-type-adjustment = <1>, <4>, <8>, <16>;
->> +	usb_con: gpio_usb_connector {
->> +		compatible = "gpio-usb-b-connector";
->> +		id-gpio = <&tlmm 116 GPIO_ACTIVE_HIGH>;
->> +		vbus-gpio = <&pms405_gpios 12 GPIO_ACTIVE_HIGH>;
-> 
-> *-gpios is the preferred form and should be what's documented.
+I'm supporting a system that uses Linux-as-a-bootloader to load a
+distro kernel via kexec, The systems have a TI TUSB73x0 PCIe
+controller which goes out to lunch after a kexec. This is the distro
+(post-kexec) kernel:
 
-Hi Rob,
+[    0.235411] pci 0003:01:00.0: xHCI HW did not halt within 16000
+usec status = 0x0
+[    1.037298] xhci_hcd 0003:01:00.0: xHCI Host Controller
+[    1.037367] xhci_hcd 0003:01:00.0: new USB bus registered, assigned
+bus number 1
+[    1.053481] xhci_hcd 0003:01:00.0: Host halt failed, -110
+[    1.053523] xhci_hcd 0003:01:00.0: can't setup: -110
+[    1.053565] xhci_hcd 0003:01:00.0: USB bus 1 deregistered
+[    1.053629] xhci_hcd 0003:01:00.0: init 0003:01:00.0 fail, -110
+[    1.053703] xhci_hcd: probe of 0003:01:00.0 failed with error -110
 
-If I've understood you right here you don't favour documenting a new 
-binding but you're OK with adding an example ?
+There were some fixes made a few years back to improve the situation,
+but we've still had to carry some form of the patch below in the
+bootloader kernel. I would like to rework it so it can be merged.
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index dbac0fa9748d..eaa94456dd9d 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -789,6 +789,9 @@ void xhci_shutdown(struct usb_hcd *hcd)
+     xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+             "xhci_shutdown completed - status = %x",
+             readl(&xhci->op_regs->status));
++
++    /* TI XHCI controllers do not come back after kexec without this hack */
++    pci_reset_function_locked(to_pci_dev(hcd->self.sysdev));
+ }
+ EXPORT_SYMBOL_GPL(xhci_shutdown);
+
+I would like some advice on how to implement it in a way that is
+acceptable. Would a quirk on the pci id in xhci_shutdown be ok?
+
+0003:01:00.0 USB controller: Texas Instruments TUSB73x0 SuperSpeed USB
+3.0 xHCI Host Controller (rev 02)
+
+The full debug log of the distro kernel booting is below.
+
+Cheers,
+
+Joel
 
 ---
-bod
 
+[    1.037638] xhci_hcd 0003:01:00.0: xHCI Host Controller
+[    1.037695] xhci_hcd 0003:01:00.0: new USB bus registered, assigned
+bus number 1
+[    1.037789] xhci_hcd 0003:01:00.0: xHCI capability registers at
+    (ptrval):
+[    1.037792] xhci_hcd 0003:01:00.0: CAPLENGTH AND HCIVERSION 0x960020:
+[    1.037794] xhci_hcd 0003:01:00.0: CAPLENGTH: 0x20
+[    1.037796] xhci_hcd 0003:01:00.0: HCIVERSION: 0x96
+[    1.037798] xhci_hcd 0003:01:00.0: HCSPARAMS 1: 0x8000840
+[    1.037800] xhci_hcd 0003:01:00.0:   Max device slots: 64
+[    1.037802] xhci_hcd 0003:01:00.0:   Max interrupters: 8
+[    1.037804] xhci_hcd 0003:01:00.0:   Max ports: 8
+[    1.037806] xhci_hcd 0003:01:00.0: HCSPARAMS 2: 0xc0000f1
+[    1.037808] xhci_hcd 0003:01:00.0:   Isoc scheduling threshold: 1
+[    1.037810] xhci_hcd 0003:01:00.0:   Maximum allowed segments in
+event ring: 15
+[    1.037813] xhci_hcd 0003:01:00.0: HCSPARAMS 3 0x7ff000a:
+[    1.037815] xhci_hcd 0003:01:00.0:   Worst case U1 device exit latency: 10
+[    1.037816] xhci_hcd 0003:01:00.0:   Worst case U2 device exit latency: 2047
+[    1.037819] xhci_hcd 0003:01:00.0: HCC PARAMS 0x270f06d:
+[    1.037821] xhci_hcd 0003:01:00.0:   HC generates 64 bit addresses
+[    1.037823] xhci_hcd 0003:01:00.0:   HC hasn't Contiguous Frame ID Capability
+[    1.037825] xhci_hcd 0003:01:00.0:   HC can't generate Stopped -
+Short Package event
+[    1.037826] xhci_hcd 0003:01:00.0:   FIXME: more HCCPARAMS debugging
+[    1.037829] xhci_hcd 0003:01:00.0: RTSOFF 0x4a0:
+[    1.037831] xhci_hcd 0003:01:00.0: xHCI operational registers at
+     (ptrval):
+[    1.037833] xhci_hcd 0003:01:00.0: USBCMD 0x0:
+[    1.037835] xhci_hcd 0003:01:00.0:   HC is being stopped
+[    1.037837] xhci_hcd 0003:01:00.0:   HC has finished hard reset
+[    1.037839] xhci_hcd 0003:01:00.0:   Event Interrupts disabled
+[    1.037841] xhci_hcd 0003:01:00.0:   Host System Error Interrupts disabled
+[    1.037843] xhci_hcd 0003:01:00.0:   HC has finished light reset
+[    1.037846] xhci_hcd 0003:01:00.0: USBSTS 0x0:
+[    1.037847] xhci_hcd 0003:01:00.0:   Event ring is empty
+[    1.037849] xhci_hcd 0003:01:00.0:   No Host System Error
+[    1.037851] xhci_hcd 0003:01:00.0:   HC is running
+[    1.037854] xhci_hcd 0003:01:00.0:         (ptrval) port status reg = 0x2a0
+[    1.037857] xhci_hcd 0003:01:00.0:         (ptrval) port power reg = 0x0
+[    1.037860] xhci_hcd 0003:01:00.0:         (ptrval) port link reg = 0x0
+[    1.037862] xhci_hcd 0003:01:00.0:         (ptrval) port reserved reg = 0x0
+[    1.037865] xhci_hcd 0003:01:00.0:         (ptrval) port status reg = 0x2a0
+[    1.037868] xhci_hcd 0003:01:00.0:         (ptrval) port power reg = 0x0
+[    1.037870] xhci_hcd 0003:01:00.0:         (ptrval) port link reg = 0x0
+[    1.037873] xhci_hcd 0003:01:00.0:         (ptrval) port reserved reg = 0x0
+[    1.037876] xhci_hcd 0003:01:00.0:         (ptrval) port status reg = 0xe03
+[    1.037878] xhci_hcd 0003:01:00.0:         (ptrval) port power reg = 0x0
+[    1.037881] xhci_hcd 0003:01:00.0:         (ptrval) port link reg = 0x0
+[    1.037884] xhci_hcd 0003:01:00.0:         (ptrval) port reserved reg = 0x0
+[    1.037886] xhci_hcd 0003:01:00.0:         (ptrval) port status reg = 0xe03
+[    1.037889] xhci_hcd 0003:01:00.0:         (ptrval) port power reg = 0x0
+[    1.037892] xhci_hcd 0003:01:00.0:         (ptrval) port link reg = 0x0
+[    1.037894] xhci_hcd 0003:01:00.0:         (ptrval) port reserved reg = 0x0
+[    1.037897] xhci_hcd 0003:01:00.0:         (ptrval) port status reg = 0x2a0
+[    1.037900] xhci_hcd 0003:01:00.0:         (ptrval) port power reg = 0x0
+[    1.037902] xhci_hcd 0003:01:00.0:         (ptrval) port link reg = 0x0
+[    1.037905] xhci_hcd 0003:01:00.0:         (ptrval) port reserved reg = 0x0
+[    1.037908] xhci_hcd 0003:01:00.0:         (ptrval) port status reg = 0x2a0
+[    1.037910] xhci_hcd 0003:01:00.0:         (ptrval) port power reg = 0x0
+[    1.037913] xhci_hcd 0003:01:00.0:         (ptrval) port link reg = 0x0
+[    1.037916] xhci_hcd 0003:01:00.0:         (ptrval) port reserved reg = 0x0
+[    1.037918] xhci_hcd 0003:01:00.0:         (ptrval) port status reg = 0x2a0
+[    1.037921] xhci_hcd 0003:01:00.0:         (ptrval) port power reg = 0x0
+[    1.037924] xhci_hcd 0003:01:00.0:         (ptrval) port link reg = 0x0
+[    1.037926] xhci_hcd 0003:01:00.0:         (ptrval) port reserved reg = 0x0
+[    1.037929] xhci_hcd 0003:01:00.0:         (ptrval) port status reg = 0x2a0
+[    1.037931] xhci_hcd 0003:01:00.0:         (ptrval) port power reg = 0x0
+[    1.037934] xhci_hcd 0003:01:00.0:         (ptrval) port link reg = 0x0
+[    1.037937] xhci_hcd 0003:01:00.0:         (ptrval) port reserved reg = 0x0
+[    1.037939] xhci_hcd 0003:01:00.0: // Halt the HC
+[    1.053945] xhci_hcd 0003:01:00.0: Host halt failed, -110
+[    1.053987] xhci_hcd 0003:01:00.0: can't setup: -110
+[    1.054032] xhci_hcd 0003:01:00.0: USB bus 1 deregistered
+[    1.054099] xhci_hcd 0003:01:00.0: init 0003:01:00.0 fail, -110
+[    1.054165] xhci_hcd: probe of 0003:01:00.0 failed with error -110
