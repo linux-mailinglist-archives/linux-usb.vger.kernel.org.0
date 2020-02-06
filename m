@@ -2,77 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA2C154B35
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2020 19:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D70F6154B3D
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2020 19:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727912AbgBFSd1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 6 Feb 2020 13:33:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41898 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727900AbgBFSd0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 6 Feb 2020 13:33:26 -0500
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 206435] dwc3 dwc3.3.auto: no usb2 phy configured
-Date:   Thu, 06 Feb 2020 18:33:25 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: balbi@kernel.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-206435-208809-MdGdSjVMmu@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-206435-208809@https.bugzilla.kernel.org/>
-References: <bug-206435-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1727773AbgBFSea (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Feb 2020 13:34:30 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:35606 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727685AbgBFSea (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Feb 2020 13:34:30 -0500
+Received: by mail-lf1-f65.google.com with SMTP id z18so4827379lfe.2;
+        Thu, 06 Feb 2020 10:34:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=/+n2nkntJosFeYc6CO6AzXMJTC7jYibAIizSqTWcO7U=;
+        b=BvXRj5fNezVzMeLFqXLZKZAln3PgbE00jyL7mwyXkgO9VAiSfun2NOhJkSN/6ANuBJ
+         cOoPbbFKVPGNBlF96Rb+UEr8b5HSxM7aZubPDFkBrqOFvkBrOV05E34aojSueC9oSgQk
+         2UPsCGI6A576qKWmnYgYN0MT6TnrQo26VZXpIajVxKc/6JEJL6NGhEVStRBAloyVWbaF
+         3k3vs4PQ9LR0IAMO9IWKUjiTZv+W2UaVUKEK0eQVpe7jqotNcuYrNUOgITz07lkwnO4+
+         4wpIecZo83R7hZw6qnXx1uEW5C3J8v1uhoBOzbjqUAgE8soYVbF6l/nUWyCD82H9He4F
+         /QEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=/+n2nkntJosFeYc6CO6AzXMJTC7jYibAIizSqTWcO7U=;
+        b=cRttUStzJEWgZvD9D2zGFYJkB7w2MJMiy694ACGjMvro1SyjWwB2jNbZ9JaRUlxI1n
+         aepx+UUCKE6Y17vVc5QwpYGJCQ1jixPm4Oj1FJNHAFXzzB+R5gASFUm2gpGwKaBckv6W
+         PpiKUiGXgMzpRKM9s4IKpGMeCaRnyH27dFcmfuJ68ZsxUkpf9R/jMY790T1IPdo1kueb
+         KmsfLRzg1EnKxUxwB2VwumySUB49R+e8gvhsETHwuRwMcdC77xUFU9lwDm1qw1USmRLf
+         O/ew2BZuUEaAcKxdC6EhaJJAvCSuUM5z3oRtok4XqF1Hj23UfnJ123Kdkoo6oxjbeaWq
+         IYFg==
+X-Gm-Message-State: APjAAAXyLd2OvfeBzskrBkrVLSwHux0IMS4W+hfPpL+OGUJZ714xS6GC
+        +s/bVqSod0d8QBAlzGmp1JaOncutlGA=
+X-Google-Smtp-Source: APXvYqxnQQGKl5auHeuxeSsCWAnVHiddctLWR7EJGZzJSZKl8soTDt23+hh7pBDycDIXwatDJBVu1A==
+X-Received: by 2002:a19:c3c2:: with SMTP id t185mr2553485lff.56.1581014067986;
+        Thu, 06 Feb 2020 10:34:27 -0800 (PST)
+Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
+        by smtp.gmail.com with ESMTPSA id q13sm68396ljj.63.2020.02.06.10.34.26
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 06 Feb 2020 10:34:27 -0800 (PST)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     John Keeping <john@metanate.com>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc2: Implement set_selfpowered()
+In-Reply-To: <20200205164448.0c7532c1.john@metanate.com>
+References: <20200204152933.2216615-1-john@metanate.com> <87wo9156uy.fsf@kernel.org> <20200205164448.0c7532c1.john@metanate.com>
+Date:   Thu, 06 Feb 2020 20:34:23 +0200
+Message-ID: <877e0z5zv4.fsf@kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=206435
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
---- Comment #5 from Felipe Balbi (balbi@kernel.org) ---
-+ Heikki, since this is, apparently, Bay Trail
+John Keeping <john@metanate.com> writes:
 
-Felipe Balbi <balbi@kernel.org> writes:
-
-> Hi,
+> On Wed, 05 Feb 2020 18:36:21 +0200
+> Felipe Balbi <balbi@kernel.org> wrote:
 >
-> bugzilla-daemon@bugzilla.kernel.org writes:
->> https://bugzilla.kernel.org/show_bug.cgi?id=206435
->>
->> --- Comment #3 from youling257@gmail.com ---
->> Revert 987351e1ea7772cf2f0795e917fb33b2e282e1c1 phy: core: Add consumer
->> device
->> link support, dwc3 work for my z3735f device.
->>
->> android_x86:/ $ su
->> android_x86:/ # dmesg | grep dwc
->> [    9.724606] dwc3 dwc3.3.auto: changing max_speed on rev 5533210a
->> [   47.488501] udc dwc3.3.auto: registering UDC driver [g1]
+>> John Keeping <john@metanate.com> writes:
+>>=20
+>> > dwc2 always reports as self-powered in response to a device status
+>> > request.  Implement the set_selfpowered() operations so that the gadget
+>> > can report as bus-powered when appropriate.
+>> >
+>> > This is modelled on the dwc3 implementation.
+>> >
+>> > Signed-off-by: John Keeping <john@metanate.com>
+>> > ---=20=20
+>>=20
+>> what's the dependency here?
 >
-> reverting that commit makes dwc3 work? Then you don't have a bug on
-> dwc3. You have a regression caused by another commit.
+> It depends on 6de1e301b9cf ("usb: dwc2: Fix SET/CLEAR_FEATURE and
+> GET_STATUS flows") in your testing/fixes tree.
 >
-> Alexandre, any idea what's going on?
+> Sorry, I should have mentioned that in the original message.
 
-Heikki, any ideas?
+No worries, I'll wait until those reach mainline before merging
+$subject, then.
 
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+cheers
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl48XC8ACgkQzL64meEa
+mQawSA//bOMietY1wztRDRwp50omJNycVlgdFjSDrr8fs5Lwd0jKYkf3OFvnxZ+O
+1YN9NCQpdzyAjIzc4VckKon4qPW3Zae8Sx+Bs4BP+3tTy1XHBA/X+QKFlI2PIShy
+bJqr8U7Sn4SCeijFCZxSs8koH/ApEuSxuJT/f1vENk/LiVkumx3+6LMkoqhyk36e
+a7nFnObjjsayvMDYTEwukKgaPF0e72gGzXOYIGZIoM6dSyxQjf5aQp1Rau8oplL/
+M1IOui3iWkLaPED8XXT9nuFatn5C11UYVyyfgN6CRroGq/Pe3d+uS/zL0ILMZdRv
+D/jgoUSBs5QuXiB0HMjlA39zm9g0uBIHQqlK9b/yBecRc8k54gt82cu5la0MPVTc
+/lFkuq60ByuBt1smfn6sKJY8dIZjlEXM0uu02LUSTMqxLmszDvyfDPMz/79UxzmU
+4Qs/LnaIJBfzu1OAmWXk2lx8OTDMNA8MfJFydRqxT8AemEcMMfoXGKeTl9YHEPG3
+Cp2dc1VmJwKchxRkOeIjEViWAUKFwT8g9avoWEGfw3Jfzdbq+KOV28PxilNReTpI
+fT0cF2rV5Mc+owVntQ/YjAdTQE/njPBJ+VoO8NbD9d/5ka5sv8HqvJ2aIk/NVXVS
+IhrxC/zwMQkZNBCFJ+iNuLKyQtezaFOi4b3uThAE8xrGMGAvAEU=
+=EmVB
+-----END PGP SIGNATURE-----
+--=-=-=--
