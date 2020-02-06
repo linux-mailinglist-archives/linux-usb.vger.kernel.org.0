@@ -2,118 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D70F6154B3D
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2020 19:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA16B154B53
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2020 19:41:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727773AbgBFSea (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Feb 2020 13:34:30 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:35606 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727685AbgBFSea (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Feb 2020 13:34:30 -0500
-Received: by mail-lf1-f65.google.com with SMTP id z18so4827379lfe.2;
-        Thu, 06 Feb 2020 10:34:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=/+n2nkntJosFeYc6CO6AzXMJTC7jYibAIizSqTWcO7U=;
-        b=BvXRj5fNezVzMeLFqXLZKZAln3PgbE00jyL7mwyXkgO9VAiSfun2NOhJkSN/6ANuBJ
-         cOoPbbFKVPGNBlF96Rb+UEr8b5HSxM7aZubPDFkBrqOFvkBrOV05E34aojSueC9oSgQk
-         2UPsCGI6A576qKWmnYgYN0MT6TnrQo26VZXpIajVxKc/6JEJL6NGhEVStRBAloyVWbaF
-         3k3vs4PQ9LR0IAMO9IWKUjiTZv+W2UaVUKEK0eQVpe7jqotNcuYrNUOgITz07lkwnO4+
-         4wpIecZo83R7hZw6qnXx1uEW5C3J8v1uhoBOzbjqUAgE8soYVbF6l/nUWyCD82H9He4F
-         /QEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=/+n2nkntJosFeYc6CO6AzXMJTC7jYibAIizSqTWcO7U=;
-        b=cRttUStzJEWgZvD9D2zGFYJkB7w2MJMiy694ACGjMvro1SyjWwB2jNbZ9JaRUlxI1n
-         aepx+UUCKE6Y17vVc5QwpYGJCQ1jixPm4Oj1FJNHAFXzzB+R5gASFUm2gpGwKaBckv6W
-         PpiKUiGXgMzpRKM9s4IKpGMeCaRnyH27dFcmfuJ68ZsxUkpf9R/jMY790T1IPdo1kueb
-         KmsfLRzg1EnKxUxwB2VwumySUB49R+e8gvhsETHwuRwMcdC77xUFU9lwDm1qw1USmRLf
-         O/ew2BZuUEaAcKxdC6EhaJJAvCSuUM5z3oRtok4XqF1Hj23UfnJ123Kdkoo6oxjbeaWq
-         IYFg==
-X-Gm-Message-State: APjAAAXyLd2OvfeBzskrBkrVLSwHux0IMS4W+hfPpL+OGUJZ714xS6GC
-        +s/bVqSod0d8QBAlzGmp1JaOncutlGA=
-X-Google-Smtp-Source: APXvYqxnQQGKl5auHeuxeSsCWAnVHiddctLWR7EJGZzJSZKl8soTDt23+hh7pBDycDIXwatDJBVu1A==
-X-Received: by 2002:a19:c3c2:: with SMTP id t185mr2553485lff.56.1581014067986;
-        Thu, 06 Feb 2020 10:34:27 -0800 (PST)
-Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id q13sm68396ljj.63.2020.02.06.10.34.26
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 06 Feb 2020 10:34:27 -0800 (PST)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     John Keeping <john@metanate.com>
-Cc:     Minas Harutyunyan <hminas@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc2: Implement set_selfpowered()
-In-Reply-To: <20200205164448.0c7532c1.john@metanate.com>
-References: <20200204152933.2216615-1-john@metanate.com> <87wo9156uy.fsf@kernel.org> <20200205164448.0c7532c1.john@metanate.com>
-Date:   Thu, 06 Feb 2020 20:34:23 +0200
-Message-ID: <877e0z5zv4.fsf@kernel.org>
+        id S1727711AbgBFSli (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Feb 2020 13:41:38 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:38550 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726990AbgBFSli (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Feb 2020 13:41:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Q08ftOUoyei97FPuiT9NtyQjBazlRzN9kuWqUvxH82M=; b=Sd/l60BDPZrpNVJCH76HWt2KQY
+        78r8ovu9yE0ts3Mz5ukvQXOuWS3r0hgZxMaUc24m2fEPFebomk2RCZf3C+pSzcetpwtHSymx6UANj
+        lXil3ylWqN9fg6idv8CR7oaUduchmPwqz3y/8RyeQl0T5hUcbW0gC1kgW0scwiLWmO//7aKNR66OL
+        fHvC3P7rn2pAOdtT2k1NNxcOlST5pjzUiwWt271ez9wE0mhwhRbheZCD+CjjdZKhVW84cZ3OnA1n6
+        8OzcWKOweAPV8HJ05OUTwV8usk/MeJbt9RscmKrhorxWx9qHFPBjRyljZiFJL5iv+UgSoypMnqAcC
+        421RZmBA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1izm5m-0004hy-Gd; Thu, 06 Feb 2020 18:41:34 +0000
+Date:   Thu, 6 Feb 2020 10:41:34 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        John Stultz <john.stultz@linaro.org>,
+        "Yang, Fei" <fei.yang@intel.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        stable <stable@vger.kernel.org>, Jens Axboe <axboe@kernel.dk>
+Subject: Re: [RFC][PATCH 0/2] Avoiding DWC3 transfer stalls/hangs when using
+ adb over f_fs
+Message-ID: <20200206184134.GA11027@infradead.org>
+References: <20200122222645.38805-1-john.stultz@linaro.org>
+ <ef64036f-7621-50d9-0e23-0f7141a40d7a@collabora.com>
+ <02E7334B1630744CBDC55DA8586225837F9EE280@ORSMSX102.amr.corp.intel.com>
+ <87o8uu3wqd.fsf@kernel.org>
+ <02E7334B1630744CBDC55DA8586225837F9EE335@ORSMSX102.amr.corp.intel.com>
+ <87lfpy3w1g.fsf@kernel.org>
+ <CALAqxLUQ0ciJTLrmEAu9WKCJHAbpY9szuVm=+VapN2QWWGnNjA@mail.gmail.com>
+ <20200206074005.GA28365@infradead.org>
+ <87ftfn602u.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ftfn602u.fsf@kernel.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Thu, Feb 06, 2020 at 08:29:45PM +0200, Felipe Balbi wrote:
+> > No, it shoudn't.  dma_map_sg returns the number of mapped segments,
+> > and the callers need to remember that.
+> 
+> We _do_ remember that:
 
-John Keeping <john@metanate.com> writes:
+That helps :)
 
-> On Wed, 05 Feb 2020 18:36:21 +0200
-> Felipe Balbi <balbi@kernel.org> wrote:
->
->> John Keeping <john@metanate.com> writes:
->>=20
->> > dwc2 always reports as self-powered in response to a device status
->> > request.  Implement the set_selfpowered() operations so that the gadget
->> > can report as bus-powered when appropriate.
->> >
->> > This is modelled on the dwc3 implementation.
->> >
->> > Signed-off-by: John Keeping <john@metanate.com>
->> > ---=20=20
->>=20
->> what's the dependency here?
->
-> It depends on 6de1e301b9cf ("usb: dwc2: Fix SET/CLEAR_FEATURE and
-> GET_STATUS flows") in your testing/fixes tree.
->
-> Sorry, I should have mentioned that in the original message.
+> that req->request.num_mapped_sgs is the returned value. So you're saying
+> we should test for i == num_mapped_sgs, instead of using
+> sg_is_last(). Is that it?
 
-No worries, I'll wait until those reach mainline before merging
-$subject, then.
+Yes.
 
-cheers
+> Fair enough. Just out of curiosity, then, when *should* we use
+> sg_is_last()?
 
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl48XC8ACgkQzL64meEa
-mQawSA//bOMietY1wztRDRwp50omJNycVlgdFjSDrr8fs5Lwd0jKYkf3OFvnxZ+O
-1YN9NCQpdzyAjIzc4VckKon4qPW3Zae8Sx+Bs4BP+3tTy1XHBA/X+QKFlI2PIShy
-bJqr8U7Sn4SCeijFCZxSs8koH/ApEuSxuJT/f1vENk/LiVkumx3+6LMkoqhyk36e
-a7nFnObjjsayvMDYTEwukKgaPF0e72gGzXOYIGZIoM6dSyxQjf5aQp1Rau8oplL/
-M1IOui3iWkLaPED8XXT9nuFatn5C11UYVyyfgN6CRroGq/Pe3d+uS/zL0ILMZdRv
-D/jgoUSBs5QuXiB0HMjlA39zm9g0uBIHQqlK9b/yBecRc8k54gt82cu5la0MPVTc
-/lFkuq60ByuBt1smfn6sKJY8dIZjlEXM0uu02LUSTMqxLmszDvyfDPMz/79UxzmU
-4Qs/LnaIJBfzu1OAmWXk2lx8OTDMNA8MfJFydRqxT8AemEcMMfoXGKeTl9YHEPG3
-Cp2dc1VmJwKchxRkOeIjEViWAUKFwT8g9avoWEGfw3Jfzdbq+KOV28PxilNReTpI
-fT0cF2rV5Mc+owVntQ/YjAdTQE/njPBJ+VoO8NbD9d/5ka5sv8HqvJ2aIk/NVXVS
-IhrxC/zwMQkZNBCFJ+iNuLKyQtezaFOi4b3uThAE8xrGMGAvAEU=
-=EmVB
------END PGP SIGNATURE-----
---=-=-=--
+Outside of sg_next/sg_last it really shoud not be used at all as far
+as I'm concerned. 
