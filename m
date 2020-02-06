@@ -2,72 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 956D415481B
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2020 16:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D20715482A
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2020 16:34:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727479AbgBFPaz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Feb 2020 10:30:55 -0500
-Received: from mail-pf1-f176.google.com ([209.85.210.176]:37207 "EHLO
-        mail-pf1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725535AbgBFPaz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Feb 2020 10:30:55 -0500
-Received: by mail-pf1-f176.google.com with SMTP id p14so3299478pfn.4
-        for <linux-usb@vger.kernel.org>; Thu, 06 Feb 2020 07:30:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=hZWWHvxiAS6rVI2lFepgRgRLUiTWelvEzHdakGPqFzQ=;
-        b=NlbW08BWOEHpvJXTCTyJYyLK60cFKEB/ZFlNxzGvVPKHt8Q5g4HmGS2XLFeKIQone8
-         9zZ/M+QDLEX/H0z0rB/NztnoSiuRwMUOtEHa5Csbv0uHMtw2OKyhZVMDje0Aaj7UijKG
-         q5U6eqNbpLlJ3VlWergfmct3fdSQCbxwnMZ/d19tMam/vWYno34a3Btgb4m/BDfEdu8H
-         NYBykxi0/iBjjPVSpPtKE0N2sBLWAsxETMklYUY7hHh5m+4HSRwYXpy7SJUm2LiK6rfa
-         Ip/3+/Fi+Nkvm2ztbyfIcWsmYC8miawBpc2H/ddjAAtmXgb2koaHI79ujtYczoFFAGE1
-         4z/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=hZWWHvxiAS6rVI2lFepgRgRLUiTWelvEzHdakGPqFzQ=;
-        b=otD7SCLMNmLX5dLzciomtMW5VsD7JZdjuGSZmk1vREFDY4M/juf0QlubHCvCc54FcJ
-         CnGBFQi6TYmgLqr+y5bnLwIClkodah9LioOFrE8Kt3ADk1akrabiGZTcHzSoROj5q36y
-         J1G3+JAVPNKQXKr0okuWVjxveEpoV3SkegSwFaS6uk5LzYlllzYdPGRABrAJQh57MDes
-         uhPf4hq7sz8oU8Y2H46EMFSbIJPETpmj0PiLimP6CG25f55mfwGS/qlG4kIokklpJKkl
-         7upJWAlh1rFdTo7/OZIjzdU5wwUt/vZ4G1Bz57B7zE8JUfwyDA9maJaw0wTxI3/D8jr0
-         BfaA==
-X-Gm-Message-State: APjAAAWIiXjMFs2tf8XnimmyLEgiS2HnAlPSgWB70e+Gaoxy8AMi6X0W
-        hr8jFauYKsfvI+viHRCmCgYB5xrd3RsJUkGIOGY=
-X-Google-Smtp-Source: APXvYqy2bpktvW9FkAJ7U4S/zUjK2ZjEw8h0nC4IeVBiZyw2Z/5WcD6kzhoSvay2iWv2bJlqG8b178RHlMwiYxjDDcE=
-X-Received: by 2002:a63:cd03:: with SMTP id i3mr4363381pgg.257.1581003054558;
- Thu, 06 Feb 2020 07:30:54 -0800 (PST)
-MIME-Version: 1.0
-From:   Farhad Jahangirov <farhad.jahangirov@gmail.com>
-Date:   Thu, 6 Feb 2020 15:30:23 +0000
-Message-ID: <CAFJOEtr5ZOYDGVjmMTGoORLT3UJy7wLx79Lv8eBEyQVMh6H-eg@mail.gmail.com>
-Subject: AX88179 driver is appending a two-byte VSS Ethernet Monitoring
- trailer to every IP packet
-To:     davem@davemloft.net, hslester96@gmail.com, allison@lohutok.net,
-        opensource@jilayne.com, tglx@linutronix.de,
-        linux-usb@vger.kernel.org
+        id S1727502AbgBFPer convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 6 Feb 2020 10:34:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58548 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725535AbgBFPer (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 6 Feb 2020 10:34:47 -0500
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 206427] go7007 driver fails to handle interrupt
+Date:   Thu, 06 Feb 2020 15:34:46 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: tiwai@suse.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-206427-208809-5gyTehZtm3@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-206427-208809@https.bugzilla.kernel.org/>
+References: <bug-206427-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver for AX88179 USB 3.0 to Gigabit Ethernet adapter appends a
-two-byte "VSS Ethernet Monitoring trailer" to every received IP
-packet.
+https://bugzilla.kernel.org/show_bug.cgi?id=206427
 
-Issue observed on 4.15.0-76, 4.19.93, all the way up to
-5.5.0-050500-generic #202001262030.
+--- Comment #10 from Takashi Iwai (tiwai@suse.de) ---
+Yes, the firmware loading mechanism went to the kernel module.
 
-The manufacturer-supplied driver from
-https://www.asix.com.tw/download.php?sub=driverdetail&PItemID=131 does
-not have this issue.
+The kernel warning seems fixed by correcting the urb properly like the patch
+below.  I'll submit to upstream.
 
-This is the same issue as reported earlier here:
-https://bugzilla.kernel.org/show_bug.cgi?id=121141
-
-Please let me know if I can help with more information or anything else.
-
-Kind regards,
-Farhad
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
