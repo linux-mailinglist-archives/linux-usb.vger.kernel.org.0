@@ -2,210 +2,200 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1B9154BCD
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2020 20:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50237154C03
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2020 20:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727918AbgBFTRl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Feb 2020 14:17:41 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:52520 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726990AbgBFTRk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Feb 2020 14:17:40 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 016JHanZ000581;
-        Thu, 6 Feb 2020 13:17:36 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1581016656;
-        bh=tpXKeiUAFwwUs4rTkFC126Vv3lLQyaS+9i9VFe2hufY=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=R1bZ8y8zrv6TCaBc0g6cebmjaSU4lvlFAN2HNlgD4A2DsByTihNtUVmn7i1X10TPN
-         F0m7MSBGqIkL8OxlU+AtPKUOAn/SioSwntVSB5J+0+SExo9Q0O5+WwiBmbhxiymuKt
-         Jpxg4iZx5WnAqWMMoiibNqxknOpvnVQf9Y4vbC1I=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 016JHaUl099666
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 6 Feb 2020 13:17:36 -0600
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 6 Feb
- 2020 13:17:36 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Thu, 6 Feb 2020 13:17:36 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 016JHaAv059722;
-        Thu, 6 Feb 2020 13:17:36 -0600
-Date:   Thu, 6 Feb 2020 13:17:35 -0600
-From:   Bin Liu <b-liu@ti.com>
-To:     SAURAV GIREPUNJE <saurav.girepunje@gmail.com>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <saurav.girepunje@hotmail.com>
-Subject: Re: [PATCH] usb: musb: Fix external abort on non-linefetch
-Message-ID: <20200206191735.GA11124@iaqt7>
-Mail-Followup-To: Bin Liu <b-liu@ti.com>,
-        SAURAV GIREPUNJE <saurav.girepunje@gmail.com>,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, saurav.girepunje@hotmail.com
-References: <20191211190953.GH16429@iaqt7>
- <20200119060404.GA104504@google.com>
+        id S1727989AbgBFTWK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Feb 2020 14:22:10 -0500
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:39767 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727884AbgBFTWK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Feb 2020 14:22:10 -0500
+Received: by mail-pj1-f68.google.com with SMTP id e9so397227pjr.4
+        for <linux-usb@vger.kernel.org>; Thu, 06 Feb 2020 11:22:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8zSiPQfNqsKOSQ+rCM+XFyBgpWJvhAy9MKkDpcX17vQ=;
+        b=iJPJPukfBxzLPW8M9OZNtPgF2ezCKyyw6sBxjOJWXw2X0DMDZPoEmbzeoQDLYW7ovK
+         hVY7LvcFohZD25hkba4Z0cKJe1ve485A62kFQBWbl7qNRyyYwyF2+qVwX56dscgY6H1D
+         vG440KpztEvhwvMNYj4X0IMVpNWjigi13HMv+iCMFOR/TpOiJE6eRzOPeWdv9NGUXqYz
+         ZVJs4iXfwkzFHSmwjCin1jJmb6dE50MM+XkJmgRQHuQrVK8dOjNLjKkd3XSJTJx2Te3m
+         8eQy0Hh9dTLeAvam4gqqYvPdfqpRDP/TvIklYN/zV7ohdLslNeZijkteq3Ux2oigqQiG
+         TnGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8zSiPQfNqsKOSQ+rCM+XFyBgpWJvhAy9MKkDpcX17vQ=;
+        b=PlCUD8oVrSf9c3ZSnB7i7hBLpPm8GDJuhL/0lxG2qUGAKUF/tfm37YG+oerF1KoytL
+         n7gwoHXUZ8XTacCWwaemnR9d+oAyfyMkGCrfBkdF42RCVBmnrhtOxU0NXyEXqsL1O/uY
+         J+HsVFLbvXYXWZ99H1UVHhOUoUOIV6r7jBTf00UxQ7SqC2M6XCmy8wy+Tff+qzStSqA8
+         RdRTp0u/TIfekTzEXbe79q+tmvUsLahxe2ew2UqxAp3JQzQUzpjlgXE0Pd88W0spW5Ve
+         R4IiNrYS3GCKe2qrfw7+uRCweAAnY4Amo+4L+prlrAQ6I4yYY5mw4iLCbyPNuBQ2Pz5h
+         BIew==
+X-Gm-Message-State: APjAAAWAyGR4w6mSs2I4BGIIdrd2BgbNM3ksiEP6uXKhL6d8sudWFH2w
+        5mAjygFHVZ5E6t/HWVJRIkDjO6On5vMmGI2C08JhYA==
+X-Google-Smtp-Source: APXvYqylkjjyuctiEBTDyHjHYrRMvThZy5FVqY6JsnURAH4xabFlpMVouLzkKGKvqTXRhZpZgS0ZIIR6FT61viBRT0g=
+X-Received: by 2002:a17:90a:a10c:: with SMTP id s12mr6296546pjp.47.1581016929097;
+ Thu, 06 Feb 2020 11:22:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200119060404.GA104504@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <cover.1579007786.git.andreyknvl@google.com> <461a787e63a9a01d83edc563575b8585bc138e8d.1579007786.git.andreyknvl@google.com>
+ <87ftfv7nf0.fsf@kernel.org> <CAAeHK+wwmis4z9ifPAnkM36AnfG2oESSLAkKvDkuAa0QUM2wRg@mail.gmail.com>
+ <87a7637ise.fsf@kernel.org> <CAAeHK+zNuqwmHG4NJwZNtQHizdaOpriHxoQffZHMffeke_hsGQ@mail.gmail.com>
+ <87tv4556ke.fsf@kernel.org> <CAAeHK+zE6N3W-UQ7yjrSkbfwGCBmd0cTv=z7LKNRa2Er1KMPew@mail.gmail.com>
+ <87o8uc5jbk.fsf@kernel.org>
+In-Reply-To: <87o8uc5jbk.fsf@kernel.org>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Thu, 6 Feb 2020 20:21:58 +0100
+Message-ID: <CAAeHK+yj7qZSi0tuX4zovMFvx8YriOJR6zb4cVk5WsX__cGNwg@mail.gmail.com>
+Subject: Re: [PATCH v5 1/1] usb: gadget: add raw-gadget interface
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Saurav,
+On Thu, Feb 6, 2020 at 7:19 AM Felipe Balbi <balbi@kernel.org> wrote:
+>
+>
+> Hi,
+>
+> Andrey Konovalov <andreyknvl@google.com> writes:
+> >> Andrey Konovalov <andreyknvl@google.com> writes:
+> >> >> >> > +static int raw_event_queue_add(struct raw_event_queue *queue,
+> >> >> >> > +     enum usb_raw_event_type type, size_t length, const void *data)
+> >> >> >> > +{
+> >> >> >> > +     unsigned long flags;
+> >> >> >> > +     struct usb_raw_event *event;
+> >> >> >> > +
+> >> >> >> > +     spin_lock_irqsave(&queue->lock, flags);
+> >> >> >> > +     if (WARN_ON(queue->size >= RAW_EVENT_QUEUE_SIZE)) {
+> >> >> >> > +             spin_unlock_irqrestore(&queue->lock, flags);
+> >> >> >> > +             return -ENOMEM;
+> >> >> >> > +     }
+> >> >> >> > +     event = kmalloc(sizeof(*event) + length, GFP_ATOMIC);
+> >> >> >>
+> >> >> >> I would very much prefer dropping GFP_ATOMIC here. Must you have this
+> >> >> >> allocation under a spinlock?
+> >> >> >
+> >> >> > The issue here is not the spinlock, but that this might be called in
+> >> >> > interrupt context. The number of atomic allocations here is restricted
+> >> >> > by 128, and we can reduce the limit even further (until some point in
+> >> >> > the future when and if we'll report more different events). Another
+> >> >> > option would be to preallocate the required number of objects
+> >> >> > (although we don't know the required size in advance, so we'll waste
+> >> >> > some memory) and use those. What would you prefer?
+> >> >>
+> >> >> I think you shouldn't do either :-) Here's what I think you should do:
+> >> >>
+> >> >> 1. support O_NONBLOCK. This just means conditionally removing your
+> >> >>    wait_for_completion_interruptible().
+> >> >
+> >> > I don't think non blocking read/writes will work for us. We do
+> >> > coverage-guided fuzzing and need to collect coverage for each syscall.
+> >> > In the USB case "syscall" means processing a USB request from start to
+> >> > end, and thus we need to wait until the kernel finishes processing it,
+> >> > otherwise we'll fail to associate coverage properly (It's actually a
+> >> > bit more complex, as we collect coverage for the whole initial
+> >> > enumeration process as for one "syscall", but the general idea stands,
+> >> > that we need to wait until the operation finishes.)
+> >>
+> >> Fair enough, but if the only use case that this covers, is a testing
+> >> scenario, we don't gain much from accepting this upstream, right?
+> >
+> > We gain a lot, even though it's just for testing. For one thing, once
+> > the patch is upstream, all syzbot instances that target upstream-ish
+> > branches will start fuzzing USB, and there won't be any need for me to
+> > maintain a dedicated USB fuzzing branch manually. Another thing, is
+> > that syzbot will be able to do fix/cause bisection (at least for the
+> > bugs that are fixed/introduced after this patch is merged). And
+> > finally, once this is upstream, we'll be able to backport this to
+> > Android kernels and start testing them as well.
+>
+> A very respectable goal :-)
+>
+> I just want to take the opportunity to turn this into something more
+> generic so we stop depending on kernel patches to support newer USB
+> classes.
+>
+> I'll try to allocate some time during next week (this week, I'm totally
+> swamped) to carefully review your submission.
 
-On Sun, Jan 19, 2020 at 11:34:04AM +0530, SAURAV GIREPUNJE wrote:
-> Hi Bin,
-> 
-> Yes, I really got this kernel dump for mode_show() and vbus_store(),
-> While accessing show/store for mode and vbus through sysfs .
+OK, looking forward to it, thank you!
 
-Please provide the kernel dump for mode_show() and vbus_store(). The log
-below is for mode_store().
+In case you'll find it helpful for view, here's a userspace
+implementation of a USB keyboard via Raw Gadget:
 
-> I have submitted earlier also three patches for same bug, In reply to
-> one of those patches you
-> asked me to merge another two patches and just sent in one.
+https://github.com/xairy/raw-gadget/blob/master/examples/keyboard.c
 
-I don't have issue to merge all the fixes into one patch, since they fix
-the same bug. But I need the dump log to see how the dump is triggered
-in mode_show() and vbus_store() as I don't see the how it could happen
-and I cannot reproduce it. These two function do not access any musb
-register.
-
-By the way, please don't top-posting, and reply to my message to
-preserve the context.
-
--Bin.
-
-> 
-> Regards,
-> Saurav Girepunje
-> 
-> On 27/10/19 14:06 +0530, Saurav Girepunje wrote:
-> > While setting the usb mode from sysfs. Below error came on kernel
-> > version 4.19.
-> > 
-> > On latest kernel vserion api name changed. Therefore API
-> > name and backtrace API name are different.
-> > 
-> >    [  821.908066] Backtrace:
-> >    [  821.910695] [<bf078fc0>] (musb_default_readl [musb_hdrc]) from [<bf0af738>] (dsps_musb_set_mode+0x38/0x12c [musb_dsps])
-> >    [  821.922059] [<bf0af700>] (dsps_musb_set_mode [musb_dsps]) from [<bf07899c>] (musb_mode_store+0xc8/0x12c [musb_hdrc])
-> >    [  821.933105]  r7:a0010013 r6:0000000b r5:cd79d200 r4:cb634010
-> >    [  821.939096] [<bf0788d4>] (musb_mode_store [musb_hdrc]) from [<c0425184>] (dev_attr_store+0x20/0x2c)
-> >    [  821.948593]  r7:cd79d200 r6:c5abbf78 r5:00000000 r4:bf0788d4
-> >    [  821.954549] [<c0425164>] (dev_attr_store) from [<c0285b08>] (sysfs_kf_write+0x48/0x4c)
-> >    [  821.962859]  r5:00000000 r4:c0425164
-> >    [  821.966620] [<c0285ac0>] (sysfs_kf_write) from [<c0285274>] (kernfs_fop_write+0xfc/0x1fc)
-> >    [  821.975200]  r5:00000000 r4:cd79d080
-> >    [  821.978966] [<c0285178>] (kernfs_fop_write) from [<c020ec00>] (__vfs_write+0x34/0x120)
-> >    [  821.987280]  r10:00000000 r9:0000000b r8:00000000 r7:0000000b r6:c5abbf78 r5:c0285178
-> >    [  821.995493]  r4:cb67a3c0
-> >    [  821.998160] [<c020ebcc>] (__vfs_write) from [<c020fae8>] (vfs_write+0xa8/0x170)
-> >    [  822.005835]  r9:0000000b r8:00000000 r7:c5abbf78 r6:000def80 r5:cb67a3c0 r4:0000000b
-> >    [  822.013969] [<c020fa40>] (vfs_write) from [<c02108d0>] (SyS_write+0x44/0x98)
-> >    [  822.021371]  r9:0000000b r8:000def80 r7:00000000 r6:00000000 r5:cb67a3c0 r4:cb67a3c0
-> >    [  822.029517] [<c021088c>] (SyS_write) from [<c010d8a0>] (ret_fast_syscall+0x0/0x3c)
-> >    [  822.037467]  r9:c5aba000 r8:c010daa8 r7:00000004 r6:b6f0ad58 r5:000def80 r4:0000000b
-> >    [  822.045599] Code: e1a0c00d e92dd800 e24cb004 e0801001 (e5910000)
-> > 
-> >    Without pm_runtime_{get,put}_sync calls in place,
-> >    Similar issue come on "mode_show" and "vbus_store" also.
-> > 
-> >    fix- call pm_runtime_{get,put}_sync before reading/writing
-> >    usb mode/vbus from sysfs.
-> > 
-> >    As sugguested on commit '2d15f69ed5c1c33f283e77ec161578badde33eaf'
-> >    Merged all the fix which reslove same bug in the same file.
-> >    "
-> >      commit '2d15f69ed5c1c33f283e77ec161578badde33eaf'
-> >      Author: Saurav Girepunje <saurav.girepunje@gmail.com>
-> >      Date:   Thu Aug 8 00:05:03 2019 +0530
-> > 
-> >      usb: musb: Fix external abort on non-linefetch for vbus_store
-> > 
-> >      Without pm_runtime_{get,put}_sync calls in place, writing
-> >      vbus value via /sys causes the error
-> > 
-> >      "Unhandled fault external abort on non-linefetch"
-> > 
-> >        On Thu, Aug 08, 2019 at 12:11:46AM +0530, Saurav Girepunje wrote:
-> > 	> Without pm_runtime_{get,put}_sync calls in place, writing
-> > 	> vbus value via /sys causes the error
-> > 	>
-> > 	> "Unhandled fault external abort on non-linefetch"
-> > 	>
-> > 	> Signed-off-by: Saurav Girepunje <saurav.girepunje@xxxxxxxxx>
-> > 
-> > 	Thanks for the patch. Can you please merge another two similar patches
-> > 	you just sent with this one? They all fix the same bug in the same file
-> > 	so could be just in one patch.
-> > 
-> > 	-Bin.
-> >    "
-> > 
-> > Signed-off-by: Saurav Girepunje <saurav.girepunje@gmail.com>
-> > ---
-> > drivers/usb/musb/musb_core.c | 6 ++++++
-> > 1 file changed, 6 insertions(+)
-> > 
-> > diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
-> > index bd63450af76a..dc7d786feb58 100644
-> > --- a/drivers/usb/musb/musb_core.c
-> > +++ b/drivers/usb/musb/musb_core.c
-> > @@ -1723,9 +1723,11 @@ mode_show(struct device *dev, struct device_attribute *attr, char *buf)
-> > 	unsigned long flags;
-> > 	int ret;
-> > 
-> > +	pm_runtime_get_sync(dev);
-> > 	spin_lock_irqsave(&musb->lock, flags);
-> > 	ret = sprintf(buf, "%s\n", usb_otg_state_string(musb->xceiv->otg->state));
-> > 	spin_unlock_irqrestore(&musb->lock, flags);
-> > +	pm_runtime_put_sync(dev);
-> > 
-> > 	return ret;
-> > }
-> > @@ -1738,6 +1740,7 @@ mode_store(struct device *dev, struct device_attribute *attr,
-> > 	unsigned long	flags;
-> > 	int		status;
-> > 
-> > +	pm_runtime_get_sync(dev);
-> > 	spin_lock_irqsave(&musb->lock, flags);
-> > 	if (sysfs_streq(buf, "host"))
-> > 		status = musb_platform_set_mode(musb, MUSB_HOST);
-> > @@ -1748,6 +1751,7 @@ mode_store(struct device *dev, struct device_attribute *attr,
-> > 	else
-> > 		status = -EINVAL;
-> > 	spin_unlock_irqrestore(&musb->lock, flags);
-> > +	pm_runtime_put_sync(dev);
-> > 
-> > 	return (status == 0) ? n : status;
-> > }
-> > @@ -1766,6 +1770,7 @@ vbus_store(struct device *dev, struct device_attribute *attr,
-> > 		return -EINVAL;
-> > 	}
-> > 
-> > +	pm_runtime_get_sync(dev);
-> > 	spin_lock_irqsave(&musb->lock, flags);
-> > 	/* force T(a_wait_bcon) to be zero/unlimited *OR* valid */
-> > 	musb->a_wait_bcon = val ? max_t(int, val, OTG_TIME_A_WAIT_BCON) : 0 ;
-> > @@ -1773,6 +1778,7 @@ vbus_store(struct device *dev, struct device_attribute *attr,
-> > 		musb->is_active = 0;
-> > 	musb_platform_try_idle(musb, jiffies + msecs_to_jiffies(val));
-> > 	spin_unlock_irqrestore(&musb->lock, flags);
-> > +	pm_runtime_put_sync(dev);
-> > 
-> > 	return n;
-> > }
-> > -- 
-> > 2.20.1
-> > 
+>
+> >> >> 3. Have a pre-allocated list of requests (128?) for read(). Enqueue them
+> >> >>    all during set_alt(). When user calls read() you will:
+> >> >>
+> >> >>    a) check if there are completed requests to be copied over to
+> >> >>       userspace. Recycle the request.
+> >> >>
+> >> >>    b) if there are no completed requests, then it depends on O_NONBLOCK
+> >> >>
+> >> >>       i) If O_NONBLOCK, return -EWOULDBLOCK
+> >> >>       ii) otherwise, wait_for_completion
+> >> >
+> >> > See response to #1, if we prequeue requests, then the kernel will
+> >> > start handling them before we do read(), and we'll fail to associate
+> >> > coverage properly. (This will also require adding another ioctl to
+> >> > imitate set_alt(), like the USB_RAW_IOCTL_CONFIGURE that we have.)
+> >>
+> >> set_alt() needs to be supported if we're aiming at providing support for
+> >> various USB classes to be implemented on top of what you created :-)
+> >
+> > What do you mean by supporting set_alt() here? AFAIU set_alt() is a
+> > part of the composite gadget framework, which I don't use for this.
+> > Are there some other actions (besides sending/receiving requests) that
+> > need to be exposed to userspace to implement various USB classes? The
+> > one that I know about is halting endpoints, it's mentioned in the TODO
+> > section in documentation.
+>
+> Yeah, halting endpoints, cancelling all pending requests, tell userspace
+> about it, and so on.
+>
+> >> >> I think this can all be done without any GFP_ATOMIC allocations.
+> >> >
+> >> > Overall, supporting O_NONBLOCK might be a useful feature for people
+> >> > who are doing something else other than fuzzing, We can account for
+> >> > potential future extensions that'll support it, so detecting
+> >> > O_NONBLOCK and returning an error for now makes sense.
+> >> >
+> >> > WDYT?
+> >>
+> >> If that's the way you want to go, that's okay. But let's, then, prepare
+> >> the code for extension later on. For example, let's add an IOCTL which
+> >> returns the "version" of the ABI. Based on that, userspace can detect
+> >> features and so on.
+> >
+> > This sounds good to me. Let's concentrate on implementing the part
+> > that is essential for testing/fuzzing, as it was the initial reason
+> > why I started working on this, instead of using e.g. GadgetFS. I'll
+> > add such IOCTL in v6.
+>
+> Greg doesn't want it, so let's stop that for now.
+>
+> > Re GFP_ATOMIC allocations, if we're using the blocking approach,
+> > should I decrease the limit of the number of such allocations or do
+> > something else?
+>
+> I would prefer to not see GFP_ATOMIC at all here and I think it's
+> totally doable, but I could be wrong.
+>
+> --
+> balbi
