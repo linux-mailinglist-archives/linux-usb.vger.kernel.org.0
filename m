@@ -2,63 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F734153EA0
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2020 07:19:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AFB4153EAD
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2020 07:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727477AbgBFGTi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Feb 2020 01:19:38 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:34763 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725809AbgBFGTi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Feb 2020 01:19:38 -0500
-Received: by mail-lf1-f66.google.com with SMTP id l18so3249415lfc.1;
-        Wed, 05 Feb 2020 22:19:35 -0800 (PST)
+        id S1727868AbgBFGX7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Feb 2020 01:23:59 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:40148 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725809AbgBFGX7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Feb 2020 01:23:59 -0500
+Received: by mail-lj1-f195.google.com with SMTP id n18so4828900ljo.7;
+        Wed, 05 Feb 2020 22:23:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=x2J1K3gDWMkZqzszFsE6VHoS8CdLur1gXmxUe6ymZyM=;
-        b=VftAuwDfaaZy4VfCo+iy3UeRk7mVF/zDESc+BFU57alLEXQlClkPTi3gE3iaE88pDd
-         p4pkV1lndIZ/cbqZ+2afKym3dJ5zVplUnWsWmh2QBetBCDXmAZZ6WN4wM2nyhRIzC63f
-         9/EAPZV7OiOCk3EI/BIw0LoIN8jWh7HGdb2bcty9uwfW4bFircff7lQGHpI3Kren3UE2
-         WNBPT5EEEcP5eODARYDVsr9f2YnhFU7sxNjNG7G47aeOvD/dx9YmerCIZ9rB5qfpmamM
-         ZPp8Z1ixsQAiygxfDXgKvBLFL7pzQ5U7jp0WRPWDvFoN+0xk5npUDT3MSTqqZbmg3fJZ
-         WhnA==
+        bh=Yx2+hnaLQdidmqzt6DrV4NNr+ovAAcq0GOKwZwfTWIs=;
+        b=vGwWqtE1T4L4576/daYl3oSBj9J0ccf8zDKmDxcTyx7MneQmp3/uNqVfPfZEIb3WXp
+         0oIsDc5jtLE1bUHuFfZa7pR6JaHFfsyu9EkBG0cM5/4WWkptscXimifduYzWd/NZ0Qkf
+         GK2nqiCpaFKtk6Anjjml5X7SN6VWTmnKttuJ1K6nJpoYfrMGlzR97QpIQbf0FbwFAU5l
+         Wcl70ULq1hyM3WdHBQv68yuTdpXdWeHjU/2p3UgcO3X2NWLyqepb4Svlgc3CoeTdkvqK
+         ESOo9lXEzKP+lPeDwNDoIX6fLmIgM3Art2OcFpwGjtjYJZLn7H5ku7DUg6IhJYkxtcsr
+         MJEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=x2J1K3gDWMkZqzszFsE6VHoS8CdLur1gXmxUe6ymZyM=;
-        b=gT4ORmrxCs/WL2dNAda13BnH/yiuOtAHfyM6/IWpXBUihLO1HiNLumNldueI+6vaC8
-         q1xzMtPK6QaK3vei+beOZ2Thkr15i3QGGjjZDzpAXSyi55MzIH57V5ZZUnC1e5J5Wp8c
-         2SYfTEZcXnYqFbLP8oRM2iPbiUNu5qIN5ryMgQ8J3eVyCfGLbtA09V53f1ZMryaCLt+u
-         D8mG/qsbqRlro8X9GNq42N3JygRtWgQZYISLy8ceH6S2tMZdNBb+9uiCy+F9yhHzocCN
-         tMYtDBrV0GyOUnrfOWjLbE1/3jQ3G1ZBO5pKFdA27u7XeY5jXFCyTeq9m+cJVNZrjx92
-         LgqQ==
-X-Gm-Message-State: APjAAAWDR2VHZavMEOeeeZARA1EUWFX8T9uMAIo9cNMOeaLitf9ULft7
-        eA3ZM4V9EKXv7Pot3z2xBEyvaLc7FyY=
-X-Google-Smtp-Source: APXvYqwyx1/khM+remA5TRnWgTRX6AQfIUll4Y8ZgCzxYLUsMxA9Xa6Xow2H/ahlV/Mn1SBSlinh2Q==
-X-Received: by 2002:a19:6449:: with SMTP id b9mr881454lfj.5.1580969974430;
-        Wed, 05 Feb 2020 22:19:34 -0800 (PST)
+        bh=Yx2+hnaLQdidmqzt6DrV4NNr+ovAAcq0GOKwZwfTWIs=;
+        b=QjyO8w1mPr6DJ8xeTqMojsGPehQBo0SU4EWqp0OAciQd4dpJjlHLdGYw/dFL+oHHgx
+         YPp27myjPLcCzpZ9YGtq+WTiLYAktQNl7xdJsrIdT1Sr6KstYz7h7ez9Ybul7mwJDVHs
+         CqxqV9rKIIoSceVf2iaWG/4myeA9Gv7eQhKlnDCowGmAzTj2zRRewXyAPagJ4vNTG6m8
+         GAOH1MwR7BLXtHMMwrDEQbbJVfg/M3xBgZ1mLhc4E4xxF7xOgBXn2v/u4bFv6iIjrFl2
+         zYs2GGv1zXcpUW47htRxICanM9KBGBIAL8VaxJkWE4eQz34qAdNv3Oy8F6PKk1YakBhe
+         A4xw==
+X-Gm-Message-State: APjAAAXiR1xL87NghlCGIeQBAKhrRx3mUABLm770S3SSeziupyvjcL0B
+        klyxM/7FIuHR8FhQe2oSfPE=
+X-Google-Smtp-Source: APXvYqwond6D+JUZYrVP7G89aKMFe6tsKnMUUz32fMoz0x2DylA6CzDsFoHrXPaWYAab0n0yvS3+Sw==
+X-Received: by 2002:a2e:8702:: with SMTP id m2mr1026959lji.278.1580970236194;
+        Wed, 05 Feb 2020 22:23:56 -0800 (PST)
 Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id n3sm723522ljc.100.2020.02.05.22.19.33
+        by smtp.gmail.com with ESMTPSA id p15sm703640lfo.88.2020.02.05.22.23.54
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 05 Feb 2020 22:19:33 -0800 (PST)
+        Wed, 05 Feb 2020 22:23:55 -0800 (PST)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>
-Subject: Re: [PATCH v5 1/1] usb: gadget: add raw-gadget interface
-In-Reply-To: <CAAeHK+zE6N3W-UQ7yjrSkbfwGCBmd0cTv=z7LKNRa2Er1KMPew@mail.gmail.com>
-References: <cover.1579007786.git.andreyknvl@google.com> <461a787e63a9a01d83edc563575b8585bc138e8d.1579007786.git.andreyknvl@google.com> <87ftfv7nf0.fsf@kernel.org> <CAAeHK+wwmis4z9ifPAnkM36AnfG2oESSLAkKvDkuAa0QUM2wRg@mail.gmail.com> <87a7637ise.fsf@kernel.org> <CAAeHK+zNuqwmHG4NJwZNtQHizdaOpriHxoQffZHMffeke_hsGQ@mail.gmail.com> <87tv4556ke.fsf@kernel.org> <CAAeHK+zE6N3W-UQ7yjrSkbfwGCBmd0cTv=z7LKNRa2Er1KMPew@mail.gmail.com>
-Date:   Thu, 06 Feb 2020 08:19:27 +0200
-Message-ID: <87o8uc5jbk.fsf@kernel.org>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     "Yang\, Fei" <fei.yang@intel.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        stable <stable@vger.kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [RFC][PATCH 0/2] Avoiding DWC3 transfer stalls/hangs when using adb over f_fs
+In-Reply-To: <CALAqxLUQ0ciJTLrmEAu9WKCJHAbpY9szuVm=+VapN2QWWGnNjA@mail.gmail.com>
+References: <20200122222645.38805-1-john.stultz@linaro.org> <ef64036f-7621-50d9-0e23-0f7141a40d7a@collabora.com> <02E7334B1630744CBDC55DA8586225837F9EE280@ORSMSX102.amr.corp.intel.com> <87o8uu3wqd.fsf@kernel.org> <02E7334B1630744CBDC55DA8586225837F9EE335@ORSMSX102.amr.corp.intel.com> <87lfpy3w1g.fsf@kernel.org> <CALAqxLUQ0ciJTLrmEAu9WKCJHAbpY9szuVm=+VapN2QWWGnNjA@mail.gmail.com>
+Date:   Thu, 06 Feb 2020 08:23:48 +0200
+Message-ID: <87lfpg5j4b.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -74,129 +77,90 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-Andrey Konovalov <andreyknvl@google.com> writes:
->> Andrey Konovalov <andreyknvl@google.com> writes:
->> >> >> > +static int raw_event_queue_add(struct raw_event_queue *queue,
->> >> >> > +     enum usb_raw_event_type type, size_t length, const void *d=
-ata)
->> >> >> > +{
->> >> >> > +     unsigned long flags;
->> >> >> > +     struct usb_raw_event *event;
->> >> >> > +
->> >> >> > +     spin_lock_irqsave(&queue->lock, flags);
->> >> >> > +     if (WARN_ON(queue->size >=3D RAW_EVENT_QUEUE_SIZE)) {
->> >> >> > +             spin_unlock_irqrestore(&queue->lock, flags);
->> >> >> > +             return -ENOMEM;
->> >> >> > +     }
->> >> >> > +     event =3D kmalloc(sizeof(*event) + length, GFP_ATOMIC);
->> >> >>
->> >> >> I would very much prefer dropping GFP_ATOMIC here. Must you have t=
-his
->> >> >> allocation under a spinlock?
->> >> >
->> >> > The issue here is not the spinlock, but that this might be called in
->> >> > interrupt context. The number of atomic allocations here is restric=
-ted
->> >> > by 128, and we can reduce the limit even further (until some point =
-in
->> >> > the future when and if we'll report more different events). Another
->> >> > option would be to preallocate the required number of objects
->> >> > (although we don't know the required size in advance, so we'll waste
->> >> > some memory) and use those. What would you prefer?
+John Stultz <john.stultz@linaro.org> writes:
+> On Thu, Jan 23, 2020 at 9:46 AM Felipe Balbi <balbi@kernel.org> wrote:
+>> >>>>>
+>> >>>>> Since ~4.20, when the functionfs gadget enabled scatter-gather
+>> >>>>> support, we have seen problems with adb connections stalling and
+>> >>>>> stopping to function on hardware with dwc3 usb controllers.
+>> >>>>> Specifically, HiKey960, Dragonboard 845c, and Pixel3 devices.
+> ...
 >> >>
->> >> I think you shouldn't do either :-) Here's what I think you should do:
->> >>
->> >> 1. support O_NONBLOCK. This just means conditionally removing your
->> >>    wait_for_completion_interruptible().
+>> >> I'm pretty sure this should be solved at the DMA API level, just want=
+ to confirm.
 >> >
->> > I don't think non blocking read/writes will work for us. We do
->> > coverage-guided fuzzing and need to collect coverage for each syscall.
->> > In the USB case "syscall" means processing a USB request from start to
->> > end, and thus we need to wait until the kernel finishes processing it,
->> > otherwise we'll fail to associate coverage properly (It's actually a
->> > bit more complex, as we collect coverage for the whole initial
->> > enumeration process as for one "syscall", but the general idea stands,
->> > that we need to wait until the operation finishes.)
+>> > I have sent you the tracepoints long time ago. Also my analysis of the
+>> > problem (BTW, I don't think the tracepoints helped much). It's
+>> > basically a logic problem in function dwc3_gadget_ep_reclaim_trb_sg().
 >>
->> Fair enough, but if the only use case that this covers, is a testing
->> scenario, we don't gain much from accepting this upstream, right?
->
-> We gain a lot, even though it's just for testing. For one thing, once
-> the patch is upstream, all syzbot instances that target upstream-ish
-> branches will start fuzzing USB, and there won't be any need for me to
-> maintain a dedicated USB fuzzing branch manually. Another thing, is
-> that syzbot will be able to do fix/cause bisection (at least for the
-> bugs that are fixed/introduced after this patch is merged). And
-> finally, once this is upstream, we'll be able to backport this to
-> Android kernels and start testing them as well.
-
-A very respectable goal :-)
-
-I just want to take the opportunity to turn this into something more
-generic so we stop depending on kernel patches to support newer USB
-classes.
-
-I'll try to allocate some time during next week (this week, I'm totally
-swamped) to carefully review your submission.
-
->> >> 3. Have a pre-allocated list of requests (128?) for read(). Enqueue t=
-hem
->> >>    all during set_alt(). When user calls read() you will:
->> >>
->> >>    a) check if there are completed requests to be copied over to
->> >>       userspace. Recycle the request.
->> >>
->> >>    b) if there are no completed requests, then it depends on O_NONBLO=
-CK
->> >>
->> >>       i) If O_NONBLOCK, return -EWOULDBLOCK
->> >>       ii) otherwise, wait_for_completion
->> >
->> > See response to #1, if we prequeue requests, then the kernel will
->> > start handling them before we do read(), and we'll fail to associate
->> > coverage properly. (This will also require adding another ioctl to
->> > imitate set_alt(), like the USB_RAW_IOCTL_CONFIGURE that we have.)
+>> AFAICT, this is caused by DMA API merging pages together when map an
+>> sglist for DMA. While doing that, it does *not* move the SG_END flag
+>> which sg_is_last() checks.
 >>
->> set_alt() needs to be supported if we're aiming at providing support for
->> various USB classes to be implemented on top of what you created :-)
->
-> What do you mean by supporting set_alt() here? AFAIU set_alt() is a
-> part of the composite gadget framework, which I don't use for this.
-> Are there some other actions (besides sending/receiving requests) that
-> need to be exposed to userspace to implement various USB classes? The
-> one that I know about is halting endpoints, it's mentioned in the TODO
-> section in documentation.
-
-Yeah, halting endpoints, cancelling all pending requests, tell userspace
-about it, and so on.
-
->> >> I think this can all be done without any GFP_ATOMIC allocations.
->> >
->> > Overall, supporting O_NONBLOCK might be a useful feature for people
->> > who are doing something else other than fuzzing, We can account for
->> > potential future extensions that'll support it, so detecting
->> > O_NONBLOCK and returning an error for now makes sense.
->> >
->> > WDYT?
+>> I consider that an overlook on the DMA API, wouldn't you? Why should DMA
+>> API users care if pages were merged or not while mapping the sglist? We
+>> have for_each_sg() and sg_is_last() for a reason.
 >>
->> If that's the way you want to go, that's okay. But let's, then, prepare
->> the code for extension later on. For example, let's add an IOCTL which
->> returns the "version" of the ABI. Based on that, userspace can detect
->> features and so on.
 >
-> This sounds good to me. Let's concentrate on implementing the part
-> that is essential for testing/fuzzing, as it was the initial reason
-> why I started working on this, instead of using e.g. GadgetFS. I'll
-> add such IOCTL in v6.
+> From an initial look, I agree this is pretty confusing.   dma_map_sg()
+> can coalesce entries in the sg list, modifying the sg entires
+> themselves, however, in doing so it doesn't modify the number of
+> entries in the sglist (nor the end state bit).  That's pretty subtle!
+>
+> My initial naive attempt to fix the dma-iommu path to set the end bit
+> at the tail of __finalize_sg() which does the sg entry modifications,
+> only caused trouble elsewhere, as there's plenty of logic that expects
+> the number of entries to not change, so having sg_next() return NULL
+> before that point results in lots of null pointer traversals.
+>
+> Further, looking at the history, while apparently quirky, this has
+> been the documented behavior in DMA-API.txt for over almost 14 years
+> (at least).  It clearly states that that dma_map_api can return fewer
+> mapped entries then sg entries, and one should loop only that many
+> times (for_each_sg() having a max number of entries to iterate over
+> seems specifically for this purpose).  Additionally, it says one must
+> preserve the original number of entries (not # mapped entries) for
+> dma_unmap_sg().
+>
+> So I'm not sure that sg_is_last() is really valid for iterating on
+> mapped sg lists.
+>
+> Should it be? Probably (at least with my unfamiliar eyes), but
+> sg_is_last() has been around for almost as long coexisting with this
+> behavioral quirk, so I'm also not sure this is the best hill for the
+> dwc3 driver to die on. :)
+>
+> The fix here:
+>   https://lore.kernel.org/lkml/20200122222645.38805-3-john.stultz@linaro.=
+org/
+> Or maybe the slightly cleaner varient here:
+>   https://git.linaro.org/people/john.stultz/android-dev.git/commit/?h=3Dd=
+ev/db845c-mainline-WIP&id=3D61a5816aa71ec719e77df9f2260dbbf6bcec7c99
 
-Greg doesn't want it, so let's stop that for now.
+in that case, we don't need to use sg_is_last() at all, since i will
+always encode the last entry in the list.
 
-> Re GFP_ATOMIC allocations, if we're using the blocking approach,
-> should I decrease the limit of the number of such allocations or do
-> something else?
+> seems like it would correctly address things following the
+> documentation and avoid the failures we're seeing.
+>
+> As to if dma_map_sg() should fixup the state bits or properly shrink
+> the sg list when it coalesces entries, that seems like it would be a
+> much more intrusive change across quite a bit of the kernel that was
+> written to follow the documented method. So my confidence that such a
+> change would make it upstream in a reasonable amount of time isn't
+> very high, and it seems like a bad idea to block the driver from
+> working properly in the meantime.
+>
+> Pulling in Christoph and Jens as I suspect they have more context on
+> this, and maybe can explain thats its not so quirky with the right
+> perspective?
+>
+> Thoughts? Maybe there is an easier way to make it less quirky then
+> what I imagine?
 
-I would prefer to not see GFP_ATOMIC at all here and I think it's
-totally doable, but I could be wrong.
+it just seems very counter-intuitive to me that DMA api can coalesce
+entries but they're actually still there and drivers have to cope with
+this behavior.
 
 =2D-=20
 balbi
@@ -206,18 +170,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl47r+8ACgkQzL64meEa
-mQYrtxAAmlwcFZC5nhqN30yJOozQ+ja34CO9SzXJMAN7FctUV1cMuHh5NGQQHHEH
-9nyFbWZGMS559QS8n9Z9879ATfCNZxcGPoa/eNf97tanKANdfF2vie+9CALtMGsC
-/p1gkYTu1PFm9xTj5ISebBAEe1GxOo1NB2k/7iGTgyK5iaT0JO7jbxjRAu9Ut1di
-eZgLA0pZ3lsuWVaOgTBw6Bnlv+Hkc7q+wZeZh/ddW+YsEkmqByc23v3/JgNZxTRD
-FSxunddsz9y08WOxAi98tL7sI2WIc6Np4h7MINDgk6jMzFUpwhEfVv0ubGiXuL0s
-I47ihLNAe+ikx0KVTPmYw38LPgTfcnolIztCGiR0R3D0e5j/Y5ZwiGlr5qbB8Nie
-K4HkeaOjbh2QZzYRaL+UqqXkxdjz9QSlcYdOCVHxCo4r/TdcO6yRfjNGXetQsjqr
-OCDFx2Fr+JYFg6mtPiTDMzGOGn97FH8LTe+Blxf+YPxVsLFfdqvGNIpeyIZReoTf
-PNTfUXP2qyRDpixWEt93ZhBFwoCjN3sM9UuJYrVbKOVvUFYQ8Hmo9N0cgbtzYT7v
-97DQXyeMwtNdP4KkwDPqzWvtDMMOsrOI3ViL17QuhgUhBo4jttl8lGJ3ASSpSHpn
-g30wMP/EWzHqiHPt1x+10en+L2Xjn0i7MNuCaf7ZTu4fYqF8z1w=
-=H6pc
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl47sPQACgkQzL64meEa
+mQYiLxAAhxe76gzIpf9TKKrL9PiIYADvgN7PP8dQVB0FC8oLmhCKUQLMNoi6BsB3
+sVxskmoy/8HZV0VBn+58rz1rVyOcowp0qPYF7kWP83xYD6WHQwfgFw5wKfcNELZB
+UwFYnspozEe0OIiFLFX4b2qlqeeNTlsd4VDzrSCvzchGRTGt0MHZLxz7SNFrtjeF
+QVO1A4y+KQVnv8yyQmy+TDBD49XlxM8R4Vgo5z8s/p3qQn9RL6q7XMLMztr2wMre
+PHClYBTYDsvtusLYf48WNflARU0q2KXV0LYT8h4iYg+MUIiwnWkpkgHprTMZVZS1
+jZXeb+RmABYHCn9iPLSzKKV4d/vjR6Gwzr1h4fQJiihteM5JYmjqaC3MAO9NXIVD
+35ECZyvWHbct6yKLGJZzxqOLDsjoPIcXQ7OPU1N/GtBl3lDfnX567V4Ux8NlI6+B
+Enp/LjLrRI3+7cqlnUhl4lQM+m5c5vsg3Qrg2GlrsKBHuzOQvV5lBrhQ3RjCJTPG
+E+NTk94RrgwdyEsQJrLWOaVsP9b3bhwDk5IosNWIuoo1sZ1s+4I5IuzFAEx+DnR0
+m0TL9mV4htgBW6l/BM5R3ixqgiGcPfte2lH8Ul4aB5ZH/HXaRCdbjs3XQ7xC+95y
+DAXEKdR+oCogx+4/9TqlKwfmyrQSRZhjjgYs0p191mOM7CVQyxw=
+=RzGZ
 -----END PGP SIGNATURE-----
 --=-=-=--
