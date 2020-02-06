@@ -2,83 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F621544CB
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2020 14:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B5B154518
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2020 14:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727649AbgBFNWy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Feb 2020 08:22:54 -0500
-Received: from cable.insite.cz ([84.242.75.189]:60433 "EHLO cable.insite.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726765AbgBFNWx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 6 Feb 2020 08:22:53 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id 3D101A1A40B02
-        for <linux-usb@vger.kernel.org>; Thu,  6 Feb 2020 14:22:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1580995368; bh=alaKCe8vqS2xl19wSsV7bRQiFGJGcHp/fPL4xmr0Zz4=;
-        h=To:From:Subject:Date:From;
-        b=bvdGfYTWjjDf6Mc6cYFp2LIg3uWp9/pkFyrwgBWoGPhPDcvA5ucYkIh8Dfw3UbLK9
-         TwvaKcMSQPuetDhHgROCThQ0Zbz7WSSoK5tVe0CcJWXc59TVu2QhRZvDfBL6IwqZkD
-         wdFllkiGLicrzxaG1XADgPEvUzS7ZA51BRzq0RCA=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id VqlOVMZS15QP for <linux-usb@vger.kernel.org>;
-        Thu,  6 Feb 2020 14:22:48 +0100 (CET)
-Received: from [192.168.100.32] (unknown [192.168.100.32])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 142CEA1A40B01
-        for <linux-usb@vger.kernel.org>; Thu,  6 Feb 2020 14:22:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1580995368; bh=alaKCe8vqS2xl19wSsV7bRQiFGJGcHp/fPL4xmr0Zz4=;
-        h=To:From:Subject:Date:From;
-        b=bvdGfYTWjjDf6Mc6cYFp2LIg3uWp9/pkFyrwgBWoGPhPDcvA5ucYkIh8Dfw3UbLK9
-         TwvaKcMSQPuetDhHgROCThQ0Zbz7WSSoK5tVe0CcJWXc59TVu2QhRZvDfBL6IwqZkD
-         wdFllkiGLicrzxaG1XADgPEvUzS7ZA51BRzq0RCA=
-To:     linux-usb@vger.kernel.org
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-Subject: usb:gadget:f_uac2: EP OUT is adaptive instead of async
-Message-ID: <4bd36708-0ade-fbd7-5eec-5b8df7b3f2ee@ivitera.com>
-Date:   Thu, 6 Feb 2020 14:22:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727639AbgBFNj5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Feb 2020 08:39:57 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:37376 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727415AbgBFNj5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Feb 2020 08:39:57 -0500
+Received: by mail-pf1-f196.google.com with SMTP id p14so3154062pfn.4;
+        Thu, 06 Feb 2020 05:39:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=9UI/Wm4SvohT/fPhpu434OJUCJ1ebl8rShElAxdr7Lc=;
+        b=GgU1vPmdodPKY+ehyRPENrKyOCijr6w3B7CVMnO5UhO5SRTKJ330PYioWCbnHAxDay
+         OHNBV6qDTiXRCgGwz3Aj57US1ojxFahlJAAqPXzys2L2mBXoUQy+2Aw/SV9+0UbCwVkH
+         8EhUiX+Q/S8WpSlLrdHiAATBKGuycWmt2BLsrcmqd+4ABx+rCm2zMakc20Ch1+rgv39n
+         ct1riJvgPLzykTnoyxCuxpzJwKrbRk0Z8paSF2H46acgLN6zlVkXlLAPIbaeDi0mm1yP
+         YS3qUpgs5JPPkQx+mJfMmlPJh7YNxP2I3bcYM3rEIJuffssPlBvbeRmj00rDD5W5z2S/
+         9mbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=9UI/Wm4SvohT/fPhpu434OJUCJ1ebl8rShElAxdr7Lc=;
+        b=cUCjcO/sj0j2AwK56LEhT6qDhbBujSNzlaD/zV1ef1Xy/rrI+xRX4/ZgXT1ElchLYo
+         0cvbpS3WcCdGCVEtnH0PXV1IzDhLtgyfSchjP+QRCJfClL1qsMIRwmawD6aoIAFNEVyd
+         A+0aidW/K31UObgrO64sPeTD5M1xglSNoYnX+2Vx/JRjdxPVQ8vs+81f5qj5AB35Ebh3
+         Uf1PFc2PUh+D0Jj+7CXa27Zdt6d7a6qT5Br7nj2gjnJOlaEmEJbx1LT9CPe0CPog6Qf9
+         dtYix+HKNFeeUYItsh3uoQe6mVd0LZKXwpHDI/7FnyTXzUVRHRgYjVkBeTY6iFDowLXi
+         8xBg==
+X-Gm-Message-State: APjAAAXFo3F0wXNr+byiy2N8uWsTbXcEHohv7HrJH6qyN9W/uVe6gxnx
+        ccCh/BrYdmg3K3VMISGOcSo=
+X-Google-Smtp-Source: APXvYqyMN/S+UWZnFv6QS/f5sQ8QuvTBdWOZY3ai7rwzkIaw95R8Rd2Ks0E6KgzxLJM2qOGRQIdZfg==
+X-Received: by 2002:a63:ed56:: with SMTP id m22mr3535003pgk.261.1580996396207;
+        Thu, 06 Feb 2020 05:39:56 -0800 (PST)
+Received: from localhost.localdomain ([2408:821a:3c17:470:65f2:3d88:4c94:b153])
+        by smtp.gmail.com with ESMTPSA id y24sm3947432pge.72.2020.02.06.05.39.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Feb 2020 05:39:55 -0800 (PST)
+From:   youling257 <youling257@gmail.com>
+To:     alexandre.torgue@st.com
+Cc:     kishon@ti.com, yoshihiro.shimoda.uh@renesas.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, youling257 <youling257@gmail.com>
+Subject: Re: [PATCH] phy: core: Add consumer device link support
+Date:   Thu,  6 Feb 2020 21:39:18 +0800
+Message-Id: <20200206133918.15012-1-youling257@gmail.com>
+X-Mailer: git-send-email 2.25.0
+In-Reply-To: <20191104143713.11137-1-alexandre.torgue@st.com>
+References: <20191104143713.11137-1-alexandre.torgue@st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-The existing UAC2 implementation presents itself as asynchronous 
-USB_ENDPOINT_SYNC_ASYNC 
-https://github.com/torvalds/linux/blob/master/drivers/usb/gadget/function/f_uac2.c#L276 
-+ 
-https://github.com/torvalds/linux/blob/master/drivers/usb/gadget/function/f_uac2.c#L285 
-.
-
-However:
-1) The function does not define any feedback endpoint
-
-2) IMO in reality it is adaptive - the g_audio capture device accepts 
-any data passed by the USB host, the USB host is the one which defines 
-the data pace.
-
-While Linux and reportedly OSX accept the async EP OUT without explicit 
-feedback EP IN, Windows does not.
-
-Simply changing USB_ENDPOINT_SYNC_ASYNC to USB_ENDPOINT_SYNC_ADAPTIVE 
-for the FS and HS output endpoints fixes the windows problem and IMO 
-corrects the config to reflect real function.
-
-There are multiple projects underway adding the async feedback EP, but 
-in the meantime I think the .bmAttributes information should be changed 
-as above, making the device usable in Windows for everyone.
-
-Thanks a lot for considering.
-
-Best regards,
-
-Pavel.
+This patch cause "dwc3 dwc3.3.auto: failed to create device link to dwc3.3.auto.ulpi" problem.
+https://bugzilla.kernel.org/show_bug.cgi?id=206435
