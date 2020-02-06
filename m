@@ -2,67 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70192154B1F
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2020 19:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9269C154B2B
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2020 19:32:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727822AbgBFSaA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Feb 2020 13:30:00 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:35510 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727662AbgBFS37 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Feb 2020 13:29:59 -0500
-Received: by mail-lj1-f196.google.com with SMTP id q8so7188046ljb.2;
-        Thu, 06 Feb 2020 10:29:57 -0800 (PST)
+        id S1727843AbgBFScV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Feb 2020 13:32:21 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:33692 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727358AbgBFScV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Feb 2020 13:32:21 -0500
+Received: by mail-lf1-f66.google.com with SMTP id n25so4832727lfl.0
+        for <linux-usb@vger.kernel.org>; Thu, 06 Feb 2020 10:32:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+        h=sender:from:to:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=or2FSvYPeGpxysPGJhulUEloNPL1ySrePtQNaWEOLHM=;
-        b=J3g5fuCyt6sXRWKtX2a3hdqNHrTLV736jNLnZKxMDrO5eqPsh8KarndNS6mpwmceAv
-         fTHTjAY7aPcO4yTI3jD8Cjq8Bvvd3TG2crKkRLaa0zRTsT7JHLrJ/tU8ty0AMyrj+kdV
-         V5E/LRnocEb7Jlfowe56H8nduwXxmlBujpjCO1HpYXT4RTAhEbbT0mzPhp8KQ4eGtuCV
-         nSPEDWExgUta/Az8JpLaQis64nKk3HPlnCgJw39WWVPJm5qu13obZ7/yk5Glnl6GRqkO
-         1sj8QDexRK4uxc3orYpUgAnxEVaGqQjF/PcFxqMtXUuIfQo9n1oz89Qq0Bu/Gk8PQqmN
-         IFmA==
+        bh=RwKT4BnMT40bXj8AWfdIporV7xfVJGRMuPctPQAkO0U=;
+        b=MXNy/+fyDiL8Kku1avhMadNrzJosiFvhOxI3CMMapnUv/Y1G+iewO4SxAt3kNysMSq
+         VE39vWsGuYmEuUe5gp7GN7lrzEOIfYHWgVGvxd+SSdNP3P3jfv8hewAo96GV3AAEvTvN
+         Hl9DGieqlOiGAG+JohxCuUnx/J73dW3xZWAsu8Cl1LtQyltKRT8VuS7Z7zsmHAFAJ+Xc
+         LBCq4EeF2xzKuGjDQFGOK2XSCLKGJOaQcrMPwCboMAfy++0NKzP7kwUaQVJxEYx6breT
+         1st15cmkvIg4e0j7JkahFuuPJkdhUn6SBgeAR1Dh+GBjFTuabR3vFPX0noaKN9+ZYsCf
+         wp0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+        h=x-gm-message-state:sender:from:to:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=or2FSvYPeGpxysPGJhulUEloNPL1ySrePtQNaWEOLHM=;
-        b=VnHHG5pUfKVPU2RM9EVPWwP+cLc0egFHtfCdcyySr4CvQkdTuBbV3jVF4IGfKz//yk
-         +T90osRBofsIDMUyoWLHaCUiuygN11g8FcXY2AjJ3So3HJYqps6OyiMw+BcUx5wj/wQz
-         gHZncP+mujH9h2Votu3udguigsDwaWRkvryHkzt9xcLBBa4to23f5PS26bodL5On5e7+
-         WWDLMJ87m8h+6DuaSnQYgzi2RHrx/17Yi7kP0TPoMt0hQ5aQCR5GmFQNlShAHa51SDlY
-         nBXDAHwM7T4XtFIk9ZAVNNn9rORJwCpwLgzXQQ2xsJY0pEymXmO66sJYYaLzIAah8+Wc
-         IKXA==
-X-Gm-Message-State: APjAAAXLQumjefCj8JBlNhJkHEHzFqP+qsQRoxmG3+xgnYioJxEiikDz
-        5zNej+Up5jgRevvMzvh2pUw=
-X-Google-Smtp-Source: APXvYqz/mqpJexVqnCeK0umiyTQIZnrjFmK9rmcf5zMcoYbMsz8u/eogRsdCGuiiF/5Af8eO125xzw==
-X-Received: by 2002:a2e:9256:: with SMTP id v22mr3021010ljg.45.1581013796642;
-        Thu, 06 Feb 2020 10:29:56 -0800 (PST)
+        bh=RwKT4BnMT40bXj8AWfdIporV7xfVJGRMuPctPQAkO0U=;
+        b=U/H0+WGBQV62kqRouamj8ZhsM0Y6P4NNR8SugFU61LeoXsIIrYnyWRnLf8jW0EWr2X
+         fIPqXUP+gyaAk4+/vOgtT1FqLIlILBN6CYyNai2hxve+oIG31Rv7FmlDoVGp7aIVFYYL
+         r3WSEZ7xIEjSaEdOQMtIkbq1JLoJoAPaqaf9wQaFkBwcFbW3S1uvikIhjeJ4jhZf1RYQ
+         +/TKmoOn1ddLVKJ5zkUPRLPxk2vX4uQPAcffyqK9mwsItqvcBBp7kFqSWu7Edr+52vrY
+         TvTf5HQADq4L8oGvRAbP3MDs4hioDnkNs0ip/AhvRLnyQu0pvNFNJiBa1CGGssIukJc8
+         zb8g==
+X-Gm-Message-State: APjAAAUiovTUI38RNbUfi+nzOS/Wc2Qrrdv6PNcgoxJH2zowkM3JYYwy
+        dudj5JYm3J5DUvFTq05q1Fg1uNNfJwc=
+X-Google-Smtp-Source: APXvYqwGMrA/lEQiBScCleGP8ifbdZhQQFVLTJa4dO+iwCOaIzoyQUCeIdt+VcVu8iUR8VvpCWD99w==
+X-Received: by 2002:ac2:597b:: with SMTP id h27mr2538274lfp.12.1581013938193;
+        Thu, 06 Feb 2020 10:32:18 -0800 (PST)
 Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id o19sm68298lji.54.2020.02.06.10.29.55
+        by smtp.gmail.com with ESMTPSA id 135sm95985lfb.28.2020.02.06.10.32.17
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 06 Feb 2020 10:29:55 -0800 (PST)
+        Thu, 06 Feb 2020 10:32:17 -0800 (PST)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Christoph Hellwig <hch@infradead.org>,
-        John Stultz <john.stultz@linaro.org>
-Cc:     "Yang\, Fei" <fei.yang@intel.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
-        Tejas Joglekar <tejas.joglekar@synopsys.com>,
-        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        stable <stable@vger.kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [RFC][PATCH 0/2] Avoiding DWC3 transfer stalls/hangs when using adb over f_fs
-In-Reply-To: <20200206074005.GA28365@infradead.org>
-References: <20200122222645.38805-1-john.stultz@linaro.org> <ef64036f-7621-50d9-0e23-0f7141a40d7a@collabora.com> <02E7334B1630744CBDC55DA8586225837F9EE280@ORSMSX102.amr.corp.intel.com> <87o8uu3wqd.fsf@kernel.org> <02E7334B1630744CBDC55DA8586225837F9EE335@ORSMSX102.amr.corp.intel.com> <87lfpy3w1g.fsf@kernel.org> <CALAqxLUQ0ciJTLrmEAu9WKCJHAbpY9szuVm=+VapN2QWWGnNjA@mail.gmail.com> <20200206074005.GA28365@infradead.org>
-Date:   Thu, 06 Feb 2020 20:29:45 +0200
-Message-ID: <87ftfn602u.fsf@kernel.org>
+To:     bugzilla-daemon@bugzilla.kernel.org, linux-usb@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@st.com>
+Subject: Re: [Bug 206435] dwc3 dwc3.3.auto: no usb2 phy configured
+In-Reply-To: <bug-206435-208809-nsmttjrqU7@https.bugzilla.kernel.org/>
+References: <bug-206435-208809@https.bugzilla.kernel.org/> <bug-206435-208809-nsmttjrqU7@https.bugzilla.kernel.org/>
+Date:   Thu, 06 Feb 2020 20:32:13 +0200
+Message-ID: <87d0ar5zyq.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -78,87 +67,23 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-Christoph Hellwig <hch@infradead.org> writes:
-> On Wed, Feb 05, 2020 at 01:03:51PM -0800, John Stultz wrote:
->> On Thu, Jan 23, 2020 at 9:46 AM Felipe Balbi <balbi@kernel.org> wrote:
->> > >> I'm pretty sure this should be solved at the DMA API level, just wa=
-nt to confirm.
->> > >
->> > > I have sent you the tracepoints long time ago. Also my analysis of t=
-he
->> > > problem (BTW, I don't think the tracepoints helped much). It's
->> > > basically a logic problem in function dwc3_gadget_ep_reclaim_trb_sg(=
-).
->> >
->> > AFAICT, this is caused by DMA API merging pages together when map an
->> > sglist for DMA. While doing that, it does *not* move the SG_END flag
->> > which sg_is_last() checks.
->> >
->> > I consider that an overlook on the DMA API, wouldn't you? Why should D=
-MA
->> > API users care if pages were merged or not while mapping the sglist? We
->> > have for_each_sg() and sg_is_last() for a reason.
->> >
->>=20
->> >From an initial look, I agree this is pretty confusing.   dma_map_sg()
->> can coalesce entries in the sg list, modifying the sg entires
->> themselves, however, in doing so it doesn't modify the number of
->> entries in the sglist (nor the end state bit).  That's pretty subtle!
+bugzilla-daemon@bugzilla.kernel.org writes:
+> https://bugzilla.kernel.org/show_bug.cgi?id=3D206435
 >
-> dma_map_sg only coalesces the dma address.  The page, offset and len
-> members are immutable.
-
-ok
-
-> The problem is really the design of the scatterlist structure - it
-> combines immutable input parameters (page, offset, len) and output
-> parameters (dma_addr, dma_len) in one data structure, and then needs
-> different accessors depending on which information you care about.
-> The end marker only works for the "CPU" view.
-
-right
-
-> The right fix is top stop using struct scatterlist, but that is going to
-> be larger and painful change.  At least for block layer stuff I plan to
-> incrementally do that, though.
-
-I don't think that would be necessary though.
-
->> So I'm not sure that sg_is_last() is really valid for iterating on
->> mapped sg lists.
->>=20
->> Should it be? Probably (at least with my unfamiliar eyes), but
->> sg_is_last() has been around for almost as long coexisting with this
->> behavioral quirk, so I'm also not sure this is the best hill for the
->> dwc3 driver to die on. :)
+> --- Comment #3 from youling257@gmail.com ---
+> Revert 987351e1ea7772cf2f0795e917fb33b2e282e1c1 phy: core: Add consumer d=
+evice
+> link support, dwc3 work for my z3735f device.
 >
-> No, it shoudn't.  dma_map_sg returns the number of mapped segments,
-> and the callers need to remember that.
+> android_x86:/ $ su
+> android_x86:/ # dmesg | grep dwc
+> [    9.724606] dwc3 dwc3.3.auto: changing max_speed on rev 5533210a
+> [   47.488501] udc dwc3.3.auto: registering UDC driver [g1]
 
-We _do_ remember that:
+reverting that commit makes dwc3 work? Then you don't have a bug on
+dwc3. You have a regression caused by another commit.
 
-	unsigned int remaining =3D req->request.num_mapped_sgs
-		- req->num_queued_sgs;
-
-	for_each_sg(sg, s, remaining, i) {
-		unsigned int length =3D req->request.length;
-		unsigned int maxp =3D usb_endpoint_maxp(dep->endpoint.desc);
-		unsigned int rem =3D length % maxp;
-		unsigned chain =3D true;
-
-		if (sg_is_last(s))
-			chain =3D false;
-
-		if (rem && usb_endpoint_dir_out(dep->endpoint.desc) && !chain) {
-
-that req->request.num_mapped_sgs is the returned value. So you're saying
-we should test for i =3D=3D num_mapped_sgs, instead of using
-sg_is_last(). Is that it?
-
-Fair enough. Just out of curiosity, then, when *should* we use
-sg_is_last()?
-
-cheers
+Alexandre, any idea what's going on?
 
 =2D-=20
 balbi
@@ -168,18 +93,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl48WxwACgkQzL64meEa
-mQbQmw//W/0XJp51YHkuN5pjimB9efpoMl4VuIUWDCCIlJ85izbUccIkZ8SVzO0y
-gKzPEl24X+sGx/6Lw2zDskgU5H7PTP/st6Q71RgDSK9kI/YNY7yM0OEfLEg3O+FB
-dfYmz05hTe261rv6PVzzpMgZP08I+TPO/xxINM60uMjZ6apG2EiZ+sswCVwlhK33
-Y7/KOLkAcMkAlq3mNJO1g73TkpJUnXmF+sXyxXU+9X/iP34rFoUbaSozVBygjcht
-rtPFPa7Wr0vfNm3uEQTQi+27iTyMbyXYRjSQSqN+MlpEgBFAxWTv/iuvkJ4k6/Fk
-bkAi+9yCG2V9XUx3aOuq4dPUFHHyX0xEjUaR09fnDwAiqvRyo/Ib3a4H8Pl/IYf8
-pZLlyR7uvmoGZvuQhyELnA+L52mNO4tGm2FUmRdnzShyilpOA1vLjjHEdGx7V1G4
-oPh5iG+sB/O0Hchctg0gZtYSQVdpF6J1sbtLqqrsZuC13saZGkHX++MyoDpF03Zr
-33SdJ6JMVxarO+ncFE730zrooMFoKfA1P6fIuAKYZEJ9bnf60p80A7oAmFSfcwDP
-6smxj5nWzpluKikLnlblDAPJmdpjjd6jovJoVtd8zfbuidhhUr7qkDVqL1zrIzMG
-EG4HYDE0r9gTMGqBxcNuRNLDHaAuewAZBfDybrJKrT1WNFbqZC8=
-=CcPI
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl48W60ACgkQzL64meEa
+mQbBbxAAm6zjZqt3ZRqfkpw1Fxs9BPdzvoD5TjHMJ2xJ7RFiGXl18cSf1FEbQks8
+D78DjqlbfTYg4hhTUlMD0K29mscSzTZnLF50nAbDVj+LAil82MEforYoFjhXfSnJ
+rqEeoXqkKC+l3E11wM8cQyzcJvAewbA3q4BwO6f3DRO66h/3adutINnFVA25DMXQ
+Kj1AfQFLHSgxGRJeMimmwZwYDW+329i2rhD+OKNmSa0VtlWeULgqI9UrH/9US7jB
+7Evf+/f916LycYyXJWh0SIaOj4S5riZI++KSd+cpUshhucLgCeNWmROBc/regJXX
+2DfQDEDgo6eWxLY2hTa//DkgUj/1+MAcTVnxf5YHovg0MlUMvoUlKdspU2blbLti
+2+2fL5fPD7x3FstLdJUZvUGvU4vVm8GL9NMDSrq7mINFXhv1DUg18ElZ8iN7UtWC
+ETd4cDDFBaAOCXikglJN0y8hIaLGPU7Dh5aDtCnrFK1KyRXeCa7IzE+bHnI9eXoL
+9PdRHue2Kt8yQVfq6FU8pAWTwZOyz7NH9glD9zGGrXFjfERZ3ltlbwhidmHJROy7
+PZW6SWBQi+BHr722auWjlJXjIfb5LyG7C2fahSaKfCEWr1Fx+5DMwDmGMcPgLPXz
+SRi+GKnX6kgGQkIsv57IGXi/mns0CkGlYTukg2l6q9OtH7MPEDw=
+=3qU6
 -----END PGP SIGNATURE-----
 --=-=-=--
