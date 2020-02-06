@@ -2,137 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78850153DA4
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2020 04:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE757153E96
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2020 07:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727572AbgBFDhs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Feb 2020 22:37:48 -0500
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:46475 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727307AbgBFDhr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Feb 2020 22:37:47 -0500
-Received: by mail-qt1-f194.google.com with SMTP id e25so3412892qtr.13;
-        Wed, 05 Feb 2020 19:37:47 -0800 (PST)
+        id S1727762AbgBFGO3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Feb 2020 01:14:29 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:40962 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727704AbgBFGO3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Feb 2020 01:14:29 -0500
+Received: by mail-lj1-f193.google.com with SMTP id h23so4795320ljc.8;
+        Wed, 05 Feb 2020 22:14:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fy0LCVYfm45Yj1SMlTDHcT8rLY7rLsCrngabnvAls3c=;
-        b=SZ9xZyWygxE91HCl/DMHXWYWKuttICIdff5pdazkGTAd0r/VoPjFrl6y+CmQ1fnJ1m
-         wX05iZqW7i0jqGha6L3MvLlR/QSyJXQMsbVEdCTSE6XEBEaYxzoEueZfo03DCljXsVdQ
-         s73hhhVaBzDTHAAhiEWC9LCBaTsZWkbIKMV8s=
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=D6Y9HdoriA0o8rqnyJU7KKT2aOOU0xj/IRORVJiMPtI=;
+        b=AzQRaqlXD8rAiSLepqUjv4kQJ/oaeoW64+f1NVEJtZ1f0Ucp96U+WYpjpz+/CCeT5e
+         sJZq8ddXGHd2BXhrfiPmJiLDCCbZWYp1XhEkvT/e1QSiNNR8AtHibDwK6ygjBJTwyvp4
+         wSJgwEseC4FLHmvIYA5efrU71HJRMYAJ+/aQkvlmHQeXF2X/p0VJDpAcK5BcJB/+8y/R
+         I8GZFQlhecbflpDVIZ4F7AErj7CroccDDWxhQVxxWCHrT7lC/BDm1KXrp4GbdRZpbYV+
+         3P3NNSsgwJ2NGiP9rIYHkTJuYiKkApvvtRKGt6FoENs8Zcaj4E0twgxXqCLlASy/r6hF
+         djWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fy0LCVYfm45Yj1SMlTDHcT8rLY7rLsCrngabnvAls3c=;
-        b=Z2Tl9ZUELayX5G/rV/IiFQz2qlpdlj91hH4mhcyT3zYAJ30ynUzyKif7qRW+/TubRt
-         RXOx0MZ2VlvgJujReE1sEUTgXeoSHQCM4YX4U5cN4Jm1HtmCiZtTwJU64UKAB46XHoBw
-         aSLvQlF1LwLeOjkdBJM+zJNTfkaRgWRrANYGRHmOnhIjmlx+j8TzHMGS1j4WYf5DmycZ
-         riREA/+hJqs0DKHGvd4o/aV/tpw0iL1fyNGbKS5LxFIDj/JIBMiUzQw+dodn9ErTmLlx
-         E+T4sjM06kOnKiJxXMk5phN76ztRLN0K6Qc7TwDTEfSyZ0kHZE+tTGR7AzCs6VvpIGeu
-         tOJw==
-X-Gm-Message-State: APjAAAVOD65XE8dZ26xC8Yu7P5tZmJ7IWiEdZQCbEhk9o/TID67svVAk
-        KaQNAFtqidV1qIiDMw1ZLZW3UGwXuUI0kQMnfPQ=
-X-Google-Smtp-Source: APXvYqyDLz6miWRvS0QybUMSgD70iGHqzh15onQ9joAuuH+LBPBcIFQNrfVFPF6ri7qTSNhowcHwwvdrBI6qQC4HORI=
-X-Received: by 2002:aed:3b3b:: with SMTP id p56mr920975qte.234.1580960266457;
- Wed, 05 Feb 2020 19:37:46 -0800 (PST)
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=D6Y9HdoriA0o8rqnyJU7KKT2aOOU0xj/IRORVJiMPtI=;
+        b=p2By6aLGOZOO+rS6WYJ1S6adXvOz8TU/JP9UHVItfCj5Q/v84pMGEGXIrkZ9OYFFRm
+         mJn4J18lw+7/oEeDpgOV81JwDPGluE+fcLsmP86t8wKwNUbKOaRWpkGU/wuuUJdR/vdM
+         JFuwkwi8tYwABvjZYNCloAmx/wCEZfVLBDRhmuILmLeAyU7d9jrLgdOklJCdUh0naw3d
+         Aax88qBWlZ/2EANGQYCPdyRiGq3fxlwbpglRMekedqmudfbtvwPSc0S+QJgRZeflJEx3
+         IAYQdpXVvRKxjD0eH0pZ6x4YU92GQxH1UG+b2bkMu5mvI4nbAA8ioPUCuud9xXJR6daU
+         e8XA==
+X-Gm-Message-State: APjAAAWwL++Za8Irxz8eqf4imgmNTQPr9bRJHvH2u4MCiOhcS1vjk0ZJ
+        ZNHhXr/bTNuq1BgRxgmv5hQ=
+X-Google-Smtp-Source: APXvYqw6WY4ASEZeRLh5Zs+NH+rDkbJuuQQrgBnR9WluSw/9FPt+ettTxAVTCLruz2roW8ZfsPuIRQ==
+X-Received: by 2002:a2e:8197:: with SMTP id e23mr950207ljg.250.1580969665476;
+        Wed, 05 Feb 2020 22:14:25 -0800 (PST)
+Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
+        by smtp.gmail.com with ESMTPSA id n11sm741245ljg.15.2020.02.05.22.14.23
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 05 Feb 2020 22:14:24 -0800 (PST)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>
+Subject: Re: [PATCH v5 1/1] usb: gadget: add raw-gadget interface
+In-Reply-To: <20200205211812.GD1399643@kroah.com>
+References: <cover.1579007786.git.andreyknvl@google.com> <461a787e63a9a01d83edc563575b8585bc138e8d.1579007786.git.andreyknvl@google.com> <87ftfv7nf0.fsf@kernel.org> <CAAeHK+wwmis4z9ifPAnkM36AnfG2oESSLAkKvDkuAa0QUM2wRg@mail.gmail.com> <87a7637ise.fsf@kernel.org> <CAAeHK+zNuqwmHG4NJwZNtQHizdaOpriHxoQffZHMffeke_hsGQ@mail.gmail.com> <87tv4556ke.fsf@kernel.org> <20200205211812.GD1399643@kroah.com>
+Date:   Thu, 06 Feb 2020 08:14:03 +0200
+Message-ID: <87r1z85jkk.fsf@kernel.org>
 MIME-Version: 1.0
-References: <CACPK8XdFUWoEr6YvVHf-g28hREFOWMX0g5=Vsdxq9Asq=ftOVQ@mail.gmail.com>
- <26635edf-2df3-df0f-5644-e016e1e20248@linux.intel.com>
-In-Reply-To: <26635edf-2df3-df0f-5644-e016e1e20248@linux.intel.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Thu, 6 Feb 2020 03:37:34 +0000
-Message-ID: <CACPK8XfsuyVXiLtra7mBNWTDucArPAZfOUqt96squmtBnqsGvg@mail.gmail.com>
-Subject: Re: TI PCIe xHCI and kexec
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 5 Feb 2020 at 09:35, Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
+
+Hi,
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+> On Wed, Feb 05, 2020 at 06:42:41PM +0200, Felipe Balbi wrote:
+>> > Overall, supporting O_NONBLOCK might be a useful feature for people
+>> > who are doing something else other than fuzzing, We can account for
+>> > potential future extensions that'll support it, so detecting
+>> > O_NONBLOCK and returning an error for now makes sense.
+>> >
+>> > WDYT?
+>>=20
+>> If that's the way you want to go, that's okay. But let's, then, prepare
+>> the code for extension later on. For example, let's add an IOCTL which
+>> returns the "version" of the ABI. Based on that, userspace can detect
+>> features and so on.
 >
-> On 5.2.2020 2.55, Joel Stanley wrote:
-> > I'm supporting a system that uses Linux-as-a-bootloader to load a
-> > distro kernel via kexec, The systems have a TI TUSB73x0 PCIe
-> > controller which goes out to lunch after a kexec. This is the distro
-> > (post-kexec) kernel:
-> >
-> > [    0.235411] pci 0003:01:00.0: xHCI HW did not halt within 16000
-> > usec status = 0x0
-> > [    1.037298] xhci_hcd 0003:01:00.0: xHCI Host Controller
-> > [    1.037367] xhci_hcd 0003:01:00.0: new USB bus registered, assigned
-> > bus number 1
-> > [    1.053481] xhci_hcd 0003:01:00.0: Host halt failed, -110
-> > [    1.053523] xhci_hcd 0003:01:00.0: can't setup: -110
-> > [    1.053565] xhci_hcd 0003:01:00.0: USB bus 1 deregistered
-> > [    1.053629] xhci_hcd 0003:01:00.0: init 0003:01:00.0 fail, -110
-> > [    1.053703] xhci_hcd: probe of 0003:01:00.0 failed with error -110
-> >
-> > There were some fixes made a few years back to improve the situation,
-> > but we've still had to carry some form of the patch below in the
-> > bootloader kernel. I would like to rework it so it can be merged.
-> >
-> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> > index dbac0fa9748d..eaa94456dd9d 100644
-> > --- a/drivers/usb/host/xhci.c
-> > +++ b/drivers/usb/host/xhci.c
-> > @@ -789,6 +789,9 @@ void xhci_shutdown(struct usb_hcd *hcd)
-> >       xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-> >               "xhci_shutdown completed - status = %x",
-> >               readl(&xhci->op_regs->status));
-> > +
-> > +    /* TI XHCI controllers do not come back after kexec without this hack */
-> > +    pci_reset_function_locked(to_pci_dev(hcd->self.sysdev));
-> >   }
-> >   EXPORT_SYMBOL_GPL(xhci_shutdown);
-> >
-> > I would like some advice on how to implement it in a way that is
-> > acceptable. Would a quirk on the pci id in xhci_shutdown be ok?
+> Ick, no, no version mess.  If you have a new api, just add a new ioctl
+> and away you go, userspace can easily test for that.  Don't go down the
+> path of trying to version your api, that way never works.
 >
-> Yes, but as this is a pci specific workaround the quirk should go to
-> xhci-pci.c: xhci_pci_shutdown(), which was added in v5.5
->
-> Is the rootcause known?
-> Is the only possible solution to reset the pci function?.
+> Trust me, been there, got the t-shirt, lived to regret it.
 
-I don't know the root cause. The people that helped debug it in the
-first place have moved on.
+fair enough. Here I was, thinking I was going to rock a new t-shirt
+soon.
 
-> Have you tried, or seen this issue on any other controller than this TUSB73x0?
+cheers
 
-We don't have any systems with a different USB controller.
+=2D-=20
+balbi
 
-In general, the other PCie devices in the system are well (enough)
-behaved to survive kexec. We don't have any other out of tree
-workarounds.
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
->
-> >
-> > 0003:01:00.0 USB controller: Texas Instruments TUSB73x0 SuperSpeed USB
-> > 3.0 xHCI Host Controller (rev 02)
-> >
-> > The full debug log of the distro kernel booting is below.
-> >
-> > [    1.037833] xhci_hcd 0003:01:00.0: USBCMD 0x0:
-> > [    1.037835] xhci_hcd 0003:01:00.0:   HC is being stopped
-> > [    1.037837] xhci_hcd 0003:01:00.0:   HC has finished hard reset
-> > [    1.037839] xhci_hcd 0003:01:00.0:   Event Interrupts disabled
-> > [    1.037841] xhci_hcd 0003:01:00.0:   Host System Error Interrupts disabled
-> > [    1.037843] xhci_hcd 0003:01:00.0:   HC has finished light reset
-> > [    1.037846] xhci_hcd 0003:01:00.0: USBSTS 0x0:
-> > [    1.037847] xhci_hcd 0003:01:00.0:   Event ring is empty
-> > [    1.037849] xhci_hcd 0003:01:00.0:   No Host System Error
-> > [    1.037851] xhci_hcd 0003:01:00.0:   HC is running
->
-> Hmm, all bits in both USBCMD and USBSTS are 0. This is a bit suspicious.
-> Normally at least USBCMD Run/Stop bit, and USBSTS HCHalted bit have
-> opposite values.
+-----BEGIN PGP SIGNATURE-----
 
-Does this suggest the controller is not responding at all?
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl47rq0ACgkQzL64meEa
+mQbE9BAAm+lqFVf54KzTHS5MGpxLYUDrqLhJsEP2ffe3y8srzNLYUegMsO9PBkEO
+J34xYUi2EHA+TnLZY/HfdNLtedpGuBPh81S8Vt3/4VA8BtOc9U8js1wemDG+rrHW
+7cRnUlKTAWDhgESvptAbtEOgkwTtlhPDWPhnNoaQfPCZAb00IS7jv8kwldaAwrFR
+zbEyf4gL+fd/iZGVgHJPyXFXET0lUlF6eronlok+V0/9VXoWUMHmG78WWps3SlTx
+dVJ3RKiwDBqLyWrP4poXhlJoaq0yZr/cRRAexklj9P33gL6GjrpJ/cJN2GIiwv3X
+cW/Q2AKI26Wf3kp4mAzRFkTjyPuLwJ0QShYV4CJ7i55Ec89ZS7AnRUfZw8pp7Doa
+YR3AZU5sH4F4bCpOvPcjk+ttXcnG9xHCWGTyLXzikXGRK9EeUB5G1IxS329+mSDK
+BlidzWXsIugzAzXik4yb5I57E0EypSHSJ/swI7mpmT7TP/OYjPCocUCbPRv9WR/j
+aS7tRBCB0jhgwIrVl3q+nUEhy83W5cC7HFW9NHp9VGZfmkR61G8MWb9VvFlRiSou
+O2Sqj4tUASzInargF/MZcsWtdx9YrJPu1z1eckxEziiS6esHIKP9DH1bRF7qqz8R
+JpDXJ9Rl5LuWQUmYX/t5pN21qknoKk55GFJ2+v62GHEIt30aOR4=
+=JotK
+-----END PGP SIGNATURE-----
+--=-=-=--
