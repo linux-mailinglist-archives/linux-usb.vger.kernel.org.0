@@ -2,71 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D5C156000
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2020 21:44:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 097A815608F
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2020 22:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727138AbgBGUoL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Feb 2020 15:44:11 -0500
-Received: from mail-yb1-f195.google.com ([209.85.219.195]:37450 "EHLO
-        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727005AbgBGUoK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Feb 2020 15:44:10 -0500
-Received: by mail-yb1-f195.google.com with SMTP id k69so361125ybk.4
-        for <linux-usb@vger.kernel.org>; Fri, 07 Feb 2020 12:44:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=8cDRXBFOpE9J1p6S5H+HXSQg9q3m7pUJ3iUuQ5MPcDc=;
-        b=WJgFJ9PR0yBQ+ciD08Pby60OVZzn3dTgtieZ17slfRQssKmPnwQmAwZPgDIpR6heck
-         dDY9m0nAiR73dL1CtCDLlqWI9lV6barO9i6phYUUcmMyI9lhyUunotwwGjtLNjZZXHps
-         B+ZJy7kS8IDHqb+LatDXLkBcGkPTiMku+kX9Fb92ZmFsnK1n3liOHkc4TmrSz2VBzqpm
-         gOXxQUuwBna/l8aq9nu864h1RGE/T5vMQdJwoV4IagKfmqrsTX7n4WpDLnLJobosvK0X
-         9Z7fBUirFx02ZREq+PBFhuGxFcksAi/eOnsjoHpvtfcuXe3k+tw0qtyYWnKvHtkX+Drl
-         CMWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=8cDRXBFOpE9J1p6S5H+HXSQg9q3m7pUJ3iUuQ5MPcDc=;
-        b=hGBPY9q0QBA03W2FnXEqWOPc7O6ihVOfL0R1zZ1G0AfSX0g5ILCeA+5jyuM6zUkyUl
-         SnKhSSVG1VpRGaaSmtZ9Op/+S7O/NlSe3Nd78TIGMmUreo3S3kCEeCppa3I5gqBZhdCG
-         OHJawwJ9ppQw/E4/TQB6/ZSAUb3E4vq8mk5kI+XUG959/LiJJ+etxplVAM3pExQdVsQl
-         LFuVGrxAo4989PyfdKy/nct6ZKxijFdt0CUYKRESwCpTM8MnYOTrCAV3wzBHUrDuTKVz
-         F8tfkRVwMEchGRCEIWofjRdRz/A8mVYKJQ4cUWS0sHh+tD4Yg5BhioMQt/AXh0uIzjf9
-         LkKQ==
-X-Gm-Message-State: APjAAAXnY8mlIdjNO/fuOY7cuHoZG046T6MjWWOByLPQERu31x32ygVH
-        nnwSKyCL4HnHW+Hjj6Mdv/PmVDKoMuotmEhvdz91wcy9aixurg==
-X-Google-Smtp-Source: APXvYqxZ0BHxezvYatUCwR5ujJY2IO6fZCUlpHww8WEnDHAAAY+0VvtiMdEe6JnWZWwDRH8AP8uVvx3q0Y+IviYPdhQ=
-X-Received: by 2002:a9d:7305:: with SMTP id e5mr948882otk.64.1581108248790;
- Fri, 07 Feb 2020 12:44:08 -0800 (PST)
+        id S1727076AbgBGVMv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Feb 2020 16:12:51 -0500
+Received: from cable.insite.cz ([84.242.75.189]:56877 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726947AbgBGVMv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 Feb 2020 16:12:51 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id D29A2A1A40B05;
+        Fri,  7 Feb 2020 22:12:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1581109966; bh=vjLjZRimaLLdXirEYigexl5ECe4JAQKBxtDHAHr0fkA=;
+        h=From:Subject:To:Date:From;
+        b=EM3+GpOBcRrrMKJJbXiJt8IVWUvAiBlP8bptXOGVKEfmcpVYbgThkCAKNDryo3QFx
+         prx5MEXezvSbsrjqiqIeEGmhJDVFfWwEUMrbkBqHdKrPBBn6oTkrQ8xKiHZuRtwnTd
+         zMw6zQ7RD9KKz0RNHiiH08yGyNIUFOlnfyZp/xhw=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 4OWGe8gPi5rn; Fri,  7 Feb 2020 22:12:41 +0100 (CET)
+Received: from [192.168.105.151] (ip28.insite.cz [81.0.237.28])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 656E4A1A40B08;
+        Fri,  7 Feb 2020 22:12:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1581109961; bh=vjLjZRimaLLdXirEYigexl5ECe4JAQKBxtDHAHr0fkA=;
+        h=From:Subject:To:Date:From;
+        b=ZV4WN0uTlKZ3FOmRERUXyVtK5rWH45ea/8XfajTHqwoM5MFOWHQaQ5+5cXbTunXgn
+         K4+pfL3kHfdoTSeOI2OqbXYHpY0U5RXAY1e7tG3sWR77oRuzRnJUNuAX3tF8jpZ7Tx
+         Byf5kL4eVaEid9g+bRVAGfT5mg0BuKCdpqh+IQsk=
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+Subject: [PATCH] ARM: dts: bcm283x: increase dwc2's RX FIFO size
+To:     Minas Harutyunyan <hminas@synopsys.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org
+Message-ID: <22beb919-a3c6-33c0-8d3f-070061a6c853@ivitera.com>
+Date:   Fri, 7 Feb 2020 22:12:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Received: by 2002:a4a:d508:0:0:0:0:0 with HTTP; Fri, 7 Feb 2020 12:44:08 -0800 (PST)
-Reply-To: auch197722@gmail.com
-From:   "Mr. Theophilus Odadudu" <cristinamedina0010@gmail.com>
-Date:   Fri, 7 Feb 2020 15:44:08 -0500
-Message-ID: <CAPNvSTj-8q7w5QPmnH26+_3xCKjEWyE+9xcb8QyQs9Xie+iYgg@mail.gmail.com>
-Subject: LETTER OF INQUIRY
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-2
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Good Day,
+The previous version of the dwc2 overlay set the RX FIFO size to
+256 4-byte words. This is not enough for 1024 bytes of the largest
+isochronous high speed packet allowed, because it doesn't take into
+account extra space needed by dwc2.
 
-I work as a clerk in a Bank here in Nigeria, I have a very
-confidential Business Proposition for you. There is a said amount of
-money floating in the bank unclaimed, belonging to the bank Foreign
-customer who die with his family in the Ethiopian Airline crash of
-March 11, 2019.
+Below is a detailed calculation which arises from dwc2 documentation:
 
-I seek your good collaboration to move the fund for our benefit. we
-have agreed that 40% be yours once you help claim.
+* RAM for SETUP Packets: 4 * n + 6 locations in Scatter/Gather DMA mode
+and 5 * n+8 locations in Slave and Buffer DMA mode must be reserved in
+the RxFIFO to receive up to n SETUP packets on control endpoints, where n
+is the number of control endpoints the device controller supports.
 
-Do get back to with 1) Your Full Name: (2) Residential Address: (3)
-Phone, Mobile  (4) Scan Copy of Your ID. to apply for claims of the
-funds.
+bcm283x: 5*n+8. The Broadcom core has 1 control EP (n=1), so 13 locations
 
-Regards
-Theophilus Odadudu
+* One location for Global OUT NAK
+
+bcm283x: 1 location
+
+* Status information is written to the FIFO along with each received
+packet. Therefore, a minimum space of (Largest Packet Size / 4) + 1 must
+be allotted to receive packets. If a high-bandwidth endpoint is enabled,
+or multiple isochronous endpoints are enabled, then at least two (Largest
+Packet Size / 4) + 1 spaces must be allotted to receive back-to-back
+packets. Typically, two (Largest Packet Size / 4) + 1 spaces are
+recommended so that when the previous packet is being transferred to AHB,
+the USB can receive the subsequent packet. If AHB latency is high, you
+must allocate enough space to receive multiple packets. This is critical
+to prevent dropping of any isochronous packets.
+
+bcm283x: (1024/4) +1 = 257 locations. For MC >1: 2 * 257 = 514 locations
+
+* Along with last packet of each endpoint, transfer complete status
+information is also pushed in to the FIFO.
+
+bcm283x: The core should have 5 IN and 5 OUT EP's.
+1 location for each EP - 10 locations.
+
+It's for the case when all EPs are simultaneously completing transfers.
+
+* An additional location for EPDisable status for each endpoint is
+also required.
+
+bcm283x: 1 location for each EP - 10 EP's - 10 locations
+It's for case if EP simultaneously disabled.
+
+* Typically, two locations for each OUT endpoint is recommended.
+
+bcm283x: 5*2 = 10 locations
+
+Total: 13 + 1 + 257 + 10 +10 + 10 = 301 locations
+
+Safer is 301 + 257 (for MC>1) = 558 locations.
+
+Signed-off-by: Phil Elwell <phil@raspberrypi.com>
+Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+---
+ arch/arm/boot/dts/bcm283x-rpi-usb-otg.dtsi        | 2 +-
+ arch/arm/boot/dts/bcm283x-rpi-usb-peripheral.dtsi | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/bcm283x-rpi-usb-otg.dtsi
+b/arch/arm/boot/dts/bcm283x-rpi-usb-otg.dtsi
+index e2fd961..20322de 100644
+--- a/arch/arm/boot/dts/bcm283x-rpi-usb-otg.dtsi
++++ b/arch/arm/boot/dts/bcm283x-rpi-usb-otg.dtsi
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ &usb {
+ 	dr_mode = "otg";
+-	g-rx-fifo-size = <256>;
++	g-rx-fifo-size = <558>;
+ 	g-np-tx-fifo-size = <32>;
+ 	/*
+ 	 * According to dwc2 the sum of all device EP
+diff --git a/arch/arm/boot/dts/bcm283x-rpi-usb-peripheral.dtsi
+b/arch/arm/boot/dts/bcm283x-rpi-usb-peripheral.dtsi
+index 0ff0e9e..1409d1b 100644
+--- a/arch/arm/boot/dts/bcm283x-rpi-usb-peripheral.dtsi
++++ b/arch/arm/boot/dts/bcm283x-rpi-usb-peripheral.dtsi
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ &usb {
+ 	dr_mode = "peripheral";
+-	g-rx-fifo-size = <256>;
++	g-rx-fifo-size = <558>;
+ 	g-np-tx-fifo-size = <32>;
+ 	g-tx-fifo-size = <256 256 512 512 512 768 768>;
+ };
+-- 
+1.9.1
+
+
