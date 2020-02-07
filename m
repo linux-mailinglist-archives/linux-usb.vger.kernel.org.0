@@ -2,51 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB021555D7
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2020 11:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCB215560B
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2020 11:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727113AbgBGKgY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Feb 2020 05:36:24 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:44978 "EHLO
+        id S1726935AbgBGKun (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Feb 2020 05:50:43 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:38211 "EHLO
         mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726819AbgBGKgY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Feb 2020 05:36:24 -0500
-Received: by mail-wr1-f66.google.com with SMTP id m16so1997881wrx.11
-        for <linux-usb@vger.kernel.org>; Fri, 07 Feb 2020 02:36:22 -0800 (PST)
+        with ESMTP id S1726819AbgBGKum (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Feb 2020 05:50:42 -0500
+Received: by mail-wr1-f66.google.com with SMTP id y17so2096276wrh.5
+        for <linux-usb@vger.kernel.org>; Fri, 07 Feb 2020 02:50:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
+        h=subject:from:to:cc:references:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=sn5h5DpGbd8+ZmTL8RoxDdNLMcTt2Q/GmoXxRFRhYZ4=;
-        b=xxefUEoJ55N2q6kJa5HQBj15P61j2yMGG17XMWMMEmgTH1f/4klD4aNsN1sBXI82lF
-         qDuqPNIC2EzNseh100O8cRxpiXhcmJDpDh+JAYjhH8Zswb4vSgNj40x5gw67rOGpB4Zk
-         jCDZ/e/9dBvCkOI87A4DSSRSOHpktR+qIZNKmvegzplgJDrp1XhX+uFIZ9Qobt0uxjJp
-         SlhBztEWSyDgCekgExzQkrYdXaL/OQ76oZZmThPqacnX8p9P/adh0somG3Rpi4J5uho5
-         ZPdcvd2Hxo3+KRtpRAkoKOVQHCavj2iCjNQ7iiScADUDAz+MW+dv/cr9UzvRuHQNxSOo
-         tTYA==
+        bh=s3siQdVwUR2AQJspUWLBveOF5d5gEtnXKp3bye6ABQ0=;
+        b=NMvwM94IBWfiDjGgUZiNve+xmIFm23S+iTOyrmyZM9GuK6WJKYkzqVTZJ7+iQZ2X7D
+         OGtNV09th4X3ZMgbmqTATg10cOtTsMEWpetXpUYb7Un0PDB2tNTuqDQnScsZa7s0r1B3
+         QQTfMIJmn/RizMM77L/r2T/NYEzO9Je5nsOy/gHqmYoNQ0lzYKJKD1iIeDlvZ4IQIm2t
+         wP76v1J7+wMS9t9Y1SWnJdb/cABuV21q+UBcwjCWKzoNwTDsGLoJwKQPV6wbK+w7CYKK
+         FLW7l9Cuu8NWv613/cmq0CdBqzxphpbfMUICsxEnY9aOiYhCNA6MSewcADdE8FlnfxXz
+         nrZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=sn5h5DpGbd8+ZmTL8RoxDdNLMcTt2Q/GmoXxRFRhYZ4=;
-        b=b03Ol2pazg1VhsHoc8hGHAtZsGI1bIoBq08Sn+VLjLJ/IT7Jyzan0rH/hp/vcWQCVw
-         p2Krh99h8k/zOa6i7ubtD3LK4R/eXs0fT19jLjYWdkrjcASVefEGRBxeCn7evMIitDrz
-         RcT3P5O9/KlNMn6LWkBjOt/O5mIiwCSJZ7MP3SqYr3+lJedf7fWENcjYriypQRsC2yiC
-         i56eAOWOgj3L/byORSMlQ2T3MhOctAuOxl0VKEvXQgYPvFCsF7RTvXMOlsG7v/YEEpG7
-         17doRUkZn9PKVgu1v/vpHxWo76ju8ENXlsgu5WK0j75chPk0jr3KeTVEHAYLQ0LOqV8n
-         deGg==
-X-Gm-Message-State: APjAAAVMxl/2LVQmbEAJiZUKKvOnExqo2VjPxhPmBphuTOpzrkOHGaz1
-        Td6R7NKlUzaK9AydfZ8CB0obCg==
-X-Google-Smtp-Source: APXvYqwX0rfF4tDD9dKkruRXKTI/i+SuzeYV0gAc0ED0XkpRqN+W0PcRXINPtXXany8omDCEQEDm4Q==
-X-Received: by 2002:a05:6000:50:: with SMTP id k16mr3835414wrx.145.1581071781853;
-        Fri, 07 Feb 2020 02:36:21 -0800 (PST)
+        bh=s3siQdVwUR2AQJspUWLBveOF5d5gEtnXKp3bye6ABQ0=;
+        b=iKTpBi5Qhn7zT+4rWZdCSvv4UOWw6LEhn5VFOflDbZawALhNePr8ZbnbvAgpFCuG5K
+         Hlv6MN+VTnzgoKVSnZyX3F7yucibUiS1CnqrWBuqLJK/MOLsPx8WCRigi9E609WFrrAM
+         NEHMyeIYMV6eK+M16M2KKWbLfiOVGmmxrtEL7Ohb7pzVuQQHVrrQAH7I0IHZBnp4u8ex
+         rVCuy/njDcgaZZo2PczlUiv0idNSaoaXf3gc68Tjpahj3Fwx7lOo9DRg12PyawLpTrtH
+         wyfrem0sMOjUSLlMR4pWJ/XHVbjjyBOFQXrLvYcmmMbULGw4epOuSpZnWquj2BZZHv6a
+         UGwA==
+X-Gm-Message-State: APjAAAX4W4HwyjyzpC2YJ5CUB8ji5m4gAmjSOMW5244cX7Wj4GRutJDH
+        dvz08lvtFDz8s/dVur1zuLm+ow==
+X-Google-Smtp-Source: APXvYqz2kV1/VNj2vtLrqOvcxHp2oruPVYMQmZgXomeA4NxtqVu+akd5vZjo2btRinJtOKthW1IARg==
+X-Received: by 2002:adf:ee01:: with SMTP id y1mr4305931wrn.152.1581072640457;
+        Fri, 07 Feb 2020 02:50:40 -0800 (PST)
 Received: from [192.168.0.38] ([176.61.57.127])
-        by smtp.gmail.com with ESMTPSA id i3sm3109938wrc.6.2020.02.07.02.36.20
+        by smtp.gmail.com with ESMTPSA id y185sm3050539wmg.2.2020.02.07.02.50.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Feb 2020 02:36:21 -0800 (PST)
+        Fri, 07 Feb 2020 02:50:39 -0800 (PST)
 Subject: Re: [PATCH v4 09/18] usb: dwc3: qcom: Override VBUS when using
  gpio_usb_connector
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     Jack Pham <jackp@codeaurora.org>
 Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         gregkh@linuxfoundation.org, balbi@kernel.org,
@@ -58,13 +59,13 @@ Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
 References: <20200207015907.242991-1-bryan.odonoghue@linaro.org>
  <20200207015907.242991-10-bryan.odonoghue@linaro.org>
  <20200207080729.GA30341@jackp-linux.qualcomm.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Message-ID: <2bd67925-14cf-5851-14a2-c51a065fac6c@linaro.org>
-Date:   Fri, 7 Feb 2020 10:36:26 +0000
+ <2bd67925-14cf-5851-14a2-c51a065fac6c@linaro.org>
+Message-ID: <453bfea7-4085-1a24-84ad-30c7671665e7@linaro.org>
+Date:   Fri, 7 Feb 2020 10:50:45 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.2
 MIME-Version: 1.0
-In-Reply-To: <20200207080729.GA30341@jackp-linux.qualcomm.com>
+In-Reply-To: <2bd67925-14cf-5851-14a2-c51a065fac6c@linaro.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -73,84 +74,31 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 07/02/2020 08:07, Jack Pham wrote:
-> Hi Bryan,
+On 07/02/2020 10:36, Bryan O'Donoghue wrote:
+> On 07/02/2020 08:07, Jack Pham wrote:
+>> Could the usb_role_switch class somehow be enhanced to support chaining
+>> multiple "consumers" to support this case? Such that when the gpio-b
+>> driver calls set_role() it could get handled both by drd.c and
+>> dwc3-qcom.c?
 > 
-> On Fri, Feb 07, 2020 at 01:58:58AM +0000, Bryan O'Donoghue wrote:
->> Using the gpio_usb_connector driver also means that we are not supplying
->> VBUS via the SoC but by an external PMIC directly.
->>
->> This patch searches for a gpio_usb_connector as a child node of the core
->> DWC3 block and if found switches on the VBUS over-ride, leaving it up to
->> the role-switching code in gpio-usb-connector to switch off and on VBUS.
->   
-> <snip>
+> It is probably necessary eventually, but, per my reading of the 
+> documents and working with the hardware, I couldn't justify the 
+> additional work.
 > 
->>   static int dwc3_qcom_probe(struct platform_device *pdev)
->>   {
->>   	struct device_node	*np = pdev->dev.of_node;
->> @@ -557,7 +572,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->>   	struct dwc3_qcom	*qcom;
->>   	struct resource		*res, *parent_res = NULL;
->>   	int			ret, i;
->> -	bool			ignore_pipe_clk;
->> +	bool			ignore_pipe_clk, gpio_usb_conn;
->>   
->>   	qcom = devm_kzalloc(&pdev->dev, sizeof(*qcom), GFP_KERNEL);
->>   	if (!qcom)
->> @@ -649,9 +664,10 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->>   	}
->>   
->>   	qcom->mode = usb_get_dr_mode(&qcom->dwc3->dev);
->> +	gpio_usb_conn = dwc3_qcom_find_gpio_usb_connector(qcom->dwc3);
->>   
->> -	/* enable vbus override for device mode */
->> -	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
->> +	/* enable vbus override for device mode or GPIO USB connector mode */
->> +	if (qcom->mode == USB_DR_MODE_PERIPHERAL || gpio_usb_conn)
->>   		dwc3_qcom_vbus_overrride_enable(qcom, true);
+> However if you think this patchset needs the toggle, I can look into 
+> getting the indicator to toggle here too.
 > 
-> This doesn't seem right. It looks like you are doing the vbus_override
-> only once on probe() and keeping it that way regardless of the dynamic
-> state of the connector, i.e. even after VBUS is physically removed
-> and/or ID pin is low.
+> We'd need to add some sort of linked list of notifiers to the role 
+> switching logic and toggle them in order.
 > 
+> Similar to what is done in extcon now for the various notifer hooks.
 
-Hmm, I don't see anything much in the documentation that flags why we 
-want or need to toggle this.
+Maybe I'm wrong...
 
->>   	/* register extcon to override sw_vbus on Vbus change later */
-> 
-> As suggested by this comment, if you look at the extcon handling, it
-> intercepts the VBUS state toggling in dwc3_qcom_vbus_notifier() and
-> calls vbus_override() accordingly. That way it should only be true when
-> the role==USB_ROLE_DEVICE and disabled otherwise (USB_ROLE_HOST/NONE).
-> 
-> To me the gpio-b connector + usb-role-switch is attempting to be an
-> alternative to extcon. But to correctly mimic the vbus_override()
-> behavior I think we need a way to intercept when the connector child
-> driver calls usb_role_switch_set_role() to the dwc3 device, but somehow
-> be able to do it from up here in the parent/glue layer. Unfortunately I
-> don't have a good idea of how to do that, short of shoehorning an
-> "upcall" notification from drd.c to the glue, something I don't think
-> Felipe would be a fan of.
-> 
-> Could the usb_role_switch class somehow be enhanced to support chaining
-> multiple "consumers" to support this case? Such that when the gpio-b
-> driver calls set_role() it could get handled both by drd.c and
-> dwc3-qcom.c?
-
-It is probably necessary eventually, but, per my reading of the 
-documents and working with the hardware, I couldn't justify the 
-additional work.
-
-However if you think this patchset needs the toggle, I can look into 
-getting the indicator to toggle here too.
-
-We'd need to add some sort of linked list of notifiers to the role 
-switching logic and toggle them in order.
-
-Similar to what is done in extcon now for the various notifer hooks.
+Looking a bit closer at the role-switch code it might be possible to 
+register multiple devices _as-is_ so long as you have a pointer to the 
+relevant parent...
 
 ---
 bod
+
