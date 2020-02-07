@@ -2,112 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA1E155049
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2020 03:01:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 748621551B9
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2020 06:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727836AbgBGB76 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Feb 2020 20:59:58 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:39326 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727646AbgBGB70 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Feb 2020 20:59:26 -0500
-Received: by mail-wr1-f67.google.com with SMTP id y11so775411wrt.6
-        for <linux-usb@vger.kernel.org>; Thu, 06 Feb 2020 17:59:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9jS7AtcyDtrs+6cLov2M3M67k09AnqIN5nOTMIVW4oM=;
-        b=cECIe0oEpjgrfZenchpr/nmBzPOn+eYNXiy0l7qbN3n2TMZX/vu69dPpi1iE7W9gBW
-         qAzVBODZkrShoafoIjj1HbBcMyTaTcdIu0ZDWB+XY/KCB8lVJHccnYG0QLuPtht8yHYd
-         ZhGe3shE/0GSXLRy5gytZT1lHXE97fYCIZZpRwISsWiwbXScsbfPD6azBBTWqupi2/L+
-         jqQGqfhrB2nmZhtEIQU3m7ki5NGQCIPBiVYLoSjp/01jbeK6/BHXLzqpRmqWJ3Mh0AWI
-         b7yo2yH4lI9OxAqRxDhJAe55PculLwXvvkq0XrTIOHhFV+ach+PwMfHHSbgauJOZgNvN
-         D05Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9jS7AtcyDtrs+6cLov2M3M67k09AnqIN5nOTMIVW4oM=;
-        b=nEHluxrEFyz0rsHzMWZzPdiF4RACLBwuUn1TPOVSNizxxAu7T/QjMJvPbLAWIt6n8j
-         0bgRbBLnmWrbaH73OsY8CKE/9rv3e0D+BvebvP0XQZ2G/yamouTo+OsB/1188i4+QhpM
-         uobvT09rEln+qmXnRU2AuMP4dq10B+qSEW3kAveaqYecg9p0isQMM/fUsMb1c27c4/jY
-         3pemj6BJ0dzMATTULs5+cAs50ujdZ6FqL8mJOk7E4qbkzVLhkhMKcVs2ffhSbgEUw/tm
-         FkWH766oglqadwhlG+yI0w7mlQTEyLa9JhffUG9+c24Z8lBxLSuZK2CKg4Cwdad+d6Fu
-         Yn1Q==
-X-Gm-Message-State: APjAAAWqC7bGub6O+Mt+gpRRu8S22G7uHVTIBDb4QBZqks9jXTIAXvrK
-        QdF+Mlt8sYzZ2CmrnUvYXwEvmQ==
-X-Google-Smtp-Source: APXvYqzldi+Z4ZyAjpU8OhOMfMELRM+JGwgNdPz+pcqWOZDtCNlrHg6vraP4JfE8C9T7fsIyN0UKIw==
-X-Received: by 2002:a5d:4a84:: with SMTP id o4mr1219921wrq.396.1581040764626;
-        Thu, 06 Feb 2020 17:59:24 -0800 (PST)
-Received: from localhost.localdomain ([176.61.57.127])
-        by smtp.gmail.com with ESMTPSA id a62sm1490095wmh.33.2020.02.06.17.59.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Feb 2020 17:59:24 -0800 (PST)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org, jackp@codeaurora.org, balbi@kernel.org,
-        bjorn.andersson@linaro.org
-Cc:     linux-kernel@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org
-Subject: [PATCH v4 14/18] arm64: dts: qcom: qcs404-evb: Define USB ID pin
-Date:   Fri,  7 Feb 2020 01:59:03 +0000
-Message-Id: <20200207015907.242991-15-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200207015907.242991-1-bryan.odonoghue@linaro.org>
-References: <20200207015907.242991-1-bryan.odonoghue@linaro.org>
+        id S1726400AbgBGFNZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Feb 2020 00:13:25 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:36328 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725872AbgBGFNZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Feb 2020 00:13:25 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0175DIIl001896;
+        Thu, 6 Feb 2020 23:13:18 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1581052398;
+        bh=nFqSw1uJXXeCdB7orYGvSAdf7N0xCIPP5G/vQ8n0EOA=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=UXwU7DzGs8N1iwQ0Wlxr5VBqcKxTnuonLE9550joWb2DuQcl+6bBCajGayLXi/mOH
+         5JVHqgY5JH92C0egdyo9E1NcpjlM7OPO2+pGs0JLh/H5SDXYr5Fb91U8GNJuOzvMdv
+         vpXcC8OAhcaEu+rtb27HeE1YLj7tVZPDUxfevmK8=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0175DIgu039530
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 6 Feb 2020 23:13:18 -0600
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 6 Feb
+ 2020 23:13:17 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 6 Feb 2020 23:13:16 -0600
+Received: from [10.24.69.159] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0175DE2H023823;
+        Thu, 6 Feb 2020 23:13:15 -0600
+Subject: Re: [PATCH] phy: core: Add consumer device link support
+To:     youling257 <youling257@gmail.com>, <alexandre.torgue@st.com>
+CC:     <yoshihiro.shimoda.uh@renesas.com>, <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20191104143713.11137-1-alexandre.torgue@st.com>
+ <20200206133918.15012-1-youling257@gmail.com>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <0c4a37a9-0a2e-e698-f423-53060854ea05@ti.com>
+Date:   Fri, 7 Feb 2020 10:46:47 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200206133918.15012-1-youling257@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The USB ID pin is used to tell if a system is a Host or a Device. For our
-purposes we will bind this pin into gpio-usb-conn later.
+Hi,
 
-For now define the pin with its pinmux.
+On 06/02/20 7:09 PM, youling257 wrote:
+> This patch cause "dwc3 dwc3.3.auto: failed to create device link to dwc3.3.auto.ulpi" problem.
+> https://bugzilla.kernel.org/show_bug.cgi?id=206435
 
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: linux-arm-msm@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- arch/arm64/boot/dts/qcom/qcs404-evb.dtsi | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+I'm suspecting there is some sort of reverse dependency with dwc3 ULPI.
+Can you try the following diff?
 
-diff --git a/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi b/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-index b6147b5ab5cb..abfb2a9a37e9 100644
---- a/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-@@ -270,6 +270,20 @@ rclk {
- 			bias-pull-down;
- 		};
- 	};
-+
-+	usb3_id_pin: usb3-id-pin {
-+		pinmux {
-+			pins = "gpio116";
-+			function = "gpio";
-+		};
-+
-+		pinconf {
-+			pins = "gpio116";
-+			drive-strength = <2>;
-+			bias-pull-up;
-+			input-enable;
-+		};
-+	};
- };
- 
- &pms405_gpios {
--- 
-2.25.0
+diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+index 2eb28cc2d2dc..397311dcb116 100644
+--- a/drivers/phy/phy-core.c
++++ b/drivers/phy/phy-core.c
+@@ -687,7 +687,7 @@ struct phy *phy_get(struct device *dev, const char
+*string)
 
+        get_device(&phy->dev);
+
+-       link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
++       link = device_link_add(dev, &phy->dev, DL_FLAG_SYNC_STATE_ONLY);
+        if (!link) {
+                dev_err(dev, "failed to create device link to %s\n",
+                        dev_name(phy->dev.parent));
+@@ -802,7 +802,7 @@ struct phy *devm_of_phy_get(struct device *dev,
+struct device_node *np,
+                return phy;
+        }
+
+-       link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
++       link = device_link_add(dev, &phy->dev, DL_FLAG_SYNC_STATE_ONLY);
+        if (!link) {
+                dev_err(dev, "failed to create device link to %s\n",
+                        dev_name(phy->dev.parent));
+@@ -851,7 +851,7 @@ struct phy *devm_of_phy_get_by_index(struct device
+*dev, struct device_node *np,
+        *ptr = phy;
+        devres_add(dev, ptr);
+
+-       link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
++       link = device_link_add(dev, &phy->dev, DL_FLAG_SYNC_STATE_ONLY);
+        if (!link) {
+                dev_err(dev, "failed to create device link to %s\n",
+                        dev_name(phy->dev.parent));
+
+Thanks
+Kishon
