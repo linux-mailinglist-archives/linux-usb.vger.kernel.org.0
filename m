@@ -2,53 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE18155788
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2020 13:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E7B1558DC
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2020 14:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726982AbgBGMTA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 7 Feb 2020 07:19:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57732 "EHLO mail.kernel.org"
+        id S1726954AbgBGN6k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Feb 2020 08:58:40 -0500
+Received: from host5.net38.ru ([77.243.126.231]:42384 "EHLO host5.net38.ru"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726819AbgBGMTA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 7 Feb 2020 07:19:00 -0500
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 206435] dwc3 dwc3.3.auto: no usb2 phy configured
-Date:   Fri, 07 Feb 2020 12:19:00 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: youling257@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-206435-208809-TdYZqhzQ3X@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-206435-208809@https.bugzilla.kernel.org/>
-References: <bug-206435-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
+        id S1726819AbgBGN6j (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 Feb 2020 08:58:39 -0500
+X-Greylist: delayed 529 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Feb 2020 08:58:39 EST
+Received: by host5.net38.ru (Postfix, from userid 8)
+        id 88DC128099B; Fri,  7 Feb 2020 21:49:48 +0800 (+08)
+DKIM-Filter: OpenDKIM Filter v2.11.0 host5.net38.ru 88DC128099B
+X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on host5.net38.ru
+X-Spam-Level: *
+X-Spam-Status: No, score=1.5 required=5.0 tests=ALL_TRUSTED,
+        FREEMAIL_FORGED_REPLYTO,URIBL_BLOCKED autolearn=disabled version=3.3.1
+Received: from blogs.inter-comfort.ru (unknown [171.234.114.242])
+        by host5.net38.ru (Postfix) with ESMTPA id D51852815EF
+        for <linux-usb@vger.kernel.org>; Fri,  7 Feb 2020 21:49:39 +0800 (+08)
+DKIM-Filter: OpenDKIM Filter v2.11.0 host5.net38.ru D51852815EF
+Content-transfer-encoding: 7bit
+From:   "Mark Underwood" <basicmark@inter-comfort.ru>
+Content-type: text/plain; charset=us-ascii
+MIME-version: 1.0 (1.0)
+Date:   Fri, 7 Feb 2020 16:49:39 +0300
+Message-Id: <93AD5DE1-5472-43D7-8CBC-BE6A2495CA79@inter-comfort.ru>
+Subject: 
+To:     "linux usb" <linux-usb@vger.kernel.org>
+Reply-To: "Mark Underwood" <basicmarkr@yahoo.com>
+X-Mailer: iPhone Mail (15G77)
+X-Virus-Scanned: clamav-milter 0.100.2 at host5.net38.ru
+X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=206435
-
---- Comment #8 from youling257@gmail.com ---
-https://patchwork.kernel.org/patch/11225949/#23142545
-
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+Linux     https://u.to/cX1mFw  
+Mark
