@@ -2,60 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D1D15502A
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2020 02:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9B415503A
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2020 03:00:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727753AbgBGB7c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Feb 2020 20:59:32 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:41279 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727727AbgBGB7b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Feb 2020 20:59:31 -0500
-Received: by mail-wr1-f67.google.com with SMTP id c9so763459wrw.8
-        for <linux-usb@vger.kernel.org>; Thu, 06 Feb 2020 17:59:30 -0800 (PST)
+        id S1727526AbgBGB7M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Feb 2020 20:59:12 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:41245 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727012AbgBGB7J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Feb 2020 20:59:09 -0500
+Received: by mail-wr1-f65.google.com with SMTP id c9so762812wrw.8
+        for <linux-usb@vger.kernel.org>; Thu, 06 Feb 2020 17:59:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0+D4B2/b6iuMMctw3DJ/Qvn6fdBFldvYEUcyhIreNWc=;
-        b=iANebn6J+cWw8DNkmjIevDTStDdTWyvlKc+j2sUFC20IO3mpOpbgPJz+bkumI5qlEm
-         19gQIf2FkImml/qYnFOMh66VWOIUhDB5FYTL3BKIeZabqrZgOQNPahh4/Nxp/M+jVvgm
-         mLH/1imw927YRfZNDcy9cHBrRZk3KjzW+7o7kNPzfMbLN1m9F8kvEfU7vkx3lPIFM1Tt
-         dTh6n7zJgL7/bcgsMJvLgpYnwRjZyJuG16rCo6VJqWJXO7auYlJX0jgjn3ljnSNS3DLJ
-         DNXYouhLDzcqR0X9lc3TFPtQSithnKH+USCC8V0RLDhrDcVb2cJG28i9/jqcSuI7tllY
-         7L5A==
+        bh=qsI/xaPXMqNdKm9K1igbwkE2PA4fRpWtUntr4tiEc9c=;
+        b=PTe8riw6U8bDW2BD/CxQgvv/9t4tl0U1Prhqr54tyU/g1/UMk7Tqd6sniHUl/w5azG
+         H8Sfs1vXxDHfScvBYzbH4HTjk/PsxN4+jnzWHUs0YqYitvkT29Mm1h8bZ+IoSP+mSsS+
+         p5KXsB/qvGU5nAqs+s042/nU8m6svRfIqTQFa0X3sGQcx9cnwhkhtQTF4CNHa20FGdsb
+         /4obbf3seLL+I6G2XzsD4dHF7SRF+TLHNPZ/655SBBGozgcrpXmDL98qLHnaNTxsX+WW
+         4qf8GdIzwWSBBzA0HzLJ7Crhh483zO4XdjGz923Zg0yV3A1qzKcmuAS3wQ+0cusp00by
+         SpDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0+D4B2/b6iuMMctw3DJ/Qvn6fdBFldvYEUcyhIreNWc=;
-        b=Cne11upB+R9cHB+SKWzrYgsPVrU0LzYiPmsSYrelHOYyDMKxRqrtrf2zZjpxRWeYzc
-         nJqQ5l+ynARUknW768er6H9Ru2P+3RKpEVZimG9SZ5ggAUUNA9gy3A6PWwIkhN6K01d9
-         MceVpbgtlI+9wz4cCZ5c3rss5ETSMeUgFGXMBwSz3JzcZpJdN52JbxZdNbMXTYiNXnsf
-         0d8XrqqOJn0CEyV3DAogTKRBvUfXvRKCyYkvcnORrV8hDe6kLkFS2oa/UCf6q7RSlhwI
-         j3+ei4He8ZJLZrpLQ7zR/1D9XYfkb9eBGcXvSHPAhA83nr1aJXLoILjwCIYNs5B/kJsY
-         3Rew==
-X-Gm-Message-State: APjAAAUL/+ypdjI8h2ucIdWS/Prf1T2B+m3wB4WGn/si+GQUOlaBw2O6
-        Hy+DTBxUHeUYyumTZ4g5ucIP3A==
-X-Google-Smtp-Source: APXvYqyOly3hII6E2lxUaW9RfyMcOLzelD3TulYhuFQF6qGDByAUcBCDzxz4HuUAG3ZF7YBskjwmPQ==
-X-Received: by 2002:adf:e8c9:: with SMTP id k9mr1244346wrn.168.1581040769619;
-        Thu, 06 Feb 2020 17:59:29 -0800 (PST)
+        bh=qsI/xaPXMqNdKm9K1igbwkE2PA4fRpWtUntr4tiEc9c=;
+        b=i2yBicfxjGGef/KvtginDWEYHha3LXy07BEMQ+M14S4YBSHmW6HhDo/TjIe8JqUMgA
+         ch1c1yZTWFKfsq8cvk3WEKjmWzYxvaxy7oPih8qzQ47hc+/GSQLJdIodGZRaWujlrRYc
+         qZh6JSq3uzEj4MhMzz8tmQ/n2WHNg7/guRm+u+y321e+xlTYOMaPoz9ezVAlCCF0duM6
+         9isMqqDqh18flbpEMGVvhMyz0lOBu/zt67UPVoBmrAAwK3XL5FtHgdCK0RsE6cim1S8Q
+         4zDK7u+sO6VIQYpcv4ASEp8ILtRFn9EMdlGcyi/1FeBHm97rSgccqmAqQTutA8RmOA6X
+         cupg==
+X-Gm-Message-State: APjAAAX1A9+Pt8bvvDiIRlRHDt9za2SYYKS7e/2BtnbnrtL9dkQTc7ej
+        ndJ3cvsPn+/5kSTxCFGjfka/ug==
+X-Google-Smtp-Source: APXvYqwPD2xq9B+Yz+WYnoPdj9yJUADJMolqYgcUq0fL+IXijMX6pa9HamJKV5V3OS6P4C32RhJO1w==
+X-Received: by 2002:a5d:5263:: with SMTP id l3mr1162751wrc.405.1581040747220;
+        Thu, 06 Feb 2020 17:59:07 -0800 (PST)
 Received: from localhost.localdomain ([176.61.57.127])
-        by smtp.gmail.com with ESMTPSA id a62sm1490095wmh.33.2020.02.06.17.59.28
+        by smtp.gmail.com with ESMTPSA id a62sm1490095wmh.33.2020.02.06.17.59.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Feb 2020 17:59:29 -0800 (PST)
+        Thu, 06 Feb 2020 17:59:06 -0800 (PST)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         gregkh@linuxfoundation.org, jackp@codeaurora.org, balbi@kernel.org,
         bjorn.andersson@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org
-Subject: [PATCH v4 18/18] arm64: dts: qcom: qcs404-evb: Enable primary USB controller
-Date:   Fri,  7 Feb 2020 01:59:07 +0000
-Message-Id: <20200207015907.242991-19-bryan.odonoghue@linaro.org>
+        Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>,
+        Jorge Ramirez-Ortiz <jorge.ramirez.ortiz@gmail.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: [PATCH v4 01/18] dt-bindings: phy: remove qcom-dwc3-usb-phy
+Date:   Fri,  7 Feb 2020 01:58:50 +0000
+Message-Id: <20200207015907.242991-2-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200207015907.242991-1-bryan.odonoghue@linaro.org>
 References: <20200207015907.242991-1-bryan.odonoghue@linaro.org>
@@ -66,64 +65,61 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch enables the primary USB controller which has
+From: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
 
-- One USB3 SS PHY using gpio-usb-conn
-- One USB2 HS PHY in device mode only and no connector driver
-  associated.
+This binding is not used by any driver.
 
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: linux-arm-msm@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+Cc: Jorge Ramirez-Ortiz <jorge.ramirez.ortiz@gmail.com>
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/qcs404-evb.dtsi | 29 ++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ .../bindings/phy/qcom-dwc3-usb-phy.txt        | 37 -------------------
+ 1 file changed, 37 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/phy/qcom-dwc3-usb-phy.txt
 
-diff --git a/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi b/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-index 07d6d793a922..4045d3000da6 100644
---- a/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-@@ -329,6 +329,35 @@ &usb2_phy_sec {
- 	status = "okay";
- };
- 
-+&usb3 {
-+	status = "okay";
-+	dwc3@7580000 {
-+		usb-role-switch;
-+		usb_con: connector {
-+			compatible = "gpio-usb-b-connector";
-+			label = "USB-C";
-+			id-gpios = <&tlmm 116 GPIO_ACTIVE_HIGH>;
-+			vbus-supply = <&usb3_vbus_reg>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&usb3_id_pin>, <&usb3_vbus_pin>;
-+			status = "okay";
-+		};
-+	};
-+};
-+
-+&usb2_phy_prim {
-+	vdd-supply = <&vreg_l4_1p2>;
-+	vdda1p8-supply = <&vreg_l5_1p8>;
-+	vdda3p3-supply = <&vreg_l12_3p3>;
-+	status = "okay";
-+};
-+
-+&usb3_phy {
-+	vdd-supply = <&vreg_l3_1p05>;
-+	vdda1p8-supply = <&vreg_l5_1p8>;
-+	status = "okay";
-+};
-+
- &wifi {
- 	status = "okay";
- 	vdd-0.8-cx-mx-supply = <&vreg_l2_1p275>;
+diff --git a/Documentation/devicetree/bindings/phy/qcom-dwc3-usb-phy.txt b/Documentation/devicetree/bindings/phy/qcom-dwc3-usb-phy.txt
+deleted file mode 100644
+index a1697c27aecd..000000000000
+--- a/Documentation/devicetree/bindings/phy/qcom-dwc3-usb-phy.txt
++++ /dev/null
+@@ -1,37 +0,0 @@
+-Qualcomm DWC3 HS AND SS PHY CONTROLLER
+---------------------------------------
+-
+-DWC3 PHY nodes are defined to describe on-chip Synopsis Physical layer
+-controllers.  Each DWC3 PHY controller should have its own node.
+-
+-Required properties:
+-- compatible: should contain one of the following:
+-	- "qcom,dwc3-hs-usb-phy" for High Speed Synopsis PHY controller
+-	- "qcom,dwc3-ss-usb-phy" for Super Speed Synopsis PHY controller
+-- reg: offset and length of the DWC3 PHY controller register set
+-- #phy-cells: must be zero
+-- clocks: a list of phandles and clock-specifier pairs, one for each entry in
+-  clock-names.
+-- clock-names: Should contain "ref" for the PHY reference clock
+-
+-Optional clocks:
+-  "xo"		External reference clock
+-
+-Example:
+-		phy@100f8800 {
+-			compatible = "qcom,dwc3-hs-usb-phy";
+-			reg = <0x100f8800 0x30>;
+-			clocks = <&gcc USB30_0_UTMI_CLK>;
+-			clock-names = "ref";
+-			#phy-cells = <0>;
+-
+-		};
+-
+-		phy@100f8830 {
+-			compatible = "qcom,dwc3-ss-usb-phy";
+-			reg = <0x100f8830 0x30>;
+-			clocks = <&gcc USB30_0_MASTER_CLK>;
+-			clock-names = "ref";
+-			#phy-cells = <0>;
+-
+-		};
 -- 
 2.25.0
 
