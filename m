@@ -2,91 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5CC155FF9
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2020 21:43:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D5C156000
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2020 21:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727543AbgBGUn0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Feb 2020 15:43:26 -0500
-Received: from mail25.static.mailgun.info ([104.130.122.25]:38378 "EHLO
-        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727032AbgBGUn0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Feb 2020 15:43:26 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1581108205; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=RSf3QhfauvaQZ3vgECy5h0hwpHIoKPQESdoOHFRylBE=; b=waELrOMfcdj55HHipiCVtzzuWJXi7KyvT/46uccCIdtVib4P99MUKWOUb4osIE2T1X/cWBV8
- Cx80u+0klK3yJMtwHCM69pj+xxhBoeYwveuKR/LwhUT8e2MTrPpjxI63HtAtCCVTP5fXR/Kk
- aqd0oWIdMpQhxNMj41JolQ1iK0M=
-X-Mailgun-Sending-Ip: 104.130.122.25
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e3dcbe8.7f8e37061030-smtp-out-n01;
- Fri, 07 Feb 2020 20:43:20 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id C49D1C43383; Fri,  7 Feb 2020 20:43:19 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 11BC5C433CB;
-        Fri,  7 Feb 2020 20:43:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 11BC5C433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=jackp@codeaurora.org
-Date:   Fri, 7 Feb 2020 12:43:15 -0800
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org, balbi@kernel.org,
-        bjorn.andersson@linaro.org, robh@kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH v5 09/18] usb: dwc3: qcom: Add support for usb-conn-gpio
- connectors
-Message-ID: <20200207204315.GA18464@jackp-linux.qualcomm.com>
-References: <20200207201654.641525-1-bryan.odonoghue@linaro.org>
- <20200207201654.641525-10-bryan.odonoghue@linaro.org>
+        id S1727138AbgBGUoL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Feb 2020 15:44:11 -0500
+Received: from mail-yb1-f195.google.com ([209.85.219.195]:37450 "EHLO
+        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727005AbgBGUoK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Feb 2020 15:44:10 -0500
+Received: by mail-yb1-f195.google.com with SMTP id k69so361125ybk.4
+        for <linux-usb@vger.kernel.org>; Fri, 07 Feb 2020 12:44:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=8cDRXBFOpE9J1p6S5H+HXSQg9q3m7pUJ3iUuQ5MPcDc=;
+        b=WJgFJ9PR0yBQ+ciD08Pby60OVZzn3dTgtieZ17slfRQssKmPnwQmAwZPgDIpR6heck
+         dDY9m0nAiR73dL1CtCDLlqWI9lV6barO9i6phYUUcmMyI9lhyUunotwwGjtLNjZZXHps
+         B+ZJy7kS8IDHqb+LatDXLkBcGkPTiMku+kX9Fb92ZmFsnK1n3liOHkc4TmrSz2VBzqpm
+         gOXxQUuwBna/l8aq9nu864h1RGE/T5vMQdJwoV4IagKfmqrsTX7n4WpDLnLJobosvK0X
+         9Z7fBUirFx02ZREq+PBFhuGxFcksAi/eOnsjoHpvtfcuXe3k+tw0qtyYWnKvHtkX+Drl
+         CMWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=8cDRXBFOpE9J1p6S5H+HXSQg9q3m7pUJ3iUuQ5MPcDc=;
+        b=hGBPY9q0QBA03W2FnXEqWOPc7O6ihVOfL0R1zZ1G0AfSX0g5ILCeA+5jyuM6zUkyUl
+         SnKhSSVG1VpRGaaSmtZ9Op/+S7O/NlSe3Nd78TIGMmUreo3S3kCEeCppa3I5gqBZhdCG
+         OHJawwJ9ppQw/E4/TQB6/ZSAUb3E4vq8mk5kI+XUG959/LiJJ+etxplVAM3pExQdVsQl
+         LFuVGrxAo4989PyfdKy/nct6ZKxijFdt0CUYKRESwCpTM8MnYOTrCAV3wzBHUrDuTKVz
+         F8tfkRVwMEchGRCEIWofjRdRz/A8mVYKJQ4cUWS0sHh+tD4Yg5BhioMQt/AXh0uIzjf9
+         LkKQ==
+X-Gm-Message-State: APjAAAXnY8mlIdjNO/fuOY7cuHoZG046T6MjWWOByLPQERu31x32ygVH
+        nnwSKyCL4HnHW+Hjj6Mdv/PmVDKoMuotmEhvdz91wcy9aixurg==
+X-Google-Smtp-Source: APXvYqxZ0BHxezvYatUCwR5ujJY2IO6fZCUlpHww8WEnDHAAAY+0VvtiMdEe6JnWZWwDRH8AP8uVvx3q0Y+IviYPdhQ=
+X-Received: by 2002:a9d:7305:: with SMTP id e5mr948882otk.64.1581108248790;
+ Fri, 07 Feb 2020 12:44:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200207201654.641525-10-bryan.odonoghue@linaro.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Received: by 2002:a4a:d508:0:0:0:0:0 with HTTP; Fri, 7 Feb 2020 12:44:08 -0800 (PST)
+Reply-To: auch197722@gmail.com
+From:   "Mr. Theophilus Odadudu" <cristinamedina0010@gmail.com>
+Date:   Fri, 7 Feb 2020 15:44:08 -0500
+Message-ID: <CAPNvSTj-8q7w5QPmnH26+_3xCKjEWyE+9xcb8QyQs9Xie+iYgg@mail.gmail.com>
+Subject: LETTER OF INQUIRY
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Bryan,
+Good Day,
 
-On Fri, Feb 07, 2020 at 08:16:45PM +0000, Bryan O'Donoghue wrote:
-> This patch adds a routine to find a usb-conn-gpio in the main DWC3 code.
-> This will be useful in a subsequent patch where we will reuse the current
-> extcon VBUS notifier with usb-conn-gpio.
-> 
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 261af9e38ddd..fc66ca3316ef 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -550,6 +550,21 @@ static const struct dwc3_acpi_pdata sdm845_acpi_pdata = {
->  	.ss_phy_irq_index = 2
->  };
->  
-> +static bool dwc3_qcom_find_gpio_usb_connector(struct platform_device *pdev)
+I work as a clerk in a Bank here in Nigeria, I have a very
+confidential Business Proposition for you. There is a said amount of
+money floating in the bank unclaimed, belonging to the bank Foreign
+customer who die with his family in the Ethiopian Airline crash of
+March 11, 2019.
 
-Why not just squash this patch into "[PATCH v5 12/18] usb: dwc3: qcom:
-Enable gpio-usb-conn based role-switching" where it is actually used?
+I seek your good collaboration to move the fund for our benefit. we
+have agreed that 40% be yours once you help claim.
 
-Jack
--- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Do get back to with 1) Your Full Name: (2) Residential Address: (3)
+Phone, Mobile  (4) Scan Copy of Your ID. to apply for claims of the
+funds.
+
+Regards
+Theophilus Odadudu
