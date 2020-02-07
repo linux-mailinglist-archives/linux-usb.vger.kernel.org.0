@@ -2,422 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B14155544
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2020 11:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB021555D7
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2020 11:36:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727011AbgBGKEm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Feb 2020 05:04:42 -0500
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:40535 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726619AbgBGKEl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Feb 2020 05:04:41 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 0A9556388;
-        Fri,  7 Feb 2020 05:04:40 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Fri, 07 Feb 2020 05:04:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=GDvxeJxR5VebSathOGRHx5rbKH2
-        GgrFsB0YklbsXwPM=; b=gy6L+PcV7v98X2wtE1csWSe9E19AcPm0aylIYFyjC+t
-        q4MI9QnEnxqauhZNApKz2/L9jpggklkCy0qcI4KXhpcaTHh+4gx0H6RBahrUmZtE
-        Jno1aEAwx8Zr6kuyyUBNOCex8MOoHEFwTLvzVQz2yvayKUgGwTYRauICLcX17l43
-        Ev0KL0qBQrS4Cb3diZbbJvCqi6+utvdXoXqcaVJ3CX7+gC2olXW3z2zZQuxonk1V
-        1HhnTkk4EGMAO8vR/RxswxN5j9isjfk37G5Wx0NFPWmdveAhVx8EoopqHqS+xTM1
-        61KPRDy4/4JWapTy0omu2DopFsV3DEFnGPS4kz1P+Zw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=GDvxeJ
-        xR5VebSathOGRHx5rbKH2GgrFsB0YklbsXwPM=; b=VwdoFf6aYLM9fTeEEHUTu5
-        Vs/LuaafMJijK8xO+2BwoCthZGHT168E+Jx9i6zncyuHrK/vD1ZMHjivLV5FJZQD
-        y1NTO2UduvIJEGlA2mXQ+Dld5WTupy0wqqFGnax2+wOiDh1ZLJgHZt8dk4wz+iFJ
-        bOnRChQcHIuCaxSvM0xc+qcpU+plEWHCQavwU125SAqytt20kqE98evUr0UJqAXM
-        RAdQymp9KTjCTSkGScgze6EqilTtzt+MEPhcVycOHR6lzFrauGvKInsGO1Svv0SF
-        4Stp8QiVKkW3n2Wu9GmmG6BdYep/JQDFPBjAiM53IlM0O0uzDb6SYjeHfIZWXOIQ
-        ==
-X-ME-Sender: <xms:NzY9XtZJWjRLUGo9YrFd0tZEFJWnBY3k1H3Wl36Rdgd3-6WW_digNg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrheehgdduudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
-    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledruddtje
-    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgv
-    gheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:NzY9Xgw08E4jTQAVvt9j7BeomZdr5M7qm-tdwaGSoaImKBNzGUX5pg>
-    <xmx:NzY9XkaC1BBOGdBy--yzKmGMQ2z3m_jiwHcKqpIdRY2zouU8avc3OA>
-    <xmx:NzY9XpxwQ2tnqRRjp7WmWnXClFsh6mUvAAgfOFcJy_sh3Rp9Ih6y_A>
-    <xmx:ODY9XrLO5a7gDYUiAQRvcIpaUIIvl51frbs2fV6ov3VWeSHuFraMSw>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 6BF2230600DC;
-        Fri,  7 Feb 2020 05:04:39 -0500 (EST)
-Date:   Fri, 7 Feb 2020 11:04:38 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Avaneesh Kumar Dwivedi <akdwived@codeaurora.org>
+        id S1727113AbgBGKgY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Feb 2020 05:36:24 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:44978 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726819AbgBGKgY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Feb 2020 05:36:24 -0500
+Received: by mail-wr1-f66.google.com with SMTP id m16so1997881wrx.11
+        for <linux-usb@vger.kernel.org>; Fri, 07 Feb 2020 02:36:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=sn5h5DpGbd8+ZmTL8RoxDdNLMcTt2Q/GmoXxRFRhYZ4=;
+        b=xxefUEoJ55N2q6kJa5HQBj15P61j2yMGG17XMWMMEmgTH1f/4klD4aNsN1sBXI82lF
+         qDuqPNIC2EzNseh100O8cRxpiXhcmJDpDh+JAYjhH8Zswb4vSgNj40x5gw67rOGpB4Zk
+         jCDZ/e/9dBvCkOI87A4DSSRSOHpktR+qIZNKmvegzplgJDrp1XhX+uFIZ9Qobt0uxjJp
+         SlhBztEWSyDgCekgExzQkrYdXaL/OQ76oZZmThPqacnX8p9P/adh0somG3Rpi4J5uho5
+         ZPdcvd2Hxo3+KRtpRAkoKOVQHCavj2iCjNQ7iiScADUDAz+MW+dv/cr9UzvRuHQNxSOo
+         tTYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sn5h5DpGbd8+ZmTL8RoxDdNLMcTt2Q/GmoXxRFRhYZ4=;
+        b=b03Ol2pazg1VhsHoc8hGHAtZsGI1bIoBq08Sn+VLjLJ/IT7Jyzan0rH/hp/vcWQCVw
+         p2Krh99h8k/zOa6i7ubtD3LK4R/eXs0fT19jLjYWdkrjcASVefEGRBxeCn7evMIitDrz
+         RcT3P5O9/KlNMn6LWkBjOt/O5mIiwCSJZ7MP3SqYr3+lJedf7fWENcjYriypQRsC2yiC
+         i56eAOWOgj3L/byORSMlQ2T3MhOctAuOxl0VKEvXQgYPvFCsF7RTvXMOlsG7v/YEEpG7
+         17doRUkZn9PKVgu1v/vpHxWo76ju8ENXlsgu5WK0j75chPk0jr3KeTVEHAYLQ0LOqV8n
+         deGg==
+X-Gm-Message-State: APjAAAVMxl/2LVQmbEAJiZUKKvOnExqo2VjPxhPmBphuTOpzrkOHGaz1
+        Td6R7NKlUzaK9AydfZ8CB0obCg==
+X-Google-Smtp-Source: APXvYqwX0rfF4tDD9dKkruRXKTI/i+SuzeYV0gAc0ED0XkpRqN+W0PcRXINPtXXany8omDCEQEDm4Q==
+X-Received: by 2002:a05:6000:50:: with SMTP id k16mr3835414wrx.145.1581071781853;
+        Fri, 07 Feb 2020 02:36:21 -0800 (PST)
+Received: from [192.168.0.38] ([176.61.57.127])
+        by smtp.gmail.com with ESMTPSA id i3sm3109938wrc.6.2020.02.07.02.36.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Feb 2020 02:36:21 -0800 (PST)
+Subject: Re: [PATCH v4 09/18] usb: dwc3: qcom: Override VBUS when using
+ gpio_usb_connector
+To:     Jack Pham <jackp@codeaurora.org>
 Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ckadabi@codeaurora.org, tsoni@codeaurora.org,
-        bryanh@codeaurora.org, psodagud@codeaurora.org,
-        rnayak@codeaurora.org, satyap@codeaurora.org,
-        pheragu@codeaurora.org
-Subject: Re: [PATCH v4 2/2] Embedded USB Debugger (EUD) driver
-Message-ID: <20200207100438.GA627905@kroah.com>
-References: <1580445811-15948-1-git-send-email-akdwived@codeaurora.org>
- <1580445811-15948-3-git-send-email-akdwived@codeaurora.org>
+        gregkh@linuxfoundation.org, balbi@kernel.org,
+        bjorn.andersson@linaro.org, linux-kernel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Manu Gautam <mgautam@codeaurora.org>
+References: <20200207015907.242991-1-bryan.odonoghue@linaro.org>
+ <20200207015907.242991-10-bryan.odonoghue@linaro.org>
+ <20200207080729.GA30341@jackp-linux.qualcomm.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Message-ID: <2bd67925-14cf-5851-14a2-c51a065fac6c@linaro.org>
+Date:   Fri, 7 Feb 2020 10:36:26 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1580445811-15948-3-git-send-email-akdwived@codeaurora.org>
+In-Reply-To: <20200207080729.GA30341@jackp-linux.qualcomm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 31, 2020 at 10:13:31AM +0530, Avaneesh Kumar Dwivedi wrote:
-> Add support for control peripheral of EUD (Embedded USB Debugger) to
-> listen to events such as USB attach/detach, charger enable/disable, pet
-> EUD to indicate software is functional. Reusing the platform device kobj,
-> sysfs entry 'enable' is created to enable or disable EUD.
+On 07/02/2020 08:07, Jack Pham wrote:
+> Hi Bryan,
 > 
-> Signed-off-by: Satya Durga Srinivasu Prabhala <satyap@codeaurora.org>
-> Signed-off-by: Prakruthi Deepak Heragu <pheragu@codeaurora.org>
-> Signed-off-by: Avaneesh Kumar Dwivedi <akdwived@codeaurora.org>
-> ---
->  Documentation/ABI/stable/sysfs-driver-msm-eud |   5 +
->  drivers/soc/qcom/Kconfig                      |  12 +
->  drivers/soc/qcom/Makefile                     |   1 +
->  drivers/soc/qcom/eud.c                        | 329 ++++++++++++++++++++++++++
->  4 files changed, 347 insertions(+)
->  create mode 100644 Documentation/ABI/stable/sysfs-driver-msm-eud
->  create mode 100644 drivers/soc/qcom/eud.c
+> On Fri, Feb 07, 2020 at 01:58:58AM +0000, Bryan O'Donoghue wrote:
+>> Using the gpio_usb_connector driver also means that we are not supplying
+>> VBUS via the SoC but by an external PMIC directly.
+>>
+>> This patch searches for a gpio_usb_connector as a child node of the core
+>> DWC3 block and if found switches on the VBUS over-ride, leaving it up to
+>> the role-switching code in gpio-usb-connector to switch off and on VBUS.
+>   
+> <snip>
 > 
-> diff --git a/Documentation/ABI/stable/sysfs-driver-msm-eud b/Documentation/ABI/stable/sysfs-driver-msm-eud
-> new file mode 100644
-> index 0000000..d96ae05
-> --- /dev/null
-> +++ b/Documentation/ABI/stable/sysfs-driver-msm-eud
-> @@ -0,0 +1,5 @@
-> +What:           /sys/bus/platform/drivers/msm-eud/enable
-> +Date:           Jan 2020
-> +Contact:        Avaneesh Kumar Dwivedi <akdwived@codeaurora.org>
-> +Description:    Enable/Disable use of eud device.
+>>   static int dwc3_qcom_probe(struct platform_device *pdev)
+>>   {
+>>   	struct device_node	*np = pdev->dev.of_node;
+>> @@ -557,7 +572,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>>   	struct dwc3_qcom	*qcom;
+>>   	struct resource		*res, *parent_res = NULL;
+>>   	int			ret, i;
+>> -	bool			ignore_pipe_clk;
+>> +	bool			ignore_pipe_clk, gpio_usb_conn;
+>>   
+>>   	qcom = devm_kzalloc(&pdev->dev, sizeof(*qcom), GFP_KERNEL);
+>>   	if (!qcom)
+>> @@ -649,9 +664,10 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>>   	}
+>>   
+>>   	qcom->mode = usb_get_dr_mode(&qcom->dwc3->dev);
+>> +	gpio_usb_conn = dwc3_qcom_find_gpio_usb_connector(qcom->dwc3);
+>>   
+>> -	/* enable vbus override for device mode */
+>> -	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
+>> +	/* enable vbus override for device mode or GPIO USB connector mode */
+>> +	if (qcom->mode == USB_DR_MODE_PERIPHERAL || gpio_usb_conn)
+>>   		dwc3_qcom_vbus_overrride_enable(qcom, true);
+> 
+> This doesn't seem right. It looks like you are doing the vbus_override
+> only once on probe() and keeping it that way regardless of the dynamic
+> state of the connector, i.e. even after VBUS is physically removed
+> and/or ID pin is low.
+> 
 
-What are valid values to be used here?
+Hmm, I don't see anything much in the documentation that flags why we 
+want or need to toggle this.
 
-> +Users:          User space debug application which intend to use EUD h/w block.
-> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-> index d0a73e7..6b7c9d0 100644
-> --- a/drivers/soc/qcom/Kconfig
-> +++ b/drivers/soc/qcom/Kconfig
-> @@ -202,4 +202,16 @@ config QCOM_APR
->  	  application processor and QDSP6. APR is
->  	  used by audio driver to configure QDSP6
->  	  ASM, ADM and AFE modules.
-> +
-> +config QCOM_EUD
-> +       tristate "QTI Embedded USB Debugger (EUD)"
-> +       depends on ARCH_QCOM
+>>   	/* register extcon to override sw_vbus on Vbus change later */
+> 
+> As suggested by this comment, if you look at the extcon handling, it
+> intercepts the VBUS state toggling in dwc3_qcom_vbus_notifier() and
+> calls vbus_override() accordingly. That way it should only be true when
+> the role==USB_ROLE_DEVICE and disabled otherwise (USB_ROLE_HOST/NONE).
+> 
+> To me the gpio-b connector + usb-role-switch is attempting to be an
+> alternative to extcon. But to correctly mimic the vbus_override()
+> behavior I think we need a way to intercept when the connector child
+> driver calls usb_role_switch_set_role() to the dwc3 device, but somehow
+> be able to do it from up here in the parent/glue layer. Unfortunately I
+> don't have a good idea of how to do that, short of shoehorning an
+> "upcall" notification from drd.c to the glue, something I don't think
+> Felipe would be a fan of.
+> 
+> Could the usb_role_switch class somehow be enhanced to support chaining
+> multiple "consumers" to support this case? Such that when the gpio-b
+> driver calls set_role() it could get handled both by drd.c and
+> dwc3-qcom.c?
 
-Why not let everyone test build this?
+It is probably necessary eventually, but, per my reading of the 
+documents and working with the hardware, I couldn't justify the 
+additional work.
 
-> +       help
-> +         The Embedded USB Debugger (EUD) driver is a driver for the
-> +         control peripheral which waits on events like USB attach/detach
-> +         and charger enable/disable. The control peripheral further helps
-> +         support the USB-based debug and trace capabilities.
-> +         This module enables support for Qualcomm Technologies, Inc.
-> +         Embedded USB Debugger (EUD).
-> +         If unsure, say N.
->  endmenu
-> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-> index 9fb35c8..c15be68 100644
-> --- a/drivers/soc/qcom/Makefile
-> +++ b/drivers/soc/qcom/Makefile
-> @@ -25,3 +25,4 @@ obj-$(CONFIG_QCOM_APR) += apr.o
->  obj-$(CONFIG_QCOM_LLCC) += llcc-qcom.o
->  obj-$(CONFIG_QCOM_RPMHPD) += rpmhpd.o
->  obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
-> +obj-$(CONFIG_QCOM_EUD) += eud.o
-> diff --git a/drivers/soc/qcom/eud.c b/drivers/soc/qcom/eud.c
-> new file mode 100644
-> index 0000000..e6c3604
-> --- /dev/null
-> +++ b/drivers/soc/qcom/eud.c
-> @@ -0,0 +1,329 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2016-2018, The Linux Foundation. All rights reserved.
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/slab.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/err.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/extcon.h>
-> +#include <linux/extcon-provider.h>
-> +#include <linux/delay.h>
-> +#include <linux/sysfs.h>
-> +#include <linux/io.h>
-> +#include <linux/bitops.h>
-> +#include <linux/workqueue.h>
-> +#include <linux/power_supply.h>
-> +
-> +#define EUD_ENABLE_CMD 1
-> +#define EUD_DISABLE_CMD 0
+However if you think this patchset needs the toggle, I can look into 
+getting the indicator to toggle here too.
 
-Don't need these.
+We'd need to add some sort of linked list of notifiers to the role 
+switching logic and toggle them in order.
 
-> +
-> +#define EUD_REG_INT1_EN_MASK	0x0024
-> +#define EUD_REG_INT_STATUS_1	0x0044
-> +#define EUD_REG_CTL_OUT_1	0x0074
-> +#define EUD_REG_VBUS_INT_CLR	0x0080
-> +#define EUD_REG_CHGR_INT_CLR	0x0084
-> +#define EUD_REG_CSR_EUD_EN	0x1014
-> +#define EUD_REG_SW_ATTACH_DET	0x1018
-> +
-> +#define EUD_INT_VBUS		BIT(2)
-> +#define EUD_INT_CHGR		BIT(3)
-> +#define EUD_INT_SAFE_MODE	BIT(4)
-> +#define EUD_INT_ALL		(EUD_INT_VBUS|EUD_INT_CHGR|\
-> +				EUD_INT_SAFE_MODE)
-> +
-> +struct eud_chip {
-> +	struct device			*dev;
-> +	int				eud_irq;
-> +	unsigned int			extcon_id;
-> +	unsigned int			int_status;
-> +	bool				usb_attach;
-> +	bool				chgr_enable;
-> +	void __iomem			*eud_reg_base;
-> +	struct extcon_dev		*extcon;
-> +	int				enable;
-> +	struct work_struct		eud_work;
-> +};
-> +
-> +static const unsigned int eud_extcon_cable[] = {
-> +	EXTCON_USB,
-> +	EXTCON_CHG_USB_SDP,
-> +	EXTCON_NONE,
-> +};
-> +
-> +static int enable_eud(struct eud_chip *priv)
-> +{
-> +	int ret;
-> +
-> +	/* write into CSR to enable EUD */
-> +	writel_relaxed(BIT(0), priv->eud_reg_base + EUD_REG_CSR_EUD_EN);
-> +	/* Enable vbus, chgr & safe mode warning interrupts */
-> +	writel_relaxed(EUD_INT_VBUS | EUD_INT_CHGR | EUD_INT_SAFE_MODE,
-> +			priv->eud_reg_base + EUD_REG_INT1_EN_MASK);
-> +
-> +	/* Ensure Register Writes Complete */
-> +	wmb();
-> +
-> +	/*
-> +	 * Set the default cable state to usb connect and charger
-> +	 * enable
-> +	 */
-> +	ret = extcon_set_state_sync(priv->extcon, EXTCON_USB, true);
-> +	if (ret)
-> +		return ret;
-> +	ret = extcon_set_state_sync(priv->extcon,
-> +			EXTCON_CHG_USB_SDP, true);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +static void disable_eud(struct eud_chip *priv)
-> +{
-> +	/* write into CSR to disable EUD */
-> +	writel_relaxed(0, priv->eud_reg_base + EUD_REG_CSR_EUD_EN);
-> +}
-> +
-> +static ssize_t enable_show(struct device *dev,
-> +				struct device_attribute *attr, char *buf)
-> +{
-> +	struct eud_chip *chip = dev_get_drvdata(dev);
-> +
-> +	return snprintf(buf, sizeof(int), "%d", chip->enable);
-> +}
-> +
-> +static ssize_t enable_store(struct device *dev,
-> +				struct device_attribute *attr,
-> +				const char *buf, size_t count)
-> +{
-> +	struct eud_chip *chip = dev_get_drvdata(dev);
-> +	int enable = 0;
-> +	int ret = 0;
-> +
-> +	if (sscanf(buf, "%du", &enable) != 1)
-> +		return -EINVAL;
+Similar to what is done in extcon now for the various notifer hooks.
 
-No, use the built-in kernel function to handle reading y/n/Y/N/0/1 from
-sysfs files, do not try to roll your own.  As you have seen, you will
-get it wrong :)
-
-
-
-> +
-> +	if (enable == EUD_ENABLE_CMD)
-> +		ret = enable_eud(chip);
-> +	else if (enable == EUD_DISABLE_CMD)
-> +		disable_eud(chip);
-> +	if (!ret)
-> +		chip->enable = enable;
-> +	return count;
-> +}
-> +
-> +static DEVICE_ATTR_RW(enable);
-> +
-> +static struct attribute *attrs[] = {
-> +	&dev_attr_enable.attr,
-> +	NULL
-> +};
-> +
-> +static struct attribute_group attr_group = {
-> +	.attrs = attrs,
-> +};
-> +
-> +static const struct attribute_group *attr_groups[] = {
-> +	&attr_group,
-> +	NULL
-> +};
-
-ATTRIBUTE_GROUPS()?
-
-> +
-> +static void eud_event_notifier(struct work_struct *eud_work)
-> +{
-> +	struct eud_chip *chip = container_of(eud_work, struct eud_chip,
-> +					eud_work);
-> +	int ret;
-> +
-> +	if (chip->int_status == EUD_INT_VBUS) {
-> +		ret = extcon_set_state_sync(chip->extcon, chip->extcon_id,
-> +					chip->usb_attach);
-> +		if (ret)
-> +			return;
-> +	} else if (chip->int_status == EUD_INT_CHGR) {
-> +		ret = extcon_set_state_sync(chip->extcon, chip->extcon_id,
-> +					chip->chgr_enable);
-> +		if (ret)
-> +			return;
-> +	}
-> +}
-> +
-> +static void usb_attach_detach(struct eud_chip *chip)
-> +{
-> +	u32 reg;
-> +
-> +	chip->extcon_id = EXTCON_USB;
-> +	/* read ctl_out_1[4] to find USB attach or detach event */
-> +	reg = readl_relaxed(chip->eud_reg_base + EUD_REG_CTL_OUT_1);
-> +	if (reg & BIT(4))
-> +		chip->usb_attach = true;
-> +	else
-> +		chip->usb_attach = false;
-> +
-> +	schedule_work(&chip->eud_work);
-> +
-> +	/* set and clear vbus_int_clr[0] to clear interrupt */
-> +	writel_relaxed(BIT(0), chip->eud_reg_base + EUD_REG_VBUS_INT_CLR);
-> +	/* Ensure Register Writes Complete */
-> +	wmb();
-> +	writel_relaxed(0, chip->eud_reg_base + EUD_REG_VBUS_INT_CLR);
-> +}
-> +
-> +static void chgr_enable_disable(struct eud_chip *chip)
-> +{
-> +	u32 reg;
-> +
-> +	chip->extcon_id = EXTCON_CHG_USB_SDP;
-> +	/* read ctl_out_1[6] to find charger enable or disable event */
-> +	reg = readl_relaxed(chip->eud_reg_base + EUD_REG_CTL_OUT_1);
-> +	if (reg & BIT(6))
-> +		chip->chgr_enable = true;
-> +	else
-> +		chip->chgr_enable = false;
-> +
-> +	schedule_work(&chip->eud_work);
-> +
-> +	/* set and clear chgr_int_clr[0] to clear interrupt */
-> +	writel_relaxed(BIT(0), chip->eud_reg_base + EUD_REG_CHGR_INT_CLR);
-> +	/* Ensure Register Writes Complete */
-> +	wmb();
-> +	writel_relaxed(0, chip->eud_reg_base + EUD_REG_CHGR_INT_CLR);
-> +}
-> +
-> +static void pet_eud(struct eud_chip *chip)
-> +{
-> +	u32 reg;
-> +
-> +	/* read sw_attach_det[0] to find attach/detach event */
-> +	reg = readl_relaxed(chip->eud_reg_base + EUD_REG_SW_ATTACH_DET);
-> +	if (reg & BIT(0)) {
-> +		/* Detach & Attach pet for EUD */
-> +		writel_relaxed(0, chip->eud_reg_base + EUD_REG_SW_ATTACH_DET);
-> +		/* Ensure Register Writes Complete */
-> +		wmb();
-> +		/* Delay to make sure detach pet is done before attach pet */
-> +		udelay(100);
-> +		writel_relaxed(BIT(0), chip->eud_reg_base +
-> +					EUD_REG_SW_ATTACH_DET);
-> +		/* Ensure Register Writes Complete */
-> +		wmb();
-> +	} else {
-> +		/* Attach pet for EUD */
-> +		writel_relaxed(BIT(0), chip->eud_reg_base +
-> +					EUD_REG_SW_ATTACH_DET);
-> +		/* Ensure Register Writes Complete */
-> +		wmb();
-> +	}
-> +}
-> +
-> +static irqreturn_t handle_eud_irq(int irq, void *data)
-> +{
-> +	struct eud_chip *chip = data;
-> +	u32 reg;
-> +
-> +	/* read status register and find out which interrupt triggered */
-> +	reg = readl_relaxed(chip->eud_reg_base + EUD_REG_INT_STATUS_1);
-> +	switch (reg & EUD_INT_ALL) {
-> +	case EUD_INT_VBUS:
-> +		chip->int_status = EUD_INT_VBUS;
-> +		usb_attach_detach(chip);
-> +		break;
-> +	case EUD_INT_CHGR:
-> +		chip->int_status = EUD_INT_CHGR;
-> +		chgr_enable_disable(chip);
-> +		break;
-> +	case EUD_INT_SAFE_MODE:
-> +		pet_eud(chip);
-> +		break;
-> +	default:
-> +		return IRQ_NONE;
-> +	}
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int msm_eud_probe(struct platform_device *pdev)
-> +{
-> +	struct eud_chip *chip;
-> +	struct resource *res;
-> +	int ret;
-> +
-> +	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
-> +	if (!chip)
-> +		return -ENOMEM;
-> +
-> +	chip->dev = &pdev->dev;
-
-No reference counting???
-
-thanks,
-
-greg k-h
+---
+bod
