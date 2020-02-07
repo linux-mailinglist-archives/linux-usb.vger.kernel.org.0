@@ -2,111 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 338891552A3
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2020 07:58:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B68A155378
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2020 09:07:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726956AbgBGG55 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Feb 2020 01:57:57 -0500
-Received: from mail-il1-f196.google.com ([209.85.166.196]:42813 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726951AbgBGG55 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Feb 2020 01:57:57 -0500
-Received: by mail-il1-f196.google.com with SMTP id x2so810156ila.9;
-        Thu, 06 Feb 2020 22:57:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc;
-        bh=MvC4wfPqw9IroxJFE0+MeDBQWPGintIKajsHZYirMKQ=;
-        b=JsD+38Lcu1jACdrWPnZvuVsKkMf9dmfdXJ9Ee1ctjb53C7MjQBeBKCKzUbCapxPkV3
-         yN5Y+ylzMm0ioC2S4fmQYdctCkheyaqfreX/0qsFU5De5c2lxLN0OUU4ZM7V6Q5hIpAu
-         xBNhx1UziYfV5qu8ffG5DleioJN5muRDe3FYloeKLvjcavOSBYp34gR2DMsa3AWZfxSb
-         6x9GKsN4QeVGvwjKv8PfM9u5Uk/9EYvAf3Bb52pQ0wAKxux8d8f6Y7AZIHetvLvcKAxt
-         T4YiGiKGm+RVxsAmWIYmcq2ywe/epX74Z69olrUPatdLthLCpKOS23rDaGbjyjIvbTPH
-         rTnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc;
-        bh=MvC4wfPqw9IroxJFE0+MeDBQWPGintIKajsHZYirMKQ=;
-        b=HgIezn4Aljuq4R+ZpoM0H3OpkzaPewAea0G4JRR1FbbbwuORe32eh7YY0/uTaLsBm4
-         i5/M30atrXDQ7eO8tGcSvrz9TaZXCqTSvUa/yA/olXP66XGFg6Cq5z9rMbVZq8CxKzYF
-         VsxilslayXJ5N799XvU97act8ByYWzDvrEeyKT9P+hkuV2mLtIIqOJNVLiyC6JLy7jjb
-         dWGzwEq1lCROfPDBjCRTU9nphBZl0AMWmFCUUxCxCedwIdqRo9YJCu0U7OiPrZm99TQ7
-         okgP3cqj1tMvBHGvVHolXht9fuAJU0cevGMYk0o0K35OcWnMm6hGE0Rn+6NHeMbqv+d7
-         DQYQ==
-X-Gm-Message-State: APjAAAVtNqV8jZ6emEMXb6xO/2obxgJp6d+px7ez0DMnwgs5UdQ3MrPt
-        qrkAbaJXKoe+dkP3ZG5mXhr0jK1TeiouSA4S6wDchL/E3jo=
-X-Google-Smtp-Source: APXvYqzVlmSDZ11jLfB0Dk+b5wrJmCDCPMqzimvGfc3DZnWRvtmfFKx0rOtYrAe83Rd9Tv4z08oBry1yXBL1No/vG/c=
-X-Received: by 2002:a92:860a:: with SMTP id g10mr7690199ild.280.1581058676368;
- Thu, 06 Feb 2020 22:57:56 -0800 (PST)
+        id S1726954AbgBGIHj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Feb 2020 03:07:39 -0500
+Received: from mail26.static.mailgun.info ([104.130.122.26]:64623 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726130AbgBGIHi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Feb 2020 03:07:38 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1581062858; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=pYSt7Z+Q2zmcmoG4oe8kLafuFqbUDpnUTVpgBQVYYe0=; b=PMUPDQrIVXc+nufky9E29knpD/EPYsliuVr3i36J+KLmp2YOiKCxKL2R2nVZaHtVF9054+Zy
+ cY3M6wdjzdbkYPJgAH1/2mlK3fmrMw3aur8/9c5raOvkTVFguWFX7ltW/g9G9shQXAOJk9Al
+ k/XAzNmmS9IvlUCEOfu/Er908DE=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e3d1ac8.7fcc90630148-smtp-out-n01;
+ Fri, 07 Feb 2020 08:07:36 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 47C29C4479C; Fri,  7 Feb 2020 08:07:35 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 36778C43383;
+        Fri,  7 Feb 2020 08:07:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 36778C43383
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=jackp@codeaurora.org
+Date:   Fri, 7 Feb 2020 00:07:29 -0800
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org, balbi@kernel.org,
+        bjorn.andersson@linaro.org, linux-kernel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Manu Gautam <mgautam@codeaurora.org>
+Subject: Re: [PATCH v4 09/18] usb: dwc3: qcom: Override VBUS when using
+ gpio_usb_connector
+Message-ID: <20200207080729.GA30341@jackp-linux.qualcomm.com>
+References: <20200207015907.242991-1-bryan.odonoghue@linaro.org>
+ <20200207015907.242991-10-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Received: by 2002:ad5:5442:0:0:0:0:0 with HTTP; Thu, 6 Feb 2020 22:57:56 -0800 (PST)
-In-Reply-To: <0c4a37a9-0a2e-e698-f423-53060854ea05@ti.com>
-References: <20191104143713.11137-1-alexandre.torgue@st.com>
- <20200206133918.15012-1-youling257@gmail.com> <0c4a37a9-0a2e-e698-f423-53060854ea05@ti.com>
-From:   youling 257 <youling257@gmail.com>
-Date:   Fri, 7 Feb 2020 14:57:56 +0800
-Message-ID: <CAOzgRdb5QfJDQzbtoHQry4wxUg52LwX5XFCPzzaYa=z+RqNWOQ@mail.gmail.com>
-Subject: Re: [PATCH] phy: core: Add consumer device link support
-To:     Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     alexandre.torgue@st.com, yoshihiro.shimoda.uh@renesas.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200207015907.242991-10-bryan.odonoghue@linaro.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-test this diff, dwc3 work for my device, thanks.
+Hi Bryan,
 
-2020-02-07 13:16 GMT+08:00, Kishon Vijay Abraham I <kishon@ti.com>:
-> Hi,
->
-> On 06/02/20 7:09 PM, youling257 wrote:
->> This patch cause "dwc3 dwc3.3.auto: failed to create device link to
->> dwc3.3.auto.ulpi" problem.
->> https://bugzilla.kernel.org/show_bug.cgi?id=206435
->
-> I'm suspecting there is some sort of reverse dependency with dwc3 ULPI.
-> Can you try the following diff?
->
-> diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
-> index 2eb28cc2d2dc..397311dcb116 100644
-> --- a/drivers/phy/phy-core.c
-> +++ b/drivers/phy/phy-core.c
-> @@ -687,7 +687,7 @@ struct phy *phy_get(struct device *dev, const char
-> *string)
->
->         get_device(&phy->dev);
->
-> -       link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
-> +       link = device_link_add(dev, &phy->dev, DL_FLAG_SYNC_STATE_ONLY);
->         if (!link) {
->                 dev_err(dev, "failed to create device link to %s\n",
->                         dev_name(phy->dev.parent));
-> @@ -802,7 +802,7 @@ struct phy *devm_of_phy_get(struct device *dev,
-> struct device_node *np,
->                 return phy;
->         }
->
-> -       link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
-> +       link = device_link_add(dev, &phy->dev, DL_FLAG_SYNC_STATE_ONLY);
->         if (!link) {
->                 dev_err(dev, "failed to create device link to %s\n",
->                         dev_name(phy->dev.parent));
-> @@ -851,7 +851,7 @@ struct phy *devm_of_phy_get_by_index(struct device
-> *dev, struct device_node *np,
->         *ptr = phy;
->         devres_add(dev, ptr);
->
-> -       link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
-> +       link = device_link_add(dev, &phy->dev, DL_FLAG_SYNC_STATE_ONLY);
->         if (!link) {
->                 dev_err(dev, "failed to create device link to %s\n",
->                         dev_name(phy->dev.parent));
->
-> Thanks
-> Kishon
->
+On Fri, Feb 07, 2020 at 01:58:58AM +0000, Bryan O'Donoghue wrote:
+> Using the gpio_usb_connector driver also means that we are not supplying
+> VBUS via the SoC but by an external PMIC directly.
+> 
+> This patch searches for a gpio_usb_connector as a child node of the core
+> DWC3 block and if found switches on the VBUS over-ride, leaving it up to
+> the role-switching code in gpio-usb-connector to switch off and on VBUS.
+ 
+<snip>
+
+>  static int dwc3_qcom_probe(struct platform_device *pdev)
+>  {
+>  	struct device_node	*np = pdev->dev.of_node;
+> @@ -557,7 +572,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  	struct dwc3_qcom	*qcom;
+>  	struct resource		*res, *parent_res = NULL;
+>  	int			ret, i;
+> -	bool			ignore_pipe_clk;
+> +	bool			ignore_pipe_clk, gpio_usb_conn;
+>  
+>  	qcom = devm_kzalloc(&pdev->dev, sizeof(*qcom), GFP_KERNEL);
+>  	if (!qcom)
+> @@ -649,9 +664,10 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	qcom->mode = usb_get_dr_mode(&qcom->dwc3->dev);
+> +	gpio_usb_conn = dwc3_qcom_find_gpio_usb_connector(qcom->dwc3);
+>  
+> -	/* enable vbus override for device mode */
+> -	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
+> +	/* enable vbus override for device mode or GPIO USB connector mode */
+> +	if (qcom->mode == USB_DR_MODE_PERIPHERAL || gpio_usb_conn)
+>  		dwc3_qcom_vbus_overrride_enable(qcom, true);
+
+This doesn't seem right. It looks like you are doing the vbus_override
+only once on probe() and keeping it that way regardless of the dynamic
+state of the connector, i.e. even after VBUS is physically removed
+and/or ID pin is low.
+
+>  	/* register extcon to override sw_vbus on Vbus change later */
+
+As suggested by this comment, if you look at the extcon handling, it
+intercepts the VBUS state toggling in dwc3_qcom_vbus_notifier() and
+calls vbus_override() accordingly. That way it should only be true when
+the role==USB_ROLE_DEVICE and disabled otherwise (USB_ROLE_HOST/NONE).
+
+To me the gpio-b connector + usb-role-switch is attempting to be an
+alternative to extcon. But to correctly mimic the vbus_override()
+behavior I think we need a way to intercept when the connector child
+driver calls usb_role_switch_set_role() to the dwc3 device, but somehow
+be able to do it from up here in the parent/glue layer. Unfortunately I
+don't have a good idea of how to do that, short of shoehorning an
+"upcall" notification from drd.c to the glue, something I don't think
+Felipe would be a fan of.
+
+Could the usb_role_switch class somehow be enhanced to support chaining
+multiple "consumers" to support this case? Such that when the gpio-b
+driver calls set_role() it could get handled both by drd.c and
+dwc3-qcom.c?
+
+Jack
+-- 
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
