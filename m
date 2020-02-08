@@ -2,28 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8724C156574
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2020 17:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2A115657B
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2020 17:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727377AbgBHQZL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 8 Feb 2020 11:25:11 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:46519 "EHLO
+        id S1727473AbgBHQbf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 8 Feb 2020 11:31:35 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:46557 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727303AbgBHQZL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Feb 2020 11:25:11 -0500
+        with ESMTP id S1727303AbgBHQbf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Feb 2020 11:31:35 -0500
 Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <colin.king@canonical.com>)
-        id 1j0Sur-0004As-0t; Sat, 08 Feb 2020 16:25:09 +0000
+        id 1j0T12-0004WC-RC; Sat, 08 Feb 2020 16:31:32 +0000
 From:   Colin King <colin.king@canonical.com>
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: dwc3: debug: remove redundant call to strlen
-Date:   Sat,  8 Feb 2020 16:25:08 +0000
-Message-Id: <20200208162508.29336-1-colin.king@canonical.com>
+Subject: [PATCH] usb: gadget: remove redundant assignment to variable status
+Date:   Sat,  8 Feb 2020 16:31:32 +0000
+Message-Id: <20200208163132.29592-1-colin.king@canonical.com>
 X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -35,29 +35,29 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Colin Ian King <colin.king@canonical.com>
 
-The call to strlen is redundant since the return value is assigned
-to variable len but not subsequently used. Remove the redundant
-call.
+Variable status is being assigned with a value that is never read, it is
+assigned a new value immediately afterwards. The assignment is redundant
+and can be removed.
 
 Addresses-Coverity: ("Unused value")
 Signed-off-by: Colin Ian King <colin.king@canonical.com>
 ---
- drivers/usb/dwc3/debug.h | 2 --
+ drivers/usb/gadget/function/f_uac1_legacy.c | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/drivers/usb/dwc3/debug.h b/drivers/usb/dwc3/debug.h
-index e56beb9d1e36..ee964352c8e2 100644
---- a/drivers/usb/dwc3/debug.h
-+++ b/drivers/usb/dwc3/debug.h
-@@ -296,8 +296,6 @@ static inline const char *dwc3_ep_event_string(char *str, size_t size,
- 				status & DEPEVT_STATUS_TRANSFER_ACTIVE ?
- 				" (Active)" : " (Not Active)");
+diff --git a/drivers/usb/gadget/function/f_uac1_legacy.c b/drivers/usb/gadget/function/f_uac1_legacy.c
+index 6677ae932de0..349deae7cabd 100644
+--- a/drivers/usb/gadget/function/f_uac1_legacy.c
++++ b/drivers/usb/gadget/function/f_uac1_legacy.c
+@@ -752,8 +752,6 @@ f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 	audio->out_ep = ep;
+ 	audio->out_ep->desc = &as_out_ep_desc;
  
--		len = strlen(str);
+-	status = -ENOMEM;
 -
- 		/* Control Endpoints */
- 		if (epnum <= 1) {
- 			int phase = DEPEVT_STATUS_CONTROL_PHASE(event->status);
+ 	/* copy descriptors, and track endpoint copies */
+ 	status = usb_assign_descriptors(f, f_audio_desc, f_audio_desc, NULL,
+ 					NULL);
 -- 
 2.25.0
 
