@@ -2,176 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF137156546
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2020 16:55:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D500156567
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2020 17:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727387AbgBHPzO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 8 Feb 2020 10:55:14 -0500
-Received: from canardo.mork.no ([148.122.252.1]:53891 "EHLO canardo.mork.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727340AbgBHPzO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 8 Feb 2020 10:55:14 -0500
-Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 018FtAgJ014882
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Sat, 8 Feb 2020 16:55:11 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1581177311; bh=vJOwTTfoqL06fKoYtpuRFsnFaF1X0/qhRi3tLFTzidE=;
-        h=From:To:Cc:Subject:Date:Message-Id:From;
-        b=nbj3Sgt9D8jNGUTsmmpqyUUKyOMiTm5H+1fsHrjc+7GtDZ2a45yMFWMMOeXdNp/BQ
-         CUoXnaoiJTi/oxB8SEsYi8Md1t01exfqyIwQO+1a8T96obcVD2cIqbZzSCNHTgQtP/
-         yl8o+JmAwvOdPJikbRWJHIreXCYBE3EAgE85kgco=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
-        (envelope-from <bjorn@miraculix.mork.no>)
-        id 1j0SRq-0007sV-P3; Sat, 08 Feb 2020 16:55:10 +0100
-From:   =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-To:     netdev@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        Kristian Evensen <kristian.evensen@gmail.com>,
-        Aleksander Morgado <aleksander@aleksander.es>
-Subject: [PATCH net-next] qmi_wwan: unconditionally reject 2 ep interfaces
-Date:   Sat,  8 Feb 2020 16:55:04 +0100
-Message-Id: <20200208155504.30243-1-bjorn@mork.no>
-X-Mailer: git-send-email 2.20.1
+        id S1727390AbgBHQSF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 8 Feb 2020 11:18:05 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:46432 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727340AbgBHQSF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Feb 2020 11:18:05 -0500
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1j0Sny-0003kh-T3; Sat, 08 Feb 2020 16:18:03 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: cdns3: remove redundant assignment to pointer trb
+Date:   Sat,  8 Feb 2020 16:18:02 +0000
+Message-Id: <20200208161802.28846-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.101.4 at canardo
-X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We have been using the fact that the QMI and DIAG functions
-usually are the only ones with class/subclass/protocol being
-ff/ff/ff on Quectel modems. This has allowed us to match the
-QMI function without knowing the exact interface number,
-which can vary depending on firmware configuration.
+From: Colin Ian King <colin.king@canonical.com>
 
-The ability to silently reject the DIAG function, which is
-usually handled by the option driver, is important for this
-method to work.  This is done based on the knowledge that it
-has exactly 2 bulk endpoints.  QMI function control interfaces
-will have either 3 or 1 endpoint. This rule is universal so
-the quirk condition can be removed.
+Pointer trb being assigned with a value that is never read, it is
+assigned a new value later on. The assignment is redundant and
+can be removed.
 
-The fixed layouts known from the Gobi1k and Gobi2k modems
-have been gradually replaced by more dynamic layouts, and
-many vendors now use configurable layouts without changing
-device IDs.  Renaming the class/subclass/protocol matching
-macro makes it more obvious that this is now not Quectel
-specific anymore.
-
-Cc: Kristian Evensen <kristian.evensen@gmail.com>
-Cc: Aleksander Morgado <aleksander@aleksander.es>
-Signed-off-by: Bjørn Mork <bjorn@mork.no>
+Addresses-Coverity: ("Unused value")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
 ---
-What do you think, Kristian?  There is no real need to limit this
-rule to Quectel modems, is there?  And from what I've understood,
-it seems that most/all the upcoming X55 modems will have a
-completely configurable layout.  Which means that we should
-avoid macthing on interface number if we can.  And I believe we
-can. I've not yet seen an example where ff/ff/ff would match
-anything except QMI and DIAG.
+ drivers/usb/cdns3/gadget.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
- drivers/net/usb/qmi_wwan.c | 42 ++++++++++++++------------------------
- 1 file changed, 15 insertions(+), 27 deletions(-)
-
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 839cef720cf6..3b7a3b8a5e06 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -61,7 +61,6 @@ enum qmi_wwan_flags {
- 
- enum qmi_wwan_quirks {
- 	QMI_WWAN_QUIRK_DTR = 1 << 0,	/* needs "set DTR" request */
--	QMI_WWAN_QUIRK_QUECTEL_DYNCFG = 1 << 1,	/* check num. endpoints */
- };
- 
- struct qmimux_hdr {
-@@ -916,16 +915,6 @@ static const struct driver_info	qmi_wwan_info_quirk_dtr = {
- 	.data           = QMI_WWAN_QUIRK_DTR,
- };
- 
--static const struct driver_info	qmi_wwan_info_quirk_quectel_dyncfg = {
--	.description	= "WWAN/QMI device",
--	.flags		= FLAG_WWAN | FLAG_SEND_ZLP,
--	.bind		= qmi_wwan_bind,
--	.unbind		= qmi_wwan_unbind,
--	.manage_power	= qmi_wwan_manage_power,
--	.rx_fixup       = qmi_wwan_rx_fixup,
--	.data           = QMI_WWAN_QUIRK_DTR | QMI_WWAN_QUIRK_QUECTEL_DYNCFG,
--};
--
- #define HUAWEI_VENDOR_ID	0x12D1
- 
- /* map QMI/wwan function by a fixed interface number */
-@@ -946,14 +935,18 @@ static const struct driver_info	qmi_wwan_info_quirk_quectel_dyncfg = {
- #define QMI_GOBI_DEVICE(vend, prod) \
- 	QMI_FIXED_INTF(vend, prod, 0)
- 
--/* Quectel does not use fixed interface numbers on at least some of their
-- * devices. We need to check the number of endpoints to ensure that we bind to
-- * the correct interface.
-+/* Many devices have QMI and DIAG functions which are distinguishable
-+ * from other vendor specific functions by class, subclass and
-+ * protocol all being 0xff. The DIAG function has exactly 2 endpoints
-+ * and is silently rejected when probed.
-+ *
-+ * This makes it possible to match dynamically numbered QMI functions
-+ * as seen on e.g. many Quectel modems.
-  */
--#define QMI_QUIRK_QUECTEL_DYNCFG(vend, prod) \
-+#define QMI_MATCH_FF_FF_FF(vend, prod) \
- 	USB_DEVICE_AND_INTERFACE_INFO(vend, prod, USB_CLASS_VENDOR_SPEC, \
- 				      USB_SUBCLASS_VENDOR_SPEC, 0xff), \
--	.driver_info = (unsigned long)&qmi_wwan_info_quirk_quectel_dyncfg
-+	.driver_info = (unsigned long)&qmi_wwan_info_quirk_dtr
- 
- static const struct usb_device_id products[] = {
- 	/* 1. CDC ECM like devices match on the control interface */
-@@ -1059,10 +1052,10 @@ static const struct usb_device_id products[] = {
- 		USB_DEVICE_AND_INTERFACE_INFO(0x03f0, 0x581d, USB_CLASS_VENDOR_SPEC, 1, 7),
- 		.driver_info = (unsigned long)&qmi_wwan_info,
- 	},
--	{QMI_QUIRK_QUECTEL_DYNCFG(0x2c7c, 0x0125)},	/* Quectel EC25, EC20 R2.0  Mini PCIe */
--	{QMI_QUIRK_QUECTEL_DYNCFG(0x2c7c, 0x0306)},	/* Quectel EP06/EG06/EM06 */
--	{QMI_QUIRK_QUECTEL_DYNCFG(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
--	{QMI_QUIRK_QUECTEL_DYNCFG(0x2c7c, 0x0800)},	/* Quectel RM500Q-GL */
-+	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0125)},	/* Quectel EC25, EC20 R2.0  Mini PCIe */
-+	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0306)},	/* Quectel EP06/EG06/EM06 */
-+	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
-+	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0800)},	/* Quectel RM500Q-GL */
- 
- 	/* 3. Combined interface devices matching on interface number */
- 	{QMI_FIXED_INTF(0x0408, 0xea42, 4)},	/* Yota / Megafon M100-1 */
-@@ -1455,7 +1448,6 @@ static int qmi_wwan_probe(struct usb_interface *intf,
+diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+index 736b0c6e27fe..3c05080a9ad5 100644
+--- a/drivers/usb/cdns3/gadget.c
++++ b/drivers/usb/cdns3/gadget.c
+@@ -1380,7 +1380,7 @@ static bool cdns3_request_handled(struct cdns3_endpoint *priv_ep,
+ 				  struct cdns3_request *priv_req)
  {
- 	struct usb_device_id *id = (struct usb_device_id *)prod;
- 	struct usb_interface_descriptor *desc = &intf->cur_altsetting->desc;
--	const struct driver_info *info;
- 
- 	/* Workaround to enable dynamic IDs.  This disables usbnet
- 	 * blacklisting functionality.  Which, if required, can be
-@@ -1491,12 +1483,8 @@ static int qmi_wwan_probe(struct usb_interface *intf,
- 	 * different. Ignore the current interface if the number of endpoints
- 	 * equals the number for the diag interface (two).
- 	 */
--	info = (void *)id->driver_info;
--
--	if (info->data & QMI_WWAN_QUIRK_QUECTEL_DYNCFG) {
--		if (desc->bNumEndpoints == 2)
--			return -ENODEV;
--	}
-+	if (desc->bNumEndpoints == 2)
-+		return -ENODEV;
- 
- 	return usbnet_probe(intf, id);
- }
+ 	struct cdns3_device *priv_dev = priv_ep->cdns3_dev;
+-	struct cdns3_trb *trb = priv_req->trb;
++	struct cdns3_trb *trb;
+ 	int current_index = 0;
+ 	int handled = 0;
+ 	int doorbell;
 -- 
-2.20.1
+2.25.0
 
