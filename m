@@ -2,82 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 629B5156855
-	for <lists+linux-usb@lfdr.de>; Sun,  9 Feb 2020 02:37:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA3C1569C8
+	for <lists+linux-usb@lfdr.de>; Sun,  9 Feb 2020 10:18:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727532AbgBIBhe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 8 Feb 2020 20:37:34 -0500
-Received: from mail02.vodafone.es ([217.130.24.81]:59379 "EHLO
-        mail02.vodafone.es" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727073AbgBIBhe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Feb 2020 20:37:34 -0500
-IronPort-SDR: q43fNqDLZe17D7tpApm038vCJgNB03RjqeBcXo2PdCDIos+1/tw0AOoFTipzqE/tJJbWBvXS/v
- pZmaiHDujJTg==
-IronPort-PHdr: =?us-ascii?q?9a23=3AVK0rBxAWJpPz3wY8dVG5UyQJP3N1i/DPJgcQr6?=
- =?us-ascii?q?AfoPdwSPT5pMbcNUDSrc9gkEXOFd2Cra4d16yL4+u7ACRAuc/H7ClZNsQUFl?=
- =?us-ascii?q?cssoY/p0QYGsmLCEn2frbBThcRO4B8bmJj5GyxKkNPGczzNBX4q3y26iMOSF?=
- =?us-ascii?q?2kbVImbuv6FZTPgMupyuu854PcYxlShDq6fLh+MAi6oR/eu8ULjoZuMKY8xx?=
- =?us-ascii?q?jGrnZGZuhd2GdkKU6Okxrm6cq84ZBu/z5Mt/498sJLTLn3cbk/QbFEFjotLn?=
- =?us-ascii?q?o75NfstRnNTAuP4mUTX2ALmRdWAAbL8Q/3UI7pviT1quRy1i+aPdbrTb8vQj?=
- =?us-ascii?q?St871rSB7zhygZMTMy7XzahdZxjKJfpxKhugB/zovJa4ybKPZyYqXQds4cSG?=
- =?us-ascii?q?FcXMheSjZBD5uyYYUPFeoPI+VWoZTyqFQSohWzHhWsCeHzxTNUmnP6wbM23u?=
- =?us-ascii?q?I8Gg/GxgwgGNcOvWzOotrrKKcdT/q1x7TIwjXEafNW1ir25Y/Qch8/vfGDQ6?=
- =?us-ascii?q?hwcMTWyUkpGAPIlU6fqYv4MDyP1+UNtG6b4PR6We2zjG4nrhh8rz6yzckvko?=
- =?us-ascii?q?nEnpwZxk3G+Clj3Yo4K8G0RFRlbdOrCpdduSGXOo1rSc04WW5oojw1yrgetJ?=
- =?us-ascii?q?6+eygF1YooygbEa/yCb4iI+hXjVPuNITtghHJqZra/hxGq/Eil0OL8V8200E?=
- =?us-ascii?q?xUoSpBjtXBuWoB1wLU6seaUPR98ECh2TCR2AzJ9O5EOlg4lavdK5E/3r49jo?=
- =?us-ascii?q?QfvVnBEyPshUn7grOael869uWn8ejqbLXrqoeZN4BuiwH+Nqoumta4AeQ9Kg?=
- =?us-ascii?q?UOR3aU+fii273580z5R7NKjvItn6bCt5DVON4Up6++Aw9TzIkv8QqwDzCj0N?=
- =?us-ascii?q?gAh3kIMEpFeA6bj4juI1zOJPH4DfGig1WjiTtr2uvGMab6D5XTIXjMjq3hca?=
- =?us-ascii?q?x+60FC0gozy85Q55ZOBrEGOvLzVRy5iNuNCh4/Lhzx3v3tIMty25lYWm+VBK?=
- =?us-ascii?q?KddqTIvgyy6/orMtWLMbcYpDvnY8ci4fGm2Wc0hVIHYq6v0psMYnu4HdxpJk?=
- =?us-ascii?q?yYZTznhdJXQkkQuQ9rdOH2hUfKbjlVaD7mR68g6yskD4SpJY3ESom/h7qMmi?=
- =?us-ascii?q?y8G8sFNSh9FlmQHCKwJM2/UPAWZXfKLw=3D=3D?=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2F5cgD4YT9emCMYgtlmHQEBAQkBEQU?=
- =?us-ascii?q?FAYF7AgGBPQKBVlINExKMZIZxgU0fg0OLaIEAgzOGCBOBZw0BAQEBATUCAQG?=
- =?us-ascii?q?EQIJGJDwCDQIDDQEBBQEBAQEBBQQBAQIQAQEBAQEICwsGKYVKQgEMAYFrIoN?=
- =?us-ascii?q?wIA85SkwBDgGDV4JLAQEzrloNDQKFHoJgBAqBCIEbI4E2AgEBjCEagUE/gSM?=
- =?us-ascii?q?hgisIAYIBgn8BEgFugkiCWQSNUBIhiT+YMIJEBHiVa4I4AQ+IEYQ1A4JYD4E?=
- =?us-ascii?q?Lgx2DCIFnhFKBfp9YhBJXgSBzcTMaI4IdgSBPGA2ON44rAkCBFxACT4Q7hja?=
- =?us-ascii?q?CMgEB?=
-X-IPAS-Result: =?us-ascii?q?A2F5cgD4YT9emCMYgtlmHQEBAQkBEQUFAYF7AgGBPQKBV?=
- =?us-ascii?q?lINExKMZIZxgU0fg0OLaIEAgzOGCBOBZw0BAQEBATUCAQGEQIJGJDwCDQIDD?=
- =?us-ascii?q?QEBBQEBAQEBBQQBAQIQAQEBAQEICwsGKYVKQgEMAYFrIoNwIA85SkwBDgGDV?=
- =?us-ascii?q?4JLAQEzrloNDQKFHoJgBAqBCIEbI4E2AgEBjCEagUE/gSMhgisIAYIBgn8BE?=
- =?us-ascii?q?gFugkiCWQSNUBIhiT+YMIJEBHiVa4I4AQ+IEYQ1A4JYD4ELgx2DCIFnhFKBf?=
- =?us-ascii?q?p9YhBJXgSBzcTMaI4IdgSBPGA2ON44rAkCBFxACT4Q7hjaCMgEB?=
-X-IronPort-AV: E=Sophos;i="5.70,419,1574118000"; 
-   d="scan'208";a="334344917"
-Received: from mailrel04.vodafone.es ([217.130.24.35])
-  by mail02.vodafone.es with ESMTP; 09 Feb 2020 02:37:08 +0100
-Received: (qmail 8106 invoked from network); 9 Feb 2020 00:49:08 -0000
-Received: from unknown (HELO 192.168.1.163) (apamar@[217.217.179.17])
-          (envelope-sender <peterwong@bodazone.com>)
-          by mailrel04.vodafone.es (qmail-ldap-1.03) with SMTP
-          for <linux-usb@vger.kernel.org>; 9 Feb 2020 00:49:08 -0000
-Date:   Sun, 9 Feb 2020 01:49:07 +0100 (CET)
-From:   Peter Wong <peterwong@bodazone.com>
-Reply-To: Peter Wong <peterwonghsbchk@gmail.com>
+        id S1726220AbgBIJSS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sun, 9 Feb 2020 04:18:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52938 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726078AbgBIJSS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 9 Feb 2020 04:18:18 -0500
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     linux-usb@vger.kernel.org
-Message-ID: <1551295.233608.1581209348789.JavaMail.cash@217.130.24.55>
-Subject: Investment opportunity
+Subject: [Bug 206471] New: Connecting Yi 4K+ to Tthinkpad T495, "usb
+ usb2-port3: Cannot enable. Maybe the USB cable is bad?"
+Date:   Sun, 09 Feb 2020 09:18:17 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: lucas.vacek@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression attachments.created
+Message-ID: <bug-206471-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greetings,
-Please check the attached email for a buisness proposal to explore.
-Looking forward to hearing from you for more details.
-Sincerely: Peter Wong
+https://bugzilla.kernel.org/show_bug.cgi?id=206471
 
+            Bug ID: 206471
+           Summary: Connecting Yi 4K+ to Tthinkpad T495, "usb usb2-port3:
+                    Cannot enable. Maybe the USB cable is bad?"
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.4.18-050418-lowlatency #202002051737 SMP PREEMPT Wed
+                    Feb 5 22:52:51 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
+          Hardware: x86-64
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: lucas.vacek@gmail.com
+        Regression: No
 
+Created attachment 287255
+  --> https://bugzilla.kernel.org/attachment.cgi?id=287255&action=edit
+Output of cat /sys/kernel/debug/usb/usbmon/2u
 
+I can reproduce the same problem on 5.5.2 and 5.4.3 as well.
 
-----------------------------------------------------
-This email was sent by the shareware version of Postman Professional.
+When connecting Yi 4K+ camera to USB port on Thinkpad T495 I get following
+error:
 
+[ 6376.553655] usb usb2-port3: Cannot enable. Maybe the USB cable is bad?
+[ 6377.441641] usb usb2-port3: Cannot enable. Maybe the USB cable is bad?
+[ 6377.441714] usb usb2-port3: attempt power cycle
+[ 6378.641657] usb usb2-port3: Cannot enable. Maybe the USB cable is bad?
+[ 6379.529678] usb usb2-port3: Cannot enable. Maybe the USB cable is bad?
+[ 6379.529752] usb usb2-port3: unable to enumerate USB device
+[ 6408.857408] usb usb2-port3: Cannot enable. Maybe the USB cable is bad?
+[ 6409.745778] usb usb2-port3: Cannot enable. Maybe the USB cable is bad?
+[ 6409.745843] usb usb2-port3: attempt power cycle
+[ 6410.945496] usb usb2-port3: Cannot enable. Maybe the USB cable is bad?
+[ 6411.833866] usb usb2-port3: Cannot enable. Maybe the USB cable is bad?
+[ 6411.833940] usb usb2-port3: unable to enumerate USB device
+[ 6598.002122] usb usb2-port3: Cannot enable. Maybe the USB cable is bad?
+[ 6598.890212] usb usb2-port3: Cannot enable. Maybe the USB cable is bad?
+[ 6598.890275] usb usb2-port3: attempt power cycle
+[ 6600.090213] usb usb2-port3: Cannot enable. Maybe the USB cable is bad?
+[ 6600.978772] usb usb2-port3: Cannot enable. Maybe the USB cable is bad?
+[ 6600.978825] usb usb2-port3: unable to enumerate USB device
+
+There is no problem when connecting other devices to the USB ports, there is no
+problem when I connect the camera to USB ports on dock station. If I try to
+connect the camera to the laptop via USB-C nothing happens.
+
+The camera works fine when connected to other PCs too (Thinkpad T420 running
+Ubuntu 14.04 and another PC with Windows 7). 
+
+I am attaching output of `cat /sys/kernel/debug/usb/usbmon/2u` when connecting
+the camera ot the USB port (file "usbmon_fail").
+
+Hope this helps, I'm happy to provide further assistance in debugging.
+
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
