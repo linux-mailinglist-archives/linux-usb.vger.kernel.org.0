@@ -2,69 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6847F157E7E
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 16:12:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D6D157EAA
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 16:22:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728360AbgBJPMR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Feb 2020 10:12:17 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:52535 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727347AbgBJPMR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 10:12:17 -0500
-Received: (qmail 18190 invoked by uid 500); 10 Feb 2020 10:12:15 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 10 Feb 2020 10:12:15 -0500
-Date:   Mon, 10 Feb 2020 10:12:15 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Martin Townsend <mtownsend1973@gmail.com>
-cc:     linux-usb@vger.kernel.org
-Subject: Re: Enumerating USB devices in the Bootloader
-In-Reply-To: <CABatt_xcct6nNp6OELNMO3-R+JPLdh_bn6pH5RxyWQu=m9NhGw@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.2002101005210.14460-100000@netrider.rowland.org>
+        id S1727434AbgBJPWS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Feb 2020 10:22:18 -0500
+Received: from www262.sakura.ne.jp ([202.181.97.72]:55606 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727363AbgBJPWS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 10:22:18 -0500
+Received: from fsav103.sakura.ne.jp (fsav103.sakura.ne.jp [27.133.134.230])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 01AFM5Qp011146;
+        Tue, 11 Feb 2020 00:22:05 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav103.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav103.sakura.ne.jp);
+ Tue, 11 Feb 2020 00:22:05 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav103.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 01AFM0c3011080
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
+        Tue, 11 Feb 2020 00:22:05 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Subject: Re: INFO: task hung in wdm_flush
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Oliver Neukum <oneukum@suse.de>,
+        syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Colin King <colin.king@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        yuehaibing@huawei.com, =?UTF-8?Q?Bj=c3=b8rn_Mork?= <bjorn@mork.no>
+References: <0000000000003313f0058fea8435@google.com>
+ <8736ek9qir.fsf@miraculix.mork.no> <1574159504.28617.5.camel@suse.de>
+ <87pnho85h7.fsf@miraculix.mork.no>
+ <CACT4Y+YgLm2m0JG6qKKn9OpyXT9kKEPeyLSVGSfLbUukoCnB+g@mail.gmail.com>
+ <CACT4Y+ZjiCDgtGVMow3WNzjuqBLaxy_KB4cM10wbfUnDdjBYfQ@mail.gmail.com>
+ <CACT4Y+ZWDMkOmnXpBXFhU8XcHA_-ZcHdZpfrXcCWHRzcbQ39Gg@mail.gmail.com>
+ <ebc7b5e0-e968-0bdb-d75d-346e0b763d14@i-love.sakura.ne.jp>
+ <CACT4Y+bDNjj_RGLtvRCaV3k9+QX4eENyKyWWAbsHcbwR7CDrWQ@mail.gmail.com>
+ <CACT4Y+ZaNNAiRvKCMJ9t4H+H23OcjSd5haAcXkG68L8F6Mq6Wg@mail.gmail.com>
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Message-ID: <bbf26ea3-c11c-1cd2-0072-b78634ae9579@i-love.sakura.ne.jp>
+Date:   Tue, 11 Feb 2020 00:21:56 +0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <CACT4Y+ZaNNAiRvKCMJ9t4H+H23OcjSd5haAcXkG68L8F6Mq6Wg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 10 Feb 2020, Martin Townsend wrote:
-
-> Hi,
+On 2020/02/11 0:06, Dmitry Vyukov wrote:
+>> On Mon, Feb 10, 2020 at 4:03 PM Tetsuo Handa
+>> <penguin-kernel@i-love.sakura.ne.jp> wrote:
+>>>
+>>> On 2020/02/10 21:46, Tetsuo Handa wrote:
+>>>> On 2020/02/10 19:09, Dmitry Vyukov wrote:
+>>>>> You may also try on the exact commit the bug was reported, because
+>>>>> usb-fuzzer is tracking branch, things may change there.
+>>>>
+>>>> OK. I explicitly tried
+>>>>
+>>>>   #syz test: https://github.com/google/kasan.git e5cd56e94edde38ca4dafae5a450c5a16b8a5f23
+>>>>
+>>>> but syzbot still cannot reproduce this bug using the reproducer...
+>>>
+>>> It seems that there is non-trivial difference between kernel config in dashboard
+>>> and kernel config in "syz test:" mails. Maybe that's the cause...
 > 
-> We are using the USB mass storage gadget driver in Linux and
-> everything is working fairly well but sometimes we are finding that we
-> are exceeding the 100mA limit (which I think is the default the host
-> will provide) before Linux has had a change to enumerate the USB
-> device at which point we ask for 500mA.  We have tried to reduce the
-> power by ensuring all clocks are turned off, devices not used disabled
-> etc but can't seem to satisfy the 100mA limit.  We were thinking that
-> maybe we could enumerate the USB device during U-Boot at which point
-> we know we are under the 100mA limit.  Does anyone know a reason why
-> this would not work?
+> 
+> syzkaller runs oldconfig when building any kernels:
+> https://github.com/google/syzkaller/blob/master/pkg/build/linux.go#L56
+> Is that difference what oldconfig produces?
+> 
 
-It won't work because U-Boot isn't the kernel.  When the kernel takes 
-over the USB controller, it will force the host to re-enumerate the 
-gadget -- and you will be right back where you started.
+Here is the diff (with "#" lines excluded) between dashboard and "syz test:" mails.
+I feel this difference is bigger than what simple oldconfig would cause.
 
-The only way to make this work would be to prevent U-Boot from ever 
-actually booting the Linux kernel.  This probably isn't the way you 
-want your device to behave, though.
-
-> would at some point from U-Boot enumerating a new
-> bMaxPower would the connection be reset and drop back to 100mA during
-> the kernel startup? Are there any considerations that we would need to
-> take care of in the kernel for this to work?
-
-If you can't satisfy the 100-mA current limit then you should make your
-device be self-powered instead of relying on power delivered over the
-USB bus.
-
-Be aware also that bus-powered USB-2 hubs can't deliver 500 mA to their
-downstream ports.  They are always limited to 100 mA or less.  If your
-gadget was plugged into one of them, it wouldn't be able to work at 
-all.
-
-Alan Stern
-
+$ curl 'https://syzkaller.appspot.com/text?tag=KernelConfig&x=8cff427cc8996115' | sort > dashboard
+$ curl 'https://syzkaller.appspot.com/x/.config?x=c372cdb7140fc162' | sort > syz-test
+$ diff -u dashboard syz-test | grep -vF '#' | grep '^[+-]'
+--- dashboard   2020-02-11 00:19:14.793977153 +0900
++++ syz-test    2020-02-11 00:19:15.659977108 +0900
+-CONFIG_BLK_DEV_LOOP_MIN_COUNT=16
++CONFIG_BLK_DEV_LOOP_MIN_COUNT=8
+-CONFIG_BUG_ON_DATA_CORRUPTION=y
+-CONFIG_DEBUG_CREDENTIALS=y
+-CONFIG_DEBUG_PER_CPU_MAPS=y
+-CONFIG_DEBUG_PLIST=y
+-CONFIG_DEBUG_SG=y
+-CONFIG_DEBUG_VIRTUAL=y
++CONFIG_DEVMEM=y
++CONFIG_DEVPORT=y
++CONFIG_DMA_OF=y
+-CONFIG_DYNAMIC_DEBUG=y
+-CONFIG_DYNAMIC_MEMORY_LAYOUT=y
++CONFIG_HID_REDRAGON=y
++CONFIG_IRQCHIP=y
+-CONFIG_LSM="lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor"
++CONFIG_LSM="yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor"
+-CONFIG_MAC80211_HWSIM=y
++CONFIG_MAGIC_SYSRQ=y
++CONFIG_MAGIC_SYSRQ_DEFAULT_ENABLE=0x1
++CONFIG_MAGIC_SYSRQ_SERIAL=y
++CONFIG_NET_TC_SKB_EXT=y
++CONFIG_OF=y
++CONFIG_OF_ADDRESS=y
++CONFIG_OF_GPIO=y
++CONFIG_OF_IOMMU=y
++CONFIG_OF_IRQ=y
++CONFIG_OF_KOBJ=y
++CONFIG_OF_MDIO=y
++CONFIG_OF_NET=y
+-CONFIG_PGTABLE_LEVELS=5
++CONFIG_PGTABLE_LEVELS=4
++CONFIG_PWRSEQ_EMMC=y
++CONFIG_PWRSEQ_SIMPLE=y
++CONFIG_RTLWIFI_DEBUG=y
+-CONFIG_SECURITYFS=y
++CONFIG_STRICT_DEVMEM=y
++CONFIG_THERMAL_OF=y
++CONFIG_USB_CHIPIDEA_OF=y
++CONFIG_USB_DWC3_OF_SIMPLE=y
+-CONFIG_USB_RAW_GADGET=y
++CONFIG_USB_SNP_UDC_PLAT=y
+-CONFIG_VIRTIO_BLK_SCSI=y
+-CONFIG_VIRT_WIFI=y
+-CONFIG_X86_5LEVEL=y
