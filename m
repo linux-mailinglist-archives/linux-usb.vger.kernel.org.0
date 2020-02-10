@@ -2,104 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2AC157322
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 11:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89A77157376
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 12:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727363AbgBJK4L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Feb 2020 05:56:11 -0500
-Received: from mail-il1-f193.google.com ([209.85.166.193]:40229 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726792AbgBJK4K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 05:56:10 -0500
-Received: by mail-il1-f193.google.com with SMTP id i7so5360085ilr.7;
-        Mon, 10 Feb 2020 02:56:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=d2IBt4/L/Nkmzl5hW1D/wjWzKHtqUWjVQiav92+TxjY=;
-        b=MxzfVtZRAKUIarDmqF9d8MtEWcqpjh3ZP6t4+CyS8iwJfg0VnRBEN5ecfTDSB/ifw5
-         Oe347EZ7IjQ/Ttkp4C8larMqFO3D5OVo62hVxbh4VB3YtEOic4v59wV2OxqSTcuqaAVZ
-         LSOuY+hEW35bByT0bXCtc6yvB+n7dHLJUDyaSyLv0aadoQKM8mWVpWgp+Cwa53vCsTUw
-         XZrC/jqYPGVltNO292Ad157gdmd/UuL51Qh1NxLP0atu/cJMiPWTUjy57gsZ2DfsD10S
-         NW92pC8NuZwhD0VTS3sLgeUes7Ghgp4jE+43B+Zy+lkj+fhmiFl44cZVQm9/58ycOa2K
-         mYbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=d2IBt4/L/Nkmzl5hW1D/wjWzKHtqUWjVQiav92+TxjY=;
-        b=GWiI0lpy1NSXbVswL6dJOXyCDTxlSl10wsOAIbMU4C4Q1iP0xN8xAb4IYgU/4682jb
-         +7Pv9YdSbELTQi2BtshQYKVXrzu1DZnXYr5FTRYwC7jm/L03+BPVuFSYsVEH2flOweHo
-         834sJBB1/vAKRpi1jaHUTMqP6XJyTzXmwRqLbZH5zZ79NOhsJ8TTgp1cWed+ZH7SETLG
-         ZHc+2DnZw7amC47Mtz6tHnl+ugos2eRgsSBwYMwA5zLaCMFYuuRfmtYlMgwM3HmvEPo2
-         e7cLd+Dq2F6xnrf7hLuC7Khbi2C+ezvBMJudUvg5L59yvCy3POevkGSpUviGeGorJDdU
-         zXLw==
-X-Gm-Message-State: APjAAAW39qINGrEF8dtQ6v+uQCrkdT/G96hzcvFi/2iUtXVLWCJw5j6a
-        kuvEJtv+7yVe+PdgClDb/Waxtikhbd9nAoEMkK105Q==
-X-Google-Smtp-Source: APXvYqzSD3AIuSazFlh5pPF5er+MSkw4OA9zMqA91tlC+bDSAj88WNPxzkmfnD9iDxhN7ozPY0QwiaRGDUDo1oQbwSw=
-X-Received: by 2002:a92:5d92:: with SMTP id e18mr761070ilg.75.1581332169369;
- Mon, 10 Feb 2020 02:56:09 -0800 (PST)
+        id S1727003AbgBJLam (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Feb 2020 06:30:42 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:27016 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726796AbgBJLam (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 06:30:42 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01ABRfpc012404;
+        Mon, 10 Feb 2020 12:30:25 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=phLs9lGm8x/+ZAJsH4kNU4veeVEhZ4t1zwWsPOWVrgA=;
+ b=wX0oUzSeCVCvJoxOSMLNDqK7lfESIwMA6DFIOGWEwzBSQ5KEoAEBlIgPxopV7amhbH9O
+ 6k2CM6B2ZjcZOsRaE7jL+DTf+pWSbeye6QvImhi1EqPRyosJazk04AR5sZ9LwCGN0q/a
+ qB4tXwiZjcXMAuzjQBvXGM83lWBjK4cSm4PcyvZl3W6PYCg3RzuNy1n/Hw4/JgHZ7RFT
+ eP83YjYOWBHNNQ42V4dCPhhgI3epMzLQx39zo1XPEc3fkarjowrFckm9DXm9F/iqBzCu
+ dNb5nJVpMKzSAGTZeNOzikaxReGONyfIGlyUudcvPqs1XNL+nUf85Tk86wsiiXygJUt8 0w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2y1uvd1b4g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 10 Feb 2020 12:30:25 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 789B610002A;
+        Mon, 10 Feb 2020 12:30:23 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 68C372CD05A;
+        Mon, 10 Feb 2020 12:30:23 +0100 (CET)
+Received: from lmecxl0912.lme.st.com (10.75.127.47) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 10 Feb
+ 2020 12:30:22 +0100
+Subject: Re: [PATCH] phy: core: Add consumer device link support
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        youling 257 <youling257@gmail.com>
+CC:     <yoshihiro.shimoda.uh@renesas.com>, <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <saravanak@google.com>
+References: <20191104143713.11137-1-alexandre.torgue@st.com>
+ <20200206133918.15012-1-youling257@gmail.com>
+ <0c4a37a9-0a2e-e698-f423-53060854ea05@ti.com>
+ <CAOzgRdb5QfJDQzbtoHQry4wxUg52LwX5XFCPzzaYa=z+RqNWOQ@mail.gmail.com>
+ <8bd72269-16ae-b24a-7144-44d22d668dc6@ti.com>
+From:   Alexandre Torgue <alexandre.torgue@st.com>
+Message-ID: <1cd5885d-7db4-59b9-ef2d-e3556f60ca68@st.com>
+Date:   Mon, 10 Feb 2020 12:30:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-References: <20200210105108.1128-1-linux.amoon@gmail.com>
-In-Reply-To: <20200210105108.1128-1-linux.amoon@gmail.com>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Mon, 10 Feb 2020 16:26:01 +0530
-Message-ID: <CANAwSgQzwRJE9mK+RwuCjsMaBMmD1f3fx+g-23B5Opo19kywUw@mail.gmail.com>
-Subject: Re: [PATCHv3 0/3] Add support for suspend clk for Exynos5422 SoC
-To:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-samsung-soc@vger.kernel.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <8bd72269-16ae-b24a-7144-44d22d668dc6@ti.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG4NODE2.st.com (10.75.127.11) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-10_02:2020-02-10,2020-02-10 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi All,
+Hi Kishon,
 
-Sorry typo this patch series should be PATCHv1 and not PATCHv3
+On 2/10/20 9:08 AM, Kishon Vijay Abraham I wrote:
+> Hi Alexandre,
+> 
+> On 07/02/20 12:27 PM, youling 257 wrote:
+>> test this diff, dwc3 work for my device, thanks.
+>>
+>> 2020-02-07 13:16 GMT+08:00, Kishon Vijay Abraham I <kishon@ti.com>:
+>>> Hi,
+>>>
+>>> On 06/02/20 7:09 PM, youling257 wrote:
+>>>> This patch cause "dwc3 dwc3.3.auto: failed to create device link to
+>>>> dwc3.3.auto.ulpi" problem.
+>>>> https://bugzilla.kernel.org/show_bug.cgi?id=206435
+>>>
+>>> I'm suspecting there is some sort of reverse dependency with dwc3 ULPI.
+>>> Can you try the following diff?
+>>>
+>>> diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+>>> index 2eb28cc2d2dc..397311dcb116 100644
+>>> --- a/drivers/phy/phy-core.c
+>>> +++ b/drivers/phy/phy-core.c
+>>> @@ -687,7 +687,7 @@ struct phy *phy_get(struct device *dev, const char
+>>> *string)
+>>>
+>>>          get_device(&phy->dev);
+>>>
+>>> -       link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
+>>> +       link = device_link_add(dev, &phy->dev, DL_FLAG_SYNC_STATE_ONLY);
+>>>          if (!link) {
+>>>                  dev_err(dev, "failed to create device link to %s\n",
+>>>                          dev_name(phy->dev.parent));
+>>> @@ -802,7 +802,7 @@ struct phy *devm_of_phy_get(struct device *dev,
+>>> struct device_node *np,
+>>>                  return phy;
+>>>          }
+>>>
+>>> -       link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
+>>> +       link = device_link_add(dev, &phy->dev, DL_FLAG_SYNC_STATE_ONLY);
+>>>          if (!link) {
+>>>                  dev_err(dev, "failed to create device link to %s\n",
+>>>                          dev_name(phy->dev.parent));
+>>> @@ -851,7 +851,7 @@ struct phy *devm_of_phy_get_by_index(struct device
+>>> *dev, struct device_node *np,
+>>>          *ptr = phy;
+>>>          devres_add(dev, ptr);
+>>>
+>>> -       link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
+>>> +       link = device_link_add(dev, &phy->dev, DL_FLAG_SYNC_STATE_ONLY);
+>>>          if (!link) {
+>>>                  dev_err(dev, "failed to create device link to %s\n",
+>>>                          dev_name(phy->dev.parent));Parent
+> 
+> Can you check if this doesn't affect the suspend/resume ordering?
 
--Anand
+With this fix, suspend/resume ordering is broken on my side. What do you 
+think to keep the STATELESS flag and to only display a warn if 
+"device_link_add" returns an error ? It's not "smart" but it could 
+solved our issue.
 
-On Mon, 10 Feb 2020 at 16:21, Anand Moon <linux.amoon@gmail.com> wrote:
->
-> Long time ago I tried to add suspend clk for dwc3 phy
-> which was wrong appoch, see below.
->
-> [0] https://lore.kernel.org/patchwork/patch/837635/
-> [1] https://lore.kernel.org/patchwork/patch/837636/
->
-> This patch series tries to enable suspend clk using
-> exynos dwc3 driver, for this I have added new
-> compatible string "samsung,exynos5420-dwusb3"
-> so that we could add new suspend clk in addition
-> to the core clk. exynos dwc3 driver will help
-> enable/disable these clk.
->
-> -Anand
->
-> Anand Moon (3):
->   devicetree: bindings: exynos: Add new compatible for Exynos5420 dwc3
->     clocks support
->   ARM: dts: exynos: Add missing usbdrd3 suspend clk
->   usb: dwc3: exynos: Add support for Exynos5422 suspend clk
->
->  Documentation/devicetree/bindings/usb/exynos-usb.txt | 4 +++-
->  arch/arm/boot/dts/exynos5420.dtsi                    | 8 ++++----
->  arch/arm/boot/dts/exynos54xx.dtsi                    | 4 ++--
->  drivers/usb/dwc3/dwc3-exynos.c                       | 9 +++++++++
->  4 files changed, 18 insertions(+), 7 deletions(-)
->
-> --
-> 2.25.0
->
+As a lot of improvements have been recently done on device link topic by 
+Saravana, we could check with him what is the way to follow.
+
+Regards
+Alex
+
+> 
+> Thanks
+> Kishon
+> 
