@@ -2,268 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 567F41584CF
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 22:31:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6601584DB
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 22:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727439AbgBJVbg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Feb 2020 16:31:36 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:40424 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727411AbgBJVbf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 16:31:35 -0500
-Received: by mail-pf1-f194.google.com with SMTP id q8so4334810pfh.7
-        for <linux-usb@vger.kernel.org>; Mon, 10 Feb 2020 13:31:35 -0800 (PST)
+        id S1727330AbgBJVjJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Feb 2020 16:39:09 -0500
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:35208 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727056AbgBJVjJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 16:39:09 -0500
+Received: by mail-pj1-f68.google.com with SMTP id q39so326046pjc.0
+        for <linux-usb@vger.kernel.org>; Mon, 10 Feb 2020 13:39:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:content-transfer-encoding:in-reply-to:references
-         :subject:from:cc:to:date:message-id:user-agent;
-        bh=B8Y46yQxNOEffuymdtO7hMB+CO0Z+Y5wI8m+HEDcLu0=;
-        b=D/S3ih4FUlxnwCjb4++UV+gkh9rbF7w4ohuxhC5YfRsEvBGbU59g3YST1JIOCQGYtY
-         AWhH0RNIEtQ8tYx3zeL8FMhqM1jshXU4oMhT99eDck67cR0AZrx5/4waU151yC8TYzEB
-         lswy5VGCd1OHy72SVT35N3B+8glmCX+b8Bynk=
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=VKF4/I66fKSdVDxJHASCOE5T5FlSSr3FRirJUxwtQyk=;
+        b=mqEl8hHCz0es7SHMqfM76JDDisCAudpxQZ6Siv/CdiD4CKEMtU4cB7CUayrBDKAq3f
+         8ElzqBcGVuLM4DlmmUvpWgnVGGNQyqVSV0GbubrY6iImw1uR3L5iYUisOXJDv7MnSGJI
+         puMfHXtizXOtI658y6Pd4rRROGv23Kk80mVK3qEBSI9MTptTIJhkA0yLEL9UI6sFh9KB
+         JHnqc1E9pZy2sIRO/F2eNYPpdZeIy/Rb+5POomJwSb2egt+vjYJcoyDe9Gy3AowbRLIx
+         zAKlYTXqJ/vmmykobcQxXFFxA8y+U/rOuMhuG9cZy0CfZ80SBE8wbWjRkdH6pOEoiFEJ
+         WhqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding
-         :in-reply-to:references:subject:from:cc:to:date:message-id
-         :user-agent;
-        bh=B8Y46yQxNOEffuymdtO7hMB+CO0Z+Y5wI8m+HEDcLu0=;
-        b=SJB3/AfIM12apCR4KoY4ObCOC6/4fCHlEEDWIaakL8DoCKS6WjrzHp90flQvVGyF36
-         zxczOZPaXVitJ5CCrTNNKokeZSeVGA6YrLwfE6AoS9LlbkElFAOsOH1zi5VXzSvfQLMw
-         ZDSRpbRWEgP4bATi1ZWlQB6H6npXBOi2KtfhGBLhUDUePZzPaDoNjMCNd72Q8fHTUChP
-         PHEC9lQcV8qgjJ4KrVHWu3TX/2BLkCwZkWu38QfW3s/xsonTczhI/+Vd2r5fiaT97dgK
-         jp9+N03V7HRhs5rGyUBUrhWaYv/gBMvHd/w9S4A2oxukEu48wLgijj64owwK266TOTf9
-         fQTA==
-X-Gm-Message-State: APjAAAVeH1YQNFrCMVO4btD5vxZGjZjzk2yt8ep8+P2TbhSLfq9Ekj06
-        USToohgNOiXqwEEuUNTzHUMo3g==
-X-Google-Smtp-Source: APXvYqyIJ9mIrIMYZ5G+St3pLYf8dL+L3VyB/n0oKkMz8V7RjDvi5XCqGoir/2GDp8r+GsLQlFeJMQ==
-X-Received: by 2002:a63:2266:: with SMTP id t38mr3712682pgm.145.1581370294997;
-        Mon, 10 Feb 2020 13:31:34 -0800 (PST)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id j125sm1247180pfg.160.2020.02.10.13.31.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2020 13:31:34 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1581316605-29202-2-git-send-email-sanm@codeaurora.org>
-References: <1581316605-29202-1-git-send-email-sanm@codeaurora.org> <1581316605-29202-2-git-send-email-sanm@codeaurora.org>
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: qcom,dwc3: Convert USB DWC3 bindings
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Felipe Balbi <balbi@kernel.org>,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition:user-agent;
+        bh=VKF4/I66fKSdVDxJHASCOE5T5FlSSr3FRirJUxwtQyk=;
+        b=luI8rYrXIYgNtcBoYjwGJiGwKxDYPnw99qdsbtadeIAUjDspkJB+WmFSw6XYB4FwEf
+         11WFY95Qe3Tky7N68UK3r4IwbkDNzmx3WAOxKAZqlSJlv5xy+ONEXLCqUwMgLhaT443q
+         EiDb0eJvkaNZBWfVUA5rV02kO4sH1GD6D8AhDd8pjxl/46mk/qgc8eAEDlNmOf+w2t0e
+         U3CPXj2XKwsK3dUJlmUmRkuBIceFDS4C5YXGjFAkzGByGIXImA9Usy5Z1UkIRcqI7UJb
+         6wNzKtUKz1eI9763DsM/g16vd4ywyIZGgD2ExvxGnFqYRECHB8v6WlS+UbSPT0C8cW4u
+         JCBw==
+X-Gm-Message-State: APjAAAUpvRNevYHO0F1ZluPkAnbndl6zZTRIGzrhQ5o9Nl0UQq1VE/rs
+        zGIIYtnpJpAlKKNlZerU6a8=
+X-Google-Smtp-Source: APXvYqy3k73uFNAS8nGaTXn2BuTF8XAUuNNcyFuVfyEH1m0PeO6wFaYg63owID50wVQryDxbMrZydg==
+X-Received: by 2002:a17:902:a711:: with SMTP id w17mr14976474plq.152.1581370748256;
+        Mon, 10 Feb 2020 13:39:08 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z16sm1027240pgl.92.2020.02.10.13.39.07
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 10 Feb 2020 13:39:07 -0800 (PST)
+Date:   Mon, 10 Feb 2020 13:39:06 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Boris ARZUR <boris@konbu.org>
+Cc:     linux-usb@vger.kernel.org,
+        FelipeBalbi <felipe.balbi@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>
-Date:   Mon, 10 Feb 2020 13:31:33 -0800
-Message-ID: <158137029351.121156.8319119424832255457@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+        Minas Harutyunyan <hminas@synopsys.com>,
+        William Wu <william.wu@rock-chips.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>
+Subject: Re: [PATCH] usb: dwc2: extend treatment for incomplete transfer
+Message-ID: <20200210213906.GA24079@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Sandeep Maheswaram (2020-02-09 22:36:44)
-> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Docum=
-entation/devicetree/bindings/usb/qcom,dwc3.yaml
-> new file mode 100644
-> index 0000000..0353401
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> @@ -0,0 +1,155 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/qcom,dwc3.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm SuperSpeed DWC3 USB SoC controller
-> +
-> +maintainers:
-> +  - Manu Gautam <mgautam@codeaurora.org>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - qcom,msm8996-dwc3
-> +          - qcom,msm8998-dwc3
-> +          - qcom,sdm845-dwc3
-> +      - const: qcom,dwc3
-> +
-> +  reg:
-> +    description: Offset and length of register set for QSCRATCH wrapper
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    enum: [ 1, 2 ]
-> +
-> +  "#size-cells":
-> +    enum: [ 1, 2 ]
-> +
-> +  power-domains:
-> +    description: specifies a phandle to PM domain provider node
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    description:
-> +      A list of phandle and clock-specifier pairs for the clocks
-> +      listed in clock-names.
-> +    items:
-> +      - description: System Config NOC clock.
-> +      - description: Master/Core clock, has to be >=3D 125 MHz
-> +          for SS operation and >=3D 60MHz for HS operation.
-> +      - description: System bus AXI clock.
-> +      - description: Mock utmi clock needed for ITP/SOF generation
-> +          in host mode.Its frequency should be 19.2MHz.
+Hi Boris,
 
-Please add a space between the end of sentence and next one.
+On Mon, Feb 10, 2020 at 09:29:10PM +0000, Boris ARZUR wrote:
+> <felipe.balbi@linux.intel.com>, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org>, Minas Harutyunyan <hminas@synopsys.com>,
+> William Wu <william.wu@rock-chips.com>, Dmitry Torokhov
+> <dmitry.torokhov@gmail.com>, Douglas Anderson <dianders@chromium.org>
+> 
+> 
+> Hello Guenter,
+> 
+> 
+> >good find, and good analysis. We stated to see this problem as well in the
+> >latest ChromeOS kernel.
+> I'm glad you find my report helpful.
+> 
+> 
+> >be able to reproduce the problem. Maybe you can help me. How do you tether
+> >your phone through USB ?
+> You mention thethering, so I think you have read my follow-up:
+> https://www.spinics.net/lists/linux-usb/msg187497.html
+> 
 
-> +      - description: Sleep clock, used for wakeup when
-> +          USB3 core goes into low power mode (U3).
-> +
-> +  clock-names:
-> +    items:
-> +      - const: cfg_noc
-> +      - const: core
-> +      - const: iface
-> +      - const: mock_utmi
-> +      - const: sleep
-> +
-> +  assigned-clocks:
-> +    items:
-> +      - description: Phandle to MOCK_UTMI_CLK.
-> +      - description: Phandle to MASTER_CLK.
+Unfortunately, I have been unable to reproduce the problem. It is seen only
+with certain phones and with certain Ethernet adapters, and I was unable
+to get any of those. I'll keep trying.
 
-It's a phandle and clock specifier pair, not always just a phandle.
-Maybe the base schema can enforce that somehow, but the description
-isn't accurate.
+In the meantime, can you by any chance test the attached patch ? It _might_
+fix the problem, but it is a bit of a wild shot.
 
-> +
-> +  assigned-clock-rates:
-> +    items:
-> +      - description: Must be 19.2MHz (19200000).
-> +      - description: Must be >=3D 60 MHz in HS mode, >=3D 125 MHz in SS =
-mode.
+Thanks,
+Guenter
 
-Can this be more strict? I see in [1] that it was suggested to update
-the schema checker. Did you try that?
+---
+From 29e0949531a27f14a5b46d70e34aa43546e6a3d1 Mon Sep 17 00:00:00 2001
+From: Guenter Roeck <linux@roeck-us.net>
+Date: Mon, 10 Feb 2020 13:11:00 -0800
+Subject: [PATCH] usb: dwc2: constrain endpoint transfer size on split IN
 
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    items:
-> +      - description: The interrupt that is asserted
-> +          when a wakeup event is received on USB2 bus.
-> +      - description: The interrupt that is asserted
-> +          when a wakeup event is received on USB3 bus.
-> +      - description: Wakeup event on DM line.
-> +      - description: Wakeup event on DP line.
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: hs_phy_irq
-> +      - const: ss_phy_irq
-> +      - const: dm_hs_phy_irq
-> +      - const: dp_hs_phy_irq
-> +
-> +  qcom,select-utmi-as-pipe-clk:
-> +    description:
-> +      If present, disable USB3 pipe_clk requirement.
-> +      Used when dwc3 operates without SSPHY and only
-> +      HS/FS/LS modes are supported.
-> +    type: boolean
-> +
-> +# Required child node:
-> +
-> +patternProperties:
-> +  "^dwc3@[0-9a-f]+$":
-> +    type: object
-> +    description:
-> +      A child node must exist to represent the core DWC3 IP block
-> +      The content of the node is defined in dwc3.txt.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +  - power-domains
-> +  - clocks
-> +  - clock-names
+The following messages are seen on Veyron Chromebooks running v4.19 or
+later kernels.
 
-Why aren't interrupts required? They're always present, aren't they?
+dwc2 ff580000.usb: dwc2_update_urb_state(): trimming xfer length
+dwc2 ff580000.usb: dwc2_hc_chhltd_intr_dma: Channel 7 - ChHltd set, but reason is unknown
+dwc2 ff580000.usb: hcint 0x00000002, intsts 0x04600021
 
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,gcc-sdm845.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+This is typically followed by a crash.
 
-It would be good to include <dt-bindings/interrupt-controller/irq.h>
-here too, just in case someone wants to move that include out of
-arm-gic.h, which is possible.
+Unable to handle kernel paging request at virtual address 29f9d9fc
+pgd = 4797dac9
+[29f9d9fc] *pgd=80000000004003, *pmd=00000000
+Internal error: Oops: a06 [#1] PREEMPT SMP ARM
+Modules linked in: ip6t_REJECT rfcomm i2c_dev uinput hci_uart btbcm ...
+CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W         4.19.87-07825-g4ab3515f6e4d #1
+Hardware name: Rockchip (Device Tree)
+PC is at memcpy+0x50/0x330
+LR is at 0xdd9ac94
+...
+[<c0a89f50>] (memcpy) from [<c0783b94>] (dwc2_free_dma_aligned_buffer+0x5c/0x7c)
+[<c0783b94>] (dwc2_free_dma_aligned_buffer) from [<c0765dcc>] (__usb_hcd_giveback_urb+0x78/0x130)
+[<c0765dcc>] (__usb_hcd_giveback_urb) from [<c07678fc>] (usb_giveback_urb_bh+0xa0/0xe4)
+[<c07678fc>] (usb_giveback_urb_bh) from [<c023a164>] (tasklet_action_common+0xc0/0xdc)
+[<c023a164>] (tasklet_action_common) from [<c02021f0>] (__do_softirq+0x1b8/0x434)
+[<c02021f0>] (__do_softirq) from [<c0239a14>] (irq_exit+0xdc/0xe0)
+[<c0239a14>] (irq_exit) from [<c029f260>] (__handle_domain_irq+0x94/0xd0)
+[<c029f260>] (__handle_domain_irq) from [<c05da780>] (gic_handle_irq+0x74/0xb0)
+[<c05da780>] (gic_handle_irq) from [<c02019f8>] (__irq_svc+0x58/0x8c)
 
-> +    usb_1: usb@a6f8800 {
+The crash suggests that the memory after the end of a temporary DMA-aligned
+buffer is overwritten.
 
-Can we drop the phandle? It's not used.
+The Raspberry Pi Linux kernel includes a patch suggesting that a similar
+problem was observed with the dwg2 otc driver used there. The patch
+description is as follows.
 
-> +        compatible =3D "qcom,sdm845-dwc3", "qcom,dwc3";
-> +        reg =3D <0 0x0a6f8800 0 0x400>;
-> +
-> +        #address-cells =3D <2>;
-> +        #size-cells =3D <2>;
-> +
-> +        clocks =3D <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
-> +                 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
-> +                 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
-> +                 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
-> +                 <&gcc GCC_USB30_PRIM_SLEEP_CLK>;
-> +        clock-names =3D "cfg_noc", "core", "iface", "mock_utmi",
-> +                        "sleep";
+    The hcd would unconditionally set the transfer length to the endpoint
+    packet size for non-isoc IN transfers. If the remaining buffer length
+    was less than the length of returned data, random memory would get
+    scribbled over, with bad effects if it crossed a page boundary.
 
-Spacing looks off. Are there tabs?
+    Force a babble error if this happens by limiting the max transfer size
+    to the available buffer space. DMA will stop writing to memory on a
+    babble condition.
 
-> +
-> +        assigned-clocks =3D <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
-> +                          <&gcc GCC_USB30_PRIM_MASTER_CLK>;
-> +        assigned-clock-rates =3D <19200000>, <150000000>;
-> +
-> +        interrupts =3D <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 486 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 488 IRQ_TYPE_LEVEL_HIGH>,
-> +                     <GIC_SPI 489 IRQ_TYPE_LEVEL_HIGH>;
-> +        interrupt-names =3D "hs_phy_irq", "ss_phy_irq",
-> +                              "dm_hs_phy_irq", "dp_hs_phy_irq";
+Apply the same fix to this driver.
 
-Same spacing nit
+Reported-by: Boris ARZUR <boris@konbu.org>
+Cc: Boris ARZUR <boris@konbu.org>
+Cc: Jonathan Bell <jonathan@raspberrypi.org>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/usb/dwc2/hcd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> +
-> +            power-domains =3D <&gcc USB30_PRIM_GDSC>;
-> +
-> +            resets =3D <&gcc GCC_USB30_PRIM_BCR>;
-> +
-> +            usb_1_dwc3: dwc3@a600000 {
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index b90f858af960..2c81b346b464 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -1264,7 +1264,8 @@ static void dwc2_hc_start_transfer(struct dwc2_hsotg *hsotg,
+ 			 */
+ 			chan->xfer_len = 0;
+ 		else if (chan->ep_is_in || chan->xfer_len > chan->max_packet)
+-			chan->xfer_len = chan->max_packet;
++			chan->xfer_len = min_t(uint32_t, chan->xfer_len,
++					       chan->max_packet);
+ 		else if (!chan->ep_is_in && chan->xfer_len > 188)
+ 			chan->xfer_len = 188;
+ 
+-- 
+2.17.1
 
-Drop this phandle too? It isn't used.
-
-> +                compatible =3D "snps,dwc3";
-> +                reg =3D <0 0x0a600000 0 0xcd00>;
-> +                interrupts =3D <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
-> +                iommus =3D <&apps_smmu 0x740 0>;
-> +                snps,dis_u2_susphy_quirk;
-> +                snps,dis_enblslpm_quirk;
-> +                phys =3D <&usb_1_hsphy>, <&usb_1_ssphy>;
-> +                phy-names =3D "usb2-phy", "usb3-phy";
-> +            };
-
-[1] https://lkml.kernel.org/r/20191218221310.GA4624@bogus
