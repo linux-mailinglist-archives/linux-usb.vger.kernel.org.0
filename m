@@ -2,186 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 675B6157646
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 13:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E5C1577D8
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 14:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727698AbgBJMtC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Feb 2020 07:49:02 -0500
-Received: from www262.sakura.ne.jp ([202.181.97.72]:61059 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728001AbgBJMqQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 07:46:16 -0500
-Received: from fsav104.sakura.ne.jp (fsav104.sakura.ne.jp [27.133.134.231])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 01ACkE6E048428;
-        Mon, 10 Feb 2020 21:46:14 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav104.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav104.sakura.ne.jp);
- Mon, 10 Feb 2020 21:46:14 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav104.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 01ACkDpn048358
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
-        Mon, 10 Feb 2020 21:46:14 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: INFO: task hung in wdm_flush
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Oliver Neukum <oneukum@suse.de>,
-        syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Colin King <colin.king@canonical.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        yuehaibing@huawei.com, =?UTF-8?Q?Bj=c3=b8rn_Mork?= <bjorn@mork.no>
-References: <0000000000003313f0058fea8435@google.com>
- <8736ek9qir.fsf@miraculix.mork.no> <1574159504.28617.5.camel@suse.de>
- <87pnho85h7.fsf@miraculix.mork.no>
- <CACT4Y+YgLm2m0JG6qKKn9OpyXT9kKEPeyLSVGSfLbUukoCnB+g@mail.gmail.com>
- <CACT4Y+ZjiCDgtGVMow3WNzjuqBLaxy_KB4cM10wbfUnDdjBYfQ@mail.gmail.com>
- <CACT4Y+ZWDMkOmnXpBXFhU8XcHA_-ZcHdZpfrXcCWHRzcbQ39Gg@mail.gmail.com>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <ebc7b5e0-e968-0bdb-d75d-346e0b763d14@i-love.sakura.ne.jp>
-Date:   Mon, 10 Feb 2020 21:46:11 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
-MIME-Version: 1.0
-In-Reply-To: <CACT4Y+ZWDMkOmnXpBXFhU8XcHA_-ZcHdZpfrXcCWHRzcbQ39Gg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1729059AbgBJNC7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 10 Feb 2020 08:02:59 -0500
+Received: from shards.monkeyblade.net ([23.128.96.9]:39502 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729313AbgBJNCz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 08:02:55 -0500
+Received: from localhost (82-95-191-104.ip.xs4all.nl [82.95.191.104])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id B4A0C14DD5521;
+        Mon, 10 Feb 2020 05:02:53 -0800 (PST)
+Date:   Mon, 10 Feb 2020 14:02:49 +0100 (CET)
+Message-Id: <20200210.140249.727550899805828159.davem@davemloft.net>
+To:     bjorn@mork.no
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        larsm17@gmail.com, aleksander@aleksander.es
+Subject: Re: [PATCH net,stable] qmi_wwan: re-add DW5821e pre-production
+ variant
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200208145036.27696-1-bjorn@mork.no>
+References: <20200208145036.27696-1-bjorn@mork.no>
+X-Mailer: Mew version 6.8 on Emacs 26.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 10 Feb 2020 05:02:54 -0800 (PST)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020/02/10 19:09, Dmitry Vyukov wrote:
-> You may also try on the exact commit the bug was reported, because
-> usb-fuzzer is tracking branch, things may change there.
+From: Bjørn Mork <bjorn@mork.no>
+Date: Sat,  8 Feb 2020 15:50:36 +0100
 
-OK. I explicitly tried
+> Commit f25e1392fdb5 removed the support for the pre-production variant
+> of the Dell DW5821e to avoid probing another USB interface unnecessarily.
+> However, the pre-production samples are found in the wild, and this lack
+> of support is causing problems for users of such samples.  It is therefore
+> necessary to support both variants.
+> 
+> Matching on both interfaces 0 and 1 is not expected to cause any problem
+> with either variant, as only the QMI function will be probed successfully
+> on either.  Interface 1 will be rejected based on the HID class for the
+> production variant:
+ ...
+> And interface 0 will be rejected based on too few endpoints for the
+> pre-production variant:
+ ...
+> Fixes: f25e1392fdb5 ("qmi_wwan: fix interface number for DW5821e production firmware")
+> Link: https://whrl.pl/Rf0vNk
+> Reported-by: Lars Melin <larsm17@gmail.com>
+> Cc: Aleksander Morgado <aleksander@aleksander.es>
+> Signed-off-by: Bjørn Mork <bjorn@mork.no>
 
-  #syz test: https://github.com/google/kasan.git e5cd56e94edde38ca4dafae5a450c5a16b8a5f23
-
-but syzbot still cannot reproduce this bug using the reproducer...
-
-On 2020/02/10 21:02, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger crash:
-> 
-> Reported-and-tested-by: syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com
-> 
-> Tested on:
-> 
-> commit:         e5cd56e9 usb: gadget: add raw-gadget interface
-> git tree:       https://github.com/google/kasan.git
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c372cdb7140fc162
-> dashboard link: https://syzkaller.appspot.com/bug?extid=854768b99f19e89d7f81
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> 
-> Note: testing is done by a robot and is best-effort only.
-> 
-
-Anyway, I'm just suspecting that we are forgetting to wake up all waiters
-after clearing WDM_IN_USE bit because sometimes multiple threads are reported
-as hung.
-
-On 2020/02/10 15:27, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger crash:
-> 
-> Reported-and-tested-by: syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com
-> 
-> Tested on:
-> 
-> commit:         e5cd56e9 usb: gadget: add raw-gadget interface
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c372cdb7140fc162
-> dashboard link: https://syzkaller.appspot.com/bug?extid=854768b99f19e89d7f81
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=117c3ae9e00000
-> 
-> Note: testing is done by a robot and is best-effort only.
-> 
-
-On 2020/02/10 15:55, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger crash:
-> 
-> Reported-and-tested-by: syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com
-> 
-> Tested on:
-> 
-> commit:         e5cd56e9 usb: gadget: add raw-gadget interface
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c372cdb7140fc162
-> dashboard link: https://syzkaller.appspot.com/bug?extid=854768b99f19e89d7f81
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=13b3f6e9e00000
-> 
-> Note: testing is done by a robot and is best-effort only.
-> 
-
-On 2020/02/10 16:21, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger crash:
-> 
-> Reported-and-tested-by: syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com
-> 
-> Tested on:
-> 
-> commit:         e5cd56e9 usb: gadget: add raw-gadget interface
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c372cdb7140fc162
-> dashboard link: https://syzkaller.appspot.com/bug?extid=854768b99f19e89d7f81
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=115026b5e00000
-> 
-> Note: testing is done by a robot and is best-effort only.
-> 
-
-On 2020/02/10 16:44, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger crash:
-> 
-> Reported-and-tested-by: syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com
-> 
-> Tested on:
-> 
-> commit:         e5cd56e9 usb: gadget: add raw-gadget interface
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c372cdb7140fc162
-> dashboard link: https://syzkaller.appspot.com/bug?extid=854768b99f19e89d7f81
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=17285431e00000
-> 
-> Note: testing is done by a robot and is best-effort only.
-> 
-
-On 2020/02/10 17:05, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger crash:
-> 
-> Reported-and-tested-by: syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com
-> 
-> Tested on:
-> 
-> commit:         e5cd56e9 usb: gadget: add raw-gadget interface
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c372cdb7140fc162
-> dashboard link: https://syzkaller.appspot.com/bug?extid=854768b99f19e89d7f81
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> 
-> Note: testing is done by a robot and is best-effort only.
-> 
-
+Applied and queued up for -stable.
