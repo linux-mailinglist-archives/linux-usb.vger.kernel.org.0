@@ -2,146 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9055C1573F6
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 13:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9157157455
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 13:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727790AbgBJMHp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Feb 2020 07:07:45 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:42714 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727720AbgBJMHo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 07:07:44 -0500
-Received: by mail-wr1-f66.google.com with SMTP id k11so7318997wrd.9
-        for <linux-usb@vger.kernel.org>; Mon, 10 Feb 2020 04:07:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=dlgrD1ImLwD8i7swr2073g2/em63RPZPKMG2q6/uiVU=;
-        b=uUWsD3xXPNWZCRZzUdS2YN/EuB9ZtVVSLw6IxS8dRj1eSMq7dCiwtNaRO+3bT5nc+D
-         VghAfZAv1tc8NYEvA4SjVupe3sQsVYzxaOi+k8q1lKOMZzSF5tGH6QGGiXWc/t+BAEBD
-         18koliwiRZIaIF6BamDEYehIJHr/8LNtGVTkC3nuWVTMroC3pz/I2CUuVfEPopMQDDTH
-         pQ4RIcaVXpcuLU3PcoHXlBuAEhkF79HpHzioumIlF4YrwZ3BoF+9L3aOGftaH5kKHKVo
-         CfO5vp7Mmuf6KzjbAvH7O6Owyj/owr3ggtFigip/ke8qLI/W6F6O78AlDfTzGozIfff/
-         HrVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=dlgrD1ImLwD8i7swr2073g2/em63RPZPKMG2q6/uiVU=;
-        b=PxeqfASTRIikazWBDYvlDxDEDiAzIFQCziwOcAL0yXXHbWnMDzWcoM7DNkzSZLd14C
-         0NV1CAgSh01TNKOGtDm58iqhrsy13bAarbXU66xT+JPmtZ+IjhbIKOziYtB+ebbttI+R
-         zU226AoEo8hy8/pN+6WExA13x/h8ri88oScdrcMR7vwo+Ntc3IHGfuWXkvJ5ULgYfkm1
-         MsZpd4CrzUQV9u/oJKOMHlQkjk3E52DAznG2plwGtlvzYXrFXbHdxT2oWE5UgaPKHShI
-         rje+H+Xz4BgG4unxl967uNfYaiuuXDkhQiei34ssGoDK/qQvU5xVF6MnEJSb+Ldj0wpH
-         5hlA==
-X-Gm-Message-State: APjAAAXk2GK4j2SlSjhv7o4M+23cULzwQXrkrTHmiCA0mejSJpXLFPd6
-        DVH0ZBBZj/eI51hXN8fwTxce0Q==
-X-Google-Smtp-Source: APXvYqwTicbL22mHDUW1ie+v1PtpkNYflJpxuGDJn6zmsXhpmjJ4NFJzieYb8MQk8zXmSUJGKLMw9A==
-X-Received: by 2002:adf:f10b:: with SMTP id r11mr1633083wro.307.1581336462595;
-        Mon, 10 Feb 2020 04:07:42 -0800 (PST)
-Received: from localhost.localdomain ([176.61.57.127])
-        by smtp.gmail.com with ESMTPSA id i204sm293124wma.44.2020.02.10.04.07.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2020 04:07:42 -0800 (PST)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org, jackp@codeaurora.org, balbi@kernel.org,
-        bjorn.andersson@linaro.org, robh@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org
-Subject: [PATCH v6 18/18] arm64: dts: qcom: qcs404-evb: Enable USB controllers
-Date:   Mon, 10 Feb 2020 12:07:23 +0000
-Message-Id: <20200210120723.91794-19-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200210120723.91794-1-bryan.odonoghue@linaro.org>
-References: <20200210120723.91794-1-bryan.odonoghue@linaro.org>
+        id S1727434AbgBJMPE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Feb 2020 07:15:04 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:43474 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727029AbgBJMPE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 07:15:04 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01ACEsrX098789;
+        Mon, 10 Feb 2020 06:14:54 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1581336894;
+        bh=SLpBExsKZLtK2SHmY9lMw5K33/QC+xtpwOOSBm+kc1I=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=vfsnzG50PyID/eSEXaNAjwpZk6RY2mHtR19qpsQxppBrTL5S0M5G5L/DcLYs2rah7
+         v9wCswU+oLzVr8BfI30suD2f2+OiSRffhtL48F2uBkmwO1NJrbgskx2wvIrkKFOiNO
+         yTUo8bRNk4UJmJJiWGGXVM7gCfWFPmlxgINzbFYA=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01ACEsmo062021
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 10 Feb 2020 06:14:54 -0600
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Mon, 10
+ Feb 2020 06:14:53 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Mon, 10 Feb 2020 06:14:54 -0600
+Received: from [10.24.69.159] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01ACEp0N103304;
+        Mon, 10 Feb 2020 06:14:52 -0600
+Subject: Re: [PATCH] phy: core: Add consumer device link support
+To:     Alexandre Torgue <alexandre.torgue@st.com>,
+        youling 257 <youling257@gmail.com>
+CC:     <yoshihiro.shimoda.uh@renesas.com>, <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <saravanak@google.com>
+References: <20191104143713.11137-1-alexandre.torgue@st.com>
+ <20200206133918.15012-1-youling257@gmail.com>
+ <0c4a37a9-0a2e-e698-f423-53060854ea05@ti.com>
+ <CAOzgRdb5QfJDQzbtoHQry4wxUg52LwX5XFCPzzaYa=z+RqNWOQ@mail.gmail.com>
+ <8bd72269-16ae-b24a-7144-44d22d668dc6@ti.com>
+ <1cd5885d-7db4-59b9-ef2d-e3556f60ca68@st.com>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <c2950949-6a9d-afe0-7c44-4378018b9d95@ti.com>
+Date:   Mon, 10 Feb 2020 17:48:26 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
+In-Reply-To: <1cd5885d-7db4-59b9-ef2d-e3556f60ca68@st.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch enables the primary and secondary USB controllers on the
-qcs404-evb.
+Hi,
 
-Primary:
-The primary USB controller has
+On 10/02/20 5:00 PM, Alexandre Torgue wrote:
+> Hi Kishon,
+> 
+> On 2/10/20 9:08 AM, Kishon Vijay Abraham I wrote:
+>> Hi Alexandre,
+>>
+>> On 07/02/20 12:27 PM, youling 257 wrote:
+>>> test this diff, dwc3 work for my device, thanks.
+>>>
+>>> 2020-02-07 13:16 GMT+08:00, Kishon Vijay Abraham I <kishon@ti.com>:
+>>>> Hi,
+>>>>
+>>>> On 06/02/20 7:09 PM, youling257 wrote:
+>>>>> This patch cause "dwc3 dwc3.3.auto: failed to create device link to
+>>>>> dwc3.3.auto.ulpi" problem.
+>>>>> https://bugzilla.kernel.org/show_bug.cgi?id=206435
+>>>>
+>>>> I'm suspecting there is some sort of reverse dependency with dwc3 ULPI.
+>>>> Can you try the following diff?
+>>>>
+>>>> diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+>>>> index 2eb28cc2d2dc..397311dcb116 100644
+>>>> --- a/drivers/phy/phy-core.c
+>>>> +++ b/drivers/phy/phy-core.c
+>>>> @@ -687,7 +687,7 @@ struct phy *phy_get(struct device *dev, const char
+>>>> *string)
+>>>>
+>>>>          get_device(&phy->dev);
+>>>>
+>>>> -       link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
+>>>> +       link = device_link_add(dev, &phy->dev,
+>>>> DL_FLAG_SYNC_STATE_ONLY);
+>>>>          if (!link) {
+>>>>                  dev_err(dev, "failed to create device link to %s\n",
+>>>>                          dev_name(phy->dev.parent));
+>>>> @@ -802,7 +802,7 @@ struct phy *devm_of_phy_get(struct device *dev,
+>>>> struct device_node *np,
+>>>>                  return phy;
+>>>>          }
+>>>>
+>>>> -       link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
+>>>> +       link = device_link_add(dev, &phy->dev,
+>>>> DL_FLAG_SYNC_STATE_ONLY);
+>>>>          if (!link) {
+>>>>                  dev_err(dev, "failed to create device link to %s\n",
+>>>>                          dev_name(phy->dev.parent));
+>>>> @@ -851,7 +851,7 @@ struct phy *devm_of_phy_get_by_index(struct device
+>>>> *dev, struct device_node *np,
+>>>>          *ptr = phy;
+>>>>          devres_add(dev, ptr);
+>>>>
+>>>> -       link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
+>>>> +       link = device_link_add(dev, &phy->dev,
+>>>> DL_FLAG_SYNC_STATE_ONLY);
+>>>>          if (!link) {
+>>>>                  dev_err(dev, "failed to create device link to %s\n",
+>>>>                          dev_name(phy->dev.parent));Parent
+>>
+>> Can you check if this doesn't affect the suspend/resume ordering?
+> 
+> With this fix, suspend/resume ordering is broken on my side. What do you
+> think to keep the STATELESS flag and to only display a warn if
+> "device_link_add" returns an error ? It's not "smart" but it could
+> solved our issue.
 
-- One USB3 SS PHY using gpio-usb-conn
-- One USB2 HS PHY in device mode only and no connector driver
-  associated.
-
-Secondary:
-The second DWC3 controller which has one USB Hi-Speed PHY attached to it.
-
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: linux-arm-msm@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- arch/arm64/boot/dts/qcom/qcs404-evb.dtsi | 40 ++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi b/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-index 0fff50f755ef..4045d3000da6 100644
---- a/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-@@ -318,6 +318,46 @@ pinconf {
- 	};
- };
- 
-+&usb2 {
-+	status = "okay";
-+};
-+
-+&usb2_phy_sec {
-+	vdd-supply = <&vreg_l4_1p2>;
-+	vdda1p8-supply = <&vreg_l5_1p8>;
-+	vdda3p3-supply = <&vreg_l12_3p3>;
-+	status = "okay";
-+};
-+
-+&usb3 {
-+	status = "okay";
-+	dwc3@7580000 {
-+		usb-role-switch;
-+		usb_con: connector {
-+			compatible = "gpio-usb-b-connector";
-+			label = "USB-C";
-+			id-gpios = <&tlmm 116 GPIO_ACTIVE_HIGH>;
-+			vbus-supply = <&usb3_vbus_reg>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&usb3_id_pin>, <&usb3_vbus_pin>;
-+			status = "okay";
-+		};
-+	};
-+};
-+
-+&usb2_phy_prim {
-+	vdd-supply = <&vreg_l4_1p2>;
-+	vdda1p8-supply = <&vreg_l5_1p8>;
-+	vdda3p3-supply = <&vreg_l12_3p3>;
-+	status = "okay";
-+};
-+
-+&usb3_phy {
-+	vdd-supply = <&vreg_l3_1p05>;
-+	vdda1p8-supply = <&vreg_l5_1p8>;
-+	status = "okay";
-+};
-+
- &wifi {
- 	status = "okay";
- 	vdd-0.8-cx-mx-supply = <&vreg_l2_1p275>;
--- 
-2.25.0
-
+yeah, that sounds reasonable for now. Can you find out the dependencies
+between dwc3 and ulpi and what exactly breaks. That would help Saravana
+to suggest a fix?
+> 
+> As a lot of improvements have been recently done on device link topic by
+> Saravana, we could check with him what is the way to follow.
+Thanks
+Kishon
