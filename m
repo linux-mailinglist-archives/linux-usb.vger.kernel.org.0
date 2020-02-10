@@ -2,140 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D6D157EAA
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 16:22:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECF1157EC2
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 16:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727434AbgBJPWS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Feb 2020 10:22:18 -0500
-Received: from www262.sakura.ne.jp ([202.181.97.72]:55606 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727363AbgBJPWS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 10:22:18 -0500
-Received: from fsav103.sakura.ne.jp (fsav103.sakura.ne.jp [27.133.134.230])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 01AFM5Qp011146;
-        Tue, 11 Feb 2020 00:22:05 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav103.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav103.sakura.ne.jp);
- Tue, 11 Feb 2020 00:22:05 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav103.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 01AFM0c3011080
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
-        Tue, 11 Feb 2020 00:22:05 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: INFO: task hung in wdm_flush
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Oliver Neukum <oneukum@suse.de>,
-        syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Colin King <colin.king@canonical.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        yuehaibing@huawei.com, =?UTF-8?Q?Bj=c3=b8rn_Mork?= <bjorn@mork.no>
-References: <0000000000003313f0058fea8435@google.com>
- <8736ek9qir.fsf@miraculix.mork.no> <1574159504.28617.5.camel@suse.de>
- <87pnho85h7.fsf@miraculix.mork.no>
- <CACT4Y+YgLm2m0JG6qKKn9OpyXT9kKEPeyLSVGSfLbUukoCnB+g@mail.gmail.com>
- <CACT4Y+ZjiCDgtGVMow3WNzjuqBLaxy_KB4cM10wbfUnDdjBYfQ@mail.gmail.com>
- <CACT4Y+ZWDMkOmnXpBXFhU8XcHA_-ZcHdZpfrXcCWHRzcbQ39Gg@mail.gmail.com>
- <ebc7b5e0-e968-0bdb-d75d-346e0b763d14@i-love.sakura.ne.jp>
- <CACT4Y+bDNjj_RGLtvRCaV3k9+QX4eENyKyWWAbsHcbwR7CDrWQ@mail.gmail.com>
- <CACT4Y+ZaNNAiRvKCMJ9t4H+H23OcjSd5haAcXkG68L8F6Mq6Wg@mail.gmail.com>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <bbf26ea3-c11c-1cd2-0072-b78634ae9579@i-love.sakura.ne.jp>
-Date:   Tue, 11 Feb 2020 00:21:56 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        id S1727681AbgBJP2T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Feb 2020 10:28:19 -0500
+Received: from smtp1.de.adit-jv.com ([93.241.18.167]:36108 "EHLO
+        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727563AbgBJP2T (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 10:28:19 -0500
+Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
+        by smtp1.de.adit-jv.com (Postfix) with ESMTP id 316563C057F;
+        Mon, 10 Feb 2020 16:28:17 +0100 (CET)
+Received: from smtp1.de.adit-jv.com ([127.0.0.1])
+        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id QODWTCOKUW-F; Mon, 10 Feb 2020 16:28:12 +0100 (CET)
+Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id 08CC03C0012;
+        Mon, 10 Feb 2020 16:28:12 +0100 (CET)
+Received: from lxhi-065.adit-jv.com (10.72.93.66) by HI2EXCH01.adit-jv.com
+ (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.468.0; Mon, 10 Feb
+ 2020 16:28:11 +0100
+Date:   Mon, 10 Feb 2020 16:28:08 +0100
+From:   Eugeniu Rosca <erosca@de.adit-jv.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+CC:     Hardik Gajjar <hgajjar@de.adit-jv.com>, <thinhn@synopsys.com>,
+        <Kento.A.Kobayashi@sony.com>, <atmgnd@outlook.com>,
+        <linux-usb@vger.kernel.org>, <andrew_gabbasov@mentor.com>,
+        <linux-renesas-soc@vger.kernel.org>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH v4] USB: hub: Fix the broken detection of USB3 device in
+ SMSC hub
+Message-ID: <20200210152808.GA7327@lxhi-065.adit-jv.com>
+References: <1580989763-32291-1-git-send-email-hgajjar@de.adit-jv.com>
 MIME-Version: 1.0
-In-Reply-To: <CACT4Y+ZaNNAiRvKCMJ9t4H+H23OcjSd5haAcXkG68L8F6Mq6Wg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1580989763-32291-1-git-send-email-hgajjar@de.adit-jv.com>
+X-Originating-IP: [10.72.93.66]
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020/02/11 0:06, Dmitry Vyukov wrote:
->> On Mon, Feb 10, 2020 at 4:03 PM Tetsuo Handa
->> <penguin-kernel@i-love.sakura.ne.jp> wrote:
->>>
->>> On 2020/02/10 21:46, Tetsuo Handa wrote:
->>>> On 2020/02/10 19:09, Dmitry Vyukov wrote:
->>>>> You may also try on the exact commit the bug was reported, because
->>>>> usb-fuzzer is tracking branch, things may change there.
->>>>
->>>> OK. I explicitly tried
->>>>
->>>>   #syz test: https://github.com/google/kasan.git e5cd56e94edde38ca4dafae5a450c5a16b8a5f23
->>>>
->>>> but syzbot still cannot reproduce this bug using the reproducer...
->>>
->>> It seems that there is non-trivial difference between kernel config in dashboard
->>> and kernel config in "syz test:" mails. Maybe that's the cause...
-> 
-> 
-> syzkaller runs oldconfig when building any kernels:
-> https://github.com/google/syzkaller/blob/master/pkg/build/linux.go#L56
-> Is that difference what oldconfig produces?
-> 
+Hi Alan, hi Greg,
 
-Here is the diff (with "#" lines excluded) between dashboard and "syz test:" mails.
-I feel this difference is bigger than what simple oldconfig would cause.
+On Thu, Feb 06, 2020 at 12:49:23PM +0100, Hardik Gajjar wrote:
+> Renesas R-Car H3ULCB + Kingfisher Infotainment Board is either not able
+> to detect the USB3.0 mass storage devices or is detecting those as
+> USB2.0 high speed devices.
+> 
+> The explanation given by Renesas is that, due to a HW issue, the XHCI
+> driver does not wake up after going to sleep on connecting a USB3.0
+> device.
+> 
+> In order to mitigate that, disable the auto-suspend feature
+> specifically for SMSC hubs from hub_probe() function, as a quirk.
+> 
+> Renesas Kingfisher Infotainment Board has two USB3.0 ports (CN2) which
+> are connected via USB5534B 4-port SuperSpeed/Hi-Speed, low-power,
+> configurable hub controller.
+> 
+> [1] SanDisk USB 3.0 device detected as USB-2.0 before the patch
+>  [   74.036390] usb 5-1.1: new high-speed USB device number 4 using xhci-hcd
+>  [   74.061598] usb 5-1.1: New USB device found, idVendor=0781, idProduct=5581, bcdDevice= 1.00
+>  [   74.069976] usb 5-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+>  [   74.077303] usb 5-1.1: Product: Ultra
+>  [   74.080980] usb 5-1.1: Manufacturer: SanDisk
+>  [   74.085263] usb 5-1.1: SerialNumber: 4C530001110208116550
+> 
+> [2] SanDisk USB 3.0 device detected as USB-3.0 after the patch
+>  [   34.565078] usb 6-1.1: new SuperSpeed Gen 1 USB device number 3 using xhci-hcd
+>  [   34.588719] usb 6-1.1: New USB device found, idVendor=0781, idProduct=5581, bcdDevice= 1.00
+>  [   34.597098] usb 6-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+>  [   34.604430] usb 6-1.1: Product: Ultra
+>  [   34.608110] usb 6-1.1: Manufacturer: SanDisk
+>  [   34.612397] usb 6-1.1: SerialNumber: 4C530001110208116550
+> 
+> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> Tested-by: Eugeniu Rosca <erosca@de.adit-jv.com>
 
-$ curl 'https://syzkaller.appspot.com/text?tag=KernelConfig&x=8cff427cc8996115' | sort > dashboard
-$ curl 'https://syzkaller.appspot.com/x/.config?x=c372cdb7140fc162' | sort > syz-test
-$ diff -u dashboard syz-test | grep -vF '#' | grep '^[+-]'
---- dashboard   2020-02-11 00:19:14.793977153 +0900
-+++ syz-test    2020-02-11 00:19:15.659977108 +0900
--CONFIG_BLK_DEV_LOOP_MIN_COUNT=16
-+CONFIG_BLK_DEV_LOOP_MIN_COUNT=8
--CONFIG_BUG_ON_DATA_CORRUPTION=y
--CONFIG_DEBUG_CREDENTIALS=y
--CONFIG_DEBUG_PER_CPU_MAPS=y
--CONFIG_DEBUG_PLIST=y
--CONFIG_DEBUG_SG=y
--CONFIG_DEBUG_VIRTUAL=y
-+CONFIG_DEVMEM=y
-+CONFIG_DEVPORT=y
-+CONFIG_DMA_OF=y
--CONFIG_DYNAMIC_DEBUG=y
--CONFIG_DYNAMIC_MEMORY_LAYOUT=y
-+CONFIG_HID_REDRAGON=y
-+CONFIG_IRQCHIP=y
--CONFIG_LSM="lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor"
-+CONFIG_LSM="yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor"
--CONFIG_MAC80211_HWSIM=y
-+CONFIG_MAGIC_SYSRQ=y
-+CONFIG_MAGIC_SYSRQ_DEFAULT_ENABLE=0x1
-+CONFIG_MAGIC_SYSRQ_SERIAL=y
-+CONFIG_NET_TC_SKB_EXT=y
-+CONFIG_OF=y
-+CONFIG_OF_ADDRESS=y
-+CONFIG_OF_GPIO=y
-+CONFIG_OF_IOMMU=y
-+CONFIG_OF_IRQ=y
-+CONFIG_OF_KOBJ=y
-+CONFIG_OF_MDIO=y
-+CONFIG_OF_NET=y
--CONFIG_PGTABLE_LEVELS=5
-+CONFIG_PGTABLE_LEVELS=4
-+CONFIG_PWRSEQ_EMMC=y
-+CONFIG_PWRSEQ_SIMPLE=y
-+CONFIG_RTLWIFI_DEBUG=y
--CONFIG_SECURITYFS=y
-+CONFIG_STRICT_DEVMEM=y
-+CONFIG_THERMAL_OF=y
-+CONFIG_USB_CHIPIDEA_OF=y
-+CONFIG_USB_DWC3_OF_SIMPLE=y
--CONFIG_USB_RAW_GADGET=y
-+CONFIG_USB_SNP_UDC_PLAT=y
--CONFIG_VIRTIO_BLK_SCSI=y
--CONFIG_VIRT_WIFI=y
--CONFIG_X86_5LEVEL=y
+Is there anything else we can do to see the patch accepted?
+Do you think it is also relevant for the stable tree?
+
+-- 
+Best Regards
+Eugeniu Rosca
