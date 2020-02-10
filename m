@@ -2,96 +2,208 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B70157EEE
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 16:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2353B157F31
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 16:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727254AbgBJPhX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Feb 2020 10:37:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47544 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726816AbgBJPhX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 Feb 2020 10:37:23 -0500
-Received: from localhost (unknown [104.132.1.111])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2139F20715;
-        Mon, 10 Feb 2020 15:37:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581349042;
-        bh=sGjD7xGr3xdQbRTfhCpcS5nzJvm1i6kOJ+HnTDC8inE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=w/LPlaHlTa9ikc2OwAE/jzPLqp+orS3uUOC9gBVNAHW65VDr39oI62BcXbqwCCy5m
-         PqzKgjdnSLFJDGoDX3pjkb7nkrrcM+p5kqMv1LgTP3y0GBuvRZjxiltDP5P8LMgA/N
-         5j7Ye32XCOkyRniJN4Q/7Gf/4yHfGAvywXB7HKqc=
-Date:   Mon, 10 Feb 2020 07:37:21 -0800
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Hardik Gajjar <hgajjar@de.adit-jv.com>, thinhn@synopsys.com,
-        Kento.A.Kobayashi@sony.com, atmgnd@outlook.com,
-        linux-usb@vger.kernel.org, andrew_gabbasov@mentor.com,
-        linux-renesas-soc@vger.kernel.org,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH v4] USB: hub: Fix the broken detection of USB3 device in
- SMSC hub
-Message-ID: <20200210153721.GA689337@kroah.com>
-References: <1580989763-32291-1-git-send-email-hgajjar@de.adit-jv.com>
- <20200210152808.GA7327@lxhi-065.adit-jv.com>
+        id S1727496AbgBJPvD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Feb 2020 10:51:03 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:37480 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727120AbgBJPvC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 10:51:02 -0500
+Received: by mail-io1-f71.google.com with SMTP id p4so4944008ioo.4
+        for <linux-usb@vger.kernel.org>; Mon, 10 Feb 2020 07:51:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=0Z4mZBtI2gdriykPJmN0mwKGOFirSgbNkIa1x0WQpo0=;
+        b=tsS2w7xDdoMFsPb8sf1RGBIEmd6Ml5nAVM4Zk7TpcTicylwfSdyf8toXDCDjTcVHig
+         UCBrZESNyploK6E8zfQ5lrhrgmWaivqdd7iovlSXb/cpqbfkcejdmncVo4WYGJydEAjy
+         293sXTfBp7metWr6UPn1+uwY14b809uPG4/HWXg+IkdPsdePl1r7P6fj5AaNmI2QQkHu
+         lMUvGRjRQm4oLsw0vCYPFXro1/Trjae5C7uV4We/NaZRMhiblf5mGH2z5mi1XGPGrtlv
+         4ondRJUQ53fvCTI7sIz+8DwyoCJQ3Xb02qRspsyWCF2fbC0b6gkHivVr5Y00R917fNoJ
+         FVog==
+X-Gm-Message-State: APjAAAVU3g3WzPZe2MZE7Ju8z3MtuqoGX9c0/dv19tj8dE/WEewivxc3
+        DT4SAJ567LGgXv5IhToe+3Rwl0V3K4BlKU9aaEeby4akwBdU
+X-Google-Smtp-Source: APXvYqzrR5X28Dnt9QIyHtOREXF6/SoFdK8vY+UvCcSf6Yn4HXv9ZCCXIJFDJ/8bdQ1WykzyXtTzj5ZLi9hnqNV22qR+5N7lMqze
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200210152808.GA7327@lxhi-065.adit-jv.com>
+X-Received: by 2002:a5d:9708:: with SMTP id h8mr9858742iol.141.1581349861783;
+ Mon, 10 Feb 2020 07:51:01 -0800 (PST)
+Date:   Mon, 10 Feb 2020 07:51:01 -0800
+In-Reply-To: <1581344006.26936.7.camel@suse.de>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c6fdac059e3ab4c6@google.com>
+Subject: Re: KASAN: use-after-free Read in uvc_probe
+From:   syzbot <syzbot+9a48339b077c5a80b869@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, laurent.pinchart@ideasonboard.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org, oneukum@suse.de,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 10, 2020 at 04:28:08PM +0100, Eugeniu Rosca wrote:
-> Hi Alan, hi Greg,
-> 
-> On Thu, Feb 06, 2020 at 12:49:23PM +0100, Hardik Gajjar wrote:
-> > Renesas R-Car H3ULCB + Kingfisher Infotainment Board is either not able
-> > to detect the USB3.0 mass storage devices or is detecting those as
-> > USB2.0 high speed devices.
-> > 
-> > The explanation given by Renesas is that, due to a HW issue, the XHCI
-> > driver does not wake up after going to sleep on connecting a USB3.0
-> > device.
-> > 
-> > In order to mitigate that, disable the auto-suspend feature
-> > specifically for SMSC hubs from hub_probe() function, as a quirk.
-> > 
-> > Renesas Kingfisher Infotainment Board has two USB3.0 ports (CN2) which
-> > are connected via USB5534B 4-port SuperSpeed/Hi-Speed, low-power,
-> > configurable hub controller.
-> > 
-> > [1] SanDisk USB 3.0 device detected as USB-2.0 before the patch
-> >  [   74.036390] usb 5-1.1: new high-speed USB device number 4 using xhci-hcd
-> >  [   74.061598] usb 5-1.1: New USB device found, idVendor=0781, idProduct=5581, bcdDevice= 1.00
-> >  [   74.069976] usb 5-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> >  [   74.077303] usb 5-1.1: Product: Ultra
-> >  [   74.080980] usb 5-1.1: Manufacturer: SanDisk
-> >  [   74.085263] usb 5-1.1: SerialNumber: 4C530001110208116550
-> > 
-> > [2] SanDisk USB 3.0 device detected as USB-3.0 after the patch
-> >  [   34.565078] usb 6-1.1: new SuperSpeed Gen 1 USB device number 3 using xhci-hcd
-> >  [   34.588719] usb 6-1.1: New USB device found, idVendor=0781, idProduct=5581, bcdDevice= 1.00
-> >  [   34.597098] usb 6-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> >  [   34.604430] usb 6-1.1: Product: Ultra
-> >  [   34.608110] usb 6-1.1: Manufacturer: SanDisk
-> >  [   34.612397] usb 6-1.1: SerialNumber: 4C530001110208116550
-> > 
-> > Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-> > Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
-> > Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> > Tested-by: Eugeniu Rosca <erosca@de.adit-jv.com>
-> 
-> Is there anything else we can do to see the patch accepted?
-> Do you think it is also relevant for the stable tree?
+Hello,
 
-It was the merge window, I couldn't do anything with it until a few
-hours ago.  Please give me some time to catch up with patches...
+syzbot has tested the proposed patch but the reproducer still triggered crash:
+KASAN: use-after-free Read in uvc_probe
 
-thanks,
+usb 2-1: string descriptor 0 read error: -71
+uvcvideo: Found UVC 0.00 device <unnamed> (0bd3:0555)
+==================================================================
+BUG: KASAN: use-after-free in uvc_register_terms drivers/media/usb/uvc/uvc_driver.c:2038 [inline]
+BUG: KASAN: use-after-free in uvc_register_chains drivers/media/usb/uvc/uvc_driver.c:2071 [inline]
+BUG: KASAN: use-after-free in uvc_probe.cold+0x2193/0x29fe drivers/media/usb/uvc/uvc_driver.c:2202
+Read of size 2 at addr ffff8881d933182e by task kworker/0:2/95
 
-greg k-h
+CPU: 0 PID: 95 Comm: kworker/0:2 Not tainted 5.5.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xef/0x16e lib/dump_stack.c:118
+ print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
+ __kasan_report.cold+0x37/0x85 mm/kasan/report.c:506
+ kasan_report+0xe/0x20 mm/kasan/common.c:639
+ uvc_register_terms drivers/media/usb/uvc/uvc_driver.c:2038 [inline]
+ uvc_register_chains drivers/media/usb/uvc/uvc_driver.c:2071 [inline]
+ uvc_probe.cold+0x2193/0x29fe drivers/media/usb/uvc/uvc_driver.c:2202
+ usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:361
+ really_probe+0x290/0xad0 drivers/base/dd.c:548
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:721
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+ __device_attach+0x217/0x390 drivers/base/dd.c:894
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+ device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+ usb_set_configuration+0xe47/0x17d0 drivers/usb/core/message.c:2023
+ generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+ usb_probe_device+0xaf/0x140 drivers/usb/core/driver.c:266
+ really_probe+0x290/0xad0 drivers/base/dd.c:548
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:721
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+ __device_attach+0x217/0x390 drivers/base/dd.c:894
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+ device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+ usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2537
+ hub_port_connect drivers/usb/core/hub.c:5184 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
+ port_event drivers/usb/core/hub.c:5470 [inline]
+ hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5552
+ process_one_work+0x945/0x15c0 kernel/workqueue.c:2264
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2410
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Allocated by task 95:
+ save_stack+0x1b/0x80 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ __kasan_kmalloc mm/kasan/common.c:513 [inline]
+ __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:486
+ kmalloc include/linux/slab.h:556 [inline]
+ kzalloc include/linux/slab.h:670 [inline]
+ uvc_alloc_chain+0x48/0xfa drivers/media/usb/uvc/uvc_driver.c:1692
+ uvc_scan_device drivers/media/usb/uvc/uvc_driver.c:1818 [inline]
+ uvc_probe.cold+0x15f0/0x29fe drivers/media/usb/uvc/uvc_driver.c:2198
+ usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:361
+ really_probe+0x290/0xad0 drivers/base/dd.c:548
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:721
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+ __device_attach+0x217/0x390 drivers/base/dd.c:894
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+ device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+ usb_set_configuration+0xe47/0x17d0 drivers/usb/core/message.c:2023
+ generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+ usb_probe_device+0xaf/0x140 drivers/usb/core/driver.c:266
+ really_probe+0x290/0xad0 drivers/base/dd.c:548
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:721
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+ __device_attach+0x217/0x390 drivers/base/dd.c:894
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+ device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+ usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2537
+ hub_port_connect drivers/usb/core/hub.c:5184 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
+ port_event drivers/usb/core/hub.c:5470 [inline]
+ hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5552
+ process_one_work+0x945/0x15c0 kernel/workqueue.c:2264
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2410
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Freed by task 95:
+ save_stack+0x1b/0x80 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ kasan_set_free_info mm/kasan/common.c:335 [inline]
+ __kasan_slab_free+0x117/0x160 mm/kasan/common.c:474
+ slab_free_hook mm/slub.c:1425 [inline]
+ slab_free_freelist_hook mm/slub.c:1458 [inline]
+ slab_free mm/slub.c:3005 [inline]
+ kfree+0xd5/0x300 mm/slub.c:3957
+ uvc_scan_device drivers/media/usb/uvc/uvc_driver.c:1825 [inline]
+ uvc_probe.cold+0x16fd/0x29fe drivers/media/usb/uvc/uvc_driver.c:2198
+ usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:361
+ really_probe+0x290/0xad0 drivers/base/dd.c:548
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:721
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+ __device_attach+0x217/0x390 drivers/base/dd.c:894
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+ device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+ usb_set_configuration+0xe47/0x17d0 drivers/usb/core/message.c:2023
+ generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+ usb_probe_device+0xaf/0x140 drivers/usb/core/driver.c:266
+ really_probe+0x290/0xad0 drivers/base/dd.c:548
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:721
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+ __device_attach+0x217/0x390 drivers/base/dd.c:894
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+ device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+ usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2537
+ hub_port_connect drivers/usb/core/hub.c:5184 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
+ port_event drivers/usb/core/hub.c:5470 [inline]
+ hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5552
+ process_one_work+0x945/0x15c0 kernel/workqueue.c:2264
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2410
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+The buggy address belongs to the object at ffff8881d9331800
+ which belongs to the cache kmalloc-256 of size 256
+The buggy address is located 46 bytes inside of
+ 256-byte region [ffff8881d9331800, ffff8881d9331900)
+The buggy address belongs to the page:
+page:ffffea000764cc00 refcount:1 mapcount:0 mapping:ffff8881da002780 index:0x0 compound_mapcount: 0
+raw: 0200000000010200 ffffea0007648d80 0000000e0000000e ffff8881da002780
+raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff8881d9331700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff8881d9331780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff8881d9331800: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                  ^
+ ffff8881d9331880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8881d9331900: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
+
+
+Tested on:
+
+commit:         ae179410 usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=13d466e9e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ad1d751a3a72ae57
+dashboard link: https://syzkaller.appspot.com/bug?extid=9a48339b077c5a80b869
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=16022395e00000
+
