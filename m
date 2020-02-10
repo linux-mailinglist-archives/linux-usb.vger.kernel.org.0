@@ -2,71 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A61B157C9F
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 14:45:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 545FB157CC8
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 14:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728983AbgBJNns (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Feb 2020 08:43:48 -0500
-Received: from mga05.intel.com ([192.55.52.43]:14982 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728924AbgBJNnr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 Feb 2020 08:43:47 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Feb 2020 05:43:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,425,1574150400"; 
-   d="scan'208";a="265858460"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
-  by fmsmga002.fm.intel.com with ESMTP; 10 Feb 2020 05:43:46 -0800
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH 4/4] xhci: apply XHCI_PME_STUCK_QUIRK to Intel Comet Lake platforms
-Date:   Mon, 10 Feb 2020 15:45:53 +0200
-Message-Id: <20200210134553.9144-5-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200210134553.9144-1-mathias.nyman@linux.intel.com>
-References: <20200210134553.9144-1-mathias.nyman@linux.intel.com>
+        id S1728561AbgBJNuN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Feb 2020 08:50:13 -0500
+Received: from mail-ed1-f52.google.com ([209.85.208.52]:43427 "EHLO
+        mail-ed1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727566AbgBJNuN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 08:50:13 -0500
+Received: by mail-ed1-f52.google.com with SMTP id dc19so306631edb.10;
+        Mon, 10 Feb 2020 05:50:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oUh/ndXbaDqp+3tPebK12Mbm+ONI7sh2CQOdtDK1Y1Q=;
+        b=omWazMTgJKzRRnL4XyFfYUbjw0QfgQaEYnOM/sZFP1eblVhI2iUEulVac1koKlMCUl
+         JOT9DFpPJ2mkRSWnOsit1oAgW6MHtOj4ETt9Ywc9yNL++WAW4r6t9Xh0vwWvGcVCBh3Y
+         3kXfgO87NfSg4fsliLunLB40iit+RkkXH3/VZuFLFOAqfVOVvDMvtPV3SiN4jgq1GaaU
+         u+hRQtMafv07ZGZ9VyEEJFsIST6Va3BVvQmGVZiKCZU/aHMe4KE4tYpv8gUq3TFm39OF
+         KM+Ict+t4Iym6Sl6N+fjClzdzSyGwkNysY3l/RcHD1iyqenYUFun8Q+MHYrg5Fs3D5FK
+         o+Zg==
+X-Gm-Message-State: APjAAAV6bQfcqMZoCbRP6QkD2XYnlb5MMhT0vlHDMOr3MlQsKgJ/wCku
+        UTJG7bS7Cy/mTUPEOrlDEEk=
+X-Google-Smtp-Source: APXvYqyn2t288jmOkFcP+OP9icXtvKT/eVN8DeIO76jSB5/gUw5aD8FBkeSGATGBn0SU9NvUvANfQw==
+X-Received: by 2002:a17:906:23e2:: with SMTP id j2mr1165391ejg.257.1581342611234;
+        Mon, 10 Feb 2020 05:50:11 -0800 (PST)
+Received: from pi3 ([194.230.155.125])
+        by smtp.googlemail.com with ESMTPSA id qw15sm43828ejb.92.2020.02.10.05.50.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Feb 2020 05:50:10 -0800 (PST)
+Date:   Mon, 10 Feb 2020 14:50:08 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv3 2/3] ARM: dts: exynos: Add missing usbdrd3 suspend clk
+Message-ID: <20200210135008.GA2163@pi3>
+References: <20200210105108.1128-1-linux.amoon@gmail.com>
+ <20200210105108.1128-3-linux.amoon@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200210105108.1128-3-linux.amoon@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Intel Comet Lake based platform require the XHCI_PME_STUCK_QUIRK
-quirk as well. Without this xHC can not enter D3 in runtime suspend.
+On Mon, Feb 10, 2020 at 10:51:07AM +0000, Anand Moon wrote:
+> This patch adds new combatible strings for USBDRD3
+> for adding missing suspend clk, exynos5422 usbdrd3
+> support two clk USBD300 and SCLK_USBD300, so add missing
+> suspemd_clk for Exynos542x DWC3 nodes.
+> 
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> ---
+>  arch/arm/boot/dts/exynos5420.dtsi | 8 ++++----
+>  arch/arm/boot/dts/exynos54xx.dtsi | 4 ++--
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/exynos5420.dtsi b/arch/arm/boot/dts/exynos5420.dtsi
+> index b672080e7469..bd505256a223 100644
+> --- a/arch/arm/boot/dts/exynos5420.dtsi
+> +++ b/arch/arm/boot/dts/exynos5420.dtsi
+> @@ -1372,8 +1372,8 @@ &trng {
+>  };
+>  
+>  &usbdrd3_0 {
+> -	clocks = <&clock CLK_USBD300>;
+> -	clock-names = "usbdrd30";
+> +	clocks = <&clock CLK_USBD300>, <&clock CLK_SCLK_USBD300>;
+> +	clock-names = "usbdrd30", "usbdrd30_susp_clk";
+>  };
+>  
+>  &usbdrd_phy0 {
+> @@ -1383,8 +1383,8 @@ &usbdrd_phy0 {
+>  };
+>  
+>  &usbdrd3_1 {
+> -	clocks = <&clock CLK_USBD301>;
+> -	clock-names = "usbdrd30";
+> +	clocks = <&clock CLK_USBD301>, <&clock CLK_SCLK_USBD301>;
+> +	clock-names = "usbdrd30", "usbdrd30_susp_clk";
+>  };
+>  
+>  &usbdrd_dwc3_1 {
+> diff --git a/arch/arm/boot/dts/exynos54xx.dtsi b/arch/arm/boot/dts/exynos54xx.dtsi
+> index 8aa5117e58ce..0aac6255de5d 100644
+> --- a/arch/arm/boot/dts/exynos54xx.dtsi
+> +++ b/arch/arm/boot/dts/exynos54xx.dtsi
+> @@ -143,7 +143,7 @@ hsi2c_7: i2c@12cd0000 {
+>  		};
+>  
+>  		usbdrd3_0: usb3-0 {
+> -			compatible = "samsung,exynos5250-dwusb3";
+> +			compatible = "samsung,exynos5420-dwusb3";
+>  			#address-cells = <1>;
+>  			#size-cells = <1>;
+>  			ranges;
+> @@ -165,7 +165,7 @@ usbdrd_phy0: phy@12100000 {
+>  		};
+>  
+>  		usbdrd3_1: usb3-1 {
+> -			compatible = "samsung,exynos5250-dwusb3";
+> +			compatible = "samsung,exynos5420-dwusb3";
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-pci.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+This affects also Exynos5410 but you do not add new clock there.
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index da7c2db41671..5e9b537df631 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -49,6 +49,7 @@
- #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_4C_XHCI		0x15ec
- #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI		0x15f0
- #define PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI		0x8a13
-+#define PCI_DEVICE_ID_INTEL_CML_XHCI			0xa3af
- 
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
-@@ -187,7 +188,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 		 pdev->device == PCI_DEVICE_ID_INTEL_BROXTON_M_XHCI ||
- 		 pdev->device == PCI_DEVICE_ID_INTEL_BROXTON_B_XHCI ||
- 		 pdev->device == PCI_DEVICE_ID_INTEL_APL_XHCI ||
--		 pdev->device == PCI_DEVICE_ID_INTEL_DNV_XHCI)) {
-+		 pdev->device == PCI_DEVICE_ID_INTEL_DNV_XHCI ||
-+		 pdev->device == PCI_DEVICE_ID_INTEL_CML_XHCI)) {
- 		xhci->quirks |= XHCI_PME_STUCK_QUIRK;
- 	}
- 	if (pdev->vendor == PCI_VENDOR_ID_INTEL &&
--- 
-2.17.1
+Best regards,
+Krzysztof
 
