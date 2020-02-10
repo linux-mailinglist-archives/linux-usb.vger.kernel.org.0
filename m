@@ -2,55 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63CB7157D7B
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 15:34:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE150157DD8
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 15:53:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727477AbgBJOex convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 10 Feb 2020 09:34:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55502 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726961AbgBJOex (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 Feb 2020 09:34:53 -0500
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 206471] Connecting Yi 4K+ to Thinkpad T495, "usb usb2-port3:
- Cannot enable. Maybe the USB cable is bad?"
-Date:   Mon, 10 Feb 2020 14:34:52 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: lucas.vacek@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-206471-208809-HWS9rBL16u@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-206471-208809@https.bugzilla.kernel.org/>
-References: <bug-206471-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1728760AbgBJOxg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Feb 2020 09:53:36 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:54153 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727570AbgBJOxf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 09:53:35 -0500
+Received: (qmail 16190 invoked by uid 500); 10 Feb 2020 09:53:34 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 10 Feb 2020 09:53:34 -0500
+Date:   Mon, 10 Feb 2020 09:53:34 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Oliver Neukum <oneukum@suse.de>
+cc:     Sam Lewis <sam.vr.lewis@gmail.com>, <linux-usb@vger.kernel.org>
+Subject: Re: USB hub driver over-current behavior
+In-Reply-To: <1581330569.26936.5.camel@suse.de>
+Message-ID: <Pine.LNX.4.44L0.2002100946400.14460-100000@netrider.rowland.org>
 MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=206471
+On Mon, 10 Feb 2020, Oliver Neukum wrote:
 
---- Comment #2 from Lukas Vacek (lucas.vacek@gmail.com) ---
-I can confirm the same problem with another Yi 4k+ (using many different
-cables) so it's not a hardware issue.
+> Am Montag, den 10.02.2020, 17:03 +1100 schrieb Sam Lewis:
+> > Hi,
+> > 
+> > I have a LAN9514 (rebranded SMSC9514) USB hub which has per port
+> > over-current protection.
+> > 
+> > I'm using this hub within my embedded device, and I would like the hub
+> > to continue working if any single port experiences an over-current or
+> > short condition.
+> > 
+> > In testing this behavior by shorting out a port, I've noticed that the
+> > Linux USB driver continually fights against the protection in the hub
+> > and attempts to repower the shorted port.
+> > 
+> > Looking through the hub driver and tracing the execution flow, as far
+> > as I can tell, this is the list of events that seem to be occurring:
+> > 
+> > 1. I short out a single port
+> > 2. The hub (through a power switch) detects the short and disables the port
+> > 3. The hub sends an over-current event to the driver
+> > 4. The driver gets the event in the `port_event` function
+> > 5. The driver then sleeps for 100ms (for 'cool down'?) before powering
+> > the port back on
+> > 6. Repeat from top, until the short is removed
+> 
+> Hi,
+> 
+> error handling at this level has gotten little love.
 
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+Indeed.  This is mostly because the issue does not crop up in normal 
+usage very often.  And most hubs don't have very good over-current 
+protection anyway.
+
+I believe the original expectation was that over-current events would
+generally be intermittent and very short-lived.  So when an event did
+occur, it would make sense to wait a little while and then try to
+switch the port back on.  Nobody ever bothered to implement a total
+time or retry limit on this behavior, probably because there weren't
+any complaints.
+
+> The basic problem is that we have no good way to switch a portback on
+> after we have given up on it. Feel free to propose a patch to the
+> kernel and a tool to use it and we can discuss them.
+
+Yes, patches are welcome.
+
+Alan Stern
+
