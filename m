@@ -2,114 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8942B1570DD
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 09:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9331571CF
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 10:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727538AbgBJIe7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Feb 2020 03:34:59 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:38654 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727452AbgBJIe6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 03:34:58 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01A8Wx33161934;
-        Mon, 10 Feb 2020 08:34:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=jUUFk4pjb4VR5au3cMOhGdF3aMvNDZPsdfMNEMcE88Y=;
- b=TtfwFmaCYZ7mxxJyy/NgvB5hNwBeHzKKrJHA82hz4I5KiQk+l6BBp7Qjuc8d/zS+kffz
- 1I5KRbVp8u/mPsKh1eIQfPxD3v+mN2nuiAEmHt/QtE2J4qQHY2QjYdD5eof45FAZuqQv
- ze5eygr9Pld5+VMbG0chzaJtOM7XteryWECz+U67qJSbNb3lhZXzSkqJrK6jSgTkGv1l
- 3os1ruWNTWfsjLghuW461Fc3SH5/KuViEPuupuDutjjWWmU0e5/YTXJXR281kAUaxGJz
- zFYTMFhGjklMG9vBu8OTPpSm/LWGdHof7oJVFzojkPzY1EClwiOQ7DKt+oan/RWyjOji cA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 2y2p3s24gk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Feb 2020 08:34:53 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01A8WXsp168413;
-        Mon, 10 Feb 2020 08:32:52 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 2y26pxshhy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 10 Feb 2020 08:32:52 +0000
-Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 01A8Wp4w001439;
-        Mon, 10 Feb 2020 08:32:51 GMT
-Received: from kadam (/129.205.23.165)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 10 Feb 2020 00:32:51 -0800
-Date:   Mon, 10 Feb 2020 11:32:43 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Colin King <colin.king@canonical.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: debug: remove redundant call to strlen
-Message-ID: <20200210083243.GW1778@kadam>
-References: <20200208162508.29336-1-colin.king@canonical.com>
+        id S1727029AbgBJJfF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Feb 2020 04:35:05 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:42582 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726796AbgBJJfF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 04:35:05 -0500
+Received: by mail-lj1-f194.google.com with SMTP id d10so6301087ljl.9;
+        Mon, 10 Feb 2020 01:35:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2dMtmeDRnp4IqIYHT+2e2+AiEKEG+n4IbCtoKAc5Vi0=;
+        b=YMSk8Ba68rYzrYiuDUSRTkVrcxSAzMpeePY9x9yPBGYxQgeqakpvQSSKhjCslh0c5G
+         Y3QiLFp93kbbrm0SmlYUPdn9BsMlgaOPdO1yzX29KFx8OuVcejNWfor605TBWot9EVTH
+         Z0Cr9HuOfq42VJ5xEgNT5yt2t8jEJbfZw5kI+xieaDHNPSdSNhM+e5See4pvDw37C6j5
+         fk2xcChRfnSeyfOrifHAlErFR9RT61WsSUaljdGCIfp1N07nGsuO2iBlGF8IHHX5+NGC
+         mmMeuuEoBRjpAhiSnGiugYEZddgpC/MB2fmfv74nap9NzpJt9dJpG8Ku6NDgsLL9oo1r
+         Bfng==
+X-Gm-Message-State: APjAAAXTLuiFy+Ig8ORiQJ8LKVJNU/ntTmSs9WMmwh2LkH+Kb9eaSq3y
+        vi33BN8gtZ6xtnOGP1XbJZA=
+X-Google-Smtp-Source: APXvYqxKy4brjEUxzjMG+gW2v+H+fGRjyDf1ySMlmY1e+JOpQOVWfLrGV9FmXnjkf5WDmP3pAYjLzg==
+X-Received: by 2002:a2e:5357:: with SMTP id t23mr302326ljd.227.1581327303258;
+        Mon, 10 Feb 2020 01:35:03 -0800 (PST)
+Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
+        by smtp.gmail.com with ESMTPSA id 5sm6000098lju.69.2020.02.10.01.35.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Feb 2020 01:35:02 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@kernel.org>)
+        id 1j15T2-00045d-7f; Mon, 10 Feb 2020 10:35:00 +0100
+Date:   Mon, 10 Feb 2020 10:35:00 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Johan Hovold <johan@kernel.org>, Jakub Nantl <jn@forever.cz>,
+        Jonathan Olds <jontio@i4free.co.nz>,
+        Michael Dreher <michael@5dot1.de>, linux-usb@vger.kernel.org,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH] USB: serial: ch341: fix receiver regression
+Message-ID: <20200210093500.GA3539@localhost>
+References: <20200206111819.20829-1-johan@kernel.org>
+ <20200206114546.GA3275679@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200208162508.29336-1-colin.king@canonical.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9526 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 spamscore=0
- mlxscore=0 adultscore=0 suspectscore=0 mlxlogscore=999 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2002100071
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9526 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 malwarescore=0
- suspectscore=0 mlxlogscore=999 priorityscore=1501 clxscore=1015
- impostorscore=0 lowpriorityscore=0 phishscore=0 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2002100071
+In-Reply-To: <20200206114546.GA3275679@kroah.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Feb 08, 2020 at 04:25:08PM +0000, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
+On Thu, Feb 06, 2020 at 11:45:46AM +0000, Greg Kroah-Hartman wrote:
+> On Thu, Feb 06, 2020 at 12:18:19PM +0100, Johan Hovold wrote:
+> > While assumed not to make a difference, not using the factor 2 prescaler
+> > makes the receiver more susceptible to errors.
+> > 
+> > Specifically, there have been reports of problems with devices that
+> > cannot generate a 115200 rate with a smaller error than 2.1% (e.g.
+> > 117647 bps). But this can also be reproduced with a low-speed RS232
+> > tranceiver at 115200 when the input rate is close to nominal.
+> > 
+> > So whenever possible, enable the factor 2 prescaler and halve the
+> > divisor in order to use settings closer to that of the previous
+> > algorithm.
+> > 
+> > Fixes: 35714565089e ("USB: serial: ch341: reimplement line-speed handling")
+> > Cc: stable <stable@vger.kernel.org>	# 5.5
+> > Reported-by: Jakub Nantl <jn@forever.cz>
+> > Tested-by: Jakub Nantl <jn@forever.cz>
+> > Signed-off-by: Johan Hovold <johan@kernel.org>
 > 
-> The call to strlen is redundant since the return value is assigned
-> to variable len but not subsequently used. Remove the redundant
-> call.
-> 
-> Addresses-Coverity: ("Unused value")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> ---
->  drivers/usb/dwc3/debug.h | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/debug.h b/drivers/usb/dwc3/debug.h
-> index e56beb9d1e36..ee964352c8e2 100644
-> --- a/drivers/usb/dwc3/debug.h
-> +++ b/drivers/usb/dwc3/debug.h
-> @@ -296,8 +296,6 @@ static inline const char *dwc3_ep_event_string(char *str, size_t size,
->  				status & DEPEVT_STATUS_TRANSFER_ACTIVE ?
->  				" (Active)" : " (Not Active)");
->  
-> -		len = strlen(str);
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-This code is buggy.  It's a mixup between ret and len.  Get rid of "ret"
-and use "len" throughout.
+Thanks for reviewing. Now applied.
 
-Unlike userspace snprintf() the kernel version always returns a positive
-value.  It returns the number of bytes that would have been copied if
-there were enough space.  This code should probably be changed to use
-scnprintf() which returns the number of bytes which were copied
-successfully.
-
-The remove all the strlen() calls.  It should just be += the return.
-
-	len += scnprintf(str + len, size - len, "Transfer Not Ready [%d] %s",
-			 event->parameters,
-			 status & DEPEVT_STATUS_TRANSFER_ACTIVE ?
-				"(Active)" : "(Not Active)");
-
-regards,
-dan carpenter
-
+Johan
