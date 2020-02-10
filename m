@@ -2,66 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E292F1577F8
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 14:04:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F054157C92
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 14:43:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730740AbgBJNDw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 10 Feb 2020 08:03:52 -0500
-Received: from shards.monkeyblade.net ([23.128.96.9]:39524 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729710AbgBJNDv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 08:03:51 -0500
-Received: from localhost (82-95-191-104.ip.xs4all.nl [82.95.191.104])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id DD09D14DD5523;
-        Mon, 10 Feb 2020 05:03:49 -0800 (PST)
-Date:   Mon, 10 Feb 2020 14:03:48 +0100 (CET)
-Message-Id: <20200210.140348.1963500382587025261.davem@davemloft.net>
-To:     bjorn@mork.no
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        kristian.evensen@gmail.com, aleksander@aleksander.es
-Subject: Re: [PATCH net-next] qmi_wwan: unconditionally reject 2 ep
- interfaces
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200208155504.30243-1-bjorn@mork.no>
-References: <20200208155504.30243-1-bjorn@mork.no>
-X-Mailer: Mew version 6.8 on Emacs 26.3
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 10 Feb 2020 05:03:50 -0800 (PST)
+        id S1728032AbgBJNnm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Feb 2020 08:43:42 -0500
+Received: from mga05.intel.com ([192.55.52.43]:14982 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727369AbgBJNnm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 Feb 2020 08:43:42 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Feb 2020 05:43:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,425,1574150400"; 
+   d="scan'208";a="265858446"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
+  by fmsmga002.fm.intel.com with ESMTP; 10 Feb 2020 05:43:40 -0800
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/4] xhci fixes for usb-linus
+Date:   Mon, 10 Feb 2020 15:45:49 +0200
+Message-Id: <20200210134553.9144-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Bjørn Mork <bjorn@mork.no>
-Date: Sat,  8 Feb 2020 16:55:04 +0100
+Hi Greg
 
-> We have been using the fact that the QMI and DIAG functions
-> usually are the only ones with class/subclass/protocol being
-> ff/ff/ff on Quectel modems. This has allowed us to match the
-> QMI function without knowing the exact interface number,
-> which can vary depending on firmware configuration.
-> 
-> The ability to silently reject the DIAG function, which is
-> usually handled by the option driver, is important for this
-> method to work.  This is done based on the knowledge that it
-> has exactly 2 bulk endpoints.  QMI function control interfaces
-> will have either 3 or 1 endpoint. This rule is universal so
-> the quirk condition can be removed.
-> 
-> The fixed layouts known from the Gobi1k and Gobi2k modems
-> have been gradually replaced by more dynamic layouts, and
-> many vendors now use configurable layouts without changing
-> device IDs.  Renaming the class/subclass/protocol matching
-> macro makes it more obvious that this is now not Quectel
-> specific anymore.
-> 
-> Cc: Kristian Evensen <kristian.evensen@gmail.com>
-> Cc: Aleksander Morgado <aleksander@aleksander.es>
-> Signed-off-by: Bjørn Mork <bjorn@mork.no>
+A few xhci fixes resolving an issue entering runtime suspend PCI D3 for
+some Intel hosts, fixing a memory leak, and forcing max packet size to
+valid values allowing some older FS devices to function with xhci.
 
-Applied.
+-Mathias
+
+Mathias Nyman (4):
+  xhci: Force Maximum Packet size for Full-speed bulk devices to valid
+    range.
+  xhci: Fix memory leak when caching protocol extended capability PSI
+    tables
+  xhci: fix runtime pm enabling for quirky Intel hosts
+  xhci: apply XHCI_PME_STUCK_QUIRK to Intel Comet Lake platforms
+
+ drivers/usb/host/xhci-hub.c | 25 ++++++++-----
+ drivers/usb/host/xhci-mem.c | 70 ++++++++++++++++++++++++-------------
+ drivers/usb/host/xhci-pci.c | 10 +++---
+ drivers/usb/host/xhci.h     | 14 ++++++--
+ 4 files changed, 79 insertions(+), 40 deletions(-)
+
+-- 
+2.17.1
+
