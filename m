@@ -2,58 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD90158319
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 19:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6E1158321
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 19:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727548AbgBJS6X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Feb 2020 13:58:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34870 "EHLO mail.kernel.org"
+        id S1727777AbgBJS7X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Feb 2020 13:59:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35696 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727121AbgBJS6X (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 Feb 2020 13:58:23 -0500
+        id S1727331AbgBJS7X (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 Feb 2020 13:59:23 -0500
 Received: from localhost (unknown [104.132.1.111])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 475222085B;
-        Mon, 10 Feb 2020 18:58:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id ED63E2085B;
+        Mon, 10 Feb 2020 18:59:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581361102;
-        bh=XhsDSqmZAV5GAixCR38jksBySp8eRi3o9QvzAGZo0T0=;
+        s=default; t=1581361162;
+        bh=dV/9pypPR+5LSujojchvrgFxxYVcyddDIPtQmTd6EPY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fIxlTXuChg1UrtQ3SPibVHWtPQcF/pz1KL2gIKL6c98MEEg8ZkvufcuMOuVVYDIu7
-         Y+Ark2JbEzwEmEDSqMSUsX17i4mlOva9YAwF//tnPztNFiCI1Wr3cWXUivWLPRB3/H
-         Bi6rOloB/jdx2IepZVYCBFyvlbcpd42Sy5XwxzfE=
-Date:   Mon, 10 Feb 2020 10:58:21 -0800
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     JC Kuo <jckuo@nvidia.com>
-Cc:     thierry.reding@gmail.com, robh@kernel.org, jonathanh@nvidia.com,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        felipe.balbi@linux.intel.com
-Subject: Re: [PATCH v1] dt-binding: usb: add "super-speed-plus"
-Message-ID: <20200210185821.GA1057764@kroah.com>
-References: <20200113060046.14448-1-jckuo@nvidia.com>
+        b=q9QOfyJW/DgVkDJQKfWyyLP9n5gkpS18hB2rZtUPWUvVhuHJZEqkHWEyFkKnFcYcN
+         14BhDANDwaxllNUjwFiHBl3y0OgKngSv82tCYLGXoxEiyLS4/zUJS6eVnPPj7XjUHS
+         3wDbtqT2pn0Sc1NNUaZoMg+OtGhJ1YvwDJjuZzUU=
+Date:   Mon, 10 Feb 2020 10:59:21 -0800
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     linux-rpi-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: xhci: Enable LPM for VIA LABS VL805
+Message-ID: <20200210185921.GA1058087@kroah.com>
+References: <20200120142422.3907-1-nsaenzjulienne@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200113060046.14448-1-jckuo@nvidia.com>
+In-Reply-To: <20200120142422.3907-1-nsaenzjulienne@suse.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 13, 2020 at 02:00:46PM +0800, JC Kuo wrote:
-> This commit adds "super-speed-plus" to valid argument list of
-> "maximum-speed" property.
+On Mon, Jan 20, 2020 at 03:24:22PM +0100, Nicolas Saenz Julienne wrote:
+> This PCIe controller chip is used on the Raspberry Pi 4 and multiple
+> adapter cards. There is no publicly available documentation for the
+> chip, yet both the downstream RPi4 kernel and the controller cards
+> support/advertise LPM support.
 > 
-> Signed-off-by: JC Kuo <jckuo@nvidia.com>
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 > ---
->  Documentation/devicetree/bindings/usb/generic.txt | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
+>  drivers/usb/host/xhci-pci.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> index 4917c5b033fa..c1976e98992b 100644
+> --- a/drivers/usb/host/xhci-pci.c
+> +++ b/drivers/usb/host/xhci-pci.c
+> @@ -241,6 +241,9 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+>  			pdev->device == 0x3432)
+>  		xhci->quirks |= XHCI_BROKEN_STREAMS;
+>  
+> +	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483)
+> +		xhci->quirks |= XHCI_LPM_SUPPORT;
+> +
+>  	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+>  			pdev->device == 0x1042)
+>  		xhci->quirks |= XHCI_BROKEN_STREAMS;
 
-What ever happened to this?  Did the DT developers see it?
-
-I suggest resending please so it gets into their queue to review.
+Mathias, is this in your review queue?
 
 thanks,
 
