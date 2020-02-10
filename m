@@ -2,76 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9019157D03
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 15:04:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80903157D24
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 15:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728524AbgBJOEd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Feb 2020 09:04:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44908 "EHLO mail.kernel.org"
+        id S1728766AbgBJONd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Feb 2020 09:13:33 -0500
+Received: from mx2.suse.de ([195.135.220.15]:39664 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726846AbgBJOEd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 Feb 2020 09:04:33 -0500
-Received: from PC-kkoz.proceq.com (unknown [213.160.61.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 31925206D6;
-        Mon, 10 Feb 2020 14:04:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581343472;
-        bh=7fRbMVB8UtpzAcwDa2C7GH4fqkKZBT/U7iNhVYXR1BE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tdLgfvi+MwEhD3EQ+OniSWgk5rxOMfpVefeowW9T4nkdFrXEhdP6oXDnqCoBEBuYx
-         ObgGrQX7aD137yvFDvLp/DvlFnPPR41dotnWtS4p66QYZc61/ci3ujJXjRHqXebhvT
-         PYQIRQ1cI6OMpIXLdo/ewczjp9CCuYx9d6Oj11n8=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Anand Moon <linux.amoon@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Felipe Balbi <balbi@kernel.org>
-Subject: [PATCH] dt-bindings: usb: exynos-usb: Document clock names for DWC3 bindings
-Date:   Mon, 10 Feb 2020 15:04:16 +0100
-Message-Id: <1581343456-18900-1-git-send-email-krzk@kernel.org>
-X-Mailer: git-send-email 2.7.4
+        id S1727481AbgBJONc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 Feb 2020 09:13:32 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id C6A6DAE2A;
+        Mon, 10 Feb 2020 14:13:30 +0000 (UTC)
+Message-ID: <1581344006.26936.7.camel@suse.de>
+Subject: Re: KASAN: use-after-free Read in uvc_probe
+From:   Oliver Neukum <oneukum@suse.de>
+To:     syzbot <syzbot+9a48339b077c5a80b869@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, laurent.pinchart@ideasonboard.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Date:   Mon, 10 Feb 2020 15:13:26 +0100
+In-Reply-To: <000000000000780999059c048dfc@google.com>
+References: <000000000000780999059c048dfc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Exynos DWC3 driver expects certain clock names, depending on used
-compatible.  Document this explicitly in the bindings.
+Am Montag, den 13.01.2020, 04:24 -0800 schrieb syzbot:
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    ae179410 usb: gadget: add raw-gadget interface
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=132223fee00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=ad1d751a3a72ae57
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9a48339b077c5a80b869
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16857325e00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=142e069ee00000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+9a48339b077c5a80b869@syzkaller.appspotmail.com
+> 
+> usb 1-1: New USB device found, idVendor=0bd3, idProduct=0555,  
+> bcdDevice=69.6a
+> usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> usb 1-1: config 0 descriptor??
+> usb 1-1: string descriptor 0 read error: -71
+> uvcvideo: Found UVC 0.00 device <unnamed> (0bd3:0555)
+> ==================================================================
+> BUG: KASAN: use-after-free in uvc_register_terms  
+> drivers/media/usb/uvc/uvc_driver.c:2038 [inline]
+> BUG: KASAN: use-after-free in uvc_register_chains  
+> drivers/media/usb/uvc/uvc_driver.c:2070 [inline]
+> BUG: KASAN: use-after-free in uvc_probe.cold+0x2193/0x29de  
+> drivers/media/usb/uvc/uvc_driver.c:2201
+> Read of size 2 at addr ffff8881d4f1bc2e by task kworker/1:2/94
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+#syz test: https://github.com/google/kasan.git ae179410
+
+From db844641a5e30f3cfc0ce9cde156b3cc356b6c0c Mon Sep 17 00:00:00 2001
+From: Oliver Neukum <oneukum@suse.com>
+Date: Mon, 10 Feb 2020 15:10:36 +0100
+Subject: [PATCH] UVC: deal with unnamed streams
+
+The pointer can be NULL
+
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
 ---
- Documentation/devicetree/bindings/usb/exynos-usb.txt | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/media/usb/uvc/uvc_driver.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/exynos-usb.txt b/Documentation/devicetree/bindings/usb/exynos-usb.txt
-index 66c394f9e11f..6aae1544f240 100644
---- a/Documentation/devicetree/bindings/usb/exynos-usb.txt
-+++ b/Documentation/devicetree/bindings/usb/exynos-usb.txt
-@@ -78,7 +78,14 @@ Required properties:
-  - ranges: allows valid 1:1 translation between child's address space and
- 	   parent's address space
-  - clocks: Clock IDs array as required by the controller.
-- - clock-names: names of clocks correseponding to IDs in the clock property
-+ - clock-names: Names of clocks corresponding to IDs in the clock property.
-+                Following clock names shall be provided for different
-+                compatibles:
-+                 - samsung,exynos5250-dwusb3: "usbdrd30",
-+                 - samsung,exynos5433-dwusb3: "aclk", "susp_clk", "pipe_pclk",
-+                                              "phyclk",
-+                 - samsung,exynos7-dwusb3: "usbdrd30", "usbdrd30_susp_clk",
-+                                           "usbdrd30_axius_clk"
-  - vdd10-supply: 1.0V powr supply
-  - vdd33-supply: 3.0V/3.3V power supply
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 99883550375e..26558a89f2fe 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -2069,7 +2069,8 @@ static int uvc_register_terms(struct uvc_device *dev,
+ 		stream = uvc_stream_by_id(dev, term->id);
+ 		if (stream == NULL) {
+ 			uvc_printk(KERN_INFO, "No streaming interface found "
+-				   "for terminal %u.", term->id);
++				   "for terminal %u.",
++				   term->id ? term->id : "(Unnamed)");
+ 			continue;
+ 		}
  
 -- 
-2.7.4
+2.16.4
 
