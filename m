@@ -2,58 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE001158432
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 21:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14935158491
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 22:08:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727029AbgBJUWy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 10 Feb 2020 15:22:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47790 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726563AbgBJUWy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 Feb 2020 15:22:54 -0500
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 206471] Connecting Yi 4K+ to Thinkpad T495, "usb usb2-port3:
- Cannot enable. Maybe the USB cable is bad?"
-Date:   Mon, 10 Feb 2020 20:22:53 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: lucas.vacek@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-206471-208809-ZKklY5GgGe@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-206471-208809@https.bugzilla.kernel.org/>
-References: <bug-206471-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1727199AbgBJVI6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Feb 2020 16:08:58 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:34107 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727056AbgBJVI6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 16:08:58 -0500
+Received: (qmail 15201 invoked by uid 500); 10 Feb 2020 16:08:56 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 10 Feb 2020 16:08:56 -0500
+Date:   Mon, 10 Feb 2020 16:08:56 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     James Lockie <bjlockie@lockie.ca>
+cc:     linux-usb@vger.kernel.org
+Subject: Re: dmesg -> lsusb -t
+In-Reply-To: <170302c8930.279c.665a3322dda79c663fe860d9fff7dd5d@lockie.ca>
+Message-ID: <Pine.LNX.4.44L0.2002101559040.13988-100000@netrider.rowland.org>
 MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=206471
+On Mon, 10 Feb 2020, James Lockie wrote:
 
---- Comment #3 from Lukas Vacek (lucas.vacek@gmail.com) ---
-Created attachment 287281
-  --> https://bugzilla.kernel.org/attachment.cgi?id=287281&action=edit
-wireshark capture
+> 
+> $ sudo lsusb -t
+> /: Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 5000M
+>     |__ Port 1: Dev 2, If 0, Class=Mass Storage, Driver=usb-storage, 5000M
+> /: Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 480M
+>     |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=, 480M
+>     |__ Port 4: Dev 4, If 0, Class=Human Interface Device, Driver=usbfs, 1.5M
+> /: Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 10000M
+>     |__ Port 2: Dev 3, If 0, Class=Mass Storage, Driver=uas, 5000M
+> 
+> $ dmesg
+> [42540.188430] usb 2-2: new SuperSpeed Gen 1 USB device number 3 using xhci_hcd
+> 
+> How is 'usb 2-2' mapped to lsusb?
 
-Attaching wireshark capture (camera attached at packet no. 13)
+It maps to the child entry below Bus 02 marked with Port 2.  In
+addition, the dmesg line indicates that it maps to an entry with Dev 3.
 
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+> I'm guessing it is the last entry from lsusb?
+
+Yes; that's the one which satisfies the mapping criteria.
+
+> If it was a Gen 2 USB device it could run at 10000M?
+
+Yes, assuming it was connected to a Gen 2 controller.
+
+> Why is the first line of lsusb only 5000M?
+
+Because that particular xHCI host controller is only Gen 1.
+
+Alan Stern
+
