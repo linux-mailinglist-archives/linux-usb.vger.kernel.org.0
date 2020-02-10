@@ -2,51 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B9F157313
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 11:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2AC157322
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 11:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727562AbgBJKvb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Feb 2020 05:51:31 -0500
-Received: from mail-pg1-f173.google.com ([209.85.215.173]:35356 "EHLO
-        mail-pg1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726950AbgBJKvb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 05:51:31 -0500
-Received: by mail-pg1-f173.google.com with SMTP id l24so3729691pgk.2;
-        Mon, 10 Feb 2020 02:51:30 -0800 (PST)
+        id S1727363AbgBJK4L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Feb 2020 05:56:11 -0500
+Received: from mail-il1-f193.google.com ([209.85.166.193]:40229 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726792AbgBJK4K (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 05:56:10 -0500
+Received: by mail-il1-f193.google.com with SMTP id i7so5360085ilr.7;
+        Mon, 10 Feb 2020 02:56:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+I5Vz5Y/bf9NOZjHVeJmgKIYJ8e4mYf1dL2DgZM3YDI=;
-        b=qyJUtXHVXYAu/sr0GivJeiaRTdRUijQCUOsZTbvzKKsYHr7GhenvmmvTt2RpfD8iph
-         AtjDY7jm7YX0y6Dd87t7Z5Vf07JU9wmW2AwnzbM8gF60xDyLNTkU6+d8h4MK7MvAjLvL
-         HxYu6lKQtgQjAKXwDCnccqlVqs7JORPT2UtAa7SgO3qnEsSAGr2lu/qR8MsPc5SdAeEB
-         QWGIZndqchW8XLtK6vso4OB+1La2W7dDfo6lxoS+G7aEyKjlzrSVmBXtd2RVI5XxDAN6
-         jZuk8wB8xQbE6qeYwrpChJ2zYTTmjFO7CBjEbY3xWGeWNpyLU3Ghbk3X1qFA+0965K05
-         UhNg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=d2IBt4/L/Nkmzl5hW1D/wjWzKHtqUWjVQiav92+TxjY=;
+        b=MxzfVtZRAKUIarDmqF9d8MtEWcqpjh3ZP6t4+CyS8iwJfg0VnRBEN5ecfTDSB/ifw5
+         Oe347EZ7IjQ/Ttkp4C8larMqFO3D5OVo62hVxbh4VB3YtEOic4v59wV2OxqSTcuqaAVZ
+         LSOuY+hEW35bByT0bXCtc6yvB+n7dHLJUDyaSyLv0aadoQKM8mWVpWgp+Cwa53vCsTUw
+         XZrC/jqYPGVltNO292Ad157gdmd/UuL51Qh1NxLP0atu/cJMiPWTUjy57gsZ2DfsD10S
+         NW92pC8NuZwhD0VTS3sLgeUes7Ghgp4jE+43B+Zy+lkj+fhmiFl44cZVQm9/58ycOa2K
+         mYbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+I5Vz5Y/bf9NOZjHVeJmgKIYJ8e4mYf1dL2DgZM3YDI=;
-        b=mdwE1h9HbjxBr/PxOaFmdIukHsokkF/C9I73u1LmRQu20U2BJiZYAdDLYxGVWCI9Vq
-         GZ56qkwp9f0w7sx2rqLeZgz4CuLFnrMQcM5wAuwEhPS6SToREgIeV0mSZHyVuJpn+kIi
-         qAHma1nCG8+TiEYHB7D50zC9Axet5KuIWl8RnRvei6LQveZLMbPPepb0sHTH9POx0mPX
-         pL7RRLzJBnaqsHdr5LM7yJUWLgDITZvKffym21AXu00ZyatiK77VsxCHwJ0qLEUXn+nF
-         2J4bwJbLUCPPAauCYdea9/XH3NnLJr4y4SfI2Y8YXgPqJSw9q5LJc4yjDMW1denK5XvQ
-         J6+Q==
-X-Gm-Message-State: APjAAAXbdWk60uiYI5lEfFF0yX6vRpE+iUkQDSybyFVjnSGO4iwZfEhp
-        k+gS5Vz81RYMNXXUo1ajrTCm4Icn
-X-Google-Smtp-Source: APXvYqyTY6TLRP4Dwq+bD55A2fJN5GgbXaRWBorCCV/tnxDI+KNTYZmNEtNXHHH7SqoTqEwC8KZQPw==
-X-Received: by 2002:a63:ed01:: with SMTP id d1mr936995pgi.95.1581331890249;
-        Mon, 10 Feb 2020 02:51:30 -0800 (PST)
-Received: from localhost.localdomain ([45.114.62.33])
-        by smtp.gmail.com with ESMTPSA id g18sm12104833pfi.80.2020.02.10.02.51.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2020 02:51:29 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=d2IBt4/L/Nkmzl5hW1D/wjWzKHtqUWjVQiav92+TxjY=;
+        b=GWiI0lpy1NSXbVswL6dJOXyCDTxlSl10wsOAIbMU4C4Q1iP0xN8xAb4IYgU/4682jb
+         +7Pv9YdSbELTQi2BtshQYKVXrzu1DZnXYr5FTRYwC7jm/L03+BPVuFSYsVEH2flOweHo
+         834sJBB1/vAKRpi1jaHUTMqP6XJyTzXmwRqLbZH5zZ79NOhsJ8TTgp1cWed+ZH7SETLG
+         ZHc+2DnZw7amC47Mtz6tHnl+ugos2eRgsSBwYMwA5zLaCMFYuuRfmtYlMgwM3HmvEPo2
+         e7cLd+Dq2F6xnrf7hLuC7Khbi2C+ezvBMJudUvg5L59yvCy3POevkGSpUviGeGorJDdU
+         zXLw==
+X-Gm-Message-State: APjAAAW39qINGrEF8dtQ6v+uQCrkdT/G96hzcvFi/2iUtXVLWCJw5j6a
+        kuvEJtv+7yVe+PdgClDb/Waxtikhbd9nAoEMkK105Q==
+X-Google-Smtp-Source: APXvYqzSD3AIuSazFlh5pPF5er+MSkw4OA9zMqA91tlC+bDSAj88WNPxzkmfnD9iDxhN7ozPY0QwiaRGDUDo1oQbwSw=
+X-Received: by 2002:a92:5d92:: with SMTP id e18mr761070ilg.75.1581332169369;
+ Mon, 10 Feb 2020 02:56:09 -0800 (PST)
+MIME-Version: 1.0
+References: <20200210105108.1128-1-linux.amoon@gmail.com>
+In-Reply-To: <20200210105108.1128-1-linux.amoon@gmail.com>
 From:   Anand Moon <linux.amoon@gmail.com>
-To:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
+Date:   Mon, 10 Feb 2020 16:26:01 +0530
+Message-ID: <CANAwSgQzwRJE9mK+RwuCjsMaBMmD1f3fx+g-23B5Opo19kywUw@mail.gmail.com>
+Subject: Re: [PATCHv3 0/3] Add support for suspend clk for Exynos5422 SoC
+To:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -54,57 +57,49 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCHv3 3/3] usb: dwc3: exynos: Add support for Exynos5422 suspend clk
-Date:   Mon, 10 Feb 2020 10:51:08 +0000
-Message-Id: <20200210105108.1128-4-linux.amoon@gmail.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200210105108.1128-1-linux.amoon@gmail.com>
-References: <20200210105108.1128-1-linux.amoon@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        linux-samsung-soc@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Exynos5422 DWC3 module support two clk USBD300 and SCLK_USBD300
-so add missing code to enable/disable code and suspend clk, for this
-add a new compatible samsung,exynos5420-dwusb3 to help configure
-dwc3 code and dwc3 suspend clk.
+Hi All,
 
-Signed-off-by: Anand Moon <linux.amoon@gmail.com>
----
- drivers/usb/dwc3/dwc3-exynos.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Sorry typo this patch series should be PATCHv1 and not PATCHv3
 
-diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-exynos.c
-index 90bb022737da..48b68b6f0dc8 100644
---- a/drivers/usb/dwc3/dwc3-exynos.c
-+++ b/drivers/usb/dwc3/dwc3-exynos.c
-@@ -162,6 +162,12 @@ static const struct dwc3_exynos_driverdata exynos5250_drvdata = {
- 	.suspend_clk_idx = -1,
- };
- 
-+static const struct dwc3_exynos_driverdata exynos5420_drvdata = {
-+	.clk_names = { "usbdrd30", "usbdrd30_susp_clk"},
-+	.num_clks = 2,
-+	.suspend_clk_idx = 1,
-+};
-+
- static const struct dwc3_exynos_driverdata exynos5433_drvdata = {
- 	.clk_names = { "aclk", "susp_clk", "pipe_pclk", "phyclk" },
- 	.num_clks = 4,
-@@ -178,6 +184,9 @@ static const struct of_device_id exynos_dwc3_match[] = {
- 	{
- 		.compatible = "samsung,exynos5250-dwusb3",
- 		.data = &exynos5250_drvdata,
-+	}, {
-+		.compatible = "samsung,exynos5420-dwusb3",
-+		.data = &exynos5420_drvdata,
- 	}, {
- 		.compatible = "samsung,exynos5433-dwusb3",
- 		.data = &exynos5433_drvdata,
--- 
-2.25.0
+-Anand
 
+On Mon, 10 Feb 2020 at 16:21, Anand Moon <linux.amoon@gmail.com> wrote:
+>
+> Long time ago I tried to add suspend clk for dwc3 phy
+> which was wrong appoch, see below.
+>
+> [0] https://lore.kernel.org/patchwork/patch/837635/
+> [1] https://lore.kernel.org/patchwork/patch/837636/
+>
+> This patch series tries to enable suspend clk using
+> exynos dwc3 driver, for this I have added new
+> compatible string "samsung,exynos5420-dwusb3"
+> so that we could add new suspend clk in addition
+> to the core clk. exynos dwc3 driver will help
+> enable/disable these clk.
+>
+> -Anand
+>
+> Anand Moon (3):
+>   devicetree: bindings: exynos: Add new compatible for Exynos5420 dwc3
+>     clocks support
+>   ARM: dts: exynos: Add missing usbdrd3 suspend clk
+>   usb: dwc3: exynos: Add support for Exynos5422 suspend clk
+>
+>  Documentation/devicetree/bindings/usb/exynos-usb.txt | 4 +++-
+>  arch/arm/boot/dts/exynos5420.dtsi                    | 8 ++++----
+>  arch/arm/boot/dts/exynos54xx.dtsi                    | 4 ++--
+>  drivers/usb/dwc3/dwc3-exynos.c                       | 9 +++++++++
+>  4 files changed, 18 insertions(+), 7 deletions(-)
+>
+> --
+> 2.25.0
+>
