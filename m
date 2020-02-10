@@ -2,68 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB3E1572D5
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 11:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E343157308
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 11:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727417AbgBJK3e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Feb 2020 05:29:34 -0500
-Received: from mx2.suse.de ([195.135.220.15]:48264 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727429AbgBJK3e (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 Feb 2020 05:29:34 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id D493CAD2A;
-        Mon, 10 Feb 2020 10:29:32 +0000 (UTC)
-Message-ID: <1581330569.26936.5.camel@suse.de>
-Subject: Re: USB hub driver over-current behavior
-From:   Oliver Neukum <oneukum@suse.de>
-To:     Sam Lewis <sam.vr.lewis@gmail.com>, linux-usb@vger.kernel.org
-Date:   Mon, 10 Feb 2020 11:29:29 +0100
-In-Reply-To: <CA+ZLECurtq1X-4XtMSqsdSfaw=RrNyY94cz+8CZ06HJ8Pw28Ng@mail.gmail.com>
-References: <CA+ZLECurtq1X-4XtMSqsdSfaw=RrNyY94cz+8CZ06HJ8Pw28Ng@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1727121AbgBJKvT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Feb 2020 05:51:19 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:34106 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726950AbgBJKvT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 05:51:19 -0500
+Received: by mail-pg1-f193.google.com with SMTP id j4so3732303pgi.1;
+        Mon, 10 Feb 2020 02:51:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OBq9Wxg3rNYXND45mTJejeBW0qaZ9nSsHbegXEcF9x8=;
+        b=ftHzx5eOWQlGm3C8QeR2uhQzu038c0/X4JMnx1G1weCDZyndLaC4dlIKZWqnduq5Uc
+         LxWeF9fi0gEqhJt2JHg5epLlDP4wXfiVwj6vfLY61P4yOF4ruv9k0pIMn9QtHEQBwF9i
+         dcIYqGe4+US5qAXNWHAepmlmdNq5X6V6gB8x+vrJMKC0x31J7eNxOsN1daGCeEwK5byY
+         XMUtRxktldY4sZtm0En9e8ebFIv9z2c+AM6nJTCQBuAthHoUQda0szwe6Ev6z7jNPtVQ
+         8xo7cjOp1pv3XHLEeeZtfQzo15lR/3a3mzyWlmuRV/Tiq9pvqeIoYWtdhz4tyLYZ7gNG
+         Nluw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OBq9Wxg3rNYXND45mTJejeBW0qaZ9nSsHbegXEcF9x8=;
+        b=RlWV2lpPvUtKFAKC/Gbovw97zoxxe0xK/3QskN21ZPHh0c98uvgKYe2iK/kRFvmqpp
+         2uZqwReq1quw4sgjMuQt8KoKn4A1nPuRDEVj7DtBlD4YM0IC0bw2GL7A6lVwDOmw/Rqu
+         8+yDwofeBQPjq7hToAJyk/qjUvhbAFOkMYEydtz5iZMxQIJ63Qg237/zAupAyVqQEuX7
+         OQe3xQ8CvzbwQJSY1GRPv/TeLd+IQcZ8rkI8lYpEN1vqjHk0DEdUqO7hSj+U9lanbFzq
+         JNXhds/5HBQMIGT7KRS27VMPqoy1QJmCBFySxzhf6Xvo53w/bgCoeo7vcrzQUjIb4jtv
+         8B1g==
+X-Gm-Message-State: APjAAAWK0+ToapaflRWHPqOn6mtF1dDldCJ+6knvl3cAT2UMsuVOA1Jq
+        4wlV4WPy3bKEZVv2MzA+zgOnHFQO
+X-Google-Smtp-Source: APXvYqxeRF90/zEsikUD4SUJJypsMyD4WZjz/yht4sgsIdjSjQZ284ZxUvHiyWkJHvuqABcIpJscGA==
+X-Received: by 2002:aa7:9546:: with SMTP id w6mr608003pfq.66.1581331878197;
+        Mon, 10 Feb 2020 02:51:18 -0800 (PST)
+Received: from localhost.localdomain ([45.114.62.33])
+        by smtp.gmail.com with ESMTPSA id g18sm12104833pfi.80.2020.02.10.02.51.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Feb 2020 02:51:17 -0800 (PST)
+From:   Anand Moon <linux.amoon@gmail.com>
+To:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCHv3 0/3] Add support for suspend clk for Exynos5422 SoC
+Date:   Mon, 10 Feb 2020 10:51:05 +0000
+Message-Id: <20200210105108.1128-1-linux.amoon@gmail.com>
+X-Mailer: git-send-email 2.25.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Montag, den 10.02.2020, 17:03 +1100 schrieb Sam Lewis:
-> Hi,
-> 
-> I have a LAN9514 (rebranded SMSC9514) USB hub which has per port
-> over-current protection.
-> 
-> I'm using this hub within my embedded device, and I would like the hub
-> to continue working if any single port experiences an over-current or
-> short condition.
-> 
-> In testing this behavior by shorting out a port, I've noticed that the
-> Linux USB driver continually fights against the protection in the hub
-> and attempts to repower the shorted port.
-> 
-> Looking through the hub driver and tracing the execution flow, as far
-> as I can tell, this is the list of events that seem to be occurring:
-> 
-> 1. I short out a single port
-> 2. The hub (through a power switch) detects the short and disables the port
-> 3. The hub sends an over-current event to the driver
-> 4. The driver gets the event in the `port_event` function
-> 5. The driver then sleeps for 100ms (for 'cool down'?) before powering
-> the port back on
-> 6. Repeat from top, until the short is removed
+Long time ago I tried to add suspend clk for dwc3 phy
+which was wrong appoch, see below.
 
-Hi,
+[0] https://lore.kernel.org/patchwork/patch/837635/
+[1] https://lore.kernel.org/patchwork/patch/837636/
 
-error handling at this level has gotten little love.
+This patch series tries to enable suspend clk using 
+exynos dwc3 driver, for this I have added new 
+compatible string "samsung,exynos5420-dwusb3"
+so that we could add new suspend clk in addition
+to the core clk. exynos dwc3 driver will help
+enable/disable these clk.
 
-The basic problem is that we have no good way to switch a portback on
-after we have given up on it. Feel free to propose a patch to the
-kernel and a tool to use it and we can discuss them.
+-Anand
 
-	Regards
-		Oliver
+Anand Moon (3):
+  devicetree: bindings: exynos: Add new compatible for Exynos5420 dwc3
+    clocks support
+  ARM: dts: exynos: Add missing usbdrd3 suspend clk
+  usb: dwc3: exynos: Add support for Exynos5422 suspend clk
+
+ Documentation/devicetree/bindings/usb/exynos-usb.txt | 4 +++-
+ arch/arm/boot/dts/exynos5420.dtsi                    | 8 ++++----
+ arch/arm/boot/dts/exynos54xx.dtsi                    | 4 ++--
+ drivers/usb/dwc3/dwc3-exynos.c                       | 9 +++++++++
+ 4 files changed, 18 insertions(+), 7 deletions(-)
+
+-- 
+2.25.0
 
