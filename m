@@ -2,53 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDEF6158368
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 20:16:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 112C01583AF
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2020 20:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727649AbgBJTQe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Feb 2020 14:16:34 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:34066 "EHLO
+        id S1727845AbgBJTbe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Feb 2020 14:31:34 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:45337 "EHLO
         mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727572AbgBJTQe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 14:16:34 -0500
-Received: by mail-pf1-f195.google.com with SMTP id i6so4190173pfc.1;
-        Mon, 10 Feb 2020 11:16:33 -0800 (PST)
+        with ESMTP id S1727003AbgBJTbe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 14:31:34 -0500
+Received: by mail-pf1-f195.google.com with SMTP id 2so4173016pfg.12;
+        Mon, 10 Feb 2020 11:31:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=FR5Haon15BG7fZreS9CoW6URIzJo2qBtC7hHF2/jroU=;
-        b=fEJ34Y6BdA6w6G5S2Jhq1WIaZBcBZl0N1iHwv29/wstPx85iA7k/XQuCVR0ogOx1rM
-         CyCAPsaV9pFqXT17ET1G1SSpmC5y7bHHsRRVLu3db4hLyVQdfq/crCKdsMtmlkKW6yrN
-         cv9QaAcAKSqGCAf+m9F+bzSOVnTVajmt5aJo1ft0ViBAusQlf7gxEKgroFK5ocp0+pJ6
-         fME7BZW/0CGHztYJCLOHUWJNT/Vnjb2qIhUmHKCHOrvupR3Al2yRErRrtd9pLWvv0sxT
-         GK0V02k2wJ8MdtNyYltsbxXKMvWyGEhoy5SC7o0n4vj/Y5UwN8TDl3w/f/4Ix5zPQOrb
-         eSmQ==
+        bh=ZuPt180kRsjCVRCyZy+KTCJcOp2X4om9PYJBQV60Moc=;
+        b=shdUAmJ14w97aqe7DSTm0HIXz2ZpCws3HjMztJNoydnWz7J6zzufdnzB/MDKNYKzjn
+         Np254hbT6cgaPBn4FZz9ykTV7VmZOWgGY5G4KUBewPJZ+5RTiSSoLznfegSaBWBMTsAx
+         gF4sEnhtnTO9ia+sOMz4eYufu/7D2ttRDIqjD+aWVPaJ6KVgTc7mvboVz3b1+J4ME9Ze
+         s7F4c9JQ+vO4yJKRUNQVKNNIZ+unVmhZdODmaUO3wHnE1HKQpyYeaNm/mneuWgm/uK+0
+         CIeE+sMw+0gmAefHNgRg+orMZZIiObTfERMqDWa9up90fnYoNWCE6hMpkPx71UwbLhCc
+         IC0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FR5Haon15BG7fZreS9CoW6URIzJo2qBtC7hHF2/jroU=;
-        b=qStadNzm0DbOmcK1W3TbS5mej7e7JvkUVKchEnTdZUwq5GYzOfV2yX0lruzfkybaUX
-         6h5EIlx1S0DOcLKjkk2rwEx6PhZcD33OBkOTMEy1yy+Btm3CQq1YwD/tXoH18B91s43O
-         ZStdU6u12vyZHEqhhoHGCrTHfvmJKftPtF9CbXAMAqNiteDxA7+4RnzSkV4k4wPqNWS8
-         f7ODv2ttLPfBfMXg8ekyO2lpIAz5rxR1KCIFdlnwZIRWn0+XtiHEFyWejZuc/lX7YO8T
-         ZB6Ond9+l2WqOORje6ZFOcm+Ovyvi52vdU6YEGCxdpDpka7KkFap17orEQRjtrYES6vX
-         CoEQ==
-X-Gm-Message-State: APjAAAX6+yeoSnWqtkrfCap3/l+hfOMQxIAip5XiPl8BlBxxLNtgjRmZ
-        tgx2zI6fvU9N33Q8Cins4u8=
-X-Google-Smtp-Source: APXvYqwPiKX4wT4FkdKVUqaP0LU+nKJY5DjilOXG82qBEoG10vdlSb+ndGb96C5hXAksxQfSq6VqJQ==
-X-Received: by 2002:aa7:9808:: with SMTP id e8mr2597823pfl.32.1581362193401;
-        Mon, 10 Feb 2020 11:16:33 -0800 (PST)
+        bh=ZuPt180kRsjCVRCyZy+KTCJcOp2X4om9PYJBQV60Moc=;
+        b=eEFmPV2XyPzhPq/eRH8+RS0X6n4lFcExLm1m0ugO8e1x+cQMSxPzT/H8DUzmNgAJOB
+         eqGNXFG47NwjIjS+pvTiV0CjcWmtYkd+mh3HM1njQTQsYv22jfQRSf13D/IalPakt1Aw
+         qDACsbcP05V2TxuZn0ZFTeB/rYBKFhW6Him1b0h8Cnqp1b5F3gVMBMqUqF1DLaOz/hGc
+         nN0ULJ5gR1NxZscaUb5B7WwbIK7seOHZm45vtp61mLnISsHQWysaZt5kHbf9822GbVpO
+         OneViexVnWHV7fWRKA4uAp2hLzARc0SIQUDsQF5W3ZIV2zEQaf5gzDyTllQU83ofr3Hx
+         8FQw==
+X-Gm-Message-State: APjAAAXc3SL4fKhNyc7qGEOmmffmKg9be8ARvpjCQtaLpCL+w0MiphYy
+        UboqxP/L0eyvflbVtsoj/GM=
+X-Google-Smtp-Source: APXvYqxTAam4vg8YO3HTEwUSpm+D/PTtAnCrM86RpDJMKgUVL7IuukH9eQEDieHTCjyqJRoqovvDwQ==
+X-Received: by 2002:a63:e14b:: with SMTP id h11mr3059825pgk.297.1581363093006;
+        Mon, 10 Feb 2020 11:31:33 -0800 (PST)
 Received: from taoren-ubuntu-R90MNF91 ([2620:10d:c090:200::2:87f0])
-        by smtp.gmail.com with ESMTPSA id i9sm1168592pfk.24.2020.02.10.11.16.32
+        by smtp.gmail.com with ESMTPSA id 28sm895963pgl.42.2020.02.10.11.31.31
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 10 Feb 2020 11:16:33 -0800 (PST)
-Date:   Mon, 10 Feb 2020 11:16:30 -0800
+        Mon, 10 Feb 2020 11:31:32 -0800 (PST)
+Date:   Mon, 10 Feb 2020 11:31:29 -0800
 From:   Tao Ren <rentao.bupt@gmail.com>
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Felipe Balbi <balbi@kernel.org>,
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc:     Joel Stanley <joel@jms.id.au>, Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Andrew Jeffery <andrew@aj.id.au>,
         Chunfeng Yun <chunfeng.yun@mediatek.com>,
@@ -61,40 +60,112 @@ Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         devicetree <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         OpenBMC Maillist <openbmc@lists.ozlabs.org>
-Subject: Re: [PATCH 1/3] usb: gadget: aspeed: read vhub config from
- of_device_id
-Message-ID: <20200210191629.GB5346@taoren-ubuntu-R90MNF91>
+Subject: Re: [PATCH 2/3] usb: gadget: aspeed: add ast2600 vhub support
+Message-ID: <20200210193128.GC5346@taoren-ubuntu-R90MNF91>
 References: <20200131222157.20849-1-rentao.bupt@gmail.com>
- <20200131222157.20849-2-rentao.bupt@gmail.com>
- <CACPK8Xe0b+zVNqf8v5YXOLkzqDeb4JHqec-bqFpaVFGTwHThhA@mail.gmail.com>
+ <20200131222157.20849-3-rentao.bupt@gmail.com>
+ <CACPK8XcmUYhnePr1AG2M9P-oGvOM=zCM+r44jWUzPYGxUEGOGw@mail.gmail.com>
+ <b7bf421b5fad397a7ef430af6c0c09602dd66c2a.camel@kernel.crashing.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACPK8Xe0b+zVNqf8v5YXOLkzqDeb4JHqec-bqFpaVFGTwHThhA@mail.gmail.com>
+In-Reply-To: <b7bf421b5fad397a7ef430af6c0c09602dd66c2a.camel@kernel.crashing.org>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 10, 2020 at 02:47:02AM +0000, Joel Stanley wrote:
-> On Fri, 31 Jan 2020 at 22:22, <rentao.bupt@gmail.com> wrote:
-> >
-> > From: Tao Ren <rentao.bupt@gmail.com>
-> >
-> > The patch moves hardcoded vhub attributes (maximum downstream ports and
-> > generic endpoints) to "ast_vhub_config" structure which is attached to
-> > struct of_device_id. The major purpose is to add AST2600 vhub support
-> > because AST2600 vhub provides more downstream ports and endpoints.
-> >
-> > Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
+On Mon, Feb 10, 2020 at 08:29:22AM +0100, Benjamin Herrenschmidt wrote:
+> On Mon, 2020-02-10 at 02:48 +0000, Joel Stanley wrote:
+> > On Fri, 31 Jan 2020 at 22:22, <rentao.bupt@gmail.com> wrote:
+> > > 
+> > > From: Tao Ren <rentao.bupt@gmail.com>
+> > > 
+> > > Add AST2600 support in aspeed-vhub driver. There are 3 major differences
+> > > between AST2500 and AST2600 vhub:
+> > >   - AST2600 supports 7 downstream ports while AST2500 supports 5.
+> > >   - AST2600 supports 21 generic endpoints while AST2500 supports 15.
+> > >   - EP0 data buffer's 8-byte DMA alignment restriction is removed from
+> > >     AST2600.
+> > > 
+> > > Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
+> > > Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
 > 
-> This looks generally okay. We should wait for Ben's ack before applying.
-> 
-> Reviewed-by: Joel Stanley <joel@jms.id.au>
+> Travelling at the moment so my review might be a bit delayed. Also for
+> some reason I missed your original submission, sorry about that, please
+> poke me next time if I don't reply within a couple of days !
 
-Thanks Joel for reviewing the patches.
+No worries Ben and thanks for the review. I thought people was too busy
+during merge window :)
+
+> 
+> One thing to look into as well is the 2600 has revived the "device
+> controller" which looks like a cut down version of a vhub device, so we
+> should break a bit more the linkage between vhub and the underlying
+> devices so the latter can be instanciated standalone...
+> 
+> (Foor for thought, I'm not asking you to do that right now)
+
+Thanks for sharing your thought. I was actually curious why "device
+controller" was back. Anyways I feel it might be easier to break the
+linkage when we decide to add driver for the "device controller".
+
 
 Cheers,
 
 Tao
+> 
+> Cheers,
+> Ben.
+> 
+> > Reviewed-by: Joel Stanley <joel@jms.id.au>
+> > 
+> > > ---
+> > >  drivers/usb/gadget/udc/aspeed-vhub/Kconfig | 4 ++--
+> > >  drivers/usb/gadget/udc/aspeed-vhub/core.c  | 9 +++++++++
+> > >  2 files changed, 11 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/gadget/udc/aspeed-vhub/Kconfig b/drivers/usb/gadget/udc/aspeed-vhub/Kconfig
+> > > index 83ba8a2eb6af..605500b19cf3 100644
+> > > --- a/drivers/usb/gadget/udc/aspeed-vhub/Kconfig
+> > > +++ b/drivers/usb/gadget/udc/aspeed-vhub/Kconfig
+> > > @@ -4,5 +4,5 @@ config USB_ASPEED_VHUB
+> > >         depends on ARCH_ASPEED || COMPILE_TEST
+> > >         depends on USB_LIBCOMPOSITE
+> > >         help
+> > > -         USB peripheral controller for the Aspeed AST2500 family
+> > > -         SoCs supporting the "vHub" functionality and USB2.0
+> > > +         USB peripheral controller for the Aspeed AST2400, AST2500 and
+> > > +         AST2600 family SoCs supporting the "vHub" functionality and USB2.0
+> > > diff --git a/drivers/usb/gadget/udc/aspeed-vhub/core.c b/drivers/usb/gadget/udc/aspeed-vhub/core.c
+> > > index 94081cc04113..c827bf420278 100644
+> > > --- a/drivers/usb/gadget/udc/aspeed-vhub/core.c
+> > > +++ b/drivers/usb/gadget/udc/aspeed-vhub/core.c
+> > > @@ -42,6 +42,11 @@ static const struct ast_vhub_config ast2400_config = {
+> > >         .max_epns = 15,
+> > >  };
+> > > 
+> > > +static const struct ast_vhub_config ast2600_config = {
+> > > +       .max_ports = 7,
+> > > +       .max_epns = 21,
+> > > +};
+> > > +
+> > >  static const struct of_device_id ast_vhub_dt_ids[] = {
+> > >         {
+> > >                 .compatible = "aspeed,ast2400-usb-vhub",
+> > > @@ -51,6 +56,10 @@ static const struct of_device_id ast_vhub_dt_ids[] = {
+> > >                 .compatible = "aspeed,ast2500-usb-vhub",
+> > >                 .data = &ast2400_config,
+> > >         },
+> > > +       {
+> > > +               .compatible = "aspeed,ast2600-usb-vhub",
+> > > +               .data = &ast2600_config,
+> > > +       },
+> > >         { }
+> > >  };
+> > >  MODULE_DEVICE_TABLE(of, ast_vhub_dt_ids);
+> > > --
+> > > 2.17.1
+> > > 
+> 
