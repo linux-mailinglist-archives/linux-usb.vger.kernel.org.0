@@ -2,21 +2,22 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6382159D1C
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2020 00:22:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5FB4159D94
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2020 00:43:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727791AbgBKXWq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Feb 2020 18:22:46 -0500
-Received: from gateway21.websitewelcome.com ([192.185.45.175]:25574 "EHLO
-        gateway21.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727698AbgBKXWq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 18:22:46 -0500
-Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
-        by gateway21.websitewelcome.com (Postfix) with ESMTP id DBCD8400CCC9E
-        for <linux-usb@vger.kernel.org>; Tue, 11 Feb 2020 17:22:45 -0600 (CST)
+        id S1727935AbgBKXnF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Feb 2020 18:43:05 -0500
+Received: from gateway31.websitewelcome.com ([192.185.143.40]:37639 "EHLO
+        gateway31.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727911AbgBKXnF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 18:43:05 -0500
+X-Greylist: delayed 1275 seconds by postgrey-1.27 at vger.kernel.org; Tue, 11 Feb 2020 18:43:04 EST
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway31.websitewelcome.com (Postfix) with ESMTP id 027721F343
+        for <linux-usb@vger.kernel.org>; Tue, 11 Feb 2020 17:21:49 -0600 (CST)
 Received: from gator4166.hostgator.com ([108.167.133.22])
         by cmsmtp with SMTP
-        id 1erdjKQamvBMd1erdje1Fb; Tue, 11 Feb 2020 17:22:45 -0600
+        id 1eqijkGVdAGTX1eqijwdkh; Tue, 11 Feb 2020 17:21:48 -0600
 X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
@@ -24,25 +25,25 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
         List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=d45YxL3ZVwmUXRXXaNk1DepB3rRpGpao2lxAWUtx6bM=; b=iqggwRpX32grupnHhcMZ8HGQP6
-        +vewtQpKtwwjgKiIYlS8OkZgst6U7rTXLHzQpFHADvx0KzIYhXTpTDCwkQYWad6YzUVVBcafCftkF
-        iOJmwV9P/q/LuaYLY+x2Tcxnh1RwvuwaNGFDM4tBRs1oIIdw02z2bvDRfuI3RGO9zn5mbJGcl603K
-        WHQbBwLclwpPQmrwSksRJg08d/+qFP2/WiuGbio5wQyOlqCzVPrIsIb6HbFiGok8KX/kICrdx8qwp
-        McG5drN6KRJXlHhw3PoBJzDhkeey1sYigSbXD1z9xsspkwCRhgE6fzpcMnQvn+eTUTZtTvZua3qX/
-        h43smIaQ==;
-Received: from [200.68.140.36] (port=25379 helo=embeddedor)
+        bh=n5ilMfy8gku9SOZFBLYy4Y+cibBJVLrMCr+czct/SY8=; b=jZxKKx/1yNPqJcOFhRKuRMVtcJ
+        TwctO5+9TOnW4gtBqVfwD0eK6eqFqRBjn6YJ9ngyF5og8apmAx14brohfTu/ctzyPkDeXfbAyRA8f
+        GqLLOxvvXwKU5tnskL48XmLBRHU2decBNOW0A6XDlheOKJcwKBR2+PGQ9MtsJiG6zcG5s/fzkTBJ4
+        jjNo8rzqvocHIs2kk/gJOIWXlMbUlCr/OIqX8CPph9Fy01wZh6XI7pdgsNdL10nakY1hmNgWSylQS
+        I65GCsQUtPHeE2RDHqCFsJ9M4E9r/w+munDkL7kSvZL8TVSYpk5ltuaGTCjJyisOB3/8e3qDRwkmb
+        l6nYkwhg==;
+Received: from [200.68.140.36] (port=9177 helo=embeddedor)
         by gator4166.hostgator.com with esmtpa (Exim 4.92)
         (envelope-from <gustavo@embeddedor.com>)
-        id 1j1erc-003arP-Hs; Tue, 11 Feb 2020 17:22:44 -0600
-Date:   Tue, 11 Feb 2020 17:25:19 -0600
+        id 1j1eqf-003aK6-F8; Tue, 11 Feb 2020 17:21:45 -0600
+Date:   Tue, 11 Feb 2020 17:24:20 -0600
 From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Bin Liu <b-liu@ti.com>,
+To:     Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH] USB: musb: Replace zero-length array with flexible-array
- member
-Message-ID: <20200211232519.GA23263@embeddedor>
+Subject: [PATCH] USB: serial: ti_usb_3410_5052: Replace zero-length array
+ with flexible-array member
+Message-ID: <20200211232420.GA22388@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -55,13 +56,13 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 200.68.140.36
 X-Source-L: No
-X-Exim-ID: 1j1erc-003arP-Hs
+X-Exim-ID: 1j1eqf-003aK6-F8
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: (embeddedor) [200.68.140.36]:25379
+X-Source-Sender: (embeddedor) [200.68.140.36]:9177
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 47
+X-Email-Count: 43
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
 Sender: linux-usb-owner@vger.kernel.org
@@ -92,22 +93,31 @@ This issue was found with the help of Coccinelle.
 
 Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
 ---
- drivers/usb/musb/musb_host.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/serial/ti_usb_3410_5052.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/musb/musb_host.c b/drivers/usb/musb/musb_host.c
-index eb308ec35c66..3dab821c1b30 100644
---- a/drivers/usb/musb/musb_host.c
-+++ b/drivers/usb/musb/musb_host.c
-@@ -2576,7 +2576,7 @@ static int musb_bus_resume(struct usb_hcd *hcd)
- struct musb_temp_buffer {
- 	void *kmalloc_ptr;
- 	void *old_xfer_buffer;
--	u8 data[0];
-+	u8 data[];
- };
+diff --git a/drivers/usb/serial/ti_usb_3410_5052.c b/drivers/usb/serial/ti_usb_3410_5052.c
+index dd0ad67aa71e..db3ab25d9228 100644
+--- a/drivers/usb/serial/ti_usb_3410_5052.c
++++ b/drivers/usb/serial/ti_usb_3410_5052.c
+@@ -219,7 +219,7 @@ struct ti_write_data_bytes {
+ 	u8	bDataCounter;
+ 	__be16	wBaseAddrHi;
+ 	__be16	wBaseAddrLo;
+-	u8	bData[0];
++	u8	bData[];
+ } __packed;
  
- static void musb_free_temp_buffer(struct urb *urb)
+ struct ti_read_data_request {
+@@ -234,7 +234,7 @@ struct ti_read_data_bytes {
+ 	__u8	bCmdCode;
+ 	__u8	bModuleId;
+ 	__u8	bErrorCode;
+-	__u8	bData[0];
++	__u8	bData[];
+ } __packed;
+ 
+ /* Interrupt struct */
 -- 
 2.25.0
 
