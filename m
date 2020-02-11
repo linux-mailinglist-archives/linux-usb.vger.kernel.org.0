@@ -2,169 +2,260 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8881159150
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 15:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E890D159187
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 15:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729776AbgBKOBy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Feb 2020 09:01:54 -0500
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:41626 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729681AbgBKOBx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 09:01:53 -0500
-Received: by mail-qt1-f193.google.com with SMTP id l21so7242165qtr.8
-        for <linux-usb@vger.kernel.org>; Tue, 11 Feb 2020 06:01:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Y/BadYpECLUdWrQWnEHX25mgncmJfuysCIDqnuczrAk=;
-        b=sl6W4amjj3ULSa0duaz/GaF9sRD+HniXTrk8LTBCboI2KvwvnyLMORWRCs4K+dZlZT
-         T1f9kHEjuIh0lz3PEVYPSTz9R1ZmiQHUBePJXucm2un8ygS+PNn3ffjpTm3rIEVzdRxi
-         s9naMaPNWn6wkFShRl4LkpK239QTPDlj8gKZqa+GfFO2vg+ePKFMtRVY0BcMqOB3ruMK
-         oXl13ab9Iu9fud1YExcjkncZbggZOQcvRZ1F2LGfkfalU6/wTaoGTLs5ZSFl8WpPmyCa
-         1fE4W5Z6TNZ6CAoYfaZsaIKgj4lkrazjDRerS/EwbkNHjqu7ct46GnmsVkD4x12QUHj8
-         mxVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y/BadYpECLUdWrQWnEHX25mgncmJfuysCIDqnuczrAk=;
-        b=jxyH5nyc3KvFwButWVNHu/cjIELUt5deg0/GWWefC6F+ZGlVR8mwVS5RxrMtv7mW5B
-         gsPCVRyX/aAw8NZDhx2NSmbNSMH9pugcdJ2DX0f0SDG4KLkSk737G1CHvBqBTqsBziRi
-         a69PqmoAnDJJLXu8RSfRZIslCgTyUJgnoKLOqJhF3faiPvUupQfyS9ScX17CkHkTdamR
-         yNU//3tz6JnM0Uc78lm8DhNDoA0lt6SjKwEDJrl14yEBMYTojjXUwfDcplXEjLMsmQvB
-         hcVnXwNeY/ICe5DtWRKz/HI77CczmtHywgYgTPL1IwIF64TmPMaQygUzRe041AKgWuDW
-         iq8g==
-X-Gm-Message-State: APjAAAUVyk1SsUMoyjCFFiv4wciWz3+psZ0DLgxe/XdWXTG21h85/ujg
-        uQbK5bAxbmnGhm0FzblGmhvSemc5FCGM3Pd/6/peiA==
-X-Google-Smtp-Source: APXvYqweNYSa/wrakmiOWVZk+K+1yhLLQ/TfkZzrAOVJstFKgWSIpPWJpdUmPwCkTdFURpQZZ4VIxfXyuBfdRE4AU0k=
-X-Received: by 2002:ac8:340c:: with SMTP id u12mr2498173qtb.257.1581429711919;
- Tue, 11 Feb 2020 06:01:51 -0800 (PST)
+        id S1729970AbgBKOF4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Feb 2020 09:05:56 -0500
+Received: from mga09.intel.com ([134.134.136.24]:1887 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728865AbgBKOF4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 Feb 2020 09:05:56 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Feb 2020 06:05:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,428,1574150400"; 
+   d="scan'208";a="405945809"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga005.jf.intel.com with ESMTP; 11 Feb 2020 06:05:52 -0800
+Subject: Re: [RFT PATCH] xhci: Fix memory leak when caching protocol extended
+ capability PSI tables
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     pmenzel@molgen.mpg.de, mika.westerberg@linux.intel.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+References: <572bea6f-06d4-938a-802e-93386acf59d9@linux.intel.com>
+ <20200108151730.21022-1-mathias.nyman@linux.intel.com>
+ <CGME20200211105613eucas1p27cac4202c4287a5967b2ed988779d523@eucas1p2.samsung.com>
+ <089285ab-7041-49bb-54ea-c73b25f96f48@samsung.com>
+ <20200211122316.GG1856500@kroah.com>
+ <9d314940-086e-d9a7-88e2-88447cd1c67d@linux.intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <20d0559f-8d0f-42f5-5ebf-7f658a172161@linux.intel.com>
+Date:   Tue, 11 Feb 2020 16:08:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <0000000000003313f0058fea8435@google.com> <8736ek9qir.fsf@miraculix.mork.no>
- <1574159504.28617.5.camel@suse.de> <87pnho85h7.fsf@miraculix.mork.no>
- <CACT4Y+YgLm2m0JG6qKKn9OpyXT9kKEPeyLSVGSfLbUukoCnB+g@mail.gmail.com>
- <CACT4Y+ZjiCDgtGVMow3WNzjuqBLaxy_KB4cM10wbfUnDdjBYfQ@mail.gmail.com>
- <CACT4Y+ZWDMkOmnXpBXFhU8XcHA_-ZcHdZpfrXcCWHRzcbQ39Gg@mail.gmail.com>
- <ebc7b5e0-e968-0bdb-d75d-346e0b763d14@i-love.sakura.ne.jp>
- <CACT4Y+bDNjj_RGLtvRCaV3k9+QX4eENyKyWWAbsHcbwR7CDrWQ@mail.gmail.com>
- <CACT4Y+ZaNNAiRvKCMJ9t4H+H23OcjSd5haAcXkG68L8F6Mq6Wg@mail.gmail.com> <bbf26ea3-c11c-1cd2-0072-b78634ae9579@i-love.sakura.ne.jp>
-In-Reply-To: <bbf26ea3-c11c-1cd2-0072-b78634ae9579@i-love.sakura.ne.jp>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 11 Feb 2020 15:01:37 +0100
-Message-ID: <CACT4Y+Yv-T-MfW=mgzuD99tsfkmE5Tk6bBhio9KNtPTmXM4cEw@mail.gmail.com>
-Subject: Re: INFO: task hung in wdm_flush
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Oliver Neukum <oneukum@suse.de>,
-        syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Colin King <colin.king@canonical.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        yuehaibing@huawei.com, =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <9d314940-086e-d9a7-88e2-88447cd1c67d@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 10, 2020 at 4:22 PM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
->
-> On 2020/02/11 0:06, Dmitry Vyukov wrote:
-> >> On Mon, Feb 10, 2020 at 4:03 PM Tetsuo Handa
-> >> <penguin-kernel@i-love.sakura.ne.jp> wrote:
-> >>>
-> >>> On 2020/02/10 21:46, Tetsuo Handa wrote:
-> >>>> On 2020/02/10 19:09, Dmitry Vyukov wrote:
-> >>>>> You may also try on the exact commit the bug was reported, because
-> >>>>> usb-fuzzer is tracking branch, things may change there.
-> >>>>
-> >>>> OK. I explicitly tried
-> >>>>
-> >>>>   #syz test: https://github.com/google/kasan.git e5cd56e94edde38ca4dafae5a450c5a16b8a5f23
-> >>>>
-> >>>> but syzbot still cannot reproduce this bug using the reproducer...
-> >>>
-> >>> It seems that there is non-trivial difference between kernel config in dashboard
-> >>> and kernel config in "syz test:" mails. Maybe that's the cause...
-> >
-> >
-> > syzkaller runs oldconfig when building any kernels:
-> > https://github.com/google/syzkaller/blob/master/pkg/build/linux.go#L56
-> > Is that difference what oldconfig produces?
-> >
->
-> Here is the diff (with "#" lines excluded) between dashboard and "syz test:" mails.
-> I feel this difference is bigger than what simple oldconfig would cause.
->
-> $ curl 'https://syzkaller.appspot.com/text?tag=KernelConfig&x=8cff427cc8996115' | sort > dashboard
+On 11.2.2020 14.29, Mathias Nyman wrote:
+> On 11.2.2020 14.23, Greg KH wrote:
+>> On Tue, Feb 11, 2020 at 11:56:12AM +0100, Marek Szyprowski wrote:
+>>> Hi
+>>>
+>>> On 08.01.2020 16:17, Mathias Nyman wrote:
+>>>> xhci driver assumed that xHC controllers have at most one custom
+>>>> supported speed table (PSI) for all usb 3.x ports.
+>>>> Memory was allocated for one PSI table under the xhci hub structure.
+>>>>
+>>>> Turns out this is not the case, some controllers have a separate
+>>>> "supported protocol capability" entry with a PSI table for each port.
+>>>> This means each usb3 port can in theory support different custom speeds.
+>>>>
+>>>> To solve this cache all supported protocol capabilities with their PSI
+>>>> tables in an array, and add pointers to the xhci port structure so that
+>>>> every port points to its capability entry in the array.
+>>>>
+>>>> When creating the SuperSpeedPlus USB Device Capability BOS descriptor
+>>>> for the xhci USB 3.1 roothub we for now will use only data from the
+>>>> first USB 3.1 capable protocol capability entry in the array.
+>>>> This could be improved later, this patch focuses resolving
+>>>> the memory leak.
+>>>>
+>>>> Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
+>>>> Reported-by: Sajja Venkateswara Rao <VenkateswaraRao.Sajja@amd.com>
+>>>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>>
+>>> This patch landed in today's linux-next (20200211) and causes NULL 
+>>> pointer dereference during second suspend/resume cycle on Samsung 
+>>> Exynos5422-based (arm 32bit) Odroid XU3lite board:
+>>>
+>>> # time rtcwake -s10 -mmem
+>>> rtcwake: wakeup from "mem" using /dev/rtc0 at Tue Feb 11 10:51:43 2020
+>>> PM: suspend entry (deep)
+>>> Filesystems sync: 0.012 seconds
+>>> Freezing user space processes ... (elapsed 0.010 seconds) done.
+>>> OOM killer disabled.
+>>> Freezing remaining freezable tasks ... (elapsed 0.002 seconds) done.
+>>> smsc95xx 1-1.1:1.0 eth0: entering SUSPEND2 mode
+>>> wake enabled for irq 153
+>>> wake enabled for irq 158
+>>> samsung-pinctrl 13400000.pinctrl: Setting external wakeup interrupt 
+>>> mask: 0xffffffe7
+>>> Disabling non-boot CPUs ...
+>>> IRQ 51: no longer affine to CPU1
+>>> IRQ 52: no longer affine to CPU2
+>>> s3c2410-wdt 101d0000.watchdog: watchdog disabled
+>>> wake disabled for irq 158
+>>> usb usb1: root hub lost power or was reset
+>>> usb usb2: root hub lost power or was reset
+>>> wake disabled for irq 153
+>>> exynos-tmu 10060000.tmu: More trip points than supported by this TMU.
+>>> exynos-tmu 10060000.tmu: 2 trip points should be configured in polling mode.
+>>> exynos-tmu 10064000.tmu: More trip points than supported by this TMU.
+>>> exynos-tmu 10064000.tmu: 2 trip points should be configured in polling mode.
+>>> exynos-tmu 10068000.tmu: More trip points than supported by this TMU.
+>>> exynos-tmu 10068000.tmu: 2 trip points should be configured in polling mode.
+>>> exynos-tmu 1006c000.tmu: More trip points than supported by this TMU.
+>>> exynos-tmu 1006c000.tmu: 2 trip points should be configured in polling mode.
+>>> exynos-tmu 100a0000.tmu: More trip points than supported by this TMU.
+>>> exynos-tmu 100a0000.tmu: 6 trip points should be configured in polling mode.
+>>> usb usb3: root hub lost power or was reset
+>>> s3c-rtc 101e0000.rtc: rtc disabled, re-enabling
+>>> usb usb4: root hub lost power or was reset
+>>> xhci-hcd xhci-hcd.8.auto: No ports on the roothubs?
+>>> PM: dpm_run_callback(): platform_pm_resume+0x0/0x44 returns -12
+>>> PM: Device xhci-hcd.8.auto failed to resume async: error -12
+>>> hub 3-0:1.0: hub_ext_port_status failed (err = -32)
+>>> hub 4-0:1.0: hub_ext_port_status failed (err = -32)
+>>> usb 1-1: reset high-speed USB device number 2 using exynos-ehci
+>>> usb 1-1.1: reset high-speed USB device number 3 using exynos-ehci
+>>> OOM killer enabled.
+>>> Restarting tasks ... done.
+>>>
+>>> real    0m11.890s
+>>> user    0m0.001s
+>>> sys     0m0.679s
+>>> root@target:~# PM: suspend exit
+>>> mmc_host mmc0: Bus speed (slot 0) = 50000000Hz (slot req 400000Hz, 
+>>> actual 396825HZ div = 63)
+>>> mmc_host mmc0: Bus speed (slot 0) = 200000000Hz (slot req 200000000Hz, 
+>>> actual 200000000HZ div = 0)
+>>> mmc_host mmc0: Bus speed (slot 0) = 50000000Hz (slot req 52000000Hz, 
+>>> actual 50000000HZ div = 0)
+>>> mmc_host mmc0: Bus speed (slot 0) = 400000000Hz (slot req 200000000Hz, 
+>>> actual 200000000HZ div = 1)
+>>> smsc95xx 1-1.1:1.0 eth0: link up, 100Mbps, full-duplex, lpa 0xC1E1
+>>>
+>>> root@target:~#
+>>> root@target:~# time rtcwake -s10 -mmem[   35.451572] vdd_ldo12: disabling
+>>>
+>>> rtcwake: wakeup from "mem" using /dev/rtc0 at Tue Feb 11 10:52:02 2020
+>>> PM: suspend entry (deep)
+>>> Filesystems sync: 0.004 seconds
+>>> Freezing user space processes ... (elapsed 0.006 seconds) done.
+>>> OOM killer disabled.
+>>> Freezing remaining freezable tasks ... (elapsed 0.070 seconds) done.
+>>> hub 4-0:1.0: hub_ext_port_status failed (err = -32)
+>>> hub 3-0:1.0: hub_ext_port_status failed (err = -32)
+>>> 8<--- cut here ---
+>>> Unable to handle kernel NULL pointer dereference at virtual address 00000014
+>>> pgd = 4c26b54b
+>>> [00000014] *pgd=00000000
+>>> Internal error: Oops: 17 [#1] PREEMPT SMP ARM
+>>> Modules linked in:
+>>> CPU: 3 PID: 1468 Comm: kworker/u16:23 Not tainted 
+>>> 5.6.0-rc1-next-20200211 #268
+>>> Hardware name: Samsung Exynos (Flattened Device Tree)
+>>> Workqueue: events_unbound async_run_entry_fn
+>>> PC is at xhci_suspend+0x12c/0x520
+>>> LR is at 0xa6aa9898
+>>> pc : [<c0724c90>]    lr : [<a6aa9898>]    psr: 60000093
+>>> sp : ec401df8  ip : 0000001a  fp : c12e7864
+>>> r10: 00000000  r9 : ecfb87b0  r8 : ecfb8220
+>>> r7 : 00000000  r6 : 00000000  r5 : 00000004  r4 : ecfb81f0
+>>> r3 : 00007d00  r2 : 00000001  r1 : 00000001  r0 : 00000000
+>>> Flags: nZCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment none
+>>> Control: 10c5387d  Table: 6bd4006a  DAC: 00000051
+>>> Process kworker/u16:23 (pid: 1468, stack limit = 0x6e4b6fba)
+>>> Stack: (0xec401df8 to 0xec402000)
+>>> ...
+>>> [<c0724c90>] (xhci_suspend) from [<c061b4f4>] (dpm_run_callback+0xb4/0x3fc)
+>>> [<c061b4f4>] (dpm_run_callback) from [<c061bd5c>] 
+>>> (__device_suspend+0x134/0x7e8)
+>>> [<c061bd5c>] (__device_suspend) from [<c061c42c>] (async_suspend+0x1c/0x94)
+>>> [<c061c42c>] (async_suspend) from [<c0154bd0>] 
+>>> (async_run_entry_fn+0x48/0x1b8)
+>>> [<c0154bd0>] (async_run_entry_fn) from [<c0149b38>] 
+>>> (process_one_work+0x230/0x7bc)
+>>> [<c0149b38>] (process_one_work) from [<c014a108>] (worker_thread+0x44/0x524)
+>>> [<c014a108>] (worker_thread) from [<c01511fc>] (kthread+0x130/0x164)
+>>> [<c01511fc>] (kthread) from [<c01010b4>] (ret_from_fork+0x14/0x20)
+>>> Exception stack(0xec401fb0 to 0xec401ff8)
+>>> ...
+>>> ---[ end trace c72caf6487666442 ]---
+>>> note: kworker/u16:23[1468] exited with preempt_count 1
+>>>
+>>> Reverting it fixes the NULL pointer issue. I can provide more 
+>>> information or do some other tests. Just let me know what will help to 
+>>> fix it.
+>>>
+>>>  > ...
+>>
+>> Ugh.  Mathias, should I just revert this for now?
+>>
+> 
+> Yes, revert it.
+> 
+> This looks very odd, after second resume, and losing power driver
+> can't find any port at all.
+> 
+> Marek, do you still get the "xhci-hcd xhci-hcd.8.auto: No ports on the roothubs?"
+> message on second resume after reverting the patch?
+> 
 
-I think you took a wrong config as a base.
-This 8cff427cc8996115 was only used for crashes without reproducers as
-far as I see, so it can't be used for patch testing.
-I would expect the one used for last patch testing is this one:
-https://syzkaller.appspot.com/text?tag=KernelConfig&x=8847e5384a16f66a
-associated with this crash:
-ci2-upstream-usb2019/09/23 13:26https://github.com/google/kasan.git
-usb-fuzzere0bd8d79d96e88f3
+Ok, I think I got it. 
+Patch doesn't set xhci->num_port_caps to 0 in xhci_mem_cleanup().
 
-I checked at least CONFIG_DYNAMIC_DEBUG, and it matches what was used
-for patch testing.
-So everything seems right to me as far as I see.
+Adding new ports will fail when we reinitialize xhci manually, like in this
+exynos case where xhci loses power in suspend/resume cycle.  
 
+I'll post a new version soon
 
+-Mathias
+ 
 
-> $ curl 'https://syzkaller.appspot.com/x/.config?x=c372cdb7140fc162' | sort > syz-test
-> $ diff -u dashboard syz-test | grep -vF '#' | grep '^[+-]'
-> --- dashboard   2020-02-11 00:19:14.793977153 +0900
-> +++ syz-test    2020-02-11 00:19:15.659977108 +0900
-> -CONFIG_BLK_DEV_LOOP_MIN_COUNT=16
-> +CONFIG_BLK_DEV_LOOP_MIN_COUNT=8
-> -CONFIG_BUG_ON_DATA_CORRUPTION=y
-> -CONFIG_DEBUG_CREDENTIALS=y
-> -CONFIG_DEBUG_PER_CPU_MAPS=y
-> -CONFIG_DEBUG_PLIST=y
-> -CONFIG_DEBUG_SG=y
-> -CONFIG_DEBUG_VIRTUAL=y
-> +CONFIG_DEVMEM=y
-> +CONFIG_DEVPORT=y
-> +CONFIG_DMA_OF=y
-> -CONFIG_DYNAMIC_DEBUG=y
-> -CONFIG_DYNAMIC_MEMORY_LAYOUT=y
-> +CONFIG_HID_REDRAGON=y
-> +CONFIG_IRQCHIP=y
-> -CONFIG_LSM="lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor"
-> +CONFIG_LSM="yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor"
-> -CONFIG_MAC80211_HWSIM=y
-> +CONFIG_MAGIC_SYSRQ=y
-> +CONFIG_MAGIC_SYSRQ_DEFAULT_ENABLE=0x1
-> +CONFIG_MAGIC_SYSRQ_SERIAL=y
-> +CONFIG_NET_TC_SKB_EXT=y
-> +CONFIG_OF=y
-> +CONFIG_OF_ADDRESS=y
-> +CONFIG_OF_GPIO=y
-> +CONFIG_OF_IOMMU=y
-> +CONFIG_OF_IRQ=y
-> +CONFIG_OF_KOBJ=y
-> +CONFIG_OF_MDIO=y
-> +CONFIG_OF_NET=y
-> -CONFIG_PGTABLE_LEVELS=5
-> +CONFIG_PGTABLE_LEVELS=4
-> +CONFIG_PWRSEQ_EMMC=y
-> +CONFIG_PWRSEQ_SIMPLE=y
-> +CONFIG_RTLWIFI_DEBUG=y
-> -CONFIG_SECURITYFS=y
-> +CONFIG_STRICT_DEVMEM=y
-> +CONFIG_THERMAL_OF=y
-> +CONFIG_USB_CHIPIDEA_OF=y
-> +CONFIG_USB_DWC3_OF_SIMPLE=y
-> -CONFIG_USB_RAW_GADGET=y
-> +CONFIG_USB_SNP_UDC_PLAT=y
-> -CONFIG_VIRTIO_BLK_SCSI=y
-> -CONFIG_VIRT_WIFI=y
-> -CONFIG_X86_5LEVEL=y
