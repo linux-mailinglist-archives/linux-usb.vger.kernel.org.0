@@ -2,146 +2,251 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C3B158C52
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 11:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42265158D03
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 11:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728182AbgBKKDC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Feb 2020 05:03:02 -0500
-Received: from mx2.suse.de ([195.135.220.15]:55194 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728073AbgBKKDC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 11 Feb 2020 05:03:02 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id D3190B150;
-        Tue, 11 Feb 2020 10:02:57 +0000 (UTC)
-Message-ID: <28f7ea832ead04dd93cd582480fb946604bb407d.camel@suse.de>
-Subject: Re: [PATCH] usb: xhci: Enable LPM for VIA LABS VL805
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 11 Feb 2020 11:02:55 +0100
-In-Reply-To: <19e1d141-2033-782f-e5a3-dcba6bdc0a8a@i2se.com>
-References: <20200120142422.3907-1-nsaenzjulienne@suse.de>
-         <20200210185921.GA1058087@kroah.com>
-         <1478f170-f0ec-96df-79cf-f7c44bebc290@linux.intel.com>
-         <19e1d141-2033-782f-e5a3-dcba6bdc0a8a@i2se.com>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-4mJyqWT1X0J6LlfdjyE7"
-User-Agent: Evolution 3.34.3 
+        id S1728477AbgBKK4R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Feb 2020 05:56:17 -0500
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:42315 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728472AbgBKK4Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 05:56:16 -0500
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200211105614euoutp02c6b5b54ec05bc97a177af8b7280a9bb6~yU9CmRmUq2372723727euoutp02V
+        for <linux-usb@vger.kernel.org>; Tue, 11 Feb 2020 10:56:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200211105614euoutp02c6b5b54ec05bc97a177af8b7280a9bb6~yU9CmRmUq2372723727euoutp02V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1581418574;
+        bh=oN0t+1XIozTMZTPach2eqN9WGiTKDUrNNPUb1mW4tZg=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=KcC7GCpu+8tll9YkSS32kg50CYpN57gN7P96mkuBD/38nsgzZ273AZEWi5ut4Krio
+         tpoPg/l3SNSF2pmC8S3/W/8mEs6nc8HdsAA6BS9URp/WcZ0CzLWj0WjU6nXexvIvF0
+         vmEXNQn8qVXRFJu8JNNEJGvYo8KO0nq5QclSJSi8=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20200211105614eucas1p1a8e37bef8c0924d3a3f8309589050155~yU9CDi9Js2648326483eucas1p1b;
+        Tue, 11 Feb 2020 10:56:14 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id DE.33.61286.E48824E5; Tue, 11
+        Feb 2020 10:56:14 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20200211105613eucas1p27cac4202c4287a5967b2ed988779d523~yU9Bu5Uyu3190431904eucas1p2B;
+        Tue, 11 Feb 2020 10:56:13 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20200211105613eusmtrp239fbc1c76bac47107fbc34e296bfbfd7~yU9BuN-ji0669806698eusmtrp2z;
+        Tue, 11 Feb 2020 10:56:13 +0000 (GMT)
+X-AuditID: cbfec7f2-ef1ff7000001ef66-db-5e42884e7a8b
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 28.6D.08375.D48824E5; Tue, 11
+        Feb 2020 10:56:13 +0000 (GMT)
+Received: from [106.120.51.15] (unknown [106.120.51.15]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200211105613eusmtip20559c829aa30da3853d50978ae4a4e99~yU9BTfvOX2002620026eusmtip21;
+        Tue, 11 Feb 2020 10:56:13 +0000 (GMT)
+Subject: Re: [RFT PATCH] xhci: Fix memory leak when caching protocol
+ extended capability PSI tables
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        pmenzel@molgen.mpg.de
+Cc:     mika.westerberg@linux.intel.com, linux-usb@vger.kernel.org,
+        greg@kroah.com, linux-kernel@vger.kernel.org,
+        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Message-ID: <089285ab-7041-49bb-54ea-c73b25f96f48@samsung.com>
+Date:   Tue, 11 Feb 2020 11:56:12 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+        Thunderbird/68.4.2
 MIME-Version: 1.0
+In-Reply-To: <20200108151730.21022-1-mathias.nyman@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFKsWRmVeSWpSXmKPExsWy7djPc7p+HU5xBsuvs1mcWzCD0eL8+Q3s
+        Fpd3zWGzmHF+H5PFomWtzBavPzSxWEzZfoTd4uWsNAcOj02rOtk83j4M8Jh3MtDjybkJzB6f
+        N8kFsEZx2aSk5mSWpRbp2yVwZex6rlbwyqjiw96/LA2M27W6GDk5JARMJBYfOsjYxcjFISSw
+        glHicPN9NgjnC6NE1/JWKOczo0TnhL/MXYwcYC3bbvtDxJczSjy8sYQFwnnLKNE07wkbyFxh
+        gVSJe4tXMYHYIgIeEhv3LmcFKWIWuMAo8aJxCliCTcBQouttF1gDr4CdRNe0zcwgNouAqsTS
+        P6dZQWxRgViJM8e+s0LUCEqcnPmEBeQKTgFniTNLfUHCzALyEs1bZzND2OISt57MZ4L4bRu7
+        xId5SRC2i0TbhoNQcWGJV8e3sEPYMhL/d4LUcwHZzUDfnFvLDuH0MEpcbprBCFFlLXHn3C82
+        kMXMApoS63fpQ0LCUeLZF34Ik0/ixltBiBP4JCZtmw4NK16JjjYhiBlqErOOr4PbevDCJeYJ
+        jEqzkPw1C8kzs5A8Mwth7QJGllWM4qmlxbnpqcWGeanlesWJucWleel6yfm5mxiBKej0v+Of
+        djB+vZR0iFGAg1GJh7ci0DFOiDWxrLgy9xCjBAezkgivpTRQiDclsbIqtSg/vqg0J7X4EKM0
+        B4uSOK/xopexQgLpiSWp2ampBalFMFkmDk6pBsbkb96/hOo7uXd/SX5W9E2ud4Wr0QP/ev7L
+        Fes32u3cO7Vf/86qmhdPNr6OtfjZp9XPdGvhjiVGj7cDE9y6gPypd5nq/4tInj1j7d6+4fbb
+        hgfXM3c/XLLmvVC06nVFo2dej9cr/+z9zzf1yi192ZBJBZmfz4u+kkmZPGOBze7u3W/25Jtm
+        MusrsRRnJBpqMRcVJwIAkPZiij0DAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLIsWRmVeSWpSXmKPExsVy+t/xe7q+HU5xBm+WGlqcWzCD0eL8+Q3s
+        Fpd3zWGzmHF+H5PFomWtzBavPzSxWEzZfoTd4uWsNAcOj02rOtk83j4M8Jh3MtDjybkJzB6f
+        N8kFsEbp2RTll5akKmTkF5fYKkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb2aSk5mSWpRbp2yXo
+        Zex6rlbwyqjiw96/LA2M27W6GDk4JARMJLbd9u9i5OIQEljKKPF1UxdTFyMnUFxG4uS0BlYI
+        W1jiz7UuNoii14wSBzauZwdJCAukSrS+/skIYosIeEhs3LucFaSIWeASo8TVXZ+YQRJCAtUS
+        j59fBbPZBAwlut6CTOLk4BWwk+iathksziKgKrH0z2mwbaICsRLHtrexQ9QISpyc+YQF5FJO
+        AWeJM0t9QcLMAmYS8zY/ZIaw5SWat86GssUlbj2ZzzSBUWgWku5ZSFpmIWmZhaRlASPLKkaR
+        1NLi3PTcYkO94sTc4tK8dL3k/NxNjMCo23bs5+YdjJc2Bh9iFOBgVOLhrQh0jBNiTSwrrsw9
+        xCjBwawkwmspDRTiTUmsrEotyo8vKs1JLT7EaAr020RmKdHkfGBCyCuJNzQ1NLewNDQ3Njc2
+        s1AS5+0QOBgjJJCeWJKanZpakFoE08fEwSnVwNjPLPxQen/mn0qDSU6LUl0Flu39kGvLFm8i
+        o6fm9GlXts31gyapDCc+2LUZaK/VVT0SXbBMc1ro3J+ir6XyRQsTY/ZsXjtX9+sW4U8y9kWh
+        fs8rbojO03Vu2KSwTOL2/EcP7S56Zb3/ns/5pPn/kvYnfzNP212odNL1sF/aLZDhdvDLlp71
+        q5RYijMSDbWYi4oTATCNagvQAgAA
+X-CMS-MailID: 20200211105613eucas1p27cac4202c4287a5967b2ed988779d523
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200211105613eucas1p27cac4202c4287a5967b2ed988779d523
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200211105613eucas1p27cac4202c4287a5967b2ed988779d523
+References: <572bea6f-06d4-938a-802e-93386acf59d9@linux.intel.com>
+        <20200108151730.21022-1-mathias.nyman@linux.intel.com>
+        <CGME20200211105613eucas1p27cac4202c4287a5967b2ed988779d523@eucas1p2.samsung.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi
 
---=-4mJyqWT1X0J6LlfdjyE7
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On 08.01.2020 16:17, Mathias Nyman wrote:
+> xhci driver assumed that xHC controllers have at most one custom
+> supported speed table (PSI) for all usb 3.x ports.
+> Memory was allocated for one PSI table under the xhci hub structure.
+>
+> Turns out this is not the case, some controllers have a separate
+> "supported protocol capability" entry with a PSI table for each port.
+> This means each usb3 port can in theory support different custom speeds.
+>
+> To solve this cache all supported protocol capabilities with their PSI
+> tables in an array, and add pointers to the xhci port structure so that
+> every port points to its capability entry in the array.
+>
+> When creating the SuperSpeedPlus USB Device Capability BOS descriptor
+> for the xhci USB 3.1 roothub we for now will use only data from the
+> first USB 3.1 capable protocol capability entry in the array.
+> This could be improved later, this patch focuses resolving
+> the memory leak.
+>
+> Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> Reported-by: Sajja Venkateswara Rao <VenkateswaraRao.Sajja@amd.com>
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-Hi Stefan, Mathias.
+This patch landed in today's linux-next (20200211) and causes NULL 
+pointer dereference during second suspend/resume cycle on Samsung 
+Exynos5422-based (arm 32bit) Odroid XU3lite board:
 
-On Tue, 2020-02-11 at 10:49 +0100, Stefan Wahren wrote:
-> Hi Mathias,
->=20
-> On 11.02.20 10:34, Mathias Nyman wrote:
-> > On 10.2.2020 20.59, Greg Kroah-Hartman wrote:
-> > > On Mon, Jan 20, 2020 at 03:24:22PM +0100, Nicolas Saenz Julienne wrot=
-e:
-> > > > This PCIe controller chip is used on the Raspberry Pi 4 and multipl=
-e
-> > > > adapter cards. There is no publicly available documentation for the
-> > > > chip, yet both the downstream RPi4 kernel and the controller cards
-> > > > support/advertise LPM support.
-> > > >=20
-> > > > Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> > > > ---
-> > > >  drivers/usb/host/xhci-pci.c | 3 +++
-> > > >  1 file changed, 3 insertions(+)
-> > > >=20
-> > > > diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pc=
-i.c
-> > > > index 4917c5b033fa..c1976e98992b 100644
-> > > > --- a/drivers/usb/host/xhci-pci.c
-> > > > +++ b/drivers/usb/host/xhci-pci.c
-> > > > @@ -241,6 +241,9 @@ static void xhci_pci_quirks(struct device *dev,
-> > > > struct xhci_hcd *xhci)
-> > > >  			pdev->device =3D=3D 0x3432)
-> > > >  		xhci->quirks |=3D XHCI_BROKEN_STREAMS;
-> > > > =20
-> > > > +	if (pdev->vendor =3D=3D PCI_VENDOR_ID_VIA && pdev->device =3D=3D =
-0x3483)
-> > > > +		xhci->quirks |=3D XHCI_LPM_SUPPORT;
-> > > > +
-> > > >  	if (pdev->vendor =3D=3D PCI_VENDOR_ID_ASMEDIA &&
-> > > >  			pdev->device =3D=3D 0x1042)
-> > > >  		xhci->quirks |=3D XHCI_BROKEN_STREAMS;
-> > > Mathias, is this in your review queue?
-> > >=20
-> > Ah yes, before adding link power management support for this controller=
- we
-> > should check that it has sane (or any) exit latency values set in its
-> > HCSPARAMS3 capability register.
+# time rtcwake -s10 -mmem
+rtcwake: wakeup from "mem" using /dev/rtc0 at Tue Feb 11 10:51:43 2020
+PM: suspend entry (deep)
+Filesystems sync: 0.012 seconds
+Freezing user space processes ... (elapsed 0.010 seconds) done.
+OOM killer disabled.
+Freezing remaining freezable tasks ... (elapsed 0.002 seconds) done.
+smsc95xx 1-1.1:1.0 eth0: entering SUSPEND2 mode
+wake enabled for irq 153
+wake enabled for irq 158
+samsung-pinctrl 13400000.pinctrl: Setting external wakeup interrupt 
+mask: 0xffffffe7
+Disabling non-boot CPUs ...
+IRQ 51: no longer affine to CPU1
+IRQ 52: no longer affine to CPU2
+s3c2410-wdt 101d0000.watchdog: watchdog disabled
+wake disabled for irq 158
+usb usb1: root hub lost power or was reset
+usb usb2: root hub lost power or was reset
+wake disabled for irq 153
+exynos-tmu 10060000.tmu: More trip points than supported by this TMU.
+exynos-tmu 10060000.tmu: 2 trip points should be configured in polling mode.
+exynos-tmu 10064000.tmu: More trip points than supported by this TMU.
+exynos-tmu 10064000.tmu: 2 trip points should be configured in polling mode.
+exynos-tmu 10068000.tmu: More trip points than supported by this TMU.
+exynos-tmu 10068000.tmu: 2 trip points should be configured in polling mode.
+exynos-tmu 1006c000.tmu: More trip points than supported by this TMU.
+exynos-tmu 1006c000.tmu: 2 trip points should be configured in polling mode.
+exynos-tmu 100a0000.tmu: More trip points than supported by this TMU.
+exynos-tmu 100a0000.tmu: 6 trip points should be configured in polling mode.
+usb usb3: root hub lost power or was reset
+s3c-rtc 101e0000.rtc: rtc disabled, re-enabling
+usb usb4: root hub lost power or was reset
+xhci-hcd xhci-hcd.8.auto: No ports on the roothubs?
+PM: dpm_run_callback(): platform_pm_resume+0x0/0x44 returns -12
+PM: Device xhci-hcd.8.auto failed to resume async: error -12
+hub 3-0:1.0: hub_ext_port_status failed (err = -32)
+hub 4-0:1.0: hub_ext_port_status failed (err = -32)
+usb 1-1: reset high-speed USB device number 2 using exynos-ehci
+usb 1-1.1: reset high-speed USB device number 3 using exynos-ehci
+OOM killer enabled.
+Restarting tasks ... done.
 
-I did some checks myself before sending the patch, and tested with some dev=
-ices
-I own. The latencies seemd reasonable. For example I just hooked up an USB3=
- HD,
-the root HUB exposes:
+real    0m11.890s
+user    0m0.001s
+sys     0m0.679s
+root@target:~# PM: suspend exit
+mmc_host mmc0: Bus speed (slot 0) = 50000000Hz (slot req 400000Hz, 
+actual 396825HZ div = 63)
+mmc_host mmc0: Bus speed (slot 0) = 200000000Hz (slot req 200000000Hz, 
+actual 200000000HZ div = 0)
+mmc_host mmc0: Bus speed (slot 0) = 50000000Hz (slot req 52000000Hz, 
+actual 50000000HZ div = 0)
+mmc_host mmc0: Bus speed (slot 0) = 400000000Hz (slot req 200000000Hz, 
+actual 200000000HZ div = 1)
+smsc95xx 1-1.1:1.0 eth0: link up, 100Mbps, full-duplex, lpa 0xC1E1
 
-	bU1DevExitLat           4 micro seconds
-	bU2DevExitLat         231 micro seconds
+root@target:~#
+root@target:~# time rtcwake -s10 -mmem[   35.451572] vdd_ldo12: disabling
 
-And xhci configured the device with:
+rtcwake: wakeup from "mem" using /dev/rtc0 at Tue Feb 11 10:52:02 2020
+PM: suspend entry (deep)
+Filesystems sync: 0.004 seconds
+Freezing user space processes ... (elapsed 0.006 seconds) done.
+OOM killer disabled.
+Freezing remaining freezable tasks ... (elapsed 0.070 seconds) done.
+hub 4-0:1.0: hub_ext_port_status failed (err = -32)
+hub 3-0:1.0: hub_ext_port_status failed (err = -32)
+8<--- cut here ---
+Unable to handle kernel NULL pointer dereference at virtual address 00000014
+pgd = 4c26b54b
+[00000014] *pgd=00000000
+Internal error: Oops: 17 [#1] PREEMPT SMP ARM
+Modules linked in:
+CPU: 3 PID: 1468 Comm: kworker/u16:23 Not tainted 
+5.6.0-rc1-next-20200211 #268
+Hardware name: Samsung Exynos (Flattened Device Tree)
+Workqueue: events_unbound async_run_entry_fn
+PC is at xhci_suspend+0x12c/0x520
+LR is at 0xa6aa9898
+pc : [<c0724c90>]    lr : [<a6aa9898>]    psr: 60000093
+sp : ec401df8  ip : 0000001a  fp : c12e7864
+r10: 00000000  r9 : ecfb87b0  r8 : ecfb8220
+r7 : 00000000  r6 : 00000000  r5 : 00000004  r4 : ecfb81f0
+r3 : 00007d00  r2 : 00000001  r1 : 00000001  r0 : 00000000
+Flags: nZCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment none
+Control: 10c5387d  Table: 6bd4006a  DAC: 00000051
+Process kworker/u16:23 (pid: 1468, stack limit = 0x6e4b6fba)
+Stack: (0xec401df8 to 0xec402000)
+...
+[<c0724c90>] (xhci_suspend) from [<c061b4f4>] (dpm_run_callback+0xb4/0x3fc)
+[<c061b4f4>] (dpm_run_callback) from [<c061bd5c>] 
+(__device_suspend+0x134/0x7e8)
+[<c061bd5c>] (__device_suspend) from [<c061c42c>] (async_suspend+0x1c/0x94)
+[<c061c42c>] (async_suspend) from [<c0154bd0>] 
+(async_run_entry_fn+0x48/0x1b8)
+[<c0154bd0>] (async_run_entry_fn) from [<c0149b38>] 
+(process_one_work+0x230/0x7bc)
+[<c0149b38>] (process_one_work) from [<c014a108>] (worker_thread+0x44/0x524)
+[<c014a108>] (worker_thread) from [<c01511fc>] (kthread+0x130/0x164)
+[<c01511fc>] (kthread) from [<c01010b4>] (ret_from_fork+0x14/0x20)
+Exception stack(0xec401fb0 to 0xec401ff8)
+...
+---[ end trace c72caf6487666442 ]---
+note: kworker/u16:23[1468] exited with preempt_count 1
 
-	bU1DevExitLat          10 micro seconds
-	bU2DevExitLat        2047 micro seconds
+Reverting it fixes the NULL pointer issue. I can provide more 
+information or do some other tests. Just let me know what will help to 
+fix it.
 
-> > Nicolas, if you have this controller could you show the capability
-> > registers:
-> >=20
-> > cat /sys/kernel/debug/usb/xhci/*/reg-cap
+ > ...
 
-CAPLENGTH =3D 0x01000020
-HCSPARAMS1 =3D 0x05000420
-HCSPARAMS2 =3D 0xfc000031
-HCSPARAMS3 =3D 0x00e70004
-HCCPARAMS1 =3D 0x002841eb
-DOORBELLOFF =3D 0x00000100
-RUNTIMEOFF =3D 0x00000200
-HCCPARAMS2 =3D 0x00000000
-
-> sorry for the naive question, but do you need the dump with or without
-> this patch applied?
-
-IIRC these are dumps from xhci's extended registers. Shouldn't matter at al=
-l.=20
-
-Regards,
-Nicolas
-
-
---=-4mJyqWT1X0J6LlfdjyE7
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl5Ce88ACgkQlfZmHno8
-x/7F9Qf+KWPtMeGt4zPdB2ls5zaDGQPrv3QRvhIdmu/ovQXjdcwOghNJtYpYtfod
-p75/dlkegGgfNF+6nlZSMydSAPlvy1/stxk12OhPASHLTA2knxSOUhlfmX82PC4P
-AGcGqCC7mXzeqYh4Bw1+MUkHHjNivZEOGswGkzZ8j6g/DabCEyMgByoYl1/G+hdM
-REqOtzfuxCQF+2BJLyRC7LHBO42cOLg2vGz+whF6PjmkSBJEr8MUGlOuCrtpJP2g
-ajtbxF8u7DcL+cI4m48gpIiWP/TPVb4qJOJ3B2/qKjO8NcXPveo08DGa/sy8wcDg
-8wicmtAbbG37PAVtD0R2XUmBnWudbw==
-=9y0c
------END PGP SIGNATURE-----
-
---=-4mJyqWT1X0J6LlfdjyE7--
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
