@@ -2,21 +2,21 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D81159D18
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2020 00:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6382159D1C
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2020 00:22:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727967AbgBKXUb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Feb 2020 18:20:31 -0500
-Received: from gateway30.websitewelcome.com ([192.185.198.26]:44310 "EHLO
-        gateway30.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727795AbgBKXUb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 18:20:31 -0500
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway30.websitewelcome.com (Postfix) with ESMTP id 5F6A660B6
-        for <linux-usb@vger.kernel.org>; Tue, 11 Feb 2020 17:20:30 -0600 (CST)
+        id S1727791AbgBKXWq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Feb 2020 18:22:46 -0500
+Received: from gateway21.websitewelcome.com ([192.185.45.175]:25574 "EHLO
+        gateway21.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727698AbgBKXWq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 18:22:46 -0500
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway21.websitewelcome.com (Postfix) with ESMTP id DBCD8400CCC9E
+        for <linux-usb@vger.kernel.org>; Tue, 11 Feb 2020 17:22:45 -0600 (CST)
 Received: from gator4166.hostgator.com ([108.167.133.22])
         by cmsmtp with SMTP
-        id 1epSjA5hhEfyq1epSjK2Ro; Tue, 11 Feb 2020 17:20:30 -0600
+        id 1erdjKQamvBMd1erdje1Fb; Tue, 11 Feb 2020 17:22:45 -0600
 X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
@@ -24,25 +24,25 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
         List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ZeEly4URcPzI9V6orzk6NjOSoTiGretqTjD58lLekkE=; b=eQCMYuZHqbsCvYuKUdAzhiRThO
-        F5cD2QfOAU6oUbZiMgeL9o9NWf7LLp8QkEWcQxmVztE+b8OyabyfUglGuUBTIn3Srj1Xi0oCPaf5e
-        AKWs6fJWzYy8xzP58ncH2FBLq5swhPrMAim1V37yi8/ItkPRynJEfTF0kGdYm060kjUKIedmYjKjX
-        PoqfFLrqQfXNKvt53nsKBnOokyOzBdLtt3SbonN7TdtdD9UYjlGzu8SDuAkvVrmsMIs9CwsDi2T2G
-        tV/vIdzxRtu/3rd+LKM47+03q7tukF+CA5pKhGblaXcgCEjnSoPMo2eQF5OxzbekWiCfVf09f/Qt0
-        m+39ZRXg==;
-Received: from [200.68.140.36] (port=5119 helo=embeddedor)
+        bh=d45YxL3ZVwmUXRXXaNk1DepB3rRpGpao2lxAWUtx6bM=; b=iqggwRpX32grupnHhcMZ8HGQP6
+        +vewtQpKtwwjgKiIYlS8OkZgst6U7rTXLHzQpFHADvx0KzIYhXTpTDCwkQYWad6YzUVVBcafCftkF
+        iOJmwV9P/q/LuaYLY+x2Tcxnh1RwvuwaNGFDM4tBRs1oIIdw02z2bvDRfuI3RGO9zn5mbJGcl603K
+        WHQbBwLclwpPQmrwSksRJg08d/+qFP2/WiuGbio5wQyOlqCzVPrIsIb6HbFiGok8KX/kICrdx8qwp
+        McG5drN6KRJXlHhw3PoBJzDhkeey1sYigSbXD1z9xsspkwCRhgE6fzpcMnQvn+eTUTZtTvZua3qX/
+        h43smIaQ==;
+Received: from [200.68.140.36] (port=25379 helo=embeddedor)
         by gator4166.hostgator.com with esmtpa (Exim 4.92)
         (envelope-from <gustavo@embeddedor.com>)
-        id 1j1epQ-003ZeJ-Ra; Tue, 11 Feb 2020 17:20:28 -0600
-Date:   Tue, 11 Feb 2020 17:23:03 -0600
+        id 1j1erc-003arP-Hs; Tue, 11 Feb 2020 17:22:44 -0600
+Date:   Tue, 11 Feb 2020 17:25:19 -0600
 From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Felipe Balbi <balbi@kernel.org>,
+To:     Bin Liu <b-liu@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH] usb: gadget: f_phonet: Replace zero-length array with
- flexible-array member
-Message-ID: <20200211232303.GA21495@embeddedor>
+Subject: [PATCH] USB: musb: Replace zero-length array with flexible-array
+ member
+Message-ID: <20200211232519.GA23263@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -55,13 +55,13 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 200.68.140.36
 X-Source-L: No
-X-Exim-ID: 1j1epQ-003ZeJ-Ra
+X-Exim-ID: 1j1erc-003arP-Hs
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: (embeddedor) [200.68.140.36]:5119
+X-Source-Sender: (embeddedor) [200.68.140.36]:25379
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 39
+X-Email-Count: 47
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
 Sender: linux-usb-owner@vger.kernel.org
@@ -92,22 +92,22 @@ This issue was found with the help of Coccinelle.
 
 Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
 ---
- drivers/usb/gadget/function/f_phonet.c | 2 +-
+ drivers/usb/musb/musb_host.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/function/f_phonet.c b/drivers/usb/gadget/function/f_phonet.c
-index 8b72b192c747..d7f6cc51b7ec 100644
---- a/drivers/usb/gadget/function/f_phonet.c
-+++ b/drivers/usb/gadget/function/f_phonet.c
-@@ -48,7 +48,7 @@ struct f_phonet {
- 	struct usb_ep			*in_ep, *out_ep;
- 
- 	struct usb_request		*in_req;
--	struct usb_request		*out_reqv[0];
-+	struct usb_request		*out_reqv[];
+diff --git a/drivers/usb/musb/musb_host.c b/drivers/usb/musb/musb_host.c
+index eb308ec35c66..3dab821c1b30 100644
+--- a/drivers/usb/musb/musb_host.c
++++ b/drivers/usb/musb/musb_host.c
+@@ -2576,7 +2576,7 @@ static int musb_bus_resume(struct usb_hcd *hcd)
+ struct musb_temp_buffer {
+ 	void *kmalloc_ptr;
+ 	void *old_xfer_buffer;
+-	u8 data[0];
++	u8 data[];
  };
  
- static int phonet_rxq_size = 17;
+ static void musb_free_temp_buffer(struct urb *urb)
 -- 
 2.25.0
 
