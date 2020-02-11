@@ -2,89 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1B81598AF
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 19:32:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5003B159955
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 20:02:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731202AbgBKScc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Feb 2020 13:32:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59442 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730447AbgBKScb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 11 Feb 2020 13:32:31 -0500
-Received: from localhost (unknown [104.133.9.100])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9EE78206D6;
-        Tue, 11 Feb 2020 18:32:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581445950;
-        bh=l9B+V0tjpsUXumO8m1fXx8yAwXOYw55xHJWpqlZZu64=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AljyERKVtVZzKWL/35kIi13azAOhEClGA0qIBfrqRNHizL+bxD4i8TJRDkRr3K/ft
-         hHk8rib5cwIff+tzmovuP09YVBlREmmcnpoDgkjn6NGkzmel0nhx3kXjTkbXhu7vSQ
-         bppECNBYnPWY2F7QTqkErI0ga8CUb9sK8z7SLLWE=
-Date:   Tue, 11 Feb 2020 10:32:29 -0800
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] treewide: Replace zero-length arrays with flexible-array
- member
-Message-ID: <20200211183229.GA1938663@kroah.com>
-References: <20200211174126.GA29960@embeddedor>
+        id S1729187AbgBKTCc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Feb 2020 14:02:32 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:33986 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727781AbgBKTCc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 14:02:32 -0500
+Received: (qmail 19069 invoked by uid 2102); 11 Feb 2020 14:02:30 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 11 Feb 2020 14:02:30 -0500
+Date:   Tue, 11 Feb 2020 14:02:30 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Martin Townsend <mtownsend1973@gmail.com>
+cc:     linux-usb@vger.kernel.org
+Subject: Re: Enumerating USB devices in the Bootloader
+In-Reply-To: <CABatt_x5unKx-O0WENEHfm7az-pPXO8sayk+jWuYrksbEgghnA@mail.gmail.com>
+Message-ID: <Pine.LNX.4.44L0.2002111400150.1574-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200211174126.GA29960@embeddedor>
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 11, 2020 at 11:41:26AM -0600, Gustavo A. R. Silva wrote:
-> The current codebase makes use of the zero-length array language
-> extension to the C90 standard, but the preferred mechanism to declare
-> variable-length types such as these ones is a flexible array member[1][2],
-> introduced in C99:
-> 
-> struct foo {
->         int stuff;
->         struct boo array[];
-> };
-> 
-> By making use of the mechanism above, we will get a compiler warning
-> in case the flexible array does not occur last in the structure, which
-> will help us prevent some kind of undefined behavior bugs from being
-> unadvertenly introduced[3] to the codebase from now on.
-> 
-> All these instances of code were found with the help of the following
-> Coccinelle script:
-> 
-> @@
-> identifier S, member, array;
-> type T1, T2;
-> @@
-> 
-> struct S {
->   ...
->   T1 member;
->   T2 array[
-> - 0
->   ];
-> };
-> 
-> [1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-> [2] https://github.com/KSPP/linux/issues/21
-> [3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
-> 
-> NOTE: I'll carry this in my -next tree for the v5.6 merge window.
+On Tue, 11 Feb 2020, Martin Townsend wrote:
 
-Why not carve this up into per-subsystem patches so that we can apply
-them to our 5.7-rc1 trees and then you submit the "remaining" that don't
-somehow get merged at that timeframe for 5.7-rc2?
+> On Mon, Feb 10, 2020 at 3:12 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Mon, 10 Feb 2020, Martin Townsend wrote:
+> >
+> > > Hi,
+> > >
+> > > We are using the USB mass storage gadget driver in Linux and
+> > > everything is working fairly well but sometimes we are finding that we
+> > > are exceeding the 100mA limit (which I think is the default the host
+> > > will provide) before Linux has had a change to enumerate the USB
+> > > device at which point we ask for 500mA.  We have tried to reduce the
+> > > power by ensuring all clocks are turned off, devices not used disabled
+> > > etc but can't seem to satisfy the 100mA limit.  We were thinking that
+> > > maybe we could enumerate the USB device during U-Boot at which point
+> > > we know we are under the 100mA limit.  Does anyone know a reason why
+> > > this would not work?
+> >
+> > It won't work because U-Boot isn't the kernel.  When the kernel takes
+> > over the USB controller, it will force the host to re-enumerate the
+> > gadget -- and you will be right back where you started.
+> >
+> > The only way to make this work would be to prevent U-Boot from ever
+> > actually booting the Linux kernel.  This probably isn't the way you
+> > want your device to behave, though.
+> >
+> > > would at some point from U-Boot enumerating a new
+> > > bMaxPower would the connection be reset and drop back to 100mA during
+> > > the kernel startup? Are there any considerations that we would need to
+> > > take care of in the kernel for this to work?
+> >
+> > If you can't satisfy the 100-mA current limit then you should make your
+> > device be self-powered instead of relying on power delivered over the
+> > USB bus.
+> >
+> > Be aware also that bus-powered USB-2 hubs can't deliver 500 mA to their
+> > downstream ports.  They are always limited to 100 mA or less.  If your
+> > gadget was plugged into one of them, it wouldn't be able to work at
+> > all.
+> >
+> > Alan Stern
+> >
+> 
+> Alan,
+> Thank you for the swift response.  On the first point, if we modify
+> the kernel to re-enumerate the same bMaxPower of 500mA would this
+> still be a problem? ie is there a period when the kernel takes over
+> the USB controller that the Host side would go back to 100mA after
+> U-Boot negotiates the 500mA?
 
-thanks,
+Yes, there is.  Remember, the kernel knows nothing of what U-Boot has 
+done.  It has to start fresh.
 
-greg k-h
+>  The last point you make is a very good
+> one and something I hadn't thought of. If we can overcome the first
+> hurdle I think we would be happy for it to be a requirement for the
+> device to be plugged directly into a PC.
+
+Or into a powered hub.
+
+Alan Stern
+
