@@ -2,121 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 442D01585D8
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 00:00:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 898121586BE
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 01:21:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727433AbgBJW77 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Feb 2020 17:59:59 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:39600 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727116AbgBJW77 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 17:59:59 -0500
-Received: by mail-oi1-f193.google.com with SMTP id z2so10935846oih.6;
-        Mon, 10 Feb 2020 14:59:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=h2g0oTCV98K2k6Xzoh29zE55ImVHkBdtE4+mSxUulQQ=;
-        b=P0yWasi5AD3Wkz/vo7yXo6yPuziD6iH6KVE8Q4bimB6WtQzDEGVCzAezGZWb5k1W/w
-         Z3VnF48KO1MFvUq/PYlKG96U0XCWBkZi4BEoZOfhJRetQloceUj4EboyQMfGIfdiWwMQ
-         5frXSdglP2M9xnE8DbEyl5GOqlKRymcz8n0OOw5y/drqhSgXwypJcoE7C6KVLYBhhUma
-         YhK//vHGZi4wWwJJO5iplJ8thpu4ffDHGFEt4IaJY+HDlOiSMPxLpW1vGmhH/t5mGWmP
-         7Z9PGLdLzUOHoG+WVQ6mZVShDxTkw+cAbUsA7kYE2YV/Yni7Hfb3flIETXftd93ndXRq
-         JGsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=h2g0oTCV98K2k6Xzoh29zE55ImVHkBdtE4+mSxUulQQ=;
-        b=e9iWkoPSgtNgdxbDdk5p4GWROUq/HjF24j9eh0oqFF2XhCUHeWrPHrtyDAh1YeyUOI
-         aZ40nQ1JgBpnOewmFdVNb+Mf1C2tfHQgmb//qaX+PwDJtvd7W9cuVOhtO/Nimg4gdCD8
-         lLhQGg0so8lp6nO5VwI45TYy2K1hAZuLlO5V8p2ZdMkWaRY+juGvvUU4wDbz/vV0UZf7
-         j2TqXZFNJs/7E4nK5nmbaDCe7NQ4ROTPtOyDJnVRjRUtov6rr5QNnP5xycUEAYqYRbd3
-         x8ERyb72T3AmYClvBLgJIU0Knjwi8PDHWy165CjrwyNoUufAGAo4iEekNDoJMXQjlble
-         DXHQ==
-X-Gm-Message-State: APjAAAVb/iNquQtEUQfFFEdAMDpvou441Dp4zKzrTpnR4B6NfplXVf87
-        HttG/fnEmKQa4GVvENCzsBE=
-X-Google-Smtp-Source: APXvYqwDbrcIeb7Xbibh7qCosUJ25r6zAICrriHVO5CceM7+UyW/5dwZqBATLkJk71AmXk2eQKqTWQ==
-X-Received: by 2002:aca:458:: with SMTP id 85mr1030996oie.56.1581375598184;
-        Mon, 10 Feb 2020 14:59:58 -0800 (PST)
-Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id r17sm546985otq.70.2020.02.10.14.59.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2020 14:59:57 -0800 (PST)
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Yue Wang <yue.wang@amlogic.com>,
-        Hanjie Lin <hanjie.lin@amlogic.com>, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        kbuild test robot <lkp@intel.com>
-Subject: [PATCH] usb: dwc3: meson-g12a: Don't use ret uninitialized in dwc3_meson_g12a_otg_init
-Date:   Mon, 10 Feb 2020 15:58:17 -0700
-Message-Id: <20200210225816.36598-1-natechancellor@gmail.com>
-X-Mailer: git-send-email 2.25.0
+        id S1727529AbgBKAVT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Feb 2020 19:21:19 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:42451 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727508AbgBKAVT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 19:21:19 -0500
+Received: from classic (mon69-7-83-155-44-161.fbx.proxad.net [83.155.44.161])
+        (Authenticated sender: hadess@hadess.net)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 52DB1200003;
+        Tue, 11 Feb 2020 00:21:16 +0000 (UTC)
+Message-ID: <11a4cee8a055c482ce0ba5b06dcdbe157e082a2d.camel@hadess.net>
+Subject: Re: [PATCH v3 0/6] Add Apple MFi fastcharge USB device driver
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+Date:   Tue, 11 Feb 2020 01:21:15 +0100
+In-Reply-To: <20200107093508.GA1028311@kroah.com>
+References: <20191016093933.693-1-hadess@hadess.net>
+         <2f9b9dad3e8b390f70168b2fef1607f0b72ce7c3.camel@hadess.net>
+         <a03988283e4858c0eb00e46bd9c41f52e356d1e0.camel@hadess.net>
+         <20200107093508.GA1028311@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.3 (3.34.3-1.fc31) 
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Clang warns:
+On Tue, 2020-01-07 at 10:35 +0100, Greg Kroah-Hartman wrote:
+> On Tue, Jan 07, 2020 at 09:46:50AM +0100, Bastien Nocera wrote:
+> > Hey,
+> > 
+> > On Thu, 2019-11-21 at 16:20 +0100, Bastien Nocera wrote:
+> > > Hey,
+> > > 
+> > > Any updates on getting this into the USB tree?
+> > > 
+> > > Alan acked the patchset more than a month ago.
+> > 
+> > Thought I'd ask again, the 6 patches were acked by Alan, and tested
+> > by
+> > me. Is there any chance they could be considered for merging, or
+> > reviewed?
+> 
+> Ugh, sorry, these fell through the cracks.  They are still in my
+> "to-review" queue, I'll try to get to them by the end of the week.
 
-../drivers/usb/dwc3/dwc3-meson-g12a.c:421:6: warning: variable 'ret' is
-used uninitialized whenever 'if' condition is false
-[-Wsometimes-uninitialized]
-        if (priv->otg_mode == USB_DR_MODE_OTG) {
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../drivers/usb/dwc3/dwc3-meson-g12a.c:455:9: note: uninitialized use
-occurs here
-        return ret;
-               ^~~
-../drivers/usb/dwc3/dwc3-meson-g12a.c:421:2: note: remove the 'if' if
-its condition is always true
-        if (priv->otg_mode == USB_DR_MODE_OTG) {
-        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../drivers/usb/dwc3/dwc3-meson-g12a.c:415:9: note: initialize the
-variable 'ret' to silence this warning
-        int ret, irq;
-               ^
-                = 0
-1 warning generated.
+Hey,
 
-It is not wrong, ret is only used when that if statement is true. Just
-directly return 0 at the end to avoid this.
+It's been a month, and it missed the last merge window. Is there
+anything else I should be doing?
 
-Fixes: 729149c53f04 ("usb: dwc3: Add Amlogic A1 DWC3 glue")
-Reported-by: kbuild test robot <lkp@intel.com>
-Link: https://groups.google.com/d/msg/clang-built-linux/w5iBENco_m4/PPuXreAxBQAJ
-Link: https://github.com/ClangBuiltLinux/linux/issues/869
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
----
-
-Note: This patch is against Felipe's testing/next branch.
-
- drivers/usb/dwc3/dwc3-meson-g12a.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
-index 70d24b98fcad..902553f39889 100644
---- a/drivers/usb/dwc3/dwc3-meson-g12a.c
-+++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
-@@ -452,7 +452,7 @@ static int dwc3_meson_g12a_otg_init(struct platform_device *pdev,
- 	if (IS_ERR(priv->role_switch))
- 		dev_warn(dev, "Unable to register Role Switch\n");
- 
--	return ret;
-+	return 0;
- }
- 
- static int dwc3_meson_g12a_probe(struct platform_device *pdev)
--- 
-2.25.0
+Cheers
 
