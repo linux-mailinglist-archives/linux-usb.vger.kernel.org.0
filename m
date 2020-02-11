@@ -2,87 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5A01594C9
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 17:22:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECE015951A
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 17:39:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728606AbgBKQWh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Feb 2020 11:22:37 -0500
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:37254 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728222AbgBKQWh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 11:22:37 -0500
-Received: by mail-qt1-f194.google.com with SMTP id w47so8367285qtk.4;
-        Tue, 11 Feb 2020 08:22:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8vKDSqnHXMxM6UbZpMgqezFGV7iFRtf6ymNXpe/ujkk=;
-        b=Hc6Hz7OqJzPL7sRwAcwm8QOlAlpiB840p+7ZPAUZmlWZ9rTTkNMZx0++qtypqwipRr
-         cW+Bx8qqgqfsROW+yJBa0XPTT7x80h6KY9QL4JG0I89l4K5C7VghBMJ6tm4vvfBJwiGn
-         jyZA6brpc7HZcGSc2gaH5/YMuAE0M/R41o5oabXL0dUXnWpPLEZ7LZGLk2zL73qFq19s
-         taZg++R9/60EQk0mpvmzanwp3LS7pZGRlufwgYFXktc4eY0Zgd8HHAh6j9gIOs2KGk20
-         j1h/kggHT1n8yiQACufAkzyMiTS/yRoFpaR3yX0RnvvuCidNjfyFyPgnTEt46A4IBOiL
-         omGw==
-X-Gm-Message-State: APjAAAVujYpJl1FaGZ3/WmiTzbLmtQVxfEqOQGUD+HXRbI/gHjVKQqWG
-        SY6Lu5T14cE9FtQt3kBgBb8=
-X-Google-Smtp-Source: APXvYqwwPXIFhlNKe/TmTl7Jr5C5T5vcDNDRHUN6KwtQ8wLSYF8MesauojL3eZcGJXM+s29O2pi9lw==
-X-Received: by 2002:aed:38c2:: with SMTP id k60mr3178211qte.375.1581438156499;
-        Tue, 11 Feb 2020 08:22:36 -0800 (PST)
-Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
-        by smtp.gmail.com with ESMTPSA id v10sm2312403qtq.58.2020.02.11.08.22.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2020 08:22:36 -0800 (PST)
-From:   Arvind Sankar <nivedita@alum.mit.edu>
-To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ALSA: usb-audio: Apply sample rate quirk for Audioengine D1
-Date:   Tue, 11 Feb 2020 11:22:35 -0500
-Message-Id: <20200211162235.1639889-1-nivedita@alum.mit.edu>
-X-Mailer: git-send-email 2.24.1
+        id S1729496AbgBKQjH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Feb 2020 11:39:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58248 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728049AbgBKQjH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 Feb 2020 11:39:07 -0500
+Received: from localhost (unknown [104.133.9.100])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1DAB020714;
+        Tue, 11 Feb 2020 16:39:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581439147;
+        bh=NW/bcpN6ZnsfYRq2jo8jxNsipGcsVCTdc1+KVQ9x/SQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fv+cyubVgV2EUiQrE8FT7xZhjecXwETyk8BmRhwovgnYUH1YQ0xBznD/lao9Xt/4f
+         jbak4ey7QsVm04i1asbsi2il1654Al7GZ2YbhQOU+RlF9FBrDJCR9C8ip7M40+bolk
+         8WgTvNi7EKoIFTdbaJuv6mtt301o+l1ZoRGVFItI=
+Date:   Tue, 11 Feb 2020 08:39:06 -0800
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Vladimir Stankovic <vladimir.stankovic@displaylink.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Petar Kovacevic <petar.kovacevic@displaylink.com>,
+        Stefan Lugonjic <stefan.lugonjic@displaylink.com>,
+        Nikola Simic <nikola.simic@displaylink.com>,
+        Marko Miljkovic <marko.miljkovic@displaylink.com>
+Subject: Re: [PATCH 1/1] usb: Add MA USB Host driver
+Message-ID: <20200211163906.GA1931506@kroah.com>
+References: <VI1PR10MB1965B4B61D7A9808B2EA095591180@VI1PR10MB1965.EURPRD10.PROD.OUTLOOK.COM>
+ <61e63056-31f9-9d4b-60c1-8cbf0372d34f@displaylink.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <61e63056-31f9-9d4b-60c1-8cbf0372d34f@displaylink.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Audioengine D1 (0x2912:0x30c8) does support reading the sample rate,
-but it returns the rate in byte-reversed order.
+On Tue, Feb 11, 2020 at 04:21:24PM +0000, Vladimir Stankovic wrote:
+>   39 files changed, 8668 insertions(+)
 
-When setting sampling rate, the driver produces these warning messages:
-[168840.944226] usb 3-2.2: current rate 4500480 is different from the runtime rate 44100
-[168854.930414] usb 3-2.2: current rate 8436480 is different from the runtime rate 48000
-[168905.185825] usb 3-2.1.2: current rate 30465 is different from the runtime rate 96000
+This is a bit hard, if not impossible, to review all in one huge patch.
 
-As can be seen from the hexadecimal conversion, the current rate read
-back is byte-reversed from the rate that was set.
+Can you resend this as a patch series, breaking it down into logical
+chunks, like all other kernel patches have?
 
-44100 == 0x00ac44, 4500480 == 0x44ac00
-48000 == 0x00bb80, 8436480 == 0x80bb00
-96000 == 0x017700,   30465 == 0x007701
+Also, why so many individual files?  For only 8k lines, 39 files seems
+like a huge number.
 
-Rather than implementing a new quirk to reverse the order, just skip
-checking the rate to avoid spamming the log.
+thanks,
 
-Signed-off-by: Arvind Sankar <nivedita@alum.mit.edu>
----
- sound/usb/quirks.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
-index 3a5242e383b2..7f558f4b4520 100644
---- a/sound/usb/quirks.c
-+++ b/sound/usb/quirks.c
-@@ -1440,6 +1440,7 @@ bool snd_usb_get_sample_rate_quirk(struct snd_usb_audio *chip)
- 	case USB_ID(0x1395, 0x740a): /* Sennheiser DECT */
- 	case USB_ID(0x1901, 0x0191): /* GE B850V3 CP2114 audio interface */
- 	case USB_ID(0x21b4, 0x0081): /* AudioQuest DragonFly */
-+	case USB_ID(0x2912, 0x30c8): /* Audioengine D1 */
- 		return true;
- 	}
- 
--- 
-2.24.1
-
+greg k-h
