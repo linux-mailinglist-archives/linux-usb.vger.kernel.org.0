@@ -2,251 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42265158D03
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 11:56:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E6A1158D2A
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 12:04:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728477AbgBKK4R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Feb 2020 05:56:17 -0500
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:42315 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728472AbgBKK4Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 05:56:16 -0500
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200211105614euoutp02c6b5b54ec05bc97a177af8b7280a9bb6~yU9CmRmUq2372723727euoutp02V
-        for <linux-usb@vger.kernel.org>; Tue, 11 Feb 2020 10:56:14 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200211105614euoutp02c6b5b54ec05bc97a177af8b7280a9bb6~yU9CmRmUq2372723727euoutp02V
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1581418574;
-        bh=oN0t+1XIozTMZTPach2eqN9WGiTKDUrNNPUb1mW4tZg=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=KcC7GCpu+8tll9YkSS32kg50CYpN57gN7P96mkuBD/38nsgzZ273AZEWi5ut4Krio
-         tpoPg/l3SNSF2pmC8S3/W/8mEs6nc8HdsAA6BS9URp/WcZ0CzLWj0WjU6nXexvIvF0
-         vmEXNQn8qVXRFJu8JNNEJGvYo8KO0nq5QclSJSi8=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200211105614eucas1p1a8e37bef8c0924d3a3f8309589050155~yU9CDi9Js2648326483eucas1p1b;
-        Tue, 11 Feb 2020 10:56:14 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id DE.33.61286.E48824E5; Tue, 11
-        Feb 2020 10:56:14 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200211105613eucas1p27cac4202c4287a5967b2ed988779d523~yU9Bu5Uyu3190431904eucas1p2B;
-        Tue, 11 Feb 2020 10:56:13 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200211105613eusmtrp239fbc1c76bac47107fbc34e296bfbfd7~yU9BuN-ji0669806698eusmtrp2z;
-        Tue, 11 Feb 2020 10:56:13 +0000 (GMT)
-X-AuditID: cbfec7f2-ef1ff7000001ef66-db-5e42884e7a8b
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 28.6D.08375.D48824E5; Tue, 11
-        Feb 2020 10:56:13 +0000 (GMT)
-Received: from [106.120.51.15] (unknown [106.120.51.15]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200211105613eusmtip20559c829aa30da3853d50978ae4a4e99~yU9BTfvOX2002620026eusmtip21;
-        Tue, 11 Feb 2020 10:56:13 +0000 (GMT)
-Subject: Re: [RFT PATCH] xhci: Fix memory leak when caching protocol
- extended capability PSI tables
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        pmenzel@molgen.mpg.de
-Cc:     mika.westerberg@linux.intel.com, linux-usb@vger.kernel.org,
-        greg@kroah.com, linux-kernel@vger.kernel.org,
-        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <089285ab-7041-49bb-54ea-c73b25f96f48@samsung.com>
-Date:   Tue, 11 Feb 2020 11:56:12 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
-        Thunderbird/68.4.2
+        id S1728167AbgBKLEg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Feb 2020 06:04:36 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:45406 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727561AbgBKLEf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 06:04:35 -0500
+Received: by mail-oi1-f193.google.com with SMTP id v19so12361989oic.12;
+        Tue, 11 Feb 2020 03:04:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=QijJK15dIuRzW40NdnOBenGU/zvgd3ESluIZX8bbPoA=;
+        b=KgNc/h5ARV+DaU+Na3hHmktyVZfA9T01RIwwCkl732spGIg6MTlUlQ3XwzMDXq+GbP
+         EpOGhCQr/fHhhsIg3LoNTfThGTwKwoZAwG/Pd/1MNT5wxaylHrGEZ3G7pAK9u9ucKfBb
+         da+5bke8uus7sb6hR/5hLJLVlnU085xQmvC+K7juC3e0BthBZRGfYVnds+/xMfkCAqOd
+         vNDD4FlQA8IXS9XiclDABsz8nOFQIQGgidaESYp/X+UeE5ujKjOBq2exktvI+NpgON5s
+         aGVrNE+TpfAZ7qglGQJZldTQqWxyd8FqbVl7a2LkKwylx/vvq+xg4LL2VdZWIc9C2E0A
+         iP4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=QijJK15dIuRzW40NdnOBenGU/zvgd3ESluIZX8bbPoA=;
+        b=jKmlmBqEN2MuZD0r9RvbDHqAocJXGe89auSj6mqfL7blF2Ku4FNpWda/9o0GQo2xNQ
+         Gp5wVDXrU491Gv0SRUA60A6/gUE3r3xn2WA/DBA3xrANICxpUq2f4i6oPeB6W25tJl68
+         rcU/rW7UGDb4/iJFK7IEm7z4PuyVodtFAOGJPKbLmNB9Z2r+Jp0ni0pCSPbQD1TZitWU
+         mAFwO7XmChDr/LhnR40H2rPWlUc0h/OpVcb3Hqy7a4tsxokCceczIEEE1l31Ppc8tAwR
+         /1LlV8ntnAa8xq97oAIragij755Nt1dz4E+mw05/yz+6IRrImJSs8slCCZdBQc/pJ3rs
+         O7DA==
+X-Gm-Message-State: APjAAAUI8oe6Z75dzkK+/TPdaEJnMxxAY63+F9j4tmgjw+Y+AArc5bBZ
+        anIMUF+Fz//NVSQSLZETqrNdnBzYzTG4RUOQfTk=
+X-Google-Smtp-Source: APXvYqw5c/xwE46KzdbN72xhUuGVm5XfBn8rCv+kNONWwVvTX5RdyxoYEgNmx6SDA704Vq4vZ66IFsZQmt7zRhOevNE=
+X-Received: by 2002:a54:4791:: with SMTP id o17mr2367280oic.70.1581419074785;
+ Tue, 11 Feb 2020 03:04:34 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200108151730.21022-1-mathias.nyman@linux.intel.com>
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFKsWRmVeSWpSXmKPExsWy7djPc7p+HU5xBsuvs1mcWzCD0eL8+Q3s
-        Fpd3zWGzmHF+H5PFomWtzBavPzSxWEzZfoTd4uWsNAcOj02rOtk83j4M8Jh3MtDjybkJzB6f
-        N8kFsEZx2aSk5mSWpRbp2yVwZex6rlbwyqjiw96/LA2M27W6GDk5JARMJBYfOsjYxcjFISSw
-        glHicPN9NgjnC6NE1/JWKOczo0TnhL/MXYwcYC3bbvtDxJczSjy8sYQFwnnLKNE07wkbyFxh
-        gVSJe4tXMYHYIgIeEhv3LmcFKWIWuMAo8aJxCliCTcBQouttF1gDr4CdRNe0zcwgNouAqsTS
-        P6dZQWxRgViJM8e+s0LUCEqcnPmEBeQKTgFniTNLfUHCzALyEs1bZzND2OISt57MZ4L4bRu7
-        xId5SRC2i0TbhoNQcWGJV8e3sEPYMhL/d4LUcwHZzUDfnFvLDuH0MEpcbprBCFFlLXHn3C82
-        kMXMApoS63fpQ0LCUeLZF34Ik0/ixltBiBP4JCZtmw4NK16JjjYhiBlqErOOr4PbevDCJeYJ
-        jEqzkPw1C8kzs5A8Mwth7QJGllWM4qmlxbnpqcWGeanlesWJucWleel6yfm5mxiBKej0v+Of
-        djB+vZR0iFGAg1GJh7ci0DFOiDWxrLgy9xCjBAezkgivpTRQiDclsbIqtSg/vqg0J7X4EKM0
-        B4uSOK/xopexQgLpiSWp2ampBalFMFkmDk6pBsbkb96/hOo7uXd/SX5W9E2ud4Wr0QP/ev7L
-        Fes32u3cO7Vf/86qmhdPNr6OtfjZp9XPdGvhjiVGj7cDE9y6gPypd5nq/4tInj1j7d6+4fbb
-        hgfXM3c/XLLmvVC06nVFo2dej9cr/+z9zzf1yi192ZBJBZmfz4u+kkmZPGOBze7u3W/25Jtm
-        MusrsRRnJBpqMRcVJwIAkPZiij0DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLIsWRmVeSWpSXmKPExsVy+t/xe7q+HU5xBm+WGlqcWzCD0eL8+Q3s
-        Fpd3zWGzmHF+H5PFomWtzBavPzSxWEzZfoTd4uWsNAcOj02rOtk83j4M8Jh3MtDjybkJzB6f
-        N8kFsEbp2RTll5akKmTkF5fYKkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb2aSk5mSWpRbp2yXo
-        Zex6rlbwyqjiw96/LA2M27W6GDk4JARMJLbd9u9i5OIQEljKKPF1UxdTFyMnUFxG4uS0BlYI
-        W1jiz7UuNoii14wSBzauZwdJCAukSrS+/skIYosIeEhs3LucFaSIWeASo8TVXZ+YQRJCAtUS
-        j59fBbPZBAwlut6CTOLk4BWwk+iathksziKgKrH0z2mwbaICsRLHtrexQ9QISpyc+YQF5FJO
-        AWeJM0t9QcLMAmYS8zY/ZIaw5SWat86GssUlbj2ZzzSBUWgWku5ZSFpmIWmZhaRlASPLKkaR
-        1NLi3PTcYkO94sTc4tK8dL3k/NxNjMCo23bs5+YdjJc2Bh9iFOBgVOLhrQh0jBNiTSwrrsw9
-        xCjBwawkwmspDRTiTUmsrEotyo8vKs1JLT7EaAr020RmKdHkfGBCyCuJNzQ1NLewNDQ3Njc2
-        s1AS5+0QOBgjJJCeWJKanZpakFoE08fEwSnVwNjPLPxQen/mn0qDSU6LUl0Flu39kGvLFm8i
-        o6fm9GlXts31gyapDCc+2LUZaK/VVT0SXbBMc1ro3J+ir6XyRQsTY/ZsXjtX9+sW4U8y9kWh
-        fs8rbojO03Vu2KSwTOL2/EcP7S56Zb3/ns/5pPn/kvYnfzNP212odNL1sF/aLZDhdvDLlp71
-        q5RYijMSDbWYi4oTATCNagvQAgAA
-X-CMS-MailID: 20200211105613eucas1p27cac4202c4287a5967b2ed988779d523
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200211105613eucas1p27cac4202c4287a5967b2ed988779d523
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200211105613eucas1p27cac4202c4287a5967b2ed988779d523
-References: <572bea6f-06d4-938a-802e-93386acf59d9@linux.intel.com>
-        <20200108151730.21022-1-mathias.nyman@linux.intel.com>
-        <CGME20200211105613eucas1p27cac4202c4287a5967b2ed988779d523@eucas1p2.samsung.com>
+References: <20200208155504.30243-1-bjorn@mork.no>
+In-Reply-To: <20200208155504.30243-1-bjorn@mork.no>
+From:   Kristian Evensen <kristian.evensen@gmail.com>
+Date:   Tue, 11 Feb 2020 12:04:23 +0100
+Message-ID: <CAKfDRXg0KyJpO+PgPT++DYS8C-ypMd3fpcoLOY3Duy60-zeFZA@mail.gmail.com>
+Subject: Re: [PATCH net-next] qmi_wwan: unconditionally reject 2 ep interfaces
+To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        linux-usb@vger.kernel.org,
+        Aleksander Morgado <aleksander@aleksander.es>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
+Hi Bj=C3=B8rn,
 
-On 08.01.2020 16:17, Mathias Nyman wrote:
-> xhci driver assumed that xHC controllers have at most one custom
-> supported speed table (PSI) for all usb 3.x ports.
-> Memory was allocated for one PSI table under the xhci hub structure.
+On Sat, Feb 8, 2020 at 4:55 PM Bj=C3=B8rn Mork <bjorn@mork.no> wrote:
 >
-> Turns out this is not the case, some controllers have a separate
-> "supported protocol capability" entry with a PSI table for each port.
-> This means each usb3 port can in theory support different custom speeds.
+> We have been using the fact that the QMI and DIAG functions
+> usually are the only ones with class/subclass/protocol being
+> ff/ff/ff on Quectel modems. This has allowed us to match the
+> QMI function without knowing the exact interface number,
+> which can vary depending on firmware configuration.
 >
-> To solve this cache all supported protocol capabilities with their PSI
-> tables in an array, and add pointers to the xhci port structure so that
-> every port points to its capability entry in the array.
+> The ability to silently reject the DIAG function, which is
+> usually handled by the option driver, is important for this
+> method to work.  This is done based on the knowledge that it
+> has exactly 2 bulk endpoints.  QMI function control interfaces
+> will have either 3 or 1 endpoint. This rule is universal so
+> the quirk condition can be removed.
 >
-> When creating the SuperSpeedPlus USB Device Capability BOS descriptor
-> for the xhci USB 3.1 roothub we for now will use only data from the
-> first USB 3.1 capable protocol capability entry in the array.
-> This could be improved later, this patch focuses resolving
-> the memory leak.
+> The fixed layouts known from the Gobi1k and Gobi2k modems
+> have been gradually replaced by more dynamic layouts, and
+> many vendors now use configurable layouts without changing
+> device IDs.  Renaming the class/subclass/protocol matching
+> macro makes it more obvious that this is now not Quectel
+> specific anymore.
 >
-> Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> Reported-by: Sajja Venkateswara Rao <VenkateswaraRao.Sajja@amd.com>
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> Cc: Kristian Evensen <kristian.evensen@gmail.com>
+> Cc: Aleksander Morgado <aleksander@aleksander.es>
+> Signed-off-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+> ---
+> What do you think, Kristian?  There is no real need to limit this
+> rule to Quectel modems, is there?  And from what I've understood,
+> it seems that most/all the upcoming X55 modems will have a
+> completely configurable layout.  Which means that we should
+> avoid macthing on interface number if we can.  And I believe we
+> can. I've not yet seen an example where ff/ff/ff would match
+> anything except QMI and DIAG.
 
-This patch landed in today's linux-next (20200211) and causes NULL 
-pointer dereference during second suspend/resume cycle on Samsung 
-Exynos5422-based (arm 32bit) Odroid XU3lite board:
+I am sorry for my late reply, your email had for some reason ended up
+in my spam filter. I agree with you reasoning and I think that making
+the Quectel-code generic is a good idea. I went through the modem I
+have, and could also not find any modems where the current
+Quectel-code would incorrectly match. FWIW:
 
-# time rtcwake -s10 -mmem
-rtcwake: wakeup from "mem" using /dev/rtc0 at Tue Feb 11 10:51:43 2020
-PM: suspend entry (deep)
-Filesystems sync: 0.012 seconds
-Freezing user space processes ... (elapsed 0.010 seconds) done.
-OOM killer disabled.
-Freezing remaining freezable tasks ... (elapsed 0.002 seconds) done.
-smsc95xx 1-1.1:1.0 eth0: entering SUSPEND2 mode
-wake enabled for irq 153
-wake enabled for irq 158
-samsung-pinctrl 13400000.pinctrl: Setting external wakeup interrupt 
-mask: 0xffffffe7
-Disabling non-boot CPUs ...
-IRQ 51: no longer affine to CPU1
-IRQ 52: no longer affine to CPU2
-s3c2410-wdt 101d0000.watchdog: watchdog disabled
-wake disabled for irq 158
-usb usb1: root hub lost power or was reset
-usb usb2: root hub lost power or was reset
-wake disabled for irq 153
-exynos-tmu 10060000.tmu: More trip points than supported by this TMU.
-exynos-tmu 10060000.tmu: 2 trip points should be configured in polling mode.
-exynos-tmu 10064000.tmu: More trip points than supported by this TMU.
-exynos-tmu 10064000.tmu: 2 trip points should be configured in polling mode.
-exynos-tmu 10068000.tmu: More trip points than supported by this TMU.
-exynos-tmu 10068000.tmu: 2 trip points should be configured in polling mode.
-exynos-tmu 1006c000.tmu: More trip points than supported by this TMU.
-exynos-tmu 1006c000.tmu: 2 trip points should be configured in polling mode.
-exynos-tmu 100a0000.tmu: More trip points than supported by this TMU.
-exynos-tmu 100a0000.tmu: 6 trip points should be configured in polling mode.
-usb usb3: root hub lost power or was reset
-s3c-rtc 101e0000.rtc: rtc disabled, re-enabling
-usb usb4: root hub lost power or was reset
-xhci-hcd xhci-hcd.8.auto: No ports on the roothubs?
-PM: dpm_run_callback(): platform_pm_resume+0x0/0x44 returns -12
-PM: Device xhci-hcd.8.auto failed to resume async: error -12
-hub 3-0:1.0: hub_ext_port_status failed (err = -32)
-hub 4-0:1.0: hub_ext_port_status failed (err = -32)
-usb 1-1: reset high-speed USB device number 2 using exynos-ehci
-usb 1-1.1: reset high-speed USB device number 3 using exynos-ehci
-OOM killer enabled.
-Restarting tasks ... done.
+Acked-by: Kristian Evensen <kristian.evensen@gmail.com>
 
-real    0m11.890s
-user    0m0.001s
-sys     0m0.679s
-root@target:~# PM: suspend exit
-mmc_host mmc0: Bus speed (slot 0) = 50000000Hz (slot req 400000Hz, 
-actual 396825HZ div = 63)
-mmc_host mmc0: Bus speed (slot 0) = 200000000Hz (slot req 200000000Hz, 
-actual 200000000HZ div = 0)
-mmc_host mmc0: Bus speed (slot 0) = 50000000Hz (slot req 52000000Hz, 
-actual 50000000HZ div = 0)
-mmc_host mmc0: Bus speed (slot 0) = 400000000Hz (slot req 200000000Hz, 
-actual 200000000HZ div = 1)
-smsc95xx 1-1.1:1.0 eth0: link up, 100Mbps, full-duplex, lpa 0xC1E1
-
-root@target:~#
-root@target:~# time rtcwake -s10 -mmem[   35.451572] vdd_ldo12: disabling
-
-rtcwake: wakeup from "mem" using /dev/rtc0 at Tue Feb 11 10:52:02 2020
-PM: suspend entry (deep)
-Filesystems sync: 0.004 seconds
-Freezing user space processes ... (elapsed 0.006 seconds) done.
-OOM killer disabled.
-Freezing remaining freezable tasks ... (elapsed 0.070 seconds) done.
-hub 4-0:1.0: hub_ext_port_status failed (err = -32)
-hub 3-0:1.0: hub_ext_port_status failed (err = -32)
-8<--- cut here ---
-Unable to handle kernel NULL pointer dereference at virtual address 00000014
-pgd = 4c26b54b
-[00000014] *pgd=00000000
-Internal error: Oops: 17 [#1] PREEMPT SMP ARM
-Modules linked in:
-CPU: 3 PID: 1468 Comm: kworker/u16:23 Not tainted 
-5.6.0-rc1-next-20200211 #268
-Hardware name: Samsung Exynos (Flattened Device Tree)
-Workqueue: events_unbound async_run_entry_fn
-PC is at xhci_suspend+0x12c/0x520
-LR is at 0xa6aa9898
-pc : [<c0724c90>]    lr : [<a6aa9898>]    psr: 60000093
-sp : ec401df8  ip : 0000001a  fp : c12e7864
-r10: 00000000  r9 : ecfb87b0  r8 : ecfb8220
-r7 : 00000000  r6 : 00000000  r5 : 00000004  r4 : ecfb81f0
-r3 : 00007d00  r2 : 00000001  r1 : 00000001  r0 : 00000000
-Flags: nZCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment none
-Control: 10c5387d  Table: 6bd4006a  DAC: 00000051
-Process kworker/u16:23 (pid: 1468, stack limit = 0x6e4b6fba)
-Stack: (0xec401df8 to 0xec402000)
-...
-[<c0724c90>] (xhci_suspend) from [<c061b4f4>] (dpm_run_callback+0xb4/0x3fc)
-[<c061b4f4>] (dpm_run_callback) from [<c061bd5c>] 
-(__device_suspend+0x134/0x7e8)
-[<c061bd5c>] (__device_suspend) from [<c061c42c>] (async_suspend+0x1c/0x94)
-[<c061c42c>] (async_suspend) from [<c0154bd0>] 
-(async_run_entry_fn+0x48/0x1b8)
-[<c0154bd0>] (async_run_entry_fn) from [<c0149b38>] 
-(process_one_work+0x230/0x7bc)
-[<c0149b38>] (process_one_work) from [<c014a108>] (worker_thread+0x44/0x524)
-[<c014a108>] (worker_thread) from [<c01511fc>] (kthread+0x130/0x164)
-[<c01511fc>] (kthread) from [<c01010b4>] (ret_from_fork+0x14/0x20)
-Exception stack(0xec401fb0 to 0xec401ff8)
-...
----[ end trace c72caf6487666442 ]---
-note: kworker/u16:23[1468] exited with preempt_count 1
-
-Reverting it fixes the NULL pointer issue. I can provide more 
-information or do some other tests. Just let me know what will help to 
-fix it.
-
- > ...
-
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+BR,
+Kristian
