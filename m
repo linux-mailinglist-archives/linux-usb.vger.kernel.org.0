@@ -2,105 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E6A1158D2A
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 12:04:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23372158D3F
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 12:12:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728167AbgBKLEg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Feb 2020 06:04:36 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:45406 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727561AbgBKLEf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 06:04:35 -0500
-Received: by mail-oi1-f193.google.com with SMTP id v19so12361989oic.12;
-        Tue, 11 Feb 2020 03:04:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=QijJK15dIuRzW40NdnOBenGU/zvgd3ESluIZX8bbPoA=;
-        b=KgNc/h5ARV+DaU+Na3hHmktyVZfA9T01RIwwCkl732spGIg6MTlUlQ3XwzMDXq+GbP
-         EpOGhCQr/fHhhsIg3LoNTfThGTwKwoZAwG/Pd/1MNT5wxaylHrGEZ3G7pAK9u9ucKfBb
-         da+5bke8uus7sb6hR/5hLJLVlnU085xQmvC+K7juC3e0BthBZRGfYVnds+/xMfkCAqOd
-         vNDD4FlQA8IXS9XiclDABsz8nOFQIQGgidaESYp/X+UeE5ujKjOBq2exktvI+NpgON5s
-         aGVrNE+TpfAZ7qglGQJZldTQqWxyd8FqbVl7a2LkKwylx/vvq+xg4LL2VdZWIc9C2E0A
-         iP4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QijJK15dIuRzW40NdnOBenGU/zvgd3ESluIZX8bbPoA=;
-        b=jKmlmBqEN2MuZD0r9RvbDHqAocJXGe89auSj6mqfL7blF2Ku4FNpWda/9o0GQo2xNQ
-         Gp5wVDXrU491Gv0SRUA60A6/gUE3r3xn2WA/DBA3xrANICxpUq2f4i6oPeB6W25tJl68
-         rcU/rW7UGDb4/iJFK7IEm7z4PuyVodtFAOGJPKbLmNB9Z2r+Jp0ni0pCSPbQD1TZitWU
-         mAFwO7XmChDr/LhnR40H2rPWlUc0h/OpVcb3Hqy7a4tsxokCceczIEEE1l31Ppc8tAwR
-         /1LlV8ntnAa8xq97oAIragij755Nt1dz4E+mw05/yz+6IRrImJSs8slCCZdBQc/pJ3rs
-         O7DA==
-X-Gm-Message-State: APjAAAUI8oe6Z75dzkK+/TPdaEJnMxxAY63+F9j4tmgjw+Y+AArc5bBZ
-        anIMUF+Fz//NVSQSLZETqrNdnBzYzTG4RUOQfTk=
-X-Google-Smtp-Source: APXvYqw5c/xwE46KzdbN72xhUuGVm5XfBn8rCv+kNONWwVvTX5RdyxoYEgNmx6SDA704Vq4vZ66IFsZQmt7zRhOevNE=
-X-Received: by 2002:a54:4791:: with SMTP id o17mr2367280oic.70.1581419074785;
- Tue, 11 Feb 2020 03:04:34 -0800 (PST)
+        id S1727835AbgBKLMI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Feb 2020 06:12:08 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:17571 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727653AbgBKLMI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 06:12:08 -0500
+Received: from droid10.amlogic.com (10.18.11.213) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.1591.10; Tue, 11 Feb 2020
+ 19:12:46 +0800
+From:   Hanjie Lin <hanjie.lin@amlogic.com>
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>
+CC:     Hanjie Lin <hanjie.lin@amlogic.com>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Carlo Caione <carlo@caione.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Yue Wang <yue.wang@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+Subject: [PATCH v8 0/3] arm64: meson: Add support for USB on Amlogic A1
+Date:   Tue, 11 Feb 2020 19:10:51 +0800
+Message-ID: <1581419454-12667-1-git-send-email-hanjie.lin@amlogic.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20200208155504.30243-1-bjorn@mork.no>
-In-Reply-To: <20200208155504.30243-1-bjorn@mork.no>
-From:   Kristian Evensen <kristian.evensen@gmail.com>
-Date:   Tue, 11 Feb 2020 12:04:23 +0100
-Message-ID: <CAKfDRXg0KyJpO+PgPT++DYS8C-ypMd3fpcoLOY3Duy60-zeFZA@mail.gmail.com>
-Subject: Re: [PATCH net-next] qmi_wwan: unconditionally reject 2 ep interfaces
-To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-Cc:     Network Development <netdev@vger.kernel.org>,
-        linux-usb@vger.kernel.org,
-        Aleksander Morgado <aleksander@aleksander.es>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Originating-IP: [10.18.11.213]
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Bj=C3=B8rn,
+This patchset adds support for USB on Amlogic A1 SoCs.
 
-On Sat, Feb 8, 2020 at 4:55 PM Bj=C3=B8rn Mork <bjorn@mork.no> wrote:
->
-> We have been using the fact that the QMI and DIAG functions
-> usually are the only ones with class/subclass/protocol being
-> ff/ff/ff on Quectel modems. This has allowed us to match the
-> QMI function without knowing the exact interface number,
-> which can vary depending on firmware configuration.
->
-> The ability to silently reject the DIAG function, which is
-> usually handled by the option driver, is important for this
-> method to work.  This is done based on the knowledge that it
-> has exactly 2 bulk endpoints.  QMI function control interfaces
-> will have either 3 or 1 endpoint. This rule is universal so
-> the quirk condition can be removed.
->
-> The fixed layouts known from the Gobi1k and Gobi2k modems
-> have been gradually replaced by more dynamic layouts, and
-> many vendors now use configurable layouts without changing
-> device IDs.  Renaming the class/subclass/protocol matching
-> macro makes it more obvious that this is now not Quectel
-> specific anymore.
->
-> Cc: Kristian Evensen <kristian.evensen@gmail.com>
-> Cc: Aleksander Morgado <aleksander@aleksander.es>
-> Signed-off-by: Bj=C3=B8rn Mork <bjorn@mork.no>
-> ---
-> What do you think, Kristian?  There is no real need to limit this
-> rule to Quectel modems, is there?  And from what I've understood,
-> it seems that most/all the upcoming X55 modems will have a
-> completely configurable layout.  Which means that we should
-> avoid macthing on interface number if we can.  And I believe we
-> can. I've not yet seen an example where ff/ff/ff would match
-> anything except QMI and DIAG.
+Because of my mistake I fogot to add PHY maintainer(Kishon) to mail list in
+before versions, so I have to send this v8 version again(only with dwc3
+bindings and driver patch removed).
+Sorry for this again.
 
-I am sorry for my late reply, your email had for some reason ended up
-in my spam filter. I agree with you reasoning and I think that making
-the Quectel-code generic is a good idea. I went through the modem I
-have, and could also not find any modems where the current
-Quectel-code would incorrectly match. FWIW:
+This patchset is composed with :
+- bindings of the PHY
+- bindings of the USB Control Glue(already accepted in v7)
+- PHY Driver
+- USB Control Glue driver(already accepted in v7)
+- dts of the PHY and USB Controller
 
-Acked-by: Kristian Evensen <kristian.evensen@gmail.com>
+The Amlogic A1 USB Complex is composed of :
+- 1 DWC3 USB controller for USB2 Host functionality
+- 1 USB2 PHY for USB2 Host functionality
 
-BR,
-Kristian
+The USB Control Glue setups the clocks and the reset about DWC3 USB
+controller, and binds to the USB2 PHY. It also configures the 8bit
+UTMI interfaces for the USB2 PHY, including setting USB2 phy mode.
+
+The USB2 PHY driver initializes the phy analog settings, phy PLL 
+setup and phy tuning.
+
+This patchset is based on A1 clock/power domain/reset series at [0].
+
+Changes since v1:[1]
+ - integrate glue and phy drivers into g12a's
+ 
+Changes since v2:[2]
+ - modify amlogic,meson-g12a-usb-ctrl.yaml with dt_binding_check tool
+ - phy/glue driver use of_device_get_match_data to distinguish A1 from G12A
+
+Changes since v3:[3]
+ - fix bindings mistakes of the PHY according Rob's comments
+ - fix bindings mistakes of the USB Control Glue according Rob's comments
+ - phy driver add xtal_usb_phy clock which moved from glue driver
+ - glue driver use otg_mode instead of soc_id to support otg function
+
+Changes since v4:[4]
+ - phy driver revert reset-names changes
+ - phy driver change clock name to "xtal" to consistent with g12a
+ - glue driver add drvdata otg_switch_supported
+
+Changes since v5:[5]
+ - integrate phy bindings into g12a
+ - modify glue bindings format according to martin's advices
+ - glue driver add dwc3_meson_g12a_otg_init() do otg related work
+ - glue driver add clk_bulk_disable_unprepare() in remove
+
+Changes since v6:[6]
+ - fix glue bindings dt_check_bindings error.
+ - squash phy and glue dts patches and set usb status to disabled default
+
+Changes since v7:[7]
+ - remove already accepted dwc3 bindings and driver patch.
+ 
+[0]
+https://patchwork.kernel.org/project/linux-amlogic/list/?series=185477
+https://patchwork.kernel.org/project/linux-amlogic/list/?series=180055
+https://patchwork.kernel.org/project/linux-amlogic/list/?series=189643
+
+[1] : https://lore.kernel.org/linux-amlogic/1574405757-76184-1-git-send-email-hanjie.lin@amlogic.com
+
+[2] : https://lore.kernel.org/linux-amlogic/1576636944-196192-1-git-send-email-hanjie.lin@amlogic.com
+
+[3] : https://lore.kernel.org/linux-amlogic/1577428606-69855-1-git-send-email-hanjie.lin@amlogic.com
+
+[4] : https://lore.kernel.org/linux-amlogic/1578537045-23260-1-git-send-email-hanjie.lin@amlogic.com
+
+[5] : https://lore.kernel.org/linux-amlogic/1578634957-54826-1-git-send-email-hanjie.lin@amlogic.com
+
+[6] : https://lore.kernel.org/linux-amlogic/1579220504-110067-1-git-send-email-hanjie.lin@amlogic.com
+
+[7] : https://lore.kernel.org/linux-amlogic/1579489086-157767-1-git-send-email-hanjie.lin@amlogic.com
+
+Hanjie Lin (3):
+  dt-bindings: phy: Add Amlogic A1 USB2 PHY Bindings
+  phy: amlogic: Add Amlogic A1 USB2 PHY Driver
+  arm64: dts: meson: a1: Enable USB2 PHY and DWC3 controller
+
+ .../bindings/phy/amlogic,meson-g12a-usb2-phy.yaml  | 15 ++++
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi          | 43 +++++++++++
+ drivers/phy/amlogic/phy-meson-g12a-usb2.c          | 85 +++++++++++++++-------
+ 3 files changed, 117 insertions(+), 26 deletions(-)
+
+-- 
+2.7.4
+
