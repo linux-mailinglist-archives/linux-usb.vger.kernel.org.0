@@ -2,130 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 961AE158D45
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 12:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAC8158D82
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 12:25:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728531AbgBKLMM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Feb 2020 06:12:12 -0500
-Received: from mail-sh.amlogic.com ([58.32.228.43]:17571 "EHLO
-        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727817AbgBKLMM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 06:12:12 -0500
-Received: from droid10.amlogic.com (10.18.11.213) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server id 15.1.1591.10; Tue, 11 Feb 2020
- 19:12:47 +0800
-From:   Hanjie Lin <hanjie.lin@amlogic.com>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>
-CC:     Hanjie Lin <hanjie.lin@amlogic.com>,
-        Yue Wang <yue.wang@amlogic.com>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Carlo Caione <carlo@caione.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Qiufang Dai <qiufang.dai@amlogic.com>,
-        Jian Hu <jian.hu@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
-Subject: [PATCH v8 3/3] arm64: dts: meson: a1: Enable USB2 PHY and DWC3 controller
-Date:   Tue, 11 Feb 2020 19:10:54 +0800
-Message-ID: <1581419454-12667-4-git-send-email-hanjie.lin@amlogic.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1581419454-12667-1-git-send-email-hanjie.lin@amlogic.com>
-References: <1581419454-12667-1-git-send-email-hanjie.lin@amlogic.com>
+        id S1728218AbgBKLZf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Feb 2020 06:25:35 -0500
+Received: from mga17.intel.com ([192.55.52.151]:1071 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727639AbgBKLZf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 Feb 2020 06:25:35 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Feb 2020 03:25:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,428,1574150400"; 
+   d="scan'208";a="347261815"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Feb 2020 03:25:32 -0800
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [PATCH 0/6] typec changes
+Date:   Tue, 11 Feb 2020 14:25:25 +0300
+Message-Id: <20200211112531.86510-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.18.11.213]
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable USB2 PHY and DWC3 controller for Meson A1 SoC.
+Hi Greg,
 
-Signed-off-by: Yue Wang <yue.wang@amlogic.com>
-Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
----
- arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 43 +++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+Here all the "trivial" changes I have for the USB Type-C class at this
+stage. The first patch I already send before [1]. You told me to leave
+the checks in, so I did. The rest of the patches in that series were
+about USB4, which I'm not including here. I decided to propose them
+separately.
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-index 6fdc0dd..3b7ca50 100644
---- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-@@ -6,6 +6,9 @@
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/power/meson-a1-power.h>
-+#include <dt-bindings/reset/amlogic,meson-a1-reset.h>
-+#include <dt-bindings/clock/a1-pll-clkc.h>
-+#include <dt-bindings/clock/a1-clkc.h>
- 
- / {
- 	compatible = "amlogic,a1";
-@@ -100,6 +103,17 @@
- 				#power-domain-cells = <1>;
- 				status = "okay";
- 			};
-+
-+			usb2_phy1: phy@40000 {
-+				compatible = "amlogic,a1-usb2-phy";
-+				clocks = <&clkc_periphs CLKID_XTAL_USB_PHY>;
-+				clock-names = "xtal";
-+				reg = <0x0 0x40000 0x0 0x2000>;
-+				resets = <&reset RESET_USBPHY>;
-+				reset-names = "phy";
-+				#phy-cells = <0>;
-+				power-domains = <&pwrc PWRC_USB_ID>;
-+			};
- 		};
- 
- 		gic: interrupt-controller@ff901000 {
-@@ -114,6 +128,35 @@
- 			#interrupt-cells = <3>;
- 			#address-cells = <0>;
- 		};
-+
-+		usb: usb@ffe09000 {
-+			status = "disabled";
-+			compatible = "amlogic,meson-a1-usb-ctrl";
-+			reg = <0x0 0xffe09000 0x0 0xa0>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+
-+			clocks = <&clkc_periphs CLKID_USB_CTRL>,
-+				 <&clkc_periphs CLKID_USB_BUS>,
-+				 <&clkc_periphs CLKID_XTAL_USB_CTRL>;
-+			clock-names = "usb_ctrl", "usb_bus", "xtal_usb_ctrl";
-+			resets = <&reset RESET_USBCTRL>;
-+
-+			dr_mode = "host";
-+
-+			phys = <&usb2_phy1>;
-+			phy-names = "usb2-phy1";
-+
-+			dwc3: usb@ff400000 {
-+				compatible = "snps,dwc3";
-+				reg = <0x0 0xff400000 0x0 0x100000>;
-+				interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
-+				dr_mode = "host";
-+				snps,dis_u2_susphy_quirk;
-+				snps,quirk-frame-length-adjustment = <0x20>;
-+			};
-+		};
- 	};
- 
- 	timer {
+The third patch in this series make's it possible to swap the power
+role even when USB Power Delivery is not supported since the latest
+specification now allows it. The rest of the patches are cleanups.
+
+Let me know if you want me to change anything.
+
+thanks,
+
+[1] https://lore.kernel.org/linux-usb/20191230142611.24921-1-heikki.krogerus@linux.intel.com/
+
+Heikki Krogerus (6):
+  usb: typec: Make the attributes read-only when writing is not possible
+  usb: typec: Hide the port_type attribute when it's not supported
+  usb: typec: Allow power role swapping even without USB PD
+  usb: typec: Fix the description of struct typec_capability
+  usb: typec: altmode: Remove the notification chain
+  usb: typec: mux: Drop support for device name matching
+
+ Documentation/ABI/testing/sysfs-class-typec |  14 +-
+ Documentation/driver-api/usb/typec_bus.rst  |  22 +---
+ drivers/usb/typec/bus.c                     |  12 +-
+ drivers/usb/typec/bus.h                     |   2 -
+ drivers/usb/typec/class.c                   | 137 +++++++++-----------
+ drivers/usb/typec/mux.c                     |  25 +---
+ include/linux/usb/typec.h                   |   2 -
+ include/linux/usb/typec_altmode.h           |   7 -
+ 8 files changed, 77 insertions(+), 144 deletions(-)
+
 -- 
-2.7.4
+2.25.0
 
