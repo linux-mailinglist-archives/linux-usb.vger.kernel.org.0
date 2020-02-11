@@ -2,93 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5003B159955
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 20:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF30A15995A
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 20:03:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729187AbgBKTCc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Feb 2020 14:02:32 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:33986 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727781AbgBKTCc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 14:02:32 -0500
-Received: (qmail 19069 invoked by uid 2102); 11 Feb 2020 14:02:30 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 11 Feb 2020 14:02:30 -0500
-Date:   Tue, 11 Feb 2020 14:02:30 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Martin Townsend <mtownsend1973@gmail.com>
-cc:     linux-usb@vger.kernel.org
-Subject: Re: Enumerating USB devices in the Bootloader
-In-Reply-To: <CABatt_x5unKx-O0WENEHfm7az-pPXO8sayk+jWuYrksbEgghnA@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.2002111400150.1574-100000@iolanthe.rowland.org>
+        id S1729229AbgBKTDT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Feb 2020 14:03:19 -0500
+Received: from cable.insite.cz ([84.242.75.189]:58420 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727781AbgBKTDT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 Feb 2020 14:03:19 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id CD492A1A40B05;
+        Tue, 11 Feb 2020 20:03:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1581447795; bh=Fj+yyRNqIbJTBJbrLtVICSj8Lc9/UJwAJKMJ7vuyQR0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=bQoS/iP4u+Hbqb+GDR2wk2qDfpCZQ49GVFIqwM+P1otpNZoxIpmF1jjUoJrc9AvXL
+         PUghw+9jns2+QDAe68AH7b4SzSoWpOKInW1M5jCHt5x8ZDaWzrbj1InVRNR+mX23nR
+         grZhJdpqwhNkeRsI80c6SLjqGnC8yuylQ23zU/eM=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id PYa708ZL5M4h; Tue, 11 Feb 2020 20:03:10 +0100 (CET)
+Received: from [192.168.105.151] (ip28.insite.cz [81.0.237.28])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id AA6FDA1A40B04;
+        Tue, 11 Feb 2020 20:03:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1581447789; bh=Fj+yyRNqIbJTBJbrLtVICSj8Lc9/UJwAJKMJ7vuyQR0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=fYWGv86cEwqdAPsesPp9uAPCUfLOf5heEIZg+k+xhp4f5al6D5gpgGpRtUVKV4TEV
+         Un82xCTFSkXw7Xl8m7+PlpggEmOcJxU8l+y3apwX7QVSg+clGP23xSMPX594Q52uvY
+         KDy811hF8p9FhSD2UdgUziD/uvEjdBL+17xzEH7s=
+Subject: Re: usb:gadget:f_uac2: EP OUT is adaptive instead of async
+To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+References: <4bd36708-0ade-fbd7-5eec-5b8df7b3f2ee@ivitera.com>
+ <CAB=otbRMQ6eCD0U-2zDCQvN37VRhBta_9_+9u4FwEbY4St=AgQ@mail.gmail.com>
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+Message-ID: <f3114cb0-dc77-b4a6-f70b-2e72c9e87ce2@ivitera.com>
+Date:   Tue, 11 Feb 2020 20:02:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <CAB=otbRMQ6eCD0U-2zDCQvN37VRhBta_9_+9u4FwEbY4St=AgQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 11 Feb 2020, Martin Townsend wrote:
+Hi Ruslan,
 
-> On Mon, Feb 10, 2020 at 3:12 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Mon, 10 Feb 2020, Martin Townsend wrote:
-> >
-> > > Hi,
-> > >
-> > > We are using the USB mass storage gadget driver in Linux and
-> > > everything is working fairly well but sometimes we are finding that we
-> > > are exceeding the 100mA limit (which I think is the default the host
-> > > will provide) before Linux has had a change to enumerate the USB
-> > > device at which point we ask for 500mA.  We have tried to reduce the
-> > > power by ensuring all clocks are turned off, devices not used disabled
-> > > etc but can't seem to satisfy the 100mA limit.  We were thinking that
-> > > maybe we could enumerate the USB device during U-Boot at which point
-> > > we know we are under the 100mA limit.  Does anyone know a reason why
-> > > this would not work?
-> >
-> > It won't work because U-Boot isn't the kernel.  When the kernel takes
-> > over the USB controller, it will force the host to re-enumerate the
-> > gadget -- and you will be right back where you started.
-> >
-> > The only way to make this work would be to prevent U-Boot from ever
-> > actually booting the Linux kernel.  This probably isn't the way you
-> > want your device to behave, though.
-> >
-> > > would at some point from U-Boot enumerating a new
-> > > bMaxPower would the connection be reset and drop back to 100mA during
-> > > the kernel startup? Are there any considerations that we would need to
-> > > take care of in the kernel for this to work?
-> >
-> > If you can't satisfy the 100-mA current limit then you should make your
-> > device be self-powered instead of relying on power delivered over the
-> > USB bus.
-> >
-> > Be aware also that bus-powered USB-2 hubs can't deliver 500 mA to their
-> > downstream ports.  They are always limited to 100 mA or less.  If your
-> > gadget was plugged into one of them, it wouldn't be able to work at
-> > all.
-> >
-> > Alan Stern
-> >
+Dne 11. 02. 20 v 17:10 Ruslan Bilovol napsal(a):
+> On Thu, Feb 6, 2020 at 3:35 PM Pavel Hofman <pavel.hofman@ivitera.com> wrote:
+>>
+>> Hi,
+>>
+>> The existing UAC2 implementation presents itself as asynchronous
+>> USB_ENDPOINT_SYNC_ASYNC
+>> https://github.com/torvalds/linux/blob/master/drivers/usb/gadget/function/f_uac2.c#L276
+>> +
+>> https://github.com/torvalds/linux/blob/master/drivers/usb/gadget/function/f_uac2.c#L285
+>> .
+>>
+>> However:
+>> 1) The function does not define any feedback endpoint
+>>
+>> 2) IMO in reality it is adaptive - the g_audio capture device accepts
+>> any data passed by the USB host, the USB host is the one which defines
+>> the data pace.
+>>
+>> While Linux and reportedly OSX accept the async EP OUT without explicit
+>> feedback EP IN, Windows does not.
+>>
+>> Simply changing USB_ENDPOINT_SYNC_ASYNC to USB_ENDPOINT_SYNC_ADAPTIVE
+>> for the FS and HS output endpoints fixes the windows problem and IMO
+>> corrects the config to reflect real function.
+>>
+>> There are multiple projects underway adding the async feedback EP, but
+>> in the meantime I think the .bmAttributes information should be changed
+>> as above, making the device usable in Windows for everyone.
 > 
-> Alan,
-> Thank you for the swift response.  On the first point, if we modify
-> the kernel to re-enumerate the same bMaxPower of 500mA would this
-> still be a problem? ie is there a period when the kernel takes over
-> the USB controller that the Host side would go back to 100mA after
-> U-Boot negotiates the 500mA?
+> Are you working on async feedback EP implementation? I'm interested in that
+> feature and I can implement it soon but do not want to do double work
+> if somebody
+> is already working on it and will send to the community soon
 
-Yes, there is.  Remember, the kernel knows nothing of what U-Boot has 
-done.  It has to start fresh.
+I would be happy if you focused on the feedback. I want to solve the
+g_audio usability somehow first
+https://lore.kernel.org/linux-usb/df2eeff0-ca9c-35f9-2e72-8426b2cf72c9@ivitera.com/
+as it would allow easy usage of the existing adaptive gadget version.
 
->  The last point you make is a very good
-> one and something I hadn't thought of. If we can overcome the first
-> hurdle I think we would be happy for it to be a requirement for the
-> device to be plugged directly into a PC.
+The feedback - I have been shown a simple implementation which is not
+public and is not using the g_audio alsa device on the other side.
 
-Or into a powered hub.
+IMO the key issue is designing the async feedback to accept feedback
+values from userspace as well as from any third-party kernel module. Why
+userspace? The stream provided by the g_audio capture device  can be
+output to a real master-clock alsa device (e.g. after synchronous
+resampling), be sent by network to some master-clock device, many other
+options possible. Any master-clock output device/ userspace sink should
+be able to provide data for calculating proper up-to-date feedback value
+for the slaved UAC2 gadget.
 
-Alan Stern
+I have done a few trials with master alsa output device -
 
+https://www.diyaudio.com/forums/pc-based/342070-linux-usb-audio-gadget-rpi4-otg.html#post5909816
+
+
+https://www.diyaudio.com/forums/pc-based/342070-linux-usb-audio-gadget-rpi4-otg.html#post5910911
+
+Details for alsa-lib are discussed in
+https://www.spinics.net/lists/alsa-devel/msg96781.html
+
+
+This is a solution I need - syncing the UAC2 gadget to master clock of
+real alsa soundcard . But again - I think the solution should be
+flexible to support any source of feedback information, be it in kernel
+or from userspace.
+
+Perhpas we should open a new thread on the async feedback, IMO it will
+be long :-)
+
+Thanks,
+
+Pavel.
