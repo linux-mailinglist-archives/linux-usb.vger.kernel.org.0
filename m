@@ -2,229 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC1D1587CD
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 02:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E93E1589C5
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 06:50:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727595AbgBKBQN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Feb 2020 20:16:13 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:49848 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727505AbgBKBQN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 20:16:13 -0500
-Received: by mail-io1-f69.google.com with SMTP id v11so5941807iop.16
-        for <linux-usb@vger.kernel.org>; Mon, 10 Feb 2020 17:16:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=C4ZSySAadciP/qy5lHe+8m4JJ/rKCTer5ZGKdDebbL0=;
-        b=KoJZOkR7R5OZTTukTgu2HjFbC7ijRt+7arsRL9PpTBYgakukj86P+IZTAB3TOy6+4r
-         Z7lanZh7PD9MUQ3p5n/QAQYlYflr/fZ2nHPm3h7jdIbLXWMj2wnBFSmcqrbsn9jLf9px
-         t7RCihZq2l6sFSu9Cfhwlra5QbXW4cJXGphmrliWerIqOxDoE19JtL0neqLJvyaYugvp
-         hWedDqDRYHPf6w0+wHTR/pq0WLAu67vaBm3ggIs8Ro2HP1oNrVCF59+zzZdFj9IRg1JM
-         akEbOQJyYHgkkRZhnppHE46JEiFPatBta4VSAElFDnKYe7T+vM0SpGvldL9fzIxff4FS
-         YadQ==
-X-Gm-Message-State: APjAAAXG/wksO0UwLQ3sN/jcJOr5zKETp6wXb18VG3QkkNYf7I6atfW6
-        APH9vicvGPRMw2mXamsz5TsRuau3bQUQKCsRsbHtiI5I3nYK
-X-Google-Smtp-Source: APXvYqwsOT/OwXGXrX7P8JU//4vXFQ8QPjqEYzAvGCMjyLsMo6zisZL5EM4kfxLU0VJ/pqwzmXj/HXZ1oJjwLVRKdrIhVcb4VKKJ
+        id S1727594AbgBKFuE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Feb 2020 00:50:04 -0500
+Received: from funyu.konbu.org ([51.15.241.64]:43116 "EHLO funyu.konbu.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726942AbgBKFuE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 Feb 2020 00:50:04 -0500
+Received: from tungsten (90.203.49.163.rev.vmobile.jp [163.49.203.90])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by funyu.konbu.org (Postfix) with ESMTPSA id 070652885E1;
+        Tue, 11 Feb 2020 05:49:57 +0000 (UTC)
+Date:   Tue, 11 Feb 2020 14:49:53 +0900
+From:   Boris ARZUR <boris@konbu.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-usb@vger.kernel.org,
+        FelipeBalbi <felipe.balbi@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        William Wu <william.wu@rock-chips.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>
+Subject: Re: [PATCH] usb: dwc2: extend treatment for incomplete transfer
+Message-ID: <20200211054953.GA2401@tungsten>
+References: <20200210213906.GA24079@roeck-us.net>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:b206:: with SMTP id b6mr11661758iof.299.1581383772669;
- Mon, 10 Feb 2020 17:16:12 -0800 (PST)
-Date:   Mon, 10 Feb 2020 17:16:12 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000610eb059e429abd@google.com>
-Subject: KASAN: slab-out-of-bounds Write in betop_probe
-From:   syzbot <syzbot+07efed3bc5a1407bd742@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
-        jikos@kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200210213906.GA24079@roeck-us.net>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hello Guenter,
 
-syzbot found the following crash on:
-
-HEAD commit:    e5cd56e9 usb: gadget: add raw-gadget interface
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=1517fed9e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8cff427cc8996115
-dashboard link: https://syzkaller.appspot.com/bug?extid=07efed3bc5a1407bd742
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=147026b5e00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1683b6b5e00000
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+07efed3bc5a1407bd742@syzkaller.appspotmail.com
-
-betop 0003:20BC:5500.0001: unknown main item tag 0x0
-betop 0003:20BC:5500.0001: hidraw0: USB HID v0.00 Device [HID 20bc:5500] on usb-dummy_hcd.0-1/input0
-==================================================================
-BUG: KASAN: slab-out-of-bounds in set_bit include/asm-generic/bitops/instrumented-atomic.h:28 [inline]
-BUG: KASAN: slab-out-of-bounds in betopff_init drivers/hid/hid-betopff.c:99 [inline]
-BUG: KASAN: slab-out-of-bounds in betop_probe+0x396/0x570 drivers/hid/hid-betopff.c:134
-Write of size 8 at addr ffff8881d4f43ac0 by task kworker/1:2/94
-
-CPU: 1 PID: 94 Comm: kworker/1:2 Not tainted 5.5.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
- __kasan_report.cold+0x37/0x77 mm/kasan/report.c:506
- kasan_report+0xe/0x20 mm/kasan/common.c:641
- check_memory_region_inline mm/kasan/generic.c:185 [inline]
- check_memory_region+0x152/0x1c0 mm/kasan/generic.c:192
- set_bit include/asm-generic/bitops/instrumented-atomic.h:28 [inline]
- betopff_init drivers/hid/hid-betopff.c:99 [inline]
- betop_probe+0x396/0x570 drivers/hid/hid-betopff.c:134
- hid_device_probe+0x2be/0x3f0 drivers/hid/hid-core.c:2261
- really_probe+0x290/0xac0 drivers/base/dd.c:551
- driver_probe_device+0x223/0x350 drivers/base/dd.c:724
- __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:831
- bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
- __device_attach+0x217/0x390 drivers/base/dd.c:897
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0x1459/0x1bf0 drivers/base/core.c:2487
- hid_add_device drivers/hid/hid-core.c:2417 [inline]
- hid_add_device+0x33c/0x9a0 drivers/hid/hid-core.c:2366
- usbhid_probe+0xa81/0xfa0 drivers/hid/usbhid/hid-core.c:1386
- usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:361
- really_probe+0x290/0xac0 drivers/base/dd.c:551
- driver_probe_device+0x223/0x350 drivers/base/dd.c:724
- __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:831
- bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
- __device_attach+0x217/0x390 drivers/base/dd.c:897
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0x1459/0x1bf0 drivers/base/core.c:2487
- usb_set_configuration+0xe47/0x17d0 drivers/usb/core/message.c:2023
- generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
- usb_probe_device+0xaf/0x140 drivers/usb/core/driver.c:266
- really_probe+0x290/0xac0 drivers/base/dd.c:551
- driver_probe_device+0x223/0x350 drivers/base/dd.c:724
- __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:831
- bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
- __device_attach+0x217/0x390 drivers/base/dd.c:897
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0x1459/0x1bf0 drivers/base/core.c:2487
- usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2538
- hub_port_connect drivers/usb/core/hub.c:5185 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5325 [inline]
- port_event drivers/usb/core/hub.c:5471 [inline]
- hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5553
- process_one_work+0x94b/0x1620 kernel/workqueue.c:2264
- worker_thread+0x96/0xe20 kernel/workqueue.c:2410
- kthread+0x318/0x420 kernel/kthread.c:255
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Allocated by task 94:
- save_stack+0x1b/0x80 mm/kasan/common.c:72
- set_track mm/kasan/common.c:80 [inline]
- __kasan_kmalloc mm/kasan/common.c:515 [inline]
- __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:488
- kmalloc include/linux/slab.h:556 [inline]
- kzalloc include/linux/slab.h:670 [inline]
- hidraw_connect+0x4b/0x3e0 drivers/hid/hidraw.c:521
- hid_connect+0x5c7/0xbb0 drivers/hid/hid-core.c:1937
- hid_hw_start drivers/hid/hid-core.c:2033 [inline]
- hid_hw_start+0xa2/0x130 drivers/hid/hid-core.c:2024
- betop_probe+0xbc/0x570 drivers/hid/hid-betopff.c:128
- hid_device_probe+0x2be/0x3f0 drivers/hid/hid-core.c:2261
- really_probe+0x290/0xac0 drivers/base/dd.c:551
- driver_probe_device+0x223/0x350 drivers/base/dd.c:724
- __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:831
- bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
- __device_attach+0x217/0x390 drivers/base/dd.c:897
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0x1459/0x1bf0 drivers/base/core.c:2487
- hid_add_device drivers/hid/hid-core.c:2417 [inline]
- hid_add_device+0x33c/0x9a0 drivers/hid/hid-core.c:2366
- usbhid_probe+0xa81/0xfa0 drivers/hid/usbhid/hid-core.c:1386
- usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:361
- really_probe+0x290/0xac0 drivers/base/dd.c:551
- driver_probe_device+0x223/0x350 drivers/base/dd.c:724
- __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:831
- bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
- __device_attach+0x217/0x390 drivers/base/dd.c:897
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0x1459/0x1bf0 drivers/base/core.c:2487
- usb_set_configuration+0xe47/0x17d0 drivers/usb/core/message.c:2023
- generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
- usb_probe_device+0xaf/0x140 drivers/usb/core/driver.c:266
- really_probe+0x290/0xac0 drivers/base/dd.c:551
- driver_probe_device+0x223/0x350 drivers/base/dd.c:724
- __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:831
- bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
- __device_attach+0x217/0x390 drivers/base/dd.c:897
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0x1459/0x1bf0 drivers/base/core.c:2487
- usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2538
- hub_port_connect drivers/usb/core/hub.c:5185 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5325 [inline]
- port_event drivers/usb/core/hub.c:5471 [inline]
- hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5553
- process_one_work+0x94b/0x1620 kernel/workqueue.c:2264
- worker_thread+0x96/0xe20 kernel/workqueue.c:2410
- kthread+0x318/0x420 kernel/kthread.c:255
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Freed by task 12:
- save_stack+0x1b/0x80 mm/kasan/common.c:72
- set_track mm/kasan/common.c:80 [inline]
- kasan_set_free_info mm/kasan/common.c:337 [inline]
- __kasan_slab_free+0x117/0x160 mm/kasan/common.c:476
- slab_free_hook mm/slub.c:1444 [inline]
- slab_free_freelist_hook mm/slub.c:1477 [inline]
- slab_free mm/slub.c:3024 [inline]
- kfree+0xd5/0x300 mm/slub.c:3976
- urb_destroy drivers/usb/core/urb.c:26 [inline]
- kref_put include/linux/kref.h:65 [inline]
- usb_free_urb.part.0+0xaf/0x110 drivers/usb/core/urb.c:96
- usb_free_urb+0x1b/0x30 drivers/usb/core/urb.c:95
- usb_start_wait_urb+0x1e8/0x4c0 drivers/usb/core/message.c:79
- usb_internal_control_msg drivers/usb/core/message.c:101 [inline]
- usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:152
- get_port_status drivers/usb/core/hub.c:570 [inline]
- hub_ext_port_status+0x125/0x460 drivers/usb/core/hub.c:587
- hub_port_status drivers/usb/core/hub.c:609 [inline]
- hub_activate+0x51f/0x17c0 drivers/usb/core/hub.c:1112
- process_one_work+0x94b/0x1620 kernel/workqueue.c:2264
- worker_thread+0x96/0xe20 kernel/workqueue.c:2410
- kthread+0x318/0x420 kernel/kthread.c:255
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-The buggy address belongs to the object at ffff8881d4f43a00
- which belongs to the cache kmalloc-192 of size 192
-The buggy address is located 0 bytes to the right of
- 192-byte region [ffff8881d4f43a00, ffff8881d4f43ac0)
-The buggy address belongs to the page:
-page:ffffea000753d0c0 refcount:1 mapcount:0 mapping:ffff8881da002a00 index:0x0
-flags: 0x200000000000200(slab)
-raw: 0200000000000200 ffffea0007567200 0000000300000003 ffff8881da002a00
-raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff8881d4f43980: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
- ffff8881d4f43a00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff8881d4f43a80: 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc
-                                           ^
- ffff8881d4f43b00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff8881d4f43b80: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
-==================================================================
+>In the meantime, can you by any chance test the attached patch ? It _might_
+>fix the problem, but it is a bit of a wild shot.
+I tried your patch, but the machine does not finish booting.
 
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+I would like to give you a dump, but the screen scrolls fast, and what's
+left when paused is not interesting. How do I get it to dump on disk?
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+My journalctl doesn't show anything. I have no kmesg.log anywhere.
+The first time around I was 0/ changing fonts 1/ trimming the dump message
+in the kernel 2/ filming my screen. That's not practical at all...
+
+
+I have been looking a bit at things. I believe that part of the issue
+is the need to re-align the buffer we get in the URB. I'm wondering if asking
+for a specific alignment when creating the URB could be doable.
+
+
+As a stop-gap, maybe doing things like in tegra ehci could fix our bug:
+https://github.com/torvalds/linux/blob/master/drivers/usb/host/ehci-tegra.c#L288
+i.e. having the old pointer before the new buffer instead of at the end of
+it.
+
+Now if something is overwriting the buffer end, that would also be hiding the
+issue... but if the bug is related to lengths that don't match between
+allocation and free, that could work. In this case, that would also be
+hiding the issue :)
+
+
+>Unfortunately, I have been unable to reproduce the problem. It is seen only
+>with certain phones and with certain Ethernet adapters, and I was unable
+>to get any of those. I'll keep trying.
+If you want, I can run a kernel with some printk instrumentation or run
+experiments. I'll research a bit on how to get that kernel oops data, that
+does not involve serial or net console.
+
+Thanks, have a good day,
+Boris.
+
+
+Guenter Roeck wrote:
+>Hi Boris,
+>
+>On Mon, Feb 10, 2020 at 09:29:10PM +0000, Boris ARZUR wrote:
+>> <felipe.balbi@linux.intel.com>, Greg Kroah-Hartman
+>> <gregkh@linuxfoundation.org>, Minas Harutyunyan <hminas@synopsys.com>,
+>> William Wu <william.wu@rock-chips.com>, Dmitry Torokhov
+>> <dmitry.torokhov@gmail.com>, Douglas Anderson <dianders@chromium.org>
+>> 
+>> 
+>> Hello Guenter,
+>> 
+>> 
+>> >good find, and good analysis. We stated to see this problem as well in the
+>> >latest ChromeOS kernel.
+>> I'm glad you find my report helpful.
+>> 
+>> 
+>> >be able to reproduce the problem. Maybe you can help me. How do you tether
+>> >your phone through USB ?
+>> You mention thethering, so I think you have read my follow-up:
+>> https://www.spinics.net/lists/linux-usb/msg187497.html
+>> 
+>
+>Unfortunately, I have been unable to reproduce the problem. It is seen only
+>with certain phones and with certain Ethernet adapters, and I was unable
+>to get any of those. I'll keep trying.
+>
+>In the meantime, can you by any chance test the attached patch ? It _might_
+>fix the problem, but it is a bit of a wild shot.
+>
+>Thanks,
+>Guenter
+>
+>---
+>From 29e0949531a27f14a5b46d70e34aa43546e6a3d1 Mon Sep 17 00:00:00 2001
+>From: Guenter Roeck <linux@roeck-us.net>
+>Date: Mon, 10 Feb 2020 13:11:00 -0800
+>Subject: [PATCH] usb: dwc2: constrain endpoint transfer size on split IN
+>
+>The following messages are seen on Veyron Chromebooks running v4.19 or
+>later kernels.
+>
+>dwc2 ff580000.usb: dwc2_update_urb_state(): trimming xfer length
+>dwc2 ff580000.usb: dwc2_hc_chhltd_intr_dma: Channel 7 - ChHltd set, but reason is unknown
+>dwc2 ff580000.usb: hcint 0x00000002, intsts 0x04600021
+>
+>This is typically followed by a crash.
+>
+>Unable to handle kernel paging request at virtual address 29f9d9fc
+>pgd = 4797dac9
+>[29f9d9fc] *pgd=80000000004003, *pmd=00000000
+>Internal error: Oops: a06 [#1] PREEMPT SMP ARM
+>Modules linked in: ip6t_REJECT rfcomm i2c_dev uinput hci_uart btbcm ...
+>CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W         4.19.87-07825-g4ab3515f6e4d #1
+>Hardware name: Rockchip (Device Tree)
+>PC is at memcpy+0x50/0x330
+>LR is at 0xdd9ac94
+>...
+>[<c0a89f50>] (memcpy) from [<c0783b94>] (dwc2_free_dma_aligned_buffer+0x5c/0x7c)
+>[<c0783b94>] (dwc2_free_dma_aligned_buffer) from [<c0765dcc>] (__usb_hcd_giveback_urb+0x78/0x130)
+>[<c0765dcc>] (__usb_hcd_giveback_urb) from [<c07678fc>] (usb_giveback_urb_bh+0xa0/0xe4)
+>[<c07678fc>] (usb_giveback_urb_bh) from [<c023a164>] (tasklet_action_common+0xc0/0xdc)
+>[<c023a164>] (tasklet_action_common) from [<c02021f0>] (__do_softirq+0x1b8/0x434)
+>[<c02021f0>] (__do_softirq) from [<c0239a14>] (irq_exit+0xdc/0xe0)
+>[<c0239a14>] (irq_exit) from [<c029f260>] (__handle_domain_irq+0x94/0xd0)
+>[<c029f260>] (__handle_domain_irq) from [<c05da780>] (gic_handle_irq+0x74/0xb0)
+>[<c05da780>] (gic_handle_irq) from [<c02019f8>] (__irq_svc+0x58/0x8c)
+>
+>The crash suggests that the memory after the end of a temporary DMA-aligned
+>buffer is overwritten.
+>
+>The Raspberry Pi Linux kernel includes a patch suggesting that a similar
+>problem was observed with the dwg2 otc driver used there. The patch
+>description is as follows.
+>
+>    The hcd would unconditionally set the transfer length to the endpoint
+>    packet size for non-isoc IN transfers. If the remaining buffer length
+>    was less than the length of returned data, random memory would get
+>    scribbled over, with bad effects if it crossed a page boundary.
+>
+>    Force a babble error if this happens by limiting the max transfer size
+>    to the available buffer space. DMA will stop writing to memory on a
+>    babble condition.
+>
+>Apply the same fix to this driver.
+>
+>Reported-by: Boris ARZUR <boris@konbu.org>
+>Cc: Boris ARZUR <boris@konbu.org>
+>Cc: Jonathan Bell <jonathan@raspberrypi.org>
+>Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>---
+> drivers/usb/dwc2/hcd.c | 3 ++-
+> 1 file changed, 2 insertions(+), 1 deletion(-)
+>
+>diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+>index b90f858af960..2c81b346b464 100644
+>--- a/drivers/usb/dwc2/hcd.c
+>+++ b/drivers/usb/dwc2/hcd.c
+>@@ -1264,7 +1264,8 @@ static void dwc2_hc_start_transfer(struct dwc2_hsotg *hsotg,
+> 			 */
+> 			chan->xfer_len = 0;
+> 		else if (chan->ep_is_in || chan->xfer_len > chan->max_packet)
+>-			chan->xfer_len = chan->max_packet;
+>+			chan->xfer_len = min_t(uint32_t, chan->xfer_len,
+>+					       chan->max_packet);
+> 		else if (!chan->ep_is_in && chan->xfer_len > 188)
+> 			chan->xfer_len = 188;
+> 
+>-- 
+>2.17.1
+>
