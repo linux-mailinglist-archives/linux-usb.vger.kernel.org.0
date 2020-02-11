@@ -2,167 +2,229 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5965E1587AB
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 02:06:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC1D1587CD
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 02:16:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727587AbgBKBF5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Feb 2020 20:05:57 -0500
-Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:55373 "EHLO
-        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727505AbgBKBF4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 20:05:56 -0500
-X-Greylist: delayed 566 seconds by postgrey-1.27 at vger.kernel.org; Mon, 10 Feb 2020 20:05:56 EST
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id 7842D616;
-        Mon, 10 Feb 2020 19:56:29 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 10 Feb 2020 19:56:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=BRKC1Q2crlqSmyJltbGVPx60D4o
-        E6HR1IKWysJB/xmk=; b=V3Z2D62h2p2geUkz1ivzOU/STOqjNIPDn0Nt4X8KrWs
-        4cRhPbM20kAxyZv9un1daHYw7TZcAFobebmYpWwbsPrlSx65MTLayVDjc2ftUdUG
-        QlggkEtUJfgvdz/dqgwl5KtAaTe3u+Fq3h2f6V6H2uGpvkNDs22Ws3QFNy2lNheY
-        FPImjQhi1NTxyzo2eLpHf92QARyUyj3UislevoqCP6YE6O6wjT9KeTWuiV7DYBiX
-        qRLDp7xScsr6zc/BsX9YVZsQFx33Jqb/yqGXKTFePJDE31NHzbGhw3DfdeES7djf
-        LokYUWl9dq/Wh7LCYGbpKc84fyZtueqRlZN28wL7LFA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=BRKC1Q
-        2crlqSmyJltbGVPx60D4oE6HR1IKWysJB/xmk=; b=Htshbs9ypNG6jEppMXTnn8
-        cFsnUxgiqPDZLIKLOH9WeXUfT/cTKOkm+AuDs9XiCgCCQs6Nl7U9Ee2C1YXlxPDi
-        Tla4D8TMbNoq1qMQOtVkL2ld45vD//jVug62+vNcuPkri0rr8voQrImeXh3OkOAa
-        q+bKUXbREfMMcx+voJkooztPI8hVFOyRshBkvEaBxgSnh/D3i8i8KQavbrstjdFz
-        XVpmeh5y+R5AxP+ECB7oX7Tfq3WmP/W+h1WP3m6KRUOUo9WvLdG4Z+7WxL/ON6Lr
-        GrXPKA43zlm+x56y0LWVCf/n03I89pg6FJmqca+oFg5yZIsC6t0KkzT9COS59taw
-        ==
-X-ME-Sender: <xms:vPtBXtyM2ztfKtemdxr7di2FeyiO9JOs3htTwSwNHghvmtIhZwcc8Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedriedvgddvjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehnughrvghs
-    ucfhrhgvuhhnugcuoegrnhgurhgvshesrghnrghrrgiivghlrdguvgeqnecuffhomhgrih
-    hnpehkvghrnhgvlhdrohhrghenucfkphepieejrdduiedtrddvudejrddvhedtnecuvehl
-    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghnughrvghsse
-    grnhgrrhgriigvlhdruggv
-X-ME-Proxy: <xmx:vPtBXkDqDa_oJdxnD02XP-QYN1Ilt1u5O2NAOpBQ5LLs3ReOgDO7KQ>
-    <xmx:vPtBXgJKwvzzk7kOkz32scZWplNg74F2fWtyqKFCro9Lx1Gl7E8DUA>
-    <xmx:vPtBXkN8kIb0XEZTbwinLnIgrFzIOEf9tuxSbfDNeY_qTHXCN_aI-g>
-    <xmx:vftBXmRMXBgZM7LgwQFLrSWk-w66oJWQUE8irDhrWy7-U2xTHvoIvPHm41A>
-Received: from intern.anarazel.de (c-67-160-217-250.hsd1.ca.comcast.net [67.160.217.250])
-        by mail.messagingengine.com (Postfix) with ESMTPA id DB4F03060840;
-        Mon, 10 Feb 2020 19:56:27 -0500 (EST)
-Date:   Mon, 10 Feb 2020 16:56:26 -0800
-From:   Andres Freund <andres@anarazel.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Ian Kent <raven@themaw.net>,
-        Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 00/14] pipe: Keyrings, Block and USB notifications
- [ver #3]
-Message-ID: <20200211005626.7yqjf5rbs3vbwagd@alap3.anarazel.de>
-References: <157909503552.20155.3030058841911628518.stgit@warthog.procyon.org.uk>
- <CAHk-=wjrrOgznCy3yUmcmQY1z_7vXVr6GbvKiy8cLvWbxpmzcw@mail.gmail.com>
+        id S1727595AbgBKBQN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Feb 2020 20:16:13 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:49848 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727505AbgBKBQN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Feb 2020 20:16:13 -0500
+Received: by mail-io1-f69.google.com with SMTP id v11so5941807iop.16
+        for <linux-usb@vger.kernel.org>; Mon, 10 Feb 2020 17:16:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=C4ZSySAadciP/qy5lHe+8m4JJ/rKCTer5ZGKdDebbL0=;
+        b=KoJZOkR7R5OZTTukTgu2HjFbC7ijRt+7arsRL9PpTBYgakukj86P+IZTAB3TOy6+4r
+         Z7lanZh7PD9MUQ3p5n/QAQYlYflr/fZ2nHPm3h7jdIbLXWMj2wnBFSmcqrbsn9jLf9px
+         t7RCihZq2l6sFSu9Cfhwlra5QbXW4cJXGphmrliWerIqOxDoE19JtL0neqLJvyaYugvp
+         hWedDqDRYHPf6w0+wHTR/pq0WLAu67vaBm3ggIs8Ro2HP1oNrVCF59+zzZdFj9IRg1JM
+         akEbOQJyYHgkkRZhnppHE46JEiFPatBta4VSAElFDnKYe7T+vM0SpGvldL9fzIxff4FS
+         YadQ==
+X-Gm-Message-State: APjAAAXG/wksO0UwLQ3sN/jcJOr5zKETp6wXb18VG3QkkNYf7I6atfW6
+        APH9vicvGPRMw2mXamsz5TsRuau3bQUQKCsRsbHtiI5I3nYK
+X-Google-Smtp-Source: APXvYqwsOT/OwXGXrX7P8JU//4vXFQ8QPjqEYzAvGCMjyLsMo6zisZL5EM4kfxLU0VJ/pqwzmXj/HXZ1oJjwLVRKdrIhVcb4VKKJ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjrrOgznCy3yUmcmQY1z_7vXVr6GbvKiy8cLvWbxpmzcw@mail.gmail.com>
+X-Received: by 2002:a6b:b206:: with SMTP id b6mr11661758iof.299.1581383772669;
+ Mon, 10 Feb 2020 17:16:12 -0800 (PST)
+Date:   Mon, 10 Feb 2020 17:16:12 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000610eb059e429abd@google.com>
+Subject: KASAN: slab-out-of-bounds Write in betop_probe
+From:   syzbot <syzbot+07efed3bc5a1407bd742@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
+        jikos@kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hello,
 
-I only just now noticed this work after Dave Chinner pointed towards the
-feature in the email leading to
-https://lore.kernel.org/linux-fsdevel/20200211000405.5fohxgpt554gmnhu@alap3.anarazel.de/
+syzbot found the following crash on:
 
-On 2020-01-15 12:10:32 -0800, Linus Torvalds wrote:
-> So I no longer hate the implementation, but I do want to see the
-> actual user space users come out of the woodwork and try this out for
-> their use cases.
+HEAD commit:    e5cd56e9 usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=1517fed9e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8cff427cc8996115
+dashboard link: https://syzkaller.appspot.com/bug?extid=07efed3bc5a1407bd742
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=147026b5e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1683b6b5e00000
 
-Postgres has been looking for something roughly like this, fwiw (or
-well, been forced to).
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+07efed3bc5a1407bd742@syzkaller.appspotmail.com
 
-While it's better than it used to be (due to b4678df184b3), we still
-have problems to reliably detect buffered IO errors, especially when
-done across multiple processes.  We can't easily keep an fd open that
-predates all writes to a file until, and ensure that fsyncs will happen
-only on that fd. The primary reasons for that are
-1) every connection (& some internal jobs) is a process, and neither do
-want to to fsyncing each touched file in short-lived connections, nor is
-it desirable to have to add the complication of having to transfer fds
-between processes just to reliably get an error in fsync().
-2) we have to cope with having more files open than allowed, so we have
-a layer that limits the number of OS level FDs open at the same time. We
-don't want to fsync whenever we have to juggle open fds though, as
-that'd be too costly.
+betop 0003:20BC:5500.0001: unknown main item tag 0x0
+betop 0003:20BC:5500.0001: hidraw0: USB HID v0.00 Device [HID 20bc:5500] on usb-dummy_hcd.0-1/input0
+==================================================================
+BUG: KASAN: slab-out-of-bounds in set_bit include/asm-generic/bitops/instrumented-atomic.h:28 [inline]
+BUG: KASAN: slab-out-of-bounds in betopff_init drivers/hid/hid-betopff.c:99 [inline]
+BUG: KASAN: slab-out-of-bounds in betop_probe+0x396/0x570 drivers/hid/hid-betopff.c:134
+Write of size 8 at addr ffff8881d4f43ac0 by task kworker/1:2/94
 
-So it'd good to have a way to *reliably* know when writeback io failed,
-so we can abort a checkpoint if necessary, and instead perform journal
-replay.
+CPU: 1 PID: 94 Comm: kworker/1:2 Not tainted 5.5.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xef/0x16e lib/dump_stack.c:118
+ print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
+ __kasan_report.cold+0x37/0x77 mm/kasan/report.c:506
+ kasan_report+0xe/0x20 mm/kasan/common.c:641
+ check_memory_region_inline mm/kasan/generic.c:185 [inline]
+ check_memory_region+0x152/0x1c0 mm/kasan/generic.c:192
+ set_bit include/asm-generic/bitops/instrumented-atomic.h:28 [inline]
+ betopff_init drivers/hid/hid-betopff.c:99 [inline]
+ betop_probe+0x396/0x570 drivers/hid/hid-betopff.c:134
+ hid_device_probe+0x2be/0x3f0 drivers/hid/hid-core.c:2261
+ really_probe+0x290/0xac0 drivers/base/dd.c:551
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:724
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:831
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x217/0x390 drivers/base/dd.c:897
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+ hid_add_device drivers/hid/hid-core.c:2417 [inline]
+ hid_add_device+0x33c/0x9a0 drivers/hid/hid-core.c:2366
+ usbhid_probe+0xa81/0xfa0 drivers/hid/usbhid/hid-core.c:1386
+ usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:361
+ really_probe+0x290/0xac0 drivers/base/dd.c:551
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:724
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:831
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x217/0x390 drivers/base/dd.c:897
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+ usb_set_configuration+0xe47/0x17d0 drivers/usb/core/message.c:2023
+ generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+ usb_probe_device+0xaf/0x140 drivers/usb/core/driver.c:266
+ really_probe+0x290/0xac0 drivers/base/dd.c:551
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:724
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:831
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x217/0x390 drivers/base/dd.c:897
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+ usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2538
+ hub_port_connect drivers/usb/core/hub.c:5185 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5325 [inline]
+ port_event drivers/usb/core/hub.c:5471 [inline]
+ hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5553
+ process_one_work+0x94b/0x1620 kernel/workqueue.c:2264
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2410
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Allocated by task 94:
+ save_stack+0x1b/0x80 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ __kasan_kmalloc mm/kasan/common.c:515 [inline]
+ __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:488
+ kmalloc include/linux/slab.h:556 [inline]
+ kzalloc include/linux/slab.h:670 [inline]
+ hidraw_connect+0x4b/0x3e0 drivers/hid/hidraw.c:521
+ hid_connect+0x5c7/0xbb0 drivers/hid/hid-core.c:1937
+ hid_hw_start drivers/hid/hid-core.c:2033 [inline]
+ hid_hw_start+0xa2/0x130 drivers/hid/hid-core.c:2024
+ betop_probe+0xbc/0x570 drivers/hid/hid-betopff.c:128
+ hid_device_probe+0x2be/0x3f0 drivers/hid/hid-core.c:2261
+ really_probe+0x290/0xac0 drivers/base/dd.c:551
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:724
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:831
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x217/0x390 drivers/base/dd.c:897
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+ hid_add_device drivers/hid/hid-core.c:2417 [inline]
+ hid_add_device+0x33c/0x9a0 drivers/hid/hid-core.c:2366
+ usbhid_probe+0xa81/0xfa0 drivers/hid/usbhid/hid-core.c:1386
+ usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:361
+ really_probe+0x290/0xac0 drivers/base/dd.c:551
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:724
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:831
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x217/0x390 drivers/base/dd.c:897
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+ usb_set_configuration+0xe47/0x17d0 drivers/usb/core/message.c:2023
+ generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+ usb_probe_device+0xaf/0x140 drivers/usb/core/driver.c:266
+ really_probe+0x290/0xac0 drivers/base/dd.c:551
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:724
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:831
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x217/0x390 drivers/base/dd.c:897
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+ usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2538
+ hub_port_connect drivers/usb/core/hub.c:5185 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5325 [inline]
+ port_event drivers/usb/core/hub.c:5471 [inline]
+ hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5553
+ process_one_work+0x94b/0x1620 kernel/workqueue.c:2264
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2410
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Freed by task 12:
+ save_stack+0x1b/0x80 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ kasan_set_free_info mm/kasan/common.c:337 [inline]
+ __kasan_slab_free+0x117/0x160 mm/kasan/common.c:476
+ slab_free_hook mm/slub.c:1444 [inline]
+ slab_free_freelist_hook mm/slub.c:1477 [inline]
+ slab_free mm/slub.c:3024 [inline]
+ kfree+0xd5/0x300 mm/slub.c:3976
+ urb_destroy drivers/usb/core/urb.c:26 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ usb_free_urb.part.0+0xaf/0x110 drivers/usb/core/urb.c:96
+ usb_free_urb+0x1b/0x30 drivers/usb/core/urb.c:95
+ usb_start_wait_urb+0x1e8/0x4c0 drivers/usb/core/message.c:79
+ usb_internal_control_msg drivers/usb/core/message.c:101 [inline]
+ usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:152
+ get_port_status drivers/usb/core/hub.c:570 [inline]
+ hub_ext_port_status+0x125/0x460 drivers/usb/core/hub.c:587
+ hub_port_status drivers/usb/core/hub.c:609 [inline]
+ hub_activate+0x51f/0x17c0 drivers/usb/core/hub.c:1112
+ process_one_work+0x94b/0x1620 kernel/workqueue.c:2264
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2410
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+The buggy address belongs to the object at ffff8881d4f43a00
+ which belongs to the cache kmalloc-192 of size 192
+The buggy address is located 0 bytes to the right of
+ 192-byte region [ffff8881d4f43a00, ffff8881d4f43ac0)
+The buggy address belongs to the page:
+page:ffffea000753d0c0 refcount:1 mapcount:0 mapping:ffff8881da002a00 index:0x0
+flags: 0x200000000000200(slab)
+raw: 0200000000000200 ffffea0007567200 0000000300000003 ffff8881da002a00
+raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff8881d4f43980: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+ ffff8881d4f43a00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff8881d4f43a80: 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc
+                                           ^
+ ffff8881d4f43b00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff8881d4f43b80: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
+==================================================================
 
 
-For our purposes we'd probably want errors on the fs/superblock level,
-rather than block devices. It's not always easy to map between blockdevs
-and relevant filesystems, there are errors above the block layer, and we
-definitely don'tt want to crash & restart a database just because
-somebody pulled an USB storage device that didn't have any of the
-database's data on it.
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-An earlier version of this patchset had some support for that, albeit
-perhaps not fully implemented (no errors raised, afaict?):
-https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/commit/?h=notifications&id=338eec77a0cb29a7d2ae9350066c1990408ae58e
-
-Is the plan to pick this up again once the basic feature is in?
-
-
-A few notes from the email referenced above (that actually seem to belong
-into this thread more than the other:
-
-1) From the angle of reliably needing to detect writeback errors, I find it
-somewhat concerning that an LSM may end up entirely filtering away error
-notifications, without a consumer being able to detect that:
-
-+void __post_watch_notification(struct watch_list *wlist,
-+			       struct watch_notification *n,
-+			       const struct cred *cred,
-+			       u64 id)
-+{
-...
-+		if (security_post_notification(watch->cred, cred, n) < 0)
-+			continue;
-
-It's an unpleasant thought that an overly restrictive [-ly configured]
-LSM could lead to silently swallowing data integrity errors.
-
-2) It'd be good if there were documentation, aimed at userland consumers
-of this, explaining what the delivery guarantees are. To be useful for
-us, it needs to be guaranteed that consuming all notifications ensures
-that there are no pending notifications queued up somewhere (so we can
-do fsync(data); fsync(journal); check_for_errors();
-durable_rename(checkpoint_state.tmp, checkpoint_state);).
-
-3) What will the permission model for accessing the notifications be?
-It seems currently anyone, even within a container/namespace or
-something, will see blockdev errors from everywhere?  The earlier
-superblock support (I'm not sure I like that name btw, hard to
-understand for us userspace folks), seems to have required exec
-permission, but nothing else.
-
-Greetings,
-
-Andres Freund
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
