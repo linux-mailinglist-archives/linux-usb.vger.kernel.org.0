@@ -2,120 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E0815934A
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 16:38:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC45B159387
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 16:47:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729226AbgBKPik (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Feb 2020 10:38:40 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:48494 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729114AbgBKPik (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 10:38:40 -0500
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A53DA9DA;
-        Tue, 11 Feb 2020 16:38:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1581435517;
-        bh=+RyKO39OD+gDnD8NO7nQf/9zFy2ANb076as+KLXHN3A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IYsHxeuQzWZTrOtQJmdoaa5o4IGzHNFH6FHtqVTw7rYFH5hQFxRetS9qf+zJ6eydB
-         6YrCSiuRZRZ5MqSCKCTD0Yn1ZW58YflBuBXjiA3530rMRe4m/gvSPl0P0a8NVKAlih
-         jNuFfydaEk+QsxdWGcLbOvRE52fGN/imQ+d/xbdo=
-Date:   Tue, 11 Feb 2020 17:38:23 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Oliver Neukum <oneukum@suse.de>
-Cc:     syzbot <syzbot+9a48339b077c5a80b869@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: KASAN: use-after-free Read in uvc_probe
-Message-ID: <20200211153823.GD22612@pendragon.ideasonboard.com>
-References: <000000000000780999059c048dfc@google.com>
- <1581344006.26936.7.camel@suse.de>
- <20200210141812.GB4727@pendragon.ideasonboard.com>
- <1581431490.1580.6.camel@suse.de>
+        id S1729283AbgBKPrP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Feb 2020 10:47:15 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:33856 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727941AbgBKPrP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 10:47:15 -0500
+Received: (qmail 4043 invoked by uid 2102); 11 Feb 2020 10:47:14 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 11 Feb 2020 10:47:14 -0500
+Date:   Tue, 11 Feb 2020 10:47:14 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+cc:     linux-usb@vger.kernel.org, <john453@faraday-tech.com>
+Subject: Re: [bug report] usb: host: Faraday fotg210-hcd driver
+In-Reply-To: <Pine.LNX.4.44L0.2002111021330.1574-100000@iolanthe.rowland.org>
+Message-ID: <Pine.LNX.4.44L0.2002111035470.1574-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1581431490.1580.6.camel@suse.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Oliver,
+On Tue, 11 Feb 2020, Alan Stern wrote:
 
-On Tue, Feb 11, 2020 at 03:31:30PM +0100, Oliver Neukum wrote:
-> Am Montag, den 10.02.2020, 16:18 +0200 schrieb Laurent Pinchart:
-> > On Mon, Feb 10, 2020 at 03:13:26PM +0100, Oliver Neukum wrote:
-> > > Am Montag, den 13.01.2020, 04:24 -0800 schrieb syzbot:
-> > > > Hello,
-> > > > 
-> > > > syzbot found the following crash on:
-> > > > 
-> > > > HEAD commit:    ae179410 usb: gadget: add raw-gadget interface
-> > > > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=132223fee00000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=ad1d751a3a72ae57
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=9a48339b077c5a80b869
-> > > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16857325e00000
-> > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=142e069ee00000
-> > > > 
-> > > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > > > Reported-by: syzbot+9a48339b077c5a80b869@syzkaller.appspotmail.com
-> > > > 
-> > > > usb 1-1: New USB device found, idVendor=0bd3, idProduct=0555,  
-> > > > bcdDevice=69.6a
-> > > > usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> > > > usb 1-1: config 0 descriptor??
-> > > > usb 1-1: string descriptor 0 read error: -71
-> > > > uvcvideo: Found UVC 0.00 device <unnamed> (0bd3:0555)
-> > > > ==================================================================
-> > > > BUG: KASAN: use-after-free in uvc_register_terms  
-> > > > drivers/media/usb/uvc/uvc_driver.c:2038 [inline]
-> > > > BUG: KASAN: use-after-free in uvc_register_chains  
-> > > > drivers/media/usb/uvc/uvc_driver.c:2070 [inline]
-> > > > BUG: KASAN: use-after-free in uvc_probe.cold+0x2193/0x29de  
-> > > > drivers/media/usb/uvc/uvc_driver.c:2201
-> > > > Read of size 2 at addr ffff8881d4f1bc2e by task kworker/1:2/94
-> > > 
-> > > #syz test: https://github.com/google/kasan.git ae179410
-> > > 
-> > > From db844641a5e30f3cfc0ce9cde156b3cc356b6c0c Mon Sep 17 00:00:00 2001
-> > > From: Oliver Neukum <oneukum@suse.com>
-> > > Date: Mon, 10 Feb 2020 15:10:36 +0100
-> > > Subject: [PATCH] UVC: deal with unnamed streams
-> > > 
-> > > The pointer can be NULL
-> > > 
-> > > Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> > > ---
-> > >  drivers/media/usb/uvc/uvc_driver.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> > > index 99883550375e..26558a89f2fe 100644
-> > > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > > @@ -2069,7 +2069,8 @@ static int uvc_register_terms(struct uvc_device *dev,
-> > >  		stream = uvc_stream_by_id(dev, term->id);
-> > >  		if (stream == NULL) {
-> > >  			uvc_printk(KERN_INFO, "No streaming interface found "
-> > > -				   "for terminal %u.", term->id);
-> > > +				   "for terminal %u.",
-> > > +				   term->id ? term->id : "(Unnamed)");
-> > 
-> > Have you tried compiling this ?
+> On Tue, 11 Feb 2020, Dan Carpenter wrote:
 > 
-> Yes. It does compile. Why?
+> > Hello USB devs,
+> > 
+> > The patch 7d50195f6c50: "usb: host: Faraday fotg210-hcd driver" from
+> > Jul 29, 2013, leads to the following static checker warning:
+> > 
+> > 	drivers/usb/host/fotg210-hcd.c:3945 iso_stream_init()
+> > 	warn: mask and shift to zero
+> > 
+> > drivers/usb/host/fotg210-hcd.c
+> >   3922  static void iso_stream_init(struct fotg210_hcd *fotg210,
+> >   3923                  struct fotg210_iso_stream *stream, struct usb_device *dev,
+> >   3924                  int pipe, unsigned interval)
+> >   3925  {
+> >   3926          u32 buf1;
+> >   3927          unsigned epnum, maxp;
+> >   3928          int is_input;
+> >   3929          long bandwidth;
+> >   3930          unsigned multi;
+> >   3931  
+> >   3932          /*
+> >   3933           * this might be a "high bandwidth" highspeed endpoint,
+> >   3934           * as encoded in the ep descriptor's wMaxPacket field
+> >   3935           */
+> >   3936          epnum = usb_pipeendpoint(pipe);
+> >   3937          is_input = usb_pipein(pipe) ? USB_DIR_IN : 0;
+> >   3938          maxp = usb_maxpacket(dev, pipe, !is_input);
+> >   3939          if (is_input)
+> >   3940                  buf1 = (1 << 11);
+> >   3941          else
+> >   3942                  buf1 = 0;
+> >   3943  
+> >   3944          maxp = max_packet(maxp);
+> >   3945          multi = hb_mult(maxp);
+> >   3946          buf1 |= maxp;
+> >   3947          maxp *= multi;
+> 
+> This is pretty clearly a case of mistaken reuse of a local variable.  
+> The argument to hb_mult() should be the output from usb_maxpacket(), 
+> not the result of the max_packet() calculation.
 
-Because term->id is a u8, "(Unnamed)" is a const char *, and %u requires
-an integer. I'm surprised the compiler doesn't complain, but in any
-case, it's not right :-)
+Oops, my mistake, sorry.  I should have read the source more carefully 
+before answering.
 
--- 
-Regards,
+The max_packet() macro in line 3944 does nothing, since it is only a 
+mask with 0x07ff and usb_maxpacket() (which calls usb_endpoint_maxp 
+internally) already performs this mask.
 
-Laurent Pinchart
+> >   3948  
+> >   3949          stream->buf0 = cpu_to_hc32(fotg210, (epnum << 8) | dev->devnum);
+> >   3950          stream->buf1 = cpu_to_hc32(fotg210, buf1);
+> >   3951          stream->buf2 = cpu_to_hc32(fotg210, multi);
+> > 
+> > The problem is these two defines:
+> > 
+> > #define max_packet(wMaxPacketSize) ((wMaxPacketSize) & 0x07ff)
+> > #define hb_mult(wMaxPacketSize) (1 + (((wMaxPacketSize) >> 11) & 0x03))
+> > 
+> > 0x07ff >> 11 is always zero so multi is always 1.
+> > 
+> > Should we pass the original value that usb_maxpacket() returned instead
+> > of the masked value?
+> 
+> Yes.  I suggest introducing a new local variable and using it in place
+> of maxp in lines 3938, 3944 (the second occurrence), and 3945.
+
+So the actual right thing to do is to convert the pipe value to a
+usb_endpoint_descriptor *, say by way of usb_pipe_endpoint().  Then
+maxp and multi can be calculated from the descriptor via
+usb_endpoint_maxp() and usb_endpoint_maxp_mult().
+
+Alan Stern
+
