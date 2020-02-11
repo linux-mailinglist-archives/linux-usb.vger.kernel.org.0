@@ -2,69 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC1F159531
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 17:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B79815961E
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 18:26:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729074AbgBKQlJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Feb 2020 11:41:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58952 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728911AbgBKQlJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 11 Feb 2020 11:41:09 -0500
-Received: from localhost (unknown [104.133.9.100])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CC01C20848;
-        Tue, 11 Feb 2020 16:41:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581439268;
-        bh=c+mem6JlEnQwCKCq1zucfqpBAVjKYHCjC1bHFEPaIbg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YaC+Ix0sgOp3GviB8ObJiIJhHU8/QuPptSEuXrurfCNiXyNh6H8a2L0e5cvvKusT1
-         Jt41IBiI8X4bT9khql6YRc4v3UC/M2qDOJF5fg1LBsSez6hYhR/ZqLKDRQIkBweYHT
-         gau/T+vc6ZN3w35QQS7dx6QIkaa0MNRt9wa/6rCE=
-Date:   Tue, 11 Feb 2020 08:41:08 -0800
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Vladimir Stankovic <vladimir.stankovic@displaylink.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Petar Kovacevic <petar.kovacevic@displaylink.com>,
-        Stefan Lugonjic <stefan.lugonjic@displaylink.com>,
-        Nikola Simic <nikola.simic@displaylink.com>,
-        Marko Miljkovic <marko.miljkovic@displaylink.com>
-Subject: Re: [PATCH 1/1] usb: Add MA USB Host driver
-Message-ID: <20200211164108.GC1931506@kroah.com>
-References: <VI1PR10MB1965B4B61D7A9808B2EA095591180@VI1PR10MB1965.EURPRD10.PROD.OUTLOOK.COM>
- <61e63056-31f9-9d4b-60c1-8cbf0372d34f@displaylink.com>
+        id S1729219AbgBKR0H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Feb 2020 12:26:07 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:53297 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728624AbgBKR0H (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 12:26:07 -0500
+Received: by mail-wm1-f66.google.com with SMTP id s10so4628449wmh.3
+        for <linux-usb@vger.kernel.org>; Tue, 11 Feb 2020 09:26:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gLgP1onPrPgFDge6UK3SXmSS3D/74ambFRjbtx5/Bxw=;
+        b=k0DsvGNI8SCJmT80z9K4JoR0f1kSEaiEs6biWChmPfHWPdntu3OOsJglXpCZtC1Sct
+         9HjZwQN8IBlzoEZ/+DLBAZLKXU1ticeAcgizqO9yEyjy+UyF9EH7wd6JQ4rod7jN3ndS
+         U7sWlnfBKVdjOgnwR2+/hAcahav1vboO1BcbzuGNbTCHnZoFDZyQ8jRXf4JWFJfngcVs
+         6cWmcQRUST1/FNgDi8OGAXu18xINKxpi3GXFGXYqt/KAKRdwSaJjMw0X01sQ4R+tZiRT
+         fP/48yfsjTLqkpPnU+bcp7bG/DzwpkhKqH8VX8aK6NR7lPMj5o9R23AJfcF3QHLfJ+l8
+         J+VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gLgP1onPrPgFDge6UK3SXmSS3D/74ambFRjbtx5/Bxw=;
+        b=HyKV5KItPKGTz9Z/8bsB1p3gMoKycGjwqDbe2W5wq0hR8laidL24NuajiqUkUjtMmB
+         3O/a18FpPGaV1VsU504Z3VEemBRLn+YnEBqiQe11CSDbDYE88GmB20PDyU727IeIh9cp
+         Od0Tn7FvvslaIUgf8RRaVGLAYX/YzZdhIbP9ca1fArJ+XfW9zhDjfE1KeM4yY2GkELkd
+         TsjpY0jjhke+AwtHoY8WgvoVzrhWPWpyZd8UlRgJayf04QKva04+nf7yD3+FuAs+x2M2
+         aFPAxGI8zU5v6iLQ5xvf9DOKl5BTDoEQLp1aXP3tuh+rOJhKu++q8Rbz14HlLAySzY4v
+         nmyg==
+X-Gm-Message-State: APjAAAVcm+KGmFbRd+q1z4qg+VyBsbGA4mDbHGYj/DlAyTFuGAdD5x87
+        XqYjmDLM6TZTSWAVtumE4NK6kgPcHzUgx8dysFoCYiw3
+X-Google-Smtp-Source: APXvYqxt15WC4fOfsBVaBDvQrEgsqoWx3helanCU/Bm6hXiD7dTdsXh9ceZP58EzqmZqcJEKUR41QuADs3nc3rsxv6s=
+X-Received: by 2002:a7b:c407:: with SMTP id k7mr6914455wmi.46.1581441966169;
+ Tue, 11 Feb 2020 09:26:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <61e63056-31f9-9d4b-60c1-8cbf0372d34f@displaylink.com>
+References: <CABatt_xcct6nNp6OELNMO3-R+JPLdh_bn6pH5RxyWQu=m9NhGw@mail.gmail.com>
+ <Pine.LNX.4.44L0.2002101005210.14460-100000@netrider.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.2002101005210.14460-100000@netrider.rowland.org>
+From:   Martin Townsend <mtownsend1973@gmail.com>
+Date:   Tue, 11 Feb 2020 17:25:54 +0000
+Message-ID: <CABatt_x5unKx-O0WENEHfm7az-pPXO8sayk+jWuYrksbEgghnA@mail.gmail.com>
+Subject: Re: Enumerating USB devices in the Bootloader
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 11, 2020 at 04:21:24PM +0000, Vladimir Stankovic wrote:
-> +++ b/drivers/usb/mausb_host/include/common/ma_usb.h
-> @@ -0,0 +1,873 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
+On Mon, Feb 10, 2020 at 3:12 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Mon, 10 Feb 2020, Martin Townsend wrote:
+>
+> > Hi,
+> >
+> > We are using the USB mass storage gadget driver in Linux and
+> > everything is working fairly well but sometimes we are finding that we
+> > are exceeding the 100mA limit (which I think is the default the host
+> > will provide) before Linux has had a change to enumerate the USB
+> > device at which point we ask for 500mA.  We have tried to reduce the
+> > power by ensuring all clocks are turned off, devices not used disabled
+> > etc but can't seem to satisfy the 100mA limit.  We were thinking that
+> > maybe we could enumerate the USB device during U-Boot at which point
+> > we know we are under the 100mA limit.  Does anyone know a reason why
+> > this would not work?
+>
+> It won't work because U-Boot isn't the kernel.  When the kernel takes
+> over the USB controller, it will force the host to re-enumerate the
+> gadget -- and you will be right back where you started.
+>
+> The only way to make this work would be to prevent U-Boot from ever
+> actually booting the Linux kernel.  This probably isn't the way you
+> want your device to behave, though.
+>
+> > would at some point from U-Boot enumerating a new
+> > bMaxPower would the connection be reset and drop back to 100mA during
+> > the kernel startup? Are there any considerations that we would need to
+> > take care of in the kernel for this to work?
+>
+> If you can't satisfy the 100-mA current limit then you should make your
+> device be self-powered instead of relying on power delivered over the
+> USB bus.
+>
+> Be aware also that bus-powered USB-2 hubs can't deliver 500 mA to their
+> downstream ports.  They are always limited to 100 mA or less.  If your
+> gadget was plugged into one of them, it wouldn't be able to work at
+> all.
+>
+> Alan Stern
+>
 
-Nice.
-
-> +/*
-> + * Copyright (c) 2019 - 2020 DisplayLink (UK) Ltd.
-> + *
-> + * This file is subject to the terms and conditions of the GNU General Public
-> + * License v2. See the file COPYING in the main directory of this archive for
-> + * more details.
-
-Note, COPYING does not say what you think it says here :)
-
-Please remove all "license boilerplate" from all of these files, with
-the use of SPDX you do not need it, and, as is the case here, it can
-often be wrong.
-
-thanks,
-
-greg k-h
+Alan,
+Thank you for the swift response.  On the first point, if we modify
+the kernel to re-enumerate the same bMaxPower of 500mA would this
+still be a problem? ie is there a period when the kernel takes over
+the USB controller that the Host side would go back to 100mA after
+U-Boot negotiates the 500mA?  The last point you make is a very good
+one and something I hadn't thought of. If we can overcome the first
+hurdle I think we would be happy for it to be a requirement for the
+device to be plugged directly into a PC.
