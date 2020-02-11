@@ -2,99 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 299FB15947E
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 17:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EFC215948B
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 17:13:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730781AbgBKQKg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Feb 2020 11:10:36 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:38403 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730005AbgBKQKf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 11:10:35 -0500
-Received: by mail-oi1-f195.google.com with SMTP id l9so13269374oii.5
-        for <linux-usb@vger.kernel.org>; Tue, 11 Feb 2020 08:10:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xvPGrxFUGqMLSAiWfimrK4h2s+k8AyjaVs9/AW/hgW8=;
-        b=UVOKTCHw1M6fbeb5+iIybMSi1mpRpN4EIktFFwL2Rmkj28+pPcdBcN5LXnTAyok1aK
-         I1z2D4JpLfOZScrHtTm1grPhnaZYXNP2fPjzEoDhqOgXuT/En0LusO5UsMqTw5BLNF3M
-         hcl2+0hyt1GZjhZ+iCGdUa02CuTFuJn9tmeHk0nXw9QgPMG6EZVVyeiboy1Aicgn05Ot
-         v4gi/ViJZmjlAKaK7ulFiHa8pU2kneI8ZaE90FTCPOAMLWJQuxeVv0pV/LK3baErc3HF
-         ZpDRXq2t75N6qEE0oxRT8K7CTqJG/uinvbRSLhe8rrfTSZWZWoJxL2J+WC1U4/1KRiXf
-         1iUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xvPGrxFUGqMLSAiWfimrK4h2s+k8AyjaVs9/AW/hgW8=;
-        b=ICt+0wqu2yD+1DamHaZUsaJHajC2j+w1sdN5i1iZ7uLzvw2MKOUH0zmZCcNfxX0N+H
-         v6PVNEH670V4GmIgFfthYpoZrjGBxLo+pbpOSVN5YH+Q9wJAhmVjqmUlfUt4bKrFMO3w
-         txocT80AtJ2AarAOOnWccmrKOpeGM67B88Mizj70Rtk916Q0pbZLjD0uGluDMt/UKnzd
-         Mmip1JszquTjCT/eRAoviNp8xO25XYjOzBYYw4391T+BKGO83ay21BoU4KfZ/G6JnvAr
-         lN7XO5GtNEzTtTgFMNq6j1/0QPVbTtme8G4hskl0F+ghV1CEdEXF4EnHUj6+eYC4Ng+Q
-         hgnQ==
-X-Gm-Message-State: APjAAAXt1GeLxiC2MrCfYR6T9U9oz691UwKVQRJVXCUqQB9RPce8t0H6
-        YaYn64avPB0ccNF6Y2RgwTWhBR+6sTc3UoSLX2BFvMxhj3A=
-X-Google-Smtp-Source: APXvYqwdYHW3b9A/kYLaGeypbGhchdIOgNML7kUSPRdj/JL9DSEpXWCndq6GIg4AowyzeDZF3TArXt8kJnIloI71ZxE=
-X-Received: by 2002:aca:50cd:: with SMTP id e196mr3332127oib.178.1581437434605;
- Tue, 11 Feb 2020 08:10:34 -0800 (PST)
+        id S1729732AbgBKQNS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Feb 2020 11:13:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50338 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729390AbgBKQNS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 Feb 2020 11:13:18 -0500
+Received: from localhost (unknown [104.133.9.100])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6BE232070A;
+        Tue, 11 Feb 2020 16:13:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581437597;
+        bh=mpthMPkNTmBrSE6fyhf8FwsYXxQ+Fb0JRMAAkISpmgU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jWiiqI+7RyyCw3hJoQhHNZTg2/M9zQnl8+zLXrDAe1n2XkHIKE5YO/a8mQGkpMhu5
+         KCScjHxyJHCCgMF0uw8fDyTmr9OOpQtdCrbZx5GL2ySWQun19bECNPXzreriYToGS2
+         zqVoav8R35mGJ7cw9diNyL4HDwYgvZITLVdbLaco=
+Date:   Tue, 11 Feb 2020 08:13:16 -0800
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        pmenzel@molgen.mpg.de, mika.westerberg@linux.intel.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, krzk@kernel.org,
+        stable <stable@vger.kernel.org>
+Subject: Re: [RFT PATCH v2] xhci: Fix memory leak when caching protocol
+ extended capability PSI tables
+Message-ID: <20200211161316.GA1914687@kroah.com>
+References: <20d0559f-8d0f-42f5-5ebf-7f658a172161@linux.intel.com>
+ <CGME20200211150022eucas1p1774275707908e4ee455291a793da308a@eucas1p1.samsung.com>
+ <20200211150158.14475-1-mathias.nyman@linux.intel.com>
+ <da2d0387-47f8-e047-0ff8-d971072f9f89@samsung.com>
 MIME-Version: 1.0
-References: <4bd36708-0ade-fbd7-5eec-5b8df7b3f2ee@ivitera.com>
-In-Reply-To: <4bd36708-0ade-fbd7-5eec-5b8df7b3f2ee@ivitera.com>
-From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Date:   Tue, 11 Feb 2020 18:10:23 +0200
-Message-ID: <CAB=otbRMQ6eCD0U-2zDCQvN37VRhBta_9_+9u4FwEbY4St=AgQ@mail.gmail.com>
-Subject: Re: usb:gadget:f_uac2: EP OUT is adaptive instead of async
-To:     Pavel Hofman <pavel.hofman@ivitera.com>
-Cc:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <da2d0387-47f8-e047-0ff8-d971072f9f89@samsung.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 6, 2020 at 3:35 PM Pavel Hofman <pavel.hofman@ivitera.com> wrote:
->
-> Hi,
->
-> The existing UAC2 implementation presents itself as asynchronous
-> USB_ENDPOINT_SYNC_ASYNC
-> https://github.com/torvalds/linux/blob/master/drivers/usb/gadget/function/f_uac2.c#L276
-> +
-> https://github.com/torvalds/linux/blob/master/drivers/usb/gadget/function/f_uac2.c#L285
-> .
->
-> However:
-> 1) The function does not define any feedback endpoint
->
-> 2) IMO in reality it is adaptive - the g_audio capture device accepts
-> any data passed by the USB host, the USB host is the one which defines
-> the data pace.
->
-> While Linux and reportedly OSX accept the async EP OUT without explicit
-> feedback EP IN, Windows does not.
->
-> Simply changing USB_ENDPOINT_SYNC_ASYNC to USB_ENDPOINT_SYNC_ADAPTIVE
-> for the FS and HS output endpoints fixes the windows problem and IMO
-> corrects the config to reflect real function.
->
-> There are multiple projects underway adding the async feedback EP, but
-> in the meantime I think the .bmAttributes information should be changed
-> as above, making the device usable in Windows for everyone.
+On Tue, Feb 11, 2020 at 04:12:40PM +0100, Marek Szyprowski wrote:
+> Hi Mathias,
+> 
+> On 11.02.2020 16:01, Mathias Nyman wrote:
+> > xhci driver assumed that xHC controllers have at most one custom
+> > supported speed table (PSI) for all usb 3.x ports.
+> > Memory was allocated for one PSI table under the xhci hub structure.
+> >
+> > Turns out this is not the case, some controllers have a separate
+> > "supported protocol capability" entry with a PSI table for each port.
+> > This means each usb3 roothub port can in theory support different custom
+> > speeds.
+> >
+> > To solve this, cache all supported protocol capabilities with their PSI
+> > tables in an array, and add pointers to the xhci port structure so that
+> > every port points to its capability entry in the array.
+> >
+> > When creating the SuperSpeedPlus USB Device Capability BOS descriptor
+> > for the xhci USB 3.1 roothub we for now will use only data from the
+> > first USB 3.1 capable protocol capability entry in the array.
+> > This could be improved later, this patch focuses resolving
+> > the memory leak.
+> >
+> > Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> > Reported-by: Sajja Venkateswara Rao <VenkateswaraRao.Sajja@amd.com>
+> > Fixes: 47189098f8be ("xhci: parse xhci protocol speed ID list for usb 3.1 usage")
+> > Cc: stable <stable@vger.kernel.org> # v4.4+
+> > Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> 
+> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-Are you working on async feedback EP implementation? I'm interested in that
-feature and I can implement it soon but do not want to do double work
-if somebody
-is already working on it and will send to the community soon
+Nice!
 
-Thanks,
-Ruslan
+Should I revert the first and then apply this?
 
->
-> Thanks a lot for considering.
->
-> Best regards,
->
-> Pavel.
+thanks,
+
+greg k-h
