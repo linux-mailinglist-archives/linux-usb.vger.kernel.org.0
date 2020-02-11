@@ -2,160 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B76A158DF4
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 13:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA94A158E2D
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2020 13:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728235AbgBKMK4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Feb 2020 07:10:56 -0500
-Received: from mga09.intel.com ([134.134.136.24]:55112 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727936AbgBKMK4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 11 Feb 2020 07:10:56 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Feb 2020 04:10:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,428,1574150400"; 
-   d="scan'208";a="405920074"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga005.jf.intel.com with ESMTP; 11 Feb 2020 04:10:53 -0800
-Subject: Re: [PATCH] usb: xhci: Enable LPM for VIA LABS VL805
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
+        id S1728478AbgBKMQd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Feb 2020 07:16:33 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:34873 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728033AbgBKMQd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Feb 2020 07:16:33 -0500
+Received: by mail-wr1-f67.google.com with SMTP id w12so12119655wrt.2
+        for <linux-usb@vger.kernel.org>; Tue, 11 Feb 2020 04:16:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=GUGVeWyTamE7UDj1FKSQ+oAogvWYH8rVlMddW6H23bo=;
+        b=W1+92dChYL38m0QO++WYETYen2Fxo5eUiRgk2TXSr9E1riiBm5WQ5epUQwHBYgg5Q4
+         Fgj6CeZHrKZuTII/KbyWNpNova/3fm1WK1YB+EWM8MuFQoeiwyXsLJu0xxmMw9kbhEL4
+         N+BG29zaELbKteYXpKNUVouXWqrCxd5WW3WFjRtmzzSrfidgwlKwdgtgeFF3LLuBCshQ
+         NsNnPCC8kBXMywXCzzhUC8bhTGFWah1fLdtCgVoXTbrQBFhSImu2zH4Mi9an7sS70ecf
+         guw+cYpi5JzNhlxU5nEkl4Bn6jGt9i+ZXNRTWOE0w9X/DDON7Hc1CAW1ZmHeiLROLJ7U
+         CTjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=GUGVeWyTamE7UDj1FKSQ+oAogvWYH8rVlMddW6H23bo=;
+        b=RH2UqtKZ7hvUgnsIOHsMKyLRmZ7TTLkbvA3sujc3VBUUmWzmeZps0PB/f2haNEdRDz
+         HQsHIC2nyH//gzjrRC15OcFJLwWTrUptYOm1j5RXPFDKhlvg1wS496oxgoZ3L2f8X50V
+         zcoBA2S32LTUs7/j9c1yw82LrCNKyntVoBP/5EmuyDVAq3ESw0u8Tiol75/Kd0LaMMUs
+         tbxkXCuHexC1zIQXV/JZgob6G4SCkPtrUZ2lXCilarAxalnWisCwuyiOlyJcsE1axf9D
+         g0nlyhPjFQIQBvEXJ4vwopPfCEzKSPZUren0MyPcsEm0tr/BFNEOeTtYFTY2zrso3KxZ
+         sxZQ==
+X-Gm-Message-State: APjAAAVTLzZdy5JteNUp7ANwbzYfNk5NNU0AjlUAyc/YrpIntA/01mBm
+        4AjjxJdBcNb/SOruEsrUXiyVzg==
+X-Google-Smtp-Source: APXvYqwfT/nPvnV/mY2Ya9vBY1B2CXqBG3HndSvJlIoc9nkQdXy7phO8sDESz0qr6Hw1YB1/L4rIrw==
+X-Received: by 2002:adf:82ce:: with SMTP id 72mr8363015wrc.14.1581423391418;
+        Tue, 11 Feb 2020 04:16:31 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id c4sm3446467wml.7.2020.02.11.04.16.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Feb 2020 04:16:30 -0800 (PST)
+References: <1581419454-12667-1-git-send-email-hanjie.lin@amlogic.com> <1581419454-12667-2-git-send-email-hanjie.lin@amlogic.com>
+User-agent: mu4e 1.3.3; emacs 26.3
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Hanjie Lin <hanjie.lin@amlogic.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20200120142422.3907-1-nsaenzjulienne@suse.de>
- <20200210185921.GA1058087@kroah.com>
- <1478f170-f0ec-96df-79cf-f7c44bebc290@linux.intel.com>
- <19e1d141-2033-782f-e5a3-dcba6bdc0a8a@i2se.com>
- <28f7ea832ead04dd93cd582480fb946604bb407d.camel@suse.de>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <ad5ed5d0-5599-656f-6d40-9e252fb26dec@linux.intel.com>
-Date:   Tue, 11 Feb 2020 14:13:09 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        "Kevin Hilman" <khilman@baylibre.com>
+Cc:     Yue Wang <yue.wang@amlogic.com>, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, Carlo Caione <carlo@caione.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        "Victor Wan" <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+Subject: Re: [PATCH v8 1/3] dt-bindings: phy: Add Amlogic A1 USB2 PHY Bindings
+In-reply-to: <1581419454-12667-2-git-send-email-hanjie.lin@amlogic.com>
+Date:   Tue, 11 Feb 2020 13:16:29 +0100
+Message-ID: <1jpnelb9pe.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-In-Reply-To: <28f7ea832ead04dd93cd582480fb946604bb407d.camel@suse.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11.2.2020 12.02, Nicolas Saenz Julienne wrote:
-> Hi Stefan, Mathias.
-> 
-> On Tue, 2020-02-11 at 10:49 +0100, Stefan Wahren wrote:
->> Hi Mathias,
->>
->> On 11.02.20 10:34, Mathias Nyman wrote:
->>> On 10.2.2020 20.59, Greg Kroah-Hartman wrote:
->>>> On Mon, Jan 20, 2020 at 03:24:22PM +0100, Nicolas Saenz Julienne wrote:
->>>>> This PCIe controller chip is used on the Raspberry Pi 4 and multiple
->>>>> adapter cards. There is no publicly available documentation for the
->>>>> chip, yet both the downstream RPi4 kernel and the controller cards
->>>>> support/advertise LPM support.
->>>>>
->>>>> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
->>>>> ---
->>>>>  drivers/usb/host/xhci-pci.c | 3 +++
->>>>>  1 file changed, 3 insertions(+)
->>>>>
->>>>> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
->>>>> index 4917c5b033fa..c1976e98992b 100644
->>>>> --- a/drivers/usb/host/xhci-pci.c
->>>>> +++ b/drivers/usb/host/xhci-pci.c
->>>>> @@ -241,6 +241,9 @@ static void xhci_pci_quirks(struct device *dev,
->>>>> struct xhci_hcd *xhci)
->>>>>  			pdev->device == 0x3432)
->>>>>  		xhci->quirks |= XHCI_BROKEN_STREAMS;
->>>>>  
->>>>> +	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483)
->>>>> +		xhci->quirks |= XHCI_LPM_SUPPORT;
->>>>> +
->>>>>  	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
->>>>>  			pdev->device == 0x1042)
->>>>>  		xhci->quirks |= XHCI_BROKEN_STREAMS;
->>>> Mathias, is this in your review queue?
->>>>
->>> Ah yes, before adding link power management support for this controller we
->>> should check that it has sane (or any) exit latency values set in its
->>> HCSPARAMS3 capability register.
-> 
-> I did some checks myself before sending the patch, and tested with some devices
-> I own. The latencies seemd reasonable. For example I just hooked up an USB3 HD,
-> the root HUB exposes:
-> 
-> 	bU1DevExitLat           4 micro seconds
-> 	bU2DevExitLat         231 micro seconds
-> 
-> And xhci configured the device with:
-> 
-> 	bU1DevExitLat          10 micro seconds
-> 	bU2DevExitLat        2047 micro seconds
-> 
->>> Nicolas, if you have this controller could you show the capability
->>> registers:
->>>
->>> cat /sys/kernel/debug/usb/xhci/*/reg-cap
-> 
-> CAPLENGTH = 0x01000020
-> HCSPARAMS1 = 0x05000420
-> HCSPARAMS2 = 0xfc000031
-> HCSPARAMS3 = 0x00e70004
 
-Thanks, looks sane, U1 Device exit latency is 4us, and U2 is 231us, and as
-showed above these were set correctly to the roothub.
+On Tue 11 Feb 2020 at 12:10, Hanjie Lin <hanjie.lin@amlogic.com> wrote:
 
-Greg, if you want you can pick this patch as is, otherwise I'll send it later
-with other usb-next patches.
+> Add the Amlogic A1 Family USB2 PHY Bindings
+>
+> It supports Host mode only.
+>
+> Signed-off-by: Yue Wang <yue.wang@amlogic.com>
+> Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/phy/amlogic,meson-g12a-usb2-phy.yaml         | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/phy/amlogic,meson-g12a-usb2-phy.yaml b/Documentation/devicetree/bindings/phy/amlogic,meson-g12a-usb2-phy.yaml
+> index 57d8603..3b7e763 100644
+> --- a/Documentation/devicetree/bindings/phy/amlogic,meson-g12a-usb2-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/amlogic,meson-g12a-usb2-phy.yaml
+> @@ -14,6 +14,7 @@ properties:
+>    compatible:
+>      enum:
+>        - amlogic,meson-g12a-usb2-phy
+> +      - amlogic,meson-a1-usb2-phy
+>  
+>    reg:
+>      maxItems: 1
+> @@ -49,6 +50,20 @@ required:
+>    - reset-names
+>    - "#phy-cells"
+>  
+> +allOf:
 
-Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Is 'allOf' really needed when there is only one if clause ?
+
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          enum:
+> +            - amlogic,meson-a1-usb-ctrl
+> +
+> +    then:
+> +      properties:
+> +        power-domains:
+> +          maxItems: 1
+> +      required:
+> +        - power-domains
+> +
+>  examples:
+>    - |
+>      phy@36000 {
+
