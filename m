@@ -2,176 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ACBB915B04B
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2020 19:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF6815B069
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2020 20:01:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728901AbgBLS5t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Feb 2020 13:57:49 -0500
-Received: from mx2.suse.de ([195.135.220.15]:37084 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727923AbgBLS5s (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 Feb 2020 13:57:48 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 518A5AC4B;
-        Wed, 12 Feb 2020 18:57:46 +0000 (UTC)
-Message-ID: <04e1c82b5cb08773ac9e8f0e1c33adc8cbc7c85d.camel@suse.de>
-Subject: Re: [PATCH] ARM: dts: bcm283x: increase dwc2's RX FIFO size
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     Pavel Hofman <pavel.hofman@ivitera.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org
-Date:   Wed, 12 Feb 2020 19:57:43 +0100
-In-Reply-To: <22beb919-a3c6-33c0-8d3f-070061a6c853@ivitera.com>
-References: <22beb919-a3c6-33c0-8d3f-070061a6c853@ivitera.com>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-BbFqBP9cWw8UjvP0rUr/"
-User-Agent: Evolution 3.34.3 
+        id S1727923AbgBLTBh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Feb 2020 14:01:37 -0500
+Received: from gateway20.websitewelcome.com ([192.185.45.27]:42953 "EHLO
+        gateway20.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727439AbgBLTBh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Feb 2020 14:01:37 -0500
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway20.websitewelcome.com (Postfix) with ESMTP id 0B942400D6741
+        for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2020 11:47:59 -0600 (CST)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id 1xGRj0a3WvBMd1xGRjzF47; Wed, 12 Feb 2020 13:01:35 -0600
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=e+ToTum+/zbH7vOFT++WaTINSUI9PozMldXFPNOHlFg=; b=BVTxbz64ZCqJW7b5fn3KsJfnKX
+        Y5RoT1Mt/ewwZ9crpnAKZtPmVV2bzcMLs9AsZ/v8V8BlAQBymHYjE9ENZi+ZT90x+UR7aPRSON5gJ
+        626sp1ErNTi7GFMEKupTfcsnjXKtlDag2vtk4+zZITErTVdJjEETpX3XxDvWCWn9Loi9u9AlNKtRz
+        zyvCzURjkwnnZ1H0s6+cdvq5btNY/pd7upbiRZjVVc09nJRl//gBMRChE4dGwnyDXf0AHHjK9Bowp
+        mKCnGMJuOBLkua1o9m8aKsagM45Ktd+9ma7d9wmKcFbX/rviuUPk+rKoX43tY/8Adu0zuIiWHAKIB
+        x+13kyCA==;
+Received: from [201.144.174.25] (port=2686 helo=[192.168.43.131])
+        by gator4166.hostgator.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1j1xGR-000t2i-F9; Wed, 12 Feb 2020 13:01:35 -0600
+Subject: Re: [PATCH] USB: serial: ti_usb_3410_5052: Replace zero-length array
+ with flexible-array member
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200211232420.GA22388@embeddedor>
+ <20200212075929.GE4150@localhost>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Autocrypt: addr=gustavo@embeddedor.com; keydata=
+ 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
+ VtSixD1uOgytAP7RWS474w==
+Message-ID: <245fb407-d5d3-f0ce-1909-ec1febb55c93@embeddedor.com>
+Date:   Wed, 12 Feb 2020 13:04:09 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
+In-Reply-To: <20200212075929.GE4150@localhost>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 201.144.174.25
+X-Source-L: No
+X-Exim-ID: 1j1xGR-000t2i-F9
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.43.131]) [201.144.174.25]:2686
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 3
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---=-BbFqBP9cWw8UjvP0rUr/
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Pavel,
+On 2/12/20 01:59, Johan Hovold wrote:
+> On Tue, Feb 11, 2020 at 05:24:20PM -0600, Gustavo A. R. Silva wrote:
+>> The current codebase makes use of the zero-length array language
+>> extension to the C90 standard, but the preferred mechanism to declare
+>> variable-length types such as these ones is a flexible array member[1][2],
+>> introduced in C99:
+>>
+>> struct foo {
+>>         int stuff;
+>>         struct boo array[];
+>> };
+>>
+>> By making use of the mechanism above, we will get a compiler warning
+>> in case the flexible array does not occur last in the structure, which
+>> will help us prevent some kind of undefined behavior bugs from being
+>> inadvertenly introduced[3] to the codebase from now on.
+>>
+>> This issue was found with the help of Coccinelle.
+> 
+> Same here, the scripts may need to be updated as you missed a couple of
+> instances:
+> 
+> 	$ git grep '\[0\];' drivers/usb/serial
+> 	...
+> 	drivers/usb/serial/io_usbvend.h:        __u8    Data[0];                // Data starts here
+> 	drivers/usb/serial/io_usbvend.h:        __u8    Data[0];                // Download starts here
+> 	...
+> 
+> Could you replace these as well so that is done in one patch per
+> subsystem?
+> 
 
-On Fri, 2020-02-07 at 22:12 +0100, Pavel Hofman wrote:
-> The previous version of the dwc2 overlay set the RX FIFO size to
-> 256 4-byte words. This is not enough for 1024 bytes of the largest
-> isochronous high speed packet allowed, because it doesn't take into
-> account extra space needed by dwc2.
->=20
-> Below is a detailed calculation which arises from dwc2 documentation:
->=20
-> * RAM for SETUP Packets: 4 * n + 6 locations in Scatter/Gather DMA mode
-> and 5 * n+8 locations in Slave and Buffer DMA mode must be reserved in
-> the RxFIFO to receive up to n SETUP packets on control endpoints, where n
-> is the number of control endpoints the device controller supports.
->=20
-> bcm283x: 5*n+8. The Broadcom core has 1 control EP (n=3D1), so 13 locatio=
-ns
->=20
-> * One location for Global OUT NAK
->=20
-> bcm283x: 1 location
->=20
-> * Status information is written to the FIFO along with each received
-> packet. Therefore, a minimum space of (Largest Packet Size / 4) + 1 must
-> be allotted to receive packets. If a high-bandwidth endpoint is enabled,
-> or multiple isochronous endpoints are enabled, then at least two (Largest
-> Packet Size / 4) + 1 spaces must be allotted to receive back-to-back
-> packets. Typically, two (Largest Packet Size / 4) + 1 spaces are
-> recommended so that when the previous packet is being transferred to AHB,
-> the USB can receive the subsequent packet. If AHB latency is high, you
-> must allocate enough space to receive multiple packets. This is critical
-> to prevent dropping of any isochronous packets.
->=20
-> bcm283x: (1024/4) +1 =3D 257 locations. For MC >1: 2 * 257 =3D 514 locati=
-ons
->=20
-> * Along with last packet of each endpoint, transfer complete status
-> information is also pushed in to the FIFO.
->=20
-> bcm283x: The core should have 5 IN and 5 OUT EP's.
-> 1 location for each EP - 10 locations.
->=20
-> It's for the case when all EPs are simultaneously completing transfers.
->=20
-> * An additional location for EPDisable status for each endpoint is
-> also required.
->=20
-> bcm283x: 1 location for each EP - 10 EP's - 10 locations
-> It's for case if EP simultaneously disabled.
->=20
-> * Typically, two locations for each OUT endpoint is recommended.
->=20
-> bcm283x: 5*2 =3D 10 locations
->=20
-> Total: 13 + 1 + 257 + 10 +10 + 10 =3D 301 locations
->=20
-> Safer is 301 + 257 (for MC>1) =3D 558 locations.
->=20
-> Signed-off-by: Phil Elwell <phil@raspberrypi.com>
-> Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+Sure thing. I'll do that.
 
-It'd be nice if you summarized a little. Halfway between this and the first
-revision of this patch. For example:
-
-[...]
-
-RX FIFO's size is calculated based on the following (in 4byte words):
- - 13 location for SETUP packets
- - 1 location for Global OUT NAK
- - 2 * 257 locations for status information and the received packet. Note t=
-hat
-   typically two spaces are recommended so that when the previous packet is
-   being transferred to AHB, the USB can receive the subsequent packet.
- - etc...
-
-Also, what is MC in your description? If in doubt just drop it a stick with=
- the
-explanation above.
-
-Regards,
-Nicolas
-
-> ---
->  arch/arm/boot/dts/bcm283x-rpi-usb-otg.dtsi        | 2 +-
->  arch/arm/boot/dts/bcm283x-rpi-usb-peripheral.dtsi | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/arch/arm/boot/dts/bcm283x-rpi-usb-otg.dtsi
-> b/arch/arm/boot/dts/bcm283x-rpi-usb-otg.dtsi
-> index e2fd961..20322de 100644
-> --- a/arch/arm/boot/dts/bcm283x-rpi-usb-otg.dtsi
-> +++ b/arch/arm/boot/dts/bcm283x-rpi-usb-otg.dtsi
-> @@ -1,7 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->  &usb {
->  	dr_mode =3D "otg";
-> -	g-rx-fifo-size =3D <256>;
-> +	g-rx-fifo-size =3D <558>;
->  	g-np-tx-fifo-size =3D <32>;
->  	/*
->  	 * According to dwc2 the sum of all device EP
-> diff --git a/arch/arm/boot/dts/bcm283x-rpi-usb-peripheral.dtsi
-> b/arch/arm/boot/dts/bcm283x-rpi-usb-peripheral.dtsi
-> index 0ff0e9e..1409d1b 100644
-> --- a/arch/arm/boot/dts/bcm283x-rpi-usb-peripheral.dtsi
-> +++ b/arch/arm/boot/dts/bcm283x-rpi-usb-peripheral.dtsi
-> @@ -1,7 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->  &usb {
->  	dr_mode =3D "peripheral";
-> -	g-rx-fifo-size =3D <256>;
-> +	g-rx-fifo-size =3D <558>;
->  	g-np-tx-fifo-size =3D <32>;
->  	g-tx-fifo-size =3D <256 256 512 512 512 768 768>;
->  };
-
-
---=-BbFqBP9cWw8UjvP0rUr/
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl5ESqcACgkQlfZmHno8
-x/69BAf+IvcAygOJxISYiTuhVG7YF6DERXjwAEqqlaRj/g4Na1z/r48bPpgVXSRV
-aoGaoXQ3iPoFfPIeirUN6n5DjAqkfSyIAy+Ldyw/ZnLLFMfHQ0olbXLOON/WH/0f
-3Z0oVVDSYNI0DTa8qph2i08lJg1lbar+sCslVPyzwnVu87rjJjh0NOe5UqXrljwN
-8mP68SaOzLzZKhHSEAU68bQGTvgbbCrI9MjxqKFB9Ac5XondPmuHkm8VwVdNlY1a
-eCVEKAyZspAHEj6P4y3qLF2PGTK/Ltarfpp8xHeev3vqnC4fVNwB5HMgXuLfGw8H
-Z1XySh+4RQG1sA2qcxxbRwNuJlvzmw==
-=ts39
------END PGP SIGNATURE-----
-
---=-BbFqBP9cWw8UjvP0rUr/--
-
+Thanks for the feedback.
+--
+Gustavo
