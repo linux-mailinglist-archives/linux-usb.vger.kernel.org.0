@@ -2,136 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A36E15A424
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2020 10:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ACFE15A50F
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2020 10:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728537AbgBLI7k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Feb 2020 03:59:40 -0500
-Received: from mga17.intel.com ([192.55.52.151]:27183 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728150AbgBLI7k (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 Feb 2020 03:59:40 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Feb 2020 00:59:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,428,1574150400"; 
-   d="scan'208";a="406231370"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga005.jf.intel.com with ESMTP; 12 Feb 2020 00:59:36 -0800
-Subject: Re: [RFT PATCH v2] xhci: Fix memory leak when caching protocol
- extended capability PSI tables
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     pmenzel@molgen.mpg.de, mika.westerberg@linux.intel.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, krzk@kernel.org,
-        stable <stable@vger.kernel.org>
-References: <20d0559f-8d0f-42f5-5ebf-7f658a172161@linux.intel.com>
- <CGME20200211150022eucas1p1774275707908e4ee455291a793da308a@eucas1p1.samsung.com>
- <20200211150158.14475-1-mathias.nyman@linux.intel.com>
- <da2d0387-47f8-e047-0ff8-d971072f9f89@samsung.com>
- <20200211161316.GA1914687@kroah.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <a6eedbbf-ce9f-b9c8-beee-a9c941051aeb@linux.intel.com>
-Date:   Wed, 12 Feb 2020 11:01:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20200211161316.GA1914687@kroah.com>
-Content-Type: text/plain; charset=utf-8
+        id S1728941AbgBLJlT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Feb 2020 04:41:19 -0500
+Received: from eu-smtp-delivery-167.mimecast.com ([146.101.78.167]:60217 "EHLO
+        eu-smtp-delivery-167.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728737AbgBLJlT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Feb 2020 04:41:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=displaylink.com;
+        s=mimecast20151025; t=1581500476;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lGeigVNnGWMBXy8P20zvl70+k5sKMFZiRKH515sNoU4=;
+        b=GebJhXRcf2/k3XWFHpK+qHuCG2YTKiNCtSchhYO8kH1csDR8a/+xEm16YN/kTgdGbeMq7S
+        3EgN8TTKgQRceL+4Re/yVHPt5Y7lUVrEpG/NdZL4TR3Eeqbso5fVNilMSU+l8tZ2UnTsoR
+        fOxYSIaIT6APzrOi/JPr8zXhMaPEYUk=
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com
+ (mail-am6eur05lp2106.outbound.protection.outlook.com [104.47.18.106])
+ (Using TLS) by relay.mimecast.com with ESMTP id
+ uk-mtapsc-1-zKyXQSwOMGWfzuatvbC_1Q-1; Wed, 12 Feb 2020 09:41:15 +0000
+Received: from VI1PR10MB1965.EURPRD10.PROD.OUTLOOK.COM (52.134.27.157) by
+ VI1PR10MB3328.EURPRD10.PROD.OUTLOOK.COM (52.133.246.13) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2707.23; Wed, 12 Feb 2020 09:41:12 +0000
+Received: from VI1PR10MB1965.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::7cc2:599e:25ce:49b2]) by VI1PR10MB1965.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::7cc2:599e:25ce:49b2%6]) with mapi id 15.20.2707.030; Wed, 12 Feb 2020
+ 09:41:12 +0000
+Received: from [172.17.183.132] (80.93.235.40) by AM0PR06CA0058.eurprd06.prod.outlook.com (2603:10a6:208:aa::35) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2729.23 via Frontend Transport; Wed, 12 Feb 2020 09:41:11 +0000
+From:   Vladimir Stankovic <vladimir.stankovic@displaylink.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Petar Kovacevic <petar.kovacevic@displaylink.com>,
+        Stefan Lugonjic <stefan.lugonjic@displaylink.com>,
+        Nikola Simic <nikola.simic@displaylink.com>,
+        Marko Miljkovic <marko.miljkovic@displaylink.com>
+Subject: Re: [External] Re: [PATCH 1/1] usb: Add MA USB Host driver
+Thread-Topic: [External] Re: [PATCH 1/1] usb: Add MA USB Host driver
+Thread-Index: AQHV4OzJT2OJQ4szCkS0GbDThotPEqgWLLMAgAAFAACAAR2DgA==
+Date:   Wed, 12 Feb 2020 09:41:12 +0000
+Message-ID: <742e4af7-ad70-6607-62b0-81d11cd5b04e@displaylink.com>
+References: <VI1PR10MB1965B4B61D7A9808B2EA095591180@VI1PR10MB1965.EURPRD10.PROD.OUTLOOK.COM>
+ <61e63056-31f9-9d4b-60c1-8cbf0372d34f@displaylink.com>
+ <20200211163906.GA1931506@kroah.com>
+In-Reply-To: <20200211163906.GA1931506@kroah.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: AM0PR06CA0058.eurprd06.prod.outlook.com
+ (2603:10a6:208:aa::35) To VI1PR10MB1965.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:803:37::29)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [80.93.235.40]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 68acc2fc-0cfa-4d4a-e342-08d7af9fb224
+x-ms-traffictypediagnostic: VI1PR10MB3328:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR10MB3328F90ACCD50FEB773FDFBB911B0@VI1PR10MB3328.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0311124FA9
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(376002)(366004)(39840400004)(396003)(136003)(199004)(189003)(31686004)(4326008)(107886003)(81156014)(71200400001)(36756003)(16526019)(4744005)(186003)(26005)(81166006)(31696002)(44832011)(54906003)(16576012)(8936002)(6916009)(316002)(6486002)(2616005)(956004)(86362001)(5660300002)(66476007)(66556008)(52116002)(64756008)(2906002)(478600001)(8676002)(66446008)(66946007);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR10MB3328;H:VI1PR10MB1965.EURPRD10.PROD.OUTLOOK.COM;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Ou16pmzcPLht/28jP65Ou1XvYQTn8b9KUDXHzHIFr+VuSNeSOMViL1DtwejM4LMX+RRd8KFYUmy4Qfjdm15htFnlNShCpM5a/Cm7p2AncSlZ56yjheqGuacCQ/RyyBuj7NwY+Sjt5E9FoHBpoTAI2gyrmns3WwJG2r3YMZhgLzzLq3QT5+j/lKFt+Bw3t2O5U4Ds4Qqw734xVlMk42y8/XkECbkfXXVI66YCmroFYtS08xk35d2KyjjLkQ40zDeNIdbIewU8XUquWGGc45hKWE/kKV9bWLtm4Tekjt2rHPr1UfXGOc1TVDur3SXJUx2kigDuJ4kRB4738zQpOT8Sd1wZDWZ3kjM8r+9gpiWWy2OsPbMxaYPg51WVJ/WAe58mAQmwNy2lIY6l2Ft+HwtmMDYL3jCv/QGU/RTXYTmGvefINYYKjvCU0FljMwktZ9QD
+x-ms-exchange-antispam-messagedata: W8NdWN1SpZZPqbUpLckUd064u0UnCmZkklIf6Pkc0r3h3zMTe0wMGfoRWxfzdn/Mt5RnuLgl4sMjt0nBDHxjFZ0UhC0m8tBoEW5GGm2tt0QtxwJkxS6vuPZ2YhP3ub/WpPWRsXW/4vC0OQYqX9btvw==
+Content-ID: <8DC8B3362D77D040A48FBE57CF64F311@EURPRD10.PROD.OUTLOOK.COM>
+MIME-Version: 1.0
+X-OriginatorOrg: displaylink.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68acc2fc-0cfa-4d4a-e342-08d7af9fb224
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Feb 2020 09:41:12.1606
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a4bda75a-b444-4312-9c90-44a7c4b2c91a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gYHROD7IomBwiVgqdjH+4cJI1mD/3Ox3lzYT2qsaDYwPiC+L6Ef3iYNGsqkJLOAUJnsHIDE/syhzbWrb0tthg7MDlHem6SrS0Em7qUw+6WpgOqkjCHl6+arW8jDyDxQ+
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB3328
+X-MC-Unique: zKyXQSwOMGWfzuatvbC_1Q-1
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: displaylink.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11.2.2020 18.13, Greg KH wrote:
-> On Tue, Feb 11, 2020 at 04:12:40PM +0100, Marek Szyprowski wrote:
->> Hi Mathias,
->>
->> On 11.02.2020 16:01, Mathias Nyman wrote:
->>> xhci driver assumed that xHC controllers have at most one custom
->>> supported speed table (PSI) for all usb 3.x ports.
->>> Memory was allocated for one PSI table under the xhci hub structure.
->>>
->>> Turns out this is not the case, some controllers have a separate
->>> "supported protocol capability" entry with a PSI table for each port.
->>> This means each usb3 roothub port can in theory support different custom
->>> speeds.
->>>
->>> To solve this, cache all supported protocol capabilities with their PSI
->>> tables in an array, and add pointers to the xhci port structure so that
->>> every port points to its capability entry in the array.
->>>
->>> When creating the SuperSpeedPlus USB Device Capability BOS descriptor
->>> for the xhci USB 3.1 roothub we for now will use only data from the
->>> first USB 3.1 capable protocol capability entry in the array.
->>> This could be improved later, this patch focuses resolving
->>> the memory leak.
->>>
->>> Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
->>> Reported-by: Sajja Venkateswara Rao <VenkateswaraRao.Sajja@amd.com>
->>> Fixes: 47189098f8be ("xhci: parse xhci protocol speed ID list for usb 3.1 usage")
->>> Cc: stable <stable@vger.kernel.org> # v4.4+
->>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->>
->> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> 
-> Nice!
-> 
-> Should I revert the first and then apply this?
-> 
+On 11.2.20. 17:39, gregkh@linuxfoundation.org wrote:
+> On Tue, Feb 11, 2020 at 04:21:24PM +0000, Vladimir Stankovic wrote:
+>>    39 files changed, 8668 insertions(+)
+>=20
+> This is a bit hard, if not impossible, to review all in one huge patch.
+>=20
+> Can you resend this as a patch series, breaking it down into logical
+> chunks, like all other kernel patches have?
+>=20
+> Also, why so many individual files?  For only 8k lines, 39 files seems
+> like a huge number.
+>=20
+> thanks,
+>=20
+> greg k-h
+>=20
+Will break it down into patch series and resend.
 
-Yes, please
+In regards of the file count, our intention was to ease the=20
+troubleshooting efforts during development and have a clear separation=20
+between logical parts of MA-USB implementation (i.e data in/out, isoch=20
+in/out, etc.; each source file representing logical chunk).
 
-Thanks
-
--Mathias
-
+Regards,
+Vladimir.
 
