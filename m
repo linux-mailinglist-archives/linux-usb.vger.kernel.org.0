@@ -2,64 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D7F15AA51
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2020 14:47:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5911215AA94
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2020 14:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727781AbgBLNrg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Feb 2020 08:47:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40602 "EHLO mail.kernel.org"
+        id S1728052AbgBLN7J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Feb 2020 08:59:09 -0500
+Received: from mx2.suse.de ([195.135.220.15]:42774 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727439AbgBLNrf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 Feb 2020 08:47:35 -0500
-Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9508C206B6;
-        Wed, 12 Feb 2020 13:47:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581515255;
-        bh=ro3LSlOyjGaCnmdhkZyiUrM+ZZXKFjz46uFU39iMKSc=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=sz2rx/U/NGWhMakQft6YyTpSCHRYBu+NylRYYK0/D4m6mbpHGa/ErjQsUwaSaFst6
-         n0SFofDSuom4AsQlEdekNhRhS/SQiy/1l87CSIy24mgfnNH8r0GObHfjIfokCZxOED
-         oWN1TZab3PAer0lf88toG1SWinsmGcu6X/fNUu2M=
-Date:   Wed, 12 Feb 2020 14:47:31 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        syzbot <syzbot+784ccb935f9900cc7c9e@syzkaller.appspotmail.com>
-cc:     Alan Stern <stern@rowland.harvard.edu>, andreyknvl@google.com,
-        syzkaller-bugs@googlegroups.com,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] HID: hiddev: Fix race in in hiddev_disconnect()
-In-Reply-To: <20200115174628.zxpxbpa6bwspjajg@kili.mountain>
-Message-ID: <nycvar.YFH.7.76.2002121447190.3144@cbobk.fhfr.pm>
-References: <20200115174628.zxpxbpa6bwspjajg@kili.mountain>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        id S1727439AbgBLN7J (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 Feb 2020 08:59:09 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 6F96CAEE0;
+        Wed, 12 Feb 2020 13:59:06 +0000 (UTC)
+Message-ID: <1581515939.21415.5.camel@suse.de>
+Subject: Re: KASAN: use-after-free Read in uvc_probe
+From:   Oliver Neukum <oneukum@suse.de>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     syzbot <syzbot+9a48339b077c5a80b869@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Date:   Wed, 12 Feb 2020 14:58:59 +0100
+In-Reply-To: <20200211153823.GD22612@pendragon.ideasonboard.com>
+References: <000000000000780999059c048dfc@google.com>
+         <1581344006.26936.7.camel@suse.de>
+         <20200210141812.GB4727@pendragon.ideasonboard.com>
+         <1581431490.1580.6.camel@suse.de>
+         <20200211153823.GD22612@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 15 Jan 2020, Dan Carpenter wrote:
-
-> Syzbot reports that "hiddev" is used after it's free in hiddev_disconnect().
-> The hiddev_disconnect() function sets "hiddev->exist = 0;" so
-> hiddev_release() can free it as soon as we drop the "existancelock"
-> lock.  This patch moves the mutex_unlock(&hiddev->existancelock) until
-> after we have finished using it.
+Am Dienstag, den 11.02.2020, 17:38 +0200 schrieb Laurent Pinchart:
+> Hi Oliver,
 > 
-> Reported-by: syzbot+784ccb935f9900cc7c9e@syzkaller.appspotmail.com
-> Fixes: 7f77897ef2b6 ("HID: hiddev: fix potential use-after-free")
-> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> On Tue, Feb 11, 2020 at 03:31:30PM +0100, Oliver Neukum wrote:
+> > Am Montag, den 10.02.2020, 16:18 +0200 schrieb Laurent Pinchart:
+> > > On Mon, Feb 10, 2020 at 03:13:26PM +0100, Oliver Neukum wrote:
+> > > > Am Montag, den 13.01.2020, 04:24 -0800 schrieb syzbot:
+> > > > > Hello,
+> > > > > 
+> > > > > syzbot found the following crash on:
+> > > > > 
+> > > > > HEAD commit:    ae179410 usb: gadget: add raw-gadget interface
+> > > > > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=132223fee00000
+> > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=ad1d751a3a72ae57
+> > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=9a48339b077c5a80b869
+> > > > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16857325e00000
+> > > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=142e069ee00000
+> > > > > 
+> > > > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > > > > Reported-by: syzbot+9a48339b077c5a80b869@syzkaller.appspotmail.com
+> > > > > 
+> > > > > usb 1-1: New USB device found, idVendor=0bd3, idProduct=0555,  
+> > > > > bcdDevice=69.6a
+> > > > > usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> > > > > usb 1-1: config 0 descriptor??
+> > > > > usb 1-1: string descriptor 0 read error: -71
+> > > > > uvcvideo: Found UVC 0.00 device <unnamed> (0bd3:0555)
+> > > > > ==================================================================
+> > > > > BUG: KASAN: use-after-free in uvc_register_terms  
+> > > > > drivers/media/usb/uvc/uvc_driver.c:2038 [inline]
+> > > > > BUG: KASAN: use-after-free in uvc_register_chains  
+> > > > > drivers/media/usb/uvc/uvc_driver.c:2070 [inline]
+> > > > > BUG: KASAN: use-after-free in uvc_probe.cold+0x2193/0x29de  
+> > > > > drivers/media/usb/uvc/uvc_driver.c:2201
+> > > > > Read of size 2 at addr ffff8881d4f1bc2e by task kworker/1:2/94
+> > > > 
+> > > > #syz test: https://github.com/google/kasan.git ae179410
+> > > > 
+> > > > From db844641a5e30f3cfc0ce9cde156b3cc356b6c0c Mon Sep 17 00:00:00 2001
+> > > > From: Oliver Neukum <oneukum@suse.com>
+> > > > Date: Mon, 10 Feb 2020 15:10:36 +0100
+> > > > Subject: [PATCH] UVC: deal with unnamed streams
+> > > > 
+> > > > The pointer can be NULL
+> > > > 
+> > > > Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> > > > ---
+> > > >  drivers/media/usb/uvc/uvc_driver.c | 3 ++-
+> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> > > > index 99883550375e..26558a89f2fe 100644
+> > > > --- a/drivers/media/usb/uvc/uvc_driver.c
+> > > > +++ b/drivers/media/usb/uvc/uvc_driver.c
+> > > > @@ -2069,7 +2069,8 @@ static int uvc_register_terms(struct uvc_device *dev,
+> > > >  		stream = uvc_stream_by_id(dev, term->id);
+> > > >  		if (stream == NULL) {
+> > > >  			uvc_printk(KERN_INFO, "No streaming interface found "
+> > > > -				   "for terminal %u.", term->id);
+> > > > +				   "for terminal %u.",
+> > > > +				   term->id ? term->id : "(Unnamed)");
+> > > 
+> > > Have you tried compiling this ?
+> > 
+> > Yes. It does compile. Why?
+> 
+> Because term->id is a u8, "(Unnamed)" is a const char *, and %u requires
+> an integer. I'm surprised the compiler doesn't complain, but in any
+> case, it's not right :-)
+> 
 
-Applied to for-5.6/upstream-fixes. Thanks,
+Oi, damnation, you are right. For some reason I saw a %s there.
 
--- 
-Jiri Kosina
-SUSE Labs
+	Sorry
+		Oliver
 
