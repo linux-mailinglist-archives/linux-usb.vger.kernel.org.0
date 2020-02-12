@@ -2,101 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8C415A411
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2020 09:57:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A36E15A424
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2020 10:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728602AbgBLI46 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Feb 2020 03:56:58 -0500
-Received: from smtpq3.tb.mail.iss.as9143.net ([212.54.42.166]:45162 "EHLO
-        smtpq3.tb.mail.iss.as9143.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728534AbgBLI46 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Feb 2020 03:56:58 -0500
-X-Greylist: delayed 1232 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 Feb 2020 03:56:56 EST
-Received: from [212.54.42.110] (helo=smtp7.tb.mail.iss.as9143.net)
-        by smtpq3.tb.mail.iss.as9143.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <karsdejong@home.nl>)
-        id 1j1nVO-0002VA-AH; Wed, 12 Feb 2020 09:36:22 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=home.nl;
-        s=201809corplgsmtpnl; h=To:Subject:Date:From;
-        bh=OuSzKhfxW8Gje2W8iT3ROQfQieVCxF7/6LjQe5C2nlU=; b=C1tZig2yOeXhiBttMk490YvCX0
-        dpjontyCTTk/xJa/3dIL65DhVpdOJl5etAJlJxJpIPaz33rrpjIsfK4AQFqsys7mUHJ8k6E7s361f
-        4VFIvxmByp2Qyf5nNrThPYAiIlpQZmtbeZJhVuj3wktmZDe+zwOF4wpJ53cm87asc54F09BhOAWq9
-        UNKuaM8R91Dm7zoNYtPn8ZoQrsZX6cWb+E7pn1pdSZA7940UEDqS5NMyL487f9B13ldMXerHc0LLJ
-        Q+kh82B5NlCChuB7Jt4gGza35fScNsVN+Xw9ezZgOJ7PLskAv4PPQj7KSpRwXqxbqfijzj8iT0zWL
-        HsH5ALgQ==;
-Received: from mail-wr1-f48.google.com ([209.85.221.48])
-        by smtp7.tb.mail.iss.as9143.net with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <karsdejong@home.nl>)
-        id 1j1nVO-0001vK-75; Wed, 12 Feb 2020 09:36:22 +0100
-Received: by mail-wr1-f48.google.com with SMTP id y11so1106568wrt.6;
-        Wed, 12 Feb 2020 00:36:22 -0800 (PST)
-X-Gm-Message-State: APjAAAV3AtQMX4mqcKQ6yTeGknTVyv9+ft5rP0fFnE0vl0SRCBYbDp/r
-        PGE5GiMfgh4prLzfEEZWg7GRysDLsYUagi6WL8s=
-X-Google-Smtp-Source: APXvYqypjRsTG8DHRIbsXdGcPAkCfbey86PfEpUgceAU5FztilErtQJztFGZaFVToi09qUn3H+IsvJz7CZ3ylvF5Cf0=
-X-Received: by 2002:a5d:4d04:: with SMTP id z4mr15132130wrt.157.1581496581870;
- Wed, 12 Feb 2020 00:36:21 -0800 (PST)
+        id S1728537AbgBLI7k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Feb 2020 03:59:40 -0500
+Received: from mga17.intel.com ([192.55.52.151]:27183 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728150AbgBLI7k (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 Feb 2020 03:59:40 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Feb 2020 00:59:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,428,1574150400"; 
+   d="scan'208";a="406231370"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga005.jf.intel.com with ESMTP; 12 Feb 2020 00:59:36 -0800
+Subject: Re: [RFT PATCH v2] xhci: Fix memory leak when caching protocol
+ extended capability PSI tables
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     pmenzel@molgen.mpg.de, mika.westerberg@linux.intel.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, krzk@kernel.org,
+        stable <stable@vger.kernel.org>
+References: <20d0559f-8d0f-42f5-5ebf-7f658a172161@linux.intel.com>
+ <CGME20200211150022eucas1p1774275707908e4ee455291a793da308a@eucas1p1.samsung.com>
+ <20200211150158.14475-1-mathias.nyman@linux.intel.com>
+ <da2d0387-47f8-e047-0ff8-d971072f9f89@samsung.com>
+ <20200211161316.GA1914687@kroah.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <a6eedbbf-ce9f-b9c8-beee-a9c941051aeb@linux.intel.com>
+Date:   Wed, 12 Feb 2020 11:01:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20200211174126.GA29960@embeddedor> <CAMuHMdV3DY1X3s7fvZz8MpxvqsUZAOivc18f40Ca8kHiZqfqKw@mail.gmail.com>
-In-Reply-To: <CAMuHMdV3DY1X3s7fvZz8MpxvqsUZAOivc18f40Ca8kHiZqfqKw@mail.gmail.com>
-From:   Kars de Jong <karsdejong@home.nl>
-Date:   Wed, 12 Feb 2020 09:36:10 +0100
-X-Gmail-Original-Message-ID: <CACz-3rgCkoJ-Zx_RBTLBH0yOhz36dH+io+VFRgsXNx2qqwKVMQ@mail.gmail.com>
-Message-ID: <CACz-3rgCkoJ-Zx_RBTLBH0yOhz36dH+io+VFRgsXNx2qqwKVMQ@mail.gmail.com>
-Subject: Re: [PATCH] treewide: Replace zero-length arrays with flexible-array member
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
-X-SourceIP: 209.85.221.48
-X-Authenticated-Sender: karsdejong@home.nl (via SMTP)
-X-Ziggo-spambar: /
-X-Ziggo-spamscore: 0.0
-X-Ziggo-spamreport: CMAE Analysis: v=2.3 cv=UJNG4BXy c=1 sm=1 tr=0 a=9+rZDBEiDlHhcck0kWbJtElFXBc=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=IkcTkHD0fZMA:10 a=l697ptgUJYAA:10 a=tBb2bbeoAAAA:8 a=_Wotqz80AAAA:8 a=YMzxVbYnAAAA:20 a=wNy__qbTz1_nECwbz_UA:9 a=QEXdDO2ut3YA:10 a=Oj-tNtZlA1e06AYgeCfH:22 a=buJP51TR1BpY-zbLSsyS:22
-X-Ziggo-Spam-Status: No
-X-Spam-Status: No
-X-Spam-Flag: No
+In-Reply-To: <20200211161316.GA1914687@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Op wo 12 feb. 2020 om 09:00 schreef Geert Uytterhoeven <geert@linux-m68k.org>:
->
-> Hi Gustavo,
->
-> On Tue, Feb 11, 2020 at 10:49 PM Gustavo A. R. Silva
-> <gustavo@embeddedor.com> wrote:
-> > --- a/arch/m68k/tools/amiga/dmesg.c
-> > +++ b/arch/m68k/tools/amiga/dmesg.c
-> > @@ -34,7 +34,7 @@ struct savekmsg {
-> >      u_long magic2;     /* SAVEKMSG_MAGIC2 */
-> >      u_long magicptr;   /* address of magic1 */
-> >      u_long size;
-> > -    char data[0];
-> > +       char data[];
-> >  };
->
-> JFTR, this file is not really part of the kernel, but supposed to be compiled
-> by an AmigaOS compiler, which may predate the introduction of support
-> for flexible array members.
+On 11.2.2020 18.13, Greg KH wrote:
+> On Tue, Feb 11, 2020 at 04:12:40PM +0100, Marek Szyprowski wrote:
+>> Hi Mathias,
+>>
+>> On 11.02.2020 16:01, Mathias Nyman wrote:
+>>> xhci driver assumed that xHC controllers have at most one custom
+>>> supported speed table (PSI) for all usb 3.x ports.
+>>> Memory was allocated for one PSI table under the xhci hub structure.
+>>>
+>>> Turns out this is not the case, some controllers have a separate
+>>> "supported protocol capability" entry with a PSI table for each port.
+>>> This means each usb3 roothub port can in theory support different custom
+>>> speeds.
+>>>
+>>> To solve this, cache all supported protocol capabilities with their PSI
+>>> tables in an array, and add pointers to the xhci port structure so that
+>>> every port points to its capability entry in the array.
+>>>
+>>> When creating the SuperSpeedPlus USB Device Capability BOS descriptor
+>>> for the xhci USB 3.1 roothub we for now will use only data from the
+>>> first USB 3.1 capable protocol capability entry in the array.
+>>> This could be improved later, this patch focuses resolving
+>>> the memory leak.
+>>>
+>>> Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
+>>> Reported-by: Sajja Venkateswara Rao <VenkateswaraRao.Sajja@amd.com>
+>>> Fixes: 47189098f8be ("xhci: parse xhci protocol speed ID list for usb 3.1 usage")
+>>> Cc: stable <stable@vger.kernel.org> # v4.4+
+>>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>
+>> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> 
+> Nice!
+> 
+> Should I revert the first and then apply this?
+> 
 
-FYI, there's a reasonably modern toolchain for AmigaOS which can
-compile this just fine (https://github.com/bebbo/amiga-gcc).
+Yes, please
 
-> Well, even if you keep it included, I guess the rare users can manage ;-)
-> My binary dates back to 1996, and I have no plans to recompile it.
+Thanks
 
-I did, just to check whether it still worked.
+-Mathias
 
-Kind regards,
 
-Kars.
