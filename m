@@ -2,123 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6149815A213
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2020 08:33:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F11A15A286
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2020 08:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728350AbgBLHdG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Feb 2020 02:33:06 -0500
-Received: from mail-sh.amlogic.com ([58.32.228.43]:14639 "EHLO
-        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728192AbgBLHdG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Feb 2020 02:33:06 -0500
-Received: from [10.18.90.120] (10.18.90.120) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Wed, 12 Feb
- 2020 15:33:42 +0800
-Subject: Re: [PATCH v8 1/3] dt-bindings: phy: Add Amlogic A1 USB2 PHY Bindings
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
+        id S1728429AbgBLH7d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Feb 2020 02:59:33 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:44440 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728250AbgBLH7d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Feb 2020 02:59:33 -0500
+Received: by mail-lj1-f196.google.com with SMTP id q8so1157903ljj.11;
+        Tue, 11 Feb 2020 23:59:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ckD3dBez4wVRfdf+Cbf8pOGR+4nkWo4QLK+apFAS7kQ=;
+        b=HO8ROIUa3Fx9Cf2VlGk0CfxVIeOHxjYTY3bIiUeXgVrpV4MnIpEm54VLNmMKQzs/r2
+         EnlR6Se7MM1U2v9s2WZkvnY3lrlAD3T9T3/65NU393gMwCyn/XKXGtvdqdlzxbhvJCQu
+         ZuTWof6JXi1u5TA1OmUSCFwlG/0nN5ASmcUFG5Xlw1nNvFDqqF7pZ7c1N2EcjJ4ze7nW
+         tnvjR1kRAHfFhxEIclsrGSIwKsY8HFKAIKqbnOJ25jc7vHIKodDNxZutBvK/vr656i1X
+         e1UwB6DBiI6WSyrnDjMC0dkeAQ97B99uBgQFUBtyMK5IcP7GUqek8144MYdPsXclzzMA
+         zVZQ==
+X-Gm-Message-State: APjAAAXJUGXHbY46iuhsIkxAzfSJJ6A9iX+MVOGDMhQyxZowyqAIt8Z5
+        0r1ObZLCCjbeYN7eyLMV6ZM=
+X-Google-Smtp-Source: APXvYqykknzoF6XL4gncXU2NZtkDtiRKMRvFI6HHf1YJH7oaEpQm3+1gGStpZKikF9eqqqZrOZ/8EQ==
+X-Received: by 2002:a05:651c:327:: with SMTP id b7mr6441062ljp.22.1581494371256;
+        Tue, 11 Feb 2020 23:59:31 -0800 (PST)
+Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
+        by smtp.gmail.com with ESMTPSA id g15sm3513421ljk.8.2020.02.11.23.59.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Feb 2020 23:59:30 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@kernel.org>)
+        id 1j1mvh-0006qy-GF; Wed, 12 Feb 2020 08:59:29 +0100
+Date:   Wed, 12 Feb 2020 08:59:29 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>
-CC:     Yue Wang <yue.wang@amlogic.com>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Carlo Caione <carlo@caione.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Qiufang Dai <qiufang.dai@amlogic.com>,
-        Jian Hu <jian.hu@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
-References: <1581419454-12667-1-git-send-email-hanjie.lin@amlogic.com>
- <1581419454-12667-2-git-send-email-hanjie.lin@amlogic.com>
- <1jpnelb9pe.fsf@starbuckisacylon.baylibre.com>
-From:   Hanjie Lin <hanjie.lin@amlogic.com>
-Message-ID: <f154ef4c-ce3c-2a67-01f3-97a5f0af4520@amlogic.com>
-Date:   Wed, 12 Feb 2020 15:33:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: ti_usb_3410_5052: Replace zero-length array
+ with flexible-array member
+Message-ID: <20200212075929.GE4150@localhost>
+References: <20200211232420.GA22388@embeddedor>
 MIME-Version: 1.0
-In-Reply-To: <1jpnelb9pe.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.90.120]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200211232420.GA22388@embeddedor>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 2020/2/11 20:16, Jerome Brunet wrote:
+On Tue, Feb 11, 2020 at 05:24:20PM -0600, Gustavo A. R. Silva wrote:
+> The current codebase makes use of the zero-length array language
+> extension to the C90 standard, but the preferred mechanism to declare
+> variable-length types such as these ones is a flexible array member[1][2],
+> introduced in C99:
 > 
-> On Tue 11 Feb 2020 at 12:10, Hanjie Lin <hanjie.lin@amlogic.com> wrote:
+> struct foo {
+>         int stuff;
+>         struct boo array[];
+> };
 > 
->> Add the Amlogic A1 Family USB2 PHY Bindings
->>
->> It supports Host mode only.
->>
->> Signed-off-by: Yue Wang <yue.wang@amlogic.com>
->> Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->> ---
->>  .../bindings/phy/amlogic,meson-g12a-usb2-phy.yaml         | 15 +++++++++++++++
->>  1 file changed, 15 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/phy/amlogic,meson-g12a-usb2-phy.yaml b/Documentation/devicetree/bindings/phy/amlogic,meson-g12a-usb2-phy.yaml
->> index 57d8603..3b7e763 100644
->> --- a/Documentation/devicetree/bindings/phy/amlogic,meson-g12a-usb2-phy.yaml
->> +++ b/Documentation/devicetree/bindings/phy/amlogic,meson-g12a-usb2-phy.yaml
->> @@ -14,6 +14,7 @@ properties:
->>    compatible:
->>      enum:
->>        - amlogic,meson-g12a-usb2-phy
->> +      - amlogic,meson-a1-usb2-phy
->>  
->>    reg:
->>      maxItems: 1
->> @@ -49,6 +50,20 @@ required:
->>    - reset-names
->>    - "#phy-cells"
->>  
->> +allOf:
+> By making use of the mechanism above, we will get a compiler warning
+> in case the flexible array does not occur last in the structure, which
+> will help us prevent some kind of undefined behavior bugs from being
+> inadvertenly introduced[3] to the codebase from now on.
 > 
-> Is 'allOf' really needed when there is only one if clause ?
-> 
+> This issue was found with the help of Coccinelle.
 
-Hi jerome:
+Same here, the scripts may need to be updated as you missed a couple of
+instances:
 
-Yes, this 'allOf' is not necessary here.
-I will remove it.
+	$ git grep '\[0\];' drivers/usb/serial
+	...
+	drivers/usb/serial/io_usbvend.h:        __u8    Data[0];                // Data starts here
+	drivers/usb/serial/io_usbvend.h:        __u8    Data[0];                // Download starts here
+	...
+
+Could you replace these as well so that is done in one patch per
+subsystem?
+
+> [1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+> [2] https://github.com/KSPP/linux/issues/21
+> [3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
+> 
+> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+> ---
+>  drivers/usb/serial/ti_usb_3410_5052.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/ti_usb_3410_5052.c b/drivers/usb/serial/ti_usb_3410_5052.c
+> index dd0ad67aa71e..db3ab25d9228 100644
+> --- a/drivers/usb/serial/ti_usb_3410_5052.c
+> +++ b/drivers/usb/serial/ti_usb_3410_5052.c
+> @@ -219,7 +219,7 @@ struct ti_write_data_bytes {
+>  	u8	bDataCounter;
+>  	__be16	wBaseAddrHi;
+>  	__be16	wBaseAddrLo;
+> -	u8	bData[0];
+> +	u8	bData[];
+>  } __packed;
+>  
+>  struct ti_read_data_request {
+> @@ -234,7 +234,7 @@ struct ti_read_data_bytes {
+>  	__u8	bCmdCode;
+>  	__u8	bModuleId;
+>  	__u8	bErrorCode;
+> -	__u8	bData[0];
+> +	__u8	bData[];
+>  } __packed;
+>  
+>  /* Interrupt struct */
 
 Thanks,
-Hanjie
-
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          enum:
->> +            - amlogic,meson-a1-usb-ctrl
->> +
->> +    then:
->> +      properties:
->> +        power-domains:
->> +          maxItems: 1
->> +      required:
->> +        - power-domains
->> +
->>  examples:
->>    - |
->>      phy@36000 {
-> 
-> .
-> 
+Johan
