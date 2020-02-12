@@ -2,67 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74F8915B076
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2020 20:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 358D115B332
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2020 22:57:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727439AbgBLTGX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Feb 2020 14:06:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41000 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727279AbgBLTGX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 Feb 2020 14:06:23 -0500
-Received: from localhost (unknown [104.132.1.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ACE3C20848;
-        Wed, 12 Feb 2020 19:06:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581534381;
-        bh=v0K2H4gBWXFwH/xrBY/6Z+P8qGwclSA/DnT0aAGA8V0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WZtxxc/Xmu+xdJWRfEw8wQOfEUSCP/Dh1xyM6p/FSOuHTNy3Gk5zMXzdzNwR7VX70
-         K91pvTInNnlX9aURV2vcJADh0bo4gJhUEGNTumKKjOyQy+4uGBNk2F89IXKa2wLNTK
-         rqoG+qeA4MQD8yQNEayutaXhhgg4yhCLXyXvtjvE=
-Date:   Wed, 12 Feb 2020 11:06:21 -0800
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     linux-usb@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: Re: [PATCH v3 0/6] Add Apple MFi fastcharge USB device driver
-Message-ID: <20200212190621.GA1970508@kroah.com>
-References: <20191016093933.693-1-hadess@hadess.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191016093933.693-1-hadess@hadess.net>
+        id S1729085AbgBLV51 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Feb 2020 16:57:27 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:50911 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727791AbgBLV51 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Feb 2020 16:57:27 -0500
+Received: by mail-pj1-f65.google.com with SMTP id r67so1449921pjb.0;
+        Wed, 12 Feb 2020 13:57:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=fnUhPBKcSJIh4dSE9ZDVA1HmaYlN0KtrojiReV2ykb0=;
+        b=cu2HVdgFsneUjNAodwp0mnQFtoeN6mjv2Ze87w4aV7ChgNbJ8jExut24J2vW66PS6T
+         koVG7aLqf7ULojlqtp726KnUimqivbcuoUV9NtssprL5ko3YprdPY5xvqnlkTdPaIU/r
+         8sM5Sd0Qpm6pjQxOwAl9BQbYkjdRX7X68XoEgg8aDvvtGHrTBoVcR05S8hcmY3wT23FZ
+         T4Q3nCX9mPO7fNbwnOSAJqdM8mt/maw+2dkLhWpkNJSgWQaOGZTea+Jlfky6SrNUIQ4k
+         1gqChzMwo5bt8sp/VLS/L4gnilV6Mhufl+oV3miS3u82WSBHBCTpb3KSoBpHxOn28S+A
+         2UwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=fnUhPBKcSJIh4dSE9ZDVA1HmaYlN0KtrojiReV2ykb0=;
+        b=LUNAjQn7kxW/oM/CWKbvsctCcnlup/2QXdaFm/96dFVK0Tect7Y8q1ShhuctNriuad
+         uDYiNKhwlgbybZDkyH2zo6UDr7pinw56KYt8Tpuy4+VC0h0m5XnD8Z1gQAXQhu5hP+3p
+         eRfnnVr+e+EmJaaaHLIswDP8caWlaBprkfTD7/VT8mZ3t77oOqtSKdWxlkB2AdmMPXvr
+         Pb4WdpPvl4rsXTpAlmtL99QZdf/veaAtoDcrs+23cyD+KVt/4BJ373Be8qra5Os8a/Bv
+         WTWdONnZyhZ+FvIb4GldTTbBAe1KMxEZK2gFCIqi7jd9LPH1vJXw2NRhDGcgqrD68GO8
+         Npfg==
+X-Gm-Message-State: APjAAAXItVH4eh7If3DSdsY8HG9prW7VymCJkvdIo/JTgtKw5xsiLXEw
+        Js7AkRB7Fw3u4aqz26j3zpg=
+X-Google-Smtp-Source: APXvYqyH1U4B5ayiip+FCyTBRMApO8id3his1NPhWKEoZ9RMaWpVNfNcOs6FCRURmy4EYX2Y/41kVw==
+X-Received: by 2002:a17:90a:fe02:: with SMTP id ck2mr1313325pjb.10.1581544646327;
+        Wed, 12 Feb 2020 13:57:26 -0800 (PST)
+Received: from taoren-ubuntu-R90MNF91.thefacebook.com ([2620:10d:c090:200::3:533f])
+        by smtp.gmail.com with ESMTPSA id r6sm214431pfh.91.2020.02.12.13.57.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Feb 2020 13:57:25 -0800 (PST)
+From:   rentao.bupt@gmail.com
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        taoren@fb.com
+Cc:     Tao Ren <rentao.bupt@gmail.com>
+Subject: [PATCH v2 0/5] aspeed-g6: enable usb support
+Date:   Wed, 12 Feb 2020 13:57:12 -0800
+Message-Id: <20200212215717.9474-1-rentao.bupt@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 11:39:27AM +0200, Bastien Nocera wrote:
-> This is version 3 of the patch set.
-> 
-> Changes in v3:
-> - Add Alan's ack
-> - don't export usb_device_match_id()
-> 
-> Changes in v2:
-> - checkpatch.pl is now quiet
-> - fallback to the generic driver when driver ->probe() fails
+From: Tao Ren <rentao.bupt@gmail.com>
 
-Sorry for the long response to this, my fault.
+The patch series aims at enabling USB Host and Gadget support on AST2600
+platforms.
 
-At first, I really don't like the idea of using the usb device driver
-interface, but I don't think there's a better way.  And, you did the
-work to make it so that it works cleanly, which is always appreciated.
+Patch #1 replaces hardcoded vhub port/endpoint number with device tree
+properties, so that it's more convenient to add support for ast2600-vhub
+which provides more downstream ports and endpoints.
 
-So all now queued up, let's see what breaks in linux-next with it! :)
+Patch #2 and #3 add vhub port/endpoint properties into aspeed-g4 and
+aspeed-g5 dtsi.
 
-One note, your patches had to be applied with "-p0" to git, normally we
-do it with "-p1", I don't know how you generated your patches at 0
-depth.
+Patch #4 enables ast2600 support in aspeed-vhub usb gadget driver.
 
-thanks,
+Patch #5 adds USB devices and according pin groups in aspeed-g6 dtsi.
 
-greg k-h
+The patch series is sanity tested on AST2520 (Yamp) BMC and AST2600-A0
+eval board:
+  - AST2520: created 5 gadget devices with 15 endpoints, and all of them
+    can be enumerated from usb-host side.
+  - AST2600: created 7 gadget devices with 20 endpoints, and all of them
+    can be enumerated from usb-host side.
+
+Tao Ren (5):
+  usb: gadget: aspeed: read vhub properties from device tree
+  ARM: dts: aspeed-g4: add vhub port and endpoint properties
+  ARM: dts: aspeed-g5: add vhub port and endpoint properties
+  usb: gadget: aspeed: add ast2600 vhub support
+  ARM: dts: aspeed-g6: add usb functions
+
+ arch/arm/boot/dts/aspeed-g4.dtsi           |  2 +
+ arch/arm/boot/dts/aspeed-g5.dtsi           |  2 +
+ arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi   | 25 ++++++++
+ arch/arm/boot/dts/aspeed-g6.dtsi           | 45 ++++++++++++++
+ drivers/usb/gadget/udc/aspeed-vhub/Kconfig |  4 +-
+ drivers/usb/gadget/udc/aspeed-vhub/core.c  | 71 ++++++++++++++--------
+ drivers/usb/gadget/udc/aspeed-vhub/dev.c   | 30 ++++++---
+ drivers/usb/gadget/udc/aspeed-vhub/epn.c   |  4 +-
+ drivers/usb/gadget/udc/aspeed-vhub/hub.c   | 26 +++++---
+ drivers/usb/gadget/udc/aspeed-vhub/vhub.h  | 23 +++----
+ 10 files changed, 170 insertions(+), 62 deletions(-)
+
+-- 
+2.17.1
+
