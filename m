@@ -2,118 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5911215AA94
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2020 14:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37EDD15AADF
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2020 15:22:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728052AbgBLN7J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Feb 2020 08:59:09 -0500
-Received: from mx2.suse.de ([195.135.220.15]:42774 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727439AbgBLN7J (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 Feb 2020 08:59:09 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 6F96CAEE0;
-        Wed, 12 Feb 2020 13:59:06 +0000 (UTC)
-Message-ID: <1581515939.21415.5.camel@suse.de>
-Subject: Re: KASAN: use-after-free Read in uvc_probe
-From:   Oliver Neukum <oneukum@suse.de>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     syzbot <syzbot+9a48339b077c5a80b869@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
-Date:   Wed, 12 Feb 2020 14:58:59 +0100
-In-Reply-To: <20200211153823.GD22612@pendragon.ideasonboard.com>
-References: <000000000000780999059c048dfc@google.com>
-         <1581344006.26936.7.camel@suse.de>
-         <20200210141812.GB4727@pendragon.ideasonboard.com>
-         <1581431490.1580.6.camel@suse.de>
-         <20200211153823.GD22612@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1728080AbgBLOWi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Feb 2020 09:22:38 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:40879 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727781AbgBLOWi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Feb 2020 09:22:38 -0500
+Received: by mail-wm1-f65.google.com with SMTP id t14so2684697wmi.5;
+        Wed, 12 Feb 2020 06:22:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=f3OlCupjVSpjjJAyiqIlXphKxGd2QdpKN8ivxs447PI=;
+        b=Dl9lpSmatwVOC21E0mjSSB6JBbvrgHOhnt9TJQKurWmEXoJD/j6RCoaQpD0XXLBNPG
+         s/aR2DqI/iJJmcA1mm2lC98j11nV1A63keqbKOERz/00nvFAHQYaKJm9roD/8w9OJbCh
+         stipo5s68ycgLPwKYp9FQin8Uec53elM3Dq3OcJnI4HkI8WvpQW86fAW9gaKiYNMzXkH
+         8jjXjyW/MgKwM8JNe0VwCHunEB7ULx+BmCZlC/J0fyrLci4PdE2Ztq1tDR+GyVl3PrMy
+         DCMBtn/WzSW9wRb8xrb8O4WXsXeh71t2AFZ2apstctwXCbZdky6khu44kw7S6QM+Gt1g
+         CiLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=f3OlCupjVSpjjJAyiqIlXphKxGd2QdpKN8ivxs447PI=;
+        b=XeBX/zISSg5hwOwxkvyp0BcoKw2o7TNb2Kswd21U1P6GYlJS2rmwyaObGPerV6eOMy
+         P0LYGK+D5n/8gIKacqS5Loj4NetNZp/UlBdvls3P1uWRyOmyVU59ZZIdqfLQ05sD3Tqm
+         /WuoOr8j+76lHCanvEaaXwGidNkYfRowrBv3egSZ6uJ22lPJ4vbQLc73UHSLpuwaFR6I
+         qwztTzOK1jNYbmknevhJf7+vixIlAMiN3qTqH5CzFFY4xI0k421frhuB5TtghP3NFPzm
+         nfUOBTbkZmiHrXPs+sIgZaUMoqBxZlV4sjXk9Kjxg7ZP1gnYHqbKH5vlcX7aY1ze8gSm
+         9zQQ==
+X-Gm-Message-State: APjAAAWU6DrNVtxW11Fs2sTEQlgPpowZwtYr+fioUL5H+mt9UUhjmWVo
+        rfrtaNqw63I4iWcG21AI7vFkpRS5k9w=
+X-Google-Smtp-Source: APXvYqzrf6YE5hkFqUnWc+nBttuk6honbPrzWg+QT57DKimAG4x961PYYPZNWxLWLqxj0+Q5N9SB4Q==
+X-Received: by 2002:a1c:a78b:: with SMTP id q133mr12733112wme.28.1581517355791;
+        Wed, 12 Feb 2020 06:22:35 -0800 (PST)
+Received: from rdodd-desktop.home (host5-81-121-228.range5-81.btcentralplus.com. [5.81.121.228])
+        by smtp.gmail.com with ESMTPSA id g7sm851625wrq.21.2020.02.12.06.22.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Feb 2020 06:22:34 -0800 (PST)
+From:   richard.o.dodd@gmail.com
+Cc:     gregkh@linuxfoundation.org, oneukum@suse.com,
+        linux-usb@vger.kernel.org, Richard Dodd <richard.o.dodd@gmail.com>,
+        Marco Zatta <marco@zatta.me>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] USB: Fix novation SourceControl XL after suspend
+Date:   Wed, 12 Feb 2020 14:22:18 +0000
+Message-Id: <20200212142220.36892-1-richard.o.dodd@gmail.com>
+X-Mailer: git-send-email 2.25.0
+In-Reply-To: <20200131214036.GA2280058@kroah.com>
+References: <20200131214036.GA2280058@kroah.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Dienstag, den 11.02.2020, 17:38 +0200 schrieb Laurent Pinchart:
-> Hi Oliver,
-> 
-> On Tue, Feb 11, 2020 at 03:31:30PM +0100, Oliver Neukum wrote:
-> > Am Montag, den 10.02.2020, 16:18 +0200 schrieb Laurent Pinchart:
-> > > On Mon, Feb 10, 2020 at 03:13:26PM +0100, Oliver Neukum wrote:
-> > > > Am Montag, den 13.01.2020, 04:24 -0800 schrieb syzbot:
-> > > > > Hello,
-> > > > > 
-> > > > > syzbot found the following crash on:
-> > > > > 
-> > > > > HEAD commit:    ae179410 usb: gadget: add raw-gadget interface
-> > > > > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=132223fee00000
-> > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=ad1d751a3a72ae57
-> > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=9a48339b077c5a80b869
-> > > > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16857325e00000
-> > > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=142e069ee00000
-> > > > > 
-> > > > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > > > > Reported-by: syzbot+9a48339b077c5a80b869@syzkaller.appspotmail.com
-> > > > > 
-> > > > > usb 1-1: New USB device found, idVendor=0bd3, idProduct=0555,  
-> > > > > bcdDevice=69.6a
-> > > > > usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> > > > > usb 1-1: config 0 descriptor??
-> > > > > usb 1-1: string descriptor 0 read error: -71
-> > > > > uvcvideo: Found UVC 0.00 device <unnamed> (0bd3:0555)
-> > > > > ==================================================================
-> > > > > BUG: KASAN: use-after-free in uvc_register_terms  
-> > > > > drivers/media/usb/uvc/uvc_driver.c:2038 [inline]
-> > > > > BUG: KASAN: use-after-free in uvc_register_chains  
-> > > > > drivers/media/usb/uvc/uvc_driver.c:2070 [inline]
-> > > > > BUG: KASAN: use-after-free in uvc_probe.cold+0x2193/0x29de  
-> > > > > drivers/media/usb/uvc/uvc_driver.c:2201
-> > > > > Read of size 2 at addr ffff8881d4f1bc2e by task kworker/1:2/94
-> > > > 
-> > > > #syz test: https://github.com/google/kasan.git ae179410
-> > > > 
-> > > > From db844641a5e30f3cfc0ce9cde156b3cc356b6c0c Mon Sep 17 00:00:00 2001
-> > > > From: Oliver Neukum <oneukum@suse.com>
-> > > > Date: Mon, 10 Feb 2020 15:10:36 +0100
-> > > > Subject: [PATCH] UVC: deal with unnamed streams
-> > > > 
-> > > > The pointer can be NULL
-> > > > 
-> > > > Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> > > > ---
-> > > >  drivers/media/usb/uvc/uvc_driver.c | 3 ++-
-> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> > > > index 99883550375e..26558a89f2fe 100644
-> > > > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > > > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > > > @@ -2069,7 +2069,8 @@ static int uvc_register_terms(struct uvc_device *dev,
-> > > >  		stream = uvc_stream_by_id(dev, term->id);
-> > > >  		if (stream == NULL) {
-> > > >  			uvc_printk(KERN_INFO, "No streaming interface found "
-> > > > -				   "for terminal %u.", term->id);
-> > > > +				   "for terminal %u.",
-> > > > +				   term->id ? term->id : "(Unnamed)");
-> > > 
-> > > Have you tried compiling this ?
-> > 
-> > Yes. It does compile. Why?
-> 
-> Because term->id is a u8, "(Unnamed)" is a const char *, and %u requires
-> an integer. I'm surprised the compiler doesn't complain, but in any
-> case, it's not right :-)
-> 
+From: Richard Dodd <richard.o.dodd@gmail.com>
 
-Oi, damnation, you are right. For some reason I saw a %s there.
+Currently, the SourceControl will stay in power-down mode after resuming
+from suspend. This patch resets the device after suspend to power it up.
 
-	Sorry
-		Oliver
+Signed-off-by: Richard Dodd <richard.o.dodd@gmail.com>
+---
+ drivers/usb/core/quirks.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 6b6413073584..3db6c05aaa4b 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -445,6 +445,9 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	/* INTEL VALUE SSD */
+ 	{ USB_DEVICE(0x8086, 0xf1a5), .driver_info = USB_QUIRK_RESET_RESUME },
+ 
++	/* novation SoundControl XL */
++	{ USB_DEVICE(0x1235, 0x0061), .driver_info = USB_QUIRK_RESET_RESUME },
++
+ 	{ }  /* terminating entry must be last */
+ };
+ 
+-- 
+2.25.0
 
