@@ -2,341 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 130C915B537
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2020 00:48:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B24E515B923
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2020 06:41:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729246AbgBLXsD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Feb 2020 18:48:03 -0500
-Received: from mga03.intel.com ([134.134.136.65]:40349 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727117AbgBLXsD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 Feb 2020 18:48:03 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Feb 2020 15:48:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,434,1574150400"; 
-   d="scan'208";a="432487811"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 12 Feb 2020 15:48:00 -0800
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1j21jb-0000OR-ST; Thu, 13 Feb 2020 07:47:59 +0800
-Date:   Thu, 13 Feb 2020 07:47:23 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [balbi-usb:testing/fixes] BUILD SUCCESS
- 42cd5ffe46c1037d5d9a253c72e71a024a7bfbef
-Message-ID: <5e448e8b.j+5py0BkMw7+9ZMj%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726368AbgBMFlu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Feb 2020 00:41:50 -0500
+Received: from mail-qv1-f49.google.com ([209.85.219.49]:39289 "EHLO
+        mail-qv1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725773AbgBMFlu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Feb 2020 00:41:50 -0500
+Received: by mail-qv1-f49.google.com with SMTP id y8so2100461qvk.6
+        for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2020 21:41:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mDaH5xXQaA6WBSgg7FwGlZs1NLyXzpJ3E3ms2BazYEI=;
+        b=UEuG16PD1ephz5uNd+EpXHcrTJaid7DKdqqjHzLh5T2SoXfQbDZN1BdfbM5xgUDv7e
+         476zzay83kObDM1r2Z9FODQDTV2ZbdCTrFaBw0OZNjPLkcZ+2kmo0Bopt7sn4GI2d8AA
+         gVug75o27xESKSj1khR4NbABFnASZJYZY/nbMQRteQPynRsI+NqN94xRmHBsyoFDyDUM
+         j4sad+lLuooHJll/DgTkv2gxYqIxWqcFmG5Ah6/Q/8mX8iGfhYmCS8up5maY3Zj4YAjK
+         snUAABP7/sDVJ4JGQoiraAzwsNu4lrgiznsOdT1llmh5NEWHRtlZf+hi1jOizdKI6Iir
+         W8hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mDaH5xXQaA6WBSgg7FwGlZs1NLyXzpJ3E3ms2BazYEI=;
+        b=ZTyUOpmHCOvtJgo7RyrjgQ9cLGy6vV+leLrvpSf1GPY8eepZqApy4YOmjsx26gnfCh
+         sIosMb+1yenliBDJ+Og9fQau2mp5jsMjevnTJojRuCe//fQucy2z8YPs/wpKLbXjhuit
+         MgpVeSIm2jx/QEYGaV/UKdMvXFvrIQln/HxcpakuIAeZ8z9NREMt1jeA9BfUgz7cytUs
+         eNjsssqfHVnbWTT6EtXYfVkM3/Nkhx93ZKr6k6G6JtUBYq2ZJkeQKCCS6yMGg+ZEfqy4
+         nrlcr4z6JxrSjFPnbLeCAyjHIAQHOy1QEjWiFSXB67P29scyrKfgTSkmargSo5NMI2xE
+         rhfw==
+X-Gm-Message-State: APjAAAXIy5e7roBJtX7L0pU1kIMSz1X7KVVGlqxJ/zIOzmswtdKWN1UK
+        xPN0Q9LbSe+PI49pcEsUOv+GqmVh+3YgbpnWegk=
+X-Google-Smtp-Source: APXvYqzDAAREL4ZVatcRlFQxR22N9c+UOeKIsVm7xKRU2oZ6QQnq3reUbmWPplxog6EpjLu3exGYUkc0g5SXh1HdVlQ=
+X-Received: by 2002:ad4:4e50:: with SMTP id eb16mr22423506qvb.34.1581572508932;
+ Wed, 12 Feb 2020 21:41:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <1581330569.26936.5.camel@suse.de> <Pine.LNX.4.44L0.2002100946400.14460-100000@netrider.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.2002100946400.14460-100000@netrider.rowland.org>
+From:   Sam Lewis <sam.vr.lewis@gmail.com>
+Date:   Thu, 13 Feb 2020 16:41:37 +1100
+Message-ID: <CA+ZLECuKY0zOfGW4=5U1o0fYuYta9Xxdxwvbj5zS5TB6NVoqFQ@mail.gmail.com>
+Subject: Re: USB hub driver over-current behavior
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Oliver Neukum <oneukum@suse.de>, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git  testing/fixes
-branch HEAD: 42cd5ffe46c1037d5d9a253c72e71a024a7bfbef  usb: dwc3: debug: fix string position formatting mixup with ret and len
+On Tue, 11 Feb 2020 at 01:53, Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Mon, 10 Feb 2020, Oliver Neukum wrote:
+> > error handling at this level has gotten little love.
+>
+> Indeed.  This is mostly because the issue does not crop up in normal
+> usage very often.  And most hubs don't have very good over-current
+> protection anyway.
+>
+> I believe the original expectation was that over-current events would
+> generally be intermittent and very short-lived.  So when an event did
+> occur, it would make sense to wait a little while and then try to
+> switch the port back on.  Nobody ever bothered to implement a total
+> time or retry limit on this behavior, probably because there weren't
+> any complaints.
 
-elapsed time: 2173m
+Thanks for the responses. This makes sense, especially if most
+consumer hubs aren't very high quality.
 
-configs tested: 286
-configs skipped: 0
+> > The basic problem is that we have no good way to switch a portback on
+> > after we have given up on it. Feel free to propose a patch to the
+> > kernel and a tool to use it and we can discuss them.
+>
+> Yes, patches are welcome.
+>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+How receptive would you (and other contributors/maintainers) be to a
+patch that adds configuration that allows a port to stay off if it
+receives an OC event? This obviously wouldn't be the desired behaviour
+in the general case, but could be useful for embedded devices (such as
+mine) where the design of the hub electronics are such that you can be
+confident that an OC event is not just an glitch and is indicative of
+a real problem.
 
-arm                              allmodconfig
-arm                               allnoconfig
-arm                              allyesconfig
-arm                         at91_dt_defconfig
-arm                           efm32_defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                        multi_v7_defconfig
-arm                        shmobile_defconfig
-arm                           sunxi_defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-sparc                            allyesconfig
-nds32                             allnoconfig
-riscv                          rv32_defconfig
-s390                                defconfig
-arc                                 defconfig
-sparc64                             defconfig
-sh                          rsk7269_defconfig
-sh                            titan_defconfig
-riscv                               defconfig
-powerpc                           allnoconfig
-microblaze                    nommu_defconfig
-parisc                              defconfig
-um                                  defconfig
-openrisc                    or1ksim_defconfig
-sparc64                          allyesconfig
-microblaze                      mmu_defconfig
-riscv                    nommu_virt_defconfig
-alpha                               defconfig
-nds32                               defconfig
-i386                             alldefconfig
-ia64                             allyesconfig
-powerpc                       ppc64_defconfig
-openrisc                 simple_smp_defconfig
-mips                              allnoconfig
-parisc                           allyesconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                                defconfig
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                                defconfig
-c6x                              allyesconfig
-c6x                        evmc6678_defconfig
-nios2                         10m50_defconfig
-nios2                         3c120_defconfig
-xtensa                       common_defconfig
-xtensa                          iss_defconfig
-csky                                defconfig
-h8300                     edosk2674_defconfig
-h8300                    h8300h-sim_defconfig
-h8300                       h8s-sim_defconfig
-m68k                             allmodconfig
-m68k                       m5475evb_defconfig
-m68k                          multi_defconfig
-m68k                           sun3_defconfig
-arc                              allyesconfig
-powerpc                             defconfig
-powerpc                          rhel-kconfig
-mips                           32r2_defconfig
-mips                         64r6el_defconfig
-mips                             allmodconfig
-mips                             allyesconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-parisc                            allnoconfig
-parisc                         b180_defconfig
-parisc                        c3000_defconfig
-x86_64               randconfig-a001-20200213
-x86_64               randconfig-a002-20200213
-x86_64               randconfig-a003-20200213
-i386                 randconfig-a001-20200213
-i386                 randconfig-a002-20200213
-i386                 randconfig-a003-20200213
-x86_64               randconfig-a001-20200212
-x86_64               randconfig-a002-20200212
-x86_64               randconfig-a003-20200212
-i386                 randconfig-a001-20200212
-i386                 randconfig-a002-20200212
-i386                 randconfig-a003-20200212
-alpha                randconfig-a001-20200212
-m68k                 randconfig-a001-20200212
-nds32                randconfig-a001-20200212
-parisc               randconfig-a001-20200212
-riscv                randconfig-a001-20200212
-alpha                randconfig-a001-20200213
-m68k                 randconfig-a001-20200213
-mips                 randconfig-a001-20200213
-nds32                randconfig-a001-20200213
-parisc               randconfig-a001-20200213
-riscv                randconfig-a001-20200213
-c6x                  randconfig-a001-20200211
-h8300                randconfig-a001-20200211
-microblaze           randconfig-a001-20200211
-nios2                randconfig-a001-20200211
-sparc64              randconfig-a001-20200211
-c6x                  randconfig-a001-20200212
-h8300                randconfig-a001-20200212
-microblaze           randconfig-a001-20200212
-nios2                randconfig-a001-20200212
-sparc64              randconfig-a001-20200212
-c6x                  randconfig-a001-20200213
-h8300                randconfig-a001-20200213
-microblaze           randconfig-a001-20200213
-nios2                randconfig-a001-20200213
-sparc64              randconfig-a001-20200213
-csky                 randconfig-a001-20200212
-openrisc             randconfig-a001-20200212
-s390                 randconfig-a001-20200212
-sh                   randconfig-a001-20200212
-xtensa               randconfig-a001-20200212
-csky                 randconfig-a001-20200213
-openrisc             randconfig-a001-20200213
-s390                 randconfig-a001-20200213
-sh                   randconfig-a001-20200213
-xtensa               randconfig-a001-20200213
-csky                 randconfig-a001-20200211
-openrisc             randconfig-a001-20200211
-s390                 randconfig-a001-20200211
-sh                   randconfig-a001-20200211
-xtensa               randconfig-a001-20200211
-x86_64               randconfig-b001-20200211
-x86_64               randconfig-b002-20200211
-x86_64               randconfig-b003-20200211
-i386                 randconfig-b001-20200211
-i386                 randconfig-b002-20200211
-i386                 randconfig-b003-20200211
-x86_64               randconfig-b001-20200212
-x86_64               randconfig-b002-20200212
-x86_64               randconfig-b003-20200212
-i386                 randconfig-b001-20200212
-i386                 randconfig-b002-20200212
-i386                 randconfig-b003-20200212
-x86_64               randconfig-b001-20200213
-x86_64               randconfig-b002-20200213
-x86_64               randconfig-b003-20200213
-i386                 randconfig-b001-20200213
-i386                 randconfig-b002-20200213
-i386                 randconfig-b003-20200213
-i386                 randconfig-c002-20200211
-x86_64               randconfig-c003-20200211
-i386                 randconfig-c001-20200211
-x86_64               randconfig-c002-20200211
-x86_64               randconfig-c001-20200211
-i386                 randconfig-c003-20200211
-x86_64               randconfig-c001-20200212
-x86_64               randconfig-c002-20200212
-x86_64               randconfig-c003-20200212
-i386                 randconfig-c001-20200212
-i386                 randconfig-c002-20200212
-i386                 randconfig-c003-20200212
-x86_64               randconfig-c001-20200213
-x86_64               randconfig-c002-20200213
-x86_64               randconfig-c003-20200213
-i386                 randconfig-c001-20200213
-i386                 randconfig-c002-20200213
-i386                 randconfig-c003-20200213
-x86_64               randconfig-d001-20200212
-x86_64               randconfig-d002-20200212
-x86_64               randconfig-d003-20200212
-i386                 randconfig-d001-20200212
-i386                 randconfig-d002-20200212
-i386                 randconfig-d003-20200212
-x86_64               randconfig-d001-20200213
-x86_64               randconfig-d002-20200213
-x86_64               randconfig-d003-20200213
-i386                 randconfig-d001-20200213
-i386                 randconfig-d002-20200213
-i386                 randconfig-d003-20200213
-x86_64               randconfig-d001-20200211
-x86_64               randconfig-d002-20200211
-x86_64               randconfig-d003-20200211
-i386                 randconfig-d001-20200211
-i386                 randconfig-d002-20200211
-i386                 randconfig-d003-20200211
-x86_64               randconfig-e001-20200212
-x86_64               randconfig-e002-20200212
-x86_64               randconfig-e003-20200212
-i386                 randconfig-e001-20200212
-i386                 randconfig-e002-20200212
-i386                 randconfig-e003-20200212
-x86_64               randconfig-e001-20200213
-x86_64               randconfig-e002-20200213
-x86_64               randconfig-e003-20200213
-i386                 randconfig-e001-20200213
-i386                 randconfig-e002-20200213
-i386                 randconfig-e003-20200213
-x86_64               randconfig-f001-20200212
-x86_64               randconfig-f002-20200212
-x86_64               randconfig-f003-20200212
-i386                 randconfig-f001-20200212
-i386                 randconfig-f002-20200212
-i386                 randconfig-f003-20200212
-x86_64               randconfig-f001-20200213
-x86_64               randconfig-f002-20200213
-x86_64               randconfig-f003-20200213
-i386                 randconfig-f001-20200213
-i386                 randconfig-f002-20200213
-i386                 randconfig-f003-20200213
-x86_64               randconfig-f001-20200211
-x86_64               randconfig-f002-20200211
-x86_64               randconfig-f003-20200211
-i386                 randconfig-f001-20200211
-i386                 randconfig-f002-20200211
-i386                 randconfig-f003-20200211
-x86_64               randconfig-g001-20200211
-x86_64               randconfig-g002-20200211
-x86_64               randconfig-g003-20200211
-i386                 randconfig-g001-20200211
-i386                 randconfig-g002-20200211
-i386                 randconfig-g003-20200211
-x86_64               randconfig-g001-20200212
-x86_64               randconfig-g002-20200212
-x86_64               randconfig-g003-20200212
-i386                 randconfig-g001-20200212
-i386                 randconfig-g002-20200212
-i386                 randconfig-g003-20200212
-x86_64               randconfig-g001-20200213
-x86_64               randconfig-g002-20200213
-x86_64               randconfig-g003-20200213
-i386                 randconfig-g001-20200213
-i386                 randconfig-g002-20200213
-i386                 randconfig-g003-20200213
-x86_64               randconfig-h001-20200212
-x86_64               randconfig-h002-20200212
-x86_64               randconfig-h003-20200212
-i386                 randconfig-h001-20200212
-i386                 randconfig-h002-20200212
-i386                 randconfig-h003-20200212
-x86_64               randconfig-h001-20200213
-x86_64               randconfig-h002-20200213
-x86_64               randconfig-h003-20200213
-i386                 randconfig-h001-20200213
-i386                 randconfig-h002-20200213
-i386                 randconfig-h003-20200213
-x86_64               randconfig-h001-20200211
-x86_64               randconfig-h002-20200211
-x86_64               randconfig-h003-20200211
-i386                 randconfig-h001-20200211
-i386                 randconfig-h002-20200211
-i386                 randconfig-h003-20200211
-arc                  randconfig-a001-20200211
-arm                  randconfig-a001-20200211
-arm64                randconfig-a001-20200211
-ia64                 randconfig-a001-20200211
-powerpc              randconfig-a001-20200211
-sparc                randconfig-a001-20200211
-arc                  randconfig-a001-20200212
-arm                  randconfig-a001-20200212
-arm64                randconfig-a001-20200212
-ia64                 randconfig-a001-20200212
-powerpc              randconfig-a001-20200212
-sparc                randconfig-a001-20200212
-arc                  randconfig-a001-20200213
-arm                  randconfig-a001-20200213
-arm64                randconfig-a001-20200213
-ia64                 randconfig-a001-20200213
-powerpc              randconfig-a001-20200213
-sparc                randconfig-a001-20200213
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                            allyesconfig
-s390                             alldefconfig
-s390                             allmodconfig
-s390                              allnoconfig
-s390                             allyesconfig
-s390                          debug_defconfig
-s390                       zfcpdump_defconfig
-sh                               allmodconfig
-sh                                allnoconfig
-sh                  sh7785lcr_32bit_defconfig
-sparc                               defconfig
-sparc64                          allmodconfig
-sparc64                           allnoconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              fedora-25
-x86_64                                  kexec
-x86_64                                    lkp
-x86_64                                   rhel
-x86_64                         rhel-7.2-clear
-x86_64                               rhel-7.6
+If it isn't acceptable to have a USB port off until the system is
+rebooted, what would be the appropriate mechanism of allowing a
+userspace application to manually turn the port back on?
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Sam
