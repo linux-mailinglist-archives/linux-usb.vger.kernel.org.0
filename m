@@ -2,65 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 920D315BD96
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2020 12:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3963A15BDAC
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2020 12:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729893AbgBMLVD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Feb 2020 06:21:03 -0500
-Received: from mx2.suse.de ([195.135.220.15]:46688 "EHLO mx2.suse.de"
+        id S1729772AbgBMLe2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Feb 2020 06:34:28 -0500
+Received: from mga09.intel.com ([134.134.136.24]:12562 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729532AbgBMLVD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 Feb 2020 06:21:03 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 8D908B198;
-        Thu, 13 Feb 2020 11:21:01 +0000 (UTC)
-From:   Takashi Iwai <tiwai@suse.de>
-To:     alsa-devel@alsa-project.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] ALSA: usb-audio: Parse source ID of UAC2 effect unit
-Date:   Thu, 13 Feb 2020 12:20:59 +0100
-Message-Id: <20200213112059.18745-3-tiwai@suse.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20200213112059.18745-1-tiwai@suse.de>
-References: <20200213112059.18745-1-tiwai@suse.de>
+        id S1726232AbgBMLe2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 13 Feb 2020 06:34:28 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Feb 2020 03:34:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,436,1574150400"; 
+   d="scan'208";a="347712799"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 13 Feb 2020 03:34:24 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 13 Feb 2020 13:34:23 +0200
+Date:   Thu, 13 Feb 2020 13:34:23 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Colin King <colin.king@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: ucsi: remove redundant assignment to
+ variable num
+Message-ID: <20200213113423.GK1498@kuha.fi.intel.com>
+References: <20200208165022.30429-1-colin.king@canonical.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200208165022.30429-1-colin.king@canonical.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-During parsing the input source, we currently cut off at the Effect
-Unit node without parsing further its source id.  It's no big problem,
-so far, but it should be more consistent to parse it properly.
+On Sat, Feb 08, 2020 at 04:50:22PM +0000, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
+> 
+> Variable num is being assigned with a value that is never read, it is
+> assigned a new value later in a for-loop. The assignment is redundant
+> and can be removed.
+> 
+> Addresses-Coverity: ("Unused value")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index d5a6aac86327..b1b72cb7af10 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -400,7 +400,7 @@ static int ucsi_register_altmodes(struct ucsi_connector *con, u8 recipient)
+>  	struct typec_altmode_desc desc;
+>  	struct ucsi_altmode alt[2];
+>  	u64 command;
+> -	int num = 1;
+> +	int num;
+>  	int ret;
+>  	int len;
+>  	int j;
 
-This patch adds the recursive parsing in parse_term_effect_unit().
-It doesn't add anything in the audio unit parser itself, and the
-effect unit itself is still skipped, though.
+Greg! I'll pick this, and to you with a few other patches that I have
+in my queue for the ucsi driver. I hope that's OK.
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=206147
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
----
- sound/usb/mixer.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+thanks,
 
-diff --git a/sound/usb/mixer.c b/sound/usb/mixer.c
-index 81b2db0edd5f..56d0878e4999 100644
---- a/sound/usb/mixer.c
-+++ b/sound/usb/mixer.c
-@@ -901,6 +901,12 @@ static int parse_term_effect_unit(struct mixer_build *state,
- 				  struct usb_audio_term *term,
- 				  void *p1, int id)
- {
-+	struct uac2_effect_unit_descriptor *d = p1;
-+	int err;
-+
-+	err = __check_input_term(state, d->bSourceID, term);
-+	if (err < 0)
-+		return err;
- 	term->type = UAC3_EFFECT_UNIT << 16; /* virtual type */
- 	term->id = id;
- 	return 0;
 -- 
-2.16.4
-
+heikki
