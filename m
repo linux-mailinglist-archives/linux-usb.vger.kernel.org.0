@@ -2,95 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F26C215BEC9
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2020 13:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E342F15BEE8
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2020 14:04:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729953AbgBMM5A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Feb 2020 07:57:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46044 "EHLO mail.kernel.org"
+        id S1729981AbgBMNEG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Feb 2020 08:04:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49778 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729557AbgBMM5A (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 Feb 2020 07:57:00 -0500
+        id S1729801AbgBMNEG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 13 Feb 2020 08:04:06 -0500
 Received: from localhost (unknown [209.37.97.194])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 87ACE2168B;
-        Thu, 13 Feb 2020 12:56:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9F6DB2168B;
+        Thu, 13 Feb 2020 13:04:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581598619;
-        bh=hR6bwzbgQ4PVp+wweLDY51C8dgqXKoNzqDDCI8q8+qU=;
+        s=default; t=1581599044;
+        bh=JzuXVZMjhJuQSJ5hGh5JfZlVw6AYi3gKS44RcKZi8yI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A2L+zQ25Xq+c9Nvo0PBn6EELnbeuVsw/b/+OMFKz1Wk4GWZZAfEkwaBlWEIebjoRe
-         6t8bYSewpR/qIpxVGbq2UkYKE12suzS4+TygWxlKYaMRhJoFJL6hgB1usAzz8T8I8I
-         zpM4LspbmWWMFq7dRInZmUu7AgjKvyuMPcyPAIhs=
-Date:   Thu, 13 Feb 2020 04:56:59 -0800
+        b=rKcZlkdb1MfHMvC/XJXfgmNFUkssnjWs2ADRkmHXZ9mvIr//KwkdCC50/Ltj/M0PG
+         I0m89eojS5KcAIjAWPsFPJfX/rRcXDDOHLTe7buofpKbFgASMcaiXNIkdsCwflkNtZ
+         VEBeoqqUxZD/8RNhH9Bp8nCx7FJv1ZIdiVzuNRLU=
+Date:   Thu, 13 Feb 2020 05:04:04 -0800
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Timur Tabi <timur@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Anton Vorontsov <avorontsov@ru.mvista.com>,
-        kbuild test robot <lkp@intel.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: host: fhci-hcd: annotate PIPE_CONTROL switch case
- with fallthrough
-Message-ID: <20200213125659.GB3325929@kroah.com>
-References: <20200213085401.27862-1-linux@rasmusvillemoes.dk>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Colin King <colin.king@canonical.com>, linux-usb@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: ucsi: remove redundant assignment to
+ variable num
+Message-ID: <20200213130404.GA3369961@kroah.com>
+References: <20200208165022.30429-1-colin.king@canonical.com>
+ <20200213113423.GK1498@kuha.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200213085401.27862-1-linux@rasmusvillemoes.dk>
+In-Reply-To: <20200213113423.GK1498@kuha.fi.intel.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 13, 2020 at 09:54:00AM +0100, Rasmus Villemoes wrote:
-> After this was made buildable for something other than PPC32, kbuild
-> starts warning
+On Thu, Feb 13, 2020 at 01:34:23PM +0200, Heikki Krogerus wrote:
+> On Sat, Feb 08, 2020 at 04:50:22PM +0000, Colin King wrote:
+> > From: Colin Ian King <colin.king@canonical.com>
+> > 
+> > Variable num is being assigned with a value that is never read, it is
+> > assigned a new value later in a for-loop. The assignment is redundant
+> > and can be removed.
+> > 
+> > Addresses-Coverity: ("Unused value")
+> > Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> > ---
+> >  drivers/usb/typec/ucsi/ucsi.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> > index d5a6aac86327..b1b72cb7af10 100644
+> > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > @@ -400,7 +400,7 @@ static int ucsi_register_altmodes(struct ucsi_connector *con, u8 recipient)
+> >  	struct typec_altmode_desc desc;
+> >  	struct ucsi_altmode alt[2];
+> >  	u64 command;
+> > -	int num = 1;
+> > +	int num;
+> >  	int ret;
+> >  	int len;
+> >  	int j;
 > 
-> drivers/usb/host/fhci-hcd.c:398:8: warning: this statement may fall
-> through [-Wimplicit-fallthrough=]
-> 
-> I don't know this code, but from the construction (initializing size
-> with 0 and explicitly using "size +=" in the PIPE_BULK case) I assume
-> that fallthrough is indeed intended.
-> 
-> Reported-by: kbuild test robot <lkp@intel.com>
-> Fixes: 5a35435ef4e6 (soc: fsl: qe: remove PPC32 dependency from CONFIG_QUICC_ENGINE)
-> Fixes: a035d552a93b (Makefile: Globally enable fall-through warning)
-> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> ---
-> 
-> Two different Fixes: Obviously my 5a35435ef4e6 is the one that started
-> making kbuild complain, but that's just because apparently kbuild
-> doesn't cover a PPC32+USB_FHCI_HCD .config. Note for -stable folks,
-> just in case 5.3.y is still maintained somewhere: a035d552a93b
-> appeared in 5.3, but the #define fallthrough that I'm using here
-> wasn't introduced until 5.4 (294f69e662d15). So either ignore this,
-> make it /* fallthrough */, or backport 294f69e662d15 to 5.3.y as well.
-> 
->  drivers/usb/host/fhci-hcd.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/host/fhci-hcd.c b/drivers/usb/host/fhci-hcd.c
-> index 04733876c9c6..a8e1048278d0 100644
-> --- a/drivers/usb/host/fhci-hcd.c
-> +++ b/drivers/usb/host/fhci-hcd.c
-> @@ -396,6 +396,7 @@ static int fhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb,
->  	case PIPE_CONTROL:
->  		/* 1 td fro setup,1 for ack */
->  		size = 2;
-> +		fallthrough;
+> Greg! I'll pick this, and to you with a few other patches that I have
+> in my queue for the ucsi driver. I hope that's OK.
 
-We have an attribute for that?
-
-Shouldn't this be /* fall through */ instead?
-
-Gustavo, what's the best practice here, I count only a few
-"fallthrough;" instances in the kernel, although one is in our coding
-style document, and thousands of the /* */ version.
-
-thanks,
-
-greg k-h
+Thats fine.
