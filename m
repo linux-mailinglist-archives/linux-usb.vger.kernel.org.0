@@ -2,108 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65EB515BE39
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2020 13:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE19D15BEBB
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2020 13:53:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729544AbgBMMGT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Feb 2020 07:06:19 -0500
-Received: from mga17.intel.com ([192.55.52.151]:21501 "EHLO mga17.intel.com"
+        id S1729931AbgBMMx5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Feb 2020 07:53:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44786 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727059AbgBMMGS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 Feb 2020 07:06:18 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Feb 2020 04:06:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,436,1574150400"; 
-   d="diff'?scan'208";a="347718089"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 13 Feb 2020 04:06:16 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 13 Feb 2020 14:05:55 +0200
-Date:   Thu, 13 Feb 2020 14:05:55 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Shah, Nehal-bakulchandra" <nbshah@amd.com>
-Cc:     ajayg@nvidia.com, linux-usb@vger.kernel.org
-Subject: Re: UCSI:CCG: AMD Platform
-Message-ID: <20200213120555.GM1498@kuha.fi.intel.com>
-References: <0fa0fc36-ce51-046a-32ae-9dbb7452c1c4@amd.com>
- <20200203132808.GA29050@kuha.fi.intel.com>
- <20200203133231.GB29050@kuha.fi.intel.com>
- <aca4968f-06e8-6ac3-09c8-4810947e92b3@amd.com>
- <20200213120011.GL1498@kuha.fi.intel.com>
+        id S1729901AbgBMMx4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 13 Feb 2020 07:53:56 -0500
+Received: from localhost (unknown [209.37.97.194])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3B9F5218AC;
+        Thu, 13 Feb 2020 12:53:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581598436;
+        bh=nyig/oycKzyGM+1H8laUOHkyMA4yypnEaN7AHJ2b24o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HivmmBJOMH0Js1m3iNQMnRO9xvLnX4DLbUawFzovY9bg2hCXFB0U6WjPfj2Zb8UCX
+         cu6HLgZ5v/PVczBi8n8RFHI4xUpsiuI9JfXq55TBdKMg/PSa9yXcVtYRrKb4X5zfEF
+         x0omGMUVwZK4O3ZhKgUYHxpq7ror9+twF5cI9zGQ=
+Date:   Thu, 13 Feb 2020 04:53:55 -0800
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] USB-serial fixes for 5.6-rc2
+Message-ID: <20200213125355.GA3325929@kroah.com>
+References: <20200213110318.GA16245@localhost>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="5/uDoXvLw7AC5HRs"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200213120011.GL1498@kuha.fi.intel.com>
+In-Reply-To: <20200213110318.GA16245@localhost>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---5/uDoXvLw7AC5HRs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Thu, Feb 13, 2020 at 02:00:14PM +0200, Heikki Krogerus wrote:
-> > I am using CCG based UCSI driver without any
-> > modification.For I2C part i have written custom
-> > driver.
-> > 
-> > I have attached the trace out and dmesg crash log.
-> > 
-> > Please have a look
+On Thu, Feb 13, 2020 at 12:03:18PM +0100, Johan Hovold wrote:
+> The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9:
 > 
-> Thanks for the logs. Can you test the attached diff?
+>   Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.6-rc2
 
-Actually, don't try that one. Try this one instead.
+Pulled and pushed out, thanks!
 
--- 
-heikki
-
---5/uDoXvLw7AC5HRs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="displayport_lock.diff"
-
-diff --git a/drivers/usb/typec/ucsi/displayport.c b/drivers/usb/typec/ucsi/displayport.c
-index 0f1273ae086c..0f8f5d07e270 100644
---- a/drivers/usb/typec/ucsi/displayport.c
-+++ b/drivers/usb/typec/ucsi/displayport.c
-@@ -285,6 +285,8 @@ struct typec_altmode *ucsi_register_displayport(struct ucsi_connector *con,
- 	struct typec_altmode *alt;
- 	struct ucsi_dp *dp;
- 
-+	mutex_lock(&con->lock);
-+
- 	/* We can't rely on the firmware with the capabilities. */
- 	desc->vdo |= DP_CAP_DP_SIGNALING | DP_CAP_RECEPTACLE;
- 
-@@ -293,12 +295,15 @@ struct typec_altmode *ucsi_register_displayport(struct ucsi_connector *con,
- 	desc->vdo |= all_assignments << 16;
- 
- 	alt = typec_port_register_altmode(con->port, desc);
--	if (IS_ERR(alt))
-+	if (IS_ERR(alt)) {
-+		mutex_unlock(&con->lock);
- 		return alt;
-+	}
- 
- 	dp = devm_kzalloc(&alt->dev, sizeof(*dp), GFP_KERNEL);
- 	if (!dp) {
- 		typec_unregister_altmode(alt);
-+		mutex_unlock(&con->lock);
- 		return ERR_PTR(-ENOMEM);
- 	}
- 
-@@ -311,5 +316,7 @@ struct typec_altmode *ucsi_register_displayport(struct ucsi_connector *con,
- 	alt->ops = &ucsi_displayport_ops;
- 	typec_altmode_set_drvdata(alt, dp);
- 
-+	mutex_unlock(&con->lock);
-+
- 	return alt;
- }
-
---5/uDoXvLw7AC5HRs--
+greg k-h
