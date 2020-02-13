@@ -2,342 +2,170 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E457115BDBC
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2020 12:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0AE15BE2A
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2020 13:00:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729896AbgBMLga (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Feb 2020 06:36:30 -0500
-Received: from mga18.intel.com ([134.134.136.126]:46684 "EHLO mga18.intel.com"
+        id S1729957AbgBMMAP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Feb 2020 07:00:15 -0500
+Received: from mga05.intel.com ([192.55.52.43]:18751 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726232AbgBMLga (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 Feb 2020 06:36:30 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
+        id S1729952AbgBMMAP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 13 Feb 2020 07:00:15 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Feb 2020 03:36:27 -0800
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Feb 2020 04:00:14 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,436,1574150400"; 
-   d="scan'208";a="434397718"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 13 Feb 2020 03:36:26 -0800
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1j2CnB-000IdY-Ne; Thu, 13 Feb 2020 19:36:25 +0800
-Date:   Thu, 13 Feb 2020 19:36:13 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [balbi-usb:testing/next] BUILD SUCCESS
- 36d292c6ddd3248d5a8e465e51a4e3b76de93a91
-Message-ID: <5e4534ad.SpXT9Ss+mUoI6Cvf%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+   d="diff'?scan'208";a="347717004"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 13 Feb 2020 04:00:12 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 13 Feb 2020 14:00:11 +0200
+Date:   Thu, 13 Feb 2020 14:00:11 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     "Shah, Nehal-bakulchandra" <nbshah@amd.com>
+Cc:     ajayg@nvidia.com, linux-usb@vger.kernel.org
+Subject: Re: UCSI:CCG: AMD Platform
+Message-ID: <20200213120011.GL1498@kuha.fi.intel.com>
+References: <0fa0fc36-ce51-046a-32ae-9dbb7452c1c4@amd.com>
+ <20200203132808.GA29050@kuha.fi.intel.com>
+ <20200203133231.GB29050@kuha.fi.intel.com>
+ <aca4968f-06e8-6ac3-09c8-4810947e92b3@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="k+w/mQv8wyuph6w0"
+Content-Disposition: inline
+In-Reply-To: <aca4968f-06e8-6ac3-09c8-4810947e92b3@amd.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git  testing/next
-branch HEAD: 36d292c6ddd3248d5a8e465e51a4e3b76de93a91  usb: dwc3: meson-g12a: Don't use ret uninitialized in dwc3_meson_g12a_otg_init
 
-elapsed time: 2882m
+--k+w/mQv8wyuph6w0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-configs tested: 287
-configs skipped: 0
+On Mon, Feb 10, 2020 at 03:39:38PM +0530, Shah, Nehal-bakulchandra wrote:
+> Hi
+> 
+> Sorry for the delayed response. I was on vacation.
+> On 2/3/2020 7:02 PM, Heikki Krogerus wrote:
+> > On Mon, Feb 03, 2020 at 03:28:11PM +0200, Heikki Krogerus wrote:
+> >> Hi,
+> >>
+> >> On Mon, Feb 03, 2020 at 10:52:52AM +0530, Shah, Nehal-bakulchandra wrote:
+> >>> Currently i am working on enabling UCSI support
+> >>> for CCGx based controller on AMD GPU Cards.
+> >>>
+> >>> Now i am observing the issue reported here when
+> >>> i unplug the cable.
+> >>>
+> >>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbugzilla.redhat.com%2Fshow_bug.cgi%3Fid%3D1762031&amp;data=02%7C01%7CNehal-bakulchandra.Shah%40amd.com%7Ceb1ac5e877db4fa9d75f08d7a8ad87a3%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637163335569266081&amp;sdata=KemJKkVhpqDo%2FSbHhVaMz7jrcploEALJYg%2BRWvhJ7bM%3D&amp;reserved=0
+> >>>
+> >>> Also would like to know is there any way we can
+> >>> get user level notifications for UCSI?
+> >>
+> >> If you want to see the actual UCSI notification in user space, then
+> >> that is not possible, but the driver does produce trace output, and I
+> >> would actually like to see what we got there. You need debugfs to be
+> >> mounted. Then try the following:
+> >>
+> >>         # Unload all UCSI modules
+> >>         modprobe -r ucsi_acpi
+> >>
+> >>         # At this point you should plug-in the problematic device
+> >>
+> >>         # Reload the UCSI core module
+> >>         modprobe typec_ucsi
+> >>
+> >>         # Enable UCSI tracing
+> >>         echo 1 > /sys/kernel/debug/tracing/events/ucsi/enable
+> >>
+> >>         # Now reload the ACPI glue driver
+> >>         modprobe ucsi_acpi
+> >>
+> >>         # Unplug the problematic device so that you see the error
+> >>
+> >>         # Finally dump the trace output
+> >>         cat /sys/kernel/debug/tracing/trace
+> >>
+> >> So if that works, please send the trace output to me.
+> > 
+> > Actually, first things first. Please share your dmesg output. Are you
+> > using ucsi_acpi or ucsi_ccg glue driver?
+> > 
+> > thanks,
+> > 
+> 
+> I am using CCG based UCSI driver without any
+> modification.For I2C part i have written custom
+> driver.
+> 
+> I have attached the trace out and dmesg crash log.
+> 
+> Please have a look
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks for the logs. Can you test the attached diff?
 
-arm                              allmodconfig
-arm                               allnoconfig
-arm                              allyesconfig
-arm                         at91_dt_defconfig
-arm                           efm32_defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                        multi_v7_defconfig
-arm                        shmobile_defconfig
-arm                           sunxi_defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-sparc                            allyesconfig
-nds32                             allnoconfig
-riscv                          rv32_defconfig
-s390                                defconfig
-um                                  defconfig
-nios2                         10m50_defconfig
-riscv                             allnoconfig
-sh                  sh7785lcr_32bit_defconfig
-m68k                       m5475evb_defconfig
-m68k                           sun3_defconfig
-sh                          rsk7269_defconfig
-sh                            titan_defconfig
-riscv                               defconfig
-powerpc                           allnoconfig
-c6x                              allyesconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-parisc                              defconfig
-mips                      fuloong2e_defconfig
-xtensa                          iss_defconfig
-alpha                               defconfig
-ia64                                defconfig
-sparc64                          allmodconfig
-csky                                defconfig
-s390                             allyesconfig
-nds32                               defconfig
-powerpc                       ppc64_defconfig
-i386                                defconfig
-sparc64                             defconfig
-xtensa                       common_defconfig
-nios2                         3c120_defconfig
-mips                              allnoconfig
-i386                             alldefconfig
-i386                              allnoconfig
-i386                             allyesconfig
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-c6x                        evmc6678_defconfig
-openrisc                    or1ksim_defconfig
-openrisc                 simple_smp_defconfig
-h8300                     edosk2674_defconfig
-h8300                    h8300h-sim_defconfig
-h8300                       h8s-sim_defconfig
-m68k                             allmodconfig
-m68k                          multi_defconfig
-arc                              allyesconfig
-arc                                 defconfig
-powerpc                             defconfig
-powerpc                          rhel-kconfig
-mips                           32r2_defconfig
-mips                         64r6el_defconfig
-mips                             allmodconfig
-mips                             allyesconfig
-mips                      malta_kvm_defconfig
-parisc                            allnoconfig
-parisc                           allyesconfig
-parisc                         b180_defconfig
-parisc                        c3000_defconfig
-i386                 randconfig-a003-20200211
-x86_64               randconfig-a003-20200211
-i386                 randconfig-a001-20200211
-x86_64               randconfig-a002-20200211
-x86_64               randconfig-a001-20200211
-i386                 randconfig-a002-20200211
-x86_64               randconfig-a001-20200213
-x86_64               randconfig-a002-20200213
-x86_64               randconfig-a003-20200213
-i386                 randconfig-a001-20200213
-i386                 randconfig-a002-20200213
-i386                 randconfig-a003-20200213
-x86_64               randconfig-a001-20200212
-x86_64               randconfig-a002-20200212
-x86_64               randconfig-a003-20200212
-i386                 randconfig-a001-20200212
-i386                 randconfig-a002-20200212
-i386                 randconfig-a003-20200212
-alpha                randconfig-a001-20200212
-m68k                 randconfig-a001-20200212
-nds32                randconfig-a001-20200212
-parisc               randconfig-a001-20200212
-riscv                randconfig-a001-20200212
-alpha                randconfig-a001-20200213
-m68k                 randconfig-a001-20200213
-mips                 randconfig-a001-20200213
-nds32                randconfig-a001-20200213
-parisc               randconfig-a001-20200213
-riscv                randconfig-a001-20200213
-c6x                  randconfig-a001-20200211
-h8300                randconfig-a001-20200211
-microblaze           randconfig-a001-20200211
-nios2                randconfig-a001-20200211
-sparc64              randconfig-a001-20200211
-c6x                  randconfig-a001-20200213
-h8300                randconfig-a001-20200213
-microblaze           randconfig-a001-20200213
-nios2                randconfig-a001-20200213
-sparc64              randconfig-a001-20200213
-c6x                  randconfig-a001-20200212
-h8300                randconfig-a001-20200212
-microblaze           randconfig-a001-20200212
-nios2                randconfig-a001-20200212
-sparc64              randconfig-a001-20200212
-csky                 randconfig-a001-20200212
-openrisc             randconfig-a001-20200212
-s390                 randconfig-a001-20200212
-sh                   randconfig-a001-20200212
-xtensa               randconfig-a001-20200212
-csky                 randconfig-a001-20200213
-openrisc             randconfig-a001-20200213
-s390                 randconfig-a001-20200213
-sh                   randconfig-a001-20200213
-xtensa               randconfig-a001-20200213
-x86_64               randconfig-b001-20200212
-x86_64               randconfig-b002-20200212
-x86_64               randconfig-b003-20200212
-i386                 randconfig-b001-20200212
-i386                 randconfig-b002-20200212
-i386                 randconfig-b003-20200212
-x86_64               randconfig-b001-20200213
-x86_64               randconfig-b002-20200213
-x86_64               randconfig-b003-20200213
-i386                 randconfig-b001-20200213
-i386                 randconfig-b002-20200213
-i386                 randconfig-b003-20200213
-x86_64               randconfig-b001-20200211
-x86_64               randconfig-b002-20200211
-x86_64               randconfig-b003-20200211
-i386                 randconfig-b001-20200211
-i386                 randconfig-b002-20200211
-i386                 randconfig-b003-20200211
-x86_64               randconfig-c001-20200212
-x86_64               randconfig-c002-20200212
-x86_64               randconfig-c003-20200212
-i386                 randconfig-c001-20200212
-i386                 randconfig-c002-20200212
-i386                 randconfig-c003-20200212
-x86_64               randconfig-c001-20200213
-x86_64               randconfig-c002-20200213
-x86_64               randconfig-c003-20200213
-i386                 randconfig-c001-20200213
-i386                 randconfig-c002-20200213
-i386                 randconfig-c003-20200213
-x86_64               randconfig-c001-20200211
-x86_64               randconfig-c002-20200211
-x86_64               randconfig-c003-20200211
-i386                 randconfig-c001-20200211
-i386                 randconfig-c002-20200211
-i386                 randconfig-c003-20200211
-x86_64               randconfig-d001-20200212
-x86_64               randconfig-d002-20200212
-x86_64               randconfig-d003-20200212
-i386                 randconfig-d001-20200212
-i386                 randconfig-d002-20200212
-i386                 randconfig-d003-20200212
-x86_64               randconfig-d001-20200213
-x86_64               randconfig-d002-20200213
-x86_64               randconfig-d003-20200213
-i386                 randconfig-d001-20200213
-i386                 randconfig-d002-20200213
-i386                 randconfig-d003-20200213
-x86_64               randconfig-d001-20200211
-x86_64               randconfig-d002-20200211
-x86_64               randconfig-d003-20200211
-i386                 randconfig-d001-20200211
-i386                 randconfig-d002-20200211
-i386                 randconfig-d003-20200211
-x86_64               randconfig-e001-20200213
-x86_64               randconfig-e002-20200213
-x86_64               randconfig-e003-20200213
-i386                 randconfig-e001-20200213
-i386                 randconfig-e002-20200213
-i386                 randconfig-e003-20200213
-x86_64               randconfig-e001-20200212
-x86_64               randconfig-e002-20200212
-x86_64               randconfig-e003-20200212
-i386                 randconfig-e001-20200212
-i386                 randconfig-e002-20200212
-i386                 randconfig-e003-20200212
-x86_64               randconfig-f001-20200213
-x86_64               randconfig-f002-20200213
-x86_64               randconfig-f003-20200213
-i386                 randconfig-f001-20200213
-i386                 randconfig-f002-20200213
-i386                 randconfig-f003-20200213
-x86_64               randconfig-f001-20200212
-x86_64               randconfig-f002-20200212
-x86_64               randconfig-f003-20200212
-i386                 randconfig-f001-20200212
-i386                 randconfig-f002-20200212
-i386                 randconfig-f003-20200212
-x86_64               randconfig-f001-20200211
-x86_64               randconfig-f002-20200211
-x86_64               randconfig-f003-20200211
-i386                 randconfig-f001-20200211
-i386                 randconfig-f002-20200211
-i386                 randconfig-f003-20200211
-x86_64               randconfig-g001-20200213
-x86_64               randconfig-g002-20200213
-x86_64               randconfig-g003-20200213
-i386                 randconfig-g001-20200213
-i386                 randconfig-g002-20200213
-i386                 randconfig-g003-20200213
-x86_64               randconfig-g001-20200212
-x86_64               randconfig-g002-20200212
-x86_64               randconfig-g003-20200212
-i386                 randconfig-g001-20200212
-i386                 randconfig-g002-20200212
-i386                 randconfig-g003-20200212
-x86_64               randconfig-g001-20200211
-x86_64               randconfig-g002-20200211
-x86_64               randconfig-g003-20200211
-i386                 randconfig-g001-20200211
-i386                 randconfig-g002-20200211
-i386                 randconfig-g003-20200211
-x86_64               randconfig-h001-20200212
-x86_64               randconfig-h002-20200212
-x86_64               randconfig-h003-20200212
-i386                 randconfig-h001-20200212
-i386                 randconfig-h002-20200212
-i386                 randconfig-h003-20200212
-x86_64               randconfig-h001-20200213
-x86_64               randconfig-h002-20200213
-x86_64               randconfig-h003-20200213
-i386                 randconfig-h001-20200213
-i386                 randconfig-h002-20200213
-i386                 randconfig-h003-20200213
-x86_64               randconfig-h001-20200211
-x86_64               randconfig-h002-20200211
-x86_64               randconfig-h003-20200211
-i386                 randconfig-h001-20200211
-i386                 randconfig-h002-20200211
-i386                 randconfig-h003-20200211
-arc                  randconfig-a001-20200212
-arm                  randconfig-a001-20200212
-arm64                randconfig-a001-20200212
-ia64                 randconfig-a001-20200212
-powerpc              randconfig-a001-20200212
-sparc                randconfig-a001-20200212
-arc                  randconfig-a001-20200213
-arm                  randconfig-a001-20200213
-arm64                randconfig-a001-20200213
-ia64                 randconfig-a001-20200213
-powerpc              randconfig-a001-20200213
-sparc                randconfig-a001-20200213
-arc                  randconfig-a001-20200211
-arm                  randconfig-a001-20200211
-arm64                randconfig-a001-20200211
-ia64                 randconfig-a001-20200211
-powerpc              randconfig-a001-20200211
-sparc                randconfig-a001-20200211
-riscv                            allmodconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-s390                             alldefconfig
-s390                             allmodconfig
-s390                              allnoconfig
-s390                          debug_defconfig
-s390                       zfcpdump_defconfig
-sh                               allmodconfig
-sh                                allnoconfig
-sparc                               defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              fedora-25
-x86_64                                  kexec
-x86_64                                    lkp
-x86_64                                   rhel
-x86_64                         rhel-7.2-clear
-x86_64                               rhel-7.6
+thanks,
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+heikki
+
+--k+w/mQv8wyuph6w0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="port_lock.diff"
+
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index ddf2ad3752de..37837bf5385b 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -870,12 +870,16 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+ 	con->num = index + 1;
+ 	con->ucsi = ucsi;
+ 
++	mutex_lock(&con->lock);
++
+ 	/* Get connector capability */
+ 	command = UCSI_GET_CONNECTOR_CAPABILITY;
+ 	command |= UCSI_CONNECTOR_NUMBER(con->num);
+ 	ret = ucsi_run_command(ucsi, command, &con->cap, sizeof(con->cap));
+-	if (ret < 0)
++	if (ret < 0) {
++		mutex_unlock(&con->lock);
+ 		return ret;
++	}
+ 
+ 	if (con->cap.op_mode & UCSI_CONCAP_OPMODE_DRP)
+ 		cap->data = TYPEC_PORT_DRD;
+@@ -907,8 +911,10 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+ 
+ 	/* Register the connector */
+ 	con->port = typec_register_port(ucsi->dev, cap);
+-	if (IS_ERR(con->port))
++	if (IS_ERR(con->port)) {
++		mutex_unlock(&con->lock);
+ 		return PTR_ERR(con->port);
++	}
+ 
+ 	/* Alternate modes */
+ 	ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_CON);
+@@ -922,6 +928,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+ 			       sizeof(con->status));
+ 	if (ret < 0) {
+ 		dev_err(ucsi->dev, "con%d: failed to get status\n", con->num);
++		mutex_unlock(&con->lock);
+ 		return 0;
+ 	}
+ 
+@@ -956,6 +963,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+ 
+ 	trace_ucsi_register_port(con->num, &con->status);
+ 
++	mutex_unlock(&con->lock);
+ 	return 0;
+ }
+ 
+
+--k+w/mQv8wyuph6w0--
