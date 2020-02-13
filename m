@@ -2,104 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2900115BA0C
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2020 08:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F1715BB07
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2020 09:54:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729839AbgBMH1k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Feb 2020 02:27:40 -0500
-Received: from mx2.suse.de ([195.135.220.15]:48990 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729748AbgBMH1k (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 Feb 2020 02:27:40 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 75798AE06;
-        Thu, 13 Feb 2020 07:27:38 +0000 (UTC)
-Message-ID: <1581578850.21415.8.camel@suse.de>
-Subject: Re: No PNP0CA0 device on a Dell Precision 5520 laptop
-From:   Oliver Neukum <oneukum@suse.de>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-Date:   Thu, 13 Feb 2020 08:27:30 +0100
-In-Reply-To: <20200212160649.GH1498@kuha.fi.intel.com>
-References: <1581427518.1580.3.camel@suse.de>
-         <20200211135920.GB1498@kuha.fi.intel.com> <1581430450.1580.5.camel@suse.de>
-         <20200211142855.GC1498@kuha.fi.intel.com> <1581431677.1580.7.camel@suse.de>
-         <20200211144429.GD1498@kuha.fi.intel.com>
-         <1581513174.21415.4.camel@suse.de>
-         <20200212160649.GH1498@kuha.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1729531AbgBMIyJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Feb 2020 03:54:09 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:34017 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729511AbgBMIyJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Feb 2020 03:54:09 -0500
+Received: by mail-lj1-f195.google.com with SMTP id x7so5651476ljc.1
+        for <linux-usb@vger.kernel.org>; Thu, 13 Feb 2020 00:54:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4rkGF5v8vVDO4e6MS975js5HBclxWpED/LpMGJ9Hey0=;
+        b=NZZYkVhgDADY3Ce/7aWSfp11q9xMdrEsM9cTzr53u4TTDFfdWqyd1tDLbiJPEsMUIL
+         nrdHXw7yMCpASuFZT8HdPBUOmSr5SiPyHGz7I4gCQxWPYEcM7fcN4IojRYzUu0vNgtoS
+         KtnddPHF+VlRj2imrmImc3aduXSr+In5jlqFY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4rkGF5v8vVDO4e6MS975js5HBclxWpED/LpMGJ9Hey0=;
+        b=H9l3SRjrTQorPSMquSSsWuFBjaCyQNrI/OgH4BgK5wvueQOgofArsIJsnRDmQnrtT7
+         83bkpLu94SRDGGTDIsKAe+yJT+OMIM6nUv9tckiFheYl0kkgj5WivFa0+PVqK0CNIY4+
+         8KHh925aCT0H2Xhv0xT1EaZ0lWZbtDL97FM6q1bOXtpIwWCOA1vc4rJEqAqn1aYTT/CY
+         szDfgrgV9sv0kRpAk68iIyPxujEbmeBIpEMW9k+ndBSrOJLnEjBOgEKLRwewBWu7e9Hr
+         00hgwgOwBlbftSRx7ZWJsZ7wCJ+t5dWzwfZ7Jg3EqUjIItWJ4PlP16oVvgDCvn96Y89Z
+         K37g==
+X-Gm-Message-State: APjAAAXgPPvQjqtNENQvGji54l+Jp+Xoz2Fo7dTuLi0/++HGSq+e6HRy
+        4PS4r9C4zx6oZDsOVXAPgP5JSw==
+X-Google-Smtp-Source: APXvYqyy3x/KKk/OiEsGzCxn5t8PSTtiieVNqLoBgW9/07IdKWT9jsL7busLIGeSEXK6P93WeA0rug==
+X-Received: by 2002:a2e:9e16:: with SMTP id e22mr10980352ljk.220.1581584047321;
+        Thu, 13 Feb 2020 00:54:07 -0800 (PST)
+Received: from prevas-ravi.prevas.se ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id 5sm966893lju.69.2020.02.13.00.54.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Feb 2020 00:54:06 -0800 (PST)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Timur Tabi <timur@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     Anton Vorontsov <avorontsov@ru.mvista.com>,
+        kbuild test robot <lkp@intel.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: host: fhci-hcd: annotate PIPE_CONTROL switch case with fallthrough
+Date:   Thu, 13 Feb 2020 09:54:00 +0100
+Message-Id: <20200213085401.27862-1-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.23.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Mittwoch, den 12.02.2020, 18:06 +0200 schrieb Heikki Krogerus:
-> On Wed, Feb 12, 2020 at 02:12:54PM +0100, Oliver Neukum wrote:
-> > Am Dienstag, den 11.02.2020, 16:44 +0200 schrieb Heikki Krogerus:
+After this was made buildable for something other than PPC32, kbuild
+starts warning
 
-> >         Device (UCM1)
-> >         {
-> >             Name (_HID, "INT3515")  // _HID: Hardware ID
-> >             Name (_UID, Zero)  // _UID: Unique ID
-> >             Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-> >             {
-> >                 Name (SBFB, ResourceTemplate ()
-> >                 {
-> >                     I2cSerialBusV2 (0x0038, ControllerInitiated, 0x00061A80,
-> >                         AddressingMode7Bit, "\\_SB.PCI0.I2C0",
-> >                         0x00, ResourceConsumer, , Exclusive,
-> >                         )
-> >                 })
-> >                 Name (SBFI, ResourceTemplate ()
-> >                 {
-> >                     Interrupt (ResourceConsumer, Level, ActiveLow, Exclusive, ,, _Y28)
-> >                     {
-> >                         0x00000000,
-> >                     }
-> >                 })
-> >                 CreateDWordField (SBFI, \_SB.PCI0.I2C0.UCM1._CRS._Y28._INT, GINT)  // _INT: Interrupts
-> >                 GINT = INUM (UCG1)
-> >                 Return (ConcatenateResTemplate (SBFB, SBFI))
-> >             }
-> > 
-> >             Method (_STA, 0, NotSerialized)  // _STA: Status
-> >             {
-> >                 If ((UCSI == One))
-> >                 {
-> >                     Return (0x0F)
-> >                 }
-> >                 Else
-> >                 {
-> >                     Return (Zero)
-> >                 }
-> >             }
-> >         }
-> > 
-> > And indeed 'status' is 0 in sysfs. I am puzzled. I can see no sense in that unless
-> > I am supposed to use ucsi_acpi but there is no node for that.
-> 
-> The "UCSI" in that condition is just a variable name. It does not
-> actually have anything to do with the actual UCSI interface.
+drivers/usb/host/fhci-hcd.c:398:8: warning: this statement may fall
+through [-Wimplicit-fallthrough=]
 
-Yesw, but it is a mightily suggestive variable name.
+I don't know this code, but from the construction (initializing size
+with 0 and explicitly using "size +=" in the PIPE_BULK case) I assume
+that fallthrough is indeed intended.
 
-> It looks to me like the operating system is not even made aware of the
-> connectors on that laptop. That is fairly common unfortunately.
-> 
-> The connectors will work, the firmware takes care of everything, but
-> they are simply not visible to the operating system. There is of
-> course also no way to for example swap the roles, or do anything else.
+Reported-by: kbuild test robot <lkp@intel.com>
+Fixes: 5a35435ef4e6 (soc: fsl: qe: remove PPC32 dependency from CONFIG_QUICC_ENGINE)
+Fixes: a035d552a93b (Makefile: Globally enable fall-through warning)
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+---
 
-I see. I just don't get how this is supposed to work with devices that
-have multiple alternate modes? Or if you want to couple two hosts on
-the USB level?
+Two different Fixes: Obviously my 5a35435ef4e6 is the one that started
+making kbuild complain, but that's just because apparently kbuild
+doesn't cover a PPC32+USB_FHCI_HCD .config. Note for -stable folks,
+just in case 5.3.y is still maintained somewhere: a035d552a93b
+appeared in 5.3, but the #define fallthrough that I'm using here
+wasn't introduced until 5.4 (294f69e662d15). So either ignore this,
+make it /* fallthrough */, or backport 294f69e662d15 to 5.3.y as well.
 
-Well, I am going to look for another laptop then.
+ drivers/usb/host/fhci-hcd.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-	Thank you
-		Oliver
+diff --git a/drivers/usb/host/fhci-hcd.c b/drivers/usb/host/fhci-hcd.c
+index 04733876c9c6..a8e1048278d0 100644
+--- a/drivers/usb/host/fhci-hcd.c
++++ b/drivers/usb/host/fhci-hcd.c
+@@ -396,6 +396,7 @@ static int fhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb,
+ 	case PIPE_CONTROL:
+ 		/* 1 td fro setup,1 for ack */
+ 		size = 2;
++		fallthrough;
+ 	case PIPE_BULK:
+ 		/* one td for every 4096 bytes(can be up to 8k) */
+ 		size += urb->transfer_buffer_length / 4096;
+-- 
+2.23.0
 
