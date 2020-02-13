@@ -2,75 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E342F15BEE8
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2020 14:04:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB7815BF37
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2020 14:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729981AbgBMNEG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Feb 2020 08:04:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49778 "EHLO mail.kernel.org"
+        id S1729934AbgBMNYc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Feb 2020 08:24:32 -0500
+Received: from mga06.intel.com ([134.134.136.31]:44559 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729801AbgBMNEG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 Feb 2020 08:04:06 -0500
-Received: from localhost (unknown [209.37.97.194])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9F6DB2168B;
-        Thu, 13 Feb 2020 13:04:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581599044;
-        bh=JzuXVZMjhJuQSJ5hGh5JfZlVw6AYi3gKS44RcKZi8yI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rKcZlkdb1MfHMvC/XJXfgmNFUkssnjWs2ADRkmHXZ9mvIr//KwkdCC50/Ltj/M0PG
-         I0m89eojS5KcAIjAWPsFPJfX/rRcXDDOHLTe7buofpKbFgASMcaiXNIkdsCwflkNtZ
-         VEBeoqqUxZD/8RNhH9Bp8nCx7FJv1ZIdiVzuNRLU=
-Date:   Thu, 13 Feb 2020 05:04:04 -0800
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Colin King <colin.king@canonical.com>, linux-usb@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: remove redundant assignment to
- variable num
-Message-ID: <20200213130404.GA3369961@kroah.com>
-References: <20200208165022.30429-1-colin.king@canonical.com>
- <20200213113423.GK1498@kuha.fi.intel.com>
+        id S1729588AbgBMNYc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 13 Feb 2020 08:24:32 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Feb 2020 05:24:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,436,1574150400"; 
+   d="scan'208";a="347728482"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 13 Feb 2020 05:24:29 -0800
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH 0/9] usb: typec: Driver for Intel PMC Mux-Agent
+Date:   Thu, 13 Feb 2020 16:24:19 +0300
+Message-Id: <20200213132428.53374-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200213113423.GK1498@kuha.fi.intel.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 13, 2020 at 01:34:23PM +0200, Heikki Krogerus wrote:
-> On Sat, Feb 08, 2020 at 04:50:22PM +0000, Colin King wrote:
-> > From: Colin Ian King <colin.king@canonical.com>
-> > 
-> > Variable num is being assigned with a value that is never read, it is
-> > assigned a new value later in a for-loop. The assignment is redundant
-> > and can be removed.
-> > 
-> > Addresses-Coverity: ("Unused value")
-> > Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> > ---
-> >  drivers/usb/typec/ucsi/ucsi.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> > index d5a6aac86327..b1b72cb7af10 100644
-> > --- a/drivers/usb/typec/ucsi/ucsi.c
-> > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> > @@ -400,7 +400,7 @@ static int ucsi_register_altmodes(struct ucsi_connector *con, u8 recipient)
-> >  	struct typec_altmode_desc desc;
-> >  	struct ucsi_altmode alt[2];
-> >  	u64 command;
-> > -	int num = 1;
-> > +	int num;
-> >  	int ret;
-> >  	int len;
-> >  	int j;
-> 
-> Greg! I'll pick this, and to you with a few other patches that I have
-> in my queue for the ucsi driver. I hope that's OK.
+Hi,
 
-Thats fine.
+The Intel PMC (Power Management Controller) microcontroller, which is
+available on most SOCs from Intel, has a function called mux-agent.
+The mux-agent, when visible to the operating system, makes it possible
+to control the various USB muxes on the system.
+
+In practice the mux-agent is a device that controls multiple muxes.
+Unfortunately both the USB Type-C Class and the USB Role Class don't
+have proper support for that kind of devices that handle multiple
+muxes, which is why I had to tweak the APIs a bit.
+
+On top of the API changes, and the driver of course, I'm adding a
+header for the Thunderbolt 3 alt mode since the "mux-agent" supports
+it.
+
+thanks,
+
+Heikki Krogerus (9):
+  usb: typec: mux: Allow the muxes to be named
+  usb: typec: mux: Add helpers for setting the mux state
+  usb: typec: mux: Allow the mux handles to be requested with fwnode
+  usb: roles: Leave the private driver data pointer to the drivers
+  usb: roles: Provide the switch drivers handle to the switch in the API
+  usb: roles: Allow the role switches to be named
+  device property: Export fwnode_get_name()
+  usb: typec: Add definitions for Thunderbolt 3 Alternate Mode
+  usb: typec: driver for Intel PMC mux control
+
+ drivers/base/property.c                       |   1 +
+ drivers/usb/cdns3/core.c                      |  10 +-
+ drivers/usb/chipidea/core.c                   |  10 +-
+ drivers/usb/dwc3/dwc3-meson-g12a.c            |  10 +-
+ drivers/usb/gadget/udc/renesas_usb3.c         |  26 +-
+ drivers/usb/gadget/udc/tegra-xudc.c           |   8 +-
+ drivers/usb/mtu3/mtu3_dr.c                    |   9 +-
+ drivers/usb/musb/mediatek.c                   |   9 +-
+ drivers/usb/roles/class.c                     |  29 +-
+ .../usb/roles/intel-xhci-usb-role-switch.c    |  26 +-
+ drivers/usb/typec/class.c                     |  10 +-
+ drivers/usb/typec/mux.c                       |  47 +-
+ drivers/usb/typec/mux/Kconfig                 |   9 +
+ drivers/usb/typec/mux/Makefile                |   1 +
+ drivers/usb/typec/mux/intel_pmc_mux.c         | 434 ++++++++++++++++++
+ include/linux/usb/role.h                      |  23 +-
+ include/linux/usb/typec_mux.h                 |  25 +-
+ include/linux/usb/typec_tbt.h                 |  53 +++
+ 18 files changed, 667 insertions(+), 73 deletions(-)
+ create mode 100644 drivers/usb/typec/mux/intel_pmc_mux.c
+ create mode 100644 include/linux/usb/typec_tbt.h
+
+-- 
+2.25.0
+
