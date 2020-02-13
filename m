@@ -2,95 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B24E515B923
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2020 06:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F30515B9D7
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2020 08:01:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726368AbgBMFlu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Feb 2020 00:41:50 -0500
-Received: from mail-qv1-f49.google.com ([209.85.219.49]:39289 "EHLO
-        mail-qv1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725773AbgBMFlu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Feb 2020 00:41:50 -0500
-Received: by mail-qv1-f49.google.com with SMTP id y8so2100461qvk.6
-        for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2020 21:41:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mDaH5xXQaA6WBSgg7FwGlZs1NLyXzpJ3E3ms2BazYEI=;
-        b=UEuG16PD1ephz5uNd+EpXHcrTJaid7DKdqqjHzLh5T2SoXfQbDZN1BdfbM5xgUDv7e
-         476zzay83kObDM1r2Z9FODQDTV2ZbdCTrFaBw0OZNjPLkcZ+2kmo0Bopt7sn4GI2d8AA
-         gVug75o27xESKSj1khR4NbABFnASZJYZY/nbMQRteQPynRsI+NqN94xRmHBsyoFDyDUM
-         j4sad+lLuooHJll/DgTkv2gxYqIxWqcFmG5Ah6/Q/8mX8iGfhYmCS8up5maY3Zj4YAjK
-         snUAABP7/sDVJ4JGQoiraAzwsNu4lrgiznsOdT1llmh5NEWHRtlZf+hi1jOizdKI6Iir
-         W8hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mDaH5xXQaA6WBSgg7FwGlZs1NLyXzpJ3E3ms2BazYEI=;
-        b=ZTyUOpmHCOvtJgo7RyrjgQ9cLGy6vV+leLrvpSf1GPY8eepZqApy4YOmjsx26gnfCh
-         sIosMb+1yenliBDJ+Og9fQau2mp5jsMjevnTJojRuCe//fQucy2z8YPs/wpKLbXjhuit
-         MgpVeSIm2jx/QEYGaV/UKdMvXFvrIQln/HxcpakuIAeZ8z9NREMt1jeA9BfUgz7cytUs
-         eNjsssqfHVnbWTT6EtXYfVkM3/Nkhx93ZKr6k6G6JtUBYq2ZJkeQKCCS6yMGg+ZEfqy4
-         nrlcr4z6JxrSjFPnbLeCAyjHIAQHOy1QEjWiFSXB67P29scyrKfgTSkmargSo5NMI2xE
-         rhfw==
-X-Gm-Message-State: APjAAAXIy5e7roBJtX7L0pU1kIMSz1X7KVVGlqxJ/zIOzmswtdKWN1UK
-        xPN0Q9LbSe+PI49pcEsUOv+GqmVh+3YgbpnWegk=
-X-Google-Smtp-Source: APXvYqzDAAREL4ZVatcRlFQxR22N9c+UOeKIsVm7xKRU2oZ6QQnq3reUbmWPplxog6EpjLu3exGYUkc0g5SXh1HdVlQ=
-X-Received: by 2002:ad4:4e50:: with SMTP id eb16mr22423506qvb.34.1581572508932;
- Wed, 12 Feb 2020 21:41:48 -0800 (PST)
+        id S1729702AbgBMHBN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Feb 2020 02:01:13 -0500
+Received: from mga14.intel.com ([192.55.52.115]:10547 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726368AbgBMHBN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 13 Feb 2020 02:01:13 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Feb 2020 23:01:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,435,1574150400"; 
+   d="scan'208";a="281445051"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Feb 2020 23:01:11 -0800
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1j28Up-0003gk-5s; Thu, 13 Feb 2020 15:01:11 +0800
+Date:   Thu, 13 Feb 2020 15:01:00 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Bastien Nocera <hadess@hadess.net>
+Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [usb:usb-testing 18/18]
+ drivers/usb/misc/apple-mfi-fastcharge.c:173:29: sparse: sparse: restricted
+ __le16 degrades to integer
+Message-ID: <202002131558.UH2wlHsI%lkp@intel.com>
 MIME-Version: 1.0
-References: <1581330569.26936.5.camel@suse.de> <Pine.LNX.4.44L0.2002100946400.14460-100000@netrider.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.2002100946400.14460-100000@netrider.rowland.org>
-From:   Sam Lewis <sam.vr.lewis@gmail.com>
-Date:   Thu, 13 Feb 2020 16:41:37 +1100
-Message-ID: <CA+ZLECuKY0zOfGW4=5U1o0fYuYta9Xxdxwvbj5zS5TB6NVoqFQ@mail.gmail.com>
-Subject: Re: USB hub driver over-current behavior
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Oliver Neukum <oneukum@suse.de>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 11 Feb 2020 at 01:53, Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Mon, 10 Feb 2020, Oliver Neukum wrote:
-> > error handling at this level has gotten little love.
->
-> Indeed.  This is mostly because the issue does not crop up in normal
-> usage very often.  And most hubs don't have very good over-current
-> protection anyway.
->
-> I believe the original expectation was that over-current events would
-> generally be intermittent and very short-lived.  So when an event did
-> occur, it would make sense to wait a little while and then try to
-> switch the port back on.  Nobody ever bothered to implement a total
-> time or retry limit on this behavior, probably because there weren't
-> any complaints.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+head:   249fa8217b846a7c031b997bd4ea70d65d3ff774
+commit: 249fa8217b846a7c031b997bd4ea70d65d3ff774 [18/18] USB: Add driver to control USB fast charge for iOS devices
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.1-166-g7e4a5b6f-dirty
+        git checkout 249fa8217b846a7c031b997bd4ea70d65d3ff774
+        make ARCH=x86_64 allmodconfig
+        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
 
-Thanks for the responses. This makes sense, especially if most
-consumer hubs aren't very high quality.
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
 
-> > The basic problem is that we have no good way to switch a portback on
-> > after we have given up on it. Feel free to propose a patch to the
-> > kernel and a tool to use it and we can discuss them.
->
-> Yes, patches are welcome.
->
 
-How receptive would you (and other contributors/maintainers) be to a
-patch that adds configuration that allows a port to stay off if it
-receives an OC event? This obviously wouldn't be the desired behaviour
-in the general case, but could be useful for embedded devices (such as
-mine) where the design of the hub electronics are such that you can be
-confident that an OC event is not just an glitch and is indicative of
-a real problem.
+sparse warnings: (new ones prefixed by >>)
 
-If it isn't acceptable to have a USB port off until the system is
-rebooted, what would be the appropriate mechanism of allowing a
-userspace application to manually turn the port back on?
+>> drivers/usb/misc/apple-mfi-fastcharge.c:173:29: sparse: sparse: restricted __le16 degrades to integer
+   drivers/usb/misc/apple-mfi-fastcharge.c:174:29: sparse: sparse: restricted __le16 degrades to integer
 
-Sam
+vim +173 drivers/usb/misc/apple-mfi-fastcharge.c
+
+   165	
+   166	static int mfi_fc_probe(struct usb_device *udev)
+   167	{
+   168		struct power_supply_config battery_cfg = {};
+   169		struct mfi_device *mfi = NULL;
+   170		int err;
+   171	
+   172		/* See comment above mfi_fc_id_table[] */
+ > 173		if (udev->descriptor.idProduct < 0x1200 ||
+   174		    udev->descriptor.idProduct > 0x12ff) {
+   175			return -ENODEV;
+   176		}
+   177	
+   178		mfi = kzalloc(sizeof(struct mfi_device), GFP_KERNEL);
+   179		if (!mfi) {
+   180			err = -ENOMEM;
+   181			goto error;
+   182		}
+   183	
+   184		battery_cfg.drv_data = mfi;
+   185	
+   186		mfi->charge_type = POWER_SUPPLY_CHARGE_TYPE_TRICKLE;
+   187		mfi->battery = power_supply_register(&udev->dev,
+   188							&apple_mfi_fc_desc,
+   189							&battery_cfg);
+   190		if (IS_ERR(mfi->battery)) {
+   191			dev_err(&udev->dev, "Can't register battery\n");
+   192			err = PTR_ERR(mfi->battery);
+   193			goto error;
+   194		}
+   195	
+   196		mfi->udev = usb_get_dev(udev);
+   197		dev_set_drvdata(&udev->dev, mfi);
+   198	
+   199		return 0;
+   200	
+   201	error:
+   202		kfree(mfi);
+   203		return err;
+   204	}
+   205	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
