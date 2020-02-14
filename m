@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D436C15E2AC
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 17:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F1415E7E7
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 17:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405948AbgBNQYl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Feb 2020 11:24:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33366 "EHLO mail.kernel.org"
+        id S2404592AbgBNQRy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Feb 2020 11:17:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49548 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405938AbgBNQYk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:24:40 -0500
+        id S2404239AbgBNQRy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:17:54 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D1C9B247A1;
-        Fri, 14 Feb 2020 16:24:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 032D6246FC;
+        Fri, 14 Feb 2020 16:17:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581697479;
-        bh=pAkzvU+2L+mPiXbKAIUVGE+uuI8Fi1iZfHgJiIQJq38=;
+        s=default; t=1581697072;
+        bh=Xk19oTYE9u70HyDvvNyK9NTAXEnNkO6YRsK6c/paOMs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xQ+EsqVBPALt3bW4Gv9SlXWN5VyRumI1T0W3IedfAR7IySlj5WeZ8ajKogSqkkXgK
-         BJzKgaxhVQweTPqCY/UXSrcxHvP19y1yAsHg2vaqhWRKhU0+CtgTqBsdEX387OxG9O
-         3wzfgn+KjXI9lK6Qm7EoGbmDjoTQ8S8KgwGfLRwk=
+        b=A4nzOqWZKxSmRIlVo8TlpRFKu7rshZ9chnd1DTic+FuNtdSHJo0Udmp6HShqnSrSj
+         vtzDanELO75ewStsSJivpvkNByhSl0e25vRkjUSW+nVdeNs3y9kV2FZKnsQ6JTvLOZ
+         X7Ww/z+zitsZ88oJycAt3XXqgh8I4XkpQkTNwf4Q=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jia-Ju Bai <baijiaju1990@gmail.com>,
         Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 011/100] usb: gadget: udc: fix possible sleep-in-atomic-context bugs in gr_probe()
-Date:   Fri, 14 Feb 2020 11:22:55 -0500
-Message-Id: <20200214162425.21071-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 028/186] usb: gadget: udc: fix possible sleep-in-atomic-context bugs in gr_probe()
+Date:   Fri, 14 Feb 2020 11:14:37 -0500
+Message-Id: <20200214161715.18113-28-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214162425.21071-1-sashal@kernel.org>
-References: <20200214162425.21071-1-sashal@kernel.org>
+In-Reply-To: <20200214161715.18113-1-sashal@kernel.org>
+References: <20200214161715.18113-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -100,10 +100,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 9 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/usb/gadget/udc/gr_udc.c b/drivers/usb/gadget/udc/gr_udc.c
-index b9429bc425116..594639e5cbf82 100644
+index 1f9941145746e..feb73a1c42ef9 100644
 --- a/drivers/usb/gadget/udc/gr_udc.c
 +++ b/drivers/usb/gadget/udc/gr_udc.c
-@@ -2201,8 +2201,6 @@ static int gr_probe(struct platform_device *pdev)
+@@ -2200,8 +2200,6 @@ static int gr_probe(struct platform_device *pdev)
  		return -ENOMEM;
  	}
  
@@ -112,7 +112,7 @@ index b9429bc425116..594639e5cbf82 100644
  	/* Inside lock so that no gadget can use this udc until probe is done */
  	retval = usb_add_gadget_udc(dev->dev, &dev->gadget);
  	if (retval) {
-@@ -2211,15 +2209,21 @@ static int gr_probe(struct platform_device *pdev)
+@@ -2210,15 +2208,21 @@ static int gr_probe(struct platform_device *pdev)
  	}
  	dev->added = 1;
  
@@ -137,7 +137,7 @@ index b9429bc425116..594639e5cbf82 100644
  	retval = gr_request_irq(dev, dev->irq);
  	if (retval) {
  		dev_err(dev->dev, "Failed to request irq %d\n", dev->irq);
-@@ -2248,8 +2252,6 @@ static int gr_probe(struct platform_device *pdev)
+@@ -2247,8 +2251,6 @@ static int gr_probe(struct platform_device *pdev)
  		dev_info(dev->dev, "regs: %p, irq %d\n", dev->regs, dev->irq);
  
  out:
