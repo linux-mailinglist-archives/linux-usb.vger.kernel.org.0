@@ -2,41 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 389F415E4DD
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 17:38:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2143B15E3ED
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 17:33:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390419AbgBNQi3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Feb 2020 11:38:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59780 "EHLO mail.kernel.org"
+        id S2406179AbgBNQZl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Feb 2020 11:25:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35442 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405626AbgBNQX3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:23:29 -0500
+        id S2406173AbgBNQZk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:25:40 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1A1F72477B;
-        Fri, 14 Feb 2020 16:23:28 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6B4B1247CF;
+        Fri, 14 Feb 2020 16:25:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581697409;
-        bh=q9B2fCZrysqb+v5XGLZAltzC00DdcE0gKtCJ9/GgzYQ=;
+        s=default; t=1581697539;
+        bh=AHEsC+E3W2xJQbzUvuMY92P8qdh5Jea/uQfL/fYkVJo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VBynMS1XR8dfIvMpyOCboDtNlxvWPTfpfAL504tvVl9x+Pm48Oil+RsqA1fk2krxd
-         8vPFo2ICEvZZry9LgRcPQp1kKOdyR/sQ8c35KerIhL5ujehPUDBY2ntf6Uq6ORDcmr
-         bNQtHZJznO5ASaRvPRXhAbaAExbqcVa5gVAfjDM4=
+        b=qDu9SHAYvhRk1paQvo0zml2Mv2NheHtnZLwSz95NBqIZ/+qj/6lgH4KEgwsrWWL/F
+         qZn0P40NdgNQlRJ8oSyIELQVu4FIxTrUp1Iebp2kfRhkyrIbsSFBwgqjJoWJNWmUph
+         OVWy4Fo9LEUEPc3nmXOP/fJ7qTbZzAgSJnJ3T1kA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tony Lindgren <tony@atomide.com>, Pavel Machek <pavel@ucw.cz>,
-        Bin Liu <b-liu@ti.com>,
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 101/141] usb: musb: omap2430: Get rid of musb .set_vbus for omap2430 glue
-Date:   Fri, 14 Feb 2020 11:20:41 -0500
-Message-Id: <20200214162122.19794-101-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.4 059/100] usbip: Fix unsafe unaligned pointer usage
+Date:   Fri, 14 Feb 2020 11:23:43 -0500
+Message-Id: <20200214162425.21071-59-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214162122.19794-1-sashal@kernel.org>
-References: <20200214162122.19794-1-sashal@kernel.org>
+In-Reply-To: <20200214162425.21071-1-sashal@kernel.org>
+References: <20200214162425.21071-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -45,53 +44,150 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Tony Lindgren <tony@atomide.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
 
-[ Upstream commit 91b6dec32e5c25fbdbb564d1e5af23764ec17ef1 ]
+[ Upstream commit 585c91f40d201bc564d4e76b83c05b3b5363fe7e ]
 
-We currently have musb_set_vbus() called from two different paths. Mostly
-it gets called from the USB PHY via omap_musb_set_mailbox(), but in some
-cases it can get also called from musb_stage0_irq() rather via .set_vbus:
+Fix unsafe unaligned pointer usage in usbip network interfaces. usbip tool
+build fails with new gcc -Werror=address-of-packed-member checks.
 
-(musb_set_host [musb_hdrc])
-(omap2430_musb_set_vbus [omap2430])
-(musb_stage0_irq [musb_hdrc])
-(musb_interrupt [musb_hdrc])
-(omap2430_musb_interrupt [omap2430])
+usbip_network.c: In function ‘usbip_net_pack_usb_device’:
+usbip_network.c:79:32: error: taking address of packed member of ‘struct usbip_usb_device’ may result in an unaligned pointer value [-Werror=address-of-packed-member]
+   79 |  usbip_net_pack_uint32_t(pack, &udev->busnum);
 
-This is racy and will not work with introducing generic helper functions
-for musb_set_host() and musb_set_peripheral(). We want to get rid of the
-busy loops in favor of usleep_range().
+Fix with minor changes to pass by value instead of by address.
 
-Let's just get rid of .set_vbus for omap2430 glue layer and let the PHY
-code handle VBUS with musb_set_vbus(). Note that in the follow-up patch
-we can completely remove omap2430_musb_set_vbus(), but let's do it in a
-separate patch as this change may actually turn out to be needed as a
-fix.
-
-Reported-by: Pavel Machek <pavel@ucw.cz>
-Acked-by: Pavel Machek <pavel@ucw.cz>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
-Signed-off-by: Bin Liu <b-liu@ti.com>
-Link: https://lore.kernel.org/r/20200115132547.364-5-b-liu@ti.com
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20200109012416.2875-1-skhan@linuxfoundation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/musb/omap2430.c | 2 --
- 1 file changed, 2 deletions(-)
+ tools/usb/usbip/src/usbip_network.c | 40 +++++++++++++++++------------
+ tools/usb/usbip/src/usbip_network.h | 12 +++------
+ 2 files changed, 27 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/usb/musb/omap2430.c b/drivers/usb/musb/omap2430.c
-index e8be8e39ab8fb..457ad33f4caa8 100644
---- a/drivers/usb/musb/omap2430.c
-+++ b/drivers/usb/musb/omap2430.c
-@@ -388,8 +388,6 @@ static const struct musb_platform_ops omap2430_ops = {
- 	.init		= omap2430_musb_init,
- 	.exit		= omap2430_musb_exit,
+diff --git a/tools/usb/usbip/src/usbip_network.c b/tools/usb/usbip/src/usbip_network.c
+index b4c37e76a6e08..187dfaa67d0a2 100644
+--- a/tools/usb/usbip/src/usbip_network.c
++++ b/tools/usb/usbip/src/usbip_network.c
+@@ -62,39 +62,39 @@ void usbip_setup_port_number(char *arg)
+ 	info("using port %d (\"%s\")", usbip_port, usbip_port_string);
+ }
  
--	.set_vbus	= omap2430_musb_set_vbus,
+-void usbip_net_pack_uint32_t(int pack, uint32_t *num)
++uint32_t usbip_net_pack_uint32_t(int pack, uint32_t num)
+ {
+ 	uint32_t i;
+ 
+ 	if (pack)
+-		i = htonl(*num);
++		i = htonl(num);
+ 	else
+-		i = ntohl(*num);
++		i = ntohl(num);
+ 
+-	*num = i;
++	return i;
+ }
+ 
+-void usbip_net_pack_uint16_t(int pack, uint16_t *num)
++uint16_t usbip_net_pack_uint16_t(int pack, uint16_t num)
+ {
+ 	uint16_t i;
+ 
+ 	if (pack)
+-		i = htons(*num);
++		i = htons(num);
+ 	else
+-		i = ntohs(*num);
++		i = ntohs(num);
+ 
+-	*num = i;
++	return i;
+ }
+ 
+ void usbip_net_pack_usb_device(int pack, struct usbip_usb_device *udev)
+ {
+-	usbip_net_pack_uint32_t(pack, &udev->busnum);
+-	usbip_net_pack_uint32_t(pack, &udev->devnum);
+-	usbip_net_pack_uint32_t(pack, &udev->speed);
++	udev->busnum = usbip_net_pack_uint32_t(pack, udev->busnum);
++	udev->devnum = usbip_net_pack_uint32_t(pack, udev->devnum);
++	udev->speed = usbip_net_pack_uint32_t(pack, udev->speed);
+ 
+-	usbip_net_pack_uint16_t(pack, &udev->idVendor);
+-	usbip_net_pack_uint16_t(pack, &udev->idProduct);
+-	usbip_net_pack_uint16_t(pack, &udev->bcdDevice);
++	udev->idVendor = usbip_net_pack_uint16_t(pack, udev->idVendor);
++	udev->idProduct = usbip_net_pack_uint16_t(pack, udev->idProduct);
++	udev->bcdDevice = usbip_net_pack_uint16_t(pack, udev->bcdDevice);
+ }
+ 
+ void usbip_net_pack_usb_interface(int pack __attribute__((unused)),
+@@ -141,6 +141,14 @@ ssize_t usbip_net_send(int sockfd, void *buff, size_t bufflen)
+ 	return usbip_net_xmit(sockfd, buff, bufflen, 1);
+ }
+ 
++static inline void usbip_net_pack_op_common(int pack,
++					    struct op_common *op_common)
++{
++	op_common->version = usbip_net_pack_uint16_t(pack, op_common->version);
++	op_common->code = usbip_net_pack_uint16_t(pack, op_common->code);
++	op_common->status = usbip_net_pack_uint32_t(pack, op_common->status);
++}
++
+ int usbip_net_send_op_common(int sockfd, uint32_t code, uint32_t status)
+ {
+ 	struct op_common op_common;
+@@ -152,7 +160,7 @@ int usbip_net_send_op_common(int sockfd, uint32_t code, uint32_t status)
+ 	op_common.code    = code;
+ 	op_common.status  = status;
+ 
+-	PACK_OP_COMMON(1, &op_common);
++	usbip_net_pack_op_common(1, &op_common);
+ 
+ 	rc = usbip_net_send(sockfd, &op_common, sizeof(op_common));
+ 	if (rc < 0) {
+@@ -176,7 +184,7 @@ int usbip_net_recv_op_common(int sockfd, uint16_t *code)
+ 		goto err;
+ 	}
+ 
+-	PACK_OP_COMMON(0, &op_common);
++	usbip_net_pack_op_common(0, &op_common);
+ 
+ 	if (op_common.version != USBIP_VERSION) {
+ 		dbg("version mismatch: %d %d", op_common.version,
+diff --git a/tools/usb/usbip/src/usbip_network.h b/tools/usb/usbip/src/usbip_network.h
+index c1e875cf1078c..573fa839b66b7 100644
+--- a/tools/usb/usbip/src/usbip_network.h
++++ b/tools/usb/usbip/src/usbip_network.h
+@@ -33,12 +33,6 @@ struct op_common {
+ 
+ } __attribute__((packed));
+ 
+-#define PACK_OP_COMMON(pack, op_common)  do {\
+-	usbip_net_pack_uint16_t(pack, &(op_common)->version);\
+-	usbip_net_pack_uint16_t(pack, &(op_common)->code);\
+-	usbip_net_pack_uint32_t(pack, &(op_common)->status);\
+-} while (0)
 -
- 	.enable		= omap2430_musb_enable,
- 	.disable	= omap2430_musb_disable,
+ /* ---------------------------------------------------------------------- */
+ /* Dummy Code */
+ #define OP_UNSPEC	0x00
+@@ -164,11 +158,11 @@ struct op_devlist_reply_extra {
+ } while (0)
+ 
+ #define PACK_OP_DEVLIST_REPLY(pack, reply)  do {\
+-	usbip_net_pack_uint32_t(pack, &(reply)->ndev);\
++	(reply)->ndev = usbip_net_pack_uint32_t(pack, (reply)->ndev);\
+ } while (0)
+ 
+-void usbip_net_pack_uint32_t(int pack, uint32_t *num);
+-void usbip_net_pack_uint16_t(int pack, uint16_t *num);
++uint32_t usbip_net_pack_uint32_t(int pack, uint32_t num);
++uint16_t usbip_net_pack_uint16_t(int pack, uint16_t num);
+ void usbip_net_pack_usb_device(int pack, struct usbip_usb_device *udev);
+ void usbip_net_pack_usb_interface(int pack, struct usbip_usb_interface *uinf);
  
 -- 
 2.20.1
