@@ -2,193 +2,191 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EEFF15F1EF
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 19:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7D1415F403
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 19:23:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391410AbgBNSEt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Feb 2020 13:04:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36746 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731791AbgBNPze (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 14 Feb 2020 10:55:34 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A18CF24682;
-        Fri, 14 Feb 2020 15:55:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581695733;
-        bh=BbynmfQcKModhyEQg3FLos1RtWnCUPBZgCxGcT5IdOs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QO/QmUDj5eenNhlJPlu5oFH0fYZySdoFKuKJt0DYsSLEv8cNHGk+3BxwboXGwc9xc
-         6jge/gu2Deqk7YP9ZU5Q8BRF/gUghbnT08+9raKcCRwxaBaHt9dZxZ1d+mbJqlqMl/
-         /842qePAM8GYvWxP/dvA2gTU7IAeLRqb/fOpPlcA=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 307/542] usbip: Fix unsafe unaligned pointer usage
-Date:   Fri, 14 Feb 2020 10:44:59 -0500
-Message-Id: <20200214154854.6746-307-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
-References: <20200214154854.6746-1-sashal@kernel.org>
+        id S2405124AbgBNSRS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Feb 2020 13:17:18 -0500
+Received: from smtprelay0076.hostedemail.com ([216.40.44.76]:51244 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2405119AbgBNSRS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Feb 2020 13:17:18 -0500
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay06.hostedemail.com (Postfix) with ESMTP id AB4161822451B;
+        Fri, 14 Feb 2020 18:17:16 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::,RULES_HIT:2:41:355:379:800:960:973:982:988:989:1260:1277:1311:1313:1314:1345:1437:1515:1516:1518:1535:1593:1594:1605:1606:1730:1747:1777:1792:2393:2553:2559:2562:2828:2897:3138:3139:3140:3141:3142:3653:3865:3866:3867:3868:4321:4605:5007:6119:8603:8957:9010:10004:10848:11026:11473:11658:11914:12043:12296:12297:12438:12555:12760:12986:13439:14394:14659:14664:21080:21433:21451:21627:21939:30054:30070:30080:30090,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: north37_224944e309a50
+X-Filterd-Recvd-Size: 5967
+Received: from XPS-9350.home (unknown [47.151.143.254])
+        (Authenticated sender: joe@perches.com)
+        by omf17.hostedemail.com (Postfix) with ESMTPA;
+        Fri, 14 Feb 2020 18:17:15 +0000 (UTC)
+Message-ID: <60559197a1af9e0af7f329cc3427989e5756846f.camel@perches.com>
+Subject: [PATCH] usb-storage: Use const to reduce object data size
+From:   Joe Perches <joe@perches.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Fri, 14 Feb 2020 10:15:57 -0800
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.34.1-2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Shuah Khan <skhan@linuxfoundation.org>
+Make structs const to reduce data size ~20KB.
 
-[ Upstream commit 585c91f40d201bc564d4e76b83c05b3b5363fe7e ]
+Change function arguments and prototypes as necessary to compile.
 
-Fix unsafe unaligned pointer usage in usbip network interfaces. usbip tool
-build fails with new gcc -Werror=address-of-packed-member checks.
+$ size (x86-64 defconfig pre)
+   text	   data	    bss	    dec	    hex	filename
+  12281	  10948	    480	  23709	   5c9d	./drivers/usb/storage/usb.o
+    111	  10528	      8	  10647	   2997	./drivers/usb/storage/usual-tables.o
 
-usbip_network.c: In function ‘usbip_net_pack_usb_device’:
-usbip_network.c:79:32: error: taking address of packed member of ‘struct usbip_usb_device’ may result in an unaligned pointer value [-Werror=address-of-packed-member]
-   79 |  usbip_net_pack_uint32_t(pack, &udev->busnum);
+$ size (x86-64 defconfig post)
+   text	   data	    bss	    dec	    hex	filename
+  22809	    420	    480	  23709	   5c9d	drivers/usb/storage/usb.o
+  10551	      0	      0	  10551	   2937	drivers/usb/storage/usual-tables.o
 
-Fix with minor changes to pass by value instead of by address.
-
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Link: https://lore.kernel.org/r/20200109012416.2875-1-skhan@linuxfoundation.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Joe Perches <joe@perches.com>
 ---
- tools/usb/usbip/src/usbip_network.c | 40 +++++++++++++++++------------
- tools/usb/usbip/src/usbip_network.h | 12 +++------
- 2 files changed, 27 insertions(+), 25 deletions(-)
 
-diff --git a/tools/usb/usbip/src/usbip_network.c b/tools/usb/usbip/src/usbip_network.c
-index d595d72693fbb..ed4dc8c142690 100644
---- a/tools/usb/usbip/src/usbip_network.c
-+++ b/tools/usb/usbip/src/usbip_network.c
-@@ -50,39 +50,39 @@ void usbip_setup_port_number(char *arg)
- 	info("using port %d (\"%s\")", usbip_port, usbip_port_string);
+compile tested only
+
+ drivers/usb/storage/usb.c          | 10 +++++-----
+ drivers/usb/storage/usb.h          |  5 +++--
+ drivers/usb/storage/usual-tables.c |  6 +++---
+ include/linux/usb_usual.h          |  2 +-
+ 4 files changed, 12 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
+index 9a79cd..94a6472 100644
+--- a/drivers/usb/storage/usb.c
++++ b/drivers/usb/storage/usb.c
+@@ -121,12 +121,12 @@ MODULE_PARM_DESC(quirks, "supplemental list of
+device IDs and their quirks");
+ 	.initFunction = init_function,	\
  }
  
--void usbip_net_pack_uint32_t(int pack, uint32_t *num)
-+uint32_t usbip_net_pack_uint32_t(int pack, uint32_t num)
+-static struct us_unusual_dev us_unusual_dev_list[] = {
++static const struct us_unusual_dev us_unusual_dev_list[] = {
+ #	include "unusual_devs.h"
+ 	{ }		/* Terminating entry */
+ };
+ 
+-static struct us_unusual_dev for_dynamic_ids =
++static const struct us_unusual_dev for_dynamic_ids =
+ 		USUAL_DEV(USB_SC_SCSI, USB_PR_BULK);
+ 
+ #undef UNUSUAL_DEV
+@@ -583,7 +583,7 @@ EXPORT_SYMBOL_GPL(usb_stor_adjust_quirks);
+ 
+ /* Get the unusual_devs entries and the string descriptors */
+ static int get_device_info(struct us_data *us, const struct
+usb_device_id *id,
+-		struct us_unusual_dev *unusual_dev)
++		const struct us_unusual_dev *unusual_dev)
  {
- 	uint32_t i;
- 
- 	if (pack)
--		i = htonl(*num);
-+		i = htonl(num);
- 	else
--		i = ntohl(*num);
-+		i = ntohl(num);
- 
--	*num = i;
-+	return i;
- }
- 
--void usbip_net_pack_uint16_t(int pack, uint16_t *num)
-+uint16_t usbip_net_pack_uint16_t(int pack, uint16_t num)
+ 	struct usb_device *dev = us->pusb_dev;
+ 	struct usb_interface_descriptor *idesc =
+@@ -933,7 +933,7 @@ static unsigned int usb_stor_sg_tablesize(struct
+usb_interface *intf)
+ int usb_stor_probe1(struct us_data **pus,
+ 		struct usb_interface *intf,
+ 		const struct usb_device_id *id,
+-		struct us_unusual_dev *unusual_dev,
++		const struct us_unusual_dev *unusual_dev,
+ 		struct scsi_host_template *sht)
  {
- 	uint16_t i;
- 
- 	if (pack)
--		i = htons(*num);
-+		i = htons(num);
- 	else
--		i = ntohs(*num);
-+		i = ntohs(num);
- 
--	*num = i;
-+	return i;
- }
- 
- void usbip_net_pack_usb_device(int pack, struct usbip_usb_device *udev)
+ 	struct Scsi_Host *host;
+@@ -1092,7 +1092,7 @@ static struct scsi_host_template
+usb_stor_host_template;
+ static int storage_probe(struct usb_interface *intf,
+ 			 const struct usb_device_id *id)
  {
--	usbip_net_pack_uint32_t(pack, &udev->busnum);
--	usbip_net_pack_uint32_t(pack, &udev->devnum);
--	usbip_net_pack_uint32_t(pack, &udev->speed);
-+	udev->busnum = usbip_net_pack_uint32_t(pack, udev->busnum);
-+	udev->devnum = usbip_net_pack_uint32_t(pack, udev->devnum);
-+	udev->speed = usbip_net_pack_uint32_t(pack, udev->speed);
- 
--	usbip_net_pack_uint16_t(pack, &udev->idVendor);
--	usbip_net_pack_uint16_t(pack, &udev->idProduct);
--	usbip_net_pack_uint16_t(pack, &udev->bcdDevice);
-+	udev->idVendor = usbip_net_pack_uint16_t(pack, udev->idVendor);
-+	udev->idProduct = usbip_net_pack_uint16_t(pack, udev->idProduct);
-+	udev->bcdDevice = usbip_net_pack_uint16_t(pack, udev->bcdDevice);
+-	struct us_unusual_dev *unusual_dev;
++	const struct us_unusual_dev *unusual_dev;
+ 	struct us_data *us;
+ 	int result;
+ 	int size;
+diff --git a/drivers/usb/storage/usb.h b/drivers/usb/storage/usb.h
+index 85052c..5850d62 100644
+--- a/drivers/usb/storage/usb.h
++++ b/drivers/usb/storage/usb.h
+@@ -93,7 +93,8 @@ struct us_data {
+ 	struct mutex		dev_mutex;	 /* protect pusb_dev */
+ 	struct usb_device	*pusb_dev;	 /* this usb_device */
+ 	struct usb_interface	*pusb_intf;	 /* this interface */
+-	struct us_unusual_dev   *unusual_dev;	 /* device-filter
+entry     */
++	const struct us_unusual_dev   *unusual_dev;
++						/* device-filter
+entry     */
+ 	unsigned long		fflags;		 /* fixed flags from
+filter */
+ 	unsigned long		dflags;		 /* dynamic atomic
+bitflags */
+ 	unsigned int		send_bulk_pipe;	 /* cached pipe values
+*/
+@@ -185,7 +186,7 @@ extern int usb_stor_post_reset(struct usb_interface
+*iface);
+ extern int usb_stor_probe1(struct us_data **pus,
+ 		struct usb_interface *intf,
+ 		const struct usb_device_id *id,
+-		struct us_unusual_dev *unusual_dev,
++		const struct us_unusual_dev *unusual_dev,
+ 		struct scsi_host_template *sht);
+ extern int usb_stor_probe2(struct us_data *us);
+ extern void usb_stor_disconnect(struct usb_interface *intf);
+diff --git a/drivers/usb/storage/usual-tables.c
+b/drivers/usb/storage/usual-tables.c
+index cfd12e5..529512 100644
+--- a/drivers/usb/storage/usual-tables.c
++++ b/drivers/usb/storage/usual-tables.c
+@@ -40,7 +40,7 @@
+ 	.driver_info = (flags) \
  }
  
- void usbip_net_pack_usb_interface(int pack __attribute__((unused)),
-@@ -129,6 +129,14 @@ ssize_t usbip_net_send(int sockfd, void *buff, size_t bufflen)
- 	return usbip_net_xmit(sockfd, buff, bufflen, 1);
+-struct usb_device_id usb_storage_usb_ids[] = {
++const struct usb_device_id usb_storage_usb_ids[] = {
+ #	include "unusual_devs.h"
+ 	{ }		/* Terminating entry */
+ };
+@@ -68,7 +68,7 @@ struct ignore_entry {
+ 	.bcdmax = bcdDeviceMax,		\
  }
  
-+static inline void usbip_net_pack_op_common(int pack,
-+					    struct op_common *op_common)
-+{
-+	op_common->version = usbip_net_pack_uint16_t(pack, op_common->version);
-+	op_common->code = usbip_net_pack_uint16_t(pack, op_common->code);
-+	op_common->status = usbip_net_pack_uint32_t(pack, op_common->status);
-+}
-+
- int usbip_net_send_op_common(int sockfd, uint32_t code, uint32_t status)
+-static struct ignore_entry ignore_ids[] = {
++static const struct ignore_entry ignore_ids[] = {
+ #	include "unusual_alauda.h"
+ #	include "unusual_cypress.h"
+ #	include "unusual_datafab.h"
+@@ -92,7 +92,7 @@ int usb_usual_ignore_device(struct usb_interface
+*intf)
  {
- 	struct op_common op_common;
-@@ -140,7 +148,7 @@ int usbip_net_send_op_common(int sockfd, uint32_t code, uint32_t status)
- 	op_common.code    = code;
- 	op_common.status  = status;
+ 	struct usb_device *udev;
+ 	unsigned vid, pid, bcd;
+-	struct ignore_entry *p;
++	const struct ignore_entry *p;
  
--	PACK_OP_COMMON(1, &op_common);
-+	usbip_net_pack_op_common(1, &op_common);
+ 	udev = interface_to_usbdev(intf);
+ 	vid = le16_to_cpu(udev->descriptor.idVendor);
+diff --git a/include/linux/usb_usual.h b/include/linux/usb_usual.h
+index 000a595..4a19ac3 100644
+--- a/include/linux/usb_usual.h
++++ b/include/linux/usb_usual.h
+@@ -92,6 +92,6 @@ enum { US_DO_ALL_FLAGS };
+ #include <linux/usb/storage.h>
  
- 	rc = usbip_net_send(sockfd, &op_common, sizeof(op_common));
- 	if (rc < 0) {
-@@ -164,7 +172,7 @@ int usbip_net_recv_op_common(int sockfd, uint16_t *code, int *status)
- 		goto err;
- 	}
+ extern int usb_usual_ignore_device(struct usb_interface *intf);
+-extern struct usb_device_id usb_storage_usb_ids[];
++extern const struct usb_device_id usb_storage_usb_ids[];
  
--	PACK_OP_COMMON(0, &op_common);
-+	usbip_net_pack_op_common(0, &op_common);
- 
- 	if (op_common.version != USBIP_VERSION) {
- 		err("USBIP Kernel and tool version mismatch: %d %d:",
-diff --git a/tools/usb/usbip/src/usbip_network.h b/tools/usb/usbip/src/usbip_network.h
-index 555215eae43e9..83b4c5344f721 100644
---- a/tools/usb/usbip/src/usbip_network.h
-+++ b/tools/usb/usbip/src/usbip_network.h
-@@ -32,12 +32,6 @@ struct op_common {
- 
- } __attribute__((packed));
- 
--#define PACK_OP_COMMON(pack, op_common)  do {\
--	usbip_net_pack_uint16_t(pack, &(op_common)->version);\
--	usbip_net_pack_uint16_t(pack, &(op_common)->code);\
--	usbip_net_pack_uint32_t(pack, &(op_common)->status);\
--} while (0)
--
- /* ---------------------------------------------------------------------- */
- /* Dummy Code */
- #define OP_UNSPEC	0x00
-@@ -163,11 +157,11 @@ struct op_devlist_reply_extra {
- } while (0)
- 
- #define PACK_OP_DEVLIST_REPLY(pack, reply)  do {\
--	usbip_net_pack_uint32_t(pack, &(reply)->ndev);\
-+	(reply)->ndev = usbip_net_pack_uint32_t(pack, (reply)->ndev);\
- } while (0)
- 
--void usbip_net_pack_uint32_t(int pack, uint32_t *num);
--void usbip_net_pack_uint16_t(int pack, uint16_t *num);
-+uint32_t usbip_net_pack_uint32_t(int pack, uint32_t num);
-+uint16_t usbip_net_pack_uint16_t(int pack, uint16_t num);
- void usbip_net_pack_usb_device(int pack, struct usbip_usb_device *udev);
- void usbip_net_pack_usb_interface(int pack, struct usbip_usb_interface *uinf);
- 
--- 
-2.20.1
+ #endif /* __LINUX_USB_USUAL_H */
+
 
