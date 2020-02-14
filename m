@@ -2,41 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A7615EA8E
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 18:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B83815E945
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 18:06:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392057AbgBNROt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Feb 2020 12:14:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39970 "EHLO mail.kernel.org"
+        id S2392396AbgBNQOu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Feb 2020 11:14:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44606 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403776AbgBNQM2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:12:28 -0500
+        id S2392178AbgBNQOs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:14:48 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 77D68246AA;
-        Fri, 14 Feb 2020 16:12:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7A44C246D9;
+        Fri, 14 Feb 2020 16:14:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696747;
-        bh=+vGHe3JDy9xNEfZk9K6/cvGaRyAsbbjFMd+oa+5LXM4=;
+        s=default; t=1581696888;
+        bh=tvKzxyBSOWdbycPIokxc9W8PB7ktoh/zY9HjhmgDT+k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tkUeNVweV8CTt0mqWpIo5eN89xf0bJ9kByfrMtPRjPsf3X+cP4mbWelUur/3pnw2l
-         acyCu4pBxZkR9X7bojEOO7iKy6KugTZynuwWH4YzMNbp0Z0s0Dz9zT4ivsqWtcknsJ
-         PKSVt97pmepYIbthILv15hS+nez31EHtoP9aCqPk=
+        b=OmhoAPnxqP7JzlVn67oxEBYbkvAyCYNgXPobFvE8m85ZTrUvh6gRl47qXkto3Ulqo
+         GlKzkmc0R4GZJLJpY2rlKQAAsgUHjeSHRji7ecnucevr86flj38XoxdYyJBKbtBgL/
+         yED4xfyFHjEcQBbBHRYvcryrvd61L7/nVPJAPsbQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     John Keeping <john@metanate.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 030/252] usb: dwc2: Fix IN FIFO allocation
-Date:   Fri, 14 Feb 2020 11:08:05 -0500
-Message-Id: <20200214161147.15842-30-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 141/252] usbip: Fix unsafe unaligned pointer usage
+Date:   Fri, 14 Feb 2020 11:09:56 -0500
+Message-Id: <20200214161147.15842-141-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200214161147.15842-1-sashal@kernel.org>
 References: <20200214161147.15842-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -45,82 +44,151 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: John Keeping <john@metanate.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
 
-[ Upstream commit 644139f8b64d818f6345351455f14471510879a5 ]
+[ Upstream commit 585c91f40d201bc564d4e76b83c05b3b5363fe7e ]
 
-On chips with fewer FIFOs than endpoints (for example RK3288 which has 9
-endpoints, but only 6 which are cabable of input), the DPTXFSIZN
-registers above the FIFO count may return invalid values.
+Fix unsafe unaligned pointer usage in usbip network interfaces. usbip tool
+build fails with new gcc -Werror=address-of-packed-member checks.
 
-With logging added on startup, I see:
+usbip_network.c: In function ‘usbip_net_pack_usb_device’:
+usbip_network.c:79:32: error: taking address of packed member of ‘struct usbip_usb_device’ may result in an unaligned pointer value [-Werror=address-of-packed-member]
+   79 |  usbip_net_pack_uint32_t(pack, &udev->busnum);
 
-	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=1 sz=256
-	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=2 sz=128
-	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=3 sz=128
-	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=4 sz=64
-	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=5 sz=64
-	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=6 sz=32
-	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=7 sz=0
-	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=8 sz=0
-	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=9 sz=0
-	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=10 sz=0
-	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=11 sz=0
-	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=12 sz=0
-	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=13 sz=0
-	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=14 sz=0
-	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=15 sz=0
+Fix with minor changes to pass by value instead of by address.
 
-but:
-
-	# cat /sys/kernel/debug/ff580000.usb/fifo
-	Non-periodic FIFOs:
-	RXFIFO: Size 275
-	NPTXFIFO: Size 16, Start 0x00000113
-
-	Periodic TXFIFOs:
-		DPTXFIFO 1: Size 256, Start 0x00000123
-		DPTXFIFO 2: Size 128, Start 0x00000223
-		DPTXFIFO 3: Size 128, Start 0x000002a3
-		DPTXFIFO 4: Size 64, Start 0x00000323
-		DPTXFIFO 5: Size 64, Start 0x00000363
-		DPTXFIFO 6: Size 32, Start 0x000003a3
-		DPTXFIFO 7: Size 0, Start 0x000003e3
-		DPTXFIFO 8: Size 0, Start 0x000003a3
-		DPTXFIFO 9: Size 256, Start 0x00000123
-
-so it seems that FIFO 9 is mirroring FIFO 1.
-
-Fix the allocation by using the FIFO count instead of the endpoint count
-when selecting a FIFO for an endpoint.
-
-Acked-by: Minas Harutyunyan <hminas@synopsys.com>
-Signed-off-by: John Keeping <john@metanate.com>
-Signed-off-by: Felipe Balbi <balbi@kernel.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20200109012416.2875-1-skhan@linuxfoundation.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc2/gadget.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/usb/usbip/src/usbip_network.c | 40 +++++++++++++++++------------
+ tools/usb/usbip/src/usbip_network.h | 12 +++------
+ 2 files changed, 27 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index f64d1cd08fb67..17f3e7b4d4fed 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -3918,11 +3918,12 @@ static int dwc2_hsotg_ep_enable(struct usb_ep *ep,
- 	 * a unique tx-fifo even if it is non-periodic.
- 	 */
- 	if (dir_in && hsotg->dedicated_fifos) {
-+		unsigned fifo_count = dwc2_hsotg_tx_fifo_count(hsotg);
- 		u32 fifo_index = 0;
- 		u32 fifo_size = UINT_MAX;
+diff --git a/tools/usb/usbip/src/usbip_network.c b/tools/usb/usbip/src/usbip_network.c
+index 8ffcd47d96385..902f55208e239 100644
+--- a/tools/usb/usbip/src/usbip_network.c
++++ b/tools/usb/usbip/src/usbip_network.c
+@@ -62,39 +62,39 @@ void usbip_setup_port_number(char *arg)
+ 	info("using port %d (\"%s\")", usbip_port, usbip_port_string);
+ }
  
- 		size = hs_ep->ep.maxpacket * hs_ep->mc;
--		for (i = 1; i < hsotg->num_of_eps; ++i) {
-+		for (i = 1; i <= fifo_count; ++i) {
- 			if (hsotg->fifo_map & (1 << i))
- 				continue;
- 			val = dwc2_readl(hsotg, DPTXFSIZN(i));
+-void usbip_net_pack_uint32_t(int pack, uint32_t *num)
++uint32_t usbip_net_pack_uint32_t(int pack, uint32_t num)
+ {
+ 	uint32_t i;
+ 
+ 	if (pack)
+-		i = htonl(*num);
++		i = htonl(num);
+ 	else
+-		i = ntohl(*num);
++		i = ntohl(num);
+ 
+-	*num = i;
++	return i;
+ }
+ 
+-void usbip_net_pack_uint16_t(int pack, uint16_t *num)
++uint16_t usbip_net_pack_uint16_t(int pack, uint16_t num)
+ {
+ 	uint16_t i;
+ 
+ 	if (pack)
+-		i = htons(*num);
++		i = htons(num);
+ 	else
+-		i = ntohs(*num);
++		i = ntohs(num);
+ 
+-	*num = i;
++	return i;
+ }
+ 
+ void usbip_net_pack_usb_device(int pack, struct usbip_usb_device *udev)
+ {
+-	usbip_net_pack_uint32_t(pack, &udev->busnum);
+-	usbip_net_pack_uint32_t(pack, &udev->devnum);
+-	usbip_net_pack_uint32_t(pack, &udev->speed);
++	udev->busnum = usbip_net_pack_uint32_t(pack, udev->busnum);
++	udev->devnum = usbip_net_pack_uint32_t(pack, udev->devnum);
++	udev->speed = usbip_net_pack_uint32_t(pack, udev->speed);
+ 
+-	usbip_net_pack_uint16_t(pack, &udev->idVendor);
+-	usbip_net_pack_uint16_t(pack, &udev->idProduct);
+-	usbip_net_pack_uint16_t(pack, &udev->bcdDevice);
++	udev->idVendor = usbip_net_pack_uint16_t(pack, udev->idVendor);
++	udev->idProduct = usbip_net_pack_uint16_t(pack, udev->idProduct);
++	udev->bcdDevice = usbip_net_pack_uint16_t(pack, udev->bcdDevice);
+ }
+ 
+ void usbip_net_pack_usb_interface(int pack __attribute__((unused)),
+@@ -141,6 +141,14 @@ ssize_t usbip_net_send(int sockfd, void *buff, size_t bufflen)
+ 	return usbip_net_xmit(sockfd, buff, bufflen, 1);
+ }
+ 
++static inline void usbip_net_pack_op_common(int pack,
++					    struct op_common *op_common)
++{
++	op_common->version = usbip_net_pack_uint16_t(pack, op_common->version);
++	op_common->code = usbip_net_pack_uint16_t(pack, op_common->code);
++	op_common->status = usbip_net_pack_uint32_t(pack, op_common->status);
++}
++
+ int usbip_net_send_op_common(int sockfd, uint32_t code, uint32_t status)
+ {
+ 	struct op_common op_common;
+@@ -152,7 +160,7 @@ int usbip_net_send_op_common(int sockfd, uint32_t code, uint32_t status)
+ 	op_common.code    = code;
+ 	op_common.status  = status;
+ 
+-	PACK_OP_COMMON(1, &op_common);
++	usbip_net_pack_op_common(1, &op_common);
+ 
+ 	rc = usbip_net_send(sockfd, &op_common, sizeof(op_common));
+ 	if (rc < 0) {
+@@ -176,7 +184,7 @@ int usbip_net_recv_op_common(int sockfd, uint16_t *code, int *status)
+ 		goto err;
+ 	}
+ 
+-	PACK_OP_COMMON(0, &op_common);
++	usbip_net_pack_op_common(0, &op_common);
+ 
+ 	if (op_common.version != USBIP_VERSION) {
+ 		err("USBIP Kernel and tool version mismatch: %d %d:",
+diff --git a/tools/usb/usbip/src/usbip_network.h b/tools/usb/usbip/src/usbip_network.h
+index 555215eae43e9..83b4c5344f721 100644
+--- a/tools/usb/usbip/src/usbip_network.h
++++ b/tools/usb/usbip/src/usbip_network.h
+@@ -32,12 +32,6 @@ struct op_common {
+ 
+ } __attribute__((packed));
+ 
+-#define PACK_OP_COMMON(pack, op_common)  do {\
+-	usbip_net_pack_uint16_t(pack, &(op_common)->version);\
+-	usbip_net_pack_uint16_t(pack, &(op_common)->code);\
+-	usbip_net_pack_uint32_t(pack, &(op_common)->status);\
+-} while (0)
+-
+ /* ---------------------------------------------------------------------- */
+ /* Dummy Code */
+ #define OP_UNSPEC	0x00
+@@ -163,11 +157,11 @@ struct op_devlist_reply_extra {
+ } while (0)
+ 
+ #define PACK_OP_DEVLIST_REPLY(pack, reply)  do {\
+-	usbip_net_pack_uint32_t(pack, &(reply)->ndev);\
++	(reply)->ndev = usbip_net_pack_uint32_t(pack, (reply)->ndev);\
+ } while (0)
+ 
+-void usbip_net_pack_uint32_t(int pack, uint32_t *num);
+-void usbip_net_pack_uint16_t(int pack, uint16_t *num);
++uint32_t usbip_net_pack_uint32_t(int pack, uint32_t num);
++uint16_t usbip_net_pack_uint16_t(int pack, uint16_t num);
+ void usbip_net_pack_usb_device(int pack, struct usbip_usb_device *udev);
+ void usbip_net_pack_usb_interface(int pack, struct usbip_usb_interface *uinf);
+ 
 -- 
 2.20.1
 
