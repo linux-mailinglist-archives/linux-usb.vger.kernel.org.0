@@ -2,149 +2,223 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4A215D314
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 08:45:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E10815D34D
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 08:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728880AbgBNHpj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Feb 2020 02:45:39 -0500
-Received: from mga09.intel.com ([134.134.136.24]:55938 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725897AbgBNHpi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 14 Feb 2020 02:45:38 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Feb 2020 23:45:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,439,1574150400"; 
-   d="scan'208";a="406913159"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga005.jf.intel.com with ESMTP; 13 Feb 2020 23:45:35 -0800
-Subject: Re: [RFT PATCH v2] xhci: Fix memory leak when caching protocol
- extended capability PSI tables
-To:     Jon Hunter <jonathanh@nvidia.com>, gregkh@linuxfoundation.org,
-        m.szyprowski@samsung.com
-Cc:     pmenzel@molgen.mpg.de, mika.westerberg@linux.intel.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, krzk@kernel.org,
-        stable <stable@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-References: <20d0559f-8d0f-42f5-5ebf-7f658a172161@linux.intel.com>
- <20200211150158.14475-1-mathias.nyman@linux.intel.com>
- <f42f7f73-48e7-74ad-2524-2514f29490cb@nvidia.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <0f871a8f-aa96-4684-1d9c-a18c6edfb62f@linux.intel.com>
-Date:   Fri, 14 Feb 2020 09:47:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728801AbgBNH7e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Feb 2020 02:59:34 -0500
+Received: from mail-vi1eur05on2075.outbound.protection.outlook.com ([40.107.21.75]:6022
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728691AbgBNH7e (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 14 Feb 2020 02:59:34 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bm1W7Z78w8oJcxpCjQp4q5oN9jiTisDNRyvSYtPwyz5IprOg7tDXVIJDSoEw6YxEn8Z4ZXbvP6kt+td4HemABABUeNcz5FNkqQpyBtJ5DsL1IREU9nW0ISDq9lXUuhAq/juTRKg6/lPuBqGXWa15zyqofXt2zpCyZGl2yaSEH1+zytZU9N1PDLHgepUhc7yHK5+ZiR/9NQZ63qR750a3/emNDz6wJ+lgBd5IxI3c73AelD/R05GlnfDDsojKXPyQ0DCX7o1UHWLF/CQEGXaIg2ZKA35B71g5Afca2kEFO9R480qMgCxaL18922hKaQB6wiGmiF+Sw9765s/0SAry2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pPLcOE05QySd96suJ4yVyS5+pD91ErsaCNrbu4h0ctU=;
+ b=BzXcZ9qESUjBvgMlqTAvi8tGWcF5+V+gMEN18ZOoQ1n/sOMJdhHjhtP1bRpoLhUIf3K+uOZKwXyVV6pkRTjR4LHY72CUlhj2XZdVRfimBQbh5agEr0DAzS6bbnEutwsDIhDuVtvfJEmC1nbRxAwsXZrzGbyjYSn/sF8RvFPsGUSisxSsAK52NoCoirw2QRoEoluVDZ5mvKpkIFnffOXBqM/DsnGJ6h2sKEczSqxaXl6e3uHrHGXw9FFamG3rLvmaguG4K5gKHEIwyIawtB6NWOHLMyjQBZZBosq64LSgRY1VLWD0IPFuhQ7XUxBp08UvuUhFv0mw+VruyLFPSZSG2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pPLcOE05QySd96suJ4yVyS5+pD91ErsaCNrbu4h0ctU=;
+ b=XT17a7bt0K8+ArwhP4798NDqUp49JYaDdD5djepSs6IEZKX5xovf6j8suQhxDoo1KxS+ysUbcpBHS906fiR0gpY2URGqabNYOG34o+Bc4+Hk7cRelNbRGD3QPV9dAImONLd1Xm/jtwpWox0iolJVcfHhGkI12I0scePDuheYnCQ=
+Authentication-Results: spf=none (sender IP is ) smtp.mailfrom=jun.li@nxp.com; 
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (20.179.235.146) by
+ VE1PR04MB6735.eurprd04.prod.outlook.com (20.179.234.203) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2729.22; Fri, 14 Feb 2020 07:59:29 +0000
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::ccb0:7d6d:adfa:423c]) by VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::ccb0:7d6d:adfa:423c%4]) with mapi id 15.20.2729.025; Fri, 14 Feb 2020
+ 07:59:29 +0000
+From:   jun.li@nxp.com
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com
+Cc:     gregkh@linuxfoundation.org, jun.li@nxp.com, linux-imx@nxp.com,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v3] usb: typec: tcpm: set correct data role for non-DRD
+Date:   Fri, 14 Feb 2020 15:53:48 +0800
+Message-Id: <1581666828-2063-1-git-send-email-jun.li@nxp.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-ClientProxiedBy: HK0PR03CA0117.apcprd03.prod.outlook.com
+ (2603:1096:203:b0::33) To VE1PR04MB6528.eurprd04.prod.outlook.com
+ (2603:10a6:803:127::18)
 MIME-Version: 1.0
-In-Reply-To: <f42f7f73-48e7-74ad-2524-2514f29490cb@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: from localhost.localdomain (119.31.174.66) by HK0PR03CA0117.apcprd03.prod.outlook.com (2603:1096:203:b0::33) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.2729.25 via Frontend Transport; Fri, 14 Feb 2020 07:59:27 +0000
+X-Mailer: git-send-email 2.7.4
+X-Originating-IP: [119.31.174.66]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 4bc8c181-8363-4d66-c764-08d7b123d158
+X-MS-TrafficTypeDiagnostic: VE1PR04MB6735:|VE1PR04MB6735:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <VE1PR04MB67352FA5024BDDA1493199AB89150@VE1PR04MB6735.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
+X-Forefront-PRVS: 03137AC81E
+X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(396003)(346002)(366004)(136003)(376002)(199004)(189003)(6506007)(316002)(2616005)(26005)(956004)(8676002)(6512007)(81156014)(81166006)(186003)(9686003)(5660300002)(8936002)(69590400006)(16526019)(6486002)(4326008)(86362001)(478600001)(6666004)(36756003)(52116002)(2906002)(66556008)(66476007)(66946007);DIR:OUT;SFP:1101;SCL:1;SRVR:VE1PR04MB6735;H:VE1PR04MB6528.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+Received-SPF: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +4NDBAeAnzkZ6h5JRSoXIyawZ8LcbKy3VkeBNVfaKWsJS5lSwOD90NlpEPdcRZZoFk7+mQpJpTOdXthzwTB7rDfzhbQYb4SHVs2tJ0cGijiQlUXmEaA6CgSEMS7DlKyc0ybO5tTHjotKAeTGx/CQu/UOgEmrwTL1VsmSF6yrsL6IPxHVf0Jo0ZSBOAHnMvo94VZh0NE+K8s98ui+UkRJaZsaPudICgH0TYkg6JMIniiELUjpuBndssl7Qj+zyrSgQG2uGkGFuvEUegS2gcrgeFMgicX/C2T8BbCl94JX26dpb5AIYyqgCEe5yc4IjK4ygS37irGLsV1q1qNXUheeZkENeT6P/tifvMu9zF8DwEzxMdEzx26f8S8f2MqdB6MLWhkb9jygyOljvFt5IE3sFtZolqP/+PFIf72FL6BbKqDxX8U5+phPZohTFQ21GICqBlBfTFHPeJf3J1BE+NHmnq48WmL9BaMQPNgDcK2WNNQuauRx0P/PQbI8MCi74MOFFJY1J5QneaF5urUU4utrCp9FHzpt3rvJ8Za2zMlefdQ=
+X-MS-Exchange-AntiSpam-MessageData: V0MW/TO03Up2Ouf5sBKfrxdoyEomCijNI0P1aLyzNLtIkCPc0JFxiQlrkMl/nGbTXczge3L5i9hV2aCxwnS7NrrDC4BCB1a2YEvaTlDXFCIxQQ8/otbsa1shxI33l0+DI1vishbOYCNEmC0QAj0FgQ==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4bc8c181-8363-4d66-c764-08d7b123d158
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2020 07:59:29.1971
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QOpFIfWu2w0NUSoJzKp49s4LMnOCfohuUHYyElYMKtfrxVG1niG5p7RfP6J/F486
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6735
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 13.2.2020 15.33, Jon Hunter wrote:
-> 
-> On 11/02/2020 15:01, Mathias Nyman wrote:
->> xhci driver assumed that xHC controllers have at most one custom
->> supported speed table (PSI) for all usb 3.x ports.
->> Memory was allocated for one PSI table under the xhci hub structure.
->>
->> Turns out this is not the case, some controllers have a separate
->> "supported protocol capability" entry with a PSI table for each port.
->> This means each usb3 roothub port can in theory support different custom
->> speeds.
->>
->> To solve this, cache all supported protocol capabilities with their PSI
->> tables in an array, and add pointers to the xhci port structure so that
->> every port points to its capability entry in the array.
->>
->> When creating the SuperSpeedPlus USB Device Capability BOS descriptor
->> for the xhci USB 3.1 roothub we for now will use only data from the
->> first USB 3.1 capable protocol capability entry in the array.
->> This could be improved later, this patch focuses resolving
->> the memory leak.
->>
->> Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
->> Reported-by: Sajja Venkateswara Rao <VenkateswaraRao.Sajja@amd.com>
->> Fixes: 47189098f8be ("xhci: parse xhci protocol speed ID list for usb 3.1 usage")
->> Cc: stable <stable@vger.kernel.org> # v4.4+
->> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> 
-> 
-> Since next-20200211, we have been observing a regression exiting suspend
-> on our Tegra124 Jetson TK1 board. Bisect is pointing to this commit and
-> reverting on top of -next fixes the problem.
-> 
-> On exiting suspend, I am seeing the following ...
-> 
-> [   56.216793] tegra-xusb 70090000.usb: Firmware already loaded, Falcon state 0x20
-> [   56.216834] usb usb3: root hub lost power or was reset
-> [   56.216837] usb usb4: root hub lost power or was reset
-> [   56.217760] tegra-xusb 70090000.usb: No ports on the roothubs?
-> [   56.218257] tegra-xusb 70090000.usb: failed to resume XHCI: -12
-> [   56.218299] PM: dpm_run_callback(): platform_pm_resume+0x0/0x40 returns -12
-> [   56.218312] PM: Device 70090000.usb failed to resume: error -12
-> [   56.334366] hub 4-0:1.0: hub_ext_port_status failed (err = -32)
-> [   56.334368] hub 3-0:1.0: hub_ext_port_status failed (err = -32)
-> 
-> Let me know if you have any thoughts on this.
-> 
-> Cheers
-> Jon
+From: Li Jun <jun.li@nxp.com>
 
-This was an issue with the first version, and should be fixed in the second.
+Since the typec port data role is separated from power role,
+so check the port data capability when setting data role.
 
-next-20200211 has the faulty version, 
-next-20200213 is fixed, reverted first version and applied second.
+Signed-off-by: Li Jun <jun.li@nxp.com>
+---
+change for v3:
+- Use 2 macro to get correct typec data role for source and sink
+  according to port data capability.
 
-Does next-20200213 work for you?
+change for v2:
+- Pass the right typec data role when call tcpm_set_roles()
+- Return error if the pass typec data role is not supported
+  in tcpm_set_roles().
 
--Mathias
+ drivers/usb/typec/tcpm/tcpm.c | 53 ++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 42 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index f3087ef..78077c2 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -373,6 +373,14 @@ struct pd_rx_event {
+ 	((port)->try_src_count == 0 && (port)->try_role == TYPEC_SOURCE && \
+ 	(port)->port_type == TYPEC_PORT_DRP)
+ 
++#define tcpm_data_role_for_source(port) \
++	((port)->typec_caps.data == TYPEC_PORT_UFP ? \
++	TYPEC_DEVICE : TYPEC_HOST)
++
++#define tcpm_data_role_for_sink(port) \
++	((port)->typec_caps.data == TYPEC_PORT_DFP ? \
++	TYPEC_HOST : TYPEC_DEVICE)
++
+ static enum tcpm_state tcpm_default_state(struct tcpm_port *port)
+ {
+ 	if (port->port_type == TYPEC_PORT_DRP) {
+@@ -788,10 +796,30 @@ static int tcpm_set_roles(struct tcpm_port *port, bool attached,
+ 	else
+ 		orientation = TYPEC_ORIENTATION_REVERSE;
+ 
+-	if (data == TYPEC_HOST)
+-		usb_role = USB_ROLE_HOST;
+-	else
+-		usb_role = USB_ROLE_DEVICE;
++	if (port->typec_caps.data == TYPEC_PORT_DRD) {
++		if (data == TYPEC_HOST)
++			usb_role = USB_ROLE_HOST;
++		else
++			usb_role = USB_ROLE_DEVICE;
++	} else if (port->typec_caps.data == TYPEC_PORT_DFP) {
++		if (data == TYPEC_HOST) {
++			if (role == TYPEC_SOURCE)
++				usb_role = USB_ROLE_HOST;
++			else
++				usb_role = USB_ROLE_NONE;
++		} else {
++			return -ENOTSUPP;
++		}
++	} else {
++		if (data == TYPEC_DEVICE) {
++			if (role == TYPEC_SINK)
++				usb_role = USB_ROLE_DEVICE;
++			else
++				usb_role = USB_ROLE_NONE;
++		} else {
++			return -ENOTSUPP;
++		}
++	}
+ 
+ 	ret = tcpm_mux_set(port, TYPEC_STATE_USB, usb_role, orientation);
+ 	if (ret < 0)
+@@ -1817,7 +1845,7 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+ 		tcpm_set_state(port, SOFT_RESET, 0);
+ 		break;
+ 	case PD_CTRL_DR_SWAP:
+-		if (port->port_type != TYPEC_PORT_DRP) {
++		if (port->typec_caps.data != TYPEC_PORT_DRD) {
+ 			tcpm_queue_message(port, PD_MSG_CTRL_REJECT);
+ 			break;
+ 		}
+@@ -2618,7 +2646,8 @@ static int tcpm_src_attach(struct tcpm_port *port)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = tcpm_set_roles(port, true, TYPEC_SOURCE, TYPEC_HOST);
++	ret = tcpm_set_roles(port, true, TYPEC_SOURCE,
++			     tcpm_data_role_for_source(port));
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -2740,7 +2769,8 @@ static int tcpm_snk_attach(struct tcpm_port *port)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = tcpm_set_roles(port, true, TYPEC_SINK, TYPEC_DEVICE);
++	ret = tcpm_set_roles(port, true, TYPEC_SINK,
++			     tcpm_data_role_for_sink(port));
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -2766,7 +2796,8 @@ static int tcpm_acc_attach(struct tcpm_port *port)
+ 	if (port->attached)
+ 		return 0;
+ 
+-	ret = tcpm_set_roles(port, true, TYPEC_SOURCE, TYPEC_HOST);
++	ret = tcpm_set_roles(port, true, TYPEC_SOURCE,
++			     tcpm_data_role_for_source(port));
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -3293,7 +3324,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 		tcpm_set_vconn(port, true);
+ 		tcpm_set_vbus(port, false);
+ 		tcpm_set_roles(port, port->self_powered, TYPEC_SOURCE,
+-			       TYPEC_HOST);
++			       tcpm_data_role_for_source(port));
+ 		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SRC_RECOVER);
+ 		break;
+ 	case SRC_HARD_RESET_VBUS_ON:
+@@ -3308,7 +3339,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 		if (port->pd_capable)
+ 			tcpm_set_charge(port, false);
+ 		tcpm_set_roles(port, port->self_powered, TYPEC_SINK,
+-			       TYPEC_DEVICE);
++			       tcpm_data_role_for_sink(port));
+ 		/*
+ 		 * VBUS may or may not toggle, depending on the adapter.
+ 		 * If it doesn't toggle, transition to SNK_HARD_RESET_SINK_ON
+@@ -3969,7 +4000,7 @@ static int tcpm_dr_set(struct typec_port *p, enum typec_data_role data)
+ 	mutex_lock(&port->swap_lock);
+ 	mutex_lock(&port->lock);
+ 
+-	if (port->port_type != TYPEC_PORT_DRP) {
++	if (port->typec_caps.data != TYPEC_PORT_DRD) {
+ 		ret = -EINVAL;
+ 		goto port_unlock;
+ 	}
+-- 
+2.7.4
+
