@@ -2,72 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7CB615D359
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 09:03:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4101715D3C3
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 09:25:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728779AbgBNIC5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Feb 2020 03:02:57 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:40049 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725897AbgBNIC5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Feb 2020 03:02:57 -0500
-Received: by mail-lj1-f193.google.com with SMTP id n18so9668929ljo.7;
-        Fri, 14 Feb 2020 00:02:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=X/Md7A4NWERfg/DmbYpJ9Eml/ssX4Y/ElFMjdppGM4M=;
-        b=KlL1ZtWClcHIDFbzzFBz94TxeIItpZ8QwO1r0YSV2TvIVpsgyaB7k+Dw1nZWg5eeDU
-         V5VF0Qcn5DZtUeHjS6HPVLf5vZlz/VNfQmwlCbk9W5jRyKTPMYBt5szHL+yVnJt3txPA
-         MlHwq32RRJCu7wvpjjcKaYu5qUfw5pOsdRg5gpglptWEDZ08/nFv6N4UITx2P06C/m0J
-         z2AX8K6iPdEne7MV0fuwh/vJQ8p/ffmXKzccssM6aEVrvNVHKb6LogKXpi690sEBsCRm
-         zl/XUdjRARsNQzBfkOVYp5h76u4r7xhuFxhWaROTpUg7lcW7m6Xx2r272113DIpJr7Oe
-         JLWQ==
-X-Gm-Message-State: APjAAAXmMKOqrR/83ITi1xZ5qnGZEvTQGJtMTXZZZSETKJ1/065GMf9b
-        CooZDx2oyjbuoAnZKWVux7pNazww
-X-Google-Smtp-Source: APXvYqxUWUc/YS4R459CfAbRFyrbZAk6ScEkay8bCr28k7SuiabEqUbiPHRXPG8OGsVnYE3CRVj94g==
-X-Received: by 2002:a2e:9596:: with SMTP id w22mr1196873ljh.21.1581667374794;
-        Fri, 14 Feb 2020 00:02:54 -0800 (PST)
-Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
-        by smtp.gmail.com with ESMTPSA id h24sm3043580ljl.80.2020.02.14.00.02.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Feb 2020 00:02:54 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@kernel.org>)
-        id 1j2Vw6-0002Yp-GC; Fri, 14 Feb 2020 09:02:54 +0100
-Date:   Fri, 14 Feb 2020 09:02:54 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Sean Young <sean@mess.org>, Hans Verkuil <hverkuil@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: Re: [PATCH 0/6] media: fix USB descriptor issues
-Message-ID: <20200214080254.GK4150@localhost>
-References: <20200103163513.1229-1-johan@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200103163513.1229-1-johan@kernel.org>
+        id S1729011AbgBNIZt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Feb 2020 03:25:49 -0500
+Received: from alexa-out-blr-01.qualcomm.com ([103.229.18.197]:45291 "EHLO
+        alexa-out-blr-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728859AbgBNIZp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Feb 2020 03:25:45 -0500
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by alexa-out-blr-01.qualcomm.com with ESMTP/TLS/AES256-SHA; 14 Feb 2020 13:55:34 +0530
+Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 14 Feb 2020 13:55:05 +0530
+Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
+        id 6474F25BF; Fri, 14 Feb 2020 13:55:04 +0530 (IST)
+From:   Sandeep Maheswaram <sanm@codeaurora.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Subject: [PATCH v5 0/3] ADD interconnect support for Qualcomm DWC3 driver
+Date:   Fri, 14 Feb 2020 13:54:41 +0530
+Message-Id: <1581668684-4182-1-git-send-email-sanm@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jan 03, 2020 at 05:35:07PM +0100, Johan Hovold wrote:
-> This series fixes a number of issues due to missing or incomplete sanity
-> checks that could lead to NULL-pointer dereferences, memory corruption
-> or driver misbehaviour when a device has unexpected descriptors.
+This path series aims to add interconnect support in
+dwc3-qcom driver on SDM845 SoCs.
 
-> Johan Hovold (6):
->   media: flexcop-usb: fix endpoint sanity check
->   media: ov519: add missing endpoint sanity checks
->   media: stv06xx: add missing descriptor sanity checks
->   media: xirlink_cit: add missing descriptor sanity checks
->   media: dib0700: fix rc endpoint lookup
->   media: iguanair: fix endpoint sanity check
+Changes from v4 -> v5
+  > [PATCH 1/3] Added the interconnect properties in yaml. This patch depends
+    on series https://patchwork.kernel.org/cover/11372641/.
+  > [PATCH 2/3] Fixed review comments from Matthias in DWC3 driver.
+  > [PATCH 3/3] Modified as per the new interconnect nodes in sdm845. Depends
+    on series https://patchwork.kernel.org/cover/11372211/. 
 
-Just sending a reminder about these as it seems only the last one has
-made into mainline (and stable) yet.
 
-Johan
+Changes from v3 -> v4
+  > Fixed review comments from Matthias
+  > [PATCH 1/3] and [PATCH 3/3] remains unchanged
+
+Changes from v2 -> v3
+  > Fixed review comments from Matthias and Manu
+  > changed the functions prefix from usb_* to dwc3_qcom_*
+
+Changes since V1:
+  > Comments by Georgi Djakov on "[PATCH 2/3]" addressed
+  > [PATCH 1/3] and [PATCH 3/3] remains unchanged
+
+Sandeep Maheswaram (3):
+  dt-bindings: usb: qcom,dwc3: Introduce interconnect properties for
+    Qualcomm DWC3 driver
+  usb: dwc3: qcom: Add interconnect support in dwc3 driver
+  arm64: dts: sdm845: Add interconnect properties for USB
+
+ .../devicetree/bindings/usb/qcom,dwc3.yaml         |  16 +++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |  12 ++
+ drivers/usb/dwc3/dwc3-qcom.c                       | 135 ++++++++++++++++++++-
+ 3 files changed, 161 insertions(+), 2 deletions(-)
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
+
