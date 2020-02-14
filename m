@@ -2,76 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BF515D733
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 13:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7235E15D746
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 13:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728427AbgBNMQl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Feb 2020 07:16:41 -0500
-Received: from mga01.intel.com ([192.55.52.88]:56470 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728083AbgBNMQl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 14 Feb 2020 07:16:41 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Feb 2020 04:16:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,440,1574150400"; 
-   d="scan'208";a="433005612"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Feb 2020 04:16:39 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 5FE4219C; Fri, 14 Feb 2020 14:16:38 +0200 (EET)
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>
-Subject: [PATCH v2] thunderbolt: Add missing kernel-doc parameter descriptions
-Date:   Fri, 14 Feb 2020 15:16:38 +0300
-Message-Id: <20200214121638.75589-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.25.0
+        id S1729087AbgBNMVJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Feb 2020 07:21:09 -0500
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:50655 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728036AbgBNMVJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Feb 2020 07:21:09 -0500
+Received: from [IPv6:2001:983:e9a7:1:bd23:d5c7:5f0e:7bef]
+ ([IPv6:2001:983:e9a7:1:bd23:d5c7:5f0e:7bef])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id 2ZxvjNQoMP9a92ZxwjGslZ; Fri, 14 Feb 2020 13:21:06 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1581682866; bh=PhqMFnmd2aN7gDvxtHkHxo9Tjtd5wgCucdPCv1i4je8=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=OQo8YW+mO7BFRmxx/32cK6cyemqRC7sP4WY0IJMROX2Kh7DdsRbCUEqbKbTSjNZV1
+         is5nwLB+zhtMjClvL4mHf7J6nBS2xed5y7c/GW9spW9SWS1OwjOKLzvCYirNZFkUwa
+         /P2ROepldLmMM2mJX+9p5vyxlWoagzBc2wv1zo+fjdD9nVHT9ndZ8UeBrzEIsNIm5R
+         hfqMOP7IPulZyu/zjjARdAjZugDBoyn7RkSNm56eJ819DtDeuaiIlDGGgFtg9Yk7X8
+         RAAml0sjGDOKweFt8/351drXbkWouMFH39pLhjS6Ob5MlGB+bltUj9DWoBeAPJgrkV
+         /ji1nhlRVUJTw==
+Subject: Re: [PATCH] media: usbvision: Fix a use after free in v4l2_release()
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        syzbot <syzbot+75287f75e2fedd69d680@syzkaller.appspotmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Allison Randal <allison@lohutok.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Souptick Joarder <jrdr.linux@gmail.com>, andreyknvl@google.com,
+        bnvandana@gmail.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+References: <20200124141356.365bgzg2lp3tjedm@kili.mountain>
+ <d8663b81-e920-3e1d-11d0-f636ea52c6ef@xs4all.nl>
+ <20200214112239.GC4831@pendragon.ideasonboard.com>
+ <20200214121447.13612-1-hdanton@sina.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <ddc06d75-2f9f-fb91-a73f-b5b2125b036d@xs4all.nl>
+Date:   Fri, 14 Feb 2020 13:21:03 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200214121447.13612-1-hdanton@sina.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfJZ3v3yOtuJD/iTQkXKATl0BqWT6ctGJCU2m9B9Wi30fNB5Ua8uXkmdX1pPt5CoZBnUxGdqk1Alo+C4IotpAO/JITMtDcNRCCatVhDefVMh6tWXOqlz5
+ DVLzQApUvH4GGBwWCK+7sDrmzlKUWSp5btTET+ikWdIPYQARC8XPEtUypTGlpsXC7th/3moghrE4IebhC1lZVeXMaaDkTBEOS23ZvHjkWfcpyGs4MhxUrFxp
+ QcKE4zpLV0Ed+aym+BFXaqXLY1nUVQQ6s0HvZqL64nwIlglF+BBiNQr6DZ4mo5QZ1eX1cYil0jXkkxYBTMUMz05Bb1hrX4+UiRndAOhQvoDd9yfznq0q2P0d
+ adCxqbqncGVs4APbVfeLC02eLciwg9W5KNEfFqgazh0euNVorRAFHuulEaKf/5e1CfX7AhoUoBlMwDwI+j2SzLfTBKv10B5OJWwaRvVdfA5VGs/nAM/snyFt
+ +4qBhEzTL/b4g46kY7Si03jk0Y1WZTSPqmMNnjl0Lx0aFb0cC2gAxEPq40nNeG2hOUbC2M531t75/BbmE/PWdNCau+OLPCaRG8GNT3bnNZwLpKkvDnixYJ6m
+ 0YW0jb5THMBPyD035vwHM/jnw2znJ5OmIJiq6sAWyKNNbX3BgS9WD8HGq/DgPCXrU1pZYz10fr7V/RqXpKnpuYAyQZYH51NhePegN28XqsEQxnfDCt74Lb1w
+ NzmHH3mcqsykSD1oUo6tRIdjtu3gfyftSHtaXbYrGV+QSbTQsdSviE+APsKgovKABG9xsZU7QRdkEhuWajpXs3ZHjaUy2lif05iGlaFfA4ktvSD4HEcj/g==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Two functions that were added for USB4 support miss kernel-doc parameter
-descriptions so add them now.
+On 2/14/20 1:14 PM, Hillf Danton wrote:
+> 
+> On Fri, 14 Feb 2020 12:30:29 +0100 Hans Verkuil wrote:
+>>
+>> Hillf, if you want your patch to be merged, then make sure it is CC-ed to
+>> linux-media as well.
+> 
+> Please pick it up if it makes a sense to you and it was sent with
+> linux-media added on the Cc list as it is known for a while that
+> my mail agent is rejected @vger.kernel.org for what I am not clear
+> about. It makes my day occasionally :P
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
-v2: Corrected typo "contens is" -> "content is"
+I don't I ever received the full patch, only replies to your patch.
 
- drivers/thunderbolt/usb4.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Please mail your patch directly to me so I have a clean version.
 
-diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
-index b341fc60c4ba..3d084cec136f 100644
---- a/drivers/thunderbolt/usb4.c
-+++ b/drivers/thunderbolt/usb4.c
-@@ -259,6 +259,7 @@ int usb4_switch_setup(struct tb_switch *sw)
- /**
-  * usb4_switch_read_uid() - Read UID from USB4 router
-  * @sw: USB4 router
-+ * @uid: UID is stored here
-  *
-  * Reads 64-bit UID from USB4 router config space.
-  */
-@@ -296,6 +297,9 @@ static int usb4_switch_drom_read_block(struct tb_switch *sw,
- /**
-  * usb4_switch_drom_read() - Read arbitrary bytes from USB4 router DROM
-  * @sw: USB4 router
-+ * @address: Byte address inside DROM to start reading
-+ * @buf: Buffer where the DROM content is stored
-+ * @size: Number of bytes to read from DROM
-  *
-  * Uses USB4 router operations to read router DROM. For devices this
-  * should always work but for hosts it may return %-EOPNOTSUPP in which
--- 
-2.25.0
+Regards,
+
+	Hans
+
+> 
+> Thanks
+> Hillf
+> 
 
