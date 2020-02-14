@@ -2,161 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B3215D40B
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 09:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D14DF15D530
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 11:06:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726769AbgBNIs5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Feb 2020 03:48:57 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:50986 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726004AbgBNIs5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Feb 2020 03:48:57 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01E8mogu034713;
-        Fri, 14 Feb 2020 02:48:50 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1581670130;
-        bh=GaCu5POQ1T6riHusnOIyNaM556/nSKKzgDxDiMpND2k=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=PUWDEDj6WZdbRyEztMwvMuGbkizWPA7/G8Mf/CQ7V8ZYMbSUXLcZiuRpDGPguVSdQ
-         l6Os6GhspbIWpSi4dQzbYas7akOOXDhUfRc6OuaTJt1rlbSVFozbg3N9yRY8u1INmK
-         W7eoxPM1dXu4u8MewLcrmQBz6YuXIrB904kiMFDc=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01E8mova101729
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 14 Feb 2020 02:48:50 -0600
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Fri, 14
- Feb 2020 02:48:49 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Fri, 14 Feb 2020 02:48:49 -0600
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01E8mlwl084809;
-        Fri, 14 Feb 2020 02:48:48 -0600
-Subject: Re: [PATCH 2/2] usb: cdns3: gadget: toggle cycle bit before reset
- endpoint
-To:     Peter Chen <peter.chen@nxp.com>, <balbi@kernel.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-imx@nxp.com>,
-        <pawell@cadence.com>, <gregkh@linuxfoundation.org>,
-        <jun.li@nxp.com>
-References: <20200214071414.7256-1-peter.chen@nxp.com>
- <20200214071414.7256-3-peter.chen@nxp.com>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <97bbbf7d-2718-b6a0-2fda-6cac21643dfe@ti.com>
-Date:   Fri, 14 Feb 2020 10:48:47 +0200
+        id S1729026AbgBNKGm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Feb 2020 05:06:42 -0500
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:34355 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728522AbgBNKGl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Feb 2020 05:06:41 -0500
+Received: from [IPv6:2001:983:e9a7:1:f887:140a:e9b5:d382]
+ ([IPv6:2001:983:e9a7:1:f887:140a:e9b5:d382])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id 2XrojHZfI8i432XrqjPJ9i; Fri, 14 Feb 2020 11:06:39 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1581674799; bh=XK9wS6VTvGQo/7aOlmJ1ms3hulo1Zgl2Sc6AimCvIaQ=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=gOyjjtob/LnpJmpGPdgjTfSBzTY7ha8jFVOsl0QbqVgPr35bRT45i0tFqDCfQUfz0
+         QavccYB8szlBsjt+CAbt+LKc+5wmM3ZiBEX+zqJEQVsHYq1XKRDtdcQIHpKywC5624
+         7K7uYEoY6iPT1gN4PZSdtVmosbeOQzD0VVlxk50ynP6ZQPCdA64wIDrQhDENnieqYo
+         z6MT3fCX+7pA4fXRcWAMHXaQw91vYplTeJlR1VyOUCXRuro6rIaVLlwnvTcv9KhpMK
+         8DpVx1jrAc19q3vnSR1Se0NnGs/MuZSTGoIfIpybb6LEjwRs/vDLhn7mmYFnNUHYU7
+         ydSuHiuu1l87g==
+Subject: Re: [PATCH] media: usbvision: Fix a use after free in v4l2_release()
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        syzbot <syzbot+75287f75e2fedd69d680@syzkaller.appspotmail.com>,
+        Hillf Danton <hdanton@sina.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Allison Randal <allison@lohutok.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Souptick Joarder <jrdr.linux@gmail.com>, andreyknvl@google.com,
+        bnvandana@gmail.com, laurent.pinchart@ideasonboard.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org,
+        syzkaller-bugs@googlegroups.com
+References: <20200124141356.365bgzg2lp3tjedm@kili.mountain>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <d8663b81-e920-3e1d-11d0-f636ea52c6ef@xs4all.nl>
+Date:   Fri, 14 Feb 2020 11:06:36 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-In-Reply-To: <20200214071414.7256-3-peter.chen@nxp.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <20200124141356.365bgzg2lp3tjedm@kili.mountain>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-CMAE-Envelope: MS4wfD5b730u68C1OfmcFWAgg02NoSNkgNclJNc1nSdbddkVkhztFo5KDBr3rEs3IPL53BFxASJXzlVJy+Khu0WXjIs4mo3Nai9dSHEl/38rexsFxyvyA6DS
+ c126GE7gTgEVOGqitoQ/esIDi8p3HFSaO31Tmo4EzO6Wt0GJmYp6qpVsOmLDcF9qlzMuyMcNfsk1Sp1TTfEHTf24tgUlvo40sv25F1FwQdjrmH4EWXH2ZKJd
+ nBCW1Va1cb+5EnlutVK+4yLKc0W8GJG4/kVKIy5DpTsMAwfrvzVroYWOIXtHH15tyUlw8lNV4DuPKb5Tr0F52R0ho6W7W8cgyVFpLfwMoS6/fBp7l4NBMWXp
+ htDZHm1IrJJDsYc8VFh4jRvDpU05jvYoySN6iNV8EN4Gc/ANS9axUjrlsBQ1G6VSVJ8Jk0uiUkb8MpgN5yELp1+rzFVvCL4uxGaS/qp/VK8P1FRVChFQyp/2
+ VC41H7HSuCw6V0LRc5PzZKE5XMM38yHYAGxUta7tItIAWPeY2DweaCE/agqBld+L49b/oY6jRoAXqwrs6qjXpBJBFb77M6RrXByp9PtacvpHEJ/wygUmV4p7
+ PoPsRN9o39TRQn+Xo2fUV6U144jqwJWLaVVFUyDdIJ9Lmpe/JVstRdOfHM8CtDm43yHAp9/WlBD96nYuCNb4wle1SShFJW/8Ug2PltpMQmLJGjfQVNJgS2do
+ bfVe6r9yfiXT865kNCoKODXwmTTai3WlDv4IVt1C0KQtqbrqTRmUA7yOTIYFL55z7PSyf7Utm0izLvVVv/skPp6xO3ikGr6vJXhiRr+yXKYpr1ctw/tFow==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 1/24/20 3:13 PM, Dan Carpenter wrote:
+> Syzbot triggered a use after free in v5.5-rc6:
+> 
+> BUG: KASAN: use-after-free in v4l2_release+0x2f1/0x390 drivers/media/v4l2-core/v4l2-dev.c:459
+> 
+> Allocated by task 94:
+>  usbvision_alloc drivers/media/usb/usbvision/usbvision-video.c:1315 [inline]
+>  usbvision_probe.cold+0x5c5/0x1f21 drivers/media/usb/usbvision/usbvision-video.c:1469
+> 
+> Freed by task 1913:
+>  kfree+0xd5/0x300 mm/slub.c:3957
+>  usbvision_release+0x181/0x1c0 drivers/media/usb/usbvision/usbvision-video.c:1364
+>  usbvision_radio_close.cold+0x2b/0x74 drivers/media/usb/usbvision/usbvision-video.c:1130
+>  v4l2_release+0x2e7/0x390 drivers/media/v4l2-core/v4l2-dev.c:455
+> 
+> The problem is that the v4l2_release() calls usbvision_release() which
+> frees "usbvision" but v4l2_release() still wants to use
+> "usbvision->vdev".  One solution is to make this devm_ allocated memory
+> so the memory isn't freed until later.
 
+devm_ allocated memory is freed after disconnect, so I doubt this will help, or at
+best it will just move the problem elsewhere.
 
-On 14/02/2020 09:14, Peter Chen wrote:
-> If there are TRBs pending during clear stall and reset endpoint, the
+The right approach would be to use the release() callback from struct v4l2_device:
+that's called when the very last open filehandle is closed.
 
-s/and/or?
+But I'm not sure if it is worth the effort. The usbvision driver is a mess and
+personally I think it should be deprecated.
 
-> DMA will advance after reset operation, but it doesn't be expected,
+Regards,
 
-s/doesn't/isn't?
-
-> since the data has still not be ready (For OUT, the data has still
-
-s/"has still not be"/"is not yet"
-
-(e.g. for OUT, the data is not yet available).
-
-> not received). After the data is ready, there isn't any interrupt
-
-s/"there isn't any"/"there won't be any"
-
-> since the EP_TRADDR has already points to next TRB entry.
-
-remove "has"
+	Hans
 
 > 
-> To fix it, it toggles cyclt bit before reset operation, and restore
-
-s/cyclt/cycle
-
-s/restore/restores
-
-> it after reset, it could keep DMA stopping.
-
-It prevents DMA from getting stuck up?
-
-> 
-> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> Reported-by: syzbot+75287f75e2fedd69d680@syzkaller.appspotmail.com
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 > ---
->   drivers/usb/cdns3/gadget.c | 17 ++++++++++++++---
->   1 file changed, 14 insertions(+), 3 deletions(-)
+> I copied this idea from a different driver, but I haven't tested it.
+> I wanted to try the #syz fix command to see if it works.
 > 
-> diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
-> index 1d8a2af35bb0..7b6bb96b91d1 100644
-> --- a/drivers/usb/cdns3/gadget.c
-> +++ b/drivers/usb/cdns3/gadget.c
-> @@ -2595,11 +2595,21 @@ int __cdns3_gadget_ep_clear_halt(struct cdns3_endpoint *priv_ep)
->   {
->   	struct cdns3_device *priv_dev = priv_ep->cdns3_dev;
->   	struct usb_request *request;
-> +	struct cdns3_request *priv_req;
-> +	struct cdns3_trb *trb = NULL;
->   	int ret;
->   	int val;
->   
->   	trace_cdns3_halt(priv_ep, 0, 0);
->   
-> +	request = cdns3_next_request(&priv_ep->pending_req_list);
-> +	if (request) {
-> +		priv_req = to_cdns3_request(request);
-> +		trb = priv_req->trb;
-> +		if (trb)
-> +			trb->control = trb->control ^ 1;
-
-use TRB_CYCLE macro instead of 1.
-
-Is it better to toggle this bit or explicitly set/clear it?
-
-> +	}
-> +
->   	writel(EP_CMD_CSTALL | EP_CMD_EPRST, &priv_dev->regs->ep_cmd);
->   
->   	/* wait for EPRST cleared */
-> @@ -2610,10 +2620,11 @@ int __cdns3_gadget_ep_clear_halt(struct cdns3_endpoint *priv_ep)
->   
->   	priv_ep->flags &= ~(EP_STALLED | EP_STALL_PENDING);
->   
-> -	request = cdns3_next_request(&priv_ep->pending_req_list);
-> -
-> -	if (request)
-> +	if (request) {
-> +		if (trb)
-> +			trb->control = trb->control ^ 1;
-
-same here.
-
->   		cdns3_rearm_transfer(priv_ep, 1);
-> +	}
->   
->   	cdns3_start_all_request(priv_dev, priv_ep);
->   	return ret;
+>  drivers/media/usb/usbvision/usbvision-video.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/media/usb/usbvision/usbvision-video.c b/drivers/media/usb/usbvision/usbvision-video.c
+> index 93d36aab824f..07b4763062c4 100644
+> --- a/drivers/media/usb/usbvision/usbvision-video.c
+> +++ b/drivers/media/usb/usbvision/usbvision-video.c
+> @@ -1312,7 +1312,7 @@ static struct usb_usbvision *usbvision_alloc(struct usb_device *dev,
+>  {
+>  	struct usb_usbvision *usbvision;
+>  
+> -	usbvision = kzalloc(sizeof(*usbvision), GFP_KERNEL);
+> +	usbvision = devm_kzalloc(&dev->dev, sizeof(*usbvision), GFP_KERNEL);
+>  	if (!usbvision)
+>  		return NULL;
+>  
+> @@ -1336,7 +1336,6 @@ static struct usb_usbvision *usbvision_alloc(struct usb_device *dev,
+>  	v4l2_ctrl_handler_free(&usbvision->hdl);
+>  	v4l2_device_unregister(&usbvision->v4l2_dev);
+>  err_free:
+> -	kfree(usbvision);
+>  	return NULL;
+>  }
+>  
+> @@ -1361,7 +1360,6 @@ static void usbvision_release(struct usb_usbvision *usbvision)
+>  
+>  	v4l2_ctrl_handler_free(&usbvision->hdl);
+>  	v4l2_device_unregister(&usbvision->v4l2_dev);
+> -	kfree(usbvision);
+>  
+>  	PDEBUG(DBG_PROBE, "success");
+>  }
 > 
 
--- 
-cheers,
--roger
-
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
