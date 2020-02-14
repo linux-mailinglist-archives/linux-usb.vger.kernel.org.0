@@ -2,191 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D1415F403
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 19:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B9815F608
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 19:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405124AbgBNSRS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Feb 2020 13:17:18 -0500
-Received: from smtprelay0076.hostedemail.com ([216.40.44.76]:51244 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2405119AbgBNSRS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Feb 2020 13:17:18 -0500
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay06.hostedemail.com (Postfix) with ESMTP id AB4161822451B;
-        Fri, 14 Feb 2020 18:17:16 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::,RULES_HIT:2:41:355:379:800:960:973:982:988:989:1260:1277:1311:1313:1314:1345:1437:1515:1516:1518:1535:1593:1594:1605:1606:1730:1747:1777:1792:2393:2553:2559:2562:2828:2897:3138:3139:3140:3141:3142:3653:3865:3866:3867:3868:4321:4605:5007:6119:8603:8957:9010:10004:10848:11026:11473:11658:11914:12043:12296:12297:12438:12555:12760:12986:13439:14394:14659:14664:21080:21433:21451:21627:21939:30054:30070:30080:30090,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: north37_224944e309a50
-X-Filterd-Recvd-Size: 5967
-Received: from XPS-9350.home (unknown [47.151.143.254])
-        (Authenticated sender: joe@perches.com)
-        by omf17.hostedemail.com (Postfix) with ESMTPA;
-        Fri, 14 Feb 2020 18:17:15 +0000 (UTC)
-Message-ID: <60559197a1af9e0af7f329cc3427989e5756846f.camel@perches.com>
-Subject: [PATCH] usb-storage: Use const to reduce object data size
-From:   Joe Perches <joe@perches.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Fri, 14 Feb 2020 10:15:57 -0800
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.34.1-2 
+        id S2390048AbgBNSqJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Feb 2020 13:46:09 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:36840 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389723AbgBNSqI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Feb 2020 13:46:08 -0500
+Received: by mail-pf1-f196.google.com with SMTP id 185so5299907pfv.3;
+        Fri, 14 Feb 2020 10:46:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lcAo2cRFw8x17fP3aIkMxC2GnRGns7uCksHDMjRNXaw=;
+        b=RrbDf18PWY+2fPPPQRCgyupMcufV7Ny4wcwsGdOEEtsxZ8n4SIz0nQ15AsuI8LKx6z
+         MJ8q3fbC03jYi1t/U7E53gh122fpTd8gehcq8oh4HGQdd54PshFBi2u0WhbgBUIXvfXF
+         BNPispvDrlbRxPl/8EcYvO0C3qEowmJZ8uHiVjoxssrmVmcy9xN8o+gS6FFhK2Wmjz+8
+         +2+b5ZlZoiwfVjpEprNai/LE5rtCB2hXQYMJPKTtA3OtrQswlomQ+NLhGHRKz9mGP34q
+         iurjMAKWExIUYE2f3A6NL19yI+YOHOoJsl3W+5MRRpgTqUNA9etGO5eriI4pdaLIVx3L
+         ndCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lcAo2cRFw8x17fP3aIkMxC2GnRGns7uCksHDMjRNXaw=;
+        b=ceIfjNpz9JtKKWCuWcZM+qfk4hQPjCYcOSAi3INokVLgdHU/LujHIECxQ9WftvTYwx
+         lnS69w8WdstQkN1Ai31xa/WaLylPIll5Q3evhPpX8JOufBwUuAydhn973rSvirtFJixy
+         uTj1s63xk37C2JS9ZEJg276a7teEqeeKUcOiXEZFhk9IDoggAaKdJnDrZX0RRAhVVFLP
+         3+dZylmUy678IwK7q1uJRDRYnM35tyaK/d7rmVqRMutXSsllxWTNFOV7Mkn2oz+eUAst
+         cbf9IjXViNi+r1W6ZIRXMfc5bTg3BAk4chZHqBEEKQp9D8pc3QMP+RKDF1nwnCy3X8qn
+         u/1A==
+X-Gm-Message-State: APjAAAU3zRXmDS5STERyiaBvSbGKaj/L2GjvZ/bQQPCPH97yLC6bX/he
+        CUUI475LdAHfj5Nretzopda4II0CzKqW6sIGzssAfq5a/ds=
+X-Google-Smtp-Source: APXvYqxBFH0CC58Eqsz0AVHcO9xbju+Mjk3tQbBjybssL0kk6NvWWHu+bwSV1YNeofoXZI9LmQpR1MhmnPV/lORZNDo=
+X-Received: by 2002:a62:1a09:: with SMTP id a9mr4854899pfa.64.1581705968117;
+ Fri, 14 Feb 2020 10:46:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20191104143713.11137-1-alexandre.torgue@st.com>
+ <20200206133918.15012-1-youling257@gmail.com> <0c4a37a9-0a2e-e698-f423-53060854ea05@ti.com>
+ <CAOzgRdb5QfJDQzbtoHQry4wxUg52LwX5XFCPzzaYa=z+RqNWOQ@mail.gmail.com>
+ <8bd72269-16ae-b24a-7144-44d22d668dc6@ti.com> <1cd5885d-7db4-59b9-ef2d-e3556f60ca68@st.com>
+In-Reply-To: <1cd5885d-7db4-59b9-ef2d-e3556f60ca68@st.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 14 Feb 2020 20:46:00 +0200
+Message-ID: <CAHp75VcbPYNKfrnkuSfdN8t100kZFdq05hkbWxJKgRWJknRgxQ@mail.gmail.com>
+Subject: Re: [PATCH] phy: core: Add consumer device link support
+To:     Alexandre Torgue <alexandre.torgue@st.com>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        youling 257 <youling257@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>, saravanak@google.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Make structs const to reduce data size ~20KB.
+On Mon, Feb 10, 2020 at 1:32 PM Alexandre Torgue
+<alexandre.torgue@st.com> wrote:
+> On 2/10/20 9:08 AM, Kishon Vijay Abraham I wrote:
+> > On 07/02/20 12:27 PM, youling 257 wrote:
+> >> test this diff, dwc3 work for my device, thanks.
+> >>
+> >> 2020-02-07 13:16 GMT+08:00, Kishon Vijay Abraham I <kishon@ti.com>:
+> >>> On 06/02/20 7:09 PM, youling257 wrote:
+> >>>> This patch cause "dwc3 dwc3.3.auto: failed to create device link to
+> >>>> dwc3.3.auto.ulpi" problem.
+> >>>> https://bugzilla.kernel.org/show_bug.cgi?id=206435
 
-Change function arguments and prototypes as necessary to compile.
++1 to the report.
+Please revert for v5.6 or provide a fix ASAP!
 
-$ size (x86-64 defconfig pre)
-   text	   data	    bss	    dec	    hex	filename
-  12281	  10948	    480	  23709	   5c9d	./drivers/usb/storage/usb.o
-    111	  10528	      8	  10647	   2997	./drivers/usb/storage/usual-tables.o
-
-$ size (x86-64 defconfig post)
-   text	   data	    bss	    dec	    hex	filename
-  22809	    420	    480	  23709	   5c9d	drivers/usb/storage/usb.o
-  10551	      0	      0	  10551	   2937	drivers/usb/storage/usual-tables.o
-
-Signed-off-by: Joe Perches <joe@perches.com>
----
-
-compile tested only
-
- drivers/usb/storage/usb.c          | 10 +++++-----
- drivers/usb/storage/usb.h          |  5 +++--
- drivers/usb/storage/usual-tables.c |  6 +++---
- include/linux/usb_usual.h          |  2 +-
- 4 files changed, 12 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
-index 9a79cd..94a6472 100644
---- a/drivers/usb/storage/usb.c
-+++ b/drivers/usb/storage/usb.c
-@@ -121,12 +121,12 @@ MODULE_PARM_DESC(quirks, "supplemental list of
-device IDs and their quirks");
- 	.initFunction = init_function,	\
- }
- 
--static struct us_unusual_dev us_unusual_dev_list[] = {
-+static const struct us_unusual_dev us_unusual_dev_list[] = {
- #	include "unusual_devs.h"
- 	{ }		/* Terminating entry */
- };
- 
--static struct us_unusual_dev for_dynamic_ids =
-+static const struct us_unusual_dev for_dynamic_ids =
- 		USUAL_DEV(USB_SC_SCSI, USB_PR_BULK);
- 
- #undef UNUSUAL_DEV
-@@ -583,7 +583,7 @@ EXPORT_SYMBOL_GPL(usb_stor_adjust_quirks);
- 
- /* Get the unusual_devs entries and the string descriptors */
- static int get_device_info(struct us_data *us, const struct
-usb_device_id *id,
--		struct us_unusual_dev *unusual_dev)
-+		const struct us_unusual_dev *unusual_dev)
- {
- 	struct usb_device *dev = us->pusb_dev;
- 	struct usb_interface_descriptor *idesc =
-@@ -933,7 +933,7 @@ static unsigned int usb_stor_sg_tablesize(struct
-usb_interface *intf)
- int usb_stor_probe1(struct us_data **pus,
- 		struct usb_interface *intf,
- 		const struct usb_device_id *id,
--		struct us_unusual_dev *unusual_dev,
-+		const struct us_unusual_dev *unusual_dev,
- 		struct scsi_host_template *sht)
- {
- 	struct Scsi_Host *host;
-@@ -1092,7 +1092,7 @@ static struct scsi_host_template
-usb_stor_host_template;
- static int storage_probe(struct usb_interface *intf,
- 			 const struct usb_device_id *id)
- {
--	struct us_unusual_dev *unusual_dev;
-+	const struct us_unusual_dev *unusual_dev;
- 	struct us_data *us;
- 	int result;
- 	int size;
-diff --git a/drivers/usb/storage/usb.h b/drivers/usb/storage/usb.h
-index 85052c..5850d62 100644
---- a/drivers/usb/storage/usb.h
-+++ b/drivers/usb/storage/usb.h
-@@ -93,7 +93,8 @@ struct us_data {
- 	struct mutex		dev_mutex;	 /* protect pusb_dev */
- 	struct usb_device	*pusb_dev;	 /* this usb_device */
- 	struct usb_interface	*pusb_intf;	 /* this interface */
--	struct us_unusual_dev   *unusual_dev;	 /* device-filter
-entry     */
-+	const struct us_unusual_dev   *unusual_dev;
-+						/* device-filter
-entry     */
- 	unsigned long		fflags;		 /* fixed flags from
-filter */
- 	unsigned long		dflags;		 /* dynamic atomic
-bitflags */
- 	unsigned int		send_bulk_pipe;	 /* cached pipe values
-*/
-@@ -185,7 +186,7 @@ extern int usb_stor_post_reset(struct usb_interface
-*iface);
- extern int usb_stor_probe1(struct us_data **pus,
- 		struct usb_interface *intf,
- 		const struct usb_device_id *id,
--		struct us_unusual_dev *unusual_dev,
-+		const struct us_unusual_dev *unusual_dev,
- 		struct scsi_host_template *sht);
- extern int usb_stor_probe2(struct us_data *us);
- extern void usb_stor_disconnect(struct usb_interface *intf);
-diff --git a/drivers/usb/storage/usual-tables.c
-b/drivers/usb/storage/usual-tables.c
-index cfd12e5..529512 100644
---- a/drivers/usb/storage/usual-tables.c
-+++ b/drivers/usb/storage/usual-tables.c
-@@ -40,7 +40,7 @@
- 	.driver_info = (flags) \
- }
- 
--struct usb_device_id usb_storage_usb_ids[] = {
-+const struct usb_device_id usb_storage_usb_ids[] = {
- #	include "unusual_devs.h"
- 	{ }		/* Terminating entry */
- };
-@@ -68,7 +68,7 @@ struct ignore_entry {
- 	.bcdmax = bcdDeviceMax,		\
- }
- 
--static struct ignore_entry ignore_ids[] = {
-+static const struct ignore_entry ignore_ids[] = {
- #	include "unusual_alauda.h"
- #	include "unusual_cypress.h"
- #	include "unusual_datafab.h"
-@@ -92,7 +92,7 @@ int usb_usual_ignore_device(struct usb_interface
-*intf)
- {
- 	struct usb_device *udev;
- 	unsigned vid, pid, bcd;
--	struct ignore_entry *p;
-+	const struct ignore_entry *p;
- 
- 	udev = interface_to_usbdev(intf);
- 	vid = le16_to_cpu(udev->descriptor.idVendor);
-diff --git a/include/linux/usb_usual.h b/include/linux/usb_usual.h
-index 000a595..4a19ac3 100644
---- a/include/linux/usb_usual.h
-+++ b/include/linux/usb_usual.h
-@@ -92,6 +92,6 @@ enum { US_DO_ALL_FLAGS };
- #include <linux/usb/storage.h>
- 
- extern int usb_usual_ignore_device(struct usb_interface *intf);
--extern struct usb_device_id usb_storage_usb_ids[];
-+extern const struct usb_device_id usb_storage_usb_ids[];
- 
- #endif /* __LINUX_USB_USUAL_H */
+> >>>
+> >>> I'm suspecting there is some sort of reverse dependency with dwc3 ULPI.
+> >>> Can you try the following diff?
+> >>>
+> >>> diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+> >>> index 2eb28cc2d2dc..397311dcb116 100644
+> >>> --- a/drivers/phy/phy-core.c
+> >>> +++ b/drivers/phy/phy-core.c
+> >>> @@ -687,7 +687,7 @@ struct phy *phy_get(struct device *dev, const char
+> >>> *string)
+> >>>
+> >>>          get_device(&phy->dev);
+> >>>
+> >>> -       link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
+> >>> +       link = device_link_add(dev, &phy->dev, DL_FLAG_SYNC_STATE_ONLY);
+> >>>          if (!link) {
+> >>>                  dev_err(dev, "failed to create device link to %s\n",
+> >>>                          dev_name(phy->dev.parent));
+> >>> @@ -802,7 +802,7 @@ struct phy *devm_of_phy_get(struct device *dev,
+> >>> struct device_node *np,
+> >>>                  return phy;
+> >>>          }
+> >>>
+> >>> -       link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
+> >>> +       link = device_link_add(dev, &phy->dev, DL_FLAG_SYNC_STATE_ONLY);
+> >>>          if (!link) {
+> >>>                  dev_err(dev, "failed to create device link to %s\n",
+> >>>                          dev_name(phy->dev.parent));
+> >>> @@ -851,7 +851,7 @@ struct phy *devm_of_phy_get_by_index(struct device
+> >>> *dev, struct device_node *np,
+> >>>          *ptr = phy;
+> >>>          devres_add(dev, ptr);
+> >>>
+> >>> -       link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
+> >>> +       link = device_link_add(dev, &phy->dev, DL_FLAG_SYNC_STATE_ONLY);
+> >>>          if (!link) {
+> >>>                  dev_err(dev, "failed to create device link to %s\n",
+> >>>                          dev_name(phy->dev.parent));Parent
+> >
+> > Can you check if this doesn't affect the suspend/resume ordering?
+>
+> With this fix, suspend/resume ordering is broken on my side. What do you
+> think to keep the STATELESS flag and to only display a warn if
+> "device_link_add" returns an error ? It's not "smart" but it could
+> solved our issue.
+>
+> As a lot of improvements have been recently done on device link topic by
+> Saravana, we could check with him what is the way to follow.
+>
+> Regards
+> Alex
+>
+> >
+> > Thanks
+> > Kishon
+> >
 
 
+
+-- 
+With Best Regards,
+Andy Shevchenko
