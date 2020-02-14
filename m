@@ -2,115 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F7715D785
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 13:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1E015D893
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 14:34:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728582AbgBNMhM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Feb 2020 07:37:12 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:37557 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728336AbgBNMhM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Feb 2020 07:37:12 -0500
-Received: by mail-pg1-f195.google.com with SMTP id z12so4923269pgl.4
-        for <linux-usb@vger.kernel.org>; Fri, 14 Feb 2020 04:37:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=VQWYsV9y3Ombsei9FudPH6Z1Ir+D9qaqTk/ltuxkoxE=;
-        b=Y0+PcYZBM1qTMK/c/FwdjwzV/hoYbi91KVZhFJ5i+g+GvPpJYYaOaVaBnmWECC5VTR
-         ca1bLnFZ4pVQCPwfI0bXOtr2zfKapRLixf4q6Aq/CFF+Ojylm9tZ/KUQMlVHVssbDnI9
-         tdgKyQO9zKs6FG4i+rUCaseIVe5bBtZGuzm/ntloNgqkgYmcod51mnSEbehHmaiTm11F
-         /pcUj6ArCRTkIkB4RN9R2U/rVvgmUBPy/909/ZxQgl2jhLeRzvOYVcUbXIVkn9g/nWe2
-         bEiZG4azfr0l9d10+8sV6e0CMCu0GQaPFP6MAQm8HCD6mRNCsjz9BxSQEvjnAdupEzLo
-         fLYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=VQWYsV9y3Ombsei9FudPH6Z1Ir+D9qaqTk/ltuxkoxE=;
-        b=mZYqCuNIi3j2AWS4G4SGOD9u+TF8bO1Re/CY46118Tz3j//jbD05Xccwj9VghdWshr
-         dMKKJmjOT+Z75Fgko5JZwy+p8YUIqpSsCrUoVD6xGmv2VIvICEa5p8QlVvvRYzxEtknK
-         B1VgXXdd0kCQmnupzk2DVGXcTvOC8vTh2J04QuOMdbjFeHH/4uFSVAqtvu2vzjM3rrxc
-         HR1WH1+74QSJOj4BwgcN+CsjNCHz+RGqYSr2ajg980C/dpKYHSnTpAO+n8pMWUbKS3Kl
-         MAEA2/vOA00YjA4/HanxRcyH3iOWN40D2imX02BCap5VSqIylZNMzoC5YqpeXmV+vqSO
-         UNVg==
-X-Gm-Message-State: APjAAAUSH9+xpwBaforXjRK1ba14/+70JRUYOu9RZlYBptDd/+7GCUsS
-        x+mfv5ir+eCEbzeMsK4Sc74=
-X-Google-Smtp-Source: APXvYqzuiDh2x2zjuac8Vw6NurCrKekWv5n6ywqo+pEZQizOiUj3Wtmx3Gzdf3qo5bt91eC1/mBlvA==
-X-Received: by 2002:a62:2cd8:: with SMTP id s207mr3238649pfs.247.1581683831362;
-        Fri, 14 Feb 2020 04:37:11 -0800 (PST)
-Received: from localhost ([43.224.245.179])
-        by smtp.gmail.com with ESMTPSA id r9sm7162869pfl.136.2020.02.14.04.37.09
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Fri, 14 Feb 2020 04:37:10 -0800 (PST)
-From:   qiwuchen55@gmail.com
-To:     gregkh@linuxfoundation.org, tweek@google.com,
-        heikki.krogerus@linux.intel.com, suzuki.poulose@arm.com,
-        chunfeng.yun@mediatek.com, mathieu.poirier@linaro.org,
-        wenyang@linux.alibaba.com
-Cc:     linux-usb@vger.kernel.org, chenqiwu <chenqiwu@xiaomi.com>
-Subject: [PATCH] usb: use kobj_to_dev() API
-Date:   Fri, 14 Feb 2020 20:37:00 +0800
-Message-Id: <1581683820-9978-1-git-send-email-qiwuchen55@gmail.com>
-X-Mailer: git-send-email 1.9.1
+        id S1729294AbgBNNex (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Feb 2020 08:34:53 -0500
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:59937 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729278AbgBNNex (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Feb 2020 08:34:53 -0500
+Received: from [IPv6:2001:983:e9a7:1:bd23:d5c7:5f0e:7bef]
+ ([IPv6:2001:983:e9a7:1:bd23:d5c7:5f0e:7bef])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id 2b7JjO1g0P9a92b7KjHRpW; Fri, 14 Feb 2020 14:34:51 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1581687291; bh=ogiA29kGr63K3T/Y1WL1eNJvSK0/wAs6xVkh+Eug/kE=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=GsRJZ1Irf+iTNkEOSgRVdt3REwAyk5x6dBqUcmorejchJxuIhXOlMkiJl6sMIjZ+x
+         gWi6RLmq+3zgPkCpyamUBRwOHbHCGS4oy23P4kp5/qK3dObGmWO5vCjRsLoX1okTEi
+         LfCAdn/RHqgrHF/rJH4k1VMrrfvXYDhQ4T0NjVdEJmG/e3KJ0GNmvJC+PKDDts/zzc
+         xPml4L5D1ehCDPWzwf7HgYGvVuUi8UXaNw7S+Vm8WW2xpkXNiwZLZw59KuoeN7S5gI
+         ZbJ0OS0RPhpTl0dYZBbffGBsInKDL/+S9zjA9+aQwfA1CHlA9o1+tkDhB1dcHOVklH
+         uJ+gcMbyUNVng==
+Subject: Re: [PATCH] media: usbvision: Fix a use after free in v4l2_release()
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        syzbot <syzbot+75287f75e2fedd69d680@syzkaller.appspotmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Allison Randal <allison@lohutok.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Souptick Joarder <jrdr.linux@gmail.com>, andreyknvl@google.com,
+        bnvandana@gmail.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+References: <20200124141356.365bgzg2lp3tjedm@kili.mountain>
+ <d8663b81-e920-3e1d-11d0-f636ea52c6ef@xs4all.nl>
+ <20200214112239.GC4831@pendragon.ideasonboard.com>
+ <20200214121447.13612-1-hdanton@sina.com>
+ <20200214124825.12568-1-hdanton@sina.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <feb28930-0a50-b43b-e639-37adc5a60743@xs4all.nl>
+Date:   Fri, 14 Feb 2020 14:34:49 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
+MIME-Version: 1.0
+In-Reply-To: <20200214124825.12568-1-hdanton@sina.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfH5PW6WF6TCXyCSmhbqE0CqtW3dAdYqoOaC6hKS7cmFA119bWFTslJ3LzzTvGcUQ0+hntZ8td+iitWdQkUOgBfXG//S9gKFWEoPDLBgmE7sXv9O/v4cg
+ jB2Vq+smd/yDyvuXMUFF8Vt7oIoEZqOA+XtLwI1P/h2XZeMHhsOEmi/AC5WHPbloWwB5KpKLF4HGDUBSsgXHUWqygimIDmRHMOeWNbHcfgPR8upobERr5FjP
+ 6TQq/tYnV2o53zL4mcFAZ6BtQlKxACNhWeafqdtI7TbAGImtrsZ7/hxeRBKHuX9dZ6bszmIjYBfqILBNt646f3PmVE9/pfCWIU0twTIegPMv+lssTRirds8a
+ x2G7bRGVD/XT25jGka6lI2M6UVWMUP8imFH/98VHhSC6XxLZ5DL3o4c6X8jbLgC66qAUpAie+hv0ZMaFZVuTB1t/HiA1kEShoxj4xNlyS3TKmzjoAJMryEu0
+ Cz/mrrTj4xfzrCyrozaqZmKurVaBqDl2iKtq4l3wZb4XYqh1pB+e5nv3I1H1fsmSiA/ZQmpYU5TBu0TkSbkCnPoR2yCKIDqPE1TDToqfGSuk3KQM+u691tiA
+ wWNie0K/Z1grSkLek0ZbSNucMja4rHJ3kcRWd6kyxXmMZaQCzNeZ0Z10wrr/Sux7ex6DDLhaZpFlQcHW50GHMrxzTl1RvxHgMQCgQ7/Ih+0uyn7I4hNHfgb5
+ onTpacPaGMHtDyMd6yOxRGRTErO72CCXv3FhmgKZASZ75o+7DPdmj1KUi751Ay72926eYIkPcxx3DQs8vpQVK31MNiwb6zBfSJlt+/GJ+KzHfEK1UnBEzw==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: chenqiwu <chenqiwu@xiaomi.com>
+On 2/14/20 1:48 PM, Hillf Danton wrote:
+> 
+> On Fri, 14 Feb 2020 13:21:03 +0100 Hans Verkuil wrote:
+>> On 2/14/20 1:14 PM, Hillf Danton wrote:
+>>>
+>>> On Fri, 14 Feb 2020 12:30:29 +0100 Hans Verkuil wrote:
+>>>>
+>>>> Hillf, if you want your patch to be merged, then make sure it is CC-ed to
+>>>> linux-media as well.
+>>>
+>>> Please pick it up if it makes a sense to you and it was sent with
+>>> linux-media added on the Cc list as it is known for a while that
+>>> my mail agent is rejected @vger.kernel.org for what I am not clear
+>>> about. It makes my day occasionally :P
+>>
+>> I don't I ever received the full patch, only replies to your patch.
+>>
+> 
+> =========
+> Please take a look at the Cc tag in the snippet from
+> https://lore.kernel.org/lkml/b1d071e2-0428-a08c-392d-3ca5d4a7e710@xs4all.nl/T/#m13f2c16b7cd1892f6a0b58b72ce37979cb6940b9
+> 
+> 
+>> Subject: [PATCH] media: usbvision: add the release callback for video device
+>> From: Hillf Danton <hdanton@sina.com>
+>>
+>> To fix the UAF syzbot reported,
+>>
+>> BUG: KASAN: use-after-free in v4l2_release+0x2f1/0x390 drivers/media/v4l2-core/v4l2-dev.c:459
+>>
+>> a release cb which is a simple wrapper of usbvision_release() is added
+>> for releasing resources as the last reference to the usbvision video
+>> device goes away.
+>>
+>> Reported-by: syzbot <syzbot+75287f75e2fedd69d680@syzkaller.appspotmail.com>
+>> Fixes: 2aa689dd8057 ("[media] usbvision: embed video_device")
+>> Cc: Hans Verkuil <hans.verkuil@cisco.com>
 
-Use kobj_to_dev() API instead of container_of().
+Ah, my work email. And I always delete posts mailed to that if it is also CC-ed
+to linux-media. Which didn't actually arrive there in your case. And it's no longer
+in my trash folder either.
 
-Signed-off-by: chenqiwu <chenqiwu@xiaomi.com>
----
- drivers/usb/core/sysfs.c  | 6 +++---
- drivers/usb/roles/class.c | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+So please mail me a properly formatted patch so I can forward it to linux-media
+for you.
 
-diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
-index f19694e..9f4320b 100644
---- a/drivers/usb/core/sysfs.c
-+++ b/drivers/usb/core/sysfs.c
-@@ -849,7 +849,7 @@ static ssize_t remove_store(struct device *dev, struct device_attribute *attr,
- static umode_t dev_string_attrs_are_visible(struct kobject *kobj,
- 		struct attribute *a, int n)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct usb_device *udev = to_usb_device(dev);
- 
- 	if (a == &dev_attr_manufacturer.attr) {
-@@ -883,7 +883,7 @@ static umode_t dev_string_attrs_are_visible(struct kobject *kobj,
- 		struct bin_attribute *attr,
- 		char *buf, loff_t off, size_t count)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct usb_device *udev = to_usb_device(dev);
- 	size_t nleft = count;
- 	size_t srclen, n;
-@@ -1233,7 +1233,7 @@ static ssize_t interface_authorized_store(struct device *dev,
- static umode_t intf_assoc_attrs_are_visible(struct kobject *kobj,
- 		struct attribute *a, int n)
- {
--	struct device *dev = container_of(kobj, struct device, kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct usb_interface *intf = to_usb_interface(dev);
- 
- 	if (intf->intf_assoc == NULL)
-diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
-index 63a00ff..486b0b1 100644
---- a/drivers/usb/roles/class.c
-+++ b/drivers/usb/roles/class.c
-@@ -199,7 +199,7 @@ struct usb_role_switch *
- static umode_t
- usb_role_switch_is_visible(struct kobject *kobj, struct attribute *attr, int n)
- {
--	struct device *dev = container_of(kobj, typeof(*dev), kobj);
-+	struct device *dev = kobj_to_dev(kobj);
- 	struct usb_role_switch *sw = to_role_switch(dev);
- 
- 	if (sw->allow_userspace_control)
--- 
-1.9.1
+Regards,
+
+	Hans
+
+>> Signed-off-by: Hillf Danton <hdanton@sina.com>
+>> ---
+> =========
+> 
+>> Please mail your patch directly to me so I have a clean version.
+> 
 
