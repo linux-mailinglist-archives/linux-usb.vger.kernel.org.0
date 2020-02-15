@@ -2,252 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CABCE15FCF4
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Feb 2020 06:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 325EB15FDCE
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Feb 2020 10:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725829AbgBOFg6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 15 Feb 2020 00:36:58 -0500
-Received: from funyu.konbu.org ([51.15.241.64]:47442 "EHLO funyu.konbu.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725797AbgBOFg6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 15 Feb 2020 00:36:58 -0500
-Received: from tungsten (24.205.49.163.rev.vmobile.jp [163.49.205.24])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by funyu.konbu.org (Postfix) with ESMTPSA id CC3E2280821;
-        Sat, 15 Feb 2020 05:36:52 +0000 (UTC)
-Date:   Sat, 15 Feb 2020 14:36:47 +0900
-From:   Boris ARZUR <boris@konbu.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        William Wu <william.wu@rock-chips.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: Re: [PATCH] usb: dwc2: extend treatment for incomplete transfer
-Message-ID: <20200215053647.GA10345@tungsten>
-References: <20200210213906.GA24079@roeck-us.net>
- <20200211054953.GA2401@tungsten>
- <20200211161522.GA1894@roeck-us.net>
+        id S1725922AbgBOJVA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 15 Feb 2020 04:21:00 -0500
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:5751 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725852AbgBOJVA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 Feb 2020 04:21:00 -0500
+X-UUID: e183eb48eb1f403b98a19fec620da92a-20200215
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=k13YbxXhz4gHeoY8sCSPlvVxaM10t7m2oHtq2oD0CI0=;
+        b=GsQGasfnVre3dzigm4NEoBALH29uYsv1l36FYecb8416SjNKbbTuoWmTgQnYwVvcWwm1eYbKzXxTnrkazpFzJlIjmJnlWIgzz1t46a3wuaQ/VceKUUDP+tio+wcD7m4bCrh/swNoa+w+qJ9dvsTHcYNBJHkfDM0BWDlpIQXgJxo=;
+X-UUID: e183eb48eb1f403b98a19fec620da92a-20200215
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1317205863; Sat, 15 Feb 2020 17:20:20 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31DR.mediatek.inc
+ (172.27.6.102) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Sat, 15 Feb
+ 2020 17:19:10 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Sat, 15 Feb 2020 17:18:49 +0800
+Message-ID: <1581758398.3473.3.camel@mhfsdcap03>
+Subject: Re: [PATCH 4/9] usb: roles: Leave the private driver data pointer
+ to the drivers
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        "Mika Westerberg" <mika.westerberg@linux.intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Date:   Sat, 15 Feb 2020 17:19:58 +0800
+In-Reply-To: <20200213132428.53374-5-heikki.krogerus@linux.intel.com>
+References: <20200213132428.53374-1-heikki.krogerus@linux.intel.com>
+         <20200213132428.53374-5-heikki.krogerus@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200211161522.GA1894@roeck-us.net>
+X-TM-SNTS-SMTP: B88534A6BE45C77582AA7EE259A2C4329D073BDE8CECCF35BFDCADB4570735E32000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Guenter,
+T24gVGh1LCAyMDIwLTAyLTEzIGF0IDE2OjI0ICswMzAwLCBIZWlra2kgS3JvZ2VydXMgd3JvdGU6
+DQo+IEFkZGluZyB1c2Jfcm9sZV9zd2l0Y2hfZ2V0L3NldF9kcnZkYXRhKCkgZnVuY3Rpb25zIHRo
+YXQgdGhlDQo+IHN3aXRjaCBkcml2ZXJzIGNhbiB1c2UgZm9yIHNldHRpbmcgYW5kIGdldHRpbmcg
+cHJpdmF0ZSBkYXRhDQo+IHBvaW50ZXIgdGhhdCBpcyBhc3NvY2lhdGVkIHdpdGggdGhlIHN3aXRj
+aC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEhlaWtraSBLcm9nZXJ1cyA8aGVpa2tpLmtyb2dlcnVz
+QGxpbnV4LmludGVsLmNvbT4NCj4gLS0tDQo+ICBkcml2ZXJzL3VzYi9yb2xlcy9jbGFzcy5jIHwg
+MjIgKysrKysrKysrKysrKysrKysrKysrKw0KPiAgaW5jbHVkZS9saW51eC91c2Ivcm9sZS5oICB8
+IDE2ICsrKysrKysrKysrKysrKysNCj4gIDIgZmlsZXMgY2hhbmdlZCwgMzggaW5zZXJ0aW9ucygr
+KQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL3JvbGVzL2NsYXNzLmMgYi9kcml2ZXJz
+L3VzYi9yb2xlcy9jbGFzcy5jDQo+IGluZGV4IDYzYTAwZmYyNjY1NS4uZjMxMzJkMjMxNTk5IDEw
+MDY0NA0KPiAtLS0gYS9kcml2ZXJzL3VzYi9yb2xlcy9jbGFzcy5jDQo+ICsrKyBiL2RyaXZlcnMv
+dXNiL3JvbGVzL2NsYXNzLmMNCj4gQEAgLTMyOSw2ICszMjksNyBAQCB1c2Jfcm9sZV9zd2l0Y2hf
+cmVnaXN0ZXIoc3RydWN0IGRldmljZSAqcGFyZW50LA0KPiAgCXN3LT5kZXYuZndub2RlID0gZGVz
+Yy0+Zndub2RlOw0KPiAgCXN3LT5kZXYuY2xhc3MgPSByb2xlX2NsYXNzOw0KPiAgCXN3LT5kZXYu
+dHlwZSA9ICZ1c2Jfcm9sZV9kZXZfdHlwZTsNCj4gKwlzdy0+ZGV2LmRyaXZlcl9kYXRhID0gZGVz
+Yy0+ZHJpdmVyX2RhdGE7DQpIb3cgYWJvdXQgdXNlIGRldl9zZXRfZHJ2ZGF0YSgpPyB3aWxsIGtl
+ZXAgYWxpZ24gd2l0aA0KdXNiX3JvbGVfc3dpdGNoX3NldC9nZXRfZHJ2ZGF0YSgpLCANCg0KPiAg
+CWRldl9zZXRfbmFtZSgmc3ctPmRldiwgIiVzLXJvbGUtc3dpdGNoIiwgZGV2X25hbWUocGFyZW50
+KSk7DQo+ICANCj4gIAlyZXQgPSBkZXZpY2VfcmVnaXN0ZXIoJnN3LT5kZXYpOw0KPiBAQCAtMzU2
+LDYgKzM1NywyNyBAQCB2b2lkIHVzYl9yb2xlX3N3aXRjaF91bnJlZ2lzdGVyKHN0cnVjdCB1c2Jf
+cm9sZV9zd2l0Y2ggKnN3KQ0KPiAgfQ0KPiAgRVhQT1JUX1NZTUJPTF9HUEwodXNiX3JvbGVfc3dp
+dGNoX3VucmVnaXN0ZXIpOw0KPiAgDQo+ICsvKioNCj4gKyAqIHVzYl9yb2xlX3N3aXRjaF9zZXRf
+ZHJ2ZGF0YSAtIEFzc2lnbiBwcml2YXRlIGRhdGEgcG9pbnRlciB0byBhIHN3aXRjaA0KPiArICog
+QHN3OiBVU0IgUm9sZSBTd2l0Y2gNCj4gKyAqIEBkYXRhOiBQcml2YXRlIGRhdGEgcG9pbnRlcg0K
+PiArICovDQo+ICt2b2lkIHVzYl9yb2xlX3N3aXRjaF9zZXRfZHJ2ZGF0YShzdHJ1Y3QgdXNiX3Jv
+bGVfc3dpdGNoICpzdywgdm9pZCAqZGF0YSkNCj4gK3sNCj4gKwlkZXZfc2V0X2RydmRhdGEoJnN3
+LT5kZXYsIGRhdGEpOw0KPiArfQ0KPiArRVhQT1JUX1NZTUJPTF9HUEwodXNiX3JvbGVfc3dpdGNo
+X3NldF9kcnZkYXRhKTsNCj4gKw0KPiArLyoqDQo+ICsgKiB1c2Jfcm9sZV9zd2l0Y2hfZ2V0X2Ry
+dmRhdGEgLSBHZXQgdGhlIHByaXZhdGUgZGF0YSBwb2ludGVyIG9mIGEgc3dpdGNoDQo+ICsgKiBA
+c3c6IFVTQiBSb2xlIFN3aXRjaA0KPiArICovDQo+ICt2b2lkICp1c2Jfcm9sZV9zd2l0Y2hfZ2V0
+X2RydmRhdGEoc3RydWN0IHVzYl9yb2xlX3N3aXRjaCAqc3cpDQo+ICt7DQo+ICsJcmV0dXJuIGRl
+dl9nZXRfZHJ2ZGF0YSgmc3ctPmRldik7DQo+ICt9DQo+ICtFWFBPUlRfU1lNQk9MX0dQTCh1c2Jf
+cm9sZV9zd2l0Y2hfZ2V0X2RydmRhdGEpOw0KPiArDQo+ICBzdGF0aWMgaW50IF9faW5pdCB1c2Jf
+cm9sZXNfaW5pdCh2b2lkKQ0KPiAgew0KPiAgCXJvbGVfY2xhc3MgPSBjbGFzc19jcmVhdGUoVEhJ
+U19NT0RVTEUsICJ1c2Jfcm9sZSIpOw0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC91c2Iv
+cm9sZS5oIGIvaW5jbHVkZS9saW51eC91c2Ivcm9sZS5oDQo+IGluZGV4IGVmYWMzYWY4M2Q2Yi4u
+MDJkYWU5MzZjZWJkIDEwMDY0NA0KPiAtLS0gYS9pbmNsdWRlL2xpbnV4L3VzYi9yb2xlLmgNCj4g
+KysrIGIvaW5jbHVkZS9saW51eC91c2Ivcm9sZS5oDQo+IEBAIC0yNSw2ICsyNSw3IEBAIHR5cGVk
+ZWYgZW51bSB1c2Jfcm9sZSAoKnVzYl9yb2xlX3N3aXRjaF9nZXRfdCkoc3RydWN0IGRldmljZSAq
+ZGV2KTsNCj4gICAqIEBzZXQ6IENhbGxiYWNrIGZvciBzZXR0aW5nIHRoZSByb2xlDQo+ICAgKiBA
+Z2V0OiBDYWxsYmFjayBmb3IgZ2V0dGluZyB0aGUgcm9sZSAob3B0aW9uYWwpDQo+ICAgKiBAYWxs
+b3dfdXNlcnNwYWNlX2NvbnRyb2w6IElmIHRydWUgdXNlcnNwYWNlIG1heSBjaGFuZ2UgdGhlIHJv
+bGUgdGhyb3VnaCBzeXNmcw0KPiArICogQGRyaXZlcl9kYXRhOiBQcml2YXRlIGRhdGEgcG9pbnRl
+cg0KPiAgICoNCj4gICAqIEB1c2IyX3BvcnQgYW5kIEB1c2IzX3BvcnQgd2lsbCBwb2ludCB0byB0
+aGUgVVNCIGhvc3QgcG9ydCBhbmQgQHVkYyB0byB0aGUgVVNCDQo+ICAgKiBkZXZpY2UgY29udHJv
+bGxlciBiZWhpbmQgdGhlIFVTQiBjb25uZWN0b3Igd2l0aCB0aGUgcm9sZSBzd2l0Y2guIElmDQo+
+IEBAIC00MCw2ICs0MSw3IEBAIHN0cnVjdCB1c2Jfcm9sZV9zd2l0Y2hfZGVzYyB7DQo+ICAJdXNi
+X3JvbGVfc3dpdGNoX3NldF90IHNldDsNCj4gIAl1c2Jfcm9sZV9zd2l0Y2hfZ2V0X3QgZ2V0Ow0K
+PiAgCWJvb2wgYWxsb3dfdXNlcnNwYWNlX2NvbnRyb2w7DQo+ICsJdm9pZCAqZHJpdmVyX2RhdGE7
+DQo+ICB9Ow0KPiAgDQo+IA0KPiBAQCAtNTcsNiArNTksOSBAQCBzdHJ1Y3QgdXNiX3JvbGVfc3dp
+dGNoICoNCj4gIHVzYl9yb2xlX3N3aXRjaF9yZWdpc3RlcihzdHJ1Y3QgZGV2aWNlICpwYXJlbnQs
+DQo+ICAJCQkgY29uc3Qgc3RydWN0IHVzYl9yb2xlX3N3aXRjaF9kZXNjICpkZXNjKTsNCj4gIHZv
+aWQgdXNiX3JvbGVfc3dpdGNoX3VucmVnaXN0ZXIoc3RydWN0IHVzYl9yb2xlX3N3aXRjaCAqc3cp
+Ow0KPiArDQo+ICt2b2lkIHVzYl9yb2xlX3N3aXRjaF9zZXRfZHJ2ZGF0YShzdHJ1Y3QgdXNiX3Jv
+bGVfc3dpdGNoICpzdywgdm9pZCAqZGF0YSk7DQo+ICt2b2lkICp1c2Jfcm9sZV9zd2l0Y2hfZ2V0
+X2RydmRhdGEoc3RydWN0IHVzYl9yb2xlX3N3aXRjaCAqc3cpOw0KPiAgI2Vsc2UNCj4gIHN0YXRp
+YyBpbmxpbmUgaW50IHVzYl9yb2xlX3N3aXRjaF9zZXRfcm9sZShzdHJ1Y3QgdXNiX3JvbGVfc3dp
+dGNoICpzdywNCj4gIAkJZW51bSB1c2Jfcm9sZSByb2xlKQ0KPiBAQCAtOTAsNiArOTUsMTcgQEAg
+dXNiX3JvbGVfc3dpdGNoX3JlZ2lzdGVyKHN0cnVjdCBkZXZpY2UgKnBhcmVudCwNCj4gIH0NCj4g
+IA0KPiAgc3RhdGljIGlubGluZSB2b2lkIHVzYl9yb2xlX3N3aXRjaF91bnJlZ2lzdGVyKHN0cnVj
+dCB1c2Jfcm9sZV9zd2l0Y2ggKnN3KSB7IH0NCj4gKw0KPiArc3RhdGljIGlubGluZSB2b2lkDQo+
+ICt1c2Jfcm9sZV9zd2l0Y2hfc2V0X2RydmRhdGEoc3RydWN0IHVzYl9yb2xlX3N3aXRjaCAqc3cs
+IHZvaWQgKmRhdGEpDQo+ICt7DQo+ICt9DQo+ICsNCj4gK3N0YXRpYyBpbmxpbmUgdm9pZCAqdXNi
+X3JvbGVfc3dpdGNoX2dldF9kcnZkYXRhKHN0cnVjdCB1c2Jfcm9sZV9zd2l0Y2ggKnN3KQ0KPiAr
+ew0KPiArCXJldHVybiBOVUxMOw0KPiArfQ0KPiArDQo+ICAjZW5kaWYNCj4gIA0KPiAgI2VuZGlm
+IC8qIF9fTElOVVhfVVNCX1JPTEVfSCAqLw0KDQo=
 
->> The first time around I was 0/ changing fonts 1/ trimming the dump message
->> in the kernel 2/ filming my screen. That's not practical at all...
-Mmm, pstore does seem to work on my machine. CHROME_PSTORE is not available
-to me because I'm not on x86, I just enabled the rest and nothing pops up
-in /sys/fs/pstore...
-
-So I took pictures (OCR did not help):
-- https://funyu.konbu.org/pQUF2P08etcpVxuKZ0A720%2b0/IMG_20200215_134343.jpg.webp
-  is a stack trace for your earlier patch "min_t", in
-  https://www.spinics.net/lists/linux-usb/msg191019.html ;
-- https://funyu.konbu.org/pQUF2P08etcpVxuKZ0A720%2b0/IMG_20200215_135816.jpg.webp
-  is a stack trace for your later patch "container_of", in
-  https://www.spinics.net/lists/linux-usb/msg191074.html .
-
-Both patches crash (without even loading the machine), but "container_of" is
-a bit more resilient.
-
-Thanks, Boris.
-
-Guenter Roeck wrote:
->Hi Boris,
->
->On Tue, Feb 11, 2020 at 02:49:53PM +0900, Boris ARZUR wrote:
->> Hello Guenter,
->> 
->> >In the meantime, can you by any chance test the attached patch ? It _might_
->> >fix the problem, but it is a bit of a wild shot.
->> I tried your patch, but the machine does not finish booting.
->> 
->> 
->> I would like to give you a dump, but the screen scrolls fast, and what's
->> left when paused is not interesting. How do I get it to dump on disk?
->> 
->> My journalctl doesn't show anything. I have no kmesg.log anywhere.
->> The first time around I was 0/ changing fonts 1/ trimming the dump message
->> in the kernel 2/ filming my screen. That's not practical at all...
->> 
->> 
->> I have been looking a bit at things. I believe that part of the issue
->> is the need to re-align the buffer we get in the URB. I'm wondering if asking
->> for a specific alignment when creating the URB could be doable.
->> 
->> 
->> As a stop-gap, maybe doing things like in tegra ehci could fix our bug:
->> https://github.com/torvalds/linux/blob/master/drivers/usb/host/ehci-tegra.c#L288
->> i.e. having the old pointer before the new buffer instead of at the end of
->> it.
->> 
->> Now if something is overwriting the buffer end, that would also be hiding the
->> issue... but if the bug is related to lengths that don't match between
->> allocation and free, that could work. In this case, that would also be
->> hiding the issue :)
->> 
->See below for a patch (untested) doing just that. It may solve your immediate
->problem, though it would still suffer from the buffer end overwrite.
->
->> 
->> >Unfortunately, I have been unable to reproduce the problem. It is seen only
->> >with certain phones and with certain Ethernet adapters, and I was unable
->> >to get any of those. I'll keep trying.
->> If you want, I can run a kernel with some printk instrumentation or run
->> experiments. I'll research a bit on how to get that kernel oops data, that
->
->Unfortunately I have no real idea what to look out for. The problem may be
->related to the phone sending more than one Ethernet packet in a single USB
->transfer. See rndis_rx_fixup() for how that is handled in the driver.
->I don't know how that would result in the observed problem, though.
->
->Thanks,
->Guenter
->
->---
->From 8efa9c598f2390dca2e97cbbe41e981caba41ca1 Mon Sep 17 00:00:00 2001
->From: Guenter Roeck <linux@roeck-us.net>
->Date: Mon, 10 Feb 2020 14:04:06 -0800
->Subject: [PATCH] usb: dwc2: Simplify DMA alignment code
->
->The code to align buffers for DMA was first introduced with commit
->3bc04e28a030 ("usb: dwc2: host: Get aligned DMA in a more supported way").
->It was updated with commit 56406e017a88 ("usb: dwc2: Fix DMA alignment
->to start at allocated boundary") because it did not really align buffers to
->DMA boundaries but to DWC2_USB_DMA_ALIGN. This was then optimized in commit
->1e111e885238 ("usb: dwc2: Fix inefficient copy of unaligned buffers")
->to only copy actual data rather than the whole buffer. Commit 4a4863bf2e79
->("usb: dwc2: Fix DMA cache alignment issues") changed this further to add
->a padding at the end of the buffer to ensure that the old data pointer is
->not in the same cache line as the buffer.
->
->This last commit states "Otherwise, the stored_xfer_buffer gets corrupted
->for IN URBs on non-cache-coherent systems". However, such corruptions are
->still observed. Either case, DMA is not expected to overwrite more memory
->than it is supposed to do, suggesting that the commit may have been hiding
->a problem rather than fixing it.
->
->On top of that, DMA alignment is still not guaranteed since it only happens
->if the original buffer is not aligned to DWC2_USB_DMA_ALIGN, which is still
->a constant of 4 and not associated with DMA alignment.
->
->Move the old data pointer back to the beginning of the new buffer,
->restoring most of the original commit and to simplify the code. Define
->DWC2_USB_DMA_ALIGN to dma_get_cache_alignment() to fix the DMA alignment
->for real this time.
->
->Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->---
-> drivers/usb/dwc2/hcd.c | 50 +++++++++++++++++++-----------------------
-> 1 file changed, 22 insertions(+), 28 deletions(-)
->
->diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
->index 2c81b346b464..9e04b3a314eb 100644
->--- a/drivers/usb/dwc2/hcd.c
->+++ b/drivers/usb/dwc2/hcd.c
->@@ -2470,21 +2470,24 @@ static int dwc2_alloc_split_dma_aligned_buf(struct dwc2_hsotg *hsotg,
-> 	return 0;
-> }
-> 
->-#define DWC2_USB_DMA_ALIGN 4
->+#define DWC2_USB_DMA_ALIGN	dma_get_cache_alignment()
->+
->+struct dma_aligned_buffer {
->+	void *kmalloc_ptr;
->+	void *old_xfer_buffer;
->+	u8 data[0];
->+};
-> 
-> static void dwc2_free_dma_aligned_buffer(struct urb *urb)
-> {
->-	void *stored_xfer_buffer;
->+	struct dma_aligned_buffer *temp;
-> 	size_t length;
-> 
-> 	if (!(urb->transfer_flags & URB_ALIGNED_TEMP_BUFFER))
-> 		return;
-> 
->-	/* Restore urb->transfer_buffer from the end of the allocated area */
->-	memcpy(&stored_xfer_buffer,
->-	       PTR_ALIGN(urb->transfer_buffer + urb->transfer_buffer_length,
->-			 dma_get_cache_alignment()),
->-	       sizeof(urb->transfer_buffer));
->+	temp = container_of(urb->transfer_buffer,
->+			    struct dma_aligned_buffer, data);
-> 
-> 	if (usb_urb_dir_in(urb)) {
-> 		if (usb_pipeisoc(urb->pipe))
->@@ -2492,17 +2495,17 @@ static void dwc2_free_dma_aligned_buffer(struct urb *urb)
-> 		else
-> 			length = urb->actual_length;
-> 
->-		memcpy(stored_xfer_buffer, urb->transfer_buffer, length);
->+		memcpy(temp->old_xfer_buffer, temp->data, length);
-> 	}
->-	kfree(urb->transfer_buffer);
->-	urb->transfer_buffer = stored_xfer_buffer;
->+	urb->transfer_buffer = temp->old_xfer_buffer;
->+	kfree(temp->kmalloc_ptr);
-> 
-> 	urb->transfer_flags &= ~URB_ALIGNED_TEMP_BUFFER;
-> }
-> 
-> static int dwc2_alloc_dma_aligned_buffer(struct urb *urb, gfp_t mem_flags)
-> {
->-	void *kmalloc_ptr;
->+	struct dma_aligned_buffer *temp, *kmalloc_ptr;
-> 	size_t kmalloc_size;
-> 
-> 	if (urb->num_sgs || urb->sg ||
->@@ -2510,31 +2513,22 @@ static int dwc2_alloc_dma_aligned_buffer(struct urb *urb, gfp_t mem_flags)
-> 	    !((uintptr_t)urb->transfer_buffer & (DWC2_USB_DMA_ALIGN - 1)))
-> 		return 0;
-> 
->-	/*
->-	 * Allocate a buffer with enough padding for original transfer_buffer
->-	 * pointer. This allocation is guaranteed to be aligned properly for
->-	 * DMA
->-	 */
->+	/* Allocate a buffer with enough padding for alignment */
-> 	kmalloc_size = urb->transfer_buffer_length +
->-		(dma_get_cache_alignment() - 1) +
->-		sizeof(urb->transfer_buffer);
->+		sizeof(struct dma_aligned_buffer) + DWC2_USB_DMA_ALIGN - 1;
-> 
-> 	kmalloc_ptr = kmalloc(kmalloc_size, mem_flags);
-> 	if (!kmalloc_ptr)
-> 		return -ENOMEM;
-> 
->-	/*
->-	 * Position value of original urb->transfer_buffer pointer to the end
->-	 * of allocation for later referencing
->-	 */
->-	memcpy(PTR_ALIGN(kmalloc_ptr + urb->transfer_buffer_length,
->-			 dma_get_cache_alignment()),
->-	       &urb->transfer_buffer, sizeof(urb->transfer_buffer));
->-
->+	/* Position our struct dma_aligned_buffer such that data is aligned */
->+	temp = PTR_ALIGN(kmalloc_ptr + 1, DWC2_USB_DMA_ALIGN) - 1;
->+	temp->kmalloc_ptr = kmalloc_ptr;
->+	temp->old_xfer_buffer = urb->transfer_buffer;
-> 	if (usb_urb_dir_out(urb))
->-		memcpy(kmalloc_ptr, urb->transfer_buffer,
->+		memcpy(temp->data, urb->transfer_buffer,
-> 		       urb->transfer_buffer_length);
->-	urb->transfer_buffer = kmalloc_ptr;
->+	urb->transfer_buffer = temp->data;
-> 
-> 	urb->transfer_flags |= URB_ALIGNED_TEMP_BUFFER;
-> 
->-- 
->2.17.1
->
