@@ -2,66 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4D615F930
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2020 23:02:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB3415FC12
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Feb 2020 02:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727295AbgBNWBc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Feb 2020 17:01:32 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:40178 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726079AbgBNWBN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Feb 2020 17:01:13 -0500
-Received: (qmail 7837 invoked by uid 2102); 14 Feb 2020 17:01:11 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 14 Feb 2020 17:01:11 -0500
-Date:   Fri, 14 Feb 2020 17:01:11 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Joe Perches <joe@perches.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>,
-        <usb-storage@lists.one-eyed-alien.net>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb-storage: Use const to reduce object data size
-In-Reply-To: <60559197a1af9e0af7f329cc3427989e5756846f.camel@perches.com>
-Message-ID: <Pine.LNX.4.44L0.2002141700390.1579-100000@iolanthe.rowland.org>
+        id S1727649AbgBOBhf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 14 Feb 2020 20:37:35 -0500
+Received: from l37-192-35-170.novotelecom.ru ([37.192.35.170]:17318 "EHLO
+        glpak.ru" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727602AbgBOBhf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 14 Feb 2020 20:37:35 -0500
+Received: from alex.glpak.ru (localhost [127.0.0.1])
+        by glpak.ru (Postfix) with ESMTP id 8C15BA3DCD6
+        for <linux-usb@vger.kernel.org>; Sat, 15 Feb 2020 08:08:29 +0700 (NOVT)
+X-Virus-Scanned: amavisd-new at glpak.ru
+Received: from glpak.ru ([127.0.0.1])
+        by alex.glpak.ru (glpak.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id J87sRcz23NPQ for <linux-usb@vger.kernel.org>;
+        Sat, 15 Feb 2020 08:08:29 +0700 (NOVT)
+Received: from [192.168.88.250] (unknown [185.248.13.181])
+        by glpak.ru (Postfix) with ESMTPA id EBF61A3DC44
+        for <linux-usb@vger.kernel.org>; Sat, 15 Feb 2020 08:08:28 +0700 (NOVT)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: zionitld3@gmail.com
+To:     linux-usb@vger.kernel.org
+From:   anna@glpak.ru
+Date:   Fri, 14 Feb 2020 17:10:13 -0800
+Reply-To: zionitld3@gmail.com
+X-Antivirus: Avast (VPS 200214-0, 02/14/2020), Outbound message
+X-Antivirus-Status: Clean
+Message-Id: <20200215010829.8C15BA3DCD6@glpak.ru>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 14 Feb 2020, Joe Perches wrote:
-
-> Make structs const to reduce data size ~20KB.
-> 
-> Change function arguments and prototypes as necessary to compile.
-> 
-> $ size (x86-64 defconfig pre)
->    text	   data	    bss	    dec	    hex	filename
->   12281	  10948	    480	  23709	   5c9d	./drivers/usb/storage/usb.o
->     111	  10528	      8	  10647	   2997	./drivers/usb/storage/usual-tables.o
-> 
-> $ size (x86-64 defconfig post)
->    text	   data	    bss	    dec	    hex	filename
->   22809	    420	    480	  23709	   5c9d	drivers/usb/storage/usb.o
->   10551	      0	      0	  10551	   2937	drivers/usb/storage/usual-tables.o
-> 
-> Signed-off-by: Joe Perches <joe@perches.com>
-> ---
-> 
-> compile tested only
-> 
->  drivers/usb/storage/usb.c          | 10 +++++-----
->  drivers/usb/storage/usb.h          |  5 +++--
->  drivers/usb/storage/usual-tables.c |  6 +++---
->  include/linux/usb_usual.h          |  2 +-
->  4 files changed, 12 insertions(+), 11 deletions(-)
-
-It all looks quite reasonable.
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
-Alan Stern
-
+Hello, We from Zion Finance Group currently offers loans to customers at a low interest rate of 3%. This is an opportunity that you cannot miss. We have a few questions to ask; Do you have debts? Do you want to pay off your debts? Do you want to be financially equipped? If so, request a loan today from Zion Finance Group. Interested, customers are expected to contact zionitld3@gmail.com for more information. We wish to assist you with a loan. Greetings, Mr. Bernard.
