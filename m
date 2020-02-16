@@ -2,28 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 301EF1604FF
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Feb 2020 18:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D9A1604FA
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Feb 2020 18:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728532AbgBPR1M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 16 Feb 2020 12:27:12 -0500
-Received: from asav22.altibox.net ([109.247.116.9]:50782 "EHLO
+        id S1728522AbgBPR1G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 16 Feb 2020 12:27:06 -0500
+Received: from asav22.altibox.net ([109.247.116.9]:50660 "EHLO
         asav22.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728504AbgBPR1L (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 16 Feb 2020 12:27:11 -0500
+        with ESMTP id S1727895AbgBPR1G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 16 Feb 2020 12:27:06 -0500
+X-Greylist: delayed 319 seconds by postgrey-1.27 at vger.kernel.org; Sun, 16 Feb 2020 12:26:59 EST
 Received: from localhost.localdomain (unknown [81.166.168.211])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: noralf.tronnes@ebnett.no)
-        by asav22.altibox.net (Postfix) with ESMTPSA id 297EC200E8;
+        by asav22.altibox.net (Postfix) with ESMTPSA id 83324200ED;
         Sun, 16 Feb 2020 18:21:40 +0100 (CET)
 From:   =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
 To:     broonie@kernel.org, balbi@kernel.org, lee.jones@linaro.org
 Cc:     linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
         =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
-Subject: [RFC 4/9] pinctrl: Add Multifunction USB Device pinctrl driver
-Date:   Sun, 16 Feb 2020 18:21:12 +0100
-Message-Id: <20200216172117.49832-5-noralf@tronnes.org>
+Subject: [RFC 5/9] usb: gadget: function: mud: Add gpio support
+Date:   Sun, 16 Feb 2020 18:21:13 +0100
+Message-Id: <20200216172117.49832-6-noralf@tronnes.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20200216172117.49832-1-noralf@tronnes.org>
 References: <20200216172117.49832-1-noralf@tronnes.org>
@@ -34,816 +35,1033 @@ X-CMAE-Score: 0
 X-CMAE-Analysis: v=2.3 cv=ZvHD1ezG c=1 sm=1 tr=0
         a=OYZzhG0JTxDrWp/F2OJbnw==:117 a=OYZzhG0JTxDrWp/F2OJbnw==:17
         a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=IkcTkHD0fZMA:10 a=M51BFTxLslgA:10
-        a=SJz97ENfAAAA:8 a=zA0JEd7Wm40yEy5wBp4A:9 a=mvnLadNLvkWAnLlj:21
-        a=mjYpQo1dwepDeJSL:21 a=QEXdDO2ut3YA:10 a=vFet0B0WnEQeilDPIY6i:22
+        a=SJz97ENfAAAA:8 a=OVWlCPoClyRDxbRKtg8A:9 a=ENd6JL4-XTPeTk_z:21
+        a=YaaFWRjS8iQpcXM6:21 a=QEXdDO2ut3YA:10 a=vFet0B0WnEQeilDPIY6i:22
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Multifunction USB Device has optional support for gpio and pin
-configuration. Interrupts are supported if the device supports it.
+Add optional gpio functionality to the Multifunction USB Device.
 
 Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
 ---
- drivers/pinctrl/Kconfig       |   9 +
- drivers/pinctrl/Makefile      |   1 +
- drivers/pinctrl/pinctrl-mud.c | 657 ++++++++++++++++++++++++++++++++++
- drivers/pinctrl/pinctrl-mud.h |  89 +++++
- 4 files changed, 756 insertions(+)
- create mode 100644 drivers/pinctrl/pinctrl-mud.c
- create mode 100644 drivers/pinctrl/pinctrl-mud.h
+ drivers/usb/gadget/Kconfig               |  14 +
+ drivers/usb/gadget/function/Makefile     |   2 +
+ drivers/usb/gadget/function/f_mud_pins.c | 962 +++++++++++++++++++++++
+ 3 files changed, 978 insertions(+)
+ create mode 100644 drivers/usb/gadget/function/f_mud_pins.c
 
-diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
-index df0ef69dd474..ee3532c64411 100644
---- a/drivers/pinctrl/Kconfig
-+++ b/drivers/pinctrl/Kconfig
-@@ -384,6 +384,15 @@ config PINCTRL_OCELOT
- 	select OF_GPIO
- 	select REGMAP_MMIO
+diff --git a/drivers/usb/gadget/Kconfig b/drivers/usb/gadget/Kconfig
+index 9551876ffe08..d6285146ec76 100644
+--- a/drivers/usb/gadget/Kconfig
++++ b/drivers/usb/gadget/Kconfig
+@@ -219,6 +219,9 @@ config USB_F_TCM
+ config USB_F_MUD
+ 	tristate
  
-+config PINCTRL_MUD
-+	tristate "Multifunction USB Device pinctrl driver"
-+	depends on MFD_MUD
-+	select GENERIC_PINCONF
-+	select GPIOLIB
-+	select GPIOLIB_IRQCHIP
-+	help
-+	  Support for GPIOs on Multifunction USB Devices.
++config USB_F_MUD_PINS
++	tristate
 +
- source "drivers/pinctrl/actions/Kconfig"
- source "drivers/pinctrl/aspeed/Kconfig"
- source "drivers/pinctrl/bcm/Kconfig"
-diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
-index 879f312bfb75..782cc7f286b7 100644
---- a/drivers/pinctrl/Makefile
-+++ b/drivers/pinctrl/Makefile
-@@ -47,6 +47,7 @@ obj-$(CONFIG_PINCTRL_INGENIC)	+= pinctrl-ingenic.o
- obj-$(CONFIG_PINCTRL_RK805)	+= pinctrl-rk805.o
- obj-$(CONFIG_PINCTRL_OCELOT)	+= pinctrl-ocelot.o
- obj-$(CONFIG_PINCTRL_EQUILIBRIUM)   += pinctrl-equilibrium.o
-+obj-$(CONFIG_PINCTRL_MUD)	+= pinctrl-mud.o
+ # this first set of drivers all depend on bulk-capable hardware.
  
- obj-y				+= actions/
- obj-$(CONFIG_ARCH_ASPEED)	+= aspeed/
-diff --git a/drivers/pinctrl/pinctrl-mud.c b/drivers/pinctrl/pinctrl-mud.c
+ config USB_CONFIGFS
+@@ -493,6 +496,17 @@ menuconfig USB_CONFIGFS_F_MUD
+ 	help
+ 	  Core support for the Multifunction USB Device.
+ 
++if USB_F_MUD
++
++config USB_CONFIGFS_F_MUD_PINS
++	bool "Multifunction USB Device GPIO"
++	depends on PINCTRL
++	select USB_F_MUD_PINS
++	help
++	  GPIO support for the Multifunction USB Device.
++
++endif # USB_F_MUD
++
+ choice
+ 	tristate "USB Gadget precomposed configurations"
+ 	default USB_ETH
+diff --git a/drivers/usb/gadget/function/Makefile b/drivers/usb/gadget/function/Makefile
+index b6e31b511521..2e24227fcc12 100644
+--- a/drivers/usb/gadget/function/Makefile
++++ b/drivers/usb/gadget/function/Makefile
+@@ -52,3 +52,5 @@ usb_f_tcm-y			:= f_tcm.o
+ obj-$(CONFIG_USB_F_TCM)		+= usb_f_tcm.o
+ usb_f_mud-y			:= f_mud.o mud_regmap.o
+ obj-$(CONFIG_USB_F_MUD)		+= usb_f_mud.o
++usb_f_mud_pins-y		:= f_mud_pins.o
++obj-$(CONFIG_USB_F_MUD_PINS)	+= usb_f_mud_pins.o
+diff --git a/drivers/usb/gadget/function/f_mud_pins.c b/drivers/usb/gadget/function/f_mud_pins.c
 new file mode 100644
-index 000000000000..f890c8e68755
+index 000000000000..b3466804ad5e
 --- /dev/null
-+++ b/drivers/pinctrl/pinctrl-mud.c
-@@ -0,0 +1,657 @@
++++ b/drivers/usb/gadget/function/f_mud_pins.c
+@@ -0,0 +1,962 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * Copyright 2020 Noralf Trønnes
++ * Copyright (C) 2020 Noralf Trønnes
 + */
 +
 +#include <linux/bitmap.h>
-+#include <linux/gpio/driver.h>
++#include <linux/configfs.h>
++#include <linux/device.h>
++#include <linux/gpio/consumer.h>
++#include <linux/gpio/machine.h>
++#include <linux/idr.h>
 +#include <linux/interrupt.h>
-+#include <linux/irq.h>
 +#include <linux/kernel.h>
-+#include <linux/mfd/mud.h>
 +#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/pinctrl/pinconf.h>
-+#include <linux/pinctrl/pinmux.h>
++#include <linux/mutex.h>
 +#include <linux/regmap.h>
-+#include <linux/seq_file.h>
 +#include <linux/slab.h>
++#include <linux/string.h>
 +
-+#include "core.h"
-+#include "pinconf.h"
-+#include "pinmux.h"
-+#include "pinctrl-utils.h"
++#include "f_mud.h"
++#include "../../../pinctrl/pinctrl-mud.h"
 +
-+#include "pinctrl-mud.h"
++/*
++ * Even though the host side is a pinctrl driver, the device side is a gpio consumer.
++ * That's because not all boards have a pin controller.
++ */
 +
 +/* Temporary debugging aid */
-+static unsigned int debug = 8;
-+
-+#define pdebug(level, fmt, ...)				\
++#define fmdebug(fmt, ...)				\
 +do {							\
-+	if ((level) <= debug)				\
++	if (1)						\
 +		printk(KERN_DEBUG fmt, ##__VA_ARGS__);	\
 +} while (0)
 +
-+struct mud_pinctrl_pin {
-+	unsigned int irq_types;
-+	unsigned int irq_type;
-+	bool irq_enabled;
++static DEFINE_IDA(f_mud_pins_ida);
++
++struct f_mud_pins_cell_item {
++	struct list_head node;
++	unsigned int index;
++	struct config_group group;
++
++	struct mutex lock; /* Protect the values below */
++	int refcnt;
++
++	const char *name;
++	const char *chip;
++	int offset;
 +};
 +
-+struct mud_pinctrl {
-+	struct device *dev;
-+	struct regmap *regmap;
-+	struct mud_pinctrl_pin *pins;
-+	struct pinctrl_dev *pctl_dev;
-+	struct pinctrl_desc pctl_desc;
-+	struct gpio_chip gpio_chip;
-+	struct irq_chip irq_chip;
-+	struct mutex irqlock; /* IRQ bus lock */
++static inline struct f_mud_pins_cell_item *ci_to_f_mud_pins_cell_item(struct config_item *item)
++{
++	return container_of(to_config_group(item), struct f_mud_pins_cell_item, group);
++}
++
++struct f_mud_pins_lookup_device {
++	struct device dev;
++	int id;
++	struct f_mud_cell *cell;
++	struct gpiod_lookup_table *lookup;
++	const char **names;
++	unsigned int count;
 +};
 +
-+static unsigned int mud_pinctrl_pin_reg(unsigned int pin, unsigned int offset)
-+{
-+	return MUD_PINCTRL_REG_PIN_BASE + (pin * MUD_PINCTRL_PIN_BLOCK_SIZE) + offset;
-+}
-+
-+static int mud_pinctrl_pin_read_reg(struct mud_pinctrl *pctl, unsigned int pin,
-+				    unsigned int offset, unsigned int *val)
-+{
-+	return regmap_read(pctl->regmap, mud_pinctrl_pin_reg(pin, offset), val);
-+}
-+
-+static int mud_pinctrl_pin_write_reg(struct mud_pinctrl *pctl, unsigned int pin,
-+				     unsigned int offset, unsigned int val)
-+{
-+	return regmap_write(pctl->regmap, mud_pinctrl_pin_reg(pin, offset), val);
-+}
-+
-+static int mud_pinctrl_read_bitmap(struct mud_pinctrl *pctl, unsigned int reg,
-+				   unsigned long *bitmap, unsigned int nbits)
-+{
-+	unsigned int nregs = DIV_ROUND_UP(nbits, 32);
-+	u32 *vals;
-+	int ret;
-+
-+	vals = kmalloc_array(nregs, sizeof(*vals), GFP_KERNEL);
-+	if (!vals)
-+		return -ENOMEM;
-+
-+	ret = regmap_bulk_read(pctl->regmap, reg, vals, nregs);
-+	if (ret)
-+		goto free;
-+
-+	bitmap_from_arr32(bitmap, vals, nbits);
-+free:
-+	kfree(vals);
-+
-+	return ret;
-+}
-+
-+static int mud_pinctrl_gpio_request(struct gpio_chip *gc, unsigned int offset)
-+{
-+	struct mud_pinctrl *pctl = gpiochip_get_data(gc);
-+	int ret;
-+
-+	pdebug(1, "%s: offset=%u\n", __func__, offset);
-+
-+	ret = mud_pinctrl_pin_write_reg(pctl, offset, MUD_PIN_GPIO_REQUEST, 1);
-+	if (ret == -EBUSY) {
-+		dev_err(pctl->dev,
-+			"pin %u is claimed by another function on the USB device\n",
-+			offset);
-+		ret = -EINVAL; /* follow pinmux.c:pin_request() */
-+	}
-+
-+	return ret;
-+}
-+
-+static void mud_pinctrl_gpio_free(struct gpio_chip *gc, unsigned int offset)
-+{
-+	struct mud_pinctrl *pctl = gpiochip_get_data(gc);
-+
-+	pdebug(1, "%s: offset=%u\n", __func__, offset);
-+
-+	mud_pinctrl_pin_write_reg(pctl, offset, MUD_PIN_GPIO_FREE, 1);
-+}
-+
-+static int mud_pinctrl_gpio_get(struct gpio_chip *gc, unsigned int offset)
-+{
-+	struct mud_pinctrl *pctl = gpiochip_get_data(gc);
-+	unsigned int value;
-+	int ret;
-+
-+	ret = mud_pinctrl_pin_read_reg(pctl, offset, MUD_PIN_LEVEL, &value);
-+
-+	return ret ? ret : value;
-+}
-+
-+static void mud_pinctrl_gpio_set(struct gpio_chip *gc, unsigned int offset, int value)
-+{
-+	struct mud_pinctrl *pctl = gpiochip_get_data(gc);
-+	int ret;
-+
-+	ret = mud_pinctrl_pin_write_reg(pctl, offset, MUD_PIN_LEVEL, value);
-+	if (ret)
-+		dev_err_once(pctl->dev, "Failed to set gpio output, error=%d\n", ret);
-+}
-+
-+/* FIXME: Remove this comment when settled: .get_direction returns 0=out, 1=in */
-+static int mud_pinctrl_gpio_get_direction(struct gpio_chip *gc, unsigned int offset)
-+{
-+	struct mud_pinctrl *pctl = gpiochip_get_data(gc);
-+	unsigned int val;
-+	int ret;
-+
-+	ret = mud_pinctrl_pin_read_reg(pctl, offset, MUD_PIN_DIRECTION, &val);
-+
-+	return ret ? ret : val;
-+}
-+
-+static int mud_pinctrl_gpio_direction_input(struct gpio_chip *gc, unsigned int offset)
-+{
-+	struct mud_pinctrl *pctl = gpiochip_get_data(gc);
-+	int ret;
-+
-+	ret = mud_pinctrl_pin_write_reg(pctl, offset, MUD_PIN_DIRECTION,
-+					MUD_PIN_DIRECTION_INPUT);
-+	if (ret == -ENOTSUPP) {
-+		dev_err(pctl->dev, "pin %u can't be used as an input\n", offset);
-+		ret = -EIO; /* gpiolib uses this error code */
-+	}
-+
-+	return ret;
-+}
-+
-+static int mud_pinctrl_gpio_direction_output(struct gpio_chip *gc, unsigned int offset, int value)
-+{
-+	struct mud_pinctrl *pctl = gpiochip_get_data(gc);
-+	unsigned int regval;
-+	int ret;
-+
-+	regval = value ? MUD_PIN_DIRECTION_OUTPUT_HIGH : MUD_PIN_DIRECTION_OUTPUT_LOW;
-+
-+	ret = mud_pinctrl_pin_write_reg(pctl, offset, MUD_PIN_DIRECTION, regval);
-+	if (ret == -ENOTSUPP) {
-+		dev_err(pctl->dev, "pin %u can't be used as an output\n", offset);
-+		ret = -EIO;
-+	}
-+
-+	return ret;
-+}
-+
-+/* The pinctrl pin number space and the gpio hwpin (offset) numberspace are identical. */
-+static int mud_pinctrl_gpio_add_pin_ranges(struct gpio_chip *gc)
-+{
-+	struct mud_pinctrl *pctl = gpiochip_get_data(gc);
-+
-+	return gpiochip_add_pin_range(&pctl->gpio_chip, dev_name(pctl->dev),
-+				      pctl->pctl_desc.pins->number,
-+				      pctl->pctl_desc.pins->number,
-+				      pctl->pctl_desc.npins);
-+}
-+
-+static const struct gpio_chip mud_pinctrl_gpio_chip = {
-+	.label			= "mud-pins",
-+	.request		= mud_pinctrl_gpio_request,
-+	.free			= mud_pinctrl_gpio_free,
-+	.get_direction		= mud_pinctrl_gpio_get_direction,
-+	.direction_input	= mud_pinctrl_gpio_direction_input,
-+	.direction_output	= mud_pinctrl_gpio_direction_output,
-+	.get			= mud_pinctrl_gpio_get,
-+	.set			= mud_pinctrl_gpio_set,
-+	.set_config		= gpiochip_generic_config,
-+	.add_pin_ranges		= mud_pinctrl_gpio_add_pin_ranges,
-+	.base			= -1,
-+	.can_sleep		= true,
++struct f_mud_pins_pin {
++	struct f_mud_pins_cell *parent;
++	unsigned int index;
++	struct gpio_desc *gpio;
++	unsigned long dflags;
++	unsigned int debounce;
++#define DEBOUNCE_NOT_SET UINT_MAX
++	bool config_requested;
++	int irq;
++	int irqflags;
 +};
 +
-+/* enum pin_config_param is not ABI so: */
-+static const u8 mud_pin_config_param_table[] = {
-+	[PIN_CONFIG_BIAS_BUS_HOLD] = MUD_PIN_CONFIG_BIAS_BUS_HOLD,
-+	[PIN_CONFIG_BIAS_DISABLE] = MUD_PIN_CONFIG_BIAS_DISABLE,
-+	[PIN_CONFIG_BIAS_HIGH_IMPEDANCE] = MUD_PIN_CONFIG_BIAS_HIGH_IMPEDANCE,
-+	[PIN_CONFIG_BIAS_PULL_DOWN] = MUD_PIN_CONFIG_BIAS_PULL_DOWN,
-+	[PIN_CONFIG_BIAS_PULL_PIN_DEFAULT] = MUD_PIN_CONFIG_BIAS_PULL_PIN_DEFAULT,
-+	[PIN_CONFIG_BIAS_PULL_UP] = MUD_PIN_CONFIG_BIAS_PULL_UP,
-+	[PIN_CONFIG_DRIVE_OPEN_DRAIN] = MUD_PIN_CONFIG_DRIVE_OPEN_DRAIN,
-+	[PIN_CONFIG_DRIVE_OPEN_SOURCE] = MUD_PIN_CONFIG_DRIVE_OPEN_SOURCE,
-+	[PIN_CONFIG_DRIVE_PUSH_PULL] = MUD_PIN_CONFIG_DRIVE_PUSH_PULL,
-+	[PIN_CONFIG_DRIVE_STRENGTH] = MUD_PIN_CONFIG_DRIVE_STRENGTH,
-+	[PIN_CONFIG_DRIVE_STRENGTH_UA] = MUD_PIN_CONFIG_DRIVE_STRENGTH_UA,
-+	[PIN_CONFIG_INPUT_DEBOUNCE] = MUD_PIN_CONFIG_INPUT_DEBOUNCE,
-+	[PIN_CONFIG_INPUT_ENABLE] = MUD_PIN_CONFIG_INPUT_ENABLE,
-+	[PIN_CONFIG_INPUT_SCHMITT] = MUD_PIN_CONFIG_INPUT_SCHMITT,
-+	[PIN_CONFIG_INPUT_SCHMITT_ENABLE] = MUD_PIN_CONFIG_INPUT_SCHMITT_ENABLE,
-+	[PIN_CONFIG_LOW_POWER_MODE] = MUD_PIN_CONFIG_LOW_POWER_MODE,
-+	[PIN_CONFIG_OUTPUT_ENABLE] = MUD_PIN_CONFIG_OUTPUT_ENABLE,
-+	[PIN_CONFIG_OUTPUT] = MUD_PIN_CONFIG_OUTPUT,
-+	[PIN_CONFIG_POWER_SOURCE] = MUD_PIN_CONFIG_POWER_SOURCE,
-+	[PIN_CONFIG_SLEEP_HARDWARE_STATE] = MUD_PIN_CONFIG_SLEEP_HARDWARE_STATE,
-+	[PIN_CONFIG_SLEW_RATE] = MUD_PIN_CONFIG_SLEW_RATE,
-+	[PIN_CONFIG_SKEW_DELAY] = MUD_PIN_CONFIG_SKEW_DELAY,
-+	[PIN_CONFIG_PERSIST_STATE] = MUD_PIN_CONFIG_PERSIST_STATE,
++struct f_mud_pins_cell {
++	struct f_mud_cell cell;
++
++	struct mutex lock; /* Protect refcnt and items */
++	int refcnt;
++	struct list_head items;
++
++	struct f_mud_pins_lookup_device *ldev;
++	struct f_mud_pins_pin *pins;
++	unsigned int count;
++	spinlock_t irq_status_lock;
++	unsigned long *irq_status;
 +};
 +
-+static int mud_pinctrl_pinconf_get(struct pinctrl_dev *pctldev,
-+				   unsigned int pin, unsigned long *config)
++static inline struct f_mud_pins_cell *ci_to_f_mud_pins_cell(struct config_item *item)
 +{
-+	enum pin_config_param param = pinconf_to_config_param(*config);
-+	struct mud_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
-+	unsigned int arg, offset = mud_pin_config_param_table[param];
-+	int ret;
-+
-+	ret = mud_pinctrl_pin_read_reg(pctl, pin, offset, &arg);
-+	if (ret)
-+		return ret;
-+
-+	*config = pinconf_to_config_packed(param, arg);
-+
-+	return 0;
++	return container_of(to_config_group(item), struct f_mud_pins_cell, cell.group);
 +}
 +
-+static int mud_pinctrl_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
-+				   unsigned long *configs, unsigned int num_configs)
++static inline struct f_mud_pins_cell *cell_to_pcell(struct f_mud_cell *cell)
 +{
-+	struct mud_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
-+	enum pin_config_param param;
-+	unsigned int i, offset, arg;
-+	int ret;
-+
-+	for (i = 0; i < num_configs; i++) {
-+		param = pinconf_to_config_param(configs[i]);
-+		arg = pinconf_to_config_argument(configs[i]);
-+		offset = mud_pin_config_param_table[param];
-+
-+		ret = mud_pinctrl_pin_write_reg(pctl, pin, offset, arg);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
++	return container_of(cell, struct f_mud_pins_cell, cell);
 +}
 +
-+static const struct pinconf_ops mud_pinconf_ops = {
-+	.is_generic			= true,
-+	.pin_config_get			= mud_pinctrl_pinconf_get,
-+	.pin_config_set			= mud_pinctrl_pinconf_set,
-+	.pin_config_config_dbg_show	= pinconf_generic_dump_config,
-+};
-+
-+static int mud_pinctrl_get_groups_count(struct pinctrl_dev *pctldev)
++static irqreturn_t f_mud_pins_gpio_irq_thread(int irq, void *p)
 +{
-+	return 0;
-+}
++	struct f_mud_pins_pin *pin = p;
++	struct f_mud_pins_cell *pcell = pin->parent;
 +
-+static const char *mud_pinctrl_get_group_name(struct pinctrl_dev *pctldev,
-+					      unsigned int selector)
-+{
-+	return NULL;
-+}
++	spin_lock(&pcell->irq_status_lock);
++	set_bit(pin->index, pcell->irq_status);
++	spin_unlock(&pcell->irq_status_lock);
 +
-+static int mud_pinctrl_get_group_pins(struct pinctrl_dev *pctldev,
-+				      unsigned int selector,
-+				      const unsigned int **pins,
-+				      unsigned int *num_pins)
-+{
-+	return -ENOTSUPP;
-+}
++	fmdebug("%s(index=%u): irq_status=%*pb\n", __func__, pin->index,
++		pcell->count, pcell->irq_status);
 +
-+static void mud_pinctrl_pin_dbg_show(struct pinctrl_dev *pctldev,
-+				     struct seq_file *s, unsigned int offset)
-+{
-+	struct mud_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
-+	struct pinctrl_gpio_range *range;
-+	int dir, val;
-+
-+	range = pinctrl_find_gpio_range_from_pin_nolock(pctldev, offset);
-+	if (!range)
-+		return;
-+
-+	dir = mud_pinctrl_gpio_get_direction(&pctl->gpio_chip, offset);
-+	if (dir < 0)
-+		return;
-+
-+	val = mud_pinctrl_gpio_get(&pctl->gpio_chip, offset);
-+	if (val < 0)
-+		return;
-+
-+	seq_printf(s, "function gpio_%s %s", dir ? "in" : "out", val ? "hi" : "lo");
-+}
-+
-+static const struct pinctrl_ops mud_pinctrl_ops = {
-+	.get_groups_count	= mud_pinctrl_get_groups_count,
-+	.get_group_name		= mud_pinctrl_get_group_name,
-+	.get_group_pins		= mud_pinctrl_get_group_pins,
-+	.pin_dbg_show		= mud_pinctrl_pin_dbg_show,
-+	.dt_node_to_map		= pinconf_generic_dt_node_to_map_pin,
-+	.dt_free_map		= pinconf_generic_dt_free_map,
-+};
-+
-+static const struct pinctrl_desc mud_pinctrl_pinctrl_desc = {
-+	.owner		= THIS_MODULE,
-+	.name		= "mud-pins",
-+	.pctlops	= &mud_pinctrl_ops,
-+	.confops	= &mud_pinconf_ops,
-+};
-+
-+static void mud_pinctrl_irq_init_valid_mask(struct gpio_chip *gc,
-+					    unsigned long *valid_mask,
-+					    unsigned int ngpios)
-+{
-+	struct mud_pinctrl *pctl = gpiochip_get_data(gc);
-+	unsigned int i;
-+
-+	pdebug(1, "%s: valid_mask: %*pb\n", __func__, ngpios, valid_mask);
-+
-+	for (i = 0; i < ngpios; i++) {
-+		if (!pctl->pins[i].irq_types)
-+			clear_bit(i, valid_mask);
-+	}
-+
-+	pdebug(1, "%s: valid_mask: %*pb\n", __func__, ngpios, valid_mask);
-+}
-+
-+static void mud_pinctrl_irq_enable(struct irq_data *data)
-+{
-+	struct gpio_chip *gpio_chip = irq_data_get_irq_chip_data(data);
-+	struct mud_pinctrl *pctl = gpiochip_get_data(gpio_chip);
-+
-+	pdebug(2, "%s: hwirq=%lu\n", __func__, data->hwirq);
-+
-+	pctl->pins[data->hwirq].irq_enabled = true;
-+}
-+
-+static void mud_pinctrl_irq_disable(struct irq_data *data)
-+{
-+	struct gpio_chip *gpio_chip = irq_data_get_irq_chip_data(data);
-+	struct mud_pinctrl *pctl = gpiochip_get_data(gpio_chip);
-+
-+	pdebug(2, "%s: hwirq=%lu\n", __func__, data->hwirq);
-+
-+	pctl->pins[data->hwirq].irq_enabled = false;
-+}
-+
-+static int mud_pinctrl_irq_set_type(struct irq_data *data, unsigned int type)
-+{
-+	struct gpio_chip *gpio_chip = irq_data_get_irq_chip_data(data);
-+	struct mud_pinctrl *pctl = gpiochip_get_data(gpio_chip);
-+
-+	pdebug(1, "%s: hwirq=%lu, type=%u\n", __func__, data->hwirq, type);
-+
-+	if (type == IRQ_TYPE_NONE)
-+		return -EINVAL;
-+
-+	if ((pctl->pins[data->hwirq].irq_types & type) == type)
-+		pctl->pins[data->hwirq].irq_type = type;
-+
-+	return 0;
-+}
-+
-+static void mud_pinctrl_irq_bus_lock(struct irq_data *data)
-+{
-+	struct gpio_chip *gpio_chip = irq_data_get_irq_chip_data(data);
-+	struct mud_pinctrl *pctl = gpiochip_get_data(gpio_chip);
-+
-+	pdebug(3, "%s: hwirq=%lu\n", __func__, data->hwirq);
-+
-+	mutex_lock(&pctl->irqlock);
-+}
-+
-+static void mud_pinctrl_irq_bus_sync_unlock(struct irq_data *data)
-+{
-+	struct gpio_chip *gpio_chip = irq_data_get_irq_chip_data(data);
-+	struct mud_pinctrl *pctl = gpiochip_get_data(gpio_chip);
-+	unsigned int reg;
-+	u32 vals[2];
-+	int ret;
-+
-+	pdebug(3, "%s: hwirq=%lu: irq_enabled=%u irq_type=%u\n", __func__,
-+	       data->hwirq, pctl->pins[data->hwirq].irq_enabled,
-+	       pctl->pins[data->hwirq].irq_type);
-+
-+	switch (pctl->pins[data->hwirq].irq_type) {
-+	case IRQ_TYPE_EDGE_RISING:
-+		vals[0] = MUD_PIN_IRQ_TYPE_EDGE_RISING;
-+		break;
-+	case IRQ_TYPE_EDGE_FALLING:
-+		vals[0] = MUD_PIN_IRQ_TYPE_EDGE_FALLING;
-+		break;
-+	case IRQ_TYPE_EDGE_BOTH:
-+		vals[0] = MUD_PIN_IRQ_TYPE_EDGE_BOTH;
-+		break;
-+	default:
-+		vals[0] = MUD_PIN_IRQ_TYPE_NONE;
-+		break;
-+	};
-+
-+	vals[1] = pctl->pins[data->hwirq].irq_enabled;
-+	reg = mud_pinctrl_pin_reg(data->hwirq, MUD_PIN_IRQ_TYPE);
-+
-+	/* It's safe to use a stack allocated array because bulk_write does kmemdup */
-+	ret = regmap_bulk_write(pctl->regmap, reg, vals, 2);
-+	if (ret)
-+		dev_err_once(pctl->dev, "Failed to sync irq data, error=%d\n", ret);
-+
-+	mutex_unlock(&pctl->irqlock);
-+}
-+
-+static const struct irq_chip mud_pinctrl_irq_chip = {
-+	.name			= "mud-pins",
-+	.irq_enable		= mud_pinctrl_irq_enable,
-+	.irq_disable		= mud_pinctrl_irq_disable,
-+	.irq_set_type		= mud_pinctrl_irq_set_type,
-+	.irq_bus_lock		= mud_pinctrl_irq_bus_lock,
-+	.irq_bus_sync_unlock	= mud_pinctrl_irq_bus_sync_unlock,
-+};
-+
-+static irqreturn_t mud_pinctrl_irq_thread_fn(int irq, void *dev_id)
-+{
-+	struct mud_pinctrl *pctl = (struct mud_pinctrl *)dev_id;
-+	DECLARE_BITMAP(status, MUD_PINCTRL_MAX_NUM_PINS);
-+	struct gpio_chip *gc = &pctl->gpio_chip;
-+	unsigned long n;
-+	int ret;
-+
-+	ret = mud_pinctrl_read_bitmap(pctl, MUD_PINCTRL_REG_IRQ_STATUS,
-+				      status, gc->ngpio);
-+	if (ret)
-+		return IRQ_NONE;
-+
-+	pdebug(3, "%s: STATUS: %*pb\n", __func__, gc->ngpio, status);
-+
-+	for_each_set_bit(n, status, gc->ngpio) {
-+		unsigned int irq = irq_find_mapping(gc->irq.domain, n);
-+
-+		pdebug(2, "%s: IRQ on pin %lu irq=%u enabled=%u\n", __func__,
-+		       n, irq, pctl->pins[n].irq_enabled);
-+
-+		if (irq && pctl->pins[n].irq_enabled)
-+			handle_nested_irq(irq);
-+	}
++	f_mud_irq(pcell->ldev->cell);
 +
 +	return IRQ_HANDLED;
 +}
 +
-+static const struct regmap_config mud_pinctrl_regmap_config = {
-+	.reg_bits = 32,
-+	.val_bits = 32,
-+	/* FIXME: Setup caching? */
-+	.cache_type = REGCACHE_NONE,
-+};
-+
-+static int mud_pinctrl_probe(struct platform_device *pdev)
++static int f_mud_pins_gpio_irq_request(struct f_mud_pins_cell *pcell, unsigned int index)
 +{
-+	struct device *dev = &pdev->dev;
-+	struct mud_cell_pdata *pdata = dev_get_platdata(dev);
-+	struct pinctrl_pin_desc *pdesc;
-+	struct mud_pinctrl *pctl;
-+	struct regmap *regmap;
-+	unsigned int i, reg, npins;
-+	const char **names;
++	struct f_mud_pins_pin *pin = &pcell->pins[index];
 +	int ret, irq;
 +
-+	pdebug(1, "%s: dev->of_node=%px\n", __func__, dev->of_node);
++	fmdebug("%s(index=%u)\n", __func__, index);
 +
-+	pctl = devm_kzalloc(dev, sizeof(*pctl), GFP_KERNEL);
-+	if (!pctl)
-+		return -ENOMEM;
++	if (pin->irq)
++		return 0;
 +
-+	pctl->dev = dev;
-+
-+	mutex_init(&pctl->irqlock);
-+
-+	regmap = devm_regmap_init_usb(dev, pdata->interface, pdata->index,
-+				      &mud_pinctrl_regmap_config);
-+	if (IS_ERR(regmap))
-+		return PTR_ERR(regmap);
-+
-+	pctl->regmap = regmap;
-+
-+	ret = regmap_read(regmap, MUD_PINCTRL_REG_NUM_PINS, &npins);
-+	if (ret) {
-+		dev_err(pctl->dev, "Failed to read from device\n");
-+		return ret;
-+	}
-+	if (!npins || npins > MUD_PINCTRL_MAX_NUM_PINS)
++	if (!pin->gpio || !pin->irqflags)
 +		return -EINVAL;
 +
-+	pctl->pins = devm_kcalloc(dev, npins, sizeof(*pctl->pins), GFP_KERNEL);
-+	if (!pctl->pins)
-+		return -ENOMEM;
++	ret = gpiod_get_direction(pin->gpio);
++	if (ret < 0)
++		return ret;
++	if (ret != 1)
++		return -EINVAL;
 +
-+	pdesc = devm_kcalloc(dev, npins, sizeof(*pdesc), GFP_KERNEL);
-+	if (!pdesc)
-+		return -ENOMEM;
++	irq = gpiod_to_irq(pin->gpio);
++	fmdebug("    irq=%d\n", irq);
++	if (irq <= 0)
++		return -ENODEV;
 +
-+	pctl->pctl_desc = mud_pinctrl_pinctrl_desc;
-+	pctl->pctl_desc.pins = pdesc;
-+	pctl->pctl_desc.npins = npins;
++	ret = request_threaded_irq(irq, NULL, f_mud_pins_gpio_irq_thread,
++				   pin->irqflags | IRQF_ONESHOT,
++				   dev_name(&pcell->ldev->dev), pin);
++	if (ret)
++		return ret;
 +
-+	for (i = 0; i < npins; i++, pdesc++) {
-+		char *name;
++	pin->irq = irq;
 +
-+		name = devm_kmalloc(dev, MUD_PIN_NAME_LEN, GFP_KERNEL);
-+		if (!name)
-+			return -ENOMEM;
++	return 0;
++}
 +
-+		pdesc->number = i;
-+		pdesc->name = name;
-+		reg = mud_pinctrl_pin_reg(i, MUD_PIN_NAME);
-+		ret = regmap_raw_read(regmap, reg, name, MUD_PIN_NAME_LEN);
-+		if (ret) {
-+			dev_err(pctl->dev, "Failed to read name for pin %u\n", i);
-+			return ret;
-+		}
-+		if (!name[0] || name[MUD_PIN_NAME_LEN - 1]) {
-+			dev_err(pctl->dev, "Illegal name for pin %u\n", i);
-+			return -EINVAL;
-+		}
++static void f_mud_pins_gpio_irq_free(struct f_mud_pins_cell *pcell, unsigned int index)
++{
++	struct f_mud_pins_pin *pin = &pcell->pins[index];
++
++	fmdebug("%s(index=%u): irq=%d\n", __func__, index, pin->irq);
++
++	if (pin->irq) {
++		free_irq(pin->irq, pin);
++		pin->irq = 0;
++	}
++}
++
++static void f_mud_pins_gpio_irq_free_all(struct f_mud_pins_cell *pcell)
++{
++	unsigned int i;
++
++	for (i = 0; i < pcell->count; i++)
++		f_mud_pins_gpio_irq_free(pcell, i);
++}
++
++static int f_mud_pins_gpio_irq_type(struct f_mud_pins_cell *pcell, unsigned int index,
++				    unsigned int val)
++{
++	struct f_mud_pins_pin *pin = &pcell->pins[index];
++
++	fmdebug("%s(index=%u, val=%u)\n", __func__, index, val);
++
++	switch (val) {
++	case MUD_PIN_IRQ_TYPE_EDGE_RISING:
++		pin->irqflags = IRQF_TRIGGER_RISING;
++		break;
++	case MUD_PIN_IRQ_TYPE_EDGE_FALLING:
++		pin->irqflags = IRQF_TRIGGER_FALLING;
++		break;
++	case MUD_PIN_IRQ_TYPE_EDGE_BOTH:
++		pin->irqflags = IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING;
++		break;
++	case MUD_PIN_IRQ_TYPE_NONE:
++		pin->irqflags = IRQF_TRIGGER_NONE;
++		break;
++	default:
++		return -EINVAL;
++	};
++
++	return 0;
++}
++
++static void f_mud_pins_gpio_free(struct f_mud_pins_cell *pcell, unsigned int index)
++{
++	struct f_mud_pins_pin *pin = &pcell->pins[index];
++
++	fmdebug("%s(index=%u): gpio=%d, config_requested=%u\n", __func__, index,
++		pin->gpio ? desc_to_gpio(pin->gpio) : -1, pin->config_requested);
++
++	if (pin->config_requested)
++		return;
++
++	if (pin->gpio)
++		gpiod_put(pin->gpio);
++	pin->gpio = NULL;
++}
++
++/* When flags change re-request the gpio to enable the settings */
++static int f_mud_pins_gpio_request_do(struct f_mud_pins_cell *pcell, unsigned int index,
++				      bool config, unsigned int debounce)
++{
++	struct f_mud_pins_pin *pin = &pcell->pins[index];
++	struct gpio_desc *gpio;
++	int ret;
++
++	fmdebug("%s(index=%u): lflags=%lu dflags=%lu\n", __func__, index,
++		pcell->ldev->lookup->table[index].flags, pin->dflags);
++
++	if (!pcell->pins[index].gpio && config)
++		pin->config_requested = true;
++
++	if (pcell->pins[index].gpio) {
++		gpiod_put(pcell->pins[index].gpio);
++		pcell->pins[index].gpio = NULL;
 +	}
 +
-+	ret = devm_pinctrl_register_and_init(dev, &pctl->pctl_desc,
-+					     pctl, &pctl->pctl_dev);
-+	if (ret) {
-+		dev_err(pctl->dev, "pinctrl registration failed\n");
++	gpio = gpiod_get_index(&pcell->ldev->dev, NULL, index, pin->dflags);
++	if (IS_ERR(gpio)) {
++		ret = PTR_ERR(gpio);
++		fmdebug("failed to get gpio %u: ret=%d\n", index, ret);
 +		return ret;
 +	}
++	pin->gpio = gpio;
++	fmdebug("    gpios[%u]: gpionr %d\n", index, desc_to_gpio(gpio));
 +
-+	ret = pinctrl_enable(pctl->pctl_dev);
-+	if (ret) {
-+		dev_err(pctl->dev, "pinctrl enable failed\n");
-+		return ret;
-+	}
++	/* Debounce can be set through pinconf so it must be stored */
++	if (debounce == DEBOUNCE_NOT_SET)
++		debounce = pin->debounce;
 +
-+	irq = platform_get_irq_optional(pdev, 0);
-+	pdebug(1, "%s: irq=%d\n", __func__, irq);
-+	if (irq > 0) {
-+		bool use_irq = false;
-+
-+		for (i = 0; i < npins; i++) {
-+			reg = mud_pinctrl_pin_reg(i, MUD_PIN_IRQ_TYPES);
-+			ret = regmap_read(regmap, reg, &pctl->pins[i].irq_types);
-+			if (ret) {
-+				dev_err(dev, "Failed to read irq type for pin %u\n", i);
-+				return ret;
-+			}
-+			pdebug(1, "%s: pctl->pins[%u].irq_types=%u\n", __func__,
-+			       i, pctl->pins[i].irq_types);
-+			if (pctl->pins[i].irq_types)
-+				use_irq = true;
-+		}
-+
-+		if (!use_irq)
-+			irq = 0;
-+	} else {
-+		irq = 0;
-+	}
-+
-+	pctl->gpio_chip = mud_pinctrl_gpio_chip;
-+	pctl->gpio_chip.parent = dev;
-+	pctl->gpio_chip.ngpio = npins;
-+	if (irq)
-+		pctl->gpio_chip.irq.init_valid_mask = mud_pinctrl_irq_init_valid_mask;
-+
-+	names = devm_kcalloc(dev, npins, sizeof(*names), GFP_KERNEL);
-+	if (!names)
-+		return -ENOMEM;
-+
-+	pctl->gpio_chip.names = names;
-+
-+	for (i = 0; i < npins; i++)
-+		names[i] = pctl->pctl_desc.pins[i].name;
-+
-+	ret = devm_gpiochip_add_data(dev, &pctl->gpio_chip, pctl);
-+	if (ret) {
-+		dev_err(dev, "Could not register gpiochip, %d\n", ret);
-+		return ret;
-+	}
-+
-+	if (irq) {
-+		pctl->irq_chip = mud_pinctrl_irq_chip;
-+		ret = gpiochip_irqchip_add_nested(&pctl->gpio_chip, &pctl->irq_chip,
-+						  0, handle_bad_irq, IRQ_TYPE_NONE);
-+		if (ret) {
-+			dev_err(dev, "Cannot add irqchip to gpiochip\n");
++	if (debounce != DEBOUNCE_NOT_SET) {
++		ret = gpiod_set_debounce(pin->gpio, debounce);
++		if (ret)
 +			return ret;
-+		}
 +
-+		ret = devm_request_threaded_irq(dev, irq, NULL,
-+						mud_pinctrl_irq_thread_fn,
-+						IRQF_ONESHOT, "mud-pins", pctl);
-+		if (ret) {
-+			dev_err(dev, "Cannot request irq%d\n", irq);
-+			return ret;
-+		}
++		pin->debounce = debounce ? debounce : DEBOUNCE_NOT_SET;
 +	}
 +
 +	return 0;
 +}
 +
-+static const struct of_device_id mud_pinctrl_of_match[] = {
-+	{ .compatible = "mud-pins", },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, mud_pinctrl_of_match);
++static int f_mud_pins_gpio_request_debounce(struct f_mud_pins_cell *pcell,
++					    unsigned int index, unsigned int debounce)
++{
++	struct f_mud_pins_pin *pin = &pcell->pins[index];
 +
-+static const struct platform_device_id mud_pinctrl_id_table[] = {
-+	{ "mud-pins", },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(platform, mud_pinctrl_id_table);
++	if (pin->debounce == debounce)
++		return 0;
 +
-+static struct platform_driver mud_pinctrl_driver = {
-+	.driver = {
-+		.name = "mud-pins",
-+		.of_match_table = mud_pinctrl_of_match,
-+	},
-+	.probe = mud_pinctrl_probe,
-+	.id_table = mud_pinctrl_id_table,
++	return f_mud_pins_gpio_request_do(pcell, index, true, debounce);
++}
++
++static int f_mud_pins_gpio_request_dflag(struct f_mud_pins_cell *pcell, unsigned int index,
++					 enum gpiod_flags dflag, bool dval, bool config)
++{
++	struct f_mud_pins_pin *pin = &pcell->pins[index];
++	bool curr_dflag = pin->dflags & dflag;
++	bool changed = false;
++
++	fmdebug("%s(index=%u): dflag=%u dval=%u\n", __func__, index, dflag, dval);
++
++	if (curr_dflag != dval) {
++		if (dval)
++			pin->dflags |= dflag;
++		else
++			pin->dflags &= ~dflag;
++		changed = true;
++	}
++
++	if (pin->gpio && !changed)
++		return 0;
++
++	return f_mud_pins_gpio_request_do(pcell, index, config, DEBOUNCE_NOT_SET);
++}
++
++static int f_mud_pins_gpio_request_lflag(struct f_mud_pins_cell *pcell, unsigned int index,
++					 enum gpio_lookup_flags lflag, bool lval,
++					 bool config)
++{
++	struct gpiod_lookup *lentry = &pcell->ldev->lookup->table[index];
++	struct f_mud_pins_pin *pin = &pcell->pins[index];
++	bool curr_lflag = lentry->flags & lflag;
++	bool changed = false;
++
++	fmdebug("%s(index=%u): lflag=%u lval=%u\n", __func__, index, lflag, lval);
++
++	if (curr_lflag != lval) {
++		if (lval)
++			lentry->flags |= lflag;
++		else
++			lentry->flags &= ~lflag;
++		changed = true;
++	}
++
++	if (pin->gpio && !changed)
++		return 0;
++
++	return f_mud_pins_gpio_request_do(pcell, index, config, DEBOUNCE_NOT_SET);
++}
++
++static int f_mud_pins_write_gpio_config(struct f_mud_pins_cell *pcell, unsigned int index,
++					unsigned int offset, unsigned int val)
++{
++	struct f_mud_pins_pin *pin;
++	int ret = -ENOTSUPP;
++
++	fmdebug("%s(index=%u, offset=0x%02x, val=%u)\n", __func__, index, offset, val);
++
++	pin = &pcell->pins[index];
++
++	switch (offset) {
++	case MUD_PIN_CONFIG_BIAS_PULL_DOWN:
++		if (!val)
++			return -ENOTSUPP;
++		ret = f_mud_pins_gpio_request_lflag(pcell, index, GPIO_PULL_DOWN, val, true);
++		break;
++	case MUD_PIN_CONFIG_BIAS_PULL_UP:
++		if (!val)
++			return -ENOTSUPP;
++		ret = f_mud_pins_gpio_request_lflag(pcell, index, GPIO_PULL_UP, val, true);
++		break;
++	case MUD_PIN_CONFIG_DRIVE_OPEN_DRAIN:
++		ret = f_mud_pins_gpio_request_lflag(pcell, index, GPIO_OPEN_DRAIN, 1, true);
++		break;
++	case MUD_PIN_CONFIG_DRIVE_OPEN_SOURCE:
++		ret = f_mud_pins_gpio_request_lflag(pcell, index, GPIO_OPEN_SOURCE, 1, true);
++		break;
++	case MUD_PIN_CONFIG_DRIVE_PUSH_PULL:
++		ret = f_mud_pins_gpio_request_dflag(pcell, index, GPIOD_IN, 0, true);
++		break;
++	case MUD_PIN_CONFIG_INPUT_DEBOUNCE:
++		ret = f_mud_pins_gpio_request_debounce(pcell, index, val);
++		break;
++	case MUD_PIN_CONFIG_INPUT_ENABLE:
++		ret = f_mud_pins_gpio_request_dflag(pcell, index, GPIOD_IN, val, true);
++		break;
++	case MUD_PIN_CONFIG_OUTPUT:
++		val = val ? GPIOD_OUT_HIGH : GPIOD_OUT_LOW;
++		ret = f_mud_pins_gpio_request_dflag(pcell, index, val, 1, true);
++		break;
++	case MUD_PIN_CONFIG_PERSIST_STATE:
++		ret = f_mud_pins_gpio_request_lflag(pcell, index, GPIO_TRANSITORY, val, true);
++		break;
++	}
++
++	return ret;
++}
++
++static int f_mud_pins_write_gpio(struct f_mud_pins_cell *pcell, unsigned int regnr,
++				 const void *buf, size_t len)
++{
++	unsigned int regbase = regnr - MUD_PINCTRL_REG_PIN_BASE;
++	unsigned int offset = regbase % MUD_PINCTRL_PIN_BLOCK_SIZE;
++	unsigned int index = regbase / MUD_PINCTRL_PIN_BLOCK_SIZE;
++	size_t count = len / sizeof(u32);
++	struct f_mud_pins_pin *pin;
++	const __le32 *buf32 = buf;
++	u32 val;
++	int ret;
++
++	fmdebug("%s(len=%zu): offset=0x%02x index=%u\n", __func__, len, offset, index);
++
++	if (index >= pcell->count) {
++		fmdebug("%s: gpio index out of bounds: %u\n", __func__, index);
++		return -EINVAL;
++	}
++
++	while (count--) {
++		pin = &pcell->pins[index];
++		val = le32_to_cpup(buf32++);
++		ret = 0;
++
++		switch (offset++) {
++		case MUD_PIN_CONFIG_BIAS_BUS_HOLD ... MUD_PIN_CONFIG_END:
++			return f_mud_pins_write_gpio_config(pcell, index, offset - 1, val);
++
++		case MUD_PIN_GPIO_REQUEST:
++			if (val != 1)
++				return -EINVAL;
++			/* Persistence is the default so set it from the start */
++			ret = f_mud_pins_gpio_request_lflag(pcell, index, GPIO_TRANSITORY,
++							    0, false);
++			break;
++		case MUD_PIN_GPIO_FREE:
++			if (val != 1)
++				return -EINVAL;
++			f_mud_pins_gpio_free(pcell, index);
++			break;
++
++		case MUD_PIN_DIRECTION:
++			if (!pin)
++				return -EINVAL;
++
++			if (val == MUD_PIN_DIRECTION_INPUT) {
++				ret = gpiod_direction_input(pin->gpio);
++			} else {
++				int value = !!(val & MUD_PIN_DIRECTION_OUTPUT_HIGH);
++
++				ret = gpiod_direction_output(pin->gpio, value);
++			}
++			break;
++		case MUD_PIN_LEVEL:
++			if (pin)
++				gpiod_set_value_cansleep(pin->gpio, val);
++			break;
++		case MUD_PIN_IRQ_TYPE:
++			ret = f_mud_pins_gpio_irq_type(pcell, index, val);
++			break;
++		case MUD_PIN_IRQ_ENABLED:
++			if (val)
++				ret = f_mud_pins_gpio_irq_request(pcell, index);
++			else
++				f_mud_pins_gpio_irq_free(pcell, index);
++			break;
++		default:
++			pr_err("%s: unknown register: 0x%x\n", __func__, regnr);
++			return -EINVAL;
++		}
++
++		if (ret < 0)
++			return ret;
++	}
++
++	return 0;
++}
++
++static int f_mud_pins_writereg(struct f_mud_cell *cell, unsigned int regnr,
++			       const void *buf, size_t len, u8 compression)
++{
++	struct f_mud_pins_cell *pcell = cell_to_pcell(cell);
++
++	fmdebug("%s(regnr=0x%02x, len=%zu)\n", __func__, regnr, len);
++
++	if (regnr >= MUD_PINCTRL_REG_PIN_BASE)
++		return f_mud_pins_write_gpio(pcell, regnr, buf, len);
++
++	return -EINVAL;
++}
++
++static int f_mud_pins_read_gpio(struct f_mud_pins_cell *pcell, unsigned int regnr,
++				void *buf, size_t len)
++{
++	unsigned int regbase = regnr - MUD_PINCTRL_REG_PIN_BASE;
++	unsigned int offset = regbase % MUD_PINCTRL_PIN_BLOCK_SIZE;
++	unsigned int index = regbase / MUD_PINCTRL_PIN_BLOCK_SIZE;
++	size_t count = len / sizeof(u32);
++	struct f_mud_pins_pin *pin;
++	struct gpio_desc *gpio;
++	__le32 *buf32 = buf;
++	u32 val;
++	int ret;
++
++	fmdebug("%s(len=%zu): offset=0x%02x index=%u\n", __func__, len, offset, index);
++
++	if (index >= pcell->count) {
++		fmdebug("%s: gpio index out of bounds: %u\n", __func__, index);
++		return -EINVAL;
++	}
++
++	if (offset >= MUD_PIN_NAME && (offset + count - 1) <= MUD_PIN_NAME_END) {
++		size_t start = (offset - MUD_PIN_NAME) * sizeof(u32);
++		char name[MUD_PIN_NAME_LEN];
++
++		strscpy_pad(name, pcell->ldev->names[index], MUD_PIN_NAME_LEN);
++		fmdebug("    name=%*ph\n", MUD_PIN_NAME_LEN, name);
++		memcpy(buf, name + start, len);
++
++		return 0;
++	}
++
++	pin = &pcell->pins[index];
++
++	while (count--) {
++		switch (offset++) {
++		case MUD_PIN_DIRECTION:
++			/*
++			 * Host side gpiochip_add_data_with_key() calls ->get_direction
++			 * without requesting the gpio first.
++			 */
++			gpio = pin->gpio;
++			if (!gpio) {
++				/* non gpio pins will fail here, but that's fine */
++				ret = f_mud_pins_gpio_request_lflag(pcell, index,
++								    0, 0, false);
++				if (ret)
++					return ret;
++			}
++			ret = gpiod_get_direction(pin->gpio);
++			if (!gpio)
++				f_mud_pins_gpio_free(pcell, index);
++			if (ret < 0)
++				return ret;
++			val = ret ? MUD_PIN_DIRECTION_INPUT : MUD_PIN_DIRECTION_OUTPUT;
++			break;
++		case MUD_PIN_LEVEL:
++			if (!pin->gpio)
++				return -EINVAL;
++			ret = gpiod_get_value_cansleep(pin->gpio);
++			if (ret < 0)
++				return ret;
++			val = ret;
++			break;
++		case MUD_PIN_IRQ_TYPES:
++			/* FIXME: Is it possible to get this info somewhere? */
++			val = MUD_PIN_IRQ_TYPE_EDGE_BOTH;
++			break;
++		default:
++			pr_err("%s: unknown register: 0x%x\n", __func__, regnr);
++			return -EINVAL;
++		}
++
++		*(buf32++) = cpu_to_le32(val);
++	}
++
++	return 0;
++}
++
++static int f_mud_pins_readreg(struct f_mud_cell *cell, unsigned int regnr,
++			      void *buf, size_t *len, u8 compression)
++{
++	struct f_mud_pins_cell *pcell = cell_to_pcell(cell);
++	size_t count = *len / sizeof(u32);
++	__le32 *buf32 = buf;
++
++	fmdebug("%s(regnr=0x%02x, len=%zu)\n", __func__, regnr, *len);
++
++	if (regnr >= MUD_PINCTRL_REG_PIN_BASE)
++		return f_mud_pins_read_gpio(pcell, regnr, buf, *len);
++
++	if (regnr >= MUD_PINCTRL_REG_IRQ_STATUS &&
++	    regnr <= MUD_PINCTRL_REG_IRQ_STATUS_END) {
++		unsigned int nregs = DIV_ROUND_UP(pcell->count, sizeof(u32));
++		unsigned int offset = regnr - MUD_PINCTRL_REG_IRQ_STATUS;
++		unsigned int i, end = min_t(unsigned int, count, nregs);
++		u32 irqvals[MUD_PINCTRL_MAX_NUM_PINS / sizeof(u32)];
++
++		if (count > (nregs - offset))
++			return -EINVAL;
++
++		bitmap_to_arr32(irqvals, pcell->irq_status, pcell->count);
++
++		fmdebug("    irq_status=%*pb  irqvals=%*ph\n", pcell->count,
++			pcell->irq_status, nregs, irqvals);
++
++		for (i = offset; i < end; i++)
++			*buf32++ = cpu_to_le32(irqvals[i]);
++
++		return 0;
++	}
++
++	if (regnr == MUD_PINCTRL_REG_NUM_PINS && count == 1) {
++		*buf32 = cpu_to_le32(pcell->count);
++		return 0;
++	}
++
++	fmdebug("%s: unknown register 0x%x\n", __func__, regnr);
++
++	return -EINVAL;
++}
++
++static void f_mud_pins_disable(struct f_mud_cell *cell)
++{
++	struct f_mud_pins_cell *pcell = cell_to_pcell(cell);
++
++	f_mud_pins_gpio_irq_free_all(pcell);
++	/*
++	 * FIXME: Free requested gpios as well?
++	 *        Or should they survive on unplug on a powered board?
++	 */
++}
++
++static void f_mud_pins_lookup_device_release(struct device *dev)
++{
++	struct f_mud_pins_lookup_device *ldev =
++				container_of(dev, struct f_mud_pins_lookup_device, dev);
++
++	fmdebug("%s: ldev=%px\n", __func__, ldev);
++
++	if (ldev->lookup) {
++		struct gpiod_lookup *p;
++
++		if (ldev->lookup->dev_id)
++			gpiod_remove_lookup_table(ldev->lookup);
++
++		for (p = &ldev->lookup->table[0]; p->chip_label; p++)
++			kfree(p->chip_label);
++		kfree(ldev->lookup);
++	}
++
++	if (ldev->names) {
++		unsigned int i;
++
++		for (i = 0; i < ldev->count; i++)
++			kfree(ldev->names[i]);
++		kfree(ldev->names);
++	}
++
++	ida_free(&f_mud_pins_ida, ldev->id);
++	kfree(ldev);
++}
++
++static int f_mud_pins_looup_device_create(struct f_mud_pins_cell *pcell)
++{
++	struct f_mud_pins_lookup_device *ldev;
++	struct f_mud_pins_cell_item *fitem;
++	unsigned int max_index = 0;
++	int ret;
++
++	fmdebug("%s: %px\n", __func__, pcell);
++
++	ldev = kzalloc(sizeof(*ldev), GFP_KERNEL);
++	if (!ldev)
++		return -ENOMEM;
++
++	fmdebug("%s: ldev=%px\n", __func__, ldev);
++
++	ldev->id = ida_alloc(&f_mud_pins_ida, GFP_KERNEL);
++	if (ldev->id < 0) {
++		kfree(ldev);
++		return ldev->id;
++	}
++
++	ldev->cell = &pcell->cell;
++	ldev->dev.release = f_mud_pins_lookup_device_release;
++	dev_set_name(&ldev->dev, "f_mud_pins-%d", ldev->id);
++
++	ret = device_register(&ldev->dev);
++	if (ret) {
++		put_device(&ldev->dev);
++		return ret;
++	}
++
++	mutex_lock(&pcell->lock);
++
++	list_for_each_entry(fitem, &pcell->items, node) {
++		max_index = max(max_index, fitem->index);
++		ldev->count++;
++	}
++
++	if (!ldev->count) {
++		ret = -ENOENT;
++		goto out_unlock;
++	}
++
++	if (ldev->count != max_index + 1) {
++		pr_err("Pin indices are not continuous\n");
++		ret = -EINVAL;
++		goto out_unlock;
++	}
++
++	ldev->names = kcalloc(ldev->count, sizeof(*ldev->names), GFP_KERNEL);
++	ldev->lookup = kzalloc(struct_size(ldev->lookup, table, ldev->count + 1),
++			       GFP_KERNEL);
++	if (!ldev->lookup || !ldev->names) {
++		ret = -ENOMEM;
++		goto out_unlock;
++	}
++
++	ret = 0;
++	list_for_each_entry(fitem, &pcell->items, node) {
++		struct gpiod_lookup *entry = &ldev->lookup->table[fitem->index];
++
++		mutex_lock(&fitem->lock);
++
++		if (!fitem->name) {
++			pr_err("Missing name for pin %u\n", fitem->index);
++			ret = -EINVAL;
++			goto out_unlock_pin;
++		}
++
++		ldev->names[fitem->index] = kstrdup(fitem->name, GFP_KERNEL);
++		if (!ldev->names[fitem->index]) {
++			ret = -ENOMEM;
++			goto out_unlock_pin;
++		}
++
++		/* Skip adding to lookup if the pin has no gpio function */
++		if (!fitem->chip)
++			goto out_unlock_pin;
++
++		entry->idx = fitem->index;
++		entry->chip_hwnum = fitem->offset;
++
++		entry->chip_label = kstrdup(fitem->chip, GFP_KERNEL);
++		if (!entry->chip_label) {
++			ret = -ENOMEM;
++			goto out_unlock_pin;
++		}
++
++		fmdebug("    %u: chip=%s hwnum=%u name=%s\n", entry->idx,
++			entry->chip_label, entry->chip_hwnum, ldev->names[fitem->index]);
++out_unlock_pin:
++		mutex_unlock(&fitem->lock);
++		if (ret)
++			goto out_unlock;
++	}
++
++	ldev->lookup->dev_id = dev_name(&ldev->dev);
++	gpiod_add_lookup_table(ldev->lookup);
++
++	pcell->ldev = ldev;
++	pcell->count = ldev->count;
++
++out_unlock:
++	mutex_unlock(&pcell->lock);
++
++	if (ret)
++		device_unregister(&ldev->dev);
++
++	return ret;
++}
++
++static void f_mud_pins_lookup_device_destroy(struct f_mud_pins_cell *pcell)
++{
++	if (pcell->ldev) {
++		device_unregister(&pcell->ldev->dev);
++		pcell->ldev = NULL;
++	}
++}
++
++static int f_mud_pins_bind(struct f_mud_cell *cell)
++{
++	struct f_mud_pins_cell *pcell = cell_to_pcell(cell);
++	unsigned int i;
++	int ret;
++
++	fmdebug("%s: %px\n", __func__, pcell);
++
++	ret = f_mud_pins_looup_device_create(pcell);
++	if (ret)
++		return ret;
++
++	spin_lock_init(&pcell->irq_status_lock);
++	pcell->irq_status = bitmap_zalloc(pcell->count, GFP_KERNEL);
++	if (!pcell->irq_status) {
++		ret = -ENOMEM;
++		goto error_free;
++	}
++
++	pcell->pins = kcalloc(pcell->count, sizeof(*pcell->pins), GFP_KERNEL);
++	if (!pcell->pins) {
++		ret = -ENOMEM;
++		goto error_free;
++	}
++
++	for (i = 0; i < pcell->count; i++) {
++		struct f_mud_pins_pin *pin = &pcell->pins[i];
++
++		pin->parent = pcell;
++		pin->index = i;
++		pin->debounce = DEBOUNCE_NOT_SET;
++	}
++
++	return 0;
++
++error_free:
++	kfree(pcell->pins);
++	f_mud_pins_lookup_device_destroy(pcell);
++
++	return ret;
++}
++
++static void f_mud_pins_unbind(struct f_mud_cell *cell)
++{
++	struct f_mud_pins_cell *pcell = cell_to_pcell(cell);
++	unsigned int i;
++
++	fmdebug("%s:\n", __func__);
++
++	if (pcell->pins) {
++		for (i = 0; i < pcell->count; i++) {
++			if (pcell->pins[i].gpio) {
++				fmdebug("    gpiod_put: %u\n", i);
++				gpiod_put(pcell->pins[i].gpio);
++			}
++		}
++
++		kfree(pcell->pins);
++	}
++
++	bitmap_free(pcell->irq_status);
++
++	f_mud_pins_lookup_device_destroy(pcell);
++}
++
++static void f_mud_pins_cell_item_item_release(struct config_item *item)
++{
++	struct f_mud_pins_cell_item *fitem = ci_to_f_mud_pins_cell_item(item);
++
++	fmdebug("%s: fitem=%px\n", __func__, fitem);
++
++	kfree(fitem->name);
++	kfree(fitem->chip);
++	kfree(fitem);
++}
++
++F_MUD_OPT_STR(f_mud_pins_cell_item, name);
++F_MUD_OPT_STR(f_mud_pins_cell_item, chip);
++F_MUD_OPT_INT(f_mud_pins_cell_item, offset, 0, INT_MAX);
++
++static struct configfs_attribute *f_mud_pins_cell_item_attrs[] = {
++	&f_mud_pins_cell_item_attr_name,
++	&f_mud_pins_cell_item_attr_chip,
++	&f_mud_pins_cell_item_attr_offset,
++	NULL,
 +};
 +
-+module_platform_driver(mud_pinctrl_driver);
++static struct configfs_item_operations f_mud_pins_cell_item_item_ops = {
++	.release = f_mud_pins_cell_item_item_release,
++};
++
++static const struct config_item_type f_mud_pins_cell_item_func_type = {
++	.ct_item_ops	= &f_mud_pins_cell_item_item_ops,
++	.ct_attrs	= f_mud_pins_cell_item_attrs,
++	.ct_owner	= THIS_MODULE,
++};
++
++static struct config_group *f_mud_pins_make_group(struct config_group *group,
++						  const char *name)
++{
++	struct f_mud_pins_cell *pcell = ci_to_f_mud_pins_cell(&group->cg_item);
++	struct f_mud_pins_cell_item *fitem;
++	const char *prefix = "pin.";
++	struct config_group *grp;
++	int ret, index;
++
++	fmdebug("%s: name=%s\n", __func__, name);
++
++	mutex_lock(&pcell->lock);
++	fmdebug("%s: pcell=%px pcell->refcnt=%d\n", __func__, pcell, pcell->refcnt);
++	if (pcell->refcnt) {
++		grp = ERR_PTR(-EBUSY);
++		goto out_unlock;
++	}
++
++	if (strstr(name, prefix) != name) {
++		pr_err("Missing prefix '%s' in name: '%s'\n", prefix, name);
++		grp = ERR_PTR(-EINVAL);
++		goto out_unlock;
++	}
++
++	ret = kstrtoint(name + strlen(prefix), 10, &index);
++	if (ret) {
++		pr_err("Failed to parse index in name: '%s'\n", name);
++		grp = ERR_PTR(ret);
++		goto out_unlock;
++	}
++
++	fitem = kzalloc(sizeof(*fitem), GFP_KERNEL);
++	fmdebug("    pin=%px\n", fitem);
++	if (!fitem) {
++		grp = ERR_PTR(-ENOMEM);
++		goto out_unlock;
++	}
++
++	fitem->index = index;
++	grp = &fitem->group;
++
++	config_group_init_type_name(grp, "", &f_mud_pins_cell_item_func_type);
++
++	list_add(&fitem->node, &pcell->items);
++out_unlock:
++	mutex_unlock(&pcell->lock);
++
++	return grp;
++}
++
++static void f_mud_pins_drop_item(struct config_group *group, struct config_item *item)
++{
++	struct f_mud_pins_cell *pcell = ci_to_f_mud_pins_cell(&group->cg_item);
++	struct f_mud_pins_cell_item *fitem = ci_to_f_mud_pins_cell_item(item);
++
++	fmdebug("%s: pcell=%px fitem=%px\n", __func__, pcell, fitem);
++
++	mutex_lock(&pcell->lock);
++	list_del(&fitem->node);
++	mutex_unlock(&pcell->lock);
++
++	config_item_put(item);
++}
++
++static struct configfs_group_operations f_mud_pins_group_ops = {
++	.make_group	= f_mud_pins_make_group,
++	.drop_item	= f_mud_pins_drop_item,
++};
++
++static struct configfs_item_operations f_mud_pins_item_ops = {
++	.release = f_mud_cell_item_release,
++};
++
++static const struct config_item_type f_mud_pins_func_type = {
++	.ct_item_ops	= &f_mud_pins_item_ops,
++	.ct_group_ops	= &f_mud_pins_group_ops,
++	.ct_owner	= THIS_MODULE,
++};
++
++static void f_mud_pins_free(struct f_mud_cell *cell)
++{
++	struct f_mud_pins_cell *pcell = container_of(cell, struct f_mud_pins_cell, cell);
++
++	fmdebug("%s: pcell=%px\n", __func__, pcell);
++
++	mutex_destroy(&pcell->lock);
++	kfree(pcell);
++}
++
++static struct f_mud_cell *f_mud_pins_alloc(void)
++{
++	struct f_mud_pins_cell *pcell;
++
++	pcell = kzalloc(sizeof(*pcell), GFP_KERNEL);
++	fmdebug("%s: pcell=%px\n", __func__, pcell);
++	if (!pcell)
++		return ERR_PTR(-ENOMEM);
++
++	mutex_init(&pcell->lock);
++	INIT_LIST_HEAD(&pcell->items);
++	config_group_init_type_name(&pcell->cell.group, "", &f_mud_pins_func_type);
++
++	fmdebug("%s: cell=%px\n", __func__, &pcell->cell);
++
++	return &pcell->cell;
++}
++
++static const struct f_mud_cell_ops f_mud_pins_ops = {
++	.name = "mud-pins",
++	.owner = THIS_MODULE,
++
++	.interrupt_interval_ms = 100,
++
++	.alloc = f_mud_pins_alloc,
++	.free = f_mud_pins_free,
++	.bind = f_mud_pins_bind,
++	.unbind = f_mud_pins_unbind,
++
++	.regval_bytes = 4,
++	.max_transfer_size = 64,
++
++	.disable = f_mud_pins_disable,
++	.readreg = f_mud_pins_readreg,
++	.writereg = f_mud_pins_writereg,
++};
++
++DECLARE_F_MUD_CELL_INIT(f_mud_pins_ops);
 +
 +MODULE_AUTHOR("Noralf Trønnes");
-+MODULE_DESCRIPTION("Pin control interface for Multifunction USB Device");
 +MODULE_LICENSE("GPL");
-diff --git a/drivers/pinctrl/pinctrl-mud.h b/drivers/pinctrl/pinctrl-mud.h
-new file mode 100644
-index 000000000000..f4839da46bda
---- /dev/null
-+++ b/drivers/pinctrl/pinctrl-mud.h
-@@ -0,0 +1,89 @@
-+/* SPDX-License-Identifier: MIT */
-+/*
-+ * Copyright 2020 Noralf Trønnes
-+ */
-+
-+#ifndef __LINUX_PINCTRL_MUD_H
-+#define __LINUX_PINCTRL_MUD_H
-+
-+#define MUD_PINCTRL_MAX_NUM_PINS		512
-+
-+#define MUD_PINCTRL_REG_NUM_PINS		0x0000
-+
-+#define MUD_PINCTRL_REG_IRQ_STATUS		0x0020
-+#define MUD_PINCTRL_REG_IRQ_STATUS_END		0x002f
-+
-+#define MUD_PINCTRL_REG_PIN_BASE		0x0100
-+#define MUD_PINCTRL_PIN_BLOCK_SIZE		256
-+
-+  /*
-+   * The following are offsets into the pin register block.
-+   *
-+   * The first part is identical to enum pin_config_param except for:
-+   * - No room for custom configurations.
-+   *
-+   * See the enum declaration docs in include/linux/pinctrl/pinconf-generic.h
-+   * for details about behaviour and arguments.
-+   *
-+   * Device should return -ENOTSUPP if the config is not supported.
-+   */
-+  #define MUD_PIN_CONFIG_BIAS_BUS_HOLD		0x00
-+  #define MUD_PIN_CONFIG_BIAS_DISABLE		0x01
-+  #define MUD_PIN_CONFIG_BIAS_HIGH_IMPEDANCE	0x02
-+  #define MUD_PIN_CONFIG_BIAS_PULL_DOWN		0x03
-+  #define MUD_PIN_CONFIG_BIAS_PULL_PIN_DEFAULT	0x04
-+  #define MUD_PIN_CONFIG_BIAS_PULL_UP		0x05
-+  #define MUD_PIN_CONFIG_DRIVE_OPEN_DRAIN	0x06
-+  #define MUD_PIN_CONFIG_DRIVE_OPEN_SOURCE	0x07
-+  #define MUD_PIN_CONFIG_DRIVE_PUSH_PULL	0x08
-+  #define MUD_PIN_CONFIG_DRIVE_STRENGTH		0x09
-+  #define MUD_PIN_CONFIG_DRIVE_STRENGTH_UA	0x0a
-+  #define MUD_PIN_CONFIG_INPUT_DEBOUNCE		0x0b
-+  #define MUD_PIN_CONFIG_INPUT_ENABLE		0x0c
-+  #define MUD_PIN_CONFIG_INPUT_SCHMITT		0x0d
-+  #define MUD_PIN_CONFIG_INPUT_SCHMITT_ENABLE	0x0e
-+  #define MUD_PIN_CONFIG_LOW_POWER_MODE		0x0f
-+  #define MUD_PIN_CONFIG_OUTPUT_ENABLE		0x10
-+  #define MUD_PIN_CONFIG_OUTPUT			0x11
-+  #define MUD_PIN_CONFIG_POWER_SOURCE		0x12
-+  #define MUD_PIN_CONFIG_SLEEP_HARDWARE_STATE	0x13
-+  #define MUD_PIN_CONFIG_SLEW_RATE		0x14
-+  #define MUD_PIN_CONFIG_SKEW_DELAY		0x15
-+  #define MUD_PIN_CONFIG_PERSIST_STATE		0x16
-+  #define MUD_PIN_CONFIG_END			0x7f
-+
-+  /* Must be NUL terminated */
-+  #define MUD_PIN_NAME				0x80
-+    #define MUD_PIN_NAME_LEN			16
-+  #define MUD_PIN_NAME_END			0x83
-+
-+  /*
-+   * Device should return:
-+   *   -EBUSY if pin is in use by another function (i2c, spi, ...)
-+   *   -ENOENT if there is no gpio function on the pin.
-+   */
-+  #define MUD_PIN_GPIO_REQUEST			0x84
-+  #define MUD_PIN_GPIO_FREE			0x85
-+
-+  /* Device should return -ENOTSUPP if the direction is not supported */
-+  #define MUD_PIN_DIRECTION			0x86
-+    #define MUD_PIN_DIRECTION_OUTPUT		0x0
-+      #define MUD_PIN_DIRECTION_OUTPUT_LOW	0x0
-+      #define MUD_PIN_DIRECTION_OUTPUT_HIGH	0x2
-+    #define MUD_PIN_DIRECTION_INPUT		0x1
-+
-+  #define MUD_PIN_LEVEL				0x87
-+
-+  /*
-+   * Set _TYPES to _NONE is the pin doesn't have interrupt support.
-+   * If all pins are _NONE, then interrupts are disabled in the host driver.
-+   */
-+  #define MUD_PIN_IRQ_TYPES			0x90
-+    #define MUD_PIN_IRQ_TYPE_NONE		0x00
-+    #define MUD_PIN_IRQ_TYPE_EDGE_RISING	0x01
-+    #define MUD_PIN_IRQ_TYPE_EDGE_FALLING	0x02
-+    #define MUD_PIN_IRQ_TYPE_EDGE_BOTH		0x03
-+  #define MUD_PIN_IRQ_TYPE			0x91
-+  #define MUD_PIN_IRQ_ENABLED			0x92
-+
-+#endif
 -- 
 2.23.0
 
