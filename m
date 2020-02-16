@@ -2,156 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A871604D8
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Feb 2020 17:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB3341604F9
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Feb 2020 18:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728465AbgBPQf6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 16 Feb 2020 11:35:58 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:43367 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728239AbgBPQf6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 16 Feb 2020 11:35:58 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id C45ED5966;
-        Sun, 16 Feb 2020 11:35:56 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Sun, 16 Feb 2020 11:35:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=SQA1PLeoVk+BW+GTPAF4AsP3llw
-        ambjLeI+Hxm8q8jY=; b=nmcy0E9UGTIhkYGrQYahCZthdxt5odOdVHcvXfHU+XE
-        NdCbXPiKGVLHk2RRmmiHwQMEklhsyOkc/47HVt/+/E2topOCBJERfsiny2lXLnvp
-        UDzmHt1g6J1Z4iilSqw69Q7e2Ku/UVbQQN/LtsbvNsFwW2Uiv/VoYuchgasnzsUn
-        z/0VXXoVIxtkI3CwMP15OPveLRplrhdO4ut43gD9H27xwAApjywQbabuhPb1QNnW
-        P+jRXfi83jrarJAHIjZiWk/zkdMCVnbhyBZhcJ3oP3BEEhB0z+CFuMUUXTUVo404
-        ihTIDZjS3Ib/0ng2aWvBg80i+TTvjq1jtjPiicVKoVg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=SQA1PL
-        eoVk+BW+GTPAF4AsP3llwambjLeI+Hxm8q8jY=; b=GZhEBWLo/hc1Yy9zGMY7RI
-        3qIhXoV7Ggjjr6b/JovvJpd9a5rltQ7iwzSpwNsOzQIUdJpEnyeqVpcMpaBD0pvF
-        IyoP/unIXL6PcBglNdE0bZu+L7zptqzYaNibkKMImwE7KC1NZWGqZ+rXH4yW5n0l
-        /PLc8YaUYAGg/2FsEelBXp3uVoLK2evW/GJXhzQ4ffNTMzjayHzdXrvpleFklJyp
-        unySdOsE5b0MQYxyRq3MsZQ9cu3IVSFQIGFIBUXT0kh8ETqE5PP4cv81tTsMV7by
-        W5uG1rpIgEiiltxLrSyVxIbxl3K/IOMQcoW+8NKHQk0pWCyyUr4vq2OJ3v3Im7og
-        ==
-X-ME-Sender: <xms:bG9JXpqk52gGd1F_j4h6-vVKhPYSpg4pQP1HjUQiInJGnf_XpQTYrA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrjeeggdeludcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
-    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledruddtje
-    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgv
-    gheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:bG9JXuSwcKY1qeLkTwBf8f3sdU9lOxSXwsGqCAwFT637D82o8df1Iw>
-    <xmx:bG9JXlvXMUGUkhSjXli6qZKkaNjJX-4o65eSHea4SbiOf5IvanjJWg>
-    <xmx:bG9JXmNnHqugDnOijxA1h5xBRJluRUnKRLWhjyjk3cTjFt29SsPrug>
-    <xmx:bG9JXq_vmNs6tYMHPHDaGEbCsvnTTO8kuzf64adAWBQ0P5NpUtrudQ>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 1ADBB3060C28;
-        Sun, 16 Feb 2020 11:35:56 -0500 (EST)
-Date:   Sun, 16 Feb 2020 17:35:54 +0100
-From:   Greg KH <greg@kroah.com>
-To:     "Dwivedi, Avaneesh Kumar (avani)" <akdwived@codeaurora.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ckadabi@codeaurora.org, tsoni@codeaurora.org,
-        bryanh@codeaurora.org, psodagud@codeaurora.org,
-        rnayak@codeaurora.org, satyap@codeaurora.org,
-        pheragu@codeaurora.org
-Subject: Re: [PATCH v4 2/2] Embedded USB Debugger (EUD) driver
-Message-ID: <20200216163554.GA48157@kroah.com>
-References: <1580445811-15948-1-git-send-email-akdwived@codeaurora.org>
- <1580445811-15948-3-git-send-email-akdwived@codeaurora.org>
- <20200207100438.GA627905@kroah.com>
- <06d21fa5-0115-9478-5cf1-e710446f8311@codeaurora.org>
+        id S1728514AbgBPR1G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 16 Feb 2020 12:27:06 -0500
+Received: from asav22.altibox.net ([109.247.116.9]:50780 "EHLO
+        asav22.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728370AbgBPR1G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 16 Feb 2020 12:27:06 -0500
+Received: from localhost.localdomain (unknown [81.166.168.211])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: noralf.tronnes@ebnett.no)
+        by asav22.altibox.net (Postfix) with ESMTPSA id 43359200E1;
+        Sun, 16 Feb 2020 18:21:38 +0100 (CET)
+From:   =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
+To:     broonie@kernel.org, balbi@kernel.org, lee.jones@linaro.org
+Cc:     linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
+Subject: [RFC 0/9] Regmap over USB for Multifunction USB Device (gpio, display, ...)
+Date:   Sun, 16 Feb 2020 18:21:08 +0100
+Message-Id: <20200216172117.49832-1-noralf@tronnes.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <06d21fa5-0115-9478-5cf1-e710446f8311@codeaurora.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=ZvHD1ezG c=1 sm=1 tr=0
+        a=OYZzhG0JTxDrWp/F2OJbnw==:117 a=OYZzhG0JTxDrWp/F2OJbnw==:17
+        a=IkcTkHD0fZMA:10 a=M51BFTxLslgA:10 a=0GFqvFEQP_9VLyYywQIA:9
+        a=QEXdDO2ut3YA:10
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Feb 16, 2020 at 09:52:19PM +0530, Dwivedi, Avaneesh Kumar (avani) wrote:
-> 
-> On 2/7/2020 3:34 PM, Greg KH wrote:
-> > On Fri, Jan 31, 2020 at 10:13:31AM +0530, Avaneesh Kumar Dwivedi wrote:
-> > > Add support for control peripheral of EUD (Embedded USB Debugger) to
-> > > listen to events such as USB attach/detach, charger enable/disable, pet
-> > > EUD to indicate software is functional. Reusing the platform device kobj,
-> > > sysfs entry 'enable' is created to enable or disable EUD.
-> > > 
-> > > Signed-off-by: Satya Durga Srinivasu Prabhala <satyap@codeaurora.org>
-> > > Signed-off-by: Prakruthi Deepak Heragu <pheragu@codeaurora.org>
-> > > Signed-off-by: Avaneesh Kumar Dwivedi <akdwived@codeaurora.org>
-> > > ---
-> > >   Documentation/ABI/stable/sysfs-driver-msm-eud |   5 +
-> > >   drivers/soc/qcom/Kconfig                      |  12 +
-> > >   drivers/soc/qcom/Makefile                     |   1 +
-> > >   drivers/soc/qcom/eud.c                        | 329 ++++++++++++++++++++++++++
-> > >   4 files changed, 347 insertions(+)
-> > >   create mode 100644 Documentation/ABI/stable/sysfs-driver-msm-eud
-> > >   create mode 100644 drivers/soc/qcom/eud.c
-> > > 
-> > > diff --git a/Documentation/ABI/stable/sysfs-driver-msm-eud b/Documentation/ABI/stable/sysfs-driver-msm-eud
-> > > new file mode 100644
-> > > index 0000000..d96ae05
-> > > --- /dev/null
-> > > +++ b/Documentation/ABI/stable/sysfs-driver-msm-eud
-> > > @@ -0,0 +1,5 @@
-> > > +What:           /sys/bus/platform/drivers/msm-eud/enable
-> > > +Date:           Jan 2020
-> > > +Contact:        Avaneesh Kumar Dwivedi <akdwived@codeaurora.org>
-> > > +Description:    Enable/Disable use of eud device.
-> > What are valid values to be used here?
-> it should be bool variable relying on 0 or 1.
+Hi,
 
-Then document it.
+A while back I had the idea to turn a Raspberry Pi Zero into a $5
+USB to HDMI/SDTV/DSI/DPI display adapter.
 
-> > 
-> > > +Users:          User space debug application which intend to use EUD h/w block.
-> > > diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-> > > index d0a73e7..6b7c9d0 100644
-> > > --- a/drivers/soc/qcom/Kconfig
-> > > +++ b/drivers/soc/qcom/Kconfig
-> > > @@ -202,4 +202,16 @@ config QCOM_APR
-> > >   	  application processor and QDSP6. APR is
-> > >   	  used by audio driver to configure QDSP6
-> > >   	  ASM, ADM and AFE modules.
-> > > +
-> > > +config QCOM_EUD
-> > > +       tristate "QTI Embedded USB Debugger (EUD)"
-> > > +       depends on ARCH_QCOM
-> > Why not let everyone test build this?
-> EUD is Qualcomm IP, shall not it be associated with ARCH_QCOM?
+Thinking about how to represent the display to the driver I realised
+that hardware use registers as API. And Linux does have a generic
+register abstraction: regmap. Furthermore this means that if I can do a
+regmap over USB implementation, it will be easy to do other functions
+like gpio, adc and others. After a few iterations trying to understand
+the USB subsystem and satisfying driver requirements, I now have
+something that looks promising.
 
-No, why can't everyone buid it for testing?  What about when I want to
-build a generic arm64 kernel to run on multiple SoCs?
+I'm sending out an early version hoping to get feedback especially on
+the core parts that handles regmap and interrupts.
 
-Do not put dependancies in here that you really do not have.  There's no
-reason for this to be limited to that one chip, right?  And if you allow
-others to build the code, you will get proper bug reports when things
-break, and others will fix them, which is what you want.
+Overview:
 
-I think the ARCH_RANDOM_SOC_NAME is totally broken and needs to be, at
-most, just an arch-specific thing, if even that.
+          USB Host          :         USB Device
+                            :
+            --------------  :  ------------------
+----------  | mfd: mud   |  :  | f_mud          |  ----------
+| Driver |  --------------  :  |                |  | Driver |
+----------  | regmap-usb |  :  | (mud_regmap)   |  ----------
+            --------------  :  ------------------
 
-Look at almost all other kernel drivers, they do not have those types of
-dependancies.
 
-> > > +	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
-> > > +	if (!chip)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	chip->dev = &pdev->dev;
-> > No reference counting???
-> you mean get/put_device?
+I've attached 2 drivers:
+- gpio/pinctrl: is more or less finished
+- display: needs a lot more work
 
-yes.
 
-thanks,
+USB3 device
+I've only tested this with usb2 devices (Pi, BBB) so I should get myself
+a usb3 gadget capable board. My searching didn't turn up much, so this
+seems to be quite rare. ROCK960 has USB 3.0 type C OTG but the price is
+$139 which is a bit expensive for this hobby project. Does anyone know
+of a cheap board?
 
-greg k-h
+Noralf.
+
+
+Noralf Trønnes (9):
+  regmap: Add USB support
+  mfd: Add driver for Multifunction USB Device
+  usb: gadget: function: Add Multifunction USB Device support
+  pinctrl: Add Multifunction USB Device pinctrl driver
+  usb: gadget: function: mud: Add gpio support
+  regmap: Speed up _regmap_raw_write_impl() for large buffers
+  drm: Add Multifunction USB Device display driver
+  drm/client: Add drm_client_init_from_id() and drm_client_modeset_set()
+  usb: gadget: function: mud: Add display support
+
+ drivers/base/regmap/Kconfig              |    8 +-
+ drivers/base/regmap/Makefile             |    1 +
+ drivers/base/regmap/regmap-usb.c         | 1026 ++++++++++++++++++
+ drivers/base/regmap/regmap.c             |   10 +-
+ drivers/gpu/drm/Kconfig                  |    2 +
+ drivers/gpu/drm/Makefile                 |    1 +
+ drivers/gpu/drm/drm_client.c             |   37 +
+ drivers/gpu/drm/drm_client_modeset.c     |   52 +
+ drivers/gpu/drm/mud/Kconfig              |   18 +
+ drivers/gpu/drm/mud/Makefile             |    4 +
+ drivers/gpu/drm/mud/mud_drm.c            | 1198 ++++++++++++++++++++++
+ drivers/gpu/drm/mud/mud_drm.h            |  137 +++
+ drivers/gpu/drm/mud/mud_drm_gadget.c     |  889 ++++++++++++++++
+ drivers/mfd/Kconfig                      |    8 +
+ drivers/mfd/Makefile                     |    1 +
+ drivers/mfd/mud.c                        |  580 +++++++++++
+ drivers/pinctrl/Kconfig                  |    9 +
+ drivers/pinctrl/Makefile                 |    1 +
+ drivers/pinctrl/pinctrl-mud.c            |  657 ++++++++++++
+ drivers/pinctrl/pinctrl-mud.h            |   89 ++
+ drivers/usb/gadget/Kconfig               |   36 +
+ drivers/usb/gadget/function/Makefile     |    6 +
+ drivers/usb/gadget/function/f_mud.c      |  913 +++++++++++++++++
+ drivers/usb/gadget/function/f_mud.h      |  210 ++++
+ drivers/usb/gadget/function/f_mud_drm.c  |  181 ++++
+ drivers/usb/gadget/function/f_mud_pins.c |  962 +++++++++++++++++
+ drivers/usb/gadget/function/mud_regmap.c |  936 +++++++++++++++++
+ include/drm/drm_client.h                 |    4 +
+ include/linux/mfd/mud.h                  |   16 +
+ include/linux/regmap.h                   |   23 +
+ include/linux/regmap_usb.h               |   97 ++
+ 31 files changed, 8107 insertions(+), 5 deletions(-)
+ create mode 100644 drivers/base/regmap/regmap-usb.c
+ create mode 100644 drivers/gpu/drm/mud/Kconfig
+ create mode 100644 drivers/gpu/drm/mud/Makefile
+ create mode 100644 drivers/gpu/drm/mud/mud_drm.c
+ create mode 100644 drivers/gpu/drm/mud/mud_drm.h
+ create mode 100644 drivers/gpu/drm/mud/mud_drm_gadget.c
+ create mode 100644 drivers/mfd/mud.c
+ create mode 100644 drivers/pinctrl/pinctrl-mud.c
+ create mode 100644 drivers/pinctrl/pinctrl-mud.h
+ create mode 100644 drivers/usb/gadget/function/f_mud.c
+ create mode 100644 drivers/usb/gadget/function/f_mud.h
+ create mode 100644 drivers/usb/gadget/function/f_mud_drm.c
+ create mode 100644 drivers/usb/gadget/function/f_mud_pins.c
+ create mode 100644 drivers/usb/gadget/function/mud_regmap.c
+ create mode 100644 include/linux/mfd/mud.h
+ create mode 100644 include/linux/regmap_usb.h
+
+-- 
+2.23.0
+
