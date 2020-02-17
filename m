@@ -2,96 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD2D160EFC
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 10:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D749E160F8A
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 11:07:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728983AbgBQJkk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Feb 2020 04:40:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40512 "EHLO mail.kernel.org"
+        id S1729112AbgBQKHM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Feb 2020 05:07:12 -0500
+Received: from mx2.suse.de ([195.135.220.15]:42610 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728919AbgBQJkj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 Feb 2020 04:40:39 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 96F742070B;
-        Mon, 17 Feb 2020 09:40:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581932439;
-        bh=fksEsw2TEJe3oWeqVvBmZb9SfqjxPG70zCcZxBZL/mc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SVkGBK7bQk9qU8H1FYIAn2BmVTJNjUnYYLY3ulODrRl30OKVNL5RxzZjstyEFcwrM
-         t5f07SSslsDClvAsEY/plVTMx6Sm1LzPCeEnKhu+op3yYDyr249Y2Ejy+AlPgvLvV9
-         UQY5goxPYdqOEnpnP5/2jSsU15GHFsjkx7QkD6gA=
-Date:   Mon, 17 Feb 2020 10:40:36 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Joe Perches <joe@perches.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb-storage: Use const to reduce object data size
-Message-ID: <20200217094036.GA47231@kroah.com>
-References: <60559197a1af9e0af7f329cc3427989e5756846f.camel@perches.com>
+        id S1728833AbgBQKHL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 Feb 2020 05:07:11 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 76A7BAD5C;
+        Mon, 17 Feb 2020 10:07:09 +0000 (UTC)
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com
+Cc:     oneukum@suse.com, phil@raspberrypi.com, tim.gover@raspberrypi.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] usb: xhci-pci: Raspberry Pi FW loader for VIA VL805
+Date:   Mon, 17 Feb 2020 11:07:00 +0100
+Message-Id: <20200217100701.19949-1-nsaenzjulienne@suse.de>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <60559197a1af9e0af7f329cc3427989e5756846f.camel@perches.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 14, 2020 at 10:15:57AM -0800, Joe Perches wrote:
-> Make structs const to reduce data size ~20KB.
-> 
-> Change function arguments and prototypes as necessary to compile.
-> 
-> $ size (x86-64 defconfig pre)
->    text	   data	    bss	    dec	    hex	filename
->   12281	  10948	    480	  23709	   5c9d	./drivers/usb/storage/usb.o
->     111	  10528	      8	  10647	   2997	./drivers/usb/storage/usual-tables.o
-> 
-> $ size (x86-64 defconfig post)
->    text	   data	    bss	    dec	    hex	filename
->   22809	    420	    480	  23709	   5c9d	drivers/usb/storage/usb.o
->   10551	      0	      0	  10551	   2937	drivers/usb/storage/usual-tables.o
-> 
-> Signed-off-by: Joe Perches <joe@perches.com>
-> ---
-> 
-> compile tested only
-> 
->  drivers/usb/storage/usb.c          | 10 +++++-----
->  drivers/usb/storage/usb.h          |  5 +++--
->  drivers/usb/storage/usual-tables.c |  6 +++---
->  include/linux/usb_usual.h          |  2 +-
->  4 files changed, 12 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
-> index 9a79cd..94a6472 100644
-> --- a/drivers/usb/storage/usb.c
-> +++ b/drivers/usb/storage/usb.c
-> @@ -121,12 +121,12 @@ MODULE_PARM_DESC(quirks, "supplemental list of
-> device IDs and their quirks");
->  	.initFunction = init_function,	\
->  }
->  
-> -static struct us_unusual_dev us_unusual_dev_list[] = {
-> +static const struct us_unusual_dev us_unusual_dev_list[] = {
->  #	include "unusual_devs.h"
->  	{ }		/* Terminating entry */
->  };
->  
-> -static struct us_unusual_dev for_dynamic_ids =
-> +static const struct us_unusual_dev for_dynamic_ids =
->  		USUAL_DEV(USB_SC_SCSI, USB_PR_BULK);
->  
->  #undef UNUSUAL_DEV
-> @@ -583,7 +583,7 @@ EXPORT_SYMBOL_GPL(usb_stor_adjust_quirks);
->  
->  /* Get the unusual_devs entries and the string descriptors */
->  static int get_device_info(struct us_data *us, const struct
-> usb_device_id *id,
+On the Raspberry Pi 4, after a PCI reset, VL805's firmware may either be
+loaded directly from an EEPROM or, if not present, by the SoC's
+VideCore.  Inform VideCore that VL805 was just reset, or defer xhci's
+probe if not yet joinable trough the mailbox interface.
 
-Patch is line-wrapped and does not apply at all :(
+Based on Tim Gover's downstream implementation.
+
+Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+---
+ drivers/usb/host/xhci-pci.c                | 50 ++++++++++++++++++++++
+ include/soc/bcm2835/raspberrypi-firmware.h |  2 +-
+ 2 files changed, 51 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 4917c5b033fa..eadace4a9339 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -13,6 +13,8 @@
+ #include <linux/module.h>
+ #include <linux/acpi.h>
+ 
++#include <soc/bcm2835/raspberrypi-firmware.h>
++
+ #include "xhci.h"
+ #include "xhci-trace.h"
+ 
+@@ -308,6 +310,44 @@ static int xhci_pci_setup(struct usb_hcd *hcd)
+ 	return xhci_pci_reinit(xhci, pdev);
+ }
+ 
++/*
++ * On the Raspberry Pi 4, after a PCI reset, VL805's firmware may either be
++ * loaded directly from an EEPROM or, if not present, by the SoC's VideCore.
++ * Inform VideCore that VL805 was just reset, or defer xhci's probe if not yet
++ * joinable trough the mailbox interface.
++ */
++static int raspberrypi_load_vl805_fw(struct pci_dev *pdev)
++{
++#ifdef CONFIG_RASPBERRYPI_FIRMWARE
++	struct device_node *fw_np;
++	struct rpi_firmware *fw;
++	u32 dev_addr;
++	int ret;
++
++	fw_np = of_find_compatible_node(NULL, NULL,
++					"raspberrypi,bcm2835-firmware");
++	if (!fw_np)
++		return 0;
++
++	fw = rpi_firmware_get(fw_np);
++	of_node_put(fw_np);
++	if (!fw)
++		return -EPROBE_DEFER;
++
++	dev_addr = pdev->bus->number << 20 | PCI_SLOT(pdev->devfn) << 15 |
++		   PCI_FUNC(pdev->devfn) << 12;
++
++	ret = rpi_firmware_property(fw, RPI_FIRMWARE_NOTIFY_XHCI_RESET,
++				    &dev_addr, sizeof(dev_addr));
++	if (ret)
++		return ret;
++
++	dev_dbg(&pdev->dev, "loaded Raspberry Pi's VL805 firmware\n");
++
++#endif
++	return 0;
++}
++
+ /*
+  * We need to register our own PCI probe function (instead of the USB core's
+  * function) in order to create a second roothub under xHCI.
+@@ -321,6 +361,16 @@ static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 
+ 	driver = (struct hc_driver *)id->driver_data;
+ 
++	if (dev->vendor == PCI_VENDOR_ID_VIA && dev->device == 0x3483) {
++		retval = raspberrypi_load_vl805_fw(dev);
++		if (retval) {
++			if (retval != -EPROBE_DEFER)
++				dev_err(&dev->dev,
++					"Failed to load VL805's firmware");
++			return retval;
++		}
++	}
++
+ 	/* Prevent runtime suspending between USB-2 and USB-3 initialization */
+ 	pm_runtime_get_noresume(&dev->dev);
+ 
+diff --git a/include/soc/bcm2835/raspberrypi-firmware.h b/include/soc/bcm2835/raspberrypi-firmware.h
+index 7800e12ee042..cc9cdbc66403 100644
+--- a/include/soc/bcm2835/raspberrypi-firmware.h
++++ b/include/soc/bcm2835/raspberrypi-firmware.h
+@@ -90,7 +90,7 @@ enum rpi_firmware_property_tag {
+ 	RPI_FIRMWARE_SET_PERIPH_REG =                         0x00038045,
+ 	RPI_FIRMWARE_GET_POE_HAT_VAL =                        0x00030049,
+ 	RPI_FIRMWARE_SET_POE_HAT_VAL =                        0x00030050,
+-
++	RPI_FIRMWARE_NOTIFY_XHCI_RESET =                      0x00030058,
+ 
+ 	/* Dispmanx TAGS */
+ 	RPI_FIRMWARE_FRAMEBUFFER_ALLOCATE =                   0x00040001,
+-- 
+2.25.0
 
