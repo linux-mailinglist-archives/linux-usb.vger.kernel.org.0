@@ -2,38 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7445716084A
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 03:45:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E84F16084B
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 03:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726380AbgBQCpb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 16 Feb 2020 21:45:31 -0500
-Received: from 5.mo69.mail-out.ovh.net ([46.105.43.105]:40089 "EHLO
-        5.mo69.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726271AbgBQCpb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 16 Feb 2020 21:45:31 -0500
-X-Greylist: delayed 931 seconds by postgrey-1.27 at vger.kernel.org; Sun, 16 Feb 2020 21:45:29 EST
-Received: from player732.ha.ovh.net (unknown [10.108.54.119])
-        by mo69.mail-out.ovh.net (Postfix) with ESMTP id 84EC1839ED
-        for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2020 03:29:56 +0100 (CET)
+        id S1726824AbgBQCpc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 16 Feb 2020 21:45:32 -0500
+Received: from 1.mo69.mail-out.ovh.net ([178.33.251.173]:42864 "EHLO
+        1.mo69.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726560AbgBQCpc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 16 Feb 2020 21:45:32 -0500
+X-Greylist: delayed 602 seconds by postgrey-1.27 at vger.kernel.org; Sun, 16 Feb 2020 21:45:32 EST
+Received: from player159.ha.ovh.net (unknown [10.108.57.153])
+        by mo69.mail-out.ovh.net (Postfix) with ESMTP id D66386E0F0
+        for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2020 03:45:30 +0100 (CET)
 Received: from mattea.info (host221-23-dynamic.248-95-r.retail.telecomitalia.it [95.248.23.221])
         (Authenticated sender: relay@mattea.info)
-        by player732.ha.ovh.net (Postfix) with ESMTPSA id 268C0F4F2D49
-        for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2020 02:29:56 +0000 (UTC)
+        by player159.ha.ovh.net (Postfix) with ESMTPSA id 90F29F68B133
+        for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2020 02:45:30 +0000 (UTC)
 Received: from alby.localnet (unknown [IPv6:fc00::91ca:3bb3:4051:1ecb])
-        by i-m-services.net (Postfix) with ESMTP id C57822CE3EF
-        for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2020 03:29:54 +0100 (CET)
+        by i-m-services.net (Postfix) with ESMTP id 1F4DD2CE3EF
+        for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2020 03:45:30 +0100 (CET)
 From:   Alberto Mattea <alberto@mattea.info>
 To:     linux-usb@vger.kernel.org
 Subject: AMD XHCI controller 1022:145c needs the XHCI_SUSPEND_DELAY quirk to suspend properly
-Date:   Mon, 17 Feb 2020 02:29:54 +0000
-Message-ID: <11474023.O9o76ZdvQC@alby>
+Date:   Mon, 17 Feb 2020 03:45:30 +0100
+Message-ID: <5338000.DvuYhMxLoT@alby>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
-X-Ovh-Tracer-Id: 18060560408157355872
+X-Ovh-Tracer-Id: 18323458036148797280
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedugedrjeehgdeghecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhephffvufffkfgggfgtsehtufertddttddvnecuhfhrohhmpeetlhgsvghrthhoucforghtthgvrgcuoegrlhgsvghrthhosehmrghtthgvrgdrihhnfhhoqeenucfkpheptddrtddrtddrtddpfhgttddtmeemledutggrmeefsggsfeemgedthedumeduvggtsgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrhejfedvrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprghlsggvrhhtohesmhgrthhtvggrrdhinhhfohdprhgtphhtthhopehlihhnuhigqdhushgssehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedugedrjeehgdeglecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhephffvufffkfgggfgtsehtufertddttddvnecuhfhrohhmpeetlhgsvghrthhoucforghtthgvrgcuoegrlhgsvghrthhosehmrghtthgvrgdrihhnfhhoqeenucfkpheptddrtddrtddrtddpfhgttddtmeemledutggrmeefsggsfeemgedthedumeduvggtsgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrhduheelrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheprghlsggvrhhtohesmhgrthhtvggrrdhinhhfohdprhgtphhtthhopehlihhnuhigqdhushgssehvghgvrhdrkhgvrhhnvghlrdhorhhg
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
