@@ -2,103 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B45D1617E9
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 17:29:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3FF21617ED
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 17:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728688AbgBQQ3t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Feb 2020 11:29:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37604 "EHLO mail.kernel.org"
+        id S1728387AbgBQQaU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Feb 2020 11:30:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37906 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726866AbgBQQ3t (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 Feb 2020 11:29:49 -0500
+        id S1726866AbgBQQaU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 Feb 2020 11:30:20 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2F594214D8;
-        Mon, 17 Feb 2020 16:29:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A1A83214D8;
+        Mon, 17 Feb 2020 16:30:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581956987;
-        bh=EsYyewiCgEfKwPRCUKZl1Kg4p+gbDyMv0r1YSwvRpKY=;
+        s=default; t=1581957020;
+        bh=aEmbtnOK/j3I6JyrPr4ubDGEdFkeKQjZqNn69A2RAUc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PYKA5FNITPtJeMhzm8IO0pT/LVtgCldu3tksSLOAZcrCpmeIWD6T63T/gqXQZMMne
-         czK8ZiLeFZFExOehdR2b7Vo6BnQxx6qfZEKbhPcLvTDQ0RS/HW1Uy+l0D7grVkH9vH
-         DTrsRbr6TvyBz9ccxbwp91u+JClv3t/oPfk93C4g=
-Date:   Mon, 17 Feb 2020 17:29:45 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Timur Tabi <timur@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Anton Vorontsov <avorontsov@ru.mvista.com>,
-        kbuild test robot <lkp@intel.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Joe Perches <joe@perches.com>
-Subject: Re: [PATCH] usb: host: fhci-hcd: annotate PIPE_CONTROL switch case
- with fallthrough
-Message-ID: <20200217162945.GC1502885@kroah.com>
-References: <20200213085401.27862-1-linux@rasmusvillemoes.dk>
- <20200213125659.GB3325929@kroah.com>
- <6ab68169-dde6-b5ba-0909-fa685bd24aac@rasmusvillemoes.dk>
- <20200217093836.GA37937@kroah.com>
- <a1f0f024-c1e5-8ff5-f717-f5098b4eb78d@rasmusvillemoes.dk>
- <20200217141831.GA1123892@kroah.com>
- <298629e3-40bb-9530-8292-7e2a9432cd4a@embeddedor.com>
+        b=EpbxeZg+qt0AehYvMaxXGa6Qbf/4LnM+/G1r9WlZWpjP4hzEMtb9ll4iSvv/V74/7
+         8EoyZY+et23Ajy+1fLwRBIs01Nf6+nJzc6QID+61FXKrfvIxlyZTX1dQ3vZK//O5rh
+         kiI1VRpwwbDByblCCsCkyABBR46yedacsqxd5fYI=
+Date:   Mon, 17 Feb 2020 17:30:18 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Alberto Mattea <alberto@mattea.info>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: xhci: apply XHCI_SUSPEND_DELAY to AMD XHCI
+ controller 1022:145c
+Message-ID: <20200217163018.GD1502885@kroah.com>
+References: <5340061.DvuYhMxLoT@alby>
+ <20200217154538.GA1457504@kroah.com>
+ <5575017.lOV4Wx5bFT@alby>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <298629e3-40bb-9530-8292-7e2a9432cd4a@embeddedor.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5575017.lOV4Wx5bFT@alby>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 17, 2020 at 10:15:09AM -0600, Gustavo A. R. Silva wrote:
-> Hi!
-> 
-> Sorry for the late reply. I wasn't aware of this thread until now.
-> 
-> Please, see my comments below...
-> 
-> On 2/17/20 08:18, Greg Kroah-Hartman wrote:
-> > On Mon, Feb 17, 2020 at 03:12:21PM +0100, Rasmus Villemoes wrote:
-> >> On 17/02/2020 10.38, Greg Kroah-Hartman wrote:
-> >>> On Thu, Feb 13, 2020 at 02:35:18PM +0100, Rasmus Villemoes wrote:
-> >>>> On 13/02/2020 13.56, Greg Kroah-Hartman wrote:
-> >>>>
-> >>>>> Shouldn't this be /* fall through */ instead?
-> >>>>>
-> >>>>> Gustavo, what's the best practice here, I count only a few
-> >>>>> "fallthrough;" instances in the kernel, although one is in our coding
-> >>>>> style document, and thousands of the /* */ version.
-> >>>>
-> >>>> Yes, I went with the attribute/macro due to that, and the history is
-> >>>> that Linus applied Joe's patches directly
-> >>>> (https://lore.kernel.org/lkml/CAHk-=whOF8heTGz5tfzYUBp_UQQzSWNJ_50M7-ECXkfFRDQWFA@mail.gmail.com/),
-> >>>> so I assumed that meant the Penguin decided that the attribute/macro is
-> >>>> the right thing to do for new code, while existing comment annotations
-> >>>> can be left alone or changed piecemeal as code gets refactored anyway.
-> >>>
-> >>> But, to be fair, Gustavo went and fixed up thousands of these, with the
-> >>> /* */ version, not the attribute.
-> >>>
-> >>> Gustavo, can coverity notice the "fallthrough;" attribute properly?  I
-> >>> don't want to start adding things that end up triggering
-> >>> false-positives.
-> >>
-> >> I'm not Gustavo, and I don't know the answer, but 1.5 years ago some guy
-> >> named greg k-h suggested that coverity does grok the fallthrough attribute:
-> >>
-> >> https://patchwork.kernel.org/cover/10651357/#22279095
+On Mon, Feb 17, 2020 at 05:07:17PM +0100, Alberto Mattea wrote:
+> In data lunedì 17 febbraio 2020 16:45:38 CET, hai scritto:
+> > On Mon, Feb 17, 2020 at 04:21:50PM +0100, Alberto Mattea wrote:
+> > > Fixes suspend/resume
 > > 
-> > I wouldn't trust anything that bum says :)
+> > We are going to need a lot more information here, sorry.  Please be
+> > explicit as to what you are doing and why.
 > > 
-> > Ok, I don't remember saying that at all, but I'll wait a day or two to
-> > get Gustavo's opinion befor applying the patch.
+> > thanks,
+> > 
+> > greg k-h
 > > 
 > 
-> We are good to go with the 'fallthrough' pseudo keyword. Linus is OK with
-> that.
-> 
-> The comment annotations will eventually be transformed to "fallthrough;"
+> Sure, what about
+> "This controller timeouts during suspend (S3) with 
+> [  240.521724] xhci_hcd 0000:30:00.3: WARN: xHC save state timeout
+> [  240.521729] xhci_hcd 0000:30:00.3: ERROR mismatched command completion event
+> thus preventing the system from entering S3. Moreover it remains in an undefined state
+> where some connected devices stop working until a reboot.
+> Apply the XHCI_SUSPEND_DELAY quirk to make it suspend properly."
 
-Ok, thanks for the confirmation, will queue this up.
+I sure beats the original 3 words you wrote :)
 
-greg k-h
