@@ -2,30 +2,23 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65287161025
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 11:36:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0625A1610C3
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 12:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729187AbgBQKgI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Feb 2020 05:36:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42250 "EHLO mail.kernel.org"
+        id S1727794AbgBQLMt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Feb 2020 06:12:49 -0500
+Received: from mx2.suse.de ([195.135.220.15]:48004 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729086AbgBQKgI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 Feb 2020 05:36:08 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CB2D420725;
-        Mon, 17 Feb 2020 10:36:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581935767;
-        bh=60viLGKf79jXAYXHImdhwgxFlEuSkAt+HsIyxhV25lA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eYlTq6hflCJzX6XFC6jLt7AvBAgZw/8p1du/CYSw/mqOuHrhFtercBxM1Wi6zCe5m
-         eQI8yyOD/oy5vnxuSOpYCuQ2gZNaYbD8fLHnV+lyHYSiZAhWLuWghe8Avhpb7BWE6G
-         3J5NZqs8bYpPR2a2GT0Hj/sZExxyxFG6CYA/ACYo=
-Date:   Mon, 17 Feb 2020 11:36:05 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+        id S1726823AbgBQLMt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 Feb 2020 06:12:49 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 0CB5EB05D;
+        Mon, 17 Feb 2020 11:12:45 +0000 (UTC)
+Message-ID: <9d3a870fdd71fd2ed5a4a5992b2dd39388eaedd5.camel@suse.de>
+Subject: Re: [PATCH] usb: xhci-pci: Raspberry Pi FW loader for VIA VL805
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Mathias Nyman <mathias.nyman@intel.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Ray Jui <rjui@broadcom.com>,
@@ -35,117 +28,154 @@ Cc:     Mathias Nyman <mathias.nyman@intel.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] usb: xhci-pci: Raspberry Pi FW loader for VIA VL805
-Message-ID: <20200217103605.GA93732@kroah.com>
+Date:   Mon, 17 Feb 2020 12:12:42 +0100
+In-Reply-To: <20200217103605.GA93732@kroah.com>
 References: <20200217100701.19949-1-nsaenzjulienne@suse.de>
+         <20200217103605.GA93732@kroah.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-XZFCLbgsBknBnaLkhP22"
+User-Agent: Evolution 3.34.3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200217100701.19949-1-nsaenzjulienne@suse.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 17, 2020 at 11:07:00AM +0100, Nicolas Saenz Julienne wrote:
-> On the Raspberry Pi 4, after a PCI reset, VL805's firmware may either be
-> loaded directly from an EEPROM or, if not present, by the SoC's
-> VideCore.  Inform VideCore that VL805 was just reset, or defer xhci's
-> probe if not yet joinable trough the mailbox interface.
-> 
-> Based on Tim Gover's downstream implementation.
-> 
-> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> ---
->  drivers/usb/host/xhci-pci.c                | 50 ++++++++++++++++++++++
->  include/soc/bcm2835/raspberrypi-firmware.h |  2 +-
->  2 files changed, 51 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index 4917c5b033fa..eadace4a9339 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -13,6 +13,8 @@
->  #include <linux/module.h>
->  #include <linux/acpi.h>
->  
-> +#include <soc/bcm2835/raspberrypi-firmware.h>
 
-That feels really wrong :(
+--=-XZFCLbgsBknBnaLkhP22
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> +
->  #include "xhci.h"
->  #include "xhci-trace.h"
->  
-> @@ -308,6 +310,44 @@ static int xhci_pci_setup(struct usb_hcd *hcd)
->  	return xhci_pci_reinit(xhci, pdev);
->  }
->  
-> +/*
-> + * On the Raspberry Pi 4, after a PCI reset, VL805's firmware may either be
-> + * loaded directly from an EEPROM or, if not present, by the SoC's VideCore.
-> + * Inform VideCore that VL805 was just reset, or defer xhci's probe if not yet
-> + * joinable trough the mailbox interface.
-> + */
-> +static int raspberrypi_load_vl805_fw(struct pci_dev *pdev)
-> +{
-> +#ifdef CONFIG_RASPBERRYPI_FIRMWARE
+Hi Greg, thanks for having a look at this.
 
-Can you just put #ifdefs in a .h file instead please?
+On Mon, 2020-02-17 at 11:36 +0100, Greg Kroah-Hartman wrote:
 
-> +	struct device_node *fw_np;
-> +	struct rpi_firmware *fw;
-> +	u32 dev_addr;
-> +	int ret;
-> +
-> +	fw_np = of_find_compatible_node(NULL, NULL,
-> +					"raspberrypi,bcm2835-firmware");
-> +	if (!fw_np)
-> +		return 0;
+[...]
 
-So for non-rpi systems, this will work just fine, no need to #ifdef out
-the whole function, right?
+> > +#include <soc/bcm2835/raspberrypi-firmware.h>
+>=20
+> That feels really wrong :(
+
+I know, not that happy about it either, but I had to start with something :=
+)
+
+> > +
+> >  #include "xhci.h"
+> >  #include "xhci-trace.h"
+> > =20
+> > @@ -308,6 +310,44 @@ static int xhci_pci_setup(struct usb_hcd *hcd)
+> >  	return xhci_pci_reinit(xhci, pdev);
+> >  }
+> > =20
+> > +/*
+> > + * On the Raspberry Pi 4, after a PCI reset, VL805's firmware may eith=
+er be
+> > + * loaded directly from an EEPROM or, if not present, by the SoC's
+> > VideCore.
+> > + * Inform VideCore that VL805 was just reset, or defer xhci's probe if=
+ not
+> > yet
+> > + * joinable trough the mailbox interface.
+> > + */
+> > +static int raspberrypi_load_vl805_fw(struct pci_dev *pdev)
+> > +{
+> > +#ifdef CONFIG_RASPBERRYPI_FIRMWARE
+>=20
+> Can you just put #ifdefs in a .h file instead please?
+
+Yes, although...
+
+> > +	struct device_node *fw_np;
+> > +	struct rpi_firmware *fw;
+> > +	u32 dev_addr;
+> > +	int ret;
+> > +
+> > +	fw_np =3D of_find_compatible_node(NULL, NULL,
+> > +					"raspberrypi,bcm2835-firmware");
+> > +	if (!fw_np)
+> > +		return 0;
+>=20
+> So for non-rpi systems, this will work just fine, no need to #ifdef out
+> the whole function, right?
+
+...you're right here, on non-rpi systems this will just return without erro=
+rs.
+On top of that, most VL805 users don't use device-tree, so it'll be fast.
+
+> > +
+> > +	fw =3D rpi_firmware_get(fw_np);
+> > +	of_node_put(fw_np);
+> > +	if (!fw)
+> > +		return -EPROBE_DEFER;
+> > +
+> > +	dev_addr =3D pdev->bus->number << 20 | PCI_SLOT(pdev->devfn) << 15 |
+> > +		   PCI_FUNC(pdev->devfn) << 12;
+> > +
+> > +	ret =3D rpi_firmware_property(fw, RPI_FIRMWARE_NOTIFY_XHCI_RESET,
+> > +				    &dev_addr, sizeof(dev_addr));
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	dev_dbg(&pdev->dev, "loaded Raspberry Pi's VL805 firmware\n");
+> > +
+> > +#endif
+> > +	return 0;
+> > +}
+
+> Why not put this whole function in some rpi-platform code?
+
+I think moving it into firmware/raspberrypi.c should be acceptable. That sa=
+id
+I'd still be on the loose regarding the include file, and the platform spec=
+ific
+function call in xhci_pci_probe(). Any suggestions?
+Note that it's important to us to be able to defer the probe as the firmwar=
+e
+inteface bringup might race with xHC's
+
+> > +
+> >  /*
+> >   * We need to register our own PCI probe function (instead of the USB
+> > core's
+> >   * function) in order to create a second roothub under xHCI.
+> > @@ -321,6 +361,16 @@ static int xhci_pci_probe(struct pci_dev *dev, con=
+st
+> > struct pci_device_id *id)
+> > =20
+> >  	driver =3D (struct hc_driver *)id->driver_data;
+> > =20
+> > +	if (dev->vendor =3D=3D PCI_VENDOR_ID_VIA && dev->device =3D=3D 0x3483=
+) {
+> > +		retval =3D raspberrypi_load_vl805_fw(dev);
+> > +		if (retval) {
+> > +			if (retval !=3D -EPROBE_DEFER)
+> > +				dev_err(&dev->dev,
+> > +					"Failed to load VL805's firmware");
+>=20
+> Shouldn't the function print an error if there is one?
+
+Noted, I'll update that.
+
+Regards,
+Nicolas
 
 
-> +
-> +	fw = rpi_firmware_get(fw_np);
-> +	of_node_put(fw_np);
-> +	if (!fw)
-> +		return -EPROBE_DEFER;
-> +
-> +	dev_addr = pdev->bus->number << 20 | PCI_SLOT(pdev->devfn) << 15 |
-> +		   PCI_FUNC(pdev->devfn) << 12;
-> +
-> +	ret = rpi_firmware_property(fw, RPI_FIRMWARE_NOTIFY_XHCI_RESET,
-> +				    &dev_addr, sizeof(dev_addr));
-> +	if (ret)
-> +		return ret;
-> +
-> +	dev_dbg(&pdev->dev, "loaded Raspberry Pi's VL805 firmware\n");
-> +
-> +#endif
-> +	return 0;
-> +}
+--=-XZFCLbgsBknBnaLkhP22
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-Why not put this whole function in some rpi-platform code?
+-----BEGIN PGP SIGNATURE-----
 
-> +
->  /*
->   * We need to register our own PCI probe function (instead of the USB core's
->   * function) in order to create a second roothub under xHCI.
-> @@ -321,6 +361,16 @@ static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
->  
->  	driver = (struct hc_driver *)id->driver_data;
->  
-> +	if (dev->vendor == PCI_VENDOR_ID_VIA && dev->device == 0x3483) {
-> +		retval = raspberrypi_load_vl805_fw(dev);
-> +		if (retval) {
-> +			if (retval != -EPROBE_DEFER)
-> +				dev_err(&dev->dev,
-> +					"Failed to load VL805's firmware");
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl5KdSoACgkQlfZmHno8
+x/6d/Af5AT5S0Pwl8xDlumP0TchdnzD/yXqk8Z3/Ysr8N+PeZKeXQpprFdma2otT
+z3axXIyIc2syYEscAQUqge9eKMfgHPBbsCSPICAEl00hQysxFxPmc1kJlhzxkN+F
+6p3LRnzdUgVWGoc8ZMfym6EFVOlVcmQWqYKa4XaNhyhMIIMr0c5xfW2GSXpMFsNj
+ZtKXzOkDVUdeD7bAZKXELiQL/O3Kgqaut8Wm4F3ux9qTTxLv8WhWNk/dIOrwIpfm
+4zy6GgZ2zmr+3rP0JNXqSujyjh9ZYj2cuJ75c/JeRzVa5r4b5ARhZ64F5ZpP+slW
+q5LpISI31g/y0STz1WxFgvLwttMljg==
+=QcVm
+-----END PGP SIGNATURE-----
 
-Shouldn't the function print an error if there is one?
+--=-XZFCLbgsBknBnaLkhP22--
 
-thanks,
-
-greg k-h
