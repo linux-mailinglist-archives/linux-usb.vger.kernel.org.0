@@ -2,117 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E493160D4D
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 09:31:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C61F160D6E
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 09:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728169AbgBQIbX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Feb 2020 03:31:23 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:51779 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726397AbgBQIbX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Feb 2020 03:31:23 -0500
-Received: by mail-wm1-f68.google.com with SMTP id t23so16172851wmi.1;
-        Mon, 17 Feb 2020 00:31:22 -0800 (PST)
+        id S1728473AbgBQIdN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Feb 2020 03:33:13 -0500
+Received: from mail-lj1-f182.google.com ([209.85.208.182]:36799 "EHLO
+        mail-lj1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728456AbgBQIdN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Feb 2020 03:33:13 -0500
+Received: by mail-lj1-f182.google.com with SMTP id r19so17816427ljg.3
+        for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2020 00:33:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=8rbgYJlkuhz7p0MRk02omjGLVw/OhkLVh8HKOL7Pyw4=;
-        b=VGtUbVWd6GDA5GYAI1zle3ge1bn6dD2X5BWXrZcKWzpDZXpHAB1b3JKz8uoTKqBJV7
-         SVGkPI6aJpLMgmu3QaI+FhltcPfFdE///lUby+3YoO99rFaCReeco/pgrH8j7/D5K7cl
-         KF0t+86yOH2LZJ4WasjLYMk8ZwpwWDM2WJgImLKDHi7lpqnUn1riguf0dz81f/b08iek
-         WDjk6hqqfFJ0MHomvJ062mj9PNj3Ah8NNqUPTeKMAmmfX33+4wrKsBNxCRa8tdFdIBCm
-         6DOdtFSL6XfcvTJe6JfImnoUOFfsZaFXlP3f8BiKOtOTxl2pKdqjDn5TOLppKy8coOR4
-         h/Pw==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=4o9MpvCnaW7UNrMoDadTvPllbR5hSCdTM1cZtcwAvo8=;
+        b=xr36KzVxOPwuOahqFncxjhK4K8zSR2lKO39Cxagp19vpsh2qOcTiJybYRRe7pI/5bk
+         3w/XGkmLQjqV3+cwsJlYWlggupIrqmMkzIGJUwGWgZOAR9d7suw7tMrylO3nmBWcc/VR
+         qsFb5SzdiVdfppdjWADry9ZGJEUCL9vM5oTQY5woMoZ4u7ENul/znHVmDUPOdzIMW3Qz
+         8de77iKP6QtAHDal2JrdZb9FC0nElwJJVG64ZiA03jlZwvrx7TiIZeVWKfK6J0Ltn/xw
+         FDNz99SqqBemyvnYIc39cJLNv//6MUgZZuCuw/CQhlQ45AJOSVff8mXvbiKxV8nt/W2o
+         JKlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=8rbgYJlkuhz7p0MRk02omjGLVw/OhkLVh8HKOL7Pyw4=;
-        b=OQVSlpa+Cdh0RL4tZiJCIfdvdEcdIYOJTGp2MR4/UwClvSas9ZJs5V34dFP7J1VEbT
-         BArVPVLJsCqVSYd1Xt8E02JBQa7WLAOYfAWzhSmDiTSNwPMGl56/jai4pKh3KBO0/Y26
-         STuW0iDCFdFiGdjnndeH3/BX4pAZWbt8oYtDn47Abw6vJnD7ByrWjTnMrB0LFZIqzvE3
-         UFUS/j/fLLBx7Hw+ZmcQD5+C65Whzv6NnPZ3tric6ufs9zGkzWOfj84HkZTF6uee82O2
-         3+uvfVEb+83tA6bD4RIeY8yNrmCy8WACpAC09UAgyiX0VbLoeCw7T90ca8YPTMW4fs/0
-         1aeQ==
-X-Gm-Message-State: APjAAAX2H62Wr8b0y/SkoDxtbZqvI724ERZTwpoYBZlSyRgX3nx5vIbA
-        W9EnPSVePVfUuNm48j7160k=
-X-Google-Smtp-Source: APXvYqz9N8PHcSSp1HK+3KW8LZATYFgVsMTTvjiUP7bT53uGJnrfzE0TO0/baeUxuBD3T3ZwnFQE6g==
-X-Received: by 2002:a1c:ddd6:: with SMTP id u205mr21807313wmg.151.1581928281370;
-        Mon, 17 Feb 2020 00:31:21 -0800 (PST)
-Received: from localhost (p2E5BEF3F.dip0.t-ipconnect.de. [46.91.239.63])
-        by smtp.gmail.com with ESMTPSA id y131sm20125840wmc.13.2020.02.17.00.31.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Feb 2020 00:31:20 -0800 (PST)
-Date:   Mon, 17 Feb 2020 09:31:19 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     JC Kuo <jckuo@nvidia.com>
-Cc:     gregkh@linuxfoundation.org, robh@kernel.org, jonathanh@nvidia.com,
-        kishon@ti.com, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, nkristam@nvidia.com
-Subject: Re: [PATCH v6 4/5] arm64: tegra: Add XUSB and pad controller on
- Tegra194
-Message-ID: <20200217083119.GC1339021@ulmo>
-References: <20200212061133.11665-1-jckuo@nvidia.com>
- <20200212061133.11665-5-jckuo@nvidia.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=4o9MpvCnaW7UNrMoDadTvPllbR5hSCdTM1cZtcwAvo8=;
+        b=rNXR9HTCEW2LeCBlhBYSiwQqeqwSHmFnQwbsWm1CpGSoliA+8qRrAFbH6qgxUjK47H
+         vRYPi2+FTfnc0Y9tcdVu6Oy6VygIEt4LdnBaz86jcQrgR+ZI84Y3s7NXw72mRxVEfIDu
+         3ukHTh5oAOh8zZVWIggEXQrSRwn+pPU3xSVTkfRc1/8VPcGjkLxM167LXINergL5Eayd
+         e/ishuYHxISRWBMd6D17VtyeAqW1Gc3t2thCVFmXGTFkc4gG21BP9/mRXtF7Taag+Q+b
+         2PkaJIecma/RpVVD6gV+trKbzvGZv5DkI1mIR7XtUd1uuIOYz0KWSjiWPAKmMSDwfiSI
+         l+vQ==
+X-Gm-Message-State: APjAAAUWVlbJN2Vz3TPqtcm0pYSgxY0bDhCPnh7G4hQExDqevbquG0zw
+        GWMlM7wammzbDW3dasAhsbWSEvrhb98jP4pJFWwuh3Em5mk=
+X-Google-Smtp-Source: APXvYqx2ueaC/hV8qPE0R05PmQXt8c2Pct9mXAV2SSmrSlMEmO1pjbXcsPd0W1wVCc9TriZVLyqVp/ChAvVZSmdRB38=
+X-Received: by 2002:a2e:9008:: with SMTP id h8mr9245027ljg.217.1581928390302;
+ Mon, 17 Feb 2020 00:33:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="69pVuxX8awAiJ7fD"
-Content-Disposition: inline
-In-Reply-To: <20200212061133.11665-5-jckuo@nvidia.com>
-User-Agent: Mutt/1.13.1 (2019-12-14)
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 17 Feb 2020 14:02:57 +0530
+Message-ID: <CA+G9fYtnwFVPQxgHOU2Bi9y5+q4sSsww47yxK+_3ZAQ9=kyhUg@mail.gmail.com>
+Subject: msm_hsusb 78d9000.usb: failed to create device link to ci_hdrc.0.ulpi
+To:     linux-usb@vger.kernel.org, open list <linux-kernel@vger.kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter.Chen@nxp.com, lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+arm64 APQ 8016 SBC ( Dragonboard 410c)  device running Linux next boot
+failed due to below error.
 
---69pVuxX8awAiJ7fD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd030]
+[    0.000000] Linux version 5.6.0-rc2-next-20200217 (oe-user@oe-host)
+(gcc version 7.3.0 (GCC)) #1 SMP PREEMPT Mon Feb 17 04:27:31 UTC 2020
+[    0.000000] Machine model: Qualcomm Technologies, Inc. APQ 8016 SBC
+<>
+[    4.439291] msm_hsusb 78d9000.usb: failed to create device link to
+ci_hdrc.0.ulpi
+[    4.448891] msm_hsusb 78d9000.usb: failed to create device link to
+ci_hdrc.0.ulpi
+[    4.457879] msm_hsusb 78d9000.usb: failed to create device link to
+ci_hdrc.0.ulpi
+[    4.467331] msm_hsusb 78d9000.usb: failed to create device link to
+ci_hdrc.0.ulpi
+[    4.475636] mmc0: new HS200 MMC card at address 0001
+[    4.478895] mmcblk0: mmc0:0001 DS2008 7.28 GiB
+[    4.480629] mmcblk0boot0: mmc0:0001 DS2008 partition 1 4.00 MiB
+[    4.484719] mmcblk0boot1: mmc0:0001 DS2008 partition 2 4.00 MiB
+[    4.492247] msm_hsusb 78d9000.usb: failed to create device link to
+ci_hdrc.0.ulpi
+[    4.502611] mmcblk0rpmb: mmc0:0001 DS2008 partition 3 4.00 MiB,
+chardev (234:0)
+[    4.506949] msm_hsusb 78d9000.usb: failed to create device link to
+ci_hdrc.0.ulpi
+[    4.517901] random: fast init done
+[    4.521420] mmc1: new ultra high speed SDR104 SDHC card at address aaaa
+[    4.523400] mmcblk1: mmc1:aaaa SL16G 14.8 GiB
+[    4.532843] msm_hsusb 78d9000.usb: failed to create device link to
+ci_hdrc.0.ulpi
+[    4.539131]  mmcblk0: p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11 p12 p13 p14
+[    4.542309]  mmcblk1: p1
+[    4.561843] msm_hsusb 78d9000.usb: failed to create device link to
+ci_hdrc.0.ulpi
+[    4.573481] msm_hsusb 78d9000.usb: failed to create device link to
+ci_hdrc.0.ulpi
+[    4.585283] msm_hsusb 78d9000.usb: failed to create device link to
+ci_hdrc.0.ulpi
+[    4.592622] msm_hsusb 78d9000.usb: failed to create device link to
+ci_hdrc.0.ulpi
+[    4.600074] msm_hsusb 78d9000.usb: failed to create device link to
+ci_hdrc.0.ulpi
+[    4.607204] msm_hsusb 78d9000.usb: failed to create device link to
+ci_hdrc.0.ulpi
+[    4.614679] msm_hsusb 78d9000.usb: failed to create device link to
+ci_hdrc.0.ulpi
 
-On Wed, Feb 12, 2020 at 02:11:32PM +0800, JC Kuo wrote:
-> Adds the XUSB pad and XUSB controllers on Tegra194.
->=20
-> Signed-off-by: JC Kuo <jckuo@nvidia.com>
-> ---
-> Changes in v6: rebase
-> Changes in v5: none
-> Changes in v4: none
-> Changes in v3: none
-> Changes in v2:
->  - renamed xhci@3610000 with usb@3610000
->  - moved padctl@3520000 and usb@3610000 inside /cbb
->  - cleaned up "clocks" property of usb@3610000 node
->  - added blanks lines to visually separate blocks
->=20
->  arch/arm64/boot/dts/nvidia/tegra194.dtsi | 139 +++++++++++++++++++++++
->  1 file changed, 139 insertions(+)
+metadata:
+  git branch: master
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  git commit: c25a951c50dca1da4a449a985a9debd82dc18573
+  git describe: next-20200217
+  make_kernelversion: 5.6.0-rc2
+  kernel-config:
+http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/dragonboard-410c/lkft/linux-next/705/config
+  build-location:
+http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/dragonboard-410c/lkft/linux-next/705
 
-Applied to for-5.7/arm64/dt, thanks.
-
-Thierry
-
---69pVuxX8awAiJ7fD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl5KT1cACgkQ3SOs138+
-s6GnYA//Sd6ujIPiLIfMs8BIr5umZlDgL84Yb3sZrCSLrvv75bXQiLBSIUUlaJXA
-TrUEzOv4zD6AfYw/4+dQOWm9FKLwYDY2Cde/vVuILP5bKxnGFSqKYuFnFSFfko1m
-1wP90nroVW/83B+i/28eI19IPL0tRXnjGbOhEGuKEiFLMv1wytH2OuThDjkrNbnw
-hahF+j7Ip17EXejh5SFCk3oFMTwAQrD60B2CrfmHdc9EkaLRT885BSFY2EGfCTud
-peNf1olQukAdafJJ27qOmoPL2WEwhVQJf1rOGrPygYPb8CcrHpwakuzYczvvA3kK
-IYA+wqZxDnaNAVQurr1PM5dceI7514AW3TeZK3VlCQ6l2AJg+ZAzeOBMit7Qq1Bt
-MGe4wgQyV6zhyaisPy7TrZIc8Ua/DO0ZJz6sgSWykfN+g5t7PPFPv/i4LXb/w3IB
-Ndrw+AH+iDDSNSE1JbQEczmxlyDD5Yb41i6uvLhNayCuVD25k1HGlPLMOe+7qVfn
-7siMqO+t2DozPnkgd1dtsYG2JzxYRwIz++rH69gyCc1LOCuKFs/hKH0qkLnGegBx
-nxATs+cVNo7qab7XuoRDi47JwVZw4/IyZckYim5j6gRJR4eMooteZJVeWQ5o/9vf
-G855HvFBew+mmvpfDPd0sQ1vfGYqFnSSiMmacW0nhlQFr7b9GhM=
-=F5ca
------END PGP SIGNATURE-----
-
---69pVuxX8awAiJ7fD--
+ref:
+https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200217/testrun/1223296/log
+https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200217/testrun/1223301/log
+https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200217/testrun/1223310/log
+https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200217/testrun/1223308/log
