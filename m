@@ -2,117 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBF5160D71
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 09:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E0D160D7D
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 09:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728398AbgBQIdq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Feb 2020 03:33:46 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:45816 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728108AbgBQIdq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Feb 2020 03:33:46 -0500
-Received: by mail-wr1-f66.google.com with SMTP id g3so18497160wrs.12;
-        Mon, 17 Feb 2020 00:33:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=+7Ukio5eVRhWG5EqBR9LrQe1Ic0U22Ymzcis/tBCVZA=;
-        b=KaI17qZ8CL4COFgDL4O0IvE1WTk+T0NYsed+2clavfyv+0LH9uOM+oPyCDBwAz7LQy
-         4c4wUTpqzKBFr1AjWCPGfYx8O0+kd30HjutTCUV2b9lsPwNZjMJhZRm9Cy9w2yXBgLTe
-         2LtxhYOBEoiYZlNn09Xf3jeV4euYbB7jF469NCHnn0C+BqAdNhfTjTqqCDdNaEiTqNQj
-         SXWzMTE7NgK06DKPDopLqBgX8MiABWYr26gGayncUrCqRjDDpwaIhwdTiqImOj5Y1fz6
-         GxCFI86MnWxO0llnMNeF5nKq4WPeTfL7q8pTHfKzRJPxiHjso1coguFDSLjbhyt4ZT3P
-         njSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+7Ukio5eVRhWG5EqBR9LrQe1Ic0U22Ymzcis/tBCVZA=;
-        b=rEPvgw2X/QubJ6OihV23pXHYW5ShU6SqtJYjqu+MVd0l/QRtaMB1mgbSPcESBPTn26
-         XEwpUUOYqiVVnzkqxA9JVCo6g+cKVnk6Fie2NBYzQNseX6gnNeFsPrCb8cBJIhLll3VF
-         K4JZIJqVChYcT7SiJDPCjjSA1YQ1BKj3lAUqq2aHvi484pfmZBoW+WgYRm9Z3tEsSfIq
-         jKhKPf59/gitoA5uQiA/jhSqrgmP4dXeU0ZNlep1gn5gDGUia9ttMPbf01QhnVzjDVD3
-         uDrkFMAPn0UHbutdUMpnA5TdrYOMX5tMTL7+CsRq6ziEPR0vtIBOqF1j1BnUkTRewyHj
-         oYQg==
-X-Gm-Message-State: APjAAAUUy3BwS2mc9HposqVunrwi8l6a13FhcSK3k6g9+H9mVla0zFgg
-        iBDNPV2ayHh8bXIByw/+m4vkoPS5
-X-Google-Smtp-Source: APXvYqxpgq4ptqYGx9gtXms7gyTq+QH8O/dTUATiLEhEah8yYQ/a9j80dJLNDDTDT8duCCgZ8CTCAQ==
-X-Received: by 2002:a5d:5283:: with SMTP id c3mr21163986wrv.148.1581928424807;
-        Mon, 17 Feb 2020 00:33:44 -0800 (PST)
-Received: from localhost (p2E5BEF3F.dip0.t-ipconnect.de. [46.91.239.63])
-        by smtp.gmail.com with ESMTPSA id s8sm20209704wrt.57.2020.02.17.00.33.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Feb 2020 00:33:43 -0800 (PST)
-Date:   Mon, 17 Feb 2020 09:33:43 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     JC Kuo <jckuo@nvidia.com>
-Cc:     gregkh@linuxfoundation.org, robh@kernel.org, jonathanh@nvidia.com,
-        kishon@ti.com, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, nkristam@nvidia.com
-Subject: Re: [PATCH v6 5/5] arm64: tegra: Enable XUSB host in P2972-0000 board
-Message-ID: <20200217083343.GD1339021@ulmo>
-References: <20200212061133.11665-1-jckuo@nvidia.com>
- <20200212061133.11665-6-jckuo@nvidia.com>
+        id S1728327AbgBQIgE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Feb 2020 03:36:04 -0500
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:11934 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728296AbgBQIgE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Feb 2020 03:36:04 -0500
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01H8RUrg030057;
+        Mon, 17 Feb 2020 09:35:47 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=dYYlD9AxTr/W6qVxxLp/GoGixwt/C1OSKTp0qeV3VqI=;
+ b=RMEbA4Ia5w0qU5b82buZQuRCSNhN430/6zezROvKMKSLs0ih4a1yDEvFdi9U03TJhQ74
+ AIkYH4uIMev5WP5Xw2aATyqrHRtRSUi4hLSM6P6T5GvWnfEt9p+vokJJg7mpv5QlcfKe
+ FIlGkxNztDgz5KM6b6Rtec4djVbqA8mWuEQ+gs2QW1uEc7jTjmgU2Zd09RvqIouQslLX
+ JppcnuCo7E5M/PdMR6eyXDom41fgF5DAeNZ4pRqxzzvBF0Vs2f2ZJ4vxT9JI7eZUsOkW
+ bYT6iZOOkdxXZJULrS5M6P5CDdhY7e5kW4KvpDzLRsEQMmZhWVFZm+68rMHVm0wJf+rv rA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2y6705hpvv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Feb 2020 09:35:47 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id ADAE810002A;
+        Mon, 17 Feb 2020 09:35:46 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9E26B22161C;
+        Mon, 17 Feb 2020 09:35:46 +0100 (CET)
+Received: from lmecxl0912.lme.st.com (10.75.127.47) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 17 Feb
+ 2020 09:35:46 +0100
+Subject: Re: [PATCH] phy: core: Add consumer device link support
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+CC:     youling 257 <youling257@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>, <saravanak@google.com>
+References: <20191104143713.11137-1-alexandre.torgue@st.com>
+ <20200206133918.15012-1-youling257@gmail.com>
+ <0c4a37a9-0a2e-e698-f423-53060854ea05@ti.com>
+ <CAOzgRdb5QfJDQzbtoHQry4wxUg52LwX5XFCPzzaYa=z+RqNWOQ@mail.gmail.com>
+ <8bd72269-16ae-b24a-7144-44d22d668dc6@ti.com>
+ <1cd5885d-7db4-59b9-ef2d-e3556f60ca68@st.com>
+ <CAHp75VcbPYNKfrnkuSfdN8t100kZFdq05hkbWxJKgRWJknRgxQ@mail.gmail.com>
+From:   Alexandre Torgue <alexandre.torgue@st.com>
+Message-ID: <3afc9783-813c-ab61-b4f4-e925a32df947@st.com>
+Date:   Mon, 17 Feb 2020 09:35:45 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="5gxpn/Q6ypwruk0T"
-Content-Disposition: inline
-In-Reply-To: <20200212061133.11665-6-jckuo@nvidia.com>
-User-Agent: Mutt/1.13.1 (2019-12-14)
+In-Reply-To: <CAHp75VcbPYNKfrnkuSfdN8t100kZFdq05hkbWxJKgRWJknRgxQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG5NODE1.st.com (10.75.127.13) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-17_04:2020-02-14,2020-02-17 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
 
---5gxpn/Q6ypwruk0T
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2/14/20 7:46 PM, Andy Shevchenko wrote:
+> On Mon, Feb 10, 2020 at 1:32 PM Alexandre Torgue
+> <alexandre.torgue@st.com> wrote:
+>> On 2/10/20 9:08 AM, Kishon Vijay Abraham I wrote:
+>>> On 07/02/20 12:27 PM, youling 257 wrote:
+>>>> test this diff, dwc3 work for my device, thanks.
+>>>>
+>>>> 2020-02-07 13:16 GMT+08:00, Kishon Vijay Abraham I <kishon@ti.com>:
+>>>>> On 06/02/20 7:09 PM, youling257 wrote:
+>>>>>> This patch cause "dwc3 dwc3.3.auto: failed to create device link to
+>>>>>> dwc3.3.auto.ulpi" problem.
+>>>>>> https://bugzilla.kernel.org/show_bug.cgi?id=206435
+> 
+> +1 to the report.
+> Please revert for v5.6 or provide a fix ASAP!
+> 
 
-On Wed, Feb 12, 2020 at 02:11:33PM +0800, JC Kuo wrote:
-> This commit enables XUSB host and pad controller in Tegra194
-> P2972-0000 board.
->=20
-> Signed-off-by: JC Kuo <jckuo@nvidia.com>
-> ---
-> Changes in v6:
-> - re-use "maximum-speed" instead of adding "nvidia,disable-gen2"
-> Changes in v5: none
-> Changes in v4: none
-> Changes in v3: none
-> Changes in v2:
-> - use capitalization of regulator names
-> - fix gpio property of VDD_5V_SATA regulator
->=20
->  .../arm64/boot/dts/nvidia/tegra194-p2888.dtsi | 36 ++++++++++-
->  .../boot/dts/nvidia/tegra194-p2972-0000.dts   | 63 +++++++++++++++++++
->  2 files changed, 98 insertions(+), 1 deletion(-)
+Kishon, do you plan to do the fix? If not, I'll send it quickly.
 
-Applied to for-5.7/arm64/dt, thanks.
+Thanks
+Alex
 
-Thierry
-
---5gxpn/Q6ypwruk0T
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl5KT+YACgkQ3SOs138+
-s6FzIRAAiqLSeEJ4PKGKw0C68DNsxPVFwwerYD3emjg3/ZUeSBWtzlItgiMeALkk
-hnej+vs1OH1eUutF7QVw39/lvNjfDlr081ZLK9Vs8l0w+/IrsVObz+EcS4GM6nWT
-941/tn5PFxahXcLnGcNxxd9m7qJjL0v9B72JKT317JrwD5B7ZH1o+t4Ij+toNi5G
-6rSuhXMii1YluF133U5XfQEyTEG/4Y7s2yAoBmn+nyZUQHSCLucg4YMJpiwiojHk
-U7tSxNbbALgFwLnLjWuZzAPBwIh4RMTIrpNowTnml/CgD+k5UE3m7++jp5xNVKqw
-+lmpARu7XF1ev+d3E6Td/NmJPD3gO0v1Id5fJbPF+n7VZieUpWecQwAvmfM8K8w6
-+CU4npgC74i4PVzzx2tEcUFxLHKrV+F9mEJpZ7YtmazCjZPWYnV7dn414mho9ZuW
-8+k248qKfEHN5G0ClQqeGKC98EjoBWAu7N5R1S9fcRkQ+6EVT7KVcfqqTPvVBVaE
-c2nCV5idCkDKCdSNH1G5sOX/cwFQDfSC6GNG9VS86myLaITCJYA9FCQ4Gc8ROBvP
-9/84ZzT2td0XZC4N3hWf2Aa9zX05xhdEAebKRQgHs5lsFmPrpQR1u+JSHj8dV8Db
-KiPrNu847WHh74lKExsu/MLAh0agMfMT0WdIE/0qunYxQc/U67U=
-=1Vx9
------END PGP SIGNATURE-----
-
---5gxpn/Q6ypwruk0T--
+>>>>>
+>>>>> I'm suspecting there is some sort of reverse dependency with dwc3 ULPI.
+>>>>> Can you try the following diff?
+>>>>>
+>>>>> diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+>>>>> index 2eb28cc2d2dc..397311dcb116 100644
+>>>>> --- a/drivers/phy/phy-core.c
+>>>>> +++ b/drivers/phy/phy-core.c
+>>>>> @@ -687,7 +687,7 @@ struct phy *phy_get(struct device *dev, const char
+>>>>> *string)
+>>>>>
+>>>>>           get_device(&phy->dev);
+>>>>>
+>>>>> -       link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
+>>>>> +       link = device_link_add(dev, &phy->dev, DL_FLAG_SYNC_STATE_ONLY);
+>>>>>           if (!link) {
+>>>>>                   dev_err(dev, "failed to create device link to %s\n",
+>>>>>                           dev_name(phy->dev.parent));
+>>>>> @@ -802,7 +802,7 @@ struct phy *devm_of_phy_get(struct device *dev,
+>>>>> struct device_node *np,
+>>>>>                   return phy;
+>>>>>           }
+>>>>>
+>>>>> -       link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
+>>>>> +       link = device_link_add(dev, &phy->dev, DL_FLAG_SYNC_STATE_ONLY);
+>>>>>           if (!link) {
+>>>>>                   dev_err(dev, "failed to create device link to %s\n",
+>>>>>                           dev_name(phy->dev.parent));
+>>>>> @@ -851,7 +851,7 @@ struct phy *devm_of_phy_get_by_index(struct device
+>>>>> *dev, struct device_node *np,
+>>>>>           *ptr = phy;
+>>>>>           devres_add(dev, ptr);
+>>>>>
+>>>>> -       link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
+>>>>> +       link = device_link_add(dev, &phy->dev, DL_FLAG_SYNC_STATE_ONLY);
+>>>>>           if (!link) {
+>>>>>                   dev_err(dev, "failed to create device link to %s\n",
+>>>>>                           dev_name(phy->dev.parent));Parent
+>>>
+>>> Can you check if this doesn't affect the suspend/resume ordering?
+>>
+>> With this fix, suspend/resume ordering is broken on my side. What do you
+>> think to keep the STATELESS flag and to only display a warn if
+>> "device_link_add" returns an error ? It's not "smart" but it could
+>> solved our issue.
+>>
+>> As a lot of improvements have been recently done on device link topic by
+>> Saravana, we could check with him what is the way to follow.
+>>
+>> Regards
+>> Alex
+>>
+>>>
+>>> Thanks
+>>> Kishon
+>>>
+> 
+> 
+> 
