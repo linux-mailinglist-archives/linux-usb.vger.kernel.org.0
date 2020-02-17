@@ -2,57 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F243E1616C3
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 16:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B14B1616FB
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 17:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729671AbgBQPyv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Feb 2020 10:54:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51898 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729664AbgBQPyt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 Feb 2020 10:54:49 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5EA08206F4;
-        Mon, 17 Feb 2020 15:54:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581954887;
-        bh=V430jFj2L7DhXHtND43/1uiq2r1KBa2QOUh+1SiYQ7s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PPfL+xUCHc3RTqvoCMix4I6d07XXvbpFMcFCYjorYDvDjyoizR1Z8zIOkrd3cImnQ
-         AGMLFtRKrADjXKD9VkOvGJJ+VKyRXgEAR3G8GSGMyeIUli6anLqlUKF9YLAsrb7GQ1
-         uGx32b0x0yU0Cv4E/8ZEUjSupwJm9okSUrq42LeQ=
-Date:   Mon, 17 Feb 2020 16:54:45 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Ajay Gupta <ajayg@nvidia.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/3] ucsi driver changes (for v5.7)
-Message-ID: <20200217155445.GA1475779@kroah.com>
-References: <20200217144913.55330-1-heikki.krogerus@linux.intel.com>
+        id S1728651AbgBQQHa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 17 Feb 2020 11:07:30 -0500
+Received: from 8.mo69.mail-out.ovh.net ([46.105.56.233]:60056 "EHLO
+        8.mo69.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728489AbgBQQHa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Feb 2020 11:07:30 -0500
+X-Greylist: delayed 2227 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Feb 2020 11:07:29 EST
+Received: from player157.ha.ovh.net (unknown [10.108.42.192])
+        by mo69.mail-out.ovh.net (Postfix) with ESMTP id 4F1E2830BB
+        for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2020 17:07:28 +0100 (CET)
+Received: from mattea.info (host221-23-dynamic.248-95-r.retail.telecomitalia.it [95.248.23.221])
+        (Authenticated sender: relay@mattea.info)
+        by player157.ha.ovh.net (Postfix) with ESMTPSA id 03022F7842B5;
+        Mon, 17 Feb 2020 16:07:26 +0000 (UTC)
+Received: from alby.localnet (unknown [IPv6:fc00::9dc0:b1ba:2995:58a5])
+        by i-m-services.net (Postfix) with ESMTP id C61A22CE3EF;
+        Mon, 17 Feb 2020 17:07:17 +0100 (CET)
+From:   Alberto Mattea <alberto@mattea.info>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: xhci: apply XHCI_SUSPEND_DELAY to AMD XHCI controller 1022:145c
+Date:   Mon, 17 Feb 2020 17:07:17 +0100
+Message-ID: <5575017.lOV4Wx5bFT@alby>
+In-Reply-To: <20200217154538.GA1457504@kroah.com>
+References: <5340061.DvuYhMxLoT@alby> <20200217154538.GA1457504@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200217144913.55330-1-heikki.krogerus@linux.intel.com>
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Ovh-Tracer-Id: 13420726889642327925
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedugedrjeeigdekhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthhqredttddtudenucfhrhhomheptehlsggvrhhtohcuofgrthhtvggruceorghlsggvrhhtohesmhgrthhtvggrrdhinhhfoheqnecukfhppedtrddtrddtrddtpdhftgdttdemmeeluggttdemsgdusggrmedvleelheemheekrgehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpqdhouhhtpdhhvghlohepphhlrgihvghrudehjedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegrlhgsvghrthhosehmrghtthgvrgdrihhnfhhopdhrtghpthhtoheplhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 17, 2020 at 05:49:10PM +0300, Heikki Krogerus wrote:
-> Hi Greg,
+In data lunedì 17 febbraio 2020 16:45:38 CET, hai scritto:
+> On Mon, Feb 17, 2020 at 04:21:50PM +0100, Alberto Mattea wrote:
+> > Fixes suspend/resume
 > 
-> Here all the UCSI driver changes at this stage. I though the cleanup
-> patch from Colin would conflict with the patches from Ajay, but there
-> was no problem after all.
+> We are going to need a lot more information here, sorry.  Please be
+> explicit as to what you are doing and why.
 > 
-> Let me know if you want anything to be changed.
+> thanks,
+> 
+> greg k-h
+> 
 
-All looks good, now applied.  And note, I already had applied Colin's
-patch :)
+Sure, what about
+"This controller timeouts during suspend (S3) with 
+[  240.521724] xhci_hcd 0000:30:00.3: WARN: xHC save state timeout
+[  240.521729] xhci_hcd 0000:30:00.3: ERROR mismatched command completion event
+thus preventing the system from entering S3. Moreover it remains in an undefined state
+where some connected devices stop working until a reboot.
+Apply the XHCI_SUSPEND_DELAY quirk to make it suspend properly."
 
-thanks,
+Thanks,
 
-greg k-h
+Alberto
+
+
