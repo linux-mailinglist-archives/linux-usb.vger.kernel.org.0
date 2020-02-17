@@ -2,121 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2639F16134B
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 14:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2561A16141C
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 15:05:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728425AbgBQN1M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Feb 2020 08:27:12 -0500
-Received: from mail-il1-f198.google.com ([209.85.166.198]:33970 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728124AbgBQN1L (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Feb 2020 08:27:11 -0500
-Received: by mail-il1-f198.google.com with SMTP id l13so14326643ils.1
-        for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2020 05:27:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=//Eikc+TfQoOfK+iblsjNCYJ0p+m9TlXlSpof67YNNw=;
-        b=Moj6/29tb+I5+rL+k58LQvkTrgKypDdTsaM9F6f/R5j+pZvNFvNAKvs3XKyzuBiAv4
-         rrIOyArMVaOh86VZ373u6EmeBGkR9GWXWPZ/TD0ak65IopPw3QjoZkz91SErkBIAKB/e
-         z2YsJ773ubX/xIx0wZGbQSKK/LhnfnI0etQqkxAAbscJucmbT44iYlphgY+VWsl6aDTN
-         DyE4wwfo5+8U26hfwzygO16J793BXv1nth+5R/jhg0TN1bnn4+6mYLrlh31036/ty8JA
-         gSgmuOKTkHX0wJN0aE+BUhrJK4PtZJ31WPzxTuIby6af9PHasFyXQWMPOv2K5L13gqhn
-         sSMw==
-X-Gm-Message-State: APjAAAVG9EGNQQ6sh3N5ev6Ei1QwZ9c1FpZKs2eOu5z3kXn3TBQH5OXw
-        I4AbTfl0KWfYrIhl9UzLfp+WYiP0QG1OkIncUHS+O0YIHwTI
-X-Google-Smtp-Source: APXvYqwnpjMrbSljtR7Lav4RkYaw8FsWyzE9gfZXhRW3Att0YLAj9mEoaKfcS1mD94s1f6BhP1S5aoN629SA2yLXv0hdqcUHaRSp
+        id S1727346AbgBQOFJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Feb 2020 09:05:09 -0500
+Received: from smtp.domeneshop.no ([194.63.252.55]:47543 "EHLO
+        smtp.domeneshop.no" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726945AbgBQOFJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Feb 2020 09:05:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds201912; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=A7DoHQzMcjstRT4VIaWX5MCnTC30F+k0NRTtXi92u1I=; b=VW3uCl3wq9QgGlam23qVN8I+9+
+        SmA/CuXUhWBypAmjgnhxKxt7UkbuEBPCxHY7PCzFHnff7c4NqIHjzmf93OU1B+/QlpLczdp9Wlih+
+        T4jpfEBBDwxNCdn6aL65MXFIK4kniY5j9EiGlfMoShjqXyZLGWfB/TMCPQnGPQv6HcDtvMS+LEqVv
+        u7Jkd5CSJDtcF4jIl5UUW4o8H0KRh6uzpXF6gwIjI/tQjs5Ncf5KVZjelD9TFDfgBJDc/dmWzivhP
+        /8UIT0evjXtary/ejsZQ9V89Qso+x/qqixyfNlEh8DIU6OJSmYTcKp6tsxFYJprzd0ZOVpQmLkjF7
+        OUWLlBiA==;
+Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:53127 helo=[192.168.10.61])
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1j3h1G-00059d-4g; Mon, 17 Feb 2020 15:05:06 +0100
+Subject: Re: [RFC 0/9] Regmap over USB for Multifunction USB Device (gpio,
+ display, ...)
+To:     Neil Armstrong <narmstrong@baylibre.com>, broonie@kernel.org,
+        balbi@kernel.org, lee.jones@linaro.org
+Cc:     linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20200216172117.49832-1-noralf@tronnes.org>
+ <62e6e9b1-f44a-42ae-a971-8b947763284b@baylibre.com>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Message-ID: <0ae9eda9-3e1a-d231-2a03-1877f5a3a0bb@tronnes.org>
+Date:   Mon, 17 Feb 2020 15:05:02 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-X-Received: by 2002:a92:1a12:: with SMTP id a18mr14351032ila.10.1581946031115;
- Mon, 17 Feb 2020 05:27:11 -0800 (PST)
-Date:   Mon, 17 Feb 2020 05:27:11 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003d1365059ec583c5@google.com>
-Subject: WARNING in chaoskey_disconnect
-From:   syzbot <syzbot+a07cc2ec8430d5980aa1@syzkaller.appspotmail.com>
-To:     alexandre.belloni@bootlin.com, andreyknvl@google.com,
-        arnd@arndb.de, gregkh@linuxfoundation.org,
-        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        lvivier@redhat.com, mchehab+samsung@kernel.org, mpm@selenic.com,
-        swboyd@chromium.org, syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <62e6e9b1-f44a-42ae-a971-8b947763284b@baylibre.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-syzbot found the following crash on:
-
-HEAD commit:    7f0cd6c7 usb: gadget: add raw-gadget interface
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=12445311e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f10b12ae04e03319
-dashboard link: https://syzkaller.appspot.com/bug?extid=a07cc2ec8430d5980aa1
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-
-Unfortunately, I don't have any reproducer for this crash yet.
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+a07cc2ec8430d5980aa1@syzkaller.appspotmail.com
-
-usb 6-1: USB disconnect, device number 67
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 4799 at kernel/kthread.c:75 to_kthread kernel/kthread.c:75 [inline]
-WARNING: CPU: 1 PID: 4799 at kernel/kthread.c:75 kthread_stop+0x5f8/0x780 kernel/kthread.c:555
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 1 PID: 4799 Comm: kworker/1:8 Not tainted 5.6.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- panic+0x2aa/0x6e1 kernel/panic.c:221
- __warn.cold+0x2f/0x30 kernel/panic.c:582
- report_bug+0x27b/0x2f0 lib/bug.c:195
- fixup_bug arch/x86/kernel/traps.c:174 [inline]
- fixup_bug arch/x86/kernel/traps.c:169 [inline]
- do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
- do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
- invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-RIP: 0010:to_kthread kernel/kthread.c:75 [inline]
-RIP: 0010:kthread_stop+0x5f8/0x780 kernel/kthread.c:555
-Code: 00 4c 89 e7 e8 79 4b cb 00 e9 f9 fa ff ff e8 5f 03 23 00 be 03 00 00 00 4c 89 e7 e8 62 4b cb 00 e9 0e fc ff ff e8 48 03 23 00 <0f> 0b e9 23 fb ff ff e8 3c 03 23 00 be 02 00 00 00 4c 89 e7 e8 3f
-RSP: 0018:ffff8881cc3677f0 EFLAGS: 00010216
-RAX: 0000000000040000 RBX: 0000000000000000 RCX: ffffc9000d782000
-RDX: 00000000000040df RSI: ffffffff811c5ed8 RDI: 0000000000000005
-RBP: ffff8881d4b50000 R08: ffff8881cbb54980 R09: ffffed103a96a005
-R10: ffffed103a96a004 R11: ffff8881d4b50023 R12: ffff8881d4b50020
-R13: ffff8881c8a1a930 R14: ffff8881c8a1a978 R15: ffffffff873764e0
- hwrng_unregister+0x24f/0x330 drivers/char/hw_random/core.c:556
- chaoskey_disconnect+0x216/0x290 drivers/usb/misc/chaoskey.c:232
- usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
- __device_release_driver drivers/base/dd.c:1137 [inline]
- device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1168
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
- device_del+0x481/0xd30 drivers/base/core.c:2664
- usb_disable_device+0x23d/0x790 drivers/usb/core/message.c:1237
- usb_disconnect+0x293/0x900 drivers/usb/core/hub.c:2201
- hub_port_connect drivers/usb/core/hub.c:5036 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5325 [inline]
- port_event drivers/usb/core/hub.c:5471 [inline]
- hub_event+0x1a1d/0x4300 drivers/usb/core/hub.c:5553
- process_one_work+0x94b/0x1620 kernel/workqueue.c:2264
- process_scheduled_works kernel/workqueue.c:2326 [inline]
- worker_thread+0x7ab/0xe20 kernel/workqueue.c:2412
- kthread+0x318/0x420 kernel/kthread.c:255
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
 
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Den 17.02.2020 11.32, skrev Neil Armstrong:
+> Hi,
+> 
+> On 16/02/2020 18:21, Noralf Trønnes wrote:
+>> Hi,
+>>
+>> A while back I had the idea to turn a Raspberry Pi Zero into a $5
+>> USB to HDMI/SDTV/DSI/DPI display adapter.
+>>
+>> Thinking about how to represent the display to the driver I realised
+>> that hardware use registers as API. And Linux does have a generic
+>> register abstraction: regmap. Furthermore this means that if I can do a
+>> regmap over USB implementation, it will be easy to do other functions
+>> like gpio, adc and others. After a few iterations trying to understand
+>> the USB subsystem and satisfying driver requirements, I now have
+>> something that looks promising.
+>>
+>> I'm sending out an early version hoping to get feedback especially on
+>> the core parts that handles regmap and interrupts.
+>>
+>> Overview:
+>>
+>>           USB Host          :         USB Device
+>>                             :
+>>             --------------  :  ------------------
+>> ----------  | mfd: mud   |  :  | f_mud          |  ----------
+>> | Driver |  --------------  :  |                |  | Driver |
+>> ----------  | regmap-usb |  :  | (mud_regmap)   |  ----------
+>>             --------------  :  ------------------
+>>
+> 
+> The idea is really like ARA's greybus, but much simpler !
+> Anyway nice idea, do you have good performance over USB2 and
+> RPi's awful DWC2 gagdet controller ?
+> 
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Not as good as I was hoping for. If I disable compression I'm getting 5
+fps for a 1.5MB framebuffer (7800 kB/s):
+
+$ modetest -M mud_drm -s 35:1024x768@RG16 -v
+setting mode 1024x768-60.00Hz@RG16 on connectors 35, crtc 33
+freq: 5.07Hz
+
+When I tried reading I discovered that it was almost 3 times faster than
+writing.
+
+The zero gadget (loop testing) confirmed my findings:
+
+Device:
+$ sudo modprobe g_zero
+[   44.221890] zero gadget: Gadget Zero, version: Cinco de Mayo 2008
+[   44.221906] zero gadget: zero ready
+[   60.751451] zero gadget: high-speed config #3: source/sink
+
+Host:
+
+$ sudo ~/testusb -a -t <n> -g 64 -s 16384
+/dev/bus/usb/001/010 test 27,  107.230669 secs	-> 1000 / 107 =  9MB/s
+/dev/bus/usb/001/010 test 28,   37.791292 secs	-> 1000 / 37  = 27MB/s
+[73983.796552] usbtest 1-1.3:3.0: TEST 27: bulk write 1000Mbytes
+[74205.060204] usbtest 1-1.3:3.0: TEST 28: bulk read 1000Mbytes
+
+$ sudo ~/testusb -a -t <n> -g 64 -s 16384
+/dev/bus/usb/001/010 test 5,  107.421535 secs
+/dev/bus/usb/001/010 test 6,   38.189712 secs
+[74893.204170] usbtest 1-1.3:3.0: TEST 5:  write 1000 sglists 64 entries
+of 16384 bytes
+[75012.592222] usbtest 1-1.3:3.0: TEST 6:  read 1000 sglists 64 entries
+of 16384 bytes
+
+
+I have tried Raspberry Pi1 and Pi4 as host (2 different controllers)
+and Pi Zero and Beaglebone Black as device, getting similar result.
+
+I found this post having the same issue:
+
+Re: Asymmetric speed results with testusb/usbtest/g_zero
+https://www.spinics.net/lists/linux-usb/msg100588.html
+
+I haven't got a usb analyzer, but adding printk to
+dwc2_assign_and_init_hc() showed that IN interrupts were 2-3 ms apart
+but OUT interrupts were ~8 ms apart.
+
+Noralf.
