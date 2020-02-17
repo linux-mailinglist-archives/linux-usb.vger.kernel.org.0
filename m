@@ -2,21 +2,21 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D855A16188B
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 18:09:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B56611618C7
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 18:26:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729504AbgBQRJe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Feb 2020 12:09:34 -0500
-Received: from gateway21.websitewelcome.com ([192.185.45.133]:17803 "EHLO
-        gateway21.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728054AbgBQRJe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Feb 2020 12:09:34 -0500
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway21.websitewelcome.com (Postfix) with ESMTP id 7BE7A400D1869
-        for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2020 11:09:33 -0600 (CST)
+        id S1729715AbgBQRZi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Feb 2020 12:25:38 -0500
+Received: from gateway31.websitewelcome.com ([192.185.143.51]:27834 "EHLO
+        gateway31.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729375AbgBQRZa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Feb 2020 12:25:30 -0500
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway31.websitewelcome.com (Postfix) with ESMTP id 07F32F40A6
+        for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2020 11:25:29 -0600 (CST)
 Received: from gator4166.hostgator.com ([108.167.133.22])
         by cmsmtp with SMTP
-        id 3jtkjGcZDEfyq3jtljOyHW; Mon, 17 Feb 2020 11:09:33 -0600
+        id 3k99jS1uNXVkQ3k9Ajp9DP; Mon, 17 Feb 2020 11:25:29 -0600
 X-Authority-Reason: nr=8
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
@@ -24,27 +24,26 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=pExjigbiFyjiC9TT47KCL7or17+KCvUqoQghFIlPoAs=; b=nbKgLHwCiI5ltyzH6CpQqFfavg
-        WCLlVIfIZnNmtMG0ACTZ0osdgDORdo3Flgi7cnKr5c4R0lKAQiXlgd5DSXK6DidVGi9tyYB/5k0/5
-        0FUtRSxUYlSdqO2huPE5lZmumXaiDkhs8QLqymQrcwbv5rxcCY4BMKVOtiEMlUS9fO3Oek1/LfnaZ
-        yBng5gzq8NmN+WETLxjiZnFrBzN2LqJeiDRCvorwkFoN2EWHPZn67daLSriGbejOqhxYeDEUipdSu
-        qQHFi2iGO7fEDj+CHiem/NTWMbwT5OTNrMrf1+8A5kt7cu0uYtCmWcAbd2beaSw70zfV02KcF2uL9
-        cvmlPIQA==;
-Received: from [200.68.140.26] (port=1590 helo=[192.168.43.131])
+        bh=vy8zPoZTkqwtadC3/A/joeLVJuOJ28WgdFBN7SNZWi8=; b=TLJvKUiYZAxkF0FG53cFS48gOK
+        q4mqeadqU53VU3nA3IFWAFidZAY61y9KnLdf95RkCiNtXRUmrjfcJA5AAZxZ3/LPOCy31pakS1pDe
+        iqZn77HTECw/XsA4dVX8bsSiI1EiqtoYj5mVGTg0idIG4dgsgRt2mCMLGW4K1S7ZpeoqVIZ6qvJym
+        kJekhqBG9PEJbnZzPtKQq9baNtwE+Wyzu0hWg34G9yq/AovxjCBwjnabWAM8RAa44y8oR2BdSA6sM
+        BSE7dR1xcz6bipmYuj/WSWJC5hoRBc1TlKCZaejAbaEAsFFeokIXO4XFhgRO7Wb6IAy2IA9ix8cHy
+        H9Fp6Fng==;
+Received: from [200.68.140.26] (port=2480 helo=[192.168.43.131])
         by gator4166.hostgator.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
         (Exim 4.92)
         (envelope-from <gustavo@embeddedor.com>)
-        id 1j3jtk-003Lt8-Cn; Mon, 17 Feb 2020 11:09:32 -0600
+        id 1j3k99-003TIp-3z; Mon, 17 Feb 2020 11:25:27 -0600
 Subject: Re: [PATCH] usb: host: fhci-hcd: annotate PIPE_CONTROL switch case
  with fallthrough
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Timur Tabi <timur@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Anton Vorontsov <avorontsov@ru.mvista.com>,
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Timur Tabi <timur@kernel.org>, Li Yang <leoyang.li@nxp.com>
+Cc:     Anton Vorontsov <avorontsov@ru.mvista.com>,
         kbuild test robot <lkp@intel.com>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20200213085401.27862-1-linux@rasmusvillemoes.dk>
- <20200213125659.GB3325929@kroah.com>
 From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
 Autocrypt: addr=gustavo@embeddedor.com; keydata=
  xsFNBFssHAwBEADIy3ZoPq3z5UpsUknd2v+IQud4TMJnJLTeXgTf4biSDSrXn73JQgsISBwG
@@ -89,12 +88,12 @@ Autocrypt: addr=gustavo@embeddedor.com; keydata=
  YJWH93PN+ZUh6i6Rd2U/i8jH5WvzR57UeWxE4P8bQc0hNGrUsHQH6bpHV2lbuhDdqo+cM9eh
  GZEO3+gCDFmKrjspZjkJbB5Gadzvts5fcWGOXEvuT8uQSvl+vEL0g6vczsyPBtqoBLa9SNrS
  VtSixD1uOgytAP7RWS474w==
-Message-ID: <4fa8a8e9-934d-2962-1daa-fdeea6017ea1@embeddedor.com>
-Date:   Mon, 17 Feb 2020 11:12:13 -0600
+Message-ID: <660cc732-d206-8528-500c-400618a6f19b@embeddedor.com>
+Date:   Mon, 17 Feb 2020 11:28:08 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200213125659.GB3325929@kroah.com>
+In-Reply-To: <20200213085401.27862-1-linux@rasmusvillemoes.dk>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -106,13 +105,13 @@ X-AntiAbuse: Sender Address Domain - embeddedor.com
 X-BWhitelist: no
 X-Source-IP: 200.68.140.26
 X-Source-L: No
-X-Exim-ID: 1j3jtk-003Lt8-Cn
+X-Exim-ID: 1j3k99-003TIp-3z
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-Source-Sender: ([192.168.43.131]) [200.68.140.26]:1590
+X-Source-Sender: ([192.168.43.131]) [200.68.140.26]:2480
 X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 7
+X-Email-Count: 15
 X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
 X-Local-Domain: yes
 Sender: linux-usb-owner@vger.kernel.org
@@ -122,26 +121,51 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 
-On 2/13/20 06:56, Greg Kroah-Hartman wrote:
-> On Thu, Feb 13, 2020 at 09:54:00AM +0100, Rasmus Villemoes wrote:
->> After this was made buildable for something other than PPC32, kbuild
->> starts warning
->>
->> drivers/usb/host/fhci-hcd.c:398:8: warning: this statement may fall
->> through [-Wimplicit-fallthrough=]
->>
->> I don't know this code, but from the construction (initializing size
->> with 0 and explicitly using "size +=" in the PIPE_BULK case) I assume
->> that fallthrough is indeed intended.
->>
->> Reported-by: kbuild test robot <lkp@intel.com>
->> Fixes: 5a35435ef4e6 (soc: fsl: qe: remove PPC32 dependency from CONFIG_QUICC_ENGINE)
->> Fixes: a035d552a93b (Makefile: Globally enable fall-through warning)
+On 2/13/20 02:54, Rasmus Villemoes wrote:
+> After this was made buildable for something other than PPC32, kbuild
+> starts warning
+> 
+> drivers/usb/host/fhci-hcd.c:398:8: warning: this statement may fall
+> through [-Wimplicit-fallthrough=]
+> 
+> I don't know this code, but from the construction (initializing size
+> with 0 and explicitly using "size +=" in the PIPE_BULK case) I assume
+> that fallthrough is indeed intended.
+> 
+> Reported-by: kbuild test robot <lkp@intel.com>
+> Fixes: 5a35435ef4e6 (soc: fsl: qe: remove PPC32 dependency from CONFIG_QUICC_ENGINE)
+> Fixes: a035d552a93b (Makefile: Globally enable fall-through warning)
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> ---
+> 
+> Two different Fixes: Obviously my 5a35435ef4e6 is the one that started
+> making kbuild complain, but that's just because apparently kbuild
+> doesn't cover a PPC32+USB_FHCI_HCD .config. Note for -stable folks,
+> just in case 5.3.y is still maintained somewhere: a035d552a93b
+> appeared in 5.3, but the #define fallthrough that I'm using here
+> wasn't introduced until 5.4 (294f69e662d15). So either ignore this,
+> make it /* fallthrough */, or backport 294f69e662d15 to 5.3.y as well.
+> 
 
-By the way, the "Fixes" tag above makes no sense. There is nothing wrong about
-that commit. It just enabled the fall-through warning globally. Why would you
-"fix" that?
+This patch should not be considered for -stable at all.
 
 Thanks
 --
 Gustavo
+
+>  drivers/usb/host/fhci-hcd.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/host/fhci-hcd.c b/drivers/usb/host/fhci-hcd.c
+> index 04733876c9c6..a8e1048278d0 100644
+> --- a/drivers/usb/host/fhci-hcd.c
+> +++ b/drivers/usb/host/fhci-hcd.c
+> @@ -396,6 +396,7 @@ static int fhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb,
+>  	case PIPE_CONTROL:
+>  		/* 1 td fro setup,1 for ack */
+>  		size = 2;
+> +		fallthrough;
+>  	case PIPE_BULK:
+>  		/* one td for every 4096 bytes(can be up to 8k) */
+>  		size += urb->transfer_buffer_length / 4096;
+> 
