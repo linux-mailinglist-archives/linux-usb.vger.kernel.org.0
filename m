@@ -2,89 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8941611CD
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 13:15:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB5A16120A
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 13:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727677AbgBQMPO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Feb 2020 07:15:14 -0500
-Received: from foss.arm.com ([217.140.110.172]:34832 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725972AbgBQMPO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 Feb 2020 07:15:14 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D6E930E;
-        Mon, 17 Feb 2020 04:15:14 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB6FB3F703;
-        Mon, 17 Feb 2020 04:15:13 -0800 (PST)
-Date:   Mon, 17 Feb 2020 12:15:12 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>
-Cc:     balbi@kernel.org, lee.jones@linaro.org, linux-usb@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [RFC 6/9] regmap: Speed up _regmap_raw_write_impl() for large
- buffers
-Message-ID: <20200217121512.GC9304@sirena.org.uk>
-References: <20200216172117.49832-1-noralf@tronnes.org>
- <20200216172117.49832-7-noralf@tronnes.org>
+        id S1729305AbgBQMbL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Feb 2020 07:31:11 -0500
+Received: from mail-qv1-f46.google.com ([209.85.219.46]:35125 "EHLO
+        mail-qv1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728615AbgBQMbL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Feb 2020 07:31:11 -0500
+Received: by mail-qv1-f46.google.com with SMTP id u10so7490476qvi.2
+        for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2020 04:31:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ossystems-com-br.20150623.gappssmtp.com; s=20150623;
+        h=from:mime-version:references:in-reply-to:date:message-id:subject:to
+         :cc;
+        bh=dXG6CClP4jx5ZwTa4pqIneGKAKm0xJl9UjRWD8qE7rY=;
+        b=EllmxXhIsnJkfS1oYXIKDe7bbqnDMDLZGHT9WbCoQHfjwSmTR0hCU3DTkW6I5jsv8n
+         EEIqIZqbDGYzCcwnWb/JO2znsuONwWdGkh/IlP/YtXc1mPhkCZBZlqZOfsGl885Nyxcw
+         AcIzf7MpbOcET+Rs/745okgTITKpVWYLrWxdIj6HP3q7pLrqAD/hHmyw8ORDiEGrIqmh
+         V0WkYpfpck7p6OaY3mWSL3eFPDOViCpfadTwq1Lq2vRTMOg3ZTuKXi1FzL+UHvEdETLD
+         UiqRk35XPdkDjSSokqqxv0uLHrHdho7fY8/J4XusYqorZhNWNN0fuGlIJOIORS/z3xES
+         JVsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:mime-version:references:in-reply-to:date
+         :message-id:subject:to:cc;
+        bh=dXG6CClP4jx5ZwTa4pqIneGKAKm0xJl9UjRWD8qE7rY=;
+        b=po5sM3PASDf0NI/CWiBaxvk3qvLFPdxJQ2hPuQBbaGyAY8tpw+qSNScG3TFCo7xSom
+         0i9/88KzblVQMO6sfA5khyJuF7L8pm0/XR4645rU4Kla3dXXWzDyOwYrFQaw144hEyhq
+         TO/GjTFnQDey4WUsDqoqmj0cpJbhs05bTqd3X8wSSCSy7wO+myIAJ+08NbftxtXuPfsW
+         /yVdq2woAuL3HuSu1pVZyV/TpI/iMeN9XlZc3e6Xug3pJo3CFwTkP0qaBUHJziKvPShv
+         JW7gEch7+g8pdQ0B2xdjIBrUwftRAD1NRqFkaEw0sVwjDhayCGcIsNnekCcNi/0kPAFT
+         jShg==
+X-Gm-Message-State: APjAAAUUFb69h/YduIIwkZtgeYdM0CX0Hc1v5D0XKFQLxiq3PAj27mpe
+        MBBDRyQiUBCPRdpe7QooymNppAepuin9gw==
+X-Google-Smtp-Source: APXvYqyix1FgUjMCa4MJHhBBtYmyv0FuasEDxY1nuQI2IUOqqYjWdpwvJznY9Gad1skqMB0sFV1zqA==
+X-Received: by 2002:a05:6214:80c:: with SMTP id df12mr11924172qvb.113.1581942669979;
+        Mon, 17 Feb 2020 04:31:09 -0800 (PST)
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com. [209.85.160.179])
+        by smtp.gmail.com with ESMTPSA id p92sm101584qtd.14.2020.02.17.04.31.08
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Feb 2020 04:31:08 -0800 (PST)
+From:   Otavio Salvador <otavio.salvador@ossystems.com.br>
+X-Google-Original-From: Otavio Salvador <otavio@ossystems.com.br>
+Received: by mail-qt1-f179.google.com with SMTP id i23so1705280qtr.5
+        for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2020 04:31:08 -0800 (PST)
+X-Received: by 2002:ac8:4b70:: with SMTP id g16mr12772150qts.296.1581942668095;
+ Mon, 17 Feb 2020 04:31:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="f0KYrhQ4vYSV2aJu"
-Content-Disposition: inline
-In-Reply-To: <20200216172117.49832-7-noralf@tronnes.org>
-X-Cookie: There was a phone call for you.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <CAP9ODKprPi8N-dU8NaKwneXH-3b0ipSEDpU5mDbGntxuyhGhJw@mail.gmail.com>
+ <41a7bfe7-54b1-84eb-091f-469d971ab968@synopsys.com>
+In-Reply-To: <41a7bfe7-54b1-84eb-091f-469d971ab968@synopsys.com>
+Date:   Mon, 17 Feb 2020 09:30:56 -0300
+X-Gmail-Original-Message-ID: <CAP9ODKoUH=Cc=uuhfaUy7fkSVdfBHhX-6oS9_hi3Wd6GgDiZYw@mail.gmail.com>
+Message-ID: <CAP9ODKoUH=Cc=uuhfaUy7fkSVdfBHhX-6oS9_hi3Wd6GgDiZYw@mail.gmail.com>
+Subject: Re: USB DWC2 stops responding when insert/remove cable multiple times
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "linux-rockchip@lists.infradead.org" 
+        <linux-rockchip@lists.infradead.org>,
+        Johan Hovold <johan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello Minas,
 
---f0KYrhQ4vYSV2aJu
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, Feb 17, 2020 at 5:58 AM Minas Harutyunyan
+<Minas.Harutyunyan@synopsys.com> wrote:
+> On 2/14/2020 5:40 PM, Otavio Salvador wrote:
+...
+> >      [  312.967867] g_serial gadget: high-speed config #2: CDC ACM config
+> >      [  314.828173] dwc2 30180000.usb: new device is high-speed
+> >      [  314.866943] dwc2 30180000.usb: new address 16
+> >      [  314.889550] g_serial gadget: high-speed config #2: CDC ACM config
+> >
+>
+> I assume here you few time disconnected and then connected cable and
+> after last connection even when g_serial seen in last line it stop work.
+> Correct?
 
-On Sun, Feb 16, 2020 at 06:21:14PM +0100, Noralf Tr=F8nnes wrote:
+Yes. It stops responding.
 
-> When writing a 3MB buffer the unwritable check in _regmap_raw_write_impl()
-> adds a ~20ms overhead on a Raspberry Pi 4.
-> Amend this by avoiding the check if it's not necessary.
+> > The "[  314.889550] g_serial gadget: high-speed config #2: CDC ACM
+> > config" message is the last time it is detected. As mentioned, to
+> > restore the port to work, we need to reload the g_serial module.
+> >
+> > When we reload it, following exception happens:
+> >
+>
+> Actually exception happen in g_serial not dwc2. Why you assume that it
+> because of dwc2?
 
-This is a generic optimization, why is it mixed in with the rest of this
-series?  There is no dependency either way :(
+Indeed. After reporting this, it does sounds it is two decouple
+issues. The tty seems to be not properly cleaned up and it seems to
+have a resource not properly cleaned up.
 
->  	/* Check for unwritable registers before we start */
-> -	for (i =3D 0; i < val_len / map->format.val_bytes; i++)
-> -		if (!regmap_writeable(map,
-> -				     reg + regmap_get_offset(map, i)))
-> -			return -EINVAL;
-> +	if (map->max_register || map->writeable_reg || map->wr_table) {
-> +		for (i =3D 0; i < val_len / map->format.val_bytes; i++)
-> +			if (!regmap_writeable(map,
-> +					      reg + regmap_get_offset(map, i)))
-> +				return -EINVAL;
-> +	}
+...
+> > So, I am a bit lost how to debug this so I'd like to know what kind of
+> > information might be useful to find the root cause of it?
+>
+> And despite of above exception, g_serial enumerated it works fine?
 
-This is going to break if there is any change to the implementation of
-regmap_writeable().  The code should at least be next to that if not
-actually shared so that this doesn't happen.  I'd suggest implementing a
-function regmap_writeable_range() and then making regmap_writeable()
-call that.
+If reloaded the USB is detected but tty seems to not work. It seems it
+fails to free the ttyGS0 previously used and thus it cannot properly
+create the new device.
 
---f0KYrhQ4vYSV2aJu
-Content-Type: application/pgp-signature; name="signature.asc"
+> Please provide me dump of follow dwc2 debugfs's: regdump, hw_params, params.
 
------BEGIN PGP SIGNATURE-----
+Do you want this on working and failing state or just the failing one?
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5Kg88ACgkQJNaLcl1U
-h9Cqvwf/b0w5H5olLei00kwpkml0bAiaSqYNvHWjnvPQy5UyJuoRvZzGKOzzd3Pd
-xYUkjSU9pYQbSq1vTg7gjw4RjiUxdAWAiaeTAOxF6CEzbZ23oP8xavpEf+ZlSkjU
-WUB4muajVxmpQOa+iQxXOO1RYL1KLcNE23nQeaoPSXQxCfqjKM13avtXqEjFxRvi
-xH+HJ+ZljukvM+pEqYc4q6SlWJ4mOxuXm8hkOcVBa2JbvbOJd2b9pGXp502iSURi
-TiKdf2YXr+pn1tp2XiRAaBOLVzRbQcAb6Y4ZnSJmLMR584fhgzBJUbJDmIHDeklJ
-q5v8iZXWrEPSQbQq7++Ce80mkC9oxg==
-=Yug8
------END PGP SIGNATURE-----
-
---f0KYrhQ4vYSV2aJu--
+-- 
+Otavio Salvador                             O.S. Systems
+http://www.ossystems.com.br        http://code.ossystems.com.br
+Mobile: +55 (53) 9 9981-7854          Mobile: +1 (347) 903-9750
