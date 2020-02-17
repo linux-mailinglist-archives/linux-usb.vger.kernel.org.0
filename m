@@ -2,136 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2561A16141C
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 15:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 710C0161444
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2020 15:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727346AbgBQOFJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Feb 2020 09:05:09 -0500
-Received: from smtp.domeneshop.no ([194.63.252.55]:47543 "EHLO
-        smtp.domeneshop.no" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726945AbgBQOFJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Feb 2020 09:05:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds201912; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=A7DoHQzMcjstRT4VIaWX5MCnTC30F+k0NRTtXi92u1I=; b=VW3uCl3wq9QgGlam23qVN8I+9+
-        SmA/CuXUhWBypAmjgnhxKxt7UkbuEBPCxHY7PCzFHnff7c4NqIHjzmf93OU1B+/QlpLczdp9Wlih+
-        T4jpfEBBDwxNCdn6aL65MXFIK4kniY5j9EiGlfMoShjqXyZLGWfB/TMCPQnGPQv6HcDtvMS+LEqVv
-        u7Jkd5CSJDtcF4jIl5UUW4o8H0KRh6uzpXF6gwIjI/tQjs5Ncf5KVZjelD9TFDfgBJDc/dmWzivhP
-        /8UIT0evjXtary/ejsZQ9V89Qso+x/qqixyfNlEh8DIU6OJSmYTcKp6tsxFYJprzd0ZOVpQmLkjF7
-        OUWLlBiA==;
-Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:53127 helo=[192.168.10.61])
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1j3h1G-00059d-4g; Mon, 17 Feb 2020 15:05:06 +0100
-Subject: Re: [RFC 0/9] Regmap over USB for Multifunction USB Device (gpio,
- display, ...)
-To:     Neil Armstrong <narmstrong@baylibre.com>, broonie@kernel.org,
-        balbi@kernel.org, lee.jones@linaro.org
-Cc:     linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20200216172117.49832-1-noralf@tronnes.org>
- <62e6e9b1-f44a-42ae-a971-8b947763284b@baylibre.com>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-Message-ID: <0ae9eda9-3e1a-d231-2a03-1877f5a3a0bb@tronnes.org>
-Date:   Mon, 17 Feb 2020 15:05:02 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        id S1728962AbgBQOM3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Feb 2020 09:12:29 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:44075 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728123AbgBQOM2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Feb 2020 09:12:28 -0500
+Received: by mail-lf1-f66.google.com with SMTP id v201so11944046lfa.11
+        for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2020 06:12:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=tKSE4g/oUh8JP0cEiCIATWChO5NnMQwrTlN4DA9Lt8o=;
+        b=B0FvGH8TX29jyPG7bOm5TLFH8q5LsdhONtC1UHcUJ8h7odxJU2GxRt9z21IYmJGNzF
+         /0jTWJUiFD5TVE+48t4F6OEDVhf6OgYquJRARiAhjlzbvXHG85JG+khhY1MqMWUZNBR2
+         nh9VETpmGseZX71qeGmAo32tc3CM0M50UVpSU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=tKSE4g/oUh8JP0cEiCIATWChO5NnMQwrTlN4DA9Lt8o=;
+        b=IW0ymf4/MPpPE/QSaDi4vALjbDLB5HNpIOvNJW/RDpmUZR+VkQGbDTb0MYw3oSWU4P
+         ekhR1VU+4LjZbCpTT6n0JQsJaQ1bzf5I/Q/Q9uVN6WNQz5dCYBq/h4vl9Tgu7FQYeHX7
+         MNgvmhJMh1arWV7JUp3eid9+67BHfJckZh56Mdj6ugKvc/4qdkJbjT98fUmvcEFzlr3J
+         +415/yAiR/EWy/lmVL4Z3GdeTSIGpxofsA/aYPe8UX1cA3UXSQvyQY0uFkSiCIiDp+Sc
+         JObRWviXqxmgYthcD3bMktW6Q6foWOYJkC+XJlllqMiFn3vBiQuUGI8IooOhEH70sYG+
+         VY2g==
+X-Gm-Message-State: APjAAAVQlnbAh3VeZ7KyT5fpsuNuzstf++TYN2CV+jeWebkRFEKJpvfv
+        MoEo1lRPncc2NWQQKlIq+VUDAg==
+X-Google-Smtp-Source: APXvYqxsv6WJ34fOs69KpqyEJm/T+9cC2Q9QrUx6WEOh9oqc9KmUryRCC6197x7uuj70NfRbZNvgdg==
+X-Received: by 2002:ac2:5922:: with SMTP id v2mr8089831lfi.106.1581948745665;
+        Mon, 17 Feb 2020 06:12:25 -0800 (PST)
+Received: from [172.16.11.50] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id f9sm479954ljp.62.2020.02.17.06.12.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Feb 2020 06:12:23 -0800 (PST)
+Subject: Re: [PATCH] usb: host: fhci-hcd: annotate PIPE_CONTROL switch case
+ with fallthrough
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Timur Tabi <timur@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Anton Vorontsov <avorontsov@ru.mvista.com>,
+        kbuild test robot <lkp@intel.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Joe Perches <joe@perches.com>
+References: <20200213085401.27862-1-linux@rasmusvillemoes.dk>
+ <20200213125659.GB3325929@kroah.com>
+ <6ab68169-dde6-b5ba-0909-fa685bd24aac@rasmusvillemoes.dk>
+ <20200217093836.GA37937@kroah.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <a1f0f024-c1e5-8ff5-f717-f5098b4eb78d@rasmusvillemoes.dk>
+Date:   Mon, 17 Feb 2020 15:12:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <62e6e9b1-f44a-42ae-a971-8b947763284b@baylibre.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200217093836.GA37937@kroah.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-Den 17.02.2020 11.32, skrev Neil Armstrong:
-> Hi,
+On 17/02/2020 10.38, Greg Kroah-Hartman wrote:
+> On Thu, Feb 13, 2020 at 02:35:18PM +0100, Rasmus Villemoes wrote:
+>> On 13/02/2020 13.56, Greg Kroah-Hartman wrote:
+>>
+>>> Shouldn't this be /* fall through */ instead?
+>>>
+>>> Gustavo, what's the best practice here, I count only a few
+>>> "fallthrough;" instances in the kernel, although one is in our coding
+>>> style document, and thousands of the /* */ version.
+>>
+>> Yes, I went with the attribute/macro due to that, and the history is
+>> that Linus applied Joe's patches directly
+>> (https://lore.kernel.org/lkml/CAHk-=whOF8heTGz5tfzYUBp_UQQzSWNJ_50M7-ECXkfFRDQWFA@mail.gmail.com/),
+>> so I assumed that meant the Penguin decided that the attribute/macro is
+>> the right thing to do for new code, while existing comment annotations
+>> can be left alone or changed piecemeal as code gets refactored anyway.
 > 
-> On 16/02/2020 18:21, Noralf Trønnes wrote:
->> Hi,
->>
->> A while back I had the idea to turn a Raspberry Pi Zero into a $5
->> USB to HDMI/SDTV/DSI/DPI display adapter.
->>
->> Thinking about how to represent the display to the driver I realised
->> that hardware use registers as API. And Linux does have a generic
->> register abstraction: regmap. Furthermore this means that if I can do a
->> regmap over USB implementation, it will be easy to do other functions
->> like gpio, adc and others. After a few iterations trying to understand
->> the USB subsystem and satisfying driver requirements, I now have
->> something that looks promising.
->>
->> I'm sending out an early version hoping to get feedback especially on
->> the core parts that handles regmap and interrupts.
->>
->> Overview:
->>
->>           USB Host          :         USB Device
->>                             :
->>             --------------  :  ------------------
->> ----------  | mfd: mud   |  :  | f_mud          |  ----------
->> | Driver |  --------------  :  |                |  | Driver |
->> ----------  | regmap-usb |  :  | (mud_regmap)   |  ----------
->>             --------------  :  ------------------
->>
+> But, to be fair, Gustavo went and fixed up thousands of these, with the
+> /* */ version, not the attribute.
 > 
-> The idea is really like ARA's greybus, but much simpler !
-> Anyway nice idea, do you have good performance over USB2 and
-> RPi's awful DWC2 gagdet controller ?
-> 
+> Gustavo, can coverity notice the "fallthrough;" attribute properly?  I
+> don't want to start adding things that end up triggering
+> false-positives.
 
-Not as good as I was hoping for. If I disable compression I'm getting 5
-fps for a 1.5MB framebuffer (7800 kB/s):
+I'm not Gustavo, and I don't know the answer, but 1.5 years ago some guy
+named greg k-h suggested that coverity does grok the fallthrough attribute:
 
-$ modetest -M mud_drm -s 35:1024x768@RG16 -v
-setting mode 1024x768-60.00Hz@RG16 on connectors 35, crtc 33
-freq: 5.07Hz
+https://patchwork.kernel.org/cover/10651357/#22279095
 
-When I tried reading I discovered that it was almost 3 times faster than
-writing.
-
-The zero gadget (loop testing) confirmed my findings:
-
-Device:
-$ sudo modprobe g_zero
-[   44.221890] zero gadget: Gadget Zero, version: Cinco de Mayo 2008
-[   44.221906] zero gadget: zero ready
-[   60.751451] zero gadget: high-speed config #3: source/sink
-
-Host:
-
-$ sudo ~/testusb -a -t <n> -g 64 -s 16384
-/dev/bus/usb/001/010 test 27,  107.230669 secs	-> 1000 / 107 =  9MB/s
-/dev/bus/usb/001/010 test 28,   37.791292 secs	-> 1000 / 37  = 27MB/s
-[73983.796552] usbtest 1-1.3:3.0: TEST 27: bulk write 1000Mbytes
-[74205.060204] usbtest 1-1.3:3.0: TEST 28: bulk read 1000Mbytes
-
-$ sudo ~/testusb -a -t <n> -g 64 -s 16384
-/dev/bus/usb/001/010 test 5,  107.421535 secs
-/dev/bus/usb/001/010 test 6,   38.189712 secs
-[74893.204170] usbtest 1-1.3:3.0: TEST 5:  write 1000 sglists 64 entries
-of 16384 bytes
-[75012.592222] usbtest 1-1.3:3.0: TEST 6:  read 1000 sglists 64 entries
-of 16384 bytes
-
-
-I have tried Raspberry Pi1 and Pi4 as host (2 different controllers)
-and Pi Zero and Beaglebone Black as device, getting similar result.
-
-I found this post having the same issue:
-
-Re: Asymmetric speed results with testusb/usbtest/g_zero
-https://www.spinics.net/lists/linux-usb/msg100588.html
-
-I haven't got a usb analyzer, but adding printk to
-dwc2_assign_and_init_hc() showed that IN interrupts were 2-3 ms apart
-but OUT interrupts were ~8 ms apart.
-
-Noralf.
+Rasmus
