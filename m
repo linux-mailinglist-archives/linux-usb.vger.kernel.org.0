@@ -2,87 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB2316218E
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2020 08:41:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A52A41621FA
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2020 09:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726154AbgBRHlY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Feb 2020 02:41:24 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:60387 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726104AbgBRHlY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Feb 2020 02:41:24 -0500
-X-UUID: d408accb050345269bf4092c32b8eabd-20200218
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=R5o8h58rYOA1fQLNSXIwPhnCU0xALWjQ5mRQdByDjFk=;
-        b=gV+vQumofRgeHZQLi18ZL0fXI0cOe/m8m9jHQK1lAAwIwiikMv2ILEXat/eyhU0IKRcshFL0QWupA8xNmwG/j707T7GFs7L/sAdvYuq6fi0fCOzpXQSn9nB2mR/p9Wky/ggJ7CRWDs0fdL5mb+PPO+/bq/uHzSDFyXvILobmlKU=;
-X-UUID: d408accb050345269bf4092c32b8eabd-20200218
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1173835655; Tue, 18 Feb 2020 15:41:16 +0800
-Received: from mtkcas09.mediatek.inc (172.21.101.178) by
- mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Tue, 18 Feb 2020 15:42:30 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas09.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 18 Feb 2020 15:40:51 +0800
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Shen Jing <jingx.shen@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Vincent Pelletier <plr.vincent@gmail.com>,
-        Jerry Zhang <zhangjerry@google.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-CC:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        CC Hwang <cc.hwang@mediatek.com>,
-        Loda Chou <loda.chou@mediatek.com>
-Subject: [PATCH] lib: iov_iter.c: fix a possible calculation error on remaining bytes
-Date:   Tue, 18 Feb 2020 15:41:12 +0800
-Message-ID: <1582011672-17189-1-git-send-email-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
+        id S1726262AbgBRID0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Feb 2020 03:03:26 -0500
+Received: from mail-eopbgr130040.outbound.protection.outlook.com ([40.107.13.40]:28325
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726154AbgBRIDZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Feb 2020 03:03:25 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oLZ+Zt3tDsA3sb1D2ZkeqJPmgRgoW+HYYezYdsKP8ITzlEWunCuu03K95xrodo4jhsMsBVDKs0gLHmz96DVEZiJ0u64xcTWTCzLgwCIPxm41DjbZxcA7WAyB9rF+pHPE/iqhfBfnMIoPO3eZlKSdMFgcdexf7w/ZVh9jLLO4itBESS1M7LZmkqwCJ5YvFuLHA/1fL/YMUEy/vnCsXaH9pnLcJ5oXihadTAi4nL1J0N9yDkQoHwKvKxU++HcW2vjDh2vuBknvPVyRNzMCLmPAAzgoJQXERM4Y3elVL7oBl/BDyA0IOS1GCTX766t2DzhM6qgRpcK4aRk1J5VO8h5oAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=16Br2kpiLMSh0/S1ibk6sri7P4dEzNk2pcC68P2NoUs=;
+ b=FC46FonkXHtXsxihNT10fIpjtm1KO+3CguLBUwvg1LFxTEYoudoBqDyY3VoyDxT/5p+if3iU4o5GNNy1OaMRtdZqzTKXHBvhctgwHrFBhCWolAQLrrT59Zl0eAYgzUecfwuDFKFJt4BGQOcBr+7RNDxylGz/poH00aRhgUjZX7YQfFVjrmxODXGpricIQWWai/bBoPmn8d+CMGF+fSYrfjYzfWhZMO6I1wrB+jE8UErE4NQRJ/7YgRp2EInP5ES2awKPDrY2jWAj+YWjhhJcD5HUKxafsmlHpMYIY14l83XTOP7gl4K+R90aF+pYOWmTRIWz9E9PtqLaOIOZ1wfn6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=16Br2kpiLMSh0/S1ibk6sri7P4dEzNk2pcC68P2NoUs=;
+ b=lmHkZkEpx1W3KoDRuRxUP6qnDDy5lJDJIYgjbwZFHRQcvsy7/iHs/usUixGPRQfhVGlomr4ZkyOjKXddzGghEZp0XKio2kX1VH63bLQMIR2qkhKY1MgzfcTATKrV1CRIidCiC1LLiGgwK5u8J0Ym4RCU+tOuUpviR44GLaOKjIM=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
+ VI1PR04MB4799.eurprd04.prod.outlook.com (20.177.49.84) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2729.29; Tue, 18 Feb 2020 08:03:13 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::c7d:58a2:7265:407e]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::c7d:58a2:7265:407e%6]) with mapi id 15.20.2729.032; Tue, 18 Feb 2020
+ 08:03:13 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Greg KH <greg@kroah.com>
+CC:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 23/28] drivers: usb: Call cpu_latency_qos_*() instead of
+ pm_qos_*()
+Thread-Topic: [PATCH 23/28] drivers: usb: Call cpu_latency_qos_*() instead of
+ pm_qos_*()
+Thread-Index: AQHV4TRn3BXs86jgkEan911jMn55C6gX5NGAgAi8gwA=
+Date:   Tue, 18 Feb 2020 08:03:13 +0000
+Message-ID: <20200218080314.GB30350@b29397-desktop>
+References: <1654227.8mz0SueHsU@kreacher> <19064076.ICumzjfW0v@kreacher>
+ <20200212183827.GA1900941@kroah.com>
+In-Reply-To: <20200212183827.GA1900941@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 04ceddd4-c15a-43da-4683-08d7b44900b1
+x-ms-traffictypediagnostic: VI1PR04MB4799:
+x-microsoft-antispam-prvs: <VI1PR04MB479974CC4D66D9149F3D2EFB8B110@VI1PR04MB4799.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1388;
+x-forefront-prvs: 031763BCAF
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(376002)(396003)(346002)(39860400002)(366004)(136003)(199004)(189003)(86362001)(186003)(26005)(316002)(2906002)(53546011)(33716001)(54906003)(44832011)(1076003)(71200400001)(6506007)(81156014)(81166006)(478600001)(6486002)(76116006)(91956017)(4744005)(66946007)(8936002)(9686003)(5660300002)(66556008)(64756008)(66446008)(66476007)(33656002)(4326008)(6916009)(8676002)(6512007);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4799;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nxsnkHhSeM5XVEnLF8sUxgsxmetM0wFIeNGyMemvKA5moqtz8cGahg9L7jzwABAKeBWSyo4ytapdLisxogFWz4vegBLJGhzug0IW+1g8mYtpt5HVUT2btAn232C+Vr7djIC57FxUL2PzVjmZAdVigrEPQFpp9v+wiARqghFk13YfdDJoRgJk8NbjMZPl39BDsDlTESthITEvZp3XG8ye34R0DlWKuC5tQhwhRDvcdmN7ScSIhcgfQrTXS/Cplnkrfgxvcm8jGi7ovH91uF74zCllMxiKGzeTT5qyDbYf1p8cye3PEUNWyzhkkUfXKjIB0hDhm/CA30B2I4oZ7o9ut8SdRIOIrJ5Zi82D8zZvETlO2hRG/47rIWPIBaihjAsYa6n/do2ca/FXDDHc/yvekVV//XgGLppzaxIZG+KqaJed9hdr8PXorHxXgOnoCd3v
+x-ms-exchange-antispam-messagedata: J5D/dTc8h546uJLR6d0qd7nLsQErNHARbN+h10w1D/PGbLTyv4/sIp84QpFAlAf4aNhG/8CXo4/BT8FN7pzglXYYoYrMOrQyRzQePstCrY9tF8WI9/sB0skmD2PqNQqaJRCmkpDP5WzBSSkplVDWyg==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <9B3641F5F58C8D4ABABD9F3FE98C7F05@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 04ceddd4-c15a-43da-4683-08d7b44900b1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Feb 2020 08:03:13.1755
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 568mV9jvQUDAvsnCbHLUcobou5og9mKf9cE64gQwiTplYcHKPY1FgWbE9tUxzG/cYHKnKCkswtxH504TzHZisg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4799
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-VGhpcyBpc3N1ZSB3YXMgZm91bmQgd2hlbiBhZGJkIHRyeWluZyB0byBvcGVuIGZ1bmN0aW9uZnMg
-d2l0aCBBSU8gbW9kZS4NClVzdWFsbHksIHdlIG5lZWQgdG8gc2V0ICJzZXRwcm9wIHN5cy51c2Iu
-ZmZzLmFpb19jb21wYXQgMCIgdG8gZW5hYmxlDQphZGJkIHdpdGggQUlPIG1vZGUgb24gQW5kcm9p
-ZC4NCg0KV2hlbiBhZGJkIGlzIG9wZW5pbmcgZnVuY3Rpb25mcywgaXQgd2lsbCB0cnkgdG8gcmVh
-ZCAyNCBieXRlcyBhdCB0aGUNCmZpc3J0IHJlYWQgSS9PIGNvbnRyb2wuIElmIHRoaXMgcmVhZGlu
-ZyBoYXMgYmVlbiBmYWlsZWQsIGFkYmQgd2lsbA0KdHJ5IHRvIHNlbmQgRlVOQ1RJT05GU19DTEVB
-Ul9IQUxUIHRvIGZ1bmN0aW9uZnMuIFdoZW4gYWRiZCBpcyBpbiBBSU8NCm1vZGUsIGZ1bmN0aW9u
-ZnMgd2lsbCBiZSBhY3RlZCB3aXRoIGFzeW5jcm9uaXplZCBJL08gcGF0aC4gQWZ0ZXIgdGhlDQpz
-dWNjZXNzZnVsIHJlYWQgdHJhbnNmZXIgaGFzIGJlZW4gY29tcGxldGVkIGJ5IGdhZGdldCBoYXJk
-d2FyZSwgdGhlDQpmb2xsb3dpbmcgc2VyaWVzIG9mIGZ1bmN0aW9ucyB3aWxsIGJlIGNhbGxlZC4N
-CiAgZmZzX2VwZmlsZV9hc3luY19pb19jb21wbGV0ZSgpIC0+IGZmc191c2VyX2NvcHlfd29ya2Vy
-KCkgLT4NCiAgICBjb3B5X3RvX2l0ZXIoKSAtPiBfY29weV90b19pdGVyKCkgLT4gY29weW91dCgp
-IC0+DQogICAgaXRlcmF0ZV9hbmRfYWR2YW5jZSgpIC0+IGl0ZXJhdGVfaW92ZWMoKQ0KDQpBZGRp
-bmcgZGVidWcgdHJhY2UgdG8gdGhlc2UgZnVuY3Rpb25zLCBpdCBoYXMgYmVlbiBmb3VuZCB0aGF0
-IGluDQppdGVyYXRlX2lvdmVjKCksIHRoZSBjYWxjdWxhdGlvbiByZXN1bHQgb2YgbiB3aWxsIGJl
-IHR1cm5lZCBpbnRvIHplcm8uDQogICBuID0gd2FudGVkIC0gbjsgLyogMCA9PSBuID0gMjQgLSAy
-NDsgKi8NCldoaWNoIGNhdXNlcyBjb3B5b3V0KCkgd29uJ3QgY29weSBkYXRhIHRvIHVzZXJzcGFj
-ZSBzaW5jZSB0aGUgbGVuZ3RoDQp0byBiZSBjb3BpZWQgInYuaW92X2xlbiIgd2lsbCBiZSB6ZXJv
-LCB3aGljaCBpc24ndCBjb3JyZWN0LiBUaGlzIGFsc28NCmxlYWRzIGZmc19jb3B5X3RvX2l0ZXIo
-KSBhbHdheXMgcmV0dXJuIC1FRkFVTFQuIEZpbmFsbHkgYWRiZCBjYW5ub3QNCm9wZW4gZnVuY3Rp
-b25mcyBhbmQgc2VuZCBGVU5DVElPTkZTX0NMRUFSX0hBTFQuDQoNClNpZ25lZC1vZmYtYnk6IE1h
-Y3BhdWwgTGluIDxtYWNwYXVsLmxpbkBtZWRpYXRlay5jb20+DQotLS0NCiBsaWIvaW92X2l0ZXIu
-YyB8IDMgKystDQogMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigt
-KQ0KDQpkaWZmIC0tZ2l0IGEvbGliL2lvdl9pdGVyLmMgYi9saWIvaW92X2l0ZXIuYw0KaW5kZXgg
-ZmIyOWMwMmM2YTNjLi5mOTMzNDE0NGUyNTkgMTAwNjQ0DQotLS0gYS9saWIvaW92X2l0ZXIuYw0K
-KysrIGIvbGliL2lvdl9pdGVyLmMNCkBAIC0zNiw3ICszNiw4IEBADQogCQlza2lwID0gX192Lmlv
-dl9sZW47CQkJXA0KIAkJbiAtPSBfX3YuaW92X2xlbjsJCQlcDQogCX0JCQkJCQlcDQotCW4gPSB3
-YW50ZWQgLSBuOwkJCQkJXA0KKwlpZiAobiAhPSB3YW50ZWQpCQkJCVwNCisJCW4gPSB3YW50ZWQg
-LSBuOwkJCQlcDQogfQ0KIA0KICNkZWZpbmUgaXRlcmF0ZV9rdmVjKGksIG4sIF9fdiwgX19wLCBz
-a2lwLCBTVEVQKSB7CVwNCi0tIA0KMi4xOC4wDQo=
+On 20-02-12 10:38:27, Greg KH wrote:
+> On Wed, Feb 12, 2020 at 12:28:44AM +0100, Rafael J. Wysocki wrote:
+> > From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> >=20
+> > Call cpu_latency_qos_add/remove_request() instead of
+> > pm_qos_add/remove_request(), respectively, because the
+> > latter are going to be dropped.
+> >=20
+> > No intentional functional impact.
+> >=20
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  drivers/usb/chipidea/ci_hdrc_imx.c | 12 +++++-------
+> >  1 file changed, 5 insertions(+), 7 deletions(-)
+>=20
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
+Hi Greg,
+
+With this patch applied, the usb-next can't compile pass.
+
+--=20
+
+Thanks,
+Peter Chen=
