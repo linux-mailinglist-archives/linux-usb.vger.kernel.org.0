@@ -2,96 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A948816264A
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2020 13:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A138D16264F
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2020 13:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726582AbgBRMl4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Feb 2020 07:41:56 -0500
-Received: from zeniv.linux.org.uk ([195.92.253.2]:51288 "EHLO
-        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726512AbgBRMlz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Feb 2020 07:41:55 -0500
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j42C6-00Efka-5Y; Tue, 18 Feb 2020 12:41:42 +0000
-Date:   Tue, 18 Feb 2020 12:41:42 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Macpaul Lin <macpaul.lin@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Shen Jing <jingx.shen@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Vincent Pelletier <plr.vincent@gmail.com>,
-        Jerry Zhang <zhangjerry@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        CC Hwang <cc.hwang@mediatek.com>,
-        Loda Chou <loda.chou@mediatek.com>
-Subject: Re: [PATCH] lib: iov_iter.c: fix a possible calculation error on
- remaining bytes
-Message-ID: <20200218124142.GJ23230@ZenIV.linux.org.uk>
-References: <1582011672-17189-1-git-send-email-macpaul.lin@mediatek.com>
+        id S1726617AbgBRMnA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Feb 2020 07:43:00 -0500
+Received: from mga05.intel.com ([192.55.52.43]:49272 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726567AbgBRMm7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Feb 2020 07:42:59 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Feb 2020 04:42:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,456,1574150400"; 
+   d="scan'208";a="228275817"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 18 Feb 2020 04:42:58 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id A57B4109; Tue, 18 Feb 2020 14:42:57 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1] usb: dwc3: Add ACPI support for xHCI ports
+Date:   Tue, 18 Feb 2020 14:42:57 +0200
+Message-Id: <20200218124257.8734-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1582011672-17189-1-git-send-email-macpaul.lin@mediatek.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 18, 2020 at 03:41:12PM +0800, Macpaul Lin wrote:
-> This issue was found when adbd trying to open functionfs with AIO mode.
-> Usually, we need to set "setprop sys.usb.ffs.aio_compat 0" to enable
-> adbd with AIO mode on Android.
-> 
-> When adbd is opening functionfs, it will try to read 24 bytes at the
-> fisrt read I/O control. If this reading has been failed, adbd will
-> try to send FUNCTIONFS_CLEAR_HALT to functionfs. When adbd is in AIO
-> mode, functionfs will be acted with asyncronized I/O path. After the
-> successful read transfer has been completed by gadget hardware, the
-> following series of functions will be called.
->   ffs_epfile_async_io_complete() -> ffs_user_copy_worker() ->
->     copy_to_iter() -> _copy_to_iter() -> copyout() ->
->     iterate_and_advance() -> iterate_iovec()
-> 
-> Adding debug trace to these functions, it has been found that in
-> iterate_iovec(), the calculation result of n will be turned into zero.
->    n = wanted - n; /* 0 == n = 24 - 24; */
-> Which causes copyout() won't copy data to userspace since the length
-> to be copied "v.iov_len" will be zero, which isn't correct. This also
-> leads ffs_copy_to_iter() always return -EFAULT. Finally adbd cannot
-> open functionfs and send FUNCTIONFS_CLEAR_HALT.
-> 
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> ---
->  lib/iov_iter.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-> index fb29c02c6a3c..f9334144e259 100644
-> --- a/lib/iov_iter.c
-> +++ b/lib/iov_iter.c
-> @@ -36,7 +36,8 @@
->  		skip = __v.iov_len;			\
->  		n -= __v.iov_len;			\
->  	}						\
-> -	n = wanted - n;					\
-> +	if (n != wanted)				\
-> +		n = wanted - n;				\
->  }
+The ACPI companion of the adapter has to be set for xHCI controller
+code to read and attach the ports described in the ACPI table.
+Use ACPI_COMPANION_SET macro to set this.
 
-	First of all, nothing in that line can possibly *cause*
-copyout() to do anything - it's after the calls of step.  What's
-more, this changes behaviour only when wanted would've been equal to
-n, doesn't it?  Which translates into "no decrements of n have
-happened at all", i.e. "nothing has been copied".  IOW, it's
-a consequence of no copyout, not the cause of such.  You can
-make copy_to_iter() lie and pretend if has copied everything
-when it has copied nothing, but that won't change the underlying
-bug.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/usb/dwc3/host.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-	So I'm afraid your debugging is not finished - you
-still need to find out what causes the copyout failures and/or
-BS iov_iter padded by caller.
+diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+index fa252870c926..86dbd012b984 100644
+--- a/drivers/usb/dwc3/host.c
++++ b/drivers/usb/dwc3/host.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+-/**
++/*
+  * host.c - DesignWare USB3 DRD Controller Host Glue
+  *
+  * Copyright (C) 2011 Texas Instruments Incorporated - http://www.ti.com
+@@ -7,6 +7,7 @@
+  * Authors: Felipe Balbi <balbi@ti.com>,
+  */
+ 
++#include <linux/acpi.h>
+ #include <linux/platform_device.h>
+ 
+ #include "core.h"
+@@ -75,6 +76,7 @@ int dwc3_host_init(struct dwc3 *dwc)
+ 	}
+ 
+ 	xhci->dev.parent	= dwc->dev;
++	ACPI_COMPANION_SET(&xhci->dev, ACPI_COMPANION(dwc->dev));
+ 
+ 	dwc->xhci = xhci;
+ 
+-- 
+2.25.0
+
