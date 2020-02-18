@@ -2,115 +2,232 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA8F1628A8
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2020 15:38:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 225721628D9
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2020 15:48:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726739AbgBROi3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Feb 2020 09:38:29 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:43895 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726442AbgBROi3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Feb 2020 09:38:29 -0500
-Received: by mail-lf1-f68.google.com with SMTP id 9so14670330lfq.10
-        for <linux-usb@vger.kernel.org>; Tue, 18 Feb 2020 06:38:28 -0800 (PST)
+        id S1726774AbgBROsL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Feb 2020 09:48:11 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:33729 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726764AbgBROsL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Feb 2020 09:48:11 -0500
+Received: by mail-wm1-f66.google.com with SMTP id m10so2370943wmc.0
+        for <linux-usb@vger.kernel.org>; Tue, 18 Feb 2020 06:48:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=sY61Fr9YVI4lh18cQUNO718Eme0LNQbuaZGESudFpqw=;
-        b=WkYtu/dY2ovNW0qm1LPax22Q4ht0NjynYZX0mFpft4GmvaT/S1qohqDprHO5yTlvPE
-         iHPkhaniJM0xjfnc17QDfJNnSSzsmymKt5qJJMFrmQrh65BEEXi9cUhdcWCe3FJ1x7FR
-         4MiltQNY6cttJuMusjW7t1OGsk9/VKM83dT7wNF/p+6oe3GKuU2g3b1whNtWF+RyOPDs
-         E73V26fjaLZ6/wON2vlj2LaAoWTcNn5cxzY4c8aSsmdTsyMbQbCRRhLpOs0QZ+GX+xi0
-         pQx7b4d6wDl39AEciUbFF6vgKozZHYuA6Eirj3yvA/dl/Bhe+Mdkppf/AtgKowV+yKO5
-         pPUg==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=BRsmd+nJRBqiO0UVP+1rIxeSyPLLEYBByX1n2Ouuk+0=;
+        b=B0a4incYG46ULAS3He56W1WJHbusdfxsFhgZ8ochxdPDdlVr/gSJJJP43eudvN8aIS
+         yyJT7gsetwiKMLeBiGGI9alFGqJVRgEniHCi7JD0JEPnB/Vvzb1GcIRQtlWQaP1AlJjW
+         iFpi1LSgjTPyWaAC/zSAz6TikRiEkPMfWd2s3ase82+ISGRmC1B2F2Jh3eSP3xmfk5FC
+         ITn5BEMmQkcJ1Ra+cgKTIbq0U9KrhueUs058DRksIrijYaicdoa9tEXFnyUTc3D3jlyW
+         MGy6fOhYs0/TLcFGuqSzwVPZple98XL9WHd6bmwgMD0NkCGFB+dWL2vevFSAxIXvYXqC
+         foZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=sY61Fr9YVI4lh18cQUNO718Eme0LNQbuaZGESudFpqw=;
-        b=RWVlISXuHbdokM63LbWVFRM8k7WSyVpBSq1hezTBH2Boasca0XeQoqnFzHu9jsqzuO
-         0ZyQUAtwGUIVJQ0D1J9oS38rKu0ROc+Fv9UEusa75biXxRnN+iMoEMn84nKHzFlTC4jS
-         dDbIi2MTFfvTmqmBZbg0V6JcvXSt3q1HV7waqdJ12A7SoS4lQvPLFSSwIgrwZhpUmC/t
-         VwTPSUO3OH98SAvX22Yg1XAdADijLOv6G/Az0NohMO31V2DMgsfTCufvHJGWDbKJlH2o
-         93k3OngE+OGRFfuFR1/17ohjAUzO4eKfjNPqh/ftZnAkgBc4IXy/zX2g7yAkYXSdNB/4
-         5uwA==
-X-Gm-Message-State: APjAAAXyMZZ9+3FI9XFZu9TSlvUmjgbbIXlc7n0T0g3zUjoyJjRZtkdg
-        OIQs9nR9gwqLs4mz0xP82IA=
-X-Google-Smtp-Source: APXvYqyYFSUC/ZLttO0aNVrvRVKGcY8Z7trWKa6BH0+B9JtbKN9J/5DS8qqqwXChycZplrJC1aM6EQ==
-X-Received: by 2002:a19:c7d8:: with SMTP id x207mr10920235lff.142.1582036707423;
-        Tue, 18 Feb 2020 06:38:27 -0800 (PST)
-Received: from saruman (88-113-215-213.elisa-laajakaista.fi. [88.113.215.213])
-        by smtp.gmail.com with ESMTPSA id z3sm2609100ljh.83.2020.02.18.06.38.26
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 18 Feb 2020 06:38:26 -0800 (PST)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1] usb: dwc3: Add ACPI support for xHCI ports
-In-Reply-To: <20200218124257.8734-1-andriy.shevchenko@linux.intel.com>
-References: <20200218124257.8734-1-andriy.shevchenko@linux.intel.com>
-Date:   Tue, 18 Feb 2020 16:38:16 +0200
-Message-ID: <87zhdgezaf.fsf@kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BRsmd+nJRBqiO0UVP+1rIxeSyPLLEYBByX1n2Ouuk+0=;
+        b=btH8KyKJv2jiXvrl1m4AMopu12fP51Vwk6YdmJK0I8EZyQgGbEiCqZH4sOwiBUYczx
+         enL8J9Fj+2kEtN7BcBj2twvH4hKBXWD8BYOgdf8rNbfj3P8fksiGrXZDCvyc6vezufkG
+         NpBxgN7S8Hn0FFXsH9azpEMKxDTB8AHxMKzdUKOvthmXcXyqKCDeHZQavb/0/F+hId+C
+         r4MqiR7oG1G4bwp/vmlNwTZ2JPKKczohjA1i2ka41soavt7k3r0QAR2yZmBqwycOWqED
+         tcvHEaTH8bplTjI0m9vPhCUkrRweW9pWbTtx+kXFFvpsjkGCydqDzsT4Tzs+SD2HCor5
+         1ugw==
+X-Gm-Message-State: APjAAAWFT3AR7a8PTyuGwa6BiuiT4gKXsYBL4W17Ec019bGKdRlbneXo
+        ZuQFAjHHtSvEukaIJ1FrmWrt4g==
+X-Google-Smtp-Source: APXvYqz8FjJ/isZ29SxNHhkGEO8YebWRzu952yOfgt/LpaxpcIdR5rRWMH8k1WDdUQNchignN2uQHw==
+X-Received: by 2002:a1c:4c0c:: with SMTP id z12mr3548617wmf.63.1582037288879;
+        Tue, 18 Feb 2020 06:48:08 -0800 (PST)
+Received: from [192.168.0.38] ([176.61.57.127])
+        by smtp.gmail.com with ESMTPSA id z21sm3751179wml.5.2020.02.18.06.48.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Feb 2020 06:48:08 -0800 (PST)
+Subject: Re: [PATCH v4 2/2] Embedded USB Debugger (EUD) driver
+To:     "Dwivedi, Avaneesh Kumar (avani)" <akdwived@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ckadabi@codeaurora.org, tsoni@codeaurora.org,
+        bryanh@codeaurora.org, psodagud@codeaurora.org,
+        rnayak@codeaurora.org, satyap@codeaurora.org,
+        pheragu@codeaurora.org
+References: <1580445811-15948-1-git-send-email-akdwived@codeaurora.org>
+ <1580445811-15948-3-git-send-email-akdwived@codeaurora.org>
+ <20200203193533.GL3948@builder>
+ <5008a446-a90c-b68a-aaa4-3e7cd90418fa@linaro.org>
+ <d09f8a1d-0544-838f-e6f8-1c47f58e4f1f@codeaurora.org>
+ <8a854c02-7435-46c6-5bd1-05273e5249e4@linaro.org>
+ <aa942701-d11b-dcf2-d28f-144582af0d2f@codeaurora.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Message-ID: <a6cbc859-184e-2a0d-bd2b-0ad9653e5ee2@linaro.org>
+Date:   Tue, 18 Feb 2020 14:48:16 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+In-Reply-To: <aa942701-d11b-dcf2-d28f-144582af0d2f@codeaurora.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On 18/02/2020 13:23, Dwivedi, Avaneesh Kumar (avani) wrote:
+> 
+> On 2/18/2020 1:14 AM, Bryan O'Donoghue wrote:
+>> On 16/02/2020 16:07, Dwivedi, Avaneesh Kumar (avani) wrote:
+>>>
+>>> On 2/4/2020 8:40 AM, Bryan O'Donoghue wrote:
+>>>> On 03/02/2020 19:35, Bjorn Andersson wrote:
+>>>>> On Thu 30 Jan 20:43 PST 2020, Avaneesh Kumar Dwivedi wrote:
+>>>>
+>>>> Hi Avaneesh.
+>>>
+>>> Hello Bryan, Thank you very much for your review comments.
+>>>
+>>> Will be replying to your comments and will be posting new patchset 
+>>> soon as per review comments.
+>>>
+>>>>
+>>>>> Please aim for keeping the sort order in this file (ignore QCOM_APR
+>>>>> which obviously is in the wrong place)
+>>>>>
+>>>>>> +       tristate "QTI Embedded USB Debugger (EUD)"
+>>>>>> +       depends on ARCH_QCOM
+>>>>
+>>>> If we persist with the model of EXTCON you should "select EXTCON" here.
+>>
+>>> I have asked this query with Bjorn Also against his review comments, 
+>>> whether we need to persist with extcon or need to switch to usb role 
+>>> switch framework, as we are notifying not only to usb controller but 
+>>> also to pmic charger so in case we adopt usb role switch then how we 
+>>> will notify to pmic charger to enable charging battery ? Also as i 
+>>> mentioned there my dilema is it does not look very apt to model EUD 
+>>> hw IP as c type connector, so please let me know your views.
+>>
+>> I think there's a desire to model USB ports as connector child nodes 
+>> of a USB controllers as opposed to the more generic extcon so, I think 
+>> the effort should probably be made to model it up as typec.
+> this comment is irrespective of your below comment (If we were to 
+> support Control Peripheral where the local DWC3 controller has the 
+> signals routed away entirely, then I think we would need to look into 
+> modelling that in device tree - and using an overlay to show the DWC3 
+> controller going away in Control Peripheral mode and coming back. )?
 
+Yes, I think irrespective we should model this as a connector not an 
+extcon and I think you could do think you could do that as a typec
 
-Hi,
+1. Using role-switch
+2. Use the regulator API to capture EUD related charger messages
+    and trigger changes in the PMIC as opposed to using extcon
+    to notify.
 
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+I could be wrong about #2
 
-> The ACPI companion of the adapter has to be set for xHCI controller
-> code to read and attach the ports described in the ACPI table.
-> Use ACPI_COMPANION_SET macro to set this.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/usb/dwc3/host.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index fa252870c926..86dbd012b984 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -1,5 +1,5 @@
->  // SPDX-License-Identifier: GPL-2.0
-> -/**
-> +/*
+>> Can that work for you ?
+> Did not comprehend this comment fully. if possible can you give some 
+> example.
 
-trailing change, at least mention it in commit log ;-)
+My understanding is we are generally being encouraged to model ports as 
+connectors instead of extcon. I think it is possible to model your port 
+driver as a typec connector using USB role-switching and the regulator 
+API i.e. I don't think you really need extcon here.
 
-=2D-=20
-balbi
+>> Ah so, the EUD is a mux, that sits between the connector and the 
+>> controller, routing UTMI signals to an internal USB hub, which in-turn 
+>> has debug functions attached to the hub...
+> Yes that is correct understanding.
+>>
+>> Can the Arm core see the hub ? I assume not ?
+> Not sure what is it mean by "Can the Arm core see the hub"?
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+In Debug mode will a DWC3 controller in host mode enumerate the internal 
+hub ? If so, is that a supported use-case ?
 
------BEGIN PGP SIGNATURE-----
+>> There are a few different modes - you should probably be clear on 
+>> which mode it is you are supporting.
+>>
+>> Normal mode: (Bypass)
+>> Port | EUD | Controller
+>>
+>> Normal + debug hub mode: (Debug)
+>> Port | EUD | Controller + HUB -> debug functions
+>>
+>> Debug hub mode: (Control Peripheral)
+>> Port | EUD | HUB -> debug functions
+>>
+>> its not clear to me from the documentation or the code which mode it 
+>> is we are targeting to be supported here.
+> Its debug mode which we are supporting in driver.
+>>
+>> I think you should support Debug mode only here, so that the Arm core 
+>> never has to deal with the situation where the USB connector "goes away".
+> Can you please help what you mean by "so that the Arm core never has to 
+> deal with the situation where the USB connector "goes away""
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl5L9toACgkQzL64meEa
-mQZ7ZQ/9FcIuztTwsJxUcmmS+s4pGQsKN+wlTJ0H+43v1x9AP4JQmfAh47Yqth8l
-l0gr1Okd8/2BnW+MAuy/V8FCcbqkVYuRmOjVmNjQILQLguw2P/pRn9qfaYgE+QIT
-EHnqBiukVTC7cnKH41zfCMEEvhnHh52i0uvirKmlSV2Gu3DjxeVM7SVFmjCAYE9V
-bOiKMg72WKIs2wKWi1EzZ0F3BXId5Vtiz/1Djg4lGUafx73Q4Wgrnv60/3BwlTKx
-c/ke+JnONw43etGiLhVYW0xIZ/EA6k613iYBSwHlW+yfI0FHN/BU9C6yTmRc7Cnz
-G+0sb3AERclStCC1ojNa64zaRL4fhAc8zm6k47Mz+B7K8jaCjGx1XY24b/Voj3tT
-naKjpY5umea+YbK9R8MwuSMsVn+SWEmaxVwLWDvw7LEqslK1dcX4VnlapFduk45h
-Pmax1n4vmkZYXAUR8u936CsnDfW9XXVf3WzByLJk+wvDafDR+qZrbCBn/ydB4gs8
-t7he2ey6oajJ5LCp+hQM0WSt1Bx4PCMgFBw/An5LUm8ZDe71u3UMZktOFGhYe/2j
-F5DVvg/PEn42NAAzpaqLL4oFs8Ut7/W7kFYgKB1KzpwLRHmxhQZCLwraSZVnJa2Y
-IZxDKYk75yRDTqrGG077unxBtEhxrjOhcxP04icSfMiVXPAITIE=
-=uhmp
------END PGP SIGNATURE-----
---=-=-=--
+So my thinking is
+
+- DWC3 in host mode
+   For argument sake, lets say an external self-powered hub is connected
+   and a number of USB devices are enumerated
+- EUD switches to Control Peripheral mode
+
+In this case what would happen ?
+
+>>
+>> If we were to support Control Peripheral where the local DWC3 
+>> controller has the signals routed away entirely, then I think we would 
+>> need to look into modelling that in device tree - and using an overlay 
+>> to show the DWC3 controller going away in Control Peripheral mode and 
+>> coming back.
+> debug mode is set run time via user, i will check how we can model such 
+> scenario where device tree corresponding to a h/w module is only valid 
+> in some scenario at run time. if possible please elaborate bit more on 
+> your suggestion
+
+If Debug mode is all you are trying to do support then I don't think you 
+really need to model that in DT.
+
+However if intend to support Control Peripheral mode which as I 
+understand it, switches the UTMI signals away from a DWC3 controller in 
+Host mode, then I think you would need to use a DT overlay to switch off 
+the controller, before switching.
+
+That's why I'm asking you about Control Peripheral mode - do you want to 
+support it - and if so, then what happens to DWC3 in host mode when the 
+UTMI signals go away ?
+
+I think you've said you only want to support Debug mode, which makes 
+more sense to me.
+
+Is Debug mode only valid when the DWC3 controller is in 
+peripheral/device mode and if so, should we be checking/enforcing that 
+somewhere - DT or EUD-driver code ?
+
+>> Also final thought since the EUD can operate in different modes, it 
+>> really should be a string that gets passed in - with the string name 
+>> aligning to the documentation "bypass", "debug" and so on, so that the 
+>> mode we are switching to is obvious to anybody who has the spec and 
+>> the driver.
+> 
+> you mean we should document that this driver works in debug mode only? 
+> not clear on where one should pass "debug" and "bypass" string?
+
+You have a routine to switch to debug mode that takes a parameter from 
+user-space right ?
+
+Bjorn mentioned you could write 42. My question/suggestion is why isn't 
+the value written a string which corresponds to the supported modes from 
+the EUD spec ?
+"bypass" as default "debug" the mode you want to add, at a later time 
+you could optionally add in "control-periperhal" mode.
+
+Makes a little more sense to me than writing just 0, 1 or 42 :) into 
+your store routine.
+
+---
+bod
