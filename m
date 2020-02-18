@@ -2,59 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6E6162910
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2020 16:08:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39FAF162918
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2020 16:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726754AbgBRPIS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Feb 2020 10:08:18 -0500
-Received: from mga01.intel.com ([192.55.52.88]:44091 "EHLO mga01.intel.com"
+        id S1726771AbgBRPMX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Feb 2020 10:12:23 -0500
+Received: from mga14.intel.com ([192.55.52.115]:21618 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726634AbgBRPIR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 Feb 2020 10:08:17 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1726696AbgBRPMX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Feb 2020 10:12:23 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Feb 2020 07:08:17 -0800
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Feb 2020 07:12:22 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,456,1574150400"; 
-   d="scan'208";a="228756842"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008.jf.intel.com with ESMTP; 18 Feb 2020 07:08:15 -0800
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1j44Tx-0035UQ-If; Tue, 18 Feb 2020 17:08:17 +0200
-Date:   Tue, 18 Feb 2020 17:08:17 +0200
+   d="scan'208";a="434111794"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 18 Feb 2020 07:12:20 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 8324D189; Tue, 18 Feb 2020 17:12:20 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org,
+To:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1] usb: dwc3: Add ACPI support for xHCI ports
-Message-ID: <20200218150817.GI10400@smile.fi.intel.com>
-References: <20200218124257.8734-1-andriy.shevchenko@linux.intel.com>
- <87zhdgezaf.fsf@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/2] usb: dwc3: Add ACPI support for xHCI ports
+Date:   Tue, 18 Feb 2020 17:12:18 +0200
+Message-Id: <20200218151219.50121-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87zhdgezaf.fsf@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 18, 2020 at 04:38:16PM +0200, Felipe Balbi wrote:
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+The ACPI companion of the adapter has to be set for xHCI controller
+code to read and attach the ports described in the ACPI table.
+Use ACPI_COMPANION_SET macro to set this.
 
-> > -/**
-> > +/*
-> 
-> trailing change, at least mention it in commit log ;-)
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: split out kernel doc fix
+ drivers/usb/dwc3/host.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I will split to two. Thanks!
-
+diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+index fa252870c926..95a90ea08975 100644
+--- a/drivers/usb/dwc3/host.c
++++ b/drivers/usb/dwc3/host.c
+@@ -7,6 +7,7 @@
+  * Authors: Felipe Balbi <balbi@ti.com>,
+  */
+ 
++#include <linux/acpi.h>
+ #include <linux/platform_device.h>
+ 
+ #include "core.h"
+@@ -75,6 +76,7 @@ int dwc3_host_init(struct dwc3 *dwc)
+ 	}
+ 
+ 	xhci->dev.parent	= dwc->dev;
++	ACPI_COMPANION_SET(&xhci->dev, ACPI_COMPANION(dwc->dev));
+ 
+ 	dwc->xhci = xhci;
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.0
 
