@@ -2,143 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF3DD162EB3
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2020 19:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80060162EC8
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2020 19:40:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbgBRShN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Feb 2020 13:37:13 -0500
-Received: from mail-io1-f68.google.com ([209.85.166.68]:44578 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726482AbgBRShN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Feb 2020 13:37:13 -0500
-Received: by mail-io1-f68.google.com with SMTP id z16so23396269iod.11;
-        Tue, 18 Feb 2020 10:37:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6LA/EHc+e6t+L6IRcGNPtyhrDj7kNqfD9AG7NcrsSIY=;
-        b=ekctg0PMKqPatEN0YWNxfW/TVojwFT/Xw7GIftfux3NatRBdzA6JL2YNSwG79V8vKD
-         UFw11psOsaLwBmDpMbkxywHStdyI6bR827wD7sVoCDbHc2V+SH8nTqn8u2rBcBRprmPH
-         SU9n42TIwAc97+EMrUvqUmOvl4QbE9a2vCOc83T/EYnkN0XFJv9NzBDW+aeytcRtI3mz
-         hB2rrPEHrade7jwj811BcUiQzn9Vdu3yhEZ1T5ecD6B8T4uRTty2cgqbYL5he+o6jy+O
-         GYHxfbqWVzrlQSUUJZNR8KzNeBkY5E3BcTIjcnrcfhhJerkmN68i8YJ32/DwSAh7nAGh
-         Vl3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6LA/EHc+e6t+L6IRcGNPtyhrDj7kNqfD9AG7NcrsSIY=;
-        b=GJCj/dxXhXtrZ/nWwmsscLqWEwpR5akvn/wJAqTBewblUoZ9lcr2ruQ9+OhemgdtAj
-         Hge79t1Ujc5SRLmfdeHGeRkQnZlBjwP5J4CxGJBtpNOyCuYdUebi4NbdJHgf2mHuG+4g
-         WBJ4hpnBU6VTj3+UrRq8KhUg49pDDgXAl+qe2Rjyi5kXlSIgOvIXltoQBz2rsXIW81mq
-         OAqvN7DGPHIYJFpO7SjTTh3/KV9IQnbCH+taRjPfG8FYd9FS3/Aav+xOwPYBRq7Y/6vZ
-         TYneyg8wQxuwCcspPGDuFX2W7N9OiwOeDpnKNa+v2km6/ttbLxZTCG1sotKW9liWGu2M
-         RE9g==
-X-Gm-Message-State: APjAAAX2ySILkV2s0ooxP3PvuBfM6sEwx8VXHzRKbGzrC4pcvfmbZmSj
-        4hskRtrcrOAzCzTKpTxW12MnjsBSE2pkLO0SsCI=
-X-Google-Smtp-Source: APXvYqwhyw0esPb3ZI68eB4xydSJJbHEThpDI7EWoOn2jZ3Agi54dpmtxRpKq28iacd4HYAP0sYnlF6/X5wTe00bIIg=
-X-Received: by 2002:a6b:6205:: with SMTP id f5mr17136935iog.42.1582051032503;
- Tue, 18 Feb 2020 10:37:12 -0800 (PST)
+        id S1726557AbgBRSk1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Feb 2020 13:40:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60164 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726548AbgBRSk0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Feb 2020 13:40:26 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BAD4E24654;
+        Tue, 18 Feb 2020 18:40:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582051226;
+        bh=QN8PvGUmdnqwqUO1DNccUDIaJziDm03uGotO+WGlbV0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ty7m6i5u/BkSWuFB0dlC1gd+6AcTgjrmAz5gZQEN7xWkDQFurltJCpHnIzIVtkWW1
+         RAZKHKAwN7ot6Mblf98rmTw8ezTh22FQDEAFKRsi1BgNhhnKsuJHRNSzDzBM5RzaAj
+         2n5d+gLqHxDRr29Ce2o65vOi+PW9xRpKJOGQyajA=
+Date:   Tue, 18 Feb 2020 19:40:24 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] Thunderbolt/USB4 fix for v5.6-rc3
+Message-ID: <20200218184024.GA2667292@kroah.com>
+References: <20200218122900.GC2667@lahna.fi.intel.com>
 MIME-Version: 1.0
-References: <76cd6cfc-f4f3-ece7-203a-0266b7f02a12@gmail.com> <02ea88e7-1a79-f779-d58c-bb1dced0b3b4@gmail.com>
-In-Reply-To: <02ea88e7-1a79-f779-d58c-bb1dced0b3b4@gmail.com>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Tue, 18 Feb 2020 10:37:01 -0800
-Message-ID: <CAKgT0UfaBpLxWQZO55-KE8QKJD9XgC2SCPAtzo=PA_MAwRxtuw@mail.gmail.com>
-Subject: Re: [PATCH net-next 2/3] r8169: use new helper tcp_v6_gso_csum_prep
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Realtek linux nic maintainers <nic_swsd@realtek.com>,
-        Jay Cliburn <jcliburn@gmail.com>,
-        Chris Snook <chris.snook@gmail.com>,
-        Rasesh Mody <rmody@marvell.com>,
-        Sudarsana Kalluru <skalluru@marvell.com>,
-        GR-Linux-NIC-Dev@marvell.com,
-        Christian Benvenuti <benve@cisco.com>,
-        Govindarajulu Varadarajan <_govind@gmx.com>,
-        Parvi Kaustubhi <pkaustub@cisco.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Guo-Fu Tseng <cooldavid@cooldavid.org>,
-        Shannon Nelson <snelson@pensando.io>,
-        Pensando Drivers <drivers@pensando.io>,
-        Timur Tabi <timur@kernel.org>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Ronak Doshi <doshir@vmware.com>,
-        "VMware, Inc." <pv-drivers@vmware.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        linux-hyperv@vger.kernel.org,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200218122900.GC2667@lahna.fi.intel.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 17, 2020 at 1:42 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
->
-> Simplify the code by using new helper tcp_v6_gso_csum_prep.
->
-> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-> ---
->  drivers/net/ethernet/realtek/r8169_main.c | 26 ++---------------------
->  1 file changed, 2 insertions(+), 24 deletions(-)
->
-> diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
-> index 5a9143b50..75ba10069 100644
-> --- a/drivers/net/ethernet/realtek/r8169_main.c
-> +++ b/drivers/net/ethernet/realtek/r8169_main.c
-> @@ -4108,29 +4108,6 @@ static bool rtl_test_hw_pad_bug(struct rtl8169_private *tp, struct sk_buff *skb)
->         return skb->len < ETH_ZLEN && tp->mac_version == RTL_GIGA_MAC_VER_34;
->  }
->
-> -/* msdn_giant_send_check()
-> - * According to the document of microsoft, the TCP Pseudo Header excludes the
-> - * packet length for IPv6 TCP large packets.
-> - */
-> -static int msdn_giant_send_check(struct sk_buff *skb)
-> -{
-> -       const struct ipv6hdr *ipv6h;
-> -       struct tcphdr *th;
-> -       int ret;
-> -
-> -       ret = skb_cow_head(skb, 0);
-> -       if (ret)
-> -               return ret;
-> -
-> -       ipv6h = ipv6_hdr(skb);
-> -       th = tcp_hdr(skb);
-> -
-> -       th->check = 0;
-> -       th->check = ~tcp_v6_check(0, &ipv6h->saddr, &ipv6h->daddr, 0);
-> -
-> -       return ret;
-> -}
-> -
->  static void rtl8169_tso_csum_v1(struct sk_buff *skb, u32 *opts)
->  {
->         u32 mss = skb_shinfo(skb)->gso_size;
-> @@ -4163,9 +4140,10 @@ static bool rtl8169_tso_csum_v2(struct rtl8169_private *tp,
->                         break;
->
->                 case htons(ETH_P_IPV6):
-> -                       if (msdn_giant_send_check(skb))
-> +                       if (skb_cow_head(skb, 0))
->                                 return false;
->
-> +                       tcp_v6_gso_csum_prep(skb, false);
->                         opts[0] |= TD1_GTSENV6;
->                         break;
->
+On Tue, Feb 18, 2020 at 02:29:00PM +0200, Mika Westerberg wrote:
+> Hi Greg,
+> 
+> The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9:
+> 
+>   Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-fix-for-v5.6-rc3
 
-This change looks more or less identical to the one you made in
-"drivers/net/usb/r8152.c" for patch 3. If you have to resubmit it
-might make sense to pull that change out and include it here since
-they are both essentially the same change.
+Pulled and pushed out, thanks.
+
+greg k-h
