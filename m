@@ -2,107 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A25B8162E3F
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2020 19:18:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6102A162E73
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2020 19:25:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726569AbgBRSRy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Feb 2020 13:17:54 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:38018 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726391AbgBRSRx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Feb 2020 13:17:53 -0500
-Received: by mail-lj1-f196.google.com with SMTP id w1so24093622ljh.5
-        for <linux-usb@vger.kernel.org>; Tue, 18 Feb 2020 10:17:52 -0800 (PST)
+        id S1726352AbgBRSZb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Feb 2020 13:25:31 -0500
+Received: from mail-io1-f67.google.com ([209.85.166.67]:37224 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726225AbgBRSZb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Feb 2020 13:25:31 -0500
+Received: by mail-io1-f67.google.com with SMTP id k24so10907410ioc.4;
+        Tue, 18 Feb 2020 10:25:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:references:from:organization:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=9cK2bckJ3e3FyI9QlV5IGwg4pLLNKN0sSP7dc2Uyjj0=;
-        b=nwCRYQJHU7t81cKYiiHMpauFXZx3PG9b8T241KfEm9dBTZT749hQeOuhmEhjnzY/Ej
-         zAZ2wutIR+mBqg4+063b4iCSDCm7FAnd4h1TKDVwCFZxK5HZrF7fRqp7HZjZBWbtghcB
-         4caov/rszM98BoUgvCndB4Uv8Ru1LUp6XU7Pi4V/3W3MBlqtP8r1VT7dNsmZ7hMlP6U2
-         8keJZPtAZoBK0UpQpJLhMf36WCfFjfbjqFD+5znrse+waUCDhDolsB7106UQtxmzx8nG
-         v/7R7WHoAesKHL5xvUhabdajEsNN95kKKIMAUJXJLRqCdylf9b4xm5Mcy/o/RxiWxpd+
-         LKLg==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0oo2FfOUL0MjlcigokgYSuRLB0N4VOcL/NZk+nWeo40=;
+        b=Wq3t2NifRRVRe6tINTW8hnfC80948jJcADE2VTky69RGcQ4+0Dd53XZ1Y1VlaNyLFa
+         EfnQcbLNpv/2vZpiea2s2z9deEkxsXp14CLzj6XpJ2WOoIbvX7WKkcy/cML5KZh+VeGr
+         UlwwDsF+m1vxVQRM6vLpsNGVaB3R5HIdPOYp07ciPcmBHr7rqWNT1b5v+o7BEW01IhGj
+         ejEtIlBR4lNJUjBPWwg6XvzAX1AJ3XK7nsmTS0zJCx+70vGgdRlDVuN/Etqa1dj8kxDk
+         Dwn6dYui17G6BrZxMFPFthQXEJ9Gj6wSKhjYFWNoMX1KEg2kWuURhzvJBT1LKgORPCFs
+         zFOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=9cK2bckJ3e3FyI9QlV5IGwg4pLLNKN0sSP7dc2Uyjj0=;
-        b=gHPfABa0yJ046CZxABTB3bnTzPMDftKi7rCb63S1oi04BB7jTDsmy0tZD0kwGs0ehB
-         +9QTt3nwvFCGLHGqTNT9t+49Vh95r9+4VXUjWzoHAsXp+zNeH9n2tTiO86gWNcK4L/vv
-         d/P/+z0Os/v28UJtyFiy8KYXTnthUZ2+02+Do72bkgLjnx6VVejM1QK7JWkLaBhmbHun
-         7ubKHo+s2WG+w5FNvIk0a954ZwxC41L1cVrC9nDfl019YiUq1k/q1OvQQaGKtXpAgLz4
-         k7ZsJWNHk2+qN83mwNxcOaqmUEMuN0i2vsTQFwU0VZeorz9QiU2KtAhUnhJWIfQDA0ic
-         Vm4A==
-X-Gm-Message-State: APjAAAXCVScLiU4fy2OrgQwOV6LsP7amM4s5s2VDrUs2cEgpjmIygOH2
-        OOiza5YF6C9+HX2vPwuu3BmcIX9HWLc=
-X-Google-Smtp-Source: APXvYqxnuD7KZLVCvcHVWrrXyRLFNs7wg9g/7K39ijr8NAcudaSPUwU3K+i1JhT5ayWKwiblENhIWw==
-X-Received: by 2002:a2e:9e43:: with SMTP id g3mr13983565ljk.37.1582049870742;
-        Tue, 18 Feb 2020 10:17:50 -0800 (PST)
-Received: from wasted.cogentembedded.com ([2a00:1fa0:4291:80f4:9357:4c36:a787:cdd4])
-        by smtp.gmail.com with ESMTPSA id e8sm3319754ljb.45.2020.02.18.10.17.48
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 18 Feb 2020 10:17:49 -0800 (PST)
-Subject: Re: [PATCH v1] usb: core: Make use of acpi_evaluate_object() status
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-References: <20200218160954.42815-1-andriy.shevchenko@linux.intel.com>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Organization: Cogent Embedded
-Message-ID: <511c8750-b188-82a1-e839-6b136e5c727c@cogentembedded.com>
-Date:   Tue, 18 Feb 2020 21:17:47 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0oo2FfOUL0MjlcigokgYSuRLB0N4VOcL/NZk+nWeo40=;
+        b=cOIvo9KpwseWMBaV0F96CfmUykbqnduIPRtTwsGDuZXgtoN3/BBHSYMh9Eliw+uatp
+         vWeXT1JaMwCpvziT9S+KJVEEe0/nMX6pBq1ahFr/OVXWAHVHkDDeaI+ZgkLL+SAfW1yG
+         FKi3rN/Zviwz3hl9iTRJuaWza5p5wC8L04MDnyRgrU8c/8txUtXOaPwhFLYPoIEuhxPV
+         bU6DZGUqo8TmshQ0RT5oE6uC2QzySdlIRkredT2LwBL4Ddq8WNICMcChrt1l5ehrSib2
+         tWL4Fx2oBOmf4hyFzBzd9MhYN2wE0zuHT7lx1BLN4AvNckiqepWV3OZjpDcNCsw2Vrzn
+         eC2Q==
+X-Gm-Message-State: APjAAAVIg1E0A0zvo5sOlU8D/4swM2qr9ofjYTDnjtk5Ia7PYdsSu+aU
+        eSsnr+wm1HXa/3BltNlo1N4AfIBxFefvaF0dUEo=
+X-Google-Smtp-Source: APXvYqwgtWgImN9QZV7JQUuv0hVUZuRkzL56C+1AttxemO7MC8eMPliv6NfqFQATOc/UbFf6Hm1OohYvw/cxkJsQ2bc=
+X-Received: by 2002:a5e:860f:: with SMTP id z15mr16017999ioj.64.1582050330517;
+ Tue, 18 Feb 2020 10:25:30 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200218160954.42815-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-MW
-Content-Transfer-Encoding: 8bit
+References: <76cd6cfc-f4f3-ece7-203a-0266b7f02a12@gmail.com> <9fdc5f0c-fdf0-122e-48a5-43ff029cf8d9@gmail.com>
+In-Reply-To: <9fdc5f0c-fdf0-122e-48a5-43ff029cf8d9@gmail.com>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Tue, 18 Feb 2020 10:25:19 -0800
+Message-ID: <CAKgT0UeUEcoKZsRnxzftMA4tc2chasmW+sWQkP11hVLbdYTYxA@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/3] net: core: add helper tcp_v6_gso_csum_prep
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Realtek linux nic maintainers <nic_swsd@realtek.com>,
+        Jay Cliburn <jcliburn@gmail.com>,
+        Chris Snook <chris.snook@gmail.com>,
+        Rasesh Mody <rmody@marvell.com>,
+        Sudarsana Kalluru <skalluru@marvell.com>,
+        GR-Linux-NIC-Dev@marvell.com,
+        Christian Benvenuti <benve@cisco.com>,
+        Govindarajulu Varadarajan <_govind@gmx.com>,
+        Parvi Kaustubhi <pkaustub@cisco.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Guo-Fu Tseng <cooldavid@cooldavid.org>,
+        Shannon Nelson <snelson@pensando.io>,
+        Pensando Drivers <drivers@pensando.io>,
+        Timur Tabi <timur@kernel.org>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Ronak Doshi <doshir@vmware.com>,
+        "VMware, Inc." <pv-drivers@vmware.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
+        linux-hyperv@vger.kernel.org,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi! :-)
-
-On 02/18/2020 07:09 PM, Andy Shevchenko wrote:
-
-> Compiler is not happy about dangling variable:
-> 
-> .../core/usb-acpi.c: In function ‘usb_acpi_get_connect_type’:
-> .../core/usb-acpi.c:90:14: warning: variable ‘status’ set but not used [-Wunused-but-set-variable]
->    90 |  acpi_status status;
->       |              ^~~~~~
-> 
-> Make use of it by checking the status and bail out in case of error.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Mon, Feb 17, 2020 at 1:41 PM Heiner Kallweit <hkallweit1@gmail.com> wrote:
+>
+> Several network drivers for chips that support TSO6 share the same code
+> for preparing the TCP header. A difference is that some reset the
+> payload_len whilst others don't do this. Let's factor out this common
+> code to a new helper.
+>
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 > ---
->  drivers/usb/core/usb-acpi.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/core/usb-acpi.c b/drivers/usb/core/usb-acpi.c
-> index f434a2060552..41b91f4c207d 100644
-> --- a/drivers/usb/core/usb-acpi.c
-> +++ b/drivers/usb/core/usb-acpi.c
-[...]
-> @@ -98,9 +98,11 @@ static enum usb_port_connect_type usb_acpi_get_connect_type(acpi_handle handle,
->  	 * no connectable, the port would be not used.
->  	 */
->  	status = acpi_evaluate_object(handle, "_UPC", NULL, &buffer);
-> +	if (ACPI_FAILURE(status))
-> +		goto out;
+>  include/net/ip6_checksum.h | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>
+> diff --git a/include/net/ip6_checksum.h b/include/net/ip6_checksum.h
+> index 7bec95df4..ef0130023 100644
+> --- a/include/net/ip6_checksum.h
+> +++ b/include/net/ip6_checksum.h
+> @@ -76,6 +76,18 @@ static inline void __tcp_v6_send_check(struct sk_buff *skb,
+>         }
+>  }
+>
+> +static inline void tcp_v6_gso_csum_prep(struct sk_buff *skb,
+> +                                       bool clear_payload_len)
+> +{
+> +       struct ipv6hdr *ipv6h = ipv6_hdr(skb);
+> +       struct tcphdr *th = tcp_hdr(skb);
 > +
->  	upc = buffer.pointer;
-> -	if (!upc || (upc->type != ACPI_TYPE_PACKAGE)
-> -		|| upc->package.count != 4) {
-> +	if (!upc || (upc->type != ACPI_TYPE_PACKAGE) || upc->package.count != 4) {
->  		goto out;
->  	}
+> +       if (clear_payload_len)
+> +               ipv6h->payload_len = 0;
+> +
+> +       th->check = ~tcp_v6_check(0, &ipv6h->saddr, &ipv6h->daddr, 0);
+> +}
+> +
+>  #if IS_ENABLED(CONFIG_IPV6)
+>  static inline void tcp_v6_send_check(struct sock *sk, struct sk_buff *skb)
+>  {
 
-   I'd drop {} here, while at it.
+So functionally I believe this is correct. The only piece I have a
+question about is if we should just force the clear_payload_len as
+always being the case since the value should either be
+ignored/overwritten in any GSO case anyway.
 
-MBR, Sergei
+Reviewed-by: Alexander Duyck <alexander.h.duyck@linux.intel.com>
