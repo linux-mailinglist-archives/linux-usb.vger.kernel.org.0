@@ -2,126 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDBF1632C8
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2020 21:16:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8473163341
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2020 21:43:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727069AbgBRUQY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Feb 2020 15:16:24 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:51737 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726996AbgBRUQX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Feb 2020 15:16:23 -0500
-Received: by mail-wm1-f65.google.com with SMTP id t23so4100778wmi.1;
-        Tue, 18 Feb 2020 12:16:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=j9++cZ/IP+wbbDCQ64mmb3OUnzsqMjEjsl1uqLXQ9Hc=;
-        b=WOSx8qaaGWz+JOaf5TSGTQ1tPjayIZ97VF3VmkCbwIm2Q0NJ8Ai7xUpq1PRwlGi9UH
-         bluLaY8ZYv50q0quvdJCyLERldS3GSXemhexxoRNuZkwGiKy1vfXHTWpzJ3HMA1cKszL
-         EnfhyuHkx37MwBFiN6qQA+kA8Kc13B1NeYrpv+G4Gl3Gq/UIwrCDc7xN1VejAF4ib2Ba
-         K8uy4p87L3lUsxTTeJP4RSFlGQnA2IUlO40lqt1FBw9AaMRdMCcqxP3R8eQ25nRfQf0I
-         haPjy6FFzIPgMK/QOdYA94GU9qoSnU+TveQ6hN1RqyVHPjvXNM8g5AXEFrYV4vERxVqG
-         kD9g==
+        id S1726962AbgBRUmv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Feb 2020 15:42:51 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:36102 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726283AbgBRUmv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Feb 2020 15:42:51 -0500
+Received: by mail-ot1-f65.google.com with SMTP id j20so20921423otq.3;
+        Tue, 18 Feb 2020 12:42:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=j9++cZ/IP+wbbDCQ64mmb3OUnzsqMjEjsl1uqLXQ9Hc=;
-        b=sqS5483YEwaEJEzLYN9G0M2OUIWrIuC7mSA5zbPARpW4Y95EP93sNDCU5pv653F+A3
-         KjONvx2pdoPXWY3SdRpHN20L61dPGKjOHaPJJIV5rW+79qJBu1ojqZn0JMYC91oO/3fJ
-         aGGC8EEeVaxRdhmNNc/0T1/7UGcuV+LoZT9+vHbBrMF9fQJmi8YXSEoSPUeHwHaYY3D2
-         6lGn6ThyxYEtYBShOOeO0WAnOjhnXtf13GmyHb/0p3P6qY0KejgFbjXvQ6CkrPkKaMcP
-         n3dKKa0p7BuEfT3sgFUSXhDOAHz715/alxbwmwYES9Af4ucwEMOMqjFMFg6EX32Ya/D5
-         q37w==
-X-Gm-Message-State: APjAAAXfI/GMtguvZ6YNxQ+8esB05d8oZt72TP8u8KAqAZZtcugZsQZY
-        AndNyMaZx3KkralWme+0lPHPd/V7
-X-Google-Smtp-Source: APXvYqwssbUYngfobHc+Zd32PF8GyLWgR88HwW/3rHhOxchbGNWeIvyapBtxQhYHOPHxemQgyUkLhg==
-X-Received: by 2002:a1c:1f56:: with SMTP id f83mr4832027wmf.93.1582056980798;
-        Tue, 18 Feb 2020 12:16:20 -0800 (PST)
-Received: from ?IPv6:2003:ea:8f29:6000:5cb0:582f:968:ec00? (p200300EA8F2960005CB0582F0968EC00.dip0.t-ipconnect.de. [2003:ea:8f29:6000:5cb0:582f:968:ec00])
-        by smtp.googlemail.com with ESMTPSA id j15sm8120513wrp.9.2020.02.18.12.16.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Feb 2020 12:16:20 -0800 (PST)
-Subject: [PATCH net-next v2 12/13] r8152: use new helper tcp_v6_gso_csum_prep
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-To:     David Miller <davem@davemloft.net>,
-        Realtek linux nic maintainers <nic_swsd@realtek.com>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-References: <fffc8b6d-68ed-7501-18f1-94cf548821fb@gmail.com>
-Message-ID: <1dd1668a-b3c6-d441-681d-6cbe3ab22fa4@gmail.com>
-Date:   Tue, 18 Feb 2020 21:12:52 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=fbxbwEaD4qF3WMZRRbbcfJIaLGPm78vL8TqgF9rVVVA=;
+        b=Q1x81srnkkxGxftk0rVGqR7GuIJw8PjgvFxxzJI6hmJvyf31IU6EfuvdGxs0VdVING
+         R1aUzms5D5EayZDsSj7Atw8iP0IhtWc1bnvrA64I3KWbmtQRhkOJ4conCkndZckM66ph
+         ll5ppXUssnl67ZvDh9+JQzI8slBlSIeqXbY+fe7Pv4dg4EX7qHBjp6KVptjQg+dtZSrc
+         8K13u8iIT/SDi/hctgFoUHQq8fIrl82vgeO0zhq5sftv9aWSo+gohruzIdTdOKqpx75H
+         iCpF/rIWwxPm+NhNpOvrhehw8v9gjQyMqsG1EUPiYVJVhRhmR1XOqxLylKYdat8k2VTN
+         asrQ==
+X-Gm-Message-State: APjAAAX92qHRz+clnOlUVqV7Mi+YOE5Tu7ka4Llp8mN948zX+AiATP2y
+        TL+CZxIjDPx6xNvo8sp9uQ==
+X-Google-Smtp-Source: APXvYqxIC26xwfaXsfuVbpL+ibxTaDBrPmM7K900gLuNY2/+tZr+rM1AS6Cj9VbvN/PVfLYNmFsuGw==
+X-Received: by 2002:a9d:6443:: with SMTP id m3mr16551864otl.20.1582058570147;
+        Tue, 18 Feb 2020 12:42:50 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id w201sm1547806oif.29.2020.02.18.12.42.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Feb 2020 12:42:49 -0800 (PST)
+Received: (nullmailer pid 3007 invoked by uid 1000);
+        Tue, 18 Feb 2020 20:42:48 -0000
+Date:   Tue, 18 Feb 2020 14:42:48 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org, jackp@codeaurora.org, balbi@kernel.org,
+        bjorn.andersson@linaro.org, robh@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sriharsha Allenki <sallenki@codeaurora.org>,
+        Anu Ramanathan <anur@codeaurora.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jorge Ramirez-Ortiz <jorge.ramirez.ortiz@gmail.com>,
+        devicetree@vger.kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: Re: [PATCH v6 02/18] dt-bindings: phy: Add Qualcomm Synopsys
+ Hi-Speed USB PHY binding
+Message-ID: <20200218204248.GA2908@bogus>
+References: <20200210120723.91794-1-bryan.odonoghue@linaro.org>
+ <20200210120723.91794-3-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <fffc8b6d-68ed-7501-18f1-94cf548821fb@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200210120723.91794-3-bryan.odonoghue@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use new helper tcp_v6_gso_csum_prep in additional network drivers.
+On Mon, 10 Feb 2020 12:07:07 +0000, Bryan O'Donoghue wrote:
+> From: Sriharsha Allenki <sallenki@codeaurora.org>
+> 
+> Adds bindings for Qualcomm's 28 nm USB PHY supporting Low-Speed, Full-Speed
+> and Hi-Speed USB connectivity on Qualcomm chipsets.
+> 
+> [bod: Converted to YAML. Changed name dropping snps, 28nm components]
+> 
+> Signed-off-by: Sriharsha Allenki <sallenki@codeaurora.org>
+> Signed-off-by: Anu Ramanathan <anur@codeaurora.org>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> Cc: Andy Gross <agross@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Jorge Ramirez-Ortiz <jorge.ramirez.ortiz@gmail.com>
+> Cc: linux-arm-msm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>  .../bindings/phy/qcom,usb-hs-28nm.yaml        | 90 +++++++++++++++++++
+>  1 file changed, 90 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/qcom,usb-hs-28nm.yaml
+> 
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
----
- drivers/net/usb/r8152.c | 26 ++------------------------
- 1 file changed, 2 insertions(+), 24 deletions(-)
-
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 78ddbaf64..709578f4d 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -1948,29 +1948,6 @@ static void r8152_csum_workaround(struct r8152 *tp, struct sk_buff *skb,
- 	}
- }
- 
--/* msdn_giant_send_check()
-- * According to the document of microsoft, the TCP Pseudo Header excludes the
-- * packet length for IPv6 TCP large packets.
-- */
--static int msdn_giant_send_check(struct sk_buff *skb)
--{
--	const struct ipv6hdr *ipv6h;
--	struct tcphdr *th;
--	int ret;
--
--	ret = skb_cow_head(skb, 0);
--	if (ret)
--		return ret;
--
--	ipv6h = ipv6_hdr(skb);
--	th = tcp_hdr(skb);
--
--	th->check = 0;
--	th->check = ~tcp_v6_check(0, &ipv6h->saddr, &ipv6h->daddr, 0);
--
--	return ret;
--}
--
- static inline void rtl_tx_vlan_tag(struct tx_desc *desc, struct sk_buff *skb)
- {
- 	if (skb_vlan_tag_present(skb)) {
-@@ -2016,10 +1993,11 @@ static int r8152_tx_csum(struct r8152 *tp, struct tx_desc *desc,
- 			break;
- 
- 		case htons(ETH_P_IPV6):
--			if (msdn_giant_send_check(skb)) {
-+			if (skb_cow_head(skb, 0)) {
- 				ret = TX_CSUM_TSO;
- 				goto unavailable;
- 			}
-+			tcp_v6_gso_csum_prep(skb);
- 			opts1 |= GTSENDV6;
- 			break;
- 
--- 
-2.25.1
-
-
+Reviewed-by: Rob Herring <robh@kernel.org>
