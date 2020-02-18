@@ -2,121 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 045E916377A
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2020 00:50:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82EE1163783
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2020 00:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726760AbgBRXu2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Feb 2020 18:50:28 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:42695 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726716AbgBRXu2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Feb 2020 18:50:28 -0500
-Received: by mail-pl1-f196.google.com with SMTP id e8so8740420plt.9
-        for <linux-usb@vger.kernel.org>; Tue, 18 Feb 2020 15:50:27 -0800 (PST)
+        id S1727592AbgBRXvM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Feb 2020 18:51:12 -0500
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:37154 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726691AbgBRXvM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Feb 2020 18:51:12 -0500
+Received: by mail-pj1-f68.google.com with SMTP id m13so1714199pjb.2
+        for <linux-usb@vger.kernel.org>; Tue, 18 Feb 2020 15:51:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id;
-        bh=cU6rRL+fEDBZEUh1M3w8jP2C2tvvBigE0EFoKql4LUY=;
-        b=kY7giRTxGQhDcNA/rBhbEMYcBnWiiqIOxzlFTADE7SW7U1IA7U7dKQjm61LAsdQEfu
-         /sJ+DoCAzXkqg/c1AuIvUzILO45xUXRRTn2rlwCIcySGoQlC3yuVEiPXqplN41peB5ua
-         04P9AB04XajEtdCyMjM/ZfkflXwrls4iuXFdBQ187bfEBSfwueQdI9sAgmFklPPb5b9G
-         c+7PfMmO63L1bW2PAgCfJvslWmhXNjjQSqZ4mqfbNEGTZcg5cukOnH9GeewnltlLQsG3
-         ypru9jyJtwtuwfz79P7dsbRu+iSBguVPTxVn8beAY6B7xnkEjcE8uGxzmkprgPMnVidk
-         FYtw==
+        bh=H9Vy91VcgS2dfjojUgyTLRgs44OJ1u3F7tZb9F/g2s4=;
+        b=XtjY32moCVDQQioAXHxahEf5oYVhgz+Ms4AFWGGTaFP4778HtoUNBVCZbW/C2qLolT
+         kDIi0JZqXC7NMPPKTviR9qMq/uEd/2YzpTjSe9IaITXu8Pl4JEDP9qbdg7sIIRVZ//1i
+         KtiroPgJmXpywPRGIY+tRmnl8PQ6+OMwaraP1VH0SOJ5WbBohMTNLRPRezZYc2qxq/sa
+         2W6kvsh9Fs6Fpve+mm0yDRQIeZ7choax1gRTSiFCOkog4mfLEzJV9OH+KkcYvUUFNjHX
+         S+Hc+3xvGjLdqBzUhHT2TzNGdEjWroRfLHHYpwd/TbZj2sO/pVmhcBrNVgTGZQBeSp5j
+         XUIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=cU6rRL+fEDBZEUh1M3w8jP2C2tvvBigE0EFoKql4LUY=;
-        b=PAM4pBPhr43Z6XcVtZW/Tnoy/AU4JiNtV49cehhMQIuTZc5oT+hflkpnUmTvVmI0Cc
-         WdP4Ny1V+tHyvToJAJ/gsDNmj3eRzTuXlBnXU1IwnRO0rRCZb+O5xx94Oe9fNQqm4W97
-         tt4GfmhOAIucboiDg4LC/TwuhY3r0WlsGK0exscwGjgOAkNIXdHOC48YbkDAmCT7o5Ps
-         wolA3NPlUeSqi7U+faBYv/9ClL4CLd/ajsMOWQ8pJyu4nt2T+Jc42rki9CBu+xRnZDS8
-         oSgVAClym0vhpcrLbyzafdSRRo+IN44u5rxM/2ZjLdHTdqX/4kNcjstNBYuMWVegnVnJ
-         oFAQ==
-X-Gm-Message-State: APjAAAW3jCTQ20dGc6uJ98eKzaIzu5+gyVzHukArtJu8JqiPLIFqd1yy
-        bTKeN/0/4eO+07PMiY9j+DA=
-X-Google-Smtp-Source: APXvYqz1mHolmHyfQEVcv9FBKCJt8XbDqaXSlXI0OzmwN3Tu0orc1QDDraVYXNMympTB0yrCKtS7WQ==
-X-Received: by 2002:a17:902:8b81:: with SMTP id ay1mr21409529plb.275.1582069827421;
-        Tue, 18 Feb 2020 15:50:27 -0800 (PST)
-Received: from ajayg.nvidia.com (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id f3sm113766pfg.115.2020.02.18.15.50.26
+        bh=H9Vy91VcgS2dfjojUgyTLRgs44OJ1u3F7tZb9F/g2s4=;
+        b=Ye/vFLBw8Q8VQdQLCwqOuh1VEt1SEGTkWD+5kYoPEYsH3Uq6CzpSGpvnDJmQLXlq+1
+         +Qc6an3crJ00nOlu2KTpFNPgCobXoe2SH5HMTLubFrZlc7Q9MI9s21lALe6xavHwM/T4
+         b57gtOV+iusE5F8S6APH6R/5uGHS+lHlZ0UdT3B3AGeIpDuD6k8yMCpqKHUdx6qyA/JD
+         +HKWkP4kItwDe0tJ6lsT2hFNze1gyERvFIDlJasSYm04vWOWSdEWQugSu0CThaDzy8ls
+         IDc99qTbY1GhVuejp7QexCHPNP+6zAwM743P8OUeFhhR0cfLePin7Z2vK0HMP2HNtFre
+         M37w==
+X-Gm-Message-State: APjAAAWZUHD10xa1ZFjk6hSYM14PLdDDqIuRhIB5OXyyCgsKYuz7vozl
+        fSYtMEty7xXeowh3BTIFtdJDDA==
+X-Google-Smtp-Source: APXvYqxZ65WQ76i7D3Y4yE+ieYshnEw5upVN5/4FZ5xFsoWgY9MsPSPIm9vhiPRL+clNxV3M8q/PVw==
+X-Received: by 2002:a17:90b:1256:: with SMTP id gx22mr5711887pjb.94.1582069871497;
+        Tue, 18 Feb 2020 15:51:11 -0800 (PST)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id b1sm88455pgs.27.2020.02.18.15.51.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2020 15:50:26 -0800 (PST)
-From:   Ajay Gupta <ajaykuee@gmail.com>
-X-Google-Original-From: Ajay Gupta <ajayg@nvidia.com>
-To:     mathias.nyman@intel.com
-Cc:     linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>
-Subject: [PATCH] usb: xhci: enable interrupt only after xhci_start()
-Date:   Tue, 18 Feb 2020 15:50:24 -0800
-Message-Id: <20200218235024.15266-1-ajayg@nvidia.com>
+        Tue, 18 Feb 2020 15:51:10 -0800 (PST)
+From:   John Stultz <john.stultz@linaro.org>
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     Pratham Pratap <prathampratap@codeaurora.org>,
+        Felipe Balbi <balbi@kernel.org>, Yang Fei <fei.yang@intel.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        John Stultz <john.stultz@linaro.org>
+Subject: [PATCH] usb: dwc3: gadget: Update chain bit correctly when using sg list
+Date:   Tue, 18 Feb 2020 23:51:04 +0000
+Message-Id: <20200218235104.112323-1-john.stultz@linaro.org>
 X-Mailer: git-send-email 2.17.1
-X-NVConfidentiality: public
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Ajay Gupta <ajayg@nvidia.com>
+From: Pratham Pratap <prathampratap@codeaurora.org>
 
-Xhci interrupt must be enabled only after controller is
-initialized and started. Currently interrupt is enabled
-first in xhci_run() and later hcd state is set to running
-in xhci_run_finished().
+If scatter-gather operation is allowed, a large USB request is split
+into multiple TRBs. For preparing TRBs for sg list, driver iterates
+over the list and creates TRB for each sg and mark the chain bit to
+false for the last sg. The current IOMMU driver is clubbing the list
+of sgs which shares a page boundary into one and giving it to USB driver.
+With this the number of sgs mapped it not equal to the the number of sgs
+passed. Because of this USB driver is not marking the chain bit to false
+since it couldn't iterate to the last sg. This patch addresses this issue
+by marking the chain bit to false if it is the last mapped sg.
 
-On a slow system (such as FPGA based platform) the time
-difference between enabling interrupt and setting the hcd
-state becomes huge enough where interrupt is triggered but
-controller initialization is not complete yet.
+At a practical level, this patch resolves USB transfer stalls
+seen with adb on dwc3 based db845c, pixel3 and other qcom
+hardware after functionfs gadget added scatter-gather support
+around v4.20.
 
-Fixing the same by moving the interrupt enable (CMD_EIE)
-part of code snippet from xhci_run() to xhci_run_finished().
+Credit also to Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+who implemented a very similar fix to this issue.
 
-Signed-off-by: Ajay Gupta <ajayg@nvidia.com>
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Yang Fei <fei.yang@intel.com>
+Cc: Thinh Nguyen <thinhn@synopsys.com>
+Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
+Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc: Jack Pham <jackp@codeaurora.org>
+Cc: Todd Kjos <tkjos@google.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linux USB List <linux-usb@vger.kernel.org>
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Pratham Pratap <prathampratap@codeaurora.org>
+[jstultz: Slight tweak to remove sg_is_last() usage, reworked
+          commit message, minor comment tweak]
+Signed-off-by: John Stultz <john.stultz@linaro.org>
 ---
- drivers/usb/host/xhci.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ drivers/usb/dwc3/gadget.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index dbac0fa9748d..ee2877fe0a58 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -604,6 +604,8 @@ static int xhci_init(struct usb_hcd *hcd)
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 1b8014ab0b25..10aa511051e8 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1071,7 +1071,14 @@ static void dwc3_prepare_one_trb_sg(struct dwc3_ep *dep,
+ 		unsigned int rem = length % maxp;
+ 		unsigned chain = true;
  
- static int xhci_run_finished(struct xhci_hcd *xhci)
- {
-+	u32 temp;
-+
- 	if (xhci_start(xhci)) {
- 		xhci_halt(xhci);
- 		return -ENODEV;
-@@ -611,6 +613,13 @@ static int xhci_run_finished(struct xhci_hcd *xhci)
- 	xhci->shared_hcd->state = HC_STATE_RUNNING;
- 	xhci->cmd_ring_state = CMD_RING_STATE_RUNNING;
+-		if (sg_is_last(s))
++		/*
++		 * IOMMU driver is coalescing the list of sgs which shares a
++		 * page boundary into one and giving it to USB driver. With
++		 * this the number of sgs mapped it not equal to the the number
++		 * of sgs passed. Mark the chain bit to false if it is the last
++		 * mapped sg.
++		 */
++		if ((i == remaining - 1))
+ 			chain = false;
  
-+	/* Set the HCD state before we enable the irqs */
-+	temp = readl(&xhci->op_regs->command);
-+	temp |= (CMD_EIE);
-+	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-+			"// Enable interrupts, cmd = 0x%x.", temp);
-+	writel(temp, &xhci->op_regs->command);
-+
- 	if (xhci->quirks & XHCI_NEC_HOST)
- 		xhci_ring_cmd_db(xhci);
- 
-@@ -664,13 +673,6 @@ int xhci_run(struct usb_hcd *hcd)
- 	temp |= (xhci->imod_interval / 250) & ER_IRQ_INTERVAL_MASK;
- 	writel(temp, &xhci->ir_set->irq_control);
- 
--	/* Set the HCD state before we enable the irqs */
--	temp = readl(&xhci->op_regs->command);
--	temp |= (CMD_EIE);
--	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
--			"// Enable interrupts, cmd = 0x%x.", temp);
--	writel(temp, &xhci->op_regs->command);
--
- 	temp = readl(&xhci->ir_set->irq_pending);
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
- 			"// Enabling event ring interrupter %p by writing 0x%x to irq_pending",
+ 		if (rem && usb_endpoint_dir_out(dep->endpoint.desc) && !chain) {
 -- 
 2.17.1
 
