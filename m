@@ -2,88 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CAF2164C13
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2020 18:37:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9D1164E49
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2020 20:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726677AbgBSRh4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Feb 2020 12:37:56 -0500
-Received: from comms.puri.sm ([159.203.221.185]:48354 "EHLO comms.puri.sm"
+        id S1726750AbgBSTCS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 19 Feb 2020 14:02:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41070 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726518AbgBSRh4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 Feb 2020 12:37:56 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id ACADCE0338;
-        Wed, 19 Feb 2020 09:37:55 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id jlhybjPA9pEg; Wed, 19 Feb 2020 09:37:54 -0800 (PST)
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     jun.li@nxp.com, peter.chen@nxp.com, mathias.nyman@intel.com
-Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, Anson.Huang@nxp.com,
-        shawnguo@kernel.org, kernel@pengutronix.de
-Subject: [PATCH] usb: host: xhci-plat: add XHCI_MISSING_CAS quirk
-Date:   Wed, 19 Feb 2020 18:37:27 +0100
-Message-Id: <20200219173727.9882-1-martin.kepplinger@puri.sm>
-Content-Transfer-Encoding: 8bit
+        id S1726647AbgBSTCS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 19 Feb 2020 14:02:18 -0500
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 206603] New: Regression: Thunderbolt 3 Dock USB not working
+ when connecting it for the second time
+Date:   Wed, 19 Feb 2020 19:02:17 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: D-12twm7qq8vgi7o@maildrop.cc
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression attachments.created
+Message-ID: <bug-206603-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Li Jun <jun.li@nxp.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=206603
 
-i.MX8MQ USB3 host needs XHCI_MISSING_CAS quirk to warm reset the port to
-enum the USB3 device plugged in while system sleep, as the port state is
-stuck in polling mode after resume.
+            Bug ID: 206603
+           Summary: Regression: Thunderbolt 3 Dock USB not working when
+                    connecting it for the second time
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.4.12
+          Hardware: Intel
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: high
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: D-12twm7qq8vgi7o@maildrop.cc
+        Regression: No
 
-Signed-off-by: Li Jun <jun.li@nxp.com>
-Acked-by: Peter Chen <peter.chen@nxp.com>
+Created attachment 287515
+  --> https://bugzilla.kernel.org/attachment.cgi?id=287515&action=edit
+kernel-5.4.10-200.fc31.x86_64.log
+
+I did submit this bug to the Fedora bug tracker in January. Since the latest
+update this is now happening on Ubuntu too, which is why I'm now submitting
+this to the Kernel bug tracker.
+
+Bug at Red Hat Bugzilla for reference:
+https://bugzilla.redhat.com/show_bug.cgi?id=1790889
+
 ---
 
-Hi,
+I'm using this Thunderbolt 3 Dock together together with my ThinkPad T480s:
 
-Because resume from S3 suspend is broken for me on imx8mq, I stumbled
-upon this patch in NXP's linux tree. (Please note that I'm not the
-author and I've not yet put my SoB tag under it). This is just a
-question:
+https://i-tec.cz/de/produkt/tb3hdmidock-3/ (P/N TB3HDMIDOCK)
+https://web.archive.org/web/20180929103728/https://i-tec.cz/de/produkt/tb3hdmidock-3/
 
-This patch (and the docs) clearly is missing in mainline Linux because
-the imx8mq devicetree description includes it (which does nothing now).
+It contains HDMI and USB outputs.
 
-I've tested this and this particular addition doesn't fix my problem:
+When connecting the Dock for the second time after boot (boot, plug, unplug,
+and plug again), USB devices connected to
+the Dock are not working (at least I've tried keyboard, mouse and mass storage
+devices).
+The HDMI output continues to work.
 
-[   84.257538] imx8mq-usb-phy 381f0040.usb-phy: bus resume
-[   84.263195] imx8mq-usb-phy 382f0040.usb-phy: bus resume
-[   84.268898] dwc3 38100000.usb: driver resume
+This did work before using the following kernel versions:
 
-during resume from S3 suspend, here it still hangs.
+- 5.4.7-200.fc31 (Fedora)
+- 5.3.0-29-generic (Ubuntu)
 
-What else could be missing here? I'm using mainline Linux only of course.
+When upgrading the Kernel, it breaks:
 
-thanks,
+- 5.4.7-200.fc31 (Fedora)
+- 5.3.0-40-generic (Ubuntu)
 
-                            martin
+Both Fedora and Ubuntu keep old Kernel versions for a while. I can still boot
+one of the older kernels and then the bug is not happening.
 
+Steps to reproduce:
 
+1. Boot Notebook
+2. Connect Dock
+(HDMI and USB devices connected to the Dock are now working.)
+3. Disconnect Dock
+4. Connect Dock again
+(HDMI device connected to the Dock is now working again, USB devices connected
+to the Dock are not working until reboot.)
 
- drivers/usb/host/xhci-plat.c | 4 ++++
- 1 file changed, 4 insertions(+)
+This is from the kernel log:
 
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index d90cd5ec09cf..4655016eaf45 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -291,6 +291,10 @@ static int xhci_plat_probe(struct platform_device *pdev)
- 
- 		device_property_read_u32(tmpdev, "imod-interval-ns",
- 					 &xhci->imod_interval);
-+
-+		if (device_property_read_bool(tmpdev,
-+					      "usb3-resume-missing-cas"))
-+			xhci->quirks |= XHCI_MISSING_CAS;
- 	}
- 
- 	hcd->usb_phy = devm_usb_get_phy_by_phandle(sysdev, "usb-phy", 0);
+> Jan 14 08:04:48 kernel: Registered IR keymap rc-cec
+> Jan 14 08:04:48 kernel: rc rc0: DP-1 as
+> /devices/pci0000:00/0000:00:02.0/rc/rc0
+> Jan 14 08:04:48 kernel: input: DP-1 as
+> /devices/pci0000:00/0000:00:02.0/rc/rc0/input38
+> Jan 14 08:04:48 kernel: typec_displayport port1-partner.0: failed to enter
+> mode
+> Jan 14 08:04:48 kernel: thunderbolt 0-1: new device found, vendor=0x16b
+> device=0x9003
+> Jan 14 08:04:48 kernel: thunderbolt 0-1: ComDis TB3HDMIDOCK
+
+Full log is attached.
+
 -- 
-2.20.1
-
+You are receiving this mail because:
+You are watching the assignee of the bug.
