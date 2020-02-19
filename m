@@ -2,151 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A8BD163878
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2020 01:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8386163893
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2020 01:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727992AbgBSAWA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Feb 2020 19:22:00 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:32974 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726521AbgBSAV7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Feb 2020 19:21:59 -0500
-Received: by mail-oi1-f196.google.com with SMTP id q81so22125226oig.0
-        for <linux-usb@vger.kernel.org>; Tue, 18 Feb 2020 16:21:58 -0800 (PST)
+        id S1727333AbgBSAeA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Feb 2020 19:34:00 -0500
+Received: from mail-eopbgr1410139.outbound.protection.outlook.com ([40.107.141.139]:45922
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726488AbgBSAd7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Feb 2020 19:33:59 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EdyXniQISawmwZ/F87KSx/I6+WIAjLG6hDtF+TJCIOrkUxSaDxYSE8CQAUQR/r6XvZk9Gsv23e92e+a37aU09sFs8XWEVH3e+DBRgXHmppaO2Hf+ckCusxJygMGJNh6bHpAnB/ucvAPFsAdOs1pbtMlAXYaN1DGWudVEJV0uq3foi/oSIoPhh0nOnxeEUecPl3NS8FdVnMn/pY6Com5IBkHJ4exzG0V2ylyLIQ/l3mXjQDI+EnVQa3R4pQSu3z0spAockp7szMES0xj6533hh1N4T0EVGxdCUrzY5r3brPCnz98I1laGr5zaDAscDW9s871tewjnhHhz63qlh3kJaw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oqMOXwCIA4YmSfN3xI2nBLaoNruTAwS5pdIF+xD9+y4=;
+ b=HaOwocAM527WHDlTPKz/i6A9pkkfwyNLaK5c87OTYl+H9blBTzW0UWHJ61wnVcm5O6FORTNwErOsXURKqz++7mrYsS+szKdlyGcGqZ/RoYtYKo8M9j2kAKFj6ms3V4pCSXC8CwEGnUK7wFp7A8OoldBwVBzlifpNAmyUPmDQ/7LrZnG2iYpxDj2REMHjov+f6QUSgtJfMW1ysslaYh9ywrhr3Nw1qUFZ6HVX6uycxqAunsrXEzZnbgSe5+BXffjbP2n0fSzRkErbwxGqlm78TJNNqHObCFDzErgDSBE+rwnsLhUhuFcdyuzS7xMEQCzzx8WWWMnlWvCW5DQ09WBrHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iwevfYaMGMnWqDp7BRBH9ndZK1ueB9FpG7BWDRha664=;
-        b=uXpGi2JtCaKA3afhjgPnx3+k6bu9jRJFFsxC1tdxkFA2xmvGo813n+ZBpK+kHNH/39
-         aZ7yNwhZeAq6N113hFT+Z7i3q+igLWsyXdAmQCx0FBwKnVkgREb0kVWKfguOHKueZveq
-         ZvOaEfMgOMt2ySw4a1QyCrQJC2t/FNxIRmHkuSurQ9D6XOB2qmC2ne59d1ee/3/6jwaM
-         JtifkDeTXpnBdsiIlxZf5GoQkjGQc5fpmIu0DLDptiQoBobekKlKZo6hn+pha4aLWmPr
-         B+bYAjtTgusI/aORPogBkG+bpo4h/Bu6olv6xoFBj2IjpY4R4Lva9xceCo8cbzAhNQPZ
-         v9Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iwevfYaMGMnWqDp7BRBH9ndZK1ueB9FpG7BWDRha664=;
-        b=IH7BSc4oOBcvSNYQfzt0YxXKrk7IP2qX0cm4hoUh/maYwiHfGvPDsIl8MhkfHZLN9M
-         VKlYUktEGcbgoGGcvBNDiWrGXqsTuU6XXcSaHMnli4IOuldbO85oWg7agRA+azp0mmWs
-         HktSYTy/enm3FtH3QB/orOi71N+vq6MkcyBB7DmhjivQo2zyN7fiI+ZOXNQ6ocCjctsu
-         Cbr0qFx7YmZ91TXtDnutDi2P5FTfo5TDgCQ9j7LTDQuIsqsojN1rlQ/LxICdC0btVxtG
-         GDk4AZ6IxGjY2z4JyFz3ZCoEVqkDINPwzOUwA4KjTNYdOR5APUK8C4xajkHAy1ZxnfSl
-         p1OQ==
-X-Gm-Message-State: APjAAAXJ1tDYMrdm5TBiNcefDniCxqnT8ICUG8CayG2A+wTQhkHmhfrw
-        5oDHzU4r5zxja9nuBEs6qS60wCNBhd5RcK65DaF9pg==
-X-Google-Smtp-Source: APXvYqyYiXJ4jQH3RxiDV6J7/uaLgk6BiS53+aqHNeUal6TNgdsW5hDDsiGSQ/HeW/6snAkmK42XqN3LCG9NUaItzAg=
-X-Received: by 2002:a54:4396:: with SMTP id u22mr3027403oiv.128.1582071718379;
- Tue, 18 Feb 2020 16:21:58 -0800 (PST)
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oqMOXwCIA4YmSfN3xI2nBLaoNruTAwS5pdIF+xD9+y4=;
+ b=WEyoNVp0NpptqIo0bfbBQej/38MYsVLNYyrvNaAT3bNxZF91PMz28vDPGvqRy58qhJSwZGpvWhm9yKbJUi9nCSr4gTMPSowYZf4s6ifkmg0CFWmuSUpNUoYFsG4uR3XFbtpb3enmp923C3353uzkD8eCMY/4M7AaXFSk4beMmSk=
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.175.203) by
+ TYAPR01MB4383.jpnprd01.prod.outlook.com (20.179.174.12) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2729.27; Wed, 19 Feb 2020 00:33:56 +0000
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::318b:31aa:4212:bd49]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::318b:31aa:4212:bd49%7]) with mapi id 15.20.2729.032; Wed, 19 Feb 2020
+ 00:33:56 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Corentin Labbe <clabbe@baylibre.com>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        "b-liu@ti.com" <b-liu@ti.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "ludovic.desroches@microchip.com" <ludovic.desroches@microchip.com>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+        "slemieux.tyco@gmail.com" <slemieux.tyco@gmail.com>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "vz@mleia.com" <vz@mleia.com>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH 14/20] usb: gadget: renesas_usb3: remove useless cast for
+ driver.name
+Thread-Topic: [PATCH 14/20] usb: gadget: renesas_usb3: remove useless cast for
+ driver.name
+Thread-Index: AQHV5pJjlc+xczpn3U64bn6qmWQNnqghqx0w
+Date:   Wed, 19 Feb 2020 00:33:56 +0000
+Message-ID: <TYAPR01MB45442877135FCCE97570E2BBD8100@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+References: <1582054383-35760-1-git-send-email-clabbe@baylibre.com>
+ <1582054383-35760-15-git-send-email-clabbe@baylibre.com>
+In-Reply-To: <1582054383-35760-15-git-send-email-clabbe@baylibre.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [124.210.22.195]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: da2a68e8-f36b-43ab-6780-08d7b4d3676a
+x-ms-traffictypediagnostic: TYAPR01MB4383:
+x-microsoft-antispam-prvs: <TYAPR01MB43834029F4DE4D023C2DEDDFD8100@TYAPR01MB4383.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2331;
+x-forefront-prvs: 0318501FAE
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(366004)(396003)(376002)(136003)(39860400002)(346002)(189003)(199004)(110136005)(4326008)(186003)(55016002)(9686003)(76116006)(316002)(478600001)(71200400001)(26005)(5660300002)(55236004)(66446008)(6506007)(64756008)(66476007)(66946007)(66556008)(33656002)(86362001)(7696005)(2906002)(54906003)(4744005)(81166006)(81156014)(8936002)(8676002)(52536014)(7416002)(921003)(1121003);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB4383;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: I1U7aIJT3ENhL0xDGC2VEcfWcahvdi156dLcN9sv2nrv0KPeUQ9AQoBgKcmx+fiVCEeLwo7EGwVM4ps53lE8aPNwjDs6NWDzFbzcisuKHI7H1CPpiDFqm/yT0/ebmZ4K57ye1uKENBNKgjqTIgfskkeZG6zdHcjUXxis5R0jlmkAEfwCpXtlh4/IgHUXQTNOhMldiFsynCHxs+tAHF1/ZHMhIZ1KeT1OT36wl7fGAlYUvrjfWzd3bEmYkrzHXBfTceFa95ciElHo8qYC5voEOQwRdG3UdRXjbi8KEEfHrGkh66ScUb96x2bh3hC6m0IgxP8pYrTUg504t6zpXAJbcZIcdLhXof4eYw6P847Pcr5WR6hGS/ccssv9bSdmApwvV8Esq5cAkAvagjU9+XCzJcPLvG46A2L7njW5yxVnPKZbH71Zy8X+lL76Qixeb5MvErcc2HzpWFXuILC5NAn74BvLImtl6Kmz/fv5qeP3+qQXy5gAGB237HjpU7lgSNK7
+x-ms-exchange-antispam-messagedata: VX3lC1QpfpUmzqlnH+fZlv0plpW4JOJj5BTke8GTRAhO6xc6Zjql392ZuY3k5uL9BSuVbnJVvPkC6FhJkPiXrKuExkYv7W3qozr51u7GCNkX92th7WFtLsGpkT3+qyh66dqJvuu+73pZSV40E1aWKg==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20200218235104.112323-1-john.stultz@linaro.org> <20200219000736.GA5511@jackp-linux.qualcomm.com>
-In-Reply-To: <20200219000736.GA5511@jackp-linux.qualcomm.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Tue, 18 Feb 2020 16:21:47 -0800
-Message-ID: <CALAqxLUSU4j3G6zBsxeOanF2A4fi-Q+JKu6FVDXOwAzpnZvWNQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: gadget: Update chain bit correctly when using
- sg list
-To:     Jack Pham <jackp@codeaurora.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        Pratham Pratap <prathampratap@codeaurora.org>,
-        Felipe Balbi <balbi@kernel.org>, Yang Fei <fei.yang@intel.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
-        Tejas Joglekar <tejas.joglekar@synopsys.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Todd Kjos <tkjos@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: da2a68e8-f36b-43ab-6780-08d7b4d3676a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Feb 2020 00:33:56.1330
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qkbZccuKt5+73KAF6K1o/PLSOOjVSgSLKvpdCI9YqJObrldbfr6ENm/TTuKPbtZ0QcppPUHGLfBd6h6VVvXwQKUo+m1swrMrPlu2TUCyUQOuYovUe0BumIP+jPZ/f+mU
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB4383
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 18, 2020 at 4:07 PM Jack Pham <jackp@codeaurora.org> wrote:
->
-> Hi John,
->
-> Thanks for following-up with this! While you're doing minor tweaks
-> anyway, I hope you don't mind me picking some nits below.
->
-> On Tue, Feb 18, 2020 at 11:51:04PM +0000, John Stultz wrote:
-> > From: Pratham Pratap <prathampratap@codeaurora.org>
-> >
-> > If scatter-gather operation is allowed, a large USB request is split
-> > into multiple TRBs. For preparing TRBs for sg list, driver iterates
-> > over the list and creates TRB for each sg and mark the chain bit to
-> > false for the last sg. The current IOMMU driver is clubbing the list
-> > of sgs which shares a page boundary into one and giving it to USB driver.
-> > With this the number of sgs mapped it not equal to the the number of sgs
-> > passed. Because of this USB driver is not marking the chain bit to false
-> > since it couldn't iterate to the last sg. This patch addresses this issue
-> > by marking the chain bit to false if it is the last mapped sg.
-> >
-> > At a practical level, this patch resolves USB transfer stalls
-> > seen with adb on dwc3 based db845c, pixel3 and other qcom
-> > hardware after functionfs gadget added scatter-gather support
-> > around v4.20.
-> >
-> > Credit also to Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
-> > who implemented a very similar fix to this issue.
-> >
-> > Cc: Felipe Balbi <balbi@kernel.org>
-> > Cc: Yang Fei <fei.yang@intel.com>
-> > Cc: Thinh Nguyen <thinhn@synopsys.com>
-> > Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
-> > Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-> > Cc: Jack Pham <jackp@codeaurora.org>
-> > Cc: Todd Kjos <tkjos@google.com>
-> > Cc: Greg KH <gregkh@linuxfoundation.org>
-> > Cc: Linux USB List <linux-usb@vger.kernel.org>
-> > Cc: stable <stable@vger.kernel.org>
-> > Signed-off-by: Pratham Pratap <prathampratap@codeaurora.org>
-> > [jstultz: Slight tweak to remove sg_is_last() usage, reworked
-> >           commit message, minor comment tweak]
-> > Signed-off-by: John Stultz <john.stultz@linaro.org>
-> > ---
-> >  drivers/usb/dwc3/gadget.c | 9 ++++++++-
-> >  1 file changed, 8 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > index 1b8014ab0b25..10aa511051e8 100644
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@ -1071,7 +1071,14 @@ static void dwc3_prepare_one_trb_sg(struct dwc3_ep *dep,
-> >               unsigned int rem = length % maxp;
-> >               unsigned chain = true;
-> >
-> > -             if (sg_is_last(s))
-> > +             /*
-> > +              * IOMMU driver is coalescing the list of sgs which shares a
-> > +              * page boundary into one and giving it to USB driver. With
-> > +              * this the number of sgs mapped it not equal to the the number
->                                                  ^^ s/it/is/     ^^^ /d
->
-> Or could we more specifically say "number of sgs mapped could be less
-> than number passed"?
->
-> > +              * of sgs passed. Mark the chain bit to false if it is the last
-> > +              * mapped sg.
-> > +              */
-> > +             if ((i == remaining - 1))
->
-> These outer parens are superfluous.
+Hi,
 
-Thanks for catching these. I'll respin here shortly.
+> From: Corentin Labbe, Sent: Wednesday, February 19, 2020 4:33 AM
+>=20
+> device_driver name is const char pointer, so it not useful to cast
+> udc_name (which is already const char).
+>=20
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 
-> Also wondering if it would be more or less clear to just set the
-> variable once (and awkwardly move the comment to appear above the
-> local var declaration):
->
->                 unsigned chain = (i < remaining - 1);
->
+Thank you for the patch!
 
-Personally, I think doing it via the conditional makes the logic a bit
-less taxing to read/skim. So I might keep that bit as is.
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
-thanks
--john
+Best regards,
+Yoshihiro Shimoda
+
