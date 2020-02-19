@@ -2,72 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FEAB164692
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2020 15:12:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8622A16469C
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2020 15:14:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727857AbgBSOML (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Feb 2020 09:12:11 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:41793 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727705AbgBSOML (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Feb 2020 09:12:11 -0500
-Received: by mail-wr1-f68.google.com with SMTP id c9so692486wrw.8
-        for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2020 06:12:09 -0800 (PST)
+        id S1727957AbgBSOOM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Feb 2020 09:14:12 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:45929 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727705AbgBSOOL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Feb 2020 09:14:11 -0500
+Received: by mail-wr1-f66.google.com with SMTP id g3so670664wrs.12
+        for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2020 06:14:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=subject:to:cc:references:from:autocrypt:organization:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=RJKXqioDvyKKircULJkfX6xF3mRWI5j91/8iUVGAbK4=;
-        b=gnIUEn7cQOwgOR+a39j7PjBIDnyjhMMvStC1RViFPRodsw41lGAumAfVE7fVVGecYZ
-         UZdRW0VSu6cpscMAFJT3AZb3bEcTLrbnMFq36XhAkwcR4MF2WQCiprUlGRq9b7vJGPnZ
-         Dik2c1mVYL0NM/E4HR7XQFhCKcSTPbu8CQjHzqmDA2Iw8CvADg8Wd8bZB//DpWZyoAB1
-         A+3RfV0UZLWBf4hdrk1m/GsLiYM1JOeiRApU+HLGntd4outB6lPc1S0+FdYAi/tsYc8F
-         YiLeNSwXSNeW4o0GsvIQ9RauY5nAAp8hJH0/mGnrYhi4qjY02e7w8EjcqvDum53JPIL+
-         UkkA==
+        bh=uXdoUR0XgCTZxVCtiaoQw/MLf4PcvBIvxwOCFYMZSP4=;
+        b=YCNX2wA3dQsIG79xa3IR2n26dg4q4qH4bLfM+AsKqKBeX+9bmOyQfTcjNEkW9xgBli
+         112xTlYPCu30nelz2okdUFmsEHxE//hPaSQcYQ+5lwcZXnc2TtGmyrOrIl8s2Rh7RAiQ
+         P9JbEbYbEHPamAv8Bh0EKOAfhYI8zqIz5Q0qMqYZ8hmvaQ0cAaDlcds0bNZjXQjxH+vM
+         fWVFii766TV10fLkrzbUCCNn11lhjWZU8rZ1dZzGjyse844SxJWwUzzCIUW/brG3tjJP
+         zlK76put0XMuKjQ1+ZSBQG5FRwPQHXQiFS7BjPDVd5/PfN0JwAUF4pTKVMLZXz19F47n
+         7VVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :organization:message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=RJKXqioDvyKKircULJkfX6xF3mRWI5j91/8iUVGAbK4=;
-        b=beRTgjVH4am0DAAUZxwuL8ooB0IFQOZuCghl0aXWhTvW9UtSX07qqD60/UcjvdCgGn
-         FRTt5gCCfMh/7KrUznVJ3u8eYflAcZHrpFXqfNbBgPIb9E31so4ITeRJd4oF2eyBEtuE
-         NldI4LLasNm8BevsCMF0V2OPz49PMSIW0WSA/3oMLflB6qg95MsNx3QaknpGFt3W3RPC
-         V4mcr6DkLJPsIfgFxWOfazWehlaWjLz681SC+9a0lmuNPqmKl0EBaT5gQo3Fi2BkDqqi
-         vhc2O8X+f3Pe95eNrgZggu56qa7omLI8e1zS6zAcX+/xstVb09kEKW1jt/te4FlobKzJ
-         j8gw==
-X-Gm-Message-State: APjAAAWHiVflPBfef2ghuND4elhoCBnnYn1SB65vpkVZoJWi1xXHsHJq
-        Eja/F4DhcpW5foUtM9Ok1JS9SA==
-X-Google-Smtp-Source: APXvYqz9+aPQWqiRzMV6OfoWUEixLNJduNo0aaQM0SXm8v/eggAyRBWYQl2Jt5bo22PpgZdWzSi+mA==
-X-Received: by 2002:adf:f302:: with SMTP id i2mr36261663wro.21.1582121528555;
-        Wed, 19 Feb 2020 06:12:08 -0800 (PST)
-Received: from ?IPv6:2a01:e35:2ec0:82b0:4ca8:b25b:98e4:858? ([2a01:e35:2ec0:82b0:4ca8:b25b:98e4:858])
-        by smtp.gmail.com with ESMTPSA id x21sm2927157wmi.30.2020.02.19.06.12.06
+        bh=uXdoUR0XgCTZxVCtiaoQw/MLf4PcvBIvxwOCFYMZSP4=;
+        b=PSTBJcBHnqgHZrm2HEouk5oYg2TviX3a7SuCCxZ6z3yL+AgsUj3JJx3Twp3w8NCmoq
+         OHkK9bVz3Eef/RBy6L6eLEzXMTkWyywtBJNcnDX1UdI9N11n6CclFKRkkBCiAWt7kLQ6
+         DeIYs4qsdCMtEahqK5pbyrLlDS2vKxUcW3MT8FkxJhm4G1ExYpYDnL1ZUqZbNnU+xhIn
+         VSN/Qy2d7Obrr9GrWBgAtJwUjEuuExph8DiF5FiDt/yO91a7wvF6G9OG1PB+4v9bPMFs
+         0+GDWOuPkfFAO9wrCXA1IZxd18PNT7T5xcZVsrM5xXuQAYIFjclSgxK6CIFt8Ma7hjef
+         11Jg==
+X-Gm-Message-State: APjAAAUhCVq+Q8Sxjjg2vA8V/1xLQE6xyhvgBhQA90yV9/Etbzahv5PT
+        5MpLCK4t9xy/5szOlPRqDXL6MQ==
+X-Google-Smtp-Source: APXvYqxH9nOzidlAyGIVX7T2P8TGUAvMVJctZqUzmF3PYX7tf9LOYHAVrfPBg9SG1BZGGlCJf/qmDg==
+X-Received: by 2002:adf:f1cb:: with SMTP id z11mr35086030wro.375.1582121648290;
+        Wed, 19 Feb 2020 06:14:08 -0800 (PST)
+Received: from ?IPv6:2a01:e35:2ec0:82b0:510e:e29a:93ab:74c3? ([2a01:e35:2ec0:82b0:510e:e29a:93ab:74c3])
+        by smtp.gmail.com with ESMTPSA id 5sm3254394wrc.75.2020.02.19.06.14.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Feb 2020 06:12:07 -0800 (PST)
-Subject: Re: [PATCH v9 3/3] arm64: dts: meson: a1: Enable USB2 PHY and DWC3
- controller
-To:     Hanjie Lin <hanjie.lin@amlogic.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
+        Wed, 19 Feb 2020 06:14:07 -0800 (PST)
+Subject: Re: [PATCH] usb: dwc3: meson-g12a: Don't use ret uninitialized in
+ dwc3_meson_g12a_otg_init
+To:     Nathan Chancellor <natechancellor@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Hanjie Lin <hanjie.lin@amlogic.com>,
+        kbuild test robot <lkp@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>
-Cc:     Yue Wang <yue.wang@amlogic.com>, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, Carlo Caione <carlo@caione.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Qiufang Dai <qiufang.dai@amlogic.com>,
-        Jian Hu <jian.hu@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
-References: <1581990859-135234-1-git-send-email-hanjie.lin@amlogic.com>
- <1581990859-135234-4-git-send-email-hanjie.lin@amlogic.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yue Wang <yue.wang@amlogic.com>,
+        clang-built-linux@googlegroups.com,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20200210225816.36598-1-natechancellor@gmail.com>
 From:   Neil Armstrong <narmstrong@baylibre.com>
 Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
  xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
@@ -119,12 +111,12 @@ Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
  zR8QplXA5kogS4kLe/7/JmlDMO8Zgm9vKLHSUeesLOrjdZ59EcjldNNBszRZQgEhwaarfz46
  BSwxi7g3Mu7u5kUByanqHyA=
 Organization: Baylibre
-Message-ID: <37725e68-a24f-f76f-6730-630f24431e6f@baylibre.com>
-Date:   Wed, 19 Feb 2020 15:12:06 +0100
+Message-ID: <d47c9cb2-9458-afc7-e91b-1a56ad87d1be@baylibre.com>
+Date:   Wed, 19 Feb 2020 15:14:06 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <1581990859-135234-4-git-send-email-hanjie.lin@amlogic.com>
+In-Reply-To: <20200210225816.36598-1-natechancellor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -133,83 +125,57 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 18/02/2020 02:54, Hanjie Lin wrote:
-> Enable USB2 PHY and DWC3 controller for Meson A1 SoC.
+On 10/02/2020 23:58, Nathan Chancellor wrote:
+> Clang warns:
 > 
-> Signed-off-by: Yue Wang <yue.wang@amlogic.com>
-> Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
+> ../drivers/usb/dwc3/dwc3-meson-g12a.c:421:6: warning: variable 'ret' is
+> used uninitialized whenever 'if' condition is false
+> [-Wsometimes-uninitialized]
+>         if (priv->otg_mode == USB_DR_MODE_OTG) {
+>             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ../drivers/usb/dwc3/dwc3-meson-g12a.c:455:9: note: uninitialized use
+> occurs here
+>         return ret;
+>                ^~~
+> ../drivers/usb/dwc3/dwc3-meson-g12a.c:421:2: note: remove the 'if' if
+> its condition is always true
+>         if (priv->otg_mode == USB_DR_MODE_OTG) {
+>         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ../drivers/usb/dwc3/dwc3-meson-g12a.c:415:9: note: initialize the
+> variable 'ret' to silence this warning
+>         int ret, irq;
+>                ^
+>                 = 0
+> 1 warning generated.
+> 
+> It is not wrong, ret is only used when that if statement is true. Just
+> directly return 0 at the end to avoid this.
+> 
+> Fixes: 729149c53f04 ("usb: dwc3: Add Amlogic A1 DWC3 glue")
+> Reported-by: kbuild test robot <lkp@intel.com>
+> Link: https://groups.google.com/d/msg/clang-built-linux/w5iBENco_m4/PPuXreAxBQAJ
+> Link: https://github.com/ClangBuiltLinux/linux/issues/869
+> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 > ---
->  arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 43 +++++++++++++++++++++++++++++++
->  1 file changed, 43 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-> index 6fdc0dd..3b7ca50 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-> @@ -6,6 +6,9 @@
->  #include <dt-bindings/interrupt-controller/irq.h>
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
->  #include <dt-bindings/power/meson-a1-power.h>
-> +#include <dt-bindings/reset/amlogic,meson-a1-reset.h>
-> +#include <dt-bindings/clock/a1-pll-clkc.h>
-> +#include <dt-bindings/clock/a1-clkc.h>
+> Note: This patch is against Felipe's testing/next branch.
+> 
+>  drivers/usb/dwc3/dwc3-meson-g12a.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
+> index 70d24b98fcad..902553f39889 100644
+> --- a/drivers/usb/dwc3/dwc3-meson-g12a.c
+> +++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
+> @@ -452,7 +452,7 @@ static int dwc3_meson_g12a_otg_init(struct platform_device *pdev,
+>  	if (IS_ERR(priv->role_switch))
+>  		dev_warn(dev, "Unable to register Role Switch\n");
 >  
->  / {
->  	compatible = "amlogic,a1";
-> @@ -100,6 +103,17 @@
->  				#power-domain-cells = <1>;
->  				status = "okay";
->  			};
-> +
-> +			usb2_phy1: phy@40000 {
-> +				compatible = "amlogic,a1-usb2-phy";
-> +				clocks = <&clkc_periphs CLKID_XTAL_USB_PHY>;
-> +				clock-names = "xtal";
-> +				reg = <0x0 0x40000 0x0 0x2000>;
-> +				resets = <&reset RESET_USBPHY>;
-> +				reset-names = "phy";
-> +				#phy-cells = <0>;
-> +				power-domains = <&pwrc PWRC_USB_ID>;
-> +			};
->  		};
+> -	return ret;
+> +	return 0;
+>  }
 >  
->  		gic: interrupt-controller@ff901000 {
-> @@ -114,6 +128,35 @@
->  			#interrupt-cells = <3>;
->  			#address-cells = <0>;
->  		};
-> +
-> +		usb: usb@ffe09000 {
-> +			status = "disabled";
-> +			compatible = "amlogic,meson-a1-usb-ctrl";
-> +			reg = <0x0 0xffe09000 0x0 0xa0>;
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +
-> +			clocks = <&clkc_periphs CLKID_USB_CTRL>,
-> +				 <&clkc_periphs CLKID_USB_BUS>,
-> +				 <&clkc_periphs CLKID_XTAL_USB_CTRL>;
-> +			clock-names = "usb_ctrl", "usb_bus", "xtal_usb_ctrl";
-> +			resets = <&reset RESET_USBCTRL>;
-> +
-> +			dr_mode = "host";
-> +
-> +			phys = <&usb2_phy1>;
-> +			phy-names = "usb2-phy1";
-> +
-> +			dwc3: usb@ff400000 {
-> +				compatible = "snps,dwc3";
-> +				reg = <0x0 0xff400000 0x0 0x100000>;
-> +				interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
-> +				dr_mode = "host";
-> +				snps,dis_u2_susphy_quirk;
-> +				snps,quirk-frame-length-adjustment = <0x20>;
-> +			};
-> +		};
->  	};
->  
->  	timer {
+>  static int dwc3_meson_g12a_probe(struct platform_device *pdev)
 > 
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
