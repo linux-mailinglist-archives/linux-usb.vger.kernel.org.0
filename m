@@ -2,140 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E770B163A6B
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2020 03:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F8C163E34
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2020 08:53:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728027AbgBSCpl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Feb 2020 21:45:41 -0500
-Received: from mail27.static.mailgun.info ([104.130.122.27]:25949 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727187AbgBSCpl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Feb 2020 21:45:41 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1582080340; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=+Hnsb9d6PeDSY82BGR34PbCnjCNdf3secKOnbmp9Pfc=; b=As5xKpPjDNStEhE2C66kNcDQpw7/TrHjQtckuK125gxdpMrnGgaZ1U0v49IQa2o6caZDe0NW
- Egs/xSs/jKiYtVCy2aL60DBYPOh8vtEjnIEY7FqPBu038Y3WxEou/swPpTPAhdPrdbxm7A2L
- eD6zSpFqHunk+3EaAtFnEg244lg=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e4ca153.7f130836dce0-smtp-out-n03;
- Wed, 19 Feb 2020 02:45:39 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id D4713C447A0; Wed, 19 Feb 2020 02:45:37 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id A38B4C43383;
-        Wed, 19 Feb 2020 02:45:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A38B4C43383
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=jackp@codeaurora.org
-Date:   Tue, 18 Feb 2020 18:45:34 -0800
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: msm_hsusb 78d9000.usb: failed to create device link to
- ci_hdrc.0.ulpi
-Message-ID: <20200219024534.GB10078@jackp-linux.qualcomm.com>
-References: <CA+G9fYtnwFVPQxgHOU2Bi9y5+q4sSsww47yxK+_3ZAQ9=kyhUg@mail.gmail.com>
- <20200219013824.GB8602@b29397-desktop>
+        id S1726484AbgBSHwz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Feb 2020 02:52:55 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:38259 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726213AbgBSHwz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Feb 2020 02:52:55 -0500
+Received: by mail-lf1-f67.google.com with SMTP id r14so16617490lfm.5;
+        Tue, 18 Feb 2020 23:52:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pBcXvYpVbcpOivBpwH+KxMjwUZ99WUPQa/e/GZdQhGI=;
+        b=HOl3ZPnH9kGEWldoZ6VJkGJrcUkTI97X5hzYlxz88a4LjE3zPG9G4pJV+BFKJ/3ZHC
+         wN7IA/IS9O/t+n4UqS8OIyHRJHBp51I7SrPaUHkWWtEDU2KZsoKXsjGvTbCqrhqj+dzP
+         gMq+JtBLdaTuGvA30Ds9oIcnLzrMhVlRTEcGrM6eH31RIMJVq8qGSlIl28lXxz0ggEwW
+         RID+KLaDl2JQR7/tGQ+uOoENKMDT9lyHYNbtyBiteafMJ5ZNh90YJjiYJSOWmZmkKqBg
+         NaYlmKTVxHgEAcX0XrGlWA57byKoqev1oEzMtYk19xFWZcr3cRFcRh9+IkHM0PE9z2k7
+         pRqw==
+X-Gm-Message-State: APjAAAXQqJe5W0XZy3/Ij+cJGEXx82iQMr7cFaCh4fdfdOtgtHTN0G9T
+        rHHOdHi5nC+2u+kLVQMcAec=
+X-Google-Smtp-Source: APXvYqxniWWWPPX2NX94mAjgrd5J+QVhCrkvaxE78uLY29DmvxjPj+m2MiISPdQ1Ugvp3CjlSMrY2w==
+X-Received: by 2002:ac2:58fa:: with SMTP id v26mr12695059lfo.84.1582098771710;
+        Tue, 18 Feb 2020 23:52:51 -0800 (PST)
+Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
+        by smtp.gmail.com with ESMTPSA id u25sm682904ljj.70.2020.02.18.23.52.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Feb 2020 23:52:50 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@kernel.org>)
+        id 1j4KA3-00080g-E8; Wed, 19 Feb 2020 08:52:47 +0100
+Date:   Wed, 19 Feb 2020 08:52:47 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Corentin Labbe <clabbe@baylibre.com>
+Cc:     alexandre.belloni@bootlin.com, b-liu@ti.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, ludovic.desroches@microchip.com,
+        mathias.nyman@intel.com, nicolas.ferre@microchip.com,
+        slemieux.tyco@gmail.com, stern@rowland.harvard.edu, vz@mleia.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 00/20] usb: remove useless cast for driver.name
+Message-ID: <20200219075247.GE2090@localhost>
+References: <1582054383-35760-1-git-send-email-clabbe@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200219013824.GB8602@b29397-desktop>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <1582054383-35760-1-git-send-email-clabbe@baylibre.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 19, 2020 at 01:38:22AM +0000, Peter Chen wrote:
-> On 20-02-17 14:02:57, Naresh Kamboju wrote:
-> > arm64 APQ 8016 SBC ( Dragonboard 410c)  device running Linux next boot
-> > failed due to below error.
-> > 
-> > [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd030]
-> > [    0.000000] Linux version 5.6.0-rc2-next-20200217 (oe-user@oe-host)
-> > (gcc version 7.3.0 (GCC)) #1 SMP PREEMPT Mon Feb 17 04:27:31 UTC 2020
-> > [    0.000000] Machine model: Qualcomm Technologies, Inc. APQ 8016 SBC
-> > <>
-> > [    4.439291] msm_hsusb 78d9000.usb: failed to create device link to
-> > ci_hdrc.0.ulpi
-> > [    4.448891] msm_hsusb 78d9000.usb: failed to create device link to
-> > ci_hdrc.0.ulpi
-> > [    4.457879] msm_hsusb 78d9000.usb: failed to create device link to
-> > ci_hdrc.0.ulpi
-> > [    4.467331] msm_hsusb 78d9000.usb: failed to create device link to
-> > ci_hdrc.0.ulpi
-> > [    4.475636] mmc0: new HS200 MMC card at address 0001
-> > [    4.478895] mmcblk0: mmc0:0001 DS2008 7.28 GiB
-> > [    4.480629] mmcblk0boot0: mmc0:0001 DS2008 partition 1 4.00 MiB
-> > [    4.484719] mmcblk0boot1: mmc0:0001 DS2008 partition 2 4.00 MiB
-> > [    4.492247] msm_hsusb 78d9000.usb: failed to create device link to
-> > ci_hdrc.0.ulpi
-> > [    4.502611] mmcblk0rpmb: mmc0:0001 DS2008 partition 3 4.00 MiB,
-> > chardev (234:0)
-> > [    4.506949] msm_hsusb 78d9000.usb: failed to create device link to
-> > ci_hdrc.0.ulpi
-> > [    4.517901] random: fast init done
-> > [    4.521420] mmc1: new ultra high speed SDR104 SDHC card at address aaaa
-> > [    4.523400] mmcblk1: mmc1:aaaa SL16G 14.8 GiB
-> > [    4.532843] msm_hsusb 78d9000.usb: failed to create device link to
-> > ci_hdrc.0.ulpi
-> > [    4.539131]  mmcblk0: p1 p2 p3 p4 p5 p6 p7 p8 p9 p10 p11 p12 p13 p14
-> > [    4.542309]  mmcblk1: p1
-> > [    4.561843] msm_hsusb 78d9000.usb: failed to create device link to
-> > ci_hdrc.0.ulpi
-> > [    4.573481] msm_hsusb 78d9000.usb: failed to create device link to
-> > ci_hdrc.0.ulpi
-> > [    4.585283] msm_hsusb 78d9000.usb: failed to create device link to
-> > ci_hdrc.0.ulpi
-> > [    4.592622] msm_hsusb 78d9000.usb: failed to create device link to
-> > ci_hdrc.0.ulpi
-> > [    4.600074] msm_hsusb 78d9000.usb: failed to create device link to
-> > ci_hdrc.0.ulpi
-> > [    4.607204] msm_hsusb 78d9000.usb: failed to create device link to
-> > ci_hdrc.0.ulpi
-> > [    4.614679] msm_hsusb 78d9000.usb: failed to create device link to
-> > ci_hdrc.0.ulpi
+On Tue, Feb 18, 2020 at 07:32:43PM +0000, Corentin Labbe wrote:
+> This serie remove a useless (char*) cast for some xxx_driver.name.
+> pci_driver, device_driver, usb_composite_driver structures have a "name"
+> member which is const char * and all the driver patched assigned to it a
+> const char[] name, so the cast was bad and unnecessary.
 > 
-> The chipidea USB code hasn't changed recently. Would you please bisect
-> which commit affect it?
+> Corentin Labbe (20):
+>   usb: gadget: legacy: gmidi: remove useless cast for driver.name
+>   usb: gadget: legacy: inode: remove useless cast for driver.name
+>   usb: gadget: udc: amd5536udc_pci: remove useless cast for driver.name
+>   usb: gadget: at91_udc: remove useless cast for driver.name
+>   usb: gadget: dummy_hcd: remove useless cast for driver.name
+>   usb: gadget: fotg210-udc: remove useless cast for driver.name
+>   usb: gadget: fusb300_udc: remove useless cast for driver.name
+>   usb: gadget: goku_udc: remove useless cast for driver.name
+>   usb: gadget: lpc32xx_udc: remove useless cast for driver.name
+>   usb: gadget: m66592-udc: remove useless cast for driver.name
+>   usb: gadget: net2280: remove useless cast for driver.name
+>   usb: gadget: omap_udc: remove useless cast for driver.name
+>   usb: gadget: r8a66597-udc: remove useless cast for driver.name
+>   usb: gadget: renesas_usb3: remove useless cast for driver.name
+>   usb: host: ehci-pci: remove useless cast for driver.name
+>   usb: host: ohci-pci: remove useless cast for driver.name
+>   usb: host: sl811-hcd: remove useless cast for driver.name
+>   usb: host: uhci-pci: remove useless cast for driver.name
+>   usb: host: xhci-pci: remove useless cast for driver.name
+>   usb: musb: core: remove useless cast for driver.name
 
-Probably same cause as for this:
-https://bugzilla.kernel.org/show_bug.cgi?id=206435
+Please do trivial conversions like this one in one patch per subsystem
+(e.g. all of USB) instead of 20 one-line patches.
 
-> > metadata:
-> >   git branch: master
-> >   git repo: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fnext%2Flinux-next.git&amp;data=02%7C01%7CPeter.Chen%40nxp.com%7C4e1721d16eb94d84db0208d7b38405d8%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637175251927547718&amp;sdata=Hy52nqOnn5nPgLcgSgWWJciwVy73MnHheNAqOi8tX4g%3D&amp;reserved=0
-> >   git commit: c25a951c50dca1da4a449a985a9debd82dc18573
-> >   git describe: next-20200217
-> >   make_kernelversion: 5.6.0-rc2
-> >   kernel-config:
-> > https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fsnapshots.linaro.org%2Fopenembedded%2Flkft%2Flkft%2Fsumo%2Fdragonboard-410c%2Flkft%2Flinux-next%2F705%2Fconfig&amp;data=02%7C01%7CPeter.Chen%40nxp.com%7C4e1721d16eb94d84db0208d7b38405d8%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637175251927547718&amp;sdata=7tuNCoQH2Fu5yDtcfE3D%2F1SDGQg9wSyKKPO8ufmQg1w%3D&amp;reserved=0
-> >   build-location:
-> > https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fsnapshots.linaro.org%2Fopenembedded%2Flkft%2Flkft%2Fsumo%2Fdragonboard-410c%2Flkft%2Flinux-next%2F705&amp;data=02%7C01%7CPeter.Chen%40nxp.com%7C4e1721d16eb94d84db0208d7b38405d8%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637175251927557710&amp;sdata=%2FBbdDiwFV%2B7z01ayzHuKl%2FLMIa6Qv%2BjajgywkhsVrJY%3D&amp;reserved=0
-> > 
-> > ref:
-> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fqa-reports.linaro.org%2Flkft%2Flinux-next-oe%2Fbuild%2Fnext-20200217%2Ftestrun%2F1223296%2Flog&amp;data=02%7C01%7CPeter.Chen%40nxp.com%7C4e1721d16eb94d84db0208d7b38405d8%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637175251927557710&amp;sdata=hXhbx%2FMJ6BDzQkYMUZrc8uRmiCb2YfLluvzjg6uaZ%2Fw%3D&amp;reserved=0
-> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fqa-reports.linaro.org%2Flkft%2Flinux-next-oe%2Fbuild%2Fnext-20200217%2Ftestrun%2F1223301%2Flog&amp;data=02%7C01%7CPeter.Chen%40nxp.com%7C4e1721d16eb94d84db0208d7b38405d8%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637175251927557710&amp;sdata=5zrDqvPVZcgrFEogBjes0NG1uRv7WJnEeUiGUqe%2FB7A%3D&amp;reserved=0
-> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fqa-reports.linaro.org%2Flkft%2Flinux-next-oe%2Fbuild%2Fnext-20200217%2Ftestrun%2F1223310%2Flog&amp;data=02%7C01%7CPeter.Chen%40nxp.com%7C4e1721d16eb94d84db0208d7b38405d8%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637175251927557710&amp;sdata=TWixPlJuzES7AReilcm%2FG4pWTYVy3ku6zetEVmeXB6I%3D&amp;reserved=0
-> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fqa-reports.linaro.org%2Flkft%2Flinux-next-oe%2Fbuild%2Fnext-20200217%2Ftestrun%2F1223308%2Flog&amp;data=02%7C01%7CPeter.Chen%40nxp.com%7C4e1721d16eb94d84db0208d7b38405d8%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637175251927557710&amp;sdata=qSxWLfIWM047jLKjahfDC6luxI9kYr5xPhErkD%2BxiaQ%3D&amp;reserved=0
+You may also want to refer to commit 8d790d740858 ("[PATCH] make
+driver's name be const char *") for the historical background for this
+in the commit message.
 
-Jack
--- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+>  drivers/usb/gadget/legacy/gmidi.c       | 2 +-
+>  drivers/usb/gadget/legacy/inode.c       | 2 +-
+>  drivers/usb/gadget/udc/amd5536udc_pci.c | 2 +-
+>  drivers/usb/gadget/udc/at91_udc.c       | 2 +-
+>  drivers/usb/gadget/udc/dummy_hcd.c      | 4 ++--
+>  drivers/usb/gadget/udc/fotg210-udc.c    | 2 +-
+>  drivers/usb/gadget/udc/fusb300_udc.c    | 2 +-
+>  drivers/usb/gadget/udc/goku_udc.c       | 2 +-
+>  drivers/usb/gadget/udc/lpc32xx_udc.c    | 2 +-
+>  drivers/usb/gadget/udc/m66592-udc.c     | 2 +-
+>  drivers/usb/gadget/udc/net2280.c        | 2 +-
+>  drivers/usb/gadget/udc/omap_udc.c       | 2 +-
+>  drivers/usb/gadget/udc/r8a66597-udc.c   | 2 +-
+>  drivers/usb/gadget/udc/renesas_usb3.c   | 2 +-
+>  drivers/usb/host/ehci-pci.c             | 2 +-
+>  drivers/usb/host/ohci-pci.c             | 2 +-
+>  drivers/usb/host/sl811-hcd.c            | 2 +-
+>  drivers/usb/host/uhci-pci.c             | 2 +-
+>  drivers/usb/host/xhci-pci.c             | 2 +-
+>  drivers/usb/musb/musb_core.c            | 2 +-
+>  20 files changed, 21 insertions(+), 21 deletions(-)
+
+Thanks,
+Johan
