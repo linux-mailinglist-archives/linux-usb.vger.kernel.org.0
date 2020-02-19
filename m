@@ -2,393 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C69AA165168
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2020 22:11:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3131D1651F2
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2020 22:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727421AbgBSVK7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Feb 2020 16:10:59 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:35303 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726739AbgBSVK7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Feb 2020 16:10:59 -0500
-Received: by mail-pf1-f195.google.com with SMTP id i19so706655pfa.2
-        for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2020 13:10:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=NwYJiFPNk3IIl8GuXgZSQBTo2QqHZ4IdHN61pYXpoJ4=;
-        b=MHfNuJ3Oh6jh4jsekjLUU7uR5v1gmNtv6u/z28QKMFmbBAYv/93L1xdTokpsLfbEjk
-         Wz61IbGXu7vZ5hAVxFb03qBI1bFDD4kfWk/EGIbgB20F3Qa2E70CuZPIRJyUZm9yD6BM
-         X6SZkc0JGO5l4zkWggnwSI4UJY4bbKood6LmET5T9MVOl5Jj/m0jA8WNms1MFDxgV2FD
-         qG6qE2fJ24Iw/8RVg7LtxnL32FN8aM+o1mSomwCy5Oz1Wt3GlYdreZvRcKQjbf7rwzu0
-         IPSddo1SG583xo7A47vaL2bcGwfrdXAJfErFT3na3+PcCKQUgiCbaIWifrQNec2ys9uK
-         hypg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=NwYJiFPNk3IIl8GuXgZSQBTo2QqHZ4IdHN61pYXpoJ4=;
-        b=WVEJUZ7fFUYQCJczEt34p196CtadLDoJg9Fd7by4O2mcisBAmJrbZQj0d5wv4oz/4M
-         Vl6WuL9PPlf10g9Ei0MkMwAQLMzMFF0UdDBBZiWNJEYKRHWIahvQZaxzXv3By59QKSLp
-         pJrGYqraR0GbB0wfOpcZQzJa5Ry+6C95kjYpWwf0/tJ+MX4RGkuHeLfHhT4NUKxYxtuZ
-         lI6MXAqaLHlB4DhaSZ+MVEnvok/I1voSmyhcR33ClKV5k+dJ/iSKFvzXycyrKlhjsXow
-         8Vbgb3P9qQXlFzvLb077LBtz0SRSefmvJFrSP3qx5s4wenNGbAMzO2X73P/xokLoNuI/
-         PYoQ==
-X-Gm-Message-State: APjAAAU8Dc63aSWZjuY+0b5/v+jTiUyN5ad7FwOfefceC5F2z21/Zl/n
-        vzkSLliBNM7ehLJxn8VFcUQ=
-X-Google-Smtp-Source: APXvYqysOr8AnhirFKQof9hVCv4RKjZiydTudQ1n77ZzCMXUA0fw5zEn3Fx1PSE8rTKBB5pZ9ZwDhA==
-X-Received: by 2002:aa7:95b0:: with SMTP id a16mr27305756pfk.253.1582146657987;
-        Wed, 19 Feb 2020 13:10:57 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h26sm569454pfr.9.2020.02.19.13.10.56
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 19 Feb 2020 13:10:56 -0800 (PST)
-Date:   Wed, 19 Feb 2020 13:10:56 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Boris ARZUR <boris@konbu.org>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        William Wu <william.wu@rock-chips.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: Re: [PATCH] usb: dwc2: extend treatment for incomplete transfer
-Message-ID: <20200219211056.GA829@roeck-us.net>
-References: <20200210213906.GA24079@roeck-us.net>
- <20200211054953.GA2401@tungsten>
- <20200211161522.GA1894@roeck-us.net>
- <20200215053647.GA10345@tungsten>
+        id S1727326AbgBSVze (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Feb 2020 16:55:34 -0500
+Received: from mon1.sibername.com ([162.144.64.251]:52406 "EHLO
+        montreal.sibername.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726760AbgBSVze (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Feb 2020 16:55:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lockie.ca;
+         s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:Subject:To:From:Sender:Reply-To:Cc:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=p4s1YETsa1jtx9JNXDqMheHq5+VDpOH4pekz5LpGjyU=; b=CcErfFDuOTJrryFIdvPF/pUjwx
+        yAXdnvnzr+RznWlxjmPg0qGjy1JCsdZCBfxmQ+XbinB9PK2clG+m9pWzR3jnmhYFz42bbzcsTmFuo
+        squQ0k0CQi2WaaY76NUJikipILA+6UaZUq8EsHPwDlzTpqERsakB9XE0Hmq8fpA5Rc+Qd84DY8J3Q
+        zToskJvOy29SVuhl0GbEJHPXzlTnMHRN5qYH0RjzPKZxleNFrkzQFpsT45PwweoLLMU+vB2KEDSEj
+        oPLR/OkzdNpD2hzm84Noai/xL08HjDuVI5znaZKaT+M3ThKrknPdGBMO0WZ/Y9hAWAZhBG5te6AhO
+        Z8wmHqkA==;
+Received: from 216-58-18-206.cpe.distributel.net ([216.58.18.206]:41154 helo=[192.168.1.17])
+        by montreal.sibername.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <bjlockie@lockie.ca>)
+        id 1j4XJZ-001yi7-Ef
+        for linux-usb@vger.kernel.org; Wed, 19 Feb 2020 16:55:32 -0500
+From:   James <bjlockie@lockie.ca>
+To:     linux-usb@vger.kernel.org
+Subject: USB questions
+Message-ID: <eaab70b2-e95f-0ea8-bddc-995c1bde3b5d@lockie.ca>
+Date:   Wed, 19 Feb 2020 16:55:28 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="zYM0uCDKw75PZbzx"
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200215053647.GA10345@tungsten>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Language: en-US
+X-OutGoing-Spam-Status: No, score=-1.0
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - montreal.sibername.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lockie.ca
+X-Get-Message-Sender-Via: montreal.sibername.com: authenticated_id: bjlockie@lockie.ca
+X-Authenticated-Sender: montreal.sibername.com: bjlockie@lockie.ca
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+https://asrock.com/MB/AMD/B450M%20Pro4/index.us.asp#Specification
+- 2 x USB 2.0 Ports (Supports ESD Protection)
+- 1 x USB 3.1 Gen2 Type-A Port (10 Gb/s) (Supports ESD Protection)
+- 1 x USB 3.1 Gen2 Type-C Port (10 Gb/s) (Supports ESD Protection)
+- 4 x USB 3.1 Gen1 Ports (Supports ESD Protection)
 
---zYM0uCDKw75PZbzx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+$ lsusb
+Bus 004 Device 002: ID 13fe:6300 Kingston Technology Company Inc. USB 
+DISK 3.0
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 004: ID 051d:0002 American Power Conversion 
+Uninterruptible Power Supply
+Bus 003 Device 003: ID 04a9:190f Canon, Inc. CanoScan LiDE 220
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 002: ID 0bc2:2321 Seagate RSS LLC Expansion Portable
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 006: ID 1bcf:0005 Sunplus Innovation Technology Inc. 
+Optical Mouse
+Bus 001 Device 005: ID 04d9:1503 Holtek Semiconductor, Inc. Keyboard
+Bus 001 Device 004: ID 1a40:0101 Terminus Technology Inc. Hub
+Bus 001 Device 003: ID 046d:082c Logitech, Inc. HD Webcam C615
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 
-On Sat, Feb 15, 2020 at 02:36:47PM +0900, Boris ARZUR wrote:
-> Hi Guenter,
-> 
-> >> The first time around I was 0/ changing fonts 1/ trimming the dump message
-> >> in the kernel 2/ filming my screen. That's not practical at all...
-> Mmm, pstore does seem to work on my machine. CHROME_PSTORE is not available
-> to me because I'm not on x86, I just enabled the rest and nothing pops up
-> in /sys/fs/pstore...
-> 
-> So I took pictures (OCR did not help):
-> - https://funyu.konbu.org/pQUF2P08etcpVxuKZ0A720%2b0/IMG_20200215_134343.jpg.webp
->   is a stack trace for your earlier patch "min_t", in
->   https://www.spinics.net/lists/linux-usb/msg191019.html ;
-> - https://funyu.konbu.org/pQUF2P08etcpVxuKZ0A720%2b0/IMG_20200215_135816.jpg.webp
->   is a stack trace for your later patch "container_of", in
->   https://www.spinics.net/lists/linux-usb/msg191074.html .
-> 
-> Both patches crash (without even loading the machine), but "container_of" is
-> a bit more resilient.
-> 
-
-Yes, those patches didn't address the core problem. Can you test with the
-attached two patches ?
-
-Thanks,
-Guenter
-
---zYM0uCDKw75PZbzx
-Content-Type: text/x-diff; charset=us-ascii
-Content-Disposition: attachment; filename="0001-usb-dwc2-Simplify-DMA-alignment-code.patch"
-
-From a1c0551b62b038b495177737828f986961184110 Mon Sep 17 00:00:00 2001
-From: Guenter Roeck <linux@roeck-us.net>
-Date: Mon, 10 Feb 2020 14:04:06 -0800
-Subject: [PATCH 1/2] usb: dwc2: Simplify DMA alignment code
-
-The code to align buffers for DMA was first introduced with commit
-3bc04e28a030 ("usb: dwc2: host: Get aligned DMA in a more supported way").
-It was updated with commit 56406e017a88 ("usb: dwc2: Fix DMA alignment
-to start at allocated boundary") because it did not really align buffers to
-DMA boundaries but to DWC2_USB_DMA_ALIGN. This was then optimized in commit
-1e111e885238 ("usb: dwc2: Fix inefficient copy of unaligned buffers")
-to only copy actual data rather than the whole buffer. Commit 4a4863bf2e79
-("usb: dwc2: Fix DMA cache alignment issues") changed this further to add
-a padding at the end of the buffer to ensure that the old data pointer is
-not in the same cache line as the buffer.
-
-This last commit states "Otherwise, the stored_xfer_buffer gets corrupted
-for IN URBs on non-cache-coherent systems". However, such corruptions are
-still observed. Either case, DMA is not expected to overwrite more memory
-than it is supposed to do, suggesting that the commit may have been hiding
-a problem rather than fixing it.
-
-On top of that, DMA alignment is still not guaranteed since it only happens
-if the original buffer is not aligned to DWC2_USB_DMA_ALIGN, which is still
-a constant of 4 and not really associated with DMA alignment.
-
-Move the old data pointer back to the beginning of the new buffer,
-restoring most of the original commit and to simplify the code. Define
-DWC2_USB_DMA_ALIGN to dma_get_cache_alignment() to fix the DMA alignment
-for real this time.
-
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/usb/dwc2/hcd.c | 50 +++++++++++++++++++-----------------------
- 1 file changed, 22 insertions(+), 28 deletions(-)
-
-diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index b90f858af960..b5841197165a 100644
---- a/drivers/usb/dwc2/hcd.c
-+++ b/drivers/usb/dwc2/hcd.c
-@@ -2469,21 +2469,24 @@ static int dwc2_alloc_split_dma_aligned_buf(struct dwc2_hsotg *hsotg,
- 	return 0;
- }
- 
--#define DWC2_USB_DMA_ALIGN 4
-+#define DWC2_USB_DMA_ALIGN	dma_get_cache_alignment()
-+
-+struct dma_aligned_buffer {
-+	void *kmalloc_ptr;
-+	void *old_xfer_buffer;
-+	u8 data[0];
-+};
- 
- static void dwc2_free_dma_aligned_buffer(struct urb *urb)
- {
--	void *stored_xfer_buffer;
-+	struct dma_aligned_buffer *temp;
- 	size_t length;
- 
- 	if (!(urb->transfer_flags & URB_ALIGNED_TEMP_BUFFER))
- 		return;
- 
--	/* Restore urb->transfer_buffer from the end of the allocated area */
--	memcpy(&stored_xfer_buffer,
--	       PTR_ALIGN(urb->transfer_buffer + urb->transfer_buffer_length,
--			 dma_get_cache_alignment()),
--	       sizeof(urb->transfer_buffer));
-+	temp = container_of(urb->transfer_buffer,
-+			    struct dma_aligned_buffer, data);
- 
- 	if (usb_urb_dir_in(urb)) {
- 		if (usb_pipeisoc(urb->pipe))
-@@ -2491,17 +2494,17 @@ static void dwc2_free_dma_aligned_buffer(struct urb *urb)
- 		else
- 			length = urb->actual_length;
- 
--		memcpy(stored_xfer_buffer, urb->transfer_buffer, length);
-+		memcpy(temp->old_xfer_buffer, temp->data, length);
- 	}
--	kfree(urb->transfer_buffer);
--	urb->transfer_buffer = stored_xfer_buffer;
-+	urb->transfer_buffer = temp->old_xfer_buffer;
-+	kfree(temp->kmalloc_ptr);
- 
- 	urb->transfer_flags &= ~URB_ALIGNED_TEMP_BUFFER;
- }
- 
- static int dwc2_alloc_dma_aligned_buffer(struct urb *urb, gfp_t mem_flags)
- {
--	void *kmalloc_ptr;
-+	struct dma_aligned_buffer *temp, *kmalloc_ptr;
- 	size_t kmalloc_size;
- 
- 	if (urb->num_sgs || urb->sg ||
-@@ -2509,31 +2512,22 @@ static int dwc2_alloc_dma_aligned_buffer(struct urb *urb, gfp_t mem_flags)
- 	    !((uintptr_t)urb->transfer_buffer & (DWC2_USB_DMA_ALIGN - 1)))
- 		return 0;
- 
--	/*
--	 * Allocate a buffer with enough padding for original transfer_buffer
--	 * pointer. This allocation is guaranteed to be aligned properly for
--	 * DMA
--	 */
-+	/* Allocate a buffer with enough padding for alignment */
- 	kmalloc_size = urb->transfer_buffer_length +
--		(dma_get_cache_alignment() - 1) +
--		sizeof(urb->transfer_buffer);
-+		sizeof(struct dma_aligned_buffer) + DWC2_USB_DMA_ALIGN - 1;
- 
- 	kmalloc_ptr = kmalloc(kmalloc_size, mem_flags);
- 	if (!kmalloc_ptr)
- 		return -ENOMEM;
- 
--	/*
--	 * Position value of original urb->transfer_buffer pointer to the end
--	 * of allocation for later referencing
--	 */
--	memcpy(PTR_ALIGN(kmalloc_ptr + urb->transfer_buffer_length,
--			 dma_get_cache_alignment()),
--	       &urb->transfer_buffer, sizeof(urb->transfer_buffer));
--
-+	/* Position our struct dma_aligned_buffer such that data is aligned */
-+	temp = PTR_ALIGN(kmalloc_ptr + 1, DWC2_USB_DMA_ALIGN) - 1;
-+	temp->kmalloc_ptr = kmalloc_ptr;
-+	temp->old_xfer_buffer = urb->transfer_buffer;
- 	if (usb_urb_dir_out(urb))
--		memcpy(kmalloc_ptr, urb->transfer_buffer,
-+		memcpy(temp->data, urb->transfer_buffer,
- 		       urb->transfer_buffer_length);
--	urb->transfer_buffer = kmalloc_ptr;
-+	urb->transfer_buffer = temp->data;
- 
- 	urb->transfer_flags |= URB_ALIGNED_TEMP_BUFFER;
- 
--- 
-2.17.1
+$ lsusb -t
+/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 5000M
+     |__ Port 1: Dev 2, If 0, Class=Mass Storage, Driver=usb-storage, 5000M
+/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 480M
+     |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=, 480M
+     |__ Port 4: Dev 4, If 0, Class=Human Interface Device, 
+Driver=usbfs, 1.5M
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 10000M
+     |__ Port 2: Dev 2, If 0, Class=Mass Storage, Driver=uas, 5000M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 480M
+     |__ Port 5: Dev 3, If 0, Class=Audio, Driver=snd-usb-audio, 480M
+     |__ Port 5: Dev 3, If 1, Class=Audio, Driver=snd-usb-audio, 480M
+     |__ Port 5: Dev 3, If 2, Class=Video, Driver=uvcvideo, 480M
+     |__ Port 5: Dev 3, If 3, Class=Video, Driver=uvcvideo, 480M
+     |__ Port 6: Dev 4, If 0, Class=Hub, Driver=hub/4p, 480M
+         |__ Port 3: Dev 6, If 0, Class=Human Interface Device, 
+Driver=usbhid, 1.5M
+         |__ Port 1: Dev 5, If 1, Class=Human Interface Device, 
+Driver=usbhid, 1.5M
+         |__ Port 1: Dev 5, If 0, Class=Human Interface Device, 
+Driver=usbhid, 1.5M
 
 
---zYM0uCDKw75PZbzx
-Content-Type: text/x-diff; charset=iso-8859-1
-Content-Disposition: attachment; filename="0002-usb-dwc2-Allocate-input-buffers-as-multiples-of-wMax.patch"
-Content-Transfer-Encoding: 8bit
+1. Does this mean the installer used the USB2 connections on the 
+motherboard even though it looks like USB3.1 Gen ones were available?
 
-From 9df13854b3717f8c16a2012dec614f737bb8c15d Mon Sep 17 00:00:00 2001
-From: Guenter Roeck <linux@roeck-us.net>
-Date: Mon, 10 Feb 2020 13:11:00 -0800
-Subject: [PATCH 2/2] usb: dwc2: Allocate input buffers as multiples of
- wMaxPacketSize
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+2. What is the number after the slash (4p) on xhci_hcd/4p?
 
-The following messages are seen on Veyron Chromebooks running v4.19 or
-later kernels.
-
-dwc2 ff580000.usb: dwc2_update_urb_state(): trimming xfer length
-dwc2 ff580000.usb: dwc2_hc_chhltd_intr_dma: Channel 7 - ChHltd set, but reason is unknown
-dwc2 ff580000.usb: hcint 0x00000002, intsts 0x04600021
-
-This is typically followed by a crash.
-
-Unable to handle kernel paging request at virtual address 29f9d9fc
-pgd = 4797dac9
-[29f9d9fc] *pgd=80000000004003, *pmd=00000000
-Internal error: Oops: a06 [#1] PREEMPT SMP ARM
-Modules linked in: ip6t_REJECT rfcomm i2c_dev uinput hci_uart btbcm ...
-CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W         4.19.87-07825-g4ab3515f6e4d #1
-Hardware name: Rockchip (Device Tree)
-PC is at memcpy+0x50/0x330
-LR is at 0xdd9ac94
-...
-[<c0a89f50>] (memcpy) from [<c0783b94>] (dwc2_free_dma_aligned_buffer+0x5c/0x7c)
-[<c0783b94>] (dwc2_free_dma_aligned_buffer) from [<c0765dcc>] (__usb_hcd_giveback_urb+0x78/0x130)
-[<c0765dcc>] (__usb_hcd_giveback_urb) from [<c07678fc>] (usb_giveback_urb_bh+0xa0/0xe4)
-[<c07678fc>] (usb_giveback_urb_bh) from [<c023a164>] (tasklet_action_common+0xc0/0xdc)
-[<c023a164>] (tasklet_action_common) from [<c02021f0>] (__do_softirq+0x1b8/0x434)
-[<c02021f0>] (__do_softirq) from [<c0239a14>] (irq_exit+0xdc/0xe0)
-[<c0239a14>] (irq_exit) from [<c029f260>] (__handle_domain_irq+0x94/0xd0)
-[<c029f260>] (__handle_domain_irq) from [<c05da780>] (gic_handle_irq+0x74/0xb0)
-[<c05da780>] (gic_handle_irq) from [<c02019f8>] (__irq_svc+0x58/0x8c)
-
-The crash suggests that the memory after the end of a temporary DMA-aligned
-buffer is overwritten.
-
-The problem is typically only seen in kernels which include commit
-56406e017a88 ("usb: dwc2: Fix DMA alignment to start at allocated
-boundary"), presumably because that commit moves the pointer to the old
-buffer to the end of the newly allocated buffer, where it is more likely
-to be overwritten.
-
-Code analysis shows that the transfer size programmed into the chip for
-input transfers is a multiple of an endpoint's maximum packet size
-(wMaxPacketSize). In the observed situation, the transfer size and thus
-the size of the input buffer is 1522 bytes. With a maximum packet size
-of 64 bytes, the chip is programmed to receive up to 1536 bytes of data.
-This overwrites the end of the buffer.
-
-To work around the problem, always allocate a multiple of wMaxPacketSize
-bytes for receive buffers. Do this even for DMA-aligned buffers if the
-receive buffer size is not a multiple of wMaxPacketSize. At the same time,
-do not update chan->xfer_len if the transfer size is 0.
-
-Reported-by: Boris ARZUR <boris@konbu.org>
-Cc: Boris ARZUR <boris@konbu.org>
-Cc: Jonathan Bell <jonathan@raspberrypi.org>
-Cc: Antti Sepp�l� <a.seppala@gmail.com>
-Fixes: 56406e017a88 ("usb: dwc2: Fix DMA alignment to start at allocated boundary")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/usb/dwc2/hcd.c | 37 +++++++++++++++++++++++++++----------
- 1 file changed, 27 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index b5841197165a..f27dc11e409c 100644
---- a/drivers/usb/dwc2/hcd.c
-+++ b/drivers/usb/dwc2/hcd.c
-@@ -1313,18 +1313,20 @@ static void dwc2_hc_start_transfer(struct dwc2_hsotg *hsotg,
- 			if (num_packets > max_hc_pkt_count) {
- 				num_packets = max_hc_pkt_count;
- 				chan->xfer_len = num_packets * chan->max_packet;
-+			} else if (chan->ep_is_in) {
-+				/*
-+				 * Always program an integral # of max packets for IN
-+				 * transfers.
-+				 * Note: This assumes that the input buffer is
-+				 * aligned accordingly.
-+				 */
-+				chan->xfer_len = num_packets * chan->max_packet;
- 			}
- 		} else {
- 			/* Need 1 packet for transfer length of 0 */
- 			num_packets = 1;
- 		}
- 
--		if (chan->ep_is_in)
--			/*
--			 * Always program an integral # of max packets for IN
--			 * transfers
--			 */
--			chan->xfer_len = num_packets * chan->max_packet;
- 
- 		if (chan->ep_type == USB_ENDPOINT_XFER_INT ||
- 		    chan->ep_type == USB_ENDPOINT_XFER_ISOC)
-@@ -2505,16 +2507,31 @@ static void dwc2_free_dma_aligned_buffer(struct urb *urb)
- static int dwc2_alloc_dma_aligned_buffer(struct urb *urb, gfp_t mem_flags)
- {
- 	struct dma_aligned_buffer *temp, *kmalloc_ptr;
-+	struct usb_host_endpoint *ep = urb->ep;
-+	int maxp = usb_endpoint_maxp(&ep->desc);
- 	size_t kmalloc_size;
- 
--	if (urb->num_sgs || urb->sg ||
--	    urb->transfer_buffer_length == 0 ||
-+	if (urb->num_sgs || urb->sg || urb->transfer_buffer_length == 0)
-+		return 0;
-+
-+	/*
-+	 * Input transfer buffer size must be a multiple of the endpoint's
-+	 * maximum packet size to match the transfer limit programmed into
-+	 * the chip.
-+	 * See calculation of chan->xfer_len in dwc2_hc_start_transfer().
-+	 */
-+	if (usb_urb_dir_out(urb))
-+		kmalloc_size = urb->transfer_buffer_length;
-+	else
-+		kmalloc_size = roundup(urb->transfer_buffer_length, maxp);
-+
-+	if (kmalloc_size == urb->transfer_buffer_length &&
- 	    !((uintptr_t)urb->transfer_buffer & (DWC2_USB_DMA_ALIGN - 1)))
- 		return 0;
- 
- 	/* Allocate a buffer with enough padding for alignment */
--	kmalloc_size = urb->transfer_buffer_length +
--		sizeof(struct dma_aligned_buffer) + DWC2_USB_DMA_ALIGN - 1;
-+	kmalloc_size += sizeof(struct dma_aligned_buffer) +
-+		DWC2_USB_DMA_ALIGN - 1;
- 
- 	kmalloc_ptr = kmalloc(kmalloc_size, mem_flags);
- 	if (!kmalloc_ptr)
--- 
-2.17.1
-
-
---zYM0uCDKw75PZbzx--
+3. Shouldn't "Linux Foundation 3.0 root hub" be "Linux Foundation 3.1 
+Gen 1 root hub"?
