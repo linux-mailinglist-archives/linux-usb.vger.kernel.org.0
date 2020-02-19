@@ -2,117 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F27791638A7
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2020 01:43:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8A316390A
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2020 02:09:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726729AbgBSAnV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Feb 2020 19:43:21 -0500
-Received: from mail-eopbgr1400091.outbound.protection.outlook.com ([40.107.140.91]:6369
-        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
+        id S1726964AbgBSBJq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Feb 2020 20:09:46 -0500
+Received: from mail-db8eur05on2042.outbound.protection.outlook.com ([40.107.20.42]:6189
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726641AbgBSAnV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 Feb 2020 19:43:21 -0500
+        id S1726761AbgBSBJq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Feb 2020 20:09:46 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BawBGhIF2XeqnQ1VEt5eZHOPV8vwCk8T2K8tsCbZ988NVObAII4Y5wmYMcwP8VXJYS5BJfm6VgNARLuibhefaU3id1qc3RmrgmRQxdnuKJIU6djzIBCvbtkwcmZTTXkGpjM3Nwmc9WzTlQ6g46iVFoMySsqbPyiAULnGAiuJaVE+eb5MK84NGyRAOQ53JxXvTEooyuIamtSa5A8okLwFeHR1CV/aKUSv/7sMG1f5cz0Ze54ZtjPPuySREpMRnACNunU4fkhJjx828lGS1roRWZERX/5enj17vqkiJH3khE7+YjzWfGQA9NYkbQEXuqWuAxzREC0ExGzN2pj20Y2Knw==
+ b=PBcQOLYq2WxHQ/JLo7kdYv78b3874dWzSY++07r7jGGq00cU23Mm3bpW9z6rFcWMsa4th1ESYKPP+a5yXN8lmefRsHJEY7FeSLeK0OSgFgyH/d/+fvaoUAyR8riuZC3Jriptdqmnf0jTML2188w7dLiko3P2K4vIUqVL5kGgJrtpMitBNijcX1eIUt/KcuVA7gKPk1SHaPxL46P/0inisr4njU/O3/OLEEPpiTycTueltJk6vJlRGjGhnn3ZMKg1Q7KHoCo7CzBxQxh8U0lTiuzBrvF++sBhjKYAQ1YWm5ymR0jA/k2TQevxeDHMa7ItljogmwZfHSYPpcdJgVVP6w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oqMOXwCIA4YmSfN3xI2nBLaoNruTAwS5pdIF+xD9+y4=;
- b=iJzsWbDVavVHLv0mC/fUgtk+jAx9l1+E8tX5AgIw8JQqRkKqorXw5qzU/SZMcSr8TskKSJrgKP0wd5QuNmpHig8KBsV1D4v/qC+Bj6YjR+BPPsmHM36lkuplZ53cdpc/qGSPdxT0WOWdd0BKe0VSShfONcktXh0O0qJx3p//fcyon+dshZ/JEhDN5Nze7mt56OkevYG4guLKIeizkCRo9ai9FE7wKQw2+h5NBR5O22ybdrAjD2IYhebPf+SEnSpwxDei+H4Z10e3ZTHRhqZ7odALkJke4mljM8QO4H/36Y5x9/bYof4oUNR2WHQuQaVyKIJ5jJUCxvIgUyTCEiz2ww==
+ bh=jxKkd/ogCaklC4BHSyOyqan70nCoU0gzqM6lcOBSMX8=;
+ b=i9iR6KF/+n8XQDclcqIPDn4rajFgVLiJX7X58SVwMdez/egtLvJ2bm7lmpCPSVspHGhfCWRh+9uD23FJ1Evd/Ns8PSKjWdxd1u0v5Ah1WlVL0BDqas0O+HMlEcad1J/OLzamOzwuOe39e3A0g80ZU/IR0FE97F/OBbUkSohhkWwS7wyNz7TGhiExRyxBABrTpma9MRcLnjUezBpUlziptAROnM/2Ygo8UKhrFnt47GlCRED3DGWjRgWplBatvDt+H/uYdFU0QCo5+CgBcWOC85IyCMtzj4A5vPHB4kjvwgW5jQ1FTVHZAQb7s2o2ZPA+xEV6KXOIDsvGauMIjkA3uQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oqMOXwCIA4YmSfN3xI2nBLaoNruTAwS5pdIF+xD9+y4=;
- b=IPOg24m9OPKuKlzALrNP7KfNuVYm+AqOr9zSmL25wVmmRdCCcwVJA3myxV+ctPrPNezPrgr+4gsxpp2V0jiY8nQTQHfSgjTDvIMXUbOUSIdvQlErdQGZkLraBnHbSTl+2Zb3cC4v8akEEtJDC15Qq6nDYPqtyISHIUPhkHiBVAk=
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.175.203) by
- TYAPR01MB3680.jpnprd01.prod.outlook.com (20.178.138.11) with Microsoft SMTP
+ bh=jxKkd/ogCaklC4BHSyOyqan70nCoU0gzqM6lcOBSMX8=;
+ b=FeWzveAS9nGZCszdaAp8Lt/g7rrr7PHbTQmen31i1vky7ExsmOnb6QxnKV/KnnoYUNEI2VlBEF56InIKMPmhfgLr6IC1wyiw8DyzwyEb1P8CIeJ7uvv26q51lhrX0rUDTk/l5plibBKvByc24mEUcVDoqbOU8cYefg+VvcbdniE=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
+ VI1PR04MB5757.eurprd04.prod.outlook.com (20.178.126.77) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2750.17; Wed, 19 Feb 2020 00:43:16 +0000
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::318b:31aa:4212:bd49]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::318b:31aa:4212:bd49%7]) with mapi id 15.20.2729.032; Wed, 19 Feb 2020
- 00:43:16 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Corentin Labbe <clabbe@baylibre.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "b-liu@ti.com" <b-liu@ti.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "ludovic.desroches@microchip.com" <ludovic.desroches@microchip.com>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
-        "slemieux.tyco@gmail.com" <slemieux.tyco@gmail.com>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "vz@mleia.com" <vz@mleia.com>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ 15.20.2729.24; Wed, 19 Feb 2020 01:09:42 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::c7d:58a2:7265:407e]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::c7d:58a2:7265:407e%6]) with mapi id 15.20.2729.032; Wed, 19 Feb 2020
+ 01:09:42 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+CC:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH 13/20] usb: gadget: r8a66597-udc: remove useless cast for
- driver.name
-Thread-Topic: [PATCH 13/20] usb: gadget: r8a66597-udc: remove useless cast for
- driver.name
-Thread-Index: AQHV5pJjU9BDe4hHXUaldQK4Gp5mTaghrduQ
-Date:   Wed, 19 Feb 2020 00:43:16 +0000
-Message-ID: <TYAPR01MB45443CE85FF10D5EEDBB110CD8100@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-References: <1582054383-35760-1-git-send-email-clabbe@baylibre.com>
- <1582054383-35760-14-git-send-email-clabbe@baylibre.com>
-In-Reply-To: <1582054383-35760-14-git-send-email-clabbe@baylibre.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
+Subject: Re: [PATCH 23/28] drivers: usb: Call cpu_latency_qos_*() instead of
+ pm_qos_*()
+Thread-Topic: [PATCH 23/28] drivers: usb: Call cpu_latency_qos_*() instead of
+ pm_qos_*()
+Thread-Index: AQHV4TRn3BXs86jgkEan911jMn55C6ghwCCA
+Date:   Wed, 19 Feb 2020 01:09:42 +0000
+Message-ID: <20200219010943.GA8602@b29397-desktop>
+References: <1654227.8mz0SueHsU@kreacher> <19064076.ICumzjfW0v@kreacher>
+In-Reply-To: <19064076.ICumzjfW0v@kreacher>
+Accept-Language: en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [124.210.22.195]
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 9b324d4c-7f43-4315-1264-08d7b4d4b55f
-x-ms-traffictypediagnostic: TYAPR01MB3680:
-x-microsoft-antispam-prvs: <TYAPR01MB3680955EE29B7A57D53E9DC9D8100@TYAPR01MB3680.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2331;
+x-ms-office365-filtering-correlation-id: 942975e1-3920-4f8a-7c1d-08d7b4d866ac
+x-ms-traffictypediagnostic: VI1PR04MB5757:
+x-microsoft-antispam-prvs: <VI1PR04MB575732C5C22E9787BA9FEE618B100@VI1PR04MB5757.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4941;
 x-forefront-prvs: 0318501FAE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(136003)(346002)(376002)(366004)(396003)(39860400002)(199004)(189003)(52536014)(66556008)(5660300002)(64756008)(186003)(26005)(2906002)(66476007)(76116006)(66446008)(66946007)(33656002)(8936002)(81156014)(8676002)(81166006)(4744005)(4326008)(55016002)(9686003)(6506007)(86362001)(7416002)(7696005)(478600001)(71200400001)(316002)(55236004)(110136005)(54906003)(921003)(1121003);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB3680;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(39860400002)(366004)(376002)(396003)(136003)(346002)(189003)(199004)(8936002)(81156014)(66476007)(8676002)(64756008)(316002)(66556008)(66446008)(4326008)(6486002)(76116006)(186003)(81166006)(66946007)(44832011)(9686003)(6512007)(71200400001)(33656002)(5660300002)(91956017)(2906002)(86362001)(1076003)(6916009)(6506007)(26005)(54906003)(478600001)(33716001)(53546011);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5757;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TxyUmqiMmFNr+BT4mxtx+Uihy2RlW2Yg/D4UCwvP8vOOLMbQ52Z0q7FZw2WkHXgUCkf7AGne5FDU2fIMAfOhdPJPLcY9JDfB2x9z/vUkouOe2nIHHbafxSveVE5UAR81+491e1JJf+vReMz1E9nYSuCU0naySEQPFCGEtZx1BX16Frz7/PexMiZaKD5A66kA23WEUrtyHT+pTCeXvQwYCsh8gM4aNXVsUDxWGa70k9UWIYx0WTpJ4Pf7lZkN/MtaliB1COE1BamGgyeqTFMhYn46GCk3Zl3j0n1RSD77LfzR3qBsIAO8hAqjEq3OM0q2tGmNyMtRoz6zqpoElJuiiOV31sbTaR7iutkW4z/P/qem/gXzL948w+KI/SKCTRMr/4m57Qqcbhdqcgjg/CKPC5Ao1RlpABztSxZPhEHf3zZiVW/zp42qAOv74CwVTOUxdDq2BEAlFNAX0ukb52TgmGzuD5IcID3wv8YWiBXclKbrFtVFI7ePTkEOyhkdMYXz
-x-ms-exchange-antispam-messagedata: L33AKNywzFZBpZwocckKsXHLgAgOgW2Jq+9uDLyu/hifpd19+1P1Cyvuq3mmSy1xT6mZUBmA9SqGQhxW6HnMEzIiOucEwSMfdT69mpDBHpdY2wSwUAwUzGV911gpySsQYvvOHJ+9xskakYXi9gb9Pw==
+x-microsoft-antispam-message-info: 9jC6apnwgX/iHK3crz0lbp6n9qCiQw3W9ygpwtyI5FVJes0IuRWsEzIjAdwdl4Sstuy28RE6nnmGXoIabtVvP4nHdTSJQ9tt4Wn/QFcATiYjYdaS5f68ClT3on8mRCLPUeOVADnLgzYolSBO8fBR0MqlnhQx8xuoNZGrN3wqpdsd3VJj/3pgg7pby2SfS0zZ/N7wyJ1RqIS6LRGEbRlDyaF3pYsThJqyrhcaQ6Li2GU5g8nP0QCxxoaMjV5y+PW3dBNajtw9uZ+tPSBN8D37RBqMJ3ArXTFH4USM9hlZq2L+R3anMEUHSe5jL6UFx0AnLy4drA0sFUZ23/r0HFVbC5FpGvCGfVYh7BS9pOK+H/D0ZxEmt8TJK73PQkB1e7VKb+lBxd5KPpr7JaoWXWASON553f8vUXyCtJcUircrWP7LUvaUROARenBqu55x9f5b
+x-ms-exchange-antispam-messagedata: 3X978MQ+C9apvw02I+ViPPhsPoINZ0Q/bUpLFBzbDm1ytynn+tvx5VBKu113W3IhCSDGOlQsWL9njuZbwns1Cf4xgYnM876jCxvwi5GRKiYd1vvyPDdqZ7yyu/t9sKIeDl15tbAgovruUgt4/c+hVw==
 x-ms-exchange-transport-forked: True
 Content-Type: text/plain; charset="us-ascii"
+Content-ID: <B6BF50EE27DE8B4FA0F5FBF8A2854802@eurprd04.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9b324d4c-7f43-4315-1264-08d7b4d4b55f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Feb 2020 00:43:16.3878
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 942975e1-3920-4f8a-7c1d-08d7b4d866ac
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Feb 2020 01:09:42.4000
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zSE1wiAV7lh1TJfokmiPYEqK0RxwIOfhNRM43T9PQs+0iXZuc/K8K3TFv1P95U1FrQjo/tZhW+XdhFzhZDt158oK13ohwFHRFA7E8kb+AlqhfW1Pd6ThvqAyG9pfw5Ah
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB3680
+X-MS-Exchange-CrossTenant-userprincipalname: 6tNNwKL/N9gbgau5CyhqXQnYSQHP4S9LqPqpa4JblEvWxojsdns8p7haPNDC3vTzHBNfr6hu4aidsqRD4tUC3w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5757
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-> From: Corentin Labbe, Sent: Wednesday, February 19, 2020 4:33 AM
+On 20-02-12 00:28:44, Rafael J. Wysocki wrote:
+> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 >=20
-> device_driver name is const char pointer, so it not useful to cast
-> udc_name (which is already const char).
+> Call cpu_latency_qos_add/remove_request() instead of
+> pm_qos_add/remove_request(), respectively, because the
+> latter are going to be dropped.
 >=20
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> No intentional functional impact.
+>=20
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/usb/chipidea/ci_hdrc_imx.c | 12 +++++-------
+>  1 file changed, 5 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci=
+_hdrc_imx.c
+> index d8e7eb2f97b9..a479af3ae31d 100644
+> --- a/drivers/usb/chipidea/ci_hdrc_imx.c
+> +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+> @@ -393,8 +393,7 @@ static int ci_hdrc_imx_probe(struct platform_device *=
+pdev)
+>  	}
+> =20
+>  	if (pdata.flags & CI_HDRC_PMQOS)
+> -		pm_qos_add_request(&data->pm_qos_req,
+> -			PM_QOS_CPU_DMA_LATENCY, 0);
+> +		cpu_latency_qos_add_request(&data->pm_qos_req, 0);
+> =20
+>  	ret =3D imx_get_clks(dev);
+>  	if (ret)
+> @@ -478,7 +477,7 @@ static int ci_hdrc_imx_probe(struct platform_device *=
+pdev)
+>  		/* don't overwrite original ret (cf. EPROBE_DEFER) */
+>  		regulator_disable(data->hsic_pad_regulator);
+>  	if (pdata.flags & CI_HDRC_PMQOS)
+> -		pm_qos_remove_request(&data->pm_qos_req);
+> +		cpu_latency_qos_remove_request(&data->pm_qos_req);
+>  	data->ci_pdev =3D NULL;
+>  	return ret;
+>  }
+> @@ -499,7 +498,7 @@ static int ci_hdrc_imx_remove(struct platform_device =
+*pdev)
+>  	if (data->ci_pdev) {
+>  		imx_disable_unprepare_clks(&pdev->dev);
+>  		if (data->plat_data->flags & CI_HDRC_PMQOS)
+> -			pm_qos_remove_request(&data->pm_qos_req);
+> +			cpu_latency_qos_remove_request(&data->pm_qos_req);
+>  		if (data->hsic_pad_regulator)
+>  			regulator_disable(data->hsic_pad_regulator);
+>  	}
+> @@ -527,7 +526,7 @@ static int __maybe_unused imx_controller_suspend(stru=
+ct device *dev)
+> =20
+>  	imx_disable_unprepare_clks(dev);
+>  	if (data->plat_data->flags & CI_HDRC_PMQOS)
+> -		pm_qos_remove_request(&data->pm_qos_req);
+> +		cpu_latency_qos_remove_request(&data->pm_qos_req);
+> =20
+>  	data->in_lpm =3D true;
+> =20
+> @@ -547,8 +546,7 @@ static int __maybe_unused imx_controller_resume(struc=
+t device *dev)
+>  	}
+> =20
+>  	if (data->plat_data->flags & CI_HDRC_PMQOS)
+> -		pm_qos_add_request(&data->pm_qos_req,
+> -			PM_QOS_CPU_DMA_LATENCY, 0);
+> +		cpu_latency_qos_add_request(&data->pm_qos_req, 0);
+> =20
+>  	ret =3D imx_prepare_enable_clks(dev);
+>  	if (ret)
+> --=20
+> 2.16.4
+>=20
 
-Thank you for the patch!
+Acked-by: Peter Chen <peter.chen@nxp.com>
 
-Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+--=20
 
-Best regards,
-Yoshihiro Shimoda
-
+Thanks,
+Peter Chen=
