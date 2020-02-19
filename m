@@ -2,156 +2,214 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D660A164671
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2020 15:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FEAB164692
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2020 15:12:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728119AbgBSOJ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Feb 2020 09:09:58 -0500
-Received: from mail-am6eur05on2040.outbound.protection.outlook.com ([40.107.22.40]:57376
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727597AbgBSOJ5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 Feb 2020 09:09:57 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H6k7U2vlIN8R9PmZEgfSQtl8DM0S9dmgFMbQe4zKSMKwcMgpnWJxRWChItjecyI6HhAehy/F0iNPeepCvTTJdbTLWO8H7by+v3b3TVB2/aaBdLTO23aT3n2daVGI/tWN3Xq/ZEWOQnlE4b+u61WsbO2dXcmGF39Njlm540aoPvuP9cD1wvz5lhc+yi5is6QlKguKmgGTPAlIHLOYdGtbrCcjTwjcUc8HjtL4TbmoSd9ERUISfeytS2nM+bUSl7+w5LoSJF8Vl7LUikSYnPbvXh0EcVjneCYD2TH5G+uHmHWlAAbSTf9jiC7+etxgdkG462rL831FUvnhKIIk3cNILQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mCDbxm/ukF1lQkO8g2Y9bcAGRH0QbUS+TIub+b/n+6w=;
- b=Al+baPimy1iH2tiHu5liKpHUYBEDJUgH8SZOWheRQ+JAKPnSU3DVPadc74HERc5BcWAdoYMiqV7U7cCVuTRz43Ha33yQWjlHORdefzJiNB2gp3TPRRFFhUEKQ0lgoUKJLmj6O+rNnYyQNTHjn94KGdITcf/9zNC/oL4q43h9cRABwnugIefo3WE74porlQByR9Ki7XkBRbr2pcNLCkoy8SmjZjxx2CvwQthat38HVYOLzYp0qQtLgwXhoZIqltCAq8CkE7a24VCRY37qzelOxif1hMyezeIeuIgtwDY80w6mLvFWe8Qb4jI+bauaSlM5JTManb9sBDVZnFgcYxxkQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mCDbxm/ukF1lQkO8g2Y9bcAGRH0QbUS+TIub+b/n+6w=;
- b=Age6WU6jc0qQUwe58oEOGcOsZm93W0/88uQzCj0qPFCUaG3gk0N/v8Yfbg2gaf7frtCp0nyLAfvhnb6eIEQ0e+j237UgRnmlEZAe/B5agyxV2Is2HbJmWilJ1UDP2oL4MDWrU3RrkyayHBDWsfATLJP+0nNpijhoig7SzuQ4ptY=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
- VI1PR04MB6336.eurprd04.prod.outlook.com (20.179.24.151) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2729.31; Wed, 19 Feb 2020 14:09:54 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::c7d:58a2:7265:407e]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::c7d:58a2:7265:407e%6]) with mapi id 15.20.2729.032; Wed, 19 Feb 2020
- 14:09:54 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Bin Liu <b-liu@ti.com>, Benson Leung <bleung@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        id S1727857AbgBSOML (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Feb 2020 09:12:11 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:41793 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727705AbgBSOML (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Feb 2020 09:12:11 -0500
+Received: by mail-wr1-f68.google.com with SMTP id c9so692486wrw.8
+        for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2020 06:12:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:autocrypt:organization:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=RJKXqioDvyKKircULJkfX6xF3mRWI5j91/8iUVGAbK4=;
+        b=gnIUEn7cQOwgOR+a39j7PjBIDnyjhMMvStC1RViFPRodsw41lGAumAfVE7fVVGecYZ
+         UZdRW0VSu6cpscMAFJT3AZb3bEcTLrbnMFq36XhAkwcR4MF2WQCiprUlGRq9b7vJGPnZ
+         Dik2c1mVYL0NM/E4HR7XQFhCKcSTPbu8CQjHzqmDA2Iw8CvADg8Wd8bZB//DpWZyoAB1
+         A+3RfV0UZLWBf4hdrk1m/GsLiYM1JOeiRApU+HLGntd4outB6lPc1S0+FdYAi/tsYc8F
+         YiLeNSwXSNeW4o0GsvIQ9RauY5nAAp8hJH0/mGnrYhi4qjY02e7w8EjcqvDum53JPIL+
+         UkkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :organization:message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=RJKXqioDvyKKircULJkfX6xF3mRWI5j91/8iUVGAbK4=;
+        b=beRTgjVH4am0DAAUZxwuL8ooB0IFQOZuCghl0aXWhTvW9UtSX07qqD60/UcjvdCgGn
+         FRTt5gCCfMh/7KrUznVJ3u8eYflAcZHrpFXqfNbBgPIb9E31so4ITeRJd4oF2eyBEtuE
+         NldI4LLasNm8BevsCMF0V2OPz49PMSIW0WSA/3oMLflB6qg95MsNx3QaknpGFt3W3RPC
+         V4mcr6DkLJPsIfgFxWOfazWehlaWjLz681SC+9a0lmuNPqmKl0EBaT5gQo3Fi2BkDqqi
+         vhc2O8X+f3Pe95eNrgZggu56qa7omLI8e1zS6zAcX+/xstVb09kEKW1jt/te4FlobKzJ
+         j8gw==
+X-Gm-Message-State: APjAAAWHiVflPBfef2ghuND4elhoCBnnYn1SB65vpkVZoJWi1xXHsHJq
+        Eja/F4DhcpW5foUtM9Ok1JS9SA==
+X-Google-Smtp-Source: APXvYqz9+aPQWqiRzMV6OfoWUEixLNJduNo0aaQM0SXm8v/eggAyRBWYQl2Jt5bo22PpgZdWzSi+mA==
+X-Received: by 2002:adf:f302:: with SMTP id i2mr36261663wro.21.1582121528555;
+        Wed, 19 Feb 2020 06:12:08 -0800 (PST)
+Received: from ?IPv6:2a01:e35:2ec0:82b0:4ca8:b25b:98e4:858? ([2a01:e35:2ec0:82b0:4ca8:b25b:98e4:858])
+        by smtp.gmail.com with ESMTPSA id x21sm2927157wmi.30.2020.02.19.06.12.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Feb 2020 06:12:07 -0800 (PST)
+Subject: Re: [PATCH v9 3/3] arm64: dts: meson: a1: Enable USB2 PHY and DWC3
+ controller
+To:     Hanjie Lin <hanjie.lin@amlogic.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 5/9] usb: roles: Provide the switch drivers handle to the
- switch in the API
-Thread-Topic: [PATCH 5/9] usb: roles: Provide the switch drivers handle to the
- switch in the API
-Thread-Index: AQHV4nD6G15oErWo00iXG8zLCuhxYqgZHzyAgAd0koCAAFRlgIAA4yEAgADDdoCAAAjZgA==
-Date:   Wed, 19 Feb 2020 14:09:54 +0000
-Message-ID: <20200219140955.GA15569@b29397-desktop>
-References: <20200213132428.53374-1-heikki.krogerus@linux.intel.com>
- <20200213132428.53374-6-heikki.krogerus@linux.intel.com>
- <20200213133239.GN1498@kuha.fi.intel.com>
- <20200218072341.GA30350@b29397-desktop>
- <20200218122545.GF28776@kuha.fi.intel.com>
- <20200219015840.GC8602@b29397-desktop>
- <20200219133815.GH28776@kuha.fi.intel.com>
-In-Reply-To: <20200219133815.GH28776@kuha.fi.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: b8ba266c-f63d-4920-b34c-08d7b54564af
-x-ms-traffictypediagnostic: VI1PR04MB6336:
-x-microsoft-antispam-prvs: <VI1PR04MB6336AE8FAF0AAB8F746D954E8B100@VI1PR04MB6336.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-forefront-prvs: 0318501FAE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(396003)(346002)(136003)(39860400002)(376002)(366004)(189003)(199004)(8936002)(8676002)(6916009)(44832011)(81156014)(7416002)(26005)(76116006)(33656002)(186003)(2906002)(86362001)(81166006)(6506007)(71200400001)(53546011)(4326008)(54906003)(66946007)(64756008)(478600001)(66556008)(1076003)(66446008)(91956017)(5660300002)(6512007)(9686003)(6486002)(66476007)(316002)(33716001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB6336;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: r3TYWlTxVlC/z6o4tXyqy71uqZ6k1L7wWd+fb2steyZNJkE7/1GuT15mtzjIMQ7//32de4guAaf3c+AwB/XVGGYAFSA162/itbBRIIOGCML+AsSkh2xRMgvOqXQZL/unsD0ilLFQiQEiLMwGBZinMELhXyHhcUDQfC/IhkDFj9CgZViR4MmVl2SeuQE3MBbVcfCvM2KomcBsqPww8co47LEGYttm7AbBBLFAVKY9Rj5oVg2PaxitDIajTtUGaaJQg+PLR/wTGwPmeZoMOl3pVN+bYqmIfb0R8ncXQ6zcPqlvtkArEdemak5pHAFcXjrdsBh/k44x3UO9YmslAcKlIcEBGKwM8GX11S9A0yhJaiaC73MprS8htaaRgu2CuxyEBbSv5bSOYQs4WumWo8Ri9OTfI5rtGaRmIkVCubZU80OHGTQl1fzi5Goe4Etgb8HD
-x-ms-exchange-antispam-messagedata: 6dLDEwsgwIOlYCcJ1hrYxK3F5ByBC54IUwBwJ/vRHYGPRjV8y8VFVRkeaVDfOS9zVK+NI8Ze+zXkL1bGA11kw2L9N4oII57PuJG85lFmr3Fx1AXEtWGRuRPlRbVno5C3QqBFaVBrp2mexqRDAPKy8A==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <D720C75BB1073948831A63342843B422@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Kevin Hilman <khilman@baylibre.com>
+Cc:     Yue Wang <yue.wang@amlogic.com>, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, Carlo Caione <carlo@caione.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+References: <1581990859-135234-1-git-send-email-hanjie.lin@amlogic.com>
+ <1581990859-135234-4-git-send-email-hanjie.lin@amlogic.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
+ 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
+ BSwxi7g3Mu7u5kUByanqHyA=
+Organization: Baylibre
+Message-ID: <37725e68-a24f-f76f-6730-630f24431e6f@baylibre.com>
+Date:   Wed, 19 Feb 2020 15:12:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b8ba266c-f63d-4920-b34c-08d7b54564af
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Feb 2020 14:09:54.1142
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4phJWA8nmZrNHokEfhdXpwdKwnrX7Tv3CZyhAEH/MGEslUQXtQjoJrfx3cNhN6oYWS+sptqkk9fGFGuGMYDV/g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6336
+In-Reply-To: <1581990859-135234-4-git-send-email-hanjie.lin@amlogic.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-02-19 15:38:15, Heikki Krogerus wrote:
-> On Wed, Feb 19, 2020 at 01:58:38AM +0000, Peter Chen wrote:
-> > On 20-02-18 14:25:45, Heikki Krogerus wrote:
-> > > Hi,
-> > >=20
-> > > On Tue, Feb 18, 2020 at 07:23:41AM +0000, Peter Chen wrote:
-> > > > > > @@ -1118,6 +1119,7 @@ static int ci_hdrc_probe(struct platform_=
-device *pdev)
-> > > > > >  	}
-> > > > > > =20
-> > > > > >  	if (ci_role_switch.fwnode) {
-> > > > > > +		ci_role_switch.driver_data =3D ci;
-> > > > > >  		ci->role_switch =3D usb_role_switch_register(dev,
-> > > > > >  					&ci_role_switch);
-> > > >=20
-> > > > Why the struct usb_role_switch_desc needs drvdata, the struct
-> > > > usb_role_switch has already one?
-> > >=20
-> > > I'm assuming that you are asking why not just register the switch,
-> > > and then call usb_role_switch_set_drvdata(), right?
-> >=20
-> > Yes.
-> >=20
-> > >=20
-> > > That may create a race condition where the switch is accessed before
-> > > the driver data is available. That can happen for example if the
-> > > switch is exposed to the user space.
-> > >=20
-> > > To play it safe, supplying the driver data as part of the descriptor.
-> > > That way we can be sure that the driver data is always available
-> > > the moment the switch is registered.
-> > >=20
-> >=20
-> > Then, you may use the uniform way for the driver. Some may have
-> > race condition like you said.
->=20
-> Uniform way for the driver?
->=20
+On 18/02/2020 02:54, Hanjie Lin wrote:
+> Enable USB2 PHY and DWC3 controller for Meson A1 SoC.
+> 
+> Signed-off-by: Yue Wang <yue.wang@amlogic.com>
+> Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
+> ---
+>  arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 43 +++++++++++++++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> index 6fdc0dd..3b7ca50 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> @@ -6,6 +6,9 @@
+>  #include <dt-bindings/interrupt-controller/irq.h>
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/power/meson-a1-power.h>
+> +#include <dt-bindings/reset/amlogic,meson-a1-reset.h>
+> +#include <dt-bindings/clock/a1-pll-clkc.h>
+> +#include <dt-bindings/clock/a1-clkc.h>
+>  
+>  / {
+>  	compatible = "amlogic,a1";
+> @@ -100,6 +103,17 @@
+>  				#power-domain-cells = <1>;
+>  				status = "okay";
+>  			};
+> +
+> +			usb2_phy1: phy@40000 {
+> +				compatible = "amlogic,a1-usb2-phy";
+> +				clocks = <&clkc_periphs CLKID_XTAL_USB_PHY>;
+> +				clock-names = "xtal";
+> +				reg = <0x0 0x40000 0x0 0x2000>;
+> +				resets = <&reset RESET_USBPHY>;
+> +				reset-names = "phy";
+> +				#phy-cells = <0>;
+> +				power-domains = <&pwrc PWRC_USB_ID>;
+> +			};
+>  		};
+>  
+>  		gic: interrupt-controller@ff901000 {
+> @@ -114,6 +128,35 @@
+>  			#interrupt-cells = <3>;
+>  			#address-cells = <0>;
+>  		};
+> +
+> +		usb: usb@ffe09000 {
+> +			status = "disabled";
+> +			compatible = "amlogic,meson-a1-usb-ctrl";
+> +			reg = <0x0 0xffe09000 0x0 0xa0>;
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +
+> +			clocks = <&clkc_periphs CLKID_USB_CTRL>,
+> +				 <&clkc_periphs CLKID_USB_BUS>,
+> +				 <&clkc_periphs CLKID_XTAL_USB_CTRL>;
+> +			clock-names = "usb_ctrl", "usb_bus", "xtal_usb_ctrl";
+> +			resets = <&reset RESET_USBCTRL>;
+> +
+> +			dr_mode = "host";
+> +
+> +			phys = <&usb2_phy1>;
+> +			phy-names = "usb2-phy1";
+> +
+> +			dwc3: usb@ff400000 {
+> +				compatible = "snps,dwc3";
+> +				reg = <0x0 0xff400000 0x0 0x100000>;
+> +				interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
+> +				dr_mode = "host";
+> +				snps,dis_u2_susphy_quirk;
+> +				snps,quirk-frame-length-adjustment = <0x20>;
+> +			};
+> +		};
+>  	};
+>  
+>  	timer {
+> 
 
-Sorry, unify way. Take chipidea and cdns3 as an example, at chipidea you
-use struct usb_role_switch_desc
-
-+               ci_role_switch.driver_data =3D ci;
-                ci->role_switch =3D usb_role_switch_register(dev,
-			&ci_role_switch);
-
-But at cdns3 side, you set usb_role_switch drvdata directly.
-+       usb_role_switch_set_drvdata(cdns->role_sw, cdns);
-
-But according to your comments, all the driver needs to use chipidea's
-way to avoid race condition.
-
---=20
-
-Thanks,
-Peter Chen=
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
