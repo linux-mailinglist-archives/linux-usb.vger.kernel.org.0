@@ -2,107 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D961164A3A
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2020 17:26:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F08D164B99
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2020 18:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726652AbgBSQ0H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Feb 2020 11:26:07 -0500
-Received: from mail-eopbgr50080.outbound.protection.outlook.com ([40.107.5.80]:31139
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726514AbgBSQ0H (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 Feb 2020 11:26:07 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eC7NG0//dhP4H1voEcRUEIHhxPeIxiDmM+3p/YKHRAOhmrMDU1kNV8+9BE2H9nynA/j3AIwuyEoLcS+SSs5qwVOrGdX7O8Mt2L5adY3r532jk4BqUkFvh9rFRE5vWGq2ujZ9+I6rPs9EMthhPYQozJA3AxdDMsK4CLCZvnxL/AvbRH/qI5cKQx0CZ0zrBbCRh8mLbdzMq3E7xdSP6FNCwZ78v31ZjpgxBU11YQj1FRdkKmKF0V85Dyv+wJ2OliOzwv6JwW1U4BgPdUJROLrI9A17JIQHdsfaNIe6htlEVIfLDDfaODDohx2M2ETeUgrVHVZJvJYUS4zIAmjbveYqKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GrjTSVGSbU7bLqjpsYIhTXbL4W72rvRI359cQiLlnew=;
- b=PSp5wYCrDNFs755cejpfiKKMUwPV4Dpk9IsXgnwvUPakArvY2OxBdIiAcmG5YWWzAOZXF6GvjMseTlUSZy3+8XtCgFSZ4NEBbjVSN2ScvAmjRPmUGIlSdv5QbRcAzuzUBvZfeVWMChqO7D2r3C5Aml7W8GaYgfM5kotHTyLE9iVCENIvFg2aoT9DhuWmaQTmWz+0R5cfnkavREuiyQUEvIJP49kPkgqJXYHW8xqM6SI9JBNmZ0x4e8Ad5+dNn3O66gMCKAi4GB2vbvKTqswLr0HILS+gxj/5uzeYvmx+VMq1uauBxWuVdNn4J/LH+dnnotX3gJQ2P69t3HmE06A4iw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GrjTSVGSbU7bLqjpsYIhTXbL4W72rvRI359cQiLlnew=;
- b=X3kRJ1IPeNJQZkCBymeMsBTNTzZZHPPjsR+aCctyTDZOIZKWNZMEB2vNmy8cwmcRvpq9/qTDH4BklaiVkDuXfNItTqJ7wur4Yyb2yKG88ek8Q26FAjvbCmoc9s3iXNX2Zjwg1th4HJEfqE4K/5wSFi2j1l4Pt9R8G9p7st//6rg=
-Authentication-Results: spf=none (sender IP is ) smtp.mailfrom=jun.li@nxp.com; 
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (20.179.235.146) by
- VE1PR04MB6413.eurprd04.prod.outlook.com (20.179.232.94) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2729.29; Wed, 19 Feb 2020 16:26:03 +0000
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::ccb0:7d6d:adfa:423c]) by VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::ccb0:7d6d:adfa:423c%4]) with mapi id 15.20.2729.032; Wed, 19 Feb 2020
- 16:26:03 +0000
-From:   jun.li@nxp.com
-To:     balbi@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-imx@nxp.com, jun.li@nxp.com
-Subject: [PATCH] usb: dwc3: core: don't do suspend for device mode if already suspended
-Date:   Thu, 20 Feb 2020 00:20:04 +0800
-Message-Id: <1582129204-22528-1-git-send-email-jun.li@nxp.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR06CA0015.apcprd06.prod.outlook.com
- (2603:1096:202:2e::27) To VE1PR04MB6528.eurprd04.prod.outlook.com
- (2603:10a6:803:127::18)
+        id S1726598AbgBSRPR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Feb 2020 12:15:17 -0500
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:37054 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726539AbgBSRPR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Feb 2020 12:15:17 -0500
+Received: by mail-pj1-f68.google.com with SMTP id m13so335919pjb.2
+        for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2020 09:15:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=p8mILfY4p0DfIGVNTpkUYfM9Zh4ijtnY5APfyb1vmyg=;
+        b=OCl656MSbaKSiX2hD637sG/cTVkB1AMhHQkaHTFAL8XMVAtgrhMg4Kx5a3fanhg915
+         JuzPYykZN/aUpkGV0QT5cl3PrKn8nsTjZjOHZJDOzDAE2lCp5bYeHWe3HAliGDu6La3w
+         7WReCanESDYUxHSlatlwCilbSFtkZPYShezJf7MMw7Va8kM2KaP+e7mN42urbnVYvyyk
+         9bJohoQTddPdmkIIP2ng+Mn6TiCDZdIr/Ww13JrtOEyv1xHHTBpvLr6zOaUOzM9I7W+c
+         ZaYs98o3Q+BOyP7xSJ5c7jIJQE9jZY5/kCIGlpcRaUZvhv42iDk5ppuDPrxT5b2Raoh0
+         mPxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=p8mILfY4p0DfIGVNTpkUYfM9Zh4ijtnY5APfyb1vmyg=;
+        b=mFcSteWq2czFSeMjaZ+0R5l+aWxFYnXDpoLiYJmbdUdO+zkDUT9WSr3TY+3TRl88mR
+         2fakSuGQ1tMMvqHqg2MSSNYDra7RwBDjDaQZQwFFJUiBqUoF8z5kDwBCb5jEfKLlYbGq
+         ePaDdFX8aCjffMnDkltVHYsla+emug+ejPowKwq5iRpg2ZDYFrwZ7ONVitY65P/WCI1k
+         EFswTs5LUcP9N/LRTH2qKslu7PwoX4PLNKCt50ExjQSynnMe+Z3+lEbd6T+oaq1h/kZG
+         KP+rHHZ+AAZcnAUVwIcD5znfLMUA3dJD5/cSPNSH3QOVMrkUmHsU31pPP9fJtrCBNecj
+         nrpQ==
+X-Gm-Message-State: APjAAAVcR0beJ8vezJUXEVd6pCUteUaelqMtKWAo6XRysSuAATSywgRj
+        kFtczchgkPPvfmaKLFqxIIY=
+X-Google-Smtp-Source: APXvYqxSmFvGSgR4rBEmeNj4xrkHB+N1EZ2/5B/C5fsalHKMQ6hLsUGmQrZ1lT6D8SRosFOGnaF0zw==
+X-Received: by 2002:a17:90a:d995:: with SMTP id d21mr10153790pjv.118.1582132516582;
+        Wed, 19 Feb 2020 09:15:16 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 199sm202126pfv.81.2020.02.19.09.15.15
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 19 Feb 2020 09:15:15 -0800 (PST)
+Date:   Wed, 19 Feb 2020 09:15:14 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     jun.li@nxp.com
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-imx@nxp.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: tcpm: move to SNK_UNATTACHED if sink removed
+ for DRP
+Message-ID: <20200219171514.GA6677@roeck-us.net>
+References: <1582128343-22438-1-git-send-email-jun.li@nxp.com>
 MIME-Version: 1.0
-Received: from localhost.localdomain (119.31.174.66) by HK2PR06CA0015.apcprd06.prod.outlook.com (2603:1096:202:2e::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.2729.24 via Frontend Transport; Wed, 19 Feb 2020 16:26:01 +0000
-X-Mailer: git-send-email 2.7.4
-X-Originating-IP: [119.31.174.66]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 4a2add80-2154-45d1-59fc-08d7b55869b5
-X-MS-TrafficTypeDiagnostic: VE1PR04MB6413:|VE1PR04MB6413:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <VE1PR04MB641321C073B0E77ED0BDD28D89100@VE1PR04MB6413.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2449;
-X-Forefront-PRVS: 0318501FAE
-X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(346002)(376002)(136003)(39860400002)(366004)(199004)(189003)(66556008)(66476007)(81156014)(8676002)(66946007)(81166006)(8936002)(15650500001)(69590400006)(2616005)(2906002)(4326008)(9686003)(36756003)(26005)(6512007)(478600001)(52116002)(6486002)(86362001)(316002)(186003)(956004)(16526019)(4744005)(6916009)(5660300002)(6506007);DIR:OUT;SFP:1101;SCL:1;SRVR:VE1PR04MB6413;H:VE1PR04MB6528.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-Received-SPF: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Sp2FdihhbKIJ87r969TZUAOSvyIm++uzoQuK0sJ3X9kB1MJV1g9GTuNWqYzg2q+blqd9zzLb4VegaeGRiYYE2QpXMILTPHbk/8QPTfl0BRtWeGRv5/g962z+LOeZfhMZAfqjcqWFs2AByoIRJImgA75GFGAuVKoLO1nSJBXjHp2TKd9Tk0Q593B6Sh5lgWUQSRAyC1kmumGs2/7tdr+N7qJGh/jXo3vYJH4YnneD/gLmow8uLThAKsCPHvU8p2BPKqrNm3k+SBg2x0R8Xpx4mrF2b1erP6IiNS5q8WrPPad3MJShMZrYS8n/BSXE/ZyO2A8Kf6Fag3hjzwibBz0lh+ysh+mgLEQAha4QO01gdOM6ye0KBxFmqinF1Pxf5k8K092BaDtLBKbAxIUDfWduazSV5WRIKFsS+A/HFm8MhmvbvY6vrKpskois7KdHqWlgayLadZ8jOtdrWmHcmApC4u8Zpt25OUNm4J2cxQmcaOpHI06z/VU4akIgSgLP20Zf4bK9iNYF0TAIJZ3q9SU+YTRh44MOd4LZ0WQ/3h85jVI=
-X-MS-Exchange-AntiSpam-MessageData: LSdTlt0cuVPfW/H43j4ScFjbrEAoeXER9CSwE0M1HE1/zE2FPhatu+QchNDQPXVwaEiTP231kpfNmh7mzCFvIzQeEBKHxJ7IfAAaEUxBNWW3AQHvZ7lfNjO4IZjYq3LvsF7SLYzuHLjfgwn8s7LgPA==
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4a2add80-2154-45d1-59fc-08d7b55869b5
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2020 16:26:03.5064
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Tu5eu7qS+HHQcBoxzPEjJhJ3Fp+L7r9+brvhpuQItPEeyc7NANwiuMEhxJpZC7s+
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6413
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1582128343-22438-1-git-send-email-jun.li@nxp.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Li Jun <jun.li@nxp.com>
+On Thu, Feb 20, 2020 at 12:05:43AM +0800, jun.li@nxp.com wrote:
+> From: Li Jun <jun.li@nxp.com>
+> 
+> Per typec spec:
+> Figure 4-15 Connection State Diagram: DRP
+> Figure 4-16 Connection State Diagram: DRP with Accessory and Try.SRC
+> 	    Support
+> Figure 4-17 Connection State Diagram: DRP with Accessory and Try.SNK
+> 	    Support
+> DRP port should move to Unattached.SNK instead of Unattached.SRC if
+> sink removed.
+> 
+> Signed-off-by: Li Jun <jun.li@nxp.com>
 
-If dwc->dev in device mode already runtime suspended, don't do it again
-for system suspend.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Signed-off-by: Li Jun <jun.li@nxp.com>
----
- drivers/usb/dwc3/core.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 1d85c42..51dc844 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1637,6 +1637,8 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
- 
- 	switch (dwc->current_dr_role) {
- 	case DWC3_GCTL_PRTCAP_DEVICE:
-+		if (pm_runtime_suspended(dwc->dev))
-+			break;
- 		spin_lock_irqsave(&dwc->lock, flags);
- 		dwc3_gadget_suspend(dwc);
- 		spin_unlock_irqrestore(&dwc->lock, flags);
--- 
-2.7.4
-
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 78077c2..3174180 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -3680,8 +3680,12 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
+>  	case SRC_SEND_CAPABILITIES:
+>  	case SRC_READY:
+>  		if (tcpm_port_is_disconnected(port) ||
+> -		    !tcpm_port_is_source(port))
+> -			tcpm_set_state(port, SRC_UNATTACHED, 0);
+> +		    !tcpm_port_is_source(port)) {
+> +			if (port->port_type == TYPEC_PORT_SRC)
+> +				tcpm_set_state(port, SRC_UNATTACHED, 0);
+> +			else
+> +				tcpm_set_state(port, SNK_UNATTACHED, 0);
+> +		}
+>  		break;
+>  	case SNK_UNATTACHED:
+>  		if (tcpm_port_is_sink(port))
+> -- 
+> 2.7.4
+> 
