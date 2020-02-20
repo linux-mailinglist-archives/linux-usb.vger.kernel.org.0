@@ -2,129 +2,392 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC2C165E80
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2020 14:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2645A165EFD
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2020 14:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728042AbgBTNQd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Feb 2020 08:16:33 -0500
-Received: from mga09.intel.com ([134.134.136.24]:25234 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727931AbgBTNQd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 20 Feb 2020 08:16:33 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Feb 2020 05:16:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,464,1574150400"; 
-   d="scan'208";a="408785790"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga005.jf.intel.com with ESMTP; 20 Feb 2020 05:16:31 -0800
-Subject: Re: [PATCH] usb: xhci: enable interrupt only after xhci_start()
-To:     Ajay Gupta <ajaykuee@gmail.com>, mathias.nyman@intel.com
-Cc:     linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>
-References: <20200218235024.15266-1-ajayg@nvidia.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <85ae3a52-f968-ce02-af51-e4d2aa140f8b@linux.intel.com>
-Date:   Thu, 20 Feb 2020 15:18:50 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728225AbgBTNla (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Feb 2020 08:41:30 -0500
+Received: from gateway20.websitewelcome.com ([192.185.49.40]:43073 "EHLO
+        gateway20.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728028AbgBTNl3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Feb 2020 08:41:29 -0500
+X-Greylist: delayed 1434 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 Feb 2020 08:41:29 EST
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway20.websitewelcome.com (Postfix) with ESMTP id 46501400C76B4
+        for <linux-usb@vger.kernel.org>; Thu, 20 Feb 2020 06:03:34 -0600 (CST)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id 4lhujvy4rvBMd4lhvjt417; Thu, 20 Feb 2020 07:17:35 -0600
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
+        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=z1nik/sLu1rWe1J16Res5lnb/I2LgkK5u9A27nU3ovY=; b=WkfFysgNRAo+UWyPV48G7KJxrr
+        QdENWL2WZlpyux/qZ58g4YNrrdODyN/3/5cURbxev/i8i5y9/fNa5+YyCQqKV2OF1pfuypyeMs6Lw
+        Y92EXY+tFP+JEI7zuhJ9u/F6GFh7jn0iMXQaIrEbM3+gaYf84/xhX9DUaDN6ZeBMHJoz95ht6epCx
+        mwmOwqv+ZxjhNYtjful6ZZFIlk487O59qsgsT0VioFBEeGpH9HBiP4Jg6ntzqB0+xPpRVA0H+Bz77
+        pcSB4jcakHBCa6z+/lfyyqg19of677C4vhYE8WCxtJPfP7j9vA8WbGR6YsuqF2vp5ilM+33vEmh8f
+        GwMVz72w==;
+Received: from [201.144.174.47] (port=28175 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1j4lht-003Yvz-1W; Thu, 20 Feb 2020 07:17:33 -0600
+Date:   Thu, 20 Feb 2020 07:20:17 -0600
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Johan Hovold <johan@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH] USB: Replace zero-length array with flexible-array member
+Message-ID: <20200220132017.GA29262@embeddedor>
 MIME-Version: 1.0
-In-Reply-To: <20200218235024.15266-1-ajayg@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 201.144.174.47
+X-Source-L: No
+X-Exim-ID: 1j4lht-003Yvz-1W
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [201.144.174.47]:28175
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 10
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19.2.2020 1.50, Ajay Gupta wrote:
-> From: Ajay Gupta <ajayg@nvidia.com>
-> 
-> Xhci interrupt must be enabled only after controller is
-> initialized and started. Currently interrupt is enabled
-> first in xhci_run() and later hcd state is set to running
-> in xhci_run_finished().
-> 
-> On a slow system (such as FPGA based platform) the time
-> difference between enabling interrupt and setting the hcd
-> state becomes huge enough where interrupt is triggered but
-> controller initialization is not complete yet.
-> 
-> Fixing the same by moving the interrupt enable (CMD_EIE)
-> part of code snippet from xhci_run() to xhci_run_finished().
-> 
-> Signed-off-by: Ajay Gupta <ajayg@nvidia.com>
-> ---
+The current codebase makes use of the zero-length array language
+extension to the C90 standard, but the preferred mechanism to declare
+variable-length types such as these ones is a flexible array member[1][2],
+introduced in C99:
 
-Sounds reasonable, but xHCI specs wants interrupts set and enabled before
-xHC is running state.
+struct foo {
+        int stuff;
+        struct boo array[];
+};
 
-I see this can be an issue if we get a port event for a USB 3 port before
-the USB3 hcd is added.
-What kind of issues did you see? I'd guess NULL pointer dereference in 
-handle_port_status()?.
+By making use of the mechanism above, we will get a compiler warning
+in case the flexible array does not occur last in the structure, which
+will help us prevent some kind of undefined behavior bugs from being
+inadvertently introduced[3] to the codebase from now on.
 
-We could move interrupt enabling to xhci_run_finished() before 
-xhci_start() is called, then the USB3 hcd should be initialized before
-we receive interrupts.
+Also, notice that, dynamic memory allocations won't be affected by
+this change:
 
-Does that work for you?
+"Flexible array members have incomplete type, and so the sizeof operator
+may not be applied. As a quirk of the original implementation of
+zero-length arrays, sizeof evaluates to zero."[1]
 
-Details:
-xHCI section 4.2 "Host Controller Initialization" has the following sequence:
+This issue was found with the help of Coccinelle.
 
-- Enable host system interrupt (CMD_EIE),
-- Enable primary interupter (set IE bit in IMAN register)
-- set run bit in USBCMD register.
+[1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+[2] https://github.com/KSPP/linux/issues/21
+[3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
 
-And section 5.5.2 has a note:
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ drivers/usb/atm/usbatm.h              | 2 +-
+ drivers/usb/dwc2/hcd.h                | 2 +-
+ drivers/usb/host/ehci-tegra.c         | 2 +-
+ drivers/usb/host/ehci.h               | 4 ++--
+ drivers/usb/host/fotg210.h            | 2 +-
+ drivers/usb/host/ohci.h               | 4 ++--
+ drivers/usb/host/xhci-mtk.h           | 2 +-
+ drivers/usb/host/xhci.h               | 4 ++--
+ drivers/usb/serial/io_usbvend.h       | 4 ++--
+ drivers/usb/serial/ti_usb_3410_5052.c | 4 ++--
+ include/linux/usb.h                   | 4 ++--
+ include/linux/usb/audio-v2.h          | 2 +-
+ include/linux/usb/audio-v3.h          | 2 +-
+ include/linux/usb/gadget.h            | 2 +-
+ include/linux/usb/hcd.h               | 2 +-
+ include/linux/usbdevice_fs.h          | 2 +-
+ 16 files changed, 22 insertions(+), 22 deletions(-)
 
-"All registers of the Primary Interrupter shall be initialized before setting the
-Run/Stop (RS) flag in the USBCMD register to ‘1’."
+diff --git a/drivers/usb/atm/usbatm.h b/drivers/usb/atm/usbatm.h
+index d3bdc4cc47aa..8725755bd53d 100644
+--- a/drivers/usb/atm/usbatm.h
++++ b/drivers/usb/atm/usbatm.h
+@@ -164,7 +164,7 @@ struct usbatm_data {
+ 	unsigned char *cell_buf;	/* holds partial rx cell */
+ 	unsigned int buf_usage;
+ 
+-	struct urb *urbs[0];
++	struct urb *urbs[];
+ };
+ 
+ static inline void *to_usbatm_driver_data(struct usb_interface *intf)
+diff --git a/drivers/usb/dwc2/hcd.h b/drivers/usb/dwc2/hcd.h
+index 8ca6d12a6f57..1224fa9df604 100644
+--- a/drivers/usb/dwc2/hcd.h
++++ b/drivers/usb/dwc2/hcd.h
+@@ -199,7 +199,7 @@ struct dwc2_hcd_urb {
+ 	u32 flags;
+ 	u16 interval;
+ 	struct dwc2_hcd_pipe_info pipe_info;
+-	struct dwc2_hcd_iso_packet_desc iso_descs[0];
++	struct dwc2_hcd_iso_packet_desc iso_descs[];
+ };
+ 
+ /* Phases for control transfers */
+diff --git a/drivers/usb/host/ehci-tegra.c b/drivers/usb/host/ehci-tegra.c
+index d6433f206c17..10d51daa6a1b 100644
+--- a/drivers/usb/host/ehci-tegra.c
++++ b/drivers/usb/host/ehci-tegra.c
+@@ -282,7 +282,7 @@ static int tegra_ehci_hub_control(
+ struct dma_aligned_buffer {
+ 	void *kmalloc_ptr;
+ 	void *old_xfer_buffer;
+-	u8 data[0];
++	u8 data[];
+ };
+ 
+ static void free_dma_aligned_buffer(struct urb *urb)
+diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
+index ac5e967907d1..229b3de319e6 100644
+--- a/drivers/usb/host/ehci.h
++++ b/drivers/usb/host/ehci.h
+@@ -255,7 +255,7 @@ struct ehci_hcd {			/* one per controller */
+ 	struct list_head	tt_list;
+ 
+ 	/* platform-specific data -- must come last */
+-	unsigned long		priv[0] __aligned(sizeof(s64));
++	unsigned long		priv[] __aligned(sizeof(s64));
+ };
+ 
+ /* convert between an HCD pointer and the corresponding EHCI_HCD */
+@@ -460,7 +460,7 @@ struct ehci_iso_sched {
+ 	struct list_head	td_list;
+ 	unsigned		span;
+ 	unsigned		first_packet;
+-	struct ehci_iso_packet	packet[0];
++	struct ehci_iso_packet	packet[];
+ };
+ 
+ /*
+diff --git a/drivers/usb/host/fotg210.h b/drivers/usb/host/fotg210.h
+index 1b4db95e5c43..6cee40ec65b4 100644
+--- a/drivers/usb/host/fotg210.h
++++ b/drivers/usb/host/fotg210.h
+@@ -490,7 +490,7 @@ struct fotg210_iso_packet {
+ struct fotg210_iso_sched {
+ 	struct list_head	td_list;
+ 	unsigned		span;
+-	struct fotg210_iso_packet	packet[0];
++	struct fotg210_iso_packet	packet[];
+ };
+ 
+ /*
+diff --git a/drivers/usb/host/ohci.h b/drivers/usb/host/ohci.h
+index b015b00774b2..27c26ca10bfd 100644
+--- a/drivers/usb/host/ohci.h
++++ b/drivers/usb/host/ohci.h
+@@ -337,7 +337,7 @@ typedef struct urb_priv {
+ 	u16			length;		// # tds in this request
+ 	u16			td_cnt;		// tds already serviced
+ 	struct list_head	pending;
+-	struct td		*td [0];	// all TDs in this request
++	struct td		*td[];		// all TDs in this request
+ 
+ } urb_priv_t;
+ 
+@@ -435,7 +435,7 @@ struct ohci_hcd {
+ 	struct dentry		*debug_dir;
+ 
+ 	/* platform-specific data -- must come last */
+-	unsigned long           priv[0] __aligned(sizeof(s64));
++	unsigned long           priv[] __aligned(sizeof(s64));
+ 
+ };
+ 
+diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
+index 5ac458b7d2e0..acd56517215a 100644
+--- a/drivers/usb/host/xhci-mtk.h
++++ b/drivers/usb/host/xhci-mtk.h
+@@ -95,7 +95,7 @@ struct mu3h_sch_ep_info {
+ 	u32 pkts;
+ 	u32 cs_count;
+ 	u32 burst_mode;
+-	u32 bw_budget_table[0];
++	u32 bw_budget_table[];
+ };
+ 
+ #define MU3C_U3_PORT_MAX 4
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 3ecee10fdcdc..685180e1b98a 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1642,7 +1642,7 @@ struct xhci_scratchpad {
+ struct urb_priv {
+ 	int	num_tds;
+ 	int	num_tds_done;
+-	struct	xhci_td	td[0];
++	struct	xhci_td	td[];
+ };
+ 
+ /*
+@@ -1901,7 +1901,7 @@ struct xhci_hcd {
+ 
+ 	void			*dbc;
+ 	/* platform-specific data -- must come last */
+-	unsigned long		priv[0] __aligned(sizeof(s64));
++	unsigned long		priv[] __aligned(sizeof(s64));
+ };
+ 
+ /* Platform specific overrides to generic XHCI hc_driver ops */
+diff --git a/drivers/usb/serial/io_usbvend.h b/drivers/usb/serial/io_usbvend.h
+index c38e87ac5ea9..0d1a5bb4636e 100644
+--- a/drivers/usb/serial/io_usbvend.h
++++ b/drivers/usb/serial/io_usbvend.h
+@@ -593,7 +593,7 @@ struct ti_i2c_desc {
+ 	__u8	Type;			// Type of descriptor
+ 	__le16	Size;			// Size of data only not including header
+ 	__u8	CheckSum;		// Checksum (8 bit sum of data only)
+-	__u8	Data[0];		// Data starts here
++	__u8	Data[];		// Data starts here
+ } __attribute__((packed));
+ 
+ // for 5152 devices only (type 2 record)
+@@ -601,7 +601,7 @@ struct ti_i2c_desc {
+ struct ti_i2c_firmware_rec {
+ 	__u8	Ver_Major;		// Firmware Major version number
+ 	__u8	Ver_Minor;		// Firmware Minor version number
+-	__u8	Data[0];		// Download starts here
++	__u8	Data[];		// Download starts here
+ } __attribute__((packed));
+ 
+ 
+diff --git a/drivers/usb/serial/ti_usb_3410_5052.c b/drivers/usb/serial/ti_usb_3410_5052.c
+index ef23acc9b9ce..73075b9351c5 100644
+--- a/drivers/usb/serial/ti_usb_3410_5052.c
++++ b/drivers/usb/serial/ti_usb_3410_5052.c
+@@ -219,7 +219,7 @@ struct ti_write_data_bytes {
+ 	u8	bDataCounter;
+ 	__be16	wBaseAddrHi;
+ 	__be16	wBaseAddrLo;
+-	u8	bData[0];
++	u8	bData[];
+ } __packed;
+ 
+ struct ti_read_data_request {
+@@ -234,7 +234,7 @@ struct ti_read_data_bytes {
+ 	__u8	bCmdCode;
+ 	__u8	bModuleId;
+ 	__u8	bErrorCode;
+-	__u8	bData[0];
++	__u8	bData[];
+ } __packed;
+ 
+ /* Interrupt struct */
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index ca1a5f1e1c5e..9f3c721c70dc 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -325,7 +325,7 @@ struct usb_interface_cache {
+ 
+ 	/* variable-length array of alternate settings for this interface,
+ 	 * stored in no particular order */
+-	struct usb_host_interface altsetting[0];
++	struct usb_host_interface altsetting[];
+ };
+ #define	ref_to_usb_interface_cache(r) \
+ 		container_of(r, struct usb_interface_cache, ref)
+@@ -1589,7 +1589,7 @@ struct urb {
+ 	int error_count;		/* (return) number of ISO errors */
+ 	void *context;			/* (in) context for completion */
+ 	usb_complete_t complete;	/* (in) completion routine */
+-	struct usb_iso_packet_descriptor iso_frame_desc[0];
++	struct usb_iso_packet_descriptor iso_frame_desc[];
+ 					/* (in) ISO ONLY */
+ };
+ 
+diff --git a/include/linux/usb/audio-v2.h b/include/linux/usb/audio-v2.h
+index cb9900b34b67..ead8c9a47c6a 100644
+--- a/include/linux/usb/audio-v2.h
++++ b/include/linux/usb/audio-v2.h
+@@ -153,7 +153,7 @@ struct uac2_feature_unit_descriptor {
+ 	__u8 bSourceID;
+ 	/* bmaControls is actually u32,
+ 	 * but u8 is needed for the hybrid parser */
+-	__u8 bmaControls[0]; /* variable length */
++	__u8 bmaControls[]; /* variable length */
+ } __attribute__((packed));
+ 
+ /* 4.7.2.10 Effect Unit Descriptor */
+diff --git a/include/linux/usb/audio-v3.h b/include/linux/usb/audio-v3.h
+index 6b708434b7f9..c69a6f2e6837 100644
+--- a/include/linux/usb/audio-v3.h
++++ b/include/linux/usb/audio-v3.h
+@@ -109,7 +109,7 @@ struct uac3_feature_unit_descriptor {
+ 	__u8 bSourceID;
+ 	/* bmaControls is actually u32,
+ 	 * but u8 is needed for the hybrid parser */
+-	__u8 bmaControls[0]; /* variable length */
++	__u8 bmaControls[]; /* variable length */
+ 	/* wFeatureDescrStr omitted */
+ } __attribute__((packed));
+ 
+diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+index 124462d65eac..9411c08a5c7e 100644
+--- a/include/linux/usb/gadget.h
++++ b/include/linux/usb/gadget.h
+@@ -767,7 +767,7 @@ struct usb_gadget_strings {
+ 
+ struct usb_gadget_string_container {
+ 	struct list_head        list;
+-	u8                      *stash[0];
++	u8                      *stash[];
+ };
+ 
+ /* put descriptor for string with that id into buf (buflen >= 256) */
+diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+index 712b2a603645..e12105ed3834 100644
+--- a/include/linux/usb/hcd.h
++++ b/include/linux/usb/hcd.h
+@@ -228,7 +228,7 @@ struct usb_hcd {
+ 	/* The HC driver's private data is stored at the end of
+ 	 * this structure.
+ 	 */
+-	unsigned long hcd_priv[0]
++	unsigned long hcd_priv[]
+ 			__attribute__ ((aligned(sizeof(s64))));
+ };
+ 
+diff --git a/include/linux/usbdevice_fs.h b/include/linux/usbdevice_fs.h
+index 79aab0065ec8..14ea197ce37f 100644
+--- a/include/linux/usbdevice_fs.h
++++ b/include/linux/usbdevice_fs.h
+@@ -69,7 +69,7 @@ struct usbdevfs_urb32 {
+ 	compat_int_t error_count;
+ 	compat_uint_t signr;
+ 	compat_caddr_t usercontext; /* unused */
+-	struct usbdevfs_iso_packet_desc iso_frame_desc[0];
++	struct usbdevfs_iso_packet_desc iso_frame_desc[];
+ };
+ 
+ struct usbdevfs_ioctl32 {
+-- 
+2.25.0
 
--Mathias
