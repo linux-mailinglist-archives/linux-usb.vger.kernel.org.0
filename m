@@ -2,67 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8EA21660E5
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2020 16:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D09F216610B
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2020 16:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728289AbgBTP0w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Feb 2020 10:26:52 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:59436 "HELO
+        id S1728484AbgBTPeh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Feb 2020 10:34:37 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:59446 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728236AbgBTP0w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Feb 2020 10:26:52 -0500
-Received: (qmail 1541 invoked by uid 2102); 20 Feb 2020 10:26:51 -0500
+        with SMTP id S1728419AbgBTPeh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Feb 2020 10:34:37 -0500
+Received: (qmail 1597 invoked by uid 2102); 20 Feb 2020 10:34:36 -0500
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 20 Feb 2020 10:26:51 -0500
-Date:   Thu, 20 Feb 2020 10:26:51 -0500 (EST)
+  by localhost with SMTP; 20 Feb 2020 10:34:36 -0500
+Date:   Thu, 20 Feb 2020 10:34:36 -0500 (EST)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     Belisko Marek <marek.belisko@gmail.com>
-cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>
-Subject: Re: functionfs gadget with multiple endpoints
-In-Reply-To: <CAAfyv36n=--KiHmdyS7hOGzF8fVtq8y=uZx0cxARgp7fUta4ng@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.2002201024190.1453-100000@iolanthe.rowland.org>
+To:     Kees Cook <keescook@chromium.org>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: net2280: Distribute switch variables for
+ initialization
+In-Reply-To: <20200220062315.69253-1-keescook@chromium.org>
+Message-ID: <Pine.LNX.4.44L0.2002201028070.1453-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: TEXT/PLAIN; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 20 Feb 2020, Belisko Marek wrote:
+On Wed, 19 Feb 2020, Kees Cook wrote:
 
-> Hi,
+> Variables declared in a switch statement before any case statements
+> cannot be automatically initialized with compiler instrumentation (as
+> they are not part of any execution flow). With GCC's proposed automatic
+> stack variable initialization feature, this triggers a warning (and they
+> don't get initialized). Clang's automatic stack variable initialization
+> (via CONFIG_INIT_STACK_ALL=y) doesn't throw a warning, but it also
+> doesn't initialize such variables[1]. Note that these warnings (or silent
+> skipping) happen before the dead-store elimination optimization phase,
+> so even when the automatic initializations are later elided in favor of
+> direct initializations, the warnings remain.
 > 
-> I'm playing with functionfs and use configfs + functionfs + ffs-test
-> from kernel to test connection between my device and host. ffs-test
-> example provide 1 configuration with 1 interface and with 2 bulk
-> endpoints.
+> To avoid these problems, move such variables into the "case" where
+> they're used or lift them up into the main function body.
 > 
-> I'm writing application which will write/read data to usb device but
-> can be accessed from other multiple application. I'm planning to write
-> kind of gatekeeper which will serialize data to endpoint and notify
-> reader about received data.
+> drivers/usb/gadget/udc/net2280.c: In function ‘handle_stat0_irqs_superspeed’:
+> drivers/usb/gadget/udc/net2280.c:2871:22: warning: statement will never be executed [-Wswitch-unreachable]
+>  2871 |   struct net2280_ep *e;
+>       |                      ^
 > 
-> I was thinking about other possibility to extend gadget to provide
-> more endpoints (like 2). I was able to extend ffs-test and also I can
-> send/receive data (using libusb) over original endpoints but not over
-> new created one (I've run 2 instances of same application which
-> basically create transfers for 2 different endpoints) but when running
-> second application I got this error:
+> [1] https://bugs.llvm.org/show_bug.cgi?id=44916
 > 
-> libusb: error [submit_bulk_transfer] submiturb failed error -1 errno=16
-> libusb: error [submit_bulk_transfer] submiturb failed error -1 errno=16
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  drivers/usb/gadget/udc/net2280.c |   10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/net2280.c b/drivers/usb/gadget/udc/net2280.c
+> index 1fd1b9186e46..cc5869363298 100644
+> --- a/drivers/usb/gadget/udc/net2280.c
+> +++ b/drivers/usb/gadget/udc/net2280.c
+> @@ -2861,6 +2861,7 @@ static void ep_clear_seqnum(struct net2280_ep *ep)
+>  static void handle_stat0_irqs_superspeed(struct net2280 *dev,
+>  		struct net2280_ep *ep, struct usb_ctrlrequest r)
+>  {
+> +	struct net2280_ep *e;
+>  	int tmp = 0;
+>  
+>  #define	w_value		le16_to_cpu(r.wValue)
+> @@ -2868,14 +2869,13 @@ static void handle_stat0_irqs_superspeed(struct net2280 *dev,
+>  #define	w_length	le16_to_cpu(r.wLength)
+>  
+>  	switch (r.bRequest) {
+> -		struct net2280_ep *e;
+> -		u16 status;
+> -
+>  	case USB_REQ_SET_CONFIGURATION:
+>  		dev->addressed_state = !w_value;
+>  		goto usb3_delegate;
+>  
+> -	case USB_REQ_GET_STATUS:
+> +	case USB_REQ_GET_STATUS: {
+> +		u16 status;
+> +
+>  		switch (r.bRequestType) {
+>  		case (USB_DIR_IN | USB_TYPE_STANDARD | USB_RECIP_DEVICE):
+>  			status = dev->wakeup_enable ? 0x02 : 0x00;
+> @@ -2905,7 +2905,7 @@ static void handle_stat0_irqs_superspeed(struct net2280 *dev,
+>  			goto usb3_delegate;
+>  		}
+>  		break;
+> -
+> +	}
 
-Only one program at a time can claim an interface, and submitting an 
-URB to an endpoint automatically claims the endpoint's interface.
+This is an unusual use of nested blocks (i.e., a block immediately 
+following a "case" label, and it throws the indentation off -- there 
+will now be two nested closing braces at the same indentation level: 
+this one and the one preceding do_stall3:.
 
-> I'm not USB expert but multiple endpoint should be possible (maybe I
-> need to put them to other interface?-> tried that also but got same
-> error as above with errno=2). Thanks for any pointers and advice.
-
-errno=16 and errno=2 are different errors, not the same error.  
-Putting the endpoints in different interfaces should work; you probably
-have a bug somewhere in your code.
+Just define status at the function level, along with e, and don't 
+worry about it.
 
 Alan Stern
+
+>  	case USB_REQ_CLEAR_FEATURE:
+>  		switch (r.bRequestType) {
+>  		case (USB_DIR_OUT | USB_TYPE_STANDARD | USB_RECIP_DEVICE):
+> 
+> 
+> 
 
