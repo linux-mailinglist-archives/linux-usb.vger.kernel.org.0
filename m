@@ -2,36 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D6F5165A68
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2020 10:46:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E396F165A8D
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2020 10:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726948AbgBTJqv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Feb 2020 04:46:51 -0500
-Received: from mx2.suse.de ([195.135.220.15]:50332 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726637AbgBTJqv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 20 Feb 2020 04:46:51 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 3C0F0AE4E;
-        Thu, 20 Feb 2020 09:46:50 +0000 (UTC)
-Message-ID: <1582192003.6843.7.camel@suse.com>
-Subject: Re: usb cdc-acm TIOCSSERIAL may wrongly report EPERM
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Anthony Mallet <anthony.mallet@laas.fr>
-Cc:     linux-usb@vger.kernel.org
-Date:   Thu, 20 Feb 2020 10:46:43 +0100
-In-Reply-To: <24141.6739.313167.448875@beetle.laas.fr>
-References: <24140.5498.228141.264272@beetle.laas.fr>
-         <1582106185.9787.9.camel@suse.com>
-         <24141.6739.313167.448875@beetle.laas.fr>
-Content-Type: text/plain
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1727035AbgBTJyj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Feb 2020 04:54:39 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:34437 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726989AbgBTJyi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Feb 2020 04:54:38 -0500
+Received: by mail-pf1-f195.google.com with SMTP id i6so1681999pfc.1
+        for <linux-usb@vger.kernel.org>; Thu, 20 Feb 2020 01:54:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=xsUbPWAhYtsZRE8nHbpZ90/dMr+6ACJOvf/o3gzcGwM=;
+        b=KfNWW2kcqvTW/9/08hTLogIqobA7bvlKpQJoYHafvufqDMAEJNGTi16kdgjiBPR6K2
+         IBu4QoBeoD1zPK+mAFEFCyGoW7vmbfnnJRoF3S1jn953AwhHjpsb61lJNKtC5Cd4w3ly
+         LyXVFblZTrGK4xKB1acSQvvf0L0W5gtLLv17Nc8u08V8JuGNOrki7Hu4hIn889cOrocf
+         OI7ofI/Ba26rlHcp25+n0dtCNsZNHdepJpLTvIgblIc5oB7MwKt85sd2HkDRZ6GK9GOZ
+         1AD79o4ZcYs/IVxzGoSLwT+BZX2xrTfctgg/ehk24p/tiuqY5cUAh9nbhz8Oq+hbCjua
+         K5DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=xsUbPWAhYtsZRE8nHbpZ90/dMr+6ACJOvf/o3gzcGwM=;
+        b=du7GI1zESspJqM88T5T8Dm+8P3ETwrNIFcdH1IFyc+ih6NZMfr4pmV3ngCp9ckeqDK
+         ze6GB+OcitJ5T3YxRqcEr14+k4iTDZWxPhZapb0xBeQmKBFYH1Hym62PG71+aBYzI1+J
+         3UXWGOK3N1GlVSj3fjjpAVdaPp2DdTksD7txVLGEE5em5T6eLCxhCmOUVNN8qzjZIcvO
+         C6Ef/nBQ5i0Feeip8mZAgLi5Juk3vcgUZ3vlSZznaxFGgJH58PlFbAVyn4cXGd+LGAyF
+         Sxw66jOZ2MHhgXaaRDN6SqF+1fcPqbCRNG1P9UvFjw/geKaG6zkX8pK8WJubwpQJcmoI
+         nXDw==
+X-Gm-Message-State: APjAAAUjN6HN80TCVNlFjAEiGJAhSSwx31D6CCX4oSYnXCRiJDzzSE2j
+        Ba8fu333+3s9AlmGwO+MZNYIKH6b2F2Hc1vjvdE=
+X-Google-Smtp-Source: APXvYqySoCSJ82A8OuYPdZOTOSzwsgpIu/3GOYLR3uHjrSC8cVSsXETPeL8PxFF00bDBm0liDA2StN1CChwALXKR/tU=
+X-Received: by 2002:a62:5bc7:: with SMTP id p190mr30655380pfb.16.1582192477900;
+ Thu, 20 Feb 2020 01:54:37 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a17:90a:90f:0:0:0:0 with HTTP; Thu, 20 Feb 2020 01:54:37
+ -0800 (PST)
+Reply-To: cagesusan199@gmail.com
+From:   "Mrs. Susan S. Cage" <drgoodluckebelejonathan061@gmail.com>
+Date:   Thu, 20 Feb 2020 01:54:37 -0800
+Message-ID: <CALjo5=_qROtCiT4u8zj8ta2R612eUBzRGz6aZpKsD-fVmmvMXA@mail.gmail.com>
+Subject: Attention:Beneficiary
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+-- 
+Dearest Friend,
 
+Sorry for invading your privacy, my name is Susan S. Cage I am 81
+years, citizen of United States and presently in hospital undergoing
+chromatography for bronchogenic carcinomas (Lung cancer) which
+affected both Lungs. The doctors said I have few days to live because
+the cancer has now affected my brain.
+
+My late husband left Fifteen Million, Five Hundred British Pounds
+Sterling in my account, I want to transfer the money to you and I want
+you to use it as a donate for charitable and help the needy,
+motherless, less privileged and widows within your location.
+
+I need your assurance that you will use the fund for charity, once I a
+favorable reply from you, will inform my Bank through my lawyer to
+transfer the fund to you as my Next of Kin and Sole Beneficiary. Once
+I receive your response, I will inform my bank in writing through my
+lawyer.
+
+
+
+Thank you and God bless you.
+
+Mrs. Susan S. Cage
