@@ -2,109 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43115165476
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2020 02:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE14165749
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2020 07:06:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727291AbgBTBka (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Feb 2020 20:40:30 -0500
-Received: from kernel.crashing.org ([76.164.61.194]:32960 "EHLO
-        kernel.crashing.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726784AbgBTBka (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Feb 2020 20:40:30 -0500
-Received: from localhost (gate.crashing.org [63.228.1.57])
-        (authenticated bits=0)
-        by kernel.crashing.org (8.14.7/8.14.7) with ESMTP id 01K1dkWX028195
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 19 Feb 2020 19:39:49 -0600
-Message-ID: <55e77bcb37ec780094b8d226f89bd5557e30d913.camel@kernel.crashing.org>
-Subject: Re: [PATCH 2/2] usb: gadget: aspeed: fixup usb1 device descriptor
- at init time
-From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
-To:     rentao.bupt@gmail.com, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        taoren@fb.com
-Date:   Thu, 20 Feb 2020 12:39:45 +1100
-In-Reply-To: <20200218235600.6763-3-rentao.bupt@gmail.com>
-References: <20200218235600.6763-1-rentao.bupt@gmail.com>
-         <20200218235600.6763-3-rentao.bupt@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726149AbgBTGGW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Feb 2020 01:06:22 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:37189 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725988AbgBTGGW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Feb 2020 01:06:22 -0500
+Received: by mail-pl1-f196.google.com with SMTP id c23so1116543plz.4
+        for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2020 22:06:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=FwVgCncLbVot4SV9ouCUOJjc6U+mADi+9P9iseWgOPI=;
+        b=FIncW3q427jUrJc76Y5wnHtilxkDdRipTd9Z0W6sQzjmc+I7zTxLGoIyw5+dU7OBr6
+         xrVqqX8ncq4AKJ6CL6Qmo+cGKPU73ueOlos1tpypHNlQ9M/EvpgTzwpB9AaEnQI8ck2v
+         ms4ipHKtI5c1iTbQd9nEPS6BnFc4XgsIZlFyZd02dzlB9ONFilIOqF7K7KyGkZohLd8/
+         ewQy5rduuyxd99ICYAUd8gFtrG5NWZav4DTMTYEYj5gKuL5jCuiCM2t8XBn8CnbTCSvN
+         niBFIKoC72wYfwWxxcYjLuo+3jO1dQPeLMcexsDoxjb9MfY0Cgz96/d2bqLFVL/D9jPv
+         W/Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=FwVgCncLbVot4SV9ouCUOJjc6U+mADi+9P9iseWgOPI=;
+        b=MIH875LhBLcDT0ClnPqvKkRTQ3Dgk301fQ6Uaz2+UWLK6ukBVEcyPtdmve9L5n1DQj
+         69WkWmQpjbsw/TLFUMiDpkpWR9SM3KTOECnM30Qai9C6dBo+x7x31GOyksJTyNhyIrir
+         sbmv+EIds300u0NDW1D+Z9iIfFu4YopePqDs4w+8jnY8mN1DDNsF6pnArAklYgTarbzX
+         vUFVDYFq82VO30488aF5ZmDqLHkGhOeKF31cmx0mZGYJolw72Z9VOFWEnBD/oevGabkw
+         PnPIc8mpgsP3ngh0SbqNmUfQbC6tBqiLsZObfVsZKNzw5rUVU4rYqwskb5H7PNDaEcQk
+         bS/Q==
+X-Gm-Message-State: APjAAAXdsDDu3TQrc4AR4/g9c3WnfIucB5DBzTbLFzF8Uqtt7EqUxRCK
+        e2RMJr4bvchpdM4HGMdN6mPHiQ==
+X-Google-Smtp-Source: APXvYqwnon8ICd/yoj8ge5wkuOIkItWJbqBTJlG7DQJMrVrVL6k/BZq66xnHxJjvkgHYIn2qovfoQA==
+X-Received: by 2002:a17:902:d20f:: with SMTP id t15mr30941281ply.55.1582178781449;
+        Wed, 19 Feb 2020 22:06:21 -0800 (PST)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id v5sm1747887pgc.11.2020.02.19.22.06.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Feb 2020 22:06:20 -0800 (PST)
+From:   John Stultz <john.stultz@linaro.org>
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     Pratham Pratap <prathampratap@codeaurora.org>,
+        Felipe Balbi <balbi@kernel.org>, Yang Fei <fei.yang@intel.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        John Stultz <john.stultz@linaro.org>
+Subject: [PATCH v2] usb: dwc3: gadget: Update chain bit correctly when using sg list
+Date:   Thu, 20 Feb 2020 06:06:16 +0000
+Message-Id: <20200220060616.54389-1-john.stultz@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2020-02-18 at 15:56 -0800, rentao.bupt@gmail.com wrote:
-> From: Tao Ren <rentao.bupt@gmail.com>
-> 
-> This patch moves fixup-usb1-device-descriptor logic from get_descriptor
-> handler to "ast_vhub_fixup_dev_desc" function so the device descriptor
-> is only patched once (at vhub init time).
+From: Pratham Pratap <prathampratap@codeaurora.org>
 
-I don't like this either. We should make ast_vhub_dev_desc and patch a
-copy here too. I know today there's only one instance of the vhub in a
-given SoC but that might not always be the case.
+If scatter-gather operation is allowed, a large USB request is split
+into multiple TRBs. For preparing TRBs for sg list, driver iterates
+over the list and creates TRB for each sg and mark the chain bit to
+false for the last sg. The current IOMMU driver is clubbing the list
+of sgs which shares a page boundary into one and giving it to USB driver.
+With this the number of sgs mapped it not equal to the the number of sgs
+passed. Because of this USB driver is not marking the chain bit to false
+since it couldn't iterate to the last sg. This patch addresses this issue
+by marking the chain bit to false if it is the last mapped sg.
 
-> Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
-> ---
->  drivers/usb/gadget/udc/aspeed-vhub/hub.c | 20 +++++++++-----------
->  1 file changed, 9 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/hub.c b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-> index 4e3ef83283a6..b8bf54b12adc 100644
-> --- a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-> +++ b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-> @@ -76,13 +76,6 @@ static struct usb_device_descriptor ast_vhub_dev_desc = {
->  	.bNumConfigurations	= 1,
->  };
->  
-> -/* Patches to the above when forcing USB1 mode */
-> -static void ast_vhub_patch_dev_desc_usb1(struct usb_device_descriptor *desc)
-> -{
-> -	desc->bcdUSB = cpu_to_le16(0x0100);
-> -	desc->bDeviceProtocol = 0;
-> -}
-> -
->  /*
->   * Configuration descriptor: same comments as above
->   * regarding handling USB1 mode.
-> @@ -316,10 +309,6 @@ static int ast_vhub_rep_desc(struct ast_vhub_ep *ep,
->  	if (len > dsize)
->  		len = dsize;
->  
-> -	/* Patch it if forcing USB1 */
-> -	if (desc_type == USB_DT_DEVICE && ep->vhub->force_usb1)
-> -		ast_vhub_patch_dev_desc_usb1(ep->buf);
-> -
->  	/* Shoot it from the EP buffer */
->  	return ast_vhub_reply(ep, NULL, len);
->  }
-> @@ -878,6 +867,15 @@ static void ast_vhub_fixup_dev_desc(struct ast_vhub *vhub)
->  		if (of_str[id])
->  			ast_vhub_str_array[i].s = of_str[id];
->  	}
-> +
-> +	/*
-> +	 * Update USB Release Number and Protocol code if vhub is running
-> +	 * at USB 1.x speed.
-> +	 */
-> +	if (vhub->force_usb1) {
-> +		ast_vhub_dev_desc.bcdUSB = cpu_to_le16(0x0100);
-> +		ast_vhub_dev_desc.bDeviceProtocol = 0;
-> +	}
->  }
->  
->  void ast_vhub_init_hub(struct ast_vhub *vhub)
+At a practical level, this patch resolves USB transfer stalls
+seen with adb on dwc3 based db845c, pixel3 and other qcom
+hardware after functionfs gadget added scatter-gather support
+around v4.20.
+
+Credit also to Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+who implemented a very similar fix to this issue.
+
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Yang Fei <fei.yang@intel.com>
+Cc: Thinh Nguyen <thinhn@synopsys.com>
+Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
+Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc: Jack Pham <jackp@codeaurora.org>
+Cc: Todd Kjos <tkjos@google.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linux USB List <linux-usb@vger.kernel.org>
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Pratham Pratap <prathampratap@codeaurora.org>
+[jstultz: Slight tweak to remove sg_is_last() usage, reworked
+          commit message, minor comment tweak]
+Signed-off-by: John Stultz <john.stultz@linaro.org>
+---
+v2:
+* Fix typeos and unnecssary parens as suggested by Jack
+---
+ drivers/usb/dwc3/gadget.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 1b8014ab0b25..721d897fef94 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1071,7 +1071,14 @@ static void dwc3_prepare_one_trb_sg(struct dwc3_ep *dep,
+ 		unsigned int rem = length % maxp;
+ 		unsigned chain = true;
+ 
+-		if (sg_is_last(s))
++		/*
++		 * IOMMU driver is coalescing the list of sgs which shares a
++		 * page boundary into one and giving it to USB driver. With
++		 * this the number of sgs mapped is not equal to the number of
++		 * sgs passed. So mark the chain bit to false if it isthe last
++		 * mapped sg.
++		 */
++		if (i == remaining - 1)
+ 			chain = false;
+ 
+ 		if (rem && usb_endpoint_dir_out(dep->endpoint.desc) && !chain) {
+-- 
+2.17.1
 
