@@ -2,103 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04662165383
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2020 01:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9AA9165445
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2020 02:31:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726677AbgBTAZV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Feb 2020 19:25:21 -0500
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:54917 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726613AbgBTAZV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Feb 2020 19:25:21 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id C38167403;
-        Wed, 19 Feb 2020 19:25:19 -0500 (EST)
-Received: from imap2 ([10.202.2.52])
-  by compute4.internal (MEProxy); Wed, 19 Feb 2020 19:25:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=
-        mime-version:message-id:in-reply-to:references:date:from:to
-        :subject:content-type; s=fm2; bh=ETRepjY32Q6DdRrxXYMas4ZgO/c7BVj
-        rXiFe89IwJKw=; b=p9J2m3z/kladxjeMWX8wh1ouyA0ceWph0+WnH+NhjtnfEeI
-        NcfLYlB+3Gd5scBDnF4pNkG70Hvk0Aq2Xbsja9lSdgclRNH3Q1IXE3zQ/HAPn13E
-        Jtdbv9q8Eyd6sduZ5Nikr1Qj4rFhaICRq2IXfKwMvnRHUSRENaBY7H4YHQMrXO3p
-        WSgUiYAGK0UY4FUPvtH5TtyHEtlBTfhWGlHg5bEQTKiBqlkQl78Qbs12iS4skVZ4
-        f4iHJJI4HyiDOV8Vp77CUlQq+bCW82O9sCuAbQMpAQXavLDvIcRuAB8MFXc+OmHk
-        XqTBeysh98nLodGdr9X3f05Y5CGU7rvmBQH4Lcw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=ETRepj
-        Y32Q6DdRrxXYMas4ZgO/c7BVjrXiFe89IwJKw=; b=ytqVAfavlMnvH1MsgcwdhE
-        t0Snl9wKxDCotuyyHSgv6cn6qyA8z7q8M5NgMyfJU+C8N3GNfAAfFN+971V3hgfD
-        MGJ0yghLia39Zn9JiHU2fFlowACvcKcTDhRqYEe7D57y44SKpDgIUhN1bTa99tMO
-        58UM8EPpyyEje+4dLzBdUucDfr8pxFRy5kvwnP0DKVoCsGRZBbgvdIVfoue0YO0C
-        /xU8uUma99ch+E2P20pf9HYSwOkWkJPX0mXKrHuu0a/CLXoeaqX/rSjWDEd8tYXg
-        FdXXJtOfPrZ0VaUV16bmnJwd2u9wfjC7fupRHd7pXPXyvlrBo8G6CbRg+Oxj0msQ
-        ==
-X-ME-Sender: <xms:7dFNXvGKlglqhK7rOkbCc3Qxdwndl-SFwTFYOFU2x3w6aBkRtUaZtQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrkedugddvfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehnughr
-    vgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucevlhhush
-    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnhgurhgvfiesrghj
-    rdhiugdrrghu
-X-ME-Proxy: <xmx:7dFNXoicFFnJWcyHIGoMYTJmX6Ycak3ABe0OYetg8OOixGZtbgakVg>
-    <xmx:7dFNXkCMZyrTWAx8td5AD_q6nrgrlKDtqdkKBNAdMCTo51SV3DUnpg>
-    <xmx:7dFNXrs5HL2rX_aOsn3wsELb9FJyYFbrE3HFPUhQNxkr1yl_4frShQ>
-    <xmx:79FNXuMwKCHMcz5a5RN-_EenwnMdLv21wKCP8EQ5HlRq4NmtnVGOWA>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id E3BD2E00B2; Wed, 19 Feb 2020 19:25:16 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.1.7-802-g7a41c81-fmstable-20200203v1
-Mime-Version: 1.0
-Message-Id: <5d295199-d0d7-4d58-be29-4621738d7f28@www.fastmail.com>
-In-Reply-To: <20200218031315.562-1-rentao.bupt@gmail.com>
-References: <20200218031315.562-1-rentao.bupt@gmail.com>
-Date:   Thu, 20 Feb 2020 10:55:10 +1030
-From:   "Andrew Jeffery" <andrew@aj.id.au>
-To:     "Tao Ren" <rentao.bupt@gmail.com>,
-        "Felipe Balbi" <balbi@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Joel Stanley" <joel@jms.id.au>,
-        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
-        "Chunfeng Yun" <chunfeng.yun@mediatek.com>,
-        "Colin King" <colin.king@canonical.com>,
-        "Stephen Boyd" <swboyd@chromium.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
+        id S1727677AbgBTBbQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Feb 2020 20:31:16 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:39040 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726962AbgBTBbP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Feb 2020 20:31:15 -0500
+Received: by mail-pj1-f66.google.com with SMTP id e9so170006pjr.4;
+        Wed, 19 Feb 2020 17:31:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=szYg2AQsd4vPQUXlNOTQeaWlhRWbCJD6D1ASNIe6NPQ=;
+        b=YnmfKpLlHDFp/4r9dbH9mYpcYtDzQkvfjIBwgZOS2FTAVbZEvFLZJV5cYEjVMHryDD
+         ZinziWcgxAtkfqZWej/jlk7ErptUcF9zL/uzSUXVV0X8Y/ituH3Puhd62Y94Aby9OSkG
+         3UbWxTFpyekwXSZdOygXreubDyUmc65byNxSAW4/uIxvOjBoGj1tmYLH0V8Xds/Gg/TB
+         wiCCGBqvOvG9wBmmK/W8WPoO9RMwtjz/i6JLUr2rGsuV4PSe0tqMxW13nlDTwF5PGwPY
+         melwQyeC74boGcoqQU9vlVMFYWCOnAYj9pFLH6QPl1xq/lpWe0zHUKeugY3TkPMfI2ps
+         bZng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=szYg2AQsd4vPQUXlNOTQeaWlhRWbCJD6D1ASNIe6NPQ=;
+        b=e1AKUOUZx1wX7n0+5hRqARI9gKqpzdiJYqLZJxkyf6ssdXZOpvJVdzPLwxvo38p4Yr
+         Om0ZuVBlKaRi+z3DSUjgr2f5bzXbqkJzONEWIGxJHngrCWv1ofZrkGG86GPQYAOBTmyn
+         c0Mp9aI28rf8NveDkN7xB61Irjxg/EPdD2iKkpAltdWSXfJnMlLH9PqyNIGXCB70bWnK
+         sw7LJ0HUIFwopgfft53j8yfu6Qo7tukcQGubhe3W5yko+d7QQC8Ci1JnPu0Y0RI5Ix+R
+         ICWNUDoy8ZUkUFGILYQ2bvEzTRb1cRNChp1nXUKYeeVhFXTKXw6506x8QZRwaUyw6pxA
+         GSNw==
+X-Gm-Message-State: APjAAAUDBcEFPQgFi2TNL5aARp7qYr3d2184atYrgvRqGW6Jaq0cL6vB
+        VhZeRRD9Bide4+tK6dCInLI=
+X-Google-Smtp-Source: APXvYqyzmgvxyBGFHEKtfmbVHh4nsUmpCnOiJOLklUkLLXD00WNKvL2PU2ls8e+TkkBLFHlsbUTTpw==
+X-Received: by 2002:a17:90a:b318:: with SMTP id d24mr687568pjr.142.1582162274835;
+        Wed, 19 Feb 2020 17:31:14 -0800 (PST)
+Received: from taoren-ubuntuvm (c-24-4-25-55.hsd1.ca.comcast.net. [24.4.25.55])
+        by smtp.gmail.com with ESMTPSA id u13sm957679pjn.29.2020.02.19.17.31.11
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 19 Feb 2020 17:31:14 -0800 (PST)
+Date:   Wed, 19 Feb 2020 17:31:04 -0800
+From:   Tao Ren <rentao.bupt@gmail.com>
+To:     Andrew Jeffery <andrew@aj.id.au>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Colin King <colin.king@canonical.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        "Tao Ren" <taoren@fb.com>
+        Tao Ren <taoren@fb.com>
 Subject: Re: [PATCH v3 0/5] aspeed-g6: enable usb support
-Content-Type: text/plain
+Message-ID: <20200220013103.GA4830@taoren-ubuntuvm>
+References: <20200218031315.562-1-rentao.bupt@gmail.com>
+ <5d295199-d0d7-4d58-be29-4621738d7f28@www.fastmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5d295199-d0d7-4d58-be29-4621738d7f28@www.fastmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On Tue, 18 Feb 2020, at 13:43, rentao.bupt@gmail.com wrote:
-> From: Tao Ren <rentao.bupt@gmail.com>
+On Thu, Feb 20, 2020 at 10:55:10AM +1030, Andrew Jeffery wrote:
 > 
-> The patch series aims at enabling USB Host and Gadget support on AST2600
-> platforms.
 > 
-> Patch #1 replaces hardcoded vhub port/endpoint number with device tree
-> properties, so that it's more convenient to add support for ast2600-vhub
-> which provides more downstream ports and endpoints.
-
-Ah, something I should have mentioned on the previous series is you'll need
-to update the binding documentation with the new properties.
-
+> On Tue, 18 Feb 2020, at 13:43, rentao.bupt@gmail.com wrote:
+> > From: Tao Ren <rentao.bupt@gmail.com>
+> > 
+> > The patch series aims at enabling USB Host and Gadget support on AST2600
+> > platforms.
+> > 
+> > Patch #1 replaces hardcoded vhub port/endpoint number with device tree
+> > properties, so that it's more convenient to add support for ast2600-vhub
+> > which provides more downstream ports and endpoints.
 > 
-> Patch #2 enables ast2600 support in aspeed-vhub usb gadget driver.
+> Ah, something I should have mentioned on the previous series is you'll need
+> to update the binding documentation with the new properties.
 
-Also need to add the 2600 support to the dt binding document.
+Looks like we don't have dt binding documentation for this driver. I will add
+the document in my 2nd patch set "allow to customize vhub device IDs/strings"
+so all the new dt properties are included in the doc.
 
-Looks good to me otherwise.
+> > 
+> > Patch #2 enables ast2600 support in aspeed-vhub usb gadget driver.
+> 
+> Also need to add the 2600 support to the dt binding document.
+> 
+> Looks good to me otherwise.
+> 
+> Andrew
 
-Andrew
+Thanks again for the quick review, Andrew.
+
+
+Cheers,
+
+Tao
