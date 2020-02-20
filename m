@@ -2,128 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CE14165749
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2020 07:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 753F716578B
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2020 07:24:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726149AbgBTGGW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Feb 2020 01:06:22 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:37189 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725988AbgBTGGW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Feb 2020 01:06:22 -0500
-Received: by mail-pl1-f196.google.com with SMTP id c23so1116543plz.4
-        for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2020 22:06:22 -0800 (PST)
+        id S1727553AbgBTGXU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Feb 2020 01:23:20 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:35919 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727448AbgBTGXU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Feb 2020 01:23:20 -0500
+Received: by mail-pf1-f196.google.com with SMTP id 185so1396203pfv.3
+        for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2020 22:23:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=FwVgCncLbVot4SV9ouCUOJjc6U+mADi+9P9iseWgOPI=;
-        b=FIncW3q427jUrJc76Y5wnHtilxkDdRipTd9Z0W6sQzjmc+I7zTxLGoIyw5+dU7OBr6
-         xrVqqX8ncq4AKJ6CL6Qmo+cGKPU73ueOlos1tpypHNlQ9M/EvpgTzwpB9AaEnQI8ck2v
-         ms4ipHKtI5c1iTbQd9nEPS6BnFc4XgsIZlFyZd02dzlB9ONFilIOqF7K7KyGkZohLd8/
-         ewQy5rduuyxd99ICYAUd8gFtrG5NWZav4DTMTYEYj5gKuL5jCuiCM2t8XBn8CnbTCSvN
-         niBFIKoC72wYfwWxxcYjLuo+3jO1dQPeLMcexsDoxjb9MfY0Cgz96/d2bqLFVL/D9jPv
-         W/Lg==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r7W1IeYO5luNyCIfOI+KTpss0yVfj4B4P/bY+7anUj4=;
+        b=GtMY8VRryc4tgEAZGFnHgZwifnQLW90Ls2V3FbDv7DGB/HQqIksqO+WTqzfYGx9yL/
+         v0WMmt16AUT4OP+0CDmzqdVSg4knv8RD+RRV7JrC9tnF63W+hQyCQSJJLTvGjBPKR6AS
+         dgWP+eUZvmip3PM89KktbrcAIjM7V+++IHS2I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=FwVgCncLbVot4SV9ouCUOJjc6U+mADi+9P9iseWgOPI=;
-        b=MIH875LhBLcDT0ClnPqvKkRTQ3Dgk301fQ6Uaz2+UWLK6ukBVEcyPtdmve9L5n1DQj
-         69WkWmQpjbsw/TLFUMiDpkpWR9SM3KTOECnM30Qai9C6dBo+x7x31GOyksJTyNhyIrir
-         sbmv+EIds300u0NDW1D+Z9iIfFu4YopePqDs4w+8jnY8mN1DDNsF6pnArAklYgTarbzX
-         vUFVDYFq82VO30488aF5ZmDqLHkGhOeKF31cmx0mZGYJolw72Z9VOFWEnBD/oevGabkw
-         PnPIc8mpgsP3ngh0SbqNmUfQbC6tBqiLsZObfVsZKNzw5rUVU4rYqwskb5H7PNDaEcQk
-         bS/Q==
-X-Gm-Message-State: APjAAAXdsDDu3TQrc4AR4/g9c3WnfIucB5DBzTbLFzF8Uqtt7EqUxRCK
-        e2RMJr4bvchpdM4HGMdN6mPHiQ==
-X-Google-Smtp-Source: APXvYqwnon8ICd/yoj8ge5wkuOIkItWJbqBTJlG7DQJMrVrVL6k/BZq66xnHxJjvkgHYIn2qovfoQA==
-X-Received: by 2002:a17:902:d20f:: with SMTP id t15mr30941281ply.55.1582178781449;
-        Wed, 19 Feb 2020 22:06:21 -0800 (PST)
-Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id v5sm1747887pgc.11.2020.02.19.22.06.19
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=r7W1IeYO5luNyCIfOI+KTpss0yVfj4B4P/bY+7anUj4=;
+        b=Wyz8MEyU6XQQMakixvi+5z3M1E/RwKQGkb37M1omDYzpYoF4Na4c/W/PtoHFpm5QuP
+         0a48jkO10CymjfkpxtzGtS82ECx+AqmYzR46j4VOj1ENh8rGtNnFzHx/GDrOLMThG6yp
+         c+KAh6SnpoeSQlQ+yMc7W4HpRAx7K7P7OasIjNNPFg7cmsW872mZiFq1JhF7vc/7e3X0
+         O4+VsA4EwLMFV54yUdboRiVNdWmFvPqXrnXvHqBacVBCCfjAA7wB4OBgcgCm7ZztYddl
+         qkflOaJ6cyuWFkqzMTnaqXLUXUbHcpwqG9906nMsqSEmoVxqOUSoszpT1id7SSa9UWXe
+         ENxA==
+X-Gm-Message-State: APjAAAVOBpyzGoDKwq4yCkgqo6/lvH88XIIxnbQvq5GOB2gT785UYRkh
+        IohOspuEYBaybIxDFMfhzVGxxXR4uUY=
+X-Google-Smtp-Source: APXvYqzyLQqVUdbOMVTIixpgCSWP3Hc4yP/kWSP5g3dy+5aQAi9rqzpohQ6OfqeemMzgq/kJqNBUFg==
+X-Received: by 2002:a62:7696:: with SMTP id r144mr30710610pfc.177.1582179799553;
+        Wed, 19 Feb 2020 22:23:19 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x6sm1701090pfi.83.2020.02.19.22.23.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2020 22:06:20 -0800 (PST)
-From:   John Stultz <john.stultz@linaro.org>
-To:     lkml <linux-kernel@vger.kernel.org>
-Cc:     Pratham Pratap <prathampratap@codeaurora.org>,
-        Felipe Balbi <balbi@kernel.org>, Yang Fei <fei.yang@intel.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
-        Tejas Joglekar <tejas.joglekar@synopsys.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        John Stultz <john.stultz@linaro.org>
-Subject: [PATCH v2] usb: dwc3: gadget: Update chain bit correctly when using sg list
-Date:   Thu, 20 Feb 2020 06:06:16 +0000
-Message-Id: <20200220060616.54389-1-john.stultz@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        Wed, 19 Feb 2020 22:23:18 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Kees Cook <keescook@chromium.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: net2280: Distribute switch variables for initialization
+Date:   Wed, 19 Feb 2020 22:23:15 -0800
+Message-Id: <20200220062315.69253-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Pratham Pratap <prathampratap@codeaurora.org>
+Variables declared in a switch statement before any case statements
+cannot be automatically initialized with compiler instrumentation (as
+they are not part of any execution flow). With GCC's proposed automatic
+stack variable initialization feature, this triggers a warning (and they
+don't get initialized). Clang's automatic stack variable initialization
+(via CONFIG_INIT_STACK_ALL=y) doesn't throw a warning, but it also
+doesn't initialize such variables[1]. Note that these warnings (or silent
+skipping) happen before the dead-store elimination optimization phase,
+so even when the automatic initializations are later elided in favor of
+direct initializations, the warnings remain.
 
-If scatter-gather operation is allowed, a large USB request is split
-into multiple TRBs. For preparing TRBs for sg list, driver iterates
-over the list and creates TRB for each sg and mark the chain bit to
-false for the last sg. The current IOMMU driver is clubbing the list
-of sgs which shares a page boundary into one and giving it to USB driver.
-With this the number of sgs mapped it not equal to the the number of sgs
-passed. Because of this USB driver is not marking the chain bit to false
-since it couldn't iterate to the last sg. This patch addresses this issue
-by marking the chain bit to false if it is the last mapped sg.
+To avoid these problems, move such variables into the "case" where
+they're used or lift them up into the main function body.
 
-At a practical level, this patch resolves USB transfer stalls
-seen with adb on dwc3 based db845c, pixel3 and other qcom
-hardware after functionfs gadget added scatter-gather support
-around v4.20.
+drivers/usb/gadget/udc/net2280.c: In function ‘handle_stat0_irqs_superspeed’:
+drivers/usb/gadget/udc/net2280.c:2871:22: warning: statement will never be executed [-Wswitch-unreachable]
+ 2871 |   struct net2280_ep *e;
+      |                      ^
 
-Credit also to Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
-who implemented a very similar fix to this issue.
+[1] https://bugs.llvm.org/show_bug.cgi?id=44916
 
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Yang Fei <fei.yang@intel.com>
-Cc: Thinh Nguyen <thinhn@synopsys.com>
-Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
-Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc: Jack Pham <jackp@codeaurora.org>
-Cc: Todd Kjos <tkjos@google.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>
-Cc: Linux USB List <linux-usb@vger.kernel.org>
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Pratham Pratap <prathampratap@codeaurora.org>
-[jstultz: Slight tweak to remove sg_is_last() usage, reworked
-          commit message, minor comment tweak]
-Signed-off-by: John Stultz <john.stultz@linaro.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
-v2:
-* Fix typeos and unnecssary parens as suggested by Jack
----
- drivers/usb/dwc3/gadget.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/usb/gadget/udc/net2280.c |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 1b8014ab0b25..721d897fef94 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1071,7 +1071,14 @@ static void dwc3_prepare_one_trb_sg(struct dwc3_ep *dep,
- 		unsigned int rem = length % maxp;
- 		unsigned chain = true;
+diff --git a/drivers/usb/gadget/udc/net2280.c b/drivers/usb/gadget/udc/net2280.c
+index 1fd1b9186e46..cc5869363298 100644
+--- a/drivers/usb/gadget/udc/net2280.c
++++ b/drivers/usb/gadget/udc/net2280.c
+@@ -2861,6 +2861,7 @@ static void ep_clear_seqnum(struct net2280_ep *ep)
+ static void handle_stat0_irqs_superspeed(struct net2280 *dev,
+ 		struct net2280_ep *ep, struct usb_ctrlrequest r)
+ {
++	struct net2280_ep *e;
+ 	int tmp = 0;
  
--		if (sg_is_last(s))
-+		/*
-+		 * IOMMU driver is coalescing the list of sgs which shares a
-+		 * page boundary into one and giving it to USB driver. With
-+		 * this the number of sgs mapped is not equal to the number of
-+		 * sgs passed. So mark the chain bit to false if it isthe last
-+		 * mapped sg.
-+		 */
-+		if (i == remaining - 1)
- 			chain = false;
+ #define	w_value		le16_to_cpu(r.wValue)
+@@ -2868,14 +2869,13 @@ static void handle_stat0_irqs_superspeed(struct net2280 *dev,
+ #define	w_length	le16_to_cpu(r.wLength)
  
- 		if (rem && usb_endpoint_dir_out(dep->endpoint.desc) && !chain) {
--- 
-2.17.1
+ 	switch (r.bRequest) {
+-		struct net2280_ep *e;
+-		u16 status;
+-
+ 	case USB_REQ_SET_CONFIGURATION:
+ 		dev->addressed_state = !w_value;
+ 		goto usb3_delegate;
+ 
+-	case USB_REQ_GET_STATUS:
++	case USB_REQ_GET_STATUS: {
++		u16 status;
++
+ 		switch (r.bRequestType) {
+ 		case (USB_DIR_IN | USB_TYPE_STANDARD | USB_RECIP_DEVICE):
+ 			status = dev->wakeup_enable ? 0x02 : 0x00;
+@@ -2905,7 +2905,7 @@ static void handle_stat0_irqs_superspeed(struct net2280 *dev,
+ 			goto usb3_delegate;
+ 		}
+ 		break;
+-
++	}
+ 	case USB_REQ_CLEAR_FEATURE:
+ 		switch (r.bRequestType) {
+ 		case (USB_DIR_OUT | USB_TYPE_STANDARD | USB_RECIP_DEVICE):
 
