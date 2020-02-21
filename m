@@ -2,155 +2,231 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C8F16700E
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2020 08:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7701A1675A3
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2020 09:31:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727145AbgBUHJq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Feb 2020 02:09:46 -0500
-Received: from gateway20.websitewelcome.com ([192.185.52.45]:44459 "EHLO
-        gateway20.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726045AbgBUHJq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Feb 2020 02:09:46 -0500
-X-Greylist: delayed 1250 seconds by postgrey-1.27 at vger.kernel.org; Fri, 21 Feb 2020 02:09:45 EST
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway20.websitewelcome.com (Postfix) with ESMTP id 980BE400C5271
-        for <linux-usb@vger.kernel.org>; Thu, 20 Feb 2020 23:34:51 -0600 (CST)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id 527KjrBw4Sl8q527KjXMFL; Fri, 21 Feb 2020 00:48:54 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Nad0fubeYkDvfrUVkzt1lZoj+jY7cL/xLisjWoKQNWw=; b=GTrF9K002o9tKkf0NZBA3CDTkJ
-        rAMQScJrLM2rmrUJE2EWX2qte0DuRclflzkJpWTpTfNRdXLGRRwoOdjAa+EH4NsBBDAxQAacMN6bf
-        22xaPdY9BzkSt8BbEOcIvd/eqLgA9KRKOZor8yqPLBmFoptATnp7isDyGlAspbR+co7WRnr9aW9ks
-        3YFCXbg9bfrCwogYCV6TDAT8F2a49/r8CBop8sbrroNTS857/yKCdHoEa626Ju0v1iLa7arVRMSGt
-        Z5rjZFy4Dz4LUDNKyCkwu2t3OmVR21k8D9G/ErgLAli+DnkvA6XxMlTNlsfTRN6ZxZVPjqmbPyIOn
-        7JqcpwtA==;
-Received: from [200.68.141.13] (port=13612 helo=[192.168.43.131])
-        by gator4166.hostgator.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1j527K-003Olm-9P; Fri, 21 Feb 2020 00:48:54 -0600
-Subject: Re: linux-next: build warning in Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-References: <20200221143930.620f381e@canb.auug.org.au>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Autocrypt: addr=gustavo@embeddedor.com; keydata=
- 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
- VtSixD1uOgytAP7RWS474w==
-Message-ID: <786a4b98-207e-13e1-43fa-1c1b5f71346d@embeddedor.com>
-Date:   Fri, 21 Feb 2020 00:51:37 -0600
+        id S2387512AbgBUIQW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Feb 2020 03:16:22 -0500
+Received: from comms.puri.sm ([159.203.221.185]:43604 "EHLO comms.puri.sm"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387509AbgBUIQV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 21 Feb 2020 03:16:21 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 5F6EBE0FB3;
+        Fri, 21 Feb 2020 00:16:20 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id cLVqmxlx4Xi3; Fri, 21 Feb 2020 00:16:19 -0800 (PST)
+Subject: Re: [PATCH] usb: host: xhci-plat: add XHCI_MISSING_CAS quirk
+To:     Jun Li <jun.li@nxp.com>, Peter Chen <peter.chen@nxp.com>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Anson Huang <anson.huang@nxp.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+References: <20200219173727.9882-1-martin.kepplinger@puri.sm>
+ <VE1PR04MB65289878A84E662D6CCAF13089130@VE1PR04MB6528.eurprd04.prod.outlook.com>
+ <ddbb9543-f632-b1da-cbb8-d390fcd3b4f8@puri.sm>
+ <VE1PR04MB65282F4FFCFAF3D1F0C9825B89130@VE1PR04MB6528.eurprd04.prod.outlook.com>
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+Autocrypt: addr=martin.kepplinger@puri.sm; keydata=
+ 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
+ ekMtxgNYb/8oDry09UFHbGHLsWn6oBo=
+Message-ID: <f622c011-76c2-5745-d82b-c9373413af4b@puri.sm>
+Date:   Fri, 21 Feb 2020 09:16:10 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <20200221143930.620f381e@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
+ Thunderbird/68.5.0
+In-Reply-To: <VE1PR04MB65282F4FFCFAF3D1F0C9825B89130@VE1PR04MB6528.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=gbk
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 200.68.141.13
-X-Source-L: No
-X-Exim-ID: 1j527K-003Olm-9P
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.43.131]) [200.68.141.13]:13612
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 5
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 2/20/20 21:39, Stephen Rothwell wrote:
-> Hi all,
+On 20.02.20 16:37, Jun Li wrote:
 > 
-> For some time I have been getting the following warning from the powerpc
-> allyesconfig build:
 > 
-> drivers/usb/host/fhci-hcd.c: In function 'fhci_urb_enqueue':
-> drivers/usb/host/fhci-hcd.c:398:8: warning: this statement may fall through [-Wimplicit-fallthrough=]
->   398 |   size = 2;
->       |   ~~~~~^~~
-> drivers/usb/host/fhci-hcd.c:399:2: note: here
->   399 |  case PIPE_BULK:
->       |  ^~~~
+>> -----Original Message-----
+>> From: Martin Kepplinger <martin.kepplinger@puri.sm>
+>> Sent: 2020年2月20日 19:44
+>> To: Jun Li <jun.li@nxp.com>; Peter Chen <peter.chen@nxp.com>;
+>> mathias.nyman@intel.com
+>> Cc: linux-usb@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>; Anson Huang
+>> <anson.huang@nxp.com>; shawnguo@kernel.org; kernel@pengutronix.de
+>> Subject: Re: [PATCH] usb: host: xhci-plat: add XHCI_MISSING_CAS quirk
+>>
+>> On 20.02.20 07:31, Jun Li wrote:
+>>>> -----Original Message-----
+>>>> From: Martin Kepplinger <martin.kepplinger@puri.sm>
+>>>> Sent: 2020年2月20日 1:37
+>>>> To: Jun Li <jun.li@nxp.com>; Peter Chen <peter.chen@nxp.com>;
+>>>> mathias.nyman@intel.com
+>>>> Cc: linux-usb@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>;
+>>>> Anson Huang <anson.huang@nxp.com>; shawnguo@kernel.org;
+>>>> kernel@pengutronix.de
+>>>> Subject: [PATCH] usb: host: xhci-plat: add XHCI_MISSING_CAS quirk
+>>>>
+>>>> From: Li Jun <jun.li@nxp.com>
+>>>>
+>>>> i.MX8MQ USB3 host needs XHCI_MISSING_CAS quirk to warm reset the port
+>>>> to enum the
+>>>> USB3 device plugged in while system sleep, as the port state is stuck
+>>>> in polling mode after resume.
+>>>>
+>>>> Signed-off-by: Li Jun <jun.li@nxp.com>
+>>>> Acked-by: Peter Chen <peter.chen@nxp.com>
+>>>> ---
+>>>>
+>>>> Hi,
+>>>>
+>>>> Because resume from S3 suspend is broken for me on imx8mq, I stumbled
+>>>> upon this patch in NXP's linux tree. (Please note that I'm not the
+>>>> author and I've not yet put my SoB tag under it). This is just a
+>>>> question:
+>>>>
+>>>> This patch (and the docs) clearly is missing in mainline Linux
+>>>> because the imx8mq devicetree description includes it (which does nothing now).
+>>>>
+>>>> I've tested this and this particular addition doesn't fix my problem:
+>>>>
+>>>> [   84.257538] imx8mq-usb-phy 381f0040.usb-phy: bus resume
+>>>> [   84.263195] imx8mq-usb-phy 382f0040.usb-phy: bus resume
+>>>> [   84.268898] dwc3 38100000.usb: driver resume
+>>>>
+>>>> during resume from S3 suspend, here it still hangs.
+>>>
+>>> Is your problem a system hang? If yes, this may another issue, where
+>>> the hang happens? dwc3_resume_common()?
+>>
+>> exactly! I followed to the point it hangs once again and it's
+>>
+>> dwc3_core_init() called from dwc3_resume_common()'s "OTG" case.
+>>
+>> Specifically, dwc3_writel() is what I don't get past:
+>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Felixir.bootl
+>> in.com%2Flinux%2Fv5.6-rc2%2Fsource%2Fdrivers%2Fusb%2Fdwc3%2Fcore.c%23L934&amp;
+>> data=02%7C01%7Cjun.li%40nxp.com%7C130cd29875c44792d1a908d7b5fa2516%7C686ea1d3b
+>> c2b4c6fa92cd99c5c301635%7C0%7C0%7C637177958284696041&amp;sdata=mqh9MH6ESLVxKvW
+>> vvMq4vwt2dcTuvNopgGVdXEbbMwk%3D&amp;reserved=0
 > 
-> Introduced by commit
+> So while dwc3 resume, the first register access cause hang.
+> Looks like some required clocks or power domain of USB0 is not on.
+
+which would these be in imx8mq.dtsi ?
+
+>  
+>>
+>> do you have an idea why this writel() hangs?
 > 
->   236dd4d18f29 ("USB: Driver for Freescale QUICC Engine USB Host Controller")
+> I never encounter such hang on my iMX8MQ EVK board
+> using upstream kernel(5.x) + changes of enable USB0 port,
+> but I didn't try latest 5.6 kernel.
+> I will enable the first port based on Linux-next to give a
+> try on my NXP iMX8MQ EVK board, do you think I can reproduce
+> your problem?
 > 
-> from 2009, but exposed only recently.
+> Li Jun
+
+Hi Li, thanks for taking a look. I would think that you can reproduce
+that, yes. I'm running v5.6-rc2 with no changes to usb or any relevant
+changes to clk (I think), but in case you're curious, this is the whole
+tree:
+https://source.puri.sm/Librem5/linux-next/tree/imx8-linux-next-librem5
+
+What "changes of enable USB0 port" do you mean?
+
+thanks,
+
+                       martin
+
+>>
+>>>
+>>> The question patch is to give a warm reset for connected USB device if
+>>> the link state is not connect/CAS after system resume, otherwise host
+>>> will wait 2s for device appear:
+>>>
+>>> [   44.834831] usb 2-1: Waited 2000ms for CONNECT
+>>> ...
+>>> [   45.055718] PM: resume devices took 3.132 seconds
+>>>
+>>> I will post this patch and doc(to be updated) to upstream later.
+>>>
+>>
+>> ok, good, thanks,
+>>
+>>                                  martin
 > 
-
-Thanks for the report, Stephen. The following patch should fix that:
-
-https://lore.kernel.org/lkml/20200213085401.27862-1-linux@rasmusvillemoes.dk/
-
-Greg,
-
-I would just replace the two "Fixes" tags in the patch above with this one:
-
-Fixes: 236dd4d18f29 ("USB: Driver for Freescale QUICC Engine USB Host Controller")
-
-Thanks
---
-Gustavo
