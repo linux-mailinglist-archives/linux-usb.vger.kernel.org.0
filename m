@@ -2,103 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A60F6166C92
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2020 02:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C5AF166DE2
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2020 04:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729259AbgBUB7w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Feb 2020 20:59:52 -0500
-Received: from mail-ua1-f67.google.com ([209.85.222.67]:39156 "EHLO
-        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729027AbgBUB7w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Feb 2020 20:59:52 -0500
-Received: by mail-ua1-f67.google.com with SMTP id 73so118710uac.6;
-        Thu, 20 Feb 2020 17:59:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=RdVfbVZXGWk8XlFb7DhCE4Y68FuCmDQuU4O4AdDKTpI=;
-        b=UxldTl8dDH1NqcSIeaVFSZzPy9UhFBhamL5nZKIoaU/4voigaEGYM3gJ2kZMebhFcC
-         4rvHBYGaWgaqLi6zDYbkq4fepTTp/7+178uwwDcerCbttbmdP5NL+7tJ3V0XmXqHINO5
-         5aJxH66aC/qNywwe6zkoOcKwd7XL+BohbIIEaxboom3xq3xcMqIj9BpHB+xehNPAXleC
-         TOxOUnlglbo9B5jh0r9CATQZRmT+A74oAyFHOMjcFTU9v4xN8uG9FWfS1Bk8CNQKOL4L
-         B7nzHeymtwVjoCCRMnb5vLvd+cT7ykgpO1nb1jKUyB9izHbT7R8s67+HlyVl2AW5h1jE
-         wSVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RdVfbVZXGWk8XlFb7DhCE4Y68FuCmDQuU4O4AdDKTpI=;
-        b=YUWgCmyqt9picJKOBKCVn+irfCJ82ypdA9oqRjrYChSItQXOpwjQYs3vXFYkNPgIEv
-         Fqrz48y9zD29pYBqNvdR3DfzClUilrLUU+f6Af6SCaJZIQB3PsPmiGUHfqRPCLO4QUSw
-         dYZ+Ja0Bxh9ejtCTdEzd9S6mP2HlLVemIrTgtzQd8PeFdfpW6cQAHhq1vPYC7Wcxdhza
-         NwJirE1M3ZB+h/OxHTZ/FCx0ifHr5HrSz3QKzQYqbBVNdcAq514oiw4PqrrzOuVaznqt
-         G76MV9MJc/P+Aml412N5/O3MH1m2vNUsPdV2qRuFjYD1tEe3bPaEUMctWgDWSlYS6WcR
-         Pnyw==
-X-Gm-Message-State: APjAAAU+D2UkTgC+C9DW16WWApUK8jESoqnvIvzU6lvLylyvdAYvj2RE
-        6BOEIgiulY62yDhSc4v+5kuTuEngscpPgRHBfaY=
-X-Google-Smtp-Source: APXvYqzvAhgnhGuKxVxgEOOU/vbidi82mqkro09LPprbwsqNGz7iD8xA6ZnCMsiJGe/Wa6C7yJZ5/FYSF/VqcRCFL/s=
-X-Received: by 2002:ab0:45f2:: with SMTP id u105mr17834631uau.115.1582250389422;
- Thu, 20 Feb 2020 17:59:49 -0800 (PST)
+        id S1729654AbgBUDj5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Feb 2020 22:39:57 -0500
+Received: from ozlabs.org ([203.11.71.1]:37037 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727944AbgBUDj5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 20 Feb 2020 22:39:57 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48NxzZ3h5qz9sRl;
+        Fri, 21 Feb 2020 14:39:54 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1582256394;
+        bh=vgKhJtAQu5/AyCyCN4a7gmdkvz8Ai7bAmdHGaTwWFqM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=X9uiU7y++0TcJLCfUqhzCGh/osRxNrTS0MzajMkjUep6fhj/c/BuPrSSsQ1OvzG/C
+         EEdVsQs8oDxg+pBGkmPb/Mox2e/gvd5veJuY5ytg5O5Lc8QZuBh4hdoRQuIjFzYrVt
+         /QNFsb0iio2Bjf5UMewhQPZWW+gm84K0OR1aZbjlmrETqPw0kgkYEDlt5I+eiL9b5x
+         EsV8ZmcqP5H++qc/jdeMgjj/zZJH0YSlffQjweEbuEHr33lYxGQvrfdvekh76hvx8h
+         NAFDI2Ay239BvszbWmcIysWIOrbQXhGfwjLILz/tWkyTiI+gvMJoN7kNLroMAKxYpM
+         lNEoEvxC+kCpA==
+Date:   Fri, 21 Feb 2020 14:39:53 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Subject: linux-next: build warning in Linus' tree
+Message-ID: <20200221143930.620f381e@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20200219141817.24521-1-narmstrong@baylibre.com> <20200219141817.24521-3-narmstrong@baylibre.com>
-In-Reply-To: <20200219141817.24521-3-narmstrong@baylibre.com>
-From:   Jun Li <lijun.kernel@gmail.com>
-Date:   Fri, 21 Feb 2020 09:59:38 +0800
-Message-ID: <CAKgpwJXVo_Psyu45+KfRKsTRBc6LRWSvUw2CWdUQseAoKd2p9g@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] usb: dwc3: gadget: Add support for disabling SS
- instances in park mode
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, khilman@baylibre.com,
-        linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dongjin Kim <tobetter@gmail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Thinh Nguyen <thinhn@synopsys.com>, Tim <elatllat@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; boundary="Sig_/6U3i/Oj=DwC==c+av/nyAib";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Neil Armstrong <narmstrong@baylibre.com> =E4=BA=8E2020=E5=B9=B42=E6=9C=8819=
-=E6=97=A5=E5=91=A8=E4=B8=89 =E4=B8=8B=E5=8D=8810:18=E5=86=99=E9=81=93=EF=BC=
-=9A
->
-> In certain circumstances, the XHCI SuperSpeed instance in park mode
-> can fail to recover, thus on Amlogic G12A/G12B/SM1 SoCs when there is hig=
-h
-> load on the single XHCI SuperSpeed instance, the controller can crash lik=
-e:
->  xhci-hcd xhci-hcd.0.auto: xHCI host not responding to stop endpoint comm=
-and.
->  xhci-hcd xhci-hcd.0.auto: Host halt failed, -110
->  xhci-hcd xhci-hcd.0.auto: xHCI host controller not responding, assume de=
-ad
->  xhci-hcd xhci-hcd.0.auto: xHCI host not responding to stop endpoint comm=
-and.
->  hub 2-1.1:1.0: hub_ext_port_status failed (err =3D -22)
->  xhci-hcd xhci-hcd.0.auto: HC died; cleaning up
->  usb 2-1.1-port1: cannot reset (err =3D -22)
->
-> Setting the PARKMODE_DISABLE_SS bit in the DWC3_USB3_GUCTL1 mitigates
-> the issue. The bit is described as :
-> "When this bit is set to '1' all SS bus instances in park mode are disabl=
-ed"
->
-> Synopsys explains in [1]:
-> The GUCTL1.PARKMODE_DISABLE_SS is only available in
-> dwc_usb3 controller running in host mode.
-> This should not be set for other IPs.
-> This can be disabled by default based on IP, but I recommend to have a
-> property to enable this feature for devices that need this.
->
-> [1] https://lore.kernel.org/linux-usb/45212db9-e366-2669-5c0a-3c5bd06287f=
-6@synopsys.com
+--Sig_/6U3i/Oj=DwC==c+av/nyAib
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This is not for gadget, patch title should be:
+Hi all,
 
-usb: dwc3: core: add support...
+For some time I have been getting the following warning from the powerpc
+allyesconfig build:
 
-Li Jun
+drivers/usb/host/fhci-hcd.c: In function 'fhci_urb_enqueue':
+drivers/usb/host/fhci-hcd.c:398:8: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+  398 |   size =3D 2;
+      |   ~~~~~^~~
+drivers/usb/host/fhci-hcd.c:399:2: note: here
+  399 |  case PIPE_BULK:
+      |  ^~~~
+
+Introduced by commit
+
+  236dd4d18f29 ("USB: Driver for Freescale QUICC Engine USB Host Controller=
+")
+
+from 2009, but exposed only recently.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/6U3i/Oj=DwC==c+av/nyAib
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5PUQkACgkQAVBC80lX
+0Gxowgf9FzZUw1VbMTWlX/J4qyh0YdBz4qvX/OeSMeExqJbWKcr9LeJNteVkTj8C
+fdqdWIKByke2UdnpULqOpbfTocHBc6A6HMbcnzehCyWfLcChWGPG8J1qaCKuX9GN
+0tPKn73XIh3EbfPoUAEObQTC0pwshxovkNOHmnDl9INDR8wKwFp09/x7vORCPiMa
+7ecLm5MwhggdvPqGw/CR+KrFUooJcjIIka1et6n2yEhAJLMDL660+oziK/VC/MUy
+R/BSCMIV0cPxMMP/NeBzWQqinhW/Lxcmd2yzAiq1a99pDRAWyVH3RN+EozcaSl13
+e0pPGVLts22Jo42l1w+rQ9c8kPQrZQ==
+=dvQq
+-----END PGP SIGNATURE-----
+
+--Sig_/6U3i/Oj=DwC==c+av/nyAib--
