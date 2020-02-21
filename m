@@ -2,114 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7701A1675A3
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2020 09:31:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E76B16790E
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2020 10:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387512AbgBUIQW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Feb 2020 03:16:22 -0500
-Received: from comms.puri.sm ([159.203.221.185]:43604 "EHLO comms.puri.sm"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387509AbgBUIQV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 21 Feb 2020 03:16:21 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 5F6EBE0FB3;
-        Fri, 21 Feb 2020 00:16:20 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id cLVqmxlx4Xi3; Fri, 21 Feb 2020 00:16:19 -0800 (PST)
-Subject: Re: [PATCH] usb: host: xhci-plat: add XHCI_MISSING_CAS quirk
-To:     Jun Li <jun.li@nxp.com>, Peter Chen <peter.chen@nxp.com>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
-References: <20200219173727.9882-1-martin.kepplinger@puri.sm>
- <VE1PR04MB65289878A84E662D6CCAF13089130@VE1PR04MB6528.eurprd04.prod.outlook.com>
- <ddbb9543-f632-b1da-cbb8-d390fcd3b4f8@puri.sm>
- <VE1PR04MB65282F4FFCFAF3D1F0C9825B89130@VE1PR04MB6528.eurprd04.prod.outlook.com>
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-Autocrypt: addr=martin.kepplinger@puri.sm; keydata=
- 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
- ekMtxgNYb/8oDry09UFHbGHLsWn6oBo=
-Message-ID: <f622c011-76c2-5745-d82b-c9373413af4b@puri.sm>
-Date:   Fri, 21 Feb 2020 09:16:10 +0100
+        id S1727681AbgBUJLJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Feb 2020 04:11:09 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:54807 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726440AbgBUJLE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Feb 2020 04:11:04 -0500
+Received: by mail-wm1-f67.google.com with SMTP id n3so861137wmk.4
+        for <linux-usb@vger.kernel.org>; Fri, 21 Feb 2020 01:11:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:autocrypt:organization:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lC2Ok05wDBJ11Mc+7XUHky9ZjVue0L36+JAbszAfxLM=;
+        b=nitPb5hY8JFvy36A15Vy2ZNcfH2vIQLKpCa9o97VvY+nLx1A5fr8PkdsPflphtORSp
+         t54HsjYCc0zoXbu5sC/2qwW9+Yj4gbdN7ZoPKJuicxkhz1tv1TCGZcbyhI5kWG1Dn/Bt
+         Fq8bqIouteP/5SuVrB3YVm+8pqUvR+dz1bDl06pTL9qWfnasz7flQ5Pu2qorpwJ0bKCc
+         JsX0XqsQcQv8PQNpdvZIC1VzRErxIu+tPstIRiuU7fMJfQsjY+Wu7iT5aCkJI2ne662b
+         o3vfGzOmsjso1ikg8zHPxqckRuw/jLhPcsy+0zpNfx1Pp80DUoVzSi2FuruoYUtgFE47
+         mv4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :organization:message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=lC2Ok05wDBJ11Mc+7XUHky9ZjVue0L36+JAbszAfxLM=;
+        b=N21WhxYnLbAzuOS4Stb5OgS+U0YJhSqIwzLQoKK8BvD+pKHKUCALQE2jnAZAhoZHou
+         mZeN/+wFTngM6iZgs9hbOC37JwjZznOknDhWoaTj2qLxNweuEa6edZs9OMdD0m+Mj7aQ
+         b7fi0hHlije0tBx5oDkYi7oF2Tt9LA+NPhed02i5xiu38W6Wkzk0nRTL8NvEMlv3DH05
+         BCHovwZ6P/5NMLqhnwwoCVyhqBnPe28RIdvwO6Z+IvEToRD8OPrAw6BhhXmxktyrcwcK
+         NNo6Jz1ySoXzXLD/WRVtiVDhZ2+ONWZzplwoe8H7IJTXnhJLj65hev9m6FyAuqMxlQ1R
+         mrYQ==
+X-Gm-Message-State: APjAAAX8xgKgiGX6wRdC6n6usPDRw1prHuK5hZP52awSvku5HBeSx9HV
+        olmrmoxdzuUH8w3dVQ+HifjJIQ==
+X-Google-Smtp-Source: APXvYqzW+erZHPEVYlb4cjR9TwZjlpd5fW07F9ngwXZnZ9+r5FiohTmukOgiek6LvZ+Pt5tBb+VSpw==
+X-Received: by 2002:a1c:4b0f:: with SMTP id y15mr2478639wma.87.1582276261828;
+        Fri, 21 Feb 2020 01:11:01 -0800 (PST)
+Received: from ?IPv6:2a01:e35:2ec0:82b0:4ca8:b25b:98e4:858? ([2a01:e35:2ec0:82b0:4ca8:b25b:98e4:858])
+        by smtp.gmail.com with ESMTPSA id a22sm3025856wmd.20.2020.02.21.01.11.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Feb 2020 01:11:01 -0800 (PST)
+Subject: Re: [PATCH v3 2/3] usb: dwc3: gadget: Add support for disabling SS
+ instances in park mode
+To:     Jun Li <lijun.kernel@gmail.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, khilman@baylibre.com,
+        linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Dongjin Kim <tobetter@gmail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Thinh Nguyen <thinhn@synopsys.com>, Tim <elatllat@gmail.com>
+References: <20200219141817.24521-1-narmstrong@baylibre.com>
+ <20200219141817.24521-3-narmstrong@baylibre.com>
+ <CAKgpwJXVo_Psyu45+KfRKsTRBc6LRWSvUw2CWdUQseAoKd2p9g@mail.gmail.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
+ 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
+ BSwxi7g3Mu7u5kUByanqHyA=
+Organization: Baylibre
+Message-ID: <b2439923-5590-349e-754b-6b047d4becaf@baylibre.com>
+Date:   Fri, 21 Feb 2020 10:10:59 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
-In-Reply-To: <VE1PR04MB65282F4FFCFAF3D1F0C9825B89130@VE1PR04MB6528.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=gbk
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <CAKgpwJXVo_Psyu45+KfRKsTRBc6LRWSvUw2CWdUQseAoKd2p9g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -117,116 +123,42 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20.02.20 16:37, Jun Li wrote:
+On 21/02/2020 02:59, Jun Li wrote:
+> Neil Armstrong <narmstrong@baylibre.com> äºŽ2020å¹´2æœˆ19æ—¥å‘¨ä¸‰ ä¸‹åˆ10:18å†™é“ï¼š
+>>
+>> In certain circumstances, the XHCI SuperSpeed instance in park mode
+>> can fail to recover, thus on Amlogic G12A/G12B/SM1 SoCs when there is high
+>> load on the single XHCI SuperSpeed instance, the controller can crash like:
+>>  xhci-hcd xhci-hcd.0.auto: xHCI host not responding to stop endpoint command.
+>>  xhci-hcd xhci-hcd.0.auto: Host halt failed, -110
+>>  xhci-hcd xhci-hcd.0.auto: xHCI host controller not responding, assume dead
+>>  xhci-hcd xhci-hcd.0.auto: xHCI host not responding to stop endpoint command.
+>>  hub 2-1.1:1.0: hub_ext_port_status failed (err = -22)
+>>  xhci-hcd xhci-hcd.0.auto: HC died; cleaning up
+>>  usb 2-1.1-port1: cannot reset (err = -22)
+>>
+>> Setting the PARKMODE_DISABLE_SS bit in the DWC3_USB3_GUCTL1 mitigates
+>> the issue. The bit is described as :
+>> "When this bit is set to '1' all SS bus instances in park mode are disabled"
+>>
+>> Synopsys explains in [1]:
+>> The GUCTL1.PARKMODE_DISABLE_SS is only available in
+>> dwc_usb3 controller running in host mode.
+>> This should not be set for other IPs.
+>> This can be disabled by default based on IP, but I recommend to have a
+>> property to enable this feature for devices that need this.
+>>
+>> [1] https://lore.kernel.org/linux-usb/45212db9-e366-2669-5c0a-3c5bd06287f6@synopsys.com
 > 
+> This is not for gadget, patch title should be:
 > 
->> -----Original Message-----
->> From: Martin Kepplinger <martin.kepplinger@puri.sm>
->> Sent: 2020Äê2ÔÂ20ÈÕ 19:44
->> To: Jun Li <jun.li@nxp.com>; Peter Chen <peter.chen@nxp.com>;
->> mathias.nyman@intel.com
->> Cc: linux-usb@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>; Anson Huang
->> <anson.huang@nxp.com>; shawnguo@kernel.org; kernel@pengutronix.de
->> Subject: Re: [PATCH] usb: host: xhci-plat: add XHCI_MISSING_CAS quirk
->>
->> On 20.02.20 07:31, Jun Li wrote:
->>>> -----Original Message-----
->>>> From: Martin Kepplinger <martin.kepplinger@puri.sm>
->>>> Sent: 2020Äê2ÔÂ20ÈÕ 1:37
->>>> To: Jun Li <jun.li@nxp.com>; Peter Chen <peter.chen@nxp.com>;
->>>> mathias.nyman@intel.com
->>>> Cc: linux-usb@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>;
->>>> Anson Huang <anson.huang@nxp.com>; shawnguo@kernel.org;
->>>> kernel@pengutronix.de
->>>> Subject: [PATCH] usb: host: xhci-plat: add XHCI_MISSING_CAS quirk
->>>>
->>>> From: Li Jun <jun.li@nxp.com>
->>>>
->>>> i.MX8MQ USB3 host needs XHCI_MISSING_CAS quirk to warm reset the port
->>>> to enum the
->>>> USB3 device plugged in while system sleep, as the port state is stuck
->>>> in polling mode after resume.
->>>>
->>>> Signed-off-by: Li Jun <jun.li@nxp.com>
->>>> Acked-by: Peter Chen <peter.chen@nxp.com>
->>>> ---
->>>>
->>>> Hi,
->>>>
->>>> Because resume from S3 suspend is broken for me on imx8mq, I stumbled
->>>> upon this patch in NXP's linux tree. (Please note that I'm not the
->>>> author and I've not yet put my SoB tag under it). This is just a
->>>> question:
->>>>
->>>> This patch (and the docs) clearly is missing in mainline Linux
->>>> because the imx8mq devicetree description includes it (which does nothing now).
->>>>
->>>> I've tested this and this particular addition doesn't fix my problem:
->>>>
->>>> [   84.257538] imx8mq-usb-phy 381f0040.usb-phy: bus resume
->>>> [   84.263195] imx8mq-usb-phy 382f0040.usb-phy: bus resume
->>>> [   84.268898] dwc3 38100000.usb: driver resume
->>>>
->>>> during resume from S3 suspend, here it still hangs.
->>>
->>> Is your problem a system hang? If yes, this may another issue, where
->>> the hang happens? dwc3_resume_common()?
->>
->> exactly! I followed to the point it hangs once again and it's
->>
->> dwc3_core_init() called from dwc3_resume_common()'s "OTG" case.
->>
->> Specifically, dwc3_writel() is what I don't get past:
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Felixir.bootl
->> in.com%2Flinux%2Fv5.6-rc2%2Fsource%2Fdrivers%2Fusb%2Fdwc3%2Fcore.c%23L934&amp;
->> data=02%7C01%7Cjun.li%40nxp.com%7C130cd29875c44792d1a908d7b5fa2516%7C686ea1d3b
->> c2b4c6fa92cd99c5c301635%7C0%7C0%7C637177958284696041&amp;sdata=mqh9MH6ESLVxKvW
->> vvMq4vwt2dcTuvNopgGVdXEbbMwk%3D&amp;reserved=0
-> 
-> So while dwc3 resume, the first register access cause hang.
-> Looks like some required clocks or power domain of USB0 is not on.
-
-which would these be in imx8mq.dtsi ?
-
->  
->>
->> do you have an idea why this writel() hangs?
-> 
-> I never encounter such hang on my iMX8MQ EVK board
-> using upstream kernel(5.x) + changes of enable USB0 port,
-> but I didn't try latest 5.6 kernel.
-> I will enable the first port based on Linux-next to give a
-> try on my NXP iMX8MQ EVK board, do you think I can reproduce
-> your problem?
+> usb: dwc3: core: add support...
 > 
 > Li Jun
-
-Hi Li, thanks for taking a look. I would think that you can reproduce
-that, yes. I'm running v5.6-rc2 with no changes to usb or any relevant
-changes to clk (I think), but in case you're curious, this is the whole
-tree:
-https://source.puri.sm/Librem5/linux-next/tree/imx8-linux-next-librem5
-
-What "changes of enable USB0 port" do you mean?
-
-thanks,
-
-                       martin
-
->>
->>>
->>> The question patch is to give a warm reset for connected USB device if
->>> the link state is not connect/CAS after system resume, otherwise host
->>> will wait 2s for device appear:
->>>
->>> [   44.834831] usb 2-1: Waited 2000ms for CONNECT
->>> ...
->>> [   45.055718] PM: resume devices took 3.132 seconds
->>>
->>> I will post this patch and doc(to be updated) to upstream later.
->>>
->>
->> ok, good, thanks,
->>
->>                                  martin
 > 
+
+Indeed... time for a v4.
+
+Thanks,
+
+Neil
