@@ -2,91 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C5AF166DE2
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2020 04:40:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54043166EA8
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2020 05:57:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729654AbgBUDj5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Feb 2020 22:39:57 -0500
-Received: from ozlabs.org ([203.11.71.1]:37037 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727944AbgBUDj5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 20 Feb 2020 22:39:57 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48NxzZ3h5qz9sRl;
-        Fri, 21 Feb 2020 14:39:54 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1582256394;
-        bh=vgKhJtAQu5/AyCyCN4a7gmdkvz8Ai7bAmdHGaTwWFqM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=X9uiU7y++0TcJLCfUqhzCGh/osRxNrTS0MzajMkjUep6fhj/c/BuPrSSsQ1OvzG/C
-         EEdVsQs8oDxg+pBGkmPb/Mox2e/gvd5veJuY5ytg5O5Lc8QZuBh4hdoRQuIjFzYrVt
-         /QNFsb0iio2Bjf5UMewhQPZWW+gm84K0OR1aZbjlmrETqPw0kgkYEDlt5I+eiL9b5x
-         EsV8ZmcqP5H++qc/jdeMgjj/zZJH0YSlffQjweEbuEHr33lYxGQvrfdvekh76hvx8h
-         NAFDI2Ay239BvszbWmcIysWIOrbQXhGfwjLILz/tWkyTiI+gvMJoN7kNLroMAKxYpM
-         lNEoEvxC+kCpA==
-Date:   Fri, 21 Feb 2020 14:39:53 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-Subject: linux-next: build warning in Linus' tree
-Message-ID: <20200221143930.620f381e@canb.auug.org.au>
+        id S1729607AbgBUE5o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Feb 2020 23:57:44 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:45016 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729546AbgBUE5o (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Feb 2020 23:57:44 -0500
+Received: by mail-ot1-f66.google.com with SMTP id h9so909734otj.11;
+        Thu, 20 Feb 2020 20:57:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ogn/J4giaQGLC3qcPsRUe3cWuadkZCD6KASZ61C4ThA=;
+        b=kIEoFngwEB2uizuWztZrPisyrMtzekpWhy+TjV93VsYmFrHQ3Pcp6fut+K4lBdL3F7
+         hYa9mFpXC8zQIhW+jAeRG5kaQQ+o4UqewiTjbLWESn0auaUWUuJCV7O3C5kgofVNKFJG
+         /iTmwExGNd2RaaHRUpPWxtVOUGPLGCGIcJRFw44gQvapOxF7tsIUE0jheKYMr7+4XeqD
+         8DEljxOi3rTum3dIVxr0d2sdcNUtqLpO6g2dZyI4vJz7razV1oKmftSI1k4IlqJ03ImG
+         9dPEMiZpxF4xZnlBOtWVsIhwXKgBlg1I2790KQFCu/Ph2crRExpSPfFPiGOkQy7gct72
+         8Edw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ogn/J4giaQGLC3qcPsRUe3cWuadkZCD6KASZ61C4ThA=;
+        b=BdoM0MtoFyQ2qRuFt99O8pPyag7SA/6IRCXQADMcwk6IUR7pdcNQ9kLUcvu9slIrBn
+         BblqrSGLoFjXeCJ+Raxk518cOrJbtnz7S+JPfgMcdb3iv0lu7dOnv09LDBQ4+UmSgN4l
+         afeHhxhAeUkuD41wcICcdeMVzcO4SEZphBQzos5SRHNI1LyrtrBfIlytUmM8IRdIVgjL
+         QQvlhqh3IKcI+HB1kwt8FeCOPAX68HjpnnaCZ2zjaDw5riJgcc3jm+R87DS3ifKroDCP
+         XVIg8yrpSt/qODXUxWOj28k1Qv14s0w2Nt75QJOwvMTJ6YQwH25OvuZfCsE5t1acCOi+
+         00Ag==
+X-Gm-Message-State: APjAAAU0p8UjJFAmj64QneNnFz1RUJUzdfizvc91S3ZmVK45Xh5j8hLX
+        8xGs+ptz95Oz+lQkkz9sIfE=
+X-Google-Smtp-Source: APXvYqzTqMZvH/9ZgI3+G8aJjVo4IcNpjr++SOjdjDD/PR19TdNUf9R7rgpYCw/rQP3r0Sv9FTMfWA==
+X-Received: by 2002:a9d:6e98:: with SMTP id a24mr25542147otr.53.1582261062265;
+        Thu, 20 Feb 2020 20:57:42 -0800 (PST)
+Received: from ubuntu-m2-xlarge-x86 ([2604:1380:4111:8b00::1])
+        by smtp.gmail.com with ESMTPSA id y25sm660670oto.27.2020.02.20.20.57.41
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 20 Feb 2020 20:57:41 -0800 (PST)
+Date:   Thu, 20 Feb 2020 21:57:40 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Ashwini Pahuja <ashwini.linux@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: Re: [PATCH] usb: gadget: udc: bdc: Remove unnecessary NULL checks in
+ bdc_req_complete
+Message-ID: <20200221045740.GA43417@ubuntu-m2-xlarge-x86>
+References: <20191023002014.22571-1-natechancellor@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6U3i/Oj=DwC==c+av/nyAib";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191023002014.22571-1-natechancellor@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---Sig_/6U3i/Oj=DwC==c+av/nyAib
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+I know it has been a while but ping?
 
-Hi all,
-
-For some time I have been getting the following warning from the powerpc
-allyesconfig build:
-
-drivers/usb/host/fhci-hcd.c: In function 'fhci_urb_enqueue':
-drivers/usb/host/fhci-hcd.c:398:8: warning: this statement may fall through=
- [-Wimplicit-fallthrough=3D]
-  398 |   size =3D 2;
-      |   ~~~~~^~~
-drivers/usb/host/fhci-hcd.c:399:2: note: here
-  399 |  case PIPE_BULK:
-      |  ^~~~
-
-Introduced by commit
-
-  236dd4d18f29 ("USB: Driver for Freescale QUICC Engine USB Host Controller=
-")
-
-from 2009, but exposed only recently.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/6U3i/Oj=DwC==c+av/nyAib
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5PUQkACgkQAVBC80lX
-0Gxowgf9FzZUw1VbMTWlX/J4qyh0YdBz4qvX/OeSMeExqJbWKcr9LeJNteVkTj8C
-fdqdWIKByke2UdnpULqOpbfTocHBc6A6HMbcnzehCyWfLcChWGPG8J1qaCKuX9GN
-0tPKn73XIh3EbfPoUAEObQTC0pwshxovkNOHmnDl9INDR8wKwFp09/x7vORCPiMa
-7ecLm5MwhggdvPqGw/CR+KrFUooJcjIIka1et6n2yEhAJLMDL660+oziK/VC/MUy
-R/BSCMIV0cPxMMP/NeBzWQqinhW/Lxcmd2yzAiq1a99pDRAWyVH3RN+EozcaSl13
-e0pPGVLts22Jo42l1w+rQ9c8kPQrZQ==
-=dvQq
------END PGP SIGNATURE-----
-
---Sig_/6U3i/Oj=DwC==c+av/nyAib--
+On Tue, Oct 22, 2019 at 05:20:15PM -0700, Nathan Chancellor wrote:
+> When building with Clang + -Wtautological-pointer-compare:
+> 
+> drivers/usb/gadget/udc/bdc/bdc_ep.c:543:28: warning: comparison of
+> address of 'req->queue' equal to a null pointer is always false
+> [-Wtautological-pointer-compare]
+>         if (req == NULL  || &req->queue == NULL || &req->usb_req == NULL)
+>                              ~~~~~^~~~~    ~~~~
+> drivers/usb/gadget/udc/bdc/bdc_ep.c:543:51: warning: comparison of
+> address of 'req->usb_req' equal to a null pointer is always false
+> [-Wtautological-pointer-compare]
+>         if (req == NULL  || &req->queue == NULL || &req->usb_req == NULL)
+>                                                     ~~~~~^~~~~~~    ~~~~
+> 2 warnings generated.
+> 
+> As it notes, these statements will always evaluate to false so remove
+> them.
+> 
+> Fixes: efed421a94e6 ("usb: gadget: Add UDC driver for Broadcom USB3.0 device controller IP BDC")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/749
+> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+> ---
+> 
+> Note: I am not sure if these checks were intended to check if the
+> contents of these arrays were NULL or if there should be some other
+> checks in lieu of these; I am not familiar with the USB subsystem to
+> answer this but I will happily respin the patch if this is not correct.
+> 
+>  drivers/usb/gadget/udc/bdc/bdc_ep.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/bdc/bdc_ep.c b/drivers/usb/gadget/udc/bdc/bdc_ep.c
+> index a4d9b5e1e50e..d49c6dc1082d 100644
+> --- a/drivers/usb/gadget/udc/bdc/bdc_ep.c
+> +++ b/drivers/usb/gadget/udc/bdc/bdc_ep.c
+> @@ -540,7 +540,7 @@ static void bdc_req_complete(struct bdc_ep *ep, struct bdc_req *req,
+>  {
+>  	struct bdc *bdc = ep->bdc;
+>  
+> -	if (req == NULL  || &req->queue == NULL || &req->usb_req == NULL)
+> +	if (req == NULL)
+>  		return;
+>  
+>  	dev_dbg(bdc->dev, "%s ep:%s status:%d\n", __func__, ep->name, status);
+> -- 
+> 2.23.0
+> 
