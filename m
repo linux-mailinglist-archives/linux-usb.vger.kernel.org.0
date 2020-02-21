@@ -2,358 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D77D167AE6
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2020 11:37:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D3D167C53
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2020 12:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727277AbgBUKhJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Feb 2020 05:37:09 -0500
-Received: from mga04.intel.com ([192.55.52.120]:29456 "EHLO mga04.intel.com"
+        id S1727137AbgBULjE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Feb 2020 06:39:04 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41606 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726100AbgBUKhJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 21 Feb 2020 05:37:09 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Feb 2020 02:37:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,467,1574150400"; 
-   d="scan'208";a="259587488"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 21 Feb 2020 02:37:07 -0800
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1j55gB-0006am-30; Fri, 21 Feb 2020 18:37:07 +0800
-Date:   Fri, 21 Feb 2020 18:36:18 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 2f41c8a25feb822203f92e17f3720397805d0cfd
-Message-ID: <5e4fb2a2.w1I7KBoxzkYiljKJ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726934AbgBULjE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 21 Feb 2020 06:39:04 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EE26B222C4;
+        Fri, 21 Feb 2020 11:39:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582285143;
+        bh=3VbA/6IynnwAPZnk3kedddXUiGueUIj2LdQ/mwiF/xo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MuRnZAq2frRfCGDw1SSCqIaE5VYoHhEUEVLvtXQ24hfaEOfbO3/gZHraQLv4XLC+R
+         /hbxT45o1EWL+WxZzV4In8c4M9SRNHiuQ4GG7+aYeWfF6jTDnK3fO1GpkAdLpRHDZW
+         t/SrSdKvBUaoc48jTTJKhkZLx/tGJD21DwlvKmHE=
+Date:   Fri, 21 Feb 2020 12:39:01 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB/Thunderbolt fixes for 5.6-rc3
+Message-ID: <20200221113901.GA114136@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: 2f41c8a25feb822203f92e17f3720397805d0cfd  usb: musb: core: remove useless cast for driver.name
+The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9:
 
-elapsed time: 2885m
+  Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
 
-configs tested: 303
-configs skipped: 0
+are available in the Git repository at:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.6-rc3
 
-arm                              allmodconfig
-arm                               allnoconfig
-arm                              allyesconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm64                            allyesconfig
-arm                         at91_dt_defconfig
-arm                           efm32_defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                        multi_v7_defconfig
-arm                        shmobile_defconfig
-arm                           sunxi_defconfig
-arm64                               defconfig
-sparc                            allyesconfig
-s390                       zfcpdump_defconfig
-sparc64                          allmodconfig
-s390                             allmodconfig
-parisc                generic-64bit_defconfig
-sparc64                           allnoconfig
-nios2                         10m50_defconfig
-i386                              allnoconfig
-um                           x86_64_defconfig
-xtensa                       common_defconfig
-s390                          debug_defconfig
-m68k                          multi_defconfig
-nds32                             allnoconfig
-riscv                            allyesconfig
-m68k                           sun3_defconfig
-c6x                        evmc6678_defconfig
-openrisc                    or1ksim_defconfig
-ia64                             allyesconfig
-riscv                    nommu_virt_defconfig
-h8300                       h8s-sim_defconfig
-h8300                    h8300h-sim_defconfig
-nios2                         3c120_defconfig
-riscv                          rv32_defconfig
-m68k                             allmodconfig
-powerpc                           allnoconfig
-sh                                allnoconfig
-ia64                              allnoconfig
-openrisc                 simple_smp_defconfig
-s390                                defconfig
-sh                  sh7785lcr_32bit_defconfig
-alpha                               defconfig
-ia64                             alldefconfig
-um                                  defconfig
-mips                             allmodconfig
-s390                              allnoconfig
-xtensa                          iss_defconfig
-nds32                               defconfig
-c6x                              allyesconfig
-h8300                     edosk2674_defconfig
-riscv                               defconfig
-sh                               allmodconfig
-sparc64                             defconfig
-sh                            titan_defconfig
-i386                             allyesconfig
-i386                             alldefconfig
-i386                                defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-csky                                defconfig
-m68k                       m5475evb_defconfig
-arc                              allyesconfig
-arc                                 defconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-powerpc                             defconfig
-powerpc                       ppc64_defconfig
-powerpc                          rhel-kconfig
-mips                           32r2_defconfig
-mips                         64r6el_defconfig
-mips                              allnoconfig
-mips                             allyesconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-parisc                            allnoconfig
-parisc                           allyesconfig
-parisc                generic-32bit_defconfig
-x86_64               randconfig-a001-20200220
-x86_64               randconfig-a002-20200220
-x86_64               randconfig-a003-20200220
-i386                 randconfig-a001-20200220
-i386                 randconfig-a002-20200220
-i386                 randconfig-a003-20200220
-x86_64               randconfig-a001-20200219
-x86_64               randconfig-a002-20200219
-x86_64               randconfig-a003-20200219
-i386                 randconfig-a001-20200219
-i386                 randconfig-a002-20200219
-i386                 randconfig-a003-20200219
-x86_64               randconfig-a001-20200221
-x86_64               randconfig-a002-20200221
-x86_64               randconfig-a003-20200221
-i386                 randconfig-a001-20200221
-i386                 randconfig-a002-20200221
-i386                 randconfig-a003-20200221
-parisc               randconfig-a001-20200219
-riscv                randconfig-a001-20200219
-mips                 randconfig-a001-20200219
-m68k                 randconfig-a001-20200219
-alpha                randconfig-a001-20200219
-nds32                randconfig-a001-20200219
-alpha                randconfig-a001-20200221
-m68k                 randconfig-a001-20200221
-mips                 randconfig-a001-20200221
-nds32                randconfig-a001-20200221
-parisc               randconfig-a001-20200221
-riscv                randconfig-a001-20200221
-alpha                randconfig-a001-20200220
-m68k                 randconfig-a001-20200220
-mips                 randconfig-a001-20200220
-nds32                randconfig-a001-20200220
-parisc               randconfig-a001-20200220
-riscv                randconfig-a001-20200220
-c6x                  randconfig-a001-20200221
-h8300                randconfig-a001-20200221
-microblaze           randconfig-a001-20200221
-nios2                randconfig-a001-20200221
-sparc64              randconfig-a001-20200221
-c6x                  randconfig-a001-20200220
-h8300                randconfig-a001-20200220
-microblaze           randconfig-a001-20200220
-nios2                randconfig-a001-20200220
-sparc64              randconfig-a001-20200220
-c6x                  randconfig-a001-20200219
-h8300                randconfig-a001-20200219
-microblaze           randconfig-a001-20200219
-nios2                randconfig-a001-20200219
-sparc64              randconfig-a001-20200219
-csky                 randconfig-a001-20200219
-openrisc             randconfig-a001-20200219
-s390                 randconfig-a001-20200219
-xtensa               randconfig-a001-20200219
-csky                 randconfig-a001-20200220
-openrisc             randconfig-a001-20200220
-s390                 randconfig-a001-20200220
-sh                   randconfig-a001-20200220
-xtensa               randconfig-a001-20200220
-csky                 randconfig-a001-20200221
-openrisc             randconfig-a001-20200221
-s390                 randconfig-a001-20200221
-sh                   randconfig-a001-20200221
-xtensa               randconfig-a001-20200221
-x86_64               randconfig-b001-20200220
-x86_64               randconfig-b002-20200220
-x86_64               randconfig-b003-20200220
-i386                 randconfig-b001-20200220
-i386                 randconfig-b002-20200220
-i386                 randconfig-b003-20200220
-x86_64               randconfig-b001-20200219
-x86_64               randconfig-b002-20200219
-x86_64               randconfig-b003-20200219
-i386                 randconfig-b001-20200219
-i386                 randconfig-b002-20200219
-i386                 randconfig-b003-20200219
-x86_64               randconfig-b001-20200221
-x86_64               randconfig-b002-20200221
-x86_64               randconfig-b003-20200221
-i386                 randconfig-b001-20200221
-i386                 randconfig-b002-20200221
-i386                 randconfig-b003-20200221
-x86_64               randconfig-c001-20200219
-x86_64               randconfig-c002-20200219
-x86_64               randconfig-c003-20200219
-i386                 randconfig-c001-20200219
-i386                 randconfig-c002-20200219
-i386                 randconfig-c003-20200219
-x86_64               randconfig-c001-20200220
-x86_64               randconfig-c002-20200220
-x86_64               randconfig-c003-20200220
-i386                 randconfig-c001-20200220
-i386                 randconfig-c002-20200220
-i386                 randconfig-c003-20200220
-x86_64               randconfig-c001-20200221
-x86_64               randconfig-c002-20200221
-x86_64               randconfig-c003-20200221
-i386                 randconfig-c001-20200221
-i386                 randconfig-c002-20200221
-i386                 randconfig-c003-20200221
-x86_64               randconfig-d001-20200219
-x86_64               randconfig-d002-20200219
-x86_64               randconfig-d003-20200219
-i386                 randconfig-d001-20200219
-i386                 randconfig-d002-20200219
-i386                 randconfig-d003-20200219
-x86_64               randconfig-d001-20200220
-x86_64               randconfig-d002-20200220
-x86_64               randconfig-d003-20200220
-i386                 randconfig-d001-20200220
-i386                 randconfig-d002-20200220
-i386                 randconfig-d003-20200220
-x86_64               randconfig-d001-20200221
-x86_64               randconfig-d002-20200221
-x86_64               randconfig-d003-20200221
-i386                 randconfig-d001-20200221
-i386                 randconfig-d002-20200221
-i386                 randconfig-d003-20200221
-x86_64               randconfig-e001-20200219
-x86_64               randconfig-e002-20200219
-x86_64               randconfig-e003-20200219
-i386                 randconfig-e001-20200219
-i386                 randconfig-e002-20200219
-i386                 randconfig-e003-20200219
-x86_64               randconfig-e001-20200220
-x86_64               randconfig-e002-20200220
-x86_64               randconfig-e003-20200220
-i386                 randconfig-e001-20200220
-i386                 randconfig-e002-20200220
-i386                 randconfig-e003-20200220
-x86_64               randconfig-e001-20200221
-x86_64               randconfig-e002-20200221
-x86_64               randconfig-e003-20200221
-i386                 randconfig-e001-20200221
-i386                 randconfig-e002-20200221
-i386                 randconfig-e003-20200221
-x86_64               randconfig-f001-20200219
-x86_64               randconfig-f002-20200219
-x86_64               randconfig-f003-20200219
-i386                 randconfig-f001-20200219
-i386                 randconfig-f002-20200219
-i386                 randconfig-f003-20200219
-x86_64               randconfig-f001-20200220
-x86_64               randconfig-f002-20200220
-x86_64               randconfig-f003-20200220
-i386                 randconfig-f001-20200220
-i386                 randconfig-f002-20200220
-i386                 randconfig-f003-20200220
-x86_64               randconfig-f003-20200221
-x86_64               randconfig-f002-20200221
-x86_64               randconfig-f001-20200221
-i386                 randconfig-f001-20200221
-i386                 randconfig-f003-20200221
-i386                 randconfig-f002-20200221
-x86_64               randconfig-g001-20200219
-x86_64               randconfig-g002-20200219
-x86_64               randconfig-g003-20200219
-i386                 randconfig-g001-20200219
-i386                 randconfig-g002-20200219
-i386                 randconfig-g003-20200219
-x86_64               randconfig-g001-20200221
-x86_64               randconfig-g002-20200221
-x86_64               randconfig-g003-20200221
-i386                 randconfig-g001-20200221
-i386                 randconfig-g002-20200221
-i386                 randconfig-g003-20200221
-x86_64               randconfig-g001-20200220
-x86_64               randconfig-g002-20200220
-x86_64               randconfig-g003-20200220
-i386                 randconfig-g001-20200220
-i386                 randconfig-g002-20200220
-i386                 randconfig-g003-20200220
-x86_64               randconfig-h001-20200219
-x86_64               randconfig-h002-20200219
-x86_64               randconfig-h003-20200219
-i386                 randconfig-h001-20200219
-i386                 randconfig-h002-20200219
-i386                 randconfig-h003-20200219
-x86_64               randconfig-h001-20200220
-x86_64               randconfig-h002-20200220
-x86_64               randconfig-h003-20200220
-i386                 randconfig-h001-20200220
-i386                 randconfig-h002-20200220
-i386                 randconfig-h003-20200220
-x86_64               randconfig-h001-20200221
-x86_64               randconfig-h002-20200221
-x86_64               randconfig-h003-20200221
-i386                 randconfig-h001-20200221
-i386                 randconfig-h002-20200221
-i386                 randconfig-h003-20200221
-arc                  randconfig-a001-20200220
-arm                  randconfig-a001-20200220
-arm64                randconfig-a001-20200220
-ia64                 randconfig-a001-20200220
-powerpc              randconfig-a001-20200220
-sparc                randconfig-a001-20200220
-arc                  randconfig-a001-20200219
-arm                  randconfig-a001-20200219
-arm64                randconfig-a001-20200219
-ia64                 randconfig-a001-20200219
-powerpc              randconfig-a001-20200219
-sparc                randconfig-a001-20200219
-arc                  randconfig-a001-20200221
-arm                  randconfig-a001-20200221
-arm64                randconfig-a001-20200221
-ia64                 randconfig-a001-20200221
-powerpc              randconfig-a001-20200221
-sparc                randconfig-a001-20200221
-riscv                            allmodconfig
-riscv                             allnoconfig
-s390                             alldefconfig
-s390                             allyesconfig
-sh                          rsk7269_defconfig
-sparc                               defconfig
-sparc64                          allyesconfig
-um                             i386_defconfig
-x86_64                              fedora-25
-x86_64                                  kexec
-x86_64                                    lkp
-x86_64                                   rhel
-x86_64                         rhel-7.2-clear
-x86_64                               rhel-7.6
+for you to fetch changes up to 8b978be8d067f58b29cbbf0579e88bb4a2d4350a:
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+  Merge tag 'thunderbolt-fix-for-v5.6-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus (2020-02-18 19:39:29 +0100)
+
+----------------------------------------------------------------
+USB fixes for 5.6-rc3
+
+Here are a number of small USB driver fixes for 5.6-rc3.
+
+Included in here are:
+  - MAINTAINER file updates
+  - USB gadget driver fixes
+  - usb core quirk additions and fixes for regressions
+  - xhci driver fixes
+  - usb serial driver id additions and fixes
+  - thunderbolt bugfix
+
+Thunderbolt patches come in through here now that USB4 is really
+thunderbolt.
+
+All of these have been in linux-next for a while with no reported
+issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Alan Stern (1):
+      USB: hub: Don't record a connect-change event during reset-resume
+
+Andy Shevchenko (2):
+      MAINTAINERS: Sort entries in database for USB TYPEC
+      MAINTAINERS: Sort entries in database for THUNDERBOLT
+
+Anurag Kumar Vulisha (1):
+      usb: dwc3: gadget: Check for IOC/LST bit in TRB->ctrl fields
+
+Colin Ian King (2):
+      usb: dwc3: debug: fix string position formatting mixup with ret and len
+      usb: dwc3: debug: fix string position formatting mixup with ret and len
+
+Dan Carpenter (1):
+      USB: serial: ir-usb: Silence harmless uninitialized variable warning
+
+Dmitry Osipenko (1):
+      usb: phy: tegra: Add clarifying comments about the shared registers
+
+EJ Hsu (1):
+      usb: uas: fix a plug & unplug racing
+
+Greg Kroah-Hartman (7):
+      Revert "xhci: Fix memory leak when caching protocol extended capability PSI tables"
+      USB: misc: iowarrior: add support for 2 OEMed devices
+      USB: misc: iowarrior: add support for the 28 and 28L devices
+      Merge tag 'usb-serial-5.6-rc2' of https://git.kernel.org/.../johan/usb-serial into usb-linus
+      Merge tag 'fixes-for-v5.6-rc1' of git://git.kernel.org/.../balbi/usb into usb-linus
+      USB: misc: iowarrior: add support for the 100 device
+      Merge tag 'thunderbolt-fix-for-v5.6-rc3' of git://git.kernel.org/.../westeri/thunderbolt into usb-linus
+
+Hardik Gajjar (1):
+      USB: hub: Fix the broken detection of USB3 device in SMSC hub
+
+Jack Pham (2):
+      usb: gadget: composite: Fix bMaxPower for SuperSpeedPlus
+      usb: gadget: composite: Support more than 500mA MaxPower
+
+Johan Hovold (4):
+      USB: serial: ch341: fix receiver regression
+      USB: core: add endpoint-blacklist quirk
+      USB: quirks: blacklist duplicate ep on Sound Devices USBPre2
+      USB: core: clean up endpoint-descriptor parsing
+
+John Keeping (1):
+      usb: gadget: u_audio: Fix high-speed max packet size
+
+Lars-Peter Clausen (1):
+      usb: gadget: ffs: ffs_aio_cancel(): Save/restore IRQ flags
+
+Mathias Nyman (5):
+      xhci: Force Maximum Packet size for Full-speed bulk devices to valid range.
+      xhci: Fix memory leak when caching protocol extended capability PSI tables
+      xhci: fix runtime pm enabling for quirky Intel hosts
+      xhci: apply XHCI_PME_STUCK_QUIRK to Intel Comet Lake platforms
+      xhci: Fix memory leak when caching protocol extended capability PSI tables - take 2
+
+Michal Simek (1):
+      usb: gadget: udc-xilinx: Fix xudc_stop() kernel-doc format
+
+Mika Westerberg (1):
+      thunderbolt: Prevent crash if non-active NVMem file is read
+
+Minas Harutyunyan (2):
+      usb: dwc2: Fix in ISOC request length checking
+      usb: dwc2: Fix SET/CLEAR_FEATURE and GET_STATUS flows
+
+Peter Chen (1):
+      usb: charger: assign specific number for enum value
+
+Richard Dodd (1):
+      USB: Fix novation SourceControl XL after suspend
+
+Sergey Organov (1):
+      usb: gadget: serial: fix Tx stall after buffer overflow
+
+ MAINTAINERS                            | 20 +++++-----
+ drivers/thunderbolt/switch.c           |  7 ++++
+ drivers/usb/core/config.c              | 31 +++++++++------
+ drivers/usb/core/hub.c                 | 20 +++++++---
+ drivers/usb/core/hub.h                 |  1 +
+ drivers/usb/core/quirks.c              | 40 +++++++++++++++++++
+ drivers/usb/core/usb.h                 |  3 ++
+ drivers/usb/dwc2/gadget.c              | 40 +++++++++++--------
+ drivers/usb/dwc3/debug.h               | 39 +++++++------------
+ drivers/usb/dwc3/gadget.c              |  3 +-
+ drivers/usb/gadget/composite.c         | 30 +++++++++-----
+ drivers/usb/gadget/function/f_fs.c     |  5 ++-
+ drivers/usb/gadget/function/u_audio.c  | 10 ++---
+ drivers/usb/gadget/function/u_serial.c |  4 +-
+ drivers/usb/gadget/udc/udc-xilinx.c    |  1 -
+ drivers/usb/host/xhci-hub.c            | 25 ++++++++----
+ drivers/usb/host/xhci-mem.c            | 71 ++++++++++++++++++++++------------
+ drivers/usb/host/xhci-pci.c            | 10 +++--
+ drivers/usb/host/xhci.h                | 14 +++++--
+ drivers/usb/misc/iowarrior.c           | 31 ++++++++++++++-
+ drivers/usb/phy/phy-tegra-usb.c        |  8 ++++
+ drivers/usb/serial/ch341.c             | 10 +++++
+ drivers/usb/serial/ir-usb.c            |  2 +-
+ drivers/usb/storage/uas.c              | 23 ++++++++++-
+ include/linux/usb/quirks.h             |  3 ++
+ include/uapi/linux/usb/charger.h       | 16 ++++----
+ 26 files changed, 327 insertions(+), 140 deletions(-)
