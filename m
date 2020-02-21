@@ -2,127 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E52F91686E3
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2020 19:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D20F216875A
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2020 20:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729430AbgBUSo4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Feb 2020 13:44:56 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:35186 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729288AbgBUSo4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Feb 2020 13:44:56 -0500
-Received: by mail-pf1-f194.google.com with SMTP id i19so1697424pfa.2
-        for <linux-usb@vger.kernel.org>; Fri, 21 Feb 2020 10:44:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Nx0SaMtsGeq6ig/Wx6A2oBthvSaJ4xp1AmuNs+tweqU=;
-        b=m2K47Ys0LJhq/M1i/fWqT6yZqvfGk081hU3QUnO2zKyZETpt190S6RTduyaLCiRjr4
-         oJ0fsVQRGZQ9W+C3umC4gKSEjdkTr+zu+8QWsElqK6PVNL6wzirJe4Tm/t6APNLVJGmN
-         7eW4j4fnUL4DtzGpmFoYVbW8Km1JkSr/s2dBZA1NKoFMRVYtVXQnqM3wZeyfj5XmT9Qu
-         itQip4xkUd4OeeRmkEUOoncPTuPrg2A73mj1z71TTqsp0xu/UvsEXvBIjl/F/V/tE0P4
-         rNYKCZlog7+N+sXVDW6oAXlFCS7OBo10pKQ217TlxqS1+NOn4Q4xKsqvxXQzsMEF6O/6
-         NiWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Nx0SaMtsGeq6ig/Wx6A2oBthvSaJ4xp1AmuNs+tweqU=;
-        b=E5KMvMW01oQTMaqxFkgvz3VWBMdQm/DnqpQjRqIrj6EAIubkW0mtHhEC1z0DsQfvUf
-         h0WLU1etszzXSTUMK2GbnYo4jy43ioseOUi7qC9qcypYekGFLSR8cFh/s3VE6HYMiplE
-         qT3YfALm8EVdTaePnBy4m8h3SvGj1+isHsbJi6K1fLZ+MuZXmcQDGcGIXo+1oHo7PBYY
-         DV5Tx+VMSiMsdgzaGvAHaM/DMIIRmXnMLMdfGJs3sPZHY/iRbKPy1K+qg51ojhxe1Tsg
-         ApItMp10GP5NVwG5EzeA7u12f6y4jSjwENh5VPBzSOMcORxEHLCEnhUxeddogFnw9Gok
-         lKWQ==
-X-Gm-Message-State: APjAAAXpCPKXiMsnLsK/VIcsdcVVI0IIca/a4AO3CFIp91PoL43Ned89
-        0SGLiRHgZ2ygqLfwAdUNpUCphU34UawOPlAWDYbzaw==
-X-Google-Smtp-Source: APXvYqwirH1IZiYstbEIv32o/k3vcvAnZc0dbTFnVC41dUdDcNUlFFRadbc7dyELmchHiFatNIdYL31n90gsfjWmGBY=
-X-Received: by 2002:a63:34e:: with SMTP id 75mr41083312pgd.286.1582310694322;
- Fri, 21 Feb 2020 10:44:54 -0800 (PST)
+        id S1729509AbgBUTU2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Feb 2020 14:20:28 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:54368 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729397AbgBUTU2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Feb 2020 14:20:28 -0500
+Received: (qmail 4972 invoked by uid 2102); 21 Feb 2020 14:20:27 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 21 Feb 2020 14:20:27 -0500
+Date:   Fri, 21 Feb 2020 14:20:27 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     "taz.007" <taz.007@zoho.com>
+cc:     linux-usb@vger.kernel.org
+Subject: Re: fuse freeze and usb devices
+In-Reply-To: <74e26141-e697-31bb-c574-b8968d0f13e6@zoho.com>
+Message-ID: <Pine.LNX.4.44L0.2002211406460.1488-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-References: <000000000000058a87059f1882b9@google.com> <Pine.LNX.4.44L0.2002211138300.1488-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.2002211138300.1488-100000@iolanthe.rowland.org>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 21 Feb 2020 19:44:43 +0100
-Message-ID: <CAAeHK+yGS+wj5ovxu5P2Wyc=hgcmwEgK8LJ62+_T25vv8JOaOA@mail.gmail.com>
-Subject: Re: WARNING in dummy_free_request
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+55ae006e0a1feae5aeab@syzkaller.appspotmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 5:41 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Fri, 21 Feb 2020, syzbot wrote:
->
-> > Hello,
-> >
-> > syzbot found the following crash on:
-> >
-> > HEAD commit:    7f0cd6c7 usb: gadget: add raw-gadget interface
-> > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=17b58e5ee00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=f10b12ae04e03319
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=55ae006e0a1feae5aeab
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> >
-> > Unfortunately, I don't have any reproducer for this crash yet.
-> >
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+55ae006e0a1feae5aeab@syzkaller.appspotmail.com
-> >
-> > ------------[ cut here ]------------
-> > WARNING: CPU: 1 PID: 19332 at drivers/usb/gadget/udc/dummy_hcd.c:679 dummy_free_request+0x6c/0x80 drivers/usb/gadget/udc/dummy_hcd.c:679
-> > Kernel panic - not syncing: panic_on_warn set ...
-> > CPU: 1 PID: 19332 Comm: syz-executor.5 Not tainted 5.6.0-rc1-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > Call Trace:
-> >  __dump_stack lib/dump_stack.c:77 [inline]
-> >  dump_stack+0xef/0x16e lib/dump_stack.c:118
-> >  panic+0x2aa/0x6e1 kernel/panic.c:221
-> >  __warn.cold+0x2f/0x30 kernel/panic.c:582
-> >  report_bug+0x27b/0x2f0 lib/bug.c:195
-> >  fixup_bug arch/x86/kernel/traps.c:174 [inline]
-> >  fixup_bug arch/x86/kernel/traps.c:169 [inline]
-> >  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
-> >  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
-> >  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-> > RIP: 0010:dummy_free_request+0x6c/0x80 drivers/usb/gadget/udc/dummy_hcd.c:679
-> > Code: c5 75 22 e8 26 06 96 fd 48 89 ef e8 3e 54 be fd 5b 5d e9 17 06 96 fd e8 12 06 96 fd 0f 0b 5b 5d e9 09 06 96 fd e8 04 06 96 fd <0f> 0b eb d5 48 89 ef e8 08 ae be fd eb c2 66 0f 1f 44 00 00 41 56
-> > RSP: 0018:ffff8881c9eafdd8 EFLAGS: 00010016
-> > RAX: 0000000000040000 RBX: ffff8881d0d5aa10 RCX: ffffc900012a0000
-> > RDX: 000000000000012f RSI: ffffffff83a95c1c RDI: ffff8881d4d501c8
-> > RBP: ffff8881d0d5aa00 R08: ffff8881d0f9b100 R09: ffffed103b666a84
-> > R10: ffffed103b666a83 R11: ffff8881db33541b R12: 0000000000000212
-> > R13: ffff8881ca832008 R14: 0000000000000000 R15: ffff8881ca832180
-> >  raw_ioctl_ep_disable drivers/usb/gadget/legacy/raw_gadget.c:814 [inline]
-> >  raw_ioctl+0x1281/0x19e0 drivers/usb/gadget/legacy/raw_gadget.c:1031
->
-> Andrey:
->
-> This could be a bug in your raw_gadget driver.  This particular WARN is
-> triggered when a gadget driver tries to call usb_ep_free_request() for
-> a request that is still in flight.
+On Fri, 21 Feb 2020, taz.007 wrote:
 
-Hi Alan,
+> Hello linux-usb,
+> 
+> I'm experiencing some freezing from a fuse userspace daemon. I'm not 
+> sure if it is an actual usb issue, so please point me to the correct 
+> subsystem/mailing list if they could help.
+> setup:
+> 10 hard drives (ext3 or ext4) mounted on the system.
+> 7 of those are sata under usb enclosures, (usb2 only).
+> 2 of them are usbkeys (usb1 & usb2).
+> 1 of them is a regular sata drive directly connected.
+> I use mergerfs to gather all of them under a common mount point.
+> scenario :
+> the machine is cpu loaded, (2C/4T) nearly fully used.
+> rsync is running in a loop (in order to reproduce the issue), copying 
+> some files (several GB) from the mergerfs mount point to another drive 
+> (that is not part of the pool, also a regular ext4 mounted drive).
+> some background processes are doing "light" (~50KB/sec) IO on the same 
+> mergerfs pool.
+> after a while , any access to the mergerfs mount point is frozen.
+> This is because mergerfs itself is stuck in a syscall (if I understand 
+> correctly) that is never returning.
+> However I can access (by doing an "ls" for example) the underlying 
+> mounted hard drives fine!
+> And in this case, accessing the underlying hard drives via "ls" somehow 
+> unfreezes the previously blocked syscall from the mergerfs daemon!
+> It is not even needed to use "ls", doing hdparm -tT on the drives 
+> directly also permits to unfreeze mergerfs.
+> 
+> Now the link with usb :
+> When I tweak the values of /sys/block/sdX/device/max_sectors I can alter 
+> the behaviour.
+> With the values of 128 or 240, I'm unable to reproduce the issue.
+> With the value of 512 it reproduces the issue after around 4-5hours.
+> With the value of 1024 it reproduces the issue after around 2hours.
+> (maybe those are statistically insignificant numbers and I'm just unlucky)
+> 
+> There are no errors from the kernel, and the drives still seem to be 
+> working fine in fact.
+> I'm using Linux 5.5.3, but I tried back the 5.1.15, and the issue is 
+> already there.
+> 
+> For more detailed info on the mergerfs callstack, see the original 
+> bugreport thread :
+> https://github.com/trapexit/mergerfs/issues/708
+> 
+> Please don't forget to CC me as I'm not subscribed to the ML.
 
-It might. It's not obvious what's wrong though. raw_ioctl_ep_disable()
-calls usb_ep_disable()->dummy_disable() first, that supposedly does
-list_del_init(&req->queue). And then it calls
-usb_ep_free_request()->dummy_free_request(), which for some reason
-still causes the warning. And a racy queueing of another request
-should be prevented by the disabling flag.
+It seems unlikely to me that your problem has anything to do with USB.  
+You might try asking for help on the linux-kernel mailing list.
 
-I'll take a closer look on Monday.
+The GitHub bug report says that there are two threads stuck waiting in
+splice system calls.  It also says that turning off splice doesn't
+help.  When splice is off, what are the threads waiting for?
 
-Thanks!
+Some other things to consider...  They may not be related to your
+problem:
+
+What does "hdparm -B" show for your drives?
+
+What do /sys/block/sdX/device/power/{control,runtime_status} contain?
+
+Alan Stern
+
