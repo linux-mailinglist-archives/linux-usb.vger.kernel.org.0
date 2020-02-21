@@ -2,62 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E76B16790E
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2020 10:11:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47258167915
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2020 10:11:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727681AbgBUJLJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Feb 2020 04:11:09 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:54807 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726440AbgBUJLE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Feb 2020 04:11:04 -0500
-Received: by mail-wm1-f67.google.com with SMTP id n3so861137wmk.4
-        for <linux-usb@vger.kernel.org>; Fri, 21 Feb 2020 01:11:02 -0800 (PST)
+        id S1728164AbgBUJLi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Feb 2020 04:11:38 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:40471 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726440AbgBUJLh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Feb 2020 04:11:37 -0500
+Received: by mail-wr1-f66.google.com with SMTP id t3so1090756wru.7
+        for <linux-usb@vger.kernel.org>; Fri, 21 Feb 2020 01:11:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=subject:to:cc:references:from:autocrypt:organization:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=lC2Ok05wDBJ11Mc+7XUHky9ZjVue0L36+JAbszAfxLM=;
-        b=nitPb5hY8JFvy36A15Vy2ZNcfH2vIQLKpCa9o97VvY+nLx1A5fr8PkdsPflphtORSp
-         t54HsjYCc0zoXbu5sC/2qwW9+Yj4gbdN7ZoPKJuicxkhz1tv1TCGZcbyhI5kWG1Dn/Bt
-         Fq8bqIouteP/5SuVrB3YVm+8pqUvR+dz1bDl06pTL9qWfnasz7flQ5Pu2qorpwJ0bKCc
-         JsX0XqsQcQv8PQNpdvZIC1VzRErxIu+tPstIRiuU7fMJfQsjY+Wu7iT5aCkJI2ne662b
-         o3vfGzOmsjso1ikg8zHPxqckRuw/jLhPcsy+0zpNfx1Pp80DUoVzSi2FuruoYUtgFE47
-         mv4w==
+        bh=bPRVDNf5EPTvnMzKVRTHHqZyhdLMgs7p0iBBHW7uiTM=;
+        b=ssZzuQGpLfeHgihL58P5xu4tWSyUfdVL9znvDpf+p+w2Vbtg+/gy3OFTHUIy0FVl3Z
+         nTqurvRNfuGRKk4nEbR3X0dLm0hXIYKjvcubJAvlO8mjBwRJUGMQz3zolH3d1MNW1EED
+         UebTR/hxU6fiLVVj1cEoRKhgzZcLIEk5SawD+6Z1UF+oconbCWdbWFZRqKSynpe7mIq4
+         rnTl1o/jLqQpbPJM/72EazeMWNitApzCK5NNP0XyOoGV/dvgfUCdP6mXLRJO0auuslYm
+         siPLOtIFXDWWF/mA5Ss/uDMTppDONPEtjUmYTiClcovej5kqJIhmnUZIiFxFl/OqyRjU
+         QhXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :organization:message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=lC2Ok05wDBJ11Mc+7XUHky9ZjVue0L36+JAbszAfxLM=;
-        b=N21WhxYnLbAzuOS4Stb5OgS+U0YJhSqIwzLQoKK8BvD+pKHKUCALQE2jnAZAhoZHou
-         mZeN/+wFTngM6iZgs9hbOC37JwjZznOknDhWoaTj2qLxNweuEa6edZs9OMdD0m+Mj7aQ
-         b7fi0hHlije0tBx5oDkYi7oF2Tt9LA+NPhed02i5xiu38W6Wkzk0nRTL8NvEMlv3DH05
-         BCHovwZ6P/5NMLqhnwwoCVyhqBnPe28RIdvwO6Z+IvEToRD8OPrAw6BhhXmxktyrcwcK
-         NNo6Jz1ySoXzXLD/WRVtiVDhZ2+ONWZzplwoe8H7IJTXnhJLj65hev9m6FyAuqMxlQ1R
-         mrYQ==
-X-Gm-Message-State: APjAAAX8xgKgiGX6wRdC6n6usPDRw1prHuK5hZP52awSvku5HBeSx9HV
-        olmrmoxdzuUH8w3dVQ+HifjJIQ==
-X-Google-Smtp-Source: APXvYqzW+erZHPEVYlb4cjR9TwZjlpd5fW07F9ngwXZnZ9+r5FiohTmukOgiek6LvZ+Pt5tBb+VSpw==
-X-Received: by 2002:a1c:4b0f:: with SMTP id y15mr2478639wma.87.1582276261828;
-        Fri, 21 Feb 2020 01:11:01 -0800 (PST)
+        bh=bPRVDNf5EPTvnMzKVRTHHqZyhdLMgs7p0iBBHW7uiTM=;
+        b=lZBX9HCu0fpiRGeQGDd0FiKU1bRFVyEuJRJNpKDjL44FUUCtSqTGiX5WB+ThlIlgMD
+         JQQKqcgXdgx8xpGKZ2/x7XppXOwThQ4ASmKlEhV75ul8X+w86HFlE0ts6S+G5xV48uyt
+         PxMm0wnJc4LLcty3ycOMg4lbnQTAAZQg18b4KFdGwwStXiAcIpvGcs3zU1vPIAjCdIO8
+         14pFhxIVfrm11u84utv7eCTydwTOAaKxvZVdqK185ycYuq3IuMBUyxan5gH59zpAjb3T
+         RdGJtIVXIo5FzSGKe/N+rgxPqsvFdmpDxvU6qqdfZiGg05e+qUFeMkVj9wdw8MKbLMaj
+         5PIg==
+X-Gm-Message-State: APjAAAULK/gg4H4YjN97UHHz5azgRRS8We3WAkcRl2uK0RxEC9qm5JUV
+        KiQMbxQheoAQWTOlx8LR62edLg==
+X-Google-Smtp-Source: APXvYqxQun4CWpSZd1jZWXivvInYvIwhuPcvu38YVhSy/L5i7QKdCZh2Bc7Vg0S6JsKNyNDvUMrhbQ==
+X-Received: by 2002:adf:81e3:: with SMTP id 90mr45436302wra.23.1582276296008;
+        Fri, 21 Feb 2020 01:11:36 -0800 (PST)
 Received: from ?IPv6:2a01:e35:2ec0:82b0:4ca8:b25b:98e4:858? ([2a01:e35:2ec0:82b0:4ca8:b25b:98e4:858])
-        by smtp.gmail.com with ESMTPSA id a22sm3025856wmd.20.2020.02.21.01.11.00
+        by smtp.gmail.com with ESMTPSA id h5sm3183515wmf.8.2020.02.21.01.11.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Feb 2020 01:11:01 -0800 (PST)
-Subject: Re: [PATCH v3 2/3] usb: dwc3: gadget: Add support for disabling SS
- instances in park mode
-To:     Jun Li <lijun.kernel@gmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, khilman@baylibre.com,
-        linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dongjin Kim <tobetter@gmail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Thinh Nguyen <thinhn@synopsys.com>, Tim <elatllat@gmail.com>
+        Fri, 21 Feb 2020 01:11:35 -0800 (PST)
+Subject: Re: [PATCH v3 0/3] usb: dwc3: parkmode_disable_ss_quirk on DWC3
+ controller
+To:     balbi@kernel.org, khilman@baylibre.com
+Cc:     linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20200219141817.24521-1-narmstrong@baylibre.com>
- <20200219141817.24521-3-narmstrong@baylibre.com>
- <CAKgpwJXVo_Psyu45+KfRKsTRBc6LRWSvUw2CWdUQseAoKd2p9g@mail.gmail.com>
 From:   Neil Armstrong <narmstrong@baylibre.com>
 Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
  xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
@@ -109,56 +103,67 @@ Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
  zR8QplXA5kogS4kLe/7/JmlDMO8Zgm9vKLHSUeesLOrjdZ59EcjldNNBszRZQgEhwaarfz46
  BSwxi7g3Mu7u5kUByanqHyA=
 Organization: Baylibre
-Message-ID: <b2439923-5590-349e-754b-6b047d4becaf@baylibre.com>
-Date:   Fri, 21 Feb 2020 10:10:59 +0100
+Message-ID: <72443f63-d2fa-8eb5-ef56-98844bc59d55@baylibre.com>
+Date:   Fri, 21 Feb 2020 10:11:34 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <CAKgpwJXVo_Psyu45+KfRKsTRBc6LRWSvUw2CWdUQseAoKd2p9g@mail.gmail.com>
+In-Reply-To: <20200219141817.24521-1-narmstrong@baylibre.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21/02/2020 02:59, Jun Li wrote:
-> Neil Armstrong <narmstrong@baylibre.com> 于2020年2月19日周三 下午10:18写道：
->>
->> In certain circumstances, the XHCI SuperSpeed instance in park mode
->> can fail to recover, thus on Amlogic G12A/G12B/SM1 SoCs when there is high
->> load on the single XHCI SuperSpeed instance, the controller can crash like:
->>  xhci-hcd xhci-hcd.0.auto: xHCI host not responding to stop endpoint command.
->>  xhci-hcd xhci-hcd.0.auto: Host halt failed, -110
->>  xhci-hcd xhci-hcd.0.auto: xHCI host controller not responding, assume dead
->>  xhci-hcd xhci-hcd.0.auto: xHCI host not responding to stop endpoint command.
->>  hub 2-1.1:1.0: hub_ext_port_status failed (err = -22)
->>  xhci-hcd xhci-hcd.0.auto: HC died; cleaning up
->>  usb 2-1.1-port1: cannot reset (err = -22)
->>
->> Setting the PARKMODE_DISABLE_SS bit in the DWC3_USB3_GUCTL1 mitigates
->> the issue. The bit is described as :
->> "When this bit is set to '1' all SS bus instances in park mode are disabled"
->>
->> Synopsys explains in [1]:
->> The GUCTL1.PARKMODE_DISABLE_SS is only available in
->> dwc_usb3 controller running in host mode.
->> This should not be set for other IPs.
->> This can be disabled by default based on IP, but I recommend to have a
+On 19/02/2020 15:18, Neil Armstrong wrote:
+> In certain circumstances, the XHCI SuperSpeed instance in park mode
+> can fail to recover, thus on Amlogic G12A/G12B/SM1 SoCs when there is high
+> load on the single XHCI SuperSpeed instance, the controller can crash like:
+> xhci-hcd xhci-hcd.0.auto: xHCI host not responding to stop endpoint command.
+> xhci-hcd xhci-hcd.0.auto: Host halt failed, -110
+> xhci-hcd xhci-hcd.0.auto: xHCI host controller not responding, assume dead
+> xhci-hcd xhci-hcd.0.auto: xHCI host not responding to stop endpoint command.
+> hub 2-1.1:1.0: hub_ext_port_status failed (err = -22)
+> xhci-hcd xhci-hcd.0.auto: HC died; cleaning up
+> usb 2-1.1-port1: cannot reset (err = -22)
+> 
+> Setting the PARKMODE_DISABLE_SS bit in the DWC3_USB3_GUCTL1 mitigates
+> the issue. The bit is described as :
+> "When this bit is set to '1' all SS bus instances in park mode are disabled"
+> 
+> The bug has been reproduced by Jun Li <lijun.kernel@gmail.com> and confirmed
+> by Thinh Nguyen <Thinh.Nguyen@synopsys.com> with the explanation:
+>> The GUCTL1.PARKMODE_DISABLE_SS is only available in dwc_usb3 controller 
+>> running in host mode. This should not be set for other IPs.
+>> This can be disabled by default based on IP, but I recommend to have a 
 >> property to enable this feature for devices that need this.
->>
->> [1] https://lore.kernel.org/linux-usb/45212db9-e366-2669-5c0a-3c5bd06287f6@synopsys.com
 > 
-> This is not for gadget, patch title should be:
+> Changes since v2 at [2]:
+> - rebased on v5.6-rc2
 > 
-> usb: dwc3: core: add support...
+> Changes since v1 at [1]:
+> - added rob review tag
+> - added Thinh Nguyen in commit log
 > 
-> Li Jun
+> [1] https://lore.kernel.org/linux-amlogic/20191014141718.22603-1-narmstrong@baylibre.com
+> [1] https://lore.kernel.org/linux-amlogic/20200109101535.26812-1-narmstrong@baylibre.com
+> 
+> Neil Armstrong (3):
+>   doc: dt: bindings: usb: dwc3: Update entries for disabling SS
+>     instances in park mode
+>   usb: dwc3: gadget: Add support for disabling SS instances in park mode
+>   arm64: dts: g12-common: add parkmode_disable_ss_quirk on DWC3
+>     controller
+> 
+>  Documentation/devicetree/bindings/usb/dwc3.txt    | 2 ++
+>  arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi | 1 +
+>  drivers/usb/dwc3/core.c                           | 5 +++++
+>  drivers/usb/dwc3/core.h                           | 4 ++++
+>  4 files changed, 12 insertions(+)
 > 
 
-Indeed... time for a v4.
-
-Thanks,
+Please ignore this serie, the patch 3 subject is wrong.
 
 Neil
