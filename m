@@ -2,36 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3D8169111
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Feb 2020 18:55:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B9F169259
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 00:41:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726805AbgBVRzB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Feb 2020 12:55:01 -0500
-Received: from [167.172.150.84] ([167.172.150.84]:51228 "EHLO
-        centos-s-1vcpu-2gb-nyc1-01.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726550AbgBVRzB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Feb 2020 12:55:01 -0500
-Received: from localhost (centos-s-1vcpu-2gb-nyc1-01 [127.0.0.1])
-        by centos-s-1vcpu-2gb-nyc1-01.localdomain (Postfix) with SMTP id 73C0D17733;
-        Fri, 21 Feb 2020 16:50:48 +0000 (UTC)
-Received: from [179.66.137.250] by localhost with ESMTP id <588575-35691>; Fri, 21 Feb 2020 11:42:39 -0500
-Message-ID: <p3o44--eu8u3zhbgz9q$5$v$-68@g2p5r.d9.8th>
-From:   "RECEIVE AND SECURE THIS MONEY FOR ME" <fta447447@gmail.com>
-Reply-To: "RECEIVE AND SECURE THIS MONEY FOR ME" <fta447447@gmail.com>
-To:     linux-spi@vger.kernel.org
-Subject: RECEIVE MONEY IN BANK ACCOUNT REPLY TO fta447447@gmail.com
-Date:   Fri, 21 Feb 20 11:42:39 GMT
-X-Mailer: Microsoft Outlook Express 5.50.4522.1200
+        id S1726908AbgBVXlz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Feb 2020 18:41:55 -0500
+Received: from vps.xff.cz ([195.181.215.36]:34294 "EHLO vps.xff.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726881AbgBVXlz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 22 Feb 2020 18:41:55 -0500
+X-Greylist: delayed 582 seconds by postgrey-1.27 at vger.kernel.org; Sat, 22 Feb 2020 18:41:54 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
+        t=1582414331; bh=IxjYsKuZde7SyqZ/SuCk3wb/xdZPGdl9V7ADWU7YqlM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MU6t6luDIt1l6QHL4PTsN72GySLrOmLilLguUWlKy9fX39bngBYaIR1Hq53GIXCSQ
+         v21eevbB0PMRplPJbKyT4bQXB8gJ/FUFkkMJW7q2gQtvKpCQinTUfkNZaGOjJ4HLq0
+         PN/s4/b/TXDhYbKNXTJsvqnMOVvIM+A0dNGZlQfg=
+From:   Ondrej Jirman <megous@megous.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Ondrej Jirman <megous@megous.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] Support Castles Vega5000 PoS terminal USB
+Date:   Sun, 23 Feb 2020 00:32:02 +0100
+Message-Id: <20200222233202.237967-1-megous@megous.com>
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="A..C8.._3321CEA_"
-X-Priority: 3
-X-MSMail-Priority: Normal
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This terminal's USB port needs NO_UNION_NORMAL quirk to work with
+cdc-acm driver.
 
---A..C8.._3321CEA_--
+Signed-off-by: Ondrej Jirman <megous@megous.com>
+---
+ drivers/usb/class/cdc-acm.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 62f4fb9b362f1..8577441c81a4d 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -1739,6 +1739,9 @@ static const struct usb_device_id acm_ids[] = {
+ 	{ USB_DEVICE(0x22b8, 0x2d9a),   /* modem + AT port + diagnostics + NMEA */
+ 	.driver_info = NO_UNION_NORMAL, /* handle only modem interface          */
+ 	},
++	{ USB_DEVICE(0x0ca6, 0xa050), /* Castles Technology VEGA 5000 */
++	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
++	},
+ 
+ 	{ USB_DEVICE(0x0572, 0x1329), /* Hummingbird huc56s (Conexant) */
+ 	.driver_info = NO_UNION_NORMAL, /* union descriptor misplaced on
+-- 
+2.25.1
 
