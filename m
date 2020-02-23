@@ -2,138 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3484516977B
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 13:12:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B65C31697A8
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 14:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726236AbgBWMMd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Feb 2020 07:12:33 -0500
-Received: from sender4-pp-o97.zoho.com ([136.143.188.97]:25714 "EHLO
-        sender4-pp-o97.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725980AbgBWMMd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Feb 2020 07:12:33 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1582459948; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=Zv9dzNTa/vSo6j5fbHyw+AEwu6Yjba+L2s2lhEUygEnG69xMs+nTPMPcqupOsYSPXz0TYIgP2dgKaPPI1Ext42tAzzHkYpZyxut5/v6sFI9UiiZapmiR9SuLjVZhIRcHRk48Jkfcw7dj3m2fjIaw+CMFGV2AtJXVoAvnlbfYJiA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1582459948; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=Nh0j83u9R7gqLcAoO/9s61YyS1XGiVxVqyagprmlSMg=; 
-        b=T8qaLPGVLIp34VLC1b7B40nuE3UK7KUv3cxqeBBaW5h6zdng7lYTabwXmRJC3fjZzENIoO1QkupJD9TzuG799H32AbRO6gcJ5YjumjY2epugq1/Xq4dAcZLT3rsHkfX86JykYWi9L5qKDCVy9E4FBw8gtkoDyf8XqTSRSQOLA74=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=zoho.com;
-        spf=pass  smtp.mailfrom=taz.007@zoho.com;
-        dmarc=pass header.from=<taz.007@zoho.com> header.from=<taz.007@zoho.com>
-DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
-  s=zapps768; d=zoho.com; 
-  h=subject:to:cc:references:from:message-id:date:user-agent:mime-version:in-reply-to:content-type; 
-  b=FhZINyz1gCaqeAIbumWHdoHh89qPG89H/DJuQWeaVGZMVMEv8Q1d2rOx86GEL+YpIt5GFg3cFPJj
-    BoPZSd2g3wQzOs8XWRwBGF924CKKt0VWzSRjkfjV2I6vhCmiENPb  
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1582459947;
-        s=zm2020; d=zoho.com; i=taz.007@zoho.com;
-        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-        bh=Nh0j83u9R7gqLcAoO/9s61YyS1XGiVxVqyagprmlSMg=;
-        b=RpqrV/kzHTSWjobzyiqCygBqTaTPk8OQK0ER1yXXk779R1c2uBIB4wGztWAPrwxA
-        v0AWhheHYFnmGOVD4XLm9W97y64Y0lanmdlHm5M7dAyu7xkMVdFcouNaihco5nCO2YI
-        U0CeMEAsKt6tR6LYns0Y8CNA/RJmpWc+hQNeqCK8=
-Received: from [192.168.1.5] (77.109.97.112.adsl.dyn.edpnet.net [77.109.97.112]) by mx.zohomail.com
-        with SMTPS id 1582459945610465.4940824436874; Sun, 23 Feb 2020 04:12:25 -0800 (PST)
-Subject: Re: fuse freeze and usb devices
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org
-References: <Pine.LNX.4.44L0.2002211406460.1488-100000@iolanthe.rowland.org>
-From:   "taz.007" <taz.007@zoho.com>
-Message-ID: <dd616c84-6861-986c-56d0-8c020fd84410@zoho.com>
-Date:   Sun, 23 Feb 2020 13:12:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux i686; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        id S1727165AbgBWNPT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Feb 2020 08:15:19 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:62408 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726302AbgBWNPS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Feb 2020 08:15:18 -0500
+X-UUID: 1d18b034a6be43ee88cd15a93b00d9fb-20200223
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=HUcMinlJztCOhwy6UvhkEzNXlyN6matYqtCW9mEf2tg=;
+        b=cyjb4Jh2uiN5gqUWXcDwNSbbBVQ3VHvCM2Bac0nMvB+TU+UEj1X0VX443+da8woBc78lZX2D00EuYgtDBxqrxzXVnpF/zvaNrtN7oOulBxQJJ5XSmN6RM2SeAzYcvbTPeIwqoYFR2vF7IIKMvWuCsA2LkzSg713ZlOzSXTT6XpQ=;
+X-UUID: 1d18b034a6be43ee88cd15a93b00d9fb-20200223
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 708867206; Sun, 23 Feb 2020 21:15:08 +0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Sun, 23 Feb 2020 21:11:02 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Sun, 23 Feb 2020 21:14:50 +0800
+Message-ID: <1582463706.19053.32.camel@mtkswgap22>
+Subject: Re: [PATCH] lib: iov_iter.c: fix a possible calculation error on
+ remaining bytes
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Shen Jing <jingx.shen@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Vincent Pelletier <plr.vincent@gmail.com>,
+        Jerry Zhang <zhangjerry@google.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        CC Hwang <cc.hwang@mediatek.com>,
+        Loda Chou <loda.chou@mediatek.com>
+Date:   Sun, 23 Feb 2020 21:15:06 +0800
+In-Reply-To: <20200218124142.GJ23230@ZenIV.linux.org.uk>
+References: <1582011672-17189-1-git-send-email-macpaul.lin@mediatek.com>
+         <20200218124142.GJ23230@ZenIV.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-In-Reply-To: <Pine.LNX.4.44L0.2002211406460.1488-100000@iolanthe.rowland.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-CA
-X-ZohoMailClient: External
+X-TM-SNTS-SMTP: D743D5FFED43F9BC952FE27FF4BE8AE9BAFC6F359885D5FD278658A4DF9A560E2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21/02/20 20:20, Alan Stern wrote:
-> On Fri, 21 Feb 2020, taz.007 wrote:
->
->> Hello linux-usb,
->>
->> I'm experiencing some freezing from a fuse userspace daemon. I'm not
->> sure if it is an actual usb issue, so please point me to the correct
->> subsystem/mailing list if they could help.
->> setup:
->> 10 hard drives (ext3 or ext4) mounted on the system.
->> 7 of those are sata under usb enclosures, (usb2 only).
->> 2 of them are usbkeys (usb1 & usb2).
->> 1 of them is a regular sata drive directly connected.
->> I use mergerfs to gather all of them under a common mount point.
->> scenario :
->> the machine is cpu loaded, (2C/4T) nearly fully used.
->> rsync is running in a loop (in order to reproduce the issue), copying
->> some files (several GB) from the mergerfs mount point to another drive
->> (that is not part of the pool, also a regular ext4 mounted drive).
->> some background processes are doing "light" (~50KB/sec) IO on the same
->> mergerfs pool.
->> after a while , any access to the mergerfs mount point is frozen.
->> This is because mergerfs itself is stuck in a syscall (if I understand
->> correctly) that is never returning.
->> However I can access (by doing an "ls" for example) the underlying
->> mounted hard drives fine!
->> And in this case, accessing the underlying hard drives via "ls" somehow
->> unfreezes the previously blocked syscall from the mergerfs daemon!
->> It is not even needed to use "ls", doing hdparm -tT on the drives
->> directly also permits to unfreeze mergerfs.
->>
->> Now the link with usb :
->> When I tweak the values of /sys/block/sdX/device/max_sectors I can alter
->> the behaviour.
->> With the values of 128 or 240, I'm unable to reproduce the issue.
->> With the value of 512 it reproduces the issue after around 4-5hours.
->> With the value of 1024 it reproduces the issue after around 2hours.
->> (maybe those are statistically insignificant numbers and I'm just unlucky)
->>
->> There are no errors from the kernel, and the drives still seem to be
->> working fine in fact.
->> I'm using Linux 5.5.3, but I tried back the 5.1.15, and the issue is
->> already there.
->>
->> For more detailed info on the mergerfs callstack, see the original
->> bugreport thread :
->> https://github.com/trapexit/mergerfs/issues/708
->>
->> Please don't forget to CC me as I'm not subscribed to the ML.
-> It seems unlikely to me that your problem has anything to do with USB.
-> You might try asking for help on the linux-kernel mailing list.
-
-I will, thanks.
-
->
-> The GitHub bug report says that there are two threads stuck waiting in
-> splice system calls.  It also says that turning off splice doesn't
-> help.  When splice is off, what are the threads waiting for?
-
-they are waiting in pread64 () from /usr/lib/libpthread.so.0
-
-> Some other things to consider...  They may not be related to your
-> problem:
->
-> What does "hdparm -B" show for your drives?
-
-APM_level = off for the sata drive ; APM_level = not supported for all 
-the usb drives
-
-> What do /sys/block/sdX/device/power/{control,runtime_status} contain?
-"on" and "active" for all of them.
-
-I don't think it's related to a sleeping disk: the sata drive was 
-busy(swapping a little) while the fuse mount was frozen.
-
-I did a manual sync (on the cli), and it was enough to "wakeup" the 
-system and rsync did resume.
-
-> Alan Stern
->
+T24gVHVlLCAyMDIwLTAyLTE4IGF0IDEyOjQxICswMDAwLCBBbCBWaXJvIHdyb3RlOg0KPiBPbiBU
+dWUsIEZlYiAxOCwgMjAyMCBhdCAwMzo0MToxMlBNICswODAwLCBNYWNwYXVsIExpbiB3cm90ZToN
+Cj4gPiBUaGlzIGlzc3VlIHdhcyBmb3VuZCB3aGVuIGFkYmQgdHJ5aW5nIHRvIG9wZW4gZnVuY3Rp
+b25mcyB3aXRoIEFJTyBtb2RlLg0KPiA+IFVzdWFsbHksIHdlIG5lZWQgdG8gc2V0ICJzZXRwcm9w
+IHN5cy51c2IuZmZzLmFpb19jb21wYXQgMCIgdG8gZW5hYmxlDQo+ID4gYWRiZCB3aXRoIEFJTyBt
+b2RlIG9uIEFuZHJvaWQuDQo+ID4gDQo+ID4gV2hlbiBhZGJkIGlzIG9wZW5pbmcgZnVuY3Rpb25m
+cywgaXQgd2lsbCB0cnkgdG8gcmVhZCAyNCBieXRlcyBhdCB0aGUNCj4gPiBmaXNydCByZWFkIEkv
+TyBjb250cm9sLiBJZiB0aGlzIHJlYWRpbmcgaGFzIGJlZW4gZmFpbGVkLCBhZGJkIHdpbGwNCj4g
+PiB0cnkgdG8gc2VuZCBGVU5DVElPTkZTX0NMRUFSX0hBTFQgdG8gZnVuY3Rpb25mcy4gV2hlbiBh
+ZGJkIGlzIGluIEFJTw0KPiA+IG1vZGUsIGZ1bmN0aW9uZnMgd2lsbCBiZSBhY3RlZCB3aXRoIGFz
+eW5jcm9uaXplZCBJL08gcGF0aC4gQWZ0ZXIgdGhlDQo+ID4gc3VjY2Vzc2Z1bCByZWFkIHRyYW5z
+ZmVyIGhhcyBiZWVuIGNvbXBsZXRlZCBieSBnYWRnZXQgaGFyZHdhcmUsIHRoZQ0KPiA+IGZvbGxv
+d2luZyBzZXJpZXMgb2YgZnVuY3Rpb25zIHdpbGwgYmUgY2FsbGVkLg0KPiA+ICAgZmZzX2VwZmls
+ZV9hc3luY19pb19jb21wbGV0ZSgpIC0+IGZmc191c2VyX2NvcHlfd29ya2VyKCkgLT4NCj4gPiAg
+ICAgY29weV90b19pdGVyKCkgLT4gX2NvcHlfdG9faXRlcigpIC0+IGNvcHlvdXQoKSAtPg0KPiA+
+ICAgICBpdGVyYXRlX2FuZF9hZHZhbmNlKCkgLT4gaXRlcmF0ZV9pb3ZlYygpDQo+ID4gDQo+ID4g
+QWRkaW5nIGRlYnVnIHRyYWNlIHRvIHRoZXNlIGZ1bmN0aW9ucywgaXQgaGFzIGJlZW4gZm91bmQg
+dGhhdCBpbg0KPiA+IGl0ZXJhdGVfaW92ZWMoKSwgdGhlIGNhbGN1bGF0aW9uIHJlc3VsdCBvZiBu
+IHdpbGwgYmUgdHVybmVkIGludG8gemVyby4NCj4gPiAgICBuID0gd2FudGVkIC0gbjsgLyogMCA9
+PSBuID0gMjQgLSAyNDsgKi8NCj4gPiBXaGljaCBjYXVzZXMgY29weW91dCgpIHdvbid0IGNvcHkg
+ZGF0YSB0byB1c2Vyc3BhY2Ugc2luY2UgdGhlIGxlbmd0aA0KPiA+IHRvIGJlIGNvcGllZCAidi5p
+b3ZfbGVuIiB3aWxsIGJlIHplcm8sIHdoaWNoIGlzbid0IGNvcnJlY3QuIFRoaXMgYWxzbw0KPiA+
+IGxlYWRzIGZmc19jb3B5X3RvX2l0ZXIoKSBhbHdheXMgcmV0dXJuIC1FRkFVTFQuIEZpbmFsbHkg
+YWRiZCBjYW5ub3QNCj4gPiBvcGVuIGZ1bmN0aW9uZnMgYW5kIHNlbmQgRlVOQ1RJT05GU19DTEVB
+Ul9IQUxULg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IE1hY3BhdWwgTGluIDxtYWNwYXVsLmxp
+bkBtZWRpYXRlay5jb20+DQo+ID4gLS0tDQo+ID4gIGxpYi9pb3ZfaXRlci5jIHwgMyArKy0NCj4g
+PiAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiA+IA0K
+PiA+IGRpZmYgLS1naXQgYS9saWIvaW92X2l0ZXIuYyBiL2xpYi9pb3ZfaXRlci5jDQo+ID4gaW5k
+ZXggZmIyOWMwMmM2YTNjLi5mOTMzNDE0NGUyNTkgMTAwNjQ0DQo+ID4gLS0tIGEvbGliL2lvdl9p
+dGVyLmMNCj4gPiArKysgYi9saWIvaW92X2l0ZXIuYw0KPiA+IEBAIC0zNiw3ICszNiw4IEBADQo+
+ID4gIAkJc2tpcCA9IF9fdi5pb3ZfbGVuOwkJCVwNCj4gPiAgCQluIC09IF9fdi5pb3ZfbGVuOwkJ
+CVwNCj4gPiAgCX0JCQkJCQlcDQo+ID4gLQluID0gd2FudGVkIC0gbjsJCQkJCVwNCj4gPiArCWlm
+IChuICE9IHdhbnRlZCkJCQkJXA0KPiA+ICsJCW4gPSB3YW50ZWQgLSBuOwkJCQlcDQo+ID4gIH0N
+Cj4gDQo+IAlGaXJzdCBvZiBhbGwsIG5vdGhpbmcgaW4gdGhhdCBsaW5lIGNhbiBwb3NzaWJseSAq
+Y2F1c2UqDQo+IGNvcHlvdXQoKSB0byBkbyBhbnl0aGluZyAtIGl0J3MgYWZ0ZXIgdGhlIGNhbGxz
+IG9mIHN0ZXAuICBXaGF0J3MNCj4gbW9yZSwgdGhpcyBjaGFuZ2VzIGJlaGF2aW91ciBvbmx5IHdo
+ZW4gd2FudGVkIHdvdWxkJ3ZlIGJlZW4gZXF1YWwgdG8NCj4gbiwgZG9lc24ndCBpdD8gIFdoaWNo
+IHRyYW5zbGF0ZXMgaW50byAibm8gZGVjcmVtZW50cyBvZiBuIGhhdmUNCj4gaGFwcGVuZWQgYXQg
+YWxsIiwgaS5lLiAibm90aGluZyBoYXMgYmVlbiBjb3BpZWQiLiAgSU9XLCBpdCdzDQo+IGEgY29u
+c2VxdWVuY2Ugb2Ygbm8gY29weW91dCwgbm90IHRoZSBjYXVzZSBvZiBzdWNoLiAgWW91IGNhbg0K
+PiBtYWtlIGNvcHlfdG9faXRlcigpIGxpZSBhbmQgcHJldGVuZCBpZiBoYXMgY29waWVkIGV2ZXJ5
+dGhpbmcNCj4gd2hlbiBpdCBoYXMgY29waWVkIG5vdGhpbmcsIGJ1dCB0aGF0IHdvbid0IGNoYW5n
+ZSB0aGUgdW5kZXJseWluZw0KPiBidWcuDQo+IA0KPiAJU28gSSdtIGFmcmFpZCB5b3VyIGRlYnVn
+Z2luZyBpcyBub3QgZmluaXNoZWQgLSB5b3UNCj4gc3RpbGwgbmVlZCB0byBmaW5kIG91dCB3aGF0
+IGNhdXNlcyB0aGUgY29weW91dCBmYWlsdXJlcyBhbmQvb3INCj4gQlMgaW92X2l0ZXIgcGFkZGVk
+IGJ5IGNhbGxlci4NCg0KVGhhbmtzIGZvciB5b3VyIGV4cGxhbmF0aW9uLiBBZnRlciB0aGVzZSBk
+YXlzLCBJJ3ZlIGZvdW5kIHRoaXMgaXNzdWUNCm9ubHkgaGFwcGVuZWQgb24gYXJtIDY0LWJpdCBz
+eXN0ZW0sIHdoaWxlIGFybSAzMi1iaXQgc3lzdGVtIHdvcmtzIHdlbGwuDQpBZnRlciBtb3JlIGRl
+YnVnZ2luZywgaXQgbG9va3MgbGlrZSBhcm0gNjQgdGFnZ2VkIEFCSSByZWxhdGVkIGlzc3VlLg0K
+SSd2ZSB1cGRhdGUgYSBuZXcgcGF0Y2ggaGVyZTogDQogICAgdXNiOiBnYWRnZXQ6IGZfZnM6IHRy
+eSB0byBmaXggQUlPIGlzc3VlIHVuZGVyIEFSTSA2NCBiaXQgVEFHR0VEIG1vZGUNCiAgICBodHRw
+czovL2xrbWwub3JnL2xrbWwvMjAyMC8yLzIzLzE2Lg0KDQpUaGFua3MuDQpNYWNwYXVsIExpbi4N
+Cg==
 
