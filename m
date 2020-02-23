@@ -2,114 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B65C31697A8
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 14:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FACD1697ED
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 14:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727165AbgBWNPT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Feb 2020 08:15:19 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:62408 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726302AbgBWNPS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Feb 2020 08:15:18 -0500
-X-UUID: 1d18b034a6be43ee88cd15a93b00d9fb-20200223
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=HUcMinlJztCOhwy6UvhkEzNXlyN6matYqtCW9mEf2tg=;
-        b=cyjb4Jh2uiN5gqUWXcDwNSbbBVQ3VHvCM2Bac0nMvB+TU+UEj1X0VX443+da8woBc78lZX2D00EuYgtDBxqrxzXVnpF/zvaNrtN7oOulBxQJJ5XSmN6RM2SeAzYcvbTPeIwqoYFR2vF7IIKMvWuCsA2LkzSg713ZlOzSXTT6XpQ=;
-X-UUID: 1d18b034a6be43ee88cd15a93b00d9fb-20200223
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 708867206; Sun, 23 Feb 2020 21:15:08 +0800
-Received: from mtkcas09.mediatek.inc (172.21.101.178) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Sun, 23 Feb 2020 21:11:02 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas09.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Sun, 23 Feb 2020 21:14:50 +0800
-Message-ID: <1582463706.19053.32.camel@mtkswgap22>
-Subject: Re: [PATCH] lib: iov_iter.c: fix a possible calculation error on
- remaining bytes
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Shen Jing <jingx.shen@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Vincent Pelletier <plr.vincent@gmail.com>,
-        Jerry Zhang <zhangjerry@google.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        CC Hwang <cc.hwang@mediatek.com>,
-        Loda Chou <loda.chou@mediatek.com>
-Date:   Sun, 23 Feb 2020 21:15:06 +0800
-In-Reply-To: <20200218124142.GJ23230@ZenIV.linux.org.uk>
-References: <1582011672-17189-1-git-send-email-macpaul.lin@mediatek.com>
-         <20200218124142.GJ23230@ZenIV.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S1726490AbgBWNpO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Feb 2020 08:45:14 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:43050 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726208AbgBWNpO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Feb 2020 08:45:14 -0500
+Received: by mail-pl1-f195.google.com with SMTP id p11so2862703plq.10
+        for <linux-usb@vger.kernel.org>; Sun, 23 Feb 2020 05:45:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=LkBcusp0K1+kbxFwysWwqTv6d10vigfbNEEutpsd+eU=;
+        b=JRrsQoyLE1tNN2adHFzeg3FkMSI/fKFaXaC45IH0in8OGY6nDrnUiU/IBaqSseLXGU
+         T6QvpohJxnsduPTYwaopmAQQAgqdAnqtAZ4vcqb7Wjt+ap0SLRtCgWTqz7dZvwbFvLzl
+         Bh3g7PDmlcEWK/G3wZUeIkGLkvvTOtuaH/OPjsW+qU81HKTusHlm/VYQ85UVmiDw6Mky
+         wJDXOZSfVCykFB4G3cN6kapmIKbeWDC+t0ubFjYRCF5keTIaapCtuoly0Z7QhrBg3rdQ
+         hojv19cmz4LILB7cE5Y6JX0ZLaGIBaBUbmpuNfO52ysJZi4vyc9yROTrtzxsKv8XZNIs
+         h9SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LkBcusp0K1+kbxFwysWwqTv6d10vigfbNEEutpsd+eU=;
+        b=LWwIODi6U995YNYyyO1uOiRWTvVyEAb/K7eboEdVt3EC+ghG+HQfKyFq1ye6Tk0SjL
+         A64WExDl1J6ie6tfFY/VT/cnumIu4HlcoJRVJJe8wmJrPLZ8IgytgCjqh1wITwHK/jvW
+         okCPJGX6PcUmaaE29dMdr6ZCEdobYr2Nb6Q+XWbzVA6G3BR8BHMBtY9xPpvdwMnlStPL
+         BL/dsXqOK+GRqTDvg+LoC3RP6fNxaRyn43A8yKBfMXGCyu5LHTljAKPNY9NsU9+ka9JW
+         um9NhbeerEyII/vc/jlOVCnp/wBFOa+I9kjR6Rh4V46tMFzTXkc9aj0TBiBwu8F5miZk
+         uDsg==
+X-Gm-Message-State: APjAAAVrlzC11BsWehpBbOf5WDkCbvqYz8fA5l759qnbUqTcOq/M52QH
+        L4+fdzl0JtFYlQYzR08+lN8=
+X-Google-Smtp-Source: APXvYqy0sW90nxVxwnxhknZJwujbxZlriAGUdz2liM+BHJQ+Myu4zQz67BOyGtRB9UuhUr0Q9pEMfQ==
+X-Received: by 2002:a17:902:7e4b:: with SMTP id a11mr45411367pln.61.1582465513738;
+        Sun, 23 Feb 2020 05:45:13 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i27sm8959072pgn.76.2020.02.23.05.45.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Feb 2020 05:45:12 -0800 (PST)
+Subject: Re: [PATCH] usb: dwc2: extend treatment for incomplete transfer
+To:     =?UTF-8?B?QW50dGkgU2VwcMOkbMOk?= <a.seppala@gmail.com>
+Cc:     Boris ARZUR <boris@konbu.org>, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        William Wu <william.wu@rock-chips.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>
+References: <20200210213906.GA24079@roeck-us.net>
+ <20200211054953.GA2401@tungsten> <20200211161522.GA1894@roeck-us.net>
+ <20200215053647.GA10345@tungsten> <20200219211056.GA829@roeck-us.net>
+ <CAKv9HNZx_YTC1QEyT-T2_BuXnnju+9czKx-JJjduk9TjUSjS7A@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <587c8fd7-6a31-098e-7fcb-815208f602bc@roeck-us.net>
+Date:   Sun, 23 Feb 2020 05:45:11 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: D743D5FFED43F9BC952FE27FF4BE8AE9BAFC6F359885D5FD278658A4DF9A560E2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <CAKv9HNZx_YTC1QEyT-T2_BuXnnju+9czKx-JJjduk9TjUSjS7A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVHVlLCAyMDIwLTAyLTE4IGF0IDEyOjQxICswMDAwLCBBbCBWaXJvIHdyb3RlOg0KPiBPbiBU
-dWUsIEZlYiAxOCwgMjAyMCBhdCAwMzo0MToxMlBNICswODAwLCBNYWNwYXVsIExpbiB3cm90ZToN
-Cj4gPiBUaGlzIGlzc3VlIHdhcyBmb3VuZCB3aGVuIGFkYmQgdHJ5aW5nIHRvIG9wZW4gZnVuY3Rp
-b25mcyB3aXRoIEFJTyBtb2RlLg0KPiA+IFVzdWFsbHksIHdlIG5lZWQgdG8gc2V0ICJzZXRwcm9w
-IHN5cy51c2IuZmZzLmFpb19jb21wYXQgMCIgdG8gZW5hYmxlDQo+ID4gYWRiZCB3aXRoIEFJTyBt
-b2RlIG9uIEFuZHJvaWQuDQo+ID4gDQo+ID4gV2hlbiBhZGJkIGlzIG9wZW5pbmcgZnVuY3Rpb25m
-cywgaXQgd2lsbCB0cnkgdG8gcmVhZCAyNCBieXRlcyBhdCB0aGUNCj4gPiBmaXNydCByZWFkIEkv
-TyBjb250cm9sLiBJZiB0aGlzIHJlYWRpbmcgaGFzIGJlZW4gZmFpbGVkLCBhZGJkIHdpbGwNCj4g
-PiB0cnkgdG8gc2VuZCBGVU5DVElPTkZTX0NMRUFSX0hBTFQgdG8gZnVuY3Rpb25mcy4gV2hlbiBh
-ZGJkIGlzIGluIEFJTw0KPiA+IG1vZGUsIGZ1bmN0aW9uZnMgd2lsbCBiZSBhY3RlZCB3aXRoIGFz
-eW5jcm9uaXplZCBJL08gcGF0aC4gQWZ0ZXIgdGhlDQo+ID4gc3VjY2Vzc2Z1bCByZWFkIHRyYW5z
-ZmVyIGhhcyBiZWVuIGNvbXBsZXRlZCBieSBnYWRnZXQgaGFyZHdhcmUsIHRoZQ0KPiA+IGZvbGxv
-d2luZyBzZXJpZXMgb2YgZnVuY3Rpb25zIHdpbGwgYmUgY2FsbGVkLg0KPiA+ICAgZmZzX2VwZmls
-ZV9hc3luY19pb19jb21wbGV0ZSgpIC0+IGZmc191c2VyX2NvcHlfd29ya2VyKCkgLT4NCj4gPiAg
-ICAgY29weV90b19pdGVyKCkgLT4gX2NvcHlfdG9faXRlcigpIC0+IGNvcHlvdXQoKSAtPg0KPiA+
-ICAgICBpdGVyYXRlX2FuZF9hZHZhbmNlKCkgLT4gaXRlcmF0ZV9pb3ZlYygpDQo+ID4gDQo+ID4g
-QWRkaW5nIGRlYnVnIHRyYWNlIHRvIHRoZXNlIGZ1bmN0aW9ucywgaXQgaGFzIGJlZW4gZm91bmQg
-dGhhdCBpbg0KPiA+IGl0ZXJhdGVfaW92ZWMoKSwgdGhlIGNhbGN1bGF0aW9uIHJlc3VsdCBvZiBu
-IHdpbGwgYmUgdHVybmVkIGludG8gemVyby4NCj4gPiAgICBuID0gd2FudGVkIC0gbjsgLyogMCA9
-PSBuID0gMjQgLSAyNDsgKi8NCj4gPiBXaGljaCBjYXVzZXMgY29weW91dCgpIHdvbid0IGNvcHkg
-ZGF0YSB0byB1c2Vyc3BhY2Ugc2luY2UgdGhlIGxlbmd0aA0KPiA+IHRvIGJlIGNvcGllZCAidi5p
-b3ZfbGVuIiB3aWxsIGJlIHplcm8sIHdoaWNoIGlzbid0IGNvcnJlY3QuIFRoaXMgYWxzbw0KPiA+
-IGxlYWRzIGZmc19jb3B5X3RvX2l0ZXIoKSBhbHdheXMgcmV0dXJuIC1FRkFVTFQuIEZpbmFsbHkg
-YWRiZCBjYW5ub3QNCj4gPiBvcGVuIGZ1bmN0aW9uZnMgYW5kIHNlbmQgRlVOQ1RJT05GU19DTEVB
-Ul9IQUxULg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IE1hY3BhdWwgTGluIDxtYWNwYXVsLmxp
-bkBtZWRpYXRlay5jb20+DQo+ID4gLS0tDQo+ID4gIGxpYi9pb3ZfaXRlci5jIHwgMyArKy0NCj4g
-PiAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiA+IA0K
-PiA+IGRpZmYgLS1naXQgYS9saWIvaW92X2l0ZXIuYyBiL2xpYi9pb3ZfaXRlci5jDQo+ID4gaW5k
-ZXggZmIyOWMwMmM2YTNjLi5mOTMzNDE0NGUyNTkgMTAwNjQ0DQo+ID4gLS0tIGEvbGliL2lvdl9p
-dGVyLmMNCj4gPiArKysgYi9saWIvaW92X2l0ZXIuYw0KPiA+IEBAIC0zNiw3ICszNiw4IEBADQo+
-ID4gIAkJc2tpcCA9IF9fdi5pb3ZfbGVuOwkJCVwNCj4gPiAgCQluIC09IF9fdi5pb3ZfbGVuOwkJ
-CVwNCj4gPiAgCX0JCQkJCQlcDQo+ID4gLQluID0gd2FudGVkIC0gbjsJCQkJCVwNCj4gPiArCWlm
-IChuICE9IHdhbnRlZCkJCQkJXA0KPiA+ICsJCW4gPSB3YW50ZWQgLSBuOwkJCQlcDQo+ID4gIH0N
-Cj4gDQo+IAlGaXJzdCBvZiBhbGwsIG5vdGhpbmcgaW4gdGhhdCBsaW5lIGNhbiBwb3NzaWJseSAq
-Y2F1c2UqDQo+IGNvcHlvdXQoKSB0byBkbyBhbnl0aGluZyAtIGl0J3MgYWZ0ZXIgdGhlIGNhbGxz
-IG9mIHN0ZXAuICBXaGF0J3MNCj4gbW9yZSwgdGhpcyBjaGFuZ2VzIGJlaGF2aW91ciBvbmx5IHdo
-ZW4gd2FudGVkIHdvdWxkJ3ZlIGJlZW4gZXF1YWwgdG8NCj4gbiwgZG9lc24ndCBpdD8gIFdoaWNo
-IHRyYW5zbGF0ZXMgaW50byAibm8gZGVjcmVtZW50cyBvZiBuIGhhdmUNCj4gaGFwcGVuZWQgYXQg
-YWxsIiwgaS5lLiAibm90aGluZyBoYXMgYmVlbiBjb3BpZWQiLiAgSU9XLCBpdCdzDQo+IGEgY29u
-c2VxdWVuY2Ugb2Ygbm8gY29weW91dCwgbm90IHRoZSBjYXVzZSBvZiBzdWNoLiAgWW91IGNhbg0K
-PiBtYWtlIGNvcHlfdG9faXRlcigpIGxpZSBhbmQgcHJldGVuZCBpZiBoYXMgY29waWVkIGV2ZXJ5
-dGhpbmcNCj4gd2hlbiBpdCBoYXMgY29waWVkIG5vdGhpbmcsIGJ1dCB0aGF0IHdvbid0IGNoYW5n
-ZSB0aGUgdW5kZXJseWluZw0KPiBidWcuDQo+IA0KPiAJU28gSSdtIGFmcmFpZCB5b3VyIGRlYnVn
-Z2luZyBpcyBub3QgZmluaXNoZWQgLSB5b3UNCj4gc3RpbGwgbmVlZCB0byBmaW5kIG91dCB3aGF0
-IGNhdXNlcyB0aGUgY29weW91dCBmYWlsdXJlcyBhbmQvb3INCj4gQlMgaW92X2l0ZXIgcGFkZGVk
-IGJ5IGNhbGxlci4NCg0KVGhhbmtzIGZvciB5b3VyIGV4cGxhbmF0aW9uLiBBZnRlciB0aGVzZSBk
-YXlzLCBJJ3ZlIGZvdW5kIHRoaXMgaXNzdWUNCm9ubHkgaGFwcGVuZWQgb24gYXJtIDY0LWJpdCBz
-eXN0ZW0sIHdoaWxlIGFybSAzMi1iaXQgc3lzdGVtIHdvcmtzIHdlbGwuDQpBZnRlciBtb3JlIGRl
-YnVnZ2luZywgaXQgbG9va3MgbGlrZSBhcm0gNjQgdGFnZ2VkIEFCSSByZWxhdGVkIGlzc3VlLg0K
-SSd2ZSB1cGRhdGUgYSBuZXcgcGF0Y2ggaGVyZTogDQogICAgdXNiOiBnYWRnZXQ6IGZfZnM6IHRy
-eSB0byBmaXggQUlPIGlzc3VlIHVuZGVyIEFSTSA2NCBiaXQgVEFHR0VEIG1vZGUNCiAgICBodHRw
-czovL2xrbWwub3JnL2xrbWwvMjAyMC8yLzIzLzE2Lg0KDQpUaGFua3MuDQpNYWNwYXVsIExpbi4N
-Cg==
+On 2/23/20 3:00 AM, Antti Seppälä wrote:
+> Hi Guenter,
+> 
+> On Wed, 19 Feb 2020 at 23:11, Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> Yes, those patches didn't address the core problem. Can you test with the
+>> attached two patches ?
+>>
+>> Thanks,
+>> Guenter
+> 
+> I took a look at your patch (usb: dwc2: Simplify DMA alignment code)
+> and I don't believe it is correct.
+> 
+> The patch re-introduces the dma_aligned_buffer struct and takes some
+> care to align the beginning of the struct to dma cache lines. However
+> we should be aligning the data[0] pointer inside the struct instead.
+> With the code in the patch data[0] gets pushed to be at an offset from
+> the alignment by kmalloc_ptr and old_xfer_buffer pointers. In other
+> words data[0] is now not aligned to dma cache boundaries.
+> 
+
+I thought so too initially. However,
+
+temp = PTR_ALIGN(kmalloc_ptr + 1, TEGRA_USB_DMA_ALIGN) - 1;
+
+aligns the structure pointer such that its _end_ is DMA-aligned,
+which is ->data[0].
+
+Just to be sure, I'll add some debug code warning me if data[0] is
+not DMA aligned.
+
+> Reviewing the code got me thinking that what if we stopped playing
+> with the alignment hacks altogether and hit the issue with a heavier
+> hammer instead? Attached you can find a new patch that introduces a
+> list to keep track of the allocations. The code then looks up the
+> entry from the list when it is time to restore the original pointer.
+> This way the allocations for the aligned dma area and the original
+> pointer are separate and no corruptions should occur.
+> 
+> Thoughts, comments? I should note that the patch has received only
+> light testing and not very thorough thinking. I can prepare a proper
+> patch to be sent inline if the idea seems worth exploring further.
+> 
 
