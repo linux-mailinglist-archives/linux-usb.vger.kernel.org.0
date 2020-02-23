@@ -2,96 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51465169575
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 04:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5944169588
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 04:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727158AbgBWDIJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Feb 2020 22:08:09 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:35670 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727093AbgBWDIJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Feb 2020 22:08:09 -0500
-Received: by mail-pg1-f195.google.com with SMTP id 7so1071040pgr.2;
-        Sat, 22 Feb 2020 19:08:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=L8rbrZA8d9M2bUXip/mtfy2g9mjJeidmY8X9/9kPSJM=;
-        b=JKMkfiD0UFIxKKhXqwLNb79QW1bAmKWH9ZhcG/YFnRrqINosVquTBsdBog839oSz3Q
-         sL1CckOy2+OSIiyQto9bWM/OrZPOJJ9OdF2/Qs/fY7AasanKWWqR4c3ssheRU8szMNX1
-         X9YPKgzcHMV5x97gFbvg4mKqz4YTt4JkT4vy4VjLB+jCzaZAk1lnVpViJ/0mCbumHzqV
-         ebD48b8laRFaZ8ZWzvF38Z0+1rz2b1DzhAF2klJyUBbdNcT4lmVp/CcGFISiXmG8D8Q9
-         NbDplUqrVNfJd/KqKvt4olvTqfN1nOjC+rjV8YWTLvvjyDT1bvKJUEdUm0K1O85Jhrh5
-         m1vA==
+        id S1727272AbgBWDX3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Feb 2020 22:23:29 -0500
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:33335 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727093AbgBWDX3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Feb 2020 22:23:29 -0500
+Received: by mail-ed1-f65.google.com with SMTP id r21so7587898edq.0;
+        Sat, 22 Feb 2020 19:23:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=L8rbrZA8d9M2bUXip/mtfy2g9mjJeidmY8X9/9kPSJM=;
-        b=j1t/62FPmNmC2dZ9zTs6gvmJiEFaXYAh4i+UDWEDv0WqDYOY644XgbLqNqU60lhqFR
-         EdCUYxLr1XjcR8hbL2q0Mr7JpysQm90vfqHSDVw4Ctv/rtbA2YoV3aDyvrv+gmjOIW8A
-         8f5IU5FUf6dl3KmHA/z0Uq5VKVTa6zm5S3mYxRWL5DseOHIZgYjh14/RRvPN58kPFwAa
-         D47DnW356K5fxqnM5BAjmeLOaEwJNCm2KG43+ccJEaKy8VH5Pzb8Gprc6gH9ECqHaHyL
-         zEDA+GjhT1oRB2shGiMS+OiaXeUnIAJgGt25SKWpc1YBvIAJ0DH8NFziIo7G9ETV1AW1
-         p4iA==
-X-Gm-Message-State: APjAAAWBRCoNXwx32ZeXZSoZd5RCNKz1TY9K5Tkp2n5JACaK91Im1CVG
-        KVKMI0JEFrbfyuMyWti0/cYllWccIhY=
-X-Google-Smtp-Source: APXvYqz14HB6+ohogoFMvLIOf5V9rLoSIvKeD9epby/QGvO8EEdyBRjgAJoTJ3H1YR1apy+9ncw6ig==
-X-Received: by 2002:a62:7945:: with SMTP id u66mr45890032pfc.82.1582427288589;
-        Sat, 22 Feb 2020 19:08:08 -0800 (PST)
-Received: from [192.168.1.5] ([110.77.154.179])
-        by smtp.googlemail.com with ESMTPSA id gc1sm7277305pjb.20.2020.02.22.19.08.06
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RS1myGQD4/DxcloU05LYheuFzcmTnlxgIJwQU+BLqtY=;
+        b=MxI8FM2mm+dZFcmAVdQO8Lq728djsVIYKYj7ANjU90WqVOBTJUKEuJwApjk4ipExGp
+         BRtNw9htGZS6Xi6xW/NHAqV8YmipiBlXN86fD2TH7xJn8PfIaCQdTRpET0hQ+Y3fPSy2
+         v+9+pk2ht3ZRZGc10pKqqdCls0whoBut4YgxlQxTIqPhd2M3VoDsfCXkcijUmkRsJ1lL
+         Logq8Ao1iLpnhCezCzLvMWoo1uXLjDJIJBaDZxt3aSje0K3XEA/9HGmW7g27Bby+r5YO
+         kkkAdaKAlvNolD8Si0Vt6e/6lGGlAx6uh490F2vUkh6sS05MxXzYrQQuFDL7OBhCr/aq
+         07Jg==
+X-Gm-Message-State: APjAAAXnOCoZjXaSYij8JYRIUKgCFCqGbena04Y7KJK68/lry33+9/LV
+        XKxQfKunGFhjP82OfvhwJvWtg+OAlS4=
+X-Google-Smtp-Source: APXvYqwi+kjImUdTL0vzD3gf5zEKNMyj3eI9Fvxf+6hnbmTWovDebi924u/JV7IqYEuNJF+bBAMT7w==
+X-Received: by 2002:aa7:cf81:: with SMTP id z1mr40883593edx.234.1582428207299;
+        Sat, 22 Feb 2020 19:23:27 -0800 (PST)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id n11sm594532eje.86.2020.02.22.19.23.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Feb 2020 19:08:07 -0800 (PST)
-Subject: Re: [PATCH] Support Castles Vega5000 PoS terminal USB
-To:     Ondrej Jirman <megous@megous.com>, linux-usb@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20200222233202.237967-1-megous@megous.com>
-From:   Lars Melin <larsm17@gmail.com>
-Message-ID: <9d9263a0-cddb-0efb-46a5-1d223a8232e3@gmail.com>
-Date:   Sun, 23 Feb 2020 10:08:04 +0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        Sat, 22 Feb 2020 19:23:26 -0800 (PST)
+Received: by mail-wr1-f43.google.com with SMTP id g3so6334598wrs.12;
+        Sat, 22 Feb 2020 19:23:25 -0800 (PST)
+X-Received: by 2002:a5d:484f:: with SMTP id n15mr57653500wrs.365.1582428205416;
+ Sat, 22 Feb 2020 19:23:25 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200222233202.237967-1-megous@megous.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20191020134229.1216351-3-megous@megous.com> <20191110124355.1569-1-rikard.falkeborn@gmail.com>
+In-Reply-To: <20191110124355.1569-1-rikard.falkeborn@gmail.com>
+From:   Chen-Yu Tsai <wens@csie.org>
+Date:   Sun, 23 Feb 2020 11:23:15 +0800
+X-Gmail-Original-Message-ID: <CAGb2v67piSbdmDPOU_w3QterPRk7iFnrMAZe05O5ypwraohssQ@mail.gmail.com>
+Message-ID: <CAGb2v67piSbdmDPOU_w3QterPRk7iFnrMAZe05O5ypwraohssQ@mail.gmail.com>
+Subject: Re: [linux-sunxi] [PATCH v2 RESEND] phy: allwinner: Fix GENMASK misuse
+To:     =?UTF-8?Q?Ond=C5=99ej_Jirman?= <megous@megous.com>
+Cc:     linux-usb <linux-usb@vger.kernel.org>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        linux-sunxi <linux-sunxi@googlegroups.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Icenowy Zheng <icenowy@aosc.io>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2/23/2020 06:32, Ondrej Jirman wrote:
-> This terminal's USB port needs NO_UNION_NORMAL quirk to work with
-> cdc-acm driver.
-> 
+On Sun, Feb 23, 2020 at 7:42 AM Ondrej Jirman <megous@megous.com> wrote:
+>
+> From: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+>
+> Arguments are supposed to be ordered high then low.
+>
+> Fixes: a228890f9458 ("phy: allwinner: add phy driver for USB3 PHY on Allwinner H6 SoC")
+> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+> Tested-by: Ondrej Jirman <megous@megous.com>
 > Signed-off-by: Ondrej Jirman <megous@megous.com>
+
+Acked-by: Chen-Yu Tsai <wens@csie.org>
+
 > ---
->   drivers/usb/class/cdc-acm.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-> index 62f4fb9b362f1..8577441c81a4d 100644
-> --- a/drivers/usb/class/cdc-acm.c
-> +++ b/drivers/usb/class/cdc-acm.c
-> @@ -1739,6 +1739,9 @@ static const struct usb_device_id acm_ids[] = {
->   	{ USB_DEVICE(0x22b8, 0x2d9a),   /* modem + AT port + diagnostics + NMEA */
->   	.driver_info = NO_UNION_NORMAL, /* handle only modem interface          */
->   	},
-> +	{ USB_DEVICE(0x0ca6, 0xa050), /* Castles Technology VEGA 5000 */
-> +	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
-> +	},
->   
->   	{ USB_DEVICE(0x0572, 0x1329), /* Hummingbird huc56s (Conexant) */
->   	.driver_info = NO_UNION_NORMAL, /* union de
-
-This quirk is in the driver since almost a year ago.
-
-br
-/Lars
-
+> v1->v2: Add fixes tax. Add Ondrejs Tested-by. No functional change.
+>
+> This was last sent in Nov last year. I'm resending, because it probably
+> got forgotten. The only change is adding my SoB, which I understand is
+> required for the sender of the patch.
+>
+>  drivers/phy/allwinner/phy-sun50i-usb3.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/phy/allwinner/phy-sun50i-usb3.c b/drivers/phy/allwinner/phy-sun50i-usb3.c
+> index 1169f3e83a6f..b1c04f71a31d 100644
+> --- a/drivers/phy/allwinner/phy-sun50i-usb3.c
+> +++ b/drivers/phy/allwinner/phy-sun50i-usb3.c
+> @@ -49,7 +49,7 @@
+>  #define SUNXI_LOS_BIAS(n)              ((n) << 3)
+>  #define SUNXI_LOS_BIAS_MASK            GENMASK(5, 3)
+>  #define SUNXI_TXVBOOSTLVL(n)           ((n) << 0)
+> -#define SUNXI_TXVBOOSTLVL_MASK         GENMASK(0, 2)
+> +#define SUNXI_TXVBOOSTLVL_MASK         GENMASK(2, 0)
+>
+>  struct sun50i_usb3_phy {
+>         struct phy *phy;
+> --
+> 2.24.0
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+>
+> --
+> You received this message because you are subscribed to the Google Groups "linux-sunxi" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to linux-sunxi+unsubscribe@googlegroups.com.
+> To view this discussion on the web, visit https://groups.google.com/d/msgid/linux-sunxi/20191110124355.1569-1-rikard.falkeborn%40gmail.com.
