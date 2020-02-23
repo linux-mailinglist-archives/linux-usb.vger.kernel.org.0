@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8681693ED
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 03:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED202169553
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 03:37:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729172AbgBWC0p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Feb 2020 21:26:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55032 "EHLO mail.kernel.org"
+        id S1727401AbgBWCVg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Feb 2020 21:21:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49970 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729421AbgBWCYq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 22 Feb 2020 21:24:46 -0500
+        id S1727364AbgBWCVe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 22 Feb 2020 21:21:34 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D2F382465D;
-        Sun, 23 Feb 2020 02:24:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BF64720707;
+        Sun, 23 Feb 2020 02:21:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582424685;
-        bh=yPOMweMTvIVMEebzEEQEwUamvdvERBXJ4zun5+Ygmr0=;
+        s=default; t=1582424493;
+        bh=OfcuyefYI3hSHKkMabhA0vDxDytTX9d3JOM+9rGO+fw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J/sidBaPTAlC9qTdsHedNyCEvCxWxLCdyQa2b/+AGz8u3cSE/v+3aZEviazvDWSdV
-         GuOMfnVGGA0DgyMeFuM1mUvz54Hpw6RxNpoTBM11BwdEMb2JpIsHV4wSUVSp2QlcQL
-         4TH4jwJiUbBWmL3XhK4d1rdQX1wVfnxnxTC1fL84=
+        b=uyF8qFjtzFLk/jbalLPUsbZZ0MDDNvMz1Q3iZFv4bnEDl7mqIhpoIrIEenw23h6NE
+         cv6z8EmwhWebuhIZ8LK4/N8yfT8tFQaw+8xDWe+xAL/yvv0vb4HofRuRMzQywibr5Z
+         MZs21bFunWZnMwvkKIVntVU7z6nEde0TQbteTpPY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
@@ -31,12 +31,12 @@ Cc:     =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 05/16] qmi_wwan: re-add DW5821e pre-production variant
-Date:   Sat, 22 Feb 2020 21:24:27 -0500
-Message-Id: <20200223022438.2398-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.5 11/58] qmi_wwan: re-add DW5821e pre-production variant
+Date:   Sat, 22 Feb 2020 21:20:32 -0500
+Message-Id: <20200223022119.707-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200223022438.2398-1-sashal@kernel.org>
-References: <20200223022438.2398-1-sashal@kernel.org>
+In-Reply-To: <20200223022119.707-1-sashal@kernel.org>
+References: <20200223022119.707-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -104,10 +104,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index de7b431fdd6b5..97f6b8130db33 100644
+index 9485c8d1de8a3..839cef720cf64 100644
 --- a/drivers/net/usb/qmi_wwan.c
 +++ b/drivers/net/usb/qmi_wwan.c
-@@ -951,6 +951,7 @@ static const struct usb_device_id products[] = {
+@@ -1363,6 +1363,7 @@ static const struct usb_device_id products[] = {
  	{QMI_FIXED_INTF(0x413c, 0x81b6, 8)},	/* Dell Wireless 5811e */
  	{QMI_FIXED_INTF(0x413c, 0x81b6, 10)},	/* Dell Wireless 5811e */
  	{QMI_FIXED_INTF(0x413c, 0x81d7, 0)},	/* Dell Wireless 5821e */
