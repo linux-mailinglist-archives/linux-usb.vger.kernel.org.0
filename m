@@ -2,60 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B9F169259
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 00:41:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4A816945D
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 03:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726908AbgBVXlz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Feb 2020 18:41:55 -0500
-Received: from vps.xff.cz ([195.181.215.36]:34294 "EHLO vps.xff.cz"
+        id S1728220AbgBWCXw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Feb 2020 21:23:52 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53556 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726881AbgBVXlz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 22 Feb 2020 18:41:55 -0500
-X-Greylist: delayed 582 seconds by postgrey-1.27 at vger.kernel.org; Sat, 22 Feb 2020 18:41:54 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
-        t=1582414331; bh=IxjYsKuZde7SyqZ/SuCk3wb/xdZPGdl9V7ADWU7YqlM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=MU6t6luDIt1l6QHL4PTsN72GySLrOmLilLguUWlKy9fX39bngBYaIR1Hq53GIXCSQ
-         v21eevbB0PMRplPJbKyT4bQXB8gJ/FUFkkMJW7q2gQtvKpCQinTUfkNZaGOjJ4HLq0
-         PN/s4/b/TXDhYbKNXTJsvqnMOVvIM+A0dNGZlQfg=
-From:   Ondrej Jirman <megous@megous.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Ondrej Jirman <megous@megous.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] Support Castles Vega5000 PoS terminal USB
-Date:   Sun, 23 Feb 2020 00:32:02 +0100
-Message-Id: <20200222233202.237967-1-megous@megous.com>
+        id S1728842AbgBWCXu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 22 Feb 2020 21:23:50 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1066020707;
+        Sun, 23 Feb 2020 02:23:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582424630;
+        bh=jdtBSaRnKwccMpAXvj6ku0+MOgE7Z+PuriNC5fpmV6E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=OZoJPWsyNklqTW3o4uFegQsuZGg2vhR1YpIPcCf/He2Pu64QvlIc29UeML8HzJ+Jm
+         P3xBOvSl8sG16zHEN1M7IGG8DXDn2GHU1oUXzYFw4DAdxb9JIpoicio4JdVQoeHNv/
+         lmXcLuRq6GfuXkpCRCX56MSV07oIEt0jCrNIBUCQ=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        Lars Melin <larsm17@gmail.com>,
+        Aleksander Morgado <aleksander@aleksander.es>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 08/25] qmi_wwan: re-add DW5821e pre-production variant
+Date:   Sat, 22 Feb 2020 21:23:22 -0500
+Message-Id: <20200223022339.1885-8-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200223022339.1885-1-sashal@kernel.org>
+References: <20200223022339.1885-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This terminal's USB port needs NO_UNION_NORMAL quirk to work with
-cdc-acm driver.
+From: Bjørn Mork <bjorn@mork.no>
 
-Signed-off-by: Ondrej Jirman <megous@megous.com>
+[ Upstream commit 88bf54603f6f2c137dfee1abf6436ceac3528d2d ]
+
+Commit f25e1392fdb5 removed the support for the pre-production variant
+of the Dell DW5821e to avoid probing another USB interface unnecessarily.
+However, the pre-production samples are found in the wild, and this lack
+of support is causing problems for users of such samples.  It is therefore
+necessary to support both variants.
+
+Matching on both interfaces 0 and 1 is not expected to cause any problem
+with either variant, as only the QMI function will be probed successfully
+on either.  Interface 1 will be rejected based on the HID class for the
+production variant:
+
+T:  Bus=01 Lev=03 Prnt=04 Port=00 Cnt=01 Dev#= 16 Spd=480 MxCh= 0
+D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  2
+P:  Vendor=413c ProdID=81d7 Rev=03.18
+S:  Manufacturer=DELL
+S:  Product=DW5821e Snapdragon X20 LTE
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+I:  If#= 1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+
+And interface 0 will be rejected based on too few endpoints for the
+pre-production variant:
+
+T: Bus=01 Lev=02 Prnt=02 Port=03 Cnt=03 Dev#= 7 Spd=480 MxCh= 0
+D: Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs= 2
+P: Vendor=413c ProdID=81d7 Rev= 3.18
+S: Manufacturer=DELL
+S: Product=DW5821e Snapdragon X20 LTE
+S: SerialNumber=0123456789ABCDEF
+C: #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+I: If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=
+I: If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+I: If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I: If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I: If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+
+Fixes: f25e1392fdb5 ("qmi_wwan: fix interface number for DW5821e production firmware")
+Link: https://whrl.pl/Rf0vNk
+Reported-by: Lars Melin <larsm17@gmail.com>
+Cc: Aleksander Morgado <aleksander@aleksander.es>
+Signed-off-by: Bjørn Mork <bjorn@mork.no>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/class/cdc-acm.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index 62f4fb9b362f1..8577441c81a4d 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -1739,6 +1739,9 @@ static const struct usb_device_id acm_ids[] = {
- 	{ USB_DEVICE(0x22b8, 0x2d9a),   /* modem + AT port + diagnostics + NMEA */
- 	.driver_info = NO_UNION_NORMAL, /* handle only modem interface          */
- 	},
-+	{ USB_DEVICE(0x0ca6, 0xa050), /* Castles Technology VEGA 5000 */
-+	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
-+	},
- 
- 	{ USB_DEVICE(0x0572, 0x1329), /* Hummingbird huc56s (Conexant) */
- 	.driver_info = NO_UNION_NORMAL, /* union descriptor misplaced on
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 13c8788e3b6b2..f489df377f5d2 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1298,6 +1298,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_FIXED_INTF(0x413c, 0x81b6, 8)},	/* Dell Wireless 5811e */
+ 	{QMI_FIXED_INTF(0x413c, 0x81b6, 10)},	/* Dell Wireless 5811e */
+ 	{QMI_FIXED_INTF(0x413c, 0x81d7, 0)},	/* Dell Wireless 5821e */
++	{QMI_FIXED_INTF(0x413c, 0x81d7, 1)},	/* Dell Wireless 5821e preproduction config */
+ 	{QMI_FIXED_INTF(0x413c, 0x81e0, 0)},	/* Dell Wireless 5821e with eSIM support*/
+ 	{QMI_FIXED_INTF(0x03f0, 0x4e1d, 8)},	/* HP lt4111 LTE/EV-DO/HSPA+ Gobi 4G Module */
+ 	{QMI_FIXED_INTF(0x03f0, 0x9d1d, 1)},	/* HP lt4120 Snapdragon X5 LTE */
 -- 
-2.25.1
+2.20.1
 
