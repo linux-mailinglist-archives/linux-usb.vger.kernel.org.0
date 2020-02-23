@@ -2,100 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7CB4169887
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 16:49:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E02E169923
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 18:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726583AbgBWPtW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Feb 2020 10:49:22 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:50327 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726208AbgBWPtW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Feb 2020 10:49:22 -0500
-X-UUID: 40a2514bdc9745c7a58158bde4f8cc3e-20200223
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=0nKH1cddPqIhprdICOy5mrIMOZ5r54kyLtHZf1Qc6t4=;
-        b=rbUsAmSaUKac7XbAmN9yZsihbYIy+rDemDxQRGEtTcx7e+tbsvnNjNUCcIfK+Ok1vmz92OfMZ86XnYpu9WOEBiX4cNMe5k0MVewwy3XgsSV9SCCUyInKjKltvdnodlOnF/N414PDBCZOZtgCvpkO0m39g5//U7x/iOqP8+cvPww=;
-X-UUID: 40a2514bdc9745c7a58158bde4f8cc3e-20200223
-Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw01.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1991646407; Sun, 23 Feb 2020 23:49:13 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Sun, 23 Feb 2020 23:48:24 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Sun, 23 Feb 2020 23:48:17 +0800
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Shen Jing <jingx.shen@intel.com>,
-        Sasha Levin <sashal@kernel.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Vincent Pelletier <plr.vincent@gmail.com>,
-        Jerry Zhang <zhangjerry@google.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        CC Hwang <cc.hwang@mediatek.com>,
-        Loda Chou <loda.chou@mediatek.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-CC:     Macpaul Lin <macpaul.lin@mediatek.com>
-Subject: [PATCH v2] usb: gadget: f_fs: try to fix AIO issue under ARM 64 bit TAGGED mode
-Date:   Sun, 23 Feb 2020 23:49:07 +0800
-Message-ID: <1582472947-22471-1-git-send-email-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
+        id S1726740AbgBWRn6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Feb 2020 12:43:58 -0500
+Received: from smtp.domeneshop.no ([194.63.252.55]:55881 "EHLO
+        smtp.domeneshop.no" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726534AbgBWRn6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Feb 2020 12:43:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds201912; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Yvu2oKZOlC2jMRTg5bIqhX+gpozzd1r46c0VrXSAU0U=; b=aRhhK3XXrLYlMZ3oJ/XpG9I9Dy
+        6eDrKihMBu2VjLCrhjmMUA+/cVr58ptpaam+Xk0s197pex9tbQzs4wP7eHaZzJBlo9dQUGcMqkJIl
+        PS5Vud3A+VqIU3LYPNz+/Dymw2j9wKzDhnw0ARKGgZd2TWUeTtkpylJEiyUd6Ggg0HDUkd1apya9k
+        qn4I3MWedtdvP/iwW1Idxtjaf5iOSzyjKFE8O+2erp+nABh2uwN3roNxLbfhiMfLABkhLvXIm6ae3
+        s4cZY8qJkxEy7DZXUM8YZk1jdDyzgvP2gHzH/Nk/hwAdxDGjl+DdKoMIgJi0X6mR1PEoiSe2qXlwM
+        Z8XdkcDA==;
+Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:50027 helo=[192.168.10.61])
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1j5vIJ-0006bO-ID; Sun, 23 Feb 2020 18:43:55 +0100
+Subject: Re: [RFC 8/9] drm/client: Add drm_client_init_from_id() and
+ drm_client_modeset_set()
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     broonie@kernel.org, balbi@kernel.org, lee.jones@linaro.org,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Greg KH <gregkh@linuxfoundation.org>
+References: <20200216172117.49832-1-noralf@tronnes.org>
+ <20200216172117.49832-9-noralf@tronnes.org>
+ <20200217093836.GH2363188@phenom.ffwll.local>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Message-ID: <393a8dcf-e01b-715c-551b-5108e42ebefc@tronnes.org>
+Date:   Sun, 23 Feb 2020 18:43:52 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <20200217093836.GH2363188@phenom.ffwll.local>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-VGhpcyBpc3N1ZSB3YXMgZm91bmQgd2hlbiBhZGJkIHRyeWluZyB0byBvcGVuIGZ1bmN0aW9uZnMg
-d2l0aCBBSU8gbW9kZS4NClVzdWFsbHksIHdlIG5lZWQgdG8gc2V0ICJzZXRwcm9wIHN5cy51c2Iu
-ZmZzLmFpb19jb21wYXQgMCIgdG8gZW5hYmxlDQphZGJkIHdpdGggQUlPIG1vZGUgb24gQW5kcm9p
-ZC4NCg0KV2hlbiBhZGJkIGlzIG9wZW5pbmcgZnVuY3Rpb25mcywgaXQgd2lsbCB0cnkgdG8gcmVh
-ZCAyNCBieXRlcyBhdCB0aGUNCmZpc3J0IHJlYWQgSS9PIGNvbnRyb2wuIElmIHRoaXMgcmVhZGlu
-ZyBoYXMgYmVlbiBmYWlsZWQsIGFkYmQgd2lsbA0KdHJ5IHRvIHNlbmQgRlVOQ1RJT05GU19DTEVB
-Ul9IQUxUIHRvIGZ1bmN0aW9uZnMuIFdoZW4gYWRiZCBpcyBpbiBBSU8NCm1vZGUsIGZ1bmN0aW9u
-ZnMgd2lsbCBiZSBhY3RlZCB3aXRoIGFzeW5jcm9uaXplZCBJL08gcGF0aC4gQWZ0ZXIgdGhlDQpz
-dWNjZXNzZnVsIHJlYWQgdHJhbnNmZXIgaGFzIGJlZW4gY29tcGxldGVkIGJ5IGdhZGdldCBoYXJk
-d2FyZSwgdGhlDQpmb2xsb3dpbmcgc2VyaWVzIG9mIGZ1bmN0aW9ucyB3aWxsIGJlIGNhbGxlZC4N
-CiAgZmZzX2VwZmlsZV9hc3luY19pb19jb21wbGV0ZSgpIC0+IGZmc191c2VyX2NvcHlfd29ya2Vy
-KCkgLT4NCiAgICBjb3B5X3RvX2l0ZXIoKSAtPiBfY29weV90b19pdGVyKCkgLT4gY29weW91dCgp
-IC0+DQogICAgaXRlcmF0ZV9hbmRfYWR2YW5jZSgpIC0+IGl0ZXJhdGVfaW92ZWMoKQ0KDQpBZGRp
-bmcgZGVidWcgdHJhY2UgdG8gdGhlc2UgZnVuY3Rpb25zLCBpdCBoYXMgYmVlbiBmb3VuZCB0aGF0
-IGluDQpjb3B5b3V0KCksIGFjY2Vzc19vaygpIHdpbGwgY2hlY2sgaWYgdGhlIHVzZXIgc3BhY2Ug
-YWRkcmVzcyBpcyB2YWxpZA0KdG8gd3JpdGUuIEhvd2V2ZXIgaWYgQ09ORklHX0FSTTY0X1RBR0dF
-RF9BRERSX0FCSSBpcyBlbmFibGVkLCBhZGJkDQphbHdheXMgcGFzc2VzIHVzZXIgc3BhY2UgYWRk
-cmVzcyBzdGFydCB3aXRoICIweDNDIiB0byBnZGFnZXQncyBBSU8NCmJsb2Nrcy4gVGhpcyB0YWdn
-ZWQgYWRkcmVzcyB3aWxsIGNhdXNlIGFjY2Vzc19vaygpIGNoZWNrIGFsd2F5cyBmYWlsLg0KV2hp
-Y2ggY2F1c2VzIGxhdGVyIGNhbGN1bGF0aW9uIGluIGl0ZXJhdGVfaW92ZWMoKSB0dXJuIHplcm8u
-DQpDb3B5b3V0KCkgd29uJ3QgY29weSBkYXRhIHRvIHVzZXJzcGFjZSBzaW5jZSB0aGUgbGVuZ3Ro
-IHRvIGJlIGNvcGllZA0KInYuaW92X2xlbiIgd2lsbCBiZSB6ZXJvLiBGaW5hbGx5IGxlYWRzIGZm
-c19jb3B5X3RvX2l0ZXIoKSBhbHdheXMgcmV0dXJuDQotRUZBVUxULCBjYXVzZXMgYWRiZCBjYW5u
-b3Qgb3BlbiBmdW5jdGlvbmZzIGFuZCBzZW5kDQpGVU5DVElPTkZTX0NMRUFSX0hBTFQuDQoNClNp
-Z25lZC1vZmYtYnk6IE1hY3BhdWwgTGluIDxtYWNwYXVsLmxpbkBtZWRpYXRlay5jb20+DQotLS0N
-CkNoYW5nZXMgZm9yIHYyOg0KICAtIEZpeCBidWlsZCBlcnJvciBmb3IgMzItYml0IGxvYWQuIEFu
-ICNpZiBkZWZpbmVkKENPTkZJR19BUk02NCkgc3RpbGwgbmVlZA0KICAgIGZvciBhdm9pZGluZyB1
-bmRlY2xhcmVkIGRlZmluZXMuDQoNCiBkcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vZl9mcy5j
-IHwgICAgNSArKysrKw0KIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKykNCg0KZGlmZiAt
-LWdpdCBhL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9mX2ZzLmMgYi9kcml2ZXJzL3VzYi9n
-YWRnZXQvZnVuY3Rpb24vZl9mcy5jDQppbmRleCBjZTFkMDIzLi43MjhjMjYwIDEwMDY0NA0KLS0t
-IGEvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL2ZfZnMuYw0KKysrIGIvZHJpdmVycy91c2Iv
-Z2FkZ2V0L2Z1bmN0aW9uL2ZfZnMuYw0KQEAgLTM1LDYgKzM1LDcgQEANCiAjaW5jbHVkZSA8bGlu
-dXgvbW11X2NvbnRleHQuaD4NCiAjaW5jbHVkZSA8bGludXgvcG9sbC5oPg0KICNpbmNsdWRlIDxs
-aW51eC9ldmVudGZkLmg+DQorI2luY2x1ZGUgPGxpbnV4L3RocmVhZF9pbmZvLmg+DQogDQogI2lu
-Y2x1ZGUgInVfZnMuaCINCiAjaW5jbHVkZSAidV9mLmgiDQpAQCAtODI2LDYgKzgyNywxMCBAQCBz
-dGF0aWMgdm9pZCBmZnNfdXNlcl9jb3B5X3dvcmtlcihzdHJ1Y3Qgd29ya19zdHJ1Y3QgKndvcmsp
-DQogCWlmIChpb19kYXRhLT5yZWFkICYmIHJldCA+IDApIHsNCiAJCW1tX3NlZ21lbnRfdCBvbGRm
-cyA9IGdldF9mcygpOw0KIA0KKyNpZiBkZWZpbmVkKENPTkZJR19BUk02NCkNCisJCWlmIChJU19F
-TkFCTEVEKENPTkZJR19BUk02NF9UQUdHRURfQUREUl9BQkkpKQ0KKwkJCXNldF90aHJlYWRfZmxh
-ZyhUSUZfVEFHR0VEX0FERFIpOw0KKyNlbmRpZg0KIAkJc2V0X2ZzKFVTRVJfRFMpOw0KIAkJdXNl
-X21tKGlvX2RhdGEtPm1tKTsNCiAJCXJldCA9IGZmc19jb3B5X3RvX2l0ZXIoaW9fZGF0YS0+YnVm
-LCByZXQsICZpb19kYXRhLT5kYXRhKTsNCi0tIA0KMS43LjkuNQ0K
 
+
+Den 17.02.2020 10.38, skrev Daniel Vetter:
+> On Sun, Feb 16, 2020 at 06:21:16PM +0100, Noralf Trønnes wrote:
+>> drm_client_init_from_id() provides a way for clients to add a client based
+>> on the minor. drm_client_modeset_set() provides a way to set the modeset
+>> for clients that handles connectors and display mode on their own.
+>>
+>> Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
+>> ---
+>>  drivers/gpu/drm/drm_client.c         | 37 ++++++++++++++++++++
+>>  drivers/gpu/drm/drm_client_modeset.c | 52 ++++++++++++++++++++++++++++
+>>  include/drm/drm_client.h             |  4 +++
+>>  3 files changed, 93 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/drm_client.c b/drivers/gpu/drm/drm_client.c
+>> index d9a2e3695525..dbd73fe8d987 100644
+>> --- a/drivers/gpu/drm/drm_client.c
+>> +++ b/drivers/gpu/drm/drm_client.c
+>> @@ -112,6 +112,43 @@ int drm_client_init(struct drm_device *dev, struct drm_client_dev *client,
+>>  }
+>>  EXPORT_SYMBOL(drm_client_init);
+>>  
+>> +/**
+>> + * drm_client_init_from_id - Initialise a DRM client
+>> + * @minor_id: DRM minor id
+>> + * @client: DRM client
+>> + * @name: Client name
+>> + * @funcs: DRM client functions (optional)
+>> + *
+>> + * This function looks up the drm_device using the minor id and initializes the client.
+>> + * It also registeres the client to avoid a possible race with DRM device unregister.
+> 
+> I think another sentence here would be good, explaining that this is for
+> drivers outside of drm to expose a specific drm driver in some fashion,
+> and just outright mention your use-case as an example.
+> 
+> I'm also not sure whether lookup-by-minor is the greatest thing for
+> kernel-internal lookups like this, maybe Greg has some idea?
+> 
+
+What alternatives do you see? Parent device name?
+
+I did a scan to see what others are doing, and most have a consumer name
+lookup on the struct device (Device Tree or lookup tables):
+
+struct reset_control *__reset_control_get(struct device *dev, const char
+*id,
+					  int index, bool shared,
+					  bool optional, bool acquired);
+
+struct iio_channel *iio_channel_get(struct device *dev,
+				    const char *consumer_channel);
+
+struct regulator *__must_check regulator_get(struct device *dev,
+					     const char *id);
+
+struct pwm_device *pwm_get(struct device *dev, const char *con_id)
+
+struct gpio_desc *__must_check gpiod_get(struct device *dev,
+					 const char *con_id,
+					 enum gpiod_flags flags);
+
+SPI and I2C use the bus index as lookup:
+
+extern struct i2c_adapter *i2c_get_adapter(int nr);
+
+extern struct spi_controller *spi_busnum_to_master(u16 busnum);
+
+
+Noralf.
+
+>> + *
+>> + * See drm_client_init() and drm_client_register().
+>> + *
+>> + * Returns:
+>> + * Zero on success or negative error code on failure.
+>> + */
+>> +int drm_client_init_from_id(unsigned int minor_id, struct drm_client_dev *client,
+>> +			    const char *name, const struct drm_client_funcs *funcs)
+>> +{
+>> +	struct drm_minor *minor;
+>> +	int ret;
+>> +
+>> +	minor = drm_minor_acquire(minor_id);
+>> +	if (IS_ERR(minor))
+>> +		return PTR_ERR(minor);
+>> +
+>> +	mutex_lock(&minor->dev->clientlist_mutex);
+>> +	ret = drm_client_init(minor->dev, client, name, funcs);
+>> +	if (!ret)
+>> +		list_add(&client->list, &minor->dev->clientlist);
+>> +	mutex_unlock(&minor->dev->clientlist_mutex);
+>> +
+>> +	drm_minor_release(minor);
+>> +
+>> +	return ret;
+>> +}
+>> +EXPORT_SYMBOL(drm_client_init_from_id);
+>> +
+>>  /**
+>>   * drm_client_register - Register client
+>>   * @client: DRM client
