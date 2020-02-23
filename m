@@ -2,106 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7913B169966
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 19:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E648D16997D
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 19:47:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727100AbgBWSV0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Feb 2020 13:21:26 -0500
-Received: from mail-il1-f195.google.com ([209.85.166.195]:41110 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726208AbgBWSV0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Feb 2020 13:21:26 -0500
-Received: by mail-il1-f195.google.com with SMTP id f10so5843228ils.8
-        for <linux-usb@vger.kernel.org>; Sun, 23 Feb 2020 10:21:25 -0800 (PST)
+        id S1726534AbgBWSrG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Feb 2020 13:47:06 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:43172 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726208AbgBWSrG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Feb 2020 13:47:06 -0500
+Received: by mail-pg1-f196.google.com with SMTP id u12so3866781pgb.10
+        for <linux-usb@vger.kernel.org>; Sun, 23 Feb 2020 10:47:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=agHmJufwc5n016o2XYWPc9er9j+KJzKqCvCWyMVkDYU=;
-        b=OXybnUTspyhHEpoAFnr1xFQuc6wIsOpJr3S35MFD2MJ0NJGfxCIATZ5TSqOy7wmnVX
-         kmFmYbQ/aVO1GEzMl2V0/2GOG+RdjSzMkSqonn5Beqj28whwH+hyoEaH97EDwq8JXG5h
-         vE3BmyWubU+9GHw9skUnIstDFMz8lcrV+4q5Egv/McIYPDBFoOOolWTPoDr6yiZaVjMS
-         cdn450NLzpHCZTsrE/JyzeyaHaNVRyTnaZBkbU12MsTVqAFs3KmeAkz9bn5kUAF8ix7Z
-         HHsMeWxXlvQt8STKqFa9gCWrfmDGOe85yXN64k5bWQE4QpnaMpEq69W8ltfxFx5Qmzwn
-         PMwQ==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+pmLbSE/kvii9Zz3FLUuP0hymIyoiyHxwc8vdYbytwU=;
+        b=I2WXDLo+gzUanzhu4EsbM4qE8hbPngYy1CsjTmbHgrF3cSWt7EjwY+TQyHnVEAGdIc
+         Jdr1L9klGa8mx0mgj2gNfvXb5uxFlELnj7fM4s3cD1Ae7YrjGxYSlZsFyQBKGlKacVrY
+         8qfXAGHRlroqAnB+CzKouM3hOt+VykvP3kSIWT6gVe/j+CBCLSHEUzneDXuHD3iq6KUH
+         9wIRgryKMMsEwwc++EnB7jGJiMg9LFIyBAG5lLR+EGzOKqj2dzYajpyZBb6K9QALenP7
+         Oh4dfrXD4ArXKfbe/WmMYEk8Y7HNFAybZRx0KPFngN2EGUfDbYL9m3zRFlK4nlFuLybs
+         KI9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=agHmJufwc5n016o2XYWPc9er9j+KJzKqCvCWyMVkDYU=;
-        b=fsY87G8u1lj36eol8vQ3CNqP41Gb9BhFiCkkEnz2QDUzrkFMuAtBuzVFNJ7ZamN1+A
-         XgOvtAcQasYEwLfpRnoLpG5T1XB64l6ZuQ9AkzfGXTC8AVXBAA2maWKG6KPK873Cu5Uo
-         Y8SRIsV8AlXnNqMCGN7Pd0KAXQxy+8I7VXQ4gU5HvuaGr4nGsf66uJR7yuOGKcBh3GCf
-         PYm86o+F/y7EVx4wqUoQDAWhIifQ9Jl/340cyMhaumynPmiAKaA0v0ona8eBBtBuGibF
-         4EhcrJW6OByn/vYdvxCyHIg/KCeO4rTrca47p7j/xSX9+KZ5LRfQGFVdUasScxPClWfr
-         ixRg==
-X-Gm-Message-State: APjAAAWln9oyPUMohCyq6kjl6cB1TFPuFDH6oqB/WFhycQycYB6Y/jNy
-        8iT4nr3iNalflE4AqT+xwDRWwOX5YN2LNfPELbQ=
-X-Google-Smtp-Source: APXvYqwCZ2Tuwz1Dmdx79brilm/+WarUAPFBW/eUIGDh6SvdRLbG/Hee58trZ9p6Dman9sCQDcH/mXnRouxMP6nfRiU=
-X-Received: by 2002:a92:c848:: with SMTP id b8mr55549388ilq.168.1582482085421;
- Sun, 23 Feb 2020 10:21:25 -0800 (PST)
-MIME-Version: 1.0
-References: <20200210213906.GA24079@roeck-us.net> <20200211054953.GA2401@tungsten>
- <20200211161522.GA1894@roeck-us.net> <20200215053647.GA10345@tungsten>
- <20200219211056.GA829@roeck-us.net> <CAKv9HNZx_YTC1QEyT-T2_BuXnnju+9czKx-JJjduk9TjUSjS7A@mail.gmail.com>
- <587c8fd7-6a31-098e-7fcb-815208f602bc@roeck-us.net>
-In-Reply-To: <587c8fd7-6a31-098e-7fcb-815208f602bc@roeck-us.net>
-From:   =?UTF-8?B?QW50dGkgU2VwcMOkbMOk?= <a.seppala@gmail.com>
-Date:   Sun, 23 Feb 2020 20:20:49 +0200
-Message-ID: <CAKv9HNYoyzMbufYyaByDoKgwDO3Vfw2vk7RmpcGdf9pvzREjVA@mail.gmail.com>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+pmLbSE/kvii9Zz3FLUuP0hymIyoiyHxwc8vdYbytwU=;
+        b=KwDMJ1O62vI6r7xVP9uRQHat80GJwplniNiLqxQ7C9GkV7MzVsEKmbeoBRnuUCd0e0
+         751pjJyY+/6GZocSSZxMAymg2LmPS+KKRIfigB15Uei0kpUZZCEa2VKLEoLHYrrQ/DnX
+         U+7tkcbBL2zFHvweOgX3XIvRnObfoWQFQmucrF2cGg9CWfxjgYmr52mRjjkUC4UzWyrc
+         t7r4XApHVgM7CpQntfw17Itx60cmjTdDDAMBiPhxccmdkq02XMQ/5VtlcjLupFpcK+BR
+         tcOUqPZXNs9QFjp0M0FTFhKHy+vfEspkdkwwQ15fjWk9Y7oqeS0nMTfBArZwXbD2xzQX
+         Nmaw==
+X-Gm-Message-State: APjAAAVwf5l5I7zUgs8tn3a3mIvyRPJJ77HwspEryFWYmBvs6giFbsB/
+        z2dqGSM1EixwwreVjcqLFA4=
+X-Google-Smtp-Source: APXvYqy5Kk9THGVlyw9Ipawcea2sz2hBcJ7pkXXsBo00nuBXqIUrz6JohksHQ2bPvm7fRarmHvyYeA==
+X-Received: by 2002:a63:7b5a:: with SMTP id k26mr46983022pgn.406.1582483625369;
+        Sun, 23 Feb 2020 10:47:05 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c15sm9942166pja.30.2020.02.23.10.47.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Feb 2020 10:47:04 -0800 (PST)
 Subject: Re: [PATCH] usb: dwc2: extend treatment for incomplete transfer
-To:     Guenter Roeck <linux@roeck-us.net>
+To:     =?UTF-8?B?QW50dGkgU2VwcMOkbMOk?= <a.seppala@gmail.com>
 Cc:     Boris ARZUR <boris@konbu.org>, linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Minas Harutyunyan <hminas@synopsys.com>,
         William Wu <william.wu@rock-chips.com>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Douglas Anderson <dianders@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20200210213906.GA24079@roeck-us.net>
+ <20200211054953.GA2401@tungsten> <20200211161522.GA1894@roeck-us.net>
+ <20200215053647.GA10345@tungsten> <20200219211056.GA829@roeck-us.net>
+ <CAKv9HNZx_YTC1QEyT-T2_BuXnnju+9czKx-JJjduk9TjUSjS7A@mail.gmail.com>
+ <587c8fd7-6a31-098e-7fcb-815208f602bc@roeck-us.net>
+ <CAKv9HNYoyzMbufYyaByDoKgwDO3Vfw2vk7RmpcGdf9pvzREjVA@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <7e225488-feec-e461-e22b-4befc5ce3c20@roeck-us.net>
+Date:   Sun, 23 Feb 2020 10:47:03 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <CAKv9HNYoyzMbufYyaByDoKgwDO3Vfw2vk7RmpcGdf9pvzREjVA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 23 Feb 2020 at 15:45, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 2/23/20 3:00 AM, Antti Sepp=C3=A4l=C3=A4 wrote:
-> > Hi Guenter,
-> >
-> > On Wed, 19 Feb 2020 at 23:11, Guenter Roeck <linux@roeck-us.net> wrote:
-> >>
-> >> Yes, those patches didn't address the core problem. Can you test with =
-the
-> >> attached two patches ?
-> >>
-> >> Thanks,
-> >> Guenter
-> >
-> > I took a look at your patch (usb: dwc2: Simplify DMA alignment code)
-> > and I don't believe it is correct.
-> >
-> > The patch re-introduces the dma_aligned_buffer struct and takes some
-> > care to align the beginning of the struct to dma cache lines. However
-> > we should be aligning the data[0] pointer inside the struct instead.
-> > With the code in the patch data[0] gets pushed to be at an offset from
-> > the alignment by kmalloc_ptr and old_xfer_buffer pointers. In other
-> > words data[0] is now not aligned to dma cache boundaries.
-> >
->
-> I thought so too initially. However,
->
-> temp =3D PTR_ALIGN(kmalloc_ptr + 1, TEGRA_USB_DMA_ALIGN) - 1;
->
-> aligns the structure pointer such that its _end_ is DMA-aligned,
-> which is ->data[0].
->
+On 2/23/20 10:20 AM, Antti Seppälä wrote:
+> On Sun, 23 Feb 2020 at 15:45, Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On 2/23/20 3:00 AM, Antti Seppälä wrote:
+>>> Hi Guenter,
+>>>
+>>> On Wed, 19 Feb 2020 at 23:11, Guenter Roeck <linux@roeck-us.net> wrote:
+>>>>
+>>>> Yes, those patches didn't address the core problem. Can you test with the
+>>>> attached two patches ?
+>>>>
+>>>> Thanks,
+>>>> Guenter
+>>>
+>>> I took a look at your patch (usb: dwc2: Simplify DMA alignment code)
+>>> and I don't believe it is correct.
+>>>
+>>> The patch re-introduces the dma_aligned_buffer struct and takes some
+>>> care to align the beginning of the struct to dma cache lines. However
+>>> we should be aligning the data[0] pointer inside the struct instead.
+>>> With the code in the patch data[0] gets pushed to be at an offset from
+>>> the alignment by kmalloc_ptr and old_xfer_buffer pointers. In other
+>>> words data[0] is now not aligned to dma cache boundaries.
+>>>
+>>
+>> I thought so too initially. However,
+>>
+>> temp = PTR_ALIGN(kmalloc_ptr + 1, TEGRA_USB_DMA_ALIGN) - 1;
+>>
+>> aligns the structure pointer such that its _end_ is DMA-aligned,
+>> which is ->data[0].
+>>
+> 
+> Hmm, looks like you're right. I somehow missed the - 1 at the end.
+> Sorry for the noise I guess.
+> 
+No worries. It took me a while to understand hat code, and I initially
+also thought it was wrong, so you are in good company.
 
-Hmm, looks like you're right. I somehow missed the - 1 at the end.
-Sorry for the noise I guess.
+> Would be nice to know what makes the previous code prone to pointer
+> corruption issues though. With the added padding that pointer should
+> also be on another dma cache line.
+> 
+Padding to DMA cache line size doesn't fix the real problem. The dwc2
+IP expects input buffer size to be a multiple of wMaxPacketSize.
+dwc2_hc_start_transfer() has the following code(where wMaxPacketSize ==
+chan->max_packet).
 
-Would be nice to know what makes the previous code prone to pointer
-corruption issues though. With the added padding that pointer should
-also be on another dma cache line.
---=20
-Antti
+		if (chan->xfer_len > 0) {
+                         num_packets = (chan->xfer_len + chan->max_packet - 1) /
+                                         chan->max_packet;
+			...
+		}
+		...
+		if (chan->ep_is_in)
+			chan->xfer_len = num_packets * chan->max_packet;
+
+If, for example, wMaxPacketSize is 64, and the original xfer_len is, say,
+1522 (as observed in our case), xfer_len is updated to 1536, and the chip
+is programmed to receive up to 1536 bytes. In most cases, padding the
+buffer to the DMA cache line size (64 in our case) catches this, but not
+if xfer_len is much lower than wMaxPacketSize.
+
+My code tries to address that situation, but as Boris noticed there is
+still something wrong with my fix.
+
+Guenter
