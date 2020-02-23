@@ -2,82 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 275C316972E
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 11:20:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F19169734
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 11:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726534AbgBWKUr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Feb 2020 05:20:47 -0500
-Received: from vps.xff.cz ([195.181.215.36]:41666 "EHLO vps.xff.cz"
+        id S1727159AbgBWKeE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sun, 23 Feb 2020 05:34:04 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50382 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725980AbgBWKUr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 23 Feb 2020 05:20:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
-        t=1582453245; bh=2tN9XTMyK3Umo3ghVIJmzvxq0UXC2Jq+XBIALehkoD0=;
-        h=Date:From:To:Cc:Subject:References:X-My-GPG-KeyId:From;
-        b=XkoEqgLqCnr+tkqDHpkd4XMU7/XEpc92wTJDACbB7353407pP6PMR1qytzkz8FZu9
-         50U87c+urvZy12Gr8YgpdEk3XegL8DQZRxBdek5sj07FSSwcPyS+ePNawjzN/TcXEx
-         1AP8JFD35wgNTZAY7pyYtQYQcHvAp7Uu2ccSeofs=
-Date:   Sun, 23 Feb 2020 11:20:44 +0100
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
-To:     Lars Melin <larsm17@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] Support Castles Vega5000 PoS terminal USB
-Message-ID: <20200223102044.odcmcxdk45egxu5i@core.my.home>
-Mail-Followup-To: Lars Melin <larsm17@gmail.com>, linux-usb@vger.kernel.org,
-        Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20200222233202.237967-1-megous@megous.com>
- <9d9263a0-cddb-0efb-46a5-1d223a8232e3@gmail.com>
+        id S1725980AbgBWKeE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 23 Feb 2020 05:34:04 -0500
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 206271] Trackpoint stops working after updating from Kernel
+ 5.4.11 to 5.4.12
+Date:   Sun, 23 Feb 2020 10:34:04 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bernd.sontheimer@posteo.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-206271-208809-P6MPgqH16a@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-206271-208809@https.bugzilla.kernel.org/>
+References: <bug-206271-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9d9263a0-cddb-0efb-46a5-1d223a8232e3@gmail.com>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+https://bugzilla.kernel.org/show_bug.cgi?id=206271
 
-On Sun, Feb 23, 2020 at 10:08:04AM +0700, Lars Melin wrote:
-> On 2/23/2020 06:32, Ondrej Jirman wrote:
-> > This terminal's USB port needs NO_UNION_NORMAL quirk to work with
-> > cdc-acm driver.
-> > 
-> > Signed-off-by: Ondrej Jirman <megous@megous.com>
-> > ---
-> >   drivers/usb/class/cdc-acm.c | 3 +++
-> >   1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-> > index 62f4fb9b362f1..8577441c81a4d 100644
-> > --- a/drivers/usb/class/cdc-acm.c
-> > +++ b/drivers/usb/class/cdc-acm.c
-> > @@ -1739,6 +1739,9 @@ static const struct usb_device_id acm_ids[] = {
-> >   	{ USB_DEVICE(0x22b8, 0x2d9a),   /* modem + AT port + diagnostics + NMEA */
-> >   	.driver_info = NO_UNION_NORMAL, /* handle only modem interface          */
-> >   	},
-> > +	{ USB_DEVICE(0x0ca6, 0xa050), /* Castles Technology VEGA 5000 */
-> > +	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
-> > +	},
-> >   	{ USB_DEVICE(0x0572, 0x1329), /* Hummingbird huc56s (Conexant) */
-> >   	.driver_info = NO_UNION_NORMAL, /* union de
-> 
-> This quirk is in the driver since almost a year ago.
+Bernd Sontheimer (bernd.sontheimer@posteo.de) changed:
 
-You're right. Thank you.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |bernd.sontheimer@posteo.de
 
-I held to the patch for way too long, and didn't notice someone else patched
-it in the meantime.
+--- Comment #1 from Bernd Sontheimer (bernd.sontheimer@posteo.de) ---
+(In reply to Johannes Goepfert from comment #0)
+> The Trackpoint from my Lenovo X1 Tablet Gen 3 stopped working after updating
+> to Kernel version 5.4.12. The Trackpoint is recognized by "usbmon" (usbmon
+> gives an output) and also "libinput list-devices". But there is no output
+> for "cat /dev/input/eventX".
 
-regards,
-	o.
+I can confirm the issue for this specific tablet. Further, there are patches
+and a dkms module here https://github.com/Lunm0us/linux-tp1gen3 that fix the
+trackpoint and also enable missing function keys like FnLock.
 
-> br
-> /Lars
-> 
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
