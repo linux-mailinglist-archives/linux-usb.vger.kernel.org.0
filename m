@@ -2,175 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E691694BC
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 03:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51465169575
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 04:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728337AbgBWCWw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Feb 2020 21:22:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51992 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728324AbgBWCWv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 22 Feb 2020 21:22:51 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E2D56208C4;
-        Sun, 23 Feb 2020 02:22:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582424569;
-        bh=MRhUrpxEbVHfhz+X54x8Q4f8X0N2Aq39aVimgP6a/BM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VtDZkiZ15drab4CPlkv43MDEIkXbJIMeFkBK2/mMStN0TrvAcS58i3MADFuusWjqz
-         3qxpHkp4L3dU8egkjaKUfVWJC+R6rD+3YjRu6mmHdwV53tL2zAEifYE5b30uU9wQgR
-         4oOEMqkUqJyEp6gING9BrJ2CHc1VBbT9toS0K4aM=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        Kristian Evensen <kristian.evensen@gmail.com>,
-        Aleksander Morgado <aleksander@aleksander.es>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 11/50] qmi_wwan: unconditionally reject 2 ep interfaces
-Date:   Sat, 22 Feb 2020 21:21:56 -0500
-Message-Id: <20200223022235.1404-11-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200223022235.1404-1-sashal@kernel.org>
-References: <20200223022235.1404-1-sashal@kernel.org>
+        id S1727158AbgBWDIJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Feb 2020 22:08:09 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:35670 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727093AbgBWDIJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Feb 2020 22:08:09 -0500
+Received: by mail-pg1-f195.google.com with SMTP id 7so1071040pgr.2;
+        Sat, 22 Feb 2020 19:08:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=L8rbrZA8d9M2bUXip/mtfy2g9mjJeidmY8X9/9kPSJM=;
+        b=JKMkfiD0UFIxKKhXqwLNb79QW1bAmKWH9ZhcG/YFnRrqINosVquTBsdBog839oSz3Q
+         sL1CckOy2+OSIiyQto9bWM/OrZPOJJ9OdF2/Qs/fY7AasanKWWqR4c3ssheRU8szMNX1
+         X9YPKgzcHMV5x97gFbvg4mKqz4YTt4JkT4vy4VjLB+jCzaZAk1lnVpViJ/0mCbumHzqV
+         ebD48b8laRFaZ8ZWzvF38Z0+1rz2b1DzhAF2klJyUBbdNcT4lmVp/CcGFISiXmG8D8Q9
+         NbDplUqrVNfJd/KqKvt4olvTqfN1nOjC+rjV8YWTLvvjyDT1bvKJUEdUm0K1O85Jhrh5
+         m1vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=L8rbrZA8d9M2bUXip/mtfy2g9mjJeidmY8X9/9kPSJM=;
+        b=j1t/62FPmNmC2dZ9zTs6gvmJiEFaXYAh4i+UDWEDv0WqDYOY644XgbLqNqU60lhqFR
+         EdCUYxLr1XjcR8hbL2q0Mr7JpysQm90vfqHSDVw4Ctv/rtbA2YoV3aDyvrv+gmjOIW8A
+         8f5IU5FUf6dl3KmHA/z0Uq5VKVTa6zm5S3mYxRWL5DseOHIZgYjh14/RRvPN58kPFwAa
+         D47DnW356K5fxqnM5BAjmeLOaEwJNCm2KG43+ccJEaKy8VH5Pzb8Gprc6gH9ECqHaHyL
+         zEDA+GjhT1oRB2shGiMS+OiaXeUnIAJgGt25SKWpc1YBvIAJ0DH8NFziIo7G9ETV1AW1
+         p4iA==
+X-Gm-Message-State: APjAAAWBRCoNXwx32ZeXZSoZd5RCNKz1TY9K5Tkp2n5JACaK91Im1CVG
+        KVKMI0JEFrbfyuMyWti0/cYllWccIhY=
+X-Google-Smtp-Source: APXvYqz14HB6+ohogoFMvLIOf5V9rLoSIvKeD9epby/QGvO8EEdyBRjgAJoTJ3H1YR1apy+9ncw6ig==
+X-Received: by 2002:a62:7945:: with SMTP id u66mr45890032pfc.82.1582427288589;
+        Sat, 22 Feb 2020 19:08:08 -0800 (PST)
+Received: from [192.168.1.5] ([110.77.154.179])
+        by smtp.googlemail.com with ESMTPSA id gc1sm7277305pjb.20.2020.02.22.19.08.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Feb 2020 19:08:07 -0800 (PST)
+Subject: Re: [PATCH] Support Castles Vega5000 PoS terminal USB
+To:     Ondrej Jirman <megous@megous.com>, linux-usb@vger.kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20200222233202.237967-1-megous@megous.com>
+From:   Lars Melin <larsm17@gmail.com>
+Message-ID: <9d9263a0-cddb-0efb-46a5-1d223a8232e3@gmail.com>
+Date:   Sun, 23 Feb 2020 10:08:04 +0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200222233202.237967-1-megous@megous.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Bjørn Mork <bjorn@mork.no>
+On 2/23/2020 06:32, Ondrej Jirman wrote:
+> This terminal's USB port needs NO_UNION_NORMAL quirk to work with
+> cdc-acm driver.
+> 
+> Signed-off-by: Ondrej Jirman <megous@megous.com>
+> ---
+>   drivers/usb/class/cdc-acm.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+> index 62f4fb9b362f1..8577441c81a4d 100644
+> --- a/drivers/usb/class/cdc-acm.c
+> +++ b/drivers/usb/class/cdc-acm.c
+> @@ -1739,6 +1739,9 @@ static const struct usb_device_id acm_ids[] = {
+>   	{ USB_DEVICE(0x22b8, 0x2d9a),   /* modem + AT port + diagnostics + NMEA */
+>   	.driver_info = NO_UNION_NORMAL, /* handle only modem interface          */
+>   	},
+> +	{ USB_DEVICE(0x0ca6, 0xa050), /* Castles Technology VEGA 5000 */
+> +	.driver_info = NO_UNION_NORMAL, /* reports zero length descriptor */
+> +	},
+>   
+>   	{ USB_DEVICE(0x0572, 0x1329), /* Hummingbird huc56s (Conexant) */
+>   	.driver_info = NO_UNION_NORMAL, /* union de
 
-[ Upstream commit 00516d13d4cfa56ce39da144db2dbf08b09b9357 ]
+This quirk is in the driver since almost a year ago.
 
-We have been using the fact that the QMI and DIAG functions
-usually are the only ones with class/subclass/protocol being
-ff/ff/ff on Quectel modems. This has allowed us to match the
-QMI function without knowing the exact interface number,
-which can vary depending on firmware configuration.
-
-The ability to silently reject the DIAG function, which is
-usually handled by the option driver, is important for this
-method to work.  This is done based on the knowledge that it
-has exactly 2 bulk endpoints.  QMI function control interfaces
-will have either 3 or 1 endpoint. This rule is universal so
-the quirk condition can be removed.
-
-The fixed layouts known from the Gobi1k and Gobi2k modems
-have been gradually replaced by more dynamic layouts, and
-many vendors now use configurable layouts without changing
-device IDs.  Renaming the class/subclass/protocol matching
-macro makes it more obvious that this is now not Quectel
-specific anymore.
-
-Cc: Kristian Evensen <kristian.evensen@gmail.com>
-Cc: Aleksander Morgado <aleksander@aleksander.es>
-Signed-off-by: Bjørn Mork <bjorn@mork.no>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/qmi_wwan.c | 42 ++++++++++++++------------------------
- 1 file changed, 15 insertions(+), 27 deletions(-)
-
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 839cef720cf64..3b7a3b8a5e067 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -61,7 +61,6 @@ enum qmi_wwan_flags {
- 
- enum qmi_wwan_quirks {
- 	QMI_WWAN_QUIRK_DTR = 1 << 0,	/* needs "set DTR" request */
--	QMI_WWAN_QUIRK_QUECTEL_DYNCFG = 1 << 1,	/* check num. endpoints */
- };
- 
- struct qmimux_hdr {
-@@ -916,16 +915,6 @@ static const struct driver_info	qmi_wwan_info_quirk_dtr = {
- 	.data           = QMI_WWAN_QUIRK_DTR,
- };
- 
--static const struct driver_info	qmi_wwan_info_quirk_quectel_dyncfg = {
--	.description	= "WWAN/QMI device",
--	.flags		= FLAG_WWAN | FLAG_SEND_ZLP,
--	.bind		= qmi_wwan_bind,
--	.unbind		= qmi_wwan_unbind,
--	.manage_power	= qmi_wwan_manage_power,
--	.rx_fixup       = qmi_wwan_rx_fixup,
--	.data           = QMI_WWAN_QUIRK_DTR | QMI_WWAN_QUIRK_QUECTEL_DYNCFG,
--};
--
- #define HUAWEI_VENDOR_ID	0x12D1
- 
- /* map QMI/wwan function by a fixed interface number */
-@@ -946,14 +935,18 @@ static const struct driver_info	qmi_wwan_info_quirk_quectel_dyncfg = {
- #define QMI_GOBI_DEVICE(vend, prod) \
- 	QMI_FIXED_INTF(vend, prod, 0)
- 
--/* Quectel does not use fixed interface numbers on at least some of their
-- * devices. We need to check the number of endpoints to ensure that we bind to
-- * the correct interface.
-+/* Many devices have QMI and DIAG functions which are distinguishable
-+ * from other vendor specific functions by class, subclass and
-+ * protocol all being 0xff. The DIAG function has exactly 2 endpoints
-+ * and is silently rejected when probed.
-+ *
-+ * This makes it possible to match dynamically numbered QMI functions
-+ * as seen on e.g. many Quectel modems.
-  */
--#define QMI_QUIRK_QUECTEL_DYNCFG(vend, prod) \
-+#define QMI_MATCH_FF_FF_FF(vend, prod) \
- 	USB_DEVICE_AND_INTERFACE_INFO(vend, prod, USB_CLASS_VENDOR_SPEC, \
- 				      USB_SUBCLASS_VENDOR_SPEC, 0xff), \
--	.driver_info = (unsigned long)&qmi_wwan_info_quirk_quectel_dyncfg
-+	.driver_info = (unsigned long)&qmi_wwan_info_quirk_dtr
- 
- static const struct usb_device_id products[] = {
- 	/* 1. CDC ECM like devices match on the control interface */
-@@ -1059,10 +1052,10 @@ static const struct usb_device_id products[] = {
- 		USB_DEVICE_AND_INTERFACE_INFO(0x03f0, 0x581d, USB_CLASS_VENDOR_SPEC, 1, 7),
- 		.driver_info = (unsigned long)&qmi_wwan_info,
- 	},
--	{QMI_QUIRK_QUECTEL_DYNCFG(0x2c7c, 0x0125)},	/* Quectel EC25, EC20 R2.0  Mini PCIe */
--	{QMI_QUIRK_QUECTEL_DYNCFG(0x2c7c, 0x0306)},	/* Quectel EP06/EG06/EM06 */
--	{QMI_QUIRK_QUECTEL_DYNCFG(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
--	{QMI_QUIRK_QUECTEL_DYNCFG(0x2c7c, 0x0800)},	/* Quectel RM500Q-GL */
-+	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0125)},	/* Quectel EC25, EC20 R2.0  Mini PCIe */
-+	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0306)},	/* Quectel EP06/EG06/EM06 */
-+	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
-+	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0800)},	/* Quectel RM500Q-GL */
- 
- 	/* 3. Combined interface devices matching on interface number */
- 	{QMI_FIXED_INTF(0x0408, 0xea42, 4)},	/* Yota / Megafon M100-1 */
-@@ -1455,7 +1448,6 @@ static int qmi_wwan_probe(struct usb_interface *intf,
- {
- 	struct usb_device_id *id = (struct usb_device_id *)prod;
- 	struct usb_interface_descriptor *desc = &intf->cur_altsetting->desc;
--	const struct driver_info *info;
- 
- 	/* Workaround to enable dynamic IDs.  This disables usbnet
- 	 * blacklisting functionality.  Which, if required, can be
-@@ -1491,12 +1483,8 @@ static int qmi_wwan_probe(struct usb_interface *intf,
- 	 * different. Ignore the current interface if the number of endpoints
- 	 * equals the number for the diag interface (two).
- 	 */
--	info = (void *)id->driver_info;
--
--	if (info->data & QMI_WWAN_QUIRK_QUECTEL_DYNCFG) {
--		if (desc->bNumEndpoints == 2)
--			return -ENODEV;
--	}
-+	if (desc->bNumEndpoints == 2)
-+		return -ENODEV;
- 
- 	return usbnet_probe(intf, id);
- }
--- 
-2.20.1
+br
+/Lars
 
