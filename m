@@ -2,254 +2,419 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5F8169749
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 12:01:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CDD16976C
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 13:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726592AbgBWLBB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Feb 2020 06:01:01 -0500
-Received: from mail-il1-f195.google.com ([209.85.166.195]:38212 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725980AbgBWLBB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Feb 2020 06:01:01 -0500
-Received: by mail-il1-f195.google.com with SMTP id f5so5386002ilq.5
-        for <linux-usb@vger.kernel.org>; Sun, 23 Feb 2020 03:01:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bX278zpfgvk1MTprvY2ZwZMTxMN8Q/gNImUW89vtOvI=;
-        b=TtJeQ/F/4aHJiuWS294OgxEBF6YuUFcwLh0c0ZLpDmAyqAj9bjYRTag0zuxSiZ6HZ0
-         hRnfvHyXE8/SUPYTFoDWriLzVfQ7qeByf/va9isrGdt1jmsAZZRtRfUsatgP30pYWZ1P
-         uwAthCW0PThW/U7DBsf8yDY9fxvRTP8RjcK82ZKnMVljGMdNkGzfpXLy6mzk1XiG28RL
-         12e/DkcYPQjSdon6Wlc+eaxcmQeuSyuDNEC2UokdqlhLqlhv3A1qMNA7hS/e7CU8XgCi
-         JfI8hVLlVTETuC7zTrr/BKDcyNRSpEwltVdIYbPX1D5A93f3hobA+44CPvu0DyeoaEzn
-         M6+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bX278zpfgvk1MTprvY2ZwZMTxMN8Q/gNImUW89vtOvI=;
-        b=gj/y8Dwd1AKQaVLhG+66z4pmAxG9ImMPwJ0KRzjjuXfMpEJZURpp6H+tqUv9679o8D
-         sOSpiSso5VVbhn06CNVx4jB1ESH5acRBE3ixug17nS9AfPCkla5WLtAcsxyxiAnjJxVP
-         PFXJlKX9pwtszyxZeM5raK21mjUImPmbz6ro11JX96a+EmWzO0lh69pUhXtwNtzEY+7g
-         5Dlw1RxyWpz3CP4bk98AETao7j5XG7MvXQTfFp3B3ZA0xSIBDyF/FQXfE3SN169GOM2F
-         5ESk27Sa2pkzHSu5g43ab9sAzYqgkF4eMcWfZrZt9T6n2LhJUSPydcZDvoq0r2M+gfFg
-         mnAg==
-X-Gm-Message-State: APjAAAW8E4xYFN9xJdMRQ2HvoTz729SfYYfzJWmclhujfizfuUzIQbAd
-        NTWZydG5a4Shv8nLjsASKXNUHzH0x477I79+kzcS7L1D
-X-Google-Smtp-Source: APXvYqwhe0izomcmBiqcqr6ovEO3NfPAFVWLbaI9vdU+CYGHVNqMh08si1qwT845JEAHMF+B386g1OYjOnvoXDY1fi4=
-X-Received: by 2002:a92:7a05:: with SMTP id v5mr47667983ilc.122.1582455660462;
- Sun, 23 Feb 2020 03:01:00 -0800 (PST)
-MIME-Version: 1.0
-References: <20200210213906.GA24079@roeck-us.net> <20200211054953.GA2401@tungsten>
- <20200211161522.GA1894@roeck-us.net> <20200215053647.GA10345@tungsten> <20200219211056.GA829@roeck-us.net>
-In-Reply-To: <20200219211056.GA829@roeck-us.net>
-From:   =?UTF-8?B?QW50dGkgU2VwcMOkbMOk?= <a.seppala@gmail.com>
-Date:   Sun, 23 Feb 2020 13:00:24 +0200
-Message-ID: <CAKv9HNZx_YTC1QEyT-T2_BuXnnju+9czKx-JJjduk9TjUSjS7A@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc2: extend treatment for incomplete transfer
+        id S1726236AbgBWMC7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Feb 2020 07:02:59 -0500
+Received: from funyu.konbu.org ([51.15.241.64]:49480 "EHLO funyu.konbu.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725980AbgBWMC7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 23 Feb 2020 07:02:59 -0500
+Received: from tungsten (237.203.49.163.rev.vmobile.jp [163.49.203.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by funyu.konbu.org (Postfix) with ESMTPSA id F27EB28096F;
+        Sun, 23 Feb 2020 12:02:52 +0000 (UTC)
+Date:   Sun, 23 Feb 2020 21:02:47 +0900
+From:   Boris ARZUR <boris@konbu.org>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Boris ARZUR <boris@konbu.org>, linux-usb@vger.kernel.org,
+Cc:     linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Minas Harutyunyan <hminas@synopsys.com>,
         William Wu <william.wu@rock-chips.com>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>
-Content-Type: multipart/mixed; boundary="000000000000840c70059f3c2bd5"
+        Douglas Anderson <dianders@chromium.org>, a.seppala@gmail.com
+Subject: Re: [PATCH] usb: dwc2: extend treatment for incomplete transfer
+Message-ID: <20200223120247.GA21552@tungsten>
+References: <20200210213906.GA24079@roeck-us.net>
+ <20200211054953.GA2401@tungsten>
+ <20200211161522.GA1894@roeck-us.net>
+ <20200215053647.GA10345@tungsten>
+ <20200219211056.GA829@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="yrj/dFKFPuw6o+aM"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200219211056.GA829@roeck-us.net>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---000000000000840c70059f3c2bd5
-Content-Type: text/plain; charset="UTF-8"
+
+--yrj/dFKFPuw6o+aM
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
 Hi Guenter,
 
-On Wed, 19 Feb 2020 at 23:11, Guenter Roeck <linux@roeck-us.net> wrote:
+I tried your series of patch. rndis_host tethering & loading the machine
+seems to work fine. No more crashing.
+
+That being said, I now have an issue with regular USB keys (I tried a few):
+usb 3-1: reset high-speed USB device number 2 using dwc2
+
+I was able to reproduce this issue with the unpatched kernel, by disabling
+the early return in dwc2_alloc_dma_aligned_buffer(), see attached.
+There are times were re-allocation fails, either with your patch or with
+the (almost-)original code.
+
+In particular it seems that there is a packet of lenght 13, usb_urb_dir_in() == true,
+usb_pipetype(urb->pipe) == PIPE_BULK, that comes in every 2s or so, that
+does not reallocate properly.
+
+In the original code, it's not a problem thanks to the early return, but your code
+wants 512B (maxp) and forces reallocation...
+
+Thanks, Boris.
+
+Guenter Roeck wrote:
+>On Sat, Feb 15, 2020 at 02:36:47PM +0900, Boris ARZUR wrote:
+>> Hi Guenter,
+>> 
+>> >> The first time around I was 0/ changing fonts 1/ trimming the dump message
+>> >> in the kernel 2/ filming my screen. That's not practical at all...
+>> Mmm, pstore does seem to work on my machine. CHROME_PSTORE is not available
+>> to me because I'm not on x86, I just enabled the rest and nothing pops up
+>> in /sys/fs/pstore...
+>> 
+>> So I took pictures (OCR did not help):
+>> - https://funyu.konbu.org/pQUF2P08etcpVxuKZ0A720%2b0/IMG_20200215_134343.jpg.webp
+>>   is a stack trace for your earlier patch "min_t", in
+>>   https://www.spinics.net/lists/linux-usb/msg191019.html ;
+>> - https://funyu.konbu.org/pQUF2P08etcpVxuKZ0A720%2b0/IMG_20200215_135816.jpg.webp
+>>   is a stack trace for your later patch "container_of", in
+>>   https://www.spinics.net/lists/linux-usb/msg191074.html .
+>> 
+>> Both patches crash (without even loading the machine), but "container_of" is
+>> a bit more resilient.
+>> 
 >
-> Yes, those patches didn't address the core problem. Can you test with the
-> attached two patches ?
+>Yes, those patches didn't address the core problem. Can you test with the
+>attached two patches ?
 >
-> Thanks,
-> Guenter
+>Thanks,
+>Guenter
 
-I took a look at your patch (usb: dwc2: Simplify DMA alignment code)
-and I don't believe it is correct.
+>From a1c0551b62b038b495177737828f986961184110 Mon Sep 17 00:00:00 2001
+>From: Guenter Roeck <linux@roeck-us.net>
+>Date: Mon, 10 Feb 2020 14:04:06 -0800
+>Subject: [PATCH 1/2] usb: dwc2: Simplify DMA alignment code
+>
+>The code to align buffers for DMA was first introduced with commit
+>3bc04e28a030 ("usb: dwc2: host: Get aligned DMA in a more supported way").
+>It was updated with commit 56406e017a88 ("usb: dwc2: Fix DMA alignment
+>to start at allocated boundary") because it did not really align buffers to
+>DMA boundaries but to DWC2_USB_DMA_ALIGN. This was then optimized in commit
+>1e111e885238 ("usb: dwc2: Fix inefficient copy of unaligned buffers")
+>to only copy actual data rather than the whole buffer. Commit 4a4863bf2e79
+>("usb: dwc2: Fix DMA cache alignment issues") changed this further to add
+>a padding at the end of the buffer to ensure that the old data pointer is
+>not in the same cache line as the buffer.
+>
+>This last commit states "Otherwise, the stored_xfer_buffer gets corrupted
+>for IN URBs on non-cache-coherent systems". However, such corruptions are
+>still observed. Either case, DMA is not expected to overwrite more memory
+>than it is supposed to do, suggesting that the commit may have been hiding
+>a problem rather than fixing it.
+>
+>On top of that, DMA alignment is still not guaranteed since it only happens
+>if the original buffer is not aligned to DWC2_USB_DMA_ALIGN, which is still
+>a constant of 4 and not really associated with DMA alignment.
+>
+>Move the old data pointer back to the beginning of the new buffer,
+>restoring most of the original commit and to simplify the code. Define
+>DWC2_USB_DMA_ALIGN to dma_get_cache_alignment() to fix the DMA alignment
+>for real this time.
+>
+>Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>---
+> drivers/usb/dwc2/hcd.c | 50 +++++++++++++++++++-----------------------
+> 1 file changed, 22 insertions(+), 28 deletions(-)
+>
+>diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+>index b90f858af960..b5841197165a 100644
+>--- a/drivers/usb/dwc2/hcd.c
+>+++ b/drivers/usb/dwc2/hcd.c
+>@@ -2469,21 +2469,24 @@ static int dwc2_alloc_split_dma_aligned_buf(struct dwc2_hsotg *hsotg,
+> 	return 0;
+> }
+> 
+>-#define DWC2_USB_DMA_ALIGN 4
+>+#define DWC2_USB_DMA_ALIGN	dma_get_cache_alignment()
+>+
+>+struct dma_aligned_buffer {
+>+	void *kmalloc_ptr;
+>+	void *old_xfer_buffer;
+>+	u8 data[0];
+>+};
+> 
+> static void dwc2_free_dma_aligned_buffer(struct urb *urb)
+> {
+>-	void *stored_xfer_buffer;
+>+	struct dma_aligned_buffer *temp;
+> 	size_t length;
+> 
+> 	if (!(urb->transfer_flags & URB_ALIGNED_TEMP_BUFFER))
+> 		return;
+> 
+>-	/* Restore urb->transfer_buffer from the end of the allocated area */
+>-	memcpy(&stored_xfer_buffer,
+>-	       PTR_ALIGN(urb->transfer_buffer + urb->transfer_buffer_length,
+>-			 dma_get_cache_alignment()),
+>-	       sizeof(urb->transfer_buffer));
+>+	temp = container_of(urb->transfer_buffer,
+>+			    struct dma_aligned_buffer, data);
+> 
+> 	if (usb_urb_dir_in(urb)) {
+> 		if (usb_pipeisoc(urb->pipe))
+>@@ -2491,17 +2494,17 @@ static void dwc2_free_dma_aligned_buffer(struct urb *urb)
+> 		else
+> 			length = urb->actual_length;
+> 
+>-		memcpy(stored_xfer_buffer, urb->transfer_buffer, length);
+>+		memcpy(temp->old_xfer_buffer, temp->data, length);
+> 	}
+>-	kfree(urb->transfer_buffer);
+>-	urb->transfer_buffer = stored_xfer_buffer;
+>+	urb->transfer_buffer = temp->old_xfer_buffer;
+>+	kfree(temp->kmalloc_ptr);
+> 
+> 	urb->transfer_flags &= ~URB_ALIGNED_TEMP_BUFFER;
+> }
+> 
+> static int dwc2_alloc_dma_aligned_buffer(struct urb *urb, gfp_t mem_flags)
+> {
+>-	void *kmalloc_ptr;
+>+	struct dma_aligned_buffer *temp, *kmalloc_ptr;
+> 	size_t kmalloc_size;
+> 
+> 	if (urb->num_sgs || urb->sg ||
+>@@ -2509,31 +2512,22 @@ static int dwc2_alloc_dma_aligned_buffer(struct urb *urb, gfp_t mem_flags)
+> 	    !((uintptr_t)urb->transfer_buffer & (DWC2_USB_DMA_ALIGN - 1)))
+> 		return 0;
+> 
+>-	/*
+>-	 * Allocate a buffer with enough padding for original transfer_buffer
+>-	 * pointer. This allocation is guaranteed to be aligned properly for
+>-	 * DMA
+>-	 */
+>+	/* Allocate a buffer with enough padding for alignment */
+> 	kmalloc_size = urb->transfer_buffer_length +
+>-		(dma_get_cache_alignment() - 1) +
+>-		sizeof(urb->transfer_buffer);
+>+		sizeof(struct dma_aligned_buffer) + DWC2_USB_DMA_ALIGN - 1;
+> 
+> 	kmalloc_ptr = kmalloc(kmalloc_size, mem_flags);
+> 	if (!kmalloc_ptr)
+> 		return -ENOMEM;
+> 
+>-	/*
+>-	 * Position value of original urb->transfer_buffer pointer to the end
+>-	 * of allocation for later referencing
+>-	 */
+>-	memcpy(PTR_ALIGN(kmalloc_ptr + urb->transfer_buffer_length,
+>-			 dma_get_cache_alignment()),
+>-	       &urb->transfer_buffer, sizeof(urb->transfer_buffer));
+>-
+>+	/* Position our struct dma_aligned_buffer such that data is aligned */
+>+	temp = PTR_ALIGN(kmalloc_ptr + 1, DWC2_USB_DMA_ALIGN) - 1;
+>+	temp->kmalloc_ptr = kmalloc_ptr;
+>+	temp->old_xfer_buffer = urb->transfer_buffer;
+> 	if (usb_urb_dir_out(urb))
+>-		memcpy(kmalloc_ptr, urb->transfer_buffer,
+>+		memcpy(temp->data, urb->transfer_buffer,
+> 		       urb->transfer_buffer_length);
+>-	urb->transfer_buffer = kmalloc_ptr;
+>+	urb->transfer_buffer = temp->data;
+> 
+> 	urb->transfer_flags |= URB_ALIGNED_TEMP_BUFFER;
+> 
+>-- 
+>2.17.1
+>
 
-The patch re-introduces the dma_aligned_buffer struct and takes some
-care to align the beginning of the struct to dma cache lines. However
-we should be aligning the data[0] pointer inside the struct instead.
-With the code in the patch data[0] gets pushed to be at an offset from
-the alignment by kmalloc_ptr and old_xfer_buffer pointers. In other
-words data[0] is now not aligned to dma cache boundaries.
+>From 9df13854b3717f8c16a2012dec614f737bb8c15d Mon Sep 17 00:00:00 2001
+>From: Guenter Roeck <linux@roeck-us.net>
+>Date: Mon, 10 Feb 2020 13:11:00 -0800
+>Subject: [PATCH 2/2] usb: dwc2: Allocate input buffers as multiples of
+> wMaxPacketSize
+>MIME-Version: 1.0
+>Content-Type: text/plain; charset=UTF-8
+>Content-Transfer-Encoding: 8bit
+>
+>The following messages are seen on Veyron Chromebooks running v4.19 or
+>later kernels.
+>
+>dwc2 ff580000.usb: dwc2_update_urb_state(): trimming xfer length
+>dwc2 ff580000.usb: dwc2_hc_chhltd_intr_dma: Channel 7 - ChHltd set, but reason is unknown
+>dwc2 ff580000.usb: hcint 0x00000002, intsts 0x04600021
+>
+>This is typically followed by a crash.
+>
+>Unable to handle kernel paging request at virtual address 29f9d9fc
+>pgd = 4797dac9
+>[29f9d9fc] *pgd=80000000004003, *pmd=00000000
+>Internal error: Oops: a06 [#1] PREEMPT SMP ARM
+>Modules linked in: ip6t_REJECT rfcomm i2c_dev uinput hci_uart btbcm ...
+>CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W         4.19.87-07825-g4ab3515f6e4d #1
+>Hardware name: Rockchip (Device Tree)
+>PC is at memcpy+0x50/0x330
+>LR is at 0xdd9ac94
+>...
+>[<c0a89f50>] (memcpy) from [<c0783b94>] (dwc2_free_dma_aligned_buffer+0x5c/0x7c)
+>[<c0783b94>] (dwc2_free_dma_aligned_buffer) from [<c0765dcc>] (__usb_hcd_giveback_urb+0x78/0x130)
+>[<c0765dcc>] (__usb_hcd_giveback_urb) from [<c07678fc>] (usb_giveback_urb_bh+0xa0/0xe4)
+>[<c07678fc>] (usb_giveback_urb_bh) from [<c023a164>] (tasklet_action_common+0xc0/0xdc)
+>[<c023a164>] (tasklet_action_common) from [<c02021f0>] (__do_softirq+0x1b8/0x434)
+>[<c02021f0>] (__do_softirq) from [<c0239a14>] (irq_exit+0xdc/0xe0)
+>[<c0239a14>] (irq_exit) from [<c029f260>] (__handle_domain_irq+0x94/0xd0)
+>[<c029f260>] (__handle_domain_irq) from [<c05da780>] (gic_handle_irq+0x74/0xb0)
+>[<c05da780>] (gic_handle_irq) from [<c02019f8>] (__irq_svc+0x58/0x8c)
+>
+>The crash suggests that the memory after the end of a temporary DMA-aligned
+>buffer is overwritten.
+>
+>The problem is typically only seen in kernels which include commit
+>56406e017a88 ("usb: dwc2: Fix DMA alignment to start at allocated
+>boundary"), presumably because that commit moves the pointer to the old
+>buffer to the end of the newly allocated buffer, where it is more likely
+>to be overwritten.
+>
+>Code analysis shows that the transfer size programmed into the chip for
+>input transfers is a multiple of an endpoint's maximum packet size
+>(wMaxPacketSize). In the observed situation, the transfer size and thus
+>the size of the input buffer is 1522 bytes. With a maximum packet size
+>of 64 bytes, the chip is programmed to receive up to 1536 bytes of data.
+>This overwrites the end of the buffer.
+>
+>To work around the problem, always allocate a multiple of wMaxPacketSize
+>bytes for receive buffers. Do this even for DMA-aligned buffers if the
+>receive buffer size is not a multiple of wMaxPacketSize. At the same time,
+>do not update chan->xfer_len if the transfer size is 0.
+>
+>Reported-by: Boris ARZUR <boris@konbu.org>
+>Cc: Boris ARZUR <boris@konbu.org>
+>Cc: Jonathan Bell <jonathan@raspberrypi.org>
+>Cc: Antti Seppälä <a.seppala@gmail.com>
+>Fixes: 56406e017a88 ("usb: dwc2: Fix DMA alignment to start at allocated boundary")
+>Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>---
+> drivers/usb/dwc2/hcd.c | 37 +++++++++++++++++++++++++++----------
+> 1 file changed, 27 insertions(+), 10 deletions(-)
+>
+>diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+>index b5841197165a..f27dc11e409c 100644
+>--- a/drivers/usb/dwc2/hcd.c
+>+++ b/drivers/usb/dwc2/hcd.c
+>@@ -1313,18 +1313,20 @@ static void dwc2_hc_start_transfer(struct dwc2_hsotg *hsotg,
+> 			if (num_packets > max_hc_pkt_count) {
+> 				num_packets = max_hc_pkt_count;
+> 				chan->xfer_len = num_packets * chan->max_packet;
+>+			} else if (chan->ep_is_in) {
+>+				/*
+>+				 * Always program an integral # of max packets for IN
+>+				 * transfers.
+>+				 * Note: This assumes that the input buffer is
+>+				 * aligned accordingly.
+>+				 */
+>+				chan->xfer_len = num_packets * chan->max_packet;
+> 			}
+> 		} else {
+> 			/* Need 1 packet for transfer length of 0 */
+> 			num_packets = 1;
+> 		}
+> 
+>-		if (chan->ep_is_in)
+>-			/*
+>-			 * Always program an integral # of max packets for IN
+>-			 * transfers
+>-			 */
+>-			chan->xfer_len = num_packets * chan->max_packet;
+> 
+> 		if (chan->ep_type == USB_ENDPOINT_XFER_INT ||
+> 		    chan->ep_type == USB_ENDPOINT_XFER_ISOC)
+>@@ -2505,16 +2507,31 @@ static void dwc2_free_dma_aligned_buffer(struct urb *urb)
+> static int dwc2_alloc_dma_aligned_buffer(struct urb *urb, gfp_t mem_flags)
+> {
+> 	struct dma_aligned_buffer *temp, *kmalloc_ptr;
+>+	struct usb_host_endpoint *ep = urb->ep;
+>+	int maxp = usb_endpoint_maxp(&ep->desc);
+> 	size_t kmalloc_size;
+> 
+>-	if (urb->num_sgs || urb->sg ||
+>-	    urb->transfer_buffer_length == 0 ||
+>+	if (urb->num_sgs || urb->sg || urb->transfer_buffer_length == 0)
+>+		return 0;
+>+
+>+	/*
+>+	 * Input transfer buffer size must be a multiple of the endpoint's
+>+	 * maximum packet size to match the transfer limit programmed into
+>+	 * the chip.
+>+	 * See calculation of chan->xfer_len in dwc2_hc_start_transfer().
+>+	 */
+>+	if (usb_urb_dir_out(urb))
+>+		kmalloc_size = urb->transfer_buffer_length;
+>+	else
+>+		kmalloc_size = roundup(urb->transfer_buffer_length, maxp);
+>+
+>+	if (kmalloc_size == urb->transfer_buffer_length &&
+> 	    !((uintptr_t)urb->transfer_buffer & (DWC2_USB_DMA_ALIGN - 1)))
+> 		return 0;
+> 
+> 	/* Allocate a buffer with enough padding for alignment */
+>-	kmalloc_size = urb->transfer_buffer_length +
+>-		sizeof(struct dma_aligned_buffer) + DWC2_USB_DMA_ALIGN - 1;
+>+	kmalloc_size += sizeof(struct dma_aligned_buffer) +
+>+		DWC2_USB_DMA_ALIGN - 1;
+> 
+> 	kmalloc_ptr = kmalloc(kmalloc_size, mem_flags);
+> 	if (!kmalloc_ptr)
+>-- 
+>2.17.1
+>
 
-Reviewing the code got me thinking that what if we stopped playing
-with the alignment hacks altogether and hit the issue with a heavier
-hammer instead? Attached you can find a new patch that introduces a
-list to keep track of the allocations. The code then looks up the
-entry from the list when it is time to restore the original pointer.
-This way the allocations for the aligned dma area and the original
-pointer are separate and no corruptions should occur.
 
-Thoughts, comments? I should note that the patch has received only
-light testing and not very thorough thinking. I can prepare a proper
-patch to be sent inline if the idea seems worth exploring further.
+--yrj/dFKFPuw6o+aM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="break_original.patch"
 
--- 
-Antti
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index 2192a28..4c45642 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -2503,12 +2503,27 @@ static int dwc2_alloc_dma_aligned_buffer(struct urb *urb, gfp_t mem_flags)
+ {
+ 	void *kmalloc_ptr;
+ 	size_t kmalloc_size;
++	struct usb_host_endpoint *ep = urb->ep;
++	int maxp = usb_endpoint_maxp(&ep->desc);
+ 
+ 	if (urb->num_sgs || urb->sg ||
+-	    urb->transfer_buffer_length == 0 ||
+-	    !((uintptr_t)urb->transfer_buffer & (DWC2_USB_DMA_ALIGN - 1)))
++	    urb->transfer_buffer_length == 0)
+ 		return 0;
+ 
++	if (!((uintptr_t)urb->transfer_buffer & (DWC2_USB_DMA_ALIGN - 1))) {
++		//[ 8906.761517] EARLY RET len:13 out:0 in:1 type:3 mx:512
++		//[ 8908.776755] EARLY RET len:13 out:0 in:1 type:3 mx:512
++		if (urb->transfer_buffer_length == 13) {
++			printk("EARLY RET len:%u out:%d in:%d type:%d mx:%d ",
++				urb->transfer_buffer_length,
++				usb_urb_dir_out(urb) ? 1 : 0,
++				usb_urb_dir_in(urb) ? 1 : 0,
++				usb_pipetype(urb->pipe),
++				maxp);
++			return 0;
++		}
++	}
++
+ 	/*
+ 	 * Allocate a buffer with enough padding for original transfer_buffer
+ 	 * pointer. This allocation is guaranteed to be aligned properly for
 
---000000000000840c70059f3c2bd5
-Content-Type: application/octet-stream; 
-	name="0001-usb-dwc2-Use-list-to-keep-track-of-DMA-aligned-buffe.patch"
-Content-Disposition: attachment; 
-	filename="0001-usb-dwc2-Use-list-to-keep-track-of-DMA-aligned-buffe.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_k6ywp7u60>
-X-Attachment-Id: f_k6ywp7u60
-
-RnJvbSBiNzg0N2U3OTBlODdlZTEwYjAwMDJkNGMwY2FiY2Y4MzBiZjU0ODEyIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiA9P1VURi04P3E/QW50dGk9MjBTZXBwPUMzPUE0bD1DMz1BND89
-IDxhLnNlcHBhbGFAZ21haWwuY29tPgpEYXRlOiBTdW4sIDIzIEZlYiAyMDIwIDEwOjMzOjU5ICsw
-MjAwClN1YmplY3Q6IFtQQVRDSF0gdXNiOiBkd2MyOiBVc2UgbGlzdCB0byBrZWVwIHRyYWNrIG9m
-IERNQSBhbGlnbmVkIGJ1ZmZlcgogYWxsb2NhdGlvbnMKTUlNRS1WZXJzaW9uOiAxLjAKQ29udGVu
-dC1UeXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04CkNvbnRlbnQtVHJhbnNmZXItRW5jb2Rp
-bmc6IDhiaXQKClVzaW5nIHNhbWUgbWVtb3J5IGFyZWEgYWxsb2NhdGlvbiBmb3Igb3JpZ2luYWwg
-cG9pbnRlciB2YWx1ZXMgYW5kIGRpcmVjdAptZW1vcnkgYWNjZXNzZXMgaXMgcHJvbmUgdG8gbWVt
-b3J5IGNvcnJ1cHRpb24gaXNzdWVzIGR1ZSB0byBjYWNoZQpjb2hlcmVuY3kgcmVhc29ucy4KClNl
-cGFyYXRlIHRoZSBhbGxvY2F0aW9ucyBhbmQgdXNlIGEgbGlzdCB0byBrZWVwIHRyYWNrIG9mIHRo
-ZSBETUEgYWxpZ25lZApidWZmZXJzLgoKU2lnbmVkLW9mZi1ieTogQW50dGkgU2VwcMOkbMOkIDxh
-LnNlcHBhbGFAZ21haWwuY29tPgotLS0KCk5vdGVzOgogICAgSSdtIGN1cnJlbnRseSBub3Qgc3Vy
-ZSBpZiBzdHJ1Y3QgZHdjMl9oc290ZyBpcyB0aGUgcmlnaHQgcGxhY2UgZm9yIHN0b3JpbmcKICAg
-IHRoZSBETUEgYWxsb2NhdGlvbiBsaXN0LiBQZXJoYXBzIHRoZXJlIGFyZSBiZXR0ZXIgc3RydWN0
-cyBpbiBkd2MyPyBJcyBsaXN0CiAgICBldmVuIHRoZSByaWdodCBkYXRhIHN0cnVjdHVyZSBmb3Ig
-dGhlIGpvYj8KCiBkcml2ZXJzL3VzYi9kd2MyL2NvcmUuaCB8ICAgMyArKwogZHJpdmVycy91c2Iv
-ZHdjMi9oY2QuYyAgfCAxMTYgKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0t
-LS0tLS0tLS0tCiAyIGZpbGVzIGNoYW5nZWQsIDc0IGluc2VydGlvbnMoKyksIDQ1IGRlbGV0aW9u
-cygtKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2R3YzIvY29yZS5oIGIvZHJpdmVycy91c2Iv
-ZHdjMi9jb3JlLmgKaW5kZXggOTY4ZTAzYjg5ZDA0Li5hN2E3ODIwYTg5YWQgMTAwNjQ0Ci0tLSBh
-L2RyaXZlcnMvdXNiL2R3YzIvY29yZS5oCisrKyBiL2RyaXZlcnMvdXNiL2R3YzIvY29yZS5oCkBA
-IC05NDgsNiArOTQ4LDggQEAgc3RydWN0IGR3YzJfaHJlZ3NfYmFja3VwIHsKICAqICAgICAgICAg
-ICAgICAgICAgICAgIHRoZSBuZXh0IGZyYW1lLiBPdGhlcndpc2UsIHRoZSBpdGVtIG1vdmVzIHRv
-CiAgKiAgICAgICAgICAgICAgICAgICAgICBwZXJpb2RpY19zY2hlZF9pbmFjdGl2ZS4KICAqIEBz
-cGxpdF9vcmRlcjogICAgICAgIExpc3Qga2VlcGluZyB0cmFjayBvZiBjaGFubmVscyBkb2luZyBz
-cGxpdHMsIGluIG9yZGVyLgorICogQGRtYV9hbGlnbmVkX2J1ZmZlcnM6IExpc3Qgb2YgdXJiLT50
-cmFuc2Zlcl9idWZmZXJzIHRoYXQgd2VyZSBzcGVjaWZpY2FsbHkKKyAqICAgICAgICAgICAgICAg
-ICAgICAgIERNQS1hbGlnbmVkIGFuZCBuZWVkIHRvIGJlIGxhdGVyIHJlZmVyZW5jZWQgYW5kIGZy
-ZWVkLgogICogQHBlcmlvZGljX3VzZWNzOiAgICAgVG90YWwgYmFuZHdpZHRoIGNsYWltZWQgc28g
-ZmFyIGZvciBwZXJpb2RpYyB0cmFuc2ZlcnMuCiAgKiAgICAgICAgICAgICAgICAgICAgICBUaGlz
-IHZhbHVlIGlzIGluIG1pY3Jvc2Vjb25kcyBwZXIgKG1pY3JvKWZyYW1lLiBUaGUKICAqICAgICAg
-ICAgICAgICAgICAgICAgIGFzc3VtcHRpb24gaXMgdGhhdCBhbGwgcGVyaW9kaWMgdHJhbnNmZXJz
-IG1heSBvY2N1ciBpbgpAQCAtMTEyNyw2ICsxMTI5LDcgQEAgc3RydWN0IGR3YzJfaHNvdGcgewog
-CXN0cnVjdCBsaXN0X2hlYWQgcGVyaW9kaWNfc2NoZWRfYXNzaWduZWQ7CiAJc3RydWN0IGxpc3Rf
-aGVhZCBwZXJpb2RpY19zY2hlZF9xdWV1ZWQ7CiAJc3RydWN0IGxpc3RfaGVhZCBzcGxpdF9vcmRl
-cjsKKwlzdHJ1Y3QgbGlzdF9oZWFkIGRtYV9hbGlnbmVkX2J1ZmZlcnM7CiAJdTE2IHBlcmlvZGlj
-X3VzZWNzOwogCXVuc2lnbmVkIGxvbmcgaHNfcGVyaW9kaWNfYml0bWFwWwogCQlESVZfUk9VTkRf
-VVAoRFdDMl9IU19TQ0hFRFVMRV9VUywgQklUU19QRVJfTE9ORyldOwpkaWZmIC0tZ2l0IGEvZHJp
-dmVycy91c2IvZHdjMi9oY2QuYyBiL2RyaXZlcnMvdXNiL2R3YzIvaGNkLmMKaW5kZXggYjkwZjg1
-OGFmOTYwLi5jMzc1NjExZGU4YzUgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNiL2R3YzIvaGNkLmMK
-KysrIGIvZHJpdmVycy91c2IvZHdjMi9oY2QuYwpAQCAtMjQ2OSwyMSArMjQ2OSwzNiBAQCBzdGF0
-aWMgaW50IGR3YzJfYWxsb2Nfc3BsaXRfZG1hX2FsaWduZWRfYnVmKHN0cnVjdCBkd2MyX2hzb3Rn
-ICpoc290ZywKIAlyZXR1cm4gMDsKIH0KIAotI2RlZmluZSBEV0MyX1VTQl9ETUFfQUxJR04gNAor
-I2RlZmluZSBEV0MyX1VTQl9ETUFfQUxJR04JZG1hX2dldF9jYWNoZV9hbGlnbm1lbnQoKQogCi1z
-dGF0aWMgdm9pZCBkd2MyX2ZyZWVfZG1hX2FsaWduZWRfYnVmZmVyKHN0cnVjdCB1cmIgKnVyYikK
-K3N0cnVjdCBkbWFfYWxpZ25lZF9idWZmZXIgeworCXZvaWQgKmttYWxsb2NfcHRyOworCXZvaWQg
-Km9sZF94ZmVyX2J1ZmZlcjsKKwlzdHJ1Y3QgbGlzdF9oZWFkIGRtYV9saXN0OworfTsKKworc3Rh
-dGljIHZvaWQgZHdjMl9mcmVlX2RtYV9hbGlnbmVkX2J1ZmZlcihzdHJ1Y3QgZHdjMl9oc290ZyAq
-aHNvdGcsCisJCQkJCSBzdHJ1Y3QgdXJiICp1cmIpCiB7Ci0Jdm9pZCAqc3RvcmVkX3hmZXJfYnVm
-ZmVyOworCXN0cnVjdCBkbWFfYWxpZ25lZF9idWZmZXIgKnRlbXAgPSBOVUxMOwogCXNpemVfdCBs
-ZW5ndGg7CisJdW5zaWduZWQgbG9uZyBmbGFnczsKIAogCWlmICghKHVyYi0+dHJhbnNmZXJfZmxh
-Z3MgJiBVUkJfQUxJR05FRF9URU1QX0JVRkZFUikpCiAJCXJldHVybjsKIAotCS8qIFJlc3RvcmUg
-dXJiLT50cmFuc2Zlcl9idWZmZXIgZnJvbSB0aGUgZW5kIG9mIHRoZSBhbGxvY2F0ZWQgYXJlYSAq
-LwotCW1lbWNweSgmc3RvcmVkX3hmZXJfYnVmZmVyLAotCSAgICAgICBQVFJfQUxJR04odXJiLT50
-cmFuc2Zlcl9idWZmZXIgKyB1cmItPnRyYW5zZmVyX2J1ZmZlcl9sZW5ndGgsCi0JCQkgZG1hX2dl
-dF9jYWNoZV9hbGlnbm1lbnQoKSksCi0JICAgICAgIHNpemVvZih1cmItPnRyYW5zZmVyX2J1ZmZl
-cikpOworCXNwaW5fbG9ja19pcnFzYXZlKCZoc290Zy0+bG9jaywgZmxhZ3MpOworCWxpc3RfZm9y
-X2VhY2hfZW50cnkodGVtcCwgJmhzb3RnLT5kbWFfYWxpZ25lZF9idWZmZXJzLCBkbWFfbGlzdCkg
-eworCQlpZiAodGVtcC0+a21hbGxvY19wdHIgPT0gdXJiLT50cmFuc2Zlcl9idWZmZXIpCisJCQli
-cmVhazsKKwl9CisJaWYgKCF0ZW1wKSB7CisJCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJmhzb3Rn
-LT5sb2NrLCBmbGFncyk7CisJCVdBUk5fT05DRSghdGVtcCwgImRtYSBhbGlnbmVkIHRlbXBvcmFy
-eSBidWZmZXIgbG9zdCIpOworCQlyZXR1cm47CisJfQorCWxpc3RfZGVsKCZ0ZW1wLT5kbWFfbGlz
-dCk7CisJc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmaHNvdGctPmxvY2ssIGZsYWdzKTsKIAogCWlm
-ICh1c2JfdXJiX2Rpcl9pbih1cmIpKSB7CiAJCWlmICh1c2JfcGlwZWlzb2ModXJiLT5waXBlKSkK
-QEAgLTI0OTEsMTggKzI1MDYsMjEgQEAgc3RhdGljIHZvaWQgZHdjMl9mcmVlX2RtYV9hbGlnbmVk
-X2J1ZmZlcihzdHJ1Y3QgdXJiICp1cmIpCiAJCWVsc2UKIAkJCWxlbmd0aCA9IHVyYi0+YWN0dWFs
-X2xlbmd0aDsKIAotCQltZW1jcHkoc3RvcmVkX3hmZXJfYnVmZmVyLCB1cmItPnRyYW5zZmVyX2J1
-ZmZlciwgbGVuZ3RoKTsKKwkJbWVtY3B5KHRlbXAtPm9sZF94ZmVyX2J1ZmZlciwgdXJiLT50cmFu
-c2Zlcl9idWZmZXIsIGxlbmd0aCk7CiAJfQotCWtmcmVlKHVyYi0+dHJhbnNmZXJfYnVmZmVyKTsK
-LQl1cmItPnRyYW5zZmVyX2J1ZmZlciA9IHN0b3JlZF94ZmVyX2J1ZmZlcjsKKwl1cmItPnRyYW5z
-ZmVyX2J1ZmZlciA9IHRlbXAtPm9sZF94ZmVyX2J1ZmZlcjsKKworCWtmcmVlKHRlbXAtPmttYWxs
-b2NfcHRyKTsKKwlrZnJlZSh0ZW1wKTsKIAogCXVyYi0+dHJhbnNmZXJfZmxhZ3MgJj0gflVSQl9B
-TElHTkVEX1RFTVBfQlVGRkVSOwogfQogCi1zdGF0aWMgaW50IGR3YzJfYWxsb2NfZG1hX2FsaWdu
-ZWRfYnVmZmVyKHN0cnVjdCB1cmIgKnVyYiwgZ2ZwX3QgbWVtX2ZsYWdzKQorc3RhdGljIGludCBk
-d2MyX2FsbG9jX2RtYV9hbGlnbmVkX2J1ZmZlcihzdHJ1Y3QgZHdjMl9oc290ZyAqaHNvdGcsCisJ
-CQkJCSBzdHJ1Y3QgdXJiICp1cmIsIGdmcF90IG1lbV9mbGFncykKIHsKLQl2b2lkICprbWFsbG9j
-X3B0cjsKLQlzaXplX3Qga21hbGxvY19zaXplOworCXN0cnVjdCBkbWFfYWxpZ25lZF9idWZmZXIg
-KnRlbXA7CisJdW5zaWduZWQgbG9uZyBmbGFnczsKIAogCWlmICh1cmItPm51bV9zZ3MgfHwgdXJi
-LT5zZyB8fAogCSAgICB1cmItPnRyYW5zZmVyX2J1ZmZlcl9sZW5ndGggPT0gMCB8fApAQCAtMjUx
-MCw2MCArMjUyOCw4MCBAQCBzdGF0aWMgaW50IGR3YzJfYWxsb2NfZG1hX2FsaWduZWRfYnVmZmVy
-KHN0cnVjdCB1cmIgKnVyYiwgZ2ZwX3QgbWVtX2ZsYWdzKQogCQlyZXR1cm4gMDsKIAogCS8qCi0J
-ICogQWxsb2NhdGUgYSBidWZmZXIgd2l0aCBlbm91Z2ggcGFkZGluZyBmb3Igb3JpZ2luYWwgdHJh
-bnNmZXJfYnVmZmVyCisJICogQWxsb2NhdGUgYSBsaXN0IGVudHJ5IGFuZCBhIG5ldyBidWZmZXIg
-Zm9yIG9yaWdpbmFsIHRyYW5zZmVyX2J1ZmZlcgogCSAqIHBvaW50ZXIuIFRoaXMgYWxsb2NhdGlv
-biBpcyBndWFyYW50ZWVkIHRvIGJlIGFsaWduZWQgcHJvcGVybHkgZm9yCiAJICogRE1BCisJICog
-RHJvcCBwb3RlbnRpYWwgRE1BIGZsYWcgZnJvbSBsaXN0IGVudHJ5IGFsbG9jYXRpb24gYmVjYXVz
-ZSB0aGUgbGlzdAorCSAqIGl0c2VsZiBpcyBub3QgYWNjZXNzZWQgdmlhIERNQQogCSAqLwotCWtt
-YWxsb2Nfc2l6ZSA9IHVyYi0+dHJhbnNmZXJfYnVmZmVyX2xlbmd0aCArCi0JCShkbWFfZ2V0X2Nh
-Y2hlX2FsaWdubWVudCgpIC0gMSkgKwotCQlzaXplb2YodXJiLT50cmFuc2Zlcl9idWZmZXIpOwot
-Ci0Ja21hbGxvY19wdHIgPSBrbWFsbG9jKGttYWxsb2Nfc2l6ZSwgbWVtX2ZsYWdzKTsKLQlpZiAo
-IWttYWxsb2NfcHRyKQorCXRlbXAgPSBrbWFsbG9jKHNpemVvZihzdHJ1Y3QgZG1hX2FsaWduZWRf
-YnVmZmVyKSwgbWVtX2ZsYWdzICYgfkdGUF9ETUEpOworCWlmICghdGVtcCkKKwkJcmV0dXJuIC1F
-Tk9NRU07CisJdGVtcC0+b2xkX3hmZXJfYnVmZmVyID0gdXJiLT50cmFuc2Zlcl9idWZmZXI7CisJ
-dGVtcC0+a21hbGxvY19wdHIgPSBrbWFsbG9jKHVyYi0+dHJhbnNmZXJfYnVmZmVyX2xlbmd0aCwg
-bWVtX2ZsYWdzKTsKKwlpZiAoIXRlbXAtPmttYWxsb2NfcHRyKSB7CisJCWtmcmVlKHRlbXApOwog
-CQlyZXR1cm4gLUVOT01FTTsKKwl9CiAKIAkvKgotCSAqIFBvc2l0aW9uIHZhbHVlIG9mIG9yaWdp
-bmFsIHVyYi0+dHJhbnNmZXJfYnVmZmVyIHBvaW50ZXIgdG8gdGhlIGVuZAotCSAqIG9mIGFsbG9j
-YXRpb24gZm9yIGxhdGVyIHJlZmVyZW5jaW5nCisJICogVXNlIG91ciBuZXdseSBhbGxvY2F0ZWQg
-YW5kIGFsaWduZWQgYnVmZmVyIGFuZCBzdG9yZSB0aGUgb2xkCisJICogdHJhbnNmZXJfYnVmZmVy
-IGludG8gdGhlIGxpc3QKIAkgKi8KLQltZW1jcHkoUFRSX0FMSUdOKGttYWxsb2NfcHRyICsgdXJi
-LT50cmFuc2Zlcl9idWZmZXJfbGVuZ3RoLAotCQkJIGRtYV9nZXRfY2FjaGVfYWxpZ25tZW50KCkp
-LAotCSAgICAgICAmdXJiLT50cmFuc2Zlcl9idWZmZXIsIHNpemVvZih1cmItPnRyYW5zZmVyX2J1
-ZmZlcikpOwotCiAJaWYgKHVzYl91cmJfZGlyX291dCh1cmIpKQotCQltZW1jcHkoa21hbGxvY19w
-dHIsIHVyYi0+dHJhbnNmZXJfYnVmZmVyLAorCQltZW1jcHkodGVtcC0+a21hbGxvY19wdHIsIHVy
-Yi0+dHJhbnNmZXJfYnVmZmVyLAogCQkgICAgICAgdXJiLT50cmFuc2Zlcl9idWZmZXJfbGVuZ3Ro
-KTsKLQl1cmItPnRyYW5zZmVyX2J1ZmZlciA9IGttYWxsb2NfcHRyOworCXVyYi0+dHJhbnNmZXJf
-YnVmZmVyID0gdGVtcC0+a21hbGxvY19wdHI7CisKKwlzcGluX2xvY2tfaXJxc2F2ZSgmaHNvdGct
-PmxvY2ssIGZsYWdzKTsKKwlsaXN0X2FkZF90YWlsKCZ0ZW1wLT5kbWFfbGlzdCwgJmhzb3RnLT5k
-bWFfYWxpZ25lZF9idWZmZXJzKTsKKwlzcGluX3VubG9ja19pcnFyZXN0b3JlKCZoc290Zy0+bG9j
-aywgZmxhZ3MpOwogCiAJdXJiLT50cmFuc2Zlcl9mbGFncyB8PSBVUkJfQUxJR05FRF9URU1QX0JV
-RkZFUjsKIAogCXJldHVybiAwOwogfQogCitzdHJ1Y3Qgd3JhcHBlcl9wcml2X2RhdGEgeworCXN0
-cnVjdCBkd2MyX2hzb3RnICpoc290ZzsKK307CisKKy8qIEdldHMgdGhlIGR3YzJfaHNvdGcgZnJv
-bSBhIHVzYl9oY2QgKi8KK3N0YXRpYyBzdHJ1Y3QgZHdjMl9oc290ZyAqZHdjMl9oY2RfdG9faHNv
-dGcoc3RydWN0IHVzYl9oY2QgKmhjZCkKK3sKKwlzdHJ1Y3Qgd3JhcHBlcl9wcml2X2RhdGEgKnA7
-CisKKwlwID0gKHN0cnVjdCB3cmFwcGVyX3ByaXZfZGF0YSAqKSZoY2QtPmhjZF9wcml2OworCXJl
-dHVybiBwLT5oc290ZzsKK30KKwogc3RhdGljIGludCBkd2MyX21hcF91cmJfZm9yX2RtYShzdHJ1
-Y3QgdXNiX2hjZCAqaGNkLCBzdHJ1Y3QgdXJiICp1cmIsCiAJCQkJZ2ZwX3QgbWVtX2ZsYWdzKQog
-ewogCWludCByZXQ7CisJc3RydWN0IGR3YzJfaHNvdGcgKmhzb3RnID0gZHdjMl9oY2RfdG9faHNv
-dGcoaGNkKTsKIAogCS8qIFdlIGFzc3VtZSBzZXR1cF9kbWEgaXMgYWx3YXlzIGFsaWduZWQ7IHdh
-cm4gaWYgbm90ICovCiAJV0FSTl9PTl9PTkNFKHVyYi0+c2V0dXBfZG1hICYmCiAJCSAgICAgKHVy
-Yi0+c2V0dXBfZG1hICYgKERXQzJfVVNCX0RNQV9BTElHTiAtIDEpKSk7CiAKLQlyZXQgPSBkd2My
-X2FsbG9jX2RtYV9hbGlnbmVkX2J1ZmZlcih1cmIsIG1lbV9mbGFncyk7CisJcmV0ID0gZHdjMl9h
-bGxvY19kbWFfYWxpZ25lZF9idWZmZXIoaHNvdGcsIHVyYiwgbWVtX2ZsYWdzKTsKIAlpZiAocmV0
-KQogCQlyZXR1cm4gcmV0OwogCiAJcmV0ID0gdXNiX2hjZF9tYXBfdXJiX2Zvcl9kbWEoaGNkLCB1
-cmIsIG1lbV9mbGFncyk7CiAJaWYgKHJldCkKLQkJZHdjMl9mcmVlX2RtYV9hbGlnbmVkX2J1ZmZl
-cih1cmIpOworCQlkd2MyX2ZyZWVfZG1hX2FsaWduZWRfYnVmZmVyKGhzb3RnLCB1cmIpOwogCiAJ
-cmV0dXJuIHJldDsKIH0KIAogc3RhdGljIHZvaWQgZHdjMl91bm1hcF91cmJfZm9yX2RtYShzdHJ1
-Y3QgdXNiX2hjZCAqaGNkLCBzdHJ1Y3QgdXJiICp1cmIpCiB7CisJc3RydWN0IGR3YzJfaHNvdGcg
-Kmhzb3RnID0gZHdjMl9oY2RfdG9faHNvdGcoaGNkKTsKKwogCXVzYl9oY2RfdW5tYXBfdXJiX2Zv
-cl9kbWEoaGNkLCB1cmIpOwotCWR3YzJfZnJlZV9kbWFfYWxpZ25lZF9idWZmZXIodXJiKTsKKwlk
-d2MyX2ZyZWVfZG1hX2FsaWduZWRfYnVmZmVyKGhzb3RnLCB1cmIpOwogfQogCiAvKioKQEAgLTM5
-NTYsMTkgKzM5OTQsNiBAQCB2b2lkIGR3YzJfaGNkX2R1bXBfc3RhdGUoc3RydWN0IGR3YzJfaHNv
-dGcgKmhzb3RnKQogI2VuZGlmCiB9CiAKLXN0cnVjdCB3cmFwcGVyX3ByaXZfZGF0YSB7Ci0Jc3Ry
-dWN0IGR3YzJfaHNvdGcgKmhzb3RnOwotfTsKLQotLyogR2V0cyB0aGUgZHdjMl9oc290ZyBmcm9t
-IGEgdXNiX2hjZCAqLwotc3RhdGljIHN0cnVjdCBkd2MyX2hzb3RnICpkd2MyX2hjZF90b19oc290
-ZyhzdHJ1Y3QgdXNiX2hjZCAqaGNkKQotewotCXN0cnVjdCB3cmFwcGVyX3ByaXZfZGF0YSAqcDsK
-LQotCXAgPSAoc3RydWN0IHdyYXBwZXJfcHJpdl9kYXRhICopJmhjZC0+aGNkX3ByaXY7Ci0JcmV0
-dXJuIHAtPmhzb3RnOwotfQotCiAvKioKICAqIGR3YzJfaG9zdF9nZXRfdHRfaW5mbygpIC0gR2V0
-IHRoZSBkd2MyX3R0IGFzc29jaWF0ZWQgd2l0aCBjb250ZXh0CiAgKgpAQCAtNTExMiw2ICs1MTM3
-LDcgQEAgaW50IGR3YzJfaGNkX2luaXQoc3RydWN0IGR3YzJfaHNvdGcgKmhzb3RnKQogCUlOSVRf
-TElTVF9IRUFEKCZoc290Zy0+cGVyaW9kaWNfc2NoZWRfcXVldWVkKTsKIAogCUlOSVRfTElTVF9I
-RUFEKCZoc290Zy0+c3BsaXRfb3JkZXIpOworCUlOSVRfTElTVF9IRUFEKCZoc290Zy0+ZG1hX2Fs
-aWduZWRfYnVmZmVycyk7CiAKIAkvKgogCSAqIENyZWF0ZSBhIGhvc3QgY2hhbm5lbCBkZXNjcmlw
-dG9yIGZvciBlYWNoIGhvc3QgY2hhbm5lbCBpbXBsZW1lbnRlZAotLSAKMi4xMy42Cgo=
---000000000000840c70059f3c2bd5--
+--yrj/dFKFPuw6o+aM--
