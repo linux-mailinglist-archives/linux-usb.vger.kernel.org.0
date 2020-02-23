@@ -2,142 +2,193 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E648D16997D
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 19:47:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D61169A23
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 21:59:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726534AbgBWSrG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Feb 2020 13:47:06 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:43172 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726208AbgBWSrG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Feb 2020 13:47:06 -0500
-Received: by mail-pg1-f196.google.com with SMTP id u12so3866781pgb.10
-        for <linux-usb@vger.kernel.org>; Sun, 23 Feb 2020 10:47:05 -0800 (PST)
+        id S1726678AbgBWU7q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Feb 2020 15:59:46 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:45637 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726302AbgBWU7q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Feb 2020 15:59:46 -0500
+Received: by mail-ot1-f68.google.com with SMTP id 59so6902220otp.12
+        for <linux-usb@vger.kernel.org>; Sun, 23 Feb 2020 12:59:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+pmLbSE/kvii9Zz3FLUuP0hymIyoiyHxwc8vdYbytwU=;
-        b=I2WXDLo+gzUanzhu4EsbM4qE8hbPngYy1CsjTmbHgrF3cSWt7EjwY+TQyHnVEAGdIc
-         Jdr1L9klGa8mx0mgj2gNfvXb5uxFlELnj7fM4s3cD1Ae7YrjGxYSlZsFyQBKGlKacVrY
-         8qfXAGHRlroqAnB+CzKouM3hOt+VykvP3kSIWT6gVe/j+CBCLSHEUzneDXuHD3iq6KUH
-         9wIRgryKMMsEwwc++EnB7jGJiMg9LFIyBAG5lLR+EGzOKqj2dzYajpyZBb6K9QALenP7
-         Oh4dfrXD4ArXKfbe/WmMYEk8Y7HNFAybZRx0KPFngN2EGUfDbYL9m3zRFlK4nlFuLybs
-         KI9w==
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=yLerEjQyKf5kmZPFmeSynvzmvw9OGsBrsA5dtIaOS1o=;
+        b=jYw/UvDkD/iCvN0cYrck0oS3/SKfZUngYndn54iGw0m9TB1QBNp6J3IN3tFmZlzHKN
+         92Felhy7bgNvQEjQ/JN9ge9/EElH/lZqFcmn9KxhOuYb4OTvy2aPti85lwIpVLAPcwSL
+         JXNLJi8klEY7FP3Uuv86zKDjQWRPTNjv7iHaw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+pmLbSE/kvii9Zz3FLUuP0hymIyoiyHxwc8vdYbytwU=;
-        b=KwDMJ1O62vI6r7xVP9uRQHat80GJwplniNiLqxQ7C9GkV7MzVsEKmbeoBRnuUCd0e0
-         751pjJyY+/6GZocSSZxMAymg2LmPS+KKRIfigB15Uei0kpUZZCEa2VKLEoLHYrrQ/DnX
-         U+7tkcbBL2zFHvweOgX3XIvRnObfoWQFQmucrF2cGg9CWfxjgYmr52mRjjkUC4UzWyrc
-         t7r4XApHVgM7CpQntfw17Itx60cmjTdDDAMBiPhxccmdkq02XMQ/5VtlcjLupFpcK+BR
-         tcOUqPZXNs9QFjp0M0FTFhKHy+vfEspkdkwwQ15fjWk9Y7oqeS0nMTfBArZwXbD2xzQX
-         Nmaw==
-X-Gm-Message-State: APjAAAVwf5l5I7zUgs8tn3a3mIvyRPJJ77HwspEryFWYmBvs6giFbsB/
-        z2dqGSM1EixwwreVjcqLFA4=
-X-Google-Smtp-Source: APXvYqy5Kk9THGVlyw9Ipawcea2sz2hBcJ7pkXXsBo00nuBXqIUrz6JohksHQ2bPvm7fRarmHvyYeA==
-X-Received: by 2002:a63:7b5a:: with SMTP id k26mr46983022pgn.406.1582483625369;
-        Sun, 23 Feb 2020 10:47:05 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c15sm9942166pja.30.2020.02.23.10.47.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Feb 2020 10:47:04 -0800 (PST)
-Subject: Re: [PATCH] usb: dwc2: extend treatment for incomplete transfer
-To:     =?UTF-8?B?QW50dGkgU2VwcMOkbMOk?= <a.seppala@gmail.com>
-Cc:     Boris ARZUR <boris@konbu.org>, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        William Wu <william.wu@rock-chips.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>
-References: <20200210213906.GA24079@roeck-us.net>
- <20200211054953.GA2401@tungsten> <20200211161522.GA1894@roeck-us.net>
- <20200215053647.GA10345@tungsten> <20200219211056.GA829@roeck-us.net>
- <CAKv9HNZx_YTC1QEyT-T2_BuXnnju+9czKx-JJjduk9TjUSjS7A@mail.gmail.com>
- <587c8fd7-6a31-098e-7fcb-815208f602bc@roeck-us.net>
- <CAKv9HNYoyzMbufYyaByDoKgwDO3Vfw2vk7RmpcGdf9pvzREjVA@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <7e225488-feec-e461-e22b-4befc5ce3c20@roeck-us.net>
-Date:   Sun, 23 Feb 2020 10:47:03 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=yLerEjQyKf5kmZPFmeSynvzmvw9OGsBrsA5dtIaOS1o=;
+        b=AfFYlGJorFX0DnEu4RHyi1BrDl3L7C7Tufd4gyLDigMNmhdmVtRrY6T7jq3L6NMvpX
+         KuQ12J/uBYZ+huEboj44F3VNaFAYDM4RUEkx8ZH7tDPwc+/CVepjJfK36wXGJGliWamS
+         w4fZc8yEk1wpr7x+ojehfiLS9CzNg1hId+bvBEbS5ePAvI4CKIzG6TFeKONGsZDxtbzN
+         6ekboz7rR9Fatcvx183m/AXqC3AtQeA1zci1VvK9guTgFI7s8qHK0OZt/vwvy/1mgsXB
+         /Iar31BQ/jdZmyFuXHargDp25NlsmYppxJDwF6yoqU5SGsxx/6KB0jDHQCDl1xATxu1z
+         kH6Q==
+X-Gm-Message-State: APjAAAU7alN1A+Fm9JNQcXzn+ARusjJxUqUpuecLTL5fgaqEfWIiARt8
+        6OnXVD9JYjHA4znAhwLaHva7boSvBaEHchBy6X8OHr0T
+X-Google-Smtp-Source: APXvYqyGJWW/yU3lj3vs+yyHCrwnN4qbgs2YaW9Rs5GjVnHZZ2Jf0UcWdn7pvq+7appAtc7PZ8TvlOMKk/UdtW5No1M=
+X-Received: by 2002:a9d:7696:: with SMTP id j22mr39757561otl.188.1582491583142;
+ Sun, 23 Feb 2020 12:59:43 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAKv9HNYoyzMbufYyaByDoKgwDO3Vfw2vk7RmpcGdf9pvzREjVA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20200216172117.49832-1-noralf@tronnes.org> <20200216172117.49832-9-noralf@tronnes.org>
+ <20200217093836.GH2363188@phenom.ffwll.local> <393a8dcf-e01b-715c-551b-5108e42ebefc@tronnes.org>
+In-Reply-To: <393a8dcf-e01b-715c-551b-5108e42ebefc@tronnes.org>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Sun, 23 Feb 2020 21:59:32 +0100
+Message-ID: <CAKMK7uH0e4gqYja3igPm8oScJxkJkGDZfoA0Pbs9qgwnsW+moA@mail.gmail.com>
+Subject: Re: [RFC 8/9] drm/client: Add drm_client_init_from_id() and drm_client_modeset_set()
+To:     =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     Mark Brown <broonie@kernel.org>, balbi@kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2/23/20 10:20 AM, Antti Seppälä wrote:
-> On Sun, 23 Feb 2020 at 15:45, Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On 2/23/20 3:00 AM, Antti Seppälä wrote:
->>> Hi Guenter,
->>>
->>> On Wed, 19 Feb 2020 at 23:11, Guenter Roeck <linux@roeck-us.net> wrote:
->>>>
->>>> Yes, those patches didn't address the core problem. Can you test with the
->>>> attached two patches ?
->>>>
->>>> Thanks,
->>>> Guenter
->>>
->>> I took a look at your patch (usb: dwc2: Simplify DMA alignment code)
->>> and I don't believe it is correct.
->>>
->>> The patch re-introduces the dma_aligned_buffer struct and takes some
->>> care to align the beginning of the struct to dma cache lines. However
->>> we should be aligning the data[0] pointer inside the struct instead.
->>> With the code in the patch data[0] gets pushed to be at an offset from
->>> the alignment by kmalloc_ptr and old_xfer_buffer pointers. In other
->>> words data[0] is now not aligned to dma cache boundaries.
->>>
->>
->> I thought so too initially. However,
->>
->> temp = PTR_ALIGN(kmalloc_ptr + 1, TEGRA_USB_DMA_ALIGN) - 1;
->>
->> aligns the structure pointer such that its _end_ is DMA-aligned,
->> which is ->data[0].
->>
-> 
-> Hmm, looks like you're right. I somehow missed the - 1 at the end.
-> Sorry for the noise I guess.
-> 
-No worries. It took me a while to understand hat code, and I initially
-also thought it was wrong, so you are in good company.
+On Sun, Feb 23, 2020 at 6:43 PM Noralf Tr=C3=B8nnes <noralf@tronnes.org> wr=
+ote:
+> Den 17.02.2020 10.38, skrev Daniel Vetter:
+> > On Sun, Feb 16, 2020 at 06:21:16PM +0100, Noralf Tr=C3=B8nnes wrote:
+> >> drm_client_init_from_id() provides a way for clients to add a client b=
+ased
+> >> on the minor. drm_client_modeset_set() provides a way to set the modes=
+et
+> >> for clients that handles connectors and display mode on their own.
+> >>
+> >> Signed-off-by: Noralf Tr=C3=B8nnes <noralf@tronnes.org>
+> >> ---
+> >>  drivers/gpu/drm/drm_client.c         | 37 ++++++++++++++++++++
+> >>  drivers/gpu/drm/drm_client_modeset.c | 52 +++++++++++++++++++++++++++=
++
+> >>  include/drm/drm_client.h             |  4 +++
+> >>  3 files changed, 93 insertions(+)
+> >>
+> >> diff --git a/drivers/gpu/drm/drm_client.c b/drivers/gpu/drm/drm_client=
+.c
+> >> index d9a2e3695525..dbd73fe8d987 100644
+> >> --- a/drivers/gpu/drm/drm_client.c
+> >> +++ b/drivers/gpu/drm/drm_client.c
+> >> @@ -112,6 +112,43 @@ int drm_client_init(struct drm_device *dev, struc=
+t drm_client_dev *client,
+> >>  }
+> >>  EXPORT_SYMBOL(drm_client_init);
+> >>
+> >> +/**
+> >> + * drm_client_init_from_id - Initialise a DRM client
+> >> + * @minor_id: DRM minor id
+> >> + * @client: DRM client
+> >> + * @name: Client name
+> >> + * @funcs: DRM client functions (optional)
+> >> + *
+> >> + * This function looks up the drm_device using the minor id and initi=
+alizes the client.
+> >> + * It also registeres the client to avoid a possible race with DRM de=
+vice unregister.
+> >
+> > I think another sentence here would be good, explaining that this is fo=
+r
+> > drivers outside of drm to expose a specific drm driver in some fashion,
+> > and just outright mention your use-case as an example.
+> >
+> > I'm also not sure whether lookup-by-minor is the greatest thing for
+> > kernel-internal lookups like this, maybe Greg has some idea?
+> >
+>
+> What alternatives do you see? Parent device name?
+>
+> I did a scan to see what others are doing, and most have a consumer name
+> lookup on the struct device (Device Tree or lookup tables):
 
-> Would be nice to know what makes the previous code prone to pointer
-> corruption issues though. With the added padding that pointer should
-> also be on another dma cache line.
-> 
-Padding to DMA cache line size doesn't fix the real problem. The dwc2
-IP expects input buffer size to be a multiple of wMaxPacketSize.
-dwc2_hc_start_transfer() has the following code(where wMaxPacketSize ==
-chan->max_packet).
+I think those are all for other purposes. What we want here is that
+some interface things binds to something else. I was thinking sysfs
+paths to the underlying struct device (i.e. the one in
+drm_device->dev) might be neater, since that's more unique. Using
+minors we get that entire trouble of having duplicates (and in the
+past triplicatres) due to our uapi-flavors. But in sysfs there's only
+one underlying device.
 
-		if (chan->xfer_len > 0) {
-                         num_packets = (chan->xfer_len + chan->max_packet - 1) /
-                                         chan->max_packet;
-			...
-		}
-		...
-		if (chan->ep_is_in)
-			chan->xfer_len = num_packets * chan->max_packet;
+Anyway if there's no precedence and Greg doesn't have ideas either
+then I guess we can just go with minor ids. It's about as good as
+anything else really.
+-Daniel
 
-If, for example, wMaxPacketSize is 64, and the original xfer_len is, say,
-1522 (as observed in our case), xfer_len is updated to 1536, and the chip
-is programmed to receive up to 1536 bytes. In most cases, padding the
-buffer to the DMA cache line size (64 in our case) catches this, but not
-if xfer_len is much lower than wMaxPacketSize.
+>
+> struct reset_control *__reset_control_get(struct device *dev, const char
+> *id,
+>                                           int index, bool shared,
+>                                           bool optional, bool acquired);
+>
+> struct iio_channel *iio_channel_get(struct device *dev,
+>                                     const char *consumer_channel);
+>
+> struct regulator *__must_check regulator_get(struct device *dev,
+>                                              const char *id);
+>
+> struct pwm_device *pwm_get(struct device *dev, const char *con_id)
+>
+> struct gpio_desc *__must_check gpiod_get(struct device *dev,
+>                                          const char *con_id,
+>                                          enum gpiod_flags flags);
+>
+> SPI and I2C use the bus index as lookup:
+>
+> extern struct i2c_adapter *i2c_get_adapter(int nr);
+>
+> extern struct spi_controller *spi_busnum_to_master(u16 busnum);
+>
+>
+> Noralf.
+>
+> >> + *
+> >> + * See drm_client_init() and drm_client_register().
+> >> + *
+> >> + * Returns:
+> >> + * Zero on success or negative error code on failure.
+> >> + */
+> >> +int drm_client_init_from_id(unsigned int minor_id, struct drm_client_=
+dev *client,
+> >> +                        const char *name, const struct drm_client_fun=
+cs *funcs)
+> >> +{
+> >> +    struct drm_minor *minor;
+> >> +    int ret;
+> >> +
+> >> +    minor =3D drm_minor_acquire(minor_id);
+> >> +    if (IS_ERR(minor))
+> >> +            return PTR_ERR(minor);
+> >> +
+> >> +    mutex_lock(&minor->dev->clientlist_mutex);
+> >> +    ret =3D drm_client_init(minor->dev, client, name, funcs);
+> >> +    if (!ret)
+> >> +            list_add(&client->list, &minor->dev->clientlist);
+> >> +    mutex_unlock(&minor->dev->clientlist_mutex);
+> >> +
+> >> +    drm_minor_release(minor);
+> >> +
+> >> +    return ret;
+> >> +}
+> >> +EXPORT_SYMBOL(drm_client_init_from_id);
+> >> +
+> >>  /**
+> >>   * drm_client_register - Register client
+> >>   * @client: DRM client
 
-My code tries to address that situation, but as Boris noticed there is
-still something wrong with my fix.
 
-Guenter
+
+--=20
+Daniel Vetter
+Software Engineer, Intel Corporation
++41 (0) 79 365 57 48 - http://blog.ffwll.ch
