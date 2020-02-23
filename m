@@ -2,117 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5944169588
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 04:23:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE01D1696DF
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2020 09:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727272AbgBWDX3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Feb 2020 22:23:29 -0500
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:33335 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727093AbgBWDX3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Feb 2020 22:23:29 -0500
-Received: by mail-ed1-f65.google.com with SMTP id r21so7587898edq.0;
-        Sat, 22 Feb 2020 19:23:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RS1myGQD4/DxcloU05LYheuFzcmTnlxgIJwQU+BLqtY=;
-        b=MxI8FM2mm+dZFcmAVdQO8Lq728djsVIYKYj7ANjU90WqVOBTJUKEuJwApjk4ipExGp
-         BRtNw9htGZS6Xi6xW/NHAqV8YmipiBlXN86fD2TH7xJn8PfIaCQdTRpET0hQ+Y3fPSy2
-         v+9+pk2ht3ZRZGc10pKqqdCls0whoBut4YgxlQxTIqPhd2M3VoDsfCXkcijUmkRsJ1lL
-         Logq8Ao1iLpnhCezCzLvMWoo1uXLjDJIJBaDZxt3aSje0K3XEA/9HGmW7g27Bby+r5YO
-         kkkAdaKAlvNolD8Si0Vt6e/6lGGlAx6uh490F2vUkh6sS05MxXzYrQQuFDL7OBhCr/aq
-         07Jg==
-X-Gm-Message-State: APjAAAXnOCoZjXaSYij8JYRIUKgCFCqGbena04Y7KJK68/lry33+9/LV
-        XKxQfKunGFhjP82OfvhwJvWtg+OAlS4=
-X-Google-Smtp-Source: APXvYqwi+kjImUdTL0vzD3gf5zEKNMyj3eI9Fvxf+6hnbmTWovDebi924u/JV7IqYEuNJF+bBAMT7w==
-X-Received: by 2002:aa7:cf81:: with SMTP id z1mr40883593edx.234.1582428207299;
-        Sat, 22 Feb 2020 19:23:27 -0800 (PST)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id n11sm594532eje.86.2020.02.22.19.23.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Feb 2020 19:23:26 -0800 (PST)
-Received: by mail-wr1-f43.google.com with SMTP id g3so6334598wrs.12;
-        Sat, 22 Feb 2020 19:23:25 -0800 (PST)
-X-Received: by 2002:a5d:484f:: with SMTP id n15mr57653500wrs.365.1582428205416;
- Sat, 22 Feb 2020 19:23:25 -0800 (PST)
+        id S1727033AbgBWIx2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Feb 2020 03:53:28 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:22825 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726592AbgBWIx2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Feb 2020 03:53:28 -0500
+X-UUID: 38e39728baba4c5a88c3e39a367ab3e1-20200223
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=L6+Le50jyFOltKwz1JENBOZc2qg1uyeNTqnh9DLfcl4=;
+        b=WnM6R2F75bga3qqX7bdF+i6UDekkzY4y8slHZtEFTxxHqj0R3TmWLYniNfaMKj9YLekaSJCowU+6KZ8ZD8PJ8yyndwNiq0OIXeDBNL6BXyL2Gx9flOZYilIVHas3Wn0zK6zVs0OBjQH49DaWz9jVmcXYkUaqAP0pVN2qpbbWHtY=;
+X-UUID: 38e39728baba4c5a88c3e39a367ab3e1-20200223
+Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 574559612; Sun, 23 Feb 2020 16:53:24 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Sun, 23 Feb 2020 16:52:09 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Sun, 23 Feb 2020 16:52:29 +0800
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Shen Jing <jingx.shen@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Vincent Pelletier <plr.vincent@gmail.com>,
+        Jerry Zhang <zhangjerry@google.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        CC Hwang <cc.hwang@mediatek.com>,
+        Loda Chou <loda.chou@mediatek.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+CC:     Macpaul Lin <macpaul.lin@mediatek.com>
+Subject: [PATCH] usb: gadget: f_fs: try to fix AIO issue under ARM 64 bit TAGGED mode
+Date:   Sun, 23 Feb 2020 16:53:12 +0800
+Message-ID: <1582447993-7594-1-git-send-email-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <n>
+References: <n>
 MIME-Version: 1.0
-References: <20191020134229.1216351-3-megous@megous.com> <20191110124355.1569-1-rikard.falkeborn@gmail.com>
-In-Reply-To: <20191110124355.1569-1-rikard.falkeborn@gmail.com>
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Sun, 23 Feb 2020 11:23:15 +0800
-X-Gmail-Original-Message-ID: <CAGb2v67piSbdmDPOU_w3QterPRk7iFnrMAZe05O5ypwraohssQ@mail.gmail.com>
-Message-ID: <CAGb2v67piSbdmDPOU_w3QterPRk7iFnrMAZe05O5ypwraohssQ@mail.gmail.com>
-Subject: Re: [linux-sunxi] [PATCH v2 RESEND] phy: allwinner: Fix GENMASK misuse
-To:     =?UTF-8?Q?Ond=C5=99ej_Jirman?= <megous@megous.com>
-Cc:     linux-usb <linux-usb@vger.kernel.org>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        linux-sunxi <linux-sunxi@googlegroups.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Icenowy Zheng <icenowy@aosc.io>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Feb 23, 2020 at 7:42 AM Ondrej Jirman <megous@megous.com> wrote:
->
-> From: Rikard Falkeborn <rikard.falkeborn@gmail.com>
->
-> Arguments are supposed to be ordered high then low.
->
-> Fixes: a228890f9458 ("phy: allwinner: add phy driver for USB3 PHY on Allwinner H6 SoC")
-> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
-> Tested-by: Ondrej Jirman <megous@megous.com>
-> Signed-off-by: Ondrej Jirman <megous@megous.com>
+VGhpcyBpc3N1ZSB3YXMgZm91bmQgd2hlbiBhZGJkIHRyeWluZyB0byBvcGVuIGZ1bmN0aW9uZnMg
+d2l0aCBBSU8gbW9kZS4NClVzdWFsbHksIHdlIG5lZWQgdG8gc2V0ICJzZXRwcm9wIHN5cy51c2Iu
+ZmZzLmFpb19jb21wYXQgMCIgdG8gZW5hYmxlDQphZGJkIHdpdGggQUlPIG1vZGUgb24gQW5kcm9p
+ZC4NCg0KV2hlbiBhZGJkIGlzIG9wZW5pbmcgZnVuY3Rpb25mcywgaXQgd2lsbCB0cnkgdG8gcmVh
+ZCAyNCBieXRlcyBhdCB0aGUNCmZpc3J0IHJlYWQgSS9PIGNvbnRyb2wuIElmIHRoaXMgcmVhZGlu
+ZyBoYXMgYmVlbiBmYWlsZWQsIGFkYmQgd2lsbA0KdHJ5IHRvIHNlbmQgRlVOQ1RJT05GU19DTEVB
+Ul9IQUxUIHRvIGZ1bmN0aW9uZnMuIFdoZW4gYWRiZCBpcyBpbiBBSU8NCm1vZGUsIGZ1bmN0aW9u
+ZnMgd2lsbCBiZSBhY3RlZCB3aXRoIGFzeW5jcm9uaXplZCBJL08gcGF0aC4gQWZ0ZXIgdGhlDQpz
+dWNjZXNzZnVsIHJlYWQgdHJhbnNmZXIgaGFzIGJlZW4gY29tcGxldGVkIGJ5IGdhZGdldCBoYXJk
+d2FyZSwgdGhlDQpmb2xsb3dpbmcgc2VyaWVzIG9mIGZ1bmN0aW9ucyB3aWxsIGJlIGNhbGxlZC4N
+CiAgZmZzX2VwZmlsZV9hc3luY19pb19jb21wbGV0ZSgpIC0+IGZmc191c2VyX2NvcHlfd29ya2Vy
+KCkgLT4NCiAgICBjb3B5X3RvX2l0ZXIoKSAtPiBfY29weV90b19pdGVyKCkgLT4gY29weW91dCgp
+IC0+DQogICAgaXRlcmF0ZV9hbmRfYWR2YW5jZSgpIC0+IGl0ZXJhdGVfaW92ZWMoKQ0KDQpBZGRp
+bmcgZGVidWcgdHJhY2UgdG8gdGhlc2UgZnVuY3Rpb25zLCBpdCBoYXMgYmVlbiBmb3VuZCB0aGF0
+IGluDQpjb3B5b3V0KCksIGFjY2Vzc19vaygpIHdpbGwgY2hlY2sgaWYgdGhlIHVzZXIgc3BhY2Ug
+YWRkcmVzcyBpcyB2YWxpZA0KdG8gd3JpdGUuIEhvd2V2ZXIgaWYgQ09ORklHX0FSTTY0X1RBR0dF
+RF9BRERSX0FCSSBpcyBlbmFibGVkLCBhZGJkDQphbHdheXMgcGFzc2VzIHVzZXIgc3BhY2UgYWRk
+cmVzcyBzdGFydCB3aXRoICIweDNDIiB0byBnZGFnZXQncyBBSU8NCmJsb2Nrcy4gVGhpcyB0YWdn
+ZWQgYWRkcmVzcyB3aWxsIGNhdXNlIGFjY2Vzc19vaygpIGNoZWNrIGFsd2F5cyBmYWlsLg0KV2hp
+Y2ggY2F1c2VzIGxhdGVyIGNhbGN1bGF0aW9uIGluIGl0ZXJhdGVfaW92ZWMoKSB0dXJuIHplcm8u
+DQpDb3B5b3V0KCkgd29uJ3QgY29weSBkYXRhIHRvIHVzZXJzcGFjZSBzaW5jZSB0aGUgbGVuZ3Ro
+IHRvIGJlIGNvcGllZA0KInYuaW92X2xlbiIgd2lsbCBiZSB6ZXJvLiBGaW5hbGx5IGxlYWRzIGZm
+c19jb3B5X3RvX2l0ZXIoKSBhbHdheXMgcmV0dXJuDQotRUZBVUxULCBjYXVzZXMgYWRiZCBjYW5u
+b3Qgb3BlbiBmdW5jdGlvbmZzIGFuZCBzZW5kDQpGVU5DVElPTkZTX0NMRUFSX0hBTFQuDQoNClNp
+Z25lZC1vZmYtYnk6IE1hY3BhdWwgTGluIDxtYWNwYXVsLmxpbkBtZWRpYXRlay5jb20+DQotLS0N
+CiBkcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vZl9mcy5jIHwgICAgMyArKysNCiAxIGZpbGUg
+Y2hhbmdlZCwgMyBpbnNlcnRpb25zKCspDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9nYWRn
+ZXQvZnVuY3Rpb24vZl9mcy5jIGIvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL2ZfZnMuYw0K
+aW5kZXggY2UxZDAyMy4uYjIxNTQxYSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvdXNiL2dhZGdldC9m
+dW5jdGlvbi9mX2ZzLmMNCisrKyBiL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9mX2ZzLmMN
+CkBAIC0zNSw2ICszNSw3IEBADQogI2luY2x1ZGUgPGxpbnV4L21tdV9jb250ZXh0Lmg+DQogI2lu
+Y2x1ZGUgPGxpbnV4L3BvbGwuaD4NCiAjaW5jbHVkZSA8bGludXgvZXZlbnRmZC5oPg0KKyNpbmNs
+dWRlIDxsaW51eC90aHJlYWRfaW5mby5oPg0KIA0KICNpbmNsdWRlICJ1X2ZzLmgiDQogI2luY2x1
+ZGUgInVfZi5oIg0KQEAgLTgyNiw2ICs4MjcsOCBAQCBzdGF0aWMgdm9pZCBmZnNfdXNlcl9jb3B5
+X3dvcmtlcihzdHJ1Y3Qgd29ya19zdHJ1Y3QgKndvcmspDQogCWlmIChpb19kYXRhLT5yZWFkICYm
+IHJldCA+IDApIHsNCiAJCW1tX3NlZ21lbnRfdCBvbGRmcyA9IGdldF9mcygpOw0KIA0KKwkJaWYg
+KElTX0VOQUJMRUQoQ09ORklHX0FSTTY0X1RBR0dFRF9BRERSX0FCSSkpDQorCQkJc2V0X3RocmVh
+ZF9mbGFnKFRJRl9UQUdHRURfQUREUik7DQogCQlzZXRfZnMoVVNFUl9EUyk7DQogCQl1c2VfbW0o
+aW9fZGF0YS0+bW0pOw0KIAkJcmV0ID0gZmZzX2NvcHlfdG9faXRlcihpb19kYXRhLT5idWYsIHJl
+dCwgJmlvX2RhdGEtPmRhdGEpOw0KLS0gDQoxLjcuOS41DQo=
 
-Acked-by: Chen-Yu Tsai <wens@csie.org>
-
-> ---
-> v1->v2: Add fixes tax. Add Ondrejs Tested-by. No functional change.
->
-> This was last sent in Nov last year. I'm resending, because it probably
-> got forgotten. The only change is adding my SoB, which I understand is
-> required for the sender of the patch.
->
->  drivers/phy/allwinner/phy-sun50i-usb3.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/phy/allwinner/phy-sun50i-usb3.c b/drivers/phy/allwinner/phy-sun50i-usb3.c
-> index 1169f3e83a6f..b1c04f71a31d 100644
-> --- a/drivers/phy/allwinner/phy-sun50i-usb3.c
-> +++ b/drivers/phy/allwinner/phy-sun50i-usb3.c
-> @@ -49,7 +49,7 @@
->  #define SUNXI_LOS_BIAS(n)              ((n) << 3)
->  #define SUNXI_LOS_BIAS_MASK            GENMASK(5, 3)
->  #define SUNXI_TXVBOOSTLVL(n)           ((n) << 0)
-> -#define SUNXI_TXVBOOSTLVL_MASK         GENMASK(0, 2)
-> +#define SUNXI_TXVBOOSTLVL_MASK         GENMASK(2, 0)
->
->  struct sun50i_usb3_phy {
->         struct phy *phy;
-> --
-> 2.24.0
->
->
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
->
-> --
-> You received this message because you are subscribed to the Google Groups "linux-sunxi" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to linux-sunxi+unsubscribe@googlegroups.com.
-> To view this discussion on the web, visit https://groups.google.com/d/msgid/linux-sunxi/20191110124355.1569-1-rikard.falkeborn%40gmail.com.
