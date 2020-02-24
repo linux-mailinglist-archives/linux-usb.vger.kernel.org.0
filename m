@@ -2,328 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1896516AB10
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2020 17:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB9216AB19
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2020 17:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727992AbgBXQNh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Feb 2020 11:13:37 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:52634 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727489AbgBXQNh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Feb 2020 11:13:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1582560811; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HwWywXWtl0lHU0hr4om7dgYTxZAMZAHHLQqSA06y8PA=;
-        b=dMcwB4GEZfo+CJwU8C8yCM0YsSPkZyVEQtQdsM4q2wsELCEh/aQNBhlvs5jMUbYy8fO4ey
-        N1xjYV4mrJuoiMMg0rh8440JwSY3x8+Cj9ktrfVzM13UnpGruI6vVVajoWlnU+9bPXiE3D
-        //SycfvUDTEHB8t2i9Ig6hUW4BueL+U=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     od@zcrc.me, linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 2/2] usb: phy: Add driver for the Ingenic JZ4770 USB transceiver
-Date:   Mon, 24 Feb 2020 13:13:16 -0300
-Message-Id: <20200224161316.15070-2-paul@crapouillou.net>
-In-Reply-To: <20200224161316.15070-1-paul@crapouillou.net>
-References: <20200224161316.15070-1-paul@crapouillou.net>
+        id S1727426AbgBXQOk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Feb 2020 11:14:40 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:43405 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726762AbgBXQOj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Feb 2020 11:14:39 -0500
+Received: by mail-pl1-f195.google.com with SMTP id p11so4237500plq.10
+        for <linux-usb@vger.kernel.org>; Mon, 24 Feb 2020 08:14:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UNCPDhY2rBi3SKiGAc64x5UFQgTRx5e56yo7dkev/24=;
+        b=sJmbsmwR6bcWllqxgVn8BygS5XA3EAIPcJNmFUi4aLASR48L3gS37YAJa9jF1vytX9
+         OCz/nm3XPUlz/n3DALojC2+gw/TM6lUuQJ/qObnvHaiylbmkEENUg3vvvjslVka9aeeN
+         FDoGZgMzPDaoIRbZxt0KK+M8YjFTBIStk+b+42cyMnSPHEeftqPlqBMGiX1IBbTwoxwy
+         QAYUe7cKpHc5odKqaJ28LkMk0CisrmO8PAxU/do7mAfOnBZT2p72DSdeQqbkrS2frH3U
+         S1I+RCw/WlxAg73158fyqFbzBYwzL1Bkt4v183osjbcgOMux4R0Tn3jolfbtIsL1B18k
+         orTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UNCPDhY2rBi3SKiGAc64x5UFQgTRx5e56yo7dkev/24=;
+        b=k/trAzvPb4zOy+vZmoPDN1E3Y6USwx68irBvZjbCpoxF7e4hm6Or0L8w89FBMoqJ2L
+         GFG/GyNUtmZOsxEeTvxaOG1cZRRHqmUTf1qAzO5cc76fpESvQLDj/1EI73RLV4eyajKW
+         C5PuMmwSgvXcrZmy6ArQVvLWFMOFiuYayN5KDnJM3HKYA6/0aRN2CQWMccVo4GLBiZTv
+         +ZtY2kBIIpwvfE2ydVzxKc0OzrJ0hmsD01Hotuj5+pBJUm7YsTUKPTD+upEaPKPziVZL
+         FsRjI6uPiyyiEM8fdQWWZZ3pXvlqnkVzR+WvW4MeQUbWQrMji3b8gqN066DivES5zdfz
+         RUOQ==
+X-Gm-Message-State: APjAAAWE1Mmum3BDkNpwKNI5xKxWD6aldJzVPxhf0v3fNqWd9nmjVYUu
+        UGqeI30+4Ak3/4ux5SFBJXewoQulU3WY/kU8lmYeXg==
+X-Google-Smtp-Source: APXvYqwEO19ym1rQgbvAzn0qCjC/bIx9lh8iZOfduzyeDaY/Z2z0u8K18I3iutG4FujiM2k8vObhxg8pTrzBn9i5TMY=
+X-Received: by 2002:a17:902:8486:: with SMTP id c6mr52636096plo.147.1582560878971;
+ Mon, 24 Feb 2020 08:14:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <000000000000058a87059f1882b9@google.com> <Pine.LNX.4.44L0.2002211138300.1488-100000@iolanthe.rowland.org>
+ <CAAeHK+yGS+wj5ovxu5P2Wyc=hgcmwEgK8LJ62+_T25vv8JOaOA@mail.gmail.com> <CAAeHK+wdVKrmQq1aDqJALMmCUAWfDuz4LT0pm4cYJpH_MfSO+w@mail.gmail.com>
+In-Reply-To: <CAAeHK+wdVKrmQq1aDqJALMmCUAWfDuz4LT0pm4cYJpH_MfSO+w@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Mon, 24 Feb 2020 17:14:28 +0100
+Message-ID: <CAAeHK+zMNKSUo4PoJLRaHcGRx66890HBkSET_NA5o8rwcTbZag@mail.gmail.com>
+Subject: Re: WARNING in dummy_free_request
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     syzbot <syzbot+55ae006e0a1feae5aeab@syzkaller.appspotmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add a driver to support the USB PHY found in the JZ4770 SoC from
-Ingenic.
+On Mon, Feb 24, 2020 at 4:48 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+>
+> On Fri, Feb 21, 2020 at 7:44 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+> >
+> > On Fri, Feb 21, 2020 at 5:41 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > >
+> > > On Fri, 21 Feb 2020, syzbot wrote:
+> > >
+> > > > Hello,
+> > > >
+> > > > syzbot found the following crash on:
+> > > >
+> > > > HEAD commit:    7f0cd6c7 usb: gadget: add raw-gadget interface
+> > > > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=17b58e5ee00000
+> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=f10b12ae04e03319
+> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=55ae006e0a1feae5aeab
+> > > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > > >
+> > > > Unfortunately, I don't have any reproducer for this crash yet.
+> > > >
+> > > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > > > Reported-by: syzbot+55ae006e0a1feae5aeab@syzkaller.appspotmail.com
+> > > >
+> > > > ------------[ cut here ]------------
+> > > > WARNING: CPU: 1 PID: 19332 at drivers/usb/gadget/udc/dummy_hcd.c:679 dummy_free_request+0x6c/0x80 drivers/usb/gadget/udc/dummy_hcd.c:679
+> > > > Kernel panic - not syncing: panic_on_warn set ...
+> > > > CPU: 1 PID: 19332 Comm: syz-executor.5 Not tainted 5.6.0-rc1-syzkaller #0
+> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > > > Call Trace:
+> > > >  __dump_stack lib/dump_stack.c:77 [inline]
+> > > >  dump_stack+0xef/0x16e lib/dump_stack.c:118
+> > > >  panic+0x2aa/0x6e1 kernel/panic.c:221
+> > > >  __warn.cold+0x2f/0x30 kernel/panic.c:582
+> > > >  report_bug+0x27b/0x2f0 lib/bug.c:195
+> > > >  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+> > > >  fixup_bug arch/x86/kernel/traps.c:169 [inline]
+> > > >  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
+> > > >  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
+> > > >  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
+> > > > RIP: 0010:dummy_free_request+0x6c/0x80 drivers/usb/gadget/udc/dummy_hcd.c:679
+> > > > Code: c5 75 22 e8 26 06 96 fd 48 89 ef e8 3e 54 be fd 5b 5d e9 17 06 96 fd e8 12 06 96 fd 0f 0b 5b 5d e9 09 06 96 fd e8 04 06 96 fd <0f> 0b eb d5 48 89 ef e8 08 ae be fd eb c2 66 0f 1f 44 00 00 41 56
+> > > > RSP: 0018:ffff8881c9eafdd8 EFLAGS: 00010016
+> > > > RAX: 0000000000040000 RBX: ffff8881d0d5aa10 RCX: ffffc900012a0000
+> > > > RDX: 000000000000012f RSI: ffffffff83a95c1c RDI: ffff8881d4d501c8
+> > > > RBP: ffff8881d0d5aa00 R08: ffff8881d0f9b100 R09: ffffed103b666a84
+> > > > R10: ffffed103b666a83 R11: ffff8881db33541b R12: 0000000000000212
+> > > > R13: ffff8881ca832008 R14: 0000000000000000 R15: ffff8881ca832180
+> > > >  raw_ioctl_ep_disable drivers/usb/gadget/legacy/raw_gadget.c:814 [inline]
+> > > >  raw_ioctl+0x1281/0x19e0 drivers/usb/gadget/legacy/raw_gadget.c:1031
+> > >
+> > > Andrey:
+> > >
+> > > This could be a bug in your raw_gadget driver.  This particular WARN is
+> > > triggered when a gadget driver tries to call usb_ep_free_request() for
+> > > a request that is still in flight.
+> >
+> > Hi Alan,
+> >
+> > It might. It's not obvious what's wrong though. raw_ioctl_ep_disable()
+> > calls usb_ep_disable()->dummy_disable() first, that supposedly does
+> > list_del_init(&req->queue). And then it calls
+> > usb_ep_free_request()->dummy_free_request(), which for some reason
+> > still causes the warning. And a racy queueing of another request
+> > should be prevented by the disabling flag.
+> >
+> > I'll take a closer look on Monday.
+>
+> OK, I see the issue, will post v6 with a fix soon.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/usb/phy/Kconfig      |   8 ++
- drivers/usb/phy/Makefile     |   1 +
- drivers/usb/phy/phy-jz4770.c | 242 +++++++++++++++++++++++++++++++++++
- 3 files changed, 251 insertions(+)
- create mode 100644 drivers/usb/phy/phy-jz4770.c
-
-diff --git a/drivers/usb/phy/Kconfig b/drivers/usb/phy/Kconfig
-index ff24fca0a2d9..4b3fa78995cf 100644
---- a/drivers/usb/phy/Kconfig
-+++ b/drivers/usb/phy/Kconfig
-@@ -184,4 +184,12 @@ config USB_ULPI_VIEWPORT
- 	  Provides read/write operations to the ULPI phy register set for
- 	  controllers with a viewport register (e.g. Chipidea/ARC controllers).
- 
-+config JZ4770_PHY
-+	tristate "Ingenic JZ4770 Transceiver Driver"
-+	depends on MIPS || COMPILE_TEST
-+	select USB_PHY
-+	help
-+	  This driver provides PHY support for the USB controller found
-+	  on the JZ4770 SoC from Ingenic.
-+
- endmenu
-diff --git a/drivers/usb/phy/Makefile b/drivers/usb/phy/Makefile
-index df1d99010079..b352bdbe8712 100644
---- a/drivers/usb/phy/Makefile
-+++ b/drivers/usb/phy/Makefile
-@@ -24,3 +24,4 @@ obj-$(CONFIG_USB_MXS_PHY)		+= phy-mxs-usb.o
- obj-$(CONFIG_USB_ULPI)			+= phy-ulpi.o
- obj-$(CONFIG_USB_ULPI_VIEWPORT)		+= phy-ulpi-viewport.o
- obj-$(CONFIG_KEYSTONE_USB_PHY)		+= phy-keystone.o
-+obj-$(CONFIG_JZ4770_PHY)		+= phy-jz4770.o
-diff --git a/drivers/usb/phy/phy-jz4770.c b/drivers/usb/phy/phy-jz4770.c
-new file mode 100644
-index 000000000000..afc1b42f655a
---- /dev/null
-+++ b/drivers/usb/phy/phy-jz4770.c
-@@ -0,0 +1,242 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Ingenic JZ4770 USB PHY driver
-+ * Copyright (c) Paul Cercueil <paul@crapouillou.net>
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/usb/otg.h>
-+#include <linux/usb/phy.h>
-+
-+#define REG_USBPCR_OFFSET	0x00
-+#define REG_USBRDT_OFFSET	0x04
-+#define REG_USBVBFIL_OFFSET	0x08
-+#define REG_USBPCR1_OFFSET	0x0c
-+
-+/* USBPCR */
-+#define USBPCR_USB_MODE		BIT(31)
-+#define USBPCR_AVLD_REG		BIT(30)
-+#define USBPCR_INCRM		BIT(27)
-+#define USBPCR_CLK12_EN		BIT(26)
-+#define USBPCR_COMMONONN	BIT(25)
-+#define USBPCR_VBUSVLDEXT	BIT(24)
-+#define USBPCR_VBUSVLDEXTSEL	BIT(23)
-+#define USBPCR_POR		BIT(22)
-+#define USBPCR_SIDDQ		BIT(21)
-+#define USBPCR_OTG_DISABLE	BIT(20)
-+#define USBPCR_TXPREEMPHTUNE	BIT(6)
-+
-+#define USBPCR_IDPULLUP_LSB	28
-+#define USBPCR_IDPULLUP_MASK	GENMASK(29, USBPCR_IDPULLUP_LSB)
-+#define USBPCR_IDPULLUP_ALWAYS	(3 << USBPCR_IDPULLUP_LSB)
-+#define USBPCR_IDPULLUP_SUSPEND	(1 << USBPCR_IDPULLUP_LSB)
-+#define USBPCR_IDPULLUP_OTG	(0 << USBPCR_IDPULLUP_LSB)
-+
-+#define USBPCR_COMPDISTUNE_LSB	17
-+#define USBPCR_COMPDISTUNE_MASK	GENMASK(19, USBPCR_COMPDISTUNE_LSB)
-+#define USBPCR_COMPDISTUNE_DFT	4
-+
-+#define USBPCR_OTGTUNE_LSB	14
-+#define USBPCR_OTGTUNE_MASK	GENMASK(16, USBPCR_OTGTUNE_LSB)
-+#define USBPCR_OTGTUNE_DFT	4
-+
-+#define USBPCR_SQRXTUNE_LSB	11
-+#define USBPCR_SQRXTUNE_MASK	GENMASK(13, USBPCR_SQRXTUNE_LSB)
-+#define USBPCR_SQRXTUNE_DFT	3
-+
-+#define USBPCR_TXFSLSTUNE_LSB	7
-+#define USBPCR_TXFSLSTUNE_MASK	GENMASK(10, USBPCR_TXFSLSTUNE_LSB)
-+#define USBPCR_TXFSLSTUNE_DFT	3
-+
-+#define USBPCR_TXRISETUNE_LSB	4
-+#define USBPCR_TXRISETUNE_MASK	GENMASK(5, USBPCR_TXRISETUNE_LSB)
-+#define USBPCR_TXRISETUNE_DFT	3
-+
-+#define USBPCR_TXVREFTUNE_LSB	0
-+#define USBPCR_TXVREFTUNE_MASK	GENMASK(3, USBPCR_TXVREFTUNE_LSB)
-+#define USBPCR_TXVREFTUNE_DFT	5
-+
-+/* USBRDT */
-+#define USBRDT_VBFIL_LD_EN	BIT(25)
-+#define USBRDT_IDDIG_EN		BIT(24)
-+#define USBRDT_IDDIG_REG	BIT(23)
-+
-+#define USBRDT_USBRDT_LSB	0
-+#define USBRDT_USBRDT_MASK	GENMASK(22, USBRDT_USBRDT_LSB)
-+
-+/* USBPCR1 */
-+#define USBPCR1_UHC_POWON	BIT(5)
-+
-+struct jz4770_phy {
-+	struct usb_phy phy;
-+	struct usb_otg otg;
-+	struct device *dev;
-+	void __iomem *base;
-+	struct clk *clk;
-+	struct regulator *vcc_supply;
-+};
-+
-+static inline struct jz4770_phy *otg_to_jz4770_phy(struct usb_otg *otg)
-+{
-+	return container_of(otg, struct jz4770_phy, otg);
-+}
-+
-+static inline struct jz4770_phy *phy_to_jz4770_phy(struct usb_phy *phy)
-+{
-+	return container_of(phy, struct jz4770_phy, phy);
-+}
-+
-+static int jz4770_phy_set_peripheral(struct usb_otg *otg,
-+				     struct usb_gadget *gadget)
-+{
-+	struct jz4770_phy *priv = otg_to_jz4770_phy(otg);
-+	u32 reg;
-+
-+	reg = readl(priv->base + REG_USBPCR_OFFSET);
-+	reg &= ~USBPCR_USB_MODE;
-+	reg |= USBPCR_VBUSVLDEXT | USBPCR_VBUSVLDEXTSEL | USBPCR_OTG_DISABLE;
-+	writel(reg, priv->base + REG_USBPCR_OFFSET);
-+
-+	return 0;
-+}
-+
-+static int jz4770_phy_set_host(struct usb_otg *otg, struct usb_bus *host)
-+{
-+	struct jz4770_phy *priv = otg_to_jz4770_phy(otg);
-+	u32 reg;
-+
-+	reg = readl(priv->base + REG_USBPCR_OFFSET);
-+	reg &= ~(USBPCR_VBUSVLDEXT | USBPCR_VBUSVLDEXTSEL | USBPCR_OTG_DISABLE);
-+	reg |= USBPCR_USB_MODE;
-+	writel(reg, priv->base + REG_USBPCR_OFFSET);
-+
-+	return 0;
-+}
-+
-+static int jz4770_phy_init(struct usb_phy *phy)
-+{
-+	struct jz4770_phy *priv = phy_to_jz4770_phy(phy);
-+	int err;
-+	u32 reg;
-+
-+	err = regulator_enable(priv->vcc_supply);
-+	if (err) {
-+		dev_err(priv->dev, "Unable to enable VCC: %d", err);
-+		return err;
-+	}
-+
-+	err = clk_prepare_enable(priv->clk);
-+	if (err) {
-+		dev_err(priv->dev, "Unable to start clock: %d", err);
-+		return err;
-+	}
-+
-+	reg = USBPCR_AVLD_REG | USBPCR_COMMONONN | USBPCR_IDPULLUP_ALWAYS |
-+		(USBPCR_COMPDISTUNE_DFT << USBPCR_COMPDISTUNE_LSB) |
-+		(USBPCR_OTGTUNE_DFT << USBPCR_OTGTUNE_LSB) |
-+		(USBPCR_SQRXTUNE_DFT << USBPCR_SQRXTUNE_LSB) |
-+		(USBPCR_TXFSLSTUNE_DFT << USBPCR_TXFSLSTUNE_LSB) |
-+		(USBPCR_TXRISETUNE_DFT << USBPCR_TXRISETUNE_LSB) |
-+		(USBPCR_TXVREFTUNE_DFT << USBPCR_TXVREFTUNE_LSB) |
-+		USBPCR_POR;
-+	writel(reg, priv->base + REG_USBPCR_OFFSET);
-+
-+	/* Wait for PHY to reset */
-+	usleep_range(30, 300);
-+	writel(reg & ~USBPCR_POR, priv->base + REG_USBPCR_OFFSET);
-+	usleep_range(300, 1000);
-+
-+	return 0;
-+}
-+
-+static void jz4770_phy_shutdown(struct usb_phy *phy)
-+{
-+	struct jz4770_phy *priv = phy_to_jz4770_phy(phy);
-+
-+	clk_disable_unprepare(priv->clk);
-+	regulator_disable(priv->vcc_supply);
-+}
-+
-+static void jz4770_phy_remove(void *phy)
-+{
-+	usb_remove_phy(phy);
-+}
-+
-+static int jz4770_phy_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct jz4770_phy *priv;
-+	int err;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	platform_set_drvdata(pdev, priv);
-+	priv->dev = dev;
-+	priv->phy.dev = dev;
-+	priv->phy.otg = &priv->otg;
-+	priv->phy.label = "jz4770-phy";
-+	priv->phy.init = jz4770_phy_init;
-+	priv->phy.shutdown = jz4770_phy_shutdown;
-+
-+	priv->otg.state = OTG_STATE_UNDEFINED;
-+	priv->otg.usb_phy = &priv->phy;
-+	priv->otg.set_host = jz4770_phy_set_host;
-+	priv->otg.set_peripheral = jz4770_phy_set_peripheral;
-+
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->base)) {
-+		dev_err(dev, "Failed to map registers");
-+		return PTR_ERR(priv->base);
-+	}
-+
-+	priv->clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(priv->clk)) {
-+		err = PTR_ERR(priv->clk);
-+		if (err != -EPROBE_DEFER)
-+			dev_err(dev, "Failed to get clock");
-+		return err;
-+	}
-+
-+	priv->vcc_supply = devm_regulator_get(dev, "vcc");
-+	if (IS_ERR(priv->vcc_supply)) {
-+		err = PTR_ERR(priv->vcc_supply);
-+		if (err != -EPROBE_DEFER)
-+			dev_err(dev, "failed to get regulator");
-+		return err;
-+	}
-+
-+	err = usb_add_phy(&priv->phy, USB_PHY_TYPE_USB2);
-+	if (err) {
-+		if (err != -EPROBE_DEFER)
-+			dev_err(dev, "Unable to register PHY");
-+		return err;
-+	}
-+
-+	return devm_add_action_or_reset(dev, jz4770_phy_remove, &priv->phy);
-+}
-+
-+#ifdef CONFIG_OF
-+static const struct of_device_id jz4770_phy_of_matches[] = {
-+	{ .compatible = "ingenic,jz4770-phy" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, jz4770_phy_of_matches);
-+#endif
-+
-+static struct platform_driver jz4770_phy_driver = {
-+	.probe		= jz4770_phy_probe,
-+	.driver		= {
-+		.name	= "jz4770-phy",
-+		.of_match_table = of_match_ptr(jz4770_phy_of_matches),
-+	},
-+};
-+module_platform_driver(jz4770_phy_driver);
-+
-+MODULE_AUTHOR("Paul Cercueil <paul@crapouillou.net>");
-+MODULE_DESCRIPTION("Ingenic JZ4770 USB PHY driver");
-+MODULE_LICENSE("GPL");
--- 
-2.25.0
-
+#syz invalid
