@@ -2,101 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3CB169BE8
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2020 02:41:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B904169E53
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2020 07:21:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727260AbgBXBkw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Feb 2020 20:40:52 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:49074 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727187AbgBXBkw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Feb 2020 20:40:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1582508432; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oIkXOlcvNEOIaRYiGfAyK5BuGM9pBUckulvUHXDUA/o=;
-        b=oh19lA7Y+/lMvQJvuk01jY2lt4HiB5GsVM4pab5dECNKgQ7/KgLArEi1XYDAy6HWKxJSlk
-        vFN8ZeRApMBcFzRmsKHMet86STXBZ36MLl+d6GALYng5pD1C22iRXaFLnzhPkYQQAaCDQO
-        nJgAwgWNbb1o+iWD/arXfsoPtOvOvkM=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     od@zcrc.me, linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 5/5] usb: musb: jz4740: Add support for the JZ4770
-Date:   Sun, 23 Feb 2020 22:40:08 -0300
-Message-Id: <20200224014008.27114-5-paul@crapouillou.net>
-In-Reply-To: <20200224014008.27114-1-paul@crapouillou.net>
-References: <20200224014008.27114-1-paul@crapouillou.net>
+        id S1726502AbgBXGVu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Feb 2020 01:21:50 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:1715 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725895AbgBXGVu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Feb 2020 01:21:50 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e536b5a0000>; Sun, 23 Feb 2020 22:21:14 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Sun, 23 Feb 2020 22:21:49 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Sun, 23 Feb 2020 22:21:49 -0800
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 24 Feb
+ 2020 06:21:49 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 24 Feb 2020 06:21:49 +0000
+Received: from jckuo-lt.nvidia.com (Not Verified[10.19.108.125]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5e536b7b0000>; Sun, 23 Feb 2020 22:21:49 -0800
+From:   JC Kuo <jckuo@nvidia.com>
+To:     <mathias.nyman@linux.intel.com>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>
+CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <nkristam@nvidia.com>, JC Kuo <jckuo@nvidia.com>
+Subject: [PATCH] usb: host: xhci-tegra: Tegra186/Tegra194 LPM
+Date:   Mon, 24 Feb 2020 14:21:45 +0800
+Message-ID: <20200224062145.25785-1-jckuo@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1582525275; bh=qzfaECbdr4ykASrTm8dC9mRKYUL+OV7uzjoJlDqFq0w=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=kd/zD6viGyQiXU1XeTN/j3IFCHoW8RhKMk+9CtHDAGg63DeV+Sy4lke/vD5rm17aZ
+         XDTE3BNBM26iczA8HbHgmAKCtAFZQGkYGPtTkIXi6rrficwxwkmu6/lPvmzYwDZzOQ
+         z5QYI/igjmJYA7E1eF0kqKE7Q/+oACZbb9zTPrWFxma+1ubC3KquK9cWUIfPKmV8wG
+         j8blfBXJQdKKKWMZ6+w/QKaigscDFi5Fy0rwd6Wmnr2HjocKGGQECKsXcHhIpPl+oC
+         S2nn8OQoGe21Ew6DHH/pJrtQuNL6WkiSITKty/KOft4MoPwZKZBE8SnKiYJXoRxfma
+         CutVIpq16LN4A==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add support for probing the jz4740-musb driver on the JZ4770 SoC.
+Tegra186 and Tegra194 xHC supports USB 3.0 LPM. This commit enables
+XHCI_LPM_SUPPORT quirk for Tegra186 and Tegra194.
 
-The USB IP in the JZ4770 works the same Inventra IP as for the JZ4740,
-but it features more endpoints, and officially supports OTG.
-
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: JC Kuo <jckuo@nvidia.com>
 ---
+ drivers/usb/host/xhci-tegra.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Notes:
-    v2: No change
-
- drivers/usb/musb/jz4740.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
-
-diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
-index b6747bad4fb2..8c52a1fa6fbc 100644
---- a/drivers/usb/musb/jz4740.c
-+++ b/drivers/usb/musb/jz4740.c
-@@ -161,6 +161,33 @@ static const struct musb_hdrc_platform_data jz4740_musb_pdata = {
- 	.platform_ops	= &jz4740_musb_ops,
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index 8163aefc6c6b..a6e36b3c968f 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -203,6 +203,7 @@ struct tegra_xusb_soc {
+ 
+ 	bool scale_ss_clock;
+ 	bool has_ipfs;
++	bool lpm_support;
  };
  
-+static struct musb_fifo_cfg jz4770_musb_fifo_cfg[] = {
-+	{ .hw_ep_num = 1, .style = FIFO_TX, .maxpacket = 512, },
-+	{ .hw_ep_num = 1, .style = FIFO_RX, .maxpacket = 512, },
-+	{ .hw_ep_num = 2, .style = FIFO_TX, .maxpacket = 512, },
-+	{ .hw_ep_num = 2, .style = FIFO_RX, .maxpacket = 512, },
-+	{ .hw_ep_num = 3, .style = FIFO_TX, .maxpacket = 512, },
-+	{ .hw_ep_num = 3, .style = FIFO_RX, .maxpacket = 512, },
-+	{ .hw_ep_num = 4, .style = FIFO_TX, .maxpacket = 512, },
-+	{ .hw_ep_num = 4, .style = FIFO_RX, .maxpacket = 512, },
-+	{ .hw_ep_num = 5, .style = FIFO_TX, .maxpacket = 512, },
-+	{ .hw_ep_num = 5, .style = FIFO_RX, .maxpacket = 512, },
-+};
-+
-+static struct musb_hdrc_config jz4770_musb_config = {
-+	.multipoint	= 1,
-+	.num_eps	= 11,
-+	.ram_bits	= 11,
-+	.fifo_cfg	= jz4770_musb_fifo_cfg,
-+	.fifo_cfg_size	= ARRAY_SIZE(jz4770_musb_fifo_cfg),
-+};
-+
-+static const struct musb_hdrc_platform_data jz4770_musb_pdata = {
-+	.mode		= MUSB_PERIPHERAL, /* TODO: support OTG */
-+	.config		= &jz4770_musb_config,
-+	.platform_ops	= &jz4740_musb_ops,
-+};
-+
- static int jz4740_probe(struct platform_device *pdev)
+ struct tegra_xusb_context {
+@@ -1779,6 +1780,7 @@ static const struct tegra_xusb_soc tegra186_soc = {
+ 		.data_out = 0xec,
+ 		.owner = 0xf0,
+ 	},
++	.lpm_support = true,
+ };
+ 
+ static const char * const tegra194_supply_names[] = {
+@@ -1808,6 +1810,7 @@ static const struct tegra_xusb_soc tegra194_soc = {
+ 		.data_out = 0x70,
+ 		.owner = 0x74,
+ 	},
++	.lpm_support = true,
+ };
+ MODULE_FIRMWARE("nvidia/tegra194/xusb.bin");
+ 
+@@ -1832,7 +1835,11 @@ static struct platform_driver tegra_xusb_driver = {
+ 
+ static void tegra_xhci_quirks(struct device *dev, struct xhci_hcd *xhci)
  {
- 	struct device			*dev = &pdev->dev;
-@@ -248,6 +275,7 @@ static int jz4740_remove(struct platform_device *pdev)
++	struct tegra_xusb *tegra = dev_get_drvdata(dev);
++
+ 	xhci->quirks |= XHCI_PLAT;
++	if (tegra && tegra->soc->lpm_support)
++		xhci->quirks |= XHCI_LPM_SUPPORT;
+ }
  
- static const struct of_device_id jz4740_musb_of_match[] = {
- 	{ .compatible = "ingenic,jz4740-musb", .data = &jz4740_musb_pdata },
-+	{ .compatible = "ingenic,jz4770-musb", .data = &jz4770_musb_pdata },
- 	{ /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(of, jz4740_musb_of_match);
+ static int tegra_xhci_setup(struct usb_hcd *hcd)
 -- 
-2.25.0
+2.17.1
 
