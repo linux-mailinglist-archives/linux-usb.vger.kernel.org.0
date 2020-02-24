@@ -2,134 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB9216AB19
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2020 17:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F09916AB27
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2020 17:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727426AbgBXQOk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Feb 2020 11:14:40 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:43405 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726762AbgBXQOj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Feb 2020 11:14:39 -0500
-Received: by mail-pl1-f195.google.com with SMTP id p11so4237500plq.10
-        for <linux-usb@vger.kernel.org>; Mon, 24 Feb 2020 08:14:39 -0800 (PST)
+        id S1727877AbgBXQSK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Feb 2020 11:18:10 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:33723 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727177AbgBXQSK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Feb 2020 11:18:10 -0500
+Received: by mail-pj1-f65.google.com with SMTP id m7so84828pjs.0
+        for <linux-usb@vger.kernel.org>; Mon, 24 Feb 2020 08:18:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=UNCPDhY2rBi3SKiGAc64x5UFQgTRx5e56yo7dkev/24=;
-        b=sJmbsmwR6bcWllqxgVn8BygS5XA3EAIPcJNmFUi4aLASR48L3gS37YAJa9jF1vytX9
-         OCz/nm3XPUlz/n3DALojC2+gw/TM6lUuQJ/qObnvHaiylbmkEENUg3vvvjslVka9aeeN
-         FDoGZgMzPDaoIRbZxt0KK+M8YjFTBIStk+b+42cyMnSPHEeftqPlqBMGiX1IBbTwoxwy
-         QAYUe7cKpHc5odKqaJ28LkMk0CisrmO8PAxU/do7mAfOnBZT2p72DSdeQqbkrS2frH3U
-         S1I+RCw/WlxAg73158fyqFbzBYwzL1Bkt4v183osjbcgOMux4R0Tn3jolfbtIsL1B18k
-         orTw==
+        bh=gsYjXT5y25umLgajERgJkh5L1V1CQFDUxeGT2hMU0Ag=;
+        b=acqvOVaeFEL79wYat2Tu3xMbROsub914649oLTiIJFKmM6hLpIwCk81mP38kiSLcG7
+         hpW8G8cTnyB7C2ICizsNPFnKw5yk46IsPsiViE1aaPyKts/TRsCu8ZkCRQaAKZ8Zf3kr
+         JxJuk5BXNUySbjUF6LqA79YyCYOLsiIVFRRPIwhUOyplAIgTR7wmWPsaBM4mLr0CWM8q
+         3YOABfY9X004jaZotMkXA0kEpXibJ6hwd83/sr7aCJWt/tHYOMmc1QUYlXjNmc295M++
+         dWdwI/yfuchvWch1On+7IfjfuhRgXjVLzq8RdNfqV+9Za2yQvGv9rlrSIX6qHol4jMPf
+         L7tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UNCPDhY2rBi3SKiGAc64x5UFQgTRx5e56yo7dkev/24=;
-        b=k/trAzvPb4zOy+vZmoPDN1E3Y6USwx68irBvZjbCpoxF7e4hm6Or0L8w89FBMoqJ2L
-         GFG/GyNUtmZOsxEeTvxaOG1cZRRHqmUTf1qAzO5cc76fpESvQLDj/1EI73RLV4eyajKW
-         C5PuMmwSgvXcrZmy6ArQVvLWFMOFiuYayN5KDnJM3HKYA6/0aRN2CQWMccVo4GLBiZTv
-         +ZtY2kBIIpwvfE2ydVzxKc0OzrJ0hmsD01Hotuj5+pBJUm7YsTUKPTD+upEaPKPziVZL
-         FsRjI6uPiyyiEM8fdQWWZZ3pXvlqnkVzR+WvW4MeQUbWQrMji3b8gqN066DivES5zdfz
-         RUOQ==
-X-Gm-Message-State: APjAAAWE1Mmum3BDkNpwKNI5xKxWD6aldJzVPxhf0v3fNqWd9nmjVYUu
-        UGqeI30+4Ak3/4ux5SFBJXewoQulU3WY/kU8lmYeXg==
-X-Google-Smtp-Source: APXvYqwEO19ym1rQgbvAzn0qCjC/bIx9lh8iZOfduzyeDaY/Z2z0u8K18I3iutG4FujiM2k8vObhxg8pTrzBn9i5TMY=
-X-Received: by 2002:a17:902:8486:: with SMTP id c6mr52636096plo.147.1582560878971;
- Mon, 24 Feb 2020 08:14:38 -0800 (PST)
+        bh=gsYjXT5y25umLgajERgJkh5L1V1CQFDUxeGT2hMU0Ag=;
+        b=ttQuSBLnoGkZYr00yt6jrPRcJdTpr8wpz2b3ATDXaQXMXZiZGqzKVOVd/EhWBUunu7
+         d+R9agzG9V48G8VSk6/HC7oRvnDqtQ3G2D+ePP4YO/ORfNQVnkS1ZDh3O6Hivk/ZPgJ8
+         sJZQohW0exYPbooIkEhaJbybBzzTQEaSLa47mqQ1+Pxoz/TRwJXWbhh2sVj/bStg1Jqj
+         Hqbz6LLjeyHwNVOgq0P5xp1oERIqo7zUJkgoVzhWYFyn+x7d299g3oqEoYQFVNlB2OEn
+         vHvV/3a/7BSC97SiMz6dOiZuNHGXdNOd8LN/dScqjJd1PZ+UKj/Y672kFSdcm2f1rVmL
+         D+xA==
+X-Gm-Message-State: APjAAAVWeQbIfXFMVrg+KgZF91J8Ot61M/DXFubqGRp5+J/qEulZuVJI
+        Ah9wO/t7kcSkWiJOv2AMTAhA0g9k1vJeUdrUkg2ZOA==
+X-Google-Smtp-Source: APXvYqyct0MEZT8sBmLAJscQlsCSHUJ5kQli5XgQjFwmUvv+IvpSsHmF36IHxJv2zBF57KhhLIrasKR3AYCHB69TpOE=
+X-Received: by 2002:a17:902:9889:: with SMTP id s9mr46549947plp.252.1582561089283;
+ Mon, 24 Feb 2020 08:18:09 -0800 (PST)
 MIME-Version: 1.0
-References: <000000000000058a87059f1882b9@google.com> <Pine.LNX.4.44L0.2002211138300.1488-100000@iolanthe.rowland.org>
- <CAAeHK+yGS+wj5ovxu5P2Wyc=hgcmwEgK8LJ62+_T25vv8JOaOA@mail.gmail.com> <CAAeHK+wdVKrmQq1aDqJALMmCUAWfDuz4LT0pm4cYJpH_MfSO+w@mail.gmail.com>
-In-Reply-To: <CAAeHK+wdVKrmQq1aDqJALMmCUAWfDuz4LT0pm4cYJpH_MfSO+w@mail.gmail.com>
+References: <cover.1582560596.git.andreyknvl@google.com>
+In-Reply-To: <cover.1582560596.git.andreyknvl@google.com>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 24 Feb 2020 17:14:28 +0100
-Message-ID: <CAAeHK+zMNKSUo4PoJLRaHcGRx66890HBkSET_NA5o8rwcTbZag@mail.gmail.com>
-Subject: Re: WARNING in dummy_free_request
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+55ae006e0a1feae5aeab@syzkaller.appspotmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+Date:   Mon, 24 Feb 2020 17:17:58 +0100
+Message-ID: <CAAeHK+y7yKwQP-prUv17gFXKnKtBdfz7fQ8Gc5vwL49R4yCHuA@mail.gmail.com>
+Subject: Re: [PATCH v6 0/1] usb: gadget: add raw-gadget interface
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
         USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 24, 2020 at 4:48 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+On Mon, Feb 24, 2020 at 5:13 PM Andrey Konovalov <andreyknvl@google.com> wrote:
 >
-> On Fri, Feb 21, 2020 at 7:44 PM Andrey Konovalov <andreyknvl@google.com> wrote:
-> >
-> > On Fri, Feb 21, 2020 at 5:41 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > >
-> > > On Fri, 21 Feb 2020, syzbot wrote:
-> > >
-> > > > Hello,
-> > > >
-> > > > syzbot found the following crash on:
-> > > >
-> > > > HEAD commit:    7f0cd6c7 usb: gadget: add raw-gadget interface
-> > > > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=17b58e5ee00000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=f10b12ae04e03319
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=55ae006e0a1feae5aeab
-> > > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > >
-> > > > Unfortunately, I don't have any reproducer for this crash yet.
-> > > >
-> > > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > > > Reported-by: syzbot+55ae006e0a1feae5aeab@syzkaller.appspotmail.com
-> > > >
-> > > > ------------[ cut here ]------------
-> > > > WARNING: CPU: 1 PID: 19332 at drivers/usb/gadget/udc/dummy_hcd.c:679 dummy_free_request+0x6c/0x80 drivers/usb/gadget/udc/dummy_hcd.c:679
-> > > > Kernel panic - not syncing: panic_on_warn set ...
-> > > > CPU: 1 PID: 19332 Comm: syz-executor.5 Not tainted 5.6.0-rc1-syzkaller #0
-> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > > > Call Trace:
-> > > >  __dump_stack lib/dump_stack.c:77 [inline]
-> > > >  dump_stack+0xef/0x16e lib/dump_stack.c:118
-> > > >  panic+0x2aa/0x6e1 kernel/panic.c:221
-> > > >  __warn.cold+0x2f/0x30 kernel/panic.c:582
-> > > >  report_bug+0x27b/0x2f0 lib/bug.c:195
-> > > >  fixup_bug arch/x86/kernel/traps.c:174 [inline]
-> > > >  fixup_bug arch/x86/kernel/traps.c:169 [inline]
-> > > >  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
-> > > >  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
-> > > >  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-> > > > RIP: 0010:dummy_free_request+0x6c/0x80 drivers/usb/gadget/udc/dummy_hcd.c:679
-> > > > Code: c5 75 22 e8 26 06 96 fd 48 89 ef e8 3e 54 be fd 5b 5d e9 17 06 96 fd e8 12 06 96 fd 0f 0b 5b 5d e9 09 06 96 fd e8 04 06 96 fd <0f> 0b eb d5 48 89 ef e8 08 ae be fd eb c2 66 0f 1f 44 00 00 41 56
-> > > > RSP: 0018:ffff8881c9eafdd8 EFLAGS: 00010016
-> > > > RAX: 0000000000040000 RBX: ffff8881d0d5aa10 RCX: ffffc900012a0000
-> > > > RDX: 000000000000012f RSI: ffffffff83a95c1c RDI: ffff8881d4d501c8
-> > > > RBP: ffff8881d0d5aa00 R08: ffff8881d0f9b100 R09: ffffed103b666a84
-> > > > R10: ffffed103b666a83 R11: ffff8881db33541b R12: 0000000000000212
-> > > > R13: ffff8881ca832008 R14: 0000000000000000 R15: ffff8881ca832180
-> > > >  raw_ioctl_ep_disable drivers/usb/gadget/legacy/raw_gadget.c:814 [inline]
-> > > >  raw_ioctl+0x1281/0x19e0 drivers/usb/gadget/legacy/raw_gadget.c:1031
-> > >
-> > > Andrey:
-> > >
-> > > This could be a bug in your raw_gadget driver.  This particular WARN is
-> > > triggered when a gadget driver tries to call usb_ep_free_request() for
-> > > a request that is still in flight.
-> >
-> > Hi Alan,
-> >
-> > It might. It's not obvious what's wrong though. raw_ioctl_ep_disable()
-> > calls usb_ep_disable()->dummy_disable() first, that supposedly does
-> > list_del_init(&req->queue). And then it calls
-> > usb_ep_free_request()->dummy_free_request(), which for some reason
-> > still causes the warning. And a racy queueing of another request
-> > should be prevented by the disabling flag.
-> >
-> > I'll take a closer look on Monday.
+> This patchset (currently a single patch) adds a new userspace interface
+> for the USB Gadget subsystem called USB Raw Gadget. This is what is
+> currently being used to enable coverage-guided USB fuzzing with syzkaller:
 >
-> OK, I see the issue, will post v6 with a fix soon.
+> https://github.com/google/syzkaller/blob/master/docs/linux/external_fuzzing_usb.md
+>
+> Initially I was using GadgetFS (together with the Dummy HCD/UDC module)
+> to perform emulation of USB devices for fuzzing, but later switched to a
+> custom written interface. The incentive to implement a different interface
+> was to provide a somewhat raw and direct access to the USB Gadget layer
+> for the userspace, where every USB request is passed to the userspace to
+> get a response. See documentation for the list of differences between
+> Raw Gadget and GadgetFS.
+>
+> Currently Raw Gadget only supports blocking I/O mode, that synchronously
+> waits for the result of each operation to allow collecting coverage per
+> operation.
+>
+> This patchset has been pushed to the public Linux kernel Gerrit instance:
+>
+> https://linux-review.googlesource.com/c/linux/kernel/git/torvalds/linux/+/2144
+>
+> Changes v5 -> v6:
+> - Prevent raw_process_ep_io() racing with raw_ioctl_ep_disable() by
+>   checking urb_queued flag in the latter.
+> - Use GFP_KERNEL instead of GFP_ATOMIC where possible.
+> - Reject opening raw-gadget with O_NONBLOCK to allow future extensions to
+>   support nonblocking IO.
+> - Reduce RAW_EVENT_QUEUE_SIZE to 16.
 
-#syz invalid
+Hi Felipe! I'm still hoping for a review :)
+
+(Forgot to add a link to the example that emulates a USB keyboard via
+Raw Gadget into the cover letter:
+
+https://github.com/xairy/raw-gadget/blob/master/examples/keyboard.c)
+
+>
+> Changes v4 -> v5:
+> - Specified explicit usb_raw_event_type enum values for all entries.
+> - Dropped pointless locking in gadget_unbind().
+>
+> Changes v3 -> v4:
+> - Print debug message when maxpacket check fails.
+> - Use module_misc_device() instead of module_init/exit().
+> - Reuse DRIVER_NAME macro in raw_device struct definition.
+> - Don't print WARNING in raw_release().
+> - Add comment that explains locking into raw_event_queue_fetch().
+> - Print a WARNING when event queue size is exceeded.
+> - Rename raw.c to raw_gadget.c.
+> - Mention module name in Kconfig.
+> - Reworked logging to use dev_err/dbg() instead of pr_err/debug().
+>
+> Changes v2 -> v3:
+> - Updated device path in documentation.
+> - Changed usb_raw_init struct layout to make it the same for 32 bit compat
+>   mode.
+> - Added compat_ioctl to raw_fops.
+> - Changed raw_ioctl_init() to return EINVAL for invalid USB speeds, except
+>   for USB_SPEED_UNKNOWN, which defaults to USB_SPEED_HIGH.
+> - Reject endpoints with maxpacket = 0 in raw_ioctl_ep_enable().
+>
+> Changes v1 -> v2:
+> - Moved raw.c to legacy/.
+> - Changed uapi header to use __u* types.
+> - Switched from debugfs entry to a misc device.
+> - Changed raw_dev from refcount to kref.
+> - Moved UDC_NAME_LENGTH_MAX to uapi headers.
+> - Used usb_endpoint_type() and usb_endpoint_dir_in/out() functions instead
+>   of open coding them.
+> - Added "WITH Linux-syscall-note" to SPDX id in the uapi header.
+> - Removed pr_err() if case dev_new() fails.
+> - Reduced the number of debugging messages.
+>
+> Andrey Konovalov (1):
+>   usb: gadget: add raw-gadget interface
+>
+>  Documentation/usb/index.rst            |    1 +
+>  Documentation/usb/raw-gadget.rst       |   61 ++
+>  drivers/usb/gadget/legacy/Kconfig      |   11 +
+>  drivers/usb/gadget/legacy/Makefile     |    1 +
+>  drivers/usb/gadget/legacy/raw_gadget.c | 1078 ++++++++++++++++++++++++
+>  include/uapi/linux/usb/raw_gadget.h    |  167 ++++
+>  6 files changed, 1319 insertions(+)
+>  create mode 100644 Documentation/usb/raw-gadget.rst
+>  create mode 100644 drivers/usb/gadget/legacy/raw_gadget.c
+>  create mode 100644 include/uapi/linux/usb/raw_gadget.h
+>
+> --
+> 2.25.0.265.gbab2e86ba0-goog
+>
