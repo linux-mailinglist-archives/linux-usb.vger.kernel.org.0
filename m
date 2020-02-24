@@ -2,100 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1501016A752
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2020 14:31:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 726F816A7BA
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2020 14:55:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727378AbgBXNbV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Feb 2020 08:31:21 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:33214 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726208AbgBXNbU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Feb 2020 08:31:20 -0500
-Received: by mail-pf1-f195.google.com with SMTP id n7so5397087pfn.0
-        for <linux-usb@vger.kernel.org>; Mon, 24 Feb 2020 05:31:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rk9xFvrjs94J+cp6mV5Ai1OOkOUlDjUhG7M3DID+zb4=;
-        b=qzi+z6/Ve5agNazfStEPp1krW8/Y9os6e49n6WwFKKdXzlgwJW/Nz5aIMZd/jVnXJS
-         NkmSfKEpwpyaIFY+c8fIFe4qon5D8vmYazu9w61STa7MqiJA8FjeO4edRGtuEU9W70i8
-         0kCsRRfwMG3Zxq0ZGl4fb2vCGJNgtjfdkSh2pNto1agwD/QX2WyPIQ1u5vYDA+QRxmy3
-         9rf51iu0Z8t5xFTJBYcEvH1YdfdM+PQU0tzgA4qrCUtEr/TMPVrKCrWZuz4At4QshjKI
-         +pZJuOaXLECoY9tjdn2FqqI/zCX2BIyt0ZH4jmm5L9+Hbk1mKuxa7QBD2j3kqMoY/wHn
-         seiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rk9xFvrjs94J+cp6mV5Ai1OOkOUlDjUhG7M3DID+zb4=;
-        b=W9j/ABe15UNj2WW+ibpHrs8Cqbw3VVZmFm7DSzG4ld1N/1wzm86LgTySXcv1Mnm1hE
-         KA7ls+8YDbY6LlZJTZRlax6od9G1yZCuUUTAkwYHnjnllqcP/8lyRDijqiUMnIjGWnk3
-         kRo9hVJUWwzwHwhO4S6jdBpdgsErk5mqSz4358ATL/egqVWa3huRb29vxFrRDANa9vQT
-         oQMsdQ8eU7YQMpkjd+PaxywamNvWV188rJ5+1RDuCojG/H5fX8JCsJHYziDdsNbNjZ5r
-         x0Mb1gQTDJ2EwP3k3Daw5tbTn0RofYf53YIFaLFAqWUVd3pjTGf0TcrEzs43hhGMIopw
-         BcYw==
-X-Gm-Message-State: APjAAAVWnv6unXzWk1NQZInUtQPH1V2G2CDUrlVsz+M57utWsLAHSkr4
-        vLjRTCNFqFX3RKjSNmIMOzW13YqqmJIUU/0iGTWlqA==
-X-Google-Smtp-Source: APXvYqyGqf4l/KWsrKzVIZkIBaE13bDXEBj992jRnsMCg6qwHyy+4e2P6IqnWeBvjXVr6y9mcWJGu39tDMEba6hLpN4=
-X-Received: by 2002:a62:b604:: with SMTP id j4mr32889697pff.93.1582551077701;
- Mon, 24 Feb 2020 05:31:17 -0800 (PST)
+        id S1727348AbgBXNzy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Feb 2020 08:55:54 -0500
+Received: from mga05.intel.com ([192.55.52.43]:49731 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725535AbgBXNzy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 Feb 2020 08:55:54 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Feb 2020 05:55:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,480,1574150400"; 
+   d="scan'208";a="349921950"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 24 Feb 2020 05:55:51 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 24 Feb 2020 15:55:51 +0200
+Date:   Mon, 24 Feb 2020 15:55:51 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     jun.li@nxp.com
+Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org, linux-imx@nxp.com,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: tcpm: move to SNK_UNATTACHED if sink removed
+ for DRP
+Message-ID: <20200224135551.GA30452@kuha.fi.intel.com>
+References: <1582128343-22438-1-git-send-email-jun.li@nxp.com>
 MIME-Version: 1.0
-References: <0000000000009e7712059f5257af@google.com>
-In-Reply-To: <0000000000009e7712059f5257af@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 24 Feb 2020 14:31:06 +0100
-Message-ID: <CAAeHK+y2WZpj9jKMqZLZe5J9LxtdxaMeqA=9hGE=70fTL6s8sA@mail.gmail.com>
-Subject: Re: BUG: bad host encryption descriptor; descriptor is too short (3
- vs 5 needed)
-To:     syzbot <syzbot+069037c83014b5536cb7@syzkaller.appspotmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1582128343-22438-1-git-send-email-jun.li@nxp.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 24, 2020 at 2:28 PM syzbot
-<syzbot+069037c83014b5536cb7@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    307a2623 usb: gadget: add raw-gadget interface
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=13fa7a29e00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=cf0c83d9cbd23d52
-> dashboard link: https://syzkaller.appspot.com/bug?extid=069037c83014b5536cb7
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12acfe09e00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1613d1b5e00000
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+069037c83014b5536cb7@syzkaller.appspotmail.com
->
-> usb 1-1: config 0 interface 0 altsetting 0 has 2 endpoint descriptors, different from the interface descriptor's value: 4
-> usb 1-1: New USB device found, idVendor=13dc, idProduct=5611, bcdDevice=40.15
-> usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> usb 1-1: config 0 descriptor??
-> hwa-hc 1-1:0.0: Wire Adapter v106.52 newer than groked v1.0
-> usb 1-1: BUG: bad host encryption descriptor; descriptor is too short (3 vs 5 needed)
-> usb 1-1: supported encryption types:
-> usb 1-1: E: host doesn't support CCM-1 crypto
-> hwa-hc 1-1:0.0: Cannot initialize internals: -19
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+On Thu, Feb 20, 2020 at 12:05:43AM +0800, jun.li@nxp.com wrote:
+> From: Li Jun <jun.li@nxp.com>
+> 
+> Per typec spec:
+> Figure 4-15 Connection State Diagram: DRP
+> Figure 4-16 Connection State Diagram: DRP with Accessory and Try.SRC
+> 	    Support
+> Figure 4-17 Connection State Diagram: DRP with Accessory and Try.SNK
+> 	    Support
+> DRP port should move to Unattached.SNK instead of Unattached.SRC if
+> sink removed.
+> 
+> Signed-off-by: Li Jun <jun.li@nxp.com>
 
-#syz dup: BUG: bad host security descriptor; not enough data (4 vs 5 left)
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 78077c2..3174180 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -3680,8 +3680,12 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
+>  	case SRC_SEND_CAPABILITIES:
+>  	case SRC_READY:
+>  		if (tcpm_port_is_disconnected(port) ||
+> -		    !tcpm_port_is_source(port))
+> -			tcpm_set_state(port, SRC_UNATTACHED, 0);
+> +		    !tcpm_port_is_source(port)) {
+> +			if (port->port_type == TYPEC_PORT_SRC)
+> +				tcpm_set_state(port, SRC_UNATTACHED, 0);
+> +			else
+> +				tcpm_set_state(port, SNK_UNATTACHED, 0);
+> +		}
+>  		break;
+>  	case SNK_UNATTACHED:
+>  		if (tcpm_port_is_sink(port))
+> -- 
+> 2.7.4
+
+thanks,
+
+-- 
+heikki
