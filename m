@@ -2,105 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B904169E53
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2020 07:21:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7511169EFA
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2020 08:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726502AbgBXGVu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Feb 2020 01:21:50 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:1715 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725895AbgBXGVu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Feb 2020 01:21:50 -0500
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e536b5a0000>; Sun, 23 Feb 2020 22:21:14 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Sun, 23 Feb 2020 22:21:49 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Sun, 23 Feb 2020 22:21:49 -0800
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 24 Feb
- 2020 06:21:49 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Mon, 24 Feb 2020 06:21:49 +0000
-Received: from jckuo-lt.nvidia.com (Not Verified[10.19.108.125]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e536b7b0000>; Sun, 23 Feb 2020 22:21:49 -0800
-From:   JC Kuo <jckuo@nvidia.com>
-To:     <mathias.nyman@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>
-CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <nkristam@nvidia.com>, JC Kuo <jckuo@nvidia.com>
-Subject: [PATCH] usb: host: xhci-tegra: Tegra186/Tegra194 LPM
-Date:   Mon, 24 Feb 2020 14:21:45 +0800
-Message-ID: <20200224062145.25785-1-jckuo@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-X-NVConfidentiality: public
+        id S1726778AbgBXHPo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Feb 2020 02:15:44 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:37126 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725792AbgBXHPo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Feb 2020 02:15:44 -0500
+Received: by mail-pl1-f194.google.com with SMTP id c23so3682841plz.4;
+        Sun, 23 Feb 2020 23:15:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=E3dZo4uyTHIfwZ9buqAY9fgJTMYKM8S4o+B958cH0P0=;
+        b=ehE+U/VgTg7m+pmMZp4h+iqFSuLlZSWHaLtxGJqjla6QPNjUUZuEuKw/tCz7PuBTnk
+         CBq5+x6flfuP/ns7aBp/o/P3ZMlFcU77agAVttX9uv783bO6DpT42S1SljjagYHrHdqh
+         sNZGAKrhFmMlwxDpE6qLBgN0CAAjZvZutJwUzlLqevQN6XIlptdqGbFaJBW7K38PDSet
+         rNgayJaEDUuNm29xM/l+FmDKTfR9Wh1NsmdZTyJNuuFz8PyKs3PcMch8Y5KMqw5/vJac
+         1yo7qCcNjpbmbP3/aB3Wv0mPtBQoCSwXYMAwhAyBr9weHp5ZIO/9PkDidANfLnPfUxbU
+         Fe1A==
+X-Gm-Message-State: APjAAAVX7YVV5M3o6K8yyHXRrrCNIGz3mZo/2Fqze1D3OZ4WOmcgRZqB
+        7WfyU0DBu59nnaJ9bFGsNoM=
+X-Google-Smtp-Source: APXvYqyZdO6HOxgfMd5MC+igzpT5WulQVFMxrwUSLIpPtC6nN/jtILTAjxyoe6dcCiVEJGYvwnAHVw==
+X-Received: by 2002:a17:90a:2545:: with SMTP id j63mr19008657pje.128.1582528543711;
+        Sun, 23 Feb 2020 23:15:43 -0800 (PST)
+Received: from localhost (61-220-137-37.HINET-IP.hinet.net. [61.220.137.37])
+        by smtp.gmail.com with ESMTPSA id w25sm11267765pfi.106.2020.02.23.23.15.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Feb 2020 23:15:42 -0800 (PST)
+From:   You-Sheng Yang <vicamo.yang@canonical.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Hayes Wang <hayeswang@realtek.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Grant Grundler <grundler@chromium.org>,
+        You-Sheng Yang <vicamo@gmail.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: r8151: check disconnect status after long sleep
+Date:   Mon, 24 Feb 2020 15:15:41 +0800
+Message-Id: <20200224071541.117363-1-vicamo.yang@canonical.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1582525275; bh=qzfaECbdr4ykASrTm8dC9mRKYUL+OV7uzjoJlDqFq0w=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         X-NVConfidentiality:MIME-Version:Content-Type;
-        b=kd/zD6viGyQiXU1XeTN/j3IFCHoW8RhKMk+9CtHDAGg63DeV+Sy4lke/vD5rm17aZ
-         XDTE3BNBM26iczA8HbHgmAKCtAFZQGkYGPtTkIXi6rrficwxwkmu6/lPvmzYwDZzOQ
-         z5QYI/igjmJYA7E1eF0kqKE7Q/+oACZbb9zTPrWFxma+1ubC3KquK9cWUIfPKmV8wG
-         j8blfBXJQdKKKWMZ6+w/QKaigscDFi5Fy0rwd6Wmnr2HjocKGGQECKsXcHhIpPl+oC
-         S2nn8OQoGe21Ew6DHH/pJrtQuNL6WkiSITKty/KOft4MoPwZKZBE8SnKiYJXoRxfma
-         CutVIpq16LN4A==
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Tegra186 and Tegra194 xHC supports USB 3.0 LPM. This commit enables
-XHCI_LPM_SUPPORT quirk for Tegra186 and Tegra194.
+Dell USB Type C docking WD19/WD19DC attaches additional peripherals as:
 
-Signed-off-by: JC Kuo <jckuo@nvidia.com>
+  /: Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
+      |__ Port 1: Dev 11, If 0, Class=Hub, Driver=hub/4p, 5000M
+          |__ Port 3: Dev 12, If 0, Class=Hub, Driver=hub/4p, 5000M
+          |__ Port 4: Dev 13, If 0, Class=Vendor Specific Class,
+              Driver=r8152, 5000M
+
+where usb 2-1-3 is a hub connecting all USB Type-A/C ports on the dock.
+
+When hotplugging such dock with additional usb devices already attached on
+it, the probing process may reset usb 2.1 port, therefore r8152 ethernet
+device is also reset. However, during r8152 device init there are several
+for-loops that, when it's unable to retrieve hardware registers due to
+being discconected from USB, may take up to 14 seconds each in practice,
+and that has to be completed before USB may re-enumerate devices on the
+bus. As a result, devices attached to the dock will only be available
+after nearly 1 minute after the dock was plugged in:
+
+  [ 216.388290] [250] r8152 2-1.4:1.0: usb_probe_interface
+  [ 216.388292] [250] r8152 2-1.4:1.0: usb_probe_interface - got id
+  [ 258.830410] r8152 2-1.4:1.0 (unnamed net_device) (uninitialized): PHY not ready
+  [ 258.830460] r8152 2-1.4:1.0 (unnamed net_device) (uninitialized): Invalid header when reading pass-thru MAC addr
+  [ 258.830464] r8152 2-1.4:1.0 (unnamed net_device) (uninitialized): Get ether addr fail
+
+This can be reproduced on all kernel versions up to latest v5.6-rc2, but
+after v5.5-rc7 the reproduce rate is dramatically lower to 1/30 or so
+while it was around 1/2.
+
+The time consuming for-loops are at:
+https://elixir.bootlin.com/linux/v5.5/source/drivers/net/usb/r8152.c#L3206
+https://elixir.bootlin.com/linux/v5.5/source/drivers/net/usb/r8152.c#L5400
+https://elixir.bootlin.com/linux/v5.5/source/drivers/net/usb/r8152.c#L5537
+
+Signed-off-by: You-Sheng Yang <vicamo.yang@canonical.com>
 ---
- drivers/usb/host/xhci-tegra.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/net/usb/r8152.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-index 8163aefc6c6b..a6e36b3c968f 100644
---- a/drivers/usb/host/xhci-tegra.c
-+++ b/drivers/usb/host/xhci-tegra.c
-@@ -203,6 +203,7 @@ struct tegra_xusb_soc {
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 78ddbaf6401b..95b19ce96513 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -3221,6 +3221,8 @@ static u16 r8153_phy_status(struct r8152 *tp, u16 desired)
+ 		}
  
- 	bool scale_ss_clock;
- 	bool has_ipfs;
-+	bool lpm_support;
- };
+ 		msleep(20);
++		if (test_bit(RTL8152_UNPLUG, &tp->flags))
++			break;
+ 	}
  
- struct tegra_xusb_context {
-@@ -1779,6 +1780,7 @@ static const struct tegra_xusb_soc tegra186_soc = {
- 		.data_out = 0xec,
- 		.owner = 0xf0,
- 	},
-+	.lpm_support = true,
- };
- 
- static const char * const tegra194_supply_names[] = {
-@@ -1808,6 +1810,7 @@ static const struct tegra_xusb_soc tegra194_soc = {
- 		.data_out = 0x70,
- 		.owner = 0x74,
- 	},
-+	.lpm_support = true,
- };
- MODULE_FIRMWARE("nvidia/tegra194/xusb.bin");
- 
-@@ -1832,7 +1835,11 @@ static struct platform_driver tegra_xusb_driver = {
- 
- static void tegra_xhci_quirks(struct device *dev, struct xhci_hcd *xhci)
- {
-+	struct tegra_xusb *tegra = dev_get_drvdata(dev);
+ 	return data;
+@@ -5402,7 +5404,10 @@ static void r8153_init(struct r8152 *tp)
+ 		if (ocp_read_word(tp, MCU_TYPE_PLA, PLA_BOOT_CTRL) &
+ 		    AUTOLOAD_DONE)
+ 			break;
 +
- 	xhci->quirks |= XHCI_PLAT;
-+	if (tegra && tegra->soc->lpm_support)
-+		xhci->quirks |= XHCI_LPM_SUPPORT;
- }
+ 		msleep(20);
++		if (test_bit(RTL8152_UNPLUG, &tp->flags))
++			break;
+ 	}
  
- static int tegra_xhci_setup(struct usb_hcd *hcd)
+ 	data = r8153_phy_status(tp, 0);
+@@ -5539,7 +5544,10 @@ static void r8153b_init(struct r8152 *tp)
+ 		if (ocp_read_word(tp, MCU_TYPE_PLA, PLA_BOOT_CTRL) &
+ 		    AUTOLOAD_DONE)
+ 			break;
++
+ 		msleep(20);
++		if (test_bit(RTL8152_UNPLUG, &tp->flags))
++			break;
+ 	}
+ 
+ 	data = r8153_phy_status(tp, 0);
 -- 
-2.17.1
+2.25.0
 
