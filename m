@@ -2,108 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C8B16B67B
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2020 01:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F98B16B69A
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2020 01:18:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728621AbgBYAOT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Feb 2020 19:14:19 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:38221 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728316AbgBYAOT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Feb 2020 19:14:19 -0500
-Received: by mail-oi1-f196.google.com with SMTP id r137so10821612oie.5
-        for <linux-usb@vger.kernel.org>; Mon, 24 Feb 2020 16:14:18 -0800 (PST)
+        id S1728602AbgBYASE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Feb 2020 19:18:04 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:50349 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728011AbgBYASD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Feb 2020 19:18:03 -0500
+Received: by mail-pj1-f65.google.com with SMTP id r67so483331pjb.0
+        for <linux-usb@vger.kernel.org>; Mon, 24 Feb 2020 16:18:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GZtmbSEgUmBA2cOgkuRpY+h9XbrXRgH0ndQIFRZmJ38=;
-        b=cwjjB8VVG8XrJHr+9SEk59Jg97OlI73g/1W+hi/ky5xqv970/1C1XiAom2PD2PpLlg
-         LdSsMUOe2CelKaeX76Shd1EAfnXlOeF+FYFyuoXZ10Olfto9EiXkoMm0tGHoKDv/tQOy
-         kImfGPxJ08+5yri7sO6xsIMJniJTAg5sw3mO1zn3soZ8YMxwhoKA3Z+wIgucL1dn/jiQ
-         A80GsJml5bRUrFSGKbq/A/MTdkhprhOWaXBvOZ6NEOeGV1g+/IvES68k2MW04/Xr9NJ+
-         JlW1lyZ6UT2SkaBba5Qp5brJ7CBxbR54fQ2KT8ILx4VdDIt+VSaQlCnQefzgODfuZbyr
-         w7Yw==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=49/v+Nf7LPcGofu0JcfqKZIRUKh2q2fmPpy5lPor13s=;
+        b=Vs4lXffuRy1uDo3E80/HdsgzKogmyf3F0I2+mUw2aLP0Shn14xz3TSqDrPBuX1m6RB
+         D4Na8OdNYNgaF4GQ/MqQylhNyTy1Yne1cLVC33ANY2VeBxqr2KX2Eu+wyTfuo1tEUUs9
+         3CBi+LlmGimBITkALwYNPUFlBknjdKXUzFi/WBMtVZ+Fs1lTI19IivrR6Bj3zNkSTgiH
+         MU7d2aJxaw1H7BO7Dia9bD2PzGYp4HbbJPLkBRdBsFrPlFKoHZTfqiVNb7CKusBZoQgo
+         TdvU+WTnHTssqdqDjsdi8jt3V74NhLk1b05+3LSoeaDt+iCA3WqRhB5iFWlGEk/Odwwq
+         5lOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GZtmbSEgUmBA2cOgkuRpY+h9XbrXRgH0ndQIFRZmJ38=;
-        b=ZCC5OrllJOjd3wDF7e7pJSplccycFNqgEa7HKXyHHQWvMMpiMZ3fBJESnCc6LbssS2
-         qIjqZIGRsztFMEHy0Jnm0Kzu604SzPV27zf6yyXIvSFWgqelzcQwlxQPxsDOQeruCa+g
-         v6CvVzwyX/QebTbYZggr5jFtmvyZC/t+Zvez+S/OuO0LX+3JfKioN1c1ziZJzTQCvQzj
-         IU7Vyz4bAgA0U54Z9BCBY36BYF1VK1RdK8kGuLH0LZS3zc8bqE1qaVX0mcIBQGCn1LwM
-         7miKHhigaEll+KX1/1CxpGPp/9LPtdHW2juDD9AoPlpvle9XyisiEShzh/vqZn8dT3P5
-         iYUw==
-X-Gm-Message-State: APjAAAUl8WSsac5PUM737zka0ISgdfj2xM7jSGCC97SIfpWZUI1g2zfq
-        NOeOwPf3ns4zfpjGeNv3yh5tRGbgxu7FusZ9jQVg6w==
-X-Google-Smtp-Source: APXvYqzsDX7BHdCV5vm2RuqNmJjUPSdFrnJPn1LX8SDfKwKqUUphTqyN7w7FRi0e9tlsvwDFCvuFTUG2RmHNvqX3in0=
-X-Received: by 2002:aca:c0c5:: with SMTP id q188mr1270836oif.169.1582589658269;
- Mon, 24 Feb 2020 16:14:18 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=49/v+Nf7LPcGofu0JcfqKZIRUKh2q2fmPpy5lPor13s=;
+        b=kzC+DSwPqJcxe453NgBNUDJ5Rix8wEd13kg4KHpYIsRTgLje+n1S9LFKmyshhQhKXs
+         TiV3B6j0P1pIj0XBlr8RzGKekaZWc+uR1ay85t5KTRput+xiox1Hs3fiBFxePNVpy7F2
+         7h64xBBtCwq2Z35Xz9u61cXYQ5tubuNDeEwODwJX9/OD2qMGo6J2qK8Al3WU39K5uUS0
+         vHH6ccOLUXkNOjNQrckZDTwpYUmHYxE9G5eEFFbazxc6a+YM8VSu+iIhfg7IE0oAX9Yw
+         Qs7sHID9OrrUDXWxLuOxVlF4hmF1S4QiAFKsOdGL9iGMoQRKx8wmApJjbV3t3KpllwfJ
+         KZ8w==
+X-Gm-Message-State: APjAAAUGhWJPvg4897uT5y5joKmLIocnZem5rCXJ+ARNH2Qn3mGo9XHX
+        fnYnNqRkkKfMWNI9fPj3VHN9x/JC
+X-Google-Smtp-Source: APXvYqz1p4vCnOtscIrXCCvshSGFGr9Yfy8G1nn7w7PS4HobKXEMWJQeMggxhLob9bjomoiYMxttdQ==
+X-Received: by 2002:a17:90b:254:: with SMTP id fz20mr1872925pjb.25.1582589883085;
+        Mon, 24 Feb 2020 16:18:03 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s7sm625161pjk.22.2020.02.24.16.18.01
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 24 Feb 2020 16:18:02 -0800 (PST)
+Date:   Mon, 24 Feb 2020 16:18:00 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Boris ARZUR <boris@konbu.org>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        William Wu <william.wu@rock-chips.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>, a.seppala@gmail.com
+Subject: Re: [PATCH] usb: dwc2: extend treatment for incomplete transfer
+Message-ID: <20200225001800.GA13099@roeck-us.net>
+References: <20200210213906.GA24079@roeck-us.net>
+ <20200211054953.GA2401@tungsten>
+ <20200211161522.GA1894@roeck-us.net>
+ <20200215053647.GA10345@tungsten>
+ <20200219211056.GA829@roeck-us.net>
+ <20200223120247.GA21552@tungsten>
 MIME-Version: 1.0
-References: <20200220060616.54389-1-john.stultz@linaro.org> <20200220124927.BB33124670@mail.kernel.org>
-In-Reply-To: <20200220124927.BB33124670@mail.kernel.org>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Mon, 24 Feb 2020 16:14:07 -0800
-Message-ID: <CALAqxLVFHCJfKbDaSC38MMsi_zbn-61Kz4AumxEXv+cCp69Xjw@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: dwc3: gadget: Update chain bit correctly when
- using sg list
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     Pratham Pratap <prathampratap@codeaurora.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>, Yang Fei <fei.yang@intel.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
-        Tejas Joglekar <tejas.joglekar@synopsys.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200223120247.GA21552@tungsten>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 20, 2020 at 4:49 AM Sasha Levin <sashal@kernel.org> wrote:
->
-> Hi,
->
-> [This is an automated email]
->
-> This commit has been processed because it contains a -stable tag.
-> The stable tag indicates that it's relevant for the following trees: all
->
-> The bot has tested the following trees: v5.5.4, v5.4.20, v4.19.104, v4.14.171, v4.9.214, v4.4.214.
->
-> v5.5.4: Build OK!
-> v5.4.20: Build OK!
-> v4.19.104: Build OK!
-> v4.14.171: Build failed! Errors:
->     drivers/usb/dwc3/gadget.c:1098:12: error: `remaining` undeclared (first use in this function)
->
-> v4.9.214: Failed to apply! Possible dependencies:
->     Unable to calculate
->
-> v4.4.214: Failed to apply! Possible dependencies:
->     36b68aae8e39 ("usb: dwc3: gadget: use link TRB for all endpoint types")
->     4faf75504a7d ("usb: dwc3: gadget: move % operation to increment helpers")
->     53fd88189e08 ("usb: dwc3: gadget: rename busy/free_slot to trb_enqueue/dequeue")
->     5ee85d890f8d ("usb: dwc3: gadget: split __dwc3_gadget_kick_transfer()")
->     70fdb273db37 ("usb: dwc3: get rid of DWC3_TRB_MASK")
->     8495036e986b ("usb: dwc3: increase maximum number of TRBs per endpoint")
->     c4233573f6ee ("usb: dwc3: gadget: prepare TRBs on update transfers too")
->     e901aa159dac ("usb: dwc3: gadget: fix endpoint renaming")
->     ef966b9d3353 ("usb: dwc3: gadget: add trb enqueue/dequeue helpers")
->
->
-> NOTE: The patch will not be queued to stable trees until it is upstream.
->
-> How should we proceed with this patch?
+On Sun, Feb 23, 2020 at 09:02:47PM +0900, Boris ARZUR wrote:
+> Hi Guenter,
+> 
+> I tried your series of patch. rndis_host tethering & loading the machine
+> seems to work fine. No more crashing.
+> 
+> That being said, I now have an issue with regular USB keys (I tried a few):
+> usb 3-1: reset high-speed USB device number 2 using dwc2
+> 
+> I was able to reproduce this issue with the unpatched kernel, by disabling
+> the early return in dwc2_alloc_dma_aligned_buffer(), see attached.
+> There are times were re-allocation fails, either with your patch or with
+> the (almost-)original code.
+> 
+> In particular it seems that there is a packet of lenght 13, usb_urb_dir_in() == true,
+> usb_pipetype(urb->pipe) == PIPE_BULK, that comes in every 2s or so, that
+> does not reallocate properly.
+> 
+Those packets have URB_NO_TRANSFER_DMA_MAP set. If that is the case,
+the packet is not received into the transfer buffer but into an already
+assigned DMA buffer/address. Providing a temporary buffer does not have
+an effect; the packet is still received into the orginal buffer (and then
+overwritten with the data in the temporary buffer). That means we have
+to leave such packets alone.
 
-Sorry, I only see this change as critical for 4.20+ kernels (where it
-started biting folks), but I'd defer to Felipe if he'd like to see it
-go any further back.
+I'll send out an updated series later tonight or tomorrow. I'll probably
+send it as RFT series this time.
 
-thanks
--john
+Guenter
