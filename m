@@ -2,101 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F98B16B69A
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2020 01:18:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B73C16B785
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2020 03:06:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728602AbgBYASE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Feb 2020 19:18:04 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:50349 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728011AbgBYASD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Feb 2020 19:18:03 -0500
-Received: by mail-pj1-f65.google.com with SMTP id r67so483331pjb.0
-        for <linux-usb@vger.kernel.org>; Mon, 24 Feb 2020 16:18:03 -0800 (PST)
+        id S1728733AbgBYCGR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Feb 2020 21:06:17 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:42400 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726962AbgBYCGQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Feb 2020 21:06:16 -0500
+Received: by mail-pl1-f195.google.com with SMTP id u3so507823plr.9
+        for <linux-usb@vger.kernel.org>; Mon, 24 Feb 2020 18:06:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=49/v+Nf7LPcGofu0JcfqKZIRUKh2q2fmPpy5lPor13s=;
-        b=Vs4lXffuRy1uDo3E80/HdsgzKogmyf3F0I2+mUw2aLP0Shn14xz3TSqDrPBuX1m6RB
-         D4Na8OdNYNgaF4GQ/MqQylhNyTy1Yne1cLVC33ANY2VeBxqr2KX2Eu+wyTfuo1tEUUs9
-         3CBi+LlmGimBITkALwYNPUFlBknjdKXUzFi/WBMtVZ+Fs1lTI19IivrR6Bj3zNkSTgiH
-         MU7d2aJxaw1H7BO7Dia9bD2PzGYp4HbbJPLkBRdBsFrPlFKoHZTfqiVNb7CKusBZoQgo
-         TdvU+WTnHTssqdqDjsdi8jt3V74NhLk1b05+3LSoeaDt+iCA3WqRhB5iFWlGEk/Odwwq
-         5lOw==
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=1CHI99P6OXzbIsUlNKnLj6/C20wsSN/f5nvpeDcrDZQ=;
+        b=qK+uweoDB3+v7+LZkfO3DF6qyZPC8fs2X1QM2VCiyhB1iIUKxt7aVTlmMDAL/Kho/l
+         bPVrn5QXuX8Yq37MyuaKblwofdNpfVat5eBTUV+t7Trn+W74gR8PEZV210iH1WAsUbxn
+         CudJ33KkdRKrRhakKRn+LFW7G8KBbkNR30PgKXOUCXB+3GhRZpDQ31pc3jgsoqXGb64l
+         +0jlCGuTLfxjoaciOTAJ40PI9tALuv+thYaglMwH3go3BOQBCptVN3kL9Qr8PGbXGaUt
+         zFN4BMNvAIlOYZ01TgrQdY+EC4wckkDl18uMXGV6K5z78yx97P/wicRgw0j4A3rvvKRC
+         c/Lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=49/v+Nf7LPcGofu0JcfqKZIRUKh2q2fmPpy5lPor13s=;
-        b=kzC+DSwPqJcxe453NgBNUDJ5Rix8wEd13kg4KHpYIsRTgLje+n1S9LFKmyshhQhKXs
-         TiV3B6j0P1pIj0XBlr8RzGKekaZWc+uR1ay85t5KTRput+xiox1Hs3fiBFxePNVpy7F2
-         7h64xBBtCwq2Z35Xz9u61cXYQ5tubuNDeEwODwJX9/OD2qMGo6J2qK8Al3WU39K5uUS0
-         vHH6ccOLUXkNOjNQrckZDTwpYUmHYxE9G5eEFFbazxc6a+YM8VSu+iIhfg7IE0oAX9Yw
-         Qs7sHID9OrrUDXWxLuOxVlF4hmF1S4QiAFKsOdGL9iGMoQRKx8wmApJjbV3t3KpllwfJ
-         KZ8w==
-X-Gm-Message-State: APjAAAUGhWJPvg4897uT5y5joKmLIocnZem5rCXJ+ARNH2Qn3mGo9XHX
-        fnYnNqRkkKfMWNI9fPj3VHN9x/JC
-X-Google-Smtp-Source: APXvYqz1p4vCnOtscIrXCCvshSGFGr9Yfy8G1nn7w7PS4HobKXEMWJQeMggxhLob9bjomoiYMxttdQ==
-X-Received: by 2002:a17:90b:254:: with SMTP id fz20mr1872925pjb.25.1582589883085;
-        Mon, 24 Feb 2020 16:18:03 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s7sm625161pjk.22.2020.02.24.16.18.01
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 24 Feb 2020 16:18:02 -0800 (PST)
-Date:   Mon, 24 Feb 2020 16:18:00 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Boris ARZUR <boris@konbu.org>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        William Wu <william.wu@rock-chips.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>, a.seppala@gmail.com
-Subject: Re: [PATCH] usb: dwc2: extend treatment for incomplete transfer
-Message-ID: <20200225001800.GA13099@roeck-us.net>
-References: <20200210213906.GA24079@roeck-us.net>
- <20200211054953.GA2401@tungsten>
- <20200211161522.GA1894@roeck-us.net>
- <20200215053647.GA10345@tungsten>
- <20200219211056.GA829@roeck-us.net>
- <20200223120247.GA21552@tungsten>
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1CHI99P6OXzbIsUlNKnLj6/C20wsSN/f5nvpeDcrDZQ=;
+        b=b7TitIgqh2lTfY8IU8nrCUTpeb8iuX2i0xRhvHS4yqZzRPGarFQ1c9Z8Zh0bkTJyE0
+         XGH5SuXdbD4GVmXGSTmcBWFzLrmzD3NuuPrE1UnXQ14CCf05pFFSdyI4JrJqkOuhp9Sp
+         5xKa4GuOpP6aGfcm7eoeHfRPjro0Ls5VqoxJFeDDghQkOaROn+hwTJ/QiamVhSF8A85I
+         rAntQ27uuJksBeScl1DfsjyxklfEAnGwYJSxdt16Z7s+BJW++HWCbol8Yd4uNUDp8DSZ
+         Y8K2N9VMfvGpSaZebCTSn2bNEwyXKB1F2Nchx+yv8QLvWMrxlMbCOaXGuwqnLUnH63c1
+         qxNw==
+X-Gm-Message-State: APjAAAVJju//JpO0XHcHN2eSdGHPh+APjhCLSM8NL/ltMBBEsGreC0VG
+        1QprYgYBvJOZyCsVIfGAH6jTvKb9
+X-Google-Smtp-Source: APXvYqyXt9zrKPyqFKao/MgKQ/qq88Z3/hIIewjhQnEh9iK9cc6U1vdUU7Pg0a8YJcgE5/lCMMEegg==
+X-Received: by 2002:a17:902:107:: with SMTP id 7mr51226189plb.183.1582596375960;
+        Mon, 24 Feb 2020 18:06:15 -0800 (PST)
+Received: from [192.168.1.5] ([110.77.154.179])
+        by smtp.googlemail.com with ESMTPSA id d23sm14238418pfo.176.2020.02.24.18.06.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Feb 2020 18:06:15 -0800 (PST)
+Subject: Re: Driver fault
+To:     PLENTY <plentypvp@gmail.com>, linux-usb@vger.kernel.org
+References: <CALDgPpU+zqjeLbh7SnGGbe66RjJU9a2P6JiZUp-VJn=w44S_=A@mail.gmail.com>
+From:   Lars Melin <larsm17@gmail.com>
+Message-ID: <dd3597fd-f23b-24c1-7d8d-fe335e1f5755@gmail.com>
+Date:   Tue, 25 Feb 2020 09:06:12 +0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200223120247.GA21552@tungsten>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CALDgPpU+zqjeLbh7SnGGbe66RjJU9a2P6JiZUp-VJn=w44S_=A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Feb 23, 2020 at 09:02:47PM +0900, Boris ARZUR wrote:
-> Hi Guenter,
+On 2/25/2020 04:23, PLENTY wrote:
+> Hello. I'm using Ubuntu 18.04.3 LTS. I'm trying to get my JT308 RFID
+> reader working. Please help.
 > 
-> I tried your series of patch. rndis_host tethering & loading the machine
-> seems to work fine. No more crashing.
+> $ sudo modprobe usbserial vendor=0xffff product=0x0035
+> $ dmesg
+> ...
+> [  266.304578] usbserial_generic 2-1.5:1.1: The "generic" usb-serial
+> driver is only for testing and one-off prototypes.
+> [  266.304579] usbserial_generic 2-1.5:1.1: Tell
+> linux-usb@vger.kernel.org to add your device to a proper driver.
 > 
-> That being said, I now have an issue with regular USB keys (I tried a few):
-> usb 3-1: reset high-speed USB device number 2 using dwc2
+> $ lsusb -d ffff:0035 -v
+> Bus 002 Device 003: ID ffff:0035
+> Device Descriptor:
+>    bLength                18
+>    bDescriptorType         1
+>    bcdUSB               1.10
+>    bDeviceClass            0 (Defined at Interface level)
+>    bDeviceSubClass         0
+>    bDeviceProtocol         0
+>    bMaxPacketSize0         8
+>    idVendor           0xffff
+>    idProduct          0x0035
+>    bcdDevice            1.00
+>    iManufacturer           1 Sycreader
+>    iProduct                2 USB Reader
+>    iSerial                 3 08FF20150112
+>    bNumConfigurations      1
 > 
-> I was able to reproduce this issue with the unpatched kernel, by disabling
-> the early return in dwc2_alloc_dma_aligned_buffer(), see attached.
-> There are times were re-allocation fails, either with your patch or with
-> the (almost-)original code.
-> 
-> In particular it seems that there is a packet of lenght 13, usb_urb_dir_in() == true,
-> usb_pipetype(urb->pipe) == PIPE_BULK, that comes in every 2s or so, that
-> does not reallocate properly.
-> 
-Those packets have URB_NO_TRANSFER_DMA_MAP set. If that is the case,
-the packet is not received into the transfer buffer but into an already
-assigned DMA buffer/address. Providing a temporary buffer does not have
-an effect; the packet is still received into the orginal buffer (and then
-overwritten with the data in the temporary buffer). That means we have
-to leave such packets alone.
 
-I'll send out an updated series later tonight or tomorrow. I'll probably
-send it as RFT series this time.
+Your RFID reader does not have interfaces for a serial driver, the 
+interfaces are for a HID driver.
+Your verbose lsusb listing would have showed that had you not cut it 
+short and your dmesg should also show a HID driver attempting to bind.
 
-Guenter
+
+br
+/Lars
+
