@@ -2,313 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C672F16BAE1
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2020 08:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B13DC16BB90
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2020 09:12:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729390AbgBYHkX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Feb 2020 02:40:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59700 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728983AbgBYHkX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 25 Feb 2020 02:40:23 -0500
-Received: from localhost.localdomain (unknown [101.229.0.15])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C130321927;
-        Tue, 25 Feb 2020 07:40:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582616423;
-        bh=H0iy/RTg8MCCkLKTaY98xa58S+bn/tzHtxirIaJMV+I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZUB/1aVqudGN+LKAD9yNwJGi0fR2c5qUvLzAWxXJFTaARGmpEl9d6imKArmym+q+n
-         +LiRGJFYSyyZRg8R6ju4foJfPQzrSbCyiDZ25s6NFCdZZvrCFixVDHIdHkzpxfncdw
-         gn+I1MRh70YSCwNdBqpy/v2QNYYbjPdHmC00zBZA=
-From:   Peter Chen <peter.chen@kernel.org>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-imx@nxp.com, jun.li@nxp.com, frank.li@nxp.com,
-        Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH 1/1] usb: chipidea: udc: add sg list support
-Date:   Tue, 25 Feb 2020 15:40:07 +0800
-Message-Id: <20200225074007.10740-1-peter.chen@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        id S1729712AbgBYIMO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Feb 2020 03:12:14 -0500
+Received: from mail-vi1eur05on2073.outbound.protection.outlook.com ([40.107.21.73]:29344
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729458AbgBYIMN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 25 Feb 2020 03:12:13 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZgKkx9oUWJ/2Szgk7SljbtojxUtuLAsOoX91HekWcMSvAVLJPzsgRW0euBTkWtBtdL2ZbEDinwTqp8iwTa6I0/77xJrCCJ6ZbH9fb5BIc5KHPeDi3dIa4dxNqvsxylRrt/v+X4ZPQnmtMD8aZM5yf0tPyg+65s67NrFyn/hemZe4zwKttX6gacx76Rf9rGvercFo9Qgbqn7NdIjs4/yeQWl86Ko2ZjYROBfcVhehgQm/LG+bv338fMa/AjHI62qYc/SSwqa2i2Nd43BSs7m1SiAfqk3TPAuM3KXfDzejvhLVaigVdG8M980T8fBZXDHu6Xf9OqNnK8H31XfABdz1Gg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bKJqPbzyCrYysc8e6vNkQF3RLZxCHQskhMILm6nDuo4=;
+ b=Tw7MRwYphSRHdn44GW5DLawnSoqSm49tSo3TPnikgsljrvfp8Ti2oQpHGIWSRy6TUx63xOYazORTsf/wRPVMWuiCjG9apD1W2ILkTCdO386vXwMhrRzUp6vyW9OdhzTffjDt+A45PC3sGztlMEuO4mhPDKBP1tTOKknQNHPkAzalJghrvNWLu8V9nTn7V3P8z8p8XST08UIdgyaf9jAl515vfG/wA+7WeAIlw9u5pzBEaQvJW/DWrLlOFVPvz08iZPK149ASj2joiBSfODLqAPFC6RSLbnB/PsS5OjkJfn3OMOhl+oGpcDOCMSgC3fL50cOQrKm8HyYMw1/WMKFP4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bKJqPbzyCrYysc8e6vNkQF3RLZxCHQskhMILm6nDuo4=;
+ b=ibg0cOFwVs6O/J6+KQDKBBcKf7cejlDYVvD+waPDb6OvaHy1NjKyzu6pcl0hUpjk/WjJszms0hjUhJ8wV1PUXyizyj9RaE5lSBpKSMUfzZeZOld7lyBvcO+fsiH5DKhf0T04sm4Hlal0nwkIlp+3eGf62Nez5x80N8S4JkVPvak=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
+ VI1PR04MB3309.eurprd04.prod.outlook.com (10.170.225.150) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2750.21; Tue, 25 Feb 2020 08:12:10 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::9547:9dfa:76b8:71b1]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::9547:9dfa:76b8:71b1%7]) with mapi id 15.20.2750.021; Tue, 25 Feb 2020
+ 08:12:10 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Macpaul Lin <macpaul.lin@mediatek.com>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Shen Jing <jingx.shen@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Vincent Pelletier <plr.vincent@gmail.com>,
+        Jerry Zhang <zhangjerry@google.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        CC Hwang <cc.hwang@mediatek.com>,
+        Loda Chou <loda.chou@mediatek.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v2] usb: gadget: f_fs: try to fix AIO issue under ARM 64
+ bit TAGGED mode
+Thread-Topic: [PATCH v2] usb: gadget: f_fs: try to fix AIO issue under ARM 64
+ bit TAGGED mode
+Thread-Index: AQHV6mDVZR8qi0sUNEueYlefbym6aKgrkc4A
+Date:   Tue, 25 Feb 2020 08:12:10 +0000
+Message-ID: <20200225081211.GA6447@b29397-desktop>
+References: <1582472947-22471-1-git-send-email-macpaul.lin@mediatek.com>
+In-Reply-To: <1582472947-22471-1-git-send-email-macpaul.lin@mediatek.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 31581cb2-dc8d-4a67-8230-08d7b9ca69bf
+x-ms-traffictypediagnostic: VI1PR04MB3309:
+x-microsoft-antispam-prvs: <VI1PR04MB33092E22A0417A5CAEF103F18BED0@VI1PR04MB3309.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2657;
+x-forefront-prvs: 0324C2C0E2
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(346002)(366004)(376002)(396003)(39860400002)(136003)(199004)(189003)(478600001)(6486002)(81166006)(81156014)(71200400001)(44832011)(2906002)(6512007)(6506007)(5660300002)(8676002)(66946007)(316002)(4326008)(7416002)(54906003)(9686003)(8936002)(66446008)(64756008)(66556008)(66476007)(53546011)(33656002)(33716001)(1076003)(6916009)(76116006)(26005)(91956017)(86362001)(186003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB3309;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /sqDL7DDqp8tILghRoXL53bHSi8NzjmeF03fz2dvqd1CRsjntrACWEj0+aVx8lamkAcqvFclSDT8K+l0W6Hv6Gv0DZ/FbuZnq/RoR9Xs5NOnFPoG7neG/wjeUX762bqH5fB8py7kAhelnNntjS4LyYEo34Siq9qqmBkbjKm1mu38/oZRkNsu59KmiI4uiR3dO5n4IYuXd6Xc1TDfBtzHgdHlR0QB09yCiDMN2YFU2w/ek6WI15m6PxoCPrGuv5LNjnk2PcVFxN+uv6xYpUW76hcm51cKSpK/Kv4S2CfF03XalAzOc09z6F8dSHSabOwUQvIWauB3pkNWb/wzy5h6I6aI+sjH4/pDEOTHNSPzYQSzgFKxEzjs4MShCR/yxYDNTY4YLIEhMWMYT/VmAIFwS4HwKgVhvIVU0L+qi5Va2fvjnuqIIAzduHLIpk6MLq5d
+x-ms-exchange-antispam-messagedata: 9N37SJ0OBEkZX4Ef7/QTKUeBRNKwXIyHzT4T1PZOEfFqGjBxCcstY13PnASRblINzwTAV3YzsaIamQMUtPNnkdiS3aeFNhKHVRP5aDRN/+mvzxRGvY3Rty2TwokMGueh0tzvTLGIXsss2LU3EqmK8g==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <B737EEDE0836064BB66A40339B2FBCBA@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31581cb2-dc8d-4a67-8230-08d7b9ca69bf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Feb 2020 08:12:10.3745
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gcnqnROLTacTG7acODQnDbhDskMnkKgB1wDz9VrdAJ67fhzJRb76MaCMFWs3RwzB2LJ//LSlSJ6SMpPuuHre7w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3309
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Peter Chen <peter.chen@nxp.com>
+On 20-02-23 23:49:07, Macpaul Lin wrote:
+> This issue was found when adbd trying to open functionfs with AIO mode.
+> Usually, we need to set "setprop sys.usb.ffs.aio_compat 0" to enable
+> adbd with AIO mode on Android.
+>=20
+> When adbd is opening functionfs, it will try to read 24 bytes at the
+> fisrt read I/O control. If this reading has been failed, adbd will
 
-For low system memory system (eg, 265M), it may met OOM issue if the request
-buffer is large (eg, 64KB). We ran out below OOM issue for f_fs. Luckily,
-the f_fs supports sg list now, the OOM issue is fixed with this patch.
+%s/fisrt/first
 
-ufb: page allocation failure: order:4, mode:0x40cc0(GFP_KERNEL|__GFP_COMP), nodemask=(null),cpuset=/,mems_allowed=0
-CPU: 2 PID: 370 Comm: ufb Not tainted 5.4.3-1.1.0+g54b3750d61fd #1
-Hardware name: NXP i.MX8MNano DDR4 EVK board (DT)
-Call trace:
- dump_backtrace+0x0/0x140
- show_stack+0x14/0x20
- dump_stack+0xb4/0xf8
- warn_alloc+0xec/0x158
- __alloc_pages_slowpath+0x9cc/0x9f8
- __alloc_pages_nodemask+0x21c/0x280
- alloc_pages_current+0x7c/0xe8
- kmalloc_order+0x1c/0x88
- __kmalloc+0x25c/0x298
- ffs_epfile_io.isra.0+0x20c/0x7d0
- ffs_epfile_read_iter+0xa8/0x188
- new_sync_read+0xe4/0x170
- __vfs_read+0x2c/0x40
- vfs_read+0xc8/0x1a0
- ksys_read+0x68/0xf0
- __arm64_sys_read+0x18/0x20
- el0_svc_common.constprop.0+0x68/0x160
- el0_svc_handler+0x20/0x80
- el0_svc+0x8/0xc
-Mem-Info:
-active_anon:2856 inactive_anon:5269 isolated_anon:12
- active_file:5238 inactive_file:18803 isolated_file:0
- unevictable:0 dirty:22 writeback:416 unstable:0
- slab_reclaimable:4073 slab_unreclaimable:3408
- mapped:727 shmem:7393 pagetables:37 bounce:0
- free:4104 free_pcp:118 free_cma:0
-Node 0 active_anon:11436kB inactive_anon:21076kB active_file:20988kB inactive_file:75216kB unevictable:0kB isolated(ano
-Node 0 DMA32 free:16820kB min:1808kB low:2260kB high:2712kB active_anon:11436kB inactive_anon:21076kB active_file:2098B
-lowmem_reserve[]: 0 0 0
-Node 0 DMA32: 508*4kB (UME) 242*8kB (UME) 730*16kB (UM) 21*32kB (UME) 5*64kB (UME) 2*128kB (M) 0*256kB 0*512kB 0*1024kB
-Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=1048576kB
-Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=32768kB
-Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=2048kB
-Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=64kB
-31455 total pagecache pages
-0 pages in swap cache
-Swap cache stats: add 0, delete 0, find 0/0
-Free swap  = 0kB
-Total swap = 0kB
-65536 pages RAM
-0 pages HighMem/MovableOnly
-10766 pages reserved
-0 pages cma reserved
-0 pages hwpoisoned
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
----
- drivers/usb/chipidea/udc.c | 172 ++++++++++++++++++++++++++++++-------
- 1 file changed, 142 insertions(+), 30 deletions(-)
+> try to send FUNCTIONFS_CLEAR_HALT to functionfs. When adbd is in AIO
+> mode, functionfs will be acted with asyncronized I/O path. After the
+> successful read transfer has been completed by gadget hardware, the
+> following series of functions will be called.
+>   ffs_epfile_async_io_complete() -> ffs_user_copy_worker() ->
+>     copy_to_iter() -> _copy_to_iter() -> copyout() ->
+>     iterate_and_advance() -> iterate_iovec()
+>=20
+> Adding debug trace to these functions, it has been found that in
+> copyout(), access_ok() will check if the user space address is valid
+> to write. However if CONFIG_ARM64_TAGGED_ADDR_ABI is enabled, adbd
+> always passes user space address start with "0x3C" to gdaget's AIO
 
-diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-index ffa6caee1f3b..b42d60113288 100644
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -400,31 +400,18 @@ static inline u8 _usb_addr(struct ci_hw_ep *ep)
- 	return ((ep->dir == TX) ? USB_ENDPOINT_DIR_MASK : 0) | ep->num;
- }
- 
--/**
-- * _hardware_enqueue: configures a request at hardware level
-- * @hwep:   endpoint
-- * @hwreq:  request
-- *
-- * This function returns an error code
-- */
--static int _hardware_enqueue(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq)
-+static int prepare_td_for_non_sg(struct ci_hw_ep *hwep,
-+		struct ci_hw_req *hwreq)
- {
--	struct ci_hdrc *ci = hwep->ci;
--	int ret = 0;
- 	unsigned rest = hwreq->req.length;
- 	int pages = TD_PAGE_COUNT;
--	struct td_node *firstnode, *lastnode;
--
--	/* don't queue twice */
--	if (hwreq->req.status == -EALREADY)
--		return -EALREADY;
--
--	hwreq->req.status = -EALREADY;
-+	int ret = 0;
- 
--	ret = usb_gadget_map_request_by_dev(ci->dev->parent,
--					    &hwreq->req, hwep->dir);
--	if (ret)
--		return ret;
-+	if (rest == 0) {
-+		ret = add_td_to_list(hwep, hwreq, 0);
-+		if (ret < 0)
-+			return ret;
-+	}
- 
- 	/*
- 	 * The first buffer could be not page aligned.
-@@ -433,18 +420,13 @@ static int _hardware_enqueue(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq)
- 	if (hwreq->req.dma % PAGE_SIZE)
- 		pages--;
- 
--	if (rest == 0) {
--		ret = add_td_to_list(hwep, hwreq, 0);
--		if (ret < 0)
--			goto done;
--	}
--
- 	while (rest > 0) {
- 		unsigned count = min(hwreq->req.length - hwreq->req.actual,
--					(unsigned)(pages * CI_HDRC_PAGE_SIZE));
-+			(unsigned)(pages * CI_HDRC_PAGE_SIZE));
-+
- 		ret = add_td_to_list(hwep, hwreq, count);
- 		if (ret < 0)
--			goto done;
-+			return ret;
- 
- 		rest -= count;
- 	}
-@@ -453,9 +435,138 @@ static int _hardware_enqueue(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq)
- 	    && (hwreq->req.length % hwep->ep.maxpacket == 0)) {
- 		ret = add_td_to_list(hwep, hwreq, 0);
- 		if (ret < 0)
--			goto done;
-+			return ret;
- 	}
- 
-+	return ret;
-+}
-+
-+static int add_td_to_list_sg(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq,
-+			  struct scatterlist *s, unsigned length)
-+{
-+	int i;
-+	u32 temp;
-+	struct td_node *lastnode, *node = kzalloc(sizeof(struct td_node),
-+						  GFP_ATOMIC);
-+
-+	if (node == NULL)
-+		return -ENOMEM;
-+
-+	node->ptr = dma_pool_zalloc(hwep->td_pool, GFP_ATOMIC, &node->dma);
-+	if (node->ptr == NULL) {
-+		kfree(node);
-+		return -ENOMEM;
-+	}
-+
-+	node->ptr->token = cpu_to_le32(length << __ffs(TD_TOTAL_BYTES));
-+	node->ptr->token &= cpu_to_le32(TD_TOTAL_BYTES);
-+	node->ptr->token |= cpu_to_le32(TD_STATUS_ACTIVE);
-+	if (hwep->type == USB_ENDPOINT_XFER_ISOC && hwep->dir == TX) {
-+		u32 mul = hwreq->req.length / hwep->ep.maxpacket;
-+
-+		if (hwreq->req.length == 0
-+				|| hwreq->req.length % hwep->ep.maxpacket)
-+			mul++;
-+		node->ptr->token |= cpu_to_le32(mul << __ffs(TD_MULTO));
-+	}
-+
-+	temp = (u32) (sg_dma_address(s) + hwreq->req.actual);
-+	for (i = 0; i < TD_PAGE_COUNT; i++)
-+		node->ptr->page[i] = cpu_to_le32(temp + i * CI_HDRC_PAGE_SIZE);
-+
-+	hwreq->req.actual += length;
-+
-+	if (!list_empty(&hwreq->tds)) {
-+		/* get the last entry */
-+		lastnode = list_entry(hwreq->tds.prev,
-+				struct td_node, td);
-+		lastnode->ptr->next = cpu_to_le32(node->dma);
-+	}
-+
-+	INIT_LIST_HEAD(&node->td);
-+	list_add_tail(&node->td, &hwreq->tds);
-+
-+	return 0;
-+}
-+
-+static int prepare_td_per_sg(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq,
-+		struct scatterlist *s)
-+{
-+	unsigned rest = sg_dma_len(s);
-+	int ret = 0;
-+
-+	hwreq->req.actual = 0;
-+	while (rest > 0) {
-+		unsigned count = min(rest,
-+				(unsigned)(TD_PAGE_COUNT * CI_HDRC_PAGE_SIZE));
-+
-+		ret = add_td_to_list_sg(hwep, hwreq, s, count);
-+		if (ret < 0)
-+			return ret;
-+
-+		rest -= count;
-+	}
-+
-+	return ret;
-+}
-+
-+static int prepare_td_for_sg(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq)
-+{
-+	struct usb_request *req = &hwreq->req;
-+	struct scatterlist *s = req->sg;
-+	int ret;
-+
-+	if (!s || req->zero || req->length == 0) {
-+		dev_err(hwep->ci->dev, "not supported operation for sg\n");
-+		return -EINVAL;
-+	}
-+
-+	do {
-+		if (sg_dma_address(s) % PAGE_SIZE) {
-+			dev_err(hwep->ci->dev, "non-page aligned sg\n");
-+			return -EINVAL;
-+		}
-+
-+		ret = prepare_td_per_sg(hwep, hwreq, s);
-+		if (ret)
-+			return ret;
-+	} while ((s = sg_next(s)));
-+
-+	return ret;
-+}
-+
-+/**
-+ * _hardware_enqueue: configures a request at hardware level
-+ * @hwep:   endpoint
-+ * @hwreq:  request
-+ *
-+ * This function returns an error code
-+ */
-+static int _hardware_enqueue(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq)
-+{
-+	struct ci_hdrc *ci = hwep->ci;
-+	int ret = 0;
-+	struct td_node *firstnode, *lastnode;
-+
-+	/* don't queue twice */
-+	if (hwreq->req.status == -EALREADY)
-+		return -EALREADY;
-+
-+	hwreq->req.status = -EALREADY;
-+
-+	ret = usb_gadget_map_request_by_dev(ci->dev->parent,
-+					    &hwreq->req, hwep->dir);
-+	if (ret)
-+		return ret;
-+
-+	if (hwreq->req.num_mapped_sgs)
-+		ret = prepare_td_for_sg(hwep, hwreq);
-+	else
-+		ret = prepare_td_for_non_sg(hwep, hwreq);
-+
-+	if (ret)
-+		return ret;
-+
- 	firstnode = list_first_entry(&hwreq->tds, struct td_node, td);
- 
- 	lastnode = list_entry(hwreq->tds.prev,
-@@ -1935,6 +2046,7 @@ static int udc_start(struct ci_hdrc *ci)
- 	ci->gadget.max_speed    = USB_SPEED_HIGH;
- 	ci->gadget.name         = ci->platdata->name;
- 	ci->gadget.otg_caps	= otg_caps;
-+	ci->gadget.sg_supported = 1;
- 
- 	if (ci->platdata->flags & CI_HDRC_REQUIRES_ALIGNED_DMA)
- 		ci->gadget.quirk_avoids_skb_reserve = 1;
--- 
-2.17.1
+%s/gdaget/gadget
 
+> blocks. This tagged address will cause access_ok() check always fail.
+> Which causes later calculation in iterate_iovec() turn zero.
+> Copyout() won't copy data to userspace since the length to be copied
+> "v.iov_len" will be zero. Finally leads ffs_copy_to_iter() always return
+> -EFAULT, causes adbd cannot open functionfs and send
+> FUNCTIONFS_CLEAR_HALT.
+>=20
+> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> ---
+> Changes for v2:
+>   - Fix build error for 32-bit load. An #if defined(CONFIG_ARM64) still n=
+eed
+>     for avoiding undeclared defines.
+>=20
+>  drivers/usb/gadget/function/f_fs.c |    5 +++++
+>  1 file changed, 5 insertions(+)
+>=20
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/func=
+tion/f_fs.c
+> index ce1d023..728c260 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -35,6 +35,7 @@
+>  #include <linux/mmu_context.h>
+>  #include <linux/poll.h>
+>  #include <linux/eventfd.h>
+> +#include <linux/thread_info.h>
+> =20
+>  #include "u_fs.h"
+>  #include "u_f.h"
+> @@ -826,6 +827,10 @@ static void ffs_user_copy_worker(struct work_struct =
+*work)
+>  	if (io_data->read && ret > 0) {
+>  		mm_segment_t oldfs =3D get_fs();
+> =20
+> +#if defined(CONFIG_ARM64)
+> +		if (IS_ENABLED(CONFIG_ARM64_TAGGED_ADDR_ABI))
+> +			set_thread_flag(TIF_TAGGED_ADDR);
+> +#endif
+>  		set_fs(USER_DS);
+>  		use_mm(io_data->mm);
+>  		ret =3D ffs_copy_to_iter(io_data->buf, ret, &io_data->data);
+> --=20
+> 1.7.9.5
+
+--=20
+
+Thanks,
+Peter Chen=
