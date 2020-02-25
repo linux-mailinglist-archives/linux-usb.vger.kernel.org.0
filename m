@@ -2,105 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8FF16BFBA
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2020 12:38:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D3C16BFFA
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2020 12:52:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730172AbgBYLi1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Feb 2020 06:38:27 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:40199 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730153AbgBYLi0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Feb 2020 06:38:26 -0500
-Received: by mail-wm1-f65.google.com with SMTP id t14so2791529wmi.5
-        for <linux-usb@vger.kernel.org>; Tue, 25 Feb 2020 03:38:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=vWNd4dO9rM0Zn6N45+ujni9L7yvp+AVlxZygsZuZiUk=;
-        b=e0xw1Pqeb1tdU2Rqpqe16SGK7lLTGnDR6ly2V1DQ1l6sUygGKmnIgwkEWEX0+aTNZQ
-         Q6qfr55Nc1fi9R2ab8zy1Kw0UB+GDYv/ufui4KBNJbO4XGu4b5uV2/Fh5GiymEgOMXyE
-         c3xc8W4oC3Zat68vWtvw/vfp2/6mAxEc34SGMtTqrSCgpXw5i7sWkkXiHfinfaX3hlK+
-         0QbWdOIGroVyF1xE06P8DT8pAkA/MgMzkIf7648HJzs+Feyw1FPv7/jLEfbV8ABNg4oA
-         DZRVmTNGuoSXNr3saqqnqFEBJj1HNaOtF80QqMYmJjf99hrTGLJalG3rKKZXhvTbXjQH
-         c7ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vWNd4dO9rM0Zn6N45+ujni9L7yvp+AVlxZygsZuZiUk=;
-        b=k9mzbehHZRN8g6k+iM2Ik0KpzwSs55ZkgFsfrEgJWHWYDc2d02xTowjuPZN3I4QDa4
-         JDj5LZ6OjBll/Q4777c8CRSE7i0c74/IWtE97q1L4PSeROJDPVs32XRtBOBJ7y2Jwe0G
-         U5tmrldwYAxgOC1/VGYSMhvNpiVY5mPePh5XQ0rnqEDut/o84O0xV66Aw4tYmRWYQM8h
-         sfMfEi4luL9SFsyswtEf0i29lOyjgUQSfAxpn7Sl5lAUb84xCDNklKuZNIhJfkFJ2qh/
-         XBh0NxBZZ02jFCY80DzhfWx2hirrE2Z4lMFDoQxSmOW4P8iXixsNpvGK8quTZe/h0VSK
-         Ntlg==
-X-Gm-Message-State: APjAAAV4/45/t9g3lO8gMjkFmbFZQeB++cBPDu7WFBt2AxAJyTKT3KWq
-        GvoX8mej57CI+G50BpzZ+R9MqFQOu9PDK7YzQ/qSdA==
-X-Google-Smtp-Source: APXvYqxJYb6X2aa8QKMNaCwxTid7DjpjeMWf5aBxYWn0sHuWlTKcUUjVqeGbRB80+4k5vma2rEZLtius03fqLOsmxBE=
-X-Received: by 2002:a1c:7919:: with SMTP id l25mr4739099wme.135.1582630703752;
- Tue, 25 Feb 2020 03:38:23 -0800 (PST)
+        id S1730152AbgBYLwr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Feb 2020 06:52:47 -0500
+Received: from foss.arm.com ([217.140.110.172]:49668 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729976AbgBYLwr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 25 Feb 2020 06:52:47 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2AF2A1063;
+        Tue, 25 Feb 2020 03:52:46 -0800 (PST)
+Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.71])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E589E3F6CF;
+        Tue, 25 Feb 2020 03:52:43 -0800 (PST)
+Date:   Tue, 25 Feb 2020 11:52:41 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Macpaul Lin <macpaul.lin@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Shen Jing <jingx.shen@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Vincent Pelletier <plr.vincent@gmail.com>,
+        Jerry Zhang <zhangjerry@google.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        CC Hwang <cc.hwang@mediatek.com>,
+        Loda Chou <loda.chou@mediatek.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, stable@vger.kernel.org,
+        andreyknvl@google.com
+Subject: Re: [PATCH v3] usb: gadget: f_fs: try to fix AIO issue under ARM 64
+ bit TAGGED mode
+Message-ID: <20200225115241.GB2410978@arrakis.emea.arm.com>
+References: <1582472947-22471-1-git-send-email-macpaul.lin@mediatek.com>
+ <1582627315-21123-1-git-send-email-macpaul.lin@mediatek.com>
 MIME-Version: 1.0
-References: <c753b529bdcdfdd40a3cf69121527ec8c63775cb.1581505183.git.michal.simek@xilinx.com>
-In-Reply-To: <c753b529bdcdfdd40a3cf69121527ec8c63775cb.1581505183.git.michal.simek@xilinx.com>
-From:   Michal Simek <monstr@monstr.eu>
-Date:   Tue, 25 Feb 2020 12:38:12 +0100
-Message-ID: <CAHTX3dJN5No9wUSDnmcMQXsGRKXKcLrDx_OhP-MF2yL+dXFu7w@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: udc-xilinx: Fix xudc_stop() kernel-doc format
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Michal Simek <monstr@monstr.eu>, git <git@xilinx.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Felipe Balbi <balbi@ti.com>, Peter Chen <peter.chen@freescale.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-arm <linux-arm-kernel@lists.infradead.org>,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1582627315-21123-1-git-send-email-macpaul.lin@mediatek.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Tue, Feb 25, 2020 at 06:41:55PM +0800, Macpaul Lin wrote:
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index ce1d023..728c260 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -35,6 +35,7 @@
+>  #include <linux/mmu_context.h>
+>  #include <linux/poll.h>
+>  #include <linux/eventfd.h>
+> +#include <linux/thread_info.h>
+>  
+>  #include "u_fs.h"
+>  #include "u_f.h"
+> @@ -826,6 +827,10 @@ static void ffs_user_copy_worker(struct work_struct *work)
+>  	if (io_data->read && ret > 0) {
+>  		mm_segment_t oldfs = get_fs();
+>  
+> +#if defined(CONFIG_ARM64)
+> +		if (IS_ENABLED(CONFIG_ARM64_TAGGED_ADDR_ABI))
+> +			set_thread_flag(TIF_TAGGED_ADDR);
+> +#endif
+>  		set_fs(USER_DS);
+>  		use_mm(io_data->mm);
+>  		ret = ffs_copy_to_iter(io_data->buf, ret, &io_data->data);
 
-st 12. 2. 2020 v 11:59 odes=C3=ADlatel Michal Simek <michal.simek@xilinx.co=
-m> napsal:
->
-> The patch removes "driver" parameter which has been removed without
-> updating kernel-doc format.
->
-> Fixes: 22835b807e7c ("usb: gadget: remove unnecessary 'driver' argument")
-> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
-> ---
->
->  drivers/usb/gadget/udc/udc-xilinx.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc=
-/udc-xilinx.c
-> index 29d8e5f8bb58..b1cfc8279c3d 100644
-> --- a/drivers/usb/gadget/udc/udc-xilinx.c
-> +++ b/drivers/usb/gadget/udc/udc-xilinx.c
-> @@ -1399,7 +1399,6 @@ static int xudc_start(struct usb_gadget *gadget,
->  /**
->   * xudc_stop - stops the device.
->   * @gadget: pointer to the usb gadget structure
-> - * @driver: pointer to usb gadget driver structure
->   *
->   * Return: zero always
->   */
-> --
-> 2.25.0
->
+I really don't think that's the correct fix. The TIF_TAGGED_ADDR is a
+per-thread property and not really compatible with use_mm(). We've had
+tagged pointers in arm64 user-space since day 0 and access_ok() would
+have prevented them, so this config is not something new. For some
+reason, adb now passes them to the kernel (presumably because user-space
+makes more use of them). If you have strong reasons not to fix it in
+adb, the next best thing may be to untag the addresses in the usb gadget
+driver.
 
-Can someone take a look at this patch?
-
-Thanks,
-Michal
-
---=20
-Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
-w: www.monstr.eu p: +42-0-721842854
-Maintainer of Linux kernel - Xilinx Microblaze
-Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
-U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
+-- 
+Catalin
