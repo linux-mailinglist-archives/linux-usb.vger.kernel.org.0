@@ -2,57 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B79E170150
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2020 15:34:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 897A4170167
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2020 15:39:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727584AbgBZOez (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Feb 2020 09:34:55 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:53588 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727426AbgBZOez (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Feb 2020 09:34:55 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: padovan)
-        with ESMTPSA id 1DCC728F756
-From:   Gustavo Padovan <gustavo.padovan@collabora.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, Dan Lazewatsky <dlaz@chromium.org>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>
-Subject: [PATCH] usb: quirks: add NO_LPM quirk for Logitech Screen Share
-Date:   Wed, 26 Feb 2020 14:34:38 +0000
-Message-Id: <20200226143438.1445-1-gustavo.padovan@collabora.com>
-X-Mailer: git-send-email 2.11.0
+        id S1727741AbgBZOjp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Feb 2020 09:39:45 -0500
+Received: from mx2.suse.de ([195.135.220.15]:34780 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727362AbgBZOjo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 26 Feb 2020 09:39:44 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 65F45AC69;
+        Wed, 26 Feb 2020 14:39:43 +0000 (UTC)
+Message-ID: <1582727977.17520.30.camel@suse.com>
+Subject: Re: [PATCH v2 0/8] Add MA USB Host driver
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Vladimir Stankovic <vladimir.stankovic@displaylink.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        mausb-host-devel <mausb-host-devel@displaylink.com>
+Date:   Wed, 26 Feb 2020 15:39:37 +0100
+In-Reply-To: <013d6b8e-3e61-b41d-614a-8c115f2e2c9f@displaylink.com>
+References: <013d6b8e-3e61-b41d-614a-8c115f2e2c9f@displaylink.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Dan Lazewatsky <dlaz@chromium.org>
+Am Mittwoch, den 26.02.2020, 09:57 +0000 schrieb Vladimir Stankovic:
+> MA USB Host driver provides USB connectivity over an available
+> network, allowing host device to access remote USB devices attached
+> to one or more MA USB devices (accessible via network).
 
-LPM on the device appears to cause xHCI host controllers to claim
-that there isn't enough bandwidth to support additional devices.
+Hi,
 
-Signed-off-by: Dan Lazewatsky <dlaz@chromium.org>
-Signed-off-by: Gustavo Padovan <gustavo.padovan@collabora.com>
----
- drivers/usb/core/quirks.c | 3 +++
- 1 file changed, 3 insertions(+)
+you are limiting this to IPv4. IIRC MA-USB allows for direct use
+of WiFi. Do you see a way of adding this in due course?
 
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index 2b24336a72e5..2dac3e7cdd97 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -231,6 +231,9 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	/* Logitech PTZ Pro Camera */
- 	{ USB_DEVICE(0x046d, 0x0853), .driver_info = USB_QUIRK_DELAY_INIT },
- 
-+	/* Logitech Screen Share */
-+	{ USB_DEVICE(0x046d, 0x086c), .driver_info = USB_QUIRK_NO_LPM },
-+
- 	/* Logitech Quickcam Fusion */
- 	{ USB_DEVICE(0x046d, 0x08c1), .driver_info = USB_QUIRK_RESET_RESUME },
- 
--- 
-2.11.0
+	Regards
+		Oliver
 
