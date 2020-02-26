@@ -2,113 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5448116FABB
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2020 10:29:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3D116FB65
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2020 10:57:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727520AbgBZJ3q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Feb 2020 04:29:46 -0500
-Received: from mga17.intel.com ([192.55.52.151]:40512 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726679AbgBZJ3p (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 26 Feb 2020 04:29:45 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 01:29:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,487,1574150400"; 
-   d="scan'208";a="226659480"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga007.jf.intel.com with ESMTP; 26 Feb 2020 01:29:43 -0800
-Subject: Re: [PATCH] usb: host: xhci-tegra: Tegra186/Tegra194 LPM
-To:     JC Kuo <jckuo@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     gregkh@linuxfoundation.org, jonathanh@nvidia.com,
-        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
-        nkristam@nvidia.com
-References: <20200224062145.25785-1-jckuo@nvidia.com>
- <20200224125100.GA2108060@ulmo>
- <223f5f09-781a-825d-e75e-3b878acec27d@nvidia.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <6c93af2b-5a4d-a3ad-07f4-f5c72f569752@linux.intel.com>
-Date:   Wed, 26 Feb 2020 11:32:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <223f5f09-781a-825d-e75e-3b878acec27d@nvidia.com>
-Content-Type: text/plain; charset=utf-8
+        id S1727781AbgBZJ5c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Feb 2020 04:57:32 -0500
+Received: from eu-smtp-delivery-167.mimecast.com ([207.82.80.167]:26725 "EHLO
+        eu-smtp-delivery-167.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727097AbgBZJ5b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Feb 2020 04:57:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=displaylink.com;
+        s=mimecast20151025; t=1582711048;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=GMAeEUisq/fTEGN18JFOBILvZMEP1SjsMBORCeLkH6M=;
+        b=BA2vK/9vnJn+oU1vN4LmUDIzH+zWA4F2MC2AErllJmoLou6Bpu3s7MowP93okGF0sIlayh
+        Rxgtv2v6Ff3f09uJB6Ffp7SdEnQFt718XlaWMD3bJEOp9bg+89Ri53psB0b78LYEeTikNb
+        qmoaIS0XvMAwkhzC5Z6DCBu27wWNZpI=
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com
+ (mail-db3eur04lp2054.outbound.protection.outlook.com [104.47.12.54]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-26-m23DxplwOT67jpSSWbFKPw-1; Wed, 26 Feb 2020 09:57:26 +0000
+X-MC-Unique: m23DxplwOT67jpSSWbFKPw-1
+Received: from AM0PR10MB1954.EURPRD10.PROD.OUTLOOK.COM (52.133.63.154) by
+ AM0PR10MB2676.EURPRD10.PROD.OUTLOOK.COM (20.178.119.88) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2750.21; Wed, 26 Feb 2020 09:57:24 +0000
+Received: from AM0PR10MB1954.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::d07a:2e67:4515:dba6]) by AM0PR10MB1954.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::d07a:2e67:4515:dba6%3]) with mapi id 15.20.2750.021; Wed, 26 Feb 2020
+ 09:57:24 +0000
+Received: from [172.17.183.132] (80.93.235.40) by VI1PR07CA0255.eurprd07.prod.outlook.com (2603:10a6:803:b4::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2772.12 via Frontend Transport; Wed, 26 Feb 2020 09:57:23 +0000
+From:   Vladimir Stankovic <vladimir.stankovic@displaylink.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        mausb-host-devel <mausb-host-devel@displaylink.com>
+Subject: [PATCH v2 0/8] Add MA USB Host driver
+Thread-Topic: [PATCH v2 0/8] Add MA USB Host driver
+Thread-Index: AQHV7IskUwNNQv/Aj0qPQBxaE+JY1Q==
+Date:   Wed, 26 Feb 2020 09:57:24 +0000
+Message-ID: <013d6b8e-3e61-b41d-614a-8c115f2e2c9f@displaylink.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: VI1PR07CA0255.eurprd07.prod.outlook.com
+ (2603:10a6:803:b4::22) To AM0PR10MB1954.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:40::26)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [80.93.235.40]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1477a866-d3b9-45c9-a7ae-08d7baa2474f
+x-ms-traffictypediagnostic: AM0PR10MB2676:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM0PR10MB2676ABF587540B5C3CADE75391EA0@AM0PR10MB2676.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 0325F6C77B
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(376002)(396003)(366004)(39840400004)(346002)(189003)(199004)(81166006)(8936002)(44832011)(8676002)(81156014)(956004)(36756003)(478600001)(71200400001)(2906002)(5660300002)(16576012)(316002)(54906003)(86362001)(66946007)(26005)(64756008)(66446008)(2616005)(31686004)(4326008)(6916009)(66476007)(66556008)(16526019)(52116002)(107886003)(31696002)(186003)(6486002);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR10MB2676;H:AM0PR10MB1954.EURPRD10.PROD.OUTLOOK.COM;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: cZtMWrSIxlP8DMbpOND9uO7kgYk9GWVIDyK4QQEsRBDlqdOG/p3CW67ERyn1tx2YgpWdstyVOASJNsqA+T8b26KBLiYQaXbCXJPIMy2D7+IvdEqJtyoJxljwHiybmedn3yUb5MYOrWnbn8bL8KbQNb4ve8ERqyi8Cm3jIvZlOv3j2Gucws9woP7X5sfuol5ZC2zwhRW+qsE2kuPz5uUdQ8GYypSjpk5V/ZWYUcABzuv3YYNyh8zU4sY0cY/kdZvh70O9YhGxkDkAoDYc4nPOyRXYLLdtmHSSYjs51vFuwPg3cTbTQRSe5tzCXLalW4cfDKbkl+kStjG/61uqMvmmTKI/IqZUOUwDEPRu1Jpry+ByFjF7U4DI9fGLRjfdIC2JfMhzFHQeOS5MrpdQj1pd8hM2Ovh+CaB3jOJXtWq5d6/AFlaLZT70PO6tRXekChl7
+x-ms-exchange-antispam-messagedata: pYG6m5x+KtsU4r15mMZI1dJv+vPLZCELErVh2d7PYo/shtihhSBMVlciXi6l/LD8KT6FYydULhEJeL2W/ROcYRrAPGLA0I62xuXv3H8U5GgsV0HIIrUGY9/yqGaBhdDe5p/rJGEEJeCpXpY5J6NyeA==
+Content-ID: <333849C2BFF7A14AADF543C1FE7B9EAD@EURPRD10.PROD.OUTLOOK.COM>
+MIME-Version: 1.0
+X-OriginatorOrg: displaylink.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1477a866-d3b9-45c9-a7ae-08d7baa2474f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Feb 2020 09:57:24.1654
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a4bda75a-b444-4312-9c90-44a7c4b2c91a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lWPhAtYqFGIRjvYHgCWohTF6cCFM8iZGPiwpYuuzXZN2hDz0Vf5+SWA1OEt/wNjdKlACRBmyiggFMN6J/S8vYV4UdKdZNEG44Ppi/inCW7I3+RWO503/dzuIXvP1jFPX
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB2676
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: displaylink.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 26.2.2020 10.12, JC Kuo wrote:
-> Hi Thierry,
-> Yes, it can be verified with a LPM capable device. For example, a VIA USB 3.0
-> hub is connected to Jetson-Xavier. "lsusb -v" output [1] shows the device
-> supports LPM and the host has enabled U1/U2 states for the device. If host LPM
-> is disabled, there will be no "U1 Enabled" and "U2 Enabled" strings in "Device
-> Status" section.
-> 
-> To check LPM operation, disconnect all USB 3.0 devices from the hub and disable
-> runtime PM for the super-speed portion of the hub, so that it won't be
-> auto-suspended.
-> root@tegra-ubuntu:~# echo on > /sys/bus/usb/devices/2-4/power/control
-> 
-> Since there is no data transaction for the hub, link will enter U2 soon. This
-> can be checked by reading XHCI.PORTSC register. In below, PLS (Port Link State)
-> field is U2.
-> root@tegra-ubuntu:~# devmem 0x3610450
-> 0x00001243
+MA USB Host driver provides USB connectivity over an available
+network, allowing host device to access remote USB devices attached
+to one or more MA USB devices (accessible via network).
 
-A more human friendly way to read portsc registers:
+This driver has been developed to enable the host to communicate
+with DisplayLink products supporting MA USB protocol (MA USB device,
+in terms of MA USB Specification).
 
-# cat /sys/kernel/debug/usb/xhci/0000\:00\:14.0/ports/port02/portsc 
-Powered Connected Enabled Link:U0 PortSpeed:3 Change: Wake: 
+MA USB protocol used by MA USB Host driver has been implemented in
+accordance with MA USB Specification Release 1.0b.
 
--Mathias
+This driver depends on the functions provided by DisplayLink's
+user-space driver.
+
+v2:
+- Fixed licensing info in headers
+- Reorganized code to lower file count
+- Patch has been split into 8 smaller patches
+
+Vladimir Stankovic (8):
+   usb: Add MA-USB Host kernel module
+   usb: mausb_host: Add link layer implementation
+   usb: mausb_host: HCD initialization
+   usb: mausb_host: Implement initial hub handlers
+   usb: mausb_host: Introduce PAL processing
+   usb: mausb_host: Add logic for PAL-to-PAL communication
+   usb: mausb_host: MA-USB PAL events processing
+   usb: mausb_host: Process MA-USB data packets
+
+  MAINTAINERS                                  |    7 +
+  drivers/usb/Kconfig                          |    2 +
+  drivers/usb/Makefile                         |    2 +
+  drivers/usb/mausb_host/Kconfig               |   14 +
+  drivers/usb/mausb_host/Makefile              |   18 +
+  drivers/usb/mausb_host/hcd.c                 | 1897 ++++++++++++++++
+  drivers/usb/mausb_host/hcd.h                 |  162 ++
+  drivers/usb/mausb_host/hpal.c                | 2082 ++++++++++++++++++
+  drivers/usb/mausb_host/hpal.h                |  339 +++
+  drivers/usb/mausb_host/hpal_data.c           |  719 ++++++
+  drivers/usb/mausb_host/hpal_data.h           |   34 +
+  drivers/usb/mausb_host/hpal_events.c         |  611 +++++
+  drivers/usb/mausb_host/hpal_events.h         |   85 +
+  drivers/usb/mausb_host/ip_link.c             |  346 +++
+  drivers/usb/mausb_host/ip_link.h             |   83 +
+  drivers/usb/mausb_host/ma_usb.h              |  869 ++++++++
+  drivers/usb/mausb_host/mausb_address.h       |   34 +
+  drivers/usb/mausb_host/mausb_driver_status.h |   17 +
+  drivers/usb/mausb_host/mausb_event.h         |  224 ++
+  drivers/usb/mausb_host/mausb_host.c          |  213 ++
+  drivers/usb/mausb_host/utils.c               |  360 +++
+  drivers/usb/mausb_host/utils.h               |   45 +
+  22 files changed, 8163 insertions(+)
+  create mode 100644 drivers/usb/mausb_host/Kconfig
+  create mode 100644 drivers/usb/mausb_host/Makefile
+  create mode 100644 drivers/usb/mausb_host/hcd.c
+  create mode 100644 drivers/usb/mausb_host/hcd.h
+  create mode 100644 drivers/usb/mausb_host/hpal.c
+  create mode 100644 drivers/usb/mausb_host/hpal.h
+  create mode 100644 drivers/usb/mausb_host/hpal_data.c
+  create mode 100644 drivers/usb/mausb_host/hpal_data.h
+  create mode 100644 drivers/usb/mausb_host/hpal_events.c
+  create mode 100644 drivers/usb/mausb_host/hpal_events.h
+  create mode 100644 drivers/usb/mausb_host/ip_link.c
+  create mode 100644 drivers/usb/mausb_host/ip_link.h
+  create mode 100644 drivers/usb/mausb_host/ma_usb.h
+  create mode 100644 drivers/usb/mausb_host/mausb_address.h
+  create mode 100644 drivers/usb/mausb_host/mausb_driver_status.h
+  create mode 100644 drivers/usb/mausb_host/mausb_event.h
+  create mode 100644 drivers/usb/mausb_host/mausb_host.c
+  create mode 100644 drivers/usb/mausb_host/utils.c
+  create mode 100644 drivers/usb/mausb_host/utils.h
+
+--=20
+2.17.1
+
