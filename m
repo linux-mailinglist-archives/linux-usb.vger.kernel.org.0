@@ -2,85 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF01916F0A8
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Feb 2020 21:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B38416F7E7
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2020 07:23:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729501AbgBYUyV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Feb 2020 15:54:21 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:39630 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728162AbgBYUyV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Feb 2020 15:54:21 -0500
-Received: (qmail 6720 invoked by uid 2102); 25 Feb 2020 15:54:20 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 25 Feb 2020 15:54:20 -0500
-Date:   Tue, 25 Feb 2020 15:54:20 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>
-cc:     linux-usb@vger.kernel.org, <linux-renesas-soc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "Lee, Chiasheng" <chiasheng.lee@intel.com>,
-        Mathieu Malaterre <malat@debian.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Hardik Gajjar <hgajjar@de.adit-jv.com>,
-        <scan-admin@coverity.com>, Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH] usb: hub: Fix unhandled return value of usb_autopm_get_interface()
-In-Reply-To: <20200225202223.GA9154@lxhi-065.adit-jv.com>
-Message-ID: <Pine.LNX.4.44L0.2002251553030.1485-100000@iolanthe.rowland.org>
+        id S1727242AbgBZGPj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Feb 2020 01:15:39 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:34390 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726396AbgBZGPj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 26 Feb 2020 01:15:39 -0500
+Received: from linux.localdomain (unknown [123.138.236.242])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxn2sADVZeuNkTAA--.2S2;
+        Wed, 26 Feb 2020 14:15:29 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH 1/2] USB: core: Fix build warning in usb_get_configuration()
+Date:   Wed, 26 Feb 2020 14:15:22 +0800
+Message-Id: <1582697723-7274-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9Dxn2sADVZeuNkTAA--.2S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKry7CFWxKr1ruFyxXF4DXFb_yoWfuFg_CF
+        yjqF17CryjkFyj9r18ua9YkFWFk3W29r18XFs0qry5J3W2vw1xZw4kZFy7J3WrWa1UArsx
+        WrW0yr1kW3W0gjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r47
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUj7DG5UUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 25 Feb 2020, Eugeniu Rosca wrote:
+There is no functional issue, just fix the following build warning:
 
-> Hi Alan,
-> 
-> On Tue, Feb 25, 2020 at 02:39:23PM -0500, Alan Stern wrote:
-> > On Tue, 25 Feb 2020, Eugeniu Rosca wrote:
-> > > [1] (v5.6-rc3) git grep -En "[^=]\s+usb_autopm_get_interface\("
-> > >   drivers/input/touchscreen/usbtouchscreen.c:1788:  usb_autopm_get_interface(intf);
-> > >   drivers/media/usb/stkwebcam/stk-webcam.c:628:     usb_autopm_get_interface(dev->interface);
-> > >   drivers/net/usb/hso.c:1308:                       usb_autopm_get_interface(serial->parent->interface);
-> > >   drivers/net/usb/r8152.c:5231:                     usb_autopm_get_interface(tp->intf);
-> > >   sound/usb/usx2y/us122l.c:192:                     usb_autopm_get_interface(iface);
-> > 
-> > Your regular expression isn't right because it doesn't match lines
-> > where the usb_autopm_get_interface() is preceded only by one whitespace
-> > character (i.e., a tab).  It also will match lines where there are two
-> > space characters between the = sign and the function name.  I think
-> > what you want is more like "(^|[^=[:space:]])\s*" at the start of the
-> > RE.
-> 
-> Agreed. My version filters out some true positives.
-> 
-> > 
-> > A revised search finds line 997 in drivers/usb/core/hub.c and lines
-> > 216, 269 in drivers/usb/core/port.c.  (I didn't try looking in any
-> > other directories.)  AFAICT all three of these should check the return
-> > value, although a error message in the kernel log probably isn't
-> > needed.
-> > 
-> > Do you want to fix those instances up also, maybe merging them in with
-> > the existing patch?
-> 
-> I wonder if squashing all these fixes into one patch is the best option.
-> 
-> There are three commits fixed by the proposed changes in usb core:
->  - v5.6-rc3 commit 1208f9e1d758c9 ("USB: hub: Fix the broken detection of USB3 device in SMSC hub")
->  - v3.9-rc1 commit 971fcd492cebf5 ("usb: add runtime pm support for usb port device")
->  - v2.6.33-rc1 commit 253e05724f9230 ("USB: add a "remove hardware" sysfs attribute")
-> 
-> I assume a single fix will create some pain when applying it to the
-> stable branches. Do you have any preference/inputs about that?
+  CC      drivers/usb/core/config.o
+drivers/usb/core/config.c: In function ‘usb_get_configuration’:
+drivers/usb/core/config.c:868:6: warning: ‘result’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+  int result;
+      ^
 
-If you prefer to split this up into multiple patches, that's fine with 
-me.
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ drivers/usb/core/config.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Alan Stern
+diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+index b7918f6..bb63ee0 100644
+--- a/drivers/usb/core/config.c
++++ b/drivers/usb/core/config.c
+@@ -865,7 +865,7 @@ int usb_get_configuration(struct usb_device *dev)
+ 	unsigned int cfgno, length;
+ 	unsigned char *bigbuffer;
+ 	struct usb_config_descriptor *desc;
+-	int result;
++	int result = 0;
+ 
+ 	if (ncfg > USB_MAXCONFIG) {
+ 		dev_warn(ddev, "too many configurations: %d, "
+-- 
+2.1.0
 
