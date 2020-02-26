@@ -2,94 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C5216FBC1
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2020 11:12:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E72216FE95
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2020 13:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727109AbgBZKMQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Feb 2020 05:12:16 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:42634 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726329AbgBZKMQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Feb 2020 05:12:16 -0500
-Received: by mail-lj1-f195.google.com with SMTP id d10so2386289ljl.9;
-        Wed, 26 Feb 2020 02:12:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lgtf/Yh5fw23zpaM+oJehFHDgy9iRIzBJZORq8BS8yI=;
-        b=PLRgKZUV/08PUhQyG4rmFZIssdWccwYnZ668dHkt1UQesKfWojVohKUN7vlMeyGHDF
-         VB4jx27JvV6fvheOUOXgq4fq1B9jA8dGj4sfpqciAVe6+0Ikx5ZrS8kFT5wb2Opq1cbD
-         6Bh/Wge5k6Rb2EIQEXBg5wrw/Nmx8cXW1Jojkt91iCu8Y8nsS0nTp/Hp8HBLMfO24cb/
-         68Pf/VRYu7iy4k7fcrhnNm429obDygBR/xrJAMYgNafQVetPEp+bVBpG2L2g5AYEKsNA
-         y/psiR4L6t4pPyRdUhF0zGlTKsr83PWEP8TQn2hqXmqUkXhA1H0Ry2xg0zBs6Gc4RWxw
-         8KXQ==
-X-Gm-Message-State: APjAAAXIhuTHc0PQXgsbXSj4w/LGB+pd9tmOKkOBZjc8x3AOVSCt3Bb7
-        EtbaZWemcK28RvLhzXNNjLOVRauL
-X-Google-Smtp-Source: APXvYqwI2EXm7w460uhNh1RP7Gen+GVUesLpFxmO5pbpK3KyTAxQW9Xcok2OwdQ9D4n0ksEEL2GhRg==
-X-Received: by 2002:a2e:6c06:: with SMTP id h6mr2568866ljc.246.1582711934119;
-        Wed, 26 Feb 2020 02:12:14 -0800 (PST)
-Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
-        by smtp.gmail.com with ESMTPSA id k1sm797019lfg.20.2020.02.26.02.12.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2020 02:12:13 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@kernel.org>)
-        id 1j6tfo-00050N-Tv; Wed, 26 Feb 2020 11:12:12 +0100
-Date:   Wed, 26 Feb 2020 11:12:12 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-Subject: Re: [PATCH 2/2] USB: core: Fix potential memory leak in
- usb_get_configuration()
-Message-ID: <20200226101212.GX32540@localhost>
-References: <1582697723-7274-1-git-send-email-yangtiezhu@loongson.cn>
- <1582697723-7274-2-git-send-email-yangtiezhu@loongson.cn>
- <20200226080906.GV32540@localhost>
- <c7dfaa07-dd34-600d-2a69-95a65f966dfc@loongson.cn>
+        id S1726926AbgBZMCP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Feb 2020 07:02:15 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:6851 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726272AbgBZMCP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Feb 2020 07:02:15 -0500
+X-UUID: 618771a74bec4bba8d11e5bc7ea6f553-20200226
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=HeqaTDjIL0PTx6tfNZRsJGOB5wSUUqHsQNV/Ncz2fJc=;
+        b=ENbT1nfHLPmaa1KnVt+jRf/tknKxc2p2KiK+s6CU1rwJAp+Lk3CSRMzwDpCHeadWl1fqHuy8hhUWvULtNVcLJGPLWkNfldClAau63AQr7JW2Wod7LrFdac8b6i7YmPCYva695mdKqQLe76+fThWjqwBTnhRst8AF2MHGbGBUrjI=;
+X-UUID: 618771a74bec4bba8d11e5bc7ea6f553-20200226
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 804146539; Wed, 26 Feb 2020 20:02:07 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Wed, 26 Feb 2020 19:57:57 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 26 Feb 2020 20:01:57 +0800
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Shen Jing <jingx.shen@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Vincent Pelletier <plr.vincent@gmail.com>,
+        Jerry Zhang <zhangjerry@google.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        CC Hwang <cc.hwang@mediatek.com>,
+        Loda Chou <loda.chou@mediatek.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, <stable@vger.kernel.org>,
+        <andreyknvl@google.com>
+CC:     Macpaul Lin <macpaul.lin@mediatek.com>,
+        Peter Chen <peter.chen@nxp.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Miles Chen <miles.chen@mediatek.com>
+Subject: [PATCH v4] usb: gadget: f_fs: try to fix AIO issue under ARM 64 bit TAGGED mode
+Date:   Wed, 26 Feb 2020 20:01:52 +0800
+Message-ID: <1582718512-28923-1-git-send-email-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <1582627315-21123-1-git-send-email-macpaul.lin@mediatek.com>
+References: <1582627315-21123-1-git-send-email-macpaul.lin@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c7dfaa07-dd34-600d-2a69-95a65f966dfc@loongson.cn>
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 272F8CE54AD6E67D73DACACA69671537612B9D56AD5648D8354972DCC44EFC2F2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 26, 2020 at 04:42:55PM +0800, Tiezhu Yang wrote:
-> On 02/26/2020 04:09 PM, Johan Hovold wrote:
-> > On Wed, Feb 26, 2020 at 02:15:23PM +0800, Tiezhu Yang wrote:
-> >> Make sure to free all the allocated memory before exiting from the function
-> >> usb_get_configuration() when an error is encountered.
-> > There's no leak in this function as far as I can tell. Any allocated
-> > memory is released in usb_destroy_configuration() when the last
-> > reference to the struct usb_device is dropped.
-> 
-> Yes, you are right, the allocated memory in usb_get_configuration()
-> will be released in usb_destroy_configuration().
-> 
-> By the way, is it better to release the allocated memory as early as 
-> possible
-> in usb_get_configuration()? Just like this:
-> 
-> diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
-> index bb63ee0..dd4ebeb 100644
-> --- a/drivers/usb/core/config.c
-> +++ b/drivers/usb/core/config.c
-> @@ -885,12 +885,17 @@ int usb_get_configuration(struct usb_device *dev)
-> 
->          length = ncfg * sizeof(char *);
->          dev->rawdescriptors = kzalloc(length, GFP_KERNEL);
-> -       if (!dev->rawdescriptors)
-> +       if (!dev->rawdescriptors) {
-> +               kfree(dev->config);
->                  return -ENOMEM;
-> +       }
+VGhpcyBpc3N1ZSB3YXMgZm91bmQgd2hlbiBhZGJkIHRyeWluZyB0byBvcGVuIGZ1bmN0aW9uZnMg
+d2l0aCBBSU8gbW9kZS4NClVzdWFsbHksIHdlIG5lZWQgdG8gc2V0ICJzZXRwcm9wIHN5cy51c2Iu
+ZmZzLmFpb19jb21wYXQgMCIgdG8gZW5hYmxlDQphZGJkIHdpdGggQUlPIG1vZGUgb24gQW5kcm9p
+ZC4NCg0KV2hlbiBhZGJkIGlzIG9wZW5pbmcgZnVuY3Rpb25mcywgaXQgd2lsbCB0cnkgdG8gcmVh
+ZCAyNCBieXRlcyBhdCB0aGUNCmZpcnN0IHJlYWQgSS9PIGNvbnRyb2wuIElmIHRoaXMgcmVhZGlu
+ZyBoYXMgYmVlbiBmYWlsZWQsIGFkYmQgd2lsbA0KdHJ5IHRvIHNlbmQgRlVOQ1RJT05GU19DTEVB
+Ul9IQUxUIHRvIGZ1bmN0aW9uZnMuIFdoZW4gYWRiZCBpcyBpbiBBSU8NCm1vZGUsIGZ1bmN0aW9u
+ZnMgd2lsbCBiZSBhY3RlZCB3aXRoIGFzeW5jcm9uaXplZCBJL08gcGF0aC4gQWZ0ZXIgdGhlDQpz
+dWNjZXNzZnVsIHJlYWQgdHJhbnNmZXIgaGFzIGJlZW4gY29tcGxldGVkIGJ5IGdhZGdldCBoYXJk
+d2FyZSwgdGhlDQpmb2xsb3dpbmcgc2VyaWVzIG9mIGZ1bmN0aW9ucyB3aWxsIGJlIGNhbGxlZC4N
+CiAgZmZzX2VwZmlsZV9hc3luY19pb19jb21wbGV0ZSgpIC0+IGZmc191c2VyX2NvcHlfd29ya2Vy
+KCkgLT4NCiAgICBjb3B5X3RvX2l0ZXIoKSAtPiBfY29weV90b19pdGVyKCkgLT4gY29weW91dCgp
+IC0+DQogICAgaXRlcmF0ZV9hbmRfYWR2YW5jZSgpIC0+IGl0ZXJhdGVfaW92ZWMoKQ0KDQpBZGRp
+bmcgZGVidWcgdHJhY2UgdG8gdGhlc2UgZnVuY3Rpb25zLCBpdCBoYXMgYmVlbiBmb3VuZCB0aGF0
+IGluDQpjb3B5b3V0KCksIGFjY2Vzc19vaygpIHdpbGwgY2hlY2sgaWYgdGhlIHVzZXIgc3BhY2Ug
+YWRkcmVzcyBpcyB2YWxpZA0KdG8gd3JpdGUuIEhvd2V2ZXIgaWYgQ09ORklHX0FSTTY0X1RBR0dF
+RF9BRERSX0FCSSBpcyBlbmFibGVkLCBhZGJkDQphbHdheXMgcGFzc2VzIHVzZXIgc3BhY2UgYWRk
+cmVzcyBzdGFydCB3aXRoICIweDNDIiB0byBnYWRnZXQncyBBSU8NCmJsb2Nrcy4gVGhpcyB0YWdn
+ZWQgYWRkcmVzcyB3aWxsIGNhdXNlIGFjY2Vzc19vaygpIGNoZWNrIGFsd2F5cyBmYWlsLg0KV2hp
+Y2ggY2F1c2VzIGxhdGVyIGNhbGN1bGF0aW9uIGluIGl0ZXJhdGVfaW92ZWMoKSB0dXJuIHplcm8u
+DQpDb3B5b3V0KCkgd29uJ3QgY29weSBkYXRhIHRvIHVzZXIgc3BhY2Ugc2luY2UgdGhlIGxlbmd0
+aCB0byBiZSBjb3BpZWQNCiJ2Lmlvdl9sZW4iIHdpbGwgYmUgemVyby4gRmluYWxseSBsZWFkcyBm
+ZnNfY29weV90b19pdGVyKCkgYWx3YXlzIHJldHVybg0KLUVGQVVMVCwgY2F1c2VzIGFkYmQgY2Fu
+bm90IG9wZW4gZnVuY3Rpb25mcyBhbmQgc2VuZA0KRlVOQ1RJT05GU19DTEVBUl9IQUxULg0KDQpT
+aWduZWQtb2ZmLWJ5OiBNYWNwYXVsIExpbiA8bWFjcGF1bC5saW5AbWVkaWF0ZWsuY29tPg0KQ2M6
+IFBldGVyIENoZW4gPHBldGVyLmNoZW5AbnhwLmNvbT4NCkNjOiBDYXRhbGluIE1hcmluYXMgPGNh
+dGFsaW4ubWFyaW5hc0Bhcm0uY29tPg0KQ2M6IE1pbGVzIENoZW4gPG1pbGVzLmNoZW5AbWVkaWF0
+ZWsuY29tPg0KLS0tDQpDaGFuZ2VzIGZvciB2NDoNCiAgLSBBYmFuZG9uIHNvbHV0aW9uIHYzIGJ5
+IGFkZGluZyAiVElGX1RBR0dFRF9BRERSIiBmbGFnIHRvIGdhZGdldCBkcml2ZXIuDQogICAgQWNj
+b3JkaW5nIHRvIENhdGFsaW4ncyBzdWdnZXN0aW9uLCBjaGFuZ2UgdGhlIHNvbHV0aW9uIGJ5IHVu
+dGFnZ2luZyANCiAgICB1c2VyIHNwYWNlIGFkZHJlc3MgcGFzc2VkIGJ5IEFJTyBpbiBnYWRnZXQg
+ZHJpdmVyLg0KDQpDaGFuZ2VzIGZvciB2MzoNCiAgLSBGaXggbWlzc3BlbGxpbmcgaW4gY29tbWl0
+IG1lc3NhZ2UuDQogICAgVGhhbmtzIGZvciBQZXRlcidzIHJldmlldy4NCg0KQ2hhbmdlcyBmb3Ig
+djI6DQogIC0gRml4IGJ1aWxkIGVycm9yIGZvciAzMi1iaXQgbG9hZC4gQW4gI2lmIGRlZmluZWQo
+Q09ORklHX0FSTTY0KSBzdGlsbCBuZWVkDQogICAgZm9yIGF2b2lkaW5nIHVuZGVjbGFyZWQgZGVm
+aW5lcy4NCg0KIGRyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9mX2ZzLmMgfCAgIDE1ICsrKysr
+KysrKysrKysrLQ0KIDEgZmlsZSBjaGFuZ2VkLCAxNCBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9u
+KC0pDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vZl9mcy5jIGIv
+ZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL2ZfZnMuYw0KaW5kZXggY2UxZDAyMy4uMTkyOTM1
+ZiAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9mX2ZzLmMNCisrKyBi
+L2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9mX2ZzLmMNCkBAIC03MTUsNyArNzE1LDIwIEBA
+IHN0YXRpYyB2b2lkIGZmc19lcGZpbGVfaW9fY29tcGxldGUoc3RydWN0IHVzYl9lcCAqX2VwLCBz
+dHJ1Y3QgdXNiX3JlcXVlc3QgKnJlcSkNCiANCiBzdGF0aWMgc3NpemVfdCBmZnNfY29weV90b19p
+dGVyKHZvaWQgKmRhdGEsIGludCBkYXRhX2xlbiwgc3RydWN0IGlvdl9pdGVyICppdGVyKQ0KIHsN
+Ci0Jc3NpemVfdCByZXQgPSBjb3B5X3RvX2l0ZXIoZGF0YSwgZGF0YV9sZW4sIGl0ZXIpOw0KKwlz
+c2l6ZV90IHJldDsNCisNCisjaWYgZGVmaW5lZChDT05GSUdfQVJNNjQpDQorCS8qDQorCSAqIFJl
+cGxhY2UgdGFnZ2VkIGFkZHJlc3MgcGFzc2VkIGJ5IHVzZXIgc3BhY2UgYXBwbGljYXRpb24gYmVm
+b3JlDQorCSAqIGNvcHlpbmcuDQorCSAqLw0KKwlpZiAoSVNfRU5BQkxFRChDT05GSUdfQVJNNjRf
+VEFHR0VEX0FERFJfQUJJKSAmJg0KKwkJKGl0ZXItPnR5cGUgPT0gSVRFUl9JT1ZFQykpIHsNCisJ
+CSoodW5zaWduZWQgbG9uZyAqKSZpdGVyLT5pb3YtPmlvdl9iYXNlID0NCisJCQkodW5zaWduZWQg
+bG9uZyl1bnRhZ2dlZF9hZGRyKGl0ZXItPmlvdi0+aW92X2Jhc2UpOw0KKwl9DQorI2VuZGlmDQor
+CXJldCA9IGNvcHlfdG9faXRlcihkYXRhLCBkYXRhX2xlbiwgaXRlcik7DQogCWlmIChsaWtlbHko
+cmV0ID09IGRhdGFfbGVuKSkNCiAJCXJldHVybiByZXQ7DQogDQotLSANCjEuNy45LjUNCg==
 
-No, there's no point in that. And just like your original proposal, this
-would also introduce a double free.
-
-Johan
