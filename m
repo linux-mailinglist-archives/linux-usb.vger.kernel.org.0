@@ -2,84 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D64170769
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2020 19:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D992D17079B
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2020 19:25:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726995AbgBZSOZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Feb 2020 13:14:25 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:50858 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726880AbgBZSOZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Feb 2020 13:14:25 -0500
-Received: (qmail 2447 invoked by uid 2102); 26 Feb 2020 13:14:24 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 26 Feb 2020 13:14:24 -0500
-Date:   Wed, 26 Feb 2020 13:14:24 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>
-cc:     linux-usb@vger.kernel.org, <linux-kernel@vger.kernel.org>,
+        id S1726899AbgBZSZW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Feb 2020 13:25:22 -0500
+Received: from mail-pl1-f202.google.com ([209.85.214.202]:48214 "EHLO
+        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726789AbgBZSZW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Feb 2020 13:25:22 -0500
+Received: by mail-pl1-f202.google.com with SMTP id d20so138562pls.15
+        for <linux-usb@vger.kernel.org>; Wed, 26 Feb 2020 10:25:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Dtrtcbd0ejslwf0LtU/qo17SJwpVcOcZfkxeu4K1Nao=;
+        b=sCpHYtLs0CJiIDfFY2EivUvDyEBwDVS4IdyueP9aMxN2OdJElMwgFW12llWW/o6ZZD
+         wCe/ArAU/FXTzlQY9UlwoBlqo91oLK1BFv0zYgjrjqQBbYd2RfJQHLftFcNUZAgnMj9G
+         PEd1dyDqYQwYLF0UTmlypkd92osz4D3V20OXyZz+o8vZHrV1Ax7MpfTBSJ9KzUNcvw5f
+         cwZ+2W6YKOW2M4KyLbGX+CuiAOOdr3KoOgdQWRdgnBsxb/Fh0yGaMUPKeQ5YuPYW+UTb
+         KDBQ7msaFEVcLUSFfJZ9jiS4CTNffnxX9yJF7eXUQZfF6QuWHeaNDVf5FSJFR0MI67Cr
+         gQyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Dtrtcbd0ejslwf0LtU/qo17SJwpVcOcZfkxeu4K1Nao=;
+        b=M+5jOTInQLxPHPFB2KIBDImnAiDKwpvUlJLz8ntnckoSSREqWW4eR3M46nb9nMsLP7
+         bZJKMu+KnpC8vU2ci1MsyiMQvOF8V15SyYTHkCb2GkuJW9+pvYLpYRFVr/kU2nDfZbwn
+         KlQ1Jib2dFV87e6YhIEW6kvbKKvQUYiRLvPWokc4+9nqJsYALW9mJbAmbLlNlNa+1+7o
+         WR3SPFGmj1Y8ksfWC08a0QxnA4extJiiVGFjO0Ups23bgH6MaMVYtmChNBm/c+DfMJ3O
+         nPlYdrV3uh7KyFyym0paw1VUsSO7h5P1j7Y2QuNTmZkkIrYrcPQLqferdWGY6tx0DJIU
+         QhZg==
+X-Gm-Message-State: APjAAAW9uSWrRyITw7OdGX41aiWQj71PT35Ess6RGPFfSuVtgDsXlog6
+        hIkfCpxey9UxSXbBbd6ojD/lkJpldvU=
+X-Google-Smtp-Source: APXvYqw+u9wtVgDicMKwUG8VALUmQI2Blv5D+mhPNo2OIBLp22vRIIzoyXmsOy1zUJI7CTyurwXK7GuLPJ4=
+X-Received: by 2002:a63:544:: with SMTP id 65mr172246pgf.72.1582741521124;
+ Wed, 26 Feb 2020 10:25:21 -0800 (PST)
+Date:   Wed, 26 Feb 2020 10:25:17 -0800
+Message-Id: <20200226182517.49214-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.25.0.265.gbab2e86ba0-goog
+Subject: [PATCH v3] usb: typec: Add sysfs node to show cc orientation
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "Lee, Chiasheng" <chiasheng.lee@intel.com>,
-        Mathieu Malaterre <malat@debian.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>,
-        Hardik Gajjar <hgajjar@de.adit-jv.com>,
-        <stable@vger.kernel.org>, <scan-admin@coverity.com>
-Subject: Re: [PATCH v3 1/3] usb: core: hub: fix unhandled return by employing
- a void function
-In-Reply-To: <20200226175036.14946-1-erosca@de.adit-jv.com>
-Message-ID: <Pine.LNX.4.44L0.2002261313390.1406-100000@iolanthe.rowland.org>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pumahsu@google.com, Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 26 Feb 2020, Eugeniu Rosca wrote:
+Export Type-C orientation information when available.
+- "normal": CC1 orientation
+- "reverse": CC2 orientation
+- "unknown": Orientation cannot be determined.
 
-> Address below Coverity complaint (Feb 25, 2020, 8:06 AM CET):
-> 
-> *** CID 1458999:  Error handling issues  (CHECKED_RETURN)
-> /drivers/usb/core/hub.c: 1869 in hub_probe()
-> 1863
-> 1864            if (id->driver_info & HUB_QUIRK_CHECK_PORT_AUTOSUSPEND)
-> 1865                    hub->quirk_check_port_auto_suspend = 1;
-> 1866
-> 1867            if (id->driver_info & HUB_QUIRK_DISABLE_AUTOSUSPEND) {
-> 1868                    hub->quirk_disable_autosuspend = 1;
->  >>>     CID 1458999:  Error handling issues  (CHECKED_RETURN)
->  >>>     Calling "usb_autopm_get_interface" without checking return value (as is done elsewhere 97 out of 111 times).
-> 1869                    usb_autopm_get_interface(intf);
-> 1870            }
-> 1871
-> 1872            if (hub_configure(hub, &desc->endpoint[0].desc) >= 0)
-> 1873                    return 0;
-> 1874
-> 
-> Rather than checking the return value of 'usb_autopm_get_interface()',
-> switch to the usb_autopm_get_interface_no_resume() API, as per:
-> 
-> On Tue, Feb 25, 2020 at 10:32:32AM -0500, Alan Stern wrote:
->  ------ 8< ------
->  > This change (i.e. 'ret = usb_autopm_get_interface') is not necessary,
->  > because the resume operation cannot fail at this point (interfaces
->  > are always powered-up during probe). A better solution would be to
->  > call usb_autopm_get_interface_no_resume() instead.
->  ------ 8< ------
-> 
-> Fixes: 1208f9e1d758c9 ("USB: hub: Fix the broken detection of USB3 device in SMSC hub")
-> Cc: Hardik Gajjar <hgajjar@de.adit-jv.com>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: stable@vger.kernel.org # v4.14+
-> Reported-by: scan-admin@coverity.com
-> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-> Signed-off-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+Version history:
+V3:
+- Heikki's suggestion to us .is_visible callback.
+  unsigned int orientation_aware:1 has been introduced to
+  make support of this attribute optional for drivers such
+  as UCSI
+- Guenter's suggestion to rename to "orientation".
+- Heikki's suggestion to stick with string values instead
+  of exposing it as integer values.
+---
+ Documentation/ABI/testing/sysfs-class-typec |  9 +++++++
+ drivers/usb/typec/class.c                   | 27 +++++++++++++++++++++
+ drivers/usb/typec/tcpm/tcpm.c               |  1 +
+ include/linux/usb/typec.h                   |  1 +
+ 4 files changed, 38 insertions(+)
 
-For all three patches:
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
+index 0c2eb26fdc06b..b834671522d6f 100644
+--- a/Documentation/ABI/testing/sysfs-class-typec
++++ b/Documentation/ABI/testing/sysfs-class-typec
+@@ -108,6 +108,15 @@ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+ Description:
+ 		Revision number of the supported USB Type-C specification.
+ 
++What:		/sys/class/typec/<port>/orientation
++Date:		February 2020
++Contact:	Badhri Jagan Sridharan <badhri@google.com>
++Description:
++		Indicates the active orientation of the Type-C connector.
++		Valid values:
++		- "normal": CC1 orientation
++		- "reverse": CC2 orientation
++		- "unknown": Orientation cannot be determined.
+ 
+ USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
+ 
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index 12be5bb6d32ca..2524f1571e425 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -1244,6 +1244,26 @@ static ssize_t usb_power_delivery_revision_show(struct device *dev,
+ }
+ static DEVICE_ATTR_RO(usb_power_delivery_revision);
+ 
++static ssize_t orientation_show(struct device *dev,
++				   struct device_attribute *attr,
++				   char *buf)
++{
++	struct typec_port *p = to_typec_port(dev);
++	enum typec_orientation orientation = typec_get_orientation(p);
++
++	switch (orientation) {
++	case TYPEC_ORIENTATION_NONE:
++		return sprintf(buf, "%s\n", "unknown");
++	case TYPEC_ORIENTATION_NORMAL:
++		return sprintf(buf, "%s\n", "normal");
++	case TYPEC_ORIENTATION_REVERSE:
++		return sprintf(buf, "%s\n", "reverse");
++	default:
++		return sprintf(buf, "%s\n", "unknown");
++	}
++}
++static DEVICE_ATTR_RO(orientation);
++
+ static struct attribute *typec_attrs[] = {
+ 	&dev_attr_data_role.attr,
+ 	&dev_attr_power_operation_mode.attr,
+@@ -1254,6 +1274,7 @@ static struct attribute *typec_attrs[] = {
+ 	&dev_attr_usb_typec_revision.attr,
+ 	&dev_attr_vconn_source.attr,
+ 	&dev_attr_port_type.attr,
++	&dev_attr_orientation.attr,
+ 	NULL,
+ };
+ 
+@@ -1283,6 +1304,10 @@ static umode_t typec_attr_is_visible(struct kobject *kobj,
+ 			return 0;
+ 		if (port->cap->type != TYPEC_PORT_DRP)
+ 			return 0444;
++	} else if (attr == &dev_attr_orientation.attr) {
++		if (port->cap->orientation_aware)
++			return 0444;
++		return 0;
+ 	}
+ 
+ 	return attr->mode;
+@@ -1493,6 +1518,8 @@ int typec_set_orientation(struct typec_port *port,
+ 	}
+ 
+ 	port->orientation = orientation;
++	sysfs_notify(&port->dev.kobj, NULL, "orientation");
++	kobject_uevent(&port->dev.kobj, KOBJ_CHANGE);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 78077c234ef27..bc0032a6b9a14 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -4742,6 +4742,7 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
+ 	port->typec_caps.pd_revision = 0x0300;	/* USB-PD spec release 3.0 */
+ 	port->typec_caps.driver_data = port;
+ 	port->typec_caps.ops = &tcpm_ops;
++	port->typec_caps.orientation_aware = 1;
+ 
+ 	port->partner_desc.identity = &port->partner_ident;
+ 	port->port_type = port->typec_caps.type;
+diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+index 44d28387ced48..b00a2642a9cd6 100644
+--- a/include/linux/usb/typec.h
++++ b/include/linux/usb/typec.h
+@@ -211,6 +211,7 @@ struct typec_capability {
+ 	u16			pd_revision; /* 0300H = "3.0" */
+ 	int			prefer_role;
+ 	enum typec_accessory	accessory[TYPEC_MAX_ACCESSORY];
++	unsigned int		orientation_aware:1;
+ 
+ 	struct fwnode_handle	*fwnode;
+ 	void			*driver_data;
+-- 
+2.25.0.265.gbab2e86ba0-goog
 
