@@ -2,91 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E78A16FB9F
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2020 11:09:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C5216FBC1
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2020 11:12:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727097AbgBZKJY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Feb 2020 05:09:24 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:39701 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726329AbgBZKJX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Feb 2020 05:09:23 -0500
-Received: by mail-lf1-f68.google.com with SMTP id n30so1525280lfh.6;
-        Wed, 26 Feb 2020 02:09:22 -0800 (PST)
+        id S1727109AbgBZKMQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Feb 2020 05:12:16 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:42634 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726329AbgBZKMQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Feb 2020 05:12:16 -0500
+Received: by mail-lj1-f195.google.com with SMTP id d10so2386289ljl.9;
+        Wed, 26 Feb 2020 02:12:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=tY/3ZhNqAfe25zbsUNHIg9lCEmF6tZUqDehw6V5qg4Q=;
-        b=JcdvggEbzD7YMixs1hEjV6dzDg4R7d61RlT5hwn+K4HrShgKmhSd6Fq0J6gbIqP20/
-         q8fvwMLiEF5B0GNER4CwOP8gq4JaldsS8nOlUn0WTjHsH2o+Jsgv1R9SE7aeWZRU+HeA
-         71pxSEy0rRVt7EtHpbS2LCBQWsrw7d2BBz0EHUDgVbVNBmvuzf5fUw15c7aQpZZ4IBn5
-         gk/ll1FhmiGDj/AqsDUqTs11HQWK7+HvZef9VxJjLErC6xwek/laN9k46F2MMnIwMlU7
-         IuxcgDJp15ndu/hjXFJ2IoOzygDmlEvEAyw1nPKOCqTfPedj+JH2cpeduCNaU9rqGc5Q
-         CDBA==
-X-Gm-Message-State: APjAAAUNBtNbXJaUN6uSlnRfIBvvUKRFUhVBayAA8WgvK8C0pa+1pcV+
-        FyPIsbURD++GxCuGg1T8rOCwmWmv
-X-Google-Smtp-Source: APXvYqwF8rKFVB6d3mu3fqyd3R+AGjJUovwvYTAlzXLqX/mU+/+mSz1NRfr4TLMe6SV8nMa4rPDb/w==
-X-Received: by 2002:ac2:4255:: with SMTP id m21mr2052545lfl.23.1582711761611;
-        Wed, 26 Feb 2020 02:09:21 -0800 (PST)
+         :mime-version:content-disposition:in-reply-to;
+        bh=lgtf/Yh5fw23zpaM+oJehFHDgy9iRIzBJZORq8BS8yI=;
+        b=PLRgKZUV/08PUhQyG4rmFZIssdWccwYnZ668dHkt1UQesKfWojVohKUN7vlMeyGHDF
+         VB4jx27JvV6fvheOUOXgq4fq1B9jA8dGj4sfpqciAVe6+0Ikx5ZrS8kFT5wb2Opq1cbD
+         6Bh/Wge5k6Rb2EIQEXBg5wrw/Nmx8cXW1Jojkt91iCu8Y8nsS0nTp/Hp8HBLMfO24cb/
+         68Pf/VRYu7iy4k7fcrhnNm429obDygBR/xrJAMYgNafQVetPEp+bVBpG2L2g5AYEKsNA
+         y/psiR4L6t4pPyRdUhF0zGlTKsr83PWEP8TQn2hqXmqUkXhA1H0Ry2xg0zBs6Gc4RWxw
+         8KXQ==
+X-Gm-Message-State: APjAAAXIhuTHc0PQXgsbXSj4w/LGB+pd9tmOKkOBZjc8x3AOVSCt3Bb7
+        EtbaZWemcK28RvLhzXNNjLOVRauL
+X-Google-Smtp-Source: APXvYqwI2EXm7w460uhNh1RP7Gen+GVUesLpFxmO5pbpK3KyTAxQW9Xcok2OwdQ9D4n0ksEEL2GhRg==
+X-Received: by 2002:a2e:6c06:: with SMTP id h6mr2568866ljc.246.1582711934119;
+        Wed, 26 Feb 2020 02:12:14 -0800 (PST)
 Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
-        by smtp.gmail.com with ESMTPSA id i13sm885909ljg.89.2020.02.26.02.09.20
+        by smtp.gmail.com with ESMTPSA id k1sm797019lfg.20.2020.02.26.02.12.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2020 02:09:20 -0800 (PST)
+        Wed, 26 Feb 2020 02:12:13 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.92.3)
         (envelope-from <johan@kernel.org>)
-        id 1j6td2-0004zV-Bm; Wed, 26 Feb 2020 11:09:20 +0100
-Date:   Wed, 26 Feb 2020 11:09:20 +0100
+        id 1j6tfo-00050N-Tv; Wed, 26 Feb 2020 11:12:12 +0100
+Date:   Wed, 26 Feb 2020 11:12:12 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     Tiezhu Yang <yangtiezhu@loongson.cn>
 Cc:     Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Xuefeng Li <lixuefeng@loongson.cn>
-Subject: Re: [PATCH 1/2] USB: core: Fix build warning in
+Subject: Re: [PATCH 2/2] USB: core: Fix potential memory leak in
  usb_get_configuration()
-Message-ID: <20200226100920.GW32540@localhost>
+Message-ID: <20200226101212.GX32540@localhost>
 References: <1582697723-7274-1-git-send-email-yangtiezhu@loongson.cn>
- <20200226080459.GU32540@localhost>
- <d9637b5a-6d5e-17a1-e615-f828d311f654@loongson.cn>
+ <1582697723-7274-2-git-send-email-yangtiezhu@loongson.cn>
+ <20200226080906.GV32540@localhost>
+ <c7dfaa07-dd34-600d-2a69-95a65f966dfc@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d9637b5a-6d5e-17a1-e615-f828d311f654@loongson.cn>
+In-Reply-To: <c7dfaa07-dd34-600d-2a69-95a65f966dfc@loongson.cn>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 26, 2020 at 04:35:48PM +0800, Tiezhu Yang wrote:
-> On 02/26/2020 04:04 PM, Johan Hovold wrote:
-> > On Wed, Feb 26, 2020 at 02:15:22PM +0800, Tiezhu Yang wrote:
-> >> There is no functional issue, just fix the following build warning:
-> >>
-> >>    CC      drivers/usb/core/config.o
-> >> drivers/usb/core/config.c: In function ‘usb_get_configuration’:
-> >> drivers/usb/core/config.c:868:6: warning: ‘result’ may be used uninitialized in this function [-Wmaybe-uninitialized]
-> >>    int result;
-> >>        ^
-> > What compiler are you using? The warning is clearly bogus and it hasn't
-> > been seen with any recent gcc at least.
+On Wed, Feb 26, 2020 at 04:42:55PM +0800, Tiezhu Yang wrote:
+> On 02/26/2020 04:09 PM, Johan Hovold wrote:
+> > On Wed, Feb 26, 2020 at 02:15:23PM +0800, Tiezhu Yang wrote:
+> >> Make sure to free all the allocated memory before exiting from the function
+> >> usb_get_configuration() when an error is encountered.
+> > There's no leak in this function as far as I can tell. Any allocated
+> > memory is released in usb_destroy_configuration() when the last
+> > reference to the struct usb_device is dropped.
 > 
-> [yangtiezhu@linux ~]$ gcc --version
-> gcc (GCC) 4.9.4 20160726 (Red Hat 4.9.4-14)
-> Copyright (C) 2015 Free Software Foundation, Inc.
+> Yes, you are right, the allocated memory in usb_get_configuration()
+> will be released in usb_destroy_configuration().
 > 
-> The gcc version I used maybe too old,
-> if the warning is bogus, please ignore this patch.
+> By the way, is it better to release the allocated memory as early as 
+> possible
+> in usb_get_configuration()? Just like this:
+> 
+> diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+> index bb63ee0..dd4ebeb 100644
+> --- a/drivers/usb/core/config.c
+> +++ b/drivers/usb/core/config.c
+> @@ -885,12 +885,17 @@ int usb_get_configuration(struct usb_device *dev)
+> 
+>          length = ncfg * sizeof(char *);
+>          dev->rawdescriptors = kzalloc(length, GFP_KERNEL);
+> -       if (!dev->rawdescriptors)
+> +       if (!dev->rawdescriptors) {
+> +               kfree(dev->config);
+>                  return -ENOMEM;
+> +       }
 
-Hmm. I even tried installing 4.9.4 and still don't see that warning (on
-x86).
-
-Are you sure that's the compiler version you use?
-
-We've silenced bogus maybe-uninitialized warnings for 4.9 and newer
-before, but we shouldn't be adding compiler workarounds unless we have
-to.
+No, there's no point in that. And just like your original proposal, this
+would also introduce a double free.
 
 Johan
