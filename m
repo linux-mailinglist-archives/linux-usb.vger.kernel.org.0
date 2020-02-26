@@ -2,115 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D75D16F9E4
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2020 09:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5448116FABB
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2020 10:29:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727109AbgBZIm7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Feb 2020 03:42:59 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:33182 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725872AbgBZIm7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 26 Feb 2020 03:42:59 -0500
-Received: from [10.130.0.70] (unknown [123.138.236.242])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Axb+iPL1ZenOQTAA--.1S3;
-        Wed, 26 Feb 2020 16:42:55 +0800 (CST)
-Subject: Re: [PATCH 2/2] USB: core: Fix potential memory leak in
- usb_get_configuration()
-To:     Johan Hovold <johan@kernel.org>
-References: <1582697723-7274-1-git-send-email-yangtiezhu@loongson.cn>
- <1582697723-7274-2-git-send-email-yangtiezhu@loongson.cn>
- <20200226080906.GV32540@localhost>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <c7dfaa07-dd34-600d-2a69-95a65f966dfc@loongson.cn>
-Date:   Wed, 26 Feb 2020 16:42:55 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        id S1727520AbgBZJ3q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Feb 2020 04:29:46 -0500
+Received: from mga17.intel.com ([192.55.52.151]:40512 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726679AbgBZJ3p (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 26 Feb 2020 04:29:45 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Feb 2020 01:29:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,487,1574150400"; 
+   d="scan'208";a="226659480"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga007.jf.intel.com with ESMTP; 26 Feb 2020 01:29:43 -0800
+Subject: Re: [PATCH] usb: host: xhci-tegra: Tegra186/Tegra194 LPM
+To:     JC Kuo <jckuo@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     gregkh@linuxfoundation.org, jonathanh@nvidia.com,
+        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+        nkristam@nvidia.com
+References: <20200224062145.25785-1-jckuo@nvidia.com>
+ <20200224125100.GA2108060@ulmo>
+ <223f5f09-781a-825d-e75e-3b878acec27d@nvidia.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <6c93af2b-5a4d-a3ad-07f4-f5c72f569752@linux.intel.com>
+Date:   Wed, 26 Feb 2020 11:32:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200226080906.GV32540@localhost>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Axb+iPL1ZenOQTAA--.1S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zr43uFykWrWDXFWUZFy3XFb_yoW8Zrykpa
-        18XayYyFW5JFWfJa1kGas5WayFgan7Aa45Crya9w4Dur43Aa1YkFnakr1FvF97Gr97AF40
-        qayFg3W7KrWDC3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
-        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CE
-        bIxvr21lc2xSY4AK67AK6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
-        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-        67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-        x0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAI
-        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
-        nxnUUI43ZEXa7VUjMKZJUUUUU==
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+In-Reply-To: <223f5f09-781a-825d-e75e-3b878acec27d@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 02/26/2020 04:09 PM, Johan Hovold wrote:
-> On Wed, Feb 26, 2020 at 02:15:23PM +0800, Tiezhu Yang wrote:
->> Make sure to free all the allocated memory before exiting from the function
->> usb_get_configuration() when an error is encountered.
-> There's no leak in this function as far as I can tell. Any allocated
-> memory is released in usb_destroy_configuration() when the last
-> reference to the struct usb_device is dropped.
+On 26.2.2020 10.12, JC Kuo wrote:
+> Hi Thierry,
+> Yes, it can be verified with a LPM capable device. For example, a VIA USB 3.0
+> hub is connected to Jetson-Xavier. "lsusb -v" output [1] shows the device
+> supports LPM and the host has enabled U1/U2 states for the device. If host LPM
+> is disabled, there will be no "U1 Enabled" and "U2 Enabled" strings in "Device
+> Status" section.
+> 
+> To check LPM operation, disconnect all USB 3.0 devices from the hub and disable
+> runtime PM for the super-speed portion of the hub, so that it won't be
+> auto-suspended.
+> root@tegra-ubuntu:~# echo on > /sys/bus/usb/devices/2-4/power/control
+> 
+> Since there is no data transaction for the hub, link will enter U2 soon. This
+> can be checked by reading XHCI.PORTSC register. In below, PLS (Port Link State)
+> field is U2.
+> root@tegra-ubuntu:~# devmem 0x3610450
+> 0x00001243
 
-Yes, you are right, the allocated memory in usb_get_configuration()
-will be released in usb_destroy_configuration().
+A more human friendly way to read portsc registers:
 
-By the way, is it better to release the allocated memory as early as 
-possible
-in usb_get_configuration()? Just like this:
+# cat /sys/kernel/debug/usb/xhci/0000\:00\:14.0/ports/port02/portsc 
+Powered Connected Enabled Link:U0 PortSpeed:3 Change: Wake: 
 
-diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
-index bb63ee0..dd4ebeb 100644
---- a/drivers/usb/core/config.c
-+++ b/drivers/usb/core/config.c
-@@ -885,12 +885,17 @@ int usb_get_configuration(struct usb_device *dev)
-
-         length = ncfg * sizeof(char *);
-         dev->rawdescriptors = kzalloc(length, GFP_KERNEL);
--       if (!dev->rawdescriptors)
-+       if (!dev->rawdescriptors) {
-+               kfree(dev->config);
-                 return -ENOMEM;
-+       }
-
-         desc = kmalloc(USB_DT_CONFIG_SIZE, GFP_KERNEL);
--       if (!desc)
-+       if (!desc) {
-+               kfree(dev->config);
-+               kfree(dev->rawdescriptors);
-                 return -ENOMEM;
-+       }
-
-         for (cfgno = 0; cfgno < ncfg; cfgno++) {
-                 /* We grab just the first descriptor so we know how long
-
-Thanks,
-
-Tiezhu Yang
-
->
->> Additionally, just initialize the variable "bigbuffer" with NULL to avoid
->> the following build warning:
->>
->>    CC      drivers/usb/core/config.o
->> drivers/usb/core/config.c: In function ‘usb_get_configuration’:
->> drivers/usb/core/config.c:956:2: warning: ‘bigbuffer’ may be used uninitialized in this function [-Wmaybe-uninitialized]
->>    kfree(bigbuffer);
->>    ^
-> No need to mention warnings that you introduce yourself while creating
-> your patch. It can give the false impression that your addressing an
-> existing issue.
->
-> Johan
-
+-Mathias
