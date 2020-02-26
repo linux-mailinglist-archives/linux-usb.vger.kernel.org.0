@@ -2,90 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFF716F8EA
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2020 09:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 729DA16F917
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Feb 2020 09:09:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727377AbgBZIFD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Feb 2020 03:05:03 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:37603 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727223AbgBZIFD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Feb 2020 03:05:03 -0500
-Received: by mail-lj1-f193.google.com with SMTP id q23so1968767ljm.4;
-        Wed, 26 Feb 2020 00:05:01 -0800 (PST)
+        id S1727377AbgBZIJK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Feb 2020 03:09:10 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:43067 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727327AbgBZIJK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Feb 2020 03:09:10 -0500
+Received: by mail-lj1-f196.google.com with SMTP id e3so904306lja.10;
+        Wed, 26 Feb 2020 00:09:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=yKvVSicnRjGL1KBR6OA7vuLTKFiFx2PtDbuSAdj12/E=;
-        b=ccAHqfwxytj3lNoBs6NBqWkrY7cQJN4MpDoDgQ1nI+sUi/ZJyGw1h1fGMsVgK3TTLr
-         P+u6sPsrecETJFW4hbw3lzJk1FBYjpeqi+Wrz7q9uf01kCPQygsZpIpVwC3jIRntLypv
-         d8UaCT4iBsgBxAgt7v6Ko7KPRzYjTuuNa1UbFMaYDZwUGbqxDWUbaLkUHpQP+zPRrVVq
-         NHdTRv9slJ/O1IDK+tOv17WkX4v9M0MemQBplpuFXQYeqig/JtcbqRiAUhR+/tACERDq
-         oYWiOoCsFO9jf5KCMIE/pYslEW7Fn0xa9hByVziyV9YsM6mot7gf41CmF7S5eWVl7smf
-         WA/w==
-X-Gm-Message-State: APjAAAVn4OrSLWGQ9N0MEBnL5CEgbo68v2X2XGrDyRdI6HY4Cf3nEozq
-        oowwbUFhutfSu5c0dDsV7Vf9Nv3x
-X-Google-Smtp-Source: APXvYqxtBp00ozcwsH0h6RkFNguOuXbrCq3p9SMa4uqnZ0wQB9w9DHyXdONrvcFY0NUSwaXfHsFfqw==
-X-Received: by 2002:a2e:8145:: with SMTP id t5mr2166288ljg.144.1582704300911;
-        Wed, 26 Feb 2020 00:05:00 -0800 (PST)
+        bh=ZAhX4Kjo49a/2nrW9qMMuYh2FGtltiAUaTTCoWUNQzg=;
+        b=PDenjLes/GWTVzHKoE/Lf3aacAyb7nPmJALDm/LuSDhMODjG0r2EXcppKP2F/QM/0z
+         EOsPX4rHFPIva+tkHNQfmgafiP/m9pMaBqiZJRqEHEzgnILghV7jkjGO5Ks76eiC2dQc
+         X2lvX3TOqNEXw2nz832ud925hnPfmE8vnLm3EXgaNzMSBesZooJ5d7aNUB7eN4nSeZjO
+         lajp9IwdyKiDpJC4T3sY/xdKo1CUsgloppOVpBi5AX6y3h64O5f0FpKs6YZbOyj5wU58
+         i9vyZh8K8Y26SoEbugxEQLy50sMz+Bw+LbusSJLnoWx4LqoGJ3DojYmYmk5WqIF1UoZ5
+         eMVA==
+X-Gm-Message-State: APjAAAUr4cGcUEPPekMarEthiTYXyIDWBsBfgn4c0toTCFH12AnU7E4t
+        Z9h5PFW9aDVatGfnm88ZB7o=
+X-Google-Smtp-Source: APXvYqy2c9A7UaDZGtGr2NVUzZ8Jdh6Kobi7GpHvV93wWsGLiJ3jESZEAk9pFU+2KOdWibxOnvzc7g==
+X-Received: by 2002:a05:651c:2c7:: with SMTP id f7mr2072219ljo.125.1582704547829;
+        Wed, 26 Feb 2020 00:09:07 -0800 (PST)
 Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
-        by smtp.gmail.com with ESMTPSA id a3sm570720lfo.70.2020.02.26.00.05.00
+        by smtp.gmail.com with ESMTPSA id q24sm579459lfm.78.2020.02.26.00.09.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2020 00:05:00 -0800 (PST)
+        Wed, 26 Feb 2020 00:09:06 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.92.3)
         (envelope-from <johan@kernel.org>)
-        id 1j6rgh-0001U3-EC; Wed, 26 Feb 2020 09:04:59 +0100
-Date:   Wed, 26 Feb 2020 09:04:59 +0100
+        id 1j6rkg-0001VD-1N; Wed, 26 Feb 2020 09:09:06 +0100
+Date:   Wed, 26 Feb 2020 09:09:06 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     Tiezhu Yang <yangtiezhu@loongson.cn>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Xuefeng Li <lixuefeng@loongson.cn>
-Subject: Re: [PATCH 1/2] USB: core: Fix build warning in
+Subject: Re: [PATCH 2/2] USB: core: Fix potential memory leak in
  usb_get_configuration()
-Message-ID: <20200226080459.GU32540@localhost>
+Message-ID: <20200226080906.GV32540@localhost>
 References: <1582697723-7274-1-git-send-email-yangtiezhu@loongson.cn>
+ <1582697723-7274-2-git-send-email-yangtiezhu@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1582697723-7274-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1582697723-7274-2-git-send-email-yangtiezhu@loongson.cn>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Feb 26, 2020 at 02:15:22PM +0800, Tiezhu Yang wrote:
-> There is no functional issue, just fix the following build warning:
+On Wed, Feb 26, 2020 at 02:15:23PM +0800, Tiezhu Yang wrote:
+> Make sure to free all the allocated memory before exiting from the function
+> usb_get_configuration() when an error is encountered.
+
+There's no leak in this function as far as I can tell. Any allocated
+memory is released in usb_destroy_configuration() when the last
+reference to the struct usb_device is dropped.
+
+> Additionally, just initialize the variable "bigbuffer" with NULL to avoid
+> the following build warning:
 > 
 >   CC      drivers/usb/core/config.o
 > drivers/usb/core/config.c: In function ‘usb_get_configuration’:
-> drivers/usb/core/config.c:868:6: warning: ‘result’ may be used uninitialized in this function [-Wmaybe-uninitialized]
->   int result;
->       ^
+> drivers/usb/core/config.c:956:2: warning: ‘bigbuffer’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+>   kfree(bigbuffer);
+>   ^
 
-What compiler are you using? The warning is clearly bogus and it hasn't
-been seen with any recent gcc at least.
-
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  drivers/usb/core/config.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
-> index b7918f6..bb63ee0 100644
-> --- a/drivers/usb/core/config.c
-> +++ b/drivers/usb/core/config.c
-> @@ -865,7 +865,7 @@ int usb_get_configuration(struct usb_device *dev)
->  	unsigned int cfgno, length;
->  	unsigned char *bigbuffer;
->  	struct usb_config_descriptor *desc;
-> -	int result;
-> +	int result = 0;
->  
->  	if (ncfg > USB_MAXCONFIG) {
->  		dev_warn(ddev, "too many configurations: %d, "
+No need to mention warnings that you introduce yourself while creating
+your patch. It can give the false impression that your addressing an
+existing issue.
 
 Johan
