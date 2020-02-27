@@ -2,47 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FA9171427
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 10:29:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24FC7171459
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 10:51:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728678AbgB0J3v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Feb 2020 04:29:51 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:56613 "EHLO
+        id S1728659AbgB0JvH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Feb 2020 04:51:07 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:36425 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728655AbgB0J3v (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 04:29:51 -0500
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        with ESMTP id S1728653AbgB0JvH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 04:51:07 -0500
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1j7FUL-0004bi-Ti; Thu, 27 Feb 2020 10:29:49 +0100
-Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
+        id 1j7Fod-0006mu-IK; Thu, 27 Feb 2020 10:50:47 +0100
+Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1j7FUL-0007oL-DZ; Thu, 27 Feb 2020 10:29:49 +0100
-Date:   Thu, 27 Feb 2020 10:29:49 +0100
+        id 1j7FoZ-0003jq-SI; Thu, 27 Feb 2020 10:50:43 +0100
 From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        kernel@pengutronix.de, richard.leitner@skidata.com
-Subject: Re: [PATCH] usb: usb251xb: check if hub is already attached
-Message-ID: <20200227092949.sk47t4eebwoiwbk3@pengutronix.de>
-References: <20200227072545.16856-1-m.felsch@pengutronix.de>
- <20200227081448.f7ul3idseybln3sc@pengutronix.de>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com, harry.pan@intel.com,
+        nobuta.keiya@fujitsu.com, malat@debian.org,
+        kai.heng.feng@canonical.com, chiasheng.lee@intel.com,
+        andreyknvl@google.com, heinzelmann.david@gmail.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [RFC PATCH] USB: hub: fix port suspend/resume
+Date:   Thu, 27 Feb 2020 10:50:40 +0100
+Message-Id: <20200227095040.10208-1-m.felsch@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200227081448.f7ul3idseybln3sc@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 10:28:10 up 104 days, 46 min, 122 users,  load average: 0.02, 0.04,
- 0.00
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
 X-SA-Exim-Mail-From: mfe@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-usb@vger.kernel.org
@@ -51,90 +42,125 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Uwe, Richard,
+At the momemnt the usb-port driver has only runime_pm hooks.
+Suspending the port and turn off the VBUS supply should be triggered by
+the hub device suspend callback usb_port_suspend() which calls the
+pm_runtime_put_sync() if all pre-conditions are meet. This mechanism
+don't work correctly due to the global PM behaviour, for more information
+see [1]. According [1] I added the suspend/resume callbacks for the port
+device to fix this. While on it I replaced the #ifdef's by
+__maybe_unused.
 
-thanks for your feedback :) Will prepare a v2.
+[1] https://www.spinics.net/lists/linux-usb/msg190537.html
 
-On 20-02-27 09:14, Uwe Kleine-König wrote:
-> On Thu, Feb 27, 2020 at 08:25:45AM +0100, Marco Felsch wrote:
-> > It is possible that the hub was configured earlier by the bootloader and
-> > we lack of the reset-gpio. In such a case the usb251xb_connect() fails
-> > because the registers are write-protected. Add a check to test if the
-> > hub is already connected and don't try to reconfigure the hub if we
-> > can't toggle the reset pin. Don't change the usb251xb_connect() logic
-> > if we can't read the status.
-> > 
-> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > ---
-> >  drivers/usb/misc/usb251xb.c | 33 +++++++++++++++++++++++++++++++++
-> >  1 file changed, 33 insertions(+)
-> > 
-> > diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
-> > index 29fe5771c21b..9f9a64bab059 100644
-> > --- a/drivers/usb/misc/usb251xb.c
-> > +++ b/drivers/usb/misc/usb251xb.c
-> > @@ -266,6 +266,30 @@ static int usb251x_check_gpio_chip(struct usb251xb *hub)
-> >  }
-> >  #endif
-> >  
-> > +static bool usb251xb_hub_attached(struct usb251xb *hub)
-> > +{
-> > +	char i2c_rb;
-> > +	int err;
-> > +
-> > +	err = i2c_smbus_read_block_data(hub->i2c, USB251XB_ADDR_STATUS_COMMAND,
-> > +					&i2c_rb);
-> > +	if (err < 0) {
-> > +		/*
-> > +		 * The device disables the i2c-interface immediately after it
-> > +		 * received the USB_ATTACH signal.
-> > +		 */
-> > +		if (err == -ENXIO)
-> > +			return true;
-> > +
-> > +		dev_warn(hub->dev,
-> > +			 "Checking hub Status/Command register failed: %d\n",
-> > +			 err);
-> > +		return false;
-> > +	}
-> > +
-> > +	return !!(i2c_rb & USB251XB_STATUS_COMMAND_ATTACH);
-> > +}
-> > +
-> >  static void usb251xb_reset(struct usb251xb *hub)
-> >  {
-> >  	if (!hub->gpio_reset)
-> > @@ -288,6 +312,15 @@ static int usb251xb_connect(struct usb251xb *hub)
-> >  	struct device *dev = hub->dev;
-> >  	int err, i;
-> >  	char i2c_wb[USB251XB_I2C_REG_SZ];
-> > +	bool is_attached;
-> > +
-> > +	/*
-> > +	 * Check if configuration was done earlier by the bootloader. Trust them
-> > +	 * if it is the case and we are not capable to reset the hub.
-> > +	 */
-> > +	is_attached = usb251xb_hub_attached(hub);
-> > +	if (!hub->gpio_reset && is_attached)
-> > +		return 0;
-> 
-> If you write this as:
-> 
-> 	if (!hub->gpio_reset && usb251xb_hub_attached(hub))
-> 		return 0;
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+---
+ drivers/usb/core/hub.c  | 13 -------------
+ drivers/usb/core/port.c | 39 +++++++++++++++++++++++++++++++--------
+ 2 files changed, 31 insertions(+), 21 deletions(-)
 
-Yeah tought about this too.
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 3405b146edc9..c294484e478d 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -3323,10 +3323,6 @@ int usb_port_suspend(struct usb_device *udev, pm_message_t msg)
+ 		usb_set_device_state(udev, USB_STATE_SUSPENDED);
+ 	}
+ 
+-	if (status == 0 && !udev->do_remote_wakeup && udev->persist_enabled
+-			&& test_and_clear_bit(port1, hub->child_usage_bits))
+-		pm_runtime_put_sync(&port_dev->dev);
+-
+ 	usb_mark_last_busy(hub->hdev);
+ 
+ 	usb_unlock_port(port_dev);
+@@ -3514,15 +3510,6 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
+ 	int		status;
+ 	u16		portchange, portstatus;
+ 
+-	if (!test_and_set_bit(port1, hub->child_usage_bits)) {
+-		status = pm_runtime_get_sync(&port_dev->dev);
+-		if (status < 0) {
+-			dev_dbg(&udev->dev, "can't resume usb port, status %d\n",
+-					status);
+-			return status;
+-		}
+-	}
+-
+ 	usb_lock_port(port_dev);
+ 
+ 	/* Skip the initial Clear-Suspend step for a remote wakeup */
+diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+index bbbb35fa639f..9efa6b2ef31b 100644
+--- a/drivers/usb/core/port.c
++++ b/drivers/usb/core/port.c
+@@ -187,8 +187,7 @@ static void usb_port_device_release(struct device *dev)
+ 	kfree(port_dev);
+ }
+ 
+-#ifdef CONFIG_PM
+-static int usb_port_runtime_resume(struct device *dev)
++static int __maybe_unused usb_port_runtime_resume(struct device *dev)
+ {
+ 	struct usb_port *port_dev = to_usb_port(dev);
+ 	struct usb_device *hdev = to_usb_device(dev->parent->parent);
+@@ -244,7 +243,7 @@ static int usb_port_runtime_resume(struct device *dev)
+ 	return retval;
+ }
+ 
+-static int usb_port_runtime_suspend(struct device *dev)
++static int __maybe_unused usb_port_runtime_suspend(struct device *dev)
+ {
+ 	struct usb_port *port_dev = to_usb_port(dev);
+ 	struct usb_device *hdev = to_usb_device(dev->parent->parent);
+@@ -283,7 +282,33 @@ static int usb_port_runtime_suspend(struct device *dev)
+ 
+ 	return retval;
+ }
+-#endif
++
++static int __maybe_unused _usb_port_suspend(struct device *dev)
++{
++	struct usb_port *port_dev = to_usb_port(dev);
++	struct usb_device *udev = port_dev->child;
++	int retval;
++
++	if (!udev->do_remote_wakeup && udev->persist_enabled)
++		retval = usb_port_runtime_suspend(dev);
++
++	/* Do not force the user to enable the power-off feature */
++	if (retval && retval != -EAGAIN)
++		return retval;
++
++	return 0;
++}
++
++static int __maybe_unused _usb_port_resume(struct device *dev)
++{
++	struct usb_port *port_dev = to_usb_port(dev);
++	struct usb_device *udev = port_dev->child;
++
++	if (!udev->do_remote_wakeup && udev->persist_enabled)
++		return usb_port_runtime_resume(dev);
++
++	return 0;
++}
+ 
+ static void usb_port_shutdown(struct device *dev)
+ {
+@@ -294,10 +319,8 @@ static void usb_port_shutdown(struct device *dev)
+ }
+ 
+ static const struct dev_pm_ops usb_port_pm_ops = {
+-#ifdef CONFIG_PM
+-	.runtime_suspend =	usb_port_runtime_suspend,
+-	.runtime_resume =	usb_port_runtime_resume,
+-#endif
++	SET_SYSTEM_SLEEP_PM_OPS(_usb_port_suspend, _usb_port_resume)
++	SET_RUNTIME_PM_OPS(usb_port_runtime_suspend, usb_port_runtime_resume, NULL)
+ };
+ 
+ struct device_type usb_port_device_type = {
+-- 
+2.20.1
 
-> you save some i2c transfers in the presence of a reset gpio.
-> 
-> Also I wonder if skipping the initialisation is at least worth a
-> pr_info.
-
-Okay I will add this.
-
-Regards,
-  Marco
-
-
-> Best regards
-> Uwe
