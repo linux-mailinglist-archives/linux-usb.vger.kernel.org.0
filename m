@@ -2,147 +2,200 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12583172896
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 20:29:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD90917292D
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 21:03:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730023AbgB0T3f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Feb 2020 14:29:35 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:37260 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729889AbgB0T3f (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 14:29:35 -0500
-Received: (qmail 1906 invoked by uid 2102); 27 Feb 2020 14:29:34 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 27 Feb 2020 14:29:34 -0500
-Date:   Thu, 27 Feb 2020 14:29:34 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Marco Felsch <m.felsch@pengutronix.de>
-cc:     gregkh@linuxfoundation.org, <Thinh.Nguyen@synopsys.com>,
-        <harry.pan@intel.com>, <nobuta.keiya@fujitsu.com>,
-        <malat@debian.org>, <kai.heng.feng@canonical.com>,
-        <chiasheng.lee@intel.com>, <andreyknvl@google.com>,
-        <heinzelmann.david@gmail.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@pengutronix.de>,
-        kbuild test robot <lkp@intel.com>
-Subject: Re: [RFC PATCH v2] USB: hub: fix port suspend/resume
-In-Reply-To: <20200227164142.dsnbrxtk747tnvma@pengutronix.de>
-Message-ID: <Pine.LNX.4.44L0.2002271353300.1307-100000@iolanthe.rowland.org>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+        id S1730009AbgB0UD0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Feb 2020 15:03:26 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:40739 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729441AbgB0UD0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 15:03:26 -0500
+Received: by mail-pl1-f195.google.com with SMTP id y1so230901plp.7
+        for <linux-usb@vger.kernel.org>; Thu, 27 Feb 2020 12:03:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=K8iytLqHgFDY8ynjtXVffNccHAiLLbH2CUJKo1OnDUk=;
+        b=fHUY3iCBJyi+1W9cFjvAZY2qYXKF5BErAQKup2WCQcviStJR9aKKucLkgMzKg4IJnB
+         U1uY+Odm1eBtPFoBG34WO5iPmIbRGffjFXqYC48q2oMiT5C9WTdzL0RflIOWyBAnjr37
+         R/C5oS8B96CVUCgUTzR77DC9vlh7HNhPOmWK11Cb3U5itxKYqAbLvAXpz+fbTgRPva99
+         ol84p0ATxn6vPJSpgYXsKeMh6R6pS9smN92fhJxpR/Kzslkg2AurM/NCa320YWTOMHf1
+         En7zxqBNi6P2Lgz7+TSDQ49uX7XhWNaXbyXeZPDXGrWW3lNpTFXZ47Ut5KMsGSKDZQwL
+         2Zjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=K8iytLqHgFDY8ynjtXVffNccHAiLLbH2CUJKo1OnDUk=;
+        b=Uu6AjbIutkThAGOMR00jDszZj6fwPS0zoVZqn6R7Ssa+XB9CzQBxH1Ba9dy2DD3IUY
+         b+jYCUVt2RKyvEaHzSxjLS4Ifdw1eFlu5TBgQUE0zGMF4Ea04DKVd6hK56eRKM16GRbg
+         SlB7i+3zQ0cqXH8b/3b1gZSZfctyITt7AEd10tlfvcNOKi4zEg1vriD4tgjN+wa4HMa6
+         AtoyigWgt+YO++xvG5os6ADhLbDcZa9tRbKmhAWzI3amnmbiFXORPFoXMD4nEVljGdnq
+         8skSBSxIWhBx7QfNNRfadDbT7BDZeUnTh19BVrbK52Yd99L5mlsrXvygKifnMJhjrgM0
+         /ZVw==
+X-Gm-Message-State: APjAAAW3CTYYE7foCX4zCX6+iO67gOoYN0kxidmHg0Beo5uJTvT1X7gT
+        enCoPW29bKltaB2YPYuj8+k=
+X-Google-Smtp-Source: APXvYqzmpQ5oQTKIlR8TpQTcOwGdIhBPR/SXry80nTWIDtNt8ZzxcqCU7eBzOhDgJ5EvkljpTncwGA==
+X-Received: by 2002:a17:90a:1f8d:: with SMTP id x13mr666170pja.27.1582833804833;
+        Thu, 27 Feb 2020 12:03:24 -0800 (PST)
+Received: from ajayg.nvidia.com (searspoint.nvidia.com. [216.228.112.21])
+        by smtp.gmail.com with ESMTPSA id z64sm8139292pfz.23.2020.02.27.12.03.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Feb 2020 12:03:23 -0800 (PST)
+From:   Ajay Gupta <ajaykuee@gmail.com>
+X-Google-Original-From: Ajay Gupta <ajayg@nvidia.com>
+To:     heikki.krogerus@linux.intel.com
+Cc:     linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>
+Subject: [PATCH v2] usb: typec: ucsi_ccg: workaround for NVIDIA test device
+Date:   Thu, 27 Feb 2020 12:03:17 -0800
+Message-Id: <20200227200317.21509-1-ajayg@nvidia.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 27 Feb 2020, Marco Felsch wrote:
+From: Ajay Gupta <ajayg@nvidia.com>
 
-> On 20-02-27 11:18, Alan Stern wrote:
+NVIDIA VirtualLink (svid 0x955) has two altmode, vdo=0x1 for
+VirtualLink DP mode and vdo=0x3 for NVIDIA test mode. NVIDIA
+test device FTB (Function Test Board) reports altmode list with
+vdo=0x3 first and then vdo=0x1. The list is:
+ SVID   VDO
+0xff01  0xc05
+0x28de  0x8085
+0x955   0x3
+0x955   0x1
 
-> > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > > ---
-> > > Hi,
-> > > 
-> > > this v2 contains the fixes
-> > > 
-> > > Reported-by: kbuild test robot <lkp@intel.com>
-> > 
-> > Everything below the "---" line, except the patch itself, gets ignored.  
-> > You need to move this Reported-by: up higher.
-> 
-> I know, I put it here because the patch isn't part of the kernel. IMHO a
-> 
-> Signed-off-by:
-> Reported-by: 
-> 
-> looks a bit strange.
+Current logic to assign mode value is based on order
+in altmode list. This causes a mismatch of CON and SOP altmodes
+since NVIDIA GPU connector has order of vdo=0x1 first and then
+vdo=0x3. Fixing this by changing the order of vdo values
+reported by NVIDIA test device. the new list will be:
 
-Not at all.  That sort of thing occurs all the time; just look at a few 
-commits in the kernel or patches on the mailing lists.  Especially ones 
-that are bug fixes.
+ SVID   VDO
+0xff01  0xc05
+0x28de  0x8085
+0x955   0x1085
+0x955   0x3
 
-> > > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> > > index 3405b146edc9..c294484e478d 100644
-> > > --- a/drivers/usb/core/hub.c
-> > > +++ b/drivers/usb/core/hub.c
-> > > @@ -3323,10 +3323,6 @@ int usb_port_suspend(struct usb_device *udev, pm_message_t msg)
-> > >  		usb_set_device_state(udev, USB_STATE_SUSPENDED);
-> > >  	}
-> > >  
-> > > -	if (status == 0 && !udev->do_remote_wakeup && udev->persist_enabled
-> > > -			&& test_and_clear_bit(port1, hub->child_usage_bits))
-> > > -		pm_runtime_put_sync(&port_dev->dev);
-> > > -
-> > >  	usb_mark_last_busy(hub->hdev);
-> > >  
-> > >  	usb_unlock_port(port_dev);
-> > > @@ -3514,15 +3510,6 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
-> > >  	int		status;
-> > >  	u16		portchange, portstatus;
-> > >  
-> > > -	if (!test_and_set_bit(port1, hub->child_usage_bits)) {
-> > > -		status = pm_runtime_get_sync(&port_dev->dev);
-> > > -		if (status < 0) {
-> > > -			dev_dbg(&udev->dev, "can't resume usb port, status %d\n",
-> > > -					status);
-> > > -			return status;
-> > > -		}
-> > > -	}
-> > > -
-> > 
-> > Why do you get rid of these two sections of code?  Won't that cause
-> > runtime PM to stop working properly?
-> 
-> Both runtime_pm calls are part of the suspend/resume logic so this code
-> isn't called during runtime PM.
+Also NVIDIA VirtualLink (svid 0x955) uses pin E for display mode.
+NVIDIA test device reports vdo of 0x1 so make sure vdo values
+always have pin E assignement.
 
-I'm not quite sure what you mean by that.  In any case, it would be 
-completely wrong to think that usb_port_suspend isn't involved in 
-runtime PM.
+Signed-off-by: Ajay Gupta <ajayg@nvidia.com>
+---
+Changes from v1: Fixed comments from Heikki
 
-In fact, usb_port_suspend is _more_ important for runtime suspend than
-for system sleep.  The reason is simple: If you want to put a USB
-device into runtime suspend, you have to tell its upstream hub's port
-to enable the suspend feature (i.e., call usb_port_suspend).  But if
-you want to put an entire bus of USB devices to sleep for a system
-suspend, all you have to do is tell the host controller to stop sending
-packets; the ports don't need any notification.
+ drivers/usb/typec/ucsi/ucsi.h     |  2 ++
+ drivers/usb/typec/ucsi/ucsi_ccg.c | 55 ++++++++++++++++++++++++++++---
+ 2 files changed, 52 insertions(+), 5 deletions(-)
 
-(Actually the situation is more complicated for USB 3.  But you get the 
-idea.)
-
-> As far as I understood it correctly the
-> purpose of those section was to trigger port poweroff if the device
-> supports it upon a system-suspend.
-
-No, the purpose of the sections you removed is to trigger port poweroff
-when the device goes into any type of suspend, either system or
-runtime.  Of course, as you discovered, during system sleep the code
-doesn't actually turn off the port power -- that's a bug.  But during
-runtime PM it does.
-
-> Therefore I came up with my question:
-> https://www.spinics.net/lists/linux-usb/msg190537.html.
-
-> > Also, try to find better names.  Maybe usb_port_sleep and 
-> > usb_port_wake, or usb_port_system_suspend and usb_port_system_resume.
-> 
-> IMHO usb_port_suspend/resume should be the best ;)
-
-Okay, so long as they are static and won't conflict with the functions 
-in hub.c.
-
-Alan Stern
-
-PS: There's one more thing you need to know -- I completely forgot 
-about it until just now.  During system sleep, we have to make sure 
-that the child device gets suspended _before_ and resumed _after_ the 
-port.  If it happened the other way, we'd be in trouble.
-
-(The proper ordering would be automatic if the child USB device was
-registered under the port device, but for historical reasons it isn't;
-it gets registered directly under the parent hub.)
-
-This means you'll have to call device_pm_wait_for_dev() at the 
-appropriate places in the suspend and resume pathways.
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index a89112b69cd5..8e831108f481 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -119,12 +119,14 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
+ #define UCSI_SET_PDR_ACCEPT_ROLE_SWAPS		BIT(25)
+ 
+ /* GET_ALTERNATE_MODES command bits */
++#define UCSI_ALTMODE_RECIPIENT(_r_)		(((_r_) >> 16) & 0x7)
+ #define UCSI_GET_ALTMODE_RECIPIENT(_r_)		((u64)(_r_) << 16)
+ #define   UCSI_RECIPIENT_CON			0
+ #define   UCSI_RECIPIENT_SOP			1
+ #define   UCSI_RECIPIENT_SOP_P			2
+ #define   UCSI_RECIPIENT_SOP_PP			3
+ #define UCSI_GET_ALTMODE_CONNECTOR_NUMBER(_r_)	((u64)(_r_) << 24)
++#define UCSI_ALTMODE_OFFSET(_r_)		(((_r_) >> 32) & 0xff)
+ #define UCSI_GET_ALTMODE_OFFSET(_r_)		((u64)(_r_) << 32)
+ #define UCSI_GET_ALTMODE_NUM_ALTMODES(_r_)	((u64)(_r_) << 40)
+ 
+diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+index 2658cda5da11..bff96d64dddf 100644
+--- a/drivers/usb/typec/ucsi/ucsi_ccg.c
++++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+@@ -125,6 +125,10 @@ struct version_format {
+ #define CCG_FW_BUILD_NVIDIA	(('n' << 8) | 'v')
+ #define CCG_OLD_FW_VERSION	(CCG_VERSION(0x31) | CCG_VERSION_PATCH(10))
+ 
++/* Altmode offset for NVIDIA Function Test Board (FTB) */
++#define NVIDIA_FTB_DP_OFFSET	(2)
++#define NVIDIA_FTB_DBG_OFFSET	(3)
++
+ struct version_info {
+ 	struct version_format base;
+ 	struct version_format app;
+@@ -477,24 +481,65 @@ static void ucsi_ccg_update_set_new_cam_cmd(struct ucsi_ccg *uc,
+ 	*cmd |= UCSI_SET_NEW_CAM_SET_AM(cam);
+ }
+ 
++/*
++ * Change the order of vdo values of NVIDIA test device FTB
++ * (Function Test Board) which reports altmode list with vdo=0x3
++ * first and then vdo=0x. Current logic to assign mode value is
++ * based on order in altmode list and it causes a mismatch of CON
++ * and SOP altmodes since NVIDIA GPU connector has order of vdo=0x1
++ * first and then vdo=0x3
++ */
++static void ucsi_ccg_nvidia_altmode(struct ucsi_ccg *uc,
++				    struct ucsi_altmode *alt)
++{
++	switch (UCSI_ALTMODE_OFFSET(uc->last_cmd_sent)) {
++	case NVIDIA_FTB_DP_OFFSET:
++		if (alt[0].mid == USB_TYPEC_NVIDIA_VLINK_DBG_VDO)
++			alt[0].mid = USB_TYPEC_NVIDIA_VLINK_DP_VDO |
++				DP_CAP_DP_SIGNALING | DP_CAP_USB |
++				DP_CONF_SET_PIN_ASSIGN(BIT(DP_PIN_ASSIGN_E));
++		break;
++	case NVIDIA_FTB_DBG_OFFSET:
++		if (alt[0].mid == USB_TYPEC_NVIDIA_VLINK_DP_VDO)
++			alt[0].mid = USB_TYPEC_NVIDIA_VLINK_DBG_VDO;
++		break;
++	default:
++		break;
++	}
++}
++
+ static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
+ 			 void *val, size_t val_len)
+ {
+ 	struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
+-	int ret;
+ 	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
++	struct ucsi_altmode *alt;
++	int ret;
+ 
+ 	ret = ccg_read(uc, reg, val, val_len);
+ 	if (ret)
+ 		return ret;
+ 
+-	if (offset == UCSI_MESSAGE_IN) {
+-		if (UCSI_COMMAND(uc->last_cmd_sent) == UCSI_GET_CURRENT_CAM &&
+-		    uc->has_multiple_dp) {
++	if (offset != UCSI_MESSAGE_IN)
++		return ret;
++
++	switch (UCSI_COMMAND(uc->last_cmd_sent)) {
++	case UCSI_GET_CURRENT_CAM:
++		if (uc->has_multiple_dp)
+ 			ucsi_ccg_update_get_current_cam_cmd(uc, (u8 *)val);
++		break;
++	case UCSI_GET_ALTERNATE_MODES:
++		if (UCSI_ALTMODE_RECIPIENT(uc->last_cmd_sent) ==
++		    UCSI_RECIPIENT_SOP) {
++			alt = val;
++			if (alt[0].svid == USB_TYPEC_NVIDIA_VLINK_SID)
++				ucsi_ccg_nvidia_altmode(uc, alt);
+ 		}
+-		uc->last_cmd_sent = 0;
++		break;
++	default:
++		break;
+ 	}
++	uc->last_cmd_sent = 0;
+ 
+ 	return ret;
+ }
+-- 
+2.17.1
 
