@@ -2,92 +2,190 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4D8172276
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 16:45:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 640F6172305
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 17:19:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729475AbgB0Poy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Feb 2020 10:44:54 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:42229 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727592AbgB0Poy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 10:44:54 -0500
-Received: by mail-pf1-f196.google.com with SMTP id 15so5829pfo.9
-        for <linux-usb@vger.kernel.org>; Thu, 27 Feb 2020 07:44:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=P0GQUcx7HmmpSamBc03kK+HfbtO6GCBFhRm2/Ltpz3o=;
-        b=awYccJOYe/nKqPHYEdR/Z1vvmgTeIaNQ79AwkS+qmUanO7zNSUoG5ewFMViLs1ZVCO
-         tUSVnaU29rIfc8MwCUF2wN+qZwio/rDuM3erfdMiHZ2owajdE28PcrbRi6KOcZkCN0kz
-         kOMUYiveAwn8aflOoclqKdc0NHaBa/nZWX1opOBXVZm/MvdioyWA5/qKcGrb4LQQuAa9
-         M9GsZzhlajAhzNOR5X89F1W6Jo3vmx1+ltkhUjwFW00dlaIImoIczSdUMjD+MbuTYXuy
-         2fDtxHLBOUzzciTPorKOsAyZ0y2veZwbCITTqnL91zNpQs96dhCs5a/rIfTzjRg4vISE
-         vgdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=P0GQUcx7HmmpSamBc03kK+HfbtO6GCBFhRm2/Ltpz3o=;
-        b=pdoL/Ml08wIrkD1VRZNU47HzTU0WztjlwxTgO+4+21Qe0NLGpJ2AkD2pnBM64ycMkH
-         ivV9OTSn7lqF8pGy5LGORAJpcRQCOhiG4ziX+Z1qhtpqQfCDjspeBtCYwZ5K6jVS1BFQ
-         RY1M6ZAdTbgoI6oKynvfGrsKEPJY0fPVrWJrtYzcsTL5PhK6EzJHdjbHtEy94eYozTKy
-         hIqWLTiy489AkK2WGjLUUM09VZDTlP5VbBmMRtZ91mILba7XMYK6NLIIZ5YG4pO3gtHS
-         1zwfj3VK4TD3mEKYUgBldjjM1takKenSg0ZJgq/jWzbwSMzzgoQPtprkLFbV9+Zu/9FY
-         If+A==
-X-Gm-Message-State: APjAAAU+YYJtaVnifr5nmGa6mX724BnTgUSFxrunW94wdni1R6RLGW1s
-        H8OdrjdlADufGM/8CNJ8aQfkGh0ZcmCkQrilRQU6Uw==
-X-Google-Smtp-Source: APXvYqwDl+EtYrX963G/yoja7CkMwn3y35cv/p/HJEJInwXICsTEgLfY6ay3a91oC2F/lKgWco/Sz1cPwi/b5lZas+I=
-X-Received: by 2002:aa7:9629:: with SMTP id r9mr4726368pfg.51.1582818293330;
- Thu, 27 Feb 2020 07:44:53 -0800 (PST)
+        id S1729865AbgB0QSm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Feb 2020 11:18:42 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:38684 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729689AbgB0QSm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 11:18:42 -0500
+Received: (qmail 2704 invoked by uid 2102); 27 Feb 2020 11:18:41 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 27 Feb 2020 11:18:41 -0500
+Date:   Thu, 27 Feb 2020 11:18:41 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Marco Felsch <m.felsch@pengutronix.de>
+cc:     gregkh@linuxfoundation.org, <Thinh.Nguyen@synopsys.com>,
+        <harry.pan@intel.com>, <nobuta.keiya@fujitsu.com>,
+        <malat@debian.org>, <kai.heng.feng@canonical.com>,
+        <chiasheng.lee@intel.com>, <andreyknvl@google.com>,
+        <heinzelmann.david@gmail.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@pengutronix.de>,
+        kbuild test robot <lkp@intel.com>
+Subject: Re: [RFC PATCH v2] USB: hub: fix port suspend/resume
+In-Reply-To: <20200227135631.13983-1-m.felsch@pengutronix.de>
+Message-ID: <Pine.LNX.4.44L0.2002271100000.1730-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-References: <cover.1582742673.git.andreyknvl@google.com> <20200226174141.d1c938e7962a4fc09060eba9@linux-foundation.org>
-In-Reply-To: <20200226174141.d1c938e7962a4fc09060eba9@linux-foundation.org>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Thu, 27 Feb 2020 16:44:42 +0100
-Message-ID: <CAAeHK+wKO1_VhtEZptgXyqgPLHT9w47Z+-77QfDD4fKDPRS+Gg@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] kcov: collect coverage from usb soft interrupts
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 27, 2020 at 2:41 AM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Wed, 26 Feb 2020 19:48:06 +0100 Andrey Konovalov <andreyknvl@google.com> wrote:
->
-> > This patchset extends kcov to allow collecting coverage from soft
-> > interrupts and then uses the new functionality to collect coverage from
-> > USB code.
-> >
-> > This has allowed to find at least one new HID bug [1], which was recently
-> > fixed by Alan [2].
->
-> I might have asked this before, but I don't see this obvious question
-> addressed in the changelogs so maybe I didn't...
+On Thu, 27 Feb 2020, Marco Felsch wrote:
 
-You've asked this for the previous patchset about collecting coverage
-from background threads :)
+> At the momemnt the usb-port driver has only runime_pm hooks.
+> Suspending the port and turn off the VBUS supply should be triggered by
+> the hub device suspend callback usb_port_suspend() which calls the
 
-> Will this only ever be useful for USB?  Or is it anticipated that other
-> subsystems will use this?  If the latter, which ones?
+Strictly speaking it's just a routine, not a callback.  That is, it 
+doesn't get invoked through a function pointer.
 
-Any subsystem that uses softirqs (e.g. timers) can make use of this.
-Looking at the recent syzbot reports, an obvious candidate is the
-networking subsystem [1, 2, 3 and many more]. I'll add this info into
-the cover letter in the next version.
+> pm_runtime_put_sync() if all pre-conditions are meet. This mechanism
+> don't work correctly due to the global PM behaviour, for more information
+> see [1]. According [1] I added the suspend/resume callbacks for the port
+> device to fix this.
+> 
+> [1] https://www.spinics.net/lists/linux-usb/msg190537.html
 
-Thanks!
+Please put at least a short description of the problem here; don't 
+force people to go look up some random web page just to find out what's 
+really going on.
 
-[1] https://syzkaller.appspot.com/bug?extid=522ab502c69badc66ab7
-[2] https://syzkaller.appspot.com/bug?extid=57f89d05946c53dbbb31
-[3] https://syzkaller.appspot.com/bug?extid=df358e65d9c1b9d3f5f4
+> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> ---
+> Hi,
+> 
+> this v2 contains the fixes
+> 
+> Reported-by: kbuild test robot <lkp@intel.com>
+
+Everything below the "---" line, except the patch itself, gets ignored.  
+You need to move this Reported-by: up higher.
+
+> Regards,
+>   Marco
+> 
+> Changes:
+> - init retval to zero
+> - keep CONFIG_PM due to do_remote_wakeup availability
+> - adapt commit message
+> 
+>  drivers/usb/core/hub.c  | 13 -------------
+>  drivers/usb/core/port.c | 35 ++++++++++++++++++++++++++++++-----
+>  2 files changed, 30 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 3405b146edc9..c294484e478d 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -3323,10 +3323,6 @@ int usb_port_suspend(struct usb_device *udev, pm_message_t msg)
+>  		usb_set_device_state(udev, USB_STATE_SUSPENDED);
+>  	}
+>  
+> -	if (status == 0 && !udev->do_remote_wakeup && udev->persist_enabled
+> -			&& test_and_clear_bit(port1, hub->child_usage_bits))
+> -		pm_runtime_put_sync(&port_dev->dev);
+> -
+>  	usb_mark_last_busy(hub->hdev);
+>  
+>  	usb_unlock_port(port_dev);
+> @@ -3514,15 +3510,6 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
+>  	int		status;
+>  	u16		portchange, portstatus;
+>  
+> -	if (!test_and_set_bit(port1, hub->child_usage_bits)) {
+> -		status = pm_runtime_get_sync(&port_dev->dev);
+> -		if (status < 0) {
+> -			dev_dbg(&udev->dev, "can't resume usb port, status %d\n",
+> -					status);
+> -			return status;
+> -		}
+> -	}
+> -
+
+Why do you get rid of these two sections of code?  Won't that cause
+runtime PM to stop working properly?
+
+>  	usb_lock_port(port_dev);
+>  
+>  	/* Skip the initial Clear-Suspend step for a remote wakeup */
+> diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+> index bbbb35fa639f..13f130b67efe 100644
+> --- a/drivers/usb/core/port.c
+> +++ b/drivers/usb/core/port.c
+> @@ -283,7 +283,34 @@ static int usb_port_runtime_suspend(struct device *dev)
+>  
+>  	return retval;
+>  }
+> -#endif
+> +
+> +static int __maybe_unused _usb_port_suspend(struct device *dev)
+
+Don't say _maybe_unused.  Instead, protect these two routines with 
+#ifdef CONFIG_PM_SLEEP.  That way they won't be compiled on systems 
+that can't use them.
+
+Also, try to find better names.  Maybe usb_port_sleep and 
+usb_port_wake, or usb_port_system_suspend and usb_port_system_resume.
+
+> +{
+> +	struct usb_port *port_dev = to_usb_port(dev);
+> +	struct usb_device *udev = port_dev->child;
+> +	int retval = 0;
+> +
+> +	if (!udev->do_remote_wakeup && udev->persist_enabled)
+> +		retval = usb_port_runtime_suspend(dev);
+> +
+> +	/* Do not force the user to enable the power-off feature */
+> +	if (retval && retval != -EAGAIN)
+> +		return retval;
+> +
+> +	return 0;
+
+IMO it would be a lot more understandable if you wrote
+
+	if (retval == -EAGAIN)
+		retval = 0;
+
+Also, the relation between this code and the preceding comment is not
+obvious.  The comment should say something more like: If the
+PM_QOS_FLAG setting prevents us from powering off the port, it's not an
+error.
+
+Alan Stern
+
+> +}
+> +
+> +static int __maybe_unused _usb_port_resume(struct device *dev)
+> +{
+> +	struct usb_port *port_dev = to_usb_port(dev);
+> +	struct usb_device *udev = port_dev->child;
+> +
+> +	if (!udev->do_remote_wakeup && udev->persist_enabled)
+> +		return usb_port_runtime_resume(dev);
+> +
+> +	return 0;
+> +}
+> +#endif /* CONFIG_PM */
+>  
+>  static void usb_port_shutdown(struct device *dev)
+>  {
+> @@ -294,10 +321,8 @@ static void usb_port_shutdown(struct device *dev)
+>  }
+>  
+>  static const struct dev_pm_ops usb_port_pm_ops = {
+> -#ifdef CONFIG_PM
+> -	.runtime_suspend =	usb_port_runtime_suspend,
+> -	.runtime_resume =	usb_port_runtime_resume,
+> -#endif
+> +	SET_SYSTEM_SLEEP_PM_OPS(_usb_port_suspend, _usb_port_resume)
+> +	SET_RUNTIME_PM_OPS(usb_port_runtime_suspend, usb_port_runtime_resume, NULL)
+>  };
+>  
+>  struct device_type usb_port_device_type = {
+> 
+
