@@ -2,62 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1BE170DF9
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 02:41:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44411170E28
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 03:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728143AbgB0Bln (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Feb 2020 20:41:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57372 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727964AbgB0Blm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 26 Feb 2020 20:41:42 -0500
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ED623208E4;
-        Thu, 27 Feb 2020 01:41:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582767702;
-        bh=zlU+Mz8nl1wZykQwoywF5NYDM925aYXitUfhUJEFdWU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Pz5oD86KPZttD/NpbHpThtTRB2GMFbr5zWEIct45dfm69sKvsQiXBEx9SUMUmVrfK
-         HK7HH28LBrhShehywrBdC5uLBkB06JNGMe91rnjwoVbz32CG2UZeHHONzPRIP2JRML
-         1foQ4EmW6m7KPl2YBaC8/vzHStmyrtq6fW4bPgRY=
-Date:   Wed, 26 Feb 2020 17:41:41 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>
-Subject: Re: [PATCH v1 0/3] kcov: collect coverage from usb soft interrupts
-Message-Id: <20200226174141.d1c938e7962a4fc09060eba9@linux-foundation.org>
-In-Reply-To: <cover.1582742673.git.andreyknvl@google.com>
-References: <cover.1582742673.git.andreyknvl@google.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        id S1728274AbgB0CD1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Feb 2020 21:03:27 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:17935 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728217AbgB0CD0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Feb 2020 21:03:26 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e5723490000>; Wed, 26 Feb 2020 18:02:49 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 26 Feb 2020 18:03:26 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 26 Feb 2020 18:03:26 -0800
+Received: from [10.19.108.125] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 27 Feb
+ 2020 02:03:24 +0000
+Subject: Re: [PATCH] usb: host: xhci-tegra: Tegra186/Tegra194 LPM
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+CC:     <gregkh@linuxfoundation.org>, <jonathanh@nvidia.com>,
+        <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <nkristam@nvidia.com>
+References: <20200224062145.25785-1-jckuo@nvidia.com>
+ <20200224125100.GA2108060@ulmo>
+ <223f5f09-781a-825d-e75e-3b878acec27d@nvidia.com>
+ <6c93af2b-5a4d-a3ad-07f4-f5c72f569752@linux.intel.com>
+X-Nvconfidentiality: public
+From:   JC Kuo <jckuo@nvidia.com>
+Message-ID: <f819d55a-8479-b15f-b06c-a8d391a64e04@nvidia.com>
+Date:   Thu, 27 Feb 2020 10:03:08 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
+MIME-Version: 1.0
+In-Reply-To: <6c93af2b-5a4d-a3ad-07f4-f5c72f569752@linux.intel.com>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1582768969; bh=lK6dW+IEyWhiwClCKvj+UqE+UR6I9nzlO2znKXwoWDM=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=BaJLcL01rmpSpRsgTrZ9/YKvBXkFV3y6/VSnJjCvqX/kc3zyeLagz/SzOkxbrDYG2
+         T35gfIeD9677HXPMM9iKP1GFhbaXhuqCK4z1wrGwT0yuMbMJ2YnfiO1TU37r40eYKa
+         9x0NzTJfyk0nDtJDkvkQzLy8CTd1CYCBhRR0jtVrXG3YUPQKpB/CV+yiJ6nvSxVlYa
+         N+mzEvEYUqbBDTEwl64CZBGeT1AU09TMHe17bBdX4EJqC+g9dPYlRi6a8DmMKDMlSd
+         ppGEYPtNn/XHwmsbCrkPe4N2Z842YZIYdjNAsEZ96Y6sHCwspgSJkBtkiDd8602lgV
+         BRBqMLsPwRgtA==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 26 Feb 2020 19:48:06 +0100 Andrey Konovalov <andreyknvl@google.com> wrote:
+Hi Mathias,
+Thanks for the tip. It's really helpful.
 
-> This patchset extends kcov to allow collecting coverage from soft
-> interrupts and then uses the new functionality to collect coverage from
-> USB code.
+root@tegra-ubuntu:/d/usb/xhci/3610000.usb/ports/port04# cat portsc
+Powered Connected Enabled Link:U2 PortSpeed:4 Change: Wake:
+
+-JC
+
+On 2/26/20 5:32 PM, Mathias Nyman wrote:
+> On 26.2.2020 10.12, JC Kuo wrote:
+>> Hi Thierry,
+>> Yes, it can be verified with a LPM capable device. For example, a VIA USB 3.0
+>> hub is connected to Jetson-Xavier. "lsusb -v" output [1] shows the device
+>> supports LPM and the host has enabled U1/U2 states for the device. If host LPM
+>> is disabled, there will be no "U1 Enabled" and "U2 Enabled" strings in "Device
+>> Status" section.
+>>
+>> To check LPM operation, disconnect all USB 3.0 devices from the hub and disable
+>> runtime PM for the super-speed portion of the hub, so that it won't be
+>> auto-suspended.
+>> root@tegra-ubuntu:~# echo on > /sys/bus/usb/devices/2-4/power/control
+>>
+>> Since there is no data transaction for the hub, link will enter U2 soon. This
+>> can be checked by reading XHCI.PORTSC register. In below, PLS (Port Link State)
+>> field is U2.
+>> root@tegra-ubuntu:~# devmem 0x3610450
+>> 0x00001243
 > 
-> This has allowed to find at least one new HID bug [1], which was recently
-> fixed by Alan [2].
-
-I might have asked this before, but I don't see this obvious question
-addressed in the changelogs so maybe I didn't...
-
-Will this only ever be useful for USB?  Or is it anticipated that other
-subsystems will use this?  If the latter, which ones?
-
-Thanks.
+> A more human friendly way to read portsc registers:
+> 
+> # cat /sys/kernel/debug/usb/xhci/0000\:00\:14.0/ports/port02/portsc 
+> Powered Connected Enabled Link:U0 PortSpeed:3 Change: Wake: 
+> 
+> -Mathias
+> 
