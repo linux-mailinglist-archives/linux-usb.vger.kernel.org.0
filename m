@@ -2,140 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4601715D8
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 12:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F85517161B
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 12:35:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728865AbgB0LSk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Feb 2020 06:18:40 -0500
-Received: from mail-eopbgr80071.outbound.protection.outlook.com ([40.107.8.71]:64069
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728846AbgB0LSk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Feb 2020 06:18:40 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DJpnuK8IhytarkQEoaTdKWjMeAYi4lBJLyaRoZ8JSWVqxkxmd99TAMrDDbmhNBLte1QGfOFtxuypNlzhk2xXBrTv2aK3bC61d8n+Gjbw0ajfzEdcFWrh3uMvevmjb+OvuufZ0VAns66pVqjYbLxZ38EbUDEMHsOfnhzRFhcSosAYFupv+aN7+ilrmyeclxSfxynYOGr2SdUL4XKWsHpOqVvGAgBxCD0/KI6UZwTeCuciZ34URbZySngF/IZ2GIAVpO0aMFvuRB2IkeGcaQNkXKmByLihtdCCq2li6YT67J7O+s39ZMIKB4zfJd1Ky5TzTuDZcF6ksncYy0ggTxlS6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YAgnf2o/pM5RXuXTvv7+5D+CVN6WFnMrNsVW2hqxjiE=;
- b=CJhefFHq6xlSRQ3auetlCYeBvdTRT89JHyg0Rz4qtBSVlm65JOe/MSPSzJQ8L2/fYh74gvt0fpc572GorQOrkfwshXD0ztiKNbFu1VVhv9gXMWE3SCmkolt8Q+eEzYBf/04Juf73XgG8d4czegPaPZVD720XX/aKSz5KUmmVMrpBExvpvOvS2rO9V/hHVCCOQ+7RgXg39aL1acUwwHLFAXGrGiXcyBIQXv9QCKPR+uS7DUKntRHY/bOcksG6nUFjBVclW7eLQvmShww8CJYtMC/iBbL1MvltNBw6KpMQ6SLqaq5qf/QnrlgtI5F4a1jhJ0FEHwF6INRdnPU80g3yhA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YAgnf2o/pM5RXuXTvv7+5D+CVN6WFnMrNsVW2hqxjiE=;
- b=lRnQLLL4siX23nGiGn3aKgLSPu0ge9nQRVz+s4c+amkdnTFszug93Kkys4mQ0nwOr8HYZsjSP9HLYBJKBo2CevDUcEy32gd7Ll7vsdDZCTakOLOtncsLW1U61Co9xi1HSaYlXPrwa/8XwQ9bNC/yZt8h9pJ6B6PWYX6H1b7WuBI=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
- VI1PR04MB4256.eurprd04.prod.outlook.com (52.133.12.147) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2772.14; Thu, 27 Feb 2020 11:18:37 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::9547:9dfa:76b8:71b1]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::9547:9dfa:76b8:71b1%7]) with mapi id 15.20.2750.021; Thu, 27 Feb 2020
- 11:18:36 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        id S1728885AbgB0Lfm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Feb 2020 06:35:42 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:48871 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728856AbgB0Lfm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 06:35:42 -0500
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1j7HS8-0001mn-Pt; Thu, 27 Feb 2020 12:35:40 +0100
+Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1j7HS7-0003vJ-Lw; Thu, 27 Feb 2020 12:35:39 +0100
+Date:   Thu, 27 Feb 2020 12:35:39 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
         "jun.li@freescale.com" <jun.li@freescale.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
+        <linux-arm-kernel@lists.infradead.org>
 Subject: Re: [PATCH 0/3] USB IMX Chipidea fix gpio vbus control
-Thread-Topic: [PATCH 0/3] USB IMX Chipidea fix gpio vbus control
-Thread-Index: AQHV7VqVZ4BeDr6e5UuTM5ZPfBO9kqgu5JsA
-Date:   Thu, 27 Feb 2020 11:18:36 +0000
-Message-ID: <20200227111838.GA24071@b29397-desktop>
+Message-ID: <20200227113539.gcx3nfwm2fbm3ukv@pengutronix.de>
 References: <20200227104212.12562-1-m.felsch@pengutronix.de>
-In-Reply-To: <20200227104212.12562-1-m.felsch@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 5fc3a947-48ff-4097-d090-08d7bb76c9da
-x-ms-traffictypediagnostic: VI1PR04MB4256:|VI1PR04MB4256:|VI1PR04MB4256:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB4256F92BB94819BB319350E48BEB0@VI1PR04MB4256.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-forefront-prvs: 03264AEA72
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(376002)(396003)(366004)(346002)(136003)(39850400004)(189003)(199004)(6506007)(8676002)(966005)(2906002)(26005)(6512007)(9686003)(8936002)(64756008)(1076003)(316002)(71200400001)(53546011)(4326008)(66556008)(66476007)(76116006)(91956017)(44832011)(66946007)(5660300002)(66446008)(6486002)(81166006)(81156014)(6916009)(33716001)(45080400002)(33656002)(54906003)(86362001)(478600001)(186003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4256;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: X/QW5UAb6jUuOp0ukcZ5UAlE4cxN5bCWcOWCDPY060kC7WBC7gTTS5zj53NPDn/J8IcxHk31yuIPZXx8mN72ejC1q2qZJzT62Hg2R1Rk0qiR9TXaUfXdL1W5XU28OwYHnrums38r/j/zkqNwngCEwj4V9D+Q6OtzBX8UeImQnexfZM/YhZ1WqdkHne5yZK/05x/8ZucFLzz+N0nyIkqC1u/Xm4jF4kM8Q1MOF++dBcsmQLw6O9C2/o/J/lxENR/dAtP2sCu3N0NvOdJ6daiB9PDJp0JOxMIEnqvgcC92eHVqucVznwGILnNkwMGbskg5Pvtv7rtWm5fKGrHcxblZ2adWkosPu/pqx01amlYYc3RBcJ7M+yqP7Qrq7VQm4qACE2qTuFQa69r+5vwqSw+Kzlo8+IBtb/3BBSlhFgcQ2q17wDR8dj1YmZ0FMkHiH8ruLH4b4K9KKkvv7VJTtg+VCVsgksMXXeXfAcOs0LbpGsjWqQ93ApPYTNcoMAKrEpvNWH+AREHhyQ7RKgea4RnDlA==
-x-ms-exchange-antispam-messagedata: VyJzU7eKXAUQHeefeXC5/O0RtSMsXrSsLV7yQGsW/pG+Eg0XKcYiq+UnPkkS6ZGPYHnB7BrOUOni9hSR/PV3vS1HyVQ5x966AJ6EdCH6mHK5FVukUCo94cEntsa8jc3aGOygbBZGpHlZHMpuD0kLvw==
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <D57EE805709FFD44B51BA171D2561C58@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+ <20200227111838.GA24071@b29397-desktop>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5fc3a947-48ff-4097-d090-08d7bb76c9da
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Feb 2020 11:18:36.1951
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ew/Q0JJnXBuGtmSBp7SF2rKI/7/NPtx7WPV7ickBYFj/UG9JOngBmfacU02dwvA4aMJmykveGwJjU9isIWz16g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200227111838.GA24071@b29397-desktop>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 12:28:58 up 104 days,  2:47, 122 users,  load average: 0.00, 0.01,
+ 0.00
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-02-27 11:42:09, Marco Felsch wrote:
-> Hi,
->=20
-> the gpio-based port power is broken since commit [1,2]. I changed the
-> core behaviour to to cleanup the code and avoid local workaround fixes.
+Hi Peter,
 
-Many i.mx series evk boards work well for gpio-based port power control,
-what problem you have found, would you please list it detail?
+thanks for your fast reply :)
 
-Peter
->=20
-> With this series and [3] I'am now able to disable the port completely
-> after I disbaled the pm_qos_no_power_off flag.
->=20
-> [1] 6adb9b7b5fb6 ("usb: chipidea: add a flag for turn on vbus early for h=
-ost")
-> [2] 659459174188 ("usb: chipidea: host: turn on vbus before add hcd if ea=
-rly vbus on is required")
-> [3] https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fl=
-kml.org%2Flkml%2F2020%2F2%2F27%2F198&amp;data=3D02%7C01%7Cpeter.chen%40nxp.=
-com%7Cc1b3094e826b49b572cb08d7bb71b6bc%7C686ea1d3bc2b4c6fa92cd99c5c301635%7=
-C0%7C0%7C637183969379126557&amp;sdata=3Di7O7vBqiVCb2opVNva7ffxIdqFb%2BvGzV5=
-Qsy5wwarbQ%3D&amp;reserved=3D0
->=20
-> Regards,
->   Marco
->=20
-> Marco Felsch (3):
->   USB: ehci-hub: let port_power() override the ehci_port_power()
->   Partially Revert "usb: chipidea: host: turn on vbus before add hcd if
->     early vbus on is required"
->   Revert "usb: chipidea: add a flag for turn on vbus early for host"
->=20
->  drivers/usb/chipidea/ci_hdrc_imx.c | 10 ++--------
->  drivers/usb/chipidea/host.c        | 31 ++++++++++--------------------
->  drivers/usb/host/ehci-hub.c        |  6 +++---
->  include/linux/usb/chipidea.h       | 17 ++++++++--------
->  4 files changed, 23 insertions(+), 41 deletions(-)
->=20
-> --=20
-> 2.20.1
->=20
+On 20-02-27 11:18, Peter Chen wrote:
+> On 20-02-27 11:42:09, Marco Felsch wrote:
+> > Hi,
+> > 
+> > the gpio-based port power is broken since commit [1,2]. I changed the
+> > core behaviour to to cleanup the code and avoid local workaround fixes.
+> 
+> Many i.mx series evk boards work well for gpio-based port power control,
+> what problem you have found, would you please list it detail?
 
---=20
+Hm.. who could that work? I picked the important parts:
 
-Thanks,
-Peter Chen=
+static int ehci_ci_portpower(struct usb_hcd *hcd, int portnum, bool enable)
+{
+	...
+
+	if (priv->reg_vbus && enable != priv->enabled) {
+
+		...
+
+		if (enable)
+			ret = regulator_enable(priv->reg_vbus);
+		else
+			ret = regulator_disable(priv->reg_vbus);
+
+		...
+	}
+
+	...
+}
+
+static int host_start(struct ci_hdrc *ci)
+{
+	...
+
+	priv->reg_vbus = NULL;
+
+	if (ci->platdata->reg_vbus && !ci_otg_is_fsm_mode(ci)) {
+		if (ci->platdata->flags & CI_HDRC_TURN_VBUS_EARLY_ON) {
+			ret = regulator_enable(ci->platdata->reg_vbus);
+			if (ret) {
+				dev_err(ci->dev,
+				"Failed to enable vbus regulator, ret=%d\n",
+									ret);
+				goto put_hcd;
+			}
+		} else {
+			priv->reg_vbus = ci->platdata->reg_vbus;
+		}
+	}
+
+	...
+}
+
+Note, I'm using a imx6q which has the CI_HDRC_TURN_VBUS_EARLY_ON set.
+
+Regards,
+  Marco
+
+> Peter
+> > 
+> > With this series and [3] I'am now able to disable the port completely
+> > after I disbaled the pm_qos_no_power_off flag.
+> > 
+> > [1] 6adb9b7b5fb6 ("usb: chipidea: add a flag for turn on vbus early for host")
+> > [2] 659459174188 ("usb: chipidea: host: turn on vbus before add hcd if early vbus on is required")
+> > [3] https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.org%2Flkml%2F2020%2F2%2F27%2F198&amp;data=02%7C01%7Cpeter.chen%40nxp.com%7Cc1b3094e826b49b572cb08d7bb71b6bc%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637183969379126557&amp;sdata=i7O7vBqiVCb2opVNva7ffxIdqFb%2BvGzV5Qsy5wwarbQ%3D&amp;reserved=0
+> > 
+> > Regards,
+> >   Marco
+> > 
+> > Marco Felsch (3):
+> >   USB: ehci-hub: let port_power() override the ehci_port_power()
+> >   Partially Revert "usb: chipidea: host: turn on vbus before add hcd if
+> >     early vbus on is required"
+> >   Revert "usb: chipidea: add a flag for turn on vbus early for host"
+> > 
+> >  drivers/usb/chipidea/ci_hdrc_imx.c | 10 ++--------
+> >  drivers/usb/chipidea/host.c        | 31 ++++++++++--------------------
+> >  drivers/usb/host/ehci-hub.c        |  6 +++---
+> >  include/linux/usb/chipidea.h       | 17 ++++++++--------
+> >  4 files changed, 23 insertions(+), 41 deletions(-)
+> > 
+> > -- 
+> > 2.20.1
+> > 
+> 
+> -- 
+> 
+> Thanks,
+> Peter Chen
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
