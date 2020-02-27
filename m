@@ -2,132 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB157172524
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 18:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12583172896
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 20:29:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730270AbgB0Rce (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Feb 2020 12:32:34 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:36704 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730168AbgB0Rcd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 12:32:33 -0500
-Received: by mail-wm1-f66.google.com with SMTP id f19so258417wmh.1;
-        Thu, 27 Feb 2020 09:32:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=bOM9ZguY+LlfPuZces6tFRfvNJKyFJIl4Ch9+iWS3ek=;
-        b=lN6thxEPJeeGHigyjJNMQ8pPcMnBjMfnUPj0B458IHVV4xSU4V5efLpUhpsDZlbygB
-         qKLRrxN046Fwl3/LPG0XrB3J7XHahTJvgQJYpd/lXh/Xii/kSw7wEujObkB/4eOZ/rti
-         XtZCz9CtI75qNFaobEl5008mYB28Qg83kz88DaFQ2uy7cjQaha+MktXZHXNjPDyxVblx
-         J+dUD6TedBLe4BSrO7BAUvJe+tUJlWjjucJoXTjftHNBiLPFFCXiULL+v1VlQXKcuQBs
-         yJMdPpHpXcGO72LlsO+mFfJSEAM12aBdALguL96+3QVy6oOJtDVe2yV/fv/HRy+AcDTm
-         nx+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bOM9ZguY+LlfPuZces6tFRfvNJKyFJIl4Ch9+iWS3ek=;
-        b=IpwwFR38qY6wSK2MFDUshoc7tZUrFzEbn9+LWyHYwuTy/Eoe1aOPL/B4DLJ6wA2Aj1
-         ykyHjr9hC5ZLzp4oAxQYvv7kIcGy9PYo+BPzYZzsLjMEHU7MRTez7+EJwEBNgiaLVOXd
-         KVuh5Bv8vAJKUKGmjZV9+ZDRzrnqOQptq90wp91jtDIxfOjcDnG+6gsRz/Zvv6NnAhoo
-         jjhiiV/BGHVZTXomncPhRnwn0ccsUlIccEOXEyLRYNLpQYig6YJBPgGFnCBb4BFhHrtn
-         YV0PMdGyeX5KGLwUWutZ090JxzBTc7bR3mnHhbcibOFIGOwMjHptT2BWCWmW7GqeLDFQ
-         t9ZQ==
-X-Gm-Message-State: APjAAAXQ+xYdrvQUWLjsIcOhNjEOdlQfZm9Z9MdOicoYDnMfASBuBMuT
-        MbUHZhMS0uC6k25ET8YZqdg=
-X-Google-Smtp-Source: APXvYqyYjLyY+cOxVx5++7yoIrsteDDJb3n3HKrVHlrladKrVpKxjf8hjlKjSAXULYfIGtOd0M+EIA==
-X-Received: by 2002:a1c:156:: with SMTP id 83mr576898wmb.151.1582824750974;
-        Thu, 27 Feb 2020 09:32:30 -0800 (PST)
-Received: from localhost (pD9E516A9.dip0.t-ipconnect.de. [217.229.22.169])
-        by smtp.gmail.com with ESMTPSA id z10sm8450261wmk.31.2020.02.27.09.32.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2020 09:32:29 -0800 (PST)
-Date:   Thu, 27 Feb 2020 18:32:26 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     Nagarjuna Kristam <nkristam@nvidia.com>, jonathanh@nvidia.com,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Patch V5 00/21] Tegra XUSB OTG support
-Message-ID: <20200227173226.GA1114616@ulmo>
-References: <1581322307-11140-1-git-send-email-nkristam@nvidia.com>
- <20200217085130.GJ1339021@ulmo>
+        id S1730023AbgB0T3f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Feb 2020 14:29:35 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:37260 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729889AbgB0T3f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 14:29:35 -0500
+Received: (qmail 1906 invoked by uid 2102); 27 Feb 2020 14:29:34 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 27 Feb 2020 14:29:34 -0500
+Date:   Thu, 27 Feb 2020 14:29:34 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Marco Felsch <m.felsch@pengutronix.de>
+cc:     gregkh@linuxfoundation.org, <Thinh.Nguyen@synopsys.com>,
+        <harry.pan@intel.com>, <nobuta.keiya@fujitsu.com>,
+        <malat@debian.org>, <kai.heng.feng@canonical.com>,
+        <chiasheng.lee@intel.com>, <andreyknvl@google.com>,
+        <heinzelmann.david@gmail.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@pengutronix.de>,
+        kbuild test robot <lkp@intel.com>
+Subject: Re: [RFC PATCH v2] USB: hub: fix port suspend/resume
+In-Reply-To: <20200227164142.dsnbrxtk747tnvma@pengutronix.de>
+Message-ID: <Pine.LNX.4.44L0.2002271353300.1307-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wRRV7LY7NUeQGEoC"
-Content-Disposition: inline
-In-Reply-To: <20200217085130.GJ1339021@ulmo>
-User-Agent: Mutt/1.13.1 (2019-12-14)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Thu, 27 Feb 2020, Marco Felsch wrote:
 
---wRRV7LY7NUeQGEoC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On 20-02-27 11:18, Alan Stern wrote:
 
-On Mon, Feb 17, 2020 at 09:51:30AM +0100, Thierry Reding wrote:
-> On Mon, Feb 10, 2020 at 01:41:26PM +0530, Nagarjuna Kristam wrote:
-> > This patch series adds OTG support on XUSB hardware used in Tegra210 and
-> > Tegra186 SoCs.
-> >=20
-> > This patchset is composed with :
-> >  - dt bindings of XUSB Pad Controller
-> >  - dt bindings for XUSB device Driver
-> >  - Tegra PHY driver for usb-role-switch and usb-phy
-> >  - Tegra XUSB host mode driver to support OTG mode
-> >  - Tegra XUSB device mode driver to use usb-phy and multi device mode
-> >  - dts for XUSB pad controller
-> >  - dts for xudc for Jetson TX1 and TX2
-> >  - dts for Jetson-TK1
-> >  - dts for Jetson-Nano
-> >=20
-> > Tegra Pad controller driver register for role switch updates for
-> > OTG/peripheral capable USB ports and adds usb-phy for that corresponding
-> > USB ports.
-> >=20
-> > Host and Device mode drivers gets usb-phy from USB2's phy and registers
-> > notifier for role changes to perform corresponding role tasks.
-> >=20
-> > Order of merging Patches:
-> > Please merge DT changes first followed Tegra PHY driver changes and then
-> > USB driver changes.
->=20
-> Felipe, Greg, Kishon,
->=20
-> Given the runtime dependencies between these various parts, I could pick
-> these up into the Tegra tree if you provide an Acked-by.
+> > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > > ---
+> > > Hi,
+> > > 
+> > > this v2 contains the fixes
+> > > 
+> > > Reported-by: kbuild test robot <lkp@intel.com>
+> > 
+> > Everything below the "---" line, except the patch itself, gets ignored.  
+> > You need to move this Reported-by: up higher.
+> 
+> I know, I put it here because the patch isn't part of the kernel. IMHO a
+> 
+> Signed-off-by:
+> Reported-by: 
+> 
+> looks a bit strange.
 
-Ping. Are you guys okay if I pick these up into the Tegra tree?
+Not at all.  That sort of thing occurs all the time; just look at a few 
+commits in the kernel or patches on the mailing lists.  Especially ones 
+that are bug fixes.
 
-Thierry
+> > > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> > > index 3405b146edc9..c294484e478d 100644
+> > > --- a/drivers/usb/core/hub.c
+> > > +++ b/drivers/usb/core/hub.c
+> > > @@ -3323,10 +3323,6 @@ int usb_port_suspend(struct usb_device *udev, pm_message_t msg)
+> > >  		usb_set_device_state(udev, USB_STATE_SUSPENDED);
+> > >  	}
+> > >  
+> > > -	if (status == 0 && !udev->do_remote_wakeup && udev->persist_enabled
+> > > -			&& test_and_clear_bit(port1, hub->child_usage_bits))
+> > > -		pm_runtime_put_sync(&port_dev->dev);
+> > > -
+> > >  	usb_mark_last_busy(hub->hdev);
+> > >  
+> > >  	usb_unlock_port(port_dev);
+> > > @@ -3514,15 +3510,6 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
+> > >  	int		status;
+> > >  	u16		portchange, portstatus;
+> > >  
+> > > -	if (!test_and_set_bit(port1, hub->child_usage_bits)) {
+> > > -		status = pm_runtime_get_sync(&port_dev->dev);
+> > > -		if (status < 0) {
+> > > -			dev_dbg(&udev->dev, "can't resume usb port, status %d\n",
+> > > -					status);
+> > > -			return status;
+> > > -		}
+> > > -	}
+> > > -
+> > 
+> > Why do you get rid of these two sections of code?  Won't that cause
+> > runtime PM to stop working properly?
+> 
+> Both runtime_pm calls are part of the suspend/resume logic so this code
+> isn't called during runtime PM.
 
---wRRV7LY7NUeQGEoC
-Content-Type: application/pgp-signature; name="signature.asc"
+I'm not quite sure what you mean by that.  In any case, it would be 
+completely wrong to think that usb_port_suspend isn't involved in 
+runtime PM.
 
------BEGIN PGP SIGNATURE-----
+In fact, usb_port_suspend is _more_ important for runtime suspend than
+for system sleep.  The reason is simple: If you want to put a USB
+device into runtime suspend, you have to tell its upstream hub's port
+to enable the suspend feature (i.e., call usb_port_suspend).  But if
+you want to put an entire bus of USB devices to sleep for a system
+suspend, all you have to do is tell the host controller to stop sending
+packets; the ports don't need any notification.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl5X/SQACgkQ3SOs138+
-s6E7uxAAwLgVZKM5o1rrps7EuTuKsMpZ5xxl3xBXrfsXA3ySvIC3W0H6sNDuQsD7
-bKHID3zunA0/6EnDGEyn62wyo58e489dCiPseSTr/t0cSTks5f2dDM46BrTDug3A
-iyAIH71LcFvd9+SoNNiIFwQxs3Qx6E+oU/uFqdgPKqO+uqjlI//V28syeVHCmeW2
-50HLMU91gS/Wc7+nU/TMaSBDh98kayfyVihMSyVC1llle2O8ADhVrCY/ATO8Pno0
-kKV/i7GCYnvhW6I/6260WLWrgOKaru5Yzo9oWGR02LPukuJMGsw/jci0MhhTZp7e
-qj4Pa5oc9+hMkjXVEV6pcNmJBOVs3hfx9dR4Ipvl+KJBBQrCeeclKfPbFVFJI/mC
-uMdJFc5ode+XmVDxc2VbEtwPN7/+UGrhwIN27gjPlVeVyVjwLS4tUt+hj0QOMgrS
-p7q8ilN5VZ0TV4Kwa7aqUntx60yTDFsDSj+eFEUbp46QZzIBncUdpIqxFYqMc4Hz
-Wa6QBAHjT4Pad9DviKRDR/71nZknkBbtAnq822gkk5Ax3gUShgZo37CbAim7su66
-pwdQsoOpoJOmZHf8mcLB2t+99qAzBbZepOnQ1bw7iNo58q4SMXqTki5geomJ+JDs
-wxFOqWQb8B+0Fw8J3VHS3X/j2KIRs9hEnl5qD+Z8g3CPZBlqpmo=
-=u05R
------END PGP SIGNATURE-----
+(Actually the situation is more complicated for USB 3.  But you get the 
+idea.)
 
---wRRV7LY7NUeQGEoC--
+> As far as I understood it correctly the
+> purpose of those section was to trigger port poweroff if the device
+> supports it upon a system-suspend.
+
+No, the purpose of the sections you removed is to trigger port poweroff
+when the device goes into any type of suspend, either system or
+runtime.  Of course, as you discovered, during system sleep the code
+doesn't actually turn off the port power -- that's a bug.  But during
+runtime PM it does.
+
+> Therefore I came up with my question:
+> https://www.spinics.net/lists/linux-usb/msg190537.html.
+
+> > Also, try to find better names.  Maybe usb_port_sleep and 
+> > usb_port_wake, or usb_port_system_suspend and usb_port_system_resume.
+> 
+> IMHO usb_port_suspend/resume should be the best ;)
+
+Okay, so long as they are static and won't conflict with the functions 
+in hub.c.
+
+Alan Stern
+
+PS: There's one more thing you need to know -- I completely forgot 
+about it until just now.  During system sleep, we have to make sure 
+that the child device gets suspended _before_ and resumed _after_ the 
+port.  If it happened the other way, we'd be in trouble.
+
+(The proper ordering would be automatic if the child USB device was
+registered under the port device, but for historical reasons it isn't;
+it gets registered directly under the parent hub.)
+
+This means you'll have to call device_pm_wait_for_dev() at the 
+appropriate places in the suspend and resume pathways.
+
