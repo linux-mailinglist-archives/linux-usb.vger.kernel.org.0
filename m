@@ -2,158 +2,31 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DABA8171FF3
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 15:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1245E172228
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 16:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732524AbgB0OjT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Feb 2020 09:39:19 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:59863 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731954AbgB0OjT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 09:39:19 -0500
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1j7KJo-0007I7-MA; Thu, 27 Feb 2020 15:39:16 +0100
-Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1j7KJm-0001SU-GJ; Thu, 27 Feb 2020 15:39:14 +0100
-Date:   Thu, 27 Feb 2020 15:39:14 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     "jun.li@freescale.com" <jun.li@freescale.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 0/3] USB IMX Chipidea fix gpio vbus control
-Message-ID: <20200227143914.mi3vsltrtyo5sqed@pengutronix.de>
-References: <20200227104212.12562-1-m.felsch@pengutronix.de>
- <20200227111838.GA24071@b29397-desktop>
- <20200227113539.gcx3nfwm2fbm3ukv@pengutronix.de>
- <20200227122045.GB24071@b29397-desktop>
- <20200227124406.6kbgu3dbru4qmews@pengutronix.de>
- <VI1PR04MB53270541BB66CAB1EB8F00008BEB0@VI1PR04MB5327.eurprd04.prod.outlook.com>
+        id S1730481AbgB0PWT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Feb 2020 10:22:19 -0500
+Received: from s18521432.onlinehome-server.com ([74.208.104.148]:59144 "EHLO
+        mail.electrokingdom.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729471AbgB0PWT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 10:22:19 -0500
+X-Greylist: delayed 581 seconds by postgrey-1.27 at vger.kernel.org; Thu, 27 Feb 2020 10:22:18 EST
+Received: from electrokingdom.com ([123.20.178.185]) by electrokingdom.com with MailEnable ESMTP; Thu, 27 Feb 2020 09:12:11 -0600
+Date:   Thu, 27 Feb 2020 18:12:10 +0300
+Subject: 
+Message-Id: <68qvqg26evfe6m301nhrkfd7.15828163307925@email.android.com>
+From:   "Joe Bryant" <tenminjoe@electrokingdom.com>
+To:     "linux usb" <linux-usb@vger.kernel.org>
+Reply-To: "Joe Bryant" <tenminjoer@yahoo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <VI1PR04MB53270541BB66CAB1EB8F00008BEB0@VI1PR04MB5327.eurprd04.prod.outlook.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 15:01:27 up 104 days,  5:20, 122 users,  load average: 0.24, 0.16,
- 0.07
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Peter,
+ICBMaW51eCAgIGh0dHBzOi8vdS50by9MS0dRRncgICBKb2U=
 
-On 20-02-27 13:30, Peter Chen wrote:
->   
-> > > >
-> > > > Note, I'm using a imx6q which has the CI_HDRC_TURN_VBUS_EARLY_ON set.
-> > > >
-> > >
-> > > Do you have a VBUS regulator at your dts, and add it at controller's
-> > > node? See: arch/arm/boot/dts/imx6qdl-sabresd.dtsi as an example please?
-> > 
-> > Yes, that's my use case too.
-> > 
-> > > If you have set CI_HDRC_TURN_VBUS_EARLY_ON, the VBUS is controlled by
-> > > chipidea driver, not by USB core through PORTSC.PP (ehci_ci_portpower).
-> > 
-> > I know, pls have a look my the patches.
-> > 
-> > I had the problem that the vbus regulator wasn't turned off during a
-> > suspend/resume logic. The first issue within the usb-core should be fixed by [1] (v2
-> > RFC is on the way). You never run in that case if you don't fix this. After I fixed it
-> > the port-power is called during suspend but obviously the regulator didn't get turned
-> > off because we don't add it to the priv->reg_vbus.
-> > 
-> > This patchset should fix this and get rid of the CI_HDRC_TURN_VBUS_EARLY_ON
-> > flag.
-> > 
->  
-> Hi Marco,
-> 
-> I may understand your case now. At old USB port design, the VBUS is never allowed to
-> turned off to response the USB wakeup event. But the expected behavior has changed
-> after pm_qos_no_power_off is introduced for USB port, it is allowed the port is powered off.
 
-Luckily we have git :) and I my archeological findings are:
-
- 0ero Patch 2012-07-07) 1530280084c3 usb: chipidea: add imx platform driver
- 1st  Patch 2012-10-23) ae0fb4b72c8d PM / QoS: Introduce PM QoS device flags support
- 2nd  Patch 2013-01-23) ad493e5e5805 usb: add usb port auto power off mechanism
- 3th  Patch 2014-10-13) 11a7e5940514 usb: ehci: add ehci_port_power interface
- 4th  Patch 2014-10-13) c8679a2fb8de usb: chipidea: host: add portpower override
- 5th  Patch 2015-02-11) 6adb9b7b5fb6 usb: chipidea: add a flag for turn on vbus early for host
- 6th  Patch 2015-02-11) 659459174188 usb: chipidea: host: turn on vbus before add hcd if early vbus on is required
-
-A few more details:
-- Since day 0 the imx chipidea driver supports the regulator but it was
-  only used to turn it on (0ero Patch). Later the regulator support was
-  shifted to the core and optional.
-- 1-2 Patch added the pm_qos_no_power_off support
-- 3-4 Patch adds the support to disable the regulator
-- 5-6 Patch adding a workaround for patches 3-4 which breaks the
-  regulator power-off support.
-
-So as you can see the pm_qos_no_power_off was introduced before the gpio
-regulator vbus power-off support was added.
-
-> PORTSC.PP could be controlled by USB core, but USB VBUS's power is not controlled
-> by this bit if the VBUS power enable pin is configured as GPIO function, that is your case.
-
-Yep I know :)
-
-> CI_HDRC_TURN_VBUS_EARLY_ON is introduced by fixing a bug that some i.mx USB
-> controllers PHY's power is sourced from VBUS, the PHY's power need to be on before
-> touch some ehci registers, otherwise, the USB signal will be wrong at some low speed
-> devices use case. So, this flag can't be deleted, it may cause regression.
-
-Pls check my archeological findings and again pls check my patches. I
-deleted the flag because isn't required anymore afterwards.
-
-> The solution I see is your may need to implement chipidea VBUS control flow by considering
-> pm_qos_no_power_off at suspend situation. You may add .suspend API for ci_role_driver,
-> and called by ci_controller_suspend/ci_controller_resume, of cos, better solution is welcome.
-
-I fixed it within the core [1] and here at the chipidea side.
-
-[1] https://lkml.org/lkml/2020/2/27/669
-
-You will never enter the ehci_ci_portpower() during suspend without [1]
-if you are using a vanilla kernel. So IMHO this case can't be tested,
-sorry.
-
-Kind regards,
-  Marco
-
-> Peter
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
