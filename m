@@ -2,184 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB28171CD6
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 15:15:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28298171D64
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 15:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389349AbgB0OPo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Feb 2020 09:15:44 -0500
-Received: from mga14.intel.com ([192.55.52.115]:55255 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389137AbgB0OPj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Feb 2020 09:15:39 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 Feb 2020 06:15:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,492,1574150400"; 
-   d="diff'?scan'208";a="350692022"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 27 Feb 2020 06:15:37 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 27 Feb 2020 16:15:36 +0200
-Date:   Thu, 27 Feb 2020 16:15:36 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Ajay Gupta <ajaykuee@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>
-Subject: Re: [PATCH] usb: typec: ucsi_ccg: workaround for NVIDIA test device
-Message-ID: <20200227141536.GE10532@kuha.fi.intel.com>
-References: <20200218231520.12208-1-ajayg@nvidia.com>
- <20200227140204.GD10532@kuha.fi.intel.com>
+        id S1731230AbgB0OUP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Feb 2020 09:20:15 -0500
+Received: from mail-io1-f70.google.com ([209.85.166.70]:37325 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389835AbgB0OUO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 09:20:14 -0500
+Received: by mail-io1-f70.google.com with SMTP id p4so3682423ioo.4
+        for <linux-usb@vger.kernel.org>; Thu, 27 Feb 2020 06:20:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Hd0HpDzmbpNnrsFjBCVh0lTrAR3AwaF5k/G21OfNRZE=;
+        b=W8FCUSA1IM2r7Ycyq/XUnCjawgruOgjzmuiC3XHfF68nQ4q/Xsbh2axNXWqhDzc8Dp
+         QZNxYJJvtLPcFmIE1sEvrM5UHbhxDc9rWp9d2oU3oojF2GJgHYe7Yz1+Dyh5ah1bjfjc
+         EJqiaXMhvWgXKilkFziodoANxe3j6Vt5cNa/+8Sb2AKRMFueBBtklafNExOkapvLeQcD
+         tzhaoe5rKLDzsJRAaP5gnKC5g1jTRFC7E5SBbhlZS8Chx+fekCrRMs9t4kexZTCzUOBt
+         3nxG8eel3L11WORXpZPI2PkVSFzCw+WybYOpWVFm7tJB1yFQu7rPm4HD3QNRcHLyZfXd
+         /VoA==
+X-Gm-Message-State: APjAAAVd2kl6ONnRebL8WE8mFYluvi0wewRMZOfBRciZA4gkXDjaslba
+        Ip9aIItxXJjte77IUoqdHmfKOeGQkFcOLrXsZUKWysfDISkT
+X-Google-Smtp-Source: APXvYqxrL+yfikkTvPKB29UhXktlBL4AiKejOtMiNK8Hhjlmbqchlq8feXCDyp/fSJLjlFl48Ik1xd73rIyf5UanbrxRlSowwVVh
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="CblX+4bnyfN0pR09"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200227140204.GD10532@kuha.fi.intel.com>
+X-Received: by 2002:a6b:5c0a:: with SMTP id z10mr4836117ioh.228.1582813212155;
+ Thu, 27 Feb 2020 06:20:12 -0800 (PST)
+Date:   Thu, 27 Feb 2020 06:20:12 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000041a20d059f8f6bd3@google.com>
+Subject: KASAN: use-after-free Read in load_firmware_cb
+From:   syzbot <syzbot+434bc1054077aac11da3@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello,
 
---CblX+4bnyfN0pR09
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+syzbot found the following crash on:
 
-On Thu, Feb 27, 2020 at 04:02:07PM +0200, Heikki Krogerus wrote:
-> This did not compile:
-> 
-> drivers/usb/typec/ucsi/ucsi_ccg.c: In function ‘ucsi_ccg_read’:
-> drivers/usb/typec/ucsi/ucsi_ccg.c:505:22: error: ‘USB_TYPEC_NVIDIA_VLINK_DBG_VDO’ undeclared (first use in this function); did you mean ‘USB_TYPEC_NVIDIA_VLINK_SID’?
->   505 |        alt[0].mid == USB_TYPEC_NVIDIA_VLINK_DBG_VDO) {
->       |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |                      USB_TYPEC_NVIDIA_VLINK_SID
-> drivers/usb/typec/ucsi/ucsi_ccg.c:505:22: note: each undeclared identifier is reported only once for each function it appears in
-> drivers/usb/typec/ucsi/ucsi_ccg.c:506:18: error: ‘USB_TYPEC_NVIDIA_VLINK_DP_VDO’ undeclared (first use in this function); did you mean ‘USB_TYPEC_NVIDIA_VLINK_SID’?
->   506 |     alt[0].mid = USB_TYPEC_NVIDIA_VLINK_DP_VDO |
->       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |                  USB_TYPEC_NVIDIA_VLINK_SID
+HEAD commit:    d6ff8147 usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=136b9c91e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=90a3d9bed5648419
+dashboard link: https://syzkaller.appspot.com/bug?extid=434bc1054077aac11da3
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10c32fd9e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14fd1531e00000
 
-Sorry, I was working on top of the wrong branch. The patch does
-compile fine...
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+434bc1054077aac11da3@syzkaller.appspotmail.com
 
-> All those nested conditions make the code a bit difficult to read for
-> me. You could handle the NVIDIA alt mode in its own function. I'm
-> attaching a diff that you should be able to apply on top of your patch
-> that should make the code a bit easier to read.
+usb 1-1:0.254: Direct firmware load for xc3028-v27.fw failed with error -2
+==================================================================
+BUG: KASAN: use-after-free in load_firmware_cb+0x173/0x18c drivers/media/tuners/tuner-xc2028.c:1364
+Read of size 8 at addr ffff8881cd828308 by task kworker/0:1/12
 
-I attached a fixed version of the diff.
+CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.6.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events request_firmware_work_func
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xef/0x16e lib/dump_stack.c:118
+ print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
+ __kasan_report.cold+0x37/0x77 mm/kasan/report.c:506
+ kasan_report+0xe/0x20 mm/kasan/common.c:641
+ load_firmware_cb+0x173/0x18c drivers/media/tuners/tuner-xc2028.c:1364
+ request_firmware_work_func+0x126/0x242 drivers/base/firmware_loader/main.c:976
+ process_one_work+0x94b/0x1620 kernel/workqueue.c:2264
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2410
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Allocated by task 12:
+ save_stack+0x1b/0x80 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ __kasan_kmalloc mm/kasan/common.c:515 [inline]
+ __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:488
+ kmalloc include/linux/slab.h:555 [inline]
+ kzalloc include/linux/slab.h:669 [inline]
+ tuner_probe+0xa4/0x1182 drivers/media/v4l2-core/tuner-core.c:638
+ i2c_device_probe+0x51a/0x800 drivers/i2c/i2c-core-base.c:396
+ really_probe+0x290/0xac0 drivers/base/dd.c:551
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:724
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:831
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x217/0x390 drivers/base/dd.c:897
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+ i2c_new_client_device+0x589/0xa70 drivers/i2c/i2c-core-base.c:784
+ i2c_new_device+0x19/0x50 drivers/i2c/i2c-core-base.c:827
+ v4l2_i2c_new_subdev_board+0xaf/0x2a0 drivers/media/v4l2-core/v4l2-i2c.c:80
+ v4l2_i2c_new_subdev+0xb8/0xf0 drivers/media/v4l2-core/v4l2-i2c.c:135
+ em28xx_v4l2_init drivers/media/usb/em28xx/em28xx-video.c:2627 [inline]
+ em28xx_v4l2_init.cold+0x9cc/0x33eb drivers/media/usb/em28xx/em28xx-video.c:2520
+ em28xx_init_extension+0x12f/0x1f0 drivers/media/usb/em28xx/em28xx-core.c:1128
+ request_module_async+0x5d/0x70 drivers/media/usb/em28xx/em28xx-cards.c:3320
+ process_one_work+0x94b/0x1620 kernel/workqueue.c:2264
+ process_scheduled_works kernel/workqueue.c:2326 [inline]
+ worker_thread+0x73e/0xe20 kernel/workqueue.c:2415
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Freed by task 12:
+ save_stack+0x1b/0x80 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ kasan_set_free_info mm/kasan/common.c:337 [inline]
+ __kasan_slab_free+0x117/0x160 mm/kasan/common.c:476
+ slab_free_hook mm/slub.c:1444 [inline]
+ slab_free_freelist_hook mm/slub.c:1477 [inline]
+ slab_free mm/slub.c:3024 [inline]
+ kfree+0xd5/0x300 mm/slub.c:3976
+ tuner_remove+0x198/0x200 drivers/media/v4l2-core/tuner-core.c:791
+ i2c_device_remove+0xcf/0x250 drivers/i2c/i2c-core-base.c:426
+ __device_release_driver drivers/base/dd.c:1135 [inline]
+ device_release_driver_internal+0x231/0x500 drivers/base/dd.c:1168
+ bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
+ device_del+0x481/0xd30 drivers/base/core.c:2664
+ device_unregister+0x22/0xc0 drivers/base/core.c:2696
+ i2c_unregister_device+0x38/0x40 include/linux/err.h:41
+ v4l2_i2c_subdev_unregister+0xa2/0xc0 drivers/media/v4l2-core/v4l2-i2c.c:28
+ v4l2_device_unregister drivers/media/v4l2-core/v4l2-device.c:102 [inline]
+ v4l2_device_unregister+0x18a/0x220 drivers/media/v4l2-core/v4l2-device.c:88
+ em28xx_v4l2_init drivers/media/usb/em28xx/em28xx-video.c:2908 [inline]
+ em28xx_v4l2_init.cold+0xd26/0x33eb drivers/media/usb/em28xx/em28xx-video.c:2520
+ em28xx_init_extension+0x12f/0x1f0 drivers/media/usb/em28xx/em28xx-core.c:1128
+ request_module_async+0x5d/0x70 drivers/media/usb/em28xx/em28xx-cards.c:3320
+ process_one_work+0x94b/0x1620 kernel/workqueue.c:2264
+ process_scheduled_works kernel/workqueue.c:2326 [inline]
+ worker_thread+0x73e/0xe20 kernel/workqueue.c:2415
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+The buggy address belongs to the object at ffff8881cd828000
+ which belongs to the cache kmalloc-2k of size 2048
+The buggy address is located 776 bytes inside of
+ 2048-byte region [ffff8881cd828000, ffff8881cd828800)
+The buggy address belongs to the page:
+page:ffffea0007360a00 refcount:1 mapcount:0 mapping:ffff8881da00c000 index:0x0 compound_mapcount: 0
+flags: 0x200000000010200(slab|head)
+raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da00c000
+raw: 0000000000000000 0000000080080008 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff8881cd828200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8881cd828280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff8881cd828300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                      ^
+ ffff8881cd828380: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8881cd828400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
 
-thanks,
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
--- 
-heikki
-
---CblX+4bnyfN0pR09
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="ucsi_ccg_nvidia_altmode.diff"
-
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index b421b0045448..65fa648eea19 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -126,8 +126,8 @@ struct version_format {
- #define CCG_OLD_FW_VERSION	(CCG_VERSION(0x31) | CCG_VERSION_PATCH(10))
- 
- /* Altmode offset for NVIDIA Function Test Board (FTB) */
--#define USB_TYPEC_NVIDIA_FTB_DP_OFFSET	(2)
--#define USB_TYPEC_NVIDIA_FTB_DBG_OFFSET	(3)
-+#define NVIDIA_FTB_DP_OFFSET	(2)
-+#define NVIDIA_FTB_DBG_OFFSET	(3)
- 
- struct version_info {
- 	struct version_format base;
-@@ -481,49 +481,55 @@ static void ucsi_ccg_update_set_new_cam_cmd(struct ucsi_ccg *uc,
- 	*cmd |= UCSI_SET_NEW_CAM_SET_AM(cam);
- }
- 
-+/*
-+ * FIXME: A short explanation what this function does.
-+ */
-+static int ucsi_ccg_nvidia_altmode(struct ucsi_ccg *uc,
-+				   struct ucsi_altmode *alt)
-+{
-+	if (UCSI_ALTMODE_OFFSET(uc->last_cmd_sent) == NVIDIA_FTB_DP_OFFSET &&
-+	    alt[0].mid == USB_TYPEC_NVIDIA_VLINK_DBG_VDO)
-+		alt[0].mid = USB_TYPEC_NVIDIA_VLINK_DP_VDO |
-+		             DP_CAP_DP_SIGNALING | DP_CAP_USB |
-+			     DP_CONF_SET_PIN_ASSIGN(BIT(DP_PIN_ASSIGN_E));
-+
-+	if (UCSI_ALTMODE_OFFSET(uc->last_cmd_sent) == NVIDIA_FTB_DBG_OFFSET &&
-+	    alt[0].mid == USB_TYPEC_NVIDIA_VLINK_DP_VDO)
-+		alt[0].mid = USB_TYPEC_NVIDIA_VLINK_DBG_VDO;
-+
-+	return 0;
-+}
-+
- static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
- 			 void *val, size_t val_len)
- {
- 	struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
--	int ret;
- 	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
-+	struct ucsi_altmode *alt;
-+	int ret;
- 
- 	ret = ccg_read(uc, reg, val, val_len);
- 	if (ret)
- 		return ret;
- 
--	if (offset == UCSI_MESSAGE_IN) {
--		if (UCSI_COMMAND(uc->last_cmd_sent) ==
--		    UCSI_GET_ALTERNATE_MODES &&
--		    UCSI_ALTMODE_RECIPIENT(uc->last_cmd_sent) ==
--		    UCSI_RECIPIENT_SOP) {
--			struct ucsi_altmode *alt = (struct ucsi_altmode *)val;
--
--			if (alt[0].svid == USB_TYPEC_NVIDIA_VLINK_SID &&
--			    UCSI_ALTMODE_OFFSET(uc->last_cmd_sent) ==
--			    USB_TYPEC_NVIDIA_FTB_DP_OFFSET &&
--			    alt[0].mid == USB_TYPEC_NVIDIA_VLINK_DBG_VDO) {
--				alt[0].mid = USB_TYPEC_NVIDIA_VLINK_DP_VDO |
--						DP_CAP_DP_SIGNALING |
--						DP_CAP_USB |
--						DP_CONF_SET_PIN_ASSIGN(BIT
--							(DP_PIN_ASSIGN_E));
--			}
--			if (alt[0].svid == USB_TYPEC_NVIDIA_VLINK_SID &&
--			    UCSI_ALTMODE_OFFSET(uc->last_cmd_sent) ==
--			    USB_TYPEC_NVIDIA_FTB_DBG_OFFSET &&
--			    alt[0].mid == USB_TYPEC_NVIDIA_VLINK_DP_VDO) {
--				alt[0].mid = USB_TYPEC_NVIDIA_VLINK_DBG_VDO;
--			}
--		}
--		if (UCSI_COMMAND(uc->last_cmd_sent) == UCSI_GET_CURRENT_CAM &&
--		    uc->has_multiple_dp) {
-+	if (offset != UCSI_MESSAGE_IN)
-+		return 0;
-+
-+	switch (UCSI_COMMAND(uc->last_cmd_sent)) {
-+	case UCSI_GET_CURRENT_CAM:
-+		if (uc->has_multiple_dp)
- 			ucsi_ccg_update_get_current_cam_cmd(uc, (u8 *)val);
--		}
--		uc->last_cmd_sent = 0;
-+		break;
-+	case UCSI_GET_ALTERNATE_MODES:
-+		alt = val;
-+		if (alt[0].svid == USB_TYPEC_NVIDIA_VLINK_SID)
-+			return ucsi_ccg_nvidia_altmode(uc, alt);
-+		break;
-+	default:
-+		break;
- 	}
- 
--	return ret;
-+	return 0;
- }
- 
- static int ucsi_ccg_async_write(struct ucsi *ucsi, unsigned int offset,
-
---CblX+4bnyfN0pR09--
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
