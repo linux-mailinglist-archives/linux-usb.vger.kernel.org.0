@@ -2,172 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28298171D64
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 15:20:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89DB0171EED
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 15:31:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731230AbgB0OUP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Feb 2020 09:20:15 -0500
-Received: from mail-io1-f70.google.com ([209.85.166.70]:37325 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389835AbgB0OUO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 09:20:14 -0500
-Received: by mail-io1-f70.google.com with SMTP id p4so3682423ioo.4
-        for <linux-usb@vger.kernel.org>; Thu, 27 Feb 2020 06:20:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=Hd0HpDzmbpNnrsFjBCVh0lTrAR3AwaF5k/G21OfNRZE=;
-        b=W8FCUSA1IM2r7Ycyq/XUnCjawgruOgjzmuiC3XHfF68nQ4q/Xsbh2axNXWqhDzc8Dp
-         QZNxYJJvtLPcFmIE1sEvrM5UHbhxDc9rWp9d2oU3oojF2GJgHYe7Yz1+Dyh5ah1bjfjc
-         EJqiaXMhvWgXKilkFziodoANxe3j6Vt5cNa/+8Sb2AKRMFueBBtklafNExOkapvLeQcD
-         tzhaoe5rKLDzsJRAaP5gnKC5g1jTRFC7E5SBbhlZS8Chx+fekCrRMs9t4kexZTCzUOBt
-         3nxG8eel3L11WORXpZPI2PkVSFzCw+WybYOpWVFm7tJB1yFQu7rPm4HD3QNRcHLyZfXd
-         /VoA==
-X-Gm-Message-State: APjAAAVd2kl6ONnRebL8WE8mFYluvi0wewRMZOfBRciZA4gkXDjaslba
-        Ip9aIItxXJjte77IUoqdHmfKOeGQkFcOLrXsZUKWysfDISkT
-X-Google-Smtp-Source: APXvYqxrL+yfikkTvPKB29UhXktlBL4AiKejOtMiNK8Hhjlmbqchlq8feXCDyp/fSJLjlFl48Ik1xd73rIyf5UanbrxRlSowwVVh
+        id S1733023AbgB0ODk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Feb 2020 09:03:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39034 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732995AbgB0ODh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 Feb 2020 09:03:37 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3383B2469B;
+        Thu, 27 Feb 2020 14:03:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582812216;
+        bh=VOdujmpR/Y7+yCEJKg2C2pz0Nbpaw3BSbaFvsqkw/VU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HxPBtVpkTJTF/UYwfdNvmAOQtE5D8Pd1baFVuc9LXtp9PSMn+eFg8m8y2+WCZbu+6
+         pHPMnuzo5iORAUGke0Mlre30zKKzSshKQZEvJycn9+VMZkI6igGJDSIgM3aHpfML8a
+         LBBmo7kJQRFZIYj38e8tyl7OqBqG4x5RqhYV+Ytc=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Yang Fei <fei.yang@intel.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
+        John Stultz <john.stultz@linaro.org>
+Subject: [PATCH 4.19 30/97] usb: dwc3: gadget: Check for IOC/LST bit in TRB->ctrl fields
+Date:   Thu, 27 Feb 2020 14:36:38 +0100
+Message-Id: <20200227132219.513967393@linuxfoundation.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200227132214.553656188@linuxfoundation.org>
+References: <20200227132214.553656188@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-X-Received: by 2002:a6b:5c0a:: with SMTP id z10mr4836117ioh.228.1582813212155;
- Thu, 27 Feb 2020 06:20:12 -0800 (PST)
-Date:   Thu, 27 Feb 2020 06:20:12 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000041a20d059f8f6bd3@google.com>
-Subject: KASAN: use-after-free Read in load_firmware_cb
-From:   syzbot <syzbot+434bc1054077aac11da3@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+From: Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
 
-syzbot found the following crash on:
+commit 5ee858975b13a9b40db00f456989a689fdbb296c upstream.
 
-HEAD commit:    d6ff8147 usb: gadget: add raw-gadget interface
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=136b9c91e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=90a3d9bed5648419
-dashboard link: https://syzkaller.appspot.com/bug?extid=434bc1054077aac11da3
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10c32fd9e00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14fd1531e00000
+The current code in dwc3_gadget_ep_reclaim_completed_trb() will
+check for IOC/LST bit in the event->status and returns if
+IOC/LST bit is set. This logic doesn't work if multiple TRBs
+are queued per request and the IOC/LST bit is set on the last
+TRB of that request.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+434bc1054077aac11da3@syzkaller.appspotmail.com
+Consider an example where a queued request has multiple queued
+TRBs and IOC/LST bit is set only for the last TRB. In this case,
+the core generates XferComplete/XferInProgress events only for
+the last TRB (since IOC/LST are set only for the last TRB). As
+per the logic in dwc3_gadget_ep_reclaim_completed_trb()
+event->status is checked for IOC/LST bit and returns on the
+first TRB. This leaves the remaining TRBs left unhandled.
 
-usb 1-1:0.254: Direct firmware load for xc3028-v27.fw failed with error -2
-==================================================================
-BUG: KASAN: use-after-free in load_firmware_cb+0x173/0x18c drivers/media/tuners/tuner-xc2028.c:1364
-Read of size 8 at addr ffff8881cd828308 by task kworker/0:1/12
+Similarly, if the gadget function enqueues an unaligned request
+with sglist already in it, it should fail the same way, since we
+will append another TRB to something that already uses more than
+one TRB.
 
-CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.6.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events request_firmware_work_func
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
- __kasan_report.cold+0x37/0x77 mm/kasan/report.c:506
- kasan_report+0xe/0x20 mm/kasan/common.c:641
- load_firmware_cb+0x173/0x18c drivers/media/tuners/tuner-xc2028.c:1364
- request_firmware_work_func+0x126/0x242 drivers/base/firmware_loader/main.c:976
- process_one_work+0x94b/0x1620 kernel/workqueue.c:2264
- worker_thread+0x96/0xe20 kernel/workqueue.c:2410
- kthread+0x318/0x420 kernel/kthread.c:255
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+To aviod this, this patch changes the code to check for IOC/LST
+bits in TRB->ctrl instead.
 
-Allocated by task 12:
- save_stack+0x1b/0x80 mm/kasan/common.c:72
- set_track mm/kasan/common.c:80 [inline]
- __kasan_kmalloc mm/kasan/common.c:515 [inline]
- __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:488
- kmalloc include/linux/slab.h:555 [inline]
- kzalloc include/linux/slab.h:669 [inline]
- tuner_probe+0xa4/0x1182 drivers/media/v4l2-core/tuner-core.c:638
- i2c_device_probe+0x51a/0x800 drivers/i2c/i2c-core-base.c:396
- really_probe+0x290/0xac0 drivers/base/dd.c:551
- driver_probe_device+0x223/0x350 drivers/base/dd.c:724
- __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:831
- bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
- __device_attach+0x217/0x390 drivers/base/dd.c:897
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0x1459/0x1bf0 drivers/base/core.c:2487
- i2c_new_client_device+0x589/0xa70 drivers/i2c/i2c-core-base.c:784
- i2c_new_device+0x19/0x50 drivers/i2c/i2c-core-base.c:827
- v4l2_i2c_new_subdev_board+0xaf/0x2a0 drivers/media/v4l2-core/v4l2-i2c.c:80
- v4l2_i2c_new_subdev+0xb8/0xf0 drivers/media/v4l2-core/v4l2-i2c.c:135
- em28xx_v4l2_init drivers/media/usb/em28xx/em28xx-video.c:2627 [inline]
- em28xx_v4l2_init.cold+0x9cc/0x33eb drivers/media/usb/em28xx/em28xx-video.c:2520
- em28xx_init_extension+0x12f/0x1f0 drivers/media/usb/em28xx/em28xx-core.c:1128
- request_module_async+0x5d/0x70 drivers/media/usb/em28xx/em28xx-cards.c:3320
- process_one_work+0x94b/0x1620 kernel/workqueue.c:2264
- process_scheduled_works kernel/workqueue.c:2326 [inline]
- worker_thread+0x73e/0xe20 kernel/workqueue.c:2415
- kthread+0x318/0x420 kernel/kthread.c:255
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+At a practical level, this patch resolves USB transfer stalls seen
+with adb on dwc3 based HiKey960 after functionfs gadget added
+scatter-gather support around v4.20.
 
-Freed by task 12:
- save_stack+0x1b/0x80 mm/kasan/common.c:72
- set_track mm/kasan/common.c:80 [inline]
- kasan_set_free_info mm/kasan/common.c:337 [inline]
- __kasan_slab_free+0x117/0x160 mm/kasan/common.c:476
- slab_free_hook mm/slub.c:1444 [inline]
- slab_free_freelist_hook mm/slub.c:1477 [inline]
- slab_free mm/slub.c:3024 [inline]
- kfree+0xd5/0x300 mm/slub.c:3976
- tuner_remove+0x198/0x200 drivers/media/v4l2-core/tuner-core.c:791
- i2c_device_remove+0xcf/0x250 drivers/i2c/i2c-core-base.c:426
- __device_release_driver drivers/base/dd.c:1135 [inline]
- device_release_driver_internal+0x231/0x500 drivers/base/dd.c:1168
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
- device_del+0x481/0xd30 drivers/base/core.c:2664
- device_unregister+0x22/0xc0 drivers/base/core.c:2696
- i2c_unregister_device+0x38/0x40 include/linux/err.h:41
- v4l2_i2c_subdev_unregister+0xa2/0xc0 drivers/media/v4l2-core/v4l2-i2c.c:28
- v4l2_device_unregister drivers/media/v4l2-core/v4l2-device.c:102 [inline]
- v4l2_device_unregister+0x18a/0x220 drivers/media/v4l2-core/v4l2-device.c:88
- em28xx_v4l2_init drivers/media/usb/em28xx/em28xx-video.c:2908 [inline]
- em28xx_v4l2_init.cold+0xd26/0x33eb drivers/media/usb/em28xx/em28xx-video.c:2520
- em28xx_init_extension+0x12f/0x1f0 drivers/media/usb/em28xx/em28xx-core.c:1128
- request_module_async+0x5d/0x70 drivers/media/usb/em28xx/em28xx-cards.c:3320
- process_one_work+0x94b/0x1620 kernel/workqueue.c:2264
- process_scheduled_works kernel/workqueue.c:2326 [inline]
- worker_thread+0x73e/0xe20 kernel/workqueue.c:2415
- kthread+0x318/0x420 kernel/kthread.c:255
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-The buggy address belongs to the object at ffff8881cd828000
- which belongs to the cache kmalloc-2k of size 2048
-The buggy address is located 776 bytes inside of
- 2048-byte region [ffff8881cd828000, ffff8881cd828800)
-The buggy address belongs to the page:
-page:ffffea0007360a00 refcount:1 mapcount:0 mapping:ffff8881da00c000 index:0x0 compound_mapcount: 0
-flags: 0x200000000010200(slab|head)
-raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da00c000
-raw: 0000000000000000 0000000080080008 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff8881cd828200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8881cd828280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff8881cd828300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                      ^
- ffff8881cd828380: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8881cd828400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Yang Fei <fei.yang@intel.com>
+Cc: Thinh Nguyen <thinhn@synopsys.com>
+Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
+Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc: Jack Pham <jackp@codeaurora.org>
+Cc: Todd Kjos <tkjos@google.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linux USB List <linux-usb@vger.kernel.org>
+Cc: stable <stable@vger.kernel.org>
+Tested-by: Tejas Joglekar <tejas.joglekar@synopsys.com>
+Reviewed-by: Thinh Nguyen <thinhn@synopsys.com>
+Signed-off-by: Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+[jstultz: forward ported to mainline, reworded commit log, reworked
+ to only check trb->ctrl as suggested by Felipe]
+Signed-off-by: John Stultz <john.stultz@linaro.org>
+Signed-off-by: Felipe Balbi <balbi@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ---
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/usb/dwc3/gadget.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2224,7 +2224,8 @@ static int dwc3_gadget_ep_reclaim_comple
+ 	if (event->status & DEPEVT_STATUS_SHORT && !chain)
+ 		return 1;
+ 
+-	if (event->status & DEPEVT_STATUS_IOC)
++	if ((trb->ctrl & DWC3_TRB_CTRL_IOC) ||
++	    (trb->ctrl & DWC3_TRB_CTRL_LST))
+ 		return 1;
+ 
+ 	return 0;
+
+
