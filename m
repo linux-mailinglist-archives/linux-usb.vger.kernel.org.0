@@ -2,32 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBAB3171532
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 11:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73623171535
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 11:42:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728850AbgB0KmU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S1728852AbgB0KmU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Thu, 27 Feb 2020 05:42:20 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:48845 "EHLO
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:39261 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728846AbgB0KmU (ORCPT
+        with ESMTP id S1728847AbgB0KmU (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 05:42:20 -0500
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1j7GcR-0003f7-Ay; Thu, 27 Feb 2020 11:42:15 +0100
+        id 1j7GcR-0003f8-Ay; Thu, 27 Feb 2020 11:42:15 +0100
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1j7GcP-0004nu-6A; Thu, 27 Feb 2020 11:42:13 +0100
+        id 1j7GcP-0004o4-6a; Thu, 27 Feb 2020 11:42:13 +0100
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     Peter.Chen@nxp.com, gregkh@linuxfoundation.org,
         shawnguo@kernel.org, linux-imx@nxp.com, stern@rowland.harvard.edu,
         jun.li@freescale.com
 Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         kernel@pengutronix.de
-Subject: [PATCH 2/3] Partially Revert "usb: chipidea: host: turn on vbus before add hcd if early vbus on is required"
-Date:   Thu, 27 Feb 2020 11:42:11 +0100
-Message-Id: <20200227104212.12562-3-m.felsch@pengutronix.de>
+Subject: [PATCH 3/3] Revert "usb: chipidea: add a flag for turn on vbus early for host"
+Date:   Thu, 27 Feb 2020 11:42:12 +0100
+Message-Id: <20200227104212.12562-4-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200227104212.12562-1-m.felsch@pengutronix.de>
 References: <20200227104212.12562-1-m.felsch@pengutronix.de>
@@ -42,96 +42,90 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit 659459174188 ("usb: chipidea: host: turn on vbus before add hcd if
-early vbus on is required") enabled the vbus regulator but didn't assign
-the reg_vbus. So the vbus regulator can't be disabled anymore.
-
-Since the port_power() callback is executed exclusive (without enabling
-the port power (PP) bit) we can do the special handling within the
-callback without the need of a special flag.
+The flag is no longer needed and can be removed since the quirk is now
+handled within the port_power() callback.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 ---
- drivers/usb/chipidea/host.c | 31 ++++++++++---------------------
- 1 file changed, 10 insertions(+), 21 deletions(-)
+ drivers/usb/chipidea/ci_hdrc_imx.c | 10 ++--------
+ include/linux/usb/chipidea.h       | 17 ++++++++---------
+ 2 files changed, 10 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/usb/chipidea/host.c b/drivers/usb/chipidea/host.c
-index 48e4a5ca1835..f1832847a023 100644
---- a/drivers/usb/chipidea/host.c
-+++ b/drivers/usb/chipidea/host.c
-@@ -37,6 +37,8 @@ static int ehci_ci_portpower(struct usb_hcd *hcd, int portnum, bool enable)
- 	struct ci_hdrc *ci = dev_get_drvdata(dev);
- 	int ret = 0;
- 	int port = HCS_N_PORTS(ehci->hcs_params);
-+	u32 __iomem *status_reg = &ehci->regs->port_status[portnum];
-+	u32 temp = ehci_readl(ehci, status_reg) & ~PORT_RWC_BITS;
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+index d8e7eb2f97b9..5c66921bbb9b 100644
+--- a/drivers/usb/chipidea/ci_hdrc_imx.c
++++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+@@ -23,8 +23,7 @@ struct ci_hdrc_imx_platform_flag {
+ };
  
- 	if (priv->reg_vbus && enable != priv->enabled) {
- 		if (port > 1) {
-@@ -57,6 +59,11 @@ static int ehci_ci_portpower(struct usb_hcd *hcd, int portnum, bool enable)
- 		priv->enabled = enable;
- 	}
+ static const struct ci_hdrc_imx_platform_flag imx23_usb_data = {
+-	.flags = CI_HDRC_TURN_VBUS_EARLY_ON |
+-		CI_HDRC_DISABLE_STREAMING,
++	.flags = CI_HDRC_DISABLE_STREAMING,
+ };
  
-+	if (enable)
-+		ehci_writel(ehci, temp | PORT_POWER, status_reg);
-+	else
-+		ehci_writel(ehci, temp & ~PORT_POWER, status_reg);
-+
- 	if (enable && (ci->platdata->phy_mode == USBPHY_INTERFACE_MODE_HSIC)) {
- 		/*
- 		 * Marvell 28nm HSIC PHY requires forcing the port to HS mode.
-@@ -142,19 +149,8 @@ static int host_start(struct ci_hdrc *ci)
- 	priv = (struct ehci_ci_priv *)ehci->priv;
- 	priv->reg_vbus = NULL;
+ static const struct ci_hdrc_imx_platform_flag imx27_usb_data = {
+@@ -33,31 +32,26 @@ static const struct ci_hdrc_imx_platform_flag imx27_usb_data = {
  
--	if (ci->platdata->reg_vbus && !ci_otg_is_fsm_mode(ci)) {
--		if (ci->platdata->flags & CI_HDRC_TURN_VBUS_EARLY_ON) {
--			ret = regulator_enable(ci->platdata->reg_vbus);
--			if (ret) {
--				dev_err(ci->dev,
--				"Failed to enable vbus regulator, ret=%d\n",
--									ret);
--				goto put_hcd;
--			}
--		} else {
--			priv->reg_vbus = ci->platdata->reg_vbus;
--		}
--	}
-+	if (ci->platdata->reg_vbus && !ci_otg_is_fsm_mode(ci))
-+		priv->reg_vbus = ci->platdata->reg_vbus;
+ static const struct ci_hdrc_imx_platform_flag imx28_usb_data = {
+ 	.flags = CI_HDRC_IMX28_WRITE_FIX |
+-		CI_HDRC_TURN_VBUS_EARLY_ON |
+ 		CI_HDRC_DISABLE_STREAMING,
+ };
  
- 	if (ci->platdata->pins_host)
- 		pinctrl_select_state(ci->platdata->pctl,
-@@ -162,7 +158,7 @@ static int host_start(struct ci_hdrc *ci)
+ static const struct ci_hdrc_imx_platform_flag imx6q_usb_data = {
+ 	.flags = CI_HDRC_SUPPORTS_RUNTIME_PM |
+-		CI_HDRC_TURN_VBUS_EARLY_ON |
+ 		CI_HDRC_DISABLE_STREAMING,
+ };
  
- 	ret = usb_add_hcd(hcd, 0, 0);
- 	if (ret) {
--		goto disable_reg;
-+		goto put_hcd;
- 	} else {
- 		struct usb_otg *otg = &ci->otg;
+ static const struct ci_hdrc_imx_platform_flag imx6sl_usb_data = {
+ 	.flags = CI_HDRC_SUPPORTS_RUNTIME_PM |
+-		CI_HDRC_TURN_VBUS_EARLY_ON |
+ 		CI_HDRC_DISABLE_HOST_STREAMING,
+ };
  
-@@ -181,10 +177,6 @@ static int host_start(struct ci_hdrc *ci)
+ static const struct ci_hdrc_imx_platform_flag imx6sx_usb_data = {
+ 	.flags = CI_HDRC_SUPPORTS_RUNTIME_PM |
+-		CI_HDRC_TURN_VBUS_EARLY_ON |
+ 		CI_HDRC_DISABLE_HOST_STREAMING,
+ };
  
- 	return ret;
+ static const struct ci_hdrc_imx_platform_flag imx6ul_usb_data = {
+-	.flags = CI_HDRC_SUPPORTS_RUNTIME_PM |
+-		CI_HDRC_TURN_VBUS_EARLY_ON,
++	.flags = CI_HDRC_SUPPORTS_RUNTIME_PM,
+ };
  
--disable_reg:
--	if (ci->platdata->reg_vbus && !ci_otg_is_fsm_mode(ci) &&
--			(ci->platdata->flags & CI_HDRC_TURN_VBUS_EARLY_ON))
--		regulator_disable(ci->platdata->reg_vbus);
- put_hcd:
- 	usb_put_hcd(hcd);
- 
-@@ -203,9 +195,6 @@ static void host_stop(struct ci_hdrc *ci)
- 		ci->role = CI_ROLE_END;
- 		synchronize_irq(ci->irq);
- 		usb_put_hcd(hcd);
--		if (ci->platdata->reg_vbus && !ci_otg_is_fsm_mode(ci) &&
--			(ci->platdata->flags & CI_HDRC_TURN_VBUS_EARLY_ON))
--				regulator_disable(ci->platdata->reg_vbus);
- 	}
- 	ci->hcd = NULL;
- 	ci->otg.host = NULL;
+ static const struct ci_hdrc_imx_platform_flag imx7d_usb_data = {
+diff --git a/include/linux/usb/chipidea.h b/include/linux/usb/chipidea.h
+index edd89b7c8f18..fa373aafa80e 100644
+--- a/include/linux/usb/chipidea.h
++++ b/include/linux/usb/chipidea.h
+@@ -53,15 +53,14 @@ struct ci_hdrc_platform_data {
+ #define CI_HDRC_DUAL_ROLE_NOT_OTG	BIT(4)
+ #define CI_HDRC_IMX28_WRITE_FIX		BIT(5)
+ #define CI_HDRC_FORCE_FULLSPEED		BIT(6)
+-#define CI_HDRC_TURN_VBUS_EARLY_ON	BIT(7)
+-#define CI_HDRC_SET_NON_ZERO_TTHA	BIT(8)
+-#define CI_HDRC_OVERRIDE_AHB_BURST	BIT(9)
+-#define CI_HDRC_OVERRIDE_TX_BURST	BIT(10)
+-#define CI_HDRC_OVERRIDE_RX_BURST	BIT(11)
+-#define CI_HDRC_OVERRIDE_PHY_CONTROL	BIT(12) /* Glue layer manages phy */
+-#define CI_HDRC_REQUIRES_ALIGNED_DMA	BIT(13)
+-#define CI_HDRC_IMX_IS_HSIC		BIT(14)
+-#define CI_HDRC_PMQOS			BIT(15)
++#define CI_HDRC_SET_NON_ZERO_TTHA	BIT(7)
++#define CI_HDRC_OVERRIDE_AHB_BURST	BIT(8)
++#define CI_HDRC_OVERRIDE_TX_BURST	BIT(9)
++#define CI_HDRC_OVERRIDE_RX_BURST	BIT(10)
++#define CI_HDRC_OVERRIDE_PHY_CONTROL	BIT(11) /* Glue layer manages phy */
++#define CI_HDRC_REQUIRES_ALIGNED_DMA	BIT(12)
++#define CI_HDRC_IMX_IS_HSIC		BIT(13)
++#define CI_HDRC_PMQOS			BIT(14)
+ 	enum usb_dr_mode	dr_mode;
+ #define CI_HDRC_CONTROLLER_RESET_EVENT		0
+ #define CI_HDRC_CONTROLLER_STOPPED_EVENT	1
 -- 
 2.20.1
 
