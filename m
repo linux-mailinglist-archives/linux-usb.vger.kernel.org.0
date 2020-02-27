@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 797A2171E72
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 15:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E674E171CAD
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 15:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388197AbgB0OIF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Feb 2020 09:08:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45716 "EHLO mail.kernel.org"
+        id S2389111AbgB0OOT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Feb 2020 09:14:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53462 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732780AbgB0OID (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Feb 2020 09:08:03 -0500
+        id S2389105AbgB0OOT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 Feb 2020 09:14:19 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B67F124656;
-        Thu, 27 Feb 2020 14:08:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D740B24697;
+        Thu, 27 Feb 2020 14:14:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582812482;
+        s=default; t=1582812857;
         bh=Dqe8peYwQwuHYE4wE7HzqKcEV4TelEPWey30f3hiVvk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=piNiDJA5MISFO0L1gl3TMJ8mgk9F6BB2k1+TEVWFoGK4Atkv54dCEnST2MfiFJ4pE
-         fWcSQnkom840wGyCKxrtXaOzIRQ0qwSMgqHCcBoAw1RCJHRhTnmobyPMK4dT17cVKV
-         879c9fYr8DnrtDKxvgyehKbV70VW1MQloZWR+IB0=
+        b=VaYxrrnUVztyfLYJ/Dhq4e7af7CMcAnaCqrHofBQmf5YokhRNO1SHDERZ9kQgwzyK
+         o8YYHlt0x+ztB4jTQQ3R+ZwCE/jdJxSqSGABOKb6SXjBz7egLUVzM/BbAiPNcrR8vx
+         9bc+7D0JlMDJIQMlYSQiSunSVkxeyBjk9eWoeteQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -35,12 +35,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux USB List <linux-usb@vger.kernel.org>,
         Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
         John Stultz <john.stultz@linaro.org>
-Subject: [PATCH 5.4 035/135] usb: dwc3: gadget: Check for IOC/LST bit in TRB->ctrl fields
-Date:   Thu, 27 Feb 2020 14:36:15 +0100
-Message-Id: <20200227132234.268741998@linuxfoundation.org>
+Subject: [PATCH 5.5 042/150] usb: dwc3: gadget: Check for IOC/LST bit in TRB->ctrl fields
+Date:   Thu, 27 Feb 2020 14:36:19 +0100
+Message-Id: <20200227132239.087998024@linuxfoundation.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200227132228.710492098@linuxfoundation.org>
-References: <20200227132228.710492098@linuxfoundation.org>
+In-Reply-To: <20200227132232.815448360@linuxfoundation.org>
+References: <20200227132232.815448360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
