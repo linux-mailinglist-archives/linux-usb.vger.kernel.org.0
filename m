@@ -2,126 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B50171705
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 13:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B52BB1717B9
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 13:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728946AbgB0MXQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Feb 2020 07:23:16 -0500
-Received: from mga03.intel.com ([134.134.136.65]:28822 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728929AbgB0MXQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Feb 2020 07:23:16 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 Feb 2020 04:23:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,492,1574150400"; 
-   d="scan'208,223";a="350665814"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 27 Feb 2020 04:23:13 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 27 Feb 2020 14:23:08 +0200
-Date:   Thu, 27 Feb 2020 14:23:08 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
-Cc:     "Shah, Nehal-bakulchandra" <nbshah@amd.com>, ajayg@nvidia.com,
-        linux-usb@vger.kernel.org
-Subject: Re: UCSI:CCG: AMD Platform
-Message-ID: <20200227122308.GC10532@kuha.fi.intel.com>
-References: <0fa0fc36-ce51-046a-32ae-9dbb7452c1c4@amd.com>
- <20200203132808.GA29050@kuha.fi.intel.com>
- <20200203133231.GB29050@kuha.fi.intel.com>
- <aca4968f-06e8-6ac3-09c8-4810947e92b3@amd.com>
- <20200213120011.GL1498@kuha.fi.intel.com>
- <20200213120555.GM1498@kuha.fi.intel.com>
- <0efd0175-6668-7411-81b2-d4a487ccc0ec@amd.com>
- <e0ab390b-743a-d583-15c4-83af3a7dca35@amd.com>
+        id S1728998AbgB0MoK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Feb 2020 07:44:10 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:35421 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728977AbgB0MoK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 07:44:10 -0500
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1j7IWO-00013u-U9; Thu, 27 Feb 2020 13:44:08 +0100
+Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1j7IWN-000615-15; Thu, 27 Feb 2020 13:44:07 +0100
+Date:   Thu, 27 Feb 2020 13:44:07 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "jun.li@freescale.com" <jun.li@freescale.com>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 0/3] USB IMX Chipidea fix gpio vbus control
+Message-ID: <20200227124406.6kbgu3dbru4qmews@pengutronix.de>
+References: <20200227104212.12562-1-m.felsch@pengutronix.de>
+ <20200227111838.GA24071@b29397-desktop>
+ <20200227113539.gcx3nfwm2fbm3ukv@pengutronix.de>
+ <20200227122045.GB24071@b29397-desktop>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="17pEHd4RhPHOinZp"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e0ab390b-743a-d583-15c4-83af3a7dca35@amd.com>
+In-Reply-To: <20200227122045.GB24071@b29397-desktop>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 13:34:01 up 104 days,  3:52, 122 users,  load average: 0.03, 0.05,
+ 0.00
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---17pEHd4RhPHOinZp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Mon, Feb 24, 2020 at 02:38:12PM +0530, Shah, Nehal-bakulchandra wrote:
-> Hi
+On 20-02-27 12:20, Peter Chen wrote:
+> On 20-02-27 12:35:39, Marco Felsch wrote:
+> > Hi Peter,
+> > 
+> > thanks for your fast reply :)
+> > 
+> > On 20-02-27 11:18, Peter Chen wrote:
+> > > On 20-02-27 11:42:09, Marco Felsch wrote:
+> > > > Hi,
+> > > > 
+> > > > the gpio-based port power is broken since commit [1,2]. I changed the
+> > > > core behaviour to to cleanup the code and avoid local workaround fixes.
+> > > 
+> > > Many i.mx series evk boards work well for gpio-based port power control,
+> > > what problem you have found, would you please list it detail?
+> > 
+> > Hm.. who could that work? I picked the important parts:
+> > 
+> > static int ehci_ci_portpower(struct usb_hcd *hcd, int portnum, bool enable)
+> > {
+> > 	...
+> > 
+> > 	if (priv->reg_vbus && enable != priv->enabled) {
+> > 
+> > 		...
+> > 
+> > 		if (enable)
+> > 			ret = regulator_enable(priv->reg_vbus);
+> > 		else
+> > 			ret = regulator_disable(priv->reg_vbus);
+> > 
+> > 		...
+> > 	}
+> > 
+> > 	...
+> > }
+> > 
+> > static int host_start(struct ci_hdrc *ci)
+> > {
+> > 	...
+> > 
+> > 	priv->reg_vbus = NULL;
+> > 
+> > 	if (ci->platdata->reg_vbus && !ci_otg_is_fsm_mode(ci)) {
+> > 		if (ci->platdata->flags & CI_HDRC_TURN_VBUS_EARLY_ON) {
+> > 			ret = regulator_enable(ci->platdata->reg_vbus);
+> > 			if (ret) {
+> > 				dev_err(ci->dev,
+> > 				"Failed to enable vbus regulator, ret=%d\n",
+> > 									ret);
+> > 				goto put_hcd;
+> > 			}
+> > 		} else {
+> > 			priv->reg_vbus = ci->platdata->reg_vbus;
+> > 		}
+> > 	}
+> > 
+> > 	...
+> > }
+> > 
+> > Note, I'm using a imx6q which has the CI_HDRC_TURN_VBUS_EARLY_ON set.
+> > 
 > 
-> On 2/14/2020 7:58 PM, Shah, Nehal-bakulchandra wrote:
-> > Hi
-> >
-> > On 2/13/2020 5:35 PM, Heikki Krogerus wrote:
-> >> On Thu, Feb 13, 2020 at 02:00:14PM +0200, Heikki Krogerus wrote:
-> >>>> I am using CCG based UCSI driver without any
-> >>>> modification.For I2C part i have written custom
-> >>>> driver.
-> >>>>
-> >>>> I have attached the trace out and dmesg crash log.
-> >>>>
-> >>>> Please have a look
-> >>> Thanks for the logs. Can you test the attached diff?
-> >> Actually, don't try that one. Try this one instead.
-> > Sure i will update on this on Monday.
-> >
-> >
-> > thanks
-> >
-> > Nehal
+> Do you have a VBUS regulator at your dts, and add it at controller's
+> node? See: arch/arm/boot/dts/imx6qdl-sabresd.dtsi as an example please?
+
+Yes, that's my use case too.
+
+> If you have set CI_HDRC_TURN_VBUS_EARLY_ON, the VBUS is controlled by
+> chipidea driver, not by USB core through PORTSC.PP (ehci_ci_portpower).
+
+I know, pls have a look my the patches.
+
+I had the problem that the vbus regulator wasn't turned off during a
+suspend/resume logic. The first issue within the usb-core should be
+fixed by [1] (v2 RFC is on the way). You never run in that case if you
+don't fix this. After I fixed it the port-power is called during suspend
+but obviously the regulator didn't get turned off because we don't add
+it to the priv->reg_vbus.
+
+This patchset should fix this and get rid of the
+CI_HDRC_TURN_VBUS_EARLY_ON flag.
+
+Regards,
+  Marco
+
+> -- 
 > 
-> Patch is not solving the issue. I have attached both trace and dmesg output.
-
-How about if you try this (the attached patch) together with that
-previous diff?
-
-thanks,
+> Thanks,
+> Peter Chen
 
 -- 
-heikki
-
---17pEHd4RhPHOinZp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment;
-	filename="0001-usb-typec-ucsi-displayport-Fix-potential-NULL-pointe.patch"
-
-From fa1aff5e8e7464851470f29eeae45bde1f089ce1 Mon Sep 17 00:00:00 2001
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Date: Mon, 17 Feb 2020 18:07:17 +0300
-Subject: [PATCH] usb: typec: ucsi: displayport: Fix potential NULL pointer
- dereference
-
-In ucsi_displayport_remove_partner(), if the DisplayPort alt
-mode was never registered, then there is also no driver data
-for it. Adding a check to make sure there really is driver
-data for the device before modifying it.
-
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/ucsi/displayport.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/usb/typec/ucsi/displayport.c b/drivers/usb/typec/ucsi/displayport.c
-index 0f1273ae086c..261131c9e37c 100644
---- a/drivers/usb/typec/ucsi/displayport.c
-+++ b/drivers/usb/typec/ucsi/displayport.c
-@@ -271,6 +271,9 @@ void ucsi_displayport_remove_partner(struct typec_altmode *alt)
- 		return;
- 
- 	dp = typec_altmode_get_drvdata(alt);
-+	if (!dp)
-+		return;
-+
- 	dp->data.conf = 0;
- 	dp->data.status = 0;
- 	dp->initialized = false;
--- 
-2.25.0
-
-
---17pEHd4RhPHOinZp--
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
