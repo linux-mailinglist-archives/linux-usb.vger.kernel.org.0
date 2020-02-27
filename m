@@ -2,98 +2,212 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 44411170E28
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 03:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF3E170F4B
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Feb 2020 05:02:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728274AbgB0CD1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Feb 2020 21:03:27 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:17935 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728217AbgB0CD0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Feb 2020 21:03:26 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e5723490000>; Wed, 26 Feb 2020 18:02:49 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 26 Feb 2020 18:03:26 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 26 Feb 2020 18:03:26 -0800
-Received: from [10.19.108.125] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 27 Feb
- 2020 02:03:24 +0000
-Subject: Re: [PATCH] usb: host: xhci-tegra: Tegra186/Tegra194 LPM
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-CC:     <gregkh@linuxfoundation.org>, <jonathanh@nvidia.com>,
-        <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <nkristam@nvidia.com>
-References: <20200224062145.25785-1-jckuo@nvidia.com>
- <20200224125100.GA2108060@ulmo>
- <223f5f09-781a-825d-e75e-3b878acec27d@nvidia.com>
- <6c93af2b-5a4d-a3ad-07f4-f5c72f569752@linux.intel.com>
-X-Nvconfidentiality: public
-From:   JC Kuo <jckuo@nvidia.com>
-Message-ID: <f819d55a-8479-b15f-b06c-a8d391a64e04@nvidia.com>
-Date:   Thu, 27 Feb 2020 10:03:08 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
-MIME-Version: 1.0
-In-Reply-To: <6c93af2b-5a4d-a3ad-07f4-f5c72f569752@linux.intel.com>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+        id S1728304AbgB0ECw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Feb 2020 23:02:52 -0500
+Received: from kernel.crashing.org ([76.164.61.194]:36468 "EHLO
+        kernel.crashing.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728252AbgB0ECw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Feb 2020 23:02:52 -0500
+Received: from localhost (gate.crashing.org [63.228.1.57])
+        (authenticated bits=0)
+        by kernel.crashing.org (8.14.7/8.14.7) with ESMTP id 01R41lA3022351
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 26 Feb 2020 22:01:51 -0600
+Message-ID: <e76edda178cd83c4aa5d0282c481425c34653f5e.camel@kernel.crashing.org>
+Subject: Re: [PATCH v4 1/7] usb: gadget: aspeed: support per-vhub usb
+ descriptors
+From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
+To:     rentao.bupt@gmail.com, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        taoren@fb.com
+Date:   Thu, 27 Feb 2020 15:01:47 +1100
+In-Reply-To: <20200226230346.672-2-rentao.bupt@gmail.com>
+References: <20200226230346.672-1-rentao.bupt@gmail.com>
+         <20200226230346.672-2-rentao.bupt@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1582768969; bh=lK6dW+IEyWhiwClCKvj+UqE+UR6I9nzlO2znKXwoWDM=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=BaJLcL01rmpSpRsgTrZ9/YKvBXkFV3y6/VSnJjCvqX/kc3zyeLagz/SzOkxbrDYG2
-         T35gfIeD9677HXPMM9iKP1GFhbaXhuqCK4z1wrGwT0yuMbMJ2YnfiO1TU37r40eYKa
-         9x0NzTJfyk0nDtJDkvkQzLy8CTd1CYCBhRR0jtVrXG3YUPQKpB/CV+yiJ6nvSxVlYa
-         N+mzEvEYUqbBDTEwl64CZBGeT1AU09TMHe17bBdX4EJqC+g9dPYlRi6a8DmMKDMlSd
-         ppGEYPtNn/XHwmsbCrkPe4N2Z842YZIYdjNAsEZ96Y6sHCwspgSJkBtkiDd8602lgV
-         BRBqMLsPwRgtA==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
-Thanks for the tip. It's really helpful.
+On Wed, 2020-02-26 at 15:03 -0800, rentao.bupt@gmail.com wrote:
+> From: Tao Ren <rentao.bupt@gmail.com>
+> 
+> This patch store vhub's standard usb descriptors in struct "ast_vhub"
+> so
+> it's more convenient to customize descriptors and potentially support
+> multiple vhub instances in the future.
+> 
+> Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
 
-root@tegra-ubuntu:/d/usb/xhci/3610000.usb/ports/port04# cat portsc
-Powered Connected Enabled Link:U2 PortSpeed:4 Change: Wake:
+Acked-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+---
+> ---
+>  No change in v2/v3/v4:
+>    - the patch is added to the patch series since v4.
+> 
+>  drivers/usb/gadget/udc/aspeed-vhub/hub.c  | 43 ++++++++++++++++-----
+> --
+>  drivers/usb/gadget/udc/aspeed-vhub/vhub.h | 15 ++++++++
+>  2 files changed, 46 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> index 19b3517e04c0..9c3027306b15 100644
+> --- a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> +++ b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> @@ -93,11 +93,7 @@ static void ast_vhub_patch_dev_desc_usb1(struct
+> usb_device_descriptor *desc)
+>  				 USB_DT_INTERFACE_SIZE + \
+>  				 USB_DT_ENDPOINT_SIZE)
+>  
+> -static const struct ast_vhub_full_cdesc {
+> -	struct usb_config_descriptor	cfg;
+> -	struct usb_interface_descriptor intf;
+> -	struct usb_endpoint_descriptor	ep;
+> -} __attribute__ ((packed)) ast_vhub_conf_desc = {
+> +static const struct ast_vhub_full_cdesc ast_vhub_conf_desc = {
+>  	.cfg = {
+>  		.bLength		= USB_DT_CONFIG_SIZE,
+>  		.bDescriptorType	= USB_DT_CONFIG,
+> @@ -266,6 +262,7 @@ static int ast_vhub_rep_desc(struct ast_vhub_ep
+> *ep,
+>  			     u8 desc_type, u16 len)
+>  {
+>  	size_t dsize;
+> +	struct ast_vhub *vhub = ep->vhub;
+>  
+>  	EPDBG(ep, "GET_DESCRIPTOR(type:%d)\n", desc_type);
+>  
+> @@ -281,20 +278,20 @@ static int ast_vhub_rep_desc(struct ast_vhub_ep
+> *ep,
+>  	switch(desc_type) {
+>  	case USB_DT_DEVICE:
+>  		dsize = USB_DT_DEVICE_SIZE;
+> -		memcpy(ep->buf, &ast_vhub_dev_desc, dsize);
+> -		BUILD_BUG_ON(dsize > sizeof(ast_vhub_dev_desc));
+> +		memcpy(ep->buf, &vhub->vhub_dev_desc, dsize);
+> +		BUILD_BUG_ON(dsize > sizeof(vhub->vhub_dev_desc));
+>  		BUILD_BUG_ON(USB_DT_DEVICE_SIZE >=
+> AST_VHUB_EP0_MAX_PACKET);
+>  		break;
+>  	case USB_DT_CONFIG:
+>  		dsize = AST_VHUB_CONF_DESC_SIZE;
+> -		memcpy(ep->buf, &ast_vhub_conf_desc, dsize);
+> -		BUILD_BUG_ON(dsize > sizeof(ast_vhub_conf_desc));
+> +		memcpy(ep->buf, &vhub->vhub_conf_desc, dsize);
+> +		BUILD_BUG_ON(dsize > sizeof(vhub->vhub_conf_desc));
+>  		BUILD_BUG_ON(AST_VHUB_CONF_DESC_SIZE >=
+> AST_VHUB_EP0_MAX_PACKET);
+>  		break;
+>  	case USB_DT_HUB:
+>  		dsize = AST_VHUB_HUB_DESC_SIZE;
+> -		memcpy(ep->buf, &ast_vhub_hub_desc, dsize);
+> -		BUILD_BUG_ON(dsize > sizeof(ast_vhub_hub_desc));
+> +		memcpy(ep->buf, &vhub->vhub_hub_desc, dsize);
+> +		BUILD_BUG_ON(dsize > sizeof(vhub->vhub_hub_desc));
+>  		BUILD_BUG_ON(AST_VHUB_HUB_DESC_SIZE >=
+> AST_VHUB_EP0_MAX_PACKET);
+>  		break;
+>  	default:
+> @@ -317,7 +314,8 @@ static int ast_vhub_rep_string(struct ast_vhub_ep
+> *ep,
+>  			       u8 string_id, u16 lang_id,
+>  			       u16 len)
+>  {
+> -	int rc = usb_gadget_get_string (&ast_vhub_strings, string_id,
+> ep->buf);
+> +	int rc = usb_gadget_get_string(&ep->vhub->vhub_str_desc,
+> +					string_id, ep->buf);
+>  
+>  	/*
+>  	 * This should never happen unless we put too big strings in
+> @@ -834,9 +832,30 @@ void ast_vhub_hub_reset(struct ast_vhub *vhub)
+>  	writel(0, vhub->regs + AST_VHUB_EP1_STS_CHG);
+>  }
+>  
+> +static void ast_vhub_init_desc(struct ast_vhub *vhub)
+> +{
+> +	/* Initialize vhub Device Descriptor. */
+> +	memcpy(&vhub->vhub_dev_desc, &ast_vhub_dev_desc,
+> +		sizeof(vhub->vhub_dev_desc));
+> +
+> +	/* Initialize vhub Configuration Descriptor. */
+> +	memcpy(&vhub->vhub_conf_desc, &ast_vhub_conf_desc,
+> +		sizeof(vhub->vhub_conf_desc));
+> +
+> +	/* Initialize vhub Hub Descriptor. */
+> +	memcpy(&vhub->vhub_hub_desc, &ast_vhub_hub_desc,
+> +		sizeof(vhub->vhub_hub_desc));
+> +
+> +	/* Initialize vhub String Descriptors. */
+> +	memcpy(&vhub->vhub_str_desc, &ast_vhub_strings,
+> +		sizeof(vhub->vhub_str_desc));
+> +}
+> +
+>  void ast_vhub_init_hub(struct ast_vhub *vhub)
+>  {
+>  	vhub->speed = USB_SPEED_UNKNOWN;
+>  	INIT_WORK(&vhub->wake_work, ast_vhub_wake_work);
+> +
+> +	ast_vhub_init_desc(vhub);
+>  }
+>  
+> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
+> b/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
+> index 761919e220d3..191f9fae7420 100644
+> --- a/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
+> +++ b/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
+> @@ -2,6 +2,9 @@
+>  #ifndef __ASPEED_VHUB_H
+>  #define __ASPEED_VHUB_H
+>  
+> +#include <linux/usb.h>
+> +#include <linux/usb/ch11.h>
+> +
+>  /*****************************
+>   *                           *
+>   * VHUB register definitions *
+> @@ -373,6 +376,12 @@ struct ast_vhub_port {
+>  	struct ast_vhub_dev	dev;
+>  };
+>  
+> +struct ast_vhub_full_cdesc {
+> +	struct usb_config_descriptor	cfg;
+> +	struct usb_interface_descriptor intf;
+> +	struct usb_endpoint_descriptor	ep;
+> +} __packed;
+> +
+>  /* Global vhub structure */
+>  struct ast_vhub {
+>  	struct platform_device		*pdev;
+> @@ -409,6 +418,12 @@ struct ast_vhub {
+>  
+>  	/* Upstream bus speed captured at bus reset */
+>  	unsigned int			speed;
+> +
+> +	/* Standard USB Descriptors of the vhub. */
+> +	struct usb_device_descriptor	vhub_dev_desc;
+> +	struct ast_vhub_full_cdesc	vhub_conf_desc;
+> +	struct usb_hub_descriptor	vhub_hub_desc;
+> +	struct usb_gadget_strings	vhub_str_desc;
+>  };
+>  
+>  /* Standard request handlers result codes */
 
--JC
-
-On 2/26/20 5:32 PM, Mathias Nyman wrote:
-> On 26.2.2020 10.12, JC Kuo wrote:
->> Hi Thierry,
->> Yes, it can be verified with a LPM capable device. For example, a VIA USB 3.0
->> hub is connected to Jetson-Xavier. "lsusb -v" output [1] shows the device
->> supports LPM and the host has enabled U1/U2 states for the device. If host LPM
->> is disabled, there will be no "U1 Enabled" and "U2 Enabled" strings in "Device
->> Status" section.
->>
->> To check LPM operation, disconnect all USB 3.0 devices from the hub and disable
->> runtime PM for the super-speed portion of the hub, so that it won't be
->> auto-suspended.
->> root@tegra-ubuntu:~# echo on > /sys/bus/usb/devices/2-4/power/control
->>
->> Since there is no data transaction for the hub, link will enter U2 soon. This
->> can be checked by reading XHCI.PORTSC register. In below, PLS (Port Link State)
->> field is U2.
->> root@tegra-ubuntu:~# devmem 0x3610450
->> 0x00001243
-> 
-> A more human friendly way to read portsc registers:
-> 
-> # cat /sys/kernel/debug/usb/xhci/0000\:00\:14.0/ports/port02/portsc 
-> Powered Connected Enabled Link:U0 PortSpeed:3 Change: Wake: 
-> 
-> -Mathias
-> 
