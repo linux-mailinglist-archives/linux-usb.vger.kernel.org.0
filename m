@@ -2,100 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8431737AF
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 13:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10ADF17387A
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 14:37:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726103AbgB1MxH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Feb 2020 07:53:07 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:46474 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726400AbgB1MxH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Feb 2020 07:53:07 -0500
-Received: by mail-pg1-f196.google.com with SMTP id y30so1464306pga.13
-        for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2020 04:53:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xvtq6YgokW3dOsLf2LiPLCXiFYliWMU8X+XdnMUFWTY=;
-        b=khxyAtO9q1wRQ+lcr4BsHyhmrJldouT8tHUupK/MZO/ZAUYk0/7vF97R72t0CoaEKy
-         JueyKryrU/84wqmBTlYE9VnXL3BKt2Chqyy3/WT0mNdcGs/h9GDtjBeTa5ENhthLvN7J
-         pcucStY7cyn4ZZ87wJKaPubABydibuewIdKqsn4nPl2MM3kSziMyUSFW6MF5igElPFC3
-         3KY/DO9VB4NahsgYIihMqOfMNQib1RNbnBI0XFqw9+COeMG5YNnPCYjzh9Ml1gO1F9gk
-         ga5N+/yuwrgzPuDFuXbTkLORhCbst8Ukk48hOQ+he2pWpMISOnySanzh8VR0ps8Z8jiX
-         tRBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xvtq6YgokW3dOsLf2LiPLCXiFYliWMU8X+XdnMUFWTY=;
-        b=LAHZM0uWEWyy/Ka29ZT6V6GeRYXkZIHzym0LobLf1iH1q18uhWKVsueA2jQcB5JiHX
-         mzKENWODFVbkficSfUl/guj+muqNVYymuW67imIq7pL6Alx6zvFOYRPXK5hr6rOwpw/g
-         ADP8uxhFJVQNRZZsifSZxY9Z4AG+0z9XPmdbzwrXz1PqmCQ+52REyKRQgM+OydX9s0uz
-         xx5xMJZyVkjk4kMXPHpeGXkNQtJJMk3ErqoPAhwmfhW5xElJ/KAPapNcZcnnEIQl7V2a
-         thwCMVYxsp4/RSCNvD7UFVKolikXpyRj4RnAr2ALKcFmqijl/C9MkeO2jX6fFQWF/dqS
-         SkyQ==
-X-Gm-Message-State: APjAAAVc6vymM0Jz2Ks2xnhb7H13H1Tqan3rvT2KgOko8/FBZQ2LJSZp
-        ZN5860tOwWsGg3okcV3Q0ktyEkRC6eRp9SL03IMyOw==
-X-Google-Smtp-Source: APXvYqzpwNsgK3YVAW6YE68jIRhoDu3kMleJRygqKjLOc2b4xFIq5YJb+HtXnkwHHxD99JTpetytK9OtGZnpjMJoanU=
-X-Received: by 2002:a63:f242:: with SMTP id d2mr4526336pgk.130.1582894385752;
- Fri, 28 Feb 2020 04:53:05 -0800 (PST)
+        id S1726788AbgB1Nh2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Feb 2020 08:37:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47268 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726151AbgB1Nh2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 28 Feb 2020 08:37:28 -0500
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 16DAA246B2;
+        Fri, 28 Feb 2020 13:37:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582897047;
+        bh=3QTsf6yxc7rs1GNJzVvRB6S0uuiy+3lK2e9AhBjgK9U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=PYW1elnCmO11I8yypoUm++QOvuS5mjo4qjQS3WJsoYbB8ouH57FD1Zn+AsHR6BxYh
+         uVzJ46ki3kR1P4j1XLTDhlPxJ9Naig6YinLcn3i69w/rkFDyzdiyu+i4WTcH2M9Vba
+         CObmYdWF8gL1UScf3zzKgVoPscBnBZUBtirabons=
+Received: by mail-qk1-f181.google.com with SMTP id z12so2873793qkg.12;
+        Fri, 28 Feb 2020 05:37:27 -0800 (PST)
+X-Gm-Message-State: APjAAAUq8X+rZ+44pmYwC/qy8okbFcJOi+c7go+nJxQl9XNZdR+XWsEQ
+        qWXkWigoIWgmq14la6Xfs5GW0Zw8H7/Q72tpmg==
+X-Google-Smtp-Source: APXvYqxv7Nvxn3gC9nka19zmNC3LNW+zYXn12WGYx0IvQ/8zlbcZx2PSeIw5Jyoc0EsM8EUw7UFcSWSt1Qu2jKo6TFU=
+X-Received: by 2002:a05:620a:12a3:: with SMTP id x3mr4553853qki.254.1582897046187;
+ Fri, 28 Feb 2020 05:37:26 -0800 (PST)
 MIME-Version: 1.0
-References: <0000000000003bf3fb059fa247eb@google.com>
-In-Reply-To: <0000000000003bf3fb059fa247eb@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 28 Feb 2020 13:52:54 +0100
-Message-ID: <CAAeHK+wXm115pU+rTpFQ_293bF6w9_5pgsEeZrFpeEQMPGBSCA@mail.gmail.com>
-Subject: Re: BUG: bad host encryption descriptor; descriptor is too short (1
- vs 5 needed)
-To:     syzbot <syzbot+2470d4931705e03b0977@syzkaller.appspotmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+References: <20200227062754.19131-1-peter.chen@nxp.com> <20200227062754.19131-2-peter.chen@nxp.com>
+ <20200227170810.GA2318@bogus> <VI1PR04MB5327992CC6BA891C199D39A08BE80@VI1PR04MB5327.eurprd04.prod.outlook.com>
+In-Reply-To: <VI1PR04MB5327992CC6BA891C199D39A08BE80@VI1PR04MB5327.eurprd04.prod.outlook.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 28 Feb 2020 07:37:14 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLQ+5iR_rTaS7D2cvS_psT0XKh=FLH0EmLo2EsE4cuXSA@mail.gmail.com>
+Message-ID: <CAL_JsqLQ+5iR_rTaS7D2cvS_psT0XKh=FLH0EmLo2EsE4cuXSA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] doc: dt-binding: cdns-salvo-phy: add binding doc
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     "kishon@ti.com" <kishon@ti.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "aniljoy@cadence.com" <aniljoy@cadence.com>,
+        Jun Li <jun.li@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 28, 2020 at 1:50 PM syzbot
-<syzbot+2470d4931705e03b0977@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    d6ff8147 usb: gadget: add raw-gadget interface
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=15cd9a81e00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=90a3d9bed5648419
-> dashboard link: https://syzkaller.appspot.com/bug?extid=2470d4931705e03b0977
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15cfbd09e00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=170e3645e00000
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+2470d4931705e03b0977@syzkaller.appspotmail.com
->
-> usb 1-1: config 0 interface 0 altsetting 0 has 2 endpoint descriptors, different from the interface descriptor's value: 4
-> usb 1-1: New USB device found, idVendor=13dc, idProduct=5611, bcdDevice=40.15
-> usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> usb 1-1: config 0 descriptor??
-> hwa-hc 1-1:0.0: Wire Adapter v106.52 newer than groked v1.0
-> usb 1-1: BUG: bad host encryption descriptor; descriptor is too short (1 vs 5 needed)
-> usb 1-1: supported encryption types:
-> usb 1-1: E: host doesn't support CCM-1 crypto
-> hwa-hc 1-1:0.0: Cannot initialize internals: -19
+On Fri, Feb 28, 2020 at 3:29 AM Peter Chen <peter.chen@nxp.com> wrote:
 >
 >
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> > >  .../bindings/phy/cdns,salvo-phy.yaml          | 47 +++++++++++++++++++
+> > >  1 file changed, 47 insertions(+)
+> > >  create mode 100644
+> > > Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
+> > >
+> >
+> > My bot found errors running 'make dt_binding_check' on your patch:
+> >
+> > warning: no schema found in file:
+> > Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
+> > /builds/robherring/linux-dt-
+> > review/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml: ignoring, error
+> > parsing file
+> > Documentation/devicetree/bindings/display/simple-framebuffer.example.dts:21.16-
+> > 37.11: Warning (chosen_node_is_root): /example-0/chosen: chosen node must be
+> > at root node
+> > Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml:  while scanning a
+> > block scalar
+> >   in "<unicode string>", line 39, column 5 found a tab character where an indentation
+> > space is expected
+> >   in "<unicode string>", line 41, column 1
+> > Documentation/devicetree/bindings/Makefile:12: recipe for target
+> > 'Documentation/devicetree/bindings/phy/cdns,salvo-phy.example.dts' failed
+> > make[1]: *** [Documentation/devicetree/bindings/phy/cdns,salvo-phy.example.dts]
+> > Error 1
+> > Makefile:1263: recipe for target 'dt_binding_check' failed
+> > make: *** [dt_binding_check] Error 2
+> >
+> Hi Rob,
 >
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+> After changing some format, I still got below errors, would you please point to
+> what's wrong with line 40, column 12? Thanks.
 
-#syz dup: BUG: bad host security descriptor; not enough data (4 vs 5 left)
+It is line numbers of the generated .example.dts you need to look at.
+
+>
+>  31 required:
+>  32   - compatible
+>  33   - reg
+>  34   - "#phy-cells"
+>  35
+>  36 additionalProperties: false
+>  37
+>  38 examples:
+>  39     -|
+>  40     usb3phy: usb3-phy {
+
+Needs a unit address.
+
+>  41         compatible = "nxp,salvo-phy";
+>  42         reg = <0x5B160000 0x40000>;
+>  43         clocks = <&usb3_lpcg 4>;
+>  44         clock-names = "salvo_phy_clk";
+>  45         power-domains = <&pd IMX_SC_R_USB_2_PHY>;
+
+Need to include the header for this define.
+
+>  46         #phy-cells = <0>;
+>  47     };
