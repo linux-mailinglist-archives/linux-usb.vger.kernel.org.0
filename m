@@ -2,106 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F7B8172D7A
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 01:39:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A394C172DF8
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 02:07:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730124AbgB1AjC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Feb 2020 19:39:02 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:33069 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729984AbgB1AjB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 19:39:01 -0500
-Received: by mail-pl1-f194.google.com with SMTP id ay11so516636plb.0;
-        Thu, 27 Feb 2020 16:39:01 -0800 (PST)
+        id S1730459AbgB1BFa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Feb 2020 20:05:30 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:41471 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729984AbgB1BFa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 20:05:30 -0500
+Received: by mail-pf1-f196.google.com with SMTP id j9so774076pfa.8;
+        Thu, 27 Feb 2020 17:05:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=Z/yxTrdmlGAmNZb612vOa6OICzFDLjBrtfyjwcjGr0I=;
-        b=qvOgREEDhea8eVEYFz9FqSehJre6irn23Wigft+6rL2Zg1SfkE4xnms/IjVxqde/EW
-         kQpfCOuBvFF4m62qUQcy/PNlUQZHAacD2g4PEvcx2ML6wSxgcnuBxAeBm+S9Sa3sHXC1
-         9pYbeqa7yaav0NlPou5YXeHLUMNMyIG+QPPwqfJ1OOC/65n9acuprnxXV20OeezE857v
-         oypneDDwUgsy21O756k82Q/VRddxcSMcXzaIqsSsRILTqqPANxcuSTK/AZVWQKSzJmQ6
-         z0G2ojoTb3a+Z2rrCvLD97gr4ZAXnR8JzioAwuMYMpMAGZTSBJqkEzPJpX4G7v+PqOWd
-         pCaA==
+        bh=vYKIHHhVn7nSPH52/lrlIOtB7hqwWnXUydbXUcnZWnI=;
+        b=QFlUCv7nCT2v8zoOhV2qa4uo6mlR9+Nsq7/xVvJLjsHIYBg9P4ixu6A7b7qhQfX8Qe
+         vM2r2IJLVY9WzSAiDaGRlFnxtMv0848tL6yTTWdVjghb2Xv7E37AEUDJvaVREmp1BNIY
+         940Ae6Ut8CrQrOp26oJlS2RyZXS+vfTFD/yZ9tb3CLTw9R9hPaFCY9Tmvvtv3wtrpMv2
+         wsbFKm7PATc4wfRkkFxv4OB6EejtTBAuwkvi2tchL/GS8lh0brgPhwBQKAmHXetqk/pd
+         Fczf/Ob3g8Rk03buXNFyaS8jPj0aEMjWjAAnatVfiDQsw3OFVl9MCsiJrbJCHh/etzdq
+         Iy8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Z/yxTrdmlGAmNZb612vOa6OICzFDLjBrtfyjwcjGr0I=;
-        b=JlKDgAHPzJRP3A9qm7p5tqQeQxsGmzPjZnkLgN/64pTke1GdJ6nkKPtmnItQZ5mstB
-         ai8DeYx+lye8ye1vCsrL0tGGRhGl7M/YGUIENBkNJbyytt8J8sSMBXrHfRE8bBF2COKq
-         yT+W/pDueYCMJuxjvV7Tyf52AvLNfEGE8zYBCnTINl1V1FhKarqK/Zz7GhcbLLe2AJZe
-         RM2h9hI1RTJLe+qq3jI6ozocSAXr9PJp0VriQMhQQCZKzdV62UIym64bAEZreRaTDfkq
-         Pb2hHMOFEmAIW0kSvxO0zFPuLRXuAZSXiaU93J0QG/V73Wt5OXNViC2bHdA0Elw9H98F
-         V33A==
-X-Gm-Message-State: APjAAAU0Y3SvOyOzHgpEEHUPyV0SiWFopzhMRpdtn3yQVGvwm3UbU4+V
-        9YT9sRLK9uIc9NeaZ2KruEI=
-X-Google-Smtp-Source: APXvYqyhdz4YW3ZnR+9gXnGHrvh1yrfSz86rFuRvtglPoDEGuSTSyqF9J15P0kW1RUNoryevyEYhVQ==
-X-Received: by 2002:a17:902:8542:: with SMTP id d2mr1490574plo.200.1582850340892;
-        Thu, 27 Feb 2020 16:39:00 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g12sm8176155pfh.170.2020.02.27.16.39.00
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=vYKIHHhVn7nSPH52/lrlIOtB7hqwWnXUydbXUcnZWnI=;
+        b=JerhwD9443k8HApuhfBm61aTPYo+k30gThB+pmjj2CXFdU/d+DqWBv2qstT5VcUObz
+         o7nXLNr0yHwA9G3HEnnnFq2iEu3AxX8GK2UFxfSx1imYwCLVNqRYvFvRxN73K5IquErw
+         RIqb2ELrDceZD37Yopsa5wl5lN9nwqQG8uhPMJoSg+VwMnfwYzzl8j9pj+1/XUgbPeF/
+         hipobu1tl1+udva6qXUvqNcm7DclOAqYYb9qbVlBgJRVKXeioWOQDdzsW6S8mRW6duJs
+         s8ZNs/v/GvOG5ICGeL5jyHuYnxbcwOpLVrqy7YdAywe0bSkS9/eTlHxPygxdEMWkG7lj
+         XoOg==
+X-Gm-Message-State: APjAAAWxSuNwF6CwwyMTThpyCYBMlWk+N+86G34azwiIeyOPHVzJeQii
+        bgc45RRA7gmE8YEdTTMbiKc=
+X-Google-Smtp-Source: APXvYqyTntILByeXSll2nrJCqdigFZSVhDQGQyd6dWT/1lZozrCoBY86BHFMbLTiHaa612sjWifBGQ==
+X-Received: by 2002:a62:3343:: with SMTP id z64mr1754059pfz.150.1582851928639;
+        Thu, 27 Feb 2020 17:05:28 -0800 (PST)
+Received: from taoren-ubuntu-R90MNF91 ([2620:10d:c090:500::4:d8f5])
+        by smtp.gmail.com with ESMTPSA id 136sm7975604pgh.26.2020.02.27.17.05.27
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 27 Feb 2020 16:39:00 -0800 (PST)
-Date:   Thu, 27 Feb 2020 16:38:59 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Thu, 27 Feb 2020 17:05:28 -0800 (PST)
+Date:   Thu, 27 Feb 2020 17:05:20 -0800
+From:   Tao Ren <rentao.bupt@gmail.com>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Antti =?iso-8859-1?Q?Sepp=E4l=E4?= <a.seppala@gmail.com>,
-        Boris ARZUR <boris@konbu.org>, linux-usb@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Martin Schiller <ms@dev.tdt.de>
-Subject: Re: [RFT PATCH 4/4] usb: dwc2: Make "trimming xfer length" a debug
- message
-Message-ID: <20200228003859.GC11811@roeck-us.net>
-References: <20200226210414.28133-1-linux@roeck-us.net>
- <20200226210414.28133-5-linux@roeck-us.net>
- <CAD=FV=VZYOV-uNwPB3zBpfdWV6U0qFeC1HTqwEWR1+x962J3mA@mail.gmail.com>
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        taoren@fb.com
+Subject: Re: [PATCH v5 7/7] dt-bindings: usb: add documentation for aspeed
+ usb-vhub
+Message-ID: <20200228010444.GA19910@taoren-ubuntu-R90MNF91>
+References: <20200227230507.8682-1-rentao.bupt@gmail.com>
+ <20200227230507.8682-8-rentao.bupt@gmail.com>
+ <3150424b9e9f5856c747a0fbf44647919f49209d.camel@kernel.crashing.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAD=FV=VZYOV-uNwPB3zBpfdWV6U0qFeC1HTqwEWR1+x962J3mA@mail.gmail.com>
+In-Reply-To: <3150424b9e9f5856c747a0fbf44647919f49209d.camel@kernel.crashing.org>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Feb 27, 2020 at 02:07:14PM -0800, Doug Anderson wrote:
-> Hi,
+On Fri, Feb 28, 2020 at 10:30:02AM +1100, Benjamin Herrenschmidt wrote:
+> On Thu, 2020-02-27 at 15:05 -0800, rentao.bupt@gmail.com wrote:
 > 
-> On Wed, Feb 26, 2020 at 1:04 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > With some USB network adapters, such as DM96xx, the following message
-> > is seen for each maximum size receive packet.
-> >
-> > dwc2 ff540000.usb: dwc2_update_urb_state(): trimming xfer length
-> >
-> > This happens because the packet size requested by the driver is 1522
-> > bytes, wMaxPacketSize is 64, the dwc2 driver configures the chip to
-> > receive 24*64 = 1536 bytes, and the chip does indeed send more than
-> > 1522 bytes of data. Since the event does not indicate an error condition,
-> > the message is just noise. Demote it to debug level.
-> >
-> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > ---
-> >  drivers/usb/dwc2/hcd_intr.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../...
 > 
-> Suggest a "Fixes" or "Cc: stable" tag.  This one isn't as important as
-> the others, but presumably you'll start hitting it a lot more now
-> (whereas previously we'd just crash).
-> 
-Good point. Added
+> You haven't fixed the problem spotted by Rob which is that the example
+> is now out of sync, it's missing the required properties.
 
-Fixes: 7359d482eb4d3 ("staging: HCD files for the DWC2 driver")
+Ahhh, now I know where my problem is..
+Let me see why I cannot reproduce the error on my side; otherwise I may
+create more noise in my next patch set (customize device IDs/strings)..
 
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> Also long run I think best is going to have a child node per downstream
+> port, so we create a matching linux struct device. This will make it
+> easier to deal with the other device-controller in the ast2600 which is
+> basically one of these without a vhub above it.
 
-Thanks again!
+Maybe a dumb question: what would be the proper place to parse the child
+node/properties when they are added? For example, in some usb_gadget_ops
+callback?
 
-Guenter
+
+Cheers,
+
+Tao
