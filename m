@@ -2,55 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A394C172DF8
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 02:07:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B5C172E94
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 03:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730459AbgB1BFa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Feb 2020 20:05:30 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:41471 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729984AbgB1BFa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 20:05:30 -0500
-Received: by mail-pf1-f196.google.com with SMTP id j9so774076pfa.8;
-        Thu, 27 Feb 2020 17:05:29 -0800 (PST)
+        id S1730509AbgB1CIK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Feb 2020 21:08:10 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:46685 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730346AbgB1CIK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 21:08:10 -0500
+Received: by mail-pf1-f193.google.com with SMTP id o24so836793pfp.13;
+        Thu, 27 Feb 2020 18:08:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=vYKIHHhVn7nSPH52/lrlIOtB7hqwWnXUydbXUcnZWnI=;
-        b=QFlUCv7nCT2v8zoOhV2qa4uo6mlR9+Nsq7/xVvJLjsHIYBg9P4ixu6A7b7qhQfX8Qe
-         vM2r2IJLVY9WzSAiDaGRlFnxtMv0848tL6yTTWdVjghb2Xv7E37AEUDJvaVREmp1BNIY
-         940Ae6Ut8CrQrOp26oJlS2RyZXS+vfTFD/yZ9tb3CLTw9R9hPaFCY9Tmvvtv3wtrpMv2
-         wsbFKm7PATc4wfRkkFxv4OB6EejtTBAuwkvi2tchL/GS8lh0brgPhwBQKAmHXetqk/pd
-         Fczf/Ob3g8Rk03buXNFyaS8jPj0aEMjWjAAnatVfiDQsw3OFVl9MCsiJrbJCHh/etzdq
-         Iy8A==
+        h=from:to:cc:subject:date:message-id;
+        bh=Z5AIbk2nbOcHqpTmcvhMG9mF23rIvUFPSLJXXgXhGns=;
+        b=WxZo9JuHxs2vb8rzf2HkXGaALenOiLW17gU9FV7NRZnQX/R4Snkc7mWGvmDU4MAO7t
+         8jVaLqfz7cr3WemoDQyHzihCUa74B7tA2upzRpq3DhB56XOkNZEUAP+diQ8F5pr1mYYy
+         /eINOAoaeDTbtQSjkQ7q78GZrG18X6ofyEIevln/VnS7x9LMTG0vZCQ7fdSQAuOm/YSX
+         LPE2FMrcSLV42KJJN0Al145sJ40ccNpQSxso2CPCXZfPBYXsZdmZXydPm6TGRv8sxS8X
+         IO+MQfO38hqOcgEArnArXh/Imkv8+osKKLguQ/jJgaRUiT+PKDryfxsvWMW27f74d2WQ
+         +KMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=vYKIHHhVn7nSPH52/lrlIOtB7hqwWnXUydbXUcnZWnI=;
-        b=JerhwD9443k8HApuhfBm61aTPYo+k30gThB+pmjj2CXFdU/d+DqWBv2qstT5VcUObz
-         o7nXLNr0yHwA9G3HEnnnFq2iEu3AxX8GK2UFxfSx1imYwCLVNqRYvFvRxN73K5IquErw
-         RIqb2ELrDceZD37Yopsa5wl5lN9nwqQG8uhPMJoSg+VwMnfwYzzl8j9pj+1/XUgbPeF/
-         hipobu1tl1+udva6qXUvqNcm7DclOAqYYb9qbVlBgJRVKXeioWOQDdzsW6S8mRW6duJs
-         s8ZNs/v/GvOG5ICGeL5jyHuYnxbcwOpLVrqy7YdAywe0bSkS9/eTlHxPygxdEMWkG7lj
-         XoOg==
-X-Gm-Message-State: APjAAAWxSuNwF6CwwyMTThpyCYBMlWk+N+86G34azwiIeyOPHVzJeQii
-        bgc45RRA7gmE8YEdTTMbiKc=
-X-Google-Smtp-Source: APXvYqyTntILByeXSll2nrJCqdigFZSVhDQGQyd6dWT/1lZozrCoBY86BHFMbLTiHaa612sjWifBGQ==
-X-Received: by 2002:a62:3343:: with SMTP id z64mr1754059pfz.150.1582851928639;
-        Thu, 27 Feb 2020 17:05:28 -0800 (PST)
-Received: from taoren-ubuntu-R90MNF91 ([2620:10d:c090:500::4:d8f5])
-        by smtp.gmail.com with ESMTPSA id 136sm7975604pgh.26.2020.02.27.17.05.27
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 27 Feb 2020 17:05:28 -0800 (PST)
-Date:   Thu, 27 Feb 2020 17:05:20 -0800
-From:   Tao Ren <rentao.bupt@gmail.com>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Z5AIbk2nbOcHqpTmcvhMG9mF23rIvUFPSLJXXgXhGns=;
+        b=KA1Vo/F0zAQs4sY+S3HHKQkAK3JfpNhyVorKqoCL8brqB23u4wBLsWZrlM913wmdpV
+         ZS1Ylr4l4lJutkWt0up4d0a4iBw4eZ29sWnPZKeXKfQhLh2/PPuFmBWf1QZMG3dm4Csa
+         jt/Ky6toeeGpGd8VktZUxbbiIZzROoBjGZqQy9KhKoTQ+HQ5SbKUj3E1rYEdc8+3jnXD
+         HGJdoyL5c2FhC9+1ogro0tjXfZz0Ggt0dEmRG84DZaeRdJUWSg/KBBQa9xe8t5cV5q88
+         6jVLMcty/ZBrklGrJSMVz5ighA9etgk5mybVSEQQmTKY8Q5MxLmRxitOxLw039S6xF4s
+         Uytw==
+X-Gm-Message-State: APjAAAXlXdvJ3bJNI0y9pAYQBwnJRp9Zrj3VWfpoudWGdUG5PXr3T97b
+        C+QGWkCFkHMrnvYuq4UOXl4=
+X-Google-Smtp-Source: APXvYqzwfsLxTTqt4X5L8xIjUVbm8bxdacPFLrNAwoD4cD1bY8Ry1LYaaB9nFvV5Fr/sOrt1DhrKRA==
+X-Received: by 2002:a63:42c2:: with SMTP id p185mr2358809pga.268.1582855687383;
+        Thu, 27 Feb 2020 18:08:07 -0800 (PST)
+Received: from taoren-ubuntu-R90MNF91.thefacebook.com ([2620:10d:c090:500::4:d8f5])
+        by smtp.gmail.com with ESMTPSA id k24sm4931972pgm.61.2020.02.27.18.08.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Feb 2020 18:08:06 -0800 (PST)
+From:   rentao.bupt@gmail.com
+To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Joel Stanley <joel@jms.id.au>,
         Andrew Jeffery <andrew@aj.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Colin Ian King <colin.king@canonical.com>,
         Stephen Boyd <swboyd@chromium.org>,
@@ -60,44 +57,61 @@ Cc:     Felipe Balbi <balbi@kernel.org>,
         linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
         taoren@fb.com
-Subject: Re: [PATCH v5 7/7] dt-bindings: usb: add documentation for aspeed
- usb-vhub
-Message-ID: <20200228010444.GA19910@taoren-ubuntu-R90MNF91>
-References: <20200227230507.8682-1-rentao.bupt@gmail.com>
- <20200227230507.8682-8-rentao.bupt@gmail.com>
- <3150424b9e9f5856c747a0fbf44647919f49209d.camel@kernel.crashing.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3150424b9e9f5856c747a0fbf44647919f49209d.camel@kernel.crashing.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Cc:     Tao Ren <rentao.bupt@gmail.com>
+Subject: [PATCH v6 0/7] aspeed-g6: enable usb support
+Date:   Thu, 27 Feb 2020 18:07:50 -0800
+Message-Id: <20200228020757.10513-1-rentao.bupt@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 28, 2020 at 10:30:02AM +1100, Benjamin Herrenschmidt wrote:
-> On Thu, 2020-02-27 at 15:05 -0800, rentao.bupt@gmail.com wrote:
-> 
->  .../...
-> 
-> You haven't fixed the problem spotted by Rob which is that the example
-> is now out of sync, it's missing the required properties.
+From: Tao Ren <rentao.bupt@gmail.com>
 
-Ahhh, now I know where my problem is..
-Let me see why I cannot reproduce the error on my side; otherwise I may
-create more noise in my next patch set (customize device IDs/strings)..
+The patch series aims at enabling USB Host and Gadget support on AST2600
+platforms.
 
-> Also long run I think best is going to have a child node per downstream
-> port, so we create a matching linux struct device. This will make it
-> easier to deal with the other device-controller in the ast2600 which is
-> basically one of these without a vhub above it.
+Patch #1 includes vhub's usb descriptors in struct "ast_vhub": all usb
+descriptor changes will go to the per-vhub instance instead of touching
+the global default descriptors.
 
-Maybe a dumb question: what would be the proper place to parse the child
-node/properties when they are added? For example, in some usb_gadget_ops
-callback?
+Patch #2 replaces hardcoded vhub port/endpoint number with device tree
+properties, so that it's more convenient to add support for ast2600-vhub
+which provides more downstream ports and endpoints.
 
+Patch #3 enables ast2600 support in aspeed-vhub usb gadget driver.
 
-Cheers,
+Patch #4 adds USB devices and according pin groups in aspeed-g6 dtsi.
 
-Tao
+Patch #5 and #6 add vhub port/endpoint properties into aspeed-g4 and
+aspeed-g5 dtsi.
+
+Patch #7 adds device tree binding document for aspeed usb-vhub driver.
+
+Tao Ren (7):
+  usb: gadget: aspeed: support per-vhub usb descriptors
+  usb: gadget: aspeed: read vhub properties from device tree
+  usb: gadget: aspeed: add ast2600 vhub support
+  ARM: dts: aspeed-g6: add usb functions
+  ARM: dts: aspeed-g5: add vhub port and endpoint properties
+  ARM: dts: aspeed-g4: add vhub port and endpoint properties
+  dt-bindings: usb: add documentation for aspeed usb-vhub
+
+ .../bindings/usb/aspeed,usb-vhub.yaml         | 73 +++++++++++++++++++
+ arch/arm/boot/dts/aspeed-g4.dtsi              |  2 +
+ arch/arm/boot/dts/aspeed-g5.dtsi              |  2 +
+ arch/arm/boot/dts/aspeed-g6-pinctrl.dtsi      | 25 +++++++
+ arch/arm/boot/dts/aspeed-g6.dtsi              | 45 ++++++++++++
+ drivers/usb/gadget/udc/aspeed-vhub/Kconfig    |  4 +-
+ drivers/usb/gadget/udc/aspeed-vhub/core.c     | 71 +++++++++++-------
+ drivers/usb/gadget/udc/aspeed-vhub/dev.c      | 30 ++++++--
+ drivers/usb/gadget/udc/aspeed-vhub/epn.c      |  4 +-
+ drivers/usb/gadget/udc/aspeed-vhub/hub.c      | 58 ++++++++++-----
+ drivers/usb/gadget/udc/aspeed-vhub/vhub.h     | 43 +++++++----
+ 11 files changed, 286 insertions(+), 71 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
+
+-- 
+2.17.1
+
