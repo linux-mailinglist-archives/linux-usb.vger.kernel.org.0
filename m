@@ -2,136 +2,281 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 596E617344C
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 10:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA346173565
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 11:35:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726838AbgB1Jkl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Feb 2020 04:40:41 -0500
-Received: from mail-eopbgr40072.outbound.protection.outlook.com ([40.107.4.72]:22171
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726005AbgB1Jkk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 28 Feb 2020 04:40:40 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F+QkqHHDirZUqu3oytz/QF0SK/MMhchHOwSdGwVGUY6xTE41sDbATGf6jLhVzIN7RG3ZJD+Yf7oQI1Zl7tdzZo5BlNy8OXBZ2HAk35cyr+GELCYApkUlNo8oBGqqasdVhAN/QPThZnx53u0bOuAXyK9D/1r7vLv+tbMhA85RSYNWMPF1uPrWK6+K+dmsS9jog2ZocsSGKi4k5W35P0J4/wkvvwi8dTk/PL52J/NgjvNs+lvwVCZfUKDs5a1CV2cv4hbz5QyCIkg9xUgMSUNEtdz3n/yXb6QI4ObF5TExtv4ITobl5nF67/PzeYmmoNLhS8WfOKDEgt3U1lJgAglO9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qu4U3Qfap0aPW6N0ypHrUYNcGu4IbNPsjaseEPd8k1Q=;
- b=CfvxYgpQWSWqGqRh8rgMWGT8mi9aLjTdhyBDWoKaMrM9GVKUQRyvefE2/W1WUevEgDHG0s57Bc2DveYNj4mQolLaBMMpWcamRcfTXOEr4HK7DMR7HCP5f5Ri1wfGaBxzDsDtOcqT1FX4WwrNqaw6sXroIgpwuNro8ODKSvYDEr0AKs9N2OW39BR3bxveim1gYghlAXBONQUvBiRTXzrdTy54aD5nmXu/q/cGoWhlI/Kta240hfyvBOY9LV5GEJ2vTL/E9F+eq7tumqJm02WE9o6zy0vPM5/mzIr0hxoV7grynySh4TCNELV0+Q76swcZ6d/kuf47IYrBrvvTLviwfA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qu4U3Qfap0aPW6N0ypHrUYNcGu4IbNPsjaseEPd8k1Q=;
- b=VjOK+508HeFt8pcNOjY28G3QZYfEIdCajFYABpD4sbRFnUT3hk5P4csB8G4pO0QjwfLj2FpA+QJWKsAK7peTxt/jq76w3nnjdcTem5+hrMASW+y/OrhkdXRpXSAOkNHJwDgWPANwZajshgwneR88cBLjXXCV0CHDHoMuCFoh/tc=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
- VI1PR04MB7149.eurprd04.prod.outlook.com (10.186.159.86) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2772.16; Fri, 28 Feb 2020 09:40:37 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::9547:9dfa:76b8:71b1]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::9547:9dfa:76b8:71b1%7]) with mapi id 15.20.2750.021; Fri, 28 Feb 2020
- 09:40:37 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-CC:     "jun.li@freescale.com" <jun.li@freescale.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 0/3] USB IMX Chipidea fix gpio vbus control
-Thread-Topic: [PATCH 0/3] USB IMX Chipidea fix gpio vbus control
-Thread-Index: AQHV7VqVZ4BeDr6e5UuTM5ZPfBO9kqgu5JsAgAAEwYCAAAyagIAABoeAgAAFTBCAABreAIAAzJeAgABTGwCAAB83gA==
-Date:   Fri, 28 Feb 2020 09:40:37 +0000
-Message-ID: <20200228094039.GB31815@b29397-desktop>
-References: <20200227104212.12562-1-m.felsch@pengutronix.de>
- <20200227111838.GA24071@b29397-desktop>
- <20200227113539.gcx3nfwm2fbm3ukv@pengutronix.de>
- <20200227122045.GB24071@b29397-desktop>
- <20200227124406.6kbgu3dbru4qmews@pengutronix.de>
- <VI1PR04MB53270541BB66CAB1EB8F00008BEB0@VI1PR04MB5327.eurprd04.prod.outlook.com>
- <20200227143914.mi3vsltrtyo5sqed@pengutronix.de>
- <20200228025129.GA31815@b29397-desktop>
- <20200228074856.gomzgtoxwzj4eele@pengutronix.de>
-In-Reply-To: <20200228074856.gomzgtoxwzj4eele@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: da0a788a-53b7-489c-cf17-08d7bc32442b
-x-ms-traffictypediagnostic: VI1PR04MB7149:|VI1PR04MB7149:|VI1PR04MB7149:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB7149A2DDCC1A987F503F31E58BE80@VI1PR04MB7149.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-forefront-prvs: 0327618309
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(136003)(396003)(366004)(39860400002)(376002)(346002)(189003)(199004)(33716001)(71200400001)(64756008)(66446008)(1076003)(9686003)(81156014)(53546011)(8936002)(6512007)(478600001)(8676002)(81166006)(186003)(86362001)(6916009)(26005)(316002)(6506007)(44832011)(54906003)(5660300002)(76116006)(66556008)(66476007)(66946007)(33656002)(4326008)(91956017)(6486002)(2906002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB7149;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: emx1T+ne95kVaIFn1MbLbJ1T29W6a9yyOv1KyXNTeHTnW0AJcKVj4ZGnbzi9U0nN2nP581B7gfcghn7mZePCqri+2c2TH/3UZdLSQnhJx/gNKvGYpUZWyKLnbBt4VsYT7dP+PlHj4UcsvlQ5cOVX+Ak7x5A+614FWnQLt3VHN971qejA99AUplWowviu5r8aRncd8BWsadFbsPSv4Z5P2lMZX7oSbFYbxHyw36gWkrdi0irECd3ZNo2ldP8MANE/3/tmmqhS1FV+2HYACeTqD6NVYsD0J2uuoh47zhfYcHQSbcHp25tVIZSHXtyLjDYb+uPB8qw9aIB/lsM6prvvwj8w30qEVgnTcIC6g5uFIw4vkaGgl6GxPZwvw0HkFvN2W8cMpeccCj1zMEAjtiwHtsbRhnikzOGeMq8QlfknK+002ExM5kOxR5ch6s9y8CMv
-x-ms-exchange-antispam-messagedata: iOYUDz06QOm4Tdg2u0PtLN7GEGF7jtFavfY+NGXffHbeSXm1N73QigmJGszOEr/DDC/Tq289UJ8bgb8nmQkx8rbusGW0QE2xzU2D/m5G7RQ3u1qIv0wZEV/fxLSlbURuOoKVpr3BVxzvV2Gdev0+8A==
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <5F7E1E671A104B4BAF9D6B45978DA6CD@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: da0a788a-53b7-489c-cf17-08d7bc32442b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2020 09:40:37.3553
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mQqEFOBEoJ8lL1CBlli/cfBgNZv/8+eoeSSNmvYK7Oua4QEuhHuRIWwpoe+7/MX6EZybWb1g2c2PjEBFP+nTpQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7149
+        id S1726538AbgB1Kfn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Feb 2020 05:35:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45016 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726063AbgB1Kfn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 28 Feb 2020 05:35:43 -0500
+Received: from localhost.localdomain (unknown [222.65.251.82])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 43D9F246A8;
+        Fri, 28 Feb 2020 10:35:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582886142;
+        bh=wp6XMdSNw04JjTxVtUpLjO6Mx3otLshpjG+hwuGWf0k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Q5orTx4ueA9Leiij0cEeachUk8CC90tf2e0iURZ5nJPDJ/BByoUcm6a55o19MKWsV
+         G7vMnQ14MBnpZ47m4t3E9ekOu0caiTwMDu/jjIZ7oumt0Q0eqLHAKCdylDprgKSwFh
+         uiv3eyBK6A01fXVUeoVkQx4lDTGuD8LGFT6S21Gg=
+From:   Peter Chen <peter.chen@kernel.org>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-imx@nxp.com, Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH v2 1/1] usb: chipidea: udc: add sg list support
+Date:   Fri, 28 Feb 2020 18:35:26 +0800
+Message-Id: <20200228103526.21454-1-peter.chen@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-02-28 08:48:56, Marco Felsch wrote:
-> Hi Peter,
->=20
-> On 20-02-28 02:51, Peter Chen wrote:
->=20
-> ...
->=20
-> > > > CI_HDRC_TURN_VBUS_EARLY_ON is introduced by fixing a bug that some =
-i.mx USB
-> > > > controllers PHY's power is sourced from VBUS, the PHY's power need =
-to be on before
-> > > > touch some ehci registers, otherwise, the USB signal will be wrong =
-at some low speed
-> > > > devices use case. So, this flag can't be deleted, it may cause regr=
-ession.
-> > >=20
-> > > Pls check my archeological findings and again pls check my patches. I
-> > > deleted the flag because isn't required anymore afterwards.
-> >=20
-> > I have already checked your patch, your patch deletes CI_HDRC_TURN_VBUS=
-_EARLY_ON
-> > quirk, and it may cause regression.
->=20
-> Arg, sorry now I see what you mean. Thanks for your explanation :)
-> Since the 'struct ehci_ci_priv' contains now an enabled state we can
-> git rid of the flag. To get it right, the writing the ehci PORT_POWER
-> must be done before or after we enabled the VBUS? I'm asking because
-> we can drop the 1st patch of this series.
+From: Peter Chen <peter.chen@nxp.com>
 
-Both are OK.
+For low system memory system (eg, 256MB), it may met OOM issue if the
+request buffer is large (eg, 64KB). We ran out below OOM issue for f_fs.
+Luckily, the f_fs supports sg list now, the OOM issue is fixed with
+this patch.
 
---=20
+ufb: page allocation failure: order:4, mode:0x40cc0(GFP_KERNEL|__GFP_COMP),
+nodemask=(null),cpuset=/,mems_allowed=0
+CPU: 2 PID: 370 Comm: ufb Not tainted 5.4.3-1.1.0+g54b3750d61fd #1
+Hardware name: NXP i.MX8MNano DDR4 EVK board (DT)
+Call trace:
+ dump_backtrace+0x0/0x140
+ show_stack+0x14/0x20
+ dump_stack+0xb4/0xf8
+ warn_alloc+0xec/0x158
+ __alloc_pages_slowpath+0x9cc/0x9f8
+ __alloc_pages_nodemask+0x21c/0x280
+ alloc_pages_current+0x7c/0xe8
+ kmalloc_order+0x1c/0x88
+ __kmalloc+0x25c/0x298
+ ffs_epfile_io.isra.0+0x20c/0x7d0
+ ffs_epfile_read_iter+0xa8/0x188
+ new_sync_read+0xe4/0x170
+ __vfs_read+0x2c/0x40
+ vfs_read+0xc8/0x1a0
+ ksys_read+0x68/0xf0
+ __arm64_sys_read+0x18/0x20
+ el0_svc_common.constprop.0+0x68/0x160
+ el0_svc_handler+0x20/0x80
+ el0_svc+0x8/0xc
+Mem-Info:
+active_anon:2856 inactive_anon:5269 isolated_anon:12
+ active_file:5238 inactive_file:18803 isolated_file:0
+ unevictable:0 dirty:22 writeback:416 unstable:0
+ slab_reclaimable:4073 slab_unreclaimable:3408
+ mapped:727 shmem:7393 pagetables:37 bounce:0
+ free:4104 free_pcp:118 free_cma:0
+Node 0 active_anon:11436kB inactive_anon:21076kB active_file:20988kB inactive_file:75216kB unevictable:0kB isolated(ano
+Node 0 DMA32 free:16820kB min:1808kB low:2260kB high:2712kB active_anon:11436kB inactive_anon:21076kB active_file:2098B
+lowmem_reserve[]: 0 0 0
+Node 0 DMA32: 508*4kB (UME) 242*8kB (UME) 730*16kB (UM) 21*32kB (UME) 5*64kB (UME) 2*128kB (M) 0*256kB 0*512kB 0*1024kB
+Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=1048576kB
+Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=32768kB
+Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=2048kB
+Node 0 hugepages_total=0 hugepages_free=0 hugepages_surp=0 hugepages_size=64kB
+31455 total pagecache pages
+0 pages in swap cache
+Swap cache stats: add 0, delete 0, find 0/0
+Free swap  = 0kB
+Total swap = 0kB
+65536 pages RAM
+0 pages HighMem/MovableOnly
+10766 pages reserved
+0 pages cma reserved
+0 pages hwpoisoned
 
-Thanks,
-Peter Chen=
+Reviewed-by: Jun Li <jun.li@nxp.com>
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
+---
+Changes for v2:
+- Reuse add_td_to_list for sg case
+- Fix some checkpatch warnings
+- Add review-by from NXP internal review
+
+ drivers/usb/chipidea/udc.c | 127 +++++++++++++++++++++++++++----------
+ 1 file changed, 95 insertions(+), 32 deletions(-)
+
+diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+index ffa6caee1f3b..94feaecc6059 100644
+--- a/drivers/usb/chipidea/udc.c
++++ b/drivers/usb/chipidea/udc.c
+@@ -338,7 +338,7 @@ static int hw_usb_reset(struct ci_hdrc *ci)
+  *****************************************************************************/
+ 
+ static int add_td_to_list(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq,
+-			  unsigned length)
++			unsigned int length, struct scatterlist *s)
+ {
+ 	int i;
+ 	u32 temp;
+@@ -366,7 +366,11 @@ static int add_td_to_list(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq,
+ 		node->ptr->token |= cpu_to_le32(mul << __ffs(TD_MULTO));
+ 	}
+ 
+-	temp = (u32) (hwreq->req.dma + hwreq->req.actual);
++	if (s)
++		temp = (u32) (sg_dma_address(s) + hwreq->req.actual);
++	else
++		temp = (u32) (hwreq->req.dma + hwreq->req.actual);
++
+ 	if (length) {
+ 		node->ptr->page[0] = cpu_to_le32(temp);
+ 		for (i = 1; i < TD_PAGE_COUNT; i++) {
+@@ -400,6 +404,88 @@ static inline u8 _usb_addr(struct ci_hw_ep *ep)
+ 	return ((ep->dir == TX) ? USB_ENDPOINT_DIR_MASK : 0) | ep->num;
+ }
+ 
++static int prepare_td_for_non_sg(struct ci_hw_ep *hwep,
++		struct ci_hw_req *hwreq)
++{
++	unsigned int rest = hwreq->req.length;
++	int pages = TD_PAGE_COUNT;
++	int ret = 0;
++
++	if (rest == 0) {
++		ret = add_td_to_list(hwep, hwreq, 0, NULL);
++		if (ret < 0)
++			return ret;
++	}
++
++	/*
++	 * The first buffer could be not page aligned.
++	 * In that case we have to span into one extra td.
++	 */
++	if (hwreq->req.dma % PAGE_SIZE)
++		pages--;
++
++	while (rest > 0) {
++		unsigned int count = min(hwreq->req.length - hwreq->req.actual,
++			(unsigned int)(pages * CI_HDRC_PAGE_SIZE));
++
++		ret = add_td_to_list(hwep, hwreq, count, NULL);
++		if (ret < 0)
++			return ret;
++
++		rest -= count;
++	}
++
++	if (hwreq->req.zero && hwreq->req.length && hwep->dir == TX
++	    && (hwreq->req.length % hwep->ep.maxpacket == 0)) {
++		ret = add_td_to_list(hwep, hwreq, 0, NULL);
++		if (ret < 0)
++			return ret;
++	}
++
++	return ret;
++}
++
++static int prepare_td_per_sg(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq,
++		struct scatterlist *s)
++{
++	unsigned int rest = sg_dma_len(s);
++	int ret = 0;
++
++	hwreq->req.actual = 0;
++	while (rest > 0) {
++		unsigned int count = min(rest,
++			(unsigned int)(TD_PAGE_COUNT * CI_HDRC_PAGE_SIZE));
++
++		ret = add_td_to_list(hwep, hwreq, count, s);
++		if (ret < 0)
++			return ret;
++
++		rest -= count;
++	}
++
++	return ret;
++}
++
++static int prepare_td_for_sg(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq)
++{
++	struct usb_request *req = &hwreq->req;
++	struct scatterlist *s = req->sg;
++	int ret;
++
++	if (!s || req->zero || req->length == 0) {
++		dev_err(hwep->ci->dev, "not supported operation for sg\n");
++		return -EINVAL;
++	}
++
++	do {
++		ret = prepare_td_per_sg(hwep, hwreq, s);
++		if (ret)
++			return ret;
++	} while ((s = sg_next(s)));
++
++	return ret;
++}
++
+ /**
+  * _hardware_enqueue: configures a request at hardware level
+  * @hwep:   endpoint
+@@ -411,8 +497,6 @@ static int _hardware_enqueue(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq)
+ {
+ 	struct ci_hdrc *ci = hwep->ci;
+ 	int ret = 0;
+-	unsigned rest = hwreq->req.length;
+-	int pages = TD_PAGE_COUNT;
+ 	struct td_node *firstnode, *lastnode;
+ 
+ 	/* don't queue twice */
+@@ -426,35 +510,13 @@ static int _hardware_enqueue(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq)
+ 	if (ret)
+ 		return ret;
+ 
+-	/*
+-	 * The first buffer could be not page aligned.
+-	 * In that case we have to span into one extra td.
+-	 */
+-	if (hwreq->req.dma % PAGE_SIZE)
+-		pages--;
+-
+-	if (rest == 0) {
+-		ret = add_td_to_list(hwep, hwreq, 0);
+-		if (ret < 0)
+-			goto done;
+-	}
+-
+-	while (rest > 0) {
+-		unsigned count = min(hwreq->req.length - hwreq->req.actual,
+-					(unsigned)(pages * CI_HDRC_PAGE_SIZE));
+-		ret = add_td_to_list(hwep, hwreq, count);
+-		if (ret < 0)
+-			goto done;
+-
+-		rest -= count;
+-	}
++	if (hwreq->req.num_mapped_sgs)
++		ret = prepare_td_for_sg(hwep, hwreq);
++	else
++		ret = prepare_td_for_non_sg(hwep, hwreq);
+ 
+-	if (hwreq->req.zero && hwreq->req.length && hwep->dir == TX
+-	    && (hwreq->req.length % hwep->ep.maxpacket == 0)) {
+-		ret = add_td_to_list(hwep, hwreq, 0);
+-		if (ret < 0)
+-			goto done;
+-	}
++	if (ret)
++		return ret;
+ 
+ 	firstnode = list_first_entry(&hwreq->tds, struct td_node, td);
+ 
+@@ -1935,6 +1997,7 @@ static int udc_start(struct ci_hdrc *ci)
+ 	ci->gadget.max_speed    = USB_SPEED_HIGH;
+ 	ci->gadget.name         = ci->platdata->name;
+ 	ci->gadget.otg_caps	= otg_caps;
++	ci->gadget.sg_supported = 1;
+ 
+ 	if (ci->platdata->flags & CI_HDRC_REQUIRES_ALIGNED_DMA)
+ 		ci->gadget.quirk_avoids_skb_reserve = 1;
+-- 
+2.17.1
+
