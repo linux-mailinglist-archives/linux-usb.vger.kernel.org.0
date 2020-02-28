@@ -2,82 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4B8172C44
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 00:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3543C172D67
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 01:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729983AbgB0Xay (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Feb 2020 18:30:54 -0500
-Received: from kernel.crashing.org ([76.164.61.194]:37124 "EHLO
-        kernel.crashing.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729838AbgB0Xay (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 18:30:54 -0500
-Received: from localhost (gate.crashing.org [63.228.1.57])
-        (authenticated bits=0)
-        by kernel.crashing.org (8.14.7/8.14.7) with ESMTP id 01RNU3sQ030322
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 27 Feb 2020 17:30:06 -0600
-Message-ID: <3150424b9e9f5856c747a0fbf44647919f49209d.camel@kernel.crashing.org>
-Subject: Re: [PATCH v5 7/7] dt-bindings: usb: add documentation for aspeed
- usb-vhub
-From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
-To:     rentao.bupt@gmail.com, Felipe Balbi <balbi@kernel.org>,
+        id S1730317AbgB1Ac1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Feb 2020 19:32:27 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:36719 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730117AbgB1Ac1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Feb 2020 19:32:27 -0500
+Received: by mail-pf1-f195.google.com with SMTP id i13so746753pfe.3;
+        Thu, 27 Feb 2020 16:32:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=s30J624/VP3HrEoGo1r3bYubq6LVO8D9HM/6PcACQO0=;
+        b=qW06oxb1fzVXep6BwwNAyOwG70mCiGpQS6B6veLIokygiuOnqSU1PudiZIsyJpuDx2
+         Al7uKGJQUorkbQ1IGXFelHFXnR0NglIvfd2Lq/EiNe87HNeRuAgm5FeuRv/GssADtqzS
+         tPnRqVZHQnEIK7DGqx7PWnEBCmtfPSElyVDFrTLGyLF0NhgxEItQ9kHYuoQWreLQZdyk
+         l7WdZZ5VhrfNjRKEIRBtoelpxmuc4pgibYQ4PJK2iTrnCTuKVzZ4ytwBvEOK5Zpzy7oc
+         eThbhOkSJ7pukiWAfWGhr+T/sLtsSdIFkXPifmZ5tQRfIcQSOMVAUQsIhuZCUVVB1d+r
+         pURw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=s30J624/VP3HrEoGo1r3bYubq6LVO8D9HM/6PcACQO0=;
+        b=qLR+98llWly/V6pEoVQoAy6iGXNLXQj9qprzalHAYofvp0sBSdL2QdMNsV8w7WAc+B
+         ilI0quHj6IPLSgCanjQ0UvWY3tc08X/P/tfvzmH9/e52A0DCI+s5GVTB5wCsraBupV+q
+         JMcd+x6XS09jjKgOp3eVgAFpeBbasmo2VsMiSw/fsIwl+xsfgxl+rkWzjYx8SlGFuLz6
+         xsT2ddvdJVglTTgptfMhVujfZHVLg6TE874Xe160oEwEr6LCB0k86hMfAMIb8MyX9d5u
+         8Dwq6HGQCecbBs2CBSw6Nr9embWtawPG9sAA3a7DXZsh7nPQk+J1iARBYyuRKLQxsHxa
+         8gxQ==
+X-Gm-Message-State: APjAAAWg3urrk24IFtoO/iGVai0u33LQHw7Kuu1XdG5VBXkRnElBdSgj
+        ow0qyb+rjod0zuYjpBQHrX1+am0s
+X-Google-Smtp-Source: APXvYqzm2cVg7M5gfQ2fdWy+5ejprQEPAiNepZFokpFo9yk5YoIstG6fh1BrQPNVAEmApm+3Vm5q/g==
+X-Received: by 2002:a63:c550:: with SMTP id g16mr1961644pgd.9.1582849946286;
+        Thu, 27 Feb 2020 16:32:26 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u12sm7936215pgr.3.2020.02.27.16.32.24
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 27 Feb 2020 16:32:25 -0800 (PST)
+Date:   Thu, 27 Feb 2020 16:32:24 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        taoren@fb.com
-Date:   Fri, 28 Feb 2020 10:30:02 +1100
-In-Reply-To: <20200227230507.8682-8-rentao.bupt@gmail.com>
-References: <20200227230507.8682-1-rentao.bupt@gmail.com>
-         <20200227230507.8682-8-rentao.bupt@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Antti =?iso-8859-1?Q?Sepp=E4l=E4?= <a.seppala@gmail.com>,
+        Boris ARZUR <boris@konbu.org>, linux-usb@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Martin Schiller <ms@dev.tdt.de>
+Subject: Re: [RFT PATCH 2/4] usb: dwc2: Do not update data length if it is 0
+ on inbound transfers
+Message-ID: <20200228003224.GA11811@roeck-us.net>
+References: <20200226210414.28133-1-linux@roeck-us.net>
+ <20200226210414.28133-3-linux@roeck-us.net>
+ <CAD=FV=UutvJE+k4W0sQDs6q+oOfbz5Tz670+L-8fFHfdB=KytQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=UutvJE+k4W0sQDs6q+oOfbz5Tz670+L-8fFHfdB=KytQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2020-02-27 at 15:05 -0800, rentao.bupt@gmail.com wrote:
+On Thu, Feb 27, 2020 at 02:06:44PM -0800, Doug Anderson wrote:
+> Hi,
+> 
+> On Wed, Feb 26, 2020 at 1:04 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > The DWC2 documentation states that transfers with zero data length should
+> > set the number of packets to 1 and the transfer length to 0. This is not
+> > currently the case for inbound transfers: the transfer length is set to
+> > the maximum packet length. This can have adverse effects if the chip
+> > actually does transfer data as it is programmed to do. Follow chip
+> > documentation and keep the transfer length set to 0 in that situation.
+> >
+> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> > ---
+> >  drivers/usb/dwc2/hcd.c | 15 ++++++++-------
+> >  1 file changed, 8 insertions(+), 7 deletions(-)
+> 
+> I don't have any other test setup that you don't have, so just giving
+> my review tag and not tested tag.
+> 
+> I will note that it feels like this should have a "Fixes" tag or a
+> direct Cc to stable to make it obvious that it should make its way
+> back to stable trees.
+> 
 
- .../...
+I added
 
-You haven't fixed the problem spotted by Rob which is that the example
-is now out of sync, it's missing the required properties.
+Fixes: 56f5b1cff22a1 ("staging: Core files for the DWC2 driver")
 
-Also long run I think best is going to have a child node per downstream
-port, so we create a matching linux struct device. This will make it
-easier to deal with the other device-controller in the ast2600 which is
-basically one of these without a vhub above it.
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - interrupts
-> +  - aspeed,vhub-downstream-ports
-> +  - aspeed,vhub-generic-endpoints
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/aspeed-clock.h>
-> +    vhub: usb-vhub@1e6a0000 {
-> +            compatible = "aspeed,ast2500-usb-vhub";
-> +            reg = <0x1e6a0000 0x300>;
-> +            interrupts = <5>;
-> +            clocks = <&syscon ASPEED_CLK_GATE_USBPORT1CLK>;
-> +            pinctrl-names = "default";
-> +            pinctrl-0 = <&pinctrl_usb2ad_default>;
-> +    };
-> -- 
+Thanks!
 
+Guenter
