@@ -2,141 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34AEB173CA2
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 17:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7242D173CE0
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 17:27:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726758AbgB1QOx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Feb 2020 11:14:53 -0500
-Received: from mail-vk1-f195.google.com ([209.85.221.195]:46074 "EHLO
-        mail-vk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725769AbgB1QOx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Feb 2020 11:14:53 -0500
-Received: by mail-vk1-f195.google.com with SMTP id f17so143347vkk.12
-        for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2020 08:14:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sdfucJr4oGXmK/lbY5RGk72YXwrFDcIl2yf5ZBumLmc=;
-        b=Y19jelF+yAj3D9yhRoea0pkJgxFOHFphhYx6vuwZohk2gP08M+tUPLgTNxVPjM3yLd
-         9tG7853yVeWuZ0dH2FfBEO57PhITSljU8G0GoDefm7OknQYhjKftArSFAi8Y+0gyamUA
-         rNN4hYtWHbpmrbLEc1SF3YbEu6q75JEbBCZ4M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sdfucJr4oGXmK/lbY5RGk72YXwrFDcIl2yf5ZBumLmc=;
-        b=mXKiuCCnmoCxgKIEzfAp97pPxPyY0vazOSGQHhZvEW+4+LUuAZjdGCYLRpvukzHb8j
-         e1iF+PeFCe4F3Bz0koCUA0p2LlJUQO2GcAPHDozKGS85d6PwzOId3ZbTWC82eFWYhT/A
-         LbDvrIvtaECDBKFX+g7/2USUmxeCPb2hqja6SFPgNlDzIjk/7wNbF+Xhqf1q8UM8raup
-         ZLCgD+6MN/V3d8cnSV7+RlnQMnoAA24SHqaMtzK7L+8jvXEV8ylkj982s4By7XTwh+lH
-         cjd1n0TqCperKLWg0LyF4z14+AVunoxk+5HPQhMclkSe/Ly5OiYtTo1HyzS/g3O7G39a
-         QTrg==
-X-Gm-Message-State: ANhLgQ3+4/8xY/wASG9G+kUNDLNhpnTSwvEVqGZTHZFAaY19BgDF7dcW
-        sVe511W9Likp6wq4cjJJ0vBtNboNJTA=
-X-Google-Smtp-Source: ADFU+vtZpqK2URibP1J+sp68MK/D9ra2AIEQhvdhm5k8ZEuWOsmTRAe7EWlXQ9kySA7YZIcLeniEVQ==
-X-Received: by 2002:ac5:c807:: with SMTP id y7mr2903930vkl.92.1582906489549;
-        Fri, 28 Feb 2020 08:14:49 -0800 (PST)
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
-        by smtp.gmail.com with ESMTPSA id k20sm3092200vki.6.2020.02.28.08.14.47
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Feb 2020 08:14:48 -0800 (PST)
-Received: by mail-ua1-f53.google.com with SMTP id c7so1159977uaf.5
-        for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2020 08:14:47 -0800 (PST)
-X-Received: by 2002:ab0:45b6:: with SMTP id u51mr2409303uau.120.1582906487233;
- Fri, 28 Feb 2020 08:14:47 -0800 (PST)
-MIME-Version: 1.0
-References: <20200226210414.28133-1-linux@roeck-us.net> <20200226210414.28133-2-linux@roeck-us.net>
- <CAD=FV=WDd4E-zDW73kb-qHo1QYQrD3BTgVpE70rzowpgeXVy7w@mail.gmail.com>
- <ce3357a1-467f-1241-ae0d-2e113116ca8d@roeck-us.net> <f94fc372-d81b-e8e4-e7ef-780fe7db1237@roeck-us.net>
-In-Reply-To: <f94fc372-d81b-e8e4-e7ef-780fe7db1237@roeck-us.net>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 28 Feb 2020 08:14:35 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=VNsOo--1x+pkwhWOWSGAQyVB6g6CE+o4q7phPSXaDXRw@mail.gmail.com>
-Message-ID: <CAD=FV=VNsOo--1x+pkwhWOWSGAQyVB6g6CE+o4q7phPSXaDXRw@mail.gmail.com>
+        id S1726151AbgB1Q11 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Feb 2020 11:27:27 -0500
+Received: from mout.kundenserver.de ([212.227.17.24]:60955 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbgB1Q10 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Feb 2020 11:27:26 -0500
+Received: from [192.168.1.183] ([37.4.249.171]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MJV5K-1inyfA4AHY-00JvWc; Fri, 28 Feb 2020 17:26:49 +0100
 Subject: Re: [RFT PATCH 1/4] usb: dwc2: Simplify and fix DMA alignment code
-To:     Guenter Roeck <linux@roeck-us.net>
+To:     Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>
 Cc:     Minas Harutyunyan <hminas@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         =?UTF-8?B?QW50dGkgU2VwcMOkbMOk?= <a.seppala@gmail.com>,
         Boris ARZUR <boris@konbu.org>, linux-usb@vger.kernel.org,
         LKML <linux-kernel@vger.kernel.org>,
         Felipe Balbi <balbi@kernel.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Martin Schiller <ms@dev.tdt.de>
-Content-Type: text/plain; charset="UTF-8"
+        Martin Schiller <ms@dev.tdt.de>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+References: <20200226210414.28133-1-linux@roeck-us.net>
+ <20200226210414.28133-2-linux@roeck-us.net>
+ <CAD=FV=WDd4E-zDW73kb-qHo1QYQrD3BTgVpE70rzowpgeXVy7w@mail.gmail.com>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=stefan.wahren@i2se.com; keydata=
+ xsFNBFt6gBMBEACub/pBevHxbvJefyZG32JINmn2bsEPX25V6fejmyYwmCGKjFtL/DoUMEVH
+ DxCJ47BMXo344fHV1C3AnudgN1BehLoBtLHxmneCzgH3KcPtWW7ptj4GtJv9CQDZy27SKoEP
+ xyaI8CF0ygRxJc72M9I9wmsPZ5bUHsLuYWMqQ7JcRmPs6D8gBkk+8/yngEyNExwxJpR1ylj5
+ bjxWDHyYQvuJ5LzZKuO9LB3lXVsc4bqXEjc6VFuZFCCk/syio/Yhse8N+Qsx7MQagz4wKUkQ
+ QbfXg1VqkTnAivXs42VnIkmu5gzIw/0tRJv50FRhHhxpyKAI8B8nhN8Qvx7MVkPc5vDfd3uG
+ YW47JPhVQBcUwJwNk/49F9eAvg2mtMPFnFORkWURvP+G6FJfm6+CvOv7YfP1uewAi4ln+JO1
+ g+gjVIWl/WJpy0nTipdfeH9dHkgSifQunYcucisMyoRbF955tCgkEY9EMEdY1t8iGDiCgX6s
+ 50LHbi3k453uacpxfQXSaAwPksl8MkCOsv2eEr4INCHYQDyZiclBuuCg8ENbR6AGVtZSPcQb
+ enzSzKRZoO9CaqID+favLiB/dhzmHA+9bgIhmXfvXRLDZze8po1dyt3E1shXiddZPA8NuJVz
+ EIt2lmI6V8pZDpn221rfKjivRQiaos54TgZjjMYI7nnJ7e6xzwARAQABzSlTdGVmYW4gV2Fo
+ cmVuIDxzdGVmYW4ud2FocmVuQGluLXRlY2guY29tPsLBdwQTAQgAIQUCXIdehwIbAwULCQgH
+ AgYVCAkKCwIEFgIDAQIeAQIXgAAKCRCUgewPEZDy2yHTD/9UF7QlDkGxzQ7AaCI6N95iQf8/
+ 1oSUaDNu2Y6IK+DzQpb1TbTOr3VJwwY8a3OWz5NLSOLMWeVxt+osMmlQIGubD3ODZJ8izPlG
+ /JrNt5zSdmN5IA5f3esWWQVKvghZAgTDqdpv+ZHW2EmxnAJ1uLFXXeQd3UZcC5r3/g/vSaMo
+ 9xek3J5mNuDm71lEWsAs/BAcFc+ynLhxwBWBWwsvwR8bHtJ5DOMWvaKuDskpIGFUe/Kb2B+j
+ ravQ3Tn6s/HqJM0cexSHz5pe+0sGvP+t9J7234BFQweFExriey8UIxOr4XAbaabSryYnU/zV
+ H9U1i2AIQZMWJAevCvVgQ/U+NeRhXude9YUmDMDo2sB2VAFEAqiF2QUHPA2m8a7EO3yfL4rM
+ k0iHzLIKvh6/rH8QCY8i3XxTNL9iCLzBWu/NOnCAbS+zlvLZaiSMh5EfuxTtv4PlVdEjf62P
+ +ZHID16gUDwEmazLAMrx666jH5kuUCTVymbL0TvB+6L6ARl8ANyM4ADmkWkpyM22kCuISYAE
+ fQR3uWXZ9YgxaPMqbV+wBrhJg4HaN6C6xTqGv3r4B2aqb77/CVoRJ1Z9cpHCwiOzIaAmvyzP
+ U6MxCDXZ8FgYlT4v23G5imJP2zgX5s+F6ACUJ9UQPD0uTf+J9Da2r+skh/sWOnZ+ycoHNBQv
+ ocZENAHQf87BTQRbeoATARAA2Hd0fsDVK72RLSDHby0OhgDcDlVBM2M+hYYpO3fX1r++shiq
+ PKCHVAsQ5bxe7HmJimHa4KKYs2kv/mlt/CauCJ//pmcycBM7GvwnKzmuXzuAGmVTZC6WR5Lk
+ akFrtHOzVmsEGpNv5Rc9l6HYFpLkbSkVi5SPQZJy+EMgMCFgjrZfVF6yotwE1af7HNtMhNPa
+ LDN1oUKF5j+RyRg5iwJuCDknHjwBQV4pgw2/5vS8A7ZQv2MbW/TLEypKXif78IhgAzXtE2Xr
+ M1n/o6ZH71oRFFKOz42lFdzdrSX0YsqXgHCX5gItLfqzj1psMa9o1eiNTEm1dVQrTqnys0l1
+ 8oalRNswYlQmnYBwpwCkaTHLMHwKfGBbo5dLPEshtVowI6nsgqLTyQHmqHYqUZYIpigmmC3S
+ wBWY1V6ffUEmkqpAACEnL4/gUgn7yQ/5d0seqnAq2pSBHMUUoCcTzEQUWVkiDv3Rk7hTFmhT
+ sMq78xv2XRsXMR6yQhSTPFZCYDUExElEsSo9FWHWr6zHyYcc8qDLFvG9FPhmQuT2s9Blx6gI
+ 323GnEq1lwWPJVzP4jQkJKIAXwFpv+W8CWLqzDWOvdlrDaTaVMscFTeH5W6Uprl65jqFQGMp
+ cRGCs8GCUW13H0IyOtQtwWXA4ny+SL81pviAmaSXU8laKaRu91VOVaF9f4sAEQEAAcLBXwQY
+ AQIACQUCW3qAEwIbDAAKCRCUgewPEZDy2+oXD/9cHHRkBZOfkmSq14Svx062PtU0KV470TSn
+ p/jWoYJnKIw3G0mXIRgrtH2dPwpIgVjsYyRSVMKmSpt5ZrDf9NtTbNWgk8VoLeZzYEo+J3oP
+ qFrTMs3aYYv7e4+JK695YnmQ+mOD9nia915tr5AZj95UfSTlyUmyic1d8ovsf1fP7XCUVRFc
+ RjfNfDF1oL/pDgMP5GZ2OwaTejmyCuHjM8IR1CiavBpYDmBnTYk7Pthy6atWvYl0fy/CqajT
+ Ksx7+p9xziu8ZfVX+iKBCc+He+EDEdGIDhvNZ/IQHfOB2PUXWGS+s9FNTxr/A6nLGXnA9Y6w
+ 93iPdYIwxS7KXLoKJee10DjlzsYsRflFOW0ZOiSihICXiQV1uqM6tzFG9gtRcius5UAthWaO
+ 1OwUSCQmfCOm4fvMIJIA9rxtoS6OqRQciF3crmo0rJCtN2awZfgi8XEif7d6hjv0EKM9XZoi
+ AZYZD+/iLm5TaKWN6oGIti0VjJv8ZZOZOfCb6vqFIkJW+aOu4orTLFMz28aoU3QyWpNC8FFm
+ dYsVua8s6gN1NIa6y3qa/ZB8bA/iky59AEz4iDIRrgUzMEg8Ak7Tfm1KiYeiTtBDCo25BvXj
+ bqsyxkQD1nkRm6FAVzEuOPIe8JuqW2xD9ixGYvjU5hkRgJp3gP5b+cnG3LPqquQ2E6goKUML AQ==
+Message-ID: <ea445ef5-3e8a-1e58-d264-0d7dad064fc8@i2se.com>
+Date:   Fri, 28 Feb 2020 17:26:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <CAD=FV=WDd4E-zDW73kb-qHo1QYQrD3BTgVpE70rzowpgeXVy7w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:8Ci6HbpqEwshCElsKWJpQlfMV5T1blfqm6rwrhbJgIr7QXruf3A
+ KYX8XYjJEep5W1y6Kww6Bu682WjJ1E8hN2zqjwworTkvSjJyyp31+HoSJOghY60FyQmcg3M
+ Z3BVoXmsVJOeXISnjRi2q5AZxixB846WWAL/mO21CESKL0ORZ9mFawXyy47SGRGyRn7GSen
+ ssbZKuOfUY20oHwu3rVOQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Sl3WOhjELo0=:mpC+1+m9q8DIQof6qeCWyW
+ U/Hs9iSfD0FxlmHjo0+BxXdVL+kRGvMn31X33MEQjeXZWH2Bxj9mROzgy+rYfAn3TeROefQjN
+ sKYYQE+F3Vfaar2BiThjYVETsJx6IKZqzY0zogF2yyBdrUzTaRd0Bd7DFlq9aUbQ6aubEKc4Y
+ UkoAJGCB7VLZrlr0gO9j4DRXgPJLOhFtIq4qG6U0wyipHF4a+r00VEQvVASHgGQg3p8Ur0cpD
+ /TXjynQQxT54Hj7xvTo1HPeU6zeeK2jlE8kWY1f18TGHfHMOQc0gXvcCoxXMu9eQ4whT+elxF
+ lUgI3CYTtByqHyFnfM+sJSkITxYeFEBK49d3EQMWNfS8uPD2rlqS6i7Pn/bSa2f7oJ9vHGLKN
+ BTE/izdMBBdejwUr3sMNLHf8XqBULh7OlrVdGPhSwKJJ2o6xT30MP4U1upVt6BUsjfo60WjVU
+ /XXxevAKpC07uPhS7r/xlpJVEs1ax0KU8sJqd6r6g1kXeG/q4eZeAnhAPBvbxr8n6u4xWOow0
+ 0v56m9SipqK8WG5veKO6gy+b6o8C/1x+tjQhsKldThHmHUrXiL+TXuhFOb1cIXPhDkXLRphkg
+ exJYfi1jKRCRFbachjKwirAKbuaO8XWpi251jIKyj7T8vX9SS/9sztkXP6OHTTBVpPELKJARQ
+ hxI7pqyqQnsvwHf0Oo4NVdLBbMEf6akqU08K2ulW7WiFJ1Cqg/kafur30Aopp4Zn2RtuzRBHC
+ Xg1GLFbcAsY83vL982nPqa8T5kWiaWqRR4L77PuVLu2jRwWikrnI0jpprfWswgOERhjvk87fV
+ +rZvrRraLNCg0/RRQza9mxg0zJjR7fLqmeq8mZ5HlfNTCaaBnFoY7b4tMVGKZeyDN9Kcabr
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi Doug,
 
-On Thu, Feb 27, 2020 at 8:28 PM Guenter Roeck <linux@roeck-us.net> wrote:
+[add Nicolas the new BCM2835 maintainer]
+
+Am 27.02.20 um 23:06 schrieb Doug Anderson:
+> Hi,
 >
-> On 2/27/20 2:27 PM, Guenter Roeck wrote:
-> > On 2/27/20 2:06 PM, Doug Anderson wrote:
-> [ ... ]
-> >>> -       if (urb->num_sgs || urb->sg ||
-> >>> -           urb->transfer_buffer_length == 0 ||
-> >>> +       if (urb->num_sgs || urb->sg || urb->transfer_buffer_length == 0 ||
-> >>> +           (urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP) ||
-> >>>             !((uintptr_t)urb->transfer_buffer & (DWC2_USB_DMA_ALIGN - 1)))
-> >>
-> >> Maybe I'm misunderstanding things, but it feels like we need something
-> >> more here.  Specifically I'm worried about the fact when the transfer
-> >> buffer is already aligned but the length is not a multiple of the
-> >> endpoint's maximum transfer size.  You need to handle that, right?
-> >> AKA something like this (untested):
-> >>
-> >> /* Simple case of not having to allocate a bounce buffer */
-> >> if (urb->num_sgs || urb->sg || urb->transfer_buffer_length == 0 ||
-> >>     (urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP))
-> >>   return 0;
-> >>
-> >> /* Can also avoid bounce buffer if alignment and size are good */
-> >> maxp = usb_endpoint_maxp(&ep->desc);
-> >> if (maxp == urb->transfer_buffer_length &&
-> >
-> > No, transfer_buffer_length would have to be a multiple of maxp. There
-> > are many situations where roundup(transfer_buffer_length, maxp) !=
-> > transfer_buffer_length. I agree, this would be the prudent approach
-> > (and it was my original implementation), but then it didn't seem to
-> > cause trouble so far, and I was hesitant to add it in because it results
-> > in creating temporary buffers for almost every receive operation.
-> > I'd like to get some test feedback from Boris - if the current code
-> > causes crashes with his use case, we'll know that it is needed.
-> > Otherwise, we'll have to decide if the current approach (with fewer
-> > copies) is worth the risk, or if we want to play save and always
-> > copy if roundup(transfer_buffer_length, maxp) != transfer_buffer_length.
-> >
+> On Wed, Feb 26, 2020 at 1:04 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>> The code to align buffers for DMA was first introduced with commit
+>> 3bc04e28a030 ("usb: dwc2: host: Get aligned DMA in a more supported way").
+>> It was updated with commit 56406e017a88 ("usb: dwc2: Fix DMA alignment
+>> to start at allocated boundary") because it did not really align buffers to
+>> DMA boundaries but to word offsets. This was then optimized in commit
+>> 1e111e885238 ("usb: dwc2: Fix inefficient copy of unaligned buffers")
+>> to only copy actual data rather than the whole buffer. Commit 4a4863bf2e79
+>> ("usb: dwc2: Fix DMA cache alignment issues") changed this further to add
+>> a padding at the end of the buffer to ensure that the old data pointer is
+>> not in the same cache line as the buffer.
+>>
+>> This last commit states "Otherwise, the stored_xfer_buffer gets corrupted
+>> for IN URBs on non-cache-coherent systems". However, such corruptions are
+>> still observed. This suggests that the commit may have been hiding a
+>> problem rather than fixing it. Further analysis shows that this is indeed
+>> the case: The code in dwc2_hc_start_transfer() assumes that the transfer
+>> size is a multiple of wMaxPacketSize, and rounds up the transfer size
+>> communicated to the chip accordingly. Added debug code confirms that
+>> the chip does under some circumstances indeed send more data than requested
+>> in the urb receive buffer size.
+>>
+>> On top of that, it turns out that buffers are still not guaranteed to be
+>> aligned to dma_get_cache_alignment(), but to DWC2_USB_DMA_ALIGN (4).
+>> Further debugging shows that packets aligned to DWC2_USB_DMA_ALIGN
+>> but not to dma_get_cache_alignment() are indeed common and work just fine.
+>> This suggests that commit 56406e017a88 was not really necessary because
+>> even without it packets were already aligned to DWC2_USB_DMA_ALIGN.
+>>
+>> To simplify the code, move the old data pointer back to the beginning of
+>> the new buffer, restoring most of the original commit. Stop aligning the
+>> buffer to dma_get_cache_alignment() since it isn't needed and only makes
+>> the code more complex. Instead, ensure that the allocated buffer is a
+>> multiple of wMaxPacketSize to ensure that the chip does not write beyond
+>> the end of the buffer.
+> I do like the cleanliness of being able to easily identify the old
+> buffer (AKA by putting it first) and I agree that the existing code
+> was only really guaranteeing 4-byte alignment and if we truly needed
+> more alignment then we'd be allocating a lot more bounce buffers
+> (which is pretty expensive).
 >
-> Thinking more about this, the situation is actually much worse:
-> In Boris' testing, he found inbound transactions requested by usb
-> storage code with a requested transfer size of 13 bytes ... with
-> URB_NO_TRANSFER_DMA_MAP set. This means the requesting code has
-> provided a DMA ready buffer, transfer_buffer isn't even used,
-> and we can not reallocate it. In this situation we can just hope
-> that the chip (and the connected USB device) don't send more data
-> than requested.
+> ...but the argument in commit 56406e017a88 ("usb: dwc2: Fix DMA
+> alignment to start at allocated boundary") is still a compelling one.
+> Maybe at least put a comment in the code next to the "#define
+> DWC2_USB_DMA_ALIGN" saying that we think that this is enough alignment
+> for anyone using dwc2's built-in DMA logic?
 >
-> With that in mind, I think we should stick with the current
-> scheme (ie only allocate a new buffer if the provided buffer is
-> unaligned) unless Boris comes back and tells us that it doesn't
-> work.
+>
+>> Cc: Douglas Anderson <dianders@chromium.org>
+>> Cc: Boris Arzur <boris@konbu.org>
+>> Fixes: 56406e017a88 ("usb: dwc2: Fix DMA alignment to start at allocated boundary")
+>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> ---
+>>  drivers/usb/dwc2/hcd.c | 67 ++++++++++++++++++++++--------------------
+>>  1 file changed, 35 insertions(+), 32 deletions(-)
+> Sorry for such a mess and thank you for all the work tracking down and
+> documenting all the problems.  Clearly deep understanding of DMA is
+> not something I can claim.  :(
+>
+> A few points of order first:
+> * Although get_maintainer doesn't identify him, it has seemed like
+> Felipe Balbi lands most of the dwc2 things.  Probably a good idea to
+> CC him.
+> * I have historically found Stefan Wahren interested in dwc2 fixes and
+> willing to test them on Raspberry Pi w/ various peripherals.
 
-I dunno.  I'd rather see correctness over performance.  Certainly we'd
-only need to do the extra bounce buffer for input buffers at least.
+i'm not the BCM2835 maintainer anymore, but will give it a try.
 
-Although I don't love the idea, is this something where we want to
-introduce a config option (either runtime or through KConfig),
-something like:
+Regards
+Stefan
 
-CONFIG_DWC2_FAST_AND_LOOSE - Avoid bounce buffers and thus run faster
-at the risk of a bad USB device being able to clobber some of your
-memory.  Only do this if you really care about speed and have some
-trust in the USB devices connected to your system.
-
-
--Doug
