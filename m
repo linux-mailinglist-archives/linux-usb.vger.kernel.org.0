@@ -2,113 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EAEA17320D
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 08:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A9C17327B
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 09:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726740AbgB1HtB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Feb 2020 02:49:01 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:41369 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725870AbgB1HtA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Feb 2020 02:49:00 -0500
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1j7aOI-0002VD-9t; Fri, 28 Feb 2020 08:48:58 +0100
-Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1j7aOG-0001nf-9z; Fri, 28 Feb 2020 08:48:56 +0100
-Date:   Fri, 28 Feb 2020 08:48:56 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     "jun.li@freescale.com" <jun.li@freescale.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 0/3] USB IMX Chipidea fix gpio vbus control
-Message-ID: <20200228074856.gomzgtoxwzj4eele@pengutronix.de>
-References: <20200227104212.12562-1-m.felsch@pengutronix.de>
- <20200227111838.GA24071@b29397-desktop>
- <20200227113539.gcx3nfwm2fbm3ukv@pengutronix.de>
- <20200227122045.GB24071@b29397-desktop>
- <20200227124406.6kbgu3dbru4qmews@pengutronix.de>
- <VI1PR04MB53270541BB66CAB1EB8F00008BEB0@VI1PR04MB5327.eurprd04.prod.outlook.com>
- <20200227143914.mi3vsltrtyo5sqed@pengutronix.de>
- <20200228025129.GA31815@b29397-desktop>
+        id S1726005AbgB1INV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Feb 2020 03:13:21 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:33269 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725871AbgB1INU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Feb 2020 03:13:20 -0500
+Received: by mail-pf1-f193.google.com with SMTP id n7so1342839pfn.0;
+        Fri, 28 Feb 2020 00:13:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=1XeAZdDEEMWPSRFSSrigFDHZjIaWywrJrDOcCv/SctI=;
+        b=BclSCGD/+Gp7pLCK+Yfq+IH0orWklytTcUNiFna90KwERemW3y0lq2SFGwBTScn/ZR
+         SOnMFpFra//MK4i1yP2XSWxhSB0AmtyVADIvnaixDjHOEilFGfAtxn96llpXGSu9w6x9
+         cnYc7x7sgEcbB4wEdoWPyc1hRhVj/x1T1b7yJp/3L1qebJXpWiZZcerMA4aKUSTSJzOu
+         +EJL716Ez9KnsOA3AUIXTOEjEYftKhDFAE4pxRa3OfvNhxlaMqYrOmYwyXYyNJdP0BwU
+         JH+Jb4ugNll/M3AjCQdCwSJWKoNoHs8e/biyVduULpYiHq+u7xkE0FG316miHyBgMLPu
+         3vmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=1XeAZdDEEMWPSRFSSrigFDHZjIaWywrJrDOcCv/SctI=;
+        b=Rb5MQdLNTJfph2R87UypBvSK54SNAdcquRtbIynWhNFG7+b70BN/9Qwy/7TPZtmjbF
+         lOuzLFK4gncNiGZ1gz6/Lc94G6+v9euOYIro0QySymlHx1mpXBeXpHscjQmXm1Qk5uBF
+         uQjbR3inHhwVaKLP9fuMvD9XJaIW0imY6hMxJsgaiNWMqJ5nVEIKzQm5temNrqCFdX/P
+         sTs62MOpng3NkJSTyTL35xb8JFtUwb25G90uUKERMi+h4OVV9L7W4i+zCY18QL+mJ6o9
+         Dt3LO6jXpOdc/WNv7TH/VY8Uu1vVtwS2oURENCYNpBWTnIhIrjsW3Vf467tgbeFDNf5N
+         ydjw==
+X-Gm-Message-State: APjAAAWTKt/zFrFfhec97eLFPiRJJRNqMeO9Z7X0Q3/DbwI+UtqbA5em
+        l8AToCXGSeDq4cVqDHFzEhU=
+X-Google-Smtp-Source: APXvYqwaScFWt2pSZw8deGePN2rW5lckHptMxbrEKDdWitX5+l+202jKgzn654xFzxvUIwznQHDJHQ==
+X-Received: by 2002:aa7:93a6:: with SMTP id x6mr3341479pff.72.1582877599463;
+        Fri, 28 Feb 2020 00:13:19 -0800 (PST)
+Received: from taoren-ubuntuvm (c-24-4-25-55.hsd1.ca.comcast.net. [24.4.25.55])
+        by smtp.gmail.com with ESMTPSA id c18sm8717917pgw.17.2020.02.28.00.13.18
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 28 Feb 2020 00:13:19 -0800 (PST)
+Date:   Fri, 28 Feb 2020 00:13:11 -0800
+From:   Tao Ren <rentao.bupt@gmail.com>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>, linux-aspeed@lists.ozlabs.org,
+        devicetree@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>, taoren@fb.com,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 7/7] dt-bindings: usb: add documentation for aspeed
+ usb-vhub
+Message-ID: <20200228081309.GA4531@taoren-ubuntuvm>
+References: <20200227230507.8682-1-rentao.bupt@gmail.com>
+ <20200227230507.8682-8-rentao.bupt@gmail.com>
+ <3150424b9e9f5856c747a0fbf44647919f49209d.camel@kernel.crashing.org>
+ <20200228010444.GA19910@taoren-ubuntu-R90MNF91>
+ <2676013663fc8c53e02a5fdaafb1b27e18249b80.camel@kernel.crashing.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200228025129.GA31815@b29397-desktop>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 08:18:19 up 104 days, 22:36, 122 users,  load average: 0.23, 0.56,
- 0.38
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <2676013663fc8c53e02a5fdaafb1b27e18249b80.camel@kernel.crashing.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Peter,
-
-On 20-02-28 02:51, Peter Chen wrote:
-
-...
-
-> > > CI_HDRC_TURN_VBUS_EARLY_ON is introduced by fixing a bug that some i.mx USB
-> > > controllers PHY's power is sourced from VBUS, the PHY's power need to be on before
-> > > touch some ehci registers, otherwise, the USB signal will be wrong at some low speed
-> > > devices use case. So, this flag can't be deleted, it may cause regression.
+On Fri, Feb 28, 2020 at 02:02:28PM +1100, Benjamin Herrenschmidt wrote:
+> On Thu, 2020-02-27 at 17:05 -0800, Tao Ren wrote:
+> > > Also long run I think best is going to have a child node per downstream
+> > > port, so we create a matching linux struct device. This will make it
+> > > easier to deal with the other device-controller in the ast2600 which is
+> > > basically one of these without a vhub above it.
 > > 
-> > Pls check my archeological findings and again pls check my patches. I
-> > deleted the flag because isn't required anymore afterwards.
+> > Maybe a dumb question: what would be the proper place to parse the child
+> > node/properties when they are added? For example, in some usb_gadget_ops
+> > callback?
 > 
-> I have already checked your patch, your patch deletes CI_HDRC_TURN_VBUS_EARLY_ON
-> quirk, and it may cause regression.
-
-Arg, sorry now I see what you mean. Thanks for your explanation :)
-Since the 'struct ehci_ci_priv' contains now an enabled state we can
-git rid of the flag. To get it right, the writing the ehci PORT_POWER
-must be done before or after we enabled the VBUS? I'm asking because
-we can drop the 1st patch of this series.
-
-> > > The solution I see is your may need to implement chipidea VBUS control flow by considering
-> > > pm_qos_no_power_off at suspend situation. You may add .suspend API for ci_role_driver,
-> > > and called by ci_controller_suspend/ci_controller_resume, of cos, better solution is welcome.
-> > 
-> > I fixed it within the core [1] and here at the chipidea side.
-> > 
-> > [1] https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.org%2Flkml%2F2020%2F2%2F27%2F669&amp;data=02%7C01%7Cpeter.chen%40nxp.com%7Cad9b3833ae2f433d93ef08d7bb92d4a0%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637184111614326500&amp;sdata=SPwwBEGBco6IdP8ufmAnJeeRxuAXGLa0xzYlzFA%2FAvg%3D&amp;reserved=0
-> > 
-> > You will never enter the ehci_ci_portpower() during suspend without [1]
-> > if you are using a vanilla kernel. So IMHO this case can't be tested,
-> > sorry.
-> > 
+> No. What the vhub would do is when it probes, it creates a platform
+> device for each "port" child node that's linked to the DT node.
 > 
-> Through set pm_qos_no_power_off as 0, the VBUS will be off. You
-> never need to call .ehci_ci_portpower again. You may try my second
-> suggestion for fix chipidea issue. I will reply your RFC patch for
-> USB core.
-
-Many thanks for testing =)
-
-Regards,
-  Marco
-
-> -- 
+> The driver for the device then attaches to it via standard DT matching
+> and checks if it has a vhub parent or not, and based on that, operates
+> as a vhub child device or a standalone one.
 > 
-> Thanks,
-> Peter Chen
+> (For example, it might have different functions for EP selection since
+> standalone devices have private EPs rather than a shared pool)
+> 
+> They can both be in the same module or they can be separate modules
+> with cross dependencies.
+> 
+> Cheers,
+> Ben.
+
+I see. It's to describe these downstream devices (such as configurations
+and according functions) in device tree, which is similar to defining a
+composite device and linking functions/interfaces via configfs. Thanks for
+the clarify.
+
+
+Cheers,
+
+Tao
