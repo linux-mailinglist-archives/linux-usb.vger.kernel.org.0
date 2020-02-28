@@ -2,243 +2,371 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B13C172EE3
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 03:51:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B77172EEE
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 03:56:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730562AbgB1Cve (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Feb 2020 21:51:34 -0500
-Received: from mail-eopbgr60089.outbound.protection.outlook.com ([40.107.6.89]:21836
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        id S1730569AbgB1Cz7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Feb 2020 21:55:59 -0500
+Received: from mail-eopbgr70084.outbound.protection.outlook.com ([40.107.7.84]:14865
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726943AbgB1Cve (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 Feb 2020 21:51:34 -0500
+        id S1726943AbgB1Cz6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 Feb 2020 21:55:58 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PFH0mB7NqWYDHTidTfFWlma8apNXJn5L313go6brMhXfkYx/8SWwSWYVvldCwExyCcqiWRr92BAbXvZbFARgRYDuCL9+p4DGm6fO6IICpULCgjagw3swPChMGbN5tZRC8ijVzo6YquiJn+ryMa5z2oOBy8keFPOspeFwrEsNfC2hiX7MzzCLGFQDc0TEWCo4n2TKGwtRAYDZ9nvTaRVjYJctG3kQVf9ALO/8LEjYHEVNuCM5+NBVie7wx4F8pv8so3CLZxYFbe96/BNCatuMnec+feX4dKCneiNGrY5ZpD22qK7uuf6mz9n0bVxyBJbZwkmo7smKlqc5Aigp5jt7WQ==
+ b=hHlrdQJvGtGTocsh4lZo7IGSf+YAHLnb9nVJcaSIYt9CD+WEspYP1G3QOQ8uE+UCR+MZy+D9Gwf/a/dVR/6xwMpde33VZqxWdPHaPRkeQFt3/FZtkItWj/pBTD1Uhl/C5i57p9vQcRFehKUAr/P9pjFSWiJuZfcgf+VieDbWisaFEoQ/Sl/0VUmCJXBZAPvoyOyxg8fQ5wCqf0CeBDWOTYizn2zLkeMcBaxHHBe5IxT56xk1WGEvaYFaFZwYqhqZO9Vn38rdneAonLfarvpSylzCfKLmkAJ84BWCNxf1AYLeTD/218w5+fCi5KyivJTW21OZ7qME8SQQWrNoLiGIWA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vefV7JIMZQzPKgcQQtF7kpV9MTt6BXX8haC3ia8RvUI=;
- b=iorL+4qAjQdbi4xZ7YcqJLrU5+cddcogCnZBqZslDk1592DkZByKLCosK5kV34EvS4rmRW5ph//W8sxt+n5Nr0o3cg1O6eP68Qz4VbqAR06NML0+N5n0P13gGh5X8kKHhrmLpQ3z9ZzqJgpUVqmYnVO+Cg0MX08JK5GpMtHqYRz9f6agDMDyVdH4CHrPU1sKpdMmiMIKmkstfYkztoo99sXioSx3ObNEwTsJYsbGjDGh7Q8TSXhHePhRLpSJK74CuOrUuMVr+D1e0tTvWqNILB1Wa0YVFO9Jg9bA5jfgT3gxgWodSBGN53yj6NejkrwefjFguOOZrZutQfJnXzNolg==
+ bh=4A+7HfbfNdLwq1uGHetYNPdwTJm2Jtlc9HuVSn+5EO4=;
+ b=kOT5dDZ6zrrFr0GcuzF5+s1e3mLNGxmoVVdFayZ/lYVgifuDiqgJZQpZnOkYK/sz0xBnnS1MdFrfTb1S2fT9ULcni3T5GhPEVyud33l/mfhXOUntE4ARYNiCXxSHXQfnnvJc8TX9W7MKqGXIuwStwRpy6FJMGDiryqaWVYLY2GTeTUrNkI7oy0cncfvOfQACYuNsNIvp+f3zobFiqq13lVEnUUwqTrLgZUN3mcMUaQRL8JAcHC4su0RdmBr3jEFopoQrVnf5rJGrDfE/gGyrNK8xz37K28qbpnmtNCXjse8EG90/KnwRo0oj8OYJqcJgAZVrQl03gdxSdSkvSeU5Jw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vefV7JIMZQzPKgcQQtF7kpV9MTt6BXX8haC3ia8RvUI=;
- b=s49NSOGYGmnZC0e1PMyZzCTk1uH+Js5KEx1+CMTzeiRpJd19zHHZKFMgQZnVesKQX4bl+yjWhfOHOfBRT4sljsjj7KZlSvdK/JQP+dGhybsZ4w/8uecyXD9HhalluJ4xk48GxkIPVsmnZdTodsBpXO0fxBgYb8DhYrrhmeGM6uI=
+ bh=4A+7HfbfNdLwq1uGHetYNPdwTJm2Jtlc9HuVSn+5EO4=;
+ b=HkaWDpUkN8afSxhHMVHd7u8yXGr4lhGsO4zLJJRuP1hbfUuRNR+vpUjGTjKYJJtddo7eZ+gk1/LvHlV+ykcPXmzcaCUONuin9CAPOFbbW9NLbVKGBkTSp1P7mjlXBI4AsZdRar1z4qgC0Gc59PjMP2xIIR7P3pgzoecNNhLr8lc=
 Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
- VI1PR04MB5822.eurprd04.prod.outlook.com (20.178.125.144) with Microsoft SMTP
+ VI1PR04MB4830.eurprd04.prod.outlook.com (20.177.52.150) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2772.14; Fri, 28 Feb 2020 02:51:28 +0000
+ 15.20.2750.18; Fri, 28 Feb 2020 02:55:51 +0000
 Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
  ([fe80::9547:9dfa:76b8:71b1]) by VI1PR04MB5327.eurprd04.prod.outlook.com
  ([fe80::9547:9dfa:76b8:71b1%7]) with mapi id 15.20.2750.021; Fri, 28 Feb 2020
- 02:51:28 +0000
+ 02:55:51 +0000
 From:   Peter Chen <peter.chen@nxp.com>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-CC:     "jun.li@freescale.com" <jun.li@freescale.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Marco Felsch <m.felsch@pengutronix.de>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "Thinh.Nguyen@synopsys.com" <Thinh.Nguyen@synopsys.com>,
+        "harry.pan@intel.com" <harry.pan@intel.com>,
+        "nobuta.keiya@fujitsu.com" <nobuta.keiya@fujitsu.com>,
+        "malat@debian.org" <malat@debian.org>,
+        "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
+        "chiasheng.lee@intel.com" <chiasheng.lee@intel.com>,
+        "andreyknvl@google.com" <andreyknvl@google.com>,
+        "heinzelmann.david@gmail.com" <heinzelmann.david@gmail.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 0/3] USB IMX Chipidea fix gpio vbus control
-Thread-Topic: [PATCH 0/3] USB IMX Chipidea fix gpio vbus control
-Thread-Index: AQHV7VqVZ4BeDr6e5UuTM5ZPfBO9kqgu5JsAgAAEwYCAAAyagIAABoeAgAAFTBCAABreAIAAzJeA
-Date:   Fri, 28 Feb 2020 02:51:27 +0000
-Message-ID: <20200228025129.GA31815@b29397-desktop>
-References: <20200227104212.12562-1-m.felsch@pengutronix.de>
- <20200227111838.GA24071@b29397-desktop>
- <20200227113539.gcx3nfwm2fbm3ukv@pengutronix.de>
- <20200227122045.GB24071@b29397-desktop>
- <20200227124406.6kbgu3dbru4qmews@pengutronix.de>
- <VI1PR04MB53270541BB66CAB1EB8F00008BEB0@VI1PR04MB5327.eurprd04.prod.outlook.com>
- <20200227143914.mi3vsltrtyo5sqed@pengutronix.de>
-In-Reply-To: <20200227143914.mi3vsltrtyo5sqed@pengutronix.de>
+        kbuild test robot <lkp@intel.com>
+Subject: RE: [RFC PATCH v2] USB: hub: fix port suspend/resume
+Thread-Topic: [RFC PATCH v2] USB: hub: fix port suspend/resume
+Thread-Index: AQHV7XXifloh2j1eeUmVEpjTsUeGzKgvODqAgAAGbgCAAC7nAIAAe+NQ
+Date:   Fri, 28 Feb 2020 02:55:51 +0000
+Message-ID: <VI1PR04MB53275BFFED120FCA4717469C8BE80@VI1PR04MB5327.eurprd04.prod.outlook.com>
+References: <20200227164142.dsnbrxtk747tnvma@pengutronix.de>
+ <Pine.LNX.4.44L0.2002271353300.1307-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.2002271353300.1307-100000@iolanthe.rowland.org>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 authentication-results: spf=none (sender IP is )
  smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
+x-originating-ip: [222.65.251.82]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: e7c3a1a8-b33d-4a9d-c4f9-08d7bbf91b9e
-x-ms-traffictypediagnostic: VI1PR04MB5822:|VI1PR04MB5822:|VI1PR04MB5822:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB582272056118CA706905A19B8BE80@VI1PR04MB5822.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-office365-filtering-correlation-id: 13ac9a06-e88e-4e43-24d0-08d7bbf9b8d5
+x-ms-traffictypediagnostic: VI1PR04MB4830:
+x-microsoft-antispam-prvs: <VI1PR04MB48304A88C5547CC7DDD8F4CD8BE80@VI1PR04MB4830.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
 x-forefront-prvs: 0327618309
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(39860400002)(136003)(396003)(346002)(376002)(366004)(199004)(189003)(5660300002)(8936002)(8676002)(66446008)(81166006)(66946007)(91956017)(66476007)(33656002)(53546011)(66556008)(2906002)(76116006)(44832011)(6506007)(966005)(186003)(26005)(64756008)(33716001)(45080400002)(478600001)(4001150100001)(6916009)(4326008)(71200400001)(6486002)(316002)(81156014)(86362001)(1076003)(54906003)(6512007)(9686003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5822;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(346002)(39860400002)(366004)(396003)(376002)(199004)(189003)(7416002)(54906003)(110136005)(33656002)(45080400002)(64756008)(2906002)(4326008)(66556008)(66946007)(76116006)(44832011)(8676002)(66476007)(52536014)(186003)(5660300002)(26005)(81166006)(55016002)(966005)(86362001)(71200400001)(478600001)(7696005)(66446008)(15650500001)(6506007)(316002)(81156014)(9686003)(8936002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4830;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: nxp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ndk8f9MuYIUyD2Z7L0yoayLPyDSTe8/n+8P/yq0IQnp9gTHxLHAds0GgvYyztkbtmtuLRPHOoxjeb2ozdbdPlajuIXdnOLLNy5o8EadAy7ZQar+jMJkq69d4ethRcfNsqZNH73g0Aqmy1v7MIp+tNDXdZHIAenhr/2aCra8UjgAGuAZO2E7uBQmc16ebRXzHlO7EhWkt5/KbUc5cqYGm5/IVbso/NgmH/SToUvLD/vuq3C8/zUE8jcMbHoTrFTEJqxpbxmCTLRGm+DYtER8+mWcnzxYsoaIz/l/lbi4R/XOpJWkfpcb8qVxKvN5wyW3hNUf9UBS89xjNaLFCo8fmnaEAyhvzBsshdiSPu98He0l9RV6bI9ELvhDcum1yX2vQQCzYnrJ98gtGoa+cZN1kKpuDJHViysBzE0lu1bob4lv4QBntoWKODlqMJgLmRMy8l3crvHmD8agHKjZ2uROqyULGfGukH8i/aE0LoYt4TEpsXK+46hrNQQ+vSVmDQouuW9G4LWKCs6qvhh/rHuETWw==
-x-ms-exchange-antispam-messagedata: oPWaQimnAjNbMILknoaVainhlYOuCWCxTmLBwQS44FtNIYUzarRZt4jueFmvp1Iomc12PkP87mzfroTSyhdBNnAh0wsFnH9ibf3Ry+lJ/4QGntjQxTPD1YPXyrt6Hf54VqTW/Wa0R6TUGeDux4ql+w==
+x-microsoft-antispam-message-info: UZlP0NKJTLpmRLNayvUWiB7JnGOTc7IXVKKjMQ7gl1UWl1YxAmCwb8nPWFq+vg/+PE4u73HbdpOfHULCeZo/3fAGJX9jXhNPEVjeEtOFk50EhtUeQmtpcqC8sanThe5bV6aKZlXvB2d9fLg0jCwyPJPOPTm4n/Rc6ylpX1Dotj1VCmqhpBpJuwbkjnrgG5XqDcuuoLaZn/WiayG0JY73BDtEV7+CAggq2VsSCDYJEQOjACUIXHT2LQRgOpM6WDghNbFxnlLUq5zSpcWtzP+NFyflNcnljv2/f/U92KxZh1LNyV54Ef/OElr2ylUvzldo1fe932zc3tzigTy2HZmjgGsdQQdTfonOCzhe5mmbCvWdgcLbDEQvXGWGIlvpMAECPWGnE5slC5b2DdJo94kKRZqy5Bna2r743hvtLIDFnxB4XTy0qEzgXXn/bIlikyhJyhiN7xkBHvV4JVRExIthTUz6mYJSfHUbgvaybXgDrU9B6/PAFE2yOu+n+Dh4juLyn4IGO2rxu5fQkvy8PvycsQ==
+x-ms-exchange-antispam-messagedata: zfpJztqR0hXrnxieyr9pRVT70HqwG9vMiazAWQp0mUpxCKlC8HnodydMfhi0m9CSRvSB8TlqLQnJNIIo6MTVRTVfOKWYxSKDJ2pJAuZVkYtkvevR59xgnyv69oOmZha0OrUBg5TYPHGTbJeCGV18pA==
+x-ms-exchange-transport-forked: True
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <34BA4C0A29E36F41AE3E26B98E9B53C0@eurprd04.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e7c3a1a8-b33d-4a9d-c4f9-08d7bbf91b9e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2020 02:51:27.9606
+X-MS-Exchange-CrossTenant-Network-Message-Id: 13ac9a06-e88e-4e43-24d0-08d7bbf9b8d5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2020 02:55:51.8071
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: oTXLFoJKUFd/gfR9rOBHUBQvdu5V5wXq2vIb3K7xYr+MZljTV3MOXSL9ov5ZNrZvVzx+gkiB52BFFpgQVgWdOg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5822
+X-MS-Exchange-CrossTenant-userprincipalname: K46iMjwEzFCI+ThE+RyTefPXMVM8lp3WTgGYMc7SamV+OrdLaHAGvwGlVPa0L03/PoTy5VBleLapGzZODPorpQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4830
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-02-27 15:39:14, Marco Felsch wrote:
-> Hi Peter,
+=20
 >=20
-> On 20-02-27 13:30, Peter Chen wrote:
-> >  =20
-> > > > >
-> > > > > Note, I'm using a imx6q which has the CI_HDRC_TURN_VBUS_EARLY_ON =
-set.
-> > > > >
+> > > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > > > ---
+> > > > Hi,
 > > > >
-> > > > Do you have a VBUS regulator at your dts, and add it at controller'=
-s
-> > > > node? See: arch/arm/boot/dts/imx6qdl-sabresd.dtsi as an example ple=
-ase?
-> > >=20
-> > > Yes, that's my use case too.
-> > >=20
-> > > > If you have set CI_HDRC_TURN_VBUS_EARLY_ON, the VBUS is controlled =
-by
-> > > > chipidea driver, not by USB core through PORTSC.PP (ehci_ci_portpow=
-er).
-> > >=20
-> > > I know, pls have a look my the patches.
-> > >=20
-> > > I had the problem that the vbus regulator wasn't turned off during a
-> > > suspend/resume logic. The first issue within the usb-core should be f=
-ixed by [1] (v2
-> > > RFC is on the way). You never run in that case if you don't fix this.=
- After I fixed it
-> > > the port-power is called during suspend but obviously the regulator d=
-idn't get turned
-> > > off because we don't add it to the priv->reg_vbus.
-> > >=20
-> > > This patchset should fix this and get rid of the CI_HDRC_TURN_VBUS_EA=
-RLY_ON
-> > > flag.
-> > >=20
-> > =20
-> > Hi Marco,
-> >=20
-> > I may understand your case now. At old USB port design, the VBUS is nev=
-er allowed to
-> > turned off to response the USB wakeup event. But the expected behavior =
-has changed
-> > after pm_qos_no_power_off is introduced for USB port, it is allowed the=
- port is powered off.
+> > > > this v2 contains the fixes
+> > > >
+> > > > Reported-by: kbuild test robot <lkp@intel.com>
+> > >
+> > > Everything below the "---" line, except the patch itself, gets ignore=
+d.
+> > > You need to move this Reported-by: up higher.
+> >
+> > I know, I put it here because the patch isn't part of the kernel. IMHO
+> > a
+> >
+> > Signed-off-by:
+> > Reported-by:
+> >
+> > looks a bit strange.
 >=20
-> Luckily we have git :) and I my archeological findings are:
+> Not at all.  That sort of thing occurs all the time; just look at a few c=
+ommits in the
+> kernel or patches on the mailing lists.  Especially ones that are bug fix=
+es.
 >=20
->  0ero Patch 2012-07-07) 1530280084c3 usb: chipidea: add imx platform driv=
-er
->  1st  Patch 2012-10-23) ae0fb4b72c8d PM / QoS: Introduce PM QoS device fl=
-ags support
->  2nd  Patch 2013-01-23) ad493e5e5805 usb: add usb port auto power off mec=
-hanism
->  3th  Patch 2014-10-13) 11a7e5940514 usb: ehci: add ehci_port_power inter=
-face
->  4th  Patch 2014-10-13) c8679a2fb8de usb: chipidea: host: add portpower o=
-verride
->  5th  Patch 2015-02-11) 6adb9b7b5fb6 usb: chipidea: add a flag for turn o=
-n vbus early for host
->  6th  Patch 2015-02-11) 659459174188 usb: chipidea: host: turn on vbus be=
-fore add hcd if early vbus on is required
+> > > > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c index
+> > > > 3405b146edc9..c294484e478d 100644
+> > > > --- a/drivers/usb/core/hub.c
+> > > > +++ b/drivers/usb/core/hub.c
+> > > > @@ -3323,10 +3323,6 @@ int usb_port_suspend(struct usb_device *udev=
+,
+> pm_message_t msg)
+> > > >  		usb_set_device_state(udev, USB_STATE_SUSPENDED);
+> > > >  	}
+> > > >
+> > > > -	if (status =3D=3D 0 && !udev->do_remote_wakeup && udev->persist_e=
+nabled
+> > > > -			&& test_and_clear_bit(port1, hub->child_usage_bits))
+> > > > -		pm_runtime_put_sync(&port_dev->dev);
+> > > > -
+> > > >  	usb_mark_last_busy(hub->hdev);
+> > > >
+> > > >  	usb_unlock_port(port_dev);
+> > > > @@ -3514,15 +3510,6 @@ int usb_port_resume(struct usb_device *udev,
+> pm_message_t msg)
+> > > >  	int		status;
+> > > >  	u16		portchange, portstatus;
+> > > >
+> > > > -	if (!test_and_set_bit(port1, hub->child_usage_bits)) {
+> > > > -		status =3D pm_runtime_get_sync(&port_dev->dev);
+> > > > -		if (status < 0) {
+> > > > -			dev_dbg(&udev->dev, "can't resume usb port, status %d\n",
+> > > > -					status);
+> > > > -			return status;
+> > > > -		}
+> > > > -	}
+> > > > -
+> > >
+> > > Why do you get rid of these two sections of code?  Won't that cause
+> > > runtime PM to stop working properly?
+> >
+> > Both runtime_pm calls are part of the suspend/resume logic so this
+> > code isn't called during runtime PM.
 >=20
-> A few more details:
-> - Since day 0 the imx chipidea driver supports the regulator but it was
->   only used to turn it on (0ero Patch). Later the regulator support was
->   shifted to the core and optional.
-> - 1-2 Patch added the pm_qos_no_power_off support
-> - 3-4 Patch adds the support to disable the regulator
-> - 5-6 Patch adding a workaround for patches 3-4 which breaks the
->   regulator power-off support.
+> I'm not quite sure what you mean by that.  In any case, it would be compl=
+etely
+> wrong to think that usb_port_suspend isn't involved in runtime PM.
 >=20
+> In fact, usb_port_suspend is _more_ important for runtime suspend than fo=
+r system
+> sleep.  The reason is simple: If you want to put a USB device into runtim=
+e suspend,
+> you have to tell its upstream hub's port to enable the suspend feature (i=
+.e., call
+> usb_port_suspend).  But if you want to put an entire bus of USB devices t=
+o sleep
+> for a system suspend, all you have to do is tell the host controller to s=
+top sending
+> packets; the ports don't need any notification.
+>=20
+> (Actually the situation is more complicated for USB 3.  But you get the
+> idea.)
+>=20
+> > As far as I understood it correctly the purpose of those section was
+> > to trigger port poweroff if the device supports it upon a
+> > system-suspend.
+>=20
+> No, the purpose of the sections you removed is to trigger port poweroff w=
+hen the
+> device goes into any type of suspend, either system or runtime.  Of cours=
+e, as you
+> discovered, during system sleep the code doesn't actually turn off the po=
+rt power --
+> that's a bug.  But during runtime PM it does.
+>=20
+> > Therefore I came up with my question:
+> >
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fwww.s=
+pinics.
+> net%2Flists%2Flinux-
+> usb%2Fmsg190537.html&amp;data=3D02%7C01%7Cpeter.chen%40nxp.com%7Ce2
+> 47403d3a8c420ef66d08d7bbbb63a5%7C686ea1d3bc2b4c6fa92cd99c5c301635%7
+> C0%7C0%7C637184285813366300&amp;sdata=3DMviQpc4vhyVu496wyNQ%2Bb3T
+> hNE7Gh6hpenjzxn6%2FLwE%3D&amp;reserved=3D0.
+>=20
+> > > Also, try to find better names.  Maybe usb_port_sleep and
+> > > usb_port_wake, or usb_port_system_suspend and usb_port_system_resume.
+> >
+> > IMHO usb_port_suspend/resume should be the best ;)
+>=20
+> Okay, so long as they are static and won't conflict with the functions in=
+ hub.c.
+>=20
+> Alan Stern
+>=20
+> PS: There's one more thing you need to know -- I completely forgot about =
+it until
+> just now.  During system sleep, we have to make sure that the child devic=
+e gets
+> suspended _before_ and resumed _after_ the port.  If it happened the othe=
+r way,
+> we'd be in trouble.
+>=20
+> (The proper ordering would be automatic if the child USB device was regis=
+tered
+> under the port device, but for historical reasons it isn't; it gets regis=
+tered directly
+> under the parent hub.)
+>=20
+> This means you'll have to call device_pm_wait_for_dev() at the appropriat=
+e places
+> in the suspend and resume pathways.
 
-Thanks for tracking it so detail.
+Hi Alan & Marco,
 
-1-2: pm_qos_no_power_off is default on, and it is a standard USB working
-way. In fact, no customer mentioned that before, and even for me, it is
-the first time to try it.
-3-4: It is not adding support for gpio-base VBUS control for chipidea,
-it lets the USB core control the VBUS instead of controller driver.
-5-6: With patch 3-4 introduced, we found issues at imx6 series SoCs
-(see detail at the last reply), so we add quirk for imx6.
+I tried this VBUS off feature at one chipidea controller board with USB mou=
+se, it works
+well, at least with my expectation. See below log:
 
-> So as you can see the pm_qos_no_power_off was introduced before the gpio
-> regulator vbus power-off support was added.
->=20
+// There is a USB mouse at USB2 port
 
-Like I said it is default off, we don't know there is such feature
-at kernel. In my mind, the VBUS is never off for host.
+root@imx6ul7d:~# ./uclk.sh=20
+    pll_usb_main_clk                  1        1        0   480000000      =
+    0     0  50000
+       usb_phy2_clk                   1        1        0   480000000      =
+    0     0  50000
+    pll_usb1_main_clk                 0        0        0   480000000      =
+    0     0  50000
+       usb_phy1_clk                   0        0        0   480000000      =
+    0     0  50000
+             usb_hsic_src             0        0        0   480000000      =
+    0     0  50000
+                usb_hsic_cg           0        0        0   480000000      =
+    0     0  50000
+                   usb_hsic_pre_div       0        0        0   480000000  =
+        0     0  50000
+                      usb_hsic_post_div       0        0        0   4800000=
+00          0     0  50000
+                         usb_hsic_root_clk       0        0        0   4800=
+00000          0     0  50000
+                            usb_ctrl_clk       1        1        0   135000=
+000          0     0  50000
+// clock is on
 
-> > PORTSC.PP could be controlled by USB core, but USB VBUS's power is not =
-controlled
-> > by this bit if the VBUS power enable pin is configured as GPIO function=
-, that is your case.
->=20
-> Yep I know :)
->=20
-> > CI_HDRC_TURN_VBUS_EARLY_ON is introduced by fixing a bug that some i.mx=
- USB
-> > controllers PHY's power is sourced from VBUS, the PHY's power need to b=
-e on before
-> > touch some ehci registers, otherwise, the USB signal will be wrong at s=
-ome low speed
-> > devices use case. So, this flag can't be deleted, it may cause regressi=
-on.
->=20
-> Pls check my archeological findings and again pls check my patches. I
-> deleted the flag because isn't required anymore afterwards.
+root@imx6ul7d:~# echo auto > /sys/bus/usb/devices/1-1/power/control=20
+root@imx6ul7d:~# ./uclk.sh=20
+    pll_usb_main_clk                  0        0        0   480000000      =
+    0     0  50000
+       usb_phy2_clk                   0        0        0   480000000      =
+    0     0  50000
+    pll_usb1_main_clk                 0        0        0   480000000      =
+    0     0  50000
+       usb_phy1_clk                   0        0        0   480000000      =
+    0     0  50000
+             usb_hsic_src             0        0        0   480000000      =
+    0     0  50000
+                usb_hsic_cg           0        0        0   480000000      =
+    0     0  50000
+                   usb_hsic_pre_div       0        0        0   480000000  =
+        0     0  50000
+                      usb_hsic_post_div       0        0        0   4800000=
+00          0     0  50000
+                         usb_hsic_root_clk       0        0        0   4800=
+00000          0     0  50000
+                            usb_ctrl_clk       0        0        0   135000=
+000          0     0  50000
 
-I have already checked your patch, your patch deletes CI_HDRC_TURN_VBUS_EAR=
-LY_ON
-quirk, and it may cause regression.
+//clock is off after enable mouse's autosuspend
 
->=20
-> > The solution I see is your may need to implement chipidea VBUS control =
-flow by considering
-> > pm_qos_no_power_off at suspend situation. You may add .suspend API for =
-ci_role_driver,
-> > and called by ci_controller_suspend/ci_controller_resume, of cos, bette=
-r solution is welcome.
->=20
-> I fixed it within the core [1] and here at the chipidea side.
->=20
-> [1] https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fl=
-kml.org%2Flkml%2F2020%2F2%2F27%2F669&amp;data=3D02%7C01%7Cpeter.chen%40nxp.=
-com%7Cad9b3833ae2f433d93ef08d7bb92d4a0%7C686ea1d3bc2b4c6fa92cd99c5c301635%7=
-C0%7C0%7C637184111614326500&amp;sdata=3DSPwwBEGBco6IdP8ufmAnJeeRxuAXGLa0xzY=
-lzFA%2FAvg%3D&amp;reserved=3D0
->=20
-> You will never enter the ehci_ci_portpower() during suspend without [1]
-> if you are using a vanilla kernel. So IMHO this case can't be tested,
-> sorry.
->=20
+root@imx6ul7d:~# echo 0 > //sys/bus/usb/devices/1-0\:1.0/usb1-port1/power/
+autosuspend_delay_ms    pm_qos_no_power_off     runtime_status
+control                 runtime_active_time     runtime_suspended_time
+_no_power_off ~# echo 0 > //sys/bus/usb/devices/1-0\:1.0/usb1-port1/power/p=
+m_qos_
+root@imx6ul7d:~# [  250.865933] ci_hdrc ci_hdrc.1: at: ehci_ci_portpower, d=
+isable vbus regulator
 
-Through set pm_qos_no_power_off as 0, the VBUS will be off. You
-never need to call .ehci_ci_portpower again. You may try my second
-suggestion for fix chipidea issue. I will reply your RFC patch for
-USB core.
+//VBUS is off after set pm_qos_no_power_off 0. It stands for pm_qos_no_powe=
+r_off works
+well for runtime suspend.
 
---=20
+root@imx6ul7d:~# echo enabled > /sys/class/tty/ttymxc0/power/wakeup
+root@imx6ul7d:~# echo mem > /sys/power/state
 
-Thanks,
-Peter Chen=
+// Enable tty wakeup, and suspend system.
+
+[  292.530680] PM: suspend entry (s2idle)
+[  292.547108] Filesystems sync: 0.012 seconds
+[  292.575311] Freezing user space processes ... (elapsed 0.003 seconds) do=
+ne.
+[  292.586275] OOM killer disabled.
+[  292.589726] Freezing remaining freezable tasks ... (elapsed 0.002 second=
+s) done.
+[  292.599891] printk: Suspending console(s) (use no_console_suspend to deb=
+ug)
+
+[  292.674257] fec 30be0000.ethernet eth0: Link is Down
+[  292.677564] PM: suspend devices took 0.070 seconds
+[  295.690990] imx6q-pcie 33800000.pcie: Phy link never came up
+[  295.691012] imx6q-pcie 33800000.pcie: pcie link is down after resume.
+[  295.715262] ci_hdrc ci_hdrc.1: at: ehci_ci_portpower, enable vbus regula=
+tor
+
+// The VBUS is only on after resume, but not during the system suspend rout=
+ine.
+
+[  296.321299] usb 1-1: reset low-speed USB device number 2 using ci_hdrc
+[  296.680700] PM: resume devices took 0.990 seconds
+[  296.721685] OOM killer enabled.
+[  296.724847] Restarting tasks ... done.
+[  296.750136] PM: suspend exit
+root@imx6ul7d:~#=20
+root@imx6ul7d:~# [  298.811004] fec 30be0000.ethernet eth0: Link is Up - 10=
+0Mbps/Full - flow control rx/tx
+[  299.169794] ci_hdrc ci_hdrc.1: at: ehci_ci_portpower, disable vbus regul=
+ator
+
+root@imx6ul7d:~# ./uclk.sh=20
+    pll_usb_main_clk                  0        0        0   480000000      =
+    0     0  50000
+       usb_phy2_clk                   0        0        0   480000000      =
+    0     0  50000
+    pll_usb1_main_clk                 0        0        0   480000000      =
+    0     0  50000
+       usb_phy1_clk                   0        0        0   480000000      =
+    0     0  50000
+             usb_hsic_src             0        0        0   480000000      =
+    0     0  50000
+                usb_hsic_cg           0        0        0   480000000      =
+    0     0  50000
+                   usb_hsic_pre_div       0        0        0   480000000  =
+        0     0  50000
+                      usb_hsic_post_div       0        0        0   4800000=
+00          0     0  50000
+                         usb_hsic_root_clk       0        0        0   4800=
+00000          0     0  50000
+                            usb_ctrl_clk       0        0        0   135000=
+000          0     0  50000
+
+// As USB mouse is auto-suspend, and pm_qos_no_power_off is 0. The clock is=
+ off, and VBUS is off after autosuspend
+timeout.
+
+Linux version 5.6.0-rc1-00027-g2671f46409d5-dirty (b29397@b29397-desktop) (=
+gcc version 6.2.0 (GCC)) #7 SMP Fri Feb 28=20
+10:20:18 CST 2020
+
+// I use the usb-next tree, it is the new upstream kernel
+
+Peter
+
