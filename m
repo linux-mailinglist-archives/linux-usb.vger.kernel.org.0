@@ -2,115 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10ADF17387A
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 14:37:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 997221739CF
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 15:26:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726788AbgB1Nh2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Feb 2020 08:37:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47268 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726151AbgB1Nh2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 28 Feb 2020 08:37:28 -0500
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 16DAA246B2;
-        Fri, 28 Feb 2020 13:37:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582897047;
-        bh=3QTsf6yxc7rs1GNJzVvRB6S0uuiy+3lK2e9AhBjgK9U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PYW1elnCmO11I8yypoUm++QOvuS5mjo4qjQS3WJsoYbB8ouH57FD1Zn+AsHR6BxYh
-         uVzJ46ki3kR1P4j1XLTDhlPxJ9Naig6YinLcn3i69w/rkFDyzdiyu+i4WTcH2M9Vba
-         CObmYdWF8gL1UScf3zzKgVoPscBnBZUBtirabons=
-Received: by mail-qk1-f181.google.com with SMTP id z12so2873793qkg.12;
-        Fri, 28 Feb 2020 05:37:27 -0800 (PST)
-X-Gm-Message-State: APjAAAUq8X+rZ+44pmYwC/qy8okbFcJOi+c7go+nJxQl9XNZdR+XWsEQ
-        qWXkWigoIWgmq14la6Xfs5GW0Zw8H7/Q72tpmg==
-X-Google-Smtp-Source: APXvYqxv7Nvxn3gC9nka19zmNC3LNW+zYXn12WGYx0IvQ/8zlbcZx2PSeIw5Jyoc0EsM8EUw7UFcSWSt1Qu2jKo6TFU=
-X-Received: by 2002:a05:620a:12a3:: with SMTP id x3mr4553853qki.254.1582897046187;
- Fri, 28 Feb 2020 05:37:26 -0800 (PST)
+        id S1726875AbgB1O0e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Feb 2020 09:26:34 -0500
+Received: from mail-lj1-f181.google.com ([209.85.208.181]:42186 "EHLO
+        mail-lj1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726738AbgB1O0e (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Feb 2020 09:26:34 -0500
+Received: by mail-lj1-f181.google.com with SMTP id d10so3506531ljl.9
+        for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2020 06:26:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:from:subject:message-id:date:user-agent:mime-version
+         :content-language;
+        bh=GXPcSl5cuThD5HcnDbbOQjt0yuv/35mXS88kOAnExuU=;
+        b=BuEa0yYGDa1uaOGiCRlVLbMUFFKLWL2bBjXXqo8nTCu2zgUUw4bSzJZrDKx6rylOJs
+         8b00XAKZt2AQEUGuNhqkXXi4FegXVLchddYs0kpTDIEsYd/ftVckNS/RzAq6TLH6COcz
+         1RU28XfU8ipsu8HTB2wkAbTShYlnYqjd6NUHcBOOh+v3qTlIMv2fFhnoJmpuzpj/AruB
+         EwjMeBVD0tpYmKtt6BnoUPvrXGjAOz6pG5H86MkJkawkJ5JtNensWHiWeX33t2Ks3pE5
+         ocUlZqXbalsNkkSLf0xdHa4QZtXI4Wu+XvJV+jpNwJCecjKWjfOLCOvOP1PCvil3/zuU
+         aPsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
+         :mime-version:content-language;
+        bh=GXPcSl5cuThD5HcnDbbOQjt0yuv/35mXS88kOAnExuU=;
+        b=CItw82l+pB3X+ohYDft//QTGLPd0mwWN14MAW9+J+n3yr6BrAzu1jFpZ0B21012Goj
+         xTDds5ASQJQ/zktHKwwc1wheIsinNOGXmWGWkeiUuqJIaSOp+pMckxfnjZ4aGHdaWIvv
+         Txg84feOYlB4NVV1huJDetSApepikCzzCtN/IkwhqeTp9dy50tSowSaYnDWi8g4p54eM
+         A6k9907IadOyX6dL5iE2YC/1yPmiswyWgEBtMW2wX+ePI4xcjdqR7gKf/ol7KySSux33
+         oEkFq3GGRHni51YJR45XTYth5+Ax5FrCPkUpSnOHHCyIPWCCvJvBfUzXbgedMMAl4Ory
+         ZGuQ==
+X-Gm-Message-State: ANhLgQ3q9aFgVAN20AEa8nK9J3+wuntpZIzluPgNiNpqtSLAWqVDjjRt
+        HI0uzb3VxnslyYLEBPpAbkYs6h23
+X-Google-Smtp-Source: ADFU+vuJ3TtB3xS6yh7T94a+Utjjzj75PWhIOIokU8TrOFfy01030xVKwEsGI8t/QQWoFydwaSWNhQ==
+X-Received: by 2002:a2e:a551:: with SMTP id e17mr3160890ljn.86.1582899991942;
+        Fri, 28 Feb 2020 06:26:31 -0800 (PST)
+Received: from [192.168.1.14] ([89.109.10.26])
+        by smtp.gmail.com with ESMTPSA id i4sm5746234ljg.102.2020.02.28.06.26.30
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Feb 2020 06:26:31 -0800 (PST)
+To:     linux-usb@vger.kernel.org
+From:   Igor Filippov <igorf777@gmail.com>
+Subject: driver
+Message-ID: <20f1edf4-f589-2b04-8353-d02bb87d251a@gmail.com>
+Date:   Fri, 28 Feb 2020 17:26:30 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-References: <20200227062754.19131-1-peter.chen@nxp.com> <20200227062754.19131-2-peter.chen@nxp.com>
- <20200227170810.GA2318@bogus> <VI1PR04MB5327992CC6BA891C199D39A08BE80@VI1PR04MB5327.eurprd04.prod.outlook.com>
-In-Reply-To: <VI1PR04MB5327992CC6BA891C199D39A08BE80@VI1PR04MB5327.eurprd04.prod.outlook.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 28 Feb 2020 07:37:14 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLQ+5iR_rTaS7D2cvS_psT0XKh=FLH0EmLo2EsE4cuXSA@mail.gmail.com>
-Message-ID: <CAL_JsqLQ+5iR_rTaS7D2cvS_psT0XKh=FLH0EmLo2EsE4cuXSA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] doc: dt-binding: cdns-salvo-phy: add binding doc
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     "kishon@ti.com" <kishon@ti.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "aniljoy@cadence.com" <aniljoy@cadence.com>,
-        Jun Li <jun.li@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/mixed;
+ boundary="------------16D10D6DA25F3227DADB876A"
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 28, 2020 at 3:29 AM Peter Chen <peter.chen@nxp.com> wrote:
->
->
-> > >  .../bindings/phy/cdns,salvo-phy.yaml          | 47 +++++++++++++++++++
-> > >  1 file changed, 47 insertions(+)
-> > >  create mode 100644
-> > > Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
-> > >
-> >
-> > My bot found errors running 'make dt_binding_check' on your patch:
-> >
-> > warning: no schema found in file:
-> > Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
-> > /builds/robherring/linux-dt-
-> > review/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml: ignoring, error
-> > parsing file
-> > Documentation/devicetree/bindings/display/simple-framebuffer.example.dts:21.16-
-> > 37.11: Warning (chosen_node_is_root): /example-0/chosen: chosen node must be
-> > at root node
-> > Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml:  while scanning a
-> > block scalar
-> >   in "<unicode string>", line 39, column 5 found a tab character where an indentation
-> > space is expected
-> >   in "<unicode string>", line 41, column 1
-> > Documentation/devicetree/bindings/Makefile:12: recipe for target
-> > 'Documentation/devicetree/bindings/phy/cdns,salvo-phy.example.dts' failed
-> > make[1]: *** [Documentation/devicetree/bindings/phy/cdns,salvo-phy.example.dts]
-> > Error 1
-> > Makefile:1263: recipe for target 'dt_binding_check' failed
-> > make: *** [dt_binding_check] Error 2
-> >
-> Hi Rob,
->
-> After changing some format, I still got below errors, would you please point to
-> what's wrong with line 40, column 12? Thanks.
+This is a multi-part message in MIME format.
+--------------16D10D6DA25F3227DADB876A
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-It is line numbers of the generated .example.dts you need to look at.
+Hello!
 
->
->  31 required:
->  32   - compatible
->  33   - reg
->  34   - "#phy-cells"
->  35
->  36 additionalProperties: false
->  37
->  38 examples:
->  39     -|
->  40     usb3phy: usb3-phy {
+I use the USB2CAN converter i-7565H1 (from ICP CON) and the driver 
+installation script from the delivery kit (in the attachment).
 
-Needs a unit address.
+And the dmesg comand output is:
 
->  41         compatible = "nxp,salvo-phy";
->  42         reg = <0x5B160000 0x40000>;
->  43         clocks = <&usb3_lpcg 4>;
->  44         clock-names = "salvo_phy_clk";
->  45         power-domains = <&pd IMX_SC_R_USB_2_PHY>;
+[  489.495739] usbcore: registered new interface driver usbserial_generic
+[  489.495747] usbserial: USB Serial support registered for generic
+[  489.590087] usbserial_generic 3-3:1.0: The "generic" usb-serial 
+driver is only for testing and one-off prototypes.
+[  489.590088] usbserial_generic 3-3:1.0: Tell linux-usb@vger.kernel.org 
+to add your device to a proper driver.
+[  489.590090] usbserial_generic 3-3:1.0: device has no bulk endpoints
+[  489.590106] usbserial_generic 3-3:1.1: The "generic" usb-serial 
+driver is only for testing and one-off prototypes.
+[  489.590107] usbserial_generic 3-3:1.1: Tell linux-usb@vger.kernel.org 
+to add your device to a proper driver.
+[  489.590108] usbserial_generic 3-3:1.1: generic converter detected
+[  489.590208] usb 3-3: generic converter now attached to ttyUSB0
 
-Need to include the header for this define.
+Can you solve this problem? Thank You.
 
->  46         #phy-cells = <0>;
->  47     };
+
+--------------16D10D6DA25F3227DADB876A
+Content-Type: application/zip;
+ name="I7565H1H2_install.zip"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="I7565H1H2_install.zip"
+
+UEsDBBQDAAAIACFQVk707V3KJQIAANIFAAARAAAASTc1NjVIMUgyX2luc3RhbGy9lN9v2jAQ
+x5/nv+LqouUpmERik1aFqQ1oROtolUL3ME0hsR2wmh/ITtgq7Y9fIMGEwiq0h/rxfOfv3ee+
+yeUFiURG1BLd3F67X2+9h6lDeEFJmrOVzCPeZSRKQvqUCFV0aZ7FaPZwE3wZTUa+5waT0Xdv
+6BD1rEhUKlKqyFRcijAhTIo1l4oseFYFKMn4r0Aw9DiaDO98x7CiPjXQ2Aru/bvhzJ06Rs/u
+WVXEPojYBkIihh+AOxYGB4wlT1YG/LyCYskz9I7TZQ7YPPPgXUGpwgX/BF3ifex/6I+tSlVk
+qgiTRKdAfbw6DNtEc2yRsQ0VmjLhUE8IYVnkaVgIWqU9n6EAkqf5mr8U8rfRtk4jcM6TlNEg
+pOnpN3e3EMs8hf0yN9m/RYF4ckC4bq/FeOcEMCVUC673e7q2UWoVK87AFGCQ5oowAzraas0r
+sUDoki45fQJhtgA88ozlErwhxEKqAtGwgHksMgYbx4GZhSkHweq0OfyBheQr6NQegwEQxtck
+KytA9uC9hfzRdOZPHNz5jLWr6ti2eevIV5P8sJ84LzN20XC72rbtDt3g2v3mzDfSmjTej4jn
+WqvJ3Yhh/FJL70UvEwaDNqr2HnY5NbnGBTtDYr0k3HDTlfrmmDfcy8rWtKho/4tzk7EHvf98
+X4d9zLp3xNo7HCLO5b63rjZ2s9u2NIYK09E/6ZSn7P+a0X6TGe1TM9qvzwjbIesiVVLKlape
++QtQSwECPwMUAwAACAAhUFZO9O1dyiUCAADSBQAAEQAkAAAAAAAAACCA7YEAAAAASTc1NjVI
+MUgyX2luc3RhbGwKACAAAAAAAAEAGACA9HNefMrUAQD8cmlE7dUBgIgl4kPt1QFQSwUGAAAA
+AAEAAQBjAAAAVAIAAAAA
+--------------16D10D6DA25F3227DADB876A--
