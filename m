@@ -2,68 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF678173612
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 12:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF0A17378F
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 13:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726103AbgB1Lcl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Feb 2020 06:32:41 -0500
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:45182 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725827AbgB1Lcl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Feb 2020 06:32:41 -0500
-Received: by mail-ed1-f68.google.com with SMTP id h62so1024979edd.12;
-        Fri, 28 Feb 2020 03:32:39 -0800 (PST)
+        id S1726400AbgB1MuO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Feb 2020 07:50:14 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:43899 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725892AbgB1MuO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Feb 2020 07:50:14 -0500
+Received: by mail-il1-f199.google.com with SMTP id o13so3186509ilf.10
+        for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2020 04:50:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WwHkn00+dJyzFl79Z3wZZ7U758NGAlMAHel80SC1KKA=;
-        b=b5m9ZcSvlAVgIprC8rZGqDdUCBk9Y9I0v0o0ZBhHknGPOf/Y3498RouFvDQQ6cBrq6
-         aT1zn1dzyDz9Nq3nSr64lkv3BlE5cQ94LKH3FXUM8rIgXh3GOup+iU4+XTO5Zlrd3O3i
-         ebOjg2EzvNAFLzIHDFiU3sLiXrGR/7le9gMCW7CwS0At43ihKnnfHrU29pF1Wr8GnygL
-         F2z3ikmYt1NCuDnx6WRZGJDwMqzKH1+fWdsNPTP1MUJqVcbn5Kovu9qiuhZEs79XnVlx
-         wLwZDpjPtRAA6EpjNdOEpxRMCKMc69+uTTAi82K+MUm+4kDxKY5CHWDxbO+jrAvattiO
-         CxhQ==
-X-Gm-Message-State: APjAAAXqcO96NjUQbDa0QnOfuo6IvIflw6FcR6pzdnCbNSRLy1zOIWX3
-        Q6ivJZMQaphnu2wKojo2mGu6FqAgEKw=
-X-Google-Smtp-Source: APXvYqyld2+YaUioJrINN5LT/V2YT0770Evql77F4sX6YZe/MzPiF6b7LkLpyKcRgbsFkNJalUHZ/Q==
-X-Received: by 2002:a17:906:5c10:: with SMTP id e16mr3651279ejq.10.1582889559109;
-        Fri, 28 Feb 2020 03:32:39 -0800 (PST)
-Received: from pi3 ([194.230.155.125])
-        by smtp.googlemail.com with ESMTPSA id r23sm531736edp.15.2020.02.28.03.32.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Feb 2020 03:32:38 -0800 (PST)
-Date:   Fri, 28 Feb 2020 12:32:36 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] usb: dwc2: Silence warning about supplies during
- deferred probe
-Message-ID: <20200228113236.GD9458@pi3>
-References: <CGME20200228092607eucas1p20faf7fdabdf52586f18e8781e371f04d@eucas1p2.samsung.com>
- <20200228092557.31429-1-m.szyprowski@samsung.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=LM0FCJ+4KrKjYVOZD9eoAK5J6A6SqATe6bP4uXW+GrE=;
+        b=IGQhU4iz+vxXg6C9/DFA2Jp8vX8Gjz+sW6GXWpnCUQ7XYQfEvocTYzNOEHlYFCbY8Z
+         lkCo5d0KIFeaCrDIWyLIzKYeXFit8lsVdF1hqqDgfMhWFDPT+JhpD2noE6U/UXqlLyTI
+         UOQf386T/6CoC/uy+fXlkUZo5a54uLXiDEkY+CNHzI5N7w60UF1d2KVbzOx+JGrtwDVe
+         9Uep8ss5VVlgRwyFhoiXHZp16hQLHaD1uINR02RWF8vJRpDimV6DG0ULkqClYIIzccdJ
+         EaAnDH0b2vum9/r5zWdC4rLGtbwnHAGupLR1BtbSCCYVCo18ywClymD3F8H4abFmLSmw
+         iRXg==
+X-Gm-Message-State: APjAAAXeDHtze2f9QgVkVPUUM9qxBHNdsC+CHhTUAKKAS7lKXKPVpVcd
+        gv4d936hD2jBS4CcY/6sFAMbCnwug7nS3c0jIJ5qOKGVNxuo
+X-Google-Smtp-Source: APXvYqxnMG6CtbOph8kuz2jwfpOW0Zu/YcDE6V5G5am9WB6BuxUgsYwXeKWXvnB/UGn07sYo/1n/FMXRxI/O/GmPWBw6RPG3Yb6r
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200228092557.31429-1-m.szyprowski@samsung.com>
+X-Received: by 2002:a5d:8143:: with SMTP id f3mr3173932ioo.12.1582894212180;
+ Fri, 28 Feb 2020 04:50:12 -0800 (PST)
+Date:   Fri, 28 Feb 2020 04:50:12 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003bf3fb059fa247eb@google.com>
+Subject: BUG: bad host encryption descriptor; descriptor is too short (1 vs 5 needed)
+From:   syzbot <syzbot+2470d4931705e03b0977@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 28, 2020 at 10:25:57AM +0100, Marek Szyprowski wrote:
-> Don't confuse user with meaningless warning about the failure in getting
-> supplies in case of deferred probe.
-> 
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> ---
->  drivers/usb/dwc2/platform.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+Hello,
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+syzbot found the following crash on:
 
-Best regards,
-Krzysztof
+HEAD commit:    d6ff8147 usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=15cd9a81e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=90a3d9bed5648419
+dashboard link: https://syzkaller.appspot.com/bug?extid=2470d4931705e03b0977
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15cfbd09e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=170e3645e00000
 
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+2470d4931705e03b0977@syzkaller.appspotmail.com
+
+usb 1-1: config 0 interface 0 altsetting 0 has 2 endpoint descriptors, different from the interface descriptor's value: 4
+usb 1-1: New USB device found, idVendor=13dc, idProduct=5611, bcdDevice=40.15
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+hwa-hc 1-1:0.0: Wire Adapter v106.52 newer than groked v1.0
+usb 1-1: BUG: bad host encryption descriptor; descriptor is too short (1 vs 5 needed)
+usb 1-1: supported encryption types: 
+usb 1-1: E: host doesn't support CCM-1 crypto
+hwa-hc 1-1:0.0: Cannot initialize internals: -19
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
