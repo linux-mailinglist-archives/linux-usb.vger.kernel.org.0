@@ -2,118 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 304961733FB
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 10:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6533173402
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 10:29:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726586AbgB1J2S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Feb 2020 04:28:18 -0500
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:50847 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726525AbgB1J2S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Feb 2020 04:28:18 -0500
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200228092816euoutp013a9d6a38d3bada1c13c9a3e3e0396a4d~3huF4DhGh2612026120euoutp01v
-        for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2020 09:28:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200228092816euoutp013a9d6a38d3bada1c13c9a3e3e0396a4d~3huF4DhGh2612026120euoutp01v
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1582882097;
-        bh=4Il3OC3xzJqEiwuH88cOFDRumXb5AGJ1jKsN47OjV6E=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=lywzm1WJVfBeo7OK/K0++6joc9rkQ21agbBdmHBg/vFUU5UsjDgGZfPJC+j9AuUm8
-         0SIY6kR3DLF9a1hPS9xA9AW2Tyh2Le6zlab3yL9QrR7KGsvVmKf4EOzij5rOAvELOu
-         M2Zv7uk4daY25bQ0FzJsx7TLgUTu/zrIigKb2mXY=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200228092816eucas1p1b2b5377252b731e4a845d3c9272a5e7b~3huFpJtIt2816428164eucas1p1T;
-        Fri, 28 Feb 2020 09:28:16 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 56.90.61286.03DD85E5; Fri, 28
-        Feb 2020 09:28:16 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200228092816eucas1p27ffbe58d985fb30fa400fcb9939f4433~3huFW1Lx73124331243eucas1p2r;
-        Fri, 28 Feb 2020 09:28:16 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200228092816eusmtrp14e62b60f66944aee9ed8410319700180~3huFWQ3ls2387523875eusmtrp1g;
-        Fri, 28 Feb 2020 09:28:16 +0000 (GMT)
-X-AuditID: cbfec7f2-ef1ff7000001ef66-06-5e58dd307e97
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id DD.3E.08375.03DD85E5; Fri, 28
-        Feb 2020 09:28:16 +0000 (GMT)
-Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200228092815eusmtip290157b77b61c8bb702ba38bde0e7f187~3huE9MJDc2158721587eusmtip2C;
-        Fri, 28 Feb 2020 09:28:15 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH] udc: s3c-hsudc: Silence warning about supplies during
- deferred probe
-Date:   Fri, 28 Feb 2020 10:28:08 +0100
-Message-Id: <20200228092808.4580-1-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBIsWRmVeSWpSXmKPExsWy7djP87oGdyPiDL6/U7c41vaE3eL8+Q3s
-        FjPO72OyWLSsldli7ZG77A6sHptWdbJ59G1ZxejxeZNcAHMUl01Kak5mWWqRvl0CV0bLQt6C
-        52wVW7s0GxhvsXYxcnJICJhILNixjamLkYtDSGAFo8T21a1sEM4XRomGi5vZQaqEBD4zSuw+
-        LwXTcevjUxaIouWMEtOPH0HoeHP0ElgHm4ChRNfbLjYQW0TAQWLJ0jtgNrNApcT6havBdgsL
-        hEtMW/wEaDcHB4uAqsTfswUgYV4BG4nmHdMZIZbJS6zecIAZZL6EwBY2ic1nZjBDJFwkvjUe
-        YYGwhSVeHd/CDmHLSJye3MMC0dDMKPHw3Fp2CKeHUeJy0wyosdYSd879YgPZzCygKbF+lz5E
-        2FHi7ZvprCBhCQE+iRtvBSFu5pOYtG06M0SYV6KjTQiiWk1i1vF1cGsPXrgEdZqHxKvzuxkh
-        ARcrMfPWB7YJjHKzEHYtYGRcxSieWlqcm55abJiXWq5XnJhbXJqXrpecn7uJERjfp/8d/7SD
-        8eulpEOMAhyMSjy8C3aExwmxJpYVV+YeYpTgYFYS4d34NTROiDclsbIqtSg/vqg0J7X4EKM0
-        B4uSOK/xopexQgLpiSWp2ampBalFMFkmDk6pBsbcr5Pakx/e2eD2uWO+r/abjjnd1xrbQ59t
-        XLSd2/yOpUXgxNWMmT+7AjicFb7fN03dV5776cuizh/6LMc77Zj1lzUt/t/70+lfQdEklb/f
-        n96XOpVTV7+lKHRXxsMMc54Nol9Xft+89aid8KuZyyJmP8hYrvtMb4XovMlvuFkuHZreO/fY
-        Vt5zSizFGYmGWsxFxYkA7lXkfesCAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHLMWRmVeSWpSXmKPExsVy+t/xe7oGdyPiDLpnCFsca3vCbnH+/AZ2
-        ixnn9zFZLFrWymyx9shddgdWj02rOtk8+rasYvT4vEkugDlKz6Yov7QkVSEjv7jEVina0MJI
-        z9DSQs/IxFLP0Ng81srIVEnfziYlNSezLLVI3y5BL6NlIW/Bc7aKrV2aDYy3WLsYOTkkBEwk
-        bn18ytLFyMUhJLCUUWLPi+/MEAkZiZPTGqCKhCX+XOtigyj6xCix9vtfsASbgKFE11uQBCeH
-        iICTROfa02A2s0C1xPmuk4wgtrBAqMS/g9uA4hwcLAKqEn/PFoCEeQVsJJp3TGeEmC8vsXrD
-        AeYJjDwLGBlWMYqklhbnpucWG+oVJ+YWl+al6yXn525iBIbVtmM/N+9gvLQx+BCjAAejEg/v
-        gh3hcUKsiWXFlbmHGCU4mJVEeDd+DY0T4k1JrKxKLcqPLyrNSS0+xGgKtHsis5Rocj4w5PNK
-        4g1NDc0tLA3Njc2NzSyUxHk7BA7GCAmkJ5akZqemFqQWwfQxcXBKNTA6Si+wf6i8cjqvtOKu
-        d7wMAXvnn7txpFhoSdur9J2HpiSJ/nrz61He50oR781B188c64zumpr5aU5j0FuH5X8fG+Vs
-        +l31LeWeUwKTlqqFtIcZy+e0i/m3z3UnJdyMbr7dcf8EC6PaSk2/Z47Kt2N3PQt7EBYu0rng
-        sqZiSPKrsIa0q7tP11sosRRnJBpqMRcVJwIA+iAuC0ECAAA=
-X-CMS-MailID: 20200228092816eucas1p27ffbe58d985fb30fa400fcb9939f4433
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200228092816eucas1p27ffbe58d985fb30fa400fcb9939f4433
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200228092816eucas1p27ffbe58d985fb30fa400fcb9939f4433
-References: <CGME20200228092816eucas1p27ffbe58d985fb30fa400fcb9939f4433@eucas1p2.samsung.com>
+        id S1726525AbgB1J3l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Feb 2020 04:29:41 -0500
+Received: from mail-vi1eur05on2067.outbound.protection.outlook.com ([40.107.21.67]:23393
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726490AbgB1J3l (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 28 Feb 2020 04:29:41 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E5fCujb/P4lsfqiuMf8Emk8OcKq9cX23AwivbAsmiipPL1LvUEBzFndwCHFPSDcLSPwvX5ke/NPkl+PJub/0KWa2jGjWyHSNir3zi9Yo0AfmAyKlj50yHgYOaZtSebrOUPxQeSq0FSNyScq4zBcbt7iuSsCiJNiq1TqOPk/IbIwd8Ak8MynjTPWYq1em3o4O9NVKoLR+XbHbXzFZKiihYNbBFxkP3xIcLeRbgQPRmLOAYiM0bvp41qXnBQEL47lY259ECswpVdyzXkHObhjEPmFhULoJwj1xz2PUk80viUIKaoQd6y2jG2Dwvnn4jrBXiDukD7Qoe4sra7199Gn04w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P/ZS6HYc9dPci1LW/QecOhlynDdsO3psOg0zqECWWyo=;
+ b=P4mdq9D85CJgZF4PINv5kBab1K+sDrz+X12L4GNJYVDzEmgXljUzHb7seVSO3qKAH89QRLmizntTnprCoUjkd0kFmaRprdWXhBr99ia3BnfWkjpSMxcsjBB8zLl/J9dxhOJV0utUkSxttY4eldA5SDlqXlmNjYtft0JzBBY+OSa1v6E/e9UYPmW1JDfgrZwJYnxGYjxVuXW5qtHtMy10pyY8ZnDtrMfjCttrzz+S17LwNUDnXSxH7Ln5aavd6tT4kpSGHaQgJ1xyZ9/8TOGj6ENqJPYeU3UQ/s8pd3UsMdtKO306PoqS4DLTkVhPlW2OatZlapwEGGCbLzcxwzLiaw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P/ZS6HYc9dPci1LW/QecOhlynDdsO3psOg0zqECWWyo=;
+ b=fAnjWe3V0plA0M1eA2cqsJIQ4OtJcdt1aRcVDGGhEzwpQTkmaZhpcOII52bChHYOAVtg5CtkSXeylAftZE2bbVRD5P1l0inXdSexHyidEpCHXkFanJd+CZHomAiPFS43+w1qBEh20kMvLTd8d3fFQKOqqwCxjvDtkcXKkdwxinA=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
+ VI1PR04MB3246.eurprd04.prod.outlook.com (10.170.229.33) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2750.22; Fri, 28 Feb 2020 09:29:36 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::9547:9dfa:76b8:71b1]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::9547:9dfa:76b8:71b1%7]) with mapi id 15.20.2750.021; Fri, 28 Feb 2020
+ 09:29:33 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "kishon@ti.com" <kishon@ti.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "aniljoy@cadence.com" <aniljoy@cadence.com>,
+        Jun Li <jun.li@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: RE: [PATCH 2/2] doc: dt-binding: cdns-salvo-phy: add binding doc
+Thread-Topic: [PATCH 2/2] doc: dt-binding: cdns-salvo-phy: add binding doc
+Thread-Index: AQHV7TcYWgsnimYnvUK07Zx3ZoCe3agvRosAgAER7SA=
+Date:   Fri, 28 Feb 2020 09:29:32 +0000
+Message-ID: <VI1PR04MB5327992CC6BA891C199D39A08BE80@VI1PR04MB5327.eurprd04.prod.outlook.com>
+References: <20200227062754.19131-1-peter.chen@nxp.com>
+ <20200227062754.19131-2-peter.chen@nxp.com> <20200227170810.GA2318@bogus>
+In-Reply-To: <20200227170810.GA2318@bogus>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [222.65.251.82]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 3524706a-9927-4a74-b978-08d7bc30b832
+x-ms-traffictypediagnostic: VI1PR04MB3246:|VI1PR04MB3246:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB324621C72CE1C376A638AFB68BE80@VI1PR04MB3246.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 0327618309
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(136003)(396003)(376002)(366004)(39860400002)(199004)(189003)(478600001)(6916009)(81156014)(316002)(4326008)(7696005)(81166006)(54906003)(71200400001)(8676002)(55016002)(8936002)(44832011)(86362001)(2906002)(26005)(52536014)(186003)(5660300002)(33656002)(66446008)(9686003)(64756008)(66476007)(66946007)(76116006)(66556008)(6506007);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB3246;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ZYIfTfWHDVkXa0/z6Gund1IFLdyX8/x8eHHtCVWKgQU7VoqZiSOaSGoOUuk8O2MPJ9N6xOLlFDoLRsTdMwF7uuHXT3+vq6QGpPjzxeurTsWBFghz23zd6Soiomjvu0HPpgoubFn/NdLMxkVFeOq4CvwL9g8M1YH/3/N+H01Of8oIqwO/5sDvaZ+/uXipNL3CJ2X0wFajy8xMCZph181xLZLvJ/htoOAu+4wpxhM5S9RKn86HEcMnYl1iGzi2MwgslsX4bPG14OlcO1f5s1xlczCrFF8WloO7ftVl/B/2xEi609tA8uWrSyG+2/o43WLPEn+QzBluorwzI/U3j8tgpgsAekXIg1qM9Jt+ZUBqYnOaVS1QvVp88rWV8MWlZZ/4ikujVQMtg5uM42JZoS6wvdNhAVXyRRi4qj3/hYPYKNJC9K1DzJivbpTzibjLgek1
+x-ms-exchange-antispam-messagedata: nD8eQaHimbBcSrgbvWSTQldHXumav1lHOEFeejs3PUgKuYX1gPHQ42jvszPJDkmPXSHI36ZyOyvJUZCP5oFWPq1aTfDa1PNMLP6t5aTPuBzxhefRjsl2UdkM38PanLZUXsGOS4fuIlx2Ly3y8YrbiQ==
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3524706a-9927-4a74-b978-08d7bc30b832
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2020 09:29:32.9839
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QGpN5P9ebLiXH6gSdqftB6k7OC6UDDpyJbrcO8+viNAsGKLNguGtxi6kzsb7/meUyoENclwsYs+A4KhGVHnuLQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3246
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Don't confuse user with meaningless warning about the failure in getting
-supplies in case of deferred probe.
+=20
+> >  .../bindings/phy/cdns,salvo-phy.yaml          | 47 +++++++++++++++++++
+> >  1 file changed, 47 insertions(+)
+> >  create mode 100644
+> > Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
+> >
+>=20
+> My bot found errors running 'make dt_binding_check' on your patch:
+>=20
+> warning: no schema found in file:
+> Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
+> /builds/robherring/linux-dt-
+> review/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml: ignorin=
+g, error
+> parsing file
+> Documentation/devicetree/bindings/display/simple-framebuffer.example.dts:=
+21.16-
+> 37.11: Warning (chosen_node_is_root): /example-0/chosen: chosen node must=
+ be
+> at root node
+> Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml:  while scannin=
+g a
+> block scalar
+>   in "<unicode string>", line 39, column 5 found a tab character where an=
+ indentation
+> space is expected
+>   in "<unicode string>", line 41, column 1
+> Documentation/devicetree/bindings/Makefile:12: recipe for target
+> 'Documentation/devicetree/bindings/phy/cdns,salvo-phy.example.dts' failed
+> make[1]: *** [Documentation/devicetree/bindings/phy/cdns,salvo-phy.exampl=
+e.dts]
+> Error 1
+> Makefile:1263: recipe for target 'dt_binding_check' failed
+> make: *** [dt_binding_check] Error 2
+>=20
+Hi Rob,
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
- drivers/usb/gadget/udc/s3c-hsudc.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+After changing some format, I still got below errors, would you please poin=
+t to
+what's wrong with line 40, column 12? Thanks.
 
-diff --git a/drivers/usb/gadget/udc/s3c-hsudc.c b/drivers/usb/gadget/udc/s3c-hsudc.c
-index 21252fbc0319..aaca1b0a2f59 100644
---- a/drivers/usb/gadget/udc/s3c-hsudc.c
-+++ b/drivers/usb/gadget/udc/s3c-hsudc.c
-@@ -1285,7 +1285,8 @@ static int s3c_hsudc_probe(struct platform_device *pdev)
- 	ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(hsudc->supplies),
- 				 hsudc->supplies);
- 	if (ret != 0) {
--		dev_err(dev, "failed to request supplies: %d\n", ret);
-+		if (ret != -EPROBE_DEFER)
-+			dev_err(dev, "failed to request supplies: %d\n", ret);
- 		goto err_supplies;
- 	}
- 
--- 
-2.17.1
+=A031 required:
+=A032 =A0 - compatible
+=A033 =A0 - reg
+=A034 =A0 - "#phy-cells"
+=A035
+=A036 additionalProperties: false
+=A037
+=A038 examples:
+=A039 =A0 =A0 -|
+=A040 =A0 =A0 usb3phy: usb3-phy {
+=A041 =A0 =A0 =A0 =A0 compatible =3D "nxp,salvo-phy";
+=A042 =A0 =A0 =A0 =A0 reg =3D <0x5B160000 0x40000>;
+=A043 =A0 =A0 =A0 =A0 clocks =3D <&usb3_lpcg 4>;
+=A044 =A0 =A0 =A0 =A0 clock-names =3D "salvo_phy_clk";
+=A045 =A0 =A0 =A0 =A0 power-domains =3D <&pd IMX_SC_R_USB_2_PHY>;
+=A046 =A0 =A0 =A0 =A0 #phy-cells =3D <0>;
+=A047 =A0 =A0 };
 
+
+make[1]: Entering directory '/home/b29397/work/projects/upstream/usb/outout=
+/imx_v8'
+=A0 CHKDT =A0 Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
+/home/b29397/work/projects/upstream/usb/Documentation/devicetree/bindings/p=
+hy/cdns,salvo-phy.yaml: =A0mapping values are not allowed in this context
+=A0 in "<unicode string>", line 40, column 12
+/home/b29397/work/projects/upstream/usb/Documentation/devicetree/bindings/M=
+akefile:12: recipe for target 'Documentation/devicetree/bindings/phy/cdns,s=
+alvo-phy.example.dts' failed
+make[2]: *** [Documentation/devicetree/bindings/phy/cdns,salvo-phy.example.=
+dts] Error 1
+/home/b29397/work/projects/upstream/usb/Makefile:1262: recipe for target 'd=
+t_binding_check' failed
+make[1]: *** [dt_binding_check] Error 2
+make[1]: Leaving directory '/home/b29397/work/projects/upstream/usb/outout/=
+imx_v8'
+Makefile:179: recipe for target 'sub-make' failed
+make: *** [sub-make] Error 2
+
+Peter
