@@ -2,102 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C9D1739EA
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 15:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34AEB173CA2
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 17:15:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726987AbgB1Ody (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Feb 2020 09:33:54 -0500
-Received: from out2-smtp.messagingengine.com ([66.111.4.26]:34415 "EHLO
-        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726738AbgB1Ody (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Feb 2020 09:33:54 -0500
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id C6DFE2208A;
-        Fri, 28 Feb 2020 09:33:52 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 28 Feb 2020 09:33:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:content-transfer-encoding:in-reply-to; s=fm3; bh=B
-        IVnEtSa6sK7vH65QEc0yJyDJeovhoLx0ggTKWRA6PQ=; b=fdYXHUvyKKAVaczLn
-        bNng6sZk76UtK6QR349uEA5TVoD5l2cQwDlWpn4zWsNnE9oHmDwIlY+6uFGADC7N
-        lQgoAZdsua+dzU+G45JzTaMe6CZ5VrhWzldSzn4hLE9Q6Cx8CmjYR4dODlqKwQYK
-        2m8M1S6jHw3yH9pNTL9BgO6giF4DLrUryih1Nn6R70pUfkCG9iDCbXURfvmjY9UW
-        qC2xFAVdEOfWSh71VvamlSXIw7VWEDq3zWJbz//j45JtnLmlSZ6ebVQwOT7VisnQ
-        ntooK0xxCNdhUdbpYwYutxYBRxt2fygXVd+Rvdt3fqjzn2DcGhKInYiUx5u4hVd7
-        uCWAQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=BIVnEtSa6sK7vH65QEc0yJyDJeovhoLx0ggTKWRA6
-        PQ=; b=zgbhnS6tH/3Pyf6xKzg6Pb6Y79k1/YYu1gLrMcR/r9e136EqrRk5x7U+7
-        Z9AfvPkgD3VrhzAjEWPw3YS5x3B9Dd1TRJuP8HiIzobdX/flvXVcZxoTNFfkxRQD
-        S8bUfycRkHVxlUlcBrxLuzm0XzjsZffA5nymU0vupMIkyaPCOdCTdeoustog8oSa
-        OSIs5rjDtd8uMtaAf+PEvN32tZdHpJDypdWZ5xIMMxODb9fvMpoLXDgy/Ua5d9Jx
-        R1bhZsCiCasmEWdccwIkO01hgWpY2cgpu9aUYIg8yOvcHbFklMPVm6yoapAIfaiv
-        8+E/IV+1RmG4gN21dts3Lzt3MhwHQ==
-X-ME-Sender: <xms:0CRZXsPr2TXKffAOTUtbYZqpZxKYMJTUL6iLmo7QSUsaqeIxoelpfQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrleekgdeigecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepkeefrdekiedrkeelrddutd
-    ejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhr
-    vghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:0CRZXqa8ya4AoRfVxJCkxFplR1pnS57DtK0akf8myERaxdmYSZWx7w>
-    <xmx:0CRZXlPrudvtJ7vBFsNuqDNxMPNG52zKHqYaeCaLps2tHYLZ05g3Qg>
-    <xmx:0CRZXrXuO5vcpgBvHc8hwsShCEYwVLtW5_EKpewnG74HPAWZKNr2lw>
-    <xmx:0CRZXkkGYnhccBBFxwPFl5MkJ5Ydxe90bbUpZOn7jAnpEmx_PcTAlw>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 6354D328005A;
-        Fri, 28 Feb 2020 09:33:52 -0500 (EST)
-Date:   Fri, 28 Feb 2020 15:33:50 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Igor Filippov <igorf777@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: driver
-Message-ID: <20200228143350.GA3054483@kroah.com>
-References: <20f1edf4-f589-2b04-8353-d02bb87d251a@gmail.com>
+        id S1726758AbgB1QOx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Feb 2020 11:14:53 -0500
+Received: from mail-vk1-f195.google.com ([209.85.221.195]:46074 "EHLO
+        mail-vk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725769AbgB1QOx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Feb 2020 11:14:53 -0500
+Received: by mail-vk1-f195.google.com with SMTP id f17so143347vkk.12
+        for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2020 08:14:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sdfucJr4oGXmK/lbY5RGk72YXwrFDcIl2yf5ZBumLmc=;
+        b=Y19jelF+yAj3D9yhRoea0pkJgxFOHFphhYx6vuwZohk2gP08M+tUPLgTNxVPjM3yLd
+         9tG7853yVeWuZ0dH2FfBEO57PhITSljU8G0GoDefm7OknQYhjKftArSFAi8Y+0gyamUA
+         rNN4hYtWHbpmrbLEc1SF3YbEu6q75JEbBCZ4M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sdfucJr4oGXmK/lbY5RGk72YXwrFDcIl2yf5ZBumLmc=;
+        b=mXKiuCCnmoCxgKIEzfAp97pPxPyY0vazOSGQHhZvEW+4+LUuAZjdGCYLRpvukzHb8j
+         e1iF+PeFCe4F3Bz0koCUA0p2LlJUQO2GcAPHDozKGS85d6PwzOId3ZbTWC82eFWYhT/A
+         LbDvrIvtaECDBKFX+g7/2USUmxeCPb2hqja6SFPgNlDzIjk/7wNbF+Xhqf1q8UM8raup
+         ZLCgD+6MN/V3d8cnSV7+RlnQMnoAA24SHqaMtzK7L+8jvXEV8ylkj982s4By7XTwh+lH
+         cjd1n0TqCperKLWg0LyF4z14+AVunoxk+5HPQhMclkSe/Ly5OiYtTo1HyzS/g3O7G39a
+         QTrg==
+X-Gm-Message-State: ANhLgQ3+4/8xY/wASG9G+kUNDLNhpnTSwvEVqGZTHZFAaY19BgDF7dcW
+        sVe511W9Likp6wq4cjJJ0vBtNboNJTA=
+X-Google-Smtp-Source: ADFU+vtZpqK2URibP1J+sp68MK/D9ra2AIEQhvdhm5k8ZEuWOsmTRAe7EWlXQ9kySA7YZIcLeniEVQ==
+X-Received: by 2002:ac5:c807:: with SMTP id y7mr2903930vkl.92.1582906489549;
+        Fri, 28 Feb 2020 08:14:49 -0800 (PST)
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
+        by smtp.gmail.com with ESMTPSA id k20sm3092200vki.6.2020.02.28.08.14.47
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Feb 2020 08:14:48 -0800 (PST)
+Received: by mail-ua1-f53.google.com with SMTP id c7so1159977uaf.5
+        for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2020 08:14:47 -0800 (PST)
+X-Received: by 2002:ab0:45b6:: with SMTP id u51mr2409303uau.120.1582906487233;
+ Fri, 28 Feb 2020 08:14:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20f1edf4-f589-2b04-8353-d02bb87d251a@gmail.com>
+References: <20200226210414.28133-1-linux@roeck-us.net> <20200226210414.28133-2-linux@roeck-us.net>
+ <CAD=FV=WDd4E-zDW73kb-qHo1QYQrD3BTgVpE70rzowpgeXVy7w@mail.gmail.com>
+ <ce3357a1-467f-1241-ae0d-2e113116ca8d@roeck-us.net> <f94fc372-d81b-e8e4-e7ef-780fe7db1237@roeck-us.net>
+In-Reply-To: <f94fc372-d81b-e8e4-e7ef-780fe7db1237@roeck-us.net>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 28 Feb 2020 08:14:35 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=VNsOo--1x+pkwhWOWSGAQyVB6g6CE+o4q7phPSXaDXRw@mail.gmail.com>
+Message-ID: <CAD=FV=VNsOo--1x+pkwhWOWSGAQyVB6g6CE+o4q7phPSXaDXRw@mail.gmail.com>
+Subject: Re: [RFT PATCH 1/4] usb: dwc2: Simplify and fix DMA alignment code
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QW50dGkgU2VwcMOkbMOk?= <a.seppala@gmail.com>,
+        Boris ARZUR <boris@konbu.org>, linux-usb@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Martin Schiller <ms@dev.tdt.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 28, 2020 at 05:26:30PM +0300, Igor Filippov wrote:
-> Hello!
-> 
-> I use the USB2CAN converter i-7565H1 (from ICP CON) and the driver
-> installation script from the delivery kit (in the attachment).
-> 
-> And the dmesg comand output is:
-> 
-> [  489.495739] usbcore: registered new interface driver usbserial_generic
-> [  489.495747] usbserial: USB Serial support registered for generic
-> [  489.590087] usbserial_generic 3-3:1.0: The "generic" usb-serial driver is
-> only for testing and one-off prototypes.
-> [  489.590088] usbserial_generic 3-3:1.0: Tell linux-usb@vger.kernel.org to
-> add your device to a proper driver.
-> [  489.590090] usbserial_generic 3-3:1.0: device has no bulk endpoints
-> [  489.590106] usbserial_generic 3-3:1.1: The "generic" usb-serial driver is
-> only for testing and one-off prototypes.
-> [  489.590107] usbserial_generic 3-3:1.1: Tell linux-usb@vger.kernel.org to
-> add your device to a proper driver.
-> [  489.590108] usbserial_generic 3-3:1.1: generic converter detected
-> [  489.590208] usb 3-3: generic converter now attached to ttyUSB0
-> 
-> Can you solve this problem? Thank You.
-> 
+Hi,
+
+On Thu, Feb 27, 2020 at 8:28 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 2/27/20 2:27 PM, Guenter Roeck wrote:
+> > On 2/27/20 2:06 PM, Doug Anderson wrote:
+> [ ... ]
+> >>> -       if (urb->num_sgs || urb->sg ||
+> >>> -           urb->transfer_buffer_length == 0 ||
+> >>> +       if (urb->num_sgs || urb->sg || urb->transfer_buffer_length == 0 ||
+> >>> +           (urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP) ||
+> >>>             !((uintptr_t)urb->transfer_buffer & (DWC2_USB_DMA_ALIGN - 1)))
+> >>
+> >> Maybe I'm misunderstanding things, but it feels like we need something
+> >> more here.  Specifically I'm worried about the fact when the transfer
+> >> buffer is already aligned but the length is not a multiple of the
+> >> endpoint's maximum transfer size.  You need to handle that, right?
+> >> AKA something like this (untested):
+> >>
+> >> /* Simple case of not having to allocate a bounce buffer */
+> >> if (urb->num_sgs || urb->sg || urb->transfer_buffer_length == 0 ||
+> >>     (urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP))
+> >>   return 0;
+> >>
+> >> /* Can also avoid bounce buffer if alignment and size are good */
+> >> maxp = usb_endpoint_maxp(&ep->desc);
+> >> if (maxp == urb->transfer_buffer_length &&
+> >
+> > No, transfer_buffer_length would have to be a multiple of maxp. There
+> > are many situations where roundup(transfer_buffer_length, maxp) !=
+> > transfer_buffer_length. I agree, this would be the prudent approach
+> > (and it was my original implementation), but then it didn't seem to
+> > cause trouble so far, and I was hesitant to add it in because it results
+> > in creating temporary buffers for almost every receive operation.
+> > I'd like to get some test feedback from Boris - if the current code
+> > causes crashes with his use case, we'll know that it is needed.
+> > Otherwise, we'll have to decide if the current approach (with fewer
+> > copies) is worth the risk, or if we want to play save and always
+> > copy if roundup(transfer_buffer_length, maxp) != transfer_buffer_length.
+> >
+>
+> Thinking more about this, the situation is actually much worse:
+> In Boris' testing, he found inbound transactions requested by usb
+> storage code with a requested transfer size of 13 bytes ... with
+> URB_NO_TRANSFER_DMA_MAP set. This means the requesting code has
+> provided a DMA ready buffer, transfer_buffer isn't even used,
+> and we can not reallocate it. In this situation we can just hope
+> that the chip (and the connected USB device) don't send more data
+> than requested.
+>
+> With that in mind, I think we should stick with the current
+> scheme (ie only allocate a new buffer if the provided buffer is
+> unaligned) unless Boris comes back and tells us that it doesn't
+> work.
+
+I dunno.  I'd rather see correctness over performance.  Certainly we'd
+only need to do the extra bounce buffer for input buffers at least.
+
+Although I don't love the idea, is this something where we want to
+introduce a config option (either runtime or through KConfig),
+something like:
+
+CONFIG_DWC2_FAST_AND_LOOSE - Avoid bounce buffers and thus run faster
+at the risk of a bad USB device being able to clobber some of your
+memory.  Only do this if you really care about speed and have some
+trust in the USB devices connected to your system.
 
 
-Can you provide the output of 'lsusb -v' from the command line with the
-device plugged in?
-
-thanks,
-
-greg k-h
+-Doug
