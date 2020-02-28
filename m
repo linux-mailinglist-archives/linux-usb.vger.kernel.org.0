@@ -2,298 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DEE6173EA5
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 18:36:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03096173EF4
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Feb 2020 18:59:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726118AbgB1RgQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Feb 2020 12:36:16 -0500
-Received: from mail-qv1-f48.google.com ([209.85.219.48]:36246 "EHLO
-        mail-qv1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725877AbgB1RgQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Feb 2020 12:36:16 -0500
-Received: by mail-qv1-f48.google.com with SMTP id ff2so1721628qvb.3
-        for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2020 09:36:13 -0800 (PST)
+        id S1725827AbgB1R7J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Feb 2020 12:59:09 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:37513 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbgB1R7J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Feb 2020 12:59:09 -0500
+Received: by mail-pj1-f66.google.com with SMTP id m13so1602275pjb.2;
+        Fri, 28 Feb 2020 09:59:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ossystems-com-br.20150623.gappssmtp.com; s=20150623;
-        h=from:mime-version:references:in-reply-to:date:message-id:subject:to
-         :cc;
-        bh=nuESWKUUXRjbZoRtl7WNgFU6uak+VOQSEMvSHcqgaro=;
-        b=1v6WjwovMS8KM8nWeLGZxzzUeIHzKX6CsWI3MX6QPE2j1puJyJ+RAZcBLLoobyUeKf
-         sw+iV1gwM2/3AaMaZEhHd7l4iOnHH9eRrs0gKZELvyWNF6PvBAJQv7D3ZqdcxsMBGY/n
-         85KXzHq11dwZBd1dnxZM6jjQNeva+nsBzg24Yr6eq6ye/5UAOadphy++l2Dz6jDs94wA
-         cuvfw/DzGZz5UUXqv1u4yfghFJv9a+yY9u+0fulZNG47lxgW7fjs2kr+iB/NwE5eVWYw
-         oPxKS+kDOSRcljQY+DYhMtso03vQcaFiJE+FK9SQzPq7IUn6dY3eewU/Q6Jq5wM8eXrf
-         /Dug==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=W479fFfJP8Am9FQwNANH6QZduIgFgYhViV6Kajs5bV4=;
+        b=Rk4abaK2BBlJk7w0X7EVEuEOL9Da3d8ZhPiQJBKVoOa+mXQZHUXEEvkFh6W77A5wh9
+         H7pcn/ozAElnkKy9m6gWdlZPyXORGd348f0fvXUQNqGbpP5ebJwTgQ5sWdyZyXMNPZ/e
+         Q5/XE7cLA72SujkIVBmLJS/MWflRhpOKrtzWnXujkphGVMlyMc6tkGV94gxtfBjk6fDN
+         iXXlrMgR+3wnNF8oSlllG/BEuoXc9pOrc1LeY+jMXv/TBwajeZGu3g0M72WFZguo+v8r
+         g+Mwlodrm+qURSwI77zyKcHy8ReHy9qilNrApYUN9NR6iGZFxceox9RDco1m0kdF1toB
+         RXmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:mime-version:references:in-reply-to:date
-         :message-id:subject:to:cc;
-        bh=nuESWKUUXRjbZoRtl7WNgFU6uak+VOQSEMvSHcqgaro=;
-        b=eKWPmzjnP7gc2AffTSAZgBjrBkPQDr9LNdtg3OfYCjTxECtVNQByYK/DPZVnln/oa2
-         C6/FOLfSJbTxzzSzXtABQF2pY80PkfiHzl0qlHsovc9klTxvwP67HI9we6sv2KzR0x+K
-         dUSFKqpldYme3aAj9pUwBmnuxVuaudt44gCPpaSrQRzATrJC+QG9quJqmKZu9GUpXW7a
-         xPnLYClosN3wvltSW86L0IYmAvQv99L79VSXhHpbg+9xZcY/HLFgaj5T/1NIb/LAq3Gp
-         uclB7eJMYzgQGUCY1OI4oSqD+odFGwRmN8u1MtiAXL4LJh2ulhyv/A+3SAJpIUOnFH4H
-         SzNw==
-X-Gm-Message-State: APjAAAWPXvY+Stt85A1gzFmlq7DxIv+ewFhCQHlak77hMxBNSiqiUAIY
-        LBsLCGOp0P8upxDDvFIjYkUaX7Q8koVOaA==
-X-Google-Smtp-Source: APXvYqw/qrnuWkbEIFfOZVRj6M8slKck6y543BcxtfZlTW8lCh51FIzUXVI8sBGALsp+qIg5aEPReg==
-X-Received: by 2002:a05:6214:974:: with SMTP id do20mr4702544qvb.221.1582911372555;
-        Fri, 28 Feb 2020 09:36:12 -0800 (PST)
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com. [209.85.222.176])
-        by smtp.gmail.com with ESMTPSA id 11sm5621306qkr.101.2020.02.28.09.36.11
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Feb 2020 09:36:11 -0800 (PST)
-From:   Otavio Salvador <otavio.salvador@ossystems.com.br>
-X-Google-Original-From: Otavio Salvador <otavio@ossystems.com.br>
-Received: by mail-qk1-f176.google.com with SMTP id u124so3679022qkh.13
-        for <linux-usb@vger.kernel.org>; Fri, 28 Feb 2020 09:36:11 -0800 (PST)
-X-Received: by 2002:a37:a402:: with SMTP id n2mr5280207qke.71.1582911370834;
- Fri, 28 Feb 2020 09:36:10 -0800 (PST)
-MIME-Version: 1.0
-References: <CAP9ODKprPi8N-dU8NaKwneXH-3b0ipSEDpU5mDbGntxuyhGhJw@mail.gmail.com>
- <41a7bfe7-54b1-84eb-091f-469d971ab968@synopsys.com> <CAP9ODKoUH=Cc=uuhfaUy7fkSVdfBHhX-6oS9_hi3Wd6GgDiZYw@mail.gmail.com>
- <ee47be28-ba9f-750f-65d2-51a722ce291d@synopsys.com> <CAP9ODKqa_4NSsFMUpyFDt3ohgGBCMgbOyKaVjYfSjmcZLmmC+A@mail.gmail.com>
- <380d765b-8867-a899-b67a-c016c09fa27b@synopsys.com> <CAP9ODKqL_GN+iebL3wPX_9fEUtUVP8Ahv03yJ1R-JLDr=Cn0BA@mail.gmail.com>
- <beddbc55-fd22-96b7-c980-e4ea207a42f5@synopsys.com> <CAP9ODKq2nEHz_rbwwCv-94LSBOq0it2Kc4yhCqrLT-XxoXommg@mail.gmail.com>
- <1d2ee918-57e4-53b2-6953-0107d7720c59@synopsys.com> <CAP9ODKoS5KQrhTrUvahHEhQG-WA+bfLnP4tTFxzrQaGh1nTcZw@mail.gmail.com>
- <CAP9ODKoRuB-nyjr1ksGU61PVMjFTMMWKwgpHQ=e7bChAu5Okhg@mail.gmail.com> <665fe49e-ebfa-bcb0-fcd1-ea1e9252b306@synopsys.com>
-In-Reply-To: <665fe49e-ebfa-bcb0-fcd1-ea1e9252b306@synopsys.com>
-Date:   Fri, 28 Feb 2020 14:35:59 -0300
-X-Gmail-Original-Message-ID: <CAP9ODKo=YSNa-uNgzwP2X5yDy_qDzYjLogZLg11rRcSXr+wrFw@mail.gmail.com>
-Message-ID: <CAP9ODKo=YSNa-uNgzwP2X5yDy_qDzYjLogZLg11rRcSXr+wrFw@mail.gmail.com>
-Subject: Re: USB DWC2 stops responding when insert/remove cable multiple times
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Cc:     Otavio Salvador <otavio@ossystems.com.br>,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=W479fFfJP8Am9FQwNANH6QZduIgFgYhViV6Kajs5bV4=;
+        b=MamvILzaEfRLJKai/iAOb5OO2LN3jgAz1LwnDMMAGUxyOHsrckFZGgEe+3iIfg43or
+         QPkZUPgnJWeuIMyF/JeVeu1Jr+TjAbkBf+1f5N2SUusTx96BvtR/2jMlaWsEfZJ0rKin
+         vaIHS1n+MVag4oHIP6QlrsDS7LD//daUZVD+x0EitF18zelvXF4zWttcApJmJ4vm/8cd
+         5Anh8xCOD0SZLpojX62Yg+V8fWlT/OwCZ8+sV8ZBkeswfQanS67gp0RE263RxfcAgNDY
+         Nxs1csGARMJWIpgvMi7lCRN6dVNWBElE+LHwlKhbvIgLYzLP/Zo+PZ/Qn/tiVNJqiDVQ
+         WdRw==
+X-Gm-Message-State: APjAAAWLFRC1CssRkCwU2BoNqukxI6/T3hP+6+UBwEw+arkJdmYWsA2s
+        E05gG9m86MKRRryHMItbVG4=
+X-Google-Smtp-Source: APXvYqyNA2lkChyKOMH60PML1VQHvFQkcLbvStr35TByxg9zQhCEqmhSaIwBoVN64dMR8fKnzqM5Ow==
+X-Received: by 2002:a17:90a:f492:: with SMTP id bx18mr6103523pjb.118.1582912747908;
+        Fri, 28 Feb 2020 09:59:07 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z4sm10991127pfn.42.2020.02.28.09.59.06
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 28 Feb 2020 09:59:06 -0800 (PST)
+Date:   Fri, 28 Feb 2020 09:59:05 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Antti =?iso-8859-1?Q?Sepp=E4l=E4?= <a.seppala@gmail.com>,
+        Boris ARZUR <boris@konbu.org>, linux-usb@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
         Felipe Balbi <balbi@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "linux-rockchip@lists.infradead.org" 
-        <linux-rockchip@lists.infradead.org>,
-        Johan Hovold <johan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Martin Schiller <ms@dev.tdt.de>
+Subject: Re: [RFT PATCH 1/4] usb: dwc2: Simplify and fix DMA alignment code
+Message-ID: <20200228175905.GB3188@roeck-us.net>
+References: <20200226210414.28133-1-linux@roeck-us.net>
+ <20200226210414.28133-2-linux@roeck-us.net>
+ <CAD=FV=WDd4E-zDW73kb-qHo1QYQrD3BTgVpE70rzowpgeXVy7w@mail.gmail.com>
+ <ce3357a1-467f-1241-ae0d-2e113116ca8d@roeck-us.net>
+ <f94fc372-d81b-e8e4-e7ef-780fe7db1237@roeck-us.net>
+ <CAD=FV=VNsOo--1x+pkwhWOWSGAQyVB6g6CE+o4q7phPSXaDXRw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=VNsOo--1x+pkwhWOWSGAQyVB6g6CE+o4q7phPSXaDXRw@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Minas,
-
-On Fri, Feb 28, 2020 at 6:01 AM Minas Harutyunyan
-<Minas.Harutyunyan@synopsys.com> wrote:
-> On 2/21/2020 6:07 PM, Otavio Salvador wrote:
-> > On Fri, Feb 21, 2020 at 11:06 AM Otavio Salvador
-> > <otavio@ossystems.com.br> wrote:
-> >> On Fri, Feb 21, 2020 at 3:52 AM Minas Harutyunyan
-> >> <Minas.Harutyunyan@synopsys.com> wrote:
-> >>> On 2/20/2020 5:16 PM, Otavio Salvador wrote:
-> >>>> Hello Minas,
-> >>>>
-> >>>> Thanks for all your help on this, ...
-> >>>>
-> >>>> On Thu, Feb 20, 2020 at 3:59 AM Minas Harutyunyan
-> >>>> <Minas.Harutyunyan@synopsys.com> wrote:
-> >>>>>
-> >>>>> On 2/19/2020 7:10 PM, Otavio Salvador wrote:
-> >>>> ...
-> >>>>>> What sequence do you want us to do?
-> >>>>>
-> >>> Please provide dwc2 debug log when stop working with g_serial exception
-> >>> dump inside.
-> >>> Also provide dwc2 log when it's work without issue.
-> >>
-> >> Attached.
+On Fri, Feb 28, 2020 at 08:14:35AM -0800, Doug Anderson wrote:
+> Hi,
+> 
+> On Thu, Feb 27, 2020 at 8:28 PM Guenter Roeck <linux@roeck-us.net> wrote:
 > >
-> Reviewed all logs. Not found any dwc2 related issue. Not able to
-> reproduce on my setup. My log on rmmod g_serial:
->
-> [68784.817773] g_serial gadget: reset config
-> [68784.817775] g_serial gadget: acm ttyGS0 deactivated
-> [68784.817779] dwc2 dwc2.1.auto: dwc2_hsotg_ep_disable(ep 000000005e9ae420)
-> [68784.817784] dwc2 dwc2.1.auto: dwc2_hsotg_ep_disable: DxEPCTL=0x08080200
-> [68784.817791] dwc2 dwc2.1.auto: dwc2_hsotg_ep_disable(ep 00000000e6730f2b)
-> [68784.817796] dwc2 dwc2.1.auto: dwc2_hsotg_ep_disable: DxEPCTL=0x08880200
-> [68784.817805] dwc2 dwc2.1.auto: dwc2_hsotg_ep_disable(ep 00000000cef05e9b)
-> [68784.817809] dwc2 dwc2.1.auto: dwc2_hsotg_ep_disable: DxEPCTL=0x084c000a
-> [68784.817820] g_serial gadget: acm ttyGS0 deactivated
-> [68784.817894] usb 5-4: USB disconnect, device number 6
-> [68784.817975] dwc2 dwc2.1.auto: dwc2_hsotg_ep_disable(ep 00000000e6730f2b)
-> [68784.817980] dwc2 dwc2.1.auto: dwc2_hsotg_ep_disable: DxEPCTL=0x088a0200
->
-> Pay attention g_serial twice performing ttySG0 deactivation.
-> In my setup second deactivation passed Ok, but in your case exception
-> back trace print out with NULL pointer de-reference on spin_lock_irq.
-> Could you please add debug print before spin_lock_irq() in function
-> gs_close() in file u_serial.c to check tty, tty->driver_data. Are these
-> vars NULL or no.
-> Just rmmod g_serial case fully enough.
+> > On 2/27/20 2:27 PM, Guenter Roeck wrote:
+> > > On 2/27/20 2:06 PM, Doug Anderson wrote:
+> > [ ... ]
+> > >>> -       if (urb->num_sgs || urb->sg ||
+> > >>> -           urb->transfer_buffer_length == 0 ||
+> > >>> +       if (urb->num_sgs || urb->sg || urb->transfer_buffer_length == 0 ||
+> > >>> +           (urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP) ||
+> > >>>             !((uintptr_t)urb->transfer_buffer & (DWC2_USB_DMA_ALIGN - 1)))
+> > >>
+> > >> Maybe I'm misunderstanding things, but it feels like we need something
+> > >> more here.  Specifically I'm worried about the fact when the transfer
+> > >> buffer is already aligned but the length is not a multiple of the
+> > >> endpoint's maximum transfer size.  You need to handle that, right?
+> > >> AKA something like this (untested):
+> > >>
+> > >> /* Simple case of not having to allocate a bounce buffer */
+> > >> if (urb->num_sgs || urb->sg || urb->transfer_buffer_length == 0 ||
+> > >>     (urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP))
+> > >>   return 0;
+> > >>
+> > >> /* Can also avoid bounce buffer if alignment and size are good */
+> > >> maxp = usb_endpoint_maxp(&ep->desc);
+> > >> if (maxp == urb->transfer_buffer_length &&
+> > >
+> > > No, transfer_buffer_length would have to be a multiple of maxp. There
+> > > are many situations where roundup(transfer_buffer_length, maxp) !=
+> > > transfer_buffer_length. I agree, this would be the prudent approach
+> > > (and it was my original implementation), but then it didn't seem to
+> > > cause trouble so far, and I was hesitant to add it in because it results
+> > > in creating temporary buffers for almost every receive operation.
+> > > I'd like to get some test feedback from Boris - if the current code
+> > > causes crashes with his use case, we'll know that it is needed.
+> > > Otherwise, we'll have to decide if the current approach (with fewer
+> > > copies) is worth the risk, or if we want to play save and always
+> > > copy if roundup(transfer_buffer_length, maxp) != transfer_buffer_length.
+> > >
+> >
+> > Thinking more about this, the situation is actually much worse:
+> > In Boris' testing, he found inbound transactions requested by usb
+> > storage code with a requested transfer size of 13 bytes ... with
+> > URB_NO_TRANSFER_DMA_MAP set. This means the requesting code has
+> > provided a DMA ready buffer, transfer_buffer isn't even used,
+> > and we can not reallocate it. In this situation we can just hope
+> > that the chip (and the connected USB device) don't send more data
+> > than requested.
+> >
+> > With that in mind, I think we should stick with the current
+> > scheme (ie only allocate a new buffer if the provided buffer is
+> > unaligned) unless Boris comes back and tells us that it doesn't
+> > work.
+> 
+> I dunno.  I'd rather see correctness over performance.  Certainly we'd
+> only need to do the extra bounce buffer for input buffers at least.
+> 
+> Although I don't love the idea, is this something where we want to
+> introduce a config option (either runtime or through KConfig),
+> something like:
+> 
+> CONFIG_DWC2_FAST_AND_LOOSE - Avoid bounce buffers and thus run faster
+> at the risk of a bad USB device being able to clobber some of your
+> memory.  Only do this if you really care about speed and have some
+> trust in the USB devices connected to your system.
+> 
 
-[  207.715898] dwc2 30180000.usb: dwc2_hsotg_pullup: is_on: 0 op_state: 3
-[  207.715942] dwc2 30180000.usb: complete: ep b45e8dac ep0, req
-9e5949b0, -108 => 863fc1b9
-[  207.715966] dwc2 30180000.usb: dwc2_hsotg_complete_setup: failed -108
-[  207.715996] dwc2 30180000.usb: complete: ep edfa46d3 ep2out, req
-c659a301, -108 => f0de5013
-[  207.716050] dwc2 30180000.usb: complete: ep edfa46d3 ep2out, req
-f46b68c4, -108 => f0de5013
-[  207.716078] dwc2 30180000.usb: complete: ep edfa46d3 ep2out, req
-24890a46, -108 => f0de5013
-[  207.716100] dwc2 30180000.usb: complete: ep edfa46d3 ep2out, req
-fc4810fd, -108 => f0de5013
-[  207.716119] dwc2 30180000.usb: complete: ep edfa46d3 ep2out, req
-f641bdad, -108 => f0de5013
-[  207.716139] dwc2 30180000.usb: complete: ep edfa46d3 ep2out, req
-92871573, -108 => f0de5013
-[  207.716158] dwc2 30180000.usb: complete: ep edfa46d3 ep2out, req
-fe77b603, -108 => f0de5013
-[  207.716177] dwc2 30180000.usb: complete: ep edfa46d3 ep2out, req
-3e9064d5, -108 => f0de5013
-[  207.716196] dwc2 30180000.usb: complete: ep edfa46d3 ep2out, req
-5aae2e11, -108 => f0de5013
-[  207.716216] dwc2 30180000.usb: complete: ep edfa46d3 ep2out, req
-7c5834db, -108 => f0de5013
-[  207.716236] dwc2 30180000.usb: complete: ep edfa46d3 ep2out, req
-968af244, -108 => f0de5013
-[  207.716257] dwc2 30180000.usb: complete: ep edfa46d3 ep2out, req
-fa68c2eb, -108 => f0de5013
-[  207.716276] dwc2 30180000.usb: complete: ep edfa46d3 ep2out, req
-6cfbcee5, -108 => f0de5013
-[  207.716296] dwc2 30180000.usb: complete: ep edfa46d3 ep2out, req
-eea82a2b, -108 => f0de5013
-[  207.716315] dwc2 30180000.usb: complete: ep edfa46d3 ep2out, req
-56ccd82d, -108 => f0de5013
-[  207.716335] dwc2 30180000.usb: complete: ep edfa46d3 ep2out, req
-a00b7148, -108 => f0de5013
-[  207.716389] dwc2 30180000.usb: dwc2_hsotg_ep_disable(ep edfa46d3)
-[  207.716410] dwc2 30180000.usb: dwc2_hsotg_ep_stop_xfr: stopping
-transfer on ep2out
-[  207.716438] dwc2 30180000.usb: dwc2_hsotg_ep_disable: DxEPCTL=0x08080200
-[  207.716457] dwc2 30180000.usb: dwc2_hsotg_ep_disable(ep 03f40054)
-[  207.716469] dwc2 30180000.usb: dwc2_hsotg_ep_disable: DxEPCTL=0x088a0200
-[  207.716567] dwc2 30180000.usb: dwc2_hsotg_ep_disable(ep 108f89fa)
-[  207.716581] dwc2 30180000.usb: dwc2_hsotg_ep_disable: DxEPCTL=0x098c000a
-[  207.722600] gs_close: before spin_unlock_irq 1: tty->driver_data is baf4a00d
-[  207.722625] gs_close: ttyGS0 (11bbbfea,dc9a1db1) ...
-[  207.722646] gs_close: ttyGS0 (11bbbfea,dc9a1db1) done!
-[  208.040122] dwc2 30180000.usb: dwc2_hsotg_ep_disable(ep 03f40054)
-[  208.040153] dwc2 30180000.usb: dwc2_hsotg_ep_disable: DxEPCTL=0x088a0200
-[  208.040177] dwc2 30180000.usb: dwc2_hsotg_ep_disable(ep edfa46d3)
-[  208.040194] dwc2 30180000.usb: dwc2_hsotg_ep_disable: DxEPCTL=0x080a0200
-[  208.040214] dwc2 30180000.usb: dwc2_hsotg_ep_disable(ep 108f89fa)
-[  208.040227] dwc2 30180000.usb: dwc2_hsotg_ep_disable: DxEPCTL=0x098e000a
-[  208.040243] dwc2 30180000.usb: dwc2_hsotg_ep_disable(ep 12d21028)
-[  208.040255] dwc2 30180000.usb: dwc2_hsotg_ep_disable: DxEPCTL=0x08020400
-[  208.040271] dwc2 30180000.usb: dwc2_hsotg_ep_disable(ep fb6b3e60)
-[  208.040282] dwc2 30180000.usb: dwc2_hsotg_ep_disable: DxEPCTL=0x08020400
-[  208.040298] dwc2 30180000.usb: dwc2_hsotg_ep_disable(ep abea3d06)
-[  208.040310] dwc2 30180000.usb: dwc2_hsotg_ep_disable: DxEPCTL=0x08020400
-[  208.040326] dwc2 30180000.usb: dwc2_hsotg_ep_disable(ep 8074ac21)
-[  208.040338] dwc2 30180000.usb: dwc2_hsotg_ep_disable: DxEPCTL=0x08020400
-[  208.040355] dwc2 30180000.usb: dwc2_hsotg_ep_disable(ep 9449e3ee)
-[  208.040367] dwc2 30180000.usb: dwc2_hsotg_ep_disable: DxEPCTL=0x08020400
-[  208.040383] dwc2 30180000.usb: dwc2_hsotg_ep_disable(ep 3b6cd68c)
-[  208.040395] dwc2 30180000.usb: dwc2_hsotg_ep_disable: DxEPCTL=0x08020400
-[  208.040412] dwc2 30180000.usb: dwc2_hsotg_ep_disable(ep 38c4d9db)
-[  208.040426] dwc2 30180000.usb: dwc2_hsotg_ep_disable: DxEPCTL=0x08020400
-[  208.040443] dwc2 30180000.usb: dwc2_hsotg_ep_disable(ep 67b37434)
-[  208.040457] dwc2 30180000.usb: dwc2_hsotg_ep_disable: DxEPCTL=0x08020400
-[  208.061914] gs_close: before spin_unlock_irq 1: tty->driver_data is baf4a00d
-[  208.061980] 8<--- cut here ---
-[  208.062283] Unable to handle kernel paging request at virtual
-address 00766500
-[  208.062934] pgd = b41c9e7b
-[  208.063189] [00766500] *pgd=00000000
-[  208.063528] Internal error: Oops: 5 [#1] SMP ARM
-[  208.063945] Modules linked in: usb_f_acm u_serial libcomposite
-configfs zram zsmalloc emlog(O) rtc_rk808 clk_rk808 spi_rockchip
-wdtoken(O) [last unloaded: g_serial]
-[  208.065303] CPU: 0 PID: 1203 Comm: sh Tainted: G           O      5.4.21 #1
-[  208.065923] Hardware name: Rockchip (Device Tree)
-[  208.066364] PC is at __cancel_work_timer+0x64/0x200
-[  208.066819] LR is at try_to_grab_pending+0x44/0x1a0
-[  208.067257] pc : [<c0153c70>]    lr : [<c0152a34>]    psr: 20010093
-[  208.067818] sp : c5d91e98  ip : 00000000  fp : c094e8c8
-[  208.068289] r10: 00000000  r9 : c648fb7c  r8 : c5c88f00
-[  208.068760] r7 : 00000000  r6 : 00000000  r5 : c648d204  r4 : c5d90000
-[  208.069343] r3 : 00766500  r2 : 00766565  r1 : c648d204  r0 : 00000000
-[  208.069933] Flags: nzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM
-Segment none
-[  208.070581] Control: 10c5387d  Table: 6591006a  DAC: 00000051
-[  208.071102] Process sh (pid: 1203, stack limit = 0x7c1578a9)
-[  208.071614] Stack: (0xc5d91e98 to 0xc5d92000)
-[  208.072012] 1e80:
-    60010013 c04a2f50
-[  208.072745] 1ea0: c648fa00 00000000 00000000 c5c8c580 c5c88f00
-c0c05c88 00000000 c648fa00
-[  208.073478] 1ec0: c648fa00 00000000 c5c8c580 c049af84 c0c6f3b4
-c049b080 c648fa00 00000000
-[  208.074211] 1ee0: c648fba8 c049be10 00000000 00000000 00000178
-c648fb04 c648fb04 c09883c0
-[  208.074944] 1f00: 8010000a c5c88f00 000e0003 c5907398 c720a850
-c6e68cc0 00000008 c5c88f08
-[  208.075677] 1f20: 00000000 c02b476c 00000000 00000000 c5d95800
-c5d95c54 c0cb15b4 c5d95c3c
-[  208.076411] 1f40: c634aa80 00000000 000000f8 c0157f78 c5d95800
-c640b400 c5d90000 c640b440
-[  208.077146] 1f60: ffffe000 c013bf64 0000080f c01165cc b6f09abc
-c0c05c88 00000000 000000f8
-[  208.077879] 1f80: 00000000 c013d4b8 00000000 00000004 0050201c
-000000f8 c0101204 c013d554
-[  208.078611] 1fa0: 00000000 c0101000 00000000 00000004 00000000
-00000000 00503150 00000000
-[  208.079344] 1fc0: 00000000 00000004 0050201c 000000f8 00000000
-00000000 00501a78 00000000
-[  208.080077] 1fe0: 00501b28 bec798e4 0048e360 b6e695e4 20010010
-00000000 00000000 00000000
-[  208.080831] [<c0153c70>] (__cancel_work_timer) from [<c049af84>]
-(release_tty+0x88/0x104)
-[  208.081585] [<c049af84>] (release_tty) from [<c049b080>]
-(tty_release_struct+0x34/0x40)
-[  208.082315] [<c049b080>] (tty_release_struct) from [<c049be10>]
-(tty_release+0x43c/0x640)
-[  208.083056] [<c049be10>] (tty_release) from [<c02b476c>] (__fput+0x88/0x218)
-[  208.083702] [<c02b476c>] (__fput) from [<c0157f78>] (task_work_run+0xa4/0xc4)
-[  208.084357] [<c0157f78>] (task_work_run) from [<c013bf64>]
-(do_exit+0x430/0xaec)
-[  208.085029] [<c013bf64>] (do_exit) from [<c013d4b8>]
-(do_group_exit+0x3c/0xc8)
-[  208.085684] [<c013d4b8>] (do_group_exit) from [<c013d554>]
-(__wake_up_parent+0x0/0x18)
-[  208.086397] Code: e5953000 e3130004 13c330ff 01a042a3 (15933000)
-[  208.086948] ---[ end trace 9aa9566e42b92f1c ]---
-[  208.087367] Fixing recursive fault but reboot is needed!
+I understand your point. Unfortunately that would only work if the driver
+doesn't set URB_NO_TRANSFER_DMA_MAP.
 
-The diff I applied was:
+$ git grep "=.*URB_NO_TRANSFER_DMA_MAP" | wc
+    115     498   10104
 
-@@ -662,6 +662,9 @@ static void gs_close(struct tty_struct *tty,
-struct file *file)
-    struct gs_port *port = tty->driver_data;
-    struct gserial  *gser;
+isn't exactly reassuring - a quick checks suggests that almost 50%
+of USB drivers set this flag.
 
-+    pr_debug("gs_close: before spin_unlock_irq 1: tty->driver_data is %p\n",
-+             tty->driver_data);
-+
-    spin_lock_irq(&port->port_lock);
+So all we'd really accomplish is to give people a false sense of
+security.
 
-    if (port->port.count != 1) {
-@@ -687,6 +690,10 @@ static void gs_close(struct tty_struct *tty,
-struct file *file)
-        wait_event_interruptible_timeout(port->drain_wait,
-                    gs_close_flush_done(port),
-                    GS_CLOSE_TIMEOUT * HZ);
-+
-+        pr_debug("gs_close: before spin_unlock_irq 2:
-tty->driver_data is %p\n",
-+                 tty->driver_data);
-+
-        spin_lock_irq(&port->port_lock);
+In this context, I did play around with configuring the real receive
+buffer size (ie in my reproducer 1522 instead of 1536). If I do that,
+reading the HCTSIZ register after the transfer reports 0x7fff2
+(or -14 = 1522-1536 if I treat the value as signed) as actual transfer
+size. Maybe that would be an option, if properly handled, but who knows
+what the IP actually does in this case, and what it does on other
+implementations (not rk3288).
 
-        if (port->port.count != 1)
-
-
--- 
-Otavio Salvador                             O.S. Systems
-http://www.ossystems.com.br        http://code.ossystems.com.br
-Mobile: +55 (53) 9 9981-7854          Mobile: +1 (347) 903-9750
+Guenter
