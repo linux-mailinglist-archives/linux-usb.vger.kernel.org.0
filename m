@@ -2,90 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BAFB81752DC
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Mar 2020 05:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AD617538B
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Mar 2020 07:13:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727027AbgCBEuD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 1 Mar 2020 23:50:03 -0500
-Received: from kernel.crashing.org ([76.164.61.194]:40486 "EHLO
-        kernel.crashing.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726805AbgCBEuD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Mar 2020 23:50:03 -0500
-Received: from localhost (gate.crashing.org [63.228.1.57])
-        (authenticated bits=0)
-        by kernel.crashing.org (8.14.7/8.14.7) with ESMTP id 0224n7ms031936
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Sun, 1 Mar 2020 22:49:11 -0600
-Message-ID: <42daa66bedc1b06936bc9cbc6e9b31f6dd8ed3a1.camel@kernel.crashing.org>
-Subject: Re: [PATCH v5 7/7] dt-bindings: usb: add documentation for aspeed
- usb-vhub
-From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
-To:     Tao Ren <rentao.bupt@gmail.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>, linux-aspeed@lists.ozlabs.org,
-        devicetree@vger.kernel.org, Andrew Jeffery <andrew@aj.id.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>, taoren@fb.com,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        linux-arm-kernel@lists.infradead.org
-Date:   Mon, 02 Mar 2020 15:49:07 +1100
-In-Reply-To: <20200228081309.GA4531@taoren-ubuntuvm>
-References: <20200227230507.8682-1-rentao.bupt@gmail.com>
-         <20200227230507.8682-8-rentao.bupt@gmail.com>
-         <3150424b9e9f5856c747a0fbf44647919f49209d.camel@kernel.crashing.org>
-         <20200228010444.GA19910@taoren-ubuntu-R90MNF91>
-         <2676013663fc8c53e02a5fdaafb1b27e18249b80.camel@kernel.crashing.org>
-         <20200228081309.GA4531@taoren-ubuntuvm>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
+        id S1726695AbgCBGN0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Mar 2020 01:13:26 -0500
+Received: from mail.dsns.gov.ua ([194.0.148.101]:47304 "EHLO mail.dsns.gov.ua"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725446AbgCBGNZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 2 Mar 2020 01:13:25 -0500
+X-Greylist: delayed 25093 seconds by postgrey-1.27 at vger.kernel.org; Mon, 02 Mar 2020 01:13:21 EST
+Received: from localhost (localhost [127.0.0.1])
+        by mail.dsns.gov.ua (Postfix) with ESMTP id BBE291FC7B1A;
+        Sun,  1 Mar 2020 22:27:30 +0200 (EET)
+Received: from mail.dsns.gov.ua ([127.0.0.1])
+        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id S75rTB7JEydT; Sun,  1 Mar 2020 22:27:30 +0200 (EET)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.dsns.gov.ua (Postfix) with ESMTP id 5BA411FA620B;
+        Sun,  1 Mar 2020 22:21:45 +0200 (EET)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.dsns.gov.ua 5BA411FA620B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dsns.gov.ua;
+        s=1E60DAC0-2607-11E9-81E6-7A77C2B36653; t=1583094106;
+        bh=njlCkWFc0hcw8eBX6ul4CN7Q0eDgIqGtksJn7ge99kc=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=MNqv7wxPb5ptLZpegGrPa1iHEdOJdTNOKGb2U9Q58t3BFdT49XFh6vgS/zn8rC/5g
+         kv0SFE7rEwzovJv/Mhtz0k+GVvpPt7OCD6QywRS3XLVVTQ78OZWx7bJkET3c0Qby4R
+         GlMOw+XvvGVgeWiXN9SkeMoUw7yQdk4qHeiKR3brBdFqXyTdhi1fcOA0x5ea9y4Mdf
+         uJ+lLv+3ajPY0nYC6Y5zKKiMiGl1+zwhzFU1RmzBc/0/750Vn7x0OrSXsrCa3svrBg
+         LELzoQhKe29LUs7spnxLrcWYu/C9WVYycts6au+voFgGIbvN7QkHkUp9tFmmQWi/eZ
+         UlVPHz07I6+5Q==
+X-Virus-Scanned: amavisd-new at dsns.gov.ua
+Received: from mail.dsns.gov.ua ([127.0.0.1])
+        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 6j_p4uF_JICh; Sun,  1 Mar 2020 22:21:45 +0200 (EET)
+Received: from mail.dsns.gov.ua (localhost [127.0.0.1])
+        by mail.dsns.gov.ua (Postfix) with ESMTP id A04FF1FC5450;
+        Sun,  1 Mar 2020 21:59:28 +0200 (EET)
+Date:   Sun, 1 Mar 2020 21:59:28 +0200 (EET)
+From:   Peter Wong <sport08@dsns.gov.ua>
+Reply-To: petrwong@hotmail.com
+Message-ID: <464635221.3674166.1583092768623.JavaMail.zimbra@dsns.gov.ua>
+Subject: Hello
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [5.154.174.49, 172.68.102.151]
+X-Mailer: Zimbra 8.8.15_GA_3899 (zclient/8.8.15_GA_3899)
+Thread-Index: 3O/8ccrlbZdxQ9U2SgkVgLNKDcW1Og==
+Thread-Topic: Hello
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 2020-02-28 at 00:13 -0800, Tao Ren wrote:
-> On Fri, Feb 28, 2020 at 02:02:28PM +1100, Benjamin Herrenschmidt wrote:
-> > On Thu, 2020-02-27 at 17:05 -0800, Tao Ren wrote:
-> > > > Also long run I think best is going to have a child node per downstream
-> > > > port, so we create a matching linux struct device. This will make it
-> > > > easier to deal with the other device-controller in the ast2600 which is
-> > > > basically one of these without a vhub above it.
-> > > 
-> > > Maybe a dumb question: what would be the proper place to parse the child
-> > > node/properties when they are added? For example, in some usb_gadget_ops
-> > > callback?
-> > 
-> > No. What the vhub would do is when it probes, it creates a platform
-> > device for each "port" child node that's linked to the DT node.
-> > 
-> > The driver for the device then attaches to it via standard DT matching
-> > and checks if it has a vhub parent or not, and based on that, operates
-> > as a vhub child device or a standalone one.
-> > 
-> > (For example, it might have different functions for EP selection since
-> > standalone devices have private EPs rather than a shared pool)
-> > 
-> > They can both be in the same module or they can be separate modules
-> > with cross dependencies.
-> > 
-> > Cheers,
-> > Ben.
-> 
-> I see. It's to describe these downstream devices (such as configurations
-> and according functions) in device tree, which is similar to defining a
-> composite device and linking functions/interfaces via configfs. Thanks for
-> the clarify.
-
-It's also to make it easier long run to support both the standalone
-variant and the vhub variant from the same code base.
-
-Cheers,
-Ben.
 
 
+Can we talk now?
