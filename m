@@ -2,101 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 948D4174A70
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Mar 2020 01:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD80174AE2
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Mar 2020 04:21:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727207AbgCAA1j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 29 Feb 2020 19:27:39 -0500
-Received: from mon1.sibername.com ([162.144.64.251]:40348 "EHLO
-        montreal.sibername.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727175AbgCAA1j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 Feb 2020 19:27:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lockie.ca;
-         s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version
-        :Date:Message-ID:From:References:Cc:Subject:Sender:Reply-To:To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=XIm58KT4MBnKuT0GcA0t2n+AT7SlTf1K9MlVlo+8XFY=; b=mVNYjaFLPreJyV5o/a04nck8uf
-        xATaZ0nsY5i/Mz21F4K6iD/RhQVRZfAtppgg1RQwNSH2Ft7ruduuK1fVOc3KRm5wNuN1oy+IhhFbs
-        aGdXzVZx/ocNyd3Bp3zqfUo9YI6i9Knxv++NH8RXAUnXMeKXeJLTFRp7jBE4uGKLWtk/5BP2LoVFZ
-        39u6RE8CvJnmYseUJwAoK0Gc6gRP1uzHFdpXm0Us3svPT0OZfxpjW5jqi3+jsL4vCCzpasM7SJhdh
-        Vp+/9H7Ma78WMBZqIDuzzRfT6YWH6X7JFrsZqJCTJKvpW1IDv7jstDCfpO7jeothY9gomOJsKpVOB
-        vsYyq28g==;
-Received: from 216-58-17-101.cpe.distributel.net ([216.58.17.101]:33358 helo=[192.168.1.4])
-        by montreal.sibername.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <bjlockie@lockie.ca>)
-        id 1j8CSC-00CMfH-Q3
-        for linux-usb@vger.kernel.org; Sat, 29 Feb 2020 19:27:33 -0500
-Subject: Re: USB2 device?
-Cc:     linux-usb@vger.kernel.org
-References: <Pine.LNX.4.44L0.2002291803310.32621-100000@netrider.rowland.org>
-From:   James <bjlockie@lockie.ca>
-Message-ID: <a8003c66-2a9b-c3ab-e7bb-d6b8a2b84a66@lockie.ca>
-Date:   Sat, 29 Feb 2020 19:27:30 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1727289AbgCADUz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 29 Feb 2020 22:20:55 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:32827 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727242AbgCADUz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 Feb 2020 22:20:55 -0500
+X-UUID: 7b3ded5a30884d9988efa18b6d36d784-20200301
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=gEuqpc3FvuW2EqLSsfehY0NEfaRH3CHq60ZO1Tz8Ll0=;
+        b=STzk469ZSYIlP+pyoY3x8u2RtXO3oALFryqCMlRvwlrneR+vRfK8B8+UM8WWTP31kB8WpTx/lgqqJgNm/GBDiJvFyxzO7d+SYYz/tjoIbUQ0DC8D4WSgLGdsaKJ2LWnUUHf07/O/IyQyVbBodXs7HS+FXVyaRXxYgyHx5Ww7aeI=;
+X-UUID: 7b3ded5a30884d9988efa18b6d36d784-20200301
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 725150250; Sun, 01 Mar 2020 11:20:45 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Sun, 1 Mar 2020 11:22:18 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Sun, 1 Mar 2020 11:20:18 +0800
+Message-ID: <1583032843.12083.24.camel@mtkswgap22>
+Subject: Re: [PATCH v4] usb: gadget: f_fs: try to fix AIO issue under ARM 64
+ bit TAGGED mode
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+CC:     Sasha Levin <sashal@kernel.org>, Shen Jing <jingx.shen@intel.com>,
+        "CC Hwang" <cc.hwang@mediatek.com>,
+        Peter Chen <peter.chen@nxp.com>,
+        "Mediatek WSD Upstream" <wsd_upstream@mediatek.com>,
+        Jerry Zhang <zhangjerry@google.com>, <andreyknvl@google.com>,
+        <linux-usb@vger.kernel.org>, Loda Chou <loda.chou@mediatek.com>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Miles Chen <miles.chen@mediatek.com>, <eugenis@google.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "Vincent Pelletier" <plr.vincent@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Sun, 1 Mar 2020 11:20:43 +0800
+In-Reply-To: <20200228164848.GH4019108@arrakis.emea.arm.com>
+References: <1582627315-21123-1-git-send-email-macpaul.lin@mediatek.com>
+         <1582718512-28923-1-git-send-email-macpaul.lin@mediatek.com>
+         <20200228164848.GH4019108@arrakis.emea.arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-In-Reply-To: <Pine.LNX.4.44L0.2002291803310.32621-100000@netrider.rowland.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-OutGoing-Spam-Status: No, score=0.2
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - montreal.sibername.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lockie.ca
-X-Get-Message-Sender-Via: montreal.sibername.com: authenticated_id: bjlockie@lockie.ca
-X-Authenticated-Sender: montreal.sibername.com: bjlockie@lockie.ca
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-To:     unlisted-recipients:; (no To-header on input)
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+T24gRnJpLCAyMDIwLTAyLTI4IGF0IDE2OjQ4ICswMDAwLCBDYXRhbGluIE1hcmluYXMgd3JvdGU6
+DQo+IE9uIFdlZCwgRmViIDI2LCAyMDIwIGF0IDA4OjAxOjUyUE0gKzA4MDAsIE1hY3BhdWwgTGlu
+IHdyb3RlOg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vZl9m
+cy5jIGIvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL2ZfZnMuYw0KPiA+IGluZGV4IGNlMWQw
+MjMuLjE5MjkzNWYgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9u
+L2ZfZnMuYw0KPiA+ICsrKyBiL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9mX2ZzLmMNCj4g
+PiBAQCAtNzE1LDcgKzcxNSwyMCBAQCBzdGF0aWMgdm9pZCBmZnNfZXBmaWxlX2lvX2NvbXBsZXRl
+KHN0cnVjdCB1c2JfZXAgKl9lcCwgc3RydWN0IHVzYl9yZXF1ZXN0ICpyZXEpDQo+ID4gIA0KPiA+
+ICBzdGF0aWMgc3NpemVfdCBmZnNfY29weV90b19pdGVyKHZvaWQgKmRhdGEsIGludCBkYXRhX2xl
+biwgc3RydWN0IGlvdl9pdGVyICppdGVyKQ0KPiA+ICB7DQo+ID4gLQlzc2l6ZV90IHJldCA9IGNv
+cHlfdG9faXRlcihkYXRhLCBkYXRhX2xlbiwgaXRlcik7DQo+ID4gKwlzc2l6ZV90IHJldDsNCj4g
+PiArDQo+ID4gKyNpZiBkZWZpbmVkKENPTkZJR19BUk02NCkNCj4gPiArCS8qDQo+ID4gKwkgKiBS
+ZXBsYWNlIHRhZ2dlZCBhZGRyZXNzIHBhc3NlZCBieSB1c2VyIHNwYWNlIGFwcGxpY2F0aW9uIGJl
+Zm9yZQ0KPiA+ICsJICogY29weWluZy4NCj4gPiArCSAqLw0KPiA+ICsJaWYgKElTX0VOQUJMRUQo
+Q09ORklHX0FSTTY0X1RBR0dFRF9BRERSX0FCSSkgJiYNCj4gPiArCQkoaXRlci0+dHlwZSA9PSBJ
+VEVSX0lPVkVDKSkgew0KPiA+ICsJCSoodW5zaWduZWQgbG9uZyAqKSZpdGVyLT5pb3YtPmlvdl9i
+YXNlID0NCj4gPiArCQkJKHVuc2lnbmVkIGxvbmcpdW50YWdnZWRfYWRkcihpdGVyLT5pb3YtPmlv
+dl9iYXNlKTsNCj4gPiArCX0NCj4gPiArI2VuZGlmDQo+ID4gKwlyZXQgPSBjb3B5X3RvX2l0ZXIo
+ZGF0YSwgZGF0YV9sZW4sIGl0ZXIpOw0KPiA+ICAJaWYgKGxpa2VseShyZXQgPT0gZGF0YV9sZW4p
+KQ0KPiA+ICAJCXJldHVybiByZXQ7DQo+IA0KPiBJIGhhZCBmb3Jnb3R0ZW4gdGhhdCB3ZSBkaXNj
+dXNzZWQgYSBzaW1pbGFyIGNhc2UgYWxyZWFkeSBhIGZldyBtb250aHMNCj4gYWdvICh0aGFua3Mg
+dG8gRXZnZW5paSBmb3IgcG9pbnRpbmcgb3V0KS4gRG8geW91IGhhdmUgdGhpcyBjb21taXQNCj4g
+YXBwbGllZCB0byB5b3VyIHRyZWU6IGRmMzI1ZTA1YTY4MiAoImFybTY0OiBWYWxpZGF0ZSB0YWdn
+ZWQgYWRkcmVzc2VzIGluDQo+IGFjY2Vzc19vaygpIGNhbGxlZCBmcm9tIGtlcm5lbCB0aHJlYWRz
+Iik/DQo+IA0KDQpZZXMhIFdlIGhhdmUgdGhhdCBwYXRjaC4gSSd2ZSBhbHNvIGdvdCBHb29nbGUn
+cyByZXBseSBhYm91dCByZWZlcmVuY2luZw0KdGhpcyBwYXRjaCBpbiBhbmRyb2lkIGtlcm5lbCB0
+cmVlLg0KaHR0cHM6Ly9hbmRyb2lkLXJldmlldy5nb29nbGVzb3VyY2UuY29tL2Mva2VybmVsL2Nv
+bW1vbi8rLzExODY2MTUNCg0KSG93ZXZlciwgZHVyaW5nIG15IGRlYnVnZ2luZyBwcm9jZXNzLCBJ
+J3ZlIGR1bXBlZCBzcGVjaWZpYyBsZW5ndGggKGUuZy4sDQoyNCBieXRlcyBmb3IgdGhlIGZpcnN0
+IHJlcXVlc3QpIEFJTyByZXF1ZXN0IGJ1ZmZlciBhZGRyZXNzIGJvdGggaW4gYWRiZA0KYW5kIGlu
+IF9fcmFuZ2Vfb2soKS4gVGhlbiBJJ3ZlIGZvdW5kIF9fcmFuZ2Vfb2soKSBzdGlsbCBhbHdheXMg
+cmV0dXJuDQpmYWxzZSBvbiBhZGRyZXNzIGJlZ2luIHdpdGggIjB4M2MiLiBTaW5jZSB1bnRhZ2dl
+ZF9hZGRyKCkgYWxyZWFkeSBjYWxsZWQNCmluIF9fcmFuZ2Vfb2soKSwgdG8gc2V0ICJUSUZfVEFH
+R0VEX0FERFIiIHdpdGggYWRiZCdzIHVzZXIgc3BhY2UgYnVmZmVyDQpzaG91bGQgYmUgdGhlIHBv
+c3NpYmxlIHNvbHV0aW9uLiBIZW5jZSBJJ3ZlIHNlbmQgdGhlIHYzIHBhdGNoLg0KDQpBbnl3YXks
+IEkndmUgZm91bmQgdGhhdCB0byBkaXNhYmxlIFRBR0dFRCBhZGRyZXNzIGluIGFkYmQgaXMgcG9z
+c2libGUgYnkNCnRoaXMgd2F5IGFuZCB3aWxsIHJlcG9ydCB0byBHb29nbGUgYW5kIHNlZSBob3cg
+dGhleSB0aGluay4NCg0KZGlmZiAtLWdpdCBhL2FkYi9kYWVtb24vbWFpbi5jcHAgYi9hZGIvZGFl
+bW9uL21haW4uY3BwDQppbmRleCA5ZTAyZTg5YWIuLmIyZjZmOGUzZiAxMDA2NDQNCi0tLSBhL2Fk
+Yi9kYWVtb24vbWFpbi5jcHANCisrKyBiL2FkYi9kYWVtb24vbWFpbi5jcHANCkBAIC0zMTcsNiAr
+MzE3LDggQEAgaW50IG1haW4oaW50IGFyZ2MsIGNoYXIqKiBhcmd2KSB7DQogICAgIG1hbGxvcHQo
+TV9ERUNBWV9USU1FLCAxKTsNCiAjZW5kaWYNCg0KKyAgICBwcmN0bChQUl9TRVRfVEFHR0VEX0FE
+RFJfQ1RSTCwgflBSX1RBR0dFRF9BRERSX0VOQUJMRSwgMCwgMCwgMCk7DQorDQogICAgIHdoaWxl
+ICh0cnVlKSB7DQogICAgICAgICBzdGF0aWMgc3RydWN0IG9wdGlvbiBvcHRzW10gPSB7DQogICAg
+ICAgICAgICAgICAgIHsicm9vdF9zZWNsYWJlbCIsIHJlcXVpcmVkX2FyZ3VtZW50LCBudWxscHRy
+LCAncyd9LA0KDQpNYW55IHRoYW5rcyENCk1hY3BhdWwgTGluDQo=
 
-
-On 2020-02-29 6:05 p.m., Alan Stern wrote:
-> On Sat, 29 Feb 2020, James wrote:
->
->> I forgot sudo.
->>
->> This looks like the interface is USB 3 but the device internals are USB 2.
->> Does that make sense?
-> No.
-What does "SuperSpeed USB Device Capability:" mean?
->>     SuperSpeed USB Device Capability:
->>       bLength                10
->>       bDescriptorType        16
->>       bDevCapabilityType      3
->>       bmAttributes         0x00
->>       wSpeedsSupported   0x0006
->>         Device can operate at Full Speed (12Mbps)
->>         Device can operate at High Speed (480Mbps)
->> $ sudo lsusb -v -d 0bda:b812
->>
->> Bus 003 Device 002: ID 0bda:b812 Realtek Semiconductor Corp. 802.11ac NIC
->> Device Descriptor:
->>     bLength                18
->>     bDescriptorType         1
->>     bcdUSB               2.10
->>     bDeviceClass            0
->>     bDeviceSubClass         0
->>     bDeviceProtocol         0
->>     bMaxPacketSize0        64
->>     idVendor           0x0bda Realtek Semiconductor Corp.
->>     idProduct          0xb812
->>     bcdDevice            2.10
-> These are exactly the same vendor, product, and serial IDs as the first
-> device.  So you should expect them to be the same.
->
-> Alan Stern
->
-I have another one on order, hopefully it is better.
-It might have the same USB id but I know it seems like a better vendor 
-(Netis).
