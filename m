@@ -2,183 +2,193 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D716C1767B0
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Mar 2020 23:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3F3176869
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2020 00:47:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726758AbgCBWyF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Mar 2020 17:54:05 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:44038 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726744AbgCBWyF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Mar 2020 17:54:05 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 022Ms2v2038288;
-        Mon, 2 Mar 2020 22:54:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=jBXvbosMzLr8cNEtRtdBhjMAdDP77QDG44MQUpfa6gU=;
- b=gDBo6Ni+nkLNe59RHOfg2HXrm2z+ctivp9jNPcEYD27T49h9x4KXeqtgI8rnK1rlH0MS
- MgYCGxe046qYe/8rJ7oDLPknRRTetvziUElVQL5dM+Jp/zF/ShJPU3aQqp7oygiFb8iA
- ZvNzT+6ecCN/FeoZQtryJaa9p7401QbBpyFYOhaOWmjul5h4sLzs6IWfdaZq+Q+PL+d/
- rojsszOpLT36H0kagQyI5bqLtQKZ+2sZHxqLXODt4VCNKXIY81kbHGcjJ9hKq7LeFSpb
- gbIltPuguZaPVFhyV5j7sBgF5sZpBBWgsRqc6LNO/I0gWOivLCxNfbtNKJRoAn7rS9hY mQ== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 2yffcub1ka-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 02 Mar 2020 22:54:02 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 022MqPFC044541;
-        Mon, 2 Mar 2020 22:54:02 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 2yg1p2u6rr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 02 Mar 2020 22:54:02 +0000
-Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 022Ms1sQ009564;
-        Mon, 2 Mar 2020 22:54:01 GMT
-Received: from [192.168.1.140] (/47.220.71.223)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 02 Mar 2020 14:54:00 -0800
-Subject: Re: Spurious EHCI interrupts with 5.2 and later on shutdown / init 6
- reboot .
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org
-References: <Pine.LNX.4.44L0.2003021651590.1555-100000@iolanthe.rowland.org>
-From:   John Donnelly <John.P.Donnelly@Oracle.com>
-Message-ID: <42c1a8c5-aaa6-b875-d173-136509838a32@Oracle.com>
-Date:   Mon, 2 Mar 2020 16:54:00 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726783AbgCBXrt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Mar 2020 18:47:49 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:38308 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726728AbgCBXrt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Mar 2020 18:47:49 -0500
+Received: by mail-ot1-f65.google.com with SMTP id i14so1193729otp.5;
+        Mon, 02 Mar 2020 15:47:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=d/RkNcxyLqUX/+PgUpkEl7v2Jd0JMvdb/wExbaQt108=;
+        b=nomFvKa1NStZwFm9mb7CBUdadrt7KBsNYC3ksZ7JcqRRB9R/4x5fKKh3i/ORttsIiX
+         W+f0LM9VcldQBPn46IikXgpv9/ApP9h5qwkx9KxkjTAIKNTP51GbKQ8rJns6MA4M0Mpz
+         eHUhUBRwP6y7lEiE3moKzE/X/ylUktohbtzsHu6MMM8XSZ+A43FIQOW3oU/37D9h7Nxb
+         Q3+55uaucAQb0C8TpCBs3LM8wa47qESaUtTyA9pD1Ia0mmfBUTUv4lCpZ9AxisS0zNJJ
+         HgSO96T9dyIx+TxFdiyLO30cYAIByFHxqOMTJ/FSfMmpoYcYHSt7UY4Um/beVCRYi69B
+         0kpw==
+X-Gm-Message-State: ANhLgQ3rsjkfJt6JaKZG8PNgcJVmAW4emPtJz99NU7aAsL8QpwvAeLqT
+        BotsVsRfxIlRORSK4/9QLQ==
+X-Google-Smtp-Source: ADFU+vuxpmnJMb8DOFdRXd1/mWLsgWVNrXdVa77SguBZ7LSbwMPbChW5+xbwnEeE1XzjzZTeiYahoQ==
+X-Received: by 2002:a9d:7509:: with SMTP id r9mr1274145otk.270.1583192866512;
+        Mon, 02 Mar 2020 15:47:46 -0800 (PST)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id m23sm3457031otq.37.2020.03.02.15.47.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Mar 2020 15:47:45 -0800 (PST)
+Received: (nullmailer pid 30642 invoked by uid 1000);
+        Mon, 02 Mar 2020 23:47:44 -0000
+Date:   Mon, 2 Mar 2020 17:47:44 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     rentao.bupt@gmail.com
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        taoren@fb.com
+Subject: Re: [PATCH v6 7/7] dt-bindings: usb: add documentation for aspeed
+ usb-vhub
+Message-ID: <20200302234744.GA21778@bogus>
+References: <20200228020757.10513-1-rentao.bupt@gmail.com>
+ <20200228020757.10513-8-rentao.bupt@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <Pine.LNX.4.44L0.2003021651590.1555-100000@iolanthe.rowland.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9548 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
- mlxlogscore=999 mlxscore=0 spamscore=0 adultscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2003020149
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9548 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 bulkscore=0
- adultscore=0 suspectscore=0 spamscore=0 malwarescore=0 impostorscore=0
- priorityscore=1501 mlxlogscore=999 lowpriorityscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2003020149
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200228020757.10513-8-rentao.bupt@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/2/20 3:56 PM, Alan Stern wrote:
-> On Mon, 2 Mar 2020, John Donnelly wrote:
+On Thu, Feb 27, 2020 at 06:07:57PM -0800, rentao.bupt@gmail.com wrote:
+> From: Tao Ren <rentao.bupt@gmail.com>
 > 
->> Hello linux-usb.
->>
->>
->> I am seeing this message every time a server is rebooted, and it started around 5.2 release. It is benign behavior but it does not occur in prior 4.18 Linux kernels.
+> Add device tree binding documentation for the Aspeed USB 2.0 Virtual HUb
+> Controller.
 > 
-> What about 4.19?  4.20?  5.0?  And so on...
+> Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
+> ---
+>  Changes in v6:
+>    - added 2 required properties into example and passed "make
+>      dt_binding_check".
+>  Changes in v5:
+>    - updated maintainer to Ben.
+>    - refined patch description per Joel's suggestion.
+>  No change in v2/v3/v4:
+>    - the patch is added to the patch series since v4.
 > 
-> It still think your best bet for finding out what is happening is to do
-> a bisection.
+>  .../bindings/usb/aspeed,usb-vhub.yaml         | 73 +++++++++++++++++++
+>  1 file changed, 73 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
+> new file mode 100644
+> index 000000000000..b9f33310e9a2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
+> @@ -0,0 +1,73 @@
+> +# SPDX-License-Identifier: GPL-2.0-or-later
 
-   Thank you for the feedback.  This could take awhile !  I will update 
-you on my findings.
+Dual license new bindings please.
 
+(GPL-2.0-only OR BSD-2-Clause)
 
+> +# Copyright (c) 2020 Facebook Inc.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/aspeed,usb-vhub.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: ASPEED USB 2.0 Virtual Hub Controller
+> +
+> +maintainers:
+> +  - Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> +
+> +description: |+
+> +  The ASPEED USB 2.0 Virtual Hub Controller implements 1 set of USB Hub
+> +  register and several sets of Device and Endpoint registers to support
+> +  the Virtual Hub's downstream USB devices.
+> +
+> +  Supported number of devices and endpoints vary depending on hardware
+> +  revisions. AST2400 and AST2500 Virtual Hub supports 5 downstream devices
+> +  and 15 generic endpoints, while AST2600 Virtual Hub supports 7 downstream
+> +  devices and 21 generic endpoints.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - aspeed,ast2400-usb-vhub
+> +      - aspeed,ast2500-usb-vhub
+> +      - aspeed,ast2600-usb-vhub
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: Common configuration registers
 
-> 
->> Kernel 5.6.0-rc1.01.el8uek.rc1.x86_64 on an x86_64
->>
->>
->> [  836.063284] irq 18: nobody cared (try booting with the "irqpoll" option)
->> [  836.143498] CPU: 24 PID: 0 Comm: swapper/24 Kdump: loaded Not tainted
->> 5.3.6.jpd.01.+ #5
->> [  836.239310] Hardware name: Oracle Corporation ORACLE SERVER
->> X5-2/ASM,MOTHERBOARD,1U, BIOS 30140300 09/20/2018
->> [  836.358010] Call Trace:
->> [  836.387248]  <IRQ>
->> [  836.411298]  dump_stack+0x63/0x8a
->> [  836.450951]  __report_bad_irq+0x3c/0xb6
->> [  836.496830]  note_interrupt.cold.10+0xb/0x5d
->> [  836.547916]  handle_irq_event_percpu+0x6f/0x80
->> [  836.601077]  handle_irq_event+0x3b/0x5a
->> [  836.646962]  handle_fasteoi_irq+0x90/0x130
->> [  836.695968]  handle_irq+0x20/0x30
->> [  836.711139] megaraid_sas 0000:23:00.0: megasas_disable_intr_fusion is
->> called outbound_intr_mask:0x40000009
->> [  836.735612]  do_IRQ+0x4e/0xe0
->> [  836.735616]  common_interrupt+0xf/0xf
->> [  836.735619]  </IRQ>
->>
->> [  336.622666] [<0000000010b50533>] usb_hcd_irq
->> [  336.673746] [<0000000010b50533>] usb_hcd_irq
->>
->>
->> Device info :
->>
->>
->> lsusb -t
->> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
->>     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/8p, 480M
->> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
->>     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/6p, 480M
->> [root@ca-dev55 ~]#
->>
->>
->>
->> PCI infö :
->>
->> [root@ca-dev55 kernel]# lspci -s 00:1d.0 -k -vv
->> 00:1d.0 USB controller: Intel Corporation C610/X99 series chipset USB Enhanced Host Controller #1 (rev 05) (prog-if 20 [EHCI])
->> 	Subsystem: Oracle/SUN Device 4852
->> 	Control: I/O- Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr+ Stepping- SERR+ FastB2B- DisINTx-
->> 	Status: Cap+ 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
->> 	Interrupt: pin C routed to IRQ 18
->> 	NUMA node: 0
->> 	Region 0: Memory at c7501000 (32-bit, non-prefetchable) [size=1K]
->> 	Capabilities: [50] Power Management version 2
->> 		Flags: PMEClk- DSI- D1- D2- AuxCurrent=375mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
->> 		Status: D0 NoSoftRst- PME-Enable- DSel=0 DScale=0 PME-
->> 	Capabilities: [58] Debug port: BAR=1 offset=00a0
->> 	Capabilities: [98] PCI Advanced Features
->> 		AFCap: TP+ FLR+
->> 		AFCtrl: FLR-
->> 		AFStatus: TP-
->> 	Kernel modules: ehci_pci
->>
->>
->> # cat  /sys/kernel/irq/18/*
->> ehci_hcd:usb1,ehci_hcd:usb2
->> IR-IO-APIC
->> 18
->> fasteoi
->> 0,0,0,0,0,0,0,0,60,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
->> level
->>
->>
->>
->> There are no USB devices attached to these ports ( like a keyboard or mouse ) so I am not sure why it would be producing spurious interrupts .
->>
->> We have ehci_pci and echo_hcd  components compiled in the kernel ,but the behavior also occurs when those drivers are created as loadable  modules .
->>
->> If I removed the modules using rmmod  prior to Linux shutdown the issue does not occur .
-> 
-> So at least you have a workaround, if nothing else.
-> 
->> Any suggestions ?
-> 
-> Since the messages are benign, you can simply ignore them.
-> 
-> Or you can try to track down the code that causes them to appear, as
-> described above.
-> 
-> Alan Stern
-> 
+If 'Common' means something specific to this block, then keep. 
+Otherwise, you can drop ti.
 
+> +
+> +  clocks:
+> +    maxItems: 1
+> +    description: The Virtual Hub Controller clock gate
 
--- 
-Thank You,
-John
+Drop this.
+
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  aspeed,vhub-downstream-ports:
+> +    description: Number of downstream ports supported by the Virtual Hub
+> +    allOf:
+> +      - $ref: /schemas/types.yaml#/definitions/uint32
+
+Constraints?
+
+'maximum: 5' ?
+
+default?
+
+> +
+> +  aspeed,vhub-generic-endpoints:
+> +    description: Number of generic endpoints supported by the Virtual Hub
+> +    allOf:
+> +      - $ref: /schemas/types.yaml#/definitions/uint32
+
+Constraints?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - interrupts
+> +  - aspeed,vhub-downstream-ports
+> +  - aspeed,vhub-generic-endpoints
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/aspeed-clock.h>
+> +    vhub: usb-vhub@1e6a0000 {
+> +            compatible = "aspeed,ast2500-usb-vhub";
+> +            reg = <0x1e6a0000 0x300>;
+> +            interrupts = <5>;
+> +            clocks = <&syscon ASPEED_CLK_GATE_USBPORT1CLK>;
+> +            aspeed,vhub-downstream-ports = <5>;
+> +            aspeed,vhub-generic-endpoints = <15>;
+> +            pinctrl-names = "default";
+> +            pinctrl-0 = <&pinctrl_usb2ad_default>;
+> +    };
+> -- 
+> 2.17.1
+> 
