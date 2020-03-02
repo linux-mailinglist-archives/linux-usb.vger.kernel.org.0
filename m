@@ -2,118 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE5D175F60
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Mar 2020 17:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A5617613B
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Mar 2020 18:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727084AbgCBQTg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Mar 2020 11:19:36 -0500
-Received: from foss.arm.com ([217.140.110.172]:34872 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726988AbgCBQTg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 2 Mar 2020 11:19:36 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 771D72F;
-        Mon,  2 Mar 2020 08:19:35 -0800 (PST)
-Received: from C02TF0J2HF1T.cambridge.arm.com (C02TF0J2HF1T.cambridge.arm.com [10.1.38.135])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EFD083F534;
-        Mon,  2 Mar 2020 08:19:31 -0800 (PST)
-Date:   Mon, 2 Mar 2020 16:19:29 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Macpaul Lin <macpaul.lin@mediatek.com>
-Cc:     Sasha Levin <sashal@kernel.org>, Shen Jing <jingx.shen@intel.com>,
-        CC Hwang <cc.hwang@mediatek.com>,
-        Peter Chen <peter.chen@nxp.com>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Jerry Zhang <zhangjerry@google.com>, andreyknvl@google.com,
-        linux-usb@vger.kernel.org, Loda Chou <loda.chou@mediatek.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Miles Chen <miles.chen@mediatek.com>, eugenis@google.com,
-        John Stultz <john.stultz@linaro.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Vincent Pelletier <plr.vincent@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4] usb: gadget: f_fs: try to fix AIO issue under ARM 64
- bit TAGGED mode
-Message-ID: <20200302161929.GA48767@C02TF0J2HF1T.cambridge.arm.com>
-References: <1582627315-21123-1-git-send-email-macpaul.lin@mediatek.com>
- <1582718512-28923-1-git-send-email-macpaul.lin@mediatek.com>
- <20200228164848.GH4019108@arrakis.emea.arm.com>
- <1583032843.12083.24.camel@mtkswgap22>
+        id S1727401AbgCBRkj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Mar 2020 12:40:39 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:55015 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727054AbgCBRkj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Mar 2020 12:40:39 -0500
+Received: by mail-wm1-f68.google.com with SMTP id z12so188018wmi.4
+        for <linux-usb@vger.kernel.org>; Mon, 02 Mar 2020 09:40:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=K5oqHdhYQsbfwq1JYk39e1I9fjT9r5f+6YhvHb0bQI8=;
+        b=MCD49OCiX7UTc2zw7TI6NhGlqWX7Y9VHIk0EDfdExeozCcgciVDPFIH0fd/R1lvBv1
+         47evh82+1UHr89jfexA+0pUGgrrkrcWozvZL3nbDc/HB4oXlYJZg4IMGjBw4cQOxf8yH
+         vRtckG3qJipaBRkTbNJsxz9XaG9Hazisn3fEh/2BUikhnxMx3Wyp9YMxm/YfCCvP8a1l
+         H4IRAUwogSyWctz59D0VCd1sI2lu6JdXgwM3TOk1lQ8BPfTgvMmsZhAD1y1XEcrVSYJ8
+         FTkEtknCxWWByrppNDuALB5r+pwuIPmMaHxHgsNGpNRwx/nN4tW5IlNPEN8FZfP26OVv
+         zDnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=K5oqHdhYQsbfwq1JYk39e1I9fjT9r5f+6YhvHb0bQI8=;
+        b=mmMDp2d9mue3qGt2b4D9ESehBEBkft5CD8rBAenfktpjM6EPCfawHAcwLyi8TkypZd
+         cXK8nAoKCL6wbUQTMaMbNGdb3m5ADrKbMSOTh/eC7w8/Hyjhg9sADZdtMloeYyNVt56L
+         YPnaqb1nLqAtFW9HKbSZuposjF3qKJ2sCCeYI7no4t7l4A5Fln2CgQDnx2fQIfFmqijK
+         XfFYRBL0aoVY07HTRkdEroGJoqZnl9DWI4Zgmouw7761n3wleeiMgA0knCJt99mOLVDf
+         ebJ5TjJp+HJtBwDnHX6W7stXYEDFSNO5l47rqS6Vx0iZqR2ou269T9mIkW7EQE8wSIEA
+         QTtg==
+X-Gm-Message-State: ANhLgQ1DQjf/lbWlWT/Wr1oWzbdNigIE3E3QuQwAa/t8LwiSeF9d5425
+        3toJQe0HRrfu7UTn9omMud1Kug==
+X-Google-Smtp-Source: ADFU+vu4eyZf264stx6XXEuonL5I+rb48iCgNQ3uaj7b59BY/gStshUsUmb52p8X8SoOhZlTgoxJpg==
+X-Received: by 2002:a05:600c:2283:: with SMTP id 3mr155939wmf.109.1583170835939;
+        Mon, 02 Mar 2020 09:40:35 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id u20sm150314wmj.14.2020.03.02.09.40.34
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 02 Mar 2020 09:40:34 -0800 (PST)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Kishon Vijay Abraham I <kishon@ti.com>
+Cc:     Hanjie Lin <hanjie.lin@amlogic.com>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, Carlo Caione <carlo@caione.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Yue Wang <yue.wang@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>,
+        Hanjie Lin <hanjie.lin@amlogic.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v9 0/3] arm64: meson: Add support for USB on Amlogic A1
+In-Reply-To: <1581990859-135234-1-git-send-email-hanjie.lin@amlogic.com>
+References: <1581990859-135234-1-git-send-email-hanjie.lin@amlogic.com>
+Date:   Mon, 02 Mar 2020 18:40:34 +0100
+Message-ID: <7hblper6y5.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1583032843.12083.24.camel@mtkswgap22>
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Mar 01, 2020 at 11:20:43AM +0800, Macpaul Lin wrote:
-> On Fri, 2020-02-28 at 16:48 +0000, Catalin Marinas wrote:
-> > On Wed, Feb 26, 2020 at 08:01:52PM +0800, Macpaul Lin wrote:
-> > > diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> > > index ce1d023..192935f 100644
-> > > --- a/drivers/usb/gadget/function/f_fs.c
-> > > +++ b/drivers/usb/gadget/function/f_fs.c
-> > > @@ -715,7 +715,20 @@ static void ffs_epfile_io_complete(struct usb_ep *_ep, struct usb_request *req)
-> > >  
-> > >  static ssize_t ffs_copy_to_iter(void *data, int data_len, struct iov_iter *iter)
-> > >  {
-> > > -	ssize_t ret = copy_to_iter(data, data_len, iter);
-> > > +	ssize_t ret;
-> > > +
-> > > +#if defined(CONFIG_ARM64)
-> > > +	/*
-> > > +	 * Replace tagged address passed by user space application before
-> > > +	 * copying.
-> > > +	 */
-> > > +	if (IS_ENABLED(CONFIG_ARM64_TAGGED_ADDR_ABI) &&
-> > > +		(iter->type == ITER_IOVEC)) {
-> > > +		*(unsigned long *)&iter->iov->iov_base =
-> > > +			(unsigned long)untagged_addr(iter->iov->iov_base);
-> > > +	}
-> > > +#endif
-> > > +	ret = copy_to_iter(data, data_len, iter);
-> > >  	if (likely(ret == data_len))
-> > >  		return ret;
-> > 
-> > I had forgotten that we discussed a similar case already a few months
-> > ago (thanks to Evgenii for pointing out). Do you have this commit
-> > applied to your tree: df325e05a682 ("arm64: Validate tagged addresses in
-> > access_ok() called from kernel threads")?
-> > 
-> 
-> Yes! We have that patch. I've also got Google's reply about referencing
-> this patch in android kernel tree.
-> https://android-review.googlesource.com/c/kernel/common/+/1186615
-> 
-> However, during my debugging process, I've dumped specific length (e.g.,
-> 24 bytes for the first request) AIO request buffer address both in adbd
-> and in __range_ok(). Then I've found __range_ok() still always return
-> false on address begin with "0x3c". Since untagged_addr() already called
-> in __range_ok(), to set "TIF_TAGGED_ADDR" with adbd's user space buffer
-> should be the possible solution. Hence I've send the v3 patch.
+Kishon,
 
-ffs_copy_to_iter() is called from a workqueue (ffs_user_copy_worker()).
-That's still in a kernel thread context but it doesn't have PF_KTHREAD
-set, hence __range_ok() rejects the tagged address. Can you try the diff
-below:
+Hanjie Lin <hanjie.lin@amlogic.com> writes:
 
-diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
-index 32fc8061aa76..2803143cad1f 100644
---- a/arch/arm64/include/asm/uaccess.h
-+++ b/arch/arm64/include/asm/uaccess.h
-@@ -68,7 +68,8 @@ static inline unsigned long __range_ok(const void __user *addr, unsigned long si
- 	 * the user address before checking.
- 	 */
- 	if (IS_ENABLED(CONFIG_ARM64_TAGGED_ADDR_ABI) &&
--	    (current->flags & PF_KTHREAD || test_thread_flag(TIF_TAGGED_ADDR)))
-+	    (current->flags & (PF_KTHREAD | PF_WQ_WORKER) ||
-+	     test_thread_flag(TIF_TAGGED_ADDR)))
- 		addr = untagged_addr(addr);
- 
- 	__chk_user_ptr(addr);
--
+> This patchset adds support for USB on Amlogic A1 SoCs.
+>
+> Because of my mistake I fogot to add PHY maintainer(Kishon) to mail list in
+> before versions, so I have to send this v8(and lateres) version again(only with dwc3
+> bindings and driver patch removed).
+>
+> This patchset is composed with :
+> - bindings of the PHY
+> - bindings of the USB Control Glue(already accepted in v7)
+> - PHY Driver
+> - USB Control Glue driver(already accepted in v7)
+> - dts of the PHY and USB Controller
+>
+> The Amlogic A1 USB Complex is composed of :
+> - 1 DWC3 USB controller for USB2 Host functionality
+> - 1 USB2 PHY for USB2 Host functionality
+>
+> The USB Control Glue setups the clocks and the reset about DWC3 USB
+> controller, and binds to the USB2 PHY. It also configures the 8bit
+> UTMI interfaces for the USB2 PHY, including setting USB2 phy mode.
+>
+> The USB2 PHY driver initializes the phy analog settings, phy PLL 
+> setup and phy tuning.
+>
+> This patchset is based on A1 clock/power domain/reset series at [0].
+
+Gentle reminder ping.
+
+Once you pick up the bindings and driver (patches 1-2) I'll pick up the
+DT patch.
+
+Kevin
