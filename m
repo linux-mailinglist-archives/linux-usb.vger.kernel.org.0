@@ -2,112 +2,224 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C496174FDA
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Mar 2020 22:21:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44EC51751FA
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Mar 2020 03:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726891AbgCAVUt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 1 Mar 2020 16:20:49 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:52371 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726875AbgCAVUs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Mar 2020 16:20:48 -0500
-Received: by mail-pj1-f65.google.com with SMTP id lt1so802659pjb.2;
-        Sun, 01 Mar 2020 13:20:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=D6dnU3YCYSZUcdITT9tRm2FU4sfYo2G5AyV3xv+G08o=;
-        b=MgqWfHeI0HYwF89+XYqy06+aARmL6UTcW9w64ZmEKNGLgJWHqfPaY2/BjjcxpeSmOg
-         drJB2EsgzlbcfszvaC/s77CI5iWgYl4eAZAritTid4/RvPI6EPf57V0I+CC+nGjPaNlH
-         fjW3FRuhURZIEjsLXEZOB53t6MYxEkm6vXJYu7cLfmL+Q1XDifYbhVJEXArvmb4R1yWw
-         dhQYZ6Al24wX7bxpEz+/YdGgfiRmHkr2xfonMXtUOLJx6yHmkeWr7rslE8ov7T+VxT0K
-         R7t8BvLQ/qpdW+w55dkMKSPgxnbZPxHnS8zerjNIFgrYCjSAxQPWkeVG12L8maX2gzJH
-         cz6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=D6dnU3YCYSZUcdITT9tRm2FU4sfYo2G5AyV3xv+G08o=;
-        b=CX/LZeo9xszEH227P/bgiJRMEYxM0R1ZILgbYcsecsk6dAbRc5tQl/72f5lpyaFM6L
-         vzknCtYqaWCjLEjxFDR7P4h7+o/hzTsG0zJx+9yJPPKNy50TvL3n/YyZnAUGQJqL6BI3
-         A37NWrGc7s3RYHb6P3VzZBmfio55d+Wufd8fqcFiKtRj0YTd0ieXWpdCjEqM/YSnXoVM
-         kqgglV5nOJSddwUuL0qSB+JsVN9gFZjFoI4wsGgCFSdRyqkzlf4wuJOtP0HDQcle9KfL
-         3qB5kHS5Z+BrJz+EcPHGynrUKXbM3Gai9JNElZxjGrc6wdgwxqvu01BXHL7uKAqEy9JR
-         ONJg==
-X-Gm-Message-State: APjAAAX1tCgyQQk1gK/9zwLwrg3keiKkQgNXqIgaAS8mB7Eo7MTKBdcN
-        4x65KfAlNCfNiezX1rBsyMe+1RZI
-X-Google-Smtp-Source: APXvYqz5y/2XYySv8A042ORhLqlk6CxHi1FMncc8+lWZy0TS48OgPtnqt5PE2f7/b+21BO2umkDcZw==
-X-Received: by 2002:a17:90a:928c:: with SMTP id n12mr18093932pjo.45.1583097645413;
-        Sun, 01 Mar 2020 13:20:45 -0800 (PST)
-Received: from localhost.localdomain ([103.51.74.208])
-        by smtp.gmail.com with ESMTPSA id u19sm4547686pgf.11.2020.03.01.13.20.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Mar 2020 13:20:44 -0800 (PST)
-From:   Anand Moon <linux.amoon@gmail.com>
-To:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCHv2 3/3] usb: dwc3: exynos: Add support for Exynos5422 suspend clk
-Date:   Sun,  1 Mar 2020 21:20:18 +0000
-Message-Id: <20200301212019.2248-4-linux.amoon@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200301212019.2248-1-linux.amoon@gmail.com>
-References: <20200301212019.2248-1-linux.amoon@gmail.com>
+        id S1726775AbgCBC6v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 1 Mar 2020 21:58:51 -0500
+Received: from mail-eopbgr60073.outbound.protection.outlook.com ([40.107.6.73]:9536
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726688AbgCBC6v (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 1 Mar 2020 21:58:51 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U8LvCwW6aD3EMF6lNIY4DX94ojW1Gzi0FoxG75NMeHuDTB788W8Rcr0JtVfQlED0Bxqo7SQFaq5ZMUNVzfGLRrnnWiPEpJWhpvNd+seei3HGPkIUThQQPsfG2nNL39AHvCVnWbVIss/Dt1sD7p1QKBXaoAsssNLg2eS+DvqbbWvpR43oNHSXj1S1NUszPzIAcFRHcWb3CAGpK2er7SqFufi9NJrsVJOmbDBMHoATsdvSfxeLAWCA85PTWeZlaNxXJm09P/Zvf0xcgmJT/8aXKJuTA12TOZ4/ISF+UqdtVLikx0SBAncm3BwFdoZr53Bk1pKiCtdGDPBfMOGht2qwtw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/Z0lPYxvMToG9KRfqH7EuMmv7Q2X7gRgzTUcU7bHgD8=;
+ b=aKelyea+S55tszNIMvh8D6MwiTAxotSsUSadAcGfcm0mnmUNg1m90krl37j5cQEkdFPuoyOzbN6rtxFIoIGZyC5giZYNc2CZnlIWj+f5gktKPiUQCdl1U4xCCY2qDRV6RRqGOrs2DxlqX3zQXYqvjyZEV97tEuMPzOrH9FyXhO4cPJNP+mlkzvTdZ3p/Mk2S9wH0dCAszDZfi6EUzNuGWvuLeq/2i8+qqizZ0scgsv7jgdfQGeQF/t7SmXYwxNvhSXCyuX7tq/KFb41SHGm0xrztuLyIgtupbrOjXASb4clLFGVrC2c1EquJKps7swyGK64rkHlWdu3iwmK7qA4pYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/Z0lPYxvMToG9KRfqH7EuMmv7Q2X7gRgzTUcU7bHgD8=;
+ b=etVZBWsobUXiEe332pQa7uE3MExGx3xaake8BMdEZEvZ3VOT9CQ7/hXyzyq/9vpIXQ4l6jYDr2f5v4ilrtEjxzpygK3fBooJAX2FHXkv3V6PCMb/7ZD0q2dMabl44pd5LepsQ41cD33xN8MEJkGTlJkaCapsCdnJr4PWk5RyrLQ=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
+ VI1PR04MB4480.eurprd04.prod.outlook.com (20.177.53.80) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2772.18; Mon, 2 Mar 2020 02:58:47 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::9547:9dfa:76b8:71b1]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::9547:9dfa:76b8:71b1%7]) with mapi id 15.20.2772.019; Mon, 2 Mar 2020
+ 02:58:47 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "kishon@ti.com" <kishon@ti.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "aniljoy@cadence.com" <aniljoy@cadence.com>,
+        Jun Li <jun.li@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH 2/2] doc: dt-binding: cdns-salvo-phy: add binding doc
+Thread-Topic: [PATCH 2/2] doc: dt-binding: cdns-salvo-phy: add binding doc
+Thread-Index: AQHV7TcYWgsnimYnvUK07Zx3ZoCe3agvRosAgAER7SCAAEV4AIAEBKCA
+Date:   Mon, 2 Mar 2020 02:58:46 +0000
+Message-ID: <20200302025849.GB3834@b29397-desktop>
+References: <20200227062754.19131-1-peter.chen@nxp.com>
+ <20200227062754.19131-2-peter.chen@nxp.com> <20200227170810.GA2318@bogus>
+ <VI1PR04MB5327992CC6BA891C199D39A08BE80@VI1PR04MB5327.eurprd04.prod.outlook.com>
+ <CAL_JsqLQ+5iR_rTaS7D2cvS_psT0XKh=FLH0EmLo2EsE4cuXSA@mail.gmail.com>
+In-Reply-To: <CAL_JsqLQ+5iR_rTaS7D2cvS_psT0XKh=FLH0EmLo2EsE4cuXSA@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 49edfbab-54f0-4a31-8867-08d7be55a080
+x-ms-traffictypediagnostic: VI1PR04MB4480:|VI1PR04MB4480:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB44809BA235558EAA6F8834E28BE70@VI1PR04MB4480.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-forefront-prvs: 033054F29A
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(136003)(376002)(396003)(346002)(366004)(39860400002)(199004)(189003)(66556008)(66476007)(66446008)(64756008)(53546011)(6506007)(6916009)(2906002)(33656002)(478600001)(71200400001)(33716001)(66946007)(54906003)(8936002)(6512007)(9686003)(966005)(44832011)(4326008)(81156014)(81166006)(8676002)(91956017)(76116006)(316002)(26005)(1076003)(86362001)(6486002)(5660300002)(186003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4480;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: E6omLGwZV42Efq/p61w/DwAru5N0605LzVFCkoD2IxplQnFTllBZCBAa+Ylpo3lm8LrQAVHQFQY9PFTsb8NCldqDWJlsQbdYFaVv/cfR86WSxdF0onxXgxitRAzZsVDrSGj9staM5/o7cSiKCUwpxvQl7IqvZOSQcWu6Qf2YNVffiembD9wnQD2n/dB/A2RB7tX0195bzh+2nF4A6LcLigtosCqZu/Laqh/oUQHUgMCX1Esc4sgYfopn1TseER9yyZiVe9iHenAAco3zwkW3NcfKGv/w1NVW1RCpEBS0i19niv0fHe/UPuT3oXA3JK+H2ZFAEheMVIq1OKf6o+SqTbkFzEMZJtngiPyC2yWwTQdwY60uUR50XbyvN/c4OY/Z4qnaTitP3OsxR6HVJISx3+MVyv5HkgN/Z3Z++PzJDMhlargy6yWbaE03pYRgZwl8XErU6Ti7BH9Fu2FgdSE6qYBgDO0NHNafQ9viC51YGE4LTdwSHdViLtnjDImjf3HROBJyeR7ti+jz3QY9CyqaRw==
+x-ms-exchange-antispam-messagedata: GIhyPVF/TrvhWUcdLQn/NjPg+fz32CfEjO8JbdGRMsTo9DNqvY0uK/kEhekFj7TuZSgiQfDF1M9H0FvlYSBwbbeVvX4k38SG3T5hWncSdvOIYNr56gTIqiXTvDgjFa3lSqy5fmMxJAzonES8FAuP2g==
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <B1904CFF5FDA754E9553B63587CB1352@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49edfbab-54f0-4a31-8867-08d7be55a080
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Mar 2020 02:58:46.9210
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 02Rh9RUQBJdE+u3uluwG9WE66dTZ0BcKxgQtXm0/HN2cmg7cd+kjtlpuUDwIQ4eKrElIAyii78djebTUYs7yGQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4480
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Exynos5422 DWC3 module support two clk USBD300 and SCLK_USBD300
-so add missing code to enable/disable code and suspend clk, for this
-add a new compatible samsung,exynos5420-dwusb3 to help configure
-dwc3 code and dwc3 suspend clock. Suspend clock controls the PHY power
-change from P0 to P1/P2/P3 during U0 to U1/U2/U3 transition.
+On 20-02-28 07:37:14, Rob Herring wrote:
+> On Fri, Feb 28, 2020 at 3:29 AM Peter Chen <peter.chen@nxp.com> wrote:
+> >
+> >
+> > > >  .../bindings/phy/cdns,salvo-phy.yaml          | 47 +++++++++++++++=
+++++
+> > > >  1 file changed, 47 insertions(+)
+> > > >  create mode 100644
+> > > > Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
+> > > >
+> > >
+> > > My bot found errors running 'make dt_binding_check' on your patch:
+> > >
+> > > warning: no schema found in file:
+> > > Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
+> > > /builds/robherring/linux-dt-
+> > > review/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml: ign=
+oring, error
+> > > parsing file
+> > > Documentation/devicetree/bindings/display/simple-framebuffer.example.=
+dts:21.16-
+> > > 37.11: Warning (chosen_node_is_root): /example-0/chosen: chosen node =
+must be
+> > > at root node
+> > > Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml:  while sca=
+nning a
+> > > block scalar
+> > >   in "<unicode string>", line 39, column 5 found a tab character wher=
+e an indentation
+> > > space is expected
+> > >   in "<unicode string>", line 41, column 1
+> > > Documentation/devicetree/bindings/Makefile:12: recipe for target
+> > > 'Documentation/devicetree/bindings/phy/cdns,salvo-phy.example.dts' fa=
+iled
+> > > make[1]: *** [Documentation/devicetree/bindings/phy/cdns,salvo-phy.ex=
+ample.dts]
+> > > Error 1
+> > > Makefile:1263: recipe for target 'dt_binding_check' failed
+> > > make: *** [dt_binding_check] Error 2
+> > >
+> > Hi Rob,
+> >
+> > After changing some format, I still got below errors, would you please =
+point to
+> > what's wrong with line 40, column 12? Thanks.
+>=20
+> It is line numbers of the generated .example.dts you need to look at.
 
-Signed-off-by: Anand Moon <linux.amoon@gmail.com>
----
-Append the Power Managment State control by the suspend clk for USB3.0
----
- drivers/usb/dwc3/dwc3-exynos.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+There is no cdns,salvo-phy.example.dts file at both source folder or
+obj (-O) folder. I use https://github.com/robherring/dt-schema to
+create dt-doc-validate. The command I use to verify yaml file:
+make O=3D$OUTKNL dt_binding_check, OUTKNL is my kernel obj folder.
 
-diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-exynos.c
-index 90bb022737da..48b68b6f0dc8 100644
---- a/drivers/usb/dwc3/dwc3-exynos.c
-+++ b/drivers/usb/dwc3/dwc3-exynos.c
-@@ -162,6 +162,12 @@ static const struct dwc3_exynos_driverdata exynos5250_drvdata = {
- 	.suspend_clk_idx = -1,
- };
- 
-+static const struct dwc3_exynos_driverdata exynos5420_drvdata = {
-+	.clk_names = { "usbdrd30", "usbdrd30_susp_clk"},
-+	.num_clks = 2,
-+	.suspend_clk_idx = 1,
-+};
-+
- static const struct dwc3_exynos_driverdata exynos5433_drvdata = {
- 	.clk_names = { "aclk", "susp_clk", "pipe_pclk", "phyclk" },
- 	.num_clks = 4,
-@@ -178,6 +184,9 @@ static const struct of_device_id exynos_dwc3_match[] = {
- 	{
- 		.compatible = "samsung,exynos5250-dwusb3",
- 		.data = &exynos5250_drvdata,
-+	}, {
-+		.compatible = "samsung,exynos5420-dwusb3",
-+		.data = &exynos5420_drvdata,
- 	}, {
- 		.compatible = "samsung,exynos5433-dwusb3",
- 		.data = &exynos5433_drvdata,
--- 
-2.25.1
+I am sorry I get below error:
 
+make[1]: Entering directory '/home/b29397/work/projects/upstream/usb/outout=
+/imx_v8'
+  CHKDT   Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
+/home/b29397/work/projects/upstream/usb/Documentation/devicetree/bindings/p=
+hy/cdns,salvo-phy.yaml:  while parsing a block mapping
+  in "<unicode string>", line 5, column 1
+did not find expected key
+  in "<unicode string>", line 42, column 5
+/home/b29397/work/projects/upstream/usb/Documentation/devicetree/bindings/M=
+akefile:12: recipe for target 'Documentation/devicetree/bindings/phy/cdns,s=
+alvo-phy.example.dts' failed
+make[2]: *** [Documentation/devicetree/bindings/phy/cdns,salvo-phy.example.=
+dts] Error 1
+/home/b29397/work/projects/upstream/usb/Makefile:1262: recipe for target 'd=
+t_binding_check' failed
+make[1]: *** [dt_binding_check] Error 2
+make[1]: Leaving directory '/home/b29397/work/projects/upstream/usb/outout/=
+imx_v8'
+Makefile:179: recipe for target 'sub-make' failed
+make: *** [sub-make] Error 2
+
+  1 # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+  2 # Copyright (c) 2020 NXP
+  3 %YAML 1.2
+  4 ---
+  5 $id: "http://devicetree.org/schemas/phy/cdns,salvo-phy.yaml#"
+  6 $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+  7=20
+  8 title: Cadence SALVO PHY
+  9=20
+ 10 maintainers:
+ 11   - Peter Chen <peter.chen@nxp.com>
+ 12=20
+ 13 properties:
+ 14   compatible:
+ 15     enum:
+ 16       - nxp,salvo-phy
+ 17=20
+ 18   reg:
+ 19     maxItems: 1
+ 20=20
+ 21   clocks:
+ 22     maxItems: 1
+ 23=20
+ 24   clock-names:
+ 25     items:
+ 26       - const: salvo_phy_clk
+ 27=20
+ 28   "#phy-cells":
+ 29     const: 1
+ 30=20
+ 31 required:
+ 32   - compatible
+ 33   - reg
+ 34   - "#phy-cells"
+ 35=20
+ 36 additionalProperties: false
+ 37=20
+ 38 examples:
+ 39     -|
+ 40     #include <dt-bindings/firmware/imx/rsrc.h>
+ 41=20
+ 42     usb3phy: usb3-phy@5B160000 {
+ 43         compatible =3D "nxp,salvo-phy";
+ 44         reg =3D <0x5B160000 0x40000>;
+ 45         clocks =3D <&usb3_lpcg 4>;
+ 46         clock-names =3D "salvo_phy_clk";
+ 47         power-domains =3D <&pd IMX_SC_R_USB_2_PHY>;
+ 48         #phy-cells =3D <0>;
+ 49     };
+
+
+--=20
+
+Thanks,
+Peter Chen=
