@@ -2,60 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3731753E0
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Mar 2020 07:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D631754B9
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Mar 2020 08:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726890AbgCBGk3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Mar 2020 01:40:29 -0500
-Received: from mail.dsns.gov.ua ([194.0.148.101]:33306 "EHLO mail.dsns.gov.ua"
+        id S1726926AbgCBHnI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Mar 2020 02:43:08 -0500
+Received: from mga06.intel.com ([134.134.136.31]:42953 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726204AbgCBGk2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 2 Mar 2020 01:40:28 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.dsns.gov.ua (Postfix) with ESMTP id A8C511FC7E1F;
-        Sun,  1 Mar 2020 22:36:01 +0200 (EET)
-Received: from mail.dsns.gov.ua ([127.0.0.1])
-        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id JsHPPEjz2xg0; Sun,  1 Mar 2020 22:36:01 +0200 (EET)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.dsns.gov.ua (Postfix) with ESMTP id CD10F1FA362A;
-        Sun,  1 Mar 2020 22:05:46 +0200 (EET)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.dsns.gov.ua CD10F1FA362A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dsns.gov.ua;
-        s=1E60DAC0-2607-11E9-81E6-7A77C2B36653; t=1583093147;
-        bh=njlCkWFc0hcw8eBX6ul4CN7Q0eDgIqGtksJn7ge99kc=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=hms9C6GPLlRlQNCYtQ2toMs3ClMiPzgkk/mR4WQxcYU6tpVKdY3Cw7EaB57TqROvw
-         8SIc4n9OiA40i7EkONZT8k1HjH49riZnDMqDjXA7dxLJ4Bo/IUY7CHP0+UbaivDTqe
-         ccD71usHFlOBfwsHssDZ2mIShswGr7Ervvvr2OnvhBN8CTjKGPz4MnyGDA3WS8vQA6
-         +8xNfcp9T7uiXsHicG+8sxahcsXnx9c1cHpHbEWReL/P4sce+9DJ93gTeecW5kpmZM
-         IvGPV1YmVNwjkxushITIqo0qsYdmr8djfBV/b+doYzRxEeJq4Ie3cxmxzJYi4i1FZy
-         ZNF4u2o3b4huw==
-X-Virus-Scanned: amavisd-new at dsns.gov.ua
-Received: from mail.dsns.gov.ua ([127.0.0.1])
-        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id BJbF3S7QcyPh; Sun,  1 Mar 2020 22:05:46 +0200 (EET)
-Received: from mail.dsns.gov.ua (localhost [127.0.0.1])
-        by mail.dsns.gov.ua (Postfix) with ESMTP id B0F9B1FC4E95;
-        Sun,  1 Mar 2020 21:59:48 +0200 (EET)
-Date:   Sun, 1 Mar 2020 21:59:48 +0200 (EET)
-From:   Peter Wong <sport08@dsns.gov.ua>
-Reply-To: petrwong@hotmail.com
-Message-ID: <1314446558.3674585.1583092788690.JavaMail.zimbra@dsns.gov.ua>
-Subject: Hello
+        id S1725446AbgCBHnI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 2 Mar 2020 02:43:08 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Mar 2020 23:43:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,506,1574150400"; 
+   d="scan'208";a="351483847"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 01 Mar 2020 23:43:03 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 02 Mar 2020 09:43:03 +0200
+Date:   Mon, 2 Mar 2020 09:43:03 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benson Leung <bleung@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Bin Liu <b-liu@ti.com>
+Subject: Re: [PATCH v2 5/9] usb: roles: Provide the switch drivers handle to
+ the switch in the API
+Message-ID: <20200302074303.GB27904@kuha.fi.intel.com>
+References: <20200224121406.2419-1-heikki.krogerus@linux.intel.com>
+ <20200224121406.2419-6-heikki.krogerus@linux.intel.com>
+ <20200224131442.GA5365@b29397-desktop>
+ <20200302062302.GE3834@b29397-desktop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [5.154.174.49, 172.68.102.151]
-X-Mailer: Zimbra 8.8.15_GA_3899 (zclient/8.8.15_GA_3899)
-Thread-Index: QDiGNMxb89tOxY1vOzGfXokne4cQUg==
-Thread-Topic: Hello
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200302062302.GE3834@b29397-desktop>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Mon, Mar 02, 2020 at 06:22:59AM +0000, Peter Chen wrote:
+> On 20-02-24 13:14:40, Peter Chen wrote:
+> > >   */
+> > > -static int cdns3_role_set(struct device *dev, enum usb_role role)
+> > > +static int cdns3_role_set(struct usb_role_switch *sw, enum usb_role role)
+> > >  {
+> > > -	struct cdns3 *cdns = dev_get_drvdata(dev);
+> > > +	struct cdns3 *cdns = usb_role_switch_get_drvdata(sw);
+> > >  	int ret = 0;
+> > >  
+> > >  	pm_runtime_get_sync(cdns->dev);
+> > > @@ -423,12 +423,6 @@ static int cdns3_role_set(struct device *dev, enum usb_role role)
+> > >  	return ret;
+> > >  }
+> > >  
+> > > -static const struct usb_role_switch_desc cdns3_switch_desc = {
+> > > -	.set = cdns3_role_set,
+> > > -	.get = cdns3_role_get,
+> > > -	.allow_userspace_control = true,
+> > > -};
+> > > -
+> > >  /**
+> > >   * cdns3_probe - probe for cdns3 core device
+> > >   * @pdev: Pointer to cdns3 core platform device
+> > > @@ -437,6 +431,7 @@ static const struct usb_role_switch_desc cdns3_switch_desc = {
+> > >   */
+> > >  static int cdns3_probe(struct platform_device *pdev)
+> > >  {
+> > > +	struct usb_role_switch_desc sw_desc = { };
+> > >  	struct device *dev = &pdev->dev;
+> > >  	struct resource	*res;
+> > >  	struct cdns3 *cdns;
+> > > @@ -529,7 +524,12 @@ static int cdns3_probe(struct platform_device *pdev)
+> > >  	if (ret)
+> > >  		goto err3;
+> > >  
+> > > -	cdns->role_sw = usb_role_switch_register(dev, &cdns3_switch_desc);
+> > > +	sw_desc.set = cdns3_role_set,
+> > > +	sw_desc.get = cdns3_role_get,
+> > > +	sw_desc.allow_userspace_control = true,
+> 
+> Heikki, when I try to apply above, and compile, I find above issue,
+> the end of code should be ";", but not ",".
 
+OK. I'll fix that. I could have sworn that I tested that, but clearly
+I have not done it.
 
-Can we talk now?
+> > > +	sw_desc.driver_data = cdns;
+> > > +
+> > > +	cdns->role_sw = usb_role_switch_register(dev, &sw_desc);
+> > >  	if (IS_ERR(cdns->role_sw)) {
+> > >  		ret = PTR_ERR(cdns->role_sw);
+> > >  		dev_warn(dev, "Unable to register Role Switch\n");
+> > > diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+> > > index 52139c2a9924..ae0bdc036464 100644
+> > > --- a/drivers/usb/chipidea/core.c
+> > > +++ b/drivers/usb/chipidea/core.c
+> > > @@ -600,9 +600,9 @@ static int ci_cable_notifier(struct notifier_block *nb, unsigned long event,
+> > >  	return NOTIFY_DONE;
+> > >  }
+> > >  
+> > > -static enum usb_role ci_usb_role_switch_get(struct device *dev)
+> > > +static enum usb_role ci_usb_role_switch_get(struct usb_role_switch *sw)
+> > >  {
+> > > -	struct ci_hdrc *ci = dev_get_drvdata(dev);
+> > > +	struct ci_hdrc *ci = usb_role_switch_get_drvdata(sw);
+> > >  	enum usb_role role;
+> > >  	unsigned long flags;
+> > >  
+> > > @@ -613,9 +613,10 @@ static enum usb_role ci_usb_role_switch_get(struct device *dev)
+> > >  	return role;
+> > >  }
+> > >  
+> > > -static int ci_usb_role_switch_set(struct device *dev, enum usb_role role)
+> > > +static int ci_usb_role_switch_set(struct usb_role_switch *sw,
+> > > +				  enum usb_role role)
+> > >  {
+> > > -	struct ci_hdrc *ci = dev_get_drvdata(dev);
+> > > +	struct ci_hdrc *ci = usb_role_switch_get_drvdata(sw);
+> > >  	struct ci_hdrc_cable *cable = NULL;
+> > >  	enum usb_role current_role = ci_role_to_usb_role(ci);
+> > >  	enum ci_role ci_role = usb_role_to_ci_role(role);
+> > > @@ -1118,6 +1119,7 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+> > >  	}
+> > >  
+> > >  	if (ci_role_switch.fwnode) {
+> > > +		ci_role_switch.driver_data = ci;
+> 
+> And chipidea code, better change it like cdns3's, otherwise, the
+> switch desc for all controllers have the same driver_data.
+
+OK.
+
+thanks,
+
+-- 
+heikki
