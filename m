@@ -2,72 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E47C91763EA
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Mar 2020 20:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E809717664F
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Mar 2020 22:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727857AbgCBT22 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Mar 2020 14:28:28 -0500
-Received: from shards.monkeyblade.net ([23.128.96.9]:52682 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727413AbgCBT21 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Mar 2020 14:28:27 -0500
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 3474314648EF5;
-        Mon,  2 Mar 2020 11:28:27 -0800 (PST)
-Date:   Mon, 02 Mar 2020 11:28:26 -0800 (PST)
-Message-Id: <20200302.112826.290719800273299052.davem@davemloft.net>
-To:     gustavo@embeddedor.com
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] r8152: Replace zero-length array with
- flexible-array member
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200302122305.GA1200@embeddedor>
-References: <20200302122305.GA1200@embeddedor>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 02 Mar 2020 11:28:27 -0800 (PST)
+        id S1727125AbgCBVot (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Mar 2020 16:44:49 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:37726 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727067AbgCBVot (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Mar 2020 16:44:49 -0500
+Received: by mail-pg1-f193.google.com with SMTP id z12so463401pgl.4
+        for <linux-usb@vger.kernel.org>; Mon, 02 Mar 2020 13:44:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=4Y3ObTGarg5FSEMw5sy9VH68aTZS5szI2sN7gCsNGVk=;
+        b=eQSofJhH/+iTx+5JQ5yxGwjEuHa1BvH0/uRrXBVnpM6oVu2o/WCVZlvyy4KVqZCfIU
+         K/BstL1P9irmhKujSgxC21S67oMoQAAwtV2fX9Wksw9rY9XYNcdLjustJ4gHopJczxrx
+         OIQyRJzue5x/ia8NDW/JQgmFIXU7p2Yb9Tmg7Z1vUeSLYXSGVjZ50yIFFS49AogQ5dQs
+         +smFGVxG7GzvElalaj66J0TaavSIZdwBWJP68Fb7GG32dCvyCcOApd1UhA/2+hMNp/zK
+         feyHJFt2SVoCJ8lfKAHgKaw1PxrZdjFChc25V3Y51SFIom5IqvQyG9u23UePVCc0I9Er
+         4pkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=4Y3ObTGarg5FSEMw5sy9VH68aTZS5szI2sN7gCsNGVk=;
+        b=L7AslOW+Hu/9VQfGvOftzHIsLoZdX/g10UozZOloUOHy4XVboczNMNDYNle/9PpS0O
+         oFcVykA+mM5UP3jDg6WTVIIYHmOFjonRikROqboE6s8GwvnoM/UQ/1L5TlbgOdpizVcj
+         I5/9U3SUoO4GTgPowTtYEbKZAMJEHTJCaPlhRR8jFBRaRh6q1i6pxV2keIAJ6lr7a3Xd
+         gGuDf372lsWS6EOKWvYG/Tu3hqWsSIpXtFdJZuZ44vEwwTdFs7tFBzWF0Q2PzTll732I
+         okyTtTh37JrpgPKZgX/GMwLwi6fg3om3tj17Dpx0MhQkH2x+9RE5mIeJhnkQXBDDOfzs
+         gIZA==
+X-Gm-Message-State: ANhLgQ08ti+CvbkQZft2HxY1IyhY7w62pcVqOPpZTZBUdYEsyqoh6Z9g
+        xQyAi/RthvTv1OGcO/zoJJEezg==
+X-Google-Smtp-Source: ADFU+vvwaFfaYzRy+WqqPZG1NBwX75qifdGXa03PdoCWDVY1D1w3m7zNwD2USUnR1U6pC0T3j49MPA==
+X-Received: by 2002:a63:f354:: with SMTP id t20mr870398pgj.126.1583185488289;
+        Mon, 02 Mar 2020 13:44:48 -0800 (PST)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id v25sm21573567pfe.147.2020.03.02.13.44.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Mar 2020 13:44:47 -0800 (PST)
+From:   John Stultz <john.stultz@linaro.org>
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     Pratham Pratap <prathampratap@codeaurora.org>,
+        Felipe Balbi <balbi@kernel.org>, Yang Fei <fei.yang@intel.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        John Stultz <john.stultz@linaro.org>
+Subject: [RESEND][PATCH v2] usb: dwc3: gadget: Update chain bit correctly when using sg list
+Date:   Mon,  2 Mar 2020 21:44:43 +0000
+Message-Id: <20200302214443.55783-1-john.stultz@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Date: Mon, 2 Mar 2020 06:23:05 -0600
+From: Pratham Pratap <prathampratap@codeaurora.org>
 
-> The current codebase makes use of the zero-length array language
-> extension to the C90 standard, but the preferred mechanism to declare
-> variable-length types such as these ones is a flexible array member[1][2],
-> introduced in C99:
-> 
-> struct foo {
->         int stuff;
->         struct boo array[];
-> };
-> 
-> By making use of the mechanism above, we will get a compiler warning
-> in case the flexible array does not occur last in the structure, which
-> will help us prevent some kind of undefined behavior bugs from being
-> inadvertently introduced[3] to the codebase from now on.
-> 
-> Also, notice that, dynamic memory allocations won't be affected by
-> this change:
-> 
-> "Flexible array members have incomplete type, and so the sizeof operator
-> may not be applied. As a quirk of the original implementation of
-> zero-length arrays, sizeof evaluates to zero."[1]
-> 
-> This issue was found with the help of Coccinelle.
-> 
-> [1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-> [2] https://github.com/KSPP/linux/issues/21
-> [3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
-> 
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+If scatter-gather operation is allowed, a large USB request is split
+into multiple TRBs. For preparing TRBs for sg list, driver iterates
+over the list and creates TRB for each sg and mark the chain bit to
+false for the last sg. The current IOMMU driver is clubbing the list
+of sgs which shares a page boundary into one and giving it to USB driver.
+With this the number of sgs mapped it not equal to the the number of sgs
+passed. Because of this USB driver is not marking the chain bit to false
+since it couldn't iterate to the last sg. This patch addresses this issue
+by marking the chain bit to false if it is the last mapped sg.
 
-Applied.
+At a practical level, this patch resolves USB transfer stalls
+seen with adb on dwc3 based db845c, pixel3 and other qcom
+hardware after functionfs gadget added scatter-gather support
+around v4.20.
+
+Credit also to Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+who implemented a very similar fix to this issue.
+
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Yang Fei <fei.yang@intel.com>
+Cc: Thinh Nguyen <thinhn@synopsys.com>
+Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
+Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc: Jack Pham <jackp@codeaurora.org>
+Cc: Todd Kjos <tkjos@google.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linux USB List <linux-usb@vger.kernel.org>
+Cc: stable <stable@vger.kernel.org> #4.20+
+Signed-off-by: Pratham Pratap <prathampratap@codeaurora.org>
+[jstultz: Slight tweak to remove sg_is_last() usage, reworked
+          commit message, minor comment tweak]
+Signed-off-by: John Stultz <john.stultz@linaro.org>
+---
+v2:
+* Fix typeos and unnecssary parens as suggested by Jack
+---
+ drivers/usb/dwc3/gadget.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 1b7d2f9cb673..1e00bf2d65a2 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1071,7 +1071,14 @@ static void dwc3_prepare_one_trb_sg(struct dwc3_ep *dep,
+ 		unsigned int rem = length % maxp;
+ 		unsigned chain = true;
+ 
+-		if (sg_is_last(s))
++		/*
++		 * IOMMU driver is coalescing the list of sgs which shares a
++		 * page boundary into one and giving it to USB driver. With
++		 * this the number of sgs mapped is not equal to the number of
++		 * sgs passed. So mark the chain bit to false if it isthe last
++		 * mapped sg.
++		 */
++		if (i == remaining - 1)
+ 			chain = false;
+ 
+ 		if (rem && usb_endpoint_dir_out(dep->endpoint.desc) && !chain) {
+-- 
+2.17.1
+
