@@ -2,60 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51649177D00
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2020 18:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 454EC177D1A
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2020 18:14:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730702AbgCCRML (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Mar 2020 12:12:11 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:54177 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730676AbgCCRMJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Mar 2020 12:12:09 -0500
-Received: by mail-wm1-f65.google.com with SMTP id g134so2806035wme.3
-        for <linux-usb@vger.kernel.org>; Tue, 03 Mar 2020 09:12:07 -0800 (PST)
+        id S1730785AbgCCRMm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Mar 2020 12:12:42 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:37356 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730696AbgCCRMK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Mar 2020 12:12:10 -0500
+Received: by mail-wm1-f68.google.com with SMTP id a141so3659879wme.2
+        for <linux-usb@vger.kernel.org>; Tue, 03 Mar 2020 09:12:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=OjQamL43DyX5ZKZxf76rV+ncjDjjqwHBvZnOMO71+5w=;
-        b=qrCUZFKTC26uiV3nWZX+HnZvyKjvdogewT44WMI46nlrCqDj0HF5Z1tU/RBRyGnv6e
-         XuHz34+k9XTdGzKbGVuyvu1Gv0gj5TXl1pdX7vkHVn2a+Ra2tqf4QIOl+0iOrkZrBRHG
-         acyQFA1tjPXzY+rts+qubM6YHC+Ox8un4bDXVkM+8nV/DBKTGTyjqf/iSDJcTrj5kxTk
-         wRUs7dCyko+YZnC6K6/DMoXHNSnCmF/YC/k2dn9NydXeOJZwvIGr0SRVhM75Rvccdswr
-         sD7oagf/vnF5lB/VcbZ5i5gttuR8v4Q55greTjSJeZobtzEuHFbrDEO39crTqIZkz7ax
-         x8Ew==
+        bh=ZPPGYFMns8Eb0BtCoPm4VW2OpZkSSM3j58axdU/IfuM=;
+        b=O4Z5cHiKkmQ+bOXomT4Adnlla/zpvUnnHKnHRiJnc6HZTMgS+s64KjrD0M8dizGJqV
+         j5txUXYCbMwC0ewUXeOU5rWc01TJ7Z8aOaq9k7AgqTX3dHGJKl+nDI+Px+zmfLUB93No
+         6V+FPk3IlLwU1Tb93BqMY4eEMPQo5dCK5sNPvJc4VKvhWklHRc4atynyw4dhv+F59rBZ
+         d1FSUMwEv4u2WY6HmyTgBuQSHVeka0aHAFnx5+Rlszhgb043lefR5OG3GQVKubNVOvd2
+         JiekvG3L/Q5JTPWwm5DQimOsM3kCC+Zwy7HRWvzEFFfZgBx3w5x3vk3+WDZ9qzoE1jux
+         bSPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=OjQamL43DyX5ZKZxf76rV+ncjDjjqwHBvZnOMO71+5w=;
-        b=ta2ik8knn/XAXv3uMG/Fq4tH4sULVQPcA8q9bVAfNSZkI1zrAiS7QJgFqm22cdR1ct
-         Lg6LHUCuADlA0s7EBny3WDB3KVm4EcL1Wfo02s2B1/oFiEFKD/pGnxa/lrNZ49lTLsW6
-         t5y5CEnLd4YqnNyZygPQPeplYZoI024P0ylXjYXNrypUQnSXmOHnirUu1DIRF6peyxuR
-         BTeU2qFnx62fJq67oPRuTGji3Gwr5G1hwPs01R0ZnctcaZ2lH3gmKUZwVQXnw1VofLlh
-         5fNt7eUkg/CyrSr8dd44cROGvrqfkM72JIvOAVfENbX6Gz+EhS7dt2RfNUH2JYsvTWIX
-         fNbA==
-X-Gm-Message-State: ANhLgQ0OyYCh/41w6TVzabWSPe67dzNX3URB7E78pBJZ/vWsfrahHFTZ
-        0XByWoxLtp6VVnBx/kJXFqRdEw==
-X-Google-Smtp-Source: ADFU+vsjOLSBRTWQQ5+w29BeK4bsLgwDfVpvP7UETnHiuzQw5xkU3zKeMsfaQUmL8yjS8uItlXC1uw==
-X-Received: by 2002:a7b:c109:: with SMTP id w9mr5208820wmi.54.1583255527125;
-        Tue, 03 Mar 2020 09:12:07 -0800 (PST)
+        bh=ZPPGYFMns8Eb0BtCoPm4VW2OpZkSSM3j58axdU/IfuM=;
+        b=KiqIx5WbHm6LBxMCWQSKeUazyT5lawN/CVULpG+zG+EDHTDj9sh4RXk+o0rdvQl3Dq
+         GOqfu29vhTJqXU8YODd7HlMvYEmk2AVctJIzpnL2HY9F9lD9s0mv1ctsA2fssYm/cCT8
+         svRJfmcpcQP1v+2UUjWCWTvo6MSqGVA6fweqDnuAHAOlHFQpwZaDVDpMSpcTvJpdFhEd
+         YerFeuYKYdoYY+mn5WG96yaLpcFOr1JiuSUWOcgq3/seOXcTcTupKYz/XWFdqLnR+TtQ
+         6EWDtpQVbJbPm7+QIVcE62OE3b05OVgzrFpJjDIm2u5ZF9dmddZs/pZWPU2jfyizDOyr
+         4LWQ==
+X-Gm-Message-State: ANhLgQ2BwEZxUqK2BsjHUe8isAz9ZWvg6JbF3mSs5LuBYZiadeB5/roQ
+        zIQRB8/F1omqu/6G+kepGZTrJA==
+X-Google-Smtp-Source: ADFU+vuwH+JcmOTaQLUODIvWjX4q6nDSP8HAuS2wT0wkvezVz/0ZPyUMB33aF5CDrTBv/59NuT/y7A==
+X-Received: by 2002:a05:600c:230d:: with SMTP id 13mr5133837wmo.11.1583255528580;
+        Tue, 03 Mar 2020 09:12:08 -0800 (PST)
 Received: from localhost.localdomain ([176.61.57.127])
-        by smtp.gmail.com with ESMTPSA id z13sm5425319wrw.88.2020.03.03.09.12.06
+        by smtp.gmail.com with ESMTPSA id z13sm5425319wrw.88.2020.03.03.09.12.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2020 09:12:06 -0800 (PST)
+        Tue, 03 Mar 2020 09:12:07 -0800 (PST)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         gregkh@linuxfoundation.org, jackp@codeaurora.org, balbi@kernel.org,
         bjorn.andersson@linaro.org, robh@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+Cc:     linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
         Andy Gross <agross@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [PATCH v7 12/18] usb: dwc3: qcom: Enable gpio-usb-conn based role-switching
-Date:   Tue,  3 Mar 2020 17:11:53 +0000
-Message-Id: <20200303171159.246992-13-bryan.odonoghue@linaro.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: [PATCH v7 13/18] arm64: dts: qcom: qcs404: Add USB devices and PHYs
+Date:   Tue,  3 Mar 2020 17:11:54 +0000
+Message-Id: <20200303171159.246992-14-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200303171159.246992-1-bryan.odonoghue@linaro.org>
 References: <20200303171159.246992-1-bryan.odonoghue@linaro.org>
@@ -66,70 +68,144 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch adds the ability to receive a notification from the DRD code for
-role-switch events and in doing so it introduces a disjunction between
-gpio-usb-conn or extcon mode.
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-This is what we want to do, since the two methods are mutually exclusive.
+QCS404 sports HS and SS USB controllers based on dwc3 block with two HS
+PHYs and one SS PHY. Add nodes for these devices and enable them for
+EVB board.
 
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
 Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Lee Jones <lee.jones@linaro.org>
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Jack Pham <jackp@codeaurora.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
 Cc: linux-arm-msm@vger.kernel.org
-Cc: linux-usb@vger.kernel.org
+Cc: devicetree@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- drivers/usb/dwc3/dwc3-qcom.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/qcs404.dtsi | 100 +++++++++++++++++++++++++++
+ 1 file changed, 100 insertions(+)
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 6f4b2b3cffce..f6a7ede5953e 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -571,6 +571,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 	struct device		*dev = &pdev->dev;
- 	struct dwc3_qcom	*qcom;
- 	struct resource		*res, *parent_res = NULL;
-+	struct dwc3		*dwc;
- 	int			ret, i;
- 	bool			ignore_pipe_clk;
+diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
+index 4ee1e3d5f123..d3347ce2b94f 100644
+--- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
++++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
+@@ -323,6 +323,48 @@ rpm_msg_ram: memory@60000 {
+ 			reg = <0x00060000 0x6000>;
+ 		};
  
-@@ -669,8 +670,16 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
- 		dwc3_qcom_vbus_overrride_enable(qcom, true);
- 
--	/* register extcon to override sw_vbus on Vbus change later */
--	ret = dwc3_qcom_register_extcon(qcom);
-+	if (dwc3_qcom_find_gpio_usb_connector(qcom->dwc3)) {
-+		/* Using gpio-usb-conn register a notifier for VBUS */
-+		dwc = platform_get_drvdata(qcom->dwc3);
-+		qcom->vbus_nb.notifier_call = dwc3_qcom_vbus_notifier;
-+		ret = dwc3_role_switch_notifier_register(dwc, &qcom->vbus_nb);
-+	} else {
-+		/* register extcon to override sw_vbus on Vbus change later */
-+		ret = dwc3_qcom_register_extcon(qcom);
-+	}
++		usb3_phy: phy@78000 {
++			compatible = "qcom,usb-ss-28nm-phy";
++			reg = <0x00078000 0x400>;
++			#phy-cells = <0>;
++			clocks = <&rpmcc RPM_SMD_LN_BB_CLK>,
++				 <&gcc GCC_USB_HS_PHY_CFG_AHB_CLK>,
++				 <&gcc GCC_USB3_PHY_PIPE_CLK>;
++			clock-names = "ref", "ahb", "pipe";
++			resets = <&gcc GCC_USB3_PHY_BCR>,
++				 <&gcc GCC_USB3PHY_PHY_BCR>;
++			reset-names = "com", "phy";
++			status = "disabled";
++		};
 +
- 	if (ret)
- 		goto depopulate;
- 
-@@ -702,8 +711,11 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
- {
- 	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
- 	struct device *dev = &pdev->dev;
-+	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
- 	int i;
- 
-+	dwc3_role_switch_notifier_unregister(dwc, &qcom->vbus_nb);
++		usb2_phy_prim: phy@7a000 {
++			compatible = "qcom,usb-hs-28nm-femtophy";
++			reg = <0x0007a000 0x200>;
++			#phy-cells = <0>;
++			clocks = <&rpmcc RPM_SMD_LN_BB_CLK>,
++				 <&gcc GCC_USB_HS_PHY_CFG_AHB_CLK>,
++				 <&gcc GCC_USB2A_PHY_SLEEP_CLK>;
++			clock-names = "ref", "ahb", "sleep";
++			resets = <&gcc GCC_USB_HS_PHY_CFG_AHB_BCR>,
++				 <&gcc GCC_USB2A_PHY_BCR>;
++			reset-names = "phy", "por";
++			status = "disabled";
++		};
 +
- 	of_platform_depopulate(dev);
++		usb2_phy_sec: phy@7c000 {
++			compatible = "qcom,usb-hs-28nm-femtophy";
++			reg = <0x0007c000 0x200>;
++			#phy-cells = <0>;
++			clocks = <&rpmcc RPM_SMD_LN_BB_CLK>,
++				 <&gcc GCC_USB_HS_PHY_CFG_AHB_CLK>,
++				 <&gcc GCC_USB2A_PHY_SLEEP_CLK>;
++			clock-names = "ref", "ahb", "sleep";
++			resets = <&gcc GCC_QUSB2_PHY_BCR>,
++				 <&gcc GCC_USB2_HS_PHY_ONLY_BCR>;
++			reset-names = "phy", "por";
++			status = "disabled";
++		};
++
+ 		qfprom: qfprom@a4000 {
+ 			compatible = "qcom,qfprom";
+ 			reg = <0x000a4000 0x1000>;
+@@ -486,6 +528,64 @@ glink-edge {
+ 			};
+ 		};
  
- 	for (i = qcom->num_clocks - 1; i >= 0; i--) {
++		usb3: usb@7678800 {
++			compatible = "qcom,dwc3";
++			reg = <0x07678800 0x400>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges;
++			clocks = <&gcc GCC_USB30_MASTER_CLK>,
++				 <&gcc GCC_SYS_NOC_USB3_CLK>,
++				 <&gcc GCC_USB30_SLEEP_CLK>,
++				 <&gcc GCC_USB30_MOCK_UTMI_CLK>;
++			clock-names = "core", "iface", "sleep", "mock_utmi";
++			assigned-clocks = <&gcc GCC_USB20_MOCK_UTMI_CLK>,
++					  <&gcc GCC_USB30_MASTER_CLK>;
++			assigned-clock-rates = <19200000>, <200000000>;
++			status = "disabled";
++
++			dwc3@7580000 {
++				compatible = "snps,dwc3";
++				reg = <0x07580000 0xcd00>;
++				interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
++				phys = <&usb2_phy_sec>, <&usb3_phy>;
++				phy-names = "usb2-phy", "usb3-phy";
++				snps,has-lpm-erratum;
++				snps,hird-threshold = /bits/ 8 <0x10>;
++				snps,usb3_lpm_capable;
++				dr_mode = "otg";
++			};
++		};
++
++		usb2: usb@79b8800 {
++			compatible = "qcom,dwc3";
++			reg = <0x079b8800 0x400>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges;
++			clocks = <&gcc GCC_USB_HS_SYSTEM_CLK>,
++				 <&gcc GCC_PCNOC_USB2_CLK>,
++				 <&gcc GCC_USB_HS_INACTIVITY_TIMERS_CLK>,
++				 <&gcc GCC_USB20_MOCK_UTMI_CLK>;
++			clock-names = "core", "iface", "sleep", "mock_utmi";
++			assigned-clocks = <&gcc GCC_USB20_MOCK_UTMI_CLK>,
++					  <&gcc GCC_USB_HS_SYSTEM_CLK>;
++			assigned-clock-rates = <19200000>, <133333333>;
++			status = "disabled";
++
++			dwc3@78c0000 {
++				compatible = "snps,dwc3";
++				reg = <0x078c0000 0xcc00>;
++				interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
++				phys = <&usb2_phy_prim>;
++				phy-names = "usb2-phy";
++				snps,has-lpm-erratum;
++				snps,hird-threshold = /bits/ 8 <0x10>;
++				snps,usb3_lpm_capable;
++				dr_mode = "peripheral";
++			};
++		};
++
+ 		tlmm: pinctrl@1000000 {
+ 			compatible = "qcom,qcs404-pinctrl";
+ 			reg = <0x01000000 0x200000>,
 -- 
 2.25.1
 
