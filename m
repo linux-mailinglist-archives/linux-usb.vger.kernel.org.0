@@ -2,107 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A80B1772DC
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2020 10:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 326741773C2
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2020 11:17:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727890AbgCCJqZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Mar 2020 04:46:25 -0500
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:39771 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727881AbgCCJqZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Mar 2020 04:46:25 -0500
-Received: by mail-ed1-f65.google.com with SMTP id m13so3490100edb.6;
-        Tue, 03 Mar 2020 01:46:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kH1X2D2b4dxEsrD1WLS0yi7/4Un3F5auBBafyxkyk3E=;
-        b=H4vK3b2vCIkW0nESLucSGpVLVGDFKIcr270Yif5KPhipYdwyFneoap0sQ615V9nHGe
-         u8pBJ+Z6ER1k7axQ0J3Qn2fGi0h0i+eiNV6f8DhIe7PDOmqkxgcdsgli4PcSdYS4lySi
-         P8o9cR2MuLy7/9wsoLh+ycmu2VKKnvJRhlzdC6lniy9Jy+1/1F3Bkm2Ox0FLXNZnzCWu
-         4qwR+32rZgeBwTJiB1GLM5tK5vQkw6jtHmxfL1KD/aGJpT0AXmfJ+XOdSoaqV9gWWx0y
-         Jd+rINagOzwj6vQPZmoS0y9HBJcl+xnJTSBcUfXlYG6DzwY0tWTehrGQYFvwF3gT8PpP
-         OMcg==
-X-Gm-Message-State: ANhLgQ0JgHrnW4psk2uEW4vaG7CAQg4yFD5N27zISZBBZNYx/v+i+JSF
-        G/f4cOxFBjTQBD4KS0gC3rM=
-X-Google-Smtp-Source: ADFU+vtIFkJ0Ojpmt4sIzlMtbbpQ2p7WqilCvmNNEM5/2XzXv5agArQPt5qR3v51ebMmhc9eIYM6zw==
-X-Received: by 2002:a17:906:c345:: with SMTP id ci5mr3170236ejb.132.1583228782674;
-        Tue, 03 Mar 2020 01:46:22 -0800 (PST)
-Received: from pi3 ([194.230.155.125])
-        by smtp.googlemail.com with ESMTPSA id r26sm657866edw.46.2020.03.03.01.46.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2020 01:46:21 -0800 (PST)
-Date:   Tue, 3 Mar 2020 10:46:19 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Anand Moon <linux.amoon@gmail.com>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2 1/3] devicetree: bindings: exynos: Add new compatible
- for Exynos5420 dwc3 clocks support
-Message-ID: <20200303094619.GA20181@pi3>
-References: <20200301212019.2248-1-linux.amoon@gmail.com>
- <20200301212019.2248-2-linux.amoon@gmail.com>
+        id S1728480AbgCCKRa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Mar 2020 05:17:30 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:41042 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728242AbgCCKR3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Mar 2020 05:17:29 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 023ADDhP161608;
+        Tue, 3 Mar 2020 10:17:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=g4Fj4RCs8bygm5l9JixjrRbOjWG5iw+AvJKbF4xphFY=;
+ b=xoIXXSSxJ7eN5IxTCeSfIE8ReUGfe0cNdpD37MCO2u1rMKqeYk+Qy39fP0yS1kd3roz1
+ MOTHUiort1tQFGNB7H8UJWmFAblELi2xo/axQkYVAVZBjHwk21mLtFe+sflAgZQ2YS6L
+ hrEIXDpFYCNwwpvwz7qnz9gCpEG8XIbJtXLpamy8gsUqexQgRp2Xnp4fcNJTnLNRlYD9
+ tUU9XfSIlF/oLWNIVTriXvdcyG7tUphzfUBxyPBwdkjH19as80K/+aYNOjLqdG9ZCP6o
+ EbGTrBw4MzJEpKOrrgO1TNZFqp8TnT6YXKxDGpT+bU83d1WBqXIAQh5Yb1MIhJNTyzmj Xw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 2yghn31wq1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 Mar 2020 10:17:26 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 023AGhWR058251;
+        Tue, 3 Mar 2020 10:17:25 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 2yg1rkb68s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 Mar 2020 10:17:25 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 023AHOOT002966;
+        Tue, 3 Mar 2020 10:17:24 GMT
+Received: from kili.mountain (/129.205.23.165)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 03 Mar 2020 02:17:24 -0800
+Date:   Tue, 3 Mar 2020 13:17:16 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] thunderbolt: Fix error code in tb_port_is_width_supported()
+Message-ID: <20200303101716.uf6l62oavfqmf6hm@kili.mountain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200301212019.2248-2-linux.amoon@gmail.com>
+X-Mailer: git-send-email haha only kidding
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9548 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999
+ suspectscore=0 malwarescore=0 adultscore=0 spamscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2003030078
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9548 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0 spamscore=0
+ impostorscore=0 mlxscore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0
+ priorityscore=1501 bulkscore=0 clxscore=1011 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
+ definitions=main-2003030077
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Mar 01, 2020 at 09:20:16PM +0000, Anand Moon wrote:
-> This patch adds the new compatible string for Exynos5422 DWC3
-> to support enable/disable of core and suspend clk by DWC3 driver.
-> Also updated the clock names for compatible samsung,exynos5420-dwusb3.
+This function is type bool, and it's supposed to return true on success. 
+Unfortunately, this path takes negative error codes and casts them to
+bool (true) so it's treated as success instead of failure.
 
-Some time ago I mentioned this... so once more:
-Do not use "This patch adds" but simple "Add".
-https://elixir.bootlin.com/linux/latest/source/Documentation/process/submitting-patches.rst#L151
+Fixes: 91c0c12080d0 ("thunderbolt: Add support for lane bonding")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/thunderbolt/switch.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index 7d6ecc342508..a2ce99051c51 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -954,7 +954,7 @@ static bool tb_port_is_width_supported(struct tb_port *port, int width)
+ 	ret = tb_port_read(port, &phy, TB_CFG_PORT,
+ 			   port->cap_phy + LANE_ADP_CS_0, 1);
+ 	if (ret)
+-		return ret;
++		return false;
+ 
+ 	widths = (phy & LANE_ADP_CS_0_SUPPORTED_WIDTH_MASK) >>
+ 		LANE_ADP_CS_0_SUPPORTED_WIDTH_SHIFT;
+-- 
+2.11.0
 
-> 
-> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> ---
-> Previous changes:
-> 	Added the missing clock name for Exynos5420 complatible
-> ---
->  Documentation/devicetree/bindings/usb/exynos-usb.txt | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/exynos-usb.txt b/Documentation/devicetree/bindings/usb/exynos-usb.txt
-> index 6aae1544f240..220f729ac8eb 100644
-> --- a/Documentation/devicetree/bindings/usb/exynos-usb.txt
-> +++ b/Documentation/devicetree/bindings/usb/exynos-usb.txt
-> @@ -69,7 +69,9 @@ DWC3
->  Required properties:
->   - compatible: should be one of the following -
->  	       "samsung,exynos5250-dwusb3": for USB 3.0 DWC3 controller on
-> -					    Exynos5250/5420.
-> +					    Exynos5250.
-> +	       "samsung,exynos5420-dwusb3": for USB 3.0 DWC3 controller on
-> +					    Exynos5420.
->  	       "samsung,exynos5433-dwusb3": for USB 3.0 DWC3 controller on
->  					    Exynos5433.
->  	       "samsung,exynos7-dwusb3": for USB 3.0 DWC3 controller on Exynos7.
-> @@ -82,6 +84,7 @@ Required properties:
->                  Following clock names shall be provided for different
->                  compatibles:
->                   - samsung,exynos5250-dwusb3: "usbdrd30",
-> +                 - samsung,exynos5420-dwusb3: "usbdrd30", "usbdrd30_susp_clk",
->                   - samsung,exynos5433-dwusb3: "aclk", "susp_clk", "pipe_pclk",
->                                                "phyclk",
->                   - samsung,exynos7-dwusb3: "usbdrd30", "usbdrd30_susp_clk",
-> -- 
-> 2.25.1
-> 
