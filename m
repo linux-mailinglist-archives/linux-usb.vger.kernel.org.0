@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E2F177D07
+	by mail.lfdr.de (Postfix) with ESMTP id 31E5C177D06
 	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2020 18:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730723AbgCCRMO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S1730730AbgCCRMO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Tue, 3 Mar 2020 12:12:14 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:45773 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730676AbgCCRMN (ORCPT
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:39089 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730713AbgCCRMN (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Mar 2020 12:12:13 -0500
-Received: by mail-wr1-f66.google.com with SMTP id v2so5275289wrp.12
-        for <linux-usb@vger.kernel.org>; Tue, 03 Mar 2020 09:12:11 -0800 (PST)
+Received: by mail-wm1-f66.google.com with SMTP id j1so2213026wmi.4
+        for <linux-usb@vger.kernel.org>; Tue, 03 Mar 2020 09:12:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=QTnLUqWFBpyvzwpVTBm89O8eiqTgQtA9qR2QiZEc26U=;
-        b=lGaWE277H8XcdYwgtTfFH2tb9CSGbygtic32Z57TPhFArHTX+Yh/AJINcTL+sR5ohN
-         SyW9FHO9a/JP3Tbi8Jur/QHJsiZx9S2NjMf/hV8X7jHpVn755In/oZ0cxcbjaKkSjyBs
-         baF1UxtdXtY0AoABG+2r7LbMdHLcl9wGaM4eOKO0m9/HGrzo3QNsu9OBLvM8xGWyMwTv
-         kqaaW2N4Y2S2Ndtkdq3SAtM3eBTqI+92ohNkDstDtNOiP3R09SBL89pheduAnO2CHlBY
-         u6NbAyV9TD6c7SPoah2RoM+sBaXjNjUyumcUBIo8lFnY9G9cxUjvJiAi1bmzPSVYomtM
-         OyOQ==
+        bh=PHpjS/lc5wpshcEGSNTL9SwnayzHi0kkEetfF+T5EmY=;
+        b=G86Iby+Jb3bBD7EzhxvgK5FwG1NVGSxkoaEYNX6m4BwDBCLsPBb2YYioavUAyW5GUO
+         rk7FvMLW7K2W+GdFAZDuUl42+OVFLJZNXWrj3YGYxkcCS+qmxPxL4Zrdiupfub1icPzW
+         19nTG1cueNZqzoWbSgk3aIapizXuG10YumvMrguo4c2VLM3Hi/icNrV6pbCjZvocrTTA
+         oPRcSXEIA1UCplsOZtp7mE1IdEVRHTxV3fyqYanaWcrHJZ0iGHA/8FHe3mlNQhqbPhYb
+         6vWk459Eo63uUIqn9iMogGmM6IDZb5LjWbyIML+k+kOb5GLBuMf/zIkmcSVqEO7TF9/G
+         OFyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=QTnLUqWFBpyvzwpVTBm89O8eiqTgQtA9qR2QiZEc26U=;
-        b=nAogaNwdiVydYCAcoWPURqkxsIuNSFgPDBsoTyHCj2HWOD0fnOrFQgFPs1vQQPmqEi
-         WXSHnB3SGmdPA4zA3qMOgMDNb+p+TgAdCNo00kVoVgABPz4BEqjpAue4t/91vBYLMqEy
-         MktHdpmtHz7ruSi9TYfb0rzx3t8AR9oov5f2PADvKe9xKAODrEg/A0hAL3xYysUE2dVY
-         tGNVc0aaOWFDA/CSiGNYlGoeR8jcTJrdQyeV16jSNE2NuvSEGK+dfSIb+IlpK0yXlhMn
-         h8BDf1dnFkjbLre4YZQKXRfgesooeuABWQnBM5KVmbEXMsxslIYaQkKUX+N8DWa3nMmq
-         iCrQ==
-X-Gm-Message-State: ANhLgQ2UWPaAd7Pvwxi0rboj087DWZQbxZ4s8/TkiizBiHMGLNkyjJ3a
-        rYP/RbqBUckQHs5LwHVmMgyakw==
-X-Google-Smtp-Source: ADFU+vu+2MIALvRP3/YG7FgAq8QTTJwY8E2jeOrziUGeyqcqEgxAb5nrJcHlcTK9t1UYDDmZdRVluQ==
-X-Received: by 2002:adf:d086:: with SMTP id y6mr6114796wrh.387.1583255531155;
-        Tue, 03 Mar 2020 09:12:11 -0800 (PST)
+        bh=PHpjS/lc5wpshcEGSNTL9SwnayzHi0kkEetfF+T5EmY=;
+        b=dKZGCVa63g+IWyb1cSz5C/EO2j3ym9zFcCSud4IDB8PHz20OmsQ590KROd4LMwdNTF
+         zoosWlfaXJgN2ja88HAAbcyPdxfRGof97lvdFfbrlN6JEwO1Yta/bZ7J/PdpZXsKIuMI
+         e5VVGRBW5S0DJLJfwFO1aN5+fKE14Z6Sk2ZDze/wjX4cF0BhTwzTb4D1TjrvJ/pqME6n
+         GgzfjpRbL3iHstugdFznIZT3Ld6jjJH4lPlijbLH4HROR7LAZssxf5IDaITgTB8pxoK9
+         yPYsV55smBpc6L6qLxY3e9ZSEU8c2yicGYrT+oSb7n80vnCawLyoET+aMbSONbRaSjDv
+         Wbbw==
+X-Gm-Message-State: ANhLgQ0tyQqMu8ea8qOL/12SFNd+moLuRUypZ0qaXiaciAPdUK4/7TQr
+        wDBUsz/fy/RFWENIdNK1TZQNMw==
+X-Google-Smtp-Source: ADFU+vsq7HDMk5KccTeWATobi7lcFmVMLelRRn3BaWvYtpZDS2dkrQMYuQ26yM4cZWoJU4MCvd0ouQ==
+X-Received: by 2002:a1c:9646:: with SMTP id y67mr5070304wmd.42.1583255532278;
+        Tue, 03 Mar 2020 09:12:12 -0800 (PST)
 Received: from localhost.localdomain ([176.61.57.127])
-        by smtp.gmail.com with ESMTPSA id z13sm5425319wrw.88.2020.03.03.09.12.09
+        by smtp.gmail.com with ESMTPSA id z13sm5425319wrw.88.2020.03.03.09.12.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2020 09:12:10 -0800 (PST)
+        Tue, 03 Mar 2020 09:12:11 -0800 (PST)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         gregkh@linuxfoundation.org, jackp@codeaurora.org, balbi@kernel.org,
@@ -53,9 +53,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Andy Gross <agross@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org
-Subject: [PATCH v7 15/18] arm64: dts: qcom: qcs404-evb: Define USB ID pin
-Date:   Tue,  3 Mar 2020 17:11:56 +0000
-Message-Id: <20200303171159.246992-16-bryan.odonoghue@linaro.org>
+Subject: [PATCH v7 16/18] arm64: dts: qcom: qcs404-evb: Describe external VBUS regulator
+Date:   Tue,  3 Mar 2020 17:11:57 +0000
+Message-Id: <20200303171159.246992-17-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200303171159.246992-1-bryan.odonoghue@linaro.org>
 References: <20200303171159.246992-1-bryan.odonoghue@linaro.org>
@@ -66,10 +66,8 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The USB ID pin is used to tell if a system is a Host or a Device. For our
-purposes we will bind this pin into gpio-usb-conn later.
-
-For now define the pin with its pinmux.
+VBUS is supplied by an external regulator controlled by a GPIO pin. This
+patch models the regulator as regulator-usb3-vbus.
 
 Cc: Andy Gross <agross@kernel.org>
 Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
@@ -80,34 +78,32 @@ Cc: devicetree@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/qcs404-evb.dtsi | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ arch/arm64/boot/dts/qcom/qcs404-evb.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi b/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-index 62ef9c34b04e..cb893ca76901 100644
+index cb893ca76901..4b529a6077d2 100644
 --- a/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
 +++ b/arch/arm64/boot/dts/qcom/qcs404-evb.dtsi
-@@ -271,6 +271,20 @@ rclk {
- 			bias-pull-down;
- 		};
+@@ -33,6 +33,18 @@ vdd_esmps3_3p3: vdd-esmps3-3p3-regulator {
+ 		regulator-max-microvolt = <3300000>;
+ 		regulator-always-on;
  	};
 +
-+	usb3_id_pin: usb3-id-pin {
-+		pinmux {
-+			pins = "gpio116";
-+			function = "gpio";
-+		};
-+
-+		pinconf {
-+			pins = "gpio116";
-+			drive-strength = <2>;
-+			bias-pull-up;
-+			input-enable;
-+		};
++	usb3_vbus_reg: regulator-usb3-vbus {
++		compatible = "regulator-fixed";
++		regulator-name = "VBUS_BOOST_5V";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		gpio = <&pms405_gpios 3 GPIO_ACTIVE_HIGH>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&usb_vbus_boost_pin>;
++		vin-supply = <&vph_pwr>;
++		enable-active-high;
 +	};
  };
  
- &pms405_gpios {
+ &blsp1_uart3 {
 -- 
 2.25.1
 
