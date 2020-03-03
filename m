@@ -2,60 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7130E177CFA
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2020 18:13:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5248177D1F
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2020 18:14:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730671AbgCCRMF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Mar 2020 12:12:05 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:35235 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730618AbgCCRMF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Mar 2020 12:12:05 -0500
-Received: by mail-wm1-f67.google.com with SMTP id m3so3672661wmi.0
-        for <linux-usb@vger.kernel.org>; Tue, 03 Mar 2020 09:12:03 -0800 (PST)
+        id S1730684AbgCCRMw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Mar 2020 12:12:52 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:38538 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730666AbgCCRMG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Mar 2020 12:12:06 -0500
+Received: by mail-wr1-f68.google.com with SMTP id t11so5341274wrw.5
+        for <linux-usb@vger.kernel.org>; Tue, 03 Mar 2020 09:12:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NvkN5ieo3+2FwVw2nYNNBnNyWIU2wiUN/Xkbb42M4Aw=;
-        b=bkYTyEM66MSZwFzvV+rUB0b7ffV0RJ8pVTz8/ULZ7ALdrwc4wknFHXf4Mc4VrVLF5W
-         EhRDJGtlmgcvKplPcWdEUe7/7qbad4oSowGLtvo7cI1jQ+atmre6oJVu8+scmRujbwkx
-         +AXB0+RMCO8RwT49voIZkK3ZNJs+b/hfam1TnWdvf13DMd0YfL1HMO5ZeuLL5D0vdU0E
-         UjbfGacXSdBh16V6dSRjOaW7ELVyRafDVJsxSNMDwf6CPh25N1EYMT/BCCuppNOORpsG
-         eUeaPOefvZwSk4dI2vzlZlctUV1MZ9wrDxjkubVX/zZUoFVFQBPyIAKu+wwfpRyF33Gy
-         cTaQ==
+        bh=tOKDkyUmAMjWXMziJpbUMfDorD9PY/k8abOKzPT2TKY=;
+        b=uomHMbW9ekhiV44ysS9cyvZ9tL7y1E7JYc1HMpdfBMEbT9d5Ow3RKbO/B8VpiBo/ok
+         48kCLGVn+SmsTKdBNKKQxImm+QjMO4TsQsSwFmy+G9wTNd616cPPYznUNBWfAZWdcG98
+         UDiYvF7+Zr6yHblKJX0HN8NFZrPNNG+pfiJ7X5M+T2PUBMAKQWGQkoHPYWFZURCg9z3y
+         9/GWeSiAiAJJM+JT8N8d7OrrZZYT5KZkrpqg9BeuN6e7QX6FATpVOeI9bdnrsIT4tRq3
+         CckH1Ef/gk/QRw/ooSmH1yXzfkXe+/roCqZDcRAn/68HO1z8g873SF5KuYnxsPM8tcUP
+         13qQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NvkN5ieo3+2FwVw2nYNNBnNyWIU2wiUN/Xkbb42M4Aw=;
-        b=cG5eajmRf7clb/QLudJCEDzAvet+BGDy4dii1mrKrMRMkgcJdJoHbwtVvb62GxUiDH
-         5nw2FZVHYb2Uj7OvcqNYilCThcdYLvuBbyAaC7iu9vIysZ18uK0vUB8bAjb0+rwIsI+a
-         rEwTI3DYZqtbhns482FOxG8iCdjgNGStAONlXrrfkFV88UgGcQYIqfBgmYaEZ8o+rhGX
-         GPhKfZzYcRs4jzIlEAixfXxybgNG9cZAaLqHypTdEersmnuTBZqenamC3o/7HaYjit9J
-         prWpcg1U6SHdcNG9Y0gFKgqgdvD4gCdktbKCEqkC5myMPQJDGB4uoFiv38Y4csKtBs0n
-         4eAQ==
-X-Gm-Message-State: ANhLgQ08n9rlEcUHdEu4Ze8EgfL68gufflj+xxKVT82IBT/C/vXLG6nG
-        Ney/2oTcr2Oqa9ceII8nY476KQ==
-X-Google-Smtp-Source: ADFU+vuO22XCb0pQ9DLER2YigBpY5HQHyJrxsV/u2ejVjTJU8HyJHVZ50MZUAN7jkyR/jmg+416KYQ==
-X-Received: by 2002:a7b:c413:: with SMTP id k19mr5062707wmi.128.1583255523220;
-        Tue, 03 Mar 2020 09:12:03 -0800 (PST)
+        bh=tOKDkyUmAMjWXMziJpbUMfDorD9PY/k8abOKzPT2TKY=;
+        b=m4JW5TYDvMV8WFJMiFoMRD86oXTxG1eSrCR0wh+so33KdR3qiXxzW4k77qZaulSNQq
+         MAEdeVEzN9ppnnuzve0g1qPU6m0dVXc9yCLICUjYLjcX93qBTmr06hGDQWCVm4Q+c2Cv
+         +EjuPLitpz2Pgw97CjCOhwZ5sSLrW5nO6Vo55Zfs8oI1O5Xcfy/YX7G+ynKoMUlL51hq
+         Rqmutr0Qw7H63jC7AS8/+ZT38XQfz9Uh2KgLZQcDlPdDOdCkmdxGisw9UO/BAoyZvDHG
+         B4mzvjYrlFcNSJb8adUhSoCrZDzzOK9/L8HsSFAhk6PJFRO+Uj7QjH76Uxo/n3FMhBUa
+         jsRQ==
+X-Gm-Message-State: ANhLgQ07KMe3o9yVf5uPTgQANVqyGn2UF3YT+b+XnfY6oSE2+t/V0l5s
+        xB1LT2h76PBvtfMPWZnnMGXX5Q==
+X-Google-Smtp-Source: ADFU+vsxxytqy/j85IVjnrdfu0A9gIGsCA9PPaP2vsFxVyxsBQHwkxnO09aDb/KALLKDPd3+l8vjww==
+X-Received: by 2002:adf:f504:: with SMTP id q4mr6131687wro.28.1583255524715;
+        Tue, 03 Mar 2020 09:12:04 -0800 (PST)
 Received: from localhost.localdomain ([176.61.57.127])
-        by smtp.gmail.com with ESMTPSA id z13sm5425319wrw.88.2020.03.03.09.12.02
+        by smtp.gmail.com with ESMTPSA id z13sm5425319wrw.88.2020.03.03.09.12.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2020 09:12:02 -0800 (PST)
+        Tue, 03 Mar 2020 09:12:04 -0800 (PST)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         gregkh@linuxfoundation.org, jackp@codeaurora.org, balbi@kernel.org,
         bjorn.andersson@linaro.org, robh@kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
+        John Stultz <john.stultz@linaro.org>,
         Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [PATCH v7 09/18] usb: dwc3: qcom: Add support for usb-conn-gpio connectors
-Date:   Tue,  3 Mar 2020 17:11:50 +0000
-Message-Id: <20200303171159.246992-10-bryan.odonoghue@linaro.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        ShuFan Lee <shufan_lee@richtek.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Yu Chen <chenyu56@huawei.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        devicetree@vger.kernel.org
+Subject: [PATCH v7 10/18] usb: dwc3: Add support for usb-conn-gpio connectors
+Date:   Tue,  3 Mar 2020 17:11:51 +0000
+Message-Id: <20200303171159.246992-11-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200303171159.246992-1-bryan.odonoghue@linaro.org>
 References: <20200303171159.246992-1-bryan.odonoghue@linaro.org>
@@ -66,51 +77,94 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch adds a routine to find a usb-conn-gpio in the main DWC3 code.
-This will be useful in a subsequent patch where we will reuse the current
-extcon VBUS notifier with usb-conn-gpio.
+This patch adds the ability to probe and enumerate a connector based on
+usb-conn-gpio.
 
-Cc: Andy Gross <agross@kernel.org>
+You would use usb-conn-gpio when a regulator in your system provides VBUS
+directly to the connector instead of supplying via the USB PHY.
+
+The parent device must have the "usb-role-switch" property, so that when
+the usb-conn-gpio driver calls usb_role_switch_set_role() the notification
+in dwc3 will run and the block registers will be updated to match the state
+detected at the connector.
+
+Cc: John Stultz <john.stultz@linaro.org>
 Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc: Lee Jones <lee.jones@linaro.org>
-Cc: Felipe Balbi <balbi@kernel.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-arm-msm@vger.kernel.org
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+CC: ShuFan Lee <shufan_lee@richtek.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc: Yu Chen <chenyu56@huawei.com>
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Hans de Goede <hdegoede@redhat.com>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Jun Li <lijun.kernel@gmail.com>
+Cc: Valentin Schneider <valentin.schneider@arm.com>
+Cc: Jack Pham <jackp@codeaurora.org>
 Cc: linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Acked-by: Felipe Balbi <balbi@kernel.org>
+Cc: devicetree@vger.kernel.org
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- drivers/usb/dwc3/dwc3-qcom.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ drivers/usb/dwc3/drd.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 1dfd024cd06b..6f4b2b3cffce 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -550,6 +550,21 @@ static const struct dwc3_acpi_pdata sdm845_acpi_pdata = {
- 	.ss_phy_irq_index = 2
- };
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index 331c6e997f0c..2ec1ae30bcc5 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -11,6 +11,7 @@
+ #include <linux/of_graph.h>
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
++#include <linux/of_platform.h>
  
-+static bool dwc3_qcom_find_gpio_usb_connector(struct platform_device *pdev)
+ #include "debug.h"
+ #include "core.h"
+@@ -538,9 +539,30 @@ static int dwc3_setup_role_switch(struct dwc3 *dwc)
+ 	dwc3_set_mode(dwc, DWC3_GCTL_PRTCAP_DEVICE);
+ 	return 0;
+ }
++
++static int dwc3_register_gpio_usb_connector(struct dwc3 *dwc)
 +{
-+	struct device_node	*np;
-+	bool			retval = false;
++	struct device		*dev = dwc->dev;
++	struct device_node	*np = dev->of_node, *conn_np;
++	int			ret = 0;
 +
-+	np = of_get_child_by_name(pdev->dev.of_node, "connector");
-+	if (np) {
-+		if (of_device_is_compatible(np, "gpio-usb-b-connector"))
-+			retval = true;
++	conn_np = of_get_child_by_name(np, "connector");
++	if (!conn_np) {
++		dev_dbg(dev, "no connector child node specified\n");
++		goto done;
 +	}
-+	of_node_put(np);
 +
-+	return retval;
++	if (of_device_is_compatible(conn_np, "gpio-usb-b-connector"))
++		ret = of_platform_populate(np, NULL, NULL, dev);
++done:
++	of_node_put(conn_np);
++	return ret;
 +}
 +
- static int dwc3_qcom_probe(struct platform_device *pdev)
- {
- 	struct device_node	*np = pdev->dev.of_node;
+ #else
+ #define ROLE_SWITCH 0
+ #define dwc3_setup_role_switch(x) 0
++#define dwc3_register_gpio_usb_connector(x) 0
+ #endif
+ 
+ int dwc3_drd_init(struct dwc3 *dwc)
+@@ -556,6 +578,9 @@ int dwc3_drd_init(struct dwc3 *dwc)
+ 		ret = dwc3_setup_role_switch(dwc);
+ 		if (ret < 0)
+ 			return ret;
++		ret = dwc3_register_gpio_usb_connector(dwc);
++		if (ret < 0)
++			return ret;
+ 	} else if (dwc->edev) {
+ 		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
+ 		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
 -- 
 2.25.1
 
