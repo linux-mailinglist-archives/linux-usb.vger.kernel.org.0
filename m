@@ -2,66 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6A7178227
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2020 20:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E29711783B1
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2020 21:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733215AbgCCSJE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Mar 2020 13:09:04 -0500
-Received: from mail-il1-f194.google.com ([209.85.166.194]:33253 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731823AbgCCSJC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Mar 2020 13:09:02 -0500
-Received: by mail-il1-f194.google.com with SMTP id r4so3624903iln.0
-        for <linux-usb@vger.kernel.org>; Tue, 03 Mar 2020 10:09:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=42VRx4KA+cD1ZZnhz/34yl/kjJSKnU+ahvHX6e7S6BM=;
-        b=q7YmcB4c3xNivUiRnGbEmHi9ciBYsBTGJ3kBqOzI/c6CTS7TSPqRgaWNk025FpfiIk
-         UIHk/34W6/novGmD0W9ZSoJZbAR9qiyBwIbPfw8htytv3Pu+5ladp6JGliaatdTqYqkf
-         Fk69LG5Nm8YzADex4Vi+pf/rIeGNqNr78qVqopOdKzY11PtfTXtKZPzyTZFXbL/EduMu
-         vrTog13bOuCpMRI3PU9oQb0Q48DD/QD7nIIPWvI5CtHad4tT7V7uSdaJEhJ+oaISbJID
-         ga65o7/Vvvpc0yIEqzcmaI77Jw6/EO5F/+EQPV/TUhotVu/KSLDlNqX9UAupuiIWaWiJ
-         N+sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=42VRx4KA+cD1ZZnhz/34yl/kjJSKnU+ahvHX6e7S6BM=;
-        b=nK1wmAWb63WLCQDhc6o7jGPm7MyB+4mNodmsYZ9ElFvjFA8FhSjTov7OYORaSPS288
-         LmPEGf8uWGwJdv0Or4QrNbF4kVnCg8Vk8qp8nf+3RGai7C3kGmGiHi6NBLiQGvYyBx6J
-         PP6EWohAnBtoKrgGKbz99k21QBmA4Hvii7GK9tsaIaDW4zzOQYOD1pZKB4IelZFuPx4C
-         2m0XIO6i2Pl8MzZreuOFEBadM8BDbStkU1058hXJ+hLxARlBYA+1Nb+H+XEykYxJoLwl
-         nAEZKvFCWVe2erfynN1OUNHSctNVzq/DWXSZHr14eKFFpP8PDK2r4itRgDZyh4I76q5I
-         6qJA==
-X-Gm-Message-State: ANhLgQ3JPQDtEQCMURzBZnUyGoFRzmnlH+ii5verVgJjI+WQM576l3p8
-        +rzTffEqEb1MteSSCxeLPabk7Luv+bbziWagCVQ=
-X-Google-Smtp-Source: ADFU+vv6E+wsnvPeg+ajcohjNvpKFAWgFSPumeVI6/s74fKhIZXkTb+ytEUQRfjMVtoUc1OrqPZutNFrjMHjyYaW0Q4=
-X-Received: by 2002:a92:244f:: with SMTP id k76mr6178413ilk.290.1583258940852;
- Tue, 03 Mar 2020 10:09:00 -0800 (PST)
+        id S1731338AbgCCUIn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 3 Mar 2020 15:08:43 -0500
+Received: from mail.actia.se ([195.67.112.82]:21568 "EHLO mail.actia.se"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729860AbgCCUIm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Mar 2020 15:08:42 -0500
+Received: from S036ANL.actianordic.se (192.168.16.117) by
+ S035ANL.actianordic.se (192.168.16.116) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Tue, 3 Mar 2020 21:08:39 +0100
+Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
+ S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%3]) with mapi id
+ 15.01.1913.007; Tue, 3 Mar 2020 21:08:39 +0100
+From:   Jonas Karlsson <jonas.karlsson@actia.se>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: USB transaction errors causing RCU stalls and kernel panics
+Thread-Topic: USB transaction errors causing RCU stalls and kernel panics
+Thread-Index: AdXxbFdECZ2tmAAoQZaxVkfgHyprqgABZ9yAAAiGryA=
+Date:   Tue, 3 Mar 2020 20:08:38 +0000
+Message-ID: <ca6f029a57f24ee9aea39385a9ad55bd@actia.se>
+References: <ddf8c3971b8544e983a9d2bbdc7f2010@actia.se>
+ <20200303163945.GB652754@kroah.com>
+In-Reply-To: <20200303163945.GB652754@kroah.com>
+Accept-Language: sv-SE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.20.121.3]
+x-esetresult: clean, is OK
+x-esetid: 37303A2914C9726A637161
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Received: by 2002:a02:9f04:0:0:0:0:0 with HTTP; Tue, 3 Mar 2020 10:09:00 -0800 (PST)
-Reply-To: dr.challynoah@gmail.com
-From:   DR CHALLY NOAH <mayorabrahamedge404@gmail.com>
-Date:   Tue, 3 Mar 2020 19:09:00 +0100
-Message-ID: <CALqVJWdFx_aWTT4kkN0eD5b+-M5aPDZmP2kebmH9eN3yv-cVBg@mail.gmail.com>
-Subject: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Dear,
-What Have Kept You Waiting To Claim Your $600,000.00 USD Compensation Award?
-This said fund was issued out by the UNITED NATIONS To compensate
-you.Please If You Have Not Claim Your Fund (Award),Kindly contact me
-at   DR.CHALLYNOAH@GMAIL.COM   for further details on how to proceed your
-fund (award)release to you or better still reply back Immediately You
-Receive This Information For An Urgent Confirmation And Release Of Your
-Fund To You Without Delays, as your email was listed among those to be
-compensated this year.Congratulations..
-Best Regards,
-Dr Chally Noah.
-Minister Of Finance On Foreign Remittance:
+> 
+> On Tue, Mar 03, 2020 at 03:05:50PM +0000, Jonas Karlsson wrote:
+> > Hi,
+> >
+> > We have a board with an NXP i.MX8 SoC. We are running Linux 4.19.35 from
+> NXP on the SoC.
+> >
+> > There is a modem connected to the SoC via USB through a USB hub.
+> > The modem presents it self as a cdc-acm device with 4 tty:s.
+> >
+> > Sometimes we end up in a situation where all transfers over USB generetes
+> 'USB transaction Errors".
+> > It is likely that the modem is misbehaving. When this happens we get a lot of
+> "xhci-cdns3: ERROR unknown event type 37"
+> > in the terminal indicating that the xhci event ring is full. This often leads to RCU
+> stalls and sometimes Kernel panics.
+> >
+> > If I enable dynamic debug on xhci_hcd and cdc-acm I can see that all
+> > transfers have error code -71 (-EPROTO which in xhci translates to
+> > 'USB transaction error"). When this happens it seems like xhci resets
+> > the ep, sets TR Deq Ptr to unstall the ep and then a new transfer is
+> > started which also fails. This behavior generates a lot of events on
+> > the event ring which causes 'ERROR unknown event type 37'. This loop
+> > of failing transfers seems to continue until we either unbind the USB driver or
+> get a kernel panic. The SoC almost becomes unresponsive since it spends most
+> of the time executing usb interrupts.
+> >
+> > If I pull the reset pin of the USB hub and keep it in reset state at
+> > this point, the event loop of failing transfers continues despite
+> > there is nothing on the USB bus any longer. The only way to get out of that
+> loop is to either unbind the usb driver or power cycle the board.
+> >
+> > Is this the expected behavior when USB transaction error happens for all
+> transfers when using cdc-acm class driver?
+> > Or could there be something wrong in the low level USB driver (Cadence
+> > in our case)? We need to figure out why we get all the transaction errors but
+> we also need to make sure the kernel does not die on us when we have a
+> misbehaving USB device.
+> > Does anyone have a suggestion on what we could do to improve the stability
+> of the kernel in this situation?
+> 
+> I would blame the xhci-cdns driver as it is the one controlling all of this.
+> 
+> I don't see this driver in the 4.19 tree, so I think you are going to have to get
+> support from the company that provided you with that driver as you are already
+> paying for that support from them :)
+> 
+> good luck!
+> 
+> greg k-h
+
+Thanks for the feedback! If the cadence driver is the main suspect I totally agree with you.
+
+The reason I posted on this mailing list was that I was afraid that the cdc-acm driver could
+be causing new transfers to be started when the previous fails due to USB transaction errors and
+then trigger this event storm.
+The acm_ctrl_irq() function seems to submit a new urb directly if the previous fails, but I cannot 
+say that I understand that code very well yet. The acm_read_bulk_callback() function also seem
+to submit a new read urb on USB transaction Errors. But If you think this could not cause this
+behavior I will ask our supplier to fix the cdns driver.
+
+BR,
+Jonas
+
