@@ -2,41 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED7B176BF5
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2020 03:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83081176BC0
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2020 03:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728939AbgCCCtn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Mar 2020 21:49:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45990 "EHLO mail.kernel.org"
+        id S1727773AbgCCCwJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Mar 2020 21:52:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46702 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728929AbgCCCtm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 2 Mar 2020 21:49:42 -0500
+        id S1729066AbgCCCuG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 2 Mar 2020 21:50:06 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ABA1F2468D;
-        Tue,  3 Mar 2020 02:49:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D8ED7246E6;
+        Tue,  3 Mar 2020 02:50:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583203781;
-        bh=f+smNxhL2OfdgV7oDdGzlTppEvpqzeaeqjamekC+ckE=;
+        s=default; t=1583203805;
+        bh=lmH1utyMKQlbkWRrt5YcFzcKcYbLr9xfF/JCSANbeOk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=icIt4muG1fGkYyzzx22l9ZSWlfJKr7TldSX1wy/tZBM6UE1mu+oaQif45kMpx8U4k
-         XL70twANYWbyYH7/ZuBeTI5IFgio+lNMAEJySuTcbVuIJJw2NneJYjt0ptOCppKxWl
-         VDxmakOBSS6y1GY1LRZ6FFtahVHrEPIc4VvAeipY=
+        b=C8eZAkT52FSSzAHCMeUY6+YQ1wDsjG+ik/GroZjNIjyuao9zqJRIJY3KNVGzWaswF
+         t9sTZiEqCV1cxEcOnUFK7tQqsnW2Q/D+ozjhS+wT+VZiZtwoB/pynpJT+RHcBn6La1
+         Kji+dNG+Ij/zFrF1tu3qPGuEVItN4TvAxOB8HEPA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sergey Organov <sorganov@gmail.com>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        Felipe Balbi <balbi@kernel.org>,
+Cc:     Jack Pham <jackp@codeaurora.org>, Felipe Balbi <balbi@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 06/22] usb: gadget: serial: fix Tx stall after buffer overflow
-Date:   Mon,  2 Mar 2020 21:49:17 -0500
-Message-Id: <20200303024933.10371-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 02/13] usb: gadget: composite: Support more than 500mA MaxPower
+Date:   Mon,  2 Mar 2020 21:49:51 -0500
+Message-Id: <20200303025002.10600-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200303024933.10371-1-sashal@kernel.org>
-References: <20200303024933.10371-1-sashal@kernel.org>
+In-Reply-To: <20200303025002.10600-1-sashal@kernel.org>
+References: <20200303025002.10600-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -45,45 +42,113 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Sergey Organov <sorganov@gmail.com>
+From: Jack Pham <jackp@codeaurora.org>
 
-[ Upstream commit e4bfded56cf39b8d02733c1e6ef546b97961e18a ]
+[ Upstream commit a2035411fa1d1206cea7d5dfe833e78481844a76 ]
 
-Symptom: application opens /dev/ttyGS0 and starts sending (writing) to
-it while either USB cable is not connected, or nobody listens on the
-other side of the cable. If driver circular buffer overflows before
-connection is established, no data will be written to the USB layer
-until/unless /dev/ttyGS0 is closed and re-opened again by the
-application (the latter besides having no means of being notified about
-the event of establishing of the connection.)
+USB 3.x SuperSpeed peripherals can draw up to 900mA of VBUS power
+when in configured state. However, if a configuration wanting to
+take advantage of this is added with MaxPower greater than 500
+(currently possible if using a ConfigFS gadget) the composite
+driver fails to accommodate this for a couple reasons:
 
-Fix: on open and/or connect, kick Tx to flush circular buffer data to
-USB layer.
+ - usb_gadget_vbus_draw() when called from set_config() and
+   composite_resume() will be passed the MaxPower value without
+   regard for the current connection speed, resulting in a
+   violation for USB 2.0 since the max is 500mA.
 
-Signed-off-by: Sergey Organov <sorganov@gmail.com>
-Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+ - the bMaxPower of the configuration descriptor would be
+   incorrectly encoded, again if the connection speed is only
+   at USB 2.0 or below, likely wrapping around U8_MAX since
+   the 2mA multiplier corresponds to a maximum of 510mA.
+
+Fix these by adding checks against the current gadget->speed
+when the c->MaxPower value is used (set_config() and
+composite_resume()) and appropriately limit based on whether
+it is currently at a low-/full-/high- or super-speed connection.
+
+Because 900 is not divisible by 8, with the round-up division
+currently used in encode_bMaxPower() a MaxPower of 900mA will
+result in an encoded value of 0x71. When a host stack (including
+Linux and Windows) enumerates this on a single port root hub, it
+reads this value back and decodes (multiplies by 8) to get 904mA
+which is strictly greater than 900mA that is typically budgeted
+for that port, causing it to reject the configuration. Instead,
+we should be using the round-down behavior of normal integral
+division so that 900 / 8 -> 0x70 or 896mA to stay within range.
+And we might as well change it for the high/full/low case as well
+for consistency.
+
+N.B. USB 3.2 Gen N x 2 allows for up to 1500mA but there doesn't
+seem to be any any peripheral controller supported by Linux that
+does two lane operation, so for now keeping the clamp at 900
+should be fine.
+
+Signed-off-by: Jack Pham <jackp@codeaurora.org>
 Signed-off-by: Felipe Balbi <balbi@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/u_serial.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/usb/gadget/composite.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index 520ace49f91d9..942d2977797d7 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -715,8 +715,10 @@ static int gs_start_io(struct gs_port *port)
- 	port->n_read = 0;
- 	started = gs_start_rx(port);
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index 4d7df2f6caf5b..3a0452ff1a565 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -438,9 +438,13 @@ static u8 encode_bMaxPower(enum usb_device_speed speed,
+ 	if (!val)
+ 		return 0;
+ 	if (speed < USB_SPEED_SUPER)
+-		return DIV_ROUND_UP(val, 2);
++		return min(val, 500U) / 2;
+ 	else
+-		return DIV_ROUND_UP(val, 8);
++		/*
++		 * USB 3.x supports up to 900mA, but since 900 isn't divisible
++		 * by 8 the integral division will effectively cap to 896mA.
++		 */
++		return min(val, 900U) / 8;
+ }
  
--	/* unblock any pending writes into our circular buffer */
- 	if (started) {
-+		gs_start_tx(port);
-+		/* Unblock any pending writes into our circular buffer, in case
-+		 * we didn't in gs_start_tx() */
- 		tty_wakeup(port->port.tty);
- 	} else {
- 		gs_free_requests(ep, head, &port->read_allocated);
+ static int config_buf(struct usb_configuration *config,
+@@ -833,6 +837,10 @@ static int set_config(struct usb_composite_dev *cdev,
+ 
+ 	/* when we return, be sure our power usage is valid */
+ 	power = c->MaxPower ? c->MaxPower : CONFIG_USB_GADGET_VBUS_DRAW;
++	if (gadget->speed < USB_SPEED_SUPER)
++		power = min(power, 500U);
++	else
++		power = min(power, 900U);
+ done:
+ 	usb_gadget_vbus_draw(gadget, power);
+ 	if (result >= 0 && cdev->delayed_status)
+@@ -2272,7 +2280,7 @@ void composite_resume(struct usb_gadget *gadget)
+ {
+ 	struct usb_composite_dev	*cdev = get_gadget_data(gadget);
+ 	struct usb_function		*f;
+-	u16				maxpower;
++	unsigned			maxpower;
+ 
+ 	/* REVISIT:  should we have config level
+ 	 * suspend/resume callbacks?
+@@ -2286,10 +2294,14 @@ void composite_resume(struct usb_gadget *gadget)
+ 				f->resume(f);
+ 		}
+ 
+-		maxpower = cdev->config->MaxPower;
++		maxpower = cdev->config->MaxPower ?
++			cdev->config->MaxPower : CONFIG_USB_GADGET_VBUS_DRAW;
++		if (gadget->speed < USB_SPEED_SUPER)
++			maxpower = min(maxpower, 500U);
++		else
++			maxpower = min(maxpower, 900U);
+ 
+-		usb_gadget_vbus_draw(gadget, maxpower ?
+-			maxpower : CONFIG_USB_GADGET_VBUS_DRAW);
++		usb_gadget_vbus_draw(gadget, maxpower);
+ 	}
+ 
+ 	cdev->suspended = 0;
 -- 
 2.20.1
 
