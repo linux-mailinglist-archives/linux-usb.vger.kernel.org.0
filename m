@@ -2,110 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2696F177A23
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2020 16:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECFDD177A86
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2020 16:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728385AbgCCPK7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Mar 2020 10:10:59 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:46491 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727070AbgCCPK7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Mar 2020 10:10:59 -0500
-Received: by mail-lj1-f193.google.com with SMTP id h18so3850802ljl.13;
-        Tue, 03 Mar 2020 07:10:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=srYBJQBn40ddvd9Oy2lph/9+g4zk3ppatIYkVI/mDpU=;
-        b=lZuapSbNZ4EIwa2OG0I+vk5CXF9p5PcP4FAUsGhHvfoOmPtUN80qLQyiGhHDm8LYEH
-         w32rOdgYWrDXbgvmSwz8ME1N8zbKeVYviIvLzcry4nXf0E0aKijEL8Vzs9ux7YPG7Tz5
-         N+ScuTx184UxpAFpNm7K0xQby3ogUb/l9lgrmjSTV6aG4UvUCq62IoESmjjcOKIz8aRa
-         FS7PMRLSlIDmDQxeuhhQHh1awCbJfI6gF9O5a4LOpoauQ1aCJamHlXAPzYqTnPnLqw8A
-         Bbg1mBHJ7AyLpG58tJDvuuXWGgJ2dVIh0AP2EnAaX5exZdTngwkXtK4ia7hPN8zB4LAA
-         naqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=srYBJQBn40ddvd9Oy2lph/9+g4zk3ppatIYkVI/mDpU=;
-        b=NB8dSX2CQsN7jqSs2AI8s3Joo2Wfg233B2cUwkrHXpJcdzmQcaOn1KosMc9eCAvbbI
-         jg9ry/+JNZxjtxRuKwRRsYQE5n9Zw3o4oug9zNm3+k0o4+9qH0g9EqHTszUy/0wNPvST
-         i1Z3iV6kWkEMpIk3YHj6oJQ7+TfTV5AunxZsyNnAWWB+zSpavOi5NoaJ1tgC2o993aXj
-         1BzRzgUucwR76qBkSXCvag8bKa2LfqUqzVmgWOa/q+b4CsvDl6tYvDnIcrKJ3b/1pQO1
-         jdxglptO5rfXMGFzi7DTkB6iLKIBBzfucxjV2ESGIwkpcc/5sHekPqZpBmVCdKwiYnXh
-         ymMA==
-X-Gm-Message-State: ANhLgQ2xZNKNX3rSKlHH+sS/z4PZssVAkgQ+5/hp4cywg02+d4QKL5mS
-        GwWw/mbUgzVBYRbPbSIwKnysWw1T
-X-Google-Smtp-Source: ADFU+vvkFl1Zh01+7/XZPhJgxMIs7pGaIKPdrbXOPe/ptTcaGythQv4/hP85GnjUp6g489j1NEMTDQ==
-X-Received: by 2002:a2e:7009:: with SMTP id l9mr2797800ljc.96.1583248255159;
-        Tue, 03 Mar 2020 07:10:55 -0800 (PST)
-Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id t14sm4907012ljo.56.2020.03.03.07.10.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Mar 2020 07:10:54 -0800 (PST)
-Subject: Re: [PATCH] usb: phy: tegra: Include proper GPIO consumer header to
- fix compile testing
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1583234960-24909-1-git-send-email-krzk@kernel.org>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <9cce90a5-88b5-b875-9d20-34b5a9dd165e@gmail.com>
-Date:   Tue, 3 Mar 2020 18:10:53 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1729644AbgCCPfL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Mar 2020 10:35:11 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:38292 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729588AbgCCPfL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Mar 2020 10:35:11 -0500
+Received: (qmail 2156 invoked by uid 2102); 3 Mar 2020 10:35:10 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 3 Mar 2020 10:35:10 -0500
+Date:   Tue, 3 Mar 2020 10:35:10 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     John Donnelly <John.P.Donnelly@Oracle.com>
+cc:     linux-usb@vger.kernel.org
+Subject: Re: Spurious EHCI interrupts with 5.2 and later on shutdown / init
+ 6 reboot .
+In-Reply-To: <42c1a8c5-aaa6-b875-d173-136509838a32@Oracle.com>
+Message-ID: <Pine.LNX.4.44L0.2003031025440.1538-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <1583234960-24909-1-git-send-email-krzk@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-03.03.2020 14:29, Krzysztof Kozlowski пишет:
-> The driver uses only GPIO Descriptor Consumer Interface so include
-> proper header.  This fixes compile test failures (e.g. on i386):
-> 
->     drivers/usb/phy/phy-tegra-usb.c: In function ‘ulpi_phy_power_on’:
->     drivers/usb/phy/phy-tegra-usb.c:695:2: error:
->         implicit declaration of function ‘gpiod_set_value_cansleep’ [-Werror=implicit-function-declaration]
->     drivers/usb/phy/phy-tegra-usb.c: In function ‘tegra_usb_phy_probe’:
->     drivers/usb/phy/phy-tegra-usb.c:1167:11: error:
->         implicit declaration of function ‘devm_gpiod_get_from_of_node’ [-Werror=implicit-function-declaration]
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> ---
->  drivers/usb/phy/phy-tegra-usb.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
-> index 6153cc35aba0..cffe2aced488 100644
-> --- a/drivers/usb/phy/phy-tegra-usb.c
-> +++ b/drivers/usb/phy/phy-tegra-usb.c
-> @@ -12,12 +12,11 @@
->  #include <linux/delay.h>
->  #include <linux/err.h>
->  #include <linux/export.h>
-> -#include <linux/gpio.h>
-> +#include <linux/gpio/consumer.h>
->  #include <linux/iopoll.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/of_device.h>
-> -#include <linux/of_gpio.h>
->  #include <linux/platform_device.h>
->  #include <linux/resource.h>
->  #include <linux/slab.h>
-> 
+On Mon, 2 Mar 2020, John Donnelly wrote:
 
-Thanks,
+> On 3/2/20 3:56 PM, Alan Stern wrote:
+> > On Mon, 2 Mar 2020, John Donnelly wrote:
+> > 
+> >> Hello linux-usb.
+> >>
+> >>
+> >> I am seeing this message every time a server is rebooted, and it started around 5.2 release. It is benign behavior but it does not occur in prior 4.18 Linux kernels.
+> > 
+> > What about 4.19?  4.20?  5.0?  And so on...
+> > 
+> > It still think your best bet for finding out what is happening is to do
+> > a bisection.
+> 
+>    Thank you for the feedback.  This could take awhile !  I will update 
+> you on my findings.
+> 
+> 
+> 
+> > 
+> >> Kernel 5.6.0-rc1.01.el8uek.rc1.x86_64 on an x86_64
+> >>
+> >>
+> >> [  836.063284] irq 18: nobody cared (try booting with the "irqpoll" option)
+> >> [  836.143498] CPU: 24 PID: 0 Comm: swapper/24 Kdump: loaded Not tainted
+> >> 5.3.6.jpd.01.+ #5
+> >> [  836.239310] Hardware name: Oracle Corporation ORACLE SERVER
+> >> X5-2/ASM,MOTHERBOARD,1U, BIOS 30140300 09/20/2018
+> >> [  836.358010] Call Trace:
+> >> [  836.387248]  <IRQ>
+> >> [  836.411298]  dump_stack+0x63/0x8a
+> >> [  836.450951]  __report_bad_irq+0x3c/0xb6
+> >> [  836.496830]  note_interrupt.cold.10+0xb/0x5d
+> >> [  836.547916]  handle_irq_event_percpu+0x6f/0x80
+> >> [  836.601077]  handle_irq_event+0x3b/0x5a
+> >> [  836.646962]  handle_fasteoi_irq+0x90/0x130
+> >> [  836.695968]  handle_irq+0x20/0x30
+> >> [  836.711139] megaraid_sas 0000:23:00.0: megasas_disable_intr_fusion is
+> >> called outbound_intr_mask:0x40000009
+> >> [  836.735612]  do_IRQ+0x4e/0xe0
+> >> [  836.735616]  common_interrupt+0xf/0xf
+> >> [  836.735619]  </IRQ>
+> >>
+> >> [  336.622666] [<0000000010b50533>] usb_hcd_irq
+> >> [  336.673746] [<0000000010b50533>] usb_hcd_irq
 
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Let's try to be a little more precise.  You said this happens "every 
+time a server is rebooted".  At first I thought you meant it happened 
+during the boot process.  But the timestamps on these log messages 
+indicate the unwanted IRQ happened 836 seconds _after_ boot, possibly 
+also 336 seconds after.
+
+So when exactly do you see this?
+
+>     Removing the modules BEFORE I do a shutdown does not produce the error - which is kind of surprising . 
+
+What exactly does this mean?  Do you mean that the error does not occur 
+at the time the module is removed?  Or do you mean that if you remove 
+the module and then reboot, the error does not occur during the reboot?  
+Or do you mean that if you remove the module and reboot, the error does 
+not occur until the system is booted yet again?
+
+>    It appears the modules are actually loaded by the ramdisk too  - prior to getting to the single user mode when I built them as loadable module .. because I renamed them  so modprobe/udev  would not find them after systemd starts.
+
+This depends on the contents of your initramfs.  Most likely you
+rebuilt that along with the kernel, so if the kernel uses modules for
+the EHCI drivers then so does the initramfs.
+
+Alan Stern
+
