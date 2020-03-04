@@ -2,112 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7376C17850D
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Mar 2020 22:47:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64DFA178899
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2020 03:42:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728002AbgCCVrf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Mar 2020 16:47:35 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:43963 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725932AbgCCVrf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Mar 2020 16:47:35 -0500
-Received: by mail-ot1-f67.google.com with SMTP id j5so4620304otn.10;
-        Tue, 03 Mar 2020 13:47:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=kzS7sppGtoeQZStlmLGTvgFs7IdS5XigTWRah7nTvXo=;
-        b=NhF5+mnsG1Ih/AIs16uFf3EZ1vDLZH2/LM4uFBE5p0HBDSAhMksi1AlZMsTdpW9MCb
-         FbsM7a1tmWyul9BrfgNnI1WcRQ+dm/XoDE+inLceEecql/2m8WK38PQf2lIIVhrvI0Ty
-         ifpmwEgagy4UrImGjkc42E2U9lxSaC6mirsrzYWWvCv4L26vtiY4M/5DFO3DVdYRxfZw
-         MxOatoVNLEBCjzqiMXJhkc1D7/YsfMOO6TKaReb5/4OOYgPT4PNkkajZWBcd+ZAoY9RA
-         M3QLgzKaxQDMnubjyQzR5/WBVMapohx/KQgu6TyQj9BTYfs7AXaVj9jMmOkGFozdmGfH
-         pFyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=kzS7sppGtoeQZStlmLGTvgFs7IdS5XigTWRah7nTvXo=;
-        b=e7b4HonVYLQioFBAmzf9W93KnPbCSZHSQe+Lz0wAuQh/zuHiPBFaNeyWm+P2GrKoOT
-         bU7995xUKwvDsx6WqGJZLupJphcI9ORxi4vW7DgIkqq42C/uX8dCL7kXHgbgpfOZQSFv
-         DmeeTNHqf8+k8w7GgoHP3Rqhln6A7CstnJcxxfI1yPfFfNxTaD3CSD19yXSbZ6SPwo9D
-         g2J2vNaD8Dlqb9XRq7s8MBRchL5a091BTD50Tc/X1+Yc4nlUfbB/CN+7Qjcg6eQuG+Ns
-         kFJ+U0XNiHOYhaFzzJNqTlQdFVMbko/BLyE9Z7GUb1VT5Vm6xevL3D+IJD3tEOpJQDxz
-         RW0g==
-X-Gm-Message-State: ANhLgQ1jhZBT2SfCVxGVlwVf9hPj3Pw8Fz69byw6IlmLs2VUNxFYKRZK
-        iqRg61BxlKQ/L6WTu4uR3VkpMh1Nj2csTo2vbUtKuYVH2Tw=
-X-Google-Smtp-Source: ADFU+vuDjdyRB3ehuG18m1u1HXkDauvyAATDfc8Cq4w7yAjGn9kV3muaZEkknO/VzqE6ZzRHvu5tlen8TgfRi1imdXw=
-X-Received: by 2002:a05:6830:104d:: with SMTP id b13mr4526678otp.42.1583272053229;
- Tue, 03 Mar 2020 13:47:33 -0800 (PST)
-MIME-Version: 1.0
-From:   Tony Fischetti <tony.fischetti@gmail.com>
-Date:   Tue, 3 Mar 2020 16:47:22 -0500
-Message-ID: <CAOMV6SWp3UgY+4AThCLeYmAk2gmh5m0UhG7+=ujPvKFsUdjU-A@mail.gmail.com>
-Subject: Trouble adding QUIRK_ALWAYS_POLL to quirky USB mouse
-To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S2387454AbgCDCmc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Mar 2020 21:42:32 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:50703 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2387397AbgCDCmc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Mar 2020 21:42:32 -0500
+X-UUID: 781e4cd2345447bc8a31c4eb8cdb05dd-20200304
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=qqnq9KOHB+4j9iQFNK0jTOehbrSjNlU6HSiLppYdxEQ=;
+        b=HPqHf1hn2UgH3pi+uyUeBtthjBsyM+kwUK6wrB1iWCeomoCRdLKqUTtAgCwLXDspY9ItbHRSLdYEc/zN2e2Rh2EZpVV2yzZQmnFZ55qP3ugM+R3xu9JH4qGICOtxFGnTXXjvTA6kFBOFFPM5WEzBYtHeu9yBbUtV2OYcg3ymMVA=;
+X-UUID: 781e4cd2345447bc8a31c4eb8cdb05dd-20200304
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1632441705; Wed, 04 Mar 2020 10:42:26 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Wed, 4 Mar 2020 10:41:15 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 4 Mar 2020 10:43:03 +0800
+Message-ID: <1583289743.12083.52.camel@mtkswgap22>
+Subject: Re: [PATCH v4] usb: gadget: f_fs: try to fix AIO issue under ARM 64
+ bit TAGGED mode
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Evgenii Stepanov <eugenis@google.com>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Shen Jing <jingx.shen@intel.com>,
+        CC Hwang <cc.hwang@mediatek.com>,
+        Peter Chen <peter.chen@nxp.com>,
+        "Mediatek WSD Upstream" <wsd_upstream@mediatek.com>,
+        Jerry Zhang <zhangjerry@google.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        <linux-usb@vger.kernel.org>, "Loda Chou" <loda.chou@mediatek.com>,
+        LKML <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Vincent Pelletier <plr.vincent@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-mediatek@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Date:   Wed, 4 Mar 2020 10:42:23 +0800
+In-Reply-To: <CAFKCwrj-0aQN_cUxf8=h7AbfS_rLEwxqePZN2kGHZxgWi2=ncw@mail.gmail.com>
+References: <1582627315-21123-1-git-send-email-macpaul.lin@mediatek.com>
+         <1582718512-28923-1-git-send-email-macpaul.lin@mediatek.com>
+         <20200228164848.GH4019108@arrakis.emea.arm.com>
+         <1583032843.12083.24.camel@mtkswgap22>
+         <20200302161929.GA48767@C02TF0J2HF1T.cambridge.arm.com>
+         <CAFKCwrj-0aQN_cUxf8=h7AbfS_rLEwxqePZN2kGHZxgWi2=ncw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
+MIME-Version: 1.0
+X-TM-SNTS-SMTP: BA309130D7E973DD8EC97C0BA36C398DBC0D6CC09E29C013944033B1EDA201232000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi all,
+T24gVHVlLCAyMDIwLTAzLTAzIGF0IDExOjE5IC0wODAwLCBFdmdlbmlpIFN0ZXBhbm92IHdyb3Rl
+Og0KPiBJJ20gYSBiaXQgc3VycHJpc2VkIHRoYXQgdGhpcyBpcyBuZWNlc3NhcnksIGdpdmVuIHRo
+YXQgdGhlIGVhcmxpZXINCj4gcGF0Y2ggdGhhdCBhZGRlZCB0aGUgKGN1cnJlbnQtPmZsYWdzICYg
+UEZfS1RIUkVBRCkgY29uZGl0aW9uIHdhcyBpbg0KPiByZXNwb25zZSB0byB0aGlzIGV4YWN0IHBy
+b2JsZW0sIGFuZCBJIGtub3cgZm9yIHN1cmUgdGhhdCBpdCBoZWxwZWQuDQo+IFRoaXMgd2FzIHRo
+ZSBzdGFjayB0cmFjZSBmb3IgdGhlIGNhbGwgdG8gX19yYW5nZV9vayBpbiB0aGF0IGNhc2U6DQo+
+IFsgICAxMi44ODY3NjVdIGMxICAgIDI3MSAgX2NvcHlfdG9faXRlcisweGI4LzB4NWMwDQo+IA0K
+PiBbICAgMTIuODkxNDIxXSBjMSAgICAyNzEgIGZmc191c2VyX2NvcHlfd29ya2VyKzB4ZWMvMHgy
+NGMNCj4gWyAgIDEyLjg5NjY5OV0gYzEgICAgMjcxICBwcm9jZXNzX29uZV93b3JrKzB4MjY0LzB4
+NDUwDQo+IFsgICAxMi45MDE3MTNdIGMxICAgIDI3MSAgd29ya2VyX3RocmVhZCsweDI1MC8weDQ4
+NA0KPiBbICAgMTIuOTA2NDU0XSBjMSAgICAyNzEgIGt0aHJlYWQrMHgxMWMvMHgxMmMNCj4gWyAg
+IDEyLjkxMDY2NF0gYzEgICAgMjcxICByZXRfZnJvbV9mb3JrKzB4MTAvMHgxOA0KDQo+IEl0IHdv
+dWxkIGJlIGdyZWF0IHRvIGtub3cgd2hhdCBjaGFuZ2VkIHRvIHJlcXVpcmUgdGhlIHVwZGF0ZWQN
+Cj4gY29uZGl0aW9uLg0KDQo+IEFkZGluZyBhIHByY3RsIGNhbGwgdG8gYWRiIGlzIHVubGlrZWx5
+IHRvIGhlbHAsIGJlY2F1c2UgaXQgd291bGQgbm90DQo+IHN0b3AgdGFnZ2VkIGFkZHJlc3MgZ2Vu
+ZXJhdGlvbiBpbiBtYWxsb2MuDQoNClNvcnJ5IGZvciBsYXRlIHJlcGx5LCBhZnRlciBjYXJlZnVs
+bHkgY2hlY2sgdGhlIGtlcmVubCB1cGRhdGUgc3RhdHVzDQppbiBNZWRpYXRlaydzIGJyYW5jaC4g
+SSd2ZSBmb3VuZCB3ZSBnb3QgdGhpcyBwYXRjaCAoZGYzMjVlMDVhNjgyDQooImFybTY0OiBWYWxp
+ZGF0ZSB0YWdnZWQgYWRkcmVzc2VzIGluIGFjY2Vzc19vaygpIGNhbGxlZCBmcm9tIGtlcm5lbA0K
+dGhyZWFkcyIpKSB1cGRhdGVkIGludG8gaW50ZXJuYWwgTWVkaWF0ZWsncyB3b3JraW5nIHRyZWUg
+YXJvdW5kIEZlYiAyMw0Kb3IgMjQuIEhvd2V2ZXIsIEknbSBub3Qgc3VyZSB3aHkgdGhhdCBwYXRj
+aCBjYW5ub3Qgd29yayBpbiBteSBvd24NCndvcmtpbmcgdHJlZSBhdCB0aGF0IHRpbWUuIEkndmUg
+aW5kZWVkIGR1bXBlZCB1c2VyIHNwYWNlIGFkZHJlc3MgYW5kDQpjaGVja2VkIHRoZSByZXR1cm4g
+cmVzdWx0IGluIGFjY2Vzc19vaygpIGFuZCBmb3VuZCBpdCB3YXMgbm90IHdvcmtlZC4NCg0KSW4g
+dGhlc2UgZGF5cyBJJ3ZlIGNsZWFuIHVwIGFsbCBteSB3b3JraW5nIHNwYWNlIGFuZCByZS10ZXN0
+IHRoaXMgcGF0Y2gsDQpJJ3ZlIGZvdW5kIHRvIGNoZWNrIFBGX0tUSFJFQUQgYW5kIFRJRl9UQUdH
+RURfQUREUiB3YXMgZW5vdWdoIHRvIHNvbHZlDQp0aGlzIHByb2JsZW0uIFNvcnJ5IGZvciBib3Ro
+ZXJpbmcgSSdtIG5vdCBzdXJlIHdoYXQgY2F1c2VzIHRoYXQgZmFpbCBpbg0KcHJldmlvdXMgZW52
+aXJvbm1lbnQuDQoNCk1vcmVvdmVyLCBJJ3ZlIHRlc3RlZCBQRl9XUV9XT1JLRVIgY2FzZSwgaWYg
+d2UgcmVwbGFjZWQgdGVzdCBmbGFnDQpQRl9LVEhSRUFEIGJ5IFBGX1dRX1dPUktFUiwgQUlPIHdp
+bGwgc3RpbGwgYmUgd29ya2VkLCB0b28uIEJvdGggY29kZQ0KDQpBLg0KICAgICAgICBpZiAoSVNf
+RU5BQkxFRChDT05GSUdfQVJNNjRfVEFHR0VEX0FERFJfQUJJKSAmJg0KCQkoY3VycmVudC0+Zmxh
+Z3MgJiBQRl9LVEhSRUFEIHx8IHRlc3RfdGhyZWFkX2ZsYWcoVElGX1RBR0dFRF9BRERSKSkpDQoN
+Cm9yDQoNCkIuDQogICAgICAgIGlmIChJU19FTkFCTEVEKENPTkZJR19BUk02NF9UQUdHRURfQURE
+Ul9BQkkpICYmDQoJCShjdXJyZW50LT5mbGFncyAmIFBGX1dRX1dPUktFUiB8fCB0ZXN0X3RocmVh
+ZF9mbGFnKFRJRl9UQUdHRURfQUREUikpKQ0KDQphcmUgd29ya2VkIGZvciB0aGlzIGlzc3VlLg0K
+DQo+IE9uIE1vbiwgTWFyIDIsIDIwMjAgYXQgODoxOSBBTSBDYXRhbGluIE1hcmluYXMNCj4gPGNh
+dGFsaW4ubWFyaW5hc0Bhcm0uY29tPiB3cm90ZToNCj4gDQo+ICAgICAgICAgT24gU3VuLCBNYXIg
+MDEsIDIwMjAgYXQgMTE6MjA6NDNBTSArMDgwMCwgTWFjcGF1bCBMaW4gd3JvdGU6DQo+ICAgICAg
+ICAgPiBPbiBGcmksIDIwMjAtMDItMjggYXQgMTY6NDggKzAwMDAsIENhdGFsaW4gTWFyaW5hcyB3
+cm90ZToNCj4gICAgICAgICA+ID4gT24gV2VkLCBGZWIgMjYsIDIwMjAgYXQgMDg6MDE6NTJQTSAr
+MDgwMCwgTWFjcGF1bCBMaW4NCj4gICAgICAgICB3cm90ZToNCj4gICAgICAgICA+ID4gPiBkaWZm
+IC0tZ2l0IGEvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL2ZfZnMuYw0KPiAgICAgICAgIGIv
+ZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL2ZfZnMuYw0KPiAgICAgICAgID4gPiA+IGluZGV4
+IGNlMWQwMjMuLjE5MjkzNWYgMTAwNjQ0DQo+ICAgICAgICAgPiA+ID4gLS0tIGEvZHJpdmVycy91
+c2IvZ2FkZ2V0L2Z1bmN0aW9uL2ZfZnMuYw0KPiAgICAgICAgID4gPiA+ICsrKyBiL2RyaXZlcnMv
+dXNiL2dhZGdldC9mdW5jdGlvbi9mX2ZzLmMNCj4gICAgICAgICA+ID4gPiBAQCAtNzE1LDcgKzcx
+NSwyMCBAQCBzdGF0aWMgdm9pZA0KPiAgICAgICAgIGZmc19lcGZpbGVfaW9fY29tcGxldGUoc3Ry
+dWN0IHVzYl9lcCAqX2VwLCBzdHJ1Y3QgdXNiX3JlcXVlc3QNCj4gICAgICAgICAqcmVxKQ0KPiAg
+ICAgICAgID4gPiA+ICANCj4gICAgICAgICA+ID4gPiAgc3RhdGljIHNzaXplX3QgZmZzX2NvcHlf
+dG9faXRlcih2b2lkICpkYXRhLCBpbnQNCj4gICAgICAgICBkYXRhX2xlbiwgc3RydWN0IGlvdl9p
+dGVyICppdGVyKQ0KPiAgICAgICAgID4gPiA+ICB7DQo+ICAgICAgICAgPiA+ID4gLSBzc2l6ZV90
+IHJldCA9IGNvcHlfdG9faXRlcihkYXRhLCBkYXRhX2xlbiwgaXRlcik7DQo+ICAgICAgICAgPiA+
+ID4gKyBzc2l6ZV90IHJldDsNCj4gICAgICAgICA+ID4gPiArDQo+ICAgICAgICAgPiA+ID4gKyNp
+ZiBkZWZpbmVkKENPTkZJR19BUk02NCkNCj4gICAgICAgICA+ID4gPiArIC8qDQo+ICAgICAgICAg
+PiA+ID4gKyAgKiBSZXBsYWNlIHRhZ2dlZCBhZGRyZXNzIHBhc3NlZCBieSB1c2VyIHNwYWNlDQo+
+ICAgICAgICAgYXBwbGljYXRpb24gYmVmb3JlDQo+ICAgICAgICAgPiA+ID4gKyAgKiBjb3B5aW5n
+Lg0KPiAgICAgICAgID4gPiA+ICsgICovDQo+ICAgICAgICAgPiA+ID4gKyBpZiAoSVNfRU5BQkxF
+RChDT05GSUdfQVJNNjRfVEFHR0VEX0FERFJfQUJJKSAmJg0KPiAgICAgICAgID4gPiA+ICsgICAg
+ICAgICAoaXRlci0+dHlwZSA9PSBJVEVSX0lPVkVDKSkgew0KPiAgICAgICAgID4gPiA+ICsgICAg
+ICAgICAqKHVuc2lnbmVkIGxvbmcgKikmaXRlci0+aW92LT5pb3ZfYmFzZSA9DQo+ICAgICAgICAg
+PiA+ID4gKyAgICAgICAgICAgICAgICAgKHVuc2lnbmVkDQo+ICAgICAgICAgbG9uZyl1bnRhZ2dl
+ZF9hZGRyKGl0ZXItPmlvdi0+aW92X2Jhc2UpOw0KPiAgICAgICAgID4gPiA+ICsgfQ0KPiAgICAg
+ICAgID4gPiA+ICsjZW5kaWYNCj4gICAgICAgICA+ID4gPiArIHJldCA9IGNvcHlfdG9faXRlcihk
+YXRhLCBkYXRhX2xlbiwgaXRlcik7DQo+ICAgICAgICAgPiA+ID4gICBpZiAobGlrZWx5KHJldCA9
+PSBkYXRhX2xlbikpDQo+ICAgICAgICAgPiA+ID4gICAgICAgICAgIHJldHVybiByZXQ7DQo+ICAg
+ICAgICAgPiA+IA0KPiAgICAgICAgID4gPiBJIGhhZCBmb3Jnb3R0ZW4gdGhhdCB3ZSBkaXNjdXNz
+ZWQgYSBzaW1pbGFyIGNhc2UgYWxyZWFkeSBhDQo+ICAgICAgICAgZmV3IG1vbnRocw0KPiAgICAg
+ICAgID4gPiBhZ28gKHRoYW5rcyB0byBFdmdlbmlpIGZvciBwb2ludGluZyBvdXQpLiBEbyB5b3Ug
+aGF2ZSB0aGlzDQo+ICAgICAgICAgY29tbWl0DQo+ICAgICAgICAgPiA+IGFwcGxpZWQgdG8geW91
+ciB0cmVlOiBkZjMyNWUwNWE2ODIgKCJhcm02NDogVmFsaWRhdGUNCj4gICAgICAgICB0YWdnZWQg
+YWRkcmVzc2VzIGluDQo+ICAgICAgICAgPiA+IGFjY2Vzc19vaygpIGNhbGxlZCBmcm9tIGtlcm5l
+bCB0aHJlYWRzIik/DQo+ICAgICAgICAgPiA+IA0KPiAgICAgICAgID4gDQo+ICAgICAgICAgPiBZ
+ZXMhIFdlIGhhdmUgdGhhdCBwYXRjaC4gSSd2ZSBhbHNvIGdvdCBHb29nbGUncyByZXBseSBhYm91
+dA0KPiAgICAgICAgIHJlZmVyZW5jaW5nDQo+ICAgICAgICAgPiB0aGlzIHBhdGNoIGluIGFuZHJv
+aWQga2VybmVsIHRyZWUuDQo+ICAgICAgICAgPg0KPiAgICAgICAgIGh0dHBzOi8vYW5kcm9pZC1y
+ZXZpZXcuZ29vZ2xlc291cmNlLmNvbS9jL2tlcm5lbC9jb21tb24vKy8xMTg2NjE1DQo+ICAgICAg
+ICAgPiANCj4gICAgICAgICA+IEhvd2V2ZXIsIGR1cmluZyBteSBkZWJ1Z2dpbmcgcHJvY2Vzcywg
+SSd2ZSBkdW1wZWQgc3BlY2lmaWMNCj4gICAgICAgICBsZW5ndGggKGUuZy4sDQo+ICAgICAgICAg
+PiAyNCBieXRlcyBmb3IgdGhlIGZpcnN0IHJlcXVlc3QpIEFJTyByZXF1ZXN0IGJ1ZmZlciBhZGRy
+ZXNzDQo+ICAgICAgICAgYm90aCBpbiBhZGJkDQo+ICAgICAgICAgPiBhbmQgaW4gX19yYW5nZV9v
+aygpLiBUaGVuIEkndmUgZm91bmQgX19yYW5nZV9vaygpIHN0aWxsDQo+ICAgICAgICAgYWx3YXlz
+IHJldHVybg0KPiAgICAgICAgID4gZmFsc2Ugb24gYWRkcmVzcyBiZWdpbiB3aXRoICIweDNjIi4g
+U2luY2UgdW50YWdnZWRfYWRkcigpDQo+ICAgICAgICAgYWxyZWFkeSBjYWxsZWQNCj4gICAgICAg
+ICA+IGluIF9fcmFuZ2Vfb2soKSwgdG8gc2V0ICJUSUZfVEFHR0VEX0FERFIiIHdpdGggYWRiZCdz
+IHVzZXINCj4gICAgICAgICBzcGFjZSBidWZmZXINCj4gICAgICAgICA+IHNob3VsZCBiZSB0aGUg
+cG9zc2libGUgc29sdXRpb24uIEhlbmNlIEkndmUgc2VuZCB0aGUgdjMNCj4gICAgICAgICBwYXRj
+aC4NCj4gICAgICAgICANCj4gICAgICAgICBmZnNfY29weV90b19pdGVyKCkgaXMgY2FsbGVkIGZy
+b20gYSB3b3JrcXVldWUNCj4gICAgICAgICAoZmZzX3VzZXJfY29weV93b3JrZXIoKSkuDQo+ICAg
+ICAgICAgVGhhdCdzIHN0aWxsIGluIGEga2VybmVsIHRocmVhZCBjb250ZXh0IGJ1dCBpdCBkb2Vz
+bid0IGhhdmUNCj4gICAgICAgICBQRl9LVEhSRUFEDQo+ICAgICAgICAgc2V0LCBoZW5jZSBfX3Jh
+bmdlX29rKCkgcmVqZWN0cyB0aGUgdGFnZ2VkIGFkZHJlc3MuIENhbiB5b3UNCj4gICAgICAgICB0
+cnkgdGhlIGRpZmYNCj4gICAgICAgICBiZWxvdzoNCj4gICAgICAgICANCj4gICAgICAgICBkaWZm
+IC0tZ2l0IGEvYXJjaC9hcm02NC9pbmNsdWRlL2FzbS91YWNjZXNzLmgNCj4gICAgICAgICBiL2Fy
+Y2gvYXJtNjQvaW5jbHVkZS9hc20vdWFjY2Vzcy5oDQo+ICAgICAgICAgaW5kZXggMzJmYzgwNjFh
+YTc2Li4yODAzMTQzY2FkMWYgMTAwNjQ0DQo+ICAgICAgICAgLS0tIGEvYXJjaC9hcm02NC9pbmNs
+dWRlL2FzbS91YWNjZXNzLmgNCj4gICAgICAgICArKysgYi9hcmNoL2FybTY0L2luY2x1ZGUvYXNt
+L3VhY2Nlc3MuaA0KPiAgICAgICAgIEBAIC02OCw3ICs2OCw4IEBAIHN0YXRpYyBpbmxpbmUgdW5z
+aWduZWQgbG9uZyBfX3JhbmdlX29rKGNvbnN0DQo+ICAgICAgICAgdm9pZCBfX3VzZXIgKmFkZHIs
+IHVuc2lnbmVkIGxvbmcgc2kNCj4gICAgICAgICAgICAgICAgICAqIHRoZSB1c2VyIGFkZHJlc3Mg
+YmVmb3JlIGNoZWNraW5nLg0KPiAgICAgICAgICAgICAgICAgICovDQo+ICAgICAgICAgICAgICAg
+ICBpZiAoSVNfRU5BQkxFRChDT05GSUdfQVJNNjRfVEFHR0VEX0FERFJfQUJJKSAmJg0KPiAgICAg
+ICAgIC0gICAgICAgICAgIChjdXJyZW50LT5mbGFncyAmIFBGX0tUSFJFQUQgfHwNCj4gICAgICAg
+ICB0ZXN0X3RocmVhZF9mbGFnKFRJRl9UQUdHRURfQUREUikpKQ0KPiAgICAgICAgICsgICAgICAg
+ICAgIChjdXJyZW50LT5mbGFncyAmIChQRl9LVEhSRUFEIHwgUEZfV1FfV09SS0VSKSB8fA0KPiAg
+ICAgICAgICsgICAgICAgICAgICB0ZXN0X3RocmVhZF9mbGFnKFRJRl9UQUdHRURfQUREUikpKQ0K
+PiAgICAgICAgICAgICAgICAgICAgICAgICBhZGRyID0gdW50YWdnZWRfYWRkcihhZGRyKTsNCj4g
+ICAgICAgICANCj4gICAgICAgICAgICAgICAgIF9fY2hrX3VzZXJfcHRyKGFkZHIpOw0KPiAgICAg
+ICAgIC0NCg0KTWFueSB0aGFua3MgdG8gQ2F0YWxpbiBhbmQgRXZnZW5paS4NCg0KUmVnYXJkcywN
+Ck1hY3BhdWwgTGluDQo=
 
-I have a lenovo pixart mouse (vendorId: 0x17ef, productId: 0x608d)
-that's afflicted with the apparently common problem of disconnecting
-and re-connecting every minute, each time incrementing the device
-number
-
-I tried to apply a patch very much like the one in this commit with
-the identical problem: dcf768b0ac868630e7bdb6f2f1c9fe72788012fa
-The particular patch I applied appears at the end of this email (not
-meant to be submitted/applied, just as a reference)
-
-The problem is that when I apply the patch and boot the new kernel,
-the quirk appears not to have been registered (it doesn't appear in
-/sys/module/usbhid/parameters/quirks)
-It is only when I add the kernel boot parameter
-usbhid.quirks=0x17ef:0x608d:0x00000400 that it appears to be working
-
-Anyone have any ideas on how to fix this? I'd like to submit a patch
-fixing this issue once I get it sorted out
-
-Thank you for your time.
-
----
- drivers/hid/hid-ids.h    | 1 +
- drivers/hid/hid-quirks.c | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 3a400ce603c4..9e1dfc714ea8 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -726,6 +726,7 @@
- #define USB_DEVICE_ID_LENOVO_X1_COVER    0x6085
- #define USB_DEVICE_ID_LENOVO_X1_TAB    0x60a3
- #define USB_DEVICE_ID_LENOVO_X1_TAB3    0x60b5
-+#define USB_DEVICE_ID_LENOVO_PIXART_USB_OPTICAL_MOUSE    0x608d
-
- #define USB_VENDOR_ID_LG        0x1fd2
- #define USB_DEVICE_ID_LG_MULTITOUCH    0x0064
-diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-index 0e7b2d998395..247747d6d8cf 100644
---- a/drivers/hid/hid-quirks.c
-+++ b/drivers/hid/hid-quirks.c
-@@ -103,6 +103,7 @@ static const struct hid_device_id hid_quirks[] = {
-     { HID_USB_DEVICE(USB_VENDOR_ID_KYE,
-USB_DEVICE_ID_KYE_PENSKETCH_M912), HID_QUIRK_MULTI_INPUT },
-     { HID_USB_DEVICE(USB_VENDOR_ID_KYE,
-USB_DEVICE_ID_KYE_EASYPEN_M406XE), HID_QUIRK_MULTI_INPUT },
-     { HID_USB_DEVICE(USB_VENDOR_ID_KYE,
-USB_DEVICE_ID_PIXART_USB_OPTICAL_MOUSE_ID2), HID_QUIRK_ALWAYS_POLL },
-+    { HID_USB_DEVICE(USB_VENDOR_ID_LENOVO,
-USB_DEVICE_ID_LENOVO_PIXART_USB_OPTICAL_MOUSE), HID_QUIRK_ALWAYS_POLL
-},
-     { HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH,
-USB_DEVICE_ID_LOGITECH_C007), HID_QUIRK_ALWAYS_POLL },
-     { HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH,
-USB_DEVICE_ID_LOGITECH_C077), HID_QUIRK_ALWAYS_POLL },
-     { HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH,
-USB_DEVICE_ID_LOGITECH_KEYBOARD_G710_PLUS), HID_QUIRK_NOGET },
---
