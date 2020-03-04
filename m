@@ -2,232 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79FA5178D6D
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2020 10:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3E6178D97
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2020 10:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728744AbgCDJ3y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Mar 2020 04:29:54 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:51252 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727734AbgCDJ3y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Mar 2020 04:29:54 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0249TjrZ089014;
-        Wed, 4 Mar 2020 03:29:45 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1583314185;
-        bh=e4PeKRutmxnsEKHu3OypTkMAaV/T5qt4QEtP5s9vREY=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=NRwhYCNqFvnyVPvKcBbdSJ4y9Do84BhAPnsMR6jbwPeQnDU8yGH+b/oun+IpeBj2X
-         5eL2geZEQ9ZtIHFY4ok0Zs/4qX7iXRYK3zGVTSUUQlIl8yPA3xjnxLxD17yC6KyD57
-         5jvdRlix0BTsyJIb1f2rM4fJeTlS0YaEIHlLPMcE=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0249Tjn1002490;
-        Wed, 4 Mar 2020 03:29:45 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 4 Mar
- 2020 03:29:44 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Wed, 4 Mar 2020 03:29:44 -0600
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0249TfK1079733;
-        Wed, 4 Mar 2020 03:29:42 -0600
-Subject: Re: [PATCH v1] usb:gadget: Fix issue with config_ep_by_speed
- function.
-To:     Pawel Laszczak <pawell@cadence.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "balbi@kernel.org" <balbi@kernel.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jbergsagel@ti.com" <jbergsagel@ti.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>, "nm@ti.com" <nm@ti.com>,
-        "peter.chen@nxp.com" <peter.chen@nxp.com>,
-        Rahul Kumar <kurahul@cadence.com>,
-        Sanket Parmar <sparmar@cadence.com>
-References: <1581502748-22464-1-git-send-email-jpawar@cadence.com>
- <c722e1c3-7aee-11a6-295f-fb183c611300@synopsys.com>
- <BYAPR07MB47098648C28E5E4BB9B78DCADD150@BYAPR07MB4709.namprd07.prod.outlook.com>
- <7ef4b9c5-8694-4d8e-2866-95ec11546bec@synopsys.com>
- <BYAPR07MB47093444129A8EEB734F4F2EDD150@BYAPR07MB4709.namprd07.prod.outlook.com>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <d00da996-1254-87c4-8c58-3ca76561f398@ti.com>
-Date:   Wed, 4 Mar 2020 11:29:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S2387727AbgCDJie (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Mar 2020 04:38:34 -0500
+Received: from mga06.intel.com ([134.134.136.31]:36802 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387714AbgCDJie (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Mar 2020 04:38:34 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Mar 2020 01:38:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,513,1574150400"; 
+   d="scan'208";a="352055626"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001.fm.intel.com with SMTP; 04 Mar 2020 01:38:30 -0800
+Received: by lahna (sSMTP sendmail emulation); Wed, 04 Mar 2020 11:38:29 +0200
+Date:   Wed, 4 Mar 2020 11:38:29 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] thunderbolt: Fix error code in
+ tb_port_is_width_supported()
+Message-ID: <20200304093829.GJ2540@lahna.fi.intel.com>
+References: <20200303101716.uf6l62oavfqmf6hm@kili.mountain>
 MIME-Version: 1.0
-In-Reply-To: <BYAPR07MB47093444129A8EEB734F4F2EDD150@BYAPR07MB4709.namprd07.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200303101716.uf6l62oavfqmf6hm@kili.mountain>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Pawel,
+On Tue, Mar 03, 2020 at 01:17:16PM +0300, Dan Carpenter wrote:
+> This function is type bool, and it's supposed to return true on success. 
+> Unfortunately, this path takes negative error codes and casts them to
+> bool (true) so it's treated as success instead of failure.
+> 
+> Fixes: 91c0c12080d0 ("thunderbolt: Add support for lane bonding")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-On 14/02/2020 21:55, Pawel Laszczak wrote:
->>
->> Pawel Laszczak wrote:
->>> Hi,
->>>
->>>> Hi,
->>>>
->>>> Jayshri Pawar wrote:
->>>>> This patch adds additional parameter alt to config_ep_by_speed function.
->>>>> This additional parameter allows to improve this function and
->>>>> find proper usb_ss_ep_comp_descriptor.
->>>>>
->>>>> Problem has appeared during testing f_tcm (BOT/UAS) driver function.
->>>>>
->>>>> f_tcm function for SS use array of headers for both  BOT/UAS alternate
->>>>> setting:
->>>>>
->>>>> static struct usb_descriptor_header *uasp_ss_function_desc[] = {
->>>>>            (struct usb_descriptor_header *) &bot_intf_desc,
->>>>>            (struct usb_descriptor_header *) &bot_uasp_ss_bi_desc,
->>>>>            (struct usb_descriptor_header *) &bot_bi_ep_comp_desc,
->>>>>            (struct usb_descriptor_header *) &bot_uasp_ss_bo_desc,
->>>>>            (struct usb_descriptor_header *) &bot_bo_ep_comp_desc,
->>>>>
->>>>>            (struct usb_descriptor_header *) &uasp_intf_desc,
->>>>>            (struct usb_descriptor_header *) &bot_uasp_ss_bi_desc,
->>>>>            (struct usb_descriptor_header *) &uasp_bi_ep_comp_desc,
->>>>>            (struct usb_descriptor_header *) &uasp_bi_pipe_desc,
->>>>>            (struct usb_descriptor_header *) &bot_uasp_ss_bo_desc,
->>>>>            (struct usb_descriptor_header *) &uasp_bo_ep_comp_desc,
->>>>>            (struct usb_descriptor_header *) &uasp_bo_pipe_desc,
->>>>>            (struct usb_descriptor_header *) &uasp_ss_status_desc,
->>>>>            (struct usb_descriptor_header *) &uasp_status_in_ep_comp_desc,
->>>>>            (struct usb_descriptor_header *) &uasp_status_pipe_desc,
->>>>>            (struct usb_descriptor_header *) &uasp_ss_cmd_desc,
->>>>>            (struct usb_descriptor_header *) &uasp_cmd_comp_desc,
->>>>>            (struct usb_descriptor_header *) &uasp_cmd_pipe_desc,
->>>>>            NULL,
->>>>> };
->>>>>
->>>>> The first 5 descriptors are associated with BOT alternate setting,
->>>>> and others are associated  with UAS.
->>>>>
->>>>> During handling UAS alternate setting f_tcm drivr invokes
->>>>> config_ep_by_speed and this function sets incorrect companion endpoint
->>>>> descriptor in usb_ep object.
->>>>>
->>>>> Instead setting ep->comp_desc to uasp_bi_ep_comp_desc function in this
->>>>> case set ep->comp_desc to bot_uasp_ss_bi_desc.
->>>>>
->>>>> This is due to the fact that it search endpoint based on endpoint
->>>>> address:
->>>>>
->>>>>            for_each_ep_desc(speed_desc, d_spd) {
->>>>>                    chosen_desc = (struct usb_endpoint_descriptor *)*d_spd;
->>>>>                    if (chosen_desc->bEndpoitAddress == _ep->address)
->>>>>                            goto ep_found;
->>>>>            }
->>>>>
->>>>> And in result it uses the descriptor from BOT alternate setting
->>>>> instead UAS.
->>>>>
->>>>> Finally, it causes that controller driver during enabling endpoints
->>>>> detect that just enabled endpoint for bot.
->>>>>
->>>>> Signed-off-by: Jayshri Pawar <jpawar@cadence.com>
->>>>> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
->>>>> ---
->>>>>     drivers/usb/gadget/composite.c               | 46 ++++++++++++++------
->>>>>     drivers/usb/gadget/function/f_acm.c          |  7 +--
->>>>>     drivers/usb/gadget/function/f_ecm.c          |  7 +--
->>>>>     drivers/usb/gadget/function/f_eem.c          |  4 +-
->>>>>     drivers/usb/gadget/function/f_fs.c           |  3 +-
->>>>>     drivers/usb/gadget/function/f_hid.c          |  4 +-
->>>>>     drivers/usb/gadget/function/f_loopback.c     |  2 +-
->>>>>     drivers/usb/gadget/function/f_mass_storage.c |  5 ++-
->>>>>     drivers/usb/gadget/function/f_midi.c         |  2 +-
->>>>>     drivers/usb/gadget/function/f_ncm.c          |  7 +--
->>>>>     drivers/usb/gadget/function/f_obex.c         |  4 +-
->>>>>     drivers/usb/gadget/function/f_phonet.c       |  4 +-
->>>>>     drivers/usb/gadget/function/f_rndis.c        |  7 +--
->>>>>     drivers/usb/gadget/function/f_serial.c       |  4 +-
->>>>>     drivers/usb/gadget/function/f_sourcesink.c   | 11 +++--
->>>>>     drivers/usb/gadget/function/f_subset.c       |  4 +-
->>>>>     drivers/usb/gadget/function/f_tcm.c          | 36 +++++++--------
->>>>>     drivers/usb/gadget/function/f_uac1_legacy.c  |  2 +-
->>>>>     drivers/usb/gadget/function/f_uvc.c          |  5 ++-
->>>>>     drivers/usb/gadget/function/u_audio.c        |  4 +-
->>>>>     include/linux/usb/composite.h                |  2 +-
->>>>>     21 files changed, 99 insertions(+), 71 deletions(-)
->>>>>
->>>> I think we should create a new function and keep the old
->>>> config_ep_by_speed() for default alt-setting (e.i. have
->>>> config_ep_by_speed calls the new function with default alt-setting 0).
->>>> This way, we can keep compatibility with old function drivers and
->>>> minimize changes. At least that's what we did.
->>>>
->>> I don't think we need the separate function.
->>> If we set last parameter alt=0 then this function will work in the same way as old one.
->>>
->>
->> I wasn't talking about that. This patch modifies the
->> config_ep_by_speed() parameters, which requires to make a change to
->> every function driver of the kernel, and all in a single patch. This
->> makes it difficult to backport this fix. The only function driver that
->> you really need this fix for is f_tcm because of the stream eps right?
->>
->> You could just add a function like
->>
->>     int config_ep_by_speed_and_alt(struct usb_gadget *g, struct
->>     usb_function *f, unsigned int alt, struct usb_ep *_ep);
->>
->>
->> Then redefine config_ep_by_speed() to use it
->>
->>     int config_ep_by_speed(struct usb_gadget *g,
->>                            struct usb_function *f,
->>                            struct usb_ep *_ep)
->>     {
->>             return config_ep_by_speed_and_alt(g, f, 0, _ep);
->>     }
->>
->> This way, 1) you can split this patch, 2) you only need to make a fix to
->> f_tcm, 3) this fix can be backported much easier.
->>
->> Anyways, this is just a suggestion. It's up to the maintainers to decide.
-> 
-> Thanks for clarification, now I got it. In my opinion, both solution has pros and cons
-> 1. Original patch.
-> cons: introduce many change in many files
-> pros:  we have only single API function - simpler Gadget Subsystem API
-> 
-> 2. using config_ep_by_speed_and_alt
-> cons: minimal impact to other files.
-> pros: introduce the new API function which in fact could be  omitted.
-> 
-
-I would vote for 2.
-
-> It's only my personal opinion :) .
-> 
-> Felipe and Greg what is you opinion ?
-> 
-> Best Regards,
-> Pawel
-> 
->>
->> BR,
->> Thinh
-> 
-
--- 
-
-cheers,
--roger
-
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Applied to fixes, thanks!
