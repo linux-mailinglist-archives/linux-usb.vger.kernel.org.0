@@ -2,311 +2,226 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48EA2178EB7
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2020 11:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DC1178F76
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2020 12:19:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387751AbgCDKnl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Mar 2020 05:43:41 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:36205 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387396AbgCDKnl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Mar 2020 05:43:41 -0500
-Received: by mail-wr1-f66.google.com with SMTP id j16so1785085wrt.3
-        for <linux-usb@vger.kernel.org>; Wed, 04 Mar 2020 02:43:39 -0800 (PST)
+        id S2387761AbgCDLTa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Mar 2020 06:19:30 -0500
+Received: from mail-lj1-f177.google.com ([209.85.208.177]:41946 "EHLO
+        mail-lj1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387398AbgCDLTa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Mar 2020 06:19:30 -0500
+Received: by mail-lj1-f177.google.com with SMTP id u26so1552748ljd.8
+        for <linux-usb@vger.kernel.org>; Wed, 04 Mar 2020 03:19:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=cOPZZa2YeYj4bRs6Ipe06Uttlzd0Ipezkhv8/7vAJ3Y=;
-        b=H2YdxMEonM48/H90ulP0bKnW4mf6ll2D/7MShaXQ0JUEexEseL5SRavAOB6kvcDxyX
-         ayjDNPNuoLKP32a+o13rCE+8zgEA8rTDxq2F2N1mwYbQh6vmTQJK0IDsQVDn3Bek07fF
-         UMnXcqYXkJaNyGPn0deadzKZCd2p/e2JKv/ILu8ZlzLDqWfFwhyeQdFyXY5uaUKF2Ufd
-         aTTJosQ5irgVG9BvqHC75J71Dtsw22+eFG5aKT3nEa7na54Lgr2kr9rwiASNFm3pMRAv
-         DAez0e+bGO5Hq0SFWJSsbNG5RBYa83K71pjnJi0aax1Xuu/fVD6Fhh8Dx558WolEg7Ns
-         31/g==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language;
+        bh=e+ODjofxvJm9uXagDSmFGYHa0XWxh2X4TBSz6GyGCHI=;
+        b=kpWxjrR20Aq7lsJdedTg+kbzml0jbRIa8bv0jI+DHFoenCkCpihov4i1QOF1k54/Kf
+         3iUemZ1nm2eEmF5CCIocIrTE52hZ+j+5c2N8lJw0ORY27v6j5N+QzMwTbF3Z4OTqdl+J
+         /+ATBM6eE+nyFpzTB6L8lwctULSh2rOf/rxZbii8Eip89KaN5+ELWeiXk99P78eOqitj
+         tK7jpfBnK3c6yvYsqzH0dLYIrVna8H0B9pogQiJ0tOQY077c88us4Jlq0QjsXkah1ooX
+         96fpmzumRQ2d6AfaRNgDUtbi/RTwZSd/4/zs0C0mBUo5WbSNn4meEr1QEy7woh7rnafd
+         4ZjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=cOPZZa2YeYj4bRs6Ipe06Uttlzd0Ipezkhv8/7vAJ3Y=;
-        b=A12/kun1NX6Msvjzt8S7amUJv5QgUVjF6SRq6itiGos/bmLiG5xu6Fo82rldj6j891
-         4sTtC6YRjQTNpMLqVZNKsjfCKCMzr/tVa6MhNkSRHuXid/hpACIpI1JHYIm7zPFul7Mm
-         oYErZIQmXdztdhPiUy+MGtrTjPK2mIdMnUKoUUOAIsgkR6AqR70p/PIl7Q6Lr5vFtGpi
-         pdnQnKASOSZyPCFLkyA1/io0igPDmP5YgKHvav/tMYGIM26LOjUgvHxDbfHx2SeAFhCd
-         Os3VVR8Wpem3Vz2J+I7N8MM2U+tMDDKj5thx1R5cq+xNsQr4gmNlO536rZ4pTPPxyij3
-         kLvg==
-X-Gm-Message-State: ANhLgQ2AlCLElXV1r+g1Hc5JtRmtK5MBxAiWMNRClVlL20JwVZYrEAPS
-        iscddDPfXmL0fvGU2E6W27g=
-X-Google-Smtp-Source: ADFU+vtoYhfV/w4G2UKCqzsbMvIP9XslEixwtR7FHJH6PFjLf6rl9s+WmeopX54TdfIPkN95A28neA==
-X-Received: by 2002:adf:90e1:: with SMTP id i88mr3585686wri.95.1583318618656;
-        Wed, 04 Mar 2020 02:43:38 -0800 (PST)
-Received: from danielepa-ThinkCentre-M93p.tmt.telital.com (static-82-85-31-68.clienti.tiscali.it. [82.85.31.68])
-        by smtp.gmail.com with ESMTPSA id b14sm29155250wrn.75.2020.03.04.02.43.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2020 02:43:38 -0800 (PST)
-From:   Daniele Palmas <dnlplm@gmail.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>
-Subject: [PATCH 1/1] usb: serial: option: add ME910G1 ECM composition 0x110b
-Date:   Wed,  4 Mar 2020 11:43:10 +0100
-Message-Id: <20200304104310.2938-1-dnlplm@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language;
+        bh=e+ODjofxvJm9uXagDSmFGYHa0XWxh2X4TBSz6GyGCHI=;
+        b=imWnNpXL7hBY3xtKhanD0FWT/oGDcjXLiMjFUKKXSRTTBeP7rmmwpSv8godaEJK3vq
+         /dPdoCjk+2VpOOfMDRXVn93mrn5Ph9i98YcFVQJnXtijj76WyFj0Pp4t6xxQIEOAGh2H
+         YGxN7aFfWmADQzbxDCpNRjsEkwq/T4aDNoTzZ5+zMBKHNzBoWJLUV7JShbnwC+fyJM5z
+         A3n2BRBiQBrtTpZQkUkO8NxUDDw+5Fvg6DhPI6JjbAJrnBnwJeV9pbT4kvU3NxBeB1hL
+         UBjHPxGoq0Xx9txocu7y8L4J4Qp1c6lrI51LJ/T27unZftrrwVzuD9vz+rT9YbMwE0r9
+         UDaw==
+X-Gm-Message-State: ANhLgQ2dI7hNk0Q9Qq00m6fHlKtjU4vpFNMlogOXhfN52IFRWjmxK/7q
+        ZbrMXEgduCMKBMhUs7BzPBx/cSj1
+X-Google-Smtp-Source: ADFU+vsWgW9SLEBb8zx1hA6AXTC5T+sP0GFwdR0bz5DlQo6Vj4gNIzCNY8yM13oxgh9AtN/xKPDdfQ==
+X-Received: by 2002:a05:651c:1072:: with SMTP id y18mr1723164ljm.243.1583320766617;
+        Wed, 04 Mar 2020 03:19:26 -0800 (PST)
+Received: from [192.168.1.14] ([89.109.10.26])
+        by smtp.gmail.com with ESMTPSA id r15sm13747818ljh.11.2020.03.04.03.19.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Mar 2020 03:19:25 -0800 (PST)
+Subject: Re: driver
+To:     Greg KH <greg@kroah.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <5e5941d6.1c69fb81.92ce2.f6a5@mx.google.com>
+ <20200304090905.GD1429273@kroah.com>
+From:   Igor Filippov <igorf777@gmail.com>
+Message-ID: <00931b5b-a8f0-3876-8762-e18ecdee7be4@gmail.com>
+Date:   Wed, 4 Mar 2020 14:19:24 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <20200304090905.GD1429273@kroah.com>
+Content-Type: multipart/mixed;
+ boundary="------------913C86F080D7FB5B31D9D9C8"
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add ME910G1 ECM composition 0x110b: tty, tty, tty, ecm
+This is a multi-part message in MIME format.
+--------------913C86F080D7FB5B31D9D9C8
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
----
-Hi Johan,
+The i-7565H1 device has a driver installation script from the device 
+manufacturer. This script contains the instruction "modprobe usbserial". 
+If this is not correct, could you tell me which driver we should use? I 
+attach the script to the message. The link to where we got the software: 
+http://www.icpdas.com/root/product/solutions/industrial_communication/fieldbus/can_bus/converter/i-7565-h1h2.html
 
-following the lsusb output, thanks.
+thanks,
 
-Bus 003 Device 005: ID 1bc7:110b Telit Wireless Solutions
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass          239 Miscellaneous Device
-  bDeviceSubClass         2 ?
-  bDeviceProtocol         1 Interface Association
-  bMaxPacketSize0        64
-  idVendor           0x1bc7 Telit Wireless Solutions
-  idProduct          0x110b 
-  bcdDevice            0.00
-  iManufacturer           4 Telit
-  iProduct                3 Telit ME910
-  iSerial                 5 d15932d6
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength          171
-    bNumInterfaces          5
-    bConfigurationValue     1
-    iConfiguration          2 Telit Configuration
-    bmAttributes         0xe0
-      Self Powered
-      Remote Wakeup
-    MaxPower              500mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass    255 Vendor Specific Subclass
-      bInterfaceProtocol    255 Vendor Specific Protocol
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass    255 Vendor Specific Subclass
-      bInterfaceProtocol    255 Vendor Specific Protocol
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               5
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        2
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass    254 
-      bInterfaceProtocol    255 
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x84  EP 4 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               5
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x85  EP 5 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x03  EP 3 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         3
-      bInterfaceCount         2
-      bFunctionClass          2 Communications
-      bFunctionSubClass       0 
-      bFunctionProtocol       0 
-      iFunction               0 
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        3
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2 Communications
-      bInterfaceSubClass      6 Ethernet Networking
-      bInterfaceProtocol      0 
-      iInterface              0 
-      CDC Header:
-        bcdCDC               1.10
-      CDC Ethernet:
-        iMacAddress                      1 00A0C6932D60
-        bmEthernetStatistics    0x00000000
-        wMaxSegmentSize              16384
-        wNumberMCFilters            0x0001
-        bNumberPowerFilters              0
-      CDC Union:
-        bMasterInterface        3
-        bSlaveInterface         4 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x86  EP 6 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               5
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        4
-      bAlternateSetting       0
-      bNumEndpoints           0
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0 Unused
-      bInterfaceProtocol      0 
-      iInterface              0 
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        4
-      bAlternateSetting       1
-      bNumEndpoints           2
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0 Unused
-      bInterfaceProtocol      0 
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x87  EP 7 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x04  EP 4 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-Device Qualifier (for other device speed):
-  bLength                10
-  bDescriptorType         6
-  bcdUSB               2.00
-  bDeviceClass          239 Miscellaneous Device
-  bDeviceSubClass         2 ?
-  bDeviceProtocol         1 Interface Association
-  bMaxPacketSize0        64
-  bNumConfigurations      1
-Device Status:     0x0000
-  (Bus Powered)
----
- drivers/usb/serial/option.c | 2 ++
- 1 file changed, 2 insertions(+)
+igor
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 084cc2fff3ae..0b5dcf973d94 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1183,6 +1183,8 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = NCTRL(0) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x110a, 0xff),	/* Telit ME910G1 */
- 	  .driver_info = NCTRL(0) | RSVD(3) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x110b, 0xff),	/* Telit ME910G1 (ECM) */
-+	  .driver_info = NCTRL(0) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_LE910),
- 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_LE910_USBCFG4),
--- 
-2.17.1
+04.03.2020 12:09, Greg KH пишет:
+> On Fri, Feb 28, 2020 at 07:37:40PM +0300, Igor Filippov wrote:
+>> I apologize for my carelessness. I will try to send it to everyone...
+> You can't send html email to the list, that will cause it to get
+> rejected :(
+>
+> Anyway, I think this is the device, right:
+>
+>> Bus 002 Device 004: ID 1b5c:0201
+>> Couldn't open device, some information will be missing
+>> Device Descriptor:
+>>    bLength                18
+>>    bDescriptorType         1
+>>    bcdUSB               2.00
+>>    bDeviceClass            2 Communications
+>>    bDeviceSubClass         0
+>>    bDeviceProtocol         0
+>>    bMaxPacketSize0        64
+>>    idVendor           0x1b5c
+>>    idProduct          0x0201
+>>    bcdDevice            1.00
+>>    iManufacturer           4
+>>    iProduct               38
+>>    iSerial                74
+>>    bNumConfigurations      1
+>>    Configuration Descriptor:
+>>      bLength                 9
+>>      bDescriptorType         2
+>>      wTotalLength           67
+>>      bNumInterfaces          2
+>>      bConfigurationValue     1
+>>      iConfiguration          0
+>>      bmAttributes         0x80
+>>        (Bus Powered)
+>>      MaxPower              250mA
+>>      Interface Descriptor:
+>>        bLength                 9
+>>        bDescriptorType         4
+>>        bInterfaceNumber        0
+>>        bAlternateSetting       0
+>>        bNumEndpoints           1
+>>        bInterfaceClass         2 Communications
+>>        bInterfaceSubClass      2 Abstract (modem)
+>>        bInterfaceProtocol      0 None
+>>        iInterface            104
+>>        CDC Header:
+>>          bcdCDC               1.10
+>>        CDC Call Management:
+>>          bmCapabilities       0x01
+>>            call management
+>>          bDataInterface          1
+>>        CDC ACM:
+>>          bmCapabilities       0x02
+>>            line coding and serial state
+>>        CDC Union:
+>>          bMasterInterface        0
+>>          bSlaveInterface         1
+>>        Endpoint Descriptor:
+>>          bLength                 7
+>>          bDescriptorType         5
+>>          bEndpointAddress     0x81  EP 1 IN
+>>          bmAttributes            3
+>>            Transfer Type            Interrupt
+>>            Synch Type               None
+>>            Usage Type               Data
+>>          wMaxPacketSize     0x0010  1x 16 bytes
+>>          bInterval              32
+>>      Interface Descriptor:
+>>        bLength                 9
+>>        bDescriptorType         4
+>>        bInterfaceNumber        1
+>>        bAlternateSetting       0
+>>        bNumEndpoints           2
+>>        bInterfaceClass        10 CDC Data
+>>        bInterfaceSubClass      0 Unused
+>>        bInterfaceProtocol      0
+>>        iInterface            104
+>>        Endpoint Descriptor:
+>>          bLength                 7
+>>          bDescriptorType         5
+>>          bEndpointAddress     0x02  EP 2 OUT
+>>          bmAttributes            2
+>>            Transfer Type            Bulk
+>>            Synch Type               None
+>>            Usage Type               Data
+>>          wMaxPacketSize     0x0040  1x 64 bytes
+>>          bInterval               0
+>>        Endpoint Descriptor:
+>>          bLength                 7
+>>          bDescriptorType         5
+>>          bEndpointAddress     0x82  EP 2 IN
+>>          bmAttributes            2
+>>            Transfer Type            Bulk
+>>            Synch Type               None
+>>            Usage Type               Data
+>>          wMaxPacketSize     0x0040  1x 64 bytes
+>>          bInterval               0
+>
+> Can you confirm that the vendor/product id is 1b5c/0201 for this?
+>
+> If so, what is wrong with the "normal" cdc driver here?  Why does the
+> usb-serial generic driver need to be used instead?
+>
+> Do you have a pointer to where you got the instructions to usb the
+> usb-serial generic driver instead of the built-in kernel driver?
+>
+> thanks,
+>
+> greg k-h
 
+--------------913C86F080D7FB5B31D9D9C8
+Content-Type: text/plain; charset=UTF-8;
+ name="I7565H1H2_install"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="I7565H1H2_install"
+
+IyEvYmluL3NoCkJMQUNLTElTVD0vZXRjL21vZHByb2JlLmQvYmxhY2tsaXN0LmNvbmYKVVNC
+X0dFTkVSSUNfTkVXSUQ9L3N5cy9idXMvdXNiLXNlcmlhbC9kcml2ZXJzL2dlbmVyaWMvbmV3
+X2lkClZFTkRPUj0nMWI1YycKSDFfUFJPRFVDVD0nMDIwMScKSDJfUFJPRFVDVD0nMDIwMicK
+CmlmIFsgIiQxIiA9ICdoZWxwJyBdOyB0aGVuCgllY2hvICItLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tIgoJZWNobyAidXNhZ2U6IC4vSTc1NjVIMUgyX2luc3Rh
+bGwiCgllY2hvICIgICAgICAgSW5zdGFsbCBJNzU2NS1IMS9IMiBtb2R1bGUgZHJpdmVyIGF1
+dG9tYXRpY2FsbHkiCgllY2hvICJ1c2FnZTogLi9JNzU2NUgxSDJfaW5zdGFsbCByZW1vdmUi
+CgllY2hvICIgICAgICAgUmVtb3ZlIEk3NTY1LUgxL0gyIGRyaXZlciIKCWVjaG8gInVzYWdl
+OiAuL0k3NTY1SDFIMl9pbnN0YWxsIGNkY19hY20iCgllY2hvICIgICAgICAgUmVtb3ZlIGNk
+Y19hY20gZnJvbSBibGFja2xpc3QuIgoJZXhpdAplbGlmIFsgIiQxIiA9ICdyZW1vdmUnIF07
+IHRoZW4KCW1vZHByb2JlIC1yIHVzYnNlcmlhbAoJZXhpdAplbGlmIFsgIiQxIiA9ICdjZGNf
+YWNtJyBdOyB0aGVuCglzZWQgLWkgJy9jZGNfYWNtL2QnICRCTEFDS0xJU1QKCWV4aXQKZmkK
+CiNjaGVjayBpLTc1NjUtSDEvSDIgVmVuZG9yIElEIGZpcnN0CmNhdCBgZmluZCAvc3lzIC1u
+YW1lIGlkVmVuZG9yYCB8IGdyZXAgJFZFTkRPUiA+IC9kZXYvbnVsbCAyPiYxClJFVFVSTj0i
+JD8iCgppZiBbICIkUkVUVVJOIiA9ICcxJyBdOyB0aGVuCgllY2hvICJObyBpLTc1NjUtSDEv
+SDIgZm91bmQhIgoJZXhpdDsKZmkKCkNEQ19BQ009YGdyZXAgY2RjX2FjbSAiJEJMQUNLTElT
+VCJgCgppZiBbICIkQ0RDX0FDTSIgPSAiIiBdOyB0aGVuCgllY2hvICJibGFja2xpc3QgY2Rj
+X2FjbSIgPj4gJEJMQUNLTElTVAoJbW9kcHJvYmUgLXIgY2RjX2FjbQpmaQoKI2luc3RhbGwg
+ZHJpdmVyICJ1c2JzZXJpYWwiIGZpcnN0Cm1vZHByb2JlIHVzYnNlcmlhbAoKI2NoZWNrIGkt
+NzU2NS1IMSBQcm9kdWN0IElECmNhdCBgZmluZCAvc3lzIC1uYW1lIGlkUHJvZHVjdGAgfCBn
+cmVwICRIMV9QUk9EVUNUID4gL2Rldi9udWxsIDI+JjEKUkVUVVJOPSIkPyIKaWYgWyAiJFJF
+VFVSTiIgPSAnMCcgXTsgdGhlbgoJZWNobyAiSW5zdGFsbCBkcml2ZXIgZm9yIGktNzU2NS1I
+MS4iCgllY2hvICIkVkVORE9SICRIMV9QUk9EVUNUIiA+ICRVU0JfR0VORVJJQ19ORVdJRApm
+aQoKI2NoZWNrIGktNzU2NS1IMiBQcm9kdWN0IElECmNhdCBgZmluZCAvc3lzIC1uYW1lIGlk
+UHJvZHVjdGAgfCBncmVwICRIMl9QUk9EVUNUID4gL2Rldi9udWxsIDI+JjEKUkVUVVJOPSIk
+PyIKaWYgWyAiJFJFVFVSTiIgPSAnMCcgXTsgdGhlbgoJZWNobyAiSW5zdGFsbCBkcml2ZXIg
+Zm9yIGktNzU2NS1IMi4iCgllY2hvICIkVkVORE9SICRIMl9QUk9EVUNUIiA+ICRVU0JfR0VO
+RVJJQ19ORVdJRCAKZmkKCmVjaG8gInN1Y2Nlc3MuIgo=
+--------------913C86F080D7FB5B31D9D9C8--
