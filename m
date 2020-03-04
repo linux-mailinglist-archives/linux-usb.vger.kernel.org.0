@@ -2,87 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05DC31792DD
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2020 15:58:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8151792F3
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2020 16:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387642AbgCDO56 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Mar 2020 09:57:58 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:41846 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725795AbgCDO56 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Mar 2020 09:57:58 -0500
-Received: by mail-oi1-f196.google.com with SMTP id i1so2337320oie.8;
-        Wed, 04 Mar 2020 06:57:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=DmcoZNUJxxsS5LTSsyiiqENx6EIP1OPlgM367MTeK8I=;
-        b=LfCBzxIQ8WzX+TFAeheZYWPj7a+6aLUYdys0KxSQXX3caQxK7LsvQE3PA+LnNzHJCk
-         RSj5rh0tt5JG7Ak0tSdDlnmfNSn5KD33ddWAqUx7ZdL4WH1EHiS9Dcsbyphi9b8jgzFO
-         f0pLTUKKXETfUlRv6B+GtFNlJrYgoiKvEeSanuAqU79sYqw0mjQzQlKGPUCsMxm/9NEE
-         Uav2xvs2uhnsNLqwH972fMi81mArWIGPill7gsW7HKhta4DLa3j9nX8uLuPcVQhefAkx
-         DhAgflMCUEIq+YwPUcQ09inpHIVv/lDlAj00ENChzi4lGnGaeMCXPe+pkJH/G2CYb05/
-         ZKpw==
-X-Gm-Message-State: ANhLgQ13rwoGGPCvr1hCRwlcdN4+WYajaxIpwsgoly9h2e4tu60kVF2S
-        j3I7eYps4qV93iTfB20HtA==
-X-Google-Smtp-Source: ADFU+vt4gqhc3KDXQ3ks19GyfY1ioyJVdrTyDw9Oyh68DIp1bWp9tTZzshgCw7rze/fFoCaTdgQKdQ==
-X-Received: by 2002:aca:f1c2:: with SMTP id p185mr2037926oih.87.1583333877779;
-        Wed, 04 Mar 2020 06:57:57 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id i20sm9072512otp.14.2020.03.04.06.57.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2020 06:57:57 -0800 (PST)
-Received: (nullmailer pid 17602 invoked by uid 1000);
-        Wed, 04 Mar 2020 14:57:56 -0000
-Date:   Wed, 4 Mar 2020 08:57:56 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org, jackp@codeaurora.org, balbi@kernel.org,
-        bjorn.andersson@linaro.org, robh@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v7 07/18] dt-bindings: usb: dwc3: Add a
- gpio-usb-connector example
-Message-ID: <20200304145756.GA17484@bogus>
-References: <20200303171159.246992-1-bryan.odonoghue@linaro.org>
- <20200303171159.246992-8-bryan.odonoghue@linaro.org>
+        id S1728278AbgCDPFX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Mar 2020 10:05:23 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:34774 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726981AbgCDPFX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Mar 2020 10:05:23 -0500
+Received: (qmail 1622 invoked by uid 2102); 4 Mar 2020 10:05:22 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 4 Mar 2020 10:05:22 -0500
+Date:   Wed, 4 Mar 2020 10:05:21 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Tony Fischetti <tony.fischetti@gmail.com>
+cc:     linux-usb@vger.kernel.org, <linux-kernel@vger.kernel.org>
+Subject: Re: Trouble adding QUIRK_ALWAYS_POLL to quirky USB mouse
+In-Reply-To: <CAOMV6SWp3UgY+4AThCLeYmAk2gmh5m0UhG7+=ujPvKFsUdjU-A@mail.gmail.com>
+Message-ID: <Pine.LNX.4.44L0.2003041002440.1509-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200303171159.246992-8-bryan.odonoghue@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue,  3 Mar 2020 17:11:48 +0000, Bryan O'Donoghue wrote:
-> A USB connector should be a child node of the USB controller
-> connector/usb-connector.txt. This patch adds an example of how to do this
-> to the dwc3 binding descriptions.
-> 
-> It is necessary to declare a connector as a child-node of a USB controller
-> for role-switching to work, so this example should be helpful to others
-> implementing that.
-> 
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: linux-usb@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Acked-by: Felipe Balbi <balbi@kernel.org>
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  Documentation/devicetree/bindings/usb/dwc3.txt | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
+On Tue, 3 Mar 2020, Tony Fischetti wrote:
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
+> Hi all,
+> 
+> I have a lenovo pixart mouse (vendorId: 0x17ef, productId: 0x608d)
+> that's afflicted with the apparently common problem of disconnecting
+> and re-connecting every minute, each time incrementing the device
+> number
+> 
+> I tried to apply a patch very much like the one in this commit with
+> the identical problem: dcf768b0ac868630e7bdb6f2f1c9fe72788012fa
+> The particular patch I applied appears at the end of this email (not
+> meant to be submitted/applied, just as a reference)
+> 
+> The problem is that when I apply the patch and boot the new kernel,
+> the quirk appears not to have been registered (it doesn't appear in
+> /sys/module/usbhid/parameters/quirks)
+> It is only when I add the kernel boot parameter
+> usbhid.quirks=0x17ef:0x608d:0x00000400 that it appears to be working
+> 
+> Anyone have any ideas on how to fix this? I'd like to submit a patch
+> fixing this issue once I get it sorted out
 
-If a tag was not added on purpose, please state why and what changed.
+If you have usbhid loaded as a module instead of built into the kernel, 
+then it probably is getting loaded from the initramfs.  If you didn't 
+rebuild the initramfs image after creating the new kernel, you would 
+end up loading the original module without the new quirk entry.
+
+It's easy enough to test this.  After booting, do:
+
+	rmmod usbhid ; modprobe usbhid
+
+and see if the quirk entry then shows up in sysfs.
+
+Alan Stern
+
