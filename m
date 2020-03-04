@@ -2,91 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A30D6178D02
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2020 10:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11597178D0E
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2020 10:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387626AbgCDJCv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Mar 2020 04:02:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59320 "EHLO mail.kernel.org"
+        id S2387488AbgCDJGB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Mar 2020 04:06:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59700 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387473AbgCDJCu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 4 Mar 2020 04:02:50 -0500
+        id S1725271AbgCDJGB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Mar 2020 04:06:01 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 804FA20870;
-        Wed,  4 Mar 2020 09:02:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D436E2072D;
+        Wed,  4 Mar 2020 09:05:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583312570;
-        bh=d1d7T8bhYI6RdCBRlzoxxnWI5VOqnAQwwNJieXXrTXE=;
+        s=default; t=1583312758;
+        bh=nv9z76qB1AKdNeHNDVvjHLCUMfYUelYmliFzrlCR1xI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ShAHlSwNGNGkTu5uV62qoSLw5L8bD3bkQv/j55ixmEyofa5ndn6/R4lBLnpQKm76P
-         dCC41gY36t78FnaBufnW1uGJOgCNFp8qKytN2Hauu/GOMFm+yiOEKcSC7z+9xtRU3s
-         h9yNyKVT2XhJ3yJy77sdzjWdimY4jqp2NE+ylq/Q=
-Date:   Wed, 4 Mar 2020 10:02:46 +0100
+        b=wTrJb2nLOkC3o5SdH0RfJuDO3+VKd84OhHaBaZVRb3O2Ur83RlzXVHaQkO0GfHzHu
+         3gmkPcBjGwKBXwt3VXDXDLJJXPBz5eP9uphOkBtnCJaPRyDemc+cPP9jUcmkSAR3hn
+         MoNlOP+aswJByig32PeT4UbzI37cRSWxBn7/P6Kg=
+Date:   Wed, 4 Mar 2020 10:05:55 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Alberto Mattea <alberto@mattea.info>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH resend] usb: xhci: apply XHCI_SUSPEND_DELAY to AMD XHCI
- controller 1022:145c
-Message-ID: <20200304090246.GB1429273@kroah.com>
-References: <5338586.DvuYhMxLoT@alby>
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, f.fainelli@gmail.com,
+        tim.gover@raspberrypi.org, linux-pci@vger.kernel.org,
+        wahrenst@gmx.net
+Subject: Re: [PATCH v3 4/4] USB: pci-quirks: Add Raspberry Pi 4 quirk
+Message-ID: <20200304090555.GC1429273@kroah.com>
+References: <20200302155528.19505-1-nsaenzjulienne@suse.de>
+ <20200302155528.19505-5-nsaenzjulienne@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5338586.DvuYhMxLoT@alby>
+In-Reply-To: <20200302155528.19505-5-nsaenzjulienne@suse.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 17, 2020 at 05:54:19PM +0100, Alberto Mattea wrote:
-> This controller timeouts during suspend (S3) with
-> [  240.521724] xhci_hcd 0000:30:00.3: WARN: xHC save state timeout
-> [  240.521729] xhci_hcd 0000:30:00.3: ERROR mismatched command completion event
-> thus preventing the system from entering S3.
-> Moreover it remains in an undefined state where some connected devices stop
-> working until a reboot.
-> Apply the XHCI_SUSPEND_DELAY quirk to make it suspend properly.
+On Mon, Mar 02, 2020 at 04:55:28PM +0100, Nicolas Saenz Julienne wrote:
+> On the Raspberry Pi 4, after a PCI reset, VL805's firmware may either be
+> loaded directly from an EEPROM or, if not present, by the SoC's
+> VideCore. Inform VideCore that VL805 was just reset.
 > 
-> Signed-off-by: Alberto Mattea <alberto@mattea.info>
+> Also, as this creates a dependency between XHCI_PCI and VideoCore's,
+> reflect that on the firmware interface Kconfg.
+> 
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> 
 > ---
->  drivers/usb/host/xhci-pci.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index 4917c5b033fa..1533310b3d6b 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -135,7 +135,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->  		xhci->quirks |= XHCI_AMD_PLL_FIX;
+> Changes since v1:
+>  - Make RASPBERRYPI_FIRMWARE dependent on this quirk to make sure it
+>    gets compiled when needed.
+> 
+>  drivers/firmware/Kconfig      |  1 +
+>  drivers/usb/host/pci-quirks.c | 18 ++++++++++++++++++
+>  2 files changed, 19 insertions(+)
+> 
+> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+> index ea869addc89b..40a468d712a5 100644
+> --- a/drivers/firmware/Kconfig
+> +++ b/drivers/firmware/Kconfig
+> @@ -180,6 +180,7 @@ config ISCSI_IBFT
+>  config RASPBERRYPI_FIRMWARE
+>  	tristate "Raspberry Pi Firmware Driver"
+>  	depends on BCM2835_MBOX
+> +	default XHCI_PCI
+>  	help
+>  	  This option enables support for communicating with the firmware on the
+>  	  Raspberry Pi.
+> diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
+> index beb2efa71341..aee2eaa3f0e1 100644
+> --- a/drivers/usb/host/pci-quirks.c
+> +++ b/drivers/usb/host/pci-quirks.c
+> @@ -16,6 +16,9 @@
+>  #include <linux/export.h>
+>  #include <linux/acpi.h>
+>  #include <linux/dmi.h>
+> +
+> +#include <soc/bcm2835/raspberrypi-firmware.h>
+> +
+>  #include "pci-quirks.h"
+>  #include "xhci-ext-caps.h"
 >  
->  	if (pdev->vendor == PCI_VENDOR_ID_AMD &&
-> -		(pdev->device == 0x15e0 ||
-> +		(pdev->device == 0x145c ||
-> +		 pdev->device == 0x15e0 ||
->  		 pdev->device == 0x15e1 ||
->  		 pdev->device == 0x43bb))
->  		xhci->quirks |= XHCI_SUSPEND_DELAY;
-> -- 
-> 2.17.1
-> 
-> 
+> @@ -1243,11 +1246,26 @@ static void quirk_usb_handoff_xhci(struct pci_dev *pdev)
+>  
+>  static void quirk_usb_early_handoff(struct pci_dev *pdev)
+>  {
+> +	int ret;
+> +
+>  	/* Skip Netlogic mips SoC's internal PCI USB controller.
+>  	 * This device does not need/support EHCI/OHCI handoff
+>  	 */
+>  	if (pdev->vendor == 0x184e)	/* vendor Netlogic */
+>  		return;
+> +
+> +	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483) {
+> +		ret = rpi_firmware_init_vl805(pdev);
+> +		if (ret)
+> +			/*
+> +			 * Firmware might be outdated, or else, something
+> +			 * failed, keep going and hope for the best.
+> +			 */
+> +			dev_warn(&pdev->dev,
+> +				 "Failed to load VL805's firmware: %d\n",
+> +				 ret);
 
-$ ./scripts/get_maintainer.pl --file drivers/usb/host/xhci-pci.c
-Mathias Nyman <mathias.nyman@intel.com> (supporter:USB XHCI DRIVER)
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM)
-linux-usb@vger.kernel.org (open list:USB XHCI DRIVER)
-linux-kernel@vger.kernel.org (open list)
+{} please.
 
+Also, you might want to provide a better warning, something like:
+	"Failed to load VL805's firmware, will continue to attempt to
+	work, but bad things might happen, you should fix this..."
 
-{sigh}
-
-Always include the maintainer of the driver in your cc: list.
-
-I've added Mathias to this message now, hopefully he can pick this up
-for his next round of patches.
+or something to give people a chance to know what to do here.
 
 thanks,
 
