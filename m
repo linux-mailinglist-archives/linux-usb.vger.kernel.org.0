@@ -2,66 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8151792F3
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2020 16:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 547AC17948E
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Mar 2020 17:10:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728278AbgCDPFX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Mar 2020 10:05:23 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:34774 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726981AbgCDPFX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Mar 2020 10:05:23 -0500
-Received: (qmail 1622 invoked by uid 2102); 4 Mar 2020 10:05:22 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 4 Mar 2020 10:05:22 -0500
-Date:   Wed, 4 Mar 2020 10:05:21 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Tony Fischetti <tony.fischetti@gmail.com>
-cc:     linux-usb@vger.kernel.org, <linux-kernel@vger.kernel.org>
-Subject: Re: Trouble adding QUIRK_ALWAYS_POLL to quirky USB mouse
-In-Reply-To: <CAOMV6SWp3UgY+4AThCLeYmAk2gmh5m0UhG7+=ujPvKFsUdjU-A@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.2003041002440.1509-100000@iolanthe.rowland.org>
+        id S1729722AbgCDQKM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Mar 2020 11:10:12 -0500
+Received: from mail-lj1-f170.google.com ([209.85.208.170]:33095 "EHLO
+        mail-lj1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726561AbgCDQKM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Mar 2020 11:10:12 -0500
+Received: by mail-lj1-f170.google.com with SMTP id f13so2661608ljp.0;
+        Wed, 04 Mar 2020 08:10:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:from:subject:cc:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=muR/a1rwNRfnpNPUEP6bKf6C4WkMfc6xHbPZajvJGVk=;
+        b=QfqOc5yS6VcamnHOpXUgAizj6Ssgsyc62WMVgt3y0uM93P2/dMse53MwUZ0VbiG0IE
+         +FcKCaG/Agp+zIHHdVWESQAfCoxK0FRnmBal2iCsZcFLy23Rv3UtEvYoOEMS929J5r1V
+         ZjUKTcvUzGkOCr4mmvA72DCghTvIeMkhCdsLK19ynhJZb54ToGriCnJCg6ZkDoklod0T
+         Qx2IhA7Wpoau8II6v0SqLLApkctxX4kpAEYP5i5J30T6xhXJffMrFNo/caCLuS2AKpUB
+         pk+A1GaNC7CIIRTS4AL4Cuo42u6rpXQRNbBhtWpH8BZIbOq9BZvLn6IRQYVmCotMkwIR
+         j8bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:from:subject:cc:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=muR/a1rwNRfnpNPUEP6bKf6C4WkMfc6xHbPZajvJGVk=;
+        b=f8lK/sHOzd3Kb+elxnWs0QH4TCfNtVOsGOvJo3V8BgMQ4uqknxB6ZA7TJrgB1JS3Pf
+         Xo2ybRxUlwYt9nyfFh8EAnVaK2C4T/zgCy1uxMUWfeeQbDLYhq5UHz7YskDG997jdpvl
+         xaJMjXhaW9CzaapcxGMeElRwRM05CJnRvCtdKhEYY/IkJ8DLJZ3h6UR3knOwPCIVZNz8
+         wdQeAt5D6UQ0m6VhplBerhe39+rb9N1g9rRBOGKwl33vSZ4lBFeJ96cNE8zjeBUmiehx
+         ExB6E9RIC7Z9/Iz5Kb05IlPmnUesbCPRFSVT+Oxozwc8nzPEDmF7J5Le6pMgTqgIbObo
+         7QXQ==
+X-Gm-Message-State: ANhLgQ3wylzdC+LtYLeCIGG3zPZ3f0VjDLerSJGmU4jPfzB/hOjiayhi
+        4R+vLhBhffmTdEJCOn7wwR7FDZoH
+X-Google-Smtp-Source: ADFU+vtw56gSWqgMCehzJJ+VSKjMpRPUI7NiAy2Ic7jhj3aGlWpmYyVGyvnmMpZN4H7YUq4RUmsFYQ==
+X-Received: by 2002:a2e:9182:: with SMTP id f2mr2409633ljg.110.1583338209685;
+        Wed, 04 Mar 2020 08:10:09 -0800 (PST)
+Received: from [192.168.2.145] (94-29-39-224.dynamic.spd-mgts.ru. [94.29.39.224])
+        by smtp.googlemail.com with ESMTPSA id i5sm14652912ljj.29.2020.03.04.08.10.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Mar 2020 08:10:09 -0800 (PST)
+To:     Peter Chen <Peter.Chen@nxp.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Subject: usb: chipidea: udc: BUG: sleeping function called from invalid
+ context
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Message-ID: <bfa5b2f7-cf52-0055-ffb2-2cb8278a1181@gmail.com>
+Date:   Wed, 4 Mar 2020 19:10:08 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 3 Mar 2020, Tony Fischetti wrote:
+Hello,
 
-> Hi all,
-> 
-> I have a lenovo pixart mouse (vendorId: 0x17ef, productId: 0x608d)
-> that's afflicted with the apparently common problem of disconnecting
-> and re-connecting every minute, each time incrementing the device
-> number
-> 
-> I tried to apply a patch very much like the one in this commit with
-> the identical problem: dcf768b0ac868630e7bdb6f2f1c9fe72788012fa
-> The particular patch I applied appears at the end of this email (not
-> meant to be submitted/applied, just as a reference)
-> 
-> The problem is that when I apply the patch and boot the new kernel,
-> the quirk appears not to have been registered (it doesn't appear in
-> /sys/module/usbhid/parameters/quirks)
-> It is only when I add the kernel boot parameter
-> usbhid.quirks=0x17ef:0x608d:0x00000400 that it appears to be working
-> 
-> Anyone have any ideas on how to fix this? I'd like to submit a patch
-> fixing this issue once I get it sorted out
+I was trying out today's linux-next-20200304 and noticed this splat in KMSG:
 
-If you have usbhid loaded as a module instead of built into the kernel, 
-then it probably is getting loaded from the initramfs.  If you didn't 
-rebuild the initramfs image after creating the new kernel, you would 
-end up loading the original module without the new quirk entry.
+[    1.161244] BUG: sleeping function called from invalid context at
+drivers/base/power/runtime.c:1075
+[    1.161393] in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid:
+37, name: kworker/u8:1
+[    1.161481] CPU: 1 PID: 37 Comm: kworker/u8:1 Not tainted
+5.6.0-rc4-next-20200304-00181-gbebfd2a5be98 #1588
+[    1.161616] Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+[    1.161769] Workqueue: ci_otg ci_otg_work
+[    1.161882] [<c010e8bd>] (unwind_backtrace) from [<c010a315>]
+(show_stack+0x11/0x14)
+[    1.162035] [<c010a315>] (show_stack) from [<c0987d29>]
+(dump_stack+0x85/0x94)
+[    1.162132] [<c0987d29>] (dump_stack) from [<c013e77f>]
+(___might_sleep+0xeb/0x118)
+[    1.162281] [<c013e77f>] (___might_sleep) from [<c052fa1d>]
+(__pm_runtime_resume+0x75/0x78)
+[    1.162427] [<c052fa1d>] (__pm_runtime_resume) from [<c0627a33>]
+(ci_udc_pullup+0x23/0x74)
+[    1.162575] [<c0627a33>] (ci_udc_pullup) from [<c062fb93>]
+(usb_gadget_connect+0x2b/0xcc)
+[    1.162665] [<c062fb93>] (usb_gadget_connect) from [<c062769d>]
+(ci_hdrc_gadget_connect+0x59/0x104)
+[    1.162807] [<c062769d>] (ci_hdrc_gadget_connect) from [<c062778b>]
+(ci_udc_vbus_session+0x43/0x48)
+[    1.162949] [<c062778b>] (ci_udc_vbus_session) from [<c062f997>]
+(usb_gadget_vbus_connect+0x17/0x9c)
+[    1.163089] [<c062f997>] (usb_gadget_vbus_connect) from [<c062634d>]
+(ci_otg_work+0xbd/0x128)
+[    1.163245] [<c062634d>] (ci_otg_work) from [<c0134719>]
+(process_one_work+0x149/0x404)
+[    1.163335] [<c0134719>] (process_one_work) from [<c0134acb>]
+(worker_thread+0xf7/0x3bc)
+[    1.163479] [<c0134acb>] (worker_thread) from [<c0139433>]
+(kthread+0xf3/0x118)
+[    1.163621] [<c0139433>] (kthread) from [<c01010bd>]
+(ret_from_fork+0x11/0x34)
 
-It's easy enough to test this.  After booting, do:
-
-	rmmod usbhid ; modprobe usbhid
-
-and see if the quirk entry then shows up in sysfs.
-
-Alan Stern
-
+I haven't tried to figure out what change causes this problem, it didn't
+happen using next-20200218. Please take a look, thanks in advance.
