@@ -2,211 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DDFE717AE1B
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2020 19:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13BE017AE5E
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2020 19:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726004AbgCEScH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Mar 2020 13:32:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42308 "EHLO mail.kernel.org"
+        id S1726079AbgCESoQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Mar 2020 13:44:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45546 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725946AbgCEScH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Mar 2020 13:32:07 -0500
+        id S1725938AbgCESoP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Mar 2020 13:44:15 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B85A3208C3;
-        Thu,  5 Mar 2020 18:32:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B6A9B2072D;
+        Thu,  5 Mar 2020 18:44:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583433125;
-        bh=KM0uYAqk/5kpfoI8SkJkxTAAEAL/IwWV/D+DdVwkhN8=;
+        s=default; t=1583433855;
+        bh=M65Bw8vTfUeiRXfq4/UfyErlckIvJExOcmcF/dVAmrk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dWlx6EJD/iVDV2O/rwdjD6kQBkYUslAly1nbSjuhyAvZC51Ye/muMuU/lrPdTD91A
-         5HMr6pSJEb8eMBvsSCL4xYUylv6eQ2P/ksYwBqVR7bDWQVV3ChG7nBgyL0tuKUdAc9
-         FWqoxYNLhSoQY5EJRVMcpq1upnLaXWHsMyEyNxtw=
-Date:   Thu, 5 Mar 2020 19:32:02 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Macpaul Lin <macpaul.lin@mediatek.com>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Chunfeng Yun =?utf-8?B?KOS6keaYpeWzsCk=?= 
-        <Chunfeng.Yun@mediatek.com>,
-        wsd_upstream <wsd_upstream@mediatek.com>,
-        Sriharsha Allenki <sallenki@codeaurora.org>
-Subject: Re: [PATCH] xhci-mtk: Fix NULL pointer dereference with xhci_irq()
- for shared_hcd
-Message-ID: <20200305183202.GA2107395@kroah.com>
-References: <1579246910-22736-1-git-send-email-macpaul.lin@mediatek.com>
- <08f69bab-2ada-d6ab-7bf7-d960e9f148a0@linux.intel.com>
- <1580556039.10835.3.camel@mtkswgap22>
- <39ec1610-1686-6509-02ac-6e73d8be2453@linux.intel.com>
- <1583291775.12083.59.camel@mtkswgap22>
- <ef4d9d96-df4d-be0c-22af-a97a03c39d3a@linux.intel.com>
- <1583377126.12083.63.camel@mtkswgap22>
+        b=Sdi5/hkU2o8ks8dghvIZj1cadatWBN3GWqSqPxp7GT+OzCgPZjkQcUAVzQ4xw32WK
+         U+bxTYIYH0KL5KIPdpxlWvs8VKAqEI4uk6IhM0ftYoaNRV9IiactMVCW7naRZKrZ5D
+         Dkvg0A0nlY7Kx9HKaB0ZbkzfMuJ5e20BOyTZ0u+Q=
+Date:   Thu, 5 Mar 2020 19:44:12 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Anthony Mallet <anthony.mallet@laas.fr>
+Cc:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/2] USB: cdc-acm: fix rounding error in TIOCSSERIAL
+Message-ID: <20200305184412.GA2133118@kroah.com>
+References: <24160.54137.563763.50884@beetle.laas.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1583377126.12083.63.camel@mtkswgap22>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <24160.54137.563763.50884@beetle.laas.fr>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 05, 2020 at 10:58:46AM +0800, Macpaul Lin wrote:
-> On Wed, 2020-03-04 at 16:39 +0200, Mathias Nyman wrote:
-> > On 4.3.2020 5.16, Macpaul Lin wrote:
-> > > On Tue, 2020-02-04 at 17:44 +0800, Mathias Nyman wrote:
-> > >> On 1.2.2020 13.20, Macpaul Lin wrote:
-> > >>> On Fri, 2020-01-31 at 16:50 +0200, Mathias Nyman wrote:
-> > >>>> On 17.1.2020 9.41, Macpaul Lin wrote:
-> > >>>>> According to NULL pointer fix: https://tinyurl.com/uqft5ra
-> > >>>>> xhci: Fix NULL pointer dereference with xhci_irq() for shared_hcd
-> > >>>>> The similar issue has also been found in QC activities in Mediatek.
-> > >>>>>
-> > >>>>> Here quote the description from the referenced patch as follows.
-> > >>>>> "Commit ("f068090426ea xhci: Fix leaking USB3 shared_hcd
-> > >>>>> at xhci removal") sets xhci_shared_hcd to NULL without
-> > >>>>> stopping xhci host. This results into a race condition
-> > >>>>> where shared_hcd (super speed roothub) related interrupts
-> > >>>>> are being handled with xhci_irq happens when the
-> > >>>>> xhci_plat_remove is called and shared_hcd is set to NULL.
-> > >>>>> Fix this by setting the shared_hcd to NULL only after the
-> > >>>>> controller is halted and no interrupts are generated."
-> > >>>>>
-> > >>>>> Signed-off-by: Sriharsha Allenki <sallenki@codeaurora.org>
-> > >>>>> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> > >>>>> ---
-> > >>>>>    drivers/usb/host/xhci-mtk.c | 2 +-
-> > >>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
-> > >>>>>
-> > >>>>> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-> > >>>>> index b18a6baef204..c227c67f5dc5 100644
-> > >>>>> --- a/drivers/usb/host/xhci-mtk.c
-> > >>>>> +++ b/drivers/usb/host/xhci-mtk.c
-> > >>>>> @@ -593,11 +593,11 @@ static int xhci_mtk_remove(struct platform_device *dev)
-> > >>>>>    	struct usb_hcd  *shared_hcd = xhci->shared_hcd;
-> > >>>>>    
-> > >>>>>    	usb_remove_hcd(shared_hcd);
-> > >>>>> -	xhci->shared_hcd = NULL;
-> > >>>>>    	device_init_wakeup(&dev->dev, false);
-> > >>>>>    
-> > >>>>>    	usb_remove_hcd(hcd);
-> > >>>>>    	usb_put_hcd(shared_hcd);
-> > >>>>> +	xhci->shared_hcd = NULL;
-> > >>>>>    	usb_put_hcd(hcd);
-> > >>>>>    	xhci_mtk_sch_exit(mtk);
-> > >>>>>    	xhci_mtk_clks_disable(mtk);
-> > >>>>>
-> > >>>>
-> > >>>> Could you share details of the NULL pointer dereference, (backtrace).
-> > >>>
-> > >>> This bug was found by our QA staff while doing 500 times plug-in and
-> > >>> plug-out devices. The backtrace I have was recorded by QA and I didn't
-> > >>> reproduce this issue on my own environment. However, after applied this
-> > >>> patch the issue seems resolve. Here is the backtrace:
-> > >>>
-> > >>> Exception Class: Kernel (KE)
-> > >>> PC is at [<ffffff8008cccbc0>] xhci_irq+0x728/0x2364
-> > >>> LR is at [<ffffff8008ccc788>] xhci_irq+0x2f0/0x2364
-> > >>>
-> > >>> Current Executing Process:
-> > >>> [iptables, 859][netdagent, 770]
-> > >>>
-> > >>> Backtrace:
-> > >>> [<ffffff80080ead58>] __atomic_notifier_call_chain+0xa8/0x130
-> > >>> [<ffffff80080eb6d4>] notify_die+0x84/0xac
-> > >>> [<ffffff800808e874>] die+0x1d8/0x3b8
-> > >>> [<ffffff80080a89b0>] __do_kernel_fault+0x178/0x188
-> > >>> [<ffffff80080a81b4>] do_page_fault+0x44/0x3b0
-> > >>> [<ffffff80080a811c>] do_translation_fault+0x44/0x98
-> > >>> [<ffffff8008080e08>] do_mem_abort+0x4c/0x128
-> > >>> [<ffffff80080832d0>] el1_da+0x24/0x3c
-> > >>> [<ffffff8008cccbc0>] xhci_irq+0x728/0x2364
-> > >>> [<ffffff8008c98804>] usb_hcd_irq+0x2c/0x44
-> > >>> [<ffffff8008179bb0>] __handle_irq_event_percpu+0x26c/0x4a4
-> > >>> [<ffffff8008179ec8>] handle_irq_event+0x5c/0xd0
-> > >>> [<ffffff800817e3c0>] handle_fasteoi_irq+0x10c/0x1e0
-> > >>> [<ffffff80081787b0>] __handle_domain_irq+0x32c/0x738
-> > >>> [<ffffff800808159c>] gic_handle_irq+0x174/0x1c4
-> > >>> [<ffffff8008083cf8>] el0_irq_naked+0x50/0x5c
-> > >>> [<ffffffffffffffff>] 0xffffffffffffffff
-> > >>>
-> > >>
-> > >> Thanks,
-> > >> Could you help me find out which line of code xhci_irq+0x728 is in your case.
-> > >>
-> > >> As Guenter pointed out there is a risk of turning the NULL pointer dereference
-> > >> into a use after free if we just solve this by setting xhci->shared_hcd = NULL
-> > >> later.
-> > >>
-> > >> If you still have that kernel around, and xhci is compiled in:
-> > >> gdb vmlinux
-> > >> gdb li *(xhci_irq+0x728)
-> > >>
-> > > 
-> > > Sorry that I couldn't get back to you soon. The internal code version
-> > > for this issue was really old and a little bit difficult to rewind to
-> > > that version.
-> > > However, I think the following dump might be correct for the code base.
-> > > 
-> > > (gdb) li *(xhci_irq+0x728)
-> > > 0xffffff8008cc8634 is in xhci_irq (*stripped*
-> > > kernel-4.14/drivers/usb/host/xhci.h:1694).
-> > > 1689     */
-> > > 1690    #define XHCI_MAX_REXIT_TIMEOUT_MS       20
-> > > 1691
-> > > 1692    static inline unsigned int hcd_index(struct usb_hcd *hcd)
-> > > 1693    {
-> > > 1694            if (hcd->speed >= HCD_USB3)
-> > > 1695                    return 0;
-> > > 1696            else
-> > > 1697                    return 1;
-> > > 1698    }
-> > > (gdb)
-> > > 
-> > > Thanks
-> > > Macpaul Lin
-> > > 
-> > 
-> > Ah, it was a 4.14 kernel.
-> > This should be fixed in 4.20 with patch:
-> > 1245374e9b83 xhci: handle port status events for removed USB3 hcd
-> > 
-> > Port arrays/structures were changed completely in 4.18
-> > 
-> > Something like the below should work for 4.14:
-> > 
-> > diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> > index 61fa3007a74a..e7367b9f19c5 100644
-> > --- a/drivers/usb/host/xhci-ring.c
-> > +++ b/drivers/usb/host/xhci-ring.c
-> > @@ -1640,6 +1640,12 @@ static void handle_port_status(struct xhci_hcd *xhci,
-> >  	if ((major_revision == 0x03) != (hcd->speed >= HCD_USB3))
-> >  		hcd = xhci->shared_hcd;
-> >  
-> > +	if (!hcd) {
-> > +		xhci_dbg(xhci, "No hcd found for port %u event\n", port_id);
-> > +		bogus_port_status = true;
-> > +		goto cleanup;
-> > +	}
-> > +
-> >  	if (major_revision == 0) {
-> >  		xhci_warn(xhci, "Event for port %u not in "
-> >  				"Extended Capabilities, ignoring.\n",
+On Thu, Mar 05, 2020 at 11:24:57AM +0100, Anthony Mallet wrote:
+> By default, tty_port_init() initializes those parameters to a multiple
+> of HZ. For instance in line 69 of tty_port.c:
+>    port->close_delay = (50 * HZ) / 100;
+> https://github.com/torvalds/linux/blob/master/drivers/tty/tty_port.c#L69
 > 
-> Thanks for this suggestion, this is much better! I am sorry that we're
-> using android kernel that some reported issue might be out of date. I
-> will update the suggestion into our code base. Thanks!
+> With e.g. CONFIG_HZ = 250 (as this is the case for Ubuntu 18.04
+> linux-image-4.15.0-37-generic), the default setting for close_delay is
+> thus 125.
+> 
+> When ioctl(fd, TIOCGSERIAL, &s) is executed, the setting returned in
+> user space is '12' (125/10). When ioctl(fd, TIOCSSERIAL, &s) is then
+> executed with the same setting '12', the value is interpreted as '120'
+> which is different from the current setting and a EPERM error may be
+> raised by set_serial_info() if !CAP_SYS_ADMIN.
+> https://github.com/torvalds/linux/blob/master/drivers/usb/class/cdc-acm.c#L919
+> 
+> Signed-off-by: Anthony Mallet <anthony.mallet@laas.fr>
+> Fixes: ba2d8ce9db0a6 ("cdc-acm: implement TIOCSSERIAL to avoid blocking close(2)")
+> Cc: stable <stable@vger.kernel.org>
+> Acked-by: Oliver Neukum <oneukum@suse.com>
+> ---
+>  drivers/usb/class/cdc-acm.c | 27 +++++++++++++++++----------
+>  1 file changed, 17 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+> index da619176d..b43820fb2 100644
+> --- a/drivers/usb/class/cdc-acm.c
+> +++ b/drivers/usb/class/cdc-acm.c
+> @@ -907,6 +907,7 @@ static int set_serial_info(struct tty_struct *tty, struct serial_struct *ss)
+>  {
+>  	struct acm *acm = tty->driver_data;
+>  	unsigned int closing_wait, close_delay;
+> +	unsigned int old_closing_wait, old_close_delay;
+>  	int retval = 0;
+>  
+>  	close_delay = msecs_to_jiffies(ss->close_delay * 10);
+> @@ -914,18 +915,24 @@ static int set_serial_info(struct tty_struct *tty, struct serial_struct *ss)
+>  			ASYNC_CLOSING_WAIT_NONE :
+>  			msecs_to_jiffies(ss->closing_wait * 10);
+>  
+> +	/* we must redo the rounding here, so that the values match */
+> +	old_close_delay	= jiffies_to_msecs(acm->port.close_delay) / 10;
+> +	old_closing_wait = acm->port.closing_wait == ASYNC_CLOSING_WAIT_NONE ?
+> +				ASYNC_CLOSING_WAIT_NONE :
+> +				jiffies_to_msecs(acm->port.closing_wait) / 10;
+> +
+>  	mutex_lock(&acm->port.mutex);
+>  
+> -	if (!capable(CAP_SYS_ADMIN)) {
+> -		if ((close_delay != acm->port.close_delay) ||
+> -		    (closing_wait != acm->port.closing_wait))
+> +	if ((ss->close_delay != old_close_delay) ||
+> +            (ss->closing_wait != old_closing_wait)) {
+> +		if (!capable(CAP_SYS_ADMIN)) {
+>  			retval = -EPERM;
+> -		else
+> -			retval = -EOPNOTSUPP;
+> -	} else {
+> -		acm->port.close_delay  = close_delay;
+> -		acm->port.closing_wait = closing_wait;
+> -	}
+> +		else {
+> +			acm->port.close_delay  = close_delay;
+> +			acm->port.closing_wait = closing_wait;
+> +		}
+> +	} else
+> +		retval = -EOPNOTSUPP;
+>  
+>  	mutex_unlock(&acm->port.mutex);
+>  	return retval;
+> @@ -969,7 +976,7 @@ static int wait_serial_change(struct acm *acm, unsigned long arg)
+>  		}
+>  	} while (!rv);
+>  
+> -	
+> +
+>  
 
-Should I backport this to 4.14 and older kernels to prevent this issue
-from showing up in newer Android devices that are using these older
-kernels?
+Was this patch even build tested?
+
+drivers/usb/class/cdc-acm.c: In function ‘set_serial_info’:
+drivers/usb/class/cdc-acm.c:930:3: error: expected ‘}’ before ‘else’
+  930 |   else {
+      |   ^~~~
+
+
+Please fix up, properly test, and resend both of these.
+
+And yes, this is the correct format for these patches, nice work there.
 
 thanks,
 
