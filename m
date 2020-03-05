@@ -2,135 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BE017AE5E
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2020 19:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4978917AEA7
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2020 20:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726079AbgCESoQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Mar 2020 13:44:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45546 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725938AbgCESoP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Mar 2020 13:44:15 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B6A9B2072D;
-        Thu,  5 Mar 2020 18:44:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583433855;
-        bh=M65Bw8vTfUeiRXfq4/UfyErlckIvJExOcmcF/dVAmrk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Sdi5/hkU2o8ks8dghvIZj1cadatWBN3GWqSqPxp7GT+OzCgPZjkQcUAVzQ4xw32WK
-         U+bxTYIYH0KL5KIPdpxlWvs8VKAqEI4uk6IhM0ftYoaNRV9IiactMVCW7naRZKrZ5D
-         Dkvg0A0nlY7Kx9HKaB0ZbkzfMuJ5e20BOyTZ0u+Q=
-Date:   Thu, 5 Mar 2020 19:44:12 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Anthony Mallet <anthony.mallet@laas.fr>
-Cc:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/2] USB: cdc-acm: fix rounding error in TIOCSSERIAL
-Message-ID: <20200305184412.GA2133118@kroah.com>
-References: <24160.54137.563763.50884@beetle.laas.fr>
+        id S1726209AbgCETCS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Mar 2020 14:02:18 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:44422 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726170AbgCETCS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Mar 2020 14:02:18 -0500
+Received: (qmail 3927 invoked by uid 2102); 5 Mar 2020 14:02:16 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 5 Mar 2020 14:02:16 -0500
+Date:   Thu, 5 Mar 2020 14:02:16 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+cc:     gregkh@linuxfoundation.org, <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: core: Set port link to RxDetect if port is not
+ enabled after resume
+In-Reply-To: <20200305072826.23231-1-kai.heng.feng@canonical.com>
+Message-ID: <Pine.LNX.4.44L0.2003051357400.1298-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <24160.54137.563763.50884@beetle.laas.fr>
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 05, 2020 at 11:24:57AM +0100, Anthony Mallet wrote:
-> By default, tty_port_init() initializes those parameters to a multiple
-> of HZ. For instance in line 69 of tty_port.c:
->    port->close_delay = (50 * HZ) / 100;
-> https://github.com/torvalds/linux/blob/master/drivers/tty/tty_port.c#L69
+On Thu, 5 Mar 2020, Kai-Heng Feng wrote:
+
+> On Dell TB16, Realtek USB ethernet (r8152) connects to an SMSC hub which
+> then connects to ASMedia xHCI's root hub:
 > 
-> With e.g. CONFIG_HZ = 250 (as this is the case for Ubuntu 18.04
-> linux-image-4.15.0-37-generic), the default setting for close_delay is
-> thus 125.
+> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
+>     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/7p, 5000M
+>             |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
 > 
-> When ioctl(fd, TIOCGSERIAL, &s) is executed, the setting returned in
-> user space is '12' (125/10). When ioctl(fd, TIOCSSERIAL, &s) is then
-> executed with the same setting '12', the value is interpreted as '120'
-> which is different from the current setting and a EPERM error may be
-> raised by set_serial_info() if !CAP_SYS_ADMIN.
-> https://github.com/torvalds/linux/blob/master/drivers/usb/class/cdc-acm.c#L919
+> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+> Bus 004 Device 002: ID 0424:5537 Standard Microsystems Corp. USB5537B
+> Bus 004 Device 003: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
 > 
-> Signed-off-by: Anthony Mallet <anthony.mallet@laas.fr>
-> Fixes: ba2d8ce9db0a6 ("cdc-acm: implement TIOCSSERIAL to avoid blocking close(2)")
-> Cc: stable <stable@vger.kernel.org>
-> Acked-by: Oliver Neukum <oneukum@suse.com>
+> The port is disabled after resume:
+> xhci_hcd 0000:3f:00.0: Get port status 4-1 read: 0x280, return 0x280
+> 
+> According to xHCI 4.19.1.2.1, we should set link to RxDetect to transit
+> it from disabled state to disconnected state, which allows the port to
+> be set to U0 and completes the resume process.
+> 
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 > ---
->  drivers/usb/class/cdc-acm.c | 27 +++++++++++++++++----------
->  1 file changed, 17 insertions(+), 10 deletions(-)
 > 
-> diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-> index da619176d..b43820fb2 100644
-> --- a/drivers/usb/class/cdc-acm.c
-> +++ b/drivers/usb/class/cdc-acm.c
-> @@ -907,6 +907,7 @@ static int set_serial_info(struct tty_struct *tty, struct serial_struct *ss)
->  {
->  	struct acm *acm = tty->driver_data;
->  	unsigned int closing_wait, close_delay;
-> +	unsigned int old_closing_wait, old_close_delay;
->  	int retval = 0;
+> P.S. This is and differnt (and should be more correct) approach to solve
+> https://lore.kernel.org/lkml/20191129174115.31683-1-kai.heng.feng@canonical.com/
+> 
+>  drivers/usb/core/hub.c | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 54cd8ef795ec..352e33c84d6a 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -3537,12 +3537,24 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
 >  
->  	close_delay = msecs_to_jiffies(ss->close_delay * 10);
-> @@ -914,18 +915,24 @@ static int set_serial_info(struct tty_struct *tty, struct serial_struct *ss)
->  			ASYNC_CLOSING_WAIT_NONE :
->  			msecs_to_jiffies(ss->closing_wait * 10);
+>  	/* Skip the initial Clear-Suspend step for a remote wakeup */
+>  	status = hub_port_status(hub, port1, &portstatus, &portchange);
+> -	if (status == 0 && !port_is_suspended(hub, portstatus)) {
+> +	if (status == 0 && !port_is_suspended(hub, portstatus)
+> +	    && (portstatus & USB_PORT_STAT_ENABLE)) {
+
+This doesn't look right.  We want to skip the step the clears the
+port's suspend feature whenever the feature is already clear,
+regardless of whether the port is enabled.
+
+Besides, isn't this new test racy?  Suppose the port was enabled when
+we called hub_port_status above, but it got disabled in the nanoseconds
+since then?
+
+>  		if (portchange & USB_PORT_STAT_C_SUSPEND)
+>  			pm_wakeup_event(&udev->dev, 0);
+>  		goto SuspendCleared;
+>  	}
 >  
-> +	/* we must redo the rounding here, so that the values match */
-> +	old_close_delay	= jiffies_to_msecs(acm->port.close_delay) / 10;
-> +	old_closing_wait = acm->port.closing_wait == ASYNC_CLOSING_WAIT_NONE ?
-> +				ASYNC_CLOSING_WAIT_NONE :
-> +				jiffies_to_msecs(acm->port.closing_wait) / 10;
+> +	/* xHCI 4.19.1.2.1 */
+> +	if (hub_is_superspeed(hub->hdev)) {
+> +		if (!(portstatus & USB_PORT_STAT_ENABLE))
+> +			status = hub_set_port_link_state(hub, port1,
+> +							 USB_SS_PORT_LS_RX_DETECT);
 > +
->  	mutex_lock(&acm->port.mutex);
->  
-> -	if (!capable(CAP_SYS_ADMIN)) {
-> -		if ((close_delay != acm->port.close_delay) ||
-> -		    (closing_wait != acm->port.closing_wait))
-> +	if ((ss->close_delay != old_close_delay) ||
-> +            (ss->closing_wait != old_closing_wait)) {
-> +		if (!capable(CAP_SYS_ADMIN)) {
->  			retval = -EPERM;
-> -		else
-> -			retval = -EOPNOTSUPP;
-> -	} else {
-> -		acm->port.close_delay  = close_delay;
-> -		acm->port.closing_wait = closing_wait;
-> -	}
-> +		else {
-> +			acm->port.close_delay  = close_delay;
-> +			acm->port.closing_wait = closing_wait;
-> +		}
-> +	} else
-> +		retval = -EOPNOTSUPP;
->  
->  	mutex_unlock(&acm->port.mutex);
->  	return retval;
-> @@ -969,7 +976,7 @@ static int wait_serial_change(struct acm *acm, unsigned long arg)
->  		}
->  	} while (!rv);
->  
-> -	
+> +		if (status)
+> +			dev_dbg(&port_dev->dev,
+> +				"can't set to RxDetect, status %d\n", status);
+> +	}
 > +
->  
 
-Was this patch even build tested?
+So maybe this part belongs later in the routine.  Or maybe it shouldn't
+be in the hub driver at all -- since it is xHCI-specific, shouldn't it
+go into the xhci-hcd driver?
 
-drivers/usb/class/cdc-acm.c: In function ‘set_serial_info’:
-drivers/usb/class/cdc-acm.c:930:3: error: expected ‘}’ before ‘else’
-  930 |   else {
-      |   ^~~~
+Alan Stern
 
+>  	/* see 7.1.7.7; affects power usage, but not budgeting */
+>  	if (hub_is_superspeed(hub->hdev))
+>  		status = hub_set_port_link_state(hub, port1, USB_SS_PORT_LS_U0);
 
-Please fix up, properly test, and resend both of these.
-
-And yes, this is the correct format for these patches, nice work there.
-
-thanks,
-
-greg k-h
