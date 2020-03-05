@@ -2,92 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E2717A266
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2020 10:43:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 171B317A30A
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2020 11:24:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726811AbgCEJnQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Mar 2020 04:43:16 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:44785 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726049AbgCEJnQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Mar 2020 04:43:16 -0500
-Received: by mail-pl1-f194.google.com with SMTP id d9so2393099plo.11
-        for <linux-usb@vger.kernel.org>; Thu, 05 Mar 2020 01:43:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=labau-com-tw.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id;
-        bh=zM3coQP4jzTNu1UON2w3xTtkJ9MHKb1rTJhrWJXFY44=;
-        b=RQ1TfrBXC3FKItT3TVdLN459ThKx1gJxpw/3NewcSfU1iTlcXJ7V1FRJ/Dzg3rHLoH
-         +Ichle9zIYwjQiPlvN6w8BAXJqhDNggBtCxH4MF4I0yIbHV4bZu5xJeT/QHu0gFvL0RT
-         M+yM+d6Az9lYu8ZEgUUHTiMIpbwPszybqOAMu5SBwUBb8tf1FZPyQv46TcX71xLhkWpA
-         vY+6IcJCqXzUXIuZzV2pJSJHnBizL/joG54j7m9SkmXjFhXmedM6w/wSGHLBBTjzPe+t
-         sSWCZj1DQJwZ8j65UJkhcdVSWicYcRJ+m4ls9ZQ+nTIpv8fEb7M6ntxaUQz+gKol+tbn
-         T54Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=zM3coQP4jzTNu1UON2w3xTtkJ9MHKb1rTJhrWJXFY44=;
-        b=k2pUAeoomXy02pI8JpU5SZ3M2WWtis+zYikwrNLri/OmNa57EbqtaLDkJWh6ep1Qgt
-         BIBoadiDkUcGKPTPm81iydrVGaNGqiAt31xYb+1Ff1L49yJPl9GSPXoZ6RGOUaDgzNLt
-         U21lx5opDDBvEN624iJn5tdqGAjGHflOd0gknFGjwTV+eo8Wf4svohl7J6JcoKlLvBQ6
-         gEr5GXhruRLRxamGDjRf5OXvNVNgM8zEyToS/WxeyuvpOvxOZR9dICDCF1c1zCe/eltd
-         /3ZP0L0oury9+lBDnqGISJt2MBBoIGfFuzj2bJ9p4tgmsv7+CG5Ui87+h9M1P0W2dNEI
-         4uNw==
-X-Gm-Message-State: ANhLgQ0tnEYt1gWovLP6pFrSKA/+4Pm8nO0Y1Xhng6M9LUCTaUaThaWk
-        b3BP54Ahb7k3LLw8rQPk3406zw==
-X-Google-Smtp-Source: ADFU+vuDr1dW8XFz9At4DuK0qmWO3ro/Out+khuYHLYmrrcLPMeAjsMZRHLEBNCDXcL8HuCgg2Tq/A==
-X-Received: by 2002:a17:90a:9f98:: with SMTP id o24mr7456679pjp.172.1583401394791;
-        Thu, 05 Mar 2020 01:43:14 -0800 (PST)
-Received: from localhost.localdomain (60-251-64-13.HINET-IP.hinet.net. [60.251.64.13])
-        by smtp.gmail.com with ESMTPSA id y14sm1728401pfp.59.2020.03.05.01.43.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2020 01:43:14 -0800 (PST)
-From:   Scott Chen <scott@labau.com.tw>
-Cc:     young@labau.com.tw, jocelyn@labau.com.tw,
-        Scott Chen <scott@labau.com.tw>,
-        Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Add device ids to pl2303 for the HP LD381 Display
-Date:   Thu,  5 Mar 2020 17:42:15 +0800
-Message-Id: <20200305094215.10105-1-scott@labau.com.tw>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        id S1726898AbgCEKYN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Mar 2020 05:24:13 -0500
+Received: from laas.laas.fr ([140.93.0.15]:9437 "EHLO laas.laas.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725946AbgCEKYN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Mar 2020 05:24:13 -0500
+Received: from beetle.laas.fr (beetle.laas.fr [IPv6:2001:660:6602:4:4a4d:7eff:fee1:650a])
+        by laas.laas.fr (8.16.0.21/8.16.0.29) with SMTP id 025AO3To000985;
+        Thu, 5 Mar 2020 11:24:03 +0100 (CET)
+Received: by beetle.laas.fr (sSMTP sendmail emulation); Thu, 05 Mar 2020 11:24:03 +0100
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Message-ID: <24160.54083.771390.513782@beetle.laas.fr>
+Date:   Thu, 5 Mar 2020 11:24:03 +0100
+From:   Anthony Mallet <anthony.mallet@laas.fr>
+To:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
+Subject: [PATCH 1/2] USB: cdc-acm: fix close_delay and closing_wait units in TIOCSSERIAL
+X-Mailer: VM 8.2.0b under 25.2.2 (x86_64-pc-linux-gnu)
+Organization: LAAS/CNRS - Toulouse - France
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Signed-off-by: Scott Chen <scott@labau.com.tw>
----
- drivers/usb/serial/pl2303.c | 1 +
- drivers/usb/serial/pl2303.h | 1 +
- 2 files changed, 2 insertions(+)
+close_delay and closing_wait are specified in hundredth of a second but stored
+internally in jiffies. Use the jiffies_to_msecs() and msecs_to_jiffies()
+functions to convert from each other.
 
-diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
-index aab737e1e7b6..5cb1c63295f5 100644
---- a/drivers/usb/serial/pl2303.c
-+++ b/drivers/usb/serial/pl2303.c
-@@ -97,6 +97,7 @@ static const struct usb_device_id id_table[] = {
- 	{ USB_DEVICE(COREGA_VENDOR_ID, COREGA_PRODUCT_ID) },
- 	{ USB_DEVICE(YCCABLE_VENDOR_ID, YCCABLE_PRODUCT_ID) },
- 	{ USB_DEVICE(SUPERIAL_VENDOR_ID, SUPERIAL_PRODUCT_ID) },
-+	{ USB_DEVICE(HP_VENDOR_ID, HP_LD381_PRODUCT_ID) },
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_LD220_PRODUCT_ID) },
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_LD220TA_PRODUCT_ID) },
- 	{ USB_DEVICE(HP_VENDOR_ID, HP_LD960_PRODUCT_ID) },
-diff --git a/drivers/usb/serial/pl2303.h b/drivers/usb/serial/pl2303.h
-index a019ea7e6e0e..80b20e980064 100644
---- a/drivers/usb/serial/pl2303.h
-+++ b/drivers/usb/serial/pl2303.h
-@@ -127,6 +127,7 @@
+Signed-off-by: Anthony Mallet <anthony.mallet@laas.fr>
+---
+ drivers/usb/class/cdc-acm.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 62f4fb9b3..da619176d 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -896,10 +896,10 @@ static int get_serial_info(struct tty_struct *tty, struct serial_struct *ss)
  
- /* Hewlett-Packard POS Pole Displays */
- #define HP_VENDOR_ID		0x03f0
-+#define HP_LD381_PRODUCT_ID	0x0f7f
- #define HP_LM920_PRODUCT_ID	0x026b
- #define HP_TD620_PRODUCT_ID	0x0956
- #define HP_LD960_PRODUCT_ID	0x0b39
+ 	ss->xmit_fifo_size = acm->writesize;
+ 	ss->baud_base = le32_to_cpu(acm->line.dwDTERate);
+-	ss->close_delay	= acm->port.close_delay / 10;
++	ss->close_delay	= jiffies_to_msecs(acm->port.close_delay) / 10;
+ 	ss->closing_wait = acm->port.closing_wait == ASYNC_CLOSING_WAIT_NONE ?
+ 				ASYNC_CLOSING_WAIT_NONE :
+-				acm->port.closing_wait / 10;
++				jiffies_to_msecs(acm->port.closing_wait) / 10;
+ 	return 0;
+ }
+ 
+@@ -909,9 +909,10 @@ static int set_serial_info(struct tty_struct *tty, struct serial_struct *ss)
+ 	unsigned int closing_wait, close_delay;
+ 	int retval = 0;
+ 
+-	close_delay = ss->close_delay * 10;
++	close_delay = msecs_to_jiffies(ss->close_delay * 10);
+ 	closing_wait = ss->closing_wait == ASYNC_CLOSING_WAIT_NONE ?
+-			ASYNC_CLOSING_WAIT_NONE : ss->closing_wait * 10;
++			ASYNC_CLOSING_WAIT_NONE :
++			msecs_to_jiffies(ss->closing_wait * 10);
+ 
+ 	mutex_lock(&acm->port.mutex);
+ 
 -- 
 2.17.1
 
