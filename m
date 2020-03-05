@@ -2,112 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 919E317B098
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2020 22:24:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1F217B0A7
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2020 22:29:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726222AbgCEVYW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Mar 2020 16:24:22 -0500
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:53428 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726184AbgCEVYV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Mar 2020 16:24:21 -0500
-Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 95AAD43BE1;
-        Thu,  5 Mar 2020 21:24:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1583443461; bh=3/XMRGShBnl0C1pKRoEEBidRVlpCQ65FOlu6h1QXl1w=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=h55bMNdPCboO3IntyLISNxGpeCxLqhnfaYcoRfK72GF2MURuE7Hm3M38GV7rAp5VA
-         hYhezFquVOvfpM0sgb/QzIQjz1arQTP3yQP8cO1m832H5HtwpZ7FqGB51RnBe07NTG
-         uVIWOXkf9Q49e1ShBqh8yEMO8sNUsJUlA+IIG6aBfQTkLBnASiWd410Wo5MKk//65i
-         hGp4XIA0zJdm2O8cSL0p/4FEKkXWaI9rgaUf2b+p/GsR4tZopvASzsm2YgoTxvUUCj
-         3TqBVn/htCLRnHjRxYI4JxxgFhgvMaFd/I5wRiYfwUMKWBKlThoLkQaxwf5+s9bQN6
-         ylTTs5QWf3bPQ==
-Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
+        id S1726179AbgCEV3P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Mar 2020 16:29:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38958 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726067AbgCEV3O (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Mar 2020 16:29:14 -0500
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 8180EA006E;
-        Thu,  5 Mar 2020 21:24:20 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Thu, 05 Mar 2020 13:24:20 -0800
-Date:   Thu, 05 Mar 2020 13:24:20 -0800
-Message-Id: <17318e194eea91aca59a1965967f953a55629d1e.1583443184.git.thinhn@synopsys.com>
-In-Reply-To: <cover.1583443184.git.thinhn@synopsys.com>
-References: <cover.1583443184.git.thinhn@synopsys.com>
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH 6/6] usb: dwc3: gadget: Refactor dwc3_gadget_ep_dequeue
-To:     Felipe Balbi <balbi@kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 8060320728;
+        Thu,  5 Mar 2020 21:29:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1583443753;
+        bh=oh2OwQ/0TeiUDxPSSCXzSpj5KXTo4xNzQh97uu6obDw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ShPPP/LC/9bbpx0NGMJcdAFDkRwBAzI7UfIQOCBK8FtcyFOSbnL/mhxhTlVpfidtd
+         EvjOk7ZmKbTjpeiu0mssyqZbGbuNOyuZOarr3k45UTaN8MfINS7v78/9gFpPJjxGIp
+         9halWgIRS2l82IX8m+dus45MdaiO013SnmlnTbag=
+Received: by mail-qk1-f169.google.com with SMTP id j7so333177qkd.5;
+        Thu, 05 Mar 2020 13:29:13 -0800 (PST)
+X-Gm-Message-State: ANhLgQ37JJZhXZ8aPh05YSSI7QTZb/FNSLF6I/rIAiKMDjHF/vNC9g1K
+        fo/I5zEjrJxrXmo7uxss0Mhfb+/18UR8nlBJIQ==
+X-Google-Smtp-Source: ADFU+vtqjRJO6NbTISWxledTlH+SAy9WYo0Hq7+mzVvIuhn8GJMCac26m6QCpXzcrlt1I+k7z1Xm4kMe5NwmRP+Yero=
+X-Received: by 2002:a37:393:: with SMTP id 141mr9930qkd.393.1583443752527;
+ Thu, 05 Mar 2020 13:29:12 -0800 (PST)
+MIME-Version: 1.0
+References: <20200305030135.210675-1-pmalani@chromium.org>
+In-Reply-To: <20200305030135.210675-1-pmalani@chromium.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 5 Mar 2020 15:29:00 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJcJf0JZVHEuY5y0eHLyw3e0Wr2ZDJvPs4=cZaSMWg97A@mail.gmail.com>
+Message-ID: <CAL_JsqJcJf0JZVHEuY5y0eHLyw3e0Wr2ZDJvPs4=cZaSMWg97A@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: Convert usb-connector to YAML format.
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     devicetree@vger.kernel.org, Benson Leung <bleung@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>
+        Linus Walleij <linus.walleij@linaro.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The flow from function dwc3_gadget_ep_dequeue() is not easy to follow.
-Refactor it for easier read. No functional change in this commit.
+On Wed, Mar 4, 2020 at 9:01 PM Prashant Malani <pmalani@chromium.org> wrote:
+>
+> Convert the usb-connector.txt bindings file to YAML format. This allows
+> it to be used in dt_bindings_check verification. This patch was
+> born out of a patch series for the addition of a Type C connector
+> class port driver[1].
+>
+> An attempt has been made to maintain the same documentation text and
+> example structure as was in the .txt file, but wherever needed
+> modifications have been made to satisfy dt_bindings_check.
+>
+> Also, update all references to usb-connector.txt to now use
+> usb-connector.yaml.
+>
+> [1]: https://lkml.org/lkml/2020/2/19/1232
+>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> ---
+>
+> Changes in v2:
+> - Added type references for some properties.
+> - Removed pinctrl properties.
+> - Updated power-role, try-power-role and data-role properties to be in
+>   valid schema format.
+> - Added OF graph data bus binding property according to reviewer
+>   suggestions.
+>
+>  .../connector/samsung,usb-connector-11pin.txt |   2 +-
+>  .../bindings/connector/usb-connector.txt      | 135 ------------
+>  .../bindings/connector/usb-connector.yaml     | 203 ++++++++++++++++++
+>  .../devicetree/bindings/usb/fcs,fusb302.txt   |   2 +-
+>  .../devicetree/bindings/usb/generic.txt       |   2 +-
+>  .../devicetree/bindings/usb/mediatek,mtu3.txt |   2 +-
+>  .../devicetree/bindings/usb/mediatek,musb.txt |   2 +-
+>  .../bindings/usb/richtek,rt1711h.txt          |   2 +-
+>  .../devicetree/bindings/usb/ti,hd3ss3220.txt  |   2 +-
+>  .../devicetree/bindings/usb/typec-tcpci.txt   |   2 +-
+>  .../devicetree/bindings/usb/usb-conn-gpio.txt |   4 +-
+>  11 files changed, 213 insertions(+), 145 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/connector/usb-connector.txt
+>  create mode 100644 Documentation/devicetree/bindings/connector/usb-connector.yaml
 
-Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
----
- drivers/usb/dwc3/gadget.c | 27 +++++++++++----------------
- 1 file changed, 11 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index cd00f2757cb5..39c92df6e188 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1555,19 +1555,17 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
- 
- 	list_for_each_entry(r, &dep->cancelled_list, list) {
- 		if (r == req)
--			goto out0;
-+			goto out;
- 	}
- 
- 	list_for_each_entry(r, &dep->pending_list, list) {
--		if (r == req)
--			break;
-+		if (r == req) {
-+			dwc3_gadget_giveback(dep, req, -ECONNRESET);
-+			goto out;
-+		}
- 	}
- 
--	if (r != req) {
--		list_for_each_entry(r, &dep->started_list, list) {
--			if (r == req)
--				break;
--		}
-+	list_for_each_entry(r, &dep->started_list, list) {
- 		if (r == req) {
- 			struct dwc3_request *t;
- 
-@@ -1581,17 +1579,14 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
- 			list_for_each_entry_safe(r, t, &dep->started_list, list)
- 				dwc3_gadget_move_cancelled_request(r);
- 
--			goto out0;
-+			goto out;
- 		}
--		dev_err(dwc->dev, "request %pK was not queued to %s\n",
--				request, ep->name);
--		ret = -EINVAL;
--		goto out0;
- 	}
- 
--	dwc3_gadget_giveback(dep, req, -ECONNRESET);
--
--out0:
-+	dev_err(dwc->dev, "request %pK was not queued to %s\n",
-+		request, ep->name);
-+	ret = -EINVAL;
-+out:
- 	spin_unlock_irqrestore(&dwc->lock, flags);
- 
- 	return ret;
--- 
-2.11.0
+> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> new file mode 100644
+> index 0000000000000..b386e2880405c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> @@ -0,0 +1,203 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/connector/usb-connector.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: USB Connector
+> +
+> +maintainers:
+> +  - linux-usb@vger.kernel.org
 
+Person please. You can put me if no one else.
+
+> +description:
+> +  A USB connector node represents a physical USB connector. It should be a child
+> +  of a USB interface controller.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - usb-a-connector
+> +      - usb-b-connector
+> +      - usb-c-connector
+> +
+> +  label:
+> +    description: Symbolic name for the connector.
+> +
+> +  type:
+> +    description: Size of the connector, should be specified in case of USB-A,
+> +      USB-B non-fullsize connectors.
+> +    $ref: /schemas/types.yaml#definitions/string
+
+Needs to be under an 'allOf' or the enum is ignored.
+
+Rob
