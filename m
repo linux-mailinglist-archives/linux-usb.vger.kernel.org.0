@@ -2,86 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9410417A3E5
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2020 12:16:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A1917AD1D
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2020 18:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727416AbgCELQT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Mar 2020 06:16:19 -0500
-Received: from ulan.pagasa.dost.gov.ph ([202.90.128.205]:47754 "EHLO
-        mailgw.pagasa.dost.gov.ph" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725880AbgCELQQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Mar 2020 06:16:16 -0500
-X-Greylist: delayed 1274 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Mar 2020 06:16:06 EST
-Received: from webmail.pagasa.dost.int ([10.10.11.8])
-        by mailgw.pagasa.dost.gov.ph  with ESMTP id 025AseSK006737-025AseSM006737
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 5 Mar 2020 18:54:40 +0800
-Received: from localhost (localhost [127.0.0.1])
-        by webmail.pagasa.dost.int (Postfix) with ESMTP id 2FB4F2981A90;
-        Thu,  5 Mar 2020 18:46:49 +0800 (PST)
-Received: from webmail.pagasa.dost.int ([127.0.0.1])
-        by localhost (webmail.pagasa.dost.int [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id r7J1A0N3aHYl; Thu,  5 Mar 2020 18:46:48 +0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by webmail.pagasa.dost.int (Postfix) with ESMTP id 2232C2981A4C;
-        Thu,  5 Mar 2020 18:46:48 +0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 webmail.pagasa.dost.int 2232C2981A4C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pagasa.dost.gov.ph;
-        s=96B9A03E-48B0-11EA-A7E8-92F42F537CE2; t=1583405208;
-        bh=RC75T5p3JPNk7JUNB+lH0UfaFQO1Ac584gPL3SIL6h8=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=vwxX3L8Z7uHnDJPZBIix9IBQi0XMBiY4sLQTc/9+h6pT2FHeTz61v6B+3f3w6WhXh
-         jUdnW3+FuZCvkf1pcG3LkjpsYvCQO7zO587a10BanpMqFFL6zPGTaTUsrqnCnsqpAd
-         CtN8Atz3iXBEFHZeiXsfNfnWSfk0n7tqEffbmBy8=
-X-Virus-Scanned: amavisd-new at pagasa.dost.int
-Received: from webmail.pagasa.dost.int ([127.0.0.1])
-        by localhost (webmail.pagasa.dost.int [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id WT2tTJV-1oie; Thu,  5 Mar 2020 18:46:47 +0800 (PST)
-Received: from webmail.pagasa.dost.int (webmail.pagasa.dost.int [10.11.1.8])
-        by webmail.pagasa.dost.int (Postfix) with ESMTP id 5119729819D2;
-        Thu,  5 Mar 2020 18:46:46 +0800 (PST)
-Date:   Thu, 5 Mar 2020 18:46:46 +0800 (PST)
-From:   "Juanito S. Galang" <juanito.galang@pagasa.dost.gov.ph>
-Message-ID: <1980644409.3575157.1583405206290.JavaMail.zimbra@pagasa.dost.gov.ph>
-Subject: 
+        id S1727515AbgCERYU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Mar 2020 12:24:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38636 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725938AbgCERNR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Mar 2020 12:13:17 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BAB4321556;
+        Thu,  5 Mar 2020 17:13:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1583428396;
+        bh=zgVtazVFwI+Yfj0ahILa+kVWFdUeQ9jA7UBi5RO0ug4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SHlex3ej1XWF8CIn0/aH8VNMlaAWCKK16s9I4YWNUfQ07F0kkHGLsZghcjQ9b2VKu
+         A1E5P5011ynAPZYyt/wOZ+kIFQauXC2gltnLQAXIY1d2Br1/PritkDnUXa/0Ooudos
+         RXfTVsLjcR5nG+tCK2+AWfEsIJeoDyidxvNQ3oug=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
+        syzbot+784ccb935f9900cc7c9e@syzkaller.appspotmail.com,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.5 05/67] HID: hiddev: Fix race in in hiddev_disconnect()
+Date:   Thu,  5 Mar 2020 12:12:06 -0500
+Message-Id: <20200305171309.29118-5-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200305171309.29118-1-sashal@kernel.org>
+References: <20200305171309.29118-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Zimbra 8.8.15_GA_3899 (ZimbraWebClient - GC79 (Win)/8.8.15_GA_3895)
-Thread-Index: lWYDQbv6QI/eIWKrWUD3NPCXqIIr9A==
-Thread-Topic: 
-X-FEAS-DKIM: Valid
-Authentication-Results: mailgw.pagasa.dost.gov.ph;
-        dkim=pass header.i=@pagasa.dost.gov.ph
-To:     unlisted-recipients:; (no To-header on input)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>
 
+[ Upstream commit 5c02c447eaeda29d3da121a2e17b97ccaf579b51 ]
 
-Herzlichen Gl=C3=BCckwunsch Lieber Beg=C3=BCnstigter,Sie erhalten diese E-M=
-ail von der Robert Bailey Foundation. Ich bin ein pensionierter Regierungsa=
-ngestellter aus Harlem und ein Gewinner des Powerball Lottery Jackpot im We=
-rt von 343,8 Millionen US-Dollar. Ich bin der gr=C3=B6=C3=9Fte Jackpot-Gewi=
-nner in der Geschichte der New Yorker Lotterie im US-Bundesstaat Amerika. I=
-ch habe diese Lotterie am 27. Oktober 2018 gewonnen und m=C3=B6chte Sie dar=
-=C3=BCber informieren, dass Google in Zusammenarbeit mit Microsoft Ihre "E-=
-Mail-Adresse" auf meine Bitte, einen Spendenbetrag von 3.000.000,00 Million=
-en Euro zu erhalten, =C3=BCbermittelt hat. Ich spende diese 3 Millionen Eur=
-o an Sie, um den Wohlt=C3=A4tigkeitsheimen und armen Menschen in Ihrer Geme=
-inde zu helfen, damit wir die Welt f=C3=BCr alle verbessern k=C3=B6nnen.Wei=
-tere Informationen finden Sie auf der folgenden Website, damit Sie nicht sk=
-eptisch sind
-Diese Spende von 3 Mio. EUR.https://nypost.com/2018/11/14/meet-the-winner-o=
-f-the-biggest-lottery-jackpot-in-new-york-history/Sie k=C3=B6nnen auch mein=
- YouTube f=C3=BCr mehr Best=C3=A4tigung aufpassen:
-https://www.youtube.com/watch?v=3DH5vT18Ysavc
-Bitte beachten Sie, dass alle Antworten an (robertdonation7@gmail.com=C2=A0=
- ) gesendet werden, damit wir das k=C3=B6nnen
-Fahren Sie fort, um das gespendete Geld an Sie zu =C3=BCberweisen.E-Mail: r=
-obertdonation7@gmail.comFreundliche Gr=C3=BC=C3=9Fe,
-Robert Bailey
-* * * * * * * * * * * * * * * *
-Powerball Jackpot Gewinner
+Syzbot reports that "hiddev" is used after it's free in hiddev_disconnect().
+The hiddev_disconnect() function sets "hiddev->exist = 0;" so
+hiddev_release() can free it as soon as we drop the "existancelock"
+lock.  This patch moves the mutex_unlock(&hiddev->existancelock) until
+after we have finished using it.
+
+Reported-by: syzbot+784ccb935f9900cc7c9e@syzkaller.appspotmail.com
+Fixes: 7f77897ef2b6 ("HID: hiddev: fix potential use-after-free")
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/hid/usbhid/hiddev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/hid/usbhid/hiddev.c b/drivers/hid/usbhid/hiddev.c
+index a970b809d778c..4140dea693e90 100644
+--- a/drivers/hid/usbhid/hiddev.c
++++ b/drivers/hid/usbhid/hiddev.c
+@@ -932,9 +932,9 @@ void hiddev_disconnect(struct hid_device *hid)
+ 	hiddev->exist = 0;
+ 
+ 	if (hiddev->open) {
+-		mutex_unlock(&hiddev->existancelock);
+ 		hid_hw_close(hiddev->hid);
+ 		wake_up_interruptible(&hiddev->wait);
++		mutex_unlock(&hiddev->existancelock);
+ 	} else {
+ 		mutex_unlock(&hiddev->existancelock);
+ 		kfree(hiddev);
+-- 
+2.20.1
+
