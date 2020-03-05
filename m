@@ -2,94 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E2BC117A33B
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2020 11:34:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B9E17A342
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2020 11:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727126AbgCEKen (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Mar 2020 05:34:43 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:42146 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726973AbgCEKem (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Mar 2020 05:34:42 -0500
-Received: by mail-lf1-f67.google.com with SMTP id t21so4164584lfe.9
-        for <linux-usb@vger.kernel.org>; Thu, 05 Mar 2020 02:34:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
-        b=fz2DAL/hCVOBzgx+g45rdprPzuuFcQsUW1ZHNo4nDuWKCX/fmtcJFi6lbSs9P/RfJA
-         lAVCHt1fNQbO92SbHey4yazD8D+BRVnEqK7PVKp1rcMy40FqhDMG89bJ58GSzMbwvj8U
-         zAnHbCvHz8cMGM9KEggtHMrJgl6JBjlHSjxVfYCRhwYPKx+Jjq/D+Io2Qn9ywDnb1vG6
-         OscJGDR+ktAt1dSFKcBwqG0UklQUo5kR+xK1xD7ZN4ey+k79Dp/cQzpwPp4ZcFKOa/hp
-         HQXr9qb2tQ0y+avLLK+wgv/3Axz+CmJlkglRa4MPyv4tObLkJ7AkbgA7LI04c8TOXAVI
-         wgbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
-        b=U077gdRnPcM/X/YKMWCHPDPrKn+DjToP2OymBLqCBtLX0qmDeu8g7NznXaKnpzmu9x
-         VY/wO5uhJBZvZI51EygmuFI68iaGC701toyCrRT2YqsZg6nzZfLbghOIQSW+O81CXYBM
-         +QN1nDhhemTnvhnGxiRq0UAHBj4rywtci4Jlq3d7PWC+OpQFcpwYQHxatGNLv4GDdjBp
-         Br8VVbOnoDKdhi3LQ61QsSfvWio4+XrqtBWxdIcHFtAPYB9SFktsUEK5+BxVZvBQzZ5w
-         ZdrbFtaRzXv5iihY2gkKtJvcfWwc3bR1kzXnwkZFURNIZU9Zw6gh8/HYx6EUsbDb1TAw
-         Zm9A==
-X-Gm-Message-State: ANhLgQ3mXWOJYF6iZrIefRClBrDMkGXVmcuP/CV7cgtQhHl94rVaAgLk
-        GY/9N+6LRXwqIQRC9jQB5JG4lGIFIe6jOY4cTio=
-X-Google-Smtp-Source: ADFU+vt4p78g3SCPLp2SkhMI2bIlerfed0N6TLid+L8CMxk399v6WJ1kSPdTuUyeuRHmX7GoHE72hDaaexbZ9WYxFUU=
-X-Received: by 2002:a19:c714:: with SMTP id x20mr5096973lff.107.1583404479393;
- Thu, 05 Mar 2020 02:34:39 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:ab3:5d10:0:0:0:0:0 with HTTP; Thu, 5 Mar 2020 02:34:38 -0800 (PST)
-Reply-To: ayishagddafio@mail.ru
-From:   AISHA GADDAFI <mahasaliou4444@gmail.com>
-Date:   Thu, 5 Mar 2020 02:34:38 -0800
-Message-ID: <CAKHB8qf7CPHeUuxPD-D07960Jx9qxdLt6hBH1AJUj0AYDreUzA@mail.gmail.com>
-Subject: Lieber Freund (Assalamu Alaikum),?
-To:     undisclosed-recipients:;
+        id S1727066AbgCEKfY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Mar 2020 05:35:24 -0500
+Received: from mx2.suse.de ([195.135.220.15]:40300 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726956AbgCEKfY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Mar 2020 05:35:24 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 86404ADFE;
+        Thu,  5 Mar 2020 10:35:22 +0000 (UTC)
+Message-ID: <1583404507.12738.32.camel@suse.com>
+Subject: Re: [PATCH 2/2] USB: cdc-acm: fix rounding error in TIOCSSERIAL
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Anthony Mallet <anthony.mallet@laas.fr>, linux-usb@vger.kernel.org
+Date:   Thu, 05 Mar 2020 11:35:07 +0100
+In-Reply-To: <24160.54137.563763.50884@beetle.laas.fr>
+References: <24160.54137.563763.50884@beetle.laas.fr>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=20
-Lieber Freund (Assalamu Alaikum),
+Am Donnerstag, den 05.03.2020, 11:24 +0100 schrieb Anthony Mallet:
+> By default, tty_port_init() initializes those parameters to a multiple
+> of HZ. For instance in line 69 of tty_port.c:
+>    port->close_delay = (50 * HZ) / 100;
+> https://github.com/torvalds/linux/blob/master/drivers/tty/tty_port.c#L69
+> 
+> With e.g. CONFIG_HZ = 250 (as this is the case for Ubuntu 18.04
+> linux-image-4.15.0-37-generic), the default setting for close_delay is
+> thus 125.
+> 
+> When ioctl(fd, TIOCGSERIAL, &s) is executed, the setting returned in
+> user space is '12' (125/10). When ioctl(fd, TIOCSSERIAL, &s) is then
+> executed with the same setting '12', the value is interpreted as '120'
+> which is different from the current setting and a EPERM error may be
+> raised by set_serial_info() if !CAP_SYS_ADMIN.
+> https://github.com/torvalds/linux/blob/master/drivers/usb/class/cdc-acm.c#L919
+> 
+> Signed-off-by: Anthony Mallet <anthony.mallet@laas.fr>
+> Fixes: ba2d8ce9db0a6 ("cdc-acm: implement TIOCSSERIAL to avoid blocking close(2)")
+Acked-by: Oliver Neukum <oneukum@suse.com>
 
-Ich bin vor einer privaten Suche auf Ihren E-Mail-Kontakt gesto=C3=9Fen
-Ihre Hilfe. Mein Name ist Aisha Al-Qaddafi, eine alleinerziehende
-Mutter und eine Witwe
-mit drei Kindern. Ich bin die einzige leibliche Tochter des Sp=C3=A4tlibysc=
-hen
-Pr=C3=A4sident (verstorbener Oberst Muammar Gaddafi).
+	Regards
+		Oliver
 
-Ich habe Investmentfonds im Wert von siebenundzwanzig Millionen
-f=C3=BCnfhunderttausend
-United State Dollar ($ 27.500.000.00) und ich brauche eine
-vertrauensw=C3=BCrdige Investition
-Manager / Partner aufgrund meines aktuellen Fl=C3=BCchtlingsstatus bin ich =
-jedoch
-M=C3=B6glicherweise interessieren Sie sich f=C3=BCr die Unterst=C3=BCtzung =
-von
-Investitionsprojekten in Ihrem Land
-Von dort aus k=C3=B6nnen wir in naher Zukunft Gesch=C3=A4ftsbeziehungen auf=
-bauen.
-
-Ich bin bereit, mit Ihnen =C3=BCber das Verh=C3=A4ltnis zwischen Investitio=
-n und
-Unternehmensgewinn zu verhandeln
-Basis f=C3=BCr die zuk=C3=BCnftige Investition Gewinne zu erzielen.
-
-Wenn Sie bereit sind, dieses Projekt in meinem Namen zu bearbeiten,
-antworten Sie bitte dringend
-Damit ich Ihnen mehr Informationen =C3=BCber die Investmentfonds geben kann=
-.
-
-Ihre dringende Antwort wird gesch=C3=A4tzt. schreibe mir an diese email adr=
-esse (
-ayishagddafio@mail.ru ) zur weiteren Diskussion.
-
-Freundliche Gr=C3=BC=C3=9Fe
-Frau Aisha Al-Qaddafi
