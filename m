@@ -2,91 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C142F17A07F
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2020 08:28:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82D7317A21B
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2020 10:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725893AbgCEH2n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Mar 2020 02:28:43 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:60987 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725816AbgCEH2n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Mar 2020 02:28:43 -0500
-Received: from 61-220-137-37.hinet-ip.hinet.net ([61.220.137.37] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1j9kvq-0003xu-83; Thu, 05 Mar 2020 07:28:34 +0000
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     gregkh@linuxfoundation.org
-Cc:     mathias.nyman@intel.com, stern@rowland.harvard.edu,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [PATCH] usb: core: Set port link to RxDetect if port is not enabled after resume
-Date:   Thu,  5 Mar 2020 15:28:26 +0800
-Message-Id: <20200305072826.23231-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726009AbgCEJSU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Mar 2020 04:18:20 -0500
+Received: from mx2.suse.de ([195.135.220.15]:40048 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725937AbgCEJSU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Mar 2020 04:18:20 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 86994AC2C;
+        Thu,  5 Mar 2020 09:18:18 +0000 (UTC)
+Message-ID: <1583399882.12738.30.camel@suse.com>
+Subject: Re: ASM1142 USB 3.1 Gen2 controller from startech(2 port) errors
+ when USB 3.1 Gen2 disk is manipulated
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Nikolay Kichukov <hijacker@oldum.net>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Date:   Thu, 05 Mar 2020 10:18:02 +0100
+In-Reply-To: <ce1660b5-c9f4-f0c6-d4f4-b55dc8690437@oldum.net>
+References: <ce1660b5-c9f4-f0c6-d4f4-b55dc8690437@oldum.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Dell TB16, Realtek USB ethernet (r8152) connects to an SMSC hub which
-then connects to ASMedia xHCI's root hub:
+Am Donnerstag, den 05.03.2020, 00:44 +0100 schrieb Nikolay Kichukov:
+> So far the list of failing disks/enclosures(all USB 3.1 Gen2 compatible):
+> Samsung portable T5 2TB
+> IcyBox IB-366-C31 (174c:55aa ASMedia Technology Inc. Name: ASM1051E SATA
+> 6Gb/s bridge, ASM1053E SATA 6Gb/s bridge, ASM1153 SATA 3Gb/s bridge,
+> ASM1153E SATA 6Gb/s bridge)
+> 
+> Even if uas module is blacklisted and the disk initializes through
+> usb-storage, the same problem appears.
 
-/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
-    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/7p, 5000M
-            |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
+Hi,
 
-Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 004 Device 002: ID 0424:5537 Standard Microsystems Corp. USB5537B
-Bus 004 Device 003: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
+this looks like we are triggering a race in the firmware at the highest
+speed. Have you tried the m and g quirk settings for storage?
 
-The port is disabled after resume:
-xhci_hcd 0000:3f:00.0: Get port status 4-1 read: 0x280, return 0x280
+If that does not help a usbmon trace of a failure will be necessary.
 
-According to xHCI 4.19.1.2.1, we should set link to RxDetect to transit
-it from disabled state to disconnected state, which allows the port to
-be set to U0 and completes the resume process.
-
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
-
-P.S. This is and differnt (and should be more correct) approach to solve
-https://lore.kernel.org/lkml/20191129174115.31683-1-kai.heng.feng@canonical.com/
-
- drivers/usb/core/hub.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 54cd8ef795ec..352e33c84d6a 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -3537,12 +3537,24 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
- 
- 	/* Skip the initial Clear-Suspend step for a remote wakeup */
- 	status = hub_port_status(hub, port1, &portstatus, &portchange);
--	if (status == 0 && !port_is_suspended(hub, portstatus)) {
-+	if (status == 0 && !port_is_suspended(hub, portstatus)
-+	    && (portstatus & USB_PORT_STAT_ENABLE)) {
- 		if (portchange & USB_PORT_STAT_C_SUSPEND)
- 			pm_wakeup_event(&udev->dev, 0);
- 		goto SuspendCleared;
- 	}
- 
-+	/* xHCI 4.19.1.2.1 */
-+	if (hub_is_superspeed(hub->hdev)) {
-+		if (!(portstatus & USB_PORT_STAT_ENABLE))
-+			status = hub_set_port_link_state(hub, port1,
-+							 USB_SS_PORT_LS_RX_DETECT);
-+
-+		if (status)
-+			dev_dbg(&port_dev->dev,
-+				"can't set to RxDetect, status %d\n", status);
-+	}
-+
- 	/* see 7.1.7.7; affects power usage, but not budgeting */
- 	if (hub_is_superspeed(hub->hdev))
- 		status = hub_set_port_link_state(hub, port1, USB_SS_PORT_LS_U0);
--- 
-2.17.1
+	Regards
+		Oliver
 
