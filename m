@@ -2,42 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E2117ACCF
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2020 18:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B4E17AC9C
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2020 18:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727988AbgCERWl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Mar 2020 12:22:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39660 "EHLO mail.kernel.org"
+        id S1727685AbgCERO3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Mar 2020 12:14:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40610 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727448AbgCERNx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Mar 2020 12:13:53 -0500
+        id S1727671AbgCERO2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Mar 2020 12:14:28 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DE52B208CD;
-        Thu,  5 Mar 2020 17:13:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 146E2208CD;
+        Thu,  5 Mar 2020 17:14:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583428432;
-        bh=7Xpa5Qwe0lWcRf6rqT2U+lbAJA93ioiusi3vNGr++3Q=;
+        s=default; t=1583428467;
+        bh=hmXOjy2k2WuVXfJkljl/hOavvSMDuPfcrUAqlQP2Vrg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yiqSxFMOCMsnXVLNKFu5SdIzioJCw5B51+xIVX03nnXKL+e1rSE6/q2NaGWUHVZMg
-         2nC3VAOa1bV8SFm7jYSFzExuz3gqZngYr95akRuY5nSsU7HdIbZ2siwFcc80kXC3/P
-         GM1vxqcYndX6WDI4F+5zWAG3ek2/zRmp+1AmyPs8=
+        b=p1BL6T0bJZ1Dq8sRXuWhp10kydkdiqJ86z3wjCibTA453ZRhvgRkPf8treKIhZmjF
+         CKqefeOCn+JKERGp9pSXULjExeQgllFIxY1YJ9HqB8rkLPf5Sj9ZG3FifQWuqz4moG
+         y9mV91iEYfVk0nwdb9WBqPcA2w7TtpIIuB/KnMs0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Daniele Palmas <dnlplm@gmail.com>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 31/67] net: usb: qmi_wwan: restore mtu min/max values after raw_ip switch
-Date:   Thu,  5 Mar 2020 12:12:32 -0500
-Message-Id: <20200305171309.29118-31-sashal@kernel.org>
+Cc:     "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
+        syzbot+784ccb935f9900cc7c9e@syzkaller.appspotmail.com,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 05/58] HID: hiddev: Fix race in in hiddev_disconnect()
+Date:   Thu,  5 Mar 2020 12:13:26 -0500
+Message-Id: <20200305171420.29595-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200305171309.29118-1-sashal@kernel.org>
-References: <20200305171309.29118-1-sashal@kernel.org>
+In-Reply-To: <20200305171420.29595-1-sashal@kernel.org>
+References: <20200305171420.29595-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -46,46 +45,41 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Daniele Palmas <dnlplm@gmail.com>
+From: "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>
 
-[ Upstream commit eae7172f8141eb98e64e6e81acc9e9d5b2add127 ]
+[ Upstream commit 5c02c447eaeda29d3da121a2e17b97ccaf579b51 ]
 
-usbnet creates network interfaces with min_mtu = 0 and
-max_mtu = ETH_MAX_MTU.
+Syzbot reports that "hiddev" is used after it's free in hiddev_disconnect().
+The hiddev_disconnect() function sets "hiddev->exist = 0;" so
+hiddev_release() can free it as soon as we drop the "existancelock"
+lock.  This patch moves the mutex_unlock(&hiddev->existancelock) until
+after we have finished using it.
 
-These values are not modified by qmi_wwan when the network interface
-is created initially, allowing, for example, to set mtu greater than 1500.
-
-When a raw_ip switch is done (raw_ip set to 'Y', then set to 'N') the mtu
-values for the network interface are set through ether_setup, with
-min_mtu = ETH_MIN_MTU and max_mtu = ETH_DATA_LEN, not allowing anymore to
-set mtu greater than 1500 (error: mtu greater than device maximum).
-
-The patch restores the original min/max mtu values set by usbnet after a
-raw_ip switch.
-
-Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
-Acked-by: Bjørn Mork <bjorn@mork.no>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Reported-by: syzbot+784ccb935f9900cc7c9e@syzkaller.appspotmail.com
+Fixes: 7f77897ef2b6 ("HID: hiddev: fix potential use-after-free")
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/qmi_wwan.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/hid/usbhid/hiddev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 9485c8d1de8a3..9dcbca1f8f9aa 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -338,6 +338,9 @@ static void qmi_wwan_netdev_setup(struct net_device *net)
- 		netdev_dbg(net, "mode: raw IP\n");
- 	} else if (!net->header_ops) { /* don't bother if already set */
- 		ether_setup(net);
-+		/* Restoring min/max mtu values set originally by usbnet */
-+		net->min_mtu = 0;
-+		net->max_mtu = ETH_MAX_MTU;
- 		clear_bit(EVENT_NO_IP_ALIGN, &dev->flags);
- 		netdev_dbg(net, "mode: Ethernet\n");
- 	}
+diff --git a/drivers/hid/usbhid/hiddev.c b/drivers/hid/usbhid/hiddev.c
+index c879b214a4797..35b1fa6d962ec 100644
+--- a/drivers/hid/usbhid/hiddev.c
++++ b/drivers/hid/usbhid/hiddev.c
+@@ -941,9 +941,9 @@ void hiddev_disconnect(struct hid_device *hid)
+ 	hiddev->exist = 0;
+ 
+ 	if (hiddev->open) {
+-		mutex_unlock(&hiddev->existancelock);
+ 		hid_hw_close(hiddev->hid);
+ 		wake_up_interruptible(&hiddev->wait);
++		mutex_unlock(&hiddev->existancelock);
+ 	} else {
+ 		mutex_unlock(&hiddev->existancelock);
+ 		kfree(hiddev);
 -- 
 2.20.1
 
