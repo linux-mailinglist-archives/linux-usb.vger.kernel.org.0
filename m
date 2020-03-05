@@ -2,127 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E95179E46
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2020 04:35:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F12179E89
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Mar 2020 05:08:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725830AbgCEDfw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Mar 2020 22:35:52 -0500
-Received: from kernel.crashing.org ([76.164.61.194]:43620 "EHLO
-        kernel.crashing.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725810AbgCEDfw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Mar 2020 22:35:52 -0500
-Received: from localhost (gate.crashing.org [63.228.1.57])
-        (authenticated bits=0)
-        by kernel.crashing.org (8.14.7/8.14.7) with ESMTP id 0253Z9YA032350
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 4 Mar 2020 21:35:13 -0600
-Message-ID: <8a9033d5e76951f5bec39531c5d0e0d6ef963ee5.camel@kernel.crashing.org>
-Subject: Re: [PATCH] usb: gadget: aspeed: improve vhub port irq handling
-From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
-To:     rentao.bupt@gmail.com, Felipe Balbi <balbi@kernel.org>,
+        id S1726191AbgCEEH6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Mar 2020 23:07:58 -0500
+Received: from mail-io1-f65.google.com ([209.85.166.65]:39542 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725839AbgCEEH6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Mar 2020 23:07:58 -0500
+Received: by mail-io1-f65.google.com with SMTP id h3so4959838ioj.6;
+        Wed, 04 Mar 2020 20:07:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sv3uK9xf9C73dIUI1DIkkaJoGRZu2pQVCfWVV2VChWM=;
+        b=kNehVANOiC52TvRUHxr1c+SmzU4+JpRUKLnGjZb+owOiqvsB0jHvTv7UUiKP/0cU2O
+         9KifuJ+OCTkwtSK1bhGAOr5+O6pzbu7hKlGZUXqRc69oox5bxLw8ctBVVBJyFHdHn6/0
+         VDs2GNnTv20EXmUSvzYlk2RVQEvNnupggtKdWvg7EzbiRd7Q3+nfENYp5+yERMxGQb2f
+         osKIW7KDLRnk8Ipn0RH2pvfI4YKQn1+f9wc3C3Yv5b0ysJtoyESylO2WPV0kix64fA6z
+         Xi1V22tPhf+o8Zi785JUP9/VQgsN7vwpEQAb6sCpG4cZKI+Z+NRrA66z9ZQIz1ZDffO1
+         bz0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sv3uK9xf9C73dIUI1DIkkaJoGRZu2pQVCfWVV2VChWM=;
+        b=P73mcbhv8FreHX0Wx4CqNvJaGB7orRJF3G9LzYk9d+qFXTOIEBBm0TVEGL8TjdIBwY
+         zDuLxQPF2nZaQVAot1P7c3JpUJaK5nyw47cwNoSNe8eW+PKx2ubqLRWAMszWpIBhpvgm
+         doqPkIO+VXpSdrsFsp0i3ASXF7cf+3bRC6ZmRLpir9aG6hOBBZQ/n6gPtlln9eO4xNhJ
+         xX3MddIpg6gFYd4qnxEWMSpkv4LN+/wDqKgA9FNH5pJYfhE2gl35B5FKvv2MEwhKEuwN
+         VEpK8Q4YRNBl0EkzLnvjzRn0/ZTXhZ+rTPyhjjJQ/Iwqtmo4++XoL9laK0XLBFSsvj7Q
+         zcVw==
+X-Gm-Message-State: ANhLgQ338Cqoc9LIuWlKl5c4PWVWLgB/r+CoTKCd7Gq22yo6zSO1Ep2p
+        oxHTZEurkfuai3Mi++3f//YLYCL5KkWrdnlZcQ8=
+X-Google-Smtp-Source: ADFU+vt9uyjUN8gULjKOUZ6/cN1Ak/LMeyNVMhB2uDZnismRKn3B5kcB03r0UUywSPFnatF2WBQR/Orn5EI8Ifyg1zY=
+X-Received: by 2002:a6b:b309:: with SMTP id c9mr5008105iof.6.1583381277010;
+ Wed, 04 Mar 2020 20:07:57 -0800 (PST)
+MIME-Version: 1.0
+References: <20200301212019.2248-1-linux.amoon@gmail.com> <20200301212019.2248-2-linux.amoon@gmail.com>
+ <20200303094619.GA20181@pi3>
+In-Reply-To: <20200303094619.GA20181@pi3>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Thu, 5 Mar 2020 09:37:45 +0530
+Message-ID: <CANAwSgRxyYsDBX2Cx4w8-U_yEv2KqrzzgTc5oTfwjCFGDgttfw@mail.gmail.com>
+Subject: Re: [PATCHv2 1/3] devicetree: bindings: exynos: Add new compatible
+ for Exynos5420 dwc3 clocks support
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Stephen Boyd <swboyd@chromium.org>, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org, taoren@fb.com
-Date:   Thu, 05 Mar 2020 14:35:08 +1100
-In-Reply-To: <20200305023859.21057-1-rentao.bupt@gmail.com>
-References: <20200305023859.21057-1-rentao.bupt@gmail.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-samsung-soc@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2020-03-04 at 18:38 -0800, rentao.bupt@gmail.com wrote:
-> From: Tao Ren <rentao.bupt@gmail.com>
-> 
-> This patch evaluates vhub ports' irq mask before going through per-
-> port
-> irq handling one by one, which helps to speed up irq handling in case
-> there is no port interrupt.
-> 
-> Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
+Hi Krzysztof,
 
-Looks reasonable, but did you try a find_next_bit() loop and whether
-that's faster ?
+On Tue, 3 Mar 2020 at 15:16, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>
+> On Sun, Mar 01, 2020 at 09:20:16PM +0000, Anand Moon wrote:
+> > This patch adds the new compatible string for Exynos5422 DWC3
+> > to support enable/disable of core and suspend clk by DWC3 driver.
+> > Also updated the clock names for compatible samsung,exynos5420-dwusb3.
+>
+> Some time ago I mentioned this... so once more:
+> Do not use "This patch adds" but simple "Add".
+> https://elixir.bootlin.com/linux/latest/source/Documentation/process/submitting-patches.rst#L151
+>
 
-> ---
->  drivers/usb/gadget/udc/aspeed-vhub/core.c | 11 ++++++-----
->  drivers/usb/gadget/udc/aspeed-vhub/vhub.h |  8 ++++----
->  2 files changed, 10 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/core.c
-> b/drivers/usb/gadget/udc/aspeed-vhub/core.c
-> index f8d35dd60c34..a03e4e4ea401 100644
-> --- a/drivers/usb/gadget/udc/aspeed-vhub/core.c
-> +++ b/drivers/usb/gadget/udc/aspeed-vhub/core.c
-> @@ -134,11 +134,11 @@ static irqreturn_t ast_vhub_irq(int irq, void
-> *data)
->  	}
->  
->  	/* Handle device interrupts */
-> -	for (i = 0; i < vhub->max_ports; i++) {
-> -		u32 dev_mask = VHUB_IRQ_DEVICE1 << i;
-> -
-> -		if (istat & dev_mask)
-> -			ast_vhub_dev_irq(&vhub->ports[i].dev);
-> +	if (istat & vhub->port_irq_mask) {
-> +		for (i = 0; i < vhub->max_ports; i++) {
-> +			if (istat & VHUB_DEV_IRQ(i))
-> +				ast_vhub_dev_irq(&vhub->ports[i].dev);
-> +		}
->  	}
->  
->  	/* Handle top-level vHub EP0 interrupts */
-> @@ -332,6 +332,7 @@ static int ast_vhub_probe(struct platform_device
-> *pdev)
->  
->  	spin_lock_init(&vhub->lock);
->  	vhub->pdev = pdev;
-> +	vhub->port_irq_mask = GENMASK(vhub->max_ports + 8, 9);
->  
->  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->  	vhub->regs = devm_ioremap_resource(&pdev->dev, res);
-> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
-> b/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
-> index fac79ef6d669..e49924ec7e58 100644
-> --- a/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
-> +++ b/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
-> @@ -54,10 +54,6 @@
->  #define VHUB_IRQ_USB_CMD_DEADLOCK		(1 << 18)
->  #define VHUB_IRQ_EP_POOL_NAK			(1 << 17)
->  #define VHUB_IRQ_EP_POOL_ACK_STALL		(1 << 16)
-> -#define VHUB_IRQ_DEVICE5			(1 << 13)
-> -#define VHUB_IRQ_DEVICE4			(1 << 12)
-> -#define VHUB_IRQ_DEVICE3			(1 << 11)
-> -#define VHUB_IRQ_DEVICE2			(1 << 10)
->  #define VHUB_IRQ_DEVICE1			(1 << 9)
->  #define VHUB_IRQ_BUS_RESUME			(1 << 8)
->  #define VHUB_IRQ_BUS_SUSPEND 			(1 << 7)
-> @@ -70,6 +66,9 @@
->  #define VHUB_IRQ_HUB_EP0_SETUP			(1 << 0)
->  #define VHUB_IRQ_ACK_ALL			0x1ff
->  
-> +/* Downstream device IRQ mask. */
-> +#define VHUB_DEV_IRQ(n)				(VHUB_IRQ_DEVIC
-> E1 << (n))
-> +
->  /* SW reset reg */
->  #define VHUB_SW_RESET_EP_POOL			(1 << 9)
->  #define VHUB_SW_RESET_DMA_CONTROLLER		(1 << 8)
-> @@ -402,6 +401,7 @@ struct ast_vhub {
->  	/* Per-port info */
->  	struct ast_vhub_port		*ports;
->  	u32				max_ports;
-> +	u32				port_irq_mask;
->  
->  	/* Generic EP data structures */
->  	struct ast_vhub_ep		*epns;
+Ok I will keep this in my mind next time I update my patchs.
 
+> Best regards,
+> Krzysztof
+>
+
+-Anand
