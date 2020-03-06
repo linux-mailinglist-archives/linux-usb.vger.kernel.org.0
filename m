@@ -2,71 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F285017C13A
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2020 16:06:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38BF517C28D
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2020 17:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727125AbgCFPGl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Mar 2020 10:06:41 -0500
-Received: from mga14.intel.com ([192.55.52.115]:49424 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726958AbgCFPGk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 6 Mar 2020 10:06:40 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Mar 2020 07:06:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,522,1574150400"; 
-   d="scan'208";a="234831848"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
-  by orsmga008.jf.intel.com with ESMTP; 06 Mar 2020 07:06:38 -0800
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>, Alberto Mattea <alberto@mattea.info>,
-        stable@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 2/2] usb: xhci: apply XHCI_SUSPEND_DELAY to AMD XHCI controller 1022:145c
-Date:   Fri,  6 Mar 2020 17:08:58 +0200
-Message-Id: <20200306150858.21904-3-mathias.nyman@linux.intel.com>
+        id S1726485AbgCFQIB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Mar 2020 11:08:01 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:53703 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726271AbgCFQIA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Mar 2020 11:08:00 -0500
+Received: by mail-wm1-f67.google.com with SMTP id g134so3053420wme.3;
+        Fri, 06 Mar 2020 08:07:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=1rQw/frsMaF2gnOOhkHrb+4riB7NiM0f9L7AjHG7DPU=;
+        b=qvTHk5spZc1f8k9bKjvWAA8YD7FUjnFJRWKDLRSAaYiZKcKM0Wr7mVZAEb++wJ4sHE
+         4zCeGexAyVjqyDUnkJeSS5Cm8tXjlQeeYrkZb4pVDMS9Q/bsJR1+ZcYC4t/QNIAVb8g1
+         rWbWp96pmCdtRyhh1y1GYqp97MzaqhaQd0R7R5R+aHSd10jestzLb4PsGq4iHmide4s4
+         Mn2LsNhiVBlYqNHdTFO6UznSgQg3hogWCfUC00U/iUADRCjghcVKwuZX7QsIPeQz1wZC
+         R8HVmJ+ffDNBx5ZAbhcM3nXZS0J9xWPfW8t00b36UwXSy//mRjKD6Ysbu5w1JTO/fdSR
+         pN/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=1rQw/frsMaF2gnOOhkHrb+4riB7NiM0f9L7AjHG7DPU=;
+        b=RGTvpR7RxgOGDtw+XzCiiVEnAVDHKyviMJqojgcA1qaHRej7w01gysaJLoiUgZHK1f
+         6j1Iyz6C7zsxpPbBRoXNNEcECaDK6JonB0FbfFTwrIem0C6fofdrhL6JOJqWVURPpe3p
+         lEcU9X5YHov+8yqIKOvPHscy5t32Pf5NiC4PvaVDKB+aGvGIc+AyW2U3rv6x92uvJkqk
+         BGaVYEJ4AASjVdM3HkoLR6xEtQ22wUGyyhibcKU+SEEmPScjr14A3BX8CzNfVEd7IrQ7
+         upv5BP81slDEILpCrGJspJItOOD3KB5MsDtU4L85i41Lb9+eXsWnk6223UL53BXGvUtQ
+         Xzng==
+X-Gm-Message-State: ANhLgQ2j3xhkivWDhOMjGhsnb06ZKiGSf+4PLtobrtXxCT4ffRGjuV+h
+        sdI1h9OKcB3kAas9DIqWiPRuGzEz
+X-Google-Smtp-Source: ADFU+vv8pIrURBIxmS0ltgeQiAoP8UFEjEZbeudU4SQGtedpFRWTby5elBxa9EDpX8rmNRh7llUv2Q==
+X-Received: by 2002:a7b:c8d5:: with SMTP id f21mr4660807wml.60.1583510877374;
+        Fri, 06 Mar 2020 08:07:57 -0800 (PST)
+Received: from stbsrv-and-01.and.broadcom.net ([192.19.231.250])
+        by smtp.gmail.com with ESMTPSA id c72sm8218975wme.35.2020.03.06.08.07.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Mar 2020 08:07:56 -0800 (PST)
+From:   Al Cooper <alcooperx@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Al Cooper <alcooperx@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+Subject: [PATCH] usb: xhci: Error enumerating USB TV Tuner
+Date:   Fri,  6 Mar 2020 11:06:59 -0500
+Message-Id: <20200306160659.16319-1-alcooperx@gmail.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200306150858.21904-1-mathias.nyman@linux.intel.com>
-References: <20200306150858.21904-1-mathias.nyman@linux.intel.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Alberto Mattea <alberto@mattea.info>
+Unable to complete the enumeration of a USB TV Tuner device.
 
-This controller timeouts during suspend (S3) with
-[  240.521724] xhci_hcd 0000:30:00.3: WARN: xHC save state timeout
-[  240.521729] xhci_hcd 0000:30:00.3: ERROR mismatched command completion event
-thus preventing the system from entering S3.
-Moreover it remains in an undefined state where some connected devices stop
-working until a reboot.
-Apply the XHCI_SUSPEND_DELAY quirk to make it suspend properly.
+Per XHCI spec (4.6.5), the EP state field of the input context shall
+be cleared for a set address command. In the special case of an FS
+device that has "MaxPacketSize0 = 8", the Linux XHCI driver does
+not do this before evaluating the context. With an XHCI controller
+that checks the EP state field for parameter context error this
+causes a problem in cases such as the device getting reset again
+after enumeration.
 
-CC: stable@vger.kernel.org
-Signed-off-by: Alberto Mattea <alberto@mattea.info>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+When that field is cleared, the problem does not occur.
+
+This was found and fixed by Sasi Kumar.
+
+Signed-off-by: Al Cooper <alcooperx@gmail.com>
 ---
- drivers/usb/host/xhci-pci.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/usb/host/xhci.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 5e9b537df631..1fddc41fa1f3 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -136,7 +136,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 		xhci->quirks |= XHCI_AMD_PLL_FIX;
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index dbac0fa9748d..5f034e143082 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1428,6 +1428,7 @@ static int xhci_check_maxpacket(struct xhci_hcd *xhci, unsigned int slot_id,
+ 				xhci->devs[slot_id]->out_ctx, ep_index);
  
- 	if (pdev->vendor == PCI_VENDOR_ID_AMD &&
--		(pdev->device == 0x15e0 ||
-+		(pdev->device == 0x145c ||
-+		 pdev->device == 0x15e0 ||
- 		 pdev->device == 0x15e1 ||
- 		 pdev->device == 0x43bb))
- 		xhci->quirks |= XHCI_SUSPEND_DELAY;
+ 		ep_ctx = xhci_get_ep_ctx(xhci, command->in_ctx, ep_index);
++		ep_ctx->ep_info &= cpu_to_le32(~EP_STATE_MASK);/* must clear */
+ 		ep_ctx->ep_info2 &= cpu_to_le32(~MAX_PACKET_MASK);
+ 		ep_ctx->ep_info2 |= cpu_to_le32(MAX_PACKET(max_packet_size));
+ 
 -- 
 2.17.1
 
