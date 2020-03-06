@@ -2,257 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B19F917C5D3
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2020 20:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69BA817C72D
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2020 21:40:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726766AbgCFTA6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Mar 2020 14:00:58 -0500
-Received: from mail-gateway-shared14.cyon.net ([194.126.200.67]:49996 "EHLO
-        mail-gateway-shared14.cyon.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726781AbgCFTA6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Mar 2020 14:00:58 -0500
-Received: from s013.cyon.net ([149.126.4.22])
-        by mail-gateway-shared14.cyon.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim)
-        (envelope-from <public+bounce-silo.slz.hanselmann.tv-hansmi@hansmi.ch>)
-        id 1jAIDN-0003jF-Dg
-        for linux-usb@vger.kernel.org; Fri, 06 Mar 2020 20:00:55 +0100
-Received: from [10.20.10.231] (port=58938 helo=mail.cyon.ch)
-        by s013.cyon.net with esmtpa (Exim 4.92)
-        (envelope-from <public+bounce-silo.slz.hanselmann.tv-hansmi@hansmi.ch>)
-        id 1jAIDM-00A74m-7k; Fri, 06 Mar 2020 20:00:52 +0100
-Received: from hansmi by silo.slz.hanselmann.tv with local (Exim 4.92)
-        (envelope-from <hansmi@silo.slz.hanselmann.tv>)
-        id 1jAIDL-00061U-UI; Fri, 06 Mar 2020 19:00:51 +0000
-From:   Michael Hanselmann <public@hansmi.ch>
-To:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Cc:     Michael Hanselmann <public@hansmi.ch>,
-        Michael Dreher <michael@5dot1.de>,
-        Jonathan Olds <jontio@i4free.co.nz>
-Subject: [PATCH 4/4] ch341: Simulate break condition on HL340 variant
-Date:   Fri,  6 Mar 2020 19:00:45 +0000
-Message-Id: <5da11e2b99cbf37bf741addbc4c28b9f3658efa2.1583520568.git.public@hansmi.ch>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <cover.1583520568.git.public@hansmi.ch>
-References: <cover.1583520568.git.public@hansmi.ch>
+        id S1726090AbgCFUko (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Mar 2020 15:40:44 -0500
+Received: from mon1.sibername.com ([162.144.64.251]:45738 "EHLO
+        mon1.sibername.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725922AbgCFUko (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Mar 2020 15:40:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lockie.ca;
+         s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:Subject:From:To:Sender:Reply-To:Cc:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=pFmqGLUpxqUswq+LXQxYypjJaAnfeEmZLKipdavJoRk=; b=Kdsa2DRlTfN5RWlBEQvOjZ0G7d
+        YOWCgtqth/r3pfebWOjigyhX/sCk24DdpSLZY5PkwdJqi5dUNodNek72I6f7NwpIR7BV6rOXhldlj
+        jDuMc6WxvAvWvTCv7eRZcFwQZdFgX5phAK+XMAU28yJAQTSWyck/KhnCbfT3SITHSEwfn/VbIzyZh
+        FrNC+ZlGwsrEG/N0yFtb/23bfQ8sf9fTxoVnWa2QaSMwE1FYOD4R+bA1ppJCMA5ZYT5qG+yJnLAXJ
+        jXujflaxgL72jtqi0vuWr/XXd43mpCgzKntjFRKBng6yB9InxwgMTtK6Z/ksCYm/YwYuYvT1MSkON
+        lwyR56rw==;
+Received: from 216-58-17-101.cpe.distributel.net ([216.58.17.101]:44518 helo=[192.168.1.4])
+        by montreal.sibername.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <bjlockie@lockie.ca>)
+        id 1jAJlx-00F3hv-Kl
+        for linux-usb@vger.kernel.org; Fri, 06 Mar 2020 15:40:42 -0500
+To:     linux-usb@vger.kernel.org
+From:   James <bjlockie@lockie.ca>
+Subject: dvdrw USB3 drive seen as USB2
+Message-ID: <477a12ce-e6ae-ce43-fca7-0f1dc4e00735@lockie.ca>
+Date:   Fri, 6 Mar 2020 15:40:39 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-OutGoing-Spam-Status: No, score=-0.5
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - s013.cyon.net
+X-AntiAbuse: Primary Hostname - montreal.sibername.com
 X-AntiAbuse: Original Domain - vger.kernel.org
 X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - hansmi.ch
-X-Get-Message-Sender-Via: s013.cyon.net: authenticated_id: mailrelay-cervus@hansmi.ch
-X-Authenticated-Sender: s013.cyon.net: mailrelay-cervus@hansmi.ch
+X-AntiAbuse: Sender Address Domain - lockie.ca
+X-Get-Message-Sender-Via: montreal.sibername.com: authenticated_id: bjlockie@lockie.ca
+X-Authenticated-Sender: montreal.sibername.com: bjlockie@lockie.ca
 X-Source: 
 X-Source-Args: 
 X-Source-Dir: 
-X-OutGoing-Spam-Status: No, score=-1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-ch34x devices of the "HL340" variant don't support a real break
-condition. This fact is already used in the ch341_detect_hl340 function.
-With this change a quirk is implemented to simulate a break condition by
-temporarily lowering the baud rate and sending a NUL byte.
+I bought what is supposed to be a USB3 dvdrw drive but it is detected as 
+USB2.
 
-The primary drawback of this approach is that the duration of the break
-can't be controlled by userland.
+$ dmesg
+[99941.296152] usb 1-3: new high-speed USB device number 12 using xhci_hcd
+[99941.464780] usb 1-3: New USB device found, idVendor=13fd, 
+idProduct=0840, bcdDevice= 1.14
+[99941.464783] usb 1-3: New USB device strings: Mfr=1, Product=2, 
+SerialNumber=3
+[99941.464786] usb 1-3: Product: External
+[99941.464788] usb 1-3: Manufacturer: Generic
+[99941.464789] usb 1-3: SerialNumber: 534841353132313630362020
+[99941.477838] usb-storage 1-3:1.0: USB Mass Storage device detected
+[99941.478063] scsi host9: usb-storage 1-3:1.0
+[99942.485502] scsi 9:0:0:0: CD-ROM            hp       DVD RW AD-7586H  
+KH04 PQ: 0 ANSI: 0
+[99942.488054] sr 9:0:0:0: Power-on or device reset occurred
+[99942.492956] sr 9:0:0:0: [sr0] scsi3-mmc drive: 24x/24x writer dvd-ram 
+cd/rw xa/form2 cdda tray
+[99942.493466] sr 9:0:0:0: Attached scsi CD-ROM sr0
+[99942.493594] sr 9:0:0:0: Attached scsi generic sg2 type 5
 
-Signed-off-by: Michael Hanselmann <public@hansmi.ch>
----
- drivers/usb/serial/ch341.c | 102 +++++++++++++++++++++++++++++++++----
- 1 file changed, 91 insertions(+), 11 deletions(-)
+$ lsusb
+Bus 001 Device 012: ID 13fd:0840 Initio Corporation INIC-1618L SATA
 
-diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-index 48a704174aec..459a27a6ebcc 100644
---- a/drivers/usb/serial/ch341.c
-+++ b/drivers/usb/serial/ch341.c
-@@ -25,6 +25,10 @@
- #define DEFAULT_TIMEOUT   1000
- 
- #define CH341_QUIRK_LIMITED_PRESCALER 0x01
-+#define CH341_QUIRK_SIMULATE_BREAK    0x02
-+
-+/* Minimum baud rate */
-+#define CH341_MIN_BPS 46U
- 
- /* flags for IO-Bits */
- #define CH341_BIT_RTS (1 << 6)
-@@ -92,6 +96,7 @@ struct ch341_private {
- 	u8 msr;
- 	u8 lcr;
- 	u8 flags;
-+	unsigned long break_end;
- };
- 
- static void ch341_set_termios(struct tty_struct *tty,
-@@ -170,20 +175,17 @@ static const speed_t ch341_min_rates[] = {
-  *		2 <= div <= 256 if fact = 0, or
-  *		9 <= div <= 256 if fact = 1
-  */
--static int ch341_get_divisor(struct ch341_private *priv)
-+static int ch341_get_divisor(struct ch341_private *priv, speed_t speed)
- {
- 	const speed_t *min_rates;
--	speed_t speed;
- 	unsigned int fact, div, clk_div;
- 	int ps;
- 
--	speed = priv->baud_rate;
--
- 	/*
- 	 * Clamp to supported range, this makes the (ps < 0) and (div < 2)
- 	 * sanity checks below redundant.
- 	 */
--	speed = clamp(speed, 46U, 3000000U);
-+	speed = clamp(speed, CH341_MIN_BPS, 3000000U);
- 
- 	if (priv->flags & CH341_QUIRK_LIMITED_PRESCALER) {
- 		/*
-@@ -247,16 +249,17 @@ static int ch341_get_divisor(struct ch341_private *priv)
- }
- 
- static int ch341_set_baudrate_lcr(struct usb_device *dev,
--				  struct ch341_private *priv, u8 lcr)
-+				  struct ch341_private *priv,
-+				  unsigned baud_rate, u8 lcr)
- {
- 	uint16_t reg;
- 	int val;
- 	int r;
- 
--	if (!priv->baud_rate)
-+	if (!baud_rate)
- 		return -EINVAL;
- 
--	val = ch341_get_divisor(priv);
-+	val = ch341_get_divisor(priv, baud_rate);
- 	if (val < 0)
- 		return -EINVAL;
- 
-@@ -331,7 +334,7 @@ static int ch341_configure(struct usb_device *dev, struct ch341_private *priv)
- 	if (r < 0)
- 		goto out;
- 
--	r = ch341_set_baudrate_lcr(dev, priv, priv->lcr);
-+	r = ch341_set_baudrate_lcr(dev, priv, priv->baud_rate, priv->lcr);
- 	if (r < 0)
- 		goto out;
- 
-@@ -403,7 +406,9 @@ static int ch341_port_probe(struct usb_serial_port *port)
- 	if (r < 0)
- 		goto error;
- 	else if (r != 0)
--		priv->flags |= CH341_QUIRK_LIMITED_PRESCALER;
-+		priv->flags |=
-+			CH341_QUIRK_LIMITED_PRESCALER |
-+			CH341_QUIRK_SIMULATE_BREAK;
- 
- 	usb_set_serial_port_data(port, priv);
- 	return 0;
-@@ -536,7 +541,8 @@ static void ch341_set_termios(struct tty_struct *tty,
- 	if (baud_rate) {
- 		priv->baud_rate = baud_rate;
- 
--		r = ch341_set_baudrate_lcr(port->serial->dev, priv, lcr);
-+		r = ch341_set_baudrate_lcr(port->serial->dev, priv,
-+					   priv->baud_rate, lcr);
- 		if (r < 0 && old_termios) {
- 			priv->baud_rate = tty_termios_baud_rate(old_termios);
- 			tty_termios_copy_hw(&tty->termios, old_termios);
-@@ -555,15 +561,89 @@ static void ch341_set_termios(struct tty_struct *tty,
- 	ch341_set_handshake(port->serial->dev, priv->mcr);
- }
- 
-+/*
-+ * Devices of the "HL340" variant don't support a real break condition and
-+ * reading CH341_REG_BREAK fails (see also ch341_detect_hl340). This function
-+ * simulates a break condition by lowering the baud rate to the minimum
-+ * supported by the hardware upon enabling the break condition and sending
-+ * a NUL byte.
-+ *
-+ * Normally the duration of the break condition can be controlled individually
-+ * by userspace using TIOCSBRK and TIOCCBRK or by passing an argument to
-+ * TCSBRKP. Due to how the simulation is implemented the duration can't be
-+ * controlled. The duration is always 1s / 46bd * 10bit = 217ms.
-+ */
-+static void ch341_simulate_break(struct tty_struct *tty, int break_state)
-+{
-+	struct usb_serial_port *port = tty->driver_data;
-+	struct ch341_private *priv = usb_get_serial_port_data(port);
-+	unsigned long delay;
-+	int r;
-+
-+	if (break_state != 0) {
-+		dev_dbg(&port->dev, "%s - Enter break state requested\n",
-+			__func__);
-+
-+		r = ch341_set_baudrate_lcr(port->serial->dev, priv,
-+			CH341_MIN_BPS,
-+			CH341_LCR_ENABLE_RX | CH341_LCR_ENABLE_TX |
-+			CH341_LCR_CS8);
-+		if (r < 0) {
-+			dev_err(&port->dev, "%s - baud rate status %d\n",
-+				__func__, r);
-+			goto restore;
-+		}
-+
-+		r = tty_put_char(tty, '\0');
-+		if (r < 0) {
-+			dev_err(&port->dev, "%s - write status %d\n",
-+				__func__, r);
-+			goto restore;
-+		}
-+
-+		priv->break_end = jiffies + (10 * HZ / CH341_MIN_BPS);
-+
-+		return;
-+	}
-+
-+	dev_dbg(&port->dev, "%s - Leave break state requested\n", __func__);
-+
-+	if (time_before(jiffies, priv->break_end)) {
-+		/* Wait until NUL byte is written */
-+		delay = min_t(unsigned long, HZ, priv->break_end - jiffies);
-+
-+		dev_dbg(&port->dev, "%s - sleep for %d ms\n", __func__,
-+			jiffies_to_msecs(delay));
-+		schedule_timeout_interruptible(delay);
-+	}
-+
-+restore:
-+	/* Restore original baud rate */
-+	r = ch341_set_baudrate_lcr(port->serial->dev, priv, priv->baud_rate,
-+				   priv->lcr);
-+	if (r < 0)
-+		dev_err(&port->dev, "%s - baud rate status %d\n", __func__, r);
-+}
-+
- static void ch341_break_ctl(struct tty_struct *tty, int break_state)
- {
- 	const uint16_t ch341_break_reg =
- 			((uint16_t) CH341_REG_LCR << 8) | CH341_REG_BREAK;
- 	struct usb_serial_port *port = tty->driver_data;
-+	struct ch341_private *priv = usb_get_serial_port_data(port);
- 	int r;
- 	uint16_t reg_contents;
- 	uint8_t *break_reg;
- 
-+	if (priv->flags & CH341_QUIRK_SIMULATE_BREAK) {
-+		dev_warn_once(&port->dev,
-+			      "%s - hardware doesn't support real break"
-+			      " condition, simulating instead\n",
-+			      __func__);
-+		ch341_simulate_break(tty, break_state);
-+		return;
-+	}
-+
- 	break_reg = kmalloc(2, GFP_KERNEL);
- 	if (!break_reg)
- 		return;
--- 
-2.20.1
+$ lsusb -t
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 480M
+     |__ Port 3: Dev 12, If 0, Class=Mass Storage, Driver=usb-storage, 480M
+
+I plugged in a known USB3 device in the same port.
+Could there be a bug that makes the bus decide it is not a USB3 device?
+
+$ lsusb
+Bus 002 Device 003: ID 13fe:6300 Kingston Technology Company Inc. USB 
+DISK 3.0
+
+$ lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 10000M
+     |__ Port 3: Dev 3, If 0, Class=Mass Storage, Driver=usb-storage, 5000M
+
+Is there a way to see if Windows in a VirtualBox sees it as USB3?
 
