@@ -2,61 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF0117B933
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2020 10:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D799017BBEF
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2020 12:44:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726129AbgCFJ0o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Mar 2020 04:26:44 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:44054 "EHLO inva020.nxp.com"
+        id S1726676AbgCFLn5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Mar 2020 06:43:57 -0500
+Received: from mx2.suse.de ([195.135.220.15]:39220 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725951AbgCFJ0o (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 6 Mar 2020 04:26:44 -0500
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 894241A0A78;
-        Fri,  6 Mar 2020 10:26:42 +0100 (CET)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A44431A0A4A;
-        Fri,  6 Mar 2020 10:26:38 +0100 (CET)
-Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 85C4C402A0;
-        Fri,  6 Mar 2020 17:26:33 +0800 (SGT)
-From:   Ran Wang <ran.wang_1@nxp.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Peter Chen <peter.chen@nxp.com>, Jun Li <jun.li@nxp.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ran Wang <ran.wang_1@nxp.com>
-Subject: [PATCH] usb: host: xhci-plat: add a shutdown
-Date:   Fri,  6 Mar 2020 17:23:28 +0800
-Message-Id: <20200306092328.41253-1-ran.wang_1@nxp.com>
-X-Mailer: git-send-email 2.17.1
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1725827AbgCFLn5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 6 Mar 2020 06:43:57 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 1C4D0AC23;
+        Fri,  6 Mar 2020 11:43:55 +0000 (UTC)
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, f.fainelli@gmail.com,
+        gregkh@linuxfoundation.org, tim.gover@raspberrypi.org,
+        linux-pci@vger.kernel.org, wahrenst@gmx.net,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Andrew Murray <amurray@thegoodpenguin.co.uk>
+Subject: [PATCH v4 0/4]  USB: pci-quirks: Add Raspberry Pi 4 quirk
+Date:   Fri,  6 Mar 2020 12:43:44 +0100
+Message-Id: <20200306114348.5172-1-nsaenzjulienne@suse.de>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When loading new kernel via kexec, we need to shutdown host controller to
-avoid any un-expected memory accessing during new kernel boot.
+On the Raspberry Pi 4, after a PCI reset, VL805's firmware may either be
+loaded directly from an EEPROM or, if not present, by the SoC's
+VideCore. This series adds support for the later.
 
-Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
-Reviewed-by: Peter Chen <peter.chen@nxp.com>
+Note that there are a set of constraints we have to consider (some of
+them I missed on v1):
+ - We need to make sure the VideoCore firmware interface is up and
+   running before running the VL805 firmware load call.
+
+ - There is no way to discern RPi4's VL805 chip from other platforms',
+   so we need the firmware load to happen *before* running
+   quirk_usb_handoff_xhci(). Failure to do so results in an unwarranted
+   5 second wait while the fixup code polls xHC's unexisting state.
+
+As per Stefan Wahren's comments I tested the behaviour on outdated
+firmware. Boards dependent on this will not boot if firmware is not
+up-to-date. Older boards with outdated firmware will fail to execute the
+VideoCore firmware call, but xHCI will perform reliably. I added a
+warning printout in case of failure.
+
+I'm aware that Florian Fianelli noted on the previous revision that
+waiting on the VideoCore firmware interface during PCIe's probe is far
+from ideal. But this was before taking into account the second
+constraint mentioned above. Impact on non RPi4 boards is minimal.
+
 ---
- drivers/usb/host/xhci-plat.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index d90cd5e..315b455 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -445,6 +445,7 @@ MODULE_DEVICE_TABLE(acpi, usb_xhci_acpi_match);
- static struct platform_driver usb_xhci_driver = {
- 	.probe	= xhci_plat_probe,
- 	.remove	= xhci_plat_remove,
-+	.shutdown = usb_hcd_platform_shutdown,
- 	.driver	= {
- 		.name = "xhci-hcd",
- 		.pm = &xhci_plat_pm_ops,
+Changes since v3:
+ - Addressed Greg's comments
+
+There was no v2, my bad.
+
+Changes since v1:
+ - Addressed Floarians comments
+
+Nicolas Saenz Julienne (4):
+  soc: bcm2835: Sync xHCI reset firmware property with downstream
+  firmware: raspberrypi: Introduce vl805 init routine
+  PCI: brcmstb: Wait for Raspberry Pi's firmware when present
+  USB: pci-quirks: Add Raspberry Pi 4 quirk
+
+ drivers/firmware/Kconfig                   |  1 +
+ drivers/firmware/raspberrypi.c             | 38 ++++++++++++++++++++++
+ drivers/pci/controller/pcie-brcmstb.c      | 15 +++++++++
+ drivers/usb/host/pci-quirks.c              | 16 +++++++++
+ include/soc/bcm2835/raspberrypi-firmware.h |  9 ++++-
+ 5 files changed, 78 insertions(+), 1 deletion(-)
+
 -- 
-2.7.4
+2.25.1
 
