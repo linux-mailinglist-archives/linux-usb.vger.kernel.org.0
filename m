@@ -2,98 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E2817B50D
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2020 04:44:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C27F17B52D
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2020 05:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727079AbgCFDoH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Mar 2020 22:44:07 -0500
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:37856 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726317AbgCFDoG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Mar 2020 22:44:06 -0500
-Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 0464E4016D;
-        Fri,  6 Mar 2020 03:44:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1583466246; bh=HmbQJCi+eo9JezlYLH6Ua90jQbJXejR56X1WA0GoD7g=;
-        h=Date:From:Subject:To:Cc:From;
-        b=P9L6XcYY7lihT+pWr59JU4eTRezZ8UXaUcyD6MmLbnnR/qPlENAPY8lQFVm0ClKTf
-         uN7qHeYh2eS0MjITotpfQUzO32rey78ct6XggdVyXGAviZDRyGVg6RS4vWb4y4IlzL
-         2GW8Xa58hKi4VJ7uEeNzr0EGuVJevjL1r2Q6LAcbTm7V2msv+zFakO6C/RqA9wAWIU
-         +zMThgs5Qf3cmNcU1do95CEaee84tHKSlZNUhUCGANXY1Fw+EkaqL6UnlEqS5/u12p
-         6qrf11LetvIbsmfHyq4CykWhB1qkOVt1sSNDclDn1FpMZ4u39IGKYoFK7I3/2XPjFe
-         Ddg6Lys0YwaZg==
-Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 844E3A006D;
-        Fri,  6 Mar 2020 03:44:04 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Thu, 05 Mar 2020 19:44:04 -0800
-Date:   Thu, 05 Mar 2020 19:44:04 -0800
-Message-Id: <660a74249e64b3b62ca9b394584387baee67a119.1583466150.git.thinhn@synopsys.com>
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH] usb: dwc3: gadget: Remove incomplete check
-To:     Felipe Balbi <balbi@kernel.org>,
+        id S1726957AbgCFD75 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Mar 2020 22:59:57 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:41127 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726368AbgCFD74 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Mar 2020 22:59:56 -0500
+Received: by mail-pg1-f194.google.com with SMTP id b1so438191pgm.8;
+        Thu, 05 Mar 2020 19:59:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=fTHfeEGAKUEx09sh7hreY5/yhd9fkPYMGk68O4GQCQg=;
+        b=PUcarrjbiWaX0Rz1vdBcrA3yfUMAw8e+Atf96hJeBtwAqJN70Y4poAxEKzUxEnzSsY
+         odGxQJnpTsJBJ86fKUNXt2hGyNiOsDdjIbB4Amfxqnoj2pf+SUwk8EGrFiT9TCKtmQuV
+         DDhF3OFqRURWzQDi+bnOKdRvJJ8S7ASP9ZzfX6imLHTS4Ep8zc8SFSffajJ4dF1BZMqV
+         Rp2Lh0ZOv+BdRzhdo3SxD/TVvbTY9ARexO83cxJF+p+7y1QiY4f/45GBNNhdpDpviR5E
+         YM5bHE/CCuNXScULRfE/a5CE25GZO+iCuJwAltYHpgUdxWQgHqZAgKczjy9mz4ZBwpQy
+         MWfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fTHfeEGAKUEx09sh7hreY5/yhd9fkPYMGk68O4GQCQg=;
+        b=o04HvcNh3xOpydurLcEATp25ZUyeNyJ9yHcsyUFTxiK4oQdYxXYu8QEvHysQWt1U6K
+         +ztDEuhnTogw6bKYvBFauTV9c5cjxAEHqFG3+Lp4kTzytPb2Xa3Th4AaAIGMmbUW+RDY
+         pF924A/r0B5LmyNU8INp4ufPeAJFt6ksrom5iJ5ackn0dGDSJfI/VBDvsTQNyHpzzBDz
+         KgZRImiZRGYkDYfqmovTXHlv+RHZNE741qWxtGnjII0U7Vh02iHHwkS1jOi/87kfnbRm
+         nZ2qhhGqmFLS7to9Uh7wwErrjChVw1zbAWmYu9wlbFK/bD5zrpaP/UOe4oC0WkoYd0WT
+         SEAg==
+X-Gm-Message-State: ANhLgQ090hFev8o5pS+P4cesf/CkvSUdu0UccDf4HVtlaLM5tII44AKE
+        THaN2p191d/6mPUNgbaXwRrBFxAwtOU=
+X-Google-Smtp-Source: ADFU+vumLorMOD36Y6V1YPaG/n5y6GEDPX5EPyx/31sT9LIIiW1Y/t2fQdgWUN7brLM19dr6T7ni6A==
+X-Received: by 2002:a63:d40a:: with SMTP id a10mr1340495pgh.53.1583467193889;
+        Thu, 05 Mar 2020 19:59:53 -0800 (PST)
+Received: from [192.168.1.5] ([110.77.155.127])
+        by smtp.googlemail.com with ESMTPSA id z3sm7632414pjr.46.2020.03.05.19.59.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Mar 2020 19:59:53 -0800 (PST)
+Subject: Re: [PATCH] Add a new PID for HP
+To:     Scott Chen <scott@labau.com.tw>
+Cc:     young@labau.com.tw, jocelyn@labau.com.tw, roger@labau.com.tw,
+        Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200306024048.11408-1-scott@labau.com.tw>
+From:   Lars Melin <larsm17@gmail.com>
+Message-ID: <bc753e9a-6624-0f17-725e-f54144e5a281@gmail.com>
+Date:   Fri, 6 Mar 2020 10:59:48 +0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
+MIME-Version: 1.0
+In-Reply-To: <20200306024048.11408-1-scott@labau.com.tw>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We only care to resume transfer for SG because the request maybe
-partially completed. dwc3_gadget_ep_request_completed() doesn't check
-that of a request, at least not fully.
+On 3/6/2020 09:40, Scott Chen wrote:
+> Add a device id for HP LD381 Display
+> LD381:   03f0:0f7f
+> 
+> Signed-off-by: Scott Chen <scott@labau.com.tw>
+> ---
+>   drivers/usb/serial/pl2303.c | 1 +
+>   drivers/usb/serial/pl2303.h | 1 +
+>   2 files changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
+> index aab737e1e7b6..5cb1c63295f5 100644
+> --- a/drivers/usb/serial/pl2303.c
+> +++ b/drivers/usb/serial/pl2303.c
+> @@ -97,6 +97,7 @@ static const struct usb_device_id id_table[] = {
+>   	{ USB_DEVICE(COREGA_VENDOR_ID, COREGA_PRODUCT_ID) },
+>   	{ USB_DEVICE(YCCABLE_VENDOR_ID, YCCABLE_PRODUCT_ID) },
+>   	{ USB_DEVICE(SUPERIAL_VENDOR_ID, SUPERIAL_PRODUCT_ID) },
+> +	{ USB_DEVICE(HP_VENDOR_ID, HP_LD381_PRODUCT_ID) },
+>   	{ USB_DEVICE(HP_VENDOR_ID, HP_LD220_PRODUCT_ID) },
+>   	{ USB_DEVICE(HP_VENDOR_ID, HP_LD220TA_PRODUCT_ID) },
+>   	{ USB_DEVICE(HP_VENDOR_ID, HP_LD960_PRODUCT_ID) },
+> diff --git a/drivers/usb/serial/pl2303.h b/drivers/usb/serial/pl2303.h
+> index a019ea7e6e0e..80b20e980064 100644
+> --- a/drivers/usb/serial/pl2303.h
+> +++ b/drivers/usb/serial/pl2303.h
+> @@ -127,6 +127,7 @@
+>   
+>   /* Hewlett-Packard POS Pole Displays */
+>   #define HP_VENDOR_ID		0x03f0
+> +#define HP_LD381_PRODUCT_ID	0x0f7f
+>   #define HP_LM920_PRODUCT_ID	0x026b
+>   #define HP_TD620_PRODUCT_ID	0x0956
+>   #define HP_LD960_PRODUCT_ID	0x0b39
+> 
 
-1) It doesn't account for OUT direction.
-2) It doesn't account for isoc. For isoc, a request maybe completed with
-partial data.
+The tables were sorted on product id, not product name, before you 
+entered this one.
 
-Remove this check.
-
-Fixes: e0c42ce590fe ("usb: dwc3: gadget: simplify IOC handling")
-Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
----
- drivers/usb/dwc3/gadget.c | 15 +--------------
- 1 file changed, 1 insertion(+), 14 deletions(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 39c92df6e188..9f46c8bc1114 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2506,18 +2506,6 @@ static int dwc3_gadget_ep_reclaim_trb_linear(struct dwc3_ep *dep,
- 			event, status, false);
- }
- 
--static bool dwc3_gadget_ep_request_completed(struct dwc3_request *req)
--{
--	/*
--	 * For OUT direction, host may send less than the setup
--	 * length. Return true for all OUT requests.
--	 */
--	if (!req->direction)
--		return true;
--
--	return req->request.actual == req->request.length;
--}
--
- static int dwc3_gadget_ep_cleanup_completed_request(struct dwc3_ep *dep,
- 		const struct dwc3_event_depevt *event,
- 		struct dwc3_request *req, int status)
-@@ -2539,8 +2527,7 @@ static int dwc3_gadget_ep_cleanup_completed_request(struct dwc3_ep *dep,
- 
- 	req->request.actual = req->request.length - req->remaining;
- 
--	if (!dwc3_gadget_ep_request_completed(req) ||
--			req->num_pending_sgs) {
-+	if (req->num_pending_sgs) {
- 		__dwc3_gadget_kick_transfer(dep);
- 		goto out;
- 	}
--- 
-2.11.0
-
+br
+/Lars
