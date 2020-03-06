@@ -2,116 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9CF17C543
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2020 19:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C53BC17C5CF
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2020 20:00:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726359AbgCFSSX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Mar 2020 13:18:23 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:42666 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726251AbgCFSSX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Mar 2020 13:18:23 -0500
-Received: (qmail 4386 invoked by uid 2102); 6 Mar 2020 13:18:22 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 6 Mar 2020 13:18:22 -0500
-Date:   Fri, 6 Mar 2020 13:18:22 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
-cc:     linux-usb@vger.kernel.org
-Subject: Re: Crash while capturing with usbmon
-In-Reply-To: <yw1xy2sdidbz.fsf@mansr.com>
-Message-ID: <Pine.LNX.4.44L0.2003061316110.1480-100000@iolanthe.rowland.org>
+        id S1726245AbgCFTAx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Mar 2020 14:00:53 -0500
+Received: from mail-gateway-shared14.cyon.net ([194.126.200.67]:49926 "EHLO
+        mail-gateway-shared14.cyon.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726083AbgCFTAx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Mar 2020 14:00:53 -0500
+Received: from s013.cyon.net ([149.126.4.22])
+        by mail-gateway-shared14.cyon.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim)
+        (envelope-from <public+bounce-silo.slz.hanselmann.tv-hansmi@hansmi.ch>)
+        id 1jAIDJ-0003iQ-N4
+        for linux-usb@vger.kernel.org; Fri, 06 Mar 2020 20:00:51 +0100
+Received: from [10.20.10.231] (port=57634 helo=mail.cyon.ch)
+        by s013.cyon.net with esmtpa (Exim 4.92)
+        (envelope-from <public+bounce-silo.slz.hanselmann.tv-hansmi@hansmi.ch>)
+        id 1jAIDI-00A70o-GI; Fri, 06 Mar 2020 20:00:48 +0100
+Received: from hansmi by silo.slz.hanselmann.tv with local (Exim 4.92)
+        (envelope-from <hansmi@silo.slz.hanselmann.tv>)
+        id 1jAIDH-00061A-Po; Fri, 06 Mar 2020 19:00:47 +0000
+From:   Michael Hanselmann <public@hansmi.ch>
+To:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Cc:     Michael Hanselmann <public@hansmi.ch>,
+        Michael Dreher <michael@5dot1.de>,
+        Jonathan Olds <jontio@i4free.co.nz>
+Subject: [PATCH 0/4] ch341: Add support for HL340 devices
+Date:   Fri,  6 Mar 2020 19:00:41 +0000
+Message-Id: <cover.1583520568.git.public@hansmi.ch>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - s013.cyon.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - hansmi.ch
+X-Get-Message-Sender-Via: s013.cyon.net: authenticated_id: mailrelay-cervus@hansmi.ch
+X-Authenticated-Sender: s013.cyon.net: mailrelay-cervus@hansmi.ch
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-OutGoing-Spam-Status: No, score=-1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 6 Mar 2020, [iso-8859-1] Måns Rullgård wrote:
+A subset of CH341 devices does not support all features, namely the
+prescaler is limited to a reduced precision and there is no support for
+sending a RS232 break condition.
 
-> I found the problem.  Initially, usb_sg_init() sets transfer_buffer to
-> NULL like this:
-> 
-> 			if (!PageHighMem(sg_page(sg)))
-> 				urb->transfer_buffer = sg_virt(sg);
-> 			else
-> 				urb->transfer_buffer = NULL;
-> 
-> Later, musb_host_rx() uses sg_miter_next() to assign a temporary
-> address:
-> 
-> 			/*
-> 			 * We need to map sg if the transfer_buffer is
-> 			 * NULL.
-> 			 */
-> 			if (!urb->transfer_buffer) {
-> 				qh->use_sg = true;
-> 				sg_miter_start(&qh->sg_miter, urb->sg, 1,
-> 						sg_flags);
-> 			}
-> 
-> 			if (qh->use_sg) {
-> 				if (!sg_miter_next(&qh->sg_miter)) {
-> 					dev_err(musb->controller, "error: sg list empty\n");
-> 					sg_miter_stop(&qh->sg_miter);
-> 					status = -EINVAL;
-> 					done = true;
-> 					goto finish;
-> 				}
-> 				urb->transfer_buffer = qh->sg_miter.addr;
-> 				received_len = urb->actual_length;
-> 				qh->offset = 0x0;
-> 				done = musb_host_packet_rx(musb, urb, epnum,
-> 						iso_err);
-> 				/* Calculate the number of bytes received */
-> 				received_len = urb->actual_length -
-> 					received_len;
-> 				qh->sg_miter.consumed = received_len;
-> 				sg_miter_stop(&qh->sg_miter);
-> 			} else {
-> 				done = musb_host_packet_rx(musb, urb,
-> 						epnum, iso_err);
-> 			}
-> 
-> When the transfer has completed, a bogus value is left behind in
-> urb->transfer_buffer, and this trips up usbmon.  Apparently nothing else
-> uses that value before the urb is released.
-> 
-> This patch makes it not crash:
-> 
-> diff --git a/drivers/usb/musb/musb_host.c b/drivers/usb/musb/musb_host.c
-> index 1c813c37462a..b67b40de1947 100644
-> --- a/drivers/usb/musb/musb_host.c
-> +++ b/drivers/usb/musb/musb_host.c
-> @@ -1459,8 +1459,10 @@ void musb_host_tx(struct musb *musb, u8 epnum)
->  	qh->segsize = length;
->  
->  	if (qh->use_sg) {
-> -		if (offset + length >= urb->transfer_buffer_length)
-> +		if (offset + length >= urb->transfer_buffer_length) {
->  			qh->use_sg = false;
-> +			urb->transfer_buffer = NULL;
-> +		}
->  	}
->  
->  	musb_ep_select(mbase, epnum);
-> @@ -1977,8 +1979,10 @@ void musb_host_rx(struct musb *musb, u8 epnum)
->  	urb->actual_length += xfer_len;
->  	qh->offset += xfer_len;
->  	if (done) {
-> -		if (qh->use_sg)
-> +		if (qh->use_sg) {
->  			qh->use_sg = false;
-> +			urb->transfer_buffer = NULL;
-> +		}
->  
->  		if (urb->status == -EINPROGRESS)
->  			urb->status = status;
+These devices can usually be identified by an imprint of "340" on the
+turquoise-colored plug. They're also sometimes called "HL340", hence the
+terminology in this series and driver.
 
-Good detective work, and I'm glad I was able to help.
+This series adds detection of these devices, adjusts the
+divisor/prescaler setup and implements a simulated break condition.
 
-Alan Stern
+Michael Hanselmann (4):
+  ch341: Name more registers
+  ch341: Detect HL340 variant
+  ch341: Limit prescaler on HL340 variant
+  ch341: Simulate break condition on HL340 variant
+
+ drivers/usb/serial/ch341.c | 196 +++++++++++++++++++++++++++++++++----
+ 1 file changed, 176 insertions(+), 20 deletions(-)
+
+-- 
+2.20.1
 
