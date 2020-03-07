@@ -2,99 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69BA817C72D
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Mar 2020 21:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4879E17CA94
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Mar 2020 02:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726090AbgCFUko (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Mar 2020 15:40:44 -0500
-Received: from mon1.sibername.com ([162.144.64.251]:45738 "EHLO
-        mon1.sibername.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725922AbgCFUko (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Mar 2020 15:40:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lockie.ca;
-         s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:Subject:From:To:Sender:Reply-To:Cc:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=pFmqGLUpxqUswq+LXQxYypjJaAnfeEmZLKipdavJoRk=; b=Kdsa2DRlTfN5RWlBEQvOjZ0G7d
-        YOWCgtqth/r3pfebWOjigyhX/sCk24DdpSLZY5PkwdJqi5dUNodNek72I6f7NwpIR7BV6rOXhldlj
-        jDuMc6WxvAvWvTCv7eRZcFwQZdFgX5phAK+XMAU28yJAQTSWyck/KhnCbfT3SITHSEwfn/VbIzyZh
-        FrNC+ZlGwsrEG/N0yFtb/23bfQ8sf9fTxoVnWa2QaSMwE1FYOD4R+bA1ppJCMA5ZYT5qG+yJnLAXJ
-        jXujflaxgL72jtqi0vuWr/XXd43mpCgzKntjFRKBng6yB9InxwgMTtK6Z/ksCYm/YwYuYvT1MSkON
-        lwyR56rw==;
-Received: from 216-58-17-101.cpe.distributel.net ([216.58.17.101]:44518 helo=[192.168.1.4])
-        by montreal.sibername.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <bjlockie@lockie.ca>)
-        id 1jAJlx-00F3hv-Kl
-        for linux-usb@vger.kernel.org; Fri, 06 Mar 2020 15:40:42 -0500
-To:     linux-usb@vger.kernel.org
-From:   James <bjlockie@lockie.ca>
-Subject: dvdrw USB3 drive seen as USB2
-Message-ID: <477a12ce-e6ae-ce43-fca7-0f1dc4e00735@lockie.ca>
-Date:   Fri, 6 Mar 2020 15:40:39 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726269AbgCGBzF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Mar 2020 20:55:05 -0500
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:43278 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726240AbgCGBzF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Mar 2020 20:55:05 -0500
+Received: by mail-qk1-f194.google.com with SMTP id q18so4187406qki.10
+        for <linux-usb@vger.kernel.org>; Fri, 06 Mar 2020 17:55:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ossystems-com-br.20150623.gappssmtp.com; s=20150623;
+        h=from:mime-version:date:message-id:subject:to;
+        bh=149GfJMabP9ADRY+wLjqUTkSIFWU7oP/B0hDukdU5q0=;
+        b=e5zorsDiJJlFW9+EF5NKwWamb2WnF7Pu1mViW7GhblPB6a2cc51TOkzQu3YZ9rPF7i
+         jnQGGfsCggyNGoe/74uhJohNxxFm1VWEVsbQNT5keQLSn7ijdNALRCSJ1YqjcI0IbsPY
+         AfzAZWHoZFCd9sL5X7B+QW0f+FENF2p73CrHMqK4nStmy7BfpYzXpeJjkUZGmyliJadm
+         tx2XI7moThX41P3iKSWl0qyfxcAkmzmdkQpjHaaW2LpU70+TTT2RCzV6RajCxyAcQZSl
+         JvOXUfPO/HnXu1hcdMmim/qua0EnXuIp78oUI591sV9lRQLBOBypYWgB0v/IqVWs8Snm
+         HE/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:mime-version:date:message-id:subject:to;
+        bh=149GfJMabP9ADRY+wLjqUTkSIFWU7oP/B0hDukdU5q0=;
+        b=E9nJvmTm23L1EuNg+ME9LmkQFxXrYa8hwavXbpDvW9wdK5ntGaT1puhgtnyHou+Yit
+         3BUKDrpMeJTl+FnmjfXHb9pdwsYvMu3rKqHuf38ei6uEvkaIoWQWDKle2KYM9J2PJo5p
+         sEMt8ijnyexOxAJhYPgL8vk3l2CTPyG7jdGMCHgK8Aw5Y4oRD5beeTYDICNt+IBrZSlf
+         7AlMkI3zc+Kic3bmFCQPGAvdIv3TWaLl0Kr5BiHakYbDJTB4SZ7n2q4Ffsq5O7YEw7eT
+         cX+E7e3s6umPaNi3I9iX0kzes8NWc5weqDjEWUx67x9dpGge30zN/8RSCQyx0nZA0hXn
+         uoJg==
+X-Gm-Message-State: ANhLgQ1h+Q5SeG0ovCA8SEb6twADSQV0B8D5Ai30ZK6M+WTrFTdDDyrj
+        JVnnfFssY7NJELXfoYfEoqw3Q3dox8MbhQ==
+X-Google-Smtp-Source: ADFU+vt/Fgj6pdG0JGlq4pJ5a+N0M20c9wFu1lugpQ2kjXLmm8CZujQyhHk8uZaEJSffgnVxHtADvw==
+X-Received: by 2002:a05:620a:951:: with SMTP id w17mr33310qkw.352.1583546102487;
+        Fri, 06 Mar 2020 17:55:02 -0800 (PST)
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com. [209.85.160.175])
+        by smtp.gmail.com with ESMTPSA id l3sm10859071qkl.100.2020.03.06.17.55.01
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Mar 2020 17:55:01 -0800 (PST)
+From:   Otavio Salvador <otavio.salvador@ossystems.com.br>
+X-Google-Original-From: Otavio Salvador <otavio@ossystems.com.br>
+Received: by mail-qt1-f175.google.com with SMTP id d22so3233844qtn.0
+        for <linux-usb@vger.kernel.org>; Fri, 06 Mar 2020 17:55:01 -0800 (PST)
+X-Received: by 2002:ac8:6f2e:: with SMTP id i14mr5619803qtv.296.1583546101290;
+ Fri, 06 Mar 2020 17:55:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-OutGoing-Spam-Status: No, score=-0.5
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - montreal.sibername.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lockie.ca
-X-Get-Message-Sender-Via: montreal.sibername.com: authenticated_id: bjlockie@lockie.ca
-X-Authenticated-Sender: montreal.sibername.com: bjlockie@lockie.ca
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Date:   Fri, 6 Mar 2020 22:54:49 -0300
+X-Gmail-Original-Message-ID: <CAP9ODKrH_7p1p1+9pXc-85m3yHHo_2YLouuXFBOLBr+gsSe+Ew@mail.gmail.com>
+Message-ID: <CAP9ODKrH_7p1p1+9pXc-85m3yHHo_2YLouuXFBOLBr+gsSe+Ew@mail.gmail.com>
+Subject: Error when unloading g_serial module
+To:     Felipe Balbi <balbi@kernel.org>, sorganov@gmail.com,
+        mirq-linux@rere.qmqm.pl, felixhaedicke@web.de,
+        linux-usb@vger.kernel.org, Fabio Estevam <festevam@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I bought what is supposed to be a USB3 dvdrw drive but it is detected as 
-USB2.
+Hi,
 
-$ dmesg
-[99941.296152] usb 1-3: new high-speed USB device number 12 using xhci_hcd
-[99941.464780] usb 1-3: New USB device found, idVendor=13fd, 
-idProduct=0840, bcdDevice= 1.14
-[99941.464783] usb 1-3: New USB device strings: Mfr=1, Product=2, 
-SerialNumber=3
-[99941.464786] usb 1-3: Product: External
-[99941.464788] usb 1-3: Manufacturer: Generic
-[99941.464789] usb 1-3: SerialNumber: 534841353132313630362020
-[99941.477838] usb-storage 1-3:1.0: USB Mass Storage device detected
-[99941.478063] scsi host9: usb-storage 1-3:1.0
-[99942.485502] scsi 9:0:0:0: CD-ROM            hp       DVD RW AD-7586H  
-KH04 PQ: 0 ANSI: 0
-[99942.488054] sr 9:0:0:0: Power-on or device reset occurred
-[99942.492956] sr 9:0:0:0: [sr0] scsi3-mmc drive: 24x/24x writer dvd-ram 
-cd/rw xa/form2 cdda tray
-[99942.493466] sr 9:0:0:0: Attached scsi CD-ROM sr0
-[99942.493594] sr 9:0:0:0: Attached scsi generic sg2 type 5
+Running kernel 5.4.23 on a RV1108 based board the following issue is
+seen when removing the g_serial module.
 
-$ lsusb
-Bus 001 Device 012: ID 13fd:0840 Initio Corporation INIC-1618L SATA
+[root@rv1108 ~]# rmmod g_serial
+[root@rv1108 ~]#
+[   78.090775] ------------[ cut here ]------------
+[   78.091252] WARNING: CPU: 0 PID: 617 at
+drivers/usb/gadget/function/u_serial.c:706 gs_close+0x8c/0x1e4
+[u_serial]
+[   78.092164] Modules linked in: usb_f_acm u_serial libcomposite
+configfs zram zsmalloc emlog(O) wdtoken(O) clk_rk808 rtc_rk808
+spi_rockchip [last unloaded: g_serial]
+[   78.093529] CPU: 0 PID: 617 Comm: nm-online Tainted: G           O
+    5.4.23 #41
+[   78.094198] Hardware name: Rockchip (Device Tree)
+[   78.094655] [<c0111100>] (unwind_backtrace) from [<c010c638>]
+(show_stack+0x10/0x14)
+[   78.095363] [<c010c638>] (show_stack) from [<c082b19c>]
+(dump_stack+0xc0/0xd4)
+[   78.096027] [<c082b19c>] (dump_stack) from [<c01357c8>] (__warn+0xe0/0xf8)
+[   78.096655] [<c01357c8>] (__warn) from [<c0135890>]
+(warn_slowpath_fmt+0xb0/0xb8)
+[   78.097341] [<c0135890>] (warn_slowpath_fmt) from [<bf04ad8c>]
+(gs_close+0x8c/0x1e4 [u_serial])
+[   78.098137] [<bf04ad8c>] (gs_close [u_serial]) from [<c04f47cc>]
+(tty_release+0xf0/0x47c)
+[   78.098877] [<c04f47cc>] (tty_release) from [<c02afb14>] (__fput+0x88/0x214)
+[   78.099517] [<c02afb14>] (__fput) from [<c01556a4>] (task_work_run+0xa4/0xc8)
+[   78.100164] [<c01556a4>] (task_work_run) from [<c01397a4>]
+(do_exit+0x3e4/0xac8)
+[   78.100835] [<c01397a4>] (do_exit) from [<c013ad04>]
+(do_group_exit+0x3c/0xc8)
+[   78.101486] [<c013ad04>] (do_group_exit) from [<c013ada0>]
+(__wake_up_parent+0x0/0x18)
+[   78.102190] ---[ end trace f34de27d5eaf8688 ]---
 
-$ lsusb -t
-/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 480M
-     |__ Port 3: Dev 12, If 0, Class=Mass Storage, Driver=usb-storage, 480M
+Looks like port.count is not being correctly handled.
 
-I plugged in a known USB3 device in the same port.
-Could there be a bug that makes the bus decide it is not a USB3 device?
+Does anyone have any suggestions on how we could fix this?
 
-$ lsusb
-Bus 002 Device 003: ID 13fe:6300 Kingston Technology Company Inc. USB 
-DISK 3.0
+Thanks
 
-$ lsusb -t
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 10000M
-     |__ Port 3: Dev 3, If 0, Class=Mass Storage, Driver=usb-storage, 5000M
-
-Is there a way to see if Windows in a VirtualBox sees it as USB3?
-
+-- 
+Otavio Salvador                             O.S. Systems
+http://www.ossystems.com.br        http://code.ossystems.com.br
+Mobile: +55 (53) 9 9981-7854          Mobile: +1 (347) 903-9750
