@@ -2,104 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7D617CF49
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Mar 2020 17:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C11417CFCD
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Mar 2020 20:15:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726180AbgCGQVi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sat, 7 Mar 2020 11:21:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56190 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726138AbgCGQVi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 7 Mar 2020 11:21:38 -0500
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 206779] usb subsystems hang
-Date:   Sat, 07 Mar 2020 16:21:37 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: ionut_n2001@yahoo.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-206779-208809-SCFxwEJ07j@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-206779-208809@https.bugzilla.kernel.org/>
-References: <bug-206779-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726206AbgCGTPE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 7 Mar 2020 14:15:04 -0500
+Received: from mail-lf1-f54.google.com ([209.85.167.54]:34033 "EHLO
+        mail-lf1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726138AbgCGTPD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 7 Mar 2020 14:15:03 -0500
+Received: by mail-lf1-f54.google.com with SMTP id w27so4501433lfc.1
+        for <linux-usb@vger.kernel.org>; Sat, 07 Mar 2020 11:15:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=one-eyed-alien.net; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2uYOB3RuHfkoIsORffjFQ7cRUXuBj+pBfxmhq7YpleA=;
+        b=B0YfG/4t6uTu3IILcvXoLa32x4DBTYn2oX6Sjsrah0vBR+HbsJWGAAgf/ZHIix948w
+         VA091BnNdtycO2iKNy+G/QMaZE+UgR6e2wKWKzeAzTm8rzqoRHYfzLr1fR5UYC7IQ5YA
+         tXLRCa+1PbT225kjrGi5bIDP8R6JIKs61FVW4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2uYOB3RuHfkoIsORffjFQ7cRUXuBj+pBfxmhq7YpleA=;
+        b=AGwIDcF5Jje9ky+UsEdXtAmSZ/Bzjw6Bk7E5GYbASFMWtMz9Yb3kZQb6LBOwMQ2Dmy
+         rMaxwd9U8sXRDhqxTDWBJo4D9WmnVf1thrZyplHEAHQwB6OvHiXVD6tvMGxjJuacMjQl
+         v0DktRwP656RNx7Wqns4PsWOiIu+coQTjvOtITSL/aKyqfrm92eTlrLmaW17QVuAe/2c
+         SW7Ms4sjnpRollwozKzZriu3Oa0tDgla1imrLDYoX5j4+UvciFnAHQ1rBc2V0+FKasYV
+         ntoTSiufHW1LZ//x/bfdJLf1nLT/gfTOzt4aUvKWlgRhX2IsMCsc/Tj9Q22TTMdRFCN6
+         BPww==
+X-Gm-Message-State: ANhLgQ25GpO1CoY+/6/WjFYECiITU+FfLuY24I0KGsjKjQaevlgxIf7s
+        C92M+WRfw2B1m3COp+O3A997UGrqn6kzL7TByZuKptPg
+X-Google-Smtp-Source: ADFU+vsCjX4IMp8Un7wCrkDwVSZJa3xbTPf2byNun+rFDHSlxHCiwHKgizo/Pt4C5VzNGhwgP+mVkmk0ekLGdGpMYQM=
+X-Received: by 2002:ac2:4c18:: with SMTP id t24mr959795lfq.54.1583608501473;
+ Sat, 07 Mar 2020 11:15:01 -0800 (PST)
 MIME-Version: 1.0
+References: <477a12ce-e6ae-ce43-fca7-0f1dc4e00735@lockie.ca>
+In-Reply-To: <477a12ce-e6ae-ce43-fca7-0f1dc4e00735@lockie.ca>
+From:   Matthew Dharm <mdharm-usb@one-eyed-alien.net>
+Date:   Sat, 7 Mar 2020 11:14:49 -0800
+Message-ID: <CAA6KcBAEfZJ0rHHKEGELrdVehNFfELV78AOw=X=qhp1jQBXucA@mail.gmail.com>
+Subject: Re: dvdrw USB3 drive seen as USB2
+To:     James <bjlockie@lockie.ca>
+Cc:     linux-usb <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=206779
+Is the cable on your DVDRW device a USB3 cable?  Those have extra pins
+(and are often blue) for USB3 cables.  If you use a USB2 cable with a
+USB3 device, it will automatically revert to USB2 only.
 
---- Comment #1 from sander44 (ionut_n2001@yahoo.com) ---
-(In reply to sander44 from comment #0)
-> Hi,
-> 
-> I observed issue with this version with one usb device.
-> 
-> My setup is:
-> 
-> Ubuntu 19.10 clean install
-> Kernel 5.5.7 vanilla, 5.5.7-vanilla
-> 
-> My issue is:
-> [  726.043665] INFO: task fastboot:1531 blocked for more than 120 seconds.
-> [  726.043716]       Not tainted 5.5.7-vanilla #1
-> [  726.043734] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables
-> this message.
-> [  726.043753] fastboot        D    0  1531   1413 0x00000004
-> [  726.043755] Call Trace:
-> [  726.043778]  __schedule+0x28c/0x6e0
-> [  726.043779]  schedule+0x44/0xb0
-> [  726.043780]  schedule_timeout+0x1d3/0x2f0
-> [  726.043783]  ? ttwu_do_activate+0x5a/0x70
-> [  726.043784]  wait_for_completion_timeout+0xb3/0x140
-> [  726.043785]  ? wake_up_q+0xb0/0xb0
-> [  726.043787]  usb_start_wait_urb+0x8c/0x180
-> [  726.043788]  usb_bulk_msg+0xb8/0x160
-> [  726.043790]  proc_bulk+0x158/0x3a0
-> [  726.043791]  usbdev_ioctl+0xc08/0x1480
-> [  726.043794]  do_vfs_ioctl+0xa5/0x680
-> [  726.043796]  ? finish_task_switch+0x70/0x260
-> [  726.043798]  ? tomoyo_file_ioctl+0x19/0x20
-> [  726.043799]  ksys_ioctl+0x75/0x80
-> [  726.043801]  __x64_sys_ioctl+0x1a/0x20
-> [  726.043803]  do_syscall_64+0x57/0x1c0
-> [  726.043804]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> [  726.043810] RIP: 0033:0x7f1da431867b
-> [  726.043815] Code: Bad RIP value.
-> [  726.043816] RSP: 002b:00007ffdb4c22af8 EFLAGS: 00000246 ORIG_RAX:
-> 0000000000000010
-> [  726.043817] RAX: ffffffffffffffda RBX: 000055b82cb5c2a0 RCX:
-> 00007f1da431867b
-> [  726.043818] RDX: 00007ffdb4c22b00 RSI: 00000000c0185502 RDI:
-> 0000000000000004
-> [  726.043818] RBP: 0000000000000040 R08: 00000000000001ec R09:
-> 00007ffdb4c22b40
-> [  726.043819] R10: 00007ffdb4c22b00 R11: 0000000000000246 R12:
-> 0000000000000040
-> [  726.043819] R13: 00000006fc23abff R14: 0000000000000000 R15:
-> 00007ffdb4c22c70
-> [  774.124057] usb 1-2: USB disconnect, device number 4
-> 
-> I had to restart the machine - vm so I could continue the process.
-> My task is: writing a phone with adb and fastboot.
+Matt
+
+On Fri, Mar 6, 2020 at 12:40 PM James <bjlockie@lockie.ca> wrote:
+>
+> I bought what is supposed to be a USB3 dvdrw drive but it is detected as
+> USB2.
+>
+> $ dmesg
+> [99941.296152] usb 1-3: new high-speed USB device number 12 using xhci_hcd
+> [99941.464780] usb 1-3: New USB device found, idVendor=13fd,
+> idProduct=0840, bcdDevice= 1.14
+> [99941.464783] usb 1-3: New USB device strings: Mfr=1, Product=2,
+> SerialNumber=3
+> [99941.464786] usb 1-3: Product: External
+> [99941.464788] usb 1-3: Manufacturer: Generic
+> [99941.464789] usb 1-3: SerialNumber: 534841353132313630362020
+> [99941.477838] usb-storage 1-3:1.0: USB Mass Storage device detected
+> [99941.478063] scsi host9: usb-storage 1-3:1.0
+> [99942.485502] scsi 9:0:0:0: CD-ROM            hp       DVD RW AD-7586H
+> KH04 PQ: 0 ANSI: 0
+> [99942.488054] sr 9:0:0:0: Power-on or device reset occurred
+> [99942.492956] sr 9:0:0:0: [sr0] scsi3-mmc drive: 24x/24x writer dvd-ram
+> cd/rw xa/form2 cdda tray
+> [99942.493466] sr 9:0:0:0: Attached scsi CD-ROM sr0
+> [99942.493594] sr 9:0:0:0: Attached scsi generic sg2 type 5
+>
+> $ lsusb
+> Bus 001 Device 012: ID 13fd:0840 Initio Corporation INIC-1618L SATA
+>
+> $ lsusb -t
+> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 480M
+>      |__ Port 3: Dev 12, If 0, Class=Mass Storage, Driver=usb-storage, 480M
+>
+> I plugged in a known USB3 device in the same port.
+> Could there be a bug that makes the bus decide it is not a USB3 device?
+>
+> $ lsusb
+> Bus 002 Device 003: ID 13fe:6300 Kingston Technology Company Inc. USB
+> DISK 3.0
+>
+> $ lsusb -t
+> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 10000M
+>      |__ Port 3: Dev 3, If 0, Class=Mass Storage, Driver=usb-storage, 5000M
+>
+> Is there a way to see if Windows in a VirtualBox sees it as USB3?
+>
+
 
 -- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+Matthew Dharm
+Former Maintainer, USB Mass Storage driver for Linux
