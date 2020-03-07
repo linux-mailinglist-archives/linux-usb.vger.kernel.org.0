@@ -2,76 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8078817CE5B
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Mar 2020 14:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D30AF17CF48
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Mar 2020 17:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726154AbgCGNPe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 7 Mar 2020 08:15:34 -0500
-Received: from unicorn.mansr.com ([81.2.72.234]:59632 "EHLO unicorn.mansr.com"
+        id S1726116AbgCGQSg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sat, 7 Mar 2020 11:18:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55424 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726105AbgCGNPe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 7 Mar 2020 08:15:34 -0500
-X-Greylist: delayed 437 seconds by postgrey-1.27 at vger.kernel.org; Sat, 07 Mar 2020 08:15:34 EST
-Received: by unicorn.mansr.com (Postfix, from userid 51770)
-        id 165E615F0E; Sat,  7 Mar 2020 13:08:16 +0000 (GMT)
-From:   Mans Rullgard <mans@mansr.com>
-To:     Bin Liu <b-liu@ti.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: musb: fix crash with highmen PIO and usbmon
-Date:   Sat,  7 Mar 2020 13:07:20 +0000
-Message-Id: <20200307130720.16652-1-mans@mansr.com>
-X-Mailer: git-send-email 2.25.1
+        id S1726105AbgCGQSg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 7 Mar 2020 11:18:36 -0500
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 206779] New: usb subsystems hang
+Date:   Sat, 07 Mar 2020 16:18:36 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: ionut_n2001@yahoo.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-206779-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When handling a PIO bulk transfer with highmem buffer, a temporary
-mapping is assigned to urb->transfer_buffer.  After the transfer is
-complete, an invalid address is left behind in this pointer.  This is
-not ordinarily a problem since nothing touches that buffer before the
-urb is released.  However, when usbmon is active, usbmon_urb_complete()
-calls (indirectly) mon_bin_get_data() which does access the transfer
-buffer if it is set.  To prevent an invalid memory access here, reset
-urb->tranfer_buffer to NULL when finished.
+https://bugzilla.kernel.org/show_bug.cgi?id=206779
 
-Fixes: 8e8a55165469 ("usb: musb: host: Handle highmem in PIO mode")
-Signed-off-by: Mans Rullgard <mans@mansr.com>
----
- drivers/usb/musb/musb_host.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+            Bug ID: 206779
+           Summary: usb subsystems hang
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.5.7
+          Hardware: x86-64
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: high
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: ionut_n2001@yahoo.com
+        Regression: No
 
-diff --git a/drivers/usb/musb/musb_host.c b/drivers/usb/musb/musb_host.c
-index 1c813c37462a..b67b40de1947 100644
---- a/drivers/usb/musb/musb_host.c
-+++ b/drivers/usb/musb/musb_host.c
-@@ -1459,8 +1459,10 @@ void musb_host_tx(struct musb *musb, u8 epnum)
- 	qh->segsize = length;
- 
- 	if (qh->use_sg) {
--		if (offset + length >= urb->transfer_buffer_length)
-+		if (offset + length >= urb->transfer_buffer_length) {
- 			qh->use_sg = false;
-+			urb->transfer_buffer = NULL;
-+		}
- 	}
- 
- 	musb_ep_select(mbase, epnum);
-@@ -1977,8 +1979,10 @@ void musb_host_rx(struct musb *musb, u8 epnum)
- 	urb->actual_length += xfer_len;
- 	qh->offset += xfer_len;
- 	if (done) {
--		if (qh->use_sg)
-+		if (qh->use_sg) {
- 			qh->use_sg = false;
-+			urb->transfer_buffer = NULL;
-+		}
- 
- 		if (urb->status == -EINPROGRESS)
- 			urb->status = status;
+Hi,
+
+I observed issue with this version with one usb device.
+
+My setup is:
+
+Ubuntu 19.10 clean install
+Kernel 5.5.7 vanilla, 5.5.7-vanilla
+
+My issue is:
+[  726.043665] INFO: task fastboot:1531 blocked for more than 120 seconds.
+[  726.043716]       Not tainted 5.5.7-vanilla #1
+[  726.043734] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this
+message.
+[  726.043753] fastboot        D    0  1531   1413 0x00000004
+[  726.043755] Call Trace:
+[  726.043778]  __schedule+0x28c/0x6e0
+[  726.043779]  schedule+0x44/0xb0
+[  726.043780]  schedule_timeout+0x1d3/0x2f0
+[  726.043783]  ? ttwu_do_activate+0x5a/0x70
+[  726.043784]  wait_for_completion_timeout+0xb3/0x140
+[  726.043785]  ? wake_up_q+0xb0/0xb0
+[  726.043787]  usb_start_wait_urb+0x8c/0x180
+[  726.043788]  usb_bulk_msg+0xb8/0x160
+[  726.043790]  proc_bulk+0x158/0x3a0
+[  726.043791]  usbdev_ioctl+0xc08/0x1480
+[  726.043794]  do_vfs_ioctl+0xa5/0x680
+[  726.043796]  ? finish_task_switch+0x70/0x260
+[  726.043798]  ? tomoyo_file_ioctl+0x19/0x20
+[  726.043799]  ksys_ioctl+0x75/0x80
+[  726.043801]  __x64_sys_ioctl+0x1a/0x20
+[  726.043803]  do_syscall_64+0x57/0x1c0
+[  726.043804]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[  726.043810] RIP: 0033:0x7f1da431867b
+[  726.043815] Code: Bad RIP value.
+[  726.043816] RSP: 002b:00007ffdb4c22af8 EFLAGS: 00000246 ORIG_RAX:
+0000000000000010
+[  726.043817] RAX: ffffffffffffffda RBX: 000055b82cb5c2a0 RCX:
+00007f1da431867b
+[  726.043818] RDX: 00007ffdb4c22b00 RSI: 00000000c0185502 RDI:
+0000000000000004
+[  726.043818] RBP: 0000000000000040 R08: 00000000000001ec R09:
+00007ffdb4c22b40
+[  726.043819] R10: 00007ffdb4c22b00 R11: 0000000000000246 R12:
+0000000000000040
+[  726.043819] R13: 00000006fc23abff R14: 0000000000000000 R15:
+00007ffdb4c22c70
+[  774.124057] usb 1-2: USB disconnect, device number 4
+
+I had to restart the car so I could continue the process.
+My task is: writing a phone with adb and fastboot.
+
 -- 
-2.25.1
-
+You are receiving this mail because:
+You are watching the assignee of the bug.
