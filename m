@@ -2,277 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F38517CC9F
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Mar 2020 08:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D9B17CD5B
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Mar 2020 10:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726043AbgCGHUL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 7 Mar 2020 02:20:11 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:34119 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725878AbgCGHUL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 7 Mar 2020 02:20:11 -0500
-Received: by mail-pg1-f195.google.com with SMTP id t3so2179586pgn.1
-        for <linux-usb@vger.kernel.org>; Fri, 06 Mar 2020 23:20:08 -0800 (PST)
+        id S1726139AbgCGJyd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 7 Mar 2020 04:54:33 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:40486 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725909AbgCGJyd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 7 Mar 2020 04:54:33 -0500
+Received: by mail-lf1-f68.google.com with SMTP id p5so3847932lfc.7
+        for <linux-usb@vger.kernel.org>; Sat, 07 Mar 2020 01:54:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=e3PMYYBHQGex2U1IYow6ZhmcfHguiYqwTzhAXYhQp2g=;
-        b=jW2BNI0m13J9kLuQvuXNLnXtrbLSv1uykgB+aL82tn77ODy9ZIoiKHtxQ1I5n8TVSl
-         sAiZT3NOqvSMzS96NDpFRPc1B/nJ+IQEPGuZSKY1Oe3muoyHhsLuw09txYt6Z1Q1dIXN
-         lFWdJu6uhqsfU/AR0uA2HdZb5IyjRRGZgyN84hJMZOPqUEX43wjM9k0h8JG2LSB/GxDp
-         Dg2ow6Tc4jtJHCwZ2h7g2QmUYmlGXyT0aSm2tyCiMDjl1q45ZHWFNTQRo6Z0geFlJQjp
-         ROq3jZ/hA7lN55+lmi2qXsEFenbkr5+qF6Wd/z23ILScvrlQuW1+NoZL1hLnRzQG3BnE
-         WLaA==
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+iY7vg8Db28lbZpkj8YbZ4nAiqLqC1ZkxS8MIhuLcMU=;
+        b=ylpat4kRdMth3tgWlvM26uho69yQ9OBDlJqz9C4W2FP/opded7R33Gs9dCZ441sDeE
+         XXcCUprakY2Zx3bRayE+q+uD4obMIAircprbTxdJYpe0/qTADFTqpBe8JJ2igckRHAvT
+         dP4JYIuo8Y/qjWN7nj4ykCDfVsEOCmPMALohd4iLGEzL4XbxBtw8A+esMWN4Y62zJU9t
+         eGNr4baLxZ2rUHx2gNf2f5QIze1ZEoBsuHtfznFaQerUm+yB8zo/NKsh2ibjgx4tEY6e
+         Hd8Xp1eCtoOc1T7H4kcg3+4wc1scUop9Bh1WiUdxKbXAe3XK/R1Nx3UcKD5Hdmv6qH/1
+         whIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=e3PMYYBHQGex2U1IYow6ZhmcfHguiYqwTzhAXYhQp2g=;
-        b=T6Zj81uRhlwGTkt6Md1+WajVs52dvkvrxSvIjMlzmYpUU/4nKj53EdN0H1+x7mmTnd
-         j+GndhXE2CCRXyRhF1OFKUzoT9e2oaYBoRaD0vvl/cZgE3PvBe55VnGUxDoAGDMC/P28
-         5uwitRNIqgnKv7Y+mE4z9MnKDsK3MVUo02Ge6T4UUTvM3G0YMovvvW0bz+43d2454Xwg
-         +PaMD7k89yXAAod+zQFNf63Tf46R+03m/51t7StHQFRj/3sxUHzckPaowZWMD1icniLw
-         0S3nZOzA5jolcVKbkKhP1AzurU3LxPKZtTFILcEE1Rj+OXl727Tp/7qHQ4J1iKr1ZtQ5
-         O4bg==
-X-Gm-Message-State: ANhLgQ3heiVWk5zkX4DKBgvYmz9p/wDqO1F0oYtSomeQNddXcGQSu7Br
-        QTOEli7J6NcAyTe8YjWO21WYyQ==
-X-Google-Smtp-Source: ADFU+vt5OUcqIil2Ct4vz63TlxrwHEsqPTuii1IorFFwcmTz22ozqVVbfCRZsWhbsRGbPxnR73O5PA==
-X-Received: by 2002:a62:fb07:: with SMTP id x7mr7417872pfm.125.1583565607694;
-        Fri, 06 Mar 2020 23:20:07 -0800 (PST)
-Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id y14sm8776103pfp.59.2020.03.06.23.20.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2020 23:20:06 -0800 (PST)
-Date:   Fri, 6 Mar 2020 23:20:04 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org, jackp@codeaurora.org, balbi@kernel.org,
-        robh@kernel.org, linux-kernel@vger.kernel.org,
-        Yu Chen <chenyu56@huawei.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        ShuFan Lee <shufan_lee@richtek.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jun Li <lijun.kernel@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Guillaume Gardet <Guillaume.Gardet@arm.com>,
-        devicetree@vger.kernel.org, John Stultz <john.stultz@linaro.org>
-Subject: Re: [PATCH v7 06/18] usb: dwc3: Registering a role switch in the DRD
- code.
-Message-ID: <20200307072004.GI1094083@builder>
-References: <20200303171159.246992-1-bryan.odonoghue@linaro.org>
- <20200303171159.246992-7-bryan.odonoghue@linaro.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+iY7vg8Db28lbZpkj8YbZ4nAiqLqC1ZkxS8MIhuLcMU=;
+        b=C0wKzD53s1asLEYxXzSDQGTkAinKbRgSrU8nHL8RYNeaNPduDjSeLQYbQy9MRCimbh
+         VH7XPq8lJgqvMh+KqSh1CZaVs58O34S9V3s23mk+3gBqUQgJSw9dW7fbp1yeAKCtwNvC
+         1KeiGwphxRBw282k5L9Lt61Z9NRmyiiJzuG9J2NWRXvLs08Ck1aS0ZbHDX6ubVkhqfYr
+         OxlpNlP6wF95u1rcsbhOuTf2SsIoWAb8+FEx30nY9eag/ymPCIjlax6Gp4y0Xsp5aTq5
+         Pc2CJ62loQMLBhn1hKyczP95Zw+Sz8n3AXVPxOrsAPRR7ftI3ePL09fhcBsKaT0Nov37
+         wmCQ==
+X-Gm-Message-State: ANhLgQ14iMjnELuKJNKP0Z7sAXQjOM7COH/pzgaCjmTqEJX5Qo/vaQez
+        vl7eCUFSs6z4iHn1unVcSvddxA==
+X-Google-Smtp-Source: ADFU+vv6OIWzoXOg4mWHENdK4mbxgfXz8v6v9hX1jJMwhRRBJ60rFJUXuMg07DvgtCrrYsNkhjdr7Q==
+X-Received: by 2002:a05:6512:692:: with SMTP id t18mr4284908lfe.212.1583574870677;
+        Sat, 07 Mar 2020 01:54:30 -0800 (PST)
+Received: from ?IPv6:2a00:1fa0:402:864b:dd24:504:68eb:a9fe? ([2a00:1fa0:402:864b:dd24:504:68eb:a9fe])
+        by smtp.gmail.com with ESMTPSA id j17sm2554029ljc.0.2020.03.07.01.54.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 Mar 2020 01:54:29 -0800 (PST)
+Subject: Re: [PATCH v4 4/4] USB: pci-quirks: Add Raspberry Pi 4 quirk
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        linux-kernel@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, f.fainelli@gmail.com,
+        gregkh@linuxfoundation.org, tim.gover@raspberrypi.org,
+        linux-pci@vger.kernel.org, wahrenst@gmx.net
+References: <20200306114348.5172-1-nsaenzjulienne@suse.de>
+ <20200306114348.5172-5-nsaenzjulienne@suse.de>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <b4fb58f0-6d51-657b-bcf6-5f4b0c798312@cogentembedded.com>
+Date:   Sat, 7 Mar 2020 12:54:27 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200303171159.246992-7-bryan.odonoghue@linaro.org>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <20200306114348.5172-5-nsaenzjulienne@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue 03 Mar 09:11 PST 2020, Bryan O'Donoghue wrote:
+Hello!
 
-> From: Yu Chen <chenyu56@huawei.com>
+On 06.03.2020 14:43, Nicolas Saenz Julienne wrote:
+
+> On the Raspberry Pi 4, after a PCI reset, VL805's firmware may either be
+> loaded directly from an EEPROM or, if not present, by the SoC's
+> VideCore. Inform VideCore that VL805 was just reset.
 > 
-> The Type-C drivers use USB role switch API to inform the
-> system about the negotiated data role, so registering a role
-> switch in the DRD code in order to support platforms with
-> USB Type-C connectors.
+> Also, as this creates a dependency between XHCI_PCI and VideoCore's
+> firmware interface, reflect that on the firmware interface Kconfg.
 > 
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> CC: ShuFan Lee <shufan_lee@richtek.com>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> Cc: Yu Chen <chenyu56@huawei.com>
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Cc: Jun Li <lijun.kernel@gmail.com>
-> Cc: Valentin Schneider <valentin.schneider@arm.com>
-> Cc: Guillaume Gardet <Guillaume.Gardet@arm.com>
-> Cc: Jack Pham <jackp@codeaurora.org>
-> Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> Cc: linux-usb@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> Signed-off-by: Yu Chen <chenyu56@huawei.com>
-> Signed-off-by: John Stultz <john.stultz@linaro.org>
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 > ---
->  drivers/usb/dwc3/core.h |  3 ++
->  drivers/usb/dwc3/drd.c  | 77 ++++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 79 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index 77c4a9abe365..a99e57636172 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -25,6 +25,7 @@
->  #include <linux/usb/ch9.h>
->  #include <linux/usb/gadget.h>
->  #include <linux/usb/otg.h>
-> +#include <linux/usb/role.h>
->  #include <linux/ulpi/interface.h>
->  
->  #include <linux/phy/phy.h>
-> @@ -953,6 +954,7 @@ struct dwc3_scratchpad_array {
->   * @hsphy_mode: UTMI phy mode, one of following:
->   *		- USBPHY_INTERFACE_MODE_UTMI
->   *		- USBPHY_INTERFACE_MODE_UTMIW
-> + * @role_sw: usb_role_switch handle
->   * @usb2_phy: pointer to USB2 PHY
->   * @usb3_phy: pointer to USB3 PHY
->   * @usb2_generic_phy: pointer to USB2 PHY
-> @@ -1086,6 +1088,7 @@ struct dwc3 {
->  	struct extcon_dev	*edev;
->  	struct notifier_block	edev_nb;
->  	enum usb_phy_interface	hsphy_mode;
-> +	struct usb_role_switch	*role_sw;
->  
->  	u32			fladj;
->  	u32			irq_gadget;
-> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-> index c946d64142ad..331c6e997f0c 100644
-> --- a/drivers/usb/dwc3/drd.c
-> +++ b/drivers/usb/dwc3/drd.c
-> @@ -476,6 +476,73 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
->  	return edev;
->  }
->  
-> +#if IS_ENABLED(CONFIG_USB_ROLE_SWITCH)
-> +#define ROLE_SWITCH 1
-> +static int dwc3_usb_role_switch_set(struct device *dev, enum usb_role role)
-
-The prototype for set and get was changed in 'bce3052f0c16 ("usb: roles:
-Provide the switch drivers handle to the switch in the API")', so this
-no longer compiles.
-
-The new prototype should be:
-static int dwc3_usb_role_switch_set(struct usb_role_switch *sw, enum usb_role role)
-
-> +{
-> +	struct dwc3 *dwc = dev_get_drvdata(dev);
-
-And this would then be:
-	struct dwc3 *dwc = usb_role_switch_get_drvdata(sw);
-
-> +	u32 mode;
-> +
-> +	switch (role) {
-> +	case USB_ROLE_HOST:
-> +		mode = DWC3_GCTL_PRTCAP_HOST;
-> +		break;
-> +	case USB_ROLE_DEVICE:
-> +		mode = DWC3_GCTL_PRTCAP_DEVICE;
-> +		break;
-> +	default:
-> +		mode = DWC3_GCTL_PRTCAP_DEVICE;
-> +		break;
-> +	}
-> +
-> +	dwc3_set_mode(dwc, mode);
-> +	return 0;
-> +}
-> +
-> +static enum usb_role dwc3_usb_role_switch_get(struct device *dev)
-
-static enum usb_role dwc3_usb_role_switch_get(struct usb_role_switch sw)
-
-> +{
-> +	struct dwc3 *dwc = dev_get_drvdata(dev);
-
-	struct dwc3 *dwc = usb_role_switch_get_drvdata(sw);
-
-> +	unsigned long flags;
-> +	enum usb_role role;
-> +
-> +	spin_lock_irqsave(&dwc->lock, flags);
-> +	switch (dwc->current_dr_role) {
-> +	case DWC3_GCTL_PRTCAP_HOST:
-> +		role = USB_ROLE_HOST;
-> +		break;
-> +	case DWC3_GCTL_PRTCAP_DEVICE:
-> +		role = USB_ROLE_DEVICE;
-> +		break;
-> +	case DWC3_GCTL_PRTCAP_OTG:
-> +		role = dwc->current_otg_role;
-> +		break;
-> +	default:
-> +		role = USB_ROLE_DEVICE;
-> +		break;
-> +	}
-> +	spin_unlock_irqrestore(&dwc->lock, flags);
-> +	return role;
-> +}
-> +
-> +static int dwc3_setup_role_switch(struct dwc3 *dwc)
-> +{
-> +	struct usb_role_switch_desc dwc3_role_switch = {NULL};
-> +
-> +	dwc3_role_switch.fwnode = dev_fwnode(dwc->dev);
-> +	dwc3_role_switch.set = dwc3_usb_role_switch_set;
-> +	dwc3_role_switch.get = dwc3_usb_role_switch_get;
-
-And you need to pass dwc as .driver_data here:
-
-	dwc3_role_switch.driver_data = dwc;
-
-With this the series compiles and both dwc3 devices probes nicely. I
-haven't done any further testing though...
-
-Regards,
-Bjorn
-
-> +	dwc->role_sw = usb_role_switch_register(dwc->dev, &dwc3_role_switch);
-> +	if (IS_ERR(dwc->role_sw))
-> +		return PTR_ERR(dwc->role_sw);
-> +
-> +	dwc3_set_mode(dwc, DWC3_GCTL_PRTCAP_DEVICE);
-> +	return 0;
-> +}
-> +#else
-> +#define ROLE_SWITCH 0
-> +#define dwc3_setup_role_switch(x) 0
-> +#endif
-> +
->  int dwc3_drd_init(struct dwc3 *dwc)
->  {
->  	int ret, irq;
-> @@ -484,7 +551,12 @@ int dwc3_drd_init(struct dwc3 *dwc)
->  	if (IS_ERR(dwc->edev))
->  		return PTR_ERR(dwc->edev);
->  
-> -	if (dwc->edev) {
-> +	if (ROLE_SWITCH &&
-> +	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
-> +		ret = dwc3_setup_role_switch(dwc);
-> +		if (ret < 0)
-> +			return ret;
-> +	} else if (dwc->edev) {
->  		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
->  		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
->  					       &dwc->edev_nb);
-> @@ -531,6 +603,9 @@ void dwc3_drd_exit(struct dwc3 *dwc)
->  {
->  	unsigned long flags;
->  
-> +	if (dwc->role_sw)
-> +		usb_role_switch_unregister(dwc->role_sw);
-> +
->  	if (dwc->edev)
->  		extcon_unregister_notifier(dwc->edev, EXTCON_USB_HOST,
->  					   &dwc->edev_nb);
-> -- 
-> 2.25.1
+> Changes since v3:
+>   - Add more complete error message.
+>   - Add braces around if statement
 > 
+> Changes since v1:
+>   - Make RASPBERRYPI_FIRMWARE dependent on this quirk to make sure it
+>     gets compiled when needed.
+> 
+>   drivers/firmware/Kconfig      |  1 +
+>   drivers/usb/host/pci-quirks.c | 16 ++++++++++++++++
+>   2 files changed, 17 insertions(+)
+[...]
+> diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
+> index beb2efa71341..452f5f12b042 100644
+> --- a/drivers/usb/host/pci-quirks.c
+> +++ b/drivers/usb/host/pci-quirks.c
+> @@ -16,6 +16,9 @@
+>   #include <linux/export.h>
+>   #include <linux/acpi.h>
+>   #include <linux/dmi.h>
+> +
+> +#include <soc/bcm2835/raspberrypi-firmware.h>
+> +
+>   #include "pci-quirks.h"
+>   #include "xhci-ext-caps.h"
+>   
+> @@ -1243,11 +1246,24 @@ static void quirk_usb_handoff_xhci(struct pci_dev *pdev)
+>   
+>   static void quirk_usb_early_handoff(struct pci_dev *pdev)
+>   {
+> +	int ret;
+> +
+>   	/* Skip Netlogic mips SoC's internal PCI USB controller.
+>   	 * This device does not need/support EHCI/OHCI handoff
+>   	 */
+>   	if (pdev->vendor == 0x184e)	/* vendor Netlogic */
+>   		return;
+> +
+> +	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483) {
+> +		ret = rpi_firmware_init_vl805(pdev);
+> +		if (ret) {
+> +			/* Firmware might be outdated, or something failed */
+> +			dev_warn(&pdev->dev, "Failed to load VL805's firmware: %d\n", ret);
+> +			dev_warn(&pdev->dev, "Will continue to attempt to work, "
+> +				 "but bad things might happen. You should fix this...\n");
+
+    Don't break up the long kernel messages (checkpatch.pl should not complain 
+about them).
+
+[...]
+
+MBR, Sergei
