@@ -2,53 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6320617D48D
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Mar 2020 16:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8198917D525
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Mar 2020 18:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726335AbgCHPzF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 8 Mar 2020 11:55:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43558 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726270AbgCHPzF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 8 Mar 2020 11:55:05 -0400
-Subject: Re: [GIT PULL] USB/PHY fixes for 5.6-rc6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583682905;
-        bh=7c0RQWpB6504azPx4KDuMJ4vfb1FqyAmFVn678/Cwgc=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=hDOfPLEdL/nettnqhD1GqNQs8MHNCn+vvpj1T8UyucXr9zS9p1SxWTJK9pu5nnfSo
-         V9y4e5p/5ybmf0rNFN5bcgf9jyu7sGqSgWqu6Z2cENHQvTYPGFnGuRGNliml2R996z
-         2YQFtcl6fY6Qt0vetN1xljrkHDQqUJuJqe7QAnaY=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200308095118.GA4026918@kroah.com>
-References: <20200308095118.GA4026918@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200308095118.GA4026918@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.6-rc5
-X-PR-Tracked-Commit-Id: 19f3c1e98bd1704fe22e5f8105c0677a1332cdef
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: fd3f6cc9806c2f10b886f3ad78c9e192fb1bffd9
-Message-Id: <158368290527.12496.3475367871442185658.pr-tracker-bot@kernel.org>
-Date:   Sun, 08 Mar 2020 15:55:05 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+        id S1726397AbgCHRKK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 Mar 2020 13:10:10 -0400
+Received: from www752.sakura.ne.jp ([59.106.19.202]:57156 "EHLO
+        www752.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726297AbgCHRKJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Mar 2020 13:10:09 -0400
+X-Greylist: delayed 4106 seconds by postgrey-1.27 at vger.kernel.org; Sun, 08 Mar 2020 13:10:07 EDT
+Received: from fsav101.sakura.ne.jp (fsav101.sakura.ne.jp [27.133.134.228])
+        by www752.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 028FpPAT061629;
+        Mon, 9 Mar 2020 00:51:25 +0900 (JST)
+        (envelope-from postmaster@hokusetubad.sakura.ne.jp)
+Received: from www752.sakura.ne.jp (59.106.19.202)
+ by fsav101.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav101.sakura.ne.jp);
+ Mon, 09 Mar 2020 00:51:25 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav101.sakura.ne.jp)
+Received: from www752.sakura.ne.jp (localhost [127.0.0.1])
+        by www752.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 028FpOhJ061610;
+        Mon, 9 Mar 2020 00:51:25 +0900 (JST)
+        (envelope-from postmaster@hokusetubad.sakura.ne.jp)
+Received: (from hokusetubad@localhost)
+        by www752.sakura.ne.jp (8.15.2/8.15.2/Submit) id 028FpOOQ061609;
+        Mon, 9 Mar 2020 00:51:24 +0900 (JST)
+        (envelope-from postmaster@hokusetubad.sakura.ne.jp)
+Message-Id: <202003081551.028FpOOQ061609@www752.sakura.ne.jp>
+X-Authentication-Warning: www752.sakura.ne.jp: hokusetubad set sender to postmaster@hokusetubad.sakura.ne.jp using -f
+Subject: BUSINESS PROPOSAL
+From:   postmaster@hokusetubad.sakura.ne.jp
+Reply-To: abulkareem461@gmail.com
+To:     nJreyes@midway.edu
+MIME-Version: 1.0
+Date:   Mon, 09 Mar 2020 00:51:24 +0900
+Content-Type: text/plain; charset="ISO-2022-JP"
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Sun, 8 Mar 2020 10:51:18 +0100:
+Dearest Friend
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.6-rc5
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/fd3f6cc9806c2f10b886f3ad78c9e192fb1bffd9
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+I am Mr Abdul Kareem working with Emirate NBD Bank Dubai,United Arab Emirate as Finance Manager.
+I have a very profitable Business that concerns you and will benefit both of us after completion.
+Kindly get back to me for more details.
+Awaiting your response.
+Regards
+Abdul Kareem
