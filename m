@@ -2,122 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3694817D2F2
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Mar 2020 10:51:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E04BA17D487
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Mar 2020 16:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726289AbgCHJvW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 8 Mar 2020 05:51:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35556 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726038AbgCHJvW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 8 Mar 2020 05:51:22 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BE63B2072A;
-        Sun,  8 Mar 2020 09:51:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583661080;
-        bh=/4yYO4GgZbxmA0zei073nwkDkE9sDQW5NYyQ+MEZxFs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Q244NCGRIsDq5YUL2s33zrUFkb7EzboKf7F2rI9VgH4mPMpFsTmKqy4xOmYZou0jO
-         UJEw5COrQnRlchYdMEi8Xo1aNjUekFU/0uU6wUhjb3Te0NdP6NmYSb3T9OEReNKpZH
-         05+lS5rNAvBdKpD1yQ2kZV55+1oCB94tVSjlArRM=
-Date:   Sun, 8 Mar 2020 10:51:18 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB/PHY fixes for 5.6-rc6
-Message-ID: <20200308095118.GA4026918@kroah.com>
+        id S1726292AbgCHPy4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 Mar 2020 11:54:56 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:42683 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726270AbgCHPy4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Mar 2020 11:54:56 -0400
+Received: (qmail 31319 invoked by uid 500); 8 Mar 2020 11:54:55 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 8 Mar 2020 11:54:55 -0400
+Date:   Sun, 8 Mar 2020 11:54:55 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     James <bjlockie@lockie.ca>
+cc:     Matthew Dharm <mdharm-usb@one-eyed-alien.net>,
+        linux-usb <linux-usb@vger.kernel.org>
+Subject: Re: dvdrw USB3 drive seen as USB2
+In-Reply-To: <5d16425c-a054-779e-cc3d-efad46ee07f0@lockie.ca>
+Message-ID: <Pine.LNX.4.44L0.2003081143200.30710-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit f8788d86ab28f61f7b46eb6be375f8a726783636:
+On Sat, 7 Mar 2020, James wrote:
 
-  Linux 5.6-rc3 (2020-02-23 16:17:42 -0800)
+> https://github.com/aircrack-ng/rtl8812au/blob/v5.6.4.2/README.md
+> > USB Mode Switch
+> >
+> > 0: doesn't switch, 1: switch from usb2.0 to usb 3.0 2: switch from 
+> > usb3.0 to usb 2.0
+> >
+> > $ rmmod 88XXau
+> > $ modprobe 88XXau rtw_switch_usb_mode:int (0: no switch 1: switch from 
+> > usb2 to usb3 2: switch from usb3 to usb2)
 
-are available in the Git repository at:
+Have you tried using this driver?  Does it work?
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.6-rc5
+Maybe you can convince the authors of this 88XXau driver to merge it 
+with the rtl88x2bu driver already in the standard kernel.  That's what 
+was managing your Realtek adapter in your earlier email.
 
-for you to fetch changes up to 19f3c1e98bd1704fe22e5f8105c0677a1332cdef:
+Alan Stern
 
-  Merge tag 'phy-for-5.6-rc_v2' of git://git.kernel.org/pub/scm/linux/kernel/git/kishon/linux-phy into usb-linus (2020-03-04 13:28:52 +0100)
 
-----------------------------------------------------------------
-USB/PHY fixes for 5.6-rc5
-
-Here are some small USB and PHY driver fixes for reported issues for
-5.6-rc5.
-
-Included in here are:
-	- phy driver fixes
-	- new USB quirks
-	- USB cdns3 gadget driver fixes
-	- USB hub core fixes
-
-All of these have been in linux-next with no reported issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Dan Lazewatsky (1):
-      usb: quirks: add NO_LPM quirk for Logitech Screen Share
-
-Eugeniu Rosca (3):
-      usb: core: hub: fix unhandled return by employing a void function
-      usb: core: hub: do error out if usb_autopm_get_interface() fails
-      usb: core: port: do error out if usb_autopm_get_interface() fails
-
-Florian Fainelli (1):
-      phy: brcm-sata: Correct MDIO operations for 40nm platforms
-
-Greg Kroah-Hartman (1):
-      Merge tag 'phy-for-5.6-rc_v2' of git://git.kernel.org/.../kishon/linux-phy into usb-linus
-
-Grygorii Strashko (2):
-      phy: ti: gmii-sel: fix set of copy-paste errors
-      phy: ti: gmii-sel: do not fail in case of gmii
-
-Jim Lin (1):
-      usb: storage: Add quirk for Samsung Fit flash
-
-Kishon Vijay Abraham I (1):
-      phy: core: Fix phy_get() to not return error on link creation failure
-
-Marco Felsch (1):
-      usb: usb251xb: fix regulator probe and error handling
-
-Peter Chen (2):
-      usb: cdns3: gadget: link trb should point to next request
-      usb: cdns3: gadget: toggle cycle bit before reset endpoint
-
-Pratham Pratap (1):
-      usb: dwc3: gadget: Update chain bit correctly when using sg list
-
-Rikard Falkeborn (1):
-      phy: allwinner: Fix GENMASK misuse
-
-Tony Lindgren (2):
-      phy: mapphone-mdm6600: Fix write timeouts with shorter GPIO toggle interval
-      phy: mapphone-mdm6600: Fix timeouts by adding wake-up handling
-
- drivers/phy/allwinner/phy-sun50i-usb3.c     |   2 +-
- drivers/phy/broadcom/phy-brcm-sata.c        | 148 ++++++++++++----------------
- drivers/phy/motorola/phy-mapphone-mdm6600.c |  27 ++++-
- drivers/phy/phy-core.c                      |  18 ++--
- drivers/phy/ti/phy-gmii-sel.c               |  10 +-
- drivers/usb/cdns3/gadget.c                  |  19 +++-
- drivers/usb/core/hub.c                      |   8 +-
- drivers/usb/core/port.c                     |  10 +-
- drivers/usb/core/quirks.c                   |   3 +
- drivers/usb/dwc3/gadget.c                   |   9 +-
- drivers/usb/misc/usb251xb.c                 |  20 +++-
- drivers/usb/storage/unusual_devs.h          |   6 ++
- 12 files changed, 163 insertions(+), 117 deletions(-)
