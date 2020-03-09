@@ -2,90 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3541917D5C4
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Mar 2020 20:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA41C17D742
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2020 01:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726391AbgCHTJM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 8 Mar 2020 15:09:12 -0400
-Received: from mon1.sibername.com ([162.144.64.251]:57192 "EHLO
-        mon1.sibername.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726318AbgCHTJM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Mar 2020 15:09:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lockie.ca;
-         s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version
-        :Date:Message-ID:From:References:To:Subject:Sender:Reply-To:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=emeLghREBaTtsJNN317gUlDG5KSsVX3OZ17B2YqytS0=; b=JXJ8aZ3DFN6BvP9gU62fP5/Rxx
-        hS8XDzfbFzqBT84akARyUCS9Ow0aKZ6gHVN0mHz8Q2ZuXjd7Fi2NrjJvg2Yzc3AyXySFztTFEZMkN
-        SR7iMiHa7pigZ3S2dmxL+n6Dn/2LBcJxQyswf86jW1st2IkkKrMPa7sa//lwDqBMAzNj+guzzyZHg
-        V9+VTeb5g3qA+cz0d6cX83EGtiPkAU0CP3egRIh+SlYvQidrPuIU5nXVid9uWjA2HbmYoYPbHphPQ
-        uDF51HzbOUzMG++vBMoIRIlGirx7T6niMG14ero0epi8H89PUN995vK4uHnDYbB3oE1gEyE3CkjaE
-        iQudTgLg==;
-Received: from 216-58-17-101.cpe.distributel.net ([216.58.17.101]:43188 helo=[192.168.1.4])
-        by montreal.sibername.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <bjlockie@lockie.ca>)
-        id 1jB1IT-00B275-77
-        for linux-usb@vger.kernel.org; Sun, 08 Mar 2020 15:09:10 -0400
-Subject: Re: dvdrw USB3 drive seen as USB2
-To:     linux-usb <linux-usb@vger.kernel.org>
-References: <Pine.LNX.4.44L0.2003081143200.30710-100000@netrider.rowland.org>
-From:   James <bjlockie@lockie.ca>
-Message-ID: <ba2eaac7-afdb-9714-7bd8-2f1399adc08f@lockie.ca>
-Date:   Sun, 8 Mar 2020 15:09:06 -0400
+        id S1726518AbgCIACY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 Mar 2020 20:02:24 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:37838 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726508AbgCIACY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Mar 2020 20:02:24 -0400
+Received: by mail-wr1-f67.google.com with SMTP id 6so8896402wre.4
+        for <linux-usb@vger.kernel.org>; Sun, 08 Mar 2020 17:02:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=hK4xlcXzNj+/NiSpFVaUsBvzay5FMbdjodPOBaSR+54=;
+        b=rrjgJImO6Ub48d+WhloO5qZ8V7wzwH0ZTFqN4PhxlBAddJ4YkRqG2d+iRQWMrt6qjG
+         1AXQTKZ2RYkWWB4KtPBcBVx3QJf2v8SZs7ooa+bzBZLxKKp+xlU1PAKRn6IZTS1wYq5F
+         YdV6Tbkzejv41HfkmUO1KbSrPbdm2WJr4BE3NAAq+WjvRDqzg2cxvroxBkhddvk9JgMx
+         4pPDnxLnD+NxXy6ieFhoWCvi4LK9molJgTcz5Sn/hH1Yu39O2wm7kruT2XxWH/ge30O1
+         pcD8bdkvsWKb3YJKgP7g4S1RBwxt/W2YKLQGQsyFfHC9TxD1oHaWeJMjhTyn1V9xpfCF
+         SKlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=hK4xlcXzNj+/NiSpFVaUsBvzay5FMbdjodPOBaSR+54=;
+        b=fOhxnPtggEg5ws2ehAxpYHtYz6XXa7iZd4muSSBEinclFEHNKD+JR6T7jk+j2J7VZZ
+         NNgF8dIqSnVkoPEl6Rqt09hI6fGtA7rqoxboswVq5+KKKhLvIjJebZa5eylifzHz74mr
+         Xh9fr2isJF1GdSNHuqbQqXVF4KxkwmB3n20J/ll8SEPYFQSuK+aucI6fsH+EQWcWwcEG
+         W0z04V0cczyfGFYIxhEH0yaAYtKWb8Ei+YLvxC9XLkFgFLdcmaJmvHRDrITufB8cANTi
+         Dm0u6QW2GtY6On0fYeasZN9GjHUhWBatIgrzhqCPaAD+ZBC45CExzcPkA2NEXFMo+A45
+         5+hQ==
+X-Gm-Message-State: ANhLgQ3RYEYoBEJeiRc7PbRJPoEuDKQ9w5FL2Vjc6Yw5kLEJh6/eYiW6
+        jcwLpiXT1NRrExIlxLRpL69ofA==
+X-Google-Smtp-Source: ADFU+vvcpVD2BBr21XV5V74WxEJ+jq68kqKsLx+kRhH8r4lgNy97t9IA/NW1D66p0ivwJacXGAQpBw==
+X-Received: by 2002:adf:ee4f:: with SMTP id w15mr18070723wro.254.1583712141599;
+        Sun, 08 Mar 2020 17:02:21 -0700 (PDT)
+Received: from [192.168.0.38] ([176.61.57.127])
+        by smtp.gmail.com with ESMTPSA id l5sm23349679wml.3.2020.03.08.17.02.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 08 Mar 2020 17:02:21 -0700 (PDT)
+Subject: Re: [PATCH v7 00/18] Enable Qualcomm QCS 404 HS/SS USB
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org, jackp@codeaurora.org, balbi@kernel.org,
+        robh@kernel.org, linux-kernel@vger.kernel.org
+References: <20200303171159.246992-1-bryan.odonoghue@linaro.org>
+ <20200308052302.GJ1094083@builder>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Message-ID: <dfc80be3-92ae-361f-0b1b-cb9913ee06ba@linaro.org>
+Date:   Mon, 9 Mar 2020 00:02:36 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <Pine.LNX.4.44L0.2003081143200.30710-100000@netrider.rowland.org>
+In-Reply-To: <20200308052302.GJ1094083@builder>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-OutGoing-Spam-Status: No, score=-0.5
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - montreal.sibername.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lockie.ca
-X-Get-Message-Sender-Via: montreal.sibername.com: authenticated_id: bjlockie@lockie.ca
-X-Authenticated-Sender: montreal.sibername.com: bjlockie@lockie.ca
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 08/03/2020 05:23, Bjorn Andersson wrote:
+> On Tue 03 Mar 09:11 PST 2020, Bryan O'Donoghue wrote:
+> 
+>> V1:
+>> This series enables the Primary and Secondary USB controllers on the
+>> QCS404, associated PHYs, role-switching and DTS descriptions.
+>>
+> 
+> Finally took the time to give this a spin on my QCS404 dev board.
+> 
+> Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
+thanks !
 
-On 2020-03-08 11:54 a.m., Alan Stern wrote:
-> On Sat, 7 Mar 2020, James wrote:
->
->> https://github.com/aircrack-ng/rtl8812au/blob/v5.6.4.2/README.md
->>> USB Mode Switch
->>>
->>> 0: doesn't switch, 1: switch from usb2.0 to usb 3.0 2: switch from
->>> usb3.0 to usb 2.0
->>>
->>> $ rmmod 88XXau
->>> $ modprobe 88XXau rtw_switch_usb_mode:int (0: no switch 1: switch from
->>> usb2 to usb3 2: switch from usb3 to usb2)
-> Have you tried using this driver?  Does it work?
-Neither the bu or the au driver get me above 144Mbps and the network is 
-only an (5GHz N I think).
-One of the comments about the bu driver was that the person thinks it 
-doesn't have the code to do 80211AC.
-Someone has the au working at 866Mbps (80211AC).
-I want to use it on my Raspberry Pi 4 but it is not x86 so I haven't 
-been able to compile it.
-The is an au package but it is an old driver and caused a lot of problems.
-I am looking for an Atheros or Intel USB one (5GHz 80211N) but I haven't 
-found anything yet.
->
-> Maybe you can convince the authors of this 88XXau driver to merge it
-> with the rtl88x2bu driver already in the standard kernel.  That's what
-> was managing your Realtek adapter in your earlier email.
-I wish Realtek would but there doesn't seem like much interest.
+> 
+> As this touches three different subsystems, and doesn't have have
+> compile time dependencies between the parts, I would suggest that as you
+> fix up the build error I reported yesterday you send v8 as three
+> different series - one per maintainer/subsystem. That way we avoid any
+> questions about whom should merge what parts and in what order.
 
+ack, will do.
+
+---
+bod
