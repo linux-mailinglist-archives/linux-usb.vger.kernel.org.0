@@ -2,79 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6510117E668
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2020 19:07:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2741C17E711
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2020 19:27:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727388AbgCISHO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Mar 2020 14:07:14 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:34100 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726269AbgCISHO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Mar 2020 14:07:14 -0400
-Received: by mail-pg1-f194.google.com with SMTP id t3so5077269pgn.1
-        for <linux-usb@vger.kernel.org>; Mon, 09 Mar 2020 11:07:13 -0700 (PDT)
+        id S1727440AbgCIS1M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Mar 2020 14:27:12 -0400
+Received: from mail-wm1-f73.google.com ([209.85.128.73]:52059 "EHLO
+        mail-wm1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727369AbgCIS1L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Mar 2020 14:27:11 -0400
+Received: by mail-wm1-f73.google.com with SMTP id 20so178585wmk.1
+        for <linux-usb@vger.kernel.org>; Mon, 09 Mar 2020 11:27:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=uSDDm+szHmvIWUPLQNgJK88QQsyLobcm7m+erYi43MA=;
-        b=a94axufRiybOs8QUmxdRJUFDKVHtyzYU52JehSFnSfSSbUCNc5D5hcmvKKJb2xycUk
-         Qta3py6TaSaj+JanBvfoDP42W72bqzPNKHvi/KVbGDrBBnpjS+Mv5ofJXN3xRKGN3Caa
-         vVbrhLTL5U5SG+YIGR5iDxV94lcQPjylD41S0=
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=GdJNQzOJFOqKdISqoHHBK9SjrIVmjZPZx9ZPz8U0D/Q=;
+        b=tx4O/611hF+ZbF+8vaJD7WcRX5OInMP1WOHxCQKUTa3W3rIUCRRa0Pzbr2+XXke4id
+         5pD1evIXnvUfJCRQ4zZRPlUQrDTBGifP7DgXKYQ3Xr3ykk4OFLIswSR8dh27YXgoZyCs
+         DSYuLjTZ19uExvo6oR6613S3ecWt2O3GfpS4SenptNGaGjDx9K8a+HlI2DPoaXUCVPLl
+         3NYtdjengW8w0REmafpeMt+Qvvbgfo85IXnOV1QeKWOwiNWBnbq/2yqY7yNiQ1XuQFcx
+         Z2XLT+PVGoezeoLE7YBEHdzmh9liPSInWDvD+3EvfyuhJ6IeGb7AhroMscta9qfmBAzP
+         bPiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=uSDDm+szHmvIWUPLQNgJK88QQsyLobcm7m+erYi43MA=;
-        b=tr1cK5q+KE+LVnxlbxdVvTM6Kh5ibz5ORd04MfCXbr+i02Yhcx2lakBCr7qr3/YE2Q
-         Fs/pfK6JEM/+uKvqZDRde+amTVlMZ0f41fXufEdZRPuH3ATHif6InDT6/Dctrc/B0gYI
-         NAMQpeMcOjVI0qOwWQAR/jl1xJX3J2naiMvT0eUVkrU8UbCYe4S63+NBEU+ir6BrcqFj
-         Po4fzlJD2REUzWeQaI6teIAS4QZt9Yqih/rXONZ6Mqzt2+bkxjB/cOS6Gca5cZEfaJYR
-         hVb5ZsXGQuI5hIczR6Y9xBuT7RgG0Lq/RXeIRt5+KWaIcqkUbMpXKBsolAEDXlaAZO5B
-         kUFg==
-X-Gm-Message-State: ANhLgQ2VweTT4aH42x1Zv7ZasGBTzABgKC4oXB7VtOD4ojN4gMJHu+/S
-        rXVB+hQSDcny1GtmqkIaNFgEIg==
-X-Google-Smtp-Source: ADFU+vvY9aLEitVJtJPOO+vFStdZSayTG7guRMuMoXAdUXidcTnSY4YMWpIA6UahObJI62YYr+9DKQ==
-X-Received: by 2002:a63:844a:: with SMTP id k71mr6844622pgd.79.1583777232712;
-        Mon, 09 Mar 2020 11:07:12 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id b70sm5500362pfb.6.2020.03.09.11.07.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Mar 2020 11:07:12 -0700 (PDT)
-Date:   Mon, 9 Mar 2020 11:07:10 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-usb@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Manu Gautam <mgautam@codeaurora.org>
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: qcom,dwc3: Convert USB DWC3
- bindings
-Message-ID: <20200309180710.GY24720@google.com>
-References: <1581316605-29202-1-git-send-email-sanm@codeaurora.org>
- <1581316605-29202-2-git-send-email-sanm@codeaurora.org>
- <158137029351.121156.8319119424832255457@swboyd.mtv.corp.google.com>
- <CAE=gft47is6Td7dtM_FmP1g6TFv+yRYuz7yca015YXbRRDon5w@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAE=gft47is6Td7dtM_FmP1g6TFv+yRYuz7yca015YXbRRDon5w@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=GdJNQzOJFOqKdISqoHHBK9SjrIVmjZPZx9ZPz8U0D/Q=;
+        b=br8+EUI3TqV7hifTNvGoTvzxjQUHBICKQmyicVNaaoRdfgqOgLu16CTX5YMUDbJ6yG
+         T8e34OCZMDaEs4hdNFXIYCmkRD+6F36iCs6DcqXwfwIzP/khab8tPrjQADPEvW3rirXQ
+         7Q/hGzeAa751bqMYr5uGg9qRUk07kT8HoMn2vXs3pFsHvznsF2c6Sa+E1AOlCCuw8NsV
+         Xn18/sJHVs5T/i69Kq/l594PqEhybOEKhfLEoo7LoQx0GRzit5IA1eIVpiBP4j6FYpmV
+         XAzIAHtThdPX0tmIv2OrYNTjJh8r4ncyjQutYT9vsTqYv0qP+j3BZ55da+3nWZeTe0U/
+         +KGA==
+X-Gm-Message-State: ANhLgQ0THh2saP3kY4rqE5APD9D3N+v6pNllnat3q4l4Zd9Jzzie/WD8
+        RpCzbRFRvazxoE+Lhw6VBotXio2R5GgqAdq2
+X-Google-Smtp-Source: ADFU+vtkEwBY/nTScyMNiVe58Ykd9fd07sDOnDWHkswsdgdjfDTZhoICv/rUfDfy4cqiqZpt6pB6VdIckbeAF6Aw
+X-Received: by 2002:adf:ea42:: with SMTP id j2mr21611992wrn.377.1583778429837;
+ Mon, 09 Mar 2020 11:27:09 -0700 (PDT)
+Date:   Mon,  9 Mar 2020 19:27:03 +0100
+Message-Id: <cover.1583778264.git.andreyknvl@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.25.1.481.gfbce0eb801-goog
+Subject: [PATCH v2 0/3] kcov: collect coverage from usb soft interrupts
+From:   Andrey Konovalov <andreyknvl@google.com>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Feb 28, 2020 at 03:41:47PM -0800, Evan Green wrote:
-> Sandeep, are you going to spin this series?
+This patchset extends kcov to allow collecting coverage from soft
+interrupts and then uses the new functionality to collect coverage from
+USB code.
 
-ping
+This has allowed to find at least one new HID bug [1], which was recently
+fixed by Alan [2].
+
+[1] https://syzkaller.appspot.com/bug?extid=09ef48aa58261464b621
+[2] https://patchwork.kernel.org/patch/11283319/
+
+Any subsystem that uses softirqs (e.g. timers) can make use of this in
+the future. Looking at the recent syzbot reports, an obvious candidate
+is the networking subsystem [3, 4, 5 and many more].
+
+[3] https://syzkaller.appspot.com/bug?extid=522ab502c69badc66ab7
+[4] https://syzkaller.appspot.com/bug?extid=57f89d05946c53dbbb31
+[5] https://syzkaller.appspot.com/bug?extid=df358e65d9c1b9d3f5f4
+
+This patchset has been pushed to the public Linux kernel Gerrit instance:
+
+https://linux-review.googlesource.com/c/linux/kernel/git/torvalds/linux/+/2225
+
+Changes v1 -> v2:
+- Add local_irq_save/restore() critical sections to simplify dealing with
+  softirqs happening during kcov_remote_start/stop().
+- Set kcov_softirq after flag kcov_start() in kcov_remote_start().
+
+Changes RFC -> v1:
+- Don't support hardirq or nmi, only softirq, to avoid issues with nested
+  interrupts.
+- Combined multiple per-cpu variables into one.
+- Used plain accesses and kcov_start/stop() instead of xchg()'s.
+- Simplified handling of per-cpu variables.
+- Avoid disabling interrupts for the whole kcov_remote_start/stop()
+  region.
+- Avoid overwriting t->kcov_sequence when saving/restoring state.
+- Move kcov_remote_start/stop_usb() annotations into
+  __usb_hcd_giveback_urb() to cover all urb complete() callbacks at once.
+- Drop unneeded Dummy HCD changes.
+- Split out a patch that removed debug messages.
+
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+
+Andrey Konovalov (3):
+  kcov: cleanup debug messages
+  kcov: collect coverage from interrupts
+  usb: core: kcov: collect coverage from usb complete callback
+
+ Documentation/dev-tools/kcov.rst |  17 +--
+ drivers/usb/core/hcd.c           |   3 +
+ include/linux/sched.h            |   3 +
+ kernel/kcov.c                    | 221 +++++++++++++++++++++----------
+ lib/Kconfig.debug                |   9 ++
+ 5 files changed, 178 insertions(+), 75 deletions(-)
+
+-- 
+2.25.1.481.gfbce0eb801-goog
+
