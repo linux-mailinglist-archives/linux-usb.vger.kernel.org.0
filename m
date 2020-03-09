@@ -2,42 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C0C417DB53
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2020 09:41:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5E817DCA2
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2020 10:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726634AbgCIIll (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Mar 2020 04:41:41 -0400
-Received: from [104.211.176.144] ([104.211.176.144]:57787 "EHLO
-        INMUDMS02.bharucha.in" rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1725956AbgCIIlk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Mar 2020 04:41:40 -0400
-Received: from User ([23.106.124.229]) by INMUDMS02.bharucha.in with Microsoft SMTPSVC(10.0.14393.0);
-         Mon, 9 Mar 2020 14:11:33 +0530
-Reply-To: <abulkareem461@gmail.com>
-From:   "Abdul Kareem" <admin@supply.org>
-Subject: BUSINESS PROPOSAL !!!
-Date:   Mon, 9 Mar 2020 01:41:33 -0700
-MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <INMUDMS02X0nmR1sjVf000011e1@INMUDMS02.bharucha.in>
-X-OriginalArrivalTime: 09 Mar 2020 08:41:33.0232 (UTC) FILETIME=[89544300:01D5F5EE]
-To:     unlisted-recipients:; (no To-header on input)
+        id S1726217AbgCIJwN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Mar 2020 05:52:13 -0400
+Received: from laas.laas.fr ([140.93.0.15]:44750 "EHLO laas.laas.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725942AbgCIJwN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 9 Mar 2020 05:52:13 -0400
+Received: from beetle.laas.fr (beetle.laas.fr [IPv6:2001:660:6602:4:4a4d:7eff:fee1:650a])
+        by laas.laas.fr (8.16.0.21/8.16.0.29) with SMTP id 0299q4uM075319;
+        Mon, 9 Mar 2020 10:52:05 +0100 (CET)
+Received: by beetle.laas.fr (sSMTP sendmail emulation); Mon, 09 Mar 2020 10:52:04 +0100
+From:   Anthony Mallet <anthony.mallet@laas.fr>
+To:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
+Cc:     Anthony Mallet <anthony.mallet@laas.fr>
+Subject: [PATCH 1/2] USB: cdc-acm: fix close_delay and closing_wait units in TIOCSSERIAL
+Date:   Mon,  9 Mar 2020 10:51:58 +0100
+Message-Id: <20200309095159.14163-1-anthony.mallet@laas.fr>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dearest Friend
+close_delay and closing_wait are specified in hundredth of a second but stored
+internally in jiffies. Use the jiffies_to_msecs() and msecs_to_jiffies()
+functions to convert from each other.
 
-I am Mr Abdul Kareem working with Emirate NBD Bank Dubai,United Arab Emirate as Finance Manager.
-I have a very profitable Business that relate to you and will benefit both of us after completion.
-Kindly get back to me for more details.
-Awaiting your response.
-Regards
-Abdul Kareem
+Signed-off-by: Anthony Mallet <anthony.mallet@laas.fr>
+---
+ drivers/usb/class/cdc-acm.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 62f4fb9b362f..da619176deca 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -896,10 +896,10 @@ static int get_serial_info(struct tty_struct *tty, struct serial_struct *ss)
+ 
+ 	ss->xmit_fifo_size = acm->writesize;
+ 	ss->baud_base = le32_to_cpu(acm->line.dwDTERate);
+-	ss->close_delay	= acm->port.close_delay / 10;
++	ss->close_delay	= jiffies_to_msecs(acm->port.close_delay) / 10;
+ 	ss->closing_wait = acm->port.closing_wait == ASYNC_CLOSING_WAIT_NONE ?
+ 				ASYNC_CLOSING_WAIT_NONE :
+-				acm->port.closing_wait / 10;
++				jiffies_to_msecs(acm->port.closing_wait) / 10;
+ 	return 0;
+ }
+ 
+@@ -909,9 +909,10 @@ static int set_serial_info(struct tty_struct *tty, struct serial_struct *ss)
+ 	unsigned int closing_wait, close_delay;
+ 	int retval = 0;
+ 
+-	close_delay = ss->close_delay * 10;
++	close_delay = msecs_to_jiffies(ss->close_delay * 10);
+ 	closing_wait = ss->closing_wait == ASYNC_CLOSING_WAIT_NONE ?
+-			ASYNC_CLOSING_WAIT_NONE : ss->closing_wait * 10;
++			ASYNC_CLOSING_WAIT_NONE :
++			msecs_to_jiffies(ss->closing_wait * 10);
+ 
+ 	mutex_lock(&acm->port.mutex);
+ 
+-- 
+2.17.1
+
