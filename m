@@ -2,92 +2,383 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5CEF17DDBE
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2020 11:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9813A17DDDA
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2020 11:45:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726620AbgCIKft (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Mar 2020 06:35:49 -0400
-Received: from out3-smtp.messagingengine.com ([66.111.4.27]:54863 "EHLO
-        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726469AbgCIKft (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Mar 2020 06:35:49 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 84419220E1;
-        Mon,  9 Mar 2020 06:35:48 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 09 Mar 2020 06:35:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=+2q3p0XkcfVoJ8/QouEmSmi2Zis
-        Whp75pScRqFiNcgg=; b=hzpOBTDeP7izXx+ghParprkM3UTyGFWSAmuXinGE9th
-        Y5aCk7OKsNnDY5VOFByGHX4y/mkmAB/W4q2STN2OzAZY3DMzupT6PCuUgvIj27D6
-        5vUGLj0VCQdlhuVf2fJQAh5J8dXLD7mwKCECXYV6glmsjQBlnEiJ/qGP3xQwFCWu
-        YId42fa7QDOjZeOyT8POpHr4kDM58if5ls6I0Ri37OiDvtuXVEv1JIQLWFCGiWjY
-        J6pS3rhAwW8HqwnRTU4KrZFXiY3e5Ui8ILJxlaFO13RsCkWjguz7hGqy9SGiQBRO
-        Iq/2/vsxGOZk2HCOxYFfLOITT/oqOKawC2kcePFvZSg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=+2q3p0
-        XkcfVoJ8/QouEmSmi2ZisWhp75pScRqFiNcgg=; b=VjbVN+ksVwbaX79q+KkjpQ
-        rbZwVohYUCUFxFhIbGo8tHzXn+AnZIrSuwrKhAHgrYL96N/c9xlSYmUfaPJrfLZ8
-        NWqlQ5Sbu7GNp5EY3jBDY6/9KywgocebaTJrJyFBQFSrJMHojf2LrO8HLtyhLlEI
-        a3WkjduBkds+9GHx+9C1aGXY+tpADcwpSekkpcbBCO1GlZ6Er9pFdk8RA5P1McUA
-        L2wjEJjeuCxOXP4Niq3yY+SRFwwvKueZp3JoBtWnP1746M9pQGKiYN9az2GMMxaj
-        DwfhffvCBudV4b+6bgty2g3kruZVC11ON+bmCzLvjTlUGga/IsDiByJgr6e1EV7w
-        ==
-X-ME-Sender: <xms:BBxmXu3s32sdrqtBtTLHR2f0--4SIiatW-WiSDOeAn_FgcC9XdMy8g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedruddukedgudelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepkeefrdekiedrkeelrddutd
-    ejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhr
-    vghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:BBxmXlXE1a7fzLMOrcyUv07rd8KQddd-2ZkWSFz3RqEwQFv-pIdC6Q>
-    <xmx:BBxmXh7jb_WClVZ_J2XSA5IChqkSpdq_TaF_YiZ-dLJry7-8xv8M_w>
-    <xmx:BBxmXkKxV3n7RbqNw-7eDiPgFWsRDRRq2rT5eHXQMSYRUpNrg_-STg>
-    <xmx:BBxmXqJaLPP-L1L_d7v-r0ReisLBbFBwRGkFjkmhCbnmaFhs6goz6g>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id BDA4B328005A;
-        Mon,  9 Mar 2020 06:35:47 -0400 (EDT)
-Date:   Mon, 9 Mar 2020 11:35:44 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Anthony Mallet <anthony.mallet@laas.fr>
-Cc:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/2] USB: cdc-acm: fix close_delay and closing_wait units
- in TIOCSSERIAL
-Message-ID: <20200309103544.GC180589@kroah.com>
-References: <20200309095159.14163-1-anthony.mallet@laas.fr>
+        id S1726620AbgCIKo7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Mar 2020 06:44:59 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:54290 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726215AbgCIKo7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Mar 2020 06:44:59 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 029AilK5114147;
+        Mon, 9 Mar 2020 05:44:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1583750687;
+        bh=qP+SnIhbLJ8i3Tdqe39SYh0q7Njn257duC1GUnNCIeA=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=EQtrM7vNznoRU8OEDjUyP2BxXghtxNN6o3mUV9m2/fbYfFSk308We6EJE5U6i2sE6
+         +vUdbd+whohzl5dTLrE1i1p4izFxAXN32SQgCn5h8H6myF26GalQvJAORd4z3btzVS
+         XPKIearYzTQ2VeS2m7qpLLiqRMc68v6WQkRzuQlQ=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 029AilH3027249
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 9 Mar 2020 05:44:47 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Mon, 9 Mar
+ 2020 05:44:47 -0500
+Received: from localhost.localdomain (10.64.41.19) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Mon, 9 Mar 2020 05:44:47 -0500
+Received: from [10.24.69.159] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by localhost.localdomain (8.15.2/8.15.2) with ESMTP id 029AihqU009231;
+        Mon, 9 Mar 2020 05:44:43 -0500
+Subject: Re: [PATCH v7 05/18] phy: qualcomm: usb: Add SuperSpeed PHY driver
+To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <gregkh@linuxfoundation.org>, <jackp@codeaurora.org>,
+        <balbi@kernel.org>, <bjorn.andersson@linaro.org>, <robh@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>,
+        Jorge Ramirez-Ortiz <jorge.ramirez.ortiz@gmail.com>,
+        "Sriharsha Allenki's" <sallenki@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+References: <20200303171159.246992-1-bryan.odonoghue@linaro.org>
+ <20200303171159.246992-6-bryan.odonoghue@linaro.org>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <03b4e0cd-bd1d-29fc-7cb7-f06bba5783ee@ti.com>
+Date:   Mon, 9 Mar 2020 16:19:20 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200309095159.14163-1-anthony.mallet@laas.fr>
+In-Reply-To: <20200303171159.246992-6-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 09, 2020 at 10:51:58AM +0100, Anthony Mallet wrote:
-> close_delay and closing_wait are specified in hundredth of a second but stored
-> internally in jiffies. Use the jiffies_to_msecs() and msecs_to_jiffies()
-> functions to convert from each other.
+Hi,
+
+On 03/03/20 10:41 pm, Bryan O'Donoghue wrote:
+> From: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
 > 
-> Signed-off-by: Anthony Mallet <anthony.mallet@laas.fr>
+> Controls Qualcomm's SS PHY 1.0.0 implemented on various SoCs on both the
+> 20nm and 28nm process nodes.
+> 
+> Based on Sriharsha Allenki's <sallenki@codeaurora.org> original code.
+> 
+> [bod: Removed dependency on extcon.
+>       Switched to gpio-usb-conn to handle VBUS On/Off
+>       Switched to usb-role-switch to bind gpio-usb-conn to DWC3]
+> Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+> Cc: Jorge Ramirez-Ortiz <jorge.ramirez.ortiz@gmail.com>
+> Cc: Sriharsha Allenki's <sallenki@codeaurora.org>
+> Cc: Andy Gross <agross@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: linux-arm-msm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+
+I only have 02, 03, and 05 of this patch series. Can you split the
+series and send all the patches targeted to PHY tree separately?
+
+Thanks
+Kishon
+
 > ---
->  drivers/usb/class/cdc-acm.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-
-Is this a "v2" of this series?  If so, then can you please properly
-version the patches and put below the --- line what changed from the
-previous versions?
-
-The kernel submitting patches documentation says how to do this, take a
-look at that for the details, or see one of the many examples on the
-mailing list archives here.
-
-Can you please fix this up and send a v3 for both of these?
-
-thanks,
-
-greg k-h
+>  drivers/phy/qualcomm/Kconfig           |   9 +
+>  drivers/phy/qualcomm/Makefile          |   1 +
+>  drivers/phy/qualcomm/phy-qcom-usb-ss.c | 246 +++++++++++++++++++++++++
+>  3 files changed, 256 insertions(+)
+>  create mode 100644 drivers/phy/qualcomm/phy-qcom-usb-ss.c
+> 
+> diff --git a/drivers/phy/qualcomm/Kconfig b/drivers/phy/qualcomm/Kconfig
+> index 9c56a7216f72..98674ed094d9 100644
+> --- a/drivers/phy/qualcomm/Kconfig
+> +++ b/drivers/phy/qualcomm/Kconfig
+> @@ -102,3 +102,12 @@ config PHY_QCOM_USB_HS_28NM
+>  	  High-Speed PHY driver. This driver supports the Hi-Speed PHY which
+>  	  is usually paired with either the ChipIdea or Synopsys DWC3 USB
+>  	  IPs on MSM SOCs.
+> +
+> +config PHY_QCOM_USB_SS
+> +	tristate "Qualcomm USB Super-Speed PHY driver"
+> +	depends on ARCH_QCOM || COMPILE_TEST
+> +	depends on EXTCON || !EXTCON # if EXTCON=m, this cannot be built-in
+> +	select GENERIC_PHY
+> +	help
+> +	  Enable this to support the Super-Speed USB transceiver on various
+> +	  Qualcomm chipsets.
+> diff --git a/drivers/phy/qualcomm/Makefile b/drivers/phy/qualcomm/Makefile
+> index a4dab5329de0..1f14aeacbd70 100644
+> --- a/drivers/phy/qualcomm/Makefile
+> +++ b/drivers/phy/qualcomm/Makefile
+> @@ -11,3 +11,4 @@ obj-$(CONFIG_PHY_QCOM_UFS_20NM)		+= phy-qcom-ufs-qmp-20nm.o
+>  obj-$(CONFIG_PHY_QCOM_USB_HS) 		+= phy-qcom-usb-hs.o
+>  obj-$(CONFIG_PHY_QCOM_USB_HSIC) 	+= phy-qcom-usb-hsic.o
+>  obj-$(CONFIG_PHY_QCOM_USB_HS_28NM)	+= phy-qcom-usb-hs-28nm.o
+> +obj-$(CONFIG_PHY_QCOM_USB_SS)		+= phy-qcom-usb-ss.o
+> diff --git a/drivers/phy/qualcomm/phy-qcom-usb-ss.c b/drivers/phy/qualcomm/phy-qcom-usb-ss.c
+> new file mode 100644
+> index 000000000000..a3a6d3ce7ea1
+> --- /dev/null
+> +++ b/drivers/phy/qualcomm/phy-qcom-usb-ss.c
+> @@ -0,0 +1,246 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2012-2014,2017 The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2018-2020, Linaro Limited
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/err.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/phy/phy.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/reset.h>
+> +#include <linux/slab.h>
+> +
+> +#define PHY_CTRL0			0x6C
+> +#define PHY_CTRL1			0x70
+> +#define PHY_CTRL2			0x74
+> +#define PHY_CTRL4			0x7C
+> +
+> +/* PHY_CTRL bits */
+> +#define REF_PHY_EN			BIT(0)
+> +#define LANE0_PWR_ON			BIT(2)
+> +#define SWI_PCS_CLK_SEL			BIT(4)
+> +#define TST_PWR_DOWN			BIT(4)
+> +#define PHY_RESET			BIT(7)
+> +
+> +#define NUM_BULK_CLKS			3
+> +#define NUM_BULK_REGS			2
+> +
+> +struct ssphy_priv {
+> +	void __iomem *base;
+> +	struct device *dev;
+> +	struct reset_control *reset_com;
+> +	struct reset_control *reset_phy;
+> +	struct regulator_bulk_data regs[NUM_BULK_REGS];
+> +	struct clk_bulk_data clks[NUM_BULK_CLKS];
+> +	enum phy_mode mode;
+> +};
+> +
+> +static inline void qcom_ssphy_updatel(void __iomem *addr, u32 mask, u32 val)
+> +{
+> +	writel((readl(addr) & ~mask) | val, addr);
+> +}
+> +
+> +static int qcom_ssphy_do_reset(struct ssphy_priv *priv)
+> +{
+> +	int ret;
+> +
+> +	if (!priv->reset_com) {
+> +		qcom_ssphy_updatel(priv->base + PHY_CTRL1, PHY_RESET,
+> +				   PHY_RESET);
+> +		usleep_range(10, 20);
+> +		qcom_ssphy_updatel(priv->base + PHY_CTRL1, PHY_RESET, 0);
+> +	} else {
+> +		ret = reset_control_assert(priv->reset_com);
+> +		if (ret) {
+> +			dev_err(priv->dev, "Failed to assert reset com\n");
+> +			return ret;
+> +		}
+> +
+> +		ret = reset_control_assert(priv->reset_phy);
+> +		if (ret) {
+> +			dev_err(priv->dev, "Failed to assert reset phy\n");
+> +			return ret;
+> +		}
+> +
+> +		usleep_range(10, 20);
+> +
+> +		ret = reset_control_deassert(priv->reset_com);
+> +		if (ret) {
+> +			dev_err(priv->dev, "Failed to deassert reset com\n");
+> +			return ret;
+> +		}
+> +
+> +		ret = reset_control_deassert(priv->reset_phy);
+> +		if (ret) {
+> +			dev_err(priv->dev, "Failed to deassert reset phy\n");
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int qcom_ssphy_power_on(struct phy *phy)
+> +{
+> +	struct ssphy_priv *priv = phy_get_drvdata(phy);
+> +	int ret;
+> +
+> +	ret = regulator_bulk_enable(NUM_BULK_REGS, priv->regs);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = clk_bulk_prepare_enable(NUM_BULK_CLKS, priv->clks);
+> +	if (ret)
+> +		goto err_disable_regulator;
+> +
+> +	ret = qcom_ssphy_do_reset(priv);
+> +	if (ret)
+> +		goto err_disable_clock;
+> +
+> +	writeb(SWI_PCS_CLK_SEL, priv->base + PHY_CTRL0);
+> +	qcom_ssphy_updatel(priv->base + PHY_CTRL4, LANE0_PWR_ON, LANE0_PWR_ON);
+> +	qcom_ssphy_updatel(priv->base + PHY_CTRL2, REF_PHY_EN, REF_PHY_EN);
+> +	qcom_ssphy_updatel(priv->base + PHY_CTRL4, TST_PWR_DOWN, 0);
+> +
+> +	return 0;
+> +err_disable_clock:
+> +	clk_bulk_disable_unprepare(NUM_BULK_CLKS, priv->clks);
+> +err_disable_regulator:
+> +	regulator_bulk_disable(NUM_BULK_REGS, priv->regs);
+> +
+> +	return ret;
+> +}
+> +
+> +static int qcom_ssphy_power_off(struct phy *phy)
+> +{
+> +	struct ssphy_priv *priv = phy_get_drvdata(phy);
+> +
+> +	qcom_ssphy_updatel(priv->base + PHY_CTRL4, LANE0_PWR_ON, 0);
+> +	qcom_ssphy_updatel(priv->base + PHY_CTRL2, REF_PHY_EN, 0);
+> +	qcom_ssphy_updatel(priv->base + PHY_CTRL4, TST_PWR_DOWN, TST_PWR_DOWN);
+> +
+> +	clk_bulk_disable_unprepare(NUM_BULK_CLKS, priv->clks);
+> +	regulator_bulk_disable(NUM_BULK_REGS, priv->regs);
+> +
+> +	return 0;
+> +}
+> +
+> +static int qcom_ssphy_init_clock(struct ssphy_priv *priv)
+> +{
+> +	priv->clks[0].id = "ref";
+> +	priv->clks[1].id = "ahb";
+> +	priv->clks[2].id = "pipe";
+> +
+> +	return devm_clk_bulk_get(priv->dev, NUM_BULK_CLKS, priv->clks);
+> +}
+> +
+> +static int qcom_ssphy_init_regulator(struct ssphy_priv *priv)
+> +{
+> +	int ret;
+> +
+> +	priv->regs[0].supply = "vdd";
+> +	priv->regs[1].supply = "vdda1p8";
+> +	ret = devm_regulator_bulk_get(priv->dev, NUM_BULK_REGS, priv->regs);
+> +	if (ret) {
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(priv->dev, "Failed to get regulators\n");
+> +		return ret;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int qcom_ssphy_init_reset(struct ssphy_priv *priv)
+> +{
+> +	priv->reset_com = devm_reset_control_get_optional_exclusive(priv->dev, "com");
+> +	if (IS_ERR(priv->reset_com)) {
+> +		dev_err(priv->dev, "Failed to get reset control com\n");
+> +		return PTR_ERR(priv->reset_com);
+> +	}
+> +
+> +	if (priv->reset_com) {
+> +		/* if reset_com is present, reset_phy is no longer optional */
+> +		priv->reset_phy = devm_reset_control_get_exclusive(priv->dev, "phy");
+> +		if (IS_ERR(priv->reset_phy)) {
+> +			dev_err(priv->dev, "Failed to get reset control phy\n");
+> +			return PTR_ERR(priv->reset_phy);
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct phy_ops qcom_ssphy_ops = {
+> +	.power_off = qcom_ssphy_power_off,
+> +	.power_on = qcom_ssphy_power_on,
+> +	.owner = THIS_MODULE,
+> +};
+> +
+> +static int qcom_ssphy_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct phy_provider *provider;
+> +	struct ssphy_priv *priv;
+> +	struct phy *phy;
+> +	int ret;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(struct ssphy_priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->dev = dev;
+> +	priv->mode = PHY_MODE_INVALID;
+> +
+> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(priv->base))
+> +		return PTR_ERR(priv->base);
+> +
+> +	ret = qcom_ssphy_init_clock(priv);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = qcom_ssphy_init_reset(priv);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = qcom_ssphy_init_regulator(priv);
+> +	if (ret)
+> +		return ret;
+> +
+> +	phy = devm_phy_create(dev, dev->of_node, &qcom_ssphy_ops);
+> +	if (IS_ERR(phy)) {
+> +		dev_err(dev, "Failed to create the SS phy\n");
+> +		return PTR_ERR(phy);
+> +	}
+> +
+> +	phy_set_drvdata(phy, priv);
+> +
+> +	provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+> +
+> +	return PTR_ERR_OR_ZERO(provider);
+> +}
+> +
+> +static const struct of_device_id qcom_ssphy_match[] = {
+> +	{ .compatible = "qcom,usb-ss-28nm-phy", },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, qcom_ssphy_match);
+> +
+> +static struct platform_driver qcom_ssphy_driver = {
+> +	.probe		= qcom_ssphy_probe,
+> +	.driver = {
+> +		.name	= "qcom-usb-ssphy",
+> +		.of_match_table = qcom_ssphy_match,
+> +	},
+> +};
+> +module_platform_driver(qcom_ssphy_driver);
+> +
+> +MODULE_DESCRIPTION("Qualcomm SuperSpeed USB PHY driver");
+> +MODULE_LICENSE("GPL v2");
+> 
