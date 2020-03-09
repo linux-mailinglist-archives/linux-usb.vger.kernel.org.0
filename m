@@ -2,97 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F60B17E1BA
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2020 14:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF59817E26D
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2020 15:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726674AbgCINzX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Mar 2020 09:55:23 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:38306 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726383AbgCINzX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Mar 2020 09:55:23 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 029DtIPs108459;
-        Mon, 9 Mar 2020 08:55:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1583762118;
-        bh=nDBAlUhcSYBKIaek9S1ySWQkNuPZQhpRQxOxLs4U7cE=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=V8BRRqr6EvVSnOntUmqDr4NLvCn+zNh9LErK5iKjxYPVCxLV9OVsGN5N+t+Lwe+6O
-         g8UuXQHrPFlkG/t6/KucVXFIwNBqWRo1VTpcUfGdp7MtU5p+PqD86rPeQ37QekXQPG
-         B63coBjq83kycoNHCK75JePHvc+mdSbkm7ykdWRE=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 029DtIrN033581;
-        Mon, 9 Mar 2020 08:55:18 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Mon, 9 Mar
- 2020 08:55:18 -0500
-Received: from localhost.localdomain (10.64.41.19) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Mon, 9 Mar 2020 08:55:17 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by localhost.localdomain (8.15.2/8.15.2) with ESMTP id 029DtHbS087470;
-        Mon, 9 Mar 2020 08:55:17 -0500
-Date:   Mon, 9 Mar 2020 09:01:06 -0500
-From:   Bin Liu <b-liu@ti.com>
-To:     Mans Rullgard <mans@mansr.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: musb: fix crash with highmen PIO and usbmon
-Message-ID: <20200309140106.GA31115@iaqt7>
-Mail-Followup-To: Bin Liu <b-liu@ti.com>, Mans Rullgard <mans@mansr.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200307130720.16652-1-mans@mansr.com>
+        id S1726623AbgCIOWB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Mar 2020 10:22:01 -0400
+Received: from mail.actia.se ([195.67.112.82]:56037 "EHLO mail.actia.se"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726400AbgCIOWA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 9 Mar 2020 10:22:00 -0400
+Received: from S036ANL.actianordic.se (192.168.16.117) by
+ S035ANL.actianordic.se (192.168.16.116) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Mon, 9 Mar 2020 15:21:56 +0100
+Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
+ S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%3]) with mapi id
+ 15.01.1913.007; Mon, 9 Mar 2020 15:21:56 +0100
+From:   Jonas Karlsson <jonas.karlsson@actia.se>
+To:     Peter Chen <peter.chen@nxp.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: RE: USB transaction errors causing RCU stalls and kernel panics
+Thread-Topic: USB transaction errors causing RCU stalls and kernel panics
+Thread-Index: AdXxbFdECZ2tmAAoQZaxVkfgHyprqgABZ9yAAAiGryAAIGdeAAAEO3aAAAR/HgAARX+KgACtYMrA
+Date:   Mon, 9 Mar 2020 14:21:56 +0000
+Message-ID: <699a49f2f69e494ea6558b99fad23cc4@actia.se>
+References: <ddf8c3971b8544e983a9d2bbdc7f2010@actia.se>
+ <20200303163945.GB652754@kroah.com>
+ <ca6f029a57f24ee9aea39385a9ad55bd@actia.se>
+ <6909d182-6cc5-c07f-ed79-02c741aec60b@linux.intel.com>
+ <1583331173.12738.26.camel@suse.com>
+ <4fa64e92-64ce-07f3-ed8e-ea4e07d091bb@linux.intel.com>
+ <VI1PR04MB532785057FD52DFE3A21ACA88BE30@VI1PR04MB5327.eurprd04.prod.outlook.com>
+In-Reply-To: <VI1PR04MB532785057FD52DFE3A21ACA88BE30@VI1PR04MB5327.eurprd04.prod.outlook.com>
+Accept-Language: sv-SE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.11.14.24]
+x-esetresult: clean, is OK
+x-esetid: 37303A2914C9726A627566
+Content-Type: multipart/mixed;
+        boundary="_002_699a49f2f69e494ea6558b99fad23cc4actiase_"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200307130720.16652-1-mans@mansr.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mans,
+--_002_699a49f2f69e494ea6558b99fad23cc4actiase_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-On Sat, Mar 07, 2020 at 01:07:20PM +0000, Mans Rullgard wrote:
-> When handling a PIO bulk transfer with highmem buffer, a temporary
-> mapping is assigned to urb->transfer_buffer.  After the transfer is
-> complete, an invalid address is left behind in this pointer.  This is
-> not ordinarily a problem since nothing touches that buffer before the
-> urb is released.  However, when usbmon is active, usbmon_urb_complete()
-> calls (indirectly) mon_bin_get_data() which does access the transfer
-> buffer if it is set.  To prevent an invalid memory access here, reset
-> urb->tranfer_buffer to NULL when finished.
-> 
-> Fixes: 8e8a55165469 ("usb: musb: host: Handle highmem in PIO mode")
-> Signed-off-by: Mans Rullgard <mans@mansr.com>
+PiANCj4gSWYgYXV0b3N1c3BlbmQgaXMgc3VzcGljaW91cywgSm9uYXMsIGNvdWxkIHlvdSBwbGVh
+c2UgdHJ5IHRvIGRpc2FibGUgYXV0b3N1c3BlbmQNCj4gZm9yIGFsbCBVU0IgZGV2aWNlcyAoaW5j
+bHVkaW5nIHRoZSByb290aHViIGFuZCBjb250cm9sbGVyKSB0byBzZWUgd2hhdCBoYXBwZW5zPw0K
+PiANCj4gUGV0ZXINCg0KSSBoYXZlIHJ1biBzb21lIHRlc3RzIHdpdGggYXV0b3N1c3BlbmQgdHVy
+bmVkIG9mZiBieSBkb2luZyB0aGlzOg0KZm9yIGkgaW4gJChmaW5kIC9zeXMgLW5hbWUgY29udHJv
+bCB8IGdyZXAgdXNiKTtkbyBlY2hvIG9uID4gJGk7ZWNobyAiZWNobyBvbiA+ICRpIjtkb25lOw0K
+DQpUbyBtYWtlIG91ciBtb2RlbSBtaXNiZWhhdmUgd2UgbmVlZCB0byBjb29sIGl0IGRvd24gaW4g
+YSB0ZW1wIGNoYW1iZXIgd2hpY2ggSSBoYXZlbid0IGhhZA0KYWNjZXNzIHRvIHRoZSBwYXN0IGRh
+eXMuIEhvd2V2ZXIgd2UgaGF2ZSBmb3VuZCB0d28gb3RoZXIgd2F5cyB0byByZXByb2R1Y2UgdGhl
+IGV2ZW50IHN0b3JtIGNhdXNpbmcNCmV2ZW50IHJpbmcgZnVsbCBtZXNzYWdlcyBzcGFtbWluZyB0
+aGUgbG9ncy4gVGhlIHBhdHRlcm4gaW4gdGhlIGF0dGFjaGVkIGZpbGUgcmVwZWF0cyBpdHNlbGYg
+dW50aWwgSQ0KdW5iaW5kIHRoZSBkcml2ZXIuDQoNCjEuIElmIHdlIHBvd2VyIHVwIHRoZSBtb2Rl
+bSBhbmQgd2FpdCB1bnRpbCB0aGUgbW9kZW0gaXMgZW51bWVyYXRlZCBhbmQgdGhlbiB0dXJuIG9m
+ZiB0aGUgDQpWVVNCIHN1cHBseSB0byBtb2RlbSB3aGljaCBzdXBwbGllcyB0aGUgVVNCIHBvcnQg
+b24gdGhlIG1vZGVtIHdlIHNlZSBhIGNvbnRpbnVvdXMgZmxvdyANCm9mIFVua25vd24gZXZlbnQg
+dHlwZSAzNy4NCg0KT3INCg0KMi4gSWYgd2UgcG93ZXIgdXAgdGhlIG1vZGVtIGFuZCB3YWl0IHVu
+dGlsIHRoZSBtb2RlbSBpcyBlbnVtZXJhdGVkIGFuZCB0aGVuIHB1bGwgdGhlIHJlc2V0DQpwaW4g
+b2YgdGhlIFVTQiBodWIgdGhhdCBzaXRzIGJldHdlZW4gdGhlIG1vZGVtIGFuZCB0aGUgU29DIHdl
+IGFsc28gc2VlIGEgY29udGludW91cyBmbG93IG9mIA0KVW5rbm93biBldmVudCB0eXBlIDM3Lg0K
+DQpBY2NvcmRpbmcgdG8gdGhlIFVTQiBodWIgZGF0YXNoZWV0IHRoaXMgaGFwcGVucyB3aGVuIHRo
+ZSByZXNldCBwaW4gaXMgcHVsbGVkOg0KIlRoZSBQSFlzIGFyZSBkaXNhYmxlZCwgYW5kIHRoZSBk
+aWZmZXJlbnRpYWwgcGFpcnMgd2lsbCBiZSBpbiBhIGhpZ2gtaW1wZWRhbmNlIHN0YXRlLiINCg0K
+SGF2aW5nIGF1dG9zdXNwZW5kIGVuYWJsZWQgb3IgZGlzYWJsZWQgZG9lcyBub3Qgc2VlbSB0byBt
+YWtlIGEgZGlmZmVyZW5jZSBpbiB0aGlzIGNhc2UuIA0KDQpCUiwNCkpvbmFzDQo=
 
-Thanks for fixing the bug.
+--_002_699a49f2f69e494ea6558b99fad23cc4actiase_
+Content-Type: text/plain; name="usb_transaction_errors.txt"
+Content-Description: usb_transaction_errors.txt
+Content-Disposition: attachment; filename="usb_transaction_errors.txt";
+	size=3863; creation-date="Mon, 09 Mar 2020 14:20:02 GMT";
+	modification-date="Mon, 09 Mar 2020 14:16:06 GMT"
+Content-Transfer-Encoding: base64
 
-> ---
->  drivers/usb/musb/musb_host.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/musb/musb_host.c b/drivers/usb/musb/musb_host.c
-> index 1c813c37462a..b67b40de1947 100644
-> --- a/drivers/usb/musb/musb_host.c
-> +++ b/drivers/usb/musb/musb_host.c
-> @@ -1459,8 +1459,10 @@ void musb_host_tx(struct musb *musb, u8 epnum)
->  	qh->segsize = length;
->  
->  	if (qh->use_sg) {
-> -		if (offset + length >= urb->transfer_buffer_length)
-> +		if (offset + length >= urb->transfer_buffer_length) {
->  			qh->use_sg = false;
-> +			urb->transfer_buffer = NULL;
-> +		}
+WyAgNjc0LjkxNTg5Ml0gY2RjX2FjbSAxLTEuMToxLjU6IGFjbV9yZWFkX2J1bGtfY2FsbGJhY2sg
+LSBub256ZXJvIHVyYiBzdGF0dXMgcmVjZWl2ZWQ6IC03MQpbICA2NzQuOTE1OTAyXSAgeGhjaS1j
+ZG5zMzogSWdub3JpbmcgcmVzZXQgZXAgY29tcGxldGlvbiBjb2RlIG9mIDEKWyAgNjc0LjkxNTkx
+Ml0gIHhoY2ktY2RuczM6IFN1Y2Nlc3NmdWwgU2V0IFRSIERlcSBQdHIgY21kLCBkZXEgPSBAOTYw
+ZDQ1NzAKWyAgNjc0LjkxNTk2OF0gIHhoY2ktY2RuczM6IFRyYW5zZmVyIGVycm9yIGZvciBzbG90
+IDIgZXAgMTAgb24gZW5kcG9pbnQKWyAgNjc0LjkxNTk3OV0gIHhoY2ktY2RuczM6IENsZWFuaW5n
+IHVwIHN0YWxsZWQgZW5kcG9pbnQgcmluZwpbICA2NzQuOTE1OTgzXSAgeGhjaS1jZG5zMzogRmlu
+ZGluZyBlbmRwb2ludCBjb250ZXh0ClsgIDY3NC45MTU5ODhdICB4aGNpLWNkbnMzOiBDeWNsZSBz
+dGF0ZSA9IDB4MQpbICA2NzQuOTE1OTkzXSAgeGhjaS1jZG5zMzogTmV3IGRlcXVldWUgc2VnbWVu
+dCA9IDAwMDAwMDAwNjQxZTQ5YWIgKHZpcnR1YWwpClsgIDY3NC45MTU5OThdICB4aGNpLWNkbnMz
+OiBOZXcgZGVxdWV1ZSBwb2ludGVyID0gMHg5NjBkNDU4MCAoRE1BKQpbICA2NzQuOTE2MDAyXSAg
+eGhjaS1jZG5zMzogUXVldWVpbmcgbmV3IGRlcXVldWUgc3RhdGUKWyAgNjc0LjkxNjAwOV0gIHho
+Y2ktY2RuczM6IFNldCBUUiBEZXEgUHRyIGNtZCwgbmV3IGRlcSBzZWcgPSAwMDAwMDAwMDY0MWU0
+OWFiICgweDk2MGQ0MDAwIGRtYSksIG5ldyBkZXEgcHRyID0gMDAwMDAwMDBkYWUwMzY1YyAoMHg5
+NjBkNDU4MCBkbWEpLCBuZXcgY3ljbGUgPSAxClsgIDY3NC45MTYwMTRdICB4aGNpLWNkbnMzOiAv
+LyBEaW5nIGRvbmchClsgIDY3NC45MTYwMjBdICB4aGNpLWNkbnMzOiBHaXZlYmFjayBVUkIgMDAw
+MDAwMDAwN2E1ZWQ2NSwgbGVuID0gMCwgZXhwZWN0ZWQgPSAxMDI0LCBzdGF0dXMgPSAtNzEKWyAg
+Njc0LjkxNjAyOF0gY2RjX2FjbSAxLTEuMToxLjU6IGFjbV9yZWFkX2J1bGtfY2FsbGJhY2sgLSBu
+b256ZXJvIHVyYiBzdGF0dXMgcmVjZWl2ZWQ6IC03MQpbICA2NzQuOTE2MDM1XSAgeGhjaS1jZG5z
+MzogSWdub3JpbmcgcmVzZXQgZXAgY29tcGxldGlvbiBjb2RlIG9mIDEKWyAgNjc0LjkxNjA0NF0g
+IHhoY2ktY2RuczM6IFN1Y2Nlc3NmdWwgU2V0IFRSIERlcSBQdHIgY21kLCBkZXEgPSBAOTYwZDQ1
+ODAKWyAgNjc0LjkxNjA2NF0gIHhoY2ktY2RuczM6IFRyYW5zZmVyIGVycm9yIGZvciBzbG90IDIg
+ZXAgMTAgb24gZW5kcG9pbnQKWyAgNjc0LjkxNjA3M10gIHhoY2ktY2RuczM6IENsZWFuaW5nIHVw
+IHN0YWxsZWQgZW5kcG9pbnQgcmluZwpbICA2NzQuOTE2MDc3XSAgeGhjaS1jZG5zMzogRmluZGlu
+ZyBlbmRwb2ludCBjb250ZXh0ClsgIDY3NC45MTYwODFdICB4aGNpLWNkbnMzOiBDeWNsZSBzdGF0
+ZSA9IDB4MQpbICA2NzQuOTE2MDg2XSAgeGhjaS1jZG5zMzogTmV3IGRlcXVldWUgc2VnbWVudCA9
+IDAwMDAwMDAwNjQxZTQ5YWIgKHZpcnR1YWwpClsgIDY3NC45MTYwOTFdICB4aGNpLWNkbnMzOiBO
+ZXcgZGVxdWV1ZSBwb2ludGVyID0gMHg5NjBkNDU5MCAoRE1BKQpbICA2NzQuOTE2MDk0XSAgeGhj
+aS1jZG5zMzogUXVldWVpbmcgbmV3IGRlcXVldWUgc3RhdGUKWyAgNjc0LjkxNjEwMl0gIHhoY2kt
+Y2RuczM6IFNldCBUUiBEZXEgUHRyIGNtZCwgbmV3IGRlcSBzZWcgPSAwMDAwMDAwMDY0MWU0OWFi
+ICgweDk2MGQ0MDAwIGRtYSksIG5ldyBkZXEgcHRyID0gMDAwMDAwMDBkOWY1ZjFjMSAoMHg5NjBk
+NDU5MCBkbWEpLCBuZXcgY3ljbGUgPSAxClsgIDY3NC45MTYxMDZdICB4aGNpLWNkbnMzOiAvLyBE
+aW5nIGRvbmchClsgIDY3NC45MTYxMTNdICB4aGNpLWNkbnMzOiBHaXZlYmFjayBVUkIgMDAwMDAw
+MDA4YTBhOTQxNywgbGVuID0gMCwgZXhwZWN0ZWQgPSAxMDI0LCBzdGF0dXMgPSAtNzEKWyAgNjc0
+LjkxNjExOV0gY2RjX2FjbSAxLTEuMToxLjU6IGFjbV9yZWFkX2J1bGtfY2FsbGJhY2sgLSBub256
+ZXJvIHVyYiBzdGF0dXMgcmVjZWl2ZWQ6IC03MQpbICA2NzQuOTE2MTI2XSAgeGhjaS1jZG5zMzog
+SWdub3JpbmcgcmVzZXQgZXAgY29tcGxldGlvbiBjb2RlIG9mIDEKWyAgNjc0LjkxNjEzNV0gIHho
+Y2ktY2RuczM6IFN1Y2Nlc3NmdWwgU2V0IFRSIERlcSBQdHIgY21kLCBkZXEgPSBAOTYwZDQ1OTAK
+WyAgNjc0LjkxNjE0OV0gIHhoY2ktY2RuczM6IFRyYW5zZmVyIGVycm9yIGZvciBzbG90IDIgZXAg
+MTAgb24gZW5kcG9pbnQKWyAgNjc0LjkxNjE1N10gIHhoY2ktY2RuczM6IENsZWFuaW5nIHVwIHN0
+YWxsZWQgZW5kcG9pbnQgcmluZwpbICA2NzQuOTE2MTYxXSAgeGhjaS1jZG5zMzogRmluZGluZyBl
+bmRwb2ludCBjb250ZXh0ClsgIDY3NC45MTYxNjZdICB4aGNpLWNkbnMzOiBDeWNsZSBzdGF0ZSA9
+IDB4MQpbICA2NzQuOTE2MTcwXSAgeGhjaS1jZG5zMzogTmV3IGRlcXVldWUgc2VnbWVudCA9IDAw
+MDAwMDAwNjQxZTQ5YWIgKHZpcnR1YWwpClsgIDY3NC45MTYxNzVdICB4aGNpLWNkbnMzOiBOZXcg
+ZGVxdWV1ZSBwb2ludGVyID0gMHg5NjBkNDVhMCAoRE1BKQpbICA2NzQuOTE2MTc4XSAgeGhjaS1j
+ZG5zMzogUXVldWVpbmcgbmV3IGRlcXVldWUgc3RhdGUKWyAgNjc0LjkxNjE4Nl0gIHhoY2ktY2Ru
+czM6IFNldCBUUiBEZXEgUHRyIGNtZCwgbmV3IGRlcSBzZWcgPSAwMDAwMDAwMDY0MWU0OWFiICgw
+eDk2MGQ0MDAwIGRtYSksIG5ldyBkZXEgcHRyID0gMDAwMDAwMDA5NGI4OGRjZSAoMHg5NjBkNDVh
+MCBkbWEpLCBuZXcgY3ljbGUgPSAxClsgIDY3NC45MTYxOTBdICB4aGNpLWNkbnMzOiAvLyBEaW5n
+IGRvbmchClsgIDY3NC45MTYxOTddICB4aGNpLWNkbnMzOiBHaXZlYmFjayBVUkIgMDAwMDAwMDAz
+ZGFkNzMyNSwgbGVuID0gMCwgZXhwZWN0ZWQgPSAxMDI0LCBzdGF0dXMgPSAtNzEKWyAgNjc0Ljkx
+NjIwNF0gY2RjX2FjbSAxLTEuMToxLjU6IGFjbV9yZWFkX2J1bGtfY2FsbGJhY2sgLSBub256ZXJv
+IHVyYiBzdGF0dXMgcmVjZWl2ZWQ6IC03MQpbICA2NzQuOTE2MjExXSAgeGhjaS1jZG5zMzogSWdu
+b3JpbmcgcmVzZXQgZXAgY29tcGxldGlvbiBjb2RlIG9mIDEKWyAgNjc0LjkxNjIxOV0gIHhoY2kt
+Y2RuczM6IFN1Y2Nlc3NmdWwgU2V0IFRSIERlcSBQdHIgY21kLCBkZXEgPSBAOTYwZDQ1YTAKWyAg
+Njc0LjkxNjI1MV0gIHhoY2ktY2RuczM6IFRyYW5zZmVyIGVycm9yIGZvciBzbG90IDIgZXAgMTAg
+b24gZW5kcG9pbnQKWyAgNjc0LjkxNjI2MV0gIHhoY2ktY2RuczM6IENsZWFuaW5nIHVwIHN0YWxs
+ZWQgZW5kcG9pbnQgcmluZwpbICA2NzQuOTE2MjY1XSAgeGhjaS1jZG5zMzogRmluZGluZyBlbmRw
+b2ludCBjb250ZXh0ClsgIDY3NC45MTYyNzBdICB4aGNpLWNkbnMzOiBDeWNsZSBzdGF0ZSA9IDB4
+MQpbICA2NzQuOTE2Mjc0XSAgeGhjaS1jZG5zMzogTmV3IGRlcXVldWUgc2VnbWVudCA9IDAwMDAw
+MDAwNjQxZTQ5YWIgKHZpcnR1YWwpClsgIDY3NC45MTYyNzldICB4aGNpLWNkbnMzOiBOZXcgZGVx
+dWV1ZSBwb2ludGVyID0gMHg5NjBkNDViMCAoRE1BKQpbICA2NzQuOTE2MjgyXSAgeGhjaS1jZG5z
+MzogUXVldWVpbmcgbmV3IGRlcXVldWUgc3RhdGUKWyAgNjc0LjkxNjI5MF0gIHhoY2ktY2RuczM6
+IFNldCBUUiBEZXEgUHRyIGNtZCwgbmV3IGRlcSBzZWcgPSAwMDAwMDAwMDY0MWU0OWFiICgweDk2
+MGQ0MDAwIGRtYSksIG5ldyBkZXEgcHRyID0gMDAwMDAwMDAwMGFkMGI4MyAoMHg5NjBkNDViMCBk
+bWEpLCBuZXcgY3ljbGUgPSAxClsgIDY3NC45MTYyOTRdICB4aGNpLWNkbnMzOiAvLyBEaW5nIGRv
+bmchClsgIDY3NC45MTYzMDFdICB4aGNpLWNkbnMzOiBHaXZlYmFjayBVUkIgMDAwMDAwMDA3NzEw
+MzA2NSwgbGVuID0gMCwgZXhwZWN0ZWQgPSAxMDI0LCBzdGF0dXMgPSAtNzE=
 
-In this tx case, can you directly pass qh->sg_miter.addr to
-musb_write_fifo() so that urb->transfer_buffer is not touched at all?
-
--Bin.
+--_002_699a49f2f69e494ea6558b99fad23cc4actiase_--
