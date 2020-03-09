@@ -2,61 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8028817D8B6
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2020 06:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5692917D94D
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2020 07:31:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726360AbgCIFEF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Mar 2020 01:04:05 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:54182 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725796AbgCIFEF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Mar 2020 01:04:05 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 4BFE6158B8427;
-        Sun,  8 Mar 2020 22:04:04 -0700 (PDT)
-Date:   Sun, 08 Mar 2020 22:04:03 -0700 (PDT)
-Message-Id: <20200308.220403.2013988891795466479.davem@davemloft.net>
-To:     bay@hackerdom.ru
-Cc:     oliver@neukum.org, gregkh@linuxfoundation.org, tglx@linutronix.de,
-        info@metux.net, allison@lohutok.net, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cdc_ncm: Implement the 32-bit version of NCM Transfer
- Block
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200305203318.8980-1-bay@hackerdom.ru>
-References: <20200305203318.8980-1-bay@hackerdom.ru>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sun, 08 Mar 2020 22:04:04 -0700 (PDT)
+        id S1726360AbgCIGaz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Mar 2020 02:30:55 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:44361 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725796AbgCIGaz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Mar 2020 02:30:55 -0400
+Received: by mail-pg1-f194.google.com with SMTP id 37so77284pgm.11
+        for <linux-usb@vger.kernel.org>; Sun, 08 Mar 2020 23:30:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:content-transfer-encoding:in-reply-to:references
+         :subject:from:cc:to:date:message-id:user-agent;
+        bh=yybJ1QzXrgkr7XDf2YoWtEBzCY5FqWK4MqdNg1pgXOc=;
+        b=U1DFSlHey9T/E8PLM4IJY/0dylRiAAHFvGZnWirUOQkMCY8N7t9/hLkzoLA31J5tvU
+         wQurPIFF50OYGWyuz7WmPY/CJpDaE1d6mhTr4OmHVUnC5CQF75QJktLdij+rhhEBU7dk
+         Orz8Jvlwf2lYSxGYjcGubpNoQwmyePVaOp8yE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:content-transfer-encoding
+         :in-reply-to:references:subject:from:cc:to:date:message-id
+         :user-agent;
+        bh=yybJ1QzXrgkr7XDf2YoWtEBzCY5FqWK4MqdNg1pgXOc=;
+        b=Z9/JEiJ/dbjw826xH68pZvXwzbng8ihXrVwusDICQXgz3wg8WSz9ON+q4plTD3F7m2
+         YNmYRli32mnDT7GLpAsJHzZB89v9aVB1qxKuKzGiYHJ03P3rr0Ys/b1RhxtXpVVCZ3T0
+         lyfnLZNBY4ZiruyZslW1P/TipAfZoVeCq8AJsDqebiyn+Bc4UEhkonvqYkM9NVGaaf3J
+         guSR5moeX2PLvXACoOq6vPSYqEBsFU6EYw6p2fLDhh6j6RCZv++4hjgztwMnaiaiPqz9
+         +QRqKF6FkBV/8Hg2iMRjopB/fvdMDv+csBzpo6rRakzaHx+Z2bEsZG2EY+yBDcC/Vkqm
+         nN0g==
+X-Gm-Message-State: ANhLgQ1oYS8/rKkb2gR5KYc6QiG5hbH5V8dfHtSETx7IuZWkMSvFSpiB
+        2cMF+0CBv8tIZI/1F1FpjyH19w==
+X-Google-Smtp-Source: ADFU+vtMGikTNZyTdc745utw27/3Wxa63ffNlpXgbhf7KCsot2ygSMqQQuTnOhQAQ+qnFipibZK1sA==
+X-Received: by 2002:a62:760e:: with SMTP id r14mr8075667pfc.51.1583735452374;
+        Sun, 08 Mar 2020 23:30:52 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id h7sm45650104pfq.36.2020.03.08.23.30.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Mar 2020 23:30:51 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200306092328.41253-1-ran.wang_1@nxp.com>
+References: <20200306092328.41253-1-ran.wang_1@nxp.com>
+Subject: Re: [PATCH] usb: host: xhci-plat: add a shutdown
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     Peter Chen <peter.chen@nxp.com>, Jun Li <jun.li@nxp.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ran Wang <ran.wang_1@nxp.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Ran Wang <ran.wang_1@nxp.com>
+Date:   Sun, 08 Mar 2020 23:30:50 -0700
+Message-ID: <158373545061.66766.10321933903764965708@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Alexander Bersenev <bay@hackerdom.ru>
-Date: Fri,  6 Mar 2020 01:33:16 +0500
+Quoting Ran Wang (2020-03-06 01:23:28)
+> When loading new kernel via kexec, we need to shutdown host controller to
+> avoid any un-expected memory accessing during new kernel boot.
+>=20
+> Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+> Reviewed-by: Peter Chen <peter.chen@nxp.com>
+> ---
 
-> The NCM specification defines two formats of transfer blocks: with 16-bit
-> fields (NTB-16) and with 32-bit fields (NTB-32). Currently only NTB-16 is
-> implemented.
-> 
-> This patch adds the support of NTB-32. The motivation behind this is that
-> some devices such as E5785 or E5885 from the current generation of Huawei
-> LTE routers do not support NTB-16. The previous generations of Huawei
-> devices are also use NTB-32 by default.
-> 
-> Also this patch enables NTB-32 by default for Huawei devices.
-> 
-> During the 2019 ValdikSS made five attempts to contact Huawei to add the
-> NTB-16 support to their router firmware, but they were unsuccessful.
-> 
-> Signed-off-by: Alexander Bersenev <bay@hackerdom.ru>
+Tested-by: Stephen Boyd <swboyd@chromium.org>
 
-Oliver et al., please review.
-
-Thank you.
+This fixes a problem I see where USB is still active during an orderly
+reboot.
