@@ -2,99 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2892317E718
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2020 19:27:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4DF517EA60
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Mar 2020 21:44:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727498AbgCIS1W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Mar 2020 14:27:22 -0400
-Received: from mail-wr1-f74.google.com ([209.85.221.74]:54381 "EHLO
-        mail-wr1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727499AbgCIS1V (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Mar 2020 14:27:21 -0400
-Received: by mail-wr1-f74.google.com with SMTP id b11so3344289wru.21
-        for <linux-usb@vger.kernel.org>; Mon, 09 Mar 2020 11:27:20 -0700 (PDT)
+        id S1726677AbgCIUnz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Mar 2020 16:43:55 -0400
+Received: from mail-yw1-f67.google.com ([209.85.161.67]:35070 "EHLO
+        mail-yw1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725992AbgCIUnz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Mar 2020 16:43:55 -0400
+Received: by mail-yw1-f67.google.com with SMTP id d79so10487676ywd.2;
+        Mon, 09 Mar 2020 13:43:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=GUzRbTx+9+5SLlU+YVj83grWFXbPGAYyGcx3oLf377g=;
-        b=X5DyJAXj9e7DuXNJVjgflVf85gLiik5YQz/efq+eIbb/KFoMPqv9scT5owFu90/eVl
-         DvuQaXBu+ev+8Fd9ik4Ar6xTviw5JmilkpSeCNmTAjepizZzxmfnz0mWplOqoBgNEYME
-         yaDCgcpz+qOg5fp+p6FJhdBHzXZkd/dv5lrIpyEaabo1g+tT1hrhqd/QkWdZOVgIb4Ns
-         g775BMmh2IzYfaJDq+O5XHDykXRB/ezjeP8ylgRQFgDgxDFWzmp0y8fWWh3V6le1rqs2
-         FCvuUBiIPWXW75a9FcTICy/IyB4k5U0QPfm2ASFzzI67TUHvyxZTjLq7jQH0Y/ZXzaxJ
-         jrag==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=W96PN6ds+wdrCUeWOa0/t1r6nDW2vDzBWxyYM20D4zQ=;
+        b=lgph5n7yX5ys/mm5ELbKsKK21ihxpUNK7n6KISWhAOvj6yXMVbTXuOx+ePTAkVTvw0
+         imIArQ7bOBaQVhnLbdsuHEjw6Uh4rjLAckYb8DFiyQitu68hC677X6nf/kXzxkOV+9nL
+         VUa+gjWVTclKKu8HKecjyQdXUQvpxGWnyq41+hpVMColtGT9eLXpkXrQkuqebjB8MMXa
+         lpZbePk4wsWMiCL4K4UybkeQ2aQDr0QTqrvRgJeRZGSfklI5ROzusWf92s7riAP76wlh
+         hm1LsXF0FwLXUmsf9EFd9T+WOx8iN0aGim8v78eyCqKFisXJpvv4A1DgktGPd5p0D/ep
+         7l4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=GUzRbTx+9+5SLlU+YVj83grWFXbPGAYyGcx3oLf377g=;
-        b=OXda0ynxtnguhFli5D8IYjoBCtvUztyDSzB73gHIPtxxFDoeRTCcPpbT9rTOgHdkG3
-         B3mAFkV55oyCWCjksUPugqElnEcyORxMs3NZdaZK3ES95Fs38sU5/hXXcAlgZYjNzj7y
-         m42j8S5F36R6y+DCIpqtfeAm0xA3WY5ypClNkloli7xZ7dAT5Q3/eMKQ+H3ZL8BzjM6i
-         NVQnv79NWWu100da/XjeMRnisN+Hpquc7ytCWwr3a4n09xPWze5AmDuO7jvvJ7HbUgvu
-         NZdlv2v1rjJq+lOtE3WiYXPle+V38hBIzrgD2cbaJjXicJBWgj79qChO7pOxYfP9SGGY
-         ANhw==
-X-Gm-Message-State: ANhLgQ2TtdM0aBAahkxFr6wg59+GqXklQATrvpbO8RGpeUWWtqUrt849
-        djk+HOC8HDThTwLI0aEuMvocxlSITfjoqu1V
-X-Google-Smtp-Source: ADFU+vv1SmBVli5DwvbZPkth9L0o2RHMWkXt2Q48SpLf15TTdS0o3jAjVeFPKC3S2n6naVFz0k0PGvlvQZhLeaxz
-X-Received: by 2002:adf:b19d:: with SMTP id q29mr22015214wra.211.1583778439920;
- Mon, 09 Mar 2020 11:27:19 -0700 (PDT)
-Date:   Mon,  9 Mar 2020 19:27:06 +0100
-In-Reply-To: <cover.1583778264.git.andreyknvl@google.com>
-Message-Id: <32bce32c8b88c2f88cd0a8acfcdb5d3a6e894632.1583778264.git.andreyknvl@google.com>
-Mime-Version: 1.0
-References: <cover.1583778264.git.andreyknvl@google.com>
-X-Mailer: git-send-email 2.25.1.481.gfbce0eb801-goog
-Subject: [PATCH v2 3/3] usb: core: kcov: collect coverage from usb complete callback
-From:   Andrey Konovalov <andreyknvl@google.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=W96PN6ds+wdrCUeWOa0/t1r6nDW2vDzBWxyYM20D4zQ=;
+        b=ionKulr+Or0IIviCG4uwp6OEgSRnSRHnA/6LvurXd2anX6mOFWUtGSReHxu4loQbaz
+         cFPEdz/9YOTSc+LDlq0g+e0fAIlB8xUB9rWW/ujzinGPhziJ3gWl10T2W8bluxgwqPQC
+         wm+57pd0xmjC2zrsKaVzGsHcnkwWMYKbi2A3bCCUEYAPE70Vx1ORHcMbh/5QHrdLX0lX
+         tYeUOI+be1rksd/WENcNSakVgWH2jIaDTYTHXLXruDKYXCgWq789LqUVyY3kn3igN2bb
+         hUl3VUQbLj0+dluuGOryOGYMvea9YLASbrFfY8XoeT3nE4hXyk6IJtfBzD71QzF/W2LF
+         5Pcw==
+X-Gm-Message-State: ANhLgQ0eVqYMayO5WiLrWdVj5wJeIBSkHs2bb0F1bLF9R66ABC04+tJP
+        U2AcXdmTz3cLcUbwiVq+CrY=
+X-Google-Smtp-Source: ADFU+vsQ7xiZjy67vd7Eov49CAky+jEQLedS5Gk2D1inMTWRwfH94qO2vCskueyLpzo0r0btX9lHsg==
+X-Received: by 2002:a25:d405:: with SMTP id m5mr17164053ybf.2.1583786634235;
+        Mon, 09 Mar 2020 13:43:54 -0700 (PDT)
+Received: from farregard-ubuntu.kopismobile.org (c-73-177-17-21.hsd1.ms.comcast.net. [73.177.17.21])
+        by smtp.gmail.com with ESMTPSA id s63sm17998768ywd.82.2020.03.09.13.43.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Mar 2020 13:43:53 -0700 (PDT)
+From:   George Hilliard <thirtythreeforty@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     George Hilliard <thirtythreeforty@gmail.com>,
+        Icenowy Zheng <icenowy@aosc.io>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH 0/5] Support the Allwinner F1C100s USB stack
+Date:   Mon,  9 Mar 2020 15:43:21 -0500
+Message-Id: <20200309204326.27403-1-thirtythreeforty@gmail.com>
+X-Mailer: git-send-email 2.25.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch adds kcov_remote_start/stop() callbacks around the urb
-complete() callback that is executed in softirq context when dummy_hcd
-is in use. As the result, kcov can be used to collect coverage from those
-those callbacks, which is used to facilitate coverage-guided fuzzing with
-syzkaller.
+The Allwinner F1C100s has an MUSB-based USB peripheral.  This patch
+series implements support for it alongside existing Allwinner support
+code.
 
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- drivers/usb/core/hcd.c | 3 +++
- 1 file changed, 3 insertions(+)
+This series was originally written by Icenowy Zheng for Linux v4.14.
+I've rebased and bugfixed that work against mainline and tested it on
+both the Lichee Nano and my custom hardware.
 
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index aa45840d8273..de624c47e190 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -31,6 +31,7 @@
- #include <linux/types.h>
- #include <linux/genalloc.h>
- #include <linux/io.h>
-+#include <linux/kcov.h>
- 
- #include <linux/phy/phy.h>
- #include <linux/usb.h>
-@@ -1645,7 +1646,9 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
- 
- 	/* pass ownership to the completion handler */
- 	urb->status = status;
-+	kcov_remote_start_usb((u64)urb->dev->bus->busnum);
- 	urb->complete(urb);
-+	kcov_remote_stop();
- 
- 	usb_anchor_resume_wakeups(anchor);
- 	atomic_dec(&urb->use_count);
+This resubmit is unchanged from the series I sent a couple weeks ago,
+although I've expanded the Cc: to the linux-usb list.
+
+George Hilliard (3):
+  dt-bindings: Add new F1C100s compatible strings for USB
+  phy: sun4i-usb: add support for the USB PHY on suniv SoC
+  musb: sunxi: add support for the suniv MUSB controller
+
+Icenowy Zheng (2):
+  ARM: suniv: add USB-related device nodes
+  ARM: suniv: f1c100s: enable USB on Lichee Pi Nano
+
+ .../phy/allwinner,sun4i-a10-usb-phy.yaml      |  1 +
+ .../usb/allwinner,sun4i-a10-musb.yaml         |  1 +
+ .../boot/dts/suniv-f1c100s-licheepi-nano.dts  | 16 ++++++++++
+ arch/arm/boot/dts/suniv-f1c100s.dtsi          | 29 +++++++++++++++++++
+ drivers/phy/allwinner/phy-sun4i-usb.c         | 11 +++++++
+ drivers/usb/musb/sunxi.c                      |  8 +++--
+ 6 files changed, 64 insertions(+), 2 deletions(-)
+
 -- 
-2.25.1.481.gfbce0eb801-goog
+2.25.0
 
