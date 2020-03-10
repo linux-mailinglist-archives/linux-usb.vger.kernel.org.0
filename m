@@ -2,94 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC62B17F3E7
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 10:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC6F17F44D
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 11:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbgCJJnL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Mar 2020 05:43:11 -0400
-Received: from mail-mw2nam12on2056.outbound.protection.outlook.com ([40.107.244.56]:6076
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726202AbgCJJnK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Mar 2020 05:43:10 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XcNI6zAcIje5v+unhGQh2lL8j/CAKz9ffBAJzjDBqnoEvn3FBaHlLE+ZATI9kHMPMmtwc4EJUZccKYXByRLI0DFoqYEQ9Sk2xni3lt4W3K9XsylWTQzPaqtMhgvbs4XOoHZW0gi4qqiW4tv+oojf1S+Plja51gAE0W+zc5xcT+q3INN21UvzrmGt8FAf/LvlOxBEw9WqakeIVzuz+DaEw3cpJMSMVqviN3csM565/1c3Zh05z3mqGIEkYCgNRySRUQU6Xpo5Z+wdxcfKCt2mR6K8F57YSdsZy8FnoTMsh8mSQ1oZbTJKBzAYgmlfSm/2xJcZhAEGpqdPIIfGVjLvOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LKKibb/uFQKn6cWtlu6rXqsYvgK7BFqRACAcYL9atIw=;
- b=UDUQO3EGHiS0rwzE4LozBcnERUOClOvemOfCT+h9yuBVCFHcuAmQmgB7wVBTX9EjtoZTkFO5ZIVl3LYR6vMbUlW/9TFOsbFGVz3vwm7VsipjFv+th1SnugpSxgWY3qWlz2M7D6oAWEK/DXaDTwGYvMaESeUhxyyOOrmvhM0nWHzU3iQibSXqxbjnMRcGNw5l/Mnlbv6suSo5MfhVkUye9WJWXmYDeWvxkYQ5XOWFd+JOe0EFRtlqdSHCYRGOSJYI/N4zRA11igPpuD1pLgsHKgRUjm1PkUN7ye/Uquq+sWmvi8+AZfjL6PCoGYYOM+AzyK8Mv8mqA5rm4qud9lSi8w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=infinera.com; dmarc=pass action=none header.from=infinera.com;
- dkim=pass header.d=infinera.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infinera.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LKKibb/uFQKn6cWtlu6rXqsYvgK7BFqRACAcYL9atIw=;
- b=XhMmWWIidprnYV0nsMxASUFnhQbZ29rxYP2Uf+Es7ACZHwcGWqzcXPKiKOzTv/uqL9A43f1zm2QqcrlwaxsXvLpizgLGVSTLsg0vVS4rfUgodF/iBro752AOmtXyRggrmOonIFDCy5VCYPa4PoU8Sg6/RRW+DY/qEpaDZAeUrTc=
-Received: from BN8PR10MB3540.namprd10.prod.outlook.com (2603:10b6:408:ae::24)
- by BN8PR10MB4084.namprd10.prod.outlook.com (2603:10b6:408:b0::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2793.17; Tue, 10 Mar
- 2020 09:43:07 +0000
-Received: from BN8PR10MB3540.namprd10.prod.outlook.com
- ([fe80::1940:6f91:a80e:b47]) by BN8PR10MB3540.namprd10.prod.outlook.com
- ([fe80::1940:6f91:a80e:b47%5]) with mapi id 15.20.2793.013; Tue, 10 Mar 2020
- 09:43:07 +0000
-From:   Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
-To:     "linuxppc-dev@ozlabs.org" <linuxppc-dev@ozlabs.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: CDC ethernet gadget: complete system freeze
-Thread-Topic: CDC ethernet gadget: complete system freeze
-Thread-Index: AQHV9sBN2nbfIelzrUOxTHcGd7CUkg==
-Date:   Tue, 10 Mar 2020 09:43:07 +0000
-Message-ID: <17c670a4386bc1cfa3db207c6961d95f3378ad64.camel@infinera.com>
-Accept-Language: en-GB, en-US
+        id S1726265AbgCJKEq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 10 Mar 2020 06:04:46 -0400
+Received: from mail.actia.se ([195.67.112.82]:59672 "EHLO mail.actia.se"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726202AbgCJKEp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 10 Mar 2020 06:04:45 -0400
+Received: from S036ANL.actianordic.se (192.168.16.117) by
+ S035ANL.actianordic.se (192.168.16.116) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Tue, 10 Mar 2020 11:04:42 +0100
+Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
+ S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%3]) with mapi id
+ 15.01.1913.007; Tue, 10 Mar 2020 11:04:42 +0100
+From:   Jonas Karlsson <jonas.karlsson@actia.se>
+To:     Peter Chen <peter.chen@nxp.com>
+CC:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: RE: USB transaction errors causing RCU stalls and kernel panics
+Thread-Topic: USB transaction errors causing RCU stalls and kernel panics
+Thread-Index: AdXxbFdECZ2tmAAoQZaxVkfgHyprqgABZ9yAAAiGryAAIGdeAAAEO3aAAAR/HgAARX+KgACtYMrAACnez4AABbFG8A==
+Date:   Tue, 10 Mar 2020 10:04:42 +0000
+Message-ID: <d1f68ef3316e484b9cc1360f71886719@actia.se>
+References: <ddf8c3971b8544e983a9d2bbdc7f2010@actia.se>
+ <20200303163945.GB652754@kroah.com>
+ <ca6f029a57f24ee9aea39385a9ad55bd@actia.se>
+ <6909d182-6cc5-c07f-ed79-02c741aec60b@linux.intel.com>
+ <1583331173.12738.26.camel@suse.com>
+ <4fa64e92-64ce-07f3-ed8e-ea4e07d091bb@linux.intel.com>
+ <VI1PR04MB532785057FD52DFE3A21ACA88BE30@VI1PR04MB5327.eurprd04.prod.outlook.com>
+ <699a49f2f69e494ea6558b99fad23cc4@actia.se>
+ <20200310081452.GA14625@b29397-desktop>
+In-Reply-To: <20200310081452.GA14625@b29397-desktop>
+Accept-Language: sv-SE, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.35.92 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Joakim.Tjernlund@infinera.com; 
-x-originating-ip: [88.131.87.201]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 89ecb10b-cfca-4fb8-0494-08d7c4d7705d
-x-ms-traffictypediagnostic: BN8PR10MB4084:
-x-microsoft-antispam-prvs: <BN8PR10MB40845653CD753761D49D1DE0F4FF0@BN8PR10MB4084.namprd10.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-forefront-prvs: 033857D0BD
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(39850400004)(346002)(136003)(376002)(366004)(189003)(199004)(5660300002)(316002)(4744005)(478600001)(6512007)(66476007)(71200400001)(64756008)(86362001)(91956017)(76116006)(66556008)(66946007)(110136005)(66446008)(6506007)(2616005)(6486002)(2906002)(186003)(26005)(8936002)(36756003)(81156014)(81166006)(8676002);DIR:OUT;SFP:1101;SCL:1;SRVR:BN8PR10MB4084;H:BN8PR10MB3540.namprd10.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: infinera.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: FxTqwhHrX7OVkgcMwWA6owEni7sW2948mV3zlagkJCr0DliAo9VU3yuqiE0clz9sySCl/6zgH3DnbueJhXr1e3YE90nQtoHG+rSu1KatCQIpTT0MgyhM9tgOxt0c/tRlCyKirnfkuZT6Ls5mGY8dvRar1GgJ8MkZsndf4Z/mrm8P+0UJVo1j9NpwjzlzjfSEI6lpqmANLVgpkqxNqd1GxMmIUfoDfgqDDmc0b+MX7tZAA+mcsA2Cgqm3slV0HZaKvz26s7v52EvtlwnPyKNc0OKOXV3sRkh2a/KfH8d3o5YfqkZOfRwikDWsCzv89tI9fHKYSq/tyHIXzC0wip/iD4Er/Ffh5dRH9z6YwVSLUGsPWejMLawDAzaf6q3atynfNdhEZaIY6vkoOsMhVP7LuyFaz5oZ+WBVMgE4oA/2f3AAlavbq5bV/pZD2NnxZ1Zy
-x-ms-exchange-antispam-messagedata: JB/6HeNmml1Q+6TLiYm8c2GW3ZODeJYNz8I22qeOfgHrIVr7pUR/aK7RnYcAd4eM/RmfSg6Yq4sHkVTRmDFcCYBhh8XAKtC1EYDYLyYynHwHd0jjL+pWIIuhhlRIy1CYgJET7RkJQRyvIhpBbs5bpg==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AC15D0D80651A24E83DC6E0B13CC7543@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: base64
+x-originating-ip: [10.11.14.24]
+x-esetresult: clean, is OK
+x-esetid: 37303A2914C9726A627467
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-X-OriginatorOrg: infinera.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 89ecb10b-cfca-4fb8-0494-08d7c4d7705d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2020 09:43:07.7302
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: w/YywIIeb3lJ363mnE+zAx3mM56W/iFn70aJZT8tfbUEq1Faq88GNFQjcXCxcXrycxWzzhm8VJlqGXJN+yptAQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB4084
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-V2UgaGF2ZSBhbiBlbWJlZGRlZCBUMTA0MiBOWFAgQ0RDIGV0aGVybmV0IGdhZGdldCB3aGljaCBz
-ZWVtcyB0byBjb21wbGV0ZWx5IGZyZWV6ZSB3aGVuIGFuDQp1c2IwIEkvRiBpcyBlc3RhYmxpc2hl
-ZCBhbmQgb25lIGRvIDEgb2YgdHdvIHRoaW5nczoNCiAxKSByZWJvb3QgdGhlIGNvbm5lY3RlZCBM
-aW51eCBsYXB0b3AgLT4gQ0RDIGdhZGdldCBhcHBlYXJzIHRvIGVudGVyIGNvbXBsZXRlIHN5c3Rl
-bSBmcmVlemUuDQogMikgb24gbGFwdG9wLCBpZmNvbmZpZyB1c2IwIGRvd247IHJtbW9kIGNkY19l
-dGhlciAtPiBDREMgZ2FnZXQgZnJlZXplcw0KDQpJIGNhbm5vdCBmaW5ucyBhbmQgT09QUyBvciBv
-dGhlciB0cmFjZSBpbiBjb25zb2xlIG9yIHN5c2xvZy4gSSBjb3VsZCByZWFsbHkgdXNlIHNvbSBp
-ZGVhcyBoZXJlLg0KTGludXgga2VybmVsIDQuMTkuMTA4ICg0LjE5Ljc2IGhhcyB0aGUgc2FtZSBp
-c3N1ZSkNCg0KIEpvY2tlDQoNCg==
+> On 20-03-09 14:21:56, Jonas Karlsson wrote:
+> > >
+> > > If autosuspend is suspicious, Jonas, could you please try to disable
+> > > autosuspend for all USB devices (including the roothub and controller) to see
+> what happens?
+> > >
+> > > Peter
+> >
+> > I have run some tests with autosuspend turned off by doing this:
+> > for i in $(find /sys -name control | grep usb);do echo on > $i;echo
+> > "echo on > $i";done;
+> >
+> > To make our modem misbehave we need to cool it down in a temp chamber
+> > which I haven't had access to the past days. However we have found two
+> > other ways to reproduce the event storm causing event ring full
+> > messages spamming the logs. The pattern in the attached file repeats itself
+> until I unbind the driver.
+> 
+> Hi Jonas,
+> 
+> Do you have below commit at your local tree? If you have, I am puzzled why you
+> still get "Event Ring Full Error" error, maybe Mathias have the answer?
+> 
+> commit dc0ffbea5729a3abafa577ebfce87f18b79e294b
+> Author: Peter Chen <peter.chen@nxp.com>
+> Date:   Fri Nov 15 18:50:00 2019 +0200
+> 
+>     usb: host: xhci: update event ring dequeue pointer on purpose
+>
+
+Yes, I have applied that commit. The logs I have attached so far have had that commit applied.
+It reduces the amount of Unknown event type 37 messages significantly.
+ 
+> @Mathias, could xhci design some software retry limits for transaction error? It
+> may avoid retry storm due to hardware issue (eg, signal issue). For EHCI, there is
+> a design to define QH_XACTERR_MAX at qh_completions for that.
+> 
+> Peter
