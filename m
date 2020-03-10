@@ -2,215 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 517F417F674
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 12:40:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A587417F6CE
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 12:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726224AbgCJLkG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Mar 2020 07:40:06 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58216 "EHLO mx2.suse.de"
+        id S1726466AbgCJLzP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Mar 2020 07:55:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44552 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726205AbgCJLkG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Mar 2020 07:40:06 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id C07D8AC65;
-        Tue, 10 Mar 2020 11:40:02 +0000 (UTC)
-Message-ID: <1583839306.11582.12.camel@suse.de>
-Subject: Re: USB transaction errors causing RCU stalls and kernel panics
-From:   Oliver Neukum <oneukum@suse.de>
-To:     Jonas Karlsson <jonas.karlsson@actia.se>,
-        Peter Chen <peter.chen@nxp.com>
+        id S1726290AbgCJLzO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 10 Mar 2020 07:55:14 -0400
+Received: from localhost (unknown [122.167.84.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 78E1E2464B;
+        Tue, 10 Mar 2020 11:55:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1583841314;
+        bh=cbPCeEem6JKklbB2VzqM30QCCT/AI0cLXshnbw7OmZg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y7o+ENJe1AEFpzFL1pxznbCeXnEIoUV+ZtO1T1SnV273ank4QvKFnOqcLpjOdTXeq
+         oOCzo127BFhIfqfXb3239rmTlxJcS4YnVD+kiDLCBKuCyXWJJSVn7yhGY5P3OS7Jfd
+         3fIS9pR9QzySmxVqs97kcs5gwLNK9NSWmMvyxUOI=
+Date:   Tue, 10 Mar 2020 17:25:10 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
 Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Date:   Tue, 10 Mar 2020 12:21:46 +0100
-In-Reply-To: <1583838270.11582.11.camel@suse.com>
-References: <ddf8c3971b8544e983a9d2bbdc7f2010@actia.se>
-         <20200303163945.GB652754@kroah.com>
-         <ca6f029a57f24ee9aea39385a9ad55bd@actia.se>
-         <6909d182-6cc5-c07f-ed79-02c741aec60b@linux.intel.com>
-         <1583331173.12738.26.camel@suse.com>
-         <4fa64e92-64ce-07f3-ed8e-ea4e07d091bb@linux.intel.com>
-         <VI1PR04MB532785057FD52DFE3A21ACA88BE30@VI1PR04MB5327.eurprd04.prod.outlook.com>
-         <699a49f2f69e494ea6558b99fad23cc4@actia.se>
-         <20200310081452.GA14625@b29397-desktop>
-         <d1f68ef3316e484b9cc1360f71886719@actia.se>
-         <1583838270.11582.11.camel@suse.com>
-Content-Type: multipart/mixed; boundary="=-4O8gcd++zovz6GEM/1QT"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        Christian Lamparter <chunkeey@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: Re: [PATCH v6 0/5] usb: xhci: Add support for Renesas USB controllers
+Message-ID: <20200310115510.GE4885@vkoul-mobl>
+References: <64340358-6682-4ae0-9c06-d72d5a4ff259@linux.intel.com>
+ <Pine.LNX.4.44L0.2001311045470.1577-100000@iolanthe.rowland.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.2001311045470.1577-100000@iolanthe.rowland.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---=-4O8gcd++zovz6GEM/1QT
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-
-Am Dienstag, den 10.03.2020, 12:04 +0100 schrieb Oliver Neukum:
-> Am Dienstag, den 10.03.2020, 10:04 +0000 schrieb Jonas Karlsson:
+On 31-01-20, 10:47, Alan Stern wrote:
+> On Thu, 30 Jan 2020, Mathias Nyman wrote:
 > 
-> > Yes, I have applied that commit. The logs I have attached so far have had that commit applied.
-> > It reduces the amount of Unknown event type 37 messages significantly.
+> > I realize this can't be easily changed because usb_hcd_pci_probe() takes the
+> > pci_device_id pointer as an argument, and expects id.driver_data to be a
+> > HC driver pointer.
+> > 
+> > So this turns out to be a question for Greg and Alan:
+> > 
+> > Would it make sense to change usb_hcd_pci_probe() to take a HC driver pointer
+> > as an argument instead of a pointer to pci_device_id?
+> > pci_device_id pointer is only used to extract the HC driver handle.
+> > This way the driver_data could be used for, well, driver data.
 > 
-> I am a bit confused. If this still happens after you disabled
-> autosuspend, the initial diagnosis can't be right. It looks
-> like we are entering some kind of busy loop. Can you test
-> the attached patches?
+> That seems like a good idea to me.  There aren't very many drivers that 
+> use usb_hcd_pci_probe(); changing them all should be fairly easy.
 
-Correction: please test these three patches.
+Yup it was easy to do :) I have done this and tested it. Now we can use
+driver_data for driver data.
 
-	Regards
-		Oliver
+Though couldn't compile the uhci, seems to have missing Makefile entry.
 
---=-4O8gcd++zovz6GEM/1QT
-Content-Disposition: attachment;
-	filename*0=0001-cdc-acm-close-race-betrween-suspend-and-acm_softint.patc;
-	filename*1=h
-Content-Transfer-Encoding: base64
-Content-Type: text/x-patch;
-	name="0001-cdc-acm-close-race-betrween-suspend-and-acm_softint.patch";
-	charset="UTF-8"
-
-RnJvbSBlNWY5MWZhMzJlNTI5NGI3NjRlZDkzNjE1YzIwODM0ZWUzYmE2OTBlIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
-OiBUaHUsIDUgTWFyIDIwMjAgMTE6MTY6MDIgKzAxMDAKU3ViamVjdDogW1BBVENIIDEvM10gY2Rj
-LWFjbTogY2xvc2UgcmFjZSBiZXRyd2VlbiBzdXNwZW5kKCkgYW5kIGFjbV9zb2Z0aW50CgpTdXNw
-ZW5kIGluY3JlbWVudHMgYSBjb3VudGVyLCB0aGVuIGtpbGxzIHRoZSBVUkJzLAp0aGVuIGtpbGxz
-IHRoZSBzY2hlZHVsZWQgd29yay4gVGhlIHNjaGVkdWxlZCB3b3JrLCBob3dldmVyLAptYXkgcmVz
-Y2hlZHVsZSB0aGUgVVJCcy4gRml4IHRoaXMgYnkgaGF2aW5nIHRoZSB3b3JrCmNoZWNrIHRoZSBj
-b3VudGVyLgoKU2lnbmVkLW9mZi1ieTogT2xpdmVyIE5ldWt1bSA8b25ldWt1bUBzdXNlLmNvbT4K
-LS0tCiBkcml2ZXJzL3VzYi9jbGFzcy9jZGMtYWNtLmMgfCA2ICsrKy0tLQogMSBmaWxlIGNoYW5n
-ZWQsIDMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJz
-L3VzYi9jbGFzcy9jZGMtYWNtLmMgYi9kcml2ZXJzL3VzYi9jbGFzcy9jZGMtYWNtLmMKaW5kZXgg
-NjJmNGZiOWIzNjJmLi43ZDAxNjczODJjODcgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNiL2NsYXNz
-L2NkYy1hY20uYworKysgYi9kcml2ZXJzL3VzYi9jbGFzcy9jZGMtYWNtLmMKQEAgLTU1NywxNCAr
-NTU3LDE0IEBAIHN0YXRpYyB2b2lkIGFjbV9zb2Z0aW50KHN0cnVjdCB3b3JrX3N0cnVjdCAqd29y
-aykKIAlzdHJ1Y3QgYWNtICphY20gPSBjb250YWluZXJfb2Yod29yaywgc3RydWN0IGFjbSwgd29y
-ayk7CiAKIAlpZiAodGVzdF9iaXQoRVZFTlRfUlhfU1RBTEwsICZhY20tPmZsYWdzKSkgewotCQlp
-ZiAoISh1c2JfYXV0b3BtX2dldF9pbnRlcmZhY2UoYWNtLT5kYXRhKSkpIHsKKwkJc21wX21iKCk7
-IC8qIGFnYWluc3QgYWNtX3N1c3BlbmQoKSAqLworCQlpZiAoIWFjbS0+c3VzcF9jb3VudCkgewog
-CQkJZm9yIChpID0gMDsgaSA8IGFjbS0+cnhfYnVmbGltaXQ7IGkrKykKIAkJCQl1c2Jfa2lsbF91
-cmIoYWNtLT5yZWFkX3VyYnNbaV0pOwogCQkJdXNiX2NsZWFyX2hhbHQoYWNtLT5kZXYsIGFjbS0+
-aW4pOwogCQkJYWNtX3N1Ym1pdF9yZWFkX3VyYnMoYWNtLCBHRlBfS0VSTkVMKTsKLQkJCXVzYl9h
-dXRvcG1fcHV0X2ludGVyZmFjZShhY20tPmRhdGEpOworCQkJY2xlYXJfYml0KEVWRU5UX1JYX1NU
-QUxMLCAmYWNtLT5mbGFncyk7CiAJCX0KLQkJY2xlYXJfYml0KEVWRU5UX1JYX1NUQUxMLCAmYWNt
-LT5mbGFncyk7CiAJfQogCiAJaWYgKHRlc3RfYW5kX2NsZWFyX2JpdChFVkVOVF9UVFlfV0FLRVVQ
-LCAmYWNtLT5mbGFncykpCi0tIAoyLjE2LjQKCg==
-
-
---=-4O8gcd++zovz6GEM/1QT
-Content-Disposition: attachment; filename="0002-cdc-acm-introduce-a-cool-down.patch"
-Content-Transfer-Encoding: base64
-Content-Type: text/x-patch; name="0002-cdc-acm-introduce-a-cool-down.patch";
-	charset="UTF-8"
-
-RnJvbSA0NmY4ZmU3ZGJjNTFkNjQ3NmJkODU4OWRjYmYwZmM4YTc2ZTk0MTAyIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
-OiBUdWUsIDEwIE1hciAyMDIwIDExOjU1OjIxICswMTAwClN1YmplY3Q6IFtQQVRDSCAyLzNdIGNk
-Yy1hY206IGludHJvZHVjZSBhIGNvb2wgZG93bgoKSW1tZWRpYXRlIHN1Ym1pc3Npb24gaW4gY2Fz
-ZSBvZiBhIGJhYmJsaW5nIGRldmljZSBjYW4gbGVhZAp0byBhIGJ1c3kgbG9vcC4gSW50cm9kdWNp
-bmcgYSBkZWxheWVkIHdvcmsuCgpTaWduZWQtb2ZmLWJ5OiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3Vt
-QHN1c2UuY29tPgotLS0KIGRyaXZlcnMvdXNiL2NsYXNzL2NkYy1hY20uYyB8IDI5ICsrKysrKysr
-KysrKysrKysrKysrKysrKysrKy0tCiBkcml2ZXJzL3VzYi9jbGFzcy9jZGMtYWNtLmggfCAgNSAr
-KysrLQogMiBmaWxlcyBjaGFuZ2VkLCAzMSBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQoK
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2NsYXNzL2NkYy1hY20uYyBiL2RyaXZlcnMvdXNiL2Ns
-YXNzL2NkYy1hY20uYwppbmRleCA3ZDAxNjczODJjODcuLmExZmJmNmJmNWNmNCAxMDA2NDQKLS0t
-IGEvZHJpdmVycy91c2IvY2xhc3MvY2RjLWFjbS5jCisrKyBiL2RyaXZlcnMvdXNiL2NsYXNzL2Nk
-Yy1hY20uYwpAQCAtNDEyLDkgKzQxMiwxMiBAQCBzdGF0aWMgdm9pZCBhY21fY3RybF9pcnEoc3Ry
-dWN0IHVyYiAqdXJiKQogCiBleGl0OgogCXJldHZhbCA9IHVzYl9zdWJtaXRfdXJiKHVyYiwgR0ZQ
-X0FUT01JQyk7Ci0JaWYgKHJldHZhbCAmJiByZXR2YWwgIT0gLUVQRVJNKQorCWlmIChyZXR2YWwg
-JiYgcmV0dmFsICE9IC1FUEVSTSAmJiByZXR2YWwgIT0gLUVOT0RFVikKIAkJZGV2X2VycigmYWNt
-LT5jb250cm9sLT5kZXYsCiAJCQkiJXMgLSB1c2Jfc3VibWl0X3VyYiBmYWlsZWQ6ICVkXG4iLCBf
-X2Z1bmNfXywgcmV0dmFsKTsKKwllbHNlCisJCWRldl92ZGJnKCZhY20tPmNvbnRyb2wtPmRldiwK
-KwkJCSJjb250cm9sIHJlc3VibWlzc2lvbiB0ZXJtaW5hdGVkICVkXG4iLCByZXR2YWwpOwogfQog
-CiBzdGF0aWMgaW50IGFjbV9zdWJtaXRfcmVhZF91cmIoc3RydWN0IGFjbSAqYWNtLCBpbnQgaW5k
-ZXgsIGdmcF90IG1lbV9mbGFncykKQEAgLTQzMCw2ICs0MzMsOCBAQCBzdGF0aWMgaW50IGFjbV9z
-dWJtaXRfcmVhZF91cmIoc3RydWN0IGFjbSAqYWNtLCBpbnQgaW5kZXgsIGdmcF90IG1lbV9mbGFn
-cykKIAkJCWRldl9lcnIoJmFjbS0+ZGF0YS0+ZGV2LAogCQkJCSJ1cmIgJWQgZmFpbGVkIHN1Ym1p
-c3Npb24gd2l0aCAlZFxuIiwKIAkJCQlpbmRleCwgcmVzKTsKKwkJfSBlbHNlIHsKKwkJCWRldl92
-ZGJnKCZhY20tPmRhdGEtPmRldiwgImludGVuZGVkIGZhaWx1cmUgJWRcbiIsIHJlcyk7CiAJCX0K
-IAkJc2V0X2JpdChpbmRleCwgJmFjbS0+cmVhZF91cmJzX2ZyZWUpOwogCQlyZXR1cm4gcmVzOwpA
-QCAtNDcxLDYgKzQ3Niw3IEBAIHN0YXRpYyB2b2lkIGFjbV9yZWFkX2J1bGtfY2FsbGJhY2soc3Ry
-dWN0IHVyYiAqdXJiKQogCWludCBzdGF0dXMgPSB1cmItPnN0YXR1czsKIAlib29sIHN0b3BwZWQg
-PSBmYWxzZTsKIAlib29sIHN0YWxsZWQgPSBmYWxzZTsKKwlib29sIGNvb2xkb3duID0gZmFsc2U7
-CiAKIAlkZXZfdmRiZygmYWNtLT5kYXRhLT5kZXYsICJnb3QgdXJiICVkLCBsZW4gJWQsIHN0YXR1
-cyAlZFxuIiwKIAkJcmItPmluZGV4LCB1cmItPmFjdHVhbF9sZW5ndGgsIHN0YXR1cyk7CkBAIC00
-OTcsNiArNTAzLDEzIEBAIHN0YXRpYyB2b2lkIGFjbV9yZWFkX2J1bGtfY2FsbGJhY2soc3RydWN0
-IHVyYiAqdXJiKQogCQkJX19mdW5jX18sIHN0YXR1cyk7CiAJCXN0b3BwZWQgPSB0cnVlOwogCQli
-cmVhazsKKwljYXNlIC1FT1ZFUkZMT1c6CisJCWRldl9kYmcoJmFjbS0+ZGF0YS0+ZGV2LAorCQkJ
-IiVzIC0gY29vbGluZyBiYWJibGluZyBkZXZpY2VcbiIsIF9fZnVuY19fKTsKKwkJdXNiX21hcmtf
-bGFzdF9idXN5KGFjbS0+ZGV2KTsKKwkJc2V0X2JpdChyYi0+aW5kZXgsICZhY20tPnVyYnNfaW5f
-ZXJyb3JfZGVsYXkpOworCQljb29sZG93biA9IHRydWU7CisJCWJyZWFrOwogCWRlZmF1bHQ6CiAJ
-CWRldl9kYmcoJmFjbS0+ZGF0YS0+ZGV2LAogCQkJIiVzIC0gbm9uemVybyB1cmIgc3RhdHVzIHJl
-Y2VpdmVkOiAlZFxuIiwKQEAgLTUxOCw5ICs1MzEsMTEgQEAgc3RhdGljIHZvaWQgYWNtX3JlYWRf
-YnVsa19jYWxsYmFjayhzdHJ1Y3QgdXJiICp1cmIpCiAJICovCiAJc21wX21iX19hZnRlcl9hdG9t
-aWMoKTsKIAotCWlmIChzdG9wcGVkIHx8IHN0YWxsZWQpIHsKKwlpZiAoc3RvcHBlZCB8fCBzdGFs
-bGVkIHx8IGNvb2xkb3duKSB7CiAJCWlmIChzdGFsbGVkKQogCQkJc2NoZWR1bGVfd29yaygmYWNt
-LT53b3JrKTsKKwkJZWxzZSBpZiAoY29vbGRvd24pCisJCQlzY2hlZHVsZV9kZWxheWVkX3dvcmso
-JmFjbS0+ZHdvcmssIEhaIC8gMik7CiAJCXJldHVybjsKIAl9CiAKQEAgLTU2Nyw2ICs1ODIsMTIg
-QEAgc3RhdGljIHZvaWQgYWNtX3NvZnRpbnQoc3RydWN0IHdvcmtfc3RydWN0ICp3b3JrKQogCQl9
-CiAJfQogCisJaWYgKHRlc3RfYW5kX2NsZWFyX2JpdChBQ01fRVJST1JfREVMQVksICZhY20tPmZs
-YWdzKSkgeworCQlmb3IgKGkgPSAwOyBpIDwgQUNNX05SOyBpKyspIAorCQkJaWYgKHRlc3RfYW5k
-X2NsZWFyX2JpdChpLCAmYWNtLT51cmJzX2luX2Vycm9yX2RlbGF5KSkKKwkJCQkJYWNtX3N1Ym1p
-dF9yZWFkX3VyYihhY20sIGksIEdGUF9OT0lPKTsKKwl9CisKIAlpZiAodGVzdF9hbmRfY2xlYXJf
-Yml0KEVWRU5UX1RUWV9XQUtFVVAsICZhY20tPmZsYWdzKSkKIAkJdHR5X3BvcnRfdHR5X3dha2V1
-cCgmYWNtLT5wb3J0KTsKIH0KQEAgLTEzMjUsNiArMTM0Niw3IEBAIHN0YXRpYyBpbnQgYWNtX3By
-b2JlKHN0cnVjdCB1c2JfaW50ZXJmYWNlICppbnRmLAogCWFjbS0+cmVhZHNpemUgPSByZWFkc2l6
-ZTsKIAlhY20tPnJ4X2J1ZmxpbWl0ID0gbnVtX3J4X2J1ZjsKIAlJTklUX1dPUksoJmFjbS0+d29y
-aywgYWNtX3NvZnRpbnQpOworCUlOSVRfREVMQVlFRF9XT1JLKCZhY20tPmR3b3JrLCBhY21fc29m
-dGludCk7CiAJaW5pdF93YWl0cXVldWVfaGVhZCgmYWNtLT53aW9jdGwpOwogCXNwaW5fbG9ja19p
-bml0KCZhY20tPndyaXRlX2xvY2spOwogCXNwaW5fbG9ja19pbml0KCZhY20tPnJlYWRfbG9jayk7
-CkBAIC0xNTM0LDYgKzE1NTYsNyBAQCBzdGF0aWMgdm9pZCBhY21fZGlzY29ubmVjdChzdHJ1Y3Qg
-dXNiX2ludGVyZmFjZSAqaW50ZikKIAogCWFjbV9raWxsX3VyYnMoYWNtKTsKIAljYW5jZWxfd29y
-a19zeW5jKCZhY20tPndvcmspOworCWNhbmNlbF9kZWxheWVkX3dvcmtfc3luYygmYWNtLT5kd29y
-ayk7CiAKIAl0dHlfdW5yZWdpc3Rlcl9kZXZpY2UoYWNtX3R0eV9kcml2ZXIsIGFjbS0+bWlub3Ip
-OwogCkBAIC0xNTc2LDYgKzE1OTksOCBAQCBzdGF0aWMgaW50IGFjbV9zdXNwZW5kKHN0cnVjdCB1
-c2JfaW50ZXJmYWNlICppbnRmLCBwbV9tZXNzYWdlX3QgbWVzc2FnZSkKIAogCWFjbV9raWxsX3Vy
-YnMoYWNtKTsKIAljYW5jZWxfd29ya19zeW5jKCZhY20tPndvcmspOworCWNhbmNlbF9kZWxheWVk
-X3dvcmtfc3luYygmYWNtLT5kd29yayk7CisJYWNtLT51cmJzX2luX2Vycm9yX2RlbGF5ID0gMDsK
-IAogCXJldHVybiAwOwogfQpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvY2xhc3MvY2RjLWFjbS5o
-IGIvZHJpdmVycy91c2IvY2xhc3MvY2RjLWFjbS5oCmluZGV4IGNhMWMwMjYzODJjMi4uY2Q1ZTlk
-OGFiMjM3IDEwMDY0NAotLS0gYS9kcml2ZXJzL3VzYi9jbGFzcy9jZGMtYWNtLmgKKysrIGIvZHJp
-dmVycy91c2IvY2xhc3MvY2RjLWFjbS5oCkBAIC0xMDksOCArMTA5LDExIEBAIHN0cnVjdCBhY20g
-ewogIwkJZGVmaW5lIEVWRU5UX1RUWV9XQUtFVVAJMAogIwkJZGVmaW5lIEVWRU5UX1JYX1NUQUxM
-CTEKICMJCWRlZmluZSBBQ01fVEhST1RUTEVECTIKKyMJCWRlZmluZSBBQ01fRVJST1JfREVMQVkJ
-MworCXVuc2lnbmVkIGxvbmcgdXJic19pbl9lcnJvcl9kZWxheTsJCS8qIHRoZXNlIG5lZWQgdG8g
-YmUgcmVzdGFydGVkIGFmdGVyIGEgZGVsYXkgKi8KIAlzdHJ1Y3QgdXNiX2NkY19saW5lX2NvZGlu
-ZyBsaW5lOwkJLyogYml0cywgc3RvcCwgcGFyaXR5ICovCi0Jc3RydWN0IHdvcmtfc3RydWN0IHdv
-cms7CQkJLyogd29yayBxdWV1ZSBlbnRyeSBmb3IgbGluZSBkaXNjaXBsaW5lIHdha2luZyB1cCAq
-LworCXN0cnVjdCB3b3JrX3N0cnVjdCB3b3JrOwkJCS8qIHdvcmsgcXVldWUgZW50cnkgZm9yIHZh
-cmlvdXMgcHVycG9zZXMqLworCXN0cnVjdCBkZWxheWVkX3dvcmsgZHdvcms7CQkJLyogZm9yIGNv
-b2wgZG93bnMgbmVlZGVkIGluIGVycm9yIHJlY292ZXJ5ICovCiAJdW5zaWduZWQgaW50IGN0cmxp
-bjsJCQkJLyogaW5wdXQgY29udHJvbCBsaW5lcyAoRENELCBEU1IsIFJJLCBicmVhaywgb3ZlcnJ1
-bnMpICovCiAJdW5zaWduZWQgaW50IGN0cmxvdXQ7CQkJCS8qIG91dHB1dCBjb250cm9sIGxpbmVz
-IChEVFIsIFJUUykgKi8KIAlzdHJ1Y3QgYXN5bmNfaWNvdW50IGlvY291bnQ7CQkJLyogY291bnRl
-cnMgZm9yIGNvbnRyb2wgbGluZSBjaGFuZ2VzICovCi0tIAoyLjE2LjQKCg==
-
-
---=-4O8gcd++zovz6GEM/1QT
-Content-Disposition: attachment; filename="0003-cdc-acm-also-cool-doen-for-EPROTO.patch"
-Content-Transfer-Encoding: base64
-Content-Type: text/x-patch; name="0003-cdc-acm-also-cool-doen-for-EPROTO.patch";
-	charset="UTF-8"
-
-RnJvbSBjNWE4Y2EwYTc5YWRmZWE5ZGRhNWVlNTFmMjNjZjA5ODkxNjg3YTI0IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
-OiBUdWUsIDEwIE1hciAyMDIwIDEyOjE5OjUzICswMTAwClN1YmplY3Q6IFtQQVRDSCAzLzNdIGNk
-Yy1hY206IGFsc28gY29vbCBkb2VuIGZvciBFUFJPVE8KCi0tLQogZHJpdmVycy91c2IvY2xhc3Mv
-Y2RjLWFjbS5jIHwgMSArCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKCmRpZmYgLS1n
-aXQgYS9kcml2ZXJzL3VzYi9jbGFzcy9jZGMtYWNtLmMgYi9kcml2ZXJzL3VzYi9jbGFzcy9jZGMt
-YWNtLmMKaW5kZXggYTFmYmY2YmY1Y2Y0Li44MjQ4NGNjNmMzNmYgMTAwNjQ0Ci0tLSBhL2RyaXZl
-cnMvdXNiL2NsYXNzL2NkYy1hY20uYworKysgYi9kcml2ZXJzL3VzYi9jbGFzcy9jZGMtYWNtLmMK
-QEAgLTUwNCw2ICs1MDQsNyBAQCBzdGF0aWMgdm9pZCBhY21fcmVhZF9idWxrX2NhbGxiYWNrKHN0
-cnVjdCB1cmIgKnVyYikKIAkJc3RvcHBlZCA9IHRydWU7CiAJCWJyZWFrOwogCWNhc2UgLUVPVkVS
-RkxPVzoKKwljYXNlIC1FUFJPVE86CiAJCWRldl9kYmcoJmFjbS0+ZGF0YS0+ZGV2LAogCQkJIiVz
-IC0gY29vbGluZyBiYWJibGluZyBkZXZpY2VcbiIsIF9fZnVuY19fKTsKIAkJdXNiX21hcmtfbGFz
-dF9idXN5KGFjbS0+ZGV2KTsKLS0gCjIuMTYuNAoK
-
-
---=-4O8gcd++zovz6GEM/1QT--
-
+-- 
+~Vinod
