@@ -2,30 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4883A17F62D
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 12:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 517F417F674
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 12:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726273AbgCJLWu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Mar 2020 07:22:50 -0400
-Received: from mx2.suse.de ([195.135.220.15]:50536 "EHLO mx2.suse.de"
+        id S1726224AbgCJLkG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Mar 2020 07:40:06 -0400
+Received: from mx2.suse.de ([195.135.220.15]:58216 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725937AbgCJLWu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Mar 2020 07:22:50 -0400
+        id S1726205AbgCJLkG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 10 Mar 2020 07:40:06 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 1E524B22D;
-        Tue, 10 Mar 2020 11:22:47 +0000 (UTC)
-Message-ID: <1583838270.11582.11.camel@suse.com>
+        by mx2.suse.de (Postfix) with ESMTP id C07D8AC65;
+        Tue, 10 Mar 2020 11:40:02 +0000 (UTC)
+Message-ID: <1583839306.11582.12.camel@suse.de>
 Subject: Re: USB transaction errors causing RCU stalls and kernel panics
-From:   Oliver Neukum <oneukum@suse.com>
+From:   Oliver Neukum <oneukum@suse.de>
 To:     Jonas Karlsson <jonas.karlsson@actia.se>,
         Peter Chen <peter.chen@nxp.com>
 Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
         Greg KH <gregkh@linuxfoundation.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>
-Date:   Tue, 10 Mar 2020 12:04:30 +0100
-In-Reply-To: <d1f68ef3316e484b9cc1360f71886719@actia.se>
+Date:   Tue, 10 Mar 2020 12:21:46 +0100
+In-Reply-To: <1583838270.11582.11.camel@suse.com>
 References: <ddf8c3971b8544e983a9d2bbdc7f2010@actia.se>
          <20200303163945.GB652754@kroah.com>
          <ca6f029a57f24ee9aea39385a9ad55bd@actia.se>
@@ -36,7 +36,8 @@ References: <ddf8c3971b8544e983a9d2bbdc7f2010@actia.se>
          <699a49f2f69e494ea6558b99fad23cc4@actia.se>
          <20200310081452.GA14625@b29397-desktop>
          <d1f68ef3316e484b9cc1360f71886719@actia.se>
-Content-Type: multipart/mixed; boundary="=-hVUogmiFDx3k+KTRaErW"
+         <1583838270.11582.11.camel@suse.com>
+Content-Type: multipart/mixed; boundary="=-4O8gcd++zovz6GEM/1QT"
 X-Mailer: Evolution 3.26.6 
 Mime-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
@@ -45,24 +46,27 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---=-hVUogmiFDx3k+KTRaErW
+--=-4O8gcd++zovz6GEM/1QT
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 
-Am Dienstag, den 10.03.2020, 10:04 +0000 schrieb Jonas Karlsson:
+Am Dienstag, den 10.03.2020, 12:04 +0100 schrieb Oliver Neukum:
+> Am Dienstag, den 10.03.2020, 10:04 +0000 schrieb Jonas Karlsson:
+> 
+> > Yes, I have applied that commit. The logs I have attached so far have had that commit applied.
+> > It reduces the amount of Unknown event type 37 messages significantly.
+> 
+> I am a bit confused. If this still happens after you disabled
+> autosuspend, the initial diagnosis can't be right. It looks
+> like we are entering some kind of busy loop. Can you test
+> the attached patches?
 
-> Yes, I have applied that commit. The logs I have attached so far have had that commit applied.
-> It reduces the amount of Unknown event type 37 messages significantly.
-
-I am a bit confused. If this still happens after you disabled
-autosuspend, the initial diagnosis can't be right. It looks
-like we are entering some kind of busy loop. Can you test
-the attached patches?
+Correction: please test these three patches.
 
 	Regards
 		Oliver
 
---=-hVUogmiFDx3k+KTRaErW
+--=-4O8gcd++zovz6GEM/1QT
 Content-Disposition: attachment;
 	filename*0=0001-cdc-acm-close-race-betrween-suspend-and-acm_softint.patc;
 	filename*1=h
@@ -73,7 +77,7 @@ Content-Type: text/x-patch;
 
 RnJvbSBlNWY5MWZhMzJlNTI5NGI3NjRlZDkzNjE1YzIwODM0ZWUzYmE2OTBlIE1vbiBTZXAgMTcg
 MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
-OiBUaHUsIDUgTWFyIDIwMjAgMTE6MTY6MDIgKzAxMDAKU3ViamVjdDogW1BBVENIIDEvMl0gY2Rj
+OiBUaHUsIDUgTWFyIDIwMjAgMTE6MTY6MDIgKzAxMDAKU3ViamVjdDogW1BBVENIIDEvM10gY2Rj
 LWFjbTogY2xvc2UgcmFjZSBiZXRyd2VlbiBzdXNwZW5kKCkgYW5kIGFjbV9zb2Z0aW50CgpTdXNw
 ZW5kIGluY3JlbWVudHMgYSBjb3VudGVyLCB0aGVuIGtpbGxzIHRoZSBVUkJzLAp0aGVuIGtpbGxz
 IHRoZSBzY2hlZHVsZWQgd29yay4gVGhlIHNjaGVkdWxlZCB3b3JrLCBob3dldmVyLAptYXkgcmVz
@@ -98,7 +102,7 @@ LT5mbGFncyk7CiAJfQogCiAJaWYgKHRlc3RfYW5kX2NsZWFyX2JpdChFVkVOVF9UVFlfV0FLRVVQ
 LCAmYWNtLT5mbGFncykpCi0tIAoyLjE2LjQKCg==
 
 
---=-hVUogmiFDx3k+KTRaErW
+--=-4O8gcd++zovz6GEM/1QT
 Content-Disposition: attachment; filename="0002-cdc-acm-introduce-a-cool-down.patch"
 Content-Transfer-Encoding: base64
 Content-Type: text/x-patch; name="0002-cdc-acm-introduce-a-cool-down.patch";
@@ -106,7 +110,7 @@ Content-Type: text/x-patch; name="0002-cdc-acm-introduce-a-cool-down.patch";
 
 RnJvbSA0NmY4ZmU3ZGJjNTFkNjQ3NmJkODU4OWRjYmYwZmM4YTc2ZTk0MTAyIE1vbiBTZXAgMTcg
 MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
-OiBUdWUsIDEwIE1hciAyMDIwIDExOjU1OjIxICswMTAwClN1YmplY3Q6IFtQQVRDSCAyLzJdIGNk
+OiBUdWUsIDEwIE1hciAyMDIwIDExOjU1OjIxICswMTAwClN1YmplY3Q6IFtQQVRDSCAyLzNdIGNk
 Yy1hY206IGludHJvZHVjZSBhIGNvb2wgZG93bgoKSW1tZWRpYXRlIHN1Ym1pc3Npb24gaW4gY2Fz
 ZSBvZiBhIGJhYmJsaW5nIGRldmljZSBjYW4gbGVhZAp0byBhIGJ1c3kgbG9vcC4gSW50cm9kdWNp
 bmcgYSBkZWxheWVkIHdvcmsuCgpTaWduZWQtb2ZmLWJ5OiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3Vt
@@ -187,5 +191,26 @@ IChEVFIsIFJUUykgKi8KIAlzdHJ1Y3QgYXN5bmNfaWNvdW50IGlvY291bnQ7CQkJLyogY291bnRl
 cnMgZm9yIGNvbnRyb2wgbGluZSBjaGFuZ2VzICovCi0tIAoyLjE2LjQKCg==
 
 
---=-hVUogmiFDx3k+KTRaErW--
+--=-4O8gcd++zovz6GEM/1QT
+Content-Disposition: attachment; filename="0003-cdc-acm-also-cool-doen-for-EPROTO.patch"
+Content-Transfer-Encoding: base64
+Content-Type: text/x-patch; name="0003-cdc-acm-also-cool-doen-for-EPROTO.patch";
+	charset="UTF-8"
+
+RnJvbSBjNWE4Y2EwYTc5YWRmZWE5ZGRhNWVlNTFmMjNjZjA5ODkxNjg3YTI0IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
+OiBUdWUsIDEwIE1hciAyMDIwIDEyOjE5OjUzICswMTAwClN1YmplY3Q6IFtQQVRDSCAzLzNdIGNk
+Yy1hY206IGFsc28gY29vbCBkb2VuIGZvciBFUFJPVE8KCi0tLQogZHJpdmVycy91c2IvY2xhc3Mv
+Y2RjLWFjbS5jIHwgMSArCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKCmRpZmYgLS1n
+aXQgYS9kcml2ZXJzL3VzYi9jbGFzcy9jZGMtYWNtLmMgYi9kcml2ZXJzL3VzYi9jbGFzcy9jZGMt
+YWNtLmMKaW5kZXggYTFmYmY2YmY1Y2Y0Li44MjQ4NGNjNmMzNmYgMTAwNjQ0Ci0tLSBhL2RyaXZl
+cnMvdXNiL2NsYXNzL2NkYy1hY20uYworKysgYi9kcml2ZXJzL3VzYi9jbGFzcy9jZGMtYWNtLmMK
+QEAgLTUwNCw2ICs1MDQsNyBAQCBzdGF0aWMgdm9pZCBhY21fcmVhZF9idWxrX2NhbGxiYWNrKHN0
+cnVjdCB1cmIgKnVyYikKIAkJc3RvcHBlZCA9IHRydWU7CiAJCWJyZWFrOwogCWNhc2UgLUVPVkVS
+RkxPVzoKKwljYXNlIC1FUFJPVE86CiAJCWRldl9kYmcoJmFjbS0+ZGF0YS0+ZGV2LAogCQkJIiVz
+IC0gY29vbGluZyBiYWJibGluZyBkZXZpY2VcbiIsIF9fZnVuY19fKTsKIAkJdXNiX21hcmtfbGFz
+dF9idXN5KGFjbS0+ZGV2KTsKLS0gCjIuMTYuNAoK
+
+
+--=-4O8gcd++zovz6GEM/1QT--
 
