@@ -2,244 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F8D17F189
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 09:14:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC62B17F3E7
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 10:43:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726391AbgCJIOx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Mar 2020 04:14:53 -0400
-Received: from mail-am6eur05on2072.outbound.protection.outlook.com ([40.107.22.72]:44282
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        id S1726244AbgCJJnL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Mar 2020 05:43:11 -0400
+Received: from mail-mw2nam12on2056.outbound.protection.outlook.com ([40.107.244.56]:6076
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725919AbgCJIOx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Mar 2020 04:14:53 -0400
+        id S1726202AbgCJJnK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 10 Mar 2020 05:43:10 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OqFMrwVE4YuOvg4ELNKlKqqfPppfrx8Ix0IK9imSbHZLP2i3xtoTx+PLWpujtpJC2SPvRTFrkQ65sCyZBjfnxrMxpnwbbMu8UQB7WHIdL49MbJ+slmR1non86wIYqGGoFEK2sDoZWgfeV7sWxnTZKurfW/DNRxOkci2PNk1YBebv8CqM5SCukWKgUDmUOhIcupV4BOGUAEpV7wXwwT0BpHriPXUISQruNcpUuPUAO4ttBVFmw797Vd+YUxu3WQESzDryXuI7D5+x4XVFk7Qc6X8bP/F5H77mkKTIiymb+/63pMThFndLUAD5eIPUNUdwZ0CfOjmMEbKhXoIGyAtEPw==
+ b=XcNI6zAcIje5v+unhGQh2lL8j/CAKz9ffBAJzjDBqnoEvn3FBaHlLE+ZATI9kHMPMmtwc4EJUZccKYXByRLI0DFoqYEQ9Sk2xni3lt4W3K9XsylWTQzPaqtMhgvbs4XOoHZW0gi4qqiW4tv+oojf1S+Plja51gAE0W+zc5xcT+q3INN21UvzrmGt8FAf/LvlOxBEw9WqakeIVzuz+DaEw3cpJMSMVqviN3csM565/1c3Zh05z3mqGIEkYCgNRySRUQU6Xpo5Z+wdxcfKCt2mR6K8F57YSdsZy8FnoTMsh8mSQ1oZbTJKBzAYgmlfSm/2xJcZhAEGpqdPIIfGVjLvOQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=APcFK7GAffeujSGWJkhKw8eseRnSwDlGyHUiK/aOzKk=;
- b=UTHdmNcgB3C0jUHRaqqUOvF2LbCWymKY45OXabwrv5ODrgtmxfpNjqzpGt/cxAk8om9L1O+R5mkKSlhelN3LVqcA2AWHmnZaGvmc5PRowHIAX5KlFBuF8Y4chvxtPxHUWDO5fnH6IVAloLr+GX7acB8LnpRzQulco0fVFSh0xlhOrxtOaeFNvQT0uwTYzB5YKfk7NEIHVYN5Tb3+rcRVI3zJHpBYa4myz1gdVNEGmas7DrpwrVUU921FRL/I8zsN74wJcT/19xLUr1ojvBGMuZd2Chl9tYJdlo9PDSaczrhkVwKRiqNji0H1nBdSCAEjjUIkg6JAztvXhrrXEfT9/w==
+ bh=LKKibb/uFQKn6cWtlu6rXqsYvgK7BFqRACAcYL9atIw=;
+ b=UDUQO3EGHiS0rwzE4LozBcnERUOClOvemOfCT+h9yuBVCFHcuAmQmgB7wVBTX9EjtoZTkFO5ZIVl3LYR6vMbUlW/9TFOsbFGVz3vwm7VsipjFv+th1SnugpSxgWY3qWlz2M7D6oAWEK/DXaDTwGYvMaESeUhxyyOOrmvhM0nWHzU3iQibSXqxbjnMRcGNw5l/Mnlbv6suSo5MfhVkUye9WJWXmYDeWvxkYQ5XOWFd+JOe0EFRtlqdSHCYRGOSJYI/N4zRA11igPpuD1pLgsHKgRUjm1PkUN7ye/Uquq+sWmvi8+AZfjL6PCoGYYOM+AzyK8Mv8mqA5rm4qud9lSi8w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=infinera.com; dmarc=pass action=none header.from=infinera.com;
+ dkim=pass header.d=infinera.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infinera.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=APcFK7GAffeujSGWJkhKw8eseRnSwDlGyHUiK/aOzKk=;
- b=MXQvKPtFZzwxG/gWjU20xVnRw9V5b28FkX231boZ/aa4ZdcT9CdA10Qjqbz1eTmb84sYJIrPH7caaBA5yuPJsn3cY3WOKCtHBzn3cbyDuPBA0ulCC/nmjjJx7UAwdJx/TgZ32mWM5K910wS5I//apQM5qg+OdHa7odZWxV91ywo=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
- VI1PR04MB6287.eurprd04.prod.outlook.com (20.179.27.146) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2793.17; Tue, 10 Mar 2020 08:14:49 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::9547:9dfa:76b8:71b1]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::9547:9dfa:76b8:71b1%7]) with mapi id 15.20.2793.013; Tue, 10 Mar 2020
- 08:14:49 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Jonas Karlsson <jonas.karlsson@actia.se>
-CC:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: USB transaction errors causing RCU stalls and kernel panics
-Thread-Topic: USB transaction errors causing RCU stalls and kernel panics
-Thread-Index: AdXxbFdECZ2tmAAoQZaxVkfgHyprqgADgE2AAAdLkAAAIaJ9AAAEO3aAAAR/HgAARWqdUACx3DMAACV4xgA=
-Date:   Tue, 10 Mar 2020 08:14:49 +0000
-Message-ID: <20200310081452.GA14625@b29397-desktop>
-References: <ddf8c3971b8544e983a9d2bbdc7f2010@actia.se>
- <20200303163945.GB652754@kroah.com>
- <ca6f029a57f24ee9aea39385a9ad55bd@actia.se>
- <6909d182-6cc5-c07f-ed79-02c741aec60b@linux.intel.com>
- <1583331173.12738.26.camel@suse.com>
- <4fa64e92-64ce-07f3-ed8e-ea4e07d091bb@linux.intel.com>
- <VI1PR04MB532785057FD52DFE3A21ACA88BE30@VI1PR04MB5327.eurprd04.prod.outlook.com>
- <699a49f2f69e494ea6558b99fad23cc4@actia.se>
-In-Reply-To: <699a49f2f69e494ea6558b99fad23cc4@actia.se>
-Accept-Language: en-US
+ bh=LKKibb/uFQKn6cWtlu6rXqsYvgK7BFqRACAcYL9atIw=;
+ b=XhMmWWIidprnYV0nsMxASUFnhQbZ29rxYP2Uf+Es7ACZHwcGWqzcXPKiKOzTv/uqL9A43f1zm2QqcrlwaxsXvLpizgLGVSTLsg0vVS4rfUgodF/iBro752AOmtXyRggrmOonIFDCy5VCYPa4PoU8Sg6/RRW+DY/qEpaDZAeUrTc=
+Received: from BN8PR10MB3540.namprd10.prod.outlook.com (2603:10b6:408:ae::24)
+ by BN8PR10MB4084.namprd10.prod.outlook.com (2603:10b6:408:b0::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2793.17; Tue, 10 Mar
+ 2020 09:43:07 +0000
+Received: from BN8PR10MB3540.namprd10.prod.outlook.com
+ ([fe80::1940:6f91:a80e:b47]) by BN8PR10MB3540.namprd10.prod.outlook.com
+ ([fe80::1940:6f91:a80e:b47%5]) with mapi id 15.20.2793.013; Tue, 10 Mar 2020
+ 09:43:07 +0000
+From:   Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
+To:     "linuxppc-dev@ozlabs.org" <linuxppc-dev@ozlabs.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: CDC ethernet gadget: complete system freeze
+Thread-Topic: CDC ethernet gadget: complete system freeze
+Thread-Index: AQHV9sBN2nbfIelzrUOxTHcGd7CUkg==
+Date:   Tue, 10 Mar 2020 09:43:07 +0000
+Message-ID: <17c670a4386bc1cfa3db207c6961d95f3378ad64.camel@infinera.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.35.92 
 authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
+ smtp.mailfrom=Joakim.Tjernlund@infinera.com; 
+x-originating-ip: [88.131.87.201]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 6efcae2d-d386-466b-fbd3-08d7c4cb1a2b
-x-ms-traffictypediagnostic: VI1PR04MB6287:
-x-microsoft-antispam-prvs: <VI1PR04MB62873C491B4B94AFB37D44978BFF0@VI1PR04MB6287.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-office365-filtering-correlation-id: 89ecb10b-cfca-4fb8-0494-08d7c4d7705d
+x-ms-traffictypediagnostic: BN8PR10MB4084:
+x-microsoft-antispam-prvs: <BN8PR10MB40845653CD753761D49D1DE0F4FF0@BN8PR10MB4084.namprd10.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
 x-forefront-prvs: 033857D0BD
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(376002)(396003)(346002)(136003)(366004)(39860400002)(189003)(199004)(81156014)(6512007)(86362001)(66446008)(81166006)(8936002)(9686003)(54906003)(91956017)(66476007)(478600001)(66946007)(64756008)(316002)(6486002)(76116006)(8676002)(66556008)(2906002)(44832011)(6916009)(186003)(26005)(33656002)(5660300002)(1076003)(4326008)(6506007)(33716001)(71200400001)(53546011);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB6287;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(39850400004)(346002)(136003)(376002)(366004)(189003)(199004)(5660300002)(316002)(4744005)(478600001)(6512007)(66476007)(71200400001)(64756008)(86362001)(91956017)(76116006)(66556008)(66946007)(110136005)(66446008)(6506007)(2616005)(6486002)(2906002)(186003)(26005)(8936002)(36756003)(81156014)(81166006)(8676002);DIR:OUT;SFP:1101;SCL:1;SRVR:BN8PR10MB4084;H:BN8PR10MB3540.namprd10.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: infinera.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Tniu3Wk3Tvjd11ZwK4OZnF6A7haj0kTRSrALUdGeB5VCUWuBF8JAxr0ykjUSO8h5E97AQbiyCa9oEBKDGsUT7ciE039/PwB9lNizlLDxj66lxeTRtijXR08ZweSmzdH7uXncd96m+1AFvs2kCV0XLotu84Q0wgcGRC5w5gLizq4b+56D4W4Df8pzEkP7rYALogx3h6gKYPQVfsQBrnOVHcAcRnc/lF2Qo+ezBsHc0gwAtFSpuUoIKQ4cm4mk9kTR5po9W9+5cwBkhUHPhNfLXRYaD/ZXZznkiLvr6L5lj6gxbSX3u66T3TGJMI/N/defSMhXLa1ZGQTzLX1SWoHqVSU3JDs93mYSBXtQI8nz7JwEEjaUY+x3aZkw0RoLiBdkXr8wJp3nhUMz1+4MSUxlpc0UeKNrOrArExZy/2OGvUdovbLcW2wp1CMvPXAEro+t
-x-ms-exchange-antispam-messagedata: ich2WbqBCfR/Ipw0OYZUaJPxw/v3aLuF8BWcO+wfVQzjRcjtfppCGgjucKfJCVS8Oc8mpwStILeqZ3hkHAD8cCkOCRlsMn+8J4k+XaddpC+0JCPRYIYmbKmfzJZSrVfA56ZhUb3MkTSDWs5YaDWkIg==
+x-microsoft-antispam-message-info: FxTqwhHrX7OVkgcMwWA6owEni7sW2948mV3zlagkJCr0DliAo9VU3yuqiE0clz9sySCl/6zgH3DnbueJhXr1e3YE90nQtoHG+rSu1KatCQIpTT0MgyhM9tgOxt0c/tRlCyKirnfkuZT6Ls5mGY8dvRar1GgJ8MkZsndf4Z/mrm8P+0UJVo1j9NpwjzlzjfSEI6lpqmANLVgpkqxNqd1GxMmIUfoDfgqDDmc0b+MX7tZAA+mcsA2Cgqm3slV0HZaKvz26s7v52EvtlwnPyKNc0OKOXV3sRkh2a/KfH8d3o5YfqkZOfRwikDWsCzv89tI9fHKYSq/tyHIXzC0wip/iD4Er/Ffh5dRH9z6YwVSLUGsPWejMLawDAzaf6q3atynfNdhEZaIY6vkoOsMhVP7LuyFaz5oZ+WBVMgE4oA/2f3AAlavbq5bV/pZD2NnxZ1Zy
+x-ms-exchange-antispam-messagedata: JB/6HeNmml1Q+6TLiYm8c2GW3ZODeJYNz8I22qeOfgHrIVr7pUR/aK7RnYcAd4eM/RmfSg6Yq4sHkVTRmDFcCYBhh8XAKtC1EYDYLyYynHwHd0jjL+pWIIuhhlRIy1CYgJET7RkJQRyvIhpBbs5bpg==
 x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <70E10BD5720F714A92AB6D4410D71782@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <AC15D0D80651A24E83DC6E0B13CC7543@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6efcae2d-d386-466b-fbd3-08d7c4cb1a2b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2020 08:14:49.1650
+X-OriginatorOrg: infinera.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 89ecb10b-cfca-4fb8-0494-08d7c4d7705d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2020 09:43:07.7302
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: DnaufGuY+VneSS/8npWeA2/s84M/54HQ1fazHANMWF6XpTfXB2oHaM4GrOR1gtBSIoJgu8DYW/7SyGWz7adkmg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6287
+X-MS-Exchange-CrossTenant-userprincipalname: w/YywIIeb3lJ363mnE+zAx3mM56W/iFn70aJZT8tfbUEq1Faq88GNFQjcXCxcXrycxWzzhm8VJlqGXJN+yptAQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB4084
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-03-09 14:21:56, Jonas Karlsson wrote:
-> >=20
-> > If autosuspend is suspicious, Jonas, could you please try to disable au=
-tosuspend
-> > for all USB devices (including the roothub and controller) to see what =
-happens?
-> >=20
-> > Peter
->=20
-> I have run some tests with autosuspend turned off by doing this:
-> for i in $(find /sys -name control | grep usb);do echo on > $i;echo "echo=
- on > $i";done;
->=20
-> To make our modem misbehave we need to cool it down in a temp chamber whi=
-ch I haven't had
-> access to the past days. However we have found two other ways to reproduc=
-e the event storm causing
-> event ring full messages spamming the logs. The pattern in the attached f=
-ile repeats itself until I
-> unbind the driver.
-
-Hi Jonas,
-
-Do you have below commit at your local tree? If you have, I am puzzled
-why you still get "Event Ring Full Error" error, maybe Mathias have the
-answer?
-
-commit dc0ffbea5729a3abafa577ebfce87f18b79e294b
-Author: Peter Chen <peter.chen@nxp.com>
-Date:   Fri Nov 15 18:50:00 2019 +0200
-
-    usb: host: xhci: update event ring dequeue pointer on purpose
-
-@Mathias, could xhci design some software retry limits for transaction
-error? It may avoid retry storm due to hardware issue (eg, signal
-issue). For EHCI, there is a design to define QH_XACTERR_MAX at
-qh_completions for that.
-
-Peter
-
->=20
-> 1. If we power up the modem and wait until the modem is enumerated and th=
-en turn off the=20
-> VUSB supply to modem which supplies the USB port on the modem we see a co=
-ntinuous flow=20
-> of Unknown event type 37.
->=20
-> Or
->=20
-> 2. If we power up the modem and wait until the modem is enumerated and th=
-en pull the reset
-> pin of the USB hub that sits between the modem and the SoC we also see a =
-continuous flow of=20
-> Unknown event type 37.
->=20
-> According to the USB hub datasheet this happens when the reset pin is pul=
-led:
-> "The PHYs are disabled, and the differential pairs will be in a high-impe=
-dance state."
->=20
-> Having autosuspend enabled or disabled does not seem to make a difference=
- in this case.=20
->=20
-> BR,
-> Jonas
-
-> [  674.915892] cdc_acm 1-1.1:1.5: acm_read_bulk_callback - nonzero urb st=
-atus received: -71
-> [  674.915902]  xhci-cdns3: Ignoring reset ep completion code of 1
-> [  674.915912]  xhci-cdns3: Successful Set TR Deq Ptr cmd, deq =3D @960d4=
-570
-> [  674.915968]  xhci-cdns3: Transfer error for slot 2 ep 10 on endpoint
-> [  674.915979]  xhci-cdns3: Cleaning up stalled endpoint ring
-> [  674.915983]  xhci-cdns3: Finding endpoint context
-> [  674.915988]  xhci-cdns3: Cycle state =3D 0x1
-> [  674.915993]  xhci-cdns3: New dequeue segment =3D 00000000641e49ab (vir=
-tual)
-> [  674.915998]  xhci-cdns3: New dequeue pointer =3D 0x960d4580 (DMA)
-> [  674.916002]  xhci-cdns3: Queueing new dequeue state
-> [  674.916009]  xhci-cdns3: Set TR Deq Ptr cmd, new deq seg =3D 000000006=
-41e49ab (0x960d4000 dma), new deq ptr =3D 00000000dae0365c (0x960d4580 dma)=
-, new cycle =3D 1
-> [  674.916014]  xhci-cdns3: // Ding dong!
-> [  674.916020]  xhci-cdns3: Giveback URB 0000000007a5ed65, len =3D 0, exp=
-ected =3D 1024, status =3D -71
-> [  674.916028] cdc_acm 1-1.1:1.5: acm_read_bulk_callback - nonzero urb st=
-atus received: -71
-> [  674.916035]  xhci-cdns3: Ignoring reset ep completion code of 1
-> [  674.916044]  xhci-cdns3: Successful Set TR Deq Ptr cmd, deq =3D @960d4=
-580
-> [  674.916064]  xhci-cdns3: Transfer error for slot 2 ep 10 on endpoint
-> [  674.916073]  xhci-cdns3: Cleaning up stalled endpoint ring
-> [  674.916077]  xhci-cdns3: Finding endpoint context
-> [  674.916081]  xhci-cdns3: Cycle state =3D 0x1
-> [  674.916086]  xhci-cdns3: New dequeue segment =3D 00000000641e49ab (vir=
-tual)
-> [  674.916091]  xhci-cdns3: New dequeue pointer =3D 0x960d4590 (DMA)
-> [  674.916094]  xhci-cdns3: Queueing new dequeue state
-> [  674.916102]  xhci-cdns3: Set TR Deq Ptr cmd, new deq seg =3D 000000006=
-41e49ab (0x960d4000 dma), new deq ptr =3D 00000000d9f5f1c1 (0x960d4590 dma)=
-, new cycle =3D 1
-> [  674.916106]  xhci-cdns3: // Ding dong!
-> [  674.916113]  xhci-cdns3: Giveback URB 000000008a0a9417, len =3D 0, exp=
-ected =3D 1024, status =3D -71
-> [  674.916119] cdc_acm 1-1.1:1.5: acm_read_bulk_callback - nonzero urb st=
-atus received: -71
-> [  674.916126]  xhci-cdns3: Ignoring reset ep completion code of 1
-> [  674.916135]  xhci-cdns3: Successful Set TR Deq Ptr cmd, deq =3D @960d4=
-590
-> [  674.916149]  xhci-cdns3: Transfer error for slot 2 ep 10 on endpoint
-> [  674.916157]  xhci-cdns3: Cleaning up stalled endpoint ring
-> [  674.916161]  xhci-cdns3: Finding endpoint context
-> [  674.916166]  xhci-cdns3: Cycle state =3D 0x1
-> [  674.916170]  xhci-cdns3: New dequeue segment =3D 00000000641e49ab (vir=
-tual)
-> [  674.916175]  xhci-cdns3: New dequeue pointer =3D 0x960d45a0 (DMA)
-> [  674.916178]  xhci-cdns3: Queueing new dequeue state
-> [  674.916186]  xhci-cdns3: Set TR Deq Ptr cmd, new deq seg =3D 000000006=
-41e49ab (0x960d4000 dma), new deq ptr =3D 0000000094b88dce (0x960d45a0 dma)=
-, new cycle =3D 1
-> [  674.916190]  xhci-cdns3: // Ding dong!
-> [  674.916197]  xhci-cdns3: Giveback URB 000000003dad7325, len =3D 0, exp=
-ected =3D 1024, status =3D -71
-> [  674.916204] cdc_acm 1-1.1:1.5: acm_read_bulk_callback - nonzero urb st=
-atus received: -71
-> [  674.916211]  xhci-cdns3: Ignoring reset ep completion code of 1
-> [  674.916219]  xhci-cdns3: Successful Set TR Deq Ptr cmd, deq =3D @960d4=
-5a0
-> [  674.916251]  xhci-cdns3: Transfer error for slot 2 ep 10 on endpoint
-> [  674.916261]  xhci-cdns3: Cleaning up stalled endpoint ring
-> [  674.916265]  xhci-cdns3: Finding endpoint context
-> [  674.916270]  xhci-cdns3: Cycle state =3D 0x1
-> [  674.916274]  xhci-cdns3: New dequeue segment =3D 00000000641e49ab (vir=
-tual)
-> [  674.916279]  xhci-cdns3: New dequeue pointer =3D 0x960d45b0 (DMA)
-> [  674.916282]  xhci-cdns3: Queueing new dequeue state
-> [  674.916290]  xhci-cdns3: Set TR Deq Ptr cmd, new deq seg =3D 000000006=
-41e49ab (0x960d4000 dma), new deq ptr =3D 0000000000ad0b83 (0x960d45b0 dma)=
-, new cycle =3D 1
-> [  674.916294]  xhci-cdns3: // Ding dong!
-> [  674.916301]  xhci-cdns3: Giveback URB 0000000077103065, len =3D 0, exp=
-ected =3D 1024, status =3D -71
-
-
---=20
-
-Thanks,
-Peter Chen=
+V2UgaGF2ZSBhbiBlbWJlZGRlZCBUMTA0MiBOWFAgQ0RDIGV0aGVybmV0IGdhZGdldCB3aGljaCBz
+ZWVtcyB0byBjb21wbGV0ZWx5IGZyZWV6ZSB3aGVuIGFuDQp1c2IwIEkvRiBpcyBlc3RhYmxpc2hl
+ZCBhbmQgb25lIGRvIDEgb2YgdHdvIHRoaW5nczoNCiAxKSByZWJvb3QgdGhlIGNvbm5lY3RlZCBM
+aW51eCBsYXB0b3AgLT4gQ0RDIGdhZGdldCBhcHBlYXJzIHRvIGVudGVyIGNvbXBsZXRlIHN5c3Rl
+bSBmcmVlemUuDQogMikgb24gbGFwdG9wLCBpZmNvbmZpZyB1c2IwIGRvd247IHJtbW9kIGNkY19l
+dGhlciAtPiBDREMgZ2FnZXQgZnJlZXplcw0KDQpJIGNhbm5vdCBmaW5ucyBhbmQgT09QUyBvciBv
+dGhlciB0cmFjZSBpbiBjb25zb2xlIG9yIHN5c2xvZy4gSSBjb3VsZCByZWFsbHkgdXNlIHNvbSBp
+ZGVhcyBoZXJlLg0KTGludXgga2VybmVsIDQuMTkuMTA4ICg0LjE5Ljc2IGhhcyB0aGUgc2FtZSBp
+c3N1ZSkNCg0KIEpvY2tlDQoNCg==
