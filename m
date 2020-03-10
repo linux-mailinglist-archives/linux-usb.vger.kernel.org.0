@@ -2,75 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A587417F6CE
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 12:55:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BB217F746
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 13:19:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726466AbgCJLzP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Mar 2020 07:55:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44552 "EHLO mail.kernel.org"
+        id S1726307AbgCJMTQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Mar 2020 08:19:16 -0400
+Received: from mga17.intel.com ([192.55.52.151]:38735 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726290AbgCJLzO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Mar 2020 07:55:14 -0400
-Received: from localhost (unknown [122.167.84.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 78E1E2464B;
-        Tue, 10 Mar 2020 11:55:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583841314;
-        bh=cbPCeEem6JKklbB2VzqM30QCCT/AI0cLXshnbw7OmZg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y7o+ENJe1AEFpzFL1pxznbCeXnEIoUV+ZtO1T1SnV273ank4QvKFnOqcLpjOdTXeq
-         oOCzo127BFhIfqfXb3239rmTlxJcS4YnVD+kiDLCBKuCyXWJJSVn7yhGY5P3OS7Jfd
-         3fIS9pR9QzySmxVqs97kcs5gwLNK9NSWmMvyxUOI=
-Date:   Tue, 10 Mar 2020 17:25:10 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Christian Lamparter <chunkeey@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: Re: [PATCH v6 0/5] usb: xhci: Add support for Renesas USB controllers
-Message-ID: <20200310115510.GE4885@vkoul-mobl>
-References: <64340358-6682-4ae0-9c06-d72d5a4ff259@linux.intel.com>
- <Pine.LNX.4.44L0.2001311045470.1577-100000@iolanthe.rowland.org>
+        id S1726252AbgCJMTQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 10 Mar 2020 08:19:16 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Mar 2020 05:19:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,537,1574150400"; 
+   d="scan'208";a="353613990"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Mar 2020 05:19:13 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>
+Subject: [PATCH] usb: typec: ucsi_ccg: workaround for NVIDIA test device
+Date:   Tue, 10 Mar 2020 15:19:12 +0300
+Message-Id: <20200310121912.57879-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.2001311045470.1577-100000@iolanthe.rowland.org>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 31-01-20, 10:47, Alan Stern wrote:
-> On Thu, 30 Jan 2020, Mathias Nyman wrote:
-> 
-> > I realize this can't be easily changed because usb_hcd_pci_probe() takes the
-> > pci_device_id pointer as an argument, and expects id.driver_data to be a
-> > HC driver pointer.
-> > 
-> > So this turns out to be a question for Greg and Alan:
-> > 
-> > Would it make sense to change usb_hcd_pci_probe() to take a HC driver pointer
-> > as an argument instead of a pointer to pci_device_id?
-> > pci_device_id pointer is only used to extract the HC driver handle.
-> > This way the driver_data could be used for, well, driver data.
-> 
-> That seems like a good idea to me.  There aren't very many drivers that 
-> use usb_hcd_pci_probe(); changing them all should be fairly easy.
+From: Ajay Gupta <ajayg@nvidia.com>
 
-Yup it was easy to do :) I have done this and tested it. Now we can use
-driver_data for driver data.
+NVIDIA VirtualLink (svid 0x955) has two altmode, vdo=0x1 for
+VirtualLink DP mode and vdo=0x3 for NVIDIA test mode. NVIDIA
+test device FTB (Function Test Board) reports altmode list with
+vdo=0x3 first and then vdo=0x1. The list is:
+ SVID   VDO
+0xff01  0xc05
+0x28de  0x8085
+0x955   0x3
+0x955   0x1
 
-Though couldn't compile the uhci, seems to have missing Makefile entry.
+Current logic to assign mode value is based on order
+in altmode list. This causes a mismatch of CON and SOP altmodes
+since NVIDIA GPU connector has order of vdo=0x1 first and then
+vdo=0x3. Fixing this by changing the order of vdo values
+reported by NVIDIA test device. the new list will be:
 
+ SVID   VDO
+0xff01  0xc05
+0x28de  0x8085
+0x955   0x1085
+0x955   0x3
+
+Also NVIDIA VirtualLink (svid 0x955) uses pin E for display mode.
+NVIDIA test device reports vdo of 0x1 so make sure vdo values
+always have pin E assignement.
+
+Signed-off-by: Ajay Gupta <ajayg@nvidia.com>
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/typec/ucsi/ucsi.h     |  2 ++
+ drivers/usb/typec/ucsi/ucsi_ccg.c | 55 ++++++++++++++++++++++++++++---
+ 2 files changed, 52 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index 65cd2f01eaed..cc87a72ff481 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -119,12 +119,14 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
+ #define UCSI_SET_PDR_ACCEPT_ROLE_SWAPS		BIT(25)
+ 
+ /* GET_ALTERNATE_MODES command bits */
++#define UCSI_ALTMODE_RECIPIENT(_r_)		(((_r_) >> 16) & 0x7)
+ #define UCSI_GET_ALTMODE_RECIPIENT(_r_)		((u64)(_r_) << 16)
+ #define   UCSI_RECIPIENT_CON			0
+ #define   UCSI_RECIPIENT_SOP			1
+ #define   UCSI_RECIPIENT_SOP_P			2
+ #define   UCSI_RECIPIENT_SOP_PP			3
+ #define UCSI_GET_ALTMODE_CONNECTOR_NUMBER(_r_)	((u64)(_r_) << 24)
++#define UCSI_ALTMODE_OFFSET(_r_)		(((_r_) >> 32) & 0xff)
+ #define UCSI_GET_ALTMODE_OFFSET(_r_)		((u64)(_r_) << 32)
+ #define UCSI_GET_ALTMODE_NUM_ALTMODES(_r_)	((u64)(_r_) << 40)
+ 
+diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+index a5b8530490db..61543573290e 100644
+--- a/drivers/usb/typec/ucsi/ucsi_ccg.c
++++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+@@ -125,6 +125,10 @@ struct version_format {
+ #define CCG_FW_BUILD_NVIDIA	(('n' << 8) | 'v')
+ #define CCG_OLD_FW_VERSION	(CCG_VERSION(0x31) | CCG_VERSION_PATCH(10))
+ 
++/* Altmode offset for NVIDIA Function Test Board (FTB) */
++#define NVIDIA_FTB_DP_OFFSET	(2)
++#define NVIDIA_FTB_DBG_OFFSET	(3)
++
+ struct version_info {
+ 	struct version_format base;
+ 	struct version_format app;
+@@ -477,24 +481,65 @@ static void ucsi_ccg_update_set_new_cam_cmd(struct ucsi_ccg *uc,
+ 	*cmd |= UCSI_SET_NEW_CAM_SET_AM(cam);
+ }
+ 
++/*
++ * Change the order of vdo values of NVIDIA test device FTB
++ * (Function Test Board) which reports altmode list with vdo=0x3
++ * first and then vdo=0x. Current logic to assign mode value is
++ * based on order in altmode list and it causes a mismatch of CON
++ * and SOP altmodes since NVIDIA GPU connector has order of vdo=0x1
++ * first and then vdo=0x3
++ */
++static void ucsi_ccg_nvidia_altmode(struct ucsi_ccg *uc,
++				    struct ucsi_altmode *alt)
++{
++	switch (UCSI_ALTMODE_OFFSET(uc->last_cmd_sent)) {
++	case NVIDIA_FTB_DP_OFFSET:
++		if (alt[0].mid == USB_TYPEC_NVIDIA_VLINK_DBG_VDO)
++			alt[0].mid = USB_TYPEC_NVIDIA_VLINK_DP_VDO |
++				DP_CAP_DP_SIGNALING | DP_CAP_USB |
++				DP_CONF_SET_PIN_ASSIGN(BIT(DP_PIN_ASSIGN_E));
++		break;
++	case NVIDIA_FTB_DBG_OFFSET:
++		if (alt[0].mid == USB_TYPEC_NVIDIA_VLINK_DP_VDO)
++			alt[0].mid = USB_TYPEC_NVIDIA_VLINK_DBG_VDO;
++		break;
++	default:
++		break;
++	}
++}
++
+ static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
+ 			 void *val, size_t val_len)
+ {
+ 	struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
+-	int ret;
+ 	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
++	struct ucsi_altmode *alt;
++	int ret;
+ 
+ 	ret = ccg_read(uc, reg, val, val_len);
+ 	if (ret)
+ 		return ret;
+ 
+-	if (offset == UCSI_MESSAGE_IN) {
+-		if (UCSI_COMMAND(uc->last_cmd_sent) == UCSI_GET_CURRENT_CAM &&
+-		    uc->has_multiple_dp) {
++	if (offset != UCSI_MESSAGE_IN)
++		return ret;
++
++	switch (UCSI_COMMAND(uc->last_cmd_sent)) {
++	case UCSI_GET_CURRENT_CAM:
++		if (uc->has_multiple_dp)
+ 			ucsi_ccg_update_get_current_cam_cmd(uc, (u8 *)val);
++		break;
++	case UCSI_GET_ALTERNATE_MODES:
++		if (UCSI_ALTMODE_RECIPIENT(uc->last_cmd_sent) ==
++		    UCSI_RECIPIENT_SOP) {
++			alt = val;
++			if (alt[0].svid == USB_TYPEC_NVIDIA_VLINK_SID)
++				ucsi_ccg_nvidia_altmode(uc, alt);
+ 		}
+-		uc->last_cmd_sent = 0;
++		break;
++	default:
++		break;
+ 	}
++	uc->last_cmd_sent = 0;
+ 
+ 	return ret;
+ }
 -- 
-~Vinod
+2.25.1
+
