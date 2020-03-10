@@ -2,114 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC51180812
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 20:30:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E71218086A
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 20:49:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727405AbgCJTaR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Mar 2020 15:30:17 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:41544 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726604AbgCJTaR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Mar 2020 15:30:17 -0400
-Received: by mail-oi1-f196.google.com with SMTP id i1so15093239oie.8;
-        Tue, 10 Mar 2020 12:30:15 -0700 (PDT)
+        id S1727313AbgCJTtN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Mar 2020 15:49:13 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:41937 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726545AbgCJTtM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Mar 2020 15:49:12 -0400
+Received: by mail-pl1-f193.google.com with SMTP id t14so5853696plr.8;
+        Tue, 10 Mar 2020 12:49:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jV1J0A0v5kI8D38QP7LZPmQe7Wa000FUtKtwbl8DovA=;
+        b=omQFDvmGHKXBdHPsEv5IagMxub/5iBhsEZmDaDrMaDmj83PBhBnWKghEHz1xDxVE/9
+         Qjv2aylL4IGJ68Vl7le/MblWPzJjGKCp3aXlLvHEMRVhZ46N73odzodpu6FpNAZv/Eck
+         PWZwGHXw1oX4PvVurLKthhe6L11KOstjo6vhjvntDQ+8Gvifd30uLLebpxa3Xu6LIF00
+         v6QEmjiLzkmfsaF+H8/+rrXtk9evm0g+0REDRbi2n8sMiayFE0k1YBnxCjz/4DZrjcsv
+         RbqS7ZddV8FUWKdJ/oFptjHk/VWRq8Lc3NVksZMv2fYCYNqf7OSAzMva6m/hpYKwwF7O
+         LfRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=TXsHaF4fOcNE2W9tq/AYJCOMZXblb3kZRBtXTvgUFHE=;
-        b=OGX148O27UYvoSx71GxJXH+PkYU790X6bqS00mZHnvk6oewtAk4IIAFjoT6M9G5gCY
-         Rv9eO/YMEZUgRMLckvgeZKjFyyhnLxcACHNVVdSmxK+g2Mab8/AsGVTvHpMsrDD80aJe
-         qVV2hnFoK2DwhB4gjoYHdeI8oEZ82OQRkMH31v+B1irt6dM2aD0nB264thuvfyd43aag
-         Lx9L4EZQPck7ENkytTKCXuOyU523seqvNBBthOa9uyAzDydVkRiOrDm2AusTVwfKeBlu
-         H5xl0U4x8Uqk62hMFugmx5CwrC83CT3XMeNCIbtyxKoB8LyJT7a/YpL8zPsq4j4I+8OC
-         x5pQ==
-X-Gm-Message-State: ANhLgQ14fenUmmwmtIOE+ZlEkQFb5n3DRJdfzLdZKTtwbItVfvjZKk6Y
-        qfIe9KbPl0fXsFqc12Ngjg==
-X-Google-Smtp-Source: ADFU+vvH5ymQhupC2P3V8EjfdHcq3DaB1uiTisg89ZmGHhSDnz8YXE2Mvbpo0sfVIj9y8PmrOGO7aQ==
-X-Received: by 2002:a05:6808:56:: with SMTP id v22mr2265636oic.116.1583868614910;
-        Tue, 10 Mar 2020 12:30:14 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id w2sm11049466otq.10.2020.03.10.12.30.13
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jV1J0A0v5kI8D38QP7LZPmQe7Wa000FUtKtwbl8DovA=;
+        b=Kc8byvatzN6+6/xGaHPslJ1GiS9/BFeZbhEj6/udPO2aHz3rjU9V5kGsFqbmcZqdrn
+         89voG0S7O8nEr8cdFaU6MOsfXWJKcTI1IJcrJVswghRz6+wJMs+LjsJkyXTZHjzOCoYy
+         p/RIr3JzKL7lLF3SRXEiQw4KPwVmUBDrqSh3fAuaLXDP9S4NoIdkKicfH2GMW4kJnmLF
+         SAjnOIyyIpamtAKlS72KIYLlRdlhBI91NCZvTfI8W26Iynp73ZtbX52AM9kn/3zw5t0k
+         pSGeJOSskFGN1TnTj9NhaoY/7yZWiOs2bV2eX7qWMVIWQK1eYDEBhogf4bFldpdZVIqo
+         2uWQ==
+X-Gm-Message-State: ANhLgQ3r4YH4in1WvgrsvYBZlZ3OM9jXh9RSpzVglSoBRUZoJFsvVO9f
+        QVJhokpzt0+CzpnTRz0qnvASS0wO
+X-Google-Smtp-Source: ADFU+vtvXRamWjX5o9KmUQeFzpOaqpVccOT2iNJrsaFhgH3WFG/4Ot9KKwImz4WPKGmca+i1AEEBjw==
+X-Received: by 2002:a17:90a:2ec7:: with SMTP id h7mr3449555pjs.107.1583869749046;
+        Tue, 10 Mar 2020 12:49:09 -0700 (PDT)
+Received: from localhost.localdomain ([45.114.62.228])
+        by smtp.gmail.com with ESMTPSA id d19sm3784490pfd.82.2020.03.10.12.49.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2020 12:30:13 -0700 (PDT)
-Received: (nullmailer pid 18889 invoked by uid 1000);
-        Tue, 10 Mar 2020 19:30:13 -0000
-Date:   Tue, 10 Mar 2020 14:30:13 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     heiko@sntech.de, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        Tue, 10 Mar 2020 12:49:08 -0700 (PDT)
+From:   Anand Moon <linux.amoon@gmail.com>
+To:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] dt-bindings: usb: dwc2: add compatible property for
- rk3368 usb
-Message-ID: <20200310193013.GA18080@bogus>
-References: <20200302115812.7207-1-jbx6244@gmail.com>
- <20200302115812.7207-2-jbx6244@gmail.com>
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: [PATCHv3 0/5] Add support for FSYS power domain and enable suspend clk for Exynos542x SoC 
+Date:   Tue, 10 Mar 2020 19:48:49 +0000
+Message-Id: <20200310194854.831-1-linux.amoon@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200302115812.7207-2-jbx6244@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 02, 2020 at 12:58:12PM +0100, Johan Jonker wrote:
-> A test with the command below gives these errors:
-> 
-> arch/arm64/boot/dts/rockchip/rk3368-evb-act8846.dt.yaml: usb@ff580000: compatible:
-> ['rockchip,rk3368-usb', 'rockchip,rk3066-usb', 'snps,dwc2']
-> is not valid under any of the given schemas
-> arch/arm64/boot/dts/rockchip/rk3368-geekbox.dt.yaml: usb@ff580000: compatible:
-> ['rockchip,rk3368-usb', 'rockchip,rk3066-usb', 'snps,dwc2']
-> is not valid under any of the given schemas
-> arch/arm64/boot/dts/rockchip/rk3368-lion-haikou.dt.yaml: usb@ff580000: compatible:
-> ['rockchip,rk3368-usb', 'rockchip,rk3066-usb', 'snps,dwc2']
-> is not valid under any of the given schemas
-> arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dt.yaml: usb@ff580000: compatible:
-> ['rockchip,rk3368-usb', 'rockchip,rk3066-usb', 'snps,dwc2']
-> is not valid under any of the given schemas
-> arch/arm64/boot/dts/rockchip/rk3368-px5-evb.dt.yaml: usb@ff580000: compatible:
-> ['rockchip,rk3368-usb', 'rockchip,rk3066-usb', 'snps,dwc2']
-> is not valid under any of the given schemas
-> arch/arm64/boot/dts/rockchip/rk3368-r88.dt.yaml: usb@ff580000: compatible:
-> ['rockchip,rk3368-usb', 'rockchip,rk3066-usb', 'snps,dwc2']
-> is not valid under any of the given schemas
-> 
-> The compatible property for rk3368 dwc2 usb was somehow never added to
-> the documention. Fix this error by adding
-> 'rockchip,rk3368-usb', 'rockchip,rk3066-usb', 'snps,dwc2'
-> to dwc2.yaml.
-> 
-> make ARCH=arm64 dtbs_check
-> DT_SCHEMA_FILES=Documentation/devicetree/bindings/usb/dwc2.yaml
-> 
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> ---
->  Documentation/devicetree/bindings/usb/dwc2.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
-> index e9f4cea21..14aeb67e8 100644
-> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
-> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
-> @@ -45,6 +45,10 @@ properties:
->            - const: rockchip,rk3328-usb
->            - const: rockchip,rk3066-usb
->            - const: snps,dwc2
-> +      - items:
-> +          - const: rockchip,rk3368-usb
+Series build and tested on linux next-20200306.
 
-And you can do the same thing with this.
+This patch series tries to enable FSYS power domain
+for USBDRD3, PDMA and USB2.0 devices.
+Some new patches is added to enable this feature.
 
-> +          - const: rockchip,rk3066-usb
-> +          - const: snps,dwc2
->        - const: lantiq,arx100-usb
->        - const: lantiq,xrx200-usb
->        - items:
-> -- 
-> 2.11.0
-> 
+Summary: 
+# powerdebug -d
+...
+
+FSYS:
+current_state: on
+active_time: 236786 ms
+total_idle_time: 1914 ms
+Idle States:
+             State            Time
+             S0               1914
+Devices:
+         /devices/platform/soc/10010000.clock-controller/exynos5-subcmu.6.auto
+         /devices/platform/soc/12130000.phy
+         /devices/platform/soc/12100000.phy
+         /devices/platform/soc/12500000.phy
+         /devices/platform/soc/soc:amba/121a0000.pdma
+         /devices/platform/soc/soc:amba/121b0000.pdma
+         /devices/platform/soc/12110000.usb
+         /devices/platform/soc/12120000.usb
+         /devices/platform/soc/soc:usb3-0
+         /devices/platform/soc/soc:usb3-1
+
+This patch series tries to enable suspend clk using
+exynos dwc3 driver, for this I have added new
+compatible string "samsung,exynos5420-dwusb3"
+so that we could add new suspend clk in addition
+to the core clk. exynos dwc3 driver will help
+enable/disable these clk.
+
+This series PatchV2.
+--Added the clk names for exynos5420 compatible.
+--Added missing support for Exyno5410 SoC suspend clock.
+--Update the commit message to support suspend clk usages.
+
+---
+Long time ago I tried to add suspend clk for dwc3 phy
+which was wrong appoch, see below.
+
+[0] https://lore.kernel.org/patchwork/patch/837635/
+[1] https://lore.kernel.org/patchwork/patch/837636/
+
+Previous changes V3 (It was send with wrong Patch version)
+[2] https://patchwork.kernel.org/cover/11373043/
+
+-Anand
+
+Anand Moon (5):
+  devicetree: bindings: exynos: Add new compatible for Exynos5420 dwc3
+    clocks support
+  ARM: dts: exynos: Add missing usbdrd3 suspend clk
+  ARM: dts: exynos: Add FSYS power domain to Exynos542x USB nodes
+  usb: dwc3: exynos: Add support for Exynos5422 suspend clk
+  clk: samsung: exynos542x: Move FSYS subsystem clocks to its sub-CMU
+
+ .../devicetree/bindings/usb/exynos-usb.txt    |  5 ++-
+ arch/arm/boot/dts/exynos5410.dtsi             |  8 ++--
+ arch/arm/boot/dts/exynos5420.dtsi             | 24 ++++++++--
+ arch/arm/boot/dts/exynos54xx.dtsi             |  4 +-
+ drivers/clk/samsung/clk-exynos5420.c          | 45 ++++++++++++++-----
+ drivers/usb/dwc3/dwc3-exynos.c                |  9 ++++
+ 6 files changed, 73 insertions(+), 22 deletions(-)
+
+-- 
+2.25.1
+
