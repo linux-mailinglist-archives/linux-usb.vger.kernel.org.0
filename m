@@ -2,174 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C4D17FFCA
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 15:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78279180001
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 15:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726467AbgCJOHJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Mar 2020 10:07:09 -0400
-Received: from www381.your-server.de ([78.46.137.84]:52632 "EHLO
-        www381.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726451AbgCJOHI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Mar 2020 10:07:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-         s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:References:Cc:To:From:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=B60gRpqWPVR4hCYQQG/uqrF5IwKTwlRjU/7e6kB2EUo=; b=Cb7t7IdT7RRXm/vhh7M/whNk0X
-        9K4b3XqDP4Dg0Gey1TgvKKXa9BKrnMRTFE/FfemQ4EkeVpprOy1QWn+OOVp2gXX28BA4scZGld0pY
-        ++5towU/ebfm8SCFA33dULh74GctLAo7pxgfRu/AcKNLWy0T1qxBRmYHKi6LBeZeSYKfFDaAERIUO
-        BZ9YwutkBgTEkhDVg4/gUeA82L7fE5EWB0zu5xFzr5qlCtJ+Vrr4LS/l79q5fT7Dxnjh2JmULZWcG
-        rzojE2YZUb7jMbEcKpzWs5YJS5x8QSVnIjlGLjZu9NTGheufzXQgRCrDu/H1bMT6Aof6F4hdUnlJj
-        uPje/BSg==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www381.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <lars@metafoo.de>)
-        id 1jBfXG-0002h1-9V; Tue, 10 Mar 2020 15:07:06 +0100
-Received: from [93.104.100.58] (helo=[192.168.178.20])
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1jBfXF-000PYM-Vc; Tue, 10 Mar 2020 15:07:06 +0100
-Subject: Re: [PATCH][RESEND] usb: dwc3: gadget: Handle dequeuing of non queued
- URB gracefully
-From:   Lars-Peter Clausen <lars@metafoo.de>
-To:     "Ardelean, Alexandru" <alexandru.Ardelean@analog.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "balbi@kernel.org" <balbi@kernel.org>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
-        "m.olbrich@pengutronix.de" <m.olbrich@pengutronix.de>
-References: <20191106144553.16956-1-alexandru.ardelean@analog.com>
- <20200116132459.22383-1-alexandru.ardelean@analog.com>
- <87d0b1885e.fsf@kernel.org>
- <5313c926109f39699e63342b4ff71102d3cfa495.camel@analog.com>
- <1df6e9be-2233-a0b2-1ddc-76de9d62a397@metafoo.de>
-Message-ID: <dc52d6a0-12ed-a34c-01c4-0fc5ccbf7b1d@metafoo.de>
-Date:   Tue, 10 Mar 2020 15:07:05 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1727452AbgCJOSL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Mar 2020 10:18:11 -0400
+Received: from mail-vs1-f51.google.com ([209.85.217.51]:35301 "EHLO
+        mail-vs1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727445AbgCJOSJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Mar 2020 10:18:09 -0400
+Received: by mail-vs1-f51.google.com with SMTP id m9so671575vso.2
+        for <linux-usb@vger.kernel.org>; Tue, 10 Mar 2020 07:18:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=hackerdom.ru; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=/gHw4kLrEIsmI95qZ6nhMGzekL5ir6AYQAFylshVC6Q=;
+        b=A8T824hjR5N/p3t3GhfyJAVPoTfJqcp3OKdDgsbiK4SGctpaKlRRUyHCbbGcv75bXL
+         NXldU72tYY2nGR+YAXp2X2rq2Lr36BCeFqvZ2fOj5xB+/8i1GGsXNYRJXkuLK8k1cPg5
+         ca15KLiVc/ILC9E0Br8QiADrxu7F4lAJojt4Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=/gHw4kLrEIsmI95qZ6nhMGzekL5ir6AYQAFylshVC6Q=;
+        b=D2IjZe8GoCub91KYYaqfW53B0E39+iVGq8epvBjprBQCSxSJMByaGZAQRXTRS2IEga
+         XEcsgHwva5T5y7CgrkFWK7GYA28/1VCxGU5FMZtsncuRlAHEqQVUylvXmk8CKZ3w9WH/
+         fzoKLETmfa1OIrV1OfjPlOpkUqngqJZNd4uv798BjsYhQIuwVpxcjFO+ACJ4gzNATGoS
+         MT7Qj0ttjd2jmg2fLsaCiJfFi3wCcZhCkr0KwGG+I+//1yu+jjp1kPK+IWotXyGqyqk9
+         M8cKDfvLTDrFsGKWhhnusAPLY9Qk2nBiWt7F/HlY4+LOXtNuVcRnfNB2qdFUpNCawRR5
+         Eo7A==
+X-Gm-Message-State: ANhLgQ2AIVzhISXK1mrNK2yB3/wKlw59/Hzi5BdaZpz39cjkReIzsFP6
+        bordsvAqYhN7z6UZ55dJ/6ZpOeAkTiqmcVsvGSu+m9/qDpQ=
+X-Google-Smtp-Source: ADFU+vtR88LV/enaz2iag4FQ7W9pTjOZgnAktbD8Rui8bQZ5npBa0m5hMK9XEutirT+AOzXBAgzHv2IzCTOYkN8h0t4=
+X-Received: by 2002:a67:88c8:: with SMTP id k191mr1432889vsd.110.1583849886533;
+ Tue, 10 Mar 2020 07:18:06 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1df6e9be-2233-a0b2-1ddc-76de9d62a397@metafoo.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.102.2/25747/Tue Mar 10 12:06:29 2020)
+References: <20200305203318.8980-1-bay@hackerdom.ru> <1583749022.17100.5.camel@suse.com>
+ <CAPomEdycThBH5D3Eo3dNCPRrEg0W2fQ9JS9j6TbANTDVChVcog@mail.gmail.com>
+In-Reply-To: <CAPomEdycThBH5D3Eo3dNCPRrEg0W2fQ9JS9j6TbANTDVChVcog@mail.gmail.com>
+From:   =?UTF-8?B?0JDQu9C10LrRgdCw0L3QtNGAINCR0LXRgNGB0LXQvdC10LI=?= 
+        <bay@hackerdom.ru>
+Date:   Tue, 10 Mar 2020 19:17:55 +0500
+Message-ID: <CAPomEdxg0aD=DgGVwFH4Zd1=0fao32mOL6nU=cL00jHJAuoTwA@mail.gmail.com>
+Subject: Fwd: [PATCH] cdc_ncm: Implement the 32-bit version of NCM Transfer Block
+To:     linux-usb@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/10/20 2:45 PM, Lars-Peter Clausen wrote:
-> On 3/10/20 2:22 PM, Ardelean, Alexandru wrote:
->> On Thu, 2020-01-30 at 14:02 +0200, Felipe Balbi wrote:
->>> [External]
->>>
->>>
->>> Hi,
->>>
->>> Alexandru Ardelean <alexandru.ardelean@analog.com> writes:
->>>
->>>> From: Lars-Peter Clausen <lars@metafoo.de>
->>>>
->>>> Trying to dequeue and URB that is currently not queued should be a 
->>>> no-op
->>>> and be handled gracefully.
->>>>
->>>> Use the list field of the URB to indicate whether it is queued or 
->>>> not by
->>>> setting it to the empty list when it is not queued.
->>>>
->>>> Handling this gracefully allows for race condition free synchronization
->>>> between the complete callback being called to to a completed 
->>>> transfer and
->>>> trying to call usb_ep_dequeue() at the same time.
->>> We need a little more information here. Can you further explain what
->>> happens and how you caught this?
->> Apologies for the delay [of this reply].
->> It's been a while since this patch was created, and it was on a 4.14 
->> kernel.
->> Lars was trying to fix various crashes with USB DWC3 OTG + some Xilinx 
->> patches.
->> I did not track the status of the OTG stuff upstream. I think it's a 
->> lot of
->> patches in the Xilinx tree.
->>
->> The context has changed from 4.14 [obviously], and there were many 
->> things that
->> could have influenced things.
->> I've been trying to RFC some of these patches now.
->> [ yeah I know: maybe I should have [probably] also added an RFC tag :) ]
->> Some of the patches [including this one] seemed to make sense, even 
->> outside of
->> the context of the crashes that were happening on 4.14.
->> Atm, we're at 4.19 and we don't see issues, but we still have this patch.
->> We may drop it and see what happens.
->> ¯\_(ツ)_/¯
->>
->> But in any case, it does require a bit more re-investigation.
->> Apologies for the noise that this patch created :)
-> 
-> The race condition is between a gadget calling usb_ep_dequeue() and the 
-> driver completing the URB.
-> 
-> Lets say in a thread you have a reference to a in-flight URB and you 
-> want to abort the request, e.g. because the application that sent the 
-> request has been closed. But concurrently to that the URB is completed 
-> by the hardware and the interrupt fires and marks the URB as complete. 
-> Your thread is suspended while the interrupt is running, once the 
-> interrupt has finished the thread wakes up, still has the reference to 
-> the URB, but now it has been completed. The thread still calls 
-> usb_ep_dequeue() though and then undefined behavior occurs.
-> 
+=D0=BF=D0=BD, 9 =D0=BC=D0=B0=D1=80. 2020 =D0=B3. =D0=B2 15:17, Oliver Neuku=
+m <oneukum@suse.com>:
+>
+> Am Freitag, den 06.03.2020, 01:33 +0500 schrieb Alexander Bersenev:
+> > The NCM specification defines two formats of transfer blocks: with 16-b=
+it
+> > fields (NTB-16) and with 32-bit fields (NTB-32). Currently only NTB-16 =
+is
+> > implemented.
+> >
+> > This patch adds the support of NTB-32. The motivation behind this is th=
+at
+> > some devices such as E5785 or E5885 from the current generation of Huaw=
+ei
+> > LTE routers do not support NTB-16. The previous generations of Huawei
+> > devices are also use NTB-32 by default.
+> >
+> > Also this patch enables NTB-32 by default for Huawei devices
+>
+> Hi,
+>
+> do you really see no other option but to make the choice with yet
+> anothet flag? The rest of the code looks good to me.
+>
 
-Sorry, one quick correction. I believe the issue actually occurs when 
-you have more than one CPU and the thread is not suspended, while the 
-interrupt is running. In this case it is possible that the IRQ fires the 
-driver marks the URB as complete, then unlocks, the driver lock and 
-calls the complete callback, but before the complete callback runs the 
-other thread calls usb_ep_dequeue(). There is no way to protect against 
-this condition at the gadget level and it needs to be handled in the driver.
+Hi,
 
-Basically
+The reason of yet another flag is that some Huawei devices, E5785 and E5885=
+,
+are incorrectly reporting that they support NTB-16. In fact they support on=
+ly
+NTB-32.
 
-  CPU 1                         | CPU 2
---------------------------------------------------------------
-URB IRQ fires                  |                             |
-spin_lock(&dwc->lock);         |                             |
-                                |                             |
-Driver handles completed URB   |                             |
-frees resources, etc           | spin_lock(&gadget->lock)    |
-                                | usb_ep_dequeue()            |
-spin_unlock(&dwc->lock);       |                             |
-usb_gadget_giveback_request()  | spin_lock(&dwc->lock)       |
-                                |                             |
-Call compelte callback         | Try to free URB resources   |
-                                | again => Undefined behavior |
-                                |                             |
-                                | spin_lock(&dwc->lock)       |
-                                | spin_unlock(&gadget->lock)  |
-spin_lock(&gadget->lock)       |                             |
-                                |                             |
-Mark URB as compelte in gadget |                             |
-spin_unlock(&gadget->lock)     |                             |
-spin_unlock(&dwc->lock)        |                             |
-spin_lock(&dwc->lock)          |                             |
-finish IRQ                     |                             |
+Historically the Huawei devices used NTB-32 by default and there
+was a flag CDC_NCM_FLAG_RESET_NTB16 to work around the bug that
+some Huawei E3372H devices come out of reset in NTB-32 mode even if
+NTB-16 mode was set. This commit removes the
+CDC_NCM_FLAG_RESET_NTB16 flag, that was specific to Huawei devices
+and introduces the CDC_NCM_FLAG_PREFER_NTB32 flag.
 
+The NTB-16 has lower, protocol overhead, but NTB-32 allows to transfer more
+data per transfer block, up to 4GB, supporting both High Speed and
+SuperSpeed data rates. So NTB-32 can be faster on devices with big buffers
+and slower on devices with small buffers.
 
-> The context in which we observed the issue is when using function fs to 
-> create a userspace gadget and using aio_cancel() to abort a pending URB. 
-> But really any gadget that aborts a transfer before it is completed or 
-> before the timeout occurred can run into this issue.
-> 
-> - Lars
-> 
+Anyway, for 4g modem devices there should not be much difference between
+NDP-16 and NDP-32 because the 4g speeds are lower than the USB speed.
+But also there may be the devices, that, vice versa,
+buggy with NTB-32 and work well with NTB-16.
 
+So having a flag to choose the preferred implementation is probably the bes=
+t
+option - it allows to keep older device to work as before, but if it
+is found out that
+the device works with NTB-32 better, the flag can be enabled for that devic=
+e
+or vendor.
 
-
-
+Best,
+Alexander Bersenev
