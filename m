@@ -2,83 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9BF417F75F
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 13:26:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B352217F8DB
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 13:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726442AbgCJM0f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Mar 2020 08:26:35 -0400
-Received: from mail.actia.se ([195.67.112.82]:29884 "EHLO mail.actia.se"
+        id S1728936AbgCJMvi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Mar 2020 08:51:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56722 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726271AbgCJM0f (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Mar 2020 08:26:35 -0400
-Received: from S036ANL.actianordic.se (192.168.16.117) by
- S035ANL.actianordic.se (192.168.16.116) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Tue, 10 Mar 2020 13:26:32 +0100
-Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
- S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%3]) with mapi id
- 15.01.1913.007; Tue, 10 Mar 2020 13:26:32 +0100
-From:   Jonas Karlsson <jonas.karlsson@actia.se>
-To:     Oliver Neukum <oneukum@suse.de>, Peter Chen <peter.chen@nxp.com>
-CC:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: RE: USB transaction errors causing RCU stalls and kernel panics
-Thread-Topic: USB transaction errors causing RCU stalls and kernel panics
-Thread-Index: AdXxbFdECZ2tmAAoQZaxVkfgHyprqgABZ9yAAAiGryAAIGdeAAAEO3aAAAR/HgAARX+KgACtYMrAACnez4AABbFG8AAAO9EAAACaYAAAA7I5cA==
-Date:   Tue, 10 Mar 2020 12:26:32 +0000
-Message-ID: <325d5af5d4c44eafac94fc8e0e4d1a7d@actia.se>
-References: <ddf8c3971b8544e983a9d2bbdc7f2010@actia.se>
-         <20200303163945.GB652754@kroah.com>
-         <ca6f029a57f24ee9aea39385a9ad55bd@actia.se>
-         <6909d182-6cc5-c07f-ed79-02c741aec60b@linux.intel.com>
-         <1583331173.12738.26.camel@suse.com>
-         <4fa64e92-64ce-07f3-ed8e-ea4e07d091bb@linux.intel.com>
-         <VI1PR04MB532785057FD52DFE3A21ACA88BE30@VI1PR04MB5327.eurprd04.prod.outlook.com>
-         <699a49f2f69e494ea6558b99fad23cc4@actia.se>
-         <20200310081452.GA14625@b29397-desktop>
-         <d1f68ef3316e484b9cc1360f71886719@actia.se>
-         <1583838270.11582.11.camel@suse.com> <1583839306.11582.12.camel@suse.de>
-In-Reply-To: <1583839306.11582.12.camel@suse.de>
-Accept-Language: sv-SE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.11.14.24]
-x-esetresult: clean, is OK
-x-esetid: 37303A2914C9726A627465
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1728937AbgCJMvh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 10 Mar 2020 08:51:37 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AFBD82253D;
+        Tue, 10 Mar 2020 12:51:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1583844696;
+        bh=ZBMgcPbP3wxgjFwxzZhy0vyba5otvsXz9ItW6/9bml8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=X27lnu/V/bLjerueDn5dGo96Hs87kkH0OPdJic96WgY6B3B8nFCat9JKymT96lzXa
+         zlHyZwljIoIJV91OZIbcs28WSbtiXYmX4CpKp0D1+G1hmPGGgdQws/EGfbRnvGXDa5
+         AeqBmFutxeAleBK9MauNhA/sZfgYvre5cNtZNhpQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Yang Fei <fei.yang@intel.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Pratham Pratap <prathampratap@codeaurora.org>,
+        John Stultz <john.stultz@linaro.org>
+Subject: [PATCH 5.4 068/168] usb: dwc3: gadget: Update chain bit correctly when using sg list
+Date:   Tue, 10 Mar 2020 13:38:34 +0100
+Message-Id: <20200310123642.132340279@linuxfoundation.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200310123635.322799692@linuxfoundation.org>
+References: <20200310123635.322799692@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQo+IEFtIERpZW5zdGFnLCBkZW4gMTAuMDMuMjAyMCwgMTI6MDQgKzAxMDAgc2NocmllYiBPbGl2
-ZXIgTmV1a3VtOg0KPiA+IEFtIERpZW5zdGFnLCBkZW4gMTAuMDMuMjAyMCwgMTA6MDQgKzAwMDAg
-c2NocmllYiBKb25hcyBLYXJsc3NvbjoNCj4gPg0KPiA+ID4gWWVzLCBJIGhhdmUgYXBwbGllZCB0
-aGF0IGNvbW1pdC4gVGhlIGxvZ3MgSSBoYXZlIGF0dGFjaGVkIHNvIGZhciBoYXZlIGhhZA0KPiB0
-aGF0IGNvbW1pdCBhcHBsaWVkLg0KPiA+ID4gSXQgcmVkdWNlcyB0aGUgYW1vdW50IG9mIFVua25v
-d24gZXZlbnQgdHlwZSAzNyBtZXNzYWdlcyBzaWduaWZpY2FudGx5Lg0KPiA+DQo+ID4gSSBhbSBh
-IGJpdCBjb25mdXNlZC4gSWYgdGhpcyBzdGlsbCBoYXBwZW5zIGFmdGVyIHlvdSBkaXNhYmxlZA0K
-PiA+IGF1dG9zdXNwZW5kLCB0aGUgaW5pdGlhbCBkaWFnbm9zaXMgY2FuJ3QgYmUgcmlnaHQuIEl0
-IGxvb2tzIGxpa2Ugd2UNCj4gPiBhcmUgZW50ZXJpbmcgc29tZSBraW5kIG9mIGJ1c3kgbG9vcC4g
-Q2FuIHlvdSB0ZXN0IHRoZSBhdHRhY2hlZA0KPiA+IHBhdGNoZXM/DQo+IA0KPiBDb3JyZWN0aW9u
-OiBwbGVhc2UgdGVzdCB0aGVzZSB0aHJlZSBwYXRjaGVzLg0KPiANCj4gCVJlZ2FyZHMNCj4NCiAJ
-CU9saXZlcg0KDQpJIGNhbiB0ZXN0IHRoZSBwYXRjaGVzLiBIb3dldmVyLCB0aGV5IGRvIG5vdCBh
-cHBseSBvbiBteSBOWFAgNC4xOS45NiBrZXJuZWwuDQpUaGUgb25seSBkaWZmZXJlbmNlIGJldHdl
-ZW4gdjQuMTkuMTA1IGFuZCBteSBOWFA0LjE5Ljk2IGtlcm5lbCBpcyB0aGF0IHdlIGFyZSBsYWNr
-aW5nDQp0aGlzIGNvbW1pdDoNCg0KY29tbWl0IGFlMDBlMWY1NzNmMzYyMWJhNjQxMTBhYTk5NGE4
-OGFjMGIzMzk0YzQNCkF1dGhvcjogSm9oYW4gSG92b2xkIDxqb2hhbkBrZXJuZWwub3JnPg0KRGF0
-ZTogICBUaHUgQXByIDI1IDE4OjA1OjM5IDIwMTkgKzAyMDANCg0KICAgIFVTQjogY2RjLWFjbTog
-Zml4IHVudGhyb3R0bGUgcmFjZXMNCg0KDQpIb3dldmVyLCB0aGUgMDAwMi1jZGMtYWNtLWludHJv
-ZHVjZS1hLWNvb2wtZG93bi5wYXRjaCB5b3Ugc2VudCBtZSBzZWVtIHRvIGJlIGJhc2VkIG9uIA0K
-YSBuZXdlciBrZXJuZWwgdHJlZS4gSXQgc2VlbXMgdG8gZGVwZW5kIG9uIGF0IGxlYXN0IHRoaXMg
-Y29tbWl0IHdoaWNoIHdhcyBpbnRyb2R1Y2VkIGluIHY1Lng6DQoNCmNvbW1pdCAwZjAyMzIxZTRi
-ZDFiMTdlYjk1N2UwNzdlODY4ZWYxNjExZjVkYmJkDQpBdXRob3I6IEpvaGFuIEhvdm9sZCA8am9o
-YW5Aa2VybmVsLm9yZz4NCkRhdGU6ICAgVGh1IEFwciAyNSAxODowNTo0MCAyMDE5ICswMjAwDQoN
-CiAgICBVU0I6IGNkYy1hY206IGNsZWFuIHVwIHRocm90dGxlIGhhbmRsaW5nDQoNClBsZWFzZSBh
-ZHZpY2Ugb24gaG93IHRvIHByb2NlZWQgdG8gbWFrZSBzdXJlIEkgdGVzdCB0aGUgY29kZSB5b3Ug
-aW50ZW5kLg0KDQpCUiwNCkpvbmFzDQo=
+From: Pratham Pratap <prathampratap@codeaurora.org>
+
+commit dad2aff3e827b112f27fa5e6f2bf87a110067c3f upstream.
+
+If scatter-gather operation is allowed, a large USB request is split
+into multiple TRBs. For preparing TRBs for sg list, driver iterates
+over the list and creates TRB for each sg and mark the chain bit to
+false for the last sg. The current IOMMU driver is clubbing the list
+of sgs which shares a page boundary into one and giving it to USB driver.
+With this the number of sgs mapped it not equal to the the number of sgs
+passed. Because of this USB driver is not marking the chain bit to false
+since it couldn't iterate to the last sg. This patch addresses this issue
+by marking the chain bit to false if it is the last mapped sg.
+
+At a practical level, this patch resolves USB transfer stalls
+seen with adb on dwc3 based db845c, pixel3 and other qcom
+hardware after functionfs gadget added scatter-gather support
+around v4.20.
+
+Credit also to Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+who implemented a very similar fix to this issue.
+
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Yang Fei <fei.yang@intel.com>
+Cc: Thinh Nguyen <thinhn@synopsys.com>
+Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
+Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc: Jack Pham <jackp@codeaurora.org>
+Cc: Todd Kjos <tkjos@google.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linux USB List <linux-usb@vger.kernel.org>
+Cc: stable <stable@vger.kernel.org> #4.20+
+Signed-off-by: Pratham Pratap <prathampratap@codeaurora.org>
+[jstultz: Slight tweak to remove sg_is_last() usage, reworked
+          commit message, minor comment tweak]
+Signed-off-by: John Stultz <john.stultz@linaro.org>
+Link: https://lore.kernel.org/r/20200302214443.55783-1-john.stultz@linaro.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+---
+ drivers/usb/dwc3/gadget.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1068,7 +1068,14 @@ static void dwc3_prepare_one_trb_sg(stru
+ 		unsigned int rem = length % maxp;
+ 		unsigned chain = true;
+ 
+-		if (sg_is_last(s))
++		/*
++		 * IOMMU driver is coalescing the list of sgs which shares a
++		 * page boundary into one and giving it to USB driver. With
++		 * this the number of sgs mapped is not equal to the number of
++		 * sgs passed. So mark the chain bit to false if it isthe last
++		 * mapped sg.
++		 */
++		if (i == remaining - 1)
+ 			chain = false;
+ 
+ 		if (rem && usb_endpoint_dir_out(dep->endpoint.desc) && !chain) {
+
+
