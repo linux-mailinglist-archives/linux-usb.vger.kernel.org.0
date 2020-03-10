@@ -2,111 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5316B1806BE
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 19:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDDF8180800
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 20:29:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727407AbgCJSfL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Mar 2020 14:35:11 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:42569 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727360AbgCJSfK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Mar 2020 14:35:10 -0400
-Received: by mail-il1-f193.google.com with SMTP id x2so12924203ila.9;
-        Tue, 10 Mar 2020 11:35:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VAlymheSsVWS6TtBZwVUxTy84/oSe1RgGaUvIw1jjFc=;
-        b=nteIfRRrG4iHGpc2U9paJ7vONjWM7TbY5Sqngd3SnUvHmWoUY4Zdryj6mMZmIb3QXn
-         OUdOxwFJDhwxWhFJzNPdycGcU8mMnXUTMfP3crKxirezquLoYhLOie5Gj+z1wrmWbPPc
-         MTBCYLo+2yGUW6sImdEx31HtO6uoob7oINv609+LnS7L2G6ldNRuekXK4a+O/vlvYixc
-         ZkqVHI3XRBY8u6mmPOzDHRBrUq5LmVX/Og+H1tvlbahE4IKoQAFWZkWJAo//eJLKiuXa
-         4NhgbdIfYoj6yPYPhsvooaw5rwQxly9huCMrWncEyQ3rQpdVo4pwFsLu6pPxrt/cltok
-         cqSA==
+        id S1726899AbgCJT3f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Mar 2020 15:29:35 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:39018 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726545AbgCJT3f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Mar 2020 15:29:35 -0400
+Received: by mail-oi1-f195.google.com with SMTP id d63so8315975oig.6;
+        Tue, 10 Mar 2020 12:29:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VAlymheSsVWS6TtBZwVUxTy84/oSe1RgGaUvIw1jjFc=;
-        b=EM7CWYqwdTLyAunbO9fXAfI1vK2SMyt4ht0fEwUtDTWiQQG3vjtaKZc4RvN5ojxRW0
-         bU4witmbePGNVZbUb+bo9tILnZm31K8YBnnoTbB9i1QovbXjxesq5hIfjBt2QLfBOKcT
-         XIv7H6KKOxKfOhT/oyf1QIhRJJcbLmRK3b7ZyQKgm/fRgRSlj1m6DtX/UO9DUvJ67Fzt
-         468NazhhLfbvkfHBNW22NwuA/p+8BJP1FeyX6mDmoiGijKa8fq3YzgCNZxeGPhjyan51
-         I/nQs8st2XTeeztHqUTqcSMi0GAgVR2mA9mlYKeWKTtqdMs2EB+KpPlU0L8P/jo1Rgn2
-         CZjQ==
-X-Gm-Message-State: ANhLgQ0oFRqvLKKdC4lK+H9ax4OHCSi1xVP1czVE7ilUYyadfqn8hg04
-        /gUZ2ePAAjKhQ+DC6pPP9BwZcmN0uvqusOvWNa4=
-X-Google-Smtp-Source: ADFU+vuo9UDPQM++PFizNAWpJw++AiJVW+wVcXy2+OV9oXXm/ItiHXTBNR6ieNS1CBj42fJbdMaLqlHXYVFRbOq0/Os=
-X-Received: by 2002:a92:1a12:: with SMTP id a18mr21449997ila.10.1583865309464;
- Tue, 10 Mar 2020 11:35:09 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Ti2DUsUootG5Bb/9jhB9jDTpr9Lf8fcuPShhiLFGbzM=;
+        b=XkiXm48dhGj1zviyak5rl6WPvlc/PXIeKsmSfUkH47YV5fN6mbG+iIgnPQHE+lr+4v
+         VpAIlbAvMoFoRvquYUoJjJ3qK/NFLIcuhvmr30RJJfGhX70ju89AmbdpQwVDkXDIM8KQ
+         v7R0+G64tV4wx2FTxaEwxUVkop8PwQZKLN5rTuKG8M9/3O2+pRxcxEXFJJsfnr0Em9Hq
+         711+tpT+O8k/CfEk/5R7eIOgOLl9W/kgYWIiZpDTR4HDTFPJREathiMSsmKdWLfC3eZ0
+         9fe/kCJrMJTDK0UEJbFoDASNijrnwX6dHfLQd6g+puJu+E+jXrQza01yt0df2JrgWW2p
+         kQuQ==
+X-Gm-Message-State: ANhLgQ29z+j0z3KGVjXTz0pJc4/jBkcrJ/NNFskWSBBfdqJej/gRr0v1
+        L3YJLalIHRx+R9q4Mb0wi4cNvsE=
+X-Google-Smtp-Source: ADFU+vsY5QkUJk3nxoCTdVDguFzMCTpu2klhELBPLKSw5lX4mSJAHDv7frNw6F1f7dVSVtDFZ845tw==
+X-Received: by 2002:aca:e106:: with SMTP id y6mr2370120oig.131.1583868574471;
+        Tue, 10 Mar 2020 12:29:34 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id 3sm16382764otd.15.2020.03.10.12.29.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Mar 2020 12:29:33 -0700 (PDT)
+Received: (nullmailer pid 17778 invoked by uid 1000);
+        Tue, 10 Mar 2020 19:29:33 -0000
+Date:   Tue, 10 Mar 2020 14:29:33 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     heiko@sntech.de, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: usb: dwc2: add compatible property for
+ rk3328 usb
+Message-ID: <20200310192933.GA15236@bogus>
+References: <20200302115812.7207-1-jbx6244@gmail.com>
 MIME-Version: 1.0
-References: <20200306160659.16319-1-alcooperx@gmail.com> <74c294a3-8eaa-a48e-3371-a7027d5aabd2@linux.intel.com>
-In-Reply-To: <74c294a3-8eaa-a48e-3371-a7027d5aabd2@linux.intel.com>
-From:   Alan Cooper <alcooperx@gmail.com>
-Date:   Tue, 10 Mar 2020 14:34:58 -0400
-Message-ID: <CAOGqxeWhsdtvmZBg3RLzSyHeLpCWGoRghTp+8u3gx3Aafi-vgA@mail.gmail.com>
-Subject: Re: [PATCH] usb: xhci: Error enumerating USB TV Tuner
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     ": Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200302115812.7207-1-jbx6244@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Agree on both points.
-Should I re-send a v2?
+On Mon, Mar 02, 2020 at 12:58:11PM +0100, Johan Jonker wrote:
+> A test with the command below gives these errors:
+> 
+> arch/arm64/boot/dts/rockchip/rk3328-a1.dt.yaml: usb@ff580000: compatible:
+> ['rockchip,rk3328-usb', 'rockchip,rk3066-usb', 'snps,dwc2']
+> is not valid under any of the given schemas
+> arch/arm64/boot/dts/rockchip/rk3328-evb.dt.yaml: usb@ff580000: compatible:
+> ['rockchip,rk3328-usb', 'rockchip,rk3066-usb', 'snps,dwc2']
+> is not valid under any of the given schemas
+> arch/arm64/boot/dts/rockchip/rk3328-rock64.dt.yaml: usb@ff580000: compatible:
+> ['rockchip,rk3328-usb', 'rockchip,rk3066-usb', 'snps,dwc2']
+> is not valid under any of the given schemas
+> arch/arm64/boot/dts/rockchip/rk3328-roc-cc.dt.yaml: usb@ff580000: compatible:
+> ['rockchip,rk3328-usb', 'rockchip,rk3066-usb', 'snps,dwc2']
+> is not valid under any of the given schemas
+> 
+> The compatible property for rk3328 dwc2 usb was somehow never added to
+> the documention. Fix this error by adding
+> 'rockchip,rk3328-usb', 'rockchip,rk3066-usb', 'snps,dwc2'
+> to dwc2.yaml.
+> 
+> make ARCH=arm64 dtbs_check
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/usb/dwc2.yaml
+> 
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/usb/dwc2.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
+> index e95ba9373..e9f4cea21 100644
+> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
+> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
+> @@ -41,6 +41,10 @@ properties:
+>            - const: rockchip,rk3288-usb
 
-Thanks
-Al
+Convert this entry to an 'enum' and add 'rockchip,rk3328-usb' here.
 
-On Mon, Mar 9, 2020 at 8:19 AM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
->
-> On 6.3.2020 18.06, Al Cooper wrote:
-> > Unable to complete the enumeration of a USB TV Tuner device.
-> >
-> > Per XHCI spec (4.6.5), the EP state field of the input context shall
-> > be cleared for a set address command. In the special case of an FS
-> > device that has "MaxPacketSize0 = 8", the Linux XHCI driver does
-> > not do this before evaluating the context. With an XHCI controller
-> > that checks the EP state field for parameter context error this
-> > causes a problem in cases such as the device getting reset again
-> > after enumeration.
-> >
-> > When that field is cleared, the problem does not occur.
-> >
-> > This was found and fixed by Sasi Kumar.
-> >
-> > Signed-off-by: Al Cooper <alcooperx@gmail.com>
-> > ---
-> >  drivers/usb/host/xhci.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> > index dbac0fa9748d..5f034e143082 100644
-> > --- a/drivers/usb/host/xhci.c
-> > +++ b/drivers/usb/host/xhci.c
-> > @@ -1428,6 +1428,7 @@ static int xhci_check_maxpacket(struct xhci_hcd *xhci, unsigned int slot_id,
-> >                               xhci->devs[slot_id]->out_ctx, ep_index);
-> >
-> >               ep_ctx = xhci_get_ep_ctx(xhci, command->in_ctx, ep_index);
-> > +             ep_ctx->ep_info &= cpu_to_le32(~EP_STATE_MASK);/* must clear */
-> >               ep_ctx->ep_info2 &= cpu_to_le32(~MAX_PACKET_MASK);
-> >               ep_ctx->ep_info2 |= cpu_to_le32(MAX_PACKET(max_packet_size));
-> >
-> >
->
-> Thanks, nice catch.
->
-> If you agree I'd like to change the the subject of this patch to something like:
-> "xhci: Fix enumeration issue when setting actual max packet size for FS devices"
->
-> While looking at this it seems that the current EP_STATE_MASK is not correct either.
-> It should be 0x7 instead of 0xf.
->
-> -Mathias
+>            - const: rockchip,rk3066-usb
+>            - const: snps,dwc2
+> +      - items:
+> +          - const: rockchip,rk3328-usb
+> +          - const: rockchip,rk3066-usb
+> +          - const: snps,dwc2
+>        - const: lantiq,arx100-usb
+>        - const: lantiq,xrx200-usb
+>        - items:
+> -- 
+> 2.11.0
+> 
