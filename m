@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA51D17FCEB
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 14:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11EA817FB4F
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 14:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729885AbgCJNYh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Mar 2020 09:24:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39156 "EHLO mail.kernel.org"
+        id S1731613AbgCJNMm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Mar 2020 09:12:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34996 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727391AbgCJM6z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Mar 2020 08:58:55 -0400
+        id S1731601AbgCJNMl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 10 Mar 2020 09:12:41 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DE8402467D;
-        Tue, 10 Mar 2020 12:58:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B142B208E4;
+        Tue, 10 Mar 2020 13:12:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583845134;
-        bh=ZBMgcPbP3wxgjFwxzZhy0vyba5otvsXz9ItW6/9bml8=;
+        s=default; t=1583845960;
+        bh=2vTm2EgbOlV6dJ8DaEGheINocA8X5eMIbRU+KHS7Zv0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=njbnNr8AHnWPRicAIzghvD1XpZHYMQY4x/iJ9J7mg9VVAE0m/Vut3kaJLlKx0v1wJ
-         oN+KXQqUQ5IWsG06yJEh3bKEXAUHrQiJNv7K5useJw7nf3abD8zXTIfZ0yxzyXvWLf
-         I3UmabrBSpb19iyudhU1qhBrs7V0DVx73J4MzAEQ=
+        b=SfppA/nVcTbk8HxcLl65grjsDWV44W5EDsWVL0BOobM7DT7jDli5c3kpXDF1XIDeS
+         Q4E8oTUIvZ9lXBQvemhySTN6/NMgVrdIOYrncAmm30GvqvuRecvMp5tNtXXeNpvsJO
+         Iz5d4pKUWxWeY78lbBtLyOo/tTff2e6iOAuelgTw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -35,12 +35,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux USB List <linux-usb@vger.kernel.org>,
         Pratham Pratap <prathampratap@codeaurora.org>,
         John Stultz <john.stultz@linaro.org>
-Subject: [PATCH 5.5 072/189] usb: dwc3: gadget: Update chain bit correctly when using sg list
-Date:   Tue, 10 Mar 2020 13:38:29 +0100
-Message-Id: <20200310123646.891832602@linuxfoundation.org>
+Subject: [PATCH 4.19 37/86] usb: dwc3: gadget: Update chain bit correctly when using sg list
+Date:   Tue, 10 Mar 2020 13:45:01 +0100
+Message-Id: <20200310124532.786158804@linuxfoundation.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200310123639.608886314@linuxfoundation.org>
-References: <20200310123639.608886314@linuxfoundation.org>
+In-Reply-To: <20200310124530.808338541@linuxfoundation.org>
+References: <20200310124530.808338541@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -95,7 +95,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/usb/dwc3/gadget.c
 +++ b/drivers/usb/dwc3/gadget.c
-@@ -1068,7 +1068,14 @@ static void dwc3_prepare_one_trb_sg(stru
+@@ -1067,7 +1067,14 @@ static void dwc3_prepare_one_trb_sg(stru
  		unsigned int rem = length % maxp;
  		unsigned chain = true;
  
