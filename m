@@ -2,63 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 029321821CF
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 20:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7BE1821D2
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 20:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731222AbgCKTO7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Mar 2020 15:14:59 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:37007 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731210AbgCKTO6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Mar 2020 15:14:58 -0400
-Received: by mail-wm1-f67.google.com with SMTP id a141so3397728wme.2
-        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2020 12:14:57 -0700 (PDT)
+        id S1731025AbgCKTPF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Mar 2020 15:15:05 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:34037 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730827AbgCKTPE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Mar 2020 15:15:04 -0400
+Received: by mail-wr1-f67.google.com with SMTP id z15so4138806wrl.1
+        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2020 12:15:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=z91zScAZZwulAyvz3u3tr6aLJzcsPLOyuebpL+WCLno=;
-        b=r1el2UpdttKCVTo/Phr0FTb83h+6MEFUdXPmm4p8xDLISKy4paWoEmm8CM7JMi90MX
-         8LmMTuCQvO7Bq9oSq0GPGpRj7JeM8uxk+4wRo09oNwhWKNpLuVxC/N4EmGzhLposlCVC
-         A0OFwe+GJjE7LhizNca0Sia0ncEtfYZGL0ZSZYFOdefk0lZvc6Fx0i6remRMGo2mKeB+
-         Kk/SCvJ9V2RAZOPZcpnztzT/rXtQ299Jd3KoUHROGDLGVshjqKEoXcnu/8fI5JOXwt2O
-         Vc3DUO2PvWYHTPnkt9tJeOvPu0mbrhaj6WoOC0y+sJ/wULALRa+X/uSC+r6pfBo8MIRU
-         SuvQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kbRrkAeJHyKBfoxhtaOStXipnG/Sgu+7cKCsLovVUec=;
+        b=LtWHzBiyI50M/8tTfrptPo7mD56R1D87P168cheHi6NnxFnl1grqBHKpMnUK56FTaP
+         c7SnLF5S+Mk14346cBOXCOJIehCTy8HXr7HMSEieTKYxnyvS6d+Q4MPajC18WDTeOUdZ
+         knZux5cIa9ubxh6vMW8AsXNBEUvmygdkvpsM78I9HzvCJNZM6yjZd0ukWXDPZM6ckyI5
+         8hVAYBd+cZ/TBgk4IsnvHLnt5pKhrOHeKKZYLOTW2853FJbsSyxEebRSD/8U4QnzA0QM
+         iJ3g/KOZAzdYMDWh40iMETC8cn9dKXpA33EjWsErNO1jXi2TcsNP4LhdP7dAs5lvTyq3
+         PrbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=z91zScAZZwulAyvz3u3tr6aLJzcsPLOyuebpL+WCLno=;
-        b=JhacA3DhjQazzRXQpaPhKs8tBgUSBUjuXA5ELS1mYeuNhqem1uATV2w3vdDoHzxHTJ
-         rRxE5Mq8n3JWTrXR5Ck32SGk3fKY4R9BIQk7LGU00nfRy7upTpBS+0+6D1SRrY9faL9Q
-         +kPJRsL5fGvPFjDHM974RPirmeF1HCENDx7U7Q2UDzUHjWMmBwajewjpLRnvP04DpEH5
-         q01m8KG5LxIzj4LhuM4JccVLg3XyWzXt4m6rnjuFf8vwVt0FQd69V8fz4U3rBJG0D8OR
-         1cUHXrZ6uTqEFDmkZAmusZLuWkamDH2hui9ipc2iUSrM+njcGzCV06fB8GLM7T8cDv96
-         02DA==
-X-Gm-Message-State: ANhLgQ126eZbxYXV5eqYiDaXYEKMaGHRyO2Y3+0vpeEn2UlOAaYzSeJE
-        +7MGdzejbjecM1EnfKwPEqIXGw==
-X-Google-Smtp-Source: ADFU+vvuhvgtiuMVWq5U8ezUlV4NbLmjf0dUAE8V/9qJPXi4TIiZ/VIBKWQAmz5mjTginjpk5wI9ag==
-X-Received: by 2002:a1c:2747:: with SMTP id n68mr254288wmn.14.1583954096913;
-        Wed, 11 Mar 2020 12:14:56 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kbRrkAeJHyKBfoxhtaOStXipnG/Sgu+7cKCsLovVUec=;
+        b=hjFJKnCHEjwcM9w47UPhNrITRJFooDsRHVW8TISFlpZi3+CTPb3ZqcKA+yg+9cMGuQ
+         tnvX9Y3QsQP3JhXFuTLvKNl3TNt9Nb9MRqtGSuD+U0hAsbFnnXZFj82z8fxQQx1kuqce
+         QptLkb2D2atrIJqsCM//cHolSIPDqIh+BRsP4xcyRAJztsPO4X5hPmmYfYbAUSFQyZA9
+         OpaSGarP60HHTzrC35IfjNeSSLLQMdfBDtmoI9/27AUCUD8rzW4fLnU/WldTqkMEW8l5
+         Z2GdVyrZ7lJ7ncVqtDt1dEk4/l+p5Mz38N40I2+AK9CYeVZ3RfW59TmDnLSKEduv1+1p
+         6uMw==
+X-Gm-Message-State: ANhLgQ1IcfCdAhED+d+TJo/q0+OAtS3T8LYNvMB91u4eAW9MutwGbDTJ
+        XU7ZLEexsUkhP8WQLMLPmstkOQ==
+X-Google-Smtp-Source: ADFU+vsD2ZqK4dtZKHh/wIu3OCvgAU1ewymHvX1gnWzG3Cmh50v327zeKOhmUotyxi/hMvs30e/Mzg==
+X-Received: by 2002:adf:eb51:: with SMTP id u17mr6293762wrn.29.1583954102179;
+        Wed, 11 Mar 2020 12:15:02 -0700 (PDT)
 Received: from localhost.localdomain ([176.61.57.127])
-        by smtp.gmail.com with ESMTPSA id n24sm32958496wra.61.2020.03.11.12.14.55
+        by smtp.gmail.com with ESMTPSA id c85sm9687437wmd.48.2020.03.11.12.15.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2020 12:14:56 -0700 (PDT)
+        Wed, 11 Mar 2020 12:15:01 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
         linux-usb@vger.kernel.org
 Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bjorn.andersson@linaro.org, jackp@codeaurora.org, robh@kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [PATCH 7/7] usb: dwc3: qcom: Enable gpio-usb-conn based role-switching
-Date:   Wed, 11 Mar 2020 19:15:01 +0000
-Message-Id: <20200311191501.8165-8-bryan.odonoghue@linaro.org>
+        jackp@codeaurora.org, robh@kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: [PATCH 0/6] Add DT bindings for USB HS/SS in QCS404
+Date:   Wed, 11 Mar 2020 19:15:11 +0000
+Message-Id: <20200311191517.8221-1-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200311191501.8165-1-bryan.odonoghue@linaro.org>
-References: <20200311191501.8165-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -66,71 +61,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch adds the ability to receive a notification from the DRD code for
-role-switch events and in doing so it introduces a disjunction between
-gpio-usb-conn or extcon mode.
+This set adds DT entries for the Primary and Secondary DWC3 controllers on
+QCS404 and the PHYs attached to those controllers.
 
-This is what we want to do, since the two methods are mutually exclusive.
+Additional board-specific bindings are required to make the SoC change
+functional on the EVBs as on the EVB a type-c connector interfaces with the
+SoC which is responsible to toggle VBUS via a regulator interface directly.
 
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Lee Jones <lee.jones@linaro.org>
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Jack Pham <jackp@codeaurora.org>
-Cc: linux-arm-msm@vger.kernel.org
-Cc: linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- drivers/usb/dwc3/dwc3-qcom.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+These patches have been through seven review cycles already and have a
+number of Review-by and Ack-by. For the pusposes of making it easier to
+merge this set focuses on the SoC DT bindings and target board bindings
+alone.
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 6f4b2b3cffce..f6a7ede5953e 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -571,6 +571,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 	struct device		*dev = &pdev->dev;
- 	struct dwc3_qcom	*qcom;
- 	struct resource		*res, *parent_res = NULL;
-+	struct dwc3		*dwc;
- 	int			ret, i;
- 	bool			ignore_pipe_clk;
- 
-@@ -669,8 +670,16 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
- 		dwc3_qcom_vbus_overrride_enable(qcom, true);
- 
--	/* register extcon to override sw_vbus on Vbus change later */
--	ret = dwc3_qcom_register_extcon(qcom);
-+	if (dwc3_qcom_find_gpio_usb_connector(qcom->dwc3)) {
-+		/* Using gpio-usb-conn register a notifier for VBUS */
-+		dwc = platform_get_drvdata(qcom->dwc3);
-+		qcom->vbus_nb.notifier_call = dwc3_qcom_vbus_notifier;
-+		ret = dwc3_role_switch_notifier_register(dwc, &qcom->vbus_nb);
-+	} else {
-+		/* register extcon to override sw_vbus on Vbus change later */
-+		ret = dwc3_qcom_register_extcon(qcom);
-+	}
-+
- 	if (ret)
- 		goto depopulate;
- 
-@@ -702,8 +711,11 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
- {
- 	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
- 	struct device *dev = &pdev->dev;
-+	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
- 	int i;
- 
-+	dwc3_role_switch_notifier_unregister(dwc, &qcom->vbus_nb);
-+
- 	of_platform_depopulate(dev);
- 
- 	for (i = qcom->num_clocks - 1; i >= 0; i--) {
+The last set for can be found here:
+https://lkml.org/lkml/2020/3/3/807
+
+Bjorn Andersson (1):
+  arm64: dts: qcom: qcs404: Add USB devices and PHYs
+
+Bryan O'Donoghue (5):
+  arm64: dts: qcom: qcs404-evb: Define VBUS pins
+  arm64: dts: qcom: qcs404-evb: Define USB ID pin
+  arm64: dts: qcom: qcs404-evb: Describe external VBUS regulator
+  arm64: dts: qcom: qcs404-evb: Raise vreg_l12_3p3 minimum voltage
+  arm64: dts: qcom: qcs404-evb: Enable USB controllers
+
+ arch/arm64/boot/dts/qcom/qcs404-evb.dtsi |  90 +++++++++++++++++++-
+ arch/arm64/boot/dts/qcom/qcs404.dtsi     | 100 +++++++++++++++++++++++
+ 2 files changed, 189 insertions(+), 1 deletion(-)
+
 -- 
 2.25.1
 
