@@ -2,194 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF1C181B90
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 15:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5DD181BE4
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 15:59:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729853AbgCKOm5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Mar 2020 10:42:57 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:43443 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729057AbgCKOm5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Mar 2020 10:42:57 -0400
-Received: by mail-ed1-f66.google.com with SMTP id dc19so3133763edb.10;
-        Wed, 11 Mar 2020 07:42:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gKDUe9P2YUubturUxI0TRyVNid6URk2e+Ed9FtxvxKk=;
-        b=EMKmZ/MrgEuNGsTb/Ze9rt1U9+lWeztu9hI+HH0of+sRAzH/ExlqFbOIRZFSxC4ADK
-         5X/26f6R0Z/iTcCYTGKuGtP2nlbh4uQE27kLyGUwGHCD3jgSs3vXN7JQHlOpGJ8PvKBK
-         WfPgkD8gcbIKMi9IN3+NCDIBuDyPVbjA9c0GIzrV/aMUB6I/1ri7oKrc75+WBo6cr0wI
-         o5ID2MMultN8P9BStIBS4wxYgcFg9edOD1Rdv1sM6CUM5bZXJ46B7Xjs1ZdBbUyY/orQ
-         vAyryO2dUh1BIfRe/cIKRLd1XpjnA0BhOkuZTP3IfrsMvh+uB+boHC0YO6AFo69jRXBx
-         VZBg==
-X-Gm-Message-State: ANhLgQ2P/ulINIycY42dj86NuoBy33Ie2susWmo+v93rpw6wYCUPbnls
-        j3LiPI1ua4HqGDo/+cPH7QA=
-X-Google-Smtp-Source: ADFU+vuaPy05McHUkVwSVh+g/+/nj6uRC/r0ZhsuPI7+uwkM3c7CJcwerQSzNIOD7sx8YKwslv43/w==
-X-Received: by 2002:aa7:d45a:: with SMTP id q26mr3263099edr.350.1583937774579;
-        Wed, 11 Mar 2020 07:42:54 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.125])
-        by smtp.googlemail.com with ESMTPSA id p4sm607572eju.57.2020.03.11.07.42.49
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 11 Mar 2020 07:42:51 -0700 (PDT)
-Date:   Wed, 11 Mar 2020 15:42:48 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Anand Moon <linux.amoon@gmail.com>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCHv3 5/5] clk: samsung: exynos542x: Move FSYS subsystem
- clocks to its sub-CMU
-Message-ID: <20200311144248.GA4455@kozik-lap>
-References: <20200310194854.831-1-linux.amoon@gmail.com>
- <20200310194854.831-6-linux.amoon@gmail.com>
+        id S1729805AbgCKO7r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Mar 2020 10:59:47 -0400
+Received: from mail.actia.se ([195.67.112.82]:58820 "EHLO mail.actia.se"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729309AbgCKO7r (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 11 Mar 2020 10:59:47 -0400
+Received: from S036ANL.actianordic.se (192.168.16.117) by
+ S035ANL.actianordic.se (192.168.16.116) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Wed, 11 Mar 2020 15:59:44 +0100
+Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
+ S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%3]) with mapi id
+ 15.01.1913.007; Wed, 11 Mar 2020 15:59:44 +0100
+From:   Jonas Karlsson <jonas.karlsson@actia.se>
+To:     Oliver Neukum <oneukum@suse.com>,
+        Fabio Estevam <festevam@gmail.com>
+CC:     Peter Chen <peter.chen@nxp.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: RE: USB transaction errors causing RCU stalls and kernel panics
+Thread-Topic: USB transaction errors causing RCU stalls and kernel panics
+Thread-Index: AdXxbFdECZ2tmAAoQZaxVkfgHyprqgABZ9yAAAiGryAAIGdeAAAEO3aAAAR/HgAARX+KgACtYMrAACnez4AABbFG8AAAO9EAAACaYAAAA7I5cAAHmbfw///2mYD//wJNQIACMDyA///DfRA=
+Date:   Wed, 11 Mar 2020 14:59:44 +0000
+Message-ID: <ad6b4f2d72f84726a398b41007839f77@actia.se>
+References: <ddf8c3971b8544e983a9d2bbdc7f2010@actia.se>
+         <20200303163945.GB652754@kroah.com>
+         <ca6f029a57f24ee9aea39385a9ad55bd@actia.se>
+         <6909d182-6cc5-c07f-ed79-02c741aec60b@linux.intel.com>
+         <1583331173.12738.26.camel@suse.com>
+         <4fa64e92-64ce-07f3-ed8e-ea4e07d091bb@linux.intel.com>
+         <VI1PR04MB532785057FD52DFE3A21ACA88BE30@VI1PR04MB5327.eurprd04.prod.outlook.com>
+         <699a49f2f69e494ea6558b99fad23cc4@actia.se>
+         <20200310081452.GA14625@b29397-desktop>
+         <d1f68ef3316e484b9cc1360f71886719@actia.se>
+         <1583838270.11582.11.camel@suse.com> <1583839306.11582.12.camel@suse.de>
+         <325d5af5d4c44eafac94fc8e0e4d1a7d@actia.se>
+         <c671a51d6b5642078367d681643c46af@actia.se>
+         <CAOMZO5BURqWDXKXiwLzG=BRC_wJkjZ1d_HaLt_tefjk3GrabDw@mail.gmail.com>
+         <fc2d27c17ebc409ea8c318c22ac1f4a7@actia.se>
+ <1583922523.20566.4.camel@suse.com>
+In-Reply-To: <1583922523.20566.4.camel@suse.com>
+Accept-Language: sv-SE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.11.14.24]
+x-esetresult: clean, is OK
+x-esetid: 37303A2914C9726A627663
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200310194854.831-6-linux.amoon@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 10, 2020 at 07:48:54PM +0000, Anand Moon wrote:
-> FSYS power domain support usbdrd3, pdma and usb2 power gaiting,
-> hence move FSYS clk setting to sub-CMU block to support power domain
-> on/off sequences for device nodes.
-> 
-> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> ---
-> New patch in the series
-> ---
->  drivers/clk/samsung/clk-exynos5420.c | 45 +++++++++++++++++++++-------
->  1 file changed, 34 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/clk/samsung/clk-exynos5420.c b/drivers/clk/samsung/clk-exynos5420.c
-> index c9e5a1fb6653..6c4c47dfcdce 100644
-> --- a/drivers/clk/samsung/clk-exynos5420.c
-> +++ b/drivers/clk/samsung/clk-exynos5420.c
-> @@ -859,12 +859,6 @@ static const struct samsung_div_clock exynos5x_div_clks[] __initconst = {
->  	DIV(0, "dout_maudio0", "mout_maudio0", DIV_MAU, 20, 4),
->  	DIV(0, "dout_maupcm0", "dout_maudio0", DIV_MAU, 24, 8),
->  
-> -	/* USB3.0 */
-> -	DIV(0, "dout_usbphy301", "mout_usbd301", DIV_FSYS0, 12, 4),
-> -	DIV(0, "dout_usbphy300", "mout_usbd300", DIV_FSYS0, 16, 4),
-> -	DIV(0, "dout_usbd301", "mout_usbd301", DIV_FSYS0, 20, 4),
-> -	DIV(0, "dout_usbd300", "mout_usbd300", DIV_FSYS0, 24, 4),
-
-According to clock diagram these are still in CMU TOP, not FSYS.
-
-> -
->  	/* MMC */
->  	DIV(0, "dout_mmc0", "mout_mmc0", DIV_FSYS1, 0, 10),
->  	DIV(0, "dout_mmc1", "mout_mmc1", DIV_FSYS1, 10, 10),
-> @@ -1031,8 +1025,6 @@ static const struct samsung_gate_clock exynos5x_gate_clks[] __initconst = {
-/>  
->  	/* FSYS Block */
->  	GATE(CLK_TSI, "tsi", "aclk200_fsys", GATE_BUS_FSYS0, 0, 0, 0),
-> -	GATE(CLK_PDMA0, "pdma0", "aclk200_fsys", GATE_BUS_FSYS0, 1, 0, 0),
-> -	GATE(CLK_PDMA1, "pdma1", "aclk200_fsys", GATE_BUS_FSYS0, 2, 0, 0),
->  	GATE(CLK_UFS, "ufs", "aclk200_fsys2", GATE_BUS_FSYS0, 3, 0, 0),
->  	GATE(CLK_RTIC, "rtic", "aclk200_fsys", GATE_IP_FSYS, 9, 0, 0),
->  	GATE(CLK_MMC0, "mmc0", "aclk200_fsys2", GATE_IP_FSYS, 12, 0, 0),
-> @@ -1040,9 +1032,6 @@ static const struct samsung_gate_clock exynos5x_gate_clks[] __initconst = {
->  	GATE(CLK_MMC2, "mmc2", "aclk200_fsys2", GATE_IP_FSYS, 14, 0, 0),
->  	GATE(CLK_SROMC, "sromc", "aclk200_fsys2",
->  			GATE_IP_FSYS, 17, CLK_IGNORE_UNUSED, 0),
-> -	GATE(CLK_USBH20, "usbh20", "aclk200_fsys", GATE_IP_FSYS, 18, 0, 0),
-> -	GATE(CLK_USBD300, "usbd300", "aclk200_fsys", GATE_IP_FSYS, 19, 0, 0),
-> -	GATE(CLK_USBD301, "usbd301", "aclk200_fsys", GATE_IP_FSYS, 20, 0, 0),
->  	GATE(CLK_SCLK_UNIPRO, "sclk_unipro", "dout_unipro",
->  			SRC_MASK_FSYS, 24, CLK_SET_RATE_PARENT, 0),
->  
-> @@ -1258,6 +1247,28 @@ static struct exynos5_subcmu_reg_dump exynos5x_gsc_suspend_regs[] = {
->  	{ DIV2_RATIO0, 0, 0x30 },	/* DIV dout_gscl_blk_300 */
->  };
->  
-> +/* USB3.0 */
-> +static const struct samsung_div_clock exynos5x_fsys_div_clks[] __initconst = {
-> +	DIV(0, "dout_usbphy301", "mout_usbd301", DIV_FSYS0, 12, 4),
-> +	DIV(0, "dout_usbphy300", "mout_usbd300", DIV_FSYS0, 16, 4),
-> +	DIV(0, "dout_usbd301", "mout_usbd301", DIV_FSYS0, 20, 4),
-> +	DIV(0, "dout_usbd300", "mout_usbd300", DIV_FSYS0, 24, 4),
-> +};
-> +
-> +static const struct samsung_gate_clock exynos5x_fsys_gate_clks[] __initconst = {
-> +	GATE(CLK_PDMA0, "pdma0", "aclk200_fsys", GATE_BUS_FSYS0, 1, 0, 0),
-> +	GATE(CLK_PDMA1, "pdma1", "aclk200_fsys", GATE_BUS_FSYS0, 2, 0, 0),
-> +	GATE(CLK_USBH20, "usbh20", "aclk200_fsys", GATE_IP_FSYS, 18, 0, 0),
-> +	GATE(CLK_USBD300, "usbd300", "aclk200_fsys", GATE_IP_FSYS, 19, 0, 0),
-> +	GATE(CLK_USBD301, "usbd301", "aclk200_fsys", GATE_IP_FSYS, 20, 0, 0),
-> +};
-> +
-> +static struct exynos5_subcmu_reg_dump exynos5x_fsys_suspend_regs[] = {
-> +	{ GATE_IP_FSYS, 0xffffffff, 0xffffffff }, /* FSYS gates */
-
-This looks wrong. GATE_IP_FSYS has fields also for FSYS2 clocks which
-you are not suspending. They do not belong to this CMU.
-
-Don't you need to save also parts of GATE_BUS_FSYS0?
-
-> +	{ SRC_TOP3, 0, BIT(24) },                 /* SW_MUX_PCLK_200_FSYS_SEL */
-> +	{ SRC_TOP3, 0, BIT(28) },                 /* SW_MUX_ACLK_200_FSYS_SEL */
-
-Name of clocks from the driver please, not from datasheet. Look at other
-examples.
-
-Best regards,
-Krzysztof
-
-
-> +};
-> +
->  static const struct samsung_gate_clock exynos5x_g3d_gate_clks[] __initconst = {
->  	GATE(CLK_G3D, "g3d", "mout_user_aclk_g3d", GATE_IP_G3D, 9,
->  	     CLK_SET_RATE_PARENT, 0),
-> @@ -1376,12 +1387,23 @@ static const struct exynos5_subcmu_info exynos5800_mau_subcmu = {
->  	.pd_name	= "MAU",
->  };
->  
-> +static const struct exynos5_subcmu_info exynos5x_fsys_subcmu = {
-> +	.div_clks       = exynos5x_fsys_div_clks,
-> +	.nr_div_clks    = ARRAY_SIZE(exynos5x_fsys_div_clks),
-> +	.gate_clks	= exynos5x_fsys_gate_clks,
-> +	.nr_gate_clks	= ARRAY_SIZE(exynos5x_fsys_gate_clks),
-> +	.suspend_regs	= exynos5x_fsys_suspend_regs,
-> +	.nr_suspend_regs = ARRAY_SIZE(exynos5x_fsys_suspend_regs),
-> +	.pd_name	= "FSYS",
-> +};
-> +
->  static const struct exynos5_subcmu_info *exynos5x_subcmus[] = {
->  	&exynos5x_disp_subcmu,
->  	&exynos5x_gsc_subcmu,
->  	&exynos5x_g3d_subcmu,
->  	&exynos5x_mfc_subcmu,
->  	&exynos5x_mscl_subcmu,
-> +	&exynos5x_fsys_subcmu,
->  };
->  
->  static const struct exynos5_subcmu_info *exynos5800_subcmus[] = {
-> @@ -1391,6 +1413,7 @@ static const struct exynos5_subcmu_info *exynos5800_subcmus[] = {
->  	&exynos5x_mfc_subcmu,
->  	&exynos5x_mscl_subcmu,
->  	&exynos5800_mau_subcmu,
-> +	&exynos5x_fsys_subcmu,
->  };
->  
->  static const struct samsung_pll_rate_table exynos5420_pll2550x_24mhz_tbl[] __initconst = {
-> -- 
-> 2.25.1
-> 
+SGkgT2xpdmVyLA0KDQo+IEhpLA0KPiANCj4gaXQgaXMgZ29vZCB0aGF0IHdlIGhhdmUgc29tZXRo
+aW5nIHRoYXQgd29ya3MuDQo+IEl0IHdvdWxkIGJlIGV2ZW4gYmV0dGVyIGlmIHdlIHVuZGVyc3Rv
+b2QgZXhhY3RseSBob3cgaXQgd29ya3MuIEluIGZhY3QgdGhhdA0KPiB0aGVzZSBwYXRjaGVzIHdv
+cmsgYW5kIGFyZSBuZWVkZWQgbWF5IHZlcnkgd2VsbCBpbmRpY2F0ZSB0aGF0IGVycm9yDQo+IGhh
+bmRsaW5nIG9uIGF0IGxlYXN0IHNvbWUgWEhDcyBkb2VzIG5vdCB3b3JrIGFzIGV4cGVjdGVkLg0K
+PiANCj4gU28gYSBxdWVzdGlvbiBhbmQgYSByZXF1ZXN0LCBpZiBJIG1heS4NCj4gRGlkIHlvdSBy
+dW4gdGhlIHRlc3Qgd2l0aCBhdXRvc3VzcGVuZCBkaXNhYmxlZD8gSWYgc28gY291bGQgeW91IHJl
+dGVzdCB3aXRoIGl0DQo+IGVuYWJsZWQ/DQoNCkkgaGF2ZSBvbmx5IHRlc3RlZCB3aXRoIGF1dG9z
+dXNwZW5kIGVuYWJsZWQuDQoNCj4gU2Vjb25kbHkgY291bGQgeW91IHJ1biB0ZXN0cyB3aXRoDQo+
+IA0KPiBjb21taXQgN2M4ZjdhZjA3OGE0ZWRhNzNmMzQ3NjY3ZDEyNTg0NzM2ZTYxMzA2Mg0KPiBB
+dXRob3I6IE9saXZlciBOZXVrdW0gPG9uZXVrdW1Ac3VzZS5jb20+DQo+IERhdGU6ICAgVGh1IE1h
+ciA1IDExOjE2OjAyIDIwMjAgKzAxMDANCj4gDQo+ICAgICBjZGMtYWNtOiBjbG9zZSByYWNlIGJl
+dHJ3ZWVuIHN1c3BlbmQoKSBhbmQgYWNtX3NvZnRpbnQNCj4gDQo+IG5vdCBhcHBsaWVkIChyZXNw
+ZWN0aXZlbHkgcmV2ZXJ0ZWQpIHdpdGggYW5kIHdpdGhvdXQgYXV0b3N1c3BlbmQ/DQoNCkkgcmFu
+IGEgdGVzdCB3aXRoIHRoaXMgY29tbWl0IHJldmVydGVkIGFuZCBzYXcgbm8gZGlmZmVyZW5jZSBp
+biBiZWhhdmlvci4NCmkuZSB3ZSBkbyBub3QgZ2V0IGV2ZW50IHNwYW0gd2l0aCB0aGlzIGNvbW1p
+dCByZXZlcnRlZC4NCkkgdGVzdGVkIHdpdGggZW5hYmxlZCBhbmQgZGlzYWJsZWQgYXV0b3N1c3Bl
+bmQuDQoNCj4gDQo+IAlSZWdhcmRzDQo+IAkJT2xpdmVyDQo+IA0KPiBQUzogV2hlbiBJIHN1Ym1p
+dCB1cHN0cmVhbSwgbWF5IEkgYWRkIHlvdXIgJ1Rlc3RlZC1ieSc/DQoNClN1cmUsIHlvdSBjYW4g
+YWRkIG1lLCBidXQgSSBoYXZlIG9ubHkgdGVzdGVkIHRoYXQgdGhpcyBzcGVjaWZpYyBwcm9ibGVt
+DQpzZWVtcyB0byBiZSBzb2x2ZWQuIFRoZSBub3JtYWwgZnVuY3Rpb25hbGl0eSBoYXMgbm90IGJl
+ZW4gdGVzdGVkICBwcm9wZXJseSB5ZXQNCm9uIG91ciBzaWRlLiANCg0KLy9Kb25hcw0K
