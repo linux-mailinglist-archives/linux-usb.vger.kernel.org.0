@@ -2,177 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7070C1814D7
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 10:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C81D51815CA
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 11:28:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728721AbgCKJaH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Mar 2020 05:30:07 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58658 "EHLO mx2.suse.de"
+        id S1729019AbgCKK2r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Mar 2020 06:28:47 -0400
+Received: from mx2.suse.de ([195.135.220.15]:40988 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728704AbgCKJaG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 11 Mar 2020 05:30:06 -0400
+        id S1726000AbgCKK2q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 11 Mar 2020 06:28:46 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id B2907AC1E;
-        Wed, 11 Mar 2020 09:30:04 +0000 (UTC)
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH] USB: mon: Use scnprintf() for avoiding potential buffer overflow
-Date:   Wed, 11 Mar 2020 10:30:03 +0100
-Message-Id: <20200311093003.24604-1-tiwai@suse.de>
-X-Mailer: git-send-email 2.16.4
+        by mx2.suse.de (Postfix) with ESMTP id D4095B1DD;
+        Wed, 11 Mar 2020 10:28:44 +0000 (UTC)
+Message-ID: <1583922523.20566.4.camel@suse.com>
+Subject: Re: USB transaction errors causing RCU stalls and kernel panics
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Jonas Karlsson <jonas.karlsson@actia.se>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     Peter Chen <peter.chen@nxp.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Date:   Wed, 11 Mar 2020 11:28:43 +0100
+In-Reply-To: <fc2d27c17ebc409ea8c318c22ac1f4a7@actia.se>
+References: <ddf8c3971b8544e983a9d2bbdc7f2010@actia.se>
+         <20200303163945.GB652754@kroah.com>
+         <ca6f029a57f24ee9aea39385a9ad55bd@actia.se>
+         <6909d182-6cc5-c07f-ed79-02c741aec60b@linux.intel.com>
+         <1583331173.12738.26.camel@suse.com>
+         <4fa64e92-64ce-07f3-ed8e-ea4e07d091bb@linux.intel.com>
+         <VI1PR04MB532785057FD52DFE3A21ACA88BE30@VI1PR04MB5327.eurprd04.prod.outlook.com>
+         <699a49f2f69e494ea6558b99fad23cc4@actia.se>
+         <20200310081452.GA14625@b29397-desktop>
+         <d1f68ef3316e484b9cc1360f71886719@actia.se>
+         <1583838270.11582.11.camel@suse.com> <1583839306.11582.12.camel@suse.de>
+         <325d5af5d4c44eafac94fc8e0e4d1a7d@actia.se>
+         <c671a51d6b5642078367d681643c46af@actia.se>
+         <CAOMZO5BURqWDXKXiwLzG=BRC_wJkjZ1d_HaLt_tefjk3GrabDw@mail.gmail.com>
+         <fc2d27c17ebc409ea8c318c22ac1f4a7@actia.se>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since snprintf() returns the would-be-output size instead of the
-actual output size, the succeeding calls may go beyond the given
-buffer limit.  Fix it by replacing with scnprintf().
+Am Mittwoch, den 11.03.2020, 06:25 +0000 schrieb Jonas Karlsson:
+> Hi Fabio,
+> 
+> > Hi Jonas,
+> > 
+> > On Tue, Mar 10, 2020 at 1:07 PM Jonas Karlsson <jonas.karlsson@actia.se>
+> > wrote:
+> > 
+> > > I have also _reverted_ this patch after recommendation from NXP to avoid
+> > 
+> > RCU stall
+> > > crashes:
+> > > 
+> > > commit 077506972ba23772b752e08b1ab7052cf5f04511
+> > > Author: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+> > > Date:   Mon Jul 9 13:47:30 2018 -0700
+> > > 
+> > >     rcu: Make need_resched() respond to urgent RCU-QS needs
+> > 
+> > Could you please test without this revert?
+> > 
+> > Thanks
+> 
+> I removed the revert and it still works fine.
 
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
----
- drivers/usb/mon/mon_text.c | 36 ++++++++++++++++++------------------
- 1 file changed, 18 insertions(+), 18 deletions(-)
+Hi,
 
-diff --git a/drivers/usb/mon/mon_text.c b/drivers/usb/mon/mon_text.c
-index bc5ecd5ff565..39cb14164652 100644
---- a/drivers/usb/mon/mon_text.c
-+++ b/drivers/usb/mon/mon_text.c
-@@ -414,7 +414,7 @@ static ssize_t mon_text_read_t(struct file *file, char __user *buf,
- 
- 		mon_text_read_head_t(rp, &ptr, ep);
- 		mon_text_read_statset(rp, &ptr, ep);
--		ptr.cnt += snprintf(ptr.pbuf + ptr.cnt, ptr.limit - ptr.cnt,
-+		ptr.cnt += scnprintf(ptr.pbuf + ptr.cnt, ptr.limit - ptr.cnt,
- 		    " %d", ep->length);
- 		mon_text_read_data(rp, &ptr, ep);
- 
-@@ -462,7 +462,7 @@ static ssize_t mon_text_read_u(struct file *file, char __user *buf,
- 		} else {
- 			mon_text_read_statset(rp, &ptr, ep);
- 		}
--		ptr.cnt += snprintf(ptr.pbuf + ptr.cnt, ptr.limit - ptr.cnt,
-+		ptr.cnt += scnprintf(ptr.pbuf + ptr.cnt, ptr.limit - ptr.cnt,
- 		    " %d", ep->length);
- 		mon_text_read_data(rp, &ptr, ep);
- 
-@@ -520,7 +520,7 @@ static void mon_text_read_head_t(struct mon_reader_text *rp,
- 	case USB_ENDPOINT_XFER_CONTROL:	utype = 'C'; break;
- 	default: /* PIPE_BULK */  utype = 'B';
- 	}
--	p->cnt += snprintf(p->pbuf + p->cnt, p->limit - p->cnt,
-+	p->cnt += scnprintf(p->pbuf + p->cnt, p->limit - p->cnt,
- 	    "%lx %u %c %c%c:%03u:%02u",
- 	    ep->id, ep->tstamp, ep->type,
- 	    utype, udir, ep->devnum, ep->epnum);
-@@ -538,7 +538,7 @@ static void mon_text_read_head_u(struct mon_reader_text *rp,
- 	case USB_ENDPOINT_XFER_CONTROL:	utype = 'C'; break;
- 	default: /* PIPE_BULK */  utype = 'B';
- 	}
--	p->cnt += snprintf(p->pbuf + p->cnt, p->limit - p->cnt,
-+	p->cnt += scnprintf(p->pbuf + p->cnt, p->limit - p->cnt,
- 	    "%lx %u %c %c%c:%d:%03u:%u",
- 	    ep->id, ep->tstamp, ep->type,
- 	    utype, udir, ep->busnum, ep->devnum, ep->epnum);
-@@ -549,7 +549,7 @@ static void mon_text_read_statset(struct mon_reader_text *rp,
- {
- 
- 	if (ep->setup_flag == 0) {   /* Setup packet is present and captured */
--		p->cnt += snprintf(p->pbuf + p->cnt, p->limit - p->cnt,
-+		p->cnt += scnprintf(p->pbuf + p->cnt, p->limit - p->cnt,
- 		    " s %02x %02x %04x %04x %04x",
- 		    ep->setup[0],
- 		    ep->setup[1],
-@@ -557,10 +557,10 @@ static void mon_text_read_statset(struct mon_reader_text *rp,
- 		    (ep->setup[5] << 8) | ep->setup[4],
- 		    (ep->setup[7] << 8) | ep->setup[6]);
- 	} else if (ep->setup_flag != '-') { /* Unable to capture setup packet */
--		p->cnt += snprintf(p->pbuf + p->cnt, p->limit - p->cnt,
-+		p->cnt += scnprintf(p->pbuf + p->cnt, p->limit - p->cnt,
- 		    " %c __ __ ____ ____ ____", ep->setup_flag);
- 	} else {                     /* No setup for this kind of URB */
--		p->cnt += snprintf(p->pbuf + p->cnt, p->limit - p->cnt,
-+		p->cnt += scnprintf(p->pbuf + p->cnt, p->limit - p->cnt,
- 		    " %d", ep->status);
- 	}
- }
-@@ -568,7 +568,7 @@ static void mon_text_read_statset(struct mon_reader_text *rp,
- static void mon_text_read_intstat(struct mon_reader_text *rp,
- 	struct mon_text_ptr *p, const struct mon_event_text *ep)
- {
--	p->cnt += snprintf(p->pbuf + p->cnt, p->limit - p->cnt,
-+	p->cnt += scnprintf(p->pbuf + p->cnt, p->limit - p->cnt,
- 	    " %d:%d", ep->status, ep->interval);
- }
- 
-@@ -576,10 +576,10 @@ static void mon_text_read_isostat(struct mon_reader_text *rp,
- 	struct mon_text_ptr *p, const struct mon_event_text *ep)
- {
- 	if (ep->type == 'S') {
--		p->cnt += snprintf(p->pbuf + p->cnt, p->limit - p->cnt,
-+		p->cnt += scnprintf(p->pbuf + p->cnt, p->limit - p->cnt,
- 		    " %d:%d:%d", ep->status, ep->interval, ep->start_frame);
- 	} else {
--		p->cnt += snprintf(p->pbuf + p->cnt, p->limit - p->cnt,
-+		p->cnt += scnprintf(p->pbuf + p->cnt, p->limit - p->cnt,
- 		    " %d:%d:%d:%d",
- 		    ep->status, ep->interval, ep->start_frame, ep->error_count);
- 	}
-@@ -592,7 +592,7 @@ static void mon_text_read_isodesc(struct mon_reader_text *rp,
- 	int i;
- 	const struct mon_iso_desc *dp;
- 
--	p->cnt += snprintf(p->pbuf + p->cnt, p->limit - p->cnt,
-+	p->cnt += scnprintf(p->pbuf + p->cnt, p->limit - p->cnt,
- 	    " %d", ep->numdesc);
- 	ndesc = ep->numdesc;
- 	if (ndesc > ISODESC_MAX)
-@@ -601,7 +601,7 @@ static void mon_text_read_isodesc(struct mon_reader_text *rp,
- 		ndesc = 0;
- 	dp = ep->isodesc;
- 	for (i = 0; i < ndesc; i++) {
--		p->cnt += snprintf(p->pbuf + p->cnt, p->limit - p->cnt,
-+		p->cnt += scnprintf(p->pbuf + p->cnt, p->limit - p->cnt,
- 		    " %d:%u:%u", dp->status, dp->offset, dp->length);
- 		dp++;
- 	}
-@@ -614,28 +614,28 @@ static void mon_text_read_data(struct mon_reader_text *rp,
- 
- 	if ((data_len = ep->length) > 0) {
- 		if (ep->data_flag == 0) {
--			p->cnt += snprintf(p->pbuf + p->cnt, p->limit - p->cnt,
-+			p->cnt += scnprintf(p->pbuf + p->cnt, p->limit - p->cnt,
- 			    " =");
- 			if (data_len >= DATA_MAX)
- 				data_len = DATA_MAX;
- 			for (i = 0; i < data_len; i++) {
- 				if (i % 4 == 0) {
--					p->cnt += snprintf(p->pbuf + p->cnt,
-+					p->cnt += scnprintf(p->pbuf + p->cnt,
- 					    p->limit - p->cnt,
- 					    " ");
- 				}
--				p->cnt += snprintf(p->pbuf + p->cnt,
-+				p->cnt += scnprintf(p->pbuf + p->cnt,
- 				    p->limit - p->cnt,
- 				    "%02x", ep->data[i]);
- 			}
--			p->cnt += snprintf(p->pbuf + p->cnt, p->limit - p->cnt,
-+			p->cnt += scnprintf(p->pbuf + p->cnt, p->limit - p->cnt,
- 			    "\n");
- 		} else {
--			p->cnt += snprintf(p->pbuf + p->cnt, p->limit - p->cnt,
-+			p->cnt += scnprintf(p->pbuf + p->cnt, p->limit - p->cnt,
- 			    " %c\n", ep->data_flag);
- 		}
- 	} else {
--		p->cnt += snprintf(p->pbuf + p->cnt, p->limit - p->cnt, "\n");
-+		p->cnt += scnprintf(p->pbuf + p->cnt, p->limit - p->cnt, "\n");
- 	}
- }
- 
--- 
-2.16.4
+it is good that we have something that works.
+It would be even better if we understood exactly how
+it works. In fact that these patches work and are needed
+may very well indicate that error handling on at least
+some XHCs does not work as expected.
 
+So a question and a request, if I may.
+Did you run the test with autosuspend disabled? If so could
+you retest with it enabled?
+Secondly could you run tests with
+
+commit 7c8f7af078a4eda73f347667d12584736e613062
+Author: Oliver Neukum <oneukum@suse.com>
+Date:   Thu Mar 5 11:16:02 2020 +0100
+
+    cdc-acm: close race betrween suspend() and acm_softint
+
+not applied (respectively reverted) with and without autosuspend?
+
+	Regards
+		Oliver
+
+PS: When I submit upstream, may I add your 'Tested-by'?
