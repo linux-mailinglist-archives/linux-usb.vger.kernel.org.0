@@ -2,51 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 730001822B4
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 20:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F351822D6
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 20:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731097AbgCKTpG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Mar 2020 15:45:06 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:44294 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731030AbgCKTpF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Mar 2020 15:45:05 -0400
-Received: by mail-ot1-f68.google.com with SMTP id a49so630985otc.11
-        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2020 12:45:05 -0700 (PDT)
+        id S2387433AbgCKTyj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Mar 2020 15:54:39 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:38349 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387431AbgCKTyj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Mar 2020 15:54:39 -0400
+Received: by mail-ot1-f67.google.com with SMTP id t28so810985ott.5
+        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2020 12:54:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=oV6RDMEr0DsUD3DHB/8n4G2/2iDeZ0eLNZSWiNXyaYM=;
-        b=xKbtf0BnQk2BwtdQKQs7iuKaaF2pVL9Zhrk9eB97r+Pw62Z0Mc0PJJEGVcj1qQO3+c
-         2Ah6Uc0wfIAHqSse+Qtuy4aRzHAuGHtrw8F0AlY2s7cXDuKS/wgq4uDY2EhpjwALHi6Q
-         T+Teel11DLCqp0DOeJ7tN2MxihFchjCh/SpxspvF+0YxSE56L2eexVX762pccmO1/yml
-         FrN04tjCQ8Ai7F5iTk4XZIcci6KQsJ6SYMFLHuAQna7AX0Hw+FOeJpjZcqnHvioYooe7
-         t24RVM7ZnnyLImbtmRaUdiK6Q62zjDnJR+5IdY+f/atp2UdHwvCeIoGDSRPY3y1wQwsj
-         /ivg==
+        bh=9G8BKi87dM8ac+1i8fsYu7iUa+IfFufMeRSjgfr6A2E=;
+        b=Id8s4oOSWs5Xu5M/KFQRUlf7eQY409+ZLkiK/Jdgljhl8fu/YQkLXw/5EBFEyPHMGa
+         pqwkBkWddzxS7iDwDGW5rPcYnvi7d+33rZc5hGSKDYNUHMIR8dSdwMi3a6oh+rlYEeJc
+         Fo4W6E6CZeivx037vSOmQVyWguZzfiX9cSix3q4xutmoBDRyf4AH7j1Zq75o1KhYFNbX
+         hZW3G3CaVznikgDMo1k6me6w7bK91Hy4zU016PvxRURtTDiCg9HpslVFjZb2Rv7BQYhl
+         SOuEUjZaOwxCRnLlfcb4Of13gquA7HwqNJdGgIGsVYscr/Pv6j3k6Xv3JrP3AQ2G3vlp
+         c8xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=oV6RDMEr0DsUD3DHB/8n4G2/2iDeZ0eLNZSWiNXyaYM=;
-        b=C1+8At1SddpJZThMU7iDOVGZQ5VBoKVDVNb47afGg1rSb7jkaDZaY2vDlxKpyjqtiJ
-         aJm4/P3dX1TbGkJTMkp7918ziBVXNY5BHDdVdy3rF/v43PGdMLsU8u6LD7xKoupZlJc/
-         EgvrouNbG1ypB04Ubm0sSw8XUZXoQRAG2qA4b5kUDCMZEXX8lMJFmHEGmmbo1YfImxnJ
-         wCnHbHkgMDt2Ot3AuA1gluKOV8COWhofyoqSL4fG66e9GKkb1Q9ME5ROCp8qytIijTbW
-         Mz/Y04ho4HtJcZevDwrrumg6580sYgOIG//ZgCR3lfMYMxiWcrDbFJ6w95ab3be0bHIx
-         nLNw==
-X-Gm-Message-State: ANhLgQ2ZkDRg+qhbmdW3HipIgNQsUaXsvX7v5xTyRvqTN1rrrMM6nwWQ
-        x+9XTwT7e5UDhnhKD0oUn0xBop2bPHH+9tIpc5t7qQ==
-X-Google-Smtp-Source: ADFU+vuiGPlZRPXW6M5wIKU0EkZlFtqjjR8FoEm6ZPVcrHo0mOHeyQGIqaYDMzGR9l74VwCe9fS+4J5P7I3NGcElo48=
-X-Received: by 2002:a4a:9e15:: with SMTP id t21mr1447319ook.70.1583955904880;
- Wed, 11 Mar 2020 12:45:04 -0700 (PDT)
+        bh=9G8BKi87dM8ac+1i8fsYu7iUa+IfFufMeRSjgfr6A2E=;
+        b=WtD5GV2gqPc11TLd8rYdJQrkhW3/MdNG9SRRb/4G3JzY2dqFurZ34Bu/ZoOcapCRe2
+         QibTVKJTqtzocaICvTDjgO7m5yIouX8EBMb2hkeAmxYWX/w+8Mj3BbZxSaovi5z0C7LL
+         CeqSnmImEnI7n8iA/taJzoLmXoInZDt6oTMUQnGMYAIux7OTvBYk92nHuEwWMy2Ea5ct
+         HrIGZaHhE5UDiMlPh1SPESrjPfJHAML3shHZah5GmbuQTf3wG+bSPGfaFvTnarMExauq
+         vyv0HeF+I85jIYg7R59VSo1aGkoWe6QAY7ffGQO2CiirVP6l9FS68EL6Qmm8xWm76MWg
+         hpgQ==
+X-Gm-Message-State: ANhLgQ2twopScF+XpVmGWEgAr+Vo6BqZ+lfBU9faPl2O8YnTg+qe0RBO
+        Qr/vy4zO2ZObovTNwbVQRVjBYzRma0+BIR16qGaYTQ==
+X-Google-Smtp-Source: ADFU+vujO1GuU0FxzgptyGmNumunhFLdj+J5zktXsJFnyVaoSjBzIH+jerB5Vt1h+nF6X7xTtUh1JTzBtNN8NNpemso=
+X-Received: by 2002:a9d:344:: with SMTP id 62mr3839951otv.102.1583956477185;
+ Wed, 11 Mar 2020 12:54:37 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200311172109.45134-1-john.stultz@linaro.org>
  <20200311172109.45134-2-john.stultz@linaro.org> <7337bea7-1449-e6e3-4c65-1bb802a2c316@linaro.org>
-In-Reply-To: <7337bea7-1449-e6e3-4c65-1bb802a2c316@linaro.org>
+ <CALAqxLXEZQnH3a8z9CGf52VUbb-ZHX-R78DPM1psJhV9_bs35g@mail.gmail.com>
+In-Reply-To: <CALAqxLXEZQnH3a8z9CGf52VUbb-ZHX-R78DPM1psJhV9_bs35g@mail.gmail.com>
 From:   John Stultz <john.stultz@linaro.org>
-Date:   Wed, 11 Mar 2020 12:44:54 -0700
-Message-ID: <CALAqxLXEZQnH3a8z9CGf52VUbb-ZHX-R78DPM1psJhV9_bs35g@mail.gmail.com>
+Date:   Wed, 11 Mar 2020 12:54:26 -0700
+Message-ID: <CALAqxLU0HWYsZcOjBj3XRy6+D33aPuQ=+hF=gv0prUquyb1+pg@mail.gmail.com>
 Subject: Re: [RESEND][PATCH v8 1/6] usb: dwc3: Registering a role switch in
  the DRD code.
 To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
@@ -74,19 +75,24 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 11, 2020 at 12:17 PM Bryan O'Donoghue
-<bryan.odonoghue@linaro.org> wrote:
+On Wed, Mar 11, 2020 at 12:44 PM John Stultz <john.stultz@linaro.org> wrote:
 >
-> > +static int dwc3_usb_role_switch_set(struct device *dev, enum usb_role role)
+> On Wed, Mar 11, 2020 at 12:17 PM Bryan O'Donoghue
+> <bryan.odonoghue@linaro.org> wrote:
+> >
+> > > +static int dwc3_usb_role_switch_set(struct device *dev, enum usb_role role)
+> >
+> > @bjorn found an API change that explodes this one.
+> >
+> > Fixed here: https://lkml.org/lkml/2020/3/11/1034
 >
-> @bjorn found an API change that explodes this one.
+> Huh. I wonder why I don't see that causing trouble in my testing.  :/
 >
-> Fixed here: https://lkml.org/lkml/2020/3/11/1034
+> Oddly, trying to use your patch results in build failures for me... Is
+> the api change something in -next?
 
-Huh. I wonder why I don't see that causing trouble in my testing.  :/
+Ah. Ok, I found it: "usb: roles: Provide the switch drivers handle to
+the switch in the API"
 
-Oddly, trying to use your patch results in build failures for me... Is
-the api change something in -next?
-
-thanks
+I'll add that to my patch series, retest and resubmit. Thanks for the heads up!
 -john
