@@ -2,119 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0F1180D0B
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 01:58:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B40B180D8E
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 02:32:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727867AbgCKA6o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Mar 2020 20:58:44 -0400
-Received: from mga05.intel.com ([192.55.52.43]:51967 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727648AbgCKA6o (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Mar 2020 20:58:44 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Mar 2020 17:58:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,518,1574150400"; 
-   d="scan'208";a="321987068"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 10 Mar 2020 17:58:42 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jBphp-000Fun-DH; Wed, 11 Mar 2020 08:58:41 +0800
-Date:   Wed, 11 Mar 2020 08:57:57 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Jassi Brar <jaswinder.singh@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
-        linux-omap@vger.kernel.org,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Felipe Balbi <balbi@kernel.org>
-Subject: [balbi-usb:testing/next 3/11]
- drivers/usb/gadget/udc/max3420_udc.c:570:16: sparse: sparse: incorrect type
- in assignment (different base types)
-Message-ID: <202003110854.PVZUBn32%lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727685AbgCKBce (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Mar 2020 21:32:34 -0400
+Received: from kernel.crashing.org ([76.164.61.194]:47064 "EHLO
+        kernel.crashing.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727484AbgCKBcd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Mar 2020 21:32:33 -0400
+Received: from localhost (gate.crashing.org [63.228.1.57])
+        (authenticated bits=0)
+        by kernel.crashing.org (8.14.7/8.14.7) with ESMTP id 02B1VNCw010399
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 10 Mar 2020 20:31:27 -0500
+Message-ID: <481e9b7d40c51505518a34ddc2515d3200dbf158.camel@kernel.crashing.org>
+Subject: Re: [PATCH v2] usb: gadget: aspeed: improve vhub port irq handling
+From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
+To:     rentao.bupt@gmail.com, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Stephen Boyd <swboyd@chromium.org>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, taoren@fb.com
+Date:   Wed, 11 Mar 2020 12:31:22 +1100
+In-Reply-To: <20200305234746.1002-1-rentao.bupt@gmail.com>
+References: <20200305234746.1002-1-rentao.bupt@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git testing/next
-head:   36d292c6ddd3248d5a8e465e51a4e3b76de93a91
-commit: 0dac4567e8c4c4b3ba72d22ab6cd67267910d105 [3/11] usb: gadget: add udc driver for max3420
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.1-174-g094d5a94-dirty
-        git checkout 0dac4567e8c4c4b3ba72d22ab6cd67267910d105
-        make ARCH=x86_64 allmodconfig
-        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
+On Thu, 2020-03-05 at 15:47 -0800, rentao.bupt@gmail.com wrote:
+> From: Tao Ren <rentao.bupt@gmail.com>
+> 
+> This patch evaluates vhub ports' irq mask before going through per-port
+> irq handling one by one, which helps to speed up irq handling in case
+> there is no port interrupt.
+> 
+> Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
+> ---
+>  Changes in v2:
+>    - use "for_each_set_bit" to speed up port irq handling.
+> 
+>  drivers/usb/gadget/udc/aspeed-vhub/core.c | 11 ++++++++---
+>  drivers/usb/gadget/udc/aspeed-vhub/vhub.h |  8 +++-----
+>  2 files changed, 11 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/core.c b/drivers/usb/gadget/udc/aspeed-vhub/core.c
+> index f8d35dd60c34..af2dbd405361 100644
+> --- a/drivers/usb/gadget/udc/aspeed-vhub/core.c
+> +++ b/drivers/usb/gadget/udc/aspeed-vhub/core.c
+> @@ -134,11 +134,14 @@ static irqreturn_t ast_vhub_irq(int irq, void *data)
+>  	}
+>  
+>  	/* Handle device interrupts */
+> -	for (i = 0; i < vhub->max_ports; i++) {
+> -		u32 dev_mask = VHUB_IRQ_DEVICE1 << i;
+> +	if (istat & vhub->port_irq_mask) {
+> +		int offset = VHUB_IRQ_DEV1_BIT;
+> +		int size = VHUB_IRQ_DEV1_BIT + vhub->max_ports;
+>  
+> -		if (istat & dev_mask)
+> +		for_each_set_bit_from(offset, (unsigned long *)&istat, size) 
 
-If you fix the issue, kindly add following tag
-Reported-by: kbuild test robot <lkp@intel.com>
+That type cast is very bad. It will not work on big endian for example
+(yes this driver isn't used on big endian today but still).
 
+Please assign istat to an unsigned long (or make it unsigned long to
+begin with).
 
-sparse warnings: (new ones prefixed by >>)
+> +			i = offset - VHUB_IRQ_DEV1_BIT;
+>  			ast_vhub_dev_irq(&vhub->ports[i].dev);
+> +		}
+>  	}
+>  
+>  	/* Handle top-level vHub EP0 interrupts */
+> @@ -332,6 +335,8 @@ static int ast_vhub_probe(struct platform_device *pdev)
+>  
+>  	spin_lock_init(&vhub->lock);
+>  	vhub->pdev = pdev;
+> +	vhub->port_irq_mask = GENMASK(VHUB_IRQ_DEV1_BIT + vhub->max_ports - 1,
+> +				      VHUB_IRQ_DEV1_BIT);
+>  
+>  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>  	vhub->regs = devm_ioremap_resource(&pdev->dev, res);
+> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/vhub.h b/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
+> index fac79ef6d669..23a1ac91f8d2 100644
+> --- a/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
+> +++ b/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
+> @@ -51,14 +51,11 @@
+>  #define VHUB_CTRL_UPSTREAM_CONNECT		(1 << 0)
+>  
+>  /* IER & ISR */
+> +#define VHUB_IRQ_DEV1_BIT			9
+>  #define VHUB_IRQ_USB_CMD_DEADLOCK		(1 << 18)
+>  #define VHUB_IRQ_EP_POOL_NAK			(1 << 17)
+>  #define VHUB_IRQ_EP_POOL_ACK_STALL		(1 << 16)
+> -#define VHUB_IRQ_DEVICE5			(1 << 13)
+> -#define VHUB_IRQ_DEVICE4			(1 << 12)
+> -#define VHUB_IRQ_DEVICE3			(1 << 11)
+> -#define VHUB_IRQ_DEVICE2			(1 << 10)
+> -#define VHUB_IRQ_DEVICE1			(1 << 9)
+> +#define VHUB_IRQ_DEVICE1			(1 << (VHUB_IRQ_DEV1_BIT))
+>  #define VHUB_IRQ_BUS_RESUME			(1 << 8)
+>  #define VHUB_IRQ_BUS_SUSPEND 			(1 << 7)
+>  #define VHUB_IRQ_BUS_RESET 			(1 << 6)
+> @@ -402,6 +399,7 @@ struct ast_vhub {
+>  	/* Per-port info */
+>  	struct ast_vhub_port		*ports;
+>  	u32				max_ports;
+> +	u32				port_irq_mask;
+>  
+>  	/* Generic EP data structures */
+>  	struct ast_vhub_ep		*epns;
 
-   drivers/usb/gadget/udc/max3420_udc.c:555:41: sparse: sparse: restricted __le16 degrades to integer
-   drivers/usb/gadget/udc/max3420_udc.c:556:31: sparse: sparse: restricted __le16 degrades to integer
->> drivers/usb/gadget/udc/max3420_udc.c:570:16: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned short [assigned] [usertype] status @@    got  short [assigned] [usertype] status @@
-   drivers/usb/gadget/udc/max3420_udc.c:570:16: sparse:    expected unsigned short [assigned] [usertype] status
-   drivers/usb/gadget/udc/max3420_udc.c:570:16: sparse:    got restricted __le16 [usertype]
-   drivers/usb/gadget/udc/max3420_udc.c:588:31: sparse: sparse: restricted __le16 degrades to integer
-   drivers/usb/gadget/udc/max3420_udc.c:602:32: sparse: sparse: restricted __le16 degrades to integer
-   drivers/usb/gadget/udc/max3420_udc.c:631:29: sparse: sparse: cast from restricted __le16
-   drivers/usb/gadget/udc/max3420_udc.c:632:29: sparse: sparse: cast from restricted __le16
-   drivers/usb/gadget/udc/max3420_udc.c:633:30: sparse: sparse: cast from restricted __le16
-
-vim +570 drivers/usb/gadget/udc/max3420_udc.c
-
-   538	
-   539	static void max3420_getstatus(struct max3420_udc *udc)
-   540	{
-   541		struct max3420_ep *ep;
-   542		u16 status = 0;
-   543	
-   544		switch (udc->setup.bRequestType & USB_RECIP_MASK) {
-   545		case USB_RECIP_DEVICE:
-   546			/* Get device status */
-   547			status = udc->gadget.is_selfpowered << USB_DEVICE_SELF_POWERED;
-   548			status |= (udc->remote_wkp << USB_DEVICE_REMOTE_WAKEUP);
-   549			break;
-   550		case USB_RECIP_INTERFACE:
-   551			if (udc->driver->setup(&udc->gadget, &udc->setup) < 0)
-   552				goto stall;
-   553			break;
-   554		case USB_RECIP_ENDPOINT:
-   555			ep = &udc->ep[udc->setup.wIndex & USB_ENDPOINT_NUMBER_MASK];
-   556			if (udc->setup.wIndex & USB_DIR_IN) {
-   557				if (!ep->ep_usb.caps.dir_in)
-   558					goto stall;
-   559			} else {
-   560				if (!ep->ep_usb.caps.dir_out)
-   561					goto stall;
-   562			}
-   563			if (ep->halted)
-   564				status = 1 << USB_ENDPOINT_HALT;
-   565			break;
-   566		default:
-   567			goto stall;
-   568		}
-   569	
- > 570		status = cpu_to_le16(status);
-   571		spi_wr_buf(udc, MAX3420_REG_EP0FIFO, &status, 2);
-   572		spi_wr8_ack(udc, MAX3420_REG_EP0BC, 2, 1);
-   573		return;
-   574	stall:
-   575		dev_err(udc->dev, "Can't respond to getstatus request\n");
-   576		spi_wr8(udc, MAX3420_REG_EPSTALLS, STLEP0IN | STLEP0OUT | STLSTAT);
-   577	}
-   578	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
