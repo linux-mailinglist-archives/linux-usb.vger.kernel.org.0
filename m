@@ -2,79 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E00181AEA
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 15:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF1C181B90
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 15:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729738AbgCKOPs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Mar 2020 10:15:48 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:59318 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729531AbgCKOPr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Mar 2020 10:15:47 -0400
-Received: (qmail 1610 invoked by uid 2102); 11 Mar 2020 10:15:46 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 11 Mar 2020 10:15:46 -0400
-Date:   Wed, 11 Mar 2020 10:15:46 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        AceLan Kao <acelan.kao@canonical.com>,
-        "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [RESEND] [PATCH v2 3/3] USB: Disable LPM on WD19's Realtek Hub
-In-Reply-To: <4F77B65D-77B0-4E63-ADB3-BF127BDE3BA2@canonical.com>
-Message-ID: <Pine.LNX.4.44L0.2003111015070.1492-100000@iolanthe.rowland.org>
+        id S1729853AbgCKOm5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Mar 2020 10:42:57 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:43443 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729057AbgCKOm5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Mar 2020 10:42:57 -0400
+Received: by mail-ed1-f66.google.com with SMTP id dc19so3133763edb.10;
+        Wed, 11 Mar 2020 07:42:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=gKDUe9P2YUubturUxI0TRyVNid6URk2e+Ed9FtxvxKk=;
+        b=EMKmZ/MrgEuNGsTb/Ze9rt1U9+lWeztu9hI+HH0of+sRAzH/ExlqFbOIRZFSxC4ADK
+         5X/26f6R0Z/iTcCYTGKuGtP2nlbh4uQE27kLyGUwGHCD3jgSs3vXN7JQHlOpGJ8PvKBK
+         WfPgkD8gcbIKMi9IN3+NCDIBuDyPVbjA9c0GIzrV/aMUB6I/1ri7oKrc75+WBo6cr0wI
+         o5ID2MMultN8P9BStIBS4wxYgcFg9edOD1Rdv1sM6CUM5bZXJ46B7Xjs1ZdBbUyY/orQ
+         vAyryO2dUh1BIfRe/cIKRLd1XpjnA0BhOkuZTP3IfrsMvh+uB+boHC0YO6AFo69jRXBx
+         VZBg==
+X-Gm-Message-State: ANhLgQ2P/ulINIycY42dj86NuoBy33Ie2susWmo+v93rpw6wYCUPbnls
+        j3LiPI1ua4HqGDo/+cPH7QA=
+X-Google-Smtp-Source: ADFU+vuaPy05McHUkVwSVh+g/+/nj6uRC/r0ZhsuPI7+uwkM3c7CJcwerQSzNIOD7sx8YKwslv43/w==
+X-Received: by 2002:aa7:d45a:: with SMTP id q26mr3263099edr.350.1583937774579;
+        Wed, 11 Mar 2020 07:42:54 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.125])
+        by smtp.googlemail.com with ESMTPSA id p4sm607572eju.57.2020.03.11.07.42.49
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 11 Mar 2020 07:42:51 -0700 (PDT)
+Date:   Wed, 11 Mar 2020 15:42:48 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCHv3 5/5] clk: samsung: exynos542x: Move FSYS subsystem
+ clocks to its sub-CMU
+Message-ID: <20200311144248.GA4455@kozik-lap>
+References: <20200310194854.831-1-linux.amoon@gmail.com>
+ <20200310194854.831-6-linux.amoon@gmail.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200310194854.831-6-linux.amoon@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 11 Mar 2020, Kai-Heng Feng wrote:
+On Tue, Mar 10, 2020 at 07:48:54PM +0000, Anand Moon wrote:
+> FSYS power domain support usbdrd3, pdma and usb2 power gaiting,
+> hence move FSYS clk setting to sub-CMU block to support power domain
+> on/off sequences for device nodes.
+> 
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> ---
+> New patch in the series
+> ---
+>  drivers/clk/samsung/clk-exynos5420.c | 45 +++++++++++++++++++++-------
+>  1 file changed, 34 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/clk/samsung/clk-exynos5420.c b/drivers/clk/samsung/clk-exynos5420.c
+> index c9e5a1fb6653..6c4c47dfcdce 100644
+> --- a/drivers/clk/samsung/clk-exynos5420.c
+> +++ b/drivers/clk/samsung/clk-exynos5420.c
+> @@ -859,12 +859,6 @@ static const struct samsung_div_clock exynos5x_div_clks[] __initconst = {
+>  	DIV(0, "dout_maudio0", "mout_maudio0", DIV_MAU, 20, 4),
+>  	DIV(0, "dout_maupcm0", "dout_maudio0", DIV_MAU, 24, 8),
+>  
+> -	/* USB3.0 */
+> -	DIV(0, "dout_usbphy301", "mout_usbd301", DIV_FSYS0, 12, 4),
+> -	DIV(0, "dout_usbphy300", "mout_usbd300", DIV_FSYS0, 16, 4),
+> -	DIV(0, "dout_usbd301", "mout_usbd301", DIV_FSYS0, 20, 4),
+> -	DIV(0, "dout_usbd300", "mout_usbd300", DIV_FSYS0, 24, 4),
 
-> Hi Greg,
-> 
-> > On Feb 5, 2020, at 19:26, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
-> > 
-> > Realtek Hub (0bda:0x0487) used in Dell Dock WD19 sometimes drops off the
-> > bus when bringing underlying ports from U3 to U0.
-> > 
-> > Disabling LPM on the hub during setting link state is not enough, so
-> > let's disable LPM completely for this hub.
-> > 
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> 
-> As Mathias stated, this patch can be considered as a separate one.
-> Can you please review and merge this patch?
-> 
-> Kai-Heng
-> 
-> > ---
-> > v2:
-> > - Use quirk instead of the original approach.
-> > 
-> > drivers/usb/core/quirks.c | 3 +++
-> > 1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-> > index 6b6413073584..2fb7c1602280 100644
-> > --- a/drivers/usb/core/quirks.c
-> > +++ b/drivers/usb/core/quirks.c
-> > @@ -371,6 +371,9 @@ static const struct usb_device_id usb_quirk_list[] = {
-> > 	{ USB_DEVICE(0x0b05, 0x17e0), .driver_info =
-> > 			USB_QUIRK_IGNORE_REMOTE_WAKEUP },
-> > 
-> > +	/* Realtek hub in Dell WD19 (Type-C) */
-> > +	{ USB_DEVICE(0x0bda, 0x0487), .driver_info = USB_QUIRK_NO_LPM },
-> > +
-> > 	/* Action Semiconductor flash disk */
-> > 	{ USB_DEVICE(0x10d6, 0x2200), .driver_info =
-> > 			USB_QUIRK_STRING_FETCH_255 },
-> > -- 
-> > 2.17.1
+According to clock diagram these are still in CMU TOP, not FSYS.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> -
+>  	/* MMC */
+>  	DIV(0, "dout_mmc0", "mout_mmc0", DIV_FSYS1, 0, 10),
+>  	DIV(0, "dout_mmc1", "mout_mmc1", DIV_FSYS1, 10, 10),
+> @@ -1031,8 +1025,6 @@ static const struct samsung_gate_clock exynos5x_gate_clks[] __initconst = {
+/>  
+>  	/* FSYS Block */
+>  	GATE(CLK_TSI, "tsi", "aclk200_fsys", GATE_BUS_FSYS0, 0, 0, 0),
+> -	GATE(CLK_PDMA0, "pdma0", "aclk200_fsys", GATE_BUS_FSYS0, 1, 0, 0),
+> -	GATE(CLK_PDMA1, "pdma1", "aclk200_fsys", GATE_BUS_FSYS0, 2, 0, 0),
+>  	GATE(CLK_UFS, "ufs", "aclk200_fsys2", GATE_BUS_FSYS0, 3, 0, 0),
+>  	GATE(CLK_RTIC, "rtic", "aclk200_fsys", GATE_IP_FSYS, 9, 0, 0),
+>  	GATE(CLK_MMC0, "mmc0", "aclk200_fsys2", GATE_IP_FSYS, 12, 0, 0),
+> @@ -1040,9 +1032,6 @@ static const struct samsung_gate_clock exynos5x_gate_clks[] __initconst = {
+>  	GATE(CLK_MMC2, "mmc2", "aclk200_fsys2", GATE_IP_FSYS, 14, 0, 0),
+>  	GATE(CLK_SROMC, "sromc", "aclk200_fsys2",
+>  			GATE_IP_FSYS, 17, CLK_IGNORE_UNUSED, 0),
+> -	GATE(CLK_USBH20, "usbh20", "aclk200_fsys", GATE_IP_FSYS, 18, 0, 0),
+> -	GATE(CLK_USBD300, "usbd300", "aclk200_fsys", GATE_IP_FSYS, 19, 0, 0),
+> -	GATE(CLK_USBD301, "usbd301", "aclk200_fsys", GATE_IP_FSYS, 20, 0, 0),
+>  	GATE(CLK_SCLK_UNIPRO, "sclk_unipro", "dout_unipro",
+>  			SRC_MASK_FSYS, 24, CLK_SET_RATE_PARENT, 0),
+>  
+> @@ -1258,6 +1247,28 @@ static struct exynos5_subcmu_reg_dump exynos5x_gsc_suspend_regs[] = {
+>  	{ DIV2_RATIO0, 0, 0x30 },	/* DIV dout_gscl_blk_300 */
+>  };
+>  
+> +/* USB3.0 */
+> +static const struct samsung_div_clock exynos5x_fsys_div_clks[] __initconst = {
+> +	DIV(0, "dout_usbphy301", "mout_usbd301", DIV_FSYS0, 12, 4),
+> +	DIV(0, "dout_usbphy300", "mout_usbd300", DIV_FSYS0, 16, 4),
+> +	DIV(0, "dout_usbd301", "mout_usbd301", DIV_FSYS0, 20, 4),
+> +	DIV(0, "dout_usbd300", "mout_usbd300", DIV_FSYS0, 24, 4),
+> +};
+> +
+> +static const struct samsung_gate_clock exynos5x_fsys_gate_clks[] __initconst = {
+> +	GATE(CLK_PDMA0, "pdma0", "aclk200_fsys", GATE_BUS_FSYS0, 1, 0, 0),
+> +	GATE(CLK_PDMA1, "pdma1", "aclk200_fsys", GATE_BUS_FSYS0, 2, 0, 0),
+> +	GATE(CLK_USBH20, "usbh20", "aclk200_fsys", GATE_IP_FSYS, 18, 0, 0),
+> +	GATE(CLK_USBD300, "usbd300", "aclk200_fsys", GATE_IP_FSYS, 19, 0, 0),
+> +	GATE(CLK_USBD301, "usbd301", "aclk200_fsys", GATE_IP_FSYS, 20, 0, 0),
+> +};
+> +
+> +static struct exynos5_subcmu_reg_dump exynos5x_fsys_suspend_regs[] = {
+> +	{ GATE_IP_FSYS, 0xffffffff, 0xffffffff }, /* FSYS gates */
 
+This looks wrong. GATE_IP_FSYS has fields also for FSYS2 clocks which
+you are not suspending. They do not belong to this CMU.
+
+Don't you need to save also parts of GATE_BUS_FSYS0?
+
+> +	{ SRC_TOP3, 0, BIT(24) },                 /* SW_MUX_PCLK_200_FSYS_SEL */
+> +	{ SRC_TOP3, 0, BIT(28) },                 /* SW_MUX_ACLK_200_FSYS_SEL */
+
+Name of clocks from the driver please, not from datasheet. Look at other
+examples.
+
+Best regards,
+Krzysztof
+
+
+> +};
+> +
+>  static const struct samsung_gate_clock exynos5x_g3d_gate_clks[] __initconst = {
+>  	GATE(CLK_G3D, "g3d", "mout_user_aclk_g3d", GATE_IP_G3D, 9,
+>  	     CLK_SET_RATE_PARENT, 0),
+> @@ -1376,12 +1387,23 @@ static const struct exynos5_subcmu_info exynos5800_mau_subcmu = {
+>  	.pd_name	= "MAU",
+>  };
+>  
+> +static const struct exynos5_subcmu_info exynos5x_fsys_subcmu = {
+> +	.div_clks       = exynos5x_fsys_div_clks,
+> +	.nr_div_clks    = ARRAY_SIZE(exynos5x_fsys_div_clks),
+> +	.gate_clks	= exynos5x_fsys_gate_clks,
+> +	.nr_gate_clks	= ARRAY_SIZE(exynos5x_fsys_gate_clks),
+> +	.suspend_regs	= exynos5x_fsys_suspend_regs,
+> +	.nr_suspend_regs = ARRAY_SIZE(exynos5x_fsys_suspend_regs),
+> +	.pd_name	= "FSYS",
+> +};
+> +
+>  static const struct exynos5_subcmu_info *exynos5x_subcmus[] = {
+>  	&exynos5x_disp_subcmu,
+>  	&exynos5x_gsc_subcmu,
+>  	&exynos5x_g3d_subcmu,
+>  	&exynos5x_mfc_subcmu,
+>  	&exynos5x_mscl_subcmu,
+> +	&exynos5x_fsys_subcmu,
+>  };
+>  
+>  static const struct exynos5_subcmu_info *exynos5800_subcmus[] = {
+> @@ -1391,6 +1413,7 @@ static const struct exynos5_subcmu_info *exynos5800_subcmus[] = {
+>  	&exynos5x_mfc_subcmu,
+>  	&exynos5x_mscl_subcmu,
+>  	&exynos5800_mau_subcmu,
+> +	&exynos5x_fsys_subcmu,
+>  };
+>  
+>  static const struct samsung_pll_rate_table exynos5420_pll2550x_24mhz_tbl[] __initconst = {
+> -- 
+> 2.25.1
+> 
