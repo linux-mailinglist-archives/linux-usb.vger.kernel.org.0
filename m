@@ -2,149 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8C1181142
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 07:57:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8C91811E8
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 08:29:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728269AbgCKG5T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Mar 2020 02:57:19 -0400
-Received: from mail-eopbgr130049.outbound.protection.outlook.com ([40.107.13.49]:59366
-        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728146AbgCKG5T (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 11 Mar 2020 02:57:19 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IErk57yBk8oCl9lxM65xUUVN01Nd6PgL3BeCOvpOwpuLJcj1yIC7SMDUurmyBEpaiSTF4oDOVKfy4JOpktAYkjat1FamgftBSpOOzBiSOKKnUCAE8jAJkfvRdwhGPrBUdW8v1n37Az2YaRglI55fcoJQnC8eHLNvVDwZJwPSPWI/60w0tiS3NyTQZg0dl0bWQFaN+ToTNqMmIZEcq6T9m9Ed3uIpR28iUVkxtjZcw6rw1clSGV6ueQYbZX711uEiyYgkpPtDbr7K7/q54K0SEI0DKsObckufelzunx2ct3hkzVfm9peAuS1zq/Vu4E5VtyohF8G/uPcN6HMsGtqdDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/7n5biIAWBoEeWqRqmtEx+gvqjul77DmHlkUBorcj88=;
- b=gPJ1Szk6ALDBgt6zIfccTZc0wtKq+BMNhxZUWb2GSUMMjKYZZ6gfHJGN7BhCB0hJbCsI4sRxDWdDz5JKUIJZGibnvtfqmRhRQQGRjv7xZw5PM2rU5bunfqGM+Q0H0+W6SulLwhfAZnbeN+KQ1cwTKHa548b2M9qwg0t+HDYqFUDKogI9Sx0hPC8JCCFaLqAPv6zq2NB6wYOq4KFr4wxSNtXmhMDO/VgUR2SFrLCjm71LLCQbZ8t1YFDrYbDguTHT8EYrR0R0hR5ASyNZuRQKwJoxsipFgS1sQ5auODf65PS0TsmmRuDi0e0qUgExG0y5TzDat/mpZoZ6yKIQdwGiaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/7n5biIAWBoEeWqRqmtEx+gvqjul77DmHlkUBorcj88=;
- b=Zp/3LKiKBX2TnyPUiPcpNqJMT60ayLwnWboDxMjf+Wz/l269bL8czzYRrEjceR+ENkpHbe3G9kaP04NJvy9BiQQ0dFb4s+4C6sxqNJGBh/J3QLXr3UAEOLykqiRmzACucHvOd1j57PZ97uXoZKCkEjv+Xmcxnp/4Ku5bA5jF0gk=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
- VI1PR04MB4126.eurprd04.prod.outlook.com (52.133.15.140) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2793.17; Wed, 11 Mar 2020 06:57:14 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::9547:9dfa:76b8:71b1]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::9547:9dfa:76b8:71b1%7]) with mapi id 15.20.2793.013; Wed, 11 Mar 2020
- 06:57:13 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     Peter Chen <peter.chen@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH 1/1] usb: chipidea: udc: fix sleeping function called from
- invalid context
-Thread-Topic: [PATCH 1/1] usb: chipidea: udc: fix sleeping function called
- from invalid context
-Thread-Index: AQHV9ql8rcHRmNGQB02024Fh/roZ36hB2jYAgAEdEAA=
-Date:   Wed, 11 Mar 2020 06:57:13 +0000
-Message-ID: <20200311065716.GC14625@b29397-desktop>
-References: <20200310065926.17746-2-peter.chen@kernel.org>
- <Pine.LNX.4.44L0.2003100952060.1651-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.2003100952060.1651-100000@iolanthe.rowland.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: bc8c65c1-9c3f-4788-c44f-08d7c5896dcd
-x-ms-traffictypediagnostic: VI1PR04MB4126:
-x-microsoft-antispam-prvs: <VI1PR04MB41263201FF0BB8F92949E1028BFC0@VI1PR04MB4126.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 0339F89554
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(366004)(136003)(346002)(39860400002)(376002)(396003)(199004)(81156014)(6916009)(86362001)(8676002)(81166006)(8936002)(54906003)(33656002)(64756008)(66476007)(316002)(5660300002)(478600001)(66446008)(66556008)(91956017)(76116006)(66946007)(1076003)(33716001)(2906002)(26005)(6486002)(186003)(44832011)(6512007)(9686003)(6506007)(53546011)(4326008)(71200400001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4126;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: uUUHRTh/iLjN8yN9y0SoyWX+juJxJa+Ajo45nyjYkWwBOLzMUpAbrzCW93hFU/PCccncJOHvqrMdDRIf/Y8GSFpHjeewz/0JFWtW4fzCpVEq7jyrI1Pq4lo8zP/smtiuYc3Y5FXaj2nGelI5wQUxPyVAlC31+461Sm0eBvYO8j3Bl9XADD/DU29ofXOavHmLXfmHRyZyDbbVrx7NvIdb0jpJu9KNhlHNzI/DGFHYvAKjyYgz7iOBDvnL9NVXn9Yzjo5+1k/dnRfTaPmXBGC4VQHXxckHtrbevKIUEkza7f8ocEN8bbn4y+cd5kQ6DVOTX01Khq1RICKxYJAzWbCsgPa5l41bn0G9v/yKY70sbA8LmILIw5Db478yCWJqD5RNVwi9cuE4dhQbNrUa9Vb4wUvF3pVCZrn8RVZKcNqRxq/OmZqKz6WjPR8TjnExWHaA
-x-ms-exchange-antispam-messagedata: 4e8TxAqSo9EF5ZEczx0i3pfELNX6mCCgKDWLvm0FE8VQdChKiIH39o/PF7DPTszw+azlcL6O+o9ieOJhuWvzvS2kTf1rMInFvxOofuhCAi/tv65jRo07fFEMiSC/9MN+ei7Zjl8Q6T6fTjr1uBmMgg==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <5944D057279ABB46BA11D5968E75C684@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1728408AbgCKH2m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Mar 2020 03:28:42 -0400
+Received: from mga01.intel.com ([192.55.52.88]:34803 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726310AbgCKH2m (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 11 Mar 2020 03:28:42 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Mar 2020 00:28:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,518,1574150400"; 
+   d="scan'208";a="322056610"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga001.jf.intel.com with ESMTP; 11 Mar 2020 00:28:33 -0700
+Subject: Re: [PATCH] usb: xhci: Error enumerating USB TV Tuner
+To:     Alan Cooper <alcooperx@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+References: <20200306160659.16319-1-alcooperx@gmail.com>
+ <74c294a3-8eaa-a48e-3371-a7027d5aabd2@linux.intel.com>
+ <CAOGqxeWhsdtvmZBg3RLzSyHeLpCWGoRghTp+8u3gx3Aafi-vgA@mail.gmail.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <38c5e0e8-2fe4-d20d-22c5-3f94ea34b878@linux.intel.com>
+Date:   Wed, 11 Mar 2020 09:31:00 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc8c65c1-9c3f-4788-c44f-08d7c5896dcd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Mar 2020 06:57:13.8888
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BqUmIbBR4BAVCL+GjCjA3kS+dZj+YbCdJBk7SJgj5qI3kt8JJwZ6WPAN5zLUd5JuwZnpYJ7k+ui1bqFqvt7ohA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4126
+In-Reply-To: <CAOGqxeWhsdtvmZBg3RLzSyHeLpCWGoRghTp+8u3gx3Aafi-vgA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-03-10 09:57:00, Alan Stern wrote:
-> On Tue, 10 Mar 2020, Peter Chen wrote:
->=20
-> > From: Peter Chen <peter.chen@nxp.com>
-> >=20
-> > The code calls pm_runtime_get_sync with irq disabled, it causes below
-> > warning:
-> >=20
-> > BUG: sleeping function called from invalid context at
-> > wer/runtime.c:1075
-> > in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid:
-> > er/u8:1
->=20
-> ...
->=20
-> > Tested-by: Dmitry Osipenko <digetx@gmail.com>
-> > Cc: <stable@vger.kernel.org> #v5.5
-> > Fixes: 72dc8df7920f ("usb: chipidea: udc: protect usb interrupt enable"=
-)
-> > Reported-by: Dmitry Osipenko <digetx@gmail.com>
-> > Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> > ---
-> >  drivers/usb/chipidea/udc.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-> > index ffaf46f5d062..1fa587ec52fc 100644
-> > --- a/drivers/usb/chipidea/udc.c
-> > +++ b/drivers/usb/chipidea/udc.c
-> > @@ -1539,9 +1539,11 @@ static void ci_hdrc_gadget_connect(struct usb_ga=
-dget *_gadget, int is_active)
-> >  		if (ci->driver) {
-> >  			hw_device_state(ci, ci->ep0out->qh.dma);
-> >  			usb_gadget_set_state(_gadget, USB_STATE_POWERED);
-> > +			spin_unlock_irqrestore(&ci->lock, flags);
-> >  			usb_udc_vbus_handler(_gadget, true);
-> > +		} else {
-> > +			spin_unlock_irqrestore(&ci->lock, flags);
-> >  		}
-> > -		spin_unlock_irqrestore(&ci->lock, flags);
->=20
-> There's something strange about this patch.
->=20
-> Do you really know that interrupts will be enabled following the=20
-> spin_unlock_irqrestore()?  In other words, do you know that interrupts=20
-> were enabled upon entry to this routine?
->=20
-> If they were, then why use spin_lock_irqsave/spin_unlock_irqrestore? =20
-> Why not use spin_lock_irq and spin_unlock_irq?
->=20
+On 10.3.2020 20.34, Alan Cooper wrote:
+> On Mon, Mar 9, 2020 at 8:19 AM Mathias Nyman
+> <mathias.nyman@linux.intel.com> wrote:
+>>
+>> On 6.3.2020 18.06, Al Cooper wrote:
+>>> Unable to complete the enumeration of a USB TV Tuner device.
+>>>
+>>> Per XHCI spec (4.6.5), the EP state field of the input context shall
+>>> be cleared for a set address command. In the special case of an FS
+>>> device that has "MaxPacketSize0 = 8", the Linux XHCI driver does
+>>> not do this before evaluating the context. With an XHCI controller
+>>> that checks the EP state field for parameter context error this
+>>> causes a problem in cases such as the device getting reset again
+>>> after enumeration.
+>>>
+>>> When that field is cleared, the problem does not occur.
+>>>
+>>> This was found and fixed by Sasi Kumar.
+>>>
+>>> Signed-off-by: Al Cooper <alcooperx@gmail.com>
+>>> ---
+>>>  drivers/usb/host/xhci.c | 1 +
+>>>  1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>>> index dbac0fa9748d..5f034e143082 100644
+>>> --- a/drivers/usb/host/xhci.c
+>>> +++ b/drivers/usb/host/xhci.c
+>>> @@ -1428,6 +1428,7 @@ static int xhci_check_maxpacket(struct xhci_hcd *xhci, unsigned int slot_id,
+>>>                               xhci->devs[slot_id]->out_ctx, ep_index);
+>>>
+>>>               ep_ctx = xhci_get_ep_ctx(xhci, command->in_ctx, ep_index);
+>>> +             ep_ctx->ep_info &= cpu_to_le32(~EP_STATE_MASK);/* must clear */
+>>>               ep_ctx->ep_info2 &= cpu_to_le32(~MAX_PACKET_MASK);
+>>>               ep_ctx->ep_info2 |= cpu_to_le32(MAX_PACKET(max_packet_size));
+>>>
+>>>
+>>
+>> Thanks, nice catch.
+>>
+>> If you agree I'd like to change the the subject of this patch to something like:
+>> "xhci: Fix enumeration issue when setting actual max packet size for FS devices"
+>>
+>> While looking at this it seems that the current EP_STATE_MASK is not correct either.
+>> It should be 0x7 instead of 0xf.
+>>
+>
+> Agree on both points.
+> Should I re-send a v2?
+> 
 
-This function is called at process context, so the interrupt is
-enabled, I will use spin_lock_irq, thanks, Alan.
+No need, I can make those changes
 
---=20
-
-Thanks,
-Peter Chen=
+-Mathias
