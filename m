@@ -2,184 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F148E180882
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Mar 2020 20:49:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A0F1180D0B
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 01:58:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727628AbgCJTtu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Mar 2020 15:49:50 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:36940 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726545AbgCJTtt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Mar 2020 15:49:49 -0400
-Received: by mail-pl1-f196.google.com with SMTP id f16so3710759plj.4;
-        Tue, 10 Mar 2020 12:49:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=z9ZKe9DPK55G94wFxazjpOuNWkVTtqx7CppQ9HO6NqY=;
-        b=QxA1mfJNuNo101umOeAqQ1YfnCfKPylu4nJIhD8ICZb+kA1lQjLgkrzbxjk25h9SQr
-         pZ5PkAaIlTsqDsvLkgZqL3tlvvp1XW9cPNAyB78bh/rEsJurcqd5DWeG30lDAWmR39Ad
-         uW7KbxfzTH4jlBTd0WHwYTYPNKorO5VQDSD4WM6EKOJZ9tIt3gq3Lq/jWHo2sQ/r/y+A
-         DhW3HSUJ0GFiNByu57by+d8FfdQSqK2BDl3J4+4tGoo0iMBayPuPQlUu9G4ljDYR0c3S
-         VZV0FovHyoTyzy2UMcwIU/SDGBlzJh2RwIVQYo9kTDPW0n2g3u8GRg7K4BwXTRIaLJrj
-         rgnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=z9ZKe9DPK55G94wFxazjpOuNWkVTtqx7CppQ9HO6NqY=;
-        b=ozCrQqrN4rAO42l8Q7jg0MTW7TFwwswtHOoIrpk0TbOO/9R2jjsp44FGpeoX98vAkD
-         k7a2Rm+xFur1et9prLkU1YbXAK/bFwUiWlD9Ouegj49qXTQQLrxPLhGZPsHjYDRL/z1/
-         8EPEoqckzebsIQb3SB5TW6HwugohFMvf1TSj/mQkOFs6LJGau4dEz1YKR23VtN3t1Oz/
-         U+M4NhKcUhDsNhsUtSwFIRXQ+x5Sjqd0CWrHKSParN8H3qRfVRIG79N/lJMLZHZU+a/b
-         7g7QrS57hGJ+msSSKLTM3Dt+DcgOWvgfnAslvtNlojeY5gIjCB5pVlayNH0WD3d9JysD
-         1oRQ==
-X-Gm-Message-State: ANhLgQ3SuP0am/RHAy1YkmPHyAhcF7k/i2SA2cvOiuvLr6/VijVn6EAO
-        AwYiZ+VpH7fwKSncboSSnuICXkNi
-X-Google-Smtp-Source: ADFU+vttShOB0et+FIE14Un1vRU7k4VYoJ6iz35zEx98edQYoJE8W2h24Jqu/B/zyrxKywi6Kqvs+A==
-X-Received: by 2002:a17:902:9b95:: with SMTP id y21mr8418083plp.101.1583869788247;
-        Tue, 10 Mar 2020 12:49:48 -0700 (PDT)
-Received: from localhost.localdomain ([45.114.62.228])
-        by smtp.gmail.com with ESMTPSA id d19sm3784490pfd.82.2020.03.10.12.49.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2020 12:49:47 -0700 (PDT)
-From:   Anand Moon <linux.amoon@gmail.com>
-To:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>, Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCHv3 5/5] clk: samsung: exynos542x: Move FSYS subsystem clocks to its sub-CMU
-Date:   Tue, 10 Mar 2020 19:48:54 +0000
-Message-Id: <20200310194854.831-6-linux.amoon@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200310194854.831-1-linux.amoon@gmail.com>
-References: <20200310194854.831-1-linux.amoon@gmail.com>
+        id S1727867AbgCKA6o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Mar 2020 20:58:44 -0400
+Received: from mga05.intel.com ([192.55.52.43]:51967 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727648AbgCKA6o (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 10 Mar 2020 20:58:44 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Mar 2020 17:58:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,518,1574150400"; 
+   d="scan'208";a="321987068"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 10 Mar 2020 17:58:42 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jBphp-000Fun-DH; Wed, 11 Mar 2020 08:58:41 +0800
+Date:   Wed, 11 Mar 2020 08:57:57 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Jassi Brar <jaswinder.singh@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
+        linux-omap@vger.kernel.org,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: [balbi-usb:testing/next 3/11]
+ drivers/usb/gadget/udc/max3420_udc.c:570:16: sparse: sparse: incorrect type
+ in assignment (different base types)
+Message-ID: <202003110854.PVZUBn32%lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-FSYS power domain support usbdrd3, pdma and usb2 power gaiting,
-hence move FSYS clk setting to sub-CMU block to support power domain
-on/off sequences for device nodes.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git testing/next
+head:   36d292c6ddd3248d5a8e465e51a4e3b76de93a91
+commit: 0dac4567e8c4c4b3ba72d22ab6cd67267910d105 [3/11] usb: gadget: add udc driver for max3420
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.1-174-g094d5a94-dirty
+        git checkout 0dac4567e8c4c4b3ba72d22ab6cd67267910d105
+        make ARCH=x86_64 allmodconfig
+        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
 
-Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+
+   drivers/usb/gadget/udc/max3420_udc.c:555:41: sparse: sparse: restricted __le16 degrades to integer
+   drivers/usb/gadget/udc/max3420_udc.c:556:31: sparse: sparse: restricted __le16 degrades to integer
+>> drivers/usb/gadget/udc/max3420_udc.c:570:16: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned short [assigned] [usertype] status @@    got  short [assigned] [usertype] status @@
+   drivers/usb/gadget/udc/max3420_udc.c:570:16: sparse:    expected unsigned short [assigned] [usertype] status
+   drivers/usb/gadget/udc/max3420_udc.c:570:16: sparse:    got restricted __le16 [usertype]
+   drivers/usb/gadget/udc/max3420_udc.c:588:31: sparse: sparse: restricted __le16 degrades to integer
+   drivers/usb/gadget/udc/max3420_udc.c:602:32: sparse: sparse: restricted __le16 degrades to integer
+   drivers/usb/gadget/udc/max3420_udc.c:631:29: sparse: sparse: cast from restricted __le16
+   drivers/usb/gadget/udc/max3420_udc.c:632:29: sparse: sparse: cast from restricted __le16
+   drivers/usb/gadget/udc/max3420_udc.c:633:30: sparse: sparse: cast from restricted __le16
+
+vim +570 drivers/usb/gadget/udc/max3420_udc.c
+
+   538	
+   539	static void max3420_getstatus(struct max3420_udc *udc)
+   540	{
+   541		struct max3420_ep *ep;
+   542		u16 status = 0;
+   543	
+   544		switch (udc->setup.bRequestType & USB_RECIP_MASK) {
+   545		case USB_RECIP_DEVICE:
+   546			/* Get device status */
+   547			status = udc->gadget.is_selfpowered << USB_DEVICE_SELF_POWERED;
+   548			status |= (udc->remote_wkp << USB_DEVICE_REMOTE_WAKEUP);
+   549			break;
+   550		case USB_RECIP_INTERFACE:
+   551			if (udc->driver->setup(&udc->gadget, &udc->setup) < 0)
+   552				goto stall;
+   553			break;
+   554		case USB_RECIP_ENDPOINT:
+   555			ep = &udc->ep[udc->setup.wIndex & USB_ENDPOINT_NUMBER_MASK];
+   556			if (udc->setup.wIndex & USB_DIR_IN) {
+   557				if (!ep->ep_usb.caps.dir_in)
+   558					goto stall;
+   559			} else {
+   560				if (!ep->ep_usb.caps.dir_out)
+   561					goto stall;
+   562			}
+   563			if (ep->halted)
+   564				status = 1 << USB_ENDPOINT_HALT;
+   565			break;
+   566		default:
+   567			goto stall;
+   568		}
+   569	
+ > 570		status = cpu_to_le16(status);
+   571		spi_wr_buf(udc, MAX3420_REG_EP0FIFO, &status, 2);
+   572		spi_wr8_ack(udc, MAX3420_REG_EP0BC, 2, 1);
+   573		return;
+   574	stall:
+   575		dev_err(udc->dev, "Can't respond to getstatus request\n");
+   576		spi_wr8(udc, MAX3420_REG_EPSTALLS, STLEP0IN | STLEP0OUT | STLSTAT);
+   577	}
+   578	
+
 ---
-New patch in the series
----
- drivers/clk/samsung/clk-exynos5420.c | 45 +++++++++++++++++++++-------
- 1 file changed, 34 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/clk/samsung/clk-exynos5420.c b/drivers/clk/samsung/clk-exynos5420.c
-index c9e5a1fb6653..6c4c47dfcdce 100644
---- a/drivers/clk/samsung/clk-exynos5420.c
-+++ b/drivers/clk/samsung/clk-exynos5420.c
-@@ -859,12 +859,6 @@ static const struct samsung_div_clock exynos5x_div_clks[] __initconst = {
- 	DIV(0, "dout_maudio0", "mout_maudio0", DIV_MAU, 20, 4),
- 	DIV(0, "dout_maupcm0", "dout_maudio0", DIV_MAU, 24, 8),
- 
--	/* USB3.0 */
--	DIV(0, "dout_usbphy301", "mout_usbd301", DIV_FSYS0, 12, 4),
--	DIV(0, "dout_usbphy300", "mout_usbd300", DIV_FSYS0, 16, 4),
--	DIV(0, "dout_usbd301", "mout_usbd301", DIV_FSYS0, 20, 4),
--	DIV(0, "dout_usbd300", "mout_usbd300", DIV_FSYS0, 24, 4),
--
- 	/* MMC */
- 	DIV(0, "dout_mmc0", "mout_mmc0", DIV_FSYS1, 0, 10),
- 	DIV(0, "dout_mmc1", "mout_mmc1", DIV_FSYS1, 10, 10),
-@@ -1031,8 +1025,6 @@ static const struct samsung_gate_clock exynos5x_gate_clks[] __initconst = {
- 
- 	/* FSYS Block */
- 	GATE(CLK_TSI, "tsi", "aclk200_fsys", GATE_BUS_FSYS0, 0, 0, 0),
--	GATE(CLK_PDMA0, "pdma0", "aclk200_fsys", GATE_BUS_FSYS0, 1, 0, 0),
--	GATE(CLK_PDMA1, "pdma1", "aclk200_fsys", GATE_BUS_FSYS0, 2, 0, 0),
- 	GATE(CLK_UFS, "ufs", "aclk200_fsys2", GATE_BUS_FSYS0, 3, 0, 0),
- 	GATE(CLK_RTIC, "rtic", "aclk200_fsys", GATE_IP_FSYS, 9, 0, 0),
- 	GATE(CLK_MMC0, "mmc0", "aclk200_fsys2", GATE_IP_FSYS, 12, 0, 0),
-@@ -1040,9 +1032,6 @@ static const struct samsung_gate_clock exynos5x_gate_clks[] __initconst = {
- 	GATE(CLK_MMC2, "mmc2", "aclk200_fsys2", GATE_IP_FSYS, 14, 0, 0),
- 	GATE(CLK_SROMC, "sromc", "aclk200_fsys2",
- 			GATE_IP_FSYS, 17, CLK_IGNORE_UNUSED, 0),
--	GATE(CLK_USBH20, "usbh20", "aclk200_fsys", GATE_IP_FSYS, 18, 0, 0),
--	GATE(CLK_USBD300, "usbd300", "aclk200_fsys", GATE_IP_FSYS, 19, 0, 0),
--	GATE(CLK_USBD301, "usbd301", "aclk200_fsys", GATE_IP_FSYS, 20, 0, 0),
- 	GATE(CLK_SCLK_UNIPRO, "sclk_unipro", "dout_unipro",
- 			SRC_MASK_FSYS, 24, CLK_SET_RATE_PARENT, 0),
- 
-@@ -1258,6 +1247,28 @@ static struct exynos5_subcmu_reg_dump exynos5x_gsc_suspend_regs[] = {
- 	{ DIV2_RATIO0, 0, 0x30 },	/* DIV dout_gscl_blk_300 */
- };
- 
-+/* USB3.0 */
-+static const struct samsung_div_clock exynos5x_fsys_div_clks[] __initconst = {
-+	DIV(0, "dout_usbphy301", "mout_usbd301", DIV_FSYS0, 12, 4),
-+	DIV(0, "dout_usbphy300", "mout_usbd300", DIV_FSYS0, 16, 4),
-+	DIV(0, "dout_usbd301", "mout_usbd301", DIV_FSYS0, 20, 4),
-+	DIV(0, "dout_usbd300", "mout_usbd300", DIV_FSYS0, 24, 4),
-+};
-+
-+static const struct samsung_gate_clock exynos5x_fsys_gate_clks[] __initconst = {
-+	GATE(CLK_PDMA0, "pdma0", "aclk200_fsys", GATE_BUS_FSYS0, 1, 0, 0),
-+	GATE(CLK_PDMA1, "pdma1", "aclk200_fsys", GATE_BUS_FSYS0, 2, 0, 0),
-+	GATE(CLK_USBH20, "usbh20", "aclk200_fsys", GATE_IP_FSYS, 18, 0, 0),
-+	GATE(CLK_USBD300, "usbd300", "aclk200_fsys", GATE_IP_FSYS, 19, 0, 0),
-+	GATE(CLK_USBD301, "usbd301", "aclk200_fsys", GATE_IP_FSYS, 20, 0, 0),
-+};
-+
-+static struct exynos5_subcmu_reg_dump exynos5x_fsys_suspend_regs[] = {
-+	{ GATE_IP_FSYS, 0xffffffff, 0xffffffff }, /* FSYS gates */
-+	{ SRC_TOP3, 0, BIT(24) },                 /* SW_MUX_PCLK_200_FSYS_SEL */
-+	{ SRC_TOP3, 0, BIT(28) },                 /* SW_MUX_ACLK_200_FSYS_SEL */
-+};
-+
- static const struct samsung_gate_clock exynos5x_g3d_gate_clks[] __initconst = {
- 	GATE(CLK_G3D, "g3d", "mout_user_aclk_g3d", GATE_IP_G3D, 9,
- 	     CLK_SET_RATE_PARENT, 0),
-@@ -1376,12 +1387,23 @@ static const struct exynos5_subcmu_info exynos5800_mau_subcmu = {
- 	.pd_name	= "MAU",
- };
- 
-+static const struct exynos5_subcmu_info exynos5x_fsys_subcmu = {
-+	.div_clks       = exynos5x_fsys_div_clks,
-+	.nr_div_clks    = ARRAY_SIZE(exynos5x_fsys_div_clks),
-+	.gate_clks	= exynos5x_fsys_gate_clks,
-+	.nr_gate_clks	= ARRAY_SIZE(exynos5x_fsys_gate_clks),
-+	.suspend_regs	= exynos5x_fsys_suspend_regs,
-+	.nr_suspend_regs = ARRAY_SIZE(exynos5x_fsys_suspend_regs),
-+	.pd_name	= "FSYS",
-+};
-+
- static const struct exynos5_subcmu_info *exynos5x_subcmus[] = {
- 	&exynos5x_disp_subcmu,
- 	&exynos5x_gsc_subcmu,
- 	&exynos5x_g3d_subcmu,
- 	&exynos5x_mfc_subcmu,
- 	&exynos5x_mscl_subcmu,
-+	&exynos5x_fsys_subcmu,
- };
- 
- static const struct exynos5_subcmu_info *exynos5800_subcmus[] = {
-@@ -1391,6 +1413,7 @@ static const struct exynos5_subcmu_info *exynos5800_subcmus[] = {
- 	&exynos5x_mfc_subcmu,
- 	&exynos5x_mscl_subcmu,
- 	&exynos5800_mau_subcmu,
-+	&exynos5x_fsys_subcmu,
- };
- 
- static const struct samsung_pll_rate_table exynos5420_pll2550x_24mhz_tbl[] __initconst = {
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
