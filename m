@@ -2,101 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B57181A4F
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 14:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E00181AEA
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 15:15:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729787AbgCKNwO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Mar 2020 09:52:14 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:36828 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729771AbgCKNwN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Mar 2020 09:52:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1583934707; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CoA7xlA0w+953l1MsfjjT/sDgjQ3qpKDYEH1X6p3aGM=;
-        b=pVx/8nb2vj09o7vHt4BFglowN4kDvaJ6k60RGK2hCHqrjcKZNz1bsht2S6R1PmGq3rAjxl
-        U3qfUgX1HbnKZKQEv//SK6KGjG8CHW9iJ1ouf8lj7GMXLj6sNMcmHbxL8EIXPHaSY9sf3n
-        6wa8JDIBqYyecZKyBYwhDqU6PHYipg4=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Bin Liu <b-liu@ti.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, od@zcrc.me,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v3 5/5] usb: musb: jz4740: Add support for the JZ4770
-Date:   Wed, 11 Mar 2020 14:51:33 +0100
-Message-Id: <20200311135133.16392-5-paul@crapouillou.net>
-In-Reply-To: <20200311135133.16392-1-paul@crapouillou.net>
-References: <20200311135133.16392-1-paul@crapouillou.net>
+        id S1729738AbgCKOPs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Mar 2020 10:15:48 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:59318 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729531AbgCKOPr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Mar 2020 10:15:47 -0400
+Received: (qmail 1610 invoked by uid 2102); 11 Mar 2020 10:15:46 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 11 Mar 2020 10:15:46 -0400
+Date:   Wed, 11 Mar 2020 10:15:46 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        AceLan Kao <acelan.kao@canonical.com>,
+        "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [RESEND] [PATCH v2 3/3] USB: Disable LPM on WD19's Realtek Hub
+In-Reply-To: <4F77B65D-77B0-4E63-ADB3-BF127BDE3BA2@canonical.com>
+Message-ID: <Pine.LNX.4.44L0.2003111015070.1492-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add support for probing the jz4740-musb driver on the JZ4770 SoC.
+On Wed, 11 Mar 2020, Kai-Heng Feng wrote:
 
-The USB IP in the JZ4770 works the same Inventra IP as for the JZ4740,
-but it features more endpoints, and officially supports OTG.
+> Hi Greg,
+> 
+> > On Feb 5, 2020, at 19:26, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
+> > 
+> > Realtek Hub (0bda:0x0487) used in Dell Dock WD19 sometimes drops off the
+> > bus when bringing underlying ports from U3 to U0.
+> > 
+> > Disabling LPM on the hub during setting link state is not enough, so
+> > let's disable LPM completely for this hub.
+> > 
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> 
+> As Mathias stated, this patch can be considered as a separate one.
+> Can you please review and merge this patch?
+> 
+> Kai-Heng
+> 
+> > ---
+> > v2:
+> > - Use quirk instead of the original approach.
+> > 
+> > drivers/usb/core/quirks.c | 3 +++
+> > 1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+> > index 6b6413073584..2fb7c1602280 100644
+> > --- a/drivers/usb/core/quirks.c
+> > +++ b/drivers/usb/core/quirks.c
+> > @@ -371,6 +371,9 @@ static const struct usb_device_id usb_quirk_list[] = {
+> > 	{ USB_DEVICE(0x0b05, 0x17e0), .driver_info =
+> > 			USB_QUIRK_IGNORE_REMOTE_WAKEUP },
+> > 
+> > +	/* Realtek hub in Dell WD19 (Type-C) */
+> > +	{ USB_DEVICE(0x0bda, 0x0487), .driver_info = USB_QUIRK_NO_LPM },
+> > +
+> > 	/* Action Semiconductor flash disk */
+> > 	{ USB_DEVICE(0x10d6, 0x2200), .driver_info =
+> > 			USB_QUIRK_STRING_FETCH_255 },
+> > -- 
+> > 2.17.1
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
-
-Notes:
-    v2-v3: No change
-
- drivers/usb/musb/jz4740.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
-
-diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
-index 22eebe43ae1e..e64dd30e80e7 100644
---- a/drivers/usb/musb/jz4740.c
-+++ b/drivers/usb/musb/jz4740.c
-@@ -163,6 +163,33 @@ static const struct musb_hdrc_platform_data jz4740_musb_pdata = {
- 	.platform_ops	= &jz4740_musb_ops,
- };
- 
-+static struct musb_fifo_cfg jz4770_musb_fifo_cfg[] = {
-+	{ .hw_ep_num = 1, .style = FIFO_TX, .maxpacket = 512, },
-+	{ .hw_ep_num = 1, .style = FIFO_RX, .maxpacket = 512, },
-+	{ .hw_ep_num = 2, .style = FIFO_TX, .maxpacket = 512, },
-+	{ .hw_ep_num = 2, .style = FIFO_RX, .maxpacket = 512, },
-+	{ .hw_ep_num = 3, .style = FIFO_TX, .maxpacket = 512, },
-+	{ .hw_ep_num = 3, .style = FIFO_RX, .maxpacket = 512, },
-+	{ .hw_ep_num = 4, .style = FIFO_TX, .maxpacket = 512, },
-+	{ .hw_ep_num = 4, .style = FIFO_RX, .maxpacket = 512, },
-+	{ .hw_ep_num = 5, .style = FIFO_TX, .maxpacket = 512, },
-+	{ .hw_ep_num = 5, .style = FIFO_RX, .maxpacket = 512, },
-+};
-+
-+static struct musb_hdrc_config jz4770_musb_config = {
-+	.multipoint	= 1,
-+	.num_eps	= 11,
-+	.ram_bits	= 11,
-+	.fifo_cfg	= jz4770_musb_fifo_cfg,
-+	.fifo_cfg_size	= ARRAY_SIZE(jz4770_musb_fifo_cfg),
-+};
-+
-+static const struct musb_hdrc_platform_data jz4770_musb_pdata = {
-+	.mode		= MUSB_PERIPHERAL, /* TODO: support OTG */
-+	.config		= &jz4770_musb_config,
-+	.platform_ops	= &jz4740_musb_ops,
-+};
-+
- static int jz4740_probe(struct platform_device *pdev)
- {
- 	struct device			*dev = &pdev->dev;
-@@ -250,6 +277,7 @@ static int jz4740_remove(struct platform_device *pdev)
- 
- static const struct of_device_id jz4740_musb_of_match[] = {
- 	{ .compatible = "ingenic,jz4740-musb", .data = &jz4740_musb_pdata },
-+	{ .compatible = "ingenic,jz4770-musb", .data = &jz4770_musb_pdata },
- 	{ /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(of, jz4740_musb_of_match);
--- 
-2.25.1
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
