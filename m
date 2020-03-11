@@ -2,119 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 936961819F4
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 14:36:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6837E181A2C
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 14:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729662AbgCKNgT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Mar 2020 09:36:19 -0400
-Received: from mail-il1-f197.google.com ([209.85.166.197]:36141 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729656AbgCKNgR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Mar 2020 09:36:17 -0400
-Received: by mail-il1-f197.google.com with SMTP id v14so1407325ilq.3
-        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2020 06:36:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=B6+pwT0gZafpVjC1uFsztM6A9cG4YUfExspz24y936U=;
-        b=SeTRj2ggxus/yA/RXn3qomgles3WkV2qJhOa2FQYdrA92FySNQRapUeENZIyzA+L/D
-         eLiH51wJHL9LjdaKKdeB+FMfWSK17067KUELhuu5CY2uxVP+aVOcTCAhCcIienvM66U8
-         5bp6zZts6vkKMqDuoNFo6kVg9F1DomCdbGOIX0rrWKRhdBjg9lMGA8jqaLJzbzvFJhcv
-         cFcZej/L7/ID+9Ri7HAxUIVbb0+xNjFPRmVEJKn8dyj7lRc+r/MJqDcCkqVW7iJcf55u
-         EHQQJBqvZOkoPDTEgwu6DqvOcRafqP6hA+keffq11foYalOFmB8rgucidrHmM4RqfZEJ
-         MjvA==
-X-Gm-Message-State: ANhLgQ3Hx2a1ycKXY7ZcMohAE3M4qkG7tmB8BNMZjgs6v5KRMTlHhLCc
-        kXnghrQSyUC9yIect56C7kVSOFlX56F/i9J2H+1ApTCDJjl4
-X-Google-Smtp-Source: ADFU+vuLxefO+UDW/tYunN18EVyA6TyIEtNg86ZkgNJ7UPyQWxTCqY1YwLupkTwbW3PKLI13wVWZKuk2yLt5OeZ1mHHX7C7I3CU5
+        id S1729691AbgCKNvo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Mar 2020 09:51:44 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:36772 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729591AbgCKNvn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Mar 2020 09:51:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1583934702; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=1kpQTc/BnIRMN7rLXb27AAycasWYbKztTQg5Nu/o7xw=;
+        b=Seo3WcNJymsKriUB32h2Y5oHcgVkfpcRjIOCaxuE5Jg+TkTnbeXj7fiU4eQCvvEgv3/1nl
+        kR5Jonf4XgklOwoL5/Ae9Bw4z31QlRWmodGTfgrDtIg379vJBS99A+Z7CdRG4xwyDZ1bV5
+        ULIU1or60xC0mY1M3w6eBmZrJR9pAOQ=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Bin Liu <b-liu@ti.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, od@zcrc.me,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v3 1/5] dt-bindings: usb: Convert jz4740-musb doc to YAML
+Date:   Wed, 11 Mar 2020 14:51:29 +0100
+Message-Id: <20200311135133.16392-1-paul@crapouillou.net>
 MIME-Version: 1.0
-X-Received: by 2002:a92:9edc:: with SMTP id s89mr3251008ilk.229.1583933775736;
- Wed, 11 Mar 2020 06:36:15 -0700 (PDT)
-Date:   Wed, 11 Mar 2020 06:36:15 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000cf74105a094527d@google.com>
-Subject: general protection fault in ir_raw_event_store_with_filter
-From:   syzbot <syzbot+34008406ee9a31b13c73@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, andriin@fb.com, ast@kernel.org,
-        bpf@vger.kernel.org, daniel@iogearbox.net, kafai@fb.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Convert ingenic,jz4740-musb.txt to ingenic,musb.yaml, and add the
+new ingenic,jz4770-musb and ingenic,jz4725b-musb compatible strings
+in the process.
 
-syzbot found the following crash on:
-
-HEAD commit:    d6ff8147 usb: gadget: add raw-gadget interface
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=14d0f655e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=90a3d9bed5648419
-dashboard link: https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1743a061e00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1775f5c3e00000
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+34008406ee9a31b13c73@syzkaller.appspotmail.com
-
-rc rc0: IR event FIFO is full!
-rc rc0: IR event FIFO is full!
-rc rc0: IR event FIFO is full!
-rc rc0: IR event FIFO is full!
-rc rc0: IR event FIFO is full!
-general protection fault, probably for non-canonical address 0xdffffc0000000219: 0000 [#1] SMP KASAN
-KASAN: probably user-memory-access in range [0x00000000000010c8-0x00000000000010cf]
-CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.6.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:ir_raw_event_store_with_filter+0x41b/0x580 drivers/media/rc/rc-ir-raw.c:186
-Code: 80 3c 02 00 0f 85 5b 01 00 00 4c 8b a5 f0 05 00 00 48 b8 00 00 00 00 00 fc ff df 49 8d bc 24 c8 10 00 00 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 4b 01 00 00 48 ba 00 00 00 00 00 fc ff df 48 89
-RSP: 0018:ffff8881db309948 EFLAGS: 00010002
-RAX: dffffc0000000000 RBX: ffff8881db3099b8 RCX: 0000000000000000
-RDX: 0000000000000219 RSI: ffffffff8406b41d RDI: 00000000000010c8
-RBP: ffff8881ccc8c000 R08: 000000000000001e R09: ffffed103b66439f
-R10: ffffed103b66439e R11: ffff8881db321cf3 R12: 0000000000000000
-R13: ffff8881db3099bd R14: 000000000001f400 R15: ffff8881ccc8c5f0
-FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fc50e2e1000 CR3: 00000001ce093000 CR4: 00000000001406e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <IRQ>
- sz_push.isra.0+0xa4/0x1e0 drivers/media/rc/streamzap.c:118
- sz_push_half_space drivers/media/rc/streamzap.c:182 [inline]
- streamzap_callback+0x337/0x8a0 drivers/media/rc/streamzap.c:234
- __usb_hcd_giveback_urb+0x1f2/0x470 drivers/usb/core/hcd.c:1648
- usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1713
- dummy_timer+0x1258/0x32ae drivers/usb/gadget/udc/dummy_hcd.c:1966
- call_timer_fn+0x195/0x6f0 kernel/time/timer.c:1404
- expire_timers kernel/time/timer.c:1449 [inline]
- __run_timers kernel/time/timer.c:1773 [inline]
- __run_timers kernel/time/timer.c:1740 [inline]
- run_timer_softirq+0x5f9/0x1500 kernel/time/timer.c:1786
- __do_softirq+0x21e/0x950 kernel/softirq.c:292
- invoke_softirq kernel/softirq.c:373 [inline]
- irq_exit+0x178/0x1a0 kernel/softirq.c:413
- exiting_irq arch/x86/include/asm/apic.h:546 [inline]
- smp_apic_timer_interrupt+0x141/0x540 arch/x86/kernel/apic/apic.c:1146
- apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:829
- </IRQ>
-RIP: 0010:default_idle+0x28/0x300 arch/x86/kernel/process.c:696
-Code: cc cc 41 56 41 55 65 44 8b 2d 94 c9 72 7a 41 54 55 53 0f 1f 44 00 00 e8 16 bb b5 fb e9 07 00 00 00 0f 00 2d 3a 5f 53 00 fb f4 <65> 44 8b 2d 70
-
-
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Notes:
+        v2: Changed oneOf+const to enum
+        v3: Add ingenic,jz4725b-musb compatible string with fallback to jz4740-musb
+
+ .../bindings/usb/ingenic,jz4740-musb.txt      | 32 --------
+ .../devicetree/bindings/usb/ingenic,musb.yaml | 76 +++++++++++++++++++
+ 2 files changed, 76 insertions(+), 32 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/usb/ingenic,jz4740-musb.txt
+ create mode 100644 Documentation/devicetree/bindings/usb/ingenic,musb.yaml
+
+diff --git a/Documentation/devicetree/bindings/usb/ingenic,jz4740-musb.txt b/Documentation/devicetree/bindings/usb/ingenic,jz4740-musb.txt
+deleted file mode 100644
+index 16808721f3ff..000000000000
+--- a/Documentation/devicetree/bindings/usb/ingenic,jz4740-musb.txt
++++ /dev/null
+@@ -1,32 +0,0 @@
+-Ingenic JZ4740 MUSB driver
+-
+-Required properties:
+-
+-- compatible: Must be "ingenic,jz4740-musb"
+-- reg: Address range of the UDC register set
+-- interrupts: IRQ number related to the UDC hardware
+-- interrupt-names: must be "mc"
+-- clocks: phandle to the "udc" clock
+-- clock-names: must be "udc"
+-- phys: phandle to the USB PHY
+-
+-Example:
+-
+-usb_phy: usb-phy@0 {
+-	compatible = "usb-nop-xceiv";
+-	#phy-cells = <0>;
+-};
+-
+-udc: usb@13040000 {
+-	compatible = "ingenic,jz4740-musb";
+-	reg = <0x13040000 0x10000>;
+-
+-	interrupt-parent = <&intc>;
+-	interrupts = <24>;
+-	interrupt-names = "mc";
+-
+-	clocks = <&cgu JZ4740_CLK_UDC>;
+-	clock-names = "udc";
+-
+-	phys = <&usb_phy>;
+-};
+diff --git a/Documentation/devicetree/bindings/usb/ingenic,musb.yaml b/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
+new file mode 100644
+index 000000000000..1d6877875077
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
+@@ -0,0 +1,76 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/ingenic,musb.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Ingenic JZ47xx USB IP DT bindings
++
++maintainers:
++  - Paul Cercueil <paul@crapouillou.net>
++
++properties:
++  $nodename:
++    pattern: '^usb@.*'
++
++  compatible:
++    oneOf:
++      - enum:
++        - ingenic,jz4770-musb
++        - ingenic,jz4740-musb
++      - items:
++        - const: ingenic,jz4725b-musb
++        - const: ingenic,jz4740-musb
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: udc
++
++  interrupts:
++    maxItems: 1
++
++  interrupt-names:
++    items:
++      - const: mc
++
++  phys:
++    description: PHY specifier for the USB PHY
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - interrupts
++  - interrupt-names
++  - phys
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/jz4740-cgu.h>
++    usb_phy: usb-phy@0 {
++      compatible = "usb-nop-xceiv";
++      #phy-cells = <0>;
++    };
++
++    udc: usb@13040000 {
++      compatible = "ingenic,jz4740-musb";
++      reg = <0x13040000 0x10000>;
++
++      interrupt-parent = <&intc>;
++      interrupts = <24>;
++      interrupt-names = "mc";
++
++      clocks = <&cgu JZ4740_CLK_UDC>;
++      clock-names = "udc";
++
++      phys = <&usb_phy>;
++    };
+-- 
+2.25.1
+
