@@ -2,65 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5681821BB
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 20:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7561B1821FE
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 20:16:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731152AbgCKTOQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Mar 2020 15:14:16 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:37964 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731113AbgCKTOJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Mar 2020 15:14:09 -0400
-Received: by mail-wm1-f67.google.com with SMTP id n2so3395440wmc.3
-        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2020 12:14:06 -0700 (PDT)
+        id S1731105AbgCKTOu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Mar 2020 15:14:50 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:39912 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730944AbgCKTOu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Mar 2020 15:14:50 -0400
+Received: by mail-wr1-f65.google.com with SMTP id r15so4125146wrx.6
+        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2020 12:14:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KJ8pyUFNVfAAPsA5IqEGNlFaiQhnm267Cj5yjO4ggQM=;
-        b=Q5IO7jmxJuuKfQcRwsjcZfdS+3HWdI/qftDW8SWNdwA8NXFFlaFJjPJdIT3q1L7XUy
-         pxgttXf36s2UrRuvDO9bg9TfHFmG68upALHLabanXgSJ5c+cdceC7Oe6/B4pRz4eSQQK
-         awsitvGSAE4L6kOgvt8ltZsnpjJ3uMI7uLdK0Sr3lvLTN/fJxK9OrIsCvfD83WeQ6DHA
-         xr0La+IShbnZ/8l8cIfltUuH/cz8G+Yhy/KdFkBh0fUpYnIVUFPSVqv2uSzlWJg6s4fF
-         R9WsrUTFvX/ZxMnmBqB+rOeuTdiFpFwVqzPAdPdgX0clnwxEbFzYagYVcJZS1kXXJLq7
-         mG9A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zzGl1lTjjJuRxMAbBftuxtB9MJjgk6x+oviFOcjaDys=;
+        b=YLNdyNmK2vyfKxMOCS7HWp6d4XQsMWdvOQEcKN1faOdUM2BCv2B+GumqHRkGR0Z7Js
+         2/B4v+VZA/N1+wiDPZi47q69b2OQKgEaNkP0tciXHqiRB/UU5yFqXfKC2+YoVK20U4Yn
+         yhabALLKRaYhGdX9h/D6CI2KsWUpj+hlbOzApfQUKj1U0OD1RU1H1ACq8vM9ZmFS7Au5
+         b6WU4OqMN+skDeiX0bE1bbtSjF3bqz1d7r6dKLe3ILE9QgBzVaz2Ca0j9a1J91FtVAg8
+         M/2acCXJCJl6t147QLWaKT3nd4ZlcuQK7kNBVHZTSGfTg1PPjuLF75otBYKsa8UopN4N
+         t9kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KJ8pyUFNVfAAPsA5IqEGNlFaiQhnm267Cj5yjO4ggQM=;
-        b=b9x+H3/c0PaQ5bIQ8ejJ/PESyXisfY4KSuuWlqDQOVy1i80bCQoKxsZa/ItnzU6vRV
-         Q6wZztD0g8Z6DDmIjgxkxTqqniWUEMHWoejYEAO5yR8CO/J3gFhp1OyUy7jcIJ/UkKaN
-         VsHq5MV0+zmBMV16DM3GVRyIurbuAYH//lOqtBGxOKNWIRdRXa9qCY++6tKHF/iX6Xyk
-         7MPPu4DHE41Nai5HgkTLqqvixQYc+wMz3hMxzZK5rQCvASH5dz2EAKoHIi7Ri4MT1EQu
-         4wfhKyshFY+rrAIV7+1zg0pZNmgH5fK5dgm9wE51X+fVOjN20nZia8ywFsT0j+9apeYu
-         0UIA==
-X-Gm-Message-State: ANhLgQ1A16Ztand8LR54E8wtP9f5wKn1I5kWKZuVjDyvuFyh/MLIDNwE
-        Ch7m011TwQr0ll1vunpT8OUGsA==
-X-Google-Smtp-Source: ADFU+vs025imCI+nzJY9mJGdjpRPDkFlc+v6Mg53Kz/G7ojZlRnhfOyOBg/gKSvBrOzjTZ0ELfdW8g==
-X-Received: by 2002:a1c:c3c3:: with SMTP id t186mr244481wmf.118.1583954045957;
-        Wed, 11 Mar 2020 12:14:05 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zzGl1lTjjJuRxMAbBftuxtB9MJjgk6x+oviFOcjaDys=;
+        b=n6wuVtRtOwvuLUa6xhdbBLcVt8C22enxBdZzQkVD+A5LbaJVAxKMyY3wdJuEmDOLBl
+         yKLOLJvDJiBzav2OZuYSyT80ZomRPd83EaZo60NrrgEeTG3x8ANf8xj6bhabi8SblOsv
+         iUcxioKJSMMcTJeOwBxT3AK4e8jnhjR28lAMvZkepKjKleU+dO9yBqrqV6CtpTPn38Ow
+         Qm0l72kc6TlfFcvzXwjlHi1zVKVMw1YHZxA3gRt4EZFEhTyaMYR9SivXu6jP4/pNpbtR
+         kYmUXZjXsb8aq849vUi9mca9+5N1twwpbbp8dfwe1AR27BPBgUbWDstbD67jftUpI/p7
+         9BuQ==
+X-Gm-Message-State: ANhLgQ03A9VlGbeVkuS84FYDlz2Wzbpy/7I+vXPa9MTL7Cd/PI5TceM4
+        ZBaUoa/+QaFT92o2mEDS0rel+YtikHU=
+X-Google-Smtp-Source: ADFU+vte2EmnA1VGXLC/3ngkjZwkIu3t0fo0J77SleUTZo+UYnOJ7Q0A4UxmnD3gJhE3NfCOt6QUNA==
+X-Received: by 2002:adf:fe4c:: with SMTP id m12mr1494872wrs.96.1583954088160;
+        Wed, 11 Mar 2020 12:14:48 -0700 (PDT)
 Received: from localhost.localdomain ([176.61.57.127])
-        by smtp.gmail.com with ESMTPSA id v8sm69443919wrw.2.2020.03.11.12.14.04
+        by smtp.gmail.com with ESMTPSA id n24sm32958496wra.61.2020.03.11.12.14.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2020 12:14:05 -0700 (PDT)
+        Wed, 11 Mar 2020 12:14:47 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     kishon@ti.com
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, jackp@codeaurora.org,
-        robh@kernel.org, bjorn.andersson@linaro.org,
-        p.zabel@pengutronix.de,
-        Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>,
-        Jorge Ramirez-Ortiz <jorge.ramirez.ortiz@gmail.com>,
-        Sriharsha Allenki's <sallenki@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bjorn.andersson@linaro.org, jackp@codeaurora.org, robh@kernel.org,
         Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: [PATCH 5/5] phy: qualcomm: usb: Add SuperSpeed PHY driver
-Date:   Wed, 11 Mar 2020 19:13:58 +0000
-Message-Id: <20200311191358.8102-6-bryan.odonoghue@linaro.org>
+Subject: [PATCH 0/7] DWC3/Qualcomm connector based role-switching
+Date:   Wed, 11 Mar 2020 19:14:54 +0000
+Message-Id: <20200311191501.8165-1-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200311191358.8102-1-bryan.odonoghue@linaro.org>
-References: <20200311191358.8102-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -68,313 +61,37 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+This set of patches adds the ability to use usb-gpio-connectors with
+role-switching to the DWC3 controller.
 
-Controls Qualcomm's SS PHY 1.0.0 implemented on various SoCs on both the
-20nm and 28nm process nodes.
+Additional Qualcomm specific logic is included in the Qualcomm DWC3 wrapper
+to facilitate PHY related updates on role-switch and thus VBUS state
+toggle.
 
-Based on Sriharsha Allenki's <sallenki@codeaurora.org> original code.
+These patches have been through seven review cycles already and have a
+number of Review-by and Ack-by. For the pusposes of making it easier to
+merge this set focuses on the USB role-switching related stuff alone.
 
-[bod: Removed dependency on extcon.
-      Switched to gpio-usb-conn to handle VBUS On/Off
-      Switched to usb-role-switch to bind gpio-usb-conn to DWC3]
-Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
-Cc: Jorge Ramirez-Ortiz <jorge.ramirez.ortiz@gmail.com>
-Cc: Sriharsha Allenki's <sallenki@codeaurora.org>
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Kishon Vijay Abraham I <kishon@ti.com>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-arm-msm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- drivers/phy/qualcomm/Kconfig           |   9 +
- drivers/phy/qualcomm/Makefile          |   1 +
- drivers/phy/qualcomm/phy-qcom-usb-ss.c | 246 +++++++++++++++++++++++++
- 3 files changed, 256 insertions(+)
- create mode 100644 drivers/phy/qualcomm/phy-qcom-usb-ss.c
+The last set for can be found here:
+https://lkml.org/lkml/2020/3/3/807
 
-diff --git a/drivers/phy/qualcomm/Kconfig b/drivers/phy/qualcomm/Kconfig
-index 9c56a7216f72..98674ed094d9 100644
---- a/drivers/phy/qualcomm/Kconfig
-+++ b/drivers/phy/qualcomm/Kconfig
-@@ -102,3 +102,12 @@ config PHY_QCOM_USB_HS_28NM
- 	  High-Speed PHY driver. This driver supports the Hi-Speed PHY which
- 	  is usually paired with either the ChipIdea or Synopsys DWC3 USB
- 	  IPs on MSM SOCs.
-+
-+config PHY_QCOM_USB_SS
-+	tristate "Qualcomm USB Super-Speed PHY driver"
-+	depends on ARCH_QCOM || COMPILE_TEST
-+	depends on EXTCON || !EXTCON # if EXTCON=m, this cannot be built-in
-+	select GENERIC_PHY
-+	help
-+	  Enable this to support the Super-Speed USB transceiver on various
-+	  Qualcomm chipsets.
-diff --git a/drivers/phy/qualcomm/Makefile b/drivers/phy/qualcomm/Makefile
-index a4dab5329de0..1f14aeacbd70 100644
---- a/drivers/phy/qualcomm/Makefile
-+++ b/drivers/phy/qualcomm/Makefile
-@@ -11,3 +11,4 @@ obj-$(CONFIG_PHY_QCOM_UFS_20NM)		+= phy-qcom-ufs-qmp-20nm.o
- obj-$(CONFIG_PHY_QCOM_USB_HS) 		+= phy-qcom-usb-hs.o
- obj-$(CONFIG_PHY_QCOM_USB_HSIC) 	+= phy-qcom-usb-hsic.o
- obj-$(CONFIG_PHY_QCOM_USB_HS_28NM)	+= phy-qcom-usb-hs-28nm.o
-+obj-$(CONFIG_PHY_QCOM_USB_SS)		+= phy-qcom-usb-ss.o
-diff --git a/drivers/phy/qualcomm/phy-qcom-usb-ss.c b/drivers/phy/qualcomm/phy-qcom-usb-ss.c
-new file mode 100644
-index 000000000000..a3a6d3ce7ea1
---- /dev/null
-+++ b/drivers/phy/qualcomm/phy-qcom-usb-ss.c
-@@ -0,0 +1,246 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2012-2014,2017 The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2018-2020, Linaro Limited
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/delay.h>
-+#include <linux/err.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/phy/phy.h>
-+#include <linux/platform_device.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/reset.h>
-+#include <linux/slab.h>
-+
-+#define PHY_CTRL0			0x6C
-+#define PHY_CTRL1			0x70
-+#define PHY_CTRL2			0x74
-+#define PHY_CTRL4			0x7C
-+
-+/* PHY_CTRL bits */
-+#define REF_PHY_EN			BIT(0)
-+#define LANE0_PWR_ON			BIT(2)
-+#define SWI_PCS_CLK_SEL			BIT(4)
-+#define TST_PWR_DOWN			BIT(4)
-+#define PHY_RESET			BIT(7)
-+
-+#define NUM_BULK_CLKS			3
-+#define NUM_BULK_REGS			2
-+
-+struct ssphy_priv {
-+	void __iomem *base;
-+	struct device *dev;
-+	struct reset_control *reset_com;
-+	struct reset_control *reset_phy;
-+	struct regulator_bulk_data regs[NUM_BULK_REGS];
-+	struct clk_bulk_data clks[NUM_BULK_CLKS];
-+	enum phy_mode mode;
-+};
-+
-+static inline void qcom_ssphy_updatel(void __iomem *addr, u32 mask, u32 val)
-+{
-+	writel((readl(addr) & ~mask) | val, addr);
-+}
-+
-+static int qcom_ssphy_do_reset(struct ssphy_priv *priv)
-+{
-+	int ret;
-+
-+	if (!priv->reset_com) {
-+		qcom_ssphy_updatel(priv->base + PHY_CTRL1, PHY_RESET,
-+				   PHY_RESET);
-+		usleep_range(10, 20);
-+		qcom_ssphy_updatel(priv->base + PHY_CTRL1, PHY_RESET, 0);
-+	} else {
-+		ret = reset_control_assert(priv->reset_com);
-+		if (ret) {
-+			dev_err(priv->dev, "Failed to assert reset com\n");
-+			return ret;
-+		}
-+
-+		ret = reset_control_assert(priv->reset_phy);
-+		if (ret) {
-+			dev_err(priv->dev, "Failed to assert reset phy\n");
-+			return ret;
-+		}
-+
-+		usleep_range(10, 20);
-+
-+		ret = reset_control_deassert(priv->reset_com);
-+		if (ret) {
-+			dev_err(priv->dev, "Failed to deassert reset com\n");
-+			return ret;
-+		}
-+
-+		ret = reset_control_deassert(priv->reset_phy);
-+		if (ret) {
-+			dev_err(priv->dev, "Failed to deassert reset phy\n");
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int qcom_ssphy_power_on(struct phy *phy)
-+{
-+	struct ssphy_priv *priv = phy_get_drvdata(phy);
-+	int ret;
-+
-+	ret = regulator_bulk_enable(NUM_BULK_REGS, priv->regs);
-+	if (ret)
-+		return ret;
-+
-+	ret = clk_bulk_prepare_enable(NUM_BULK_CLKS, priv->clks);
-+	if (ret)
-+		goto err_disable_regulator;
-+
-+	ret = qcom_ssphy_do_reset(priv);
-+	if (ret)
-+		goto err_disable_clock;
-+
-+	writeb(SWI_PCS_CLK_SEL, priv->base + PHY_CTRL0);
-+	qcom_ssphy_updatel(priv->base + PHY_CTRL4, LANE0_PWR_ON, LANE0_PWR_ON);
-+	qcom_ssphy_updatel(priv->base + PHY_CTRL2, REF_PHY_EN, REF_PHY_EN);
-+	qcom_ssphy_updatel(priv->base + PHY_CTRL4, TST_PWR_DOWN, 0);
-+
-+	return 0;
-+err_disable_clock:
-+	clk_bulk_disable_unprepare(NUM_BULK_CLKS, priv->clks);
-+err_disable_regulator:
-+	regulator_bulk_disable(NUM_BULK_REGS, priv->regs);
-+
-+	return ret;
-+}
-+
-+static int qcom_ssphy_power_off(struct phy *phy)
-+{
-+	struct ssphy_priv *priv = phy_get_drvdata(phy);
-+
-+	qcom_ssphy_updatel(priv->base + PHY_CTRL4, LANE0_PWR_ON, 0);
-+	qcom_ssphy_updatel(priv->base + PHY_CTRL2, REF_PHY_EN, 0);
-+	qcom_ssphy_updatel(priv->base + PHY_CTRL4, TST_PWR_DOWN, TST_PWR_DOWN);
-+
-+	clk_bulk_disable_unprepare(NUM_BULK_CLKS, priv->clks);
-+	regulator_bulk_disable(NUM_BULK_REGS, priv->regs);
-+
-+	return 0;
-+}
-+
-+static int qcom_ssphy_init_clock(struct ssphy_priv *priv)
-+{
-+	priv->clks[0].id = "ref";
-+	priv->clks[1].id = "ahb";
-+	priv->clks[2].id = "pipe";
-+
-+	return devm_clk_bulk_get(priv->dev, NUM_BULK_CLKS, priv->clks);
-+}
-+
-+static int qcom_ssphy_init_regulator(struct ssphy_priv *priv)
-+{
-+	int ret;
-+
-+	priv->regs[0].supply = "vdd";
-+	priv->regs[1].supply = "vdda1p8";
-+	ret = devm_regulator_bulk_get(priv->dev, NUM_BULK_REGS, priv->regs);
-+	if (ret) {
-+		if (ret != -EPROBE_DEFER)
-+			dev_err(priv->dev, "Failed to get regulators\n");
-+		return ret;
-+	}
-+
-+	return ret;
-+}
-+
-+static int qcom_ssphy_init_reset(struct ssphy_priv *priv)
-+{
-+	priv->reset_com = devm_reset_control_get_optional_exclusive(priv->dev, "com");
-+	if (IS_ERR(priv->reset_com)) {
-+		dev_err(priv->dev, "Failed to get reset control com\n");
-+		return PTR_ERR(priv->reset_com);
-+	}
-+
-+	if (priv->reset_com) {
-+		/* if reset_com is present, reset_phy is no longer optional */
-+		priv->reset_phy = devm_reset_control_get_exclusive(priv->dev, "phy");
-+		if (IS_ERR(priv->reset_phy)) {
-+			dev_err(priv->dev, "Failed to get reset control phy\n");
-+			return PTR_ERR(priv->reset_phy);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct phy_ops qcom_ssphy_ops = {
-+	.power_off = qcom_ssphy_power_off,
-+	.power_on = qcom_ssphy_power_on,
-+	.owner = THIS_MODULE,
-+};
-+
-+static int qcom_ssphy_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct phy_provider *provider;
-+	struct ssphy_priv *priv;
-+	struct phy *phy;
-+	int ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(struct ssphy_priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->dev = dev;
-+	priv->mode = PHY_MODE_INVALID;
-+
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->base))
-+		return PTR_ERR(priv->base);
-+
-+	ret = qcom_ssphy_init_clock(priv);
-+	if (ret)
-+		return ret;
-+
-+	ret = qcom_ssphy_init_reset(priv);
-+	if (ret)
-+		return ret;
-+
-+	ret = qcom_ssphy_init_regulator(priv);
-+	if (ret)
-+		return ret;
-+
-+	phy = devm_phy_create(dev, dev->of_node, &qcom_ssphy_ops);
-+	if (IS_ERR(phy)) {
-+		dev_err(dev, "Failed to create the SS phy\n");
-+		return PTR_ERR(phy);
-+	}
-+
-+	phy_set_drvdata(phy, priv);
-+
-+	provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
-+
-+	return PTR_ERR_OR_ZERO(provider);
-+}
-+
-+static const struct of_device_id qcom_ssphy_match[] = {
-+	{ .compatible = "qcom,usb-ss-28nm-phy", },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, qcom_ssphy_match);
-+
-+static struct platform_driver qcom_ssphy_driver = {
-+	.probe		= qcom_ssphy_probe,
-+	.driver = {
-+		.name	= "qcom-usb-ssphy",
-+		.of_match_table = qcom_ssphy_match,
-+	},
-+};
-+module_platform_driver(qcom_ssphy_driver);
-+
-+MODULE_DESCRIPTION("Qualcomm SuperSpeed USB PHY driver");
-+MODULE_LICENSE("GPL v2");
+Bryan O'Donoghue (6):
+  dt-bindings: usb: dwc3: Add a gpio-usb-connector example
+  dt-bindings: usb: dwc3: Add a usb-role-switch to the example
+  usb: dwc3: qcom: Add support for usb-conn-gpio connectors
+  usb: dwc3: Add support for usb-conn-gpio connectors
+  usb: dwc3: Add support for a role-switch notifier
+  usb: dwc3: qcom: Enable gpio-usb-conn based role-switching
+
+Yu Chen (1):
+  usb: dwc3: Registering a role switch in the DRD code.
+
+ .../devicetree/bindings/usb/dwc3.txt          |   9 ++
+ drivers/usb/dwc3/core.h                       |  22 ++++
+ drivers/usb/dwc3/drd.c                        | 120 +++++++++++++++++-
+ drivers/usb/dwc3/dwc3-qcom.c                  |  31 ++++-
+ 4 files changed, 179 insertions(+), 3 deletions(-)
+
 -- 
 2.25.1
 
