@@ -2,76 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC11C183616
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2020 17:25:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4829B183637
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2020 17:33:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727488AbgCLQZJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Mar 2020 12:25:09 -0400
-Received: from mga04.intel.com ([192.55.52.120]:7804 "EHLO mga04.intel.com"
+        id S1727133AbgCLQc7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Mar 2020 12:32:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34672 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727228AbgCLQZJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 12 Mar 2020 12:25:09 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Mar 2020 09:25:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,545,1574150400"; 
-   d="scan'208";a="322522522"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga001.jf.intel.com with ESMTP; 12 Mar 2020 09:25:05 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jCQdv-0092ut-3b; Thu, 12 Mar 2020 18:25:07 +0200
-Date:   Thu, 12 Mar 2020 18:25:07 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
-        linux-nvme@lists.infradead.org, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v1] asm-generic: Provide generic {get, put}_unaligned_{l,
- b}e24()
-Message-ID: <20200312162507.GF1922688@smile.fi.intel.com>
-References: <20200312113941.81162-1-andriy.shevchenko@linux.intel.com>
- <efe5daa3-8e37-101a-9203-676be33eb934@acm.org>
+        id S1726677AbgCLQc7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 12 Mar 2020 12:32:59 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4013A206FA;
+        Thu, 12 Mar 2020 16:32:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584030776;
+        bh=XLGjcGJfXkG7wsiKKKJrzQ3EFH/yCmYimdREZIuU5R4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rSkqIGqWdh5Up9ovvgEtHEBobVk1tIXLJXKMrKeaDLNar8pUG9/IMQ9uL9Tqoj3pk
+         l0ykdSXvxzZN7vBXuqrzDJFDUGiIQwc0kwESpxLD/qFmGHTz/i8phn/unQ+UtVqPZE
+         YBlKe91+DyoQoNVyjKM8oBY1+nREOZJhde3GYGA8=
+Date:   Thu, 12 Mar 2020 17:32:53 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Vladimir Stankovic <vladimir.stankovic@displaylink.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        mausb-host-devel <mausb-host-devel@displaylink.com>
+Subject: Re: [PATCH v3 1/8] usb: Add MA-USB Host kernel module
+Message-ID: <20200312163253.GA435313@kroah.com>
+References: <efe5dbe1-4bd7-43cb-1eea-b6b999dd15e6@displaylink.com>
+ <20200312152037.GA383349@kroah.com>
+ <a950d4e0-b9e6-ef44-9c83-35958154b36f@displaylink.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <efe5daa3-8e37-101a-9203-676be33eb934@acm.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <a950d4e0-b9e6-ef44-9c83-35958154b36f@displaylink.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 12, 2020 at 08:18:07AM -0700, Bart Van Assche wrote:
-> On 2020-03-12 04:39, Andy Shevchenko wrote:
-> > There are users in kernel that duplicate {get,put}_unaligned_{l,b}e24()
-> > implementation. Provide generic helpers once for all.
-> 
-> Hi Andy,
-> 
-> Thanks for having done this work. In case you would not yet have noticed
-> the patch series that I posted some time ago but for which I did not
-> have the time to continue working on it, please take a look at
-> https://lore.kernel.org/lkml/20191028200700.213753-1-bvanassche@acm.org/.
+On Thu, Mar 12, 2020 at 05:23:53PM +0100, Vladimir Stankovic wrote:
+> On 12.3.20. 16:20, Greg KH wrote:
+> > On Thu, Mar 12, 2020 at 03:42:30PM +0100, Vladimir Stankovic wrote:
+> >  > Added utility macros, kernel device creation and cleanup, functions for
+> >  > handling log formatting and a placeholder module for MA-USB Host device
+> >  > driver.
+> >  >
+> >  > Signed-off-by: Vladimir Stankovic <vladimir.stankovic@displaylink.com>
+> >  > ---
+> >  > MAINTAINERS | 7 +++
+> >  > drivers/usb/Kconfig | 2 +
+> >  > drivers/usb/Makefile | 2 +
+> >  > drivers/usb/mausb_host/Kconfig | 14 +++++
+> >  > drivers/usb/mausb_host/Makefile | 12 ++++
+> >  > drivers/usb/mausb_host/mausb_core.c | 90 +++++++++++++++++++++++++++++
+> >  > drivers/usb/mausb_host/utils.c | 85 +++++++++++++++++++++++++++
+> >  > drivers/usb/mausb_host/utils.h | 40 +++++++++++++
+> >  > 8 files changed, 252 insertions(+)
+> >  > create mode 100644 drivers/usb/mausb_host/Kconfig
+> >  > create mode 100644 drivers/usb/mausb_host/Makefile
+> >  > create mode 100644 drivers/usb/mausb_host/mausb_core.c
+> >  > create mode 100644 drivers/usb/mausb_host/utils.c
+> >  > create mode 100644 drivers/usb/mausb_host/utils.h
+> >  >
+> >  > diff --git a/MAINTAINERS b/MAINTAINERS
+> >  > index 235ab38ed478..12aac44196d7 100644
+> >  > --- a/MAINTAINERS
+> >  > +++ b/MAINTAINERS
+> >  > @@ -10226,6 +10226,13 @@ W: https://linuxtv.org <https://linuxtv.org>
+> >  > S: Maintained
+> >  > F: drivers/media/radio/radio-maxiradio*
+> >  > +MA USB HOST DRIVER
+> >  > +M: Vladimir Stankovic <vladimir.stankovic@displaylink.com>
+> >  > +L: mausb-host-devel@displaylink.com
+> >  > +W: https://www.displaylink.com <https://www.displaylink.com>
+> >  > +S: Maintained
+> >  > +F: drivers/usb/mausb_host/*
+> >  > +
+> >  > MCAN MMIO DEVICE DRIVER
+> >  > M: Dan Murphy <dmurphy@ti.com>
+> >  > M: Sriram Dash <sriram.dash@samsung.com>
+> > 
+> > Does that patch look correct?
+> > 
+> > Does this apply?
+> > 
+> > Something is odd here :(
+> > 
+> > 
+> >  > diff --git a/drivers/usb/Kconfig b/drivers/usb/Kconfig
+> >  > index 275568abc670..4e92f1fa0fa5 100644
+> >  > --- a/drivers/usb/Kconfig
+> >  > +++ b/drivers/usb/Kconfig
+> >  > @@ -164,6 +164,8 @@ source "drivers/usb/misc/Kconfig"
+> >  > source "drivers/usb/atm/Kconfig"
+> >  > +source "drivers/usb/mausb_host/Kconfig"
+> >  > +
+> >  > endif # USB
+> >  > source "drivers/usb/phy/Kconfig"
+> > 
+> > Yeah, something is really wrong with your email client :(
+> > 
+> > Can you use 'git send-email' to send all of these out so they do not get
+> > corrupted?
+> > 
+> > That will also fix the lack of email threading which this series still
+> > has as well.
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> I'd say it's the issue with mail server used by company, since patches and
+> mails were generated via git (i.e. used git imap-send to create mail
+> drafts). One of the reasons we've sent attachments in the first version of
+> the patch was to avoid weird mail client/server issues.
 
-Can you send a new version?
+If this is an Exchange server, you can give up now, they are known to
+corrupt patches.  There is some "magic" settings you can do to the
+server, but personally I do not know what they are.
 
-Also, consider to use byteshift to avoid this limitation:
-"Only use get_unaligned_be24() if reading p - 1 is allowed."
+good luck!
 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+greg k-h
