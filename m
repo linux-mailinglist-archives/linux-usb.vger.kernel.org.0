@@ -2,76 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7E218336D
+	by mail.lfdr.de (Postfix) with ESMTP id B44AA18336E
 	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2020 15:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727744AbgCLOm6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Mar 2020 10:42:58 -0400
+        id S1727749AbgCLOm7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Mar 2020 10:42:59 -0400
 Received: from mga09.intel.com ([134.134.136.24]:50332 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727486AbgCLOm5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 12 Mar 2020 10:42:57 -0400
+        id S1727486AbgCLOm6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 12 Mar 2020 10:42:58 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Mar 2020 07:42:57 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Mar 2020 07:42:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,545,1574150400"; 
-   d="scan'208";a="443955714"
+   d="scan'208";a="443955741"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
-  by fmsmga006.fm.intel.com with ESMTP; 12 Mar 2020 07:42:55 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 12 Mar 2020 07:42:57 -0700
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 To:     <gregkh@linuxfoundation.org>
 Cc:     <linux-usb@vger.kernel.org>,
         Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 0/9] xhci features for usb-next
-Date:   Thu, 12 Mar 2020 16:45:08 +0200
-Message-Id: <20200312144517.1593-1-mathias.nyman@linux.intel.com>
+Subject: [PATCH 1/9] xhci: bail out early if driver can't accress host in resume
+Date:   Thu, 12 Mar 2020 16:45:09 +0200
+Message-Id: <20200312144517.1593-2-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200312144517.1593-1-mathias.nyman@linux.intel.com>
+References: <20200312144517.1593-1-mathias.nyman@linux.intel.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg
+Bail out early if the xHC host needs to be reset at resume
+but driver can't access xHC PCI registers.
 
-A set of xhci features for usb-next.
-Turning on LPM support for a couple controllers, and finishing USB3
-root port suspend and resume requests based on actual port link
-states transitions instead of waiting for some default time.
+If xhci driver already fails to reset the controller then there
+is no point in attempting to free, re-initialize, re-allocate and
+re-start the host. If failure to access the host is detected later,
+failing the resume, xhci interrupts will be double freed
+when remove is called.
 
--Mathias
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+---
+ drivers/usb/host/xhci.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-JC Kuo (1):
-  usb: host: xhci-tegra: Tegra186/Tegra194 LPM
-
-Kai-Heng Feng (2):
-  xhci: Ensure link state is U3 after setting USB_SS_PORT_LS_U3
-  xhci: Wait until link state trainsits to U0 after setting
-    USB_SS_PORT_LS_U0
-
-Mathias Nyman (4):
-  xhci: bail out early if driver can't accress host in resume
-  xhci: Add a separate debug message for split transaction errors.
-  xhci: Show host status when watchdog triggers and host is assumed
-    dead.
-  xhci: Finetune host initiated USB3 rootport link suspend and resume
-
-Mika Westerberg (1):
-  xhci-pci: Allow host runtime PM as default for Intel Tiger Lake xHCI
-
-Nicolas Saenz Julienne (1):
-  usb: xhci: Enable LPM for VIA LABS VL805
-
- drivers/usb/host/xhci-hub.c   | 61 +++++++++++++++++++++++++++++------
- drivers/usb/host/xhci-mem.c   |  1 +
- drivers/usb/host/xhci-pci.c   |  7 +++-
- drivers/usb/host/xhci-ring.c  |  9 ++++++
- drivers/usb/host/xhci-tegra.c |  7 ++++
- drivers/usb/host/xhci.c       |  4 ++-
- drivers/usb/host/xhci.h       | 30 +++++++++++++++++
- 7 files changed, 107 insertions(+), 12 deletions(-)
-
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index dbac0fa9748d..fe38275363e0 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1157,8 +1157,10 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+ 		xhci_dbg(xhci, "Stop HCD\n");
+ 		xhci_halt(xhci);
+ 		xhci_zero_64b_regs(xhci);
+-		xhci_reset(xhci);
++		retval = xhci_reset(xhci);
+ 		spin_unlock_irq(&xhci->lock);
++		if (retval)
++			return retval;
+ 		xhci_cleanup_msix(xhci);
+ 
+ 		xhci_dbg(xhci, "// Disabling event ring interrupts\n");
 -- 
 2.17.1
 
