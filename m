@@ -2,91 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7101838FD
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2020 19:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD73A183927
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2020 20:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726481AbgCLSuN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Mar 2020 14:50:13 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:36374 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725268AbgCLSuN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Mar 2020 14:50:13 -0400
-Received: by mail-pf1-f193.google.com with SMTP id i13so3706340pfe.3;
-        Thu, 12 Mar 2020 11:50:11 -0700 (PDT)
+        id S1726794AbgCLTCj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Mar 2020 15:02:39 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:42896 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725268AbgCLTCj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Mar 2020 15:02:39 -0400
+Received: by mail-ot1-f67.google.com with SMTP id 66so7437116otd.9;
+        Thu, 12 Mar 2020 12:02:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=aVeDcP2GLMR0aX//Ogt1RRYQRRkohGDFdUA0jaq53Qs=;
-        b=gj4C0VrzQPslhuNBGtMSI8OT2yTIr8P/zswi8mJJ3PH6iyBRYvwNBypHodDTj/JCK7
-         xHCZtvh5DQVMgHPjPEN7rLLaPoZs20Baj76WfG3M9jt1eeylYfqk6zcwB9cDMKU85whl
-         /qj4L2tDExjOYjzoxbvCBbrOAMdBXOPMOXxA8d9p1/5C+p7XubT2JbE3JltaQPJFsVvC
-         vMqtq5UoJkrJ70I9iroZKn3CbDf0AkxRw4x2a5YhbGhqn+ej4ciOknVMXuWeKW993hlj
-         kN3dOxv8MaoFTeaaXLpkKDnBmnN9YvKquKNnW7ZfnhezjeoUvC4W5CPyu7eNGxg6tvsF
-         7WAw==
-X-Gm-Message-State: ANhLgQ0nVlTvadRKG8Tx/W6q6SvbnUdWfw16j/4ZrxgUqloJ9tU2jMwj
-        1zuRKHJCvVJh0DTJaUPfwsjPbpCT/C8=
-X-Google-Smtp-Source: ADFU+vuCg/44F2XOXy+VHNIQVrts09wkHYa7AdbHNYs2LVO56aWT9OJhzkComda6rXurlEMfw0mt0A==
-X-Received: by 2002:aa7:8d18:: with SMTP id j24mr7484991pfe.264.1584039010335;
-        Thu, 12 Mar 2020 11:50:10 -0700 (PDT)
-Received: from ?IPv6:2601:647:4000:d7:af99:b4cf:6b17:1075? ([2601:647:4000:d7:af99:b4cf:6b17:1075])
-        by smtp.gmail.com with ESMTPSA id n5sm3465841pfq.35.2020.03.12.11.50.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Mar 2020 11:50:09 -0700 (PDT)
-Subject: Re: [PATCH v1] asm-generic: Provide generic {get, put}_unaligned_{l,
- b}e24()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
-        linux-nvme@lists.infradead.org, Felipe Balbi <balbi@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=qszn8t/TXMEw8klBhLWYzin7BjJynR0x9wt3vKldKkI=;
+        b=oQjsSJZdx/5xWwRvf7guQ9XaBUYxVhOIdThOQGlmdvmz1uOmYGlwPc7p3+2VSCEU8a
+         wLGqq3oTS2DL2xc8PwAbqJdLpTPoJ1vMAw6InEfAsxAwTlF2v7TXr1ekj7YqBcc5f+1H
+         NeHsTgoPWhWT/1ODG2JYpEVMoXfBIQRSQ67rhUM3KMCAnulMIA2tw7iZ8+by7mhGPs3w
+         l9MrAUpnQ1gyzkTYHOPwoNlErHrQr3CpNToKVb3qQ/8UxsxbhlwuBmFOFtiEUtCTwRRa
+         D8T+eixENC6mkjtBsK1n1Ns5GNuSbrOssdM5UIb86IhFUoG8CQ8rXS1RRCt360fR0BiH
+         Dxew==
+X-Gm-Message-State: ANhLgQ24A5NQEa4cselaOPtybvIum8n2mpWsPeGSrHBdfKKUt68YcpAc
+        4gbgb70MGbtiPthQFGVs1A==
+X-Google-Smtp-Source: ADFU+vtDTbuZErAslJQLMpArXJZf6snkXd794nOxeCf/BKZvRnoCio76FeXOXlwzNhrd+bsC58+mfw==
+X-Received: by 2002:a05:6830:18c2:: with SMTP id v2mr7729860ote.350.1584039758461;
+        Thu, 12 Mar 2020 12:02:38 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id e4sm8462394otb.23.2020.03.12.12.02.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Mar 2020 12:02:37 -0700 (PDT)
+Received: (nullmailer pid 26970 invoked by uid 1000);
+        Thu, 12 Mar 2020 19:02:36 -0000
+Date:   Thu, 12 Mar 2020 14:02:36 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     devicetree@vger.kernel.org, bleung@chromium.org,
+        swboyd@chromium.org, heikki.krogerus@linux.intel.com,
+        enric.balletbo@collabora.com,
+        Prashant Malani <pmalani@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org
-References: <20200312113941.81162-1-andriy.shevchenko@linux.intel.com>
- <efe5daa3-8e37-101a-9203-676be33eb934@acm.org>
- <20200312162507.GF1922688@smile.fi.intel.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <6d932620-3255-fbd8-7fc8-22e4b3068043@acm.org>
-Date:   Thu, 12 Mar 2020 11:50:07 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Subject: Re: [PATCH v3] dt-bindings: Convert usb-connector to YAML format.
+Message-ID: <20200312190236.GA26911@bogus>
+References: <20200305222732.133047-1-pmalani@chromium.org>
 MIME-Version: 1.0
-In-Reply-To: <20200312162507.GF1922688@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200305222732.133047-1-pmalani@chromium.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/12/20 9:25 AM, Andy Shevchenko wrote:
-> On Thu, Mar 12, 2020 at 08:18:07AM -0700, Bart Van Assche wrote:
->> On 2020-03-12 04:39, Andy Shevchenko wrote:
->>> There are users in kernel that duplicate {get,put}_unaligned_{l,b}e24()
->>> implementation. Provide generic helpers once for all.
->>
->> Hi Andy,
->>
->> Thanks for having done this work. In case you would not yet have noticed
->> the patch series that I posted some time ago but for which I did not
->> have the time to continue working on it, please take a look at
->> https://lore.kernel.org/lkml/20191028200700.213753-1-bvanassche@acm.org/.
+On Thu,  5 Mar 2020 14:27:28 -0800, Prashant Malani wrote:
+> Convert the usb-connector.txt bindings file to YAML format. This allows
+> it to be used in dt_bindings_check verification. This patch was
+> born out of a patch series for the addition of a Type C connector
+> class port driver[1].
 > 
-> Can you send a new version?
+> An attempt has been made to maintain the same documentation text and
+> example structure as was in the .txt file, but wherever needed
+> modifications have been made to satisfy dt_bindings_check.
 > 
-> Also, consider to use byteshift to avoid this limitation:
-> "Only use get_unaligned_be24() if reading p - 1 is allowed."
+> Also, update all references to usb-connector.txt to now use
+> usb-connector.yaml.
+> 
+> [1]: https://lkml.org/lkml/2020/2/19/1232
+> 
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> ---
+> 
+> Changes in v3:
+> - Updated maintainer list.
+> - Fixed grammatical errors in descriptions.
+> - Reworded "type" description based on review comments.
+> - Added more info to OF graph binding for port@2.
+> - Removed address from DT nodes in examples.
+> 
+> Changes in v2:
+> - Added type references for some properties.
+> - Removed pinctrl properties.
+> - Updated power-role, try-power-role and data-role properties to be in
+>   valid schema format.
+> - Added OF graph data bus binding property according to reviewer
+>   suggestions.
+> 
+>  .../connector/samsung,usb-connector-11pin.txt |   2 +-
+>  .../bindings/connector/usb-connector.txt      | 135 ------------
+>  .../bindings/connector/usb-connector.yaml     | 206 ++++++++++++++++++
+>  .../devicetree/bindings/usb/fcs,fusb302.txt   |   2 +-
+>  .../devicetree/bindings/usb/generic.txt       |   2 +-
+>  .../devicetree/bindings/usb/mediatek,mtu3.txt |   2 +-
+>  .../devicetree/bindings/usb/mediatek,musb.txt |   2 +-
+>  .../bindings/usb/richtek,rt1711h.txt          |   2 +-
+>  .../devicetree/bindings/usb/ti,hd3ss3220.txt  |   2 +-
+>  .../devicetree/bindings/usb/typec-tcpci.txt   |   2 +-
+>  .../devicetree/bindings/usb/usb-conn-gpio.txt |   4 +-
+>  11 files changed, 216 insertions(+), 145 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/connector/usb-connector.txt
+>  create mode 100644 Documentation/devicetree/bindings/connector/usb-connector.yaml
+> 
 
-Sure, I will do that and I will also add you to the Cc-list of the patch 
-series.
+Applied, thanks.
 
-Thanks,
-
-Bart.
-
+Rob
