@@ -2,85 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B731836E2
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2020 18:07:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F7101838FD
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2020 19:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbgCLRHU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Mar 2020 13:07:20 -0400
-Received: from mga02.intel.com ([134.134.136.20]:14968 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726254AbgCLRHU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 12 Mar 2020 13:07:20 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Mar 2020 10:07:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,545,1574150400"; 
-   d="scan'208";a="232123199"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga007.jf.intel.com with ESMTP; 12 Mar 2020 10:07:19 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jCRIn-0093Nh-IA; Thu, 12 Mar 2020 19:07:21 +0200
-Date:   Thu, 12 Mar 2020 19:07:21 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2 1/2] usb: dwc3: Add ACPI support for xHCI ports
-Message-ID: <20200312170721.GH1922688@smile.fi.intel.com>
-References: <20200218151219.50121-1-andriy.shevchenko@linux.intel.com>
+        id S1726481AbgCLSuN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Mar 2020 14:50:13 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:36374 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725268AbgCLSuN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Mar 2020 14:50:13 -0400
+Received: by mail-pf1-f193.google.com with SMTP id i13so3706340pfe.3;
+        Thu, 12 Mar 2020 11:50:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=aVeDcP2GLMR0aX//Ogt1RRYQRRkohGDFdUA0jaq53Qs=;
+        b=gj4C0VrzQPslhuNBGtMSI8OT2yTIr8P/zswi8mJJ3PH6iyBRYvwNBypHodDTj/JCK7
+         xHCZtvh5DQVMgHPjPEN7rLLaPoZs20Baj76WfG3M9jt1eeylYfqk6zcwB9cDMKU85whl
+         /qj4L2tDExjOYjzoxbvCBbrOAMdBXOPMOXxA8d9p1/5C+p7XubT2JbE3JltaQPJFsVvC
+         vMqtq5UoJkrJ70I9iroZKn3CbDf0AkxRw4x2a5YhbGhqn+ej4ciOknVMXuWeKW993hlj
+         kN3dOxv8MaoFTeaaXLpkKDnBmnN9YvKquKNnW7ZfnhezjeoUvC4W5CPyu7eNGxg6tvsF
+         7WAw==
+X-Gm-Message-State: ANhLgQ0nVlTvadRKG8Tx/W6q6SvbnUdWfw16j/4ZrxgUqloJ9tU2jMwj
+        1zuRKHJCvVJh0DTJaUPfwsjPbpCT/C8=
+X-Google-Smtp-Source: ADFU+vuCg/44F2XOXy+VHNIQVrts09wkHYa7AdbHNYs2LVO56aWT9OJhzkComda6rXurlEMfw0mt0A==
+X-Received: by 2002:aa7:8d18:: with SMTP id j24mr7484991pfe.264.1584039010335;
+        Thu, 12 Mar 2020 11:50:10 -0700 (PDT)
+Received: from ?IPv6:2601:647:4000:d7:af99:b4cf:6b17:1075? ([2601:647:4000:d7:af99:b4cf:6b17:1075])
+        by smtp.gmail.com with ESMTPSA id n5sm3465841pfq.35.2020.03.12.11.50.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Mar 2020 11:50:09 -0700 (PDT)
+Subject: Re: [PATCH v1] asm-generic: Provide generic {get, put}_unaligned_{l,
+ b}e24()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+        linux-nvme@lists.infradead.org, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org
+References: <20200312113941.81162-1-andriy.shevchenko@linux.intel.com>
+ <efe5daa3-8e37-101a-9203-676be33eb934@acm.org>
+ <20200312162507.GF1922688@smile.fi.intel.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <6d932620-3255-fbd8-7fc8-22e4b3068043@acm.org>
+Date:   Thu, 12 Mar 2020 11:50:07 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200218151219.50121-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200312162507.GF1922688@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Feb 18, 2020 at 05:12:18PM +0200, Andy Shevchenko wrote:
-> The ACPI companion of the adapter has to be set for xHCI controller
-> code to read and attach the ports described in the ACPI table.
-> Use ACPI_COMPANION_SET macro to set this.
-
-Felipe, do you have any comments on this?
-
+On 3/12/20 9:25 AM, Andy Shevchenko wrote:
+> On Thu, Mar 12, 2020 at 08:18:07AM -0700, Bart Van Assche wrote:
+>> On 2020-03-12 04:39, Andy Shevchenko wrote:
+>>> There are users in kernel that duplicate {get,put}_unaligned_{l,b}e24()
+>>> implementation. Provide generic helpers once for all.
+>>
+>> Hi Andy,
+>>
+>> Thanks for having done this work. In case you would not yet have noticed
+>> the patch series that I posted some time ago but for which I did not
+>> have the time to continue working on it, please take a look at
+>> https://lore.kernel.org/lkml/20191028200700.213753-1-bvanassche@acm.org/.
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> v2: split out kernel doc fix
->  drivers/usb/dwc3/host.c | 2 ++
->  1 file changed, 2 insertions(+)
+> Can you send a new version?
 > 
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index fa252870c926..95a90ea08975 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -7,6 +7,7 @@
->   * Authors: Felipe Balbi <balbi@ti.com>,
->   */
->  
-> +#include <linux/acpi.h>
->  #include <linux/platform_device.h>
->  
->  #include "core.h"
-> @@ -75,6 +76,7 @@ int dwc3_host_init(struct dwc3 *dwc)
->  	}
->  
->  	xhci->dev.parent	= dwc->dev;
-> +	ACPI_COMPANION_SET(&xhci->dev, ACPI_COMPANION(dwc->dev));
->  
->  	dwc->xhci = xhci;
->  
-> -- 
-> 2.25.0
-> 
+> Also, consider to use byteshift to avoid this limitation:
+> "Only use get_unaligned_be24() if reading p - 1 is allowed."
 
--- 
-With Best Regards,
-Andy Shevchenko
+Sure, I will do that and I will also add you to the Cc-list of the patch 
+series.
 
+Thanks,
+
+Bart.
 
