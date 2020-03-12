@@ -2,97 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F351822D6
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Mar 2020 20:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B2B518261C
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2020 01:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387433AbgCKTyj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Mar 2020 15:54:39 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:38349 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387431AbgCKTyj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Mar 2020 15:54:39 -0400
-Received: by mail-ot1-f67.google.com with SMTP id t28so810985ott.5
-        for <linux-usb@vger.kernel.org>; Wed, 11 Mar 2020 12:54:37 -0700 (PDT)
+        id S1731481AbgCLAJl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Mar 2020 20:09:41 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:39632 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726194AbgCLAJl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Mar 2020 20:09:41 -0400
+Received: by mail-pl1-f193.google.com with SMTP id j20so1873770pll.6;
+        Wed, 11 Mar 2020 17:09:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9G8BKi87dM8ac+1i8fsYu7iUa+IfFufMeRSjgfr6A2E=;
-        b=Id8s4oOSWs5Xu5M/KFQRUlf7eQY409+ZLkiK/Jdgljhl8fu/YQkLXw/5EBFEyPHMGa
-         pqwkBkWddzxS7iDwDGW5rPcYnvi7d+33rZc5hGSKDYNUHMIR8dSdwMi3a6oh+rlYEeJc
-         Fo4W6E6CZeivx037vSOmQVyWguZzfiX9cSix3q4xutmoBDRyf4AH7j1Zq75o1KhYFNbX
-         hZW3G3CaVznikgDMo1k6me6w7bK91Hy4zU016PvxRURtTDiCg9HpslVFjZb2Rv7BQYhl
-         SOuEUjZaOwxCRnLlfcb4Of13gquA7HwqNJdGgIGsVYscr/Pv6j3k6Xv3JrP3AQ2G3vlp
-         c8xA==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=9ApGOF5PBkyoeBPogSoc/7/ab/yJXEM4Uq6xzW0uckE=;
+        b=qa/JjpNbOa07fUsB4jPdLDm52/jZZEQRH9wlnggCo8DYirC2AP/CxM7bIpeGf+pTsZ
+         Uv9+2rKZqzD67ItMqFhBlkKxIM3pO4GTO/b21mX73+MdeJ8hXW9aA30m/c7gsxNFkmvY
+         2l3HzKT7rZseU2snFyYgrJqHPN997zzhpWRiGk0t+jriJZeQ3BOe/fmG//AR7IdLhdFr
+         uQzd7AOSjXIYBl7IBeG3pQGBBvzaLhYsBEqU4s+4zR1iUyentr12iqjc2dKsAzemOigy
+         iZ6MrnT4onYr65Ude8HVtSsE4M05XvWBLKobbUKLxWtQ+JleX207ym20znvdc2QktO4I
+         g/WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9G8BKi87dM8ac+1i8fsYu7iUa+IfFufMeRSjgfr6A2E=;
-        b=WtD5GV2gqPc11TLd8rYdJQrkhW3/MdNG9SRRb/4G3JzY2dqFurZ34Bu/ZoOcapCRe2
-         QibTVKJTqtzocaICvTDjgO7m5yIouX8EBMb2hkeAmxYWX/w+8Mj3BbZxSaovi5z0C7LL
-         CeqSnmImEnI7n8iA/taJzoLmXoInZDt6oTMUQnGMYAIux7OTvBYk92nHuEwWMy2Ea5ct
-         HrIGZaHhE5UDiMlPh1SPESrjPfJHAML3shHZah5GmbuQTf3wG+bSPGfaFvTnarMExauq
-         vyv0HeF+I85jIYg7R59VSo1aGkoWe6QAY7ffGQO2CiirVP6l9FS68EL6Qmm8xWm76MWg
-         hpgQ==
-X-Gm-Message-State: ANhLgQ2twopScF+XpVmGWEgAr+Vo6BqZ+lfBU9faPl2O8YnTg+qe0RBO
-        Qr/vy4zO2ZObovTNwbVQRVjBYzRma0+BIR16qGaYTQ==
-X-Google-Smtp-Source: ADFU+vujO1GuU0FxzgptyGmNumunhFLdj+J5zktXsJFnyVaoSjBzIH+jerB5Vt1h+nF6X7xTtUh1JTzBtNN8NNpemso=
-X-Received: by 2002:a9d:344:: with SMTP id 62mr3839951otv.102.1583956477185;
- Wed, 11 Mar 2020 12:54:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200311172109.45134-1-john.stultz@linaro.org>
- <20200311172109.45134-2-john.stultz@linaro.org> <7337bea7-1449-e6e3-4c65-1bb802a2c316@linaro.org>
- <CALAqxLXEZQnH3a8z9CGf52VUbb-ZHX-R78DPM1psJhV9_bs35g@mail.gmail.com>
-In-Reply-To: <CALAqxLXEZQnH3a8z9CGf52VUbb-ZHX-R78DPM1psJhV9_bs35g@mail.gmail.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Wed, 11 Mar 2020 12:54:26 -0700
-Message-ID: <CALAqxLU0HWYsZcOjBj3XRy6+D33aPuQ=+hF=gv0prUquyb1+pg@mail.gmail.com>
-Subject: Re: [RESEND][PATCH v8 1/6] usb: dwc3: Registering a role switch in
- the DRD code.
-To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=9ApGOF5PBkyoeBPogSoc/7/ab/yJXEM4Uq6xzW0uckE=;
+        b=YUG1Kq1UZ+prDqZwEjuFB0cFS+/Z+xMDNN/06MwmJmi9uLavE6pEYQJMbSsl+cBWQc
+         9byuM/Pu3yNbdwayZE4Ih7fQBKQaRU0KqhOuWktZ0uT0zROjaligoNrGhoeL2WwqPAm7
+         pNGzUnxTJjmgVSOJabrPvzkDhGlM0y2SNedAyCwL3WYxOqG9iyYyCrygDQdtssdlthRJ
+         ZWeMWoMrXDqQ67GbU48FQ6/nsPtmuhCwC9p3UXzGG27CeLzvWulEGRm2upgkI1+n/9mc
+         CN5NV2JZmjAlOO/loQDTLhQakmD0R7xoOOn7SJkh8+XtXAkC2MzwJdDIZOoFpr9P/bXj
+         G27A==
+X-Gm-Message-State: ANhLgQ1J8Hj/svtUJQ+mbd5lKDpstkXGE9+JsemWRlDdz1HtYczHh2Pa
+        f0WIaI30Y16BJn7CsTK7pN0=
+X-Google-Smtp-Source: ADFU+vtML21USPDOMZ+PmnB2abZahmaHnFt3ItHVXPSoef4wnUi8Xp1UT2B8XYgt+E7etOPYpGvc6g==
+X-Received: by 2002:a17:902:d88d:: with SMTP id b13mr5144514plz.228.1583971779921;
+        Wed, 11 Mar 2020 17:09:39 -0700 (PDT)
+Received: from taoren-ubuntu-R90MNF91 (c-24-4-25-55.hsd1.ca.comcast.net. [24.4.25.55])
+        by smtp.gmail.com with ESMTPSA id e11sm9957036pfj.95.2020.03.11.17.09.38
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 11 Mar 2020 17:09:39 -0700 (PDT)
+Date:   Wed, 11 Mar 2020 17:09:31 -0700
+From:   Tao Ren <rentao.bupt@gmail.com>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        ShuFan Lee <shufan_lee@richtek.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
         Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jun Li <lijun.kernel@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Guillaume Gardet <Guillaume.Gardet@arm.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Stephen Boyd <swboyd@chromium.org>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, taoren@fb.com
+Subject: Re: [PATCH v2] usb: gadget: aspeed: improve vhub port irq handling
+Message-ID: <20200312000930.GA3956@taoren-ubuntu-R90MNF91>
+References: <20200305234746.1002-1-rentao.bupt@gmail.com>
+ <481e9b7d40c51505518a34ddc2515d3200dbf158.camel@kernel.crashing.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <481e9b7d40c51505518a34ddc2515d3200dbf158.camel@kernel.crashing.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 11, 2020 at 12:44 PM John Stultz <john.stultz@linaro.org> wrote:
->
-> On Wed, Mar 11, 2020 at 12:17 PM Bryan O'Donoghue
-> <bryan.odonoghue@linaro.org> wrote:
-> >
-> > > +static int dwc3_usb_role_switch_set(struct device *dev, enum usb_role role)
-> >
-> > @bjorn found an API change that explodes this one.
-> >
-> > Fixed here: https://lkml.org/lkml/2020/3/11/1034
->
-> Huh. I wonder why I don't see that causing trouble in my testing.  :/
->
-> Oddly, trying to use your patch results in build failures for me... Is
-> the api change something in -next?
+Hi Ben,
 
-Ah. Ok, I found it: "usb: roles: Provide the switch drivers handle to
-the switch in the API"
+On Wed, Mar 11, 2020 at 12:31:22PM +1100, Benjamin Herrenschmidt wrote:
+> On Thu, 2020-03-05 at 15:47 -0800, rentao.bupt@gmail.com wrote:
+> > From: Tao Ren <rentao.bupt@gmail.com>
+> > 
+> > This patch evaluates vhub ports' irq mask before going through per-port
+> > irq handling one by one, which helps to speed up irq handling in case
+> > there is no port interrupt.
+> > 
+> > Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
+> > ---
+> >  Changes in v2:
+> >    - use "for_each_set_bit" to speed up port irq handling.
+> > 
+> >  drivers/usb/gadget/udc/aspeed-vhub/core.c | 11 ++++++++---
+> >  drivers/usb/gadget/udc/aspeed-vhub/vhub.h |  8 +++-----
+> >  2 files changed, 11 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/drivers/usb/gadget/udc/aspeed-vhub/core.c b/drivers/usb/gadget/udc/aspeed-vhub/core.c
+> > index f8d35dd60c34..af2dbd405361 100644
+> > --- a/drivers/usb/gadget/udc/aspeed-vhub/core.c
+> > +++ b/drivers/usb/gadget/udc/aspeed-vhub/core.c
+> > @@ -134,11 +134,14 @@ static irqreturn_t ast_vhub_irq(int irq, void *data)
+> >  	}
+> >  
+> >  	/* Handle device interrupts */
+> > -	for (i = 0; i < vhub->max_ports; i++) {
+> > -		u32 dev_mask = VHUB_IRQ_DEVICE1 << i;
+> > +	if (istat & vhub->port_irq_mask) {
+> > +		int offset = VHUB_IRQ_DEV1_BIT;
+> > +		int size = VHUB_IRQ_DEV1_BIT + vhub->max_ports;
+> >  
+> > -		if (istat & dev_mask)
+> > +		for_each_set_bit_from(offset, (unsigned long *)&istat, size) 
+> 
+> That type cast is very bad. It will not work on big endian for example
+> (yes this driver isn't used on big endian today but still).
+> 
+> Please assign istat to an unsigned long (or make it unsigned long to
+> begin with).
 
-I'll add that to my patch series, retest and resubmit. Thanks for the heads up!
--john
+Thanks for pointing it out. Will fix it in v3.
+
+Cheers,
+
+Tao
