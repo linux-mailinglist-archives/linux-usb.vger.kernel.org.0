@@ -2,122 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C26E6182BA6
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2020 09:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B10182C26
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2020 10:15:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726099AbgCLI6C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Mar 2020 04:58:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38626 "EHLO mail.kernel.org"
+        id S1726254AbgCLJPs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Mar 2020 05:15:48 -0400
+Received: from laas.laas.fr ([140.93.0.15]:17480 "EHLO laas.laas.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725978AbgCLI6C (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 12 Mar 2020 04:58:02 -0400
-Received: from localhost.localdomain (unknown [180.171.74.255])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4778420578;
-        Thu, 12 Mar 2020 08:57:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584003481;
-        bh=N1uJJrbgyXSqWS05kgvyJwAxqg99mthFz14GgjyFCAk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=STntgs2ovx2H5XafYOteqPLR3EujEBKjnUKWkfur/tL6ra+lEYa1o0NJ20Kj2Uuzd
-         KHCXre56FOsjG7nrM6ZgR3gN0WLjFGB+w7mKPDjuItGUXnRdhyQN91vIUPsVoJ0u2H
-         hBxmBSrjxqDYBNTVn85Bt0l8TZ8qiSsVTsemP3Wc=
-From:   Peter Chen <peter.chen@kernel.org>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-imx@nxp.com, jun.li@nxp.com, Peter Chen <peter.chen@nxp.com>,
-        stable@vger.kernel.org
-Subject: [PATCH v2 1/1] usb: chipidea: udc: fix sleeping function called from invalid context
-Date:   Thu, 12 Mar 2020 16:57:43 +0800
-Message-Id: <20200312085743.10260-1-peter.chen@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        id S1726044AbgCLJPs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 12 Mar 2020 05:15:48 -0400
+Received: from lotus.useless-ficus.net (lotus.laas.fr [140.93.68.112])
+        (authenticated bits=0)
+        by laas.laas.fr (8.16.0.21/8.16.0.29) with ESMTPSA id 02C9Fd9O047621
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 12 Mar 2020 10:15:40 +0100 (CET)
+Received: by lotus.useless-ficus.net (Postfix, from userid 1000)
+        id BEA344C074F; Thu, 12 Mar 2020 10:15:39 +0100 (CET)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Message-ID: <24169.64955.621393.134996@gargle.gargle.HOWL>
+Date:   Thu, 12 Mar 2020 10:15:39 +0100
+From:   Anthony Mallet <anthony.mallet@laas.fr>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] USB: cdc-acm: fix rounding error in TIOCSSERIAL
+In-Reply-To: <20200312083827.GA102663@kroah.com>
+References: <20200310101027.32152-1-anthony.mallet@laas.fr>
+        <20200310101027.32152-2-anthony.mallet@laas.fr>
+        <20200312083827.GA102663@kroah.com>
+X-Mailer: VM 8.2.0b under 25.2.2 (x86_64-pc-linux-gnu)
+Organization: LAAS/CNRS - Toulouse - France
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Peter Chen <peter.chen@nxp.com>
+On Thursday 12 Mar 2020, at 09:38, Greg KH wrote:
+> This patch doesn't apply to my usb-linus branch at all.  What
+> tree/branch did you make it against?
 
-The code calls pm_runtime_get_sync with irq disabled, it causes below
-warning:
-
-BUG: sleeping function called from invalid context at
-wer/runtime.c:1075
-in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid:
-er/u8:1
-CPU: 1 PID: 37 Comm: kworker/u8:1 Not tainted
-20200304-00181-gbebfd2a5be98 #1588
-Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
-Workqueue: ci_otg ci_otg_work
-[<c010e8bd>] (unwind_backtrace) from [<c010a315>]
-1/0x14)
-[<c010a315>] (show_stack) from [<c0987d29>]
-5/0x94)
-[<c0987d29>] (dump_stack) from [<c013e77f>]
-+0xeb/0x118)
-[<c013e77f>] (___might_sleep) from [<c052fa1d>]
-esume+0x75/0x78)
-[<c052fa1d>] (__pm_runtime_resume) from [<c0627a33>]
-0x23/0x74)
-[<c0627a33>] (ci_udc_pullup) from [<c062fb93>]
-nect+0x2b/0xcc)
-[<c062fb93>] (usb_gadget_connect) from [<c062769d>]
-_connect+0x59/0x104)
-[<c062769d>] (ci_hdrc_gadget_connect) from [<c062778b>]
-ssion+0x43/0x48)
-[<c062778b>] (ci_udc_vbus_session) from [<c062f997>]
-s_connect+0x17/0x9c)
-[<c062f997>] (usb_gadget_vbus_connect) from [<c062634d>]
-bd/0x128)
-[<c062634d>] (ci_otg_work) from [<c0134719>]
-rk+0x149/0x404)
-[<c0134719>] (process_one_work) from [<c0134acb>]
-0xf7/0x3bc)
-[<c0134acb>] (worker_thread) from [<c0139433>]
-x118)
-[<c0139433>] (kthread) from [<c01010bd>]
-(ret_from_fork+0x11/0x34)
-
-Tested-by: Dmitry Osipenko <digetx@gmail.com>
-Cc: <stable@vger.kernel.org> #v5.5
-Fixes: 72dc8df7920f ("usb: chipidea: udc: protect usb interrupt enable")
-Reported-by: Dmitry Osipenko <digetx@gmail.com>
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
----
-Changes for v2:
-- Change spin_lock_irqsave to spin_lock_irq since the code
-  is running at process context
-
- drivers/usb/chipidea/udc.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-index ffaf46f5d062..4c4ac30db498 100644
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -1530,18 +1530,19 @@ static const struct usb_ep_ops usb_ep_ops = {
- static void ci_hdrc_gadget_connect(struct usb_gadget *_gadget, int is_active)
- {
- 	struct ci_hdrc *ci = container_of(_gadget, struct ci_hdrc, gadget);
--	unsigned long flags;
- 
- 	if (is_active) {
- 		pm_runtime_get_sync(&_gadget->dev);
- 		hw_device_reset(ci);
--		spin_lock_irqsave(&ci->lock, flags);
-+		spin_lock_irq(&ci->lock);
- 		if (ci->driver) {
- 			hw_device_state(ci, ci->ep0out->qh.dma);
- 			usb_gadget_set_state(_gadget, USB_STATE_POWERED);
-+			spin_unlock_irq(&ci->lock);
- 			usb_udc_vbus_handler(_gadget, true);
-+		} else {
-+			spin_unlock_irq(&ci->lock);
- 		}
--		spin_unlock_irqrestore(&ci->lock, flags);
- 	} else {
- 		usb_udc_vbus_handler(_gadget, false);
- 		if (ci->driver)
--- 
-2.17.1
-
+This is against master of https://github.com/torvalds/linux.git
