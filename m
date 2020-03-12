@@ -2,94 +2,197 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D341182FE0
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2020 13:06:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2871830AB
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2020 13:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726952AbgCLMGv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Mar 2020 08:06:51 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:42146 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726254AbgCLMGu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Mar 2020 08:06:50 -0400
-Received: by mail-wr1-f68.google.com with SMTP id v11so7107307wrm.9;
-        Thu, 12 Mar 2020 05:06:49 -0700 (PDT)
+        id S1727099AbgCLMyn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Mar 2020 08:54:43 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:37703 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726641AbgCLMyn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Mar 2020 08:54:43 -0400
+Received: by mail-il1-f196.google.com with SMTP id a6so5339094ilc.4;
+        Thu, 12 Mar 2020 05:54:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=M2p/7SIg8MCZHxFUY3pP8RLBthQecsMKTDvHJF9Cxh4=;
-        b=cQu62EYVZoH9uWyGFbyd7rLtCEUYWD9fCPPmFQlWWv/s9rTLVzvviBTYVvVhlAUisS
-         Jp7Rjv9lwe+54BtrTfsubzxpPk2djT+d5lsR9hCrSRf9qvZN5b2NHGmkvOByolYU+98L
-         DtrHR1x1AkLEXKbWI4H46uDIE0kW8DMeuE7Houy8gTEyTIaGyPKnTk/TacWigIWISEQe
-         SS6Qm5yCkLBkAKZrqCw9yrGiIX0ZgsOYlJzHJIO+CplDfGBRnaeBc3lKkRyDeEI7JcYm
-         ntuS9KWNZO7pCoerj5U+DwiHb3Qb4WrOQYt6Zl3J2ZIuJdmimLe0o+wU+hk2rfUSWXtX
-         sfUQ==
+        bh=dGkwaq8lw7fMLDfPL6B7cGksh4Hi48p1DuxNEtaP3pU=;
+        b=Gf69EOqM6TQqgC3wTSdK4qgWrFm6DxXSZiHEFmOgcazELU2xKkWAc34F0RRQnw/lK3
+         4G/DvyEWuH19UdafLL1H23PvJhDfp0Pdr71urqsapvnAiLFBQgDM3wA0sW1ve9xjjl4S
+         /AKA22xX1nbuFgAgevXyKLe6S0tLzx+OYqrtVIfpUfBFcbjn+BsvxwL0kiNsQRnqrH4/
+         7zf3wLdW5yBqU5GwijW4WYHa85kLU+Mgv3aZXzqM17oeKYST466xcCKjrQK4my/vUV+A
+         oEWswayw/ljYT+wL81GJ0oFCBewwYM0i0acOAAReKGqAi7j8uNHXgz1jEKmjyD1yQ+TL
+         lPcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=M2p/7SIg8MCZHxFUY3pP8RLBthQecsMKTDvHJF9Cxh4=;
-        b=NB/0TvCH6vFAMy8r4xJXzI9X0XFRxOScU2r5pMa2JBpa50pvZPQiwmUILczyVj73sn
-         E6NNRMe5voS2h04S6B/VAMDc8YMEk8B0c4KBKcvwCHeNe72n2Q4NKDI+n2ClbDWPgwzq
-         lHzT/jZOMX0nWDFkCNxyGTB8FjG0jIppfD7AvViqL8COdh1Kf55s3qOuQolJ2ahg0+VJ
-         yB1GD3MhvrsKKECHsikrHFP3C1qP9ZBSJ0AiT9EqFrwzTW676Oy0Y1AXae3dRGbsOCM5
-         drSOX+Lu9kzHMzMa8rd196S0yeRpffFG2eR42USbXRsLnAjolp8/k5z5PS/qoTgQeMkx
-         ZN5Q==
-X-Gm-Message-State: ANhLgQ1ccaI1LseMuX4rNwfTy6dGc70dkEacUHjd8tS7sVfbkVaTC6sq
-        2bTz3KhCPimFBdaUiUHom1gxWOE3nxcwS7gIyRU=
-X-Google-Smtp-Source: ADFU+vt2XB+Cs+k9BSJreoLcKSt8xFNXmOK4MreSyN5BoEuSGaDnBeErsHZRQaBi8jrLmM1GoqXOcvzph96UGXsVIPA=
-X-Received: by 2002:a5d:420c:: with SMTP id n12mr10711313wrq.173.1584014808827;
- Thu, 12 Mar 2020 05:06:48 -0700 (PDT)
+        bh=dGkwaq8lw7fMLDfPL6B7cGksh4Hi48p1DuxNEtaP3pU=;
+        b=JXmy4lUJ4BkEkURIVpe8jme1sqwd/RfoR7binpn1Ae4wqfhRs+01Dp/VOAEwlf8wMK
+         +t/T5rTLfPUXuICaFVYK3wGJicysgDy9T99BTMHLvwWo0iTVnJL57ICLelBfuvhd8uvQ
+         dxpoCt/td8WYSe+3hPBFbRI/ndZ1VzZcDwQ7i+hH4gxrE8hnmRiRSzNlCmNi279wkz3q
+         vOAoPttVJ6HBiOGGwBUeCy6j6tdQVYoJ7hWFqG75IfnaFwCkpnvZJq5+/2PcFJZy0Fc1
+         XKC5smhRTNA3zc9dF6oQjdMmDdVR2NVrU4L29aiTrbuo/C3q8bRtzmaiqApqrvhdQr5e
+         9Pzg==
+X-Gm-Message-State: ANhLgQ2m3jOJad0c1OlnCSKmmd5JAbrDdBu8DGNU9musO3TSwLhn5H74
+        KuXtJwcQexQg0ebOKvVbnhxaiz3ezufTlOe01QriaXZ+
+X-Google-Smtp-Source: ADFU+vv+kpji+ynroJiBDzsRd7WhZYytunKgmF0KXs+VSTXf5eOLwMqu0/hlD41bGO5/ir6ecQTiSgXijOGmBe/G3yA=
+X-Received: by 2002:a92:c008:: with SMTP id q8mr4757821ild.221.1584017681454;
+ Thu, 12 Mar 2020 05:54:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200309204326.27403-1-thirtythreeforty@gmail.com>
- <20200309204326.27403-3-thirtythreeforty@gmail.com> <CAGb2v64_cWagG54iMmzmOwtUmv91xJchtzKW25M=y9DbfFDzkQ@mail.gmail.com>
-In-Reply-To: <CAGb2v64_cWagG54iMmzmOwtUmv91xJchtzKW25M=y9DbfFDzkQ@mail.gmail.com>
-From:   George Hilliard <thirtythreeforty@gmail.com>
-Date:   Thu, 12 Mar 2020 07:06:37 -0500
-Message-ID: <CACmrr9hSK1CzDGQ9_v6gNF7TBH65J-QAL_pwQJdKCc4ZxF_-ww@mail.gmail.com>
-Subject: Re: [RESEND PATCH 2/5] phy: sun4i-usb: add support for the USB PHY on
- suniv SoC
-To:     Chen-Yu Tsai <wens@csie.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20200310194854.831-1-linux.amoon@gmail.com> <20200310194854.831-6-linux.amoon@gmail.com>
+ <20200311144248.GA4455@kozik-lap> <CANAwSgQWYdh3awuMCjUvz6EvnwMq9rDOSBn5EkNcA7OfsjoEwA@mail.gmail.com>
+ <20200312113618.GA6206@pi3>
+In-Reply-To: <20200312113618.GA6206@pi3>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Thu, 12 Mar 2020 18:24:30 +0530
+Message-ID: <CANAwSgQOLRAW8zTBfPgBxXkJ8AaXyjGXc8+eQ9PUowOo5zDP6A@mail.gmail.com>
+Subject: Re: [PATCHv3 5/5] clk: samsung: exynos542x: Move FSYS subsystem
+ clocks to its sub-CMU
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thanks for the review.
+Hi Krzysztof,
 
-On Thu, Mar 12, 2020 at 1:51 AM Chen-Yu Tsai <wens@csie.org> wrote:
+On Thu, 12 Mar 2020 at 17:06, Krzysztof Kozlowski <krzk@kernel.org> wrote:
 >
-> On Tue, Mar 10, 2020 at 4:43 AM George Hilliard
-> <thirtythreeforty@gmail.com> wrote:
+> On Thu, Mar 12, 2020 at 04:04:57PM +0530, Anand Moon wrote:
+> > Hi Krzysztof,
 > >
-> > The suniv SoC has one USB OTG port connected to a MUSB controller.
+> > Thanks for your review comments.
 > >
-> > Add support for its USB PHY.
+> > On Wed, 11 Mar 2020 at 20:12, Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> > >
+> > > On Tue, Mar 10, 2020 at 07:48:54PM +0000, Anand Moon wrote:
+> > > > FSYS power domain support usbdrd3, pdma and usb2 power gaiting,
+> > > > hence move FSYS clk setting to sub-CMU block to support power domain
+> > > > on/off sequences for device nodes.
+> > > >
+> > > > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > > > ---
+> > > > New patch in the series
+> > > > ---
+> > > >  drivers/clk/samsung/clk-exynos5420.c | 45 +++++++++++++++++++++-------
+> > > >  1 file changed, 34 insertions(+), 11 deletions(-)
+> > > >
+> > > > diff --git a/drivers/clk/samsung/clk-exynos5420.c b/drivers/clk/samsung/clk-exynos5420.c
+> > > > index c9e5a1fb6653..6c4c47dfcdce 100644
+> > > > --- a/drivers/clk/samsung/clk-exynos5420.c
+> > > > +++ b/drivers/clk/samsung/clk-exynos5420.c
+> > > > @@ -859,12 +859,6 @@ static const struct samsung_div_clock exynos5x_div_clks[] __initconst = {
+> > > >       DIV(0, "dout_maudio0", "mout_maudio0", DIV_MAU, 20, 4),
+> > > >       DIV(0, "dout_maupcm0", "dout_maudio0", DIV_MAU, 24, 8),
+> > > >
+> > > > -     /* USB3.0 */
+> > > > -     DIV(0, "dout_usbphy301", "mout_usbd301", DIV_FSYS0, 12, 4),
+> > > > -     DIV(0, "dout_usbphy300", "mout_usbd300", DIV_FSYS0, 16, 4),
+> > > > -     DIV(0, "dout_usbd301", "mout_usbd301", DIV_FSYS0, 20, 4),
+> > > > -     DIV(0, "dout_usbd300", "mout_usbd300", DIV_FSYS0, 24, 4),
+> > >
+> > > According to clock diagram these are still in CMU TOP, not FSYS.
+> > >
+> > > > -
+> > > >       /* MMC */
+> > > >       DIV(0, "dout_mmc0", "mout_mmc0", DIV_FSYS1, 0, 10),
+> > > >       DIV(0, "dout_mmc1", "mout_mmc1", DIV_FSYS1, 10, 10),
+> > > > @@ -1031,8 +1025,6 @@ static const struct samsung_gate_clock exynos5x_gate_clks[] __initconst = {
+> > > />
+> > > >       /* FSYS Block */
+> > > >       GATE(CLK_TSI, "tsi", "aclk200_fsys", GATE_BUS_FSYS0, 0, 0, 0),
+> > > > -     GATE(CLK_PDMA0, "pdma0", "aclk200_fsys", GATE_BUS_FSYS0, 1, 0, 0),
+> > > > -     GATE(CLK_PDMA1, "pdma1", "aclk200_fsys", GATE_BUS_FSYS0, 2, 0, 0),
+> > > >       GATE(CLK_UFS, "ufs", "aclk200_fsys2", GATE_BUS_FSYS0, 3, 0, 0),
+> > > >       GATE(CLK_RTIC, "rtic", "aclk200_fsys", GATE_IP_FSYS, 9, 0, 0),
+> > > >       GATE(CLK_MMC0, "mmc0", "aclk200_fsys2", GATE_IP_FSYS, 12, 0, 0),
+> > > > @@ -1040,9 +1032,6 @@ static const struct samsung_gate_clock exynos5x_gate_clks[] __initconst = {
+> > > >       GATE(CLK_MMC2, "mmc2", "aclk200_fsys2", GATE_IP_FSYS, 14, 0, 0),
+> > > >       GATE(CLK_SROMC, "sromc", "aclk200_fsys2",
+> > > >                       GATE_IP_FSYS, 17, CLK_IGNORE_UNUSED, 0),
+> > > > -     GATE(CLK_USBH20, "usbh20", "aclk200_fsys", GATE_IP_FSYS, 18, 0, 0),
+> > > > -     GATE(CLK_USBD300, "usbd300", "aclk200_fsys", GATE_IP_FSYS, 19, 0, 0),
+> > > > -     GATE(CLK_USBD301, "usbd301", "aclk200_fsys", GATE_IP_FSYS, 20, 0, 0),
+> > > >       GATE(CLK_SCLK_UNIPRO, "sclk_unipro", "dout_unipro",
+> > > >                       SRC_MASK_FSYS, 24, CLK_SET_RATE_PARENT, 0),
+> > > >
+> > > > @@ -1258,6 +1247,28 @@ static struct exynos5_subcmu_reg_dump exynos5x_gsc_suspend_regs[] = {
+> > > >       { DIV2_RATIO0, 0, 0x30 },       /* DIV dout_gscl_blk_300 */
+> > > >  };
+> > > >
+> > > > +/* USB3.0 */
+> > > > +static const struct samsung_div_clock exynos5x_fsys_div_clks[] __initconst = {
+> > > > +     DIV(0, "dout_usbphy301", "mout_usbd301", DIV_FSYS0, 12, 4),
+> > > > +     DIV(0, "dout_usbphy300", "mout_usbd300", DIV_FSYS0, 16, 4),
+> > > > +     DIV(0, "dout_usbd301", "mout_usbd301", DIV_FSYS0, 20, 4),
+> > > > +     DIV(0, "dout_usbd300", "mout_usbd300", DIV_FSYS0, 24, 4),
+> > > > +};
+> > > > +
+> > > > +static const struct samsung_gate_clock exynos5x_fsys_gate_clks[] __initconst = {
+> > > > +     GATE(CLK_PDMA0, "pdma0", "aclk200_fsys", GATE_BUS_FSYS0, 1, 0, 0),
+> > > > +     GATE(CLK_PDMA1, "pdma1", "aclk200_fsys", GATE_BUS_FSYS0, 2, 0, 0),
+> > > > +     GATE(CLK_USBH20, "usbh20", "aclk200_fsys", GATE_IP_FSYS, 18, 0, 0),
+> > > > +     GATE(CLK_USBD300, "usbd300", "aclk200_fsys", GATE_IP_FSYS, 19, 0, 0),
+> > > > +     GATE(CLK_USBD301, "usbd301", "aclk200_fsys", GATE_IP_FSYS, 20, 0, 0),
+> > > > +};
+> > > > +
+> > > > +static struct exynos5_subcmu_reg_dump exynos5x_fsys_suspend_regs[] = {
+> > > > +     { GATE_IP_FSYS, 0xffffffff, 0xffffffff }, /* FSYS gates */
+> > >
+> > > This looks wrong. GATE_IP_FSYS has fields also for FSYS2 clocks which
+> > > you are not suspending. They do not belong to this CMU.
+> > >
 > >
-> > Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+> > Ok. I change the from GATE_IP_FSYS to GATE_BUS_FSYS0 in the above
+> > exynos5x_fsys_gate_clks to make this consistent to used GATE_BUS_FSYS0 for CMU,
+> > with this change it works as per previously.
 >
-> Not sure why Icenowy's SoB is here. If she was the original author, you
-> are supposed to keep her name as the author.
+> Wait, you should set here proper registers with proper mask.
 
-So, I was unclear on the convention here.  This patch is based on her
-patch, but I've modified it and rebased those modifications back into
-a single change.  I'm happy to change the author field - does it need
-a "Co-authored-by: myself" here?
+Yes I will set the proper mask for each as per the Exynos 5422 User Manual.
+
+Here is what I feel
+CLK_GATE_BUS_FSYS0 controls the PHY clock
+CLK_GATE_IP_FSYS controls the IP clock.
+
+So both these field should be part of this FSYS CMU.
 
 > >
-> >  static const struct of_device_id sun4i_usb_phy_of_match[] = {
-> > +       { .compatible = "allwinner,suniv-f1c100s-usb-phy",
-> > +         .data = &suniv_f1c100s_cfg },
-> >         { .compatible = "allwinner,sun4i-a10-usb-phy", .data = &sun4i_a10_cfg },
+> > > Don't you need to save also parts of GATE_BUS_FSYS0?
+> >
+> > GATE_BUS_FSYS0 and GATE_IP_FSYS are already part of list
+> > of control register which are saved and restored during suspend and resume
+> > so no point in adding this here, I should drop the GATE_IP_FSYS reg
+> > dump over here.
 >
-> Please use the same style (and ignore checkpatch.pl on this one).
+> Since registers are used in separate sub CMU devices, each should
+> save/restore its part.
 
-Very happy to change this, it was bugging me!
+Ok I will add both GATE_BUS_FSYS0 and GATE_IP_FSYS
+reset value over here.
 
-George
+>
+> Best regards,
+> Krzysztof
+>
+
+-Anand
