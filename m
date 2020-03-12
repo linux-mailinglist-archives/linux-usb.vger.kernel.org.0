@@ -2,111 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0466C1834C9
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2020 16:20:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F05521834CF
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2020 16:21:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728098AbgCLPUl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Mar 2020 11:20:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47288 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727916AbgCLPUl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 12 Mar 2020 11:20:41 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 22F3620674;
-        Thu, 12 Mar 2020 15:20:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584026440;
-        bh=D146BfKMJlSPyUF2Jrja5/Ivt/KIvNV5UiPRFuBJbSc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h8IfcYq9E1F+ZmlA075iY3AxPX5xBVSp6iUNyWfnERx1HbDvs7i3XODVjK+QMKVq8
-         klSb7q20hTO5SMYuTqg5gTDtH8X/uwKnWlMaocFie08d0SaIFhEyBWOneLBuwZMV/N
-         o/7LjogcalPOxJ+i26TJWim1+qyJKXreZdLqZY4s=
-Date:   Thu, 12 Mar 2020 16:20:37 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Vladimir Stankovic <vladimir.stankovic@displaylink.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        mausb-host-devel <mausb-host-devel@displaylink.com>
-Subject: Re: [PATCH v3 1/8] usb: Add MA-USB Host kernel module
-Message-ID: <20200312152037.GA383349@kroah.com>
-References: <efe5dbe1-4bd7-43cb-1eea-b6b999dd15e6@displaylink.com>
+        id S1727857AbgCLPVO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Mar 2020 11:21:14 -0400
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:33040 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727481AbgCLPVO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Mar 2020 11:21:14 -0400
+Received: by mail-pj1-f66.google.com with SMTP id dw20so786151pjb.0;
+        Thu, 12 Mar 2020 08:21:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=KTSXYITnm1/WH2ZYXdKY58PQDpfbcjgvILt8IUd6Gv8=;
+        b=txOfn6HwNPsQib243OpzDfGuSGY6p9smMxYoA3ddljytArdiD0er4BnNFxU8ruoUIh
+         WbsncdiMSheep5ugCIJ+EoSiLXH4hq9YSHQdmB8ApO3dqMnkQQffpA6jdhCP4/TWKQ0y
+         cUbwl3126ld/OGB7Il5oedflpH0XZSHqB2dWOxPrJeectnqAXqVpjowJLjwsEqblrLN1
+         1pzYwMyOCmTwUwNkt+uolnzFF/+Lt3vuiCymVrYRoghko9Lubh8UTk0x9Jltx/AcCs2x
+         S4I366lcIADP+mLrndXp92ZNId4ygyTAKScxRFSFdBoPMHiAJjyo0m+Sw/iTHmeHzSv+
+         gX5A==
+X-Gm-Message-State: ANhLgQ2EGL8BTUTw/ixh1SMTfmkQtX5B3+VySNjO/m5UZPAKdzQuhIbT
+        z840xjuPCZOK+a4MNfd4t/5mxNP9a5g=
+X-Google-Smtp-Source: ADFU+vt8U8p/BnVf1oBclHSd/EQvbH2de32xIyr1ct/abNcEZlkhcdyMK106Jk58dEvrKu4oTeyjQQ==
+X-Received: by 2002:a17:90a:dac6:: with SMTP id g6mr4774863pjx.30.1584026472679;
+        Thu, 12 Mar 2020 08:21:12 -0700 (PDT)
+Received: from ?IPv6:2601:647:4000:d7:7dc2:675a:7f2a:2f89? ([2601:647:4000:d7:7dc2:675a:7f2a:2f89])
+        by smtp.gmail.com with ESMTPSA id b133sm54297412pga.43.2020.03.12.08.21.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Mar 2020 08:21:11 -0700 (PDT)
+Subject: Re: [PATCH v1] asm-generic: Provide generic {get, put}_unaligned_{l,
+ b}e24()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+        linux-nvme@lists.infradead.org, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org
+References: <20200312113941.81162-1-andriy.shevchenko@linux.intel.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
+ mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
+ LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
+ fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
+ AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
+ 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
+ AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
+ igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
+ Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
+ jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
+ macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
+ CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
+ RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
+ PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
+ eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
+ lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
+ T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
+ ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
+ CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
+ oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
+ //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
+ mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
+ goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
+Message-ID: <4c81594e-6b30-d1ff-31f6-0d8cfbf5ba3c@acm.org>
+Date:   Thu, 12 Mar 2020 08:21:10 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <efe5dbe1-4bd7-43cb-1eea-b6b999dd15e6@displaylink.com>
+In-Reply-To: <20200312113941.81162-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 12, 2020 at 03:42:30PM +0100, Vladimir Stankovic wrote:
-> Added utility macros, kernel device creation and cleanup, functions for
-> handling log formatting and a placeholder module for MA-USB Host device
-> driver.
-> 
-> Signed-off-by: Vladimir Stankovic <vladimir.stankovic@displaylink.com>
-> ---
->  MAINTAINERS                         |  7 +++
->  drivers/usb/Kconfig                 |  2 +
->  drivers/usb/Makefile                |  2 +
->  drivers/usb/mausb_host/Kconfig      | 14 +++++
->  drivers/usb/mausb_host/Makefile     | 12 ++++
->  drivers/usb/mausb_host/mausb_core.c | 90 +++++++++++++++++++++++++++++
->  drivers/usb/mausb_host/utils.c      | 85 +++++++++++++++++++++++++++
->  drivers/usb/mausb_host/utils.h      | 40 +++++++++++++
->  8 files changed, 252 insertions(+)
->  create mode 100644 drivers/usb/mausb_host/Kconfig
->  create mode 100644 drivers/usb/mausb_host/Makefile
->  create mode 100644 drivers/usb/mausb_host/mausb_core.c
->  create mode 100644 drivers/usb/mausb_host/utils.c
->  create mode 100644 drivers/usb/mausb_host/utils.h
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 235ab38ed478..12aac44196d7 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10226,6 +10226,13 @@ W:	https://linuxtv.org
->  S:	Maintained
->  F:	drivers/media/radio/radio-maxiradio*
->  +MA USB HOST DRIVER
-> +M:	Vladimir Stankovic <vladimir.stankovic@displaylink.com>
-> +L:	mausb-host-devel@displaylink.com
-> +W:	https://www.displaylink.com
-> +S:	Maintained
-> +F:	drivers/usb/mausb_host/*
-> +
->  MCAN MMIO DEVICE DRIVER
->  M:	Dan Murphy <dmurphy@ti.com>
->  M:	Sriram Dash <sriram.dash@samsung.com>
+On 2020-03-12 04:39, Andy Shevchenko wrote:
+> +static inline u32 get_unaligned_be24(const u8 *buf)
+> +{
+> +	return (u32)p[0] << 16 | (u32)p[1] << 8 | (u32)p[2];
+> +}
 
-Does that patch look correct?
+The argument is called 'buf' and the function body dereferences a
+pointer called 'p'. Does this even compile?
 
-Does this apply?
-
-Something is odd here :(
-
-
-> diff --git a/drivers/usb/Kconfig b/drivers/usb/Kconfig
-> index 275568abc670..4e92f1fa0fa5 100644
-> --- a/drivers/usb/Kconfig
-> +++ b/drivers/usb/Kconfig
-> @@ -164,6 +164,8 @@ source "drivers/usb/misc/Kconfig"
->   source "drivers/usb/atm/Kconfig"
->  +source "drivers/usb/mausb_host/Kconfig"
-> +
->  endif # USB
->   source "drivers/usb/phy/Kconfig"
-
-Yeah, something is really wrong with your email client :(
-
-Can you use 'git send-email' to send all of these out so they do not get
-corrupted?
-
-That will also fix the lack of email threading which this series still
-has as well.
-
-thanks,
-
-greg k-h
+Bart.
