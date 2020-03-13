@@ -2,98 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6D0184C35
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2020 17:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9B9184D44
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2020 18:07:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726832AbgCMQSl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Mar 2020 12:18:41 -0400
-Received: from mga07.intel.com ([134.134.136.100]:11114 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726622AbgCMQSk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 13 Mar 2020 12:18:40 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Mar 2020 09:18:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,549,1574150400"; 
-   d="scan'208";a="261935961"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga002.jf.intel.com with ESMTP; 13 Mar 2020 09:18:35 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jCn1A-009IkE-Vj; Fri, 13 Mar 2020 18:18:36 +0200
-Date:   Fri, 13 Mar 2020 18:18:36 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Al Cooper <alcooperx@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        "David S. Miller" <davem@davemloft.net>,
-        devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-usb@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH 0/4] Add XHCI, EHCI and OHCI support for Broadcom STB
- SoS's
-Message-ID: <20200313161836.GX1922688@smile.fi.intel.com>
-References: <20200313141545.31943-1-alcooperx@gmail.com>
+        id S1726860AbgCMRHf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Mar 2020 13:07:35 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:53501 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726526AbgCMRHe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Mar 2020 13:07:34 -0400
+Received: by mail-wm1-f65.google.com with SMTP id 25so10808384wmk.3;
+        Fri, 13 Mar 2020 10:07:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SftGljlnlL7hMnN4mOOIGMf/UgKRZHL5wuxB7TMWOqQ=;
+        b=nYqUPZVuYxN6szJQeHIaUPARwytJHySa7CM99anocIVEvJEkSbhiR1VYEZd9Y8ukWZ
+         gfRdfo5L8R4p3/HukQelSvlqnG3iLoV+QqWcsOCXc8ABunhEh9Jz4w7/UqDs+B5x4414
+         v8AoI6BXa2i78Rd3HI6FMDQ40cLjqt+buYb1KG8p/77hPbiJeRYi8XqNPSTCjA7//ZLT
+         y4vTLCKSVMtoZiYC4SpM1v7RaKzc3kvyKYgHxDFBNcPqUMoXHsgnAFoNx+sBtjBDHOB+
+         7Ui9cWGrQyPCvJ78Fp5HYqTQRT4cdeVAyIWFcakkq3nTZ4jtED/T7I94L84ojv/syx9v
+         apAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SftGljlnlL7hMnN4mOOIGMf/UgKRZHL5wuxB7TMWOqQ=;
+        b=M5kfs6Kow8l/7vCfaepLk9F4MlilyzoEg9U9AAVUynRh61x8Jrg4p7mtpR8ubHMyry
+         dpMcRDQpVDs0t0DCZbAOeceQ1G7LcplsIJ9klQVbQS/P7n3S9ypUSltybYzeimH8PFPj
+         TwiTpIK5vaFLz+kb+uhxqJ1Id5NoOkg7GzfgMi8QHnKBoGYVCVYacm9PjWHyOtBUKz3t
+         sS7kvqhLBre0c8dfJafaAtUi90QJy/haV7zxskWzoDJTLKawOdcu6riXJrKtv2TGUw1G
+         hBc68TcK0wYm1Dv2LEGPemtk3ebznJXY+MTR3M7HZaY/azhJWXgEuxhXeQ5NBCJn9vrI
+         l+3A==
+X-Gm-Message-State: ANhLgQ18cpBP5UB66JoTrkbt1y3tCGTwZTONXF6QO5Vn0QxjBplaXmnB
+        ICYDPBdv9r5iGwc7/zgySk4=
+X-Google-Smtp-Source: ADFU+vv5yr0dpy28YsR7Pkj4nv5g/iVBy3bk0E8bgCYHd8ogJ5JRgvmS64hbXxHshk533tHdSWdAHw==
+X-Received: by 2002:a7b:cc8a:: with SMTP id p10mr11763201wma.10.1584119252659;
+        Fri, 13 Mar 2020 10:07:32 -0700 (PDT)
+Received: from localhost (pD9E516A9.dip0.t-ipconnect.de. [217.229.22.169])
+        by smtp.gmail.com with ESMTPSA id y69sm18262525wmd.46.2020.03.13.10.07.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Mar 2020 10:07:31 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [GIT PULL] usb: tegra: Changes for v5.7-rc1
+Date:   Fri, 13 Mar 2020 18:07:30 +0100
+Message-Id: <20200313170730.2924259-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.24.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200313141545.31943-1-alcooperx@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 13, 2020 at 10:15:41AM -0400, Al Cooper wrote:
-> This adds support for the XHCI, EHCI and OHCI host controllers found
-> in Broadcom STB SoC's. These drivers depend on getting access to the
-> new Broadcom STB USB PHY driver through a device-tree phandle and
-> will fail if the driver is not available.
+Hi Greg, Felipe,
 
-Hint to the future:
+The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9:
 
-	scripts/get_maintainer.pl --git --git-min-percent=67 ...
+  Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
 
-> 
-> Al Cooper (4):
->   dt-bindings: Add Broadcom STB USB support
->   usb: xhci: xhci-plat: Add support for Broadcom STB SoC's
->   usb: ehci: Add new EHCI driver for Broadcom STB SoC's
->   usb: host: Add ability to build new Broadcom STB USB drivers
-> 
->  .../bindings/usb/brcm,bcm7445-ehci.yaml       |  60 ++++
->  .../devicetree/bindings/usb/usb-xhci.txt      |   1 +
->  MAINTAINERS                                   |   9 +
->  drivers/usb/host/Kconfig                      |  20 ++
->  drivers/usb/host/Makefile                     |  20 +-
->  drivers/usb/host/ehci-brcm.c                  | 288 ++++++++++++++++++
->  drivers/usb/host/xhci-brcm.c                  |  16 +
->  drivers/usb/host/xhci-brcm.h                  |  16 +
->  drivers/usb/host/xhci-plat.c                  |  11 +
->  9 files changed, 435 insertions(+), 6 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
->  create mode 100644 drivers/usb/host/ehci-brcm.c
->  create mode 100644 drivers/usb/host/xhci-brcm.c
->  create mode 100644 drivers/usb/host/xhci-brcm.h
-> 
-> -- 
-> 2.17.1
-> 
+are available in the Git repository at:
 
--- 
-With Best Regards,
-Andy Shevchenko
+  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/for-5.7-usb
 
+for you to fetch changes up to 9dd4fbef2f88ccf46f5294805bf121d6554791e8:
 
+  usb: gadget: tegra-xudc: Support multiple device modes (2020-03-13 17:16:28 +0100)
+
+It occurred to me that I could just as well send this pull request to
+you guys, rather than take it via ARM SoC. Kishon already acked all the
+patches for the PHY tree that this series depends on, so I've included
+them here as a dependency.
+
+Let me know if you'd prefer that I take this through ARM SoC.
+
+Thanks,
+Thierry
+
+----------------------------------------------------------------
+usb: tegra: Changes for v5.7-rc1
+
+These changes add USB OTG support for the XUSB host and XUSB device
+controllers found on NVIDIA Tegra SoCs.
+
+----------------------------------------------------------------
+JC Kuo (2):
+      phy: tegra: xusb: Protect Tegra186 soc with config
+      phy: tegra: xusb: Add Tegra194 support
+
+Jon Hunter (1):
+      phy: tegra: xusb: Don't warn on probe defer
+
+Nagarjuna Kristam (10):
+      phy: tegra: xusb: Add usb-role-switch support
+      phy: tegra: xusb: Add usb-phy support
+      phy: tegra: xusb: Add support to get companion USB 3 port
+      phy: tegra: xusb: Add set_mode support for USB 2 phy on Tegra210
+      phy: tegra: xusb: Add set_mode support for UTMI phy on Tegra186
+      usb: xhci-tegra: Add OTG support
+      usb: gadget: tegra-xudc: Remove usb-role-switch support
+      usb: gadget: tegra-xudc: Add usb-phy support
+      usb: gadget: tegra-xudc: Use phy_set_mode() to set/unset device mode
+      usb: gadget: tegra-xudc: Support multiple device modes
+
+Thierry Reding (1):
+      Merge branch 'for-5.7/phy' into for-5.7/usb
+
+ drivers/phy/tegra/Kconfig           |   1 +
+ drivers/phy/tegra/Makefile          |   1 +
+ drivers/phy/tegra/xusb-tegra186.c   | 261 ++++++++++++++++++++++++++--------
+ drivers/phy/tegra/xusb-tegra210.c   | 131 +++++++++++++----
+ drivers/phy/tegra/xusb.c            | 189 +++++++++++++++++++++++++
+ drivers/phy/tegra/xusb.h            |  10 ++
+ drivers/usb/gadget/udc/Kconfig      |   1 -
+ drivers/usb/gadget/udc/tegra-xudc.c | 273 +++++++++++++++++++++++++-----------
+ drivers/usb/host/xhci-tegra.c       | 228 +++++++++++++++++++++++++++++-
+ include/linux/phy/tegra/xusb.h      |   2 +
+ 10 files changed, 926 insertions(+), 171 deletions(-)
