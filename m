@@ -2,125 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9B9184D44
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2020 18:07:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 377DA184F80
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2020 20:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726860AbgCMRHf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Mar 2020 13:07:35 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:53501 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726526AbgCMRHe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Mar 2020 13:07:34 -0400
-Received: by mail-wm1-f65.google.com with SMTP id 25so10808384wmk.3;
-        Fri, 13 Mar 2020 10:07:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SftGljlnlL7hMnN4mOOIGMf/UgKRZHL5wuxB7TMWOqQ=;
-        b=nYqUPZVuYxN6szJQeHIaUPARwytJHySa7CM99anocIVEvJEkSbhiR1VYEZd9Y8ukWZ
-         gfRdfo5L8R4p3/HukQelSvlqnG3iLoV+QqWcsOCXc8ABunhEh9Jz4w7/UqDs+B5x4414
-         v8AoI6BXa2i78Rd3HI6FMDQ40cLjqt+buYb1KG8p/77hPbiJeRYi8XqNPSTCjA7//ZLT
-         y4vTLCKSVMtoZiYC4SpM1v7RaKzc3kvyKYgHxDFBNcPqUMoXHsgnAFoNx+sBtjBDHOB+
-         7Ui9cWGrQyPCvJ78Fp5HYqTQRT4cdeVAyIWFcakkq3nTZ4jtED/T7I94L84ojv/syx9v
-         apAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SftGljlnlL7hMnN4mOOIGMf/UgKRZHL5wuxB7TMWOqQ=;
-        b=M5kfs6Kow8l/7vCfaepLk9F4MlilyzoEg9U9AAVUynRh61x8Jrg4p7mtpR8ubHMyry
-         dpMcRDQpVDs0t0DCZbAOeceQ1G7LcplsIJ9klQVbQS/P7n3S9ypUSltybYzeimH8PFPj
-         TwiTpIK5vaFLz+kb+uhxqJ1Id5NoOkg7GzfgMi8QHnKBoGYVCVYacm9PjWHyOtBUKz3t
-         sS7kvqhLBre0c8dfJafaAtUi90QJy/haV7zxskWzoDJTLKawOdcu6riXJrKtv2TGUw1G
-         hBc68TcK0wYm1Dv2LEGPemtk3ebznJXY+MTR3M7HZaY/azhJWXgEuxhXeQ5NBCJn9vrI
-         l+3A==
-X-Gm-Message-State: ANhLgQ18cpBP5UB66JoTrkbt1y3tCGTwZTONXF6QO5Vn0QxjBplaXmnB
-        ICYDPBdv9r5iGwc7/zgySk4=
-X-Google-Smtp-Source: ADFU+vv5yr0dpy28YsR7Pkj4nv5g/iVBy3bk0E8bgCYHd8ogJ5JRgvmS64hbXxHshk533tHdSWdAHw==
-X-Received: by 2002:a7b:cc8a:: with SMTP id p10mr11763201wma.10.1584119252659;
-        Fri, 13 Mar 2020 10:07:32 -0700 (PDT)
-Received: from localhost (pD9E516A9.dip0.t-ipconnect.de. [217.229.22.169])
-        by smtp.gmail.com with ESMTPSA id y69sm18262525wmd.46.2020.03.13.10.07.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Mar 2020 10:07:31 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [GIT PULL] usb: tegra: Changes for v5.7-rc1
-Date:   Fri, 13 Mar 2020 18:07:30 +0100
-Message-Id: <20200313170730.2924259-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.24.1
+        id S1727211AbgCMTuY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Mar 2020 15:50:24 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:49944 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726477AbgCMTuX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Mar 2020 15:50:23 -0400
+Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com [10.192.0.17])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id B7638C0F9A;
+        Fri, 13 Mar 2020 19:50:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1584129023; bh=LInyYJDp3UfNyySVarO+lMqjxi39vG0dt8rK5AbLBWQ=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=JIOa7vSF/irJFNT6veodYZJnTx0FQW3UKAYvZgqQvt2D+qWC1KOUkOks/1LdonAFD
+         WXR84ds875DlQTrlMRNSFE37vrZjF2zkT0V51RPZw5IbV4aMlnZrX+ZovNByDWT/I8
+         DvtMVUIdYHktUI4WkBLe3dSspdwbLJfHuhlsRfFxvx5HeGLCnQQKSupKLQcRvqswie
+         BUFPeEr1xtUtSsOUSDiFDZkzJjN7sLWBMaQ/7b7KRq4lGJ5we3LRo2FGNPiWV5mBHr
+         qfny/nD6ug15xG6EhtEeYBG36fw4SzumUvUJ4QYEHkpG0+3mEpINvQOKr8hA1uZ/4M
+         lT+3Y0C6UzR3g==
+Received: from US01WEHTC3.internal.synopsys.com (us01wehtc3.internal.synopsys.com [10.15.84.232])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 38ADBA0079;
+        Fri, 13 Mar 2020 19:50:22 +0000 (UTC)
+Received: from US01HYBRID2.internal.synopsys.com (10.15.246.24) by
+ US01WEHTC3.internal.synopsys.com (10.15.84.232) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Fri, 13 Mar 2020 12:50:22 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (10.202.3.67) by
+ mrs.synopsys.com (10.15.246.24) with Microsoft SMTP Server (TLS) id
+ 14.3.408.0; Fri, 13 Mar 2020 12:50:22 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WdF8sRAsLFAq/bh4ov0kt358GKRh+0mYJckKCyzRRW3Syfc9zwz+fpw4yHUskeHRua7dBn8ndiVsLjJ48Nme3HMc991fgJBVPoZz8Y3L4zk4kSYQnxb0Nt1oZZQfC74aPqL1i1t7rxHO3L2VUEYXchH2Lsl0+tEUNxpop1mr73PfPBojx7UjbQqBykbYd3wwU54WjQCezmcazllbAl72wBC64qD9ZSj6bAbdG9LDwsC54YIGCAW/Pmarer6ipKwyVj/WRY8LzpvzPFvNzO54AxgThZ+8dQGZ7Gjy8KY++myw1Vp/B9tkFLsUMBUq6o96y4YuPC4+rUl6WX+UjW86cA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LInyYJDp3UfNyySVarO+lMqjxi39vG0dt8rK5AbLBWQ=;
+ b=NWRb9+isiKD+VD3cuGI4qFa6qGrG5M1ycipuw8RIqL16kYoYpAa/eC5DGiCnfoEhTXKo9fZELVZJ8oPSAlYVXdi4n9w8OM39M2WD6dtqFWL/HV8Bu2uHLvnX6nmAl+AjuS4snb0D9WbHSPRK2rQl86HloDGWUyrBE06lmAPGLtI1mL8wqKFu1b6mB0Bdjv5oJHfrXH4AnshB7bcRdOUo1VMf4iA9cKHYh148jt8oNO7C/BYwYd4zqKnDvDUcwDukJ5dVbZsWxYf+h8pQYjuqIlEsN72E5u5j7DrTHQ8TEHy4K9NbC2VZWZDMsmXQ9BzjLb+CBYejqP4VvLIYxgyJxQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LInyYJDp3UfNyySVarO+lMqjxi39vG0dt8rK5AbLBWQ=;
+ b=VyNuZuEDV8Dakt3X8g7yksa/QLl6Vda1/DLRWKAmNkpYEiXwnpFP5NY+Rlfny1aqTNjF3ANu/EhYkH9KdA7IN1aKHv+Nm//4d3TB6ZJn5REigQuVkeWyT1yHDVGRHVtozzlZH/3lzMVj7ZfXJRDc4RCoPLkytRmeFMwHnd/gqE4=
+Received: from BYAPR12MB2710.namprd12.prod.outlook.com (2603:10b6:a03:68::11)
+ by BYAPR12MB2965.namprd12.prod.outlook.com (2603:10b6:a03:ae::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2814.13; Fri, 13 Mar
+ 2020 19:50:20 +0000
+Received: from BYAPR12MB2710.namprd12.prod.outlook.com
+ ([fe80::e5d1:8cdd:a09d:7a08]) by BYAPR12MB2710.namprd12.prod.outlook.com
+ ([fe80::e5d1:8cdd:a09d:7a08%7]) with mapi id 15.20.2793.018; Fri, 13 Mar 2020
+ 19:50:20 +0000
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+CC:     John Youn <John.Youn@synopsys.com>
+Subject: Re: [PATCH 1/3] usb: dwc3: gadget: Properly handle failed
+ kick_transfer
+Thread-Topic: [PATCH 1/3] usb: dwc3: gadget: Properly handle failed
+ kick_transfer
+Thread-Index: AQHV+N3BzBLybznwZ0OCZe4JISGATKhGk1EAgABcM4A=
+Date:   Fri, 13 Mar 2020 19:50:20 +0000
+Message-ID: <c17da637-abf1-75b0-e8bf-737958773e8e@synopsys.com>
+References: <cover.1584065705.git.thinhn@synopsys.com>
+ <015470a7d9b950df757b1abfecd6ef398ef04710.1584065705.git.thinhn@synopsys.com>
+ <874kusgwuz.fsf@kernel.org>
+In-Reply-To: <874kusgwuz.fsf@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=thinhn@synopsys.com; 
+x-originating-ip: [149.117.75.11]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0708e117-f751-438b-5206-08d7c787c304
+x-ms-traffictypediagnostic: BYAPR12MB2965:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR12MB2965029A1E12E0DA54F87EC5AAFA0@BYAPR12MB2965.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 034119E4F6
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(366004)(346002)(376002)(39860400002)(136003)(199004)(6486002)(8936002)(76116006)(6506007)(5660300002)(31696002)(86362001)(2616005)(26005)(36756003)(186003)(8676002)(31686004)(81156014)(71200400001)(81166006)(478600001)(4326008)(66476007)(2906002)(107886003)(66946007)(110136005)(66446008)(6512007)(316002)(66556008)(64756008);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR12MB2965;H:BYAPR12MB2710.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
+received-spf: None (protection.outlook.com: synopsys.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0PL+ddPFO1sjNoSvR5jR4gtmGvnvCeKd2UKQ5T+kf+d2dwOh8ug5tP2hcMiue2Rw+VKRqry6PPryhUjzwwm7WWhqkvbYq1FPSpkdwtNvhW0Q69U6D7qxulD+NU3SLIa+R+I81AV02RvaAe9lMsWmxdrwCg4Dafg+enNl/iyWbt0xxnS8P81V5ioO6xOJVXn6M+LHjA+3gug4NWLj1c/WJu0K/CW/KFYRoyha+u3FhbwkXOFTccidICzU4BV98+2ezgqkEc3A519Xi5FcFqroUcUDtNmkIJk/TcbuDFwPI/XFeuq4KvthVD/lLext410Eu7gexe1CHQAq4TLSE/Byditmp44/mEJ7WplLkzLrHohjNmMJJnzg/F9dz8nSTikqBKOVUAcpezTzFVKj/F5QmnUskqa6n4OzT7G0YAi40lmWiwHSSWpmOoOvZq6u7RtE
+x-ms-exchange-antispam-messagedata: zFMilmBfAUCR2WUh4A/lYRT2RB0sFZTwfmD2nvlmsjWL1UuSw4p/RBhIbUtSAtdjGFTX+dK9u5aE1Ie8BKZZsqpbHDjVPpf6znsO87maXNZdU0/x5nKAzGnTMdhu5edzCl8f+XwKqBOcvvz8q3V7xQ==
 Content-Type: text/plain; charset="utf-8"
+Content-ID: <944859A900162C46A1F925C29D20468A@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0708e117-f751-438b-5206-08d7c787c304
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2020 19:50:20.0748
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QbXEjIqUKW4gerodxwoQsX69hE30B7EiMeBzAxyS5YMpagDnh7c8R3o4LO5PPjVggXUHQQVF3RMhHy2FT7bhFA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2965
+X-OriginatorOrg: synopsys.com
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg, Felipe,
-
-The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9:
-
-  Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/for-5.7-usb
-
-for you to fetch changes up to 9dd4fbef2f88ccf46f5294805bf121d6554791e8:
-
-  usb: gadget: tegra-xudc: Support multiple device modes (2020-03-13 17:16:28 +0100)
-
-It occurred to me that I could just as well send this pull request to
-you guys, rather than take it via ARM SoC. Kishon already acked all the
-patches for the PHY tree that this series depends on, so I've included
-them here as a dependency.
-
-Let me know if you'd prefer that I take this through ARM SoC.
-
-Thanks,
-Thierry
-
-----------------------------------------------------------------
-usb: tegra: Changes for v5.7-rc1
-
-These changes add USB OTG support for the XUSB host and XUSB device
-controllers found on NVIDIA Tegra SoCs.
-
-----------------------------------------------------------------
-JC Kuo (2):
-      phy: tegra: xusb: Protect Tegra186 soc with config
-      phy: tegra: xusb: Add Tegra194 support
-
-Jon Hunter (1):
-      phy: tegra: xusb: Don't warn on probe defer
-
-Nagarjuna Kristam (10):
-      phy: tegra: xusb: Add usb-role-switch support
-      phy: tegra: xusb: Add usb-phy support
-      phy: tegra: xusb: Add support to get companion USB 3 port
-      phy: tegra: xusb: Add set_mode support for USB 2 phy on Tegra210
-      phy: tegra: xusb: Add set_mode support for UTMI phy on Tegra186
-      usb: xhci-tegra: Add OTG support
-      usb: gadget: tegra-xudc: Remove usb-role-switch support
-      usb: gadget: tegra-xudc: Add usb-phy support
-      usb: gadget: tegra-xudc: Use phy_set_mode() to set/unset device mode
-      usb: gadget: tegra-xudc: Support multiple device modes
-
-Thierry Reding (1):
-      Merge branch 'for-5.7/phy' into for-5.7/usb
-
- drivers/phy/tegra/Kconfig           |   1 +
- drivers/phy/tegra/Makefile          |   1 +
- drivers/phy/tegra/xusb-tegra186.c   | 261 ++++++++++++++++++++++++++--------
- drivers/phy/tegra/xusb-tegra210.c   | 131 +++++++++++++----
- drivers/phy/tegra/xusb.c            | 189 +++++++++++++++++++++++++
- drivers/phy/tegra/xusb.h            |  10 ++
- drivers/usb/gadget/udc/Kconfig      |   1 -
- drivers/usb/gadget/udc/tegra-xudc.c | 273 +++++++++++++++++++++++++-----------
- drivers/usb/host/xhci-tegra.c       | 228 +++++++++++++++++++++++++++++-
- include/linux/phy/tegra/xusb.h      |   2 +
- 10 files changed, 926 insertions(+), 171 deletions(-)
+SGkgRmVsaXBlLA0KDQpGZWxpcGUgQmFsYmkgd3JvdGU6DQo+IEhpIFRoaW5oLA0KPg0KPiBUaGlu
+aCBOZ3V5ZW4gPFRoaW5oLk5ndXllbkBzeW5vcHN5cy5jb20+IHdyaXRlczoNCj4+IElmIGR3YzMg
+ZmFpbHMgdG8gaXNzdWUgU1RBUlRfVFJBTlNGRVIvVVBEQVRFX1RSQU5TRkVSIGNvbW1hbmQsIHRo
+ZW4gd2UNCj4+IHNob3VsZCBwcm9wZXJseSBlbmQgYW4gYWN0aXZlIHRyYW5zZmVyIGFuZCBnaXZl
+IGJhY2sgYWxsIHRoZSBzdGFydGVkDQo+PiByZXF1ZXN0cy4gSG93ZXZlciBpZiBpdCdzIGZvciBh
+biBpc29jIGVuZHBvaW50LCB0aGUgZmFpbHVyZSBtYXliZSBkdWUgdG8NCj4+IGJ1cy1leHBpcnkg
+c3RhdHVzLiBJbiB0aGlzIGNhc2UsIGRvbid0IGdpdmUgYmFjayB0aGUgcmVxdWVzdHMgYW5kIHdh
+aXQNCj4+IGZvciB0aGUgbmV4dCByZXRyeS4NCj4+DQo+PiBGaXhlczogNzIyNDZkYTQwZjM3ICgi
+dXNiOiBJbnRyb2R1Y2UgRGVzaWduV2FyZSBVU0IzIERSRCBEcml2ZXIiKQ0KPj4gU2lnbmVkLW9m
+Zi1ieTogVGhpbmggTmd1eWVuIDx0aGluaG5Ac3lub3BzeXMuY29tPg0KPiBjb3VsZCB5b3UgZ2l2
+ZSBzb21lIGRldGFpbHMgcmVnYXJkaW5nIHdoZW4gZG9lcyB0aGlzIGhhcHBlbj8NCj4NCg0KU28s
+IGhlcmUgYXJlIHRoZSBzY2VuYXJpb3MgaW4gd2hpY2ggZHdjM19zZW5kX2dhZGdldF9lcF9jbWQo
+KSBtYXkgcmV0dXJuIA0KYSBuZWdhdGl2ZSBlcnJubzoNCg0KKiAtRUFHQUlOOiBJc29jIGJ1cy1l
+eHBpcnkgc3RhdHVzDQogwqDCoCBBcyB5b3UgYWxyZWFkeSBrbm93LCB0aGlzIG9jY3VycyB3aGVu
+IHdlIHRyeSB0byBzY2hlZHVsZSBpc29jIHRvbyANCmxhdGUuIElmIHdlJ3JlIGdvaW5nIHRvIHJl
+dHJ5IHRoZSByZXF1ZXN0LCBkb24ndCB1bm1hcCBpdC4NCg0KKiAtRUlOVkFMOiBObyByZXNvdXJj
+ZSBkdWUgdG8gaXNzdWluZyBTVEFSVF9UUkFOU0ZFUiB0byBhbiBhbHJlYWR5IA0Kc3RhcnRlZCBl
+bmRwb2ludA0KIMKgwqAgVGhpcyBoYXBwZW5zIGdlbmVyYWxseSBiZWNhdXNlIG9mIFNXIHByb2dy
+YW1taW5nIGVycm9yDQoNCiogLUVUSU1FRE9VVDogUG9sbGluZyBmb3IgQ01EQUNUIHRpbWVkIG91
+dA0KIMKgwqAgVGhpcyBzaG91bGQgbm90IGhhcHBlbiB1bmxlc3MgdGhlIGNvbnRyb2xsZXIgaXMg
+ZGVhZCBvciBpbiBzb21lIGJhZCANCnN0YXRlDQoNCkJSLA0KVGhpbmgNCg==
