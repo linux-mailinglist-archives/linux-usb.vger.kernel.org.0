@@ -2,117 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D56C7184A10
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2020 15:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89521184A18
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2020 15:59:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726670AbgCMO4t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Mar 2020 10:56:49 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:36095 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726216AbgCMO4s (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Mar 2020 10:56:48 -0400
-Received: by mail-pl1-f195.google.com with SMTP id g2so1857303plo.3
-        for <linux-usb@vger.kernel.org>; Fri, 13 Mar 2020 07:56:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=p6VRmjxt/RLuEV3vnRanaLSMonZS+QrB7w914S386sk=;
-        b=cx2qTH6sC970pnUA6vaQYxDBliAsFLKpx5jgY/1l7mE1/koc3rjku94As1o/Q1Giwc
-         lh5Ov0bnx2tmzuty4qSKnHAhRLLijzBjLNbfd92vBUi+Xo7SYQq5nLEu5pgYvkQQooir
-         oDAN6iKicD+pDQoGrYezZSUB72PeP0bHomMLvT5TVYJL5ZAK5dLeSAL2MKOAJDcSyDlb
-         8F/+0XzLtjTWok0EoOeCCPMzMXcLjWsL8yuMLkIueMfM1vW0xVizPRB25FIiBz/DHe7M
-         vf0nPC0/NxdiKx8RYjo11F2plWtpyA7aS2UTtn5PCKUIM5P96c+XNiFwvXayVNkWUQco
-         D5/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=p6VRmjxt/RLuEV3vnRanaLSMonZS+QrB7w914S386sk=;
-        b=oPZdtb/ko6lM/YT1xl/DRSEiTdS4fN3svVJKvwvWA/x1QLcBCEjb7OSswSp4dcsaos
-         iB//etCywMcCoCr+uyvnuiaHMrbLM9jCZcgCdtd3CqyK2BjH6rvLAEqGLp6xJ74aUV8B
-         yh5ca129oopml5uIe6TjQMljItzUBdolVdB7rsDGkgnb3DUV4r6JPoAkVYNpuMIBwLAy
-         xnCmADJcf0hAHCsap4hvYTBDKWI3gh8y0/UPHX9dZ61MSbrSjGJvnLTZbmtKd7Buufc6
-         I/Riv0wqFt4UJj+KuO6friiHUPVauhHmrvgDoEbfeawkJ1RPI/7JHQl2sfKUPbpyURzi
-         42FA==
-X-Gm-Message-State: ANhLgQ0i1Gia0GmAsb8un34fjAt2DNVdGZLmCuWrOd41Yqin1vktppne
-        Oc1CCqBM5WHdiDIaR+n95mpnSF0IQyXrWFK16ASnBA==
-X-Google-Smtp-Source: ADFU+vuhhw0Ig3FeJf7sHNwTyURe80VBP0AJ5DzMG6Pzz6M4bqpHJu5itSRP30AMNbYDh7Ql5moWNWo2vTsmwOM/MPc=
-X-Received: by 2002:a17:902:8492:: with SMTP id c18mr14107191plo.147.1584111406059;
- Fri, 13 Mar 2020 07:56:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1583778264.git.andreyknvl@google.com> <32bce32c8b88c2f88cd0a8acfcdb5d3a6e894632.1583778264.git.andreyknvl@google.com>
- <20200312093920.GD14625@b29397-desktop>
-In-Reply-To: <20200312093920.GD14625@b29397-desktop>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 13 Mar 2020 15:56:35 +0100
-Message-ID: <CAAeHK+yuEPcCqQ=N7BLTkohXkDUnXjFb=Kfb6R663LLe=moG6g@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] usb: core: kcov: collect coverage from usb
- complete callback
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1726678AbgCMO7I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Mar 2020 10:59:08 -0400
+Received: from mga01.intel.com ([192.55.52.88]:22278 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726216AbgCMO7I (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 13 Mar 2020 10:59:08 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Mar 2020 07:58:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,549,1574150400"; 
+   d="scan'208";a="243401951"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga003.jf.intel.com with ESMTP; 13 Mar 2020 07:58:44 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jCllu-009Huq-2a; Fri, 13 Mar 2020 16:58:46 +0200
+Date:   Fri, 13 Mar 2020 16:58:46 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Al Cooper <alcooperx@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
         Alan Stern <stern@rowland.harvard.edu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Arnd Bergmann <arnd@arndb.de>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-usb@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH 2/4] usb: xhci: xhci-plat: Add support for Broadcom STB
+ SoC's
+Message-ID: <20200313145846.GU1922688@smile.fi.intel.com>
+References: <20200313141545.31943-1-alcooperx@gmail.com>
+ <20200313141545.31943-3-alcooperx@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200313141545.31943-3-alcooperx@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 12, 2020 at 10:39 AM Peter Chen <peter.chen@nxp.com> wrote:
->
-> On 20-03-09 19:27:06, Andrey Konovalov wrote:
-> > This patch adds kcov_remote_start/stop() callbacks around the urb
-> > complete() callback that is executed in softirq context when dummy_hcd
-> > is in use. As the result, kcov can be used to collect coverage from those
-> > those callbacks, which is used to facilitate coverage-guided fuzzing with
->
-> Typo, One more "those"
+On Fri, Mar 13, 2020 at 10:15:43AM -0400, Al Cooper wrote:
+> Add support for Broadcom STB SoC's to the xhci platform driver
 
-Will fix in v3, thanks Peter!
+...
 
->
-> Peter
->
-> > syzkaller.
-> >
-> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> > ---
-> >  drivers/usb/core/hcd.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> > index aa45840d8273..de624c47e190 100644
-> > --- a/drivers/usb/core/hcd.c
-> > +++ b/drivers/usb/core/hcd.c
-> > @@ -31,6 +31,7 @@
-> >  #include <linux/types.h>
-> >  #include <linux/genalloc.h>
-> >  #include <linux/io.h>
-> > +#include <linux/kcov.h>
-> >
-> >  #include <linux/phy/phy.h>
-> >  #include <linux/usb.h>
-> > @@ -1645,7 +1646,9 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
-> >
-> >       /* pass ownership to the completion handler */
-> >       urb->status = status;
-> > +     kcov_remote_start_usb((u64)urb->dev->bus->busnum);
-> >       urb->complete(urb);
-> > +     kcov_remote_stop();
-> >
-> >       usb_anchor_resume_wakeups(anchor);
-> >       atomic_dec(&urb->use_count);
-> > --
-> > 2.25.1.481.gfbce0eb801-goog
-> >
->
-> --
->
-> Thanks,
-> Peter Chen
+>  #include "xhci-plat.h"
+>  #include "xhci-mvebu.h"
+>  #include "xhci-rcar.h"
+> +#include "xhci-brcm.h"
+
+Perhaps put it in order, i.e. after xhci-plat.h?
+
+...
+
+> +static const struct xhci_plat_priv xhci_plat_brcm = {
+> +	.init_quirk = xhci_plat_brcm_init_quirk
+
+Add comma at the end, it might help to reduce burden on update.
+
+> +};
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
