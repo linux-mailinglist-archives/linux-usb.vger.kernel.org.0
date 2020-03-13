@@ -2,119 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5A318400F
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2020 05:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5787818439F
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2020 10:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726446AbgCMEoA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Mar 2020 00:44:00 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:59434 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726194AbgCMEoA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Mar 2020 00:44:00 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02D4hmM2019617;
-        Thu, 12 Mar 2020 23:43:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1584074628;
-        bh=XpUwsYDH/tbEiw9bK9EeXQskLAoqJ6LteWN9NgyZdl4=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=rc+0rrd5mK+hpp1qXDueWMnJ+xVaNuRe4JNuHPRBgh+l2k9lxqWLzA+M4TzdAqh1l
-         4gcaA3aKJdqF5/bDmdHL/dt0N5s59RD+uSAHCOmll67WkRC0y22b+tb1M77vB0ovrP
-         crI699YeDGzoMFwL6tL9zop3mm8/WGFSMAd7UIM8=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02D4hluL001597
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 12 Mar 2020 23:43:47 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 12
- Mar 2020 23:43:47 -0500
-Received: from localhost.localdomain (10.64.41.19) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Thu, 12 Mar 2020 23:43:47 -0500
-Received: from [10.24.69.159] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by localhost.localdomain (8.15.2/8.15.2) with ESMTP id 02D4hhuU126810;
-        Thu, 12 Mar 2020 23:43:44 -0500
-Subject: Re: [Patch V5 00/21] Tegra XUSB OTG support
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nagarjuna Kristam <nkristam@nvidia.com>,
-        <jonathanh@nvidia.com>, <mark.rutland@arm.com>,
-        <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1581322307-11140-1-git-send-email-nkristam@nvidia.com>
- <20200217085130.GJ1339021@ulmo> <20200227173226.GA1114616@ulmo>
- <20200304070100.GA1271591@kroah.com> <20200312092232.GA1199023@ulmo>
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-Message-ID: <3e76c44e-f2b0-3c8a-c7b3-0461ff1176d3@ti.com>
-Date:   Fri, 13 Mar 2020 10:18:23 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
-MIME-Version: 1.0
-In-Reply-To: <20200312092232.GA1199023@ulmo>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
+        id S1726395AbgCMJ2E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Mar 2020 05:28:04 -0400
+Received: from mx2.suse.de ([195.135.220.15]:53186 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726055AbgCMJ2D (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 13 Mar 2020 05:28:03 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 220BFB1A0;
+        Fri, 13 Mar 2020 09:28:02 +0000 (UTC)
+Message-ID: <1584091676.3357.4.camel@suse.com>
+Subject: Re: USB transaction errors causing RCU stalls and kernel panics
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Jonas Karlsson <jonas.karlsson@actia.se>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     Peter Chen <peter.chen@nxp.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Date:   Fri, 13 Mar 2020 10:27:56 +0100
+In-Reply-To: <e350119c78284ab28775d2dd5b85c17e@actia.se>
+References: <ddf8c3971b8544e983a9d2bbdc7f2010@actia.se>
+         <20200303163945.GB652754@kroah.com>
+         <ca6f029a57f24ee9aea39385a9ad55bd@actia.se>
+         <6909d182-6cc5-c07f-ed79-02c741aec60b@linux.intel.com>
+         <1583331173.12738.26.camel@suse.com>
+         <4fa64e92-64ce-07f3-ed8e-ea4e07d091bb@linux.intel.com>
+         <VI1PR04MB532785057FD52DFE3A21ACA88BE30@VI1PR04MB5327.eurprd04.prod.outlook.com>
+         <699a49f2f69e494ea6558b99fad23cc4@actia.se>
+         <20200310081452.GA14625@b29397-desktop>
+         <d1f68ef3316e484b9cc1360f71886719@actia.se>
+         <1583838270.11582.11.camel@suse.com> <1583839306.11582.12.camel@suse.de>
+         <325d5af5d4c44eafac94fc8e0e4d1a7d@actia.se>
+         <c671a51d6b5642078367d681643c46af@actia.se>
+         <CAOMZO5BURqWDXKXiwLzG=BRC_wJkjZ1d_HaLt_tefjk3GrabDw@mail.gmail.com>
+         <fc2d27c17ebc409ea8c318c22ac1f4a7@actia.se>
+         <1583922523.20566.4.camel@suse.com>
+         <ad6b4f2d72f84726a398b41007839f77@actia.se>
+         <1584020739.20566.10.camel@suse.com>
+         <e350119c78284ab28775d2dd5b85c17e@actia.se>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 12/03/20 2:52 pm, Thierry Reding wrote:
-> On Wed, Mar 04, 2020 at 08:01:00AM +0100, Greg Kroah-Hartman wrote:
->> On Thu, Feb 27, 2020 at 06:32:26PM +0100, Thierry Reding wrote:
->>> On Mon, Feb 17, 2020 at 09:51:30AM +0100, Thierry Reding wrote:
->>>> On Mon, Feb 10, 2020 at 01:41:26PM +0530, Nagarjuna Kristam wrote:
->>>>> This patch series adds OTG support on XUSB hardware used in Tegra210 and
->>>>> Tegra186 SoCs.
->>>>>
->>>>> This patchset is composed with :
->>>>>  - dt bindings of XUSB Pad Controller
->>>>>  - dt bindings for XUSB device Driver
->>>>>  - Tegra PHY driver for usb-role-switch and usb-phy
->>>>>  - Tegra XUSB host mode driver to support OTG mode
->>>>>  - Tegra XUSB device mode driver to use usb-phy and multi device mode
->>>>>  - dts for XUSB pad controller
->>>>>  - dts for xudc for Jetson TX1 and TX2
->>>>>  - dts for Jetson-TK1
->>>>>  - dts for Jetson-Nano
->>>>>
->>>>> Tegra Pad controller driver register for role switch updates for
->>>>> OTG/peripheral capable USB ports and adds usb-phy for that corresponding
->>>>> USB ports.
->>>>>
->>>>> Host and Device mode drivers gets usb-phy from USB2's phy and registers
->>>>> notifier for role changes to perform corresponding role tasks.
->>>>>
->>>>> Order of merging Patches:
->>>>> Please merge DT changes first followed Tegra PHY driver changes and then
->>>>> USB driver changes.
->>>>
->>>> Felipe, Greg, Kishon,
->>>>
->>>> Given the runtime dependencies between these various parts, I could pick
->>>> these up into the Tegra tree if you provide an Acked-by.
->>>
->>> Ping. Are you guys okay if I pick these up into the Tegra tree?
->>
->> That's up to Felipe, I have no opinion :)
+Am Donnerstag, den 12.03.2020, 15:37 +0000 schrieb Jonas Karlsson:
+> > Hi,
+> > 
+> > thank you. In this case it looks like the wisest course is to wait a few days then.
+> > Thank you for thorough testing.
+> > 
+> > 	Regards
+> > 		Oliver
 > 
-> Felipe, Kishon,
+> I will make sure some more testing is done and the get back to you.
 > 
-> I've picked up the device tree changes into the Tegra tree. Let me know
-> if you also want me to pick up the USB and PHY driver changes.
+> Do you intend to push the " cdc-acm: close race betrween suspend() and acm_softint"
+> commit upstream as well? I wonder since you asked me to test without it.
 
-The PHY and USB changes can only go together since xhci-tegra.c seems to
-use an export symbol of xusb PHY. So I'm fine if someone takes the PHY
-changes along with USB changes.
+Yes. I will submit the whole set.
+And I will talk to Mathias, as the need for this patch set
+means that XHCI does not work as documented.
 
-Acked-by: Kishon Vijay Abraham I <kishon@ti.com>
+> I want to make sure I run tests with the intended patch set.
 
-Thanks
-Kishon
+That is optimal. Thank you.
+
+	Regards
+		Oliver
+
