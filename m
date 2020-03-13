@@ -2,121 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD73A183927
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Mar 2020 20:02:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E1C3183DE3
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2020 01:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726794AbgCLTCj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Mar 2020 15:02:39 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:42896 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725268AbgCLTCj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Mar 2020 15:02:39 -0400
-Received: by mail-ot1-f67.google.com with SMTP id 66so7437116otd.9;
-        Thu, 12 Mar 2020 12:02:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qszn8t/TXMEw8klBhLWYzin7BjJynR0x9wt3vKldKkI=;
-        b=oQjsSJZdx/5xWwRvf7guQ9XaBUYxVhOIdThOQGlmdvmz1uOmYGlwPc7p3+2VSCEU8a
-         wLGqq3oTS2DL2xc8PwAbqJdLpTPoJ1vMAw6InEfAsxAwTlF2v7TXr1ekj7YqBcc5f+1H
-         NeHsTgoPWhWT/1ODG2JYpEVMoXfBIQRSQ67rhUM3KMCAnulMIA2tw7iZ8+by7mhGPs3w
-         l9MrAUpnQ1gyzkTYHOPwoNlErHrQr3CpNToKVb3qQ/8UxsxbhlwuBmFOFtiEUtCTwRRa
-         D8T+eixENC6mkjtBsK1n1Ns5GNuSbrOssdM5UIb86IhFUoG8CQ8rXS1RRCt360fR0BiH
-         Dxew==
-X-Gm-Message-State: ANhLgQ24A5NQEa4cselaOPtybvIum8n2mpWsPeGSrHBdfKKUt68YcpAc
-        4gbgb70MGbtiPthQFGVs1A==
-X-Google-Smtp-Source: ADFU+vtDTbuZErAslJQLMpArXJZf6snkXd794nOxeCf/BKZvRnoCio76FeXOXlwzNhrd+bsC58+mfw==
-X-Received: by 2002:a05:6830:18c2:: with SMTP id v2mr7729860ote.350.1584039758461;
-        Thu, 12 Mar 2020 12:02:38 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id e4sm8462394otb.23.2020.03.12.12.02.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2020 12:02:37 -0700 (PDT)
-Received: (nullmailer pid 26970 invoked by uid 1000);
-        Thu, 12 Mar 2020 19:02:36 -0000
-Date:   Thu, 12 Mar 2020 14:02:36 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     devicetree@vger.kernel.org, bleung@chromium.org,
-        swboyd@chromium.org, heikki.krogerus@linux.intel.com,
-        enric.balletbo@collabora.com,
-        Prashant Malani <pmalani@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        id S1726913AbgCMAit (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Mar 2020 20:38:49 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:49724 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726772AbgCMAit (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Mar 2020 20:38:49 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02D0Mwck168386;
+        Fri, 13 Mar 2020 00:38:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=hP9mFZ8Sxu3J/EE4JbNN5uOrXQmbEtdEQRl+6NEGKTQ=;
+ b=TECcM3pWqwkOo2PhaIJkxOT9Nt32xhMZdc5+LNPDjbjTlaemjskiGlzOz+C/UTPGiP59
+ 9AQtBEeRJS5DT+yvsSXahiWMhQxQvlRJs8TO3yOeTE2GGVCDFnT/wWVW8NroteMU8oyc
+ pvWxCoXhHwBX0TRkUKB7w3o1PZyPqZYnHgUl0Fmlhyw7NsijzDcgQLTmU5mVEF7MPeLv
+ n6FhxVG1Egatr43obuziFyMZ3rzc8kvZf1izZAtRCu1/V1ze5Lo6xrFvAGvcxy+Ir8H8
+ no4vMo9nYigHYAtS8qCmDtSC6tg7vPHfQftLMzuNVFpDTkjgg0XGWKulCPFXgCLRNY+W Lg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 2yqtag98fj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 13 Mar 2020 00:38:22 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02D0OJUY144781;
+        Fri, 13 Mar 2020 00:38:21 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 2yqta9uuut-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 13 Mar 2020 00:38:21 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 02D0cET2003083;
+        Fri, 13 Mar 2020 00:38:14 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 12 Mar 2020 17:38:13 -0700
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+        "linux-nvme \@ lists . infradead . org" 
+        <linux-nvme@lists.infradead.org>, Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH v3] dt-bindings: Convert usb-connector to YAML format.
-Message-ID: <20200312190236.GA26911@bogus>
-References: <20200305222732.133047-1-pmalani@chromium.org>
+        USB list <linux-usb@vger.kernel.org>,
+        Linux SCSI Mailinglist <linux-scsi@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1] asm-generic: Provide generic {get, put}_unaligned_{l, b}e24()
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20200312113941.81162-1-andriy.shevchenko@linux.intel.com>
+        <efe5daa3-8e37-101a-9203-676be33eb934@acm.org>
+        <20200312162507.GF1922688@smile.fi.intel.com>
+        <6d932620-3255-fbd8-7fc8-22e4b3068043@acm.org>
+        <CAO+b5-rXUU9r-SrCWq2cYbBr5xFqyx4CUMb8xHZv2xYzEP6CyA@mail.gmail.com>
+Date:   Thu, 12 Mar 2020 20:38:10 -0400
+In-Reply-To: <CAO+b5-rXUU9r-SrCWq2cYbBr5xFqyx4CUMb8xHZv2xYzEP6CyA@mail.gmail.com>
+        (Bart Van Assche's message of "Thu, 12 Mar 2020 17:29:37 -0700")
+Message-ID: <yq1v9n9nl71.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200305222732.133047-1-pmalani@chromium.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9558 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 suspectscore=0 adultscore=0
+ mlxlogscore=623 bulkscore=0 phishscore=0 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2003130000
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9558 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
+ lowpriorityscore=0 priorityscore=1501 mlxlogscore=687 phishscore=0
+ suspectscore=0 bulkscore=0 impostorscore=0 spamscore=0 adultscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003130000
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu,  5 Mar 2020 14:27:28 -0800, Prashant Malani wrote:
-> Convert the usb-connector.txt bindings file to YAML format. This allows
-> it to be used in dt_bindings_check verification. This patch was
-> born out of a patch series for the addition of a Type C connector
-> class port driver[1].
-> 
-> An attempt has been made to maintain the same documentation text and
-> example structure as was in the .txt file, but wherever needed
-> modifications have been made to satisfy dt_bindings_check.
-> 
-> Also, update all references to usb-connector.txt to now use
-> usb-connector.yaml.
-> 
-> [1]: https://lkml.org/lkml/2020/2/19/1232
-> 
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> ---
-> 
-> Changes in v3:
-> - Updated maintainer list.
-> - Fixed grammatical errors in descriptions.
-> - Reworded "type" description based on review comments.
-> - Added more info to OF graph binding for port@2.
-> - Removed address from DT nodes in examples.
-> 
-> Changes in v2:
-> - Added type references for some properties.
-> - Removed pinctrl properties.
-> - Updated power-role, try-power-role and data-role properties to be in
->   valid schema format.
-> - Added OF graph data bus binding property according to reviewer
->   suggestions.
-> 
->  .../connector/samsung,usb-connector-11pin.txt |   2 +-
->  .../bindings/connector/usb-connector.txt      | 135 ------------
->  .../bindings/connector/usb-connector.yaml     | 206 ++++++++++++++++++
->  .../devicetree/bindings/usb/fcs,fusb302.txt   |   2 +-
->  .../devicetree/bindings/usb/generic.txt       |   2 +-
->  .../devicetree/bindings/usb/mediatek,mtu3.txt |   2 +-
->  .../devicetree/bindings/usb/mediatek,musb.txt |   2 +-
->  .../bindings/usb/richtek,rt1711h.txt          |   2 +-
->  .../devicetree/bindings/usb/ti,hd3ss3220.txt  |   2 +-
->  .../devicetree/bindings/usb/typec-tcpci.txt   |   2 +-
->  .../devicetree/bindings/usb/usb-conn-gpio.txt |   4 +-
->  11 files changed, 216 insertions(+), 145 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/connector/usb-connector.txt
->  create mode 100644 Documentation/devicetree/bindings/connector/usb-connector.yaml
-> 
 
-Applied, thanks.
+Bart,
 
-Rob
+> Martin, can I send the second version of my patch series to you or do
+> you perhaps prefer that I send it to another kernel maintainer? I'm
+> considering to include the following patches:
+
+Happy to take it.
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
