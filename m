@@ -2,81 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5787818439F
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2020 10:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA6F184405
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2020 10:46:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726395AbgCMJ2E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Mar 2020 05:28:04 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53186 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726055AbgCMJ2D (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 13 Mar 2020 05:28:03 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 220BFB1A0;
-        Fri, 13 Mar 2020 09:28:02 +0000 (UTC)
-Message-ID: <1584091676.3357.4.camel@suse.com>
-Subject: Re: USB transaction errors causing RCU stalls and kernel panics
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Jonas Karlsson <jonas.karlsson@actia.se>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     Peter Chen <peter.chen@nxp.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Date:   Fri, 13 Mar 2020 10:27:56 +0100
-In-Reply-To: <e350119c78284ab28775d2dd5b85c17e@actia.se>
-References: <ddf8c3971b8544e983a9d2bbdc7f2010@actia.se>
-         <20200303163945.GB652754@kroah.com>
-         <ca6f029a57f24ee9aea39385a9ad55bd@actia.se>
-         <6909d182-6cc5-c07f-ed79-02c741aec60b@linux.intel.com>
-         <1583331173.12738.26.camel@suse.com>
-         <4fa64e92-64ce-07f3-ed8e-ea4e07d091bb@linux.intel.com>
-         <VI1PR04MB532785057FD52DFE3A21ACA88BE30@VI1PR04MB5327.eurprd04.prod.outlook.com>
-         <699a49f2f69e494ea6558b99fad23cc4@actia.se>
-         <20200310081452.GA14625@b29397-desktop>
-         <d1f68ef3316e484b9cc1360f71886719@actia.se>
-         <1583838270.11582.11.camel@suse.com> <1583839306.11582.12.camel@suse.de>
-         <325d5af5d4c44eafac94fc8e0e4d1a7d@actia.se>
-         <c671a51d6b5642078367d681643c46af@actia.se>
-         <CAOMZO5BURqWDXKXiwLzG=BRC_wJkjZ1d_HaLt_tefjk3GrabDw@mail.gmail.com>
-         <fc2d27c17ebc409ea8c318c22ac1f4a7@actia.se>
-         <1583922523.20566.4.camel@suse.com>
-         <ad6b4f2d72f84726a398b41007839f77@actia.se>
-         <1584020739.20566.10.camel@suse.com>
-         <e350119c78284ab28775d2dd5b85c17e@actia.se>
+        id S1726310AbgCMJqQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Mar 2020 05:46:16 -0400
+Received: from mail-io1-f47.google.com ([209.85.166.47]:43307 "EHLO
+        mail-io1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726055AbgCMJqQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Mar 2020 05:46:16 -0400
+Received: by mail-io1-f47.google.com with SMTP id n21so8652637ioo.10
+        for <linux-usb@vger.kernel.org>; Fri, 13 Mar 2020 02:46:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vFEVwYhRv/YnzG4kUZiI9GNjahrHVcPkJjO7VjbAj2U=;
+        b=UO/s7e1sPCCSb8HzKP6ltQlpc8rZuB4Kxq1svFTMH3zZcr/GLFUMx9EJETVECfxwoY
+         aIq3pQinYO7y1w4EdvsiqxD8aCaiwKPootv6+Q+GYwrgzVMVTAuJVXxIYX9DyOwt4w8q
+         kDfed8b/yUWtEg6rBMCMqX+ufqNWoVnoWz71keEdbfjDvK+SWbNFowwP+YdelL1DqTsU
+         Z/jH/YGViHr07lEKcdGZWYt2tVGDtEsJDu8lJgY3dDPs4M95VG/xkbelx945PWM59r+x
+         p57GHki9GF6emtjnAYORNH8QTwvjOv3njkyUPtRgE3yLH0aReq74JqLTXNRWQ77BBajP
+         K3QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vFEVwYhRv/YnzG4kUZiI9GNjahrHVcPkJjO7VjbAj2U=;
+        b=RxD+Z8nixkXiuU7yV21ZvmCGANGcfylUuZpVKRtZWe+za6zT+q3K/Yt3WX6EuAbaLp
+         nttwdY8KEXaO7Rbbux7sFqwQyCH0MWjpulLWfs2RrPgVACmhLqouYQFxUlyo2JeiUWI/
+         l6M44Go7u4tamNfZ7gU8f62fBRIDxDQLw8Frw30CTB/bEVTdMARVQ9veg8EoaUxQcZX4
+         MzLydDAFUt04umv/heARLGDqrybv7xz8DbauuC/ULcnet/zdwU21UCQbwQb1OfM8N9PJ
+         HNHJi0Mzn9w+IJ7mBr5QPZS2ERNiUprj5O5uRR16GmxJebbbWPPWmaT4v0wp5Yj+67JN
+         lMfQ==
+X-Gm-Message-State: ANhLgQ3j/s4Jb+3v/Sig6RE2pMqtxFsD3Y9BrOEXWgRlE5k7ELx2Zf86
+        Sr5Su3pDwIXKHdZtCVdA0keCNJ7prNZSHdsVysyQnG0Ig/w=
+X-Google-Smtp-Source: ADFU+vsa09xgjH3h0FwSo01LQ6GRYze0ga+7GCd7xkE7buD1IqK48YAgF9H4Yhds1Z7jIkE+1dGSQ3xgxm/kBoMmMu4=
+X-Received: by 2002:a6b:6815:: with SMTP id d21mr11831721ioc.28.1584092775339;
+ Fri, 13 Mar 2020 02:46:15 -0700 (PDT)
+MIME-Version: 1.0
+References: <43547627-70f7-95d7-f003-97388505a19e@lockie.ca>
+In-Reply-To: <43547627-70f7-95d7-f003-97388505a19e@lockie.ca>
+From:   Peter Chen <hzpeterchen@gmail.com>
+Date:   Fri, 13 Mar 2020 17:46:03 +0800
+Message-ID: <CAL411-o0grY_oL=pXrq-zeDqwaF87rYoLFUOPWP-HrPa2DmozA@mail.gmail.com>
+Subject: Re: USB 2?
+To:     James <bjlockie@lockie.ca>
+Cc:     linux-usb <linux-usb@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Donnerstag, den 12.03.2020, 15:37 +0000 schrieb Jonas Karlsson:
-> > Hi,
-> > 
-> > thank you. In this case it looks like the wisest course is to wait a few days then.
-> > Thank you for thorough testing.
-> > 
-> > 	Regards
-> > 		Oliver
-> 
-> I will make sure some more testing is done and the get back to you.
-> 
-> Do you intend to push the " cdc-acm: close race betrween suspend() and acm_softint"
-> commit upstream as well? I wonder since you asked me to test without it.
+On Fri, Mar 13, 2020 at 11:17 AM James <bjlockie@lockie.ca> wrote:
+>
+> This is USB2, right?
 
-Yes. I will submit the whole set.
-And I will talk to Mathias, as the need for this patch set
-means that XHCI does not work as documented.
+Yes, from below message, you could know it.
 
-> I want to make sure I run tests with the intended patch set.
+>    bcdUSB               2.00
+> wMaxPacketSize     0x0200  1x 512 bytes
 
-That is optimal. Thank you.
+Besides, when you plug in USB device, you could
+type "dmesg", it will show "new high-speed USB device number xxx"
 
-	Regards
-		Oliver
+Peter
 
+
+
+> I'm trying to buy a USB dvdrw on Amazon but even different sellers sell
+> the same thing under a different "brand".
+>
+> $ sudo lsusb -v -d 13fd:0840
+> Bus 001 Device 006: ID 13fd:0840 Initio Corporation INIC-1618L SATA
+> Device Descriptor:
+>    bLength                18
+>    bDescriptorType         1
+>    bcdUSB               2.00
+>    bDeviceClass            0
+>    bDeviceSubClass         0
+>    bDeviceProtocol         0
+>    bMaxPacketSize0        64
+>    idVendor           0x13fd Initio Corporation
+>    idProduct          0x0840 INIC-1618L SATA
+>    bcdDevice            1.14
+>    iManufacturer           1 Generic
+>    iProduct                2 External
+>    iSerial                 3 554830302020323534363832
+>    bNumConfigurations      1
+>    Configuration Descriptor:
+>      bLength                 9
+>      bDescriptorType         2
+>      wTotalLength       0x0020
+>      bNumInterfaces          1
+>      bConfigurationValue     1
+>      iConfiguration          0
+>      bmAttributes         0xc0
+>        Self Powered
+>      MaxPower                2mA
+>      Interface Descriptor:
+>        bLength                 9
+>        bDescriptorType         4
+>        bInterfaceNumber        0
+>        bAlternateSetting       0
+>        bNumEndpoints           2
+>        bInterfaceClass         8 Mass Storage
+>        bInterfaceSubClass      2 SFF-8020i, MMC-2 (ATAPI)
+>        bInterfaceProtocol     80
+>        iInterface              0
+>        Endpoint Descriptor:
+>          bLength                 7
+>          bDescriptorType         5
+>          bEndpointAddress     0x81  EP 1 IN
+>          bmAttributes            2
+>            Transfer Type            Bulk
+>            Synch Type               None
+>            Usage Type               Data
+>          wMaxPacketSize     0x0200  1x 512 bytes
+>          bInterval               0
+>        Endpoint Descriptor:
+>          bLength                 7
+>          bDescriptorType         5
+>          bEndpointAddress     0x02  EP 2 OUT
+>          bmAttributes            2
+>            Transfer Type            Bulk
+>            Synch Type               None
+>            Usage Type               Data
+>          wMaxPacketSize     0x0200  1x 512 bytes
+>          bInterval               0
+> Device Qualifier (for other device speed):
+>    bLength                10
+>    bDescriptorType         6
+>    bcdUSB               2.00
+>    bDeviceClass            0
+>    bDeviceSubClass         0
+>    bDeviceProtocol         0
+>    bMaxPacketSize0        64
+>    bNumConfigurations      1
+> can't get debug descriptor: Resource temporarily unavailable
+> Device Status:     0x0001
+>    Self Powered
