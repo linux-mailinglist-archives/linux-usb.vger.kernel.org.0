@@ -2,109 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C361848BC
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2020 15:04:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E1C184900
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2020 15:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726713AbgCMOD6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Mar 2020 10:03:58 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:37045 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726674AbgCMOD6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Mar 2020 10:03:58 -0400
-Received: by mail-wr1-f66.google.com with SMTP id 6so12239359wre.4;
-        Fri, 13 Mar 2020 07:03:56 -0700 (PDT)
+        id S1726863AbgCMOQU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Mar 2020 10:16:20 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:38148 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726526AbgCMOQU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Mar 2020 10:16:20 -0400
+Received: by mail-wr1-f68.google.com with SMTP id x11so7547123wrv.5;
+        Fri, 13 Mar 2020 07:16:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=H/mwCeCN5j4sHkdzkOsGGfEARJX1vOaTb5UpMNbo2tc=;
-        b=EJJCKJjDYov13lHByDWOWGc4KVUJ2OLaFJSBpxzEliqhXwFjnH+JdHHJV05sch9JPV
-         K0p6UXI1XBnn74Lgq6DN1x09E2rIcT+0ROYjOLbjXzpHUS5v6aJJcAjYn6P9fiWNaTJQ
-         fu/fJ1aB5nME/BHGJB4VjIZACXQ/IPuWX1hfZLtXEgwMJ7Eaht9M0yaNVfQxWfb38CHC
-         v8XWcp5k98EKmC+HIzqhc4q1fNbZLgwaHZFKap26jxAIwx/voaSoHYpIErbWWLi091Ph
-         uMC0R+1Y3TpRTB331P50enxw7trDa2obPw2gvccF0N+3CQq+SQTE/W5X1S/qNAfCR4Eu
-         CgXA==
+        h=from:to:cc:subject:date:message-id;
+        bh=mo2SVHU15dhXGmRt8MzBQ/mcodnrQymnm3XWUfS3DkU=;
+        b=nTxz8xVul1ywqLBld+tylaeroY2sj051plVUeXnYi2I2/vJmeS9Vh34shb/iY4o10e
+         DXFZOxadnKQ2cgfKqdhqDlIeHOzT72GncTsCAOm4UTdlz2lwb5rKmy4h+oXIW8AGIV40
+         wS9+D+gvreV3PIk5mFOmiFFphnXOEWFL08MgTjyBB0LuG2OziXwOm1XFFtvyQ1Ci0zAt
+         FyKgc1jLDqzIgxhvnKhEYrtk1y2HdgMP/MH818clkv55D77H6vcbGSoaHKHZ5we0TuBx
+         pL/Q1HutxYpzoFODv0CY+EkzKlTDSYAlgWGjLOYWBbEL1OeK4lrPRjEjcBo5GFs5cK5O
+         X9lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H/mwCeCN5j4sHkdzkOsGGfEARJX1vOaTb5UpMNbo2tc=;
-        b=ggCsMLGjjg8z1XRBnXNNDMXmzEhiKO45GUBpv7vyuhAE/KSRZVbo0yKr8hkXmeE8eD
-         ZBBs+OU/QiX0HnaFXhUuRE3Y/3BjJYEul8DRbbofn7fpgwrNQ2NSlhjB4uviHj3vJnbG
-         fHGJfgB/keA3LK5oGNvJcEWGj85ezwGQ2FHnKvVb8YsszyNEfDSKa7iBMJlCarE9kC3S
-         NFLxYHCPy8OfO7QWooC9OF2le6Mxl4NjVaSLwoJHU94vP9vMdRrGyLnWSdRNwoOqoVOM
-         ChsCOzTzSCJpaKQIoZxp4tW9dcMWaYvB03u8stxlJoaWTNc6TL5dYvcoAHpdaL7CVSzS
-         rO0A==
-X-Gm-Message-State: ANhLgQ24uDb1dzRZzq3PCAFKgOb1n0U2LXAHvlWLvTg4cLHYuMvpNEwe
-        jchvCp1dvwQswLu4AwzI5h7pwYAf4YbZfurp7v4=
-X-Google-Smtp-Source: ADFU+vtEiabhYMCU9TLmkj1psHVHllDAMEJhrEBsiHviseBuVp4EMhF0ZjZ4e6zM5tU855zi/B8DGheUZjAFap3RM3c=
-X-Received: by 2002:adf:b35e:: with SMTP id k30mr10721282wrd.362.1584108236285;
- Fri, 13 Mar 2020 07:03:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200309204326.27403-1-thirtythreeforty@gmail.com>
- <20200309204326.27403-3-thirtythreeforty@gmail.com> <CAGb2v64_cWagG54iMmzmOwtUmv91xJchtzKW25M=y9DbfFDzkQ@mail.gmail.com>
- <CACmrr9hSK1CzDGQ9_v6gNF7TBH65J-QAL_pwQJdKCc4ZxF_-ww@mail.gmail.com> <CAGb2v65RJUVb4fERTi8qM=qWQuhL4QWR5WpBB7kGS4tN67++aw@mail.gmail.com>
-In-Reply-To: <CAGb2v65RJUVb4fERTi8qM=qWQuhL4QWR5WpBB7kGS4tN67++aw@mail.gmail.com>
-From:   George Hilliard <thirtythreeforty@gmail.com>
-Date:   Fri, 13 Mar 2020 09:03:43 -0500
-Message-ID: <CACmrr9i-6LSOsabQuNyJn-s-AtBHc3HxX5oDkD=_LM_0em6=yQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH 2/5] phy: sun4i-usb: add support for the USB PHY on
- suniv SoC
-To:     Chen-Yu Tsai <wens@csie.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=mo2SVHU15dhXGmRt8MzBQ/mcodnrQymnm3XWUfS3DkU=;
+        b=sREOG9l0/HZmrJW0y/ofnze/c9NrvMLL1kl8IbxbOOPB3Ea2SagBvINu7cLQkYOIxZ
+         2oVYHZQ05Z6MFhy3lq1FO6OVh3ASNITKUCaif5tLPfmJe8UatzQfTShRhPruAhohUBiN
+         QteDV+aGwcCtQGADaJ8z8olh+0yjerPX7buuXumIv+M99jnIoc6AHfuqvvJ+oM+/eaQA
+         qZOAwVaaAUas342EmHTpEzqUjjGOOhs4eTN+Nmi/MFbFaajXuKs837NuTDhXarEnfVkk
+         4dV/v7hETzIiz65ItDx40lKFmXLmLAt5FU4AhXgaX6fMNEos01kVAkPHrSo1hk1PQ97N
+         MR3g==
+X-Gm-Message-State: ANhLgQ2VUm1+MVC557eFfT67a2n14G//y1ep//cFCGZnfAGD+GZLF3Lm
+        t5wL4YcCPaPS7iYokL5pzB+NTqG9/Z4=
+X-Google-Smtp-Source: ADFU+vuhBW6steYgq55mNvlJHkRG/mYoj+9ZMBf68zvt9Qazn44FCW1mGsZcKw476yIBTTeYrQssZA==
+X-Received: by 2002:adf:f2c7:: with SMTP id d7mr18333316wrp.104.1584108976444;
+        Fri, 13 Mar 2020 07:16:16 -0700 (PDT)
+Received: from stbsrv-and-01.and.broadcom.net ([192.19.231.250])
+        by smtp.gmail.com with ESMTPSA id l83sm17561422wmf.43.2020.03.13.07.16.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Mar 2020 07:16:15 -0700 (PDT)
+From:   Al Cooper <alcooperx@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Al Cooper <alcooperx@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-usb@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>
+Subject: [PATCH 0/4] Add XHCI, EHCI and OHCI support for Broadcom STB SoS's
+Date:   Fri, 13 Mar 2020 10:15:41 -0400
+Message-Id: <20200313141545.31943-1-alcooperx@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 12, 2020, 11:08 PM Chen-Yu Tsai <wens@csie.org> wrote:
->
-> On Thu, Mar 12, 2020 at 8:06 PM George Hilliard
-> <thirtythreeforty@gmail.com> wrote:
-> >
-> > Thanks for the review.
-> >
-> > On Thu, Mar 12, 2020 at 1:51 AM Chen-Yu Tsai <wens@csie.org> wrote:
-> > >
-> > > On Tue, Mar 10, 2020 at 4:43 AM George Hilliard
-> > > <thirtythreeforty@gmail.com> wrote:
-> > > >
-> > > > The suniv SoC has one USB OTG port connected to a MUSB controller.
-> > > >
-> > > > Add support for its USB PHY.
-> > > >
-> > > > Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
-> > >
-> > > Not sure why Icenowy's SoB is here. If she was the original author, you
-> > > are supposed to keep her name as the author.
-> >
-> > So, I was unclear on the convention here.  This patch is based on her
-> > patch, but I've modified it and rebased those modifications back into
-> > a single change.  I'm happy to change the author field - does it need
-> > a "Co-authored-by: myself" here?
->
-> I suppose that really depends on how much you changed it. If it were just
-> stylistic changes I'd keep the original author. Also you should list any
-> changes you made to the patch by inserting
->
->     [<who>: changed foo and bar]
->
-> before your SoB.
+This adds support for the XHCI, EHCI and OHCI host controllers found
+in Broadcom STB SoC's. These drivers depend on getting access to the
+new Broadcom STB USB PHY driver through a device-tree phandle and
+will fail if the driver is not available.
 
-Ok, this makes sense. Thanks. I'll send another series. The few that
-are stylistic, I believe I retained Icenowy as the author. Where I
-modified them, I put myself (so people email me, not her, with
-problems).  I'll modify the commit messages like you describe and
-double check the authorship.
+Al Cooper (4):
+  dt-bindings: Add Broadcom STB USB support
+  usb: xhci: xhci-plat: Add support for Broadcom STB SoC's
+  usb: ehci: Add new EHCI driver for Broadcom STB SoC's
+  usb: host: Add ability to build new Broadcom STB USB drivers
 
-> As for the Co-authored-by, I haven't really seen it used so I don't really
-> know.
+ .../bindings/usb/brcm,bcm7445-ehci.yaml       |  60 ++++
+ .../devicetree/bindings/usb/usb-xhci.txt      |   1 +
+ MAINTAINERS                                   |   9 +
+ drivers/usb/host/Kconfig                      |  20 ++
+ drivers/usb/host/Makefile                     |  20 +-
+ drivers/usb/host/ehci-brcm.c                  | 288 ++++++++++++++++++
+ drivers/usb/host/xhci-brcm.c                  |  16 +
+ drivers/usb/host/xhci-brcm.h                  |  16 +
+ drivers/usb/host/xhci-plat.c                  |  11 +
+ 9 files changed, 435 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
+ create mode 100644 drivers/usb/host/ehci-brcm.c
+ create mode 100644 drivers/usb/host/xhci-brcm.c
+ create mode 100644 drivers/usb/host/xhci-brcm.h
 
-Off topic, but I wish Git supported multiple authors natively.
+-- 
+2.17.1
 
-George
