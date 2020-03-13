@@ -2,279 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51CF2184690
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2020 13:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C361848BC
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2020 15:04:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726461AbgCMMMB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Mar 2020 08:12:01 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:62156 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726684AbgCMMMB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Mar 2020 08:12:01 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1584101520; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=Nb3SVCVO/QfeWP+jXoR7bSiSu0BJFe+yjrGG5KroHxk=; b=WjBY9i/cmQ0uzMAOPsbrvt4mge/S+fcX0ppnaERYsZK3tzYIXIUMFJR6mC68Y9T+ZkrzM+Vf
- 01iF3IGmXvM4NvDzWaM0xFkuv/V6ArHFd4hBnyqy3ssH30s1oNJmwWh/WVKu4wEPPuBS4haI
- bZ/cO1GhRLlXPR97HZ8Sdd1Az1Q=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e6b788e.7f158ca1d810-smtp-out-n02;
- Fri, 13 Mar 2020 12:11:58 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 39EE7C43636; Fri, 13 Mar 2020 12:11:57 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.206.24.160] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sanm)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1F05AC433BA;
-        Fri, 13 Mar 2020 12:11:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1F05AC433BA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sanm@codeaurora.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: qcom,dwc3: Convert USB DWC3
- bindings
-To:     Stephen Boyd <swboyd@chromium.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>
-References: <1581316605-29202-1-git-send-email-sanm@codeaurora.org>
- <1581316605-29202-2-git-send-email-sanm@codeaurora.org>
- <158137029351.121156.8319119424832255457@swboyd.mtv.corp.google.com>
-From:   "Sandeep Maheswaram (Temp)" <sanm@codeaurora.org>
-Message-ID: <fd63b608-7b73-b251-b603-642f7f89ac64@codeaurora.org>
-Date:   Fri, 13 Mar 2020 17:41:49 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        id S1726713AbgCMOD6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Mar 2020 10:03:58 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:37045 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726674AbgCMOD6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Mar 2020 10:03:58 -0400
+Received: by mail-wr1-f66.google.com with SMTP id 6so12239359wre.4;
+        Fri, 13 Mar 2020 07:03:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=H/mwCeCN5j4sHkdzkOsGGfEARJX1vOaTb5UpMNbo2tc=;
+        b=EJJCKJjDYov13lHByDWOWGc4KVUJ2OLaFJSBpxzEliqhXwFjnH+JdHHJV05sch9JPV
+         K0p6UXI1XBnn74Lgq6DN1x09E2rIcT+0ROYjOLbjXzpHUS5v6aJJcAjYn6P9fiWNaTJQ
+         fu/fJ1aB5nME/BHGJB4VjIZACXQ/IPuWX1hfZLtXEgwMJ7Eaht9M0yaNVfQxWfb38CHC
+         v8XWcp5k98EKmC+HIzqhc4q1fNbZLgwaHZFKap26jxAIwx/voaSoHYpIErbWWLi091Ph
+         uMC0R+1Y3TpRTB331P50enxw7trDa2obPw2gvccF0N+3CQq+SQTE/W5X1S/qNAfCR4Eu
+         CgXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H/mwCeCN5j4sHkdzkOsGGfEARJX1vOaTb5UpMNbo2tc=;
+        b=ggCsMLGjjg8z1XRBnXNNDMXmzEhiKO45GUBpv7vyuhAE/KSRZVbo0yKr8hkXmeE8eD
+         ZBBs+OU/QiX0HnaFXhUuRE3Y/3BjJYEul8DRbbofn7fpgwrNQ2NSlhjB4uviHj3vJnbG
+         fHGJfgB/keA3LK5oGNvJcEWGj85ezwGQ2FHnKvVb8YsszyNEfDSKa7iBMJlCarE9kC3S
+         NFLxYHCPy8OfO7QWooC9OF2le6Mxl4NjVaSLwoJHU94vP9vMdRrGyLnWSdRNwoOqoVOM
+         ChsCOzTzSCJpaKQIoZxp4tW9dcMWaYvB03u8stxlJoaWTNc6TL5dYvcoAHpdaL7CVSzS
+         rO0A==
+X-Gm-Message-State: ANhLgQ24uDb1dzRZzq3PCAFKgOb1n0U2LXAHvlWLvTg4cLHYuMvpNEwe
+        jchvCp1dvwQswLu4AwzI5h7pwYAf4YbZfurp7v4=
+X-Google-Smtp-Source: ADFU+vtEiabhYMCU9TLmkj1psHVHllDAMEJhrEBsiHviseBuVp4EMhF0ZjZ4e6zM5tU855zi/B8DGheUZjAFap3RM3c=
+X-Received: by 2002:adf:b35e:: with SMTP id k30mr10721282wrd.362.1584108236285;
+ Fri, 13 Mar 2020 07:03:56 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <158137029351.121156.8319119424832255457@swboyd.mtv.corp.google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20200309204326.27403-1-thirtythreeforty@gmail.com>
+ <20200309204326.27403-3-thirtythreeforty@gmail.com> <CAGb2v64_cWagG54iMmzmOwtUmv91xJchtzKW25M=y9DbfFDzkQ@mail.gmail.com>
+ <CACmrr9hSK1CzDGQ9_v6gNF7TBH65J-QAL_pwQJdKCc4ZxF_-ww@mail.gmail.com> <CAGb2v65RJUVb4fERTi8qM=qWQuhL4QWR5WpBB7kGS4tN67++aw@mail.gmail.com>
+In-Reply-To: <CAGb2v65RJUVb4fERTi8qM=qWQuhL4QWR5WpBB7kGS4tN67++aw@mail.gmail.com>
+From:   George Hilliard <thirtythreeforty@gmail.com>
+Date:   Fri, 13 Mar 2020 09:03:43 -0500
+Message-ID: <CACmrr9i-6LSOsabQuNyJn-s-AtBHc3HxX5oDkD=_LM_0em6=yQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH 2/5] phy: sun4i-usb: add support for the USB PHY on
+ suniv SoC
+To:     Chen-Yu Tsai <wens@csie.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Stephen,
+On Thu, Mar 12, 2020, 11:08 PM Chen-Yu Tsai <wens@csie.org> wrote:
+>
+> On Thu, Mar 12, 2020 at 8:06 PM George Hilliard
+> <thirtythreeforty@gmail.com> wrote:
+> >
+> > Thanks for the review.
+> >
+> > On Thu, Mar 12, 2020 at 1:51 AM Chen-Yu Tsai <wens@csie.org> wrote:
+> > >
+> > > On Tue, Mar 10, 2020 at 4:43 AM George Hilliard
+> > > <thirtythreeforty@gmail.com> wrote:
+> > > >
+> > > > The suniv SoC has one USB OTG port connected to a MUSB controller.
+> > > >
+> > > > Add support for its USB PHY.
+> > > >
+> > > > Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+> > >
+> > > Not sure why Icenowy's SoB is here. If she was the original author, you
+> > > are supposed to keep her name as the author.
+> >
+> > So, I was unclear on the convention here.  This patch is based on her
+> > patch, but I've modified it and rebased those modifications back into
+> > a single change.  I'm happy to change the author field - does it need
+> > a "Co-authored-by: myself" here?
+>
+> I suppose that really depends on how much you changed it. If it were just
+> stylistic changes I'd keep the original author. Also you should list any
+> changes you made to the patch by inserting
+>
+>     [<who>: changed foo and bar]
+>
+> before your SoB.
 
-On 2/11/2020 3:01 AM, Stephen Boyd wrote:
-> Quoting Sandeep Maheswaram (2020-02-09 22:36:44)
->> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->> new file mode 100644
->> index 0000000..0353401
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->> @@ -0,0 +1,155 @@
->> +# SPDX-License-Identifier: GPL-2.0-only
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/usb/qcom,dwc3.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm SuperSpeed DWC3 USB SoC controller
->> +
->> +maintainers:
->> +  - Manu Gautam <mgautam@codeaurora.org>
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - qcom,msm8996-dwc3
->> +          - qcom,msm8998-dwc3
->> +          - qcom,sdm845-dwc3
->> +      - const: qcom,dwc3
->> +
->> +  reg:
->> +    description: Offset and length of register set for QSCRATCH wrapper
->> +    maxItems: 1
->> +
->> +  "#address-cells":
->> +    enum: [ 1, 2 ]
->> +
->> +  "#size-cells":
->> +    enum: [ 1, 2 ]
->> +
->> +  power-domains:
->> +    description: specifies a phandle to PM domain provider node
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    description:
->> +      A list of phandle and clock-specifier pairs for the clocks
->> +      listed in clock-names.
->> +    items:
->> +      - description: System Config NOC clock.
->> +      - description: Master/Core clock, has to be >= 125 MHz
->> +          for SS operation and >= 60MHz for HS operation.
->> +      - description: System bus AXI clock.
->> +      - description: Mock utmi clock needed for ITP/SOF generation
->> +          in host mode.Its frequency should be 19.2MHz.
-> Please add a space between the end of sentence and next one.
-will do in next version
->
->> +      - description: Sleep clock, used for wakeup when
->> +          USB3 core goes into low power mode (U3).
->> +
->> +  clock-names:
->> +    items:
->> +      - const: cfg_noc
->> +      - const: core
->> +      - const: iface
->> +      - const: mock_utmi
->> +      - const: sleep
->> +
->> +  assigned-clocks:
->> +    items:
->> +      - description: Phandle to MOCK_UTMI_CLK.
->> +      - description: Phandle to MASTER_CLK.
-> It's a phandle and clock specifier pair, not always just a phandle.
-> Maybe the base schema can enforce that somehow, but the description
-> isn't accurate.
-will do in next version
->
->> +
->> +  assigned-clock-rates:
->> +    items:
->> +      - description: Must be 19.2MHz (19200000).
->> +      - description: Must be >= 60 MHz in HS mode, >= 125 MHz in SS mode.
-> Can this be more strict? I see in [1] that it was suggested to update
-> the schema checker. Did you try that?
+Ok, this makes sense. Thanks. I'll send another series. The few that
+are stylistic, I believe I retained Icenowy as the author. Where I
+modified them, I put myself (so people email me, not her, with
+problems).  I'll modify the commit messages like you describe and
+double check the authorship.
 
-Tried that but need to add maximum value also and even after that 
-getting some errors as below.
+> As for the Co-authored-by, I haven't really seen it used so I don't really
+> know.
 
-/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dt.yaml: 
-usb@a6f8800: assigned-clock-rates: Additional items are not allowed 
-([150000000] was unexpected)
+Off topic, but I wish Git supported multiple authors natively.
 
-/local/mnt/workspace/sandeep/bu_build/src/third_party/kernel/linux-next/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dt.yaml: 
-usb@a6f8800: assigned-clock-rates:0: [19200000] is too short
->
->> +
->> +  resets:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    items:
->> +      - description: The interrupt that is asserted
->> +          when a wakeup event is received on USB2 bus.
->> +      - description: The interrupt that is asserted
->> +          when a wakeup event is received on USB3 bus.
->> +      - description: Wakeup event on DM line.
->> +      - description: Wakeup event on DP line.
->> +
->> +  interrupt-names:
->> +    items:
->> +      - const: hs_phy_irq
->> +      - const: ss_phy_irq
->> +      - const: dm_hs_phy_irq
->> +      - const: dp_hs_phy_irq
->> +
->> +  qcom,select-utmi-as-pipe-clk:
->> +    description:
->> +      If present, disable USB3 pipe_clk requirement.
->> +      Used when dwc3 operates without SSPHY and only
->> +      HS/FS/LS modes are supported.
->> +    type: boolean
->> +
->> +# Required child node:
->> +
->> +patternProperties:
->> +  "^dwc3@[0-9a-f]+$":
->> +    type: object
->> +    description:
->> +      A child node must exist to represent the core DWC3 IP block
->> +      The content of the node is defined in dwc3.txt.
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - "#address-cells"
->> +  - "#size-cells"
->> +  - power-domains
->> +  - clocks
->> +  - clock-names
-> Why aren't interrupts required? They're always present, aren't they?
-In qcom,dwc3.txt file interrupts are mentioned in Optional properties 
-and I also didnt find any interrupts in 8996.dtsi
->
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/clock/qcom,gcc-sdm845.h>
->> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> It would be good to include <dt-bindings/interrupt-controller/irq.h>
-> here too, just in case someone wants to move that include out of
-> arm-gic.h, which is possible.
->
->> +    usb_1: usb@a6f8800 {
-> Can we drop the phandle? It's not used.
-will do in next version
->
->> +        compatible = "qcom,sdm845-dwc3", "qcom,dwc3";
->> +        reg = <0 0x0a6f8800 0 0x400>;
->> +
->> +        #address-cells = <2>;
->> +        #size-cells = <2>;
->> +
->> +        clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
->> +                 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
->> +                 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
->> +                 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
->> +                 <&gcc GCC_USB30_PRIM_SLEEP_CLK>;
->> +        clock-names = "cfg_noc", "core", "iface", "mock_utmi",
->> +                        "sleep";
-> Spacing looks off. Are there tabs?
-will correct in next version
->
->> +
->> +        assigned-clocks = <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
->> +                          <&gcc GCC_USB30_PRIM_MASTER_CLK>;
->> +        assigned-clock-rates = <19200000>, <150000000>;
->> +
->> +        interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
->> +                     <GIC_SPI 486 IRQ_TYPE_LEVEL_HIGH>,
->> +                     <GIC_SPI 488 IRQ_TYPE_LEVEL_HIGH>,
->> +                     <GIC_SPI 489 IRQ_TYPE_LEVEL_HIGH>;
->> +        interrupt-names = "hs_phy_irq", "ss_phy_irq",
->> +                              "dm_hs_phy_irq", "dp_hs_phy_irq";
-> Same spacing nit
-will correct in next version
->
->> +
->> +            power-domains = <&gcc USB30_PRIM_GDSC>;
->> +
->> +            resets = <&gcc GCC_USB30_PRIM_BCR>;
->> +
->> +            usb_1_dwc3: dwc3@a600000 {
-> Drop this phandle too? It isn't used.
-will correct in next version
->
->> +                compatible = "snps,dwc3";
->> +                reg = <0 0x0a600000 0 0xcd00>;
->> +                interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
->> +                iommus = <&apps_smmu 0x740 0>;
->> +                snps,dis_u2_susphy_quirk;
->> +                snps,dis_enblslpm_quirk;
->> +                phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
->> +                phy-names = "usb2-phy", "usb3-phy";
->> +            };
-> [1] https://lkml.kernel.org/r/20191218221310.GA4624@bogus
-
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
+George
