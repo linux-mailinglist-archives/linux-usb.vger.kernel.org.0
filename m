@@ -2,109 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB99183FFB
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2020 05:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5A318400F
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Mar 2020 05:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726512AbgCMEIG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Mar 2020 00:08:06 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:37622 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725809AbgCMEIG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Mar 2020 00:08:06 -0400
-Received: by mail-ed1-f65.google.com with SMTP id b23so10267712edx.4;
-        Thu, 12 Mar 2020 21:08:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yDox/6vLEM6w6LLKrtTgN8Ke1yzgs6JPxhSC2EqD6Jg=;
-        b=UrspklO559xZkVJiyzSChTOUwCj520pc0OfO9Wqb9HMTNk3wJDHxUYgzmULCnatLE+
-         m5GHQjyBzD5ggU362THPVni45o1y1TuCOZRzLHP4z7ZkLf+PUw1iT7PyrP759fanDkzP
-         vmdLBoa8njn+TK+W91QY3R9IicvfIjuoP+5X3/APbvGAKWbT0uOepTl6DQzjDqWqzpgH
-         v5mdxel9gIuKKouio6Fw+wO2jaqciV//QRI6/SdzUcWcxpqyeljYIMNkRHISKOe0CGvx
-         PMZO6aVO21uYDIz8NH1hcM6Z+VoxbGeJL3S37VNHF2AXpbKDj/MCws6RLey+DDsHLvfd
-         BGSA==
-X-Gm-Message-State: ANhLgQ1y3egz5WAWw6zriZEajEOrGfuny+D8/fU8Y2e1tGOEYc6PQB6s
-        p2NCAJvtGQ6TJtDeuROHhG9XygcTj2c=
-X-Google-Smtp-Source: ADFU+vuk4ttAN2oQwh1V8Pu3jzXTECde1dUCdklUdLjpdNo0D5VcaL7eP+zGescKRE6mAWCYUswdeQ==
-X-Received: by 2002:aa7:c2cc:: with SMTP id m12mr11316407edp.11.1584072481138;
-        Thu, 12 Mar 2020 21:08:01 -0700 (PDT)
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
-        by smtp.gmail.com with ESMTPSA id cx3sm3700926edb.75.2020.03.12.21.08.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Mar 2020 21:08:01 -0700 (PDT)
-Received: by mail-wm1-f48.google.com with SMTP id n8so8435987wmc.4;
-        Thu, 12 Mar 2020 21:08:00 -0700 (PDT)
-X-Received: by 2002:a1c:9816:: with SMTP id a22mr8906345wme.16.1584072480383;
- Thu, 12 Mar 2020 21:08:00 -0700 (PDT)
+        id S1726446AbgCMEoA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Mar 2020 00:44:00 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:59434 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726194AbgCMEoA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Mar 2020 00:44:00 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02D4hmM2019617;
+        Thu, 12 Mar 2020 23:43:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1584074628;
+        bh=XpUwsYDH/tbEiw9bK9EeXQskLAoqJ6LteWN9NgyZdl4=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=rc+0rrd5mK+hpp1qXDueWMnJ+xVaNuRe4JNuHPRBgh+l2k9lxqWLzA+M4TzdAqh1l
+         4gcaA3aKJdqF5/bDmdHL/dt0N5s59RD+uSAHCOmll67WkRC0y22b+tb1M77vB0ovrP
+         crI699YeDGzoMFwL6tL9zop3mm8/WGFSMAd7UIM8=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02D4hluL001597
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 12 Mar 2020 23:43:47 -0500
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 12
+ Mar 2020 23:43:47 -0500
+Received: from localhost.localdomain (10.64.41.19) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 12 Mar 2020 23:43:47 -0500
+Received: from [10.24.69.159] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by localhost.localdomain (8.15.2/8.15.2) with ESMTP id 02D4hhuU126810;
+        Thu, 12 Mar 2020 23:43:44 -0500
+Subject: Re: [Patch V5 00/21] Tegra XUSB OTG support
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nagarjuna Kristam <nkristam@nvidia.com>,
+        <jonathanh@nvidia.com>, <mark.rutland@arm.com>,
+        <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1581322307-11140-1-git-send-email-nkristam@nvidia.com>
+ <20200217085130.GJ1339021@ulmo> <20200227173226.GA1114616@ulmo>
+ <20200304070100.GA1271591@kroah.com> <20200312092232.GA1199023@ulmo>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <3e76c44e-f2b0-3c8a-c7b3-0461ff1176d3@ti.com>
+Date:   Fri, 13 Mar 2020 10:18:23 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-References: <20200309204326.27403-1-thirtythreeforty@gmail.com>
- <20200309204326.27403-3-thirtythreeforty@gmail.com> <CAGb2v64_cWagG54iMmzmOwtUmv91xJchtzKW25M=y9DbfFDzkQ@mail.gmail.com>
- <CACmrr9hSK1CzDGQ9_v6gNF7TBH65J-QAL_pwQJdKCc4ZxF_-ww@mail.gmail.com>
-In-Reply-To: <CACmrr9hSK1CzDGQ9_v6gNF7TBH65J-QAL_pwQJdKCc4ZxF_-ww@mail.gmail.com>
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Fri, 13 Mar 2020 12:07:48 +0800
-X-Gmail-Original-Message-ID: <CAGb2v65RJUVb4fERTi8qM=qWQuhL4QWR5WpBB7kGS4tN67++aw@mail.gmail.com>
-Message-ID: <CAGb2v65RJUVb4fERTi8qM=qWQuhL4QWR5WpBB7kGS4tN67++aw@mail.gmail.com>
-Subject: Re: [RESEND PATCH 2/5] phy: sun4i-usb: add support for the USB PHY on
- suniv SoC
-To:     George Hilliard <thirtythreeforty@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200312092232.GA1199023@ulmo>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 12, 2020 at 8:06 PM George Hilliard
-<thirtythreeforty@gmail.com> wrote:
->
-> Thanks for the review.
->
-> On Thu, Mar 12, 2020 at 1:51 AM Chen-Yu Tsai <wens@csie.org> wrote:
-> >
-> > On Tue, Mar 10, 2020 at 4:43 AM George Hilliard
-> > <thirtythreeforty@gmail.com> wrote:
-> > >
-> > > The suniv SoC has one USB OTG port connected to a MUSB controller.
-> > >
-> > > Add support for its USB PHY.
-> > >
-> > > Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
-> >
-> > Not sure why Icenowy's SoB is here. If she was the original author, you
-> > are supposed to keep her name as the author.
->
-> So, I was unclear on the convention here.  This patch is based on her
-> patch, but I've modified it and rebased those modifications back into
-> a single change.  I'm happy to change the author field - does it need
-> a "Co-authored-by: myself" here?
+Hi,
 
-I suppose that really depends on how much you changed it. If it were just
-stylistic changes I'd keep the original author. Also you should list any
-changes you made to the patch by inserting
+On 12/03/20 2:52 pm, Thierry Reding wrote:
+> On Wed, Mar 04, 2020 at 08:01:00AM +0100, Greg Kroah-Hartman wrote:
+>> On Thu, Feb 27, 2020 at 06:32:26PM +0100, Thierry Reding wrote:
+>>> On Mon, Feb 17, 2020 at 09:51:30AM +0100, Thierry Reding wrote:
+>>>> On Mon, Feb 10, 2020 at 01:41:26PM +0530, Nagarjuna Kristam wrote:
+>>>>> This patch series adds OTG support on XUSB hardware used in Tegra210 and
+>>>>> Tegra186 SoCs.
+>>>>>
+>>>>> This patchset is composed with :
+>>>>>  - dt bindings of XUSB Pad Controller
+>>>>>  - dt bindings for XUSB device Driver
+>>>>>  - Tegra PHY driver for usb-role-switch and usb-phy
+>>>>>  - Tegra XUSB host mode driver to support OTG mode
+>>>>>  - Tegra XUSB device mode driver to use usb-phy and multi device mode
+>>>>>  - dts for XUSB pad controller
+>>>>>  - dts for xudc for Jetson TX1 and TX2
+>>>>>  - dts for Jetson-TK1
+>>>>>  - dts for Jetson-Nano
+>>>>>
+>>>>> Tegra Pad controller driver register for role switch updates for
+>>>>> OTG/peripheral capable USB ports and adds usb-phy for that corresponding
+>>>>> USB ports.
+>>>>>
+>>>>> Host and Device mode drivers gets usb-phy from USB2's phy and registers
+>>>>> notifier for role changes to perform corresponding role tasks.
+>>>>>
+>>>>> Order of merging Patches:
+>>>>> Please merge DT changes first followed Tegra PHY driver changes and then
+>>>>> USB driver changes.
+>>>>
+>>>> Felipe, Greg, Kishon,
+>>>>
+>>>> Given the runtime dependencies between these various parts, I could pick
+>>>> these up into the Tegra tree if you provide an Acked-by.
+>>>
+>>> Ping. Are you guys okay if I pick these up into the Tegra tree?
+>>
+>> That's up to Felipe, I have no opinion :)
+> 
+> Felipe, Kishon,
+> 
+> I've picked up the device tree changes into the Tegra tree. Let me know
+> if you also want me to pick up the USB and PHY driver changes.
 
-    [<who>: changed foo and bar]
+The PHY and USB changes can only go together since xhci-tegra.c seems to
+use an export symbol of xusb PHY. So I'm fine if someone takes the PHY
+changes along with USB changes.
 
-before your SoB.
+Acked-by: Kishon Vijay Abraham I <kishon@ti.com>
 
-As for the Co-authored-by, I haven't really seen it used so I don't really
-know.
-
-ChenYu
-
-> > >
-> > >  static const struct of_device_id sun4i_usb_phy_of_match[] = {
-> > > +       { .compatible = "allwinner,suniv-f1c100s-usb-phy",
-> > > +         .data = &suniv_f1c100s_cfg },
-> > >         { .compatible = "allwinner,sun4i-a10-usb-phy", .data = &sun4i_a10_cfg },
-> >
-> > Please use the same style (and ignore checkpatch.pl on this one).
->
-> Very happy to change this, it was bugging me!
->
-> George
+Thanks
+Kishon
