@@ -2,68 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B4818544F
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2020 04:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87A2018583C
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2020 02:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726553AbgCNDn6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Mar 2020 23:43:58 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:48504 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726399AbgCNDn6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Mar 2020 23:43:58 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 7E99E15A1577C;
-        Fri, 13 Mar 2020 20:43:57 -0700 (PDT)
-Date:   Fri, 13 Mar 2020 20:43:54 -0700 (PDT)
-Message-Id: <20200313.204354.1099710416713347967.davem@davemloft.net>
-To:     bay@hackerdom.ru
-Cc:     oliver@neukum.org, gregkh@linuxfoundation.org, info@metux.net,
-        tglx@linutronix.de, kstewart@linuxfoundation.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] cdc_ncm: Implement the 32-bit version of NCM
- Transfer Block
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200313213823.178435-1-bay@hackerdom.ru>
-References: <20200313213823.178435-1-bay@hackerdom.ru>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 13 Mar 2020 20:43:57 -0700 (PDT)
+        id S1727450AbgCOB6d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 14 Mar 2020 21:58:33 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:46804 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727405AbgCOB6d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 Mar 2020 21:58:33 -0400
+Received: by mail-io1-f66.google.com with SMTP id v3so13604187iom.13;
+        Sat, 14 Mar 2020 18:58:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=jSELmPcfJ7GZk6iuqy9bvAzOT2E/K3mgaQgMY60UuWc=;
+        b=CxS94f2uz3d3wbzHTc7w0dwEryWR83xfJqmGN12gtM+yTzChjKb3z2ExrRZGQosZOL
+         pJqYviClFLHtERFl9qB2/xzo3+ldCeacoXaMBakTKo7IWKTYr52P8B1Cwt+YnUMBGIbC
+         pbB1hNyhl6UTZUuuhkYcPuDXy/JJBaI7m95+uHixL/oGVWMXTAN+j5U9zoK+WzDlWWww
+         rSnEYUeVQ0dH8k9CDyiRChKgaoromlv+u57c1FQkYJBs6d9opZYEdFpGTzjaQSjrPh16
+         Et639k4MaRaaQ9CBq+ST1xCYS7Eda1nxNIzxHaaqVO7F8DNlT+PXoKtGvkUFxHHdMqih
+         Hjvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=jSELmPcfJ7GZk6iuqy9bvAzOT2E/K3mgaQgMY60UuWc=;
+        b=Ps4f1khyuxH9lsQHA9HZ/cfxzqv+IsKIJh1IT9jJldpNi8S+1Fo2ZHHgUSwgRu/sxk
+         ClLgrV1APMPHHc8RNm3JC7bHbd4c4o3JFTPv5z/wSC+B9M6hPTggrwwzd5QFx88xix30
+         OKzZFpz6Gd1hCAZ7fNvXTF0c0zldlkiL9Dmu5YT8r6/gcOXSuS3x/muAYW4DE6nUC7UX
+         TvSMOEcovKwfBg4ybwl8Q/yMGqy6QLRWTA067VYAdzxAM5OD6Hou+3Xhmbu+hpcXfMPV
+         t51vOhwK/A3mPJIHK1o97c2ooZIPbfzOtDIcNJmbB+ayhQ05wOhcmtyypJnlkO0ULIK1
+         5Qaw==
+X-Gm-Message-State: ANhLgQ2ViD2NQEZHUY8fe0DptyJNOwc8MxwuASVQLXj0SDtUGKhv/6fA
+        5IEqV1jsZ10Wj2eXRT4QLTqNiu+7
+X-Google-Smtp-Source: ADFU+vvQKs0h9RIxP0ffPnpQ86QE+/b+ZMvImSCM5t+dNQ/D+DPOb37qd06aUPgXK56mCYhZkJsGaQ==
+X-Received: by 2002:a63:7c0f:: with SMTP id x15mr16552303pgc.173.1584163615702;
+        Fri, 13 Mar 2020 22:26:55 -0700 (PDT)
+Received: from localhost ([216.24.188.11])
+        by smtp.gmail.com with ESMTPSA id o128sm26760063pfg.5.2020.03.13.22.26.54
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 13 Mar 2020 22:26:55 -0700 (PDT)
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     gregkh@linuxfoundation.org, rafael@kernel.org, hminas@synopsys.com,
+        mathias.nyman@intel.com, bgolaszewski@baylibre.com, arnd@arndb.de,
+        geert@linux-m68k.org, mchehab+samsung@kernel.org,
+        treding@nvidia.com, tglx@linutronix.de, suzuki.poulose@arm.com,
+        hdegoede@redhat.com, linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Dejin Zheng <zhengdejin5@gmail.com>
+Subject: [PATCH v2 1/4] drivers: provide devm_platform_ioremap_and_get_resource()
+Date:   Sat, 14 Mar 2020 13:26:35 +0800
+Message-Id: <20200314052638.6008-2-zhengdejin5@gmail.com>
+X-Mailer: git-send-email 2.25.0
+In-Reply-To: <20200314052638.6008-1-zhengdejin5@gmail.com>
+References: <20200314052638.6008-1-zhengdejin5@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Alexander Bersenev <bay@hackerdom.ru>
-Date: Sat, 14 Mar 2020 02:38:20 +0500
+Since commit "drivers: provide devm_platform_ioremap_resource()",
+It was wrap platform_get_resource() and devm_ioremap_resource() as
+single helper devm_platform_ioremap_resource(). but now, many drivers
+still used platform_get_resource() and devm_ioremap_resource()
+together in the kernel tree. The reason can not be replaced is they
+still need use the resource variables obtained by platform_get_resource().
+so provide this helper.
 
-> The NCM specification defines two formats of transfer blocks: with 16-bit
-> fields (NTB-16) and with 32-bit fields (NTB-32). Currently only NTB-16 is
-> implemented.
-> 
-> This patch adds the support of NTB-32. The motivation behind this is that
-> some devices such as E5785 or E5885 from the current generation of Huawei
-> LTE routers do not support NTB-16. The previous generations of Huawei
-> devices are also use NTB-32 by default.
-> 
-> Also this patch enables NTB-32 by default for Huawei devices.
-> 
-> During the 2019 ValdikSS made five attempts to contact Huawei to add the
-> NTB-16 support to their router firmware, but they were unsuccessful.
-> 
-> Signed-off-by: Alexander Bersenev <bay@hackerdom.ru>
+Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+---
+ drivers/base/platform.c         | 18 ++++++++++++++++++
+ include/linux/platform_device.h |  3 +++
+ 2 files changed, 21 insertions(+)
 
-This patch is already in my net-next tree.
+diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+index 7fa654f1288b..b3e2409effae 100644
+--- a/drivers/base/platform.c
++++ b/drivers/base/platform.c
+@@ -62,6 +62,24 @@ struct resource *platform_get_resource(struct platform_device *dev,
+ EXPORT_SYMBOL_GPL(platform_get_resource);
+ 
+ #ifdef CONFIG_HAS_IOMEM
++/**
++ * devm_platform_ioremap_and_get_resource - call devm_ioremap_resource() for a
++ *					    platform device and get resource
++ *
++ * @pdev: platform device to use both for memory resource lookup as well as
++ *        resource management
++ * @index: resource index
++ * @res: get the resource
++ */
++void __iomem *
++devm_platform_ioremap_and_get_resource(struct platform_device *pdev,
++				unsigned int index, struct resource **res)
++{
++	*res = platform_get_resource(pdev, IORESOURCE_MEM, index);
++	return devm_ioremap_resource(&pdev->dev, *res);
++}
++EXPORT_SYMBOL_GPL(devm_platform_ioremap_and_get_resource);
++
+ /**
+  * devm_platform_ioremap_resource - call devm_ioremap_resource() for a platform
+  *				    device
+diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
+index 276a03c24691..5fd1977e3eaf 100644
+--- a/include/linux/platform_device.h
++++ b/include/linux/platform_device.h
+@@ -55,6 +55,9 @@ extern struct device *
+ platform_find_device_by_driver(struct device *start,
+ 			       const struct device_driver *drv);
+ extern void __iomem *
++devm_platform_ioremap_and_get_resource(struct platform_device *pdev,
++				unsigned int index, struct resource **res);
++extern void __iomem *
+ devm_platform_ioremap_resource(struct platform_device *pdev,
+ 			       unsigned int index);
+ extern void __iomem *
+-- 
+2.25.0
 
-You need to submit the follow-up fix all by itself, relative to my
-net-next GIT tree.
-
-You must always post patches against the GIT tree that your change
-is targetting, that way you will avoid situations like this.
-
-Thank you.
