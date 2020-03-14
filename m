@@ -2,68 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB3F1853FE
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2020 03:26:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B4818544F
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Mar 2020 04:44:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726559AbgCNC0g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Mar 2020 22:26:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39342 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726414AbgCNC0f (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 13 Mar 2020 22:26:35 -0400
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B512720663;
-        Sat, 14 Mar 2020 02:26:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584152795;
-        bh=AcJjJyWn5ByJbwtEz4BGq+xcuACI0IwUCrM4Q1XGnMI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qT5imk+Rcv0q6OLRfWaLfXPZCf0ymZ01i/IhtVZHGCwljz0IDWJI9COcx3oi5UT5Q
-         bW/4Ukk85xOZwWH6vMnWDH+h8vBDQAAS8yN/g7pqrs/Aw6HqDkwJ37fGs9G+PtiWlo
-         o7eRZB/q5Z14t+K41rknCavEVQAZcS9wGwEgSD+U=
-Date:   Fri, 13 Mar 2020 19:26:32 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Alexander Bersenev <bay@hackerdom.ru>
-Cc:     Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        id S1726553AbgCNDn6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Mar 2020 23:43:58 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:48504 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726399AbgCNDn6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Mar 2020 23:43:58 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 7E99E15A1577C;
+        Fri, 13 Mar 2020 20:43:57 -0700 (PDT)
+Date:   Fri, 13 Mar 2020 20:43:54 -0700 (PDT)
+Message-Id: <20200313.204354.1099710416713347967.davem@davemloft.net>
+To:     bay@hackerdom.ru
+Cc:     oliver@neukum.org, gregkh@linuxfoundation.org, info@metux.net,
+        tglx@linutronix.de, kstewart@linuxfoundation.org,
         linux-usb@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] cdc_ncm: Fix the build warning
-Message-ID: <20200313192632.7900a288@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20200313213823.178435-2-bay@hackerdom.ru>
+Subject: Re: [PATCH 1/2] cdc_ncm: Implement the 32-bit version of NCM
+ Transfer Block
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200313213823.178435-1-bay@hackerdom.ru>
 References: <20200313213823.178435-1-bay@hackerdom.ru>
-        <20200313213823.178435-2-bay@hackerdom.ru>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 13 Mar 2020 20:43:57 -0700 (PDT)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 14 Mar 2020 02:38:21 +0500 Alexander Bersenev wrote:
-> The ndp32->wLength is two bytes long, so replace cpu_to_le32 with cpu_to_le16.
+From: Alexander Bersenev <bay@hackerdom.ru>
+Date: Sat, 14 Mar 2020 02:38:20 +0500
 
-missing signoff
+> The NCM specification defines two formats of transfer blocks: with 16-bit
+> fields (NTB-16) and with 32-bit fields (NTB-32). Currently only NTB-16 is
+> implemented.
+> 
+> This patch adds the support of NTB-32. The motivation behind this is that
+> some devices such as E5785 or E5885 from the current generation of Huawei
+> LTE routers do not support NTB-16. The previous generations of Huawei
+> devices are also use NTB-32 by default.
+> 
+> Also this patch enables NTB-32 by default for Huawei devices.
+> 
+> During the 2019 ValdikSS made five attempts to contact Huawei to add the
+> NTB-16 support to their router firmware, but they were unsuccessful.
+> 
+> Signed-off-by: Alexander Bersenev <bay@hackerdom.ru>
 
-> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-> index 5569077bd5b8..8929669b5e6d 100644
-> --- a/drivers/net/usb/cdc_ncm.c
-> +++ b/drivers/net/usb/cdc_ncm.c
-> @@ -1172,7 +1172,7 @@ static struct usb_cdc_ncm_ndp32 *cdc_ncm_ndp32(struct cdc_ncm_ctx *ctx, struct s
->  		ndp32 = ctx->delayed_ndp32;
->  
->  	ndp32->dwSignature = sign;
-> -	ndp32->wLength = cpu_to_le32(sizeof(struct usb_cdc_ncm_ndp32) + sizeof(struct usb_cdc_ncm_dpe32));
-> +	ndp32->wLength = cpu_to_le16(sizeof(struct usb_cdc_ncm_ndp32) + sizeof(struct usb_cdc_ncm_dpe32));
->  	return ndp32;
+This patch is already in my net-next tree.
 
-Isn't this code added in the previous patch? Why not squash them
-together?
+You need to submit the follow-up fix all by itself, relative to my
+net-next GIT tree.
+
+You must always post patches against the GIT tree that your change
+is targetting, that way you will avoid situations like this.
+
+Thank you.
