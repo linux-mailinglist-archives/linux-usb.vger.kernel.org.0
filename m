@@ -2,98 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDEDF185D5C
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2020 15:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54148185E72
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2020 17:19:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728525AbgCOOGB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 15 Mar 2020 10:06:01 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:36486 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728226AbgCOOGA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Mar 2020 10:06:00 -0400
-Received: by mail-pg1-f194.google.com with SMTP id z4so2260391pgu.3;
-        Sun, 15 Mar 2020 07:05:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8KoDzKzTJ/RhQEVM8AR3TnFL37SwdP66Jc4nSkLB9Rg=;
-        b=QtK/IMCoFPirrqAqgZIQFECGWUXVcv49njtBVLg/kFW1DDcaGTXWc6YyYtmX8lNZ2f
-         lfKLyRQqDOvn3u1lpOFUbf1XjyTmAilemOxXD8pm8VSlE6vymiMYeHKGexXBrvn/mazM
-         ve/SoNGZVHsoHVjTq1RSXtyEbF40FGYILg7eYrmQX1QZlAIREZK53KToPgCAjk1OSctF
-         iot4UrfBBXAmeuz6gcQNiCWSnoaoQ4n154WAXKYX2Qmrn50IAj6/LWIffMFK4b/6vDj1
-         KClu04U4jqWVXKq1Q7kz/GUXU9XeY/1BN7f+qzqPf0zid7kVzy7quZcPzx3i+d3oH+c4
-         2qJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8KoDzKzTJ/RhQEVM8AR3TnFL37SwdP66Jc4nSkLB9Rg=;
-        b=UY7keN9rtYZRSZ3y0jc/W2yvVn6kOViNQDNLMrdnWCx4Mm1WhXseMDMjMlIivBxovJ
-         36Ecrd8+VwMqGtH/NaSxov6Bc++Ub8atL2ICwWgEk3A3Ymev5EoGFCtxvjYUNBML27vI
-         EBBwjizR7xQiSkBlcUb2PP0HTkc5pifEcIphtcioa0MC385zeDcWN3CBwmVsq3f1rBeJ
-         NF6iE0gz1y7zVlN9Hv+Xlc8kPYz4btgCyhxWBeFPMV30HRutYxZAZN0I8ATO0+z1J4b5
-         MGbZODTCo2w7Owru8H1OfwbyGtWGgFsH3h+Vg3oe7UTjOhCvPSapqEPbPDm62MnPaHyT
-         NpSw==
-X-Gm-Message-State: ANhLgQ0RCqnMWAirB8T/zCRK/eLjEq9+wp7lfSzXuwI0q2erXIXSUE0d
-        JMK2o8O3GqQRcrk2emBfClw=
-X-Google-Smtp-Source: ADFU+vv7HnMCncwCL++7z3PEppaS2b5DxX8EG+D4N1W0mQt2ckBTiFQ0mGwM2uHV7m1WNxEha2AlFg==
-X-Received: by 2002:a63:1b22:: with SMTP id b34mr21857698pgb.415.1584281158350;
-        Sun, 15 Mar 2020 07:05:58 -0700 (PDT)
-Received: from localhost (216.24.188.11.16clouds.com. [216.24.188.11])
-        by smtp.gmail.com with ESMTPSA id c190sm24066567pfa.66.2020.03.15.07.05.57
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 15 Mar 2020 07:05:58 -0700 (PDT)
-From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     gregkh@linuxfoundation.org, rafael@kernel.org, hminas@synopsys.com,
-        mathias.nyman@intel.com, bgolaszewski@baylibre.com, arnd@arndb.de,
-        jeffrey.t.kirsher@intel.com, hdegoede@redhat.com,
-        treding@nvidia.com, tglx@linutronix.de, tomas.winkler@intel.com,
-        suzuki.poulose@arm.com, sergei.shtylyov@cogentembedded.com,
-        geert@linux-m68k.org, linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Dejin Zheng <zhengdejin5@gmail.com>
-Subject: [PATCH v3 5/5] driver core: platform: Reimplement devm_platform_ioremap_resource
-Date:   Sun, 15 Mar 2020 22:05:25 +0800
-Message-Id: <20200315140525.21780-6-zhengdejin5@gmail.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200315140525.21780-1-zhengdejin5@gmail.com>
-References: <20200315140525.21780-1-zhengdejin5@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1728930AbgCOQTj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 15 Mar 2020 12:19:39 -0400
+Received: from condef-01.nifty.com ([202.248.20.66]:25236 "EHLO
+        condef-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728628AbgCOQTj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Mar 2020 12:19:39 -0400
+X-Greylist: delayed 667 seconds by postgrey-1.27 at vger.kernel.org; Sun, 15 Mar 2020 12:19:37 EDT
+Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-01.nifty.com with ESMTP id 02FFoGcf005968
+        for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2020 00:50:21 +0900
+Received: from grover.flets-west.jp (softbank126093102113.bbtec.net [126.93.102.113]) (authenticated)
+        by conuserg-10.nifty.com with ESMTP id 02FFnsYW028305;
+        Mon, 16 Mar 2020 00:49:54 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 02FFnsYW028305
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1584287394;
+        bh=DXSJAQYV+K0M5wfTtzFMast16/HPOG8d+XP8Fy1ApxU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=tfqCX3RMCkBadXSFbWsEHy6hJ0kHWD78afZDuq275jnzivm7s4zzBYtwbQFmquZzz
+         mYqV5B98M6vxe+zXg7V1IYJ21CBrHyqhTs2YtcX32D9qukaYMywOAJaphqFB3EPLg3
+         fqRRfUMaHBugriwrNRshJGZKyk4A2mdc9k8Q58gKNQR8Wu6EcMVHaTTc3yD3IHU8aw
+         eRjm84BYG97Jw5UT5osVGXcT+2Vd2T/vAHSHWC9Z0sQajdiaEEzF/vJBy1Ln+df+I3
+         4z6cGN++KzZvXSfBuTHyRzW3uMZR9FZ7CZ1ztSUeJBpaTrxL8UlQsMUbwjuQaGfCbj
+         0HqyC6K8u/eUA==
+X-Nifty-SrcIP: [126.93.102.113]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Subject: [PATCH] usb: get rid of 'choice' for legacy gadget drivers
+Date:   Mon, 16 Mar 2020 00:49:48 +0900
+Message-Id: <20200315154948.26569-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Reimplement devm_platform_ioremap_resource() by calling
-devm_platform_ioremap_and_get_resource() with res = NULL for
-simplify the code.
+drivers/usb/gadget/legacy/Kconfig creates a 'choice' inside another
+'choice'.
 
-Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+The outer choice: line 17 "USB Gadget precomposed configurations"
+The inner choice: line 484 "EHCI Debug Device mode"
+
+I wondered why the whole legacy gadget drivers reside in such a big
+choice block.
+
+This dates back to 2003, "[PATCH] USB: fix for multiple definition of
+`usb_gadget_get_string'". [1]
+
+At that time, the global function, usb_gadget_get_string(), was linked
+into multiple drivers. That was why only one driver was able to become
+built-in at the same time.
+
+Later, commit a84d9e5361bc ("usb: gadget: start with libcomposite")
+moved usb_gadget_get_string() to a separate module, libcomposite.ko
+instead of including usbstring.c from multiple modules.
+
+More and more refactoring was done, and after commit 1bcce939478f
+("usb: gadget: multi: convert to new interface of f_mass_storage"),
+you can link multiple gadget drivers into vmlinux without causing
+multiple definition error.
+
+This is the only user of the nested choice structure ever. Removing
+this mess will make some Kconfig cleanups possible.
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/?id=fee4cf49a81381e072c063571d1aadbb29207408
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
-v2 -> v3:
-	- add this patch to simplify the code by Geert's suggestion.
 
- drivers/base/platform.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/usb/gadget/legacy/Kconfig | 48 ++++++++++++++-----------------
+ 1 file changed, 22 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-index 9f6a78f79235..b83b789c8e34 100644
---- a/drivers/base/platform.c
-+++ b/drivers/base/platform.c
-@@ -95,10 +95,7 @@ EXPORT_SYMBOL_GPL(devm_platform_get_and_ioremap_resource);
- void __iomem *devm_platform_ioremap_resource(struct platform_device *pdev,
- 					     unsigned int index)
- {
--	struct resource *res;
--
--	res = platform_get_resource(pdev, IORESOURCE_MEM, index);
--	return devm_ioremap_resource(&pdev->dev, res);
-+	return devm_platform_get_and_ioremap_resource(pdev, index, NULL);
- }
- EXPORT_SYMBOL_GPL(devm_platform_ioremap_resource);
+diff --git a/drivers/usb/gadget/legacy/Kconfig b/drivers/usb/gadget/legacy/Kconfig
+index 6e7e1a9202e6..cc20f61d48a0 100644
+--- a/drivers/usb/gadget/legacy/Kconfig
++++ b/drivers/usb/gadget/legacy/Kconfig
+@@ -13,32 +13,28 @@
+ # With help from a special transceiver and a "Mini-AB" jack, systems with
+ # both kinds of controller can also support "USB On-the-Go" (CONFIG_USB_OTG).
+ #
++# A Linux "Gadget Driver" talks to the USB Peripheral Controller
++# driver through the abstract "gadget" API.  Some other operating
++# systems call these "client" drivers, of which "class drivers"
++# are a subset (implementing a USB device class specification).
++# A gadget driver implements one or more USB functions using
++# the peripheral hardware.
++#
++# Gadget drivers are hardware-neutral, or "platform independent",
++# except that they sometimes must understand quirks or limitations
++# of the particular controllers they work with.  For example, when
++# a controller doesn't support alternate configurations or provide
++# enough of the right types of endpoints, the gadget driver might
++# not be able work with that controller, or might need to implement
++# a less common variant of a device class protocol.
++#
++# The available choices each represent a single precomposed USB
++# gadget configuration. In the device model, each option contains
++# both the device instantiation as a child for a USB gadget
++# controller, and the relevant drivers for each function declared
++# by the device.
  
+-choice
+-	tristate "USB Gadget precomposed configurations"
+-	default USB_ETH
+-	optional
+-	help
+-	  A Linux "Gadget Driver" talks to the USB Peripheral Controller
+-	  driver through the abstract "gadget" API.  Some other operating
+-	  systems call these "client" drivers, of which "class drivers"
+-	  are a subset (implementing a USB device class specification).
+-	  A gadget driver implements one or more USB functions using
+-	  the peripheral hardware.
+-
+-	  Gadget drivers are hardware-neutral, or "platform independent",
+-	  except that they sometimes must understand quirks or limitations
+-	  of the particular controllers they work with.  For example, when
+-	  a controller doesn't support alternate configurations or provide
+-	  enough of the right types of endpoints, the gadget driver might
+-	  not be able work with that controller, or might need to implement
+-	  a less common variant of a device class protocol.
+-
+-	  The available choices each represent a single precomposed USB
+-	  gadget configuration. In the device model, each option contains
+-	  both the device instantiation as a child for a USB gadget
+-	  controller, and the relevant drivers for each function declared
+-	  by the device.
++menu "USB Gadget precomposed configurations"
+ 
+ config USB_ZERO
+ 	tristate "Gadget Zero (DEVELOPMENT)"
+@@ -516,4 +512,4 @@ config USB_G_WEBCAM
+ 	  Say "y" to link the driver statically, or "m" to build a
+ 	  dynamically linked module called "g_webcam".
+ 
+-endchoice
++endmenu
 -- 
-2.25.0
+2.17.1
 
