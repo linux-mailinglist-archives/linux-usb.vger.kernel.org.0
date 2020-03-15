@@ -2,153 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E78185C11
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2020 11:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2E3185C65
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2020 13:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728311AbgCOKzS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 15 Mar 2020 06:55:18 -0400
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:55003 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728234AbgCOKzS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Mar 2020 06:55:18 -0400
-Received: by mail-pj1-f66.google.com with SMTP id np16so6523100pjb.4;
-        Sun, 15 Mar 2020 03:55:15 -0700 (PDT)
+        id S1728515AbgCOMjB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 15 Mar 2020 08:39:01 -0400
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:52964 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728467AbgCOMjA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Mar 2020 08:39:00 -0400
+Received: by mail-pj1-f67.google.com with SMTP id f15so6585111pjq.2;
+        Sun, 15 Mar 2020 05:38:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=qIYlGm4yxuJWPGZE9jBq7SClwzl5SsZAe4AqIxxnJxw=;
-        b=Ytc0lS9YIYTtXj0J3ndnY9qI6fhM69eKrhKeJ5hWX7SeOO/4qrOucPykSm86CZNO8A
-         s/cwNwQwBvzidl9CI6IhyG44/yBrU+4+zrHEI7pMeo8jauUmWDcdGSe8oPOqm60mngsh
-         IjaJvwxItnBtcLy7FjbinFyXmDxPa0hsdOOMGBuGw1NXGBey3CvcBlOWREWvIDBlKFM4
-         pmc3VmBp9GHVODEGzIibmrVO83GA4HTOczijkd1We60WzCZSB4ufS30e9uZ9elP2uPdy
-         F/11X6sogex+WjgabQT3H+1L767Pk8EzB003F5exqaqQIOCLNWzjBfMZy/XjkwdJ9sfd
-         KIbw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=/JmdDH59rdv7DEibIPWZ7GdWNI7WIfFiOZu+jrSl3Oo=;
+        b=hJURvzgKdvmu7/uyg0oRe/r8CLRcXnIgKllpmpoFa99OWuAKm8jhXBZxwDLnkp4DTE
+         ohZcs0tlnPz68VlOjPFjmje+IZ2rf79qKIBxN/NMwTxN0l3xM0ReA57Mv8rmQRJrVhXj
+         /vkSqg6o3ZB6XazQsltgb7aT1XEStd1/lnF3mDyKyT9r9gcv+qATu2YjzJXUSJmWPczQ
+         aAqis9mSpbpqaKwMin/LA/zdun1yQj0OGZz6v5cbLLSyn7ppXiVbA3xmy7w/q52I00Dn
+         AjpiU4Snl40bxt1LumJwzrXYOaKDIwfQz5V4uohUVoiYPd8pYbgMqu5WjQeobe2uhYfg
+         4RvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=qIYlGm4yxuJWPGZE9jBq7SClwzl5SsZAe4AqIxxnJxw=;
-        b=aVJp7gopYw+ZNNTGorRr3ekHBFNBKMyrvU+7uQK8bJRQUf2HpHdVf1RMh5QfqfW16y
-         Jyd1oJwxBCuPhBtjF4STnoxqva4/TxZdyFRbTAJIyjhF2+Oe0QtblqFotd7JSm6zqr0f
-         41RW/S/gzYoFk7M2+aH49r2zpZgfoFrWutXCq5OwwFnB7YYyXejxPOddzZd1Va852CYN
-         GtTSFMh7UvEy9sUHx8JZn/79pTCAx2QZuDaNk2CjyoOvI9A4UEomYMVGbLgOL4l4KFvg
-         k/RVQzp68ftnBZ+yFx1wJa/7wW6kjjYxhn5GEkESV8/EX6c1bEP07F7su5lezaJ8ddJE
-         VsNg==
-X-Gm-Message-State: ANhLgQ24HHYduFIMo4IsJpt4/fUFopeIKWL+C+xAkWPojB4YWGYdHFJT
-        UOoqhwERVyRrjx3PiXddghY=
-X-Google-Smtp-Source: ADFU+vvvi9/IwQKAHenUTXb90ToqvygF+HzJRijet4tByzTJotX9aoip3MjS9Alg2JwZYozZzCUysA==
-X-Received: by 2002:a17:90a:9a90:: with SMTP id e16mr19401817pjp.164.1584269715129;
-        Sun, 15 Mar 2020 03:55:15 -0700 (PDT)
-Received: from nishad ([106.51.232.103])
-        by smtp.gmail.com with ESMTPSA id j17sm18311949pfr.176.2020.03.15.03.55.11
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=/JmdDH59rdv7DEibIPWZ7GdWNI7WIfFiOZu+jrSl3Oo=;
+        b=D4ClCgacC7rUXmTp2NRhdu8vkxIFqHDWQrGDXL0atOMWyyE/SxggDkd12Bu2veZp5d
+         NTHuhjh/kHZA+WEgOjtJr1yosOJF5Fba6LJNIH7VFtC2Vo54rFvaUQdNSkgGZxv+nTXQ
+         aYLt3lFJue0tP0oItWJvmLwB/7edT6msSjc87D+WLTAjickKgFUme1K56EQ2CFPJMFbG
+         7Mmi4JCFv8LE3/UcMuo4U4Glh3SnzbG1hrlepIcu9PTeKoFWRqHQiGGqE03n29YGNL9W
+         3MQ0QmcltrjnmOhWPU2EOGVpznBI941RgkqRhSH1494U1fSlHvTcSoi1VW6qP1MSLmKs
+         dALA==
+X-Gm-Message-State: ANhLgQ3nz3zUFndpA2/GCtva7hDFmpeq7VPURIy671aS4p9woOg+woXv
+        SLwcMsr3ZAsaxgQDUhpZOJM0Q8ck
+X-Google-Smtp-Source: ADFU+vsB37XDNXWbOdHD+OhqBvUd1lvACOl/Q+1+zDsqZgrBCVnbY2Rza6J50PYzNWWemVYVQR8aBQ==
+X-Received: by 2002:a17:90a:a483:: with SMTP id z3mr20596769pjp.43.1584275938122;
+        Sun, 15 Mar 2020 05:38:58 -0700 (PDT)
+Received: from localhost (216.24.188.11.16clouds.com. [216.24.188.11])
+        by smtp.gmail.com with ESMTPSA id w205sm7718352pfc.75.2020.03.15.05.38.56
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 15 Mar 2020 03:55:14 -0700 (PDT)
-Date:   Sun, 15 Mar 2020 16:25:07 +0530
-From:   Nishad Kamdar <nishadkamdar@gmail.com>
-To:     Peter Chen <Peter.Chen@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Joe Perches <joe@perches.com>
-Cc:     NXP Linux Team <linux-imx@nxp.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] USB: chipidea: Use the correct style for SPDX License
- Identifier
-Message-ID: <20200315105503.GA4440@nishad>
+        Sun, 15 Mar 2020 05:38:57 -0700 (PDT)
+Date:   Sun, 15 Mar 2020 20:38:55 +0800
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org, hminas@synopsys.com,
+        mathias.nyman@intel.com, bgolaszewski@baylibre.com, arnd@arndb.de,
+        geert@linux-m68k.org, mchehab+samsung@kernel.org,
+        treding@nvidia.com, tglx@linutronix.de, suzuki.poulose@arm.com,
+        hdegoede@redhat.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] drivers: provide
+ devm_platform_ioremap_and_get_resource()
+Message-ID: <20200315123855.GB13262@nuc8i5>
+References: <20200314052638.6008-1-zhengdejin5@gmail.com>
+ <20200314052638.6008-2-zhengdejin5@gmail.com>
+ <a7cbeabf-a7c3-b960-7aca-e124e98f9c7f@cogentembedded.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <a7cbeabf-a7c3-b960-7aca-e124e98f9c7f@cogentembedded.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch corrects the SPDX License Identifier style in
-header files related to ChipIdea Highspeed Dual Role Controller.
-For C header files Documentation/process/license-rules.rst
-mandates C-like comments (opposed to C source files where
-C++ style should be used).
+On Sun, Mar 15, 2020 at 01:01:14PM +0300, Sergei Shtylyov wrote:
+> Hello!
+> 
+> On 14.03.2020 8:26, Dejin Zheng wrote:
+> 
+> > Since commit "drivers: provide devm_platform_ioremap_resource()",
+> > It was wrap platform_get_resource() and devm_ioremap_resource() as
+>   ^^ it
+Ok and Thanks!
 
-Changes made by using a script provided by Joe Perches here:
-https://lkml.org/lkml/2019/2/7/46.
+> 
+> > single helper devm_platform_ioremap_resource(). but now, many drivers
+> > still used platform_get_resource() and devm_ioremap_resource()
+> > together in the kernel tree. The reason can not be replaced is they
+> > still need use the resource variables obtained by platform_get_resource().
+> > so provide this helper.
+> 
+>    Not really sure that's worth the effort...
+>
+Many drivers using platform_get_resource() and devm_ioremap_resource() together
+in the kernel tree. if use this helper, have one function call less.
 
-Suggested-by: Joe Perches <joe@perches.com>
-Signed-off-by: Nishad Kamdar <nishadkamdar@gmail.com>
----
- drivers/usb/chipidea/bits.h        | 2 +-
- drivers/usb/chipidea/ci.h          | 2 +-
- drivers/usb/chipidea/ci_hdrc_imx.h | 2 +-
- drivers/usb/chipidea/otg.h         | 2 +-
- drivers/usb/chipidea/otg_fsm.h     | 2 +-
- drivers/usb/chipidea/udc.h         | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
+> > Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+> > ---
+> >   drivers/base/platform.c         | 18 ++++++++++++++++++
+> >   include/linux/platform_device.h |  3 +++
+> >   2 files changed, 21 insertions(+)
+> > 
+> > diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+> > index 7fa654f1288b..b3e2409effae 100644
+> > --- a/drivers/base/platform.c
+> > +++ b/drivers/base/platform.c
+> > @@ -62,6 +62,24 @@ struct resource *platform_get_resource(struct platform_device *dev,
+> >   EXPORT_SYMBOL_GPL(platform_get_resource);
+> >   #ifdef CONFIG_HAS_IOMEM
+> > +/**
+> > + * devm_platform_ioremap_and_get_resource - call devm_ioremap_resource() for a
+> > + *					    platform device and get resource
+> > + *
+> > + * @pdev: platform device to use both for memory resource lookup as well as
+> > + *        resource management
+> > + * @index: resource index
+> > + * @res: get the resource
+> > + */
+> > +void __iomem *
+> > +devm_platform_ioremap_and_get_resource(struct platform_device *pdev,
+> > +				unsigned int index, struct resource **res)
+> > +{
+> > +	*res = platform_get_resource(pdev, IORESOURCE_MEM, index);
+> > +	return devm_ioremap_resource(&pdev->dev, *res);
+> > +}
+> > +EXPORT_SYMBOL_GPL(devm_platform_ioremap_and_get_resource);
+> 
+>    That looks more like devm_platform_get_and_ioremap_resource().
+> 
+Thanks for your suggestions. I will do it.
 
-diff --git a/drivers/usb/chipidea/bits.h b/drivers/usb/chipidea/bits.h
-index 98da99510be7..b1540ce93264 100644
---- a/drivers/usb/chipidea/bits.h
-+++ b/drivers/usb/chipidea/bits.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * bits.h - register bits of the ChipIdea USB IP core
-  *
-diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h
-index d49d5e1235d0..644ecaef17ee 100644
---- a/drivers/usb/chipidea/ci.h
-+++ b/drivers/usb/chipidea/ci.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * ci.h - common structures, functions, and macros of the ChipIdea driver
-  *
-diff --git a/drivers/usb/chipidea/ci_hdrc_imx.h b/drivers/usb/chipidea/ci_hdrc_imx.h
-index de2aac9a2868..c2051aeba13f 100644
---- a/drivers/usb/chipidea/ci_hdrc_imx.h
-+++ b/drivers/usb/chipidea/ci_hdrc_imx.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Copyright 2012 Freescale Semiconductor, Inc.
-  */
-diff --git a/drivers/usb/chipidea/otg.h b/drivers/usb/chipidea/otg.h
-index 4f8b8179ec96..5e7a6e571dd2 100644
---- a/drivers/usb/chipidea/otg.h
-+++ b/drivers/usb/chipidea/otg.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * Copyright (C) 2013-2014 Freescale Semiconductor, Inc.
-  *
-diff --git a/drivers/usb/chipidea/otg_fsm.h b/drivers/usb/chipidea/otg_fsm.h
-index 2b49d29bf2fb..1f5c5ae0e71e 100644
---- a/drivers/usb/chipidea/otg_fsm.h
-+++ b/drivers/usb/chipidea/otg_fsm.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * Copyright (C) 2014 Freescale Semiconductor, Inc.
-  *
-diff --git a/drivers/usb/chipidea/udc.h b/drivers/usb/chipidea/udc.h
-index e023735d94b7..ebb11b625bb8 100644
---- a/drivers/usb/chipidea/udc.h
-+++ b/drivers/usb/chipidea/udc.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * udc.h - ChipIdea UDC structures
-  *
--- 
-2.17.1
+> [...]
+> 
+> MBR, Sergei
 
+BR,
+Dejin
