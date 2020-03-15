@@ -2,84 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 67290185BAA
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2020 10:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D56185BCA
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2020 11:01:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728171AbgCOJsM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 15 Mar 2020 05:48:12 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:34083 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728108AbgCOJsM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Mar 2020 05:48:12 -0400
-Received: by mail-oi1-f194.google.com with SMTP id g6so14524762oiy.1;
-        Sun, 15 Mar 2020 02:48:11 -0700 (PDT)
+        id S1728214AbgCOKBW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 15 Mar 2020 06:01:22 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:41235 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728197AbgCOKBV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Mar 2020 06:01:21 -0400
+Received: by mail-lf1-f67.google.com with SMTP id q10so11455351lfo.8
+        for <linux-usb@vger.kernel.org>; Sun, 15 Mar 2020 03:01:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=71ORSjZ3Dn1AeJ5HCzovvghC6s/uKrTIuOwAzA8cnlc=;
+        b=b5O729U+kA6wNZMWkRMZ2f+9gLV2ekOaJTecFIJtCJuzYBWqPUm8CzUVYcJgBisJWT
+         GLuL7jk9X1V0nyATtENYx1uBjEs+rCulddzR0yw0WgnGPQjAABnlVb1uNPyCJLkl1iok
+         vMDJWuaIuZEsGdABO+3ZXiUIs8oCGiqETweY2dNRwfDh9OMBi06mpi19FPeUeyQYg5TJ
+         ZuQiARjLsFNIP3icVlxCX9Tyb63CL0JW9/XUZr95bpntxgXQZvWniZB/6a9QKtOZAWh2
+         5rUPRevjrLAiCDo3iiqmCdYyN1SAcz4M/58X8ub1ba3YqijNeICS9FmqqSczcfipFrZB
+         E4SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V+LODFo2fy0kDMGy85X+h9jjQYAdzhfINocSjcve4S0=;
-        b=pvn2QogDI6jWWm9fX8QHMjFO7Brtp7rxngbmu2uleAfv2dx6vqTrVPnTXX3eurC7f1
-         34Gu2JhrfqYxu/KT24K+iysjUgO7JEq1kfN7Df/hfqYeSy/tqxVGnRPSwusFpN6A2U50
-         gXp3nmc3J749l7+7xjQQvhMjkn79nHokqIxcyAeFN14q/k/A9MYem9yB4i4Xx4STRzgb
-         lAikCzTH7cI9GiIzaNyjrhCdBKEqjk0qLRmTkybUQxSLSaEse0NTWgQT2z6GlOJv82Ut
-         cUILnmLBUudf6M95AzGhY61r5D73Vy4lz2xHUt7qSYqkw2RKuFCx/bQLGMIO9HXtU+2D
-         RWkQ==
-X-Gm-Message-State: ANhLgQ0jZJHQ8rFBCbu1c4ks9667t4Exm9f/B8PMQsZIrf2tZlQ+2uAn
-        qeg0q3l+GWqWDFAXU81wPp42mP+hOpgHwput9bRSC/Nj
-X-Google-Smtp-Source: ADFU+vuz4qFn0EvbpJhx4q1r3ECpJm4MVPpr63RkM9TAWxt5VDdFu8JNApIGRhZEd++gVv6aHEmpdBMDCW+xs8RJQJk=
-X-Received: by 2002:aca:ad93:: with SMTP id w141mr13930641oie.54.1584265691223;
- Sun, 15 Mar 2020 02:48:11 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=71ORSjZ3Dn1AeJ5HCzovvghC6s/uKrTIuOwAzA8cnlc=;
+        b=RZAIVUsVbAiiKcmDQeoqmpcz2GMjAg7zF4d00A14EP+wzuVnBiCEl6A9Nrzek9SzZa
+         JZ/Tdb3ueGlV51hxn0VeiunsBrx9ugq6FXfnucHYO84xPEenscs+/zz2yJhNqS54/K35
+         iuW8zTyd+EWQBRFH5yzat1ea5vFXgUqSOAnHqDP47BvaMf8WKTHaQNWmvTjNTurClWnw
+         hRmiq07ZTz47vi2bFf+ZJMZUh8ScHlmopYh09pnh8YOOWtcIQdPqmTbmTFgRViVZwTuk
+         0Y+VLTm74S4VvPDfVfvMYn6Js2lO5hKramds73wU+FxgaxmrHNZPBR9hVX25yaWqa402
+         voPQ==
+X-Gm-Message-State: ANhLgQ13cyvzO3NJybCwo5rI2h97L7sW0rfAW4k5G8MnXKX7UAFm644v
+        OfT8pyZONYdGVKt8Y8uTQ+EaSA==
+X-Google-Smtp-Source: ADFU+vuZsCqDScD5JeOlek4PJ1cGVfZOBeUno5n2lRms8OCKw1HTXMMiaSeqFlVPKJo2nj/7Ihtp3A==
+X-Received: by 2002:a19:ca46:: with SMTP id h6mr1688652lfj.108.1584266477579;
+        Sun, 15 Mar 2020 03:01:17 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:86a:1c7c:64a6:f77:4be8:4439? ([2a00:1fa0:86a:1c7c:64a6:f77:4be8:4439])
+        by smtp.gmail.com with ESMTPSA id t15sm3353585lfl.79.2020.03.15.03.01.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 Mar 2020 03:01:16 -0700 (PDT)
+Subject: Re: [PATCH v2 1/4] drivers: provide
+ devm_platform_ioremap_and_get_resource()
+To:     Dejin Zheng <zhengdejin5@gmail.com>, gregkh@linuxfoundation.org,
+        rafael@kernel.org, hminas@synopsys.com, mathias.nyman@intel.com,
+        bgolaszewski@baylibre.com, arnd@arndb.de, geert@linux-m68k.org,
+        mchehab+samsung@kernel.org, treding@nvidia.com, tglx@linutronix.de,
+        suzuki.poulose@arm.com, hdegoede@redhat.com,
+        linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20200314052638.6008-1-zhengdejin5@gmail.com>
+ <20200314052638.6008-2-zhengdejin5@gmail.com>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <a7cbeabf-a7c3-b960-7aca-e124e98f9c7f@cogentembedded.com>
+Date:   Sun, 15 Mar 2020 13:01:14 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-References: <20200314052638.6008-1-zhengdejin5@gmail.com> <20200314052638.6008-2-zhengdejin5@gmail.com>
 In-Reply-To: <20200314052638.6008-2-zhengdejin5@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 15 Mar 2020 10:47:59 +0100
-Message-ID: <CAMuHMdVvjvR4J-nB8zmJVH62VGvPPnsLX0+X=aC9p_Dnh_AJ9A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] drivers: provide devm_platform_ioremap_and_get_resource()
-To:     Dejin Zheng <zhengdejin5@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Dejin,
+Hello!
 
-On Sat, Mar 14, 2020 at 6:26 AM Dejin Zheng <zhengdejin5@gmail.com> wrote:
+On 14.03.2020 8:26, Dejin Zheng wrote:
+
 > Since commit "drivers: provide devm_platform_ioremap_resource()",
 > It was wrap platform_get_resource() and devm_ioremap_resource() as
+   ^^ it
+
 > single helper devm_platform_ioremap_resource(). but now, many drivers
 > still used platform_get_resource() and devm_ioremap_resource()
 > together in the kernel tree. The reason can not be replaced is they
 > still need use the resource variables obtained by platform_get_resource().
 > so provide this helper.
->
+
+    Not really sure that's worth the effort...
+
 > Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
-
-Thanks for your patch!
-
+> ---
+>   drivers/base/platform.c         | 18 ++++++++++++++++++
+>   include/linux/platform_device.h |  3 +++
+>   2 files changed, 21 insertions(+)
+> 
+> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+> index 7fa654f1288b..b3e2409effae 100644
 > --- a/drivers/base/platform.c
 > +++ b/drivers/base/platform.c
 > @@ -62,6 +62,24 @@ struct resource *platform_get_resource(struct platform_device *dev,
->  EXPORT_SYMBOL_GPL(platform_get_resource);
->
->  #ifdef CONFIG_HAS_IOMEM
+>   EXPORT_SYMBOL_GPL(platform_get_resource);
+>   
+>   #ifdef CONFIG_HAS_IOMEM
 > +/**
 > + * devm_platform_ioremap_and_get_resource - call devm_ioremap_resource() for a
-> + *                                         platform device and get resource
+> + *					    platform device and get resource
 > + *
 > + * @pdev: platform device to use both for memory resource lookup as well as
 > + *        resource management
@@ -88,61 +112,15 @@ Thanks for your patch!
 > + */
 > +void __iomem *
 > +devm_platform_ioremap_and_get_resource(struct platform_device *pdev,
-> +                               unsigned int index, struct resource **res)
+> +				unsigned int index, struct resource **res)
 > +{
-> +       *res = platform_get_resource(pdev, IORESOURCE_MEM, index);
-> +       return devm_ioremap_resource(&pdev->dev, *res);
+> +	*res = platform_get_resource(pdev, IORESOURCE_MEM, index);
+> +	return devm_ioremap_resource(&pdev->dev, *res);
 > +}
 > +EXPORT_SYMBOL_GPL(devm_platform_ioremap_and_get_resource);
 
-As this duplicates most of the implementation of
-devm_platform_ioremap_resource(),
-I think it would be better to make res optional:
+    That looks more like devm_platform_get_and_ioremap_resource().
 
-    void __iomem *
-    devm_platform_ioremap_and_get_resource(struct platform_device *pdev,
-                                           unsigned int index, struct
-resource **resp)
-    {
-            struct resource **res;
+[...]
 
-            res = platform_get_resource(pdev, IORESOURCE_MEM, index);
-            if (resp)
-                    *resp = res;
-            return devm_ioremap_resource(&pdev->dev, *res);
-    }
-
-And implement devm_platform_ioremap_resource() by calling
-devm_platform_ioremap_and_get_resource() with resp = NULL.
-Whether the best way to do that is as an exported functions, or as an
-inlined function, is to be seen (measure impact on kernel size).
-
-> +
->  /**
->   * devm_platform_ioremap_resource - call devm_ioremap_resource() for a platform
->   *                                 device
-> diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
-> index 276a03c24691..5fd1977e3eaf 100644
-> --- a/include/linux/platform_device.h
-> +++ b/include/linux/platform_device.h
-> @@ -55,6 +55,9 @@ extern struct device *
->  platform_find_device_by_driver(struct device *start,
->                                const struct device_driver *drv);
->  extern void __iomem *
-> +devm_platform_ioremap_and_get_resource(struct platform_device *pdev,
-> +                               unsigned int index, struct resource **res);
-> +extern void __iomem *
->  devm_platform_ioremap_resource(struct platform_device *pdev,
->                                unsigned int index);
->  extern void __iomem *
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+MBR, Sergei
