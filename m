@@ -2,110 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 428A9185B65
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2020 10:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD77E185B68
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2020 10:25:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728110AbgCOJX7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 15 Mar 2020 05:23:59 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:38441 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728108AbgCOJX7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Mar 2020 05:23:59 -0400
-Received: by mail-lj1-f195.google.com with SMTP id w1so15262018ljh.5
-        for <linux-usb@vger.kernel.org>; Sun, 15 Mar 2020 02:23:57 -0700 (PDT)
+        id S1728112AbgCOJZb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 15 Mar 2020 05:25:31 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:43712 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728065AbgCOJZa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Mar 2020 05:25:30 -0400
+Received: by mail-il1-f195.google.com with SMTP id d14so12956503ilq.10;
+        Sun, 15 Mar 2020 02:25:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=m9g+CtH9FdNBHbisn+RYgjeOjg5lSdgCU/7z33WMuRo=;
-        b=kRIa9YDCHFQ/l9vvrfGV/8ok+DblGSok97WmB+okpFw8n7UXplDWYBN/iRilaxrYBA
-         ZaReweqcHuiJso5Cvg9AxyzAX8bFx3MU0TKNpUmtqG21S+yilLT0Dq2xb3TU9ZuH42lu
-         Ds0fXHyZilu3MC3AOBSVrgBoG+9HVHIgm89LoTuLq2z89uTziys81ZeF8qdJXgWOmUkh
-         0bajjHEKiqAltJAJkCSBnypSs8SBeJTYwzaOlzBVWHjJfITP1lhLMSuVayFv7FFUrZ5/
-         B7VoX9wSZ9c4OYT7NozdORTpnWiUat1FlQtu2gbHzmG538qsdkBmGzNmY3PtVL5uD3cf
-         7Usg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eDLn6hcaUGXN1ifnm89fP3KORlDlYvpz0bkA0oBIYGM=;
+        b=Vp92DRfDmGLIM/NPFDj32KHbGd5+v54Y8Qx53JAOAD18STaqvCL7NqF8E/KfcDTr1N
+         RTh37uMH8CGBwXi7s3YU7A9AqUdrD6fmecuUReY3uJ5yex7vhm+o2hnTXMKjuFBsXo8J
+         FRimVp9eYRS/Og97n7VrlGVV9giH2n3V/9MUXWgW6I3wwjkOIFXXfG78J9tNal3iQrA3
+         gO1CPPERPk/E+tzgHAp8X6rm6y76Q8xQ5fK5NSKoqHMy3CoWgMdhVBy0f55UMQT2l9Yo
+         PjFoGSXUOecROOqHn58hc8Ztnv48FZYFeTL64uCDFp58FTA2TSs3iokQUVSnB3mnnWY+
+         nyaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=m9g+CtH9FdNBHbisn+RYgjeOjg5lSdgCU/7z33WMuRo=;
-        b=Re/5Xz7b3n1/JP8ODmkWg+9i402DnWRzdkjBJj9scpB4nfw3trSaWrEjrgSfTJBncI
-         TTfW1kkDbW7W6Bjvvvl9UvF6siuMJmd8VK8Ee4Dagi9sJp7NTdsSSQHRQVtqNdmQTEro
-         rA539wMn1YRe3BzSu97Sx3jrisEYYYL5bpq9RbfnKqtiWAN98Dwl9hxw5Zf8UtZiZte8
-         qVnPEvI6bW08N+P8aO7X6MMWvnzyFq4i+XNg2jzwsyIPj+pMjIxM5UnQPxJeCDr94eor
-         vAfPg1V+Ze7OunS93R/Tg0im0O9R9CCbrc0JomquinMtOvcfWVdPNDMX6eNtzKqxl8na
-         y2AQ==
-X-Gm-Message-State: ANhLgQ1xQDd8rO/HS9PGKlhvRrtzMwGPG1wq0ZQO6TmU6y+zO1Rrkfxc
-        qsCugxGkvSxMYB0k2hVTVyU=
-X-Google-Smtp-Source: ADFU+vtn7bX61BRoaPSDQ2kbEzCC4qcG7vdZCQTKEJvbF4Qkcul5lnpofA/7u4om9uqIMlox+FsQiA==
-X-Received: by 2002:a2e:89c7:: with SMTP id c7mr13589389ljk.265.1584264236331;
-        Sun, 15 Mar 2020 02:23:56 -0700 (PDT)
-Received: from saruman (88-113-215-213.elisa-laajakaista.fi. [88.113.215.213])
-        by smtp.gmail.com with ESMTPSA id j7sm3044911lfm.65.2020.03.15.02.23.55
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 15 Mar 2020 02:23:55 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH 4/6] usb: dwc3: gadget: Give back staled requests
-In-Reply-To: <a3732fbf370a2cf180c1c5757f46faed8399bbe5.1583443184.git.thinhn@synopsys.com>
-References: <cover.1583443184.git.thinhn@synopsys.com> <a3732fbf370a2cf180c1c5757f46faed8399bbe5.1583443184.git.thinhn@synopsys.com>
-Date:   Sun, 15 Mar 2020 11:23:51 +0200
-Message-ID: <877dzmeztk.fsf@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eDLn6hcaUGXN1ifnm89fP3KORlDlYvpz0bkA0oBIYGM=;
+        b=JzzcXQjSt1PiPSI277ANzrOxaWzBw8yXSgve7kyUdTFlXWUXO/+OAJvzlZmGkuxHHQ
+         ibSsqUYObdJYFpsPshMn5OFjqbYaWYLdr6T6KsTre++kN9OkDsKoH2U05lkP62z1PjBk
+         jqTtV88GU8chciFlXcqjaminV1rDIgglzut0+fxV9jCzEyi1XOyFJzL7ZMEjkMx8YEFh
+         4Ym6Pqs7FtO6h9gVSg/QHpagYE6hjeAA2FBZs1x6sTSdzKne5Qeq9f6CsCWpub8KFIbI
+         K02rz5lCAcfXGDzHybJXF6AjeWZoVu1c0TjYzCAs7NMkAa6+QfzdfnRFMBVPJhzIKn7Y
+         ia+w==
+X-Gm-Message-State: ANhLgQ2zJ5ujUn//8LzGY7Hs4R1Add0w68Q68f4kX0tP49vsvCby03qT
+        Q4qfoyn5s39SosV6h30FOiRoLdTrDoap0xipwBQ=
+X-Google-Smtp-Source: ADFU+vu2O/lxp6WbokN0oJhMae6LPLe+vhCCs071Xl1gPKo6khFDdWen7oB+9dJAe4A09kgfcbJwwxr26vMrqKvBJwk=
+X-Received: by 2002:a92:d843:: with SMTP id h3mr8319415ilq.246.1584264329583;
+ Sun, 15 Mar 2020 02:25:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+References: <20200310194854.831-1-linux.amoon@gmail.com> <20200310194854.831-2-linux.amoon@gmail.com>
+ <87lfo2f0k9.fsf@kernel.org>
+In-Reply-To: <87lfo2f0k9.fsf@kernel.org>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Sun, 15 Mar 2020 14:55:19 +0530
+Message-ID: <CANAwSgQgLm623szgs5Lba-NQKySiGw5fRfjyxjfdfHxQxhri7g@mail.gmail.com>
+Subject: Re: [PATCHv3 1/5] devicetree: bindings: exynos: Add new compatible
+ for Exynos5420 dwc3 clocks support
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Hi Felipe,
 
-
-Hi,
-
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
-> If a request is dequeued, the transfer is cancelled. Give back all
-> the started requests.
+On Sun, 15 Mar 2020 at 14:37, Felipe Balbi <balbi@kernel.org> wrote:
 >
-> In most scenarios, the function driver dequeues all requests of a
-> transfer when there's a failure. If the function driver follows this,
-> then it's fine. If not, then we'd be skipping TRBs at different points
-> within the dequeue and enqueue pointers, making dequeue/enqueue pointers
-> useless. To enforce and make sure that we're properly skipping TRBs,
-> cancel all the started requests and give back all the cancelled requests
-> to the function drivers.
+>
+> Hi,
+>
+> Anand Moon <linux.amoon@gmail.com> writes:
+>
+> > Add the new compatible string for Exynos5422 DWC3 to support
+> > enable/disable of core and suspend clk by DWC3 driver.
+> > Also updated the clock names for compatible samsung,exynos5420-dwusb3.
+> >
+> > Acked-by: Rob Herring <robh@kernel.org>
+> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+>
+> What is the dependency here?
+>
+> checking file Documentation/devicetree/bindings/usb/exynos-usb.txt
+> Hunk #2 FAILED at 84.
+> 1 out of 2 hunks FAILED
+>
+> Applying on top of v5.6-rc5
+>
+> --
+> balbi
 
-Which function driver is *not* cancelling transfers correctly? We can
-(and should) be defensive on dwc3, but let's not hide bugs on function
-drivers either.
+These patch were made on top linux next-20200306,
+And with new updates in the clk driver configuration.
+I will update these patchs later, plz drop these changes for now.
 
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl5t9CcACgkQzL64meEa
-mQZLQxAA3rYv9eapYGYu9REGpxAUl8pW8Lp55eKHCbQrx4NY+Bbwdtx/GpUuy+0r
-5S/3UkMiEUtwEarSP7yYr/XbFpr/aeXEmJeR5fWuVBvh7uUDvw8FXLwYwubmdsyb
-uyhKg956owtKsn02CcVkotBmRlxnvXpe0+RaA2xDxnkBBXxlnfwJ1mWMyEUUsgyS
-tzza4+RhDw8+5v1HWc9jm22ccGSAZecFNH5xPy79RBqlwcPpWBpS1GmYrEwVuPR6
-3E+s6WeyyJ0wMMrUQyIiu/mzXnn1NRqWjr1An/NIJWOGYF0G2IMzdXkOOMtA39sK
-u91svi3dnmCU+mrmmQJprKrinmDlHkG09wg8cvLO0Iy0Dr3Yi3MQesY3otjvJzAX
-lRgPPUapw6wPnbDRMSYFYzNKG2nCelNgBU68Y8rQ4tqQab9G3T4egy98u9Y34T3e
-RCSm/Hy1DXXqpIl6UNYElHou88NYb4sTDiZO8rbobSgQ9/dmV3+YwV2SL4tvmKzb
-7uo61bEpwrN3b+V8mr7enXsV29cSI7iRJuPbXtycCKPyU+pdSt0B5csQFri9+j6V
-gZNKAcOYF8p5ydMKnjL3+BFbK8T0SkNcOgevGFAwhI2+njQt96P7Gw5Jb+fSH+mf
-TUJCkru66dX/5M9l34kmaPGT/6Q++VzwNFVLf5HSk+fIWsYNVNU=
-=QtIO
------END PGP SIGNATURE-----
---=-=-=--
+-Anand
