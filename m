@@ -2,60 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2630185BFF
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2020 11:40:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E78185C11
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2020 11:55:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728279AbgCOKkf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 15 Mar 2020 06:40:35 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:37022 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728234AbgCOKke (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Mar 2020 06:40:34 -0400
-Received: by mail-pf1-f194.google.com with SMTP id 3so283188pff.4;
-        Sun, 15 Mar 2020 03:40:34 -0700 (PDT)
+        id S1728311AbgCOKzS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 15 Mar 2020 06:55:18 -0400
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:55003 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728234AbgCOKzS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Mar 2020 06:55:18 -0400
+Received: by mail-pj1-f66.google.com with SMTP id np16so6523100pjb.4;
+        Sun, 15 Mar 2020 03:55:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:mime-version:content-disposition
          :user-agent;
-        bh=T7dEPiegWbPiC/e8VCxdOs7BMWZRGg4BajPSzkAJ79A=;
-        b=PT6LwBXzBxTzYMzucRCwoGeBZk33sN+EHTmC1uk4Hg821fnJii6OIeoshvDJAQNknr
-         95MrZdMIOnDEa1coNZH4+qIP10Xq+XkzMyFA8eMVRmgn42j72io+RHZVSv7B2dTO59QL
-         E3OYpSlnZzUGkFnPsPoZmopW0fdOuTirZwIJZZOH4kha+DCYDh2KF58Ki7ussBouw+Lf
-         pLWd3T+g39ihnN8xakwd44ipPUsZAqk+84FEdPjFAbDYS0JZWdVQ9/nc4ndkgdxr0JsZ
-         LStBnmZ/+tpulQJH718WSJXDSgUVSs4k1g2BxwxFNBg8zq6OA2Df4dELbrHOXSpvECFI
-         S8NQ==
+        bh=qIYlGm4yxuJWPGZE9jBq7SClwzl5SsZAe4AqIxxnJxw=;
+        b=Ytc0lS9YIYTtXj0J3ndnY9qI6fhM69eKrhKeJ5hWX7SeOO/4qrOucPykSm86CZNO8A
+         s/cwNwQwBvzidl9CI6IhyG44/yBrU+4+zrHEI7pMeo8jauUmWDcdGSe8oPOqm60mngsh
+         IjaJvwxItnBtcLy7FjbinFyXmDxPa0hsdOOMGBuGw1NXGBey3CvcBlOWREWvIDBlKFM4
+         pmc3VmBp9GHVODEGzIibmrVO83GA4HTOczijkd1We60WzCZSB4ufS30e9uZ9elP2uPdy
+         F/11X6sogex+WjgabQT3H+1L767Pk8EzB003F5exqaqQIOCLNWzjBfMZy/XjkwdJ9sfd
+         KIbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition:user-agent;
-        bh=T7dEPiegWbPiC/e8VCxdOs7BMWZRGg4BajPSzkAJ79A=;
-        b=ZPhkXJs3SRaPA9PpbXbnj2C4zPkLHJ/HvQWp1fo1nM7I7Bot4m7xwxPE6H4t04e7ge
-         DQrc8yQ9/2faU1dKfkfTClRQQ3Oh3LbEh5kF+jIY/kfhzfp7YgByffmNwXDkj3hnXFpR
-         LWyS2yEWIQ00mzejEVBSm5v7jFAxPhbBcg+HRtWF95cuL3mMW9lIvvjSTbpDqcPjRrp9
-         ppsTmmvuCfB2V4RqJ04CJfb+bu4EEi0I+Jz7DXg+8x9bJh0mni7TIpSsmERzORpnhex6
-         xo7/Umk9qbNjOGk8O/JyKiIKLVJmrI9BNxzC6N7DKwQIqmN7dOLp0Ms0ZsOwptcr1s1w
-         JUSA==
-X-Gm-Message-State: ANhLgQ0j2zygEpkPilZw8TigNn/8MfQuOfpqGFdGfneQZBQWlAheufZn
-        LLkRbLPqks9+votWgldajJk=
-X-Google-Smtp-Source: ADFU+vvVkfsWWx9bDF7jJ+1hCc1UmO7HGa/pA+p2CV8UhLred92GOVKH7FUAZxxXGAmYGBwOzomFnQ==
-X-Received: by 2002:a05:6a00:41:: with SMTP id i1mr21751857pfk.275.1584268833632;
-        Sun, 15 Mar 2020 03:40:33 -0700 (PDT)
+        bh=qIYlGm4yxuJWPGZE9jBq7SClwzl5SsZAe4AqIxxnJxw=;
+        b=aVJp7gopYw+ZNNTGorRr3ekHBFNBKMyrvU+7uQK8bJRQUf2HpHdVf1RMh5QfqfW16y
+         Jyd1oJwxBCuPhBtjF4STnoxqva4/TxZdyFRbTAJIyjhF2+Oe0QtblqFotd7JSm6zqr0f
+         41RW/S/gzYoFk7M2+aH49r2zpZgfoFrWutXCq5OwwFnB7YYyXejxPOddzZd1Va852CYN
+         GtTSFMh7UvEy9sUHx8JZn/79pTCAx2QZuDaNk2CjyoOvI9A4UEomYMVGbLgOL4l4KFvg
+         k/RVQzp68ftnBZ+yFx1wJa/7wW6kjjYxhn5GEkESV8/EX6c1bEP07F7su5lezaJ8ddJE
+         VsNg==
+X-Gm-Message-State: ANhLgQ24HHYduFIMo4IsJpt4/fUFopeIKWL+C+xAkWPojB4YWGYdHFJT
+        UOoqhwERVyRrjx3PiXddghY=
+X-Google-Smtp-Source: ADFU+vvvi9/IwQKAHenUTXb90ToqvygF+HzJRijet4tByzTJotX9aoip3MjS9Alg2JwZYozZzCUysA==
+X-Received: by 2002:a17:90a:9a90:: with SMTP id e16mr19401817pjp.164.1584269715129;
+        Sun, 15 Mar 2020 03:55:15 -0700 (PDT)
 Received: from nishad ([106.51.232.103])
-        by smtp.gmail.com with ESMTPSA id c15sm17022690pja.30.2020.03.15.03.40.30
+        by smtp.gmail.com with ESMTPSA id j17sm18311949pfr.176.2020.03.15.03.55.11
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 15 Mar 2020 03:40:33 -0700 (PDT)
-Date:   Sun, 15 Mar 2020 16:10:26 +0530
+        Sun, 15 Mar 2020 03:55:14 -0700 (PDT)
+Date:   Sun, 15 Mar 2020 16:25:07 +0530
 From:   Nishad Kamdar <nishadkamdar@gmail.com>
-To:     Peter Korsgaard <jacmet@sunsite.dk>,
+To:     Peter Chen <Peter.Chen@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
         Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Joe Perches <joe@perches.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] USB: c67x00: Use the correct style for SPDX License
+Cc:     NXP Linux Team <linux-imx@nxp.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] USB: chipidea: Use the correct style for SPDX License
  Identifier
-Message-ID: <20200315104022.GA3998@nishad>
+Message-ID: <20200315105503.GA4440@nishad>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -66,7 +70,7 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 This patch corrects the SPDX License Identifier style in
-header files related to Cypress C67X00 USB Controller.
+header files related to ChipIdea Highspeed Dual Role Controller.
 For C header files Documentation/process/license-rules.rst
 mandates C-like comments (opposed to C source files where
 C++ style should be used).
@@ -77,29 +81,73 @@ https://lkml.org/lkml/2019/2/7/46.
 Suggested-by: Joe Perches <joe@perches.com>
 Signed-off-by: Nishad Kamdar <nishadkamdar@gmail.com>
 ---
- drivers/usb/c67x00/c67x00-hcd.h | 2 +-
- drivers/usb/c67x00/c67x00.h     | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/chipidea/bits.h        | 2 +-
+ drivers/usb/chipidea/ci.h          | 2 +-
+ drivers/usb/chipidea/ci_hdrc_imx.h | 2 +-
+ drivers/usb/chipidea/otg.h         | 2 +-
+ drivers/usb/chipidea/otg_fsm.h     | 2 +-
+ drivers/usb/chipidea/udc.h         | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/usb/c67x00/c67x00-hcd.h b/drivers/usb/c67x00/c67x00-hcd.h
-index 3b181d4c7a03..6b6b04a3fe0f 100644
---- a/drivers/usb/c67x00/c67x00-hcd.h
-+++ b/drivers/usb/c67x00/c67x00-hcd.h
+diff --git a/drivers/usb/chipidea/bits.h b/drivers/usb/chipidea/bits.h
+index 98da99510be7..b1540ce93264 100644
+--- a/drivers/usb/chipidea/bits.h
++++ b/drivers/usb/chipidea/bits.h
 @@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
  /*
-  * c67x00-hcd.h: Cypress C67X00 USB HCD
+  * bits.h - register bits of the ChipIdea USB IP core
   *
-diff --git a/drivers/usb/c67x00/c67x00.h b/drivers/usb/c67x00/c67x00.h
-index 7ce10928b037..a4456d0fffa9 100644
---- a/drivers/usb/c67x00/c67x00.h
-+++ b/drivers/usb/c67x00/c67x00.h
+diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h
+index d49d5e1235d0..644ecaef17ee 100644
+--- a/drivers/usb/chipidea/ci.h
++++ b/drivers/usb/chipidea/ci.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
+ /*
+  * ci.h - common structures, functions, and macros of the ChipIdea driver
+  *
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.h b/drivers/usb/chipidea/ci_hdrc_imx.h
+index de2aac9a2868..c2051aeba13f 100644
+--- a/drivers/usb/chipidea/ci_hdrc_imx.h
++++ b/drivers/usb/chipidea/ci_hdrc_imx.h
 @@ -1,4 +1,4 @@
 -// SPDX-License-Identifier: GPL-2.0+
 +/* SPDX-License-Identifier: GPL-2.0+ */
  /*
-  * c67x00.h: Cypress C67X00 USB register and field definitions
+  * Copyright 2012 Freescale Semiconductor, Inc.
+  */
+diff --git a/drivers/usb/chipidea/otg.h b/drivers/usb/chipidea/otg.h
+index 4f8b8179ec96..5e7a6e571dd2 100644
+--- a/drivers/usb/chipidea/otg.h
++++ b/drivers/usb/chipidea/otg.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
+ /*
+  * Copyright (C) 2013-2014 Freescale Semiconductor, Inc.
+  *
+diff --git a/drivers/usb/chipidea/otg_fsm.h b/drivers/usb/chipidea/otg_fsm.h
+index 2b49d29bf2fb..1f5c5ae0e71e 100644
+--- a/drivers/usb/chipidea/otg_fsm.h
++++ b/drivers/usb/chipidea/otg_fsm.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
+ /*
+  * Copyright (C) 2014 Freescale Semiconductor, Inc.
+  *
+diff --git a/drivers/usb/chipidea/udc.h b/drivers/usb/chipidea/udc.h
+index e023735d94b7..ebb11b625bb8 100644
+--- a/drivers/usb/chipidea/udc.h
++++ b/drivers/usb/chipidea/udc.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
+ /*
+  * udc.h - ChipIdea UDC structures
   *
 -- 
 2.17.1
