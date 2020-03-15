@@ -2,76 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 211A6185F40
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2020 20:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBEB2185F41
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2020 20:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728820AbgCOTAB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 15 Mar 2020 15:00:01 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:40259 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728608AbgCOTAA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Mar 2020 15:00:00 -0400
-Received: by mail-ot1-f66.google.com with SMTP id h17so15554019otn.7
-        for <linux-usb@vger.kernel.org>; Sun, 15 Mar 2020 12:00:00 -0700 (PDT)
+        id S1728837AbgCOTA4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 15 Mar 2020 15:00:56 -0400
+Received: from mail-oi1-f174.google.com ([209.85.167.174]:39505 "EHLO
+        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728608AbgCOTAz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Mar 2020 15:00:55 -0400
+Received: by mail-oi1-f174.google.com with SMTP id d63so15412501oig.6
+        for <linux-usb@vger.kernel.org>; Sun, 15 Mar 2020 12:00:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=seas-upenn-edu.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=wCkTWFAlc5zCtC35QGbN3xHCLK1mee0GuB9QSdWqKKU=;
-        b=o7jj0mEIJ8Y20gy799W5idaoY/66LiQGp/0uMoUvjt3BP21cZU2n2Pq38VqJsyToZN
-         cf8mfqvst1uHy5uYRg51bptMk1nU3gPKb278nnGlx4CcoFJhtnYkRxQnK+F6dD7Zkj8q
-         SLELxpjyuMzqiDCod5PUudKF6FVxW7lI9ZQzPdrBxQSPcQND+GObhu7OjMn/mqssUA1D
-         Om/mFujniQMr4eIdfhsb2m8khB3PYryTwjCa/nIJfwlLC+dCa+ASwb8H3yj+k3NYuabK
-         nV0oKopqh4611gH1UisYkyQIThS0i1CSd6x6VwKpcGEpwC+4HeHamhi048YkPYUB1AZB
-         IN8A==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=dOl98hdtwWD6WGiF2f3JgBAOy6EWHbabHZ99IPN/Hbo=;
+        b=NKsrt6lXhF3H1oWszW0iGCzD2BPeYo/wD7wfI1tnNUqn/IY0w7UidlISbOuJtpgXqV
+         mo6SnfYcLeHd+wtEe6GXGp4BfPZtQrgucm5Dunxn3Z81flhzmw1RES2h/fCpm5PSPGtK
+         52S7r5rs3uwpd8ZBs/GeoxcxThyn2hKWfGUX3tGg/D79Xhs9MsKVZBcVDC8eaaF5bp1G
+         tQsp1RJuH7HCxC0E37W4uDAALrvqnnO5b7sQTGig1rpNuZoR3AzhiKeVM11nAFpWpMzi
+         laUIAFn+w8Vv0LaZXUu2wW6UkIKAjuZaUkmcoqAC2dUFu1ozSazaEKAJac5GkJx8/bnx
+         jguw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=wCkTWFAlc5zCtC35QGbN3xHCLK1mee0GuB9QSdWqKKU=;
-        b=bHOoxX6m8snNbK9QGKPG3E2nN8/nNeam+sWHfdnWdHIefMkys/zb6k9XjvS5WJeedx
-         rTDwrBN54zJbXN83Cqu9iSUhF0quRT4Hl03Jmb9gu133LYqE6Q5Xsy2BBcuz3YH5ZCzj
-         +ZF/y/TTiH6tQbK22dtYd6cVgeknk9xUTE7wqECQ/IS+v2fX2yzRJ3j9lrDGHnHw/lrW
-         +4tZJambHAM2wzRuNQo2jXuyk9go4oNpmn1Gi4djuOR8uQKaujj5dTtL74vlCcObyeVc
-         UKldeFzyuRxSF5M1dV3YJqLN6w2jWelpO73E1ygr5IamPAbuHeo6xoHsuQXkUg+XFqSt
-         Hohg==
-X-Gm-Message-State: ANhLgQ1kTqVuB3+VmGlzAsucvVAZokObHgvgWCEDEtbdBXwnUcaqcR0v
-        3xvMFV28bbZ5+6F0hTBduJnz3O97vX5MOA==
-X-Google-Smtp-Source: ADFU+vsZKrn8uYAevKvAwiYFVEgwxiQmfTDz5D0kTLbNf81yn+Oqh8nT+MyJbInL6fWnLLpBuA90Bg==
-X-Received: by 2002:a9d:6446:: with SMTP id m6mr18933439otl.122.1584298799658;
-        Sun, 15 Mar 2020 11:59:59 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=dOl98hdtwWD6WGiF2f3JgBAOy6EWHbabHZ99IPN/Hbo=;
+        b=CjrDzQoJ3+WWYcLvoMdWCv1kWpk4n/iv4LTveS1BMNfI5+y+Uho3v7XaYXJtQcirC1
+         q9K0qNlJmHX5WRoYBopoLygv04g67Q3wPcmlrMMRd+s02DrYQbq8Cis35MNgetRBgSLp
+         Z7j6oLLcdi0aivQ+ptgYi7VZ744tAnQy/7UU9jsIKqIZn+oWVKjiVdgbXXtoaBxJ0w4d
+         ViMtuwDdHX1YOeiZ+DxbLx8zNcqmtnNeIlO6iqEchFabWZL1ZZ0l7Np54gTzGPPb0XKE
+         v57gBIol3nzEdDl+UuQoCSFvaIeBzOEGHyV0PhgsaQNj/uj52/6R06xOHOvwbK/t4Q5D
+         S5aA==
+X-Gm-Message-State: ANhLgQ3TV95nN/QDf/kyKmB3IMCyvrug8cF1PH2Yh4HxhTz1OYqA4y/1
+        9fZC4QuxUCUep48oyuYbuLaEaJ8BE7tZ0w==
+X-Google-Smtp-Source: ADFU+vtnpuYUxTX+1P5LV1FdV4IlFoo3nAAj12YMoy1STIX1W/8cjSeJPWPglD8/JJW4Qz4ga3xb5A==
+X-Received: by 2002:aca:4a55:: with SMTP id x82mr1636744oia.28.1584298855109;
+        Sun, 15 Mar 2020 12:00:55 -0700 (PDT)
 Received: from evX1 ([189.172.49.121])
-        by smtp.gmail.com with ESMTPSA id q6sm2162110otm.13.2020.03.15.11.59.59
+        by smtp.gmail.com with ESMTPSA id h92sm10785016otb.2.2020.03.15.12.00.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Mar 2020 11:59:59 -0700 (PDT)
-Date:   Sun, 15 Mar 2020 12:59:56 -0600
+        Sun, 15 Mar 2020 12:00:54 -0700 (PDT)
+Date:   Sun, 15 Mar 2020 13:00:53 -0600
 From:   Enrique Vargas <jevargas@seas.upenn.edu>
 To:     Helen Koike <helen.koike@collabora.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         outreachy-kernel@googlegroups.com
 Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH 0/2] Staging: media: rkisp1: trim diagram in comments to 80
+Subject: [PATCH 1/2] Staging: media: rkisp1: reduce comments width bellow 80
  chars
-Message-ID: <cover.1584298430.git.jevargas@seas.upenn.edu>
+Message-ID: <5e08334eae9ca864dbb09c02291fd72687681c39.1584298430.git.jevargas@seas.upenn.edu>
+References: <cover.1584298430.git.jevargas@seas.upenn.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1584298430.git.jevargas@seas.upenn.edu>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-*** BLURB HERE ***
+Make 'Main Picture Path' part of block diagram on separate rows to avoid
+80 chars WARNING found with checkpatch.
 
-Enrique Vargas (2):
-  reduce comments width bellow 80 chars
-  eliminate trailing whitespaces on comments
+Signed-off-by: Enrique Vargas <jevargas@seas.upenn.edu>
+---
+ drivers/staging/media/rkisp1/rkisp1-dev.c | 57 ++++++++++++++++-------
+ 1 file changed, 39 insertions(+), 18 deletions(-)
 
- drivers/staging/media/rkisp1/rkisp1-dev.c | 54 ++++++++++++++++-------
- 1 file changed, 37 insertions(+), 17 deletions(-)
-
+diff --git a/drivers/staging/media/rkisp1/rkisp1-dev.c b/drivers/staging/media/rkisp1/rkisp1-dev.c
+index 558126e66465..194fc33941f0 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-dev.c
++++ b/drivers/staging/media/rkisp1/rkisp1-dev.c
+@@ -37,26 +37,47 @@
+  *
+  * ISP Block Diagram
+  * -----------------
+- *                                                             rkisp1-resizer.c          rkisp1-capture.c
+- *                                                          |====================|  |=======================|
+- *                                rkisp1-isp.c                              Main Picture Path
+- *                        |==========================|      |===============================================|
+- *                        +-----------+  +--+--+--+--+      +--------+  +--------+              +-----------+
+- *                        |           |  |  |  |  |  |      |        |  |        |              |           |
+- * +--------+    |\       |           |  |  |  |  |  |   -->|  Crop  |->|  RSZ   |------------->|           |
+- * |  MIPI  |--->|  \     |           |  |  |  |  |  |   |  |        |  |        |              |           |
+- * +--------+    |   |    |           |  |IE|IE|IE|IE|   |  +--------+  +--------+              |  Memory   |
+- *               |MUX|--->|    ISP    |->|0 |1 |2 |3 |---+                                      | Interface |
+- * +--------+    |   |    |           |  |  |  |  |  |   |  +--------+  +--------+  +--------+  |           |
+- * |Parallel|--->|  /     |           |  |  |  |  |  |   |  |        |  |        |  |        |  |           |
+- * +--------+    |/       |           |  |  |  |  |  |   -->|  Crop  |->|  RSZ   |->|  RGB   |->|           |
+- *                        |           |  |  |  |  |  |      |        |  |        |  | Rotate |  |           |
+- *                        +-----------+  +--+--+--+--+      +--------+  +--------+  +--------+  +-----------+
++ *                                                          
++ *                                                          
++ *                                rkisp1-isp.c              
++ *                        |==========================|      
++ *                        +-----------+  +--+--+--+--+   
++ *                        |           |  |  |  |  |  |   
++ * +--------+    |\       |           |  |  |  |  |  |   
++ * |  MIPI  |--->|  \     |           |  |  |  |  |  |   
++ * +--------+    |   |    |           |  |IE|IE|IE|IE|   
++ *               |MUX|--->|    ISP    |->|0 |1 |2 |3 |--[A]--
++ * +--------+    |   |    |           |  |  |  |  |  |   
++ * |Parallel|--->|  /     |           |  |  |  |  |  |   
++ * +--------+    |/       |           |  |  |  |  |  |   
++ *                        |           |  |  |  |  |  |   
++ *                        +-----------+  +--+--+--+--+   
+  *                                               ^
+- * +--------+                                    |          |===============================================|
+- * |  DMA   |------------------------------------+                          Self Picture Path
++ * +--------+                                    |       
++ * |  DMA   |------------------------------------+       
+  * +--------+
+- *
++ * 
++ * 
++ *              rkisp1-resizer.c          rkisp1-capture.c
++ *            |====================|  |=======================|
++ *                         Main Picture Path
++ *            |===============================================|
++ *            +--------+  +--------+              +-----------+
++ *            |        |  |        |              |           |
++ *         -->|  Crop  |->|  RSZ   |------------->|           |
++ *         |  |        |  |        |              |           |
++ *         |  +--------+  +--------+              |  Memory   |
++ * --[A]---+                                      | Interface |
++ *         |  +--------+  +--------+  +--------+  |           |
++ *         |  |        |  |        |  |        |  |           |
++ *         -->|  Crop  |->|  RSZ   |->|  RGB   |->|           |
++ *            |        |  |        |  | Rotate |  |           |
++ *            +--------+  +--------+  +--------+  +-----------+
++ *  
++ *            |===============================================|
++ *                          Self Picture Path
++ * 
++ * 
+  *         rkisp1-stats.c        rkisp1-params.c
+  *       |===============|      |===============|
+  *       +---------------+      +---------------+
 -- 
 2.17.1
 
