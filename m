@@ -2,105 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD77E185B68
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2020 10:25:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E31C1185B6C
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Mar 2020 10:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728112AbgCOJZb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 15 Mar 2020 05:25:31 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:43712 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728065AbgCOJZa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Mar 2020 05:25:30 -0400
-Received: by mail-il1-f195.google.com with SMTP id d14so12956503ilq.10;
-        Sun, 15 Mar 2020 02:25:29 -0700 (PDT)
+        id S1728096AbgCOJ0b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 15 Mar 2020 05:26:31 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:46028 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726521AbgCOJ0b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Mar 2020 05:26:31 -0400
+Received: by mail-lf1-f65.google.com with SMTP id b13so11429267lfb.12
+        for <linux-usb@vger.kernel.org>; Sun, 15 Mar 2020 02:26:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eDLn6hcaUGXN1ifnm89fP3KORlDlYvpz0bkA0oBIYGM=;
-        b=Vp92DRfDmGLIM/NPFDj32KHbGd5+v54Y8Qx53JAOAD18STaqvCL7NqF8E/KfcDTr1N
-         RTh37uMH8CGBwXi7s3YU7A9AqUdrD6fmecuUReY3uJ5yex7vhm+o2hnTXMKjuFBsXo8J
-         FRimVp9eYRS/Og97n7VrlGVV9giH2n3V/9MUXWgW6I3wwjkOIFXXfG78J9tNal3iQrA3
-         gO1CPPERPk/E+tzgHAp8X6rm6y76Q8xQ5fK5NSKoqHMy3CoWgMdhVBy0f55UMQT2l9Yo
-         PjFoGSXUOecROOqHn58hc8Ztnv48FZYFeTL64uCDFp58FTA2TSs3iokQUVSnB3mnnWY+
-         nyaw==
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=t1zt08mBfit5vL9XPuWnVH4jvHcmSRnToQancRskow0=;
+        b=u1ZJGiM7aaZkbQnkeEr/4Kx6ZCdBHhA3KrsLupisoF1xAaHvgs3VYBwAFKFqM5JcV+
+         eqvrvFwZuGJYKPIPhKLDtXRhmXTga5XDI4rVyDEeB1inbv4NuGRtIz1rQXtts/1EIsRi
+         p3vcCHf7WQSt0AqvRQh/KzFOJ9xpeBWJe9XFU9ofT8iqzIAiHdkNCmSNFJ8SlmYoWAZr
+         SjtgnXgp3EqKWst7fRL/aewYiypx9TpSQECvG0Y3Gy1nFVnG8HWyt7w3SFFpSgaBFzIb
+         CU926EJoM6XGOjM/6vKU9dkAnRNk5efnbtdbt9d7SkkmhrBfZOLonhCCWyOdXwiccHGI
+         jsiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eDLn6hcaUGXN1ifnm89fP3KORlDlYvpz0bkA0oBIYGM=;
-        b=JzzcXQjSt1PiPSI277ANzrOxaWzBw8yXSgve7kyUdTFlXWUXO/+OAJvzlZmGkuxHHQ
-         ibSsqUYObdJYFpsPshMn5OFjqbYaWYLdr6T6KsTre++kN9OkDsKoH2U05lkP62z1PjBk
-         jqTtV88GU8chciFlXcqjaminV1rDIgglzut0+fxV9jCzEyi1XOyFJzL7ZMEjkMx8YEFh
-         4Ym6Pqs7FtO6h9gVSg/QHpagYE6hjeAA2FBZs1x6sTSdzKne5Qeq9f6CsCWpub8KFIbI
-         K02rz5lCAcfXGDzHybJXF6AjeWZoVu1c0TjYzCAs7NMkAa6+QfzdfnRFMBVPJhzIKn7Y
-         ia+w==
-X-Gm-Message-State: ANhLgQ2zJ5ujUn//8LzGY7Hs4R1Add0w68Q68f4kX0tP49vsvCby03qT
-        Q4qfoyn5s39SosV6h30FOiRoLdTrDoap0xipwBQ=
-X-Google-Smtp-Source: ADFU+vu2O/lxp6WbokN0oJhMae6LPLe+vhCCs071Xl1gPKo6khFDdWen7oB+9dJAe4A09kgfcbJwwxr26vMrqKvBJwk=
-X-Received: by 2002:a92:d843:: with SMTP id h3mr8319415ilq.246.1584264329583;
- Sun, 15 Mar 2020 02:25:29 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=t1zt08mBfit5vL9XPuWnVH4jvHcmSRnToQancRskow0=;
+        b=h0MDIrqXDbr41oy8XwdQAOlDxlj2nNrOr9YyaoVKudJwui6EXaW9L2fOkfdv2rhKSp
+         Tz+Gd+VeIGXuzw7DaGGaEPvj4wgvPk8HNUw8PXq+UuIpR4KKvb9xwNZFBPAApmDSDTkz
+         CyIen3vRRpkWNHrS/TkRNO2jH6RQwyvL77wV22XE88xze/JITiVIyqWI98JtUdcqEPFu
+         yhLFcCNlNVHLTH8iAfJqNPy9heje1k2ua8MG0cILxaAAUPXRdVn3ba8D1ffEOF3PO4V/
+         5Dr1syRPbVglw3qVEVmiN8A6EjUfl6VVP6gAEijyMW0ILN6ZjdQf8cFXNPgE2UTKyfmT
+         damg==
+X-Gm-Message-State: ANhLgQ3Rus/InFhczCh2UWg2ewPUIVngeR8jAvInwf05gVvrL+EiDilT
+        VVf6PZ/Z6J4IspSb/hf3nTEMemsyHsn/Eg==
+X-Google-Smtp-Source: ADFU+vtMImgV5ky5AN5pToBEl3EKkIS6fEQwZ75nOof5OPFz5UZlHNMRBImFBsrszazcWDKnYSoT6Q==
+X-Received: by 2002:a19:fc12:: with SMTP id a18mr1059257lfi.117.1584264388975;
+        Sun, 15 Mar 2020 02:26:28 -0700 (PDT)
+Received: from saruman (88-113-215-213.elisa-laajakaista.fi. [88.113.215.213])
+        by smtp.gmail.com with ESMTPSA id m15sm6247917ljo.8.2020.03.15.02.26.27
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 15 Mar 2020 02:26:28 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>
+Subject: Re: [PATCH 6/6] usb: dwc3: gadget: Refactor dwc3_gadget_ep_dequeue
+In-Reply-To: <17318e194eea91aca59a1965967f953a55629d1e.1583443184.git.thinhn@synopsys.com>
+References: <cover.1583443184.git.thinhn@synopsys.com> <17318e194eea91aca59a1965967f953a55629d1e.1583443184.git.thinhn@synopsys.com>
+Date:   Sun, 15 Mar 2020 11:26:23 +0200
+Message-ID: <874kuqezpc.fsf@kernel.org>
 MIME-Version: 1.0
-References: <20200310194854.831-1-linux.amoon@gmail.com> <20200310194854.831-2-linux.amoon@gmail.com>
- <87lfo2f0k9.fsf@kernel.org>
-In-Reply-To: <87lfo2f0k9.fsf@kernel.org>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Sun, 15 Mar 2020 14:55:19 +0530
-Message-ID: <CANAwSgQgLm623szgs5Lba-NQKySiGw5fRfjyxjfdfHxQxhri7g@mail.gmail.com>
-Subject: Re: [PATCHv3 1/5] devicetree: bindings: exynos: Add new compatible
- for Exynos5420 dwc3 clocks support
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc@vger.kernel.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Felipe,
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 15 Mar 2020 at 14:37, Felipe Balbi <balbi@kernel.org> wrote:
->
->
-> Hi,
->
-> Anand Moon <linux.amoon@gmail.com> writes:
->
-> > Add the new compatible string for Exynos5422 DWC3 to support
-> > enable/disable of core and suspend clk by DWC3 driver.
-> > Also updated the clock names for compatible samsung,exynos5420-dwusb3.
-> >
-> > Acked-by: Rob Herring <robh@kernel.org>
-> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
->
-> What is the dependency here?
->
-> checking file Documentation/devicetree/bindings/usb/exynos-usb.txt
-> Hunk #2 FAILED at 84.
-> 1 out of 2 hunks FAILED
->
-> Applying on top of v5.6-rc5
->
-> --
-> balbi
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
 
-These patch were made on top linux next-20200306,
-And with new updates in the clk driver configuration.
-I will update these patchs later, plz drop these changes for now.
+> The flow from function dwc3_gadget_ep_dequeue() is not easy to follow.
+> Refactor it for easier read. No functional change in this commit.
+>
+> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
 
--Anand
+doesn't apply:
+
+checking file drivers/usb/dwc3/gadget.c
+Hunk #1 FAILED at 1555.
+Hunk #2 FAILED at 1581.
+2 out of 2 hunks FAILED
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl5t9L8ACgkQzL64meEa
+mQZCvA/9HQyGXXstE0rcxLVQMw3qcZV/a3LzDCkBMBEcM5OBsX4YrmiAEbV8C6Yy
++6EuIem/w9CCJk1NPBYZTwNMUSJsEvMO4P+gEKJ0Ql8kbotniX1sMV2AsHdjKMbG
+11wHTDf6MUr5XDIb7EQJAKurErM1q4HurvLbz/wt7Mi4LY9sSaf4smR5Ev4HZgSE
+Zkgd8z09JAqknsGpYqwObEJFxuKPjEZf7ZmSAhg2BT7PsxqYqjC3Qdg6aPyJ5Ky1
+UeLCqq3cR9OpgMz/+2N9ZdKxslFxpwJ3pzIvAi+wzf1oOi4lxfoRJt3bleNqhCt8
+6iqkUKKRxh3KR3OW+Ii7PIDoHCH1z3ZLpwPOgszdvlJ6hcuonbbfStAiAxMFeipZ
+O5gBp7Y3UgX2CDcS0JdaSUWadix19hNpEiaq/rCuDmSyhR/D0IoVaXuLK3xeMpoW
+PUuNwkSTXTAl44krEZ4gZIN7hC5xDL/d5unC3uLi+H7k+VP7Je2ODCmH5tZ1r+iR
+vGLCZxqlEuVIGRl3kO4P/UZwcMBUE6oJfO52VtD3XjWNEJShckoFxwuANdUnySqq
+uDj2u0gt8HQhsmcwCCwLBW0cull+QeOCZkhAzsaSluyEt+cuPc0P0XDkP4UrX0Os
+oqz2OZuYRPaqJG/cIqePfNQUFeCQXUD0JuGYEgdhTEvNCAC0MSY=
+=8sUo
+-----END PGP SIGNATURE-----
+--=-=-=--
