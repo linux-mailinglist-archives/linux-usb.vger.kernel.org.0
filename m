@@ -2,136 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78912186564
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2020 08:05:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDC3186568
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2020 08:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729859AbgCPHFT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Mar 2020 03:05:19 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:46731 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728302AbgCPHFT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Mar 2020 03:05:19 -0400
-Received: by mail-lj1-f193.google.com with SMTP id d23so17295764ljg.13;
-        Mon, 16 Mar 2020 00:05:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=uBZWUAhDtllCgzUKbsfgOq5XO1bRfHYmWfHJLRmvGhI=;
-        b=G47QD5SLJGT3j1JEedQjgXDMILOxrXG0wgKWNCqvfz/HWI2rSsXH7IIOgvkj0D4G2m
-         MiHfvmANvpwgXtxLzOVWWv42bnNJ+JFzkBGBtH+3EeLHpI2EtKRy88Bjg5dL8i7kTmmG
-         wDtH0tnIzRj9SqtVZMC3nTC2vvnP2qxllaPlP7JvhEiffBEPEWSn5Hjx+4MOBvMW1914
-         vagvolKGlPG1O3ondxPy3H6e08Ll5OAHoMauURVktnUEeKUfR9p8TCCt2ppGaee/DUDs
-         sHkVPvjCA4aflTVcJrjxEPm9gs1DMeRtw5AFHU+mtV9RxEjE8URxxrplOE7syVIxF/dk
-         3FFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=uBZWUAhDtllCgzUKbsfgOq5XO1bRfHYmWfHJLRmvGhI=;
-        b=SUKIv0/vigxP04l44E6LUNlT4U3YT9Qr+YuXen0qVnQKgb5f6qKQ9qpfXgrd/DV2jD
-         rlRECB8Eo+HubcjqRHF796caOsXuFbw1JrhdisSt38DuBO4yYZVmVLzmCIr8KMVbQTxh
-         tf53STGAZ2fwMv77aUiYFjqVZbgWuxGNxEW0ltq2C5CrkcHAeTShn2RlNrodEHWTmjmq
-         pFYj/fgCp7v4COV6ajsla5Sw/X0NibNkanYt2bxDpDLosIZFRZgWv3sfpj6SY158v0vt
-         /DHUJ4Nmci/tUe6L4y/kpll1RouIu7Nhi0HTuS0eYadFUQjjcj6j2I0D+NRFmseqL/cd
-         yunA==
-X-Gm-Message-State: ANhLgQ2MoFluWkEzf5SHq2gEC2Z/J7koIazjdMBG7KQ5YnmT3RNVq0zW
-        Tbp+S7YKLO44Y1AoE2Zq82KK538FZG8=
-X-Google-Smtp-Source: ADFU+vvu55HC7GzeAR9KkU065p9OIPALb8genbCq3kvbmbZRS5JPXHniAqVwx/BFg4J8aOBOTFcbDA==
-X-Received: by 2002:a2e:2415:: with SMTP id k21mr1096063ljk.9.1584342317222;
-        Mon, 16 Mar 2020 00:05:17 -0700 (PDT)
-Received: from saruman (88-113-215-213.elisa-laajakaista.fi. [88.113.215.213])
-        by smtp.gmail.com with ESMTPSA id p5sm20967403ljn.48.2020.03.16.00.05.15
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 16 Mar 2020 00:05:16 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Johan Hovold <johan@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Subject: Re: [PATCH] usb: get rid of 'choice' for legacy gadget drivers
-In-Reply-To: <20200315154948.26569-1-masahiroy@kernel.org>
-References: <20200315154948.26569-1-masahiroy@kernel.org>
-Date:   Mon, 16 Mar 2020 09:05:12 +0200
-Message-ID: <875zf42313.fsf@kernel.org>
+        id S1729799AbgCPHHO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Mar 2020 03:07:14 -0400
+Received: from mail.actia.se ([195.67.112.82]:33988 "EHLO mail.actia.se"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729776AbgCPHHO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 16 Mar 2020 03:07:14 -0400
+Received: from S036ANL.actianordic.se (192.168.16.117) by
+ S036ANL.actianordic.se (192.168.16.117) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Mon, 16 Mar 2020 08:07:10 +0100
+Received: from S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69]) by
+ S036ANL.actianordic.se ([fe80::e13e:1feb:4ea6:ec69%3]) with mapi id
+ 15.01.1913.007; Mon, 16 Mar 2020 08:07:10 +0100
+From:   Jonas Karlsson <jonas.karlsson@actia.se>
+To:     Oliver Neukum <oneukum@suse.com>,
+        Fabio Estevam <festevam@gmail.com>
+CC:     Peter Chen <peter.chen@nxp.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: RE: USB transaction errors causing RCU stalls and kernel panics
+Thread-Topic: USB transaction errors causing RCU stalls and kernel panics
+Thread-Index: AdXxbFdECZ2tmAAoQZaxVkfgHyprqgABZ9yAAAiGryAAIGdeAAAEO3aAAAR/HgAARX+KgACtYMrAACnez4AABbFG8AAAO9EAAACaYAAAA7I5cAAHmbfw///2mYD//wJNQIACMDyA///DfRCAAgXegP/6FcLw
+Date:   Mon, 16 Mar 2020 07:07:10 +0000
+Message-ID: <1a91d611631c49b58c0d9fb8e5671b7e@actia.se>
+References: <ddf8c3971b8544e983a9d2bbdc7f2010@actia.se>
+         <20200303163945.GB652754@kroah.com>
+         <ca6f029a57f24ee9aea39385a9ad55bd@actia.se>
+         <6909d182-6cc5-c07f-ed79-02c741aec60b@linux.intel.com>
+         <1583331173.12738.26.camel@suse.com>
+         <4fa64e92-64ce-07f3-ed8e-ea4e07d091bb@linux.intel.com>
+         <VI1PR04MB532785057FD52DFE3A21ACA88BE30@VI1PR04MB5327.eurprd04.prod.outlook.com>
+         <699a49f2f69e494ea6558b99fad23cc4@actia.se>
+         <20200310081452.GA14625@b29397-desktop>
+         <d1f68ef3316e484b9cc1360f71886719@actia.se>
+         <1583838270.11582.11.camel@suse.com> <1583839306.11582.12.camel@suse.de>
+         <325d5af5d4c44eafac94fc8e0e4d1a7d@actia.se>
+         <c671a51d6b5642078367d681643c46af@actia.se>
+         <CAOMZO5BURqWDXKXiwLzG=BRC_wJkjZ1d_HaLt_tefjk3GrabDw@mail.gmail.com>
+         <fc2d27c17ebc409ea8c318c22ac1f4a7@actia.se>
+         <1583922523.20566.4.camel@suse.com>
+         <ad6b4f2d72f84726a398b41007839f77@actia.se>
+ <1584020739.20566.10.camel@suse.com>
+In-Reply-To: <1584020739.20566.10.camel@suse.com>
+Accept-Language: sv-SE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.11.14.24]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-
-
-Hi,
-
-Masahiro Yamada <masahiroy@kernel.org> writes:
-> drivers/usb/gadget/legacy/Kconfig creates a 'choice' inside another
-> 'choice'.
->
-> The outer choice: line 17 "USB Gadget precomposed configurations"
-> The inner choice: line 484 "EHCI Debug Device mode"
->
-> I wondered why the whole legacy gadget drivers reside in such a big
-> choice block.
->
-> This dates back to 2003, "[PATCH] USB: fix for multiple definition of
-> `usb_gadget_get_string'". [1]
->
-> At that time, the global function, usb_gadget_get_string(), was linked
-> into multiple drivers. That was why only one driver was able to become
-> built-in at the same time.
->
-> Later, commit a84d9e5361bc ("usb: gadget: start with libcomposite")
-> moved usb_gadget_get_string() to a separate module, libcomposite.ko
-> instead of including usbstring.c from multiple modules.
->
-> More and more refactoring was done, and after commit 1bcce939478f
-> ("usb: gadget: multi: convert to new interface of f_mass_storage"),
-> you can link multiple gadget drivers into vmlinux without causing
-> multiple definition error.
->
-> This is the only user of the nested choice structure ever. Removing
-> this mess will make some Kconfig cleanups possible.
->
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/=
-commit/?id=3Dfee4cf49a81381e072c063571d1aadbb29207408
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-
-Greg, if you want to pick this for v5.7, please go ahead:
-
-Acked-by: Felipe Balbi <balbi@kernel.org>
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl5vJSgACgkQzL64meEa
-mQYUDxAAxrr84ybEsxCRQlX01AkdCUFtaPtwzAr4q6cuouUdEHHNWSCKqbDCVWPa
-Fxm0aPllomMAbASyuDahGoEjcg+84lVl9ieclsaNCXMDqtdNTo7bpJwrA+TjzhQb
-z1c4EZlO4KR/7MY4rPRNR1v+8T+Qy7cHyxAOxOHH7uDVjbGtzq7L1ETievoRWO1k
-yzY42zfEyvj7z3xfSnRN6I8FbXTEKLi4L0otRjxVe3vcO/Qvw8xp9kupDTY/twsJ
-o2L+E6Z+UC1Zr/jexOQm5B9eFtUQnNSNA/eH1ez4Q/yeTJjesIeHhAJnS/C9cuTk
-lFHah0K12ggH8K81thYyt3/4x8khs+rNP6kTcpGxZffM0T6Ph/o1tSmfbK2OH/Te
-aHEll1S8fgKJG2t0o1TQRY2WwR3Vz3ClUtrxXSx5+uixWSU+96k/lW1o7ggXYORe
-3HJS3jruc93zWKr+DkFvIW6xUrgez2enrGWXxpzdGXv4RK1tK7+WO1d46AEPYxBV
-ha6kSmJ5bbYYDhFbVuA/LufmDZS56wUqRox1onDwSity1BKNzkmhHrfqGH+ncyFr
-2RjfeCw2zvh1qZ2W03yRqeXA1EC+uvYBWDD1mGIjPh7i/8sboHh9HCVaOUyuZ4pp
-/hIco7nCWbnw/t+OI6szV+g/tEodbJqQ1mIKuWrMo+7Ozh4S3Ms=
-=bQ+k
------END PGP SIGNATURE-----
---=-=-=--
+PiANCj4gSGksDQo+IA0KPiB0aGFuayB5b3UuIEluIHRoaXMgY2FzZSBpdCBsb29rcyBsaWtlIHRo
+ZSB3aXNlc3QgY291cnNlIGlzIHRvIHdhaXQgYSBmZXcgZGF5cyB0aGVuLg0KPiBUaGFuayB5b3Ug
+Zm9yIHRob3JvdWdoIHRlc3RpbmcuDQo+IA0KPiAJUmVnYXJkcw0KPiAJCU9saXZlcg0KDQpIaSBP
+bGl2ZXIsDQoNClRoZSBhcHBzIHRlYW0gcmFuIGEgY291cGxlIG1vZGVtIHRlc3RzIHdpdGggdGhl
+IHBhdGNoZXMgYW5kIGl0IGxvb2tlZCBnb29kLg0KDQpCUiwNCkpvbmFzDQoNCg0K
