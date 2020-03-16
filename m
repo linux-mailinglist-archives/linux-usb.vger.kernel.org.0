@@ -2,137 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9FFE186590
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2020 08:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA49A1865A6
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2020 08:26:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729895AbgCPHWb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Mar 2020 03:22:31 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:45194 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728120AbgCPHWa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Mar 2020 03:22:30 -0400
-Received: by mail-lj1-f196.google.com with SMTP id e18so17393768ljn.12;
-        Mon, 16 Mar 2020 00:22:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=zM8KKIBzhx1kO+5WbVIIuZQdbPNyIKOWqBOoeUsitpE=;
-        b=bsRnJTPgAHC+3edYWQkWocNVD1PQaRvLiZVab5K+Wb42YHWaXlYOe5hZDH7ZP9gMu+
-         EfOTbqk/56yLXuX+p2vF8MZL9FufyepJTLb9s8E0RjDMQJM/lrgnX36FG7yipZg4r0Qb
-         BOiw3OOfpWGzRqkAsYP80LxsOfNHKAugUfzmHtmJkOgcHbQlT1gWz5KqzJwGCc7JdLUr
-         EIyBNekRJGiDvT10FA5a/PUkQcHcC+1H/wXWgmG3E5vl8FYvtuALyz/oYN0/1SSa6lLG
-         0ad5iyvlNZPFjxuOjPc8qh3JM5ZDEYFwd55R++r1TgKcsaiaWiuWRjb2DARTgZluDxld
-         PIhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=zM8KKIBzhx1kO+5WbVIIuZQdbPNyIKOWqBOoeUsitpE=;
-        b=Lvs27J6Oods5/O7IajUYTz2q07n2ZIwU86omlp8TQJafAZcvW7nbENp7k0MV7whUZ5
-         Htw9cKLX/V+W/6anWliFXADMT4EPTBOvwX7QeVF8V+WBKZgDtm+6AXTaBwPPt5Y2VB5f
-         OqBkdRmkKo1eQZc20oeUSnzypOcc+Rdbjmd+WY4Jud4OYIFzkduP1E/keGyrPi1iEDTz
-         khWJ9CHQYQnO7eb2sUGq0MxtjEa2ZDaq6QaDSDi6d1YS4+60652XxJGT40rnJ37MMs6a
-         ovzvexJ1KC4r9UstUx1LV+U2Gs6BQDL2GhXJpOdW1mlAluVTVi8IESi5EH7dDwaT6Maj
-         Hnqg==
-X-Gm-Message-State: ANhLgQ0UpAVUecKJ+56JKplOY5zXylUFll46vW1r3DH9cTlcvSw+Yqc9
-        z09Td/jOJSvPugrTaE6NN8/hN6emL7E=
-X-Google-Smtp-Source: ADFU+vu7oM/7DXs8El5eK1zdRL5vi2cRkxZBY+xv2ACF67YVjAnjTf8plkdDyZHGxHCKRw7S2ObxDQ==
-X-Received: by 2002:a2e:964e:: with SMTP id z14mr16124424ljh.44.1584343348106;
-        Mon, 16 Mar 2020 00:22:28 -0700 (PDT)
-Received: from saruman (88-113-215-213.elisa-laajakaista.fi. [88.113.215.213])
-        by smtp.gmail.com with ESMTPSA id 18sm15467494ljv.30.2020.03.16.00.22.27
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 16 Mar 2020 00:22:27 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] usb: dwc3: enable runtime PM for drd role switch / extcon
-In-Reply-To: <ab538c6e-b524-d690-984b-126651cf4d4d@puri.sm>
-References: <20200312143038.11719-1-martin.kepplinger@puri.sm> <87fteaf0b1.fsf@kernel.org> <ab538c6e-b524-d690-984b-126651cf4d4d@puri.sm>
-Date:   Mon, 16 Mar 2020 09:22:23 +0200
-Message-ID: <8736a8228g.fsf@kernel.org>
+        id S1729867AbgCPH0K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Mar 2020 03:26:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50020 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729662AbgCPH0K (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 16 Mar 2020 03:26:10 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C7F2820663;
+        Mon, 16 Mar 2020 07:26:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584343570;
+        bh=h1FYaT1UBdegTD3IizwhaTxnMbeIHr6tKFiJOPo/5sA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0Me6eTB22r8oZTRioVku7RXbniYL+UzjuRxE5wFH71mfLpaBfm0nYBGnV010wOE9v
+         l4wMI09KziG1hQ9pdVlVqt4swQu2MA2HqokRwTkKDKhxksdjz8zpe/KmGc4O86kD2q
+         Su01geODtXPHOlnEKlx+uPkx6kt5dZ8BnTN8vWg8=
+Date:   Mon, 16 Mar 2020 08:26:04 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] USB for v5.7 merge window
+Message-ID: <20200316072604.GC3019942@kroah.com>
+References: <87wo7lenor.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87wo7lenor.fsf@kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Sun, Mar 15, 2020 at 03:45:56PM +0200, Felipe Balbi wrote:
+> 
+> Hi,
+> 
+> Man... I did it! I managed to get through all 500+ patches in time. I
+> can't believe it.
+> 
+> For everyone involved, I'm sorry for the delay, but I've been super busy
+> at work. I genuinely apologize for this and will try to better plan my
+> week to guarantee at least 3 hours a week to look at the mailing list.
+> 
+> Greg,
+> 
+> If you want anything to be changed, let me know.
+> 
+> Cheers
+> 
+> The following changes since commit 2c523b344dfa65a3738e7039832044aa133c75fb:
+> 
+>   Linux 5.6-rc5 (2020-03-08 17:44:44 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git usb-for-v5.7
 
+Hm, I hit the issue that Stephen also hit with the merge and build
+breakage.
 
-Hi,
+Then I hit this problem too:
 
-Martin Kepplinger <martin.kepplinger@puri.sm> writes:
->> (for commit logs, please break your lines at 72 characters)
->>=20
->> Martin Kepplinger <martin.kepplinger@puri.sm> writes:
->>=20
->>> Note: runtime PM currently needs to be enabled ("auto") manually via
->>> sysfs as its power/control is set to "on" by the driver.
->>=20
->> Right, that's on purpose
->>=20
->>> When runtime PM enabled, dwc3 currently doesn't resume when a cable is
->>> connected.  It only suspends after a cable is disconnected.
->>>
->>> When using an extcon driver (for a different chip on the board), dwc3
->>> can register a hook for that. (Still undocumented -> TODO?).
->>>
->>> Make sure, dwc3 is resumed when "set_mode" is being called by drd.
->>>
->>> this is only a question about what's missing to properly keep runtime
->>> PM enabled for dwc3 and if my change makes any sense at all. It seems
->>> to work fine for me...
->>>
->>> I'm glad about any hints on how to keep runtime PM enabled (at least wh=
-en
->>> having an extcon hook set up).
->>=20
->> You need to remember that what you write here is going to be placed in
->> the commit log and will survive forever in the history of the
->> project. Can you be a little bit more technical? For example, why did
->> you change the asynchronous pm_runtime_put() to synchronous versions?
->> Why was that necessary?>
->> Also, you're missing your Signed-off-by line. Please, read the
->> documentation about how to write patches.
->
-> I don't sign off on this change. It merely servers as a basis for the
-> question I have: How to properly have continuous runtime PM in dwc3 (at
-> least when having an extcon device connected) and is there any specific
-> reason why this isn't yet implemented?
+Commit: 238d76021654 ("usb: dwc3: meson-g12a: Don't use ret uninitialized in dwc3_meson_g12a_otg_init")
+	Fixes tag: Fixes: 729149c53f04 ("usb: dwc3: Add Amlogic A1 DWC3 glue")
+	Has these problem(s):
+	        - Target SHA1 does not exist
 
-Probably because nobody has spent the time to do it. If you have HW and
-time to implement this, by all means, go ahead.
+I'll "override" the failure in my scripts, as I don't want you to have
+to rebase your tree, but something is odd there...
 
-Just make sure to keep the current functionality: pm runtime should only
-be enabled by userspace.
+thanks,
 
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl5vKS8ACgkQzL64meEa
-mQYeGA/+OgHY0ROt+AIADj8SxrXz4bPiq9uAEgd/J7CBDwkFVXNqodsXENY7+1uI
-ji3yVk1PDYZYYXU3C+wpJJLGYun9pt6extOZ6kdiZub/08gpVl8QsJ40N/5/32gp
-TI/qrRQphkC/UQmzzE97j7LgIburGVBjp31l08TifualMtEhAoJ5fcA91y9ynF6p
-ZG0h0cwDCtisgXytMckyKOPIwSN9EdLr4PFlDr4gj23mLyJxH2cB8UlacBp83p6D
-gBknR6vKnCWz+vhUXFUGHcKxWjjVTe9RgA7m+Iur9Eu/y60QkAs1P8IzsVLQgsUn
-+22zh82AcrOIzjwSXJppCfIVx54nKrOrkEfwrWJnUoGawrtCC7mVMPP0Lz8PfmCq
-k1UpByh5syaIm7NU9Rf+xYjsnxZEY9zevxPGUxrIvOMVhSxMHWuGd2gBSQTrhHDn
-n0t7iBI5wLgHLsL4y07OVvP7tp3ICZPtTXNM91bt7THTOO959A58silEaDVcu5iO
-t+2pbiL0BrBBQjX4136tIVGT403oPFqHa678mL7ykkeiUAx3WFBkEQHu3sFPdtBy
-zU1gxzS6BY0tnzBIOT00oMdcUF0lGljuB+67N1DB87AWZq7yhY8kvM92KwuG5SG2
-R+Fg3/Rq88aXrep4ADZgQwTmlO7OA3HVWs+d9bdR2P3XL6oKGC4=
-=UNxB
------END PGP SIGNATURE-----
---=-=-=--
+greg k-h
