@@ -2,45 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD50518748A
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2020 22:11:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97DB0187483
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2020 22:11:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732671AbgCPVLr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Mar 2020 17:11:47 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:37300 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732669AbgCPVLr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Mar 2020 17:11:47 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02GLBbxW043488;
+        id S1732661AbgCPVLj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Mar 2020 17:11:39 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:35912 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732650AbgCPVLj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Mar 2020 17:11:39 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02GLBbXk086215;
         Mon, 16 Mar 2020 16:11:37 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1584393097;
-        bh=bOYFaETYWJVVuVd1WAFYcBndYT1yP3V30xHNURp1E7k=;
+        bh=RramQHUPbwcUt8VSe76c0BmWn08JRJV96TdE6AM/ExY=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=D4KK/aNyclgcjyVBS9PXkctMkJMmYg8rGOwgXRgSenHJIi1YC+UeI+3+ooMLUWCqX
-         ciOB0kLP4wi8Kxq2BAW5HlR6t1n8GUw5exoCPHdDTobrRSDB7kDwVzu2hbml7jzIKi
-         UevTtxmUgMwM3f7uLGCQLfTqY5JBOuYuH56LSJ6A=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02GLBbPa028885;
+        b=mCvB43PhJjEfsCyZ1EUkARC2iEdiiPWl/xx2o7/+63BqC2vXcIH1u/JqDMuH5rl98
+         FdyuyaBb7CJDibrD4juQQmbiWsrGIfl767WITiFTWYY9avNUamyVUIku/0+J3rU8pY
+         yvYZrs8JoE56O9OsjUJt1bekNZShbh8nfGY9Rw6M=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02GLBbtZ077001
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Mon, 16 Mar 2020 16:11:37 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Mon, 16
  Mar 2020 16:11:37 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
  Frontend Transport; Mon, 16 Mar 2020 16:11:37 -0500
 Received: from uda0271908.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02GLBbLe119954;
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02GLBbLf119954;
         Mon, 16 Mar 2020 16:11:37 -0500
 From:   Bin Liu <b-liu@ti.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     <linux-usb@vger.kernel.org>, Bin Liu <b-liu@ti.com>
-Subject: [PATCH 2/8] dt-bindings: usb: Convert jz4740-musb doc to YAML
-Date:   Mon, 16 Mar 2020 16:11:30 -0500
-Message-ID: <20200316211136.2274-3-b-liu@ti.com>
+Subject: [PATCH 3/8] usb: musb: jz4740: Add support for DMA
+Date:   Mon, 16 Mar 2020 16:11:31 -0500
+Message-ID: <20200316211136.2274-4-b-liu@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200316211136.2274-1-b-liu@ti.com>
 References: <20200316211136.2274-1-b-liu@ti.com>
@@ -54,140 +55,89 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Paul Cercueil <paul@crapouillou.net>
 
-Convert ingenic,jz4740-musb.txt to ingenic,musb.yaml, and add the
-new ingenic,jz4770-musb and ingenic,jz4725b-musb compatible strings
-in the process.
+Add support for using the DMA channels built into the Inventra IP.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Tested-by: Artur Rojek <contact@artur-rojek.eu>
 Signed-off-by: Bin Liu <b-liu@ti.com>
 ---
- .../bindings/usb/ingenic,jz4740-musb.txt      | 32 --------
- .../devicetree/bindings/usb/ingenic,musb.yaml | 76 +++++++++++++++++++
- 2 files changed, 76 insertions(+), 32 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/ingenic,jz4740-musb.txt
- create mode 100644 Documentation/devicetree/bindings/usb/ingenic,musb.yaml
+ drivers/usb/musb/Kconfig  |  2 +-
+ drivers/usb/musb/jz4740.c | 20 ++++++++++++++------
+ 2 files changed, 15 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/ingenic,jz4740-musb.txt b/Documentation/devicetree/bindings/usb/ingenic,jz4740-musb.txt
-deleted file mode 100644
-index 16808721f3ff..000000000000
---- a/Documentation/devicetree/bindings/usb/ingenic,jz4740-musb.txt
-+++ /dev/null
-@@ -1,32 +0,0 @@
--Ingenic JZ4740 MUSB driver
--
--Required properties:
--
--- compatible: Must be "ingenic,jz4740-musb"
--- reg: Address range of the UDC register set
--- interrupts: IRQ number related to the UDC hardware
--- interrupt-names: must be "mc"
--- clocks: phandle to the "udc" clock
--- clock-names: must be "udc"
--- phys: phandle to the USB PHY
--
--Example:
--
--usb_phy: usb-phy@0 {
--	compatible = "usb-nop-xceiv";
--	#phy-cells = <0>;
--};
--
--udc: usb@13040000 {
--	compatible = "ingenic,jz4740-musb";
--	reg = <0x13040000 0x10000>;
--
--	interrupt-parent = <&intc>;
--	interrupts = <24>;
--	interrupt-names = "mc";
--
--	clocks = <&cgu JZ4740_CLK_UDC>;
--	clock-names = "udc";
--
--	phys = <&usb_phy>;
--};
-diff --git a/Documentation/devicetree/bindings/usb/ingenic,musb.yaml b/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
-new file mode 100644
-index 000000000000..1d6877875077
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/ingenic,musb.yaml
-@@ -0,0 +1,76 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/ingenic,musb.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/usb/musb/Kconfig b/drivers/usb/musb/Kconfig
+index eb2ded1026ee..c4b349e074c1 100644
+--- a/drivers/usb/musb/Kconfig
++++ b/drivers/usb/musb/Kconfig
+@@ -144,7 +144,7 @@ config USB_UX500_DMA
+ 
+ config USB_INVENTRA_DMA
+ 	bool 'Inventra'
+-	depends on USB_MUSB_OMAP2PLUS || USB_MUSB_MEDIATEK
++	depends on USB_MUSB_OMAP2PLUS || USB_MUSB_MEDIATEK || USB_MUSB_JZ4740
+ 	help
+ 	  Enable DMA transfers using Mentor's engine.
+ 
+diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
+index bc0109f4700b..aa32b5af0c1f 100644
+--- a/drivers/usb/musb/jz4740.c
++++ b/drivers/usb/musb/jz4740.c
+@@ -24,11 +24,14 @@ struct jz4740_glue {
+ static irqreturn_t jz4740_musb_interrupt(int irq, void *__hci)
+ {
+ 	unsigned long	flags;
+-	irqreturn_t	retval = IRQ_NONE;
++	irqreturn_t	retval = IRQ_NONE, retval_dma = IRQ_NONE;
+ 	struct musb	*musb = __hci;
+ 
+ 	spin_lock_irqsave(&musb->lock, flags);
+ 
++	if (IS_ENABLED(CONFIG_USB_INVENTRA_DMA) && musb->dma_controller)
++		retval_dma = dma_controller_irq(irq, musb->dma_controller);
 +
-+title: Ingenic JZ47xx USB IP DT bindings
+ 	musb->int_usb = musb_readb(musb->mregs, MUSB_INTRUSB);
+ 	musb->int_tx = musb_readw(musb->mregs, MUSB_INTRTX);
+ 	musb->int_rx = musb_readw(musb->mregs, MUSB_INTRRX);
+@@ -46,7 +49,10 @@ static irqreturn_t jz4740_musb_interrupt(int irq, void *__hci)
+ 
+ 	spin_unlock_irqrestore(&musb->lock, flags);
+ 
+-	return retval;
++	if (retval == IRQ_HANDLED || retval_dma == IRQ_HANDLED)
++		return IRQ_HANDLED;
 +
-+maintainers:
-+  - Paul Cercueil <paul@crapouillou.net>
-+
-+properties:
-+  $nodename:
-+    pattern: '^usb@.*'
-+
-+  compatible:
-+    oneOf:
-+      - enum:
-+        - ingenic,jz4770-musb
-+        - ingenic,jz4740-musb
-+      - items:
-+        - const: ingenic,jz4725b-musb
-+        - const: ingenic,jz4740-musb
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: udc
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  interrupt-names:
-+    items:
-+      - const: mc
-+
-+  phys:
-+    description: PHY specifier for the USB PHY
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - interrupts
-+  - interrupt-names
-+  - phys
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/jz4740-cgu.h>
-+    usb_phy: usb-phy@0 {
-+      compatible = "usb-nop-xceiv";
-+      #phy-cells = <0>;
-+    };
-+
-+    udc: usb@13040000 {
-+      compatible = "ingenic,jz4740-musb";
-+      reg = <0x13040000 0x10000>;
-+
-+      interrupt-parent = <&intc>;
-+      interrupts = <24>;
-+      interrupt-names = "mc";
-+
-+      clocks = <&cgu JZ4740_CLK_UDC>;
-+      clock-names = "udc";
-+
-+      phys = <&usb_phy>;
-+    };
++	return IRQ_NONE;
+ }
+ 
+ static struct musb_fifo_cfg jz4740_musb_fifo_cfg[] = {
+@@ -93,14 +99,14 @@ static int jz4740_musb_init(struct musb *musb)
+ 	return 0;
+ }
+ 
+-/*
+- * DMA has not been confirmed to work with CONFIG_USB_INVENTRA_DMA,
+- * so let's not set up the dma function pointers yet.
+- */
+ static const struct musb_platform_ops jz4740_musb_ops = {
+ 	.quirks		= MUSB_DMA_INVENTRA | MUSB_INDEXED_EP,
+ 	.fifo_mode	= 2,
+ 	.init		= jz4740_musb_init,
++#ifdef CONFIG_USB_INVENTRA_DMA
++	.dma_init	= musbhs_dma_controller_create_noirq,
++	.dma_exit	= musbhs_dma_controller_destroy,
++#endif
+ };
+ 
+ static const struct musb_hdrc_platform_data jz4740_musb_pdata = {
+@@ -142,6 +148,8 @@ static int jz4740_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	musb->dev.parent		= dev;
++	musb->dev.dma_mask		= &musb->dev.coherent_dma_mask;
++	musb->dev.coherent_dma_mask	= DMA_BIT_MASK(32);
+ 
+ 	glue->pdev			= musb;
+ 	glue->clk			= clk;
 -- 
 2.17.1
 
