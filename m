@@ -2,147 +2,198 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E03741863AE
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2020 04:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3231863C8
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2020 04:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729533AbgCPDek (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 15 Mar 2020 23:34:40 -0400
-Received: from mail-io1-f42.google.com ([209.85.166.42]:46061 "EHLO
-        mail-io1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729383AbgCPDek (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Mar 2020 23:34:40 -0400
-Received: by mail-io1-f42.google.com with SMTP id w7so318610ioj.12
-        for <linux-usb@vger.kernel.org>; Sun, 15 Mar 2020 20:34:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MlBomQEgZyav7UaAbI7AVqRLDS9R4PV9VQaWLNpxdKM=;
-        b=TEfUrGLwe9MUEQQ3fMVB2XosyjPwDAKM8p/zuxVJQ2LLs5ZyH2ltvYIEOqgMAu8hyx
-         GLuvSg2cYnGqv+CAhcAwc18EiQy9CFDCi1HhFKSlDe2HkUbyYF+2FT0iYye80kg+ZO26
-         ii34zyhoxtoNQHP9/3mtJFlBY3BxMSfePCl11TrWtc6Jb7pl+pS/Dj2cA3phcqGd5v+Z
-         tuD3jEr6S4JJHnCT85s2PGLxJ5SuCnjxfqRscNfghQC9nd1VSCyhzLYSxNAaUCyNZsEH
-         16+TskNjHwzHIDNnA5s0ipQb+Ai3lVT+W3SuYXtpq915nIE7IPYOzegLJ8tdA1TPKRJQ
-         lyMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MlBomQEgZyav7UaAbI7AVqRLDS9R4PV9VQaWLNpxdKM=;
-        b=imw9Fn5dTSyGu2M3PZxKOJA+MhoGAc54S4/9NuGlYvjXLkWsDnl8mtHgKwiw20uxZ7
-         iU0tUfVbad5Fwp+/EsH+1LSACW55VQjzJ3wpo8iROgGtY1i0ZC5kE+iqqaiYCOoywsQh
-         UcLNbhWfH/WpJiOe+TG/aVTOjWdZrIeg/i4OEvVXzo+taiCEPJhK3CoChwLMQ14HJ+35
-         SWfPM1AzDTOKq7xXai87AJoiJVR0O+quPXPCdJ2EbZx4hyXy3rMvUdD0NjHQO5PWrZH9
-         c0PqRMtnJ4xhFZ8zN9uf1541thpO3WYFivRLL7giElZyBhrP3Bl7lDjYfm+8oPwTgJAl
-         5UUw==
-X-Gm-Message-State: ANhLgQ0+zs7IddaRb8ChuBmXezBtmHNOK6BMJveoqGywhUuLLC9Cipmr
-        I2q9JjlJkBL06DGNe0wcbpFRtMoST0cQhzV5CvFDvX+J
-X-Google-Smtp-Source: ADFU+vvt9JuF+PJkcIn9KXoF4doiXitVljBdinJyaW89VVHV2/gr1/TLHmGDU820+zy3cfp8fqfiYzt9+wk+CYdy4DQ=
-X-Received: by 2002:a5d:970e:: with SMTP id h14mr21959479iol.201.1584329679741;
- Sun, 15 Mar 2020 20:34:39 -0700 (PDT)
+        id S1729513AbgCPDl4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 15 Mar 2020 23:41:56 -0400
+Received: from mail-eopbgr80077.outbound.protection.outlook.com ([40.107.8.77]:64392
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729412AbgCPDl4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 15 Mar 2020 23:41:56 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KmkmI0uYrrd/d33LKozHkanOhxqzDn4GHg4/x7tLGoD5dbr72ndXrPAJ/96rWfq40xphVMdNMgz3PVYMq3fVmfCO/in36+TPe4tDL635qhCO8Kgn4hba2X7kidXYAETN/YCWczKB84Y121rSym2ktHnmg+xdE0PKpJLU5pcM2841ly3+BQjWcmoIfHsc1kFVsMZjNbU9IRRBVDyCQcMT2ipSaak9d9mQ7Tjn7qeP/QQL2z6Xs/2LJPYoWSLz46vzHCUoHtDlnP2L2bUMntXGvCdS8O7lz5zbgmClJ7rLXQ3tI7SO3yTzesoggGd25Z1mKBXq3tjdw4JtupcfHUSofg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Pzmm4udHkViO8F3Hbbt/17Qcb1ivn95jOzuEVofgBUo=;
+ b=atV1Zwv74oW0IHOhdoj3JY/YfMSIu/6WGRdqZSEPuGbRUk6H8+T2qrP04bwC2T3KiRbnjGXVXte8cbiYGnJCs9N4u7qMEjJVqTRNJdfKG5KVzPUkC6iSzOKyHAV+M2o6o8B8aC7zrY7n8MMSc4sbrytw/dbQN69aCXth298Y4u2SGwF/fq2ykmmbTKbj7jWWr7hn7pIMEGDKbRvNC0Z9rTgzZq959oshJe4vKULmWLC5cYChS5OYJkGvrCUEafHre2ZeRmRxCDNvUFODuWS6XQqtgTgJ0tGTgzQcN9PJNaxDo+4RGAC4elwctLkDstY6D0tDK2k5oPrRt+80unbbnw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Pzmm4udHkViO8F3Hbbt/17Qcb1ivn95jOzuEVofgBUo=;
+ b=bQBken/uKtXuo7Fyg1YUZItrE8B+xWoCHUTPI106wLtPq40i93EMeca+/VVKqq7r14OfrMjHgSOutdRvrUhFpZXsMA17YO94YYQ6kvS9na8cRHHzD1z3rN5eGQLoa5PYEW2u7T2EAjE1ghV+5EXz790iTK9YfWJl6g3IpoSwC44=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
+ VI1PR04MB4478.eurprd04.prod.outlook.com (20.177.53.222) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2814.19; Mon, 16 Mar 2020 03:41:38 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::9547:9dfa:76b8:71b1]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::9547:9dfa:76b8:71b1%7]) with mapi id 15.20.2814.021; Mon, 16 Mar 2020
+ 03:41:38 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Nishad Kamdar <nishadkamdar@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        =?iso-8859-1?Q?Uwe_Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Joe Perches <joe@perches.com>
+CC:     dl-linux-imx <linux-imx@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH] USB: chipidea: Use the correct style for SPDX License
+ Identifier
+Thread-Topic: [PATCH] USB: chipidea: Use the correct style for SPDX License
+ Identifier
+Thread-Index: AQHV+rg4tLY0PLqM0U+by6gziKwWsqhKlAZA
+Date:   Mon, 16 Mar 2020 03:41:38 +0000
+Message-ID: <VI1PR04MB53270B1176108AF36224CB6B8BF90@VI1PR04MB5327.eurprd04.prod.outlook.com>
+References: <20200315105503.GA4440@nishad>
+In-Reply-To: <20200315105503.GA4440@nishad>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [180.171.74.255]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 717dfe13-07b5-4adf-781a-08d7c95bef33
+x-ms-traffictypediagnostic: VI1PR04MB4478:|VI1PR04MB4478:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB4478551BF01F9231A41B10FB8BF90@VI1PR04MB4478.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-forefront-prvs: 03449D5DD1
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(376002)(366004)(39860400002)(346002)(136003)(199004)(55016002)(81166006)(81156014)(6506007)(966005)(8676002)(478600001)(66476007)(66556008)(7416002)(4326008)(5660300002)(52536014)(64756008)(66446008)(66946007)(9686003)(33656002)(76116006)(7696005)(316002)(2906002)(186003)(54906003)(86362001)(71200400001)(8936002)(44832011)(45080400002)(26005)(110136005);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4478;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: abgBtehLiZuHW7Lf+gWT2tFCLKNr7Sd/JY3CrkmwEvXZy8cY5io6BRUkB+NTQHmRWt+NYU68oTu+ABAUT+Tz4/ZLGEvnLrWOK9hwi7YGmORrkQGD7nh1qH35MNtHdVZnujs4ndHn9T56FDERj8/gBG+YzJ1Y3ryrUCgJKvAfcc24vbVecr9JfY4iqwwFAEdYcm+EjwOLgGuv99BiYL/gZKVn4+qMxHHyd5K5LoLUtouFDrfKVlQ+B2EiLOxt1gsRz6jWHvJVh5DqKEGwemWT7eNvnyzyNIdqGjSNYpI+w7BGgYekllCsuEaI+XckNP33RLvKDRmw3dp9JHtJ0j8oM7PdPkC9xVnflfCqxPVb8k6SwMfln29nccowCZnjP4kpG/Tj2iy6JZihgGSZKfqkCA0ND6yyRxrD8dfefSJh8g0nRlYaO0O27t5+ued0iUX7cGI/zvQw+Viiu3LVpTrKhopI/SOi7nnNCWi51FRSUA4gCdfNn2e/1JlNsB6xKwcAU5chrhPcCSBRVSBoTNnjNQ==
+x-ms-exchange-antispam-messagedata: qfyn9dQuYQ8IgjGCw1MmKd/3ZhoqRhATTeEaTUAjSkk+/8vBiHA5+u98xB7k98khHydrJlKuQT5tUFk8tftnAw0FACSpA0448uIP3CEZ3aCYjrAPKvqQ2V89dWQrZ0EKHJii5rOiInTIJjmOGqSTcg==
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <43547627-70f7-95d7-f003-97388505a19e@lockie.ca>
- <CAL411-o0grY_oL=pXrq-zeDqwaF87rYoLFUOPWP-HrPa2DmozA@mail.gmail.com> <917f2afb-7edd-9dbb-dcdd-c1467af410b0@lockie.ca>
-In-Reply-To: <917f2afb-7edd-9dbb-dcdd-c1467af410b0@lockie.ca>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Mon, 16 Mar 2020 11:34:28 +0800
-Message-ID: <CAL411-qOEXd-FSXAj=yEdmcDj_bmEwEwRJkxf=k2AfreF_4PkA@mail.gmail.com>
-Subject: Re: USB 2?
-To:     James <bjlockie@lockie.ca>
-Cc:     linux-usb <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 717dfe13-07b5-4adf-781a-08d7c95bef33
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2020 03:41:38.7639
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fkq/dWTYRUgtZUf9Mn2NfZJ3uOFnFpohFmX0W+B8nc1q5xrQMLfAbLlVfO4EhKXb+Tol6q5bjue1qL+BUmOxOg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4478
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> On 2020-03-13 5:46 a.m., Peter Chen wrote:
-> > On Fri, Mar 13, 2020 at 11:17 AM James <bjlockie@lockie.ca> wrote:
-> >
-> > Yes, from below message, you could know it.
-> >
-> >>     bcdUSB               2.00
-> >> wMaxPacketSize     0x0200  1x 512 bytes
-> >> I'm trying to buy a USB dvdrw on Amazon but even different sellers sell
-> >> the same thing under a different "brand".
-> >>
-> >> $ sudo lsusb -v -d 13fd:0840
-> >> Bus 001 Device 006: ID 13fd:0840 Initio Corporation INIC-1618L SATA
-> >> Device Descriptor:
-> >>     bLength                18
-> >>     bDescriptorType         1
-> >>     bcdUSB               2.00
-> >>     bDeviceClass            0
-> >>     bDeviceSubClass         0
-> >>     bDeviceProtocol         0
-> >>     bMaxPacketSize0        64
-> >>     idVendor           0x13fd Initio Corporation
-> >>     idProduct          0x0840 INIC-1618L SATA
-> >>     bcdDevice            1.14
-> >>     iManufacturer           1 Generic
-> >>     iProduct                2 External
-> >>     iSerial                 3 554830302020323534363832
-> >>     bNumConfigurations      1
-> >>     Configuration Descriptor:
-> >>       bLength                 9
-> >>       bDescriptorType         2
-> >>       wTotalLength       0x0020
-> >>       bNumInterfaces          1
-> >>       bConfigurationValue     1
-> >>       iConfiguration          0
-> >>       bmAttributes         0xc0
-> >>         Self Powered
-> >>       MaxPower                2mA
-> >>       Interface Descriptor:
-> >>         bLength                 9
-> >>         bDescriptorType         4
-> >>         bInterfaceNumber        0
-> >>         bAlternateSetting       0
-> >>         bNumEndpoints           2
-> >>         bInterfaceClass         8 Mass Storage
-> >>         bInterfaceSubClass      2 SFF-8020i, MMC-2 (ATAPI)
-> >>         bInterfaceProtocol     80
-> >>         iInterface              0
-> >>         Endpoint Descriptor:
-> >>           bLength                 7
-> >>           bDescriptorType         5
-> >>           bEndpointAddress     0x81  EP 1 IN
-> >>           bmAttributes            2
-> >>             Transfer Type            Bulk
-> >>             Synch Type               None
-> >>             Usage Type               Data
-> >>           wMaxPacketSize     0x0200  1x 512 bytes
-> >>           bInterval               0
-> >>         Endpoint Descriptor:
-> >>           bLength                 7
-> >>           bDescriptorType         5
-> >>           bEndpointAddress     0x02  EP 2 OUT
-> >>           bmAttributes            2
-> >>             Transfer Type            Bulk
-> >>             Synch Type               None
-> >>             Usage Type               Data
-> >>           wMaxPacketSize     0x0200  1x 512 bytes
-> >>           bInterval               0
-> >> Device Qualifier (for other device speed):
-> >>     bLength                10
-> >>     bDescriptorType         6
-> >>     bcdUSB               2.00
-> >>     bDeviceClass            0
-> >>     bDeviceSubClass         0
-> >>     bDeviceProtocol         0
-> >>     bMaxPacketSize0        64
-> >>     bNumConfigurations      1
-> >> can't get debug descriptor: Resource temporarily unavailable
-> >> Device Status:     0x0001
-> >>     Self Powered
-> Is there any chance the Linux usb subsystem might be detecting incorrectly?
-> Maybe is uses the same IDs as the INIC-1618L SATA product but is a
-> slight upgrade to USB 3?
->
+=20
+> This patch corrects the SPDX License Identifier style in header files rel=
+ated to
+> ChipIdea Highspeed Dual Role Controller.
+> For C header files Documentation/process/license-rules.rst
+> mandates C-like comments (opposed to C source files where
+> C++ style should be used).
+>=20
+> Changes made by using a script provided by Joe Perches here:
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flkml.=
+org%2Fl
+> kml%2F2019%2F2%2F7%2F46&amp;data=3D02%7C01%7CPeter.Chen%40nxp.com
+> %7Cbea69ff84b574ca6b48e08d7c8cf58cf%7C686ea1d3bc2b4c6fa92cd99c5c30163
+> 5%7C0%7C0%7C637198665199494622&amp;sdata=3Dbk1n4%2BvnrfRS6ZDrps%2B
+> uXiImdzaxKZ00YskBg6pjtn4%3D&amp;reserved=3D0.
+>=20
+> Suggested-by: Joe Perches <joe@perches.com>
+> Signed-off-by: Nishad Kamdar <nishadkamdar@gmail.com>
+> ---
+>  drivers/usb/chipidea/bits.h        | 2 +-
+>  drivers/usb/chipidea/ci.h          | 2 +-
+>  drivers/usb/chipidea/ci_hdrc_imx.h | 2 +-
+>  drivers/usb/chipidea/otg.h         | 2 +-
+>  drivers/usb/chipidea/otg_fsm.h     | 2 +-
+>  drivers/usb/chipidea/udc.h         | 2 +-
+>  6 files changed, 6 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/usb/chipidea/bits.h b/drivers/usb/chipidea/bits.h in=
+dex
+> 98da99510be7..b1540ce93264 100644
+> --- a/drivers/usb/chipidea/bits.h
+> +++ b/drivers/usb/chipidea/bits.h
+> @@ -1,4 +1,4 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> +/* SPDX-License-Identifier: GPL-2.0 */
+>  /*
+>   * bits.h - register bits of the ChipIdea USB IP core
+>   *
+> diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h index
+> d49d5e1235d0..644ecaef17ee 100644
+> --- a/drivers/usb/chipidea/ci.h
+> +++ b/drivers/usb/chipidea/ci.h
+> @@ -1,4 +1,4 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> +/* SPDX-License-Identifier: GPL-2.0 */
+>  /*
+>   * ci.h - common structures, functions, and macros of the ChipIdea drive=
+r
+>   *
+> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.h b/drivers/usb/chipidea/ci=
+_hdrc_imx.h
+> index de2aac9a2868..c2051aeba13f 100644
+> --- a/drivers/usb/chipidea/ci_hdrc_imx.h
+> +++ b/drivers/usb/chipidea/ci_hdrc_imx.h
+> @@ -1,4 +1,4 @@
+> -// SPDX-License-Identifier: GPL-2.0+
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+>  /*
+>   * Copyright 2012 Freescale Semiconductor, Inc.
+>   */
+> diff --git a/drivers/usb/chipidea/otg.h b/drivers/usb/chipidea/otg.h inde=
+x
+> 4f8b8179ec96..5e7a6e571dd2 100644
+> --- a/drivers/usb/chipidea/otg.h
+> +++ b/drivers/usb/chipidea/otg.h
+> @@ -1,4 +1,4 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> +/* SPDX-License-Identifier: GPL-2.0 */
+>  /*
+>   * Copyright (C) 2013-2014 Freescale Semiconductor, Inc.
+>   *
+> diff --git a/drivers/usb/chipidea/otg_fsm.h b/drivers/usb/chipidea/otg_fs=
+m.h index
+> 2b49d29bf2fb..1f5c5ae0e71e 100644
+> --- a/drivers/usb/chipidea/otg_fsm.h
+> +++ b/drivers/usb/chipidea/otg_fsm.h
+> @@ -1,4 +1,4 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> +/* SPDX-License-Identifier: GPL-2.0 */
+>  /*
+>   * Copyright (C) 2014 Freescale Semiconductor, Inc.
+>   *
+> diff --git a/drivers/usb/chipidea/udc.h b/drivers/usb/chipidea/udc.h inde=
+x
+> e023735d94b7..ebb11b625bb8 100644
+> --- a/drivers/usb/chipidea/udc.h
+> +++ b/drivers/usb/chipidea/udc.h
+> @@ -1,4 +1,4 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> +/* SPDX-License-Identifier: GPL-2.0 */
+>  /*
+>   * udc.h - ChipIdea UDC structures
+>   *
+> --
+> 2.17.1
 
-The above information is read from device, unless the device supplied the
-wrong information. Besides, like I mentioned above, you could get the
-real hardware bus speed through dmesg whether it is "high-speed"
-or "SuperSpeed", it is got from hardware status.
+Applied, thanks.
 
 Peter
+
