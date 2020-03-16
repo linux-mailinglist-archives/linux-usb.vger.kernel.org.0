@@ -2,120 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A915C186390
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2020 04:10:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E03741863AE
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2020 04:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729625AbgCPDKw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 15 Mar 2020 23:10:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52468 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729544AbgCPDKw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 15 Mar 2020 23:10:52 -0400
-Received: from localhost.localdomain (unknown [180.171.74.255])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 46ED9206E9;
-        Mon, 16 Mar 2020 03:10:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584328251;
-        bh=4Ut9q/HBb5KQpispMHObWIqDjNQTDKDkXlVN36XVgjQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n0fSz13R+VlnJt+l27NnYWhsuV7mDUjaK9/gNdrippkwRfEO2EJ0wTEB4ph6VXSN1
-         T68SlNFcK2gNI/yrfRmdBa7DgBNg30bTC6WQpELJeMi2BMxObCKlCv01npnr+9mjBC
-         Pk08EQJE1oJYQgc13R/7bmvA67VnkqMNnZeklvtU=
-From:   Peter Chen <peter.chen@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
-        stable@vger.kernel.org
-Subject: [PATCH 1/1] usb: chipidea: udc: fix sleeping function called from invalid context
-Date:   Mon, 16 Mar 2020 11:10:34 +0800
-Message-Id: <20200316031034.17847-2-peter.chen@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200316031034.17847-1-peter.chen@kernel.org>
-References: <20200316031034.17847-1-peter.chen@kernel.org>
+        id S1729533AbgCPDek (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 15 Mar 2020 23:34:40 -0400
+Received: from mail-io1-f42.google.com ([209.85.166.42]:46061 "EHLO
+        mail-io1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729383AbgCPDek (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Mar 2020 23:34:40 -0400
+Received: by mail-io1-f42.google.com with SMTP id w7so318610ioj.12
+        for <linux-usb@vger.kernel.org>; Sun, 15 Mar 2020 20:34:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MlBomQEgZyav7UaAbI7AVqRLDS9R4PV9VQaWLNpxdKM=;
+        b=TEfUrGLwe9MUEQQ3fMVB2XosyjPwDAKM8p/zuxVJQ2LLs5ZyH2ltvYIEOqgMAu8hyx
+         GLuvSg2cYnGqv+CAhcAwc18EiQy9CFDCi1HhFKSlDe2HkUbyYF+2FT0iYye80kg+ZO26
+         ii34zyhoxtoNQHP9/3mtJFlBY3BxMSfePCl11TrWtc6Jb7pl+pS/Dj2cA3phcqGd5v+Z
+         tuD3jEr6S4JJHnCT85s2PGLxJ5SuCnjxfqRscNfghQC9nd1VSCyhzLYSxNAaUCyNZsEH
+         16+TskNjHwzHIDNnA5s0ipQb+Ai3lVT+W3SuYXtpq915nIE7IPYOzegLJ8tdA1TPKRJQ
+         lyMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MlBomQEgZyav7UaAbI7AVqRLDS9R4PV9VQaWLNpxdKM=;
+        b=imw9Fn5dTSyGu2M3PZxKOJA+MhoGAc54S4/9NuGlYvjXLkWsDnl8mtHgKwiw20uxZ7
+         iU0tUfVbad5Fwp+/EsH+1LSACW55VQjzJ3wpo8iROgGtY1i0ZC5kE+iqqaiYCOoywsQh
+         UcLNbhWfH/WpJiOe+TG/aVTOjWdZrIeg/i4OEvVXzo+taiCEPJhK3CoChwLMQ14HJ+35
+         SWfPM1AzDTOKq7xXai87AJoiJVR0O+quPXPCdJ2EbZx4hyXy3rMvUdD0NjHQO5PWrZH9
+         c0PqRMtnJ4xhFZ8zN9uf1541thpO3WYFivRLL7giElZyBhrP3Bl7lDjYfm+8oPwTgJAl
+         5UUw==
+X-Gm-Message-State: ANhLgQ0+zs7IddaRb8ChuBmXezBtmHNOK6BMJveoqGywhUuLLC9Cipmr
+        I2q9JjlJkBL06DGNe0wcbpFRtMoST0cQhzV5CvFDvX+J
+X-Google-Smtp-Source: ADFU+vvt9JuF+PJkcIn9KXoF4doiXitVljBdinJyaW89VVHV2/gr1/TLHmGDU820+zy3cfp8fqfiYzt9+wk+CYdy4DQ=
+X-Received: by 2002:a5d:970e:: with SMTP id h14mr21959479iol.201.1584329679741;
+ Sun, 15 Mar 2020 20:34:39 -0700 (PDT)
+MIME-Version: 1.0
+References: <43547627-70f7-95d7-f003-97388505a19e@lockie.ca>
+ <CAL411-o0grY_oL=pXrq-zeDqwaF87rYoLFUOPWP-HrPa2DmozA@mail.gmail.com> <917f2afb-7edd-9dbb-dcdd-c1467af410b0@lockie.ca>
+In-Reply-To: <917f2afb-7edd-9dbb-dcdd-c1467af410b0@lockie.ca>
+From:   Peter Chen <hzpeterchen@gmail.com>
+Date:   Mon, 16 Mar 2020 11:34:28 +0800
+Message-ID: <CAL411-qOEXd-FSXAj=yEdmcDj_bmEwEwRJkxf=k2AfreF_4PkA@mail.gmail.com>
+Subject: Re: USB 2?
+To:     James <bjlockie@lockie.ca>
+Cc:     linux-usb <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Peter Chen <peter.chen@nxp.com>
+> On 2020-03-13 5:46 a.m., Peter Chen wrote:
+> > On Fri, Mar 13, 2020 at 11:17 AM James <bjlockie@lockie.ca> wrote:
+> >
+> > Yes, from below message, you could know it.
+> >
+> >>     bcdUSB               2.00
+> >> wMaxPacketSize     0x0200  1x 512 bytes
+> >> I'm trying to buy a USB dvdrw on Amazon but even different sellers sell
+> >> the same thing under a different "brand".
+> >>
+> >> $ sudo lsusb -v -d 13fd:0840
+> >> Bus 001 Device 006: ID 13fd:0840 Initio Corporation INIC-1618L SATA
+> >> Device Descriptor:
+> >>     bLength                18
+> >>     bDescriptorType         1
+> >>     bcdUSB               2.00
+> >>     bDeviceClass            0
+> >>     bDeviceSubClass         0
+> >>     bDeviceProtocol         0
+> >>     bMaxPacketSize0        64
+> >>     idVendor           0x13fd Initio Corporation
+> >>     idProduct          0x0840 INIC-1618L SATA
+> >>     bcdDevice            1.14
+> >>     iManufacturer           1 Generic
+> >>     iProduct                2 External
+> >>     iSerial                 3 554830302020323534363832
+> >>     bNumConfigurations      1
+> >>     Configuration Descriptor:
+> >>       bLength                 9
+> >>       bDescriptorType         2
+> >>       wTotalLength       0x0020
+> >>       bNumInterfaces          1
+> >>       bConfigurationValue     1
+> >>       iConfiguration          0
+> >>       bmAttributes         0xc0
+> >>         Self Powered
+> >>       MaxPower                2mA
+> >>       Interface Descriptor:
+> >>         bLength                 9
+> >>         bDescriptorType         4
+> >>         bInterfaceNumber        0
+> >>         bAlternateSetting       0
+> >>         bNumEndpoints           2
+> >>         bInterfaceClass         8 Mass Storage
+> >>         bInterfaceSubClass      2 SFF-8020i, MMC-2 (ATAPI)
+> >>         bInterfaceProtocol     80
+> >>         iInterface              0
+> >>         Endpoint Descriptor:
+> >>           bLength                 7
+> >>           bDescriptorType         5
+> >>           bEndpointAddress     0x81  EP 1 IN
+> >>           bmAttributes            2
+> >>             Transfer Type            Bulk
+> >>             Synch Type               None
+> >>             Usage Type               Data
+> >>           wMaxPacketSize     0x0200  1x 512 bytes
+> >>           bInterval               0
+> >>         Endpoint Descriptor:
+> >>           bLength                 7
+> >>           bDescriptorType         5
+> >>           bEndpointAddress     0x02  EP 2 OUT
+> >>           bmAttributes            2
+> >>             Transfer Type            Bulk
+> >>             Synch Type               None
+> >>             Usage Type               Data
+> >>           wMaxPacketSize     0x0200  1x 512 bytes
+> >>           bInterval               0
+> >> Device Qualifier (for other device speed):
+> >>     bLength                10
+> >>     bDescriptorType         6
+> >>     bcdUSB               2.00
+> >>     bDeviceClass            0
+> >>     bDeviceSubClass         0
+> >>     bDeviceProtocol         0
+> >>     bMaxPacketSize0        64
+> >>     bNumConfigurations      1
+> >> can't get debug descriptor: Resource temporarily unavailable
+> >> Device Status:     0x0001
+> >>     Self Powered
+> Is there any chance the Linux usb subsystem might be detecting incorrectly?
+> Maybe is uses the same IDs as the INIC-1618L SATA product but is a
+> slight upgrade to USB 3?
+>
 
-The code calls pm_runtime_get_sync with irq disabled, it causes below
-warning:
+The above information is read from device, unless the device supplied the
+wrong information. Besides, like I mentioned above, you could get the
+real hardware bus speed through dmesg whether it is "high-speed"
+or "SuperSpeed", it is got from hardware status.
 
-BUG: sleeping function called from invalid context at
-wer/runtime.c:1075
-in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid:
-er/u8:1
-CPU: 1 PID: 37 Comm: kworker/u8:1 Not tainted
-20200304-00181-gbebfd2a5be98 #1588
-Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
-Workqueue: ci_otg ci_otg_work
-[<c010e8bd>] (unwind_backtrace) from [<c010a315>]
-1/0x14)
-[<c010a315>] (show_stack) from [<c0987d29>]
-5/0x94)
-[<c0987d29>] (dump_stack) from [<c013e77f>]
-+0xeb/0x118)
-[<c013e77f>] (___might_sleep) from [<c052fa1d>]
-esume+0x75/0x78)
-[<c052fa1d>] (__pm_runtime_resume) from [<c0627a33>]
-0x23/0x74)
-[<c0627a33>] (ci_udc_pullup) from [<c062fb93>]
-nect+0x2b/0xcc)
-[<c062fb93>] (usb_gadget_connect) from [<c062769d>]
-_connect+0x59/0x104)
-[<c062769d>] (ci_hdrc_gadget_connect) from [<c062778b>]
-ssion+0x43/0x48)
-[<c062778b>] (ci_udc_vbus_session) from [<c062f997>]
-s_connect+0x17/0x9c)
-[<c062f997>] (usb_gadget_vbus_connect) from [<c062634d>]
-bd/0x128)
-[<c062634d>] (ci_otg_work) from [<c0134719>]
-rk+0x149/0x404)
-[<c0134719>] (process_one_work) from [<c0134acb>]
-0xf7/0x3bc)
-[<c0134acb>] (worker_thread) from [<c0139433>]
-x118)
-[<c0139433>] (kthread) from [<c01010bd>]
-(ret_from_fork+0x11/0x34)
-
-Tested-by: Dmitry Osipenko <digetx@gmail.com>
-Cc: <stable@vger.kernel.org> #v5.5
-Fixes: 72dc8df7920f ("usb: chipidea: udc: protect usb interrupt enable")
-Reported-by: Dmitry Osipenko <digetx@gmail.com>
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
----
- drivers/usb/chipidea/udc.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-index ffaf46f5d062..4c4ac30db498 100644
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -1530,18 +1530,19 @@ static const struct usb_ep_ops usb_ep_ops = {
- static void ci_hdrc_gadget_connect(struct usb_gadget *_gadget, int is_active)
- {
- 	struct ci_hdrc *ci = container_of(_gadget, struct ci_hdrc, gadget);
--	unsigned long flags;
- 
- 	if (is_active) {
- 		pm_runtime_get_sync(&_gadget->dev);
- 		hw_device_reset(ci);
--		spin_lock_irqsave(&ci->lock, flags);
-+		spin_lock_irq(&ci->lock);
- 		if (ci->driver) {
- 			hw_device_state(ci, ci->ep0out->qh.dma);
- 			usb_gadget_set_state(_gadget, USB_STATE_POWERED);
-+			spin_unlock_irq(&ci->lock);
- 			usb_udc_vbus_handler(_gadget, true);
-+		} else {
-+			spin_unlock_irq(&ci->lock);
- 		}
--		spin_unlock_irqrestore(&ci->lock, flags);
- 	} else {
- 		usb_udc_vbus_handler(_gadget, false);
- 		if (ci->driver)
--- 
-2.17.1
-
+Peter
