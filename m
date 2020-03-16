@@ -2,198 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3231863C8
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2020 04:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2700A186537
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Mar 2020 07:49:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729513AbgCPDl4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 15 Mar 2020 23:41:56 -0400
-Received: from mail-eopbgr80077.outbound.protection.outlook.com ([40.107.8.77]:64392
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729412AbgCPDl4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 15 Mar 2020 23:41:56 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KmkmI0uYrrd/d33LKozHkanOhxqzDn4GHg4/x7tLGoD5dbr72ndXrPAJ/96rWfq40xphVMdNMgz3PVYMq3fVmfCO/in36+TPe4tDL635qhCO8Kgn4hba2X7kidXYAETN/YCWczKB84Y121rSym2ktHnmg+xdE0PKpJLU5pcM2841ly3+BQjWcmoIfHsc1kFVsMZjNbU9IRRBVDyCQcMT2ipSaak9d9mQ7Tjn7qeP/QQL2z6Xs/2LJPYoWSLz46vzHCUoHtDlnP2L2bUMntXGvCdS8O7lz5zbgmClJ7rLXQ3tI7SO3yTzesoggGd25Z1mKBXq3tjdw4JtupcfHUSofg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Pzmm4udHkViO8F3Hbbt/17Qcb1ivn95jOzuEVofgBUo=;
- b=atV1Zwv74oW0IHOhdoj3JY/YfMSIu/6WGRdqZSEPuGbRUk6H8+T2qrP04bwC2T3KiRbnjGXVXte8cbiYGnJCs9N4u7qMEjJVqTRNJdfKG5KVzPUkC6iSzOKyHAV+M2o6o8B8aC7zrY7n8MMSc4sbrytw/dbQN69aCXth298Y4u2SGwF/fq2ykmmbTKbj7jWWr7hn7pIMEGDKbRvNC0Z9rTgzZq959oshJe4vKULmWLC5cYChS5OYJkGvrCUEafHre2ZeRmRxCDNvUFODuWS6XQqtgTgJ0tGTgzQcN9PJNaxDo+4RGAC4elwctLkDstY6D0tDK2k5oPrRt+80unbbnw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Pzmm4udHkViO8F3Hbbt/17Qcb1ivn95jOzuEVofgBUo=;
- b=bQBken/uKtXuo7Fyg1YUZItrE8B+xWoCHUTPI106wLtPq40i93EMeca+/VVKqq7r14OfrMjHgSOutdRvrUhFpZXsMA17YO94YYQ6kvS9na8cRHHzD1z3rN5eGQLoa5PYEW2u7T2EAjE1ghV+5EXz790iTK9YfWJl6g3IpoSwC44=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
- VI1PR04MB4478.eurprd04.prod.outlook.com (20.177.53.222) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2814.19; Mon, 16 Mar 2020 03:41:38 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::9547:9dfa:76b8:71b1]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::9547:9dfa:76b8:71b1%7]) with mapi id 15.20.2814.021; Mon, 16 Mar 2020
- 03:41:38 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Nishad Kamdar <nishadkamdar@gmail.com>,
+        id S1729781AbgCPGtq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Mar 2020 02:49:46 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:46293 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729319AbgCPGtq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Mar 2020 02:49:46 -0400
+Received: by mail-lj1-f194.google.com with SMTP id d23so17255389ljg.13
+        for <linux-usb@vger.kernel.org>; Sun, 15 Mar 2020 23:49:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=feRTWbA+RwtLgoys5QOe5cPEQggDSr7BgqoUaNcCnSU=;
+        b=Ug2fBMK9XLBWOpaObA+U5mBPjK8kGxoTIQs3S1Ms6snCOs5VjhcMiFEF0NwgR0YPrO
+         IuTsBaXUVnfEU5OeFlbUbcUIxqmf3QRoFOzrxUSh8WnZuIJlMbbtmqJH/uIZKz1kB5Qe
+         PW06bXYKt9u/fbJs5G6mQt5y/5cIcrYaW4FCrnqVgXe8/p/UE50GCOFsthd8asY2+shk
+         B+zaBzqCXAVc5XkOZ2JXCpQJMeO6SQrzXHJ0GObmJVERl5W+E9G/yQ08eMS3ztJcH1JF
+         E9Wg2VUDzWGwPbvumRVOwD9/D2gUcGFQQDv4w8YprVp34z77/D/SZCgm95r4Vj2Qi27Y
+         XaRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=feRTWbA+RwtLgoys5QOe5cPEQggDSr7BgqoUaNcCnSU=;
+        b=SwGXuvx7W3k7ydyzzuUS8cGPgmqaaNPII3pNS0M2GUP1FCUKML8WK2bjN+7j6tq/5R
+         FSoQkMt399Ga4v2488EWmFCNE680gnxcTRCi0JGhvTnnAXNL/IHdponbT8kAQVOCz+HZ
+         B/G5NBz8tO1u9mcE/6wjxhOXXaH8eyVDUWVotVp+IC2UWN7ibUKbe77Qc/7wyyhePxZM
+         m7LSA4l4q8xpr6si2SKQChEH+TejOW1VFWib4N4+vGYBx7VoJq3/ZC8WFYFA+4WKDuuw
+         ZTru9DZh1D+IDnEaHViLD1MowDLb1IfeuEKVUnB/ubM3soLyEwLLmqg6oZZKJ7ccgvfY
+         9r8w==
+X-Gm-Message-State: ANhLgQ1XV/V8CvuSd2ZU/waluxgE8fj7r/pqf4snjQoTUiu95+488ivC
+        5ICdH2c/UP2AfnAF8HMjAwcD8z3caDI=
+X-Google-Smtp-Source: ADFU+vvFeMXOy3tDuOAcSLStu4tTcZ5d/OluWymBUWqbSzWrNNzN8V0OAVZQWEhkVsDvub85HilOoQ==
+X-Received: by 2002:a2e:9590:: with SMTP id w16mr15746621ljh.113.1584341384625;
+        Sun, 15 Mar 2020 23:49:44 -0700 (PDT)
+Received: from saruman (88-113-215-213.elisa-laajakaista.fi. [88.113.215.213])
+        by smtp.gmail.com with ESMTPSA id e5sm4873345lfc.14.2020.03.15.23.49.43
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 15 Mar 2020 23:49:43 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        =?iso-8859-1?Q?Uwe_Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Joe Perches <joe@perches.com>
-CC:     dl-linux-imx <linux-imx@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [PATCH] USB: chipidea: Use the correct style for SPDX License
- Identifier
-Thread-Topic: [PATCH] USB: chipidea: Use the correct style for SPDX License
- Identifier
-Thread-Index: AQHV+rg4tLY0PLqM0U+by6gziKwWsqhKlAZA
-Date:   Mon, 16 Mar 2020 03:41:38 +0000
-Message-ID: <VI1PR04MB53270B1176108AF36224CB6B8BF90@VI1PR04MB5327.eurprd04.prod.outlook.com>
-References: <20200315105503.GA4440@nishad>
-In-Reply-To: <20200315105503.GA4440@nishad>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [180.171.74.255]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 717dfe13-07b5-4adf-781a-08d7c95bef33
-x-ms-traffictypediagnostic: VI1PR04MB4478:|VI1PR04MB4478:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB4478551BF01F9231A41B10FB8BF90@VI1PR04MB4478.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5236;
-x-forefront-prvs: 03449D5DD1
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(376002)(366004)(39860400002)(346002)(136003)(199004)(55016002)(81166006)(81156014)(6506007)(966005)(8676002)(478600001)(66476007)(66556008)(7416002)(4326008)(5660300002)(52536014)(64756008)(66446008)(66946007)(9686003)(33656002)(76116006)(7696005)(316002)(2906002)(186003)(54906003)(86362001)(71200400001)(8936002)(44832011)(45080400002)(26005)(110136005);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4478;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: abgBtehLiZuHW7Lf+gWT2tFCLKNr7Sd/JY3CrkmwEvXZy8cY5io6BRUkB+NTQHmRWt+NYU68oTu+ABAUT+Tz4/ZLGEvnLrWOK9hwi7YGmORrkQGD7nh1qH35MNtHdVZnujs4ndHn9T56FDERj8/gBG+YzJ1Y3ryrUCgJKvAfcc24vbVecr9JfY4iqwwFAEdYcm+EjwOLgGuv99BiYL/gZKVn4+qMxHHyd5K5LoLUtouFDrfKVlQ+B2EiLOxt1gsRz6jWHvJVh5DqKEGwemWT7eNvnyzyNIdqGjSNYpI+w7BGgYekllCsuEaI+XckNP33RLvKDRmw3dp9JHtJ0j8oM7PdPkC9xVnflfCqxPVb8k6SwMfln29nccowCZnjP4kpG/Tj2iy6JZihgGSZKfqkCA0ND6yyRxrD8dfefSJh8g0nRlYaO0O27t5+ued0iUX7cGI/zvQw+Viiu3LVpTrKhopI/SOi7nnNCWi51FRSUA4gCdfNn2e/1JlNsB6xKwcAU5chrhPcCSBRVSBoTNnjNQ==
-x-ms-exchange-antispam-messagedata: qfyn9dQuYQ8IgjGCw1MmKd/3ZhoqRhATTeEaTUAjSkk+/8vBiHA5+u98xB7k98khHydrJlKuQT5tUFk8tftnAw0FACSpA0448uIP3CEZ3aCYjrAPKvqQ2V89dWQrZ0EKHJii5rOiInTIJjmOGqSTcg==
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>
+Cc:     John Youn <John.Youn@synopsys.com>
+Subject: Re: [PATCH 2/6] usb: dwc3: gadget: Properly handle ClearFeature(halt)
+In-Reply-To: <2edccc70-5fab-4227-3d27-a06140523d62@synopsys.com>
+References: <cover.1583443184.git.thinhn@synopsys.com> <4f9b6acbff2cd0be417fd4a943c1975bf41f8fda.1583443184.git.thinhn@synopsys.com> <87a74iezx9.fsf@kernel.org> <2edccc70-5fab-4227-3d27-a06140523d62@synopsys.com>
+Date:   Mon, 16 Mar 2020 08:49:38 +0200
+Message-ID: <87h7yo23r1.fsf@kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 717dfe13-07b5-4adf-781a-08d7c95bef33
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2020 03:41:38.7639
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fkq/dWTYRUgtZUf9Mn2NfZJ3uOFnFpohFmX0W+B8nc1q5xrQMLfAbLlVfO4EhKXb+Tol6q5bjue1qL+BUmOxOg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4478
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
+
+Hi,
+
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+> Felipe Balbi wrote:
+>> Hi,
+>>
+>> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+>>> @@ -1627,13 +1633,37 @@ int __dwc3_gadget_ep_set_halt(struct dwc3_ep *d=
+ep, int value, int protocol)
+>>>   		else
+>>>   			dep->flags |=3D DWC3_EP_STALL;
+>>>   	} else {
+>>> +		/*
+>>> +		 * Don't issue CLEAR_STALL command to control endpoints. The
+>>> +		 * controller automatically clears the STALL when it receives
+>>> +		 * the SETUP token.
+>>> +		 */
+>> we have a separate dwc3_gadget_ep0_set_halt() to handle that. How was
+>> this triggered?
+>>
+>
+> I think it's a bit confusing here that the dwc3_gadget_ep0_set_halt()=20
+> has the similar name as __dwc3_gadget_ep_set_halt(). However, that=20
+> function only calls dwc3_ep0_stall_and_restart() and not handled through=
 =20
-> This patch corrects the SPDX License Identifier style in header files rel=
-ated to
-> ChipIdea Highspeed Dual Role Controller.
-> For C header files Documentation/process/license-rules.rst
-> mandates C-like comments (opposed to C source files where
-> C++ style should be used).
->=20
-> Changes made by using a script provided by Joe Perches here:
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flkml.=
-org%2Fl
-> kml%2F2019%2F2%2F7%2F46&amp;data=3D02%7C01%7CPeter.Chen%40nxp.com
-> %7Cbea69ff84b574ca6b48e08d7c8cf58cf%7C686ea1d3bc2b4c6fa92cd99c5c30163
-> 5%7C0%7C0%7C637198665199494622&amp;sdata=3Dbk1n4%2BvnrfRS6ZDrps%2B
-> uXiImdzaxKZ00YskBg6pjtn4%3D&amp;reserved=3D0.
->=20
-> Suggested-by: Joe Perches <joe@perches.com>
-> Signed-off-by: Nishad Kamdar <nishadkamdar@gmail.com>
-> ---
->  drivers/usb/chipidea/bits.h        | 2 +-
->  drivers/usb/chipidea/ci.h          | 2 +-
->  drivers/usb/chipidea/ci_hdrc_imx.h | 2 +-
->  drivers/usb/chipidea/otg.h         | 2 +-
->  drivers/usb/chipidea/otg_fsm.h     | 2 +-
->  drivers/usb/chipidea/udc.h         | 2 +-
->  6 files changed, 6 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/usb/chipidea/bits.h b/drivers/usb/chipidea/bits.h in=
-dex
-> 98da99510be7..b1540ce93264 100644
-> --- a/drivers/usb/chipidea/bits.h
-> +++ b/drivers/usb/chipidea/bits.h
-> @@ -1,4 +1,4 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> +/* SPDX-License-Identifier: GPL-2.0 */
->  /*
->   * bits.h - register bits of the ChipIdea USB IP core
->   *
-> diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h index
-> d49d5e1235d0..644ecaef17ee 100644
-> --- a/drivers/usb/chipidea/ci.h
-> +++ b/drivers/usb/chipidea/ci.h
-> @@ -1,4 +1,4 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> +/* SPDX-License-Identifier: GPL-2.0 */
->  /*
->   * ci.h - common structures, functions, and macros of the ChipIdea drive=
-r
->   *
-> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.h b/drivers/usb/chipidea/ci=
-_hdrc_imx.h
-> index de2aac9a2868..c2051aeba13f 100644
-> --- a/drivers/usb/chipidea/ci_hdrc_imx.h
-> +++ b/drivers/usb/chipidea/ci_hdrc_imx.h
-> @@ -1,4 +1,4 @@
-> -// SPDX-License-Identifier: GPL-2.0+
-> +/* SPDX-License-Identifier: GPL-2.0+ */
->  /*
->   * Copyright 2012 Freescale Semiconductor, Inc.
->   */
-> diff --git a/drivers/usb/chipidea/otg.h b/drivers/usb/chipidea/otg.h inde=
-x
-> 4f8b8179ec96..5e7a6e571dd2 100644
-> --- a/drivers/usb/chipidea/otg.h
-> +++ b/drivers/usb/chipidea/otg.h
-> @@ -1,4 +1,4 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> +/* SPDX-License-Identifier: GPL-2.0 */
->  /*
->   * Copyright (C) 2013-2014 Freescale Semiconductor, Inc.
->   *
-> diff --git a/drivers/usb/chipidea/otg_fsm.h b/drivers/usb/chipidea/otg_fs=
-m.h index
-> 2b49d29bf2fb..1f5c5ae0e71e 100644
-> --- a/drivers/usb/chipidea/otg_fsm.h
-> +++ b/drivers/usb/chipidea/otg_fsm.h
-> @@ -1,4 +1,4 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> +/* SPDX-License-Identifier: GPL-2.0 */
->  /*
->   * Copyright (C) 2014 Freescale Semiconductor, Inc.
->   *
-> diff --git a/drivers/usb/chipidea/udc.h b/drivers/usb/chipidea/udc.h inde=
-x
-> e023735d94b7..ebb11b625bb8 100644
-> --- a/drivers/usb/chipidea/udc.h
-> +++ b/drivers/usb/chipidea/udc.h
-> @@ -1,4 +1,4 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> +/* SPDX-License-Identifier: GPL-2.0 */
->  /*
->   * udc.h - ChipIdea UDC structures
->   *
-> --
-> 2.17.1
+> SET/CLEAR_FEATURE(halt) request.
+>
+> If host issues SET_FEATURE(halt) or CLEAR_FEATURE(halt) to control=20
+> endpoints, it still goes through __dwc3_gadget_ep_set_halt().
 
-Applied, thanks.
+Perhaps that should be fixed, then?
 
-Peter
+=2D-=20
+balbi
 
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl5vIYMACgkQzL64meEa
+mQay9g/+LA+H9WZXB4KFyxZ2Tlhq+1kunOfIgIHgRSWlrFmU57TTumbC3ZOyVxbn
+0kyFZVp+3KfwUr/HWuwJskmy1Hdp+sjFgcVeUNYRe4GP6TtRxy9UNfmKyHtuzG7V
+JD3gCEFV/IEdsqzOxQ/hMldl8ANQXMJKuQUWb15AtZsq/91SikosmzzFGsbCb6xk
+FQDqiNzWWGolInKlp+06vssFf5E7JyW5JFjJp2vJmVWfWQ8KHMXlJfpTvwT7OK+u
+SMUaDbNZ6n98Z7nhg2/Juohw8o7HqBy6ww4yjtB9wj4W6mzpz3TdK0Q4y9aj+urT
+UvsbaueTcZwOnjd1pkExHdZO4TdFuZ51EkqjdrnWYBpHQLRrm9j2FMVQrMc096vY
+go2j9PdJtb0/BhNJ5UZcJrSWHGzpsZ/Ed08tRyfTxgITQhVA8ogxCEsa5jesluw5
+hD3Lx00zBwr6YbQL2Ck6yQQvJ39pTS8vuWBgEg5PbxsBHJxPKLXLAYjUILrgG6v3
+QnqfE205k8hUu/maD2sM1g7qqowFRbUobV2Ms11ksyqFbsPS7u2iGmdJvQJ+swzX
+iRT1yh+PCtpwAurn5UVyfapcTpzVcQ6mmsnXWA82GHI9Q9LdyWCaSu6cmIi4HozS
+VQYGm4X97z6ZUxKgIbjxJ2QliqO/Jw6Oa7PHE95te0eDqZwf7ck=
+=aCtc
+-----END PGP SIGNATURE-----
+--=-=-=--
