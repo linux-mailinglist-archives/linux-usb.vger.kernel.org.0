@@ -2,74 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D8C18768D
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2020 01:11:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 671921879B2
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2020 07:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733099AbgCQALo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Mar 2020 20:11:44 -0400
-Received: from mail.uic.edu.hk ([61.143.62.86]:48979 "EHLO umgp.uic.edu.hk"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1733047AbgCQALn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 16 Mar 2020 20:11:43 -0400
-X-IronPort-AV: E=Sophos;i="5.43,368,1503331200"; 
-   d="scan'208";a="17243176"
-Received: from unknown (HELO zpmail.uic.edu.hk) ([192.168.111.249])
-  by umgp.uic.edu.hk with ESMTP; 17 Mar 2020 08:11:35 +0800
-Received: from zpmail.uic.edu.hk (localhost [127.0.0.1])
-        by zpmail.uic.edu.hk (Postfix) with ESMTPS id D96D941C05A3;
-        Tue, 17 Mar 2020 08:11:32 +0800 (CST)
-Received: from localhost (localhost [127.0.0.1])
-        by zpmail.uic.edu.hk (Postfix) with ESMTP id D554341C0957;
-        Tue, 17 Mar 2020 08:11:31 +0800 (CST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zpmail.uic.edu.hk D554341C0957
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uic.edu.hk;
-        s=6465647E-9D7B-11E8-B17B-42130C7FA3B9; t=1584403892;
-        bh=Wn2BcVyAdGxyDvB/5AnVfCr/iJTzisyuX4dwKssec6E=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=N1pNhkd2l8zz69kDtEsPH5n7SDL70Ak/Rgb/NYqC0+ZCBZFg/G0QkldxXmMRPmztz
-         HwkJ6HHAibMur3rytYhnqKeG349hpGDQCbhvoJdZWkvkFCa93STWbitRqMynzR+Wj5
-         wLEdN7i9CyVDDhspocQMykx6lSGq645dTckJSCrsFHg+uR95rTW6kz2/3F5tST7+Uo
-         ELvvW8oTRw+C3DdE82L8ao85KfwNAx6BRhhB+sNBssPbo3CqQ69/PO1/J9gy3aGO+s
-         FwDrxpCEm2RIo68N7oaYrAjY/FUGCbKk/MsqrV+VDqizldOqfTDFamlvQc82rVkjYy
-         rx6v80NBgwdtg==
-Received: from zpmail.uic.edu.hk ([127.0.0.1])
-        by localhost (zpmail.uic.edu.hk [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id gCmMIXxwS0HE; Tue, 17 Mar 2020 08:11:31 +0800 (CST)
-Received: from zpmail.uic.edu.hk (zpmail.uic.edu.hk [192.168.111.249])
-        by zpmail.uic.edu.hk (Postfix) with ESMTP id 1549641C058D;
-        Tue, 17 Mar 2020 08:11:27 +0800 (CST)
-Date:   Tue, 17 Mar 2020 08:11:26 +0800 (CST)
-From:   David Ibe <ylawrence@uic.edu.hk>
-Reply-To: David Ibe <davidibe718@gmail.com>
-Message-ID: <2065446646.63699156.1584403886963.JavaMail.zimbra@uic.edu.hk>
-Subject: 
+        id S1725933AbgCQGcT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Mar 2020 02:32:19 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:40218 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725837AbgCQGcT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Mar 2020 02:32:19 -0400
+Received: by mail-pg1-f194.google.com with SMTP id t24so11171325pgj.7
+        for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2020 23:32:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fPDZ6+w3BtfImipFJW5a3OXasS2gBUMcdAat0qMbiEc=;
+        b=OvKKPAvUHrZ77ivg3BKzoibsavHaTXRrH/rGlfi8ebKoWd5cUH/7os3vHM/Xg1/X6q
+         Q3+DZF4FpIHaVdLLW7dEj8z4Oa7Tn+UX3wd5NNgomrhZp/nRpqXTv5hZ6aeRkP8MTit8
+         XRd9j98xVwJj8J+Qw6WriSsnIZD2GFwbqTfRYGVYuzV36QdeTPTWjtD0E9ZhC1thydCL
+         2j/cJItEeb1aA1ymBIVQxikl1YA/JYQ3SXki3OnflCHcVs68tX/fVTmIyJHFto+pYCLY
+         1VmNPMnaiLStOH+kFQ0MbHALwcfeH7Q60mFKWjapyc8rGSCSJOq8qskMXac1Xl53BGvs
+         0TqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fPDZ6+w3BtfImipFJW5a3OXasS2gBUMcdAat0qMbiEc=;
+        b=EWr69iarWlVWbkMfoFRPjLl3+zRGspF+qqJVu3SgyHdIK2lpUFuv107ZMY46VpBxp1
+         2BzXoKzMbZW6mH2cqs6H5mwktNQ/nrFjY5gPWf0Iu2hzaumvLBzEc7R+gMMqdppug8x/
+         AdqrsxPW5Xm7BA0mzmHdWu2ov0cvR51LEQb4pWZaSOxWTLDxjcjMstV7QyyD3fC6oDvD
+         EJ+hFBPQYX/DvTi7gXw2r2Mn0pirKUac3vLNRffTd9KMnt+2R0iEYpUptMX1oBwjfde/
+         j+sMPu5HsCUzurdgT79xLsr/QlcwIxi2aKLmIVy44hUBCSiha7m3W67SOaO4qshWSOjQ
+         m02g==
+X-Gm-Message-State: ANhLgQ0r2Ue+kLaE/xw+HqMtnHSpNF5b0I0iC8iHgNRXQeiyqUwASHhn
+        xnD94beNlGW+35BOSJEbzqHdcg==
+X-Google-Smtp-Source: ADFU+vtDVHGVGhRWc3b5Kbe7ELrzDJfeMmJctyiPAwyCZXURX7JHPZ/jPhFVH4Ab0yU9LkBak47NPg==
+X-Received: by 2002:a63:68a:: with SMTP id 132mr3603572pgg.12.1584426738234;
+        Mon, 16 Mar 2020 23:32:18 -0700 (PDT)
+Received: from ripper (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id p2sm1793802pfb.41.2020.03.16.23.32.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Mar 2020 23:32:17 -0700 (PDT)
+Date:   Mon, 16 Mar 2020 23:31:01 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jackp@codeaurora.org,
+        robh@kernel.org, Andy Gross <agross@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH 7/7] usb: dwc3: qcom: Enable gpio-usb-conn based
+ role-switching
+Message-ID: <20200317063101.GA2778164@ripper>
+References: <20200311191501.8165-1-bryan.odonoghue@linaro.org>
+ <20200311191501.8165-8-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.111.160]
-X-Mailer: Zimbra 8.8.15_GA_3829 (ZimbraWebClient - GC80 (Win)/8.8.15_GA_3829)
-Thread-Index: 8IMjdxPQWBZshE+F+QJEttpRaFVxcQ==
-Thread-Topic: 
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200311191501.8165-8-bryan.odonoghue@linaro.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed 11 Mar 12:15 PDT 2020, Bryan O'Donoghue wrote:
+
+> This patch adds the ability to receive a notification from the DRD code for
+> role-switch events and in doing so it introduces a disjunction between
+> gpio-usb-conn or extcon mode.
+> 
+> This is what we want to do, since the two methods are mutually exclusive.
+> 
+> Cc: Andy Gross <agross@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Jack Pham <jackp@codeaurora.org>
+> Cc: linux-arm-msm@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 6f4b2b3cffce..f6a7ede5953e 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -571,6 +571,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  	struct device		*dev = &pdev->dev;
+>  	struct dwc3_qcom	*qcom;
+>  	struct resource		*res, *parent_res = NULL;
+> +	struct dwc3		*dwc;
+>  	int			ret, i;
+>  	bool			ignore_pipe_clk;
+>  
+> @@ -669,8 +670,16 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
+>  		dwc3_qcom_vbus_overrride_enable(qcom, true);
+>  
+> -	/* register extcon to override sw_vbus on Vbus change later */
+> -	ret = dwc3_qcom_register_extcon(qcom);
+> +	if (dwc3_qcom_find_gpio_usb_connector(qcom->dwc3)) {
+> +		/* Using gpio-usb-conn register a notifier for VBUS */
+> +		dwc = platform_get_drvdata(qcom->dwc3);
+
+As I was testing some other things on my qcs404 board this
+suddenly failed.
+
+The of_platform_populate() in dwc3_qcom_of_register_core() will create a
+struct platform_device and attempt to probe this. But as my PHY(s) isn't
+ready that returns with -EPROBE_DEFER - i.e. it will not reach the
+platform_set_drvdata().
+
+The check in dwc3_qcom_of_register_core() successfully resolves the
+struct platform_device (it's sitting there waiting to be reprobed
+later).
+
+So qcom->dwc3 will be valid, but dwc here will be NULL.
+
+> +		qcom->vbus_nb.notifier_call = dwc3_qcom_vbus_notifier;
+> +		ret = dwc3_role_switch_notifier_register(dwc, &qcom->vbus_nb);
+
+So here we pass NULL to dwc3_role_switch_notifier_register(), which
+dereferences it and we get an oops.
 
 
-Good Day,                
+I don't yet have a sane suggestion on how to redesign the dependency
+between the two drivers in order to avoid this, but it's at least not
+possible to access the child's state data from dwc3_qcom_probe().
 
-I am Mr. David Ibe, I work with the International Standards on Auditing, I have seen on records, that several times people has divert your funds into their own personal accounts.
+Regards,
+Bjorn
 
-Now I am writing to you in respect of the amount which I have been able to send to you through our International United Nations accredited and approved Diplomat, who has arrived Africa, I want you to know that the diplomat would deliver the funds which I have packaged as a diplomatic compensation to you and the amount in the consignment is  $10,000,000.00 United State Dollars.
-
-I did not disclose the contents to the diplomat, but I told him that it is your compensation from the Auditing Corporate Governance and Stewardship, Auditing and Assurance Standards Board. I want you to know that these funds would help with your financial status as I have seen in records that you have spent a lot trying to receive these funds and I am not demanding so much from you but only 30% for my stress and logistics.
-
-I would like you to get back to me with your personal contact details, so that I can give you the contact information's of the diplomat who has arrived Africa and has been waiting to get your details so that he can proceed with the delivery to you.
-
-Yours Sincerely,
-Kindly forward your details to: mrdavidibe966@gmail.com
-Mr. David Ibe
-International Auditor,
-Corporate Governance and Stewardship
+> +	} else {
+> +		/* register extcon to override sw_vbus on Vbus change later */
+> +		ret = dwc3_qcom_register_extcon(qcom);
+> +	}
+> +
+>  	if (ret)
+>  		goto depopulate;
+>  
+> @@ -702,8 +711,11 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
+>  {
+>  	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
+>  	struct device *dev = &pdev->dev;
+> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+>  	int i;
+>  
+> +	dwc3_role_switch_notifier_unregister(dwc, &qcom->vbus_nb);
+> +
+>  	of_platform_depopulate(dev);
+>  
+>  	for (i = qcom->num_clocks - 1; i >= 0; i--) {
+> -- 
+> 2.25.1
+> 
