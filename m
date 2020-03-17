@@ -2,104 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6193188DBC
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2020 20:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BC3188DE1
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2020 20:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726740AbgCQTJV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Mar 2020 15:09:21 -0400
-Received: from mail.v3.sk ([167.172.186.51]:46710 "EHLO shell.v3.sk"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726388AbgCQTJV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 17 Mar 2020 15:09:21 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 2340FE021B;
-        Tue, 17 Mar 2020 19:09:38 +0000 (UTC)
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id DLLls_Mq1N8K; Tue, 17 Mar 2020 19:09:36 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 44473E0116;
-        Tue, 17 Mar 2020 19:09:36 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at zimbra.v3.sk
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id vjvflx8zMQmd; Tue, 17 Mar 2020 19:09:36 +0000 (UTC)
-Received: from localhost (unknown [109.183.109.54])
-        by zimbra.v3.sk (Postfix) with ESMTPSA id C22C4DFFBE;
-        Tue, 17 Mar 2020 19:09:35 +0000 (UTC)
-Date:   Tue, 17 Mar 2020 20:09:13 +0100
-From:   Lubomir Rintel <lkundrak@v3.sk>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 13/28] dt-bindings: serial: move Marvell compatible
- string to 8250 binding doc
-Message-ID: <20200317190913.GA24359@furthur.local>
-References: <20200317093922.20785-1-lkundrak@v3.sk>
- <20200317093922.20785-14-lkundrak@v3.sk>
- <20200317134805.GO24270@lunn.ch>
+        id S1726735AbgCQTUy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Mar 2020 15:20:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37568 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726726AbgCQTUy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 17 Mar 2020 15:20:54 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4AAB220752;
+        Tue, 17 Mar 2020 19:20:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584472853;
+        bh=HfdeKzKf8iAj9re4wGORdBPF20jUw2IniTJ4HTwrkXQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r93DEXPj2+/m+a6jGwOn7QaEgc3tXMtLN4BQlH9nrlxvrhGRuNx+hsg5vKg9hktQO
+         stvemR/K5xKmcBI2D87B/wRxICdZoBCpYUZjy/o5NoDDbTDwidnDuZ5oTkDC+MlFum
+         mOsb47DTJU0VYZELICenHBmwz767Uuqq1ZjGm9rg=
+Date:   Tue, 17 Mar 2020 20:20:51 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dejin Zheng <zhengdejin5@gmail.com>
+Cc:     rafael@kernel.org, hminas@synopsys.com, mathias.nyman@intel.com,
+        bgolaszewski@baylibre.com, arnd@arndb.de,
+        jeffrey.t.kirsher@intel.com, hdegoede@redhat.com,
+        treding@nvidia.com, tglx@linutronix.de, tomas.winkler@intel.com,
+        suzuki.poulose@arm.com, sergei.shtylyov@cogentembedded.com,
+        geert@linux-m68k.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/5] drivers: provide
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <20200317192051.GA1520272@kroah.com>
+References: <20200315140525.21780-1-zhengdejin5@gmail.com>
+ <20200315140525.21780-2-zhengdejin5@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200317134805.GO24270@lunn.ch>
+In-Reply-To: <20200315140525.21780-2-zhengdejin5@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 02:48:05PM +0100, Andrew Lunn wrote:
-> On Tue, Mar 17, 2020 at 10:39:07AM +0100, Lubomir Rintel wrote:
-> > These ports are compatible with NS8250 and handled by the same driver.
-> > Get rid of the extra document that fails to document the properties that
-> > are actually supported.
+On Sun, Mar 15, 2020 at 10:05:21PM +0800, Dejin Zheng wrote:
+> Since commit "drivers: provide devm_platform_ioremap_resource()",
+> it was wrap platform_get_resource() and devm_ioremap_resource() as
+> single helper devm_platform_ioremap_resource(). but now, many drivers
+> still used platform_get_resource() and devm_ioremap_resource()
+> together in the kernel tree. The reason can not be replaced is they
+> still need use the resource variables obtained by platform_get_resource().
+> so provide this helper.
 > 
-> Hi Lubmir
+> Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Suggested-by: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+> Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+> ---
+> v2 -> v3:
+> 	- rename the function to
+> 	  devm_platform_get_and_ioremap_resource() by Sergei's suggestion.
+> 	- make the last parameter res as optional by Geert's suggestion.
 > 
-> This is needs a bit closer examination. By the PXA maintainers. It
-> appears there are two serial drivers, the 8250 and a PXA specific
-> driver.
+> v1 -> v2:
+> 	- No change.
+> 
+>  drivers/base/platform.c         | 22 ++++++++++++++++++++++
+>  include/linux/platform_device.h |  3 +++
+>  2 files changed, 25 insertions(+)
+> 
+> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+> index 7fa654f1288b..9f6a78f79235 100644
+> --- a/drivers/base/platform.c
+> +++ b/drivers/base/platform.c
+> @@ -62,6 +62,28 @@ struct resource *platform_get_resource(struct platform_device *dev,
+>  EXPORT_SYMBOL_GPL(platform_get_resource);
+>  
+>  #ifdef CONFIG_HAS_IOMEM
+> +/**
+> + * devm_platform_get_and_ioremap_resource - call devm_ioremap_resource() for a
+> + *					    platform device and get resource
+> + *
+> + * @pdev: platform device to use both for memory resource lookup as well as
+> + *        resource management
+> + * @index: resource index
+> + * @res: get the resource
+> + */
+> +void __iomem *
+> +devm_platform_get_and_ioremap_resource(struct platform_device *pdev,
+> +				unsigned int index, struct resource **res)
+> +{
+> +	struct resource *r;
+> +
+> +	r = platform_get_resource(pdev, IORESOURCE_MEM, index);
+> +	if (res)
+> +		*res = r;
 
-Well, for "mrvl,mmp-uart", there are three: SERIAL_OF_PLATFORM,
-SERIAL_8250_PXA and SERIAL_PXA:
+What happens if that call fails?  Shouldn't that be checked?
 
-  drivers/tty/serial/8250/8250_of.c:      { .compatible = "mrvl,mmp-uart",
-  drivers/tty/serial/8250/8250_pxa.c:     { .compatible = "mrvl,mmp-uart", },
-  drivers/tty/serial/pxa.c:       { .compatible = "mrvl,mmp-uart", },
+thanks,
 
-For that matter, the hardware is also compatible with intel,xscale-uart
-and the mrvl,mmp-uart compatible string is perhaps entirely unnecessary.
-
-I guess the story is somewhat similar for mrvl,pxa-uart; I can not
-verify though.
-
-I suppose SERIAL_PXA is not really needed at this point and if support
-for mrvl,pxa-uart was added to SERIAL_OF_PLATFORM, then SERIAL_8250_PXA
-would only be useful for platforms that don't use DT and the DT bits
-could be stripped from it eventually. That is -- if PXA maintainers
-agree, of course.
-
-> 	Andrew
-
-Regards
-Lubo
+greg k-h
