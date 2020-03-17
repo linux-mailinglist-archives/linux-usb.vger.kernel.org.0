@@ -2,97 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C556A18882E
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2020 15:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54277188911
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2020 16:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726976AbgCQOyi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Mar 2020 10:54:38 -0400
-Received: from mail-wm1-f73.google.com ([209.85.128.73]:43416 "EHLO
-        mail-wm1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727090AbgCQOyh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Mar 2020 10:54:37 -0400
-Received: by mail-wm1-f73.google.com with SMTP id a23so7241138wmm.8
-        for <linux-usb@vger.kernel.org>; Tue, 17 Mar 2020 07:54:37 -0700 (PDT)
+        id S1726484AbgCQPWJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Mar 2020 11:22:09 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:36646 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726747AbgCQPWI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Mar 2020 11:22:08 -0400
+Received: by mail-ed1-f67.google.com with SMTP id b18so22470114edu.3
+        for <linux-usb@vger.kernel.org>; Tue, 17 Mar 2020 08:22:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=YnO147Q8BfuYNBKiEQsszIXKG8E9VejO4ffbcq8Gn6s=;
-        b=rb7245Ras6C7y9qgw0zRxUstsDae6mXfHrz3F0GCcwWusok6lOSl/FLtbSXIBAlfAG
-         pU/Gc01TdHjEAD4RfQa/mEescGcs/dwrVlhAnEPTrur54OVdeD9V/IPqXQltBDrIQcAq
-         w5v2wYv0hqb6T+pGK/4MoPsHM2iKQUTFPPDlAjc58y6ffDaiF7ZLFM2RsEHZUuf6TV3y
-         v/cxYLxN3MhtmcqrOWqQIdPF0F4Ryn42SoLljX47Z474bt+Zub1SNNH/dbIRzaEAJTAS
-         clot3+jzM4JYF2HrHvCZTpgXRO97oyhUoguzWKDL/nbP8jQFTPsEnjANlJYJBmR8SHF/
-         1v6w==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=FN6nZxGnOaw3deJgrYU1nB+eySU41aqfgMOvG0B3T1g=;
+        b=CXjlKsP5/eG3tZJGw8EPbB69nbC3nO4ZZQfYtvvX5o2sdeR2vVbOAPJd8ufv4NCETI
+         02I170hMx6kVh1sjzn69urnNbgExvQeSlkitbDxdyl/uvNwpdojqNN32J5e8ycULPU4L
+         s1HVoS9+wzcMbmrKjBXEtZ2cHoqkq7dRot6Mf/ehXoxd28r12XO9VcMG2gMJCDc5tw1h
+         gBLJlU/Ptq2it9/Xlo5utCg0XqxXmvkPr+n+vcJg1ARiA9tCg2Mex3p5UBXkQb8pCrgt
+         BLAzadrLVthZNCuciVdMd848fwy0bpmh3KryGSNikiM31ny7IGOyUM1ebjPETz6xnQ9d
+         IK/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=YnO147Q8BfuYNBKiEQsszIXKG8E9VejO4ffbcq8Gn6s=;
-        b=pEiZgpSjoxA79+jZeTyL4SHsyal4EE2o1JBGTH01cPj10GYeEgghk3eC5W8ujL71sN
-         t0jy3yl/hlep44NaXRcZSXPAvaPw4Zx0qjAN30yKDD8Bnwcfw8Y2fS2hL4/RblnglC5v
-         G/9pXqH5RBv45sSvQi8VdxP73gNCFIPvOwzzKoEte+ismB3sdvVFQyFMgaEbepfI9aER
-         oHM/BtDUaFkz4wfhtYk370SwpfFyjaJ6J8Nb4P+YvdYSO2h89d/mxWl1eZD6t6VqB9BW
-         fuIOLJGmCeFJzrKRJSQQZboegEb06XbMBjEjqiHVVogMNM/U/GkmfHp06Z03uTSuHa5i
-         I2mQ==
-X-Gm-Message-State: ANhLgQ20HLx7Hd3q8TAlGerx4Hsj4IuiyNLFXc5cFtFlIvijtkXTfn12
-        T8kIGgQVobZr3ijuPwV1vWyQTMktDDDSPdNC
-X-Google-Smtp-Source: ADFU+vuk+Yi3YFMcAI8MRlwoyHn7t0KCazaq6gRywdKYSzsiW1YSWh93dqA033BnLe0hih5cIW9z1npcTigPA9W1
-X-Received: by 2002:a05:6000:12c5:: with SMTP id l5mr6163103wrx.134.1584456876192;
- Tue, 17 Mar 2020 07:54:36 -0700 (PDT)
-Date:   Tue, 17 Mar 2020 15:54:31 +0100
-Message-Id: <6206b80b3810f95bfe1d452de45596609a07b6ea.1584456779.git.andreyknvl@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.25.1.481.gfbce0eb801-goog
-Subject: [PATCH USB] usb: raw_gadget: fix compilation warnings in uapi headers
-From:   Andrey Konovalov <andreyknvl@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        "kernelci . org bot" <bot@kernelci.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=FN6nZxGnOaw3deJgrYU1nB+eySU41aqfgMOvG0B3T1g=;
+        b=FeUh/n/bQhcLC4Wc6cLn/iyTzkFkpuXR7adVCrQQdM9qaqdeE0mFlfdfGhxXHyQIGu
+         7uN3y988aUSNz8Z5H/xRg1vOOXm7BmPTtSn6b9HuXYUMv2orsEMJzBm064squX6IIy6E
+         KHTV9tvyCxKmqrZyEqsaDbn1sL56MisZYIdcQnBJ0dq3fXA/f3gboxM7aGN1ZiHBuwee
+         4cDl//8JuEPKOAC4uZv924/udkapJ4HdcurFEzowjCdzjmurNl8pxTvAa1jwPoP4njqf
+         H0kV704YL1aSRK7atHT0oMeIiNZ+95CFs/crvw4bqUJ+QugiLesFwcy/yFWVovag/KNz
+         GgmQ==
+X-Gm-Message-State: ANhLgQ2jD7JQEEbVcF1Au1pU4YNzdHM+6qvLYLdMjKca6uGEfDJEH9jU
+        G5hVLue+kMsJ2/Qhkza1kl0LVA==
+X-Google-Smtp-Source: ADFU+vsI46bucXrS6vRC98i/tyZ5FW2KRCRZlYWtRXZUfYzkhSt7l9XxjzONQxNkkNmWOvcZUFuTfA==
+X-Received: by 2002:a05:6402:180e:: with SMTP id g14mr6060137edy.66.1584458524977;
+        Tue, 17 Mar 2020 08:22:04 -0700 (PDT)
+Received: from [192.168.0.38] ([176.61.57.127])
+        by smtp.gmail.com with ESMTPSA id bc23sm227198edb.31.2020.03.17.08.22.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Mar 2020 08:22:04 -0700 (PDT)
+Subject: Re: [PATCH 7/7] usb: dwc3: qcom: Enable gpio-usb-conn based
+ role-switching
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jackp@codeaurora.org,
+        robh@kernel.org, Andy Gross <agross@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+References: <20200311191501.8165-1-bryan.odonoghue@linaro.org>
+ <20200311191501.8165-8-bryan.odonoghue@linaro.org>
+ <20200317063101.GA2778164@ripper>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Message-ID: <ec573486-155d-c6f9-7645-496e85721a69@linaro.org>
+Date:   Tue, 17 Mar 2020 15:22:22 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <20200317063101.GA2778164@ripper>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Mark usb_raw_io_flags_valid() and usb_raw_io_flags_zero() as inline to
-fix the following warnings:
+On 17/03/2020 06:31, Bjorn Andersson wrote:
+> I don't yet have a sane suggestion on how to redesign the dependency
+> between the two drivers in order to avoid this, but it's at least not
+> possible to access the child's state data from dwc3_qcom_probe().
 
-./usr/include/linux/usb/raw_gadget.h:69:12: warning: unused function 'usb_raw_io_flags_valid' [-Wunused-function]
-./usr/include/linux/usb/raw_gadget.h:74:12: warning: unused function 'usb_raw_io_flags_zero' [-Wunused-function]
+yep, this should be modeled as the dwc3 registering with the parent 
+role-switch, like gpio-usb-conn does with dwc3.
 
-Reported-by: kernelci.org bot <bot@kernelci.org>
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- include/uapi/linux/usb/raw_gadget.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/include/uapi/linux/usb/raw_gadget.h b/include/uapi/linux/usb/raw_gadget.h
-index 00cbded71061..ea375082b3ac 100644
---- a/include/uapi/linux/usb/raw_gadget.h
-+++ b/include/uapi/linux/usb/raw_gadget.h
-@@ -66,12 +66,12 @@ struct usb_raw_event {
- #define USB_RAW_IO_FLAGS_ZERO	0x0001
- #define USB_RAW_IO_FLAGS_MASK	0x0001
- 
--static int usb_raw_io_flags_valid(__u16 flags)
-+static inline int usb_raw_io_flags_valid(__u16 flags)
- {
- 	return (flags & ~USB_RAW_IO_FLAGS_MASK) == 0;
- }
- 
--static int usb_raw_io_flags_zero(__u16 flags)
-+static inline int usb_raw_io_flags_zero(__u16 flags)
- {
- 	return (flags & USB_RAW_IO_FLAGS_ZERO);
- }
--- 
-2.25.1.481.gfbce0eb801-goog
-
+I have an idea for a patch, I'll v2 this.
