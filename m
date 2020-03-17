@@ -2,72 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C8D8188D85
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2020 19:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6193188DBC
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2020 20:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726682AbgCQS6k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Mar 2020 14:58:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59940 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726545AbgCQS6k (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 17 Mar 2020 14:58:40 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 083CB20724;
-        Tue, 17 Mar 2020 18:58:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584471518;
-        bh=OY84ZxDccQFhgYDlAvwhsfk2SegbVqCssMbIJ8LHZwI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lEbfyZoVjZ3QH6Ubdqit9/rhjwYb9P8NvvchyecqX491YLdrQbE/GlMKC3zMNNUne
-         qEgelwQ3uFe4fQa+kZ+0OM1p3bfQfJwHR6Jf0Uc6l4q9sHNorvydkzavwDtsi7RRDp
-         xJVMVVS2bci5AoO+xyZzpeIA4hiGy8wuEQ8MKd2E=
-Date:   Tue, 17 Mar 2020 19:58:35 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [GIT PULL] usb: tegra: Changes for v5.7-rc1
-Message-ID: <20200317185835.GC1480055@kroah.com>
-References: <20200313170730.2924259-1-thierry.reding@gmail.com>
+        id S1726740AbgCQTJV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Mar 2020 15:09:21 -0400
+Received: from mail.v3.sk ([167.172.186.51]:46710 "EHLO shell.v3.sk"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726388AbgCQTJV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 17 Mar 2020 15:09:21 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by zimbra.v3.sk (Postfix) with ESMTP id 2340FE021B;
+        Tue, 17 Mar 2020 19:09:38 +0000 (UTC)
+Received: from shell.v3.sk ([127.0.0.1])
+        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id DLLls_Mq1N8K; Tue, 17 Mar 2020 19:09:36 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by zimbra.v3.sk (Postfix) with ESMTP id 44473E0116;
+        Tue, 17 Mar 2020 19:09:36 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at zimbra.v3.sk
+Received: from shell.v3.sk ([127.0.0.1])
+        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id vjvflx8zMQmd; Tue, 17 Mar 2020 19:09:36 +0000 (UTC)
+Received: from localhost (unknown [109.183.109.54])
+        by zimbra.v3.sk (Postfix) with ESMTPSA id C22C4DFFBE;
+        Tue, 17 Mar 2020 19:09:35 +0000 (UTC)
+Date:   Tue, 17 Mar 2020 20:09:13 +0100
+From:   Lubomir Rintel <lkundrak@v3.sk>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 13/28] dt-bindings: serial: move Marvell compatible
+ string to 8250 binding doc
+Message-ID: <20200317190913.GA24359@furthur.local>
+References: <20200317093922.20785-1-lkundrak@v3.sk>
+ <20200317093922.20785-14-lkundrak@v3.sk>
+ <20200317134805.GO24270@lunn.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200313170730.2924259-1-thierry.reding@gmail.com>
+In-Reply-To: <20200317134805.GO24270@lunn.ch>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 13, 2020 at 06:07:30PM +0100, Thierry Reding wrote:
-> Hi Greg, Felipe,
+On Tue, Mar 17, 2020 at 02:48:05PM +0100, Andrew Lunn wrote:
+> On Tue, Mar 17, 2020 at 10:39:07AM +0100, Lubomir Rintel wrote:
+> > These ports are compatible with NS8250 and handled by the same driver.
+> > Get rid of the extra document that fails to document the properties that
+> > are actually supported.
 > 
-> The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9:
+> Hi Lubmir
 > 
->   Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/for-5.7-usb
-> 
-> for you to fetch changes up to 9dd4fbef2f88ccf46f5294805bf121d6554791e8:
-> 
->   usb: gadget: tegra-xudc: Support multiple device modes (2020-03-13 17:16:28 +0100)
-> 
-> It occurred to me that I could just as well send this pull request to
-> you guys, rather than take it via ARM SoC. Kishon already acked all the
-> patches for the PHY tree that this series depends on, so I've included
-> them here as a dependency.
-> 
-> Let me know if you'd prefer that I take this through ARM SoC.
+> This is needs a bit closer examination. By the PXA maintainers. It
+> appears there are two serial drivers, the 8250 and a PXA specific
+> driver.
 
-I tried to merge this into my usb-next branch, but get merge issues in
-drivers/usb/gadget/udc/tegra-xudc.c that I really don't know how to
-resolve.
+Well, for "mrvl,mmp-uart", there are three: SERIAL_OF_PLATFORM,
+SERIAL_8250_PXA and SERIAL_PXA:
 
-Can you give me a clue as to what to do here?
+  drivers/tty/serial/8250/8250_of.c:      { .compatible = "mrvl,mmp-uart",
+  drivers/tty/serial/8250/8250_pxa.c:     { .compatible = "mrvl,mmp-uart", },
+  drivers/tty/serial/pxa.c:       { .compatible = "mrvl,mmp-uart", },
 
-thanks,
+For that matter, the hardware is also compatible with intel,xscale-uart
+and the mrvl,mmp-uart compatible string is perhaps entirely unnecessary.
 
-greg k-h
+I guess the story is somewhat similar for mrvl,pxa-uart; I can not
+verify though.
+
+I suppose SERIAL_PXA is not really needed at this point and if support
+for mrvl,pxa-uart was added to SERIAL_OF_PLATFORM, then SERIAL_8250_PXA
+would only be useful for platforms that don't use DT and the DT bits
+could be stripped from it eventually. That is -- if PXA maintainers
+agree, of course.
+
+> 	Andrew
+
+Regards
+Lubo
