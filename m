@@ -2,165 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 671921879B2
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2020 07:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FDC1187A46
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2020 08:24:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725933AbgCQGcT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Mar 2020 02:32:19 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:40218 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725837AbgCQGcT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Mar 2020 02:32:19 -0400
-Received: by mail-pg1-f194.google.com with SMTP id t24so11171325pgj.7
-        for <linux-usb@vger.kernel.org>; Mon, 16 Mar 2020 23:32:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fPDZ6+w3BtfImipFJW5a3OXasS2gBUMcdAat0qMbiEc=;
-        b=OvKKPAvUHrZ77ivg3BKzoibsavHaTXRrH/rGlfi8ebKoWd5cUH/7os3vHM/Xg1/X6q
-         Q3+DZF4FpIHaVdLLW7dEj8z4Oa7Tn+UX3wd5NNgomrhZp/nRpqXTv5hZ6aeRkP8MTit8
-         XRd9j98xVwJj8J+Qw6WriSsnIZD2GFwbqTfRYGVYuzV36QdeTPTWjtD0E9ZhC1thydCL
-         2j/cJItEeb1aA1ymBIVQxikl1YA/JYQ3SXki3OnflCHcVs68tX/fVTmIyJHFto+pYCLY
-         1VmNPMnaiLStOH+kFQ0MbHALwcfeH7Q60mFKWjapyc8rGSCSJOq8qskMXac1Xl53BGvs
-         0TqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fPDZ6+w3BtfImipFJW5a3OXasS2gBUMcdAat0qMbiEc=;
-        b=EWr69iarWlVWbkMfoFRPjLl3+zRGspF+qqJVu3SgyHdIK2lpUFuv107ZMY46VpBxp1
-         2BzXoKzMbZW6mH2cqs6H5mwktNQ/nrFjY5gPWf0Iu2hzaumvLBzEc7R+gMMqdppug8x/
-         AdqrsxPW5Xm7BA0mzmHdWu2ov0cvR51LEQb4pWZaSOxWTLDxjcjMstV7QyyD3fC6oDvD
-         EJ+hFBPQYX/DvTi7gXw2r2Mn0pirKUac3vLNRffTd9KMnt+2R0iEYpUptMX1oBwjfde/
-         j+sMPu5HsCUzurdgT79xLsr/QlcwIxi2aKLmIVy44hUBCSiha7m3W67SOaO4qshWSOjQ
-         m02g==
-X-Gm-Message-State: ANhLgQ0r2Ue+kLaE/xw+HqMtnHSpNF5b0I0iC8iHgNRXQeiyqUwASHhn
-        xnD94beNlGW+35BOSJEbzqHdcg==
-X-Google-Smtp-Source: ADFU+vtDVHGVGhRWc3b5Kbe7ELrzDJfeMmJctyiPAwyCZXURX7JHPZ/jPhFVH4Ab0yU9LkBak47NPg==
-X-Received: by 2002:a63:68a:: with SMTP id 132mr3603572pgg.12.1584426738234;
-        Mon, 16 Mar 2020 23:32:18 -0700 (PDT)
-Received: from ripper (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id p2sm1793802pfb.41.2020.03.16.23.32.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2020 23:32:17 -0700 (PDT)
-Date:   Mon, 16 Mar 2020 23:31:01 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jackp@codeaurora.org,
-        robh@kernel.org, Andy Gross <agross@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH 7/7] usb: dwc3: qcom: Enable gpio-usb-conn based
- role-switching
-Message-ID: <20200317063101.GA2778164@ripper>
-References: <20200311191501.8165-1-bryan.odonoghue@linaro.org>
- <20200311191501.8165-8-bryan.odonoghue@linaro.org>
+        id S1725870AbgCQHYu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Mar 2020 03:24:50 -0400
+Received: from mail-sh.amlogic.com ([58.32.228.43]:21089 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbgCQHYu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Mar 2020 03:24:50 -0400
+Received: from [10.18.38.194] (10.18.38.194) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Tue, 17 Mar
+ 2020 15:25:21 +0800
+Subject: Re: [PATCH v9 3/3] arm64: dts: meson: a1: Enable USB2 PHY and DWC3
+ controller
+To:     Kevin Hilman <khilman@baylibre.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Yue Wang <yue.wang@amlogic.com>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Carlo Caione <carlo@caione.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+References: <1581990859-135234-1-git-send-email-hanjie.lin@amlogic.com>
+ <1581990859-135234-4-git-send-email-hanjie.lin@amlogic.com>
+ <7hd09cw9oh.fsf@baylibre.com>
+From:   Hanjie Lin <hanjie.lin@amlogic.com>
+Message-ID: <cf688077-c980-0c25-a3fa-39b43423f11f@amlogic.com>
+Date:   Tue, 17 Mar 2020 15:25:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200311191501.8165-8-bryan.odonoghue@linaro.org>
+In-Reply-To: <7hd09cw9oh.fsf@baylibre.com>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.18.38.194]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed 11 Mar 12:15 PDT 2020, Bryan O'Donoghue wrote:
 
-> This patch adds the ability to receive a notification from the DRD code for
-> role-switch events and in doing so it introduces a disjunction between
-> gpio-usb-conn or extcon mode.
+
+On 2020/3/17 0:23, Kevin Hilman wrote:
+> Hi Hanjie,
 > 
-> This is what we want to do, since the two methods are mutually exclusive.
+> Hanjie Lin <hanjie.lin@amlogic.com> writes:
 > 
-> Cc: Andy Gross <agross@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Jack Pham <jackp@codeaurora.org>
-> Cc: linux-arm-msm@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 16 ++++++++++++++--
->  1 file changed, 14 insertions(+), 2 deletions(-)
+>> Enable USB2 PHY and DWC3 controller for Meson A1 SoC.
+>>
+>> Signed-off-by: Yue Wang <yue.wang@amlogic.com>
+>> Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
+>> ---
+>>  arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 43 +++++++++++++++++++++++++++++++
+>>  1 file changed, 43 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+>> index 6fdc0dd..3b7ca50 100644
+>> --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+>> +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+>> @@ -6,6 +6,9 @@
+>>  #include <dt-bindings/interrupt-controller/irq.h>
+>>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>  #include <dt-bindings/power/meson-a1-power.h>
+>> +#include <dt-bindings/reset/amlogic,meson-a1-reset.h>
+>> +#include <dt-bindings/clock/a1-pll-clkc.h>
+>> +#include <dt-bindings/clock/a1-clkc.h>
 > 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 6f4b2b3cffce..f6a7ede5953e 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -571,6 +571,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  	struct device		*dev = &pdev->dev;
->  	struct dwc3_qcom	*qcom;
->  	struct resource		*res, *parent_res = NULL;
-> +	struct dwc3		*dwc;
->  	int			ret, i;
->  	bool			ignore_pipe_clk;
->  
-> @@ -669,8 +670,16 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
->  		dwc3_qcom_vbus_overrride_enable(qcom, true);
->  
-> -	/* register extcon to override sw_vbus on Vbus change later */
-> -	ret = dwc3_qcom_register_extcon(qcom);
-> +	if (dwc3_qcom_find_gpio_usb_connector(qcom->dwc3)) {
-> +		/* Using gpio-usb-conn register a notifier for VBUS */
-> +		dwc = platform_get_drvdata(qcom->dwc3);
+> The driver is now merged, but the DT cannot be merged because it has
+> dependencies on the A1 clock series which is still under review.
+> 
+> When that is merged, please resend this patch.
 
-As I was testing some other things on my qcs404 board this
-suddenly failed.
+Hi Kevin,
 
-The of_platform_populate() in dwc3_qcom_of_register_core() will create a
-struct platform_device and attempt to probe this. But as my PHY(s) isn't
-ready that returns with -EPROBE_DEFER - i.e. it will not reach the
-platform_set_drvdata().
+Ok, Thanks.
 
-The check in dwc3_qcom_of_register_core() successfully resolves the
-struct platform_device (it's sitting there waiting to be reprobed
-later).
+Hanjie
 
-So qcom->dwc3 will be valid, but dwc here will be NULL.
-
-> +		qcom->vbus_nb.notifier_call = dwc3_qcom_vbus_notifier;
-> +		ret = dwc3_role_switch_notifier_register(dwc, &qcom->vbus_nb);
-
-So here we pass NULL to dwc3_role_switch_notifier_register(), which
-dereferences it and we get an oops.
-
-
-I don't yet have a sane suggestion on how to redesign the dependency
-between the two drivers in order to avoid this, but it's at least not
-possible to access the child's state data from dwc3_qcom_probe().
-
-Regards,
-Bjorn
-
-> +	} else {
-> +		/* register extcon to override sw_vbus on Vbus change later */
-> +		ret = dwc3_qcom_register_extcon(qcom);
-> +	}
-> +
->  	if (ret)
->  		goto depopulate;
->  
-> @@ -702,8 +711,11 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
->  {
->  	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
->  	struct device *dev = &pdev->dev;
-> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
->  	int i;
->  
-> +	dwc3_role_switch_notifier_unregister(dwc, &qcom->vbus_nb);
-> +
->  	of_platform_depopulate(dev);
->  
->  	for (i = qcom->num_clocks - 1; i >= 0; i--) {
-> -- 
-> 2.25.1
+> 
+> Thanks,
+> 
+> Kevin
+> 
+> .
 > 
