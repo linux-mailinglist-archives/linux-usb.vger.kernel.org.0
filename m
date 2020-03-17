@@ -2,85 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F30C1886B5
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2020 15:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C556A18882E
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2020 15:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726771AbgCQOAM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Mar 2020 10:00:12 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:40808 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726148AbgCQOAL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 17 Mar 2020 10:00:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=FrLx3+zGH3oU0Jo8/lq72eF8fifQc3xB2bQg8gY6tl8=; b=cGnLnBuVsp6fkYfQcJ+N0lP7Zi
-        1CQ0257uMP73Zssq480GqtOsiT6dtz3j4jFY4auOWYouzd6Noyy4GBuZ2grQ+9xBQnBkb7o8JyQgO
-        LYVpPM0bbhZnw1Ygcjk+w5hK1jV6VmA0mj+VI2m8UsxHjo1atAFpbrGsSPzlUpACujao=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.93)
-        (envelope-from <andrew@lunn.ch>)
-        id 1jEClA-0006j0-3H; Tue, 17 Mar 2020 14:59:56 +0100
-Date:   Tue, 17 Mar 2020 14:59:56 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Lubomir Rintel <lkundrak@v3.sk>, Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 00/28] DT: Improve validation for Marvell SoCs
-Message-ID: <20200317135956.GQ24270@lunn.ch>
-References: <20200317093922.20785-1-lkundrak@v3.sk>
- <20200317134609.GN24270@lunn.ch>
- <20200317135551.GE3448@piout.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200317135551.GE3448@piout.net>
+        id S1726976AbgCQOyi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Mar 2020 10:54:38 -0400
+Received: from mail-wm1-f73.google.com ([209.85.128.73]:43416 "EHLO
+        mail-wm1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727090AbgCQOyh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Mar 2020 10:54:37 -0400
+Received: by mail-wm1-f73.google.com with SMTP id a23so7241138wmm.8
+        for <linux-usb@vger.kernel.org>; Tue, 17 Mar 2020 07:54:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=YnO147Q8BfuYNBKiEQsszIXKG8E9VejO4ffbcq8Gn6s=;
+        b=rb7245Ras6C7y9qgw0zRxUstsDae6mXfHrz3F0GCcwWusok6lOSl/FLtbSXIBAlfAG
+         pU/Gc01TdHjEAD4RfQa/mEescGcs/dwrVlhAnEPTrur54OVdeD9V/IPqXQltBDrIQcAq
+         w5v2wYv0hqb6T+pGK/4MoPsHM2iKQUTFPPDlAjc58y6ffDaiF7ZLFM2RsEHZUuf6TV3y
+         v/cxYLxN3MhtmcqrOWqQIdPF0F4Ryn42SoLljX47Z474bt+Zub1SNNH/dbIRzaEAJTAS
+         clot3+jzM4JYF2HrHvCZTpgXRO97oyhUoguzWKDL/nbP8jQFTPsEnjANlJYJBmR8SHF/
+         1v6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=YnO147Q8BfuYNBKiEQsszIXKG8E9VejO4ffbcq8Gn6s=;
+        b=pEiZgpSjoxA79+jZeTyL4SHsyal4EE2o1JBGTH01cPj10GYeEgghk3eC5W8ujL71sN
+         t0jy3yl/hlep44NaXRcZSXPAvaPw4Zx0qjAN30yKDD8Bnwcfw8Y2fS2hL4/RblnglC5v
+         G/9pXqH5RBv45sSvQi8VdxP73gNCFIPvOwzzKoEte+ismB3sdvVFQyFMgaEbepfI9aER
+         oHM/BtDUaFkz4wfhtYk370SwpfFyjaJ6J8Nb4P+YvdYSO2h89d/mxWl1eZD6t6VqB9BW
+         fuIOLJGmCeFJzrKRJSQQZboegEb06XbMBjEjqiHVVogMNM/U/GkmfHp06Z03uTSuHa5i
+         I2mQ==
+X-Gm-Message-State: ANhLgQ20HLx7Hd3q8TAlGerx4Hsj4IuiyNLFXc5cFtFlIvijtkXTfn12
+        T8kIGgQVobZr3ijuPwV1vWyQTMktDDDSPdNC
+X-Google-Smtp-Source: ADFU+vuk+Yi3YFMcAI8MRlwoyHn7t0KCazaq6gRywdKYSzsiW1YSWh93dqA033BnLe0hih5cIW9z1npcTigPA9W1
+X-Received: by 2002:a05:6000:12c5:: with SMTP id l5mr6163103wrx.134.1584456876192;
+ Tue, 17 Mar 2020 07:54:36 -0700 (PDT)
+Date:   Tue, 17 Mar 2020 15:54:31 +0100
+Message-Id: <6206b80b3810f95bfe1d452de45596609a07b6ea.1584456779.git.andreyknvl@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.25.1.481.gfbce0eb801-goog
+Subject: [PATCH USB] usb: raw_gadget: fix compilation warnings in uapi headers
+From:   Andrey Konovalov <andreyknvl@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        "kernelci . org bot" <bot@kernelci.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 02:55:59PM +0100, Alexandre Belloni wrote:
-> On 17/03/2020 14:46:09+0100, Andrew Lunn wrote:
-> > On Tue, Mar 17, 2020 at 10:38:54AM +0100, Lubomir Rintel wrote:
-> > > Hello World,
-> > 
-> > Yah, that is an issue here. Marvell have a few different SoC families,
-> > each with there own maintainers. Gregory and I tend to look after
-> > 'mvebu', aka orion5x, kirkwood, dove, berlin and a few others. All the
-> > others are 'Somebody elses' problem'.
-> > 
-> 
-> Hum, berlin is not mvebu, it was the same BU as the MMP and it has been
-> sold to synopsys a while ago.
+Mark usb_raw_io_flags_valid() and usb_raw_io_flags_zero() as inline to
+fix the following warnings:
 
-Yes, the boundaries are a bit fluffy. At least the early work by
-Sebastian was merged via the mvebu maintainers, even if it is not
-technically part of mvebu.
+./usr/include/linux/usb/raw_gadget.h:69:12: warning: unused function 'usb_raw_io_flags_valid' [-Wunused-function]
+./usr/include/linux/usb/raw_gadget.h:74:12: warning: unused function 'usb_raw_io_flags_zero' [-Wunused-function]
 
-This is also part of the discussion about how this lot actually gets
-merged.
+Reported-by: kernelci.org bot <bot@kernelci.org>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+---
+ include/uapi/linux/usb/raw_gadget.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-	   Andrew
+diff --git a/include/uapi/linux/usb/raw_gadget.h b/include/uapi/linux/usb/raw_gadget.h
+index 00cbded71061..ea375082b3ac 100644
+--- a/include/uapi/linux/usb/raw_gadget.h
++++ b/include/uapi/linux/usb/raw_gadget.h
+@@ -66,12 +66,12 @@ struct usb_raw_event {
+ #define USB_RAW_IO_FLAGS_ZERO	0x0001
+ #define USB_RAW_IO_FLAGS_MASK	0x0001
+ 
+-static int usb_raw_io_flags_valid(__u16 flags)
++static inline int usb_raw_io_flags_valid(__u16 flags)
+ {
+ 	return (flags & ~USB_RAW_IO_FLAGS_MASK) == 0;
+ }
+ 
+-static int usb_raw_io_flags_zero(__u16 flags)
++static inline int usb_raw_io_flags_zero(__u16 flags)
+ {
+ 	return (flags & USB_RAW_IO_FLAGS_ZERO);
+ }
+-- 
+2.25.1.481.gfbce0eb801-goog
+
