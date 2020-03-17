@@ -2,152 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2E818762B
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2020 00:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D8C18768D
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Mar 2020 01:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732920AbgCPXTM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Mar 2020 19:19:12 -0400
-Received: from [37.49.224.149] ([37.49.224.149]:57516 "EHLO
-        adcoconstruction.com" rhost-flags-FAIL-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1732873AbgCPXTM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Mar 2020 19:19:12 -0400
-X-Greylist: delayed 75730 seconds by postgrey-1.27 at vger.kernel.org; Mon, 16 Mar 2020 19:19:12 EDT
-From:   "Christopher Hills" <chris@adcoconstruction.com>
-To:     linux-usb@vger.kernel.org
-Subject: RE: NEW ORDER/DOCUMENT_0554312
-Date:   17 Mar 2020 00:19:10 +0100
-Message-ID: <20200317001910.156414FF0A68429A@adcoconstruction.com>
+        id S1733099AbgCQALo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Mar 2020 20:11:44 -0400
+Received: from mail.uic.edu.hk ([61.143.62.86]:48979 "EHLO umgp.uic.edu.hk"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1733047AbgCQALn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 16 Mar 2020 20:11:43 -0400
+X-IronPort-AV: E=Sophos;i="5.43,368,1503331200"; 
+   d="scan'208";a="17243176"
+Received: from unknown (HELO zpmail.uic.edu.hk) ([192.168.111.249])
+  by umgp.uic.edu.hk with ESMTP; 17 Mar 2020 08:11:35 +0800
+Received: from zpmail.uic.edu.hk (localhost [127.0.0.1])
+        by zpmail.uic.edu.hk (Postfix) with ESMTPS id D96D941C05A3;
+        Tue, 17 Mar 2020 08:11:32 +0800 (CST)
+Received: from localhost (localhost [127.0.0.1])
+        by zpmail.uic.edu.hk (Postfix) with ESMTP id D554341C0957;
+        Tue, 17 Mar 2020 08:11:31 +0800 (CST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zpmail.uic.edu.hk D554341C0957
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uic.edu.hk;
+        s=6465647E-9D7B-11E8-B17B-42130C7FA3B9; t=1584403892;
+        bh=Wn2BcVyAdGxyDvB/5AnVfCr/iJTzisyuX4dwKssec6E=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=N1pNhkd2l8zz69kDtEsPH5n7SDL70Ak/Rgb/NYqC0+ZCBZFg/G0QkldxXmMRPmztz
+         HwkJ6HHAibMur3rytYhnqKeG349hpGDQCbhvoJdZWkvkFCa93STWbitRqMynzR+Wj5
+         wLEdN7i9CyVDDhspocQMykx6lSGq645dTckJSCrsFHg+uR95rTW6kz2/3F5tST7+Uo
+         ELvvW8oTRw+C3DdE82L8ao85KfwNAx6BRhhB+sNBssPbo3CqQ69/PO1/J9gy3aGO+s
+         FwDrxpCEm2RIo68N7oaYrAjY/FUGCbKk/MsqrV+VDqizldOqfTDFamlvQc82rVkjYy
+         rx6v80NBgwdtg==
+Received: from zpmail.uic.edu.hk ([127.0.0.1])
+        by localhost (zpmail.uic.edu.hk [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id gCmMIXxwS0HE; Tue, 17 Mar 2020 08:11:31 +0800 (CST)
+Received: from zpmail.uic.edu.hk (zpmail.uic.edu.hk [192.168.111.249])
+        by zpmail.uic.edu.hk (Postfix) with ESMTP id 1549641C058D;
+        Tue, 17 Mar 2020 08:11:27 +0800 (CST)
+Date:   Tue, 17 Mar 2020 08:11:26 +0800 (CST)
+From:   David Ibe <ylawrence@uic.edu.hk>
+Reply-To: David Ibe <davidibe718@gmail.com>
+Message-ID: <2065446646.63699156.1584403886963.JavaMail.zimbra@uic.edu.hk>
+Subject: 
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
-        boundary="----=_NextPart_000_0012_6FB0F2D6.4CF584E5"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.111.160]
+X-Mailer: Zimbra 8.8.15_GA_3829 (ZimbraWebClient - GC80 (Win)/8.8.15_GA_3829)
+Thread-Index: 8IMjdxPQWBZshE+F+QJEttpRaFVxcQ==
+Thread-Topic: 
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is a multi-part message in MIME format.
-
-------=_NextPart_000_0012_6FB0F2D6.4CF584E5
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
-Dear Sir/Madam,
-
-Please confirm if this requisition will be ready by 3rd April
-
-and i will send you the complete details.
-
-Kind Regards.
-
-Christopher Hills
-Purchase Manager
-Adco Constructions Pty. Ltd.
 
 
+Good Day,                
 
-I will like a receipt of your acknowledgment mail
-------=_NextPart_000_0012_6FB0F2D6.4CF584E5
-Content-Type: application/msword; name="PO0554312.doc"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="PO0554312.doc"
+I am Mr. David Ibe, I work with the International Standards on Auditing, I have seen on records, that several times people has divert your funds into their own personal accounts.
 
-e1xydGYxICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIHtcb2JqZWN0e1w0ODE4Nzk0MDh9XG9iamxpbmt7XDQ4MTg3OTQw
-OH1cb2JqdzQxOTd7XDQ4MTg3OTQwOH1cb2JqaDc1MTB7XDQ4MTg3OTQwOH17XDQ4MTg3OTQw
-OH17XG9iamRhdGENXHRzZDUzNjcxOFxndXR0ZXI1ODk2ODU0NzVcJ+8gICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-e1xvYmplY3RcTFFRR0pWSFlPVnJzbHp0eGRtc3d5aHI1NzkxMzkwNTg4MzA1OTM1MTU2MDQ5
-NUxRUUdKVkhZT1Zyc2x6dHhkbXN3eWhye1xPUFhSVVlXRUdXT1duZmxrYmxsam5qeWx5aXZw
-ZXc1MzgyMTc5MzIxMDQwNTYwODcyMzg2ODY2Mjk1T1BYUlVZV0VHV09XbmZsa2JsbGpuanls
-eWl2cGV3fX0xODZjNzg0NzAyMDAwMDAwMGIwMDAwMDA0NTUxNTU0MTU0Njk2ZjZlMntcbWxp
-bSBce1x7XG1ncm91cENocn0NZTMzMDAwMDAwMDAwMDAwMDAwMDAwYjYwODAwMDAwMzRkM2M4
-Mjg4YTkwMTA4YjhiY2I5Nzk5ZTdkZDQ4MWU5M2RlMTM3ZDQ4YjM5OGIwN2JiZDVjZDJkMTU4
-MWViMjU2NmU3MTQ4YjFiNTBmZmQzMDU5OWYwNDJkMzA1OTExMGJkMmNmZmUwNjVjZTA4NDMw
-MGI2ZTdlNmMxOGUwMjg4MjhjNDMzMjhlZjJkNmYxYTYxZDc0MDY3MGNkYWE2OGQxODVlNjU2
-NjBmNDU1ZDkwOGI2NjE2MjNhMjI0ZjVlM2I3ZTk0MGJlNzJjMzgwNTNmZDI2NjI1OTU0MjQ4
-NDk3YmM4OTg0YTg0MGJiOTM3NTMwMzhmNzdhOTVhZWJiNDk5OTA4NzA1YzMzMmRjMWI0YzQy
-Y2Q2Yzg1ZWNmMjM1MWQ0NWYxMmU1NzE5NGZhN2ZkOTk2NzZkYWVmZGNhYTNkY2Y1YjI1YWY0
-ZTdmY2Y4ZWQwOWEyMTM2YTY3NTBlZjIyNjFhY2Y5NmE1MGIyZWVmMmE3NmIxZDY1NGE0MDky
-ZGYwMjg4MGZkMjkxMGMwOTdjOTIxNzk0NWZkNjk0NjFiOTQ4NDMyZDgzMTE3YjllZGQzY2U3
-ZDI1M2VjMjE1NjdhMTM2NGMzYjg5ZjgyMDY2NzBmZGNlNDE4N2M4YzVjYTkxZTJlMTZkYmVm
-MTI1ODMyMTE1ZGEyMGZjYjQ3ZDlmYTNkMDhmZjk3YTFmZWNmNjEwNjkzZTE0YmNmMmY4Njcy
-MTA0M2QzZTQ5YTBlNmExNjljOTA4NDliM2JiZTc2Y2MwNDQ3ZjczNmEyMDk0MmExNGU5NTgw
-MTAwMDBhMGM0ZDlmYWU1NDNkNzNiNGEwOWM5NjQ3ZTk2YjMxY2E3NGYyYzk2OWZiY2ExYzAz
-MWM3OGY5MjYyMDVjOTQ2YTVlN2I5OWEyNDA1OTkxMWZhNWNiNjMyN2E4ZGI3YzQ2YTFjZDAx
-ODQyYjIwZTQwNzE1OThmNTA5NmMxYzhhNWM3ODJiZjFkY2U1MDUwNTk2ODQ5NjkwMDg0MmU0
-ZmZiOGJhNGQ3YmI5NTcxYWU3MGFkYzE5MzRmMTc2NjlhZDU4NzE0NjkwMDY3YTQ3YjkxMTI1
-MDYxNTAxZGY5ZmM0NDg5NjNjNGZlMTM3ODA1ZDA2Nzg0MWUwZjY1NzZjMzU3NjQyMTM4YzQ2
-YTgwOWMzYjc5ZWUxZGEwYzA2YzNkMWVlNWRjMTY2NDNmNGE5MWUyMWMyMGFkMTFmZjZjYmVh
-YWRkMjZhY2ViNWQ2NTMzZDUxZmE3MWY3MWYxMDg5NjA4MWM4ZTRjNjk5NjY0ZDIyNTUwMTNj
-MmQzNjZjZTExNGM3M2E2NDdmMGJiZDRiZWUwODBmNmU1NDQzMDRkODI4NWIwZmFlODkwOWQ0
-ODQ2MWE3ZmUwZGFkNTFiMTczOGMxYTYxZDg1NTcwODRjYmVkZDFlNjBmMjk4ZmFiYjgyMTIy
-MjlmNjk1N2NlNzM3MjNlMmQwNzc4OWE5ZGM4YjQ4NWY3MGRlOGEwYzE0ZGIzNGI3YTYzYzFl
-ZGQzZDExOTJmZjJmYjUwNDFhZjY4ZDAxNWQ3MDYxYzlmNmQ2NTA1MWNlNGY3ZjE0YTY3NTcx
-Y2E5MTM3ZmQ3YzIzOTExYzQ1ZDlkOTExYWNhYmFhN2U2MWNmZDVlNDU2NjA3NjlhOTA0ZWU1
-YTFlZDQ3OWU5N2I3OTY5MzRiMzk4YWFmYTA0MWVhN2UxNGI3NTc0YWUyZWQ0ZTgyYjAyMDAw
-MGU5MTUwMjAwMDBlYjYzZTk0ZjAyMDAwMGViNWNlOTI0MDIwMDAwZTlkMDAwMDAwMGViNTA5
-YzUyZWIwNDk2MmUyNGY0ODFjMjIxMTQwMDAwNTM1NjVlNWI4ZDkyZTM2MDAwMDA1YTlkZTk3
-OTAyMDAwMGU5Y2IwMDAwMDBlOWIwMDEwMDAwZTk4NDAwMDAwMDUzNWJlYjE3ZWIwMjc0YTJl
-YmM2ZTk4NDAxMDAwMGViMDVlOWRjMDIwMDAwZTk5NjAwMDAwMGViZWJlOWUwMDEwMDAwOGRh
-ZWU1MDIwMDAwOWM1MTgxYzE5ZDMwMDAwMDgxZTkzZDFlMDAwMDU5OWRlYjRhZWI2ZTljNTI1
-MDA1ZGE3MTAwMDA4ZDgwZmIyNTAwMDA1ODVhZWIwYTUxNzgyYjM5NTE5MmQ5Y2ViYzAxOWRl
-YmM3ZTkzZDAyMDAwMGViMGFhY2Y4Y2EzZTJmOTY2MTRiZThiM2U5OGEwMTAwMDBlOWNmMDAw
-MDAwZWI2OGViMzdlOTUxMDEwMDAwZTk2YjAxMDAwMDZiYzkwMGU5YTUwMDAwMDBlOTZhMDEw
-MDAwZTk2Y2ZmZmZmZmU5NDQwMjAwMDBlOWM1MDEwMDAwZTk2ZTAxMDAwMGU5MzQwMTAwMDBl
-OTRjMDEwMDAwZWIyOGU5ZDEwMDAwMDBlOTYwZmZmZmZmOTBlOWU2MDEwMDAwZTk0MmZmZmZm
-ZmViYjBlOTAzZmZmZmZmZTk3YjAxMDAwMGU5MTgwMTAwMDBlYjYwZTljZjAwMDAwMGViNzk2
-OWM5ZGQwNjU1MjRlYmI4OWM1MzgxYzM1MTA2MDAwMDgxZWI3MjQ2MDAwMDgxZWJmZTExMDAw
-MDViNTA1ODlkNTA1ODljNTdlYjBiZDgxYWIwYTdhMzNmZjQ3MzZlNTc1ZjUxODFlZmM1MTUw
-MDAwOGQ4ZjEwMWIwMDAwOGRiOWQxNmQwMDAwNTk1ZjlkZTk2ZjAxMDAwMGU5NGEwMTAwMDBl
-YmFkZTk3OWZmZmZmZjkwZTlkZGZlZmZmZmViNjZlOThiMDAwMDAwZTk2Y2ZmZmZmZmU5ODFm
-ZWZmZmZlOTIwMDEwMDAwZTliYTAwMDAwMGU5MzNmZmZmZmZlYjQxOWM1NjUxOGQ4OTBmNTEw
-MDAwOGRiNjEwMjEwMDAwOGQ4OWJhMjYwMDAwODFlZTAzM2MwMDAwNTk1ZTlkZTk2ODAxMDAw
-MGViMWNlYjc0ZTllZjAwMDAwMDM5ZWVlOTY0MDEwMDAwZWIzZGViN2NlOTNiZmZmZmZmZTlk
-MGZlZmZmZmU5ZDlmZWZmZmZlOWE5MDAwMDAwZWIyM2ViNTNlOWMwMDAwMDAwZTllN2ZlZmZm
-ZjljNTA1MDhkODBkMTA3MDAwMDJkZmQzMDAwMDA4ZDgwMWUzYjAwMDA1ODU4OWRlYjBjZWIw
-ZmU5YzJmZWZmZmZlOTdiZmVmZmZmZTk4NzAwMDAwMDVlODFjNjQ1MDMwMDAwZTk4MmZlZmZm
-ZjMxMGVlOTAwZmVmZmZmZTlhYzAwMDAwMGU5MDJmZWZmZmZlYmVkZTkxYmZlZmZmZjUyNWFl
-OWJhZmVmZmZmZTljZGZlZmZmZjgxYzEzNzk1Njc1YzljNTc1MTUxODFlOWQ1N2YwMDAwODFj
-NzIzNTQwMDAwOGRiOTg1MGIwMDAwOGQ4OTJlMDEwMDAwODFjMTI0MjcwMDAwODFlOTg5NDUw
-MDAwNTk1OTVmOWQ5MGU5NTZmZmZmZmZlYmFlZTkzNWZmZmZmZjUzNWJlOTc3ZmZmZmZmNTc1
-ZmU5MTZmZWZmZmZlOTZiZmZmZmZmZTk2ZmZlZmZmZjgzYzYwNGU5MGNmZmZmZmZlYjc3ZWJm
-NGU5MTFmZWZmZmZlOTBjZmZmZmZmZWI1MzljNTY1MzhkOWVlZjY0MDAwMDgxZWVhNjM2MDAw
-MDkwOGRiMzIyM2EwMDAwNWI1ZTlkZWJiMGU5MDlmZmZmZmZlOWUwZmVmZmZmZWJkMjljNTM4
-MWViMjI1NjAwMDA4ZDliNjE1YTAwMDA4MWMzMjEzZTAwMDA4MWMzNmE3YzAwMDA4MWMzYjYz
-ZTAwMDA4MWViNmE1ZTAwMDA1YjlkNTA1ODUzNWJlOTVmZmVmZmZmZTlmYWZlZmZmZmViYmNl
-YjAzOTA5ZDE0ZTkyOGZmZmZmZmU5MjFmZGZmZmY1NjVlZTliYWZkZmZmZjBmODJlM2ZkZmZm
-ZmI2NzllNzVlYjJhZjdkYzRlMTZkZDgxMDc0ZDM4NjBhNWJhMTdkMTBjNmQ0MTY1MTI1OGUx
-N2M0MjgzNzQ5ZGViZjJhYTA2MGYyZmI1YzNiYTllOTYxNDk3OGMyNjI2YzExOGE3Mzk4Zjkx
-YjIwNTI1MzhjMzJhZGQ5ZDA3Y2ExNDc5NTViY2ZlNzY5ZGFiNzFlNzkzZjUxYTA3YzBkNTkx
-OGVjZmIzN2I0MmQ0ZGYyM2NlYjFkMjY3ODQ4M2IxOWI3ODQ3ZTIxOGU4MDFiYjk1MDllMDdi
-ODAxYmQxZjI5MjA4NmVmZDcxMGYzZWMxZGZkZWE4NDVkYzgxNjk1MDE1N2U0OWZjNDVhZGRi
-NDUyMDEzYmU1MjYxNGNhMDI4NDdiNGQ4MDJiNjZhYjg4ZTA0NTEyZjZiMmM4NDllYWZhZGY2
-NTY3ZjhiYTZiZGYzY2M5NWY1ZDVhYmNhMTc3NGM4M2U5ZTIzMzRlZmZjYjcyOGQ2MTI5NDBm
-MGYxNGM0OGI3ZjkzZTdjMjIwNWQ3ZjVlM2NmNjJkNjI5MmI1Y2NmZTU2MmNjZTZjOTNlYTZi
-YWQ1MmNlYzMwNGEwYjU0ZDY5OGVhN2IxM2ViOTU3OWE2MWYzY2UwZDI1YjU5NGEwYTQ1ZDYz
-OGI5MWU1ZmM4NzUxMWZmNDNmMTQwYjU0YjkyNzdmOTQyMTBmMjBlYWYxNzIxZjczYjM3YjQ5
-ZDE2Nzk5YmQ5OTZiMTA2NTg2NDUxNjVkYmU3ZGM2OGI5NWFhY2ZmMjk4YWJiNWEyMDM3ZjZl
-OTAxZDdjODVjYTA5NjcyYTMwZjQ5NmRlZWY1Zjc4ZWFkMWFiNGE1OTAzOTVkZGY4N2E5ZmI4
-YWMyOTVkOTdhYjEzNWVkMjQwNGJkMGFlMGFiMDcyOGExZDZkYmNkZjJmNThjMzljN2I4ZmFi
-NjA5MGYyZTU4ZGUyYTViMTA3Zjc5YmE1ZmM2YWMyNDY5YzhiM2VmZmRmMmJlNWMwMTU1M2Qx
-MjM0MmFlMGM5OGVhYTk3Nzk5NTA0OTI3ZTM2YjE0MWJhMzQ4NzQ0ZTRhYjcwZmNjYzdkMWJk
-MjFjYTIxOWYwODEzYTcyNmU1YzA2ODk0YzJjOGM2ZDZlYjQyOWEzMDk5OWQ3ZmUyYzBmNDBl
-MmMzYzEzZDYzZWIwZDZhNTQ5ZGVkMzMxZTU1MjQ1ZWYzYTdhYTc5MGNlZjkwMWVlNWQzYTky
-MWIyMjk4MGYzNDFjOTNlMDRlMjFjOGM5YmNlN2Y5YjBjZTczMmY0ZmNmOTQ1OTUyNzhhZWU1
-MDk2NDY0OTdmZTZkODRjMGEwMjgwYmEzNDY1MDUzMTFlOTFjNTJlMDNjZDFmNTZjMGM1ZDU2
-Nzk3ZWUwYzI3YmU5OTAxNjEwOWI0OTk3N2FhYTU5MmM5NmM2YTk1MTcyMDgxNTJhOTEwMjlj
-Y2E4MTliMGViNGI0NjJiNGU4MmJlY2JiYjI5ZDhlNDVlYjhkODAwZDNjNzVmYzU2YzJmMzRl
-ZDAxOTlhM2NmYmRkMjk1MGQzZDQ0OWRmODUwMDQ3YWM5NjI4YmI4YmZiOWM3MTkzZTM5Zjhj
-MjJiMWM0YzAxZWZlNWI2ZmFkYWI0YzNhMDZjMzBhNDE3M2QyZjViMTQxOTY5M2FiMTM3YmEy
-ZTM4OTRjN2YyMTFlNDUwMzZlYmM0Y2Y3NTY2MjNjNDc2YWFkYzJkZjNjZDYwZmFlZTIwYzQx
-NWY5MDQ0YWU4NDQyZDdjMDJlM2ZlN2M0M2U3ODNjYzg1NDAwNjA4ZDgxOTFiNjU5YjUzYzJh
-YTk2NmRjM2EwOTU2ZDdhNTRiNGNlZTdjNTkxNWNjNWQyYzNkMzFlYTVkOTQ1N2VkNDM5ZmJh
-NDhmNjQzNDJlNGNhNmU5YzhmMjdiOWNjMDMzYzBlMDJkZWNlM2UwNTdkZTlmYjIzNjgxZTRl
-YTc4YmNkZDVjZTVmYzdhMzViZTYwMTQwYTlmMTUwZjMyMDAwMDAwMDB9XG9ianVwZGF0ZTk4
-MzkwMTk3Mn19
+Now I am writing to you in respect of the amount which I have been able to send to you through our International United Nations accredited and approved Diplomat, who has arrived Africa, I want you to know that the diplomat would deliver the funds which I have packaged as a diplomatic compensation to you and the amount in the consignment is  $10,000,000.00 United State Dollars.
 
-------=_NextPart_000_0012_6FB0F2D6.4CF584E5--
+I did not disclose the contents to the diplomat, but I told him that it is your compensation from the Auditing Corporate Governance and Stewardship, Auditing and Assurance Standards Board. I want you to know that these funds would help with your financial status as I have seen in records that you have spent a lot trying to receive these funds and I am not demanding so much from you but only 30% for my stress and logistics.
+
+I would like you to get back to me with your personal contact details, so that I can give you the contact information's of the diplomat who has arrived Africa and has been waiting to get your details so that he can proceed with the delivery to you.
+
+Yours Sincerely,
+Kindly forward your details to: mrdavidibe966@gmail.com
+Mr. David Ibe
+International Auditor,
+Corporate Governance and Stewardship
