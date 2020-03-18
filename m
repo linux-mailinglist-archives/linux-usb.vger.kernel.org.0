@@ -2,152 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E91C1899A2
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2020 11:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3BC1899FE
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2020 11:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727800AbgCRKke (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Mar 2020 06:40:34 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:52656 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727790AbgCRKkd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Mar 2020 06:40:33 -0400
-Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com [10.192.0.17])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id AFCCE40386;
-        Wed, 18 Mar 2020 10:40:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1584528031; bh=upeiXR8A2t1k1/A1io1I4kRG+PaCRERXe0g9i/T/ro4=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=ZootnJ/C+sqVqzottAVjzdXiBSzFJkGVQkN8FNu4JSqCOxbqp1+Na6YaZcBV9p9PB
-         /s3+ONnVmWICxamweb9pem0WvevViBdLiJFswCbpqf4zeSyPVNKJUZEnEvKgUxeUXA
-         6yUGHVOQaBBHB6kAU5ylMEAhZKf3DvxUwPVA2agUaQuDubwWTKwFBPa29lbBQIHMa4
-         Bcfe8wOEnoItqyV5HQcmCQ6n01Nq3MLzFDuoQI34oODI+xQePU10A+JFanCZmqtoXg
-         J1ReSSzRB9YYSgbiJlJ0QXsABmxNLIR4FX60s1tfZJrQX8bjTOpMo/rzIp9xKbV9r1
-         oz5usZxEJHrkg==
-Received: from US01WEHTC3.internal.synopsys.com (us01wehtc3.internal.synopsys.com [10.15.84.232])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id B8584A00B1;
-        Wed, 18 Mar 2020 10:40:27 +0000 (UTC)
-Received: from US01HYBRID2.internal.synopsys.com (10.15.246.24) by
- US01WEHTC3.internal.synopsys.com (10.15.84.232) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Wed, 18 Mar 2020 03:40:20 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (10.202.3.67) by
- mrs.synopsys.com (10.15.246.24) with Microsoft SMTP Server (TLS) id
- 14.3.408.0; Wed, 18 Mar 2020 03:40:19 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NFDLz/fHSkOsBGTfvdXTYciLuZ3hECmOf1VCcml07UOAmEWIcmwEPo63SWb+jdZ87B0aq8LRJ6bLnymVQAoXjGO8k7r1yLjjgvPrXIDAoI9iITDI2anzT98x05fDrFPt+lS+NvtMs7VTZrA1AQ/a5Ed58yZJuALTVk28Wy6A8XLFa7WOhRR2dpbgEQf3SxDh4u4MmTX5Iu5Cq7tiLK7b2Q0WaYkVrdG/VlTyHjW2hx+kHYESN4b8lsT0eegITQqN7IFS3+JS8zrUWxvP+v4DLlXy0IeUU6q7ctXhbkIm0cmpzPxva06Fx+zRdFnENGG4o6t9Wz6up+QItSPeuPEtWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=upeiXR8A2t1k1/A1io1I4kRG+PaCRERXe0g9i/T/ro4=;
- b=PDLCfSiTCId2bo1DLw31lCLIKSg2K7YIEsHzEc/OvZsspgjqW32aHFwKo8PToEEJVR87zx7vXkWcVdYfNA/HtHHsw6yfXTNCmfkfO5QUZkBEZZg5CBMmjtyggiAL0uTctbyAMhH6uwk31FXTKG4kx0rcJjKFwWHXecgygnrWrj8ZLFybXD6tZ212QtRW8YHENNhS+dAUwgpXWwdq5X2K2Du0NxzVbaBtDE6ySM+O+RFHqRZhe4htUCdzveBfCONo97yon4Lmbnd8lhN435bK7p7uP4YQoQ80Ux60QAWlDkQMq3CJDuh7WGdmDdULHld++AaXDCJtTY8VpLdn4BN3hg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=upeiXR8A2t1k1/A1io1I4kRG+PaCRERXe0g9i/T/ro4=;
- b=P0lJc+rqLE8XAzVKPfepG5gBJNuese8nt3H6vl+PRv+QT8bz4jXt+pU+SGe1rORQZDINmAuoIvwPWuuSv9BO5w1LpGxzvqiIFCIjT1q1fg6pLyDmG85feonvEEs0F6T2C900zIWI9Lvfk5h5lyu34n55nsnzEpppopX+5rd8mE8=
-Received: from SN1PR12MB2557.namprd12.prod.outlook.com (2603:10b6:802:22::15)
- by SN1PR12MB2400.namprd12.prod.outlook.com (2603:10b6:802:2f::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2814.22; Wed, 18 Mar
- 2020 10:40:18 +0000
-Received: from SN1PR12MB2557.namprd12.prod.outlook.com
- ([fe80::4443:6274:1aeb:4c80]) by SN1PR12MB2557.namprd12.prod.outlook.com
- ([fe80::4443:6274:1aeb:4c80%7]) with mapi id 15.20.2835.013; Wed, 18 Mar 2020
- 10:40:17 +0000
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-To:     Dejin Zheng <zhengdejin5@gmail.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "jeffrey.t.kirsher@intel.com" <jeffrey.t.kirsher@intel.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "treding@nvidia.com" <treding@nvidia.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "sergei.shtylyov@cogentembedded.com" 
-        <sergei.shtylyov@cogentembedded.com>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 4/5] usb: dwc2: convert to
- devm_platform_get_and_ioremap_resource
-Thread-Topic: [PATCH v3 4/5] usb: dwc2: convert to
- devm_platform_get_and_ioremap_resource
-Thread-Index: AQHV+tLl/NGJLAQPKkuA5ghKUS2FRahOLZMA
-Date:   Wed, 18 Mar 2020 10:40:17 +0000
-Message-ID: <f39917e0-2ee1-076c-c199-3e728ab063d2@synopsys.com>
-References: <20200315140525.21780-1-zhengdejin5@gmail.com>
- <20200315140525.21780-5-zhengdejin5@gmail.com>
-In-Reply-To: <20200315140525.21780-5-zhengdejin5@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=hminas@synopsys.com; 
-x-originating-ip: [46.162.196.54]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bb4a79d1-7d35-4182-4e0b-08d7cb28c009
-x-ms-traffictypediagnostic: SN1PR12MB2400:
-x-microsoft-antispam-prvs: <SN1PR12MB2400C579B4EABBE71EC6577CA7F70@SN1PR12MB2400.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2399;
-x-forefront-prvs: 03468CBA43
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39860400002)(136003)(366004)(346002)(396003)(376002)(199004)(81166006)(81156014)(4326008)(2906002)(26005)(5660300002)(7416002)(6512007)(66946007)(76116006)(36756003)(6486002)(64756008)(66476007)(66556008)(66446008)(8676002)(91956017)(8936002)(478600001)(186003)(2616005)(110136005)(86362001)(316002)(31696002)(6506007)(53546011)(31686004)(71200400001)(921003)(1121003);DIR:OUT;SFP:1102;SCL:1;SRVR:SN1PR12MB2400;H:SN1PR12MB2557.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
-received-spf: None (protection.outlook.com: synopsys.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Qob8ALxI2FNycyOJ4QTP/N47skZwZ8CIRh6IGw/VaWS6RHTCRu9kigztqS1DZ9wgZ5h8e/pGi31KMqTaBhQSe8DQZXTV51i4wEIETBxNT70f3yUKLJ+hpHsiEtaCOCVRkVKgOxFwqoOFbFbdpYkUz+PCqx6ksMWbvM5Nla/RkRO3kkNCv73JTqWjAqWqwypXcHws+f52q+YTYiy3+dYDAaIByjgr33J4qx8tKINc9dDIgJ2SkHMJuBacM3wptSguZFpocGBOBXvKucVFOxJ5ixYb+V7sy0bmfflOm2qkFAe2k/80wwzMmtB8GxonM060TWr5n69O4NZUpG9nHzWfM1rmHIT2dMvoGX5pX0FNUTue7MIhkATxFPTxlM8gQUGfn+JChMQweN0s21+GPAuvik5pLcaBHphRnjnTzwzTtgbufvC8+gePB+IVKRQs3RxM1kbZe7aqVbayJH114SV12wrw30k+5FP+HoU0tjbbigC53FjY6H7zYLC0MSBv/+2G
-x-ms-exchange-antispam-messagedata: QHWag8hur0RNFg2ETZlPPbFo353ydLhfeNWcD50wV8cLhFqmy7RYbcYmSUekud32LL6cSLAwIKlkoUwCgJ/oVWOpTZNr9AhmwiXkvtIAtbHOMIBT593TIcLe8m6+1rwRbVSXOXaoJSu4wSU6SCNp8Q==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7775985701F06F4D828D8D7AEF0297B1@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1726733AbgCRKym (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Mar 2020 06:54:42 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:44275 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726586AbgCRKyl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Mar 2020 06:54:41 -0400
+Received: by mail-lj1-f193.google.com with SMTP id w4so11741317lji.11;
+        Wed, 18 Mar 2020 03:54:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=T97O9Vqu+LMQpVYQNFGe+EhBOmlbTf9zlZZvS0bG7A0=;
+        b=bqGbAgylY1H2hVTamMQWUpf7ufomDfqBiAXXguioHXdW1rPm9Y6sw/cGHQNg6I+LCI
+         tvQuEoy8ArI2VRKBsX3tNcDH6ZjjcDr4yXk9rL0Fukryr9Ez/c/O811Ndi+5MEwARmqP
+         ZA11Xgj6wOZVGBIvs/djh8SxhKEJa0nvCxNPWM2p/3EiOxzySg9dQglpgmO2AdHVz3v4
+         6gFF+hMJNUsb6adfyoYDmCEaFpr0EgN6CLq7i5LTDaPqu0xvDddifB1inzw4Fn66y7iz
+         h3/FhJhDVpQoC/uuU/oQXHVOmtmbYOovRE6m7Gm39EnUe1cdpdmN4Lq3ob44B/2iahcm
+         hk8A==
+X-Gm-Message-State: ANhLgQ0bp+keWnKcl0NHi1IMl5YMkiD+NPY9G4MUX8ZbQFlUmlkgCAIT
+        2WPjgK79klS+aDM2gH34t4HcFw5A
+X-Google-Smtp-Source: ADFU+vt2B5iZWPf7Zuy33TvJyEKsrN5xS1exSGMr7mDLaY3R4e9VeMku1oq5uA8xSEINCv204LQJ4w==
+X-Received: by 2002:a2e:7401:: with SMTP id p1mr2031473ljc.279.1584528879281;
+        Wed, 18 Mar 2020 03:54:39 -0700 (PDT)
+Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
+        by smtp.gmail.com with ESMTPSA id a13sm4061368ljp.4.2020.03.18.03.54.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Mar 2020 03:54:38 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@kernel.org>)
+        id 1jEWL6-0000bB-De; Wed, 18 Mar 2020 11:54:20 +0100
+Date:   Wed, 18 Mar 2020 11:54:20 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
+Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peter_hong@fintek.com.tw,
+        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+Subject: Re: [PATCH V5 1/1] USB: serial: f81232: Add generator for F81534A
+Message-ID: <20200318105420.GA4905@localhost>
+References: <20200312034431.21407-1-hpeter+linux_kernel@gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: bb4a79d1-7d35-4182-4e0b-08d7cb28c009
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Mar 2020 10:40:17.5880
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: d11puotNg6xfZ4M9MMJ1fSK1SXgGDsEuDc89WGq4Ikt9ao5FdS2qWlfD0YBXN0IivE9NEDaKseaJvFeUqoBWnQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2400
-X-OriginatorOrg: synopsys.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200312034431.21407-1-hpeter+linux_kernel@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQoNCk9uIDMvMTUvMjAyMCA2OjA1IFBNLCBEZWppbiBaaGVuZyB3cm90ZToNCj4gVXNlIGRldm1f
-cGxhdGZvcm1fZ2V0X2FuZF9pb3JlbWFwX3Jlc291cmNlKCkgdG8gc2ltcGxpZnkgY29kZSwgd2hp
-Y2gNCj4gY29udGFpbnMgcGxhdGZvcm1fZ2V0X3Jlc291cmNlKCkgYW5kIGRldm1faW9yZW1hcF9y
-ZXNvdXJjZSgpLCBpdCBhbHNvDQo+IGdldCB0aGUgcmVzb3VyY2UgZm9yIHVzZSBieSB0aGUgZm9s
-bG93aW5nIGNvZGUuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBEZWppbiBaaGVuZyA8emhlbmdkZWpp
-bjVAZ21haWwuY29tPg0KDQpBY2tlZC1ieTogTWluYXMgSGFydXR5dW55YW4gPGhtaW5hc0BzeW5v
-cHN5cy5jb20+DQoNCj4gLS0tDQo+IHYyIC0+IHYzOg0KPiAJLSBjYWxsIHRoZSByZW5hbWUgZnVu
-Y3Rpb24gZGV2bV9wbGF0Zm9ybV9nZXRfYW5kX2lvcmVtYXBfcmVzb3VyY2UoKQ0KPiANCj4gdjEg
-LT4gdjI6DQo+IAktIGFkZCB0aGlzIHBhdGNoIGZvciBhZGQgc29tZSByZWFsIHVzZXJzIG9mIHRo
-aXMgZnVuY3Rpb24uDQo+ICAgDQo+ICAgZHJpdmVycy91c2IvZHdjMi9wbGF0Zm9ybS5jIHwgMyAr
-LS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDIgZGVsZXRpb25zKC0pDQo+
-IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZHdjMi9wbGF0Zm9ybS5jIGIvZHJpdmVycy91
-c2IvZHdjMi9wbGF0Zm9ybS5jDQo+IGluZGV4IDNjNmNlMDlhNmRiNS4uOGE2OGU4OTc0OWQyIDEw
-MDY0NA0KPiAtLS0gYS9kcml2ZXJzL3VzYi9kd2MyL3BsYXRmb3JtLmMNCj4gKysrIGIvZHJpdmVy
-cy91c2IvZHdjMi9wbGF0Zm9ybS5jDQo+IEBAIC0zOTIsOCArMzkyLDcgQEAgc3RhdGljIGludCBk
-d2MyX2RyaXZlcl9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpkZXYpDQo+ICAgCQlyZXR1
-cm4gcmV0dmFsOw0KPiAgIAl9DQo+ICAgDQo+IC0JcmVzID0gcGxhdGZvcm1fZ2V0X3Jlc291cmNl
-KGRldiwgSU9SRVNPVVJDRV9NRU0sIDApOw0KPiAtCWhzb3RnLT5yZWdzID0gZGV2bV9pb3JlbWFw
-X3Jlc291cmNlKCZkZXYtPmRldiwgcmVzKTsNCj4gKwloc290Zy0+cmVncyA9IGRldm1fcGxhdGZv
-cm1fZ2V0X2FuZF9pb3JlbWFwX3Jlc291cmNlKGRldiwgMCwgJnJlcyk7DQo+ICAgCWlmIChJU19F
-UlIoaHNvdGctPnJlZ3MpKQ0KPiAgIAkJcmV0dXJuIFBUUl9FUlIoaHNvdGctPnJlZ3MpOw0KPiAg
-IA0KPiANCg==
+On Thu, Mar 12, 2020 at 11:44:31AM +0800, Ji-Ze Hong (Peter Hong) wrote:
+> The Fintek F81534A series is contains 1 HUB / 1 GPIO device / n UARTs,
+> but the UART is default disable and need enabled by GPIO device(2c42/16F8).
+> 
+> When F81534A plug to host, we can only see 1 HUB & 1 GPIO device and we
+> write 0x8fff to GPIO device register F81534A_CTRL_CMD_ENABLE_PORT(116h)
+> to enable all available serial ports.
+> 
+> Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
+
+Thanks, Ji-Ze. Now applied.
+
+Johan
