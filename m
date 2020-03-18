@@ -2,52 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7201B18984D
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2020 10:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3EE1898F1
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2020 11:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727558AbgCRJpe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Mar 2020 05:45:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45894 "EHLO mail.kernel.org"
+        id S1726933AbgCRKKN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Mar 2020 06:10:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52994 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727501AbgCRJpe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Mar 2020 05:45:34 -0400
+        id S1726733AbgCRKKN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Mar 2020 06:10:13 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 467E220674;
-        Wed, 18 Mar 2020 09:45:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4BF2120768;
+        Wed, 18 Mar 2020 10:10:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584524733;
-        bh=Wnmf77VkkMzkXtn8z7ONwjRsH3ZR1jKlb2R89GHyrd4=;
+        s=default; t=1584526212;
+        bh=NGAukJ+3Nmmxnzl16xW5wI96d5RF3onz8IR/ReVAjHo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X75dTwECBUHcooFp/pWOk0AOc8rwS8tA1AdT7JRFzigmdwsYwGuv49GunzfTa89uz
-         a8ds2f9Te8OXQkaUL82Hl06Of6hpfAH1cJRKqUzkAvazRh/volmalxPG/hXDzFP8pc
-         HStrNDmAJ34DpmIR2zKxt/KLiFt8tWR4TcSR4iKg=
-Date:   Wed, 18 Mar 2020 10:45:31 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [GIT PULL] USB-serial fixes for 5.6-rc7
-Message-ID: <20200318094531.GA2015136@kroah.com>
-References: <20200318084317.GA19665@localhost>
+        b=XcSuvV7Md+YK8Gf6tvrlo7AcBNA2D086+W51Am5qGEnEwuSd92PdqPgVsQrezzgGq
+         lOK8xGEaZuuLtBalvRfUbfB/H0DqXC+3iv/I+2sPzxlYMPQoqpvjvcDlLKsm7GP7/A
+         1/PBA/H50A5hIE5OS9dJOceeunzguK1XBoWlWJKY=
+Date:   Wed, 18 Mar 2020 11:10:10 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Dejin Zheng <zhengdejin5@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Winkler, Tomas" <tomas.winkler@intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/5] drivers: provide
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <20200318101010.GA2061266@kroah.com>
+References: <20200315140525.21780-1-zhengdejin5@gmail.com>
+ <20200315140525.21780-2-zhengdejin5@gmail.com>
+ <20200317192051.GA1520272@kroah.com>
+ <CAMuHMdVK0Gpw6A=CfF+5nw4hHz9UCtSoXwF9_UThAK4E+mQBWg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200318084317.GA19665@localhost>
+In-Reply-To: <CAMuHMdVK0Gpw6A=CfF+5nw4hHz9UCtSoXwF9_UThAK4E+mQBWg@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 18, 2020 at 09:43:17AM +0100, Johan Hovold wrote:
-> The following changes since commit 2c523b344dfa65a3738e7039832044aa133c75fb:
+On Tue, Mar 17, 2020 at 08:35:16PM +0100, Geert Uytterhoeven wrote:
+> Hi Greg,
 > 
->   Linux 5.6-rc5 (2020-03-08 17:44:44 -0700)
+> On Tue, Mar 17, 2020 at 8:20 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > On Sun, Mar 15, 2020 at 10:05:21PM +0800, Dejin Zheng wrote:
+> > > Since commit "drivers: provide devm_platform_ioremap_resource()",
+> > > it was wrap platform_get_resource() and devm_ioremap_resource() as
+> > > single helper devm_platform_ioremap_resource(). but now, many drivers
+> > > still used platform_get_resource() and devm_ioremap_resource()
+> > > together in the kernel tree. The reason can not be replaced is they
+> > > still need use the resource variables obtained by platform_get_resource().
+> > > so provide this helper.
+> > >
+> > > Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > > Suggested-by: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+> > > Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+> > > ---
+> > > v2 -> v3:
+> > >       - rename the function to
+> > >         devm_platform_get_and_ioremap_resource() by Sergei's suggestion.
+> > >       - make the last parameter res as optional by Geert's suggestion.
+> > >
+> > > v1 -> v2:
+> > >       - No change.
+> > >
+> > >  drivers/base/platform.c         | 22 ++++++++++++++++++++++
+> > >  include/linux/platform_device.h |  3 +++
+> > >  2 files changed, 25 insertions(+)
+> > >
+> > > diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+> > > index 7fa654f1288b..9f6a78f79235 100644
+> > > --- a/drivers/base/platform.c
+> > > +++ b/drivers/base/platform.c
+> > > @@ -62,6 +62,28 @@ struct resource *platform_get_resource(struct platform_device *dev,
+> > >  EXPORT_SYMBOL_GPL(platform_get_resource);
+> > >
+> > >  #ifdef CONFIG_HAS_IOMEM
+> > > +/**
+> > > + * devm_platform_get_and_ioremap_resource - call devm_ioremap_resource() for a
+> > > + *                                       platform device and get resource
+> > > + *
+> > > + * @pdev: platform device to use both for memory resource lookup as well as
+> > > + *        resource management
+> > > + * @index: resource index
+> > > + * @res: get the resource
+> > > + */
+> > > +void __iomem *
+> > > +devm_platform_get_and_ioremap_resource(struct platform_device *pdev,
+> > > +                             unsigned int index, struct resource **res)
+> > > +{
+> > > +     struct resource *r;
+> > > +
+> > > +     r = platform_get_resource(pdev, IORESOURCE_MEM, index);
+> > > +     if (res)
+> > > +             *res = r;
+> >
+> > What happens if that call fails?  Shouldn't that be checked?
 > 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.6-rc7
+> Then devm_ioremap_resource() will print an error message, and return
+> an error.
+> It's designed to be pipelined that way, so you have to check for an error
+> only once.
 
-Pulled and pushed out, thanks.
+Ok, thanks.  Can I get an ack/reviewed-by for this series then?
+
+thanks,
 
 greg k-h
