@@ -2,443 +2,277 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C28518A83A
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2020 23:31:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D77D18A853
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2020 23:38:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727163AbgCRWbk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Mar 2020 18:31:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49990 "EHLO mail.kernel.org"
+        id S1727231AbgCRWiK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Mar 2020 18:38:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52118 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726776AbgCRWbk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Mar 2020 18:31:40 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726619AbgCRWiJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Mar 2020 18:38:09 -0400
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 372A220754;
-        Wed, 18 Mar 2020 22:31:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6F0A3208D6;
+        Wed, 18 Mar 2020 22:38:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584570698;
-        bh=LNyvQjscnCJtpeGddOeGGKGQD6+k3gOjSe2WMRiOUQY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=eXUI9HQiQ8XaTg68pP9Qnja3pTRnFlnrL163PG/dcv4Hv+fnfjjPtzoW7xI2jGnyq
-         vZIJr6ilHEFWbqLC8cdg3UGZmFPv4KO2C2rB9uHW/P8eXa7mNBkdACFGLw4w+TyW3S
-         X93dWEV+LbapEq347UPjuuLxgYWealahp7eo0kQI=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 058D4352275A; Wed, 18 Mar 2020 15:31:38 -0700 (PDT)
-Date:   Wed, 18 Mar 2020 15:31:38 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [patch V2 08/15] Documentation: Add lock ordering and nesting
- documentation
-Message-ID: <20200318223137.GW3199@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200318204302.693307984@linutronix.de>
- <20200318204408.211530902@linutronix.de>
+        s=default; t=1584571087;
+        bh=h2tPbIwaFRFhQaSi75kDBvH4/tYSSRHaaEn6nhZmdr0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kRfNA+9TdnyBzO10nx07GysVFZDKOEyZXyN8sBPtBgPClUs4D1pLwH1u86QGHRVLI
+         VhUv0WyTisoDnDbPIwbBadfuS+0br3IgNJYuxEyNep50K1HIzxTFFk4DSvdoP4Cc0a
+         lMfsOmO1OAURjbaxeaLs+C5fAoANSbhjfQwAzweA=
+Received: by mail-qt1-f171.google.com with SMTP id i26so154650qtq.8;
+        Wed, 18 Mar 2020 15:38:07 -0700 (PDT)
+X-Gm-Message-State: ANhLgQ1e37ELRDgpPS1nBHSGnpkzOYv2pzVidmM0gJBYMfBJOmpFX0W0
+        pDr4IxegCI+qzH9NqQ7O6GthVxvMxUIq/IuRoA==
+X-Google-Smtp-Source: ADFU+vvinsamjh03SlRMcAjEI9q54HjLWIwQqxaVLevloh2bB0C7//yNJi1GoxR+dLv32cxF/ysQBxwkILHfmpn8xBI=
+X-Received: by 2002:ac8:59:: with SMTP id i25mr5558qtg.110.1584571086256; Wed,
+ 18 Mar 2020 15:38:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200318204408.211530902@linutronix.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20200317093922.20785-1-lkundrak@v3.sk> <20200317093922.20785-20-lkundrak@v3.sk>
+In-Reply-To: <20200317093922.20785-20-lkundrak@v3.sk>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Wed, 18 Mar 2020 16:37:55 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqK-z+yx6vMv_vUCc-QCigDnN8K3zPkbWM_CgXj02FGY2w@mail.gmail.com>
+Message-ID: <CAL_JsqK-z+yx6vMv_vUCc-QCigDnN8K3zPkbWM_CgXj02FGY2w@mail.gmail.com>
+Subject: Re: [PATCH 19/28] dt-bindings: mmc: Convert sdhci-pxa to json-schema
+To:     Lubomir Rintel <lkundrak@v3.sk>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 18, 2020 at 09:43:10PM +0100, Thomas Gleixner wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
-> 
-> The kernel provides a variety of locking primitives. The nesting of these
-> lock types and the implications of them on RT enabled kernels is nowhere
-> documented.
-> 
-> Add initial documentation.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+On Tue, Mar 17, 2020 at 3:40 AM Lubomir Rintel <lkundrak@v3.sk> wrote:
+>
+> Convert the sdhci-pxa binding to DT schema format using json-schema.
 
-Mostly native-English-speaker services below, so please feel free to
-ignore.  The one place I made a substantive change, I marked it "@@@".
-I only did about half of this document, but should this prove useful,
-I will do the other half later.
+Ignore what my bot said, I see you addressed that earlier in the series.
 
-							Thanx, Paul
-
+> At the same time, fix a couple of issues with the examples discovered by
+> the validation tool -- a semicolon instead of a comma and wrong node names.
+>
+> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 > ---
-> V2: Addressed review comments from Randy
-> ---
->  Documentation/locking/index.rst     |    1 
->  Documentation/locking/locktypes.rst |  298 ++++++++++++++++++++++++++++++++++++
->  2 files changed, 299 insertions(+)
->  create mode 100644 Documentation/locking/locktypes.rst
-> 
-> --- a/Documentation/locking/index.rst
-> +++ b/Documentation/locking/index.rst
-> @@ -7,6 +7,7 @@ locking
->  .. toctree::
->      :maxdepth: 1
->  
-> +    locktypes
->      lockdep-design
->      lockstat
->      locktorture
+>  .../devicetree/bindings/mmc/sdhci-pxa.txt     |  50 ---------
+>  .../devicetree/bindings/mmc/sdhci-pxa.yaml    | 101 ++++++++++++++++++
+>  2 files changed, 101 insertions(+), 50 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/mmc/sdhci-pxa.txt
+>  create mode 100644 Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-pxa.txt b/Documentation/devicetree/bindings/mmc/sdhci-pxa.txt
+> deleted file mode 100644
+> index 3d1b449d6097d..0000000000000
+> --- a/Documentation/devicetree/bindings/mmc/sdhci-pxa.txt
+> +++ /dev/null
+> @@ -1,50 +0,0 @@
+> -* Marvell sdhci-pxa v2/v3 controller
+> -
+> -This file documents differences between the core properties in mmc.txt
+> -and the properties used by the sdhci-pxav2 and sdhci-pxav3 drivers.
+> -
+> -Required properties:
+> -- compatible: Should be "mrvl,pxav2-mmc", "mrvl,pxav3-mmc" or
+> -  "marvell,armada-380-sdhci".
+> -- reg:
+> -  * for "mrvl,pxav2-mmc" and "mrvl,pxav3-mmc", one register area for
+> -    the SDHCI registers.
+> -
+> -  * for "marvell,armada-380-sdhci", three register areas. The first
+> -    one for the SDHCI registers themselves, the second one for the
+> -    AXI/Mbus bridge registers of the SDHCI unit, the third one for the
+> -    SDIO3 Configuration register
+> -- reg names: should be "sdhci", "mbus", "conf-sdio3". only mandatory
+> -  for "marvell,armada-380-sdhci"
+> -- clocks: Array of clocks required for SDHCI; requires at least one for
+> -    I/O clock.
+> -- clock-names: Array of names corresponding to clocks property; shall be
+> -    "io" for I/O clock and "core" for optional core clock.
+> -
+> -Optional properties:
+> -- mrvl,clk-delay-cycles: Specify a number of cycles to delay for tuning.
+> -
+> -Example:
+> -
+> -sdhci@d4280800 {
+> -       compatible = "mrvl,pxav3-mmc";
+> -       reg = <0xd4280800 0x800>;
+> -       bus-width = <8>;
+> -       interrupts = <27>;
+> -       clocks = <&chip CLKID_SDIO1XIN>, <&chip CLKID_SDIO1>;
+> -       clock-names = "io", "core";
+> -       non-removable;
+> -       mrvl,clk-delay-cycles = <31>;
+> -};
+> -
+> -sdhci@d8000 {
+> -       compatible = "marvell,armada-380-sdhci";
+> -       reg-names = "sdhci", "mbus", "conf-sdio3";
+> -       reg = <0xd8000 0x1000>,
+> -               <0xdc000 0x100>;
+> -               <0x18454 0x4>;
+> -       interrupts = <0 25 0x4>;
+> -       clocks = <&gateclk 17>;
+> -       clock-names = "io";
+> -       mrvl,clk-delay-cycles = <0x1F>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml b/Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml
+> new file mode 100644
+> index 0000000000000..4ae0926ac294f
 > --- /dev/null
-> +++ b/Documentation/locking/locktypes.rst
-> @@ -0,0 +1,298 @@
-> +.. _kernel_hacking_locktypes:
+> +++ b/Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml
+> @@ -0,0 +1,101 @@
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mmc/sdhci-pxa.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +==========================
-> +Lock types and their rules
-> +==========================
+> +title: Marvell PXA SDHCI v2/v3 bindings
 > +
-> +Introduction
-> +============
+> +maintainers:
+> +  - devicetree@vger.kernel.org
 > +
-> +The kernel provides a variety of locking primitives which can be divided
-> +into two categories:
-> +
-> + - Sleeping locks
-> + - Spinning locks
-> +
-> +This document describes the lock types at least at the conceptual level and
-> +provides rules for nesting of lock types also under the aspect of PREEMPT_RT.
+> +allOf:
+> +  - $ref: mmc-controller.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: marvell,armada-380-sdhci
+> +    then:
+> +      properties:
+> +        regs:
+> +          minItems: 3
+> +          maxItems: 3
 
-I suggest something like this:
+Here, you just need minItems.
 
-This document conceptually describes these lock types and provides rules
-for their nesting, including the rules for use under PREEMPT_RT.
+> +        reg-names:
+> +          items:
+> +            - const: sdhci
+> +            - const: mbus
+> +            - const: conf-sdio3
 
-> +
-> +Lock categories
-> +===============
-> +
-> +Sleeping locks
-> +--------------
-> +
-> +Sleeping locks can only be acquired in preemptible task context.
-> +
-> +Some of the implementations allow try_lock() attempts from other contexts,
-> +but that has to be really evaluated carefully including the question
-> +whether the unlock can be done from that context safely as well.
-> +
-> +Note that some lock types change their implementation details when
-> +debugging is enabled, so this should be really only considered if there is
-> +no other option.
+This should be under the main definition of 'reg-names' and then just
+'minItems: 3' here.
 
-How about something like this?
+> +      required:
+> +        - reg-names
+> +    else:
+> +      properties:
+> +        regs:
+> +          minItems: 1
+> +          maxItems: 1
 
-Although implementations allow try_lock() from other contexts, it is
-necessary to carefully evaluate the safety of unlock() as well as of
-try_lock().  Furthermore, it is also necessary to evaluate the debugging
-versions of these primitives.  In short, don't acquire sleeping locks
-from other contexts unless there is no other option.
+Just 'maxItems' is sufficient.
 
-> +Sleeping lock types:
+> +        reg-names:
+> +          minItems: 1
+> +          maxItems: 1
 > +
-> + - mutex
-> + - rt_mutex
-> + - semaphore
-> + - rw_semaphore
-> + - ww_mutex
-> + - percpu_rw_semaphore
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mrvl,pxav2-mmc
+> +      - mrvl,pxav3-mmc
+> +      - marvell,armada-380-sdhci
 > +
-> +On a PREEMPT_RT enabled kernel the following lock types are converted to
-> +sleeping locks:
+> +  reg: true
 
-On PREEMPT_RT kernels, these lock types are converted to sleeping locks:
+Here you should have:
 
-> + - spinlock_t
-> + - rwlock_t
-> +
-> +Spinning locks
-> +--------------
-> +
-> + - raw_spinlock_t
-> + - bit spinlocks
-> +
-> +On a non PREEMPT_RT enabled kernel the following lock types are spinning
-> +locks as well:
-
-On non-PREEMPT_RT kernels, these lock types are also spinning locks:
-
-> + - spinlock_t
-> + - rwlock_t
-> +
-> +Spinning locks implicitly disable preemption and the lock / unlock functions
-> +can have suffixes which apply further protections:
-> +
-> + ===================  ====================================================
-> + _bh()                Disable / enable bottom halves (soft interrupts)
-> + _irq()               Disable / enable interrupts
-> + _irqsave/restore()   Save and disable / restore interrupt disabled state
-> + ===================  ====================================================
-> +
-> +
-> +rtmutex
-> +=======
-> +
-> +RT-mutexes are mutexes with support for priority inheritance (PI).
-> +
-> +PI has limitations on non PREEMPT_RT enabled kernels due to preemption and
-> +interrupt disabled sections.
-> +
-> +On a PREEMPT_RT enabled kernel most of these sections are fully
-> +preemptible. This is possible because PREEMPT_RT forces most executions
-> +into task context, especially interrupt handlers and soft interrupts, which
-> +allows to substitute spinlock_t and rwlock_t with RT-mutex based
-> +implementations.
-
-PI clearly cannot preempt preemption-disabled or interrupt-disabled
-regions of code, even on PREEMPT_RT kernels.  Instead, PREEMPT_RT kernels
-execute most such regions of code in preemptible task context, especially
-interrupt handlers and soft interrupts.  This conversion allows spinlock_t
-and rwlock_t to be implemented via RT-mutexes.
+minItems: 1
+maxItems: 3
 
 > +
-> +raw_spinlock_t and spinlock_t
-> +=============================
+> +  reg-names: true
 > +
-> +raw_spinlock_t
-> +--------------
+> +  interrupts:
+> +    maxItems: 1
 > +
-> +raw_spinlock_t is a strict spinning lock implementation regardless of the
-> +kernel configuration including PREEMPT_RT enabled kernels.
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 2
 > +
-> +raw_spinlock_t is to be used only in real critical core code, low level
-> +interrupt handling and places where protecting (hardware) state is required
-> +to be safe against preemption and eventually interrupts.
+> +  clock-names:
+> +    minItems: 1
+> +    maxItems: 2
+> +    items:
+> +      - const: io
+> +      - const: core
 > +
-> +Another reason to use raw_spinlock_t is when the critical section is tiny
-> +to avoid the overhead of spinlock_t on a PREEMPT_RT enabled kernel in the
-> +contended case.
+> +  mrvl,clk-delay-cycles:
+> +    description: Specify a number of cycles to delay for tuning.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
 
-raw_spinlock_t is a strict spinning lock implementation in all kernels,
-including PREEMPT_RT kernels.  Use raw_spinlock_t only in real critical
-core code, low level interrupt handling and places where disabling
-preemption or interrupts is required, for example, to safely access
-hardware state.  raw_spinlock_t can sometimes also be used when the
-critical section is tiny and the lock is lightly contended, thus avoiding
-RT-mutex overhead.
+No range of valid values?
 
-@@@  I added the point about the lock being lightly contended.
-
-> +spinlock_t
-> +----------
 > +
-> +The semantics of spinlock_t change with the state of CONFIG_PREEMPT_RT.
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
 > +
-> +On a non PREEMPT_RT enabled kernel spinlock_t is mapped to raw_spinlock_t
-> +and has exactly the same semantics.
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/berlin2.h>
+> +    mmc@d4280800 {
+> +        compatible = "mrvl,pxav3-mmc";
+> +        reg = <0xd4280800 0x800>;
+> +        bus-width = <8>;
+> +        interrupts = <27>;
+> +        clocks = <&chip CLKID_SDIO1XIN>, <&chip CLKID_SDIO1>;
+> +        clock-names = "io", "core";
+> +        non-removable;
+> +        mrvl,clk-delay-cycles = <31>;
+> +    };
+> +  - |
+> +    mmc@d8000 {
+> +        compatible = "marvell,armada-380-sdhci";
+> +        reg-names = "sdhci", "mbus", "conf-sdio3";
+> +        reg = <0xd8000 0x1000>,
+> +              <0xdc000 0x100>,
+> +              <0x18454 0x4>;
+> +        interrupts = <0 25 0x4>;
+> +        clocks = <&gateclk 17>;
+> +        clock-names = "io";
+> +        mrvl,clk-delay-cycles = <0x1F>;
+> +    };
 > +
-> +spinlock_t and PREEMPT_RT
-> +-------------------------
-> +
-> +On a PREEMPT_RT enabled kernel spinlock_t is mapped to a separate
-> +implementation based on rt_mutex which changes the semantics:
-> +
-> + - Preemption is not disabled
-> +
-> + - The hard interrupt related suffixes for spin_lock / spin_unlock
-> +   operations (_irq, _irqsave / _irqrestore) do not affect the CPUs
-                                                                  CPU's
-> +   interrupt disabled state
-> +
-> + - The soft interrupt related suffix (_bh()) is still disabling the
-> +   execution of soft interrupts, but contrary to a non PREEMPT_RT enabled
-> +   kernel, which utilizes the preemption count, this is achieved by a per
-> +   CPU bottom half locking mechanism.
-
- - The soft interrupt related suffix (_bh()) still disables softirq
-   handlers.  However, unlike non-PREEMPT_RT kernels (which disable
-   preemption to get this effect), PREEMPT_RT kernels use a per-CPU
-   per-bottom-half locking mechanism.
-
-> +All other semantics of spinlock_t are preserved:
-> +
-> + - Migration of tasks which hold a spinlock_t is prevented. On a non
-> +   PREEMPT_RT enabled kernel this is implicit due to preemption disable.
-> +   PREEMPT_RT has a separate mechanism to achieve this. This ensures that
-> +   pointers to per CPU variables stay valid even if the task is preempted.
-> +
-> + - Task state preservation. The task state is not affected when a lock is
-> +   contended and the task has to schedule out and wait for the lock to
-> +   become available. The lock wake up restores the task state unless there
-> +   was a regular (not lock related) wake up on the task. This ensures that
-> +   the task state rules are always correct independent of the kernel
-> +   configuration.
-> +
-> +rwlock_t
-> +========
-> +
-> +rwlock_t is a multiple readers and single writer lock mechanism.
-> +
-> +On a non PREEMPT_RT enabled kernel rwlock_t is implemented as a spinning
-> +lock and the suffix rules of spinlock_t apply accordingly. The
-> +implementation is fair and prevents writer starvation.
-> +
-> +rwlock_t and PREEMPT_RT
-> +-----------------------
-> +
-> +On a PREEMPT_RT enabled kernel rwlock_t is mapped to a separate
-> +implementation based on rt_mutex which changes the semantics:
-> +
-> + - Same changes as for spinlock_t
-> +
-> + - The implementation is not fair and can cause writer starvation under
-> +   certain circumstances. The reason for this is that a writer cannot grant
-> +   its priority to multiple readers. Readers which are blocked on a writer
-> +   fully support the priority inheritance protocol.
-> +
-> +
-> +PREEMPT_RT caveats
-> +==================
-> +
-> +spinlock_t and rwlock_t
-> +-----------------------
-> +
-> +The substitution of spinlock_t and rwlock_t on PREEMPT_RT enabled kernels
-> +with RT-mutex based implementations has a few implications.
-> +
-> +On a non PREEMPT_RT enabled kernel the following code construct is
-> +perfectly fine::
-> +
-> +   local_irq_disable();
-> +   spin_lock(&lock);
-> +
-> +and fully equivalent to::
-> +
-> +   spin_lock_irq(&lock);
-> +
-> +Same applies to rwlock_t and the _irqsave() suffix variant.
-> +
-> +On a PREEMPT_RT enabled kernel this breaks because the RT-mutex
-> +substitution expects a fully preemptible context.
-> +
-> +The preferred solution is to use :c:func:`spin_lock_irq()` or
-> +:c:func:`spin_lock_irqsave()` and their unlock counterparts.
-> +
-> +PREEMPT_RT also offers a local_lock mechanism to substitute the
-> +local_irq_disable/save() constructs in cases where a separation of the
-> +interrupt disabling and the locking is really unavoidable. This should be
-> +restricted to very rare cases.
-> +
-> +
-> +raw_spinlock_t
-> +--------------
-> +
-> +Locking of a raw_spinlock_t disables preemption and eventually interrupts.
-> +Therefore code inside the critical region has to be careful to avoid calls
-> +into code which takes a regular spinlock_t or rwlock_t. A prime example is
-> +memory allocation.
-> +
-> +On a non PREEMPT_RT enabled kernel the following code construct is
-> +perfectly fine code::
-> +
-> +  raw_spin_lock(&lock);
-> +  p = kmalloc(sizeof(*p), GFP_ATOMIC);
-> +
-> +On a PREEMPT_RT enabled kernel this breaks because the memory allocator is
-> +fully preemptible and therefore does not support allocations from truly
-> +atomic contexts.
-> +
-> +Contrary to that the following code construct is perfectly fine on
-> +PREEMPT_RT as spin_lock() does not disable preemption::
-> +
-> +  spin_lock(&lock);
-> +  p = kmalloc(sizeof(*p), GFP_ATOMIC);
-> +
-> +Most places which use GFP_ATOMIC allocations are safe on PREEMPT_RT as the
-> +execution is forced into thread context and the lock substitution is
-> +ensuring preemptibility.
-> +
-> +
-> +bit spinlocks
-> +-------------
-> +
-> +Bit spinlocks are problematic for PREEMPT_RT as they cannot be easily
-> +substituted by an RT-mutex based implementation for obvious reasons.
-> +
-> +The semantics of bit spinlocks are preserved on a PREEMPT_RT enabled kernel
-> +and the caveats vs. raw_spinlock_t apply.
-> +
-> +Some bit spinlocks are substituted by regular spinlock_t for PREEMPT_RT but
-> +this requires conditional (#ifdef'ed) code changes at the usage side while
-> +the spinlock_t substitution is simply done by the compiler and the
-> +conditionals are restricted to header files and core implementation of the
-> +locking primitives and the usage sites do not require any changes.
-> +
-> +
-> +Lock type nesting rules
-> +=======================
-> +
-> +The most basic rules are:
-> +
-> +  - Lock types of the same lock category (sleeping, spinning) can nest
-> +    arbitrarily as long as they respect the general lock ordering rules to
-> +    prevent deadlocks.
-> +
-> +  - Sleeping lock types cannot nest inside spinning lock types.
-> +
-> +  - Spinning lock types can nest inside sleeping lock types.
-> +
-> +These rules apply in general independent of CONFIG_PREEMPT_RT.
-> +
-> +As PREEMPT_RT changes the lock category of spinlock_t and rwlock_t from
-> +spinning to sleeping this has obviously restrictions how they can nest with
-> +raw_spinlock_t.
-> +
-> +This results in the following nest ordering:
-> +
-> +  1) Sleeping locks
-> +  2) spinlock_t and rwlock_t
-> +  3) raw_spinlock_t and bit spinlocks
-> +
-> +Lockdep is aware of these constraints to ensure that they are respected.
-> +
-> +
-> +Owner semantics
-> +===============
-> +
-> +Most lock types in the Linux kernel have strict owner semantics, i.e. the
-> +context (task) which acquires a lock has to release it.
-> +
-> +There are two exceptions:
-> +
-> +  - semaphores
-> +  - rwsems
-> +
-> +semaphores have no strict owner semantics for historical reasons. They are
-> +often used for both serialization and waiting purposes. That's generally
-> +discouraged and should be replaced by separate serialization and wait
-> +mechanisms.
-> +
-> +rwsems have grown interfaces which allow non owner release for special
-> +purposes. This usage is problematic on PREEMPT_RT because PREEMPT_RT
-> +substitutes all locking primitives except semaphores with RT-mutex based
-> +implementations to provide priority inheritance for all lock types except
-> +the truly spinning ones. Priority inheritance on ownerless locks is
-> +obviously impossible.
-> +
-> +For now the rwsem non-owner release excludes code which utilizes it from
-> +being used on PREEMPT_RT enabled kernels. In same cases this can be
-> +mitigated by disabling portions of the code, in other cases the complete
-> +functionality has to be disabled until a workable solution has been found.
-> 
+> +...
+> --
+> 2.25.1
+>
