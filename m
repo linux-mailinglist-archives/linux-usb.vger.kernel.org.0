@@ -2,199 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E5C189FEA
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2020 16:46:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E3A18A01A
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2020 17:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726976AbgCRPqe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Mar 2020 11:46:34 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:37148 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726796AbgCRPqb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Mar 2020 11:46:31 -0400
-Received: by mail-pl1-f193.google.com with SMTP id f16so11357283plj.4
-        for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2020 08:46:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DypeU7Qzbc5hLjzSxqWOuJvNNMUy2IqtM3T+YvJ8bnU=;
-        b=B7HsrDmw9iBAgpmjo1xLmNYn8H9RXKql6to2qgZ16z3sEc+IbQCMR88/YqXT1BGFYc
-         5ot5/npMGFoask77Ge+m8tOKTeGHPvUqRxXl+vwPoYokDl0/R6JAHSPJs9vb+iwnyW0z
-         UHNmueVSpquXNT9wY1ybLeS5M97WEloNn7IIjyb8Gi24slJmsUWcyFdbChWUgonSMDP0
-         yzsu7FcbekJ6rZY7BmomrlHp3xSuU6Y/oDr25n5jEx41uf5AaO8q35QPLg/1KnJv0n4f
-         8Ep4X1LmzhVj0r7BvAZ2YXsgyq4dh+iqiZyTRei/vV5FHLn0FjYLCQ1Hb1UQ9AMTLoPp
-         yTGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DypeU7Qzbc5hLjzSxqWOuJvNNMUy2IqtM3T+YvJ8bnU=;
-        b=saRScCx3tbjw4/4zogyFX5xiMgW5RdoVHtFCdjiMAoiANe2vjKU2ILQs+cV3woWcMZ
-         xd0bIANLuN//T/trltzaFgL2miQZvTkg0G0/oBmHuVrhvJN9PqUf30VbqPvVCW7lSZvU
-         iqjPSxUDJ9OcPMoYRGK4LiLLoBI90RbG1e4S0qZCavvwNIau/afn2+WSMgHY/cJLZ+FM
-         AMILaTY8cF5R71xg61Pg4G9ozwOJ0HXe4woWHE6pqtUR9J9avxDmQ5EJ5OwpJBPtxoSR
-         uQfseVTOYNwqKNXHVyE9O/okJPyn0+ltawzw6IRn7NQDIka9bx/rBtgkYHAiIJeOHA3P
-         WX+Q==
-X-Gm-Message-State: ANhLgQ0nsNYEbznyXEhQ0Oc9mVMps6LLUZyh2/eeA9uB7AAS0FzbWLJ6
-        zeUIz5T5f9S/R9m/FI5LgmQnBxNqNtLQSg0nVFfyjA==
-X-Google-Smtp-Source: ADFU+vsH2h5dYlCT1hcYpwYdlU6kJ6SV79e5bGsLof+KJPJj3A/jZ+EPpOfBBL0GKaBUNNL8P2JLinsgWHT9xanJ5vg=
-X-Received: by 2002:a17:902:8c94:: with SMTP id t20mr4328042plo.336.1584546389120;
- Wed, 18 Mar 2020 08:46:29 -0700 (PDT)
+        id S1727168AbgCRQBL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Mar 2020 12:01:11 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:45736 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726817AbgCRQBL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Mar 2020 12:01:11 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1jEb80-0007pL-EG; Wed, 18 Mar 2020 16:01:08 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: cdns3: fix spelling mistake "wrapperr" -> "wrapper"
+Date:   Wed, 18 Mar 2020 16:01:08 +0000
+Message-Id: <20200318160108.267403-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <000000000000f69c3b0587aa1bc5@google.com>
-In-Reply-To: <000000000000f69c3b0587aa1bc5@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 18 Mar 2020 16:46:17 +0100
-Message-ID: <CAAeHK+xSMeJoQsGGgqf4dLig1r36vOpMjKdD+_hL2uPu7HmOKw@mail.gmail.com>
-Subject: Re: KASAN: slab-out-of-bounds Read in hex_string
-To:     syzbot <syzbot+a9fefd18c7b240f19c54@syzkaller.appspotmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 29, 2019 at 2:06 PM syzbot
-<syzbot+a9fefd18c7b240f19c54@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    43151d6c usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan/tree/usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=139ac37f200000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=4183eeef650d1234
-> dashboard link: https://syzkaller.appspot.com/bug?extid=a9fefd18c7b240f19c54
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17f3b338a00000
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+a9fefd18c7b240f19c54@syzkaller.appspotmail.com
->
-> ==================================================================
-> BUG: KASAN: slab-out-of-bounds in hex_string+0x418/0x4b0 lib/vsprintf.c:975
-> Read of size 1 at addr ffff88821a41bd38 by task kworker/0:1/12
->
-> CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.1.0-rc3-319004-g43151d6 #6
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> Workqueue: usb_hub_wq hub_event
-> Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xe8/0x16e lib/dump_stack.c:113
->   print_address_description+0x6c/0x236 mm/kasan/report.c:187
->   kasan_report.cold+0x1a/0x3c mm/kasan/report.c:317
->   hex_string+0x418/0x4b0 lib/vsprintf.c:975
->   pointer+0x460/0x910 lib/vsprintf.c:1985
->   vsnprintf+0x5a0/0x16b0 lib/vsprintf.c:2400
->   pointer+0x60b/0x910 lib/vsprintf.c:2038
->   vsnprintf+0x5a0/0x16b0 lib/vsprintf.c:2400
->   vscnprintf+0x29/0x80 lib/vsprintf.c:2499
->   vprintk_store+0x45/0x4b0 kernel/printk/printk.c:1900
->   vprintk_emit+0x210/0x5a0 kernel/printk/printk.c:1957
->   dev_vprintk_emit+0x50e/0x553 drivers/base/core.c:3185
->   dev_printk_emit+0xbf/0xf6 drivers/base/core.c:3196
->   __dev_printk+0x1ed/0x215 drivers/base/core.c:3208
->   _dev_info+0xdc/0x10e drivers/base/core.c:3254
->   dlfb_parse_vendor_descriptor drivers/video/fbdev/udlfb.c:1532 [inline]
->   dlfb_usb_probe.cold+0xb96/0x1701 drivers/video/fbdev/udlfb.c:1615
->   usb_probe_interface+0x31d/0x820 drivers/usb/core/driver.c:361
->   really_probe+0x2da/0xb10 drivers/base/dd.c:509
->   driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
->   __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
->   bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x223/0x3a0 drivers/base/dd.c:844
->   bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
->   device_add+0xad2/0x16e0 drivers/base/core.c:2106
->   usb_set_configuration+0xdf7/0x1740 drivers/usb/core/message.c:2023
->   generic_probe+0xa2/0xda drivers/usb/core/generic.c:210
->   usb_probe_device+0xc0/0x150 drivers/usb/core/driver.c:266
->   really_probe+0x2da/0xb10 drivers/base/dd.c:509
->   driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
->   __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
->   bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x223/0x3a0 drivers/base/dd.c:844
->   bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
->   device_add+0xad2/0x16e0 drivers/base/core.c:2106
->   usb_new_device.cold+0x537/0xccf drivers/usb/core/hub.c:2534
->   hub_port_connect drivers/usb/core/hub.c:5089 [inline]
->   hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
->   port_event drivers/usb/core/hub.c:5350 [inline]
->   hub_event+0x138e/0x3b00 drivers/usb/core/hub.c:5432
->   process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
->   worker_thread+0x9b/0xe20 kernel/workqueue.c:2415
->   kthread+0x313/0x420 kernel/kthread.c:253
->   ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
->
-> Allocated by task 12:
->   set_track mm/kasan/common.c:87 [inline]
->   __kasan_kmalloc mm/kasan/common.c:497 [inline]
->   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:470
->   kmalloc include/linux/slab.h:552 [inline]
->   usb_get_configuration+0x313/0x32b0 drivers/usb/core/config.c:857
->   usb_enumerate_device drivers/usb/core/hub.c:2367 [inline]
->   usb_new_device+0x2fe/0x450 drivers/usb/core/hub.c:2503
->   hub_port_connect drivers/usb/core/hub.c:5089 [inline]
->   hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
->   port_event drivers/usb/core/hub.c:5350 [inline]
->   hub_event+0x138e/0x3b00 drivers/usb/core/hub.c:5432
->   process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
->   worker_thread+0x9b/0xe20 kernel/workqueue.c:2415
->   kthread+0x313/0x420 kernel/kthread.c:253
->   ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
->
-> Freed by task 1464:
->   set_track mm/kasan/common.c:87 [inline]
->   __kasan_slab_free+0x130/0x180 mm/kasan/common.c:459
->   slab_free_hook mm/slub.c:1429 [inline]
->   slab_free_freelist_hook+0x5e/0x140 mm/slub.c:1456
->   slab_free mm/slub.c:3003 [inline]
->   kfree+0xce/0x290 mm/slub.c:3958
->   single_release+0x91/0xb0 fs/seq_file.c:597
->   __fput+0x2df/0x8c0 fs/file_table.c:278
->   task_work_run+0x149/0x1c0 kernel/task_work.c:113
->   tracehook_notify_resume include/linux/tracehook.h:188 [inline]
->   exit_to_usermode_loop+0x243/0x270 arch/x86/entry/common.c:166
->   prepare_exit_to_usermode arch/x86/entry/common.c:197 [inline]
->   syscall_return_slowpath arch/x86/entry/common.c:268 [inline]
->   do_syscall_64+0x40c/0x4f0 arch/x86/entry/common.c:293
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
->
-> The buggy address belongs to the object at ffff88821a41bd20
->   which belongs to the cache kmalloc-32 of size 32
-> The buggy address is located 24 bytes inside of
->   32-byte region [ffff88821a41bd20, ffff88821a41bd40)
-> The buggy address belongs to the page:
-> page:ffffea00086906c0 count:1 mapcount:0 mapping:ffff88812c3f5800 index:0x0
-> flags: 0x57ff00000000200(slab)
-> raw: 057ff00000000200 dead000000000100 dead000000000200 ffff88812c3f5800
-> raw: 0000000000000000 0000000000550055 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
->
-> Memory state around the buggy address:
->   ffff88821a41bc00: 00 00 00 fc fc fc 00 00 00 00 fc fc 00 00 00 00
->   ffff88821a41bc80: fc fc 00 00 00 00 fc fc fb fb fb fb fc fc fb fb
-> > ffff88821a41bd00: fb fb fc fc 00 00 00 fc fc fc fb fb fb fb fc fc
->                                          ^
->   ffff88821a41bd80: 00 00 00 fc fc fc 00 00 00 fc fc fc fb fb fb fb
->   ffff88821a41be00: fc fc fb fb fb fb fc fc fb fb fb fb fc fc 00 00
-> ==================================================================
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+From: Colin Ian King <colin.king@canonical.com>
 
-#syz dup: KASAN: slab-out-of-bounds Read in dlfb_usb_probe
+There is a spelling mistake in the module description. Fix it.
+
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ drivers/usb/cdns3/cdns3-pci-wrap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/cdns3/cdns3-pci-wrap.c b/drivers/usb/cdns3/cdns3-pci-wrap.c
+index b0a29efe7d31..deeea618ba33 100644
+--- a/drivers/usb/cdns3/cdns3-pci-wrap.c
++++ b/drivers/usb/cdns3/cdns3-pci-wrap.c
+@@ -201,4 +201,4 @@ MODULE_DEVICE_TABLE(pci, cdns3_pci_ids);
+ 
+ MODULE_AUTHOR("Pawel Laszczak <pawell@cadence.com>");
+ MODULE_LICENSE("GPL v2");
+-MODULE_DESCRIPTION("Cadence USBSS PCI wrapperr");
++MODULE_DESCRIPTION("Cadence USBSS PCI wrapper");
+-- 
+2.25.1
+
