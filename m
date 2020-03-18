@@ -2,277 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D77D18A853
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2020 23:38:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A227B18A926
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 00:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727231AbgCRWiK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Mar 2020 18:38:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52118 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726619AbgCRWiJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Mar 2020 18:38:09 -0400
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6F0A3208D6;
-        Wed, 18 Mar 2020 22:38:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584571087;
-        bh=h2tPbIwaFRFhQaSi75kDBvH4/tYSSRHaaEn6nhZmdr0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kRfNA+9TdnyBzO10nx07GysVFZDKOEyZXyN8sBPtBgPClUs4D1pLwH1u86QGHRVLI
-         VhUv0WyTisoDnDbPIwbBadfuS+0br3IgNJYuxEyNep50K1HIzxTFFk4DSvdoP4Cc0a
-         lMfsOmO1OAURjbaxeaLs+C5fAoANSbhjfQwAzweA=
-Received: by mail-qt1-f171.google.com with SMTP id i26so154650qtq.8;
-        Wed, 18 Mar 2020 15:38:07 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ1e37ELRDgpPS1nBHSGnpkzOYv2pzVidmM0gJBYMfBJOmpFX0W0
-        pDr4IxegCI+qzH9NqQ7O6GthVxvMxUIq/IuRoA==
-X-Google-Smtp-Source: ADFU+vvinsamjh03SlRMcAjEI9q54HjLWIwQqxaVLevloh2bB0C7//yNJi1GoxR+dLv32cxF/ysQBxwkILHfmpn8xBI=
-X-Received: by 2002:ac8:59:: with SMTP id i25mr5558qtg.110.1584571086256; Wed,
- 18 Mar 2020 15:38:06 -0700 (PDT)
+        id S1726869AbgCRXU2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Mar 2020 19:20:28 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:37485 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726619AbgCRXU2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Mar 2020 19:20:28 -0400
+Received: by mail-wm1-f67.google.com with SMTP id d1so87969wmb.2;
+        Wed, 18 Mar 2020 16:20:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=YNvgc32Yj8B/ZWFedujmba0NXwHYk4Zaqs+FyfA8qBs=;
+        b=NnYTEH/vji7QJ/cBb1SBkDh3tsEaYb9r/E2AyOjUQ88QLPsAizJjvC5k0PrMHclQrk
+         GB6Mw5pkMn3snPkARWPMsoRyThXTkqfsjpdJ7etrFYrqLECkMmZA8sN4stdoZvy8RHDg
+         MMJ4jgtSzm9yv7ryTAU3xfuvrEIsZZfZShGXPSyt4rOXVejDtXc5SrPSiS9CgdngR7iE
+         mMDLZ8KQ/LCASacwjAXorK1KmymdQRKsCxOFpPuP/9whHVxKmeZAqHBs76LDvB53vt92
+         qVgBL5ZhQEB7WlWGWBBUOBclf6UIAliZ1uTKkHcViSF6fVYzcgddVGwMfiC+5iRf+BY7
+         cIkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=YNvgc32Yj8B/ZWFedujmba0NXwHYk4Zaqs+FyfA8qBs=;
+        b=jXUKphQHG7MWBugb15Q4gVUlDI3KOztFuasXKCplHWpUmZaacxNb3nNVrFzOQUhoEU
+         i3jvmxoTauLaKFme5SFZjZVwKDdO3SWKK5rnD+S7/wyXs30Q8tN9+S5V6wOIkGEv6gvB
+         807UfKLmmR54F63oiYlZ8vaKcsSFZqWztPdZAJQ/gRvnUjqOusBLFLbxY53mXwttJuUI
+         G+1e5ZbZxeZSDbKlVSyysAkQeQ4Cdd/mCgUvPo4PHDcE1A01o5HBxaHgCWh0760ly51l
+         DK1y1JfxSTkYHy5EH+q7y6Xq5LVUoSptGIuIvevEH3X1rOeHo19s2poMOjW/1rozTr6d
+         nj3w==
+X-Gm-Message-State: ANhLgQ38OZtKpd6pqm0KxvWSkip4JSAPxZhL2N4i0GJG1TloiJoJ72LO
+        wz2PhAdNtYu0B9VZ8HClD/5AQFbj
+X-Google-Smtp-Source: ADFU+vvFamwi0x2RLmnTMOcPWCZYogHZ/mH/TzgVKwbxYHLdsPam/oqMa+XXC2vCMvGlQjxZk2ikxQ==
+X-Received: by 2002:a1c:7207:: with SMTP id n7mr92577wmc.138.1584573624939;
+        Wed, 18 Mar 2020 16:20:24 -0700 (PDT)
+Received: from localhost (pD9E51CDC.dip0.t-ipconnect.de. [217.229.28.220])
+        by smtp.gmail.com with ESMTPSA id h81sm465786wme.42.2020.03.18.16.20.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Mar 2020 16:20:23 -0700 (PDT)
+Date:   Thu, 19 Mar 2020 00:20:22 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [GIT PULL] usb: tegra: Changes for v5.7-rc1
+Message-ID: <20200318232022.GB2885069@ulmo>
+References: <20200313170730.2924259-1-thierry.reding@gmail.com>
+ <20200317185835.GC1480055@kroah.com>
 MIME-Version: 1.0
-References: <20200317093922.20785-1-lkundrak@v3.sk> <20200317093922.20785-20-lkundrak@v3.sk>
-In-Reply-To: <20200317093922.20785-20-lkundrak@v3.sk>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 18 Mar 2020 16:37:55 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqK-z+yx6vMv_vUCc-QCigDnN8K3zPkbWM_CgXj02FGY2w@mail.gmail.com>
-Message-ID: <CAL_JsqK-z+yx6vMv_vUCc-QCigDnN8K3zPkbWM_CgXj02FGY2w@mail.gmail.com>
-Subject: Re: [PATCH 19/28] dt-bindings: mmc: Convert sdhci-pxa to json-schema
-To:     Lubomir Rintel <lkundrak@v3.sk>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="eAbsdosE1cNLO4uF"
+Content-Disposition: inline
+In-Reply-To: <20200317185835.GC1480055@kroah.com>
+User-Agent: Mutt/1.13.1 (2019-12-14)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 3:40 AM Lubomir Rintel <lkundrak@v3.sk> wrote:
->
-> Convert the sdhci-pxa binding to DT schema format using json-schema.
 
-Ignore what my bot said, I see you addressed that earlier in the series.
+--eAbsdosE1cNLO4uF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> At the same time, fix a couple of issues with the examples discovered by
-> the validation tool -- a semicolon instead of a comma and wrong node names.
->
-> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-> ---
->  .../devicetree/bindings/mmc/sdhci-pxa.txt     |  50 ---------
->  .../devicetree/bindings/mmc/sdhci-pxa.yaml    | 101 ++++++++++++++++++
->  2 files changed, 101 insertions(+), 50 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mmc/sdhci-pxa.txt
->  create mode 100644 Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml
->
-> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-pxa.txt b/Documentation/devicetree/bindings/mmc/sdhci-pxa.txt
-> deleted file mode 100644
-> index 3d1b449d6097d..0000000000000
-> --- a/Documentation/devicetree/bindings/mmc/sdhci-pxa.txt
-> +++ /dev/null
-> @@ -1,50 +0,0 @@
-> -* Marvell sdhci-pxa v2/v3 controller
-> -
-> -This file documents differences between the core properties in mmc.txt
-> -and the properties used by the sdhci-pxav2 and sdhci-pxav3 drivers.
-> -
-> -Required properties:
-> -- compatible: Should be "mrvl,pxav2-mmc", "mrvl,pxav3-mmc" or
-> -  "marvell,armada-380-sdhci".
-> -- reg:
-> -  * for "mrvl,pxav2-mmc" and "mrvl,pxav3-mmc", one register area for
-> -    the SDHCI registers.
-> -
-> -  * for "marvell,armada-380-sdhci", three register areas. The first
-> -    one for the SDHCI registers themselves, the second one for the
-> -    AXI/Mbus bridge registers of the SDHCI unit, the third one for the
-> -    SDIO3 Configuration register
-> -- reg names: should be "sdhci", "mbus", "conf-sdio3". only mandatory
-> -  for "marvell,armada-380-sdhci"
-> -- clocks: Array of clocks required for SDHCI; requires at least one for
-> -    I/O clock.
-> -- clock-names: Array of names corresponding to clocks property; shall be
-> -    "io" for I/O clock and "core" for optional core clock.
-> -
-> -Optional properties:
-> -- mrvl,clk-delay-cycles: Specify a number of cycles to delay for tuning.
-> -
-> -Example:
-> -
-> -sdhci@d4280800 {
-> -       compatible = "mrvl,pxav3-mmc";
-> -       reg = <0xd4280800 0x800>;
-> -       bus-width = <8>;
-> -       interrupts = <27>;
-> -       clocks = <&chip CLKID_SDIO1XIN>, <&chip CLKID_SDIO1>;
-> -       clock-names = "io", "core";
-> -       non-removable;
-> -       mrvl,clk-delay-cycles = <31>;
-> -};
-> -
-> -sdhci@d8000 {
-> -       compatible = "marvell,armada-380-sdhci";
-> -       reg-names = "sdhci", "mbus", "conf-sdio3";
-> -       reg = <0xd8000 0x1000>,
-> -               <0xdc000 0x100>;
-> -               <0x18454 0x4>;
-> -       interrupts = <0 25 0x4>;
-> -       clocks = <&gateclk 17>;
-> -       clock-names = "io";
-> -       mrvl,clk-delay-cycles = <0x1F>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml b/Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml
-> new file mode 100644
-> index 0000000000000..4ae0926ac294f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml
-> @@ -0,0 +1,101 @@
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mmc/sdhci-pxa.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Marvell PXA SDHCI v2/v3 bindings
-> +
-> +maintainers:
-> +  - devicetree@vger.kernel.org
-> +
-> +allOf:
-> +  - $ref: mmc-controller.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: marvell,armada-380-sdhci
-> +    then:
-> +      properties:
-> +        regs:
-> +          minItems: 3
-> +          maxItems: 3
+On Tue, Mar 17, 2020 at 07:58:35PM +0100, Greg Kroah-Hartman wrote:
+> On Fri, Mar 13, 2020 at 06:07:30PM +0100, Thierry Reding wrote:
+> > Hi Greg, Felipe,
+> >=20
+> > The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea098=
+62b9:
+> >=20
+> >   Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
+> >=20
+> > are available in the Git repository at:
+> >=20
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/fo=
+r-5.7-usb
+> >=20
+> > for you to fetch changes up to 9dd4fbef2f88ccf46f5294805bf121d6554791e8:
+> >=20
+> >   usb: gadget: tegra-xudc: Support multiple device modes (2020-03-13 17=
+:16:28 +0100)
+> >=20
+> > It occurred to me that I could just as well send this pull request to
+> > you guys, rather than take it via ARM SoC. Kishon already acked all the
+> > patches for the PHY tree that this series depends on, so I've included
+> > them here as a dependency.
+> >=20
+> > Let me know if you'd prefer that I take this through ARM SoC.
+>=20
+> I tried to merge this into my usb-next branch, but get merge issues in
+> drivers/usb/gadget/udc/tegra-xudc.c that I really don't know how to
+> resolve.
+>=20
+> Can you give me a clue as to what to do here?
 
-Here, you just need minItems.
+Let me rebase this on top of your usb-next branch and resend this PR
+after resolving the conflict.
 
-> +        reg-names:
-> +          items:
-> +            - const: sdhci
-> +            - const: mbus
-> +            - const: conf-sdio3
+Thierry
 
-This should be under the main definition of 'reg-names' and then just
-'minItems: 3' here.
+--eAbsdosE1cNLO4uF
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +      required:
-> +        - reg-names
-> +    else:
-> +      properties:
-> +        regs:
-> +          minItems: 1
-> +          maxItems: 1
+-----BEGIN PGP SIGNATURE-----
 
-Just 'maxItems' is sufficient.
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl5yrLYACgkQ3SOs138+
+s6H07hAAoRtKHCeERZPuj3qTdFkm/k6KVMKDmmjN2Aj7jLVTbGGNrcjplf5J5bWO
+9x905oLXFCmcerVaX/oK6Q68feEWkpEEC6dQrDssixyN6hmEDH534KpM9NxFqUFR
+XL4FYYcwlhIyQtMSx/8i3gs8efPdjreKg0BPXbej4fWYWc4/IwD+WMJa7B5bzYfJ
+F5spv1T08zEn5QXzOJ6rdmTBHKZ6ximxHZbbrmltm7YvCQweOGykmnuo+FNNmMOm
+IvjBaYQZ9iqhfc2cEWzKmyV8Oitwx07McTEtUcr/AfKHEA29jGNSafyQJVxUo2Un
+FMoi9WNnUR4fRAAHLSnYqiKH2yoYqFAZOIrLDWs92eRlHUia2x6+5ZdxXaZbQ4Ln
+kozSV9D240VBWZUb0BW5g4oSjYkIkC8O/hYxah1T3aTIeHAcS2Jv4kWBfO3VL2K6
+BJIJxJOniwGIy6gRlPvYHLHffmqJD05aDDZXthSyawdp81EUmj3qBfjN1slQH3mk
+anW8v+/DaaNons4dlnVXt+uc7Y2ZDcD0h/i+FODe5EgFtSd1+HNbgbVNNVIRw0ts
+BAF0EG1U1+kpJr8W6y6vcgaeSRjxjmQ5A/ZKgiTEsbU/kwudkCKBXCVddHYpo6rv
+fTBjr3t+jDNnavS5/LDVNj05bEDglTKZQy03z95XinXgl47ulOA=
+=tYCX
+-----END PGP SIGNATURE-----
 
-> +        reg-names:
-> +          minItems: 1
-> +          maxItems: 1
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mrvl,pxav2-mmc
-> +      - mrvl,pxav3-mmc
-> +      - marvell,armada-380-sdhci
-> +
-> +  reg: true
-
-Here you should have:
-
-minItems: 1
-maxItems: 3
-
-> +
-> +  reg-names: true
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    maxItems: 2
-> +    items:
-> +      - const: io
-> +      - const: core
-> +
-> +  mrvl,clk-delay-cycles:
-> +    description: Specify a number of cycles to delay for tuning.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-
-No range of valid values?
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/berlin2.h>
-> +    mmc@d4280800 {
-> +        compatible = "mrvl,pxav3-mmc";
-> +        reg = <0xd4280800 0x800>;
-> +        bus-width = <8>;
-> +        interrupts = <27>;
-> +        clocks = <&chip CLKID_SDIO1XIN>, <&chip CLKID_SDIO1>;
-> +        clock-names = "io", "core";
-> +        non-removable;
-> +        mrvl,clk-delay-cycles = <31>;
-> +    };
-> +  - |
-> +    mmc@d8000 {
-> +        compatible = "marvell,armada-380-sdhci";
-> +        reg-names = "sdhci", "mbus", "conf-sdio3";
-> +        reg = <0xd8000 0x1000>,
-> +              <0xdc000 0x100>,
-> +              <0x18454 0x4>;
-> +        interrupts = <0 25 0x4>;
-> +        clocks = <&gateclk 17>;
-> +        clock-names = "io";
-> +        mrvl,clk-delay-cycles = <0x1F>;
-> +    };
-> +
-> +...
-> --
-> 2.25.1
->
+--eAbsdosE1cNLO4uF--
