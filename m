@@ -2,105 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4AF189AB3
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2020 12:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E5C189FEA
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2020 16:46:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727231AbgCRLdc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Mar 2020 07:33:32 -0400
-Received: from mga18.intel.com ([134.134.136.126]:33220 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726855AbgCRLdc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Mar 2020 07:33:32 -0400
-IronPort-SDR: VAsWOJEDcukz9rQu/8ZTucVwt6A4otFMLyi6J5daUNot8tmzWNCLAFbUQZGYqm4W/h4WWJOy8l
- 65HBmIYuTH0w==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2020 04:33:32 -0700
-IronPort-SDR: df5cr8BSy+nJxx3vYl5dRWH9EPaoiBb2WqxoTdafzPTwCXuzIXbOcaSjsk7UygVLxuBtzyPaMI
- Z3jG6iDpk+kw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,567,1574150400"; 
-   d="scan'208";a="244797343"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga003.jf.intel.com with ESMTP; 18 Mar 2020 04:33:27 -0700
-Subject: Re: [PATCH v3 3/5] usb: host: hisilicon: convert to
- devm_platform_get_and_ioremap_resource
-To:     Dejin Zheng <zhengdejin5@gmail.com>, gregkh@linuxfoundation.org,
-        rafael@kernel.org, hminas@synopsys.com, mathias.nyman@intel.com,
-        bgolaszewski@baylibre.com, arnd@arndb.de,
-        jeffrey.t.kirsher@intel.com, hdegoede@redhat.com,
-        treding@nvidia.com, tglx@linutronix.de, tomas.winkler@intel.com,
-        suzuki.poulose@arm.com, sergei.shtylyov@cogentembedded.com,
-        geert@linux-m68k.org, linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20200315140525.21780-1-zhengdejin5@gmail.com>
- <20200315140525.21780-4-zhengdejin5@gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <86473a87-24d5-4e72-5637-41feac4caf4e@linux.intel.com>
-Date:   Wed, 18 Mar 2020 13:35:55 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726976AbgCRPqe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Mar 2020 11:46:34 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:37148 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726796AbgCRPqb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Mar 2020 11:46:31 -0400
+Received: by mail-pl1-f193.google.com with SMTP id f16so11357283plj.4
+        for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2020 08:46:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DypeU7Qzbc5hLjzSxqWOuJvNNMUy2IqtM3T+YvJ8bnU=;
+        b=B7HsrDmw9iBAgpmjo1xLmNYn8H9RXKql6to2qgZ16z3sEc+IbQCMR88/YqXT1BGFYc
+         5ot5/npMGFoask77Ge+m8tOKTeGHPvUqRxXl+vwPoYokDl0/R6JAHSPJs9vb+iwnyW0z
+         UHNmueVSpquXNT9wY1ybLeS5M97WEloNn7IIjyb8Gi24slJmsUWcyFdbChWUgonSMDP0
+         yzsu7FcbekJ6rZY7BmomrlHp3xSuU6Y/oDr25n5jEx41uf5AaO8q35QPLg/1KnJv0n4f
+         8Ep4X1LmzhVj0r7BvAZ2YXsgyq4dh+iqiZyTRei/vV5FHLn0FjYLCQ1Hb1UQ9AMTLoPp
+         yTGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DypeU7Qzbc5hLjzSxqWOuJvNNMUy2IqtM3T+YvJ8bnU=;
+        b=saRScCx3tbjw4/4zogyFX5xiMgW5RdoVHtFCdjiMAoiANe2vjKU2ILQs+cV3woWcMZ
+         xd0bIANLuN//T/trltzaFgL2miQZvTkg0G0/oBmHuVrhvJN9PqUf30VbqPvVCW7lSZvU
+         iqjPSxUDJ9OcPMoYRGK4LiLLoBI90RbG1e4S0qZCavvwNIau/afn2+WSMgHY/cJLZ+FM
+         AMILaTY8cF5R71xg61Pg4G9ozwOJ0HXe4woWHE6pqtUR9J9avxDmQ5EJ5OwpJBPtxoSR
+         uQfseVTOYNwqKNXHVyE9O/okJPyn0+ltawzw6IRn7NQDIka9bx/rBtgkYHAiIJeOHA3P
+         WX+Q==
+X-Gm-Message-State: ANhLgQ0nsNYEbznyXEhQ0Oc9mVMps6LLUZyh2/eeA9uB7AAS0FzbWLJ6
+        zeUIz5T5f9S/R9m/FI5LgmQnBxNqNtLQSg0nVFfyjA==
+X-Google-Smtp-Source: ADFU+vsH2h5dYlCT1hcYpwYdlU6kJ6SV79e5bGsLof+KJPJj3A/jZ+EPpOfBBL0GKaBUNNL8P2JLinsgWHT9xanJ5vg=
+X-Received: by 2002:a17:902:8c94:: with SMTP id t20mr4328042plo.336.1584546389120;
+ Wed, 18 Mar 2020 08:46:29 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200315140525.21780-4-zhengdejin5@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <000000000000f69c3b0587aa1bc5@google.com>
+In-Reply-To: <000000000000f69c3b0587aa1bc5@google.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Wed, 18 Mar 2020 16:46:17 +0100
+Message-ID: <CAAeHK+xSMeJoQsGGgqf4dLig1r36vOpMjKdD+_hL2uPu7HmOKw@mail.gmail.com>
+Subject: Re: KASAN: slab-out-of-bounds Read in hex_string
+To:     syzbot <syzbot+a9fefd18c7b240f19c54@syzkaller.appspotmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 15.3.2020 16.05, Dejin Zheng wrote:
-> Use devm_platform_get_and_ioremap_resource() to simplify code, which
-> contains platform_get_resource() and devm_ioremap_resource(), it also
-> get the resource for use by the following code.
-> 
-> Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+On Mon, Apr 29, 2019 at 2:06 PM syzbot
+<syzbot+a9fefd18c7b240f19c54@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following crash on:
+>
+> HEAD commit:    43151d6c usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan/tree/usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=139ac37f200000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=4183eeef650d1234
+> dashboard link: https://syzkaller.appspot.com/bug?extid=a9fefd18c7b240f19c54
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17f3b338a00000
+>
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+a9fefd18c7b240f19c54@syzkaller.appspotmail.com
+>
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in hex_string+0x418/0x4b0 lib/vsprintf.c:975
+> Read of size 1 at addr ffff88821a41bd38 by task kworker/0:1/12
+>
+> CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.1.0-rc3-319004-g43151d6 #6
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> Google 01/01/2011
+> Workqueue: usb_hub_wq hub_event
+> Call Trace:
+>   __dump_stack lib/dump_stack.c:77 [inline]
+>   dump_stack+0xe8/0x16e lib/dump_stack.c:113
+>   print_address_description+0x6c/0x236 mm/kasan/report.c:187
+>   kasan_report.cold+0x1a/0x3c mm/kasan/report.c:317
+>   hex_string+0x418/0x4b0 lib/vsprintf.c:975
+>   pointer+0x460/0x910 lib/vsprintf.c:1985
+>   vsnprintf+0x5a0/0x16b0 lib/vsprintf.c:2400
+>   pointer+0x60b/0x910 lib/vsprintf.c:2038
+>   vsnprintf+0x5a0/0x16b0 lib/vsprintf.c:2400
+>   vscnprintf+0x29/0x80 lib/vsprintf.c:2499
+>   vprintk_store+0x45/0x4b0 kernel/printk/printk.c:1900
+>   vprintk_emit+0x210/0x5a0 kernel/printk/printk.c:1957
+>   dev_vprintk_emit+0x50e/0x553 drivers/base/core.c:3185
+>   dev_printk_emit+0xbf/0xf6 drivers/base/core.c:3196
+>   __dev_printk+0x1ed/0x215 drivers/base/core.c:3208
+>   _dev_info+0xdc/0x10e drivers/base/core.c:3254
+>   dlfb_parse_vendor_descriptor drivers/video/fbdev/udlfb.c:1532 [inline]
+>   dlfb_usb_probe.cold+0xb96/0x1701 drivers/video/fbdev/udlfb.c:1615
+>   usb_probe_interface+0x31d/0x820 drivers/usb/core/driver.c:361
+>   really_probe+0x2da/0xb10 drivers/base/dd.c:509
+>   driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
+>   __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
+>   bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
+>   __device_attach+0x223/0x3a0 drivers/base/dd.c:844
+>   bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
+>   device_add+0xad2/0x16e0 drivers/base/core.c:2106
+>   usb_set_configuration+0xdf7/0x1740 drivers/usb/core/message.c:2023
+>   generic_probe+0xa2/0xda drivers/usb/core/generic.c:210
+>   usb_probe_device+0xc0/0x150 drivers/usb/core/driver.c:266
+>   really_probe+0x2da/0xb10 drivers/base/dd.c:509
+>   driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
+>   __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
+>   bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
+>   __device_attach+0x223/0x3a0 drivers/base/dd.c:844
+>   bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
+>   device_add+0xad2/0x16e0 drivers/base/core.c:2106
+>   usb_new_device.cold+0x537/0xccf drivers/usb/core/hub.c:2534
+>   hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+>   hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+>   port_event drivers/usb/core/hub.c:5350 [inline]
+>   hub_event+0x138e/0x3b00 drivers/usb/core/hub.c:5432
+>   process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
+>   worker_thread+0x9b/0xe20 kernel/workqueue.c:2415
+>   kthread+0x313/0x420 kernel/kthread.c:253
+>   ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
+>
+> Allocated by task 12:
+>   set_track mm/kasan/common.c:87 [inline]
+>   __kasan_kmalloc mm/kasan/common.c:497 [inline]
+>   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:470
+>   kmalloc include/linux/slab.h:552 [inline]
+>   usb_get_configuration+0x313/0x32b0 drivers/usb/core/config.c:857
+>   usb_enumerate_device drivers/usb/core/hub.c:2367 [inline]
+>   usb_new_device+0x2fe/0x450 drivers/usb/core/hub.c:2503
+>   hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+>   hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+>   port_event drivers/usb/core/hub.c:5350 [inline]
+>   hub_event+0x138e/0x3b00 drivers/usb/core/hub.c:5432
+>   process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
+>   worker_thread+0x9b/0xe20 kernel/workqueue.c:2415
+>   kthread+0x313/0x420 kernel/kthread.c:253
+>   ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
+>
+> Freed by task 1464:
+>   set_track mm/kasan/common.c:87 [inline]
+>   __kasan_slab_free+0x130/0x180 mm/kasan/common.c:459
+>   slab_free_hook mm/slub.c:1429 [inline]
+>   slab_free_freelist_hook+0x5e/0x140 mm/slub.c:1456
+>   slab_free mm/slub.c:3003 [inline]
+>   kfree+0xce/0x290 mm/slub.c:3958
+>   single_release+0x91/0xb0 fs/seq_file.c:597
+>   __fput+0x2df/0x8c0 fs/file_table.c:278
+>   task_work_run+0x149/0x1c0 kernel/task_work.c:113
+>   tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+>   exit_to_usermode_loop+0x243/0x270 arch/x86/entry/common.c:166
+>   prepare_exit_to_usermode arch/x86/entry/common.c:197 [inline]
+>   syscall_return_slowpath arch/x86/entry/common.c:268 [inline]
+>   do_syscall_64+0x40c/0x4f0 arch/x86/entry/common.c:293
+>   entry_SYSCALL_64_after_hwframe+0x49/0xbe
+>
+> The buggy address belongs to the object at ffff88821a41bd20
+>   which belongs to the cache kmalloc-32 of size 32
+> The buggy address is located 24 bytes inside of
+>   32-byte region [ffff88821a41bd20, ffff88821a41bd40)
+> The buggy address belongs to the page:
+> page:ffffea00086906c0 count:1 mapcount:0 mapping:ffff88812c3f5800 index:0x0
+> flags: 0x57ff00000000200(slab)
+> raw: 057ff00000000200 dead000000000100 dead000000000200 ffff88812c3f5800
+> raw: 0000000000000000 0000000000550055 00000001ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+>
+> Memory state around the buggy address:
+>   ffff88821a41bc00: 00 00 00 fc fc fc 00 00 00 00 fc fc 00 00 00 00
+>   ffff88821a41bc80: fc fc 00 00 00 00 fc fc fb fb fb fb fc fc fb fb
+> > ffff88821a41bd00: fb fb fc fc 00 00 00 fc fc fc fb fb fb fb fc fc
+>                                          ^
+>   ffff88821a41bd80: 00 00 00 fc fc fc 00 00 00 fc fc fc fb fb fb fb
+>   ffff88821a41be00: fc fc fb fb fb fb fc fc fb fb fb fb fc fc 00 00
+> ==================================================================
+>
+>
 > ---
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this bug report. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this bug, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
 
-Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-
+#syz dup: KASAN: slab-out-of-bounds Read in dlfb_usb_probe
