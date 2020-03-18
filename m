@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 482CC18A691
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2020 22:09:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7644618A58B
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Mar 2020 22:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727351AbgCRUxu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Mar 2020 16:53:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52970 "EHLO mail.kernel.org"
+        id S1727163AbgCRU4D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Mar 2020 16:56:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56732 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727333AbgCRUxt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Mar 2020 16:53:49 -0400
+        id S1726961AbgCRU4C (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Mar 2020 16:56:02 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BF4E8208FE;
-        Wed, 18 Mar 2020 20:53:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 103A420A8B;
+        Wed, 18 Mar 2020 20:56:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584564828;
-        bh=VHldAXNuA4V/rjkWbLrMDU5ngSbe8UleiCISgGIu6eI=;
+        s=default; t=1584564961;
+        bh=QF/GYMkHLxXCI0oXGqXah6iopHeOKnwoPfvv7v33fx8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tP96Ad7I9L/28jupDx6SilvA7VzRFXzH8IT4nz7HA7tr5ws1AOiO8K/tG2asN0Sp3
-         EDpg+0A4ISIXGsHUs+yC5SSkiuiyzw6s6JFWm5WGRjS4YQpYYYCefRwnc2BpCl6ise
-         JFcQUVivAyRHeU5ups6MBYp35AsG24NZ/8qlstTY=
+        b=jkSiSj/Sg18f6YKXn7JRz8KdjAYvl9n6ujYjy8lkUmcThvpz8txi5H/YqeGpU51VO
+         21BddRA8dH+XMzFXNjZNNWMLeDuV8JWUM53DMLQm2PYWmuf+d+owI9FRvW8iuj8L/S
+         RGkKaGwOEv3Ovl4nHl9ehFXYFaND+/pzmqLuZjQg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     You-Sheng Yang <vicamo.yang@canonical.com>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 09/73] r8152: check disconnect status after long sleep
-Date:   Wed, 18 Mar 2020 16:52:33 -0400
-Message-Id: <20200318205337.16279-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 05/28] r8152: check disconnect status after long sleep
+Date:   Wed, 18 Mar 2020 16:55:32 -0400
+Message-Id: <20200318205555.17447-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200318205337.16279-1-sashal@kernel.org>
-References: <20200318205337.16279-1-sashal@kernel.org>
+In-Reply-To: <20200318205555.17447-1-sashal@kernel.org>
+References: <20200318205555.17447-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -131,10 +131,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 8 insertions(+)
 
 diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 6912624eed4ad..44ea5dcc43fd1 100644
+index a7f9c1886bd4c..cadf5ded45a9b 100644
 --- a/drivers/net/usb/r8152.c
 +++ b/drivers/net/usb/r8152.c
-@@ -3006,6 +3006,8 @@ static u16 r8153_phy_status(struct r8152 *tp, u16 desired)
+@@ -2696,6 +2696,8 @@ static u16 r8153_phy_status(struct r8152 *tp, u16 desired)
  		}
  
  		msleep(20);
@@ -143,7 +143,7 @@ index 6912624eed4ad..44ea5dcc43fd1 100644
  	}
  
  	return data;
-@@ -4419,7 +4421,10 @@ static void r8153_init(struct r8152 *tp)
+@@ -4055,7 +4057,10 @@ static void r8153_init(struct r8152 *tp)
  		if (ocp_read_word(tp, MCU_TYPE_PLA, PLA_BOOT_CTRL) &
  		    AUTOLOAD_DONE)
  			break;
@@ -154,7 +154,7 @@ index 6912624eed4ad..44ea5dcc43fd1 100644
  	}
  
  	data = r8153_phy_status(tp, 0);
-@@ -4545,7 +4550,10 @@ static void r8153b_init(struct r8152 *tp)
+@@ -4170,7 +4175,10 @@ static void r8153b_init(struct r8152 *tp)
  		if (ocp_read_word(tp, MCU_TYPE_PLA, PLA_BOOT_CTRL) &
  		    AUTOLOAD_DONE)
  			break;
