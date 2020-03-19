@@ -2,133 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A6E18AE6B
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 09:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BA218AE76
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 09:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726592AbgCSIfo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Mar 2020 04:35:44 -0400
-Received: from [37.49.224.149] ([37.49.224.149]:61662 "EHLO
-        walker-construction.co.uk" rhost-flags-FAIL-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725812AbgCSIfo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Mar 2020 04:35:44 -0400
-From:   "Wilson Jasper" <wilson@walker-construction.co.uk>
-To:     linux-usb@vger.kernel.org
-Subject: RE: Walker Construction_RFQ
-Date:   19 Mar 2020 09:35:41 +0100
-Message-ID: <20200319093541.66E3770266C4E4FF@walker-construction.co.uk>
+        id S1726879AbgCSIk5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Mar 2020 04:40:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55948 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725601AbgCSIk5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Mar 2020 04:40:57 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3A53D20724;
+        Thu, 19 Mar 2020 08:40:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584607255;
+        bh=dHtJENXjO0z7ELO16+oHxTUd6KSiGYOo+FAU1g3r1L8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XAF/A62c4v2KZMa+b7MNCvt5Okc6ArSh27nZ6WmkbKaRhYOcWXD+8cWrAPcz+Oxd5
+         GcEJnnmipmcEEfVQKgD3elLE172vOeV5zt61gPiItbhWXmp1y4AT19XvauDwP8kAkL
+         YnG/UNS29vEd98MwDnk+VTNPMtTHoyQsUCF7HqAk=
+Date:   Thu, 19 Mar 2020 09:40:53 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [patch V2 04/15] orinoco_usb: Use the regular completion
+ interfaces
+Message-ID: <20200319084053.GA3492783@kroah.com>
+References: <20200318204302.693307984@linutronix.de>
+ <20200318204407.793899611@linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
-        boundary="----=_NextPart_000_0012_809EBA79.81823CEF"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200318204407.793899611@linutronix.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is a multi-part message in MIME format.
+On Wed, Mar 18, 2020 at 09:43:06PM +0100, Thomas Gleixner wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> The completion usage in this driver is interesting:
+> 
+>   - it uses a magic complete function which according to the comment was
+>     implemented by invoking complete() four times in a row because
+>     complete_all() was not exported at that time.
+> 
+>   - it uses an open coded wait/poll which checks completion:done. Only one wait
+>     side (device removal) uses the regular wait_for_completion() interface.
+> 
+> The rationale behind this is to prevent that wait_for_completion() consumes
+> completion::done which would prevent that all waiters are woken. This is not
+> necessary with complete_all() as that sets completion::done to UINT_MAX which
+> is left unmodified by the woken waiters.
+> 
+> Replace the magic complete function with complete_all() and convert the
+> open coded wait/poll to regular completion interfaces.
+> 
+> This changes the wait to exclusive wait mode. But that does not make any
+> difference because the wakers use complete_all() which ignores the
+> exclusive mode.
+> 
+> Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Kalle Valo <kvalo@codeaurora.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: linux-wireless@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> ---
+> V2: New patch to avoid conversion to swait functions later.
+> ---
+>  drivers/net/wireless/intersil/orinoco/orinoco_usb.c |   21 ++++----------------
+>  1 file changed, 5 insertions(+), 16 deletions(-)
+> 
+> --- a/drivers/net/wireless/intersil/orinoco/orinoco_usb.c
+> +++ b/drivers/net/wireless/intersil/orinoco/orinoco_usb.c
+> @@ -365,17 +365,6 @@ static struct request_context *ezusb_all
+>  	return ctx;
+>  }
+>  
+> -
+> -/* Hopefully the real complete_all will soon be exported, in the mean
+> - * while this should work. */
+> -static inline void ezusb_complete_all(struct completion *comp)
+> -{
+> -	complete(comp);
+> -	complete(comp);
+> -	complete(comp);
+> -	complete(comp);
+> -}
 
-------=_NextPart_000_0012_809EBA79.81823CEF
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+That's so funny... :(
 
-Dear Sir/Madam,,
-
-Please confirm and give quotation as per attached,quote according=20
-to Bill of
-materials
-
-Highlighted items will be supplied in large quantity.
-
-Kind Regards.
-
-Wilson Jasper=20
-Purchase Manager
-Walker Construction (UK) Ltd
-
-
-I will like a receipt of your acknowledgment mail.
-------=_NextPart_000_0012_809EBA79.81823CEF
-Content-Type: application/msword; name="PO032411.doc"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="PO032411.doc"
-
-e1xydGY2ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHtcb2JqZWN0e1w5
-MDYzOTIzOTB9XG9iamxpbmt7XDkwNjM5MjM5MH1cb2Jqdzg3OTJ7XDkwNjM5MjM5MH1cb2Jq
-aDI4MHtcOTA2MzkyMzkwfXtcOTA2MzkyMzkwfXtcb2JqZGF0YQ1ccHN6NTIyODIzNTQ2XHly
-MDU5NzcyMzIwMlwnPwkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJ
-CQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJ
-CQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJ
-CQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQl7XG9iamVjdFxkbGJncHljbXdt
-cm9qWldCRUlYQkNaQ0hDRUlPVFdETDQwNzUxMjU2NzgxNDc1MzQwNDg4NDVkbGJncHljbXdt
-cm9qWldCRUlYQkNaQ0hDRUlPVFdETDUwODAxMDAzOTgxe1xhaXJqcXZqeHBtaHVkdHlwd2d1
-bnlza3JTSFFBUVFOU1BWWlFHWko5NzcwMTc5MTU1MjgzNDAwNzg0NjA4NDk2NGFpcmpxdmp4
-cG1odWR0eXB3Z3VueXNrclNIUUFRUU5TUFZaUUdaSjQwNDk2Njc5MDE0ODM2NjkwMTAzODUy
-NDUxOX19Zjk3MmIzNGIwMjAwMDAwMDBiMDAwMDAwNjU1MTc1NjE3NDY5NmY0e1xtYmVnQ2hy
-IFx7XHtcbWVuZENocn0NZTJlMzMwMDAwMDAwMDAwMDAwMDAwMDBiOTA2MDAwMDAyNjBmMWIy
-ZDVhMTAxMDhhYjFkYjg3ZWZmYzc1ZDI1M2RiZDZkODI4YjE4OGIxYmI4OWJhNGE2YzMwNTE1
-YzM5ZjNjOGIzMDUzZmZkNjA1YWM3MWQ4MTkyZDBhNzFkODE5ZmZlMGQzYjdmY2VhZWI0NDAw
-NDQ2NjIzNTZiMWI1ZTFhNjJjYTc0MDdjMDc2ZjViNGM2ZjAzNDM4NmE2NDgwYjgzNDRjMTFi
-NTljYzk4YmEyYTUwZGY2NzNlMWYyMGJkNDkzNzI2ODliYzU3YjZmMDMxMDM2NjBjN2I1Mzg0
-OTBiMmQxMmFkNTM2NjljY2NkZDBkZTE2YjczZjIwNDNjMDBkNGNjMDNjOWIxY2VmMmJjYzQ5
-MjBjZmEwZWIzM2Y5M2I4NzEyM2JhNjJiYzRiNzRiZmE2ODY1NTg2NWQwYWJjM2U5NDQwMTAw
-MDAzOWVhYzhlYmM3MGFmOWNhMmFjODk2YTk5NjI4MjViMGFlMGFiYThlY2Y3ODQyYjc0MmRl
-YmE5ZThhNGM3YTAwOWNiNzY1MTkyMDM3MzdlZWI3NDhjMTgyMmYwYjI0MjNjZTg0MTk5ZDhl
-ZDkyYTgyNWM5OWY2Njc1OWY0NzQyYTE5ZmUyNTI4ZThlZjY5ODAwMTYxYWU1ZGQ1OThiNzI2
-NGJiNmRjY2NmYzA1NDhmZTc0MmYzNzczNzY4NjQxMjczNTNlOGM5NjljYWQxMjA1ODc5M2Uz
-YjgwODRlNjIzYmE2MjM4NjlhOTY3OTFhYWIwOTFkZmYzZjYwODA2Njc0NmRmNzE3ZThiY2Y3
-YWZmY2NiNWZkYjE1NDlhZGEwZTE1ZDQ4OTM4Y2RlYjcyMTA5OWJlNGNhNGM5NTY0NWU5MzQz
-YTc0ODk5Y2I0OGMwZTE0YzQyMThmNDE2MzZmMjk4ZjFhNTg1MWQ1MzNkZGQ5OGFiMDYxOTFi
-OWFiMWFkMDEzNGQyOWUyYzQ2MjNjODNhOGFiZTFjZDFmMDY1ZGFkZmUxYmRkZWQxNzQ4Y2Nm
-ZDdiN2ZlNmYyYWVhZTZjZTQxYzVmNTk4MWZhZDA2NDQ4MjAzNTQ2NDMyNTdiZmQ5MzhhZTBk
-MWIyNWMzMjQ3NTQ4M2Y1MTQ4ZjkwOTg0NDdkNDcwOTJiN2YzODI3M2I0M2IzYjgzNzA5MmNi
-YzM2YTIzZDkxN2JjOTliZDg1NTI2YmM1N2MyODBiNzIwYjkzMzViOTI4N2MyOTQ0ZTk5Y2U1
-YWZjYmMxNzRjZWVlMTIxZGUxNTg0M2FmZTczMGUxYmRjOTAxOGNkZGFiZmMzNmU5MjEzNzY0
-M2ZlYjAzYTk3MTQzZThmNDAwMDAwMGU5ZDcwMDAwMDBlOWI4MDEwMDAwOWM1NjUyNTc5MDlj
-NTI4MWMyNjMwODAwMDA4MWVhNTgxNjAwMDA4MWMyNmIwNzAwMDA4MWMyOGM1YjAwMDA1YTlk
-OTA4MWVlNzQzMzAwMDA4MWVlOTQxNzAwMDA4MWVlZmMyNTAwMDA4MWVlMzU3MjAwMDA4MWM3
-MWM2MTAwMDA4MWMyY2UxZDAwMDA1ZjVhNWU5ZGU5ZGMwMDAwMDA4MWMxZDkwMTAwMDBlYjc5
-OWM1MDJkYjQ3NjAwMDAwNThiNWYwMDAwOGQ4MDQzNGYwMDAwMmQ0NzEyMDAwMDhkODBjMjUy
-MDAwMDA1ZDExYjAwMDA1ODlkZWIwNzY3NTlmYjdlMjk5M2U2ZTkwOTAxMDAwMGViNDk1NjVl
-OWM1MzUwOGQ5ODI2MzYwMDAwZWIwODU3NWZmZDM0NWE0OTViZDk1MjVhOGQ4M2NkNzkwMDAw
-NTc1ZmViMDdmMDUxY2RkMGI3MDQxYjgxZWI4MDU4MDAwMDgxZWJlMTU4MDAwMDhkODM0NzEx
-MDAwMDU4NWI5ZDU2NWVlOWQ2MDAwMDAwOTBlYmIyZWIzNzhkOTllYjAyMDAwMDZiYzAwMDkw
-NjljMDQ3MDdjMTQ1ZWI0NWViMWVlYjc3NTllOTVmZmZmZmZmZWIzOWViMTBmZmExY2MxZDdk
-ZWIwOTRkYzRlNDdkYzM1N2QxYTk0NmViNWJlOWJjMDAwMDAwZWJkZDljNTM4MWViOTY1NjAw
-MDA4M2ViNzI4MWViOTk2MTAwMDA4ZDliZTk2ZjAwMDA1YjlkZTkxZmZmZmZmZmViNmEwNTg1
-NTE5Nzc1ZWJiNDljNTM1NzUwODFjNzM0NWIwMDAwOGQ5ZmUyMTMwMDAwMDU4ZTQ5MDAwMDhk
-YmIyZDU0MDAwMDhkYjg3ZTBjMDAwMDU4NWY1YjlkZWIwNjMyNDYyZWYwYWQ1MzMxMDFlYjU4
-NTA1ODljNTI1MDU4OTA1MWViMDhlNTdlODc0MDJhZDY1NDBlODFjMTk5MjIwMDAwODFlOTJh
-MTQwMDAwOGQ5MTc0NzEwMDAwODFjMTJiNzYwMDAwNTk1YTlkZTkzZGZmZmZmZmViOTQ1NjVl
-ZTk1YmZlZmZmZmU5ZGZmZWZmZmZlOTQ2ZmZmZmZmZWIwNzcwZTBjYzlmMGFiZDg2ZTk3M2Zm
-ZmZmZmU5Y2NmZWZmZmY4M2MxMDRlYjA1ZTkwZGZmZmZmZjM5ZDkwZjgyMGZmZmZmZmYwNGJk
-MTc3NzY4OTBlNjk2NWQzNmZjMGE1MDk1MjNlN2I1NDk3MWVmYjgyYjg0OTg4ZDBmZjU0ZWEw
-ZDY3Mjc5ZTUwZjY5YTNlMGYwY2YyOGJkZmE1NjAzOTQ2NjdjOWY2N2FiZTAzMDBmZjBmYjBi
-YTk2MzVjMjJjOTMyNzgzNzQ1MTZjMDA2Y2QxNTJlMjc3MjljYjZlM2Y0YWY1MDZhMDZiNDc1
-MmVkMDkyNzcwZWM0ODg0N2ZhZTAyMzY3MWZkZDE0NmNhODJjZmIxZDZjMTQ3ZDQyYmM1ZDZk
-YWUyZDg2OTIzMGRmZjY0ZTc5MTFhZDUxZGJhYmU4Y2UxMmNjMDU3NjQ5ZTBlMDQwNjIwYmRk
-ZTc0ZWU1ZDBlYjZkMDIzNTMxN2Q2YzM4ZmJmYWZiMGQzZTcwYmUyMGI1MTA5ZTY1YWVjN2Zj
-ODgzODFiOTAzZGUyNTNjNzcwYWU3ODMzOTU1NmVjODhkODI4NjM3ZjZkYWJjYTg1YzAxNzU4
-NWZjNTk5NjBmNTI4ZDcwMTIzOWRkZWIwMmQxMDIwOWI0OWY1MmQyNTM3YTgyYmQzYWFjZGNm
-YmQ5ZTEyOGUwOGQwNjg2ZWQwMzdhNmUwOTYyYTAyZjdiNWQ3YjA2MjBmZDIwN2NjN2E0MjZm
-NTJlODBmNGNjMDU0ZjE0NjdjNDM1NmQyMjQ2OTM5YmU3ZmI1MGE1ZDk0OWE0MjVjYjc2NmIx
-YjUxYWNlMzFiOGMzZjBiMzhkMmZjODY2YTA2MTMyYjFlNTQ2YTQxODA4NmNiNmIxYmRiNmY5
-YmNmMGYxNTNlOTE1OTNlOTViNTg2MjNkY2VlZDg5NzVkMDQwZTU2N2M0NDUxZDU2NjJhODA4
-NzRhNTFkNGQ1NjAxOTAzZjE4ZWE3NTQwMjhhN2Y4MDYwMzlmNGRhN2JlNGZlMDFkNDk4ZmE1
-ODQyNWZhNDhjOTQ5OWI3ZGY0ZDlmODMwNzcxNmNhZDVhYTllNDg5OGI3NWRlZWFkZjFkOTNi
-ODBhZWQxZjAwNWE4NjhhZmU4ZjIwZjlhZGRhZmY5YTJkMGY1MDcwMGU1YmNmM2YxMzgxZmEx
-ZTI3OWQxMDg3MzUyY2EwZmZhMmM4MjkyNDFkZmE0NzM2MGViMjYzODBhNTQ3ODI2YWFjN2E5
-ZGNkYWQ3NjdiNjFjMmU3NGI4OGJiNDcxNmVhZmFhMzE0NTlhNWJmZTU2MmM2Mjg1ZTVlMDM0
-YTUyZWYzZjVmMjIyOWQ1YzgwNmE1NGNkMDBkYjE1MGFlM2ZmMDA0ZjAxYWIwM2EyYTU2MTlk
-NzA5NzA2MTFlMjY4ODRkYzU5MzNlMzE0NWQ5OTdmNjc3ZDE1NDBlZjY1NTkwZjhjZDYwOGZh
-MTE2ODY1YzkxYzM5Nzc0NDcyNTBkYTU3ZTBlNzAxYmUwYWI0OWE0OTQzYzc3MzVjODdkNGNj
-NjZlNGVlMzUzYTU0OGQ0N2FlMmUzNmJlZjNlZjMyOTA3MDhiOWU3Y2Y3ZDhkMzZlNmIwM2Uy
-NTE4MWY1YzVkZjI4YTYyMzg3M2M4ODgxMGRhYjUzN2NiNzYwMWMxMzNmMjJkNTc5ZmNiODhj
-YjkyODllMjhjZWFjMWFmZWVkYWI0YTY3ODVlYzJiYWIzYzRhYjZjZTk2NTE4OTU2ZGI3Y2M5
-YjBkN2NmNGVmMjk3YzUyZWIzNmYwYjQ5NTVkYTM2YTUxYjU2ZjM1M2VlNjM0ODc3YmY1NmVm
-NmExZjk0OTY4Nzg1MzU0NjhiOGNiM2NjZDc4MjU1YTVmYjczMTA1MzA3MGQxMWMyYTI5OTgz
-NjQ2ZjM2YjQwMTYwNWUwNDBiOTYzYTVjYzA0YzI4MmY1ZGQ4MWZjYjNjZmM3Mzk4ODIwOTI3
-MzI3Y2JhZGUwY2FmYmExNDJhYWE5YThjNTA1ZTkxNWU2ZDk4NDg0Nzc5NWQxYWQ4NGUxNmVm
-NDcyOWQzZGFkZGU1MTc1MDJlOTczNGU0YTYzZjZlMWEyNGUzYTg2MTAwMDAwMDAwfVxvYmp1
-cGRhdGU2MzkzNTkxMTF9fQ==
-
-------=_NextPart_000_0012_809EBA79.81823CEF--
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
