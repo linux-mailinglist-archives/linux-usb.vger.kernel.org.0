@@ -2,58 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ECCD18BA3B
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 16:03:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA3818BA4D
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 16:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728551AbgCSPDg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Mar 2020 11:03:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41778 "EHLO mail.kernel.org"
+        id S1727978AbgCSPEa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Mar 2020 11:04:30 -0400
+Received: from ms.lwn.net ([45.79.88.28]:33904 "EHLO ms.lwn.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728548AbgCSPDe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Mar 2020 11:03:34 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        id S1726795AbgCSPE3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Mar 2020 11:04:29 -0400
+Received: from lwn.net (localhost [127.0.0.1])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1FF7D2072D;
-        Thu, 19 Mar 2020 15:03:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584630213;
-        bh=59wwZxXQoVhEHDDcwLFmo0PsjFirqEXEFdOAklDRWGg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XMq1I0JV55c6lkD+dcoY+yuxT0/JrIeqcmCHaXKAzsUIfb5WyXgz8caHMqSIwTkaG
-         WU4htwGRAISUz96U+JKbVOnhknEZmNlmoQlJ6ZyHpKvrr04cczWqFqJT3Hl8OoIZrJ
-         QLzmcTCwuPsXQP+umbQokHFO9wptHFOd6Am/5AOE=
-Date:   Thu, 19 Mar 2020 16:02:51 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [GIT PULL v2] usb: tegra: Changes for v5.7-rc1
-Message-ID: <20200319150251.GA126495@kroah.com>
-References: <20200313170730.2924259-1-thierry.reding@gmail.com>
- <20200319143411.3266037-1-thierry.reding@gmail.com>
+        by ms.lwn.net (Postfix) with ESMTPSA id DB45F384;
+        Thu, 19 Mar 2020 15:04:27 +0000 (UTC)
+Date:   Thu, 19 Mar 2020 09:04:26 -0600
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [patch V2 08/15] Documentation: Add lock ordering and nesting
+ documentation
+Message-ID: <20200319090426.512510cb@lwn.net>
+In-Reply-To: <20200318204408.211530902@linutronix.de>
+References: <20200318204302.693307984@linutronix.de>
+        <20200318204408.211530902@linutronix.de>
+Organization: LWN.net
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200319143411.3266037-1-thierry.reding@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 19, 2020 at 03:34:11PM +0100, Thierry Reding wrote:
-> Hi Greg, Felipe,
-> 
-> The following changes since commit ca9e742b5c27c230b0bf003aecba2433a60ba837:
-> 
->   USB: c67x00: Use the correct style for SPDX License Identifier (2020-03-17 20:03:28 +0100)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.7-usb-v2
+On Wed, 18 Mar 2020 21:43:10 +0100
+Thomas Gleixner <tglx@linutronix.de> wrote:
 
-That worked, thanks!
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> The kernel provides a variety of locking primitives. The nesting of these
+> lock types and the implications of them on RT enabled kernels is nowhere
+> documented.
+> 
+> Add initial documentation.
 
-now pulled and pushed out.
+...time to add a a couple of nits...:)
 
-greg k-h
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+> V2: Addressed review comments from Randy
+> ---
+>  Documentation/locking/index.rst     |    1 
+>  Documentation/locking/locktypes.rst |  298 ++++++++++++++++++++++++++++++++++++
+>  2 files changed, 299 insertions(+)
+>  create mode 100644 Documentation/locking/locktypes.rst
+> 
+> --- a/Documentation/locking/index.rst
+> +++ b/Documentation/locking/index.rst
+> @@ -7,6 +7,7 @@ locking
+>  .. toctree::
+>      :maxdepth: 1
+>  
+> +    locktypes
+>      lockdep-design
+>      lockstat
+>      locktorture
+> --- /dev/null
+> +++ b/Documentation/locking/locktypes.rst
+> @@ -0,0 +1,298 @@
+> +.. _kernel_hacking_locktypes:
+> +
+
+So ... I vaguely remember that some Thomas guy added a document saying we
+should be putting SPDX tags on our files? :)
+
+> +==========================
+> +Lock types and their rules
+> +==========================
+
+[...]
+
+> +PREEMPT_RT caveats
+> +==================
+> +
+> +spinlock_t and rwlock_t
+> +-----------------------
+> +
+> +The substitution of spinlock_t and rwlock_t on PREEMPT_RT enabled kernels
+> +with RT-mutex based implementations has a few implications.
+> +
+> +On a non PREEMPT_RT enabled kernel the following code construct is
+> +perfectly fine::
+> +
+> +   local_irq_disable();
+> +   spin_lock(&lock);
+> +
+> +and fully equivalent to::
+> +
+> +   spin_lock_irq(&lock);
+> +
+> +Same applies to rwlock_t and the _irqsave() suffix variant.
+> +
+> +On a PREEMPT_RT enabled kernel this breaks because the RT-mutex
+> +substitution expects a fully preemptible context.
+> +
+> +The preferred solution is to use :c:func:`spin_lock_irq()` or
+> +:c:func:`spin_lock_irqsave()` and their unlock counterparts.
+
+We don't need (and shouldn't use) :c:func: anymore; just saying
+spin_lock_irq() will cause the Right Things to happen.
+
+Thanks,
+jon
