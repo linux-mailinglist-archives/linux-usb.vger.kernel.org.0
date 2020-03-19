@@ -2,159 +2,234 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DD018C397
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2020 00:26:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D74618C3FF
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2020 00:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727542AbgCSXZz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Mar 2020 19:25:55 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:37834 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727103AbgCSXZz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Mar 2020 19:25:55 -0400
-Received: by mail-lf1-f65.google.com with SMTP id j11so3090599lfg.4;
-        Thu, 19 Mar 2020 16:25:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xryJO8lkXqRCZQK2yjx1cRHjWBLO8IFysYsWxEoA3uE=;
-        b=W4p7IqK840U96gHxPUFDwKRKl0DeyM62Cf4hK4MVxDeZLz/NuJnzVzNLCXHzzJPXw3
-         cuO7UoACnyau5ntSIeAtexp74bDciO1/5FPGcp4uN5dfZOgTP1gdGS6uEx07EyMxxSuW
-         UTG41vXaINQUcorBOvlljqNGUuDzQ/Gzdti5RddYiwIqkyU/TcLQoyujB40JItwp4I44
-         aLE8124W9EF1NiPA2u/s7EaM8iAp9jTolVsVbLF6auvhBLnXqNVx2On8kwVpvS0Al6yh
-         3ce8EGJVdi1kbQEQX8KtoqT37e1mM0eGUDk1WEofyR/5anu3exltpzmPFnsw6CUMrPmR
-         10SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xryJO8lkXqRCZQK2yjx1cRHjWBLO8IFysYsWxEoA3uE=;
-        b=MKcr+XdNyQCVdcT89qLObnS3T9lVEzJOuviZO3j+W/r3Zv8IaVhcZzet+GN3J8LP/E
-         Yybjn6SmXRUwp9gYrh9i0i6MxqxVUu3Algmc5sdmjXT+fQdJmQF9C5xNGhLWRbWVjYyy
-         w9wCTx8+ls84XsFk+6SBdGXg2fgr1yEqy20FBXp/0QF8H0RtIG77ny9HxEx8uEyKSugz
-         bKwm7aUhBWNP6757hq7L1WkTEVG6EBzD48IrXtJcxRShetf1NkVF5gwdfb1zxSvh/6DE
-         fkFqGhz9UhrWoRZ+E2cFXDmG92VHD9Mp8YgQpC+sHdcBRH7GRfnmMFib90IxMzgykkn8
-         qDxw==
-X-Gm-Message-State: ANhLgQ2Gj6xWISZgAGHPVfwZjf+u3YPECEtKCTvFyioTJGydiJHlVz3W
-        nNsUSXGvaPyMHp9Tl3w0K7gZvu3gxjf68AIPgy4=
-X-Google-Smtp-Source: ADFU+vutZe3vAn9jxlvO0kvX2a2rYQyzTHs+93M3VoF6k7ot+b480wfjbV128JnurPO8vWCARFUaoAdJ1D285cdVDEc=
-X-Received: by 2002:a19:5504:: with SMTP id n4mr3537070lfe.149.1584660352957;
- Thu, 19 Mar 2020 16:25:52 -0700 (PDT)
+        id S1727220AbgCSX4j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Mar 2020 19:56:39 -0400
+Received: from mga05.intel.com ([192.55.52.43]:25724 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727202AbgCSX4j (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Mar 2020 19:56:39 -0400
+IronPort-SDR: 1aldVkpbu8BPgzI0h08SkQDvxcU4NEjVqp5xcW/nu7kivRTxuTZoHsxDtRM1CRK1r7l85UgFoz
+ T3KTAvf00n4w==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2020 16:56:37 -0700
+IronPort-SDR: rHiEyuFGrbVmJ7u8na+vYlYml4tdDEqJvf5NgZ2zsQqtj6sM5KiQ62yBWyW9lFwnJeJQpp1F8b
+ jTg++XZf6hUw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,573,1574150400"; 
+   d="scan'208";a="268909891"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 19 Mar 2020 16:56:36 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jF51g-000AOf-0v; Fri, 20 Mar 2020 07:56:36 +0800
+Date:   Fri, 20 Mar 2020 07:55:45 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ f62c1930674913b18daaa608c348000ff124a481
+Message-ID: <5e740681.9Xp9ylMywub8oGF5%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20200318204302.693307984@linutronix.de> <20200318204408.521507446@linutronix.de>
-In-Reply-To: <20200318204408.521507446@linutronix.de>
-From:   Julian Calaby <julian.calaby@gmail.com>
-Date:   Fri, 20 Mar 2020 10:25:41 +1100
-Message-ID: <CAGRGNgXAW14=8ntTiB_hJ_nLq7WC_oFR3N9BNjqVEZM=ze85tQ@mail.gmail.com>
-Subject: Re: [patch V2 11/15] completion: Use simple wait queues
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thomas,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: f62c1930674913b18daaa608c348000ff124a481  Merge tag 'tegra-for-5.7-usb-v2' of git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into usb-next
 
-On Thu, Mar 19, 2020 at 7:48 AM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> From: Thomas Gleixner <tglx@linutronix.de>
->
-> completion uses a wait_queue_head_t to enqueue waiters.
->
-> wait_queue_head_t contains a spinlock_t to protect the list of waiters
-> which excludes it from being used in truly atomic context on a PREEMPT_RT
-> enabled kernel.
->
-> The spinlock in the wait queue head cannot be replaced by a raw_spinlock
-> because:
->
->   - wait queues can have custom wakeup callbacks, which acquire other
->     spinlock_t locks and have potentially long execution times
->
->   - wake_up() walks an unbounded number of list entries during the wake up
->     and may wake an unbounded number of waiters.
->
-> For simplicity and performance reasons complete() should be usable on
-> PREEMPT_RT enabled kernels.
->
-> completions do not use custom wakeup callbacks and are usually single
-> waiter, except for a few corner cases.
->
-> Replace the wait queue in the completion with a simple wait queue (swait),
-> which uses a raw_spinlock_t for protecting the waiter list and therefore is
-> safe to use inside truly atomic regions on PREEMPT_RT.
->
-> There is no semantical or functional change:
->
->   - completions use the exclusive wait mode which is what swait provides
->
->   - complete() wakes one exclusive waiter
->
->   - complete_all() wakes all waiters while holding the lock which protects
->     the wait queue against newly incoming waiters. The conversion to swait
->     preserves this behaviour.
->
-> complete_all() might cause unbound latencies with a large number of waiters
-> being woken at once, but most complete_all() usage sites are either in
-> testing or initialization code or have only a really small number of
-> concurrent waiters which for now does not cause a latency problem. Keep it
-> simple for now.
->
-> The fixup of the warning check in the USB gadget driver is just a straight
-> forward conversion of the lockless waiter check from one waitqueue type to
-> the other.
->
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> ---
-> V2: Split out the orinoco and usb gadget parts and amended change log
-> ---
->  drivers/usb/gadget/function/f_fs.c |    2 +-
->  include/linux/completion.h         |    8 ++++----
->  kernel/sched/completion.c          |   36 +++++++++++++++++++-----------------
->  3 files changed, 24 insertions(+), 22 deletions(-)
->
-> --- a/drivers/usb/gadget/function/f_fs.c
-> +++ b/drivers/usb/gadget/function/f_fs.c
-> @@ -1703,7 +1703,7 @@ static void ffs_data_put(struct ffs_data
->                 pr_info("%s(): freeing\n", __func__);
->                 ffs_data_clear(ffs);
->                 BUG_ON(waitqueue_active(&ffs->ev.waitq) ||
-> -                      waitqueue_active(&ffs->ep0req_completion.wait) ||
-> +                      swait_active(&ffs->ep0req_completion.wait) ||
+elapsed time: 530m
 
-This looks like some code is reaching deep into the dirty dark corners
-of the completion implementation, should there be some wrapper around
-this to hide that?
+configs tested: 175
+configs skipped: 0
 
-Thanks,
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
--- 
-Julian Calaby
+arm                              allmodconfig
+arm                               allnoconfig
+arm                              allyesconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm64                            allyesconfig
+arm                         at91_dt_defconfig
+arm                           efm32_defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                        multi_v7_defconfig
+arm                        shmobile_defconfig
+arm                           sunxi_defconfig
+arm64                               defconfig
+sparc                            allyesconfig
+s390                          debug_defconfig
+s390                                defconfig
+arc                                 defconfig
+riscv                          rv32_defconfig
+nds32                               defconfig
+s390                              allnoconfig
+m68k                             allmodconfig
+openrisc                 simple_smp_defconfig
+sparc64                           allnoconfig
+ia64                                defconfig
+powerpc                             defconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                             alldefconfig
+i386                                defconfig
+ia64                             alldefconfig
+ia64                             allmodconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+nios2                         3c120_defconfig
+nios2                         10m50_defconfig
+c6x                        evmc6678_defconfig
+xtensa                          iss_defconfig
+c6x                              allyesconfig
+xtensa                       common_defconfig
+openrisc                    or1ksim_defconfig
+nds32                             allnoconfig
+csky                                defconfig
+alpha                               defconfig
+h8300                     edosk2674_defconfig
+h8300                    h8300h-sim_defconfig
+h8300                       h8s-sim_defconfig
+m68k                       m5475evb_defconfig
+m68k                          multi_defconfig
+m68k                           sun3_defconfig
+arc                              allyesconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
+powerpc                           allnoconfig
+powerpc                       ppc64_defconfig
+powerpc                          rhel-kconfig
+mips                      fuloong2e_defconfig
+mips                      malta_kvm_defconfig
+mips                             allyesconfig
+mips                         64r6el_defconfig
+mips                              allnoconfig
+mips                           32r2_defconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                           allyesconfig
+parisc                generic-32bit_defconfig
+parisc                generic-64bit_defconfig
+x86_64               randconfig-a001-20200319
+x86_64               randconfig-a002-20200319
+x86_64               randconfig-a003-20200319
+i386                 randconfig-a001-20200319
+i386                 randconfig-a002-20200319
+i386                 randconfig-a003-20200319
+riscv                randconfig-a001-20200319
+m68k                 randconfig-a001-20200319
+nds32                randconfig-a001-20200319
+alpha                randconfig-a001-20200319
+parisc               randconfig-a001-20200319
+mips                 randconfig-a001-20200319
+c6x                  randconfig-a001-20200319
+h8300                randconfig-a001-20200319
+microblaze           randconfig-a001-20200319
+nios2                randconfig-a001-20200319
+sparc64              randconfig-a001-20200319
+xtensa               randconfig-a001-20200319
+csky                 randconfig-a001-20200319
+openrisc             randconfig-a001-20200319
+sh                   randconfig-a001-20200319
+s390                 randconfig-a001-20200319
+x86_64               randconfig-b001-20200319
+x86_64               randconfig-b002-20200319
+x86_64               randconfig-b003-20200319
+i386                 randconfig-b001-20200319
+i386                 randconfig-b002-20200319
+i386                 randconfig-b003-20200319
+x86_64               randconfig-c001-20200319
+x86_64               randconfig-c002-20200319
+x86_64               randconfig-c003-20200319
+i386                 randconfig-c001-20200319
+i386                 randconfig-c002-20200319
+i386                 randconfig-c003-20200319
+x86_64               randconfig-d001-20200319
+x86_64               randconfig-d002-20200319
+x86_64               randconfig-d003-20200319
+i386                 randconfig-d001-20200319
+i386                 randconfig-d002-20200319
+i386                 randconfig-d003-20200319
+x86_64               randconfig-e001-20200319
+x86_64               randconfig-e002-20200319
+x86_64               randconfig-e003-20200319
+i386                 randconfig-e001-20200319
+i386                 randconfig-e002-20200319
+i386                 randconfig-e003-20200319
+x86_64               randconfig-f001-20200319
+x86_64               randconfig-f002-20200319
+x86_64               randconfig-f003-20200319
+i386                 randconfig-f001-20200319
+i386                 randconfig-f002-20200319
+i386                 randconfig-f003-20200319
+x86_64               randconfig-g001-20200319
+x86_64               randconfig-g002-20200319
+x86_64               randconfig-g003-20200319
+i386                 randconfig-g001-20200319
+i386                 randconfig-g002-20200319
+i386                 randconfig-g003-20200319
+x86_64               randconfig-h001-20200319
+x86_64               randconfig-h002-20200319
+x86_64               randconfig-h003-20200319
+i386                 randconfig-h001-20200319
+i386                 randconfig-h002-20200319
+i386                 randconfig-h003-20200319
+x86_64               randconfig-h001-20200320
+x86_64               randconfig-h002-20200320
+x86_64               randconfig-h003-20200320
+i386                 randconfig-h001-20200320
+i386                 randconfig-h002-20200320
+i386                 randconfig-h003-20200320
+arc                  randconfig-a001-20200320
+arm                  randconfig-a001-20200320
+arm64                randconfig-a001-20200320
+ia64                 randconfig-a001-20200320
+powerpc              randconfig-a001-20200320
+sparc                randconfig-a001-20200320
+arc                  randconfig-a001-20200319
+ia64                 randconfig-a001-20200319
+arm                  randconfig-a001-20200319
+arm64                randconfig-a001-20200319
+sparc                randconfig-a001-20200319
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                       zfcpdump_defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+s390                             alldefconfig
+sh                               allmodconfig
+sh                                allnoconfig
+sh                          rsk7269_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                            titan_defconfig
+sparc                               defconfig
+sparc64                          allmodconfig
+sparc64                          allyesconfig
+sparc64                             defconfig
+um                                  defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              fedora-25
+x86_64                                  kexec
+x86_64                                    lkp
+x86_64                                   rhel
+x86_64                         rhel-7.2-clear
+x86_64                               rhel-7.6
 
-Email: julian.calaby@gmail.com
-Profile: http://www.google.com/profiles/julian.calaby/
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
