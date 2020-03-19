@@ -2,233 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 959DD18BEEA
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 19:03:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7453F18BEF5
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 19:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727698AbgCSSC4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Mar 2020 14:02:56 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:33784 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727303AbgCSSC4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Mar 2020 14:02:56 -0400
-Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1jEzUo-0006uF-9W; Thu, 19 Mar 2020 19:02:18 +0100
-Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id 8F6F8103088; Thu, 19 Mar 2020 19:02:17 +0100 (CET)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     paulmck@kernel.org
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [patch V2 08/15] Documentation: Add lock ordering and nesting documentation
-In-Reply-To: <20200318223137.GW3199@paulmck-ThinkPad-P72>
-References: <20200318204302.693307984@linutronix.de> <20200318204408.211530902@linutronix.de> <20200318223137.GW3199@paulmck-ThinkPad-P72>
-Date:   Thu, 19 Mar 2020 19:02:17 +0100
-Message-ID: <874kuk5il2.fsf@nanos.tec.linutronix.de>
+        id S1727561AbgCSSDm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Mar 2020 14:03:42 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:40769 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727220AbgCSSDm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Mar 2020 14:03:42 -0400
+Received: by mail-ed1-f65.google.com with SMTP id a24so3869649edy.7
+        for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2020 11:03:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=XfNpIrjpsRE5Z/i+mEEnL1CN6uH1onpiPIQdClkvN9k=;
+        b=zUNj5uWPN3ed1s0ovn/PizQ3gonRKIsiPyOqsCTbOf9n1TWl0o60Agb+4fTV2eoYi0
+         zv4fUftei3+7uGNBFN3oHKBi1wCkcIv24/sM5sVKPymgnZxQBtgGeUf86U/4/e8ymNNY
+         fo4BiOFuCNG+GbvYzWb8NivNs1ZfLDropeV1j2djud6WRCAQe6wpHXvGlVCSXouAhwH8
+         nHeKziNAmqcvtJhC9sQZ3rU8+4Kh1q1RcgHbddGpl6DeuuaDnRcpv5TYYJhYdYPgJqhf
+         KifXIkXGlezdB2uknSnll53X9ffy8g8Us1tJCxPRWVta7rqlc9Utvyhbv1zEDaNfodSN
+         xSXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=XfNpIrjpsRE5Z/i+mEEnL1CN6uH1onpiPIQdClkvN9k=;
+        b=b43OnBnRtSiEp3F0Q46XKkqBWaXG3hwqNubzJAdZEzSGDXaDn4OjIQlL2Z24oaljqE
+         7M+7Y+05/pmcmZXGIFo+z8Ws4BBg7M52ospxGnORrr6ri3ib1DmuzgF6KxFp1h9eObM3
+         sw9r7/+z89lfuxY956VafG5EVpuzgyQZvnkfRE841VQzfLhV7XeEVuN1vWVyhg88lEQ+
+         Ksvh6bu4XFT/nolhiJWZVkiS/TfAYo1SiNOLDwX/6g0Ymgc9d3Zd+4VCbzkZSYbQGQdt
+         cYFz/wxMB9NrKfpD88f10Pd0VwN7lHXq3VVbrzMxRFnzhSuVbGdJaBUC3bs4art/zTsZ
+         JUKw==
+X-Gm-Message-State: ANhLgQ2gM1QXCsqThuEuphJo9Dymu7XbUvTbrUVVXfPtTPMM609Vil4y
+        /qE6Ifax/FRqdicA3Sdl4SctDg==
+X-Google-Smtp-Source: ADFU+vscWLKaOryISlWMAo7HeQrnyWVtnZCYLNMamJ7iFeEAu+BEipdUTnLwPnEstiRldF4p+RNPhA==
+X-Received: by 2002:a05:6402:2cd:: with SMTP id b13mr4017272edx.68.1584641019890;
+        Thu, 19 Mar 2020 11:03:39 -0700 (PDT)
+Received: from [192.168.0.38] ([176.61.57.127])
+        by smtp.gmail.com with ESMTPSA id ny24sm184082ejb.50.2020.03.19.11.03.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Mar 2020 11:03:38 -0700 (PDT)
+Subject: Re: [PATCH 2/7] dt-bindings: usb: dwc3: Add a gpio-usb-connector
+ example
+To:     Stephen Boyd <swboyd@chromium.org>, balbi@kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bjorn.andersson@linaro.org, jackp@codeaurora.org, robh@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org
+References: <20200311191501.8165-1-bryan.odonoghue@linaro.org>
+ <20200311191501.8165-3-bryan.odonoghue@linaro.org>
+ <158458013177.152100.17920784952083533825@swboyd.mtv.corp.google.com>
+ <aa6aa234-e2d1-bdcd-0f0e-64b2a7e497d3@linaro.org>
+ <158463604559.152100.9219030962819234620@swboyd.mtv.corp.google.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Message-ID: <f6e948cb-7d3f-72b6-b153-58afb1304c49@linaro.org>
+Date:   Thu, 19 Mar 2020 18:03:58 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+In-Reply-To: <158463604559.152100.9219030962819234620@swboyd.mtv.corp.google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Paul,
+On 19/03/2020 16:40, Stephen Boyd wrote:
+> Quoting Bryan O'Donoghue (2020-03-19 08:22:14)
+>> On 19/03/2020 01:08, Stephen Boyd wrote:
+>>>
+>>> Maybe it should be a virtual node at the root of the DT if it's GPIO
+>>> controlled? And then the phy can be connected to the usb connector
+>>> through the graph binding.
+>>
+>> Graph binding can probably work.
+>>
+>> Re: the PHY.
+>>
+>> For myself the hardware model is
+>>
+>> Connector -> PHY -> Host controller -> Host controller wrapper
+>>
+>> Only
+>>
+>> Connector -> Host controller -> Host controller wrapper
+>>
+>> care about the USB role though.
+>>
+>> If your PHY did care about the role, you'd really need to write a
+>> connector/phy type-c type driver, to detect the state and toggle your
+>> PHY bits before doing usb_role_switch_set_role() back to DWC3.
+>>
+> 
+> Yes some PHYs do care about the role. Sometimes they have to toggle some
+> bit to switch between host and gadget mode for example. I haven't fully
+> read this patch series but maybe the PHY can be the one that controls
+> the gpio for the connector?
 
-"Paul E. McKenney" <paulmck@kernel.org> writes:
+Previous version of the PHY from 2019 had extcon toggling vbus.
 
-> On Wed, Mar 18, 2020 at 09:43:10PM +0100, Thomas Gleixner wrote:
->
-> Mostly native-English-speaker services below, so please feel free to
-> ignore.  The one place I made a substantive change, I marked it "@@@".
-> I only did about half of this document, but should this prove useful,
-> I will do the other half later.
+Since extcon is going away, we moved go usb-gpio
 
-Native speaker services are always useful and appreciated.
+https://lwn.net/ml/devicetree/20190905175802.GA19599@jackp-linux.qualcomm.com/
 
->> +The kernel provides a variety of locking primitives which can be divided
->> +into two categories:
->> +
->> + - Sleeping locks
->> + - Spinning locks
->> +
->> +This document describes the lock types at least at the conceptual level and
->> +provides rules for nesting of lock types also under the aspect of PREEMPT_RT.
->
-> I suggest something like this:
->
-> This document conceptually describes these lock types and provides rules
-> for their nesting, including the rules for use under PREEMPT_RT.
+https://lwn.net/ml/devicetree/5d71edf5.1c69fb81.1f307.fdd6@mx.google.com/
 
-Way better :)
+usb-gpio-conn handle VBUS and notifies via the USB role switch API.
 
->> +Sleeping locks can only be acquired in preemptible task context.
->> +
->> +Some of the implementations allow try_lock() attempts from other contexts,
->> +but that has to be really evaluated carefully including the question
->> +whether the unlock can be done from that context safely as well.
->> +
->> +Note that some lock types change their implementation details when
->> +debugging is enabled, so this should be really only considered if there is
->> +no other option.
->
-> How about something like this?
->
-> Although implementations allow try_lock() from other contexts, it is
-> necessary to carefully evaluate the safety of unlock() as well as of
-> try_lock().  Furthermore, it is also necessary to evaluate the debugging
-> versions of these primitives.  In short, don't acquire sleeping locks
-> from other contexts unless there is no other option.
+Which if the connector is a child of the controller "just works" but, 
+maybe with a little bit of work DT <port> references could do the same 
+thing and the connector wouldn't need to be declared as a child.
 
-Yup.
+> We (ChromeOS) need to integrate the type-c connector class, etc. on
+> sc7180 with the dwc3 driver and the current thinking has the type-c
+> connectors underneath the cros_ec node because the EC is the type-c
+> manager. The EC will have a type-c driver associated with it.
 
->> +Sleeping lock types:
->> +
->> + - mutex
->> + - rt_mutex
->> + - semaphore
->> + - rw_semaphore
->> + - ww_mutex
->> + - percpu_rw_semaphore
->> +
->> +On a PREEMPT_RT enabled kernel the following lock types are converted to
->> +sleeping locks:
->
-> On PREEMPT_RT kernels, these lock types are converted to sleeping
-> locks:
+right and you don't want, doesn't work or doesn't make sense, to declare 
+cros_ec as a child of DWC3, fair enough.
 
-Ok.
+I guess a DT remote-endpoint{} will do the job.
 
->> + - spinlock_t
->> + - rwlock_t
->> +
->> +Spinning locks
->> +--------------
->> +
->> + - raw_spinlock_t
->> + - bit spinlocks
->> +
->> +On a non PREEMPT_RT enabled kernel the following lock types are spinning
->> +locks as well:
->
-> On non-PREEMPT_RT kernels, these lock types are also spinning locks:
+Something like:
+arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
 
-Ok.
-
->> + - spinlock_t
->> + - rwlock_t
->> +
->> +Spinning locks implicitly disable preemption and the lock / unlock functions
->> +can have suffixes which apply further protections:
->> +
->> + ===================  ====================================================
->> + _bh()                Disable / enable bottom halves (soft interrupts)
->> + _irq()               Disable / enable interrupts
->> + _irqsave/restore()   Save and disable / restore interrupt disabled state
->> + ===================  ====================================================
->> +
->> +
->> +rtmutex
->> +=======
->> +
->> +RT-mutexes are mutexes with support for priority inheritance (PI).
->> +
->> +PI has limitations on non PREEMPT_RT enabled kernels due to preemption and
->> +interrupt disabled sections.
->> +
->> +On a PREEMPT_RT enabled kernel most of these sections are fully
->> +preemptible. This is possible because PREEMPT_RT forces most executions
->> +into task context, especially interrupt handlers and soft interrupts, which
->> +allows to substitute spinlock_t and rwlock_t with RT-mutex based
->> +implementations.
->
-> PI clearly cannot preempt preemption-disabled or interrupt-disabled
-> regions of code, even on PREEMPT_RT kernels.  Instead, PREEMPT_RT kernels
-> execute most such regions of code in preemptible task context, especially
-> interrupt handlers and soft interrupts.  This conversion allows spinlock_t
-> and rwlock_t to be implemented via RT-mutexes.
-
-Nice.
-
->> +
->> +raw_spinlock_t and spinlock_t
->> +=============================
->> +
->> +raw_spinlock_t
->> +--------------
->> +
->> +raw_spinlock_t is a strict spinning lock implementation regardless of the
->> +kernel configuration including PREEMPT_RT enabled kernels.
->> +
->> +raw_spinlock_t is to be used only in real critical core code, low level
->> +interrupt handling and places where protecting (hardware) state is required
->> +to be safe against preemption and eventually interrupts.
->> +
->> +Another reason to use raw_spinlock_t is when the critical section is tiny
->> +to avoid the overhead of spinlock_t on a PREEMPT_RT enabled kernel in the
->> +contended case.
->
-> raw_spinlock_t is a strict spinning lock implementation in all kernels,
-> including PREEMPT_RT kernels.  Use raw_spinlock_t only in real critical
-> core code, low level interrupt handling and places where disabling
-> preemption or interrupts is required, for example, to safely access
-> hardware state.  raw_spinlock_t can sometimes also be used when the
-> critical section is tiny and the lock is lightly contended, thus avoiding
-> RT-mutex overhead.
->
-> @@@  I added the point about the lock being lightly contended.
-
-Hmm, not sure. The point is that if the critical section is small the
-overhead of cross CPU boosting along with the resulting IPIs is going to
-be at least an order of magnitude larger. And on contention this is just
-pushing the raw_spinlock contention off to the raw_spinlock in the rt
-mutex plus the owning tasks pi_lock which makes things even worse.
-
->> + - The hard interrupt related suffixes for spin_lock / spin_unlock
->> +   operations (_irq, _irqsave / _irqrestore) do not affect the CPUs
->                                                                   CPU's
-
-Si senor!
-
->> +   interrupt disabled state
->> +
->> + - The soft interrupt related suffix (_bh()) is still disabling the
->> +   execution of soft interrupts, but contrary to a non PREEMPT_RT enabled
->> +   kernel, which utilizes the preemption count, this is achieved by a per
->> +   CPU bottom half locking mechanism.
->
->  - The soft interrupt related suffix (_bh()) still disables softirq
->    handlers.  However, unlike non-PREEMPT_RT kernels (which disable
->    preemption to get this effect), PREEMPT_RT kernels use a per-CPU
->    per-bottom-half locking mechanism.
-
-it's not per-bottom-half anymore. That turned out to be dangerous due to
-dependencies between BH types, e.g. network and timers.
-
-I hope I was able to encourage you to comment on the other half as well :)
-
-Thanks,
-
-        tglx
+---
+bod
