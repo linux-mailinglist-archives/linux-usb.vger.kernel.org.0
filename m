@@ -2,129 +2,309 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A227B18A926
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 00:20:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AAEF18A9DD
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 01:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726869AbgCRXU2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Mar 2020 19:20:28 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:37485 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726619AbgCRXU2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Mar 2020 19:20:28 -0400
-Received: by mail-wm1-f67.google.com with SMTP id d1so87969wmb.2;
-        Wed, 18 Mar 2020 16:20:25 -0700 (PDT)
+        id S1727213AbgCSAd6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Mar 2020 20:33:58 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:39425 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726777AbgCSAdz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Mar 2020 20:33:55 -0400
+Received: by mail-qt1-f194.google.com with SMTP id f20so378214qtq.6
+        for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2020 17:33:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=joelfernandes.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=YNvgc32Yj8B/ZWFedujmba0NXwHYk4Zaqs+FyfA8qBs=;
-        b=NnYTEH/vji7QJ/cBb1SBkDh3tsEaYb9r/E2AyOjUQ88QLPsAizJjvC5k0PrMHclQrk
-         GB6Mw5pkMn3snPkARWPMsoRyThXTkqfsjpdJ7etrFYrqLECkMmZA8sN4stdoZvy8RHDg
-         MMJ4jgtSzm9yv7ryTAU3xfuvrEIsZZfZShGXPSyt4rOXVejDtXc5SrPSiS9CgdngR7iE
-         mMDLZ8KQ/LCASacwjAXorK1KmymdQRKsCxOFpPuP/9whHVxKmeZAqHBs76LDvB53vt92
-         qVgBL5ZhQEB7WlWGWBBUOBclf6UIAliZ1uTKkHcViSF6fVYzcgddVGwMfiC+5iRf+BY7
-         cIkg==
+        bh=cHl5FEDU/in/tKhyh8KADSkZ8t44HVVU6qSIiQF7HDk=;
+        b=vKjz15irrUHQOxGKx3YJZSYaREZiLBQ5dkdKASVNi/DUnapYI1oeMp9PSbchikzKPl
+         RL8eE9BxcoQ9gT2Z+96oGA/M+zvf4M7Ww0jlnMdeOCV7wPsoaRRDYZ+t1YRHJBhYvxmw
+         JQHaOq18/lt39V3Rogoc35Lu1FpkxEJUwdFM4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=YNvgc32Yj8B/ZWFedujmba0NXwHYk4Zaqs+FyfA8qBs=;
-        b=jXUKphQHG7MWBugb15Q4gVUlDI3KOztFuasXKCplHWpUmZaacxNb3nNVrFzOQUhoEU
-         i3jvmxoTauLaKFme5SFZjZVwKDdO3SWKK5rnD+S7/wyXs30Q8tN9+S5V6wOIkGEv6gvB
-         807UfKLmmR54F63oiYlZ8vaKcsSFZqWztPdZAJQ/gRvnUjqOusBLFLbxY53mXwttJuUI
-         G+1e5ZbZxeZSDbKlVSyysAkQeQ4Cdd/mCgUvPo4PHDcE1A01o5HBxaHgCWh0760ly51l
-         DK1y1JfxSTkYHy5EH+q7y6Xq5LVUoSptGIuIvevEH3X1rOeHo19s2poMOjW/1rozTr6d
-         nj3w==
-X-Gm-Message-State: ANhLgQ38OZtKpd6pqm0KxvWSkip4JSAPxZhL2N4i0GJG1TloiJoJ72LO
-        wz2PhAdNtYu0B9VZ8HClD/5AQFbj
-X-Google-Smtp-Source: ADFU+vvFamwi0x2RLmnTMOcPWCZYogHZ/mH/TzgVKwbxYHLdsPam/oqMa+XXC2vCMvGlQjxZk2ikxQ==
-X-Received: by 2002:a1c:7207:: with SMTP id n7mr92577wmc.138.1584573624939;
-        Wed, 18 Mar 2020 16:20:24 -0700 (PDT)
-Received: from localhost (pD9E51CDC.dip0.t-ipconnect.de. [217.229.28.220])
-        by smtp.gmail.com with ESMTPSA id h81sm465786wme.42.2020.03.18.16.20.23
+        bh=cHl5FEDU/in/tKhyh8KADSkZ8t44HVVU6qSIiQF7HDk=;
+        b=c7RNtD371S9zlDvEHNKO5s5XTNc/SPhNZaE39s1QD6hsHAXZ63mk4uM68B0PM2q1OI
+         u8yZgYUHdXZskOE4aBOJywx7XJLP3v6J3yy+2JeKaYq4KPqlroDSXpl7RXnnPttknj1m
+         3xHrLnABRNlf5MrmYQtVLt37I3LTe4djwHyvuXMxRE0tDNzlJep4/WUcOmA5g+NHBWQA
+         aUkuhIsQe5RF0vwGXbwNb0EW9mwJGCmY13GgsnGpcnBY8+1rASOFW0JCtP7pibL6a0VO
+         bZoaFnQaaXvv7bI3NzSQCK3Ghs4hcx6qFan4748NJFujOtPX3cmV6EokgJT97NjpmLuw
+         mIyw==
+X-Gm-Message-State: ANhLgQ2m17syxr7xEn4QNUN0wR3mhXAINFBvTO0Sr8MRdg+Fr1r3zqYi
+        a+CsapHR+o4zPhkzseR8cOj/aQ==
+X-Google-Smtp-Source: ADFU+vte9vg5yrKnsJYwQUFLJMp35Yp0oNpQIim2wyXmoa5rkeGpiqYzRFosPkhMiCPa11iAMkqA+g==
+X-Received: by 2002:ac8:1762:: with SMTP id u31mr389327qtk.359.1584578032733;
+        Wed, 18 Mar 2020 17:33:52 -0700 (PDT)
+Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id f13sm456312qkm.19.2020.03.18.17.33.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2020 16:20:23 -0700 (PDT)
-Date:   Thu, 19 Mar 2020 00:20:22 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [GIT PULL] usb: tegra: Changes for v5.7-rc1
-Message-ID: <20200318232022.GB2885069@ulmo>
-References: <20200313170730.2924259-1-thierry.reding@gmail.com>
- <20200317185835.GC1480055@kroah.com>
+        Wed, 18 Mar 2020 17:33:52 -0700 (PDT)
+Date:   Wed, 18 Mar 2020 20:33:51 -0400
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [patch V2 11/15] completion: Use simple wait queues
+Message-ID: <20200319003351.GA211584@google.com>
+References: <20200318204302.693307984@linutronix.de>
+ <20200318204408.521507446@linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="eAbsdosE1cNLO4uF"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200317185835.GC1480055@kroah.com>
-User-Agent: Mutt/1.13.1 (2019-12-14)
+In-Reply-To: <20200318204408.521507446@linutronix.de>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Thomas,
 
---eAbsdosE1cNLO4uF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, Mar 18, 2020 at 09:43:13PM +0100, Thomas Gleixner wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> completion uses a wait_queue_head_t to enqueue waiters.
+> 
+> wait_queue_head_t contains a spinlock_t to protect the list of waiters
+> which excludes it from being used in truly atomic context on a PREEMPT_RT
+> enabled kernel.
+> 
+> The spinlock in the wait queue head cannot be replaced by a raw_spinlock
+> because:
+> 
+>   - wait queues can have custom wakeup callbacks, which acquire other
+>     spinlock_t locks and have potentially long execution times
 
-On Tue, Mar 17, 2020 at 07:58:35PM +0100, Greg Kroah-Hartman wrote:
-> On Fri, Mar 13, 2020 at 06:07:30PM +0100, Thierry Reding wrote:
-> > Hi Greg, Felipe,
-> >=20
-> > The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea098=
-62b9:
-> >=20
-> >   Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
-> >=20
-> > are available in the Git repository at:
-> >=20
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/fo=
-r-5.7-usb
-> >=20
-> > for you to fetch changes up to 9dd4fbef2f88ccf46f5294805bf121d6554791e8:
-> >=20
-> >   usb: gadget: tegra-xudc: Support multiple device modes (2020-03-13 17=
-:16:28 +0100)
-> >=20
-> > It occurred to me that I could just as well send this pull request to
-> > you guys, rather than take it via ARM SoC. Kishon already acked all the
-> > patches for the PHY tree that this series depends on, so I've included
-> > them here as a dependency.
-> >=20
-> > Let me know if you'd prefer that I take this through ARM SoC.
->=20
-> I tried to merge this into my usb-next branch, but get merge issues in
-> drivers/usb/gadget/udc/tegra-xudc.c that I really don't know how to
-> resolve.
->=20
-> Can you give me a clue as to what to do here?
+Cool, makes sense.
 
-Let me rebase this on top of your usb-next branch and resend this PR
-after resolving the conflict.
+>   - wake_up() walks an unbounded number of list entries during the wake up
+>     and may wake an unbounded number of waiters.
 
-Thierry
+Just to clarify here, wake_up() will really wake up just 1 waiter if all the
+waiters on the queue are exclusive right? So in such scenario at least, the
+"unbounded number of waiters" would not be an issue if everything waiting was
+exclusive and waitqueue with wake_up() was used. Please correct me if I'm
+wrong about that though.
 
---eAbsdosE1cNLO4uF
-Content-Type: application/pgp-signature; name="signature.asc"
+So the main reasons to avoid waitqueue in favor of swait (as you mentioned)
+would be the sleep-while-atomic issue in truly atomic context on RT, and the
+fact that callbacks can take a long time.
 
------BEGIN PGP SIGNATURE-----
+> 
+> For simplicity and performance reasons complete() should be usable on
+> PREEMPT_RT enabled kernels.
+> 
+> completions do not use custom wakeup callbacks and are usually single
+> waiter, except for a few corner cases.
+> 
+> Replace the wait queue in the completion with a simple wait queue (swait),
+> which uses a raw_spinlock_t for protecting the waiter list and therefore is
+> safe to use inside truly atomic regions on PREEMPT_RT.
+> 
+> There is no semantical or functional change:
+> 
+>   - completions use the exclusive wait mode which is what swait provides
+> 
+>   - complete() wakes one exclusive waiter
+> 
+>   - complete_all() wakes all waiters while holding the lock which protects
+>     the wait queue against newly incoming waiters. The conversion to swait
+>     preserves this behaviour.
+> 
+> complete_all() might cause unbound latencies with a large number of waiters
+> being woken at once, but most complete_all() usage sites are either in
+> testing or initialization code or have only a really small number of
+> concurrent waiters which for now does not cause a latency problem. Keep it
+> simple for now.
+> 
+> The fixup of the warning check in the USB gadget driver is just a straight
+> forward conversion of the lockless waiter check from one waitqueue type to
+> the other.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl5yrLYACgkQ3SOs138+
-s6H07hAAoRtKHCeERZPuj3qTdFkm/k6KVMKDmmjN2Aj7jLVTbGGNrcjplf5J5bWO
-9x905oLXFCmcerVaX/oK6Q68feEWkpEEC6dQrDssixyN6hmEDH534KpM9NxFqUFR
-XL4FYYcwlhIyQtMSx/8i3gs8efPdjreKg0BPXbej4fWYWc4/IwD+WMJa7B5bzYfJ
-F5spv1T08zEn5QXzOJ6rdmTBHKZ6ximxHZbbrmltm7YvCQweOGykmnuo+FNNmMOm
-IvjBaYQZ9iqhfc2cEWzKmyV8Oitwx07McTEtUcr/AfKHEA29jGNSafyQJVxUo2Un
-FMoi9WNnUR4fRAAHLSnYqiKH2yoYqFAZOIrLDWs92eRlHUia2x6+5ZdxXaZbQ4Ln
-kozSV9D240VBWZUb0BW5g4oSjYkIkC8O/hYxah1T3aTIeHAcS2Jv4kWBfO3VL2K6
-BJIJxJOniwGIy6gRlPvYHLHffmqJD05aDDZXthSyawdp81EUmj3qBfjN1slQH3mk
-anW8v+/DaaNons4dlnVXt+uc7Y2ZDcD0h/i+FODe5EgFtSd1+HNbgbVNNVIRw0ts
-BAF0EG1U1+kpJr8W6y6vcgaeSRjxjmQ5A/ZKgiTEsbU/kwudkCKBXCVddHYpo6rv
-fTBjr3t+jDNnavS5/LDVNj05bEDglTKZQy03z95XinXgl47ulOA=
-=tYCX
------END PGP SIGNATURE-----
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
---eAbsdosE1cNLO4uF--
+thanks,
+
+ - Joel
+
+
+> ---
+> V2: Split out the orinoco and usb gadget parts and amended change log
+> ---
+>  drivers/usb/gadget/function/f_fs.c |    2 +-
+>  include/linux/completion.h         |    8 ++++----
+>  kernel/sched/completion.c          |   36 +++++++++++++++++++-----------------
+>  3 files changed, 24 insertions(+), 22 deletions(-)
+> 
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -1703,7 +1703,7 @@ static void ffs_data_put(struct ffs_data
+>  		pr_info("%s(): freeing\n", __func__);
+>  		ffs_data_clear(ffs);
+>  		BUG_ON(waitqueue_active(&ffs->ev.waitq) ||
+> -		       waitqueue_active(&ffs->ep0req_completion.wait) ||
+> +		       swait_active(&ffs->ep0req_completion.wait) ||
+>  		       waitqueue_active(&ffs->wait));
+>  		destroy_workqueue(ffs->io_completion_wq);
+>  		kfree(ffs->dev_name);
+> --- a/include/linux/completion.h
+> +++ b/include/linux/completion.h
+> @@ -9,7 +9,7 @@
+>   * See kernel/sched/completion.c for details.
+>   */
+>  
+> -#include <linux/wait.h>
+> +#include <linux/swait.h>
+>  
+>  /*
+>   * struct completion - structure used to maintain state for a "completion"
+> @@ -25,7 +25,7 @@
+>   */
+>  struct completion {
+>  	unsigned int done;
+> -	wait_queue_head_t wait;
+> +	struct swait_queue_head wait;
+>  };
+>  
+>  #define init_completion_map(x, m) __init_completion(x)
+> @@ -34,7 +34,7 @@ static inline void complete_acquire(stru
+>  static inline void complete_release(struct completion *x) {}
+>  
+>  #define COMPLETION_INITIALIZER(work) \
+> -	{ 0, __WAIT_QUEUE_HEAD_INITIALIZER((work).wait) }
+> +	{ 0, __SWAIT_QUEUE_HEAD_INITIALIZER((work).wait) }
+>  
+>  #define COMPLETION_INITIALIZER_ONSTACK_MAP(work, map) \
+>  	(*({ init_completion_map(&(work), &(map)); &(work); }))
+> @@ -85,7 +85,7 @@ static inline void complete_release(stru
+>  static inline void __init_completion(struct completion *x)
+>  {
+>  	x->done = 0;
+> -	init_waitqueue_head(&x->wait);
+> +	init_swait_queue_head(&x->wait);
+>  }
+>  
+>  /**
+> --- a/kernel/sched/completion.c
+> +++ b/kernel/sched/completion.c
+> @@ -29,12 +29,12 @@ void complete(struct completion *x)
+>  {
+>  	unsigned long flags;
+>  
+> -	spin_lock_irqsave(&x->wait.lock, flags);
+> +	raw_spin_lock_irqsave(&x->wait.lock, flags);
+>  
+>  	if (x->done != UINT_MAX)
+>  		x->done++;
+> -	__wake_up_locked(&x->wait, TASK_NORMAL, 1);
+> -	spin_unlock_irqrestore(&x->wait.lock, flags);
+> +	swake_up_locked(&x->wait);
+> +	raw_spin_unlock_irqrestore(&x->wait.lock, flags);
+>  }
+>  EXPORT_SYMBOL(complete);
+>  
+> @@ -58,10 +58,12 @@ void complete_all(struct completion *x)
+>  {
+>  	unsigned long flags;
+>  
+> -	spin_lock_irqsave(&x->wait.lock, flags);
+> +	WARN_ON(irqs_disabled());
+> +
+> +	raw_spin_lock_irqsave(&x->wait.lock, flags);
+>  	x->done = UINT_MAX;
+> -	__wake_up_locked(&x->wait, TASK_NORMAL, 0);
+> -	spin_unlock_irqrestore(&x->wait.lock, flags);
+> +	swake_up_all_locked(&x->wait);
+> +	raw_spin_unlock_irqrestore(&x->wait.lock, flags);
+>  }
+>  EXPORT_SYMBOL(complete_all);
+>  
+> @@ -70,20 +72,20 @@ do_wait_for_common(struct completion *x,
+>  		   long (*action)(long), long timeout, int state)
+>  {
+>  	if (!x->done) {
+> -		DECLARE_WAITQUEUE(wait, current);
+> +		DECLARE_SWAITQUEUE(wait);
+>  
+> -		__add_wait_queue_entry_tail_exclusive(&x->wait, &wait);
+>  		do {
+>  			if (signal_pending_state(state, current)) {
+>  				timeout = -ERESTARTSYS;
+>  				break;
+>  			}
+> +			__prepare_to_swait(&x->wait, &wait);
+>  			__set_current_state(state);
+> -			spin_unlock_irq(&x->wait.lock);
+> +			raw_spin_unlock_irq(&x->wait.lock);
+>  			timeout = action(timeout);
+> -			spin_lock_irq(&x->wait.lock);
+> +			raw_spin_lock_irq(&x->wait.lock);
+>  		} while (!x->done && timeout);
+> -		__remove_wait_queue(&x->wait, &wait);
+> +		__finish_swait(&x->wait, &wait);
+>  		if (!x->done)
+>  			return timeout;
+>  	}
+> @@ -100,9 +102,9 @@ static inline long __sched
+>  
+>  	complete_acquire(x);
+>  
+> -	spin_lock_irq(&x->wait.lock);
+> +	raw_spin_lock_irq(&x->wait.lock);
+>  	timeout = do_wait_for_common(x, action, timeout, state);
+> -	spin_unlock_irq(&x->wait.lock);
+> +	raw_spin_unlock_irq(&x->wait.lock);
+>  
+>  	complete_release(x);
+>  
+> @@ -291,12 +293,12 @@ bool try_wait_for_completion(struct comp
+>  	if (!READ_ONCE(x->done))
+>  		return false;
+>  
+> -	spin_lock_irqsave(&x->wait.lock, flags);
+> +	raw_spin_lock_irqsave(&x->wait.lock, flags);
+>  	if (!x->done)
+>  		ret = false;
+>  	else if (x->done != UINT_MAX)
+>  		x->done--;
+> -	spin_unlock_irqrestore(&x->wait.lock, flags);
+> +	raw_spin_unlock_irqrestore(&x->wait.lock, flags);
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL(try_wait_for_completion);
+> @@ -322,8 +324,8 @@ bool completion_done(struct completion *
+>  	 * otherwise we can end up freeing the completion before complete()
+>  	 * is done referencing it.
+>  	 */
+> -	spin_lock_irqsave(&x->wait.lock, flags);
+> -	spin_unlock_irqrestore(&x->wait.lock, flags);
+> +	raw_spin_lock_irqsave(&x->wait.lock, flags);
+> +	raw_spin_unlock_irqrestore(&x->wait.lock, flags);
+>  	return true;
+>  }
+>  EXPORT_SYMBOL(completion_done);
+> 
