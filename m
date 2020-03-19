@@ -2,104 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C1718C2D9
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 23:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DD018C397
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2020 00:26:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727244AbgCSWNd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Mar 2020 18:13:33 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:33789 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727383AbgCSWNc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Mar 2020 18:13:32 -0400
-Received: by mail-pg1-f196.google.com with SMTP id d17so1449985pgo.0
-        for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2020 15:13:31 -0700 (PDT)
+        id S1727542AbgCSXZz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Mar 2020 19:25:55 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:37834 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727103AbgCSXZz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Mar 2020 19:25:55 -0400
+Received: by mail-lf1-f65.google.com with SMTP id j11so3090599lfg.4;
+        Thu, 19 Mar 2020 16:25:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=gMv6TzKYu6SFIfaWqkANidyDsDf8BBLqM+MeHs0/52E=;
-        b=OknkHI9mQD8ADRe3PXx93Kzpyb+ELDkSUgQDRM58h3yDorb4jqoTr2itJgBlfKek+s
-         GPG60InKlRJOdBdQbRXSkORE1oKfx5QpKOA2ikoMDq+wPx1Vp4MfouKsNxB8ax9Sa8Kh
-         GoqlGK+mRpfHPj8/y5H5V+JBhN3wHH/ObKR6c12R9QEHiQTFx/75EQ1uyo0+m4hHmgRL
-         mCaWvmyBcNzi6VNpXVhJ0D1BQ5OGBprC3vwM0Q1og1mu+lInsIW4fNNfCZC+BNb5JZhP
-         5gDpqQVMpvdqnczGDRKX5rYJWkSSFCqS9mpBtRj6u6hjo4oUaO1awKjC2TYh68Su8m7n
-         9ZMw==
+        bh=xryJO8lkXqRCZQK2yjx1cRHjWBLO8IFysYsWxEoA3uE=;
+        b=W4p7IqK840U96gHxPUFDwKRKl0DeyM62Cf4hK4MVxDeZLz/NuJnzVzNLCXHzzJPXw3
+         cuO7UoACnyau5ntSIeAtexp74bDciO1/5FPGcp4uN5dfZOgTP1gdGS6uEx07EyMxxSuW
+         UTG41vXaINQUcorBOvlljqNGUuDzQ/Gzdti5RddYiwIqkyU/TcLQoyujB40JItwp4I44
+         aLE8124W9EF1NiPA2u/s7EaM8iAp9jTolVsVbLF6auvhBLnXqNVx2On8kwVpvS0Al6yh
+         3ce8EGJVdi1kbQEQX8KtoqT37e1mM0eGUDk1WEofyR/5anu3exltpzmPFnsw6CUMrPmR
+         10SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gMv6TzKYu6SFIfaWqkANidyDsDf8BBLqM+MeHs0/52E=;
-        b=KyWOm2kvyN+EvDJnmajg0bNArW5xcPBuKrVywXXynj63QFkUrhMEp3zpoKHstRwRQf
-         1s0Qo3EuTwF8NAcOIwJHUjIfjO6FnwhLBzvldWoRAabXm/njMuVi80Z/vMpSXUhH4kzI
-         56bkC/zlWNCJX7J6uFAfaulWZOahjCuJtzHKAT6/heUS/PMIO2xs8kAEJJW77xKkSm79
-         e0OEyu312AnqbDEF2tjBnAg59cPwnkEQYwSqy9mQqVmTaMJy6jvPehCwxODDQBuWOn3Q
-         v+Ox62uzpF8JzvXY6bjOCwSLn8elJI9NhF3N4F/AAq1/B0tqhQBpyq/W0FgZy3djGCy2
-         VbYg==
-X-Gm-Message-State: ANhLgQ23zmdFn4Yd6V0GqJn6wjedjstT+d6WT5ZvpiVr31WJVFXTBHCy
-        /HDkfSIh95oUSmZPcwKnsNyOIvwS4+NrGi9m5QKm8Q==
-X-Google-Smtp-Source: ADFU+vvD5egTSmzMoHmdQi9kOUIOr8+dusOSqQuDB+SrijkXeLWWVcykJ42cVxTC9e1X1i9nWivq0maEcDklqSk66Ig=
-X-Received: by 2002:aa7:8745:: with SMTP id g5mr5989851pfo.306.1584656010721;
- Thu, 19 Mar 2020 15:13:30 -0700 (PDT)
+        bh=xryJO8lkXqRCZQK2yjx1cRHjWBLO8IFysYsWxEoA3uE=;
+        b=MKcr+XdNyQCVdcT89qLObnS3T9lVEzJOuviZO3j+W/r3Zv8IaVhcZzet+GN3J8LP/E
+         Yybjn6SmXRUwp9gYrh9i0i6MxqxVUu3Algmc5sdmjXT+fQdJmQF9C5xNGhLWRbWVjYyy
+         w9wCTx8+ls84XsFk+6SBdGXg2fgr1yEqy20FBXp/0QF8H0RtIG77ny9HxEx8uEyKSugz
+         bKwm7aUhBWNP6757hq7L1WkTEVG6EBzD48IrXtJcxRShetf1NkVF5gwdfb1zxSvh/6DE
+         fkFqGhz9UhrWoRZ+E2cFXDmG92VHD9Mp8YgQpC+sHdcBRH7GRfnmMFib90IxMzgykkn8
+         qDxw==
+X-Gm-Message-State: ANhLgQ2Gj6xWISZgAGHPVfwZjf+u3YPECEtKCTvFyioTJGydiJHlVz3W
+        nNsUSXGvaPyMHp9Tl3w0K7gZvu3gxjf68AIPgy4=
+X-Google-Smtp-Source: ADFU+vutZe3vAn9jxlvO0kvX2a2rYQyzTHs+93M3VoF6k7ot+b480wfjbV128JnurPO8vWCARFUaoAdJ1D285cdVDEc=
+X-Received: by 2002:a19:5504:: with SMTP id n4mr3537070lfe.149.1584660352957;
+ Thu, 19 Mar 2020 16:25:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1584655448.git.andreyknvl@google.com> <6206b80b3810f95bfe1d452de45596609a07b6ea.1584456779.git.andreyknvl@google.com>
-In-Reply-To: <6206b80b3810f95bfe1d452de45596609a07b6ea.1584456779.git.andreyknvl@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Thu, 19 Mar 2020 23:13:19 +0100
-Message-ID: <CAAeHK+xtO_A7WGFxYiJ9P9+_6B7r2E6MCoq+EhsBe0dDj=r2WQ@mail.gmail.com>
-Subject: Re: [PATCH USB] usb: raw_gadget: fix compilation warnings in uapi headers
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        "kernelci . org bot" <bot@kernelci.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20200318204302.693307984@linutronix.de> <20200318204408.521507446@linutronix.de>
+In-Reply-To: <20200318204408.521507446@linutronix.de>
+From:   Julian Calaby <julian.calaby@gmail.com>
+Date:   Fri, 20 Mar 2020 10:25:41 +1100
+Message-ID: <CAGRGNgXAW14=8ntTiB_hJ_nLq7WC_oFR3N9BNjqVEZM=ze85tQ@mail.gmail.com>
+Subject: Re: [patch V2 11/15] completion: Use simple wait queues
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 19, 2020 at 11:11 PM Andrey Konovalov <andreyknvl@google.com> wrote:
->
-> Mark usb_raw_io_flags_valid() and usb_raw_io_flags_zero() as inline to
-> fix the following warnings:
->
-> ./usr/include/linux/usb/raw_gadget.h:69:12: warning: unused function 'usb_raw_io_flags_valid' [-Wunused-function]
-> ./usr/include/linux/usb/raw_gadget.h:74:12: warning: unused function 'usb_raw_io_flags_zero' [-Wunused-function]
->
-> Reported-by: kernelci.org bot <bot@kernelci.org>
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> ---
->  include/uapi/linux/usb/raw_gadget.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/include/uapi/linux/usb/raw_gadget.h b/include/uapi/linux/usb/raw_gadget.h
-> index 00cbded71061..ea375082b3ac 100644
-> --- a/include/uapi/linux/usb/raw_gadget.h
-> +++ b/include/uapi/linux/usb/raw_gadget.h
-> @@ -66,12 +66,12 @@ struct usb_raw_event {
->  #define USB_RAW_IO_FLAGS_ZERO  0x0001
->  #define USB_RAW_IO_FLAGS_MASK  0x0001
->
-> -static int usb_raw_io_flags_valid(__u16 flags)
-> +static inline int usb_raw_io_flags_valid(__u16 flags)
->  {
->         return (flags & ~USB_RAW_IO_FLAGS_MASK) == 0;
->  }
->
-> -static int usb_raw_io_flags_zero(__u16 flags)
-> +static inline int usb_raw_io_flags_zero(__u16 flags)
->  {
->         return (flags & USB_RAW_IO_FLAGS_ZERO);
->  }
-> --
-> 2.25.1.481.gfbce0eb801-goog
->
+Hi Thomas,
 
-(Sorry, accidental resend, please ignore.)
+On Thu, Mar 19, 2020 at 7:48 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> From: Thomas Gleixner <tglx@linutronix.de>
+>
+> completion uses a wait_queue_head_t to enqueue waiters.
+>
+> wait_queue_head_t contains a spinlock_t to protect the list of waiters
+> which excludes it from being used in truly atomic context on a PREEMPT_RT
+> enabled kernel.
+>
+> The spinlock in the wait queue head cannot be replaced by a raw_spinlock
+> because:
+>
+>   - wait queues can have custom wakeup callbacks, which acquire other
+>     spinlock_t locks and have potentially long execution times
+>
+>   - wake_up() walks an unbounded number of list entries during the wake up
+>     and may wake an unbounded number of waiters.
+>
+> For simplicity and performance reasons complete() should be usable on
+> PREEMPT_RT enabled kernels.
+>
+> completions do not use custom wakeup callbacks and are usually single
+> waiter, except for a few corner cases.
+>
+> Replace the wait queue in the completion with a simple wait queue (swait),
+> which uses a raw_spinlock_t for protecting the waiter list and therefore is
+> safe to use inside truly atomic regions on PREEMPT_RT.
+>
+> There is no semantical or functional change:
+>
+>   - completions use the exclusive wait mode which is what swait provides
+>
+>   - complete() wakes one exclusive waiter
+>
+>   - complete_all() wakes all waiters while holding the lock which protects
+>     the wait queue against newly incoming waiters. The conversion to swait
+>     preserves this behaviour.
+>
+> complete_all() might cause unbound latencies with a large number of waiters
+> being woken at once, but most complete_all() usage sites are either in
+> testing or initialization code or have only a really small number of
+> concurrent waiters which for now does not cause a latency problem. Keep it
+> simple for now.
+>
+> The fixup of the warning check in the USB gadget driver is just a straight
+> forward conversion of the lockless waiter check from one waitqueue type to
+> the other.
+>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> ---
+> V2: Split out the orinoco and usb gadget parts and amended change log
+> ---
+>  drivers/usb/gadget/function/f_fs.c |    2 +-
+>  include/linux/completion.h         |    8 ++++----
+>  kernel/sched/completion.c          |   36 +++++++++++++++++++-----------------
+>  3 files changed, 24 insertions(+), 22 deletions(-)
+>
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -1703,7 +1703,7 @@ static void ffs_data_put(struct ffs_data
+>                 pr_info("%s(): freeing\n", __func__);
+>                 ffs_data_clear(ffs);
+>                 BUG_ON(waitqueue_active(&ffs->ev.waitq) ||
+> -                      waitqueue_active(&ffs->ep0req_completion.wait) ||
+> +                      swait_active(&ffs->ep0req_completion.wait) ||
+
+This looks like some code is reaching deep into the dirty dark corners
+of the completion implementation, should there be some wrapper around
+this to hide that?
+
+Thanks,
+
+-- 
+Julian Calaby
+
+Email: julian.calaby@gmail.com
+Profile: http://www.google.com/profiles/julian.calaby/
