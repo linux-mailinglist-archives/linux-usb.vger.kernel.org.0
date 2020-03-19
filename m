@@ -2,122 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E16A718AE83
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 09:42:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E37AF18AEC3
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 09:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726366AbgCSIms (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Mar 2020 04:42:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56754 "EHLO mail.kernel.org"
+        id S1726623AbgCSIul (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Mar 2020 04:50:41 -0400
+Received: from comms.puri.sm ([159.203.221.185]:33218 "EHLO comms.puri.sm"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725601AbgCSImr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Mar 2020 04:42:47 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9125A20724;
-        Thu, 19 Mar 2020 08:42:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584607367;
-        bh=bc6Fify+38nZAY3Cia1aV1OdCk4gn2q4y8vjHO0jHQs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tziaOs8nF6qC2ZxtPxDt+NdfWpIrzDmvKzsswJgbGZoj8i6PseYVNTHnVQCWhF3l7
-         BlaCfZEzl2+/751CB3Sz2r9W2tBaPF/Ha6955QYPrXbnsfvJrB3QDPo2+ZfG4d0stK
-         TebhEBXc4YrP7M09KzptbT9OYlt0nFKptulOurBg=
-Date:   Thu, 19 Mar 2020 09:42:44 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [patch V2 11/15] completion: Use simple wait queues
-Message-ID: <20200319084244.GC3492783@kroah.com>
-References: <20200318204302.693307984@linutronix.de>
- <20200318204408.521507446@linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200318204408.521507446@linutronix.de>
+        id S1725787AbgCSIul (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Mar 2020 04:50:41 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 79038DFD58;
+        Thu, 19 Mar 2020 01:50:40 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id mVIS9R2TCHKD; Thu, 19 Mar 2020 01:50:39 -0700 (PDT)
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     balbi@kernel.org
+Cc:     gregkh@linuxfoundation.org, rogerq@ti.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Subject: [PATCH v2] usb: dwc3: support continuous runtime PM with dual role
+Date:   Thu, 19 Mar 2020 09:49:02 +0100
+Message-Id: <20200319084902.24747-1-martin.kepplinger@puri.sm>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 18, 2020 at 09:43:13PM +0100, Thomas Gleixner wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
-> 
-> completion uses a wait_queue_head_t to enqueue waiters.
-> 
-> wait_queue_head_t contains a spinlock_t to protect the list of waiters
-> which excludes it from being used in truly atomic context on a PREEMPT_RT
-> enabled kernel.
-> 
-> The spinlock in the wait queue head cannot be replaced by a raw_spinlock
-> because:
-> 
->   - wait queues can have custom wakeup callbacks, which acquire other
->     spinlock_t locks and have potentially long execution times
-> 
->   - wake_up() walks an unbounded number of list entries during the wake up
->     and may wake an unbounded number of waiters.
-> 
-> For simplicity and performance reasons complete() should be usable on
-> PREEMPT_RT enabled kernels.
-> 
-> completions do not use custom wakeup callbacks and are usually single
-> waiter, except for a few corner cases.
-> 
-> Replace the wait queue in the completion with a simple wait queue (swait),
-> which uses a raw_spinlock_t for protecting the waiter list and therefore is
-> safe to use inside truly atomic regions on PREEMPT_RT.
-> 
-> There is no semantical or functional change:
-> 
->   - completions use the exclusive wait mode which is what swait provides
-> 
->   - complete() wakes one exclusive waiter
-> 
->   - complete_all() wakes all waiters while holding the lock which protects
->     the wait queue against newly incoming waiters. The conversion to swait
->     preserves this behaviour.
-> 
-> complete_all() might cause unbound latencies with a large number of waiters
-> being woken at once, but most complete_all() usage sites are either in
-> testing or initialization code or have only a really small number of
-> concurrent waiters which for now does not cause a latency problem. Keep it
-> simple for now.
-> 
-> The fixup of the warning check in the USB gadget driver is just a straight
-> forward conversion of the lockless waiter check from one waitqueue type to
-> the other.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> ---
-> V2: Split out the orinoco and usb gadget parts and amended change log
-> ---
->  drivers/usb/gadget/function/f_fs.c |    2 +-
->  include/linux/completion.h         |    8 ++++----
->  kernel/sched/completion.c          |   36 +++++++++++++++++++-----------------
->  3 files changed, 24 insertions(+), 22 deletions(-)
+The DRD module calls dwc3_set_mode() on role switches, i.e. when a device is
+being pugged in. In order to support continuous runtime power management when
+plugging in / unplugging a cable, we need to call pm_runtime_get() in this path.
 
-For USB portion:
+Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+---
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+revision history
+----------------
+v2: move pm_rumtime calls into workqueue (thanks Roger)
+    remove unrelated documentation patch
+v1: https://lore.kernel.org/linux-usb/ef22f8de-9bfd-c1d5-111c-696f1336dbda@puri.sm/T/
+
+
+ drivers/usb/dwc3/core.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 1d85c42b9c67..0c058b2ac21d 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -121,17 +121,19 @@ static void __dwc3_set_mode(struct work_struct *work)
+ 	if (dwc->dr_mode != USB_DR_MODE_OTG)
+ 		return;
+ 
++	pm_runtime_get(dwc->dev);
++
+ 	if (dwc->current_dr_role == DWC3_GCTL_PRTCAP_OTG)
+ 		dwc3_otg_update(dwc, 0);
+ 
+ 	if (!dwc->desired_dr_role)
+-		return;
++		goto out;
+ 
+ 	if (dwc->desired_dr_role == dwc->current_dr_role)
+-		return;
++		goto out;
+ 
+ 	if (dwc->desired_dr_role == DWC3_GCTL_PRTCAP_OTG && dwc->edev)
+-		return;
++		goto out;
+ 
+ 	switch (dwc->current_dr_role) {
+ 	case DWC3_GCTL_PRTCAP_HOST:
+@@ -190,6 +192,9 @@ static void __dwc3_set_mode(struct work_struct *work)
+ 		break;
+ 	}
+ 
++out:
++	pm_runtime_mark_last_busy(dwc->dev);
++	pm_runtime_put_autosuspend(dwc->dev);
+ }
+ 
+ void dwc3_set_mode(struct dwc3 *dwc, u32 mode)
+-- 
+2.20.1
+
