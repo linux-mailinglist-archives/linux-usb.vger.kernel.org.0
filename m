@@ -2,121 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F412618AA30
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 02:08:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B3E18AC95
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 06:59:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726933AbgCSBIy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Mar 2020 21:08:54 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:35150 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726866AbgCSBIy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Mar 2020 21:08:54 -0400
-Received: by mail-pg1-f195.google.com with SMTP id 7so266430pgr.2
-        for <linux-usb@vger.kernel.org>; Wed, 18 Mar 2020 18:08:53 -0700 (PDT)
+        id S1727016AbgCSF7b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Mar 2020 01:59:31 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:46530 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725601AbgCSF7a (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Mar 2020 01:59:30 -0400
+Received: by mail-lf1-f67.google.com with SMTP id a28so587382lfr.13;
+        Wed, 18 Mar 2020 22:59:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:content-transfer-encoding:in-reply-to:references
-         :subject:from:cc:to:date:message-id:user-agent;
-        bh=HOrVTVj94hEqYzP+BNYpSkqs29uiFE6WXOJ/uoI1nY0=;
-        b=MT0Y8soJkEXXSdQVlOiuDB77ehUHT9j37xPgvUaPEAjUfLvnUxhWsASSZRDBU80+UE
-         4Yvm727E1zUBc7xZdiND5J9r7CGnI47FLMRXA/TzwP0VJmbe4GjX95BHgnmtZ5gbpDnq
-         YVcYCFBwG76DaaWPMx5qXkx/DqtnKFixVSljU=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4AbHLBURcg70iEWU76CnCq8iJIf343eM2hhp8ZJ9uIs=;
+        b=WJie2FFqqnjkHSs7KRUyot9wFIe/zORBUT6bNUlWZiD15hdkbXDt2Bz6Z9urRfN5Ms
+         V7jm7TUtBh5LivuF6ukKuhwi8nowZgTdkfJ/S2blg3RIkBzclxMIKe6JUaLrDSj600kS
+         XgkvJ9sm7QnxNMNaLYmiecvfhrR+iERPRPSwfPITv6UflMhtHti4Tgor28gtpCnYmxd0
+         Y0avHBoL3qmTr7BrhnpFltnlo5VVDA9aRj6WUf0dD9DtKH8z2JUXxDL5bdZ5kb8OEXW1
+         R7OFWd8zLzU1wJqQ3LI5vtS7ay2iKZ/ICwp54BFBoqQjD1aWRJs9qeN/E/TQp1ae9A46
+         CGqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding
-         :in-reply-to:references:subject:from:cc:to:date:message-id
-         :user-agent;
-        bh=HOrVTVj94hEqYzP+BNYpSkqs29uiFE6WXOJ/uoI1nY0=;
-        b=cLZIsMgdUa17jlLgyxK0RNm0ap/YnOos7dQeLJXoBq8QbmZnsj7KgM1/GziQBsGHWq
-         BheCKDgLfn6Wdc949rGb5Rs/7HaU8VtnPh+3SYZ8cXApYqHLpQmXuoIBmqGvL7zZDP0V
-         1qsGJJCcV2tyVBnlLVtoFoO23IXiM8cT1BiG9c1kYWTToCAAg9rq+LerPZtYnXbgrmed
-         g4dwT3LxIdO1ysir7D3/4uUBguEmVOaP2Bc6s8kH24NwyBloGXrb4D8qasy54Teel9kp
-         dL9UKRDWpSTA1u/2ALZWoAhT0cY4CVw96wLu5hUPWuJO6pFZvYbp/oan2XtHVfclCZ95
-         RTfQ==
-X-Gm-Message-State: ANhLgQ01d2WYYM+AGM5qErwc6GIwHQoAzhNzBVGUpLeXZjpmRYjRKUQH
-        jxbI9UVJ3kkIsh8qWBlBsmVS2w==
-X-Google-Smtp-Source: ADFU+vuAWgIWajuJGpPlRJxuUxjrbJeZVY6ltZuXXUYT9Lo/14j2AaHjIDuHwCwpxd//vqXGygp/gA==
-X-Received: by 2002:aa7:8bd1:: with SMTP id s17mr1130786pfd.225.1584580133274;
-        Wed, 18 Mar 2020 18:08:53 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id y15sm209863pfc.206.2020.03.18.18.08.52
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4AbHLBURcg70iEWU76CnCq8iJIf343eM2hhp8ZJ9uIs=;
+        b=pZxLJcs4OFRcn4L19N46r/n9a4mQg19J2o3d3arnnmqfn02+UUbWIx7vZYPEuertQs
+         ZfnmZ4yCIw8oAQl7rbqKhVQSs0Eq3j7Mlf09Sm2MKVIFhYWPZP0nO5hLITR+qv9PcUN4
+         GxD2np1dtM7H7qhY2W8EPU4yxLoND4TRzJn/4TxNVTJs9XNkBD3yEBygJtshmiGONF7F
+         KyDN2AkRtpmJcgYmjC/oV+1zNsZB7+mpHx6dXEd90kH5lC8Z/UelaQ0fVLx6W/q4B1jF
+         TUs3ByU5DCn8jxOE1reOAmVnkD2Wdp5ISyAvXbIg+6JbkVJXCw6LEa9g/4mFJhWao9dg
+         WIFA==
+X-Gm-Message-State: ANhLgQ0aQIWMJqiBsFp7g0qnuLBpXKN66C4i3QoxRr/21P5g3InPOVJa
+        0v8EdRIuNsEkGYNIBGqXDY3h1F1jARjpJA==
+X-Google-Smtp-Source: ADFU+vtffu02yPuSwfMvRqzYoFHvAnQpPa5NGlmqCKfTHzfqmex3xIco+kCqUplRSHES4MDsakSH8w==
+X-Received: by 2002:ac2:5187:: with SMTP id u7mr1055273lfi.153.1584597566619;
+        Wed, 18 Mar 2020 22:59:26 -0700 (PDT)
+Received: from localhost.localdomain ([185.188.71.122])
+        by smtp.gmail.com with ESMTPSA id o15sm604393ljj.55.2020.03.18.22.59.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2020 18:08:52 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 18 Mar 2020 22:59:26 -0700 (PDT)
+From:   Pawel Dembicki <paweldembicki@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Pawel Dembicki <paweldembicki@gmail.com>,
+        Cezary Jackiewicz <cezary@eko.one.pl>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        "David S. Miller" <davem@davemloft.net>,
+        Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: qmi_wwan: add support for ASKEY WWHC050
+Date:   Thu, 19 Mar 2020 06:58:45 +0100
+Message-Id: <20200319055845.6431-1-paweldembicki@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200311191501.8165-3-bryan.odonoghue@linaro.org>
-References: <20200311191501.8165-1-bryan.odonoghue@linaro.org> <20200311191501.8165-3-bryan.odonoghue@linaro.org>
-Subject: Re: [PATCH 2/7] dt-bindings: usb: dwc3: Add a gpio-usb-connector example
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bjorn.andersson@linaro.org, jackp@codeaurora.org, robh@kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, balbi@kernel.org,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Date:   Wed, 18 Mar 2020 18:08:51 -0700
-Message-ID: <158458013177.152100.17920784952083533825@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Bryan O'Donoghue (2020-03-11 12:14:56)
-> A USB connector should be a child node of the USB controller
-> connector/usb-connector.txt. This patch adds an example of how to do this
-> to the dwc3 binding descriptions.
+ASKEY WWHC050 is a mcie LTE modem.
+The oem configuration states:
 
-I read that as a child of the USB interface controller, which is not the
-same as the USB controller. For example, we're talking about having the
-usb connector be a child of the EC on ChromeOS devices because that
-manages the connector
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1690 ProdID=7588 Rev=ff.ff
+S:  Manufacturer=Android
+S:  Product=Android
+S:  SerialNumber=813f0eef6e6e
+C:* #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=(none)
+E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=125us
 
->=20
-> It is necessary to declare a connector as a child-node of a USB controller
-> for role-switching to work, so this example should be helpful to others
-> implementing that.
+Tested on openwrt distribution.
 
-Maybe it should be a virtual node at the root of the DT if it's GPIO
-controlled? And then the phy can be connected to the usb connector
-through the graph binding.
+Signed-off-by: Cezary Jackiewicz <cezary@eko.one.pl>
+[add commit message]
+Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
+---
+ drivers/net/usb/qmi_wwan.c  | 1 +
+ drivers/usb/serial/option.c | 2 ++
+ 2 files changed, 3 insertions(+)
 
->=20
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: linux-usb@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Acked-by: Felipe Balbi <balbi@kernel.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  Documentation/devicetree/bindings/usb/dwc3.txt | 8 ++++++++
->  1 file changed, 8 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentati=
-on/devicetree/bindings/usb/dwc3.txt
-> index 66780a47ad85..4e1e4afccee6 100644
-> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
-> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
-> @@ -121,4 +121,12 @@ dwc3@4a030000 {
->         interrupts =3D <0 92 4>
->         usb-phy =3D <&usb2_phy>, <&usb3,phy>;
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 5754bb6ca0ee..6c738a271257 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1210,6 +1210,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_FIXED_INTF(0x1435, 0xd182, 5)},	/* Wistron NeWeb D18 */
+ 	{QMI_FIXED_INTF(0x1435, 0xd191, 4)},	/* Wistron NeWeb D19Q1 */
+ 	{QMI_QUIRK_SET_DTR(0x1508, 0x1001, 4)},	/* Fibocom NL668 series */
++	{QMI_FIXED_INTF(0x1690, 0x7588, 4)},    /* ASKEY WWHC050 */
+ 	{QMI_FIXED_INTF(0x16d8, 0x6003, 0)},	/* CMOTech 6003 */
+ 	{QMI_FIXED_INTF(0x16d8, 0x6007, 0)},	/* CMOTech CHE-628S */
+ 	{QMI_FIXED_INTF(0x16d8, 0x6008, 0)},	/* CMOTech CMU-301 */
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 084cc2fff3ae..809e6ba85045 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -2016,6 +2016,8 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = RSVD(4) | RSVD(5) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0105, 0xff),			/* Fibocom NL678 series */
+ 	  .driver_info = RSVD(6) },
++	{ USB_DEVICE(0x1690, 0x7588),                                           /* ASKEY WWHC050 */
++	  .driver_info = RSVD(1) | RSVD(4) },
+ 	{ } /* Terminating entry */
+ };
+ MODULE_DEVICE_TABLE(usb, option_ids);
+-- 
+2.20.1
 
-Weird that there's a comma here        ^
-
-Not a problem with this patch, just noticing it while reading the diff.
-
->         snps,incr-burst-type-adjustment =3D <1>, <4>, <8>, <16>;
-> +
-> +       usb_con: connector {
-> +               compatible =3D "gpio-usb-b-connector";
-> +               id-gpios =3D <&tlmm 116 GPIO_ACTIVE_HIGH>;
-> +               vbus-supply =3D <&usb3_vbus_reg>;
-> +               pinctrl-names =3D "default";
-> +               pinctrl-0 =3D <&usb3_id_pin>, <&usb3_vbus_pin>;
-> +       };
