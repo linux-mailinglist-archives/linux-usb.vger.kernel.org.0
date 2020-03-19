@@ -2,99 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D753218C2D1
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 23:12:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C1718C2D9
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 23:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727486AbgCSWMQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Mar 2020 18:12:16 -0400
-Received: from mail-wr1-f73.google.com ([209.85.221.73]:38027 "EHLO
-        mail-wr1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727477AbgCSWMP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Mar 2020 18:12:15 -0400
-Received: by mail-wr1-f73.google.com with SMTP id q18so1682058wrw.5
-        for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2020 15:12:14 -0700 (PDT)
+        id S1727244AbgCSWNd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Mar 2020 18:13:33 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:33789 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727383AbgCSWNc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Mar 2020 18:13:32 -0400
+Received: by mail-pg1-f196.google.com with SMTP id d17so1449985pgo.0
+        for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2020 15:13:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Ec1QNNZB9RdZOPOOrrZEv520YKl8QD3P6+7VUng4a2o=;
-        b=wGNCWsxxzE05P/opJCYnv1N8zFwNt6cTq4ckyZiz9oQ5890qOacNIWKpN7Y++MLt6+
-         +YKxBiZXwSFk1IGTSnQFc06R14nY8UWmBgLdcbf7MdFyRG1MvL6T6rd8RP3yB53TVKyf
-         +Uc3R9oxRBqgWKVz/QSvUAel4ej1J8si1HLNu0Rai083j03ODYzNjaVZf5T0XtF/kjJh
-         LwTg7zhgbj4V9RDUcQo4mmHihgfAC9ymlc6F/1mRhJPaKXIcT7VSTgKS++nhSDDRJStp
-         Lp/miL7zNG4MdaM7dB/m1BK/l18wytSw5UL2GhIyw3LNguhr0wHydS463Cf5gI+Zqiwl
-         CXqg==
+        bh=gMv6TzKYu6SFIfaWqkANidyDsDf8BBLqM+MeHs0/52E=;
+        b=OknkHI9mQD8ADRe3PXx93Kzpyb+ELDkSUgQDRM58h3yDorb4jqoTr2itJgBlfKek+s
+         GPG60InKlRJOdBdQbRXSkORE1oKfx5QpKOA2ikoMDq+wPx1Vp4MfouKsNxB8ax9Sa8Kh
+         GoqlGK+mRpfHPj8/y5H5V+JBhN3wHH/ObKR6c12R9QEHiQTFx/75EQ1uyo0+m4hHmgRL
+         mCaWvmyBcNzi6VNpXVhJ0D1BQ5OGBprC3vwM0Q1og1mu+lInsIW4fNNfCZC+BNb5JZhP
+         5gDpqQVMpvdqnczGDRKX5rYJWkSSFCqS9mpBtRj6u6hjo4oUaO1awKjC2TYh68Su8m7n
+         9ZMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Ec1QNNZB9RdZOPOOrrZEv520YKl8QD3P6+7VUng4a2o=;
-        b=ILPLwcfBYnzt7jG/kxM93ejctXpCKmqOG/aD1v3Ntme0Ad6JUuLvTKTOe2cSVDIv/f
-         SdqEkQwodAvSSn2ij6OJa09Tjf4EPa8vqmKfLvajz/lV43oXDzHX3SFiatVbcaKcVnr+
-         0sdjdYbTCfimx098kcZlV/rLiNizbixC1Kvbd09uogNWRVdI6PzlJSEMYPg9ms4227GG
-         XP0eQ/dutAsHWvvd6buK9Z20EWvkYAOc4roe14t6cg/HiLV9/gwQWidaDC5pvkqx43xs
-         Vfl8jFWcBJvd1B4hT1nTCp26EqpmE2JZDJdnCrJxUX5P95JCRNoQ1HJdxGthNuvzJXvO
-         C8nQ==
-X-Gm-Message-State: ANhLgQ08bB9xzpRiCn8LrmFNdeP8Xte4uN7vUkY7Ay+U3b4b8jd3EtkI
-        0GhN28KSnUULLwwkzX95PovhonKOWhypV4Jh
-X-Google-Smtp-Source: ADFU+vushxI8BnYkgZABMFdSfaL5+yV3YI3la2gcdZ5v3T5GugDgvBJQPNjSNj8fkPYEaoYtd6RE48XYpmoP4A7m
-X-Received: by 2002:adf:fe4c:: with SMTP id m12mr6989126wrs.96.1584655933185;
- Thu, 19 Mar 2020 15:12:13 -0700 (PDT)
-Date:   Thu, 19 Mar 2020 23:11:41 +0100
-In-Reply-To: <cover.1584655448.git.andreyknvl@google.com>
-Message-Id: <2821d497ac1cdc0efb5e00df30271e4a67fc8009.1584655448.git.andreyknvl@google.com>
-Mime-Version: 1.0
-References: <cover.1584655448.git.andreyknvl@google.com>
-X-Mailer: git-send-email 2.25.1.696.g5e7596f4ac-goog
-Subject: [PATCH v3 7/7] usb: core: kcov: collect coverage from usb complete callback
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gMv6TzKYu6SFIfaWqkANidyDsDf8BBLqM+MeHs0/52E=;
+        b=KyWOm2kvyN+EvDJnmajg0bNArW5xcPBuKrVywXXynj63QFkUrhMEp3zpoKHstRwRQf
+         1s0Qo3EuTwF8NAcOIwJHUjIfjO6FnwhLBzvldWoRAabXm/njMuVi80Z/vMpSXUhH4kzI
+         56bkC/zlWNCJX7J6uFAfaulWZOahjCuJtzHKAT6/heUS/PMIO2xs8kAEJJW77xKkSm79
+         e0OEyu312AnqbDEF2tjBnAg59cPwnkEQYwSqy9mQqVmTaMJy6jvPehCwxODDQBuWOn3Q
+         v+Ox62uzpF8JzvXY6bjOCwSLn8elJI9NhF3N4F/AAq1/B0tqhQBpyq/W0FgZy3djGCy2
+         VbYg==
+X-Gm-Message-State: ANhLgQ23zmdFn4Yd6V0GqJn6wjedjstT+d6WT5ZvpiVr31WJVFXTBHCy
+        /HDkfSIh95oUSmZPcwKnsNyOIvwS4+NrGi9m5QKm8Q==
+X-Google-Smtp-Source: ADFU+vvD5egTSmzMoHmdQi9kOUIOr8+dusOSqQuDB+SrijkXeLWWVcykJ42cVxTC9e1X1i9nWivq0maEcDklqSk66Ig=
+X-Received: by 2002:aa7:8745:: with SMTP id g5mr5989851pfo.306.1584656010721;
+ Thu, 19 Mar 2020 15:13:30 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1584655448.git.andreyknvl@google.com> <6206b80b3810f95bfe1d452de45596609a07b6ea.1584456779.git.andreyknvl@google.com>
+In-Reply-To: <6206b80b3810f95bfe1d452de45596609a07b6ea.1584456779.git.andreyknvl@google.com>
 From:   Andrey Konovalov <andreyknvl@google.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 19 Mar 2020 23:13:19 +0100
+Message-ID: <CAAeHK+xtO_A7WGFxYiJ9P9+_6B7r2E6MCoq+EhsBe0dDj=r2WQ@mail.gmail.com>
+Subject: Re: [PATCH USB] usb: raw_gadget: fix compilation warnings in uapi headers
+To:     Andrey Konovalov <andreyknvl@google.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
         Alexander Potapenko <glider@google.com>,
         Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>
+        "kernelci . org bot" <bot@kernelci.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch adds kcov_remote_start/stop() callbacks around the urb
-complete() callback that is executed in softirq context when dummy_hcd
-is in use. As the result, kcov can be used to collect coverage from those
-callbacks, which is used to facilitate coverage-guided fuzzing with
-syzkaller.
+On Thu, Mar 19, 2020 at 11:11 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+>
+> Mark usb_raw_io_flags_valid() and usb_raw_io_flags_zero() as inline to
+> fix the following warnings:
+>
+> ./usr/include/linux/usb/raw_gadget.h:69:12: warning: unused function 'usb_raw_io_flags_valid' [-Wunused-function]
+> ./usr/include/linux/usb/raw_gadget.h:74:12: warning: unused function 'usb_raw_io_flags_zero' [-Wunused-function]
+>
+> Reported-by: kernelci.org bot <bot@kernelci.org>
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> ---
+>  include/uapi/linux/usb/raw_gadget.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/uapi/linux/usb/raw_gadget.h b/include/uapi/linux/usb/raw_gadget.h
+> index 00cbded71061..ea375082b3ac 100644
+> --- a/include/uapi/linux/usb/raw_gadget.h
+> +++ b/include/uapi/linux/usb/raw_gadget.h
+> @@ -66,12 +66,12 @@ struct usb_raw_event {
+>  #define USB_RAW_IO_FLAGS_ZERO  0x0001
+>  #define USB_RAW_IO_FLAGS_MASK  0x0001
+>
+> -static int usb_raw_io_flags_valid(__u16 flags)
+> +static inline int usb_raw_io_flags_valid(__u16 flags)
+>  {
+>         return (flags & ~USB_RAW_IO_FLAGS_MASK) == 0;
+>  }
+>
+> -static int usb_raw_io_flags_zero(__u16 flags)
+> +static inline int usb_raw_io_flags_zero(__u16 flags)
+>  {
+>         return (flags & USB_RAW_IO_FLAGS_ZERO);
+>  }
+> --
+> 2.25.1.481.gfbce0eb801-goog
+>
 
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- drivers/usb/core/hcd.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index aa45840d8273..de624c47e190 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -31,6 +31,7 @@
- #include <linux/types.h>
- #include <linux/genalloc.h>
- #include <linux/io.h>
-+#include <linux/kcov.h>
- 
- #include <linux/phy/phy.h>
- #include <linux/usb.h>
-@@ -1645,7 +1646,9 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
- 
- 	/* pass ownership to the completion handler */
- 	urb->status = status;
-+	kcov_remote_start_usb((u64)urb->dev->bus->busnum);
- 	urb->complete(urb);
-+	kcov_remote_stop();
- 
- 	usb_anchor_resume_wakeups(anchor);
- 	atomic_dec(&urb->use_count);
--- 
-2.25.1.696.g5e7596f4ac-goog
-
+(Sorry, accidental resend, please ignore.)
