@@ -2,133 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA22118B056
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 10:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 546E518B0C3
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 11:01:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726825AbgCSJfA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Mar 2020 05:35:00 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:41694 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725895AbgCSJfA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Mar 2020 05:35:00 -0400
-Received: by mail-lf1-f68.google.com with SMTP id z22so1025042lfd.8
-        for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2020 02:34:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=NiDnRV7NI9Khqp9ESuBw2nq/wy1BnLikL2FairlQ1dM=;
-        b=wTjB6gk+bF7Z2p01tu+RH+sASuqFUmpcZ5axQkNFVM6SpdKeLdsjbek3a0Tr6s5MAW
-         K3lZLKJnrtX+Zh/bCVqoRYE2t0dD72o2JsSS5JA1fOOQdjBDrVwVEQ5eoJao+X2WYVnp
-         m8/zowwQfzJzRBo/Ew7IGwsv+3kQ/SueOmiTSJgWcYJ177LRLHbOqomdgiy+OsArnXVl
-         VPI79zA/ZQ3N8IQThu+GgTpRayrnk5fP85XcxINJ3DIvOSHAyd3ntDGGlJeMGVeFTg0o
-         mkELZX3VcaggxH40h/DsLaRY9QCq7YWBa88wfHRwZZ6YA1okOJ5nLzutTcU0h1tPtTnt
-         gTqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NiDnRV7NI9Khqp9ESuBw2nq/wy1BnLikL2FairlQ1dM=;
-        b=ij2euvXQsHhVmjmOYC0reuESZ68/SDZ6MRm+4i6lNXSQ0IKn5CB5EYOwmWKhcInwS5
-         6nUJVsAyOrHXsaSiGI1hSZVzswqnvjx+jlKtktdqdrg0icb+RqgY5zeDuqO9ScNpVaqz
-         WFLp4zw2G60VXgOdCqgKscsPNxw93Gef/7u3V800NnhEkmR5N3k3HoHzDFxuIO1uiWdZ
-         TwtqX5U0PeUD7JU+SmmduueJ554FmQKEKo8HW5ZJTTxAvCTxRavqwWddkHelAe711SG4
-         iELv+RpTUmN4xMg3GdoKm4JLkpxp8CAWiZPs3mUN+ZZbAewAOAx9Zn/d24+9n7yzBK/9
-         bJQA==
-X-Gm-Message-State: ANhLgQ117dFq+vd5RiMKOXK74t7I0MaSwxnQD3RZUHM2+s5/sbyJzgsz
-        Ur/NuoQebBap3UmAQ+0EmONmkQ==
-X-Google-Smtp-Source: ADFU+vvZw6a8s0/WaXTKL2RvegLchTpAyeAVtitjQsaDhSDP9dTKxN3/cdu+ckUbmo4K7NlBhDdRww==
-X-Received: by 2002:ac2:54af:: with SMTP id w15mr1569160lfk.17.1584610497710;
-        Thu, 19 Mar 2020 02:34:57 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:461c:252e:e50e:a5fa:f432:89e9? ([2a00:1fa0:461c:252e:e50e:a5fa:f432:89e9])
-        by smtp.gmail.com with ESMTPSA id m21sm1066656ljb.89.2020.03.19.02.34.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Mar 2020 02:34:56 -0700 (PDT)
-Subject: Re: [PATCH v2] usb: dwc3: support continuous runtime PM with dual
- role
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>, balbi@kernel.org
-Cc:     gregkh@linuxfoundation.org, rogerq@ti.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200319084902.24747-1-martin.kepplinger@puri.sm>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <7a085229-68a7-d700-1781-14225863a228@cogentembedded.com>
-Date:   Thu, 19 Mar 2020 12:34:47 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1726913AbgCSKBe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Mar 2020 06:01:34 -0400
+Received: from sonic312-25.consmr.mail.ir2.yahoo.com ([77.238.178.96]:34595
+        "EHLO sonic312-25.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725601AbgCSKBd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Mar 2020 06:01:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1584612092; bh=7bAj2aTmdt2qZuhBQReQcDKGCSJd8LlC9EcZcjUJr8M=; h=Date:From:Reply-To:Subject:References:From:Subject; b=b4DIOGzB6N3ueDrov3FYiLwLMLy9xmhUlQMzmLzkNLfjW4ZaQwFskoTUj0Eto2AtxgGQ72lWrxvnnULGrAQhTecVLIA15sdvTed6Io9MZ/QH3yzRWOzlzRo243XLh3fOI6SJxQJPBrgSJLJxNVwp+A5za0h3pEVy0ZTOzIi6+FaFNgYpHVnCJlqBWG5WTpHtVMqSB0GyayqycoWpYo/VeAcLhgpDgnL+Z/ql9idP+yVVFNLWk3RtatE9ollYKTVOfUnC9TXA9FWWHbk8QchzCS5n11vl/beDlC3+blnn0e7RcxGmilgHyJB9Sig/6bfl2rHBDCIfWMpXNFjx7HHn/w==
+X-YMail-OSG: XsKmVsAVM1m1_ndx0E9KcHxvxNm88TsqbzjBdLwhYCW3pnU_._fRzGx40mJN15b
+ AGakuO5KprAeLZIPi20BarkrKva.7BiJYkJkrPNH7qGQi.nEckRsF9XdfEBDEer0A_8V3bkKeV4v
+ PzABkkjI5jcoMUns8UYdf8ggJYNA021mfwHL8nWmXG0nqPNsfDkDAgH_Z0u3cXhqMDqxv28DIcMQ
+ vvxRmhFEyLDK6egOJRIFcpgB8CLzGqytMizRS4aU6ujh5LVS7IhZoKpRQqQG8hmzlIhRw.VL7lzq
+ ECpD4SG.qKmTsejzbY9AIR6RUp7SYCC8Q.KysRntB84lCR1MUnQ0Rr2_l1mvh6I7pbmCiOowW9jb
+ FZvPaqqa5oo50LUQeaXQYZsMaRgu5NJExRkPEOHJbUTCdV5Kx7MEL4cmhJzO0f7cw5XIeZkBELXN
+ trYYpSL.wrKfQyvRoN_L9ThOfGdi7sc3gY1BFBxD4jq.6DDA.ePxvWlkrO53mx.ELY7kZZXXiayr
+ tw3rIWkHy1mjJw0TMe1rE16TBxZVAyPJeTMXtDsj1EiAXBiifanYfVgGI5sH58_qKFpPum390JRO
+ k.LlBIrAcGQ.DOVv26dVmALLbFip7qBKtbLPKG1j6Oe4No8ewGuP._xxw3JqjPiwNDNDkn2JDhnS
+ ZgpHIoD9OlooGG8bo4_dfMfdvDz9ls7dwPqROIH_8atCimsQNidH4vjbfHsXoM69Jfzdh8pLQsQY
+ 9DQpSbHIZ3f19oBROR4LBmO4aFy75WD5vsI0wapb5Rl_BDdkD8uN35Y6esH4broaUqa.o9XJ6o12
+ PSKBUttvsOJy3BjLHWbJdjvy8a0Q7XxClit2AkPr5AeZKi43y3HKhcOtr1tEI0Vdg.ttw1SVwvfM
+ bzK1SDs6cpjVnmCV3sAdKZcxZTqErRCQrOk_2TAEYXd67ajNrtLNiPUwSUBVEFcPLSjcfyOqsr_P
+ sp8bjlo1c9VCi6Qfh6mTmLhpimJQWXtHpIucar88ipHqDDgRyNI5As0O5TgE6zv_s76fERaLuYTU
+ 4E3Bu1TWUtfd._kDQLTS5xiIfwPjeHZTIPlS83A1KtyJB0EdIXlLEHxRe4Zg.esoIrR.91AlV4Wo
+ hew2SPbSQqGBJYubCuKQ6gv7b1b5tgeM6CNTgA3C7ncqSpX1ibjyAPS0jDvSODC2pzZlduYYLDVK
+ R0B5dbZAQBi0ezvH7eJpFZ.ZknR6kisimhq79B328xnY_W4KuGAZMjqAJTYCneMoJWcHX2d56RNy
+ ThZ25FjPQylzxZQKtlWRuuxqSuyP0xg5NXhrNPBu_dKGc1yV.JpvxBnn1G_81RkNWPwmEAD22UmP
+ a1w--
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.ir2.yahoo.com with HTTP; Thu, 19 Mar 2020 10:01:32 +0000
+Date:   Thu, 19 Mar 2020 10:01:30 +0000 (UTC)
+From:   Suleiman Abubaker <suleimanabubaker84612@gmail.com>
+Reply-To: suleimanabubaker@mail.com
+Message-ID: <515971425.1359819.1584612090282@mail.yahoo.com>
+Subject: Helo
 MIME-Version: 1.0
-In-Reply-To: <20200319084902.24747-1-martin.kepplinger@puri.sm>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+References: <515971425.1359819.1584612090282.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.15471 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:74.0) Gecko/20100101 Firefox/74.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
 
-On 19.03.2020 11:49, Martin Kepplinger wrote:
 
-> The DRD module calls dwc3_set_mode() on role switches, i.e. when a device is
-> being pugged in. In order to support continuous runtime power management when
 
-     Plugged? :-)
 
-> plugging in / unplugging a cable, we need to call pm_runtime_get() in this path.
-> 
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> ---
-> 
-> revision history
-> ----------------
-> v2: move pm_rumtime calls into workqueue (thanks Roger)
->      remove unrelated documentation patch
-> v1: https://lore.kernel.org/linux-usb/ef22f8de-9bfd-c1d5-111c-696f1336dbda@puri.sm/T/
-> 
-> 
->   drivers/usb/dwc3/core.c | 11 ++++++++---
->   1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 1d85c42b9c67..0c058b2ac21d 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -121,17 +121,19 @@ static void __dwc3_set_mode(struct work_struct *work)
->   	if (dwc->dr_mode != USB_DR_MODE_OTG)
->   		return;
->   
-> +	pm_runtime_get(dwc->dev);
 
-    Not get_sync()
 
-> +
->   	if (dwc->current_dr_role == DWC3_GCTL_PRTCAP_OTG)
->   		dwc3_otg_update(dwc, 0);
->   
->   	if (!dwc->desired_dr_role)
-> -		return;
-> +		goto out;
->   
->   	if (dwc->desired_dr_role == dwc->current_dr_role)
-> -		return;
-> +		goto out;
->   
->   	if (dwc->desired_dr_role == DWC3_GCTL_PRTCAP_OTG && dwc->edev)
-> -		return;
-> +		goto out;
->   
->   	switch (dwc->current_dr_role) {
->   	case DWC3_GCTL_PRTCAP_HOST:
-> @@ -190,6 +192,9 @@ static void __dwc3_set_mode(struct work_struct *work)
->   		break;
->   	}
->   
-> +out:
-> +	pm_runtime_mark_last_busy(dwc->dev);
-> +	pm_runtime_put_autosuspend(dwc->dev);
->   }
->   
->   void dwc3_set_mode(struct dwc3 *dwc, u32 mode)
+Dear Friend,
 
-MBR, Sergei
+I am. Mr. Suleiman Abubaker, Manager Auditing and Accountancy Department,Bank of Africa in (B.O.A) Burkina Faso
+
+i am writing to seek for your highly esteemed consent/assistance in a lasting business relationship of mutual benefit involving $18. Million Usd for investment in your country, under a joint venture partnership.
+
+Thank you for accommodating my inquiry, as i look forward to hear from you on this business collaboration and meeting with you soon.
+
+
+(1)Your Full name:..........................
+(2)Your Age.................................
+(3)Occupation:.................................
+(4)Mobile phone number:.....................
+(5)Your Country..........................
+
+Waiting to hear from you.
+
+Your's truly,
+
+Mr. Suleiman Abubaker,
