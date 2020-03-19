@@ -2,93 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F2E18BDD8
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 18:20:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D50918BE20
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 18:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728207AbgCSRUv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Mar 2020 13:20:51 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:46913 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727009AbgCSRUv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Mar 2020 13:20:51 -0400
-Received: by mail-ed1-f67.google.com with SMTP id ca19so3637831edb.13
-        for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2020 10:20:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mGnzjLPuiF5jh+YmVcnbPs/rygoBzTtr0yQpmvu1C/U=;
-        b=ho5WkQIp7FBmmWnNEs8qarjlXHQ/bMpYIjVlz5diN+cFqHjIA9Cfpaie2yvrq56MzY
-         6TnA04IH3cBRxYREMcsiPUpLCig/QPzuawQ7+ZDABjg2D7iZ5uNSWio6VnyJC48k22lp
-         9sUOw53EsymdqqmachpMBK4cZKv94z+KiqobI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mGnzjLPuiF5jh+YmVcnbPs/rygoBzTtr0yQpmvu1C/U=;
-        b=hYBnliOJmJpv8YnnMVTNEEAkFgGoHiWoU50zctC7sk8cA/CGgVbD0oBlCTVN2tyCPs
-         wY4xErE0Blfyhtbgqom20HOpCYxlCFs8lA+1hspC6ZOvE+ae7qjlIPMFuStKA0/67kXo
-         Quo97ULIiPn3UhTPWPwxr+tF42Nu9isaslSxR1P8rcFLLk33ewIRqJSh18cwVytmjx6e
-         zCfRoIm4qEyfGMNcDjYf+Y9JwUw+xsoL6xjy3B7SNB87xxBzVUK6sSDybqvkiWUyaaCi
-         wnN0yH4rmavtxXq9gZl5gT/R34pEe3D4FAmtrvfgBSHzj1FxkpeONpv2172wODq7pPnx
-         aqfQ==
-X-Gm-Message-State: ANhLgQ0IQ0oDNHC0KxV//RjS0D1O0wCKkUEvJ5QlKVtsZ4RdfB16HxKM
-        W69IwXbKm2RrEQmKJGdG73la8hbuZ4k=
-X-Google-Smtp-Source: ADFU+vtLQFbIdA27uyzrQMjR6lXydO4G9yCF+gI49DP/4zqt4MuMB/gnmxcZFelbTrDVeFNFA2v3Vg==
-X-Received: by 2002:aa7:da5a:: with SMTP id w26mr3947024eds.274.1584638449461;
-        Thu, 19 Mar 2020 10:20:49 -0700 (PDT)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
-        by smtp.gmail.com with ESMTPSA id m4sm194192edq.23.2020.03.19.10.20.49
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Mar 2020 10:20:49 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id n25so2741346eds.10
-        for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2020 10:20:49 -0700 (PDT)
-X-Received: by 2002:a19:c7:: with SMTP id 190mr2779646lfa.30.1584637965843;
- Thu, 19 Mar 2020 10:12:45 -0700 (PDT)
+        id S1727565AbgCSRep (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Mar 2020 13:34:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33048 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727382AbgCSRep (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Mar 2020 13:34:45 -0400
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2E7DE2071C;
+        Thu, 19 Mar 2020 17:34:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584639284;
+        bh=VXfXgaMFHwNAHnGdP2ayK9lcFqo6HP23jwlKsSeqPks=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=yADHZla9eDm6uT5/naVtKy2V7v/CxxTuk0BpddC2YxBmqic9QIobFusOdjeYAkdDd
+         yay2lu6tWwGoY1Ex+C/0N15wVo9qAVgMCNgFSa5OF4MK2L+w4XWeXm/UfhsMFmWmg+
+         ADdMbphVXQNOF0UHRPrnK27tXcKQ/p6D8f/lTcLc=
+Received: by mail-qk1-f171.google.com with SMTP id e11so3939169qkg.9;
+        Thu, 19 Mar 2020 10:34:44 -0700 (PDT)
+X-Gm-Message-State: ANhLgQ38POrXbJTFTa/anRp/FuuDvAjg0NF8tyX3dlThJs4SJqDtHIte
+        1XakrdYogUM6yGdYXvPPZ2jwTtuGIVGkTIImlA==
+X-Google-Smtp-Source: ADFU+vvCif+AbtJFy+eeJq9FFa3yvU/q7tK8ZTPl46tG4rh1c7+IhWsiFrJ7XIwJOlAm6vTIotVo3PR3cKxoFwawl/8=
+X-Received: by 2002:a37:8502:: with SMTP id h2mr4196059qkd.223.1584639283252;
+ Thu, 19 Mar 2020 10:34:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200318204302.693307984@linutronix.de> <20200318204408.521507446@linutronix.de>
-In-Reply-To: <20200318204408.521507446@linutronix.de>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 19 Mar 2020 10:12:29 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj3bwUD9=y4Wd6=Dh1Xwib+N3nYuKA=hd3-y+0OUeLcOQ@mail.gmail.com>
-Message-ID: <CAHk-=wj3bwUD9=y4Wd6=Dh1Xwib+N3nYuKA=hd3-y+0OUeLcOQ@mail.gmail.com>
-Subject: Re: [patch V2 11/15] completion: Use simple wait queues
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-wireless@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+References: <20200314093941.2533-1-peter.chen@nxp.com> <20200314093941.2533-2-peter.chen@nxp.com>
+ <20200318220420.GA15468@bogus> <20200319064655.GB11834@b29397-desktop>
+In-Reply-To: <20200319064655.GB11834@b29397-desktop>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 19 Mar 2020 11:34:31 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLF6cPCXqZiSOr6DPQad60w9Hd4yemEAmmCAR2TU86CqQ@mail.gmail.com>
+Message-ID: <CAL_JsqLF6cPCXqZiSOr6DPQad60w9Hd4yemEAmmCAR2TU86CqQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] doc: dt-binding: cdns-salvo-phy: add binding doc
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     "kishon@ti.com" <kishon@ti.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Jun Li <jun.li@nxp.com>, dl-linux-imx <linux-imx@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Mar 18, 2020 at 1:47 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+On Thu, Mar 19, 2020 at 12:46 AM Peter Chen <peter.chen@nxp.com> wrote:
 >
-> There is no semantical or functional change:
+> On 20-03-18 16:04:20, Rob Herring wrote:
+> > On Sat, 14 Mar 2020 17:39:41 +0800, Peter Chen wrote:
+> > > Add Cadence SALVO PHY binding doc, this PHY is a legacy module,
+> > > and is only used for USB3 and USB2.
+> > >
+> > > Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> > > ---
+> > > Changes for v2:
+> > > - Fix kinds of yaml style issue
+> > >
+> > >  .../bindings/phy/cdns,salvo-phy.yaml          | 49 +++++++++++++++++++
+> > >  1 file changed, 49 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
+> > >
+> >
+> > My bot found errors running 'make dt_binding_check' on your patch:
+> >
+> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/cdns,salvo-phy.example.dt.yaml: usb3-phy@5B160000: 'power-domains' does not match any of the regexes: 'pinctrl-[0-9]+'
+>
+> The 'power-domains' is described at:
+> Documentation/devicetree/bindings/power/power_domain.txt
 
-Ack, with just the explanation, I'm no longer objecting to this.
+.txt files don't generate warnings.
 
-Plus you fixed and cleaned up the odd usb gadget code separately
-(well, most of it).
+And you might want to be up to date with your kernel tree.
 
-              Linus
+>
+> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/cdns,salvo-phy.example.dt.yaml: usb3-phy@5B160000: #phy-cells:0:0: 1 was expected
+> >
+>
+> #phy-cell could be 0 if it is a dedicated PHY, eg single function PHY.
+> See below comments from drivers/phy/phy-core.c
+>
+> /**
+>  * of_phy_simple_xlate() - returns the phy instance from phy provider
+>  * @dev: the PHY provider device
+>  * @args: of_phandle_args (not used here)
+>  *
+>  * Intended to be used by phy provider for the common case where #phy-cells is
+>  * 0. For other cases where #phy-cells is greater than '0', the phy provider
+>  * should provide a custom of_xlate function that reads the *args* and returns
+>  * the appropriate phy.
+>  */
+
+What's your point? You have an error either in the schema or the
+example. You must fix it.
+
+Rob
