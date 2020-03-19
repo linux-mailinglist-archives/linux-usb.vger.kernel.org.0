@@ -2,135 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B3E18AC95
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 06:59:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2741D18ACF7
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 07:46:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727016AbgCSF7b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Mar 2020 01:59:31 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:46530 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbgCSF7a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Mar 2020 01:59:30 -0400
-Received: by mail-lf1-f67.google.com with SMTP id a28so587382lfr.13;
-        Wed, 18 Mar 2020 22:59:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4AbHLBURcg70iEWU76CnCq8iJIf343eM2hhp8ZJ9uIs=;
-        b=WJie2FFqqnjkHSs7KRUyot9wFIe/zORBUT6bNUlWZiD15hdkbXDt2Bz6Z9urRfN5Ms
-         V7jm7TUtBh5LivuF6ukKuhwi8nowZgTdkfJ/S2blg3RIkBzclxMIKe6JUaLrDSj600kS
-         XgkvJ9sm7QnxNMNaLYmiecvfhrR+iERPRPSwfPITv6UflMhtHti4Tgor28gtpCnYmxd0
-         Y0avHBoL3qmTr7BrhnpFltnlo5VVDA9aRj6WUf0dD9DtKH8z2JUXxDL5bdZ5kb8OEXW1
-         R7OFWd8zLzU1wJqQ3LI5vtS7ay2iKZ/ICwp54BFBoqQjD1aWRJs9qeN/E/TQp1ae9A46
-         CGqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4AbHLBURcg70iEWU76CnCq8iJIf343eM2hhp8ZJ9uIs=;
-        b=pZxLJcs4OFRcn4L19N46r/n9a4mQg19J2o3d3arnnmqfn02+UUbWIx7vZYPEuertQs
-         ZfnmZ4yCIw8oAQl7rbqKhVQSs0Eq3j7Mlf09Sm2MKVIFhYWPZP0nO5hLITR+qv9PcUN4
-         GxD2np1dtM7H7qhY2W8EPU4yxLoND4TRzJn/4TxNVTJs9XNkBD3yEBygJtshmiGONF7F
-         KyDN2AkRtpmJcgYmjC/oV+1zNsZB7+mpHx6dXEd90kH5lC8Z/UelaQ0fVLx6W/q4B1jF
-         TUs3ByU5DCn8jxOE1reOAmVnkD2Wdp5ISyAvXbIg+6JbkVJXCw6LEa9g/4mFJhWao9dg
-         WIFA==
-X-Gm-Message-State: ANhLgQ0aQIWMJqiBsFp7g0qnuLBpXKN66C4i3QoxRr/21P5g3InPOVJa
-        0v8EdRIuNsEkGYNIBGqXDY3h1F1jARjpJA==
-X-Google-Smtp-Source: ADFU+vtffu02yPuSwfMvRqzYoFHvAnQpPa5NGlmqCKfTHzfqmex3xIco+kCqUplRSHES4MDsakSH8w==
-X-Received: by 2002:ac2:5187:: with SMTP id u7mr1055273lfi.153.1584597566619;
-        Wed, 18 Mar 2020 22:59:26 -0700 (PDT)
-Received: from localhost.localdomain ([185.188.71.122])
-        by smtp.gmail.com with ESMTPSA id o15sm604393ljj.55.2020.03.18.22.59.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2020 22:59:26 -0700 (PDT)
-From:   Pawel Dembicki <paweldembicki@gmail.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Pawel Dembicki <paweldembicki@gmail.com>,
-        Cezary Jackiewicz <cezary@eko.one.pl>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        "David S. Miller" <davem@davemloft.net>,
-        Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: qmi_wwan: add support for ASKEY WWHC050
-Date:   Thu, 19 Mar 2020 06:58:45 +0100
-Message-Id: <20200319055845.6431-1-paweldembicki@gmail.com>
-X-Mailer: git-send-email 2.20.1
+        id S1727001AbgCSGqk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Mar 2020 02:46:40 -0400
+Received: from mail-eopbgr130089.outbound.protection.outlook.com ([40.107.13.89]:46818
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726982AbgCSGqk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Mar 2020 02:46:40 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KJvVrSeMGaq5ifsxd0oddvjBEmq08HuM29uQS/hylt4SQKBfIlzrdBu2uGZe8/bW2bb3/aTUIbqQcLQ/uadGUJ8QBy8TTTF60lEvIecEDfxTBwVBOZocN0QofXOBnmouq9jBLmejny6c8Bob1IE6P0QMdtWekjvhvOdpuT1azes8kediXdret75uf2Dn3ZL3SKcESP6j2dWC0VmIEQ2wodMTSE6/IQRQszGipZCHdeQ+xHSvrnXpRCKZwfR/H7vN6xkmSl/r3TR7NcMAoe7xAHPOW2k+nmKGUCu04iu7JWXbVTuG1lyZHq/OudIjg9uitUJIoB9T8Cn6fFYb7ElJPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ENk8I17T8kQCjf1AOXFJ5+0wu8JhuzPV/5upaqlpclI=;
+ b=TvrlZad96pQ34S+d3i946M/+SF95sX2JPQgWkoquz477hlB9GJagly/xXZohFcyKy279WfJgNo1GHQMa1IVZ+MOUNSQ8ngULb+V+DNCZAssX6iml4xMappOTNHVpdgEJMNOEyailUNeX5Mfvew1MgI1ZQk0LXn2zSOokfwkXNP5vmxq1xH4vAyYjG1urvyP8nRPooBtV20Eaq4mM6YkhGmyuNn7U5XI1UAz84gOS9kqAZ2EUBtHHnwY7vB5tsrEjRDkP+yz2j+iGEPGVGEhHs59s+8Tsf4tu4CgDIcZg4vKEAv+tcRJWcEo4FI30ZcwYhpEkZchvJewQtra8Xx8WNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ENk8I17T8kQCjf1AOXFJ5+0wu8JhuzPV/5upaqlpclI=;
+ b=GB4pSwDJFh/+tEZuIGc+/ONVls+Z5YRZ0NiBiUVrFy0hIh6f/JINEYCq+T6N9A0Aq2NaZTWREqVE7WTYiOTDxtDGOC5EdNWzzCpZoxEy8ha/LGpp/+8WTfan4f/lggKXMvdnclMNtlPOvn55aYRKYSRZbaz2hNVfimJd94MHlj4=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (52.135.57.84) by
+ AM7PR04MB7031.eurprd04.prod.outlook.com (52.135.56.207) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2835.15; Thu, 19 Mar 2020 06:46:36 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::902c:71:6377:4273]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::902c:71:6377:4273%5]) with mapi id 15.20.2835.017; Thu, 19 Mar 2020
+ 06:46:36 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Jun Li <jun.li@nxp.com>, dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH v2 2/2] doc: dt-binding: cdns-salvo-phy: add binding doc
+Thread-Topic: [PATCH v2 2/2] doc: dt-binding: cdns-salvo-phy: add binding doc
+Thread-Index: AQHV+eSIbYUUoyB07UqkpsijN1q1vahO7pAAgACSAoA=
+Date:   Thu, 19 Mar 2020 06:46:36 +0000
+Message-ID: <20200319064655.GB11834@b29397-desktop>
+References: <20200314093941.2533-1-peter.chen@nxp.com>
+ <20200314093941.2533-2-peter.chen@nxp.com> <20200318220420.GA15468@bogus>
+In-Reply-To: <20200318220420.GA15468@bogus>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 230d31a1-6392-4c98-c7be-08d7cbd1451e
+x-ms-traffictypediagnostic: AM7PR04MB7031:|AM7PR04MB7031:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM7PR04MB70319255396C8BD072EB5BDE8BF40@AM7PR04MB7031.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0347410860
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(396003)(346002)(39860400002)(376002)(136003)(366004)(199004)(4326008)(66946007)(8676002)(66556008)(81156014)(66446008)(8936002)(33656002)(64756008)(76116006)(91956017)(6916009)(66476007)(86362001)(81166006)(5660300002)(9686003)(1076003)(71200400001)(316002)(6506007)(54906003)(6512007)(44832011)(53546011)(2906002)(33716001)(186003)(478600001)(6486002)(26005);DIR:OUT;SFP:1101;SCL:1;SRVR:AM7PR04MB7031;H:AM7PR04MB7157.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: p2QUc1nIkxIksB9pqSq4EDu5bEQ9QK9uKP0nZcsRvrAfG8H9mS0VQVQ673EfWIZ6Gkcs71Nx45noaUat+4DNPxLlsMgp5tiMrVEhY7w0XtKnFbof481GR3Iyz8lZAgC8clpStvudRdQ6iHU9MaY9+hMdJ40sESaj7sRBCOLtPBPt719NwAoCkoWoc3IMg5YuCFHloyOSIcbxPkigLHq/bvfpKFDtQ5NWEcCKWbLRI19MTVSGKnek1nhvOERizyhW1hild1brEx3389j4Ih/aDsUfgAOXNzjlx3iBswbmzvNuQPu/Vma8zBxM6gAunA8IN1mpwtSppug36tUclhNgt9UgBvg1XZq3jFglj9MGbGeXi5tqwz0BxmK+W7wDU+0PzdahmYv0MDl+9YsbZo/UsYdbfR8ymuBTFcH+WFdYHI62nGtTHtfDM/ednLaGbfMe
+x-ms-exchange-antispam-messagedata: bZDy3jq/ziSArUpX4h6iuKX2rkg++MhZq3wkBKxRT0lBZ2AL4pNl0/GBbCGMtstkLxrBh5RS3C5EEuqZjwHOSUuK8XcVxMS0663hDP8N8amqQw4X8nGv1ipaLorqPq99J9AhTVaP3D9+e2wNJmE9Ng==
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <E578A2EC88F71140920603AA82CF9573@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 230d31a1-6392-4c98-c7be-08d7cbd1451e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Mar 2020 06:46:36.3616
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tkAcmgJDU260sjBMC55snKC8keliNSUtbWeP6wJcY2kk9k/nqCfjICR7TaDlM64h4seeL1ZmOxvFn5f6/FQnxA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7031
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-ASKEY WWHC050 is a mcie LTE modem.
-The oem configuration states:
+On 20-03-18 16:04:20, Rob Herring wrote:
+> On Sat, 14 Mar 2020 17:39:41 +0800, Peter Chen wrote:
+> > Add Cadence SALVO PHY binding doc, this PHY is a legacy module,
+> > and is only used for USB3 and USB2.
+> >=20
+> > Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> > ---
+> > Changes for v2:
+> > - Fix kinds of yaml style issue
+> >=20
+> >  .../bindings/phy/cdns,salvo-phy.yaml          | 49 +++++++++++++++++++
+> >  1 file changed, 49 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/phy/cdns,salvo-ph=
+y.yaml
+> >=20
+>=20
+> My bot found errors running 'make dt_binding_check' on your patch:
+>=20
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/=
+cdns,salvo-phy.example.dt.yaml: usb3-phy@5B160000: 'power-domains' does not=
+ match any of the regexes: 'pinctrl-[0-9]+'
 
-T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=1690 ProdID=7588 Rev=ff.ff
-S:  Manufacturer=Android
-S:  Product=Android
-S:  SerialNumber=813f0eef6e6e
-C:* #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=(none)
-E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=125us
+The 'power-domains' is described at:
+Documentation/devicetree/bindings/power/power_domain.txt
 
-Tested on openwrt distribution.
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/=
+cdns,salvo-phy.example.dt.yaml: usb3-phy@5B160000: #phy-cells:0:0: 1 was ex=
+pected
+>=20
 
-Signed-off-by: Cezary Jackiewicz <cezary@eko.one.pl>
-[add commit message]
-Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
----
- drivers/net/usb/qmi_wwan.c  | 1 +
- drivers/usb/serial/option.c | 2 ++
- 2 files changed, 3 insertions(+)
+#phy-cell could be 0 if it is a dedicated PHY, eg single function PHY.
+See below comments from drivers/phy/phy-core.c
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 5754bb6ca0ee..6c738a271257 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1210,6 +1210,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x1435, 0xd182, 5)},	/* Wistron NeWeb D18 */
- 	{QMI_FIXED_INTF(0x1435, 0xd191, 4)},	/* Wistron NeWeb D19Q1 */
- 	{QMI_QUIRK_SET_DTR(0x1508, 0x1001, 4)},	/* Fibocom NL668 series */
-+	{QMI_FIXED_INTF(0x1690, 0x7588, 4)},    /* ASKEY WWHC050 */
- 	{QMI_FIXED_INTF(0x16d8, 0x6003, 0)},	/* CMOTech 6003 */
- 	{QMI_FIXED_INTF(0x16d8, 0x6007, 0)},	/* CMOTech CHE-628S */
- 	{QMI_FIXED_INTF(0x16d8, 0x6008, 0)},	/* CMOTech CMU-301 */
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 084cc2fff3ae..809e6ba85045 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -2016,6 +2016,8 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(4) | RSVD(5) },
- 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0105, 0xff),			/* Fibocom NL678 series */
- 	  .driver_info = RSVD(6) },
-+	{ USB_DEVICE(0x1690, 0x7588),                                           /* ASKEY WWHC050 */
-+	  .driver_info = RSVD(1) | RSVD(4) },
- 	{ } /* Terminating entry */
- };
- MODULE_DEVICE_TABLE(usb, option_ids);
--- 
-2.20.1
+/**
+ * of_phy_simple_xlate() - returns the phy instance from phy provider
+ * @dev: the PHY provider device
+ * @args: of_phandle_args (not used here)
+ *
+ * Intended to be used by phy provider for the common case where #phy-cells=
+ is
+ * 0. For other cases where #phy-cells is greater than '0', the phy provide=
+r
+ * should provide a custom of_xlate function that reads the *args* and retu=
+rns
+ * the appropriate phy.
+ */
 
+--=20
+
+Thanks,
+Peter Chen=
