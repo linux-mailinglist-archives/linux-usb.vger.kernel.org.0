@@ -2,114 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4931918BAF8
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 16:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C04E818BBE9
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Mar 2020 17:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727902AbgCSPV6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Mar 2020 11:21:58 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:43431 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727540AbgCSPV5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Mar 2020 11:21:57 -0400
-Received: by mail-ed1-f65.google.com with SMTP id n25so2138303eds.10
-        for <linux-usb@vger.kernel.org>; Thu, 19 Mar 2020 08:21:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7Vo/Ftz8y0HanBL9Q9HVvo6it3DMCdNOtqGEMgDJW9I=;
-        b=A3/iwjkX8mSzEwg+8yC2HsPaBnY0BRs8nvdHzyDdfD7Rkega4Hbel/Z+53KqkZZXmO
-         wGA/zFmaNJKqzZVoItWdyptVzur6M3qHAvKdKGzimpbZoaK9xPD8ZCu031tQjA2v2MHp
-         J+FXZveu8cxu78e0xK9SA+SpEYIKheUQPMpm3TjmA551iPhkAgkkmsoGDoxc0VVa/fCQ
-         n9p8NyD7NwhTpEnj0voJdyxYYbNdgvhRtoDLGIkFJBix+bV31j0i186dnZ0pXgCRt6X7
-         cZhkQwZ1xIkdmVIJhKrAloj4k10oCmccp1UdNNiqnYeCVj0H2DkQvgBZtk+eAd56F6it
-         wjhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7Vo/Ftz8y0HanBL9Q9HVvo6it3DMCdNOtqGEMgDJW9I=;
-        b=sw4mcM9dvZDIGcnrDRHGrm+lnaI5KfLnTf8a3I2rklLME1FeX5mmpTadOZv2vIj8ES
-         vIu6o7d6lCi5iLnkuUOenH6XIL+BPsSkv6avgwi7079Q9Dp3flv/dAlvRz3CB6z9Ft4D
-         e/UEgF2r9UTHZVPpZG92fPtWX1iU5SbKpnVe+EnNX+8+UrZZtqeYHaY08PoeivCA5b/u
-         f3ruqwAFjQA3eH+IM48wMS0XqJbWJ+lvMnBMskED9uqUY9NlicEBgLcP8ht0tS646BcP
-         MLs8pCrm6QDZwPKK6o2PQcAdI+cf3xUWAsBRq+4oTwmrDBPthOCvOWN+sxpbCneiphq+
-         EKMQ==
-X-Gm-Message-State: ANhLgQ232UkK54Zpkzd57eu8rE3nY9TMZjVfWV6HzBGWlSdjh0Qz8WvE
-        pv0RxH1PfUs4IGNncaXXP+KoBrF6gf0=
-X-Google-Smtp-Source: ADFU+vtLlcnn3fVK+LYjZ9eeWQZLIwYJtZSt0seyEWRCmYEYKSnZNg5Ich6NL3IamCZnBo4cqxl5LA==
-X-Received: by 2002:a50:9f07:: with SMTP id b7mr3330605edf.148.1584631315616;
-        Thu, 19 Mar 2020 08:21:55 -0700 (PDT)
-Received: from [192.168.0.38] ([176.61.57.127])
-        by smtp.gmail.com with ESMTPSA id l19sm150533ejn.31.2020.03.19.08.21.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Mar 2020 08:21:54 -0700 (PDT)
-Subject: Re: [PATCH 2/7] dt-bindings: usb: dwc3: Add a gpio-usb-connector
- example
-To:     Stephen Boyd <swboyd@chromium.org>, balbi@kernel.org,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bjorn.andersson@linaro.org, jackp@codeaurora.org, robh@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org
-References: <20200311191501.8165-1-bryan.odonoghue@linaro.org>
- <20200311191501.8165-3-bryan.odonoghue@linaro.org>
- <158458013177.152100.17920784952083533825@swboyd.mtv.corp.google.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Message-ID: <aa6aa234-e2d1-bdcd-0f0e-64b2a7e497d3@linaro.org>
-Date:   Thu, 19 Mar 2020 15:22:14 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1728070AbgCSQJc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Mar 2020 12:09:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47630 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727064AbgCSQJb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Mar 2020 12:09:31 -0400
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8F9DF208C3;
+        Thu, 19 Mar 2020 16:09:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584634170;
+        bh=QFuqHMWKkiEerMDTcpgGsWBChtJHP2dAeiJte+5yHtU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=uY30D1IJVRcRBK2B9fm6ObzhPw1OcuQ6AjL1Sbl31AkMpnQyITbcQo67FqiBml04n
+         ibIaY5ScnLxTd3j3uqWZYBnmfqYfvFQNbrvf2Ku1MgINv6t9TSCaWhmGH+SljjA7zU
+         Y/UF4llCpGOqqW8nybbfwI3nev70L/DomHyFsJ0M=
+Received: by mail-yb1-f172.google.com with SMTP id s17so562687ybk.9;
+        Thu, 19 Mar 2020 09:09:30 -0700 (PDT)
+X-Gm-Message-State: ANhLgQ3pB5DuU3+sucltyszQDUEMVz4erO9PddeaLwyTLmU0xTtKcE94
+        +jGsbQShz/3WOTdGhLhvx0bUTZszLuMFM2Bu0w==
+X-Google-Smtp-Source: ADFU+vvOh/l0kOoyAZeUv7XIEUUFdmB7bmrN34m9amh/dorM5bjQaVRBAARghBCDWKGdHkkLJf9QnHfG/DHcWYa2/hI=
+X-Received: by 2002:a25:b5c3:: with SMTP id d3mr5901077ybg.358.1584634169779;
+ Thu, 19 Mar 2020 09:09:29 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <158458013177.152100.17920784952083533825@swboyd.mtv.corp.google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200317093922.20785-1-lkundrak@v3.sk> <20200317093922.20785-14-lkundrak@v3.sk>
+ <20200317134805.GO24270@lunn.ch>
+In-Reply-To: <20200317134805.GO24270@lunn.ch>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 19 Mar 2020 10:09:18 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJZbk29iq5QargTK-VMBoR359dvfQ=VuBkKHFdMfJEU9w@mail.gmail.com>
+Message-ID: <CAL_JsqJZbk29iq5QargTK-VMBoR359dvfQ=VuBkKHFdMfJEU9w@mail.gmail.com>
+Subject: Re: [PATCH 13/28] dt-bindings: serial: move Marvell compatible string
+ to 8250 binding doc
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Lubomir Rintel <lkundrak@v3.sk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19/03/2020 01:08, Stephen Boyd wrote:
-> Quoting Bryan O'Donoghue (2020-03-11 12:14:56)
->> A USB connector should be a child node of the USB controller
->> connector/usb-connector.txt. This patch adds an example of how to do this
->> to the dwc3 binding descriptions.
-> 
-> I read that as a child of the USB interface controller, which is not the
-> same as the USB controller. For example, we're talking about having the
-> usb connector be a child of the EC on ChromeOS devices because that
-> manages the connector
-> 
->>
->> It is necessary to declare a connector as a child-node of a USB controller
->> for role-switching to work, so this example should be helpful to others
->> implementing that.
-> 
-> Maybe it should be a virtual node at the root of the DT if it's GPIO
-> controlled? And then the phy can be connected to the usb connector
-> through the graph binding.
+On Tue, Mar 17, 2020 at 7:48 AM Andrew Lunn <andrew@lunn.ch> wrote:
+>
+> On Tue, Mar 17, 2020 at 10:39:07AM +0100, Lubomir Rintel wrote:
+> > These ports are compatible with NS8250 and handled by the same driver.
+> > Get rid of the extra document that fails to document the properties that
+> > are actually supported.
+>
+> Hi Lubmir
+>
+> This is needs a bit closer examination. By the PXA maintainers. It
+> appears there are two serial drivers, the 8250 and a PXA specific
+> driver.
 
-Graph binding can probably work.
+Yes, but that is independent of the binding.
 
-Re: the PHY.
+The PXA driver (serial/pxa.c) is already deprecated in favor of
+8250_pxa.c. That was 3.5 years ago now, so maybe time to remove the
+old one.
 
-For myself the hardware model is
-
-Connector -> PHY -> Host controller -> Host controller wrapper
-
-Only
-
-Connector -> Host controller -> Host controller wrapper
-
-care about the USB role though.
-
-If your PHY did care about the role, you'd really need to write a 
-connector/phy type-c type driver, to detect the state and toggle your 
-PHY bits before doing usb_role_switch_set_role() back to DWC3.
-
-At least that's my understanding.
-
----
-bod
+Rob
