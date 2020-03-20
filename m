@@ -2,88 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4938A18CAAB
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2020 10:49:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6818618CBEE
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2020 11:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727259AbgCTJta (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Mar 2020 05:49:30 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:35047 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727120AbgCTJtZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Mar 2020 05:49:25 -0400
-Received: from localhost ([127.0.0.1] helo=flow.W.breakpoint.cc)
-        by Galois.linutronix.de with esmtp (Exim 4.80)
-        (envelope-from <bigeasy@linutronix.de>)
-        id 1jFEH3-0000vL-DT; Fri, 20 Mar 2020 10:49:05 +0100
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     tglx@linutronix.de
-Cc:     arnd@arndb.de, balbi@kernel.org, bhelgaas@google.com,
-        bigeasy@linutronix.de, dave@stgolabs.net, davem@davemloft.net,
+        id S1727240AbgCTKpG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Mar 2020 06:45:06 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:33516 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726791AbgCTKpG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Mar 2020 06:45:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gpF47OFbSCOaH9j5hP1QeTQDztS/I2yzYL1A8Yg/DCI=; b=m8gRkUViv+3RtA+3AN1Hq8RB2p
+        /nd8koJA7/ftGKlqVgXGyTS1/R5zs5CBqOx+xx+6K9nCiYjvgKGyw0YC0ClboDv10bRHr9uFVti5l
+        EKvrd8vTTtGuSCXjYHyBDIj5z1uJ87Gimm+Jq3l7cxSmAzKhoX5U0dufJsqNv3jrKQNIBSslh2ZBx
+        d6J4/8w72QCJsw2WMsEdzs02t4aMmq5QQ4FsVoSmBkcn0g/+PBYsMy74VM0WnvU6eDHMxJ7NO6YW7
+        oGhprUfFSJmuJzo+np93Zq4slkqAXWnt+jp4L4s7owS9q9n3ZLlPNQHf+KIrDpK7Ir2rNYPzd9bem
+        57qKm1WQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jFF8f-0006yB-F2; Fri, 20 Mar 2020 10:44:29 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 627F2300606;
+        Fri, 20 Mar 2020 11:44:26 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 48697285E2762; Fri, 20 Mar 2020 11:44:26 +0100 (CET)
+Date:   Fri, 20 Mar 2020 11:44:26 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Davidlohr Bueso <dave@stgolabs.net>
+Cc:     tglx@linutronix.de, arnd@arndb.de, balbi@kernel.org,
+        bhelgaas@google.com, bigeasy@linutronix.de, davem@davemloft.net,
         gregkh@linuxfoundation.org, joel@joelfernandes.org,
         kurt.schwemmer@microsemi.com, kvalo@codeaurora.org,
         linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, logang@deltatee.com,
         mingo@kernel.org, mpe@ellerman.id.au, netdev@vger.kernel.org,
-        oleg@redhat.com, paulmck@kernel.org, peterz@infradead.org,
-        rdunlap@infradead.org, rostedt@goodmis.org,
-        torvalds@linux-foundation.org, will@kernel.org,
-        Michal Simek <monstr@monstr.eu>,
-        kbuild test robot <lkp@intel.com>
-Subject: [PATCH 5/5] microblaze: Remove mm.h from asm/uaccess.h
-Date:   Fri, 20 Mar 2020 10:48:56 +0100
-Message-Id: <20200320094856.3453859-6-bigeasy@linutronix.de>
-X-Mailer: git-send-email 2.26.0.rc2
-In-Reply-To: <20200320094856.3453859-1-bigeasy@linutronix.de>
-References: <20200318204408.010461877@linutronix.de>
- <20200320094856.3453859-1-bigeasy@linutronix.de>
+        oleg@redhat.com, paulmck@kernel.org, rdunlap@infradead.org,
+        rostedt@goodmis.org, torvalds@linux-foundation.org,
+        will@kernel.org, Davidlohr Bueso <dbueso@suse.de>
+Subject: Re: [PATCH 17/15] rcuwait: Inform rcuwait_wake_up() users if a
+ wakeup was attempted
+Message-ID: <20200320104426.GD20696@hirez.programming.kicks-ass.net>
+References: <20200318204302.693307984@linutronix.de>
+ <20200320085527.23861-1-dave@stgolabs.net>
+ <20200320085527.23861-2-dave@stgolabs.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200320085527.23861-2-dave@stgolabs.net>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The defconfig compiles without linux/mm.h. With mm.h included the
-include chain leands to:
-|   CC      kernel/locking/percpu-rwsem.o
-| In file included from include/linux/huge_mm.h:8,
-|                  from include/linux/mm.h:567,
-|                  from arch/microblaze/include/asm/uaccess.h:,
-|                  from include/linux/uaccess.h:11,
-|                  from include/linux/sched/task.h:11,
-|                  from include/linux/sched/signal.h:9,
-|                  from include/linux/rcuwait.h:6,
-|                  from include/linux/percpu-rwsem.h:8,
-|                  from kernel/locking/percpu-rwsem.c:6:
-| include/linux/fs.h:1422:29: error: array type has incomplete element type=
- 'struct percpu_rw_semaphore'
-|  1422 |  struct percpu_rw_semaphore rw_sem[SB_FREEZE_LEVELS];
+On Fri, Mar 20, 2020 at 01:55:25AM -0700, Davidlohr Bueso wrote:
 
-once rcuwait.h includes linux/sched/signal.h.
+> diff --git a/kernel/exit.c b/kernel/exit.c
+> index 6cc6cc485d07..b0bb0a8ec4b1 100644
+> --- a/kernel/exit.c
+> +++ b/kernel/exit.c
+> @@ -234,9 +234,10 @@ void release_task(struct task_struct *p)
+>  		goto repeat;
+>  }
+>  
+> -void rcuwait_wake_up(struct rcuwait *w)
+> +bool rcuwait_wake_up(struct rcuwait *w)
+>  {
+>  	struct task_struct *task;
+> +	bool ret = false;
+>  
+>  	rcu_read_lock();
+>  
+> @@ -254,10 +255,15 @@ void rcuwait_wake_up(struct rcuwait *w)
+>  	smp_mb(); /* (B) */
+>  
+>  	task = rcu_dereference(w->task);
+> -	if (task)
+> +	if (task) {
+>  		wake_up_process(task);
+> +	        ret = true;
 
-Remove the linux/mm.h include.
+		ret = wake_up_process(task); ?
 
-Cc: Michal Simek <monstr@monstr.eu>
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- arch/microblaze/include/asm/uaccess.h | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/arch/microblaze/include/asm/uaccess.h b/arch/microblaze/includ=
-e/asm/uaccess.h
-index a1f206b90753a..4916d5fbea5e3 100644
---- a/arch/microblaze/include/asm/uaccess.h
-+++ b/arch/microblaze/include/asm/uaccess.h
-@@ -12,7 +12,6 @@
- #define _ASM_MICROBLAZE_UACCESS_H
-=20
- #include <linux/kernel.h>
--#include <linux/mm.h>
-=20
- #include <asm/mmu.h>
- #include <asm/page.h>
---=20
-2.26.0.rc2
-
+> +	}
+>  	rcu_read_unlock();
+> +
+> +	return ret;
+>  }
+> +EXPORT_SYMBOL_GPL(rcuwait_wake_up);
