@@ -2,234 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D74618C3FF
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2020 00:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C606918C409
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2020 01:01:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727220AbgCSX4j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Mar 2020 19:56:39 -0400
-Received: from mga05.intel.com ([192.55.52.43]:25724 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727202AbgCSX4j (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Mar 2020 19:56:39 -0400
-IronPort-SDR: 1aldVkpbu8BPgzI0h08SkQDvxcU4NEjVqp5xcW/nu7kivRTxuTZoHsxDtRM1CRK1r7l85UgFoz
- T3KTAvf00n4w==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2020 16:56:37 -0700
-IronPort-SDR: rHiEyuFGrbVmJ7u8na+vYlYml4tdDEqJvf5NgZ2zsQqtj6sM5KiQ62yBWyW9lFwnJeJQpp1F8b
- jTg++XZf6hUw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,573,1574150400"; 
-   d="scan'208";a="268909891"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 19 Mar 2020 16:56:36 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jF51g-000AOf-0v; Fri, 20 Mar 2020 07:56:36 +0800
-Date:   Fri, 20 Mar 2020 07:55:45 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- f62c1930674913b18daaa608c348000ff124a481
-Message-ID: <5e740681.9Xp9ylMywub8oGF5%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1727279AbgCTABN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Mar 2020 20:01:13 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:37320 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727238AbgCTABL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Mar 2020 20:01:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=vHZuTkIraH0j18C0yesq0h37iJWXExpW0+pRP9wHAFQ=; b=kiLnA4+HBazSxcmaF2vYSeDjTi
+        GZySNj/qYjY7qWPGZkmvHOClubyAs6vb7qNyQfZbboMzJvAC4SHO+rElmWzJ0jHKOLMyU89vHKXK/
+        n1M8PZ7nzbZS/ryrjge0YuJsfT2QgYPpt2RAbDeongoVB9W/tMUNAm/+H2dBMRuDAuWrU0PwbnQ75
+        54EFHJNVY0SnoWPPNthdT3GTBbdGU8DxgXaRaLjrQZFGUO+ooZjTCdCB5e4iC3O2gyhwvHlCijgXg
+        qdZtqnhJd8ufbtliHGhktsMMJQdKUHbLmcPLdZ0UbErD8gWdNNPnllI27n2u1y0WLcmNSdyDJUoWb
+        Kec+VEjg==;
+Received: from 99-123-7-132.lightspeed.sntcca.sbcglobal.net ([99.123.7.132] helo=[192.168.1.71])
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jF562-0000eU-0Q; Fri, 20 Mar 2020 00:01:06 +0000
+Subject: Re: [patch V2 07/15] powerpc/ps3: Convert half completion to rcuwait
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-usb@vger.kernel.org, linux-pci@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Will Deacon <will@kernel.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-wireless@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>
+References: <20200318204302.693307984@linutronix.de>
+ <20200318204408.102694393@linutronix.de>
+ <20200319100459.GA18506@infradead.org>
+ <20200319102613.hbwax7zrrvgcde4x@linutronix.de>
+From:   Geoff Levand <geoff@infradead.org>
+Message-ID: <efc2378e-cf8e-8bf9-d009-34c6bcf43c8e@infradead.org>
+Date:   Thu, 19 Mar 2020 17:01:01 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20200319102613.hbwax7zrrvgcde4x@linutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: f62c1930674913b18daaa608c348000ff124a481  Merge tag 'tegra-for-5.7-usb-v2' of git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux into usb-next
+Hi,
 
-elapsed time: 530m
+On 3/19/20 3:26 AM, Sebastian Andrzej Siewior wrote:
+> On 2020-03-19 03:04:59 [-0700], Christoph Hellwig wrote:
+>> But I wonder how alive the whole PS3 support is to start with..
+> 
+> OtherOS can only be used on "old" PS3 which do not have have their
+> firmware upgraded past version 3.21, released April 1, 2010 [0].
+> It was not possible to install OtherOS on PS3-slim and I don't remember
+> if it was a successor or a budget version (but it had lower power
+> consumption as per my memory).
+> *I* remember from back then that a few universities bought quite a few
+> of them and used them as a computation cluster. However, whatever broke
+> over the last 10 years is broken.
+> 
+> [0] https://en.wikipedia.org/wiki/OtherOS
+There are still PS3-Linux users out there.  They generally use firmware
+and other tools available through the 'hacker' communities that allow
+Linux to be run on more than just the 'officially supported' platforms.
 
-configs tested: 175
-configs skipped: 0
+Anyway, the change to use rcuwait seems fine if that's needed for the
+completion re-work.  I'll try to do some testing with the patch set
+next week.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-arm                              allmodconfig
-arm                               allnoconfig
-arm                              allyesconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm64                            allyesconfig
-arm                         at91_dt_defconfig
-arm                           efm32_defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                        multi_v7_defconfig
-arm                        shmobile_defconfig
-arm                           sunxi_defconfig
-arm64                               defconfig
-sparc                            allyesconfig
-s390                          debug_defconfig
-s390                                defconfig
-arc                                 defconfig
-riscv                          rv32_defconfig
-nds32                               defconfig
-s390                              allnoconfig
-m68k                             allmodconfig
-openrisc                 simple_smp_defconfig
-sparc64                           allnoconfig
-ia64                                defconfig
-powerpc                             defconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                             alldefconfig
-i386                                defconfig
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-nios2                         3c120_defconfig
-nios2                         10m50_defconfig
-c6x                        evmc6678_defconfig
-xtensa                          iss_defconfig
-c6x                              allyesconfig
-xtensa                       common_defconfig
-openrisc                    or1ksim_defconfig
-nds32                             allnoconfig
-csky                                defconfig
-alpha                               defconfig
-h8300                     edosk2674_defconfig
-h8300                    h8300h-sim_defconfig
-h8300                       h8s-sim_defconfig
-m68k                       m5475evb_defconfig
-m68k                          multi_defconfig
-m68k                           sun3_defconfig
-arc                              allyesconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-powerpc                           allnoconfig
-powerpc                       ppc64_defconfig
-powerpc                          rhel-kconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-mips                             allyesconfig
-mips                         64r6el_defconfig
-mips                              allnoconfig
-mips                           32r2_defconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                           allyesconfig
-parisc                generic-32bit_defconfig
-parisc                generic-64bit_defconfig
-x86_64               randconfig-a001-20200319
-x86_64               randconfig-a002-20200319
-x86_64               randconfig-a003-20200319
-i386                 randconfig-a001-20200319
-i386                 randconfig-a002-20200319
-i386                 randconfig-a003-20200319
-riscv                randconfig-a001-20200319
-m68k                 randconfig-a001-20200319
-nds32                randconfig-a001-20200319
-alpha                randconfig-a001-20200319
-parisc               randconfig-a001-20200319
-mips                 randconfig-a001-20200319
-c6x                  randconfig-a001-20200319
-h8300                randconfig-a001-20200319
-microblaze           randconfig-a001-20200319
-nios2                randconfig-a001-20200319
-sparc64              randconfig-a001-20200319
-xtensa               randconfig-a001-20200319
-csky                 randconfig-a001-20200319
-openrisc             randconfig-a001-20200319
-sh                   randconfig-a001-20200319
-s390                 randconfig-a001-20200319
-x86_64               randconfig-b001-20200319
-x86_64               randconfig-b002-20200319
-x86_64               randconfig-b003-20200319
-i386                 randconfig-b001-20200319
-i386                 randconfig-b002-20200319
-i386                 randconfig-b003-20200319
-x86_64               randconfig-c001-20200319
-x86_64               randconfig-c002-20200319
-x86_64               randconfig-c003-20200319
-i386                 randconfig-c001-20200319
-i386                 randconfig-c002-20200319
-i386                 randconfig-c003-20200319
-x86_64               randconfig-d001-20200319
-x86_64               randconfig-d002-20200319
-x86_64               randconfig-d003-20200319
-i386                 randconfig-d001-20200319
-i386                 randconfig-d002-20200319
-i386                 randconfig-d003-20200319
-x86_64               randconfig-e001-20200319
-x86_64               randconfig-e002-20200319
-x86_64               randconfig-e003-20200319
-i386                 randconfig-e001-20200319
-i386                 randconfig-e002-20200319
-i386                 randconfig-e003-20200319
-x86_64               randconfig-f001-20200319
-x86_64               randconfig-f002-20200319
-x86_64               randconfig-f003-20200319
-i386                 randconfig-f001-20200319
-i386                 randconfig-f002-20200319
-i386                 randconfig-f003-20200319
-x86_64               randconfig-g001-20200319
-x86_64               randconfig-g002-20200319
-x86_64               randconfig-g003-20200319
-i386                 randconfig-g001-20200319
-i386                 randconfig-g002-20200319
-i386                 randconfig-g003-20200319
-x86_64               randconfig-h001-20200319
-x86_64               randconfig-h002-20200319
-x86_64               randconfig-h003-20200319
-i386                 randconfig-h001-20200319
-i386                 randconfig-h002-20200319
-i386                 randconfig-h003-20200319
-x86_64               randconfig-h001-20200320
-x86_64               randconfig-h002-20200320
-x86_64               randconfig-h003-20200320
-i386                 randconfig-h001-20200320
-i386                 randconfig-h002-20200320
-i386                 randconfig-h003-20200320
-arc                  randconfig-a001-20200320
-arm                  randconfig-a001-20200320
-arm64                randconfig-a001-20200320
-ia64                 randconfig-a001-20200320
-powerpc              randconfig-a001-20200320
-sparc                randconfig-a001-20200320
-arc                  randconfig-a001-20200319
-ia64                 randconfig-a001-20200319
-arm                  randconfig-a001-20200319
-arm64                randconfig-a001-20200319
-sparc                randconfig-a001-20200319
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-s390                       zfcpdump_defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-s390                             alldefconfig
-sh                               allmodconfig
-sh                                allnoconfig
-sh                          rsk7269_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                            titan_defconfig
-sparc                               defconfig
-sparc64                          allmodconfig
-sparc64                          allyesconfig
-sparc64                             defconfig
-um                                  defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              fedora-25
-x86_64                                  kexec
-x86_64                                    lkp
-x86_64                                   rhel
-x86_64                         rhel-7.2-clear
-x86_64                               rhel-7.6
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-Geoff
