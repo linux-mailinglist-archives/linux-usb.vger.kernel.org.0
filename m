@@ -2,156 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC4818D9F6
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2020 22:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D375F18DA99
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2020 22:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727197AbgCTVCq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Mar 2020 17:02:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56568 "EHLO mail.kernel.org"
+        id S1726855AbgCTVys convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 20 Mar 2020 17:54:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44908 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726738AbgCTVCp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 20 Mar 2020 17:02:45 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0FA3C20658;
-        Fri, 20 Mar 2020 21:02:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584738164;
-        bh=fLFR8YUhXJwNZZYH7ngeOnxwmZhi+69xDiLb5E3X218=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=BCeAXqXFUuj1hHiVzGhhcgSUUir3NHhdbxKZUoNYcV8LStVDQjfG/eRwyCQXKq8Be
-         IuQ1313Lnf1b5icOH+wFddq7Mb39GH99NqIqxPbuPU2PIooSvheiWkrBcjjmp3yjFc
-         b7TA5EIztlrs4AAazjq0Dl03OXMXgVcpSpgAAgtk=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id C94F935226B5; Fri, 20 Mar 2020 14:02:43 -0700 (PDT)
-Date:   Fri, 20 Mar 2020 14:02:43 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [patch V2 08/15] Documentation: Add lock ordering and nesting
- documentation
-Message-ID: <20200320210243.GT3199@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200320160145.GN3199@paulmck-ThinkPad-P72>
- <87mu8apzxr.fsf@nanos.tec.linutronix.de>
+        id S1726666AbgCTVys (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 20 Mar 2020 17:54:48 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 206897] New: Huion tablet not recognized from kernel 5.3.1
+Date:   Fri, 20 Mar 2020 21:54:47 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: hebm12@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-206897-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mu8apzxr.fsf@nanos.tec.linutronix.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 20, 2020 at 08:51:44PM +0100, Thomas Gleixner wrote:
-> "Paul E. McKenney" <paulmck@kernel.org> writes:
-> >
-> >  - The soft interrupt related suffix (_bh()) still disables softirq
-> >    handlers.  However, unlike non-PREEMPT_RT kernels (which disable
-> >    preemption to get this effect), PREEMPT_RT kernels use a per-CPU
-> >    lock to exclude softirq handlers.
-> 
-> I've made that:
-> 
->   - The soft interrupt related suffix (_bh()) still disables softirq
->     handlers.
-> 
->     Non-PREEMPT_RT kernels disable preemption to get this effect.
-> 
->     PREEMPT_RT kernels use a per-CPU lock for serialization. The lock
->     disables softirq handlers and prevents reentrancy by a preempting
->     task.
+https://bugzilla.kernel.org/show_bug.cgi?id=206897
 
-That works!  At the end, I would instead say "prevents reentrancy
-due to task preemption", but what you have works.
+            Bug ID: 206897
+           Summary: Huion tablet not recognized from kernel 5.3.1
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: from 5.3.1 to 5.6-rc6
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: hebm12@gmail.com
+        Regression: No
 
-> On non-RT this is implicit through preemption disable, but it's non
-> obvious for RT as preemption stays enabled.
-> 
-> > PREEMPT_RT kernels preserve all other spinlock_t semantics:
-> >
-> >  - Tasks holding a spinlock_t do not migrate.  Non-PREEMPT_RT kernels
-> >    avoid migration by disabling preemption.  PREEMPT_RT kernels instead
-> >    disable migration, which ensures that pointers to per-CPU variables
-> >    remain valid even if the task is preempted.
-> >
-> >  - Task state is preserved across spinlock acquisition, ensuring that the
-> >    task-state rules apply to all kernel configurations.  In non-PREEMPT_RT
-> >    kernels leave task state untouched.  However, PREEMPT_RT must change
-> >    task state if the task blocks during acquisition.  Therefore, the
-> >    corresponding lock wakeup restores the task state.  Note that regular
-> >    (not lock related) wakeups do not restore task state.
-> 
->    - Task state is preserved across spinlock acquisition, ensuring that the
->      task-state rules apply to all kernel configurations.  Non-PREEMPT_RT
->      kernels leave task state untouched.  However, PREEMPT_RT must change
->      task state if the task blocks during acquisition.  Therefore, it
->      saves the current task state before blocking and the corresponding
->      lock wakeup restores it. A regular not lock related wakeup sets the
->      task state to RUNNING. If this happens while the task is blocked on
->      a spinlock then the saved task state is changed so that correct
->      state is restored on lock wakeup.
-> 
-> Hmm?
+Hi Kernel Experts!
 
-I of course cannot resist editing the last two sentences:
+My Huion 1060plus tablet is not recognized from kernel version 5.3.1
 
-   ... Other types of wakeups unconditionally set task state to RUNNING.
-   If this happens while a task is blocked while acquiring a spinlock,
-   then the task state is restored to its pre-acquisition value at
-   lock-wakeup time.
+dmesg output is:
 
-> > But this code failes on PREEMPT_RT kernels because the memory allocator
-> > is fully preemptible and therefore cannot be invoked from truly atomic
-> > contexts.  However, it is perfectly fine to invoke the memory allocator
-> > while holding a normal non-raw spinlocks because they do not disable
-> > preemption::
-> >
-> >> +  spin_lock(&lock);
-> >> +  p = kmalloc(sizeof(*p), GFP_ATOMIC);
-> >> +
-> >> +Most places which use GFP_ATOMIC allocations are safe on PREEMPT_RT as the
-> >> +execution is forced into thread context and the lock substitution is
-> >> +ensuring preemptibility.
-> >
-> > Interestingly enough, most uses of GFP_ATOMIC allocations are
-> > actually safe on PREEMPT_RT because the the lock substitution ensures
-> > preemptibility.  Only those GFP_ATOMIC allocations that are invoke
-> > while holding a raw spinlock or with preemption otherwise disabled need
-> > adjustment to work correctly on PREEMPT_RT.
-> >
-> > [ I am not as confident of the above as I would like to be... ]
-> 
-> I'd leave that whole paragraph out. This documents the rules and from
-> the above code examples it's pretty clear what works and what not :)
 
-Works for me!  ;-)
+[ 4168.587592] usb 1-1.1: new full-speed USB device number 13 using xhci_hcd
+[ 4168.990456] usb 1-1.1: New USB device found, idVendor=256c, idProduct=006e,
+bcdDevice=30.00
+[ 4168.990461] usb 1-1.1: New USB device strings: Mfr=5, Product=6,
+SerialNumber=0
+[ 4168.990463] usb 1-1.1: Product: PenTablet 
+[ 4169.003082] usb 1-1.1: can't set config #1, error -32
 
-> > And meeting time, will continue later!
-> 
-> Enjoy!
 
-Not bad, actually, as meetings go.
+Previous working versions have this output:
 
-							Thanx, Paul
+[   62.724538] usb 2-3.1: new full-speed USB device number 3 using xhci_hcd
+[   62.851463] usb 2-3.1: New USB device found, idVendor=256c, idProduct=006e,
+bcdDevice=30.00
+[   62.851470] usb 2-3.1: New USB device strings: Mfr=5, Product=6,
+SerialNumber=0
+[   62.851475] usb 2-3.1: Product: PenTablet 
+[   62.909757] hidraw: raw HID events driver (C) Jiri Kosina
+[   62.929599] usbcore: registered new interface driver usbhid
+[   62.929601] usbhid: USB HID core driver
+[   62.939433] input: PenTablet  as
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3.1/2-3.1:1.0/0003:256C:006E.0001/input/input15
+[   62.939691] input: PenTablet  Mouse as
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3.1/2-3.1:1.0/0003:256C:006E.0001/input/input16
+[   62.939804] hid-generic 0003:256C:006E.0001: input,hidraw0: USB HID v1.11
+Mouse [PenTablet ] on usb-0000:00:14.0-3.1/input0
+[   62.943515] input: PenTablet  Mouse as
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3.1/2-3.1:1.1/0003:256C:006E.0002/input/input17
+[   62.943646] input: PenTablet  as
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3.1/2-3.1:1.1/0003:256C:006E.0002/input/input18
+[   62.943805] hid-generic 0003:256C:006E.0002: input,hiddev0,hidraw1: USB HID
+v1.11 Mouse [PenTablet ] on usb-0000:00:14.0-3.1/input1
+[   62.944370] input: PenTablet  Keyboard as
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3.1/2-3.1:1.2/0003:256C:006E.0003/input/input19
+[   62.951136] usb 2-3.4: new high-speed USB device number 4 using xhci_hcd
+[   62.997966] input: PenTablet  Consumer Control as
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3.1/2-3.1:1.2/0003:256C:006E.0003/input/input20
+[   62.998070] input: PenTablet  System Control as
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3.1/2-3.1:1.2/0003:256C:006E.0003/input/input21
+[   62.998161] hid-generic 0003:256C:006E.0003: input,hidraw2: USB HID v1.0b
+Keyboard [PenTablet ] on usb-0000:00:14.0-3.1/input2
+
+
+Looking further down, the commit that creates the problem is (thanks to
+https://bbs.archlinux.org/viewtopic.php?pid=1878478#p1878478):
+
+commit ef513be0a9057cc6baf5d29566aaaefa214ba344
+Author: Jim Lin <jilin@nvidia.com>
+Date:   Mon Jun 3 18:53:44 2019 +0800
+
+    usb: xhci: Add Clear_TT_Buffer
+
+    USB 2.0 specification chapter 11.17.5 says "as part of endpoint halt
+    processing for full-/low-speed endpoints connected via a TT, the host
+    software must use the Clear_TT_Buffer request to the TT to ensure
+    that the buffer is not in the busy state".
+
+    In our case, a full-speed speaker (ConferenceCam) is behind a high-
+    speed hub (ConferenceCam Connect), sometimes once we get STALL on a
+    request we may continue to get STALL with the folllowing requests,
+    like Set_Interface.
+
+    Here we invoke usb_hub_clear_tt_buffer() to send Clear_TT_Buffer
+    request to the hub of the device for the following Set_Interface
+    requests to the device to get ACK successfully.
+
+    Signed-off-by: Jim Lin <jilin@nvidia.com>
+    Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+drivers/usb/host/xhci-ring.c | 27 ++++++++++++++++++++++++++-
+drivers/usb/host/xhci.c      | 21 +++++++++++++++++++++
+drivers/usb/host/xhci.h      |  5 +++++
+3 files changed, 52 insertions(+), 1 deletion(-)
+
+
+Thanks for your help!
+
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
