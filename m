@@ -2,76 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB89318CFD2
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2020 15:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15CC418D0BA
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2020 15:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727175AbgCTOQY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Mar 2020 10:16:24 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:35729 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726878AbgCTOQX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Mar 2020 10:16:23 -0400
-Received: by mail-lf1-f67.google.com with SMTP id m15so4684285lfp.2
-        for <linux-usb@vger.kernel.org>; Fri, 20 Mar 2020 07:16:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=l/YyKtMjSFEbJma+JMWyuZRcQRGW5JZxNPUfP4y/LSk=;
-        b=BfnEAd8uG6GC6CDLQ5u0nq49UCtRtfH3i8hGbmGo+plIK7gRG0fqAclzwNu/WnEuoi
-         KK5+5PSN+nkNGuNqgHLsI14YwLphoMGCOiLhfqdOHgzF4ETUvp5znzi+i+B3oKbe43Hv
-         CuZ0pReoyJju9AF7O88wcO/Y0sQUG0yVM8vU3BTG8oToQIbVm5D8jOruTZs65AtPlHiq
-         QgATnixoSiP6NZMDNeSvKv+w+N2FjE7cjFQm5KufYiwUgnrhmDKNdCwqj22JeFDcI7HT
-         K7o3DUQlGGm1v7L0qFsJvM5znLzGHItqBfYDYVEjWOJPMCybQGmGjvmCAyJ9RavZFvnt
-         2nPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=l/YyKtMjSFEbJma+JMWyuZRcQRGW5JZxNPUfP4y/LSk=;
-        b=N5G/TvQKc/PXDy+y+6XC4UuECFYm9JN6AvhzI8+XZeWWjLUaugmQ7FyU59nEAE98WW
-         10mrlM+jX8Y8Uvd53NEANbzw5/vur666hp8qxhGDMtEc3agtdHhobc8GuzDYQbRybQuR
-         ZdnqqALhOeEL3qjQmp/kzaj0Df7xbL7KK+VKan6g0pH+xeKWvCDpiuG0RlFafss5AnVt
-         /axyCmUc3a4K//20x/yegH8lK3b1Ceo5JRPlwnoFiYWYgeP3QMoWt6SJj+H9QlJVhZNd
-         lb2jfS024tLTZVopw8sFXbFaY+q9lYOguZpKyluwa7MP3QZd42hqbfbQieo/NNaVrYrx
-         9QKw==
-X-Gm-Message-State: ANhLgQ1QhuCDC4Pv7JcFBEovZBDQuso52HYg8NClONiR3o+/LXQs24sj
-        zc8Q4ea/zNE3rz6WrktynrKeLrV/1b+3ZDwgn5k=
-X-Google-Smtp-Source: ADFU+vu3JZXQuKlTUKktIyObwirusoMFcO8NWHlnqd3iFd+mrvS7adcKe6AK1heBVUN1hmguLypnBYsdy3UcWuinO38=
-X-Received: by 2002:a05:6512:46a:: with SMTP id x10mr356714lfd.193.1584713781404;
- Fri, 20 Mar 2020 07:16:21 -0700 (PDT)
+        id S1727316AbgCTO1m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Mar 2020 10:27:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51368 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726896AbgCTO1m (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 20 Mar 2020 10:27:42 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 074EA2070A;
+        Fri, 20 Mar 2020 14:27:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584714461;
+        bh=ZMV8PC35BsbyE5rkXVZ62gtO1IW15NGYTzww9GsH/Aw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=QcAH3tuD3oD4fJDXPwdP+1Cu9Jb6gEGSBZFIsvE9kfeMm4du2wd9wl/OsXf2wlmn7
+         Ma15ocxuYyO+yqFmqRFUyNTd9uzgQlqoT65wEk/3DC7Uzp38lflDeRN+4Yw6yPUO0M
+         TAHWEmPsNtYO5Ta0NNe7S8Dp3IBlCf2I+pYev2DU=
+Date:   Fri, 20 Mar 2020 15:27:39 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB fixes for 5.6-rc7
+Message-ID: <20200320142739.GA760409@kroah.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6512:3055:0:0:0:0 with HTTP; Fri, 20 Mar 2020 07:16:20
- -0700 (PDT)
-Reply-To: clarkrobinson44444@gmail.com
-From:   Clark Robinson <drlarrylee42@gmail.com>
-Date:   Fri, 20 Mar 2020 07:16:20 -0700
-Message-ID: <CALi8qqb1Y1buj-Wr+VTwLj3Z=XQun54s1PXNgY5oA4G04qtZBg@mail.gmail.com>
-Subject: LOAN OFFER
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
--- 
+The following changes since commit 2c523b344dfa65a3738e7039832044aa133c75fb:
 
+  Linux 5.6-rc5 (2020-03-08 17:44:44 -0700)
 
-Do you need a loan to start your business? Do you need a loan to pay
-with your bills ? At the moment we offer Education loan , business
-loan , mortgage, agricultural credit , personal loan , auto loan ,
-etc. , if you need a loan with specific interest so we can send more
-information to You .We Give Out Loans For 3% Interest Rate And We
-Offer Loans From $5,000 To $50,000,000.00 USD
+are available in the Git repository at:
 
-    Contact us by email: clarkrobinson44444@gmail.com
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.6-rc7
 
-CREDIT APPLICATION
+for you to fetch changes up to 2866ce8696167de300e27d50d521b5f671bab5d4:
 
-Full Name:
-Country:
-Telephone No :
-Amount of the loan Needed :
-DURATION:
+  Merge tag 'usb-serial-5.6-rc7' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus (2020-03-18 10:42:57 +0100)
 
-Contact us by email: clarkrobinson44444@gmail.com
+----------------------------------------------------------------
+USB fixes for 5.6-rc7
+
+Here are some small USB fixes for 5.6-rc7.  And there's a thunderbolt
+driver fix thrown in for good measure as well.
+
+These fixes are:
+	- new device ids for usb-serial drivers
+	- thunderbolt error code fix
+	- xhci driver fixes
+	- typec fixes
+	- cdc-acm driver fixes
+	- chipidea driver fix
+	- more USB quirks added for devices that need them.
+
+All of these have been in linux-next with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Alberto Mattea (1):
+      usb: xhci: apply XHCI_SUSPEND_DELAY to AMD XHCI controller 1022:145c
+
+Anthony Mallet (2):
+      USB: cdc-acm: fix close_delay and closing_wait units in TIOCSSERIAL
+      USB: cdc-acm: fix rounding error in TIOCSSERIAL
+
+Dan Carpenter (1):
+      thunderbolt: Fix error code in tb_port_is_width_supported()
+
+Daniele Palmas (1):
+      USB: serial: option: add ME910G1 ECM composition 0x110b
+
+Greg Kroah-Hartman (2):
+      Merge tag 'thunderbolt-fix-for-v5.6-rc6' of git://git.kernel.org/.../westeri/thunderbolt into usb-linus
+      Merge tag 'usb-serial-5.6-rc7' of https://git.kernel.org/.../johan/usb-serial into usb-linus
+
+Hans de Goede (1):
+      usb: quirks: add NO_LPM quirk for RTL8153 based ethernet adapters
+
+Heikki Krogerus (2):
+      usb: typec: ucsi: displayport: Fix NULL pointer dereference
+      usb: typec: ucsi: displayport: Fix a potential race during registration
+
+Kai-Heng Feng (1):
+      USB: Disable LPM on WD19's Realtek Hub
+
+Peter Chen (1):
+      usb: chipidea: udc: fix sleeping function called from invalid context
+
+Ran Wang (1):
+      usb: host: xhci-plat: add a shutdown
+
+Scott Chen (1):
+      USB: serial: pl2303: add device-id for HP LD381
+
+Steven Rostedt (VMware) (1):
+      xhci: Do not open code __print_symbolic() in xhci trace events
+
+ drivers/thunderbolt/switch.c         |  2 +-
+ drivers/usb/chipidea/udc.c           |  7 ++++---
+ drivers/usb/class/cdc-acm.c          | 34 +++++++++++++++++++++-------------
+ drivers/usb/core/quirks.c            |  6 ++++++
+ drivers/usb/host/xhci-pci.c          |  3 ++-
+ drivers/usb/host/xhci-plat.c         |  1 +
+ drivers/usb/host/xhci-trace.h        | 23 ++++++-----------------
+ drivers/usb/serial/option.c          |  2 ++
+ drivers/usb/serial/pl2303.c          |  1 +
+ drivers/usb/serial/pl2303.h          |  1 +
+ drivers/usb/typec/ucsi/displayport.c | 12 +++++++++++-
+ 11 files changed, 56 insertions(+), 36 deletions(-)
