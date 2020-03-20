@@ -2,85 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C096418CE1A
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2020 13:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86CA418CFB2
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2020 15:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727304AbgCTMzr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Mar 2020 08:55:47 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:58656 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727279AbgCTMzr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Mar 2020 08:55:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9sJuQlZdjTLh4p9vc8U/OzHYsApB7N+ztV93SXfUXTY=; b=S+msKOf2a1fh8blY+Rww+BWM12
-        nVEZN4NzwFV6andPM4+8lKK11q/OicWX2iQkylcgiiXoJXlNoBsNsuH3Hsp2RR8RDPZL2TdcCODPS
-        uXqwQjWFKzeQTHtaizkhr7Eo97mIjvh21zbrPXi93EqkofUUhGO+C6IK+RNwVwfqauDddv3GldqOZ
-        jfFfEHZEnFgz//yhDOiVCZfQldh+E+9GX+YRXaUAVYRX5jQUgr/PHWQVGE7cyWwVF36aIaotjD5Zk
-        0y7RVQesMd3sxQR2DC76m8acC4k0uK2OUV9rbi/RfYT8M2tZQ3jZP6DJGye+lpHGnC+0OB1EyRrvO
-        hrIvLsLg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jFHAv-0000xV-Ux; Fri, 20 Mar 2020 12:54:58 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 40E9C305C92;
-        Fri, 20 Mar 2020 13:54:55 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0E42E2858D5B2; Fri, 20 Mar 2020 13:54:55 +0100 (CET)
-Date:   Fri, 20 Mar 2020 13:54:55 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Davidlohr Bueso <dave@stgolabs.net>
-Cc:     tglx@linutronix.de, arnd@arndb.de, balbi@kernel.org,
-        bhelgaas@google.com, bigeasy@linutronix.de, davem@davemloft.net,
-        gregkh@linuxfoundation.org, joel@joelfernandes.org,
-        kurt.schwemmer@microsemi.com, kvalo@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, logang@deltatee.com,
-        mingo@kernel.org, mpe@ellerman.id.au, netdev@vger.kernel.org,
-        oleg@redhat.com, paulmck@kernel.org, rdunlap@infradead.org,
-        rostedt@goodmis.org, torvalds@linux-foundation.org,
-        will@kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Davidlohr Bueso <dbueso@suse.de>
-Subject: Re: [PATCH 18/15] kvm: Replace vcpu->swait with rcuwait
-Message-ID: <20200320125455.GE20696@hirez.programming.kicks-ass.net>
-References: <20200318204302.693307984@linutronix.de>
- <20200320085527.23861-1-dave@stgolabs.net>
- <20200320085527.23861-3-dave@stgolabs.net>
+        id S1726851AbgCTOGe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Mar 2020 10:06:34 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:40047 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726774AbgCTOGe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Mar 2020 10:06:34 -0400
+Received: by mail-pf1-f194.google.com with SMTP id l184so3272958pfl.7;
+        Fri, 20 Mar 2020 07:06:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=4ihYQan0P4nWkVNyVJPOhzYTUV259o58ZK/2SPGi9As=;
+        b=Rl4J89/p1LOJdj4P3wPRoi6GNprlWR4beZ4xSymUUxHi5DRLqx7Oig6MXmrDJbdKCv
+         v4szf5lQHVGeEU8PRLjQi3GGG2J9wkok+MStHyQD4wPi2hCqPDRhWV0JcGD3/vkAsEIP
+         c9rH5uihA1gUZHHuEGQ6JjZT5M/Iwl7WeW+bxj0rD9p1h3Stpj2HB98J4GIfav1qYk2R
+         1gSmkCDJJsOZZl7bON32Z/jDjY/P2/fESCjFYl8DS7yXo2+MmYwXG5c1aX3gjJ8Al6Uw
+         /hx67QHwEyKQLwwkIJvAYFyCBJWms29iGSheGxwUy0SbPuJ51Wpu8w3NtMUs8nn6ZCTc
+         nlUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4ihYQan0P4nWkVNyVJPOhzYTUV259o58ZK/2SPGi9As=;
+        b=uYMiZQMuI/olAosIGwg43nU/tW23O8pVQOxjIvl/jNFQXq3fj0A5/gJvXwZ9zvQqIT
+         72XtWwgihfaqHfMhYE850uimamfx26qzn+93LVwv8cEABT1s+s/4SK8hzYCvrdOTdNBt
+         H30+v2W9wWjxbUo99Qa8s2cUvxRkQla3J+k2fcfjnGJRnhSLPcg0IUAB72PR9lV91wdk
+         R7LiSd7tp+NpeBy059vaLc957vP7+6CelmMRNUOjwudt4YQmxRsfHU//PM2df2ze6ltr
+         LPXiHXqKPOcNlR8OVldwlX8QSNxmOvAHrs4RO6YAIOx21VMs8tBKlcrnrfTQNgKiFkdT
+         ySwg==
+X-Gm-Message-State: ANhLgQ1QUcwREIez0znNVqUMPR4tFAjvf8jEOKJWWHx2ToOJ0PJX7IaS
+        8xku50iDllkPd/2iPjnrV8E=
+X-Google-Smtp-Source: ADFU+vugQP+2zgDQI1MUAUObEaVq5eBs5Q56th+PsuIFJ4sGn825r3RzJNcqTC8XoLWUcZd+zDv8VA==
+X-Received: by 2002:a63:6841:: with SMTP id d62mr8515773pgc.86.1584713191662;
+        Fri, 20 Mar 2020 07:06:31 -0700 (PDT)
+Received: from localhost (216.24.188.11.16clouds.com. [216.24.188.11])
+        by smtp.gmail.com with ESMTPSA id p9sm5316431pgs.50.2020.03.20.07.06.30
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 20 Mar 2020 07:06:31 -0700 (PDT)
+Date:   Fri, 20 Mar 2020 22:06:28 +0800
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Minas Harutyunyan <hminas@synopsys.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Winkler, Tomas" <tomas.winkler@intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/5] drivers: provide
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <20200320140628.GA9529@nuc8i5>
+References: <20200315140525.21780-1-zhengdejin5@gmail.com>
+ <20200315140525.21780-2-zhengdejin5@gmail.com>
+ <20200317192051.GA1520272@kroah.com>
+ <CAMuHMdVK0Gpw6A=CfF+5nw4hHz9UCtSoXwF9_UThAK4E+mQBWg@mail.gmail.com>
+ <20200318101010.GA2061266@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200320085527.23861-3-dave@stgolabs.net>
+In-Reply-To: <20200318101010.GA2061266@kroah.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 20, 2020 at 01:55:26AM -0700, Davidlohr Bueso wrote:
-> -	swait_event_interruptible_exclusive(*wq, ((!vcpu->arch.power_off) &&
-> -				       (!vcpu->arch.pause)));
-> +	rcuwait_wait_event(*wait,
-> +			   (!vcpu->arch.power_off) && (!vcpu->arch.pause),
-> +			   TASK_INTERRUPTIBLE);
+On Wed, Mar 18, 2020 at 11:10:10AM +0100, Greg KH wrote:
+> On Tue, Mar 17, 2020 at 08:35:16PM +0100, Geert Uytterhoeven wrote:
+> > Hi Greg,
+> > 
+> > On Tue, Mar 17, 2020 at 8:20 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > On Sun, Mar 15, 2020 at 10:05:21PM +0800, Dejin Zheng wrote:
+> > > > Since commit "drivers: provide devm_platform_ioremap_resource()",
+> > > > it was wrap platform_get_resource() and devm_ioremap_resource() as
+> > > > single helper devm_platform_ioremap_resource(). but now, many drivers
+> > > > still used platform_get_resource() and devm_ioremap_resource()
+> > > > together in the kernel tree. The reason can not be replaced is they
+> > > > still need use the resource variables obtained by platform_get_resource().
+> > > > so provide this helper.
+> > > >
+> > > > Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > > > Suggested-by: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+> > > > Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
+> > > > ---
+> > > > v2 -> v3:
+> > > >       - rename the function to
+> > > >         devm_platform_get_and_ioremap_resource() by Sergei's suggestion.
+> > > >       - make the last parameter res as optional by Geert's suggestion.
+> > > >
+> > > > v1 -> v2:
+> > > >       - No change.
+> > > >
+> > > >  drivers/base/platform.c         | 22 ++++++++++++++++++++++
+> > > >  include/linux/platform_device.h |  3 +++
+> > > >  2 files changed, 25 insertions(+)
+> > > >
+> > > > diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+> > > > index 7fa654f1288b..9f6a78f79235 100644
+> > > > --- a/drivers/base/platform.c
+> > > > +++ b/drivers/base/platform.c
+> > > > @@ -62,6 +62,28 @@ struct resource *platform_get_resource(struct platform_device *dev,
+> > > >  EXPORT_SYMBOL_GPL(platform_get_resource);
+> > > >
+> > > >  #ifdef CONFIG_HAS_IOMEM
+> > > > +/**
+> > > > + * devm_platform_get_and_ioremap_resource - call devm_ioremap_resource() for a
+> > > > + *                                       platform device and get resource
+> > > > + *
+> > > > + * @pdev: platform device to use both for memory resource lookup as well as
+> > > > + *        resource management
+> > > > + * @index: resource index
+> > > > + * @res: get the resource
+> > > > + */
+> > > > +void __iomem *
+> > > > +devm_platform_get_and_ioremap_resource(struct platform_device *pdev,
+> > > > +                             unsigned int index, struct resource **res)
+> > > > +{
+> > > > +     struct resource *r;
+> > > > +
+> > > > +     r = platform_get_resource(pdev, IORESOURCE_MEM, index);
+> > > > +     if (res)
+> > > > +             *res = r;
+> > >
+> > > What happens if that call fails?  Shouldn't that be checked?
+> > 
+> > Then devm_ioremap_resource() will print an error message, and return
+> > an error.
+> > It's designed to be pipelined that way, so you have to check for an error
+> > only once.
+> 
+> Ok, thanks.  Can I get an ack/reviewed-by for this series then?
+> 
+> thanks,
+> 
+> greg k-h
 
-> -	for (;;) {
-> -		prepare_to_swait_exclusive(&vcpu->wq, &wait, TASK_INTERRUPTIBLE);
-> -
-> -		if (kvm_vcpu_check_block(vcpu) < 0)
-> -			break;
-> -
-> -		waited = true;
-> -		schedule();
-> -	}
-> -
-> -	finish_swait(&vcpu->wq, &wait);
-> +	rcuwait_wait_event(&vcpu->wait,
-> +			   (block_check = kvm_vcpu_check_block(vcpu)) < 0,
-> +			   TASK_INTERRUPTIBLE);
+Hi Geert:
 
-Are these yet more instances that really want to be TASK_IDLE ?
+Could you help me review these patches if you have free time? Your comments and
+suggestions will be of great help to me. It is important to me and thanks
+again for your help.
+
+Hi Greg, Mathias and Minas:
+
+Thank you very much for taking your time to help me review my code.
+
+BR,
+Dejin
 
