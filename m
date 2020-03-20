@@ -2,119 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF7A18DAAB
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2020 23:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C50DB18DB3C
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Mar 2020 23:36:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727316AbgCTWCW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Mar 2020 18:02:22 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:45348 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726840AbgCTWCV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Mar 2020 18:02:21 -0400
-Received: by mail-lj1-f194.google.com with SMTP id y17so8082078ljk.12;
-        Fri, 20 Mar 2020 15:02:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=j+Zpm7nv3KnXyXL/VwriXYdIco1W4Hfuzxxyjd9h2fs=;
-        b=LS23U3Z2Mkkr/5FwWW3HzaKo/z4My76CU26gDQtzHZJEnhJSUg/GDsffGAd2GyqgMy
-         /ALOaz7gGtJT/f66DMtS9HR0LJHnbWoOsYTZXzE0dm6SGgfWD9y8tYlppiKXpnPkXYFn
-         SoQfdqmzzjFcD5bFuM4v/79ZGKNJ66GVNw9hN+vAdCZEcLD8b1YW1PbTzQ4YTxFAjVh0
-         yoG7/fATCQ7+7pLOkbGXbKmq68ejNOpWfxXcksqpBzN/mq69iYf0dQkkn03yp7MTFpID
-         w2MPo6pgI26ayky5Pz72YUdEyN0GfHbxji3yM+Yh7c5FngLa+/uuvEno5pZIQqG8/j3K
-         qb8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=j+Zpm7nv3KnXyXL/VwriXYdIco1W4Hfuzxxyjd9h2fs=;
-        b=CbAurxoXDTtI0HFMPn8p7r0A4//0J3DQE/oO9JeA0dlSoZv9WbB1IXQoTezuDAMwaq
-         UfUq+7i16Wjq/fm6dtHLM0VVb5bcKmIoXwyj+0fpmmorEArZfhKDLfWOgooKuE3KMCC0
-         D9i8R9agW8aLNVJx2Qzf+NnZttDVEMKHtnbLTuGXVH074FD6QmpCf3rE4Macq1F0hYxQ
-         0bvCD2NToMOjHzA0CXLTlWWctD2nQl64EsNv/sqRp3uJgKPjWncschrRRX9XSArwjBUR
-         yTTx/hygqIbcrhTuOCCqGMnurmykpCyGhgE2IspAEkgusYFGKg9OWKP+9uzjmzWdKCeo
-         bcuw==
-X-Gm-Message-State: ANhLgQ3/n4kDSsE0jgW4IDnh+g4rV8MTlmk3B7DKnH9MFISLXVSvMtE1
-        FuAgsC9+VmQX/T6gCREybaQ=
-X-Google-Smtp-Source: ADFU+vvZxRjv8GWZ+M9ELg7WqLbW0kQbslk4JVDN+5DcpyRTtSgwK+mCqXqUZUyq8NDPeSA6Q2U+1w==
-X-Received: by 2002:a05:651c:106:: with SMTP id a6mr6875085ljb.143.1584741739314;
-        Fri, 20 Mar 2020 15:02:19 -0700 (PDT)
-Received: from localhost.localdomain ([185.188.71.122])
-        by smtp.gmail.com with ESMTPSA id j21sm3992416lji.93.2020.03.20.15.02.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Mar 2020 15:02:18 -0700 (PDT)
-From:   Pawel Dembicki <paweldembicki@gmail.com>
-Cc:     Pawel Dembicki <paweldembicki@gmail.com>,
-        Johan Hovold <johan@kernel.org>,
+        id S1727304AbgCTWgg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Mar 2020 18:36:36 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:37622 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726855AbgCTWgf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Mar 2020 18:36:35 -0400
+Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1jFQFI-0005GA-2c; Fri, 20 Mar 2020 23:36:04 +0100
+Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
+        id 7EC4C1039FC; Fri, 20 Mar 2020 23:36:03 +0100 (CET)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     paulmck@kernel.org
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] USB: serial: option: add Wistron Neweb D19Q1
-Date:   Fri, 20 Mar 2020 23:01:54 +0100
-Message-Id: <20200320220155.5609-3-paweldembicki@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200320220155.5609-1-paweldembicki@gmail.com>
-References: <20200320220155.5609-1-paweldembicki@gmail.com>
+        linux-usb@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [patch V2 08/15] Documentation: Add lock ordering and nesting documentation
+In-Reply-To: <20200320210243.GT3199@paulmck-ThinkPad-P72>
+References: <20200320160145.GN3199@paulmck-ThinkPad-P72> <87mu8apzxr.fsf@nanos.tec.linutronix.de> <20200320210243.GT3199@paulmck-ThinkPad-P72>
+Date:   Fri, 20 Mar 2020 23:36:03 +0100
+Message-ID: <874kuipsbw.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This modem is embedded on dlink dwr-960 router.
-The oem configuration states:
+"Paul E. McKenney" <paulmck@kernel.org> writes:
+> On Fri, Mar 20, 2020 at 08:51:44PM +0100, Thomas Gleixner wrote:
+>> "Paul E. McKenney" <paulmck@kernel.org> writes:
+>> >
+>> >  - The soft interrupt related suffix (_bh()) still disables softirq
+>> >    handlers.  However, unlike non-PREEMPT_RT kernels (which disable
+>> >    preemption to get this effect), PREEMPT_RT kernels use a per-CPU
+>> >    lock to exclude softirq handlers.
+>> 
+>> I've made that:
+>> 
+>>   - The soft interrupt related suffix (_bh()) still disables softirq
+>>     handlers.
+>> 
+>>     Non-PREEMPT_RT kernels disable preemption to get this effect.
+>> 
+>>     PREEMPT_RT kernels use a per-CPU lock for serialization. The lock
+>>     disables softirq handlers and prevents reentrancy by a preempting
+>>     task.
+>
+> That works!  At the end, I would instead say "prevents reentrancy
+> due to task preemption", but what you have works.
 
-T: Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 2 Spd=480 MxCh= 0
-D: Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs= 1
-P: Vendor=1435 ProdID=d191 Rev=ff.ff
-S: Manufacturer=Android
-S: Product=Android
-S: SerialNumber=0123456789ABCDEF
-C:* #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-E: Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E: Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-E: Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E: Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-E: Ad=84(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
-E: Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E: Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-E: Ad=86(I) Atr=03(Int.) MxPS= 10 Ivl=32ms
-E: Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E: Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-E: Ad=88(I) Atr=03(Int.) MxPS= 8 Ivl=32ms
-E: Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E: Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=(none)
-E: Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E: Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=125us
+Yours is better.
 
-Tested on openwrt distribution
+>>    - Task state is preserved across spinlock acquisition, ensuring that the
+>>      task-state rules apply to all kernel configurations.  Non-PREEMPT_RT
+>>      kernels leave task state untouched.  However, PREEMPT_RT must change
+>>      task state if the task blocks during acquisition.  Therefore, it
+>>      saves the current task state before blocking and the corresponding
+>>      lock wakeup restores it. A regular not lock related wakeup sets the
+>>      task state to RUNNING. If this happens while the task is blocked on
+>>      a spinlock then the saved task state is changed so that correct
+>>      state is restored on lock wakeup.
+>> 
+>> Hmm?
+>
+> I of course cannot resist editing the last two sentences:
+>
+>    ... Other types of wakeups unconditionally set task state to RUNNING.
+>    If this happens while a task is blocked while acquiring a spinlock,
+>    then the task state is restored to its pre-acquisition value at
+>    lock-wakeup time.
 
-Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
----
- drivers/usb/serial/option.c | 2 ++
- 1 file changed, 2 insertions(+)
+Errm no. That would mean
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 49313a55e1f3..abc717b99204 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -2022,6 +2022,8 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(6) },
- 	{ USB_DEVICE_INTERFACE_CLASS(0x1690, 0x7588, 0xff),			/* ASKEY WWHC050 */
- 	  .driver_info = RSVD(1) | RSVD(4) },
-+	{ USB_DEVICE_INTERFACE_CLASS(0x1435, 0xd191, 0xff),			/* Wistron Neweb D19Q1 */
-+	  .driver_info = RSVD(1) | RSVD(4) },
- 	{ } /* Terminating entry */
- };
- MODULE_DEVICE_TABLE(usb, option_ids);
--- 
-2.20.1
+     state = UNINTERRUPTIBLE
+     lock()
+       block()
+         real_state = state
+         state = SLEEPONLOCK
 
+                               non lock wakeup
+                                 state = RUNNING    <--- FAIL #1
+
+                               lock wakeup
+                                 state = real_state <--- FAIL #2
+
+How it works is:
+
+     state = UNINTERRUPTIBLE
+     lock()
+       block()
+         real_state = state
+         state = SLEEPONLOCK
+
+                               non lock wakeup
+                                 real_state = RUNNING
+
+                               lock wakeup
+                                 state = real_state == RUNNING
+
+If there is no 'non lock wakeup' before the lock wakeup:
+
+     state = UNINTERRUPTIBLE
+     lock()
+       block()
+         real_state = state
+         state = SLEEPONLOCK
+
+                               lock wakeup
+                                 state = real_state == UNINTERRUPTIBLE
+
+I agree that what I tried to express is hard to parse, but it's at least
+halfways correct :)
+
+Thanks,
+
+        tglx
