@@ -2,83 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D9D518E185
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2020 14:23:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4E018E198
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2020 14:40:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727416AbgCUNXH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 21 Mar 2020 09:23:07 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:38630 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726192AbgCUNXH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Mar 2020 09:23:07 -0400
-Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1jFe4i-0003bB-3f; Sat, 21 Mar 2020 14:22:04 +0100
-Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id 6F881FFC8D; Sat, 21 Mar 2020 14:22:03 +0100 (CET)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geoff Levand <geoff@infradead.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
-        linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        platform-driver-x86@vger.kernel.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, kbuild test robot <lkp@intel.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
-        Brian Cain <bcain@codeaurora.org>,
-        linux-hexagon@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-ia64@vger.kernel.org,
-        Michal Simek <monstr@monstr.eu>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Davidlohr Bueso <dbueso@suse.de>
-Subject: Re: [patch V3 12/20] powerpc/ps3: Convert half completion to rcuwait
-In-Reply-To: <20200321113241.930037873@linutronix.de>
-References: <20200321112544.878032781@linutronix.de> <20200321113241.930037873@linutronix.de>
-Date:   Sat, 21 Mar 2020 14:22:03 +0100
-Message-ID: <87v9mxrgg4.fsf@nanos.tec.linutronix.de>
+        id S1727264AbgCUNkR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 21 Mar 2020 09:40:17 -0400
+Received: from mail-il1-f199.google.com ([209.85.166.199]:42615 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726592AbgCUNkQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Mar 2020 09:40:16 -0400
+Received: by mail-il1-f199.google.com with SMTP id j88so7856800ilg.9
+        for <linux-usb@vger.kernel.org>; Sat, 21 Mar 2020 06:40:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=pyMoj2Ao5xrYueRmpo2CDvoKtmm7H1d6XHU2eunTcBs=;
+        b=LFXkNPcRUlPMaezQ2euDQ4jwqlAEBznxd7OFh7gEX2PJalf5QyeaQui9uHI/I/xyhE
+         4iKqYXipmxmFr3p1S31t0OCtpnDJgzxMS1ZNIuToof7gr78l5E7PrY+xKC/jPBlrVOXV
+         j1621RF36I/9ZrAlpSEAm2pR6QXx/M6cxCR1gK2SRI3gBPCz3H1LPfj6WJIY6DDkZ1eD
+         FnHgUx+BReoqHt59yObJSsM5YLLpTpn8bmtwx5z8gffS6qZy23EwrZLWSc4CEiigG8Ot
+         WbEk5WeE4XW6TnqKqSr35sn9yJlFV6AYfzlzZ5TCL0eDdRO5u0IypekmAtOrFLoP8B+E
+         rwjg==
+X-Gm-Message-State: ANhLgQ0VFniauS3jng+fY5sOjaWQs8uC/F2SNtJY1ODBkMCjPMB2aY6v
+        nLAWLlkyWre9PbJWcfKAr/h8P5SLq5GIHFGC1wdf3INBstPq
+X-Google-Smtp-Source: ADFU+vsuPK95kr3EfZG0nV0RC/z5+OfOuDJQiDqIdZLlH1alFFTQmOA7fA8/R9We5nWodEngkn6TZ1bMbCR1u0bDCecZovj1wGUe
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+X-Received: by 2002:a92:890b:: with SMTP id n11mr12898208ild.54.1584798016082;
+ Sat, 21 Mar 2020 06:40:16 -0700 (PDT)
+Date:   Sat, 21 Mar 2020 06:40:16 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ca19c205a15d8aca@google.com>
+Subject: KASAN: slab-out-of-bounds Read in garmin_read_process
+From:   syzbot <syzbot+d29e9263e13ce0b9f4fd@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        johan@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thomas Gleixner <tglx@linutronix.de> writes:
+Hello,
 
-> From: Thomas Gleixner <tglx@linutronix.de>
+syzbot found the following crash on:
 
-That's obviously bogus and wants to be:
+HEAD commit:    e17994d1 usb: core: kcov: collect coverage from usb comple..
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=16255ce5e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5d64370c438bc60
+dashboard link: https://syzkaller.appspot.com/bug?extid=d29e9263e13ce0b9f4fd
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1376a3f9e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14c65fe3e00000
 
-From: Peter Zijlstra (Intel) <peterz@infradead.org>
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+d29e9263e13ce0b9f4fd@syzkaller.appspotmail.com
 
+==================================================================
+BUG: KASAN: slab-out-of-bounds in __le32_to_cpup include/uapi/linux/byteorder/little_endian.h:58 [inline]
+BUG: KASAN: slab-out-of-bounds in getLayerId drivers/usb/serial/garmin_gps.c:208 [inline]
+BUG: KASAN: slab-out-of-bounds in garmin_read_process+0x1b0/0x2e0 drivers/usb/serial/garmin_gps.c:1142
+Read of size 4 at addr ffff8881ca74abe8 by task swapper/1/0
+
+CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.6.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xef/0x16e lib/dump_stack.c:118
+ print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
+ __kasan_report.cold+0x37/0x77 mm/kasan/report.c:506
+ kasan_report+0xe/0x20 mm/kasan/common.c:641
+ __le32_to_cpup include/uapi/linux/byteorder/little_endian.h:58 [inline]
+ getLayerId drivers/usb/serial/garmin_gps.c:208 [inline]
+ garmin_read_process+0x1b0/0x2e0 drivers/usb/serial/garmin_gps.c:1142
+ garmin_read_int_callback+0x19f/0x746 drivers/usb/serial/garmin_gps.c:1279
+ __usb_hcd_giveback_urb+0x29a/0x550 drivers/usb/core/hcd.c:1650
+ usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1716
+ dummy_timer+0x1258/0x32ae drivers/usb/gadget/udc/dummy_hcd.c:1966
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
