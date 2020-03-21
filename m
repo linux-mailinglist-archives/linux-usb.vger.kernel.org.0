@@ -2,169 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E5A18DDA2
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2020 03:29:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA88318DE8E
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2020 08:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727947AbgCUC3c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Mar 2020 22:29:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55060 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726851AbgCUC3b (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 20 Mar 2020 22:29:31 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2952B2072D;
-        Sat, 21 Mar 2020 02:29:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584757771;
-        bh=cx0T7j4Rw8DmtudaxpEVF5LLRRX3FTiCAV1kPl7Nbgc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=1kXb4KEWo2dzCCzN7/6klHda+1PJHiAUGD5QuqlYfAOdT7fYlhmYaBMMtTuy/WNZN
-         ECiV3hXYdLV0vb5/erVarifnSX6rfZroo+HOqk7zb9SGh8nx4anjDrE1g+i0bZAwHB
-         pzevk+XrUrbjAD4JQ5Js8pF94X/E75fBizrexOo8=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id E979835226B5; Fri, 20 Mar 2020 19:29:30 -0700 (PDT)
-Date:   Fri, 20 Mar 2020 19:29:30 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
+        id S1728178AbgCUHga (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 21 Mar 2020 03:36:30 -0400
+Received: from smtp01.smtpout.orange.fr ([80.12.242.123]:17152 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727961AbgCUHga (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Mar 2020 03:36:30 -0400
+Received: from belgarion ([86.210.245.36])
+        by mwinf5d77 with ME
+        id GvcB220040nqnCN03vcMek; Sat, 21 Mar 2020 08:36:28 +0100
+X-ME-Helo: belgarion
+X-ME-Auth: amFyem1pay5yb2JlcnRAb3JhbmdlLmZy
+X-ME-Date: Sat, 21 Mar 2020 08:36:28 +0100
+X-ME-IP: 86.210.245.36
+From:   Robert Jarzmik <robert.jarzmik@free.fr>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Lubomir Rintel <lkundrak@v3.sk>, Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [patch V2 08/15] Documentation: Add lock ordering and nesting
- documentation
-Message-ID: <20200321022930.GU3199@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200320160145.GN3199@paulmck-ThinkPad-P72>
- <87mu8apzxr.fsf@nanos.tec.linutronix.de>
- <20200320210243.GT3199@paulmck-ThinkPad-P72>
- <874kuipsbw.fsf@nanos.tec.linutronix.de>
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 05/28] ARM: dts: pxa3xx: Fix up encoding of the /gpio interrupts property
+References: <20200317093922.20785-1-lkundrak@v3.sk>
+        <20200317093922.20785-6-lkundrak@v3.sk>
+        <20200317132854.GF24270@lunn.ch>
+X-URL:  http://belgarath.falguerolles.org/
+Date:   Sat, 21 Mar 2020 08:36:10 +0100
+In-Reply-To: <20200317132854.GF24270@lunn.ch> (Andrew Lunn's message of "Tue,
+        17 Mar 2020 14:28:54 +0100")
+Message-ID: <87y2rudus5.fsf@belgarion.home>
+User-Agent: Gnus/5.130008 (Ma Gnus v0.8) Emacs/26 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <874kuipsbw.fsf@nanos.tec.linutronix.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 20, 2020 at 11:36:03PM +0100, Thomas Gleixner wrote:
-> "Paul E. McKenney" <paulmck@kernel.org> writes:
-> > On Fri, Mar 20, 2020 at 08:51:44PM +0100, Thomas Gleixner wrote:
-> >> "Paul E. McKenney" <paulmck@kernel.org> writes:
-> >> >
-> >> >  - The soft interrupt related suffix (_bh()) still disables softirq
-> >> >    handlers.  However, unlike non-PREEMPT_RT kernels (which disable
-> >> >    preemption to get this effect), PREEMPT_RT kernels use a per-CPU
-> >> >    lock to exclude softirq handlers.
-> >> 
-> >> I've made that:
-> >> 
-> >>   - The soft interrupt related suffix (_bh()) still disables softirq
-> >>     handlers.
-> >> 
-> >>     Non-PREEMPT_RT kernels disable preemption to get this effect.
-> >> 
-> >>     PREEMPT_RT kernels use a per-CPU lock for serialization. The lock
-> >>     disables softirq handlers and prevents reentrancy by a preempting
-> >>     task.
-> >
-> > That works!  At the end, I would instead say "prevents reentrancy
-> > due to task preemption", but what you have works.
-> 
-> Yours is better.
-> 
-> >>    - Task state is preserved across spinlock acquisition, ensuring that the
-> >>      task-state rules apply to all kernel configurations.  Non-PREEMPT_RT
-> >>      kernels leave task state untouched.  However, PREEMPT_RT must change
-> >>      task state if the task blocks during acquisition.  Therefore, it
-> >>      saves the current task state before blocking and the corresponding
-> >>      lock wakeup restores it. A regular not lock related wakeup sets the
-> >>      task state to RUNNING. If this happens while the task is blocked on
-> >>      a spinlock then the saved task state is changed so that correct
-> >>      state is restored on lock wakeup.
-> >> 
-> >> Hmm?
-> >
-> > I of course cannot resist editing the last two sentences:
-> >
-> >    ... Other types of wakeups unconditionally set task state to RUNNING.
-> >    If this happens while a task is blocked while acquiring a spinlock,
-> >    then the task state is restored to its pre-acquisition value at
-> >    lock-wakeup time.
-> 
-> Errm no. That would mean
-> 
->      state = UNINTERRUPTIBLE
->      lock()
->        block()
->          real_state = state
->          state = SLEEPONLOCK
-> 
->                                non lock wakeup
->                                  state = RUNNING    <--- FAIL #1
-> 
->                                lock wakeup
->                                  state = real_state <--- FAIL #2
-> 
-> How it works is:
-> 
->      state = UNINTERRUPTIBLE
->      lock()
->        block()
->          real_state = state
->          state = SLEEPONLOCK
-> 
->                                non lock wakeup
->                                  real_state = RUNNING
-> 
->                                lock wakeup
->                                  state = real_state == RUNNING
-> 
-> If there is no 'non lock wakeup' before the lock wakeup:
-> 
->      state = UNINTERRUPTIBLE
->      lock()
->        block()
->          real_state = state
->          state = SLEEPONLOCK
-> 
->                                lock wakeup
->                                  state = real_state == UNINTERRUPTIBLE
-> 
-> I agree that what I tried to express is hard to parse, but it's at least
-> halfways correct :)
+Andrew Lunn <andrew@lunn.ch> writes:
 
-Apologies!  That is what I get for not looking it up in the source.  :-/
+> On Tue, Mar 17, 2020 at 10:38:59AM +0100, Lubomir Rintel wrote:
+>> This way the device tree validator learns that each cell of the property
+>> constitutes a separate item. Otherwise it gets unnecessairly upset:
+>> 
+>>   pxa300-raumfeld-speaker-s.dt.yaml: gpio@40e00000: interrupts:
+>>       [[8, 9, 10]] is too short
+>> 
+>> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+>
+> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Reviewed-by: Robert Jarzmik <robert.jarzmik@free.fr.>
 
-OK, so I am stupid enough not only to get it wrong, but also to try again:
-
-   ... Other types of wakeups would normally unconditionally set the
-   task state to RUNNING, but that does not work here because the task
-   must remain blocked until the lock becomes available.  Therefore,
-   when a non-lock wakeup attempts to awaken a task blocked waiting
-   for a spinlock, it instead sets the saved state to RUNNING.  Then,
-   when the lock acquisition completes, the lock wakeup sets the task
-   state to the saved state, in this case setting it to RUNNING.
-
-Is that better?
-
-							Thanx, Paul
+-- 
+Robert
