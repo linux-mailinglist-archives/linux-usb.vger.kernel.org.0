@@ -2,80 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C98518DE9D
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2020 09:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8EA618DF6B
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2020 11:26:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728085AbgCUIGp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sat, 21 Mar 2020 04:06:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48414 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728052AbgCUIGo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 21 Mar 2020 04:06:44 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 206901] New: Valve Index HMD breaks the USB controller it's
- connected into
-Date:   Sat, 21 Mar 2020 08:06:43 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: kacperski1@protonmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression
-Message-ID: <bug-206901-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1728205AbgCUK0x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 21 Mar 2020 06:26:53 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:37966 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726652AbgCUK0x (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Mar 2020 06:26:53 -0400
+Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1jFbKR-0001Rx-D7; Sat, 21 Mar 2020 11:26:07 +0100
+Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
+        id C6E72FFC8D; Sat, 21 Mar 2020 11:26:06 +0100 (CET)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     paulmck@kernel.org
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [patch V2 08/15] Documentation: Add lock ordering and nesting documentation
+In-Reply-To: <20200321022930.GU3199@paulmck-ThinkPad-P72>
+References: <20200320160145.GN3199@paulmck-ThinkPad-P72> <87mu8apzxr.fsf@nanos.tec.linutronix.de> <20200320210243.GT3199@paulmck-ThinkPad-P72> <874kuipsbw.fsf@nanos.tec.linutronix.de> <20200321022930.GU3199@paulmck-ThinkPad-P72>
+Date:   Sat, 21 Mar 2020 11:26:06 +0100
+Message-ID: <875zeyrold.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
+Content-Type: text/plain
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=206901
+"Paul E. McKenney" <paulmck@kernel.org> writes:
+> On Fri, Mar 20, 2020 at 11:36:03PM +0100, Thomas Gleixner wrote:
+>> I agree that what I tried to express is hard to parse, but it's at least
+>> halfways correct :)
+>
+> Apologies!  That is what I get for not looking it up in the source.  :-/
+>
+> OK, so I am stupid enough not only to get it wrong, but also to try again:
+>
+>    ... Other types of wakeups would normally unconditionally set the
+>    task state to RUNNING, but that does not work here because the task
+>    must remain blocked until the lock becomes available.  Therefore,
+>    when a non-lock wakeup attempts to awaken a task blocked waiting
+>    for a spinlock, it instead sets the saved state to RUNNING.  Then,
+>    when the lock acquisition completes, the lock wakeup sets the task
+>    state to the saved state, in this case setting it to RUNNING.
+>
+> Is that better?
 
-            Bug ID: 206901
-           Summary: Valve Index HMD breaks the USB controller it's
-                    connected into
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 5.5.9
-          Hardware: x86-64
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: normal
-          Priority: P1
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: kacperski1@protonmail.com
-        Regression: No
+Definitely!
 
-Attempting to use the Valve Index HMD breaks the USB controller it is connected
-into - any newly connected or reconnected devices aren't being recognized by
-the system. Unplugging the Index doesn't solve the issue, but rebooting the
-system does.
+Thanks for all the editorial work!
 
-After encountering this issue, during system shutdown I get the following
-error: "usb 1-9: device descriptor read/64, error -110". I verified that usb
-1-9 is indeed one of the HMD's connections.
-
-Note that only the controller the HMD is connected into breaks, the rest keeps
-working as intended.
-
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+       tglx
