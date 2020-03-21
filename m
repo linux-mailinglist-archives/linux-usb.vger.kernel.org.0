@@ -2,270 +2,341 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 295D318E436
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2020 21:25:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F3A18E4C1
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2020 22:21:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727405AbgCUUZM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 21 Mar 2020 16:25:12 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:41735 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726539AbgCUUZL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Mar 2020 16:25:11 -0400
-Received: by mail-lj1-f196.google.com with SMTP id o10so10243703ljc.8
-        for <linux-usb@vger.kernel.org>; Sat, 21 Mar 2020 13:25:09 -0700 (PDT)
+        id S1727870AbgCUVVu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 21 Mar 2020 17:21:50 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:39005 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726946AbgCUVVt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Mar 2020 17:21:49 -0400
+Received: by mail-qk1-f196.google.com with SMTP id b62so1824719qkf.6
+        for <linux-usb@vger.kernel.org>; Sat, 21 Mar 2020 14:21:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=waldekranz-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :organization;
-        bh=K9Wf5GzKVON6qAY3kHv4zzrPtb8dkbTHpnzTuv5kmHo=;
-        b=dV5BDG2XlYBZdaOYzTt/voLqIg3KPShiW7JENYv5CDVEQjIj88a9xeM8WyjINXhzYk
-         mgNAbdBT1NROIF2X0u/Ojg7czeZfQVkZRunUU1lrxz/9vXXSVVMuT9TyV478PjFAF4JN
-         Dm3aLAmNEwzua+ZoeJ4C5X9qJVyeKTfuh7gn561D0niam6AmZVcwIeZZk0zAPVA1aYmV
-         zp4e3Nkdw43vNZ1j2V0fXbQUcgEPwjU34wY53ZGBVBAFB6VBooex/donIt2ngMz01j3b
-         VYNvZEm/lDa9eHAESUdpsWTjKhIpfNQfm4MXTTi6vzqlceoDEd0k6ySoka6san4fVO6m
-         DLnA==
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=PQyvyFjXI63PMGXy8SBC5cS2K83uInabnKI/SkfPNac=;
+        b=GrJM1mkH9Twh9MhDThkRNjlO8JFVFIfqgVbHkVArMxygCuz6v0YScBI5cpWg2WyTcX
+         i3ADiKfNOPlIWM0NTPthFLfMYDm6VTg0j5oiCRmiRxNy5SAzNBD6ZBzXexv8G/EvzFJH
+         rI1J6l8GdJdqcEQfA0ioYtYYvwFmhofpX5N8M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:organization;
-        bh=K9Wf5GzKVON6qAY3kHv4zzrPtb8dkbTHpnzTuv5kmHo=;
-        b=DHArZ7GhcB36OCKAmuy+piwOQ4HryC5XYOWSWn9riaq4gNlpq+SFlO+GGVo4BsjQZr
-         3pEyNTnLvMOvLojY+//5ojv62MtDRuKCjldnxkVr9AcmxK5Nt9D6McA5lmY8yWdXESMT
-         1Mi11lBRQoYDsAoNk/DmZu9LtW7apqKZ48otomYA2wWKeDEW9Ag0owWnO7rkRG81sAEP
-         5b77mSKaFO6qOWnXTppckNNKdzlaoSXCl9mO6dEIB7San1Hw2XQBnAIF/4s58ANJ9v4f
-         1vfd9mMIS7/OzhKnE9Uel+GMIL8xSKq7Diky8X4x5JQm8aF/kGyHTIrvvteZtBo4htH9
-         +ytw==
-X-Gm-Message-State: ANhLgQ0tjNNC9AM+QrRQsd8uwnskX4bXTEbtLx6ie1a6M57d7NZ6JkSG
-        yVqoiR/BhAxtlR2J0XrbKXVCLQ==
-X-Google-Smtp-Source: ADFU+vtWTmYZr3YVV35/n9T7zsKuODATBYSkWrnDB8YUoxVfgVsMW6wdXRiHH6BgrRu2bzBUYqLqKA==
-X-Received: by 2002:a2e:3010:: with SMTP id w16mr3752817ljw.41.1584822308968;
-        Sat, 21 Mar 2020 13:25:08 -0700 (PDT)
-Received: from veiron.westermo.com (static-193-12-47-89.cust.tele2.se. [193.12.47.89])
-        by smtp.gmail.com with ESMTPSA id p25sm5847334ljg.85.2020.03.21.13.25.08
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=PQyvyFjXI63PMGXy8SBC5cS2K83uInabnKI/SkfPNac=;
+        b=LpOJN2uK3WDUK871zEYtmN5c/9CQ0dFwgw3oSrEJpimD8kfB2cjnbT25to6SBcqJws
+         iNa9CPGnVua2bMch/cNZtxfjop7KCgosv0wce37cpnbFzfQ+uVvObfB2/l33CtkyDNjD
+         CkUCbYADV0Mnt3QU6Q/lvaw4Us8NX5eqBR61ibx2PLHKbcEhczMGOAy90JZ8QD8myWwk
+         jmeHAquLVuJWXKeSnDCMmZkK1TsPZNsHppduv7o7wXuvnSV0SG1OP1hMY9upbdT0J8AI
+         ZPDiLa8IEKneZkv94Jp9yebAu/Ouq7dJTgq+dG00BpA5ZwSHMgyywdOQNB6L7hZG1+qI
+         iKAA==
+X-Gm-Message-State: ANhLgQ0/B0AJrV7KK98S9cPq+ihl9sYKFq5d0EcEShavy4ecGP3rWPQf
+        U8v7NIxiDS3DuuyDInlfz1nuSQ==
+X-Google-Smtp-Source: ADFU+vsWIwvhSbl0TRAZIMRGT+Umkk0LHhrP9kNSc5qfdjByg3zU6JAyPlZ7aWyG42y6MWEPys6fpQ==
+X-Received: by 2002:a37:27cd:: with SMTP id n196mr15092133qkn.144.1584825706147;
+        Sat, 21 Mar 2020 14:21:46 -0700 (PDT)
+Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id x6sm7815736qke.43.2020.03.21.14.21.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Mar 2020 13:25:08 -0700 (PDT)
-From:   Tobias Waldekranz <tobias@waldekranz.com>
-To:     davem@davemloft.net
-Cc:     netdev@vger.kernel.org, andrew@lunn.ch, f.fainelli@gmail.com,
-        hkallweit1@gmail.com, linux-usb@vger.kernel.org
-Subject: [PATCH v3 2/2] net: phy: add marvell usb to mdio controller
-Date:   Sat, 21 Mar 2020 21:24:43 +0100
-Message-Id: <20200321202443.15352-2-tobias@waldekranz.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200321202443.15352-1-tobias@waldekranz.com>
-References: <20200321202443.15352-1-tobias@waldekranz.com>
-Organization: Westermo
+        Sat, 21 Mar 2020 14:21:45 -0700 (PDT)
+Date:   Sat, 21 Mar 2020 17:21:44 -0400
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Oleg Nesterov <oleg@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [patch V2 08/15] Documentation: Add lock ordering and nesting
+ documentation
+Message-ID: <20200321212144.GA6475@google.com>
+References: <20200318204302.693307984@linutronix.de>
+ <20200318204408.211530902@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200318204408.211530902@linutronix.de>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-An MDIO controller present on development boards for Marvell switches
-from the Link Street (88E6xxx) family.
+Hi Thomas,
 
-Using this module, you can use the following setup as a development
-platform for switchdev and DSA related work.
+Just a few comments:
 
-   .-------.      .-----------------.
-   |      USB----USB                |
-   |  SoC  |      |  88E6390X-DB  ETH1-10
-   |      ETH----ETH0               |
-   '-------'      '-----------------'
+[...]
+> +rtmutex
+> +=======
+> +
+> +RT-mutexes are mutexes with support for priority inheritance (PI).
+> +
+> +PI has limitations on non PREEMPT_RT enabled kernels due to preemption and
+> +interrupt disabled sections.
+> +
+> +On a PREEMPT_RT enabled kernel most of these sections are fully
+> +preemptible. This is possible because PREEMPT_RT forces most executions
+> +into task context, especially interrupt handlers and soft interrupts, which
+> +allows to substitute spinlock_t and rwlock_t with RT-mutex based
+> +implementations.
+> +
+> +
+> +raw_spinlock_t and spinlock_t
+> +=============================
+> +
+> +raw_spinlock_t
+> +--------------
+> +
+> +raw_spinlock_t is a strict spinning lock implementation regardless of the
+> +kernel configuration including PREEMPT_RT enabled kernels.
+> +
+> +raw_spinlock_t is to be used only in real critical core code, low level
+> +interrupt handling and places where protecting (hardware) state is required
+> +to be safe against preemption and eventually interrupts.
+> +
+> +Another reason to use raw_spinlock_t is when the critical section is tiny
+> +to avoid the overhead of spinlock_t on a PREEMPT_RT enabled kernel in the
+> +contended case.
+> +
+> +spinlock_t
+> +----------
+> +
+> +The semantics of spinlock_t change with the state of CONFIG_PREEMPT_RT.
+> +
+> +On a non PREEMPT_RT enabled kernel spinlock_t is mapped to raw_spinlock_t
+> +and has exactly the same semantics.
+> +
+> +spinlock_t and PREEMPT_RT
+> +-------------------------
+> +
+> +On a PREEMPT_RT enabled kernel spinlock_t is mapped to a separate
+> +implementation based on rt_mutex which changes the semantics:
+> +
+> + - Preemption is not disabled
+> +
+> + - The hard interrupt related suffixes for spin_lock / spin_unlock
+> +   operations (_irq, _irqsave / _irqrestore) do not affect the CPUs
+> +   interrupt disabled state
+> +
+> + - The soft interrupt related suffix (_bh()) is still disabling the
+> +   execution of soft interrupts, but contrary to a non PREEMPT_RT enabled
+> +   kernel, which utilizes the preemption count, this is achieved by a per
+> +   CPU bottom half locking mechanism.
+> +
+> +All other semantics of spinlock_t are preserved:
+> +
+> + - Migration of tasks which hold a spinlock_t is prevented. On a non
+> +   PREEMPT_RT enabled kernel this is implicit due to preemption disable.
+> +   PREEMPT_RT has a separate mechanism to achieve this. This ensures that
+> +   pointers to per CPU variables stay valid even if the task is preempted.
+> +
+> + - Task state preservation. The task state is not affected when a lock is
+> +   contended and the task has to schedule out and wait for the lock to
+> +   become available. The lock wake up restores the task state unless there
+> +   was a regular (not lock related) wake up on the task. This ensures that
+> +   the task state rules are always correct independent of the kernel
+> +   configuration.
+> +
+> +rwlock_t
+> +========
+> +
+> +rwlock_t is a multiple readers and single writer lock mechanism.
+> +
+> +On a non PREEMPT_RT enabled kernel rwlock_t is implemented as a spinning
+> +lock and the suffix rules of spinlock_t apply accordingly. The
+> +implementation is fair and prevents writer starvation.
+>
 
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
----
+You mentioned writer starvation, but I think it would be good to also mention
+that rwlock_t on a non-PREEMPT_RT kernel also does not have _reader_
+starvation problem, since it uses queued implementation.  This fact is worth
+mentioning here, since further below you explain that an rwlock in PREEMPT_RT
+does have reader starvation problem.
 
-Hi linux-usb,
+> +rwlock_t and PREEMPT_RT
+> +-----------------------
+> +
+> +On a PREEMPT_RT enabled kernel rwlock_t is mapped to a separate
+> +implementation based on rt_mutex which changes the semantics:
+> +
+> + - Same changes as for spinlock_t
+> +
+> + - The implementation is not fair and can cause writer starvation under
+> +   certain circumstances. The reason for this is that a writer cannot grant
+> +   its priority to multiple readers. Readers which are blocked on a writer
+> +   fully support the priority inheritance protocol.
 
-This is my first ever USB driver, therefore I would really appreciate
-it if someone could have a look at it from a USB perspective before it
-is (hopefully) pulled into net-next.
+Is it hard to give priority to multiple readers because the number of readers
+to give priority to could be unbounded?
 
-Thanks
+> +
+> +
+> +PREEMPT_RT caveats
+> +==================
+> +
+> +spinlock_t and rwlock_t
+> +-----------------------
+> +
+> +The substitution of spinlock_t and rwlock_t on PREEMPT_RT enabled kernels
+> +with RT-mutex based implementations has a few implications.
+> +
+> +On a non PREEMPT_RT enabled kernel the following code construct is
+> +perfectly fine::
+> +
+> +   local_irq_disable();
+> +   spin_lock(&lock);
+> +
+> +and fully equivalent to::
+> +
+> +   spin_lock_irq(&lock);
+> +
+> +Same applies to rwlock_t and the _irqsave() suffix variant.
+> +
+> +On a PREEMPT_RT enabled kernel this breaks because the RT-mutex
+> +substitution expects a fully preemptible context.
+> +
+> +The preferred solution is to use :c:func:`spin_lock_irq()` or
+> +:c:func:`spin_lock_irqsave()` and their unlock counterparts.
+> +
+> +PREEMPT_RT also offers a local_lock mechanism to substitute the
+> +local_irq_disable/save() constructs in cases where a separation of the
+> +interrupt disabling and the locking is really unavoidable. This should be
+> +restricted to very rare cases.
 
-v2->v3:
-- Rename driver	smi2usb	-> mvusb.
-- Clean	up unused USB references.
+It would also be nice to mention where else local_lock() can be used, such as
+protecting per-cpu variables without disabling preemption. Could we add a
+section on protecting per-cpu data? (Happy to do that and send a patch if you
+prefer).
 
-v1->v2:
-- Reverse christmas tree ordering of local variables.
+> +raw_spinlock_t
+> +--------------
+> +
+> +Locking of a raw_spinlock_t disables preemption and eventually interrupts.
+> +Therefore code inside the critical region has to be careful to avoid calls
+> +into code which takes a regular spinlock_t or rwlock_t. A prime example is
+> +memory allocation.
+> +
+> +On a non PREEMPT_RT enabled kernel the following code construct is
+> +perfectly fine code::
+> +
+> +  raw_spin_lock(&lock);
+> +  p = kmalloc(sizeof(*p), GFP_ATOMIC);
+> +
+> +On a PREEMPT_RT enabled kernel this breaks because the memory allocator is
+> +fully preemptible and therefore does not support allocations from truly
+> +atomic contexts.
+> +
+> +Contrary to that the following code construct is perfectly fine on
+> +PREEMPT_RT as spin_lock() does not disable preemption::
+> +
+> +  spin_lock(&lock);
+> +  p = kmalloc(sizeof(*p), GFP_ATOMIC);
+> +
+> +Most places which use GFP_ATOMIC allocations are safe on PREEMPT_RT as the
+> +execution is forced into thread context and the lock substitution is
+> +ensuring preemptibility.
+> +
+> +
+> +bit spinlocks
+> +-------------
+> +
+> +Bit spinlocks are problematic for PREEMPT_RT as they cannot be easily
+> +substituted by an RT-mutex based implementation for obvious reasons.
+> +
+> +The semantics of bit spinlocks are preserved on a PREEMPT_RT enabled kernel
+> +and the caveats vs. raw_spinlock_t apply.
+> +
+> +Some bit spinlocks are substituted by regular spinlock_t for PREEMPT_RT but
+> +this requires conditional (#ifdef'ed) code changes at the usage side while
+> +the spinlock_t substitution is simply done by the compiler and the
+> +conditionals are restricted to header files and core implementation of the
+> +locking primitives and the usage sites do not require any changes.
+> +
+> +
+> +Lock type nesting rules
+> +=======================
+> +
+> +The most basic rules are:
+> +
+> +  - Lock types of the same lock category (sleeping, spinning) can nest
+> +    arbitrarily as long as they respect the general lock ordering rules to
+> +    prevent deadlocks.
+> +
+> +  - Sleeping lock types cannot nest inside spinning lock types.
+> +
+> +  - Spinning lock types can nest inside sleeping lock types.
+> +
+> +These rules apply in general independent of CONFIG_PREEMPT_RT.
+> +
+> +As PREEMPT_RT changes the lock category of spinlock_t and rwlock_t from
+> +spinning to sleeping this has obviously restrictions how they can nest with
+> +raw_spinlock_t.
+> +
+> +This results in the following nest ordering:
+> +
+> +  1) Sleeping locks
+> +  2) spinlock_t and rwlock_t
+> +  3) raw_spinlock_t and bit spinlocks
+> +
+> +Lockdep is aware of these constraints to ensure that they are respected.
+> +
+> +
+> +Owner semantics
+> +===============
+> +
+> +Most lock types in the Linux kernel have strict owner semantics, i.e. the
+> +context (task) which acquires a lock has to release it.
+> +
+> +There are two exceptions:
+> +
+> +  - semaphores
+> +  - rwsems
+> +
+> +semaphores have no strict owner semantics for historical reasons. They are
+> +often used for both serialization and waiting purposes. That's generally
+> +discouraged and should be replaced by separate serialization and wait
+> +mechanisms.
+> +
+> +rwsems have grown interfaces which allow non owner release for special
+> +purposes. This usage is problematic on PREEMPT_RT because PREEMPT_RT
+> +substitutes all locking primitives except semaphores with RT-mutex based
+> +implementations to provide priority inheritance for all lock types except
+> +the truly spinning ones. Priority inheritance on ownerless locks is
+> +obviously impossible.
+> +
+> +For now the rwsem non-owner release excludes code which utilizes it from
+> +being used on PREEMPT_RT enabled kernels.
 
----
- MAINTAINERS                  |   1 +
- drivers/net/phy/Kconfig      |   7 ++
- drivers/net/phy/Makefile     |   1 +
- drivers/net/phy/mdio-mvusb.c | 120 +++++++++++++++++++++++++++++++++++
- 4 files changed, 129 insertions(+)
- create mode 100644 drivers/net/phy/mdio-mvusb.c
+I could not parse the last sentence here, but I think you meant "For now,
+PREEMPT_RT enabled kernels disable code that perform a non-owner release of
+an rwsem". Correct me if I'm wrong.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ff35669f8712..f36023d4ee44 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10105,6 +10105,7 @@ MARVELL USB MDIO CONTROLLER DRIVER
- M:	Tobias Waldekranz <tobias@waldekranz.com>
- L:	netdev@vger.kernel.org
- S:	Maintained
-+F:	drivers/net/phy/mdio-mvusb.c
- F:	Documentation/devicetree/bindings/net/marvell,mvusb.yaml
- 
- MARVELL XENON MMC/SD/SDIO HOST CONTROLLER DRIVER
-diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
-index cc7f1df855da..be9ae8620cd1 100644
---- a/drivers/net/phy/Kconfig
-+++ b/drivers/net/phy/Kconfig
-@@ -179,6 +179,13 @@ config MDIO_MSCC_MIIM
- 	  This driver supports the MIIM (MDIO) interface found in the network
- 	  switches of the Microsemi SoCs
- 
-+config MDIO_MVUSB
-+	tristate "Marvell USB to MDIO Adapter"
-+	depends on OF_MDIO && USB
-+	help
-+	  A USB to MDIO converter present on development boards for
-+	  Marvell's Link Street family of Ethernet switches.
-+
- config MDIO_OCTEON
- 	tristate "Octeon and some ThunderX SOCs MDIO buses"
- 	depends on (64BIT && OF_MDIO) || COMPILE_TEST
-diff --git a/drivers/net/phy/Makefile b/drivers/net/phy/Makefile
-index 70774ab474e6..2f5c7093a65b 100644
---- a/drivers/net/phy/Makefile
-+++ b/drivers/net/phy/Makefile
-@@ -40,6 +40,7 @@ obj-$(CONFIG_MDIO_I2C)		+= mdio-i2c.o
- obj-$(CONFIG_MDIO_IPQ8064)	+= mdio-ipq8064.o
- obj-$(CONFIG_MDIO_MOXART)	+= mdio-moxart.o
- obj-$(CONFIG_MDIO_MSCC_MIIM)	+= mdio-mscc-miim.o
-+obj-$(CONFIG_MDIO_MVUSB)	+= mdio-mvusb.o
- obj-$(CONFIG_MDIO_OCTEON)	+= mdio-octeon.o
- obj-$(CONFIG_MDIO_SUN4I)	+= mdio-sun4i.o
- obj-$(CONFIG_MDIO_THUNDER)	+= mdio-thunder.o
-diff --git a/drivers/net/phy/mdio-mvusb.c b/drivers/net/phy/mdio-mvusb.c
-new file mode 100644
-index 000000000000..d5eabddfdf51
---- /dev/null
-+++ b/drivers/net/phy/mdio-mvusb.c
-@@ -0,0 +1,120 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_mdio.h>
-+#include <linux/phy.h>
-+#include <linux/usb.h>
-+
-+#define USB_MARVELL_VID	0x1286
-+
-+static const struct usb_device_id mvusb_mdio_table[] = {
-+	{ USB_DEVICE(USB_MARVELL_VID, 0x1fa4) },
-+
-+	{}
-+};
-+MODULE_DEVICE_TABLE(usb, mvusb_mdio_table);
-+
-+enum {
-+	MVUSB_CMD_PREAMBLE0,
-+	MVUSB_CMD_PREAMBLE1,
-+	MVUSB_CMD_ADDR,
-+	MVUSB_CMD_VAL,
-+};
-+
-+struct mvusb_mdio {
-+	struct usb_device *udev;
-+	struct mii_bus *mdio;
-+
-+	__le16 buf[4];
-+};
-+
-+static int mvusb_mdio_read(struct mii_bus *mdio, int dev, int reg)
-+{
-+	struct mvusb_mdio *mvusb = mdio->priv;
-+	int err, alen;
-+
-+	if (dev & MII_ADDR_C45)
-+		return -EOPNOTSUPP;
-+
-+	mvusb->buf[MVUSB_CMD_ADDR] = cpu_to_le16(0xa400 | (dev << 5) | reg);
-+
-+	err = usb_bulk_msg(mvusb->udev, usb_sndbulkpipe(mvusb->udev, 2),
-+			   mvusb->buf, 6, &alen, 100);
-+	if (err)
-+		return err;
-+
-+	err = usb_bulk_msg(mvusb->udev, usb_rcvbulkpipe(mvusb->udev, 6),
-+			   &mvusb->buf[MVUSB_CMD_VAL], 2, &alen, 100);
-+	if (err)
-+		return err;
-+
-+	return le16_to_cpu(mvusb->buf[MVUSB_CMD_VAL]);
-+}
-+
-+static int mvusb_mdio_write(struct mii_bus *mdio, int dev, int reg, u16 val)
-+{
-+	struct mvusb_mdio *mvusb = mdio->priv;
-+	int alen;
-+
-+	if (dev & MII_ADDR_C45)
-+		return -EOPNOTSUPP;
-+
-+	mvusb->buf[MVUSB_CMD_ADDR] = cpu_to_le16(0x8000 | (dev << 5) | reg);
-+	mvusb->buf[MVUSB_CMD_VAL]  = cpu_to_le16(val);
-+
-+	return usb_bulk_msg(mvusb->udev, usb_sndbulkpipe(mvusb->udev, 2),
-+			    mvusb->buf, 8, &alen, 100);
-+}
-+
-+static int mvusb_mdio_probe(struct usb_interface *interface,
-+			    const struct usb_device_id *id)
-+{
-+	struct device *dev = &interface->dev;
-+	struct mvusb_mdio *mvusb;
-+	struct mii_bus *mdio;
-+
-+	mdio = devm_mdiobus_alloc_size(dev, sizeof(*mvusb));
-+	if (!mdio)
-+		return -ENOMEM;
-+
-+	mvusb = mdio->priv;
-+	mvusb->mdio = mdio;
-+	mvusb->udev = usb_get_dev(interface_to_usbdev(interface));
-+
-+	/* Reversed from USB PCAPs, no idea what these mean. */
-+	mvusb->buf[MVUSB_CMD_PREAMBLE0] = cpu_to_le16(0xe800);
-+	mvusb->buf[MVUSB_CMD_PREAMBLE1] = cpu_to_le16(0x0001);
-+
-+	snprintf(mdio->id, MII_BUS_ID_SIZE, "mvusb-%s", dev_name(dev));
-+	mdio->name = mdio->id;
-+	mdio->parent = dev;
-+	mdio->read = mvusb_mdio_read;
-+	mdio->write = mvusb_mdio_write;
-+
-+	usb_set_intfdata(interface, mvusb);
-+	return of_mdiobus_register(mdio, dev->of_node);
-+}
-+
-+static void mvusb_mdio_disconnect(struct usb_interface *interface)
-+{
-+	struct mvusb_mdio *mvusb = usb_get_intfdata(interface);
-+	struct usb_device *udev = mvusb->udev;
-+
-+	mdiobus_unregister(mvusb->mdio);
-+	usb_set_intfdata(interface, NULL);
-+	usb_put_dev(udev);
-+}
-+
-+static struct usb_driver mvusb_mdio_driver = {
-+	.name       = "mvusb_mdio",
-+	.id_table   = mvusb_mdio_table,
-+	.probe      = mvusb_mdio_probe,
-+	.disconnect = mvusb_mdio_disconnect,
-+};
-+
-+module_usb_driver(mvusb_mdio_driver);
-+
-+MODULE_AUTHOR("Tobias Waldekranz <tobias@waldekranz.com>");
-+MODULE_DESCRIPTION("Marvell USB MDIO Adapter");
-+MODULE_LICENSE("GPL");
--- 
-2.17.1
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
+thanks,
+
+ - Joel
+
+
+> In same cases this can be
+> +mitigated by disabling portions of the code, in other cases the complete
+> +functionality has to be disabled until a workable solution has been found.
+> 
