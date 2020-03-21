@@ -2,82 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 732A218DF82
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2020 11:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FDA218DFA7
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2020 11:59:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728115AbgCUKmP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 21 Mar 2020 06:42:15 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:37993 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726607AbgCUKmP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Mar 2020 06:42:15 -0400
-Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1jFbZX-0001a5-00; Sat, 21 Mar 2020 11:41:43 +0100
-Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id 5D7DDFFC8D; Sat, 21 Mar 2020 11:41:42 +0100 (CET)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-pci@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        netdev@vger.kernel.org, Joel Fernandes <joel@joelfernandes.org>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [patch V2 07/15] powerpc/ps3: Convert half completion to rcuwait
-In-Reply-To: <20200319100459.GA18506@infradead.org>
-References: <20200318204302.693307984@linutronix.de> <20200318204408.102694393@linutronix.de> <20200319100459.GA18506@infradead.org>
-Date:   Sat, 21 Mar 2020 11:41:42 +0100
-Message-ID: <8736a2rnvd.fsf@nanos.tec.linutronix.de>
+        id S1728143AbgCUK7a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 21 Mar 2020 06:59:30 -0400
+Received: from mail-ua1-f66.google.com ([209.85.222.66]:46451 "EHLO
+        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727008AbgCUK7a (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Mar 2020 06:59:30 -0400
+Received: by mail-ua1-f66.google.com with SMTP id b2so3203470uas.13;
+        Sat, 21 Mar 2020 03:59:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9jH6QtcIM6fEYXW7t6vzcM0JbN7bcLGtLTKkbM3jl1Q=;
+        b=XYGs3UKy2VuvkX35osskSk7QboPJVKu5o7HdY0vROgALCpAJBzPSA7z3u+TDdYbxIf
+         PiIowHb8y2QTKxN9XKVxlhMNyoR+YCOL4bG8Dczv9FVbnW7UTK7I31o35P7kn5shzWIs
+         PhsFCl8Zi4hNCtB8hTy5Lb2Y4xZLM1/ec/agnI67SmDa0wkzf8znvYH/IUZ3KRNlidnd
+         nDlHWglgqN7IusRloAz/WK+wlcchvJq5i5Ly1VQEVppMNfFkU6m0jWyXvsoras5o8hXT
+         5FAMwt8RyBlS9kvoJL4rU9cYK8WlBOtPk0KB9wjEHUBabxRjxJxY+dO1UF+3WmazzEFP
+         cJnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9jH6QtcIM6fEYXW7t6vzcM0JbN7bcLGtLTKkbM3jl1Q=;
+        b=eRuGNDkEdIiGtZB+lsU6nAZNYq+AMWcebVApuwghInPPzHGP4Glodo3I8RRBpGTPs8
+         1NZXIDBUf2D4/CAtnVXTUHam2sCp7Zl+c757fXzxYAd0IHECfWWfmkgfUYSuuLUU5Duv
+         7jKcZNG6O+ool8zbIDudg7Z/eg+2NkbtZ2B9MdULUh2Zg63Z/kJbHc7mm3dYYeOIms25
+         XG+uCb9Hd5yXbnQjVgWI4cbFvKmzbeZboOhXt+kNLM669FYKqAqd6yjcsp2ohE6XSSdJ
+         JeDV+uiaWOAN+afhtJiKAn6ez13iCIaXJibt3IookqL6MnejM/UStofnpHVMirdESyew
+         24Xw==
+X-Gm-Message-State: ANhLgQ3p7spwHeqKr5se+O+n4iA6+I6OLWUQyVR8YUAL8XDiwceW6DW2
+        FU+3dlEcyFYlMI4oeIIhRGVU7xIBL0CAu9LNe34=
+X-Google-Smtp-Source: ADFU+vvVWEWvoTQXKS0dcG1ib/MHPvFuBK/B4kXRC7HnFmb1+qyzZISJghYui9zG/FTq+NkbH8fTIoae5dCzARAKRB4=
+X-Received: by 2002:ab0:6693:: with SMTP id a19mr8847837uan.129.1584788368957;
+ Sat, 21 Mar 2020 03:59:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+References: <20200319084902.24747-1-martin.kepplinger@puri.sm>
+In-Reply-To: <20200319084902.24747-1-martin.kepplinger@puri.sm>
+From:   Jun Li <lijun.kernel@gmail.com>
+Date:   Sat, 21 Mar 2020 18:59:17 +0800
+Message-ID: <CAKgpwJXyt1O_J2HR5uHgAg3JTcwxSrOBPg7JcLnVyo-K9QRE8g@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: dwc3: support continuous runtime PM with dual role
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, rogerq@ti.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Christoph Hellwig <hch@infradead.org> writes:
-
-> On Wed, Mar 18, 2020 at 09:43:09PM +0100, Thomas Gleixner wrote:
->> The PS3 notification interrupt and kthread use a hacked up completion to
->> communicate. Since we're wanting to change the completion implementation and
->> this is abuse anyway, replace it with a simple rcuwait since there is only ever
->> the one waiter.
->> 
->> AFAICT the kthread uses TASK_INTERRUPTIBLE to not increase loadavg, kthreads
->> cannot receive signals by default and this one doesn't look different. Use
->> TASK_IDLE instead.
+Martin Kepplinger <martin.kepplinger@puri.sm> =E4=BA=8E2020=E5=B9=B43=E6=9C=
+=8819=E6=97=A5=E5=91=A8=E5=9B=9B =E4=B8=8B=E5=8D=884:50=E5=86=99=E9=81=93=
+=EF=BC=9A
 >
-> I think the right fix here is to jut convert the thing to a threaded
-> interrupt handler and kill off the stupid kthread.
+> The DRD module calls dwc3_set_mode() on role switches, i.e. when a device=
+ is
+> being pugged in. In order to support continuous runtime power management =
+when
+> plugging in / unplugging a cable, we need to call pm_runtime_get() in thi=
+s path.
+>
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> ---
+>
+> revision history
+> ----------------
+> v2: move pm_rumtime calls into workqueue (thanks Roger)
+>     remove unrelated documentation patch
+> v1: https://lore.kernel.org/linux-usb/ef22f8de-9bfd-c1d5-111c-696f1336dbd=
+a@puri.sm/T/
+>
+>
+>  drivers/usb/dwc3/core.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 1d85c42b9c67..0c058b2ac21d 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -121,17 +121,19 @@ static void __dwc3_set_mode(struct work_struct *wor=
+k)
+>         if (dwc->dr_mode !=3D USB_DR_MODE_OTG)
+>                 return;
+>
+> +       pm_runtime_get(dwc->dev);
 
-That'd be a major surgery.
+I think this needs _get_sync(), as the following mode settings may
+require runtime resumed
+to enable clocks...
 
-> But I wonder how alive the whole PS3 support is to start with..
+Li Jun
 
-There seem to be a few enthusiast left which have a Other-OS capable PS3
-
-Thanks,
-
-        tglx
-
+> +
+>         if (dwc->current_dr_role =3D=3D DWC3_GCTL_PRTCAP_OTG)
+>                 dwc3_otg_update(dwc, 0);
+>
+>         if (!dwc->desired_dr_role)
+> -               return;
+> +               goto out;
+>
+>         if (dwc->desired_dr_role =3D=3D dwc->current_dr_role)
+> -               return;
+> +               goto out;
+>
+>         if (dwc->desired_dr_role =3D=3D DWC3_GCTL_PRTCAP_OTG && dwc->edev=
+)
+> -               return;
+> +               goto out;
+>
+>         switch (dwc->current_dr_role) {
+>         case DWC3_GCTL_PRTCAP_HOST:
+> @@ -190,6 +192,9 @@ static void __dwc3_set_mode(struct work_struct *work)
+>                 break;
+>         }
+>
+> +out:
+> +       pm_runtime_mark_last_busy(dwc->dev);
+> +       pm_runtime_put_autosuspend(dwc->dev);
+>  }
+>
+>  void dwc3_set_mode(struct dwc3 *dwc, u32 mode)
+> --
+> 2.20.1
+>
