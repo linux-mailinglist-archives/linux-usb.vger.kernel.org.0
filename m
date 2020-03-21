@@ -2,73 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4078F18E26A
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2020 16:29:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4974D18E332
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2020 18:20:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727244AbgCUP3m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 21 Mar 2020 11:29:42 -0400
-Received: from smtp05.smtpout.orange.fr ([80.12.242.127]:25826 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726823AbgCUP3l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Mar 2020 11:29:41 -0400
-Received: from localhost.localdomain ([93.22.37.29])
-        by mwinf5d09 with ME
-        id H3Ve2200H0djkx1033VeBP; Sat, 21 Mar 2020 16:29:39 +0100
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 21 Mar 2020 16:29:39 +0100
-X-ME-IP: 93.22.37.29
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     valentina.manea.m@gmail.com, shuah@kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] usbip: vhci_hcd: slighly simplify code in 'vhci_urb_dequeue()'
-Date:   Sat, 21 Mar 2020 16:29:38 +0100
-Message-Id: <20200321152938.19580-1-christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.20.1
+        id S1727628AbgCURUV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 21 Mar 2020 13:20:21 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52394 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726961AbgCURUU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 21 Mar 2020 13:20:20 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id C70F9ABD7;
+        Sat, 21 Mar 2020 17:20:14 +0000 (UTC)
+Date:   Sat, 21 Mar 2020 10:19:02 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        linux-pci@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        platform-driver-x86@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, kbuild test robot <lkp@intel.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        Brian Cain <bcain@codeaurora.org>,
+        linux-hexagon@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-ia64@vger.kernel.org,
+        Michal Simek <monstr@monstr.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geoff Levand <geoff@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Davidlohr Bueso <dbueso@suse.de>
+Subject: Re: [patch V3 00/20] Lock ordering documentation and annotation for
+ lockdep
+Message-ID: <20200321171902.xxlnpikc65wd3b4m@linux-p48b>
+References: <20200321112544.878032781@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20200321112544.878032781@linutronix.de>
+User-Agent: NeoMutt/20180716
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The allocation of 'unlink' can be moved before a spin_lock.
-This slighly simplifies the error handling if the memory allocation fails,
-aligns the code structure with what is done in 'vhci_tx_urb()' and reduces
-potential lock contention.
+On Sat, 21 Mar 2020, Thomas Gleixner wrote:
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/usb/usbip/vhci_hcd.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+>This is the third and hopefully final version of this work. The second one
+>can be found here:
 
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index 65850e9c7190..b909a634260c 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -905,17 +905,16 @@ static int vhci_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
- 		/* tcp connection is alive */
- 		struct vhci_unlink *unlink;
- 
--		spin_lock(&vdev->priv_lock);
--
- 		/* setup CMD_UNLINK pdu */
- 		unlink = kzalloc(sizeof(struct vhci_unlink), GFP_ATOMIC);
- 		if (!unlink) {
--			spin_unlock(&vdev->priv_lock);
- 			spin_unlock_irqrestore(&vhci->lock, flags);
- 			usbip_event_add(&vdev->ud, VDEV_EVENT_ERROR_MALLOC);
- 			return -ENOMEM;
- 		}
- 
-+		spin_lock(&vdev->priv_lock);
-+
- 		unlink->seqnum = atomic_inc_return(&vhci_hcd->seqnum);
- 		if (unlink->seqnum == 0xffff)
- 			pr_info("seqnum max\n");
--- 
-2.20.1
+Would you rather I send in a separate series with the kvm changes, or
+should I just send a v2 with the fixes here again?
 
+Thanks,
+Davidlohr
