@@ -2,76 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA88318DE8E
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2020 08:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C98518DE9D
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Mar 2020 09:06:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728178AbgCUHga (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 21 Mar 2020 03:36:30 -0400
-Received: from smtp01.smtpout.orange.fr ([80.12.242.123]:17152 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727961AbgCUHga (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Mar 2020 03:36:30 -0400
-Received: from belgarion ([86.210.245.36])
-        by mwinf5d77 with ME
-        id GvcB220040nqnCN03vcMek; Sat, 21 Mar 2020 08:36:28 +0100
-X-ME-Helo: belgarion
-X-ME-Auth: amFyem1pay5yb2JlcnRAb3JhbmdlLmZy
-X-ME-Date: Sat, 21 Mar 2020 08:36:28 +0100
-X-ME-IP: 86.210.245.36
-From:   Robert Jarzmik <robert.jarzmik@free.fr>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Lubomir Rintel <lkundrak@v3.sk>, Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 05/28] ARM: dts: pxa3xx: Fix up encoding of the /gpio interrupts property
-References: <20200317093922.20785-1-lkundrak@v3.sk>
-        <20200317093922.20785-6-lkundrak@v3.sk>
-        <20200317132854.GF24270@lunn.ch>
-X-URL:  http://belgarath.falguerolles.org/
-Date:   Sat, 21 Mar 2020 08:36:10 +0100
-In-Reply-To: <20200317132854.GF24270@lunn.ch> (Andrew Lunn's message of "Tue,
-        17 Mar 2020 14:28:54 +0100")
-Message-ID: <87y2rudus5.fsf@belgarion.home>
-User-Agent: Gnus/5.130008 (Ma Gnus v0.8) Emacs/26 (gnu/linux)
+        id S1728085AbgCUIGp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sat, 21 Mar 2020 04:06:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48414 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728052AbgCUIGo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 21 Mar 2020 04:06:44 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 206901] New: Valve Index HMD breaks the USB controller it's
+ connected into
+Date:   Sat, 21 Mar 2020 08:06:43 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: kacperski1@protonmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-206901-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Andrew Lunn <andrew@lunn.ch> writes:
+https://bugzilla.kernel.org/show_bug.cgi?id=206901
 
-> On Tue, Mar 17, 2020 at 10:38:59AM +0100, Lubomir Rintel wrote:
->> This way the device tree validator learns that each cell of the property
->> constitutes a separate item. Otherwise it gets unnecessairly upset:
->> 
->>   pxa300-raumfeld-speaker-s.dt.yaml: gpio@40e00000: interrupts:
->>       [[8, 9, 10]] is too short
->> 
->> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
->
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Reviewed-by: Robert Jarzmik <robert.jarzmik@free.fr.>
+            Bug ID: 206901
+           Summary: Valve Index HMD breaks the USB controller it's
+                    connected into
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.5.9
+          Hardware: x86-64
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: kacperski1@protonmail.com
+        Regression: No
+
+Attempting to use the Valve Index HMD breaks the USB controller it is connected
+into - any newly connected or reconnected devices aren't being recognized by
+the system. Unplugging the Index doesn't solve the issue, but rebooting the
+system does.
+
+After encountering this issue, during system shutdown I get the following
+error: "usb 1-9: device descriptor read/64, error -110". I verified that usb
+1-9 is indeed one of the HMD's connections.
+
+Note that only the controller the HMD is connected into breaks, the rest keeps
+working as intended.
 
 -- 
-Robert
+You are receiving this mail because:
+You are watching the assignee of the bug.
