@@ -2,25 +2,25 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA6EF18EBB4
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Mar 2020 19:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A4E18EBE8
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Mar 2020 20:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726583AbgCVSxf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sun, 22 Mar 2020 14:53:35 -0400
-Received: from mail.destinigroup.com ([175.144.213.75]:53100 "EHLO
+        id S1726666AbgCVTeJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sun, 22 Mar 2020 15:34:09 -0400
+Received: from mail.destinigroup.com ([175.144.213.75]:60849 "EHLO
         mail.destinigroup.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725881AbgCVSxf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 22 Mar 2020 14:53:35 -0400
-X-Greylist: delayed 6794 seconds by postgrey-1.27 at vger.kernel.org; Sun, 22 Mar 2020 14:53:35 EDT
+        with ESMTP id S1726583AbgCVTeJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 22 Mar 2020 15:34:09 -0400
+X-Greylist: delayed 2431 seconds by postgrey-1.27 at vger.kernel.org; Sun, 22 Mar 2020 15:34:07 EDT
 Received: from localhost (localhost [127.0.0.1])
-        by mail.destinigroup.com (Postfix) with ESMTP id 8EE562D7C7B;
-        Mon, 23 Mar 2020 01:03:01 +0800 (MYT)
+        by mail.destinigroup.com (Postfix) with ESMTP id 80C982D891B;
+        Mon, 23 Mar 2020 01:16:06 +0800 (MYT)
 Received: from mail.destinigroup.com ([127.0.0.1])
         by localhost (mail.destinigroup.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id aDzQ2vjmercJ; Mon, 23 Mar 2020 01:03:01 +0800 (MYT)
+        with ESMTP id RzeiE5vzKQSI; Mon, 23 Mar 2020 01:16:06 +0800 (MYT)
 Received: from [45.143.223.46] (unknown [45.143.223.46])
-        by mail.destinigroup.com (Postfix) with ESMTPSA id 9C77A2D5E83;
-        Mon, 23 Mar 2020 01:02:54 +0800 (MYT)
+        by mail.destinigroup.com (Postfix) with ESMTPSA id 8B7922D88EF;
+        Mon, 23 Mar 2020 01:16:00 +0800 (MYT)
 Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
@@ -28,9 +28,9 @@ Content-Description: Mail message body
 Subject: YOUR EARLY REPLY
 To:     Recipients <amunoza@surnet.cl>
 From:   "Mr. Fu" <amunoza@surnet.cl>
-Date:   Sun, 22 Mar 2020 10:02:47 -0700
+Date:   Sun, 22 Mar 2020 10:15:52 -0700
 Reply-To: fulanlan28@gmail.com
-Message-Id: <20200322170254.9C77A2D5E83@mail.destinigroup.com>
+Message-Id: <20200322171600.8B7922D88EF@mail.destinigroup.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
