@@ -2,87 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1230D18E783
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Mar 2020 09:15:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 014C118E7BD
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Mar 2020 10:09:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726756AbgCVIPm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 22 Mar 2020 04:15:42 -0400
-Received: from mail-vs1-f66.google.com ([209.85.217.66]:43489 "EHLO
-        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725987AbgCVIPm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 22 Mar 2020 04:15:42 -0400
-Received: by mail-vs1-f66.google.com with SMTP id i12so3376561vso.10;
-        Sun, 22 Mar 2020 01:15:39 -0700 (PDT)
+        id S1726901AbgCVJJe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 22 Mar 2020 05:09:34 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:36850 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726880AbgCVJJd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 22 Mar 2020 05:09:33 -0400
+Received: by mail-lj1-f195.google.com with SMTP id g12so11166170ljj.3
+        for <linux-usb@vger.kernel.org>; Sun, 22 Mar 2020 02:09:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ezcgfr720kBfY/HJS4uuB/t7vgSWU2iG9iLOlGLgKJI=;
-        b=rcSLAkh7COROd7o4ApgHEMEtSLdExdWECEl2GabkxrsN+ajPA3EU8JS1OZl6Icyf7x
-         Y0BQvlpEvAxK5C20AtiAX/TXpsBpjkpJIgWUSDfH/5jKlo/lIJ/o+cMJhOdBTdCMJBag
-         0DyrmKqON8QcLvN80mh+5px3XsjyFARF4DCVyv1ScbEVYHs8sTEPKCKyZ/pN7gb29dAV
-         +zBWweAs00EYhERPlLd2tNxp3Zr9RghPSPVQAbD2JF5PNlTCZtjOS2gQVN5h0OPQrnyE
-         zpI5GEMYpCmNOLdPOy2G7kE4rS3sig50kY0YNG60CVNyvFuUJnnqyvZTgc9WoU9WNebr
-         4mfA==
+        d=waldekranz-com.20150623.gappssmtp.com; s=20150623;
+        h=content-transfer-encoding:in-reply-to:originaldate:originalfrom
+         :original:date:to:cc:subject:from:message-id;
+        bh=6N1PewsqX7bxn4cNlKsJJ2jMwwLZDPNv5uU0i+2HQAo=;
+        b=oQkWJ6gkx/xU1ds4yrCPVzhx5iq6+OiXEuh/PC7G7dnvgCzCwCpCh+oaJhObu0CawM
+         ZedQByP4mG+PERJojGDOxBSvpXVq4JeDBPPcFYFwvdgk4jBsfT3yl0XPFQGQXjP5wMO1
+         16N3e284ATPOH+ci4bFf6HdlXPK0viMCHtwg9+/iKbpP4vczpLCXRTpx/EzUdBgVZf7Y
+         TvdCsEE4CyoX/VxZir6YUdVcKxCKU8tOITG+2YFnjY/Q8fb2jcy0b6uA2tkcHFSPOh26
+         Wa2/zlaGbeEkSkzEwWArewBVMThaDzPS9IFq5OIpJfxA4q+pRtt6JChMi7JIzSFi/sHU
+         dNzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ezcgfr720kBfY/HJS4uuB/t7vgSWU2iG9iLOlGLgKJI=;
-        b=b/urVFpKXlI48SeHWGGm1K9RO8ZIGUgkBCv8lnA/pscLFie35j6bIqI13NIe+wqKyp
-         XHfqevazXWNZYIguLXZStLJzQAuRGrqWRAWbWWwOlCWVQx4ElYlSG0iCqMvYJxMsmNrz
-         MvBcZ7OqVkCRjKy7vE/BT/yxjI6ROPBSva0V4PuikYfcG7y/jrXD7Lrc3ytfoYHux7gW
-         l5wwexAtZCNSFaSFwRxXCer24Dcpt+ZUPtzc1Pqxy1sU9QrfdnBrkjl0qWObSjMjPv/W
-         WaBRz4D6T9EIb6ey66yzAFTFqmnUDRFoldQP2nORo32Yb6rPG+zaheQ5WgAXFrQRBkV1
-         I9og==
-X-Gm-Message-State: ANhLgQ2eBlM3843Q8xIKQokVlZdM3x91tkZwoAIL1UxOj20rObenLFj2
-        plxCF3CcX9b2ixKr3H2ZrJLqAH9ALTJ8ZJAKQJg=
-X-Google-Smtp-Source: ADFU+vtkMCRgTxiszn+evIYmA8iNm7v4BrYphINlVDqn6EguH6H6hzPEt788R/4wOf7kBv6RpieQU0M9GuiJtSdGBX4=
-X-Received: by 2002:a67:c189:: with SMTP id h9mr1262941vsj.91.1584864939578;
- Sun, 22 Mar 2020 01:15:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <0000000000001a033405a15e3acb@google.com> <CADG63jBdvJMAem7_VF3GbCUSXGRuFrrv6_GqFc=KcKkxcNebCA@mail.gmail.com>
- <20200322075850.GA68214@kroah.com>
-In-Reply-To: <20200322075850.GA68214@kroah.com>
-From:   Qiujun Huang <anenbupt@gmail.com>
-Date:   Sun, 22 Mar 2020 16:15:28 +0800
-Message-ID: <CADG63jD5vHoTqfmqeRjcYniBLk8reBRfKy+=ZT2aJfcRDa4S6A@mail.gmail.com>
-Subject: Re: WARNING in hwahc_probe
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     syzbot <syzbot+df767d588771697b0433@syzkaller.appspotmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tranmanphong@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:content-transfer-encoding:in-reply-to
+         :originaldate:originalfrom:original:date:to:cc:subject:from
+         :message-id;
+        bh=6N1PewsqX7bxn4cNlKsJJ2jMwwLZDPNv5uU0i+2HQAo=;
+        b=H2+mP50ZNmjesN/Ik8OTIIOJuWiRlFuvGLXf4A2VNWGF9pttil0uSo2CuVtxwnp+JD
+         F4OHJ9Fjj8674XaPHnHthc4+YgqEYMIWaLdTt0BlU9VHnu6sVi5RbotdhI6RMk66R/0/
+         hlXQ/V10yMFeBRr63r1pNvSR5d12x/6y0bQZVfaV7pQSjCi7gVYLMUtwZ/1PKQKfeR+I
+         GK8oa1BgQJF0K9PR7nvsZiZMkmLLZ6okQtJ/IhtsAQ7f6k7ejJyGpycVzSkEDyx7KhZV
+         mICCXE22bUfq6NfccKM+D4Y0pVSUclzHmk0VlPCfOqVm0ph0oaxgsifszBlzYL92LWOV
+         QToQ==
+X-Gm-Message-State: ANhLgQ1Ac0DNDrqId4ak7gVDow8FRxiWEhSCuC3/3x9UZ4nGSqjxKVrJ
+        HQ73hm7ZeWXaxd990eBVDSnNgQ==
+X-Google-Smtp-Source: ADFU+vtN8YagwYhKrQ7munflZRExsaO+eOyr8Ek0+mnv5gApHGcJv+FjGAN3rpLcqRSs7m2Yn9FxDA==
+X-Received: by 2002:a2e:b88b:: with SMTP id r11mr10496183ljp.116.1584868169837;
+        Sun, 22 Mar 2020 02:09:29 -0700 (PDT)
+Received: from localhost (h-50-180.A259.priv.bahnhof.se. [155.4.50.180])
+        by smtp.gmail.com with ESMTPSA id n17sm836160ljc.76.2020.03.22.02.09.28
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 22 Mar 2020 02:09:29 -0700 (PDT)
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20200322074006.GB64528@kroah.com>
+Originaldate: Sun Mar 22, 2020 at 8:40 AM
+Originalfrom: "Greg KH" <gregkh@linuxfoundation.org>
+Original: =?utf-8?q?On_Sat,_Mar_21,_2020_at_09:24:43PM_+0100,_Tobias_Waldekranz_wro?= =?utf-8?q?te:=0D=0A>_An_MDIO_controller_present_on_development_boards_for?= =?utf-8?q?_Marvell_switches=0D=0A>_from_the_Link_Street_(88E6xxx)_family.?= =?utf-8?q?=0D=0A>_=0D=0A>_Using_this_module,_you_can_use_the_following_se?= =?utf-8?q?tup_as_a_development=0D=0A>_platform_for_switchdev_and_DSA_rela?= =?utf-8?q?ted_work.=0D=0A>_=0D=0A>____.-------.______.-----------------.?= =?utf-8?q?=0D=0A>____|______USB----USB________________|=0D=0A>____|__SoC_?= =?utf-8?q?_|______|__88E6390X-DB__ETH1-10=0D=0A>____|______ETH----ETH0___?= =?utf-8?q?____________|=0D=0A>____'-------'______'-----------------'=0D?= =?utf-8?q?=0A>_=0D=0A>_Signed-off-by:_Tobias_Waldekranz_<tobias@waldekran?= =?utf-8?q?z.com>=0D=0A>_---=0D=0A>_=0D=0A>_Hi_linux-usb,=0D=0A>_=0D=0A>_T?= =?utf-8?q?his_is_my_first_ever_USB_driver,_therefore_I_would_really_appre?= =?utf-8?q?ciate=0D=0A>_it_if_someone_could_have_a_look_at_it_from_a_USB_p?=
+ =?utf-8?q?erspective_before_it=0D=0A>_is_(hopefully)_pulled_into_net-next?=
+ =?utf-8?q?.=0D=0A=0D=0AFrom_a_USB_point_of_view,_it_looks_sane,_only_one_?=
+ =?utf-8?q?question:=0D=0A=0D=0A>_+static_int_mvusb=5Fmdio=5Fprobe(struct_?=
+ =?utf-8?q?usb=5Finterface_*interface,=0D=0A>_+=09=09=09____const_struct_u?=
+ =?utf-8?q?sb=5Fdevice=5Fid_*id)=0D=0A>_+{=0D=0A>_+=09struct_device_*dev_?=
+ =?utf-8?q?=3D_&interface->dev;=0D=0A>_+=09struct_mvusb=5Fmdio_*mvusb;=0D?=
+ =?utf-8?q?=0A>_+=09struct_mii=5Fbus_*mdio;=0D=0A>_+=0D=0A>_+=09mdio_=3D_d?=
+ =?utf-8?q?evm=5Fmdiobus=5Falloc=5Fsize(dev,_sizeof(*mvusb));=0D=0A=0D=0AY?=
+ =?utf-8?q?ou_allocate_a_bigger_buffer_here_than_the_original_pointer_thin?=
+ =?utf-8?q?ks_it_is=0D=0Apointing_to=3F=0D=0A=0D=0A>_+=09if_(!mdio)=0D=0A>?=
+ =?utf-8?q?_+=09=09return_-ENOMEM;=0D=0A>_+=0D=0A>_+=09mvusb_=3D_mdio->pri?=
+ =?utf-8?q?v;=0D=0A=0D=0AAnd_then_you_set_this_pointer_here=3F=0D=0A=0D=0A?=
+ =?utf-8?q?If_that's_the_way_this_is_supposed_to_work,_that's_fine,_just_f?=
+ =?utf-8?q?eels_like=0D=0Athe_math_is_wrong_somewhere...=0D=0A=0D=0Athanks?=
+ =?utf-8?q?,=0D=0A=0D=0Agreg_k-h=0D=0A?=
+Date:   Sun, 22 Mar 2020 10:09:28 +0100
+To:     "Greg KH" <gregkh@linuxfoundation.org>
+Cc:     <davem@davemloft.net>, <netdev@vger.kernel.org>, <andrew@lunn.ch>,
+        <f.fainelli@gmail.com>, <hkallweit1@gmail.com>,
+        <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] net: phy: add marvell usb to mdio controller
+From:   "Tobias Waldekranz" <tobias@waldekranz.com>
+Message-Id: <C1H8VLGMUEEC.3BCHVI0HO90KD@wkz-x280>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Mar 22, 2020 at 3:58 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Sun, Mar 22, 2020 at 03:53:44PM +0800, Qiujun Huang wrote:
-> > The return value of snprintf is longer than expected if the string is
-> > truncated. Bytes need to be checked here.
-> >
-> > diff --git a/drivers/staging/wusbcore/host/hwa-hc.c
-> > b/drivers/staging/wusbcore/host/hwa-hc.c
-> > index 8d959e9..1475a48 100644
-> > --- a/drivers/staging/wusbcore/host/hwa-hc.c
-> > +++ b/drivers/staging/wusbcore/host/hwa-hc.c
->
-> This file is no longer in the linux-next tree and will be deleted in the
-> next kernel release.
->
-> Also, no one has this hardware so there's no real security issue here at
-> all.
->
-> And finally, you forgot a signed-off-by line on your patch :(
+On Sun Mar 22, 2020 at 8:40 AM, Greg KH wrote:
+> From a USB point of view, it looks sane, only one question:
 
-Get that, thanks.
+Great, thanks for the review.
 
+> > +static int mvusb_mdio_probe(struct usb_interface *interface,
+> > +			    const struct usb_device_id *id)
+> > +{
+> > +	struct device *dev =3D &interface->dev;
+> > +	struct mvusb_mdio *mvusb;
+> > +	struct mii_bus *mdio;
+> > +
+> > +	mdio =3D devm_mdiobus_alloc_size(dev, sizeof(*mvusb));
 >
-> thanks,
+>=20
+> You allocate a bigger buffer here than the original pointer thinks it is
+> pointing to?
+
+Yes. I've seen this pattern in a couple of places in the kernel,
+e.g. alloc_netdev also does this. The object is extended with the
+requested size, and the offset is stored somewhere for later use by
+the driver.
+
+> > +	if (!mdio)
+> > +		return -ENOMEM;
+> > +
+> > +	mvusb =3D mdio->priv;
 >
-> greg k-h
+>=20
+> And then you set this pointer here?
+
+...in this case in the priv member.
+
+https://code.woboq.org/linux/linux/drivers/net/phy/mdio_bus.c.html#143
+
+Thanks
+
