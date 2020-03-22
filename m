@@ -2,82 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BACFD18E849
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Mar 2020 12:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF4D18E927
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Mar 2020 14:32:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726984AbgCVLKy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 22 Mar 2020 07:10:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52676 "EHLO mail.kernel.org"
+        id S1726583AbgCVNcR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 22 Mar 2020 09:32:17 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:50160 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726866AbgCVLKy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 22 Mar 2020 07:10:54 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7384520753;
-        Sun, 22 Mar 2020 11:10:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584875454;
-        bh=F+bb/PhDrGL6xSqYVlRBI18Yhx3UabZn2G7TvUh7EF4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jGWHc9YL5uj95BAw1iYQ3bd8gW+k+tBYGLfGEc/MOZ3necAF2Yqz4LxDye3nuh6Da
-         3jrs1YfWP9wNIc9v2ikSqgtxxdTdqNPxOmmsZBCNOhWzIuxsjs6MXFEl07LrIdUC4K
-         X8+cBWpxTZesIu/s4EQyz4id44lg495ySHcd4CUw=
-Date:   Sun, 22 Mar 2020 12:10:51 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
+        id S1725997AbgCVNcR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 22 Mar 2020 09:32:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=Uqkjdi1Il5dKCpnHj9E5UVPNDlUi2SUTAgMlZK52PvA=; b=Vrm8IAeaYkQ+RgnhRGiGTfGP7Z
+        ijKzRHh/9CspS0aEzQGJeciyvlh8iG6dMTbu4jejuJj5Tywta4cwo9nDE0G1KS5NXzYaSZX1lMCRK
+        EvzNGIQLv6410/9Of/x5feRs3xNqmjaiiGrxWFR/BsEr7pV/gFdJANVyeRgRiecU8i98=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.93)
+        (envelope-from <andrew@lunn.ch>)
+        id 1jG0i3-0008Lj-L5; Sun, 22 Mar 2020 14:32:11 +0100
+Date:   Sun, 22 Mar 2020 14:32:11 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
 To:     Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, andrew@lunn.ch,
-        f.fainelli@gmail.com, hkallweit1@gmail.com,
-        linux-usb@vger.kernel.org
+Cc:     davem@davemloft.net, netdev@vger.kernel.org, f.fainelli@gmail.com,
+        hkallweit1@gmail.com, linux-usb@vger.kernel.org
 Subject: Re: [PATCH v3 2/2] net: phy: add marvell usb to mdio controller
-Message-ID: <20200322111051.GB72939@kroah.com>
-References: <20200322074006.GB64528@kroah.com>
- <C1H8VLGMUEEC.3BCHVI0HO90KD@wkz-x280>
+Message-ID: <20200322133211.GB11481@lunn.ch>
+References: <20200321202443.15352-1-tobias@waldekranz.com>
+ <20200321202443.15352-2-tobias@waldekranz.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <C1H8VLGMUEEC.3BCHVI0HO90KD@wkz-x280>
+In-Reply-To: <20200321202443.15352-2-tobias@waldekranz.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Mar 22, 2020 at 10:09:28AM +0100, Tobias Waldekranz wrote:
-> On Sun Mar 22, 2020 at 8:40 AM, Greg KH wrote:
-> > From a USB point of view, it looks sane, only one question:
+On Sat, Mar 21, 2020 at 09:24:43PM +0100, Tobias Waldekranz wrote:
+> An MDIO controller present on development boards for Marvell switches
+> from the Link Street (88E6xxx) family.
 > 
-> Great, thanks for the review.
+> Using this module, you can use the following setup as a development
+> platform for switchdev and DSA related work.
 > 
-> > > +static int mvusb_mdio_probe(struct usb_interface *interface,
-> > > +			    const struct usb_device_id *id)
-> > > +{
-> > > +	struct device *dev = &interface->dev;
-> > > +	struct mvusb_mdio *mvusb;
-> > > +	struct mii_bus *mdio;
-> > > +
-> > > +	mdio = devm_mdiobus_alloc_size(dev, sizeof(*mvusb));
-> >
-> > 
-> > You allocate a bigger buffer here than the original pointer thinks it is
-> > pointing to?
+>    .-------.      .-----------------.
+>    |      USB----USB                |
+>    |  SoC  |      |  88E6390X-DB  ETH1-10
+>    |      ETH----ETH0               |
+>    '-------'      '-----------------'
 > 
-> Yes. I've seen this pattern in a couple of places in the kernel,
-> e.g. alloc_netdev also does this. The object is extended with the
-> requested size, and the offset is stored somewhere for later use by
-> the driver.
-> 
-> > > +	if (!mdio)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	mvusb = mdio->priv;
-> >
-> > 
-> > And then you set this pointer here?
-> 
-> ...in this case in the priv member.
-> 
-> https://code.woboq.org/linux/linux/drivers/net/phy/mdio_bus.c.html#143
+> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
 
-Ok, just wanted to make sure :)
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Andrew
