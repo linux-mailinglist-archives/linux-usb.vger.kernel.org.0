@@ -2,54 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D135E18EC63
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Mar 2020 22:03:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D8218EC72
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Mar 2020 22:10:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726836AbgCVVDz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 22 Mar 2020 17:03:55 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:45744 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726623AbgCVVDy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 22 Mar 2020 17:03:54 -0400
-Received: by mail-pg1-f196.google.com with SMTP id m15so6071537pgv.12;
-        Sun, 22 Mar 2020 14:03:53 -0700 (PDT)
+        id S1726836AbgCVVKf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 22 Mar 2020 17:10:35 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:42870 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726741AbgCVVKf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 22 Mar 2020 17:10:35 -0400
+Received: by mail-pf1-f196.google.com with SMTP id 22so2842351pfa.9;
+        Sun, 22 Mar 2020 14:10:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=tIQRWeGBWUxyXabzpdtg+h5FwOjl7zanXR55nlwRkHI=;
-        b=C65FRSUnZW8YgeHep/cksVgsbA9HwkVg7bgIbJ3eHCBNj6FVH9OsYJd9uNfrF46fvd
-         hbTTz56T1BujVjtukonPP1zIzOb4vwDiZ8Be2NEHIX0Qd1yf/A++VXQJkNGel2i/eGyF
-         zxI3/YD4kDqhV7D9IuSWYnVkJAhXEp4iqnmb9vb3rJzpJPL3af8X33xmcMii+vva0oa0
-         KxzfoKZhZN1tho5hTNMFAM1M3hzb3ZAfOKzy39n8WIehvrjCSJEfPjUTvYPQXm0sV/yf
-         KgMyiQIF+vDeMifqfyNBYBqgJeUpIQcQOTFgJ/HSd7cDnZ1CpEmQkzMaPVo0SBkNQ21v
-         6iKQ==
+        bh=DI/M1DbeHjeJ0Rbhw77l2CsSigiOPM1+Ewzh71UHzbc=;
+        b=A6FtR1hlxH6FuvpbDJWgvk/HZhaNCTBs7m3hDzPSL0w79+S57NmtQnesMvis33p/Tq
+         eqeaIMKTFjVGo1fWRxBOt1Nl4/aq6SkDpwOjCpEDBceYq4cugyehqksVLf480H+S3rHn
+         YnFhiArPkH/1Z6cRjSPB6NCwBoGBUlteFPHaXYRGE20/zYqzv7W0p3nHQxjq2SuRDlLZ
+         33JI+kUtBKJTzeth7bwQXL+sWqM/gJg/79WZpjny17oVbOQ8zamZulJ/NYE77Pjwu5uw
+         MmKldh+AJdxTkbkKoAnoql9dOol9nKIzUDuFGZ45UGpCvNdu62pPISa0eMYNbkLK2ehy
+         +82g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=tIQRWeGBWUxyXabzpdtg+h5FwOjl7zanXR55nlwRkHI=;
-        b=V7yaI/YCUe4HjY0NM+cNKcnnyZlbrPebmixqKBhmGGfmtDwFf6ilJ8tb9Z292Ry6N7
-         erj920FLkD3WcjpGB8puIv2hvF9D53DvzS8YT6yqV8UR+f66XZXrrQedD2XxKX7jqQvM
-         EVMe/hl5L/nxo8NYsenRfMpLh6SebECRDApgdQAxqc12hFiKVDQQfOEbvwAeMlNGTOPA
-         Z/i99r/4gWs2BSV864MbVcAFagUI/KqkUspAc8IxHhQ0ZaxHIcLvK8tCJDRtlHKqLr5S
-         JmcGItArkWHmrGG6sIWzrFfyDDikYDqiq94xlhVMh6s1//vRKRB93lFjNYGIl/7oxoQO
-         beiQ==
-X-Gm-Message-State: ANhLgQ3dH6VtNqVEdRqa3nd7bNLKyZdSrQsyg7lubpxp/PsK0xToOthX
-        koqNWR4Ua8Mc8eDHHPThYLHitvxP
-X-Google-Smtp-Source: ADFU+vuP/3Wgl/7V4YZndoGNsLAPQPGxqmBSTj+1w60JUzqE1+a+ZPiL08o+V5JGhgl1XwGhN7MsuQ==
-X-Received: by 2002:aa7:96f8:: with SMTP id i24mr20993832pfq.321.1584911032969;
-        Sun, 22 Mar 2020 14:03:52 -0700 (PDT)
+        bh=DI/M1DbeHjeJ0Rbhw77l2CsSigiOPM1+Ewzh71UHzbc=;
+        b=jVjsfr3lGR9iETPFcEnnYEJVSp1nqXRsQ4RSuJbUqlYYqbl1EMNfyYhJ77cxGBSKpb
+         pqqPhoNlqzGoKpg8ldC5WG+y43fKq/7MLN7k0YZbbgH28NHWueqviI3xtV9M6HZi0Abl
+         ES+SwMu20P4CGwPHVf941STHVX7NLFdsWltrwQmG8Ru3+C3oQWHCEEWlfhV/U9MFitbN
+         tTFSY6uHwMH1wxYg9a9ms8jxEL5c0F0uMsPoCG0psweTLjbppNZZxR1+v+cgiqi5VWrO
+         lUFYQquDdUMaEcjuiKMPLXjJIByeveYcdJbuRwVPJG9hF32YwaIlrJ26wSFA3qRrBQk6
+         WGMg==
+X-Gm-Message-State: ANhLgQ0pw0ifcpAvOE90GIcugrkX+DCk5hVko7DCV4t5IsUIV2/n0Gpb
+        8OkhayNfgAlWJvW9czuPWOH3PsJt
+X-Google-Smtp-Source: ADFU+vv4EJgyemuNKe+wbE9NmUz22DZThlSmbveyQaF/pGHxSVLx3U6ufW1AhnfjomcOwzNvkYxuhA==
+X-Received: by 2002:a62:1dd3:: with SMTP id d202mr21264971pfd.47.1584911432973;
+        Sun, 22 Mar 2020 14:10:32 -0700 (PDT)
 Received: from [192.168.1.3] (ip68-111-84-250.oc.oc.cox.net. [68.111.84.250])
-        by smtp.gmail.com with ESMTPSA id j21sm3077959pff.39.2020.03.22.14.03.51
+        by smtp.gmail.com with ESMTPSA id n100sm9617295pjc.38.2020.03.22.14.10.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Mar 2020 14:03:52 -0700 (PDT)
-Subject: Re: [PATCH v3 1/2] dt-bindings: net: add marvell usb to mdio bindings
+        Sun, 22 Mar 2020 14:10:32 -0700 (PDT)
+Subject: Re: [PATCH v3 2/2] net: phy: add marvell usb to mdio controller
 To:     Tobias Waldekranz <tobias@waldekranz.com>, davem@davemloft.net
 Cc:     netdev@vger.kernel.org, andrew@lunn.ch, hkallweit1@gmail.com,
         linux-usb@vger.kernel.org
 References: <20200321202443.15352-1-tobias@waldekranz.com>
+ <20200321202443.15352-2-tobias@waldekranz.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
 Autocrypt: addr=f.fainelli@gmail.com; keydata=
  mQGiBEjPuBIRBACW9MxSJU9fvEOCTnRNqG/13rAGsj+vJqontvoDSNxRgmafP8d3nesnqPyR
@@ -105,12 +106,12 @@ Autocrypt: addr=f.fainelli@gmail.com; keydata=
  caxTGgc5zzQHeX67eMzrGomG3ZnIxmd1sAbgvJUDaD2GrYlulfwGWwWyTNbWRvMighVdPkSF
  6XFgQaosWxkV0OELLy2N485YrTr2Uq64VKyxpncLh50e2RnyAJ9Za0Dx0yyp44iD1OvHtkEI
  M5kY0ACeNhCZJvZ5g4C2Lc9fcTHu8jxmEkI=
-Message-ID: <6a7fed40-b609-6f01-cd5f-cfda6aeb202e@gmail.com>
-Date:   Sun, 22 Mar 2020 14:03:51 -0700
+Message-ID: <f3b8f07f-b09b-50ed-b642-3224e243b91e@gmail.com>
+Date:   Sun, 22 Mar 2020 14:10:31 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Firefox/68.0 Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <20200321202443.15352-1-tobias@waldekranz.com>
+In-Reply-To: <20200321202443.15352-2-tobias@waldekranz.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -119,13 +120,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
+Hi Tobias,
 
 On 3/21/2020 1:24 PM, Tobias Waldekranz wrote:
-> Describe how the USB to MDIO controller can optionally use device tree
-> bindings to reference attached devices such as switches.
+> An MDIO controller present on development boards for Marvell switches
+> from the Link Street (88E6xxx) family.
+> 
+> Using this module, you can use the following setup as a development
+> platform for switchdev and DSA related work.
+> 
+>    .-------.      .-----------------.
+>    |      USB----USB                |
+>    |  SoC  |      |  88E6390X-DB  ETH1-10
+>    |      ETH----ETH0               |
+>    '-------'      '-----------------'
 > 
 > Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> ---
+
+[snip]
+
+
+> +config MDIO_MVUSB
+> +	tristate "Marvell USB to MDIO Adapter"
+> +	depends on OF_MDIO && USB
+
+You could drop OF_MDIO here since of_mdiobus_register() does default to
+mdiobus_register() when CONFIG_OF is disabled. Other than that, LGTM!
 
 Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
