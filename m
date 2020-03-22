@@ -2,92 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F8018E75D
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Mar 2020 08:40:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DC418E764
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Mar 2020 08:53:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726470AbgCVHkK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 22 Mar 2020 03:40:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60488 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725769AbgCVHkK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 22 Mar 2020 03:40:10 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D93C620753;
-        Sun, 22 Mar 2020 07:40:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584862809;
-        bh=6OTETLA2Lkag+u/aimImFI5ux+gfx2ImiFuEDDe3dk0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e19y4T+ODpyqOzHH4FP8h8Ti2ztK3Ecj9Rk9WmTUNiSRMOc8sG7Ybn5g5Yibp2YxL
-         tRUwMvufRiX0wSvfzGLI6GSJWvIupCFwJTREHuq7inZBAaTNk3h+HnsqM5fpZFZsXg
-         1L93YSRZv4Iq897VWMOisEDBIfXwpnbg3KWlEo4Q=
-Date:   Sun, 22 Mar 2020 08:40:06 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tobias Waldekranz <tobias@waldekranz.com>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, andrew@lunn.ch,
-        f.fainelli@gmail.com, hkallweit1@gmail.com,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] net: phy: add marvell usb to mdio controller
-Message-ID: <20200322074006.GB64528@kroah.com>
-References: <20200321202443.15352-1-tobias@waldekranz.com>
- <20200321202443.15352-2-tobias@waldekranz.com>
+        id S1725997AbgCVHx6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 22 Mar 2020 03:53:58 -0400
+Received: from mail-vs1-f51.google.com ([209.85.217.51]:45540 "EHLO
+        mail-vs1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725769AbgCVHx5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 22 Mar 2020 03:53:57 -0400
+Received: by mail-vs1-f51.google.com with SMTP id x82so6678459vsc.12;
+        Sun, 22 Mar 2020 00:53:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NGOXhbNE/Yvzyog9sFZHGWWLHVko+x/bs3AqHRI4q8Q=;
+        b=m96WaUkt7JedMDG4ISXzSttGGPakucXaGSVr/CYifkOtp1fXoh6INQyccXIcIHwWkN
+         kwHQcCsQV7Q+TSHtHrK9ld/SyfRZdtQr2Qvt2j/UaZaGXv7K4RQVCBIgDPD5ezAbmyAL
+         Udey756fd1cdVbIMrkT1TXC9TGTUfAUw/vd9wbBgnbb5MGMYpLuChPZecSi3XaxgXPaJ
+         bwt7GDbEo/DCfm5GoDyEIu6S9SaXgR9Uj3M1mI9VymysO2XUPC/cVRblxr50e5NAnCHx
+         jWTUaXxpGIQdTvWM00hvprFzLv19IlFZNmTcAHhFfui3ZXW+K0fWS8QxgwBZ2sZdpHSf
+         HnuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NGOXhbNE/Yvzyog9sFZHGWWLHVko+x/bs3AqHRI4q8Q=;
+        b=CprABLM6GQ9ynrYqjEYe/oAgHhCcqg4lbrwOQwCjq4EmgZN2d1NRtaaz54WaRC1QAw
+         IoLI3dqLxXctV650hiDZqlab9oTxcMaAlfifxITQtygYZx/6ymipJbtrNb3davP9hGEM
+         uXOZnNIQya+ThdTTzM4bu6vxTMZCL9I7xTz8RBFP/H0vcmSJzx3SnrBQrNzHl9LG7hOh
+         4yK+37EZ7NvTE5zso/4gSxUlg3deih21UVrXCcMwPp8Me7SyrHn6b1JYFAyGAM4hrf/f
+         Mtwo9ryx5Br6LlfdvJeD9I2coPj7HejecUairN78u9w5MxnA1bbEpjwBqQVHyh7UEKI0
+         L8Ig==
+X-Gm-Message-State: ANhLgQ1k46lJojdgp2ayxWJmYEy9zsncwM5kW+TNYKjMYsH6c7V5ulgZ
+        9MfunUN7+eOqou1x+tL5qeiTg1NZgp0tJk1F5h8=
+X-Google-Smtp-Source: ADFU+vtEaTWfmqFJuCBiwee7to6ZSYgE6Hq6H5nMKMxws5DkFoNazDU8YjIGQOGlm3hDkX3bRwxL9pdx9gcfqgOYvJQ=
+X-Received: by 2002:a67:3201:: with SMTP id y1mr12112175vsy.54.1584863635053;
+ Sun, 22 Mar 2020 00:53:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200321202443.15352-2-tobias@waldekranz.com>
+References: <0000000000001a033405a15e3acb@google.com>
+In-Reply-To: <0000000000001a033405a15e3acb@google.com>
+From:   Qiujun Huang <anenbupt@gmail.com>
+Date:   Sun, 22 Mar 2020 15:53:44 +0800
+Message-ID: <CADG63jBdvJMAem7_VF3GbCUSXGRuFrrv6_GqFc=KcKkxcNebCA@mail.gmail.com>
+Subject: Re: WARNING in hwahc_probe
+To:     syzbot <syzbot+df767d588771697b0433@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, devel@driverdev.osuosl.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tranmanphong@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Mar 21, 2020 at 09:24:43PM +0100, Tobias Waldekranz wrote:
-> An MDIO controller present on development boards for Marvell switches
-> from the Link Street (88E6xxx) family.
-> 
-> Using this module, you can use the following setup as a development
-> platform for switchdev and DSA related work.
-> 
->    .-------.      .-----------------.
->    |      USB----USB                |
->    |  SoC  |      |  88E6390X-DB  ETH1-10
->    |      ETH----ETH0               |
->    '-------'      '-----------------'
-> 
-> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-> ---
-> 
-> Hi linux-usb,
-> 
-> This is my first ever USB driver, therefore I would really appreciate
-> it if someone could have a look at it from a USB perspective before it
-> is (hopefully) pulled into net-next.
+The return value of snprintf is longer than expected if the string is
+truncated. Bytes need to be checked here.
 
-From a USB point of view, it looks sane, only one question:
-
-> +static int mvusb_mdio_probe(struct usb_interface *interface,
-> +			    const struct usb_device_id *id)
-> +{
-> +	struct device *dev = &interface->dev;
-> +	struct mvusb_mdio *mvusb;
-> +	struct mii_bus *mdio;
-> +
-> +	mdio = devm_mdiobus_alloc_size(dev, sizeof(*mvusb));
-
-You allocate a bigger buffer here than the original pointer thinks it is
-pointing to?
-
-> +	if (!mdio)
-> +		return -ENOMEM;
-> +
-> +	mvusb = mdio->priv;
-
-And then you set this pointer here?
-
-If that's the way this is supposed to work, that's fine, just feels like
-the math is wrong somewhere...
-
-thanks,
-
-greg k-h
+diff --git a/drivers/staging/wusbcore/host/hwa-hc.c
+b/drivers/staging/wusbcore/host/hwa-hc.c
+index 8d959e9..1475a48 100644
+--- a/drivers/staging/wusbcore/host/hwa-hc.c
++++ b/drivers/staging/wusbcore/host/hwa-hc.c
+@@ -680,10 +680,12 @@ static int hwahc_security_create(struct hwahc *hwahc)
+                        break;
+                }
+                itr += etd->bLength;
+-               bytes += snprintf(buf + bytes, sizeof(buf) - bytes,
+-                                 "%s (0x%02x) ",
+-                                 wusb_et_name(etd->bEncryptionType),
+-                                 etd->bEncryptionValue);
++
++               if (sizeof(buf) > bytes)
++                       bytes += snprintf(buf + bytes, sizeof(buf) - bytes,
++                                       "%s (0x%02x) ",
++                                       wusb_et_name(etd->bEncryptionType),
++                                       etd->bEncryptionValue);
+                wusbhc->ccm1_etd = etd;
+        }
+        dev_info(dev, "supported encryption types: %s\n", buf);
