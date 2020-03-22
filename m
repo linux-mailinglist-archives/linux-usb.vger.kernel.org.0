@@ -2,84 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16DC418E764
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Mar 2020 08:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45EFD18E76E
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Mar 2020 08:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725997AbgCVHx6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 22 Mar 2020 03:53:58 -0400
-Received: from mail-vs1-f51.google.com ([209.85.217.51]:45540 "EHLO
-        mail-vs1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725769AbgCVHx5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 22 Mar 2020 03:53:57 -0400
-Received: by mail-vs1-f51.google.com with SMTP id x82so6678459vsc.12;
-        Sun, 22 Mar 2020 00:53:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NGOXhbNE/Yvzyog9sFZHGWWLHVko+x/bs3AqHRI4q8Q=;
-        b=m96WaUkt7JedMDG4ISXzSttGGPakucXaGSVr/CYifkOtp1fXoh6INQyccXIcIHwWkN
-         kwHQcCsQV7Q+TSHtHrK9ld/SyfRZdtQr2Qvt2j/UaZaGXv7K4RQVCBIgDPD5ezAbmyAL
-         Udey756fd1cdVbIMrkT1TXC9TGTUfAUw/vd9wbBgnbb5MGMYpLuChPZecSi3XaxgXPaJ
-         bwt7GDbEo/DCfm5GoDyEIu6S9SaXgR9Uj3M1mI9VymysO2XUPC/cVRblxr50e5NAnCHx
-         jWTUaXxpGIQdTvWM00hvprFzLv19IlFZNmTcAHhFfui3ZXW+K0fWS8QxgwBZ2sZdpHSf
-         HnuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NGOXhbNE/Yvzyog9sFZHGWWLHVko+x/bs3AqHRI4q8Q=;
-        b=CprABLM6GQ9ynrYqjEYe/oAgHhCcqg4lbrwOQwCjq4EmgZN2d1NRtaaz54WaRC1QAw
-         IoLI3dqLxXctV650hiDZqlab9oTxcMaAlfifxITQtygYZx/6ymipJbtrNb3davP9hGEM
-         uXOZnNIQya+ThdTTzM4bu6vxTMZCL9I7xTz8RBFP/H0vcmSJzx3SnrBQrNzHl9LG7hOh
-         4yK+37EZ7NvTE5zso/4gSxUlg3deih21UVrXCcMwPp8Me7SyrHn6b1JYFAyGAM4hrf/f
-         Mtwo9ryx5Br6LlfdvJeD9I2coPj7HejecUairN78u9w5MxnA1bbEpjwBqQVHyh7UEKI0
-         L8Ig==
-X-Gm-Message-State: ANhLgQ1k46lJojdgp2ayxWJmYEy9zsncwM5kW+TNYKjMYsH6c7V5ulgZ
-        9MfunUN7+eOqou1x+tL5qeiTg1NZgp0tJk1F5h8=
-X-Google-Smtp-Source: ADFU+vtEaTWfmqFJuCBiwee7to6ZSYgE6Hq6H5nMKMxws5DkFoNazDU8YjIGQOGlm3hDkX3bRwxL9pdx9gcfqgOYvJQ=
-X-Received: by 2002:a67:3201:: with SMTP id y1mr12112175vsy.54.1584863635053;
- Sun, 22 Mar 2020 00:53:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <0000000000001a033405a15e3acb@google.com>
-In-Reply-To: <0000000000001a033405a15e3acb@google.com>
-From:   Qiujun Huang <anenbupt@gmail.com>
-Date:   Sun, 22 Mar 2020 15:53:44 +0800
-Message-ID: <CADG63jBdvJMAem7_VF3GbCUSXGRuFrrv6_GqFc=KcKkxcNebCA@mail.gmail.com>
+        id S1726783AbgCVH6y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 22 Mar 2020 03:58:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35272 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726137AbgCVH6x (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 22 Mar 2020 03:58:53 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 990FB206F8;
+        Sun, 22 Mar 2020 07:58:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584863933;
+        bh=eWjdMSV3Xt1zzPnKPS1H2YP8+k8sOMZZteG9XBHhj7U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bVGZ7shbaQ5BLOwPtynGKZyTw/ZRjcMkgWzPSoWdH5CweCwAr1Ax55WFQBS2Z3+Ij
+         2vQwzICdeKtApLnSiY0U2MlWvW/OE+s78vRX7N6izBB7HsCDBnyGX8w2bU+UVYhY3i
+         UvtJx37pR3IP/JZq1tY2UPmsj0ICqWwOeiyTYrGM=
+Date:   Sun, 22 Mar 2020 08:58:50 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Qiujun Huang <anenbupt@gmail.com>
+Cc:     syzbot <syzbot+df767d588771697b0433@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tranmanphong@gmail.com
 Subject: Re: WARNING in hwahc_probe
-To:     syzbot <syzbot+df767d588771697b0433@syzkaller.appspotmail.com>
-Cc:     andreyknvl@google.com, devel@driverdev.osuosl.org,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tranmanphong@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <20200322075850.GA68214@kroah.com>
+References: <0000000000001a033405a15e3acb@google.com>
+ <CADG63jBdvJMAem7_VF3GbCUSXGRuFrrv6_GqFc=KcKkxcNebCA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADG63jBdvJMAem7_VF3GbCUSXGRuFrrv6_GqFc=KcKkxcNebCA@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The return value of snprintf is longer than expected if the string is
-truncated. Bytes need to be checked here.
+On Sun, Mar 22, 2020 at 03:53:44PM +0800, Qiujun Huang wrote:
+> The return value of snprintf is longer than expected if the string is
+> truncated. Bytes need to be checked here.
+> 
+> diff --git a/drivers/staging/wusbcore/host/hwa-hc.c
+> b/drivers/staging/wusbcore/host/hwa-hc.c
+> index 8d959e9..1475a48 100644
+> --- a/drivers/staging/wusbcore/host/hwa-hc.c
+> +++ b/drivers/staging/wusbcore/host/hwa-hc.c
 
-diff --git a/drivers/staging/wusbcore/host/hwa-hc.c
-b/drivers/staging/wusbcore/host/hwa-hc.c
-index 8d959e9..1475a48 100644
---- a/drivers/staging/wusbcore/host/hwa-hc.c
-+++ b/drivers/staging/wusbcore/host/hwa-hc.c
-@@ -680,10 +680,12 @@ static int hwahc_security_create(struct hwahc *hwahc)
-                        break;
-                }
-                itr += etd->bLength;
--               bytes += snprintf(buf + bytes, sizeof(buf) - bytes,
--                                 "%s (0x%02x) ",
--                                 wusb_et_name(etd->bEncryptionType),
--                                 etd->bEncryptionValue);
-+
-+               if (sizeof(buf) > bytes)
-+                       bytes += snprintf(buf + bytes, sizeof(buf) - bytes,
-+                                       "%s (0x%02x) ",
-+                                       wusb_et_name(etd->bEncryptionType),
-+                                       etd->bEncryptionValue);
-                wusbhc->ccm1_etd = etd;
-        }
-        dev_info(dev, "supported encryption types: %s\n", buf);
+This file is no longer in the linux-next tree and will be deleted in the
+next kernel release.
+
+Also, no one has this hardware so there's no real security issue here at
+all.
+
+And finally, you forgot a signed-off-by line on your patch :(
+
+thanks,
+
+greg k-h
