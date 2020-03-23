@@ -2,102 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EFCF18F94A
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2020 17:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B227E18F963
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2020 17:12:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727570AbgCWQG4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Mar 2020 12:06:56 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:35887 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727282AbgCWQG4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Mar 2020 12:06:56 -0400
-Received: by mail-pg1-f196.google.com with SMTP id j29so534698pgl.3;
-        Mon, 23 Mar 2020 09:06:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=uK1iorBXF9BB4oGseEqjv4lqsBJQT04CW0YTLmh51Gc=;
-        b=enFns1JTPAAQxePIF5XR/UkwY8Cc6ppWp3dRroiZAdFgisuXjzD/OwK6FCuu988wz1
-         a31lIJSe2W9hVqDk0SjUSyV778lcJE6Dl1tZ/wW7NLRcj15if/hViAQ80LrIj3C3WCTX
-         zc+irBWnrZLZn/G5ZefV8FDCllViW7lE7QZghgAuUtj/KXzwV/CvSyTGZOPByI/NW2iC
-         DkIFLKfoxRLyRZo+EboDkwgL43rYSaNFQcLUOqF+t6JF5QrQdIL3CHopXbCHcZxb/p8N
-         EC1Ab3O2M8z54vDF2Ff4np/penjbARCtAlrPcK/BeWObWzyLcMAnmRBoUdnq8oXw0MEi
-         7Y5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=uK1iorBXF9BB4oGseEqjv4lqsBJQT04CW0YTLmh51Gc=;
-        b=rl+Uh2earBgboWUIGfEgpuVYD2ouR0w5IDcFbzrgvfm6zllU/d5BDZY3ConWGN79fA
-         1mCBP7iK6ik3MMOokh1u5YY+4HMW+WDqiFszpiSZb/Lnrxt/n1j8nFy61R98wXzS6gFN
-         W6kv8nMAwHlkEj3AF4z6yQKUU30LDQODv0PgWrHn9J7WyT78C5TXRkJp+DwlrYF/bfpN
-         nQay9waqDig8dfFRo6DCZlSSRVxi5qXwUzJdPhG/FqSmpycKgsOp5Uq86z+XPYAQigdv
-         OovZ67+usgr+S5RZWbfuWDZD5JI4gav0P7rKjDRV2SB/U+XIzjinjLHVPSzXniRxLDQ9
-         fkZQ==
-X-Gm-Message-State: ANhLgQ0MrZor4fvR9y+8IkvkaR3O+M7TAFT+Yk4vAfSE4Yr+bbVn95qy
-        528d7hPdTWMyoyMBoOKOfvo=
-X-Google-Smtp-Source: ADFU+vsrPRMOiAMsZ+zyYSVQ4JhY92AmjIK635SFGp303xhUELRjugX5pvVkZ6+tAXme3RRKVFLz6g==
-X-Received: by 2002:a63:5d04:: with SMTP id r4mr22463802pgb.241.1584979613571;
-        Mon, 23 Mar 2020 09:06:53 -0700 (PDT)
-Received: from localhost (176.122.158.203.16clouds.com. [176.122.158.203])
-        by smtp.gmail.com with ESMTPSA id x190sm13510335pfb.96.2020.03.23.09.06.52
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 23 Mar 2020 09:06:53 -0700 (PDT)
-From:   Dejin Zheng <zhengdejin5@gmail.com>
-To:     gregkh@linuxfoundation.org, rafael@kernel.org, hminas@synopsys.com,
-        mathias.nyman@intel.com, bgolaszewski@baylibre.com, arnd@arndb.de,
-        geert+renesas@glider.be, tomas.winkler@intel.com,
-        tglx@linutronix.de, hdegoede@redhat.com, treding@nvidia.com,
-        suzuki.poulose@arm.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dejin Zheng <zhengdejin5@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH v4 5/5] driver core: platform: Reimplement devm_platform_ioremap_resource
-Date:   Tue, 24 Mar 2020 00:06:12 +0800
-Message-Id: <20200323160612.17277-6-zhengdejin5@gmail.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200323160612.17277-1-zhengdejin5@gmail.com>
-References: <20200323160612.17277-1-zhengdejin5@gmail.com>
+        id S1727209AbgCWQL5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Mar 2020 12:11:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52408 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725893AbgCWQL4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 23 Mar 2020 12:11:56 -0400
+Received: from localhost (unknown [122.178.205.141])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 22E7D20714;
+        Mon, 23 Mar 2020 16:11:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584979915;
+        bh=wcMYjUxAgWM9UUp/MjToikncsTsDSPkcxq8Zig3+Tb0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U2C9OHrkcqnwil0lVzSLtqSCyc5aGR3nA3th3kTJRyNuQIXisaQz3/m1CiIaTWUtl
+         iSIo7vHAjRqCo9sKNOOwILWx5x51j301tn2dCEO9N8UE8vfhFhD6nQ2VHheZxzpCBu
+         AdhOfcoRdJ00kzL3ofwHEDErV7pNUG0R4ZuLR700=
+Date:   Mon, 23 Mar 2020 21:41:51 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     kbuild test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        clang-built-linux@googlegroups.com,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-arm-msm@vger.kernel.org, Bjorn Andersson" 
+        <bjorn.andersson@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Andreas =?iso-8859-1?Q?B=F6hler?= <dev@aboehler.at>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v7 1/5] usb: hci: add hc_driver as argument for
+ usb_hcd_pci_probe
+Message-ID: <20200323161151.GT72691@vkoul-mobl>
+References: <20200323153429.GR72691@vkoul-mobl>
+ <Pine.LNX.4.44L0.2003231147190.24254-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.2003231147190.24254-100000@netrider.rowland.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Reimplement devm_platform_ioremap_resource() by calling
-devm_platform_ioremap_and_get_resource() with res = NULL to
-simplify the code.
+On 23-03-20, 11:48, Alan Stern wrote:
+> On Mon, 23 Mar 2020, Vinod Koul wrote:
+> 
+> > On 23-03-20, 22:49, kbuild test robot wrote:
+> > > Hi Vinod,
+> > > 
+> > > I love your patch! Yet something to improve:
+> > 
+> > Thanks for the report.
+> > 
+> > > [auto build test ERROR on v5.6-rc7]
+> > > [also build test ERROR on next-20200323]
+> > > [cannot apply to usb/usb-testing]
+> > > [if your patch is applied to the wrong git tree, please drop us a note to help
+> > > improve the system. BTW, we also suggest to use '--base' option to specify the
+> > > base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
+> > > 
+> > > url:    https://github.com/0day-ci/linux/commits/Vinod-Koul/usb-xhci-Add-support-for-Renesas-USB-controllers/20200323-203447
+> > > base:    16fbf79b0f83bc752cee8589279f1ebfe57b3b6e
+> > > config: x86_64-defconfig (attached as .config)
+> > > compiler: clang version 11.0.0 (https://github.com/llvm/llvm-project 006244152d6c7dd6a390ff89b236cc7801834b46)
+> > > reproduce:
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # save the attached .config to linux build tree
+> > >         COMPILER=clang make.cross ARCH=x86_64 
+> > > 
+> > > If you fix the issue, kindly add following tag
+> > > Reported-by: kbuild test robot <lkp@intel.com>
+> > > 
+> > > All errors (new ones prefixed by >>):
+> > > 
+> > >    In file included from drivers/usb/host/uhci-hcd.c:847:
+> > > >> drivers/usb/host/uhci-pci.c:297:36: error: passing 'const struct hc_driver *' to parameter of type 'struct hc_driver *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+> > >            return usb_hcd_pci_probe(dev, id, &uhci_driver);
+> > >                                              ^~~~~~~~~~~~
+> > >    include/linux/usb/hcd.h:483:27: note: passing argument to parameter 'driver' here
+> > >                                 struct hc_driver *driver);
+> > 
+> > I need to drop the const qualifiers for uhci_driver, I have checked that
+> > and will send v8 with this fix
+> 
+> No, don't remove the qualifier for uhci_driver.  Instead, change 
+> usb_hcd_pci_probe(): make driver a pointer to const.
 
-Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
----
-v3 -> v4:
-	- modified this patch's commit comment.
-v2 -> v3:
-	- add this patch to simplify the code by Geert's suggestion.
+Thanks that is indeed a better idea.
 
- drivers/base/platform.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Will send v8 shortly
 
-diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-index 3e8a9fb91dcd..16b54ebc6958 100644
---- a/drivers/base/platform.c
-+++ b/drivers/base/platform.c
-@@ -95,10 +95,7 @@ EXPORT_SYMBOL_GPL(devm_platform_get_and_ioremap_resource);
- void __iomem *devm_platform_ioremap_resource(struct platform_device *pdev,
- 					     unsigned int index)
- {
--	struct resource *res;
--
--	res = platform_get_resource(pdev, IORESOURCE_MEM, index);
--	return devm_ioremap_resource(&pdev->dev, res);
-+	return devm_platform_get_and_ioremap_resource(pdev, index, NULL);
- }
- EXPORT_SYMBOL_GPL(devm_platform_ioremap_resource);
- 
 -- 
-2.25.0
-
+~Vinod
