@@ -2,226 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E91F318F845
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2020 16:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFCA18F86A
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2020 16:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727194AbgCWPK1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Mar 2020 11:10:27 -0400
-Received: from mga18.intel.com ([134.134.136.126]:3323 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725776AbgCWPK1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 23 Mar 2020 11:10:27 -0400
-IronPort-SDR: GeXYBLjwUli7UemcDF787kh/KqA9Ylas27g+hASDae3+cJgcxH9E8I9J2blCYpQJ/wysXq48DK
- VYPmX7lIV1Yg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Mar 2020 08:10:26 -0700
-IronPort-SDR: dI4V0iGSi/Z8oDWA5UZwzMDvBAAxAwhxsJdYfVWHCCuM7qux/xi7sDkm7wnQKTU6ouQBk/2ilI
- 1FlNOONUVc9w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,296,1580803200"; 
-   d="scan'208";a="235243342"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 23 Mar 2020 08:10:25 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jGOie-0009WC-PB; Mon, 23 Mar 2020 23:10:24 +0800
-Date:   Mon, 23 Mar 2020 23:09:37 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- d2e971d884e7b7e65162788b8f3b7801cd8bc137
-Message-ID: <5e78d131.WcFQUAwCMV8PAPMs%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1727305AbgCWPUt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Mar 2020 11:20:49 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:41746 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727127AbgCWPUs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Mar 2020 11:20:48 -0400
+Received: from bigeasy by Galois.linutronix.de with local (Exim 4.80)
+        (envelope-from <bigeasy@linutronix.de>)
+        id 1jGOsF-000148-59; Mon, 23 Mar 2020 16:20:19 +0100
+Date:   Mon, 23 Mar 2020 16:20:19 +0100
+From:   Sebastian Siewior <bigeasy@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Davidlohr Bueso <dbueso@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        linux-pci@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        linux-usb@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        platform-driver-x86@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, kbuild test robot <lkp@intel.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        Brian Cain <bcain@codeaurora.org>,
+        linux-hexagon@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-ia64@vger.kernel.org,
+        Michal Simek <monstr@monstr.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geoff Levand <geoff@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] completion: Use lockdep_assert_RT_in_threaded_ctx() in
+ complete_all()
+Message-ID: <20200323152019.4qjwluldohuh3by5@linutronix.de>
+References: <20200321112544.878032781@linutronix.de>
+ <20200321113242.317954042@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200321113242.317954042@linutronix.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: d2e971d884e7b7e65162788b8f3b7801cd8bc137  Merge 5.6-rc7 into usb-next
+The warning was intended to spot complete_all() users from hardirq
+context on PREEMPT_RT. The warning as-is will also trigger in interrupt
+handlers, which are threaded on PREEMPT_RT, which was not intended.
 
-elapsed time: 482m
+Use lockdep_assert_RT_in_threaded_ctx() which triggers in non-preemptive
+context on PREEMPT_RT.
 
-configs tested: 167
-configs skipped: 0
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-arm64                            allyesconfig
-arm                              allyesconfig
-arm64                            allmodconfig
-arm                              allmodconfig
-arm64                             allnoconfig
-arm                               allnoconfig
-arm                         at91_dt_defconfig
-arm                           efm32_defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                        multi_v7_defconfig
-arm                        shmobile_defconfig
-arm                           sunxi_defconfig
-arm64                               defconfig
-sparc                            allyesconfig
-ia64                                defconfig
-powerpc                             defconfig
-i386                              allnoconfig
-ia64                             allyesconfig
-riscv                               defconfig
-s390                              allnoconfig
-h8300                       h8s-sim_defconfig
-i386                             allyesconfig
-m68k                       m5475evb_defconfig
-i386                             alldefconfig
-i386                                defconfig
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-nios2                         3c120_defconfig
-nios2                         10m50_defconfig
-c6x                        evmc6678_defconfig
-c6x                              allyesconfig
-openrisc                    or1ksim_defconfig
-openrisc                 simple_smp_defconfig
-xtensa                       common_defconfig
-xtensa                          iss_defconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                                defconfig
-alpha                               defconfig
-h8300                     edosk2674_defconfig
-h8300                    h8300h-sim_defconfig
-m68k                             allmodconfig
-m68k                          multi_defconfig
-m68k                           sun3_defconfig
-arc                                 defconfig
-arc                              allyesconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-powerpc                           allnoconfig
-powerpc                       ppc64_defconfig
-powerpc                          rhel-kconfig
-mips                      fuloong2e_defconfig
-mips                      malta_kvm_defconfig
-mips                             allyesconfig
-mips                         64r6el_defconfig
-mips                              allnoconfig
-mips                           32r2_defconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                generic-64bit_defconfig
-parisc                generic-32bit_defconfig
-parisc                           allyesconfig
-x86_64               randconfig-a001-20200323
-x86_64               randconfig-a002-20200323
-x86_64               randconfig-a003-20200323
-i386                 randconfig-a001-20200323
-i386                 randconfig-a002-20200323
-i386                 randconfig-a003-20200323
-alpha                randconfig-a001-20200323
-m68k                 randconfig-a001-20200323
-mips                 randconfig-a001-20200323
-nds32                randconfig-a001-20200323
-parisc               randconfig-a001-20200323
-riscv                randconfig-a001-20200323
-c6x                  randconfig-a001-20200323
-h8300                randconfig-a001-20200323
-microblaze           randconfig-a001-20200323
-nios2                randconfig-a001-20200323
-sparc64              randconfig-a001-20200323
-h8300                randconfig-a001-20200322
-microblaze           randconfig-a001-20200322
-nios2                randconfig-a001-20200322
-c6x                  randconfig-a001-20200322
-sparc64              randconfig-a001-20200322
-csky                 randconfig-a001-20200323
-openrisc             randconfig-a001-20200323
-s390                 randconfig-a001-20200323
-sh                   randconfig-a001-20200323
-xtensa               randconfig-a001-20200323
-i386                 randconfig-b003-20200323
-i386                 randconfig-b001-20200323
-x86_64               randconfig-b003-20200323
-i386                 randconfig-b002-20200323
-x86_64               randconfig-b002-20200323
-x86_64               randconfig-b001-20200323
-x86_64               randconfig-c001-20200323
-x86_64               randconfig-c002-20200323
-x86_64               randconfig-c003-20200323
-i386                 randconfig-c001-20200323
-i386                 randconfig-c002-20200323
-i386                 randconfig-c003-20200323
-x86_64               randconfig-d001-20200323
-x86_64               randconfig-d002-20200323
-x86_64               randconfig-d003-20200323
-i386                 randconfig-d001-20200323
-i386                 randconfig-d002-20200323
-i386                 randconfig-d003-20200323
-x86_64               randconfig-e001-20200323
-x86_64               randconfig-e002-20200323
-x86_64               randconfig-e003-20200323
-i386                 randconfig-e001-20200323
-i386                 randconfig-e002-20200323
-i386                 randconfig-e003-20200323
-i386                 randconfig-f001-20200323
-i386                 randconfig-f003-20200323
-i386                 randconfig-f002-20200323
-x86_64               randconfig-f002-20200323
-x86_64               randconfig-f001-20200323
-i386                 randconfig-g003-20200323
-i386                 randconfig-g001-20200323
-i386                 randconfig-g002-20200323
-x86_64               randconfig-g001-20200323
-x86_64               randconfig-g003-20200323
-x86_64               randconfig-h001-20200323
-x86_64               randconfig-h002-20200323
-x86_64               randconfig-h003-20200323
-i386                 randconfig-h001-20200323
-i386                 randconfig-h002-20200323
-i386                 randconfig-h003-20200323
-arm                  randconfig-a001-20200323
-powerpc              randconfig-a001-20200323
-arm64                randconfig-a001-20200323
-ia64                 randconfig-a001-20200323
-sparc                randconfig-a001-20200323
-arc                  randconfig-a001-20200323
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-s390                             alldefconfig
-s390                             allmodconfig
-s390                             allyesconfig
-s390                          debug_defconfig
-s390                                defconfig
-s390                       zfcpdump_defconfig
-sh                          rsk7269_defconfig
-sh                               allmodconfig
-sh                            titan_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                                allnoconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                                  defconfig
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                                  kexec
-
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Reported-by: kernel test robot <rong.a.chen@intel.com>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ include/linux/lockdep.h   | 15 +++++++++++++++
+ kernel/sched/completion.c |  2 +-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+index 425b4ceb7cd07..206774ac69460 100644
+--- a/include/linux/lockdep.h
++++ b/include/linux/lockdep.h
+@@ -711,6 +711,21 @@ do {									\
+ # define lockdep_assert_in_irq() do { } while (0)
+ #endif
+ 
++#ifdef CONFIG_PROVE_RAW_LOCK_NESTING
++
++# define lockdep_assert_RT_in_threaded_ctx() do {			\
++		WARN_ONCE(debug_locks && !current->lockdep_recursion &&	\
++			  current->hardirq_context &&			\
++			  !(current->hardirq_threaded || current->irq_config),	\
++			  "Not in threaded context on PREEMPT_RT as expected\n");	\
++} while (0)
++
++#else
++
++# define lockdep_assert_RT_in_threaded_ctx() do { } while (0)
++
++#endif
++
+ #ifdef CONFIG_LOCKDEP
+ void lockdep_rcu_suspicious(const char *file, const int line, const char *s);
+ #else
+diff --git a/kernel/sched/completion.c b/kernel/sched/completion.c
+index f15e96164ff1e..a778554f9dad7 100644
+--- a/kernel/sched/completion.c
++++ b/kernel/sched/completion.c
+@@ -58,7 +58,7 @@ void complete_all(struct completion *x)
+ {
+ 	unsigned long flags;
+ 
+-	WARN_ON(irqs_disabled());
++	lockdep_assert_RT_in_threaded_ctx();
+ 
+ 	raw_spin_lock_irqsave(&x->wait.lock, flags);
+ 	x->done = UINT_MAX;
+-- 
+2.26.0.rc2
+
