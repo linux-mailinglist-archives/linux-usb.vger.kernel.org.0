@@ -2,40 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4510B18F4DC
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2020 13:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C2018F4E5
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2020 13:45:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727864AbgCWMo2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Mar 2020 08:44:28 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:46499 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727130AbgCWMo2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Mar 2020 08:44:28 -0400
-Received: by mail-oi1-f194.google.com with SMTP id q204so6733915oia.13;
-        Mon, 23 Mar 2020 05:44:27 -0700 (PDT)
+        id S1728253AbgCWMpc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Mar 2020 08:45:32 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:45693 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727840AbgCWMpb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Mar 2020 08:45:31 -0400
+Received: by mail-oi1-f196.google.com with SMTP id l22so3762752oii.12;
+        Mon, 23 Mar 2020 05:45:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=39N5FxH28hMQJbJlqOIGr8VU2Gg2+3CuREbRUZnH+ok=;
-        b=m1FgJxLWWN2EOWXIjWYHv21VSTuZuRZIsJ0btyw73undTEgfQHEyHS2joSH/ZIQVm0
-         loi3xgRZor14rMw3eRf7Qpin/Olcz5o1aTrjchkU7ZnynGr9VSFsA1eXch6IO1jE1JZD
-         i+qeUpG9Cfg89XvbAzLXIyFwU1YpqxzA0BucKQV+65kViUgEyrffCVokKxARYM5v8lh7
-         51QUN6vDAg4AUKgFUWIcM+susR8R5r9Y4wHgkSuCRorzwvSKGYLrlriJ/2GY82HstUqQ
-         O3zdAwGUXKQ+5gsEf0Bd+YquCcJW8MAxRmoO3KVPcdywWaKxPBktl3TiGzAG6rkEWxwE
-         RD6Q==
-X-Gm-Message-State: ANhLgQ2wNns5mp/MYDmFxJUdhrjFwHMDoHCiV4nloA60PSQFvoQ50H8y
-        GLm1qMWb5KIBuIOM1BJ/RafYTqkAhiwx8Aboyi4=
-X-Google-Smtp-Source: ADFU+vv/gsSxc+6YiCICJ4vvrkojNPp7uG8N2PL7YzjEMfp/VUvd0LWmMqP8ql9ldsSOCyQzxfjtiiDTGQruzLfVTyY=
-X-Received: by 2002:aca:4e57:: with SMTP id c84mr16133180oib.148.1584967467089;
- Mon, 23 Mar 2020 05:44:27 -0700 (PDT)
+        bh=E67n6CwTbk8RP7A9ScDb1eReUhjteCxGgL/uzVVjrZg=;
+        b=VHshIcIKfc2tjMqfN8ek6uB0/pfnsHvLldslSS5C4uU3tDyD77xR4mw2ofXtYK7hGY
+         wW6GBXqvha7rChxhrRHhOUJFw51KOuz/F9TasQm8HDPMyAlgEviVLrKWVM6bn7IE8JpR
+         pgvxF+YFO56QKNvTsxaBrr3mNQcuq8Iu7khyrJwDskx7OALvhWdTT5TfysfprWlpWoxs
+         SFgt+DtDC2SHQmwebFgTLL5/pYH/1d4QM1XbUj4cB+8JQjpAG5UJw57x74ordsmykSX1
+         kQ2YMEmLPYdLxgKrk9cYUKJGNR5ycvnTeIha9/B/Rzh3ufYVL6YRayLdEKiruOk85080
+         nhHw==
+X-Gm-Message-State: ANhLgQ02h380ZYWfBpLE7aXeWq6YPG6vWiP7o4SmrGaQbqMGxcPXD6Bt
+        Jsdo7mzPVYFyPAyeGkeVVMPO+VSvi3SL3QDyHIY=
+X-Google-Smtp-Source: ADFU+vuc52PWSUy0x1awcFBXPyzHgRGJzlHiZW3NspcX07XmbIo+/viMmkiqEKebjzt77gQkHX66zQfspmX+ZHwA/5k=
+X-Received: by 2002:aca:4e57:: with SMTP id c84mr16135586oib.148.1584967530847;
+ Mon, 23 Mar 2020 05:45:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200315140525.21780-1-zhengdejin5@gmail.com> <20200315140525.21780-2-zhengdejin5@gmail.com>
-In-Reply-To: <20200315140525.21780-2-zhengdejin5@gmail.com>
+References: <20200315140525.21780-1-zhengdejin5@gmail.com> <20200315140525.21780-3-zhengdejin5@gmail.com>
+In-Reply-To: <20200315140525.21780-3-zhengdejin5@gmail.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 23 Mar 2020 13:44:15 +0100
-Message-ID: <CAMuHMdW_1SP-1Z-y7ejUWM1MhTb1_AOiocvq4JwoOcjerUJwEw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] drivers: provide devm_platform_get_and_ioremap_resource()
+Date:   Mon, 23 Mar 2020 13:45:19 +0100
+Message-ID: <CAMuHMdWxpgrQ3uXoM76PbYxdcm=i7xy5iBVq1449P8-M=-2h7Q@mail.gmail.com>
+Subject: Re: [PATCH v3 2/5] usb: host: xhci-plat: convert to devm_platform_get_and_ioremap_resource
 To:     Dejin Zheng <zhengdejin5@gmail.com>
 Cc:     Greg KH <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -58,57 +58,14 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Dejin,
-
 On Sun, Mar 15, 2020 at 3:05 PM Dejin Zheng <zhengdejin5@gmail.com> wrote:
-> Since commit "drivers: provide devm_platform_ioremap_resource()",
-> it was wrap platform_get_resource() and devm_ioremap_resource() as
-> single helper devm_platform_ioremap_resource(). but now, many drivers
-> still used platform_get_resource() and devm_ioremap_resource()
-> together in the kernel tree. The reason can not be replaced is they
-> still need use the resource variables obtained by platform_get_resource().
-> so provide this helper.
+> Use devm_platform_get_and_ioremap_resource() to simplify code, which
+> contains platform_get_resource() and devm_ioremap_resource(), it also
+> get the resource for use by the following code.
 >
-> Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Suggested-by: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
 > Signed-off-by: Dejin Zheng <zhengdejin5@gmail.com>
 
-Thanks for your patch!
-
-> --- a/drivers/base/platform.c
-> +++ b/drivers/base/platform.c
-> @@ -62,6 +62,28 @@ struct resource *platform_get_resource(struct platform_device *dev,
->  EXPORT_SYMBOL_GPL(platform_get_resource);
->
->  #ifdef CONFIG_HAS_IOMEM
-> +/**
-> + * devm_platform_get_and_ioremap_resource - call devm_ioremap_resource() for a
-> + *                                         platform device and get resource
-> + *
-> + * @pdev: platform device to use both for memory resource lookup as well as
-> + *        resource management
-> + * @index: resource index
-> + * @res: get the resource
-
-Optional output parameter to store a pointer to the obtained resource.
-
-With the above changed:
-
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-> + */
-> +void __iomem *
-> +devm_platform_get_and_ioremap_resource(struct platform_device *pdev,
-> +                               unsigned int index, struct resource **res)
-> +{
-> +       struct resource *r;
-> +
-> +       r = platform_get_resource(pdev, IORESOURCE_MEM, index);
-> +       if (res)
-> +               *res = r;
-> +       return devm_ioremap_resource(&pdev->dev, r);
-> +}
-> +EXPORT_SYMBOL_GPL(devm_platform_get_and_ioremap_resource);
 
 Gr{oetje,eeting}s,
 
