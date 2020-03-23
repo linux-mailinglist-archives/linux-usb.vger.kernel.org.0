@@ -2,110 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF4E18FA8E
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2020 17:57:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE14218FAD3
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2020 18:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727742AbgCWQ4w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Mar 2020 12:56:52 -0400
-Received: from smtp09.smtpout.orange.fr ([80.12.242.131]:52207 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727234AbgCWQ4w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Mar 2020 12:56:52 -0400
-Received: from [192.168.42.210] ([93.22.39.252])
-        by mwinf5d85 with ME
-        id Hswm2200j5SRGh103swn5w; Mon, 23 Mar 2020 17:56:49 +0100
-X-ME-Helo: [192.168.42.210]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 23 Mar 2020 17:56:49 +0100
-X-ME-IP: 93.22.39.252
-Subject: Re: [PATCH] usbip: vhci_hcd: slighly simplify code in
- 'vhci_urb_dequeue()'
-To:     shuah <shuah@kernel.org>, valentina.manea.m@gmail.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Newsgroups: gmane.linux.kernel,gmane.linux.usb.general,gmane.linux.kernel.janitors
-References: <20200321152938.19580-1-christophe.jaillet@wanadoo.fr>
- <c8e319c8-cd65-2c2c-df5d-e75908ca63b7@kernel.org>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Message-ID: <2fb983be-2a42-1b89-447a-a7415ffc7335@wanadoo.fr>
-Date:   Mon, 23 Mar 2020 17:56:46 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1727673AbgCWRGd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Mar 2020 13:06:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44872 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725861AbgCWRGd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 23 Mar 2020 13:06:33 -0400
+Received: from localhost.localdomain (unknown [122.178.205.141])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CDFEC20722;
+        Mon, 23 Mar 2020 17:06:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584983192;
+        bh=CCyZttakd4FmCcuw4OkB8h7zFy787/A7n7jzKzcu/eI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=zjNMvKoMNUGTTD8+7EgN7bIEWTxx45Jnlvp/GpKJ3HcL2FCH6wCTNS/NP7bO56tQW
+         gWE9Und4661zbV0faSj41XnCerkz3zDJhfWIp5EWvOssiK9VvVAvjHm9UP9xHQd1jG
+         n8NO2BaPGqJtJpAgOBgXMlSCdWWqBaapn1J6JhtM=
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        =?UTF-8?q?Andreas=20B=C3=B6hler?= <dev@aboehler.at>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v8 0/5] usb: xhci: Add support for Renesas USB controllers
+Date:   Mon, 23 Mar 2020 22:35:56 +0530
+Message-Id: <20200323170601.419809-1-vkoul@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <c8e319c8-cd65-2c2c-df5d-e75908ca63b7@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Le 23/03/2020 à 17:48, shuah a écrit :
-> On 3/21/20 9:29 AM, Christophe JAILLET wrote:
->> The allocation of 'unlink' can be moved before a spin_lock.
->> This slighly simplifies the error handling if the memory allocation 
->> fails,
->
-> slightly (spelling nit)
->
->> aligns the code structure with what is done in 'vhci_tx_urb()' and 
->> reduces
->> potential lock contention.
->>
->
-> Are you seeing any problems or is this a potential lock contention?
-> If you are seeing issues, please share the problem seen.
->
-No, the issue is just theoretical.
+This series add support for Renesas USB controllers uPD720201 and uPD720202.
+These require firmware to be loaded and in case devices have ROM those can
+also be programmed if empty. If ROM is programmed, it runs from ROM as well.
 
+This includes patches from Christian which supported these controllers w/o
+ROM and later my patches for ROM support and debugfs hook for rom erase and
+export of xhci-pci functions.
 
->
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
->>   drivers/usb/usbip/vhci_hcd.c | 5 ++---
->>   1 file changed, 2 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
->> index 65850e9c7190..b909a634260c 100644
->> --- a/drivers/usb/usbip/vhci_hcd.c
->> +++ b/drivers/usb/usbip/vhci_hcd.c
->> @@ -905,17 +905,16 @@ static int vhci_urb_dequeue(struct usb_hcd 
->> *hcd, struct urb *urb, int status)
->>           /* tcp connection is alive */
->>           struct vhci_unlink *unlink;
->>   -        spin_lock(&vdev->priv_lock);
->> -
->
-> This change might simplify the error path, however it could
-> open a race window with the unlink activity during 
-> vhci_shutdown_connection() when the connection is being taken
-> down. It would be safer to hold both locks as soon as the
-> connection check is done.
+Changes in v8:
+ Fix compile error reported by Kbuild-bot by making usb_hcd_pci_probe() take
+ const struct hc_driver * as argument
 
-My proposal was just a small clean-up (from my point of view at least).
-If it can have some side effects, please, just consider it as a NACK.
+Changes in v7:
+ Make a single module which removes issues with module loading
+ Keep the renesas code in renesas file
+ Add hc_driver as argument for usb_hcd_pci_probe and modify hdc drivers to
+   pass this and not use driver_data
+ Use driver data for fw name
+ Remove code to check if we need to load firmware or not
+ remove multiple fw version support, we can do that with symlink in
+   userspace
 
-CJ
+Changes in v6:
+ Move the renesas code into a separate driver which invokes xhci-pci functions.
 
->
->>           /* setup CMD_UNLINK pdu */
->>           unlink = kzalloc(sizeof(struct vhci_unlink), GFP_ATOMIC);
->>           if (!unlink) {
->> -            spin_unlock(&vdev->priv_lock);
->>               spin_unlock_irqrestore(&vhci->lock, flags);
->>               usbip_event_add(&vdev->ud, VDEV_EVENT_ERROR_MALLOC);
->>               return -ENOMEM;
->>           }
->>   +        spin_lock(&vdev->priv_lock);
->> +
->>           unlink->seqnum = atomic_inc_return(&vhci_hcd->seqnum);
->>           if (unlink->seqnum == 0xffff)
->>               pr_info("seqnum max\n");
->>
->
-> thanks,
-> -- Shuah
->
+Changes in v5:
+ Added a debugfs rom erase patch, helps in debugging
+ Squashed patch 1 & 2 as requested by Mathias
+
+Changes in v4:
+ Rollback the delay values as we got device failures
+
+Changes in v3:
+  Dropped patch 2 as discussed with Christian
+  Removed aligned 8 bytes check
+  Change order for firmware search from highest version to lowest
+  Added entry for new firmware for device 0x14 as well
+  Add tested by Christian
+
+Changes in v2:
+  used macros for timeout count and delay
+  removed renesas_fw_alive_check
+  cleaned renesas_fw_callback
+  removed recurion for renesas_fw_download
+  added MODULE_FIRMWARE
+  added comment for multiple fw order
+
+Christian Lamparter (1):
+  usb: renesas-xhci: Add the renesas xhci driver
+
+Vinod Koul (4):
+  usb: hci: add hc_driver as argument for usb_hcd_pci_probe
+  usb: xhci: Add support for Renesas controller with memory
+  usb: renesas-xhci: Add ROM loader for uPD720201
+  usb: xhci: provide a debugfs hook for erasing rom
+
+ drivers/usb/core/hcd-pci.c          |   7 +-
+ drivers/usb/host/Makefile           |   3 +-
+ drivers/usb/host/ehci-pci.c         |   6 +-
+ drivers/usb/host/ohci-pci.c         |   9 +-
+ drivers/usb/host/uhci-pci.c         |   8 +-
+ drivers/usb/host/xhci-pci-renesas.c | 802 ++++++++++++++++++++++++++++
+ drivers/usb/host/xhci-pci.c         |  43 +-
+ drivers/usb/host/xhci-pci.h         |  14 +
+ include/linux/usb/hcd.h             |   3 +-
+ 9 files changed, 871 insertions(+), 24 deletions(-)
+ create mode 100644 drivers/usb/host/xhci-pci-renesas.c
+ create mode 100644 drivers/usb/host/xhci-pci.h
+
+-- 
+2.25.1
 
