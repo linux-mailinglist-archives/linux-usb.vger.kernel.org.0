@@ -2,40 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C447A18F4E7
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2020 13:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB8718F4F1
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2020 13:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728124AbgCWMqG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Mar 2020 08:46:06 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:36920 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727816AbgCWMqG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Mar 2020 08:46:06 -0400
-Received: by mail-ot1-f67.google.com with SMTP id i12so13204724otp.4;
-        Mon, 23 Mar 2020 05:46:06 -0700 (PDT)
+        id S1728238AbgCWMr2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Mar 2020 08:47:28 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:45482 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727840AbgCWMr2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Mar 2020 08:47:28 -0400
+Received: by mail-ot1-f66.google.com with SMTP id c9so3022641otl.12;
+        Mon, 23 Mar 2020 05:47:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
         bh=E67n6CwTbk8RP7A9ScDb1eReUhjteCxGgL/uzVVjrZg=;
-        b=lHUp7MW/kVwMoij0ECvMZOt1KPsFxh72I4EQFexeGf8AaBiSqNICGTVzAfPOCXkNfq
-         NSYirrCmgN5iy2KZiIUiqpTehUtLKlNlzEBCQNeZTA7HNNIpIQsg2k8piuOgSgihLVDg
-         T9YF1z0KKgbJ2+FOiFB9utqruXdWvF9Yz0KJ9wNUdsd9vdYsNRIhyaA12gXlkn8A38Bj
-         s0NhaJPcTfGRezOa4tiwA3ALqxnchQCSDrXcFsMkuFxX7ZLWuZGlpo5NyTq9tQ+IE6hd
-         TrUCkjFgBPSdmjhRYqpkfc+ysljyoCyu1dxl4vCnCLADLLNKe89hLDYcNBIUqAoU2yWe
-         Kx+g==
-X-Gm-Message-State: ANhLgQ0Jm9RT/+uu/gpNMxJnMGazXTWIfxKE9o8q6rNIBfKSP6TTKJgB
-        jL5TtmOsPi84RvY5gqk4RNNWbDliqBsU7P0j0dA=
-X-Google-Smtp-Source: ADFU+vsTKtBJiPZEOjxUvJge1cwM8SkNr/CMnNaoFoqd9vb48i+soOhAsbl/RbovK58KkjGCuHNVKqHFFssNSSY4Kss=
-X-Received: by 2002:a9d:7590:: with SMTP id s16mr321387otk.250.1584967565718;
- Mon, 23 Mar 2020 05:46:05 -0700 (PDT)
+        b=q9p4EoRhbkJ3ySAbeTJSTPBszGK+8DLSMignjH35lM0oRnhz4fxfooBgf0LnGlt05y
+         WS+ZhDIKPlICDhR7kaDx9e6PRRnBzxJ16x79sLToOUKOJrmDYo9i4LJbzQefaQVnOsCS
+         U0blcRcH913vy8J7+nYplhvNqQ16tZrEFMtgijS9jLWKrrRtJu/y6ilfv4PV7p2uXoMC
+         Krj2Vf9nd0xZ4bAR2/Aongjoi+a/HdbvCt8WyIbx8rHxSrF3xVGZuuwp5a0arqBukrWW
+         4xi9Neeqa8FwkLeNMIA+RQEBMTqM7RcHRoU2mRPzMGHaoq2abOaTt1OOlKYZyo/+D58/
+         Dk3A==
+X-Gm-Message-State: ANhLgQ0Xo6pL/Lf3LpcgzLhcQW3B2t/QWCDkGk9wzC/0JYcJ8ZKGjs/8
+        0IUV4mr3ehACTzhAojrdwHlM54n9z8nEmj9bZZk=
+X-Google-Smtp-Source: ADFU+vvAIf5JWg/DzJeGvOtVmYVxfZJkH902ec3aDAMZKmCnAoMjdGGBc2PdZNlwrus/lBB6UZAOnUWk77vrIUskhew=
+X-Received: by 2002:a9d:5c0c:: with SMTP id o12mr17815859otk.145.1584967646401;
+ Mon, 23 Mar 2020 05:47:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200315140525.21780-1-zhengdejin5@gmail.com> <20200315140525.21780-4-zhengdejin5@gmail.com>
-In-Reply-To: <20200315140525.21780-4-zhengdejin5@gmail.com>
+References: <20200315140525.21780-1-zhengdejin5@gmail.com> <20200315140525.21780-5-zhengdejin5@gmail.com>
+In-Reply-To: <20200315140525.21780-5-zhengdejin5@gmail.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 23 Mar 2020 13:45:54 +0100
-Message-ID: <CAMuHMdVKgRAeXHaHf9Ce9bxKzxgn63qDvpT6HwepdX7-p-s87Q@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] usb: host: hisilicon: convert to devm_platform_get_and_ioremap_resource
+Date:   Mon, 23 Mar 2020 13:47:15 +0100
+Message-ID: <CAMuHMdWht-TGGZsrKetXEQ8VTMrZAz+0z3kS+XELu-Vr7HnwAw@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] usb: dwc2: convert to devm_platform_get_and_ioremap_resource
 To:     Dejin Zheng <zhengdejin5@gmail.com>
 Cc:     Greg KH <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
