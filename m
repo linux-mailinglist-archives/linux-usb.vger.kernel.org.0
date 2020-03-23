@@ -2,38 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3752118F8EE
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2020 16:48:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEB518F901
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Mar 2020 16:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727408AbgCWPsr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Mar 2020 11:48:47 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:52613 "HELO
+        id S1727312AbgCWPzB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Mar 2020 11:55:01 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:51453 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726049AbgCWPsq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Mar 2020 11:48:46 -0400
-Received: (qmail 27447 invoked by uid 500); 23 Mar 2020 11:48:45 -0400
+        with SMTP id S1727298AbgCWPzA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Mar 2020 11:55:00 -0400
+Received: (qmail 27965 invoked by uid 500); 23 Mar 2020 11:54:59 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 23 Mar 2020 11:48:45 -0400
-Date:   Mon, 23 Mar 2020 11:48:45 -0400 (EDT)
+  by localhost with SMTP; 23 Mar 2020 11:54:59 -0400
+Date:   Mon, 23 Mar 2020 11:54:59 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@netrider.rowland.org
-To:     Vinod Koul <vkoul@kernel.org>
-cc:     kbuild test robot <lkp@intel.com>, <kbuild-all@lists.01.org>,
-        <clang-built-linux@googlegroups.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
+To:     Oliver Neukum <oneukum@suse.de>
+cc:     Qais Yousef <qais.yousef@arm.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-arm-msm@vger.kernel.org, Bjorn Andersson" 
-        <bjorn.andersson@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Andreas =?iso-8859-1?Q?B=F6hler?= <dev@aboehler.at>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v7 1/5] usb: hci: add hc_driver as argument for
- usb_hcd_pci_probe
-In-Reply-To: <20200323153429.GR72691@vkoul-mobl>
-Message-ID: <Pine.LNX.4.44L0.2003231147190.24254-100000@netrider.rowland.org>
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
+In-Reply-To: <1584977769.27949.18.camel@suse.de>
+Message-ID: <Pine.LNX.4.44L0.2003231151390.24254-100000@netrider.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -41,49 +31,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 23 Mar 2020, Vinod Koul wrote:
+On Mon, 23 Mar 2020, Oliver Neukum wrote:
 
-> On 23-03-20, 22:49, kbuild test robot wrote:
-> > Hi Vinod,
+> Am Montag, den 23.03.2020, 14:38 +0000 schrieb Qais Yousef:
+> > Hi
 > > 
-> > I love your patch! Yet something to improve:
+> > I've hit the following lockdep warning when I trigger hibernate on arm64
+> > platform (Juno-r2)
+> > 
+> > 
+> > 	echo suspend > /sys/power/disk
+> > 	echo disk > /sys/power/state
+> > 
+> > I only had a usb flash drive attached to it. Let me know if you need more info.
 > 
-> Thanks for the report.
+> Hi,
 > 
-> > [auto build test ERROR on v5.6-rc7]
-> > [also build test ERROR on next-20200323]
-> > [cannot apply to usb/usb-testing]
-> > [if your patch is applied to the wrong git tree, please drop us a note to help
-> > improve the system. BTW, we also suggest to use '--base' option to specify the
-> > base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
-> > 
-> > url:    https://github.com/0day-ci/linux/commits/Vinod-Koul/usb-xhci-Add-support-for-Renesas-USB-controllers/20200323-203447
-> > base:    16fbf79b0f83bc752cee8589279f1ebfe57b3b6e
-> > config: x86_64-defconfig (attached as .config)
-> > compiler: clang version 11.0.0 (https://github.com/llvm/llvm-project 006244152d6c7dd6a390ff89b236cc7801834b46)
-> > reproduce:
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # save the attached .config to linux build tree
-> >         COMPILER=clang make.cross ARCH=x86_64 
-> > 
-> > If you fix the issue, kindly add following tag
-> > Reported-by: kbuild test robot <lkp@intel.com>
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> >    In file included from drivers/usb/host/uhci-hcd.c:847:
-> > >> drivers/usb/host/uhci-pci.c:297:36: error: passing 'const struct hc_driver *' to parameter of type 'struct hc_driver *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-> >            return usb_hcd_pci_probe(dev, id, &uhci_driver);
-> >                                              ^~~~~~~~~~~~
-> >    include/linux/usb/hcd.h:483:27: note: passing argument to parameter 'driver' here
-> >                                 struct hc_driver *driver);
-> 
-> I need to drop the const qualifiers for uhci_driver, I have checked that
-> and will send v8 with this fix
+> that is not a lockdep issue, but the hub driver is not properly killing
+> its URB presumably. Yet, the driver looks correct to me. Please use
+> the additional patch and activate dynamic debugging for usbcore.
 
-No, don't remove the qualifier for uhci_driver.  Instead, change 
-usb_hcd_pci_probe(): make driver a pointer to const.
+Was the USB flash drive being used as a swap device for holding the 
+hibernation image?  That's not likely to work very well.  At least, I 
+doubt that it has been tested very much.
+
+This diagnostic was suggested by the runtime PM error that occurred 
+when the system was trying to store the hibernation image.  That's 
+probably when the hub driver's URB got restarted.
 
 Alan Stern
 
