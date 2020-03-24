@@ -2,101 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2C31908CB
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 10:13:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A12190979
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 10:23:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727130AbgCXJN1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Mar 2020 05:13:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54540 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726129AbgCXJN0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Mar 2020 05:13:26 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 84AD42070A;
-        Tue, 24 Mar 2020 09:13:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585041205;
-        bh=7HWdrYTEqvWjB6B9X3QdVKUr6q4Frj27zL9SaAhYbG0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EeGgix5WWjYKoeZsSBxBjhKziJJUoNHP3m7jAzd4yyufKKXrINLjZNkhSBi6cik0K
-         D5SGqRwkoZzW3RxhFVOdRrSQa1TXHt155uLgbFnX/Vzo9TcFdHVvcbBLDFK2LJRX9Y
-         CM0xaUFp/FXMNtejXt0/oJuZc06O7IYVHBp5M11U=
-Date:   Tue, 24 Mar 2020 10:13:21 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v1] usb: core: Add ACPI support for USB interfaces
-Message-ID: <20200324091321.GA2137714@kroah.com>
-References: <20200323195543.51050-1-andriy.shevchenko@linux.intel.com>
- <20200324062635.GB1977781@kroah.com>
- <20200324090037.GB1922688@smile.fi.intel.com>
+        id S1726565AbgCXJWj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Mar 2020 05:22:39 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:34610 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726697AbgCXJWj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 05:22:39 -0400
+Received: by mail-lf1-f66.google.com with SMTP id e7so3591744lfq.1;
+        Tue, 24 Mar 2020 02:22:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qDHSQH6EF59vFu2CoB02DlvePw9hZXaswBE3r0QTlyE=;
+        b=j8yk4Cjn7dxGSjlIEaYXPFZy+8ayMawPfDNh7/sOLp2Wgebj5Wwqwqjo29amxrDboG
+         1YJ9Isjs/TOKn7oAiVlmKvP2RIpTUtOqFtOzfvBLWgGcibta/9s0xtqRuYFx3r+0+8Of
+         2oHj3D3CQ8fCd5iIqNtASiRFU6NPe0pDNaQa4eP4ES1phO6oDwUbGqsFbQzKceVCycFx
+         B/KijK2FzHSGLim0oT8ViY9we133xs1u+/nBLKdGTdWJQ5Lg8J/H8lJ1+I2HXuuHliDQ
+         TvMDZRj8IC8wjrWnOvO64dW1cmDnYkOVICV5lGnOnfaIZmfyBQJkv3JctLgIUN/1xX3q
+         Oy7w==
+X-Gm-Message-State: ANhLgQ3eE3nwL1za7mV7uh7XFOelD6AMAvIR7NCVuK78rqP50TqA8oFP
+        hYZHnoG65ghYhYkYl0R6IMU6fNez
+X-Google-Smtp-Source: ADFU+vsNF/6bV1pC9Nn0GEfnxkuJCuYsLmoNUrH1MIQeRQd2Y3p/f9x1qsjH/s3laHqnLe109A6IMg==
+X-Received: by 2002:a19:8c3:: with SMTP id 186mr12451840lfi.27.1585041757288;
+        Tue, 24 Mar 2020 02:22:37 -0700 (PDT)
+Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
+        by smtp.gmail.com with ESMTPSA id w28sm4474515lfl.3.2020.03.24.02.22.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Mar 2020 02:22:36 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@kernel.org>)
+        id 1jGflR-0003lF-L5; Tue, 24 Mar 2020 10:22:25 +0100
+Date:   Tue, 24 Mar 2020 10:22:25 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Pawel Dembicki <paweldembicki@gmail.com>
+Cc:     Cezary Jackiewicz <cezary@eko.one.pl>,
+        Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] USB: serial: option: add support for ASKEY WWHC050
+Message-ID: <20200324092225.GB5810@localhost>
+References: <20200320220155.5609-1-paweldembicki@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200324090037.GB1922688@smile.fi.intel.com>
+In-Reply-To: <20200320220155.5609-1-paweldembicki@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 24, 2020 at 11:00:37AM +0200, Andy Shevchenko wrote:
-> On Tue, Mar 24, 2020 at 07:26:35AM +0100, Greg Kroah-Hartman wrote:
-> > On Mon, Mar 23, 2020 at 09:55:43PM +0200, Andy Shevchenko wrote:
-> > > The ACPI companion of the device has to be set for USB interfaces
-> > > in order to read and attach the properties described in the ACPI table.
-> > > Use ACPI_COMPANION_SET macro to set this.
-> > > 
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > ---
-> > >  drivers/usb/core/message.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-> > > index 5adf489428aa..d5f834f16993 100644
-> > > --- a/drivers/usb/core/message.c
-> > > +++ b/drivers/usb/core/message.c
-> > > @@ -5,6 +5,7 @@
-> > >   * Released under the GPLv2 only.
-> > >   */
-> > >  
-> > > +#include <linux/acpi.h>
-> > >  #include <linux/pci.h>	/* for scatterlist macros */
-> > >  #include <linux/usb.h>
-> > >  #include <linux/module.h>
-> > > @@ -1941,6 +1942,7 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
-> > >  			intf->dev.of_node = usb_of_get_interface_node(dev,
-> > >  					configuration, ifnum);
-> > >  		}
-> > > +		ACPI_COMPANION_SET(&intf->dev, ACPI_COMPANION(&dev->dev));
-> > >  		intf->dev.driver = NULL;
-> > >  		intf->dev.bus = &usb_bus_type;
-> > >  		intf->dev.type = &usb_if_device_type;
-> > 
+On Fri, Mar 20, 2020 at 11:01:52PM +0100, Pawel Dembicki wrote:
+> ASKEY WWHC050 is a mcie LTE modem.
+> The oem configuration states:
 > 
-> > And what does this "fix"?
+> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
+> D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=1690 ProdID=7588 Rev=ff.ff
+> S:  Manufacturer=Android
+> S:  Product=Android
+> S:  SerialNumber=813f0eef6e6e
+> C:* #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=500mA
+> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+> E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 5 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=(none)
+> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=125us
 > 
-> It links the firmware node of physical USB device to USB interface.
-> Otherwise it will be no firmware nodes under a corresponding folder.
+> Tested on openwrt distribution.
 > 
-> It mimics what is done for OF in couple of lines above.
-> 
-> > Is this a new feature, what isn't working today without this change?
-> 
-> Yes, it is a new feature. I can't tell it fixes anything, because no complains
-> so far. I doubt it previously works.
-> 
-> > And if it is a fix, should it be backported to older kernels, how far?
-> 
-> No, no need for that. Usually I put Fixes tag when I would like change to be
-> considered for backporting.
-> 
-> I'll probably update the commit message to clarify all this. Would it be enough?
+> Signed-off-by: Cezary Jackiewicz <cezary@eko.one.pl>
+> Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
 
-Please do so, what you have now is insufficient :)
+Thanks for the patches, looks good.
 
-thanks,
+But who is really the author of patches 1 and 2? You or Cezary? In the
+first case, you can use the Co-Developed-By tag to give Cezary credit,
+and otherwise you need to add a From line so that authorship is recorded
+correctly.
 
-greg k-h
+Take a look at Documentation/process/submitting-patches.rst.
+
+> ---
+>  drivers/usb/serial/option.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index 0b5dcf973d94..2f17019d3810 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -2018,6 +2018,8 @@ static const struct usb_device_id option_ids[] = {
+>  	  .driver_info = RSVD(4) | RSVD(5) },
+>  	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0105, 0xff),			/* Fibocom NL678 series */
+>  	  .driver_info = RSVD(6) },
+> +	{ USB_DEVICE_INTERFACE_CLASS(0x1690, 0x7588, 0xff),			/* ASKEY WWHC050 */
+> +	  .driver_info = RSVD(1) | RSVD(4) },
+
+I know the entries here appear to be in mostly random order, but if
+you're adding numerical ids towards the end, perhaps you can try to
+insert them in order.
+
+>  	{ } /* Terminating entry */
+>  };
+>  MODULE_DEVICE_TABLE(usb, option_ids);
+
+Johan
