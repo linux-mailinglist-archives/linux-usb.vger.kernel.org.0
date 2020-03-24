@@ -2,181 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C61CB191353
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 15:36:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65746191361
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 15:37:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727798AbgCXOgD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Mar 2020 10:36:03 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:34073 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727774AbgCXOgD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 10:36:03 -0400
-Received: by mail-wr1-f67.google.com with SMTP id 65so5036736wrl.1
-        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2020 07:36:00 -0700 (PDT)
+        id S1727385AbgCXOhl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Mar 2020 10:37:41 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:38099 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727168AbgCXOhl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 10:37:41 -0400
+Received: by mail-lf1-f68.google.com with SMTP id c5so7962217lfp.5
+        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2020 07:37:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:autocrypt:organization:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0Gevp5sNHQH6ntbIhc5KBRCvoT0lWeFA/LkmXeB8P9E=;
-        b=QWEtnZvQ1iQRPlDbwUTeGiUrXB27aZockiWFe9Uw/f7RtYAuaq2WSvU7o/JvfzTE+r
-         FILMMZHnhKpWeOXJ0NOOwmnvkpwsdIc2Z8zdBiyNI7yhDJ4oLv4UThW8q7WQ9CmWImqH
-         t2RQB85pz7VK6/dKeSt+hq6X+OsVILksQ79wThA2rgb2G4jwjFIB8jKucq8RuJTp4ikW
-         V8yN3DWK+gHLlOgSp+0560hKPoVmK4M9BpYZJmkfZH24SEOyAxzmkN2LaAnhRemyZQxv
-         jxqkRUTqTU2vBJ6mFp/VFnXGkgwBNeL1kw69wnXKeM2cOR3qk28vqaLEtbTQauXnbLE+
-         XPMw==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wOe/cwkgIM9Ab4hg3mczmIi4wh/0K818LHuirOHiJ4A=;
+        b=URod6sSAasEBeJ7UfuCiMIlcvfkkmmZgypzB/5zXAFTWfHRahsHWewBjncbYea079c
+         SmcUkFauuYKCzTJYp+pY5jNK8w8yvzCcJnLvjcCuDh0rdqlNDMA4aDzEmZOeheV6pUZh
+         9WxWbs93NyNQcQTu2lzSartwXN2f5jMacelqkx5eYHNr2RorLXid4QjyUf4HNlYbfTrc
+         iatkxTNrJQH5MqYmr2azDFe/snTXi56H7SU+2PeKKHRY0ybLYnUNdjtePQC40pST6MyQ
+         9dvnU5AE/Mkw6IvAS3f9iHzso7pFclL29N4AWSAoYUf1iF5GGs1xDDiKK0BJklqwQP+3
+         45kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :organization:message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=0Gevp5sNHQH6ntbIhc5KBRCvoT0lWeFA/LkmXeB8P9E=;
-        b=ESjpugbiqSkg0e5FA13ww4Bt9lDYRxKPFfLRZXA3EpndbCPQ9hlHBjyDaZpMNBqklD
-         GVkV4n1r5uKiTr//nunNXIoEjPghtrhG65CPU42qog+6PS9hfr4Mi9EzYHttULUUoluw
-         VjPTCQjqFjgbdbzNll53t/BjRBuR+okohO2liQ3UBt3QlpXyX4O97ERxV1LAH2cZLRRT
-         LODXhDhR8e80JeD1qKDLtmST4kjxgarRI8nEQwIw1NFNtKG6lvFDFlR9ysSeo3Svg3YK
-         X12WqIbaSWH49mmKTYQz7Q+nGtBVvyhFCx53xez07QvnbNZnLp2owjAincOedhDEIJzB
-         O/Cg==
-X-Gm-Message-State: ANhLgQ0NgNQe5zhMfvxrqVvM6t22NMHcTJQLYnuu0nl57H1Ht1LG13gA
-        vkhj1tb33/lEoDwj8vtNXT2UNA==
-X-Google-Smtp-Source: ADFU+vtAanKj3SwM60GzKfDQBA9hFthXHkws+CwWdcn/gkfYLeklLyNG7Gsfh5EBlF7lUncr2P4fZg==
-X-Received: by 2002:adf:f7cf:: with SMTP id a15mr32030001wrq.224.1585060560076;
-        Tue, 24 Mar 2020 07:36:00 -0700 (PDT)
-Received: from ?IPv6:2a01:e35:2ec0:82b0:5c5f:613e:f775:b6a2? ([2a01:e35:2ec0:82b0:5c5f:613e:f775:b6a2])
-        by smtp.gmail.com with ESMTPSA id s131sm4566887wmf.35.2020.03.24.07.35.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Mar 2020 07:35:59 -0700 (PDT)
-Subject: Re: [PATCH 05/13] usb: dwc3: meson-g12a: refactor usb2 phy init
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     kishon@ti.com, balbi@kernel.org, khilman@baylibre.com,
-        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20200324102030.31000-1-narmstrong@baylibre.com>
- <20200324102030.31000-6-narmstrong@baylibre.com>
- <CAFBinCDrycKy6sJfpUjoB3_jkHP-ssmwvr-Cab1-fOmz_i_bGQ@mail.gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKE5laWwgQXJtc3Ryb25nIDxuYXJtc3Ryb25nQGJheWxpYnJlLmNvbT7CwHsEEwEKACUC
- GyMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheABQJXDO2CAhkBAAoJEBaat7Gkz/iubGIH/iyk
- RqvgB62oKOFlgOTYCMkYpm2aAOZZLf6VKHKc7DoVwuUkjHfIRXdslbrxi4pk5VKU6ZP9AKsN
- NtMZntB8WrBTtkAZfZbTF7850uwd3eU5cN/7N1Q6g0JQihE7w4GlIkEpQ8vwSg5W7hkx3yQ6
- 2YzrUZh/b7QThXbNZ7xOeSEms014QXazx8+txR7jrGF3dYxBsCkotO/8DNtZ1R+aUvRfpKg5
- ZgABTC0LmAQnuUUf2PHcKFAHZo5KrdO+tyfL+LgTUXIXkK+tenkLsAJ0cagz1EZ5gntuheLD
- YJuzS4zN+1Asmb9kVKxhjSQOcIh6g2tw7vaYJgL/OzJtZi6JlIXOwU0EVid/pAEQAND7AFhr
- 5faf/EhDP9FSgYd/zgmb7JOpFPje3uw7jz9wFb28Cf0Y3CcncdElYoBNbRlesKvjQRL8mozV
- 9RN+IUMHdUx1akR/A4BPXNdL7StfzKWOCxZHVS+rIQ/fE3Qz/jRmT6t2ZkpplLxVBpdu95qJ
- YwSZjuwFXdC+A7MHtQXYi3UfCgKiflj4+/ITcKC6EF32KrmIRqamQwiRsDcUUKlAUjkCLcHL
- CQvNsDdm2cxdHxC32AVm3Je8VCsH7/qEPMQ+cEZk47HOR3+Ihfn1LEG5LfwsyWE8/JxsU2a1
- q44LQM2lcK/0AKAL20XDd7ERH/FCBKkNVzi+svYJpyvCZCnWT0TRb72mT+XxLWNwfHTeGALE
- +1As4jIS72IglvbtONxc2OIid3tR5rX3k2V0iud0P7Hnz/JTdfvSpVj55ZurOl2XAXUpGbq5
- XRk5CESFuLQV8oqCxgWAEgFyEapI4GwJsvfl/2Er8kLoucYO1Id4mz6N33+omPhaoXfHyLSy
- dxD+CzNJqN2GdavGtobdvv/2V0wukqj86iKF8toLG2/Fia3DxMaGUxqI7GMOuiGZjXPt/et/
- qeOySghdQ7Sdpu6fWc8CJXV2mOV6DrSzc6ZVB4SmvdoruBHWWOR6YnMz01ShFE49pPucyU1h
- Av4jC62El3pdCrDOnWNFMYbbon3vABEBAAHCwn4EGAECAAkFAlYnf6QCGwICKQkQFpq3saTP
- +K7BXSAEGQECAAYFAlYnf6QACgkQd9zb2sjISdGToxAAkOjSfGxp0ulgHboUAtmxaU3viucV
- e2Hl1BVDtKSKmbIVZmEUvx9D06IijFaEzqtKD34LXD6fjl4HIyDZvwfeaZCbJbO10j3k7FJE
- QrBtpdVqkJxme/nYlGOVzcOiKIepNkwvnHVnuVDVPcXyj2wqtsU7VZDDX41z3X4xTQwY3SO1
- 9nRO+f+i4RmtJcITgregMa2PcB0LvrjJlWroI+KAKCzoTHzSTpCXMJ1U/dEqyc87bFBdc+DI
- k8mWkPxsccdbs4t+hH0NoE3Kal9xtAl56RCtO/KgBLAQ5M8oToJVatxAjO1SnRYVN1EaAwrR
- xkHdd97qw6nbg9BMcAoa2NMc0/9MeiaQfbgW6b0reIz/haHhXZ6oYSCl15Knkr4t1o3I2Bqr
- Mw623gdiTzotgtId8VfLB2Vsatj35OqIn5lVbi2ua6I0gkI6S7xJhqeyrfhDNgzTHdQVHB9/
- 7jnM0ERXNy1Ket6aDWZWCvM59dTyu37g3VvYzGis8XzrX1oLBU/tTXqo1IFqqIAmvh7lI0Se
- gCrXz7UanxCwUbQBFjzGn6pooEHJYRLuVGLdBuoApl/I4dLqCZij2AGa4CFzrn9W0cwm3HCO
- lR43gFyz0dSkMwNUd195FrvfAz7Bjmmi19DnORKnQmlvGe/9xEEfr5zjey1N9+mt3//geDP6
- clwKBkq0JggA+RTEAELzkgPYKJ3NutoStUAKZGiLOFMpHY6KpItbbHjF2ZKIU1whaRYkHpB2
- uLQXOzZ0d7x60PUdhqG3VmFnzXSztA4vsnDKk7x2xw0pMSTKhMafpxaPQJf494/jGnwBHyi3
- h3QGG1RjfhQ/OMTX/HKtAUB2ct3Q8/jBfF0hS5GzT6dYtj0Ci7+8LUsB2VoayhNXMnaBfh+Q
- pAhaFfRZWTjUFIV4MpDdFDame7PB50s73gF/pfQbjw5Wxtes/0FnqydfId95s+eej+17ldGp
- lMv1ok7K0H/WJSdr7UwDAHEYU++p4RRTJP6DHWXcByVlpNQ4SSAiivmWiwOt490+Ac7ATQRN
- WQbPAQgAvIoM384ZRFocFXPCOBir5m2J+96R2tI2XxMgMfyDXGJwFilBNs+fpttJlt2995A8
- 0JwPj8SFdm6FBcxygmxBBCc7i/BVQuY8aC0Z/w9Vzt3Eo561r6pSHr5JGHe8hwBQUcNPd/9l
- 2ynP57YTSE9XaGJK8gIuTXWo7pzIkTXfN40Wh5jeCCspj4jNsWiYhljjIbrEj300g8RUT2U0
- FcEoiV7AjJWWQ5pi8lZJX6nmB0lc69Jw03V6mblgeZ/1oTZmOepkagwy2zLDXxihf0GowUif
- GphBDeP8elWBNK+ajl5rmpAMNRoKxpN/xR4NzBg62AjyIvigdywa1RehSTfccQARAQABwsBf
- BBgBAgAJBQJNWQbPAhsMAAoJEBaat7Gkz/iuteIH+wZuRDqK0ysAh+czshtG6JJlLW6eXJJR
- Vi7dIPpgFic2LcbkSlvB8E25Pcfz/+tW+04Urg4PxxFiTFdFCZO+prfd4Mge7/OvUcwoSub7
- ZIPo8726ZF5/xXzajahoIu9/hZ4iywWPAHRvprXaim5E/vKjcTeBMJIqZtS4u/UK3EpAX59R
- XVxVpM8zJPbk535ELUr6I5HQXnihQm8l6rt9TNuf8p2WEDxc8bPAZHLjNyw9a/CdeB97m2Tr
- zR8QplXA5kogS4kLe/7/JmlDMO8Zgm9vKLHSUeesLOrjdZ59EcjldNNBszRZQgEhwaarfz46
- BSwxi7g3Mu7u5kUByanqHyA=
-Organization: Baylibre
-Message-ID: <5e5a5a25-bd3e-e476-2ed1-635d9c4a7773@baylibre.com>
-Date:   Tue, 24 Mar 2020 15:35:58 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wOe/cwkgIM9Ab4hg3mczmIi4wh/0K818LHuirOHiJ4A=;
+        b=oS/bdoYcXPUo0rXQ1IegNkJZjMxOc6dcNufrtoFcnzr6/m0nWInP/9MN/dGL/dQTXx
+         eIV7+eIbl74TB42BU8nXmkN0P6dgveMG7ypl+nJF4MfDxnANdNLVYYsFWNIW/o8hvDeg
+         lujEGZC20BupsBIQVqKJk7lM974YIOqBYUIGgunFy6wvqFhg5hycmCwIPLRNmkxCO9Yf
+         I46wqPW/388bB1Ui/iUdiELSVEtSd0+/AIPqvcbPH7KoZy74ceG5SJo1fknCXe5YA+Tf
+         Fg114hj7IT7atZpeM2gKqzOeal8bS8TRID7L0Unmj99dghgJ6gq03Q4DC2e5zv19jAI1
+         IbPg==
+X-Gm-Message-State: ANhLgQ3Mi8OJXvYLqJf/xdas96F7EPBUY7Q97UkbvqZEyLXL06Ja+Qzh
+        X/1Sigu4QwPztpIN7meCHlUIkRlWksiPAfjWUOY=
+X-Google-Smtp-Source: ADFU+vsZC/jXY3DWAG9uq5f+7YhlDvIzgnDW5IikwmVU4Ij6DBBavpPGJpMHsoKVUxWEmUfvJu4weAVKU1KqduhRP0E=
+X-Received: by 2002:ac2:548f:: with SMTP id t15mr16681025lfk.115.1585060658724;
+ Tue, 24 Mar 2020 07:37:38 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAFBinCDrycKy6sJfpUjoB3_jkHP-ssmwvr-Cab1-fOmz_i_bGQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <CAEAjamtTnn+BZAshQ7=DQ7QdRHO83AbHeZP3xY1CpSzmbaHPDQ@mail.gmail.com>
+ <Pine.LNX.4.44L0.2003241011510.4640-100000@netrider.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.2003241011510.4640-100000@netrider.rowland.org>
+From:   Kyungtae Kim <kt0755@gmail.com>
+Date:   Tue, 24 Mar 2020 10:37:27 -0400
+Message-ID: <CAEAjams75BP5tRoJ9Xkfk7qa5pFwAsHTr4j0OJjof7WM72gxrg@mail.gmail.com>
+Subject: Re: Fwd: BUG: KASAN: use-after-free in usb_hcd_unlink_urb+0x5f/0x170 drivers/usb/core/hcd.c
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24/03/2020 15:33, Martin Blumenstingl wrote:
-> Hi Neil,
-> 
-> On Tue, Mar 24, 2020 at 11:20 AM Neil Armstrong <narmstrong@baylibre.com> wrote:
-> [...]
->> @@ -195,23 +239,9 @@ static int dwc3_meson_g12a_usb2_init(struct dwc3_meson_g12a *priv)
->>                 if (!strstr(priv->drvdata->phy_names[i], "usb2"))
->>                         continue;
->>
->> -               regmap_update_bits(priv->u2p_regmap[i], U2P_R0,
->> -                                  U2P_R0_POWER_ON_RESET,
->> -                                  U2P_R0_POWER_ON_RESET);
->> -
->> -               if (priv->drvdata->otg_switch_supported && i == USB2_OTG_PHY) {
->> -                       regmap_update_bits(priv->u2p_regmap[i], U2P_R0,
->> -                               U2P_R0_ID_PULLUP | U2P_R0_DRV_VBUS,
->> -                               U2P_R0_ID_PULLUP | U2P_R0_DRV_VBUS);
->> -
->> -                       dwc3_meson_g12a_usb2_set_mode(priv, i,
->> -                                                     priv->otg_phy_mode);
->> -               } else
->> -                       dwc3_meson_g12a_usb2_set_mode(priv, i,
->> -                                                     PHY_MODE_USB_HOST);
->> -
->> -               regmap_update_bits(priv->u2p_regmap[i], U2P_R0,
->> -                                  U2P_R0_POWER_ON_RESET, 0);
->> +               ret = priv->drvdata->usb2_init_phy(priv, i, mode);
->> +               if (ret)
->> +                       return ret;
->>         }
-> this doesn't compile for me, it complains that mode is undefined
-> I believe we need something like the attached patch on top.
+On Tue, Mar 24, 2020 at 10:14:39AM -0400, Alan Stern wrote:
+> On Mon, 23 Mar 2020, Kyungtae Kim wrote:
+>
+> > We report a bug (in linux-5.5.11) found by FuzzUSB (a modified version
+> > of syzkaller)
+> >
+> > In function usb_hcd_unlink_urb (driver/usb/core/hcd.c:1607), it tries to
+> > read "urb->use_count". But it seems the instance "urb" was
+> > already freed (right after urb->dev at line 1597) by the function "urb_destroy"
+> > in a different thread, which caused memory access violation.
+> > To solve, it may need to check if urb is valid before urb->use_count,
+> > to avoid such freed memory access.
+>
+> No, the problem is "free while still in use", caused by the fact that
+> usb_sg_cancel() fails to indicate it is using the data structures.
+>
+> > kernel config: https://kt0755.github.io/etc/config_v5.5.11
+> >
+> > ==================================================================
+> > BUG: KASAN: use-after-free in atomic_read
+> > include/asm-generic/atomic-instrumented.h:26 [inline]
+> > BUG: KASAN: use-after-free in usb_hcd_unlink_urb+0x5f/0x170
+> > drivers/usb/core/hcd.c:1607
+> > Read of size 4 at addr ffff888065379610 by task kworker/u4:1/27
+>
+> Here is a patch which ought to fix the problem.  Can you test it?
+>
+> Alan Stern
+>
+>
+> Index: usb-devel/drivers/usb/core/message.c
+> ===================================================================
+> --- usb-devel.orig/drivers/usb/core/message.c
+> +++ usb-devel/drivers/usb/core/message.c
+> @@ -588,12 +588,13 @@ void usb_sg_cancel(struct usb_sg_request
+>       int i, retval;
+>
+>       spin_lock_irqsave(&io->lock, flags);
+> -     if (io->status) {
+> +     if (io->status || io->count == 0) {
+>               spin_unlock_irqrestore(&io->lock, flags);
+>               return;
+>       }
+>       /* shut everything down */
+>       io->status = -ECONNRESET;
+> +     io->count++;            /* Keep the request alive until we're done */
+>       spin_unlock_irqrestore(&io->lock, flags);
+>
+>       for (i = io->entries - 1; i >= 0; --i) {
+> @@ -607,6 +608,12 @@ void usb_sg_cancel(struct usb_sg_request
+>                       dev_warn(&io->dev->dev, "%s, unlink --> %d\n",
+>                                __func__, retval);
+>       }
+> +
+> +     spin_lock_irqsave(&io->lock, flags);
+> +     io->count--;
+> +     if (!io->count)
+> +             complete(&io->complete);
+> +     spin_unlock_irqrestore(&io->lock, flags);
+>  }
+>  EXPORT_SYMBOL_GPL(usb_sg_cancel);
+>
+>
 
-I'll investigate
+Thanks for the patch. Unfortunately, we don't have a repro program to
+test right now.
 
-> 
-> [...]
->> @@ -580,7 +612,9 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->>         /* Get dr_mode */
->>         priv->otg_mode = usb_get_dr_mode(dev);
->>
->> -       dwc3_meson_g12a_usb_init(priv);
->> +       ret = dwc3_meson_g12a_usb_init(priv);
->> +       if (ret)
->> +               goto err_disable_clks;
-> this looks like an unrelated fix, dwc3_meson_g12a_usb_init has always
-> returned int (as potential error)
-> also the same check is missing in dwc3_meson_g12a_resume
-> can you please move this to a separate patch with the appropriate tag:
-> Fixes: c99993376f72ca ("usb: dwc3: Add Amlogic G12A DWC3 glue")
-
-Ok
-
-Thanks,
-Neil
-
-> 
-> 
-> Martin
-> 
-
+Regards,
+Kyungtae Kim
