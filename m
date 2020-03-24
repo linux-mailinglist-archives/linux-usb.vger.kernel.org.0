@@ -2,82 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D20190A42
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 11:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5755190A8B
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 11:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727253AbgCXKJ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Mar 2020 06:09:28 -0400
-Received: from mga09.intel.com ([134.134.136.24]:35742 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726818AbgCXKJ2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Mar 2020 06:09:28 -0400
-IronPort-SDR: KEdh5rEhPyQZgdcCZJFvJyhmZxH6FBobO4Td2o3a8EWqBUwDrKbxvBY8k9Gf6UJpBjv3rc1g+y
- qhfdmXnEA+vQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2020 03:09:27 -0700
-IronPort-SDR: P4V78Cb2y6Y0UxSwknOXZbVNZOLqmMUwBj+bkj6U5AxZRYbOq07Uxm0tnhVHeq8jWneudptE9D
- 6CHlxAdnfUMg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,300,1580803200"; 
-   d="scan'208";a="235538100"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 24 Mar 2020 03:09:25 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 7A63211D; Tue, 24 Mar 2020 12:09:24 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-acpi@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2] usb: core: Add ACPI support for USB interface devices
-Date:   Tue, 24 Mar 2020 12:09:23 +0200
-Message-Id: <20200324100923.8332-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        id S1727066AbgCXKUR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Mar 2020 06:20:17 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:34904 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726845AbgCXKUR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 06:20:17 -0400
+Received: by mail-lj1-f195.google.com with SMTP id k21so1883803ljh.2
+        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2020 03:20:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ML2vnfwC1qL5HbhpJYQjypeKTtlZAFm6nk+RAiAX64c=;
+        b=HTvjDCo/Bt8ekK/Ic7aaaRl6L2GFLoJ24E2Ka7ecIYjSywm38KNSIB9KWVAYNa4mcm
+         iRKzJnkqCxwaZJZJYj9i9cz6WqYdPVZKgRZXFg4chpZkjaQtIsyK9aIoLekCuKrsCrXM
+         HxiVCJBFzVC9B8nPEdGcfZ3kwwyqAuCymESrZzz15VtnTlVT8OfO05z26ptdHNlpL5O4
+         Nhc6SZBYfqN0xlw/qOAOwH4dZff2qE1RL7RCI050qPECbo3r/TQFSeIFqHGLlpojdsC7
+         T8pUIWUAKvOBKxMrmyxO8qE1P/EsNI8VY6fShqNEOTwLe4kzzzKjCjJ2yFcyaIMMs+tf
+         3dsw==
+X-Gm-Message-State: ANhLgQ163YhL6C6MVFyxrUFZ6LFIEZ+cGzoanapqXdzvrz6DMg6SfJz6
+        fb8HdCuQs3LR22tAPaaF9l4=
+X-Google-Smtp-Source: ADFU+vvoGdX2KJsik37I8Jk7Q9ZlO75Ti6WLEmg2WGWpHaKhtr4nTa5dJPpdz7GLgszs4LRv6iil7A==
+X-Received: by 2002:a2e:a0d8:: with SMTP id f24mr3922081ljm.270.1585045215070;
+        Tue, 24 Mar 2020 03:20:15 -0700 (PDT)
+Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
+        by smtp.gmail.com with ESMTPSA id t17sm9741082ljk.17.2020.03.24.03.20.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Mar 2020 03:20:13 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@kernel.org>)
+        id 1jGgfD-0006Ts-3n; Tue, 24 Mar 2020 11:20:03 +0100
+Date:   Tue, 24 Mar 2020 11:20:03 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Michael Hanselmann <public@hansmi.ch>
+Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Michael Dreher <michael@5dot1.de>,
+        Jonathan Olds <jontio@i4free.co.nz>
+Subject: Re: [PATCH 1/4] ch341: Name more registers
+Message-ID: <20200324102003.GE5810@localhost>
+References: <cover.1583520568.git.public@hansmi.ch>
+ <7a9882c0c5deaa64dcd3199a2d892e9809e6cb8e.1583520568.git.public@hansmi.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7a9882c0c5deaa64dcd3199a2d892e9809e6cb8e.1583520568.git.public@hansmi.ch>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently on ACPI-enabled systems the USB interface device has no link to
-the actual firmware node and thus drivers may not parse additional information
-given in the table. The new feature, proposed here, allows to pass properties
-or other information to the drivers.
+On Fri, Mar 06, 2020 at 07:00:42PM +0000, Michael Hanselmann wrote:
+> Add more #defines with register names.
 
-The ACPI companion of the device has to be set for USB interface devices
-to achieve above. Use ACPI_COMPANION_SET macro to set this.
+Please be more specific (e.g. which registers are you naming). Update
+the patch summary too.
 
-Note, OF already does link of_node and this is the same for ACPI case.
+> Signed-off-by: Michael Hanselmann <public@hansmi.ch>
+> ---
+>  drivers/usb/serial/ch341.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+> index c5ecdcd51ffc..518209072c50 100644
+> --- a/drivers/usb/serial/ch341.c
+> +++ b/drivers/usb/serial/ch341.c
+> @@ -59,6 +59,8 @@
+>  #define CH341_REQ_MODEM_CTRL   0xA4
+>  
+>  #define CH341_REG_BREAK        0x05
+> +#define CH341_REG_PRESCALER    0x12
+> +#define CH341_REG_DIVISOR      0x13
+>  #define CH341_REG_LCR          0x18
+>  #define CH341_NBREAK_BITS      0x01
+>  
+> @@ -221,6 +223,7 @@ static int ch341_get_divisor(speed_t speed)
+>  static int ch341_set_baudrate_lcr(struct usb_device *dev,
+>  				  struct ch341_private *priv, u8 lcr)
+>  {
+> +	uint16_t reg;
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: rewrite commit message to emphasize that it is a new feature (Greg)
- drivers/usb/core/message.c | 2 ++
- 1 file changed, 2 insertions(+)
+Use u16.
 
-diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-index 5adf489428aa..d5f834f16993 100644
---- a/drivers/usb/core/message.c
-+++ b/drivers/usb/core/message.c
-@@ -5,6 +5,7 @@
-  * Released under the GPLv2 only.
-  */
- 
-+#include <linux/acpi.h>
- #include <linux/pci.h>	/* for scatterlist macros */
- #include <linux/usb.h>
- #include <linux/module.h>
-@@ -1941,6 +1942,7 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
- 			intf->dev.of_node = usb_of_get_interface_node(dev,
- 					configuration, ifnum);
- 		}
-+		ACPI_COMPANION_SET(&intf->dev, ACPI_COMPANION(&dev->dev));
- 		intf->dev.driver = NULL;
- 		intf->dev.bus = &usb_bus_type;
- 		intf->dev.type = &usb_if_device_type;
--- 
-2.25.1
+>  	int val;
+>  	int r;
+>  
+> @@ -237,11 +240,15 @@ static int ch341_set_baudrate_lcr(struct usb_device *dev,
+>  	 */
+>  	val |= BIT(7);
+>  
+> -	r = ch341_control_out(dev, CH341_REQ_WRITE_REG, 0x1312, val);
+> +	reg = ((uint16_t)CH341_REG_DIVISOR << 8) | CH341_REG_PRESCALER;
 
+No need to cast.
+
+> +
+> +	r = ch341_control_out(dev, CH341_REQ_WRITE_REG, reg, val);
+>  	if (r)
+>  		return r;
+>  
+> -	r = ch341_control_out(dev, CH341_REQ_WRITE_REG, 0x2518, lcr);
+> +	reg = ((uint16_t)0x2500) | CH341_REG_LCR;
+
+Ditto, and please add a bit shift for consistency.
+
+Hmm, but this is unrelated to the defines you are adding, and there are
+other magic constants for registers in this driver. Perhaps drop this
+bit or break it out in its own patch (rule of thumb: one logical change
+per patch).
+
+> +
+> +	r = ch341_control_out(dev, CH341_REQ_WRITE_REG, reg, lcr);
+>  	if (r)
+>  		return r;
+
+I'd also move this last in the series as it's more of a clean up or
+documentation patch.
+
+Johan
