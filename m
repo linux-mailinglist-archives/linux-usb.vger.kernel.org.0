@@ -2,56 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB914190816
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 09:50:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 808DD190865
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 10:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727124AbgCXIup (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Mar 2020 04:50:45 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:37425 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726524AbgCXIuo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 04:50:44 -0400
-Received: by mail-il1-f195.google.com with SMTP id a6so3590824ilr.4
-        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2020 01:50:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=sG6VlBoFN40fAb5k5Y6Qv2nOMBY2+AHFcOP2NJ6h8fY=;
-        b=gbIR8EURz+6xTAYhLh6Uc7riilokxS03sjPNVbFl29Y1A3p/S2qP0L2SMVqJOmfCMG
-         N+j3Jd7lHj2j9OX57rhIe1vJbEUaDoGKNOz0lRHlrSk28npR1kcDHVFmK1YFaz2uMfS2
-         2Sc9ldG2Y1PoyzRfdyi/ozauYl3cuwLew6gCSEOpndF26hW4hORPO8tNkpYJuJl1dfi8
-         7VDseIBCHrtH/t7AhtHcW8OHID61ny3ey+ddLp2Mvl6daVoguaujQZ3PYGqD9thrmWF7
-         o79afdz6rbFmN3yjd85FqJtpIVvEOG5sXARnVGC46OLJtTxntlr6ZRyneYqIiQyqt3Rj
-         O5og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=sG6VlBoFN40fAb5k5Y6Qv2nOMBY2+AHFcOP2NJ6h8fY=;
-        b=K3uK8kjRJSi4PxamnyvugpCuL0X4zq25+wZ/LFSVzs8YMsS7pZ3Rame83403JqzJFT
-         omWLsNhdbljoz7JTwBvys/6wGoQw+lLflNr106S/YqifOsGWkkr8fhxGEd5TLNHebVgq
-         0GO3BNLPCq9gUir1iN0lfs4J6nOWGZ8Z1aP+yifouej7+8bXF811LgxFPDp93FBp4RV7
-         Wfq2bQbQ8V4rMH8gV7j5W85q0qsxDRvY0U/1G9IBWXvx8T5H3/aUWFgW11PL7mWRxf46
-         9uKcc7v445PpmeA8hvt8LgVAuD3wN/74eHg4eVoaD4fKapZhuOSJY8wi3p17xLtcEJfC
-         ofCw==
-X-Gm-Message-State: ANhLgQ2/tv60aRXQ0Z/mmzF3cqjoqvOpymEshkjCIRZOR6n+Ihk8ZFyR
-        u2f7etv+8/V0w6ly/xPW2buCOnfk9jqLonr14t0=
-X-Google-Smtp-Source: ADFU+vsrgUO3+pJ0frjmaxW/payxIwZcPzbqWrYTPkbN6IngbIUoLabdLvRpdLIRo5sqdv4G4pA/rpx8KjTgtq3I0ts=
-X-Received: by 2002:a92:8993:: with SMTP id w19mr13981287ilk.192.1585039840650;
- Tue, 24 Mar 2020 01:50:40 -0700 (PDT)
+        id S1727063AbgCXJAh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Mar 2020 05:00:37 -0400
+Received: from mga18.intel.com ([134.134.136.126]:20966 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726944AbgCXJAh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 24 Mar 2020 05:00:37 -0400
+IronPort-SDR: qnkRrk8dRVN+G537O+kvzZIABLND26NrsQ0navDd75kGe74ERGCgMVKXjJNNO11aHPuQVczmtC
+ rnRCFNueKk1A==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2020 02:00:36 -0700
+IronPort-SDR: vpnLhlvTmPW7k2IFJ/gjiBq0FDDSH0EkGkar9BCsBrlGEISbGHJUdqwQDU1DWRfYHXEnEydqxP
+ 21CYrVmCZVqg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,299,1580803200"; 
+   d="scan'208";a="393216216"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga004.jf.intel.com with ESMTP; 24 Mar 2020 02:00:35 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jGfQL-00CU45-N9; Tue, 24 Mar 2020 11:00:37 +0200
+Date:   Tue, 24 Mar 2020 11:00:37 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v1] usb: core: Add ACPI support for USB interfaces
+Message-ID: <20200324090037.GB1922688@smile.fi.intel.com>
+References: <20200323195543.51050-1-andriy.shevchenko@linux.intel.com>
+ <20200324062635.GB1977781@kroah.com>
 MIME-Version: 1.0
-Received: by 2002:a92:c602:0:0:0:0:0 with HTTP; Tue, 24 Mar 2020 01:50:40
- -0700 (PDT)
-Reply-To: cyeden1@gmail.com
-From:   CY Eden <vvvv.martin1@gmail.com>
-Date:   Tue, 24 Mar 2020 08:50:40 +0000
-Message-ID: <CAO_-0GhPwgP3uFBjH70g0Ck_ToY-zF_auHiUb12BJ-TurgiftA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200324062635.GB1977781@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-ello I have an important information from UNITED NATIONS for you,reply
+On Tue, Mar 24, 2020 at 07:26:35AM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Mar 23, 2020 at 09:55:43PM +0200, Andy Shevchenko wrote:
+> > The ACPI companion of the device has to be set for USB interfaces
+> > in order to read and attach the properties described in the ACPI table.
+> > Use ACPI_COMPANION_SET macro to set this.
+> > 
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > ---
+> >  drivers/usb/core/message.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+> > index 5adf489428aa..d5f834f16993 100644
+> > --- a/drivers/usb/core/message.c
+> > +++ b/drivers/usb/core/message.c
+> > @@ -5,6 +5,7 @@
+> >   * Released under the GPLv2 only.
+> >   */
+> >  
+> > +#include <linux/acpi.h>
+> >  #include <linux/pci.h>	/* for scatterlist macros */
+> >  #include <linux/usb.h>
+> >  #include <linux/module.h>
+> > @@ -1941,6 +1942,7 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
+> >  			intf->dev.of_node = usb_of_get_interface_node(dev,
+> >  					configuration, ifnum);
+> >  		}
+> > +		ACPI_COMPANION_SET(&intf->dev, ACPI_COMPANION(&dev->dev));
+> >  		intf->dev.driver = NULL;
+> >  		intf->dev.bus = &usb_bus_type;
+> >  		intf->dev.type = &usb_if_device_type;
+> 
+
+> And what does this "fix"?
+
+It links the firmware node of physical USB device to USB interface.
+Otherwise it will be no firmware nodes under a corresponding folder.
+
+It mimics what is done for OF in couple of lines above.
+
+> Is this a new feature, what isn't working today without this change?
+
+Yes, it is a new feature. I can't tell it fixes anything, because no complains
+so far. I doubt it previously works.
+
+> And if it is a fix, should it be backported to older kernels, how far?
+
+No, no need for that. Usually I put Fixes tag when I would like change to be
+considered for backporting.
+
+I'll probably update the commit message to clarify all this. Would it be enough?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
