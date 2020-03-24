@@ -2,116 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 185AA19178C
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 18:23:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F5119191E
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 19:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727595AbgCXRWk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Mar 2020 13:22:40 -0400
-Received: from foss.arm.com ([217.140.110.172]:38646 "EHLO foss.arm.com"
+        id S1727666AbgCXS2X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Mar 2020 14:28:23 -0400
+Received: from mx2.suse.de ([195.135.220.15]:46900 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727295AbgCXRWk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Mar 2020 13:22:40 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 05CD51FB;
-        Tue, 24 Mar 2020 10:22:40 -0700 (PDT)
-Received: from e107158-lin (e107158-lin.cambridge.arm.com [10.1.195.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3C3133F71F;
-        Tue, 24 Mar 2020 10:22:39 -0700 (PDT)
-Date:   Tue, 24 Mar 2020 17:22:36 +0000
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Oliver Neukum <oneukum@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
-Message-ID: <20200324172235.bsxea6qb3id6bhb3@e107158-lin>
-References: <20200324140609.gqvjgxdbcm5ndhvo@e107158-lin>
- <Pine.LNX.4.44L0.2003241137440.16735-100000@netrider.rowland.org>
+        id S1727267AbgCXS2X (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 24 Mar 2020 14:28:23 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 8E1FCABCF;
+        Tue, 24 Mar 2020 18:28:21 +0000 (UTC)
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, f.fainelli@gmail.com,
+        gregkh@linuxfoundation.org, tim.gover@raspberrypi.org,
+        linux-pci@vger.kernel.org, wahrenst@gmx.net,
+        sergei.shtylyov@cogentembedded.com,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Andrew Murray <amurray@thegoodpenguin.co.uk>
+Subject: [PATCH v6 0/4] USB: pci-quirks: Add Raspberry Pi 4 quirk
+Date:   Tue, 24 Mar 2020 19:28:08 +0100
+Message-Id: <20200324182812.20420-1-nsaenzjulienne@suse.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.2003241137440.16735-100000@netrider.rowland.org>
-User-Agent: NeoMutt/20171215
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 03/24/20 11:56, Alan Stern wrote:
-> On Tue, 24 Mar 2020, Qais Yousef wrote:
-> 
-> > On 03/24/20 09:52, Alan Stern wrote:
-> > > On Tue, 24 Mar 2020, Qais Yousef wrote:
-> > > 
-> > > > On 03/24/20 14:20, Oliver Neukum wrote:
-> > > > > Am Dienstag, den 24.03.2020, 10:46 +0000 schrieb Qais Yousef:
-> > > > > > 
-> > > > > > I should have stuck to what I know then. I misread the documentation. Hopefully
-> > > > > > the attached looks better. I don't see the new debug you added emitted.
-> > > > > 
-> > > > > That is odd. Please try
-> > > > > 
-> > > > > echo "module usbcore +mfp" > /sys/kernel/debug/dynamic_debug/control
-> > > > > 
-> > > > > with the attached improved patch.
-> > > > 
-> > > > Hmm still no luck
-> > > > 
-> > > > 
-> > > > # history
-> > > >    0 echo "module usbcore +mfp" > /sys/kernel/debug/dynamic_debug/control
-> > > >    1 swapoff -a
-> > > >    2 echo suspend > /sys/power/disk
-> > > >    3 echo disk > /sys/power/state
-> > > >    4 dmesg > usb.dmesg
-> > > 
-> > > What happens if you omit step 1 (the swapoff)?
-> > 
-> > It seems to hibernate (suspend) successfully. If I omit that step I must setup
-> > a wakealarm to trigger the wakeup, but that's it.
-> 
-> You don't have any other wakeup sources?  Like a power button?
+On the Raspberry Pi 4, after a PCI reset, VL805's firmware may either be
+loaded directly from an EEPROM or, if not present, by the SoC's
+VideCore. This series adds support for the later.
 
-Not sure if it's hooked correctly as a wakeup source. But as UK is now getting
-lockedown, I don't think I'll be seeing the board for a while and serial
-console is my only friend :-)
+Note that there are a set of constraints we have to consider (some of
+them I missed on v1):
+ - We need to make sure the VideoCore firmware interface is up and
+   running before running the VL805 firmware load call.
 
-I can hard reboot remotely reliably though.
+ - There is no way to discern RPi4's VL805 chip from other platforms',
+   so we need the firmware load to happen *before* running
+   quirk_usb_handoff_xhci(). Failure to do so results in an unwarranted
+   5 second wait while the fixup code polls xHC's unexisting state.
 
-> 
-> > I attached the dmesg; I didn't reboot the system in between.
-> > 
-> > 
-> > # history
-> >    0 echo "module usbcore +mfp" > /sys/kernel/debug/dynamic_debug/control
-> >    1 swapoff -a
-> >    2 echo suspend > /sys/power/disk
-> >    3 echo disk > /sys/power/state
-> >    4 dmesg > usb.dmesg
-> >    5 history
-> >    6 grep URB /sys/kernel/debug/dynamic_debug/control
-> >    7 grep "URB allocated" /sys/kernel/debug/dynamic_debug/control
-> >    8 swapon -a
-> >    9 echo +60 > /sys/class/rtc/rtc0/wakealarm
-> >   10 echo disk > /sys/power/state
-> >   11 dmesg > usb.dmesg
-> 
-> This certainly reinforces the initial impression that the cause of the
-> warnings is a bug in the platform code.  You should ask the appropriate
-> maintainer.
+---
 
-The device-tree compatible node returns "generic-ohci".
-drivers/usb/host/ohci-platform.c returns you as the maintainer :-)
+Changes since v5:
+ - Fix issues reported by Kbuild test robot
 
-> 
-> However, an equally troubling question is why the usb2 bus never got 
-> suspended in the first place.  To solve that, you may need to enable 
-> dynamic debugging in the Power Management core (i.e., "file
-> drivers/base/power/* +p").
+Changes since v4:
+ - Addressed Sergei's comments
+ - Fix potential warning in patch #2
 
-Thanks Alan. I'll run with extra debug and send back.
+Changes since v3:
+ - Addressed Greg's comments
 
-Cheers
+There was no v2, my bad.
 
---
-Qais Yousef
+Changes since v1:
+ - Addressed Floarians comments
+
+Nicolas Saenz Julienne (4):
+  soc: bcm2835: Sync xHCI reset firmware property with downstream
+  firmware: raspberrypi: Introduce vl805 init routine
+  PCI: brcmstb: Wait for Raspberry Pi's firmware when present
+  USB: pci-quirks: Add Raspberry Pi 4 quirk
+
+ drivers/firmware/Kconfig                   |  3 +-
+ drivers/firmware/raspberrypi.c             | 38 ++++++++++++++++++++++
+ drivers/pci/controller/pcie-brcmstb.c      | 15 +++++++++
+ drivers/usb/host/pci-quirks.c              | 16 +++++++++
+ include/soc/bcm2835/raspberrypi-firmware.h |  9 ++++-
+ 5 files changed, 79 insertions(+), 2 deletions(-)
+
+-- 
+2.25.1
+
