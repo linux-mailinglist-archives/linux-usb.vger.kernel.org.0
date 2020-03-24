@@ -2,79 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3119B1905AF
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 07:26:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F541905CD
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 07:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726261AbgCXG0h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Mar 2020 02:26:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48574 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725945AbgCXG0h (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Mar 2020 02:26:37 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DD77520663;
-        Tue, 24 Mar 2020 06:26:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585031197;
-        bh=BSViwAiJC3sbGx+r5qKqwJNLn6pppAaGTLJ8eTWD0k0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QDuirIv8lwJ65151gMjmNP7PaYnpKYQgNmiVVHZaiqVLsT3GelzvPV5k73FrVLzEt
-         z4DPtpFGQx2NDKEnL5rx2AscUx7yhtXhe3GcJl94GlCEdHBP0EblnxrKVtHUS4yI7I
-         fwFXnVptJItp0N1LyiTwexevnBtKLTPKFLkZM/X4=
-Date:   Tue, 24 Mar 2020 07:26:35 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v1] usb: core: Add ACPI support for USB interfaces
-Message-ID: <20200324062635.GB1977781@kroah.com>
-References: <20200323195543.51050-1-andriy.shevchenko@linux.intel.com>
+        id S1725922AbgCXGiE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Mar 2020 02:38:04 -0400
+Received: from cmccmta3.chinamobile.com ([221.176.66.81]:4882 "EHLO
+        cmccmta3.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725867AbgCXGiE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 02:38:04 -0400
+X-Greylist: delayed 551 seconds by postgrey-1.27 at vger.kernel.org; Tue, 24 Mar 2020 02:38:03 EDT
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.1]) by rmmx-syy-dmz-app10-12010 (RichMail) with SMTP id 2eea5e79a88206c-87f20; Tue, 24 Mar 2020 14:28:19 +0800 (CST)
+X-RM-TRANSID: 2eea5e79a88206c-87f20
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from localhost.localdomain (unknown[112.25.154.146])
+        by rmsmtp-syy-appsvr01-12001 (RichMail) with SMTP id 2ee15e79a88069e-da2b2;
+        Tue, 24 Mar 2020 14:28:18 +0800 (CST)
+X-RM-TRANSID: 2ee15e79a88069e-da2b2
+From:   Tang Bin <tangbin@cmss.chinamobile.com>
+To:     cernekee@gmail.com, balbi@kernel.org
+Cc:     gregkh@linuxfoundation.org, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Tang Bin <tangbin@cmss.chinamobile.com>
+Subject: [PATCH] usb: gadget: bcm63xx_udc:remove useless variable definition
+Date:   Tue, 24 Mar 2020 14:29:32 +0800
+Message-Id: <20200324062932.8364-1-tangbin@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.20.1.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200323195543.51050-1-andriy.shevchenko@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 23, 2020 at 09:55:43PM +0200, Andy Shevchenko wrote:
-> The ACPI companion of the device has to be set for USB interfaces
-> in order to read and attach the properties described in the ACPI table.
-> Use ACPI_COMPANION_SET macro to set this.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/usb/core/message.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-> index 5adf489428aa..d5f834f16993 100644
-> --- a/drivers/usb/core/message.c
-> +++ b/drivers/usb/core/message.c
-> @@ -5,6 +5,7 @@
->   * Released under the GPLv2 only.
->   */
->  
-> +#include <linux/acpi.h>
->  #include <linux/pci.h>	/* for scatterlist macros */
->  #include <linux/usb.h>
->  #include <linux/module.h>
-> @@ -1941,6 +1942,7 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
->  			intf->dev.of_node = usb_of_get_interface_node(dev,
->  					configuration, ifnum);
->  		}
-> +		ACPI_COMPANION_SET(&intf->dev, ACPI_COMPANION(&dev->dev));
->  		intf->dev.driver = NULL;
->  		intf->dev.bus = &usb_bus_type;
->  		intf->dev.type = &usb_if_device_type;
+In this function, the variable 'rc' is assigned after this place,
+so the definition is invalid.
 
-And what does this "fix"?
+Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+---
+ drivers/usb/gadget/udc/bcm63xx_udc.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Is this a new feature, what isn't working today without this change?
+diff --git a/drivers/usb/gadget/udc/bcm63xx_udc.c b/drivers/usb/gadget/udc/bcm63xx_udc.c
+index 54501814d..a7afa8c35 100644
+--- a/drivers/usb/gadget/udc/bcm63xx_udc.c
++++ b/drivers/usb/gadget/udc/bcm63xx_udc.c
+@@ -2321,8 +2321,6 @@ static int bcm63xx_udc_probe(struct platform_device *pdev)
+ 	if (rc)
+ 		return rc;
+ 
+-	rc = -ENXIO;
+-
+ 	/* IRQ resource #0: control interrupt (VBUS, speed, etc.) */
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq < 0)
+-- 
+2.20.1.windows.1
 
-And if it is a fix, should it be backported to older kernels, how far?
 
-greg k-h
+
