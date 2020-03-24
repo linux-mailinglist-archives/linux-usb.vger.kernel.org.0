@@ -2,127 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A12190979
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 10:23:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43321190A2E
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 11:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726565AbgCXJWj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Mar 2020 05:22:39 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:34610 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726697AbgCXJWj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 05:22:39 -0400
-Received: by mail-lf1-f66.google.com with SMTP id e7so3591744lfq.1;
-        Tue, 24 Mar 2020 02:22:38 -0700 (PDT)
+        id S1727111AbgCXKFn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Mar 2020 06:05:43 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:43391 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727092AbgCXKFn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 06:05:43 -0400
+Received: by mail-lf1-f67.google.com with SMTP id n20so12668513lfl.10
+        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2020 03:05:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=qDHSQH6EF59vFu2CoB02DlvePw9hZXaswBE3r0QTlyE=;
-        b=j8yk4Cjn7dxGSjlIEaYXPFZy+8ayMawPfDNh7/sOLp2Wgebj5Wwqwqjo29amxrDboG
-         1YJ9Isjs/TOKn7oAiVlmKvP2RIpTUtOqFtOzfvBLWgGcibta/9s0xtqRuYFx3r+0+8Of
-         2oHj3D3CQ8fCd5iIqNtASiRFU6NPe0pDNaQa4eP4ES1phO6oDwUbGqsFbQzKceVCycFx
-         B/KijK2FzHSGLim0oT8ViY9we133xs1u+/nBLKdGTdWJQ5Lg8J/H8lJ1+I2HXuuHliDQ
-         TvMDZRj8IC8wjrWnOvO64dW1cmDnYkOVICV5lGnOnfaIZmfyBQJkv3JctLgIUN/1xX3q
-         Oy7w==
-X-Gm-Message-State: ANhLgQ3eE3nwL1za7mV7uh7XFOelD6AMAvIR7NCVuK78rqP50TqA8oFP
-        hYZHnoG65ghYhYkYl0R6IMU6fNez
-X-Google-Smtp-Source: ADFU+vsNF/6bV1pC9Nn0GEfnxkuJCuYsLmoNUrH1MIQeRQd2Y3p/f9x1qsjH/s3laHqnLe109A6IMg==
-X-Received: by 2002:a19:8c3:: with SMTP id 186mr12451840lfi.27.1585041757288;
-        Tue, 24 Mar 2020 02:22:37 -0700 (PDT)
+        bh=muL5WwuZeHRIWwUtcJeJpBMAizLFgTYYGfm0B1HRdEM=;
+        b=pkVGdii+StnxMAgELNPz2MnY6aPu2WiHdU3wQwItoQEL71Yn9vw9kqOEuREDqyIgIr
+         B2IX0qeKt/kZdeQMZ8CXnpyrqXpyoWmV1sPRk+h9PC3033daIIJUKHvne6YblxBPwqGE
+         xA5q8PJ05tf43fYONQVQ/h4CCxhAndX8rP0nOS08VCSejQXc67HzTvI0ykwW/jJ+XN87
+         CjWhlHxiePreiO1sQiqo/hTngAw+rTjsTam4ylP5QBMFWL9dsM1VjnO+Z3HVG08xCc9r
+         a6z0ypBuryi0rr2BXwJSqktGxuzlnufbH5NWgR0D3sp6/XNi14GJ/gsmwuyF6XJKhvHA
+         t8cg==
+X-Gm-Message-State: ANhLgQ29vJ7r8rURkw6CIqtEXGh9zELIiYF0ECjJKU4pzn2ybbjhFvd6
+        cPC7k838KjFs20vDyc+d2gzAdPyl
+X-Google-Smtp-Source: ADFU+vvBeVjeD0Dxc9OTp+l7kyvuXX3e5JTj4yBW8M4a157o/pgaTDhub69ZbQqFzAvFbmdcR1AV1A==
+X-Received: by 2002:ac2:5de1:: with SMTP id z1mr15762735lfq.95.1585044341759;
+        Tue, 24 Mar 2020 03:05:41 -0700 (PDT)
 Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
-        by smtp.gmail.com with ESMTPSA id w28sm4474515lfl.3.2020.03.24.02.22.36
+        by smtp.gmail.com with ESMTPSA id r4sm9454020lfc.40.2020.03.24.03.05.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2020 02:22:36 -0700 (PDT)
+        Tue, 24 Mar 2020 03:05:41 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.92.3)
         (envelope-from <johan@kernel.org>)
-        id 1jGflR-0003lF-L5; Tue, 24 Mar 2020 10:22:25 +0100
-Date:   Tue, 24 Mar 2020 10:22:25 +0100
+        id 1jGgR8-0006MQ-7R; Tue, 24 Mar 2020 11:05:30 +0100
+Date:   Tue, 24 Mar 2020 11:05:30 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Pawel Dembicki <paweldembicki@gmail.com>
-Cc:     Cezary Jackiewicz <cezary@eko.one.pl>,
-        Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] USB: serial: option: add support for ASKEY WWHC050
-Message-ID: <20200324092225.GB5810@localhost>
-References: <20200320220155.5609-1-paweldembicki@gmail.com>
+To:     Michael Hanselmann <public@hansmi.ch>
+Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Michael Dreher <michael@5dot1.de>,
+        Jonathan Olds <jontio@i4free.co.nz>
+Subject: Re: [PATCH 0/4] ch341: Add support for HL340 devices
+Message-ID: <20200324100530.GD5810@localhost>
+References: <cover.1583520568.git.public@hansmi.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200320220155.5609-1-paweldembicki@gmail.com>
+In-Reply-To: <cover.1583520568.git.public@hansmi.ch>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 20, 2020 at 11:01:52PM +0100, Pawel Dembicki wrote:
-> ASKEY WWHC050 is a mcie LTE modem.
-> The oem configuration states:
+Hi Michael,
+
+On Fri, Mar 06, 2020 at 07:00:41PM +0000, Michael Hanselmann wrote:
+> A subset of CH341 devices does not support all features, namely the
+> prescaler is limited to a reduced precision and there is no support for
+> sending a RS232 break condition.
 > 
-> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
-> D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1690 ProdID=7588 Rev=ff.ff
-> S:  Manufacturer=Android
-> S:  Product=Android
-> S:  SerialNumber=813f0eef6e6e
-> C:* #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=500mA
-> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-> E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=(none)
-> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=125us
+> These devices can usually be identified by an imprint of "340" on the
+> turquoise-colored plug. They're also sometimes called "HL340", hence the
+> terminology in this series and driver.
+
+You need to come up with a different designation. I have a HL340 device
+here which works just fine.
+
+> This series adds detection of these devices, adjusts the
+> divisor/prescaler setup and implements a simulated break condition.
 > 
-> Tested on openwrt distribution.
-> 
-> Signed-off-by: Cezary Jackiewicz <cezary@eko.one.pl>
-> Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
+> Michael Hanselmann (4):
+>   ch341: Name more registers
+>   ch341: Detect HL340 variant
+>   ch341: Limit prescaler on HL340 variant
+>   ch341: Simulate break condition on HL340 variant
 
-Thanks for the patches, looks good.
+Nit: please use a "USB: serial: ch341:" subject prefix.
 
-But who is really the author of patches 1 and 2? You or Cezary? In the
-first case, you can use the Co-Developed-By tag to give Cezary credit,
-and otherwise you need to add a From line so that authorship is recorded
-correctly.
+Also, if possible, please move the second and third patches first in the
+series as these could be considered fixes rather than new features (and
+considered for backporting).
 
-Take a look at Documentation/process/submitting-patches.rst.
-
-> ---
->  drivers/usb/serial/option.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 0b5dcf973d94..2f17019d3810 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -2018,6 +2018,8 @@ static const struct usb_device_id option_ids[] = {
->  	  .driver_info = RSVD(4) | RSVD(5) },
->  	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0105, 0xff),			/* Fibocom NL678 series */
->  	  .driver_info = RSVD(6) },
-> +	{ USB_DEVICE_INTERFACE_CLASS(0x1690, 0x7588, 0xff),			/* ASKEY WWHC050 */
-> +	  .driver_info = RSVD(1) | RSVD(4) },
-
-I know the entries here appear to be in mostly random order, but if
-you're adding numerical ids towards the end, perhaps you can try to
-insert them in order.
-
->  	{ } /* Terminating entry */
->  };
->  MODULE_DEVICE_TABLE(usb, option_ids);
+>  drivers/usb/serial/ch341.c | 196 +++++++++++++++++++++++++++++++++----
+>  1 file changed, 176 insertions(+), 20 deletions(-)
 
 Johan
