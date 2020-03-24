@@ -2,88 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43321190A2E
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 11:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D20190A42
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 11:09:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727111AbgCXKFn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Mar 2020 06:05:43 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:43391 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727092AbgCXKFn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 06:05:43 -0400
-Received: by mail-lf1-f67.google.com with SMTP id n20so12668513lfl.10
-        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2020 03:05:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=muL5WwuZeHRIWwUtcJeJpBMAizLFgTYYGfm0B1HRdEM=;
-        b=pkVGdii+StnxMAgELNPz2MnY6aPu2WiHdU3wQwItoQEL71Yn9vw9kqOEuREDqyIgIr
-         B2IX0qeKt/kZdeQMZ8CXnpyrqXpyoWmV1sPRk+h9PC3033daIIJUKHvne6YblxBPwqGE
-         xA5q8PJ05tf43fYONQVQ/h4CCxhAndX8rP0nOS08VCSejQXc67HzTvI0ykwW/jJ+XN87
-         CjWhlHxiePreiO1sQiqo/hTngAw+rTjsTam4ylP5QBMFWL9dsM1VjnO+Z3HVG08xCc9r
-         a6z0ypBuryi0rr2BXwJSqktGxuzlnufbH5NWgR0D3sp6/XNi14GJ/gsmwuyF6XJKhvHA
-         t8cg==
-X-Gm-Message-State: ANhLgQ29vJ7r8rURkw6CIqtEXGh9zELIiYF0ECjJKU4pzn2ybbjhFvd6
-        cPC7k838KjFs20vDyc+d2gzAdPyl
-X-Google-Smtp-Source: ADFU+vvBeVjeD0Dxc9OTp+l7kyvuXX3e5JTj4yBW8M4a157o/pgaTDhub69ZbQqFzAvFbmdcR1AV1A==
-X-Received: by 2002:ac2:5de1:: with SMTP id z1mr15762735lfq.95.1585044341759;
-        Tue, 24 Mar 2020 03:05:41 -0700 (PDT)
-Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
-        by smtp.gmail.com with ESMTPSA id r4sm9454020lfc.40.2020.03.24.03.05.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2020 03:05:41 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@kernel.org>)
-        id 1jGgR8-0006MQ-7R; Tue, 24 Mar 2020 11:05:30 +0100
-Date:   Tue, 24 Mar 2020 11:05:30 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Michael Hanselmann <public@hansmi.ch>
-Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Michael Dreher <michael@5dot1.de>,
-        Jonathan Olds <jontio@i4free.co.nz>
-Subject: Re: [PATCH 0/4] ch341: Add support for HL340 devices
-Message-ID: <20200324100530.GD5810@localhost>
-References: <cover.1583520568.git.public@hansmi.ch>
+        id S1727253AbgCXKJ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Mar 2020 06:09:28 -0400
+Received: from mga09.intel.com ([134.134.136.24]:35742 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726818AbgCXKJ2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 24 Mar 2020 06:09:28 -0400
+IronPort-SDR: KEdh5rEhPyQZgdcCZJFvJyhmZxH6FBobO4Td2o3a8EWqBUwDrKbxvBY8k9Gf6UJpBjv3rc1g+y
+ qhfdmXnEA+vQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2020 03:09:27 -0700
+IronPort-SDR: P4V78Cb2y6Y0UxSwknOXZbVNZOLqmMUwBj+bkj6U5AxZRYbOq07Uxm0tnhVHeq8jWneudptE9D
+ 6CHlxAdnfUMg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,300,1580803200"; 
+   d="scan'208";a="235538100"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga007.jf.intel.com with ESMTP; 24 Mar 2020 03:09:25 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 7A63211D; Tue, 24 Mar 2020 12:09:24 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-acpi@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2] usb: core: Add ACPI support for USB interface devices
+Date:   Tue, 24 Mar 2020 12:09:23 +0200
+Message-Id: <20200324100923.8332-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1583520568.git.public@hansmi.ch>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Michael,
+Currently on ACPI-enabled systems the USB interface device has no link to
+the actual firmware node and thus drivers may not parse additional information
+given in the table. The new feature, proposed here, allows to pass properties
+or other information to the drivers.
 
-On Fri, Mar 06, 2020 at 07:00:41PM +0000, Michael Hanselmann wrote:
-> A subset of CH341 devices does not support all features, namely the
-> prescaler is limited to a reduced precision and there is no support for
-> sending a RS232 break condition.
-> 
-> These devices can usually be identified by an imprint of "340" on the
-> turquoise-colored plug. They're also sometimes called "HL340", hence the
-> terminology in this series and driver.
+The ACPI companion of the device has to be set for USB interface devices
+to achieve above. Use ACPI_COMPANION_SET macro to set this.
 
-You need to come up with a different designation. I have a HL340 device
-here which works just fine.
+Note, OF already does link of_node and this is the same for ACPI case.
 
-> This series adds detection of these devices, adjusts the
-> divisor/prescaler setup and implements a simulated break condition.
-> 
-> Michael Hanselmann (4):
->   ch341: Name more registers
->   ch341: Detect HL340 variant
->   ch341: Limit prescaler on HL340 variant
->   ch341: Simulate break condition on HL340 variant
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: rewrite commit message to emphasize that it is a new feature (Greg)
+ drivers/usb/core/message.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Nit: please use a "USB: serial: ch341:" subject prefix.
+diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+index 5adf489428aa..d5f834f16993 100644
+--- a/drivers/usb/core/message.c
++++ b/drivers/usb/core/message.c
+@@ -5,6 +5,7 @@
+  * Released under the GPLv2 only.
+  */
+ 
++#include <linux/acpi.h>
+ #include <linux/pci.h>	/* for scatterlist macros */
+ #include <linux/usb.h>
+ #include <linux/module.h>
+@@ -1941,6 +1942,7 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
+ 			intf->dev.of_node = usb_of_get_interface_node(dev,
+ 					configuration, ifnum);
+ 		}
++		ACPI_COMPANION_SET(&intf->dev, ACPI_COMPANION(&dev->dev));
+ 		intf->dev.driver = NULL;
+ 		intf->dev.bus = &usb_bus_type;
+ 		intf->dev.type = &usb_if_device_type;
+-- 
+2.25.1
 
-Also, if possible, please move the second and third patches first in the
-series as these could be considered fixes rather than new features (and
-considered for backporting).
-
->  drivers/usb/serial/ch341.c | 196 +++++++++++++++++++++++++++++++++----
->  1 file changed, 176 insertions(+), 20 deletions(-)
-
-Johan
