@@ -2,77 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA64191088
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 14:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7E6191173
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 14:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728630AbgCXN31 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Mar 2020 09:29:27 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:51077 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727578AbgCXN30 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 09:29:26 -0400
-Received: (qmail 6089 invoked by uid 500); 24 Mar 2020 09:29:25 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 24 Mar 2020 09:29:25 -0400
-Date:   Tue, 24 Mar 2020 09:29:25 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Oliver Neukum <oneukum@suse.com>
-cc:     Kyungtae Kim <kt0755@gmail.com>, <linux-usb@vger.kernel.org>
-Subject: Re: Fwd: BUG: KASAN: use-after-free in usb_hcd_unlink_urb+0x5f/0x170
- drivers/usb/core/hcd.c
-In-Reply-To: <1585046753.7151.18.camel@suse.com>
-Message-ID: <Pine.LNX.4.44L0.2003240928240.4640-100000@netrider.rowland.org>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+        id S1728193AbgCXNnd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Mar 2020 09:43:33 -0400
+Received: from mx2.suse.de ([195.135.220.15]:55924 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727904AbgCXNnd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 24 Mar 2020 09:43:33 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 0C7CEAC0C;
+        Tue, 24 Mar 2020 13:43:31 +0000 (UTC)
+Message-ID: <1585057397.7151.22.camel@suse.de>
+Subject: Re: KASAN: slab-out-of-bounds Read in garmin_read_process
+From:   Oliver Neukum <oneukum@suse.de>
+To:     syzbot <syzbot+d29e9263e13ce0b9f4fd@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, gregkh@linuxfoundation.org,
+        johan@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Date:   Tue, 24 Mar 2020 14:43:17 +0100
+In-Reply-To: <000000000000ca19c205a15d8aca@google.com>
+References: <000000000000ca19c205a15d8aca@google.com>
+Content-Type: multipart/mixed; boundary="=-uEHle+UyLTjyzWxu00zb"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 24 Mar 2020, Oliver Neukum wrote:
 
-> Am Montag, den 23.03.2020, 02:18 -0400 schrieb Kyungtae Kim:
-> > We report a bug (in linux-5.5.11) found by FuzzUSB (a modified version
-> > of syzkaller)
-> 
-> Hi,
-> 
-> thank you for the report. Is this a reproducible bug?
-> 
-> > In function usb_hcd_unlink_urb (driver/usb/core/hcd.c:1607), it tries to
-> > read "urb->use_count". But it seems the instance "urb" was
-> > already freed (right after urb->dev at line 1597) by the function "urb_destroy"
-> > in a different thread, which caused memory access violation.
-> 
-> Yes.
-> 
-> > To solve, it may need to check if urb is valid before urb->use_count,
-> > to avoid such freed memory access.
-> 
-> Difficult to do as the URB itself would be invalid.
-> 
-> I am afraid there is a race in here:
-> 
-> 
->         if (test_bit(US_FLIDX_ABORTING, &us->dflags)) {
->                 /* cancel the request, if it hasn't been cancelled already */
->                 if (test_and_clear_bit(US_FLIDX_SG_ACTIVE, &us->dflags)) {
->                         usb_stor_dbg(us, "-- cancelling sg request\n");
->                         usb_sg_cancel(&us->current_sg);
->                 }
->         }
-> 
->         /* wait for the completion of the transfer */
->         usb_sg_wait(&us->current_sg);
->         clear_bit(US_FLIDX_SG_ACTIVE, &us->dflags);
-> 
-> 
-> What keeps the request alive while usb_sg_wait() is running?
+--=-uEHle+UyLTjyzWxu00zb
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 
-It's a bug in the SG library code.  I'll post a patch later on, 
-although it's not clear whether anyone will be able to test it 
-properly.
+Am Samstag, den 21.03.2020, 06:40 -0700 schrieb syzbot:
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    e17994d1 usb: core: kcov: collect coverage from usb comple..
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=16255ce5e00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=5d64370c438bc60
+> dashboard link: https://syzkaller.appspot.com/bug?extid=d29e9263e13ce0b9f4fd
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1376a3f9e00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14c65fe3e00000
 
-Alan Stern
+#syz test: https://github.com/google/kasan.git e17994d1
+
+--=-uEHle+UyLTjyzWxu00zb
+Content-Disposition: attachment;
+	filename="0002-garmin_gps-add-sanity-checking-for-data-length.patch"
+Content-Transfer-Encoding: base64
+Content-Type: text/x-patch;
+	name="0002-garmin_gps-add-sanity-checking-for-data-length.patch";
+	charset="UTF-8"
+
+RnJvbSAzNmJhOWM2NDI1M2NjNDIzODM3NmI3NDIzNWExNjMyODhhZjU5NjM4IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
+OiBUdWUsIDI0IE1hciAyMDIwIDEzOjQ2OjMxICswMTAwClN1YmplY3Q6IFtQQVRDSCAyLzJdIGdh
+cm1pbl9ncHM6IGFkZCBzYW5pdHkgY2hlY2tpbmcgZm9yIGRhdGEgbGVuZ3RoCgpXZSBtdXN0IG5v
+dCBwcm9jZXNzIHBhY2tldHMgc2hvcnRlciB0aGFuIGEgcGFja2V0IElECgpTaWduZWQtb2ZmLWJ5
+OiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgotLS0KIGRyaXZlcnMvdXNiL3Nlcmlh
+bC9nYXJtaW5fZ3BzLmMgfCA0ICsrLS0KIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyks
+IDIgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2Ivc2VyaWFsL2dhcm1pbl9n
+cHMuYyBiL2RyaXZlcnMvdXNiL3NlcmlhbC9nYXJtaW5fZ3BzLmMKaW5kZXggZmZkOTg0MTQyMTcx
+Li5hNzJmYmJjNjU0MzYgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNiL3NlcmlhbC9nYXJtaW5fZ3Bz
+LmMKKysrIGIvZHJpdmVycy91c2Ivc2VyaWFsL2dhcm1pbl9ncHMuYwpAQCAtMTEzOCw4ICsxMTM4
+LDggQEAgc3RhdGljIHZvaWQgZ2FybWluX3JlYWRfcHJvY2VzcyhzdHJ1Y3QgZ2FybWluX2RhdGEg
+Kmdhcm1pbl9kYXRhX3AsCiAJCSAgIHNlbmQgaXQgZGlyZWN0bHkgdG8gdGhlIHR0eSBwb3J0ICov
+CiAJCWlmIChnYXJtaW5fZGF0YV9wLT5mbGFncyAmIEZMQUdTX1FVRVVJTkcpIHsKIAkJCXBrdF9h
+ZGQoZ2FybWluX2RhdGFfcCwgZGF0YSwgZGF0YV9sZW5ndGgpOwotCQl9IGVsc2UgaWYgKGJ1bGtf
+ZGF0YSB8fAotCQkJICAgZ2V0TGF5ZXJJZChkYXRhKSA9PSBHQVJNSU5fTEFZRVJJRF9BUFBMKSB7
+CisJCX0gZWxzZSBpZiAoYnVsa19kYXRhIHx8IChkYXRhX2xlbmd0aCA+PSBzaXplb2YodTMyKSAm
+JgorCQkJICAgZ2V0TGF5ZXJJZChkYXRhKSA9PSBHQVJNSU5fTEFZRVJJRF9BUFBMKSkgewogCiAJ
+CQlzcGluX2xvY2tfaXJxc2F2ZSgmZ2FybWluX2RhdGFfcC0+bG9jaywgZmxhZ3MpOwogCQkJZ2Fy
+bWluX2RhdGFfcC0+ZmxhZ3MgfD0gQVBQX1JFU1BfU0VFTjsKLS0gCjIuMTYuNAoK
+
+
+--=-uEHle+UyLTjyzWxu00zb--
 
