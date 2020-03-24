@@ -2,127 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65746191361
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 15:37:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FF019139B
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 15:50:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727385AbgCXOhl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Mar 2020 10:37:41 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:38099 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727168AbgCXOhl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 10:37:41 -0400
-Received: by mail-lf1-f68.google.com with SMTP id c5so7962217lfp.5
-        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2020 07:37:39 -0700 (PDT)
+        id S1728065AbgCXOuP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Mar 2020 10:50:15 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:33169 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727453AbgCXOuM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 10:50:12 -0400
+Received: by mail-lj1-f193.google.com with SMTP id f20so3020765ljm.0
+        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2020 07:50:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wOe/cwkgIM9Ab4hg3mczmIi4wh/0K818LHuirOHiJ4A=;
-        b=URod6sSAasEBeJ7UfuCiMIlcvfkkmmZgypzB/5zXAFTWfHRahsHWewBjncbYea079c
-         SmcUkFauuYKCzTJYp+pY5jNK8w8yvzCcJnLvjcCuDh0rdqlNDMA4aDzEmZOeheV6pUZh
-         9WxWbs93NyNQcQTu2lzSartwXN2f5jMacelqkx5eYHNr2RorLXid4QjyUf4HNlYbfTrc
-         iatkxTNrJQH5MqYmr2azDFe/snTXi56H7SU+2PeKKHRY0ybLYnUNdjtePQC40pST6MyQ
-         9dvnU5AE/Mkw6IvAS3f9iHzso7pFclL29N4AWSAoYUf1iF5GGs1xDDiKK0BJklqwQP+3
-         45kQ==
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=46/qQ50l1vh+J9wzA3xpUZxvvo8d7tioQFsg4+TJ/o8=;
+        b=bvYpkG8m/ns3rG4ZA+zT/M4MjsHPmDeoGGnpZ5cpYzMvSfGA4iOGMFepedJZweWbNe
+         2iyBmESEUeF6IAQJfDmsoYgZ5UsV0INu6mmp3Yare9tsponpOhbkMHgg+tPLmXvgBtpe
+         8jeYLQx+pLubdj8l4AUXte+u0jX5TjBmNmpw79Qd/FNhuoQS4mUrMfs6399CzGjQNsxt
+         +cIiJC7mz00fj6BWt/lAM9WLf99bZ7mzCNNef1hULoqwBw6HjopoNZdlf8423OjoRHx+
+         34/AGy3xW1NxXaHFhRAmQu0tBqSNYOitMsFSXZBpS8G4+ZNExQxXFjHa75IYB247HWho
+         VgYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wOe/cwkgIM9Ab4hg3mczmIi4wh/0K818LHuirOHiJ4A=;
-        b=oS/bdoYcXPUo0rXQ1IegNkJZjMxOc6dcNufrtoFcnzr6/m0nWInP/9MN/dGL/dQTXx
-         eIV7+eIbl74TB42BU8nXmkN0P6dgveMG7ypl+nJF4MfDxnANdNLVYYsFWNIW/o8hvDeg
-         lujEGZC20BupsBIQVqKJk7lM974YIOqBYUIGgunFy6wvqFhg5hycmCwIPLRNmkxCO9Yf
-         I46wqPW/388bB1Ui/iUdiELSVEtSd0+/AIPqvcbPH7KoZy74ceG5SJo1fknCXe5YA+Tf
-         Fg114hj7IT7atZpeM2gKqzOeal8bS8TRID7L0Unmj99dghgJ6gq03Q4DC2e5zv19jAI1
-         IbPg==
-X-Gm-Message-State: ANhLgQ3Mi8OJXvYLqJf/xdas96F7EPBUY7Q97UkbvqZEyLXL06Ja+Qzh
-        X/1Sigu4QwPztpIN7meCHlUIkRlWksiPAfjWUOY=
-X-Google-Smtp-Source: ADFU+vsZC/jXY3DWAG9uq5f+7YhlDvIzgnDW5IikwmVU4Ij6DBBavpPGJpMHsoKVUxWEmUfvJu4weAVKU1KqduhRP0E=
-X-Received: by 2002:ac2:548f:: with SMTP id t15mr16681025lfk.115.1585060658724;
- Tue, 24 Mar 2020 07:37:38 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=46/qQ50l1vh+J9wzA3xpUZxvvo8d7tioQFsg4+TJ/o8=;
+        b=luojmlicYDSA2/cPQ4/LuE7Wxxk2Mvjr496jaUkfTEmJmL0pbeMU6W/b9mC6589TXJ
+         T3+2OMOsOU7Trasde/5YWmTyEojWdAsRzSqPHZl60BWzGu/I9ftqUgioRl4ldXjW26sM
+         YtWvdL9v7sh0Z/2bxwALX2MXeXgiarO5r6SWjU55Osid5CZpAOy4KXiAIpX8Y7SngT/C
+         hMIJv7tm20eLolc+VajotEoRHr63chP6kmUhMcXqgKMahTzbMycwKp+1ErBPpiGrsUVN
+         qXu/pmjdGQz5R2yMCFVE/5+p8Owhvlt0UQSxCsOyQ9hetNHjQIGtVbZCLWg4itDp1zBn
+         2ABg==
+X-Gm-Message-State: ANhLgQ2WT5T/RIrDgtZkyjQo7HnmBpyg3P0lQ/FfFgAW5faSNxoryby7
+        bFNpcug5uXkzvjw7fnnQ6rEgoA==
+X-Google-Smtp-Source: ADFU+vsduWqt1Gs363mlpwe4KUHBbe4xPS+tER4rFbeA45hsI3KGrYgm1BWdEuzCSeE6tQZKCp8hmQ==
+X-Received: by 2002:a2e:9f07:: with SMTP id u7mr11833365ljk.115.1585061409797;
+        Tue, 24 Mar 2020 07:50:09 -0700 (PDT)
+Received: from wasted.cogentembedded.com ([2a00:1fa0:42d3:3567:1f77:9f32:8c0:b337])
+        by smtp.gmail.com with ESMTPSA id x11sm1431543ljm.7.2020.03.24.07.50.08
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 24 Mar 2020 07:50:09 -0700 (PDT)
+Subject: Re: [PATCH v2]usb: gadget: bcm63xx_udc:remove redundant variable
+ assignment
+To:     Tang Bin <tangbin@cmss.chinamobile.com>, cernekee@gmail.com,
+        balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20200324132029.16296-1-tangbin@cmss.chinamobile.com>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Organization: Cogent Embedded
+Message-ID: <a0afd44f-177d-ad21-02b5-93b15b29399e@cogentembedded.com>
+Date:   Tue, 24 Mar 2020 17:50:07 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-References: <CAEAjamtTnn+BZAshQ7=DQ7QdRHO83AbHeZP3xY1CpSzmbaHPDQ@mail.gmail.com>
- <Pine.LNX.4.44L0.2003241011510.4640-100000@netrider.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.2003241011510.4640-100000@netrider.rowland.org>
-From:   Kyungtae Kim <kt0755@gmail.com>
-Date:   Tue, 24 Mar 2020 10:37:27 -0400
-Message-ID: <CAEAjams75BP5tRoJ9Xkfk7qa5pFwAsHTr4j0OJjof7WM72gxrg@mail.gmail.com>
-Subject: Re: Fwd: BUG: KASAN: use-after-free in usb_hcd_unlink_urb+0x5f/0x170 drivers/usb/core/hcd.c
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200324132029.16296-1-tangbin@cmss.chinamobile.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-MW
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 24, 2020 at 10:14:39AM -0400, Alan Stern wrote:
-> On Mon, 23 Mar 2020, Kyungtae Kim wrote:
->
-> > We report a bug (in linux-5.5.11) found by FuzzUSB (a modified version
-> > of syzkaller)
-> >
-> > In function usb_hcd_unlink_urb (driver/usb/core/hcd.c:1607), it tries to
-> > read "urb->use_count". But it seems the instance "urb" was
-> > already freed (right after urb->dev at line 1597) by the function "urb_destroy"
-> > in a different thread, which caused memory access violation.
-> > To solve, it may need to check if urb is valid before urb->use_count,
-> > to avoid such freed memory access.
->
-> No, the problem is "free while still in use", caused by the fact that
-> usb_sg_cancel() fails to indicate it is using the data structures.
->
-> > kernel config: https://kt0755.github.io/etc/config_v5.5.11
-> >
-> > ==================================================================
-> > BUG: KASAN: use-after-free in atomic_read
-> > include/asm-generic/atomic-instrumented.h:26 [inline]
-> > BUG: KASAN: use-after-free in usb_hcd_unlink_urb+0x5f/0x170
-> > drivers/usb/core/hcd.c:1607
-> > Read of size 4 at addr ffff888065379610 by task kworker/u4:1/27
->
-> Here is a patch which ought to fix the problem.  Can you test it?
->
-> Alan Stern
->
->
-> Index: usb-devel/drivers/usb/core/message.c
-> ===================================================================
-> --- usb-devel.orig/drivers/usb/core/message.c
-> +++ usb-devel/drivers/usb/core/message.c
-> @@ -588,12 +588,13 @@ void usb_sg_cancel(struct usb_sg_request
->       int i, retval;
->
->       spin_lock_irqsave(&io->lock, flags);
-> -     if (io->status) {
-> +     if (io->status || io->count == 0) {
->               spin_unlock_irqrestore(&io->lock, flags);
->               return;
->       }
->       /* shut everything down */
->       io->status = -ECONNRESET;
-> +     io->count++;            /* Keep the request alive until we're done */
->       spin_unlock_irqrestore(&io->lock, flags);
->
->       for (i = io->entries - 1; i >= 0; --i) {
-> @@ -607,6 +608,12 @@ void usb_sg_cancel(struct usb_sg_request
->                       dev_warn(&io->dev->dev, "%s, unlink --> %d\n",
->                                __func__, retval);
->       }
-> +
-> +     spin_lock_irqsave(&io->lock, flags);
-> +     io->count--;
-> +     if (!io->count)
-> +             complete(&io->complete);
-> +     spin_unlock_irqrestore(&io->lock, flags);
->  }
->  EXPORT_SYMBOL_GPL(usb_sg_cancel);
->
->
+Hello!
 
-Thanks for the patch. Unfortunately, we don't have a repro program to
-test right now.
+On 03/24/2020 04:20 PM, Tang Bin wrote:
 
-Regards,
-Kyungtae Kim
+> --v1------------------------------------
+> In this function, the variable 'rc' is assigned after this place,
+> so the definition is invalid.
+> 
+> --v2------------------------------------
+> In this function, the variable 'rc' will be assigned by the function
+> 'usb_add_gadget_udc()',so the assignment here is redundant,we should
+> remove it.
+> 
+> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+
+   NAK.
+
+> ---
+>  drivers/usb/gadget/udc/bcm63xx_udc.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/bcm63xx_udc.c b/drivers/usb/gadget/udc/bcm63xx_udc.c
+> index 54501814d..a7afa8c35 100644
+> --- a/drivers/usb/gadget/udc/bcm63xx_udc.c
+> +++ b/drivers/usb/gadget/udc/bcm63xx_udc.c
+> @@ -2321,8 +2321,6 @@ static int bcm63xx_udc_probe(struct platform_device *pdev)
+>  	if (rc)
+>  		return rc;
+>  
+> -	rc = -ENXIO;
+> -
+>  	/* IRQ resource #0: control interrupt (VBUS, speed, etc.) */
+>  	irq = platform_get_irq(pdev, 0);
+>  	if (irq < 0)
+
+   This *if* branch goes to the 'out_uninit' label which uses 'rc' (and it should
+be negative).
+   In principle, if you change 'rc' to 'irq' below, this patch would be sane.
+It's not as is.
+
+MBR, Sergei
