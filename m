@@ -2,125 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BBC191926
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 19:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C891919CE
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 20:23:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728066AbgCXS21 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Mar 2020 14:28:27 -0400
-Received: from mx2.suse.de ([195.135.220.15]:46994 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727942AbgCXS20 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Mar 2020 14:28:26 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id EE53FABF6;
-        Tue, 24 Mar 2020 18:28:24 +0000 (UTC)
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     linux-kernel@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com, f.fainelli@gmail.com,
-        gregkh@linuxfoundation.org, tim.gover@raspberrypi.org,
-        linux-pci@vger.kernel.org, wahrenst@gmx.net,
-        sergei.shtylyov@cogentembedded.com,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Subject: [PATCH v6 4/4] USB: pci-quirks: Add Raspberry Pi 4 quirk
-Date:   Tue, 24 Mar 2020 19:28:12 +0100
-Message-Id: <20200324182812.20420-5-nsaenzjulienne@suse.de>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200324182812.20420-1-nsaenzjulienne@suse.de>
-References: <20200324182812.20420-1-nsaenzjulienne@suse.de>
+        id S1725877AbgCXTWZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Mar 2020 15:22:25 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:40163 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725927AbgCXTWZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 15:22:25 -0400
+Received: (qmail 12890 invoked by uid 500); 24 Mar 2020 15:22:24 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 24 Mar 2020 15:22:24 -0400
+Date:   Tue, 24 Mar 2020 15:22:24 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Qais Yousef <qais.yousef@arm.com>
+cc:     Oliver Neukum <oneukum@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
+In-Reply-To: <20200324172235.bsxea6qb3id6bhb3@e107158-lin>
+Message-ID: <Pine.LNX.4.44L0.2003241445210.8484-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On the Raspberry Pi 4, after a PCI reset, VL805's firmware may either be
-loaded directly from an EEPROM or, if not present, by the SoC's
-VideCore. Inform VideCore that VL805 was just reset.
+On Tue, 24 Mar 2020, Qais Yousef wrote:
 
-Also, as this creates a dependency between USB_PCI and VideoCore's
-firmware interface. Since USB_PCI can't be set as a module neither this
-should.
+> On 03/24/20 11:56, Alan Stern wrote:
 
-Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> > This certainly reinforces the initial impression that the cause of the
+> > warnings is a bug in the platform code.  You should ask the appropriate
+> > maintainer.
+> 
+> The device-tree compatible node returns "generic-ohci".
+> drivers/usb/host/ohci-platform.c returns you as the maintainer :-)
 
----
+I'm the maintainer of the driver for the device.  But the device
+structure itself (the one named 7ffb0000.ohci) gets created by 
+device-tree -- that's what I was referring to.
 
-Changes since v5:
- - Fix Kconfig issue with allmodconfig
+Here's the first error message:
 
-Changes since v4:
- - Do not split up error message
+usb usb2: runtime PM trying to activate child device usb2 but parent (7ffb0000.ohci) is not active
 
-Changes since v3:
- - Add more complete error message
+The runtime PM status of 7ffb0000.ohci is set in ohci_platform_probe(),
+which does:
 
-Changes since v1:
- - Make RASPBERRYPI_FIRMWARE dependent on this quirk to make sure it
-   gets compiled when needed.
+        pm_runtime_set_active(&dev->dev);
 
- drivers/firmware/Kconfig      |  3 ++-
- drivers/usb/host/pci-quirks.c | 16 ++++++++++++++++
- 2 files changed, 18 insertions(+), 1 deletion(-)
+The runtime PM status can change, and there aren't any debugging 
+statements in ohci_platform_suspend() or ohci_platform_resume() (or 
+ohci_suspend()/ohci_resume() in ohci-hcd.c, for that matter).  Maybe 
+you can add some so we can see if anything strange is going on.
 
-diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
-index ea869addc89b..78ab2ad6d3f0 100644
---- a/drivers/firmware/Kconfig
-+++ b/drivers/firmware/Kconfig
-@@ -178,8 +178,9 @@ config ISCSI_IBFT
- 	  Otherwise, say N.
- 
- config RASPBERRYPI_FIRMWARE
--	tristate "Raspberry Pi Firmware Driver"
-+	bool "Raspberry Pi Firmware Driver"
- 	depends on BCM2835_MBOX
-+	default USB_PCI
- 	help
- 	  This option enables support for communicating with the firmware on the
- 	  Raspberry Pi.
-diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
-index beb2efa71341..0dc34668bb2a 100644
---- a/drivers/usb/host/pci-quirks.c
-+++ b/drivers/usb/host/pci-quirks.c
-@@ -16,6 +16,9 @@
- #include <linux/export.h>
- #include <linux/acpi.h>
- #include <linux/dmi.h>
-+
-+#include <soc/bcm2835/raspberrypi-firmware.h>
-+
- #include "pci-quirks.h"
- #include "xhci-ext-caps.h"
- 
-@@ -1243,11 +1246,24 @@ static void quirk_usb_handoff_xhci(struct pci_dev *pdev)
- 
- static void quirk_usb_early_handoff(struct pci_dev *pdev)
- {
-+	int ret;
-+
- 	/* Skip Netlogic mips SoC's internal PCI USB controller.
- 	 * This device does not need/support EHCI/OHCI handoff
- 	 */
- 	if (pdev->vendor == 0x184e)	/* vendor Netlogic */
- 		return;
-+
-+	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483) {
-+		ret = rpi_firmware_init_vl805(pdev);
-+		if (ret) {
-+			/* Firmware might be outdated, or something failed */
-+			dev_warn(&pdev->dev,
-+				 "Failed to load VL805's firmware: %d. Will continue to attempt to work, but bad things might happen. You should fix this...\n",
-+				 ret);
-+		}
-+	}
-+
- 	if (pdev->class != PCI_CLASS_SERIAL_USB_UHCI &&
- 			pdev->class != PCI_CLASS_SERIAL_USB_OHCI &&
- 			pdev->class != PCI_CLASS_SERIAL_USB_EHCI &&
--- 
-2.25.1
+Any maybe you can find out exactly where that error message is coming 
+from by calling dump_stack() immediately after the dev_err() line 
+(approximately line 1198 in drivers/base/power/runtime.c).
+
+(Also, you might want to turn off rcutorture.  It adds a lot of 
+messages to the system log that are irrelevant for our purposes.)
+
+Alan Stern
 
