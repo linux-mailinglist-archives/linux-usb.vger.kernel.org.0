@@ -2,19 +2,19 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4786F1911DC
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 14:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B87B191209
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 14:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728957AbgCXNrm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Mar 2020 09:47:42 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:53793 "HELO
+        id S1727510AbgCXNwN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Mar 2020 09:52:13 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:42263 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727323AbgCXNrm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 09:47:42 -0400
-Received: (qmail 8027 invoked by uid 500); 24 Mar 2020 09:47:40 -0400
+        with SMTP id S1727289AbgCXNwN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 09:52:13 -0400
+Received: (qmail 8446 invoked by uid 500); 24 Mar 2020 09:52:12 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 24 Mar 2020 09:47:40 -0400
-Date:   Tue, 24 Mar 2020 09:47:40 -0400 (EDT)
+  by localhost with SMTP; 24 Mar 2020 09:52:12 -0400
+Date:   Tue, 24 Mar 2020 09:52:12 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@netrider.rowland.org
 To:     Qais Yousef <qais.yousef@arm.com>
@@ -22,8 +22,8 @@ cc:     Oliver Neukum <oneukum@suse.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
-In-Reply-To: <20200324104610.pqdtaocg6qctlnqv@e107158-lin>
-Message-ID: <Pine.LNX.4.44L0.2003240937410.4640-100000@netrider.rowland.org>
+In-Reply-To: <20200324134353.eamiridhnjrmirgt@e107158-lin>
+Message-ID: <Pine.LNX.4.44L0.2003240949180.4640-100000@netrider.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -33,43 +33,53 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 On Tue, 24 Mar 2020, Qais Yousef wrote:
 
-> I should have stuck to what I know then. I misread the documentation. Hopefully
-> the attached looks better. I don't see the new debug you added emitted.
+> On 03/24/20 14:20, Oliver Neukum wrote:
+> > Am Dienstag, den 24.03.2020, 10:46 +0000 schrieb Qais Yousef:
+> > > 
+> > > I should have stuck to what I know then. I misread the documentation. Hopefully
+> > > the attached looks better. I don't see the new debug you added emitted.
+> > 
+> > That is odd. Please try
+> > 
+> > echo "module usbcore +mfp" > /sys/kernel/debug/dynamic_debug/control
+> > 
+> > with the attached improved patch.
+> 
+> Hmm still no luck
+> 
+> 
+> # history
+>    0 echo "module usbcore +mfp" > /sys/kernel/debug/dynamic_debug/control
+>    1 swapoff -a
+>    2 echo suspend > /sys/power/disk
+>    3 echo disk > /sys/power/state
+>    4 dmesg > usb.dmesg
 
-These lines:
+What happens if you omit step 1 (the swapoff)?
 
-[  158.113836] ohci_hcd:ohci_resume: ohci-platform 7ffb0000.ohci: powerup ports
-[  158.139682] usbcore:hcd_bus_resume: usb usb2: usb resume
-[  158.139715] ohci_hcd:ohci_rh_resume: ohci-platform 7ffb0000.ohci: resume root hub
-...
-[  158.219604] usbcore:hub_resume: hub 2-0:1.0: hub_resume
-[  158.220482] usb usb2: runtime PM trying to activate child device usb2 but parent (7ffb0000.ohci) is not active
+> $ git log -p
+> commit dfd1731f9a3e7592135d2a6b2a5c5e1640a7eea4 (HEAD)
+> Author: Oliver Neukum <oneukum@suse.com>
+> Date:   Mon Mar 23 16:34:35 2020 +0100
+> 
+>     usb: hub additional debugging
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 54cd8ef795ec..12ce2fdc4c2a 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -1629,6 +1629,7 @@ static int hub_configure(struct usb_hub *hub,
+>                 ret = -ENOMEM;
+>                 goto fail;
+>         }
+> +       dev_dbg(hub_dev, "%p URB allocated \n", hub->urb);
+> 
+>         usb_fill_int_urb(hub->urb, hdev, pipe, *hub->buffer, maxp, hub_irq,
+>                 hub, endpoint->bInterval);
 
-suggest there is a bug in the platform code.  The 7ffb0000.ohci 
-platform device should already be resumed and active at this point.
-
-Following that, this is suspicious:
-
-[  158.482995] PM: Cannot find swap device, try swapon -a
-[  158.488379] PM: Cannot get swap writer
-
-Since there was never any device attached to the OHCI controller, this
-error is not connected to the previous one.  In fact, the swap device
-was plugged into the EHCI controller; it was 1-1.1.  But the log
-doesn't contain anything about that device being suspended, resumed, or
-disconnected.  What happened to it?
-
-[  159.064094] OOM killer enabled.
-[  159.067351] Restarting tasks ... 
-[  159.068831] usbcore:hub_event: hub 2-0:1.0: state 7 ports 1 chg 0000 evt 0000
-[  159.079921] usbcore:hub_event: hub 1-1:1.0: state 7 ports 4 chg 0000 evt 0000
-[  159.079959] usbcore:hub_event: hub 1-0:1.0: state 7 ports 1 chg 0000 evt 0000
-[  159.090776] done.
-[  159.097076] usbcore:hub_resume: hub 2-0:1.0: hub_resume
-[  159.102961] ------------[ cut here ]------------
-[  159.107805] URB (____ptrval____) submitted while active
-
-And why was usb2 resumed twice in a row with intervening suspend?
+Oliver, by the way, %p isn't a good way to get pointer values for 
+debugging.  Its output depends on how the system is configured.  Use 
+%px instead (see Documentation/core-api/printk-formats.rst).
 
 Alan Stern
 
