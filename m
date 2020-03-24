@@ -2,94 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E825B190CA9
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 12:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 350F91910CF
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 14:32:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727194AbgCXLpl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Mar 2020 07:45:41 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:34089 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727159AbgCXLpk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 07:45:40 -0400
-Received: by mail-ot1-f68.google.com with SMTP id j16so16704630otl.1;
-        Tue, 24 Mar 2020 04:45:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8Xukp+Fc29wzZVTyzrk0qXNwo77782YSPsXV0QOP/4s=;
-        b=CKMISH7rNroUwn5rqL97h0snWq8ec+kW1cZpKeb6u8szCQNd4iJ7GnohX2QYPuYSq7
-         AU8/Hv/8X8aH3mluD+wN0QxvdcK3lph/5imwk0afct3HAClO8pThavmnO+SWWSqY9qkP
-         /PWjB3VBzsBYGpNh7lIbUDZrghhPXeBPu905VFORtzFUhK7AYw445e+tnCpEvDwlmmiB
-         R0UT2qROQG43M8A2XmbpeHUYyI/ORzIBWMS5Z+Ly3mP68bGibWGqHbbvNccMviprgJWG
-         y+XiFMqzlTJyN47fb9LCfjFBusT3q6SldinanEX+IktHHHmJqDp42O9IFAxizcfucHlj
-         QuFA==
-X-Gm-Message-State: ANhLgQ3+gtEAWHdq6ux/TrndlXuM6tTlHhAN+lfKJKOMQ0f73kNhV+yn
-        yz2bYG71slY/mNvTbCZD9kakuyUsvowOYBfrK/E=
-X-Google-Smtp-Source: ADFU+vtHv2jhYbUQsGRpWUfeFfSaAVuU5XJfBh/zKjb/MDZ/2zYirryiypPOKyCEo5dYq+i4k0/xKdoJzQrs/2CTN40=
-X-Received: by 2002:a4a:df05:: with SMTP id i5mr1851614oou.9.1585050339936;
- Tue, 24 Mar 2020 04:45:39 -0700 (PDT)
+        id S1728227AbgCXNUI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Mar 2020 09:20:08 -0400
+Received: from cmccmta2.chinamobile.com ([221.176.66.80]:7074 "EHLO
+        cmccmta2.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728140AbgCXNUE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 09:20:04 -0400
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.15]) by rmmx-syy-dmz-app08-12008 (RichMail) with SMTP id 2ee85e7a08d2db9-91b8d; Tue, 24 Mar 2020 21:19:14 +0800 (CST)
+X-RM-TRANSID: 2ee85e7a08d2db9-91b8d
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from localhost.localdomain (unknown[112.1.174.174])
+        by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee85e7a08cfa0f-0ed6c;
+        Tue, 24 Mar 2020 21:19:14 +0800 (CST)
+X-RM-TRANSID: 2ee85e7a08cfa0f-0ed6c
+From:   Tang Bin <tangbin@cmss.chinamobile.com>
+To:     cernekee@gmail.com, balbi@kernel.org, gregkh@linuxfoundation.org,
+        sergei.shtylyov@cogentembedded.com
+Cc:     f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Tang Bin <tangbin@cmss.chinamobile.com>
+Subject: [PATCH v2]usb: gadget: bcm63xx_udc:remove redundant variable assignment
+Date:   Tue, 24 Mar 2020 21:20:29 +0800
+Message-Id: <20200324132029.16296-1-tangbin@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.20.1.windows.1
 MIME-Version: 1.0
-References: <20200324100923.8332-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20200324100923.8332-1-andriy.shevchenko@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 24 Mar 2020 12:45:29 +0100
-Message-ID: <CAJZ5v0gMbpBNu=C+YoNY1jSGFfXkwro=srtxAXc8NmBZV+cP+Q@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: core: Add ACPI support for USB interface devices
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 24, 2020 at 11:09 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Currently on ACPI-enabled systems the USB interface device has no link to
-> the actual firmware node and thus drivers may not parse additional information
-> given in the table. The new feature, proposed here, allows to pass properties
-> or other information to the drivers.
->
-> The ACPI companion of the device has to be set for USB interface devices
-> to achieve above. Use ACPI_COMPANION_SET macro to set this.
->
-> Note, OF already does link of_node and this is the same for ACPI case.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+--v1------------------------------------
+In this function, the variable 'rc' is assigned after this place,
+so the definition is invalid.
 
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+--v2------------------------------------
+In this function, the variable 'rc' will be assigned by the function
+'usb_add_gadget_udc()',so the assignment here is redundant,we should
+remove it.
 
-> ---
-> v2: rewrite commit message to emphasize that it is a new feature (Greg)
->  drivers/usb/core/message.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-> index 5adf489428aa..d5f834f16993 100644
-> --- a/drivers/usb/core/message.c
-> +++ b/drivers/usb/core/message.c
-> @@ -5,6 +5,7 @@
->   * Released under the GPLv2 only.
->   */
->
-> +#include <linux/acpi.h>
->  #include <linux/pci.h> /* for scatterlist macros */
->  #include <linux/usb.h>
->  #include <linux/module.h>
-> @@ -1941,6 +1942,7 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
->                         intf->dev.of_node = usb_of_get_interface_node(dev,
->                                         configuration, ifnum);
->                 }
-> +               ACPI_COMPANION_SET(&intf->dev, ACPI_COMPANION(&dev->dev));
->                 intf->dev.driver = NULL;
->                 intf->dev.bus = &usb_bus_type;
->                 intf->dev.type = &usb_if_device_type;
-> --
-> 2.25.1
->
+Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+---
+ drivers/usb/gadget/udc/bcm63xx_udc.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/bcm63xx_udc.c b/drivers/usb/gadget/udc/bcm63xx_udc.c
+index 54501814d..a7afa8c35 100644
+--- a/drivers/usb/gadget/udc/bcm63xx_udc.c
++++ b/drivers/usb/gadget/udc/bcm63xx_udc.c
+@@ -2321,8 +2321,6 @@ static int bcm63xx_udc_probe(struct platform_device *pdev)
+ 	if (rc)
+ 		return rc;
+ 
+-	rc = -ENXIO;
+-
+ 	/* IRQ resource #0: control interrupt (VBUS, speed, etc.) */
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq < 0)
+-- 
+2.20.1.windows.1
+
+
+
