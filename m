@@ -2,104 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 808DD190865
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 10:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 285B8190884
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 10:08:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727063AbgCXJAh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Mar 2020 05:00:37 -0400
-Received: from mga18.intel.com ([134.134.136.126]:20966 "EHLO mga18.intel.com"
+        id S1727148AbgCXJIw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Mar 2020 05:08:52 -0400
+Received: from mx2.suse.de ([195.135.220.15]:39006 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726944AbgCXJAh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Mar 2020 05:00:37 -0400
-IronPort-SDR: qnkRrk8dRVN+G537O+kvzZIABLND26NrsQ0navDd75kGe74ERGCgMVKXjJNNO11aHPuQVczmtC
- rnRCFNueKk1A==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2020 02:00:36 -0700
-IronPort-SDR: vpnLhlvTmPW7k2IFJ/gjiBq0FDDSH0EkGkar9BCsBrlGEISbGHJUdqwQDU1DWRfYHXEnEydqxP
- 21CYrVmCZVqg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,299,1580803200"; 
-   d="scan'208";a="393216216"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga004.jf.intel.com with ESMTP; 24 Mar 2020 02:00:35 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jGfQL-00CU45-N9; Tue, 24 Mar 2020 11:00:37 +0200
-Date:   Tue, 24 Mar 2020 11:00:37 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v1] usb: core: Add ACPI support for USB interfaces
-Message-ID: <20200324090037.GB1922688@smile.fi.intel.com>
-References: <20200323195543.51050-1-andriy.shevchenko@linux.intel.com>
- <20200324062635.GB1977781@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200324062635.GB1977781@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S1726845AbgCXJIw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 24 Mar 2020 05:08:52 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id EB2D0ACCA;
+        Tue, 24 Mar 2020 09:08:50 +0000 (UTC)
+Message-ID: <1585040918.7151.6.camel@suse.de>
+Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
+From:   Oliver Neukum <oneukum@suse.de>
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 24 Mar 2020 10:08:38 +0100
+In-Reply-To: <20200323172932.5s7txy2juhut5qdv@e107158-lin.cambridge.arm.com>
+References: <20200323143857.db5zphxhq4hz3hmd@e107158-lin.cambridge.arm.com>
+         <1584977769.27949.18.camel@suse.de>
+         <20200323172932.5s7txy2juhut5qdv@e107158-lin.cambridge.arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 24, 2020 at 07:26:35AM +0100, Greg Kroah-Hartman wrote:
-> On Mon, Mar 23, 2020 at 09:55:43PM +0200, Andy Shevchenko wrote:
-> > The ACPI companion of the device has to be set for USB interfaces
-> > in order to read and attach the properties described in the ACPI table.
-> > Use ACPI_COMPANION_SET macro to set this.
-> > 
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > ---
-> >  drivers/usb/core/message.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-> > index 5adf489428aa..d5f834f16993 100644
-> > --- a/drivers/usb/core/message.c
-> > +++ b/drivers/usb/core/message.c
-> > @@ -5,6 +5,7 @@
-> >   * Released under the GPLv2 only.
-> >   */
-> >  
-> > +#include <linux/acpi.h>
-> >  #include <linux/pci.h>	/* for scatterlist macros */
-> >  #include <linux/usb.h>
-> >  #include <linux/module.h>
-> > @@ -1941,6 +1942,7 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
-> >  			intf->dev.of_node = usb_of_get_interface_node(dev,
-> >  					configuration, ifnum);
-> >  		}
-> > +		ACPI_COMPANION_SET(&intf->dev, ACPI_COMPANION(&dev->dev));
-> >  		intf->dev.driver = NULL;
-> >  		intf->dev.bus = &usb_bus_type;
-> >  		intf->dev.type = &usb_if_device_type;
-> 
+Am Montag, den 23.03.2020, 17:29 +0000 schrieb Qais Yousef:
+> Hi Oliver
 
-> And what does this "fix"?
+Hi,
 
-It links the firmware node of physical USB device to USB interface.
-Otherwise it will be no firmware nodes under a corresponding folder.
+> First time I use dynamic debugging, hopefully I've done correctly.
 
-It mimics what is done for OF in couple of lines above.
+I am afraid not.
 
-> Is this a new feature, what isn't working today without this change?
+> 	echo "file drivers/usb/* +p" > /sys/kernel/debug/dynamic_debug/control
 
-Yes, it is a new feature. I can't tell it fixes anything, because no complains
-so far. I doubt it previously works.
+Overkill but correct. +mpf would be even better
 
-> And if it is a fix, should it be backported to older kernels, how far?
+> 	$REPRODUCE
 
-No, no need for that. Usually I put Fixes tag when I would like change to be
-considered for backporting.
+Good
 
-I'll probably update the commit message to clarify all this. Would it be enough?
+> 	cat /sys/kernel/debug/dynamic_debug/control | grep usb > usb.debug
 
--- 
-With Best Regards,
-Andy Shevchenko
+No.
 
+/sys/kernel/debug/dynamic_debug/control holds the collection of the
+messages that may be triggered, but it does not tell you which messages
+are triggered and in which order. The triggered messages end up
+in syslog. So you would use 'dmesg'
+I am afraid you redid the test correctly and then threw away the
+result.
+Could you redo it and just attach the output of dmesg?
+
+	Sorry
+		Oliver
 
