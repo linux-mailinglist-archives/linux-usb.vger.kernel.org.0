@@ -2,80 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E4C9190B4C
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 11:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC0B190B57
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 11:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727234AbgCXKlq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Mar 2020 06:41:46 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:45809 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727084AbgCXKlp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 06:41:45 -0400
-Received: by mail-lf1-f65.google.com with SMTP id v4so9072297lfo.12
-        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2020 03:41:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wqpD+wYNg1xqV0IVCC+VXA7Q+S6Q/yvjEmfajK9iKuk=;
-        b=Cem/XEQlDDsBzNFXQd5uCkUU5iQvD2AGpqr8UlsUTuNueEryoJdmEsPNT0uN08JnO6
-         BwWuKGDPUXq5OheYq+0zoNvoQZUKkQNIerk7BrsqkmKLXh5/S6eYIPZXaO13vpQhPrlp
-         /lk0X/KRSQfqW5LHp6q29CcOE/rAP4Yx7Q31brN7KZxriiAWBaWrGXfAL9w32xxc1dis
-         AI632TmF+BJisLjZFSkCT5nrG+yDLq/uBIBaunjrMoWmCPWTe7wswH3/uRLxaRKFmPwF
-         8h/IDjI1QJM6gfsXFwLpIjMNTV3HdOCzf2MF8TC0IGyDufJXNWTgA2SCtM6O5JFHxf/K
-         wBYg==
-X-Gm-Message-State: ANhLgQ0TZHqPhQWkq7Sa/vL8Hlc0SMT4KmLwQKN8b20MGuGsaDbr0gHL
-        Laogfw8vTbChWixLUPUrd/8=
-X-Google-Smtp-Source: ADFU+vuDEXtu0owO8awz/KACW4rz8tufMrdDQy2MwmRYzbjVOVtiwz7P6DszG8SH8pOP7sntijutrA==
-X-Received: by 2002:a19:6416:: with SMTP id y22mr16074315lfb.60.1585046503326;
-        Tue, 24 Mar 2020 03:41:43 -0700 (PDT)
-Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
-        by smtp.gmail.com with ESMTPSA id l11sm9796879lfg.87.2020.03.24.03.41.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2020 03:41:42 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@kernel.org>)
-        id 1jGgzz-0006bP-OA; Tue, 24 Mar 2020 11:41:31 +0100
-Date:   Tue, 24 Mar 2020 11:41:31 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Michael Hanselmann <public@hansmi.ch>
-Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Michael Dreher <michael@5dot1.de>,
-        Jonathan Olds <jontio@i4free.co.nz>
-Subject: Re: [PATCH 3/4] ch341: Limit prescaler on HL340 variant
-Message-ID: <20200324104131.GG5810@localhost>
-References: <cover.1583520568.git.public@hansmi.ch>
- <d76985a6dcf1b4aeec783dd8c8b59f054b51e07d.1583520568.git.public@hansmi.ch>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d76985a6dcf1b4aeec783dd8c8b59f054b51e07d.1583520568.git.public@hansmi.ch>
+        id S1727148AbgCXKqH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Mar 2020 06:46:07 -0400
+Received: from mx2.suse.de ([195.135.220.15]:56948 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726563AbgCXKqH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 24 Mar 2020 06:46:07 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 3918FAC50;
+        Tue, 24 Mar 2020 10:46:06 +0000 (UTC)
+Message-ID: <1585046753.7151.18.camel@suse.com>
+Subject: Re: Fwd: BUG: KASAN: use-after-free in
+ usb_hcd_unlink_urb+0x5f/0x170 drivers/usb/core/hcd.c
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Kyungtae Kim <kt0755@gmail.com>, linux-usb@vger.kernel.org
+Date:   Tue, 24 Mar 2020 11:45:53 +0100
+In-Reply-To: <CAEAjamtTnn+BZAshQ7=DQ7QdRHO83AbHeZP3xY1CpSzmbaHPDQ@mail.gmail.com>
+References: <CAEAjamtb2Kbn0He5O++=d_HCG1eQvLnGGbcVUOQ76+NfDiNybQ@mail.gmail.com>
+         <CAEAjamtTnn+BZAshQ7=DQ7QdRHO83AbHeZP3xY1CpSzmbaHPDQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 06, 2020 at 07:00:44PM +0000, Michael Hanselmann wrote:
-> HL340 devices, a subset of all CH340 devices, do not work correctly when
-> the highest prescaler bit (0b100) is set. Limit these to the lower
-> prescaler values at the cost of timing precision.
+Am Montag, den 23.03.2020, 02:18 -0400 schrieb Kyungtae Kim:
+> We report a bug (in linux-5.5.11) found by FuzzUSB (a modified version
+> of syzkaller)
 
-When we discussed this off list, you said that your device could handle
-the highest prescaler bit being set for some rates. You specifically
-confirmed that the 576000 and 921600 rates worked, while 110, 134 and
-200 did not.
+Hi,
 
-Could you reconfirm which, if any, of the following rates work with the
-current driver?
+thank you for the report. Is this a reproducible bug?
 
-	    1152000
-             921600
-             576000
-                200
-                134
-                110
+> In function usb_hcd_unlink_urb (driver/usb/core/hcd.c:1607), it tries to
+> read "urb->use_count". But it seems the instance "urb" was
+> already freed (right after urb->dev at line 1597) by the function "urb_destroy"
+> in a different thread, which caused memory access violation.
 
-Perhaps we can still continue supporting the higher rates, which are way
-off unless using the factor-2 prescaler.
+Yes.
 
-Johan
+> To solve, it may need to check if urb is valid before urb->use_count,
+> to avoid such freed memory access.
+
+Difficult to do as the URB itself would be invalid.
+
+I am afraid there is a race in here:
+
+
+        if (test_bit(US_FLIDX_ABORTING, &us->dflags)) {
+                /* cancel the request, if it hasn't been cancelled already */
+                if (test_and_clear_bit(US_FLIDX_SG_ACTIVE, &us->dflags)) {
+                        usb_stor_dbg(us, "-- cancelling sg request\n");
+                        usb_sg_cancel(&us->current_sg);
+                }
+        }
+
+        /* wait for the completion of the transfer */
+        usb_sg_wait(&us->current_sg);
+        clear_bit(US_FLIDX_SG_ACTIVE, &us->dflags);
+
+
+What keeps the request alive while usb_sg_wait() is running?
+
+	Regards
+		Oliver
+> 
