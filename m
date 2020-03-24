@@ -2,127 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 314E5190AAB
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 11:22:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0EB8190AFB
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 11:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727525AbgCXKU6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Mar 2020 06:20:58 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:41961 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727504AbgCXKU6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 06:20:58 -0400
-Received: by mail-wr1-f67.google.com with SMTP id h9so20674870wrc.8
-        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2020 03:20:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=67sFvVtkG1ivlSk+fGwbgHaYe6cmIRn/pWHBZ0lu9g4=;
-        b=G9GUxZPZnPhLAajMtiZxgmUxpYrGOcJIkPozWgUDMvAuy8EBmZbwC30xlR9wHUDnJV
-         ALFika3tbYFYgOcbEy6lLg62lZVK5VultjcamVietFmwqmduFKScAs2xljobVRPKpRXB
-         i+0XwLWm2dPB3T/cVEbeziTgctq2IaB8JoXEKasglnWC/N+nQosrtmb+n8kp06GIIR0w
-         30OWNQB2zwjvbXX5cMH+cNlV+3NUfzEfVtxBP2DaojGqjDvF5egj+tn0DSOrKutBLBFj
-         t77PxOjT7DJ0Obl93NXUkDItQyzWrNOnIQ9JmQ3KbXHMtLKZy6nVXVOBML4RvL87vvDb
-         rSqg==
+        id S1727066AbgCXKbO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Mar 2020 06:31:14 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:34906 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726167AbgCXKbO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 06:31:14 -0400
+Received: by mail-lj1-f196.google.com with SMTP id k21so1917089ljh.2
+        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2020 03:31:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=67sFvVtkG1ivlSk+fGwbgHaYe6cmIRn/pWHBZ0lu9g4=;
-        b=c55LIUc6zgsXzcSCRwWDRCZOImeP6QopwgP00mwVE2yTDqbPd1RU1f92Bluz59/5Sx
-         xtcx88HfrohzioJ0d1r5kvwhnGjubI+b/ygT0+e1fwbbEKF9HZliNCatENVdgVmGs65W
-         O5R3z0JXwPuREVsKapecMn08t8SFCGVFmUrosGsWUyDBJKAAMVlEGls8sRp4yrSkv7YY
-         bOoSZqtR4WXT3XkyPnZXdR/esKO/8o6axoJUHjMrTLH1lOtEUSAcYv173/RDWFGCB2yH
-         Knw5WHXsp4ryQXboU58q0wYGM1bMXZXptdF40gqmbJS+fM9FezPvLw3IaVMH2TwpGksj
-         i7jA==
-X-Gm-Message-State: ANhLgQ3xQWy9kTPvYV0PzECGD+tC9OS1mY9FdJetb6D1c4QKQ7tLs0nM
-        kpUlMNxAUCeS2EPpU0YsIS6ksTlN7m6KUg==
-X-Google-Smtp-Source: ADFU+vuGwhRTHhtQBh24wMOPnFqWmD8WEDTDqhBcn0GQZbxNq7+HwZ5AGbojto+87MT0Z8I4IEGjhQ==
-X-Received: by 2002:adf:fd87:: with SMTP id d7mr35578867wrr.393.1585045255321;
-        Tue, 24 Mar 2020 03:20:55 -0700 (PDT)
-Received: from bender.baylibre.local ([2a01:e35:2ec0:82b0:5c5f:613e:f775:b6a2])
-        by smtp.gmail.com with ESMTPSA id h5sm2879527wro.83.2020.03.24.03.20.54
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Qrc1qyc7Nq/IkKrQljq07wehgmhqhMm1w5CY2YeuSQ8=;
+        b=V/T6v5arn9R6fdtABaTdcyy0JS0wBTPxc2iDgT6VEMCdBH7PxK4zNlsLSEyntbeg9b
+         /1dryFyL59W1UH7h2NUkqVDjoBRi4RbXDtehocA2y+QErmDn59AMr7kH3piiSrLsU9xy
+         oHLuu3Nyi1n3RcLxDjrPJx0DBKYjXCOEor+c2w88b4Jm0nMdYfapiMpbQ1PjG7U49DfI
+         4DLnEU3kuitpv0hzwUF7bUW4BrJekkNSMu0XhSVjTjtvZR+p0sd84hT8KBah0fWs04BC
+         adSg5e/hztqbQ/FHmZGTjOVHqdbw0BYHiMBfnGjX3UrYHNPmvr1e7tVBmnI69Hx7oJTS
+         Iw8A==
+X-Gm-Message-State: ANhLgQ19LQmez7apDmV0wR7a9q3YcwH4uYKsYcWqDHQAkdNAJ+TIPmlO
+        upB0ZNrg9e5MO/CyAYkTFQY=
+X-Google-Smtp-Source: ADFU+vsbwkvFlEt+A4+xlKkR/aIgmQ47oufpK+CtICayXrj0ZpjgWpuw9wsBDaiC3LBZcKEotAE9BQ==
+X-Received: by 2002:a2e:3c0b:: with SMTP id j11mr10776155lja.9.1585045872173;
+        Tue, 24 Mar 2020 03:31:12 -0700 (PDT)
+Received: from xi.terra (c-12aae455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.170.18])
+        by smtp.gmail.com with ESMTPSA id y2sm5977826ljy.70.2020.03.24.03.31.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2020 03:20:54 -0700 (PDT)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     kishon@ti.com, balbi@kernel.org, khilman@baylibre.com,
-        martin.blumenstingl@googlemail.com, devicetree@vger.kernel.org
-Cc:     linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: [PATCH 13/13] dt-bindings: usb: amlogic,dwc3: remove old DWC3 wrapper
-Date:   Tue, 24 Mar 2020 11:20:30 +0100
-Message-Id: <20200324102030.31000-14-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20200324102030.31000-1-narmstrong@baylibre.com>
-References: <20200324102030.31000-1-narmstrong@baylibre.com>
+        Tue, 24 Mar 2020 03:31:11 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@kernel.org>)
+        id 1jGgpo-0006Y8-PE; Tue, 24 Mar 2020 11:31:00 +0100
+Date:   Tue, 24 Mar 2020 11:31:00 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Michael Hanselmann <public@hansmi.ch>
+Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Michael Dreher <michael@5dot1.de>,
+        Jonathan Olds <jontio@i4free.co.nz>
+Subject: Re: [PATCH 2/4] ch341: Detect HL340 variant
+Message-ID: <20200324103100.GF5810@localhost>
+References: <cover.1583520568.git.public@hansmi.ch>
+ <f89211ed90a3d3c99eea2850d3df29618e09e625.1583520568.git.public@hansmi.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f89211ed90a3d3c99eea2850d3df29618e09e625.1583520568.git.public@hansmi.ch>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+On Fri, Mar 06, 2020 at 07:00:43PM +0000, Michael Hanselmann wrote:
+> A subset of CH341 devices does not support all features, namely the
+> prescaler is limited to a reduced precision and there is no support for
+> sending a RS232 break condition.
+> 
+> These devices can usually be identified by an imprint of "340" on the
+> turquoise-colored plug. They're called "HL340" in this driver.
 
-There is now an updated bindings for these SoCs making the old
-compatible obsolete.
+As I mentioned in my reply to the cover letter, you need to come up with
+a different designation as this does not apply to all HL340 devices.
+ 
+> Signed-off-by: Michael Hanselmann <public@hansmi.ch>
+> ---
+>  drivers/usb/serial/ch341.c | 42 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+> index 518209072c50..0523f46f53c7 100644
+> --- a/drivers/usb/serial/ch341.c
+> +++ b/drivers/usb/serial/ch341.c
+> @@ -89,6 +89,7 @@ struct ch341_private {
+>  	u8 mcr;
+>  	u8 msr;
+>  	u8 lcr;
+> +	u8 flags;
+>  };
+>  
+>  static void ch341_set_termios(struct tty_struct *tty,
+> @@ -315,6 +316,43 @@ out:	kfree(buffer);
+>  	return r;
+>  }
+>  
+> +/*
+> + * A subset of CH341 devices, called "HL340" in this driver, does not support
+> + * all features. The prescaler is limited and there is no support for sending
+> + * a RS232 break condition. A read failure when trying to set up the latter is
+> + * used to detect these devices.
+> + */
+> +static int ch341_detect_hl340(struct usb_device *dev)
 
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
----
- .../devicetree/bindings/usb/amlogic,dwc3.txt  | 42 -------------------
- 1 file changed, 42 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
+Return bool? Rename ch341_is_xxx() ?
 
-diff --git a/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt b/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
-deleted file mode 100644
-index 9a8b631904fd..000000000000
---- a/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
-+++ /dev/null
-@@ -1,42 +0,0 @@
--Amlogic Meson GX DWC3 USB SoC controller
--
--Required properties:
--- compatible:	depending on the SoC this should contain one of:
--			* amlogic,meson-axg-dwc3
--			* amlogic,meson-gxl-dwc3
--- clocks:	a handle for the "USB general" clock
--- clock-names:	must be "usb_general"
--- resets:	a handle for the shared "USB OTG" reset line
--- reset-names:	must be "usb_otg"
--
--Required child node:
--A child node must exist to represent the core DWC3 IP block. The name of
--the node is not important. The content of the node is defined in dwc3.txt.
--
--PHY documentation is provided in the following places:
--- Documentation/devicetree/bindings/phy/meson-gxl-usb2-phy.txt
--- Documentation/devicetree/bindings/phy/meson-gxl-usb3-phy.txt
--
--Example device nodes:
--		usb0: usb@ff500000 {
--			compatible = "amlogic,meson-axg-dwc3";
--			#address-cells = <2>;
--			#size-cells = <2>;
--			ranges;
--
--			clocks = <&clkc CLKID_USB>;
--			clock-names = "usb_general";
--			resets = <&reset RESET_USB_OTG>;
--			reset-names = "usb_otg";
--
--			dwc3: dwc3@ff500000 {
--				compatible = "snps,dwc3";
--				reg = <0x0 0xff500000 0x0 0x100000>;
--				interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
--				dr_mode = "host";
--				maximum-speed = "high-speed";
--				snps,dis_u2_susphy_quirk;
--				phys = <&usb3_phy>, <&usb2_phy0>;
--				phy-names = "usb2-phy", "usb3-phy";
--			};
--		};
--- 
-2.22.0
+> +{
+> +	const unsigned int size = 2;
+> +	char *buffer;
+> +	int r;
+> +
+> +	buffer = kmalloc(size, GFP_KERNEL);
+> +	if (!buffer)
+> +		return -ENOMEM;
+> +
+> +	r = ch341_control_in(dev, CH341_REQ_READ_REG,
+> +			     CH341_REG_BREAK, 0, buffer, size);
 
+This helper would already have logged an error message, which perhaps is
+ok, but you could consider using usb_control_msg() directly here.
+
+> +	if (r == -EPIPE) {
+> +		dev_dbg(&dev->dev, "%s - Chip is a HL340 variant\n",
+> +			__func__);
+> +		r = 1;
+> +		goto out;
+> +	}
+> +
+> +	if (r < 0) {
+> +		dev_err(&dev->dev, "%s - USB control read error (%d)\n",
+> +			__func__, r);
+> +		goto out;
+> +	}
+
+So this is currently redundant.
+
+> +
+> +	r = 0;
+
+Not needed either, right?
+
+> +
+> +out:	kfree(buffer);
+
+Line break after the label, please.
+
+> +	return r;
+> +}
+> +
+>  static int ch341_port_probe(struct usb_serial_port *port)
+>  {
+>  	struct ch341_private *priv;
+> @@ -336,6 +374,10 @@ static int ch341_port_probe(struct usb_serial_port *port)
+>  	if (r < 0)
+>  		goto error;
+>  
+> +	r = ch341_detect_hl340(port->serial->dev);
+> +	if (r < 0)
+> +		goto error;
+
+You never store the return value (and the "flags" variable you add is
+unused) which indicates your series needs to be restructured.
+
+At least update flags in this patch. Perhaps consider renaming it
+"quirks" depending on how it ends up being used.
+
+> +
+>  	usb_set_serial_port_data(port, priv);
+>  	return 0;
+
+Johan
