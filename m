@@ -2,81 +2,293 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A44190468
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 05:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A41E31904A5
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Mar 2020 05:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726240AbgCXESb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Mar 2020 00:18:31 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:56072 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725867AbgCXESb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 00:18:31 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 8666D1571E56E;
-        Mon, 23 Mar 2020 21:18:30 -0700 (PDT)
-Date:   Mon, 23 Mar 2020 21:18:29 -0700 (PDT)
-Message-Id: <20200323.211829.1314919729703396174.davem@davemloft.net>
-To:     paweldembicki@gmail.com
-Cc:     cezary@eko.one.pl, bjorn@mork.no, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: qmi_wwan: add support for ASKEY WWHC050
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200320204614.4662-1-paweldembicki@gmail.com>
-References: <20200320204614.4662-1-paweldembicki@gmail.com>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 23 Mar 2020 21:18:30 -0700 (PDT)
+        id S1726094AbgCXEwH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Mar 2020 00:52:07 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:31288 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725927AbgCXEwH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 00:52:07 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1585025526; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: References: Cc: To: From:
+ Subject: Sender; bh=FUO2P5XLMY1BU2WaJp22Owb49Q1cP6EsFYl11OgO0lQ=; b=h5m1CLbDNopzxZFFeuVinl2Emx+9r9wDPlkUYn0piOEcOwI83iG+1UiqefDpnLKVR7ygMIeF
+ Jl546KgyJ9gMZ77+gw9RdIqTxIlim4TUOfJKpMvAG/HA+PNTQ+exGvRf1ShBRf+F2/AjiViX
+ IgXwjH7QVKrXs0BW5bRe/p0BXsM=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e7991f5.7fd853bb21f0-smtp-out-n02;
+ Tue, 24 Mar 2020 04:52:05 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 3B1EDC43636; Tue, 24 Mar 2020 04:52:05 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.206.24.160] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sanm)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 04320C433CB;
+        Tue, 24 Mar 2020 04:51:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 04320C433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sanm@codeaurora.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: usb: qcom,dwc3: Convert USB DWC3
+ bindings
+From:   "Sandeep Maheswaram (Temp)" <sanm@codeaurora.org>
+To:     Stephen Boyd <swboyd@chromium.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>
+References: <1581316605-29202-1-git-send-email-sanm@codeaurora.org>
+ <1581316605-29202-2-git-send-email-sanm@codeaurora.org>
+ <158137029351.121156.8319119424832255457@swboyd.mtv.corp.google.com>
+ <fd63b608-7b73-b251-b603-642f7f89ac64@codeaurora.org>
+Message-ID: <123a100a-7185-f222-0067-aceacb8c2635@codeaurora.org>
+Date:   Tue, 24 Mar 2020 10:21:57 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <fd63b608-7b73-b251-b603-642f7f89ac64@codeaurora.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Pawel Dembicki <paweldembicki@gmail.com>
-Date: Fri, 20 Mar 2020 21:46:14 +0100
+Hi Stephen,
 
-> ASKEY WWHC050 is a mcie LTE modem.
-> The oem configuration states:
-> 
-> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
-> D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1690 ProdID=7588 Rev=ff.ff
-> S:  Manufacturer=Android
-> S:  Product=Android
-> S:  SerialNumber=813f0eef6e6e
-> C:* #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=500mA
-> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-> E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=(none)
-> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=125us
-> 
-> Tested on openwrt distribution.
-> 
-> Signed-off-by: Cezary Jackiewicz <cezary@eko.one.pl>
-> Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
-> ---
-> Changes in v2:
-> - drop option driver changes, it will be sended with separate patch
+Can you check my reply to the review comments and let me know how to 
+proceeed.
 
-Applied and queued up for -stable.
+Thanks
+
+Sandeep
+
+On 3/13/2020 5:41 PM, Sandeep Maheswaram (Temp) wrote:
+> Hi Stephen,
+>
+> On 2/11/2020 3:01 AM, Stephen Boyd wrote:
+>> Quoting Sandeep Maheswaram (2020-02-09 22:36:44)
+>>> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml 
+>>> b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>>> new file mode 100644
+>>> index 0000000..0353401
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>>> @@ -0,0 +1,155 @@
+>>> +# SPDX-License-Identifier: GPL-2.0-only
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/usb/qcom,dwc3.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Qualcomm SuperSpeed DWC3 USB SoC controller
+>>> +
+>>> +maintainers:
+>>> +  - Manu Gautam <mgautam@codeaurora.org>
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    items:
+>>> +      - enum:
+>>> +          - qcom,msm8996-dwc3
+>>> +          - qcom,msm8998-dwc3
+>>> +          - qcom,sdm845-dwc3
+>>> +      - const: qcom,dwc3
+>>> +
+>>> +  reg:
+>>> +    description: Offset and length of register set for QSCRATCH 
+>>> wrapper
+>>> +    maxItems: 1
+>>> +
+>>> +  "#address-cells":
+>>> +    enum: [ 1, 2 ]
+>>> +
+>>> +  "#size-cells":
+>>> +    enum: [ 1, 2 ]
+>>> +
+>>> +  power-domains:
+>>> +    description: specifies a phandle to PM domain provider node
+>>> +    maxItems: 1
+>>> +
+>>> +  clocks:
+>>> +    description:
+>>> +      A list of phandle and clock-specifier pairs for the clocks
+>>> +      listed in clock-names.
+>>> +    items:
+>>> +      - description: System Config NOC clock.
+>>> +      - description: Master/Core clock, has to be >= 125 MHz
+>>> +          for SS operation and >= 60MHz for HS operation.
+>>> +      - description: System bus AXI clock.
+>>> +      - description: Mock utmi clock needed for ITP/SOF generation
+>>> +          in host mode.Its frequency should be 19.2MHz.
+>> Please add a space between the end of sentence and next one.
+> will do in next version
+>>
+>>> +      - description: Sleep clock, used for wakeup when
+>>> +          USB3 core goes into low power mode (U3).
+>>> +
+>>> +  clock-names:
+>>> +    items:
+>>> +      - const: cfg_noc
+>>> +      - const: core
+>>> +      - const: iface
+>>> +      - const: mock_utmi
+>>> +      - const: sleep
+>>> +
+>>> +  assigned-clocks:
+>>> +    items:
+>>> +      - description: Phandle to MOCK_UTMI_CLK.
+>>> +      - description: Phandle to MASTER_CLK.
+>> It's a phandle and clock specifier pair, not always just a phandle.
+>> Maybe the base schema can enforce that somehow, but the description
+>> isn't accurate.
+> will do in next version
+>>
+>>> +
+>>> +  assigned-clock-rates:
+>>> +    items:
+>>> +      - description: Must be 19.2MHz (19200000).
+>>> +      - description: Must be >= 60 MHz in HS mode, >= 125 MHz in SS 
+>>> mode.
+>> Can this be more strict? I see in [1] that it was suggested to update
+>> the schema checker. Did you try that?
+>
+> Tried that but need to add maximum value also and even after that 
+> getting some errors as below.
+>
+> /Documentation/devicetree/bindings/usb/qcom,dwc3.example.dt.yaml: 
+> usb@a6f8800: assigned-clock-rates: Additional items are not allowed 
+> ([150000000] was unexpected)
+>
+> /local/mnt/workspace/sandeep/bu_build/src/third_party/kernel/linux-next/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dt.yaml: 
+> usb@a6f8800: assigned-clock-rates:0: [19200000] is too short
+>>
+>>> +
+>>> +  resets:
+>>> +    maxItems: 1
+>>> +
+>>> +  interrupts:
+>>> +    items:
+>>> +      - description: The interrupt that is asserted
+>>> +          when a wakeup event is received on USB2 bus.
+>>> +      - description: The interrupt that is asserted
+>>> +          when a wakeup event is received on USB3 bus.
+>>> +      - description: Wakeup event on DM line.
+>>> +      - description: Wakeup event on DP line.
+>>> +
+>>> +  interrupt-names:
+>>> +    items:
+>>> +      - const: hs_phy_irq
+>>> +      - const: ss_phy_irq
+>>> +      - const: dm_hs_phy_irq
+>>> +      - const: dp_hs_phy_irq
+>>> +
+>>> +  qcom,select-utmi-as-pipe-clk:
+>>> +    description:
+>>> +      If present, disable USB3 pipe_clk requirement.
+>>> +      Used when dwc3 operates without SSPHY and only
+>>> +      HS/FS/LS modes are supported.
+>>> +    type: boolean
+>>> +
+>>> +# Required child node:
+>>> +
+>>> +patternProperties:
+>>> +  "^dwc3@[0-9a-f]+$":
+>>> +    type: object
+>>> +    description:
+>>> +      A child node must exist to represent the core DWC3 IP block
+>>> +      The content of the node is defined in dwc3.txt.
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - "#address-cells"
+>>> +  - "#size-cells"
+>>> +  - power-domains
+>>> +  - clocks
+>>> +  - clock-names
+>> Why aren't interrupts required? They're always present, aren't they?
+> In qcom,dwc3.txt file interrupts are mentioned in Optional properties 
+> and I also didnt find any interrupts in 8996.dtsi
+>>
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    #include <dt-bindings/clock/qcom,gcc-sdm845.h>
+>>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> It would be good to include <dt-bindings/interrupt-controller/irq.h>
+>> here too, just in case someone wants to move that include out of
+>> arm-gic.h, which is possible.
+>>
+>>> +    usb_1: usb@a6f8800 {
+>> Can we drop the phandle? It's not used.
+> will do in next version
+>>
+>>> +        compatible = "qcom,sdm845-dwc3", "qcom,dwc3";
+>>> +        reg = <0 0x0a6f8800 0 0x400>;
+>>> +
+>>> +        #address-cells = <2>;
+>>> +        #size-cells = <2>;
+>>> +
+>>> +        clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
+>>> +                 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
+>>> +                 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
+>>> +                 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
+>>> +                 <&gcc GCC_USB30_PRIM_SLEEP_CLK>;
+>>> +        clock-names = "cfg_noc", "core", "iface", "mock_utmi",
+>>> +                        "sleep";
+>> Spacing looks off. Are there tabs?
+> will correct in next version
+>>
+>>> +
+>>> +        assigned-clocks = <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
+>>> +                          <&gcc GCC_USB30_PRIM_MASTER_CLK>;
+>>> +        assigned-clock-rates = <19200000>, <150000000>;
+>>> +
+>>> +        interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 486 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 488 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 489 IRQ_TYPE_LEVEL_HIGH>;
+>>> +        interrupt-names = "hs_phy_irq", "ss_phy_irq",
+>>> +                              "dm_hs_phy_irq", "dp_hs_phy_irq";
+>> Same spacing nit
+> will correct in next version
+>>
+>>> +
+>>> +            power-domains = <&gcc USB30_PRIM_GDSC>;
+>>> +
+>>> +            resets = <&gcc GCC_USB30_PRIM_BCR>;
+>>> +
+>>> +            usb_1_dwc3: dwc3@a600000 {
+>> Drop this phandle too? It isn't used.
+> will correct in next version
+>>
+>>> +                compatible = "snps,dwc3";
+>>> +                reg = <0 0x0a600000 0 0xcd00>;
+>>> +                interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
+>>> +                iommus = <&apps_smmu 0x740 0>;
+>>> +                snps,dis_u2_susphy_quirk;
+>>> +                snps,dis_enblslpm_quirk;
+>>> +                phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
+>>> +                phy-names = "usb2-phy", "usb3-phy";
+>>> +            };
+>> [1] https://lkml.kernel.org/r/20191218221310.GA4624@bogus
+>
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
