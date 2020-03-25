@@ -2,87 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2BB11928DE
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2020 13:50:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FEA192907
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2020 13:58:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727381AbgCYMur (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Mar 2020 08:50:47 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:53355 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726998AbgCYMur (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Mar 2020 08:50:47 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1jH5UX-0005f3-9Y; Wed, 25 Mar 2020 12:50:41 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sekhar Nori <nsekhar@ti.com>, Roger Quadros <rogerq@ti.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Pawel Laszczak <pawell@cadence.com>, linux-usb@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: cdns3: make signed 1 bit bitfields unsigned
-Date:   Wed, 25 Mar 2020 12:50:41 +0000
-Message-Id: <20200325125041.94769-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.25.1
+        id S1727325AbgCYM6F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Mar 2020 08:58:05 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:33135 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727298AbgCYM6F (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Mar 2020 08:58:05 -0400
+Received: by mail-ot1-f68.google.com with SMTP id 22so1811518otf.0;
+        Wed, 25 Mar 2020 05:58:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NZVt+NwwY0gDhq0kAajr/kEyB1TX6Ts1GTxN6FWpqYs=;
+        b=ScG2iSCndSjDX9cSwJzejn8aQ2bkP5IC+wxDy18ZAK2zTnCCdoEznNbi8DWL+iZhTB
+         IwDhdJ9+IP9Gy8aJwpq1XBC+7BBSBHG2jotVfoBbN5+iG4nkEbp1T6nC7upYKVvzkA9X
+         ttutcPjI4J7T7+XiBLtNchCU4XmZKOe+zKGMuNW59EKPaNlkBw3sHwZORJcqd50yVqLk
+         SMd2fzTWoNH8B0Hwj+jG+bOo1LnP1hEPdNHQySj0qEDPcuJbWyg/bgj/RIpHJXLD7qnX
+         DgoLH0yYBzYYG2zJ0ZySkjjCADbg3+coxKg6WOtUPcEdSV4yJ16IWweWHEft9TzVtLwB
+         PZhw==
+X-Gm-Message-State: ANhLgQ1z5NP4kNtm3FaJx1qLM1ZFFfmhFQW8i2e7W1aRqcUkWh/iIcdc
+        VexaRlqap31IlAXfPG+igl4kfQJoMjpPHbIaI1c2gPVf
+X-Google-Smtp-Source: ADFU+vtwED7M9Uto3cr43QiuLpBVfPOkL/EsUkYuzOFsEqfWKQULpOeGXJQtO3kMiGxnVJTTo8NX1+BPCCgnNMBZg3o=
+X-Received: by 2002:a9d:7590:: with SMTP id s16mr2317567otk.250.1585141085101;
+ Wed, 25 Mar 2020 05:58:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <1585117006-8266-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+ <1585117006-8266-2-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+In-Reply-To: <1585117006-8266-2-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 25 Mar 2020 13:57:53 +0100
+Message-ID: <CAMuHMdXxbzR=boveEoynjFwV8=KSkOzCTdQVmtN4Hh6PVMj-Bg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] dt-bindings: usb: usb-xhci: add r8a77961 support
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+Hi Shimoda-san,
 
-The signed 1 bit bitfields should be unsigned, so make them unsigned.
+On Wed, Mar 25, 2020 at 7:17 AM Yoshihiro Shimoda
+<yoshihiro.shimoda.uh@renesas.com> wrote:
+> This patch adds support for r8a77961 (R-Car M3-W+).
+>
+> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/usb/cdns3/cdns3-ti.c | 4 ++--
- drivers/usb/cdns3/gadget.h   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Thanks for your patch!
 
-diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
-index c6a79ca15858..5685ba11480b 100644
---- a/drivers/usb/cdns3/cdns3-ti.c
-+++ b/drivers/usb/cdns3/cdns3-ti.c
-@@ -52,8 +52,8 @@ enum modestrap_mode { USBSS_MODESTRAP_MODE_NONE,
- struct cdns_ti {
- 	struct device *dev;
- 	void __iomem *usbss;
--	int usb2_only:1;
--	int vbus_divider:1;
-+	unsigned usb2_only:1;
-+	unsigned vbus_divider:1;
- 	struct clk *usb2_refclk;
- 	struct clk *lpm_clk;
- };
-diff --git a/drivers/usb/cdns3/gadget.h b/drivers/usb/cdns3/gadget.h
-index f003a7801872..bf2828e4df2c 100644
---- a/drivers/usb/cdns3/gadget.h
-+++ b/drivers/usb/cdns3/gadget.h
-@@ -1199,7 +1199,7 @@ struct cdns3_aligned_buf {
- 	void			*buf;
- 	dma_addr_t		dma;
- 	u32			size;
--	int			in_use:1;
-+	unsigned		in_use:1;
- 	struct list_head	list;
- };
- 
-@@ -1308,8 +1308,8 @@ struct cdns3_device {
- 	unsigned			u2_allowed:1;
- 	unsigned			is_selfpowered:1;
- 	unsigned			setup_pending:1;
--	int				hw_configured_flag:1;
--	int				wake_up_flag:1;
-+	unsigned			hw_configured_flag:1;
-+	unsigned			wake_up_flag:1;
- 	unsigned			status_completion_no_call:1;
- 	unsigned			using_streams:1;
- 	int				out_mem_is_allocated;
+> --- a/Documentation/devicetree/bindings/usb/usb-xhci.txt
+> +++ b/Documentation/devicetree/bindings/usb/usb-xhci.txt
+> @@ -17,6 +17,7 @@ Required properties:
+>      - "renesas,xhci-r8a7793" for r8a7793 SoC
+>      - "renesas,xhci-r8a7795" for r8a7795 SoC
+>      - "renesas,xhci-r8a7796" for r8a7796 SoC
+
+While at it, you may want to update "r8a7796 SoC" to "r8a77960 SoC", to
+avoid confusion between R-Car M3-W (R8A77960) and M3-W+ (R8A77961).
+
+> +    - "renesas,xhci-r8a77961" for r8a77961 SoC
+>      - "renesas,xhci-r8a77965" for r8a77965 SoC
+>      - "renesas,xhci-r8a77990" for r8a77990 SoC
+>      - "renesas,rcar-gen2-xhci" for a generic R-Car Gen2 or RZ/G1 compatible
+
+With that fixed:
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.25.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
