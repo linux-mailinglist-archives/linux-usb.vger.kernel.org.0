@@ -2,80 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B19E1921FC
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2020 08:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A0D1922F0
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2020 09:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726206AbgCYHwm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Mar 2020 03:52:42 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:45510 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726017AbgCYHwm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Mar 2020 03:52:42 -0400
-Received: by mail-pl1-f195.google.com with SMTP id b9so485940pls.12;
-        Wed, 25 Mar 2020 00:52:41 -0700 (PDT)
+        id S1727450AbgCYIiK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Mar 2020 04:38:10 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:39011 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726105AbgCYIiJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Mar 2020 04:38:09 -0400
+Received: by mail-lj1-f194.google.com with SMTP id i20so1515419ljn.6;
+        Wed, 25 Mar 2020 01:38:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=OyMSybDgjLtBHyJeIkj6VwbC+46L2Aw6n03o91VqgKc=;
-        b=nDoDTTiZHzzvB2jsefFabUvkfery3Bpl/g896+EwqGpDCT7TNqR+Q2Z0BzX6L5vYAM
-         +InqIY1XHQwQZ1/FcisFl9Y8B5CR6BYVZY9n+Z+SwdBhbV9onGUnbQKVR4aIwLuzAv2N
-         pt0Ake4CWdDmNbDqTROYP61jfMc4XuipXIgu/EcDnItlPET8j5LZG+rWtrPY74VXplMV
-         cIFZM2MH8wy6hcUxrY8+1fxM9EWY2tBwR9rnY1QBoNXWiLEZWi8ddHcSxEfDV1ZDVCk+
-         yMDwvOKjz4LRS93sphkoQYIihVQ7WwP9EevTJSZnZYIrm2QbD/bA6ReivYNxZnuQ4F9E
-         h8Ew==
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=u1JHVU3RAXWpWzxoEBTeSB/vNLewo28StJEFtqtyLoU=;
+        b=atWEsClArOzGKdLN4osuAk7d+XSEIi82gzITfDKHYSAZ1c+WEd3Ip/J9eETstflnDX
+         LqQd2q6Qz/8hg3HTYMLWyI1r/uM72eIqZfUXxCdkYr7yZws3ErK2kSKYsVGHg9Cm/mtf
+         X32RT6WFx/DxNfiiCaK5OWiM6W7e7JeJWoOEDUpgi05XVpNAtJvKJtyzJhblBES6Z/65
+         eVjEoRNppJWoaSaLMrUSnZYRRo6sbYBlTHOOD7K3R3s4Elu3PeBJ5C7L2ulwEL9qqsKz
+         nUa//b6Qd9KEX8nStmeRXzWQurXqzw+nAWyASHspx5uRQOtfM4KAnUAZ5r+BnFZwaD/D
+         axHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=OyMSybDgjLtBHyJeIkj6VwbC+46L2Aw6n03o91VqgKc=;
-        b=euvAYWUFadfIcI+Wqy5ToxsWlGvEarK8e9WaDm/ygiEsxUSBmcLRhJgplLghB4O9OQ
-         0f6g9q6V6TiwML9IjTTQdcAPBRLDIsLSUFbSLOiIqoPzG26ubGz29G8VCIneAtBpQAOQ
-         kSitu3XDvqQuUQQz2f1EomBcQcJiXnxDF952PGPyQLnsfT89bv+PI+EpbKa5N54wSTRv
-         LRmx6yrvCHtd1xgp5jGxh/KZCY9OBf5eFm5KgcgDoWpPB++SIewRdFSXhexswu3NqNKJ
-         +spoplIPS2qtcDdgCFbLJuMaEE67bMQEcL3SWNI0IrZamcCjOaa7x851K3Z7Q4zK5o4n
-         aPTw==
-X-Gm-Message-State: ANhLgQ3sf/wW7qf6HdAFsHEx+I9E/WrlgaTA4wxZGEIvuK8lqVBNUi88
-        CzZimFVc+JlGRBulj9BW1CM=
-X-Google-Smtp-Source: ADFU+vusxnk8kCNRrmLC5fNeF93JDBXccwRLn9rmfHjTAzwr5ifIQ6m8rVp2oEFRvDTkZdkjUU3uYQ==
-X-Received: by 2002:a17:90b:11d6:: with SMTP id gv22mr2357583pjb.31.1585122761049;
-        Wed, 25 Mar 2020 00:52:41 -0700 (PDT)
-Received: from VM_0_35_centos.localdomain ([150.109.62.251])
-        by smtp.gmail.com with ESMTPSA id ev21sm3994786pjb.24.2020.03.25.00.52.39
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 25 Mar 2020 00:52:40 -0700 (PDT)
-From:   Qiujun Huang <hqjagain@gmail.com>
-To:     johan@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        anenbupt@gmail.com, Qiujun Huang <hqjagain@gmail.com>
-Subject: [PATCH] USB: io_edgeport: fix  slab-out-of-bounds Read in edge_interrupt_callback
-Date:   Wed, 25 Mar 2020 15:52:37 +0800
-Message-Id: <1585122757-4528-1-git-send-email-hqjagain@gmail.com>
-X-Mailer: git-send-email 1.8.3.1
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=u1JHVU3RAXWpWzxoEBTeSB/vNLewo28StJEFtqtyLoU=;
+        b=UlVntKbe2jveYAAErnG5iWKhUbUaX0C/TvBgjuMlKDyQEPPkxpGN3GdsTnB65720L1
+         d5rR+NchMvMqgSFrYiYuF9jiQpLhsSVwX4bFIajSRfZ5u6X2TOV15nzk4FCaciwb7uAM
+         pzaut6vDU9Ax7BZriZz4OQG5mevW2jMd84s+Wm9GKJgoOb9T6imGzftlVxgsGYVuYzG8
+         F1GcK3sh/LeiAcc8oSMl5dpDJGWbiImiz1q3Tv6u1ub8esq+Pftx3IKJXybeS0Wo8vak
+         +tFExSslAm6150TWtYDFuhhm7HKdypD0qICRbTivdoLXHJYqQGGmmeHcF/i33cKk0Frw
+         9zKg==
+X-Gm-Message-State: ANhLgQ2IJyFH9Zyb4SesupW4iuvopgcCAPdAQ2bgb5qvMDxBeX/FEbtC
+        xD49I2AmH/9G/tEGg0NQmYs=
+X-Google-Smtp-Source: APiQypL8bMjMZDQevXNQgwWPs9QVjiJXOb2ocQYyMJ5E3G+qtV0tyxn/wNi26nCLubp8d+GA3TyEPA==
+X-Received: by 2002:a2e:9797:: with SMTP id y23mr1235851lji.183.1585125484852;
+        Wed, 25 Mar 2020 01:38:04 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id f7sm522142ljj.4.2020.03.25.01.38.01
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 25 Mar 2020 01:38:03 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Logan Gunthorpe <logang@deltatee.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        linux-pci@vger.kernel.org, Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        platform-driver-x86@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, kbuild test robot <lkp@intel.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        Brian Cain <bcain@codeaurora.org>,
+        linux-hexagon@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-ia64@vger.kernel.org,
+        Michal Simek <monstr@monstr.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geoff Levand <geoff@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Davidlohr Bueso <dbueso@suse.de>
+Subject: Re: [patch V3 03/20] usb: gadget: Use completion interface instead of open coding it
+In-Reply-To: <20200321113241.043380271@linutronix.de>
+References: <20200321112544.878032781@linutronix.de> <20200321113241.043380271@linutronix.de>
+Date:   Wed, 25 Mar 2020 10:37:57 +0200
+Message-ID: <87blokde3e.fsf@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The boundary condition should be (length - 1) as we access data[position+1].
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Reported-and-tested-by: syzbot+37ba33391ad5f3935bbd@syzkaller.appspotmail.com
-Signed-off-by: Qiujun Huang <hqjagain@gmail.com>
----
- drivers/usb/serial/io_edgeport.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thomas Gleixner <tglx@linutronix.de> writes:
 
-diff --git a/drivers/usb/serial/io_edgeport.c b/drivers/usb/serial/io_edgeport.c
-index 5737add..4cca0b8 100644
---- a/drivers/usb/serial/io_edgeport.c
-+++ b/drivers/usb/serial/io_edgeport.c
-@@ -710,7 +710,7 @@ static void edge_interrupt_callback(struct urb *urb)
- 		/* grab the txcredits for the ports if available */
- 		position = 2;
- 		portNumber = 0;
--		while ((position < length) &&
-+		while ((position < length - 1) &&
- 				(portNumber < edge_serial->serial->num_ports)) {
- 			txCredits = data[position] | (data[position+1] << 8);
- 			if (txCredits) {
--- 
-1.8.3.1
+> From: Thomas Gleixner <tglx@linutronix.de>
+>
+> ep_io() uses a completion on stack and open codes the waiting with:
+>
+>   wait_event_interruptible (done.wait, done.done);
+> and
+>   wait_event (done.wait, done.done);
+>
+> This waits in non-exclusive mode for complete(), but there is no reason to
+> do so because the completion can only be waited for by the task itself and
+> complete() wakes exactly one exlusive waiter.
+>
+> Replace the open coded implementation with the corresponding
+> wait_for_completion*() functions.
+>
+> No functional change.
+>
+> Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: linux-usb@vger.kernel.org
 
+Do you want to carry it via your tree? If so:
+
+Acked-by: Felipe Balbi <balbi@kernel.org>
+
+Otherwise, let me know and I'll pick this patch.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl57GGUACgkQzL64meEa
+mQY/phAAyKS/jK6b1hVevAPsOBS5Zyk+RBQmkmps/3C2lTyyturSmqT3TAMZyTZo
+/HPtsvyUYn8RBI5Pa62mvcnGi+/Lmk76YzmUqn/VJRe+J8kjuFI6IoyT4uDxdUsB
+qGTiuQ5qbV7Ft3fvLoEEbuyPZeDc/pbfFyK78ajdAYec4MGS8r12tWzhRZTRyRAG
+4fb/PjPcfk8/9eTkdgnjgINZTiwT9YN7HWpEfajl3MhlYK9pZh/J7swRaYwZULBo
++eVd6a6ZYt0YLC8wVQ/kJ9Q3EttmWBwPJB4FIXMzYDkXx2Z898ZUKeIJ8IXlwKSh
+CynbYGL7rNJQ+UDpVA8/y5Mqqnu3pAht/csgfrBxm/ukjkMphIDjpzuUaODgH5W3
+Eb4EXNgvgspzEMgz6pv9INgPPh2tWRmBQex8qOLrs1xups+ZmhFSHGKCUs8hxlDj
+Zk0U6Mce6mopXiCf2iVgrv9ItHlp4myA/HwWEub+LwOJi8tCt+vCjzXloWMx4Ha+
+TNyxLHrqLaeTQoYgl1wJQMjIhmcrb9UMBaJ5FhKdaXAGfAeicPSzVqVHG/yl6nds
+Z2cTMhW5kIxJDMAOuemeYZLY8PMzXrG5xHT7Da3yOzurIOmp2rhvhjpt9TpjKDLE
+3qsBCaxpICoolHqV8bAov175RPtyVvv5zdyXWulMD/1c2kVYiiY=
+=IAgh
+-----END PGP SIGNATURE-----
+--=-=-=--
