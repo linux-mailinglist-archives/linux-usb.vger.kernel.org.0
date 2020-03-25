@@ -2,158 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB4E192ECA
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2020 17:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 821B9192EFB
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2020 18:13:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727742AbgCYQ63 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Mar 2020 12:58:29 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:47796 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726102AbgCYQ63 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Mar 2020 12:58:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=nzNtddxyHToIfzwzcRpU+rkJvFePaVcVMvDxhJ0zIm8=; b=Ny0TO9lEhbmvUL2PtdSbl/e3Gm
-        dLHrOkD5v8ewIwjLPXGarl7V5+K4iXFzHb2IblMXtRLy0e1xYPfEYd/TNMgeQMms4qdMS3GnsSBzh
-        MG4FkMj0CmZIJdF594Ere7tUatW2cpHFY1FN56RNDDvW3fQmt0gVnStPqemN2Xr9H/2N8GLHIr5Wg
-        jCmOaOYFpQoZFzr/LNFj0CHFygyAwaMnjmIJLMM/2ZdRTd590pAvjPj/dIFmu4oG/94o0FTc9L0qs
-        q8JUj6IqIVy73yedpWdJ2Myuil5rim24S7yVdJXA5SxDwBhAKySclpEAQs+h4mmF+uJG1N1o3ZfNM
-        CTBQSfOQ==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jH9M9-0002V3-KT; Wed, 25 Mar 2020 16:58:17 +0000
-Subject: [PATCH v2] Documentation/locking/locktypes: minor copy editor fixes
-To:     Thomas Gleixner <tglx@linutronix.de>, paulmck@kernel.org
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
-        linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        platform-driver-x86@vger.kernel.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, kbuild test robot <lkp@intel.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
-        Brian Cain <bcain@codeaurora.org>,
-        linux-hexagon@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-ia64@vger.kernel.org,
-        Michal Simek <monstr@monstr.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geoff Levand <geoff@infradead.org>,
-        linuxppc-dev@lists.ozlabs.org, Davidlohr Bueso <dbueso@suse.de>
-References: <20200323025501.GE3199@paulmck-ThinkPad-P72>
- <87r1xhz6qp.fsf@nanos.tec.linutronix.de>
- <20200325002811.GO19865@paulmck-ThinkPad-P72>
- <87wo78y5yy.fsf@nanos.tec.linutronix.de>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <ac615f36-0b44-408d-aeab-d76e4241add4@infradead.org>
-Date:   Wed, 25 Mar 2020 09:58:14 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1727564AbgCYRNN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Mar 2020 13:13:13 -0400
+Received: from mail-pf1-f169.google.com ([209.85.210.169]:42149 "EHLO
+        mail-pf1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726102AbgCYRNN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Mar 2020 13:13:13 -0400
+Received: by mail-pf1-f169.google.com with SMTP id 22so1343448pfa.9;
+        Wed, 25 Mar 2020 10:13:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=RXLxeC9OROmQQXYGBBBEvN5sljiBTZ5VVdFyLA+6ua4=;
+        b=e0Ed5MpREuQ7o1oPQZGuPjGHKWcFg4OGWmXLOH0qOcZrgFs8+q55lZ0VyEt4zyDCu0
+         nbNBjBVJWBq4+9p0e08lTof4j3m+Ikdzpwkm5DadcWo9a6TKGAwXScW24KlcLL7gapsc
+         +omZRWNNfTI0/z17YeAkDV63aBEOcyr4hciF/gxQ6ZhzfAL+W69s1H7eCPNikyH0N7K+
+         P8YL2f99uA+1t4/aFE965BWaT+qk/ju0Lte+JIQfcol9ioaHC7YePgSd7Z5PT5khb/Pv
+         W1EhR5V4r2TZLbD1KMPvg94sjMczD2McgrodCfRDUPCxdukC9zXvikbc+/vnc1/BBC8z
+         1Bfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=RXLxeC9OROmQQXYGBBBEvN5sljiBTZ5VVdFyLA+6ua4=;
+        b=aZBFniukyRkny5w5OrGTIWfGUP1lIOgwB5NxrMwxAJwbIW6HH6V1xD/Q1IgwHd3RU4
+         +iA1KlMjyNMbiZn9nBRYPIp3wtouV3GlVA9K1dgGumOKBOVVPrHSvmIb6ADSHFpmhg+9
+         5qFxg5w1GF3iMKeOBL/MioIcFttkju2q2aqVfqSKMX887C+wYwm9T/M5bz33MfR52fX/
+         uBvVDfAMAhmkOPWm7OgZI/d7uofhanQFwV28gWd/NKw6JlC0QZ2FDSKDIcRRgf/FJ5eI
+         seNYfM8h+aU5xsEv0JCSD4tMYaQhMZoOElbsckM82TRPEQu3kqI+vCAVX52J4g7c4ddc
+         is5w==
+X-Gm-Message-State: ANhLgQ0WuODDINVkYz168cuaCjWV0g259J2S6v9FJiO7u5ATr5jmy+lh
+        hVavG+wMWSQpFlEVWs2jd6SqtD3O
+X-Google-Smtp-Source: ADFU+vs86ffP/e+SCry5iFxYjVSnYEt4s2soEoNVz+crbuyUfCEt36uuqUmX7ftfYOCzwhBDU7YFhA==
+X-Received: by 2002:aa7:9695:: with SMTP id f21mr4510450pfk.93.1585156392040;
+        Wed, 25 Mar 2020 10:13:12 -0700 (PDT)
+Received: from SARKAR ([106.51.108.92])
+        by smtp.gmail.com with ESMTPSA id nu13sm5186359pjb.22.2020.03.25.10.13.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2020 10:13:11 -0700 (PDT)
+Message-ID: <5e7b9127.1c69fb81.f2f8b.582c@mx.google.com>
+X-Google-Original-Message-ID: <20200325171307.GD7983@rohitsarkar5398@gmail.com>
+Date:   Wed, 25 Mar 2020 22:43:07 +0530
+From:   Rohit Sarkar <rohitsarkar5398@gmail.com>
+To:     Hubert CHAUMETTE <hubert.chaumette@kolabnow.com>
+Cc:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
+        linux-newbie@vger.kernel.org
+Subject: Re: Beginner query regarding usbhid
+References: <5e7b5fbc.1c69fb81.cace7.7aa1@mx.google.com>
+ <1585147543.3831.8.camel@suse.com>
+ <5e7b6f15.1c69fb81.d92d3.facb@mx.google.com>
+ <b799aa1720fecb94d832264b4561eb8a@kolabnow.com>
 MIME-Version: 1.0
-In-Reply-To: <87wo78y5yy.fsf@nanos.tec.linutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b799aa1720fecb94d832264b4561eb8a@kolabnow.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+On Wed, Mar 25, 2020 at 04:41:38PM +0100, Hubert CHAUMETTE wrote:
+> Le 25/03/2020 15:47, Rohit Sarkar a écrit :
+> > I was trying to mess around with the driver that drives my mouse. I
+> > found out that it is usbhid. I then added a printk statement to the init
+> > and exit function of usbhid.
+> > I then compiled and installed the usbhid drivers. Post that I ran
+> > `sudo modprobe -r usbhid` and `sudo modprobe usbhid` but couldnt observe
+> > any logs in dmesg.
+> > 
+> > I am certain I am missing something fundamental. Could someone help me
+> > with this.
+> 
+> Hi,
+> 
+> Did you check whether your module was effectively loaded with lsmod?
+> What log level did you use in your printk statement? Depending on your
+> system default loglevel your logs might not be printed. A quick fix
+> would be to use one of the lowest levels (pr_emerg, but pr_err might
+> suffice).
+> Regards,
 
-Minor editorial fixes:
-- add some hyphens in multi-word adjectives
-- add some periods for consistency
-- add "'" for possessive CPU's
-- capitalize IRQ when it's an acronym and not part of a function name
+Hey,
+I did check that module was loaded. And one of the signs was that my
+mouse started working after insmod :).
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Paul McKenney <paulmck@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Sebastian Siewior <bigeasy@linutronix.de>
-Cc: Joel Fernandes <joel@joelfernandes.org>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
----
- Documentation/locking/locktypes.rst |   16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+I used printk(KERN_ALERT "some message") for logging. I also tried with
+KERN_ERR but no luck. 
 
---- linux-next-20200325.orig/Documentation/locking/locktypes.rst
-+++ linux-next-20200325/Documentation/locking/locktypes.rst
-@@ -84,7 +84,7 @@ rtmutex
- 
- RT-mutexes are mutexes with support for priority inheritance (PI).
- 
--PI has limitations on non PREEMPT_RT enabled kernels due to preemption and
-+PI has limitations on non-PREEMPT_RT-enabled kernels due to preemption and
- interrupt disabled sections.
- 
- PI clearly cannot preempt preemption-disabled or interrupt-disabled
-@@ -150,7 +150,7 @@ kernel configuration including PREEMPT_R
- 
- raw_spinlock_t is a strict spinning lock implementation in all kernels,
- including PREEMPT_RT kernels.  Use raw_spinlock_t only in real critical
--core code, low level interrupt handling and places where disabling
-+core code, low-level interrupt handling and places where disabling
- preemption or interrupts is required, for example, to safely access
- hardware state.  raw_spinlock_t can sometimes also be used when the
- critical section is tiny, thus avoiding RT-mutex overhead.
-@@ -160,20 +160,20 @@ spinlock_t
- 
- The semantics of spinlock_t change with the state of PREEMPT_RT.
- 
--On a non PREEMPT_RT enabled kernel spinlock_t is mapped to raw_spinlock_t
-+On a non-PREEMPT_RT-enabled kernel spinlock_t is mapped to raw_spinlock_t
- and has exactly the same semantics.
- 
- spinlock_t and PREEMPT_RT
- -------------------------
- 
--On a PREEMPT_RT enabled kernel spinlock_t is mapped to a separate
-+On a PREEMPT_RT-enabled kernel spinlock_t is mapped to a separate
- implementation based on rt_mutex which changes the semantics:
- 
-- - Preemption is not disabled
-+ - Preemption is not disabled.
- 
-  - The hard interrupt related suffixes for spin_lock / spin_unlock
--   operations (_irq, _irqsave / _irqrestore) do not affect the CPUs
--   interrupt disabled state
-+   operations (_irq, _irqsave / _irqrestore) do not affect the CPU's
-+   interrupt disabled state.
- 
-  - The soft interrupt related suffix (_bh()) still disables softirq
-    handlers.
-@@ -279,7 +279,7 @@ fully preemptible context.  Instead, use
- spin_lock_irqsave() and their unlock counterparts.  In cases where the
- interrupt disabling and locking must remain separate, PREEMPT_RT offers a
- local_lock mechanism.  Acquiring the local_lock pins the task to a CPU,
--allowing things like per-CPU irq-disabled locks to be acquired.  However,
-+allowing things like per-CPU IRQ-disabled locks to be acquired.  However,
- this approach should be used only where absolutely necessary.
- 
- 
+The command I used for building was "make -C /home/rohit/LINUX/kernels/staging  M=$(pwd)"
+and for installing the modules: "sudo make -C /home/rohit/LINUX/kernels/staging  M=$(pwd) modules_install"
+both were executed from the usbhid directory.
+from the usbhid directory.
+> Hubert Chaumette
 
+Thanks,
+Rohit
