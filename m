@@ -2,81 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB3E191F4E
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2020 03:37:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5611920AD
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2020 06:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727290AbgCYChz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Mar 2020 22:37:55 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:41335 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727262AbgCYChy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Mar 2020 22:37:54 -0400
-Received: by mail-pg1-f194.google.com with SMTP id b1so420334pgm.8
-        for <linux-usb@vger.kernel.org>; Tue, 24 Mar 2020 19:37:54 -0700 (PDT)
+        id S1725911AbgCYFol (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Mar 2020 01:44:41 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:37496 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725263AbgCYFol (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Mar 2020 01:44:41 -0400
+Received: by mail-lf1-f67.google.com with SMTP id j11so752564lfg.4;
+        Tue, 24 Mar 2020 22:44:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:content-transfer-encoding:in-reply-to:references
-         :subject:from:cc:to:date:message-id:user-agent;
-        bh=VRnQilnt07d1oqQ4KQil6Mz63llajYTl97NmNGSglPo=;
-        b=YKxyAk3ZQU7yENdjEqMIxZP3xJ5UXORg5Wf994rlklKQNuw65fwL2GtrHKEuOOgQXY
-         SByDSi7BXw5nEX22nOtxCwYolWNrZ5/RKwfx7pDywcRUfqxqKfQvMdw+iCUaW+DqXrtU
-         WBff/Ecpq8xlXKaDdC+WJaNl9cT7o1158Rv7c=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5PN2pEY+Kzbz4XFdCE928s35v5++Wy9Ykd/RxXGev44=;
+        b=ohyQ0IaVVwTIOUP8Wrrjs6MbrHL4SxSXu6kuiAoH2a4S2UNj319FtMoCz0yKbZkNUS
+         jagKrf3WLgcONvMPL8fK+mO15JIpo7DVYvu+FYesHrs9vI1jj/1kRFB06y4gZmw0cbL4
+         0G85USaf0uachg+aNBsO3TH8x+pp7BMpV0GUZTngWYbAtoagtFPZIxVR5O/ow3O3MaqR
+         ifRbBlZI2+kj+prnnIENQMaEXMtt4akYgjmR5wYhCrYbVU3acO9QCc9LYwMGMueT4eDN
+         SRvcSUGUjoA34l/LsazWiEIXTL9TcRKlVXEL/rwMze4QI3O2L8SMNGHA5sTTFtgMFLJw
+         aR7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding
-         :in-reply-to:references:subject:from:cc:to:date:message-id
-         :user-agent;
-        bh=VRnQilnt07d1oqQ4KQil6Mz63llajYTl97NmNGSglPo=;
-        b=L74yxhfUdskE3CjutIfZr2/p/2Yo9OQg+hEI/eauOApSeHFCMeYxR/WvmcxLizH9uJ
-         kHt/Cqu2r9fK6Zkk8KRwfVTvPuHaejC3WcgODVYCivDcK8BlZXWlLgegT8FLReTtC2fn
-         tmggzNDL29q0XBUUfpVJfFOfpgbNQcXA56EZ91ESJhNX7e4Hh1q9zFZ61gCrWO7sgxZH
-         9LTAcyJYr4IRV/nGcX4tkNJFnY4s9EKDF07Tnl3ImTphfZltHR1Wt+gLUeerX85qcTw+
-         RKm7RVJroYbDmAUeLmTHCMtRfht8oPe5isUwEXcoIpzMfS8W21+KyutZlBvWFQeLfyu2
-         eFmQ==
-X-Gm-Message-State: ANhLgQ0uyss2MFnUPSFZbPKkexSjY1zK8e3pcWjVn+ot4o3n6/Sl4jA5
-        fJH2sZEdMgaCyWzroHsPNHdUGg==
-X-Google-Smtp-Source: ADFU+vseJ+fw2H4J2gLn7jXALCAM+os616BkOMYNzL7Tq2/7qkx6ZJNgGF+lIAIFjgr8xWMqoG2MaA==
-X-Received: by 2002:a63:1d7:: with SMTP id 206mr727458pgb.99.1585103873356;
-        Tue, 24 Mar 2020 19:37:53 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id e14sm16965737pfn.196.2020.03.24.19.37.52
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5PN2pEY+Kzbz4XFdCE928s35v5++Wy9Ykd/RxXGev44=;
+        b=n/H6WbBiQ7OQ6M8/68jQL4UE1JpbzjtQn2zCHjy6g1NlwZplR6p0pBDRVWU8P7jBt3
+         m/KWW+DEGLl/VxqnyoI/R+/j6koF8UhK8n5wZDhxJemL/ptZ9eedRg4mFOeci69jOQwh
+         gWCbZxnZtnu7/thl1+fSvwfVgsetDIarPC2ko9P8IjzfHEQZc7tlY6tLbTlqfObN6B+e
+         Mpx/mEVqOk5MmC/FBKE0zn7+0YHsdVLGoeReXojc3vBS4pqww7IqzVRrJuDbhHztifcJ
+         1kXE2o6NIpJrFva6BEHcMLMfZfdsJL8igiiHJ0gMl9W974LM8FyIGbazcgIwrZ0Ma733
+         bNzA==
+X-Gm-Message-State: ANhLgQ2TLSexn9EjigG0sfZpRRPwWUC7t4W6Nwl+EJhIom1KjDNxTXfE
+        3h/s1ZIta3Wv7wN4DKO8w3o=
+X-Google-Smtp-Source: ADFU+vuh0k4Bq4TAYo+XOlNmB+hpG5bs6sQqwD/bNueZp1wQ0NmtvvAsuW8dv+Bl7HFFSHrX/PjPyQ==
+X-Received: by 2002:ac2:44bb:: with SMTP id c27mr1118265lfm.91.1585115079793;
+        Tue, 24 Mar 2020 22:44:39 -0700 (PDT)
+Received: from localhost.localdomain ([185.188.71.122])
+        by smtp.gmail.com with ESMTPSA id c5sm4690876lfg.82.2020.03.24.22.44.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2020 19:37:52 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <66b8da28bbf0af6d8bd23953936e7feb6a7ed0c2.1584966325.git.mchehab+huawei@kernel.org>
-References: <66b8da28bbf0af6d8bd23953936e7feb6a7ed0c2.1584966325.git.mchehab+huawei@kernel.org>
-Subject: Re: [PATCH 1/2] docs: dt: qcom,dwc3.txt: fix cross-reference for a converted file
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Tue, 24 Mar 2020 22:44:38 -0700 (PDT)
+From:   Pawel Dembicki <paweldembicki@gmail.com>
+Cc:     Pawel Dembicki <paweldembicki@gmail.com>,
+        Cezary Jackiewicz <cezary@eko.one.pl>,
+        Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Sandeep Maheswaram <sanm@codeaurora.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Date:   Tue, 24 Mar 2020 19:37:51 -0700
-Message-ID: <158510387182.125146.16270632251829962912@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/3] USB: serial: option: add support for ASKEY WWHC050
+Date:   Wed, 25 Mar 2020 06:44:17 +0100
+Message-Id: <20200325054419.19128-1-paweldembicki@gmail.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Mauro Carvalho Chehab (2020-03-23 05:25:27)
-> The qcom-qusb2-phy.txt file was converted and renamed to yaml.
-> Update cross-reference accordingly.
->=20
-> Fixes: 8ce65d8d38df ("dt-bindings: phy: qcom,qusb2: Convert QUSB2 phy bin=
-dings to yaml")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
+ASKEY WWHC050 is a mcie LTE modem.
+The oem configuration states:
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1690 ProdID=7588 Rev=ff.ff
+S:  Manufacturer=Android
+S:  Product=Android
+S:  SerialNumber=813f0eef6e6e
+C:* #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=500mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 5 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=(none)
+E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=125us
+
+Tested on openwrt distribution.
+
+Co-Developed-by: Cezary Jackiewicz <cezary@eko.one.pl>
+Signed-off-by: Cezary Jackiewicz <cezary@eko.one.pl>
+Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
+---
+ drivers/usb/serial/option.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 0b5dcf973d94..ec367a2f7fed 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1992,6 +1992,8 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x07d1, 0x3e01, 0xff, 0xff, 0xff) },	/* D-Link DWM-152/C1 */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x07d1, 0x3e02, 0xff, 0xff, 0xff) },	/* D-Link DWM-156/C1 */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(0x07d1, 0x7e11, 0xff, 0xff, 0xff) },	/* D-Link DWM-156/A3 */
++	{ USB_DEVICE_INTERFACE_CLASS(0x1690, 0x7588, 0xff),			/* ASKEY WWHC050 */
++	  .driver_info = RSVD(1) | RSVD(4) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2020, 0x2031, 0xff),			/* Olicard 600 */
+ 	  .driver_info = RSVD(4) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2020, 0x2060, 0xff),			/* BroadMobi BM818 */
+-- 
+2.20.1
+
