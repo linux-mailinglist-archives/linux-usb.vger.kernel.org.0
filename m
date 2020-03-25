@@ -2,83 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A37131929FA
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2020 14:35:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 952CB192A47
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Mar 2020 14:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727877AbgCYNfe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Mar 2020 09:35:34 -0400
-Received: from mail-sh.amlogic.com ([58.32.228.43]:32827 "EHLO
-        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727444AbgCYNfb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Mar 2020 09:35:31 -0400
-Received: from [10.18.38.73] (10.18.38.73) by mail-sh.amlogic.com (10.18.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Wed, 25 Mar
- 2020 21:36:06 +0800
-Subject: Re: [PATCH 02/13] usb: dwc3: meson-g12a: specify phy names in soc
- data
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>
-CC:     <kishon@ti.com>, <balbi@kernel.org>, <khilman@baylibre.com>,
-        <linux-amlogic@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20200324102030.31000-1-narmstrong@baylibre.com>
- <20200324102030.31000-3-narmstrong@baylibre.com>
- <CAFBinCA9rQKWx47F2-dT4ZrCwSKW+LiwAH2VdzPKr-9ymRxkSw@mail.gmail.com>
- <a7020606-57be-81de-da2d-73d399853217@baylibre.com>
- <CAFBinCDOrhXAEwPf4L8-5XoCGqDT89=L2CX2Qsr2J-1pQp6N5Q@mail.gmail.com>
-From:   Hanjie Lin <hanjie.lin@amlogic.com>
-Message-ID: <0cc6076c-1334-026f-c7ce-32a5945351b5@amlogic.com>
-Date:   Wed, 25 Mar 2020 21:36:06 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1727430AbgCYNmW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Mar 2020 09:42:22 -0400
+Received: from mail-pl1-f172.google.com ([209.85.214.172]:44456 "EHLO
+        mail-pl1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727114AbgCYNmW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Mar 2020 09:42:22 -0400
+Received: by mail-pl1-f172.google.com with SMTP id h11so803994plr.11;
+        Wed, 25 Mar 2020 06:42:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:date:from:to:cc:subject:mime-version:content-disposition
+         :user-agent;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=uKOgZlOJn70BBq9Mz+0uWw0S1aJZwuGEywdIMaae3va3d39rELLyzPApHt7x7URmbR
+         w5ZUahOn9DopqD5Dlfeq16KTztyyuxq+fIO7kPNfP+sIrdg8cOHG9SnpjzWmJil2Nq3V
+         b3z7QJT1nndzRb1AwSr5Dyk/CP6gdpceTt4DY+1qfK86hyZ+tf6EYrKVLPxWhTi86E6H
+         JZJepS91GHGQXCgtda9TKZ3JysmrWspnLY8G0VB0UAmhIN0Ame1cgIHu78lXe0nZD4pF
+         eAxoIH5A9q/H4JX91/p5wAyw2YCBx1Y9pWG3AJ/H3ljCPftyNEBjpPiHJIHV/iZU3Jfg
+         gbMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:mime-version
+         :content-disposition:user-agent;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=mf3LsZc7s0ztC8a+1dmUztLkCM2Dh+2DKDrkZ/3atemAak+V1Po2lyou0fF+lou78y
+         jSg0kbJyXTWrKZ94219Rzjd5FpThaXPHIHeRbkPnmmy+FVaxe1mJp9toR+FmsLz8//uQ
+         yGSSD57hz1uY406j04nHJTZz7jULr8fO6GrsRpzGtm/GXV9WikQ1a26Er6M3FxmK4WrZ
+         d2dN+DZGH/k8rhIe5c6hDYdUiNTVtpk3ey/pmjvO3u+VWqGZ8lOQVZbYsKFt8vh0DNsR
+         geq7PmKzXiNZq5jY2RwsZbk7Bb6zGE3ttPAm3Ns//JdRdX+Ol2euH9RNbHmkV2O0M8eb
+         WeIg==
+X-Gm-Message-State: ANhLgQ1gFlRXCpaYB9jAjCxvUSbMLHdoh+7F1Eq8pTJhokW3VtYvx2ev
+        MPg0mckt49fTZGPOwBhJ29Tq5D9m
+X-Google-Smtp-Source: ADFU+vviT0X6Sxgrm6YS1rFEiqOhOkrSjOThpaT5hW2Bz91MGRA0d+IXaCMgteXXJ2xIhi2bF0E+iA==
+X-Received: by 2002:a17:90a:fc8c:: with SMTP id ci12mr3773557pjb.152.1585143740743;
+        Wed, 25 Mar 2020 06:42:20 -0700 (PDT)
+Received: from SARKAR ([106.51.108.92])
+        by smtp.gmail.com with ESMTPSA id a71sm18588165pfa.162.2020.03.25.06.42.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2020 06:42:20 -0700 (PDT)
+Message-ID: <5e7b5fbc.1c69fb81.cace7.7aa1@mx.google.com>
+X-Google-Original-Message-ID: <20200325134217.GB7983@rohitsarkar5398@gmail.com>
+Date:   Wed, 25 Mar 2020 19:12:17 +0530
+From:   Rohit Sarkar <rohitsarkar5398@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-newbie@vger.kernel.org
+Subject: Beginner query regarding usbhid
 MIME-Version: 1.0
-In-Reply-To: <CAFBinCDOrhXAEwPf4L8-5XoCGqDT89=L2CX2Qsr2J-1pQp6N5Q@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.38.73]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
-
-
-
-On 2020/3/24 22:19, Martin Blumenstingl wrote:
-> On Tue, Mar 24, 2020 at 3:17 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
->>
->> On 24/03/2020 15:13, Martin Blumenstingl wrote:
->>> Hi Neil,
->>>
->>> On Tue, Mar 24, 2020 at 11:20 AM Neil Armstrong <narmstrong@baylibre.com> wrote:
->>> [...]
->>>> +static const char *meson_a1_phy_names[] = {
->>>> +       "usb2-phy0", "usb2-phy1"
->>>> +};
->>> my understanding is that the A1 SoC only has usb2-phy1.
->>> +Cc Hanjie Lin to confirm this
->>
->> I forgot a comment here, it only has a single PHY, but still the 2 U2 PHY
->> controls slots... it would need a large amount of code to handle this
->> tweak, and leaving 2 PHYs keeps the behavior before the patchset.
-> I just reviewed patch #3 and I now understand that it would require a
-> large code-change
-> I'm fine with a comment
-> 
-> 
-> Martin
-> 
-> .
-> 
-
-I see, 
-A comment here will be more comprehensible.
-
-Acked-by: Hanjie Lin <hanjie.lin@amlogic.com>
-
-Hanjie
 
