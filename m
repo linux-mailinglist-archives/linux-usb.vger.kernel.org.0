@@ -2,111 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0350219441A
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 17:16:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7294A19443C
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 17:27:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728326AbgCZQQ1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Mar 2020 12:16:27 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:41426 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727912AbgCZQQ1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 12:16:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=4z4ryFy5Ro40is8WzUMXK/w3XSlExsdiHcqNZ71+Qws=; b=IIlIh7VRzqckJUiiDieNKzNxOp
-        xgPUcYubx1BrhepVScJ5cTKMbi4gpu0KdgbxW/OdJyw8CaXwaR+FYDwD03iVN+Kb5ecJRqFMbRyIS
-        oTJQvIXByz1jbxTcE5LfmkfVt7+Lok/ru4NAW78Nck1Ko8Sm+IP+TBp3Js7K6+6oc0exl1G2/E/I4
-        T2YzikLIU7yRQFQ2f6T1CjCT3jLdQjFBm4IuaN5VOLKOnGctBBh2kQDK8ZKyQqCUbkJstw/i24/XH
-        Q4MwxM9J/vV5S6CDoF5o0qtpD/hV5jfXpq5WKZfdzIe9roQoBSkdkGdFLrt13fNVuYeTvLEZEzYor
-        bre+a4gQ==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jHVBD-0002vm-9P; Thu, 26 Mar 2020 16:16:27 +0000
-Subject: Re: Beginner query regarding usbhid
-To:     Rohit Sarkar <rohitsarkar5398@gmail.com>
-Cc:     Hubert CHAUMETTE <hubert.chaumette@kolabnow.com>,
-        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-        linux-newbie@vger.kernel.org
-References: <5e7b5fbc.1c69fb81.cace7.7aa1@mx.google.com>
- <1585147543.3831.8.camel@suse.com>
- <5e7b6f15.1c69fb81.d92d3.facb@mx.google.com>
- <b799aa1720fecb94d832264b4561eb8a@kolabnow.com>
- <5e7b9127.1c69fb81.f2f8b.582c@mx.google.com>
- <cfda560c-ad5f-5e71-ab22-d8639688722b@infradead.org>
- <5e7c3e48.1c69fb81.7da14.34ab@mx.google.com>
- <fdc818d7-842c-cfef-3654-0478e74bfa73@infradead.org>
- <5e7c5b10.1c69fb81.eb1b6.4979@mx.google.com>
- <fd519185-4b66-ce4f-a12e-fc1329c73ce2@infradead.org>
- <5e7cd502.1c69fb81.2402c.714b@mx.google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <4637ad23-b086-b76d-5ce0-99da85764b45@infradead.org>
-Date:   Thu, 26 Mar 2020 09:16:26 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
-MIME-Version: 1.0
-In-Reply-To: <5e7cd502.1c69fb81.2402c.714b@mx.google.com>
-Content-Type: text/plain; charset=utf-8
+        id S1728144AbgCZQ1F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Mar 2020 12:27:05 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:37333 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726330AbgCZQ1F (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 12:27:05 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02QGNFlJ025185;
+        Thu, 26 Mar 2020 17:26:55 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=STMicroelectronics;
+ bh=1xKLuh0CMGGeFs0L/qRqkwlJw3iv6JDUdN6d2APZlR0=;
+ b=0HnG5uLoeEsbI+fFw2vsqkwtWLxAo/KD2pzJPg1na3rYU9vLfKQQ1Ip0pXY9NCwdyku+
+ Q31RwCI4B2X/GlZkoDdkduJbdqsHjy/42Qxbg3ogxPDA+U7vf786hhrgLJT8jLLdmNN7
+ bDcJDsVxgDzdkqARlQX12b1gkTJRaasnd5dKlK5q29JE135Jl+ZecwDjsT//zNH6KC5y
+ wuIxewifITzYpJUobLNUA7f1vl96y3YhGJsEIbyhCeaoTDTL1IkXvpeA6k4uwqZYVzz4
+ soC/I8nIaFYynYxe+ziVLCFBbMf5Haf87V1UtPUuWUnsCj04KufyQ4jhbla9EYZr+cRS fA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2yw9k0ctc2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 26 Mar 2020 17:26:55 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0F8A210002A;
+        Thu, 26 Mar 2020 17:26:48 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EB6C52B9067;
+        Thu, 26 Mar 2020 17:26:47 +0100 (CET)
+Received: from SFHDAG3NODE3.st.com (10.75.127.9) by SFHDAG3NODE1.st.com
+ (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 26 Mar
+ 2020 17:26:47 +0100
+Received: from SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476]) by
+ SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476%20]) with mapi id
+ 15.00.1347.000; Thu, 26 Mar 2020 17:26:47 +0100
+From:   Benjamin GAIGNARD <benjamin.gaignard@st.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] dt-bindings: usb: dwc2: fix bindings for
+ amlogic,meson-gxbb-usb
+Thread-Topic: [PATCH] dt-bindings: usb: dwc2: fix bindings for
+ amlogic,meson-gxbb-usb
+Thread-Index: AQHWA4kfrKmvM7C2NESne7Y0qff0Aqha/tkA
+Date:   Thu, 26 Mar 2020 16:26:47 +0000
+Message-ID: <e7820b83-670d-f619-c5fa-8c97379a6471@st.com>
+References: <20200326161046.12111-1-narmstrong@baylibre.com>
+In-Reply-To: <20200326161046.12111-1-narmstrong@baylibre.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.75.127.51]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8C128BFFBE124340B62493BB8102458F@st.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
+ definitions=2020-03-26_08:2020-03-26,2020-03-26 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/26/20 9:14 AM, Rohit Sarkar wrote:
-> On Thu, Mar 26, 2020 at 09:02:55AM -0700, Randy Dunlap wrote:
->> On 3/26/20 12:34 AM, Rohit Sarkar wrote:
->>
->>>>>>>
->>>>>>> The command I used for building was "make -C /home/rohit/LINUX/kernels/staging  M=$(pwd)"
->>>>>>> and for installing the modules: "sudo make -C /home/rohit/LINUX/kernels/staging  M=$(pwd) modules_install"
->>>>>>> both were executed from the usbhid directory.
->>>>>>
->>>>>> why those commands?  seems unusual.
->>>>> My Linux kernel source is in the directory mentioned in the commands. So
->>>>> it is same as running "make M=drivers/hid/usbhid/" from the linux kernel
->>>>> source root.
->>>>
->>>> So /home/rohit/kernels/staging is the top-level kernel source directory?
->>>>
->>>> "M=dir" is for external modules to be built.  AFAICT you are not building any
->>>> external modules.
->>>>
->>>> Just run
->>>> $ cd <top of kernel source tree>
->>>> $ make all
->>>> $ sudo make install
->>> Further, on my system it takes a significant amount of time to run "make
->>> all" for some reason. (30 minutes) even though I have previously
->>> built the kernel and not pulled any update.
->>> AFAIK, make is only supposed to build the files that have
->>> changed. Idk why it is also compiling other files. Most of the time is
->>> taken by make running modpost.
->>>
->>> That is the reason I tried to build and install only the hid folder
->>
->> OK, I get that.
->>
->> For a driver that is built as a loadable module, you should be able to
->> edit the driver, build it, unload previous version (rmmod),
->> load new version (modprobe or insmod), and test it, without having to
->> reboot the kernel. [until an oops or BUG or WARN happens]
->>
->> If you don't "install" the new module file, I think that modprobe will
->> look in /lib/modules/kernel_version/* for the module file and find the
->> old one.  In this case I usually use "insmod path_to_new_driver_file"
->> to load & test it.
-> Hmm, the weird part is that I did run "sudo make modules_install".
-> Shouldnt that get the latest modules into /lib/modules/{kernel
-> version}/*. Although it didnt work before rebooting.
-
-Yes.
-
-> I guess insmod path_to_new_driver_file is the best option here.
-
-
--- 
-~Randy
-
+DQoNCk9uIDMvMjYvMjAgNToxMCBQTSwgTmVpbCBBcm1zdHJvbmcgd3JvdGU6DQo+IFRoZSBhbWxv
+Z2ljLG1lc29uLWd4YmItdXNiIGNvbXBhdGlibGUgbmVlZHMgc25wcyxkd2MyIGFzd2VsbCBsaWtl
+IG90aGVyDQo+IEFtbG9naWMgU29DLg0KPg0KPiBGaXhlczogZjNjYTc0NWQ4YTBlICgiZHQtYmlu
+ZGluZ3M6IHVzYjogQ29udmVydCBEV0MyIGJpbmRpbmdzIHRvIGpzb24tc2NoZW1hIikNCj4gU2ln
+bmVkLW9mZi1ieTogTmVpbCBBcm1zdHJvbmcgPG5hcm1zdHJvbmdAYmF5bGlicmUuY29tPg0KUmV2
+aWV3ZWQtYnk6IEJlbmphbWluIEdhaWduYXJkIDxiZW5qYW1pbi5nYWlnbmFyZEBzdC5jb20+DQo+
+IC0tLQ0KPiAgIERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvZHdjMi55YW1s
+IHwgNCArKystDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlv
+bigtKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
+L3VzYi9kd2MyLnlhbWwgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL2R3
+YzIueWFtbA0KPiBpbmRleCA3MWNmN2JhMzIyMzcuLmI3YjlkZGNiYzYzNyAxMDA2NDQNCj4gLS0t
+IGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi9kd2MyLnlhbWwNCj4gKysr
+IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi9kd2MyLnlhbWwNCj4gQEAg
+LTQ5LDcgKzQ5LDkgQEAgcHJvcGVydGllczoNCj4gICAgICAgICAtIGl0ZW1zOg0KPiAgICAgICAg
+ICAgICAtIGNvbnN0OiBhbWxvZ2ljLG1lc29uOGItdXNiDQo+ICAgICAgICAgICAgIC0gY29uc3Q6
+IHNucHMsZHdjMg0KPiAtICAgICAgLSBjb25zdDogYW1sb2dpYyxtZXNvbi1neGJiLXVzYg0KPiAr
+ICAgICAgLSBpdGVtczoNCj4gKyAgICAgICAgICAtIGNvbnN0OiBhbWxvZ2ljLG1lc29uLWd4YmIt
+dXNiDQo+ICsgICAgICAgICAgLSBjb25zdDogc25wcyxkd2MyDQo+ICAgICAgICAgLSBpdGVtczoN
+Cj4gICAgICAgICAgICAgLSBjb25zdDogYW1sb2dpYyxtZXNvbi1nMTJhLXVzYg0KPiAgICAgICAg
+ICAgICAtIGNvbnN0OiBzbnBzLGR3YzINCg==
