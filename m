@@ -2,149 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57877194816
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 20:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2784D19482A
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 21:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728502AbgCZT7A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Mar 2020 15:59:00 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:37416 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727851AbgCZT67 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 15:58:59 -0400
-Received: by mail-ot1-f66.google.com with SMTP id g23so7314316otq.4;
-        Thu, 26 Mar 2020 12:58:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Ujm9KF63/2Xh115nBCNoaxnV0BjyE1MHL3TYCViqZyo=;
-        b=dqhFaSe++a6/RkbeF44E988RrAbfGKW3JSkG4/6VsckRWU0SNkPkn4iw5X2HSvXHEe
-         rLUYKAdYRHiiBS/zbJsmvoDCZAo2xI9K20gUOjkKKgPu1eHCzKVIsGq4rgZpWLixqPA2
-         WMauF17ZmQUwEZf5zVkf1z9+4Z59P6IVRKSjWdSyp7KBFbkYrrUXWfJoa8suPju2X2Ms
-         hqTzF1OVmxRqiWJGDNlh22gRoPRx6KSeDubBJJRUmUWt+xiVFYHnTF1xLlDPZOXLxhEa
-         XTVHkTmO4UzXV/BI9Kk7zQVu64x9IaMRCdjfXu/fJTTZGgSGV9M2zyHaKhRO92kgpnr+
-         gpig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Ujm9KF63/2Xh115nBCNoaxnV0BjyE1MHL3TYCViqZyo=;
-        b=SOOA+hNyE/+HyTKBf4UmLLef6nAf+WX+S2Wkom3+uc9GGm6DQVSFjRLe7+CXX2jvWa
-         RpNTuJvr699tm7oNEkPZMy20DbUiYyG8ws/bABKoD8cX41nSFZf75YdF4rjxCs4jI6KF
-         BL2IyqfNBvqUA/du8C0J96W6V5OMzJXuGyMcudFKmt2j3FbBxUryqkydItHxLWtwLotH
-         nf5fDqDATRqJy0GRJoprjqt9RqKIKXJxNZ8TQLPeeYw7o8CCaICy6w3bXxf7XHsdr9dB
-         BqjCYZ4jVytpdIYPzFr3rY4zy9OeOm09XAhdcxiwbFZeyQ2gzci1fZHOdyEZO2XUDBF+
-         8n+A==
-X-Gm-Message-State: ANhLgQ09E2lcIDCd3EzXID4q4/V2OZfzVsnpBL7Okkn0VyHiv2rjJRuo
-        H+OzsTAicQJtjeNi0qs3qUg=
-X-Google-Smtp-Source: ADFU+vtD4p8O/2ipfHSoS84IwgBiH+6D5rxYJYDtw8QWkpJ2ALLIJpe4Z27mKt4JLhHlETM7ETqxOg==
-X-Received: by 2002:a9d:8d0:: with SMTP id 74mr7767203otf.39.1585252738620;
-        Thu, 26 Mar 2020 12:58:58 -0700 (PDT)
-Received: from ubuntu-m2-xlarge-x86 ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id b26sm864123oti.3.2020.03.26.12.58.57
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 26 Mar 2020 12:58:58 -0700 (PDT)
-Date:   Thu, 26 Mar 2020 12:58:55 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     Ashwini Pahuja <ashwini.linux@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Subject: Re: [PATCH] usb: gadget: udc: bdc: Remove unnecessary NULL checks in
- bdc_req_complete
-Message-ID: <20200326195855.GB29213@ubuntu-m2-xlarge-x86>
-References: <20191023002014.22571-1-natechancellor@gmail.com>
- <20200221045740.GA43417@ubuntu-m2-xlarge-x86>
- <CAKwvOdku24UV8J4uSKFFc7gmwOP28-8K352BJepb_z-octFoPw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdku24UV8J4uSKFFc7gmwOP28-8K352BJepb_z-octFoPw@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S1727719AbgCZUDR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Mar 2020 16:03:17 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:55346 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727446AbgCZUDQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 16:03:16 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02QJx8Xv046765
+        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2020 20:03:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : content-type :
+ content-transfer-encoding : mime-version : date : subject : message-id :
+ to; s=corp-2020-01-29; bh=s9UEpIW+lsCLg2gmVx11CrymPRIPFMo/MMcp/jgu5vs=;
+ b=mYMuXMpX/i4a/jpW1Ey58xIfrZCyIzrsiHdqhPHYQN1C97w0bGE465Y9QMpjhNcZrVdI
+ gNGGNaqaRjU+RomTYFDXfFbSXrB506jjbjSPaQ8jAOM2g2CHZ4y5V/QeEU9X0jTfgfFd
+ YqfSsneD9EAIS3zvw/qxzxoiSqY7FVIV0b0m3G97ENAGd7/GxoHBBl9Ku/c6EZfZzY0/
+ XkymoWy0mfULgnlbXeSu6QU8D9hKUDL4D/QtKj4cQN90M0czuLKHMXxtmzsILEW1s6fe
+ dyhqFnF+AxwjEpfa+bSfncBPPzDldS1WsA6bTbjWmsRqS47tV/Ea3cst3MqmwZZ5usP7 ag== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 2ywavmhy6e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2020 20:03:14 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02QJud2X190600
+        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2020 20:03:14 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 30073ecdp6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2020 20:03:14 +0000
+Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 02QK3D6h027269
+        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2020 20:03:14 GMT
+Received: from dhcp-10-154-182-169.vpn.oracle.com (/10.154.182.169)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 26 Mar 2020 13:03:13 -0700
+From:   John Donnelly <john.p.donnelly@oracle.com>
+Content-Type: text/plain;
+        charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 11.5 \(3445.9.1\))
+Date:   Thu, 26 Mar 2020 15:03:12 -0500
+Subject: Question :  remote "ILO" setup - keyboard and mouse enumeration 
+Message-Id: <7A2988F9-C174-4A13-8F0E-B3D73A33DF47@oracle.com>
+To:     linux-usb@vger.kernel.org
+X-Mailer: Apple Mail (2.3445.9.1)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9572 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=891 adultscore=0
+ suspectscore=5 mlxscore=0 phishscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003260146
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9572 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
+ priorityscore=1501 mlxscore=0 bulkscore=0 clxscore=1015 impostorscore=0
+ phishscore=0 suspectscore=5 mlxlogscore=933 spamscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2003260146
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Feb 24, 2020 at 01:42:57PM -0800, Nick Desaulniers wrote:
-> On Thu, Feb 20, 2020 at 8:57 PM Nathan Chancellor
-> <natechancellor@gmail.com> wrote:
-> >
-> > I know it has been a while but ping?
-> 
-> Sorry! Too many bugs...barely treading water! Send help!
-> 
-> >
-> > On Tue, Oct 22, 2019 at 05:20:15PM -0700, Nathan Chancellor wrote:
-> > > When building with Clang + -Wtautological-pointer-compare:
-> > >
-> > > drivers/usb/gadget/udc/bdc/bdc_ep.c:543:28: warning: comparison of
-> > > address of 'req->queue' equal to a null pointer is always false
-> > > [-Wtautological-pointer-compare]
-> > >         if (req == NULL  || &req->queue == NULL || &req->usb_req == NULL)
-> > >                              ~~~~~^~~~~    ~~~~
-> > > drivers/usb/gadget/udc/bdc/bdc_ep.c:543:51: warning: comparison of
-> > > address of 'req->usb_req' equal to a null pointer is always false
-> > > [-Wtautological-pointer-compare]
-> > >         if (req == NULL  || &req->queue == NULL || &req->usb_req == NULL)
-> > >                                                     ~~~~~^~~~~~~    ~~~~
-> > > 2 warnings generated.
-> > >
-> > > As it notes, these statements will always evaluate to false so remove
-> > > them.
-> 
-> `req` is an instance of a `struct bdc_req` defined in
-> drivers/usb/gadget/udc/bdc/bdc.h as:
-> 333 struct bdc_req {
-> 334   struct usb_request  usb_req;
-> 335   struct list_head  queue;
-> 336   struct bdc_ep   *ep;
-> 337   /* only one Transfer per request */
-> 338   struct bd_transfer bd_xfr;
-> 339   int epnum;
-> 340 };
-> 
-> So indeed the non-pointer, struct members can never be NULL.
-> 
-> I think the second check that was removed should be
-> `req->usb_req.complete == NULL`, since otherwise `&req->usb_req` may
-> be passed to usb_gadget_giveback_request which tries to invoke the
-> `complete` member as a callback.  There are numerous places in
-> drivers/usb/gadget/udc/bdc/bdc_ep.c that assign `complete = NULL`.
-> 
-> Can the maintainers clarify?
+Hi,
 
-$ sed -n 537,555p drivers/usb/gadget/udc/bdc/bdc_ep.c
-/* callback to gadget layer when xfr completes */
-static void bdc_req_complete(struct bdc_ep *ep, struct bdc_req *req,
-						int status)
-{
-	struct bdc *bdc = ep->bdc;
+This is 10,000 foot question for a issue I am looking at :
 
-	if (req == NULL  || &req->queue == NULL || &req->usb_req == NULL)
-		return;
+Quite a few servers have a BCM that expose a USB keyboard and mouse when =
+a " iLo client session " is started  that also provides a remote =
+console.
 
-	dev_dbg(bdc->dev, "%s ep:%s status:%d\n", __func__, ep->name, status);
-	list_del(&req->queue);
-	req->usb_req.status = status;
-	usb_gadget_unmap_request(&bdc->gadget, &req->usb_req, ep->dir);
-	if (req->usb_req.complete) {
-		spin_unlock(&bdc->lock);
-		usb_gadget_giveback_request(&ep->usb_ep, &req->usb_req);
-		spin_lock(&bdc->lock);
-	}
-}
+For instance on Bus 01.Port 1: Dev 1, Port 8 there are these devices :
 
-It looks like req->usb_req.complete is checked before being passed to
-usb_gadget_giveback_request. So the patch as it stands is correct,
-unless those checks needed to be something else.
+ lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/10p, 5000M
+/:  Bus 01.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/16p, 480M
+    |__ Port 8: Dev 2, If 0, Class=3DHub, Driver=3Dhub/7p, 480M
+        |__ Port 3: Dev 3, If 0, Class=3DCommunications, =
+Driver=3Dcdc_ether, 480M
+        |__ Port 3: Dev 3, If 1, Class=3DCDC Data, Driver=3Dcdc_ether, =
+480M
 
-Felipe, could you clarify or pick up this patch if it is correct? This
-is one of two warnings that I see for -Wtautological-compare and I want
-it turned on for 5.7 and it'd be nice to be warning free, especially
-since I sent this patch back in October :/
 
-Cheers,
-Nathan
+When a remote viewer ( iLO ) session is started, two HID appear under =
+Port 8 :
+
+
+ lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/10p, 5000M
+/:  Bus 01.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/16p, 480M
+    |__ Port 8: Dev 2, If 0, Class=3DHub, Driver=3Dhub/7p, 480M
+        |__ Port 1: Dev 7, If 0, Class=3DHuman Interface Device, =
+Driver=3Dusbhid,480M
+        |__ Port 2: Dev 6, If 0, Class=3DHuman Interface Device, =
+Driver=3Dusbhid,480M
+        |__ Port 3: Dev 3, If 0, Class=3DCommunications, =
+Driver=3Dcdc_ether, 480M
+        |__ Port 3: Dev 3, If 1, Class=3DCDC Data, Driver=3Dcdc_ether, =
+480M
+
+
+Is this device tree showing me the Port 8 is somehow wired to the BCM ?  =
+And the BCM did some sort of operation that causes the xhci_hcd driver =
+to enumerate a new device ? =20
+
+The driver :  =E2=80=9C usbhid =E2=80=9C in real life appears to be a =
+built-in component to the kernel - Not a loadable module .  I suspect =
+that is so keyboards always work.=20
+
+When the iLO session is terminated the two HID devices disappear .=20
+
+If anyone can point me documentation how this works I would appreciate =
+it. =20
+
+
+Thank you for your time.=20
+
+JD
+
+
+
+
+
+
+
+
+
+
+
