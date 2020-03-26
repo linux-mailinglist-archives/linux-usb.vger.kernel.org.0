@@ -2,85 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 354F31945EA
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 18:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57877194816
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 20:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727495AbgCZR5p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Mar 2020 13:57:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50790 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726163AbgCZR5p (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 26 Mar 2020 13:57:45 -0400
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A1C5F20719;
-        Thu, 26 Mar 2020 17:57:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585245464;
-        bh=HDcqsps3y7sE+bgHTDL/9DN90HLJP7jG1o+L1gkMqcU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=c+xFFnm+etNnSRJ/Ah2FXe6leOx9wiOBgkJS7CvbgiEZgApTFpZ3/9Cdon8aSqb2g
-         p6ZTb53C4xfj63XEAZyIeqabtx5o541mzYHoGP0rQMQUOL2TOlUa0B9TI7xwF3PW0w
-         tVkCytw1QKCpW2IuTmyu2BRHJEWwR4Z8p97pPVeQ=
-Received: by mail-qv1-f45.google.com with SMTP id ef12so1453169qvb.11;
-        Thu, 26 Mar 2020 10:57:44 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ35UzvCsk5EIoQssQLo5H7G86fAAlVM6ESI+fae4M9nD3RppheD
-        InIcJ5Xaexv6s5XK4s1PU0AaCkrAH2SwE57NhQ==
-X-Google-Smtp-Source: ADFU+vtKM5v5e4VeFhzjzjeoNb+xYN0ZFLlxsancYFl7GdsDvmsfoY88t4i3YV+NkEMqB3PBeSG500K8p1dCCg5Gp6M=
-X-Received: by 2002:ad4:4829:: with SMTP id h9mr9006254qvy.135.1585245463794;
- Thu, 26 Mar 2020 10:57:43 -0700 (PDT)
+        id S1728502AbgCZT7A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Mar 2020 15:59:00 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:37416 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727851AbgCZT67 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 15:58:59 -0400
+Received: by mail-ot1-f66.google.com with SMTP id g23so7314316otq.4;
+        Thu, 26 Mar 2020 12:58:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Ujm9KF63/2Xh115nBCNoaxnV0BjyE1MHL3TYCViqZyo=;
+        b=dqhFaSe++a6/RkbeF44E988RrAbfGKW3JSkG4/6VsckRWU0SNkPkn4iw5X2HSvXHEe
+         rLUYKAdYRHiiBS/zbJsmvoDCZAo2xI9K20gUOjkKKgPu1eHCzKVIsGq4rgZpWLixqPA2
+         WMauF17ZmQUwEZf5zVkf1z9+4Z59P6IVRKSjWdSyp7KBFbkYrrUXWfJoa8suPju2X2Ms
+         hqTzF1OVmxRqiWJGDNlh22gRoPRx6KSeDubBJJRUmUWt+xiVFYHnTF1xLlDPZOXLxhEa
+         XTVHkTmO4UzXV/BI9Kk7zQVu64x9IaMRCdjfXu/fJTTZGgSGV9M2zyHaKhRO92kgpnr+
+         gpig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Ujm9KF63/2Xh115nBCNoaxnV0BjyE1MHL3TYCViqZyo=;
+        b=SOOA+hNyE/+HyTKBf4UmLLef6nAf+WX+S2Wkom3+uc9GGm6DQVSFjRLe7+CXX2jvWa
+         RpNTuJvr699tm7oNEkPZMy20DbUiYyG8ws/bABKoD8cX41nSFZf75YdF4rjxCs4jI6KF
+         BL2IyqfNBvqUA/du8C0J96W6V5OMzJXuGyMcudFKmt2j3FbBxUryqkydItHxLWtwLotH
+         nf5fDqDATRqJy0GRJoprjqt9RqKIKXJxNZ8TQLPeeYw7o8CCaICy6w3bXxf7XHsdr9dB
+         BqjCYZ4jVytpdIYPzFr3rY4zy9OeOm09XAhdcxiwbFZeyQ2gzci1fZHOdyEZO2XUDBF+
+         8n+A==
+X-Gm-Message-State: ANhLgQ09E2lcIDCd3EzXID4q4/V2OZfzVsnpBL7Okkn0VyHiv2rjJRuo
+        H+OzsTAicQJtjeNi0qs3qUg=
+X-Google-Smtp-Source: ADFU+vtD4p8O/2ipfHSoS84IwgBiH+6D5rxYJYDtw8QWkpJ2ALLIJpe4Z27mKt4JLhHlETM7ETqxOg==
+X-Received: by 2002:a9d:8d0:: with SMTP id 74mr7767203otf.39.1585252738620;
+        Thu, 26 Mar 2020 12:58:58 -0700 (PDT)
+Received: from ubuntu-m2-xlarge-x86 ([2604:1380:4111:8b00::1])
+        by smtp.gmail.com with ESMTPSA id b26sm864123oti.3.2020.03.26.12.58.57
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 26 Mar 2020 12:58:58 -0700 (PDT)
+Date:   Thu, 26 Mar 2020 12:58:55 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Ashwini Pahuja <ashwini.linux@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
+Subject: Re: [PATCH] usb: gadget: udc: bdc: Remove unnecessary NULL checks in
+ bdc_req_complete
+Message-ID: <20200326195855.GB29213@ubuntu-m2-xlarge-x86>
+References: <20191023002014.22571-1-natechancellor@gmail.com>
+ <20200221045740.GA43417@ubuntu-m2-xlarge-x86>
+ <CAKwvOdku24UV8J4uSKFFc7gmwOP28-8K352BJepb_z-octFoPw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20200326161046.12111-1-narmstrong@baylibre.com>
-In-Reply-To: <20200326161046.12111-1-narmstrong@baylibre.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 26 Mar 2020 11:57:32 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+zDO3vEkZ5r28_GbnUECo5BfRNFF5PJc9wL0x3mS3FGg@mail.gmail.com>
-Message-ID: <CAL_Jsq+zDO3vEkZ5r28_GbnUECo5BfRNFF5PJc9wL0x3mS3FGg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: usb: dwc2: fix bindings for amlogic,meson-gxbb-usb
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     devicetree@vger.kernel.org,
-        Benjamin Gaignard <benjamin.gaignard@st.com>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdku24UV8J4uSKFFc7gmwOP28-8K352BJepb_z-octFoPw@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 26, 2020 at 10:10 AM Neil Armstrong <narmstrong@baylibre.com> wrote:
->
-> The amlogic,meson-gxbb-usb compatible needs snps,dwc2 aswell like other
-> Amlogic SoC.
->
-> Fixes: f3ca745d8a0e ("dt-bindings: usb: Convert DWC2 bindings to json-schema")
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-> ---
->  Documentation/devicetree/bindings/usb/dwc2.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
-> index 71cf7ba32237..b7b9ddcbc637 100644
-> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
-> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
-> @@ -49,7 +49,9 @@ properties:
->        - items:
->            - const: amlogic,meson8b-usb
->            - const: snps,dwc2
-> -      - const: amlogic,meson-gxbb-usb
-> +      - items:
-> +          - const: amlogic,meson-gxbb-usb
-> +          - const: snps,dwc2
->        - items:
->            - const: amlogic,meson-g12a-usb
+On Mon, Feb 24, 2020 at 01:42:57PM -0800, Nick Desaulniers wrote:
+> On Thu, Feb 20, 2020 at 8:57 PM Nathan Chancellor
+> <natechancellor@gmail.com> wrote:
+> >
+> > I know it has been a while but ping?
+> 
+> Sorry! Too many bugs...barely treading water! Send help!
+> 
+> >
+> > On Tue, Oct 22, 2019 at 05:20:15PM -0700, Nathan Chancellor wrote:
+> > > When building with Clang + -Wtautological-pointer-compare:
+> > >
+> > > drivers/usb/gadget/udc/bdc/bdc_ep.c:543:28: warning: comparison of
+> > > address of 'req->queue' equal to a null pointer is always false
+> > > [-Wtautological-pointer-compare]
+> > >         if (req == NULL  || &req->queue == NULL || &req->usb_req == NULL)
+> > >                              ~~~~~^~~~~    ~~~~
+> > > drivers/usb/gadget/udc/bdc/bdc_ep.c:543:51: warning: comparison of
+> > > address of 'req->usb_req' equal to a null pointer is always false
+> > > [-Wtautological-pointer-compare]
+> > >         if (req == NULL  || &req->queue == NULL || &req->usb_req == NULL)
+> > >                                                     ~~~~~^~~~~~~    ~~~~
+> > > 2 warnings generated.
+> > >
+> > > As it notes, these statements will always evaluate to false so remove
+> > > them.
+> 
+> `req` is an instance of a `struct bdc_req` defined in
+> drivers/usb/gadget/udc/bdc/bdc.h as:
+> 333 struct bdc_req {
+> 334   struct usb_request  usb_req;
+> 335   struct list_head  queue;
+> 336   struct bdc_ep   *ep;
+> 337   /* only one Transfer per request */
+> 338   struct bd_transfer bd_xfr;
+> 339   int epnum;
+> 340 };
+> 
+> So indeed the non-pointer, struct members can never be NULL.
+> 
+> I think the second check that was removed should be
+> `req->usb_req.complete == NULL`, since otherwise `&req->usb_req` may
+> be passed to usb_gadget_giveback_request which tries to invoke the
+> `complete` member as a callback.  There are numerous places in
+> drivers/usb/gadget/udc/bdc/bdc_ep.c that assign `complete = NULL`.
+> 
+> Can the maintainers clarify?
 
-Perhaps combine at least all the amlogic ones to a single entry.
+$ sed -n 537,555p drivers/usb/gadget/udc/bdc/bdc_ep.c
+/* callback to gadget layer when xfr completes */
+static void bdc_req_complete(struct bdc_ep *ep, struct bdc_req *req,
+						int status)
+{
+	struct bdc *bdc = ep->bdc;
 
->            - const: snps,dwc2
-> --
-> 2.22.0
->
+	if (req == NULL  || &req->queue == NULL || &req->usb_req == NULL)
+		return;
+
+	dev_dbg(bdc->dev, "%s ep:%s status:%d\n", __func__, ep->name, status);
+	list_del(&req->queue);
+	req->usb_req.status = status;
+	usb_gadget_unmap_request(&bdc->gadget, &req->usb_req, ep->dir);
+	if (req->usb_req.complete) {
+		spin_unlock(&bdc->lock);
+		usb_gadget_giveback_request(&ep->usb_ep, &req->usb_req);
+		spin_lock(&bdc->lock);
+	}
+}
+
+It looks like req->usb_req.complete is checked before being passed to
+usb_gadget_giveback_request. So the patch as it stands is correct,
+unless those checks needed to be something else.
+
+Felipe, could you clarify or pick up this patch if it is correct? This
+is one of two warnings that I see for -Wtautological-compare and I want
+it turned on for 5.7 and it'd be nice to be warning free, especially
+since I sent this patch back in October :/
+
+Cheers,
+Nathan
