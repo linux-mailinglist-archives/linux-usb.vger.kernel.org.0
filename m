@@ -2,240 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D811935E6
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 03:24:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C300193600
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 03:40:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727688AbgCZCYt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Mar 2020 22:24:49 -0400
-Received: from mail-vs1-f67.google.com ([209.85.217.67]:40854 "EHLO
-        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727575AbgCZCYs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Mar 2020 22:24:48 -0400
-Received: by mail-vs1-f67.google.com with SMTP id r7so35715vsg.7;
-        Wed, 25 Mar 2020 19:24:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4zl2wHNaLW9/MqzLAcpB6frabgErDjMXoO1C2gCPcsw=;
-        b=A59Wp7UbLOvbeWzD8NiJl8I5gjF2P8axzPwkM0TZy9nRS3TRogABvbuW+JKgo8KF2I
-         7Am0spOW6Q9F5V9McjgoQNYOILmUum7NgHu/tvX4osfFUsWhsYr6EimuhToR10qVyMgB
-         9YS0oatuazM0vbg7k7d13w4X3xUflOBle1qELB6SqV7O0/Jaz0biG0aCvqn5Eb68eKf7
-         jN2wA2jgTOlvh6srFwu1tEumwJiqfrkuMnSCpuhEFwb0cohFNI53I1XyaH2gn8ivO9nO
-         KccmnGoB8HUGUkENjpIuMiEw4WZDDo+NE2MXFjfEwk1fOEgy5gxhMiRlKHjbz4s3JnUw
-         s70g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4zl2wHNaLW9/MqzLAcpB6frabgErDjMXoO1C2gCPcsw=;
-        b=DCJSrfeYDpe7izKufZLxVMD+JJHMgdnfZkRg0ujskeOYGOxDbwQmiYhMNnyGowVYFN
-         VwkIlBjizct4XxmfuFfRIwUGY4CVRccVuj7+U2cmT7jL70oFL0+maVa5kafz8COVxD7k
-         oCM6rDJn+k7NLyx+IYQQZDiecEAutY25M2Ce8SFTWV52pqyF3UwVMbOs30vVq+5Kf8xH
-         Q/4u12nyaLIs/LG3IHGfVQ8cW0Lwrb8pZicth6Qrk1vBXC1lXUgGzfl92bBXRXhMpt37
-         OdvBqVAoYsPFq1K9mz573tWdjnZ94aoYmnG1sBNe9DTGF50htj+FWrdIJ41Dpd9a3zwH
-         wyUQ==
-X-Gm-Message-State: ANhLgQ2KMM+MTsjsYgGCfWCmxRpI4MHz0may9L2RzY1bguBu0x8HN1k3
-        Mkq9fBfO0cizu8qRTo/2/HwBo/IEBoEQl39JMzQ=
-X-Google-Smtp-Source: ADFU+vt/NbFSjt8UIDDq7EgEAtA8YSdh4Q6l0tFzjLekH5l8QzZz+h9dK580xg5+aZIndaehswPUQwUqYC/A37YryjY=
-X-Received: by 2002:a05:6102:a01:: with SMTP id t1mr5168386vsa.108.1585189486942;
- Wed, 25 Mar 2020 19:24:46 -0700 (PDT)
+        id S1727708AbgCZCkk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Mar 2020 22:40:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59496 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727560AbgCZCkj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 25 Mar 2020 22:40:39 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id F23B020714;
+        Thu, 26 Mar 2020 02:40:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585190438;
+        bh=B/0A+EakHUoxJZZH8Zsz0E0Jrwx9AZ5KMhmmm4tWgAU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=hlvpwsdFfUlivcRX+rgOky3Qzz9W6+h3DS6rDIiFCMTcOVT/UZK7XAVPOw5xlfZmc
+         U4gWvMk+HY610Ebp67p0IXeEOlLqhqArE8W38Bn1Pstxz2UMd+wQaxLwVqwPtOGuCa
+         LHixNahpVcBZT1S+4QWNrSt9INUA9VsBP8hxz+k8=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id C134335226B0; Wed, 25 Mar 2020 19:40:37 -0700 (PDT)
+Date:   Wed, 25 Mar 2020 19:40:37 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        linux-pci@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        platform-driver-x86@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, kbuild test robot <lkp@intel.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        Brian Cain <bcain@codeaurora.org>,
+        linux-hexagon@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-ia64@vger.kernel.org,
+        Michal Simek <monstr@monstr.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geoff Levand <geoff@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org, Davidlohr Bueso <dbueso@suse.de>
+Subject: Re: [PATCH v2] Documentation/locking/locktypes: minor copy editor
+ fixes
+Message-ID: <20200326024037.GJ19865@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200323025501.GE3199@paulmck-ThinkPad-P72>
+ <87r1xhz6qp.fsf@nanos.tec.linutronix.de>
+ <20200325002811.GO19865@paulmck-ThinkPad-P72>
+ <87wo78y5yy.fsf@nanos.tec.linutronix.de>
+ <ac615f36-0b44-408d-aeab-d76e4241add4@infradead.org>
 MIME-Version: 1.0
-References: <CADG63jANt9w4rFWKg6cw_S4jvB+Q-2hyOp9Mm0WD3oyQofY6UA@mail.gmail.com>
- <20200325131309.12792-1-hdanton@sina.com> <CADG63jA_7L87d4Bm6JDBD7AoYi5MCBJEUDd4SvW43Afg385d+Q@mail.gmail.com>
-In-Reply-To: <CADG63jA_7L87d4Bm6JDBD7AoYi5MCBJEUDd4SvW43Afg385d+Q@mail.gmail.com>
-From:   Qiujun Huang <anenbupt@gmail.com>
-Date:   Thu, 26 Mar 2020 10:24:34 +0800
-Message-ID: <CADG63jDu3Q=OmjaJRKV_drF9vcJt_OhwJoYiKfQ=e0rJif-pOg@mail.gmail.com>
-Subject: Re: KASAN: slab-out-of-bounds Read in hfa384x_usbin_callback
-To:     Hillf Danton <hdanton@sina.com>,
-        syzbot <syzbot+7d42d68643a35f71ac8a@syzkaller.appspotmail.com>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        devel@driverdev.osuosl.org, Greg KH <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        nishkadg.linux@gmail.com, syzkaller-bugs@googlegroups.com
-Content-Type: multipart/mixed; boundary="0000000000004574a505a1b8b0f8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ac615f36-0b44-408d-aeab-d76e4241add4@infradead.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---0000000000004574a505a1b8b0f8
-Content-Type: text/plain; charset="UTF-8"
+On Wed, Mar 25, 2020 at 09:58:14AM -0700, Randy Dunlap wrote:
+> From: Randy Dunlap <rdunlap@infradead.org>
+> 
+> Minor editorial fixes:
+> - add some hyphens in multi-word adjectives
+> - add some periods for consistency
+> - add "'" for possessive CPU's
+> - capitalize IRQ when it's an acronym and not part of a function name
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Paul McKenney <paulmck@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Sebastian Siewior <bigeasy@linutronix.de>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
+> Cc: Ingo Molnar <mingo@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
 
-#syz test: https://github.com/google/kasan.git e17994d1
+Some nits below, but with or without those suggested changes:
 
+Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
 
-forgot to trigger:(
+> ---
+>  Documentation/locking/locktypes.rst |   16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> --- linux-next-20200325.orig/Documentation/locking/locktypes.rst
+> +++ linux-next-20200325/Documentation/locking/locktypes.rst
+> @@ -84,7 +84,7 @@ rtmutex
+>  
+>  RT-mutexes are mutexes with support for priority inheritance (PI).
+>  
+> -PI has limitations on non PREEMPT_RT enabled kernels due to preemption and
+> +PI has limitations on non-PREEMPT_RT-enabled kernels due to preemption and
 
-On Thu, Mar 26, 2020 at 10:22 AM Qiujun Huang <anenbupt@gmail.com> wrote:
->
-> On Wed, Mar 25, 2020 at 9:13 PM Hillf Danton <hdanton@sina.com> wrote:
-> >
-> >
-> > On Wed, 25 Mar 2020 01:58:03 -0700
-> > > syzbot has tested the proposed patch but the reproducer still triggered crash:
-> > > KASAN: use-after-free Read in hfa384x_usbin_callback
-> > >
-> > > ==================================================================
-> > > BUG: KASAN: use-after-free in memcpy include/linux/string.h:381 [inline]
-> > > BUG: KASAN: use-after-free in skb_put_data include/linux/skbuff.h:2284 [inline]
-> > > BUG: KASAN: use-after-free in hfa384x_int_rxmonitor drivers/staging/wlan-ng/hfa384x_usb.c:3412 [inline]
-> > > BUG: KASAN: use-after-free in hfa384x_usbin_rx drivers/staging/wlan-ng/hfa384x_usb.c:3312 [inline]
-> > > BUG: KASAN: use-after-free in hfa384x_usbin_callback+0x1993/0x2360 drivers/staging/wlan-ng/hfa384x_usb.c:3026
-> > > Read of size 19671 at addr ffff8881cda7b33c by task kworker/1:2/95
-> > >
-> > > CPU: 1 PID: 95 Comm: kworker/1:2 Not tainted 5.6.0-rc5-syzkaller #0
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > > Workqueue: usb_hub_wq hub_event
-> > > Call Trace:
-> > >  <IRQ>
-> > >  __dump_stack lib/dump_stack.c:77 [inline]
-> > >  dump_stack+0xef/0x16e lib/dump_stack.c:118
-> > >  print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
-> > >  __kasan_report.cold+0x37/0x77 mm/kasan/report.c:506
-> > >  kasan_report+0xe/0x20 mm/kasan/common.c:641
-> > >  check_memory_region_inline mm/kasan/generic.c:185 [inline]
-> > >  check_memory_region+0x152/0x1c0 mm/kasan/generic.c:192
-> > >  memcpy+0x20/0x50 mm/kasan/common.c:127
-> > >  memcpy include/linux/string.h:381 [inline]
-> > >  skb_put_data include/linux/skbuff.h:2284 [inline]
-> > >  hfa384x_int_rxmonitor drivers/staging/wlan-ng/hfa384x_usb.c:3412 [inline]
-> > >  hfa384x_usbin_rx drivers/staging/wlan-ng/hfa384x_usb.c:3312 [inline]
-> > >  hfa384x_usbin_callback+0x1993/0x2360 drivers/staging/wlan-ng/hfa384x_usb.c:3026
-> > >  __usb_hcd_giveback_urb+0x29a/0x550 drivers/usb/core/hcd.c:1650
-> > >  usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1716
-> > >  dummy_timer+0x1258/0x32ae drivers/usb/gadget/udc/dummy_hcd.c:1966
-> > >  call_timer_fn+0x195/0x6f0 kernel/time/timer.c:1404
-> > >  expire_timers kernel/time/timer.c:1449 [inline]
-> > >  __run_timers kernel/time/timer.c:1773 [inline]
-> > >  __run_timers kernel/time/timer.c:1740 [inline]
-> > >  run_timer_softirq+0x5f9/0x1500 kernel/time/timer.c:1786
-> > >  __do_softirq+0x21e/0x950 kernel/softirq.c:292
-> > >  invoke_softirq kernel/softirq.c:373 [inline]
-> > >  irq_exit+0x178/0x1a0 kernel/softirq.c:413
-> > >  exiting_irq arch/x86/include/asm/apic.h:546 [inline]
-> > >  smp_apic_timer_interrupt+0x141/0x540 arch/x86/kernel/apic/apic.c:1146
-> > >  apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:829
-> > >  </IRQ>
-> > > RIP: 0010:arch_local_irq_restore arch/x86/include/asm/irqflags.h:85 [inline]
-> > > RIP: 0010:__raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:160 [inline]
-> > > RIP: 0010:_raw_spin_unlock_irqrestore+0x3b/0x40 kernel/locking/spinlock.c:191
-> > > Code: e8 2a e8 96 fb 48 89 ef e8 f2 c9 97 fb f6 c7 02 75 11 53 9d e8 16 50 b5 fb 65 ff 0d f7 bd 72 7a 5b 5d c3 e8 07 4e b5 fb 53 9d <eb> ed 0f 1f 00 55 48 89 fd 65 ff 05 dd bd 72 7a 45 31 c9 41 b8 01
-> > > RSP: 0018:ffff8881d56b6f40 EFLAGS: 00000293 ORIG_RAX: ffffffffffffff13
-> > > RAX: 0000000000000007 RBX: 0000000000000293 RCX: 0000000000000006
-> > > RDX: 0000000000000000 RSI: ffff8881d56a88f0 RDI: ffff8881d56a884c
-> > > RBP: ffff8881c0c64b80 R08: ffff8881d56a8000 R09: fffffbfff1266e8f
-> > > R10: fffffbfff1266e8e R11: ffffffff89337477 R12: 0000000000000000
-> > > R13: ffff8881c0c64bb8 R14: ffff8881c0c64b80 R15: ffff8881c0c64bb8
-> > >  hfa384x_usbctlx_submit+0x1cb/0x260 drivers/staging/wlan-ng/hfa384x_usb.c:3834
-> > >  hfa384x_docmd drivers/staging/wlan-ng/hfa384x_usb.c:1233 [inline]
-> > >  hfa384x_cmd_initialize+0x290/0x4f0 drivers/staging/wlan-ng/hfa384x_usb.c:846
-> > >  hfa384x_drvr_start+0x1f1/0x480 drivers/staging/wlan-ng/hfa384x_usb.c:2380
-> > >  prism2sta_ifstate+0x24e/0x510 drivers/staging/wlan-ng/prism2sta.c:471
-> > >  prism2sta_probe_usb.cold+0x1c8/0x49e drivers/staging/wlan-ng/prism2usb.c:112
-> > >  usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:374
-> > >  really_probe+0x290/0xac0 drivers/base/dd.c:551
-> > >  driver_probe_device+0x223/0x350 drivers/base/dd.c:724
-> > >  __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:831
-> > >  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
-> > >  __device_attach+0x217/0x390 drivers/base/dd.c:897
-> > >  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
-> > >  device_add+0x1459/0x1bf0 drivers/base/core.c:2500
-> > >  usb_set_configuration+0xe47/0x17d0 drivers/usb/core/message.c:2023
-> > >  usb_generic_driver_probe+0x9d/0xe0 drivers/usb/core/generic.c:241
-> > >  usb_probe_device+0xd9/0x230 drivers/usb/core/driver.c:272
-> > >  really_probe+0x290/0xac0 drivers/base/dd.c:551
-> > >  driver_probe_device+0x223/0x350 drivers/base/dd.c:724
-> > >  __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:831
-> > >  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
-> > >  __device_attach+0x217/0x390 drivers/base/dd.c:897
-> > >  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
-> > >  device_add+0x1459/0x1bf0 drivers/base/core.c:2500
-> > >  usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2548
-> > >  hub_port_connect drivers/usb/core/hub.c:5195 [inline]
-> > >  hub_port_connect_change drivers/usb/core/hub.c:5335 [inline]
-> > >  port_event drivers/usb/core/hub.c:5481 [inline]
-> > >  hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5563
-> > >  process_one_work+0x94b/0x1620 kernel/workqueue.c:2264
-> > >  worker_thread+0x96/0xe20 kernel/workqueue.c:2410
-> > >  kthread+0x318/0x420 kernel/kthread.c:255
-> > >  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-> > >
-> > > The buggy address belongs to the page:
-> > > page:ffffea0007369e00 refcount:32737 mapcount:0 mapping:0000000000000000 index:0x0 compound_mapcount: 0
-> > > flags: 0x200000000010000(head)
-> > > raw: 0200000000010000 dead000000000100 dead000000000122 0000000000000000
-> > > raw: 0000000000000000 0000000000000000 00007fe1ffffffff 0000000000000000
-> > > page dumped because: kasan: bad access detected
-> > >
-> > > Memory state around the buggy address:
-> > >  ffff8881cda7ff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > >  ffff8881cda7ff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > > >ffff8881cda80000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > >                    ^
-> > >  ffff8881cda80080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > >  ffff8881cda80100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > > ==================================================================
-> > >
-> > >
-> > > Tested on:
-> > >
-> > > commit:         e17994d1 usb: core: kcov: collect coverage from usb comple..
-> > > git tree:       https://github.com/google/kasan.git
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=139ea05be00000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=5d64370c438bc60
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=7d42d68643a35f71ac8a
-> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > patch:          https://syzkaller.appspot.com/x/patch.diff?x=16d52b19e00000
-> >
-> > Add a line of debug info.
-> >
-> > --- a/drivers/staging/wlan-ng/hfa384x_usb.c
-> > +++ b/drivers/staging/wlan-ng/hfa384x_usb.c
-> > @@ -3374,6 +3374,11 @@ static void hfa384x_int_rxmonitor(struct
-> >                          skblen - sizeof(struct p80211_caphdr));
-> >         }
-> >
-> > +       if (datalen > WLAN_DATA_MAXLEN) {
-> > +               pr_debug("%s datalen %u > WLAN_DATA_MAXLEN %u\n", __func__,
-> > +                                               datalen, WLAN_DATA_MAXLEN);
-> > +               return;
-> > +       }
-> >         skb = dev_alloc_skb(skblen);
-> >         if (!skb)
-> >                 return;
->
-> Great!
->
-> >
+Or just drop the " enabled".
 
---0000000000004574a505a1b8b0f8
-Content-Type: application/octet-stream; 
-	name="0002-staging-wlan-ng-fix-use-after-free-Read-in-hfa384x_u.patch"
-Content-Disposition: attachment; 
-	filename="0002-staging-wlan-ng-fix-use-after-free-Read-in-hfa384x_u.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_k884v1dt0>
-X-Attachment-Id: f_k884v1dt0
+>  interrupt disabled sections.
+>  
+>  PI clearly cannot preempt preemption-disabled or interrupt-disabled
+> @@ -150,7 +150,7 @@ kernel configuration including PREEMPT_R
+>  
+>  raw_spinlock_t is a strict spinning lock implementation in all kernels,
+>  including PREEMPT_RT kernels.  Use raw_spinlock_t only in real critical
+> -core code, low level interrupt handling and places where disabling
+> +core code, low-level interrupt handling and places where disabling
+>  preemption or interrupts is required, for example, to safely access
+>  hardware state.  raw_spinlock_t can sometimes also be used when the
+>  critical section is tiny, thus avoiding RT-mutex overhead.
+> @@ -160,20 +160,20 @@ spinlock_t
+>  
+>  The semantics of spinlock_t change with the state of PREEMPT_RT.
+>  
+> -On a non PREEMPT_RT enabled kernel spinlock_t is mapped to raw_spinlock_t
+> +On a non-PREEMPT_RT-enabled kernel spinlock_t is mapped to raw_spinlock_t
 
-RnJvbSAzMGY1ZjIxODJkNTYyYjYwYzM1ZGY2NDgzYzkyYzFiZjYyZWQwZWM4IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBRaXVqdW4gSHVhbmcgPGhxamFnYWluQGdtYWlsLmNvbT4KRGF0
-ZTogVGh1LCAyNiBNYXIgMjAyMCAxMDoxNDoxMiArMDgwMApTdWJqZWN0OiBbUEFUQ0ggMi8yXSBz
-dGFnaW5nOiB3bGFuLW5nOiBmaXggdXNlLWFmdGVyLWZyZWUgUmVhZCBpbgogaGZhMzg0eF91c2Jp
-bl9jYWxsYmFjawoKQmVjYXVzZSB0aGUgc2l6ZSBvZiByeGZybS0+ZGF0YSBpcyBXTEFOX0RBVEFf
-TUFYTEVOKDIzMTIpLHNvIHNrYmxlbgpjYW4ndCBiZSBtb3JlIHRoYW4gdGhhdC4KClNpZ25lZC1v
-ZmYtYnk6IFFpdWp1biBIdWFuZyA8aHFqYWdhaW5AZ21haWwuY29tPgotLS0KIGRyaXZlcnMvc3Rh
-Z2luZy93bGFuLW5nL2hmYTM4NHhfdXNiLmMgfCAyICsrCiAxIGZpbGUgY2hhbmdlZCwgMiBpbnNl
-cnRpb25zKCspCiBtb2RlIGNoYW5nZSAxMDA2NDQgPT4gMTAwNzU1IGRyaXZlcnMvc3RhZ2luZy93
-bGFuLW5nL2hmYTM4NHhfdXNiLmMKCmRpZmYgLS1naXQgYS9kcml2ZXJzL3N0YWdpbmcvd2xhbi1u
-Zy9oZmEzODR4X3VzYi5jIGIvZHJpdmVycy9zdGFnaW5nL3dsYW4tbmcvaGZhMzg0eF91c2IuYwpv
-bGQgbW9kZSAxMDA2NDQKbmV3IG1vZGUgMTAwNzU1CmluZGV4IGI3MTc1NmFiMDM5NC4uN2ZlNjRm
-Y2QzODVkCi0tLSBhL2RyaXZlcnMvc3RhZ2luZy93bGFuLW5nL2hmYTM4NHhfdXNiLmMKKysrIGIv
-ZHJpdmVycy9zdGFnaW5nL3dsYW4tbmcvaGZhMzg0eF91c2IuYwpAQCAtMzM3Miw2ICszMzcyLDgg
-QEAgc3RhdGljIHZvaWQgaGZhMzg0eF9pbnRfcnhtb25pdG9yKHN0cnVjdCB3bGFuZGV2aWNlICp3
-bGFuZGV2LAogCSAgICAgV0xBTl9IRFJfQTRfTEVOICsgV0xBTl9EQVRBX01BWExFTiArIFdMQU5f
-Q1JDX0xFTikpIHsKIAkJcHJfZGVidWcoIm92ZXJsZW4gZnJtOiBsZW49JXpkXG4iLAogCQkJIHNr
-YmxlbiAtIHNpemVvZihzdHJ1Y3QgcDgwMjExX2NhcGhkcikpOworCisJCXJldHVybjsKIAl9CiAK
-IAlza2IgPSBkZXZfYWxsb2Nfc2tiKHNrYmxlbik7Ci0tIAoyLjE3LjEKCg==
---0000000000004574a505a1b8b0f8--
+Ditto.
+
+>  and has exactly the same semantics.
+>  
+>  spinlock_t and PREEMPT_RT
+>  -------------------------
+>  
+> -On a PREEMPT_RT enabled kernel spinlock_t is mapped to a separate
+> +On a PREEMPT_RT-enabled kernel spinlock_t is mapped to a separate
+
+And here as well.
+
+>  implementation based on rt_mutex which changes the semantics:
+>  
+> - - Preemption is not disabled
+> + - Preemption is not disabled.
+>  
+>   - The hard interrupt related suffixes for spin_lock / spin_unlock
+> -   operations (_irq, _irqsave / _irqrestore) do not affect the CPUs
+> -   interrupt disabled state
+> +   operations (_irq, _irqsave / _irqrestore) do not affect the CPU's
+> +   interrupt disabled state.
+>  
+>   - The soft interrupt related suffix (_bh()) still disables softirq
+>     handlers.
+> @@ -279,7 +279,7 @@ fully preemptible context.  Instead, use
+>  spin_lock_irqsave() and their unlock counterparts.  In cases where the
+>  interrupt disabling and locking must remain separate, PREEMPT_RT offers a
+>  local_lock mechanism.  Acquiring the local_lock pins the task to a CPU,
+> -allowing things like per-CPU irq-disabled locks to be acquired.  However,
+> +allowing things like per-CPU IRQ-disabled locks to be acquired.  However,
+
+Quite a bit of text in the kernel uses "irq", lower case.  Another
+option is to spell out "interrupt".
+
+>  this approach should be used only where absolutely necessary.
+>  
+>  
+> 
