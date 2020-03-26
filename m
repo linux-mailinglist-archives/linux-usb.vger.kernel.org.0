@@ -2,69 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DCE1193934
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 08:07:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DBE193970
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 08:14:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727724AbgCZHHO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Mar 2020 03:07:14 -0400
-Received: from alexa-out-blr-01.qualcomm.com ([103.229.18.197]:38910 "EHLO
-        alexa-out-blr-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726289AbgCZHHO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 03:07:14 -0400
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by alexa-out-blr-01.qualcomm.com with ESMTP/TLS/AES256-SHA; 26 Mar 2020 12:37:11 +0530
-Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 26 Mar 2020 12:37:10 +0530
-Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
-        id B517919BD; Thu, 26 Mar 2020 12:37:09 +0530 (IST)
-From:   Sandeep Maheswaram <sanm@codeaurora.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>
-Subject: [PATCH v5 2/2] dt-bindings: usb: qcom,dwc3: Add compatible for SC7180
-Date:   Thu, 26 Mar 2020 12:36:08 +0530
-Message-Id: <1585206368-685-3-git-send-email-sanm@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1585206368-685-1-git-send-email-sanm@codeaurora.org>
-References: <1585206368-685-1-git-send-email-sanm@codeaurora.org>
+        id S1726363AbgCZHOh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Mar 2020 03:14:37 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:12137 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726014AbgCZHOh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 26 Mar 2020 03:14:37 -0400
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id B8AB893BEE20643D0650;
+        Thu, 26 Mar 2020 15:14:32 +0800 (CST)
+Received: from localhost (10.173.223.234) by DGGEMS412-HUB.china.huawei.com
+ (10.3.19.212) with Microsoft SMTP Server id 14.3.487.0; Thu, 26 Mar 2020
+ 15:14:23 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <leoyang.li@nxp.com>, <balbi@kernel.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] usb: gadget: fsl: remove unused variable 'driver_desc'
+Date:   Thu, 26 Mar 2020 15:14:19 +0800
+Message-ID: <20200326071419.19240-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.173.223.234]
+X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add compatible for SC7180 in usb dwc3 bindings.
+drivers/usb/gadget/udc/fsl_udc_core.c:56:19:
+ warning: 'driver_desc' defined but not used [-Wunused-const-variable=]
 
-Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Acked-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+It is never used, so remove it.
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
- Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/gadget/udc/fsl_udc_core.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-index 0f69475..17e22ff 100644
---- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-@@ -16,6 +16,7 @@ properties:
-       - enum:
-           - qcom,msm8996-dwc3
-           - qcom,msm8998-dwc3
-+          - qcom,sc7180-dwc3
-           - qcom,sdm845-dwc3
-       - const: qcom,dwc3
+diff --git a/drivers/usb/gadget/udc/fsl_udc_core.c b/drivers/usb/gadget/udc/fsl_udc_core.c
+index ec6eda426223..febabde62f71 100644
+--- a/drivers/usb/gadget/udc/fsl_udc_core.c
++++ b/drivers/usb/gadget/udc/fsl_udc_core.c
+@@ -53,7 +53,6 @@
+ #define	DMA_ADDR_INVALID	(~(dma_addr_t)0)
+ 
+ static const char driver_name[] = "fsl-usb2-udc";
+-static const char driver_desc[] = DRIVER_DESC;
+ 
+ static struct usb_dr_device __iomem *dr_regs;
  
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+2.17.1
+
 
