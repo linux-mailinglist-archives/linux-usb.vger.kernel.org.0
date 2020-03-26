@@ -2,95 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E994E1942C8
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 16:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DECA1943A8
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 16:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727920AbgCZPOW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Mar 2020 11:14:22 -0400
-Received: from mail-il1-f199.google.com ([209.85.166.199]:52477 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727895AbgCZPOV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 11:14:21 -0400
-Received: by mail-il1-f199.google.com with SMTP id d2so5624644ilf.19
-        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2020 08:14:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=sMQYIcxP6s383S1Iv/2tUT3HdLMKF9nZyauaAtUzZEM=;
-        b=gCLxAsTMzcnFW3zl4SARm6FiEquiC2i0UcS3cvKU91G3GX6mfmQcCGz1YyFwr9Sq8J
-         D+fYYM5oCokGfD/Dojs/tuvaJ2v2i71ksZfcNyGLaYweAliYe9CBSE6MlApQIeko5/dY
-         Rd//qGabRy9xaB6r/Je/b6XxdpEZMbnFrIBeXhparfm1xAHbzAcoLe/VFFCnrj0yewM/
-         0vaJECRa9UyMV5puEAEUubmdoz2BU4ZmdtIXsRZdAv/tMZIzjQwHYEXJXmn3tRGAopl9
-         G5BK3Faxax25keqpKtGFG5pA41NRcfJXiq4M61ASUdWPP/B6mL5+5axfHQNaARLzYFU9
-         P5Nw==
-X-Gm-Message-State: ANhLgQ0k2+VdgfciXxviW9DnG+iCmvGfeybWkhuLGob5zTy7+fO5cuqv
-        FN8LgqIlBgwUExxLR2GT0WbkjfU0WI/5JwjVaG1ErY1hy611
-X-Google-Smtp-Source: ADFU+vuS4lXG57+YM3bVs1vgJ/z/JIV1Uy0m8cbiF4B/9amQkvgycJ+FyjmwTmZl6UYrFWNtSaercpmV9IAuTecdiZbttwsiBwdK
+        id S1727707AbgCZP4e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Mar 2020 11:56:34 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:55398 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725994AbgCZP4e (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 11:56:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=2/ncOJhCDpyDw2o49yndE00sUufVKINURztbV+WbMos=; b=BOzFF3grie80iMhMkNCc6Wy9sd
+        I2+zTv9Bg7KW2MMthnwsZaVVw5gFEBWREk9FxUXsR0lfMfR5PR8ciSv+Un3yJa0XDczZaFjaOCK1G
+        upHeE5XUqqjqD541YzzhNm/60pZFuG3KuOnoLTuLT2XKHpzSphbS5u8/Ro57jvTDYzyiL5H0UPBWK
+        9eiaS73XxNWvHSMaVZ1fh4vzLRYvtW2QoGJvhq9vc+JSaL5WkcDLS3fcIP9+gWBWs4ESzYrDLRi1H
+        pQ7aEzpnyP2DsgDC2og7FjqzC/4VtFBF1NZFneWkyfaXOcidAUPPlyKud1Ge23eWRkcYWYRIJkcXB
+        ElpQ3qBQ==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jHUrx-000267-Pv; Thu, 26 Mar 2020 15:56:33 +0000
+Subject: Re: Beginner query regarding usbhid
+To:     Rohit Sarkar <rohitsarkar5398@gmail.com>
+Cc:     Hubert CHAUMETTE <hubert.chaumette@kolabnow.com>,
+        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
+        linux-newbie@vger.kernel.org
+References: <5e7b5fbc.1c69fb81.cace7.7aa1@mx.google.com>
+ <1585147543.3831.8.camel@suse.com>
+ <5e7b6f15.1c69fb81.d92d3.facb@mx.google.com>
+ <b799aa1720fecb94d832264b4561eb8a@kolabnow.com>
+ <5e7b9127.1c69fb81.f2f8b.582c@mx.google.com>
+ <cfda560c-ad5f-5e71-ab22-d8639688722b@infradead.org>
+ <5e7c3e48.1c69fb81.7da14.34ab@mx.google.com>
+ <fdc818d7-842c-cfef-3654-0478e74bfa73@infradead.org>
+ <5e7c5188.1c69fb81.16130.41e1@mx.google.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <bba7f6d9-672d-bd7f-91c8-1d83cc083f7a@infradead.org>
+Date:   Thu, 26 Mar 2020 08:56:32 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:c9c9:: with SMTP id k9mr8765625ilq.307.1585235658914;
- Thu, 26 Mar 2020 08:14:18 -0700 (PDT)
-Date:   Thu, 26 Mar 2020 08:14:18 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000055c12d05a1c3701e@google.com>
-Subject: KASAN: use-after-free Read in ath9k_htc_rx_msg
-From:   syzbot <syzbot+666280b21749af5d36db@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
-        davem@davemloft.net, kvalo@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <5e7c5188.1c69fb81.16130.41e1@mx.google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On 3/25/20 11:53 PM, Rohit Sarkar wrote:
+> On Wed, Mar 25, 2020 at 11:07:55PM -0700, Randy Dunlap wrote:
+>> On 3/25/20 10:31 PM, Rohit Sarkar wrote:
+>>> On Wed, Mar 25, 2020 at 02:40:27PM -0700, Randy Dunlap wrote:
+>>>> On 3/25/20 10:13 AM, Rohit Sarkar wrote:
+>>>>> On Wed, Mar 25, 2020 at 04:41:38PM +0100, Hubert CHAUMETTE wrote:
+>>>>>> Le 25/03/2020 15:47, Rohit Sarkar a écrit :
+>>>>>>> I was trying to mess around with the driver that drives my mouse. I
+>>>>>>> found out that it is usbhid. I then added a printk statement to the init
+>>>>>>> and exit function of usbhid.
+>>>>>>> I then compiled and installed the usbhid drivers. Post that I ran
+>>>>>>> `sudo modprobe -r usbhid` and `sudo modprobe usbhid` but couldnt observe
+>>>>>>> any logs in dmesg.
+>>>>>>>
+>>>>>>> I am certain I am missing something fundamental. Could someone help me
+>>>>>>> with this.
+>>>>>>
+>>>>>> Hi,
+>>>>>>
+>>>>>> Did you check whether your module was effectively loaded with lsmod?
+>>>>>> What log level did you use in your printk statement? Depending on your
+>>>>>> system default loglevel your logs might not be printed. A quick fix
+>>>>>> would be to use one of the lowest levels (pr_emerg, but pr_err might
+>>>>>> suffice).
+>>>>>> Regards,
+>>>>>
+>>>>> Hey,
+>>>>> I did check that module was loaded. And one of the signs was that my
+>>>>> mouse started working after insmod :).
+>>> Hi,
+>>>> Hi,
+>>>> I'm not convinced that your modified usbhid module was loaded.
+>>> Hmm, here's my dmesg logs if that helps:
+>>> "
+>>> [  382.132319] usbcore: deregistering interface driver usbhid
+>>> [  391.077410] input: MOSART Semi. 2.4G Wireless Mouse as /devices/pci0000:00/0000:00:14.0/usb1/1-2/1-2:1.0/0003:3938:1031.0002/input/input26
+>>> [  391.136724] input: MOSART Semi. 2.4G Wireless Mouse as /devices/pci0000:00/0000:00:14.0/usb1/1-2/1-2:1.0/0003:3938:1031.0002/input/input27
+>>> [  391.137285] hid-generic 0003:3938:1031.0002: input,hiddev0,hidraw0: USB HID v1.10 Mouse [MOSART Semi. 2.4G Wireless Mouse] on usb-0000:00:14.0-2/input0
+>>> [  391.137480] usbcore: registered new interface driver usbhid
+>>> [  391.137483] usbhid: USB HID core driver
+>>> "
+>>
+>> I can't tell that helps any.
+>>
+>>>> Could an older (original) usbhid module be reloaded so that the mouse
+>>>> started working again?  That would also explain the lack of (new) messages.
+>>> I think so too. But how do I verify if this is the case?
+>>>
+>>>> What kernel version are you using?  Is it a distro kernel?
+>>> I am currently running a bleeding edge kernel that I built. ie 5.6-rc7. 
+>>>> Are you trying to replace the usbhid module in a distro kernel or are
+>>>> you building the entire kernel?
+>>> I am building the entire kernel
+>>>>> I used printk(KERN_ALERT "some message") for logging. I also tried with
+>>>>> KERN_ERR but no luck. 
+>>>>>
+>>>>> The command I used for building was "make -C /home/rohit/LINUX/kernels/staging  M=$(pwd)"
+>>>>> and for installing the modules: "sudo make -C /home/rohit/LINUX/kernels/staging  M=$(pwd) modules_install"
+>>>>> both were executed from the usbhid directory.
+>>>>
+>>>> why those commands?  seems unusual.
+>>> My Linux kernel source is in the directory mentioned in the commands. So
+>>> it is same as running "make M=drivers/hid/usbhid/" from the linux kernel
+>>> source root.
+>>
+>> So /home/rohit/kernels/staging is the top-level kernel source directory?
+>>
+>> "M=dir" is for external modules to be built.  AFAICT you are not building any
+>> external modules.
 
-syzbot found the following crash on:
+> Oh, I think M=dir options just makes the Makefile build the folder
+> specified. I see such an output when I run the make command which makes
+> me feel that the make command I am using is actually building the
+> modules:
 
-HEAD commit:    e17994d1 usb: core: kcov: collect coverage from usb comple..
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=113938c5e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5d64370c438bc60
-dashboard link: https://syzkaller.appspot.com/bug?extid=666280b21749af5d36db
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13fdc1e5e00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1507178de00000
+You should be able to build the usbhid sub-directory ("folder") like this:
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+666280b21749af5d36db@syzkaller.appspotmail.com
+$ cd /home/rohit/LINUX/kernels/staging
+$ make drivers/hid/usbhid/
 
-==================================================================
-BUG: KASAN: use-after-free in __wake_up_common+0x634/0x650 kernel/sched/wait.c:86
-Read of size 8 at addr ffff8881cec10000 by task swapper/1/0
+but maybe what you are doing is equivalent to this.
 
-CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.6.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
- __kasan_report.cold+0x37/0x77 mm/kasan/report.c:506
- kasan_report+0xe/0x20 mm/kasan/common.c:641
- __wake_up_common+0x634/0x650 kernel/sched/wait.c:86
- complete+0x51/0x70 kernel/sched/completion.c:36
- htc_process_conn_rsp drivers/net/wireless/ath/ath9k/htc_hst.c:138 [inline]
- ath9k_htc_rx_msg+0x7c2/0xaf0 drivers/net/wireless/ath/ath9k/htc_hst.c:443
- ath9k_hif_usb_reg_in_cb+0x1ba/0x630 drivers/net/wireless/ath/ath9k/hif_usb.c:718
- __usb_hcd_giveback_urb+0x29a/0x550 drivers/usb/core/hcd.c:1650
- usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1716
- dummy_timer+0x1258/0x32ae drivers/usb/gadget/udc/dummy_hcd.c:1966
+> "
+> drivers/hid/usbhid❯ make -C /home/rohit/LINUX/kernels/staging  M=$(pwd)                                            staging/git/master !
+> make: Entering directory '/home/rohit/LINUX/kernels/staging'
+>   AR      /home/rohit/LINUX/kernels/staging/drivers/hid/usbhid/built-in.a
+>   CC [M]  /home/rohit/LINUX/kernels/staging/drivers/hid/usbhid/hid-core.o
+>   CC [M]  /home/rohit/LINUX/kernels/staging/drivers/hid/usbhid/hiddev.o
+>   CC [M]  /home/rohit/LINUX/kernels/staging/drivers/hid/usbhid/hid-pidff.o
+>   LD [M]  /home/rohit/LINUX/kernels/staging/drivers/hid/usbhid/usbhid.o
+>   CC [M]  /home/rohit/LINUX/kernels/staging/drivers/hid/usbhid/usbkbd.o
+>   CC [M]  /home/rohit/LINUX/kernels/staging/drivers/hid/usbhid/usbmouse.o
+>   MODPOST 3 modules
+>   CC [M]  /home/rohit/LINUX/kernels/staging/drivers/hid/usbhid/usbhid.mod.o
+>   LD [M]  /home/rohit/LINUX/kernels/staging/drivers/hid/usbhid/usbhid.ko
+>   CC [M]  /home/rohit/LINUX/kernels/staging/drivers/hid/usbhid/usbkbd.mod.o
+>   LD [M]  /home/rohit/LINUX/kernels/staging/drivers/hid/usbhid/usbkbd.ko
+>   CC [M]  /home/rohit/LINUX/kernels/staging/drivers/hid/usbhid/usbmouse.mod.o
+>   LD [M]  /home/rohit/LINUX/kernels/staging/drivers/hid/usbhid/usbmouse.ko
+> make: Leaving directory '/home/rohit/LINUX/kernels/staging'
+> "
 
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+-- 
+~Randy
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
