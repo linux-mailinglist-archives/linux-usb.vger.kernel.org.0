@@ -2,132 +2,210 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2784D19482A
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 21:03:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0604C194B58
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 23:14:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727719AbgCZUDR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Mar 2020 16:03:17 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:55346 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727446AbgCZUDQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 16:03:16 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02QJx8Xv046765
-        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2020 20:03:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : content-type :
- content-transfer-encoding : mime-version : date : subject : message-id :
- to; s=corp-2020-01-29; bh=s9UEpIW+lsCLg2gmVx11CrymPRIPFMo/MMcp/jgu5vs=;
- b=mYMuXMpX/i4a/jpW1Ey58xIfrZCyIzrsiHdqhPHYQN1C97w0bGE465Y9QMpjhNcZrVdI
- gNGGNaqaRjU+RomTYFDXfFbSXrB506jjbjSPaQ8jAOM2g2CHZ4y5V/QeEU9X0jTfgfFd
- YqfSsneD9EAIS3zvw/qxzxoiSqY7FVIV0b0m3G97ENAGd7/GxoHBBl9Ku/c6EZfZzY0/
- XkymoWy0mfULgnlbXeSu6QU8D9hKUDL4D/QtKj4cQN90M0czuLKHMXxtmzsILEW1s6fe
- dyhqFnF+AxwjEpfa+bSfncBPPzDldS1WsA6bTbjWmsRqS47tV/Ea3cst3MqmwZZ5usP7 ag== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 2ywavmhy6e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
-        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2020 20:03:14 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02QJud2X190600
-        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2020 20:03:14 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 30073ecdp6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
-        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2020 20:03:14 +0000
-Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 02QK3D6h027269
-        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2020 20:03:14 GMT
-Received: from dhcp-10-154-182-169.vpn.oracle.com (/10.154.182.169)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 26 Mar 2020 13:03:13 -0700
-From:   John Donnelly <john.p.donnelly@oracle.com>
-Content-Type: text/plain;
-        charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Mime-Version: 1.0 (Mac OS X Mail 11.5 \(3445.9.1\))
-Date:   Thu, 26 Mar 2020 15:03:12 -0500
-Subject: Question :  remote "ILO" setup - keyboard and mouse enumeration 
-Message-Id: <7A2988F9-C174-4A13-8F0E-B3D73A33DF47@oracle.com>
-To:     linux-usb@vger.kernel.org
-X-Mailer: Apple Mail (2.3445.9.1)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9572 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=891 adultscore=0
- suspectscore=5 mlxscore=0 phishscore=0 bulkscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2003260146
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9572 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
- priorityscore=1501 mlxscore=0 bulkscore=0 clxscore=1015 impostorscore=0
- phishscore=0 suspectscore=5 mlxlogscore=933 spamscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2003260146
+        id S1726496AbgCZWOl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Mar 2020 18:14:41 -0400
+Received: from mga02.intel.com ([134.134.136.20]:39923 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726296AbgCZWOl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 26 Mar 2020 18:14:41 -0400
+IronPort-SDR: Opw/cC0Y5e9g+7WbR91gmQHypL/4YoI7t52eCg1nTXxIN1fnT9haZv3tQ0avQIgSqJKhcVJkbZ
+ QXv1ayaZ47oA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2020 15:14:40 -0700
+IronPort-SDR: 8e2ND5as3CCSXfRMUeVBijnb+HYIqYkOdcbKBG1HKZp2hZ/jIwkquluYDR782MsvcHf1ayD8cR
+ dUZtzMZXfWhw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,309,1580803200"; 
+   d="scan'208";a="250937310"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 26 Mar 2020 15:14:39 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jHalq-0006HR-MH; Fri, 27 Mar 2020 06:14:38 +0800
+Date:   Fri, 27 Mar 2020 06:14:01 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 70d8b9e5e63d212019ba3f6823c8ec3d2df87645
+Message-ID: <5e7d2929.wJf05ons78D65bkO%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: 70d8b9e5e63d212019ba3f6823c8ec3d2df87645  usb: cdns3: make signed 1 bit bitfields unsigned
 
-This is 10,000 foot question for a issue I am looking at :
+elapsed time: 484m
 
-Quite a few servers have a BCM that expose a USB keyboard and mouse when =
-a " iLo client session " is started  that also provides a remote =
-console.
+configs tested: 151
+configs skipped: 0
 
-For instance on Bus 01.Port 1: Dev 1, Port 8 there are these devices :
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
- lsusb -t
-/:  Bus 02.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/10p, 5000M
-/:  Bus 01.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/16p, 480M
-    |__ Port 8: Dev 2, If 0, Class=3DHub, Driver=3Dhub/7p, 480M
-        |__ Port 3: Dev 3, If 0, Class=3DCommunications, =
-Driver=3Dcdc_ether, 480M
-        |__ Port 3: Dev 3, If 1, Class=3DCDC Data, Driver=3Dcdc_ether, =
-480M
+arm64                            allyesconfig
+arm                              allyesconfig
+arm64                             allnoconfig
+arm                               allnoconfig
+arm                         at91_dt_defconfig
+arm                           efm32_defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                        multi_v7_defconfig
+arm                        shmobile_defconfig
+arm                           sunxi_defconfig
+arm64                               defconfig
+sparc                            allyesconfig
+riscv                    nommu_virt_defconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                             alldefconfig
+i386                                defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+ia64                             alldefconfig
+arm64                            allmodconfig
+arm                              allmodconfig
+c6x                              allyesconfig
+c6x                        evmc6678_defconfig
+nios2                         10m50_defconfig
+nios2                         3c120_defconfig
+openrisc                    or1ksim_defconfig
+openrisc                 simple_smp_defconfig
+xtensa                       common_defconfig
+xtensa                          iss_defconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                                defconfig
+alpha                               defconfig
+h8300                     edosk2674_defconfig
+h8300                    h8300h-sim_defconfig
+h8300                       h8s-sim_defconfig
+m68k                             allmodconfig
+m68k                       m5475evb_defconfig
+m68k                          multi_defconfig
+m68k                           sun3_defconfig
+arc                              allyesconfig
+arc                                 defconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
+powerpc                           allnoconfig
+powerpc                             defconfig
+powerpc                       ppc64_defconfig
+powerpc                          rhel-kconfig
+mips                      fuloong2e_defconfig
+mips                      malta_kvm_defconfig
+mips                             allyesconfig
+mips                         64r6el_defconfig
+mips                              allnoconfig
+mips                           32r2_defconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                           allyesconfig
+parisc                generic-32bit_defconfig
+parisc                generic-64bit_defconfig
+i386                 randconfig-a002-20200326
+i386                 randconfig-a001-20200326
+x86_64               randconfig-a002-20200326
+x86_64               randconfig-a001-20200326
+i386                 randconfig-a003-20200326
+x86_64               randconfig-a003-20200326
+mips                 randconfig-a001-20200326
+nds32                randconfig-a001-20200326
+m68k                 randconfig-a001-20200326
+parisc               randconfig-a001-20200326
+alpha                randconfig-a001-20200326
+riscv                randconfig-a001-20200326
+h8300                randconfig-a001-20200326
+microblaze           randconfig-a001-20200326
+nios2                randconfig-a001-20200326
+c6x                  randconfig-a001-20200326
+sparc64              randconfig-a001-20200326
+csky                 randconfig-a001-20200326
+openrisc             randconfig-a001-20200326
+s390                 randconfig-a001-20200326
+xtensa               randconfig-a001-20200326
+x86_64               randconfig-c003-20200326
+x86_64               randconfig-c001-20200326
+i386                 randconfig-c002-20200326
+x86_64               randconfig-c002-20200326
+i386                 randconfig-c003-20200326
+i386                 randconfig-c001-20200326
+x86_64               randconfig-e001-20200326
+x86_64               randconfig-e003-20200326
+i386                 randconfig-e002-20200326
+i386                 randconfig-e003-20200326
+i386                 randconfig-e001-20200326
+x86_64               randconfig-e002-20200326
+x86_64               randconfig-f001-20200326
+x86_64               randconfig-f002-20200326
+x86_64               randconfig-f003-20200326
+i386                 randconfig-f001-20200326
+i386                 randconfig-f002-20200326
+i386                 randconfig-f003-20200326
+x86_64               randconfig-g001-20200326
+x86_64               randconfig-g002-20200326
+x86_64               randconfig-g003-20200326
+i386                 randconfig-g001-20200326
+i386                 randconfig-g002-20200326
+i386                 randconfig-g003-20200326
+x86_64               randconfig-h002-20200326
+x86_64               randconfig-h003-20200326
+i386                 randconfig-h003-20200326
+i386                 randconfig-h001-20200326
+x86_64               randconfig-h001-20200326
+i386                 randconfig-h002-20200326
+arm                  randconfig-a001-20200326
+arm64                randconfig-a001-20200326
+ia64                 randconfig-a001-20200326
+arc                  randconfig-a001-20200326
+sparc                randconfig-a001-20200326
+powerpc              randconfig-a001-20200326
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                            allyesconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+s390                       zfcpdump_defconfig
+s390                          debug_defconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                             alldefconfig
+s390                                defconfig
+sh                          rsk7269_defconfig
+sh                               allmodconfig
+sh                            titan_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                                allnoconfig
+sparc                               defconfig
+sparc64                          allmodconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                             defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                                  defconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
 
-
-When a remote viewer ( iLO ) session is started, two HID appear under =
-Port 8 :
-
-
- lsusb -t
-/:  Bus 02.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/10p, 5000M
-/:  Bus 01.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/16p, 480M
-    |__ Port 8: Dev 2, If 0, Class=3DHub, Driver=3Dhub/7p, 480M
-        |__ Port 1: Dev 7, If 0, Class=3DHuman Interface Device, =
-Driver=3Dusbhid,480M
-        |__ Port 2: Dev 6, If 0, Class=3DHuman Interface Device, =
-Driver=3Dusbhid,480M
-        |__ Port 3: Dev 3, If 0, Class=3DCommunications, =
-Driver=3Dcdc_ether, 480M
-        |__ Port 3: Dev 3, If 1, Class=3DCDC Data, Driver=3Dcdc_ether, =
-480M
-
-
-Is this device tree showing me the Port 8 is somehow wired to the BCM ?  =
-And the BCM did some sort of operation that causes the xhci_hcd driver =
-to enumerate a new device ? =20
-
-The driver :  =E2=80=9C usbhid =E2=80=9C in real life appears to be a =
-built-in component to the kernel - Not a loadable module .  I suspect =
-that is so keyboards always work.=20
-
-When the iLO session is terminated the two HID devices disappear .=20
-
-If anyone can point me documentation how this works I would appreciate =
-it. =20
-
-
-Thank you for your time.=20
-
-JD
-
-
-
-
-
-
-
-
-
-
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
