@@ -2,88 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45475193E6D
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 12:56:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B2E193ED3
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 13:27:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728179AbgCZL4l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Mar 2020 07:56:41 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:61135 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727991AbgCZL4l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 07:56:41 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1585223800; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=G/SzWdBthTVoxAFwbG7tG3/SXJnZK649aqz/vWmd9I8=; b=ZyLptEYmxF1Xnwb10wb3ENM3tgGh0V62sUMIUD1qZOyEBqkqzKQEPMQMPXwzR2eCeVfi7QT2
- jJGqa74/qVqTjKTRYoFsl1VbRNWGFYs4wvgiOz08GXRW1CLNDq78mS6F0CrF6WqLpg2bi2Hr
- MgiWpAeDyprP57hlszMBLkacI44=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e7c9872.7f07e84452d0-smtp-out-n01;
- Thu, 26 Mar 2020 11:56:34 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 280F1C433BA; Thu, 26 Mar 2020 11:56:34 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from sallenki-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sallenki)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 60906C433D2;
-        Thu, 26 Mar 2020 11:56:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 60906C433D2
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sallenki@codeaurora.org
-From:   Sriharsha Allenki <sallenki@codeaurora.org>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-Cc:     peter.chen@nxp.com, stable@vger.kernel.org, mgautam@codeaurora.org,
-        jackp@codeaurora.org, Sriharsha Allenki <sallenki@codeaurora.org>
-Subject: [PATCH v2] usb: gadget: f_fs: Fix use after free issue as part of queue failure
-Date:   Thu, 26 Mar 2020 17:26:20 +0530
-Message-Id: <20200326115620.12571-1-sallenki@codeaurora.org>
-X-Mailer: git-send-email 2.26.0
+        id S1727998AbgCZM1u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Mar 2020 08:27:50 -0400
+Received: from foss.arm.com ([217.140.110.172]:59878 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727781AbgCZM1u (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 26 Mar 2020 08:27:50 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6623C30E;
+        Thu, 26 Mar 2020 05:27:49 -0700 (PDT)
+Received: from e107158-lin (e107158-lin.cambridge.arm.com [10.1.195.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4B55D3F71F;
+        Thu, 26 Mar 2020 05:27:48 -0700 (PDT)
+Date:   Thu, 26 Mar 2020 12:27:45 +0000
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Oliver Neukum <oneukum@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux-pm mailing list <linux-pm@vger.kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
+Message-ID: <20200326122744.kbtlmev2ravn3wey@e107158-lin>
+References: <20200325150017.xhabucfo3v6i234o@e107158-lin>
+ <Pine.LNX.4.44L0.2003251631360.1724-100000@netrider.rowland.org>
+ <CAJZ5v0gqNnoT41=Vm7AtbH8PMW+qPGighK7Up3q2rS+B0jBKFg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gqNnoT41=Vm7AtbH8PMW+qPGighK7Up3q2rS+B0jBKFg@mail.gmail.com>
+User-Agent: NeoMutt/20171215
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In AIO case, the request is freed up if ep_queue fails.
-However, io_data->req still has the reference to this freed
-request. In the case of this failure if there is aio_cancel
-call on this io_data it will lead to an invalid dequeue
-operation and a potential use after free issue.
-Fix this by setting the io_data->req to NULL when the request
-is freed as part of queue failure.
+On 03/25/20 22:28, Rafael J. Wysocki wrote:
+> On Wed, Mar 25, 2020 at 9:49 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Wed, 25 Mar 2020, Qais Yousef wrote:
+> >
+> > > Thanks for all the hints Alan.
+> > >
+> > > I think I figured it out, the below patch seems to fix it for me. Looking
+> > > at other drivers resume functions it seems we're missing the
+> > > pm_runtime_disable()->set_active()->enable() dance. Doing that fixes the
+> > > warning and the dev_err() in driver/base/power.
+> >
+> > Ah, yes.  This should have been added years ago; guess I forgot.  :-(
+> >
+> > > I don't see xhci-plat.c doing that, I wonder if it needs it too.
+> > >
+> > > I'm not well versed about the details and the rules here. So my fix could be
+> > > a hack, though it does seem the right thing to do.
+> > >
+> > > I wonder why the power core doesn't handle this transparently..
+> >
+> > Initially, we didn't want the PM core to do this automatically because
+> > we thought some devices might want to remain runtime-suspended
+> > following a system resume, and only the device driver would know what
+> > to do.
+> >
+> > Raphael, now that we have the direct_complete mechanism, can we revisit
+> > this?  Should the PM core automatically call pm_runtime_set_active() if
+> > dev->power.direct_complete isn't set?  Perhaps in device_resume_early()
+> > prior to the pm_runtime_enable() call?
+> >
+> > It's possible we discussed this and decided against it at the time when
+> > direct_complete was added, but if so I don't remember what was said.
+> 
+> Me neither. :-)
+> 
+> That said complexity has grown since then and there are the
+> DPM_FLAG_SMART_SUSPEND and DPM_FLAG_LEAVE_SUSPENDED flags that can be
+> used to control that behavior to some extent.
+> 
+> Setting DPM_FLAG_SMART_SUSPEND alone, in particular, causes
+> pm_runtime_set_active() to be called at the noirq stage of device
+> resume either by the core or by bus types (e.g. PCI) etc.
+> 
+> It looks like ohci-platform might use DPM_FLAG_SMART_SUSPEND, but I
+> need to take a closer look at that (possibly later this week).
 
-Fixes: 2e4c7553cd6f ("usb: gadget: f_fs: add aio support")
-Signed-off-by: Sriharsha Allenki <sallenki@codeaurora.org>
-CC: stable <stable@vger.kernel.org>
-Reviewed-by: Peter Chen <peter.chen@nxp.com>
----
-Changes in v2:
-	- As suggested by Greg, updated the tags
+Okay I take it this was root caused correctly and now it's a question of which
+is a better fix.
 
- drivers/usb/gadget/function/f_fs.c | 1 +
- 1 file changed, 1 insertion(+)
+Thanks!
 
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 571917677d35..767f30b86645 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -1120,6 +1120,7 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
- 
- 		ret = usb_ep_queue(ep->ep, req, GFP_ATOMIC);
- 		if (unlikely(ret)) {
-+			io_data->req = NULL;
- 			usb_ep_free_request(ep->ep, req);
- 			goto error_lock;
- 		}
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
+--
+Qais Yousef
