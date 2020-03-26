@@ -2,51 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 110C91941C2
+	by mail.lfdr.de (Postfix) with ESMTP id 84DA11941C3
 	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 15:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728123AbgCZOo2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Mar 2020 10:44:28 -0400
-Received: from mail-wm1-f73.google.com ([209.85.128.73]:59092 "EHLO
-        mail-wm1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728076AbgCZOo1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 10:44:27 -0400
-Received: by mail-wm1-f73.google.com with SMTP id f185so2243192wmf.8
-        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2020 07:44:26 -0700 (PDT)
+        id S1727665AbgCZOod (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Mar 2020 10:44:33 -0400
+Received: from mail-wr1-f74.google.com ([209.85.221.74]:52244 "EHLO
+        mail-wr1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728060AbgCZOoa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 10:44:30 -0400
+Received: by mail-wr1-f74.google.com with SMTP id d17so3140798wrw.19
+        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2020 07:44:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=54OrhN2UqwV2UhsoJvUHxfQ1kDDVGkOr4MVVzi//0Tk=;
-        b=KEoRpVSkWQ4Obk49T2NiJnX5YvJMnj3y3LgQFqwTA1oA/83D5qT2cj2EfHEHsE9J9N
-         TGuPaMZhafTcNM2K42DypQ9gbY6yTkkybsVnR7xLkhU9pHHROVFcwmDaPTza1GJSb0Ge
-         jIBdCY+tA7V4j/NBfsV7OiyhebX2WU7ix8oHpnagMsExk9Xz2MSTQMmejmAXrN46h4ou
-         2MCeDPUyX+0nufKlwrQHFC/N9N5EMdo+taW4rpwKj4eqVQN8gBpULoizs44b8hyuubVq
-         N0f3TwMFhuPbRKhHGF92OZfLfthHUhlLrD2vyPHVBft52EyJiVRYcAaCdmFbyHz8NxP2
-         KJaw==
+        bh=oIpcXbs7HMCH2rBdnqz+HP+vStesLvB5cyCR3m0rGWo=;
+        b=c+ZoYPXGUoJs2G/uhQEnUj77jkFvWpTLdmamQD3MFPVB+Nyp1lAOyNuUnkqGWydMmL
+         JEXdgJz2J5z6gJX9UXQc8YCtsYAlAjK7Rc7rnUrRpn2cewG+nI9vSf6ICvIzne7/xjnn
+         3i0HXX0N3RzFw76sJh65Jo7hxW/ZgaOUoNqQG54kuyWQKDSlsAfh4lQjv7qwtTptSE2v
+         0AeEGs3c/EbHErb+uqqFf6ZL50ELe0IXS504Gf1x3Y7wipHS4p4HCYR8U/5TY15M3Xp3
+         /6ZOMckWYP2cn9jw89fGsDMXP6uPCmTf+Af6Zno2subsLnKKVjEh9WfuL+scknGp+ujF
+         1RXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=54OrhN2UqwV2UhsoJvUHxfQ1kDDVGkOr4MVVzi//0Tk=;
-        b=aUnCXNue9di7tZ65flLi0pL0W1gsX1vE88PfDlTC9puRSv9W+tvX2tK8aGqsmRyk7U
-         mCXFUSPtrSiTLCdbeciLknPy9H88k6yYwJqRD/9yqwmaJVXXPaqdOZc192vYjDmScciC
-         oLV5y9tUV+NuLfkNeznU9NjnPNw0LE662oueeXz1MifedToltLIxP1m+YeAXSThyXGvr
-         j7KtXHS9YTV1EgAdZd+bZe1BXCYPkkygO0e7SmpMPrIvhgQw16LqsRpIp00AdOd+Qz1D
-         EwpkMZj9nCIvZRGCTnMSAFA6V/TDb0upgKY45zF6KO4XN3NY+Yy4IjWS3HyMwf4cExJM
-         mqRQ==
-X-Gm-Message-State: ANhLgQ0e5uyEKQzQXrrnhMAzmXZJMyZLrcIQM3agbT/nckiO9dCdwXO5
-        PtkDMnpTk1jfgnF3havGTmPqOg1sjf6Pur2F
-X-Google-Smtp-Source: ADFU+vvlT13Jzs850JgMlpxi2djO8UDTtjaMsAWeLvetR7iUup932A5Lrxp2uoQCpabpVD2nkeGM/35wY/4GBFEl
-X-Received: by 2002:adf:bc4a:: with SMTP id a10mr9594715wrh.7.1585233865501;
- Thu, 26 Mar 2020 07:44:25 -0700 (PDT)
-Date:   Thu, 26 Mar 2020 15:44:03 +0100
+        bh=oIpcXbs7HMCH2rBdnqz+HP+vStesLvB5cyCR3m0rGWo=;
+        b=UEpukUsBWrkGBp0u/25DJC1mTjqk4YUPXthpgyeK2dUaF63gSg9fQle0cyljMtCSmK
+         hClIWFBsG+vPq7/zrf6JIONQYc9P1ULx8gj+nwoyatuWIdVotpkyVvzUikj5aSbqxaPu
+         faKiobmcEXDRsO1xMd6BOU69JePI387nJiuAw4tpuNKqt91By02zeVpmhkQHo9GozRF7
+         BpgRl2kN+ZTk5yN7cusVWFGx1kFmKDNRH64MGl63/2veEPJloE98eUinsUiXUGlc4RjN
+         92xDEtFNbqV3Q2qYgBCfQFdI1TcVeyhj9gbwhPnTSbO0fsDKi4lDxGMk+bEWMJtNUIyN
+         X+Ng==
+X-Gm-Message-State: ANhLgQ3HJuBKuiCPg31FqQmlzyBl4h/cKIbzA9+l6GZsbf2QKMW31uwP
+        lvLd7MX9FfRQRSnjrLUPEhYbZM9vOYwS+8JN
+X-Google-Smtp-Source: ADFU+vvDk8YRsGM5M4gwKzl2NX7plDCaSAsdBkDdkcig7hV0LfODIkqeS2n63I7L68P82vgp9GsW1K9wbg6Gp0wl
+X-Received: by 2002:adf:a490:: with SMTP id g16mr9721097wrb.42.1585233868532;
+ Thu, 26 Mar 2020 07:44:28 -0700 (PDT)
+Date:   Thu, 26 Mar 2020 15:44:04 +0100
 In-Reply-To: <cover.1585233617.git.andreyknvl@google.com>
-Message-Id: <5889efe35e0b300e69dba97216b1288d9c2428a8.1585233617.git.andreyknvl@google.com>
+Message-Id: <f70377945d1d8e6e4916cbce871a12303d6186b4.1585233617.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1585233617.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.26.0.rc2.310.g2932bb562d-goog
-Subject: [PATCH v4 4/7] kcov: move t->kcov_sequence assignment
+Subject: [PATCH v4 5/7] kcov: use t->kcov_mode as enabled indicator
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     Dmitry Vyukov <dvyukov@google.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -62,30 +62,85 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Move t->kcov_sequence assignment before assigning t->kcov_mode
-for consistency.
+Currently kcov_remote_start() and kcov_remote_stop() check t->kcov to
+find out whether the coverage is already being collected by the
+current task. Use t->kcov_mode for that instead. This doesn't change
+the overall behavior in any way, but serves as a preparation for the
+following softirq coverage collection support patch.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- kernel/kcov.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/kcov.c | 32 +++++++++++++++++++++++---------
+ 1 file changed, 23 insertions(+), 9 deletions(-)
 
 diff --git a/kernel/kcov.c b/kernel/kcov.c
-index 888d0a236b04..b985b7a72870 100644
+index b985b7a72870..e43f06b5b2e4 100644
 --- a/kernel/kcov.c
 +++ b/kernel/kcov.c
-@@ -318,10 +318,10 @@ static void kcov_start(struct task_struct *t, struct kcov *kcov,
- 	/* Cache in task struct for performance. */
- 	t->kcov_size = size;
- 	t->kcov_area = area;
-+	t->kcov_sequence = sequence;
- 	/* See comment in check_kcov_mode(). */
- 	barrier();
- 	WRITE_ONCE(t->kcov_mode, mode);
--	t->kcov_sequence = sequence;
- }
+@@ -746,26 +746,33 @@ static const struct file_operations kcov_fops = {
+  * In turns kcov_remote_stop() clears those pointers from task_struct to stop
+  * collecting coverage and copies all collected coverage into the kcov area.
+  */
++
++static inline bool kcov_mode_enabled(unsigned int mode)
++{
++	return (mode & ~KCOV_IN_CTXSW) != KCOV_MODE_DISABLED;
++}
++
+ void kcov_remote_start(u64 handle)
+ {
++	struct task_struct *t = current;
+ 	struct kcov_remote *remote;
+ 	struct kcov *kcov;
++	unsigned int mode;
+ 	void *area;
+-	struct task_struct *t;
+ 	unsigned int size;
+-	enum kcov_mode mode;
+ 	int sequence;
  
- static void kcov_stop(struct task_struct *t)
+ 	if (WARN_ON(!kcov_check_handle(handle, true, true, true)))
+ 		return;
+ 	if (WARN_ON(!in_task()))
+ 		return;
+-	t = current;
++
+ 	/*
+ 	 * Check that kcov_remote_start is not called twice
+ 	 * nor called by user tasks (with enabled kcov).
+ 	 */
+-	if (WARN_ON(t->kcov))
++	mode = READ_ONCE(t->kcov_mode);
++	if (WARN_ON(kcov_mode_enabled(mode)))
+ 		return;
+ 
+ 	kcov_debug("handle = %llx\n", handle);
+@@ -863,13 +870,20 @@ static void kcov_move_area(enum kcov_mode mode, void *dst_area,
+ void kcov_remote_stop(void)
+ {
+ 	struct task_struct *t = current;
+-	struct kcov *kcov = t->kcov;
+-	void *area = t->kcov_area;
+-	unsigned int size = t->kcov_size;
+-	int sequence = t->kcov_sequence;
++	struct kcov *kcov;
++	unsigned int mode;
++	void *area;
++	unsigned int size;
++	int sequence;
+ 
+-	if (!kcov)
++	mode = READ_ONCE(t->kcov_mode);
++	barrier();
++	if (!kcov_mode_enabled(mode))
+ 		return;
++	kcov = t->kcov;
++	area = t->kcov_area;
++	size = t->kcov_size;
++	sequence = t->kcov_sequence;
+ 
+ 	kcov_stop(t);
+ 
 -- 
 2.26.0.rc2.310.g2932bb562d-goog
 
