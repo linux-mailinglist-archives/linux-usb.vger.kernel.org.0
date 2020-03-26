@@ -2,161 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0723193FF7
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 14:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CAEC19402B
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 14:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727541AbgCZNms (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Mar 2020 09:42:48 -0400
-Received: from mail-eopbgr750085.outbound.protection.outlook.com ([40.107.75.85]:6663
-        "EHLO NAM02-BL2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726270AbgCZNms (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 26 Mar 2020 09:42:48 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AFXZS4MGty1i0nrzcPmTTCcS5DSoE/hLQi9fMMfFHSo9PQpKpvTSMGGYhyt6Zdwo1MCaR53n8VrTnnLZM8Mmr8JxElIy/JAu2iAMPiXMDxHn/Fos+k877q1E+I/ECgDinR44kVr5/OSaCC/dj6Af5TtkSO2PbHgVgT+7b0RBvnDGgjyKMjdQP595glIONN0R4HyqSit2B/Ju/K2V9yH5MAcd7Ygf9pxc125frBAuaZqG7xmcmdxZ3PLtG3yz53fIcAO+DsZ35LWGDvPOiuLZvGlhJ4b1WgqEinHB5lcFRviXT6bDYTbujryMNgMJFhJxv5xEqHfB1SlKuDx6+dfmjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=t0yyD6+srGVgVbqzfkdGiNrRF2jVZ/HwMVPBPAYivs4=;
- b=YzJfYw/iKBaQfFbguydkQ41d/D0Ml+8cI9kiTdN1uwpm+m2ZzaW/9AjN1ZC42liaPREeCeAAPodAl8LFWOuMc4MSu6vXgSNPban2j7WxNaa+ArFmQ9VcVEEJoB+aykdU7CfsPqANcLDApf9luAJEs7q7Qy0Gf5TBI6JfBN60jOsMTiF1LiR3lomVDbFgVmsHqsgKyreg3WteFOeEXaQmqe5IykEygOTppl1fDiyxNDEhduJQOPUWg7EnfwjUPd5mRmjLjWO1TRRkgYcGB1F+SZUX8VdqPvFG6zwDDqRxMklzxpUm7JigE4C/B4jCyrZ5S6s73NLBT8CIihBrYV/UFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+        id S1727541AbgCZNqO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Mar 2020 09:46:14 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:45136 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727725AbgCZNpN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 09:45:13 -0400
+Received: by mail-wr1-f68.google.com with SMTP id t7so7799157wrw.12
+        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2020 06:45:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=t0yyD6+srGVgVbqzfkdGiNrRF2jVZ/HwMVPBPAYivs4=;
- b=yznl1bD+o4JBstiqg2agt5myLb/L7JBye13ZW41X9pytL4HuZqZvyBlnIEiiR7piDC3VXXQAlXmjSJ5bM6le78lr5Za5BYwr3qis7XylfOxxaQKlaUsJU+nfpuYn2ZjQBRDi3uujKa+s81V4AOaW6QKb2/ymvil8izgF7zwXptE=
-Authentication-Results: spf=none (sender IP is )
- smtp.mailfrom=Nehal-bakulchandra.Shah@amd.com; 
-Received: from MWHPR1201MB2478.namprd12.prod.outlook.com
- (2603:10b6:300:e5::19) by MWHPR1201MB2495.namprd12.prod.outlook.com
- (2603:10b6:300:df::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2835.22; Thu, 26 Mar
- 2020 13:42:45 +0000
-Received: from MWHPR1201MB2478.namprd12.prod.outlook.com
- ([fe80::bd49:3e0a:bcb2:dc2b]) by MWHPR1201MB2478.namprd12.prod.outlook.com
- ([fe80::bd49:3e0a:bcb2:dc2b%9]) with mapi id 15.20.2835.023; Thu, 26 Mar 2020
- 13:42:45 +0000
-Subject: Re: UCSI:CCG: AMD Platform
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Shah, Nehal-bakulchandra" <nbshah@amd.com>, ajayg@nvidia.com,
-        linux-usb@vger.kernel.org
-References: <20200203132808.GA29050@kuha.fi.intel.com>
- <20200203133231.GB29050@kuha.fi.intel.com>
- <aca4968f-06e8-6ac3-09c8-4810947e92b3@amd.com>
- <20200213120011.GL1498@kuha.fi.intel.com>
- <20200213120555.GM1498@kuha.fi.intel.com>
- <0efd0175-6668-7411-81b2-d4a487ccc0ec@amd.com>
- <e0ab390b-743a-d583-15c4-83af3a7dca35@amd.com>
- <20200227122308.GC10532@kuha.fi.intel.com>
- <278ab9a6-497b-9cd5-8aa1-440fc78cb3db@amd.com>
- <9fcf4549-e699-1a35-d87a-6bacf85fba29@amd.com>
- <20200326083507.GB1281735@kuha.fi.intel.com>
-From:   "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
-Message-ID: <f16d7b19-b45c-5599-8df9-2c297b8b6554@amd.com>
-Date:   Thu, 26 Mar 2020 19:11:54 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
-In-Reply-To: <20200326083507.GB1281735@kuha.fi.intel.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-ClientProxiedBy: SG2PR04CA0166.apcprd04.prod.outlook.com (2603:1096:4::28)
- To MWHPR1201MB2478.namprd12.prod.outlook.com (2603:10b6:300:e5::19)
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MRpXPRnvMHphy1rE/lS9Q+pcM8R6cY/UAWlotJHG3f8=;
+        b=O6pHgO2UFROBlOyqKsOduNAxXJHE7whRi12MWJkDR/vx8irlnJ0SY0ok5h/aWe00EJ
+         rQTJKYaERdS060GGm0vAYGSrGzrpTgC8N790w/PF5VD3H+uG8iJdrn+EkKi0sEfwwO63
+         HabTQD5+ETQBG4k+KW8B9Wugyq/pi64hloxe30oX4PBEEBuAgGHo9vOEHbuc/Lc0VOx/
+         QIt5Jr8KM+CwlnmL5ApZKwMTlzRIJYobhaupkXHNJHc1DmD9CUv5YD7OCTP3/sdxcJDh
+         2PvOh9l59vFe4m5KRFwnfQz7FmEG2ayWeqZqB13lyWXVOsJTNZhvyV9LZmZ60IlJBz3i
+         zFyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MRpXPRnvMHphy1rE/lS9Q+pcM8R6cY/UAWlotJHG3f8=;
+        b=KVNMLqrY6FQ8TUIUPT1rtqsmSiTQX/viaDmwg3a292SicZvE4CoLjLJInSoyoPy4ZR
+         rKKiWD/larngzz/tx7uHloPmfGV14NhKlsGrilUElkBeo783bZ52SZQnRqUuQV7pvZci
+         Ui6PUk1egmuYRDlR0gGnFdDDfSmcsVmjQg1PTzi8zzoVxD+uhaUXPsjpgAnlG4OWSHmA
+         dYXwP4FG0+RWM1yHgODJRNrmslV6phDu6tFC+ofV5nFcwEm1/x949AYo9gTS87UW5UjL
+         sZHgE8LDH4yT9b066+9w6fHiOT1g9zlUyaJkTCbj8vRj/KoaXV2siDTH05Fho1r0tGSe
+         TuDg==
+X-Gm-Message-State: ANhLgQ3NfO9XIjk3GkjvwNMTvYFUZqxU3npMB+HY2SQWi39D26C677TE
+        BjvTRhgnepW7tT29CgvlDkEYXQ==
+X-Google-Smtp-Source: ADFU+vvXGkEfouXX7y1+sdqh+EsGCX1Rk8sMRmpR+O8yOAt2hdBafRMo+nYkAAFLziTJ7sTB8kpp2g==
+X-Received: by 2002:a5d:56ca:: with SMTP id m10mr9840366wrw.313.1585230310112;
+        Thu, 26 Mar 2020 06:45:10 -0700 (PDT)
+Received: from bender.baylibre.local ([2a01:e35:2ec0:82b0:5c5f:613e:f775:b6a2])
+        by smtp.gmail.com with ESMTPSA id h29sm4079617wrc.64.2020.03.26.06.45.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Mar 2020 06:45:09 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     kishon@ti.com, balbi@kernel.org, khilman@baylibre.com,
+        martin.blumenstingl@googlemail.com
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/14] usb: dwc3: meson: add OTG support for GXL/GXM
+Date:   Thu, 26 Mar 2020 14:44:52 +0100
+Message-Id: <20200326134507.4808-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [10.252.142.148] (165.204.140.250) by SG2PR04CA0166.apcprd04.prod.outlook.com (2603:1096:4::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2835.19 via Frontend Transport; Thu, 26 Mar 2020 13:42:42 +0000
-X-Originating-IP: [165.204.140.250]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 3a06a384-f830-4ced-8641-08d7d18b904b
-X-MS-TrafficTypeDiagnostic: MWHPR1201MB2495:|MWHPR1201MB2495:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MWHPR1201MB249584383AE1D5B149025869A0CF0@MWHPR1201MB2495.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-Forefront-PRVS: 0354B4BED2
-X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(39860400002)(346002)(396003)(136003)(376002)(53546011)(478600001)(31696002)(6486002)(81156014)(6916009)(8676002)(52116002)(6666004)(81166006)(31686004)(4326008)(26005)(16576012)(186003)(66476007)(66556008)(36756003)(86362001)(66946007)(2906002)(956004)(2616005)(16526019)(5660300002)(316002)(8936002);DIR:OUT;SFP:1101;SCL:1;SRVR:MWHPR1201MB2495;H:MWHPR1201MB2478.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;
-Received-SPF: None (protection.outlook.com: amd.com does not designate
- permitted sender hosts)
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cex6NkgWr+HfHv1bBQrldGxcs6lz9EVH5zg+KLpEs6smgxA3koWT/ZcBifGgGdRAjFS5nMqUmMcKbLLD56pn1LAGOgUnMlOAoDadcipG28vj8lNf61hQra7Pfrh+WEn2DzC2NcxPRoa24xXIqBBOn7tpsB1RapV/GmqlJ7T48iJlB2Q3OdQfb2/wU16P6R/Pf1+C7J/iGE75nisqBdIHiYBZ6YS/gouVvwsXXkyi1/Oy3qzaKI2sOLJMqMBI0J7JoiIY2ixC0X4O4jIzo0C+wCOtw1v8r3L8A0jBNe9R7ebRxFq5guXyqlmkm8N8HVnv1EzvDcUt8O9GolL4ouO7xasn4l4fv/mvb+rKmJZB3+dkYI2RO1bnnRh2N3lTFWN9l3MdtOdOUShIevs9vmUiu+Zb/xYJNhAdV0Go7Fs+GE56Hjcdr8jexe8/1JMtrDXU
-X-MS-Exchange-AntiSpam-MessageData: ywsJkGXnZUVxjkUXBSuSHQcPbLChuXQThzo4fHHZX+KgIMMnxUcRm0gC4yAYgQOaXrXSp9lGD7DoP6uW9skzcuna0EC76kL7Q2Vt4tMCZ7uiv7/44KbFhlqYn+vZxjX5+pSHxWULX5VvSY44TvMKXA==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a06a384-f830-4ced-8641-08d7d18b904b
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Mar 2020 13:42:45.0781
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: buiFRAouN0rA7pUB5nJolakNaiOrxyBJx8ZkuNdd/weC5jnTUNm/omMgi4o+6w7C
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB2495
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-HiHeikki
+The USB support was initialy done with a set of PHYs and dwc3-of-simple
+because the architecture of the USB complex was not understood correctly
+at the time (and proper documentation was missing...).
 
-On 3/26/2020 2:05 PM, Heikki Krogerus wrote:
+But with the G12A family, the USB complex was correctly understood and
+implemented correctly.
+But seems the G12A architecture was derived for the GXL USB architecture,
+with minor differences and looks we can share most of the USB DWC3 glue
+driver.
 
-> Hi,
->
-> On Sat, Feb 29, 2020 at 08:55:50AM +0530, Shah, Nehal-bakulchandra wrote:
->> Hi
->> On 2/27/2020 10:29 PM, Shah, Nehal-bakulchandra wrote:
->>> Hi
->>> On 2/27/2020 5:53 PM, Heikki Krogerus wrote:
->>>> On Mon, Feb 24, 2020 at 02:38:12PM +0530, Shah, Nehal-bakulchandra wrote:
->>>>> Hi
->>>>>
->>>>> On 2/14/2020 7:58 PM, Shah, Nehal-bakulchandra wrote:
->>>>>> Hi
->>>>>>
->>>>>> On 2/13/2020 5:35 PM, Heikki Krogerus wrote:
->>>>>>> On Thu, Feb 13, 2020 at 02:00:14PM +0200, Heikki Krogerus wrote:
->>>>>>>>> I am using CCG based UCSI driver without any
->>>>>>>>> modification.For I2C part i have written custom
->>>>>>>>> driver.
->>>>>>>>>
->>>>>>>>> I have attached the trace out and dmesg crash log.
->>>>>>>>>
->>>>>>>>> Please have a look
->>>>>>>> Thanks for the logs. Can you test the attached diff?
->>>>>>> Actually, don't try that one. Try this one instead.
->>>>>> Sure i will update on this on Monday.
->>>>>>
->>>>>>
->>>>>> thanks
->>>>>>
->>>>>> Nehal
->>>>> Patch is not solving the issue. I have attached both trace and dmesg output.
->>>> How about if you try this (the attached patch) together with that
->>>> previous diff?
->>>>
->>>> thanks,
->>> Sure, infact i suspected that in first place and tried same logic but it was failed but now i will check with both patch combine and shall update.
->>>
->>> Thanks
->>>
->>> Nehal Shah
->> This is still crashing .
-> Sorry about the slow process with this, and the late reply.
->
-> Right now I'm out of ideas. I'll need to get my hands on the products
-> that allow me to reproduce the issue. Staring at the code does not
-> help anymore.
->
-> I'm going to cleanup the code a little bit in any case. I'm attaching
-> a diff with my changes. I don't think it will fix this issue, but I
-> would appreciate if you tested it in any case, just to be sure.
->
-> thanks,
+This patchset refactors and adds callbacks to handle the architecture
+difference while keeping the main code shared.
 
-Thanks for the patch. But i will able to validate it after few days due to countrywide lock down.
+The main difference is that on GXL/GXM the USB2 PHY control registers
+are mixed with the PHY registers (we already handle correctly), and
+the GLUE registers are allmost (99%) the same as G12A.
 
-regards
+But, the GXL/GXM HW is buggy, here are the quirks :
+- for the DWC2 controller to reset correctly, the GLUE mux must be switched
+  to peripheral when the DWC2 controller probes. For now it's handled by simply
+  switching to device when probing the subnodes, but it may be not enough
+- when manually switching from Host to Device when the USB port is not
+  populated (should not happen with proper Micro-USB/USB-C OTG switch), it
+  makes the DWC3 to crash. The only way to avoid that is to use the Host
+  Disconnect bit to disconnect the DWC3 controller from the port, but we can't
+  recover the Host functionnality unless resetting the DWC3 controller.
+  This bit is set when only manual switch is done, and a warning is printed
+  on manual switching.
 
-Nehal Shah
+The patches 1-9 should be applied first, then either waiting the next release
+or if the usb maintainer can provide us a stable tag, we can use it to merge
+the DT and bindings.
+
+Changes since v1 at [1]:
+- Fixed DT bindings to take in account usb2-phy2 on GXM
+- Added comment in patch2
+- Fixed patch 5 and moved fix out
+- Collected tags
+- Lower DT patch changes, switch p20x-q20x port B as OTG by default
+
+[1] http://lkml.kernel.org/r/20200324102030.31000-1-narmstrong@baylibre.com
+
+Martin Blumenstingl (4):
+  arm64: dts: amlogic: use the new USB control driver for GXL and GXM
+  phy: amlogic: meson-gxl-usb3: remove code for non-existing PHY
+  usb: dwc3: of-simple: remove Amlogic GXL and AXG compatibles
+  dt-bindings: usb: dwc3: remove old DWC3 wrapper
+
+Neil Armstrong (10):
+  dt-bindings: usb: amlogic,meson-g12a-usb-ctrl: add the Amlogic GXL and
+    GXM Families USB Glue Bindings
+  usb: dwc3: meson-g12a: specify phy names in soc data
+  usb: dwc3: meson-g12a: handle the phy and glue registers separately
+  usb: dwc3: meson-g12a: get the reset as shared
+  usb: dwc3: meson-g12a: check return of dwc3_meson_g12a_usb_init
+  usb: dwc3: meson-g12a: refactor usb2 phy init
+  usb: dwc3: meson-g12a: refactor usb init
+  usb: dwc3: meson-g12a: support the GXL/GXM DWC3 host phy disconnect
+  usb: dwc3: meson-g12a: add support for GXL and GXM SoCs
+  doc: dt: bindings: usb: dwc3: remove amlogic compatible entries
+
+ .../bindings/phy/meson-gxl-usb3-phy.txt       |  31 --
+ .../devicetree/bindings/usb/amlogic,dwc3.txt  |  42 --
+ .../usb/amlogic,meson-g12a-usb-ctrl.yaml      |  73 ++-
+ .../devicetree/bindings/usb/dwc3.txt          |   2 -
+ .../dts/amlogic/meson-gx-libretech-pc.dtsi    |   3 +-
+ .../boot/dts/amlogic/meson-gx-p23x-q20x.dtsi  |   3 +-
+ .../amlogic/meson-gxl-s805x-libretech-ac.dts  |   3 +-
+ .../boot/dts/amlogic/meson-gxl-s805x-p241.dts |   3 +-
+ .../amlogic/meson-gxl-s905d-phicomm-n1.dts    |   4 +
+ .../boot/dts/amlogic/meson-gxl-s905w-p281.dts |   4 +
+ .../dts/amlogic/meson-gxl-s905w-tx3-mini.dts  |   4 +
+ .../amlogic/meson-gxl-s905x-khadas-vim.dts    |   4 +
+ .../amlogic/meson-gxl-s905x-libretech-cc.dts  |   3 +-
+ .../amlogic/meson-gxl-s905x-nexbox-a95x.dts   |   3 +-
+ .../dts/amlogic/meson-gxl-s905x-p212.dtsi     |   3 +-
+ arch/arm64/boot/dts/amlogic/meson-gxl.dtsi    |  45 +-
+ .../dts/amlogic/meson-gxm-khadas-vim2.dts     |   3 +-
+ .../boot/dts/amlogic/meson-gxm-nexbox-a1.dts  |   3 +-
+ .../boot/dts/amlogic/meson-gxm-vega-s96.dts   |   4 +
+ arch/arm64/boot/dts/amlogic/meson-gxm.dtsi    |   7 +-
+ drivers/phy/amlogic/Kconfig                   |  12 -
+ drivers/phy/amlogic/Makefile                  |   1 -
+ drivers/phy/amlogic/phy-meson-gxl-usb3.c      | 283 ------------
+ drivers/usb/dwc3/dwc3-meson-g12a.c            | 415 ++++++++++++++----
+ drivers/usb/dwc3/dwc3-of-simple.c             |  30 +-
+ 25 files changed, 477 insertions(+), 511 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/phy/meson-gxl-usb3-phy.txt
+ delete mode 100644 Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
+ delete mode 100644 drivers/phy/amlogic/phy-meson-gxl-usb3.c
+
+-- 
+2.22.0
 
