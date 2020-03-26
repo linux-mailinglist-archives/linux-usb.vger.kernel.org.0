@@ -2,95 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE978193BD8
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 10:29:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DF2193BE4
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 10:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727796AbgCZJ3k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Mar 2020 05:29:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57548 "EHLO mail.kernel.org"
+        id S1727907AbgCZJaO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Mar 2020 05:30:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58210 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726292AbgCZJ3k (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 26 Mar 2020 05:29:40 -0400
+        id S1726354AbgCZJaO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 26 Mar 2020 05:30:14 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B534320714;
-        Thu, 26 Mar 2020 09:29:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 122E620714;
+        Thu, 26 Mar 2020 09:30:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585214980;
-        bh=UoGc8pPRQVbuOM6FxhZbGGEF/HGWRxriugGNyAa0F30=;
+        s=default; t=1585215012;
+        bh=60lcdGb16jJ64IIPZJoQsTKr+yRg3s78XxEMljIO42M=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kHI7WdxeMAgK6glxwYzwiGGTtCyrbaQCRXUVjpnZCpQWY4ZGP0LLZnW/0x1Bl+MGy
-         aWvVPfizsEoHkQMxI+9Mb4rSMD0lY+VQoiAtViUL7I+3iYyhrhmqxoe9Q0QCIlD3A9
-         nYhGSerbYpKxB0NuW0mnczLup4F4f3t4QC8+FjHI=
-Date:   Thu, 26 Mar 2020 10:29:36 +0100
+        b=0VCF5p+m238sj6t8TIZ0HJKWN8FN9sBBNhlL14xjo6Lq6iJoOxeiK0/bChyHjBX2H
+         eA2b96tcB2a4loVKqSCMpOgnUWxibvV12fBxmT/qu5cXgUstyhGlgnnH/d12zdnXIU
+         ihT2p9AHW5etHRvqywWqu5XvNxkGE4qTP5XnpHVg=
+Date:   Thu, 26 Mar 2020 10:30:10 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Qiujun Huang <hqjagain@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, anenbupt@gmail.com
-Subject: Re: [PATCH] USB: io_edgeport: fix  slab-out-of-bounds Read in
- edge_interrupt_callback
-Message-ID: <20200326092936.GA994882@kroah.com>
-References: <1585122757-4528-1-git-send-email-hqjagain@gmail.com>
- <20200326081433.GA979574@kroah.com>
- <20200326082117.GC4899@localhost>
- <20200326091326.GD4899@localhost>
+To:     Sriharsha Allenki <sallenki@codeaurora.org>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        mgautam@codeaurora.org, jackp@codeaurora.org
+Subject: Re: [PATCH] usb: gadget: f_fs: Fix use after free issue as part of
+ queue failure
+Message-ID: <20200326093010.GB994882@kroah.com>
+References: <20200326060033.14550-1-sallenki@codeaurora.org>
+ <20200326081601.GB979574@kroah.com>
+ <aaa5c90b-dd6c-d025-3027-201f0e8c2f8e@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200326091326.GD4899@localhost>
+In-Reply-To: <aaa5c90b-dd6c-d025-3027-201f0e8c2f8e@codeaurora.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Mar 26, 2020 at 10:13:26AM +0100, Johan Hovold wrote:
-> On Thu, Mar 26, 2020 at 09:21:17AM +0100, Johan Hovold wrote:
-> > On Thu, Mar 26, 2020 at 09:14:33AM +0100, Greg Kroah-Hartman wrote:
-> > > On Wed, Mar 25, 2020 at 03:52:37PM +0800, Qiujun Huang wrote:
-> > > > The boundary condition should be (length - 1) as we access data[position+1].
-> > > > 
-> > > > Reported-and-tested-by: syzbot+37ba33391ad5f3935bbd@syzkaller.appspotmail.com
-> > > > Signed-off-by: Qiujun Huang <hqjagain@gmail.com>
-> > > > ---
-> > > >  drivers/usb/serial/io_edgeport.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/usb/serial/io_edgeport.c b/drivers/usb/serial/io_edgeport.c
-> > > > index 5737add..4cca0b8 100644
-> > > > --- a/drivers/usb/serial/io_edgeport.c
-> > > > +++ b/drivers/usb/serial/io_edgeport.c
-> > > > @@ -710,7 +710,7 @@ static void edge_interrupt_callback(struct urb *urb)
-> > > >  		/* grab the txcredits for the ports if available */
-> > > >  		position = 2;
-> > > >  		portNumber = 0;
-> > > > -		while ((position < length) &&
-> > > > +		while ((position < length - 1) &&
-> > > >  				(portNumber < edge_serial->serial->num_ports)) {
-> > > >  			txCredits = data[position] | (data[position+1] << 8);
-> > > >  			if (txCredits) {
-> > > > -- 
-> > > > 1.8.3.1
-> > > > 
-> > > 
-> > > Johan, any objection from me taking this in my tree now?
-> > 
-> > Just let me take a look at it first.
-> >
-> > Are sending another PR to Linus for 5.6? Otherwise I can include this
-> > in my 5.7 PR to you. Will try to get it to you today.
+On Thu, Mar 26, 2020 at 02:14:23PM +0530, Sriharsha Allenki wrote:
+> Hi Greg,
 > 
-> This issue predates git so I'd add
+> On 3/26/2020 1:46 PM, Greg KH wrote:
+> > On Thu, Mar 26, 2020 at 11:30:33AM +0530, Sriharsha Allenki wrote:
+> >> In AIO case, the request is freed up if ep_queue fails.
+> >> However, io_data->req still has the reference to this freed
+> >> request. In the case of this failure if there is aio_cancel
+> >> call on this io_data it will lead to an invalid dequeue
+> >> operation and a potential use after free issue.
+> >> Fix this by setting the io_data->req to NULL when the request
+> >> is freed as part of queue failure.
+> >>
+> >> Signed-off-by: Sriharsha Allenki <sallenki@codeaurora.org>
+> >> ---
+> >>  drivers/usb/gadget/function/f_fs.c | 1 +
+> >>  1 file changed, 1 insertion(+)
+> >>
+> >> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> >> index 571917677d35..767f30b86645 100644
+> >> --- a/drivers/usb/gadget/function/f_fs.c
+> >> +++ b/drivers/usb/gadget/function/f_fs.c
+> >> @@ -1120,6 +1120,7 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+> >>  
+> >>  		ret = usb_ep_queue(ep->ep, req, GFP_ATOMIC);
+> >>  		if (unlikely(ret)) {
+> >> +			io_data->req = NULL;
+> >>  			usb_ep_free_request(ep->ep, req);
+> >>  			goto error_lock;
+> >>  		}
+> >> -- 
+> >> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
+> > What commit does this fix?  Should it go to stable kernels, and if so,
+> > how far back?
+> The commit 2e4c7553cd6f ("usb: gadget: f_fs: add aio support") introduced
+> the problem. It is good to have in stable kernels and it needs to go all
+> theway back to linux-3.15.y.
 > 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Cc: stable <stable@vger.kernel.org>
-> Acked-by: Johan Hovold <johan@kernel.org>
-> 
-> if you want to take it yourself. Just let me know, otherwise I'll
-> include in my PR.
+> Hope this information helps.
 
-I'm not sending anything to Linus for 5.6, so putting it in your 5.7 PR
-is fine.
+Great, please resend this with the proper Fixes: and cc: stable... tag
+on it so that it gets picked up properly.
 
 thanks,
 
