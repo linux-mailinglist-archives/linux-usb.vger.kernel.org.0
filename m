@@ -2,217 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA0A2193B10
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 09:35:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D10D193B3B
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 09:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727938AbgCZIfL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Mar 2020 04:35:11 -0400
-Received: from mga01.intel.com ([192.55.52.88]:15558 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726289AbgCZIfK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 26 Mar 2020 04:35:10 -0400
-IronPort-SDR: KAju++o4gATkZ1dTFd44keZqDcx4Shaw9B8ZvqYEi4TUiEu+6h/nB/1shLyStmmqEiFsZZdc9J
- bWLMTtVPV2yQ==
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2020 01:35:10 -0700
-IronPort-SDR: gmKGGMfiaY8o7pRZU5cWdrNkU1Lvw96s7ZyLNIGXNGvoQ6NI7QgJmAN/sU3EBhcTq+Qdu3sNxB
- SCdgA1XkdtFg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,307,1580803200"; 
-   d="diff'?scan'208";a="358077858"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 26 Mar 2020 01:35:08 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 26 Mar 2020 10:35:07 +0200
-Date:   Thu, 26 Mar 2020 10:35:07 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
-Cc:     "Shah, Nehal-bakulchandra" <nbshah@amd.com>, ajayg@nvidia.com,
-        linux-usb@vger.kernel.org
-Subject: Re: UCSI:CCG: AMD Platform
-Message-ID: <20200326083507.GB1281735@kuha.fi.intel.com>
-References: <20200203132808.GA29050@kuha.fi.intel.com>
- <20200203133231.GB29050@kuha.fi.intel.com>
- <aca4968f-06e8-6ac3-09c8-4810947e92b3@amd.com>
- <20200213120011.GL1498@kuha.fi.intel.com>
- <20200213120555.GM1498@kuha.fi.intel.com>
- <0efd0175-6668-7411-81b2-d4a487ccc0ec@amd.com>
- <e0ab390b-743a-d583-15c4-83af3a7dca35@amd.com>
- <20200227122308.GC10532@kuha.fi.intel.com>
- <278ab9a6-497b-9cd5-8aa1-440fc78cb3db@amd.com>
- <9fcf4549-e699-1a35-d87a-6bacf85fba29@amd.com>
+        id S1726338AbgCZIom (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Mar 2020 04:44:42 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:38495 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726210AbgCZIom (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 04:44:42 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1585212281; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=xj8EppluynW4qEUCMWGmynN2QVP84We2yAFiUGDilWY=; b=JJfgcKF109zhTWhX6d/50+AA4NNW9sEJGpZWbJgYE+BwsFudcIhsoEjFB3DbBd7MOVVAamrc
+ QF742OlHv7WzIZEFT/Ppk5FtxhS7pIz0peAJH9QdEN+EN5K8RrD+3C6adYQ8WI40zP1+KDQh
+ XNh2itHbeo2GkG3K8EZShUZFv7c=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e7c6b6c.7f285ef13848-smtp-out-n02;
+ Thu, 26 Mar 2020 08:44:28 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 6B364C433D2; Thu, 26 Mar 2020 08:44:28 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.0.100] (unknown [192.140.154.184])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sallenki)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 47BB0C433F2;
+        Thu, 26 Mar 2020 08:44:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 47BB0C433F2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sallenki@codeaurora.org
+Subject: Re: [PATCH] usb: gadget: f_fs: Fix use after free issue as part of
+ queue failure
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        mgautam@codeaurora.org, jackp@codeaurora.org
+References: <20200326060033.14550-1-sallenki@codeaurora.org>
+ <20200326081601.GB979574@kroah.com>
+From:   Sriharsha Allenki <sallenki@codeaurora.org>
+Message-ID: <aaa5c90b-dd6c-d025-3027-201f0e8c2f8e@codeaurora.org>
+Date:   Thu, 26 Mar 2020 14:14:23 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="lrZ03NoBR/3+SXJZ"
-Content-Disposition: inline
-In-Reply-To: <9fcf4549-e699-1a35-d87a-6bacf85fba29@amd.com>
+In-Reply-To: <20200326081601.GB979574@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Greg,
 
---lrZ03NoBR/3+SXJZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 3/26/2020 1:46 PM, Greg KH wrote:
+> On Thu, Mar 26, 2020 at 11:30:33AM +0530, Sriharsha Allenki wrote:
+>> In AIO case, the request is freed up if ep_queue fails.
+>> However, io_data->req still has the reference to this freed
+>> request. In the case of this failure if there is aio_cancel
+>> call on this io_data it will lead to an invalid dequeue
+>> operation and a potential use after free issue.
+>> Fix this by setting the io_data->req to NULL when the request
+>> is freed as part of queue failure.
+>>
+>> Signed-off-by: Sriharsha Allenki <sallenki@codeaurora.org>
+>> ---
+>>  drivers/usb/gadget/function/f_fs.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+>> index 571917677d35..767f30b86645 100644
+>> --- a/drivers/usb/gadget/function/f_fs.c
+>> +++ b/drivers/usb/gadget/function/f_fs.c
+>> @@ -1120,6 +1120,7 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+>>  
+>>  		ret = usb_ep_queue(ep->ep, req, GFP_ATOMIC);
+>>  		if (unlikely(ret)) {
+>> +			io_data->req = NULL;
+>>  			usb_ep_free_request(ep->ep, req);
+>>  			goto error_lock;
+>>  		}
+>> -- 
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
+> What commit does this fix?  Should it go to stable kernels, and if so,
+> how far back?
+The commit 2e4c7553cd6f ("usb: gadget: f_fs: add aio support") introduced
+the problem. It is good to have in stable kernels and it needs to go all
+theway back to linux-3.15.y.
 
-Hi,
-
-On Sat, Feb 29, 2020 at 08:55:50AM +0530, Shah, Nehal-bakulchandra wrote:
-> Hi
-> On 2/27/2020 10:29 PM, Shah, Nehal-bakulchandra wrote:
-> > Hi
-> > On 2/27/2020 5:53 PM, Heikki Krogerus wrote:
-> >> On Mon, Feb 24, 2020 at 02:38:12PM +0530, Shah, Nehal-bakulchandra wrote:
-> >>> Hi
-> >>>
-> >>> On 2/14/2020 7:58 PM, Shah, Nehal-bakulchandra wrote:
-> >>>> Hi
-> >>>>
-> >>>> On 2/13/2020 5:35 PM, Heikki Krogerus wrote:
-> >>>>> On Thu, Feb 13, 2020 at 02:00:14PM +0200, Heikki Krogerus wrote:
-> >>>>>>> I am using CCG based UCSI driver without any
-> >>>>>>> modification.For I2C part i have written custom
-> >>>>>>> driver.
-> >>>>>>>
-> >>>>>>> I have attached the trace out and dmesg crash log.
-> >>>>>>>
-> >>>>>>> Please have a look
-> >>>>>> Thanks for the logs. Can you test the attached diff?
-> >>>>> Actually, don't try that one. Try this one instead.
-> >>>> Sure i will update on this on Monday.
-> >>>>
-> >>>>
-> >>>> thanks
-> >>>>
-> >>>> Nehal
-> >>> Patch is not solving the issue. I have attached both trace and dmesg output.
-> >> How about if you try this (the attached patch) together with that
-> >> previous diff?
-> >>
-> >> thanks,
-> > Sure, infact i suspected that in first place and tried same logic but it was failed but now i will check with both patch combine and shall update.
-> >
-> > Thanks
-> >
-> > Nehal Shah
-> 
-> This is still crashing .
-
-Sorry about the slow process with this, and the late reply.
-
-Right now I'm out of ideas. I'll need to get my hands on the products
-that allow me to reproduce the issue. Staring at the code does not
-help anymore.
-
-I'm going to cleanup the code a little bit in any case. I'm attaching
-a diff with my changes. I don't think it will fix this issue, but I
-would appreciate if you tested it in any case, just to be sure.
-
-thanks,
-
--- 
-heikki
-
---lrZ03NoBR/3+SXJZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="ucsi.diff"
-
-diff --git a/drivers/usb/typec/ucsi/displayport.c b/drivers/usb/typec/ucsi/displayport.c
-index 048381c058a5..1a5c76907827 100644
---- a/drivers/usb/typec/ucsi/displayport.c
-+++ b/drivers/usb/typec/ucsi/displayport.c
-@@ -263,10 +263,12 @@ static void ucsi_displayport_work(struct work_struct *work)
- 	mutex_unlock(&dp->con->lock);
- }
- 
--void ucsi_displayport_remove_partner(struct typec_altmode *alt)
-+void ucsi_displayport_remove_partner(struct typec_altmode *pdev)
- {
-+	const struct typec_altmode *alt;
- 	struct ucsi_dp *dp;
- 
-+	alt = typec_altmode_get_partner(pdev);
- 	if (!alt)
- 		return;
- 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index ddf2ad3752de..921499407403 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -432,8 +432,12 @@ static int ucsi_register_altmodes(struct ucsi_connector *con, u8 recipient)
- 		command |= UCSI_GET_ALTMODE_CONNECTOR_NUMBER(con->num);
- 		command |= UCSI_GET_ALTMODE_OFFSET(i);
- 		len = ucsi_run_command(con->ucsi, command, alt, sizeof(alt));
--		if (len <= 0)
-+		if (len <= 0) {
-+			/* Assuming that all alt modes are now registered */
-+			if (recipient == UCSI_RECIPIENT_SOP && i)
-+				break;
- 			return len;
-+		}
- 
- 		/*
- 		 * This code is requesting one alt mode at a time, but some PPMs
-@@ -464,9 +468,8 @@ static int ucsi_register_altmodes(struct ucsi_connector *con, u8 recipient)
- 
- static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
- {
--	const struct typec_altmode *pdev;
- 	struct typec_altmode **adev;
--	int i = 0;
-+	int i;
- 
- 	switch (recipient) {
- 	case UCSI_RECIPIENT_CON:
-@@ -479,16 +482,15 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
- 		return;
- 	}
- 
--	while (adev[i]) {
-+	for (i = 0; adev[i]; i++) {
- 		if (recipient == UCSI_RECIPIENT_SOP &&
- 		    (adev[i]->svid == USB_TYPEC_DP_SID ||
--			(adev[i]->svid == USB_TYPEC_NVIDIA_VLINK_SID &&
--			adev[i]->vdo != USB_TYPEC_NVIDIA_VLINK_DBG_VDO))) {
--			pdev = typec_altmode_get_partner(adev[i]);
--			ucsi_displayport_remove_partner((void *)pdev);
--		}
-+		     (adev[i]->svid == USB_TYPEC_NVIDIA_VLINK_SID &&
-+		      adev[i]->vdo != USB_TYPEC_NVIDIA_VLINK_DBG_VDO)))
-+			ucsi_displayport_remove_partner(adev[i]);
-+
- 		typec_unregister_altmode(adev[i]);
--		adev[i++] = NULL;
-+		adev[i] = NULL;
- 	}
- }
- 
-@@ -583,8 +585,8 @@ static void ucsi_partner_change(struct ucsi_connector *con)
- 	ret = ucsi_register_altmodes(con, UCSI_RECIPIENT_SOP);
- 	if (ret)
- 		dev_err(con->ucsi->dev,
--			"con%d: failed to register partner alternate modes\n",
--			con->num);
-+			"con%d: failed to register partner alternate modes (%d)\n",
-+			con->num, ret);
- 	else
- 		ucsi_altmode_update_active(con);
- }
-diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
-index d834e236c6df..85267df13bf1 100644
---- a/include/linux/usb/typec_altmode.h
-+++ b/include/linux/usb/typec_altmode.h
-@@ -40,7 +40,8 @@ static inline void typec_altmode_set_drvdata(struct typec_altmode *altmode,
- 	dev_set_drvdata(&altmode->dev, data);
- }
- 
--static inline void *typec_altmode_get_drvdata(struct typec_altmode *altmode)
-+static inline void *
-+typec_altmode_get_drvdata(const struct typec_altmode *altmode)
- {
- 	return dev_get_drvdata(&altmode->dev);
- }
-
---lrZ03NoBR/3+SXJZ--
+Hope this information helps.
+>
+> thanks,
+>
+> greg k-h
+Regards,
+Sriharsha
