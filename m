@@ -2,59 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1D519371C
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 04:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A5A1937B7
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 06:27:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727611AbgCZDmt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 25 Mar 2020 23:42:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57488 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727575AbgCZDmt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 25 Mar 2020 23:42:49 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 206901] Valve Index HMD breaks the USB controller it's
- connected into
-Date:   Thu, 26 Mar 2020 03:42:48 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: carlo@alinoe.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-206901-208809-ALfONWzBsq@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-206901-208809@https.bugzilla.kernel.org/>
-References: <bug-206901-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
+        id S1726279AbgCZF1A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Mar 2020 01:27:00 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:46738 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725842AbgCZF07 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 01:26:59 -0400
+X-IronPort-AV: E=Sophos;i="5.72,307,1580742000"; 
+   d="scan'208";a="42883074"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 26 Mar 2020 14:26:58 +0900
+Received: from localhost.localdomain (unknown [10.166.252.89])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 3F28D400A115;
+        Thu, 26 Mar 2020 14:26:58 +0900 (JST)
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: [PATCH v2 0/3] dt-bindings: usb: add r8a77961 support
+Date:   Thu, 26 Mar 2020 14:26:47 +0900
+Message-Id: <1585200410-28841-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=206901
+This patch adds USB 2.0/3.0 devices support for r8a77961
+(R-Car M3-W+).
 
---- Comment #4 from Carlo Wood (carlo@alinoe.com) ---
-The commit comments might be relevant / interesting too:
+Changes from v1:
+ - Update the comment of "renesas,xhci-r8a77961" for r8a77960.
+ - Add Reviewed-by.
+ https://patchwork.kernel.org/project/linux-renesas-soc/list/?series=261191
 
-https://github.com/torvalds/linux/commit/227a4fd801c8a9fa2c4700ab98ec1aec06e3b44d
+Yoshihiro Shimoda (3):
+  dt-bindings: usb: usb-xhci: add r8a77961 support
+  dt-bindings: usb: renesas,usbhs: add r8a77961 support
+  dt-bindings: usb: renesas,usb3-peri: add r8a77961 support
 
-So again, if this affects me (the μPD720202) then that patch has no effect
-because that code is never executed.
+ Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml | 1 +
+ Documentation/devicetree/bindings/usb/renesas,usbhs.yaml     | 1 +
+ Documentation/devicetree/bindings/usb/usb-xhci.txt           | 3 ++-
+ 3 files changed, 4 insertions(+), 1 deletion(-)
 
 -- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+2.7.4
+
