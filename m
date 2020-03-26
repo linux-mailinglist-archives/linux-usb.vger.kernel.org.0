@@ -2,123 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9FE193DE6
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 12:33:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E2A193E01
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 12:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728137AbgCZLde convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 26 Mar 2020 07:33:34 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:36239 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728092AbgCZLdd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 07:33:33 -0400
-Received: from mail-pj1-f69.google.com ([209.85.216.69])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1jHQlP-0001Ee-AN
-        for linux-usb@vger.kernel.org; Thu, 26 Mar 2020 11:33:31 +0000
-Received: by mail-pj1-f69.google.com with SMTP id w6so4028829pjt.7
-        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2020 04:33:31 -0700 (PDT)
+        id S1728167AbgCZLeR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Mar 2020 07:34:17 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:53550 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727990AbgCZLeQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 07:34:16 -0400
+Received: by mail-io1-f71.google.com with SMTP id f6so4896106ioc.20
+        for <linux-usb@vger.kernel.org>; Thu, 26 Mar 2020 04:34:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=G+QwyOSfehj0haKhfhlIVYmqRcVCM5uC0FJcjI7cTRY=;
-        b=ifsuR/Xu0fA37KhbdCNMHlP3iVLiuk5vUelU00MVLOVRRvXu5q5eUFyu/HuS5LQacl
-         4FC1jKN4B8chDxD2kECyeDCxVzyoHBweFtsoiU/bZB3O8+hp9Lw0n6ffz7Uc5IFYnObZ
-         2AcVd9xkPnmbq1mgSMAQiJP3Df19kWAH9Ga/9ZLerjJs/yKORlnoj1EB44E/I7AR3cZM
-         hsZQ626iFLEcKOdsyZs1jldUzp3BcAtvko99PVXiN+b1Qq3dzGagMWBhyWYFYRf/nupK
-         G9LyhmSZIycBl4dBwPUDl4RnJp96Hg2h3t903yf8w4Bor0zbNhrfJswPw5APsVEaSw5R
-         Roaw==
-X-Gm-Message-State: ANhLgQ1WmqgipJy1Vu+Ba3tgaZo0l4rANWFWSs9yQMtX7pl2Cbe2WCwi
-        dbRSI6Vr+VCjkb2BBEm5Woz4IByhntkSqzQhiRlaprJ4lVRBLXPXPVb8K3jRLTls8nzgx8tsqCq
-        FyETCZMofHKpGVpKj4ZeswvzPPsNVdP5xg5Bw+w==
-X-Received: by 2002:a17:90b:46d0:: with SMTP id jx16mr2598849pjb.155.1585222409866;
-        Thu, 26 Mar 2020 04:33:29 -0700 (PDT)
-X-Google-Smtp-Source: ADFU+vuUF7fZ8cLQXk/E8Fjz7a3uP4QpVjOkMylBN5KEJwNfoB/LjAMeMUPYZ/BXBETvh8LztOA/Bg==
-X-Received: by 2002:a17:90b:46d0:: with SMTP id jx16mr2598815pjb.155.1585222409533;
-        Thu, 26 Mar 2020 04:33:29 -0700 (PDT)
-Received: from [192.168.1.208] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
-        by smtp.gmail.com with ESMTPSA id a15sm1474595pfg.77.2020.03.26.04.33.28
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 26 Mar 2020 04:33:29 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3608.60.0.2.5\))
-Subject: Re: [PATCH v2] xhci: Set port link to RxDetect if port is not enabled
- after resume
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <20200311040456.25851-1-kai.heng.feng@canonical.com>
-Date:   Thu, 26 Mar 2020 19:33:26 +0800
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <B4E44BDC-5AFE-4F8A-8498-0EEE9CDAC0E1@canonical.com>
-References: <20200311040456.25851-1-kai.heng.feng@canonical.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>
-X-Mailer: Apple Mail (2.3608.60.0.2.5)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=ekOt4BXavtliJmZUL8YzGKrknOJ5quWo6FGWsgR2OP8=;
+        b=aT7B8SstZvoD6+Ta6wU4fE2ZWWJmCEeGdGs6KcBvq743iJuW0byVpQJDsFRBcZ9tlp
+         y83C2NMUNd4pvB7nVbvD0HLLSDPUePXfuQx05uSd69hxin2vNPS88aXGw+BhhxgylTh4
+         HKjgCnL5LRQjXy7Rhtoxwu4stHW1IgZ3uokivOsdtStWlq1SRwxtLGcIGRrTZHsLRjDc
+         0tWA5byMiLnrdz0Q0krvvITiP4It5CNA1jSyd4La2PdRcc1SpcmGS9om2PHWIGB+FmkQ
+         zcHs+/uQj0fICKjvuCeumMi5zQXzJmEo947jlGJdyN53k+459zmNZU3X19nXzi78xibt
+         neeA==
+X-Gm-Message-State: ANhLgQ3MHCbZvmQ//X1uWS7+lNHTbu1JTABmvzJiFF+DBRBkNwJOgEje
+        MjxEX8T/IYg9sNDK+wOny1yFe/aGcWuvJz8nSD1xGo1xaLaI
+X-Google-Smtp-Source: ADFU+vs+49by72EiK3tyDZ1VJTAtJjUTQvFX8OhFkSOi42kkEpgdB4fNMAZ2eILYHZaqnaMGWS2fYau6zArA3T2lhzRHiozyVXVy
+MIME-Version: 1.0
+X-Received: by 2002:a92:cc8c:: with SMTP id x12mr8410127ilo.224.1585222455461;
+ Thu, 26 Mar 2020 04:34:15 -0700 (PDT)
+Date:   Thu, 26 Mar 2020 04:34:15 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000590f6b05a1c05d15@google.com>
+Subject: KASAN: use-after-free Read in htc_connect_service
+From:   syzbot <syzbot+9505af1ae303dabdc646@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
+        davem@davemloft.net, kvalo@codeaurora.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
+Hello,
 
-> On Mar 11, 2020, at 12:04, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
-> 
-> On Dell TB16, Realtek USB ethernet (r8152) connects to an SMSC hub which
-> then connects to ASMedia xHCI's root hub:
-> 
-> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
->    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/7p, 5000M
->            |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
-> 
-> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-> Bus 004 Device 002: ID 0424:5537 Standard Microsystems Corp. USB5537B
-> Bus 004 Device 003: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
-> 
-> The port is disabled after resume:
-> xhci_hcd 0000:3f:00.0: Get port status 4-1 read: 0x280, return 0x280
-> 
-> According to xHCI 4.19.1.2.1, we should set link to RxDetect to transit
-> it from disabled state to disconnected state, which allows the port to
-> be set to U0 and completes the resume process.
-> 
-> My own test shows port can still resume when it's not enabled, as long
-> as its link is in U states. So constrain the new logic only when link is
-> not in any U state.
-> 
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+syzbot found the following crash on:
 
-Do you think this is a proper fix?
+HEAD commit:    e17994d1 usb: core: kcov: collect coverage from usb comple..
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=1509f1a7e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5d64370c438bc60
+dashboard link: https://syzkaller.appspot.com/bug?extid=9505af1ae303dabdc646
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=116bbf75e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=117302d5e00000
 
-Kai-Heng
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+9505af1ae303dabdc646@syzkaller.appspotmail.com
 
-> ---
-> drivers/usb/host/xhci-hub.c | 8 ++++++++
-> 1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-> index a9c87eb8951e..263f9a9237a1 100644
-> --- a/drivers/usb/host/xhci-hub.c
-> +++ b/drivers/usb/host/xhci-hub.c
-> @@ -1776,6 +1776,14 @@ int xhci_bus_resume(struct usb_hcd *hcd)
-> 			clear_bit(port_index, &bus_state->bus_suspended);
-> 			continue;
-> 		}
-> +
-> +		/* 4.19.1.2.1 */
-> +		if (!(portsc & PORT_PE) && (portsc & PORT_PLS_MASK) > XDEV_U3) {
-> +			portsc = xhci_port_state_to_neutral(portsc);
-> +			portsc &= ~PORT_PLS_MASK;
-> +			portsc |= PORT_LINK_STROBE | XDEV_RXDETECT;
-> +		}
-> +
-> 		/* resume if we suspended the link, and it is still suspended */
-> 		if (test_bit(port_index, &bus_state->bus_suspended))
-> 			switch (portsc & PORT_PLS_MASK) {
-> -- 
-> 2.17.1
-> 
+usb 1-1: ath9k_htc: Firmware ath9k_htc/htc_9271-1.4.0.fw requested
+usb 1-1: ath9k_htc: Transferred FW: ath9k_htc/htc_9271-1.4.0.fw, size: 51008
+usb 1-1: Service connection timeout for: 256
+==================================================================
+BUG: KASAN: use-after-free in atomic_read include/asm-generic/atomic-instrumented.h:26 [inline]
+BUG: KASAN: use-after-free in refcount_read include/linux/refcount.h:134 [inline]
+BUG: KASAN: use-after-free in skb_unref include/linux/skbuff.h:1042 [inline]
+BUG: KASAN: use-after-free in kfree_skb+0x32/0x3d0 net/core/skbuff.c:692
+Read of size 4 at addr ffff8881d0957994 by task kworker/1:2/83
 
+CPU: 1 PID: 83 Comm: kworker/1:2 Not tainted 5.6.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events request_firmware_work_func
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xef/0x16e lib/dump_stack.c:118
+ print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
+ __kasan_report.cold+0x37/0x77 mm/kasan/report.c:506
+ kasan_report+0xe/0x20 mm/kasan/common.c:641
+ check_memory_region_inline mm/kasan/generic.c:185 [inline]
+ check_memory_region+0x152/0x1c0 mm/kasan/generic.c:192
+ atomic_read include/asm-generic/atomic-instrumented.h:26 [inline]
+ refcount_read include/linux/refcount.h:134 [inline]
+ skb_unref include/linux/skbuff.h:1042 [inline]
+ kfree_skb+0x32/0x3d0 net/core/skbuff.c:692
+ htc_connect_service.cold+0xa9/0x109 drivers/net/wireless/ath/ath9k/htc_hst.c:282
+ ath9k_wmi_connect+0xd2/0x1a0 drivers/net/wireless/ath/ath9k/wmi.c:265
+ ath9k_init_htc_services.constprop.0+0xb4/0x650 drivers/net/wireless/ath/ath9k/htc_drv_init.c:146
+ ath9k_htc_probe_device+0x25a/0x1d80 drivers/net/wireless/ath/ath9k/htc_drv_init.c:959
+ ath9k_htc_hw_init+0x31/0x60 drivers/net/wireless/ath/ath9k/htc_hst.c:501
+ ath9k_hif_usb_firmware_cb+0x26b/0x500 drivers/net/wireless/ath/ath9k/hif_usb.c:1187
+ request_firmware_work_func+0x126/0x242 drivers/base/firmware_loader/main.c:976
+ process_one_work+0x94b/0x1620 kernel/workqueue.c:2264
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2410
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Allocated by task 83:
+ save_stack+0x1b/0x80 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ __kasan_kmalloc mm/kasan/common.c:515 [inline]
+ __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:488
+ slab_post_alloc_hook mm/slab.h:584 [inline]
+ slab_alloc_node mm/slub.c:2778 [inline]
+ kmem_cache_alloc_node+0xdc/0x330 mm/slub.c:2814
+ __alloc_skb+0xba/0x5a0 net/core/skbuff.c:198
+ alloc_skb include/linux/skbuff.h:1081 [inline]
+ htc_connect_service+0x2cc/0x840 drivers/net/wireless/ath/ath9k/htc_hst.c:257
+ ath9k_wmi_connect+0xd2/0x1a0 drivers/net/wireless/ath/ath9k/wmi.c:265
+ ath9k_init_htc_services.constprop.0+0xb4/0x650 drivers/net/wireless/ath/ath9k/htc_drv_init.c:146
+ ath9k_htc_probe_device+0x25a/0x1d80 drivers/net/wireless/ath/ath9k/htc_drv_init.c:959
+ ath9k_htc_hw_init+0x31/0x60 drivers/net/wireless/ath/ath9k/htc_hst.c:501
+ ath9k_hif_usb_firmware_cb+0x26b/0x500 drivers/net/wireless/ath/ath9k/hif_usb.c:1187
+ request_firmware_work_func+0x126/0x242 drivers/base/firmware_loader/main.c:976
+ process_one_work+0x94b/0x1620 kernel/workqueue.c:2264
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2410
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Freed by task 0:
+ save_stack+0x1b/0x80 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ kasan_set_free_info mm/kasan/common.c:337 [inline]
+ __kasan_slab_free+0x117/0x160 mm/kasan/common.c:476
+ slab_free_hook mm/slub.c:1444 [inline]
+ slab_free_freelist_hook mm/slub.c:1477 [inline]
+ slab_free mm/slub.c:3024 [inline]
+ kmem_cache_free+0x9b/0x360 mm/slub.c:3040
+ kfree_skbmem net/core/skbuff.c:622 [inline]
+ kfree_skbmem+0xef/0x1b0 net/core/skbuff.c:616
+ __kfree_skb net/core/skbuff.c:679 [inline]
+ kfree_skb net/core/skbuff.c:696 [inline]
+ kfree_skb+0x102/0x3d0 net/core/skbuff.c:690
+ ath9k_htc_txcompletion_cb+0x1f8/0x2b0 drivers/net/wireless/ath/ath9k/htc_hst.c:356
+ hif_usb_regout_cb+0x10b/0x1b0 drivers/net/wireless/ath/ath9k/hif_usb.c:90
+ __usb_hcd_giveback_urb+0x29a/0x550 drivers/usb/core/hcd.c:1650
+ usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1716
+ dummy_timer+0x1258/0x32ae drivers/usb/gadget/udc/dummy_hcd.c:1966
+ call_timer_fn+0x195/0x6f0 kernel/time/timer.c:1404
+ expire_timers kernel/time/timer.c:1449 [inline]
+ __run_timers kernel/time/timer.c:1773 [inline]
+ __run_timers kernel/time/timer.c:1740 [inline]
+ run_timer_softirq+0x5f9/0x1500 kernel/time/timer.c:1786
+ __do_softirq+0x21e/0x950 kernel/softirq.c:292
+
+The buggy address belongs to the object at ffff8881d09578c0
+ which belongs to the cache skbuff_head_cache of size 224
+The buggy address is located 212 bytes inside of
+ 224-byte region [ffff8881d09578c0, ffff8881d09579a0)
+The buggy address belongs to the page:
+page:ffffea00074255c0 refcount:1 mapcount:0 mapping:ffff8881da16b400 index:0x0
+flags: 0x200000000000200(slab)
+raw: 0200000000000200 dead000000000100 dead000000000122 ffff8881da16b400
+raw: 0000000000000000 00000000000c000c 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff8881d0957880: fc fc fc fc fc fc fc fc fb fb fb fb fb fb fb fb
+ ffff8881d0957900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff8881d0957980: fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc
+                         ^
+ ffff8881d0957a00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8881d0957a80: fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
+==================================================================
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
