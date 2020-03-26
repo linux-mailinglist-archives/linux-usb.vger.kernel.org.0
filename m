@@ -2,76 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA20A194BEF
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 00:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E308E194D34
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 00:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726363AbgCZXIu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Mar 2020 19:08:50 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:36532 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726067AbgCZXIt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 19:08:49 -0400
-Received: by mail-ed1-f67.google.com with SMTP id i7so4032821edq.3;
-        Thu, 26 Mar 2020 16:08:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IjVmzAATf62uYEZGFDdUMmZJw/Rys56Qr6VbgpTrVUM=;
-        b=MVcDwGSBB+EFkrtg2gmqZWSXAq9mYwRWCEI/YzTHcuhAVWx2S83wHDdVNOT2k317HO
-         I58EWGrxVervRYnIEjlAPTboaD2fUW4UnujQzjxOc/YD/KuKUfSM0YPfJ0kaOYjctOU9
-         iLGd1S8jxJh0FNm2TCO63sBqyLxA9gvTQ6lM3Kxy7/HWrPCJiXfkoFOzDf1Hr2TDsi5n
-         kJZylePdzvNfkiHQhhY9XYPnnfQz0f/bP/0pK1Q9B5aC/cLdpgeEIfBPXCNIqpbG4pBf
-         l4c06yIRKxwuFcM4kYo0VFj4i8x5CeS7aif1AeAVOFIFnY3ekMkSxbJTtK/n0XEHXNF+
-         VbOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IjVmzAATf62uYEZGFDdUMmZJw/Rys56Qr6VbgpTrVUM=;
-        b=RewQtkXgZ1yAc57Bq1IcDFuEtU+68zIRum1gduFnfhmcY5QRshGmgpIWfw87abkpw2
-         Gde4h81h9uHCtP4pgqg59RIvfHtkq0wd5ody2KWAaVx0kR8xBi8hWNa/vuj7GXKQMi0H
-         4yGtt/ozAvdKxLWi/dn3qxpAftpz8UFIIP+7tmExMY4GSw+TQaT0//iOb2jF1YjWmHdY
-         uT6cbGUHOXUeXpt0vvqyNRxDm1Aqjgrd+Xp9YcvKeD4s/cT+53W86WiL18ahzQ+OO5OS
-         eJAm/1y45g6H1zipznPFmBMODeHMECqChZrCWM80TBffNjSeAQHYbCj3c4TGaG8b1y/P
-         CK1A==
-X-Gm-Message-State: ANhLgQ2IrGTi+gUjVmDRVk2dVFwaT3M2/eJhgclhyKY0+79+t+Eq3Pz5
-        Q0E3YyJlJCpl0yxoPCvtulEDxNEvBWkPkS3dSkU=
-X-Google-Smtp-Source: ADFU+vtzMTlvDFueGZkf+gigtXaPCQtDw5qM43N1F3qnk+rE96BbiGe2gqw9PTPkca4WmE7xjFnfdD1Mkjj7dwNdgb0=
-X-Received: by 2002:a50:9e45:: with SMTP id z63mr10637427ede.338.1585264127824;
- Thu, 26 Mar 2020 16:08:47 -0700 (PDT)
+        id S1727352AbgCZXX7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Mar 2020 19:23:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43038 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726296AbgCZXX7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 26 Mar 2020 19:23:59 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7AE6420663;
+        Thu, 26 Mar 2020 23:23:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585265039;
+        bh=Z4iMPj2/JljR+Vd2zFTtsyHkYIrKFgH9K7WTppGiQTU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=wzceW/JqhJz3hvZl2SGUBeXhlcRUIaaVcnZtnaHlOL4+ir/8Sw0wjEmD9/eXYHjlA
+         alqkXEY/LxFIab8OQNTWiaykhLek9kc9y5fIRkEKaZLdElfc2DzHyNjVTKMkZadRc3
+         ampKLYGEJyZfnaJbvb39Q8qHzrJq3iUrOgfObtZk=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.5 01/28] thunderbolt: Fix error code in tb_port_is_width_supported()
+Date:   Thu, 26 Mar 2020 19:23:30 -0400
+Message-Id: <20200326232357.7516-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20200326134507.4808-1-narmstrong@baylibre.com> <20200326134507.4808-7-narmstrong@baylibre.com>
-In-Reply-To: <20200326134507.4808-7-narmstrong@baylibre.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Fri, 27 Mar 2020 00:08:37 +0100
-Message-ID: <CAFBinCCVTP+MrLq1O0m1pcvLo6WSXyXpTtWMEQQxOuraN+yA0w@mail.gmail.com>
-Subject: Re: [PATCH v2 06/14] usb: dwc3: meson-g12a: refactor usb2 phy init
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     kishon@ti.com, balbi@kernel.org, khilman@baylibre.com,
-        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Neil,
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-On Thu, Mar 26, 2020 at 2:45 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
->
-> Refactor the USB2 PHY init code patch to handle the Amlogic GXL/GXM
-> not having the PHY mode control registers in the Glue but in the PHY
-> registers.
->
-> The Amlogic GXL/GXM will call phy_set_mode() instead of programming the
-> PHY mode control registers, thus add two new callbacks to the SoC match
-> data.
->
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-checkpatch reports that five lines need to be checked.
-these all look valid (for example: "Alignment should match open parenthesis")
+[ Upstream commit e9d0e7511fda92a6511904996dd0aa57b6d7687a ]
 
-with these addressed:
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+This function is type bool, and it's supposed to return true on success.
+Unfortunately, this path takes negative error codes and casts them to
+bool (true) so it's treated as success instead of failure.
+
+Fixes: 91c0c12080d0 ("thunderbolt: Add support for lane bonding")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/thunderbolt/switch.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index 43bfeb8866141..f0f77da6ca26d 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -848,7 +848,7 @@ static bool tb_port_is_width_supported(struct tb_port *port, int width)
+ 	ret = tb_port_read(port, &phy, TB_CFG_PORT,
+ 			   port->cap_phy + LANE_ADP_CS_0, 1);
+ 	if (ret)
+-		return ret;
++		return false;
+ 
+ 	widths = (phy & LANE_ADP_CS_0_SUPPORTED_WIDTH_MASK) >>
+ 		LANE_ADP_CS_0_SUPPORTED_WIDTH_SHIFT;
+-- 
+2.20.1
+
