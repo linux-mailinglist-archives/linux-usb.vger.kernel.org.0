@@ -2,164 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DEFD193EDC
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 13:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF4E193EEC
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Mar 2020 13:33:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728132AbgCZM3c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Mar 2020 08:29:32 -0400
-Received: from mga05.intel.com ([192.55.52.43]:12370 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727781AbgCZM3c (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 26 Mar 2020 08:29:32 -0400
-IronPort-SDR: dN5uaA0nrIGKSKfked7lua6qHE4Kr7b9A6cqGM0Xcmv/4vPPcjMcZgp1F123mSE2IwqYcftlIZ
- tvwKhwN4McnQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2020 05:29:31 -0700
-IronPort-SDR: dXPNEOPC5+kdmw+CvdnwzeOi9ptIUMJEKuzfPDCIKxbLhXIeXygIF/ttMOk3pFtj0IjKLzQ62q
- KGoPFyrQUwNw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,308,1580803200"; 
-   d="scan'208";a="282481672"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 26 Mar 2020 05:29:29 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jHRdY-0006mo-JG; Thu, 26 Mar 2020 20:29:28 +0800
-Date:   Thu, 26 Mar 2020 20:28:58 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Colin King <colin.king@canonical.com>
-Cc:     kbuild-all@lists.01.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sekhar Nori <nsekhar@ti.com>, Roger Quadros <rogerq@ti.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Pawel Laszczak <pawell@cadence.com>, linux-usb@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] usb: cdns3: cdns3_clear_register_bit() can be static
-Message-ID: <20200326122858.GA50118@cde5a4ed3207>
-References: <20200325125041.94769-1-colin.king@canonical.com>
+        id S1727841AbgCZMdN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Mar 2020 08:33:13 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:64999 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727560AbgCZMdM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 08:33:12 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1585225992; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=dKrpV/jIT75q98odc7+as3tEj2HbGV+dLZ9fY0aTxDU=; b=H6h3nxin9wxwNEL2whFBsLvh2MxcKnhiMVQGfacCNrBJbVdUCU3MvdwdV+Cbsim0I7tto7kx
+ NbQ5furX9z5QQBde5ECVwSQ/n+GT9rKU5Df3Z5IOAQmg8o2UJgq2vJvBtgyb8pZ/GmZWZX07
+ FZ+lSI9LHu9ONqt9PV0nWgW5hFU=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e7ca107.7f002e671a08-smtp-out-n01;
+ Thu, 26 Mar 2020 12:33:11 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id C3089C433BA; Thu, 26 Mar 2020 12:33:10 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.0.100] (unknown [192.140.154.184])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sallenki)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 12510C433D2;
+        Thu, 26 Mar 2020 12:33:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 12510C433D2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sallenki@codeaurora.org
+Subject: Re: [PATCH] usb: gadget: f_fs: Fix use after free issue as part of
+ queue failure
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        mgautam@codeaurora.org, jackp@codeaurora.org
+References: <20200326060033.14550-1-sallenki@codeaurora.org>
+ <20200326081601.GB979574@kroah.com>
+ <aaa5c90b-dd6c-d025-3027-201f0e8c2f8e@codeaurora.org>
+ <20200326093010.GB994882@kroah.com>
+From:   Sriharsha Allenki <sallenki@codeaurora.org>
+Message-ID: <ab9aefee-6603-e9c1-f6ac-5943301c5304@codeaurora.org>
+Date:   Thu, 26 Mar 2020 18:03:05 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200325125041.94769-1-colin.king@canonical.com>
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200326093010.GB994882@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-Fixes: 87db1192dc33 ("usb: cdns3: make signed 1 bit bitfields unsigned")
-Signed-off-by: kbuild test robot <lkp@intel.com>
----
- gadget.c |   32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
-index 372460ea4df9a..54a04614d336f 100644
---- a/drivers/usb/cdns3/gadget.c
-+++ b/drivers/usb/cdns3/gadget.c
-@@ -82,7 +82,7 @@ static int cdns3_ep_run_stream_transfer(struct cdns3_endpoint *priv_ep,
-  * @ptr: address of device controller register to be read and changed
-  * @mask: bits requested to clar
-  */
--void cdns3_clear_register_bit(void __iomem *ptr, u32 mask)
-+static void cdns3_clear_register_bit(void __iomem *ptr, u32 mask)
- {
- 	mask = readl(ptr) & ~mask;
- 	writel(mask, ptr);
-@@ -137,7 +137,7 @@ struct usb_request *cdns3_next_request(struct list_head *list)
-  *
-  * Returns buffer or NULL if no buffers in list
-  */
--struct cdns3_aligned_buf *cdns3_next_align_buf(struct list_head *list)
-+static struct cdns3_aligned_buf *cdns3_next_align_buf(struct list_head *list)
- {
- 	return list_first_entry_or_null(list, struct cdns3_aligned_buf, list);
- }
-@@ -148,7 +148,7 @@ struct cdns3_aligned_buf *cdns3_next_align_buf(struct list_head *list)
-  *
-  * Returns request or NULL if no requests in list
-  */
--struct cdns3_request *cdns3_next_priv_request(struct list_head *list)
-+static struct cdns3_request *cdns3_next_priv_request(struct list_head *list)
- {
- 	return list_first_entry_or_null(list, struct cdns3_request, list);
- }
-@@ -190,7 +190,7 @@ dma_addr_t cdns3_trb_virt_to_dma(struct cdns3_endpoint *priv_ep,
- 	return priv_ep->trb_pool_dma + offset;
- }
- 
--int cdns3_ring_size(struct cdns3_endpoint *priv_ep)
-+static int cdns3_ring_size(struct cdns3_endpoint *priv_ep)
- {
- 	switch (priv_ep->type) {
- 	case USB_ENDPOINT_XFER_ISOC:
-@@ -345,7 +345,7 @@ static void cdns3_ep_inc_deq(struct cdns3_endpoint *priv_ep)
- 	cdns3_ep_inc_trb(&priv_ep->dequeue, &priv_ep->ccs, priv_ep->num_trbs);
- }
- 
--void cdns3_move_deq_to_next_trb(struct cdns3_request *priv_req)
-+static void cdns3_move_deq_to_next_trb(struct cdns3_request *priv_req)
- {
- 	struct cdns3_endpoint *priv_ep = priv_req->priv_ep;
- 	int current_trb = priv_req->start_trb;
-@@ -511,9 +511,9 @@ static void cdns3_wa2_descmiss_copy_data(struct cdns3_endpoint *priv_ep,
- 	}
- }
- 
--struct usb_request *cdns3_wa2_gadget_giveback(struct cdns3_device *priv_dev,
--					      struct cdns3_endpoint *priv_ep,
--					      struct cdns3_request *priv_req)
-+static struct usb_request *cdns3_wa2_gadget_giveback(struct cdns3_device *priv_dev,
-+						     struct cdns3_endpoint *priv_ep,
-+						     struct cdns3_request *priv_req)
- {
- 	if (priv_ep->flags & EP_QUIRK_EXTRA_BUF_EN &&
- 	    priv_req->flags & REQUEST_INTERNAL) {
-@@ -551,9 +551,9 @@ struct usb_request *cdns3_wa2_gadget_giveback(struct cdns3_device *priv_dev,
- 	return &priv_req->request;
- }
- 
--int cdns3_wa2_gadget_ep_queue(struct cdns3_device *priv_dev,
--			      struct cdns3_endpoint *priv_ep,
--			      struct cdns3_request *priv_req)
-+static int cdns3_wa2_gadget_ep_queue(struct cdns3_device *priv_dev,
-+				     struct cdns3_endpoint *priv_ep,
-+				     struct cdns3_request *priv_req)
- {
- 	int deferred = 0;
- 
-@@ -836,7 +836,7 @@ void cdns3_gadget_giveback(struct cdns3_endpoint *priv_ep,
- 		cdns3_gadget_ep_free_request(&priv_ep->endpoint, request);
- }
- 
--void cdns3_wa1_restore_cycle_bit(struct cdns3_endpoint *priv_ep)
-+static void cdns3_wa1_restore_cycle_bit(struct cdns3_endpoint *priv_ep)
- {
- 	/* Work around for stale data address in TRB*/
- 	if (priv_ep->wa1_set) {
-@@ -1904,8 +1904,8 @@ static int cdns3_ep_onchip_buffer_reserve(struct cdns3_device *priv_dev,
- 	return 0;
- }
- 
--void cdns3_stream_ep_reconfig(struct cdns3_device *priv_dev,
--			      struct cdns3_endpoint *priv_ep)
-+static void cdns3_stream_ep_reconfig(struct cdns3_device *priv_dev,
-+				     struct cdns3_endpoint *priv_ep)
- {
- 	if (!priv_ep->use_streams || priv_dev->gadget.speed < USB_SPEED_SUPER)
- 		return;
-@@ -1925,8 +1925,8 @@ void cdns3_stream_ep_reconfig(struct cdns3_device *priv_dev,
- 			       EP_CFG_TDL_CHK | EP_CFG_SID_CHK);
- }
- 
--void cdns3_configure_dmult(struct cdns3_device *priv_dev,
--			   struct cdns3_endpoint *priv_ep)
-+static void cdns3_configure_dmult(struct cdns3_device *priv_dev,
-+				  struct cdns3_endpoint *priv_ep)
- {
- 	struct cdns3_usb_regs __iomem *regs = priv_dev->regs;
- 
+Hi Greg,
+On 3/26/2020 3:00 PM, Greg KH wrote:
+> On Thu, Mar 26, 2020 at 02:14:23PM +0530, Sriharsha Allenki wrote:
+>> Hi Greg,
+>>
+>> On 3/26/2020 1:46 PM, Greg KH wrote:
+>>> On Thu, Mar 26, 2020 at 11:30:33AM +0530, Sriharsha Allenki wrote:
+>>>> In AIO case, the request is freed up if ep_queue fails.
+>>>> However, io_data->req still has the reference to this freed
+>>>> request. In the case of this failure if there is aio_cancel
+>>>> call on this io_data it will lead to an invalid dequeue
+>>>> operation and a potential use after free issue.
+>>>> Fix this by setting the io_data->req to NULL when the request
+>>>> is freed as part of queue failure.
+>>>>
+>>>> Signed-off-by: Sriharsha Allenki <sallenki@codeaurora.org>
+>>>> ---
+>>>>  drivers/usb/gadget/function/f_fs.c | 1 +
+>>>>  1 file changed, 1 insertion(+)
+>>>>
+>>>> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+>>>> index 571917677d35..767f30b86645 100644
+>>>> --- a/drivers/usb/gadget/function/f_fs.c
+>>>> +++ b/drivers/usb/gadget/function/f_fs.c
+>>>> @@ -1120,6 +1120,7 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+>>>>  
+>>>>  		ret = usb_ep_queue(ep->ep, req, GFP_ATOMIC);
+>>>>  		if (unlikely(ret)) {
+>>>> +			io_data->req = NULL;
+>>>>  			usb_ep_free_request(ep->ep, req);
+>>>>  			goto error_lock;
+>>>>  		}
+>>>> -- 
+>>>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
+>>> What commit does this fix?  Should it go to stable kernels, and if so,
+>>> how far back?
+>> The commit 2e4c7553cd6f ("usb: gadget: f_fs: add aio support") introduced
+>> the problem. It is good to have in stable kernels and it needs to go all
+>> theway back to linux-3.15.y.
+>>
+>> Hope this information helps.
+> Great, please resend this with the proper Fixes: and cc: stable... tag
+> on it so that it gets picked up properly.
+Thanks Greg for review. Sent out v2 patch with the updated tags.
+> thanks,
+>
+> greg k-h
+Regards,
+Sriharsha
