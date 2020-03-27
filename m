@@ -2,106 +2,207 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 898821953AD
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 10:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DDF61953F6
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 10:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726284AbgC0JOV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Mar 2020 05:14:21 -0400
-Received: from www381.your-server.de ([78.46.137.84]:60896 "EHLO
-        www381.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726096AbgC0JOV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 05:14:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-         s=default2002; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=i5/GTfOj6acDIGpcrU7CL6Wpgc2I8NpZJXqjKZ1f8xw=; b=CXyIlPI1fbD/tvHVU1oew63ga7
-        V3a4bhgbnN/UCS7lS/EkZ1S+0TX3+VNmhX6mK9xlpH5+hWXm15ypyQguBR18+YMX+se3b0QSPhNUJ
-        HXyZQco3SxOGRcb6NseLfQ8YlojPrJQ9bCN9UbNo2qQ06sxcB3wz0hOMTvo3cdzFvAxvb2kiLzmtC
-        cmUyg/bvUrh0r697HtgZ5gpQDLdYc+f4m5Mz4dcKLKf/fyDWNEB2uVdtL2h3dwqFUQAYzWsHsU5So
-        xYHgA/D2ru9rHCCYq1m3nMPh3Vh4o6rnZJg0INChoLW+sX0f1LWmVPA27Oq55FirZ0qVaeuDRhNfv
-        i/9KZjEQ==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www381.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <lars@metafoo.de>)
-        id 1jHl48-0006uj-Ca; Fri, 27 Mar 2020 10:14:16 +0100
-Received: from [82.135.64.145] (helo=[192.168.178.20])
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1jHl48-000RZG-3B; Fri, 27 Mar 2020 10:14:12 +0100
-Subject: Re: [PATCH] usb: dwc3: gadget: don't dequeue requests on already
- disabled endpoints
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        alexandru.Ardelean@analog.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, balbi@kernel.org
-Cc:     gregkh@linuxfoundation.org, bigeasy@linutronix.de,
-        m.olbrich@pengutronix.de, kernel@pengutronix.de
-References: <dc52d6a0-12ed-a34c-01c4-0fc5ccbf7b1d@metafoo.de>
- <20200327084302.606-1-m.grzeschik@pengutronix.de>
-From:   Lars-Peter Clausen <lars@metafoo.de>
-Message-ID: <f746cc1f-b5e2-af0a-d946-edce634c46c3@metafoo.de>
-Date:   Fri, 27 Mar 2020 10:14:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1726215AbgC0J2E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Mar 2020 05:28:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57466 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726002AbgC0J2D (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Mar 2020 05:28:03 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A9CC020705;
+        Fri, 27 Mar 2020 09:28:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585301283;
+        bh=kSV1h8M9PsDakgcYsgT5ikOQZeqk+TIKYnnDYgOD4Sc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cLDPoWDryNzecZRv5gY5Ffr2OI2YuWcD9k8Ri/YE8McwELrQlNcl4HGVYK37tdQHO
+         B39UZG+XYOjWHOYF9sQt1vbQ96iuQy3TJg6Iq897tS8PsAXRHlfeO03g7EXsPwAs3V
+         0NdZWA9YmNVC17vu2vjyAEfZxfrDCchzV6gp8f2g=
+Date:   Fri, 27 Mar 2020 10:27:59 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>
+Cc:     linux-usb@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Fredrik Noring <noring@nocrew.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        John Youn <John.Youn@synopsys.com>
+Subject: Re: [RESENDING RFC PATCH 4/4] usb: xhci: Use temporary buffer to
+ consolidate SG
+Message-ID: <20200327092759.GA1693819@kroah.com>
+References: <cover.1585297723.git.joglekar@synopsys.com>
+ <5f7605b9f4cd2d6de4f0ef7d25be9a99d92c5aee.1585297723.git.joglekar@synopsys.com>
 MIME-Version: 1.0
-In-Reply-To: <20200327084302.606-1-m.grzeschik@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.102.2/25763/Thu Mar 26 14:07:34 2020)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5f7605b9f4cd2d6de4f0ef7d25be9a99d92c5aee.1585297723.git.joglekar@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 3/27/20 9:43 AM, Michael Grzeschik wrote:
-> dwc3_gadget_ep_disable gets called before the last request gets
-> dequeued.
->
-> In __dwc3_gadget_ep_disable all started, pending and cancelled
-> lists for this endpoint will call dwc3_gadget_giveback in
-> dwc3_remove_requests.
->
-> After that no list containing the afterwards dequed request,
-> therefor it is not necessary to run the dequeue routine.
->
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+On Fri, Mar 27, 2020 at 02:23:46PM +0530, Tejas Joglekar wrote:
+> The Synopsys xHC has an internal TRB cache of size TRB_CACHE_SIZE for
+> each endpoint. The default value for TRB_CACHE_SIZE is 16 for SS and 8
+> for HS. The controller loads and updates the TRB cache from the transfer
+> ring in system memory whenever the driver issues a start transfer or
+> update transfer command.
+> 
+> For chained TRBs, the Synopsys xHC requires that the total amount of
+> bytes for all TRBs loaded in the TRB cache be greater than or equal to 1
+> MPS. Or the chain ends within the TRB cache (with a last TRB).
+> 
+> If this requirement is not met, the controller will not be able to send
+> or receive a packet and it will hang causing a driver timeout and error.
+
+Sounds like broken hardware, or is this requirement in the xhci spec?
+
+> 
+> This can be a problem if a class driver queues SG requests with many
+> small-buffer entries. The XHCI driver will create a chained TRB for each
+> entry which may trigger this issue.
+> 
+> This patch adds logic to the XHCI driver to detect and prevent this from
+> happening.
+> 
+> For every (TRB_CACHE_SIZE - 2), we check the total buffer size of
+> the SG list and if the last window of (TRB_CACHE_SIZE - 2) SG list length
+> and we don't make up at least 1 MPS, we create a temporary buffer to
+> consolidate full SG list into the buffer.
+> 
+> We check at (TRB_CACHE_SIZE - 2) window because it is possible that there
+> would be a link and/or event data TRB that take up to 2 of the cache
+> entries.
+> 
+> We discovered this issue with devices on other platforms but have not
+> yet come across any device that triggers this on Linux. But it could be
+> a real problem now or in the future. All it takes is N number of small
+> chained TRBs. And other instances of the Synopsys IP may have smaller
+> values for the TRB_CACHE_SIZE which would exacerbate the problem.
+> 
+> Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
 > ---
-> @Lars-Peter Clausen:
->
-> This patch addresses the case that not queued requests get dequeued.
-> The only case that this happens seems on disabling the gadget.
+> 
+> Resending as 'umlaut' in email are not accepted by some servers.
+> 
+>  drivers/usb/core/hcd.c       |   8 +++
+>  drivers/usb/host/xhci-ring.c |   2 +-
+>  drivers/usb/host/xhci.c      | 128 +++++++++++++++++++++++++++++++++++++++++++
+>  drivers/usb/host/xhci.h      |   4 ++
+>  4 files changed, 141 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> index aa45840d8273..fdd257a2b8a6 100644
+> --- a/drivers/usb/core/hcd.c
+> +++ b/drivers/usb/core/hcd.c
+> @@ -1459,6 +1459,14 @@ int usb_hcd_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
+>  					return -EINVAL;
+>  				}
+>  
+> +				/*
+> +				 * If SG is consolidate into single buffer
+> +				 * return early
 
+I do not understand this comment.
 
-I don't believe it does. Calling usb_ep_dequeue() is not limited to be 
-called after the endpoint has been disabled. It is part of the API and 
-can be called at any time. E.g. with function_fs you can abort a queued 
-transfer from userspace at any time.
+> +				 */
+> +				if ((urb->transfer_flags &
+> +				     URB_DMA_MAP_SINGLE))
+> +					return ret;
 
-- Lars
+Why?  Isn't this now going to affect other host controllers (like all of
+them?)
 
->
->   drivers/usb/dwc3/gadget.c | 3 +++
->   1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 9a6f741d1db0dc..5d4fa8d6c93e49 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -1609,6 +1609,9 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
->   
->   	trace_dwc3_ep_dequeue(req);
->   
-> +	if (!(dep->flags & DWC3_EP_ENABLED))
-> +		return 0;
 > +
->   	spin_lock_irqsave(&dwc->lock, flags);
->   
->   	list_for_each_entry(r, &dep->pending_list, list) {
+>  				n = dma_map_sg(
+>  						hcd->self.sysdev,
+>  						urb->sg,
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index a78787bb5133..2fad9474912a 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -3291,7 +3291,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+>  
+>  	full_len = urb->transfer_buffer_length;
+>  	/* If we have scatter/gather list, we use it. */
+> -	if (urb->num_sgs) {
+> +	if (urb->num_sgs && !(urb->transfer_flags & URB_DMA_MAP_SINGLE)) {
+>  		num_sgs = urb->num_mapped_sgs;
+>  		sg = urb->sg;
+>  		addr = (u64) sg_dma_address(sg);
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index fe38275363e0..94fddbd06179 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -1256,6 +1256,109 @@ EXPORT_SYMBOL_GPL(xhci_resume);
+>  
+>  /*-------------------------------------------------------------------------*/
+>  
+> +static int xhci_map_temp_buffer(struct usb_hcd *hcd, struct urb *urb)
+> +{
+> +	void *temp;
+> +	int ret = 0;
+> +	unsigned int len;
+> +	unsigned int buf_len;
+> +	enum dma_data_direction dir;
+> +	struct xhci_hcd *xhci;
+> +
+> +	xhci = hcd_to_xhci(hcd);
+> +	dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
+> +	buf_len = urb->transfer_buffer_length;
+> +
+> +	temp = kzalloc_node(buf_len, GFP_ATOMIC,
+> +			    dev_to_node(hcd->self.sysdev));
+> +	if (!temp) {
+> +		xhci_warn(xhci, "Failed to create temp buffer, HC may fail\n");
 
+Didn't kzalloc just warn before this?
 
+And isn't this whole thing going to cause a lot more memory allocations
+per submission than before?
+
+> +		return -ENOMEM;
+> +	}
+> +
+> +	if (usb_urb_dir_out(urb)) {
+> +		len = sg_pcopy_to_buffer(urb->sg, urb->num_sgs,
+> +					 temp, buf_len, 0);
+> +		if (len != buf_len)
+> +			xhci_warn(xhci, "Wrong temp buffer write length\n");
+
+How could this happen?  And if it does, why spam the kernel log about it
+and yet not return an error?
+
+> +	}
+> +
+> +	urb->transfer_buffer = temp;
+> +	urb->transfer_dma = dma_map_single(hcd->self.sysdev,
+> +					   urb->transfer_buffer,
+> +					   urb->transfer_buffer_length,
+> +					   dir);
+> +	if (dma_mapping_error(hcd->self.sysdev,
+> +			      urb->transfer_dma)) {
+> +		xhci_err(xhci, "dma mapping error\n");
+
+Again, didn't dma_mapping_error() spit out a message?
+
+> +		ret = -EAGAIN;
+> +		kfree(temp);
+> +	} else {
+> +		urb->transfer_flags |= URB_DMA_MAP_SINGLE;
+> +	}
+> +
+> +	return ret;
+> +}
+
+thanks,
+
+greg k-h
