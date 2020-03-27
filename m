@@ -2,188 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C636E196007
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 21:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7725019601B
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 21:56:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727829AbgC0Urs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Mar 2020 16:47:48 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:35560 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727655AbgC0Urs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 16:47:48 -0400
-Received: by mail-wr1-f66.google.com with SMTP id d5so13188956wrn.2;
-        Fri, 27 Mar 2020 13:47:45 -0700 (PDT)
+        id S1727611AbgC0U42 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Mar 2020 16:56:28 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:46322 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727349AbgC0U42 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 16:56:28 -0400
+Received: by mail-io1-f65.google.com with SMTP id i3so2115797ioo.13
+        for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2020 13:56:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=9SZQxM/8L6c14zoyYaEljetpWBvkbLkTTHBa0hQabWQ=;
-        b=Uf4eu+nrSqCVBqkyDz5hqbUadokH8pm41sABl6/bCS/Rws83z8zKiYkdl98bb1+yMY
-         dSZs8JQ5h+uHXcL8XqhKf+IFmyaLKuOoRr/9qcKkLwayCj9wNdnA1u+vjlyCe0Tkl41A
-         /fe44A1HyIprnMUyQg/mcQ6u7Yvbq7+syPyb+k2eH9xcJxhLoqeZeuyTjZIv0okuOLHf
-         S9c92m2WI60M1BnjzuqpV1J+H3dwzmeKQQM7YqRpxWecwj87Bh0ULgQ+NtzJvVc3AMe6
-         iAY9JU+vBTPyl0sD4hVByxjCuqPAggXFzMla94k/e+Lk/ht9YhE+LEGWfWuF2UsYEndv
-         4+7A==
+        d=gateworks-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ztGuxpPnwvopwN5V9PVOVG8WbS48IkxJwK5yNOJbS/4=;
+        b=kk4DJRXeua8mYMBDP+GRp9tHtJck3RUJSwFqQrAq8iKRbpQzeCkIHxitXXXMjjardd
+         9HPHPp5glgAKLZjQsOpctpJg3tGx0HoHiVyPnCc7XiAD43XVZwV7kj6Py6xqSD4ZXxcK
+         hFoKn9qs/860vY1JwUPWyGrmZ/Ctn6YMVm67QUmV+4WIyiYqARwFWVtF8fc2kNHCyUQJ
+         QdShJlknFUYwi0mBUC6I6q+5M2O4S0czDl3QIupoIzh+oLQ08IkSmnsEz9ri1f5ZUP0I
+         EaXmswVIEsMnRpVOCo9/IrdNVI2p1mrbrU1H4ll+YRevccoA7Va/xdM6YQ99j4p90DBV
+         TkYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=9SZQxM/8L6c14zoyYaEljetpWBvkbLkTTHBa0hQabWQ=;
-        b=Rs/0CiBVU4x7InFR9OVZuF5NHyBe9CiCbBuE6ZRiwmBuQ+ok/L6kd+tS3P9uhrdBMu
-         I7TOsI1JYU1B6ZEewxT0VkonJhCtoWQGeM3ieEm8xOR6DNnc7HEgmoj7PM9o64GgUS9K
-         VV0UT81G0BsQccmijNiousqm5wb0cd7jJjDEiD0ck0NFpIGFZ0HAWfWnw3fGlY0E2NVr
-         gNDgcptxT5QtarLq1RsCrsXNE+8KmwwwH7tAIXVz4mHYozU/oZOXvxfLFTH/NwvVjVbI
-         6HNKcHyCJtwckdL2xVjlL+HdHtNnsZiWp8U8exeVm0p5+lPIQJawfWSZioebPW1XQRNK
-         8ypA==
-X-Gm-Message-State: ANhLgQ2BxmVDlJR8J6D4AZKKrbSyzF17aNpxb5MC1zzl0WgicYimLchc
-        r0GFMkeShigIw+sLlw0NiLIqt0z2Ubg=
-X-Google-Smtp-Source: ADFU+vv7mUndEx8pk9XXf3SsKPRjuoIW+7G7Le9nof9v6N4LhN+OHhh+2itRNEshTI3wYieLcdG+rg==
-X-Received: by 2002:adf:82b0:: with SMTP id 45mr1365091wrc.120.1585342064342;
-        Fri, 27 Mar 2020 13:47:44 -0700 (PDT)
-Received: from stbsrv-and-01.and.broadcom.net ([192.19.231.250])
-        by smtp.gmail.com with ESMTPSA id z129sm9661450wmb.7.2020.03.27.13.47.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2020 13:47:43 -0700 (PDT)
-From:   Al Cooper <alcooperx@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     andriy.shevchenko@linux.intel.com, Al Cooper <alcooperx@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-usb@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH v2 4/4] usb: host: Add ability to build new Broadcom STB USB drivers
-Date:   Fri, 27 Mar 2020 16:47:11 -0400
-Message-Id: <20200327204711.10614-5-alcooperx@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200327204711.10614-1-alcooperx@gmail.com>
-References: <20200327204711.10614-1-alcooperx@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ztGuxpPnwvopwN5V9PVOVG8WbS48IkxJwK5yNOJbS/4=;
+        b=BS5lV4Iz+z73Nf4Vgcw+Rvq915q6G1YetmRXEoZMLVk+mBaSU+TU3+0DhAV/2Miun8
+         JgnTWnT9G22XYd1dYbzfojPFsWymyalKm16rkrxla3mHAKDjXCJTC8bgAGc2CqfWwuj5
+         THL52tOB+w637RUhkSf6cY/y/1AFEamfBa5gGdhPa+R3VA1uTuUsXpKulTuN0iyaJ/pf
+         NVb8Ou8ULLEhrs+plxT7RhzghIRlHj4aPT9f6QmMUPx7XcKN4lzrUl5dM4Qgl445LQvs
+         oQMtkjIKBxez5ya4gs8CuJH4auN26eYCLk1U3ON2l5vVRzpXG47Iv9smsszlBNnkKvo3
+         L1aw==
+X-Gm-Message-State: ANhLgQ1F3Go9Z9Okr+9h1jC2OUZSOlmxjP8R9ykeQMQ2AITdfau9eiAZ
+        5OsqZ0s+m93G1d3HdRvqtSA3QrhfLYh9Y2UReD6y3Q==
+X-Google-Smtp-Source: ADFU+vseq/HdLAf4EOrqJpck+RxYilPAE2LGU2Kp9kY/klJ+BUbD3xh/tGjfw+LbfOLztQaDQYPf5L1Af64ZI2Vx1CE=
+X-Received: by 2002:a02:304a:: with SMTP id q71mr724974jaq.123.1585342587677;
+ Fri, 27 Mar 2020 13:56:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <CALAE=UDvPU-MBX5B7NU1A7WPq1gofUnr8Rf+v81AxHLLcZhMvA@mail.gmail.com>
+In-Reply-To: <CALAE=UDvPU-MBX5B7NU1A7WPq1gofUnr8Rf+v81AxHLLcZhMvA@mail.gmail.com>
+From:   Bobby Jones <rjones@gateworks.com>
+Date:   Fri, 27 Mar 2020 13:56:17 -0700
+Message-ID: <CALAE=UCG52nM8MJx2F+GyEoN7gLs2z6GpJZ27zQ9akUfjRb==Q@mail.gmail.com>
+Subject: Re: Toby MPCI - L201 cellular modem http hang after random MAC
+ address assignment
+To:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Allison Randal <allison@lohutok.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Steve Winslow <swinslow@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org, modemmanager-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the build system changes needed to get the Broadcom STB XHCI,
-EHCI and OHCI functionality working. The OHCI support does not
-require anything unique to Broadcom so the standard ohci-platform
-driver is being used. The link order for XHCI was changed in the
-Makefile because of the way STB XHCI, EHCI and OHCI controllers
-share a port which requires that the XHCI driver be initialized
-first. Also update MAINTAINERS.
+On Mon, Mar 23, 2020 at 10:21 AM Bobby Jones <rjones@gateworks.com> wrote:
+>
+> Hello net-dev,
+>
+> I'm diagnosing a problem with the Toby MPCI-L201 cellular modem where
+> http operations hang. This is reproducible on the most recent kernel
+> by turning on the rndis_host driver and executing a wget or similar
+> http command. I found I was able to still ping but not transfer any
+> data. After bisecting I've found that commit
+> a5a18bdf7453d505783e40e47ebb84bfdd35f93b introduces this hang.
+>
+> For reference the patch contents are:
+>
+> >     rndis_host: Set valid random MAC on buggy devices
+> >
+> >     Some devices of the same type all export the same, random MAC addre=
+ss. This
+> >     behavior has been seen on the ZTE MF910, MF823 and MF831, and there=
+ are
+> >     probably more devices out there. Fix this by generating a valid ran=
+dom MAC
+> >     address if we read a random MAC from device.
+> >
+> >     Also, changed the memcpy() to ether_addr_copy(), as pointed out by
+> >     checkpatch.
+> >
+> >     Suggested-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+> >     Signed-off-by: Kristian Evensen <kristian.evensen@gmail.com>
+> >     Signed-off-by: David S. Miller <davem@davemloft.net>
+> > diff --git a/drivers/net/usb/rndis_host.c b/drivers/net/usb/rndis_host.=
+c
+> > index 524a47a28120..4f4f71b2966b 100644
+> > --- a/drivers/net/usb/rndis_host.c
+> > +++ b/drivers/net/usb/rndis_host.c
+> > @@ -428,7 +428,11 @@ generic_rndis_bind(struct usbnet *dev, struct usb_=
+interface *intf, int flags)
+> >                 dev_err(&intf->dev, "rndis get ethaddr, %d\n", retval);
+> >                 goto halt_fail_and_release;
+> >         }
+> > -       memcpy(net->dev_addr, bp, ETH_ALEN);
+> > +
+> > +       if (bp[0] & 0x02)
+> > +               eth_hw_addr_random(net);
+> > +       else
+> > +               ether_addr_copy(net->dev_addr, bp);
+> >
+> >         /* set a nonzero filter to enable data transfers */
+> >         memset(u.set, 0, sizeof *u.set);
+>
+> I know that there is some internal routing done by the modem firmware,
+> and I'm assuming that overwriting the MAC address breaks said routing.
+> Can anyone suggest what a proper fix would be?
+>
+> Thanks,
+> Bobby
 
-Signed-off-by: Al Cooper <alcooperx@gmail.com>
----
- MAINTAINERS               |  9 +++++++++
- drivers/usb/host/Kconfig  | 20 ++++++++++++++++++++
- drivers/usb/host/Makefile | 20 ++++++++++++++------
- 3 files changed, 43 insertions(+), 6 deletions(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5a5332b3591d..978f3a574f64 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3433,6 +3433,15 @@ S:	Supported
- F:	drivers/i2c/busses/i2c-brcmstb.c
- F:	Documentation/devicetree/bindings/i2c/i2c-brcmstb.txt
- 
-+BROADCOM BRCMSTB USB XHCI and EHCI DRIVERS
-+M:	Al Cooper <alcooperx@gmail.com>
-+L:	linux-usb@vger.kernel.org
-+L:	bcm-kernel-feedback-list@broadcom.com
-+S:	Maintained
-+F:	drivers/usb/host/ehci-brcm.*
-+F:	drivers/usb/host/xhci-brcm.*
-+F:	Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
-+
- BROADCOM BRCMSTB USB2 and USB3 PHY DRIVER
- M:	Al Cooper <alcooperx@gmail.com>
- L:	linux-kernel@vger.kernel.org
-diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index 55bdfdf11e4c..bc582ab6c5c8 100644
---- a/drivers/usb/host/Kconfig
-+++ b/drivers/usb/host/Kconfig
-@@ -97,6 +97,26 @@ config USB_XHCI_TEGRA
- 
- endif # USB_XHCI_HCD
- 
-+config USB_EHCI_BRCMSTB
-+       tristate
-+
-+config USB_XHCI_BRCMSTB
-+       tristate
-+
-+config USB_BRCMSTB
-+	tristate "Broadcom STB USB support"
-+	depends on (ARCH_BRCMSTB && PHY_BRCM_USB) || COMPILE_TEST
-+	select USB_OHCI_HCD_PLATFORM if USB_OHCI_HCD
-+	select USB_EHCI_BRCMSTB if USB_EHCI_HCD
-+	select USB_XHCI_BRCMSTB if USB_XHCI_HCD
-+	select USB_XHCI_PLATFORM if USB_XHCI_HCD
-+	help
-+	  Say Y to enable support for XHCI, EHCI and OHCI host controllers
-+	  found in Broadcom STB SoC's.
-+
-+	  Disabling this will keep the controllers and corresponding
-+	  PHYs powered down.
-+
- config USB_EHCI_HCD
- 	tristate "EHCI HCD (USB 2.0) support"
- 	depends on HAS_DMA && HAS_IOMEM
-diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
-index b191361257cc..2a9a16047684 100644
---- a/drivers/usb/host/Makefile
-+++ b/drivers/usb/host/Makefile
-@@ -31,12 +31,25 @@ ifneq ($(CONFIG_USB_XHCI_RCAR), )
- 	xhci-plat-hcd-y		+= xhci-rcar.o
- endif
- 
-+ifneq ($(CONFIG_USB_XHCI_BRCMSTB), )
-+	xhci-plat-hcd-y		+= xhci-brcm.o
-+endif
-+
- ifneq ($(CONFIG_DEBUG_FS),)
- 	xhci-hcd-y		+= xhci-debugfs.o
- endif
- 
- obj-$(CONFIG_USB_PCI)	+= pci-quirks.o
- 
-+# NOTE: BRCMSTB systems require that xhci driver be linked before the
-+# ehci/ohci drivers.
-+obj-$(CONFIG_USB_XHCI_HCD)	+= xhci-hcd.o
-+obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o
-+obj-$(CONFIG_USB_XHCI_PLATFORM) += xhci-plat-hcd.o
-+obj-$(CONFIG_USB_XHCI_HISTB)	+= xhci-histb.o
-+obj-$(CONFIG_USB_XHCI_MTK)	+= xhci-mtk.o
-+obj-$(CONFIG_USB_XHCI_TEGRA)	+= xhci-tegra.o
-+
- obj-$(CONFIG_USB_EHCI_HCD)	+= ehci-hcd.o
- obj-$(CONFIG_USB_EHCI_PCI)	+= ehci-pci.o
- obj-$(CONFIG_USB_EHCI_HCD_PLATFORM)	+= ehci-platform.o
-@@ -49,6 +62,7 @@ obj-$(CONFIG_USB_EHCI_HCD_STI)	+= ehci-st.o
- obj-$(CONFIG_USB_EHCI_EXYNOS)	+= ehci-exynos.o
- obj-$(CONFIG_USB_EHCI_HCD_AT91) += ehci-atmel.o
- obj-$(CONFIG_USB_EHCI_TEGRA)	+= ehci-tegra.o
-+obj-$(CONFIG_USB_EHCI_BRCMSTB)	+= ehci-brcm.o
- 
- obj-$(CONFIG_USB_OXU210HP_HCD)	+= oxu210hp-hcd.o
- obj-$(CONFIG_USB_ISP116X_HCD)	+= isp116x-hcd.o
-@@ -69,12 +83,6 @@ obj-$(CONFIG_USB_OHCI_HCD_DAVINCI)	+= ohci-da8xx.o
- 
- obj-$(CONFIG_USB_UHCI_HCD)	+= uhci-hcd.o
- obj-$(CONFIG_USB_FHCI_HCD)	+= fhci.o
--obj-$(CONFIG_USB_XHCI_HCD)	+= xhci-hcd.o
--obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o
--obj-$(CONFIG_USB_XHCI_PLATFORM) += xhci-plat-hcd.o
--obj-$(CONFIG_USB_XHCI_HISTB)	+= xhci-histb.o
--obj-$(CONFIG_USB_XHCI_MTK)	+= xhci-mtk.o
--obj-$(CONFIG_USB_XHCI_TEGRA)	+= xhci-tegra.o
- obj-$(CONFIG_USB_SL811_HCD)	+= sl811-hcd.o
- obj-$(CONFIG_USB_SL811_CS)	+= sl811_cs.o
- obj-$(CONFIG_USB_U132_HCD)	+= u132-hcd.o
--- 
-2.17.1
-
+Adding some individuals and lists in hopes for feedback
