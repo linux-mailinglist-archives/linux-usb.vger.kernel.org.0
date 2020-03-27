@@ -2,189 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E66BD195F50
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 20:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D30E4195F95
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 21:23:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727548AbgC0TzZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Mar 2020 15:55:25 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:42049 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726900AbgC0TzY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 15:55:24 -0400
-Received: by mail-il1-f193.google.com with SMTP id f16so9920519ilj.9;
-        Fri, 27 Mar 2020 12:55:23 -0700 (PDT)
+        id S1727703AbgC0UXF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Mar 2020 16:23:05 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:36043 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727185AbgC0UXF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 16:23:05 -0400
+Received: by mail-ot1-f66.google.com with SMTP id l23so11160209otf.3
+        for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2020 13:23:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OFz97eXpjJf+7mUd4dNZdWEqJgglvlf1biCOfhwlvrw=;
+        b=CSvH/Ub1dezjRaHvNDRiXZX7jQJCKDFX+dMYut7M8RhokpljrMAVooMj1bo9SqDIb3
+         1ZaKfbVP4po180gn4uml+oUsHpx5MgITAEltFGisMTpSBUEnbhaUhi3JkPzSbjDauj6K
+         a+B+xGyeeYUdP+yk/txqFyw8E1pPKBrG4ME9k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=csHMLQRL98LenQ/lQbpc93jnwU8kRqtxGH56mtF9FXU=;
-        b=WvKu/ivGejE4Hwf4vzr15vb+mRRxfsHTz1l00dqUZpX3xWclAVX8gZsXG2TCMfWqwJ
-         s3pgZZ7d23GQRo9gfvSdHXxq3+fX80E9y8eZBWjtiP0YT+5fXEAB7IqD4vTIMPHjrYob
-         B7eOLpcsVxd3Xx1JLwAFLg60BTAcfSRDF1H5ViDWtQYOfSiqk47ibp7/WZZtN2PuOb7t
-         bpqzqZWe29Z2rCzf9nTSi2Jtfd2Q52NbX4zMFHcZkWuCHMbM5EFeb7oSXc0nPNCkmY59
-         lqs/XETfHPgwnHvEwPl5Wjo281URi/7CLAE3uFLAE++rRnKIXo0NShcoyBmD4t5npuTr
-         15ug==
-X-Gm-Message-State: ANhLgQ0X9uHhwnIDG8j/WobhSk1HnaZykm4qrJ+9B/vVw5CFU1r1LGF1
-        oQAnaa0WgSSpSbR6v5oitw==
-X-Google-Smtp-Source: ADFU+vvK/OlPRlrv0zdhRACJE4TlaiS+cpaAN0toP14RA+18Djh+2NRPMAxrfVKb7LtTlW0/j9dRrw==
-X-Received: by 2002:a92:39c9:: with SMTP id h70mr826045ilf.74.1585338922613;
-        Fri, 27 Mar 2020 12:55:22 -0700 (PDT)
-Received: from rob-hp-laptop ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id l6sm2204381ilh.27.2020.03.27.12.55.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2020 12:55:21 -0700 (PDT)
-Received: (nullmailer pid 4525 invoked by uid 1000);
-        Fri, 27 Mar 2020 19:55:20 -0000
-Date:   Fri, 27 Mar 2020 13:55:20 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Lubomir Rintel <lkundrak@v3.sk>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 28/28] dt-bindings: usb: Convert ehci-mv to json-schema
-Message-ID: <20200327195520.GA2235@bogus>
-References: <20200317093922.20785-1-lkundrak@v3.sk>
- <20200317093922.20785-29-lkundrak@v3.sk>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OFz97eXpjJf+7mUd4dNZdWEqJgglvlf1biCOfhwlvrw=;
+        b=phjw6zvZhkGVDZmzj7IwJudWh4jH80O9TPaBCRoeC3kjd+V5rsoUI/3ndK2bAVyuK2
+         +6QcPJ9B7hB8smsSU06v6GwcAExB0di01mNsJRYEtiokYsV85Pl135+UJOSKU/FIkTTf
+         rM2tbiKitMQJ9QuiDwCnXBFVji6A2iGT5s/zXiZvmDcZJ4MKyBbc/n+yajPyNsGLa11L
+         SGPyyFeedUnDMqQniM9f0BQMMMV9bY8y8u4LyzbNyJQo/A94jZZWXJk/q21oxRGeH77q
+         ITn3qqEz0OaddZ9/h7gqgHdOSMtHruOKpod+olyUuJ/zw/qi1kH5xhUcCHgp+i58jlMb
+         aT4w==
+X-Gm-Message-State: ANhLgQ0r0oht7XLQ1qCYuTJmnovoEy2MJ4xs4UkBsc/ULKhHlGFbCBzG
+        C3QQS/2mQnv/m9fcf8z7ceX2UBQZWn5UBi5TxPfH
+X-Google-Smtp-Source: ADFU+vvIa69JmP/eHtaUxuKh+BObIiRLVegX94oveThM6CY52unkByyBKrxVNAURHYXSfVWiT369OFTMKFjSimrf3G0=
+X-Received: by 2002:a05:6830:19ee:: with SMTP id t14mr375774ott.287.1585340583924;
+ Fri, 27 Mar 2020 13:23:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200317093922.20785-29-lkundrak@v3.sk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200313141545.31943-1-alcooperx@gmail.com> <20200313161836.GX1922688@smile.fi.intel.com>
+In-Reply-To: <20200313161836.GX1922688@smile.fi.intel.com>
+From:   Al Cooper <al.cooper@broadcom.com>
+Date:   Fri, 27 Mar 2020 16:22:52 -0400
+Message-ID: <CAGh=XAD63AhGRqvvNKfm2=0-bsZZdhtXcMDavR75BNzUd7UiOQ@mail.gmail.com>
+Subject: Re: [PATCH 0/4] Add XHCI, EHCI and OHCI support for Broadcom STB SoS's
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 10:39:22AM +0100, Lubomir Rintel wrote:
-> A straightforward conversion of the ehci-mv binding to DT schema format
-> using json-schema.
-> 
-> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-> ---
->  .../devicetree/bindings/usb/ehci-mv.txt       | 23 -------
->  .../bindings/usb/marvell,pxau2o-ehci.yaml     | 60 +++++++++++++++++++
->  2 files changed, 60 insertions(+), 23 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/usb/ehci-mv.txt
->  create mode 100644 Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/ehci-mv.txt b/Documentation/devicetree/bindings/usb/ehci-mv.txt
-> deleted file mode 100644
-> index 335589895763e..0000000000000
-> --- a/Documentation/devicetree/bindings/usb/ehci-mv.txt
-> +++ /dev/null
-> @@ -1,23 +0,0 @@
-> -* Marvell PXA/MMP EHCI controller.
-> -
-> -Required properties:
-> -
-> -- compatible: must be "marvell,pxau2o-ehci"
-> -- reg: physical base addresses of the controller and length of memory mapped region
-> -- interrupts: one EHCI controller interrupt should be described here
-> -- clocks: phandle list of usb clocks
-> -- clock-names: should be "USBCLK"
-> -- phys: phandle for the PHY device
-> -- phy-names: should be "usb"
-> -
-> -Example:
-> -
-> -	ehci0: usb-ehci@d4208000 {
-> -		compatible = "marvell,pxau2o-ehci";
-> -		reg = <0xd4208000 0x200>;
-> -		interrupts = <44>;
-> -		clocks = <&soc_clocks MMP2_CLK_USB>;
-> -		clock-names = "USBCLK";
-> -		phys = <&usb_otg_phy>;
-> -		phy-names = "usb";
-> -	};
-> diff --git a/Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml b/Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml
-> new file mode 100644
-> index 0000000000000..189025ef1e92e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml
-> @@ -0,0 +1,60 @@
-> +# SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
+On Fri, Mar 13, 2020 at 12:18 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Fri, Mar 13, 2020 at 10:15:41AM -0400, Al Cooper wrote:
+> > This adds support for the XHCI, EHCI and OHCI host controllers found
+> > in Broadcom STB SoC's. These drivers depend on getting access to the
+> > new Broadcom STB USB PHY driver through a device-tree phandle and
+> > will fail if the driver is not available.
+>
+> Hint to the future:
+>
+>         scripts/get_maintainer.pl --git --git-min-percent=67 ...
 
-Same license comment.
+Thanks, I'll use that in the future.
 
-> +# Copyright 2019,2020 Lubomir Rintel <lkundrak@v3.sk>
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/marvell,pxau2o-ehci.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Marvell PXA/MMP EHCI bindings
-> +
-> +maintainers:
-> +  - Lubomir Rintel <lkundrak@v3.sk>
-> +
-> +allOf:
-> +  - $ref: usb-hcd.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: marvell,pxau2o-ehci
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    const: USBCLK
-> +
-> +  phys:
-> +    maxItems: 1
-> +
-> +  phy-names:
-> +    const: usb
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - phys
-> +  - phy-names
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/marvell,mmp2.h>
-> +    usb@d4208000 {
-> +        compatible = "marvell,pxau2o-ehci";
-> +        reg = <0xd4208000 0x200>;
-> +        interrupts = <44>;
-> +        clocks = <&soc_clocks MMP2_CLK_USB>;
-> +        clock-names = "USBCLK";
-> +        phys = <&usb_otg_phy>;
-> +        phy-names = "usb";
-> +    };
-> +
-> +...
-> -- 
-> 2.25.1
-> 
+>
+> >
+> > Al Cooper (4):
+> >   dt-bindings: Add Broadcom STB USB support
+> >   usb: xhci: xhci-plat: Add support for Broadcom STB SoC's
+> >   usb: ehci: Add new EHCI driver for Broadcom STB SoC's
+> >   usb: host: Add ability to build new Broadcom STB USB drivers
+> >
+> >  .../bindings/usb/brcm,bcm7445-ehci.yaml       |  60 ++++
+> >  .../devicetree/bindings/usb/usb-xhci.txt      |   1 +
+> >  MAINTAINERS                                   |   9 +
+> >  drivers/usb/host/Kconfig                      |  20 ++
+> >  drivers/usb/host/Makefile                     |  20 +-
+> >  drivers/usb/host/ehci-brcm.c                  | 288 ++++++++++++++++++
+> >  drivers/usb/host/xhci-brcm.c                  |  16 +
+> >  drivers/usb/host/xhci-brcm.h                  |  16 +
+> >  drivers/usb/host/xhci-plat.c                  |  11 +
+> >  9 files changed, 435 insertions(+), 6 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
+> >  create mode 100644 drivers/usb/host/ehci-brcm.c
+> >  create mode 100644 drivers/usb/host/xhci-brcm.c
+> >  create mode 100644 drivers/usb/host/xhci-brcm.h
+> >
+> > --
+> > 2.17.1
+> >
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
