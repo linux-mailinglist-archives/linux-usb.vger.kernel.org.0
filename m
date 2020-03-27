@@ -2,120 +2,228 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7725019601B
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 21:56:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C218C19621F
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2020 00:46:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727611AbgC0U42 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Mar 2020 16:56:28 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:46322 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727349AbgC0U42 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 16:56:28 -0400
-Received: by mail-io1-f65.google.com with SMTP id i3so2115797ioo.13
-        for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2020 13:56:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ztGuxpPnwvopwN5V9PVOVG8WbS48IkxJwK5yNOJbS/4=;
-        b=kk4DJRXeua8mYMBDP+GRp9tHtJck3RUJSwFqQrAq8iKRbpQzeCkIHxitXXXMjjardd
-         9HPHPp5glgAKLZjQsOpctpJg3tGx0HoHiVyPnCc7XiAD43XVZwV7kj6Py6xqSD4ZXxcK
-         hFoKn9qs/860vY1JwUPWyGrmZ/Ctn6YMVm67QUmV+4WIyiYqARwFWVtF8fc2kNHCyUQJ
-         QdShJlknFUYwi0mBUC6I6q+5M2O4S0czDl3QIupoIzh+oLQ08IkSmnsEz9ri1f5ZUP0I
-         EaXmswVIEsMnRpVOCo9/IrdNVI2p1mrbrU1H4ll+YRevccoA7Va/xdM6YQ99j4p90DBV
-         TkYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ztGuxpPnwvopwN5V9PVOVG8WbS48IkxJwK5yNOJbS/4=;
-        b=BS5lV4Iz+z73Nf4Vgcw+Rvq915q6G1YetmRXEoZMLVk+mBaSU+TU3+0DhAV/2Miun8
-         JgnTWnT9G22XYd1dYbzfojPFsWymyalKm16rkrxla3mHAKDjXCJTC8bgAGc2CqfWwuj5
-         THL52tOB+w637RUhkSf6cY/y/1AFEamfBa5gGdhPa+R3VA1uTuUsXpKulTuN0iyaJ/pf
-         NVb8Ou8ULLEhrs+plxT7RhzghIRlHj4aPT9f6QmMUPx7XcKN4lzrUl5dM4Qgl445LQvs
-         oQMtkjIKBxez5ya4gs8CuJH4auN26eYCLk1U3ON2l5vVRzpXG47Iv9smsszlBNnkKvo3
-         L1aw==
-X-Gm-Message-State: ANhLgQ1F3Go9Z9Okr+9h1jC2OUZSOlmxjP8R9ykeQMQ2AITdfau9eiAZ
-        5OsqZ0s+m93G1d3HdRvqtSA3QrhfLYh9Y2UReD6y3Q==
-X-Google-Smtp-Source: ADFU+vseq/HdLAf4EOrqJpck+RxYilPAE2LGU2Kp9kY/klJ+BUbD3xh/tGjfw+LbfOLztQaDQYPf5L1Af64ZI2Vx1CE=
-X-Received: by 2002:a02:304a:: with SMTP id q71mr724974jaq.123.1585342587677;
- Fri, 27 Mar 2020 13:56:27 -0700 (PDT)
+        id S1726212AbgC0XqF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Mar 2020 19:46:05 -0400
+Received: from mga03.intel.com ([134.134.136.65]:19690 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726071AbgC0XqF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Mar 2020 19:46:05 -0400
+IronPort-SDR: l6UYwmgiJALbNu8EhMI4L61tTpF9zkuL2Z9a+d2QCA1i+tBcUegjVEMBtkfUVoiodnh4FgQulo
+ Q/Taon7NiHog==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2020 16:46:02 -0700
+IronPort-SDR: Kelk+GrghFlJget5rAfrbAxPYmSixWOo3TVftgmfPmXWxh6Byf3ArE0fogdnQ2DYQIu6OW/JgX
+ DSJsurIVgQPA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,314,1580803200"; 
+   d="scan'208";a="236788870"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 27 Mar 2020 16:46:00 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jHyfo-0000ue-3I; Sat, 28 Mar 2020 07:46:00 +0800
+Date:   Sat, 28 Mar 2020 07:45:04 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD REGRESSION
+ 62d65bdd9d05158aa2547f8ef72375535f3bc6e3
+Message-ID: <5e7e9000.yGARZdFtK742uWu8%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <CALAE=UDvPU-MBX5B7NU1A7WPq1gofUnr8Rf+v81AxHLLcZhMvA@mail.gmail.com>
-In-Reply-To: <CALAE=UDvPU-MBX5B7NU1A7WPq1gofUnr8Rf+v81AxHLLcZhMvA@mail.gmail.com>
-From:   Bobby Jones <rjones@gateworks.com>
-Date:   Fri, 27 Mar 2020 13:56:17 -0700
-Message-ID: <CALAE=UCG52nM8MJx2F+GyEoN7gLs2z6GpJZ27zQ9akUfjRb==Q@mail.gmail.com>
-Subject: Re: Toby MPCI - L201 cellular modem http hang after random MAC
- address assignment
-To:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steve Winslow <swinslow@gmail.com>,
-        =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org, modemmanager-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 23, 2020 at 10:21 AM Bobby Jones <rjones@gateworks.com> wrote:
->
-> Hello net-dev,
->
-> I'm diagnosing a problem with the Toby MPCI-L201 cellular modem where
-> http operations hang. This is reproducible on the most recent kernel
-> by turning on the rndis_host driver and executing a wget or similar
-> http command. I found I was able to still ping but not transfer any
-> data. After bisecting I've found that commit
-> a5a18bdf7453d505783e40e47ebb84bfdd35f93b introduces this hang.
->
-> For reference the patch contents are:
->
-> >     rndis_host: Set valid random MAC on buggy devices
-> >
-> >     Some devices of the same type all export the same, random MAC addre=
-ss. This
-> >     behavior has been seen on the ZTE MF910, MF823 and MF831, and there=
- are
-> >     probably more devices out there. Fix this by generating a valid ran=
-dom MAC
-> >     address if we read a random MAC from device.
-> >
-> >     Also, changed the memcpy() to ether_addr_copy(), as pointed out by
-> >     checkpatch.
-> >
-> >     Suggested-by: Bj=C3=B8rn Mork <bjorn@mork.no>
-> >     Signed-off-by: Kristian Evensen <kristian.evensen@gmail.com>
-> >     Signed-off-by: David S. Miller <davem@davemloft.net>
-> > diff --git a/drivers/net/usb/rndis_host.c b/drivers/net/usb/rndis_host.=
-c
-> > index 524a47a28120..4f4f71b2966b 100644
-> > --- a/drivers/net/usb/rndis_host.c
-> > +++ b/drivers/net/usb/rndis_host.c
-> > @@ -428,7 +428,11 @@ generic_rndis_bind(struct usbnet *dev, struct usb_=
-interface *intf, int flags)
-> >                 dev_err(&intf->dev, "rndis get ethaddr, %d\n", retval);
-> >                 goto halt_fail_and_release;
-> >         }
-> > -       memcpy(net->dev_addr, bp, ETH_ALEN);
-> > +
-> > +       if (bp[0] & 0x02)
-> > +               eth_hw_addr_random(net);
-> > +       else
-> > +               ether_addr_copy(net->dev_addr, bp);
-> >
-> >         /* set a nonzero filter to enable data transfers */
-> >         memset(u.set, 0, sizeof *u.set);
->
-> I know that there is some internal routing done by the modem firmware,
-> and I'm assuming that overwriting the MAC address breaks said routing.
-> Can anyone suggest what a proper fix would be?
->
-> Thanks,
-> Bobby
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: 62d65bdd9d05158aa2547f8ef72375535f3bc6e3  USB: cdc-acm: restore capability check order
 
-Adding some individuals and lists in hopes for feedback
+Regressions in current branch:
+
+drivers/usb/cdns3/core.c:251 cdsn3_hw_role_state_machine() error: uninitialized symbol 'role'.
+
+Error ids grouped by kconfigs:
+
+recent_errors
+`-- i386-allyesconfig
+    `-- drivers-usb-cdns3-core.c-cdsn3_hw_role_state_machine()-error:uninitialized-symbol-role-.
+
+elapsed time: 485m
+
+configs tested: 162
+configs skipped: 0
+
+arm                              allmodconfig
+arm                               allnoconfig
+arm                              allyesconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm64                            allyesconfig
+arm                         at91_dt_defconfig
+arm                           efm32_defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                        multi_v7_defconfig
+arm                        shmobile_defconfig
+arm                           sunxi_defconfig
+arm64                               defconfig
+sparc                            allyesconfig
+sh                            titan_defconfig
+riscv                            allmodconfig
+riscv                             allnoconfig
+um                                  defconfig
+um                           x86_64_defconfig
+microblaze                    nommu_defconfig
+i386                              allnoconfig
+i386                             alldefconfig
+i386                             allyesconfig
+i386                                defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+ia64                             alldefconfig
+c6x                              allyesconfig
+c6x                        evmc6678_defconfig
+nios2                         10m50_defconfig
+nios2                         3c120_defconfig
+openrisc                    or1ksim_defconfig
+openrisc                 simple_smp_defconfig
+xtensa                       common_defconfig
+xtensa                          iss_defconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                                defconfig
+alpha                               defconfig
+h8300                       h8s-sim_defconfig
+h8300                     edosk2674_defconfig
+m68k                       m5475evb_defconfig
+m68k                             allmodconfig
+h8300                    h8300h-sim_defconfig
+m68k                           sun3_defconfig
+m68k                          multi_defconfig
+arc                              allyesconfig
+arc                                 defconfig
+microblaze                      mmu_defconfig
+powerpc                           allnoconfig
+powerpc                             defconfig
+powerpc                       ppc64_defconfig
+powerpc                          rhel-kconfig
+mips                           32r2_defconfig
+mips                         64r6el_defconfig
+mips                             allmodconfig
+mips                              allnoconfig
+mips                             allyesconfig
+mips                      fuloong2e_defconfig
+mips                      malta_kvm_defconfig
+parisc                            allnoconfig
+parisc                generic-64bit_defconfig
+parisc                generic-32bit_defconfig
+parisc                           allyesconfig
+x86_64               randconfig-a001-20200327
+x86_64               randconfig-a002-20200327
+x86_64               randconfig-a003-20200327
+i386                 randconfig-a001-20200327
+i386                 randconfig-a002-20200327
+i386                 randconfig-a003-20200327
+mips                 randconfig-a001-20200327
+nds32                randconfig-a001-20200327
+m68k                 randconfig-a001-20200327
+parisc               randconfig-a001-20200327
+alpha                randconfig-a001-20200327
+riscv                randconfig-a001-20200327
+c6x                  randconfig-a001-20200327
+h8300                randconfig-a001-20200327
+microblaze           randconfig-a001-20200327
+nios2                randconfig-a001-20200327
+sparc64              randconfig-a001-20200327
+csky                 randconfig-a001-20200327
+openrisc             randconfig-a001-20200327
+s390                 randconfig-a001-20200327
+sh                   randconfig-a001-20200327
+xtensa               randconfig-a001-20200327
+x86_64               randconfig-b001-20200327
+x86_64               randconfig-b002-20200327
+x86_64               randconfig-b003-20200327
+i386                 randconfig-b001-20200327
+i386                 randconfig-b002-20200327
+i386                 randconfig-b003-20200327
+x86_64               randconfig-c001-20200327
+x86_64               randconfig-c002-20200327
+x86_64               randconfig-c003-20200327
+i386                 randconfig-c001-20200327
+i386                 randconfig-c002-20200327
+i386                 randconfig-c003-20200327
+x86_64               randconfig-d001-20200327
+x86_64               randconfig-d002-20200327
+x86_64               randconfig-d003-20200327
+i386                 randconfig-d001-20200327
+i386                 randconfig-d002-20200327
+i386                 randconfig-d003-20200327
+x86_64               randconfig-e001-20200327
+x86_64               randconfig-e002-20200327
+x86_64               randconfig-e003-20200327
+i386                 randconfig-e001-20200327
+i386                 randconfig-e002-20200327
+i386                 randconfig-e003-20200327
+x86_64               randconfig-f001-20200327
+x86_64               randconfig-f002-20200327
+x86_64               randconfig-f003-20200327
+i386                 randconfig-f001-20200327
+i386                 randconfig-f002-20200327
+i386                 randconfig-f003-20200327
+x86_64               randconfig-g001-20200327
+x86_64               randconfig-g002-20200327
+x86_64               randconfig-g003-20200327
+i386                 randconfig-g001-20200327
+i386                 randconfig-g002-20200327
+i386                 randconfig-g003-20200327
+x86_64               randconfig-h001-20200327
+x86_64               randconfig-h002-20200327
+x86_64               randconfig-h003-20200327
+i386                 randconfig-h001-20200327
+i386                 randconfig-h002-20200327
+i386                 randconfig-h003-20200327
+arm                  randconfig-a001-20200327
+arm64                randconfig-a001-20200327
+ia64                 randconfig-a001-20200327
+powerpc              randconfig-a001-20200327
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+s390                             alldefconfig
+s390                             allmodconfig
+s390                              allnoconfig
+s390                             allyesconfig
+s390                          debug_defconfig
+s390                                defconfig
+s390                       zfcpdump_defconfig
+sh                               allmodconfig
+sh                                allnoconfig
+sh                          rsk7269_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sparc                               defconfig
+sparc64                          allmodconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                             defconfig
+um                             i386_defconfig
+x86_64                              fedora-25
+x86_64                                  kexec
+x86_64                                    lkp
+x86_64                                   rhel
+x86_64                         rhel-7.2-clear
+x86_64                               rhel-7.6
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
