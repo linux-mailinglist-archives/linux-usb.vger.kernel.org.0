@@ -2,90 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5ABF195FB4
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 21:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20509195FF5
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 21:45:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727702AbgC0U2n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Mar 2020 16:28:43 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:41991 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727143AbgC0U2n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 16:28:43 -0400
-Received: by mail-oi1-f195.google.com with SMTP id e4so9948002oig.9
-        for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2020 13:28:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NItgZTAZAbK7I7Yq0Kk66FkTCdXcM+5U1aVR69fwhR8=;
-        b=BuDYCVZH5ikDIs4PQ1xr651kXz2OJtbIQiASaVtnRinjJOWO1WZ/WwLl9QoQVI2ddI
-         BWgojf092/KzaC1Ixz3gCjEIN9CptyyIW94mGT9WXPf0pAPv/MvNXbTmlumq6qdpRBoF
-         sLDiSPU1kpUU33mLFo9Ys/9H+9+E0bJStHZQo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NItgZTAZAbK7I7Yq0Kk66FkTCdXcM+5U1aVR69fwhR8=;
-        b=Fa/lQqbWYhBw50wq/XS4C3fUFS9pWBbJEyn1UISceYTGLpklCH1UrCSHs9bvXtrGrU
-         bswQiAsr7qmSZeLDo9Bbqc9HCfJYOpuEsjSDVuA4NYw+B4/Cjj3VhWNE2v/SLv9br+oS
-         LfaXTeDihJ1Ec1rivgkkwR6Dq/ssfZio7I3OgIrBrwcBUqg2Daa8siHVnO6dmIRRtl7b
-         xZVXD5dCsmuuc/MJNadXgPI9nqsw90PZMuRDCyT+01a6s0rnSo9Pq1RIFK5qjg1fOscs
-         wJCYhzap/90xqxVeSgHxWuyUN61vbvqMMCcS7ctTpaPXQvbNUJ7p+TbQmt8QLqfU50ZY
-         WzOw==
-X-Gm-Message-State: ANhLgQ0gTpLKlseR3PeckzjnsD8/HAUoXsyCbxoblYDKxBegHAgD1dYt
-        0hFQyKS0UUuD3KtvGcdfYl10ufoPg18iOFOu5Z/u
-X-Google-Smtp-Source: ADFU+vt7qTCu8JLz/NVAm+Eo6nFAYH0BJw9Zg7y5krM0ZVYsnUPD4Mur9fuILHw5hLM9VSekbJp6X6UQ4ZxGp4e5b5I=
-X-Received: by 2002:aca:f183:: with SMTP id p125mr537461oih.74.1585340922401;
- Fri, 27 Mar 2020 13:28:42 -0700 (PDT)
+        id S1727444AbgC0UpK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Mar 2020 16:45:10 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:36073 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727143AbgC0UpK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 16:45:10 -0400
+Received: (qmail 5854 invoked by uid 500); 27 Mar 2020 16:45:09 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 27 Mar 2020 16:45:09 -0400
+Date:   Fri, 27 Mar 2020 16:45:09 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Qais Yousef <qais.yousef@arm.com>
+cc:     USB list <linux-usb@vger.kernel.org>,
+        Linux-pm mailing list <linux-pm@vger.kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
+In-Reply-To: <20200326122744.kbtlmev2ravn3wey@e107158-lin>
+Message-ID: <Pine.LNX.4.44L0.2003271515480.29819-100000@netrider.rowland.org>
 MIME-Version: 1.0
-References: <20200313141545.31943-1-alcooperx@gmail.com> <20200313141545.31943-4-alcooperx@gmail.com>
- <20200317184851.GA1470797@kroah.com>
-In-Reply-To: <20200317184851.GA1470797@kroah.com>
-From:   Al Cooper <al.cooper@broadcom.com>
-Date:   Fri, 27 Mar 2020 16:28:31 -0400
-Message-ID: <CAGh=XAAKmrtg6LFwCOUY5uGx0kkfsgLGFn5PCdL9xbuT_G1AUw@mail.gmail.com>
-Subject: Re: [PATCH 3/4] usb: ehci: Add new EHCI driver for Broadcom STB SoC's
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Johan Hovold <johan@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 2:48 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Mar 13, 2020 at 10:15:44AM -0400, Al Cooper wrote:
-> > +static int __init ehci_brcm_init(void)
-> > +{
-> > +     if (usb_disabled())
-> > +             return -ENODEV;
-> > +
-> > +     pr_info("%s: " BRCM_DRIVER_DESC "\n", brcm_hcd_name);
->
-> Drivers should be quiet if all is good, no need for this line.
+On Thu, 26 Mar 2020, Qais Yousef wrote:
 
-I removed this.
-Thanks
-Al
+> On 03/25/20 22:28, Rafael J. Wysocki wrote:
+> > On Wed, Mar 25, 2020 at 9:49 PM Alan Stern <stern@rowland.harvard.edu> wrote:
 
->
-> thanks,
->
-> greg k-h
+> > > Raphael, now that we have the direct_complete mechanism, can we revisit
+> > > this?  Should the PM core automatically call pm_runtime_set_active() if
+> > > dev->power.direct_complete isn't set?  Perhaps in device_resume_early()
+> > > prior to the pm_runtime_enable() call?
+> > >
+> > > It's possible we discussed this and decided against it at the time when
+> > > direct_complete was added, but if so I don't remember what was said.
+> > 
+> > Me neither. :-)
+> > 
+> > That said complexity has grown since then and there are the
+> > DPM_FLAG_SMART_SUSPEND and DPM_FLAG_LEAVE_SUSPENDED flags that can be
+> > used to control that behavior to some extent.
+> > 
+> > Setting DPM_FLAG_SMART_SUSPEND alone, in particular, causes
+> > pm_runtime_set_active() to be called at the noirq stage of device
+> > resume either by the core or by bus types (e.g. PCI) etc.
+> > 
+> > It looks like ohci-platform might use DPM_FLAG_SMART_SUSPEND, but I
+> > need to take a closer look at that (possibly later this week).
+> 
+> Okay I take it this was root caused correctly and now it's a question of which
+> is a better fix.
+
+Indeed.
+
+Raphael, I've been going over the PM core code, trying to figure out
+what it's really doing.  It's kind of a mess.
+
+A large part of the problem is related to an inconsistency between the
+documentation and the code.  include/linux/pm.h says that
+DPM_FLAG_SMART_SUSPEND tells bus types and PM domains about what the
+driver wants.  This strongly implies that the PM core will ignore
+SMART_SUSPEND.  But in fact the core does check that flag and takes its
+own actions if the device has no subsystem-level callbacks!
+
+Furthermore, the PM core's actions don't seem to make sense.  If the
+flag is set and the device is runtime-suspended when the system sleep
+begins, the core will skip issuing the suspend_late and suspend_noirq
+callbacks to the driver.  But it doesn't skip issuing the suspend
+callback!  I can't figure that out.  Furthermore, the decisions about
+whether to skip the resume_noirq, resume_early, and resume callbacks
+are based on different criteria from the decisions on the suspend side.
+
+That's not all: The SMART_SUSPEND decisions completely ignore the value
+of DPM_FLAG_NEVER_SKIP!  NEVER_SKIP affects only the direct_completion
+pathway.
+
+SMART_SUSPEND seems to have two different meanings.  (1) If the device 
+is already in runtime suspend when a system sleep starts, skip the 
+suspend_late and suspend_noirq callbacks.  (2) Under certain (similar) 
+circumstances, skip the resume callbacks.  The documentation only 
+mentions (1) but the code also handles (2).
+
+Other things in there also seem strange.  device_prepare() does a
+WARN_ON if either SMART_SUSPEND or LEAVE_SUSPENDED is set and the
+device is not runtime-PM-enabled.  That's understandable, but it's also
+racy.  A system sleep can begin at any time; how can a driver know when
+it is safe to disable a device's runtime PM briefly?
+
+When device_prepare() calculates the power.direct_complete flag, it
+checks to see whether the device is currently in runtime suspend in
+some cases but not in others, as in the code added by your commit
+c62ec4610c40 ("PM / core:  Fix direct_complete handling for devices
+with no callbacks").  Since the runtime-PM state is going to checked in
+__device_suspend() anyway, we shouldn't need to check it here at all.
+
+At a couple of points in the code, THAW and RESTORE events are each
+treatedly specially, with no explanation.
+
+The power.may_skip_resume flag is used in only one place, when 
+LEAVE_SUSPENDED is set and there are subsystem-level callbacks.  In 
+particular, it is _not_ used by dev_pm_may_skip_resume().  That seems 
+highly suspicious at best.
+
+I think it would be worthwhile to expend some serious effort
+straightening all this stuff out.  Perhaps we could start with a more
+explicit description of what is supposed to happen at each step.  
+(Things to be careful about include phrases like "leave suspended",
+which is not the same as "don't call the resume callbacks", even though
+the two are easily conflated.)
+
+What do you think?
+
+Alan Stern
+
