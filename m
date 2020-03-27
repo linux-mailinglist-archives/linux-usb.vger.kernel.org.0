@@ -2,96 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4151950B6
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 06:39:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB4A19516F
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 07:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726333AbgC0Fi7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Mar 2020 01:38:59 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:34937 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725936AbgC0Fi7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 01:38:59 -0400
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1jHhhk-00085G-Qu; Fri, 27 Mar 2020 06:38:52 +0100
-Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1jHhhj-0001QA-LF; Fri, 27 Mar 2020 06:38:51 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Bin Liu <b-liu@ti.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, russell@personaltelco.net,
-        fercerpav@gmail.com
-Subject: [PATCH v1] usb: musb: dsps: set MUSB_DA8XX quirk for AM335x
-Date:   Fri, 27 Mar 2020 06:38:49 +0100
-Message-Id: <20200327053849.5348-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.26.0.rc2
+        id S1726661AbgC0GnB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Mar 2020 02:43:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48564 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725956AbgC0GnB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Mar 2020 02:43:01 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4A18920663;
+        Fri, 27 Mar 2020 06:42:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585291379;
+        bh=0GEjO0uzpiFYkGui2UqrFlykofVTWHI/4Xjigxn4nXo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DLmxtam5IQwDfr3Fyy+l7qetC0QIkQQZ9Dy/AayXAFYlmQcF08gABclcyN1de2lc7
+         AQTk00rng0g7LiktECgSklgz4PdUmVKYqZ1ZgS5qUByKqW7Uzxwe8+pTUFJTLgzjrd
+         8Qi6uSWjx/enVdj5QkHmfhgK/dZfW/Rodv/duioc=
+Date:   Fri, 27 Mar 2020 07:42:55 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rong Chen <rong.a.chen@intel.com>
+Cc:     kbuild test robot <lkp@intel.com>,
+        Colin King <colin.king@canonical.com>, kbuild-all@lists.01.org,
+        Sekhar Nori <nsekhar@ti.com>, Roger Quadros <rogerq@ti.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Pawel Laszczak <pawell@cadence.com>, linux-usb@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [kbuild-all] Re: [RFC PATCH] usb: cdns3:
+ cdns3_clear_register_bit() can be static
+Message-ID: <20200327064255.GA1603489@kroah.com>
+References: <20200325125041.94769-1-colin.king@canonical.com>
+ <20200326122858.GA50118@cde5a4ed3207>
+ <20200326130418.GA1295433@kroah.com>
+ <571960b6-5ed7-2106-7091-3ea83c31051a@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <571960b6-5ed7-2106-7091-3ea83c31051a@intel.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Beagle Bone Black has different memory corruptions if kernel is
-configured with USB_TI_CPPI41_DMA=y. This issue is reproducible with
-ath9k-htc driver (ar9271 based wifi usb controller):
+On Fri, Mar 27, 2020 at 08:34:52AM +0800, Rong Chen wrote:
+> 
+> 
+> On 3/26/20 9:04 PM, Greg Kroah-Hartman wrote:
+> > On Thu, Mar 26, 2020 at 08:28:58PM +0800, kbuild test robot wrote:
+> > > Fixes: 87db1192dc33 ("usb: cdns3: make signed 1 bit bitfields unsigned")
+> > This original patch did not "cause" this problem, it's just that you for
+> > some reason ran sparse for the first time on the file.
+> > 
+> > So I can't take this as-is, can you remove this line and resend?
+> 
+> Hi Greg,
+> 
+> Sorry for the inconvenience, the patch was generated by the bot,
+> we'll check and resend it.
 
-root@AccessBox:~ iw dev wlan0 set monitor  fcsfail otherbss
-root@AccessBox:~ ip l s dev wlan0 up
-kmemleak: Cannot insert 0xda577e40 into the object search tree (overlaps existing)
-CPU: 0 PID: 176 Comm: ip Not tainted 5.5.0 #7
-Hardware name: Generic AM33XX (Flattened Device Tree)
-[<c0112c14>] (unwind_backtrace) from [<c010dc98>] (show_stack+0x18/0x1c)
-[<c010dc98>] (show_stack) from [<c08c7c2c>] (dump_stack+0x84/0x98)
-[<c08c7c2c>] (dump_stack) from [<c02c75a8>] (create_object+0x2f8/0x324)
-[<c02c75a8>] (create_object) from [<c02b8928>] (kmem_cache_alloc+0x1a8/0x39c)
-[<c02b8928>] (kmem_cache_alloc) from [<c072fb68>] (__alloc_skb+0x60/0x174)
-[<c072fb68>] (__alloc_skb) from [<bf0c5c58>] (ath9k_wmi_cmd+0x50/0x184 [ath9k_htc])
-[<bf0c5c58>] (ath9k_wmi_cmd [ath9k_htc]) from [<bf0cb410>] (ath9k_regwrite_multi+0x54/0x84 [ath9k_htc])
-[<bf0cb410>] (ath9k_regwrite_multi [ath9k_htc]) from [<bf0cb7fc>] (ath9k_regwrite+0xf0/0xfc [ath9k_htc])
-[<bf0cb7fc>] (ath9k_regwrite [ath9k_htc]) from [<bf1aca78>] (ar5008_hw_process_ini+0x280/0x6c0 [ath9k_hw])
-[<bf1aca78>] (ar5008_hw_process_ini [ath9k_hw]) from [<bf1a66ac>] (ath9k_hw_reset+0x270/0x1458 [ath9k_hw])
-[<bf1a66ac>] (ath9k_hw_reset [ath9k_hw]) from [<bf0c9588>] (ath9k_htc_start+0xb0/0x22c [ath9k_htc])
-[<bf0c9588>] (ath9k_htc_start [ath9k_htc]) from [<bf0eb3c0>] (drv_start+0x4c/0x1e8 [mac80211])
-[<bf0eb3c0>] (drv_start [mac80211]) from [<bf104a84>] (ieee80211_do_open+0x480/0x954 [mac80211])
-[<bf104a84>] (ieee80211_do_open [mac80211]) from [<c075127c>] (__dev_open+0xdc/0x160)
-[<c075127c>] (__dev_open) from [<c07516a8>] (__dev_change_flags+0x1a4/0x204)
-[<c07516a8>] (__dev_change_flags) from [<c0751728>] (dev_change_flags+0x20/0x50)
-[<c0751728>] (dev_change_flags) from [<c076971c>] (do_setlink+0x2ac/0x978)
+It's fine that it was generated, it's a bug somewhere that thinks this
+specific patch was a problem so that this generated patch fixed it.
 
-After applying this patch, the system is running in monitor mode without
-noticeable issues.
+Did you all just start running sparse on things again?
 
-Suggested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/usb/musb/musb_dsps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+thanks,
 
-diff --git a/drivers/usb/musb/musb_dsps.c b/drivers/usb/musb/musb_dsps.c
-index 88923175f71e..c01f9e9e69f5 100644
---- a/drivers/usb/musb/musb_dsps.c
-+++ b/drivers/usb/musb/musb_dsps.c
-@@ -690,7 +690,7 @@ static void dsps_dma_controller_resume(struct dsps_glue *glue) {}
- #endif /* CONFIG_USB_TI_CPPI41_DMA */
- 
- static struct musb_platform_ops dsps_ops = {
--	.quirks		= MUSB_DMA_CPPI41 | MUSB_INDEXED_EP,
-+	.quirks		= MUSB_DMA_CPPI41 | MUSB_INDEXED_EP | MUSB_DA8XX,
- 	.init		= dsps_musb_init,
- 	.exit		= dsps_musb_exit,
- 
--- 
-2.26.0.rc2
-
+greg k-h
