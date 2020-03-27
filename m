@@ -2,90 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 075BD195483
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 10:54:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B34751954C0
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 11:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726540AbgC0Jyu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Mar 2020 05:54:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39558 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726168AbgC0Jyu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 27 Mar 2020 05:54:50 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0DDC420578;
-        Fri, 27 Mar 2020 09:54:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585302889;
-        bh=zsAHFY8HYYi1pCUgG38aoKsgwN3WWwDDoEivELfqiDU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KgT/fJ6hWwwiZFtxbE3ulRTspSgZCYIPpSSTg/5HLhkjAwiFvsywwHwnZAK1oe2v5
-         0O1n5knKyvTh75YkyA7t1M2Vn9RZhl/UkzJuVl/GyZ56aWAkR4FXYY9prUf+MCLjQJ
-         Rfw7GzamfClchGB2uyQ9yEwKizWbERO1XFRKcr+A=
-Date:   Fri, 27 Mar 2020 10:54:47 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        John Youn <John.Youn@synopsys.com>
-Subject: Re: [RESENDING RFC PATCH 1/4] dt-bindings: usb: Add
- snps,consolidate-sgl & consolidate-sgl
-Message-ID: <20200327095447.GA1698181@kroah.com>
-References: <cover.1585297723.git.joglekar@synopsys.com>
- <8a9ca8e08d7c4957789a209c77589f1aa4bd2f06.1585297723.git.joglekar@synopsys.com>
+        id S1726742AbgC0KEO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Mar 2020 06:04:14 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:37545 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726418AbgC0KEO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 06:04:14 -0400
+Received: by mail-lj1-f195.google.com with SMTP id r24so9576855ljd.4
+        for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2020 03:04:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qtl1Eialsdl3z7ZP76hLFrTUnrm/Xwed3O3Is0v5u2s=;
+        b=fm1BGbXw3YbyFJAFmqHvsEnrwOu7+/+ujtJ86z5Orejx852KLJeCDtQq+soYhGzfCj
+         2rAfF7PxQg2H2Sgjn2JBjFbILfIVHBT7QxDFDZh2R3HOuTeyVGc0fKnVbnrXO43QCj8x
+         cXlH+JS+Jobqck2T5KLCJ/QxbIlZUnxiWcd/WFLXFPVgiIHA/VQnYBo2xwwlOuCaoBNf
+         PV01d4t1H3eQqxbYRIT2/sc/hXgoikPd8X3chF1TEDLMvJhtp9ZecGoNxVyrMZXDYddu
+         VUti7wxKuFzjCVhJlxMkwTw2df/O1qZUfem6Ydt42/5xj5qm4D1YHiUkYri/dNaN3Cn1
+         sdLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qtl1Eialsdl3z7ZP76hLFrTUnrm/Xwed3O3Is0v5u2s=;
+        b=OiQhh+ZWj7jLlCtlCiCsl/Bqa3dmu2x7BNkSX1AQLVbfe9G+wCdQ22HXOg5tp6za4T
+         sET0KHo79Ttrx5y3KDOabjWFakpH6hgwO+hKqtKB64keZIkVdEM3ty+QrIzOwFzEK/TJ
+         0Q9SiMPSbh+qhUq/7edGQviQqURmaK6XDPwwB7IikK6XYx8UabOrROd2HBSTEb8aXSTI
+         J96gKY1mmD+sD7iHNMZk81jPj2TEquc6DOYbqd3YzihbxhTDhLalq3ScBFvztu4YyMyH
+         i4BqN25GMvBcnj27gPPWtU4uHNqUn4gswOQqVZc4AQLNQG0vxUxsCyA7QXyBX5IS5ZzL
+         WcMA==
+X-Gm-Message-State: AGi0Pub/AARJMwjXF/onR0l6V38PjB5xieGtepmA2RrBq1L3RSTORGfw
+        nf0/eB2S9I/w6FfOU+QP7fkz59dFhAN/Scu5KsgKRw==
+X-Google-Smtp-Source: ADFU+vsLFzRSaI0mp4F0YlxEk/ZWtLbeZk2X0x8rIBWVbKHsUZE12xxYtPOS4x7TLee1muHrdP/vfqhKQcCaKg9I0tI=
+X-Received: by 2002:a2e:9605:: with SMTP id v5mr7696484ljh.258.1585303451336;
+ Fri, 27 Mar 2020 03:04:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8a9ca8e08d7c4957789a209c77589f1aa4bd2f06.1585297723.git.joglekar@synopsys.com>
+References: <20200317093922.20785-1-lkundrak@v3.sk> <20200317093922.20785-22-lkundrak@v3.sk>
+In-Reply-To: <20200317093922.20785-22-lkundrak@v3.sk>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 27 Mar 2020 11:04:00 +0100
+Message-ID: <CACRpkdaEnODObC7emg2M7Ayn_JkeLuc3HpV4VhJcwaZ+=sDLcg@mail.gmail.com>
+Subject: Re: [PATCH 21/28] dt-bindings: gpio: Convert mrvl-gpio to json-schema
+To:     Lubomir Rintel <lkundrak@v3.sk>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        linux-media@vger.kernel.org, linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-rtc@vger.kernel.org,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 27, 2020 at 03:11:56PM +0530, Tejas Joglekar wrote:
-> This commit adds the documentation for consolidate-sgl, and
-> snps,consolidate-sgl property. These when set enables the quirk for
-> XHCI driver for consolidation of sg list into a temporary buffer when small
-> buffer sizes are scattered over the sg list not making up to MPS or total
-> transfer size within TRB cache size with Synopsys xHC.
-> 
-> Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
-> ---
->  Documentation/devicetree/bindings/usb/dwc3.txt     | 3 +++
->  Documentation/devicetree/bindings/usb/usb-xhci.txt | 3 +++
->  2 files changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
-> index 9946ff9ba735..292d1f7969e4 100644
-> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
-> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
-> @@ -104,6 +104,9 @@ Optional properties:
->  			this and tx-thr-num-pkt-prd to a valid, non-zero value
->  			1-16 (DWC_usb31 programming guide section 1.2.3) to
->  			enable periodic ESS TX threshold.
-> + - snps,consolidate-sgl: enable sg list consolidation - host mode only. Set to use
-> +			SG buffers of at least MPS size by consolidating smaller SG
-> +			buffers list into a single buffer.
->  
->   - <DEPRECATED> tx-fifo-resize: determines if the FIFO *has* to be reallocated.
->   - snps,incr-burst-type-adjustment: Value for INCR burst type of GSBUSCFG0
-> diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.txt b/Documentation/devicetree/bindings/usb/usb-xhci.txt
-> index 3f378951d624..a90d853557ee 100644
-> --- a/Documentation/devicetree/bindings/usb/usb-xhci.txt
-> +++ b/Documentation/devicetree/bindings/usb/usb-xhci.txt
-> @@ -43,6 +43,9 @@ Optional properties:
->    - quirk-broken-port-ped: set if the controller has broken port disable mechanism
->    - imod-interval-ns: default interrupt moderation interval is 5000ns
->    - phys : see usb-hcd.yaml in the current directory
-> +  - consolidate-sgl: indicate if you need to consolidate sg list into a
-> +    temporary buffer when small SG buffer sizes does not make upto MPS
-> +    size or total transfer size across the TRB cache size.
+Hi Lubomir!
 
-Shouldn't this refer to the fact that the hardware is broken?  Otherwise
-why would anyone know if they should, or should not, enable this option?
+Excellent work! Just nitpicks:
 
-thanks,
+On Tue, Mar 17, 2020 at 10:40 AM Lubomir Rintel <lkundrak@v3.sk> wrote:
 
-greg k-h
+> +++ b/Documentation/devicetree/bindings/gpio/mrvl-gpio.yaml
+> @@ -0,0 +1,173 @@
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/mrvl-gpio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell PXA GPIO controller
+
+This binding is lacking a license. Please use the dual GPL+BSD license
+tag.
+
+> +maintainers:
+> +  - devicetree@vger.kernel.org
+
+I don't know if Robert Jarzmik is in on maintaining this, would you accept
+it Robert?
+
+Yours,
+Linus Walleij
