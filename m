@@ -2,93 +2,308 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CDC9195356
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 09:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D5019535B
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 09:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726450AbgC0Ixf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Mar 2020 04:53:35 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:42422 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbgC0Ixe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 04:53:34 -0400
-Received: by mail-lj1-f195.google.com with SMTP id q19so9312857ljp.9
-        for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2020 01:53:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=R6RZiXEcIsLToTYFi1sESEyU5BX8rS5/YP6936j2TZs=;
-        b=RMaN69VBVbnZ6XLul4Z0c1rp0GoPJlXhEEXjeth0ysbXcs/RJUX/UOS51jg6dk+nRn
-         L1ydMdtag3eLejmn2W173HzX8HGhLKJx4wVbcyP6AUyOcwe0tw1cQKLdvUBdARG6XWn/
-         X+JED/o48CSCpvOyW9/x8yjaq7b+gVd9q37s8I1OEMD9mZl5rm5ch3CekchcsHXeIh9Q
-         gahgxQfxL3CvjvwNQv/m3SfZ3rA7ib5ZFcmfX13vUqHMJsuQs+lnFsr358PmmbflVbGv
-         WIcIkefmFLSK3gjvhiCxvHBCSSie2Lc9UTITIf81pUiVJr8U+UY80/W752lQ2HdfWJqz
-         WHdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=R6RZiXEcIsLToTYFi1sESEyU5BX8rS5/YP6936j2TZs=;
-        b=EndYEvx39QzPCQnihOAYeJlOEbRflB+CwGpir0RjoywkAqEOJ+0SEeoyJl6+IwUOsD
-         IUmqR3QBkvCr1vmOkM/Pmk1vMG/Ei0mPg0TYAVhlKsIrydN/ADESJAnhbYbav6YzPkyx
-         XMSrh2tr0HlZTfZ4NQ6UEhxTyHQj9CfDCvH1Unu8XckS2zSoyhSIRwVZW9vQ45iAKF+Y
-         Cr+2k7cC3y0JjvSkkblmSEShKAvpKza1t3GSESQNlrK4x34Lf/8i9zGiaWGcTyh1HZAH
-         sEOq6lrM/xhzdRfQHrnRXi5AK+1AoREnDXuiupm6PQ/F+rSPb5pTsxPT6KIbFiXcZHN8
-         3TuQ==
-X-Gm-Message-State: ANhLgQ2T519FM53RUPiTjInElJcZV8YAjeY2VVm9SP9gi9m7MCJx0W2/
-        03PuD4GPeo33q132pv59eobi9g==
-X-Google-Smtp-Source: APiQypIsQrjwe07VNObG2auVNwvv+ikRm3k1RyTxLFqb1kdpdx8DuP507njU6psxsnB+0kRsko0DZA==
-X-Received: by 2002:a2e:b554:: with SMTP id a20mr7841807ljn.34.1585299210596;
-        Fri, 27 Mar 2020 01:53:30 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:489c:7e29:1184:adc3:6cdd:61c2? ([2a00:1fa0:489c:7e29:1184:adc3:6cdd:61c2])
-        by smtp.gmail.com with ESMTPSA id v19sm3007695lfg.9.2020.03.27.01.53.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Mar 2020 01:53:30 -0700 (PDT)
-Subject: Re: [PATCH] usb: dwc3: gadget: don't dequeue requests on already
- disabled endpoints
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>, lars@metafoo.de,
-        alexandru.Ardelean@analog.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, balbi@kernel.org
-Cc:     gregkh@linuxfoundation.org, bigeasy@linutronix.de,
-        m.olbrich@pengutronix.de, kernel@pengutronix.de
-References: <dc52d6a0-12ed-a34c-01c4-0fc5ccbf7b1d@metafoo.de>
- <20200327084302.606-1-m.grzeschik@pengutronix.de>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <035d6582-b513-2ebd-f755-325df52e6a10@cogentembedded.com>
-Date:   Fri, 27 Mar 2020 11:53:18 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
-MIME-Version: 1.0
-In-Reply-To: <20200327084302.606-1-m.grzeschik@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726383AbgC0Ixz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Mar 2020 04:53:55 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:41492 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725946AbgC0Ixz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 04:53:55 -0400
+Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com [10.225.0.209])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id CBAEDC0F97;
+        Fri, 27 Mar 2020 08:53:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1585299234; bh=EJ8RV3plQh0+c4VOUvADF48eRGAn//pr/M5Ufp7Oeiw=;
+        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
+        b=l7FEEOqA5eRkonUkPGyyFVj/W9lfWVU7OtoNXCsMTN/vS/Zuk+DU2NsRuh7qK6sva
+         sjgMKEP6Hu/V2rM5uFp4ORxNCZEzQKWLeD8Dkm+ogM7QDq4/r5yNYz1yvD2bMl6Uk5
+         Bv4jDvM0lbHijcLCKgir2KOHrxlgW4yZydOfJ3hzjdRGhZZ6MXJXIlHhlD270AOhg8
+         DbKQo7r7m23QEhLqdu2Th4kGSPVnk+4zPOzPyi188dZJK5x86HnfWAu26GlQ3SDltH
+         dfWUGGDB2pvfaCC6wYqGUM9VsVFSErbaXLrPbTPNPqB4jND0JGXeL2rahQzRWymYWk
+         91/4+EcIb2efg==
+Received: from tejas-VirtualBox (joglekar-e7480.internal.synopsys.com [10.146.16.182])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 9E65FA005B;
+        Fri, 27 Mar 2020 08:53:48 +0000 (UTC)
+Received: by tejas-VirtualBox (sSMTP sendmail emulation); Fri, 27 Mar 2020 14:23:46 +0530
+Date:   Fri, 27 Mar 2020 14:23:46 +0530
+Message-Id: <5f7605b9f4cd2d6de4f0ef7d25be9a99d92c5aee.1585297723.git.joglekar@synopsys.com>
+In-Reply-To: <cover.1585297723.git.joglekar@synopsys.com>
+References: <cover.1585297723.git.joglekar@synopsys.com>
+From:   Tejas Joglekar <Tejas.Joglekar@synopsys.com>
+Subject: [RESENDING RFC PATCH 4/4] usb: xhci: Use temporary buffer to consolidate SG
+To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        linux-usb@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Fredrik Noring <noring@nocrew.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Raul E Rangel <rrangel@chromium.org>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     John Youn <John.Youn@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+The Synopsys xHC has an internal TRB cache of size TRB_CACHE_SIZE for
+each endpoint. The default value for TRB_CACHE_SIZE is 16 for SS and 8
+for HS. The controller loads and updates the TRB cache from the transfer
+ring in system memory whenever the driver issues a start transfer or
+update transfer command.
 
-On 27.03.2020 11:43, Michael Grzeschik wrote:
+For chained TRBs, the Synopsys xHC requires that the total amount of
+bytes for all TRBs loaded in the TRB cache be greater than or equal to 1
+MPS. Or the chain ends within the TRB cache (with a last TRB).
 
-> dwc3_gadget_ep_disable gets called before the last request gets
-> dequeued.
-> 
-> In __dwc3_gadget_ep_disable all started, pending and cancelled
-> lists for this endpoint will call dwc3_gadget_giveback in
-> dwc3_remove_requests.
-> 
-> After that no list containing the afterwards dequed request,
+If this requirement is not met, the controller will not be able to send
+or receive a packet and it will hang causing a driver timeout and error.
 
-    Dequeued.
+This can be a problem if a class driver queues SG requests with many
+small-buffer entries. The XHCI driver will create a chained TRB for each
+entry which may trigger this issue.
 
-> therefor it is not necessary to run the dequeue routine.
+This patch adds logic to the XHCI driver to detect and prevent this from
+happening.
 
-    Therefore?
+For every (TRB_CACHE_SIZE - 2), we check the total buffer size of
+the SG list and if the last window of (TRB_CACHE_SIZE - 2) SG list length
+and we don't make up at least 1 MPS, we create a temporary buffer to
+consolidate full SG list into the buffer.
 
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-[...]
+We check at (TRB_CACHE_SIZE - 2) window because it is possible that there
+would be a link and/or event data TRB that take up to 2 of the cache
+entries.
 
-MBR, Sergei
+We discovered this issue with devices on other platforms but have not
+yet come across any device that triggers this on Linux. But it could be
+a real problem now or in the future. All it takes is N number of small
+chained TRBs. And other instances of the Synopsys IP may have smaller
+values for the TRB_CACHE_SIZE which would exacerbate the problem.
+
+Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
+---
+
+Resending as 'umlaut' in email are not accepted by some servers.
+
+ drivers/usb/core/hcd.c       |   8 +++
+ drivers/usb/host/xhci-ring.c |   2 +-
+ drivers/usb/host/xhci.c      | 128 +++++++++++++++++++++++++++++++++++++++++++
+ drivers/usb/host/xhci.h      |   4 ++
+ 4 files changed, 141 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index aa45840d8273..fdd257a2b8a6 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -1459,6 +1459,14 @@ int usb_hcd_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
+ 					return -EINVAL;
+ 				}
+ 
++				/*
++				 * If SG is consolidate into single buffer
++				 * return early
++				 */
++				if ((urb->transfer_flags &
++				     URB_DMA_MAP_SINGLE))
++					return ret;
++
+ 				n = dma_map_sg(
+ 						hcd->self.sysdev,
+ 						urb->sg,
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index a78787bb5133..2fad9474912a 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -3291,7 +3291,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+ 
+ 	full_len = urb->transfer_buffer_length;
+ 	/* If we have scatter/gather list, we use it. */
+-	if (urb->num_sgs) {
++	if (urb->num_sgs && !(urb->transfer_flags & URB_DMA_MAP_SINGLE)) {
+ 		num_sgs = urb->num_mapped_sgs;
+ 		sg = urb->sg;
+ 		addr = (u64) sg_dma_address(sg);
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index fe38275363e0..94fddbd06179 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1256,6 +1256,109 @@ EXPORT_SYMBOL_GPL(xhci_resume);
+ 
+ /*-------------------------------------------------------------------------*/
+ 
++static int xhci_map_temp_buffer(struct usb_hcd *hcd, struct urb *urb)
++{
++	void *temp;
++	int ret = 0;
++	unsigned int len;
++	unsigned int buf_len;
++	enum dma_data_direction dir;
++	struct xhci_hcd *xhci;
++
++	xhci = hcd_to_xhci(hcd);
++	dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
++	buf_len = urb->transfer_buffer_length;
++
++	temp = kzalloc_node(buf_len, GFP_ATOMIC,
++			    dev_to_node(hcd->self.sysdev));
++	if (!temp) {
++		xhci_warn(xhci, "Failed to create temp buffer, HC may fail\n");
++		return -ENOMEM;
++	}
++
++	if (usb_urb_dir_out(urb)) {
++		len = sg_pcopy_to_buffer(urb->sg, urb->num_sgs,
++					 temp, buf_len, 0);
++		if (len != buf_len)
++			xhci_warn(xhci, "Wrong temp buffer write length\n");
++	}
++
++	urb->transfer_buffer = temp;
++	urb->transfer_dma = dma_map_single(hcd->self.sysdev,
++					   urb->transfer_buffer,
++					   urb->transfer_buffer_length,
++					   dir);
++	if (dma_mapping_error(hcd->self.sysdev,
++			      urb->transfer_dma)) {
++		xhci_err(xhci, "dma mapping error\n");
++		ret = -EAGAIN;
++		kfree(temp);
++	} else {
++		urb->transfer_flags |= URB_DMA_MAP_SINGLE;
++	}
++
++	return ret;
++}
++
++static bool xhci_urb_temp_buffer_required(struct usb_hcd *hcd,
++					  struct urb *urb)
++{
++	bool ret = false;
++	unsigned int i;
++	unsigned int len = 0;
++	unsigned int buf_len;
++	unsigned int trb_size;
++	unsigned int max_pkt;
++	struct scatterlist *sg;
++	struct scatterlist *tail_sg;
++
++	sg = urb->sg;
++	tail_sg = urb->sg;
++	buf_len = urb->transfer_buffer_length;
++	max_pkt = usb_endpoint_maxp(&urb->ep->desc);
++
++	if (urb->dev->speed >= USB_SPEED_SUPER)
++		trb_size = TRB_CACHE_SIZE_SS;
++	else
++		trb_size = TRB_CACHE_SIZE_HS;
++
++	for_each_sg(urb->sg, sg, urb->num_sgs, i) {
++		len = len + sg->length;
++		if (i > trb_size - 2) {
++			len = len - tail_sg->length;
++			if (len < max_pkt) {
++				ret = true;
++				break;
++			}
++
++			tail_sg = sg_next(tail_sg);
++		}
++	}
++	return ret;
++}
++
++static void xhci_unmap_temp_buf(struct urb *urb)
++{
++	struct scatterlist *sg;
++	unsigned int len;
++	unsigned int buf_len;
++
++	sg = urb->sg;
++	buf_len = urb->transfer_buffer_length;
++
++	if (usb_urb_dir_in(urb)) {
++		len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
++					   urb->transfer_buffer,
++					   buf_len,
++					   0);
++		if (len != buf_len)
++			dev_err(&urb->dev->dev, "Wrong length for unmap\n");
++	}
++
++	kfree(urb->transfer_buffer);
++	urb->transfer_buffer = NULL;
++}
++
+ /*
+  * Bypass the DMA mapping if URB is suitable for Immediate Transfer (IDT),
+  * we'll copy the actual data into the TRB address register. This is limited to
+@@ -1265,12 +1368,36 @@ EXPORT_SYMBOL_GPL(xhci_resume);
+ static int xhci_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
+ 				gfp_t mem_flags)
+ {
++	struct xhci_hcd *xhci;
++
++	xhci = hcd_to_xhci(hcd);
++
+ 	if (xhci_urb_suitable_for_idt(urb))
+ 		return 0;
+ 
++	if (xhci->quirks & XHCI_CONSOLIDATE_SG_LIST) {
++		if (xhci_urb_temp_buffer_required(hcd, urb))
++			xhci_map_temp_buffer(hcd, urb);
++	}
+ 	return usb_hcd_map_urb_for_dma(hcd, urb, mem_flags);
+ }
+ 
++static void xhci_unmap_urb_for_dma(struct usb_hcd *hcd, struct urb *urb)
++{
++	struct xhci_hcd *xhci;
++	bool unmap_temp_buf = false;
++
++	xhci = hcd_to_xhci(hcd);
++
++	if (urb->num_sgs && (urb->transfer_flags & URB_DMA_MAP_SINGLE))
++		unmap_temp_buf = true;
++
++	usb_hcd_unmap_urb_for_dma(hcd, urb);
++
++	if ((xhci->quirks & XHCI_CONSOLIDATE_SG_LIST) && unmap_temp_buf)
++		xhci_unmap_temp_buf(urb);
++}
++
+ /**
+  * xhci_get_endpoint_index - Used for passing endpoint bitmasks between the core and
+  * HCDs.  Find the index for an endpoint given its descriptor.  Use the return
+@@ -5315,6 +5442,7 @@ static const struct hc_driver xhci_hc_driver = {
+ 	 * managing i/o requests and associated device resources
+ 	 */
+ 	.map_urb_for_dma =      xhci_map_urb_for_dma,
++	.unmap_urb_for_dma =    xhci_unmap_urb_for_dma,
+ 	.urb_enqueue =		xhci_urb_enqueue,
+ 	.urb_dequeue =		xhci_urb_dequeue,
+ 	.alloc_dev =		xhci_alloc_dev,
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index a093eeaec70e..341d1dfbe689 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1330,6 +1330,10 @@ enum xhci_setup_dev {
+ #define TRB_SIA			(1<<31)
+ #define TRB_FRAME_ID(p)		(((p) & 0x7ff) << 20)
+ 
++/* TRB cache size for xHC with TRB cache */
++#define TRB_CACHE_SIZE_HS	8
++#define TRB_CACHE_SIZE_SS	16
++
+ struct xhci_generic_trb {
+ 	__le32 field[4];
+ };
+-- 
+2.11.0
+
