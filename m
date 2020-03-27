@@ -2,77 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16FBC194E1E
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 01:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA8C194E3A
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 01:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727742AbgC0AfR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Mar 2020 20:35:17 -0400
-Received: from mga12.intel.com ([192.55.52.136]:44340 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726359AbgC0AfR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 26 Mar 2020 20:35:17 -0400
-IronPort-SDR: sK+/uC2zPYzaUNZTSerJFe63ma0XYcLCEmuusGv6FgejRMIBCv2QhmtHPjcUc3EdGfjBmUxWKW
- kDiB3yhQx+NQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2020 17:35:16 -0700
-IronPort-SDR: e22T3VdHduyjz5bDy4OZa210k9WTO1218bTaoPEseA5BLErTX2QCPDoJWKDZia+MKeWxQXCcma
- BQIJKtcvrU0g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,310,1580803200"; 
-   d="scan'208";a="250972692"
-Received: from shao2-debian.sh.intel.com (HELO [10.239.13.3]) ([10.239.13.3])
-  by orsmga006.jf.intel.com with ESMTP; 26 Mar 2020 17:35:10 -0700
-Subject: Re: [kbuild-all] Re: [RFC PATCH] usb: cdns3:
- cdns3_clear_register_bit() can be static
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kbuild test robot <lkp@intel.com>
-Cc:     Colin King <colin.king@canonical.com>, kbuild-all@lists.01.org,
-        Sekhar Nori <nsekhar@ti.com>, Roger Quadros <rogerq@ti.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Pawel Laszczak <pawell@cadence.com>, linux-usb@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200325125041.94769-1-colin.king@canonical.com>
- <20200326122858.GA50118@cde5a4ed3207> <20200326130418.GA1295433@kroah.com>
-From:   Rong Chen <rong.a.chen@intel.com>
-Message-ID: <571960b6-5ed7-2106-7091-3ea83c31051a@intel.com>
-Date:   Fri, 27 Mar 2020 08:34:52 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727809AbgC0A6A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Mar 2020 20:58:00 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:50393 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727683AbgC0A6A (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 20:58:00 -0400
+Received: (qmail 16053 invoked by uid 500); 26 Mar 2020 20:57:59 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 26 Mar 2020 20:57:59 -0400
+Date:   Thu, 26 Mar 2020 20:57:59 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     John Donnelly <john.p.donnelly@oracle.com>
+cc:     linux-usb@vger.kernel.org
+Subject: Re: Question :  remote "ILO" setup - keyboard and mouse enumeration
+In-Reply-To: <7A2988F9-C174-4A13-8F0E-B3D73A33DF47@oracle.com>
+Message-ID: <Pine.LNX.4.44L0.2003262047590.15302-100000@netrider.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <20200326130418.GA1295433@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: TEXT/PLAIN; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Thu, 26 Mar 2020, John Donnelly wrote:
 
+> Hi,
+> 
+> This is 10,000 foot question for a issue I am looking at :
+> 
+> Quite a few servers have a BCM that expose a USB keyboard and mouse
+> when a " iLo client session " is started that also provides a remote
+> console.
+> 
+> For instance on Bus 01.Port 1: Dev 1, Port 8 there are these devices :
+> 
+>  lsusb -t
+> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 5000M
+> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/16p, 480M
+>     |__ Port 8: Dev 2, If 0, Class=Hub, Driver=hub/7p, 480M
+>         |__ Port 3: Dev 3, If 0, Class=Communications, Driver=cdc_ether, 480M
+>         |__ Port 3: Dev 3, If 1, Class=CDC Data, Driver=cdc_ether, 480M
+> 
+> 
+> When a remote viewer ( iLO ) session is started, two HID appear under
+> Port 8 :
+> 
+> 
+>  lsusb -t
+> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 5000M
+> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/16p, 480M
+>     |__ Port 8: Dev 2, If 0, Class=Hub, Driver=hub/7p, 480M
+>         |__ Port 1: Dev 7, If 0, Class=Human Interface Device, Driver=usbhid,480M
+>         |__ Port 2: Dev 6, If 0, Class=Human Interface Device, Driver=usbhid,480M
+>         |__ Port 3: Dev 3, If 0, Class=Communications, Driver=cdc_ether, 480M
+>         |__ Port 3: Dev 3, If 1, Class=CDC Data, Driver=cdc_ether, 480M
+> 
+> 
+> Is this device tree showing me the Port 8 is somehow wired to the BCM
+> ?  And the BCM did some sort of operation that causes the xhci_hcd
+> driver to enumerate a new device ?
 
-On 3/26/20 9:04 PM, Greg Kroah-Hartman wrote:
-> On Thu, Mar 26, 2020 at 08:28:58PM +0800, kbuild test robot wrote:
->> Fixes: 87db1192dc33 ("usb: cdns3: make signed 1 bit bitfields unsigned")
-> This original patch did not "cause" this problem, it's just that you for
-> some reason ran sparse for the first time on the file.
->
-> So I can't take this as-is, can you remove this line and resend?
+Yes, it looks that way.  The operation is just turning on a 
+connection -- electronically closing a switch.  Same as if you plugged 
+in a keyboard and a mouse.
 
-Hi Greg,
+> The driver :  “ usbhid “ in real life appears to be a built-in
+> component to the kernel - Not a loadable module .  I suspect that is
+> so keyboards always work.
 
-Sorry for the inconvenience, the patch was generated by the bot,
-we'll check and resend it.
+That's a common design decision, but it doesn't have to be that way.  
+If you build your own kernel, you can set it up any way you want.
 
-Best Regards,
-Rong Chen
+> When the iLO session is terminated the two HID devices disappear . 
+> 
+> If anyone can point me documentation how this works I would appreciate it.  
 
->
-> thanks,
->
-> greg k-h
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+You should look though the documentation for the BCM and iLO.  That's 
+where you're most likely to find the answers.
+
+Alan Stern
 
