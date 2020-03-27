@@ -2,51 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B3419519C
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 07:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBE31952B6
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 09:23:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726096AbgC0GyR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Mar 2020 02:54:17 -0400
-Received: from mga09.intel.com ([134.134.136.24]:17781 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725936AbgC0GyR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 27 Mar 2020 02:54:17 -0400
-IronPort-SDR: 9+EgdqXUXlvv3tIj9mMarWoYBhyWOlTRYXsWsMzADhoNKh+0+tMyDvnum4sVCaVTvqo+dioamj
- oRAy9L5LZJMA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2020 23:54:16 -0700
-IronPort-SDR: 6bjzR2sXKAnepQ89U1HncOHnqs4hNhvTPD3uMtPZ43EdX2/pZUYRAHuXvlhJlRbU6VmHVdi4GD
- v0Oq/jf9gYvQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,311,1580803200"; 
-   d="scan'208";a="251052466"
-Received: from shao2-debian.sh.intel.com (HELO [10.239.13.3]) ([10.239.13.3])
-  by orsmga006.jf.intel.com with ESMTP; 26 Mar 2020 23:54:10 -0700
-Subject: Re: [kbuild-all] Re: [RFC PATCH] usb: cdns3:
- cdns3_clear_register_bit() can be static
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kbuild test robot <lkp@intel.com>,
-        Colin King <colin.king@canonical.com>, kbuild-all@lists.01.org,
-        Sekhar Nori <nsekhar@ti.com>, Roger Quadros <rogerq@ti.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Pawel Laszczak <pawell@cadence.com>, linux-usb@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200325125041.94769-1-colin.king@canonical.com>
- <20200326122858.GA50118@cde5a4ed3207> <20200326130418.GA1295433@kroah.com>
- <571960b6-5ed7-2106-7091-3ea83c31051a@intel.com>
- <20200327064255.GA1603489@kroah.com>
-From:   Rong Chen <rong.a.chen@intel.com>
-Message-ID: <372f30ad-fbea-d411-c58f-2d4692509a60@intel.com>
-Date:   Fri, 27 Mar 2020 14:53:51 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726368AbgC0IW6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Mar 2020 04:22:58 -0400
+Received: from sonic303-1.consmr.mail.bf2.yahoo.com ([74.6.131.40]:40884 "EHLO
+        sonic303-1.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726335AbgC0IW5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 04:22:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1585297375; bh=NajTNMrfMLb6UXcjRhYpYerQX8PtVBLz0oFgaMINSWY=; h=Date:From:Reply-To:Subject:References:From:Subject; b=dUzc9c8bsfaykrQjvI88uwMC6TZEWw1nvSxvVOTICqc7caCrbQ3LaWn+w4r70UVQLZ2/hOV1vBRy1RUBUXGj6QSaKLTMrSBgava/ujb+WZyy+bsNKTbuUm2w2ft4gG/LODa/ILs8hHHuyfTqhb4jbvKcBURwl2EsRlby/FmgE2TjNY03vmsHLt5d6WoYipsRDhOsB6yekw07oS36OOjlITwHh60/O46fGQO6jz19yY5Qr26vvWgaj0mZKm7tpISGmkpFkn266urhadGCKZB3xj0QJtyj1HYVr2xg33S9meP0SyqhkV4C4cKWuYYema8tboUvTjHCjsbhLnn0P4wPLA==
+X-YMail-OSG: mU6orekVM1kkfFEViLIqw3U6dxIwi_13MMW.FfcSKoo.kVG7mH5u5KYkaTJSKYU
+ HwsCgZhq9dtKpSVvF6Oku.N2C.FFXeVZ4oneUX1uisY6XZSZgMb9oJ9Dsa6DxQjI082gfd4XXNg_
+ Tq3vhPNzBS3581595ckMX4JO2ce2.PKYfWA3xOo__JLUKMf1HnD8DDC.VGIwI83ZVkwIXyzryD_c
+ .gLLK.i6tohy7rTBsxdAcnt.Cfc_bh_AIG_In2crzHcW_yILWltVnIpLPeulTF.eDWQdJ2brZtd4
+ r0D86cwwRumioQeYKenDaqAI_HE7zmTInHFtGnBFNLHiSBIg3nmLGOOj97vv5.UJl8yZla5UX8Xd
+ GeiKGH6u2tLUT_jXgWHbniNS_C5k8Z_jK1ZCR1mJO8EaiOgly0uGO6.NgNNPTI1_VvBvjZiFOmRq
+ c4u.KFdah4igWZcPrlWitYiwmvsOnqzpTkTwZR0SJ8nO.SBgq_dNCpw1Q47qcwzTc3PLdOTDGSkp
+ .pxB1dWV8d3NuBg_y8kqqJwyd4JS27uDEHQfJK8fGs8RiiHkRDHr1.fnjfMKWNd9Um_jmenkbCXa
+ DkrwQMXEvlBejJwAbjuB4padAI2fBUQafgBk.C3QNZrsjlbrwKjzExW1.kWzJlNS_jzlOjchC3AD
+ wX2V7H4lDQk22wSIc8YDedn5vQsiyCyTTPerDpBPKz8gjyXSxMiWWtjK_llpfQQHtySPhhRhFErn
+ M7eQxNgdohj4dfoxmNqK0zyAAEr.fgCjaxBDv_1pn09CHkYWwfe_RLXFLirCQX3zRjqB58cPGjwV
+ iL0RpB4vid0L0j7PHPkokcqyC_7lA15HYtu.XrfR6q3HzKG.S4zNYqAq7d8SOhWkvG74dnKc18.L
+ imeS3UqEKdGwFy2BDfFBAw3kLNFaNbmmpgEjdxCVC.eH.AQ.gMKkl.Vw0TI.DPT0ItE611FM0eGd
+ Lv1oDIUj5c1JFGIc_2iXtJcXACYHFskJ5XKACZe.U7bBVtXpWSzVh5Hqv9DgOjytno0NEWbz_ryu
+ 2rJb6FS0MlnOncIoOMnWIqCC.YfLkCt0EmyccEdnKbAouzQsTh.M_iNupjQO95Thw5PeIhpr44Se
+ PtM6PMzXIytkQs0KwKM4csJFYEFbPWsw3RVwtL1zVXTXToMewW1M5De5e7lWBImeNp.8ik4VbCeu
+ hUqeQzMSNsmWetVkOmkyGOSvh3q1efTLA_C77LQ6SNHlUDwoFDljmdlShn.UR0TFjZch7L8tDXJQ
+ HxJkoOPJG6eVSFX3Z14VgXI9mfSL2c9qvpc0C6.ikc3HlszGXUmx8D1DPOioWSFJ5MBTFGOkZ6u4
+ -
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.bf2.yahoo.com with HTTP; Fri, 27 Mar 2020 08:22:55 +0000
+Date:   Fri, 27 Mar 2020 08:22:53 +0000 (UTC)
+From:   Ms lisa Hugh <lisahugh531@gmail.com>
+Reply-To: ms.lisahugh000@gmail.com
+Message-ID: <1852203301.1879507.1585297373380@mail.yahoo.com>
+Subject: BUSINESS CO-OPERATION OPPORTUNITY.
 MIME-Version: 1.0
-In-Reply-To: <20200327064255.GA1603489@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <1852203301.1879507.1585297373380.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.15518 YMailNodin Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
@@ -54,36 +50,25 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 
 
-On 3/27/20 2:42 PM, Greg Kroah-Hartman wrote:
-> On Fri, Mar 27, 2020 at 08:34:52AM +0800, Rong Chen wrote:
->>
->> On 3/26/20 9:04 PM, Greg Kroah-Hartman wrote:
->>> On Thu, Mar 26, 2020 at 08:28:58PM +0800, kbuild test robot wrote:
->>>> Fixes: 87db1192dc33 ("usb: cdns3: make signed 1 bit bitfields unsigned")
->>> This original patch did not "cause" this problem, it's just that you for
->>> some reason ran sparse for the first time on the file.
->>>
->>> So I can't take this as-is, can you remove this line and resend?
->> Hi Greg,
->>
->> Sorry for the inconvenience, the patch was generated by the bot,
->> we'll check and resend it.
-> It's fine that it was generated, it's a bug somewhere that thinks this
-> specific patch was a problem so that this generated patch fixed it.
-Yes, you are right, we'll fix the bug asap.
+Dear Friend,
 
->
-> Did you all just start running sparse on things again?
-Sparse has been running for a long time in our system.
+I am Ms Lisa hugh, work with the department of Audit and accounting manager here in the Bank(B.O.A).
 
-Best Regards,
-Rong Chen
+Please i need your assistance for the transferring of thIs fund to your bank account for both of us benefit for life time investment, amount (US$4.5M DOLLARS).
 
->
-> thanks,
->
-> greg k-h
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me for success.
 
+Note/ 50% for you why 50% for me after success of the transfer to your bank account.
+
+Below information is what i need from you so will can be reaching each other
+
+1)Full name ...
+2)Private telephone number...
+3)Age...
+4)Nationality...
+5)Occupation ...
+
+
+Thanks.
+
+Ms Lisa hugh.
