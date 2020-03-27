@@ -2,206 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C829195510
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 11:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57DBB19551B
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 11:24:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726360AbgC0KWR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Mar 2020 06:22:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56788 "EHLO mail.kernel.org"
+        id S1726427AbgC0KYO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Mar 2020 06:24:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58444 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726266AbgC0KWR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 27 Mar 2020 06:22:17 -0400
+        id S1726165AbgC0KYN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Mar 2020 06:24:13 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6B2C52072F;
-        Fri, 27 Mar 2020 10:22:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9319A20705;
+        Fri, 27 Mar 2020 10:24:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585304535;
-        bh=PACLhkB25RUvmW7e6y179wBsrqPT0d9Dp26uOAGUF6E=;
+        s=default; t=1585304653;
+        bh=lF/JY9ZVPOd2GvsK5POWvp9v/fpJ4aUeUUUE0LLiT5Y=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SCC1S8agO4DFLBoVdUQj4munFNghiWY7AvP/LnDqeYFal8vRRt8decOx/s7YMUV1M
-         coMZTMtwLyPCR6MxamHQNWYFK3C6+r+eQdODHPGO9fmYRNhCo+2TBY/GxbC7rsipIk
-         CeriROk4wHFUCorp0vGHPl5oMFdDjurLbc1A7gRs=
-Date:   Fri, 27 Mar 2020 11:22:11 +0100
+        b=cGsbdW4AfZk74llKktuJuBgvMAnTth5VSaNK32PplZn/Un0/A8h1qEA20gOXHdeHy
+         PV2+veX+oDFxPV3TmzxPLiYDzrzmjdIJ7oFCXg0e20Ivf/L/txU1h2DEv8ZobLSBcf
+         CHvzxL+4ZBTPq/78Dk+qC2TW9Onu4EUUKVCpUFQg=
+Date:   Fri, 27 Mar 2020 11:24:09 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>
 Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Fredrik Noring <noring@nocrew.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         John Youn <John.Youn@synopsys.com>
-Subject: Re: [RESENDING RFC PATCH 4/4] usb: xhci: Use temporary buffer to
- consolidate SG
-Message-ID: <20200327102211.GA1700570@kroah.com>
+Subject: Re: [RESENDING RFC PATCH 1/4] dt-bindings: usb: Add
+ snps,consolidate-sgl & consolidate-sgl
+Message-ID: <20200327102409.GB1700570@kroah.com>
 References: <cover.1585297723.git.joglekar@synopsys.com>
- <5f7605b9f4cd2d6de4f0ef7d25be9a99d92c5aee.1585297723.git.joglekar@synopsys.com>
- <20200327092759.GA1693819@kroah.com>
- <d20ec217-adc2-e587-f285-83fbabc30378@synopsys.com>
+ <8a9ca8e08d7c4957789a209c77589f1aa4bd2f06.1585297723.git.joglekar@synopsys.com>
+ <20200327095447.GA1698181@kroah.com>
+ <11a058bc-a947-a763-680f-a11fd454925a@synopsys.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d20ec217-adc2-e587-f285-83fbabc30378@synopsys.com>
+In-Reply-To: <11a058bc-a947-a763-680f-a11fd454925a@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 27, 2020 at 10:05:21AM +0000, Tejas Joglekar wrote:
+On Fri, Mar 27, 2020 at 10:11:59AM +0000, Tejas Joglekar wrote:
 > Hi,
-> On 3/27/2020 2:57 PM, Greg KH wrote:
-> > On Fri, Mar 27, 2020 at 02:23:46PM +0530, Tejas Joglekar wrote:
-> >> The Synopsys xHC has an internal TRB cache of size TRB_CACHE_SIZE for
-> >> each endpoint. The default value for TRB_CACHE_SIZE is 16 for SS and 8
-> >> for HS. The controller loads and updates the TRB cache from the transfer
-> >> ring in system memory whenever the driver issues a start transfer or
-> >> update transfer command.
-> >>
-> >> For chained TRBs, the Synopsys xHC requires that the total amount of
-> >> bytes for all TRBs loaded in the TRB cache be greater than or equal to 1
-> >> MPS. Or the chain ends within the TRB cache (with a last TRB).
-> >>
-> >> If this requirement is not met, the controller will not be able to send
-> >> or receive a packet and it will hang causing a driver timeout and error.
-> > 
-> > Sounds like broken hardware, or is this requirement in the xhci spec?
-> > 
-> Not a xhci spec requirement, but behavior of Synopsys xHC. We have not seen
-> actual failure on Linux yet but it is possible in future if SG list with
-> very small buffer size is given for transfer. 
-
-So this is something required that is outside of the spec, meaning that
-the hardware is imposing additional requirements, which implies it's a
-hardware bug, or "quirk", right?
-
-> >> This can be a problem if a class driver queues SG requests with many
-> >> small-buffer entries. The XHCI driver will create a chained TRB for each
-> >> entry which may trigger this issue.
-> >>
-> >> This patch adds logic to the XHCI driver to detect and prevent this from
-> >> happening.
-> >>
-> >> For every (TRB_CACHE_SIZE - 2), we check the total buffer size of
-> >> the SG list and if the last window of (TRB_CACHE_SIZE - 2) SG list length
-> >> and we don't make up at least 1 MPS, we create a temporary buffer to
-> >> consolidate full SG list into the buffer.
-> >>
-> >> We check at (TRB_CACHE_SIZE - 2) window because it is possible that there
-> >> would be a link and/or event data TRB that take up to 2 of the cache
-> >> entries.
-> >>
-> >> We discovered this issue with devices on other platforms but have not
-> >> yet come across any device that triggers this on Linux. But it could be
-> >> a real problem now or in the future. All it takes is N number of small
-> >> chained TRBs. And other instances of the Synopsys IP may have smaller
-> >> values for the TRB_CACHE_SIZE which would exacerbate the problem.
+> On 3/27/2020 3:24 PM, Greg KH wrote:
+> > On Fri, Mar 27, 2020 at 03:11:56PM +0530, Tejas Joglekar wrote:
+> >> This commit adds the documentation for consolidate-sgl, and
+> >> snps,consolidate-sgl property. These when set enables the quirk for
+> >> XHCI driver for consolidation of sg list into a temporary buffer when small
+> >> buffer sizes are scattered over the sg list not making up to MPS or total
+> >> transfer size within TRB cache size with Synopsys xHC.
 > >>
 > >> Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
 > >> ---
+> >>  Documentation/devicetree/bindings/usb/dwc3.txt     | 3 +++
+> >>  Documentation/devicetree/bindings/usb/usb-xhci.txt | 3 +++
+> >>  2 files changed, 6 insertions(+)
 > >>
-> >> Resending as 'umlaut' in email are not accepted by some servers.
-> >>
-> >>  drivers/usb/core/hcd.c       |   8 +++
-> >>  drivers/usb/host/xhci-ring.c |   2 +-
-> >>  drivers/usb/host/xhci.c      | 128 +++++++++++++++++++++++++++++++++++++++++++
-> >>  drivers/usb/host/xhci.h      |   4 ++
-> >>  4 files changed, 141 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> >> index aa45840d8273..fdd257a2b8a6 100644
-> >> --- a/drivers/usb/core/hcd.c
-> >> +++ b/drivers/usb/core/hcd.c
-> >> @@ -1459,6 +1459,14 @@ int usb_hcd_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
-> >>  					return -EINVAL;
-> >>  				}
+> >> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
+> >> index 9946ff9ba735..292d1f7969e4 100644
+> >> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
+> >> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+> >> @@ -104,6 +104,9 @@ Optional properties:
+> >>  			this and tx-thr-num-pkt-prd to a valid, non-zero value
+> >>  			1-16 (DWC_usb31 programming guide section 1.2.3) to
+> >>  			enable periodic ESS TX threshold.
+> >> + - snps,consolidate-sgl: enable sg list consolidation - host mode only. Set to use
+> >> +			SG buffers of at least MPS size by consolidating smaller SG
+> >> +			buffers list into a single buffer.
 > >>  
-> >> +				/*
-> >> +				 * If SG is consolidate into single buffer
-> >> +				 * return early
+> >>   - <DEPRECATED> tx-fifo-resize: determines if the FIFO *has* to be reallocated.
+> >>   - snps,incr-burst-type-adjustment: Value for INCR burst type of GSBUSCFG0
+> >> diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.txt b/Documentation/devicetree/bindings/usb/usb-xhci.txt
+> >> index 3f378951d624..a90d853557ee 100644
+> >> --- a/Documentation/devicetree/bindings/usb/usb-xhci.txt
+> >> +++ b/Documentation/devicetree/bindings/usb/usb-xhci.txt
+> >> @@ -43,6 +43,9 @@ Optional properties:
+> >>    - quirk-broken-port-ped: set if the controller has broken port disable mechanism
+> >>    - imod-interval-ns: default interrupt moderation interval is 5000ns
+> >>    - phys : see usb-hcd.yaml in the current directory
+> >> +  - consolidate-sgl: indicate if you need to consolidate sg list into a
+> >> +    temporary buffer when small SG buffer sizes does not make upto MPS
+> >> +    size or total transfer size across the TRB cache size.
 > > 
-> > I do not understand this comment.
-> 
-> The SG list is copied to a temporary buffer, and buffer is DMA mapped so we should 
-> not map the SG list again, and return without any mapping here. 
+> > Shouldn't this refer to the fact that the hardware is broken?  Otherwise
+> > why would anyone know if they should, or should not, enable this option?
+> >
+> We have not seen issue with Linux environment for now. But with other OS with
+> SG list with very small buffer sizes the xHC controller hang was seen. So 
+> currently introducing the binding as optional one. One could enable this 
+> option when xHC halt happens due to small SG list sizes.  
 
-Please write this all out a lot more to make it more obvious.
+What I mean is this should be something like,
+"quirk-broken-sg-list-handler" or something like that.  Otherwise how
+does anyone know if this really is needed or not.  Reading this would
+seem like everyone would like to do this, as consolidating links
+sounds like a good optimization, when instead this really cause more
+memory allocations, making this possibly worse performance.
 
-
-> > 
-> >> +				 */
-> >> +				if ((urb->transfer_flags &
-> >> +				     URB_DMA_MAP_SINGLE))
-> >> +					return ret;
-> > 
-> > Why?  Isn't this now going to affect other host controllers (like all of
-> > them?)
-> > 
-> When urb->num_sgs is greater than 0, other than my quirk dma_map function no one
-> will set the DMA transfer flag as URB_DMA_MAP_SINGLE. So it would not be called by
-> all HC's. Even when the SG list does not have very small buffer sizes this quirk will
-> not set the URB_DMA_MAP_SINGLE transfer flag.
-
-Are you sure?  :)
-
-> >> +
-> >>  				n = dma_map_sg(
-> >>  						hcd->self.sysdev,
-> >>  						urb->sg,
-> >> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> >> index a78787bb5133..2fad9474912a 100644
-> >> --- a/drivers/usb/host/xhci-ring.c
-> >> +++ b/drivers/usb/host/xhci-ring.c
-> >> @@ -3291,7 +3291,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
-> >>  
-> >>  	full_len = urb->transfer_buffer_length;
-> >>  	/* If we have scatter/gather list, we use it. */
-> >> -	if (urb->num_sgs) {
-> >> +	if (urb->num_sgs && !(urb->transfer_flags & URB_DMA_MAP_SINGLE)) {
-> >>  		num_sgs = urb->num_mapped_sgs;
-> >>  		sg = urb->sg;
-> >>  		addr = (u64) sg_dma_address(sg);
-> >> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> >> index fe38275363e0..94fddbd06179 100644
-> >> --- a/drivers/usb/host/xhci.c
-> >> +++ b/drivers/usb/host/xhci.c
-> >> @@ -1256,6 +1256,109 @@ EXPORT_SYMBOL_GPL(xhci_resume);
-> >>  
-> >>  /*-------------------------------------------------------------------------*/
-> >>  
-> >> +static int xhci_map_temp_buffer(struct usb_hcd *hcd, struct urb *urb)
-> >> +{
-> >> +	void *temp;
-> >> +	int ret = 0;
-> >> +	unsigned int len;
-> >> +	unsigned int buf_len;
-> >> +	enum dma_data_direction dir;
-> >> +	struct xhci_hcd *xhci;
-> >> +
-> >> +	xhci = hcd_to_xhci(hcd);
-> >> +	dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
-> >> +	buf_len = urb->transfer_buffer_length;
-> >> +
-> >> +	temp = kzalloc_node(buf_len, GFP_ATOMIC,
-> >> +			    dev_to_node(hcd->self.sysdev));
-> >> +	if (!temp) {
-> >> +		xhci_warn(xhci, "Failed to create temp buffer, HC may fail\n");
-> > 
-> > Didn't kzalloc just warn before this?
-> > 
-> Yes, It should.
-
-Then do not spit out another message please.
-
-> > And isn't this whole thing going to cause a lot more memory allocations
-> > per submission than before?
-> > 
-> If buffer sizes for SG list are very small (less than MPS size per TRB_CACHE_SIZE)
-> yes, it will have more memory allocations. 
-
-That's not good :(
+thanks,
 
 greg k-h
