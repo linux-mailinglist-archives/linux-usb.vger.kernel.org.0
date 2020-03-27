@@ -2,94 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D79A3195E4F
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 20:09:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39226195E63
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 20:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727612AbgC0TJr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Mar 2020 15:09:47 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:40880 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726738AbgC0TJr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 15:09:47 -0400
-Received: by mail-il1-f193.google.com with SMTP id j9so9840275ilr.7;
-        Fri, 27 Mar 2020 12:09:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=6rX+h+uJgGe8m8xtVJ86+22oKe3RcvHhIbxU08dTCMQ=;
-        b=hATQNLtYrtYjohKz7Rt8e0NLaubz2X5PmSPERn3MUP+U3XFM8Gz5nCj5GowqY2AQ9J
-         QZpnopxtbgK4vYSDnKOtIf3yNyXmCmBgsOatSa5wU2RMKcCpFE3wYGF7CbSS1XO+vAv7
-         lxNtzgRJi9BPapI/EIGzoiv4nlWCYTsj7wUQzuxyXNRnl0fOJZjmFf+kanUO05wjBd3i
-         FGlGGDRikYttOW76sTIhcMFUfeEHS+xriNPsNsYFIftvn3XcxK0wgSBGoUQ71i7w8xlg
-         1YGBr8yn6H/adl1nk5T38bSwCEbnkbsaSRK96ev3p+DBFQQq2tgiSEJfsqDFJIySt7FA
-         Va6w==
-X-Gm-Message-State: ANhLgQ3ffqmYYEKJsSupf7r7oyNAuFhEz0nQ70cgCX/RhQCfM8JTk4m8
-        To4Chi9FuId4JwjT4Bb0XA==
-X-Google-Smtp-Source: ADFU+vscvwuKw7PKMVNwihd///exX3VL5zIeuA4QhBx1b3ZCf7B6dYLbOhdo0QQAD6ziGBGk6UT+EQ==
-X-Received: by 2002:a92:9fd0:: with SMTP id z77mr589295ilk.257.1585336185552;
-        Fri, 27 Mar 2020 12:09:45 -0700 (PDT)
-Received: from rob-hp-laptop ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id l6sm2168753ilh.27.2020.03.27.12.09.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2020 12:09:44 -0700 (PDT)
-Received: (nullmailer pid 6759 invoked by uid 1000);
-        Fri, 27 Mar 2020 19:09:42 -0000
-Date:   Fri, 27 Mar 2020 13:09:42 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Lubomir Rintel <lkundrak@v3.sk>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        id S1727473AbgC0TO6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Mar 2020 15:14:58 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:56792 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726738AbgC0TO6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 15:14:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=wi9sMkFTjgwfQzFt05plG4rnAYvM3lDU42pKvwyq4Dk=; b=ARU9xHbF+qAAz2eVBrwRTExEhX
+        jwbbaXg4N6bxYjwT1WFJStJwWCN9ZHaVD3NmDI1LZV1T0tf4AIdqj5K2taxObMmf+eMC0i5CbjuQu
+        cvF7lxBZu5bLZ+0AdIzFsdJG1EATpc/ptIx2pCL2bB+g/yJEKAss2RthpcAMSl290YviOrnbOvJlX
+        ikCrnWobf8fDzpkViu46vqNLHYHj5LdPU4VdWSuQTRIwjeJYR5Vvgah5hoQLR7Vo5XfSfN1jnONov
+        0vwoM1oP/OGhYcNpgo1xpE+4HqhYQCyvKV32Q/9MINxoqL2BVCx+yMkvLrwb/lioD1mQXbZAvA7f/
+        wH3hOZwQ==;
+Received: from [2602:306:37b0:7840:b51a:dd8c:5d76:65e]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jHuRN-0006Pi-D5; Fri, 27 Mar 2020 19:14:49 +0000
+Subject: Re: [patch V3 12/20] powerpc/ps3: Convert half completion to rcuwait
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kurt Schwemmer <kurt.schwemmer@microsemi.com>,
+        linux-pci@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        Lubomir Rintel <lkundrak@v3.sk>
-Subject: Re: [PATCH 20/28] dt-bindings: phy: Convert phy-mmp3-usb to
- json-schema
-Message-ID: <20200327190942.GA6703@bogus>
-References: <20200317093922.20785-1-lkundrak@v3.sk>
- <20200317093922.20785-21-lkundrak@v3.sk>
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        platform-driver-x86@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, kbuild test robot <lkp@intel.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        Brian Cain <bcain@codeaurora.org>,
+        linux-hexagon@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-ia64@vger.kernel.org,
+        Michal Simek <monstr@monstr.eu>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Davidlohr Bueso <dbueso@suse.de>
+References: <20200321112544.878032781@linutronix.de>
+ <20200321113241.930037873@linutronix.de>
+From:   Geoff Levand <geoff@infradead.org>
+Message-ID: <f3210d53-dfb1-6bbc-cc82-832105fcfaa2@infradead.org>
+Date:   Fri, 27 Mar 2020 12:14:43 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200317093922.20785-21-lkundrak@v3.sk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200321113241.930037873@linutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 17 Mar 2020 10:39:14 +0100, Lubomir Rintel wrote:
-> A rather straightforward conversion of the phy-mmp3-usb binding to DT
-> schema format using json-schema.
-> 
-> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-> ---
->  .../bindings/phy/marvell,mmp3-usb-phy.yaml    | 40 +++++++++++++++++++
->  .../devicetree/bindings/phy/phy-mmp3-usb.txt  | 13 ------
->  2 files changed, 40 insertions(+), 13 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/phy/marvell,mmp3-usb-phy.yaml
->  delete mode 100644 Documentation/devicetree/bindings/phy/phy-mmp3-usb.txt
-> 
+Hi,
 
-Applied, thanks.
+On 3/21/20 4:25 AM, Thomas Gleixner wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> The PS3 notification interrupt and kthread use a hacked up completion to
+> communicate. Since we're wanting to change the completion implementation and
+> this is abuse anyway, replace it with a simple rcuwait since there is only ever
+> the one waiter.
+> 
+> AFAICT the kthread uses TASK_INTERRUPTIBLE to not increase loadavg, kthreads
+> cannot receive signals by default and this one doesn't look different. Use
+> TASK_IDLE instead.
 
-Rob
+I tested the patch set applied against v5.6-rc7 on the PS3 and it worked
+as expected.
+
+Tested by: Geoff Levand <geoff@infradead.org>
+
