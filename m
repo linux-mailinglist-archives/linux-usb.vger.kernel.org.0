@@ -2,98 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A42195808
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 14:30:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C8B195988
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 16:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727702AbgC0NaX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Mar 2020 09:30:23 -0400
-Received: from mail-il1-f198.google.com ([209.85.166.198]:52091 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727423AbgC0NaP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 09:30:15 -0400
-Received: by mail-il1-f198.google.com with SMTP id j12so8814368ilf.18
-        for <linux-usb@vger.kernel.org>; Fri, 27 Mar 2020 06:30:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=HweTU5jj17xC6BlpXQyem62ObeI/pFALQMnTvUhCql4=;
-        b=Glcwy/ARkSk9pEFwfQmDFoZTwZTTFo0pqZ32Jtjj5/jgqOVLAvwHN/VUaXHT3KuJkU
-         zwcCWOCOOC78NkGDnwfH3MUS6Rzmvb9IXNQ1uJtgsgMQrMRcEN/QE8aq0fCQKraHX3D6
-         MfgbJZSRlXCyhjKikuQK2Kkk/i8KZR6EkmXLyu42slALfJZGJUYU0WA/yj07hjhfAl2s
-         UcKbVPtq1Pkt4EAPXfdPMiHWRz+Gsuc4eAFASeGLbwhivmrJjmmjD9H2RaoisXvESYA7
-         7B9ceeh/Y2ZzeoWr1UzNLIKJ+8Qn3iHeYo/j/ehiFij5bw6CiYQfgwbTwNMM1A5R4AIs
-         5P0w==
-X-Gm-Message-State: ANhLgQ21MotOj/Yusq59RW2Y+/K1plbuJYA/I1HRmAU+OGWtIsadB10y
-        QkE0nzh8vZFCP3lGLZAB4k4EsXEG0WFBN1b9nIX//Jo4XGQJ
-X-Google-Smtp-Source: ADFU+vvJsJfct4TOYF0rsn4TG7dIp3UoAiUjSETSMIFbPyzhwwX/OW1NnqSw1DEFL3ukg0pGEpIAIM41ykLMvtPXAdnRAyTgXYnT
+        id S1727726AbgC0PEO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Mar 2020 11:04:14 -0400
+Received: from mail.horus.com ([78.46.148.228]:49547 "EHLO mail.horus.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727322AbgC0PEO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Mar 2020 11:04:14 -0400
+Received: from lenny.lan (193-83-225-155.adsl.highway.telekom.at [193.83.225.155])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "E-Mail Matthias Reichl Lenny", Issuer "HiassofT CA 2014" (verified OK))
+        by mail.horus.com (Postfix) with ESMTPSA id 6E612640AE;
+        Fri, 27 Mar 2020 16:04:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=horus.com;
+        s=20180324; t=1585321452;
+        bh=jzrJa97gngOuEsLDSp7j99HNV6vcsFyI+qOIZ0pY84k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YNwjOlfXb2VN/VpIJhGuaQfm+qnFP0i2ES7p0eiEIfvD/xJQVm5j17r20gO3SznFA
+         JJiSJyL0ESuw5Rbl9QnElw+NXzX+ckSfp705FsJP0vvMw9/Bm66CpVK35JcorJMsaK
+         lxRKWdEWe53YS9qVfPFmtxTKCOFct7rT4RgSbV/Y=
+Received: by lenny.lan (Postfix, from userid 1000)
+        id E42A1202E5E; Fri, 27 Mar 2020 16:04:11 +0100 (CET)
+From:   Matthias Reichl <hias@horus.com>
+To:     Anthony Mallet <anthony.mallet@laas.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>
+Cc:     linux-usb@vger.kernel.org, Matthias Reichl <hias@horus.com>
+Subject: [PATCH] USB: cdc-acm: restore capability check order
+Date:   Fri, 27 Mar 2020 16:03:50 +0100
+Message-Id: <20200327150350.3657-1-hias@horus.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:8f81:: with SMTP id r1mr13736124ilk.51.1585315814830;
- Fri, 27 Mar 2020 06:30:14 -0700 (PDT)
-Date:   Fri, 27 Mar 2020 06:30:14 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000002fc05a1d61a68@google.com>
-Subject: KASAN: use-after-free Read in ath9k_wmi_ctrl_rx
-From:   syzbot <syzbot+5d338854440137ea0fef@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
-        davem@davemloft.net, kvalo@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+commit b401f8c4f492c ("USB: cdc-acm: fix rounding error in TIOCSSERIAL")
+introduced a regression by changing the order of capability and close
+settings change checks. When running with CAP_SYS_ADMIN setting the
+close settings to the values already set resulted in -EOPNOTSUPP.
 
-syzbot found the following crash on:
+Fix this by changing the check order back to how it was before.
 
-HEAD commit:    e17994d1 usb: core: kcov: collect coverage from usb comple..
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=1253c9d5e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5d64370c438bc60
-dashboard link: https://syzkaller.appspot.com/bug?extid=5d338854440137ea0fef
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17fd135be00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16436be5e00000
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+5d338854440137ea0fef@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: use-after-free in ath9k_wmi_ctrl_rx+0x416/0x500 drivers/net/wireless/ath/ath9k/wmi.c:215
-Read of size 1 at addr ffff8881cef1417c by task swapper/1/0
-
-CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.6.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
- __kasan_report.cold+0x37/0x77 mm/kasan/report.c:506
- kasan_report+0xe/0x20 mm/kasan/common.c:641
- ath9k_wmi_ctrl_rx+0x416/0x500 drivers/net/wireless/ath/ath9k/wmi.c:215
- ath9k_htc_rx_msg+0x2da/0xaf0 drivers/net/wireless/ath/ath9k/htc_hst.c:459
- ath9k_hif_usb_reg_in_cb+0x1ba/0x630 drivers/net/wireless/ath/ath9k/hif_usb.c:718
- __usb_hcd_giveback_urb+0x29a/0x550 drivers/usb/core/hcd.c:1650
- usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1716
- dummy_timer+0x1258/0x32ae drivers/usb/gadget/udc/dummy_hcd.c:1966
- call_timer_fn+0x195/0x6f0 kernel/time/timer.c:1404
- expire_timers kernel/time/timer.c:1449 [inline]
- __run_timers kernel/time/timer.c:1773 [inline]
- __run_timers kernel/time/timer.c:1740 [inline]
- run_timer_softirq+0x5f9/0x1500 kernel/time/timer.c:1786
-
-
+Fixes: b401f8c4f492c ("USB: cdc-acm: fix rounding error in TIOCSSERIAL")
+Signed-off-by: Matthias Reichl <hias@horus.com>
 ---
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/usb/class/cdc-acm.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 47f09a6ce7bda..84d6f7df09a4e 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -923,16 +923,16 @@ static int set_serial_info(struct tty_struct *tty, struct serial_struct *ss)
+ 
+ 	mutex_lock(&acm->port.mutex);
+ 
+-	if ((ss->close_delay != old_close_delay) ||
+-            (ss->closing_wait != old_closing_wait)) {
+-		if (!capable(CAP_SYS_ADMIN))
++	if (!capable(CAP_SYS_ADMIN)) {
++		if ((ss->close_delay != old_close_delay) ||
++		    (ss->closing_wait != old_closing_wait))
+ 			retval = -EPERM;
+-		else {
+-			acm->port.close_delay  = close_delay;
+-			acm->port.closing_wait = closing_wait;
+-		}
+-	} else
+-		retval = -EOPNOTSUPP;
++		else
++			retval = -EOPNOTSUPP;
++	} else {
++		acm->port.close_delay  = close_delay;
++		acm->port.closing_wait = closing_wait;
++	}
+ 
+ 	mutex_unlock(&acm->port.mutex);
+ 	return retval;
+-- 
+2.20.1
+
