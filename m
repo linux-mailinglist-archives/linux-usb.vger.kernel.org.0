@@ -2,95 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA71F194CB3
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 00:26:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FBC194E1E
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 01:35:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728485AbgCZX0T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Mar 2020 19:26:19 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:45954 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728475AbgCZX0S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Mar 2020 19:26:18 -0400
-Received: by mail-ed1-f67.google.com with SMTP id u59so8971852edc.12;
-        Thu, 26 Mar 2020 16:26:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WqZyECE7b3l+/W5cG6aN6aQ7OERbPPJKLPh37gMr4P8=;
-        b=ue1h1NgsTbotQg6qMgEzUEGsjz11gWWWp2SUopj+TH8eOOBmYryxsfc281mZqrloEv
-         P76dythInNUEfdLKgr7SgCfjmFg6sE925yUai/7kD6iygiYW41tOLyueWqE41PZp/QQL
-         FrX5esvWQpq4u2MT/46hJXxhdRYrB5LZG3OXoJRY8UAsN3fhBfF+Mmj+NBCYmBlhXkiB
-         ee9g1chV624ys8iJxZOeJyLMD2lsOpr6uT72VNd2zFkDdFIzEQU1YJ3iJvKiaWZUvhxd
-         8ctYZYkWyFiCfSr/Sev5oQ62jff2k4N93aiamR/xOeC6EwLqNDKHb5/vZDTffrPQMHeA
-         j5uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WqZyECE7b3l+/W5cG6aN6aQ7OERbPPJKLPh37gMr4P8=;
-        b=U3mjb2viczXn5UNIInSpTrD1qs9k91EIacNeAUJkp7WtX4zntiHRY6l3t52ujvc8OV
-         orhdResRTti+Qqyf45272qh2ch7IVbvN+DMIwPKn9CDGSLXhUDdLKlbayUCFChHZgbct
-         4FC0Mr9PjGKiVIBRo1UG4eJdUBRbk5yP5pCmV69T/cnW3WhNEjGDgVSi1RQBdYUEnXpt
-         txwEXPs63Tu9wzIzTfbn9Vw37av0HQK233xppehjKikuPaCsQGZvhUN6D+6w6gTswAB2
-         SqBuvdy2WMriX0glb0YCQVOOODOSfxDsj98DT4oMXIWwzMzxPPVFfWvNm5teWMhAJtvY
-         BM5A==
-X-Gm-Message-State: ANhLgQ35dGKMmUkpazLY+aEyggg9KqzaaaJtrySX00jDM/Nuc6MpTQpv
-        PsDIjdzDbPDHJXKtNWgVTO3JjSypHR2I8RfhKsc=
-X-Google-Smtp-Source: ADFU+vszUtR++CH3qXXBapVjGUYTUgP4+oCVQrrF3dM3CXErGyDOKMkYURV1D0IJSRdLQ53DbhvctfJOG7ec6N875qg=
-X-Received: by 2002:a17:906:491:: with SMTP id f17mr162602eja.30.1585265176806;
- Thu, 26 Mar 2020 16:26:16 -0700 (PDT)
+        id S1727742AbgC0AfR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Mar 2020 20:35:17 -0400
+Received: from mga12.intel.com ([192.55.52.136]:44340 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726359AbgC0AfR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 26 Mar 2020 20:35:17 -0400
+IronPort-SDR: sK+/uC2zPYzaUNZTSerJFe63ma0XYcLCEmuusGv6FgejRMIBCv2QhmtHPjcUc3EdGfjBmUxWKW
+ kDiB3yhQx+NQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2020 17:35:16 -0700
+IronPort-SDR: e22T3VdHduyjz5bDy4OZa210k9WTO1218bTaoPEseA5BLErTX2QCPDoJWKDZia+MKeWxQXCcma
+ BQIJKtcvrU0g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,310,1580803200"; 
+   d="scan'208";a="250972692"
+Received: from shao2-debian.sh.intel.com (HELO [10.239.13.3]) ([10.239.13.3])
+  by orsmga006.jf.intel.com with ESMTP; 26 Mar 2020 17:35:10 -0700
+Subject: Re: [kbuild-all] Re: [RFC PATCH] usb: cdns3:
+ cdns3_clear_register_bit() can be static
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kbuild test robot <lkp@intel.com>
+Cc:     Colin King <colin.king@canonical.com>, kbuild-all@lists.01.org,
+        Sekhar Nori <nsekhar@ti.com>, Roger Quadros <rogerq@ti.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Pawel Laszczak <pawell@cadence.com>, linux-usb@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200325125041.94769-1-colin.king@canonical.com>
+ <20200326122858.GA50118@cde5a4ed3207> <20200326130418.GA1295433@kroah.com>
+From:   Rong Chen <rong.a.chen@intel.com>
+Message-ID: <571960b6-5ed7-2106-7091-3ea83c31051a@intel.com>
+Date:   Fri, 27 Mar 2020 08:34:52 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-References: <20200326134507.4808-1-narmstrong@baylibre.com> <20200326134507.4808-8-narmstrong@baylibre.com>
-In-Reply-To: <20200326134507.4808-8-narmstrong@baylibre.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Fri, 27 Mar 2020 00:26:06 +0100
-Message-ID: <CAFBinCBhk+XvjGODBaNH7tzCfGktYdmk1wED8UC6cYmS3ucbig@mail.gmail.com>
-Subject: Re: [PATCH v2 07/14] usb: dwc3: meson-g12a: refactor usb init
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     kishon@ti.com, balbi@kernel.org, khilman@baylibre.com,
-        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200326130418.GA1295433@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Neil,
 
-On Thu, Mar 26, 2020 at 2:45 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
-[...]
-> -static int dwc3_meson_g12a_usb2_init(struct dwc3_meson_g12a *priv)
-> +static int dwc3_meson_g12a_usb2_init(struct dwc3_meson_g12a *priv,
-> +                                    enum phy_mode mode)
->  {
->         int i, ret;
+
+On 3/26/20 9:04 PM, Greg Kroah-Hartman wrote:
+> On Thu, Mar 26, 2020 at 08:28:58PM +0800, kbuild test robot wrote:
+>> Fixes: 87db1192dc33 ("usb: cdns3: make signed 1 bit bitfields unsigned")
+> This original patch did not "cause" this problem, it's just that you for
+> some reason ran sparse for the first time on the file.
 >
-> -       if (priv->otg_mode == USB_DR_MODE_PERIPHERAL)
-> -               priv->otg_phy_mode = PHY_MODE_USB_DEVICE;
-> -       else
-> -               priv->otg_phy_mode = PHY_MODE_USB_HOST;
-> -
->         for (i = 0; i < priv->drvdata->num_phys; ++i) {
->                 if (!priv->phys[i])
->                         continue;
-> @@ -284,9 +286,10 @@ static void dwc3_meson_g12a_usb3_init(struct dwc3_meson_g12a *priv)
->                         FIELD_PREP(USB_R1_P30_PCS_TX_SWING_FULL_MASK, 127));
->  }
-There is something strange with dwc3_meson_g12a_usb2_init.
-enum phy_mode mode is added here but it's not used inside this function
+> So I can't take this as-is, can you remove this line and resend?
 
-I also think that we should not pass enum phy_mode to
-dwc3_meson_g12a_usb_otg_apply_mode
-I'm aware that the original function used enum phy_mode inside but
-this doesn't seem right:
-we're not configuring a PHY there
-instead we're setting up the OTG switch so I think we should use enum
-usb_role instead
+Hi Greg,
 
-[...]
-not part of this patch but should be:
-there's a still a direct call to dwc3_meson_g12a_usb_init() in
-dwc3_meson_g12a_resume()
-I think that needs to be changed to priv->drvdata->usb_init(priv); as well
+Sorry for the inconvenience, the patch was generated by the bot,
+we'll check and resend it.
+
+Best Regards,
+Rong Chen
+
+>
+> thanks,
+>
+> greg k-h
+> _______________________________________________
+> kbuild-all mailing list -- kbuild-all@lists.01.org
+> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+
