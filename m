@@ -2,127 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 764E6195042
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 06:07:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4151950B6
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 06:39:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726193AbgC0FHu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Mar 2020 01:07:50 -0400
-Received: from mail-eopbgr1410109.outbound.protection.outlook.com ([40.107.141.109]:65280
-        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725857AbgC0FHt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 27 Mar 2020 01:07:49 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X2EoXeSzTDPUmdfok449rzLvTmX3nrB8YU/DwQdxu6bSXbFgQF50pHj/f7jYkH5Pufe2XUQ4tlwu03R7DUuicWfCbio9ihNx5rEBkAflEIi6O9mxaJU265k/samtiz/IsXjacg0tuIsweK+Bazc80VnDoE4uc5zRyyFpBA8IjFPKudb40gf0TlZZOTUmhhv624vlJ5UPaHm2VGosIMtGBncwpwCOvN5C2c/Tz2GtI74GfgL3/05PGfUU9oB8e3Cnp+uhPjso72gUTM2ji+FdrMKT8YDkSsZuH1EyEnaGDWLXyxdUd3tKRv5w1bYwz1X6zo506YzOD20aGJlz8nsIkA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pQYdIgGroBz4xTBQ5kqAHfAV7KNZojVRQjbYBg8b0JM=;
- b=SCxqn6FKCTvIgEh7mjlFIrqvOo4KQnnF6EYGv6G0iGp0IO+4WZ7TwTWQl1/Ca8+Oc7GfmyPvVv9L+TxO4Hp0OqgB/Ws8bpgWxfrBpTxsTPguwEGniuVZ2FyylSyGod4Dpfbj2q2M8ytL29dGnZ+iTFOP/9wDLUivosecnStIAHxwKhK8dP89pNQsdy16fKrnNq/R/xrkopTij0R1dJ+MJmzVQ+JXCiHy8h0cvRmYW7BO36vbuV8GlTESpEx5RE4P0Fg+UgSLemuMqbjdX/6xzoBsgaG9hmmvSyJCp16juk1CO81ZaqxGa6XUDtWXA1RXf0aGh+HLcZXN3auPGjTu3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pQYdIgGroBz4xTBQ5kqAHfAV7KNZojVRQjbYBg8b0JM=;
- b=DTsT9tZcxKh8HSpasysOLOJua+ftdIGS+CEeClJM7kS+ByfzSCb2udZ9Y7hRF4Qic/tY+H7+VSmD8heqNtnh3l6zf5FvQuB9TzCjQThN83eF/6XF/zpoym0p5ozzDNxyMFDGqdFapB8CdHYuxN7xF/hs2EIjDVsiJaU/dIrRVkc=
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.175.203) by
- TYAPR01MB4496.jpnprd01.prod.outlook.com (20.179.187.141) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2835.22; Fri, 27 Mar 2020 05:07:45 +0000
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::ed7f:1268:55a9:fc06]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::ed7f:1268:55a9:fc06%4]) with mapi id 15.20.2835.023; Fri, 27 Mar 2020
- 05:07:45 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        id S1726333AbgC0Fi7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Mar 2020 01:38:59 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:34937 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725936AbgC0Fi7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 01:38:59 -0400
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1jHhhk-00085G-Qu; Fri, 27 Mar 2020 06:38:52 +0100
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1jHhhj-0001QA-LF; Fri, 27 Mar 2020 06:38:51 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Bin Liu <b-liu@ti.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 0/2] dt-bindings: usb: generic-ehci/ohci: Document
- power-domains property
-Thread-Topic: [PATCH 0/2] dt-bindings: usb: generic-ehci/ohci: Document
- power-domains property
-Thread-Index: AQHWA4z554OB0l2bAUaJVd29DMFcUqhb4/DA
-Date:   Fri, 27 Mar 2020 05:07:43 +0000
-Message-ID: <TYAPR01MB4544C0AD1F363CD0B5D8F43AD8CC0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-References: <20200326163807.23216-1-geert+renesas@glider.be>
-In-Reply-To: <20200326163807.23216-1-geert+renesas@glider.be>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [211.11.155.148]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 5918fa8c-4746-411e-4b16-08d7d20cc903
-x-ms-traffictypediagnostic: TYAPR01MB4496:
-x-microsoft-antispam-prvs: <TYAPR01MB449616195A4F745D1CE6DCBFD8CC0@TYAPR01MB4496.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 0355F3A3AE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(346002)(136003)(376002)(366004)(39860400002)(396003)(33656002)(86362001)(5660300002)(55016002)(7696005)(71200400001)(110136005)(8676002)(8936002)(81166006)(81156014)(66476007)(26005)(186003)(6506007)(66946007)(76116006)(66446008)(66556008)(4326008)(52536014)(64756008)(478600001)(9686003)(316002)(2906002)(54906003)(41533002);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB4496;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HuXiDEX6KdGXBDyVRlD4r/xb1fdQiaUGOEyzOl/2mwiPMDtBVt76XhGOznW1k7f5wJXr7wyB4GnX2lxfoOeh6mbnyDrDX+GvaANagC3w0o20IxbLoGaaFYtDD5uucmW1QCQBNQJx9IgPQZ9eHv6qdYEVmleRGkkfZvD4zJLSl9reIlyOYMK7Tt6dLAvtrxHC3jL5tOBUcF5g+6/WBAo8Bf8MK3iRATsk7lDphBe9sjFw1WouWpTe06jkB/Od5aZw4oX2ofTOD+lb+jeaD9yQkDUTKQO/ynsPmu2o+yQpuNiMPqJnMyf23hzWTlsMCS0PihjhEGrwkKb/vCOzzlM6Pske4+w8dGP2iMnUMR/v52UIGyzuWRxyt3VegQveXHDYJIkDQegvdAc8UX1oVEOa9Ij6dwOLw3nN3Mc4Jt8ShzpepsoPSFKP3GMJg7n8+oegkmrQsVwNhxiZO+J1M7ppyBOm0EH2l6hKOPF1EovTsF07E87CNo+IDxnd9YVGMot+
-x-ms-exchange-antispam-messagedata: k4SjqomiKjmtclIK2FAEMM9Or03vLtRpL/WVJsmFiCTVq9f49mAS92JlV5rDYWOre2GTOQvt6SJNvfhsMAc5Uqgh7AzZ7teoH8ctEi8t6XPxOljdf7ejhGhqGY9bWd0s8KHlrn79J3e1FlPVxvwUOA==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        linux-usb@vger.kernel.org, russell@personaltelco.net,
+        fercerpav@gmail.com
+Subject: [PATCH v1] usb: musb: dsps: set MUSB_DA8XX quirk for AM335x
+Date:   Fri, 27 Mar 2020 06:38:49 +0100
+Message-Id: <20200327053849.5348-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.26.0.rc2
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5918fa8c-4746-411e-4b16-08d7d20cc903
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Mar 2020 05:07:44.6483
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1wCuIXlRyJl/uor2wwRHj7iTtttPQiPpwvcqU2IYdnrgNphNRo5oXZjlFKbA0w7ahBAyEDK3U72Cq2f8lzC5jVGT+ABrvFjdqN4u5WotXDhr35ppC0zN3iAh1coJf9sb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB4496
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Geert-san,
+Beagle Bone Black has different memory corruptions if kernel is
+configured with USB_TI_CPPI41_DMA=y. This issue is reproducible with
+ath9k-htc driver (ar9271 based wifi usb controller):
 
-> From: Geert Uytterhoeven, Sent: Friday, March 27, 2020 1:38 AM
->=20
-> 	Hi Greg, Rob,
->=20
-> It is quite common for a generic EHCI or OHCI block to be embedded in an
-> SoC in its own power domain.  However, the current DT bindings do not
-> cover this yet, leading to "make dtbs_check" warnings like:
->=20
->     arch/arm64/boot/dts/renesas/r8a774a1-hihope-rzg2m.dt.yaml: usb@ee0800=
-00: 'power-domains' does not match any of the
-> regexes: 'pinctrl-[0-9]+'
->     arch/arm64/boot/dts/renesas/r8a774a1-hihope-rzg2m.dt.yaml: usb@ee0801=
-00: 'power-domains' does not match any of the
-> regexes: 'pinctrl-[0-9]+'
->=20
-> This patch series documents the optional presence of "power-domains"
-> properties in the EHCI and OHCI devices nodes, allowing the DTS writer
-> to describe the controllers' positions in the power hierarchy.
->=20
-> Thanks!
->=20
-> Geert Uytterhoeven (2):
->   dt-bindings: usb: generic-ehci: Document power-domains property
->   dt-bindings: usb: generic-ohci: Document power-domains property
+root@AccessBox:~ iw dev wlan0 set monitor  fcsfail otherbss
+root@AccessBox:~ ip l s dev wlan0 up
+kmemleak: Cannot insert 0xda577e40 into the object search tree (overlaps existing)
+CPU: 0 PID: 176 Comm: ip Not tainted 5.5.0 #7
+Hardware name: Generic AM33XX (Flattened Device Tree)
+[<c0112c14>] (unwind_backtrace) from [<c010dc98>] (show_stack+0x18/0x1c)
+[<c010dc98>] (show_stack) from [<c08c7c2c>] (dump_stack+0x84/0x98)
+[<c08c7c2c>] (dump_stack) from [<c02c75a8>] (create_object+0x2f8/0x324)
+[<c02c75a8>] (create_object) from [<c02b8928>] (kmem_cache_alloc+0x1a8/0x39c)
+[<c02b8928>] (kmem_cache_alloc) from [<c072fb68>] (__alloc_skb+0x60/0x174)
+[<c072fb68>] (__alloc_skb) from [<bf0c5c58>] (ath9k_wmi_cmd+0x50/0x184 [ath9k_htc])
+[<bf0c5c58>] (ath9k_wmi_cmd [ath9k_htc]) from [<bf0cb410>] (ath9k_regwrite_multi+0x54/0x84 [ath9k_htc])
+[<bf0cb410>] (ath9k_regwrite_multi [ath9k_htc]) from [<bf0cb7fc>] (ath9k_regwrite+0xf0/0xfc [ath9k_htc])
+[<bf0cb7fc>] (ath9k_regwrite [ath9k_htc]) from [<bf1aca78>] (ar5008_hw_process_ini+0x280/0x6c0 [ath9k_hw])
+[<bf1aca78>] (ar5008_hw_process_ini [ath9k_hw]) from [<bf1a66ac>] (ath9k_hw_reset+0x270/0x1458 [ath9k_hw])
+[<bf1a66ac>] (ath9k_hw_reset [ath9k_hw]) from [<bf0c9588>] (ath9k_htc_start+0xb0/0x22c [ath9k_htc])
+[<bf0c9588>] (ath9k_htc_start [ath9k_htc]) from [<bf0eb3c0>] (drv_start+0x4c/0x1e8 [mac80211])
+[<bf0eb3c0>] (drv_start [mac80211]) from [<bf104a84>] (ieee80211_do_open+0x480/0x954 [mac80211])
+[<bf104a84>] (ieee80211_do_open [mac80211]) from [<c075127c>] (__dev_open+0xdc/0x160)
+[<c075127c>] (__dev_open) from [<c07516a8>] (__dev_change_flags+0x1a4/0x204)
+[<c07516a8>] (__dev_change_flags) from [<c0751728>] (dev_change_flags+0x20/0x50)
+[<c0751728>] (dev_change_flags) from [<c076971c>] (do_setlink+0x2ac/0x978)
 
-Thank you for the patches!
+After applying this patch, the system is running in monitor mode without
+noticeable issues.
 
-Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Suggested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ drivers/usb/musb/musb_dsps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-Yoshihiro Shimoda
+diff --git a/drivers/usb/musb/musb_dsps.c b/drivers/usb/musb/musb_dsps.c
+index 88923175f71e..c01f9e9e69f5 100644
+--- a/drivers/usb/musb/musb_dsps.c
++++ b/drivers/usb/musb/musb_dsps.c
+@@ -690,7 +690,7 @@ static void dsps_dma_controller_resume(struct dsps_glue *glue) {}
+ #endif /* CONFIG_USB_TI_CPPI41_DMA */
+ 
+ static struct musb_platform_ops dsps_ops = {
+-	.quirks		= MUSB_DMA_CPPI41 | MUSB_INDEXED_EP,
++	.quirks		= MUSB_DMA_CPPI41 | MUSB_INDEXED_EP | MUSB_DA8XX,
+ 	.init		= dsps_musb_init,
+ 	.exit		= dsps_musb_exit,
+ 
+-- 
+2.26.0.rc2
 
