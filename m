@@ -2,114 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E652A1953FA
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 10:28:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D563519543E
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 10:42:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726233AbgC0J2d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Mar 2020 05:28:33 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:58693 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725946AbgC0J2d (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 05:28:33 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 071275800A5;
-        Fri, 27 Mar 2020 05:28:32 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Fri, 27 Mar 2020 05:28:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=LhbEX+PTcMuPpL/1ETXXhTFLIWQ
-        COOvbBr7bWPk6nqo=; b=KFFzlOF8jEmg0DqntkIpgK2wxHlt/GqsgU2g+iagndP
-        DdNijv3uS7jXI44crUGd4W3da3oMvV2EctegJACm/uDP2BfpRcTgKVQtM5q4odLs
-        U+w9apbY7q3miOFvV7IPdjDVslaPPGcwgPjaTii+xtTtWrZvh/pPQYt1pW6vKDT9
-        hwUrKpKm7R1mnKIggtJlW4ciPA6RCSYRK+tY8eiJzdHmd2Xn3zxffWrwC3VWLlYb
-        iavPMGvPaiAqMV1H5JqGZ0AwUG+4C3owepqGJ7LCf14LV/ipNcJEI13msNrjB8vV
-        BDFSXs0+tqBXuso3rQHpBjTOwIatLksQ4quDmQXnK+Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=LhbEX+
-        PTcMuPpL/1ETXXhTFLIWQCOOvbBr7bWPk6nqo=; b=dZIFWv5B0fd9XhM75muntn
-        mlezGQOSxqrOGQRHoKoYfJS4kNNCwLcKPPDIJ7yUTYo6p8s+EHYPMDoIAmgM1sex
-        0hpnHd30iNy0TYtIu5lzzoUjfA8U57fwvgVChCMkZUFbBEbrz87iN4EpXWt70YM2
-        wjKOYSVjcYGVprBHEKTXl9ulf3Oz+msYRIuvZ+RZUxFPUNvJxHUSg7anE4N5xLqW
-        YZbs0EaeNAf5z94rKBH+Si0+81IDcBTPg1LHU2hhNQ/3Ud9YOeCGX8dTxqekI/tR
-        iDuFunCHZ5RGAU55TUHDWikr/vxXVoq+xnUH+3RkmcRU2dj3jsjxs0Y1Wjw18flw
-        ==
-X-ME-Sender: <xms:Psd9XvPEofr28nUW4bHdiPDMjnTxtZWrhu31hu0jIGFBg066VQDtsg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrudehledgtddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepkeefrdekiedrkeelrddutd
-    ejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhr
-    vghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:Psd9XmIb0kbHJLhvnKnYMWl_Vpx_H3BXmHm1z0MGx4k6FlRru5sehA>
-    <xmx:Psd9XhJrBqH0Z6921ZHPakUs-Ae6IQC67XnHOCnA6o_ImnU-qxwwBw>
-    <xmx:Psd9XiXFiYAWb_VhBLLOFZpl00jqEC0FCe9MCxQJSNSLQ7On98BKeg>
-    <xmx:QMd9Xvvp2qQ01S6DgBBHHgfrdena6ZBXSdyYS_7uV7H4yjaISUFDVA>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 914AF306C109;
-        Fri, 27 Mar 2020 05:28:29 -0400 (EDT)
-Date:   Fri, 27 Mar 2020 10:28:26 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Fredrik Noring <noring@nocrew.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        John Youn <John.Youn@synopsys.com>
-Subject: Re: [RESENDING RFC PATCH 0/4] Add logic to consolidate TRBs for
- Synopsys xHC
-Message-ID: <20200327092826.GB1693819@kroah.com>
-References: <cover.1585297723.git.joglekar@synopsys.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+        id S1726540AbgC0JmD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Mar 2020 05:42:03 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:36342 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726115AbgC0JmD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 05:42:03 -0400
+Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com [10.225.0.209])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 18BB64068F;
+        Fri, 27 Mar 2020 09:42:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1585302122; bh=5lvr85wmUB+ig2sjTf8GoiI7NOjmJtqmkcAiDXQQ+iE=;
+        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
+        b=B1wZOt6pr1GmQZBOfYyL6GDT84QfA2uWCxy6qb5oiHj5dWC4VVSITpzUIz47GmbE6
+         RNhcBq94gwBo7de+qS8l2YqD5NzZ2hQlRjxe3LaUZXXwhhPmWjwNyHX/1dF5g3dq6Z
+         bq3oIFGNv/oJTMQQ6pBkDWK+wHFzfbmnBtM0OYscfMKoDOp2j/UQq2pOdtU2JCnxUD
+         yCS7f+Mm73Ds+npbdbuKYNLPIJBl7onyH7S18AkRqP2PSS4dN9KCk7VUiZKmGpkIdO
+         CoAukWT0VIbpsx4Sw/Ag611E1o0aoJ3G19F1aAht1W2YmMQzYlaLymxXiEV65ULe2l
+         6MnBefEg3GaIw==
+Received: from tejas-VirtualBox (joglekar-e7480.internal.synopsys.com [10.146.16.182])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 446CFA005B;
+        Fri, 27 Mar 2020 09:41:58 +0000 (UTC)
+Received: by tejas-VirtualBox (sSMTP sendmail emulation); Fri, 27 Mar 2020 15:11:56 +0530
+Date:   Fri, 27 Mar 2020 15:11:56 +0530
+Message-Id: <8a9ca8e08d7c4957789a209c77589f1aa4bd2f06.1585297723.git.joglekar@synopsys.com>
 In-Reply-To: <cover.1585297723.git.joglekar@synopsys.com>
+References: <cover.1585297723.git.joglekar@synopsys.com>
+From:   Tejas Joglekar <Tejas.Joglekar@synopsys.com>
+Subject: [RESENDING RFC PATCH 1/4] dt-bindings: usb: Add snps,consolidate-sgl & consolidate-sgl
+To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     John Youn <John.Youn@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 27, 2020 at 02:22:23PM +0530, Tejas Joglekar wrote:
-> The Synopsys xHC has an internal TRB cache of size TRB_CACHE_SIZE for
-> each endpoint. The default value for TRB_CACHE_SIZE is 16 for SS and 8
-> for HS. The controller loads and updates the TRB cache from the
-> transfer ring in system memory whenever the driver issues a start
-> transfer or update transfer command.
-> 
-> For chained TRBs, the Synopsys xHC requires that the total amount of
-> bytes for all TRBs loaded in the TRB cache be greater than or equal to
-> 1 MPS. Or the chain ends within the TRB cache (with a last TRB).
-> 
-> If this requirement is not met, the controller will not be able to
-> send or receive a packet and it will hang causing a driver timeout and
-> error.
-> 
-> This patch set adds logic to the XHCI driver to detect and prevent this
-> from happening along with the quirk to enable this logic for Synopsys
-> HAPS platform.
-> 
-> Based on Mathias's feedback on previous implementation where consolidation
-> was done in TRB cache, with this patch series the implementation is done
-> during mapping of the URB by consolidating the SG list into a temporary
-> buffer if the SG list buffer sizes within TRB_CACHE_SIZE is less than MPS.
-> 
-> 
-> Tejas Joglekar (4):
->   dt-bindings: usb: Add snps,consolidate-sgl & consolidate-sgl
->   usb: xhci: Set quirk for XHCI_CONSOLIDATE_SG_LIST
->   usb: dwc3: Add device property consolidate-sgl
->   usb: xhci: Use temporary buffer to consolidate SG
-> 
-> Resending as 'umlaut' is not accepted by some servers in email.
+This commit adds the documentation for consolidate-sgl, and
+snps,consolidate-sgl property. These when set enables the quirk for
+XHCI driver for consolidation of sg list into a temporary buffer when small
+buffer sizes are scattered over the sg list not making up to MPS or total
+transfer size within TRB cache size with Synopsys xHC.
 
-Only patch 4/4 seems to have gone through :(
+Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
+---
+ Documentation/devicetree/bindings/usb/dwc3.txt     | 3 +++
+ Documentation/devicetree/bindings/usb/usb-xhci.txt | 3 +++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
+index 9946ff9ba735..292d1f7969e4 100644
+--- a/Documentation/devicetree/bindings/usb/dwc3.txt
++++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+@@ -104,6 +104,9 @@ Optional properties:
+ 			this and tx-thr-num-pkt-prd to a valid, non-zero value
+ 			1-16 (DWC_usb31 programming guide section 1.2.3) to
+ 			enable periodic ESS TX threshold.
++ - snps,consolidate-sgl: enable sg list consolidation - host mode only. Set to use
++			SG buffers of at least MPS size by consolidating smaller SG
++			buffers list into a single buffer.
+ 
+  - <DEPRECATED> tx-fifo-resize: determines if the FIFO *has* to be reallocated.
+  - snps,incr-burst-type-adjustment: Value for INCR burst type of GSBUSCFG0
+diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.txt b/Documentation/devicetree/bindings/usb/usb-xhci.txt
+index 3f378951d624..a90d853557ee 100644
+--- a/Documentation/devicetree/bindings/usb/usb-xhci.txt
++++ b/Documentation/devicetree/bindings/usb/usb-xhci.txt
+@@ -43,6 +43,9 @@ Optional properties:
+   - quirk-broken-port-ped: set if the controller has broken port disable mechanism
+   - imod-interval-ns: default interrupt moderation interval is 5000ns
+   - phys : see usb-hcd.yaml in the current directory
++  - consolidate-sgl: indicate if you need to consolidate sg list into a
++    temporary buffer when small SG buffer sizes does not make upto MPS
++    size or total transfer size across the TRB cache size.
+ 
+ additionally the properties from usb-hcd.yaml (in the current directory) are
+ supported.
+-- 
+2.11.0
 
