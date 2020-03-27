@@ -2,308 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D5019535B
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 09:53:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC10195385
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Mar 2020 10:05:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726383AbgC0Ixz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Mar 2020 04:53:55 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:41492 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725946AbgC0Ixz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Mar 2020 04:53:55 -0400
-Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com [10.225.0.209])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id CBAEDC0F97;
-        Fri, 27 Mar 2020 08:53:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1585299234; bh=EJ8RV3plQh0+c4VOUvADF48eRGAn//pr/M5Ufp7Oeiw=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=l7FEEOqA5eRkonUkPGyyFVj/W9lfWVU7OtoNXCsMTN/vS/Zuk+DU2NsRuh7qK6sva
-         sjgMKEP6Hu/V2rM5uFp4ORxNCZEzQKWLeD8Dkm+ogM7QDq4/r5yNYz1yvD2bMl6Uk5
-         Bv4jDvM0lbHijcLCKgir2KOHrxlgW4yZydOfJ3hzjdRGhZZ6MXJXIlHhlD270AOhg8
-         DbKQo7r7m23QEhLqdu2Th4kGSPVnk+4zPOzPyi188dZJK5x86HnfWAu26GlQ3SDltH
-         dfWUGGDB2pvfaCC6wYqGUM9VsVFSErbaXLrPbTPNPqB4jND0JGXeL2rahQzRWymYWk
-         91/4+EcIb2efg==
-Received: from tejas-VirtualBox (joglekar-e7480.internal.synopsys.com [10.146.16.182])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 9E65FA005B;
-        Fri, 27 Mar 2020 08:53:48 +0000 (UTC)
-Received: by tejas-VirtualBox (sSMTP sendmail emulation); Fri, 27 Mar 2020 14:23:46 +0530
-Date:   Fri, 27 Mar 2020 14:23:46 +0530
-Message-Id: <5f7605b9f4cd2d6de4f0ef7d25be9a99d92c5aee.1585297723.git.joglekar@synopsys.com>
-In-Reply-To: <cover.1585297723.git.joglekar@synopsys.com>
-References: <cover.1585297723.git.joglekar@synopsys.com>
-From:   Tejas Joglekar <Tejas.Joglekar@synopsys.com>
-Subject: [RESENDING RFC PATCH 4/4] usb: xhci: Use temporary buffer to consolidate SG
-To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
-        linux-usb@vger.kernel.org,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Fredrik Noring <noring@nocrew.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Raul E Rangel <rrangel@chromium.org>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     John Youn <John.Youn@synopsys.com>
+        id S1726027AbgC0JFi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Mar 2020 05:05:38 -0400
+Received: from mail-vi1eur05on2061.outbound.protection.outlook.com ([40.107.21.61]:6221
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725956AbgC0JFi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Mar 2020 05:05:38 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jq5zc1qFMHeCy0NBIaEMPWZeWJyx9ALZdjaibpoYlqax7ZMayHXXN6XdU7PTbuIILL5Pbh9FiYTzlF/VeO34f1g+YPhdPImcuJ96zKZoL5dbGxIL8RXTuPyNt7Bff54W8GhB9aDdVOYx/GQihQg5ItCzDr27i4LhhKPsEzAp3EBBHSkTsnREVZXIzZx1Qd+YiqApmOayRG+xP2s+s5sDleXdP1NnXmGVDVvEMxQDCceP4xw0rMVpkDnVIPpN/5F4ZXjB05xjdvFM/iVsFGcYgJpE8G0kA/Eqf8B65s6jxOoGePrHC91yY1Zl0j5diUJE0RSPN3W2B5FW/Ey4Xz4tjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K6xjeY3c63UALFSpRqRjlpBARVb9Aci+NZYFgjfT750=;
+ b=f/lP4wslv6j+9hKw8/Royq1k+R3K5WD5Iqtm2A3Yg/+Z/FXaEFWbcYWV+FwovyQjKAPhhcJDrTfoDDJ5rG9o3ehx4qI6/4yNYgkd6R/fHhjXQI/+j8FFEzMLH7muifi5o3l99h2rnHab5WRmb26DB0bhTBKlDMlfmi84m3yt4SLYG7kZfrJ1gUNuEpni8qmBPjXwRfOTAsYr8OOj2iEt0f7/fvgEy3nzJtDMrQOLPdhBlTyWAJB6FlFQP4nCnA6hqAsVD6NZGDDvV8ZmmzBD6vc82MdlQBkFHuJm+bQhL1Wc3aW1yZLdo2aU8Wrl7D3I5+7csNf65w47apCx1e1dEw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K6xjeY3c63UALFSpRqRjlpBARVb9Aci+NZYFgjfT750=;
+ b=NWSFjWb0tx4lcpX6fJpWlBdpNJlSf9AuVJfXHI4l22zsiC3r8HC6Ob9YgXfzgpRSnfgpsPBtLwrW24tJ4V4cqCV8wIgIaX2o7PGzAskbc86ghXFnOwX4pCO050iX9+ki875ws3RRwBIssjX97Z1EIvkii2d5HkBagdW+hYnCXW0=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (52.135.57.84) by
+ AM7PR04MB6901.eurprd04.prod.outlook.com (10.141.173.208) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2856.18; Fri, 27 Mar 2020 09:05:33 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::902c:71:6377:4273]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::902c:71:6377:4273%5]) with mapi id 15.20.2856.019; Fri, 27 Mar 2020
+ 09:05:33 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Oliver Graute <oliver.graute@gmail.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Oliver Graute <Oliver.Graute@KoCoConnector.com>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: using cdns3-imx driver on imx8qm
+Thread-Topic: using cdns3-imx driver on imx8qm
+Thread-Index: AQHWA5EMk/twZNx6oE6N7BqRdcYd1qhcJrQA
+Date:   Fri, 27 Mar 2020 09:05:33 +0000
+Message-ID: <20200327090554.GA31160@b29397-desktop>
+References: <20200326170109.GA28051@optiplex>
+In-Reply-To: <20200326170109.GA28051@optiplex>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 42b26151-7754-44a0-f73f-08d7d22e01d7
+x-ms-traffictypediagnostic: AM7PR04MB6901:|AM7PR04MB6901:|AM7PR04MB6901:
+x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM7PR04MB690134BC1EDF38BE59A241FC8BCC0@AM7PR04MB6901.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 0355F3A3AE
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(7916004)(376002)(39860400002)(346002)(366004)(136003)(396003)(9686003)(4326008)(6506007)(2906002)(33716001)(53546011)(71200400001)(33656002)(86362001)(1076003)(66556008)(66476007)(81156014)(26005)(64756008)(6486002)(6916009)(6512007)(91956017)(76116006)(66446008)(8936002)(316002)(66946007)(81166006)(8676002)(966005)(54906003)(478600001)(186003)(44832011)(5660300002)(32563001);DIR:OUT;SFP:1101;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Cuc5AjZBDrF4DSC+Hbc+yNUt/tD909456WtHvFVEwZ2FJyBkdrSVnLuj8uxY8OEVlV7VJpzr85X+3blOp/YsBQKaMrXpdPPmQsGU1BhSyJ5MMQVnGV4jLpOwSMz72dI711KJQHZnSRc8VgitrF7SMF3Td8uDfbZTHVQLGGFfk8yyJ2z5bI/aFvkK3Fa8WraXU4wYRiS2uHQxdOxW12hbAzuNKZjMOYVlIKtqvLPir5fmxgGmFXtogFQT7ZI2+DdZI6QfF4Z9rPR5U3UZCfhYH8/Vfna+YXlEBa3VPGt5fgUL40J64f1s7ZzMH9MJCH5t8TiWJ0RfajXGEdqj4BpgOCU2vYuo2qQJHPYqyv6cGLeSWsutONKf3mk2nWng8tYfggDNDf4aVW/F/JFpSLXj4DBTtGUbGpNhPbwHAZSm26oF5j7AoFsLODfWKiDs445S5D/8aQMeUhx55NSmwPcMDuSJwJK9O0H9LosfLxHuzMzfAO2nJU7yDaQ6ShoXBK6VAovifipD+OgWdi6QuSXiwmQ3OQS4JFRIFYnEQmQqrYSdYCE1x3+rUMWqgSntuvY8
+x-ms-exchange-antispam-messagedata: CllerE05O6jpWjWeCfyRte1nnejRekrWCcewn8rDDCNzjP7ucUzjuaHTkjq+Vl7gDei+h7siSwBTlOnSohUkUiX40IYkeMwT1wuTKkILZTioHT26JaRauSbt02vyl8Bo+JhfjwtxsBDTFsrmhumcOQ==
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2CB58761D6A49541A335D20739E27812@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 42b26151-7754-44a0-f73f-08d7d22e01d7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Mar 2020 09:05:33.6358
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dyD9VwXzcPeQ4iWpn683Qy/cABIBznm1G/4tnhVZ9EXm2Aixcopk4CQ9pFkUOQcRhGpLO8w3kJNwrdjxDXAHpw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6901
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Synopsys xHC has an internal TRB cache of size TRB_CACHE_SIZE for
-each endpoint. The default value for TRB_CACHE_SIZE is 16 for SS and 8
-for HS. The controller loads and updates the TRB cache from the transfer
-ring in system memory whenever the driver issues a start transfer or
-update transfer command.
+On 20-03-26 18:01:09, Oliver Graute wrote:
+> Hello,
+>=20
+> What is the right way for using the new cdns3-imx glue usb driver on a
+> imx8qm soc with linux-next. I added this snippet in imx8qm.dtsi and
+> enabled the driver in the kernel configuration.
+>=20
 
-For chained TRBs, the Synopsys xHC requires that the total amount of
-bytes for all TRBs loaded in the TRB cache be greater than or equal to 1
-MPS. Or the chain ends within the TRB cache (with a last TRB).
+Hi Oliver,
 
-If this requirement is not met, the controller will not be able to send
-or receive a packet and it will hang causing a driver timeout and error.
+I just checked linux-next-0326, there is no imx8qm dtsi.=20
+When I worked this driver, I use a internal version
+based on v5.4, the dts layout is different with internal tree.
 
-This can be a problem if a class driver queues SG requests with many
-small-buffer entries. The XHCI driver will create a chained TRB for each
-entry which may trigger this issue.
+Besides, you need a PHY driver for upstream version:
+https://patchwork.kernel.org/patch/11454581/
 
-This patch adds logic to the XHCI driver to detect and prevent this from
-happening.
+Peter
 
-For every (TRB_CACHE_SIZE - 2), we check the total buffer size of
-the SG list and if the last window of (TRB_CACHE_SIZE - 2) SG list length
-and we don't make up at least 1 MPS, we create a temporary buffer to
-consolidate full SG list into the buffer.
+> usbotg3: usb3@5b110000 {
+> 		compatible =3D "cdns,usb3";
+> 		reg =3D <0x0 0x5B110000 0x0 0x10000>,
+> 			<0x0 0x5B130000 0x0 0x10000>,
+> 			<0x0 0x5B140000 0x0 0x10000>,
+> 			<0x0 0x5B160000 0x0 0x40000>,
+> 			<0x0 0x5B120000 0x0 0x10000>;
+> 		interrupt-parent =3D <&gic>;
+> 		interrupts =3D <GIC_SPI 271 IRQ_TYPE_LEVEL_HIGH>;
+> 		clocks =3D <&usb3_lpcg 1>,
+> 			 <&usb3_lpcg 0>,
+> 			 <&usb3_lpcg 5>,
+> 			 <&usb3_lpcg 2>,
+> 			 <&usb3_lpcg 3>;
+> 		clock-names =3D "usb3_lpm_clk", "usb3_bus_clk", "usb3_aclk",
+> 			"usb3_ipg_clk", "usb3_core_pclk";
+> 		assigned-clocks =3D <&clk IMX_SC_R_USB_2 IMX_SC_PM_CLK_PER>,
+> 				  <&clk IMX_SC_R_USB_2 IMX_SC_PM_CLK_MISC>,
+> 				  <&clk IMX_SC_R_USB_2 IMX_SC_PM_CLK_MST_BUS>;
+> 		assigned-clock-rates =3D <125000000>, <12000000>, <250000000>;
+> 		power-domains =3D <&pd IMX_SC_R_USB_2>;
+> 		cdns3,usbphy =3D <&usb3phynop1>;
+> 		status =3D "disabled";
+> 	};
+>=20
+> In board dts I enabled this:
+>=20
+> &usbotg3 {
+> 	dr_mode =3D "host";
+> 	status =3D "okay";
+> };
+>=20
+>=20
+> On probing I got:
+>=20
+> [    2.932089] cdns-usb3 5b110000.usb3: missing host IRQ
+>=20
+> I also tried to enable "fsl,imx8qm-usb3" compatible buts this results
+> directly into a crash.
+>=20
+> What do I miss here? some comments would be helpful.
+>=20
+> Best Regards,
+>=20
+> Oliver
 
-We check at (TRB_CACHE_SIZE - 2) window because it is possible that there
-would be a link and/or event data TRB that take up to 2 of the cache
-entries.
+--=20
 
-We discovered this issue with devices on other platforms but have not
-yet come across any device that triggers this on Linux. But it could be
-a real problem now or in the future. All it takes is N number of small
-chained TRBs. And other instances of the Synopsys IP may have smaller
-values for the TRB_CACHE_SIZE which would exacerbate the problem.
-
-Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
----
-
-Resending as 'umlaut' in email are not accepted by some servers.
-
- drivers/usb/core/hcd.c       |   8 +++
- drivers/usb/host/xhci-ring.c |   2 +-
- drivers/usb/host/xhci.c      | 128 +++++++++++++++++++++++++++++++++++++++++++
- drivers/usb/host/xhci.h      |   4 ++
- 4 files changed, 141 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index aa45840d8273..fdd257a2b8a6 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -1459,6 +1459,14 @@ int usb_hcd_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
- 					return -EINVAL;
- 				}
- 
-+				/*
-+				 * If SG is consolidate into single buffer
-+				 * return early
-+				 */
-+				if ((urb->transfer_flags &
-+				     URB_DMA_MAP_SINGLE))
-+					return ret;
-+
- 				n = dma_map_sg(
- 						hcd->self.sysdev,
- 						urb->sg,
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index a78787bb5133..2fad9474912a 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -3291,7 +3291,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 
- 	full_len = urb->transfer_buffer_length;
- 	/* If we have scatter/gather list, we use it. */
--	if (urb->num_sgs) {
-+	if (urb->num_sgs && !(urb->transfer_flags & URB_DMA_MAP_SINGLE)) {
- 		num_sgs = urb->num_mapped_sgs;
- 		sg = urb->sg;
- 		addr = (u64) sg_dma_address(sg);
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index fe38275363e0..94fddbd06179 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1256,6 +1256,109 @@ EXPORT_SYMBOL_GPL(xhci_resume);
- 
- /*-------------------------------------------------------------------------*/
- 
-+static int xhci_map_temp_buffer(struct usb_hcd *hcd, struct urb *urb)
-+{
-+	void *temp;
-+	int ret = 0;
-+	unsigned int len;
-+	unsigned int buf_len;
-+	enum dma_data_direction dir;
-+	struct xhci_hcd *xhci;
-+
-+	xhci = hcd_to_xhci(hcd);
-+	dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
-+	buf_len = urb->transfer_buffer_length;
-+
-+	temp = kzalloc_node(buf_len, GFP_ATOMIC,
-+			    dev_to_node(hcd->self.sysdev));
-+	if (!temp) {
-+		xhci_warn(xhci, "Failed to create temp buffer, HC may fail\n");
-+		return -ENOMEM;
-+	}
-+
-+	if (usb_urb_dir_out(urb)) {
-+		len = sg_pcopy_to_buffer(urb->sg, urb->num_sgs,
-+					 temp, buf_len, 0);
-+		if (len != buf_len)
-+			xhci_warn(xhci, "Wrong temp buffer write length\n");
-+	}
-+
-+	urb->transfer_buffer = temp;
-+	urb->transfer_dma = dma_map_single(hcd->self.sysdev,
-+					   urb->transfer_buffer,
-+					   urb->transfer_buffer_length,
-+					   dir);
-+	if (dma_mapping_error(hcd->self.sysdev,
-+			      urb->transfer_dma)) {
-+		xhci_err(xhci, "dma mapping error\n");
-+		ret = -EAGAIN;
-+		kfree(temp);
-+	} else {
-+		urb->transfer_flags |= URB_DMA_MAP_SINGLE;
-+	}
-+
-+	return ret;
-+}
-+
-+static bool xhci_urb_temp_buffer_required(struct usb_hcd *hcd,
-+					  struct urb *urb)
-+{
-+	bool ret = false;
-+	unsigned int i;
-+	unsigned int len = 0;
-+	unsigned int buf_len;
-+	unsigned int trb_size;
-+	unsigned int max_pkt;
-+	struct scatterlist *sg;
-+	struct scatterlist *tail_sg;
-+
-+	sg = urb->sg;
-+	tail_sg = urb->sg;
-+	buf_len = urb->transfer_buffer_length;
-+	max_pkt = usb_endpoint_maxp(&urb->ep->desc);
-+
-+	if (urb->dev->speed >= USB_SPEED_SUPER)
-+		trb_size = TRB_CACHE_SIZE_SS;
-+	else
-+		trb_size = TRB_CACHE_SIZE_HS;
-+
-+	for_each_sg(urb->sg, sg, urb->num_sgs, i) {
-+		len = len + sg->length;
-+		if (i > trb_size - 2) {
-+			len = len - tail_sg->length;
-+			if (len < max_pkt) {
-+				ret = true;
-+				break;
-+			}
-+
-+			tail_sg = sg_next(tail_sg);
-+		}
-+	}
-+	return ret;
-+}
-+
-+static void xhci_unmap_temp_buf(struct urb *urb)
-+{
-+	struct scatterlist *sg;
-+	unsigned int len;
-+	unsigned int buf_len;
-+
-+	sg = urb->sg;
-+	buf_len = urb->transfer_buffer_length;
-+
-+	if (usb_urb_dir_in(urb)) {
-+		len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
-+					   urb->transfer_buffer,
-+					   buf_len,
-+					   0);
-+		if (len != buf_len)
-+			dev_err(&urb->dev->dev, "Wrong length for unmap\n");
-+	}
-+
-+	kfree(urb->transfer_buffer);
-+	urb->transfer_buffer = NULL;
-+}
-+
- /*
-  * Bypass the DMA mapping if URB is suitable for Immediate Transfer (IDT),
-  * we'll copy the actual data into the TRB address register. This is limited to
-@@ -1265,12 +1368,36 @@ EXPORT_SYMBOL_GPL(xhci_resume);
- static int xhci_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
- 				gfp_t mem_flags)
- {
-+	struct xhci_hcd *xhci;
-+
-+	xhci = hcd_to_xhci(hcd);
-+
- 	if (xhci_urb_suitable_for_idt(urb))
- 		return 0;
- 
-+	if (xhci->quirks & XHCI_CONSOLIDATE_SG_LIST) {
-+		if (xhci_urb_temp_buffer_required(hcd, urb))
-+			xhci_map_temp_buffer(hcd, urb);
-+	}
- 	return usb_hcd_map_urb_for_dma(hcd, urb, mem_flags);
- }
- 
-+static void xhci_unmap_urb_for_dma(struct usb_hcd *hcd, struct urb *urb)
-+{
-+	struct xhci_hcd *xhci;
-+	bool unmap_temp_buf = false;
-+
-+	xhci = hcd_to_xhci(hcd);
-+
-+	if (urb->num_sgs && (urb->transfer_flags & URB_DMA_MAP_SINGLE))
-+		unmap_temp_buf = true;
-+
-+	usb_hcd_unmap_urb_for_dma(hcd, urb);
-+
-+	if ((xhci->quirks & XHCI_CONSOLIDATE_SG_LIST) && unmap_temp_buf)
-+		xhci_unmap_temp_buf(urb);
-+}
-+
- /**
-  * xhci_get_endpoint_index - Used for passing endpoint bitmasks between the core and
-  * HCDs.  Find the index for an endpoint given its descriptor.  Use the return
-@@ -5315,6 +5442,7 @@ static const struct hc_driver xhci_hc_driver = {
- 	 * managing i/o requests and associated device resources
- 	 */
- 	.map_urb_for_dma =      xhci_map_urb_for_dma,
-+	.unmap_urb_for_dma =    xhci_unmap_urb_for_dma,
- 	.urb_enqueue =		xhci_urb_enqueue,
- 	.urb_dequeue =		xhci_urb_dequeue,
- 	.alloc_dev =		xhci_alloc_dev,
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index a093eeaec70e..341d1dfbe689 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1330,6 +1330,10 @@ enum xhci_setup_dev {
- #define TRB_SIA			(1<<31)
- #define TRB_FRAME_ID(p)		(((p) & 0x7ff) << 20)
- 
-+/* TRB cache size for xHC with TRB cache */
-+#define TRB_CACHE_SIZE_HS	8
-+#define TRB_CACHE_SIZE_SS	16
-+
- struct xhci_generic_trb {
- 	__le32 field[4];
- };
--- 
-2.11.0
-
+Thanks,
+Peter Chen=
