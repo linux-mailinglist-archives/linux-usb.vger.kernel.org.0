@@ -2,84 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B49196717
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2020 16:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D022E196849
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2020 19:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727163AbgC1PkJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 28 Mar 2020 11:40:09 -0400
-Received: from mail-lf1-f47.google.com ([209.85.167.47]:39174 "EHLO
-        mail-lf1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726482AbgC1PkJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 Mar 2020 11:40:09 -0400
-Received: by mail-lf1-f47.google.com with SMTP id h6so4542835lfp.6
-        for <linux-usb@vger.kernel.org>; Sat, 28 Mar 2020 08:40:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jZ3WyD6bhPSZNLt/bWleoqzt1UE2igSVRjTq69LMb28=;
-        b=DQBberg+wl2RGBxqM34k1Z2AFubFDsMaSL7nTCJOr8GLn+8cdQCF38XoBKocdwkIqQ
-         oWgyRi6pDUqA90dTUbBSG6JCuXU8ioXRS4V9tS2Ctb5GqJd+HZHic0+behd4Uflwj5JQ
-         5stqB0oxrTMpk1VDSksBJ3pCI3GqoJHHwp43BP4lCvzx4d22ude/BzBaNlUiyXq6oAxW
-         zeDJ2cVvNT/FNXS0up6SwdoNuLO0B4sXfNs0+Dr8dayQURfyDzRmmxOsDFhOzBhdA3vo
-         xnEgY5j35iR8sQzf95Jj4m2aL28wtAnrtEtXN9RmfcZe6nhs++nsv7lDW/89c+J64l6z
-         bl1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jZ3WyD6bhPSZNLt/bWleoqzt1UE2igSVRjTq69LMb28=;
-        b=njZcQOJjbwHKSBkob7qAO00g8zBnPENOYN9KYUTOJlnD+Tau1RLfflbROVryvvFXIX
-         1QkFnJ+CX7fDokZ/p8X7IndiTRaGcJ/eOnSmdaqizDegIzCAsvYxaVbHIo6qn+fn7aKp
-         nYIle9mUt5pX/Qnqol+JJw5WaSrt79IIUVI3Oar03/zN3kIbZUf7aTJhStU7XkYe0219
-         IjHl3NTnWhBybhCN2dic4e/qdEJ4atXdN8t+LNJEBHiE0Zlo+t+G0nys5uRuUK/jqX4p
-         YLtm8lDeRcyFzAEkUppdBRodcClyAxDQAW+T72iiCt8+GFsKKibsZgjN704DdHRTKQWR
-         6gTw==
-X-Gm-Message-State: AGi0PuaEMPWAbVGEAHhaEob2XqzbQs9zioyza9gQUfYra31Vt38Cn87E
-        PsmdrTmSMrcupJBJMz3itTM8CPWf4d03xV0zGaHZMw==
-X-Google-Smtp-Source: APiQypJBo1gy8bZaFOTw68JPYpLCj3admqjUXa7gEPDIP5aWOAjjDZT76uFJmKfFqwt0pw0cShXpViG5dTbzkNXnFHU=
-X-Received: by 2002:ac2:51c3:: with SMTP id u3mr2741176lfm.25.1585410006904;
- Sat, 28 Mar 2020 08:40:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAEAjamuCnVEyRKDsTa-MiU_4eTnaD0d38dmSBPbbkmjd+MZxpQ@mail.gmail.com>
- <Pine.LNX.4.44L0.2003281131060.1088-100000@netrider.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.2003281131060.1088-100000@netrider.rowland.org>
-From:   Kyungtae Kim <kt0755@gmail.com>
-Date:   Sat, 28 Mar 2020 11:39:55 -0400
-Message-ID: <CAEAjamvopuy0=wP_z_bMzoPvcjcMqSOSp0BFOj+Ai2oaOqFYDw@mail.gmail.com>
-Subject: Re: Fwd: BUG: KASAN: use-after-free in usb_hcd_unlink_urb+0x5f/0x170 drivers/usb/core/hcd.c
+        id S1726325AbgC1SGP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 28 Mar 2020 14:06:15 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:53278 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726265AbgC1SGP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 Mar 2020 14:06:15 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02SI3wi5089737;
+        Sat, 28 Mar 2020 18:06:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=8yroq0NyydKbdeQAh1IWDI69kbHqW/3PZP4O8Z74eeM=;
+ b=Vnq35nKw0vrNF7XqtFmAsb/kMkqgpzQM3UdH6OZxWYmcoVD7VI05j+tuO4DqVa+yI4eS
+ y1tlZNP7JCLkznKeNGjUYZnm7VKMaxbtqKrPNoI/agU517jbmXkTDP6YEOGYs/ShKeTr
+ hzuWZls9qJrSLyHlfkD49dkym8P35XzzIAkwPZf6wMHHnxh0LeuMv3D81nOQUnIv9yoS
+ uT+0Rb6deHrmCJH/Oe3WWOpyvWH/yllqadDQKIs7d4H4/g+Do7QHMrrb7yzSD1p6PccB
+ Cdn7MkSx7U1cj48D/qqZ77cU6JCYLc3ac2Jkax5znp7ePnhtbjQT8QNtPrc2uIkDlRBX fQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 301xhkhbsb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 28 Mar 2020 18:06:05 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02SI4w4w020216;
+        Sat, 28 Mar 2020 18:06:05 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 301xd1t3uw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 28 Mar 2020 18:06:05 +0000
+Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 02SI62Nu017076;
+        Sat, 28 Mar 2020 18:06:04 GMT
+Received: from [192.168.1.140] (/47.220.71.223)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Sat, 28 Mar 2020 11:06:02 -0700
+Subject: Re: ehci-pci : WARNING: CPU: 0 PID: 347 at kernel/dma/direct.c:34
 To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     linux-usb@vger.kernel.org
+References: <Pine.LNX.4.44L0.2003281135130.1088-100000@netrider.rowland.org>
+From:   John Donnelly <John.P.Donnelly@Oracle.com>
+Message-ID: <225cfc1f-e520-cff0-404a-a67ca2bdfbef@Oracle.com>
+Date:   Sat, 28 Mar 2020 13:05:59 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <Pine.LNX.4.44L0.2003281135130.1088-100000@netrider.rowland.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9574 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0 suspectscore=0
+ mlxscore=0 adultscore=0 spamscore=0 mlxlogscore=999 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2003280172
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9574 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=999 lowpriorityscore=0 malwarescore=0
+ clxscore=1015 phishscore=0 adultscore=0 priorityscore=1501 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003280172
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Mar 28, 2020 at 11:31:32AM -0400, Alan Stern wrote:
-> On Sat, 28 Mar 2020, Kyungtae Kim wrote:
->
-> > On Thu, Mar 26, 2020 at 10:49:40AM -0400, Alan Stern wrote:
-> > > On Tue, 24 Mar 2020, Kyungtae Kim wrote:
-> > >
-> > > > Thanks for the patch. Unfortunately, we don't have a repro program to
-> > > > test right now.
-> > >
-> > > Okay.  Can you at least try running your tests with the patch installed
-> > > to check that the patch doesn't actually break anything?
-> > >
-> > > Alan Stern
-> > >
-> >
-> > I tested with that patch for more than 24 hours. It worked well
-> > without triggering the same bug.
->
-> Thanks for testing.  I'll write up the patch and submit it.
->
+On 3/28/20 10:37 AM, Alan Stern wrote:
+> On Fri, 27 Mar 2020, John Donnelly wrote:
+> 
+>> Hi,
+>>
+>> I am seeing this WARNING event with iommu=off when booting a DL380
+>> server with a 5.4.17 kernel.
+> 
+> ...
+> 
+>> The end result is this USB port is not configured when
+>> dma_direct_map_page() is called and it returns return
+>> DMA_MAPPING_ERROR;
+>>
+>>
+>> When I boot the server with iommu=on I don’t see  this sequence :
+> 
+> ...
+> 
+>> On an older kernel  5.3. flavor I am not seeing this behavior, and the usbhib devices  appear as expected :
+> 
+> I forgot to mention: Since you have one kernel where the WARNING occurs
+> and one where it doesn't, you can use bisection to find the commit that
+> was responsible for the change in behavior.  If you care to go to the
+> trouble...
+> 
 > Alan Stern
->
+> 
 
-Thanks a lot.
 
-Regards,
-Kyungtae Kim
+Hi.
+
+
+Yes that is the plan ! It may take awhile.
+
+
+
+
+-- 
+Thank You,
+John
