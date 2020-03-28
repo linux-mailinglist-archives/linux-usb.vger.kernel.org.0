@@ -2,59 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDFE196479
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2020 09:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5D519647C
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2020 09:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726045AbgC1IeW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 28 Mar 2020 04:34:22 -0400
-Received: from mail-lj1-f182.google.com ([209.85.208.182]:45113 "EHLO
-        mail-lj1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725937AbgC1IeV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 Mar 2020 04:34:21 -0400
-Received: by mail-lj1-f182.google.com with SMTP id t17so12616423ljc.12
-        for <linux-usb@vger.kernel.org>; Sat, 28 Mar 2020 01:34:19 -0700 (PDT)
+        id S1726150AbgC1If5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 28 Mar 2020 04:35:57 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:34612 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725937AbgC1If4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 Mar 2020 04:35:56 -0400
+Received: by mail-lj1-f196.google.com with SMTP id p10so12400483ljn.1;
+        Sat, 28 Mar 2020 01:35:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=XVp8ImMiTZOUe1tMGLGkaph+zIseX6YmQWhcbOPx2V0=;
-        b=WnlrPIKi5xe8IHJ3vGw4S+LLWDXLJDMOzrIGv8sdiPX/ybYJW9QvGXWR/5aOO9zEJf
-         eBL5PqpxQ72wATYf/DEzS4TNUiyd3cBo/t/Jb18nM/XzUMCNWsX4Sgu6D/D3DwbHJikn
-         iEt3EQcdRpN0AqHKKqWeFp/rCFbuCZJwjFB7cYo2gUXAO78ss/wb3nRm6m3eIruVuwMx
-         pYDL8RzzLKbhIJqcdG5onCl6VhWVrIkk7jRxvO0wH+uloXygTmsGLWwWERPGLKiyO6LZ
-         PpTVsnbrDDlswVlGC9BylTjXXdWmucH3EvDloxVNNLAdD3AOrwOatSlAKkckQiWzuDZz
-         C15w==
+        bh=Qer0UP/wnwHE4FuvM+cjbdyplCq3YOMP2VWFL2KepzY=;
+        b=JPnvBuAmpjUWgPGXLMn3Vxolnj7wRcGcfI4VpdjvIq87JIx7F/OP/9eqhY5zzJnLXr
+         Z8Osg9OAPckk7So5lxx8yImBnegyyYsWfQ0kjuFHvZOtLTkby7EJq+g8cyhowXmmFTnN
+         C+Ib41iCyI3lMyEuzSHYZBqXAG6NZgW9iav7TMfbi7Ct2Oc9/UJyzv6wE8BfPYH2AGq3
+         RTgRb9urkFYkwRQnjcQDa+9+amynT+y51Vc3dUBTPaYZ6iD2o+20D3G9XW7y1i7fomv3
+         cq9ecCd38dE/PFYuw9pVVYasw1BstmLc/4/0mhilE75uEhVYjYx2EFWXOe9Pzw96AVKw
+         q8Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=XVp8ImMiTZOUe1tMGLGkaph+zIseX6YmQWhcbOPx2V0=;
-        b=nTJx6LwCZhqt7fJNTJZJWVYEQ8Sjbu5boaTj1/13SRyPmze04rpOF4BRfZ0Pc6wU4b
-         RkSGRntu9yApZXy+0cV2PXjNGceD7qb1i8hJPSa5IeOBtKZU0IR1S3fXRh54GB6gznIH
-         cwWz8T3/Bkn3WSNPbesGnUxK86x//Q5lOjD9TnaB+ziHRjsftLeTQNECcZOANLCt1QHQ
-         vNr8MVL9XXQTQ8zYTcVlhVLXX/clfXkTrO8t40yy5mZAnkQ9Wbtq79SKptz43W2Ykt8O
-         daTTGiiPeNE6VJZYC478zMFDch77FC1qFdj98hNMQsFberO3BpmgcN08nd1Iq+ea6euD
-         2Z7A==
-X-Gm-Message-State: AGi0Pub35a0AcIaTNwFnwJm9sXZDeSGcO9QkCOlq11MDza5k2mKbs60U
-        ViOlHiBsX9YjCFIKREKuyfU=
-X-Google-Smtp-Source: APiQypJdhIyyko+1AT02tgLKjfF5k9ZSWtpsUIE/FEOa+5LxKUxAPTF6w/RaZg0aA8hLT9amBzeYBA==
-X-Received: by 2002:a2e:95c3:: with SMTP id y3mr1686141ljh.149.1585384458835;
-        Sat, 28 Mar 2020 01:34:18 -0700 (PDT)
+        bh=Qer0UP/wnwHE4FuvM+cjbdyplCq3YOMP2VWFL2KepzY=;
+        b=WlRdIOY3pFk2lzdxfhCr0cc432MXn8mI6Gfcrb/Sw4Zxptkoql+jo+C5w+lmUmsmGc
+         ob9WkPjT1gewP0x3hnj6TJ2Ji30f2vZlpzDk6+gdojZxkLln/Nc0t5HMW9qfaKq8xCNQ
+         KoAc2xhKaHHMzx1UHHFNN0H0aMG4U+fm73WspITFEowlRc2q01+4izg+YXs84x2kHCMx
+         MIVdiwNvomqKHLLuzJqEkqX87E7iYimRU6MfJlyZnxtBYadfChj17GejdQlMBKJFQnlW
+         F/6RuEzSXiPYlYz9tK56hiQL++f/SsZlKhalWN3hisiUdXWkFpGGiAQBsP0Fuh677S5+
+         8suw==
+X-Gm-Message-State: AGi0PuacAcafbDi3izw4s2JGM25kXaArrqO1E5sv3i0CSnhlEexlXCYj
+        YJ3vXPYPQCqYEZ44N78KNX8=
+X-Google-Smtp-Source: APiQypJdG7yVb7jCeHtVzTnszdmd2+Jd+KCHpGnPX/km82WU8taCy6cbV2xBW3d8iCpCpNAcXh6X6w==
+X-Received: by 2002:a2e:9ad2:: with SMTP id p18mr1670420ljj.15.1585384554120;
+        Sat, 28 Mar 2020 01:35:54 -0700 (PDT)
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id f26sm3623158lja.102.2020.03.28.01.34.17
+        by smtp.gmail.com with ESMTPSA id 9sm4096123ljf.0.2020.03.28.01.35.53
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 28 Mar 2020 01:34:18 -0700 (PDT)
+        Sat, 28 Mar 2020 01:35:53 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Sriharsha Allenki <sallenki@codeaurora.org>
-Cc:     "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Jack Pham <jackp@codeaurora.org>
-Subject: Re: Fwd: [DWC3][Gadget] Question regarding the unmapping of request as part of queue failure
-In-Reply-To: <53a4614f-d1bc-5856-8e01-eb790a6ff7fe@codeaurora.org>
-References: <0105a5cd-936e-fb08-77bf-c2f1dbf0aeed@codeaurora.org> <53a4614f-d1bc-5856-8e01-eb790a6ff7fe@codeaurora.org>
-Date:   Sat, 28 Mar 2020 10:34:13 +0200
-Message-ID: <87369skhdm.fsf@kernel.org>
+To:     Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Ashwini Pahuja <ashwini.linux@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
+Subject: Re: [PATCH] usb: gadget: udc: bdc: Remove unnecessary NULL checks in bdc_req_complete
+In-Reply-To: <20200326195855.GB29213@ubuntu-m2-xlarge-x86>
+References: <20191023002014.22571-1-natechancellor@gmail.com> <20200221045740.GA43417@ubuntu-m2-xlarge-x86> <CAKwvOdku24UV8J4uSKFFc7gmwOP28-8K352BJepb_z-octFoPw@mail.gmail.com> <20200326195855.GB29213@ubuntu-m2-xlarge-x86>
+Date:   Sat, 28 Mar 2020 10:35:49 +0200
+Message-ID: <87zhc0j2qi.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -64,51 +65,96 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 --=-=-=
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
 
 Hi,
 
-Sriharsha Allenki <sallenki@codeaurora.org> writes:
-> I was looking at the code flow for ep_queue and came across the
-> following piece of code.
+Nathan Chancellor <natechancellor@gmail.com> writes:
+> On Mon, Feb 24, 2020 at 01:42:57PM -0800, Nick Desaulniers wrote:
+>> On Thu, Feb 20, 2020 at 8:57 PM Nathan Chancellor
+>> <natechancellor@gmail.com> wrote:
+>> >
+>> > I know it has been a while but ping?
+>>=20
+>> Sorry! Too many bugs...barely treading water! Send help!
+>>=20
+>> >
+>> > On Tue, Oct 22, 2019 at 05:20:15PM -0700, Nathan Chancellor wrote:
+>> > > When building with Clang + -Wtautological-pointer-compare:
+>> > >
+>> > > drivers/usb/gadget/udc/bdc/bdc_ep.c:543:28: warning: comparison of
+>> > > address of 'req->queue' equal to a null pointer is always false
+>> > > [-Wtautological-pointer-compare]
+>> > >         if (req =3D=3D NULL  || &req->queue =3D=3D NULL || &req->usb=
+_req =3D=3D NULL)
+>> > >                              ~~~~~^~~~~    ~~~~
+>> > > drivers/usb/gadget/udc/bdc/bdc_ep.c:543:51: warning: comparison of
+>> > > address of 'req->usb_req' equal to a null pointer is always false
+>> > > [-Wtautological-pointer-compare]
+>> > >         if (req =3D=3D NULL  || &req->queue =3D=3D NULL || &req->usb=
+_req =3D=3D NULL)
+>> > >                                                     ~~~~~^~~~~~~    =
+~~~~
+>> > > 2 warnings generated.
+>> > >
+>> > > As it notes, these statements will always evaluate to false so remove
+>> > > them.
+>>=20
+>> `req` is an instance of a `struct bdc_req` defined in
+>> drivers/usb/gadget/udc/bdc/bdc.h as:
+>> 333 struct bdc_req {
+>> 334   struct usb_request  usb_req;
+>> 335   struct list_head  queue;
+>> 336   struct bdc_ep   *ep;
+>> 337   /* only one Transfer per request */
+>> 338   struct bd_transfer bd_xfr;
+>> 339   int epnum;
+>> 340 };
+>>=20
+>> So indeed the non-pointer, struct members can never be NULL.
+>>=20
+>> I think the second check that was removed should be
+>> `req->usb_req.complete =3D=3D NULL`, since otherwise `&req->usb_req` may
+>> be passed to usb_gadget_giveback_request which tries to invoke the
+>> `complete` member as a callback.  There are numerous places in
+>> drivers/usb/gadget/udc/bdc/bdc_ep.c that assign `complete =3D NULL`.
+>>=20
+>> Can the maintainers clarify?
 >
-> __dwc3_gadget_kick_transfer {
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0 dwc3_prepare_trbs(dep);
-> =C2=A0=C2=A0=C2=A0 req =3D next_request(&dep->started_list);
-> =C2=A0=C2=A0=C2=A0 if (!req) {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dep->f=
-lags |=3D DWC3_EP_PENDING_REQUEST;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return=
- 0;
-> =C2=A0=C2=A0=C2=A0 }
+> $ sed -n 537,555p drivers/usb/gadget/udc/bdc/bdc_ep.c
+> /* callback to gadget layer when xfr completes */
+> static void bdc_req_complete(struct bdc_ep *ep, struct bdc_req *req,
+> 						int status)
+> {
+> 	struct bdc *bdc =3D ep->bdc;
+>
+> 	if (req =3D=3D NULL  || &req->queue =3D=3D NULL || &req->usb_req =3D=3D =
+NULL)
+> 		return;
+>
+> 	dev_dbg(bdc->dev, "%s ep:%s status:%d\n", __func__, ep->name, status);
+> 	list_del(&req->queue);
+> 	req->usb_req.status =3D status;
+> 	usb_gadget_unmap_request(&bdc->gadget, &req->usb_req, ep->dir);
+> 	if (req->usb_req.complete) {
+> 		spin_unlock(&bdc->lock);
+> 		usb_gadget_giveback_request(&ep->usb_ep, &req->usb_req);
+> 		spin_lock(&bdc->lock);
+> 	}
 > }
 >
-> As part of dwc3_prepare_trbs(dep), we get a request from the pending_list
-> and queue to the tail of the started_list. But here we get the head of
-> the started_list, now if there is any failure in issuing UPDATE_TRANSFER
-> to the core, we unmap this request using "dwc3_gadget_del_and_unmap_reque=
-st".
+> It looks like req->usb_req.complete is checked before being passed to
+> usb_gadget_giveback_request. So the patch as it stands is correct,
+> unless those checks needed to be something else.
 >
-> But if this kick_transfer was part of the ep_queue and we have failed
-> to issue update transfer, instead of unmapping the request we are trying
-> to queue, we will be unmapping a different request (first in the started_=
-list)
-> which the core could have already started processing. I believe we should=
- unmap
-> the request we are trying to queue but not any other.
+> Felipe, could you clarify or pick up this patch if it is correct? This
+> is one of two warnings that I see for -Wtautological-compare and I want
+> it turned on for 5.7 and it'd be nice to be warning free, especially
+> since I sent this patch back in October :/
 
-no, we have to start requests in order and dequeue them in order as
-well. There's no way to verify that the request is already processed by
-the HW, other than checking HWO bit which is set during
-dwc3_prepare_trbs(). This is a HW-SW race condition that we can't really
-fix.
-
-It is minimized, however, by the fact that, at least for non-isoc
-endpoints, we use No Status Update Transfer commands, which means the
-command can't fail.
+hmm, I don't have that patch in my inbox. Could you resend it?
 
 =2D-=20
 balbi
@@ -118,18 +164,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl5/DAYACgkQzL64meEa
-mQZx6BAApVnaTu/iYkLk4ry8q67pBVl/0Ppo3hBsS3PBL+4KEZXREz67Af1ZZNlt
-3MMIiia2/6ZPgeWTuzRn6gqxqPL6deEBHPppIauWNZZFhKDp7TcAJubWiu6DHu5S
-bQxUpr14P7AE5/l5+E71zdRLpxot9LoeCId0CMhrGajmSfFQDkvL4fMVEjQAn9+t
-NPKKJzREOYdbcOX9mMUDi5Dd+wNoe/3PxM8XSmkqtfqoFgBUWNTH1UaV6awxGOyb
-eoJ8Naz65pWn2TIE6e4+IrTZNC4yPP4hm97jW/wuVywdEzNN5EMcSz3SPOYCidgX
-4XTyr1o6afUsylD8fU5SJNoD7IJ6mWzcBUEkjfy2Feq5sbXFHvhA1Hmd/o5zibAv
-gGXaY+xU+FtL1uXt6yNXVOwyd4gyFJxNoN8o2LYmY3LixqYWHdLeCOrih1lZplXu
-n/CM8XH43vg+AdF06DooYhXQQqN6BIgV9fQdvwyI/3Pw85y6LBj5naofl/IGGG3U
-cZgnZodTvIgFlO/9/H/dGF+W1JWsasCbD23okOzCBT+gtVprOcJDmddSf4P2rvR0
-vnWXwFd0m0b4jcB0S4o0Afzdc08OHLXI0NF5/GX41CvtW11KzllFlHMT/L+q/s/L
-R+fJIdPq4E/2qOgFA3Gbk+to0PYuiQtBnZruquyuI3viH4B0zNY=
-=/Xs5
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl5/DGUACgkQzL64meEa
+mQafUA/9Ht2zH4aYtwxtqPtB+xyMdI4MdcpS+/CjkBgHkTpkpp1WOnANeG7xLxf3
+pbnPBkQiPqDuDbGiM0lZ1tlwwS7+fFswxlqON8gmwH+xcq/BOVe/S5duy3G/Kbkl
+J5LQz6cR/uEvISqJRp8bKgBcy1kR0EgO8o2/nxlNbGNzZEjfq8LtZOqI0yAY0Gw7
+Ken1JOvAw/1uHa0gAWbpkIDD5wHPRCN47Lw93aCm4ZhjOe4fPK6XN+rXA1I9t2Bt
+Ra+rwTz37Biz2s90PWd+XveKCIjFUzNEsxRp+/1lnFv26/WTl4u8GNzqmePNtTx5
+iHSRwQBpqeHA5CpNPgFVmmrU1Y3eoMiBaPZO1pUGu+2e7JzWXuzdS3lgPrvVNXpv
+w723kiTG7E8M68fDiVztC/ii/63v081J+6OxPxHC+vvFtN7lX2hAjcaJGp8LRwQn
+NtlFkXszqk04EeGSebTmEyTTg823hsE+EWA/dVYQxUDJOtmBHttyyRKmeWf9k13f
+9DLJYekjXtbAikddtjRyVwLmKipuU0DfcstggkUm3wzu+JwS7e1HH1aDlZfZW/2A
+3wzpnEjtscMMuXXQlm2tzGE7cQTrHFdwFcQEptJ9JScFDlNYP+fsK8v7XcH2fLLt
+U8Ro3+BqJKKJgz1yXegLP9bDcKjDEjofgpAp3hvQoYfG3WCd8Bc=
+=5F2y
 -----END PGP SIGNATURE-----
 --=-=-=--
