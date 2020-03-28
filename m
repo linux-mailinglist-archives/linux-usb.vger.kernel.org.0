@@ -2,180 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5D519647C
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2020 09:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91FDF1964C7
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2020 10:19:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726150AbgC1If5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 28 Mar 2020 04:35:57 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:34612 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725937AbgC1If4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 Mar 2020 04:35:56 -0400
-Received: by mail-lj1-f196.google.com with SMTP id p10so12400483ljn.1;
-        Sat, 28 Mar 2020 01:35:54 -0700 (PDT)
+        id S1726269AbgC1JS7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 28 Mar 2020 05:18:59 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:37172 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725865AbgC1JS7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 Mar 2020 05:18:59 -0400
+Received: by mail-pl1-f194.google.com with SMTP id x1so4465207plm.4;
+        Sat, 28 Mar 2020 02:18:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=Qer0UP/wnwHE4FuvM+cjbdyplCq3YOMP2VWFL2KepzY=;
-        b=JPnvBuAmpjUWgPGXLMn3Vxolnj7wRcGcfI4VpdjvIq87JIx7F/OP/9eqhY5zzJnLXr
-         Z8Osg9OAPckk7So5lxx8yImBnegyyYsWfQ0kjuFHvZOtLTkby7EJq+g8cyhowXmmFTnN
-         C+Ib41iCyI3lMyEuzSHYZBqXAG6NZgW9iav7TMfbi7Ct2Oc9/UJyzv6wE8BfPYH2AGq3
-         RTgRb9urkFYkwRQnjcQDa+9+amynT+y51Vc3dUBTPaYZ6iD2o+20D3G9XW7y1i7fomv3
-         cq9ecCd38dE/PFYuw9pVVYasw1BstmLc/4/0mhilE75uEhVYjYx2EFWXOe9Pzw96AVKw
-         q8Iw==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=uEulqnoWhYVrXbCXkjImpUi0gSJmkTSnXSHAVgk4dzk=;
+        b=VIsBg3fKj45txEWcrOyOCib8Y6r/8J7Y2RtDCyi4wSJBF2XN1ieldKVSMdGvq0b3OK
+         8ajy3jdyzWFmIJIVL/xkqzhKcutM3Dc+mSM1qD8zD7m4mnk6mVwAtrowF8rpYCYBIpui
+         JoeMiBEOLDLTsBFEIeuohyy9pNag6sjjFjfHHr+b8sXuz6Xr3zJgwWIRYr2rMyVLD260
+         HIWgYeaKwre2HdTVd/FXAGtiToX/nkjcs0ng5VqjYCDrTBaL0JhezWfDJV3JvXNbmS+E
+         /a5b+ERX5h8NEDNW26kHwiAkJeZewbLksJY5HHkk8WUQ/wAb38osOgPQV5Rl/22/MwgK
+         Pi3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=Qer0UP/wnwHE4FuvM+cjbdyplCq3YOMP2VWFL2KepzY=;
-        b=WlRdIOY3pFk2lzdxfhCr0cc432MXn8mI6Gfcrb/Sw4Zxptkoql+jo+C5w+lmUmsmGc
-         ob9WkPjT1gewP0x3hnj6TJ2Ji30f2vZlpzDk6+gdojZxkLln/Nc0t5HMW9qfaKq8xCNQ
-         KoAc2xhKaHHMzx1UHHFNN0H0aMG4U+fm73WspITFEowlRc2q01+4izg+YXs84x2kHCMx
-         MIVdiwNvomqKHLLuzJqEkqX87E7iYimRU6MfJlyZnxtBYadfChj17GejdQlMBKJFQnlW
-         F/6RuEzSXiPYlYz9tK56hiQL++f/SsZlKhalWN3hisiUdXWkFpGGiAQBsP0Fuh677S5+
-         8suw==
-X-Gm-Message-State: AGi0PuacAcafbDi3izw4s2JGM25kXaArrqO1E5sv3i0CSnhlEexlXCYj
-        YJ3vXPYPQCqYEZ44N78KNX8=
-X-Google-Smtp-Source: APiQypJdG7yVb7jCeHtVzTnszdmd2+Jd+KCHpGnPX/km82WU8taCy6cbV2xBW3d8iCpCpNAcXh6X6w==
-X-Received: by 2002:a2e:9ad2:: with SMTP id p18mr1670420ljj.15.1585384554120;
-        Sat, 28 Mar 2020 01:35:54 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id 9sm4096123ljf.0.2020.03.28.01.35.53
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=uEulqnoWhYVrXbCXkjImpUi0gSJmkTSnXSHAVgk4dzk=;
+        b=MaBGhuSutBf01gCaK57pjA2iOuomB65lOg6GjEbIzG+sQBUBs9SGgtquJ7GwqaPFSP
+         GImzrtXo86PbYsTFvL2+yHHVhh1H4QNw5c93CD+YLFIKuyElH12ol8RFPrkPcedr/clY
+         W7IjOwjd2BQcV5vPP4XJrDOK1Lg2KY8uZABEZ9KoPnJ0gNNJvRygtbcApRgddiTOhrpX
+         yFgmP/tK+Gf4+leknhWFUMgzffbjfRpve2vr/jB6a8i/N9dfHKgCTlE3ad30V+ww2bqX
+         sCOxjaWcQwajp2eRwRrSqxUnz4g9krd41mwmpipEaMAKctCElkbSDKNXEgsAAMOwzHYa
+         Y8WA==
+X-Gm-Message-State: ANhLgQ0eHdYqULq0B43xthVXR2HgC1ZL0vDDgzv28I98grLa+hK5/hXu
+        N69wZkDZXnOUkA3fMlLZugE=
+X-Google-Smtp-Source: ADFU+vs0VLGJZj1c1Mf3RkATTnXr6awH9f+oSWdL9DN5o4hQVBEOjYuAJ+yi4iZtUVJTG0iGs4AlsA==
+X-Received: by 2002:a17:902:ba08:: with SMTP id j8mr3163660pls.70.1585387136045;
+        Sat, 28 Mar 2020 02:18:56 -0700 (PDT)
+Received: from nishad ([106.51.232.103])
+        by smtp.gmail.com with ESMTPSA id x188sm5935844pfx.198.2020.03.28.02.18.53
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 28 Mar 2020 01:35:53 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Ashwini Pahuja <ashwini.linux@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Subject: Re: [PATCH] usb: gadget: udc: bdc: Remove unnecessary NULL checks in bdc_req_complete
-In-Reply-To: <20200326195855.GB29213@ubuntu-m2-xlarge-x86>
-References: <20191023002014.22571-1-natechancellor@gmail.com> <20200221045740.GA43417@ubuntu-m2-xlarge-x86> <CAKwvOdku24UV8J4uSKFFc7gmwOP28-8K352BJepb_z-octFoPw@mail.gmail.com> <20200326195855.GB29213@ubuntu-m2-xlarge-x86>
-Date:   Sat, 28 Mar 2020 10:35:49 +0200
-Message-ID: <87zhc0j2qi.fsf@kernel.org>
+        Sat, 28 Mar 2020 02:18:55 -0700 (PDT)
+Date:   Sat, 28 Mar 2020 14:48:50 +0530
+From:   Nishad Kamdar <nishadkamdar@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Joe Perches <joe@perches.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] USB: core: Use the correct style for SPDX License Identifier
+Message-ID: <20200328091844.GA3648@nishad>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+This patch corrects the SPDX License Identifier style in
+header files related to USB Core.
+For C header files Documentation/process/license-rules.rst
+mandates C-like comments (opposed to C source files where
+C++ style should be used).
 
+Changes made by using a script provided by Joe Perches here:
+https://lkml.org/lkml/2019/2/7/46.
 
-Hi,
+Suggested-by: Joe Perches <joe@perches.com>
+Signed-off-by: Nishad Kamdar <nishadkamdar@gmail.com>
+---
+ drivers/usb/core/hub.h           | 2 +-
+ drivers/usb/core/otg_whitelist.h | 2 +-
+ drivers/usb/core/usb.h           | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-Nathan Chancellor <natechancellor@gmail.com> writes:
-> On Mon, Feb 24, 2020 at 01:42:57PM -0800, Nick Desaulniers wrote:
->> On Thu, Feb 20, 2020 at 8:57 PM Nathan Chancellor
->> <natechancellor@gmail.com> wrote:
->> >
->> > I know it has been a while but ping?
->>=20
->> Sorry! Too many bugs...barely treading water! Send help!
->>=20
->> >
->> > On Tue, Oct 22, 2019 at 05:20:15PM -0700, Nathan Chancellor wrote:
->> > > When building with Clang + -Wtautological-pointer-compare:
->> > >
->> > > drivers/usb/gadget/udc/bdc/bdc_ep.c:543:28: warning: comparison of
->> > > address of 'req->queue' equal to a null pointer is always false
->> > > [-Wtautological-pointer-compare]
->> > >         if (req =3D=3D NULL  || &req->queue =3D=3D NULL || &req->usb=
-_req =3D=3D NULL)
->> > >                              ~~~~~^~~~~    ~~~~
->> > > drivers/usb/gadget/udc/bdc/bdc_ep.c:543:51: warning: comparison of
->> > > address of 'req->usb_req' equal to a null pointer is always false
->> > > [-Wtautological-pointer-compare]
->> > >         if (req =3D=3D NULL  || &req->queue =3D=3D NULL || &req->usb=
-_req =3D=3D NULL)
->> > >                                                     ~~~~~^~~~~~~    =
-~~~~
->> > > 2 warnings generated.
->> > >
->> > > As it notes, these statements will always evaluate to false so remove
->> > > them.
->>=20
->> `req` is an instance of a `struct bdc_req` defined in
->> drivers/usb/gadget/udc/bdc/bdc.h as:
->> 333 struct bdc_req {
->> 334   struct usb_request  usb_req;
->> 335   struct list_head  queue;
->> 336   struct bdc_ep   *ep;
->> 337   /* only one Transfer per request */
->> 338   struct bd_transfer bd_xfr;
->> 339   int epnum;
->> 340 };
->>=20
->> So indeed the non-pointer, struct members can never be NULL.
->>=20
->> I think the second check that was removed should be
->> `req->usb_req.complete =3D=3D NULL`, since otherwise `&req->usb_req` may
->> be passed to usb_gadget_giveback_request which tries to invoke the
->> `complete` member as a callback.  There are numerous places in
->> drivers/usb/gadget/udc/bdc/bdc_ep.c that assign `complete =3D NULL`.
->>=20
->> Can the maintainers clarify?
->
-> $ sed -n 537,555p drivers/usb/gadget/udc/bdc/bdc_ep.c
-> /* callback to gadget layer when xfr completes */
-> static void bdc_req_complete(struct bdc_ep *ep, struct bdc_req *req,
-> 						int status)
-> {
-> 	struct bdc *bdc =3D ep->bdc;
->
-> 	if (req =3D=3D NULL  || &req->queue =3D=3D NULL || &req->usb_req =3D=3D =
-NULL)
-> 		return;
->
-> 	dev_dbg(bdc->dev, "%s ep:%s status:%d\n", __func__, ep->name, status);
-> 	list_del(&req->queue);
-> 	req->usb_req.status =3D status;
-> 	usb_gadget_unmap_request(&bdc->gadget, &req->usb_req, ep->dir);
-> 	if (req->usb_req.complete) {
-> 		spin_unlock(&bdc->lock);
-> 		usb_gadget_giveback_request(&ep->usb_ep, &req->usb_req);
-> 		spin_lock(&bdc->lock);
-> 	}
-> }
->
-> It looks like req->usb_req.complete is checked before being passed to
-> usb_gadget_giveback_request. So the patch as it stands is correct,
-> unless those checks needed to be something else.
->
-> Felipe, could you clarify or pick up this patch if it is correct? This
-> is one of two warnings that I see for -Wtautological-compare and I want
-> it turned on for 5.7 and it'd be nice to be warning free, especially
-> since I sent this patch back in October :/
+diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
+index a97dd1ba964e..73f4482d833a 100644
+--- a/drivers/usb/core/hub.h
++++ b/drivers/usb/core/hub.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
+ /*
+  * usb hub driver head file
+  *
+diff --git a/drivers/usb/core/otg_whitelist.h b/drivers/usb/core/otg_whitelist.h
+index 2ae90158ded7..fdd4897401e2 100644
+--- a/drivers/usb/core/otg_whitelist.h
++++ b/drivers/usb/core/otg_whitelist.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0+
++/* SPDX-License-Identifier: GPL-2.0+ */
+ /*
+  * drivers/usb/core/otg_whitelist.h
+  *
+diff --git a/drivers/usb/core/usb.h b/drivers/usb/core/usb.h
+index 64ed4023a8c8..19e4c550bc73 100644
+--- a/drivers/usb/core/usb.h
++++ b/drivers/usb/core/usb.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
+ /*
+  * Released under the GPLv2 only.
+  */
+-- 
+2.17.1
 
-hmm, I don't have that patch in my inbox. Could you resend it?
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl5/DGUACgkQzL64meEa
-mQafUA/9Ht2zH4aYtwxtqPtB+xyMdI4MdcpS+/CjkBgHkTpkpp1WOnANeG7xLxf3
-pbnPBkQiPqDuDbGiM0lZ1tlwwS7+fFswxlqON8gmwH+xcq/BOVe/S5duy3G/Kbkl
-J5LQz6cR/uEvISqJRp8bKgBcy1kR0EgO8o2/nxlNbGNzZEjfq8LtZOqI0yAY0Gw7
-Ken1JOvAw/1uHa0gAWbpkIDD5wHPRCN47Lw93aCm4ZhjOe4fPK6XN+rXA1I9t2Bt
-Ra+rwTz37Biz2s90PWd+XveKCIjFUzNEsxRp+/1lnFv26/WTl4u8GNzqmePNtTx5
-iHSRwQBpqeHA5CpNPgFVmmrU1Y3eoMiBaPZO1pUGu+2e7JzWXuzdS3lgPrvVNXpv
-w723kiTG7E8M68fDiVztC/ii/63v081J+6OxPxHC+vvFtN7lX2hAjcaJGp8LRwQn
-NtlFkXszqk04EeGSebTmEyTTg823hsE+EWA/dVYQxUDJOtmBHttyyRKmeWf9k13f
-9DLJYekjXtbAikddtjRyVwLmKipuU0DfcstggkUm3wzu+JwS7e1HH1aDlZfZW/2A
-3wzpnEjtscMMuXXQlm2tzGE7cQTrHFdwFcQEptJ9JScFDlNYP+fsK8v7XcH2fLLt
-U8Ro3+BqJKKJgz1yXegLP9bDcKjDEjofgpAp3hvQoYfG3WCd8Bc=
-=5F2y
------END PGP SIGNATURE-----
---=-=-=--
