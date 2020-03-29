@@ -2,169 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3758419691E
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Mar 2020 21:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C5F196A81
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2020 03:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727175AbgC1USt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 28 Mar 2020 16:18:49 -0400
-Received: from mga18.intel.com ([134.134.136.126]:13886 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727009AbgC1USt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 28 Mar 2020 16:18:49 -0400
-IronPort-SDR: amEyykdrmcuGDzwxLI7SVxyFpb5FEmzZUf2j9Em/Rr2HisJSf1jimTlDcVK6D2gXmomoxJkzbS
- HTncgiKjmUVw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2020 13:18:48 -0700
-IronPort-SDR: 8G6vRZkbxY7Lejf9g5PvRI2WmjBZDd83G0KoDb42WLdqIVZBhTz7RXzqZj1IUee8ghKyGOIFf0
- APVn58glMouQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,317,1580803200"; 
-   d="scan'208";a="294222256"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by FMSMGA003.fm.intel.com with ESMTP; 28 Mar 2020 13:18:44 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jIHuo-00Dm35-DF; Sat, 28 Mar 2020 22:18:46 +0200
-Date:   Sat, 28 Mar 2020 22:18:46 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Al Cooper <alcooperx@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        devicetree@vger.kernel.org,
+        id S1727729AbgC2BO3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 28 Mar 2020 21:14:29 -0400
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:41453 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727491AbgC2BO3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 Mar 2020 21:14:29 -0400
+Received: by mail-ot1-f48.google.com with SMTP id f52so14148668otf.8;
+        Sat, 28 Mar 2020 18:14:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=QO4jy+klBUwzUYl7hy/fcRwlFawrR1Dtlwk3BYQW9wo=;
+        b=eclFyjgKOcVpVuRI7HI5c9NmBqPLMbuH4Ei8YR1Y79KCMKlNif30rNRSLJqSVHBZ0P
+         uS0073efuZAO+zSuU2CtIBY2OR3D3kIckDFjCMeSQKXE9d7s1da12LSkXGipgvq+tm/s
+         cZCZ9AKc4Z0USNSYmXLwY/JJXzIekhdYv6b3vZcjtAK5XOgL1G79/HwHNcOjjS3k/tQn
+         FOEXXk8PxkK23OYtDdBby4ecDqgu+PknB54gvhFwv5uyxWnNR5lD0N44/uElCxvoBw6m
+         KffpDlHSgleMOJyQUNJdL5a/0bsa2+/Dx/RaV0IwBG5dLZmyFno3yRBFqpG1K1vraVkm
+         ayPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=QO4jy+klBUwzUYl7hy/fcRwlFawrR1Dtlwk3BYQW9wo=;
+        b=sUm1gDSR/IQD3t6bBBzMIr56hTNSLk0HTUQb1TiZTTPxIzqJtVm6HgsJGNsmO2o9ci
+         qFwv0MeLK922wumBH2gfmO643f3H4nN9Ylz8h7PkW0UVjee1K5PBWsgXho24gJkCeqxB
+         OTWIWG/7v/GLc/byITE82GpUBWvFMf24SSDSIL7cwfYnD/iZoAlqyEmlszjYY8EUyjww
+         aLpK7vHi3kjt2t8bIKwcyD0QzWWQmBmyUYEIQFI5Zh+BDoL2tCMKfuJ1Rm0kA5liu146
+         IU+GBIqcM2MW46CsdoyOhkHfNw6dJ5u46rpB+QYapGr5z4qk49nGpX1OXifjKe02b5Xo
+         wzaw==
+X-Gm-Message-State: ANhLgQ2fi8R25SQfCQQyS8osfE0S+OOogPhI4xMXUS5rZmwZpD6Riabg
+        dfDXUv8iD9A4o8yv9V4g3II=
+X-Google-Smtp-Source: ADFU+vvcI6yhEMgB9LsQJf26l2QA61BuBf0tSFdclFk7UKQxyvtXZ24HT0FOj5KRoLajMHNDQWbS0A==
+X-Received: by 2002:a9d:75d0:: with SMTP id c16mr4454889otl.8.1585444468074;
+        Sat, 28 Mar 2020 18:14:28 -0700 (PDT)
+Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
+        by smtp.gmail.com with ESMTPSA id l188sm3150905oib.44.2020.03.28.18.14.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Mar 2020 18:14:27 -0700 (PDT)
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Ashwini Pahuja <ashwini.linux@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-usb@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 3/4] usb: ehci: Add new EHCI driver for Broadcom STB
- SoC's
-Message-ID: <20200328201846.GF1922688@smile.fi.intel.com>
-References: <20200327204711.10614-1-alcooperx@gmail.com>
- <20200327204711.10614-4-alcooperx@gmail.com>
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: [PATCH RESEND] usb: gadget: udc: bdc: Remove unnecessary NULL checks in bdc_req_complete
+Date:   Sat, 28 Mar 2020 18:12:46 -0700
+Message-Id: <20200329011246.27599-1-natechancellor@gmail.com>
+X-Mailer: git-send-email 2.26.0
+In-Reply-To: <87zhc0j2qi.fsf@kernel.org>
+References: <87zhc0j2qi.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200327204711.10614-4-alcooperx@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Mar 27, 2020 at 04:47:10PM -0400, Al Cooper wrote:
-> Add a new EHCI driver for Broadcom STB SoC's. A new EHCI driver
-> was created instead of adding support to the existing ehci platform
-> driver because of the code required to workaround bugs in the EHCI
-> controller.
+When building with Clang + -Wtautological-pointer-compare:
 
-I'm not sure this has been tested. See below.
+drivers/usb/gadget/udc/bdc/bdc_ep.c:543:28: warning: comparison of
+address of 'req->queue' equal to a null pointer is always false
+[-Wtautological-pointer-compare]
+        if (req == NULL  || &req->queue == NULL || &req->usb_req == NULL)
+                             ~~~~~^~~~~    ~~~~
+drivers/usb/gadget/udc/bdc/bdc_ep.c:543:51: warning: comparison of
+address of 'req->usb_req' equal to a null pointer is always false
+[-Wtautological-pointer-compare]
+        if (req == NULL  || &req->queue == NULL || &req->usb_req == NULL)
+                                                    ~~~~~^~~~~~~    ~~~~
+2 warnings generated.
 
-...
+As it notes, these statements will always evaluate to false so remove
+them.
 
-> +#include <linux/acpi.h>
-> +#include <linux/of.h>
+Fixes: efed421a94e6 ("usb: gadget: Add UDC driver for Broadcom USB3.0 device controller IP BDC")
+Link: https://github.com/ClangBuiltLinux/linux/issues/749
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+---
+ drivers/usb/gadget/udc/bdc/bdc_ep.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I didn;t find evidence these are needed.
-
-...
-
-
-> +	res = readl_relaxed_poll_timeout(&ehci->regs->frame_index, val,
-> +					 (val != frame_idx), 1, 130);
-
-Too many parentheses.
-
-> +	if (res)
-> +		dev_err(ehci_to_hcd(ehci)->self.controller,
-> +			"Error waiting for SOF\n");
-
-...
-
-> +static int ehci_brcm_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct resource *res_mem;
-> +	struct brcm_priv *priv;
-> +	struct usb_hcd *hcd;
-> +	int irq;
-> +	int err;
-> +
-> +	if (usb_disabled())
-> +		return -ENODEV;
-> +
-> +	err = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
-> +	if (err)
-> +		return err;
-> +
-
-> +	irq = platform_get_irq(pdev, 0);
-> +		return irq;
-
-I'm not sure it was an intention to leave a lot of dead code below.
-
-> +	/* Hook the hub control routine to work around a bug */
-
-> +	if (org_hub_control == NULL)
-
-	if (!org_hub_control) ?
-
-> +		org_hub_control = ehci_brcm_hc_driver.hub_control;
-> +	ehci_brcm_hc_driver.hub_control = ehci_brcm_hub_control;
-
-> +	device_wakeup_enable(hcd->self.controller);
-> +	device_enable_async_suspend(hcd->self.controller);
-> +	platform_set_drvdata(pdev, hcd);
-> +
-
-> +	return err;
-
-	return 0; ?
-
-> +err_clk:
-> +	clk_disable_unprepare(priv->clk);
-> +err_hcd:
-> +	usb_put_hcd(hcd);
-> +
-> +	return err;
-> +}
-
-...
-
-> +#ifdef CONFIG_PM_SLEEP
-
-You also can use __maybe_unused annotations.
-
-> +static int ehci_brcm_suspend(struct device *dev)
-> +{
-> +	int ret;
-> +	struct usb_hcd *hcd = dev_get_drvdata(dev);
-> +	struct brcm_priv *priv = hcd_to_ehci_priv(hcd);
-> +	bool do_wakeup = device_may_wakeup(dev);
-> +
-
-> +	ret = ehci_suspend(hcd, do_wakeup);
-> +	clk_disable_unprepare(priv->clk);
-> +	return ret;
-
-So, if you fail to suspend the device, clocks will become unusable, how to recover from such case?
-
-> +}
-
-> +#endif /* CONFIG_PM_SLEEP */
-
-...
-
-> +MODULE_DESCRIPTION(BRCM_DRIVER_DESC);
-
-Better to have it explicit.
-
+diff --git a/drivers/usb/gadget/udc/bdc/bdc_ep.c b/drivers/usb/gadget/udc/bdc/bdc_ep.c
+index a4d9b5e1e50e..d49c6dc1082d 100644
+--- a/drivers/usb/gadget/udc/bdc/bdc_ep.c
++++ b/drivers/usb/gadget/udc/bdc/bdc_ep.c
+@@ -540,7 +540,7 @@ static void bdc_req_complete(struct bdc_ep *ep, struct bdc_req *req,
+ {
+ 	struct bdc *bdc = ep->bdc;
+ 
+-	if (req == NULL  || &req->queue == NULL || &req->usb_req == NULL)
++	if (req == NULL)
+ 		return;
+ 
+ 	dev_dbg(bdc->dev, "%s ep:%s status:%d\n", __func__, ep->name, status);
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.26.0
 
