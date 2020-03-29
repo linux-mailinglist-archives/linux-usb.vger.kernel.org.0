@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C633019710B
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2020 01:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C54A219710C
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2020 01:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727191AbgC2XNL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 29 Mar 2020 19:13:11 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:53112 "EHLO
+        id S1727192AbgC2XNS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 29 Mar 2020 19:13:18 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:45328 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726382AbgC2XNL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Mar 2020 19:13:11 -0400
-Received: from mailhost.synopsys.com (sv2-mailhost1.synopsys.com [10.205.2.133])
+        by vger.kernel.org with ESMTP id S1726382AbgC2XNS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Mar 2020 19:13:18 -0400
+Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 649F143B0F;
-        Sun, 29 Mar 2020 23:13:11 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 9308AC0084;
+        Sun, 29 Mar 2020 23:13:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1585523591; bh=kxDtcREaUceHbLcD6pcVdJ6rOx6X20TIrqm4cTn84BY=;
+        t=1585523597; bh=nyZ3QBvaZomgtnCfnxNMPpDAxdv3dl+dAoNSRNRFac0=;
         h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=UOJH8yHJRiYLEApuO5z12+kZxiUqe9Ag3pSdLwQrMmbYOwf4/A8HGe5x6Yre+t+OY
-         jP8+5Dj1b/wnncspVQp92mcFOqn7PhNK14Ph//PObcX4D2J0+HyO+zuxEPE2jEafF1
-         PmhvUazjOLbNnc9Ds6wHpywyF+TvEdpyq+zwmZv3aZ3bU0UaNZh4BpD/N/lm1P+i77
-         OBmBME5gosgROgY+K3/gY+X+U4tlUT7Dr0X9cvs3/qkIA61VF+LZwx2Wt5AJUimyUh
-         qZ+CYyrVqwkQ/85anWW4dZbk7kVEaiSITghsGp2llL6JV51aAkj5astH4xS9MLxEiZ
-         vpQ62EJH+exMg==
+        b=GD7FziVLCbId0otQ/99CmBgIn4V5zI63Bd9N6kLq0qJj7dCp/zZ8wN2E2kZWl75ff
+         qoAUdba7mLodIIJRmREnpmuXciNaWDvsciWM9bC3B0FXF0OScRYW1byqDEXUQf/piV
+         TImyGzesI3tosomnsN4NJDUTXxYjlnOTzXnPKYahUQ1SkGaWwANxtAX4kfML4d3NVt
+         psNDkNh8hdj1YWQ4jlmde9wssFLFkLGL/vIl/lA9uPs4S48iL6wBoUpRYnbvLa5UhE
+         36hOMBQ6jzV8Vv4zM8rvy2RpzGCVnhHMe8a6whMAEVXoJsybbsZhiZ62uM+1Wp37mr
+         oeKo8mgw0PoEQ==
 Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 4E6A9A00B1;
-        Sun, 29 Mar 2020 23:13:10 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Sun, 29 Mar 2020 16:13:10 -0700
-Date:   Sun, 29 Mar 2020 16:13:10 -0700
-Message-Id: <dda524d74ae8b31a75fe8e6678e37e5bce3b3575.1585523081.git.thinhn@synopsys.com>
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 64894A006D;
+        Sun, 29 Mar 2020 23:13:16 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Sun, 29 Mar 2020 16:13:16 -0700
+Date:   Sun, 29 Mar 2020 16:13:16 -0700
+Message-Id: <1538b1dfe07cb3fee30acbc8a21e44678032c088.1585523081.git.thinhn@synopsys.com>
 In-Reply-To: <cover.1585523081.git.thinhn@synopsys.com>
 References: <cover.1585523081.git.thinhn@synopsys.com>
 From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v2 3/4] usb: dwc3: gadget: Issue END_TRANSFER to retry isoc transfer
+Subject: [PATCH v2 4/4] usb: dwc3: gadget: WARN on no-resource status
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
@@ -47,76 +47,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-After a number of unsuccessful start isoc attempts due to bus-expiry
-status, issue END_TRANSFER command and retry on the next XferNotReady
-event.
+If the driver issued START_TRANSFER and received a no-resource status,
+then generally there are a few reasons for this:
+
+1) The driver did not allocate resource for the endpoint during
+power-on-reset initialization.
+
+2) The transfer resource was reset. At this moment, we don't do this in
+the driver, but it occurs when the driver issues START_CONFIG cmd to ep0
+with resource index=2.
+
+3) The driver issues the START_TRANSFER command to an already started
+endpoint. Usually, this is because the END_TRANSFER command hasn't
+completed yet.
+
+Print out a warning to help debug this issue in the driver.
 
 Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
 ---
- drivers/usb/dwc3/gadget.c | 36 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 35 insertions(+), 1 deletion(-)
+ drivers/usb/dwc3/gadget.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 7989fe663300..ee87b7b383f6 100644
+index ee87b7b383f6..1a4fc03742aa 100644
 --- a/drivers/usb/dwc3/gadget.c
 +++ b/drivers/usb/dwc3/gadget.c
-@@ -1413,7 +1413,8 @@ static int __dwc3_gadget_start_isoc(struct dwc3_ep *dep)
- 	int ret;
- 	int i;
- 
--	if (list_empty(&dep->pending_list)) {
-+	if (list_empty(&dep->pending_list) &&
-+	    list_empty(&dep->started_list)) {
- 		dep->flags |= DWC3_EP_PENDING_REQUEST;
- 		return -EAGAIN;
- 	}
-@@ -1436,6 +1437,27 @@ static int __dwc3_gadget_start_isoc(struct dwc3_ep *dep)
- 			break;
- 	}
- 
-+	/*
-+	 * After a number of unsuccessful start attempts due to bus-expiry
-+	 * status, issue END_TRANSFER command and retry on the next XferNotReady
-+	 * event.
-+	 */
-+	if (ret == -EAGAIN) {
-+		struct dwc3_gadget_ep_cmd_params params;
-+		u32 cmd;
-+
-+		cmd = DWC3_DEPCMD_ENDTRANSFER |
-+			DWC3_DEPCMD_CMDIOC |
-+			DWC3_DEPCMD_PARAM(dep->resource_index);
-+
-+		dep->resource_index = 0;
-+		memset(&params, 0, sizeof(params));
-+
-+		ret = dwc3_send_gadget_ep_cmd(dep, cmd, &params);
-+		if (!ret)
-+			dep->flags |= DWC3_EP_END_TRANSFER_PENDING;
-+	}
-+
- 	return ret;
- }
- 
-@@ -2645,6 +2667,18 @@ static void dwc3_gadget_endpoint_transfer_not_ready(struct dwc3_ep *dep,
- 		const struct dwc3_event_depevt *event)
- {
- 	dwc3_gadget_endpoint_frame_from_event(dep, event);
-+
-+	/*
-+	 * The XferNotReady event is generated only once before the endpoint
-+	 * starts. It will be generated again when END_TRANSFER command is
-+	 * issued. For some controller versions, the XferNotReady event may be
-+	 * generated while the END_TRANSFER command is still in process. Ignore
-+	 * it and wait for the next XferNotReady event after the command is
-+	 * completed.
-+	 */
-+	if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
-+		return;
-+
- 	(void) __dwc3_gadget_start_isoc(dep);
- }
- 
+@@ -356,6 +356,8 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned cmd,
+ 				ret = 0;
+ 				break;
+ 			case DEPEVT_TRANSFER_NO_RESOURCE:
++				dev_WARN(dwc->dev, "No resource for %s\n",
++					 dep->name);
+ 				ret = -EINVAL;
+ 				break;
+ 			case DEPEVT_TRANSFER_BUS_EXPIRY:
 -- 
 2.11.0
 
