@@ -2,132 +2,272 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A07196E9F
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2020 19:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D48E5196F50
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2020 20:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728438AbgC2RSD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 29 Mar 2020 13:18:03 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:32809 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728428AbgC2RSC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Mar 2020 13:18:02 -0400
-Received: by mail-pl1-f193.google.com with SMTP id g18so5765235plq.0
-        for <linux-usb@vger.kernel.org>; Sun, 29 Mar 2020 10:18:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=1VdjSPPRhlOBu7W9s+NexDovrzvWntWGJmIdhHoxZAQ=;
-        b=a4VluhObQuJFb8SVMTjUUnyaHON/TeGQbbeStEeHeBcJegBh1n4OVsHdtsIfVjvse5
-         IbvBFPybuUVOSQC5Fxd7Qc5iEqcrp89RD74YyUyxSTdpfuKOOp0DVATyIlxcyzQfmBWr
-         zEFxYeTsBKcYbSpW7IIWW+VqW4tsstUSA4qE0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1VdjSPPRhlOBu7W9s+NexDovrzvWntWGJmIdhHoxZAQ=;
-        b=RmD5FnprX4PbNPYHXFhycFX/eGJnW7O3i3OmKs5JSFo5NTmAjp+Zh5UWU8dSreN/II
-         +nXgHYYP3q1hazfUa0GZF+5+lOq/XX5bEKAK96MSZPbcNY1SXIQKaqDrMvuMduRX8sUk
-         60+wG40+B0F4tSoFLJbUBoqTZtIwB2pw6c0k8tHy32EXW2/E/LWjYs9noOHWB+klzQRF
-         XknKD5I0he70tkDyeRMwMJcb8XIgGQR3Xn2537G364YMh0dHPNPTg/cd4bTeVznkHHiQ
-         zhtzGNLmTW/BL5Gox6023shN8NLY7rOon6PP9dsPtTpdxw14aUTFew0ldX0wAGhLp5sl
-         Y5ng==
-X-Gm-Message-State: ANhLgQ0d++WPWYxhw1A8IEANGOFGszNpgiby/E0taFOMpVMTRV7Unot0
-        l1TQnXvcp6gEJBUkAZWhElEUqA==
-X-Google-Smtp-Source: ADFU+vsiB7DX7YoDE8Qsn1o3o8N1nnCf0ZGMiEPaCNY3wHCH2wyiT2nAj/cJUqGyY0agzks/DRDjjA==
-X-Received: by 2002:a17:90a:b702:: with SMTP id l2mr11203973pjr.22.1585502280189;
-        Sun, 29 Mar 2020 10:18:00 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id t2sm4016414pfh.157.2020.03.29.10.17.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Mar 2020 10:17:59 -0700 (PDT)
-Date:   Sun, 29 Mar 2020 10:17:56 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
-Subject: Re: [PATCH v6 2/4] usb: dwc3: qcom: Add interconnect support in dwc3
- driver
-Message-ID: <20200329171756.GA199755@google.com>
-References: <1585302203-11008-1-git-send-email-sanm@codeaurora.org>
- <1585302203-11008-3-git-send-email-sanm@codeaurora.org>
+        id S1728426AbgC2Sld (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 29 Mar 2020 14:41:33 -0400
+Received: from mga09.intel.com ([134.134.136.24]:54387 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727506AbgC2Sld (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 29 Mar 2020 14:41:33 -0400
+IronPort-SDR: 2nxf4pUJdLAH6Llf8ba5/hxPXK4MK79H3CTSzyNMsqX1KIekmLC1duBRvgDP3PqZzTq6cTxvN9
+ +OFtuXt+GI6A==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2020 11:41:32 -0700
+IronPort-SDR: Pppmqd+3yollSNstoRpTe8Jw6THquLoqJRK+tsE49UKyJDon0VrTZITplUXh/DjAWbMwtVknQp
+ efOU9F2BDaAg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,321,1580803200"; 
+   d="scan'208";a="266727300"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 29 Mar 2020 11:41:30 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jIcsD-0008J4-O9; Mon, 30 Mar 2020 02:41:29 +0800
+Date:   Mon, 30 Mar 2020 02:40:39 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [balbi-usb:testing/next] BUILD REGRESSION
+ bbb96bcdc97cbb4f6bc423ef8090a4bc761a651e
+Message-ID: <5e80eba7.WwxkYqQV6+lyyEcy%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1585302203-11008-3-git-send-email-sanm@codeaurora.org>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git  testing/next
+branch HEAD: bbb96bcdc97cbb4f6bc423ef8090a4bc761a651e  usb: dwc3: meson-g12a: refactor usb2 phy init
 
-On Fri, Mar 27, 2020 at 03:13:21PM +0530, Sandeep Maheswaram wrote:
-> Add interconnect support in dwc3-qcom driver to vote for bus
-> bandwidth.
-> 
-> This requires for two different paths - from USB master to
-> DDR slave. The other is from APPS master to USB slave.
-> 
-> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-> Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 128 ++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 126 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 1dfd024..7e85fe6 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
->
-> ...
->
-> +/* To disable an interconnect, we just set its bandwidth to 0 */
-> +static int dwc3_qcom_interconnect_disable(struct dwc3_qcom *qcom)
-> +{
-> +	int ret;
-> +
-> +	ret = icc_set_bw(qcom->usb_ddr_icc_path, 0, 0);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = icc_set_bw(qcom->apps_usb_icc_path, 0, 0);
-> +	if (ret)
-> +		goto err_reenable_memory_path;
-> +
-> +	return 0;
-> +
-> +	/* Re-enable things in the event of an error */
-> +err_reenable_memory_path:
-> +	ret = dwc3_qcom_interconnect_enable(qcom);
+Regressions in current branch:
 
-This overwrites the error that led to the execution of this code path.
-The function should return original error, not the result of the
-_interconnect_enable() call.
+addr = spi_rd8_ack(udc, MAX3420_REG_FNADDR, 1);
+base + (i * U2P_REG_SIZE),
+base + G12A_GLUE_OFFSET,
+const char *phy_name;
+data = memdup_user(ptr + sizeof(*io), io->length);
+drivers/usb/dwc3/drd.c:556:9: note: Assignment 'ret=0', assigned value is 0
+drivers/usb/dwc3/drd.c:557:11: note: Condition 'ret<0' is always false
+drivers/usb/dwc3/drd.c:557:11: warning: Condition 'ret<0' is always false [knownConditionTrueFalse]
+drivers/usb/dwc3/dwc3-meson-g12a.c:315:14: warning: The scope of the variable 'phy_name' can be reduced. [variableScope]
+drivers/usb/dwc3/dwc3-meson-g12a.c:415:11: warning: The scope of the variable 'irq' can be reduced. [variableScope]
+drivers/usb/dwc3/dwc3-meson-g12a.c:495:11: warning: 'base' is of type 'void *'. When using void pointers in calculations, the behaviour is undefined. [arithOperationsOnVoidPointer]
+drivers/usb/dwc3/gadget.c:1605:25: warning: The scope of the variable 'req' can be reduced. [variableScope]
+drivers/usb/gadget/legacy/raw_gadget.c:214:16: warning: The scope of the variable 'flags' can be reduced. [variableScope]
+drivers/usb/gadget/legacy/raw_gadget.c:554:26: warning: 'ptr' is of type 'void *'. When using void pointers in calculations, the behaviour is undefined. [arithOperationsOnVoidPointer]
+drivers/usb/gadget/udc/aspeed-vhub/hub.c:313:29: warning: The scope of the variable 'lang_str' can be reduced. [variableScope]
+drivers/usb/gadget/udc/max3420_udc.c:1065:5-6: ERROR: invalid reference to the index variable of the iterator on line 1057
+drivers/usb/gadget/udc/max3420_udc.c:570:16: sparse: sparse: incorrect type in assignment (different base types)
+drivers/usb/gadget/udc/max3420_udc.c:650:8: warning: Variable 'addr' is assigned a value that is never used. [unreadVariable]
+ret = dwc3_setup_role_switch(dwc);
+struct dwc3_request   *req;
+struct dwc3_request   *tmp;
+struct usb_gadget_strings *lang_str;
 
-I saw Felipe queued the patch for v5.8. I think the main options to fix this
-are:
+Error ids grouped by kconfigs:
 
-- a v6 of this patch to replace v5 in Felipe's tree (which IIUC will be rebased
-  anyway once there is a v5.7-rc)
-- send the fix as a separate patch
-- Felipe amends the patch in his tree
+recent_errors
+|-- i386-allmodconfig
+|   |-- data-memdup_user(ptr-sizeof(-io)-io-length)
+|   |-- drivers-usb-gadget-legacy-raw_gadget.c:warning:The-scope-of-the-variable-flags-can-be-reduced.-variableScope
+|   |-- drivers-usb-gadget-legacy-raw_gadget.c:warning:ptr-is-of-type-void-.-When-using-void-pointers-in-calculations-the-behaviour-is-undefined.-arithOperationsOnVoidPointer
+|   `-- drivers-usb-gadget-udc-max3420_udc.c:ERROR:invalid-reference-to-the-index-variable-of-the-iterator-on-line
+|-- m68k-allyesconfig
+|   `-- drivers-usb-gadget-udc-max3420_udc.c:ERROR:invalid-reference-to-the-index-variable-of-the-iterator-on-line
+|-- sparc-allyesconfig
+|   `-- drivers-usb-gadget-udc-max3420_udc.c:ERROR:invalid-reference-to-the-index-variable-of-the-iterator-on-line
+|-- x86_64-allmodconfig
+|   `-- drivers-usb-gadget-udc-max3420_udc.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-unsigned-short-assigned-usertype-status-got-short-assigned-usertype-status
+`-- x86_64-allyesconfig
+    |-- addr-spi_rd8_ack(udc-MAX3420_REG_FNADDR-)
+    |-- base-(i-U2P_REG_SIZE)
+    |-- base-G12A_GLUE_OFFSET
+    |-- const-char-phy_name
+    |-- drivers-usb-dwc3-drd.c:note:Assignment-ret-assigned-value-is
+    |-- drivers-usb-dwc3-drd.c:note:Condition-ret-is-always-false
+    |-- drivers-usb-dwc3-drd.c:warning:Condition-ret-is-always-false-knownConditionTrueFalse
+    |-- drivers-usb-dwc3-dwc3-meson-g12a.c:warning:The-scope-of-the-variable-irq-can-be-reduced.-variableScope
+    |-- drivers-usb-dwc3-dwc3-meson-g12a.c:warning:The-scope-of-the-variable-phy_name-can-be-reduced.-variableScope
+    |-- drivers-usb-dwc3-dwc3-meson-g12a.c:warning:base-is-of-type-void-.-When-using-void-pointers-in-calculations-the-behaviour-is-undefined.-arithOperationsOnVoidPointer
+    |-- drivers-usb-dwc3-gadget.c:warning:The-scope-of-the-variable-req-can-be-reduced.-variableScope
+    |-- drivers-usb-gadget-udc-aspeed-vhub-hub.c:warning:The-scope-of-the-variable-lang_str-can-be-reduced.-variableScope
+    |-- drivers-usb-gadget-udc-max3420_udc.c:ERROR:invalid-reference-to-the-index-variable-of-the-iterator-on-line
+    |-- drivers-usb-gadget-udc-max3420_udc.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-unsigned-short-assigned-usertype-status-got-short-assigned-usertype-status
+    |-- drivers-usb-gadget-udc-max3420_udc.c:warning:Variable-addr-is-assigned-a-value-that-is-never-used.-unreadVariable
+    |-- ret-dwc3_setup_role_switch(dwc)
+    |-- struct-dwc3_request-req
+    |-- struct-dwc3_request-tmp
+    `-- struct-usb_gadget_strings-lang_str
 
-Felipe, what would work best for you?
+elapsed time: 480m
 
-Thanks
+configs tested: 156
+configs skipped: 0
 
-Matthias
+arm                              allmodconfig
+arm                               allnoconfig
+arm                              allyesconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm64                            allyesconfig
+arm                           efm32_defconfig
+arm                         at91_dt_defconfig
+arm                        shmobile_defconfig
+arm64                               defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                           sunxi_defconfig
+arm                        multi_v7_defconfig
+sparc                            allyesconfig
+microblaze                    nommu_defconfig
+nios2                         10m50_defconfig
+m68k                       m5475evb_defconfig
+xtensa                          iss_defconfig
+h8300                     edosk2674_defconfig
+s390                              allnoconfig
+alpha                               defconfig
+i386                              allnoconfig
+i386                             alldefconfig
+i386                             allyesconfig
+i386                                defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+ia64                             alldefconfig
+nios2                         3c120_defconfig
+c6x                        evmc6678_defconfig
+c6x                              allyesconfig
+xtensa                       common_defconfig
+openrisc                 simple_smp_defconfig
+openrisc                    or1ksim_defconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                                defconfig
+h8300                    h8300h-sim_defconfig
+h8300                       h8s-sim_defconfig
+m68k                             allmodconfig
+m68k                          multi_defconfig
+m68k                           sun3_defconfig
+arc                                 defconfig
+arc                              allyesconfig
+powerpc                          rhel-kconfig
+microblaze                      mmu_defconfig
+powerpc                           allnoconfig
+powerpc                             defconfig
+powerpc                       ppc64_defconfig
+mips                      fuloong2e_defconfig
+mips                      malta_kvm_defconfig
+mips                             allyesconfig
+mips                         64r6el_defconfig
+mips                              allnoconfig
+mips                           32r2_defconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                generic-64bit_defconfig
+parisc                generic-32bit_defconfig
+parisc                           allyesconfig
+i386                 randconfig-a002-20200329
+x86_64               randconfig-a001-20200329
+i386                 randconfig-a001-20200329
+i386                 randconfig-a003-20200329
+alpha                randconfig-a001-20200329
+m68k                 randconfig-a001-20200329
+mips                 randconfig-a001-20200329
+nds32                randconfig-a001-20200329
+parisc               randconfig-a001-20200329
+riscv                randconfig-a001-20200329
+c6x                  randconfig-a001-20200329
+h8300                randconfig-a001-20200329
+microblaze           randconfig-a001-20200329
+nios2                randconfig-a001-20200329
+sparc64              randconfig-a001-20200329
+csky                 randconfig-a001-20200329
+openrisc             randconfig-a001-20200329
+s390                 randconfig-a001-20200329
+sh                   randconfig-a001-20200329
+xtensa               randconfig-a001-20200329
+x86_64               randconfig-b001-20200329
+x86_64               randconfig-b002-20200329
+x86_64               randconfig-b003-20200329
+i386                 randconfig-b001-20200329
+i386                 randconfig-b002-20200329
+i386                 randconfig-b003-20200329
+x86_64               randconfig-c001-20200329
+x86_64               randconfig-c002-20200329
+x86_64               randconfig-c003-20200329
+i386                 randconfig-c001-20200329
+i386                 randconfig-c002-20200329
+i386                 randconfig-c003-20200329
+x86_64               randconfig-d001-20200329
+x86_64               randconfig-d002-20200329
+x86_64               randconfig-d003-20200329
+i386                 randconfig-d001-20200329
+i386                 randconfig-d002-20200329
+i386                 randconfig-d003-20200329
+x86_64               randconfig-e001-20200329
+x86_64               randconfig-e002-20200329
+x86_64               randconfig-e003-20200329
+i386                 randconfig-e001-20200329
+i386                 randconfig-e002-20200329
+i386                 randconfig-e003-20200329
+i386                 randconfig-f001-20200329
+i386                 randconfig-g003-20200329
+x86_64               randconfig-g002-20200329
+i386                 randconfig-g002-20200329
+i386                 randconfig-g001-20200329
+x86_64               randconfig-g001-20200329
+x86_64               randconfig-h002-20200329
+x86_64               randconfig-h003-20200329
+i386                 randconfig-h003-20200329
+x86_64               randconfig-h001-20200329
+i386                 randconfig-h001-20200329
+i386                 randconfig-h002-20200329
+arc                  randconfig-a001-20200329
+arm                  randconfig-a001-20200329
+arm64                randconfig-a001-20200329
+ia64                 randconfig-a001-20200329
+powerpc              randconfig-a001-20200329
+sparc                randconfig-a001-20200329
+riscv                            allmodconfig
+riscv                             allnoconfig
+riscv                            allyesconfig
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+s390                             alldefconfig
+s390                             allmodconfig
+s390                             allyesconfig
+s390                          debug_defconfig
+s390                                defconfig
+s390                       zfcpdump_defconfig
+sh                          rsk7269_defconfig
+sh                               allmodconfig
+sh                            titan_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                                allnoconfig
+sparc                               defconfig
+sparc64                          allmodconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                             defconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                                  defconfig
+x86_64                              fedora-25
+x86_64                                  kexec
+x86_64                                    lkp
+x86_64                                   rhel
+x86_64                         rhel-7.2-clear
+x86_64                               rhel-7.6
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
