@@ -2,138 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF54196E84
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2020 18:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A07196E9F
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Mar 2020 19:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728313AbgC2QoA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 29 Mar 2020 12:44:00 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:38931 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727903AbgC2QoA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Mar 2020 12:44:00 -0400
-Received: by mail-lf1-f67.google.com with SMTP id h6so6201335lfp.6;
-        Sun, 29 Mar 2020 09:43:57 -0700 (PDT)
+        id S1728438AbgC2RSD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 29 Mar 2020 13:18:03 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:32809 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728428AbgC2RSC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Mar 2020 13:18:02 -0400
+Received: by mail-pl1-f193.google.com with SMTP id g18so5765235plq.0
+        for <linux-usb@vger.kernel.org>; Sun, 29 Mar 2020 10:18:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=0c8uaPF3N+GHT2An6yhCZHffyUb6jdEEzTgcTDxgCps=;
-        b=Sos5BixyOxY5FOSKR6fW9+gG4JgIChPoNbwTsGqRNCTKgr+Vz33SJIYj0Bk7+0B15F
-         OXO37FxGUBMoYY52xYMaRPZJSb5mtvy6ibiUy0iGVj/1p0PK34UU2zlMzMZ5JeTzq5bl
-         DrfF3TI4UV6e7pAvqArl8o1RndG45a1StLIzIK0/7LtmshRyOq/XncQ7FturJTb2OLGJ
-         caw1LXGQSE+Cx5Y2grTFRXgAUOUPHFm+lOYRiMaOPTXqCDk+yziISv6r/19FO1r16qE/
-         mXRp7lW0RHMRCsHC22q4Z9kwwx5jTt2LGAzE627IqVNyHKmTIG72j1Vww8xlaEK2A1Q5
-         YCIg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=1VdjSPPRhlOBu7W9s+NexDovrzvWntWGJmIdhHoxZAQ=;
+        b=a4VluhObQuJFb8SVMTjUUnyaHON/TeGQbbeStEeHeBcJegBh1n4OVsHdtsIfVjvse5
+         IbvBFPybuUVOSQC5Fxd7Qc5iEqcrp89RD74YyUyxSTdpfuKOOp0DVATyIlxcyzQfmBWr
+         zEFxYeTsBKcYbSpW7IIWW+VqW4tsstUSA4qE0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=0c8uaPF3N+GHT2An6yhCZHffyUb6jdEEzTgcTDxgCps=;
-        b=spzJRSsIpDhBRFHgY3snRisRTaUIEnYYU+VjZxON6ZEnKGf3v59i0USwxr54mqI/i6
-         w100tfrM89QPH4bUDY3+MEUQbDj1qxvD+lvR5x4q0QGcgKwFwNB6CWUeIBKKnBHPfvMj
-         +9rKsgj+xwyoFzDN10lfOuKFgRNV38muC3k8pCv8KdWC5sqIcKmuj3jLMwYD4yXITmVK
-         t6Qs12UrxFQ3cJhb0tCpxHWBCBPowPpRdqy0kny0v+x58JU0pT62g1ocTruMldkAGPQh
-         tENjSrvS9qHhtcAi77Wu3WlJ+I7u7EU03I9Eq61wf5+pXVRosC3acCO3eAUUAPQPkijy
-         krRQ==
-X-Gm-Message-State: AGi0Puav4mcwRlCert1e3KbPUPITWXixsVZnapKMWo3B2jeWxiXM9dPp
-        ehuVbdcAxag3XT6qqGkVylA=
-X-Google-Smtp-Source: APiQypKBkS2c+nq8k4EGh/prRPLtE8K0t6Qsi9F9MT91f58F6gHa4TL7qK6SLkkRbrLJAYdJEGGbLg==
-X-Received: by 2002:a19:7e01:: with SMTP id z1mr5600821lfc.196.1585500237140;
-        Sun, 29 Mar 2020 09:43:57 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id 64sm5713315ljj.41.2020.03.29.09.43.55
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 29 Mar 2020 09:43:56 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Nathan Chancellor <natechancellor@gmail.com>
-Cc:     Ashwini Pahuja <ashwini.linux@gmail.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=1VdjSPPRhlOBu7W9s+NexDovrzvWntWGJmIdhHoxZAQ=;
+        b=RmD5FnprX4PbNPYHXFhycFX/eGJnW7O3i3OmKs5JSFo5NTmAjp+Zh5UWU8dSreN/II
+         +nXgHYYP3q1hazfUa0GZF+5+lOq/XX5bEKAK96MSZPbcNY1SXIQKaqDrMvuMduRX8sUk
+         60+wG40+B0F4tSoFLJbUBoqTZtIwB2pw6c0k8tHy32EXW2/E/LWjYs9noOHWB+klzQRF
+         XknKD5I0he70tkDyeRMwMJcb8XIgGQR3Xn2537G364YMh0dHPNPTg/cd4bTeVznkHHiQ
+         zhtzGNLmTW/BL5Gox6023shN8NLY7rOon6PP9dsPtTpdxw14aUTFew0ldX0wAGhLp5sl
+         Y5ng==
+X-Gm-Message-State: ANhLgQ0d++WPWYxhw1A8IEANGOFGszNpgiby/E0taFOMpVMTRV7Unot0
+        l1TQnXvcp6gEJBUkAZWhElEUqA==
+X-Google-Smtp-Source: ADFU+vsiB7DX7YoDE8Qsn1o3o8N1nnCf0ZGMiEPaCNY3wHCH2wyiT2nAj/cJUqGyY0agzks/DRDjjA==
+X-Received: by 2002:a17:90a:b702:: with SMTP id l2mr11203973pjr.22.1585502280189;
+        Sun, 29 Mar 2020 10:18:00 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id t2sm4016414pfh.157.2020.03.29.10.17.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 Mar 2020 10:17:59 -0700 (PDT)
+Date:   Sun, 29 Mar 2020 10:17:56 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Sandeep Maheswaram <sanm@codeaurora.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH RESEND] usb: gadget: udc: bdc: Remove unnecessary NULL checks in bdc_req_complete
-In-Reply-To: <20200329144703.GA9720@ubuntu-m2-xlarge-x86>
-References: <87zhc0j2qi.fsf@kernel.org> <20200329011246.27599-1-natechancellor@gmail.com> <871rpb4nd1.fsf@kernel.org> <20200329144703.GA9720@ubuntu-m2-xlarge-x86>
-Date:   Sun, 29 Mar 2020 19:43:52 +0300
-Message-ID: <87mu7zdsc7.fsf@kernel.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+Subject: Re: [PATCH v6 2/4] usb: dwc3: qcom: Add interconnect support in dwc3
+ driver
+Message-ID: <20200329171756.GA199755@google.com>
+References: <1585302203-11008-1-git-send-email-sanm@codeaurora.org>
+ <1585302203-11008-3-git-send-email-sanm@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1585302203-11008-3-git-send-email-sanm@codeaurora.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-
-
 Hi,
 
-Nathan Chancellor <natechancellor@gmail.com> writes:
->> > When building with Clang + -Wtautological-pointer-compare:
->> >
->> > drivers/usb/gadget/udc/bdc/bdc_ep.c:543:28: warning: comparison of
->> > address of 'req->queue' equal to a null pointer is always false
->> > [-Wtautological-pointer-compare]
->> >         if (req =3D=3D NULL  || &req->queue =3D=3D NULL || &req->usb_r=
-eq =3D=3D NULL)
->> >                              ~~~~~^~~~~    ~~~~
->> > drivers/usb/gadget/udc/bdc/bdc_ep.c:543:51: warning: comparison of
->> > address of 'req->usb_req' equal to a null pointer is always false
->> > [-Wtautological-pointer-compare]
->> >         if (req =3D=3D NULL  || &req->queue =3D=3D NULL || &req->usb_r=
-eq =3D=3D NULL)
->> >                                                     ~~~~~^~~~~~~    ~~=
-~~
->> > 2 warnings generated.
->> >
->> > As it notes, these statements will always evaluate to false so remove
->> > them.
->> >
->> > Fixes: efed421a94e6 ("usb: gadget: Add UDC driver for Broadcom USB3.0 =
-device controller IP BDC")
->> > Link: https://github.com/ClangBuiltLinux/linux/issues/749
->> > Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
->>=20
->> It's now in my queue for v5.8. It doesn't really look like a bug fix, so
->> it's not going in during v5.7-rc
->>=20
->> --=20
->> balbi
+On Fri, Mar 27, 2020 at 03:13:21PM +0530, Sandeep Maheswaram wrote:
+> Add interconnect support in dwc3-qcom driver to vote for bus
+> bandwidth.
+> 
+> This requires for two different paths - from USB master to
+> DDR slave. The other is from APPS master to USB slave.
+> 
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 128 ++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 126 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 1dfd024..7e85fe6 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
 >
-> Thank you for picking it up. It would be nice to see it in 5.7 since
-> we're enabling this warning and this is one of two outstanding
-> instances in -next and the other one's patch has been picked up plus the
-> patch itself is rather benign. Not to mention that I did send this patch
-> back in October. However, when it is merged into Linus' tree is
-> ultimately your call so I won't argue as long as it gets there
-> eventually.
+> ...
+>
+> +/* To disable an interconnect, we just set its bandwidth to 0 */
+> +static int dwc3_qcom_interconnect_disable(struct dwc3_qcom *qcom)
+> +{
+> +	int ret;
+> +
+> +	ret = icc_set_bw(qcom->usb_ddr_icc_path, 0, 0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = icc_set_bw(qcom->apps_usb_icc_path, 0, 0);
+> +	if (ret)
+> +		goto err_reenable_memory_path;
+> +
+> +	return 0;
+> +
+> +	/* Re-enable things in the event of an error */
+> +err_reenable_memory_path:
+> +	ret = dwc3_qcom_interconnect_enable(qcom);
 
-If Greg's okay with this patch going in during v5.7-rc, I can send it as
-a fix, no worries. Greg?
+This overwrites the error that led to the execution of this code path.
+The function should return original error, not the result of the
+_interconnect_enable() call.
 
-=2D-=20
-balbi
+I saw Felipe queued the patch for v5.8. I think the main options to fix this
+are:
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+- a v6 of this patch to replace v5 in Felipe's tree (which IIUC will be rebased
+  anyway once there is a v5.7-rc)
+- send the fix as a separate patch
+- Felipe amends the patch in his tree
 
------BEGIN PGP SIGNATURE-----
+Felipe, what would work best for you?
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6A0EgACgkQzL64meEa
-mQZiEw/+JF2SkxE/JgJAs1X5mOvM/c8aF7iFlroAgAhXO5LZL5YZiVOoNCd2UJdp
-6VHA/jwvOtRStwzeSLleFAoyF8wozzp4REfUNyIogW6bwOHcb9T36Nn5rguSEaPN
-t/g9kBb3CbfrQ8Wejfl7xINPN6NYaW2wqUbqPVUDEX0bGFCrXWWBn4o8vVlNtvZ2
-cxwcuEOScN7o7rfrwqii1VHngY8CxHjl02yJ2F8Fcc+8rD0lCdNUB6DemSgBgFEk
-HeEmZoCb5hjpXGc8obbStT0Ie9Rut9ItgA3XxoL4cFhIa5i3UUV+Mq9qXHY+W4It
-+jhW1hK1fL+CEu+BlXb3AELgNOaxbDDwuXJMKuCbNnnP6z/4uOHjE4fxSKoUnFCw
-XFCforp3+hheFJPlB8e+fNd+hjsWv6ipI4tuEL1mrpnXu3d2U3toTlDCNyTciy3J
-sDg9TouHZqXOATisL1qPi2cFtdfUEGhVTuYbYGWUJA86f3IHVUmjU9LIJ4YmlEtI
-5aQr7nsIkF0ERGCt56DcKD7DJxNI29dMWYPw5SCSOjN8mQ4elxoBekLCtYRdNrGh
-EKmoP6TQuiPbndOzbNPuehQoDCoXao+4YfSubUfXQi484q0+DzAjQidcIJGV3efu
-D+Sjn7bi/T0ngvHHYVZot4gXukoOIu9xwZrKLVM6mbCckIH2qrM=
-=U6ai
------END PGP SIGNATURE-----
---=-=-=--
+Thanks
+
+Matthias
