@@ -2,98 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77652197440
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2020 08:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F27A19749B
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2020 08:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728819AbgC3GIJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Mar 2020 02:08:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47058 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728706AbgC3GIJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 30 Mar 2020 02:08:09 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 54D012073B;
-        Mon, 30 Mar 2020 06:08:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585548488;
-        bh=NirpMgdQCIcF8LrMlxqs/IuiLw0XFjxXNccBL78UEuo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s3MXlKj7c4fmt8PHFIe8GrMi94piULtyZ+tp5mrSjMiy5CdvA4q8B4TfBD0rK7WiV
-         704EEE1JE8mq2s2SCT9CEm6koq1Mkn/24J9XuwMUpVFcFg7n1yRiccpP95S2SA6XSb
-         OhWvkeNK0VMaLpdaWj9JavBkjKNeafz2lYcNs23g=
-Date:   Mon, 30 Mar 2020 08:08:05 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
-        Ashwini Pahuja <ashwini.linux@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH RESEND] usb: gadget: udc: bdc: Remove unnecessary NULL
- checks in bdc_req_complete
-Message-ID: <20200330060805.GA107017@kroah.com>
-References: <87zhc0j2qi.fsf@kernel.org>
- <20200329011246.27599-1-natechancellor@gmail.com>
- <871rpb4nd1.fsf@kernel.org>
- <20200329144703.GA9720@ubuntu-m2-xlarge-x86>
- <87mu7zdsc7.fsf@kernel.org>
+        id S1728997AbgC3Gjl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Mar 2020 02:39:41 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:42790 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728733AbgC3Gjl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Mar 2020 02:39:41 -0400
+Received: by mail-io1-f65.google.com with SMTP id q128so16478180iof.9;
+        Sun, 29 Mar 2020 23:39:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Z+mJEjSfvlZ8eVkOaUf8bdXaxlPzn5EXb7TwUHOw3sE=;
+        b=byT58HNqv/UmMLjhy8Lje7GGwT6k1BATM9vdYVxqklq8KNwM5gpRiaFPgeKpLDSxX7
+         xYDsNU+1egnAeELdEgjHMKknMFSk6xmoTbTWGRlUHnJW6g+awkBAx0vw8DPpAWmnINUY
+         AeNQZgwrE+Y54Du17o7rsd7wuxTxIXRVh8RTFC3lDloW5CEvN+o4d5kGvoZRtyCNZIxr
+         ZZcujOCMVHbJRkhzdtaz/E94i+79dqktH1ONqHBx6h9NhF5sjfOy9BpPx310BKVWFv+q
+         Z/BFVB9CbYqwxe9TdHiWRxAeY51bwjbOi3E00kp+QlKsDoo95ZGC35pAv2nZcPxRoHCv
+         8Oww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z+mJEjSfvlZ8eVkOaUf8bdXaxlPzn5EXb7TwUHOw3sE=;
+        b=Qc/Jg0/9DGaa2gH6/zwZTN6nAHe/ptXy6uATpC7HV8yQGZLcqTlJvgD56nkrdEnxA6
+         Xyy+Zt2EcNeDR32sLU4/x823Pn5tdfGnFRUY706aEnlIciTTh2TyzZpmbTjNmYMt+Ixo
+         2dLPr4n5ZtqBJCDf5Frl3HauLavtRTnwljss2LumH7icVaIUcnXPKIAobiYJuCaFKWtt
+         q85JI5H/Zz6XYi48AQY4ZCM7oIKCgaTXQjWlXRdJ2JYb30ByVrZve61JG7AqVyVDNMeH
+         kOTZvHepcsIH/b8Tsw4+O4OjKGUlO2WGNhjGZpOo/vZJSqIJMQn7tMZc9XAN6tah17Lh
+         +Vgw==
+X-Gm-Message-State: ANhLgQ1NFakV9tXgawMaTNPhTw+5JHxg+ktO2GJ3yRTZJTJyVOxGPY9N
+        3sJ/G7UrFioL592fLjhYwDeae2+S/bY8Z3FAf7Nz9w==
+X-Google-Smtp-Source: ADFU+vtTKfKSpGioxrZp10waa2K1Q/h65CWU+rx0AAwGswXwD7LmfS9EMe9t45crVH2mOH0Mug2oxl9z+HcQ+kRTO/I=
+X-Received: by 2002:a5d:8d89:: with SMTP id b9mr9550859ioj.156.1585550378973;
+ Sun, 29 Mar 2020 23:39:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mu7zdsc7.fsf@kernel.org>
+References: <20200324071030.19801-1-peter.chen@nxp.com> <20200324071030.19801-2-peter.chen@nxp.com>
+In-Reply-To: <20200324071030.19801-2-peter.chen@nxp.com>
+From:   Peter Chen <hzpeterchen@gmail.com>
+Date:   Mon, 30 Mar 2020 14:39:28 +0800
+Message-ID: <CAL411-oMsKDFjtcwMSKURuHgPYjPoHVzdHdaue_v+JTcNayBxA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] doc: dt-binding: cdns-salvo-phy: add binding doc
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     robh+dt@kernel.org, "ABRAHAM, KISHON VIJAY" <kishon@ti.com>,
+        devicetree@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        jun.li@nxp.com, linux-imx@nxp.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Mar 29, 2020 at 07:43:52PM +0300, Felipe Balbi wrote:
-> 
-> Hi,
-> 
-> Nathan Chancellor <natechancellor@gmail.com> writes:
-> >> > When building with Clang + -Wtautological-pointer-compare:
-> >> >
-> >> > drivers/usb/gadget/udc/bdc/bdc_ep.c:543:28: warning: comparison of
-> >> > address of 'req->queue' equal to a null pointer is always false
-> >> > [-Wtautological-pointer-compare]
-> >> >         if (req == NULL  || &req->queue == NULL || &req->usb_req == NULL)
-> >> >                              ~~~~~^~~~~    ~~~~
-> >> > drivers/usb/gadget/udc/bdc/bdc_ep.c:543:51: warning: comparison of
-> >> > address of 'req->usb_req' equal to a null pointer is always false
-> >> > [-Wtautological-pointer-compare]
-> >> >         if (req == NULL  || &req->queue == NULL || &req->usb_req == NULL)
-> >> >                                                     ~~~~~^~~~~~~    ~~~~
-> >> > 2 warnings generated.
-> >> >
-> >> > As it notes, these statements will always evaluate to false so remove
-> >> > them.
-> >> >
-> >> > Fixes: efed421a94e6 ("usb: gadget: Add UDC driver for Broadcom USB3.0 device controller IP BDC")
-> >> > Link: https://github.com/ClangBuiltLinux/linux/issues/749
-> >> > Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
-> >> 
-> >> It's now in my queue for v5.8. It doesn't really look like a bug fix, so
-> >> it's not going in during v5.7-rc
-> >> 
-> >> -- 
-> >> balbi
-> >
-> > Thank you for picking it up. It would be nice to see it in 5.7 since
-> > we're enabling this warning and this is one of two outstanding
-> > instances in -next and the other one's patch has been picked up plus the
-> > patch itself is rather benign. Not to mention that I did send this patch
-> > back in October. However, when it is merged into Linus' tree is
-> > ultimately your call so I won't argue as long as it gets there
-> > eventually.
-> 
-> If Greg's okay with this patch going in during v5.7-rc, I can send it as
-> a fix, no worries. Greg?
+>
+> Add Cadence SALVO PHY binding doc, this PHY is a legacy module,
+> and is only used for USB3 and USB2.
+>
+> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> ---
+> Changes for v3:
+> - Fix more schema errors
+>
+>  .../bindings/phy/cdns,salvo-phy.yaml          | 53 +++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml b/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
+> new file mode 100644
+> index 000000000000..a36e21e1808c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (c) 2020 NXP
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/phy/cdns,salvo-phy.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Cadence SALVO PHY
+> +
+> +maintainers:
+> +  - Peter Chen <peter.chen@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nxp,salvo-phy
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: salvo_phy_clk
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +    description: phandle to the associated power domain
+> +
+> +  "#phy-cells":
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#phy-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/firmware/imx/rsrc.h>
+> +
+> +    usb3phy: usb3-phy@5B160000 {
+> +        compatible = "nxp,salvo-phy";
+> +        reg = <0x5B160000 0x40000>;
+> +        clocks = <&usb3_lpcg 4>;
+> +        clock-names = "salvo_phy_clk";
+> +        power-domains = <&pd IMX_SC_R_USB_2_PHY>;
+> +        #phy-cells = <0>;
+> +    };
+> --
+> 2.17.1
+>
 
-Yes, clang build warnings fixes are valid fixes for the -rc period, and
-I take them into stable where needed as well.
+A gental ping :)
 
-thanks,
-
-greg k-h
+Peter
