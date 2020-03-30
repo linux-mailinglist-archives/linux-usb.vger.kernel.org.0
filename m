@@ -2,143 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CB519821D
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2020 19:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBFCD198340
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2020 20:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727717AbgC3RU6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Mar 2020 13:20:58 -0400
-Received: from mail-pl1-f182.google.com ([209.85.214.182]:44189 "EHLO
-        mail-pl1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726497AbgC3RU5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Mar 2020 13:20:57 -0400
-Received: by mail-pl1-f182.google.com with SMTP id h11so6974762plr.11;
-        Mon, 30 Mar 2020 10:20:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=3yni0Qcm8n05TZCBj3hKRu8NlwE4SJ7yEQomCEGLDwk=;
-        b=pxhpA2L10LsUBSIcO30K/eICyF7HWIxFaI9tUeDTf63aY3YXDhdwI7iGYk3Z8c2FoV
-         3Cz7NtUP+cgrgbTtT4DjY4cdHgQmrkZ3coJQZlj/V0D7xqz7MqzG1fUYe99AW71DI8zr
-         9raQIzS5GzOIAajfVqp8v+a8C7jylqolpKsmr8DaMnA4a2Temw4YOJ8dGKtC0HTvBGjC
-         N8NfMHzcA2iCnb8Xoynpa/rwuMGdgp+FpgOAgJiVRQOdxEHjDTa6z8CJuUifB41/nMQ/
-         AUgrGiXPeqoWBDiVavraPnqcBX8k//OPulwAYNAk0gXUK0nmI2RfMEBirWr5VhWMmeAr
-         vavA==
+        id S1727696AbgC3SVQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Mar 2020 14:21:16 -0400
+Received: from mail-il1-f198.google.com ([209.85.166.198]:44291 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726403AbgC3SVQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Mar 2020 14:21:16 -0400
+Received: by mail-il1-f198.google.com with SMTP id b15so14460009ilh.11
+        for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2020 11:21:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=3yni0Qcm8n05TZCBj3hKRu8NlwE4SJ7yEQomCEGLDwk=;
-        b=tQj9o9Rzi3V2S//VJMET1ABcSQHajL/ccccN3q019TH5tsKxiQCxRY152/vqb3iWZz
-         iF9Vt9UAx12f4KKXJk6mNfIVQvkiHYTiir5J0Ml13moOz7/tC3vDUl42gIwWseeh6/Pp
-         Kjkw7qdTB0lhCPcmCQJWY7HQBeGssIYPtaLGozHeJZpWDP+xAdnnFz3WBedbOK4pBPHz
-         VAK/41bhgdfsGchV5RvJfT7HOYTUlhWaMhvQvLWzkYWuoeCg7DpYOg059rVSMRv9Ke7r
-         +QWaESC6cpzbH73qVQqJ0/zM+SsOlsusJxAIzOxEogG7KL2RMjDnhNihLY4f7BFIS5iS
-         J7Ng==
-X-Gm-Message-State: AGi0PuZVI33MQRykpLLQWoB25T9NT0l++sbcO3ddhXWeD+lOzBBaIMjm
-        piDIPg36WmIITKl5LWmXoQ==
-X-Google-Smtp-Source: APiQypJBb2i9rRwC+yOX3INiEusu9vUs5TtTTrS58fzbolGuSNQ3GmogcrkN3O4Rl9gKdoiuIxZ1JA==
-X-Received: by 2002:a17:902:76c6:: with SMTP id j6mr4216084plt.223.1585588856352;
-        Mon, 30 Mar 2020 10:20:56 -0700 (PDT)
-Received: from madhuparna-HP-Notebook ([2402:3a80:d3b:3d6b:7942:93fd:fd15:96f0])
-        by smtp.gmail.com with ESMTPSA id s61sm96571pjd.33.2020.03.30.10.20.51
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 30 Mar 2020 10:20:55 -0700 (PDT)
-From:   Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
-X-Google-Original-From: Madhuparna Bhowmik <change_this_user_name@gmail.com>
-Date:   Mon, 30 Mar 2020 22:50:48 +0530
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     madhuparnabhowmik10@gmail.com, gregkh@linuxfoundation.org,
-        hariprasad.kelam@gmail.com, colin.king@canonical.com,
-        tony.olech@elandigitalsystems.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, andrianov@ispras.ru
-Subject: Re: Possible data-race related bug in u132_hcd module.
-Message-ID: <20200330172048.GA12976@madhuparna-HP-Notebook>
-References: <20200330115243.11107-1-madhuparnabhowmik10@gmail.com>
- <Pine.LNX.4.44L0.2003301159170.12110-100000@netrider.rowland.org>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=mxdVwodbRk0ry9cYchDSp6TDUK7eyG3uOBp8XYyeWXQ=;
+        b=tYVOP7zwfqDfbRb0zTWfcqwUbuAyLN+d/xfIGkKLjMIxIVK96zB18jTN8sS3qXNuZf
+         lgIdSiaBAXDDHOiLtiyplHg/CQ940XUMo5p2KrzL1eFS82q/alujENkRVE0yjWbbuokn
+         oc7kRvo34J62GADYRT7hjZ/JKBOl7PSRFT04ad5xbSyYr6rZX0GCD2KalhnzsYFm3GO6
+         OuIpSqBeGWGG25HtJOlPjTzPDKWPTf94vm/c3M7p8UMOIXKSNrWtbt1MrDVV9DM5S1Mb
+         FWIPPrkqyjJJM01ScYft56Vh5TeQzz/oKJqkD19GjIld2TMcpB8s8iLA5JUT6drsBgqD
+         iGeQ==
+X-Gm-Message-State: ANhLgQ2U2iUzQEmWh1jU6y8T5i+wmJpgD4PZg6E9Ex13s9GMxbrRQLU7
+        gYfJX4KxwJ0v6sCuTPJLIVBg9UbpAy282i3r0fxEkbN3IDml
+X-Google-Smtp-Source: ADFU+vsIuf/CRCbVNmWwvv47oJ3aX+xLSoAbjEEvYN1cOGPVqg4ocu5AJueeTvpVtrNksrrMv07+chcb+0xTt8sflyPG/O6cBYve
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Pine.LNX.4.44L0.2003301159170.12110-100000@netrider.rowland.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Received: by 2002:a92:9f13:: with SMTP id u19mr12634271ili.111.1585592475153;
+ Mon, 30 Mar 2020 11:21:15 -0700 (PDT)
+Date:   Mon, 30 Mar 2020 11:21:15 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003d7c1505a2168418@google.com>
+Subject: KASAN: stack-out-of-bounds Write in ath9k_hif_usb_rx_cb
+From:   syzbot <syzbot+d403396d4df67ad0bd5f@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
+        davem@davemloft.net, kvalo@codeaurora.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 30, 2020 at 12:03:31PM -0400, Alan Stern wrote:
-> On Mon, 30 Mar 2020 madhuparnabhowmik10@gmail.com wrote:
-> 
-> > Hi,
-> > 
-> > This bug is found by  Linux Driver Verification project (linuxtesting.org).
-> > 
-> > The bug is related to the parallel execution of u132_probe() function
-> > and u132_hcd_exit() function in u132_hcd.c. In case the module is
-> > unloaded when the probe function is executing there can be data race
-> > as the mutex lock u132_module_lock is not used properly. 
-> 
-> Normally drivers do not have to worry about races between their probe 
-> and exit routines.  The exit routine should unregister the driver from 
-> its bus subsystem, and unregistration is supposed to wait until all 
-> probe and remove functions have finished executing.
-> 
-> > i) Usage of mutex lock only when writing into the u132_exiting
-> > variable in u132_hcd_exit(). The lock is not used when this variable
-> > is read in u132_probe().
-> 
-> I'm not familiar with u132_hcd, but the probe routine shouldn't need to 
-> use and "exiting" variable at all.
->
-Even I am not sure why it should use this variable to check, that's why
-I thought of asking in the mailing list. If the maintainers agree that
-we can remove this variable I can send a patch doing it. This variable
-is not used for any other purpose in the module, so removing it
-shouldn't be a problem.
-> > 
-> > Moreover, this variable does not serve its purpose, as even if
-> > locking is used while the u132_exiting variable is read in probe(),
-> > the function may still miss that exit function is executing if it
-> > acquires the mutex before exit() function does.
-> > 
-> > How to fix this?
-> 
-> Are you certain there really is a problem?
-> 
-If the variable u132_exiting is really used for the purpose of checking
-if the module is exiting then there might be a problem. If at all it is
-assumed that exit never races with probe function and it is always
-called after probe finishes or something, then this variable is not even
-required. And suppose there is possibility of a race condition then only
-holding the mutex in exit but not probe does not make sense.
+Hello,
 
-> > ii) Usage of mutex while adding entries in u132_static_list in probe
-> > function but not in exit function while unregistering.
-> > This should be easy to fix by holding the mutex in the exit function as well.
-> 
-> Why does the driver need a static list?
->
-I do not know much about this module so I cannot answer this.
-From the point of synchronization, this list is initialized in init and
-then only used in probe and exit function. And lock is only held in
-probe, if at all it is assumed that exit cannot race with probe, there
-is no need to use the mutex.
+syzbot found the following crash on:
 
-> > There can be other synchronization problems related to the usage of
-> > u132_module_lock in this module, I have only spotted these so far.
-> 
-> You should look at other drivers for comparison.  They don't have to 
-> face this kind of problem.  u132_hcd should be similar to them.
->
-Yes, I checked out a few others and I could not see any usage of such
-variable to check if module is exiting.
+HEAD commit:    0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=159a0583e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a782c087b1f425c6
+dashboard link: https://syzkaller.appspot.com/bug?extid=d403396d4df67ad0bd5f
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=177a266de00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1579f947e00000
 
-Thank you,
-Madhuparna
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+d403396d4df67ad0bd5f@syzkaller.appspotmail.com
 
-> Alan Stern
-> 
-> 
+==================================================================
+BUG: KASAN: stack-out-of-bounds in ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:626 [inline]
+BUG: KASAN: stack-out-of-bounds in ath9k_hif_usb_rx_cb+0xdf6/0xf70 drivers/net/wireless/ath/ath9k/hif_usb.c:666
+Write of size 8 at addr ffff8881db309a28 by task swapper/1/0
+
+CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.6.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xef/0x16e lib/dump_stack.c:118
+ print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
+ __kasan_report.cold+0x37/0x77 mm/kasan/report.c:506
+ kasan_report+0xe/0x20 mm/kasan/common.c:641
+ ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:626 [inline]
+ ath9k_hif_usb_rx_cb+0xdf6/0xf70 drivers/net/wireless/ath/ath9k/hif_usb.c:666
+ __usb_hcd_giveback_urb+0x1f2/0x470 drivers/usb/core/hcd.c:1648
+ usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1713
+ dummy_timer+0x1258/0x32ae drivers/usb/gadget/udc/dummy_hcd.c:1966
+ call_timer_fn+0x195/0x6f0 kernel/time/timer.c:1404
+ expire_timers kernel/time/timer.c:1449 [inline]
+ __run_timers kernel/time/timer.c:1773 [inline]
+ __run_timers kernel/time/timer.c:1740 [inline]
+ run_timer_softirq+0x5f9/0x1500 kernel/time/timer.c:1786
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
