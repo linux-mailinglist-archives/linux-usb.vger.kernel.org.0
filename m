@@ -2,121 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D87A7197A96
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2020 13:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A03197B49
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2020 13:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729739AbgC3LVU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Mar 2020 07:21:20 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:49776 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729267AbgC3LVT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Mar 2020 07:21:19 -0400
-Received: by mail-io1-f69.google.com with SMTP id v19so944881ioq.16
-        for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2020 04:21:17 -0700 (PDT)
+        id S1729996AbgC3Lww (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Mar 2020 07:52:52 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:45638 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728764AbgC3Lwv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Mar 2020 07:52:51 -0400
+Received: by mail-pl1-f195.google.com with SMTP id t4so668263plq.12;
+        Mon, 30 Mar 2020 04:52:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Eg5ugs9X241d0CyEHmbcuFz60tm64fkmmQDdwTBJmwo=;
+        b=bx72mUxy7UhUrj/cFQtM3eS3lb41tkad+HkCfGl7ALAjXH3z2dhSxVA9srYRsjMG7g
+         EXx2GambzNP9ODeY640qVmq5Gu4R+JHDXZq+yyWf3+TIQe4xcdu6zMsJhn9aA3JRtUDQ
+         q6KxjpPJ3QoZVvkp4UJMcyNB8IsesWuOwLdHNVJxlVKwPudGdTqgVglMfsKR0EQ6bBRt
+         zID7u4h3SB9c43fysjMa2VL+L9FLQABlAXx05yJIbDxIT3cwm/ko4qIzTWXOR3w2o9/r
+         UbghdxeYQU2RR/afULeC3pRkuZ4w3C+3jQVSIOunRm2DsOA1N+J4886HS4V/iNDRtlOq
+         4bcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=CfhY61UHck7fYWqN/w7cPNYWAhLfN0P+iiBF3Bac0A4=;
-        b=f4mHzWW4nr5qS21m2vpr0nT4vyjEiB7Poqama8eYpfE/JnU+83PpmY0+RZUCbDs3N4
-         uBNv7rz/SEGzFgyK9iTSu9WCDNQusBzqe8fAoDwKiCtbRv7y/RH9SSQ3CocXSMBTvBgw
-         I6ritAkJQ3Npjar85AnQEeK6yuYzt/pd+J0l/DgMbiSNfWc0AXS/xkx+JG05kcaeZq6Q
-         RyvJBT5WNoKgyXPdj6TNFeq8ulM7KC874JNad/qZUL7KghMGux6CFe7Pe8lRjfTOv9dQ
-         KopGz1z+eLCIxF720+wTBSMlJveas1u4q2rlW5BCZCMhYHTDXWyF7K6XUS+c8XSfYfzI
-         cOGw==
-X-Gm-Message-State: ANhLgQ1gL5vZd/Fokq6feIQ8R40LZmDiK/R5n7suMSXncISVmGBU6Yw4
-        ytIdiizy1GIOAJEt0esSalrDikrIrsRUKbkomH4Ot1qMEv6Y
-X-Google-Smtp-Source: ADFU+vv8hUPAS9X3Qeiu/V92gCt8ONi6tKKXbuGKZwoRJ7Oah2fNPut7Mpn5Ql13uabznKPel6sINHuC/z3y6ucqzlvCE5uW5sDx
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Eg5ugs9X241d0CyEHmbcuFz60tm64fkmmQDdwTBJmwo=;
+        b=cmqvy2z4mkoy/+BWqsfmp3o4yVHbAgidUIsvzsY0l0coIAAp65Ot/APyCvkudzASIz
+         sGmi23EwcHNkoJvvDGUIQ0N6pxEysvhNB6Elxeg6Ui+myWHcptANlvyF0RLPhLzYTo+g
+         F35nUTdn7EcB1QA4hLguJLDSaOBQ4egGIaEJOj3G/i6+SOLyfH5eEPrI6f4yJaI0bLyb
+         WWfUN0WyPWqP+ICPH1cLewfRG2gSay+HwBKoQ4gXwR2y6UmphihmP7jxmibXzmCL7wcV
+         BQfUtWc2ziQ8W9twdcBdrdZYrF+I7VDpNa3/4tyfDwpch49VS6iqX6ZfEgegdO4X2s2v
+         8BrA==
+X-Gm-Message-State: ANhLgQ3vTOpzu4e05LK+3OlkMkQNmeVKZDsiwgcumAGfgYlK1br7qjP4
+        t0/dllbX445s65Fzv2ExSg==
+X-Google-Smtp-Source: ADFU+vvHPxPL9x5Yn46J0zk4QFbJpW4YEMsI5pazZEOmCFYJZehaxlAEidJsvORcHfq26MYyODPWZw==
+X-Received: by 2002:a17:902:788e:: with SMTP id q14mr12138962pll.72.1585569169503;
+        Mon, 30 Mar 2020 04:52:49 -0700 (PDT)
+Received: from localhost.localdomain ([2402:3a80:d3b:3d6b:7942:93fd:fd15:96f0])
+        by smtp.gmail.com with ESMTPSA id i4sm10012756pfq.82.2020.03.30.04.52.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2020 04:52:48 -0700 (PDT)
+From:   madhuparnabhowmik10@gmail.com
+To:     gregkh@linuxfoundation.org, hariprasad.kelam@gmail.com,
+        colin.king@canonical.com, tony.olech@elandigitalsystems.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andrianov@ispras.ru
+Subject: Possible data-race related bug in u132_hcd module.
+Date:   Mon, 30 Mar 2020 17:22:43 +0530
+Message-Id: <20200330115243.11107-1-madhuparnabhowmik10@gmail.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:9606:: with SMTP id g6mr10456050ilh.119.1585567277051;
- Mon, 30 Mar 2020 04:21:17 -0700 (PDT)
-Date:   Mon, 30 Mar 2020 04:21:17 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000050fd3505a210a664@google.com>
-Subject: WARNING in hiddev_ioctl/usb_submit_urb (2)
-From:   syzbot <syzbot+7c2b64c9bf83fea586fb@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi,
 
-syzbot found the following crash on:
+This bug is found by  Linux Driver Verification project (linuxtesting.org).
 
-HEAD commit:    0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=1756de4de00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a782c087b1f425c6
-dashboard link: https://syzkaller.appspot.com/bug?extid=7c2b64c9bf83fea586fb
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+The bug is related to the parallel execution of u132_probe() function and u132_hcd_exit() function in u132_hcd.c. In case the module is unloaded when the probe function is executing there can be data race as the mutex lock u132_module_lock is not used properly. 
 
-Unfortunately, I don't have any reproducer for this crash yet.
+i) Usage of mutex lock only when writing into the u132_exiting variable in u132_hcd_exit(). The lock is not used when this variable is read in u132_probe().
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+7c2b64c9bf83fea586fb@syzkaller.appspotmail.com
+Moreover, this variable does not serve its purpose, as even if locking is used while the u132_exiting variable is read in probe(), the function may still miss that exit function is executing if it acquires the mutex before exit() function does.
 
-------------[ cut here ]------------
-usb 1-1: BOGUS urb xfer, pipe 2 != type 2
-WARNING: CPU: 0 PID: 3143 at drivers/usb/core/urb.c:478 usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 3143 Comm: syz-executor.0 Not tainted 5.6.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- panic+0x2aa/0x6e1 kernel/panic.c:221
- __warn.cold+0x2f/0x30 kernel/panic.c:582
- report_bug+0x27b/0x2f0 lib/bug.c:195
- fixup_bug arch/x86/kernel/traps.c:174 [inline]
- fixup_bug arch/x86/kernel/traps.c:169 [inline]
- do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
- do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
- invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-RIP: 0010:usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
-Code: 4d 85 ed 74 46 e8 28 87 dd fd 4c 89 f7 e8 90 57 17 ff 41 89 d8 44 89 e1 4c 89 ea 48 89 c6 48 c7 c7 80 ed 3b 86 e8 d0 17 b2 fd <0f> 0b e9 20 f4 ff ff e8 fc 86 dd fd 0f 1f 44 00 00 e8 f2 86 dd fd
-RSP: 0018:ffff8881d564fa08 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-RDX: 0000000000007382 RSI: ffffffff812974dd RDI: ffffed103aac9f33
-RBP: 0000000000000000 R08: ffff8881d9831880 R09: ffffed103b646248
-R10: ffffed103b646247 R11: ffff8881db23123f R12: 0000000000000002
-R13: ffff8881c8636bd0 R14: ffff8881d20440a0 R15: ffff8881d53b3d00
- usb_start_wait_urb+0x108/0x4c0 drivers/usb/core/message.c:58
- usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
- usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
- usb_get_string+0xac/0x1a0 drivers/usb/core/message.c:694
- usb_string_sub+0xfa/0x3d0 drivers/usb/core/message.c:733
- usb_get_langid drivers/usb/core/message.c:770 [inline]
- usb_string+0x1ce/0x540 drivers/usb/core/message.c:833
- hiddev_ioctl_string.isra.0+0xf5/0x1f0 drivers/hid/usbhid/hiddev.c:575
- hiddev_ioctl+0x5b8/0x1550 drivers/hid/usbhid/hiddev.c:681
- vfs_ioctl fs/ioctl.c:47 [inline]
- ksys_ioctl+0x11a/0x180 fs/ioctl.c:763
- __do_sys_ioctl fs/ioctl.c:772 [inline]
- __se_sys_ioctl fs/ioctl.c:770 [inline]
- __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:770
- do_syscall_64+0xb6/0x5a0 arch/x86/entry/common.c:294
- entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x45c849
-Code: ad b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 7b b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007f9807022c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f98070236d4 RCX: 000000000045c849
-RDX: 0000000020000080 RSI: 0000000081044804 RDI: 0000000000000004
-RBP: 000000000076bf00 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000000ffffffff
-R13: 000000000000033e R14: 00000000004c5a98 R15: 000000000076bf0c
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+How to fix this?
 
+ii) Usage of mutex while adding entries in u132_static_list in probe function but not in exit function while unregistering.
+This should be easy to fix by holding the mutex in the exit function as well.
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+There can be other synchronization problems related to the usage of u132_module_lock in this module, I have only spotted these so far.
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Please let me know if this bug report is helpful and I can send a patch fixing it.
+
+Thank you,
+Madhuparna
