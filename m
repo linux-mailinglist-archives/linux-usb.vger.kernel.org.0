@@ -2,59 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF86A19763F
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2020 10:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD71197653
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2020 10:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729589AbgC3IPI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Mar 2020 04:15:08 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:44896 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729575AbgC3IPI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Mar 2020 04:15:08 -0400
-Received: by mail-lj1-f193.google.com with SMTP id p14so17042978lji.11
-        for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2020 01:15:06 -0700 (PDT)
+        id S1729616AbgC3ITU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Mar 2020 04:19:20 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:37673 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729576AbgC3ITT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Mar 2020 04:19:19 -0400
+Received: by mail-lj1-f196.google.com with SMTP id r24so17100488ljd.4;
+        Mon, 30 Mar 2020 01:19:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=nuSDn+Uw+FBwc76BuIuR+x0SsywYjamdRD4sr756J54=;
-        b=h/kH5u/EwQmHi6jChss1nNBmGlAjQ7AOjtBys2R0NwUIB7n4vHCT7utc2GwKlF0uMx
-         ZlhIfS/7vZMbZHOOjETqQkXe86+zKJwGNqm5MeKVYXMjNQoR8NoXlUCkTof8HRem0YfN
-         XyNl8G91tgcqINVRJSjEyekU1jDpQtvb2HEwoQJ+NoOk0ESkX/GIPQOi24Fxfzl4MZK5
-         JiKqT8d+4x0R+EYCiaQMFk+MLsGU3ZG+LVByTUCiRIgpCBMU+iga3+g420Lhno85W6KC
-         HDwr8CWUJI+rVZEo7buW8Q8mUggqGvn7GjOj5HhqLqXFqIGDmrc4Dvz3FDgwVjddu2Zt
-         +HjQ==
+        bh=7n6GKoIcVfWJLp8foyknsOYnUKfjIInXxnS+tducqOE=;
+        b=HhDC5Dg6KPSi7DJz7mZelWU9zeuSfMPhxUXFE05xnHykmAZ674UTIgvEE+NGUBpfbF
+         vZAy5u7zgn6W7/qyLmPqqAGzqa5O92Jkax3jcCM06hygUe3yjnLUCUKRhu2eDE8gMLLC
+         coJ4IWNkKzXHLXAHKfCMOjRDkl0Ruf2+D6CsMZJS8n/ZaKtqSCAx4J4Uyc7hg4Lov2s/
+         bW/ibDGIWlsNI4NQWhwmFlF4Cq+XKwjpF0sX68Hq2UIFdeVOPMYiBknyXYhcMTlUoYYP
+         8F2Gvu9epY/QMjjrrru/ZSfWyaSJBi2YOhFzfI4QJp8osuOtkSXYj5SFcHEBXExViSPg
+         U0Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=nuSDn+Uw+FBwc76BuIuR+x0SsywYjamdRD4sr756J54=;
-        b=SaskknM9fzUGAHJemI0MqWPj9+2Q9wt33fktM4xFvHdIDgMe/eFBDgY4DNcyk3FIxY
-         6zBzF9V16t0iKYyZ21GzGzDoiqARXFkPmWRa7NAMjYjKPRtdjgybsPYb/Kcn3lxkVxLN
-         r8+HBg59KewU/mSHVg2dmuzNh9In0JAsyTzIU3a4UELl77axz7v3W39zQB31Ki1lmzWF
-         wbKmt6bj8Ta8cRocug5Upea3CSzJQmKmHzGhiJgQl07W1pNjpfQohxKdjCmKABYt7UIF
-         javrBD6F7L333oIz+OBXGvTftufm8CjS+RxHHuJ9FIlIW2MiiNQDooe6HmTMdG/DFnNr
-         SCoA==
-X-Gm-Message-State: AGi0PuZsb2Gdk0Q/VVf6aUiNvqC09EmrgMNZ8qQQ9p+cW89EU4AvaUZj
-        M/7voFtE/npy4Fthlw3e3TGqRHwLiWQ=
-X-Google-Smtp-Source: APiQypKTuVwfDvT4DqQ7n9qfkB7ft1sSOcATuKC4PYDgKT3f5C3JA5T+7YVhncmFvJNpySHjuBH4FA==
-X-Received: by 2002:a05:651c:201d:: with SMTP id s29mr6621277ljo.214.1585556105937;
-        Mon, 30 Mar 2020 01:15:05 -0700 (PDT)
+        bh=7n6GKoIcVfWJLp8foyknsOYnUKfjIInXxnS+tducqOE=;
+        b=uPBG5uA3A2PRj/J8Ig2cOqwRcfiQ5iWAyw+9vCSEmPBt0rHuyt707RQELPd/uP5WqT
+         VGW6AGGF7ayFg9B+NDjvb8HSwQJrC4E1T+/9JQpm9k416YzvCpOMdv+aQ065tRtr3cA9
+         3EqXLglSRDvjJ1M6N8MlIlHDi2ffZabI9jfqOvpfk6+Skwh9zgwtW50kZ9iYWXLUK8Le
+         AJi/zGFT6X2eVdZXyBN1q6jGe37f79vxM89cSzVqJY1562ICS7kjDSIrx3MUHW9H5P2R
+         PDLvYU9OcJ/CplnVt9UVCwBYy/ZSrSvyAJTiLgpRVW/RrCOxGB1S1haGqCtt1gaGhwIm
+         IkKw==
+X-Gm-Message-State: AGi0PuaI/e0hgdURDlw2023zAR++xpuO5TT+xMfEDwxXsI1Rwn0zywil
+        twJu8Vh6/88YZnydtGhRBNQ=
+X-Google-Smtp-Source: APiQypL5gFfQjKxdK0m1NUzUNdcTeHnsHwajmRP3HoujZtbQC+x6XUBiCnKtZlfVN0l9gZNQXEpPXg==
+X-Received: by 2002:a2e:9acd:: with SMTP id p13mr6121558ljj.131.1585556356654;
+        Mon, 30 Mar 2020 01:19:16 -0700 (PDT)
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id h9sm6332180ljk.96.2020.03.30.01.15.04
+        by smtp.gmail.com with ESMTPSA id t1sm6445168ljo.94.2020.03.30.01.19.15
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 30 Mar 2020 01:15:04 -0700 (PDT)
+        Mon, 30 Mar 2020 01:19:15 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH v2 0/4] usb: dwc3: gadget: Improve isoc starting mechanism
-In-Reply-To: <cover.1585523081.git.thinhn@synopsys.com>
-References: <cover.1585523081.git.thinhn@synopsys.com>
-Date:   Mon, 30 Mar 2020 11:15:00 +0300
-Message-ID: <87k1322r97.fsf@kernel.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+Subject: Re: [PATCH v6 2/4] usb: dwc3: qcom: Add interconnect support in dwc3 driver
+In-Reply-To: <20200329171756.GA199755@google.com>
+References: <1585302203-11008-1-git-send-email-sanm@codeaurora.org> <1585302203-11008-3-git-send-email-sanm@codeaurora.org> <20200329171756.GA199755@google.com>
+Date:   Mon, 30 Mar 2020 11:19:11 +0300
+Message-ID: <87h7y62r28.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -67,33 +75,73 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
 
-> Currently we use the "retry" method to issue START_TRANSFER command multi=
-ple
-> times, each with a next interval. There's been report that 5 number of re=
-tries
-> may not be enough. See https://lkml.org/lkml/2019/11/11/535
->
-> We could increase the number of retries. However, that also may not be en=
-ough
-> depending on different system latency. It is not often that the latency is
-> higher than 5 isoc intervals. If it goes beyond 5 intervals, let's restar=
-t the
-> whole process again.
->
->
-> Changes in v2:
->  - Include patch "usb: dwc3: gadget: WARN on no-resource status" to this =
-series
->
-> Thinh Nguyen (4):
->   usb: dwc3: gadget: Properly handle failed kick_transfer
->   usb: dwc3: gadget: Store resource index of start cmd
->   usb: dwc3: gadget: Issue END_TRANSFER to retry isoc transfer
->   usb: dwc3: gadget: WARN on no-resource status
+Hi,
 
-all in testing/next now
+Matthias Kaehlcke <mka@chromium.org> writes:
+>> Add interconnect support in dwc3-qcom driver to vote for bus
+>> bandwidth.
+>>=20
+>> This requires for two different paths - from USB master to
+>> DDR slave. The other is from APPS master to USB slave.
+>>=20
+>> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+>> Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+>> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+>> ---
+>>  drivers/usb/dwc3/dwc3-qcom.c | 128 ++++++++++++++++++++++++++++++++++++=
+++++++-
+>>  1 file changed, 126 insertions(+), 2 deletions(-)
+>>=20
+>> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+>> index 1dfd024..7e85fe6 100644
+>> --- a/drivers/usb/dwc3/dwc3-qcom.c
+>> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+>>
+>> ...
+>>
+>> +/* To disable an interconnect, we just set its bandwidth to 0 */
+>> +static int dwc3_qcom_interconnect_disable(struct dwc3_qcom *qcom)
+>> +{
+>> +	int ret;
+>> +
+>> +	ret =3D icc_set_bw(qcom->usb_ddr_icc_path, 0, 0);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret =3D icc_set_bw(qcom->apps_usb_icc_path, 0, 0);
+>> +	if (ret)
+>> +		goto err_reenable_memory_path;
+>> +
+>> +	return 0;
+>> +
+>> +	/* Re-enable things in the event of an error */
+>> +err_reenable_memory_path:
+>> +	ret =3D dwc3_qcom_interconnect_enable(qcom);
+>
+> This overwrites the error that led to the execution of this code path.
+> The function should return original error, not the result of the
+> _interconnect_enable() call.
+>
+> I saw Felipe queued the patch for v5.8. I think the main options to fix t=
+his
+> are:
+>
+> - a v6 of this patch to replace v5 in Felipe's tree (which IIUC will be r=
+ebased
+>   anyway once there is a v5.7-rc)
+> - send the fix as a separate patch
+> - Felipe amends the patch in his tree
+>
+> Felipe, what would work best for you?
+
+Let's go for a v6, which commits should I drop? I can't find anything
+related to $subject in my queue:
+
+$ git --no-pager log --oneline HEAD ^linus/master -- drivers/usb/dwc3/dwc3-=
+qcom.c
+201c26c08db4 usb: dwc3: qcom: Replace <linux/clk-provider.h> by <linux/of_c=
+lk.h>
 
 =2D-=20
 balbi
@@ -103,18 +151,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6BqoQACgkQzL64meEa
-mQZgGBAAoK/suvU4s9jXUUaov6Nwzxu3q6kV0RYeecfzBPwDB1ZWwGS98t397wMY
-ls45DUYaBCoq/GVVJuQjV1G2SOXCZwfQNYKe+XchzBzpD9wBZS1KkQEA7Aznr97T
-aPg4lzAOkm4xgXksKBiXZbwO91j1I1vPzNDJHJljZeRprrPVKl3eWR6kqAiu4dff
-KSFQp73I8tY8hCliffIcnzfk0dOXgnHTvpQ4Ya74xAd7mff3r1wWgpmDVbTWsICy
-giJUe+F3HUSDtajtZ2sZn+3gWREF08oQNqWtDWwujA8lwflNgeEh2ZkiZeIjzZI1
-1vy8IfiAdHaY5ve5HcCAUZ/2Da2lhq/T2V8zn6CDcXRr024knby47zjEGcm/wwra
-9CCXWFX9EfIGnDflzgugUnoCjLwXadzoIyNA8kxNpPmKvXjlhWuaJRt/Dho4+VAo
-6AZ/2iL1Aytjny96L1anV8ThM4iSaIs9yZbHiA+OU7N7ZVohUDsGRuynBRnDWesK
-w0LviS8L4PGIMHfFhUxwjbaF2CSAJ/awNLg0Xn8I5APz5bEqK/AWtltCOYX8ukZ0
-lsn1/tTVY4yjauf8UfPlQ3j0snUqaLHbHB0N/EUM9vtXlYzeQUntCAaEhtB4f6nV
-PLXSW7HrECR70EuV/ZfHFEkNI9wYEjPMH6iHKCS7zdNWBkC7RXQ=
-=uSNG
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6Bq38ACgkQzL64meEa
+mQbEeRAAvPDxpFbHJrTEdnNciIvj9jlgCFNwT07cC4jdy6SDizMAf5ktl3burtvp
+jMXU4DTnrNW5hMcU/Rp24gdyT0VhbYJs+L7sUQh1nE+h1wC41p0eUP51Kkj6O7nu
+yaEhbkp/LtUlwn3YX8yfkhVfeuvA2slpMD2yStj4cH/g+8J+RnyF6s27fgGJk9TX
+j6i/2nyuRI4F2BVdmjwz3OPwzoBKCWqw+iHSuYsWOS/L2Rr8wTRwpZSn7azcIu+X
+jmk4KlzOkywcep7taCnM/EL4oIRCwkUDL+MNgNpiipAki61J4tVqP/dapmzVvEZ1
+Ns45sqKG89rif1g9zQA2/XZOc0HvW/rE/A/Frz+R3OTQ1Y5cSvawU1hs6QiwDBcK
+Ep4hnVn4U4LoBKSUU8pnybljgDNfD5D8nVNRWtRidUc0r/xok2iTJvQIYqv5IVop
+GPpxjb2bh5Vv4E9vdDW4iDlOUZ95kvqxNKTICfez7xGWzeLXMOfBoqEImEBJgCCn
+JXvDpM4sDzA41vXMPv0fz6b75QujVvo8nqhJlsMS6P1/bZ/166M0dWu3RW77mrJj
+lNo+J1fL8O19kxm67is6U0jKx2fnVLvQoqk5Oekd7k+nG5Fcj8H0Lr3KUZeDlomy
+ZujbTfC7Qr49Frtm8VVYyucavB3r1gO3gg/S685T6DuPl0iRZ4M=
+=Wl6K
 -----END PGP SIGNATURE-----
 --=-=-=--
