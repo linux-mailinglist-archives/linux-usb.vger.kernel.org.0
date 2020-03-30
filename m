@@ -2,105 +2,184 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD8F197BC4
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2020 14:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 418C0197F47
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2020 17:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730031AbgC3MZ1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Mar 2020 08:25:27 -0400
-Received: from mail-pj1-f50.google.com ([209.85.216.50]:50415 "EHLO
-        mail-pj1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729957AbgC3MZZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Mar 2020 08:25:25 -0400
-Received: by mail-pj1-f50.google.com with SMTP id v13so7490645pjb.0;
-        Mon, 30 Mar 2020 05:25:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=M8Ib8l/azcsofbPAguA4h7SVkMzxDl6gmT98v4wG9GU=;
-        b=G9gm5VGhAArsT1CmH0uZY313vNbbuauBelRohmp7x0E53WwYgN/yccZmdD8/HLYLOH
-         QNR3fLWxNp4efa/CbHkkioW639eQ4pDkZyx4273q2vNQDsvfYCtsJfaPd77RdPFN4UJU
-         Pbz6VhGx8Sea6HgnZx+91WIAZtt3nsPL1wNM9PTfBuqTb+t5PQZvLU7DE8raWG7Y3SLJ
-         vatFluJWaku6PJd4umh4j/XcN2Md/EH5Cw52K0MPNVaBtDJCrvxJopDGwtTmOLHkzzqe
-         LV0timV5SbWDLmNNihgpriN5KPTXtdKEsVWM37zhFnNaB9s8EZornHbjbfkfhMrWKM0K
-         YedQ==
+        id S1727973AbgC3PL2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Mar 2020 11:11:28 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:34200 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727067AbgC3PL2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Mar 2020 11:11:28 -0400
+Received: by mail-il1-f194.google.com with SMTP id t11so16145561ils.1;
+        Mon, 30 Mar 2020 08:11:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=M8Ib8l/azcsofbPAguA4h7SVkMzxDl6gmT98v4wG9GU=;
-        b=Stgg/L1UpZhyIHXJAlrhP4WdyAWdJ1dmvU9yxDbyyZGOlVJQJHr9iIyjmiwHiLpAMj
-         Pfswd++Oe5ZZ3ZbcpoYNtJsbQlXglYXOEhLUxH3FnUneKxgYUfCsLlUH9Eef6VbT5AeF
-         efxkYVB1lTgViPkKFl5iJBLZdWl71oDilZO4Bn8vx9u1Bh0D8wCSc89ZPDQosJrlotAp
-         PI2mWe9rRWlChvzv75hq9GfubgOA66H4lNl7zS1SYU801AGLCeBzuSYeAYh5kRbO2vuz
-         fatwToHu8CGoFNcWDo2zMggDtPcqZtWjEU1in1+ABPUfoJeMZpZGB9RqiwG71yGAjy2j
-         VCFw==
-X-Gm-Message-State: AGi0PuavyBKKB454+YaXqIdyrA2X4KPdyKDBrJCblq2dhrbuzXGa6tQm
-        70lZ5Gbmz6F/Fm36Z66nog==
-X-Google-Smtp-Source: APiQypIIPYL8VmKnr+it9nYOPnlJhYJLIQV+SCGDeBZlqWZi/xj1JPMh5SXdsGM/hAWpeOl7hubg1w==
-X-Received: by 2002:a17:90b:400a:: with SMTP id ie10mr8001144pjb.46.1585571124433;
-        Mon, 30 Mar 2020 05:25:24 -0700 (PDT)
-Received: from madhuparna-HP-Notebook ([2402:3a80:d3b:3d6b:7942:93fd:fd15:96f0])
-        by smtp.gmail.com with ESMTPSA id y17sm10044862pfl.104.2020.03.30.05.25.20
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 30 Mar 2020 05:25:23 -0700 (PDT)
-From:   Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
-X-Google-Original-From: Madhuparna Bhowmik <change_this_user_name@gmail.com>
-Date:   Mon, 30 Mar 2020 17:55:18 +0530
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     madhuparnabhowmik10@gmail.com, hariprasad.kelam@gmail.com,
-        colin.king@canonical.com, tony.olech@elandigitalsystems.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrianov@ispras.ru
-Subject: Re: Possible data-race related bug in u132_hcd module.
-Message-ID: <20200330122518.GA12077@madhuparna-HP-Notebook>
-References: <20200330115243.11107-1-madhuparnabhowmik10@gmail.com>
- <20200330120207.GA2807@kroah.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Wg2V9C53DlqPodPsHDEJ/E9f60hkJENPbg3weWQQbWg=;
+        b=Q84yjlb81ULF9T9kBgpZ1hushUTKLika2lcBbsseGQ9AmMSUBltFXgUt1bTPQ1ODuX
+         GOUqHO5UAi0H2bteCYwklaQyGCsS+SJqAydYjTDtBkhOvAsPL645WJXejr+mukdXap1R
+         vozXZzvphu/lGtNsfTnuvhFrcb6OkrAF13sWmV+m2hyslrVu228ElSLawPFeK9nz2bRO
+         XrLkzLzZTVcKAa5GeUctA46kE88TV2Gr0s2X8tYddqy5DlKNSPlYhsdjCthMJB2RI0hc
+         vRBp3x5dnXB0hs83xZn/N4CAZ5hHYELgX7jJlLQvfwFsN+e044n0usgCD0Ru2rm0Z9tP
+         mQGA==
+X-Gm-Message-State: ANhLgQ1AG40wTeaczyS3zWQM7hANPwMhN0WYeHCEDtIU7sWXsxUjZOna
+        tyAJGv7p5Soe4ceN9bomcwECMDE=
+X-Google-Smtp-Source: ADFU+vv1QY72ToqhHii/CGo5fEmMH0Hv59kt3x+UZiddA6Lw9P1UMrD0ngQu9AVFE8Yfi0YSS6vk7w==
+X-Received: by 2002:a92:8c93:: with SMTP id s19mr10499418ill.222.1585581087447;
+        Mon, 30 Mar 2020 08:11:27 -0700 (PDT)
+Received: from rob-hp-laptop ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id c88sm4945302ill.15.2020.03.30.08.11.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2020 08:11:26 -0700 (PDT)
+Received: (nullmailer pid 9592 invoked by uid 1000);
+        Mon, 30 Mar 2020 15:11:24 -0000
+Date:   Mon, 30 Mar 2020 09:11:24 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Tobias Waldekranz <tobias@waldekranz.com>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org, andrew@lunn.ch,
+        f.fainelli@gmail.com, hkallweit1@gmail.com,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: net: add marvell usb to mdio bindings
+Message-ID: <20200330151124.GA30148@bogus>
+References: <20200321202443.15352-1-tobias@waldekranz.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200330120207.GA2807@kroah.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200321202443.15352-1-tobias@waldekranz.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 30, 2020 at 02:02:07PM +0200, Greg KH wrote:
-> On Mon, Mar 30, 2020 at 05:22:43PM +0530, madhuparnabhowmik10@gmail.com wrote:
-> > Hi,
-> > 
-> > This bug is found by  Linux Driver Verification project (linuxtesting.org).
-> > 
-> > The bug is related to the parallel execution of u132_probe() function and u132_hcd_exit() function in u132_hcd.c. In case the module is unloaded when the probe function is executing there can be data race as the mutex lock u132_module_lock is not used properly. 
-> 
-> Please note that module unloading, while a nice thing to have, is never
-> something that happens automatically :)
-> 
-> > i) Usage of mutex lock only when writing into the u132_exiting variable in u132_hcd_exit(). The lock is not used when this variable is read in u132_probe().
-> > 
-> > Moreover, this variable does not serve its purpose, as even if locking is used while the u132_exiting variable is read in probe(), the function may still miss that exit function is executing if it acquires the mutex before exit() function does.
-> > 
-> > How to fix this?
-> > 
-> > ii) Usage of mutex while adding entries in u132_static_list in probe function but not in exit function while unregistering.
-> > This should be easy to fix by holding the mutex in the exit function as well.
-> > 
-> > There can be other synchronization problems related to the usage of u132_module_lock in this module, I have only spotted these so far.
-> > 
-> > Please let me know if this bug report is helpful and I can send a patch fixing it.
-> 
-> Please just send a patch, no need to ever ask if you should, that's the
-> best way to report and fix anything.
->
-Sure, I will do it.
+On Sat, Mar 21, 2020 at 09:24:42PM +0100, Tobias Waldekranz wrote:
+> Describe how the USB to MDIO controller can optionally use device tree
+> bindings to reference attached devices such as switches.
 
-Thank you,
-Madhuparna
+Looks like this is in linux-next now. First I'm seeing it because the DT 
+list was not Cc'ed.
 
-> thanks,
+This is breaking 'make dt_binding_check'. Revert or fix before this goes 
+to Linus please.
+
+> Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+> ---
+>  .../bindings/net/marvell,mvusb.yaml           | 65 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 ++
+>  2 files changed, 71 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/marvell,mvusb.yaml
 > 
-> greg k-h
+> diff --git a/Documentation/devicetree/bindings/net/marvell,mvusb.yaml b/Documentation/devicetree/bindings/net/marvell,mvusb.yaml
+> new file mode 100644
+> index 000000000000..9458f6659be1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/marvell,mvusb.yaml
+> @@ -0,0 +1,65 @@
+> +# SPDX-License-Identifier: GPL-2.0
+
+New bindings should be:
+
+(GPL-2.0-only OR BSD-2-Clause)
+
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/marvell,mvusb.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell USB to MDIO Controller
+> +
+> +maintainers:
+> +  - Tobias Waldekranz <tobias@waldekranz.com>
+> +
+> +description: |+
+> +  This controller is mounted on development boards for Marvell's Link Street
+> +  family of Ethernet switches. It allows you to configure the switch's registers
+> +  using the standard MDIO interface.
+> +
+> +  Since the device is connected over USB, there is no strict requirement of
+> +  having a device tree representation of the device. But in order to use it with
+> +  the mv88e6xxx driver, you need a device tree node in which to place the switch
+> +  definition.
+> +
+> +allOf:
+> +  - $ref: "mdio.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    const: usb1286,1fa4
+> +  reg:
+> +    maxItems: 1
+> +    description: The USB port number on the host controller
+
+Really, it's the port on the hub which could be a root hub.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +
+> +examples:
+> +  - |
+> +    /* USB host controller */
+> +    &usb1 {
+
+This won't compile because there's no 'usb1' to reference.
+
+> +            mvusb: mdio@1 {
+> +                    compatible = "usb1286,1fa4";
+> +                    reg = <1>;
+> +                    #address-cells = <1>;
+> +                    #size-cells = <0>;
+> +            };
+> +    };
+> +
+> +    /* MV88E6390X devboard */
+> +    &mvusb {
+
+Move this into the above node.
+
+> +            switch@0 {
+> +                    compatible = "marvell,mv88e6190";
+> +                    status = "ok";
+
+Don't show status in examples.
+
+> +                    reg = <0x0>;
+> +
+> +                    ports {
+> +                            /* Port definitions */
+
+Incomplete examples will eventually fail as when complete schema are 
+present.
+
+> +                    };
+> +
+> +                    mdio {
+> +                            /* PHY definitions */
+> +                    };
+> +            };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 97dce264bc7c..ff35669f8712 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10101,6 +10101,12 @@ M:	Nicolas Pitre <nico@fluxnic.net>
+>  S:	Odd Fixes
+>  F:	drivers/mmc/host/mvsdio.*
+>  
+> +MARVELL USB MDIO CONTROLLER DRIVER
+> +M:	Tobias Waldekranz <tobias@waldekranz.com>
+> +L:	netdev@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/net/marvell,mvusb.yaml
+> +
+>  MARVELL XENON MMC/SD/SDIO HOST CONTROLLER DRIVER
+>  M:	Hu Ziji <huziji@marvell.com>
+>  L:	linux-mmc@vger.kernel.org
+> -- 
+> 2.17.1
+> 
