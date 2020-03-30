@@ -2,109 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 347DD19765A
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2020 10:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E77197663
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2020 10:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729630AbgC3IUm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Mar 2020 04:20:42 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:35529 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729576AbgC3IUm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Mar 2020 04:20:42 -0400
-Received: by mail-lj1-f194.google.com with SMTP id k21so17105926ljh.2;
-        Mon, 30 Mar 2020 01:20:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=FLZ+NG1wdQZ/qjkMH527FZGQHZbq+EwwCn4uJZaDInk=;
-        b=uwCapJDAj0Bl5VjtKDau23EU7c0ZBDf2eSSOYAS5ZKxQtpRd7DKd1mXjwZZapM2huO
-         GpUI1mjRh8rCz81GaKPP+0465Xu0AR1PzYQmDJZ5kU3tVx4p4mkUiHEbQ2tmE3ng4nFG
-         pgreSFpwXiIp454dg6vdWMV4PTYgOLWszBTss41mDF6iysabrBgjgMaNP53fHlB6lQyd
-         woyzkGD20dqAdKCn0bjtPy/kgieoWtv08M7eNHt7GgUmpw/0f8bGnmlg5cQ1uYknFJQ+
-         pGaPQV/Uq270iYoCNTCWSwvk8lHmgS5gkKzwf2hKmsKvKQJ2eW4XcCTN7tmDLqnPShul
-         mwaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=FLZ+NG1wdQZ/qjkMH527FZGQHZbq+EwwCn4uJZaDInk=;
-        b=g7BlYcq+9P+hR+DBR7St4w2U+6ox9mwqm+d7ZRdamCwNV4TC7R5QpJQT5Enq5z3Heu
-         q0tIwudL+nGzuiP5/nD2ldyVzRwrK4hhHQR6bzzkogI/Od7jmb9V6knq4v+mFYrUpaAB
-         YM/AaqMOG2Yb6WXGjFfD1Z1iCSEvL5EWrfhex0Pp7RjGlkUVv36YUFcTRHrX6/6+0Xyr
-         kXvO/rhAqUVhiyWSjyYIxnMPgiZ3oO3VMKbFdD16mh0tw4f3rycRzvEwjSw378mGVMth
-         ixYy0hnLs+zNQa521/r8S68BatpDbqooZS7eoGmpH2UMfrgvLRfj8hFsfcr50/lB6v6R
-         3z5Q==
-X-Gm-Message-State: AGi0Pua+Q+IfbYo1Ch1n4mkCnNU2WF7eTRKbpVbxT0KYuKHUkadcvrmO
-        g8ovQEpK5LpVQZVbbS9SnTc=
-X-Google-Smtp-Source: APiQypIvqSkCWRFpeGx0VgbWzSLtaopBfQIx6KI7sHtr+D7EVvS4k7wIxqBMRiJWc5X5GelkRzK5nA==
-X-Received: by 2002:a2e:988c:: with SMTP id b12mr6494651ljj.138.1585556439073;
-        Mon, 30 Mar 2020 01:20:39 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id i2sm7577233ljj.72.2020.03.30.01.20.38
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 30 Mar 2020 01:20:38 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: Re: [PATCH v2 0/3] dt-bindings: usb: add r8a77961 support
-In-Reply-To: <1585200410-28841-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-References: <1585200410-28841-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-Date:   Mon, 30 Mar 2020 11:20:33 +0300
-Message-ID: <87eeta2qzy.fsf@kernel.org>
+        id S1729603AbgC3IZ4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Mar 2020 04:25:56 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:33281 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729562AbgC3IZ4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Mar 2020 04:25:56 -0400
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1jIpjy-00021V-UM; Mon, 30 Mar 2020 10:25:50 +0200
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1jIpjw-0002dB-LS; Mon, 30 Mar 2020 10:25:48 +0200
+Date:   Mon, 30 Mar 2020 10:25:48 +0200
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     lars@metafoo.de, alexandru.Ardelean@analog.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, bigeasy@linutronix.de,
+        m.olbrich@pengutronix.de, kernel@pengutronix.de
+Subject: Re: [PATCH] usb: dwc3: gadget: don't dequeue requests on already
+ disabled endpoints
+Message-ID: <20200330082548.GL27849@pengutronix.de>
+References: <dc52d6a0-12ed-a34c-01c4-0fc5ccbf7b1d@metafoo.de>
+ <20200327084302.606-1-m.grzeschik@pengutronix.de>
+ <875zeokhoa.fsf@kernel.org>
+ <20200329190244.GK27849@pengutronix.de>
+ <87sghq2tum.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wZdghQXYJzyo6AGC"
+Content-Disposition: inline
+In-Reply-To: <87sghq2tum.fsf@kernel.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 09:41:05 up 39 days, 15:11, 80 users,  load average: 1.00, 0.56,
+ 0.31
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
+
+--wZdghQXYJzyo6AGC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com> writes:
+On Mon, Mar 30, 2020 at 10:18:57AM +0300, Felipe Balbi wrote:
+>=20
+> Hi,
+>=20
+> Michael Grzeschik <mgr@pengutronix.de> writes:
+> >> > dwc3_gadget_ep_disable gets called before the last request gets
+> >> > dequeued.
+> >> >
+> >> > In __dwc3_gadget_ep_disable all started, pending and cancelled
+> >> > lists for this endpoint will call dwc3_gadget_giveback in
+> >> > dwc3_remove_requests.
+> >> >
+> >> > After that no list containing the afterwards dequed request,
+> >> > therefor it is not necessary to run the dequeue routine.
+> >> >
+> >> > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> >> > ---
+> >> > @Lars-Peter Clausen:
+> >> >
+> >> > This patch addresses the case that not queued requests get dequeued.
+> >> > The only case that this happens seems on disabling the gadget.
+> >> >
+> >> >  drivers/usb/dwc3/gadget.c | 3 +++
+> >> >  1 file changed, 3 insertions(+)
+> >> >
+> >> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> >> > index 9a6f741d1db0dc..5d4fa8d6c93e49 100644
+> >> > --- a/drivers/usb/dwc3/gadget.c
+> >> > +++ b/drivers/usb/dwc3/gadget.c
+> >> > @@ -1609,6 +1609,9 @@ static int dwc3_gadget_ep_dequeue(struct usb_e=
+p *ep,
+> >> > =20
+> >> >  	trace_dwc3_ep_dequeue(req);
+> >> > =20
+> >> > +	if (!(dep->flags & DWC3_EP_ENABLED))
+> >> > +		return 0;
+> >>=20
+> >> which driver is trying to call dequeue after the endpoint is disabled?
+> >> Got some tracepoints of the problem happening?
+> >
+> > I see the case when using uvc-gadget.
+> >
+> > Look into uvc_v4l2_release in uvc_v4l2.c:
+> >
+> > uvc_function_disconnect
+> >    composite_disconnect
+> >       reset_config
+> >          uvc_function_disable->usb_ep_disable
+> >
+> > uvcg_video_enable
+> >    usb_ep_dequeue
+> >       dwc3_gadget_ep_dequeue
+>=20
+> Oh, I see what you mean. We get a disconnect, which disables the
+> endpoints, which forces all requests to be dequeued. Now I remember why
+> this exists: we giveback the requests from disconnect because not all
+> gadget drivers will call usb_ep_dequeue() if simply told about the
+> disconnect. Then UDC drivers have to be a little more careful and make
+> sure that all requests are givenback.
+>=20
+> In any case, why is it a problem to call usb_ep_dequeue()? Is it only
+> because of that dev_err()? We could just remove that message,
+> really.
 
-> This patch adds USB 2.0/3.0 devices support for r8a77961
-> (R-Car M3-W+).
->
-> Changes from v1:
->  - Update the comment of "renesas,xhci-r8a77961" for r8a77960.
->  - Add Reviewed-by.
->  https://patchwork.kernel.org/project/linux-renesas-soc/list/?series=3D26=
-1191
->
-> Yoshihiro Shimoda (3):
->   dt-bindings: usb: usb-xhci: add r8a77961 support
->   dt-bindings: usb: renesas,usbhs: add r8a77961 support
->   dt-bindings: usb: renesas,usb3-peri: add r8a77961 support
+In my case, it is not a problem removing the dev_err. The ep_dequeue
+will only be called once for each request at the stream end. I don't
+know about the case Lars has mentioned.
 
-All in testing/fixes now. Thank you
+If we have to search all lists for the request every n times while in
+traffic, only to find out that it was not enqueued, I think it would be
+worth it to keep the dev_err and let these cases trigger so we have an
+option to find and avoid/fix these.
 
-=2D-=20
-balbi
+> Eventually, I want to move more of this logic into UDC core so
+> udc drivers can be simplified. For that work, though, first we would
+> have to add a "generic" struct usb_ep_hw implementation and manage list
+> of requests as part of UDC core as well.
 
---=-=-=
+I don't know about the cases you plan to abstract but it sounds
+like a good idea to get some gadget logic out of the drivers.
+
+Thanks,
+Michael
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--wZdghQXYJzyo6AGC
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6Bq9EACgkQzL64meEa
-mQagKw//XQ8qAVrkhsFlPKd3BaxDvIFS5iZCearaNXGq9luOBXZxZEJM0sPwyw82
-SET6P3fZCoYfR1e+TD/DUi3ixAKPP54iF8N28oXvFZwW7Fe7Y5ifxhEjPCEn/0CX
-BSU6/xqP9y02+65wY28morys5/hMrxMVjKBP0PUA6FAx7nWEIMWDQn5SzwgpOnAK
-t8z7GwfZfNGR9vpLtj22X09WaEaGlWv1cGTmw5nAdj8JQQO7mYTjet5Ih4HPz9Co
-afrhe8XHlkzrAmidJIQZASdZpYk0pXsmxN4d6WU64GXAN9P7RKOdBdYPEjsBWCsB
-tBWrz9fsCliR4edOpTO8uqmE88jIhgu+us8PuPnzullJWARtMN1QyKbf6Vr5HSS+
-iPQGFH3Vw76ZhNq+CAwKiqwrFKgNdV3BhBpG880ht14QXv4XRIbR5OsCkDrGnZQC
-b6CdrG+ayeT43Tij+e73NLysGZaIgKK9zC0wjeYk8lNlhoWJ0y9h/CJiuz5isL8o
-Su16YqKO/wXnSqIXYu24jVccXh4zmG2IXfwoGocijM3ptgzmjxz36Le6kU+Cnqc1
-xkYw5vzoZTi0o1sW4QnyGZyfjdkz3NwXtMBKsJC/SUeKnNL84UZ9IyppYAhRp6MX
-PsAQ1FR3t2LGS5L/Vh3yaOAcrrFxzVfzoRF0IvDAaAGVqO7XuZ8=
-=8Qwp
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAl6BrQUACgkQC+njFXoe
+LGTnRQ/+MzuaYcXWW6Wcfj5AJjiqb9RuzdHPUCrc48bZJFhaDOoJwO/eJ9C9zZM0
+/AAXJi9e/f89wRvMAQ1CyN6qT2SPqYxlZSKO4zuFyjyuslfujPCg4r372zisXFQJ
+mJpLileNOs8meBP4jfaD6ikGC5Vqb4J1YK7JX7dWAiqOKeJ1xFWTaU/QrQxwYVzU
+uL8PB/EZf/Y8EQrYIOaln0DvbJuVNllpK2uzwkjSnEe1lM9VCeiMcD+GJB+kkkNd
+dpATvxEqhVBWq9Xu0biwcWWrDfLtYBccxNd77Qy7IPIYWTiWHJaQFrkijsj5TevY
+oGWIZ/UvzUrSssu6VUgLXhoi1xaizjnGprL9WY2vx6E5nOiuUpWqQ8A/ahukuG58
+S01liCaic7NjcNyPtAO+zLaZt+oR06WO/t2B7GArhnTY7o4l69zGIIkRvUhYc94z
+o42iUvghfbCXHmQaqK9ar3cT0brFmYDTm7vEJxpAPJbKKkgkmqPCqSqQOKp3iYF7
+dgrVLdC1tvtoCiA51OPitqVttoyJZsLmRTGQbvExI54sqgh4ynJh7031SbPEd59Z
+T8oCl/fAoTZG4xWthYZUFP+uXAF/ALzMIyi3ggwJA4dJKc1q8GZ7aCOV52na8Lpl
+sqoEAw20vuLEXDfuwKT5FkyCWIQ6szWYn+U5wExMzV7zdvjZxg8=
+=ON5s
 -----END PGP SIGNATURE-----
---=-=-=--
+
+--wZdghQXYJzyo6AGC--
