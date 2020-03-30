@@ -2,137 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F27A19749B
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2020 08:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AD6197579
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Mar 2020 09:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728997AbgC3Gjl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Mar 2020 02:39:41 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:42790 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728733AbgC3Gjl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Mar 2020 02:39:41 -0400
-Received: by mail-io1-f65.google.com with SMTP id q128so16478180iof.9;
-        Sun, 29 Mar 2020 23:39:39 -0700 (PDT)
+        id S1729438AbgC3HTL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Mar 2020 03:19:11 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:35362 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729377AbgC3HTL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Mar 2020 03:19:11 -0400
+Received: by mail-lf1-f68.google.com with SMTP id t16so12402773lfl.2;
+        Mon, 30 Mar 2020 00:19:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Z+mJEjSfvlZ8eVkOaUf8bdXaxlPzn5EXb7TwUHOw3sE=;
-        b=byT58HNqv/UmMLjhy8Lje7GGwT6k1BATM9vdYVxqklq8KNwM5gpRiaFPgeKpLDSxX7
-         xYDsNU+1egnAeELdEgjHMKknMFSk6xmoTbTWGRlUHnJW6g+awkBAx0vw8DPpAWmnINUY
-         AeNQZgwrE+Y54Du17o7rsd7wuxTxIXRVh8RTFC3lDloW5CEvN+o4d5kGvoZRtyCNZIxr
-         ZZcujOCMVHbJRkhzdtaz/E94i+79dqktH1ONqHBx6h9NhF5sjfOy9BpPx310BKVWFv+q
-         Z/BFVB9CbYqwxe9TdHiWRxAeY51bwjbOi3E00kp+QlKsDoo95ZGC35pAv2nZcPxRoHCv
-         8Oww==
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=bCtjkH9GNCfz9ry2jRL1x5QjfVMjTIj52PFOHN7SRd8=;
+        b=bbyRyf05BpbFf0kyMhkwZmR+bQoI3hNyDydtDNkAfsxRFXy5LK9MzcCbssK7+vQ0Sl
+         Vb0Qucj09Cyvm4YmtGaxQ9fD5ZVnkCQiDjkBt7Uaap5IpHiy4pxqFTwQVe+6DeiF7OFQ
+         7FdMGFlbk/jd/wfj/e3uMgizPy74ZU0IoBWD1eILAvTQzXUEIPiQ8wQClkehrczRnl6x
+         j6p6d0pIIouCpEkx64rEhUxhGqABgl3v7uzUGoPPA70lB/57D/J0OYhMAnRWyTe8FI3+
+         6S1HvM8pVrM6DXKBSa1DqOP2w7aAbGTxOQJJ0a2SVJ5bFBDn0OZVF0iNkGD9AocFeaBz
+         iypg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Z+mJEjSfvlZ8eVkOaUf8bdXaxlPzn5EXb7TwUHOw3sE=;
-        b=Qc/Jg0/9DGaa2gH6/zwZTN6nAHe/ptXy6uATpC7HV8yQGZLcqTlJvgD56nkrdEnxA6
-         Xyy+Zt2EcNeDR32sLU4/x823Pn5tdfGnFRUY706aEnlIciTTh2TyzZpmbTjNmYMt+Ixo
-         2dLPr4n5ZtqBJCDf5Frl3HauLavtRTnwljss2LumH7icVaIUcnXPKIAobiYJuCaFKWtt
-         q85JI5H/Zz6XYi48AQY4ZCM7oIKCgaTXQjWlXRdJ2JYb30ByVrZve61JG7AqVyVDNMeH
-         kOTZvHepcsIH/b8Tsw4+O4OjKGUlO2WGNhjGZpOo/vZJSqIJMQn7tMZc9XAN6tah17Lh
-         +Vgw==
-X-Gm-Message-State: ANhLgQ1NFakV9tXgawMaTNPhTw+5JHxg+ktO2GJ3yRTZJTJyVOxGPY9N
-        3sJ/G7UrFioL592fLjhYwDeae2+S/bY8Z3FAf7Nz9w==
-X-Google-Smtp-Source: ADFU+vtTKfKSpGioxrZp10waa2K1Q/h65CWU+rx0AAwGswXwD7LmfS9EMe9t45crVH2mOH0Mug2oxl9z+HcQ+kRTO/I=
-X-Received: by 2002:a5d:8d89:: with SMTP id b9mr9550859ioj.156.1585550378973;
- Sun, 29 Mar 2020 23:39:38 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=bCtjkH9GNCfz9ry2jRL1x5QjfVMjTIj52PFOHN7SRd8=;
+        b=iCthFczeJtFXM+vrH/k1h+Rks3LJXcRzkON9EgzeSGc6mdvcvOg+7D1IpEU/5v/VZm
+         zcLpqXH64l0AqebylZ7Rs19ATqZbbyChLDLMFWSadmTSXhrslaFOu9//OBOXgfzfzERf
+         5EGCM2T3DpJCBxX7BLu5CLMzoWfJcIFTqsSj3YUyN4d+qAfhdFsRP7GSwMuknL7shBpm
+         RTaEuhZZ5emqRVY6hIMu7MG3eUe+3vuRcSNkGVqcxwjVWpoQyLsLDX+GVmAw7OHwrnsB
+         Kv+X3mAjLtBGgHd2rypzKO55l+QJ+KZmzxAbomifUU3bjFkM+eX7WAeajSVccJkzBLML
+         pKug==
+X-Gm-Message-State: AGi0PuY4ubftoCT7Oe/D3vswsQ2C1nl7sv62kR92l5F/1zOfOT1v5Nqs
+        qU9gzQb0i7B4nvIuth0Y5K57fKucMI8=
+X-Google-Smtp-Source: APiQypKDOw4DDcdFxkBABC5MdEF6InHqmuu0DsExWRTx5Y98zemlgQrsKSbbIl2MSB+82j/EqoKHuw==
+X-Received: by 2002:a19:f20c:: with SMTP id q12mr6481954lfh.34.1585552749461;
+        Mon, 30 Mar 2020 00:19:09 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id g8sm7390070ljl.45.2020.03.30.00.19.07
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 30 Mar 2020 00:19:08 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Michael Grzeschik <mgr@pengutronix.de>
+Cc:     lars@metafoo.de, alexandru.Ardelean@analog.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, bigeasy@linutronix.de,
+        m.olbrich@pengutronix.de, kernel@pengutronix.de
+Subject: Re: [PATCH] usb: dwc3: gadget: don't dequeue requests on already disabled endpoints
+In-Reply-To: <20200329190244.GK27849@pengutronix.de>
+References: <dc52d6a0-12ed-a34c-01c4-0fc5ccbf7b1d@metafoo.de> <20200327084302.606-1-m.grzeschik@pengutronix.de> <875zeokhoa.fsf@kernel.org> <20200329190244.GK27849@pengutronix.de>
+Date:   Mon, 30 Mar 2020 10:18:57 +0300
+Message-ID: <87sghq2tum.fsf@kernel.org>
 MIME-Version: 1.0
-References: <20200324071030.19801-1-peter.chen@nxp.com> <20200324071030.19801-2-peter.chen@nxp.com>
-In-Reply-To: <20200324071030.19801-2-peter.chen@nxp.com>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Mon, 30 Mar 2020 14:39:28 +0800
-Message-ID: <CAL411-oMsKDFjtcwMSKURuHgPYjPoHVzdHdaue_v+JTcNayBxA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] doc: dt-binding: cdns-salvo-phy: add binding doc
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     robh+dt@kernel.org, "ABRAHAM, KISHON VIJAY" <kishon@ti.com>,
-        devicetree@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        jun.li@nxp.com, linux-imx@nxp.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->
-> Add Cadence SALVO PHY binding doc, this PHY is a legacy module,
-> and is only used for USB3 and USB2.
->
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> ---
-> Changes for v3:
-> - Fix more schema errors
->
->  .../bindings/phy/cdns,salvo-phy.yaml          | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
->
-> diff --git a/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml b/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
-> new file mode 100644
-> index 000000000000..a36e21e1808c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
-> @@ -0,0 +1,53 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright (c) 2020 NXP
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/phy/cdns,salvo-phy.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Cadence SALVO PHY
-> +
-> +maintainers:
-> +  - Peter Chen <peter.chen@nxp.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nxp,salvo-phy
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: salvo_phy_clk
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +    description: phandle to the associated power domain
-> +
-> +  "#phy-cells":
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "#phy-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/firmware/imx/rsrc.h>
-> +
-> +    usb3phy: usb3-phy@5B160000 {
-> +        compatible = "nxp,salvo-phy";
-> +        reg = <0x5B160000 0x40000>;
-> +        clocks = <&usb3_lpcg 4>;
-> +        clock-names = "salvo_phy_clk";
-> +        power-domains = <&pd IMX_SC_R_USB_2_PHY>;
-> +        #phy-cells = <0>;
-> +    };
-> --
-> 2.17.1
->
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-A gental ping :)
 
-Peter
+Hi,
+
+Michael Grzeschik <mgr@pengutronix.de> writes:
+>> > dwc3_gadget_ep_disable gets called before the last request gets
+>> > dequeued.
+>> >
+>> > In __dwc3_gadget_ep_disable all started, pending and cancelled
+>> > lists for this endpoint will call dwc3_gadget_giveback in
+>> > dwc3_remove_requests.
+>> >
+>> > After that no list containing the afterwards dequed request,
+>> > therefor it is not necessary to run the dequeue routine.
+>> >
+>> > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>> > ---
+>> > @Lars-Peter Clausen:
+>> >
+>> > This patch addresses the case that not queued requests get dequeued.
+>> > The only case that this happens seems on disabling the gadget.
+>> >
+>> >  drivers/usb/dwc3/gadget.c | 3 +++
+>> >  1 file changed, 3 insertions(+)
+>> >
+>> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> > index 9a6f741d1db0dc..5d4fa8d6c93e49 100644
+>> > --- a/drivers/usb/dwc3/gadget.c
+>> > +++ b/drivers/usb/dwc3/gadget.c
+>> > @@ -1609,6 +1609,9 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep =
+*ep,
+>> >=20=20
+>> >  	trace_dwc3_ep_dequeue(req);
+>> >=20=20
+>> > +	if (!(dep->flags & DWC3_EP_ENABLED))
+>> > +		return 0;
+>>=20
+>> which driver is trying to call dequeue after the endpoint is disabled?
+>> Got some tracepoints of the problem happening?
+>
+> I see the case when using uvc-gadget.
+>
+> Look into uvc_v4l2_release in uvc_v4l2.c:
+>
+> uvc_function_disconnect
+>    composite_disconnect
+>       reset_config
+>          uvc_function_disable->usb_ep_disable
+>
+> uvcg_video_enable
+>    usb_ep_dequeue
+>       dwc3_gadget_ep_dequeue
+
+Oh, I see what you mean. We get a disconnect, which disables the
+endpoints, which forces all requests to be dequeued. Now I remember why
+this exists: we giveback the requests from disconnect because not all
+gadget drivers will call usb_ep_dequeue() if simply told about the
+disconnect. Then UDC drivers have to be a little more careful and make
+sure that all requests are givenback.
+
+In any case, why is it a problem to call usb_ep_dequeue()? Is it only
+because of that dev_err()? We could just remove that message,
+really. Eventually, I want to move more of this logic into UDC core so
+udc drivers can be simplified. For that work, though, first we would
+have to add a "generic" struct usb_ep_hw implementation and manage list
+of requests as part of UDC core as well.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6BnWQACgkQzL64meEa
+mQYDLg/+Nl6hQ4UQ27HfPic3YXL1ZnCNM6mz7wzJQSaMtKRf6Ts9LWGv2sroQzQI
+Q5oJ4EOVsl04JAlM05oEj6HaQipAVnspcFq4kgvEr8kX62j+5Q0eVV60BmVZehCm
+msnyQabelcTAT8U+YG5QgkWis2T3qt/alBg5RRjmh/e+Uu3Ivl6U3NoMapWxOuJR
+IsOQTjQy4gSM9p95/P/YimxnYlv18hSFmqliJAmpGSt0KtOwVaNeNCDL6bh1H5O/
+OjJ0z2ouEBUP8H9GSaZ6E16DJcGgqSC+EPek0Lw1BU88cwZEPRN4Fq0k+Kd1oUHE
+KyeQ3QYEdJeWPEZSpOe19IbegDspU0YpQc6EGdFTQeOdCsW6J5aJ7tCXauEwq8Yn
+mT4YXSWORoYnbbMMqLTKishui5WD53zPf/mVbs5muQ7eiJ6hZnX0t9taFOvW7SBk
+Oc//1NqpF5ApsmOTKLds7j4sHdfJ5qM3ZVMeDdE06VLQJLq/2pQIU0MYiblE9Q8y
+CjcWIti780ZUuUDwKQCDC1/P7j281VSv3VtYDxKNwf618dBQM2//D/3kaQzKbA/R
+akHfx3IaCxGiI0+XbsGBRd7KpalR1UALnJKCgaJEvfocCyy2RB/u/h9RrmivUnk7
+YgueD6QLQcYRAns5QAFlJy+Vw5V+BadBwygryOTXQV2Pc2wNF08=
+=kwrC
+-----END PGP SIGNATURE-----
+--=-=-=--
