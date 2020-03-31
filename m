@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF8319A291
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 01:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C23D19A292
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 01:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731554AbgCaXhj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S1731556AbgCaXhj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Tue, 31 Mar 2020 19:37:39 -0400
-Received: from mail-gateway-shared02.cyon.net ([194.126.200.224]:49896 "EHLO
+Received: from mail-gateway-shared02.cyon.net ([194.126.200.224]:49902 "EHLO
         mail-gateway-shared02.cyon.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731511AbgCaXhi (ORCPT
+        by vger.kernel.org with ESMTP id S1731545AbgCaXhi (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 19:37:38 -0400
 Received: from s013.cyon.net ([149.126.4.22])
         by mail-gateway-shared02.cyon.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
         (Exim)
         (envelope-from <public+bounce-silo.slz.hanselmann.tv-hansmi@hansmi.ch>)
-        id 1jJQRq-00010N-2q
-        for linux-usb@vger.kernel.org; Wed, 01 Apr 2020 01:37:36 +0200
-Received: from [10.20.10.232] (port=36156 helo=mail.cyon.ch)
+        id 1jJQRq-00010S-HY
+        for linux-usb@vger.kernel.org; Wed, 01 Apr 2020 01:37:37 +0200
+Received: from [10.20.10.233] (port=39918 helo=mail.cyon.ch)
         by s013.cyon.net with esmtpa (Exim 4.93)
         (envelope-from <public+bounce-silo.slz.hanselmann.tv-hansmi@hansmi.ch>)
-        id 1jJQRo-000qJk-SO; Wed, 01 Apr 2020 01:37:32 +0200
+        id 1jJQRp-000qKH-6I; Wed, 01 Apr 2020 01:37:33 +0200
 Received: from hansmi by silo.slz.hanselmann.tv with local (Exim 4.92)
         (envelope-from <hansmi@silo.slz.hanselmann.tv>)
-        id 1jJQRo-00086J-Ir; Tue, 31 Mar 2020 23:37:32 +0000
+        id 1jJQRo-00086O-S7; Tue, 31 Mar 2020 23:37:32 +0000
 From:   Michael Hanselmann <public@hansmi.ch>
 To:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>
 Cc:     Michael Hanselmann <public@hansmi.ch>,
         Michael Dreher <michael@5dot1.de>,
         Jonathan Olds <jontio@i4free.co.nz>
-Subject: [PATCH v2 4/6] USB: serial: ch341: Name prescaler, divisor registers
-Date:   Tue, 31 Mar 2020 23:37:20 +0000
-Message-Id: <65cfdf4a0600e86e89b3a3fb839e733ecebee688.1585697281.git.public@hansmi.ch>
+Subject: [PATCH v2 5/6] USB: serial: ch341: Compute minimum baud rate
+Date:   Tue, 31 Mar 2020 23:37:21 +0000
+Message-Id: <55c53ab4650ecabd1a6cd619ec72eed2e00d5dd2.1585697281.git.public@hansmi.ch>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1585697281.git.public@hansmi.ch>
 References: <cover.1585697281.git.public@hansmi.ch>
@@ -50,58 +50,44 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add constants for the prescaler and divisor registers.
+The minimum baud rate was hardcoded, not computed. A patch later in the
+series will make use of the minimum baud rate as well.
 
-The 0x25 register is only used by CH341 chips before version 0x30 and is
-involved in configuring the line control parameters. It's not known to
-the author whether there any such chips in the wild, and the driver
-never supported them (other registers are also treated differently). The
-alternative would've been to not set the register, but that may have
-unintended effects.
+The (1 + ((x - 1) / y)) pattern is to force rounding up (mathematically
+the minimum rate is about 45.78bps).
 
 Signed-off-by: Michael Hanselmann <public@hansmi.ch>
 ---
- drivers/usb/serial/ch341.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ drivers/usb/serial/ch341.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-index 67a5d4c3df42..9407e12d9fbc 100644
+index 9407e12d9fbc..c820772e6a07 100644
 --- a/drivers/usb/serial/ch341.c
 +++ b/drivers/usb/serial/ch341.c
-@@ -61,7 +61,11 @@
- #define CH341_REQ_MODEM_CTRL   0xA4
+@@ -147,6 +147,8 @@ static int ch341_control_in(struct usb_device *dev,
  
- #define CH341_REG_BREAK        0x05
-+#define CH341_REG_PRESCALER    0x12
-+#define CH341_REG_DIVISOR      0x13
- #define CH341_REG_LCR          0x18
-+#define CH341_REG_LCR2         0x25
-+
- #define CH341_NBREAK_BITS      0x01
+ #define CH341_CLKRATE		48000000
+ #define CH341_CLK_DIV(ps, fact)	(1 << (12 - 3 * (ps) - (fact)))
++#define CH341_MIN_BPS \
++	(unsigned int)(1 + (((CH341_CLKRATE) - 1) / (CH341_CLK_DIV(0, 0) * 256)))
+ #define CH341_MIN_RATE(ps, fact) \
+ 	(CH341_CLKRATE / (CH341_CLK_DIV((ps), (fact)) * 256))
  
- #define CH341_LCR_ENABLE_RX    0x80
-@@ -294,11 +298,19 @@ static int ch341_set_baudrate_lcr(struct usb_device *dev,
+@@ -210,10 +212,10 @@ static int ch341_get_divisor(struct ch341_private *priv)
+ 	speed = priv->baud_rate;
+ 
+ 	/*
+-	 * Clamp to supported range, this makes the (ps < 0) and (div < 2)
+-	 * sanity checks below redundant.
++	 * Clamp to supported range, making the later range sanity checks
++	 * redundant.
  	 */
- 	val |= BIT(7);
+-	speed = clamp(speed, 46U, 3000000U);
++	speed = clamp(speed, CH341_MIN_BPS, 3000000U);
  
--	r = ch341_control_out(dev, CH341_REQ_WRITE_REG, 0x1312, val);
-+	r = ch341_control_out(dev, CH341_REQ_WRITE_REG,
-+			      CH341_REG_DIVISOR << 8 | CH341_REG_PRESCALER,
-+			      val);
- 	if (r)
- 		return r;
- 
--	r = ch341_control_out(dev, CH341_REQ_WRITE_REG, 0x2518, lcr);
-+	/*
-+	 * Chip versions before version 0x30 (read using
-+	 * CH341_REQ_READ_VERSION) used separate registers for line control.
-+	 * 0x30 and above use CH341_REG_LCR only.
-+	 */
-+	r = ch341_control_out(dev, CH341_REQ_WRITE_REG,
-+			      CH341_REG_LCR2 << 8 | CH341_REG_LCR, lcr);
- 	if (r)
- 		return r;
- 
+ 	if (priv->quirks & CH341_QUIRK_LIMITED_PRESCALER) {
+ 		/*
 -- 
 2.20.1
 
