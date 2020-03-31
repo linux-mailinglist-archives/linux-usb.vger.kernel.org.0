@@ -2,73 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E67D19A1AB
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 00:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A1319A1B1
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 00:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731319AbgCaWIm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Mar 2020 18:08:42 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:39603 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728428AbgCaWIm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 18:08:42 -0400
-Received: by mail-il1-f196.google.com with SMTP id r5so21071157ilq.6;
-        Tue, 31 Mar 2020 15:08:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zq6lnen4wO1ZG0dffCWm2RGQcT8LeYtwqJqjBTsJ3GA=;
-        b=eyOpYOkyi/Ki9Ol46+Ro1+utE0pwDMe/Audj+4uvgc3x2QJdsCilQ1CCRmNndpPbYD
-         SbvSaQSyEVAb7VRZkCXa3iHJfbrk0YOojzUIJHeWGs0o6YgZYtDNe1BBZ2GqDrDLKqQ5
-         Tc3wVk95vQ9UBnVf3lHIkcLnEU3a6pziU2qhzVmCGkUbMy3cT9RYAMtZNnoowKPy/Xp1
-         LC66DPB1l07Tw65eU4zijkZi0mOsRUd8AqI+ClRcXZgqUtxBq/G86kJWEMrhoKlIZIqJ
-         /MY77k3BQTFdwPW18mukPBKDpSuutPZmSDKkWsZAvfbkUG/ZjmTXWVYCNbSTRt5OlxBb
-         0kPQ==
-X-Gm-Message-State: ANhLgQ0v3lCgGRlAxJ7FPGDDlpT5gH5YY7rmQpVSuHyg/D9w1g3UgHFM
-        a2cWtcfpZDnECkPJHHRslA==
-X-Google-Smtp-Source: ADFU+vvsqcZ/8hm+2F9xJLmsIK4neA63BSqusqM0rClIuHLAaTmsTnIJm6Qo7foDMZxypZHs0knNlw==
-X-Received: by 2002:a92:7e0d:: with SMTP id z13mr18753339ilc.202.1585692521393;
-        Tue, 31 Mar 2020 15:08:41 -0700 (PDT)
-Received: from rob-hp-laptop ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id l3sm42738iob.31.2020.03.31.15.08.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2020 15:08:40 -0700 (PDT)
-Received: (nullmailer pid 2535 invoked by uid 1000);
-        Tue, 31 Mar 2020 22:08:39 -0000
-Date:   Tue, 31 Mar 2020 16:08:39 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     devicetree@vger.kernel.org, benjamin.gaignard@st.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: Re: [PATCH v2] dt-bindings: usb: dwc2: fix bindings for
- amlogic,meson-gxbb-usb
-Message-ID: <20200331220839.GA2373@bogus>
-References: <20200331083729.24906-1-narmstrong@baylibre.com>
+        id S1730589AbgCaWLK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 31 Mar 2020 18:11:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59302 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728428AbgCaWLK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 31 Mar 2020 18:11:10 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 207045] New: uvcvideo: Realtek USB Camera (0bda:579f) reports
+ wrong dwMaxVideoFrameSize
+Date:   Tue, 31 Mar 2020 22:11:09 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jucmeyer@ucsc.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-207045-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200331083729.24906-1-narmstrong@baylibre.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 31 Mar 2020 10:37:29 +0200, Neil Armstrong wrote:
-> The amlogic,meson-gxbb-usb compatible needs snps,dwc2 aswell like other
-> Amlogic SoC.
-> 
-> Fixes: f3ca745d8a0e ("dt-bindings: usb: Convert DWC2 bindings to json-schema")
-> Reviewed-by: Benjamin Gaignard <benjamin.gaignard@st.com>
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-> ---
->  Documentation/devicetree/bindings/usb/dwc2.yaml | 13 +++++--------
->  1 file changed, 5 insertions(+), 8 deletions(-)
-> 
+https://bugzilla.kernel.org/show_bug.cgi?id=207045
 
-Applied, thanks.
+            Bug ID: 207045
+           Summary: uvcvideo: Realtek USB Camera (0bda:579f) reports wrong
+                    dwMaxVideoFrameSize
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: v5.5
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: jucmeyer@ucsc.edu
+        Regression: No
 
-Rob
+The integrated webcam on the Razer Blade (2017) does not work.
+
+I found this thread from 2014 having issues with the same webcam, but it's
+unresolved: https://www.spinics.net/lists/linux-media/msg73476.html
+
+At first, I turned on the trace parameter for the uvcvideo module and found the
+following logs as mentioned in the above thread first:
+
+[   80.490256] uvcvideo: Frame complete (FID bit toggled).
+[   80.490262] uvcvideo: frame 2080 stats: 0/0/1 packets, 0/0/0 pts (!early
+!initial), 0/1 scr, last pts/stc/sof 0/2069725020/32605
+[   80.490264] uvcvideo: Marking buffer as bad (error bit set).
+[   80.490606] uvcvideo: Frame complete (EOF found).
+[   80.490942] uvcvideo: Marking buffer as bad (error bit set).
+[   80.490947] uvcvideo: Dropping payload (out of sync).
+[   80.492920] uvcvideo: Marking buffer as bad (error bit set).
+
+After more investigation, I found this line at the end of uvc_video_decode_bulk
+that was causing the problem:
+
+if (buf->bytesused == stream->queue.buf_used ||
+  stream->bulk.payload_size == stream->bulk.max_payload_size) {
+   // assume end of frame
+}
+
+I also ran a USBMon on the webcam and decoded it using the python script in the
+thread linked above. This yielded the following setup URB:
+
+bmHint                         0x01
+bFormatIndex                      1
+bFrameIndex                       1
+dwFrameInterval              333333
+wKeyFrameRate                     0
+wPFrameRate                       0
+wCompQuality                      0
+wCompWindowSize                   0
+wDelay                           32
+dwMaxVideoFrameSize          614400
+dwMaxPayloadTransferSize     119296
+
+I also calculated the size of a video frame by adding up the lengths of each
+URB sent. So, after this, it sends the UVC header, which looks correct:
+
+0c8d6018 3bbcfa9b    .`.;¼ú›
+3cbc3304 727a7082    <¼3.rzp‚
+717c717d 6f7e7089    q|q}o~p‰
+6e816f89 6e826e88    no‰n‚nˆ
+
+In total sends 37 16384 byte URBs and one 8264 byte URB or 614472 bytes total
+(greater than the 614400 specified in the URB by 72 bytes). I tried removing
+the second condition from the if statement above and making it consider the end
+of frame based on finding a URB with size less than dwMaxVideoFrameSize and
+that seemed to change the problem at least.
+
+Now, it was overflowing the V4L plane size which was set to 614400. It seems
+this is specified somewhere in uvc_queue_setup:
+
+struct uvc_video_queue *queue = vb2_get_drv_priv(vq);
+struct uvc_streaming *stream;
+unsigned int size;
+switch (vq->type) {
+case V4L2_BUF_TYPE_META_CAPTURE:
+        size = UVC_METADATA_BUF_SIZE;
+        break;
+
+default:
+        stream = uvc_queue_to_stream(queue);
+        size = stream->ctrl.dwMaxVideoFrameSize; // + 72
+        break;
+}
+
+I'm not really sure where to go from here. It's not always 72 bytes over
+either. I've found that if I switch the resolution/format, it can be a
+different number.
+
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
