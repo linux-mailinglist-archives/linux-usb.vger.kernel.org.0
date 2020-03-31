@@ -2,178 +2,192 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A4C199840
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 16:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C10199864
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 16:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730366AbgCaORg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Mar 2020 10:17:36 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:35115 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1730358AbgCaORg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 10:17:36 -0400
-Received: (qmail 29176 invoked by uid 500); 31 Mar 2020 10:17:35 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 31 Mar 2020 10:17:35 -0400
-Date:   Tue, 31 Mar 2020 10:17:35 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     John Donnelly <John.P.Donnelly@Oracle.com>
-cc:     linux-usb@vger.kernel.org
-Subject: Re: ehci-pci : WARNING: CPU: 0 PID: 347 at kernel/dma/direct.c:34
-In-Reply-To: <eefd3438-69a5-6c08-1aca-7705f69cd9d0@Oracle.com>
-Message-ID: <Pine.LNX.4.44L0.2003311000010.27552-100000@netrider.rowland.org>
+        id S1731034AbgCaOZy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Mar 2020 10:25:54 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:39064 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729891AbgCaOZx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 10:25:53 -0400
+Received: by mail-wm1-f68.google.com with SMTP id e9so2937828wme.4
+        for <linux-usb@vger.kernel.org>; Tue, 31 Mar 2020 07:25:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=8pzPGR9a3649MW/xsbMSg19q7qbk+CNuP6wfeOC/1Rg=;
+        b=c2IBWf8k098JffO/t5dWCZxHF8IJUQwiBMNsJg+E7ja61G7uhjuBrFyF6mvzweCBv4
+         iP0BNZ4ZNXnWLiALRL2slSgGE+g6Fisz0M58xJUTW2IBpbam37tZhyjWWICdlW9KIKHk
+         IWM3jAHEFQd6KiPuAxRcttCzh+Z2+PFOZXCyEfQ/3MOSU2deyFVuTqsoWRJvg8IwBKjC
+         sXwDYu4OxiUiZCq3JxW+M4ZPWj6xvRtsHY+m26uGZyjwtw/dAeu8+x6xhAso/ycOdrGC
+         epV2nQDMvWC7mfc3UVSnqYP8kbpHtWRD32w+UCDN+HGPEUMjd5HMTrWhbimWc+OLiFTC
+         gMzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=8pzPGR9a3649MW/xsbMSg19q7qbk+CNuP6wfeOC/1Rg=;
+        b=MM59Ww9N3FL4rRioLS9FpyzscgmfFoULPH+ydeSQtbE58R4I6Ld5rQN2F3JWxvbeYv
+         1CUBS2kPCiC0mbp0+TGfU9peidMWfRNX2s3l3S9QD6usHxVQGzhqxl/LfesUDYMhoj5Y
+         Omk1Y8t7RTf8xGJIwQVDrrauMnwsYTVzB2LkVxvnVreOEQ+kTT3UNbgfFVXSNmY0/7dv
+         nV4vGevEg3msvkqSLn53ABmiys9nCkBSLFRh9LrJkqcgxMtLWgyOUMshvHm8qFn4XgGU
+         N71/P2wKF3/MR32nNvc5nzyFhUce4acCu2ET2cEhA5Ac3KaAvC+rpn3Kmweyn5xrN+YB
+         wh5g==
+X-Gm-Message-State: ANhLgQ1oi63VBqYqquamDVBk2Pmxp2DRSsliLRC6/jps6tp6dV1ee6Ox
+        FvFruj/KVRzxlsJwa9g2jQA=
+X-Google-Smtp-Source: ADFU+vtUNKX0jsZzUQk4/Hv1gTVYAvx9w9eW3oIFURLt+Hc/KDb6BCgw2gMYvIRBRTiY8b5S6r4xcA==
+X-Received: by 2002:a1c:81:: with SMTP id 123mr3537738wma.97.1585664751499;
+        Tue, 31 Mar 2020 07:25:51 -0700 (PDT)
+Received: from localhost (ipv6-519a10c4ee0c305c.ost.clients.hamburg.freifunk.net. [2a03:2267:4:0:519a:10c4:ee0c:305c])
+        by smtp.gmail.com with ESMTPSA id q8sm28652453wrc.8.2020.03.31.07.25.36
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 31 Mar 2020 07:25:42 -0700 (PDT)
+Date:   Tue, 31 Mar 2020 16:25:29 +0200
+From:   Oliver Graute <oliver.graute@gmail.com>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Oliver Graute <Oliver.Graute@KoCoConnector.com>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: using cdns3-imx driver on imx8qm
+Message-ID: <20200331142528.GA2246@portage>
+References: <20200326170109.GA28051@optiplex>
+ <20200327090554.GA31160@b29397-desktop>
+ <20200327095028.GA19809@ripley>
+ <20200327132153.GA31668@b29397-desktop>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200327132153.GA31668@b29397-desktop>
+X-URL:  https://raspberry.redbrain.me
+X-PGP-Key: https://raspberry.redbrain.me/production/impressum/pub_key.asc
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 30 Mar 2020, John Donnelly wrote:
+On 27/03/20, Peter Chen wrote:
+> On 20-03-27 10:50:28, Oliver Graute wrote:
+> > On 27/03/20, Peter Chen wrote:
+> > > On 20-03-26 18:01:09, Oliver Graute wrote:
+> > > > Hello,
+> > > > 
+> > > > What is the right way for using the new cdns3-imx glue usb driver on a
+> > > > imx8qm soc with linux-next. I added this snippet in imx8qm.dtsi and
+> > > > enabled the driver in the kernel configuration.
+> > > > 
+> > > 
+> > > Hi Oliver,
+> > > 
+> > > I just checked linux-next-0326, there is no imx8qm dtsi. 
+> > 
+> > I'am currently using this series on top of linux-next-0214.
+> > 
+> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpatchwork.kernel.org%2Fpatch%2F11248331%2F&amp;data=02%7C01%7Cpeter.chen%40nxp.com%7C1b6963823b924b76684908d7d2344976%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637208994318640157&amp;sdata=HGG4r65ROTeY54uQArcWTZGT9%2BLrr0kndwmDegULtDw%3D&amp;reserved=0
+> > 
+> > 
+> > > When I worked this driver, I use a internal version
+> > > based on v5.4, the dts layout is different with internal tree.
+> > 
+> > I looked also at:
+> > 
+> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fsource.codeaurora.org%2Fexternal%2Fimx%2Flinux-imx%2Ftree%2Farch%2Farm64%2Fboot%2Fdts%2Ffreescale%2Fimx8-ss-conn.dtsi%3Fh%3Dimx_5.4.3_2.0.0&amp;data=02%7C01%7Cpeter.chen%40nxp.com%7C1b6963823b924b76684908d7d2344976%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637208994318640157&amp;sdata=yTiMWh5BpWdtA%2B8Vy06KeCvg2jPzlgPOmKaM3fmK%2F6w%3D&amp;reserved=0
+> > 
+> > How do I adapt the usbotg3 for linux-next? I already ported some usb
+> > related dependencies from imx8-ss-conn.dtsi. But the cdns3 core driver
+> > is stucked at probe and currently I don't understand how the cdns3-imx glue
+> > layer comes into play.
+> > 
+> 
+> cdns3-imx is the parent device, the cdns3 core is the child device. The
+> example dts like below:
+> 
+> 	usb3_lpcg: clock-controller@5b280000 {
+> 		compatible = "fsl,imx8qxp-lpcg";
+> 		reg = <0x5b280000 0x10000>;
+> 		#clock-cells = <1>;
+> 		bit-offset = <0 4 16 20 24 28>;
+> 		clocks = <&clk IMX_SC_R_USB_2 IMX_SC_PM_CLK_PER>,
+> 			 <&clk IMX_SC_R_USB_2 IMX_SC_PM_CLK_MISC>,
+> 			 <&conn_ipg_clk>,
+> 			 <&conn_ipg_clk>,
+> 			 <&conn_ipg_clk>,
+> 			 <&clk IMX_SC_R_USB_2 IMX_SC_PM_CLK_MST_BUS>;
+> 		clock-output-names = "usb3_app_clk",
+> 				     "usb3_lpm_clk",
+> 				     "usb3_ipg_clk",
+> 				     "usb3_core_pclk",
+> 				     "usb3_phy_clk",
+> 				     "usb3_aclk";
+> 		power-domains = <&pd IMX_SC_R_USB_2_PHY>;
+> 	};
+> 
+> 	usbotg3: usb3@5b110000 {
+> 		compatible = "fsl,imx8qm-usb3";
+> 		#address-cells = <1>;
+> 		#size-cells = <1>;
+> 		ranges;
+> 		reg = <0x5B110000 0x10000>;
+> 		clocks = <&usb3_lpcg 1>,
+> 			 <&usb3_lpcg 0>,
+> 			 <&usb3_lpcg 5>,
+> 			 <&usb3_lpcg 2>,
+> 			 <&usb3_lpcg 3>;
+> 		clock-names = "usb3_lpm_clk", "usb3_bus_clk", "usb3_aclk",
+> 			"usb3_ipg_clk", "usb3_core_pclk";
+> 		assigned-clocks = <&clk IMX_SC_R_USB_2 IMX_SC_PM_CLK_PER>,
+> 			<&clk IMX_SC_R_USB_2 IMX_SC_PM_CLK_MISC>,
+> 			<&clk IMX_SC_R_USB_2 IMX_SC_PM_CLK_MST_BUS>;
+> 		assigned-clock-rates = <125000000>, <12000000>, <250000000>;
+> 		power-domains = <&pd IMX_SC_R_USB_2>;
+> 		status = "disabled";
+> 
+> 		usbotg3_cdns3: cdns3 {
+> 			compatible = "cdns,usb3";
+> 			#address-cells = <1>;
+> 			#size-cells = <1>;
+> 			interrupt-parent = <&gic>;
+> 			interrupts = <GIC_SPI 271 IRQ_TYPE_LEVEL_HIGH>,
+> 					<GIC_SPI 271 IRQ_TYPE_LEVEL_HIGH>,
+> 					<GIC_SPI 271 IRQ_TYPE_LEVEL_HIGH>;
+> 			interrupt-names = "host", "peripheral", "otg";
+> 			reg = <0x5B130000 0x10000>,     /* memory area for HOST registers */
+> 				<0x5B140000 0x10000>,   /* memory area for DEVICE registers */
+> 				<0x5B120000 0x10000>;   /* memory area for OTG/DRD registers */
+> 			reg-names = "xhci", "dev", "otg";
+> 			phys = <&usb3_phy>;
+> 			phy-names = "cdns3,usb3-phy";
+> 			status = "disabled";
+> 		};
+> 	};
 
-> The debug method produces the following:
-> 
-> iommu=on  ( no BCM is discovered )
-> 
-> [    9.911027] hub 4-0:1.0: state 7 ports 6 chg 0000 evt 0000
-> [    9.923028] usb 3-3: new high-speed USB device number 2 using xhci_hcd
-> [    9.950106] In hub_port_connect .. init
-> [    9.963879] usb 3-3: udev 2, busnum 3, minor = 257
-> [    9.963882] usb 3-3: New USB device found, idVendor=0424, 
-> idProduct=2660, bcdDevice= 8.01
-> [    9.978980] usb 3-3: New USB device strings: Mfr=0, Product=0, 
-> SerialNumber=0
-> [    9.994524] usb 3-3: usb_probe_device
-> [    9.994527] usb 3-3: configuration #1 chosen from 1 choice
-> [    9.994790] usb 3-3: adding 3-3:1.0 (config #1, interface 0)
-> [    9.994826] hub 3-3:1.0: usb_probe_interface
-> [    9.994828] hub 3-3:1.0: usb_probe_interface - got id
-> [    9.994831] hub 3-3:1.0: USB hub found
-> [   10.008224] hub 3-3:1.0: 2 ports detected
-> [   10.021669] hub 3-3:1.0: compound device; port removable status: FR
-> [   10.021671] hub 3-3:1.0: individual port power switching
-> [   10.021672] hub 3-3:1.0: individual port over-current protection
-> [   10.021674] hub 3-3:1.0: Single TT
-> [   10.021676] hub 3-3:1.0: TT requires at most 8 FS bit times (666 ns)
-> [   10.021678] hub 3-3:1.0: power on to power good time: 100ms
-> [   10.021753] hub 3-3:1.0: local power source is good
-> [   10.021872] hub 3-3:1.0: enabling power on all ports
-> [   10.022120] hub 2-1:1.0: state 7 ports 8 chg 0000 evt 0000
-> [   10.127115] hub 3-3:1.0: state 7 ports 2 chg 0000 evt 0000
-> [   10.327902] i8042: Can't read CTR while initializing i8042
-> 
-> 
-> Produces this configuration without the BCM devices :
-> 
-> 
-> lsusb -t
-> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
-> /:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/15p, 480M
->      |__ Port 3: Dev 2, If 0, Class=Hub, Driver=hub/2p, 480M
-> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
->      |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/8p, 480M
-> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
->      |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/6p, 480M
-> 
-> 
-> 
-> BCM is discovered  intel_iommu=off :
-> 
-> 
-> [    8.947539] usb 4-3: adding 4-3:1.0 (config #1, interface 0)
-> [    8.947569] hub 4-3:1.0: usb_probe_interface
-> [    8.947571] hub 4-3:1.0: usb_probe_interface - got id
-> [    8.947574] hub 4-3:1.0: USB hub found
-> [    8.960496] usb 3-1: skipped 1 descriptor after interface
-> [    8.960499] usb 3-1: skipped 1 descriptor after interface
-> [    8.960562] hub 4-3:1.0: 2 ports detected
-> [    8.974067] usb 3-1: default language 0x0409
-> [    8.974074] hub 4-3:1.0: compound device; port removable status: FR
-> [    8.974075] hub 4-3:1.0: individual port power switching
-> [    8.974077] hub 4-3:1.0: individual port over-current protection
-> [    8.974079] hub 4-3:1.0: Single TT
-> [    8.974081] hub 4-3:1.0: TT requires at most 8 FS bit times (666 ns)
-> [    8.974083] hub 4-3:1.0: power on to power good time: 100ms
-> [    8.974157] hub 4-3:1.0: local power source is good
-> [    8.974259] hub 4-3:1.0: enabling power on all ports
-> [    8.979469] usb 3-1: udev 2, busnum 3, minor = 257
-> [    8.979473] usb 3-1: New USB device found, idVendor=03f0, 
-> idProduct=7029, bcdDevice= 0.02
-> [    8.994797] usb 3-1: New USB device strings: Mfr=1, Product=2, 
-> SerialNumber=0
-> [    9.010633] usb 3-1: Product: Virtual Keyboard
-> [    9.024416] usb 3-1: Manufacturer: BMC
-> [    9.037858] usb 3-1: usb_probe_device
-> [    9.037860] usb 3-1: configuration #1 chosen from 1 choice
-> [    9.039418] usb 3-1: adding 3-1:1.0 (config #1, interface 0)
-> [    9.041507] usb 3-1: adding 3-1:1.1 (config #1, interface 1)
-> [    9.076272] hub 4-3:1.0: state 7 ports 2 chg 0000 evt 0000
-> 
-> I am not accustomed to looking the USB Bus.port.dev mappings , obviously 
-> with BCM discovered there are 05 Bus instead of 4 .
-> 
-> /:  Bus 05.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
-> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/15p, 480M
->      |__ Port 3: Dev 2, If 0, Class=Hub, Driver=hub/2p, 480M
-> /:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=uhci_hcd/2p, 12M
->      |__ Port 1: Dev 2, If 0, Class=Human Interface Device, 
-> Driver=usbhid, 12M
->      |__ Port 1: Dev 2, If 1, Class=Human Interface Device, 
-> Driver=usbhid, 12M
-> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
->      |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/8p, 480M
-> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
->      |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/6p, 480M
+Hello Peter,
 
-It seems pretty clear that your system (or at least the BMC part)  
-doesn't work as intended when the iommu is turned on.
+thx for the dts example. Now I get "wait clkvld timeout" in
+"cdns_imx_noncore_init()" So USB3_SSPHY_STATUS register seems to be wrong.
 
-> Here are the pci mappings:
-> 
-> [    6.381615] input: BMC Virtual Keyboard  as 
-> /devices/pci0000:00/0000:00:1c.2/0000:01:00.4/usb3/3-1/3-1:1.0/0003:03F0:7029.0001/input/input1
-> [    6.463638] hid-generic 0003:03F0:7029.0001: input,hidraw0: USB HID 
-> v1.01 Keyboard [BMC Virtual Keyboard ] on usb-0000:01:00.4-1/input0
-> [    6.496589] input: BMC Virtual Keyboard  as 
-> /devices/pci0000:00/0000:00:1c.2/0000:01:00.4/usb3/3-1/3-1:1.1/0003:03F0:7029.0002/input/input2
-> [    6.529449] hid-generic 0003:03F0:7029.0002: input,hidraw1: USB HID 
-> v1.01 Mouse [BMC Virtual Keyboard ] on usb-0000:01:00.4-1/input1
-> [    6.563139] usbcore: registered new interface driver usbhid
-> [    6.580222] usbhid: USB HID core driver
+dmesg | grep imx 
+[    1.065445] cdns3-imx 5b110000.usb3: Adding to iommu group 0
+[    1.257309] imx-scu scu: NXP i.MX SCU Initialized
+[    1.275489] imx-scu-clk: probe of gpt0_clk failed with error -5
+[    1.291143] imx-scu-clk: probe of pwm_clk failed with error -22
+[    1.302517] imx-scu-clk: probe of lcd_clk failed with error -22
+[    1.341405] imx8qm-pinctrl scu:pinctrl: initialized IMX pinctrl driver
+[    3.029484] cdns3-imx 5b110000.usb3: wait clkvld timeout
+[    3.034891] cdns3-imx: probe of 5b110000.usb3 failed with error -110
+[    3.237393] sdhci-esdhc-imx 5b030000.mmc: Got CD GPIO
+[    3.242468] sdhci-esdhc-imx 5b030000.mmc: Got WP GPIO
+[    3.316687] imx8qxp-lpcg-clk 5a4a0000.clock-controller: ignoring dependency for device, assuming no driver
 
-I don't know why you call these "pci mappings".  They have nothing to 
-do with PCI, and the last two lines don't talk about mappings at all.
+Some Idea howto fix that?
 
-> The last activity done seen on both traces is :
-> 
->      "  enabling power on all ports  "
+Best regards,
 
-Why do you say this is the last activity seen on both traces?  In both
-of the log extracts you included above there are plenty of lines
-following those "enabling power" messages.
-
-> Is this when the BCM discovery is suppose to  occur ? In the function 
-> example is when the udev appears:
-> 
->     usb 3-1: udev 2, busnum 3, minor = 257
-
-The BCM discovery is supposed to occur at the time you see it in the 
-second log extract above.
-
-One thing I didn't notice before: With iommu=off, you get an entire new 
-USB host controller and bus.  It is called bus 3, and neither it nor 
-the 3-1 device (mouse and keyboard) is present when iommu=on.  In 
-fact, by comparing the listings you can see that buses 4 and 5 (with 
-iommu=off) are really the same as buses 3 and 4 (with iommu=on).
-
-I'd say that your BMC does not work with iommu=on, and it is that
-failure which causes these extra devices not to be discovered.  In
-fact, they appear not be real physical devices at all, but rather
-virtual devices created by the BMC firmware.
-
-If you want to find out why the BMC doesn't work with iommu=on, you 
-should ask the company that manufactured your computer's motherboard.  
-They are probably the only people who know the answer.
-
-Alan Stern
-
+Oliver
