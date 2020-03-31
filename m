@@ -2,271 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B761D199AE6
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 18:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41481199B0A
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 18:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730366AbgCaQHM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Mar 2020 12:07:12 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:44722 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730845AbgCaQHL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 12:07:11 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02VFlRFY004571;
-        Tue, 31 Mar 2020 16:07:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to;
- s=corp-2020-01-29; bh=4J3dLfsHmD7RfHP5l7UDiE2X8T66wQUJFnJqd7zHmnk=;
- b=n9Ons4+3h5IzDw2MoE6poLbUapsGJn6dJz06liEgwY5OfeX77KHFMnKUuIvr2ch47Uh+
- fZP4uiQJQZXStPxNolDPB+hAgguKVNZYJK2ucyX63bHYzsKeNwfPw4beA99Lji2R0rcN
- AFH/+UOa1LQcy56Q34Nmz/B50FuoJtAWdp0zfQ7RNqP3oj3CrtML8ZV0e6Jb4bE8zSn8
- ROaDVYZ3TDrmK2zNeAy64L68xuzgryZ6yXLh7WFaaUD1oLIv4ulk8hHIK8niwDntfJYm
- VCBpzCI0n50BFJVTBW4BZZoh5VEKJA2BqxVjQVpxtB4xKrvqsc9cwtxjqRy7XLp/VBT/ tQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 303yun34va-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Mar 2020 16:07:08 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02VG71HL096213;
-        Tue, 31 Mar 2020 16:07:07 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 302g2ecgy3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 31 Mar 2020 16:07:07 +0000
-Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 02VG751L019190;
-        Tue, 31 Mar 2020 16:07:05 GMT
-Received: from dhcp-10-39-193-97.vpn.oracle.com (/10.39.193.97)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 31 Mar 2020 09:07:05 -0700
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 11.5 \(3445.9.1\))
-Subject: Re: ehci-pci : WARNING: CPU: 0 PID: 347 at kernel/dma/direct.c:34
-From:   John Donnelly <john.p.donnelly@oracle.com>
-In-Reply-To: <Pine.LNX.4.44L0.2003311000010.27552-100000@netrider.rowland.org>
-Date:   Tue, 31 Mar 2020 11:07:02 -0500
-Cc:     linux-usb@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <4BC4ADAB-FB33-4172-90EC-3EE38A3E3DE8@oracle.com>
-References: <Pine.LNX.4.44L0.2003311000010.27552-100000@netrider.rowland.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-X-Mailer: Apple Mail (2.3445.9.1)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9576 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0 mlxscore=0
- adultscore=0 phishscore=0 bulkscore=0 suspectscore=4 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2003310144
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9576 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 priorityscore=1501 mlxlogscore=999 bulkscore=0
- suspectscore=4 mlxscore=0 spamscore=0 impostorscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2003310143
+        id S1731127AbgCaQL7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Mar 2020 12:11:59 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:45112 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730706AbgCaQL6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 12:11:58 -0400
+Received: by mail-pf1-f195.google.com with SMTP id r14so8052788pfl.12
+        for <linux-usb@vger.kernel.org>; Tue, 31 Mar 2020 09:11:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=HGjePE0GSqbKz6aKbzU/yxb5OZwh8Nq086ecagG4P/g=;
+        b=FXZX8UehOEz9Kni4GELnb/5/v6Qj6xwLNsOHkCFRAvqmZJFoMimJsYJGlR8qWuT3JP
+         /jiEuMvyz9s8viO8XrGdI9iGKa+z0LkGhzTuGioisjEORu/Jtd6YUUxEyaeT+fkbg+AI
+         hklRTmvh3uljXeEwgl9dNw7H3nNlcCzTsAfVo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=HGjePE0GSqbKz6aKbzU/yxb5OZwh8Nq086ecagG4P/g=;
+        b=YWGKTjX/vcUXBUYUH0+wOucDtAiHtzwShIeGB4Hr3B5Ty77Cx1MNGHSlnichpqyDU8
+         zgg1d5rcML6E4Jyg424V+HWMUkafKI0Jleab32f65WUcV77CqiAX9XaktAirEfCnMHMN
+         V9dEh9KWcZvGP5e5Mu3yyFkUDCSef2WnyS8Q/jL97Z9v3gVK07tL5mLXjLQiu/2CW1Sr
+         xvWfmK+W9Pt6mDwF2xSEgxLmSoZCMhpbm1G4fDJwaCSBkFjidXQBn3b7Z78Tn9GekDC5
+         kuRE+MLupY0ScYWaGsU6OQ/xAORP8iyaPJ2BcxisqERNUTONntK4+s34hoIl2WDQY53t
+         4R/g==
+X-Gm-Message-State: ANhLgQ2EvfIEEdNTdCuenZDf+zNSwfKbktvRPkN8hZpAgRnCbLavZOkZ
+        DjB3p0yKMq7N76NlBK3cM3E7qg==
+X-Google-Smtp-Source: ADFU+vtfSPh8HumDN4cjkDTaweYzwxq2FI8K3EiPnKxEhov9TRTsTgaPcIbaDj4F/2NhI4oOVc9T0Q==
+X-Received: by 2002:a62:7c15:: with SMTP id x21mr19812360pfc.132.1585671117785;
+        Tue, 31 Mar 2020 09:11:57 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id z7sm12830932pfz.24.2020.03.31.09.11.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Mar 2020 09:11:57 -0700 (PDT)
+Date:   Tue, 31 Mar 2020 09:11:55 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     "Sandeep Maheswaram (Temp)" <sanm@codeaurora.org>
+Cc:     Felipe Balbi <balbi@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+Subject: Re: [PATCH v6 2/4] usb: dwc3: qcom: Add interconnect support in dwc3
+ driver
+Message-ID: <20200331161155.GD199755@google.com>
+References: <1585302203-11008-1-git-send-email-sanm@codeaurora.org>
+ <1585302203-11008-3-git-send-email-sanm@codeaurora.org>
+ <20200329171756.GA199755@google.com>
+ <87h7y62r28.fsf@kernel.org>
+ <20200330155038.GC199755@google.com>
+ <87zhbx1q6q.fsf@kernel.org>
+ <ec7e921a-45fe-c178-cc04-2a04dd4a75f5@codeaurora.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ec7e921a-45fe-c178-cc04-2a04dd4a75f5@codeaurora.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Mar 31, 2020 at 10:45:19AM +0530, Sandeep Maheswaram (Temp) wrote:
+> Hi,
+> 
+> On 3/31/2020 3:05 AM, Felipe Balbi wrote:
+> > Hi,
+> > 
+> > Matthias Kaehlcke <mka@chromium.org> writes:
+> > > > Matthias Kaehlcke <mka@chromium.org> writes:
+> > > > > > Add interconnect support in dwc3-qcom driver to vote for bus
+> > > > > > bandwidth.
+> > > > > > 
+> > > > > > This requires for two different paths - from USB master to
+> > > > > > DDR slave. The other is from APPS master to USB slave.
+> > > > > > 
+> > > > > > Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> > > > > > Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+> > > > > > Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> > > > > > ---
+> > > > > >   drivers/usb/dwc3/dwc3-qcom.c | 128 ++++++++++++++++++++++++++++++++++++++++++-
+> > > > > >   1 file changed, 126 insertions(+), 2 deletions(-)
+> > > > > > 
+> > > > > > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> > > > > > index 1dfd024..7e85fe6 100644
+> > > > > > --- a/drivers/usb/dwc3/dwc3-qcom.c
+> > > > > > +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> > > > > > 
+> > > > > > ...
+> > > > > > 
+> > > > > > +/* To disable an interconnect, we just set its bandwidth to 0 */
+> > > > > > +static int dwc3_qcom_interconnect_disable(struct dwc3_qcom *qcom)
+> > > > > > +{
+> > > > > > +	int ret;
+> > > > > > +
+> > > > > > +	ret = icc_set_bw(qcom->usb_ddr_icc_path, 0, 0);
+> > > > > > +	if (ret)
+> > > > > > +		return ret;
+> > > > > > +
+> > > > > > +	ret = icc_set_bw(qcom->apps_usb_icc_path, 0, 0);
+> > > > > > +	if (ret)
+> > > > > > +		goto err_reenable_memory_path;
+> > > > > > +
+> > > > > > +	return 0;
+> > > > > > +
+> > > > > > +	/* Re-enable things in the event of an error */
+> > > > > > +err_reenable_memory_path:
+> > > > > > +	ret = dwc3_qcom_interconnect_enable(qcom);
+> > > > > This overwrites the error that led to the execution of this code path.
+> > > > > The function should return original error, not the result of the
+> > > > > _interconnect_enable() call.
+> > > > > 
+> > > > > I saw Felipe queued the patch for v5.8. I think the main options to fix this
+> > > > > are:
+> > > > > 
+> > > > > - a v6 of this patch to replace v5 in Felipe's tree (which IIUC will be rebased
+> > > > >    anyway once there is a v5.7-rc)
+> > > > > - send the fix as a separate patch
+> > > > > - Felipe amends the patch in his tree
+> > > > > 
+> > > > > Felipe, what would work best for you?
+> > > > Let's go for a v6, which commits should I drop? I can't find anything
+> > > > related to $subject in my queue:
+> > > > 
+> > > > $ git --no-pager log --oneline HEAD ^linus/master -- drivers/usb/dwc3/dwc3-qcom.c
+> > > > 201c26c08db4 usb: dwc3: qcom: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+> > > I thought I saw a "queued for v5.8" message from you, but can't find that back.
+> > > I guess I saw the "queued" message for the "Add USB DWC3 support for SC7180"
+> > > series and thought it was for this one. Sorry for the confusion.
+> > no worries :-)
+> > 
+> Should I remove the ret from below line and send a new version?
+> +	ret = dwc3_qcom_interconnect_enable(qcom);
 
-
-> On Mar 31, 2020, at 9:17 AM, Alan Stern <stern@rowland.harvard.edu> =
-wrote:
->=20
-> On Mon, 30 Mar 2020, John Donnelly wrote:
->=20
->> The debug method produces the following:
->>=20
->> iommu=3Don  ( no BCM is discovered )
->>=20
->> [    9.911027] hub 4-0:1.0: state 7 ports 6 chg 0000 evt 0000
->> [    9.923028] usb 3-3: new high-speed USB device number 2 using =
-xhci_hcd
->> [    9.950106] In hub_port_connect .. init
->> [    9.963879] usb 3-3: udev 2, busnum 3, minor =3D 257
->> [    9.963882] usb 3-3: New USB device found, idVendor=3D0424,=20
->> idProduct=3D2660, bcdDevice=3D 8.01
->> [    9.978980] usb 3-3: New USB device strings: Mfr=3D0, Product=3D0,=20=
-
->> SerialNumber=3D0
->> [    9.994524] usb 3-3: usb_probe_device
->> [    9.994527] usb 3-3: configuration #1 chosen from 1 choice
->> [    9.994790] usb 3-3: adding 3-3:1.0 (config #1, interface 0)
->> [    9.994826] hub 3-3:1.0: usb_probe_interface
->> [    9.994828] hub 3-3:1.0: usb_probe_interface - got id
->> [    9.994831] hub 3-3:1.0: USB hub found
->> [   10.008224] hub 3-3:1.0: 2 ports detected
->> [   10.021669] hub 3-3:1.0: compound device; port removable status: =
-FR
->> [   10.021671] hub 3-3:1.0: individual port power switching
->> [   10.021672] hub 3-3:1.0: individual port over-current protection
->> [   10.021674] hub 3-3:1.0: Single TT
->> [   10.021676] hub 3-3:1.0: TT requires at most 8 FS bit times (666 =
-ns)
->> [   10.021678] hub 3-3:1.0: power on to power good time: 100ms
->> [   10.021753] hub 3-3:1.0: local power source is good
->> [   10.021872] hub 3-3:1.0: enabling power on all ports
->> [   10.022120] hub 2-1:1.0: state 7 ports 8 chg 0000 evt 0000
->> [   10.127115] hub 3-3:1.0: state 7 ports 2 chg 0000 evt 0000
->> [   10.327902] i8042: Can't read CTR while initializing i8042
->>=20
->>=20
->> Produces this configuration without the BCM devices :
->>=20
->>=20
->> lsusb -t
->> /:  Bus 04.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/6p, =
-5000M
->> /:  Bus 03.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/15p, =
-480M
->>     |__ Port 3: Dev 2, If 0, Class=3DHub, Driver=3Dhub/2p, 480M
->> /:  Bus 02.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dehci-pci/2p, =
-480M
->>     |__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/8p, 480M
->> /:  Bus 01.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dehci-pci/2p, =
-480M
->>     |__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/6p, 480M
->>=20
->>=20
->>=20
->> BCM is discovered  intel_iommu=3Doff :
->>=20
->>=20
->> [    8.947539] usb 4-3: adding 4-3:1.0 (config #1, interface 0)
->> [    8.947569] hub 4-3:1.0: usb_probe_interface
->> [    8.947571] hub 4-3:1.0: usb_probe_interface - got id
->> [    8.947574] hub 4-3:1.0: USB hub found
->> [    8.960496] usb 3-1: skipped 1 descriptor after interface
->> [    8.960499] usb 3-1: skipped 1 descriptor after interface
->> [    8.960562] hub 4-3:1.0: 2 ports detected
->> [    8.974067] usb 3-1: default language 0x0409
->> [    8.974074] hub 4-3:1.0: compound device; port removable status: =
-FR
->> [    8.974075] hub 4-3:1.0: individual port power switching
->> [    8.974077] hub 4-3:1.0: individual port over-current protection
->> [    8.974079] hub 4-3:1.0: Single TT
->> [    8.974081] hub 4-3:1.0: TT requires at most 8 FS bit times (666 =
-ns)
->> [    8.974083] hub 4-3:1.0: power on to power good time: 100ms
->> [    8.974157] hub 4-3:1.0: local power source is good
->> [    8.974259] hub 4-3:1.0: enabling power on all ports
->> [    8.979469] usb 3-1: udev 2, busnum 3, minor =3D 257
->> [    8.979473] usb 3-1: New USB device found, idVendor=3D03f0,=20
->> idProduct=3D7029, bcdDevice=3D 0.02
->> [    8.994797] usb 3-1: New USB device strings: Mfr=3D1, Product=3D2,=20=
-
->> SerialNumber=3D0
->> [    9.010633] usb 3-1: Product: Virtual Keyboard
->> [    9.024416] usb 3-1: Manufacturer: BMC
->> [    9.037858] usb 3-1: usb_probe_device
->> [    9.037860] usb 3-1: configuration #1 chosen from 1 choice
->> [    9.039418] usb 3-1: adding 3-1:1.0 (config #1, interface 0)
->> [    9.041507] usb 3-1: adding 3-1:1.1 (config #1, interface 1)
->> [    9.076272] hub 4-3:1.0: state 7 ports 2 chg 0000 evt 0000
->>=20
->> I am not accustomed to looking the USB Bus.port.dev mappings , =
-obviously=20
->> with BCM discovered there are 05 Bus instead of 4 .
->>=20
->> /:  Bus 05.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/6p, =
-5000M
->> /:  Bus 04.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dxhci_hcd/15p, =
-480M
->>     |__ Port 3: Dev 2, If 0, Class=3DHub, Driver=3Dhub/2p, 480M
->> /:  Bus 03.Port 1: Dev 1, Class=3Droot_hub, Driver=3Duhci_hcd/2p, 12M
->>     |__ Port 1: Dev 2, If 0, Class=3DHuman Interface Device,=20
->> Driver=3Dusbhid, 12M
->>     |__ Port 1: Dev 2, If 1, Class=3DHuman Interface Device,=20
->> Driver=3Dusbhid, 12M
->> /:  Bus 02.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dehci-pci/2p, =
-480M
->>     |__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/8p, 480M
->> /:  Bus 01.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dehci-pci/2p, =
-480M
->>     |__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/6p, 480M
->=20
-> It seems pretty clear that your system (or at least the BMC part) =20
-> doesn't work as intended when the iommu is turned on.
->=20
->> Here are the pci mappings:
->>=20
->> [    6.381615] input: BMC Virtual Keyboard  as=20
->> =
-/devices/pci0000:00/0000:00:1c.2/0000:01:00.4/usb3/3-1/3-1:1.0/0003:03F0:7=
-029.0001/input/input1
->> [    6.463638] hid-generic 0003:03F0:7029.0001: input,hidraw0: USB =
-HID=20
->> v1.01 Keyboard [BMC Virtual Keyboard ] on usb-0000:01:00.4-1/input0
->> [    6.496589] input: BMC Virtual Keyboard  as=20
->> =
-/devices/pci0000:00/0000:00:1c.2/0000:01:00.4/usb3/3-1/3-1:1.1/0003:03F0:7=
-029.0002/input/input2
->> [    6.529449] hid-generic 0003:03F0:7029.0002: input,hidraw1: USB =
-HID=20
->> v1.01 Mouse [BMC Virtual Keyboard ] on usb-0000:01:00.4-1/input1
->> [    6.563139] usbcore: registered new interface driver usbhid
->> [    6.580222] usbhid: USB HID core driver
->=20
-> I don't know why you call these "pci mappings".  They have nothing to=20=
-
-> do with PCI, and the last two lines don't talk about mappings at all.
->=20
->> The last activity done seen on both traces is :
->>=20
->>     "  enabling power on all ports  "
->=20
-> Why do you say this is the last activity seen on both traces?  In both
-> of the log extracts you included above there are plenty of lines
-> following those "enabling power" messages.
->=20
->> Is this when the BCM discovery is suppose to  occur ? In the function=20=
-
->> example is when the udev appears:
->>=20
->>    usb 3-1: udev 2, busnum 3, minor =3D 257
->=20
-> The BCM discovery is supposed to occur at the time you see it in the=20=
-
-> second log extract above.
->=20
-> One thing I didn't notice before: With iommu=3Doff, you get an entire =
-new=20
-> USB host controller and bus.  It is called bus 3, and neither it nor=20=
-
-> the 3-1 device (mouse and keyboard) is present when iommu=3Don.  In=20
-> fact, by comparing the listings you can see that buses 4 and 5 (with=20=
-
-> iommu=3Doff) are really the same as buses 3 and 4 (with iommu=3Don).
->=20
-> I'd say that your BMC does not work with iommu=3Don, and it is that
-> failure which causes these extra devices not to be discovered.  In
-> fact, they appear not be real physical devices at all, but rather
-> virtual devices created by the BMC firmware.
->=20
-> If you want to find out why the BMC doesn't work with iommu=3Don, you=20=
-
-> should ask the company that manufactured your computer's motherboard. =20=
-
-> They are probably the only people who know the answer.
->=20
-> Alan Stern
->=20
-
-
-  Hi Alan.
-
-Thank you for your assistance and insight.   I=E2=80=99ve tried  older =
-kernels  (4.14, and 4.18 ) with iommu=3Don
-and the BMC is recognized . This is obviously a regression somewhere  =
-along the way.
-
-
-Let me do some more bisecting.
-
-Thank you,
-JD
-
-
-
-
+Yes, please!
