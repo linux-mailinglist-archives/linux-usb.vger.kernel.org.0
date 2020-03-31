@@ -2,168 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D56B198A5B
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 05:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90815198B9F
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 07:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729013AbgCaDIK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Mar 2020 23:08:10 -0400
-Received: from mail-il1-f199.google.com ([209.85.166.199]:49228 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729142AbgCaDIE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Mar 2020 23:08:04 -0400
-Received: by mail-il1-f199.google.com with SMTP id 75so18769217ilv.16
-        for <linux-usb@vger.kernel.org>; Mon, 30 Mar 2020 20:08:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=+5vcJYsrFacweEz4W6ftdXhQocE2JVm+UGuLAzgpEEs=;
-        b=nrzOUN/qj4c3OrrN4A2sTu5VsRE1ZGvVk4XxIF07TtyFo9sSBDHeoI7nhyTyh/85d+
-         kFNTCzA4OvfOkbG6/67HDsQYX2RalTElDHSJT5abX0IlzPpFUQfZwzV/hhTVfi4A66fY
-         gYss99gMwtNSfMx6qVzNk3tTVEItPDT2KmV7IiM97zUrIXTkQIdb8fVSsofLnm7OUtxg
-         wYFy7t7o5X5jWOu0FIb0fhBNOQ/E0zSOU+/+1mse+BRaIKdOVJ+18DDcfjeX3VGG+4xx
-         gwwkQHb/dclnyhJBK4h6UjjaABV/iuKpTyOSeTkJG5NC2vPgVujHO/rgqqgAD0YM5sRY
-         QF7g==
-X-Gm-Message-State: ANhLgQ3AHAn/DUAFpJ89u8Fic15svGOjOCDM9yq0zgO4CY55bmgG7f88
-        E9wmoALzXyvCIxKswQVF/HDLo2hKRd8dm/bUBn/cbEUJDj84
-X-Google-Smtp-Source: ADFU+vursDUTX1at0nNsVGNHqQuQmAA/uLz3ggv9YCyfGdWalwmRvpK1HXfMd+zmV0YdW2uWdLm9tKL/ahe0XrSjF8EzhRViZ7tO
+        id S1726446AbgCaFPo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Mar 2020 01:15:44 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:34387 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726236AbgCaFPo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 01:15:44 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1585631743; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=dA6bvcGTput8Imgq5d/DRsbXCLiTBtRU6iE8eOYQx5I=; b=FFfCDXSd0Mo09G1/heQ3ETv+g9k4k9lKu3DCXhoxLKzjweIyAOo+2DydAijyzug5HbWC7IwP
+ jCWyIz4llkgk7DOxU//jGPssgrBWNaQAChEHQO8YcZH4TYIV1Aqopi8GuWqIeoorKR9v0jnZ
+ kdQwsEBOuxESB/T/bD2S89I6kfk=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e82d1f5.7f8b463fa110-smtp-out-n01;
+ Tue, 31 Mar 2020 05:15:33 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 13A95C433F2; Tue, 31 Mar 2020 05:15:32 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.206.24.160] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sanm)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id A93B5C433D2;
+        Tue, 31 Mar 2020 05:15:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A93B5C433D2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sanm@codeaurora.org
+Subject: Re: [PATCH v6 2/4] usb: dwc3: qcom: Add interconnect support in dwc3
+ driver
+To:     Felipe Balbi <balbi@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+References: <1585302203-11008-1-git-send-email-sanm@codeaurora.org>
+ <1585302203-11008-3-git-send-email-sanm@codeaurora.org>
+ <20200329171756.GA199755@google.com> <87h7y62r28.fsf@kernel.org>
+ <20200330155038.GC199755@google.com> <87zhbx1q6q.fsf@kernel.org>
+From:   "Sandeep Maheswaram (Temp)" <sanm@codeaurora.org>
+Message-ID: <ec7e921a-45fe-c178-cc04-2a04dd4a75f5@codeaurora.org>
+Date:   Tue, 31 Mar 2020 10:45:19 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-X-Received: by 2002:a6b:8dc9:: with SMTP id p192mr12873614iod.90.1585624082745;
- Mon, 30 Mar 2020 20:08:02 -0700 (PDT)
-Date:   Mon, 30 Mar 2020 20:08:02 -0700
-In-Reply-To: <CADG63jBgKXORSXV8zs_6QETgRGsNMOvJ8nBRn1itEjrZv5f+dA@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003313e805a21de06e@google.com>
-Subject: Re: KASAN: stack-out-of-bounds Write in ath9k_hif_usb_rx_cb
-From:   syzbot <syzbot+d403396d4df67ad0bd5f@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, anenbupt@gmail.com,
-        ath9k-devel@qca.qualcomm.com, davem@davemloft.net,
-        kvalo@codeaurora.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <87zhbx1q6q.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi,
 
-syzbot has tested the proposed patch but the reproducer still triggered crash:
-KASAN: use-after-free Read in htc_connect_service
+On 3/31/2020 3:05 AM, Felipe Balbi wrote:
+> Hi,
+>
+> Matthias Kaehlcke <mka@chromium.org> writes:
+>>> Matthias Kaehlcke <mka@chromium.org> writes:
+>>>>> Add interconnect support in dwc3-qcom driver to vote for bus
+>>>>> bandwidth.
+>>>>>
+>>>>> This requires for two different paths - from USB master to
+>>>>> DDR slave. The other is from APPS master to USB slave.
+>>>>>
+>>>>> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+>>>>> Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+>>>>> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+>>>>> ---
+>>>>>   drivers/usb/dwc3/dwc3-qcom.c | 128 ++++++++++++++++++++++++++++++++++++++++++-
+>>>>>   1 file changed, 126 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+>>>>> index 1dfd024..7e85fe6 100644
+>>>>> --- a/drivers/usb/dwc3/dwc3-qcom.c
+>>>>> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+>>>>>
+>>>>> ...
+>>>>>
+>>>>> +/* To disable an interconnect, we just set its bandwidth to 0 */
+>>>>> +static int dwc3_qcom_interconnect_disable(struct dwc3_qcom *qcom)
+>>>>> +{
+>>>>> +	int ret;
+>>>>> +
+>>>>> +	ret = icc_set_bw(qcom->usb_ddr_icc_path, 0, 0);
+>>>>> +	if (ret)
+>>>>> +		return ret;
+>>>>> +
+>>>>> +	ret = icc_set_bw(qcom->apps_usb_icc_path, 0, 0);
+>>>>> +	if (ret)
+>>>>> +		goto err_reenable_memory_path;
+>>>>> +
+>>>>> +	return 0;
+>>>>> +
+>>>>> +	/* Re-enable things in the event of an error */
+>>>>> +err_reenable_memory_path:
+>>>>> +	ret = dwc3_qcom_interconnect_enable(qcom);
+>>>> This overwrites the error that led to the execution of this code path.
+>>>> The function should return original error, not the result of the
+>>>> _interconnect_enable() call.
+>>>>
+>>>> I saw Felipe queued the patch for v5.8. I think the main options to fix this
+>>>> are:
+>>>>
+>>>> - a v6 of this patch to replace v5 in Felipe's tree (which IIUC will be rebased
+>>>>    anyway once there is a v5.7-rc)
+>>>> - send the fix as a separate patch
+>>>> - Felipe amends the patch in his tree
+>>>>
+>>>> Felipe, what would work best for you?
+>>> Let's go for a v6, which commits should I drop? I can't find anything
+>>> related to $subject in my queue:
+>>>
+>>> $ git --no-pager log --oneline HEAD ^linus/master -- drivers/usb/dwc3/dwc3-qcom.c
+>>> 201c26c08db4 usb: dwc3: qcom: Replace <linux/clk-provider.h> by <linux/of_clk.h>
+>> I thought I saw a "queued for v5.8" message from you, but can't find that back.
+>> I guess I saw the "queued" message for the "Add USB DWC3 support for SC7180"
+>> series and thought it was for this one. Sorry for the confusion.
+> no worries :-)
+>
+Should I remove the ret from below line and send a new version?
++	ret = dwc3_qcom_interconnect_enable(qcom);
 
-usb 4-1: Service connection timeout for: 256
-==================================================================
-BUG: KASAN: use-after-free in atomic_read include/asm-generic/atomic-instrumented.h:26 [inline]
-BUG: KASAN: use-after-free in refcount_read include/linux/refcount.h:134 [inline]
-BUG: KASAN: use-after-free in skb_unref include/linux/skbuff.h:1042 [inline]
-BUG: KASAN: use-after-free in kfree_skb+0x32/0x3d0 net/core/skbuff.c:692
-Read of size 4 at addr ffff8881c7ec2d54 by task kworker/0:5/3237
-
-CPU: 0 PID: 3237 Comm: kworker/0:5 Not tainted 5.6.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events request_firmware_work_func
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
- __kasan_report.cold+0x37/0x77 mm/kasan/report.c:506
- kasan_report+0xe/0x20 mm/kasan/common.c:641
- check_memory_region_inline mm/kasan/generic.c:185 [inline]
- check_memory_region+0x152/0x1c0 mm/kasan/generic.c:192
- atomic_read include/asm-generic/atomic-instrumented.h:26 [inline]
- refcount_read include/linux/refcount.h:134 [inline]
- skb_unref include/linux/skbuff.h:1042 [inline]
- kfree_skb+0x32/0x3d0 net/core/skbuff.c:692
- htc_connect_service.cold+0xa9/0x109 drivers/net/wireless/ath/ath9k/htc_hst.c:282
- ath9k_wmi_connect+0xd2/0x1a0 drivers/net/wireless/ath/ath9k/wmi.c:265
- ath9k_init_htc_services.constprop.0+0xb4/0x650 drivers/net/wireless/ath/ath9k/htc_drv_init.c:146
- ath9k_htc_probe_device+0x25a/0x1d80 drivers/net/wireless/ath/ath9k/htc_drv_init.c:959
- ath9k_htc_hw_init+0x31/0x60 drivers/net/wireless/ath/ath9k/htc_hst.c:501
- ath9k_hif_usb_firmware_cb+0x26b/0x500 drivers/net/wireless/ath/ath9k/hif_usb.c:1192
- request_firmware_work_func+0x126/0x242 drivers/base/firmware_loader/main.c:976
- process_one_work+0x94b/0x1620 kernel/workqueue.c:2266
- worker_thread+0x96/0xe20 kernel/workqueue.c:2412
- kthread+0x318/0x420 kernel/kthread.c:255
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Allocated by task 3237:
- save_stack+0x1b/0x80 mm/kasan/common.c:72
- set_track mm/kasan/common.c:80 [inline]
- __kasan_kmalloc mm/kasan/common.c:515 [inline]
- __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:488
- slab_post_alloc_hook mm/slab.h:584 [inline]
- slab_alloc_node mm/slub.c:2786 [inline]
- kmem_cache_alloc_node+0xdc/0x330 mm/slub.c:2822
- __alloc_skb+0xba/0x5a0 net/core/skbuff.c:198
- alloc_skb include/linux/skbuff.h:1081 [inline]
- htc_connect_service+0x2cc/0x840 drivers/net/wireless/ath/ath9k/htc_hst.c:257
- ath9k_wmi_connect+0xd2/0x1a0 drivers/net/wireless/ath/ath9k/wmi.c:265
- ath9k_init_htc_services.constprop.0+0xb4/0x650 drivers/net/wireless/ath/ath9k/htc_drv_init.c:146
- ath9k_htc_probe_device+0x25a/0x1d80 drivers/net/wireless/ath/ath9k/htc_drv_init.c:959
- ath9k_htc_hw_init+0x31/0x60 drivers/net/wireless/ath/ath9k/htc_hst.c:501
- ath9k_hif_usb_firmware_cb+0x26b/0x500 drivers/net/wireless/ath/ath9k/hif_usb.c:1192
- request_firmware_work_func+0x126/0x242 drivers/base/firmware_loader/main.c:976
- process_one_work+0x94b/0x1620 kernel/workqueue.c:2266
- worker_thread+0x96/0xe20 kernel/workqueue.c:2412
- kthread+0x318/0x420 kernel/kthread.c:255
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Freed by task 0:
- save_stack+0x1b/0x80 mm/kasan/common.c:72
- set_track mm/kasan/common.c:80 [inline]
- kasan_set_free_info mm/kasan/common.c:337 [inline]
- __kasan_slab_free+0x117/0x160 mm/kasan/common.c:476
- slab_free_hook mm/slub.c:1444 [inline]
- slab_free_freelist_hook mm/slub.c:1477 [inline]
- slab_free mm/slub.c:3034 [inline]
- kmem_cache_free+0x9b/0x360 mm/slub.c:3050
- kfree_skbmem net/core/skbuff.c:622 [inline]
- kfree_skbmem+0xef/0x1b0 net/core/skbuff.c:616
- __kfree_skb net/core/skbuff.c:679 [inline]
- kfree_skb net/core/skbuff.c:696 [inline]
- kfree_skb+0x102/0x3d0 net/core/skbuff.c:690
- ath9k_htc_txcompletion_cb+0x1f8/0x2b0 drivers/net/wireless/ath/ath9k/htc_hst.c:356
- hif_usb_regout_cb+0x10b/0x1b0 drivers/net/wireless/ath/ath9k/hif_usb.c:90
- __usb_hcd_giveback_urb+0x1f2/0x470 drivers/usb/core/hcd.c:1648
- usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1713
- dummy_timer+0x1258/0x32ae drivers/usb/gadget/udc/dummy_hcd.c:1966
- call_timer_fn+0x195/0x6f0 kernel/time/timer.c:1404
- expire_timers kernel/time/timer.c:1449 [inline]
- __run_timers kernel/time/timer.c:1773 [inline]
- __run_timers kernel/time/timer.c:1740 [inline]
- run_timer_softirq+0x5f9/0x1500 kernel/time/timer.c:1786
- __do_softirq+0x21e/0x950 kernel/softirq.c:292
-
-The buggy address belongs to the object at ffff8881c7ec2c80
- which belongs to the cache skbuff_head_cache of size 224
-The buggy address is located 212 bytes inside of
- 224-byte region [ffff8881c7ec2c80, ffff8881c7ec2d60)
-The buggy address belongs to the page:
-page:ffffea00071fb080 refcount:1 mapcount:0 mapping:ffff8881da16b400 index:0x0
-flags: 0x200000000000200(slab)
-raw: 0200000000000200 dead000000000100 dead000000000122 ffff8881da16b400
-raw: 0000000000000000 00000000000c000c 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff8881c7ec2c00: fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc
- ffff8881c7ec2c80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff8881c7ec2d00: fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
-                                                 ^
- ffff8881c7ec2d80: fc fc fc fc fc fc fc fc fb fb fb fb fb fb fb fb
- ffff8881c7ec2e00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
-Tested on:
-
-commit:         0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=17c2dadbe00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a782c087b1f425c6
-dashboard link: https://syzkaller.appspot.com/bug?extid=d403396d4df67ad0bd5f
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14b7b40be00000
-
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
