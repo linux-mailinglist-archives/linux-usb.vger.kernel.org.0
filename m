@@ -2,57 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 867A8199DEB
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 20:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B404E199F1F
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 21:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbgCaSVM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Mar 2020 14:21:12 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:52803 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726194AbgCaSVM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 14:21:12 -0400
-Received: (qmail 18452 invoked by uid 500); 31 Mar 2020 14:21:11 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 31 Mar 2020 14:21:11 -0400
-Date:   Tue, 31 Mar 2020 14:21:11 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     John Donnelly <john.p.donnelly@oracle.com>
-cc:     linux-usb@vger.kernel.org
-Subject: Re: ehci-pci : WARNING: CPU: 0 PID: 347 at kernel/dma/direct.c:34
-In-Reply-To: <86E5B81F-DD9D-42E8-A687-D4593FA734AE@oracle.com>
-Message-ID: <Pine.LNX.4.44L0.2003311413040.17645-100000@netrider.rowland.org>
+        id S1728617AbgCaTb3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Mar 2020 15:31:29 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:39158 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728245AbgCaTb3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 15:31:29 -0400
+Received: by mail-il1-f193.google.com with SMTP id r5so20633766ilq.6;
+        Tue, 31 Mar 2020 12:31:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4E3rOca8V8PqiExuCYVosA0xfKnTr6EMn3Z9j+lzY0I=;
+        b=ElIQJTjTUzMcEAykiFtupHoAC3BsqGZq9r2vV5WP4B+flFUp1Gals1NHHsrC6gIxvL
+         lgH/yB628vlICjtxQ3sEwGS1et3KXezyTZdNpTiyjipDCUxs1wifNAt84ydhkL2pIbIS
+         d5GIUpOZjeUFg3dowYdOwCJ9RM/OGWuON0tLHOEOFrWTsvPtLxeSh0CNyiLF45025WjW
+         TJVw+a/gpVF8h8XZI6kWJfa8XX+kWt43AQJ6yQ7ybCF2F+auJF/p2BdiPg4VKnGBtzRM
+         3027b8ZuBixmS0H707uVmbZunHs9iTY3DY76AZJ6B4FJuhQuKj7RaSgX5HmydCK/+OCL
+         7fdA==
+X-Gm-Message-State: ANhLgQ29QC9mPrfLj0XUXEE5pJQvug+njQfCf5dfPDpFOHLJ22OAWzSh
+        XETqrPsKwFslIGykDSCVQA==
+X-Google-Smtp-Source: ADFU+vvpYU1W+QnpfWkq+2/wT8SBpnlfPrg6qX7DKaI/XsuDkVjohw5Nsj4P4wIQ6O/g1ZUHs4b96A==
+X-Received: by 2002:a92:5e92:: with SMTP id f18mr18940362ilg.19.1585683088851;
+        Tue, 31 Mar 2020 12:31:28 -0700 (PDT)
+Received: from rob-hp-laptop ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id i4sm2598643ilq.4.2020.03.31.12.31.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2020 12:31:28 -0700 (PDT)
+Received: (nullmailer pid 29462 invoked by uid 1000);
+        Tue, 31 Mar 2020 19:31:26 -0000
+Date:   Tue, 31 Mar 2020 13:31:26 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     kishon@ti.com, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, jun.li@nxp.com, linux-imx@nxp.com
+Subject: Re: [PATCH v3 2/2] doc: dt-binding: cdns-salvo-phy: add binding doc
+Message-ID: <20200331193126.GA27304@bogus>
+References: <20200324071030.19801-1-peter.chen@nxp.com>
+ <20200324071030.19801-2-peter.chen@nxp.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200324071030.19801-2-peter.chen@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 31 Mar 2020, John Donnelly wrote:
-
-> Hi ,
+On Tue, Mar 24, 2020 at 03:10:30PM +0800, Peter Chen wrote:
+> Add Cadence SALVO PHY binding doc, this PHY is a legacy module,
+> and is only used for USB3 and USB2.
 > 
->  One more follow up question.
+> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> ---
+> Changes for v3:
+> - Fix more schema errors
 > 
-> How does a X86 kernel know where to look for USB buses/control
-> registers ?  I am aware PowerPC has a device-tree that is passed by
-> reference from UBoot that contains known devices.
-
-Some of the information comes from ACPI tables in the BIOS.  Other
-parts of it come from the components on the motherboard (for example,
-devices attached to a PCI bus can be discovered directly by the
-system).
-
-> For the BCM device :
+>  .../bindings/phy/cdns,salvo-phy.yaml          | 53 +++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
 > 
->    Bus 03.Port 1: Dev 1, Class=root_hub, Driver=uhci_hcd/2p, 12M
+> diff --git a/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml b/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
+> new file mode 100644
+> index 000000000000..a36e21e1808c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (c) 2020 NXP
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/phy/cdns,salvo-phy.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Cadence SALVO PHY
+> +
+> +maintainers:
+> +  - Peter Chen <peter.chen@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nxp,salvo-phy
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: salvo_phy_clk
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +    description: phandle to the associated power domain
+
+Drop. That's every power-domains property.
+
+> +
+> +  "#phy-cells":
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#phy-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/firmware/imx/rsrc.h>
+> +
+> +    usb3phy: usb3-phy@5B160000 {
+
+Should be lowercase hex.
+
+> +        compatible = "nxp,salvo-phy";
+> +        reg = <0x5B160000 0x40000>;
+> +        clocks = <&usb3_lpcg 4>;
+> +        clock-names = "salvo_phy_clk";
+> +        power-domains = <&pd IMX_SC_R_USB_2_PHY>;
+> +        #phy-cells = <0>;
+> +    };
+> -- 
+> 2.17.1
 > 
-> Is there a corresponding register set I can examine ?
-
-Yes.  For example, you can look at the files under 
-/sys/kernel/debug/usb/uhci/.  You can also use lspci and other related 
-PCI utilities.
-
-Alan Stern
-
