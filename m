@@ -2,191 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3E1199257
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 11:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A4C199840
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 16:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730131AbgCaJfF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Mar 2020 05:35:05 -0400
-Received: from mga14.intel.com ([192.55.52.115]:55575 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726488AbgCaJfF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 31 Mar 2020 05:35:05 -0400
-IronPort-SDR: FF2VhLJHBr7a6rRD0Gjanr6aKoJPma3u905ya24ocarl2HVY3/95mpU7qVf6DvPNdgqizXaGGY
- 9GXNbecsO/UA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2020 02:35:04 -0700
-IronPort-SDR: 9cSEsqGFfl9calpWeNqqnOCTi5ajzlJ41PmpKzua5uAvjtVo1KwwNZn8+SQRMnuoc1nplOmIHc
- FpkKQ73T2yzA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,327,1580803200"; 
-   d="scan'208";a="248992543"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga003.jf.intel.com with ESMTP; 31 Mar 2020 02:35:00 -0700
-Subject: Re: [PATCH v2 2/4] usb: xhci: xhci-plat: Add support for Broadcom STB
- SoC's
-To:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     andriy.shevchenko@linux.intel.com,
-        Alan Stern <stern@rowland.harvard.edu>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-usb@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Rob Herring <robh+dt@kernel.org>
-References: <20200327204711.10614-1-alcooperx@gmail.com>
- <20200327204711.10614-3-alcooperx@gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <0841dbde-efa7-6dc2-c19d-f87b756a94eb@linux.intel.com>
-Date:   Tue, 31 Mar 2020 12:37:35 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1730366AbgCaORg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Mar 2020 10:17:36 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:35115 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1730358AbgCaORg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 10:17:36 -0400
+Received: (qmail 29176 invoked by uid 500); 31 Mar 2020 10:17:35 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 31 Mar 2020 10:17:35 -0400
+Date:   Tue, 31 Mar 2020 10:17:35 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     John Donnelly <John.P.Donnelly@Oracle.com>
+cc:     linux-usb@vger.kernel.org
+Subject: Re: ehci-pci : WARNING: CPU: 0 PID: 347 at kernel/dma/direct.c:34
+In-Reply-To: <eefd3438-69a5-6c08-1aca-7705f69cd9d0@Oracle.com>
+Message-ID: <Pine.LNX.4.44L0.2003311000010.27552-100000@netrider.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <20200327204711.10614-3-alcooperx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 27.3.2020 22.47, Al Cooper wrote:
-> Add support for Broadcom STB SoC's to the xhci platform driver
+On Mon, 30 Mar 2020, John Donnelly wrote:
+
+> The debug method produces the following:
 > 
-> Signed-off-by: Al Cooper <alcooperx@gmail.com>
-> ---
->  drivers/usb/host/xhci-brcm.c | 16 ++++++++++++++++
->  drivers/usb/host/xhci-brcm.h | 16 ++++++++++++++++
->  drivers/usb/host/xhci-plat.c | 11 +++++++++++
->  3 files changed, 43 insertions(+)
->  create mode 100644 drivers/usb/host/xhci-brcm.c
->  create mode 100644 drivers/usb/host/xhci-brcm.h
+> iommu=on  ( no BCM is discovered )
 > 
-> diff --git a/drivers/usb/host/xhci-brcm.c b/drivers/usb/host/xhci-brcm.c
-> new file mode 100644
-> index 000000000000..bf8c0bfd1780
-> --- /dev/null
-> +++ b/drivers/usb/host/xhci-brcm.c
-> @@ -0,0 +1,16 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2018, Broadcom */
-> +
-> +#include <linux/usb.h>
-> +#include <linux/usb/hcd.h>
-> +
-> +#include "xhci.h"
-> +
-> +int xhci_plat_brcm_init_quirk(struct usb_hcd *hcd)
-> +{
-> +	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-> +
-> +	xhci->quirks |= XHCI_RESET_ON_RESUME;
-> +	return 0;
-> +}
-> +
+> [    9.911027] hub 4-0:1.0: state 7 ports 6 chg 0000 evt 0000
+> [    9.923028] usb 3-3: new high-speed USB device number 2 using xhci_hcd
+> [    9.950106] In hub_port_connect .. init
+> [    9.963879] usb 3-3: udev 2, busnum 3, minor = 257
+> [    9.963882] usb 3-3: New USB device found, idVendor=0424, 
+> idProduct=2660, bcdDevice= 8.01
+> [    9.978980] usb 3-3: New USB device strings: Mfr=0, Product=0, 
+> SerialNumber=0
+> [    9.994524] usb 3-3: usb_probe_device
+> [    9.994527] usb 3-3: configuration #1 chosen from 1 choice
+> [    9.994790] usb 3-3: adding 3-3:1.0 (config #1, interface 0)
+> [    9.994826] hub 3-3:1.0: usb_probe_interface
+> [    9.994828] hub 3-3:1.0: usb_probe_interface - got id
+> [    9.994831] hub 3-3:1.0: USB hub found
+> [   10.008224] hub 3-3:1.0: 2 ports detected
+> [   10.021669] hub 3-3:1.0: compound device; port removable status: FR
+> [   10.021671] hub 3-3:1.0: individual port power switching
+> [   10.021672] hub 3-3:1.0: individual port over-current protection
+> [   10.021674] hub 3-3:1.0: Single TT
+> [   10.021676] hub 3-3:1.0: TT requires at most 8 FS bit times (666 ns)
+> [   10.021678] hub 3-3:1.0: power on to power good time: 100ms
+> [   10.021753] hub 3-3:1.0: local power source is good
+> [   10.021872] hub 3-3:1.0: enabling power on all ports
+> [   10.022120] hub 2-1:1.0: state 7 ports 8 chg 0000 evt 0000
+> [   10.127115] hub 3-3:1.0: state 7 ports 2 chg 0000 evt 0000
+> [   10.327902] i8042: Can't read CTR while initializing i8042
+> 
+> 
+> Produces this configuration without the BCM devices :
+> 
+> 
+> lsusb -t
+> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
+> /:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/15p, 480M
+>      |__ Port 3: Dev 2, If 0, Class=Hub, Driver=hub/2p, 480M
+> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+>      |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/8p, 480M
+> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+>      |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/6p, 480M
+> 
+> 
+> 
+> BCM is discovered  intel_iommu=off :
+> 
+> 
+> [    8.947539] usb 4-3: adding 4-3:1.0 (config #1, interface 0)
+> [    8.947569] hub 4-3:1.0: usb_probe_interface
+> [    8.947571] hub 4-3:1.0: usb_probe_interface - got id
+> [    8.947574] hub 4-3:1.0: USB hub found
+> [    8.960496] usb 3-1: skipped 1 descriptor after interface
+> [    8.960499] usb 3-1: skipped 1 descriptor after interface
+> [    8.960562] hub 4-3:1.0: 2 ports detected
+> [    8.974067] usb 3-1: default language 0x0409
+> [    8.974074] hub 4-3:1.0: compound device; port removable status: FR
+> [    8.974075] hub 4-3:1.0: individual port power switching
+> [    8.974077] hub 4-3:1.0: individual port over-current protection
+> [    8.974079] hub 4-3:1.0: Single TT
+> [    8.974081] hub 4-3:1.0: TT requires at most 8 FS bit times (666 ns)
+> [    8.974083] hub 4-3:1.0: power on to power good time: 100ms
+> [    8.974157] hub 4-3:1.0: local power source is good
+> [    8.974259] hub 4-3:1.0: enabling power on all ports
+> [    8.979469] usb 3-1: udev 2, busnum 3, minor = 257
+> [    8.979473] usb 3-1: New USB device found, idVendor=03f0, 
+> idProduct=7029, bcdDevice= 0.02
+> [    8.994797] usb 3-1: New USB device strings: Mfr=1, Product=2, 
+> SerialNumber=0
+> [    9.010633] usb 3-1: Product: Virtual Keyboard
+> [    9.024416] usb 3-1: Manufacturer: BMC
+> [    9.037858] usb 3-1: usb_probe_device
+> [    9.037860] usb 3-1: configuration #1 chosen from 1 choice
+> [    9.039418] usb 3-1: adding 3-1:1.0 (config #1, interface 0)
+> [    9.041507] usb 3-1: adding 3-1:1.1 (config #1, interface 1)
+> [    9.076272] hub 4-3:1.0: state 7 ports 2 chg 0000 evt 0000
+> 
+> I am not accustomed to looking the USB Bus.port.dev mappings , obviously 
+> with BCM discovered there are 05 Bus instead of 4 .
+> 
+> /:  Bus 05.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
+> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/15p, 480M
+>      |__ Port 3: Dev 2, If 0, Class=Hub, Driver=hub/2p, 480M
+> /:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=uhci_hcd/2p, 12M
+>      |__ Port 1: Dev 2, If 0, Class=Human Interface Device, 
+> Driver=usbhid, 12M
+>      |__ Port 1: Dev 2, If 1, Class=Human Interface Device, 
+> Driver=usbhid, 12M
+> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+>      |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/8p, 480M
+> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+>      |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/6p, 480M
 
-If there's nothing else than one quirk flag needed for Broadcom STB Soc
-it would be simpler to add it directly to the xhci_plat_brcm structure.
+It seems pretty clear that your system (or at least the BMC part)  
+doesn't work as intended when the iommu is turned on.
 
-No need to add xhci-brcm.c or xhci-brcm.h files, or any xhci Makfile or Kconfig
-changes
+> Here are the pci mappings:
+> 
+> [    6.381615] input: BMC Virtual Keyboard  as 
+> /devices/pci0000:00/0000:00:1c.2/0000:01:00.4/usb3/3-1/3-1:1.0/0003:03F0:7029.0001/input/input1
+> [    6.463638] hid-generic 0003:03F0:7029.0001: input,hidraw0: USB HID 
+> v1.01 Keyboard [BMC Virtual Keyboard ] on usb-0000:01:00.4-1/input0
+> [    6.496589] input: BMC Virtual Keyboard  as 
+> /devices/pci0000:00/0000:00:1c.2/0000:01:00.4/usb3/3-1/3-1:1.1/0003:03F0:7029.0002/input/input2
+> [    6.529449] hid-generic 0003:03F0:7029.0002: input,hidraw1: USB HID 
+> v1.01 Mouse [BMC Virtual Keyboard ] on usb-0000:01:00.4-1/input1
+> [    6.563139] usbcore: registered new interface driver usbhid
+> [    6.580222] usbhid: USB HID core driver
 
+I don't know why you call these "pci mappings".  They have nothing to 
+do with PCI, and the last two lines don't talk about mappings at all.
 
-> diff --git a/drivers/usb/host/xhci-brcm.h b/drivers/usb/host/xhci-brcm.h
-> new file mode 100644
-> index 000000000000..e64800fae4d5
-> --- /dev/null
-> +++ b/drivers/usb/host/xhci-brcm.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/* Copyright (c) 2018, Broadcom */
-> +
-> +#ifndef _XHCI_BRCM_H
-> +#define _XHCI_BRCM_H
-> +
-> +#if IS_ENABLED(CONFIG_USB_XHCI_BRCM)
-> +int xhci_plat_brcm_init_quirk(struct usb_hcd *hcd);
-> +#else
-> +static inline int xhci_plat_brcm_init_quirk(struct usb_hcd *hcd)
-> +{
-> +	return 0;
-> +}
-> +#endif
-> +#endif /* _XHCI_BRCM_H */
-> +
-> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> index 315b4552693c..3e90a1207803 100644
-> --- a/drivers/usb/host/xhci-plat.c
-> +++ b/drivers/usb/host/xhci-plat.c
-> @@ -22,6 +22,7 @@
->  
->  #include "xhci.h"
->  #include "xhci-plat.h"
-> +#include "xhci-brcm.h"
->  #include "xhci-mvebu.h"
->  #include "xhci-rcar.h"
->  
-> @@ -112,6 +113,10 @@ static const struct xhci_plat_priv xhci_plat_renesas_rcar_gen3 = {
->  	SET_XHCI_PLAT_PRIV_FOR_RCAR(XHCI_RCAR_FIRMWARE_NAME_V3)
->  };
->  
-> +static const struct xhci_plat_priv xhci_plat_brcm = {
-> +	.init_quirk = xhci_plat_brcm_init_quirk,
-> +};
-> +
+> The last activity done seen on both traces is :
+> 
+>      "  enabling power on all ports  "
 
-So something like this instead:
+Why do you say this is the last activity seen on both traces?  In both
+of the log extracts you included above there are plenty of lines
+following those "enabling power" messages.
 
-static const struct xhci_plat_priv xhci_plat_brcm = {
-	.quirks = XHCI_RESET_ON_RESUME,
-};
+> Is this when the BCM discovery is suppose to  occur ? In the function 
+> example is when the udev appears:
+> 
+>     usb 3-1: udev 2, busnum 3, minor = 257
 
--Mathias
+The BCM discovery is supposed to occur at the time you see it in the 
+second log extract above.
+
+One thing I didn't notice before: With iommu=off, you get an entire new 
+USB host controller and bus.  It is called bus 3, and neither it nor 
+the 3-1 device (mouse and keyboard) is present when iommu=on.  In 
+fact, by comparing the listings you can see that buses 4 and 5 (with 
+iommu=off) are really the same as buses 3 and 4 (with iommu=on).
+
+I'd say that your BMC does not work with iommu=on, and it is that
+failure which causes these extra devices not to be discovered.  In
+fact, they appear not be real physical devices at all, but rather
+virtual devices created by the BMC firmware.
+
+If you want to find out why the BMC doesn't work with iommu=on, you 
+should ask the company that manufactured your computer's motherboard.  
+They are probably the only people who know the answer.
+
+Alan Stern
+
