@@ -2,136 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B404E199F1F
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 21:31:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA74E199F8A
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 21:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728617AbgCaTb3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Mar 2020 15:31:29 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:39158 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728245AbgCaTb3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 15:31:29 -0400
-Received: by mail-il1-f193.google.com with SMTP id r5so20633766ilq.6;
-        Tue, 31 Mar 2020 12:31:29 -0700 (PDT)
+        id S1729941AbgCaT6h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Mar 2020 15:58:37 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:35936 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726947AbgCaT6g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 15:58:36 -0400
+Received: by mail-il1-f195.google.com with SMTP id p13so20681309ilp.3;
+        Tue, 31 Mar 2020 12:58:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4E3rOca8V8PqiExuCYVosA0xfKnTr6EMn3Z9j+lzY0I=;
-        b=ElIQJTjTUzMcEAykiFtupHoAC3BsqGZq9r2vV5WP4B+flFUp1Gals1NHHsrC6gIxvL
-         lgH/yB628vlICjtxQ3sEwGS1et3KXezyTZdNpTiyjipDCUxs1wifNAt84ydhkL2pIbIS
-         d5GIUpOZjeUFg3dowYdOwCJ9RM/OGWuON0tLHOEOFrWTsvPtLxeSh0CNyiLF45025WjW
-         TJVw+a/gpVF8h8XZI6kWJfa8XX+kWt43AQJ6yQ7ybCF2F+auJF/p2BdiPg4VKnGBtzRM
-         3027b8ZuBixmS0H707uVmbZunHs9iTY3DY76AZJ6B4FJuhQuKj7RaSgX5HmydCK/+OCL
-         7fdA==
-X-Gm-Message-State: ANhLgQ29QC9mPrfLj0XUXEE5pJQvug+njQfCf5dfPDpFOHLJ22OAWzSh
-        XETqrPsKwFslIGykDSCVQA==
-X-Google-Smtp-Source: ADFU+vvpYU1W+QnpfWkq+2/wT8SBpnlfPrg6qX7DKaI/XsuDkVjohw5Nsj4P4wIQ6O/g1ZUHs4b96A==
-X-Received: by 2002:a92:5e92:: with SMTP id f18mr18940362ilg.19.1585683088851;
-        Tue, 31 Mar 2020 12:31:28 -0700 (PDT)
+        bh=nqeAJUtOtJijTj0sgAPusrPwg7HunH4vQhom+AKuF6M=;
+        b=WH5oRxAvIpC9ufu7J+IzLeeffVDlT8hVvbvJMdLHCU9WPMa5OZvUjEYP9S3OXM7weN
+         AChx3ThLomlo005LiuSFtfaCY2bSGZnH2S6th0pL5nayIlnpTPlwrSO1E8kUVA5qAt4k
+         YNzWjwsPNHNsH70LZNAJmyiLySPo8CfJwsSwUmINXLlVWJpZRbL4RodL9mqLMynM9yY9
+         vNF3v3Wy//n+8kZxBLF/s4fMo4+lF8NXu8fTvme8eIghPEXIutSxippwF6/0ZmugzpY/
+         HJjoLTtR+6B9FxlIZtGBBUFf0wK5H4wsq1Pyn0yFZ/fFX3XxZAI26D5BKVfycfi5Y3OM
+         ovfA==
+X-Gm-Message-State: ANhLgQ0vYQV3Vi1pEYDZgOUAKE3LVZRFe/noens7zbCH9/MYw4PpVlQD
+        omeecfFLWLcJ3akL9oZyMw==
+X-Google-Smtp-Source: ADFU+vvScuJWyJByk9tGznU4ABrVRM+QGd4p+cYDLCyHzSV2GjkxegyexD9XgClwA0WcmvmzB/uk2g==
+X-Received: by 2002:a92:8659:: with SMTP id g86mr18829453ild.267.1585684715873;
+        Tue, 31 Mar 2020 12:58:35 -0700 (PDT)
 Received: from rob-hp-laptop ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id i4sm2598643ilq.4.2020.03.31.12.31.27
+        by smtp.gmail.com with ESMTPSA id l25sm6209580ild.61.2020.03.31.12.58.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2020 12:31:28 -0700 (PDT)
-Received: (nullmailer pid 29462 invoked by uid 1000);
-        Tue, 31 Mar 2020 19:31:26 -0000
-Date:   Tue, 31 Mar 2020 13:31:26 -0600
+        Tue, 31 Mar 2020 12:58:35 -0700 (PDT)
+Received: (nullmailer pid 1867 invoked by uid 1000);
+        Tue, 31 Mar 2020 19:58:33 -0000
+Date:   Tue, 31 Mar 2020 13:58:33 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     kishon@ti.com, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, jun.li@nxp.com, linux-imx@nxp.com
-Subject: Re: [PATCH v3 2/2] doc: dt-binding: cdns-salvo-phy: add binding doc
-Message-ID: <20200331193126.GA27304@bogus>
-References: <20200324071030.19801-1-peter.chen@nxp.com>
- <20200324071030.19801-2-peter.chen@nxp.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     kishon@ti.com, balbi@kernel.org, khilman@baylibre.com,
+        martin.blumenstingl@googlemail.com, devicetree@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 12/13] dt-bindings: usb: dwc3: remove amlogic compatible
+ entries
+Message-ID: <20200331195833.GA1800@bogus>
+References: <20200324102030.31000-1-narmstrong@baylibre.com>
+ <20200324102030.31000-13-narmstrong@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200324071030.19801-2-peter.chen@nxp.com>
+In-Reply-To: <20200324102030.31000-13-narmstrong@baylibre.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 24, 2020 at 03:10:30PM +0800, Peter Chen wrote:
-> Add Cadence SALVO PHY binding doc, this PHY is a legacy module,
-> and is only used for USB3 and USB2.
+On Tue, 24 Mar 2020 11:20:29 +0100, Neil Armstrong wrote:
+> There is now a dedicated driver for these SoCs making the old compatible
+> obsolete.
 > 
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
 > ---
-> Changes for v3:
-> - Fix more schema errors
+>  Documentation/devicetree/bindings/usb/dwc3.txt | 2 --
+>  1 file changed, 2 deletions(-)
 > 
->  .../bindings/phy/cdns,salvo-phy.yaml          | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml b/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
-> new file mode 100644
-> index 000000000000..a36e21e1808c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
-> @@ -0,0 +1,53 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright (c) 2020 NXP
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/phy/cdns,salvo-phy.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Cadence SALVO PHY
-> +
-> +maintainers:
-> +  - Peter Chen <peter.chen@nxp.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nxp,salvo-phy
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: salvo_phy_clk
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +    description: phandle to the associated power domain
 
-Drop. That's every power-domains property.
-
-> +
-> +  "#phy-cells":
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "#phy-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/firmware/imx/rsrc.h>
-> +
-> +    usb3phy: usb3-phy@5B160000 {
-
-Should be lowercase hex.
-
-> +        compatible = "nxp,salvo-phy";
-> +        reg = <0x5B160000 0x40000>;
-> +        clocks = <&usb3_lpcg 4>;
-> +        clock-names = "salvo_phy_clk";
-> +        power-domains = <&pd IMX_SC_R_USB_2_PHY>;
-> +        #phy-cells = <0>;
-> +    };
-> -- 
-> 2.17.1
-> 
+Acked-by: Rob Herring <robh@kernel.org>
