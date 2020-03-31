@@ -2,218 +2,231 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3187F198EB2
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 10:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E794F198EB6
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 10:40:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729425AbgCaIj2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Mar 2020 04:39:28 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:33276 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726397AbgCaIj1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 04:39:27 -0400
-Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com [10.192.0.17])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 7E4D1C0F39;
-        Tue, 31 Mar 2020 08:39:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1585643966; bh=DPL3hJxRqQiRlXdmuL2sMfvW7j1lc7uRHfTi+pROOWk=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=KWlfNfUPYIjE75XEGNx4oTdylxVZtJIRgg8qeBHVhsnCUTO8AMp3DCYrlgWlACiCe
-         gPgqLlFMMdOGS5ua1SQldGZriiWKn6nN1/ZOqXZ/MKytsSUjbDrUaJDzCked74qlQu
-         yrkHXyNuo2gaKmojxygDjQvjCO/tGm7c5T5LyMZijkqHowdon/VeAdbsomoDiQacQW
-         UTdonXwojYF0AG7wIzDtvrlJl8zfeW7ibIgAf4wGjJnBXtnPvgerdw7EG57+wkYyeG
-         /eVzOb4N8E15EEVsMbeuAknbDIx2Q42XAkZI77VzFt0UQ8+ZuCAQljNmuEPIjkuspV
-         tUYU4B73nsfgg==
-Received: from US01WEHTC3.internal.synopsys.com (us01wehtc3.internal.synopsys.com [10.15.84.232])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 3A6A8A007F;
-        Tue, 31 Mar 2020 08:39:26 +0000 (UTC)
-Received: from US01HYBRID2.internal.synopsys.com (10.15.246.24) by
- US01WEHTC3.internal.synopsys.com (10.15.84.232) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Tue, 31 Mar 2020 01:39:26 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.202.3.67) by
- mrs.synopsys.com (10.15.246.24) with Microsoft SMTP Server (TLS) id
- 14.3.408.0; Tue, 31 Mar 2020 01:39:26 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lmIl3j5Xf9ODjL26HiFQWMFcIudyD0EGas4OnY8fjPR1Uxqg7ef1ujs6gZAgBZEjimEW/gTHxhBZ/eMzdzxIfhKamcRqaMs9ylOGz3yQ6erXTo7ubHicghEKmvt0V69H6EMqX/yxsK1HZHULVawANG26tjxxlusl+jQwd9xUIagjYxIuhX30Dt/zQCKJKVCPxwG5vuqLuqt/TjdwiDzTt1r9IRhF/iaKLjCzCvW2R0PQE/qvSaDzLx//2Zm9mgW20TtXKaNRdVJgWcF4wFwb9LDHHP8/XV9EtBtUbUqJOlJ7VGJTpWgSBxjXTv+UWEYpgVvckM3y7sNJGyNcQD1IvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DPL3hJxRqQiRlXdmuL2sMfvW7j1lc7uRHfTi+pROOWk=;
- b=gZQLyfLNJRv1vZLxxWVTAwOl3Dh4+9s7M1i4XZww+iKR5m0mfasHNE/sc3WQk+UgPujozy1LdeXuRAMe3aQk3JSWu9uMQHUiQAB0aDsOykqJZqN3Znz9/KkRpPekqEZEcZoFgmyfqNSgL6V9nVp3guo04a515vdHy/lhJ8lNHvJxC0YUa5w+TUhdpX7y67llMqeeDTVAVkoqCDmlU8Fi0ZFURsEdosF8vzePvWoVlzboF7Ocvru8V0aLBSrStt9wGJjxUJMsnGCnk8O/3W8Q69/5rOv91ugGrpNXOo2BBiDHMb6Z2h5atDnsdrE+bYlirwc7InQcygo33ufMm/4SXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DPL3hJxRqQiRlXdmuL2sMfvW7j1lc7uRHfTi+pROOWk=;
- b=PaDT7e6ncSaxZlxzmkcF7y7UNZ3sBeulHFb8kcV9AoZry1ygdwzSQ2zZ/CalTpNzi9UB/6+VZKkvPCE9jpMNnxLqBqjDrOpWc6GmQnTMYRq8bi6O2UFVX7+akhF3X9QydIj4vqT08md2mrg9DxAhQllxBa/LkKlw1+Pk0EF5xUw=
-Received: from BYAPR12MB2710.namprd12.prod.outlook.com (2603:10b6:a03:68::11)
- by BYAPR12MB2614.namprd12.prod.outlook.com (2603:10b6:a03:6b::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2856.20; Tue, 31 Mar
- 2020 08:39:24 +0000
-Received: from BYAPR12MB2710.namprd12.prod.outlook.com
- ([fe80::e5d1:8cdd:a09d:7a08]) by BYAPR12MB2710.namprd12.prod.outlook.com
- ([fe80::e5d1:8cdd:a09d:7a08%7]) with mapi id 15.20.2856.019; Tue, 31 Mar 2020
- 08:39:24 +0000
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-CC:     John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH] usb: dwc3: gadget: Remove incomplete check
-Thread-Topic: [PATCH] usb: dwc3: gadget: Remove incomplete check
-Thread-Index: AQHV82muQmX55NMUl0emMsblflREJqhJbrQAgAD/cgCAAGwZAIAA5GqAgBObrwCAAQbKAIAAkdsAgAC5c4CAACLBAIAARocAgABryoCAAAdwgA==
-Date:   Tue, 31 Mar 2020 08:39:24 +0000
-Message-ID: <8aacdddf-0a86-d0d9-5161-682b8c26639b@synopsys.com>
-References: <660a74249e64b3b62ca9b394584387baee67a119.1583466150.git.thinhn@synopsys.com>
- <87d09ef01l.fsf@kernel.org>
- <df600201-0063-bb5f-19be-ecbeaada37f0@synopsys.com>
- <87blow239f.fsf@kernel.org>
- <9a2504a3-6a89-39f2-3a9c-9ee933903d8e@synopsys.com>
- <87v9mn37vb.fsf@kernel.org>
- <eca2ea69-89dc-3ccc-b280-c1b080ad263f@synopsys.com>
- <87bloe2qq3.fsf@kernel.org>
- <d451b3cd-94e2-13a5-7169-8a87f89fa769@synopsys.com>
- <87369p34sz.fsf@kernel.org>
- <804450e5-758c-5ec6-88ae-302c023bf1e3@synopsys.com>
- <87tv250wou.fsf@kernel.org>
-In-Reply-To: <87tv250wou.fsf@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=thinhn@synopsys.com; 
-x-originating-ip: [149.117.75.12]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d7fc48f3-91bc-49cd-0b46-08d7d54f046b
-x-ms-traffictypediagnostic: BYAPR12MB2614:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BYAPR12MB261435C4A23ED108D512C690AAC80@BYAPR12MB2614.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0359162B6D
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2710.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10019020)(376002)(346002)(396003)(136003)(39860400002)(366004)(316002)(36756003)(478600001)(86362001)(110136005)(186003)(76116006)(31696002)(66556008)(64756008)(31686004)(66476007)(2616005)(66946007)(26005)(66446008)(2906002)(81156014)(5660300002)(71200400001)(6506007)(8676002)(81166006)(4326008)(6486002)(8936002)(107886003)(6512007);DIR:OUT;SFP:1102;
-received-spf: None (protection.outlook.com: synopsys.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9xdYl7Pt2Aq7LYsGDufnE0nJFyXHlKQ0xlflF3jmkPLp0g3VYHJwZkNutEIXb1GoWhDEHvFq/YU9iTbhcYH57s1WKmYjjLbX9IHnwRLMg4Hxv46O9lqO0GwJX7DiC/kQxk8apqjRqQIg/uFXIPAyQXjd4JX99lV1t4++BVMpfGUs8N7SZBNOeHk4LGsihxcakV4A6iJtDyhUXGV1Vhp90bn+bOzM8QA33+TxNpigZ2i0RY+hnBAwxuPwHarq9sDUyw8oi7K4vJfg1qghQb1L3jCs47QGDEeBZ7dyoLy843gRRO2ZBMJeZLt2AqjXSkCqT4n+PMGrscThBZWkeMTd89VgxeMuoryWy7EI/t11AWcFxJwd+6dlgav71RFm0fXCOO4w6ZxowGd5nzeH6IHHiBzGfIOtf6L/JCDexa+ds1z0rD3j+2FwlvWjmlHymPEH
-x-ms-exchange-antispam-messagedata: NLE+IE4TQ33uyDGoVu7OuqYLTO0EOD9bbzSGWqr/4DrS7as1HaO0suLtcYzLaDozc4iDz1+a00WARIVA94baZOG3aY0T1tS+xJ0jjAsUs7oq7UEMEEOmT2WFfSlm7TQIWC0Q36+uqhHHxRUW1k/j7g==
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4592FB722813B04CB5F5918BBCA73858@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1730102AbgCaIkc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Mar 2020 04:40:32 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:43901 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726488AbgCaIkb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 04:40:31 -0400
+Received: by mail-wr1-f65.google.com with SMTP id m11so18934380wrx.10
+        for <linux-usb@vger.kernel.org>; Tue, 31 Mar 2020 01:40:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:autocrypt:organization:message-id
+         :date:user-agent:mime-version:in-reply-to;
+        bh=Z+CuPkRKVZ7tXW2TEkC/gPbqUuvCiTo7Xi+BBGMFZqc=;
+        b=UQLmh+SXl74Pc4nUiurpH+zT6Tjy4hhpYkLvUjqTErcH4YU3S2eGCnpjz0GMJ6IGrw
+         axmN9L5qMBoKv9yaQlkYmOFe+daXZk/cwefGPTNesKBEMuyiP1seQ1mC/WS5uNmGU05z
+         AMk2IVC6EDdozcfv+siuzB8r7vOF7T4c9drSOju00kFCeQSb25CWNFgQLV3/LOzmVXlJ
+         NZUrLuh0KYQnNhd3DC+OzF5FOeJyye9c6yW66BuCs3gXZLaRD83zknjA3K1Tlj5til1t
+         g5hogd7nF+RV500NPknEm72FsNFV218HAHWh2jgRQNX8qkUYX9csc3RvmQf9McXx+pc2
+         BviA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :organization:message-id:date:user-agent:mime-version:in-reply-to;
+        bh=Z+CuPkRKVZ7tXW2TEkC/gPbqUuvCiTo7Xi+BBGMFZqc=;
+        b=unbSOcUGzZRQmXru87r8Xs28LAcu780OZojwUuRPlbr/HXmTqqg3CP5VovsMpXeliE
+         MwLpHNooqXC0Ukw+43TH5DxvpM1pftxO6yjuk1tfrjF9B3KyOb965LslnxNG6CavK+I7
+         ZJlQz0uiYmA9yXR9+dCReJUKeudvE3/6Jn3dSkiFVV4jhyBVDIQSLwcA8J2a1iXhQEGd
+         qsZjYXeZc6Hs32OKtwNCZ1Fwli0MzYR6RFaIc4Ror+E3QXo+orN0fsQ5WCRtiu+SrXTA
+         1H+A4J8kKhsDjZSKAQYGUXFjuHxUqQHqqtYdWfl7NMgO9TCsrFjUCZMGrBdxrpaONAkc
+         5zAw==
+X-Gm-Message-State: ANhLgQ3qxEx05Bvlb8j1hQWplHuzFjIZU/RKwpJOINVpZsNwKKeCW/qL
+        HlfJPKNVxRy6hJ2bu6py+gs5Zw==
+X-Google-Smtp-Source: ADFU+vtUMJku+tASP4viJHeLjxnEp27F8NMyUaWNWolbNSxhZm0/swXSv0jViU0/jGuXTCK3JgjZTA==
+X-Received: by 2002:adf:a48d:: with SMTP id g13mr20357187wrb.38.1585644027208;
+        Tue, 31 Mar 2020 01:40:27 -0700 (PDT)
+Received: from ?IPv6:2a01:e35:2ec0:82b0:5c5f:613e:f775:b6a2? ([2a01:e35:2ec0:82b0:5c5f:613e:f775:b6a2])
+        by smtp.gmail.com with ESMTPSA id u204sm2877774wmg.40.2020.03.31.01.40.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Mar 2020 01:40:26 -0700 (PDT)
+Subject: Re: [PATCH v2 00/14] usb: dwc3: meson: add OTG support for GXL/GXM
+To:     Felipe Balbi <balbi@kernel.org>, kishon@ti.com,
+        khilman@baylibre.com, martin.blumenstingl@googlemail.com
+Cc:     linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20200326134507.4808-1-narmstrong@baylibre.com>
+ <87v9mne9cj.fsf@kernel.org>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
+ 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
+ BSwxi7g3Mu7u5kUByanqHyA=
+Organization: Baylibre
+Message-ID: <351fa51d-9772-13a5-8b44-538a61a19c88@baylibre.com>
+Date:   Tue, 31 Mar 2020 10:40:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: d7fc48f3-91bc-49cd-0b46-08d7d54f046b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Mar 2020 08:39:24.8152
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: O4ky7ENvKdArRnz4Xj5W6Ekh+/KrZoz9MjKQsZycIAWyzxMZo+8Eux5QieoS4/Ib0kP86clozhW6wGsYLsNp2Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2614
-X-OriginatorOrg: synopsys.com
+In-Reply-To: <87v9mne9cj.fsf@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="TThNyReAmkHP58i9ENNBdtf2VVvIpqMrA"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-RmVsaXBlIEJhbGJpIHdyb3RlOg0KPiBIaSwNCj4NCj4gVGhpbmggTmd1eWVuIDxUaGluaC5OZ3V5
-ZW5Ac3lub3BzeXMuY29tPiB3cml0ZXM6DQo+Pj4gVGhpbmggTmd1eWVuIDxUaGluaC5OZ3V5ZW5A
-c3lub3BzeXMuY29tPiB3cml0ZXM6DQo+Pj4+Pj4gVGhlIGNvbmRpdGlvbiBoZXJlIGlzIGlmICgh
-cmVxdWVzdF9jb21wbGV0ZSgpKSwgdGhlbiBraWNrX3RyYW5zZmVyKCkuDQo+Pj4+Pj4gTGV0J3Mg
-dGFrZSBhIGxvb2sgYXQgd2hhdCBraWNrX3RyYW5zZmVyKCkgZG86DQo+Pj4+Pj4NCj4+Pj4+PiBr
-aWNrX3RyYW5zZmVyKCkgd2lsbCBwcmVwYXJlIG5ldyBUUkJzIGFuZCBpc3N1ZSBTVEFSVF9UUkFO
-U0ZFUiBjb21tYW5kDQo+Pj4+Pj4gb3IgVVBEQVRFX1RSQU5TRkVSIGNvbW1hbmQuIFRoZSBlbmRw
-b2ludCBpcyBhbHJlYWR5IHN0YXJ0ZWQsIGFuZCBub3RoaW5nDQo+Pj4+Pj4gaXMgY2F1c2luZyBp
-dCB0byBlbmQgYXQgdGhpcyBwb2ludC4gU28gaXQgc2hvdWxkIGp1c3QgYmUgVVBEQVRFX1RSQU5T
-RkVSDQo+Pj4+Pj4gY29tbWFuZC4gVVBEQVRFX1RSQU5TRkVSIGNvbW1hbmQgdGVsbHMgdGhlIGNv
-bnRyb2xsZXIgdG8gdXBkYXRlIGl0cyBUUkINCj4+Pj4+PiBjYWNoZSBiZWNhdXNlIHRoZXJlIHdp
-bGwgYmUgbmV3IFRSQnMgcHJlcGFyZWQgZm9yIHRoZSByZXF1ZXN0Lg0KPj4+Pj4+DQo+Pj4+Pj4g
-SWYgdGhpcyBpcyBub24tU0cvbm9uLWNoYWluZWQgVFJCIHJlcXVlc3QsIHRoZW4gdGhlcmUncyBv
-bmx5IDEgVFJCIHBlcg0KPj4+Pj4+IHJlcXVlc3QgZm9yIElOIGVuZHBvaW50cy4gSWYgdGhhdCBU
-UkIgaXMgY29tcGxldGVkLCB0aGF0IG1lYW5zIHRoYXQgdGhlDQo+Pj4+Pj4gcmVxdWVzdCBpcyBj
-b21wbGV0ZWQuIFRoZXJlJ3Mgbm8gcmVhc29uIHRvIGlzc3VlIGtpY2tfdHJhbnNmZXIoKSBhZ2Fp
-bi4NCj4+Pj4+IG5vdCBlbnRpcmVseSB0cnVlIGZvciBidWxrLiBXZSBuZXZlciBzZXQgTFNUIGJp
-dDsgd2Ugd2lsbCBuZXZlciBjb21wbGV0ZQ0KPj4+Pj4gYSB0cmFuc2Zlciwgd2UgY29udGludWFs
-bHkgYWRkIG1vcmUgVFJCcy4gVGhlIHJlYXNvbiBmb3IgdGhpcyBpcyB0bw0KPj4+Pj4gYW1vcnRp
-emUgdGhlIGNvc3Qgb2YgYWRkaW5nIG5ldyB0cmFuc2ZlcnMgdG8gdGhlIGNvbnRyb2xsZXIgY2Fj
-aGUgYmVmb3JlDQo+Pj4+PiBpdCBydW5zIG91dCBvZiBUUkJzIHdpdGhvdXQgSFdPLg0KPj4+PiBS
-aWdodCwgSSB3YXMgcmVmZXJyaW5nIHRvICJyZXF1ZXN0IiByYXRoZXIgdGhhbiB0cmFuc2ZlciAo
-YXMgaW4gYQ0KPj4+PiB0cmFuc2ZlciBtYXkgaGF2ZSAxIG9yIG1vcmUgcmVxdWVzdHMpLg0KPj4+
-Pg0KPj4+Pj4gSG93IGFib3V0IHdlIGNoYW5nZSB0aGUgdGVzdCB0byBzYXkgImlmIEkgaGF2ZSBu
-b24tc3RhcnRlZCBUUkJzIGFuZCBJJ20NCj4+Pj4+IGJ1bGsgKG5vbi1zdHJlYW0pIG9yIGludGVy
-cnVwdCBlbmRwb2ludCwga2ljayBtb3JlIHRyYW5zZmVycyI/DQo+Pj4+Pg0KPj4+Pj4+IFdoZW4g
-dGhlIGZ1bmN0aW9uIGRyaXZlciBxdWV1ZXMgYSBuZXcgcmVxdWVzdCwgdGhlbiB0aGVyZSB3aWxs
-IGJlIG5ldw0KPj4+Pj4+IFRSQnMgdG8gcHJlcGFyZSBhbmQgdGhlbiB0aGUgZHJpdmVyIGNhbiBr
-aWNrX3RyYW5zZmVyKCkgYWdhaW4uDQo+Pj4+PiBXZSBtYXkgYWxyZWFkeSBoYXZlIG1vcmUgVFJC
-cyBpbiB0aGUgcGVuZGluZyBsaXN0IHdoaWNoIG1heSBub3QgaGF2ZQ0KPj4+Pj4gYmVlbiBzdGFy
-dGVkIGJlZm9yZSB3ZSBkaWRuJ3QgaGF2ZSBmcmVlIFRSQnMgdG8gdXNlLiBXZSBqdXN0IGNvbXBs
-ZXRlZCBhDQo+Pj4+PiBUUkIsIG1pZ2h0IGFzIHdlbGwgdHJ5IHRvIHVzZSBpdCBmb3IgbW9yZSBy
-ZXF1ZXN0cy4NCj4+Pj4gWWVzIHdlIGNhbiBhbmQgd2Ugc2hvdWxkLCBidXQgd2UgZGlkbid0IGNo
-ZWNrIHRoYXQuIEFsc28gaXQgc2hvdWxkbid0IGJlDQo+Pj4+IGluIHRoZSByZXF1ZXN0X2NvbXBs
-ZXRlKCkgY2hlY2sgZnVuY3Rpb24gYXMgdGhleSBhcmUgcGFydCBvZiBkaWZmZXJlbnQNCj4+Pj4g
-cmVxdWVzdHMuDQo+Pj4+DQo+Pj4+Pj4gU28sIHRoaXMgY29uZGl0aW9uIHRvIGNoZWNrIGlmIHJl
-cXVlc3RfY29tcGxldGUoKSBpcyBvbmx5IHZhbGlkIGZvciBhDQo+Pj4+Pj4gcmVxdWVzdCB3aXRo
-IG11bHRpcGxlIGNoYWluZWQgVFJCcy4gU2luY2Ugd2UgY2FuIG9ubHkgY2hlY2sgZm9yIElODQo+
-Pj4+Pj4gZGlyZWN0aW9uLCB0aGUgY2hhaW5lZCBUUkIgc2V0dXAgcmVsYXRlZCB0byBPVVQgZGly
-ZWN0aW9uIHRvIGZpdA0KPj4+Pj4+IE1heFBhY2tldFNpemUgZG9lcyBub3QgYXBwbHkgaGVyZS4g
-V2hhdCBsZWZ0IGlzIGNoYWluZWQgVFJCcyBmb3IgU0cuIEluDQo+Pj4+PiB0aGlzIHBhcnQgaXMg
-Y2xlYXIgbm93IGFuZCB5b3UncmUgY29ycmVjdC4gVGhhbmtzDQo+Pj4+Pg0KPj4+Pj4+IHRoaXMg
-Y2FzZSwgd2UgZG8gd2FudCB0byBraWNrX3RyYW5zZmVyIGFnYWluLiBUaGlzIG1heSBoYXBwZW4g
-d2hlbiB3ZQ0KPj4+Pj4+IHJ1biBvdXQgb2YgVFJCcyBhbmQgd2UgaGF2ZSB0byB3YWl0IGZvciBh
-dmFpbGFibGUgVFJCcy4gV2hlbiB0aGVyZSBhcmUNCj4+Pj4+PiBhdmFpbGFibGUgVFJCcyBhbmQg
-c3RpbGwgcGVuZGluZyBTR3MsIHRoZW4gd2Ugd2FudCB0byBwcmVwYXJlIHRoZSByZXN0DQo+Pj4+
-Pj4gb2YgdGhlIFNHIGVudHJpZXMgdG8gZmluaXNoIHRoZSByZXF1ZXN0LiBTbyBraWNrX3RyYW5z
-ZmVyKCkgbWFrZXMgc2Vuc2UNCj4+Pj4+PiBoZXJlLg0KPj4+Pj4gUmlnaHQgYnV0IHdlIGNhbiBy
-dW4gb3V0IG9mIFRSQnMgZXZlbiBpbiBub24tY2hhaW5lZCBjYXNlLiBJIHJlbWVtYmVyDQo+Pj4+
-PiB0ZXN0aW5nIHRoaXMgeWVhcnMgYWdvIGJ5IGdpdmluZyBnX21hc3Nfc3RvcmFnZSBhIGxpc3Qg
-b2YgMzAwDQo+Pj4+PiByZXF1ZXN0cy4gVGhlIHJlYXNvbiBmb3Iga2lja2luZyB0aGUgdHJhbnNm
-ZXIgaXMgZGlmZmVyZW50LCBidXQgaXQncw0KPj4+Pj4gYmVuZWZpY2lhbCBhbnlob3cuDQo+Pj4+
-Pg0KPj4+PiBJbiB0aGlzIGNhc2UsIHRoZSBjaGVjayBzaG91bGQgYmUgZm9yIGlmIHRoZSBwZW5k
-aW5nX2xpc3QgaXMgbm90IGVtcHR5LA0KPj4+PiB0aGVuIGtpY2sgYWdhaW4uDQo+Pj4+DQo+Pj4+
-IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9kd2MzL2dhZGdldC5jIGIvZHJpdmVycy91c2IvZHdj
-My9nYWRnZXQuYw0KPj4+PiBpbmRleCA2YTA0YzlhZmNhYjYuLmQ4MzE4ZGU1NTAwMCAxMDA2NDQN
-Cj4+Pj4gLS0tIGEvZHJpdmVycy91c2IvZHdjMy9nYWRnZXQuYw0KPj4+PiArKysgYi9kcml2ZXJz
-L3VzYi9kd2MzL2dhZGdldC5jDQo+Pj4+IEBAIC0yOTc1LDE0ICsyOTc1LDcgQEAgc3RhdGljIGlu
-dA0KPj4+PiBkd2MzX2dhZGdldF9lcF9yZWNsYWltX3RyYl9saW5lYXIoc3RydWN0IGR3YzNfZXAg
-KmRlcCwNCj4+Pj4NCj4+Pj4gICAgwqBzdGF0aWMgYm9vbCBkd2MzX2dhZGdldF9lcF9yZXF1ZXN0
-X2NvbXBsZXRlZChzdHJ1Y3QgZHdjM19yZXF1ZXN0ICpyZXEpDQo+Pj4+ICAgIMKgew0KPj4+PiAt
-wqDCoMKgwqDCoMKgIC8qDQo+Pj4+IC3CoMKgwqDCoMKgwqDCoCAqIEZvciBPVVQgZGlyZWN0aW9u
-LCBob3N0IG1heSBzZW5kIGxlc3MgdGhhbiB0aGUgc2V0dXANCj4+Pj4gLcKgwqDCoMKgwqDCoMKg
-ICogbGVuZ3RoLiBSZXR1cm4gdHJ1ZSBmb3IgYWxsIE9VVCByZXF1ZXN0cy4NCj4+Pj4gLcKgwqDC
-oMKgwqDCoMKgICovDQo+Pj4+IC3CoMKgwqDCoMKgwqAgaWYgKCFyZXEtPmRpcmVjdGlvbikNCj4+
-Pj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIHRydWU7DQo+Pj4+IC0NCj4+
-Pj4gLcKgwqDCoMKgwqDCoCByZXR1cm4gcmVxLT5yZXF1ZXN0LmFjdHVhbCA9PSByZXEtPnJlcXVl
-c3QubGVuZ3RoOw0KPj4+PiArwqDCoMKgwqDCoMKgIHJldHVybiByZXEtPm51bV9wZW5kaW5nX3Nn
-cyA9PSAwOw0KPj4+PiAgICDCoH0NCj4+Pj4NCj4+Pj4gICAgwqBzdGF0aWMgaW50IGR3YzNfZ2Fk
-Z2V0X2VwX2NsZWFudXBfY29tcGxldGVkX3JlcXVlc3Qoc3RydWN0IGR3YzNfZXAgKmRlcCwNCj4+
-Pj4gQEAgLTMwMDcsNyArMzAwMCw3IEBAIHN0YXRpYyBpbnQNCj4+Pj4gZHdjM19nYWRnZXRfZXBf
-Y2xlYW51cF9jb21wbGV0ZWRfcmVxdWVzdChzdHJ1Y3QgZHdjM19lcCAqZGVwLA0KPj4+PiAgICDC
-oMKgwqDCoMKgwqDCoCByZXEtPnJlcXVlc3QuYWN0dWFsID0gcmVxLT5yZXF1ZXN0Lmxlbmd0aCAt
-IHJlcS0+cmVtYWluaW5nOw0KPj4+Pg0KPj4+PiAgICDCoMKgwqDCoMKgwqDCoCBpZiAoIWR3YzNf
-Z2FkZ2V0X2VwX3JlcXVlc3RfY29tcGxldGVkKHJlcSkgfHwNCj4+Pj4gLcKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJlcS0+bnVtX3BlbmRpbmdfc2dzKSB7DQo+
-Pj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoCAhbGlzdF9lbXB0eSgmZGVwLT5wZW5kaW5nX2xpc3Qp
-KSB7DQo+Pj4+ICAgIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBfX2R3YzNfZ2FkZ2V0
-X2tpY2tfdHJhbnNmZXIoZGVwKTsNCj4+Pj4gICAgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIGdvdG8gb3V0Ow0KPj4+PiAgICDCoMKgwqDCoMKgwqDCoCB9DQo+Pj4+DQo+Pj4+DQo+Pj4+
-IFRoaXMgaXMgdW5saWtlbHkgdG8gaGFwcGVuLCBidXQgaXQncyBuZWNlc3NhcnkgdG8gYmUgdGhl
-cmUuDQo+Pj4+DQo+Pj4+IExldCBtZSBrbm93IGlmIHlvdSdyZSBvayB3aXRoIHRoZSBjaGFuZ2Us
-IEknbGwgY3JlYXRlIGEgZm9ybWFsIHBhdGNoIGZvciBpdC4NCj4+PiBMb29rcyBnb29kLCB3ZSBt
-YXkganVzdCByZW5hbWUgdGhlIGZ1bmN0aW9uIHRvDQo+Pj4gZHdjM19nYWRnZXRfZXBfc2hvdWxk
-X2NvbnRpbnVlKCkgb3Igc29tZXRoaW5nIHNpbWlsYXIgYW5kIG1vdmUgdGhlDQo+Pj4gIWxpc3Rf
-ZW1wdHkoKSBjaGVjayBpbiB0aGVyZSB0b28uDQo+Pj4NCj4+IEkgZm9yZ290IHRoaXMgY29uZGl0
-aW9uIHNraXBzIHRoZSBkd2MzX2dhZGdldF9naXZlYmFjaygpLiBJIGhhdmUgdG8NCj4+IHNwbGl0
-IGl0LiBMZXQgbWUgc2VuZCBvdXQgdGhlIHJldmlzZWQgcGF0Y2hlcyBhbmQgeW91IGNhbiByZXZp
-ZXcuDQo+IFN1cmUsIEkgdGhpbmsgcGF0Y2ggMSBjYW4gZ28gaW4gZHVyaW5nIC1yYy4gRG8gd2Ug
-bmVlZCBhIENjIHN0YWJsZSBvbg0KPiBpdCwgdGhvdWdoPw0KPg0KPiBQYXRjaCAyIHdpbGwgaGF2
-ZSB0byB3YWl0IHVudGlsIHY1LjguDQo+DQoNClN1cmUuIEknbGwgcmVzZW5kIHdpdGggQ2Mgc3Rh
-YmxlIHRhZy4NCg0KVGhhbmtzLA0KVGhpbmgNCg==
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--TThNyReAmkHP58i9ENNBdtf2VVvIpqMrA
+Content-Type: multipart/mixed; boundary="tmOsREy25oKgpUiW8lnALGejyda7lIbzP";
+ protected-headers="v1"
+From: Neil Armstrong <narmstrong@baylibre.com>
+To: Felipe Balbi <balbi@kernel.org>, kishon@ti.com, khilman@baylibre.com,
+ martin.blumenstingl@googlemail.com
+Cc: linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Message-ID: <351fa51d-9772-13a5-8b44-538a61a19c88@baylibre.com>
+Subject: Re: [PATCH v2 00/14] usb: dwc3: meson: add OTG support for GXL/GXM
+References: <20200326134507.4808-1-narmstrong@baylibre.com>
+ <87v9mne9cj.fsf@kernel.org>
+In-Reply-To: <87v9mne9cj.fsf@kernel.org>
+
+--tmOsREy25oKgpUiW8lnALGejyda7lIbzP
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+
+On 29/03/2020 12:36, Felipe Balbi wrote:
+>=20
+> Hi,
+>=20
+> Neil Armstrong <narmstrong@baylibre.com> writes:
+>> The USB support was initialy done with a set of PHYs and dwc3-of-simpl=
+e
+>> because the architecture of the USB complex was not understood correct=
+ly
+>> at the time (and proper documentation was missing...).
+>>
+>> But with the G12A family, the USB complex was correctly understood and=
+
+>> implemented correctly.
+>> But seems the G12A architecture was derived for the GXL USB architectu=
+re,
+>> with minor differences and looks we can share most of the USB DWC3 glu=
+e
+>> driver.
+>>
+>> This patchset refactors and adds callbacks to handle the architecture
+>> difference while keeping the main code shared.
+>>
+>> The main difference is that on GXL/GXM the USB2 PHY control registers
+>> are mixed with the PHY registers (we already handle correctly), and
+>> the GLUE registers are allmost (99%) the same as G12A.
+>>
+>> But, the GXL/GXM HW is buggy, here are the quirks :
+>> - for the DWC2 controller to reset correctly, the GLUE mux must be swi=
+tched
+>>   to peripheral when the DWC2 controller probes. For now it's handled =
+by simply
+>>   switching to device when probing the subnodes, but it may be not eno=
+ugh
+>> - when manually switching from Host to Device when the USB port is not=
+
+>>   populated (should not happen with proper Micro-USB/USB-C OTG switch)=
+, it
+>>   makes the DWC3 to crash. The only way to avoid that is to use the Ho=
+st
+>>   Disconnect bit to disconnect the DWC3 controller from the port, but =
+we can't
+>>   recover the Host functionnality unless resetting the DWC3 controller=
+=2E
+>>   This bit is set when only manual switch is done, and a warning is pr=
+inted
+>>   on manual switching.
+>>
+>> The patches 1-9 should be applied first, then either waiting the next =
+release
+>> or if the usb maintainer can provide us a stable tag, we can use it to=
+ merge
+>> the DT and bindings.
+>>
+>> Changes since v1 at [1]:
+>> - Fixed DT bindings to take in account usb2-phy2 on GXM
+>> - Added comment in patch2
+>> - Fixed patch 5 and moved fix out
+>> - Collected tags
+>> - Lower DT patch changes, switch p20x-q20x port B as OTG by default
+>=20
+> patches 1-6 are applied to my testing/next
+>=20
+
+Thanks !
+
+Neil
+
+
+--tmOsREy25oKgpUiW8lnALGejyda7lIbzP--
+
+--TThNyReAmkHP58i9ENNBdtf2VVvIpqMrA
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEPVPGJshWBf4d9CyLd9zb2sjISdEFAl6DAfkACgkQd9zb2sjI
+SdFjyw//RckrqEYSwol9EjScA0sqLvAE1qwaHsolDgF9Jm0ZwMzsU0S08cm7n6XA
+AVFhiS5y12XVG7oPrOBhjQhssaH9+QxTsBWWR4E2pDVHU8F7Co90QWUpaoG9cQkX
+2vpwLVxwj7lk/JhsW+STQySfBeeCltGZ/z7Wc4jYN4u55Ija0HgoOlSkFYWMWvqT
+F7RDYafcZCQvk4HFNNcrBpibxAfvz8UAzF6eCVKrErt1efKR/uzhBYfr5o07fbPI
+WMis8oAFWhKH2D19XHG2wpwPYdBbDtGhmUNp6NSko2aB4Q6p3YEv6JQKoH98TKQQ
+cZBw+0in54LQIkkziDU9QyPI+Bqgk8xIO8IdznBW7E85UBf/N071LHcAl7vHvMpn
+F4apG+yeV+SXgPlfsyLEZL43Ufm/z3dptos7CRqpuEo4xYGmgDNfofMJ4o2KFY/s
+2Eu0Zz4lp09RkhNWXXUZH2LoS5z3djpdPJYoI/ilc3DDr0gzhyzEf7q3/oNyAZM0
+PeCdu3V5gI2EOSzwCKQJtlO6Z5MjQ7A9iw/WQBQcDHz2xTopKBkc+2XreFfcJNqk
+6HURsz/Df4k/cUy1ufwirDVaIdSfOlT87hYZlC6NN+6U3OGLv4bVkEUm0L8FqGcl
+13H2rbqZVGX3r/atM6FpV/jV0Pe2RM+iwLI+g8cwYCOiKbyEppo=
+=MKHU
+-----END PGP SIGNATURE-----
+
+--TThNyReAmkHP58i9ENNBdtf2VVvIpqMrA--
