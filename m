@@ -2,71 +2,170 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 516BC1987C1
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 01:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C851988BA
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 02:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729756AbgC3XGw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Mar 2020 19:06:52 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:36000 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728987AbgC3XGw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Mar 2020 19:06:52 -0400
-Received: by mail-io1-f68.google.com with SMTP id n10so5658051iom.3;
-        Mon, 30 Mar 2020 16:06:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=2R3HeLQuIVaRCkh6X9o27tq3rLDIUQvSz/ALYknVRuQ=;
-        b=ZqnPHyDWKMvPuny61ARi723y1mevUwHsDOfUDDWCUYTsRJxEeopk29eDupbAYak+TO
-         VDBP33W8yK6OTNRWj558ja+OoeMuWNWdhdJe4bGYqbn6/oGH6h/LQ33FV90NlMCEKXh5
-         bLv0LHagTwBPWO0KH9Yb06D4V0Da1MgVi4Grwh02KP1d9oA3PHSRte6mAkGTOcsU8mwz
-         GmBy2AA+1nKnM/rnM16pWjj8lC6Uz0F+vEXB8Xl6s0qw5KIPngiOG7sJnmMDJhn8HEfP
-         gZS1Lu9w5QhgZUQiBqCHD1pYJo974y1TsB3TvI6jrIKM4MQgMIOe0/1UL1tEQ1DVgSvx
-         Kyng==
-X-Gm-Message-State: ANhLgQ18JoKd958qNvgrKSdmlDAjvuluRtC6p9jf0CEtQLyt+xEwEeXg
-        uC8HuyrSzTfmQTvWF+ujKQ==
-X-Google-Smtp-Source: ADFU+vuK6gZ0DHpy9mtPPqneXZSnMRxos+jfYY3/2CKIx6COKayBSG14rG/bH2o8Ip/2xpj5hXIgbw==
-X-Received: by 2002:a02:2384:: with SMTP id u126mr13486357jau.64.1585609609630;
-        Mon, 30 Mar 2020 16:06:49 -0700 (PDT)
-Received: from rob-hp-laptop ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id m4sm5313115ill.78.2020.03.30.16.06.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2020 16:06:48 -0700 (PDT)
-Received: (nullmailer pid 29320 invoked by uid 1000);
-        Mon, 30 Mar 2020 23:06:47 -0000
-Date:   Mon, 30 Mar 2020 17:06:47 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Nagarjuna Kristam <nkristam@nvidia.com>
-Cc:     kishon@ti.com, robh+dt@kernel.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
-        jckuo@nvidia.com, Nagarjuna Kristam <nkristam@nvidia.com>
-Subject: Re: [PATCH V1 1/8] dt-bindings: phy: tegra-xusb: Add charger-detect
- property
-Message-ID: <20200330230647.GA29166@bogus>
-References: <1584527467-8058-1-git-send-email-nkristam@nvidia.com>
- <1584527467-8058-2-git-send-email-nkristam@nvidia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1584527467-8058-2-git-send-email-nkristam@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1729372AbgCaAO0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Mar 2020 20:14:26 -0400
+Received: from kernel.crashing.org ([76.164.61.194]:33702 "EHLO
+        kernel.crashing.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729019AbgCaAO0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Mar 2020 20:14:26 -0400
+Received: from localhost (gate.crashing.org [63.228.1.57])
+        (authenticated bits=0)
+        by kernel.crashing.org (8.14.7/8.14.7) with ESMTP id 02V0DJbF013894
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 30 Mar 2020 19:13:23 -0500
+Message-ID: <4dc3ac910c79dcca398eb5161dde44e1cc50baca.camel@kernel.crashing.org>
+Subject: Re: [PATCH v2 6/6] dt-bindings: usb: document aspeed vhub device
+ ID/string properties
+From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
+To:     Rob Herring <robh@kernel.org>, rentao.bupt@gmail.com
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        taoren@fb.com
+Date:   Tue, 31 Mar 2020 11:13:17 +1100
+In-Reply-To: <20200330192347.GA6388@bogus>
+References: <20200315191632.12536-1-rentao.bupt@gmail.com>
+         <20200315191632.12536-7-rentao.bupt@gmail.com>
+         <20200330192347.GA6388@bogus>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 18 Mar 2020 16:01:00 +0530, Nagarjuna Kristam wrote:
-> Add nvidia,charger-detect boolean property for Tegra210 and Tegra186
-> platforms. This property is used to inform driver to perform charger
-> detection on corresponding USB 2 port.
+On Mon, 2020-03-30 at 13:23 -0600, Rob Herring wrote:
+> On Sun, Mar 15, 2020 at 12:16:32PM -0700, rentao.bupt@gmail.com wrote:
+> > From: Tao Ren <rentao.bupt@gmail.com>
+> > 
+> > Update device tree binding document for aspeed vhub's device IDs and
+> > string properties.
+> > 
+> > Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
+> > ---
+> >  No change in v2:
+> >    - the patch is added into the series since v2.
+> > 
+> >  .../bindings/usb/aspeed,usb-vhub.yaml         | 68 +++++++++++++++++++
+> >  1 file changed, 68 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
+> > index 06399ba0d9e4..5b2e8d867219 100644
+> > --- a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
+> > @@ -52,6 +52,59 @@ properties:
+> >          minimum: 1
+> >          maximum: 21
+> >  
+> > +  vhub-vendor-id:
+> > +    description: vhub Vendor ID
+> > +    allOf:
+> > +      - $ref: /schemas/types.yaml#/definitions/uint32
+> > +      - maximum: 65535
+> > +
+> > +  vhub-product-id:
+> > +    description: vhub Product ID
+> > +    allOf:
+> > +      - $ref: /schemas/types.yaml#/definitions/uint32
+> > +      - maximum: 65535
 > 
-> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
-> ---
->  Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
+> There's already standard 'vendor-id' and 'device-id' properties. Use 
+> those.
 
-Acked-by: Rob Herring <robh@kernel.org>
+So yes and no... I don't fundamentally object but keep in mind that
+traditionally, the properties are about matching with a physical
+hardware.
+
+In this case however, we are describing a virtual piece of HW and so
+those IDs are going to be picked up to be exposed as the USB
+vendor/device of the vhub on the USB bus.
+
+Not necessarily an issue but it's more "configuration" than "matching"
+and as such, it might make sense to expose that with a prefix, though I
+would prefer something like usb-vendor-id or usb,vendor-id...
+
+> > +
+> > +  vhub-device-revision:
+> 
+> Specific to USB, not vhub.
+
+Same as the above.
+
+> > +    description: vhub Device Revision in binary-coded decimal
+> > +    allOf:
+> > +      - $ref: /schemas/types.yaml#/definitions/uint32
+> > +      - maximum: 65535
+> > +
+> > +  vhub-strings:
+> > +    type: object
+> > +
+> > +    properties:
+> > +      '#address-cells':
+> > +        const: 1
+> > +
+> > +      '#size-cells':
+> > +        const: 0
+> > +
+> > +    patternProperties:
+> > +      '^string@[0-9a-f]+$':
+> > +        type: object
+> > +        description: string descriptors of the specific language
+> > +
+> > +        properties:
+> > +          reg:
+> > +            maxItems: 1
+> > +            description: 16-bit Language Identifier defined by USB-IF
+> > +
+> > +          manufacturer:
+> > +            description: vhub manufacturer
+> > +            allOf:
+> > +              - $ref: /schemas/types.yaml#/definitions/string
+> > +
+> > +          product:
+> > +            description: vhub product name
+> > +            allOf:
+> > +              - $ref: /schemas/types.yaml#/definitions/string
+> > +
+> > +          serial-number:
+> > +            description: vhub device serial number
+> > +            allOf:
+> > +              - $ref: /schemas/types.yaml#/definitions/string
+> 
+> For all of this, it's USB specific, not vhub specific. I'm not sure this 
+> is the right approach. It might be better to just define properties 
+> which are just raw USB descriptors rather than inventing some DT format 
+> that then has to be converted into USB descriptors.
+
+Raw blob in the DT is rather annoying and leads to hard to parse stuff
+for both humans and scripts. The main strenght of the DT is it's easy
+to read and manipulate.
+
+Also not the entire descriptor is configurable this way.
+
+That said, it could be that using  the DT for the above is overkill and
+instead, we should consider a configfs like the rest of USB gadget.
+Though it isn't obvious how to do that, the current gadget stuff
+doesn't really "fit" what we need here.
+
+Maybe we could expose the port as UDCs but not actually expose them on
+the bus until the hub is "activated" via a special configfs entry...
+
+Cheers,
+Ben.
+
+> os the 
+> Rob
+
