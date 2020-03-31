@@ -2,118 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C48199C69
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 19:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F200C199CFB
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 19:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731343AbgCaRCl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Mar 2020 13:02:41 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:40067 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731304AbgCaRCe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 13:02:34 -0400
-Received: by mail-oi1-f193.google.com with SMTP id y71so19533824oia.7;
-        Tue, 31 Mar 2020 10:02:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=WsoENpy2jwTifAM1fD5pLX9mFDs7jg0pTni7tEt5IGg=;
-        b=MKbrczXqOEVLENPHhVTtv8kAwrtvN5vHUwpd+lgl2YbyPhAF/qHbzvLUES2RQIO3IX
-         s+PcA1CsLvTGYrN4vzj1JwrBWvDbq+l1p1Hx0M8atZ9r2Ortbp01hvl2+/acF8wK6Fac
-         S7iMrmgmM/RmbP3LXDkGXB1evGlSYvXAFhRSS5xLcHSXnH2ylxhXrs1nfcqukc2wX7WL
-         aeKPKB1RtOtuAk1CEbSRT6P+30ZiSqb1b7fO3LoNHTz0Wag5bGWjW3XTUSDprK1AF3CV
-         kBnYNSRy+eQLWKMgc9nT4arDriakeq75Z3EHZqrXrrJZAft5HkoaX0M94zfVQA/3rhmA
-         FPjA==
+        id S1726380AbgCaRgD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Mar 2020 13:36:03 -0400
+Received: from mail-io1-f72.google.com ([209.85.166.72]:47966 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725947AbgCaRgC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 13:36:02 -0400
+Received: by mail-io1-f72.google.com with SMTP id c2so19919610iok.14
+        for <linux-usb@vger.kernel.org>; Tue, 31 Mar 2020 10:36:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=WsoENpy2jwTifAM1fD5pLX9mFDs7jg0pTni7tEt5IGg=;
-        b=kVZQb+v9KPVC82XYX805YOckl1AgYMc05mwI3x9S7fBkHDcmyjJ0XWeWahPdQaL8RA
-         ymmWqY4OU0f0J7q3Pm0mA5Chwi9DpDOcIb1fKF8zBvmKezZN2wEgOU5lMCUynFlA37/v
-         nLVztOrqOov2Q1d+ZfA8nWm5pbqAdGCcvqOQQ3i7V1E77xBcLhCD0ZjVOSulFw2TfUn3
-         TnmLtDoeu0wIFRDVmJ50+b7K32Yqk+S1WDzPuqsR0Ym0QsWsyWoJDoUQ1W50ubLnRGKV
-         2vK462mLjqvhsx5/V8GPpIk92M6I6PGzOxRnWfhzoK5OPX5grsv3PaLYWGqWgPP4oX4s
-         YvNg==
-X-Gm-Message-State: ANhLgQ3sldfMOYVIW5lfAGqY1utuQ/IWJsyrkecNwiXD2Hx5e5t+6GO4
-        yhXLwPzLIdi9K+Ck/3BDtSf8GyjYAd/gNA==
-X-Google-Smtp-Source: ADFU+vvmit3GaQ6YrWCOnhehTfCG2Zwd1krBmjaYHHVxlPhFJnQT53Psinli0KKnkdL8JqlmGB40Xg==
-X-Received: by 2002:aca:efd4:: with SMTP id n203mr2853602oih.159.1585674153405;
-        Tue, 31 Mar 2020 10:02:33 -0700 (PDT)
-Received: from desertvoice.lan ([2601:3c7:8303:2a10::21c])
-        by smtp.gmail.com with ESMTPSA id h7sm2952605otk.3.2020.03.31.10.02.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2020 10:02:32 -0700 (PDT)
-From:   George Hilliard <thirtythreeforty@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     Icenowy Zheng <icenowy@aosc.io>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        George Hilliard <thirtythreeforty@gmail.com>
-Subject: [PATCH v2 5/5] ARM: suniv: f1c100s: enable USB on Lichee Pi Nano
-Date:   Tue, 31 Mar 2020 12:02:19 -0500
-Message-Id: <20200331170219.267732-6-thirtythreeforty@gmail.com>
-X-Mailer: git-send-email 2.26.0
-In-Reply-To: <20200331170219.267732-1-thirtythreeforty@gmail.com>
-References: <20200331170219.267732-1-thirtythreeforty@gmail.com>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=EkBmF5uXCWrM6aOPYLh3R3gAH7wKc57Bigw1PTLooMY=;
+        b=TMQ4CEmmxYRQufRlw/UMiuIhhS2uxMjAdKXRhOQ2Qgj4kurz8NGXTukzgE87osD1a4
+         SSr/Z0ELxhizrjq1T5SP1NuG9GYXRUi++Bl3HYO85m9Ivx8vHChBEmc1A8KpoMG3yXdF
+         IwjfXhpwbd67/wLudXVndMEI0b+sJY2OGIFfA+B/uyMoWsDC4Lakwrg9Pd2VCVY0JoaP
+         VVycxCClY8eHPMNGheOJFmBISwEDvB3uagO7C4Jrxg6s5kWUuUhpKUfm9SrhYJEOtAEU
+         hjXoKe+OuIAfPa/BVtQif2iyNiiueY4rUlwZ45CkgLSCUiDs+scJ12WdUQNRRztD0WPf
+         SKwQ==
+X-Gm-Message-State: ANhLgQ3wVUnb3u63e/XNXDHHFvBB7TSfPAv1LOsYFYaoj/shJiVbWW8X
+        DSWJB4/NpEQJrsVYjG6Gm6U2PBdHGXdxQT31qhkcl4j7QOW1
+X-Google-Smtp-Source: ADFU+vvHwabh6/XT3HQsMvsns9bvDqN3/9G4mkXHM92526jZauR7yd6nL/ccsz/Mvu+hTOSZfNJXAFtWrHfa8tJOTfHuhC7B/BNp
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a5e:880e:: with SMTP id l14mr15608634ioj.8.1585676161841;
+ Tue, 31 Mar 2020 10:36:01 -0700 (PDT)
+Date:   Tue, 31 Mar 2020 10:36:01 -0700
+In-Reply-To: <000000000000da6059059fcfdcf9@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005b022005a22a0050@google.com>
+Subject: Re: KASAN: use-after-free Read in skb_release_data (2)
+From:   syzbot <syzbot+a66a7c2e996797bb4acb@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, festevam@gmail.com,
+        gregkh@linuxfoundation.org, grundler@chromium.org,
+        hayeswang@realtek.com, johan.hedberg@gmail.com,
+        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+        linux-bluetooth@vger.kernel.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        marcel@holtmann.org, nishadkamdar@gmail.com, peter.chen@nxp.com,
+        pmalani@chromium.org, s.hauer@pengutronix.de, shawnguo@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Icenowy Zheng <icenowy@aosc.io>
+syzbot suspects this bug was fixed by commit:
 
-Lichee Pi Nano has a Micro-USB connector, with its D+, D- pins connected
-to the USB pins of the SoC and ID pin connected to PE2 GPIO.
+commit d9958306d4be14f4c7466242b38ed3893a7b1386
+Author: Nishad Kamdar <nishadkamdar@gmail.com>
+Date:   Sun Mar 15 10:55:07 2020 +0000
 
-Enable the USB functionality.
+    USB: chipidea: Use the correct style for SPDX License Identifier
 
-This patch depends on the previous change to the F1C100s device tree.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16d4940be00000
+start commit:   63623fd4 Merge tag 'for-linus' of git://git.kernel.org/pub..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5d2e033af114153f
+dashboard link: https://syzkaller.appspot.com/bug?extid=a66a7c2e996797bb4acb
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c25a81e00000
 
-Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
-Signed-off-by: George Hilliard <thirtythreeforty@gmail.com>
----
- .../arm/boot/dts/suniv-f1c100s-licheepi-nano.dts | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+If the result looks correct, please mark the bug fixed by replying with:
 
-diff --git a/arch/arm/boot/dts/suniv-f1c100s-licheepi-nano.dts b/arch/arm/boot/dts/suniv-f1c100s-licheepi-nano.dts
-index a1154e6c7cb5..c42186e22d45 100644
---- a/arch/arm/boot/dts/suniv-f1c100s-licheepi-nano.dts
-+++ b/arch/arm/boot/dts/suniv-f1c100s-licheepi-nano.dts
-@@ -6,6 +6,8 @@
- /dts-v1/;
- #include "suniv-f1c100s.dtsi"
- 
-+#include <dt-bindings/gpio/gpio.h>
-+
- / {
- 	model = "Lichee Pi Nano";
- 	compatible = "licheepi,licheepi-nano", "allwinner,suniv-f1c100s";
-@@ -19,8 +21,22 @@ chosen {
- 	};
- };
- 
-+&otg_sram {
-+	status = "okay";
-+};
-+
- &uart0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&uart0_pe_pins>;
- 	status = "okay";
- };
-+
-+&usb_otg {
-+	dr_mode = "otg";
-+	status = "okay";
-+};
-+
-+&usbphy {
-+	usb0_id_det-gpio = <&pio 4 2 GPIO_ACTIVE_HIGH>; /* PE2 */
-+	status = "okay";
-+};
--- 
-2.26.0
+#syz fix: USB: chipidea: Use the correct style for SPDX License Identifier
 
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
