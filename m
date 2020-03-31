@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB3219A290
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 01:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF8319A291
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 01:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731553AbgCaXhi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Mar 2020 19:37:38 -0400
-Received: from mail-gateway-shared02.cyon.net ([194.126.200.224]:49880 "EHLO
+        id S1731554AbgCaXhj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Mar 2020 19:37:39 -0400
+Received: from mail-gateway-shared02.cyon.net ([194.126.200.224]:49896 "EHLO
         mail-gateway-shared02.cyon.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728840AbgCaXhh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 19:37:37 -0400
+        by vger.kernel.org with ESMTP id S1731511AbgCaXhi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 19:37:38 -0400
 Received: from s013.cyon.net ([149.126.4.22])
         by mail-gateway-shared02.cyon.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
         (Exim)
         (envelope-from <public+bounce-silo.slz.hanselmann.tv-hansmi@hansmi.ch>)
-        id 1jJQRp-00010I-VL
+        id 1jJQRq-00010N-2q
         for linux-usb@vger.kernel.org; Wed, 01 Apr 2020 01:37:36 +0200
-Received: from [10.20.10.231] (port=21114 helo=mail.cyon.ch)
+Received: from [10.20.10.232] (port=36156 helo=mail.cyon.ch)
         by s013.cyon.net with esmtpa (Exim 4.93)
         (envelope-from <public+bounce-silo.slz.hanselmann.tv-hansmi@hansmi.ch>)
-        id 1jJQRo-000qJd-OU; Wed, 01 Apr 2020 01:37:32 +0200
+        id 1jJQRo-000qJk-SO; Wed, 01 Apr 2020 01:37:32 +0200
 Received: from hansmi by silo.slz.hanselmann.tv with local (Exim 4.92)
         (envelope-from <hansmi@silo.slz.hanselmann.tv>)
-        id 1jJQRo-00086E-AD; Tue, 31 Mar 2020 23:37:32 +0000
+        id 1jJQRo-00086J-Ir; Tue, 31 Mar 2020 23:37:32 +0000
 From:   Michael Hanselmann <public@hansmi.ch>
 To:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>
 Cc:     Michael Hanselmann <public@hansmi.ch>,
         Michael Dreher <michael@5dot1.de>,
         Jonathan Olds <jontio@i4free.co.nz>
-Subject: [PATCH v2 3/6] USB: serial: ch341: Limit prescaler on quirky chips
-Date:   Tue, 31 Mar 2020 23:37:19 +0000
-Message-Id: <ee0499594a75018c0e31da4af9feb8a322ff448d.1585697281.git.public@hansmi.ch>
+Subject: [PATCH v2 4/6] USB: serial: ch341: Name prescaler, divisor registers
+Date:   Tue, 31 Mar 2020 23:37:20 +0000
+Message-Id: <65cfdf4a0600e86e89b3a3fb839e733ecebee688.1585697281.git.public@hansmi.ch>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1585697281.git.public@hansmi.ch>
 References: <cover.1585697281.git.public@hansmi.ch>
@@ -50,136 +50,57 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A subset of all CH341 devices stop responding to bulk transfers, usually
-after the third byte, when the highest prescaler bit (0b100) is set.
-There is one exception, namely a prescaler of exactly 0b111 (fact=1,
-ps=3). Limit these to the lower prescaler values at the cost of timing
-precision.
+Add constants for the prescaler and divisor registers.
 
-Rates above 46875 baud use the same timings as the normal algorithm.
-Below that the worst difference between desired and actual baud rate is
-2.17 percentage points. The worst difference is 1.06 p.p. when only
-looking at divisors differing from the normal algorithm.
+The 0x25 register is only used by CH341 chips before version 0x30 and is
+involved in configuring the line control parameters. It's not known to
+the author whether there any such chips in the wild, and the driver
+never supported them (other registers are also treated differently). The
+alternative would've been to not set the register, but that may have
+unintended effects.
 
 Signed-off-by: Michael Hanselmann <public@hansmi.ch>
 ---
- drivers/usb/serial/ch341.c | 70 ++++++++++++++++++++++++++++----------
- 1 file changed, 52 insertions(+), 18 deletions(-)
+ drivers/usb/serial/ch341.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-index 9c839f67c3d4..67a5d4c3df42 100644
+index 67a5d4c3df42..9407e12d9fbc 100644
 --- a/drivers/usb/serial/ch341.c
 +++ b/drivers/usb/serial/ch341.c
-@@ -24,6 +24,8 @@
- #define DEFAULT_BAUD_RATE 9600
- #define DEFAULT_TIMEOUT   1000
+@@ -61,7 +61,11 @@
+ #define CH341_REQ_MODEM_CTRL   0xA4
  
-+#define CH341_QUIRK_LIMITED_PRESCALER 0x01
+ #define CH341_REG_BREAK        0x05
++#define CH341_REG_PRESCALER    0x12
++#define CH341_REG_DIVISOR      0x13
+ #define CH341_REG_LCR          0x18
++#define CH341_REG_LCR2         0x25
 +
- /* flags for IO-Bits */
- #define CH341_BIT_RTS (1 << 6)
- #define CH341_BIT_DTR (1 << 5)
-@@ -195,35 +197,67 @@ static int ch341_calc_divisor(speed_t speed, unsigned int ps,
-  *		2 <= div <= 256 if fact = 0, or
-  *		9 <= div <= 256 if fact = 1
-  */
--static int ch341_get_divisor(speed_t speed)
-+static int ch341_get_divisor(struct ch341_private *priv)
- {
-+	speed_t speed;
- 	unsigned int fact, div, clk_div;
- 	int ps;
+ #define CH341_NBREAK_BITS      0x01
  
-+	speed = priv->baud_rate;
-+
- 	/*
- 	 * Clamp to supported range, this makes the (ps < 0) and (div < 2)
- 	 * sanity checks below redundant.
+ #define CH341_LCR_ENABLE_RX    0x80
+@@ -294,11 +298,19 @@ static int ch341_set_baudrate_lcr(struct usb_device *dev,
  	 */
- 	speed = clamp(speed, 46U, 3000000U);
+ 	val |= BIT(7);
  
--	/*
--	 * Start with highest possible base clock and find a divisor for the
--	 * requested baud rate.
--	 */
--	for (ps = 3; ps >= 0; --ps) {
--		if (ch341_calc_divisor(speed, ps, 1U, &div, &clk_div) == 0) {
--			fact = 1;
--			break;
--		}
--
-+	if (priv->quirks & CH341_QUIRK_LIMITED_PRESCALER) {
- 		/*
--		 * Prefer half base clock (fact = 0) before trying lower
--		 * prescaler values. This makes the receiver more tolerant to
--		 * errors.
-+		 * A subset of all CH34x devices stop responding to bulk
-+		 * transfers when configured with certain prescaler values.
-+		 *
-+		 * fact=0, ps=0..3: Works
-+		 * fact=1, ps=0..2: Unreliable
-+		 * fact=1, ps=3: Works
-+		 *
-+		 * Limit these devices to working prescaler values at the cost
-+		 * of precision for speeds up to 46875 baud above which
-+		 * fact = 1 with ps = 3 is used.
- 		 */
--		if (ch341_calc_divisor(speed, ps, 0U, &div, &clk_div) == 0) {
-+		if (ch341_calc_divisor(speed, 3U, 1U, &div, &clk_div) == 0) {
-+			ps = 3U;
-+			fact = 1U;
-+		} else {
- 			fact = 0;
--			break;
-+
-+			for (ps = 3; ps >= 0; --ps) {
-+				if (ch341_calc_divisor(speed, ps, fact,
-+						       &div, &clk_div) == 0)
-+					break;
-+			}
-+		}
-+	} else {
-+		/*
-+		 * Start with highest possible base clock and find a divisor
-+		 * for the requested baud rate.
-+		 */
-+		for (ps = 3; ps >= 0; --ps) {
-+			if (ch341_calc_divisor(speed, ps, 1U,
-+					       &div, &clk_div) == 0) {
-+				fact = 1;
-+				break;
-+			}
-+
-+			/*
-+			 * Prefer half base clock (fact = 0) before trying
-+			 * lower prescaler values. This makes the receiver more
-+			 * tolerant to errors.
-+			 */
-+			if (ch341_calc_divisor(speed, ps, 0U,
-+					       &div, &clk_div) == 0) {
-+				fact = 0;
-+				break;
-+			}
- 		}
- 	}
+-	r = ch341_control_out(dev, CH341_REQ_WRITE_REG, 0x1312, val);
++	r = ch341_control_out(dev, CH341_REQ_WRITE_REG,
++			      CH341_REG_DIVISOR << 8 | CH341_REG_PRESCALER,
++			      val);
+ 	if (r)
+ 		return r;
  
-@@ -250,7 +284,7 @@ static int ch341_set_baudrate_lcr(struct usb_device *dev,
- 	if (!priv->baud_rate)
- 		return -EINVAL;
- 
--	val = ch341_get_divisor(priv->baud_rate);
-+	val = ch341_get_divisor(priv);
- 	if (val < 0)
- 		return -EINVAL;
- 
-@@ -353,7 +387,7 @@ static int ch341_detect_quirks(struct usb_device *dev)
- 	if (r == -EPIPE) {
- 		dev_dbg(&dev->dev, "%s - reading break condition register"
- 			" failed (%d)\n", __func__, r);
--		r = 0;
-+		r = CH341_QUIRK_LIMITED_PRESCALER;
- 		goto out;
- 	}
+-	r = ch341_control_out(dev, CH341_REQ_WRITE_REG, 0x2518, lcr);
++	/*
++	 * Chip versions before version 0x30 (read using
++	 * CH341_REQ_READ_VERSION) used separate registers for line control.
++	 * 0x30 and above use CH341_REG_LCR only.
++	 */
++	r = ch341_control_out(dev, CH341_REQ_WRITE_REG,
++			      CH341_REG_LCR2 << 8 | CH341_REG_LCR, lcr);
+ 	if (r)
+ 		return r;
  
 -- 
 2.20.1
