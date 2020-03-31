@@ -2,149 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BDA198E00
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 10:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2943C198E08
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 10:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729989AbgCaIKR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Mar 2020 04:10:17 -0400
-Received: from mail-eopbgr20080.outbound.protection.outlook.com ([40.107.2.80]:8974
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729950AbgCaIKR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 31 Mar 2020 04:10:17 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TX60A8Jl48lIqwixHe02oPwWC9XAFMYVl+AnxEDtw48YpSLPpae4P76OIP8qB+TRSkrjXgQ3tR0Qa9DG9g2gihVENqqBMCh+su0XyBP10Wi82Ylmj7c1eFgliP98HZinZrjF/Q78RZFfBW4F7HoXzzwrtfW6eEPfQ8jdvIDjYEtR1eAQfjB9UqpBSzl1lmqf6fP0pN46KzmFXnoQJvtfSfUQPgnDhK09bfr1SkLgHLmO8G0/yl3v6yulT129i5iOR6VB2DrilK83QHGKXvxudIhHQwqdE2jPA3S2N0yEbvqD3plRY/m3I2wYdBIBzvpjmNrbBIP1msMcjSom/hVidw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BJhyJsbya4+B58sp87W4OdZVrtusWyLWTMAsTpXmEWs=;
- b=mTt+XaoJD2TeOUJVeK90IhMZg9PDDwmbeYVhVWfUCe+YFTUVviW8S7aPUVu/Vd140WNoQZqhlGB2uXXTvdgPDS7v9jx/bx5hcvtK53LBmbgTOQxOyIKwZMCmmJDI8uRVFeTgx0pVyra+zgKAq+JhLEnfoicczsPM3ZoX3eUuPWJYUoVfo9AiCD/LBGV7V1oiwKMyNaREW1iBPgw0ALe5zvgI+NSyIe3SiHN6+h7dpwLo5yWmY2SxOvBfCzMX/bykUcQQqF5zND+DmzSGsrSwm4X6sG2pbPfY2oaQjsXJa8h9nJ1Kszg8OFusMWKeXRlxRoNc3JasMWcq/IowHpaWjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BJhyJsbya4+B58sp87W4OdZVrtusWyLWTMAsTpXmEWs=;
- b=Pn6wVNwL+zmu0zdnyqLzndILsUv9W/Oz2WUBmMvpLLBVohhwgZotwpYN9hXZjMaUmaBJHqRGASCeJElC0fSgiWJ/I8FmK0icGKWdcnrXLPm61jJEzhzT+bnbBSyjAxG4yzzHLh+Ahok27IemULXNeTRiVXwzElNGIFQWGU1gZZM=
-Authentication-Results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (52.135.57.84) by
- AM7PR04MB6934.eurprd04.prod.outlook.com (10.141.173.142) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2856.20; Tue, 31 Mar 2020 08:10:12 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::902c:71:6377:4273]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::902c:71:6377:4273%5]) with mapi id 15.20.2856.019; Tue, 31 Mar 2020
- 08:10:12 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     balbi@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, pawell@cadence.com,
-        rogerq@ti.com, gregkh@linuxfoundation.org, jun.li@nxp.com,
-        Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH 4/4] usb: cdns3: change dev_info to dev_dbg for debug message
-Date:   Tue, 31 Mar 2020 16:10:05 +0800
-Message-Id: <20200331081005.32752-4-peter.chen@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200331081005.32752-1-peter.chen@nxp.com>
-References: <20200331081005.32752-1-peter.chen@nxp.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR03CA0123.apcprd03.prod.outlook.com
- (2603:1096:4:91::27) To AM7PR04MB7157.eurprd04.prod.outlook.com
- (2603:10a6:20b:118::20)
+        id S1729795AbgCaIL0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Mar 2020 04:11:26 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:34911 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726299AbgCaILZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 04:11:25 -0400
+Received: by mail-lf1-f67.google.com with SMTP id t16so15681618lfl.2
+        for <linux-usb@vger.kernel.org>; Tue, 31 Mar 2020 01:11:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=lQgJXPohTQLyM7oFXw6PMp6DNpTxVG8t0AXi1walu40=;
+        b=JVu9j+JvZCUR6cu4k8RnQ7+GQChcHsK4KL5y+N3uFnD4bTPfK7dnj8KV1WdtXG44uX
+         dMqq1tn1AAdRQVS2aYSJY/NK9c93UVHPTyes8YNVo0/4QXqTnaLBVkuYPSFIjIEBu+2I
+         mT2Talfw/AttxMT5AQZqI5K0mnQvTp81oMxVfB7zryvwgGzJ922RWXq1VHcul2+GAA71
+         O3DjuxlJQHsI4/y+IGb5vCf7kYjtCXG+ig2PY5U+RxfXS/WEdUT1UsTKvFldm+659Shu
+         NKK+Jo80m84gC32z683PJRqYzaxFWMNLMPvZmpIpq0CG/l8iNnECCYa4HKoSshGR3xC5
+         Ubow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=lQgJXPohTQLyM7oFXw6PMp6DNpTxVG8t0AXi1walu40=;
+        b=qYUHDPeYCIGx27rhfADiN3aB6SbmZwJIljHgyO/EFBr9YuhKcQ3R6Gww19b2F1+/pQ
+         Lmcd7r4CyAVwFfb+0hmHk8noxuMmQln82m9VQqBaLgRnRkgIWUyuddSp/IBHRT2Lj7pw
+         CZYiN6X4uKtUSfUACyH2flJ3R+gCyAf7F/fVfsImw1yVjx9flgNwg4aK2VBy3diIBWHz
+         UoZl3nN/IgLgJHBiNliLuEjNNqInopvEcAENvaQv9MN8Mb50jj04amYf4DKZuF988dJy
+         tFsTrd+rpRoTHxhOlR4GlD1dlWtlWrHE1vQkFdYodO1YqHbPRMkqY+eSGIz3MP2l+5d0
+         t5jA==
+X-Gm-Message-State: AGi0PuYoaDlXvRc8VukY7zyN7hS2PBXpozMyXZgaSgKHFVTQefylmmTU
+        uFzsSnxxsfL9aeSOPihc5bS6/ULnXE4=
+X-Google-Smtp-Source: APiQypK54BUB/NW5T2ZzA8E4C9Bj+nKsG+jCu0rZmcc87g0uh4em2OCMca1rtxeDzvxv0BYNNZs0PA==
+X-Received: by 2002:a19:89d4:: with SMTP id l203mr10345085lfd.45.1585642283037;
+        Tue, 31 Mar 2020 01:11:23 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id t23sm9186097lfq.4.2020.03.31.01.11.22
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 31 Mar 2020 01:11:22 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     John Youn <John.Youn@synopsys.com>,
+        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [RESEND PATCH v2] usb: dwc3: gadget: Do link recovery for SS and SSP
+In-Reply-To: <73b1d4e0-6ce4-7c60-2c08-ec6a6e233304@synopsys.com>
+References: <20c05d4e60c97b03314ede8d7f2d7c29b34f665f.1576028945.git.thinhn@synopsys.com> <73b1d4e0-6ce4-7c60-2c08-ec6a6e233304@synopsys.com>
+Date:   Tue, 31 Mar 2020 11:11:18 +0300
+Message-ID: <87wo710wrd.fsf@kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from b29397-desktop.ap.freescale.net (119.31.174.66) by SG2PR03CA0123.apcprd03.prod.outlook.com (2603:1096:4:91::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2878.9 via Frontend Transport; Tue, 31 Mar 2020 08:10:09 +0000
-X-Mailer: git-send-email 2.17.1
-X-Originating-IP: [119.31.174.66]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 7c45c57b-f99a-4cf2-fc41-08d7d54aef69
-X-MS-TrafficTypeDiagnostic: AM7PR04MB6934:|AM7PR04MB6934:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM7PR04MB6934D3840480EDE81C0C21AB8BC80@AM7PR04MB6934.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:77;
-X-Forefront-PRVS: 0359162B6D
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(376002)(366004)(39860400002)(396003)(136003)(346002)(66476007)(5660300002)(6916009)(16526019)(186003)(6506007)(52116002)(26005)(6486002)(6512007)(44832011)(8936002)(956004)(4326008)(81166006)(66556008)(8676002)(36756003)(2616005)(81156014)(316002)(478600001)(6666004)(2906002)(15650500001)(86362001)(66946007)(1076003)(473944003)(414714003);DIR:OUT;SFP:1101;
-Received-SPF: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9YYcG0PxVtG4itFnDT3IHY6RB1xyM9uAqiZ6atqL1uFPKmwR7WToClTG+8aH/zryabFy6pUwbJtpS/beNIYIm4UqiKHkZ3MFPtUnwbYENYAi7AULYc9/spmQijHKdSUJ2WOy/DJyBTQDB6m8ENH1TA7yfLPcVc0veiFlNquTN9o9GZJEnF4qafqGaDn7eiwflKUJ6NR9PRVcu2YYmzM93FiboWxrVd2sKiPqKgWAw2ceZx+8psKxsluyTLDQeoabSrWuvIZaW8mgO6LT8pj2Vau4EhUAAbRAffU1TCu0cZucMEdU737eFemAdW557U6LEzm2ZH0RkBagfrSQmcq/iNywHcbiAwmo34mV72KVas6vh7DoPlEeLlfhTugm7Ih7hpQsFWKHzZrR2A29Dv4bsjzSikxIlRu5heQzzvN3GwsuiPi/M70dUZopQTMSR5rz5u2ze26yoN2QXziD+myzB5ORr0ATmQQgp1r5miv8VKHJ1UFwXfXI0Sh/77YCVCsUvvHz4oQ0aEZV6+k30cUQoQ==
-X-MS-Exchange-AntiSpam-MessageData: Oz53O115HemI7JUTYdm5HhGFuORzMeyx0osWvVFrx7F5W9KWiJLbrYhx0zm7yVQJuBLgTo07qSci1reRHkCn/XARHmnuS3iFhaxAjxMCoytsg0a04xfico3LlsT+CLcUc3khTgiQOYcIdC1LqnlBDw==
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c45c57b-f99a-4cf2-fc41-08d7d54aef69
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2020 08:10:11.8963
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7K9zG2mFqlFZxPBXLTLGFir4bihpTMPeWEfCobAWA68XNxKPkMASq6Cv5FZN27B5tGlj/pPOwUAD+DE2V/CuhQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6934
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-During device mode initialization, lots of device information
-are printed to console, see below. Change them as debug message.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-cdns-usb3 5b130000.cdns3: Initialized  ep0 support:
-cdns-usb3 5b130000.cdns3: Initialized  ep1out support: BULK, INT ISO
-cdns-usb3 5b130000.cdns3: Initialized  ep2out support: BULK, INT ISO
-cdns-usb3 5b130000.cdns3: Initialized  ep3out support: BULK, INT ISO
-cdns-usb3 5b130000.cdns3: Initialized  ep4out support: BULK, INT ISO
-cdns-usb3 5b130000.cdns3: Initialized  ep5out support: BULK, INT ISO
-cdns-usb3 5b130000.cdns3: Initialized  ep6out support: BULK, INT ISO
-cdns-usb3 5b130000.cdns3: Initialized  ep7out support: BULK, INT ISO
-cdns-usb3 5b130000.cdns3: Initialized  ep1in support: BULK, INT ISO
-cdns-usb3 5b130000.cdns3: Initialized  ep2in support: BULK, INT ISO
-cdns-usb3 5b130000.cdns3: Initialized  ep3in support: BULK, INT ISO
-cdns-usb3 5b130000.cdns3: Initialized  ep4in support: BULK, INT ISO
-cdns-usb3 5b130000.cdns3: Initialized  ep5in support: BULK, INT ISO
-cdns-usb3 5b130000.cdns3: Initialized  ep6in support: BULK, INT ISO
-cdns-usb3 5b130000.cdns3: Initialized  ep7in support: BULK, INT ISO
 
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
----
- drivers/usb/cdns3/drd.c    | 4 ++--
- drivers/usb/cdns3/gadget.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi,
 
-diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
-index 16ad485f0b69..58089841ed52 100644
---- a/drivers/usb/cdns3/drd.c
-+++ b/drivers/usb/cdns3/drd.c
-@@ -329,7 +329,7 @@ int cdns3_drd_init(struct cdns3 *cdns)
- 		cdns->otg_v1_regs = NULL;
- 		cdns->otg_regs = regs;
- 		writel(1, &cdns->otg_v0_regs->simulate);
--		dev_info(cdns->dev, "DRD version v0 (%08x)\n",
-+		dev_dbg(cdns->dev, "DRD version v0 (%08x)\n",
- 			 readl(&cdns->otg_v0_regs->version));
- 	} else {
- 		cdns->otg_v0_regs = NULL;
-@@ -337,7 +337,7 @@ int cdns3_drd_init(struct cdns3 *cdns)
- 		cdns->otg_regs = (void *)&cdns->otg_v1_regs->cmd;
- 		cdns->version  = CDNS3_CONTROLLER_V1;
- 		writel(1, &cdns->otg_v1_regs->simulate);
--		dev_info(cdns->dev, "DRD version v1 (ID: %08x, rev: %08x)\n",
-+		dev_dbg(cdns->dev, "DRD version v1 (ID: %08x, rev: %08x)\n",
- 			 readl(&cdns->otg_v1_regs->did),
- 			 readl(&cdns->otg_v1_regs->rid));
- 	}
-diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
-index 3c05080a9ad5..2dab1da4a2bc 100644
---- a/drivers/usb/cdns3/gadget.c
-+++ b/drivers/usb/cdns3/gadget.c
-@@ -2954,7 +2954,7 @@ static int cdns3_init_eps(struct cdns3_device *priv_dev)
- 
- 		priv_ep->flags = 0;
- 
--		dev_info(priv_dev->dev, "Initialized  %s support: %s %s\n",
-+		dev_dbg(priv_dev->dev, "Initialized  %s support: %s %s\n",
- 			 priv_ep->name,
- 			 priv_ep->endpoint.caps.type_bulk ? "BULK, INT" : "",
- 			 priv_ep->endpoint.caps.type_iso ? "ISO" : "");
--- 
-2.17.1
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+> Thinh Nguyen wrote:
+>> The controller always supports link recovery for device in SS and SSP.
+>> Remove the speed limit check. Also, when the device is in RESUME or
+>> RESET state, it means the controller received the resume/reset request.
+>> The driver must send the link recovery to acknowledge the request. They
+>> are valid states for the driver to send link recovery.
+>>
+>> Fixes: 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
+>> Fixes: ee5cd41c9117 ("usb: dwc3: Update speed checks for SuperSpeedPlus")
+>> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+>> ---
+>>
+>> Resend note -
+>>    This was on Felipe's next branch some time ago,
+>>    but it was lost somehow.
+>>
+>> Changes in v2 -
+>>    Added Fixes tags
+>>
+>>   drivers/usb/dwc3/gadget.c | 8 ++------
+>>   1 file changed, 2 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index a9aba716bf80..3dcdde9080f5 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -1712,7 +1712,6 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
+>>   	u32			reg;
+>>=20=20=20
+>>   	u8			link_state;
+>> -	u8			speed;
+>>=20=20=20
+>>   	/*
+>>   	 * According to the Databook Remote wakeup request should
+>> @@ -1722,16 +1721,13 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
+>>   	 */
+>>   	reg =3D dwc3_readl(dwc->regs, DWC3_DSTS);
+>>=20=20=20
+>> -	speed =3D reg & DWC3_DSTS_CONNECTSPD;
+>> -	if ((speed =3D=3D DWC3_DSTS_SUPERSPEED) ||
+>> -	    (speed =3D=3D DWC3_DSTS_SUPERSPEED_PLUS))
+>> -		return 0;
+>> -
+>>   	link_state =3D DWC3_DSTS_USBLNKST(reg);
+>>=20=20=20
+>>   	switch (link_state) {
+>> +	case DWC3_LINK_STATE_RESET:
+>>   	case DWC3_LINK_STATE_RX_DET:	/* in HS, means Early Suspend */
+>>   	case DWC3_LINK_STATE_U3:	/* in HS, means SUSPEND */
+>> +	case DWC3_LINK_STATE_RESUME:
+>>   		break;
+>>   	default:
+>>   		return -EINVAL;
+>
+> Maybe this patch was lost somewhere. Let me know if there's any issue=20
+> with this patch.
 
+It's now in my testing/fixes
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6C+yYACgkQzL64meEa
+mQZLmhAAmvIyC2LEVtWcM9e+xzfJOK1o3elqPbdfYhIt3Rp0mymBMZ6QY/0wjgp4
+gzi18z368B5chCbJu8e7BlNQoyzQy2jgV3lwgs48xRRwYuNiguTYiGOw9+pFAlI7
+LHPQfXsP88gHvWa+mTxY/BR3yeW7QfWeQ+tPbBVr+mqo2dW7eDTum66QstFGSgLd
+kg60OaKeoW/qs6I30nnaAh8Au8L0WfqBWJUZNemci7JrMdBEjHvIUSK442noUSYA
+4QahyyACLzZJE7YsKzx7jJoKs/gVZ3ZJanxVVKDLB+GJhKm56MvjrBx9poieo6Ob
+UfYAWjb6lE25J00is+HnIUkOGdFgPAHXA4OQ5kcvnod7gubt4JlbiVfwfc5/UAh1
+lyU8jfcRK+wWJvg+wyxHsp7pRgvVI9c6FHR65rpRyYU2Ez4K7P3ekW9wkKDyB/ii
+AlZpSqEN6VlG20LtV651g1fc7ppxUbyFh7ylsYNa+IDA21vHA8XJ3X9K2p+txIaV
+SgGHwTmQsU91QXBXJZGrbYMlC1qmELB3Z1eJgxAFhliK9MDxpUYkRRdLVGkz2PrP
+c/uXfuIRe65mITdwMAAoIzw4wmtJ0oYLS8ExDaFeKlmRJJ8CCVoVcqHPZJMdOzl7
+0mjxLvAB4CjGSlFOthuZguZhPbFtr2Xalt0F4OWQ2rG7Lf28zMA=
+=11k7
+-----END PGP SIGNATURE-----
+--=-=-=--
