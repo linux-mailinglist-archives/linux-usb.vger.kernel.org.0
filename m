@@ -2,162 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB91199C15
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 18:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A5D6199C6E
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Mar 2020 19:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731116AbgCaQuI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 31 Mar 2020 12:50:08 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:46607 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730592AbgCaQuI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 12:50:08 -0400
-Received: by mail-io1-f69.google.com with SMTP id c7so19754375iog.13
-        for <linux-usb@vger.kernel.org>; Tue, 31 Mar 2020 09:50:04 -0700 (PDT)
+        id S1730677AbgCaRC2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 31 Mar 2020 13:02:28 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:41538 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726194AbgCaRC2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 31 Mar 2020 13:02:28 -0400
+Received: by mail-ot1-f66.google.com with SMTP id f52so22761679otf.8;
+        Tue, 31 Mar 2020 10:02:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jxEDY7Lh9sFrcdUwEPS+IX6vGxzZgavjk6ZW2NcrVrk=;
+        b=Kq/9g2MQD/2QCPgF2+mn1+/B1jcPmOv3EWTIqQ2Fh6zbQtoecS4FHkQjUo9ozsnRKA
+         W1k9E1kh/u8Ni3caRzBYd6ZdLbeCspOUzmXE2GGF54oEgxdkGCklbstYts5Euv7Ausch
+         xKeBwPImJH1IusJkhsbL4JadMjuR/hk71CZToPkYsA5VfejNPcNXNj5OTLYIhHGQN0+K
+         5K8171uaD/5TuAwdubMGiFnWR9ZLNpXdL2jjwcV/YSqD1JQ13epwUe0QlUor0rOrZ9cZ
+         /Y2IK6GgRWL566lc6bEhOCelT36yY+orkfyTsTWnoLjbUJnKcN8zaRGFaCAZfeWrBdtB
+         tdRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=FnPVIE4Y4YoAbVewZLcfDMvis4c3vgY/mVpUeoEtT+Y=;
-        b=ElYcseKZRRbDalQXTFZJl71Dtd04GBMYxEhFUZCd5AE4F4nb9w63waQ7R1YztriZ2Z
-         kJjQCAMkw9e8nfOKXyhUHHUfcx0Lsi6tjPuvEEyLb/f8fbn5PPh1WRfwBtZkJetS7l2c
-         IoFpZrKBqzqh5/WFDP+T19rfZ9aZPF8ajED3u/orEq9saB7xDAvlg32QrNZyu7Wiz6pu
-         4xP2VYVcQsdg8bU8VLk7YcmrKDvxkOHixkmxZfmflG5aj9eJVSn7Nh0I5IJ9mOdaVSbg
-         tsWglmf+tkoDw9X1dAP917u8HzSJQsdHdkZf60mDqKbbRLH3ER5GrWZfjaXWWdkMDGaX
-         5s9A==
-X-Gm-Message-State: ANhLgQ1t8R6P5vzSv0R1Tuj/v4XJ4B+Yp1haGmAJT//GwGAG1ROLCWuP
-        +pSnXIA/4TDzqm6UWXlKAt68AF3LSmSfva0fXUbiA1qY3na5
-X-Google-Smtp-Source: ADFU+vv/iTauQfniYclFQg/kjihb1SPLPslGxg7z0kHqR/jnKPkNv1jM5/SfGgQjO4Jm58kCuRt6HLbibZICuV6sU4IKTlrrofCQ
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jxEDY7Lh9sFrcdUwEPS+IX6vGxzZgavjk6ZW2NcrVrk=;
+        b=XTsjoi6CEI+TSJymWu05PYx2wIcNmybcPvzRo0bLFNxr0ChR6r7OWnZE0jSx2H8TIX
+         U+kgYy3hYvErpyiovl7in+BMMqebVXeYJFCW/Q7575jKEZ0GZWcJnPrpco6RVS+B3QqQ
+         6CkegRjnu5yA3aFHBJCTQonEyEkCc1oVL2CWfNL3ek7g7k8rDpZGL6cagDWJvdxPzcCi
+         gJJhqSbbI2ZayIKcVesxArbkN26UzOkxz74PiNaPSwaa6gzkYMZ5KBcfgwcMl3ecOWq2
+         EnomLGGpirpBsBXiAArKtiuobDw9B505N8om+GTZUP9Yv8Xh9ig5HC6JgJc/ViCdbN+v
+         nc/Q==
+X-Gm-Message-State: ANhLgQ0xr3LKWAPVUYLc16YwSeKHEhX6cVy69TfQMu5iOrMgXKbBpZEe
+        lpynGC8iYXAQpNJiYdPn/yg=
+X-Google-Smtp-Source: ADFU+vvsUd4Z5AdeIEOonIjmQWuPNBNc8nTzBnvHkHh65f1ICpuQJbiBIa5rO87xKTILuWXS57w29A==
+X-Received: by 2002:a9d:6e8f:: with SMTP id a15mr9692562otr.188.1585674146917;
+        Tue, 31 Mar 2020 10:02:26 -0700 (PDT)
+Received: from desertvoice.lan ([2601:3c7:8303:2a10::21c])
+        by smtp.gmail.com with ESMTPSA id h7sm2952605otk.3.2020.03.31.10.02.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2020 10:02:26 -0700 (PDT)
+From:   George Hilliard <thirtythreeforty@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     George Hilliard <thirtythreeforty@gmail.com>,
+        Icenowy Zheng <icenowy@aosc.io>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/5] Support the Allwinner F1C100s USB stack
+Date:   Tue, 31 Mar 2020 12:02:14 -0500
+Message-Id: <20200331170219.267732-1-thirtythreeforty@gmail.com>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
-X-Received: by 2002:a02:7a18:: with SMTP id a24mr16791632jac.54.1585673403754;
- Tue, 31 Mar 2020 09:50:03 -0700 (PDT)
-Date:   Tue, 31 Mar 2020 09:50:03 -0700
-In-Reply-To: <CADG63jCwP1D3dBRFTB6FXePD6ys5n1j+1=JrkJjZXC80eKLehQ@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f5ede505a2295b59@google.com>
-Subject: Re: KASAN: use-after-free Write in ath9k_htc_rx_msg
-From:   syzbot <syzbot+b1c61e5f11be5782f192@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, anenbupt@gmail.com,
-        ath9k-devel@qca.qualcomm.com, davem@davemloft.net,
-        kvalo@codeaurora.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+The Allwinner F1C100s has an MUSB-based USB peripheral.  This patch
+series implements support for it alongside existing Allwinner support
+code.
 
-syzbot has tested the proposed patch but the reproducer still triggered crash:
-KASAN: use-after-free Write in ath9k_htc_rx_msg
+This series was originally written by Icenowy Zheng for Linux v4.14.
+I've rebased and bugfixed that work against mainline and tested it on
+both the Lichee Nano and my custom hardware.  Where I've made functional
+changes, I have changed the commit author to myself.
 
-==================================================================
-BUG: KASAN: use-after-free in htc_process_conn_rsp drivers/net/wireless/ath/ath9k/htc_hst.c:131 [inline]
-BUG: KASAN: use-after-free in ath9k_htc_rx_msg+0xa25/0xaf0 drivers/net/wireless/ath/ath9k/htc_hst.c:442
-Write of size 2 at addr ffff8881d46881b0 by task swapper/0/0
+This is a follow-up to the previous series [1], a little late on my
+self-imposed schedule but here nonetheless.
 
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.6.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
- __kasan_report.cold+0x37/0x77 mm/kasan/report.c:506
- kasan_report+0xe/0x20 mm/kasan/common.c:641
- htc_process_conn_rsp drivers/net/wireless/ath/ath9k/htc_hst.c:131 [inline]
- ath9k_htc_rx_msg+0xa25/0xaf0 drivers/net/wireless/ath/ath9k/htc_hst.c:442
- ath9k_hif_usb_reg_in_cb+0x1ba/0x630 drivers/net/wireless/ath/ath9k/hif_usb.c:718
- __usb_hcd_giveback_urb+0x1f2/0x470 drivers/usb/core/hcd.c:1648
- usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1713
- dummy_timer+0x1258/0x32ae drivers/usb/gadget/udc/dummy_hcd.c:1966
- call_timer_fn+0x195/0x6f0 kernel/time/timer.c:1404
- expire_timers kernel/time/timer.c:1449 [inline]
- __run_timers kernel/time/timer.c:1773 [inline]
- __run_timers kernel/time/timer.c:1740 [inline]
- run_timer_softirq+0x5f9/0x1500 kernel/time/timer.c:1786
- __do_softirq+0x21e/0x950 kernel/softirq.c:292
- invoke_softirq kernel/softirq.c:373 [inline]
- irq_exit+0x178/0x1a0 kernel/softirq.c:413
- exiting_irq arch/x86/include/asm/apic.h:546 [inline]
- smp_apic_timer_interrupt+0x141/0x540 arch/x86/kernel/apic/apic.c:1146
- apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:829
- </IRQ>
-RIP: 0010:default_idle+0x28/0x300 arch/x86/kernel/process.c:696
-Code: cc cc 41 56 41 55 65 44 8b 2d 04 3b 72 7a 41 54 55 53 0f 1f 44 00 00 e8 b6 27 b5 fb e9 07 00 00 00 0f 00 2d aa d0 52 00 fb f4 <65> 44 8b 2d e0 3a 72 7a 0f 1f 44 00 00 5b 5d 41 5c 41 5d 41 5e c3
-RSP: 0018:ffffffff87007d80 EFLAGS: 00000246 ORIG_RAX: ffffffffffffff13
-RAX: 0000000000000007 RBX: ffffffff8702cc40 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000006 RDI: ffffffff8702d48c
-RBP: fffffbfff0e05988 R08: ffffffff8702cc40 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000000 R14: ffffffff87e612c0 R15: 0000000000000000
- cpuidle_idle_call kernel/sched/idle.c:154 [inline]
- do_idle+0x3e0/0x500 kernel/sched/idle.c:269
- cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:361
- start_kernel+0xe16/0xe5a init/main.c:998
- secondary_startup_64+0xb6/0xc0 arch/x86/kernel/head_64.S:242
-
-Allocated by task 2593:
- save_stack+0x1b/0x80 mm/kasan/common.c:72
- set_track mm/kasan/common.c:80 [inline]
- __kasan_kmalloc mm/kasan/common.c:515 [inline]
- __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:488
- slab_post_alloc_hook mm/slab.h:584 [inline]
- slab_alloc_node mm/slub.c:2786 [inline]
- slab_alloc mm/slub.c:2794 [inline]
- kmem_cache_alloc+0xd8/0x300 mm/slub.c:2799
- getname_flags fs/namei.c:138 [inline]
- getname_flags+0xd2/0x5b0 fs/namei.c:128
- do_sys_openat2+0x3cf/0x740 fs/open.c:1140
- do_sys_open+0xc3/0x140 fs/open.c:1162
- do_syscall_64+0xb6/0x5a0 arch/x86/entry/common.c:294
- entry_SYSCALL_64_after_hwframe+0x49/0xbe
-
-Freed by task 2593:
- save_stack+0x1b/0x80 mm/kasan/common.c:72
- set_track mm/kasan/common.c:80 [inline]
- kasan_set_free_info mm/kasan/common.c:337 [inline]
- __kasan_slab_free+0x117/0x160 mm/kasan/common.c:476
- slab_free_hook mm/slub.c:1444 [inline]
- slab_free_freelist_hook mm/slub.c:1477 [inline]
- slab_free mm/slub.c:3034 [inline]
- kmem_cache_free+0x9b/0x360 mm/slub.c:3050
- putname+0xe1/0x120 fs/namei.c:259
- do_sys_openat2+0x43a/0x740 fs/open.c:1155
- do_sys_open+0xc3/0x140 fs/open.c:1162
- do_syscall_64+0xb6/0x5a0 arch/x86/entry/common.c:294
- entry_SYSCALL_64_after_hwframe+0x49/0xbe
-
-The buggy address belongs to the object at ffff8881d4688000
- which belongs to the cache names_cache of size 4096
-The buggy address is located 432 bytes inside of
- 4096-byte region [ffff8881d4688000, ffff8881d4689000)
-The buggy address belongs to the page:
-page:ffffea000751a200 refcount:1 mapcount:0 mapping:ffff8881da11c000 index:0x0 compound_mapcount: 0
-flags: 0x200000000010200(slab|head)
-raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da11c000
-raw: 0000000000000000 0000000000070007 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff8881d4688080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8881d4688100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff8881d4688180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                     ^
- ffff8881d4688200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8881d4688280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+[1]: https://patchwork.kernel.org/cover/11428003/
 
 
-Tested on:
+George Hilliard (2):
+  dt-bindings: Add new F1C100s compatible strings for USB
+  musb: sunxi: add support for the suniv MUSB controller
 
-commit:         0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=14d6096de00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a782c087b1f425c6
-dashboard link: https://syzkaller.appspot.com/bug?extid=b1c61e5f11be5782f192
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1782b063e00000
+Icenowy Zheng (3):
+  phy: sun4i-usb: add support for the USB PHY on suniv SoC
+  ARM: suniv: add USB-related device nodes
+  ARM: suniv: f1c100s: enable USB on Lichee Pi Nano
+
+ .../phy/allwinner,sun4i-a10-usb-phy.yaml      |  1 +
+ .../usb/allwinner,sun4i-a10-musb.yaml         |  1 +
+ .../boot/dts/suniv-f1c100s-licheepi-nano.dts  | 16 ++++++++++
+ arch/arm/boot/dts/suniv-f1c100s.dtsi          | 29 +++++++++++++++++++
+ drivers/phy/allwinner/phy-sun4i-usb.c         | 10 +++++++
+ drivers/usb/musb/sunxi.c                      |  8 +++--
+ 6 files changed, 63 insertions(+), 2 deletions(-)
+
+-- 
+2.26.0
 
