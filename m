@@ -2,125 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B6C19A85C
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 11:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3471419A987
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 12:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730590AbgDAJNJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Apr 2020 05:13:09 -0400
-Received: from mail-qv1-f65.google.com ([209.85.219.65]:36503 "EHLO
-        mail-qv1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728087AbgDAJNJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Apr 2020 05:13:09 -0400
-Received: by mail-qv1-f65.google.com with SMTP id z13so12444486qvw.3
-        for <linux-usb@vger.kernel.org>; Wed, 01 Apr 2020 02:13:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jkMgyGLx/BAkeNtxDN6Xm/ZbanBZQvNQbU7eOJcnXos=;
-        b=gePLR3I5HlC84w7tgJzEsRDClSwTX0vkukGGPouc74j9tPxnFXOnMxG8zqKusXyLSD
-         P1CXTLsHgRD/S8Q8S5YIH4ka/bNjg1DuR3op0rVEU8qu0/3qvutPbOxc2nl/iI4PR1x3
-         kISWfSQmZqfiL2nFZ6Rb5KCWgl65Wka5UzT/xrbBgOXxVwSphSnqGCN+0f7ErOkgeCzo
-         pdkfIyKq3i2TpWjKqfjvvvBKyxACnt5KZbkN1iV4yOXUi95SDk+EdLX7WIfIWb+0/FFM
-         axOTi9LYHzFUG7NygICZeM4Vfcw9ZoImKssVQE87l7r8QgXtWFHq59KR2dylCJRYjYsK
-         0DmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jkMgyGLx/BAkeNtxDN6Xm/ZbanBZQvNQbU7eOJcnXos=;
-        b=h0IpYGS3KdXdK7P0085uhO8/MfV+tGS3XAk6YFmwlJAdrV0tfONMLE2HqldURFAInf
-         MKat7nm2Q84jfEDZGOFITn298cqcd8yNnUWM4yr+zPAtbeY9QAfO4VtQ2RiIGteF6t9Y
-         pfbcfTRV/ooWIvDcYiBFvCl4GeHh3JvMYUmnmnqK2htWWfISOJFNQRTikpYwGVIW+o5A
-         1oVi7gckg25dB+T+kj3VFRp1lL0vjknEofiN648reqe9rMvEfcdxd5kE1FtIwnbojTKO
-         orHMRchh5b3K2xN4heA7S7pYGi6EbKJQ5Bb4Gh1bJspLAxeolG0gF1pSo0cjJxbWb+XT
-         a4uA==
-X-Gm-Message-State: ANhLgQ2l0dgutFVF1LV2WXbrJYerY4nLhMPVx69zxnO+4XDQPWuE33ZZ
-        ekjWDHAdM1lQwyuiXDSdoXKnEObLe23TeBw+6V48bw==
-X-Google-Smtp-Source: ADFU+vs06wImJZ2EPBdCY2ie1qh0IX+7CluGHJHL2V6FICU7OeYMC84ibT4JTW0BL1dvRyCt/qMHZuA5ONrD8dluF/U=
-X-Received: by 2002:ad4:49d1:: with SMTP id j17mr21052173qvy.80.1585732387345;
- Wed, 01 Apr 2020 02:13:07 -0700 (PDT)
+        id S1731839AbgDAK03 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Apr 2020 06:26:29 -0400
+Received: from mail-vi1eur05on2077.outbound.protection.outlook.com ([40.107.21.77]:56160
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726785AbgDAK02 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Apr 2020 06:26:28 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZCJy89JgjIRU6xZKUiPr1Nnh8PTjdD8EETWmWCbqFzm1MFaQ4NlNKVX/3TeSPxGRDi2MspADotlGzXIpcxz2udcP3n123/mZpO96u7/qboFYVmhE0sLG4sXNA15jE5iJnK+o0f5HqenFw6mmOjsF2vaIV3nkIHOctmmbISXZMccE42jagfy9zGS5vMLImUt2CYaPQZxkKCLehUdwSmEb6+GGu+QPqU9Mk49yFIMzI1s/ozYvky7bleEYAajDBd4QOgldW7rmARqE4NBZ3hpaehqBS0NJc8sySH4n15/dgnESzU12Tx1Aon+xIn1H94cIJqN1eFHp45cD1Yo0n4ro8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BkSR6sGVLM4X/hojPflaDvix11c/NFDKrZyCqBvvuGw=;
+ b=FkHr5KC8QuJv+jmQxMmnSDVdLTPpJ4ZM6OTpu2qDEcF7UqV7z1eeJExKtVcDfgEEQwha3lriQC41NreYEzRmpiNrfY/IpZrqzrLt2UUI/bUys1+5rrk9xLaAigFjeUC0LDozMOwc53zjGz7eYTPCGwG0ajNkPaRgxqHD2NJDv1JQi2h3otWbRoiu0FFnM2rNCJTPl+aSYhJ4L8FRCzWElTxhYK4a7yyZfg9qdkZnUcL2SoGrOf5G7qzkL4v58ZFORMHPcfw4xJlGnWoPu6yvi22Zub9+JuWWOUDLXEMFy/0/zAl+HLHN3MOX49M/iPjZ4BmUfX1pP7lA98rqqzkYAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BkSR6sGVLM4X/hojPflaDvix11c/NFDKrZyCqBvvuGw=;
+ b=Xf+uevZh5m2Ln9aENUH9JpQ8C5XD5iFrH6Q3kvnfqC3x4cljnNdRfQwPdE59OyJdpU66dgJl2hU6tMglq7gjZZ9FckWJFRN3KkKYUIjZFRnuSIWxA/9iblUqZsm+sZKNPb+PEIm7LzsPkLiD7DFi9P0+37jIBfC5yEstOJlZJUQ=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (52.135.57.84) by
+ AM7PR04MB6853.eurprd04.prod.outlook.com (10.141.172.210) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2878.15; Wed, 1 Apr 2020 10:26:25 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::902c:71:6377:4273]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::902c:71:6377:4273%5]) with mapi id 15.20.2856.019; Wed, 1 Apr 2020
+ 10:26:25 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH 0/7] Universal Serial Bus: Removing Acronyms
+Thread-Topic: [PATCH 0/7] Universal Serial Bus: Removing Acronyms
+Thread-Index: AQHWB/gCzPIPkxE2DkSHP5eqylwmQ6hj4QcAgAAB1QCAACn78A==
+Date:   Wed, 1 Apr 2020 10:26:25 +0000
+Message-ID: <AM7PR04MB7157968F8BC12AC42CD397B38BC90@AM7PR04MB7157.eurprd04.prod.outlook.com>
+References: <20200401073249.340400-1-balbi@kernel.org>
+ <20200401073806.GA2019004@kroah.com> <87pncr1wgn.fsf@kernel.org>
+In-Reply-To: <87pncr1wgn.fsf@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [180.171.74.255]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 1dffb855-7cf6-4ad9-98f7-08d7d627220a
+x-ms-traffictypediagnostic: AM7PR04MB6853:
+x-microsoft-antispam-prvs: <AM7PR04MB6853B30E9AF6EE6D7C8B90158BC90@AM7PR04MB6853.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-forefront-prvs: 03607C04F0
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(396003)(39860400002)(346002)(366004)(376002)(136003)(81156014)(8676002)(81166006)(8936002)(186003)(86362001)(66446008)(64756008)(66556008)(76116006)(66946007)(66476007)(55016002)(71200400001)(9686003)(54906003)(478600001)(5660300002)(110136005)(316002)(52536014)(26005)(2906002)(4744005)(6506007)(44832011)(7696005)(33656002)(4326008);DIR:OUT;SFP:1101;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: d4u7kG1oYwKNa0RyB0TlEYvpkeOpjMMRNT3yzuubRxQ+ILkrVfFqI1JXtHgq19lfeujcrOkseFIR8NezNhQDjiHeF29V4iWSbg5caAv1fadqmlW5YlZnfhGFrt8PaVHr1e+aQOmVEfEVEJv6d2hvfbiF1J03wPwUCuGMgjJETCb9uJW1ktDdT2aPy7YTP+TjfIaPGzm2Zqt/kT2e+n6YxgSpNoWO3gXIX/c8YYiEHGuNqDNfxmVBisOXEo9J8SqsVEfH/iKpV5jqM2krzcLrY6cIA+qoRm+jci0K57CUn3gPjqTJLS8+uoL0qr5ySwDY1bCzVsJ1B+stKMglUvMadDRnShBhmZ1belc2kRDNdzVDcf1VNHu84pRul3jNDdXzLWCofG1Go5gUeR/yttupQe8PqOl3GK6Z7fGgYv5SKzCmT+8UX8aiLal/K40xF6EN
+x-ms-exchange-antispam-messagedata: JYnqtHIhrPXFV54W27Bc3hswKzZCKpkhkQPnIUlZVhy4EQPZCQpSJoMDtvHyR/BMIkyhUVHqedALNRYnI81DZP+qjYan68rHjiR2P6VKwR5S2uKzRg61AHcgIWsRvBOctaWVXZ4oLSm75bXqUvFaUA==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <000000000000da6059059fcfdcf9@google.com> <0000000000005b022005a22a0050@google.com>
- <20200331174116.GA1844017@kroah.com> <CANEJEGuhZChGXFzbwaEwArM4UKjUxZo=WNbREPH3887xtu62Nw@mail.gmail.com>
-In-Reply-To: <CANEJEGuhZChGXFzbwaEwArM4UKjUxZo=WNbREPH3887xtu62Nw@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 1 Apr 2020 11:12:55 +0200
-Message-ID: <CACT4Y+Yk_93iScH6F0hhR2yo+pCx_0J32TaTC-_QfXy69pauMA@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in skb_release_data (2)
-To:     Grant Grundler <grundler@chromium.org>,
-        syzkaller <syzkaller@googlegroups.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        syzbot <syzbot+a66a7c2e996797bb4acb@syzkaller.appspotmail.com>,
-        David Miller <davem@davemloft.net>, festevam@gmail.com,
-        Hayes Wang <hayeswang@realtek.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>, kernel@pengutronix.de,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>, nishadkamdar@gmail.com,
-        peter.chen@nxp.com, Prashant Malani <pmalani@chromium.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1dffb855-7cf6-4ad9-98f7-08d7d627220a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Apr 2020 10:26:25.8745
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ViFzETBBS+XwcoPpZ3mp7kEyJk1oztJCHiA47d0BgSaaWKZ9rcehVJX8VxOcJ9+X5w0VMeLgJpL6Rkck6rVoSA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6853
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 31, 2020 at 7:44 PM Grant Grundler <grundler@chromium.org> wrote:
->
-> On Tue, Mar 31, 2020 at 10:41 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+=20
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+> > On Wed, Apr 01, 2020 at 10:32:42AM +0300, Felipe Balbi wrote:
+> >>  764 files changed, 86304 insertions(+), 86304 deletions(-)
 > >
-> > On Tue, Mar 31, 2020 at 10:36:01AM -0700, syzbot wrote:
-> > > syzbot suspects this bug was fixed by commit:
-> > >
-> > > commit d9958306d4be14f4c7466242b38ed3893a7b1386
-> > > Author: Nishad Kamdar <nishadkamdar@gmail.com>
-> > > Date:   Sun Mar 15 10:55:07 2020 +0000
-> > >
-> > >     USB: chipidea: Use the correct style for SPDX License Identifier
-> > >
-> > > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16d4940be00000
-> > > start commit:   63623fd4 Merge tag 'for-linus' of git://git.kernel.org/pub..
-> > > git tree:       upstream
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=5d2e033af114153f
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=a66a7c2e996797bb4acb
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c25a81e00000
-> > >
-> > > If the result looks correct, please mark the bug fixed by replying with:
-> > >
-> > > #syz fix: USB: chipidea: Use the correct style for SPDX License Identifier
-> >
-> > I really doubt a comment change fixed a syzbot bug :)
->
-> Just as I don't believe the bug was caused by pmalani's patch to r8152.
->
-> syzbot is just having trouble automatically bisecting/tracking this
-> bug since it appears only intermittently.
+> > Ah, a nice tiny patchset, I'll try to sneak this in during the merge
+> > window now :)
+>=20
+> That's great, Greg. It'll help hundreds of people, I'm sure.
+>=20
+> > nice job...
+>=20
+> Thank you
+>=20
+> > greg "I know what day this is..." k-h
+>=20
+> felipe "I've been mostly confined" balbi
+>=20
+> --
 
-Checking if vmlinux changes after applying the patch looked like a
-smart and simple way to detect all of:
-- Comment-only change
-- Documentation-only change
-- Change to a non-current arch
-- Changed to non-enabled configs
-- Changes to tests only
+Just one small comment, it may let the code line exceed 80 characters often=
+,
+is it OK? Or the 80 characters per line is not mandatory?
 
-But it's not working in reality, there is some bug in kernel or compiler:
-https://github.com/google/syzkaller/issues/1271#issuecomment-559093018
-
-You may see in this bisection log as well:
-culprit signature:
-85ed07d5a8769c26fa0d170475624841e367ea0d08ea79f55ca450a9e97429a0
-parent  signature:
-2244116b3fcae3bb24003990bcd2b06a03861effee2d94675e527446c3da078f
-
-So this commit somehow does very realistically affect the kernel
-binary. So far nobody figured out why...
-
-Before you ask, syzkaller filters out debug info, etc:
-https://github.com/google/syzkaller/blob/master/pkg/build/linux.go#L168-L178
+Peter=20
