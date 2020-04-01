@@ -2,34 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4A319AF39
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 18:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6527619AF3A
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 18:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733182AbgDAQAn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Apr 2020 12:00:43 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:49645 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1733088AbgDAQAn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Apr 2020 12:00:43 -0400
-Received: (qmail 30565 invoked by uid 500); 1 Apr 2020 12:00:42 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 1 Apr 2020 12:00:42 -0400
-Date:   Wed, 1 Apr 2020 12:00:42 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     bugzilla-daemon@bugzilla.kernel.org,
-        Mathias Nyman <mathias.nyman@intel.com>
-cc:     USB list <linux-usb@vger.kernel.org>
-Subject: Re: [Bug 203419] Logitech Group USB audio stopped working in 5.1-rc6
-In-Reply-To: <bug-203419-208809-hOQeujBEQn@https.bugzilla.kernel.org/>
-Message-ID: <Pine.LNX.4.44L0.2004011156580.27138-100000@netrider.rowland.org>
+        id S1733170AbgDAQAp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 1 Apr 2020 12:00:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37524 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1733088AbgDAQAp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Apr 2020 12:00:45 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 203419] Logitech Group USB audio stopped working in 5.1-rc6
+Date:   Wed, 01 Apr 2020 16:00:44 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-203419-208809-FazjE3AIZJ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-203419-208809@https.bugzilla.kernel.org/>
+References: <bug-203419-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=203419
+
+--- Comment #19 from Alan Stern (stern@rowland.harvard.edu) ---
 Mathias, maybe you should look at this.
 
 On Wed, 1 Apr 2020 bugzilla-daemon@bugzilla.kernel.org wrote:
@@ -55,3 +72,6 @@ it.
 
 Alan Stern
 
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
