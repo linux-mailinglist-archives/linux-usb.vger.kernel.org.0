@@ -2,115 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E9319AADF
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 13:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3396319AC2E
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 14:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732308AbgDALgx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Apr 2020 07:36:53 -0400
-Received: from mail-lj1-f173.google.com ([209.85.208.173]:44903 "EHLO
-        mail-lj1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728485AbgDALgx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Apr 2020 07:36:53 -0400
-Received: by mail-lj1-f173.google.com with SMTP id p14so25377919lji.11
-        for <linux-usb@vger.kernel.org>; Wed, 01 Apr 2020 04:36:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=0qdZoVeClfsm+MHHycrD5Xma4kaS3r9A2qEXfkZNtI0=;
-        b=fRIsE/KEc7NBBi2IbYcagzr5oSN1JZcAO+r/1BgAcfFl0mAA4WHtC0eJcHoQa/gWzG
-         37oS5BkAT0SO5FJ+hwePCckHuBk3HrJbMLe4GDN8d0wLnTty5AaEKQc62j5twq5Ui4KB
-         iELYl2YM+ubrj0+1KEUpZQw2c7V6IgRHGjTfA9V7AY1TZ/G7ztFnAR7UAij28I57UlBS
-         dp8hZhFWGzuMEdJ3ZGoK51svTeUo2UVxQIHRoyQJXp2OKwLSUWVEmmHWZHnNcJEDclFb
-         NWY6/7vO7TMIRwAX4DyUcFo4qTPrJs7aYZ+PNgMV3ctOocq26JhXMD8wG3Hi7NTBZTT0
-         8Spw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=0qdZoVeClfsm+MHHycrD5Xma4kaS3r9A2qEXfkZNtI0=;
-        b=qgniwhQalR51tPtEJd/bxjiDzaRWMdTLwvOlyUncmOhFLl55pwaffLv5ciw70AIkYt
-         mFZIW913x7YZeOLTJvovAjsXQeM36QCoPANUXunmWE6dN1vFaOJleWCIYJLqNqV6WREg
-         10b/rfMUTJjsWH7/QGt3qpdVtiPBsBthV3oePfkB9Fr7iknoHVrbKK763PQoEXJbCqLq
-         KPN1oeuG4rQ1LEHlZO2cSJ45L81DpsilHuaM6RYNNhOSNmmFgHsRl74aPK7R5ZE2+DvA
-         GrMpUyr6VbgENhFisWMiWeCZBNOA1XMznrqmgGJW8F2mDalJFajW8KDEekdlwQ9v5GHS
-         K63A==
-X-Gm-Message-State: AGi0PubXOCisPD23HoIauKstHyKOpLCwTgdb6wZymSi8c9825cQQIeaW
-        lwG8CRbAGgDOek1G2Z0kb04=
-X-Google-Smtp-Source: APiQypIoYXj1zmTIiQ4jc+bVamihYp+euHg8t74+y1tbfB4oxwsrlyfl+rzoBasa9hAqh+jXc5aNcA==
-X-Received: by 2002:a2e:9a89:: with SMTP id p9mr12837370lji.222.1585741011390;
-        Wed, 01 Apr 2020 04:36:51 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id b17sm1435754lfa.15.2020.04.01.04.36.50
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 01 Apr 2020 04:36:50 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Oliver Graute <oliver.graute@kococonnector.com>,
-        Peter Chen <peter.chen@nxp.com>
-Cc:     "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        id S1732561AbgDAM5z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Apr 2020 08:57:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50518 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732507AbgDAM5y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Apr 2020 08:57:54 -0400
+Received: from localhost (unknown [122.167.76.164])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 932C920658;
+        Wed,  1 Apr 2020 12:57:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585745873;
+        bh=/7CdyfHR1LqxImi2jBxcvtSv+PPjOxapBSIg4fyZ97w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tt1PrdNJE62LxSxlqYUgjLQIfVkELT30zWfC2MfSXjWjYTpZqAkrPeDF7RffkyPit
+         H1Ptvid/MNDvzvBsXUAbCbXcWSvzTL4vR0+1gWz4EJ92c4RxdCCYIGB9zv0YoyUEEw
+         f3V1AoywopTN2aXyHjbEaFWPMizhhX4AZAtltrls=
+Date:   Wed, 1 Apr 2020 18:27:48 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>, oliver.graute@gmail.com,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: using cdns3-imx driver on imx8qm
-In-Reply-To: <20200401103434.GA38169@archlinux.localdomain>
-References: <20200326170109.GA28051@optiplex> <20200327090554.GA31160@b29397-desktop> <20200327095028.GA19809@ripley> <20200327132153.GA31668@b29397-desktop> <20200331142528.GA2246@portage> <AM7PR04MB715728ED4EF3715A7798A5A08BC80@AM7PR04MB7157.eurprd04.prod.outlook.com> <20200401103434.GA38169@archlinux.localdomain>
-Date:   Wed, 01 Apr 2020 14:36:46 +0300
-Message-ID: <87sghna14h.fsf@kernel.org>
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andreas =?iso-8859-1?Q?B=F6hler?= <dev@aboehler.at>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 3/5] usb: xhci: Add support for Renesas controller
+ with memory
+Message-ID: <20200401125748.GC72691@vkoul-mobl>
+References: <20200323170601.419809-1-vkoul@kernel.org>
+ <20200323170601.419809-4-vkoul@kernel.org>
+ <6ea778a7-6d58-6dae-bd65-3a63a945fb97@linux.intel.com>
+ <20200326115117.GZ72691@vkoul-mobl>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200326115117.GZ72691@vkoul-mobl>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On 26-03-20, 17:21, Vinod Koul wrote:
+> On 26-03-20, 13:29, Mathias Nyman wrote:
+> > Hi Vinod
+> > 
+> > On 23.3.2020 19.05, Vinod Koul wrote:
+> > > Some rensas controller like uPD720201 and uPD720202 need firmware to be
+> > > loaded. Add these devices in table and invoke renesas firmware loader
+> > > functions to check and load the firmware into device memory when
+> > > required.
+> > > 
+> > > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > > ---
+> > >  drivers/usb/host/xhci-pci-renesas.c |  1 +
+> > >  drivers/usb/host/xhci-pci.c         | 29 ++++++++++++++++++++++++++++-
+> > >  drivers/usb/host/xhci-pci.h         |  3 +++
+> > >  3 files changed, 32 insertions(+), 1 deletion(-)
+> > > 
+> > 
+> > It's unfortunate if firmware loading couldn't be initiated in a PCI fixup hook
+> > for this Renesas controller. What was the reason it failed?
+> > 
+> > Nicolas Saenz Julienne just submitted a solution like that for Raspberry Pi 4
+> > where firmware loading is initiated in pci-quirks.c quirk_usb_early_handoff()
+> > 
+> > https://lore.kernel.org/lkml/20200324182812.20420-1-nsaenzjulienne@suse.de
+> > 
+> > Is he doing something different than what was done for the Renesas controller?
+> 
+> I tried and everytime ended up not getting firmware. Though I did not
+> investigate a lot. Christian seemed to have tested sometime back as
+> well.
+> 
+> Another problem is that we dont get driver_data in the quirk and there
+> didnt seem a way to find the firmware name.
+> 
+> > > diff --git a/drivers/usb/host/xhci-pci-renesas.c b/drivers/usb/host/xhci-pci-renesas.c
+> > > index c588277ac9b8..d413d53df94b 100644
+> > > --- a/drivers/usb/host/xhci-pci-renesas.c
+> > > +++ b/drivers/usb/host/xhci-pci-renesas.c
+> > > @@ -336,6 +336,7 @@ static void renesas_fw_callback(const struct firmware *fw,
+> > >  		goto cleanup;
+> > >  	}
+> > >  
+> > > +	xhci_pci_probe(pdev, ctx->id);
+> > >  	return;
+> > 
+> > I haven't looked into this but instead of calling xhci_pci_probe() here in the async fw
+> > loading callback could we just return -EPROBE_DEFER until firmware is loaded when
+> > xhci_pci_probe() is originally called?
+> 
+> Hmm, initially my thinking was how to tell device core to probe again,
+> and then digging up I saw wait_for_device_probe() which can be used, let
+> me try that
 
+Sorry to report back that it doesn't work as planned :(
 
-Hi,
+I modified the code to invoke the request_firmware_nowait() which will load
+the firmware and provide the firmware in callback. Meanwhile return -EPROBE_DEFER.
 
-Oliver Graute <oliver.graute@kococonnector.com> writes:
->> Make sure the five clocks in dts are correct, and print the USB3_SSPHY_S=
-TATUS if
->> timeout still exists.
->
-> ok I got this for USB3_SSPHY_STATUS
->
-> [    3.057122] cdns3-imx 5b110000.usb3: wait clkvld timeout 0xb0b03827
->
-> Unfortunally my imx8qm spec is incomplete regarding the
-> USB3_SSPHY_STATUS register.
+After a bit, the core invokes the driver probe again and we hit the
+roadblock. The request_firmware uses devres and allocates resources for
+loading the firmware. The problem is that device core checks for this:
 
-for testing purposes, you could just have the bootloader enable the
-necessary clocks and use dummy fixed-clock in your DTS.
+bus: 'pci': really_probe: probing driver xhci_hcd_pci with device 0000:01:00.0
+pci 0000:01:00.0: Resources present before probing
 
-At least you could get something working from USB-side and focus on the
-clock tree after that.
+And here the probe fails. In some cases the firmware_callback finishes
+before this and we can probe again, but that is not very reliable.
 
-=2D-=20
-balbi
+I tested another way to use request_firmware() (sync version) and then
+load the firmware in probe and load. The request is done only for
+renesas devices if they dont have firmware already running.
+So rest of the devices wont have any impact.
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+Now should we continue this way in the patchset or move to sync version.
+Am okay either way.
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6EfM4ACgkQzL64meEa
-mQaZ1hAAzCSKcBJEGoGB73g2fZlxFSYm8s+PO2sto7sCI/VFdiha4Hj7ojPDrA3o
-vA1jccdjRB8um49iTGq8ZJoFjc3P/5LM6CYnzf839h86O01ZIWlNPPayPFZD6qaK
-IGhcCRYm3CUQTcbhj3yqGCOtwGcRqK9TEIcalYVOHqLDFnTPmuei9h77KVBUjAmS
-SJO7yTVziBr2jXCaEuYqxhCW6MAGy6jdEMG9yTKkP+U5rHjAbvPbUOxXp6Pc8ed9
-GUiHIY7Og+65Jn+EQSkrYRkVfzN/09nCIF1MqYnOUe7DJWmIbsVRFu5I/yqyQSky
-NH/NELJ5ugZr787PSz6DHpD/TB7EmccLIyyRfHtwpv/YnVnBsrycqGkHRTCjjYWs
-eu8lOaIIg4/iNiwrBuzJQxi7asGofxboK6g/qB5dWrUX8R0RzoqmU3oN9zVdSDE6
-89aQ15OOqImYEd7P+0wQZsVIxTkbIwfL71jJvKlX6AIIdAA+9yPEb8J+ZbavpXpA
-2qxvqwwKGVKPZdtabjQ/Tends8KBnef2NWgU4cXkSvFvbht+vA2igmPmEc6vfdFA
-2AuC60pQ0BqgJAyvjAJ2rbAKCRTi5ETVgHwMNNiuHzVBpKOGZRMyGxAD72wYCKAC
-LRfhlGecMh7VFwDzf+CKQ9F3V4mmkZ+RAWSa/HmMoTtZoUPnb1A=
-=I7mU
------END PGP SIGNATURE-----
---=-=-=--
+-- 
+~Vinod
