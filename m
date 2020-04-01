@@ -2,111 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3358119B742
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 22:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC24719B802
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 23:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732872AbgDAUtP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Apr 2020 16:49:15 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:39098 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732728AbgDAUtO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Apr 2020 16:49:14 -0400
-Received: by mail-io1-f69.google.com with SMTP id v13so842458iox.6
-        for <linux-usb@vger.kernel.org>; Wed, 01 Apr 2020 13:49:13 -0700 (PDT)
+        id S1732669AbgDAV6g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Apr 2020 17:58:36 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:43872 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732357AbgDAV6g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Apr 2020 17:58:36 -0400
+Received: by mail-pf1-f195.google.com with SMTP id f206so687647pfa.10;
+        Wed, 01 Apr 2020 14:58:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=T6l/yr6Cjt15a6YDL3tI21z3eGbnhRLGQpcGGdkH3G0=;
+        b=Aug+9ANMwfqMqTPoXflHoLnWAPyOIweS23iswm7clSDXgqDQCTiLRSSoMNZ0io2ytz
+         4kmqK7K8TsoX8Oa1qCNIKmfyfFCeASbGk09hbmJT9JzSZOyO7y+qxD+tj+NEFilvfBwD
+         Pkv6lnNNptyY6BsU/XB8/PfyksA6Z9Xm2tp++boXtgRMNr0fUMtwTmaeW6aqhqgBxxzh
+         T3T/9LrClkN4dUYuEDANTY429B46thKNnNF8CWPF0AWe3YNUzg+3U1nhKB6vWT5uoZ9P
+         z8TEIs2da5LgN87NKawCzRGQZ9m5Isbl8/I1AM+wuDNKZL4b1/4vZvFmT2cR6NyhM9bK
+         U/2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=7r8NswXjfuvcELdpBOP7oGX9yhtb0XG9BXF3BWoBi0M=;
-        b=pFUa1XXDSjSrzwJlepUyy9wCM/EMdAXOoYx+I8fPzWnVezmefPGK/JuV+PInrBUXAj
-         cMxox9+Cce3lYbCVJRN/mL9jFsmCigFOixqwa4DTIZuUqh3lnNr4lNsKIPWccmKOf0Vk
-         mkZgFZgHGCXORkEpaM9HDhHRy0em36qn8DPsF9+bNnHuf3lVJgr1lEi6B+akAkYntbdJ
-         Ux7MnMAH5XrZm19wjUghFW0rdOOkaxVtXXquBX56Lz7wSS4NDWb/d0xDM9PLGBxZLyiE
-         VIhQVidsAKHRUVQZAYgmFGRRrRBl/1QYra4HniQWonehgPEZaTQ9wPwgo0BWDJwkjbiF
-         0M3Q==
-X-Gm-Message-State: ANhLgQ1BADGwvtn/MzyjOgiQXOmXFbDfwHjPYdi9iL2/LwSSWBLcLeqq
-        11xBcb9lmF3jLaeMdoliEh8Uypq9kq8nA3xJtzW37s1mcuFz
-X-Google-Smtp-Source: ADFU+vsGakw7Wlyq1R1VqY4rcxwzROqZR/Bl+7JsntKoj9AcqQjqAhBDG+LWvcoQl2t0alXPpNPDf66ifEF5hGW+P2eVx+bZlShf
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=T6l/yr6Cjt15a6YDL3tI21z3eGbnhRLGQpcGGdkH3G0=;
+        b=df6LoAgiRkf2y6u0uWKsCCseiMWDkz2wsqOK6BcjZxfyiVQXKkmmHBtcmfZZmji0kD
+         4ParHqshKzBzuFaOJMYw5id4scwchzgMFjXWqZfe1YUHU0azDlZ5nmvAC1zh3cVcbT45
+         1nZ1euUpAwY5ngPkI3XkHw3iIGQcjOjHj2uDGmTw6iTOZulngHR4r8GEP79VQ3iBh6qT
+         WtZLBmSb8NBkTG/UnbHKjXgfTaEiiF/pdegrwfTYohF2qWjqKl9oW5JLm/L5L6itOyyb
+         v+lJ0ZpCceuQ5jPB6UmZPvmpaJlwJQwuP0HEoABSJDHZS2CI7nOfrCSSJQEFCO2/8S0O
+         eB+Q==
+X-Gm-Message-State: AGi0PuYWL1x+bPQR5/tNKybyTfJko1pPk6pG1/a5pecs7jElAx/xPS6w
+        cbNLeQGx3n8PJaAD+hxPcok=
+X-Google-Smtp-Source: APiQypKQLNXXWccupxCJd6/Wi/Nq14WhOAQB8ADTtsp5VWa5/Aot0+vBabx18lkkpwOAaRkoEYxr3g==
+X-Received: by 2002:a63:134e:: with SMTP id 14mr288009pgt.380.1585778314374;
+        Wed, 01 Apr 2020 14:58:34 -0700 (PDT)
+Received: from taoren-ubuntu-R90MNF91 (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
+        by smtp.gmail.com with ESMTPSA id q71sm2378551pjb.5.2020.04.01.14.58.33
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 01 Apr 2020 14:58:33 -0700 (PDT)
+Date:   Wed, 1 Apr 2020 14:58:27 -0700
+From:   Tao Ren <rentao.bupt@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Stephen Boyd <swboyd@chromium.org>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, taoren@fb.com
+Subject: Re: [PATCH v3] usb: gadget: aspeed: improve vhub port irq handling
+Message-ID: <20200401215826.GA8248@taoren-ubuntu-R90MNF91>
+References: <20200315191430.12379-1-rentao.bupt@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:3b86:: with SMTP id n6mr23290195ilh.270.1585774153198;
- Wed, 01 Apr 2020 13:49:13 -0700 (PDT)
-Date:   Wed, 01 Apr 2020 13:49:13 -0700
-In-Reply-To: <00000000000046b2bf059c193afb@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001873a005a240d114@google.com>
-Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
-From:   syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200315191430.12379-1-rentao.bupt@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following crash on:
+Hi Ben,
 
-HEAD commit:    0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=12aa8567e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
-dashboard link: https://syzkaller.appspot.com/bug?extid=db339689b2101f6f6071
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1342740be00000
+Any further comments on the patch?
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com
 
-------------[ cut here ]------------
-usb 2-1: BOGUS urb xfer, pipe 2 != type 2
-WARNING: CPU: 0 PID: 9241 at drivers/usb/core/urb.c:478 usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 9241 Comm: syz-executor.1 Not tainted 5.6.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- panic+0x2aa/0x6e1 kernel/panic.c:221
- __warn.cold+0x2f/0x30 kernel/panic.c:582
- report_bug+0x27b/0x2f0 lib/bug.c:195
- fixup_bug arch/x86/kernel/traps.c:174 [inline]
- fixup_bug arch/x86/kernel/traps.c:169 [inline]
- do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
- do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
- invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-RIP: 0010:usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
-Code: 4d 85 ed 74 46 e8 68 87 dd fd 4c 89 f7 e8 90 57 17 ff 41 89 d8 44 89 e1 4c 89 ea 48 89 c6 48 c7 c7 80 dd 3b 86 e8 10 18 b2 fd <0f> 0b e9 20 f4 ff ff e8 3c 87 dd fd 0f 1f 44 00 00 e8 32 87 dd fd
-RSP: 0018:ffff8881c7a47b38 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff812974dd RDI: ffffed1038f48f59
-RBP: 0000000000000000 R08: ffff8881cd811880 R09: ffffed103b646248
-R10: ffffed103b646247 R11: ffff8881db23123f R12: 0000000000000002
-R13: ffff8881c5c764b0 R14: ffff8881c8daf0a0 R15: ffff8881d0117500
- usb_start_wait_urb+0x108/0x4c0 drivers/usb/core/message.c:58
- usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
- usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
- usbhid_set_raw_report drivers/hid/usbhid/hid-core.c:917 [inline]
- usbhid_raw_request+0x21f/0x640 drivers/hid/usbhid/hid-core.c:1265
- hid_hw_raw_request include/linux/hid.h:1079 [inline]
- hidraw_send_report+0x296/0x500 drivers/hid/hidraw.c:151
- hidraw_ioctl+0x620/0xaf0 drivers/hid/hidraw.c:422
- vfs_ioctl fs/ioctl.c:47 [inline]
- ksys_ioctl+0x11a/0x180 fs/ioctl.c:763
- __do_sys_ioctl fs/ioctl.c:772 [inline]
- __se_sys_ioctl fs/ioctl.c:770 [inline]
- __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:770
- do_syscall_64+0xb6/0x5a0 arch/x86/entry/common.c:294
- entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x45c849
-Code: ad b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 7b b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007fa05ffffc78 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007fa0600006d4 RCX: 000000000045c849
-RDX: 00000000200000c0 RSI: 0000000080404806 RDI: 0000000000000006
-RBP: 000000000076bfa0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000000ffffffff
-R13: 0000000000000335 R14: 00000000004c59df R15: 000000000076bfac
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+Cheers,
 
+Tao
+
+On Sun, Mar 15, 2020 at 12:14:30PM -0700, rentao.bupt@gmail.com wrote:
+> From: Tao Ren <rentao.bupt@gmail.com>
+> 
+> This patch evaluates vhub ports' irq mask before going through per-port
+> irq handling one by one, which helps to speed up irq handling in case
+> there is no port interrupt.
+> 
+> Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
+> ---
+>  Changes in v3:
+>    - assign istat to (unsigned long) bitmap before calling
+>      "for_each_set_bit_from".
+>  Changes in v2:
+>    - use "for_each_set_bit" to speed up port irq handling.
+> 
+>  drivers/usb/gadget/udc/aspeed-vhub/core.c | 12 +++++++++---
+>  drivers/usb/gadget/udc/aspeed-vhub/vhub.h |  8 +++-----
+>  2 files changed, 12 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/core.c b/drivers/usb/gadget/udc/aspeed-vhub/core.c
+> index f8d35dd60c34..555e8645fb1e 100644
+> --- a/drivers/usb/gadget/udc/aspeed-vhub/core.c
+> +++ b/drivers/usb/gadget/udc/aspeed-vhub/core.c
+> @@ -134,11 +134,15 @@ static irqreturn_t ast_vhub_irq(int irq, void *data)
+>  	}
+>  
+>  	/* Handle device interrupts */
+> -	for (i = 0; i < vhub->max_ports; i++) {
+> -		u32 dev_mask = VHUB_IRQ_DEVICE1 << i;
+> +	if (istat & vhub->port_irq_mask) {
+> +		unsigned long bitmap = istat;
+> +		int offset = VHUB_IRQ_DEV1_BIT;
+> +		int size = VHUB_IRQ_DEV1_BIT + vhub->max_ports;
+>  
+> -		if (istat & dev_mask)
+> +		for_each_set_bit_from(offset, &bitmap, size) {
+> +			i = offset - VHUB_IRQ_DEV1_BIT;
+>  			ast_vhub_dev_irq(&vhub->ports[i].dev);
+> +		}
+>  	}
+>  
+>  	/* Handle top-level vHub EP0 interrupts */
+> @@ -332,6 +336,8 @@ static int ast_vhub_probe(struct platform_device *pdev)
+>  
+>  	spin_lock_init(&vhub->lock);
+>  	vhub->pdev = pdev;
+> +	vhub->port_irq_mask = GENMASK(VHUB_IRQ_DEV1_BIT + vhub->max_ports - 1,
+> +				      VHUB_IRQ_DEV1_BIT);
+>  
+>  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>  	vhub->regs = devm_ioremap_resource(&pdev->dev, res);
+> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/vhub.h b/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
+> index fac79ef6d669..23a1ac91f8d2 100644
+> --- a/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
+> +++ b/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
+> @@ -51,14 +51,11 @@
+>  #define VHUB_CTRL_UPSTREAM_CONNECT		(1 << 0)
+>  
+>  /* IER & ISR */
+> +#define VHUB_IRQ_DEV1_BIT			9
+>  #define VHUB_IRQ_USB_CMD_DEADLOCK		(1 << 18)
+>  #define VHUB_IRQ_EP_POOL_NAK			(1 << 17)
+>  #define VHUB_IRQ_EP_POOL_ACK_STALL		(1 << 16)
+> -#define VHUB_IRQ_DEVICE5			(1 << 13)
+> -#define VHUB_IRQ_DEVICE4			(1 << 12)
+> -#define VHUB_IRQ_DEVICE3			(1 << 11)
+> -#define VHUB_IRQ_DEVICE2			(1 << 10)
+> -#define VHUB_IRQ_DEVICE1			(1 << 9)
+> +#define VHUB_IRQ_DEVICE1			(1 << (VHUB_IRQ_DEV1_BIT))
+>  #define VHUB_IRQ_BUS_RESUME			(1 << 8)
+>  #define VHUB_IRQ_BUS_SUSPEND 			(1 << 7)
+>  #define VHUB_IRQ_BUS_RESET 			(1 << 6)
+> @@ -402,6 +399,7 @@ struct ast_vhub {
+>  	/* Per-port info */
+>  	struct ast_vhub_port		*ports;
+>  	u32				max_ports;
+> +	u32				port_irq_mask;
+>  
+>  	/* Generic EP data structures */
+>  	struct ast_vhub_ep		*epns;
+> -- 
+> 2.17.1
+> 
