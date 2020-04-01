@@ -2,115 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7411719ACD5
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 15:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C4619AE36
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 16:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732534AbgDAN1k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Apr 2020 09:27:40 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:14517 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732296AbgDAN1k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Apr 2020 09:27:40 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1585747659; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=r5D5KBjX4JT/mnRqoOyX2W+N6ULpxb16X/SqtUY4Y2s=; b=U2XTt02tKMP2ow0Njcn8b3hnVDzpZdpsO9FQ9LJvTlNpwn2CHu+OVOw+KH0YGIIAZjspPMUE
- J0RKXyTxaSRn7+0uStaLpGCIDUL+R1Fb6pOGBsXKE/Ii+QUi0/XB9HffRofPJM1xZbEK6unF
- VM0XE/yzhQBz8ExWA5CPqxfdbR8=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e84967c.7f1b95e8fd50-smtp-out-n05;
- Wed, 01 Apr 2020 13:26:20 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 45F5AC44791; Wed,  1 Apr 2020 13:26:19 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.0.101] (unknown [192.140.155.233])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sallenki)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id C690FC433F2;
-        Wed,  1 Apr 2020 13:26:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C690FC433F2
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sallenki@codeaurora.org
-Subject: Re: Fwd: [DWC3][Gadget] Question regarding the unmapping of request
- as part of queue failure
+        id S1732890AbgDAOnT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Apr 2020 10:43:19 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:38923 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726640AbgDAOnT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Apr 2020 10:43:19 -0400
+Received: (qmail 24159 invoked by uid 500); 1 Apr 2020 10:43:18 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 1 Apr 2020 10:43:18 -0400
+Date:   Wed, 1 Apr 2020 10:43:18 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
 To:     Felipe Balbi <balbi@kernel.org>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Jack Pham <jackp@codeaurora.org>
-References: <0105a5cd-936e-fb08-77bf-c2f1dbf0aeed@codeaurora.org>
- <53a4614f-d1bc-5856-8e01-eb790a6ff7fe@codeaurora.org>
- <87369skhdm.fsf@kernel.org>
-From:   Sriharsha Allenki <sallenki@codeaurora.org>
-Message-ID: <f76b1964-ee15-8076-2575-4f533fc53244@codeaurora.org>
-Date:   Wed, 1 Apr 2020 18:56:13 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 0/7] Universal Serial Bus: Removing Acronyms
+In-Reply-To: <87pncr1wgn.fsf@kernel.org>
+Message-ID: <Pine.LNX.4.44L0.2004011036470.22914-100000@netrider.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <87369skhdm.fsf@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Wed, 1 Apr 2020, Felipe Balbi wrote:
 
-
-On 3/28/2020 2:04 PM, Felipe Balbi wrote:
+> 
 > Hi,
->
-> Sriharsha Allenki <sallenki@codeaurora.org> writes:
->> I was looking at the code flow for ep_queue and came across the
->> following piece of code.
->>
->> __dwc3_gadget_kick_transfer {
->>  
->>     dwc3_prepare_trbs(dep);
->>     req = next_request(&dep->started_list);
->>     if (!req) {
->>             dep->flags |= DWC3_EP_PENDING_REQUEST;
->>             return 0;
->>     }
->> }
->>
->> As part of dwc3_prepare_trbs(dep), we get a request from the pending_list
->> and queue to the tail of the started_list. But here we get the head of
->> the started_list, now if there is any failure in issuing UPDATE_TRANSFER
->> to the core, we unmap this request using "dwc3_gadget_del_and_unmap_request".
->>
->> But if this kick_transfer was part of the ep_queue and we have failed
->> to issue update transfer, instead of unmapping the request we are trying
->> to queue, we will be unmapping a different request (first in the started_list)
->> which the core could have already started processing. I believe we should unmap
->> the request we are trying to queue but not any other.
-> no, we have to start requests in order and dequeue them in order as
-> well. There's no way to verify that the request is already processed by
-> the HW, other than checking HWO bit which is set during
-> dwc3_prepare_trbs(). This is a HW-SW race condition that we can't really
-> fix.
->
-> It is minimized, however, by the fact that, at least for non-isoc
-> endpoints, we use No Status Update Transfer commands, which means the
-> command can't fail.
-Thanks Felipe for the reply. I see that this is a trick race condition
-between HW-SW, I have seen one occurrence where ep_queue from f_fs has
-failed (at kick_transfer).And since Asynchronous IO has been enabled,
-the request was freed leading to thecorruption of started_list because
-the list_del and unmap was happened on the requestat the head, but the
-request freed by the f_fs is at the tail of the started_list. This
-caused a use after free issue.
+> 
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+> > On Wed, Apr 01, 2020 at 10:32:42AM +0300, Felipe Balbi wrote:
+> >>  764 files changed, 86304 insertions(+), 86304 deletions(-)
+> >
+> > Ah, a nice tiny patchset, I'll try to sneak this in during the merge
+> > window now :)
+> 
+> That's great, Greg. It'll help hundreds of people, I'm sure.
+> 
+> > nice job...
+> 
+> Thank you
 
-Please let me know your comments.
+Yes indeed.  Not to mention the admirable side effect of increasing the
+amount of exercise our fingers will get in the future while we write
+patches and new drivers.  And a wonderful example of how a sizable
+_increase_ in the total size of the kernel source can lead to a
+_decrease_ in confusion for readers.
 
-Thanks and Regards,
-Sriharsha
+(Plus this is a great illustration of how consistently violating the
+80-column rule can be justifiable under the right circumstances.)
+
+Alan Stern
+
