@@ -2,101 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F28419B653
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 21:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5CDA19B65A
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 21:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732350AbgDATRz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Apr 2020 15:17:55 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:36228 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732303AbgDATRy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Apr 2020 15:17:54 -0400
-Received: by mail-pl1-f195.google.com with SMTP id g2so349781plo.3;
-        Wed, 01 Apr 2020 12:17:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=viGWFCrIxPqDJuQStiywsFxnJG3SDHsHQV6GDzJrJRw=;
-        b=SfSswwueB9nuSrY0D07ks4ZOi7dFotaZMRUFmemgH0arYcUIyQg8gU71qkctQDUM2I
-         Fbp4C3/dabKOGWtTzfzBVsZ0GKomc7QRazdcoQrk6bArtah/KYyA6/UxWp5wYDeyhRIP
-         4D/H1ARsUhnfnj4HI3ivQms5J43peUSbvrTC1YEdEEQG1dzY6RbaLAt62lZ9UmtzFioD
-         fnqi96QuC/qo6QJuR28GJC4D4SO359ZVwkwkPY6qNVfatAJZR7vYTVVqnA58HH3o8Dpt
-         Jf0pUyCDlt+2J6Jv6AozTmTy5PGBEqWiNlK+//3XvO6mafRm6JAXEiF1e08/5NKmc24x
-         gJ0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=viGWFCrIxPqDJuQStiywsFxnJG3SDHsHQV6GDzJrJRw=;
-        b=TGqmi6wKbnuYl4yE7exuHBkKk6FwPEKNsG5o+o6LpKGJbfQ8VBUBMaydpcR2ceT1QV
-         kcNPiHmfCimGLOl0hbM5PPgqtNFYOaHUtUcHWXzinieY7tlJdefgEFN+he1mvTlgvAua
-         pgFB//BBa0Kzawj9YhTvqYjLOsimIrFxncLWEKdw7w5MvklltW67T6nVWRZ9jUTlfTs/
-         Ox/pBAvgWN69juAB+rFHTJRtr9/bK12fvNt+REvNgaeDNSSkM3Mu5TQWqVPYYoEqIAo+
-         1b0sU7RdeP1n9neYNAfjXKj0FoZexiMVBZtbXcMXi+Dq+Fn73t0tkF+zrjWPEG2pUcTv
-         GBcw==
-X-Gm-Message-State: ANhLgQ1oe+tX7m7BvZkgmlbSzLfi/wHUyr1IqEmEVk7SgOPTsO2YKP9D
-        tfhnXcstAKviwr4v8olGJg==
-X-Google-Smtp-Source: ADFU+vt6j6vjN1F+h9jb2txE96Yfm/p5BVJmqPBUL7aMDC0TO+cKWVRJF8d7JBu9t2Dt4avZV0RMew==
-X-Received: by 2002:a17:902:9a8a:: with SMTP id w10mr24025837plp.218.1585768671958;
-        Wed, 01 Apr 2020 12:17:51 -0700 (PDT)
-Received: from localhost.localdomain ([2402:3a80:d0a:ee38:44da:9bb6:388c:6150])
-        by smtp.gmail.com with ESMTPSA id q43sm2257428pjc.40.2020.04.01.12.17.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2020 12:17:50 -0700 (PDT)
-From:   madhuparnabhowmik10@gmail.com
-To:     gregkh@linuxfoundation.org, hariprasad.kelam@gmail.com,
-        colin.king@canonical.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ldv-project@linuxtesting.org, andrianov@ispras.ru,
-        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
-Subject: [PATCH] usb: host: u132-hcd: Traverse u132_static_list under mutex lock in u132_hcd_exit
-Date:   Thu,  2 Apr 2020 00:47:35 +0530
-Message-Id: <20200401191735.10809-1-madhuparnabhowmik10@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1732560AbgDATWR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 1 Apr 2020 15:22:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40264 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732219AbgDATWR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Apr 2020 15:22:17 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 203419] Logitech Group USB audio stopped working in 5.1-rc6
+Date:   Wed, 01 Apr 2020 19:22:16 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: florianmey@gmx.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-203419-208809-dLGb0b8sTV@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-203419-208809@https.bugzilla.kernel.org/>
+References: <bug-203419-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=203419
 
-The global list u132_static_list is protected by u132_module_lock.
-Elements are added to this list in the probe function and this list is
-traversed in u132_hcd_exit() to unregister devices.
+--- Comment #20 from Florian Meyer (florianmey@gmx.de) ---
+I get my sound system working if I use the version at the commit directly
+before ef513be0a905. 
+I just don't know if my bug is the same as the one originally reported here.
+The error messages are the same and the problem is the same, but the commit was
+applied during the 5.2 developement I think? Which would not fit the versions
+given in the first messages here.
 
-If probe and exit execute simultaneously there can be a race condition
-between writing to this list in probe and reading the list in exit as
-u132_module_lock is not held in exit function.
-
-Even though u132_exiting variable is used in probe to detect if the module is
-exiting, it is ineffective as the probe function may read the value
-before it is updated in exit and thus leading to a race condition.
-
-Therefore, hold u132_module_lock while traversing u132_static_list in
-exit function.
-
-Found by Linux Driver Verification project (linuxtesting.org).
-
-Signed-off-by: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
----
- drivers/usb/host/u132-hcd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/u132-hcd.c b/drivers/usb/host/u132-hcd.c
-index e9209e3e6248..1cadc4e0c9b2 100644
---- a/drivers/usb/host/u132-hcd.c
-+++ b/drivers/usb/host/u132-hcd.c
-@@ -3217,10 +3217,10 @@ static void __exit u132_hcd_exit(void)
- 	struct u132 *temp;
- 	mutex_lock(&u132_module_lock);
- 	u132_exiting += 1;
--	mutex_unlock(&u132_module_lock);
- 	list_for_each_entry_safe(u132, temp, &u132_static_list, u132_list) {
- 		platform_device_unregister(u132->platform_dev);
- 	}
-+	mutex_unlock(&u132_module_lock);
- 	platform_driver_unregister(&u132_platform_driver);
- 	printk(KERN_INFO "u132-hcd driver deregistered\n");
- 	wait_event(u132_hcd_wait, u132_instances == 0);
 -- 
-2.17.1
-
+You are receiving this mail because:
+You are watching the assignee of the bug.
