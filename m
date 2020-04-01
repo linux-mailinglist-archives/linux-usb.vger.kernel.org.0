@@ -2,110 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B75D19A66F
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 09:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3243519A685
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Apr 2020 09:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731870AbgDAHos (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Apr 2020 03:44:48 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:39252 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731680AbgDAHor (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Apr 2020 03:44:47 -0400
-Received: by mail-lf1-f66.google.com with SMTP id h6so13818766lfp.6
-        for <linux-usb@vger.kernel.org>; Wed, 01 Apr 2020 00:44:46 -0700 (PDT)
+        id S1732004AbgDAHsa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Apr 2020 03:48:30 -0400
+Received: from mail-qt1-f202.google.com ([209.85.160.202]:48312 "EHLO
+        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731849AbgDAHs3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Apr 2020 03:48:29 -0400
+Received: by mail-qt1-f202.google.com with SMTP id n89so20318912qte.15
+        for <linux-usb@vger.kernel.org>; Wed, 01 Apr 2020 00:48:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=iZJIdNQ43DtVUQtAJHhe6w2H9S8SF10hMOn5a2rC+5w=;
-        b=fhqvzqGM/zA9STRnYw5OuDaKsbA4bYJo5qTjD78YEgWFN6umtPDPaGzrCzkpK0OxFH
-         G73bA8OFPfWgiWPBOHjlO39DRzHDj1WBn/+AgX8G1R0IoKftS6ZsIKaMwZ1QbAuOESv7
-         Ccf4ZZ5Lp1SY8Szwwggcevn+yD8OhG5C4+4dLU4prML0XmM4JbDHTQC6RgaLnoYG1Fd/
-         VScONMRruY7DjBgkG7fdTrROKG05OucDjQ9PmefFoJDICDwbb1iMGNDGbW4+HdkVfS7B
-         1G/hj4AN5JXKVW4bFlxUsKn/51Yh+76KEwJ3zH4QkJZMgwBZ+ONfVajOucDe00mcx+W3
-         xt9A==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=9Kyv0prcq9XMUnz5AhbcrUNUlnYWKeEXqgffzhkXFWA=;
+        b=jsHHYk7dPh8l3V65PglhCNfzdfr4ELueU70iRPAREdQ94vaaPDGDJ6aWjYOKyFeStd
+         dYwOG4IYk1dr5KBEHNeTBMRQTCUKpEeDHeges7/7DVUAW7V5yIFdHAzlBRRM6xjNFQ4C
+         7DwdjO51OlM/AeHSMNwQRwkITLyQGJ//2rwTFpn/iQL/PJT7T3LlZ0bPaciCn0xB81rx
+         bLqkxvrfnqY9xFudLMOgEmtrTYGM5YtXQuYI3mEl07U60jMXw2hhqXFFjf6Tv3wQOI5l
+         iQJkX7RcyBC4VnEiU3BRPzPfxKL6znpEbzrn0BEP/IiDOBfK9DGr0GQ22sGcMHY3eTc2
+         Otzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=iZJIdNQ43DtVUQtAJHhe6w2H9S8SF10hMOn5a2rC+5w=;
-        b=ooolQKMoc7nD7bIrFd9vUGtNfZnTnAAGIqNKbVTYH5+jM4zPs01bl727oZHyTsg01L
-         RSRzT40QV9ujT9HWQ0AtmC41ZimigZRB40i88hqHQxYQSH9CfSzRaL3dE2/wtzE2g0YR
-         +9XyIbQLJ3K7TYyRhsC60E7MQpPTb2ToVLGzfib4mz6TlBimwq/74BgjuX87R6NSBcDl
-         8PFD94L3EsQVq2wMJB3VJNGdC61oMdbHiYGf65Da5Sor3XeyVVrl/kwmVQ5E/XQGNQOF
-         3ZzYdyEPQzUomtTeTSmkkLcUi5FoA84ddEcBv7Pne3BUf9Uu3Q+2QPrP6CxepSlU+nn3
-         pFpA==
-X-Gm-Message-State: AGi0PuYJ4e53N+Kg7dC6GNVjPYIk7uchV7QqdFa8j/+qssGWu9Ia+TWJ
-        FKz34SnV9IZF8JSkFJg6r5Hvcwnm
-X-Google-Smtp-Source: APiQypIjuyFp0ozlwRPp9v7EVNQ4jAWNUClgBZ8iaJ6qCLpmRRhzqXZMJzTVDDgJ1IUirHF8Oo+dRw==
-X-Received: by 2002:a05:6512:108a:: with SMTP id j10mr13257873lfg.38.1585727085243;
-        Wed, 01 Apr 2020 00:44:45 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id l6sm660260ljc.80.2020.04.01.00.44.44
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 01 Apr 2020 00:44:44 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=9Kyv0prcq9XMUnz5AhbcrUNUlnYWKeEXqgffzhkXFWA=;
+        b=qPygI43m5rnohJAqIrB+6P+31jx/WVPhOlGoopXGOgFB6GGg4N7G2CnLCLenjiKDXk
+         oieewN5WkYrZtIDrOyQE5pNLhBMJpBqFGqlijGSfZ4ULC6DVhrIcPtrm9HzR+xtqmdjN
+         XGeUCnF0g86tp4X1g71a8YfJXf5nxmYiYIQJwljTaKWzzebB/EZ7HD6uvwv6FFIFoJSm
+         F+MyUnsWsvj1V49DHAMPFEW51vqWdv/6ZzCX3zLQoFY0+jVJop06oaRwCml9orHgOVfW
+         Rik6x12jS33lSTpPmKIxY38AmYNM7C16gW9jWcWiR383ciy64UzR4llM2niStNaz8GHF
+         o+MA==
+X-Gm-Message-State: ANhLgQ1g+f3GfnaEVMtIgV2dMkC1nKh2CJHsDaYKJcjBSwfzBADMSdXN
+        nQrZBOFc0jpxJ7lFHPo056rLXdwJTw==
+X-Google-Smtp-Source: ADFU+vs0J+dnV0qXZSaE6dsczISxwq2tsmQhXz2c/IezSINTsy/Wi7PsMw/WL+Sz8BHmSE64GhoPwYjikA==
+X-Received: by 2002:a37:8503:: with SMTP id h3mr8333290qkd.499.1585727308291;
+ Wed, 01 Apr 2020 00:48:28 -0700 (PDT)
+Date:   Wed,  1 Apr 2020 09:46:19 +0200
+Message-Id: <20200401074619.8024-1-jannh@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.26.0.rc2.310.g2932bb562d-goog
+Subject: [PATCH] USB: early: Handle AMD's spec-compliant identifiers, too
+From:   Jann Horn <jannh@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/7] Universal Serial Bus: Removing Acronyms
-In-Reply-To: <20200401073806.GA2019004@kroah.com>
-References: <20200401073249.340400-1-balbi@kernel.org> <20200401073806.GA2019004@kroah.com>
-Date:   Wed, 01 Apr 2020 10:44:40 +0300
-Message-ID: <87pncr1wgn.fsf@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+This fixes a bug that causes the USB3 early console to freeze after
+printing a single line on AMD machines because it can't parse the
+Transfer TRB properly.
 
+The spec at
+https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/extensible-host-controler-interface-usb-xhci.pdf
+says in section "4.5.1 Device Context Index" that the Context Index,
+also known as Endpoint ID according to
+section "1.6 Terms and Abbreviations", is normally computed as
+`DCI = (Endpoint Number * 2) + Direction`, which matches the current
+definitions of XDBC_EPID_OUT and XDBC_EPID_IN.
 
-Hi,
+However, the numbering in a Debug Capability Context data structure is
+supposed to be different:
+Section "7.6.3.2 Endpoint Contexts and Transfer Rings" explains that a
+Debug Capability Context data structure has the endpoints mapped to indices
+0 and 1.
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
-> On Wed, Apr 01, 2020 at 10:32:42AM +0300, Felipe Balbi wrote:
->>  764 files changed, 86304 insertions(+), 86304 deletions(-)
->
-> Ah, a nice tiny patchset, I'll try to sneak this in during the merge
-> window now :)
+Change XDBC_EPID_OUT/XDBC_EPID_IN to the spec-compliant values, add
+XDBC_EPID_OUT_INTEL/XDBC_EPID_IN_INTEL with Intel's incorrect values, and
+let xdbc_handle_tx_event() handle both.
 
-That's great, Greg. It'll help hundreds of people, I'm sure.
+I have verified that with this patch applied, the USB3 early console works
+on both an Intel and an AMD machine.
 
-> nice job...
+Fixes: aeb9dd1de98c ("usb/early: Add driver for xhci debug capability")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jann Horn <jannh@google.com>
+---
+ drivers/usb/early/xhci-dbc.c |  8 ++++----
+ drivers/usb/early/xhci-dbc.h | 18 ++++++++++++++++--
+ 2 files changed, 20 insertions(+), 6 deletions(-)
 
-Thank you
+diff --git a/drivers/usb/early/xhci-dbc.c b/drivers/usb/early/xhci-dbc.c
+index cac991173ac0..5a462a1d1896 100644
+--- a/drivers/usb/early/xhci-dbc.c
++++ b/drivers/usb/early/xhci-dbc.c
+@@ -728,19 +728,19 @@ static void xdbc_handle_tx_event(struct xdbc_trb *evt_trb)
+ 	case COMP_USB_TRANSACTION_ERROR:
+ 	case COMP_STALL_ERROR:
+ 	default:
+-		if (ep_id == XDBC_EPID_OUT)
++		if (ep_id == XDBC_EPID_OUT || ep_id == XDBC_EPID_OUT_INTEL)
+ 			xdbc.flags |= XDBC_FLAGS_OUT_STALL;
+-		if (ep_id == XDBC_EPID_IN)
++		if (ep_id == XDBC_EPID_IN || ep_id == XDBC_EPID_IN_INTEL)
+ 			xdbc.flags |= XDBC_FLAGS_IN_STALL;
+ 
+ 		xdbc_trace("endpoint %d stalled\n", ep_id);
+ 		break;
+ 	}
+ 
+-	if (ep_id == XDBC_EPID_IN) {
++	if (ep_id == XDBC_EPID_IN || ep_id == XDBC_EPID_IN_INTEL) {
+ 		xdbc.flags &= ~XDBC_FLAGS_IN_PROCESS;
+ 		xdbc_bulk_transfer(NULL, XDBC_MAX_PACKET, true);
+-	} else if (ep_id == XDBC_EPID_OUT) {
++	} else if (ep_id == XDBC_EPID_OUT || ep_id == XDBC_EPID_OUT_INTEL) {
+ 		xdbc.flags &= ~XDBC_FLAGS_OUT_PROCESS;
+ 	} else {
+ 		xdbc_trace("invalid endpoint id %d\n", ep_id);
+diff --git a/drivers/usb/early/xhci-dbc.h b/drivers/usb/early/xhci-dbc.h
+index 673686eeddd7..6e2b7266a695 100644
+--- a/drivers/usb/early/xhci-dbc.h
++++ b/drivers/usb/early/xhci-dbc.h
+@@ -120,8 +120,22 @@ struct xdbc_ring {
+ 	u32			cycle_state;
+ };
+ 
+-#define XDBC_EPID_OUT		2
+-#define XDBC_EPID_IN		3
++/*
++ * These are the "Endpoint ID" (also known as "Context Index") values for the
++ * OUT Transfer Ring and the IN Transfer Ring of a Debug Capability Context data
++ * structure.
++ * According to the "eXtensible Host Controller Interface for Universal Serial
++ * Bus (xHCI)" specification, section "7.6.3.2 Endpoint Contexts and Transfer
++ * Rings", these should be 0 and 1, and those are the values AMD machines give
++ * you; but Intel machines seem to use the formula from section "4.5.1 Device
++ * Context Index", which is supposed to be used for the Device Context only.
++ * Luckily the values from Intel don't overlap with those from AMD, so we can
++ * just test for both.
++ */
++#define XDBC_EPID_OUT		0
++#define XDBC_EPID_IN		1
++#define XDBC_EPID_OUT_INTEL	2
++#define XDBC_EPID_IN_INTEL	3
+ 
+ struct xdbc_state {
+ 	u16			vendor;
+-- 
+2.26.0.rc2.310.g2932bb562d-goog
 
-> greg "I know what day this is..." k-h
-
-felipe "I've been mostly confined" balbi
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6ERmgACgkQzL64meEa
-mQb2LQ//YpPYz4baz2VtmbeoXd9ffn9nBO4pkgQNyzBDJZpWVjalyjdReD6cOUDa
-LGNx4X2WJonEh3S97DrStiQ2floNNUBFbgnSNWUuXggZM6H+5Eejwa3MlDgNhlGY
-TXSdAnoz7l3bo8ByScwIhGO/Y3s5T9N2S05m1jIuDYjwmxozLeFgm10BIPQyI4nm
-FFn8vD5OO1AzinaP8yKH2YSfFVafTF2njtKoRiVWXITEzad23FktPQZ1g3GS9BQ9
-URXo+Bw8vViAugnTfkF9z89y0Yg+XaecEUxuA84Qr/JxSzIwraicK3C/Z2fgfkpq
-OrS/+hmIW0iJeeLIhpfcfSDNrJ6X2HFOHVjs1KEtSPGaJeSMvPhFoqmv0kFRn9z4
-3G+EJeGDcr7Ljvuv1FaGKN5f+FHxtyPfCrQ59JhoqOWOyNs+bSPfF47eWS8l+IIP
-ImuspRO/UWHcG7jg1ObVabCIX7uxwTEaPZXhL96GzDD7HyOI2CreYNGcTFEEN2yN
-g9OU7mYsvwdniy/Fto4dvE49LG5dkGwwq7iUDeiBTZka9aOmTukw+RB2lXE0S+Uj
-L2UWc2fXFbC2WizVznraoVa7EQfZil6HrOWDS06tGnQ69F48ZK8oO/zt9EKbGP2/
-qVlWu9dpOimw18Ibi7HqtdpX/qQ3PaCL1kbTKg+6fz8PnAyr4UQ=
-=Xyuv
------END PGP SIGNATURE-----
---=-=-=--
