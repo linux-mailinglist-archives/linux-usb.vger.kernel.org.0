@@ -2,75 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4282B19BA36
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 04:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81ED519BB1E
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 06:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732462AbgDBCPt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Apr 2020 22:15:49 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:33384 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727135AbgDBCPt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Apr 2020 22:15:49 -0400
-X-UUID: e9f8c229a1b64a22b30379c59a419f5b-20200402
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=j2hWWUuz3KGWjaQejXZFkjVBnedbl9V3EUJsbWbsseg=;
-        b=LfwnovNnGse+OnKDMNxeFodv82vWOnCj+h1ID0btUOwudixXXaKftc4n5lRQgxfbOekgf6anvCKGSyBkmv/U2lEk/7nt9yKsY3fXvVYlcCNvSxEFyJvjyP/u0prmw+wMJeZeT3iKUpZzJ7/0wNsa1CJj7qtrNm0tmtjnmPBISDU=;
-X-UUID: e9f8c229a1b64a22b30379c59a419f5b-20200402
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 738108935; Thu, 02 Apr 2020 10:15:37 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS33DR.mediatek.inc
- (172.27.6.106) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 2 Apr
- 2020 10:15:36 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Thu, 2 Apr 2020 10:15:35 +0800
-Message-ID: <1585793739.28772.4.camel@mhfsdcap03>
-Subject: Re: [PATCH 0/7] Universal Serial Bus: Removing Acronyms
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-CC:     <linux-usb@vger.kernel.org>
-Date:   Thu, 2 Apr 2020 10:15:39 +0800
-In-Reply-To: <Pine.LNX.4.44L0.2004011036470.22914-100000@netrider.rowland.org>
-References: <Pine.LNX.4.44L0.2004011036470.22914-100000@netrider.rowland.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726453AbgDBEca (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Apr 2020 00:32:30 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:13678 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726136AbgDBEca (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 00:32:30 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1585801950; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=53yvaZxEbBFefoatZ8fiPBqScAFWbULTmksxVY0SyVA=; b=XyuK4j2Sflhei3Nsdq0oJC2Y9pVlRm/fdUAWlCjwJ+BCbUWUV/pJMggEjqL25/BrdTvibHfg
+ oiUHBvkp7sBKvqhaVr4vLbDmucJJy6vv7bSGssLhnamdntEFhqz3q/v5anzH6uzmT8k404UI
+ mXxPSpHleUDO4uNzKI2zPf/pGDo=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e856ad5.7ff7bcfe67d8-smtp-out-n05;
+ Thu, 02 Apr 2020 04:32:21 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id B57A0C43637; Thu,  2 Apr 2020 04:32:21 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from sallenki-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sallenki)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5CE04C433F2;
+        Thu,  2 Apr 2020 04:32:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 5CE04C433F2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sallenki@codeaurora.org
+From:   Sriharsha Allenki <sallenki@codeaurora.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, ugoswami@codeaurora.org
+Cc:     mgautam@codeaurora.org, jackp@codeaurora.org,
+        stable@vger.kernel.org, Sriharsha Allenki <sallenki@codeaurora.org>
+Subject: [PATCH] usb: f_fs: Clear OS Extended descriptor counts to zero in ffs_data_reset()
+Date:   Thu,  2 Apr 2020 10:02:10 +0530
+Message-Id: <20200402043210.2342-1-sallenki@codeaurora.org>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 09BD61C12EA37C23042C85B167F24893E4375AB8A531E76234DF642965305B952000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gV2VkLCAyMDIwLTA0LTAxIGF0IDEwOjQzIC0wNDAwLCBBbGFuIFN0ZXJuIHdyb3RlOg0KPiBP
-biBXZWQsIDEgQXByIDIwMjAsIEZlbGlwZSBCYWxiaSB3cm90ZToNCj4gDQo+ID4gDQo+ID4gSGks
-DQo+ID4gDQo+ID4gR3JlZyBLcm9haC1IYXJ0bWFuIDxncmVna2hAbGludXhmb3VuZGF0aW9uLm9y
-Zz4gd3JpdGVzOg0KPiA+ID4gT24gV2VkLCBBcHIgMDEsIDIwMjAgYXQgMTA6MzI6NDJBTSArMDMw
-MCwgRmVsaXBlIEJhbGJpIHdyb3RlOg0KPiA+ID4+ICA3NjQgZmlsZXMgY2hhbmdlZCwgODYzMDQg
-aW5zZXJ0aW9ucygrKSwgODYzMDQgZGVsZXRpb25zKC0pDQo+ID4gPg0KPiA+ID4gQWgsIGEgbmlj
-ZSB0aW55IHBhdGNoc2V0LCBJJ2xsIHRyeSB0byBzbmVhayB0aGlzIGluIGR1cmluZyB0aGUgbWVy
-Z2UNCj4gPiA+IHdpbmRvdyBub3cgOikNCj4gPiANCj4gPiBUaGF0J3MgZ3JlYXQsIEdyZWcuIEl0
-J2xsIGhlbHAgaHVuZHJlZHMgb2YgcGVvcGxlLCBJJ20gc3VyZS4NCj4gPiANCj4gPiA+IG5pY2Ug
-am9iLi4uDQo+ID4gDQo+ID4gVGhhbmsgeW91DQo+IA0KPiBZZXMgaW5kZWVkLiAgTm90IHRvIG1l
-bnRpb24gdGhlIGFkbWlyYWJsZSBzaWRlIGVmZmVjdCBvZiBpbmNyZWFzaW5nIHRoZQ0KPiBhbW91
-bnQgb2YgZXhlcmNpc2Ugb3VyIGZpbmdlcnMgd2lsbCBnZXQgaW4gdGhlIGZ1dHVyZSB3aGlsZSB3
-ZSB3cml0ZQ0KPiBwYXRjaGVzIGFuZCBuZXcgZHJpdmVycy4gIEFuZCBhIHdvbmRlcmZ1bCBleGFt
-cGxlIG9mIGhvdyBhIHNpemFibGUNCj4gX2luY3JlYXNlXyBpbiB0aGUgdG90YWwgc2l6ZSBvZiB0
-aGUga2VybmVsIHNvdXJjZSBjYW4gbGVhZCB0byBhDQo+IF9kZWNyZWFzZV8gaW4gY29uZnVzaW9u
-IGZvciByZWFkZXJzLg0KPiANCkkgZmluZCB0aGF0IEkgd2lsbCBzcGVuZCBtb3JlIHRpbWUgdG8g
-cmVhZC93cml0ZSB0aGUgY29kZSENCg0KZS5nLg0KLXN0YXRpYyB2b2lkIHVoY2lfdW5saW5rX3Fo
-KHN0cnVjdCB1aGNpX2hjZCAqdWhjaSwgc3RydWN0IHVoY2lfcWggKnFoKQ0KK3N0YXRpYyB2b2lk
-IHVuaXZlcnNhbF9ob3N0X2NvbnRyb2xsZXJfaW50ZXJmYWNlX3VubGlua19xaChzdHJ1Y3QNCnVu
-aXZlcnNhbF9ob3N0X2NvbnRyb2xsZXJfaW50ZXJmYWNlX2hjZA0KKnVuaXZlcnNhbF9ob3N0X2Nv
-bnRyb2xsZXJfaW50ZXJmYWNlLCBzdHJ1Y3QNCnVuaXZlcnNhbF9ob3N0X2NvbnRyb2xsZXJfaW50
-ZXJmYWNlX3FoICpxaCkNCg0KDQo+IChQbHVzIHRoaXMgaXMgYSBncmVhdCBpbGx1c3RyYXRpb24g
-b2YgaG93IGNvbnNpc3RlbnRseSB2aW9sYXRpbmcgdGhlDQo+IDgwLWNvbHVtbiBydWxlIGNhbiBi
-ZSBqdXN0aWZpYWJsZSB1bmRlciB0aGUgcmlnaHQgY2lyY3Vtc3RhbmNlcy4pDQo+IA0KPiBBbGFu
-IFN0ZXJuDQo+IA0KDQo=
+From: Udipto Goswami <ugoswami@codeaurora.org>
 
+For userspace functions using OS Descriptors, if a function also supplies
+Extended Property descriptors currently the counts and lengths stored in
+the ms_os_descs_ext_prop_{count,name_len,data_len} variables are not
+getting reset to 0 during an unbind or when the epfiles are closed. If
+the same function is re-bound and the descriptors are re-written, this
+results in those count/length variables to monotonically increase
+causing the VLA allocation in _ffs_func_bind() to grow larger and larger
+at each bind/unbind cycle and eventually fail to allocate.
+
+Fix this by clearing the ms_os_descs_ext_prop count & lengths to 0 in
+ffs_data_reset().
+
+Change-Id: I3b292fe5386ab54b53df2b9f15f07430dc3df24a
+Fixes: f0175ab51993 ("usb: gadget: f_fs: OS descriptors support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Udipto Goswami <ugoswami@codeaurora.org>
+Signed-off-by: Sriharsha Allenki <sallenki@codeaurora.org>
+---
+ drivers/usb/gadget/function/f_fs.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index c81023b195c3..10f01f974f67 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1813,6 +1813,10 @@ static void ffs_data_reset(struct ffs_data *ffs)
+ 	ffs->state = FFS_READ_DESCRIPTORS;
+ 	ffs->setup_state = FFS_NO_SETUP;
+ 	ffs->flags = 0;
++
++	ffs->ms_os_descs_ext_prop_count = 0;
++	ffs->ms_os_descs_ext_prop_name_len = 0;
++	ffs->ms_os_descs_ext_prop_data_len = 0;
+ }
+ 
+ 
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
