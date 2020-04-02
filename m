@@ -2,59 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4DFB19C879
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 20:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB35819C94C
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 21:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389418AbgDBSBy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Apr 2020 14:01:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43848 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388641AbgDBSBy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 2 Apr 2020 14:01:54 -0400
-Received: from localhost (mobile-166-170-223-166.mycingular.net [166.170.223.166])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D8492206F6;
-        Thu,  2 Apr 2020 18:01:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585850514;
-        bh=oWUzlHfuwWKgME7NjSzkRgepanaeIaWsrH5an+W0Uds=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Wl70XaZIn/iM6huN3hAgmn9HJGzsCtMrt2DpC4VSkh0dGXZTMNkgiOcLnej8YzzGd
-         /UK/KnXqbbXwH6woCGQii3desEhyWPv/wEWByxZfPPyC7m5NkJaIOWYB0yxPvXYhnN
-         VddlJvK//g5/zZtXqbmks5qmJS7XkSODgKXNYoic=
-Date:   Thu, 2 Apr 2020 13:01:51 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-usb@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org,
-        tim.gover@raspberrypi.org, linux-pci@vger.kernel.org,
-        wahrenst@gmx.net, sergei.shtylyov@cogentembedded.com
-Subject: Re: [PATCH v6 1/4] soc: bcm2835: Sync xHCI reset firmware property
- with downstream
-Message-ID: <20200402180151.GA50169@google.com>
+        id S2389903AbgDBTAE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Apr 2020 15:00:04 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:50623 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S2389638AbgDBTAE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 15:00:04 -0400
+Received: (qmail 4070 invoked by uid 500); 2 Apr 2020 15:00:03 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 2 Apr 2020 15:00:03 -0400
+Date:   Thu, 2 Apr 2020 15:00:03 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
+        <ingrassia@epigenesys.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
+Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
+In-Reply-To: <0000000000000e8b8005a2520af1@google.com>
+Message-ID: <Pine.LNX.4.44L0.2004021428320.852-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200324182812.20420-2-nsaenzjulienne@suse.de>
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Mar 24, 2020 at 07:28:09PM +0100, Nicolas Saenz Julienne wrote:
-> The property is needed in order to trigger VL805's firmware load. Note
-> that there is a gap between the property introduced and the previous
-> one. This is also the case downstream.
+On Thu, 2 Apr 2020, syzbot wrote:
 
-I don't know what "downstream" means, so I don't know what we're
-syncing *with*.  If there's another branch or project we need to
-coordinate with, is there a name or URL that would help facilitate
-that?  If not, I'm not sure what value that sentence adds.
+> Hello,
+> 
+> syzbot has tested the proposed patch but the reproducer still triggered crash:
+> WARNING in usbhid_raw_request/usb_submit_urb
+> 
+> ------------[ cut here ]------------
+> usb 3-1: BOGUS urb xfer, pipe 2 != type 2, ep addr 0x00, pipe 0x80001a00, xfertype 0
 
-Bjorn
+Not much help, I'm afraid.  The pipe value decodes to:
+
+	Direction:	OUT
+	Device address:	26 (which agrees with the console output)
+	Endpoint:	0
+	Pipe type:	Control (which is appropriate for ep 0
+			and agrees with xfertype)
+
+Unfortunately, the values printed here need not be the same as the 
+values checked by usb_urb_ep_type_check(), if either the URB or the 
+descriptor is modified concurrently by another thread.
+
+Let's try a different approach.  Since this modifies the code before 
+the test, it may not trigger the warning.  But it's worth a try.
+
+Alan Stern
+
+#syz test: https://github.com/google/kasan.git 0fa84af8
+
+Index: usb-devel/drivers/usb/core/urb.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/urb.c
++++ usb-devel/drivers/usb/core/urb.c
+@@ -199,15 +199,27 @@ static const int pipetypes[4] = {
+  * given urb.  It returns 0 if the urb contains a valid endpoint, otherwise
+  * a negative error code.
+  */
++unsigned int alan_pipe, alan_epaddr, alan_epattr;
+ int usb_urb_ep_type_check(const struct urb *urb)
+ {
+ 	const struct usb_host_endpoint *ep;
++	unsigned int pipe, epattr;
+ 
+-	ep = usb_pipe_endpoint(urb->dev, urb->pipe);
+-	if (!ep)
++	pipe = READ_ONCE(urb->pipe);
++	ep = usb_pipe_endpoint(urb->dev, pipe);
++	if (!ep) {
++		alan_pipe = pipe;
++		alan_epattr = 0;
++		alan_epaddr = 0xff;
+ 		return -EINVAL;
+-	if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
++	}
++	epattr = READ_ONCE(ep->desc.bmAttributes);
++	if (usb_pipetype(pipe) != pipetypes[epattr & USB_ENDPOINT_XFERTYPE_MASK]) {
++		alan_pipe = pipe;
++		alan_epattr = epattr;
++		alan_epaddr = ep->desc.bEndpointAddress;
+ 		return -EINVAL;
++	}
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(usb_urb_ep_type_check);
+@@ -475,8 +487,9 @@ int usb_submit_urb(struct urb *urb, gfp_
+ 
+ 	/* Check that the pipe's type matches the endpoint's type */
+ 	if (usb_urb_ep_type_check(urb))
+-		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x != type %x\n",
+-			usb_pipetype(urb->pipe), pipetypes[xfertype]);
++		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x != type %x, pipe 0x%x, ep attr 0x%02x, ep addr 0x%02x\n",
++			usb_pipetype(urb->pipe), pipetypes[xfertype],
++			alan_pipe, alan_epattr, alan_epaddr);
+ 
+ 	/* Check against a simple/standard policy */
+ 	allowed = (URB_NO_TRANSFER_DMA_MAP | URB_NO_INTERRUPT | URB_DIR_MASK |
+
+
