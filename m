@@ -2,115 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5548719CC57
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 23:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E04219CC9F
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Apr 2020 00:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388148AbgDBVZF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Apr 2020 17:25:05 -0400
-Received: from mail-il1-f199.google.com ([209.85.166.199]:42295 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731842AbgDBVZE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 17:25:04 -0400
-Received: by mail-il1-f199.google.com with SMTP id j88so4709251ilg.9
-        for <linux-usb@vger.kernel.org>; Thu, 02 Apr 2020 14:25:04 -0700 (PDT)
+        id S2389402AbgDBWAC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Apr 2020 18:00:02 -0400
+Received: from mail-pf1-f202.google.com ([209.85.210.202]:48065 "EHLO
+        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726963AbgDBWAC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 18:00:02 -0400
+Received: by mail-pf1-f202.google.com with SMTP id h191so4206477pfe.14
+        for <linux-usb@vger.kernel.org>; Thu, 02 Apr 2020 14:59:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=fGO/LJweRfjzoNNtcouuC1p+t8sUj+ryEoR9Pw+Ties=;
+        b=eDi5O9TD95uNcfdqgTHHcoe0MCFTiL6tlhYQIWG++N+2Zj2qEQC/H5KzLh0PgWJkBk
+         RF41qd7YG9rUQX2ROBlG/9leP6lg5z2j7RZDkG3krpHgbWaRBv/ZMfbAls/wAQfoBj3k
+         Ha6+ilY7qEQmBSUqRklWAGfjjx0wrzwSClCYRIPcgeO0ZUreXSooYrq6zQR7nYf+ATeX
+         +wIOdYwZb5C7WhL9LKmv18LnNwqDW4KwUke32X7fJsci7bjcU+/yC3a2zRunZhBWRcgq
+         3XJeg1MA8C6HIGgplGDiqcZ0yL6SU1GJ7cuR15IXX/2zk5ANKLysJD/HVUe3gC+LdXVH
+         RFMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=7DSGAtFq8cBRMK5Ky7QRP/F+L98XsCIsky9uoP3uDLg=;
-        b=PlUUljJH+wg3TmffGJdiYc4K8trB5luBvzVogsBIvlz9ZXOtO5kjwa8ZoXAc2L/UCL
-         Q/PmSrNrWBCb8NpQt7vI3/zw5mksc6WzzT8enqGhKmaYI+joJlzazk8awra5cN6w64Ke
-         wYh8IFbzeVrjj+Sz1kAjX6KiuH0vVBA9QS58EJLb6izrkO/ltESwRZ8b8JjcfeYh7c2O
-         qP79C2Ff75UWW2zRIlx0LvC/G/Sy9nK9imPZL8/cJpAr5tmipLF080zXjME6k+Fr1bWi
-         K/NCxcEdG4wqFUIP16p7Wyqg/C418vVbtfffBvuUHzuBgYhZoqt17Y0c76m41AGn8htN
-         9QfA==
-X-Gm-Message-State: AGi0Pub8ECClwRQ9mQlosOZqOnZOgp09N0TAUuDVOG0d60OYt4L6qxLu
-        GpzD+QmdqTHBSulJVyGSrQYqNDytKkHa+Pyn1iLRtLfvO68L
-X-Google-Smtp-Source: APiQypILci59R8TeoWBPU+pLhDRVwa4sob2rWj6PZeTrYuFK4l9tk+3E4RVwEzBQT1LnM+f9HPUGEAt2mWJdFt7Jx9vmfQ8cgOin
-MIME-Version: 1.0
-X-Received: by 2002:a6b:8f11:: with SMTP id r17mr4461879iod.92.1585862703642;
- Thu, 02 Apr 2020 14:25:03 -0700 (PDT)
-Date:   Thu, 02 Apr 2020 14:25:03 -0700
-In-Reply-To: <Pine.LNX.4.44L0.2004021428320.852-100000@netrider.rowland.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001cfc5605a2556fb7@google.com>
-Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
-From:   syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=fGO/LJweRfjzoNNtcouuC1p+t8sUj+ryEoR9Pw+Ties=;
+        b=SwiJn2pnjn6q9eGzx+mQIBeAX7UjreasqagcEyNMQSp/G9orVhTWxToubZZ1lo6Dco
+         6Nk6eWbnUu4bpVQyXOKxhuvzvtHFqIGBA+xKUafgu1NFCXdYFZ7xZ6lXWpqxvnIc8k9w
+         bNxLOBJAF/97U1VbJZ+N/PsuZ6Q4o5C9cEEf8rrK7CV/KkOLUDFmO+mOW3eTyIKPucKT
+         IkvoGKVZ8gIeg3kK53+NjWkijpkWurfrCa5uC+lN6RniiPGO7EBugZbARvSLi6g1BQno
+         mWz0kLEKR/GCFcn5lRhqGJGJoDJWldrvsGy9Ujr5Xae0f7mV04FD/UDcIvFM3XOGUGk3
+         NPhg==
+X-Gm-Message-State: AGi0PuYglf8v8S5BvYzu56fGaVaPaM1ZV1Jc3qGfqWKKBL88I+QuwPL4
+        Zt51+3Mb4GhSJoHnnt/jd/mJeqx1Pz0=
+X-Google-Smtp-Source: APiQypJxSRgREB0dWLpAT518fR5h5iCmDFtWTpeb1vl29TnRZsaiWSDp6ZRDRMhHplEfaenObLzqOasKQFg=
+X-Received: by 2002:a17:90a:a4c7:: with SMTP id l7mr5927191pjw.114.1585864799199;
+ Thu, 02 Apr 2020 14:59:59 -0700 (PDT)
+Date:   Thu,  2 Apr 2020 14:59:47 -0700
+Message-Id: <20200402215947.176577-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.26.0.292.g33ef6b2f38-goog
+Subject: [PATCH v1] usb: typec: tcpm: Ignore CC and vbus changes in PORT_RESET change
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+After PORT_RESET, the port is set to the appropriate
+default_state. Ignore processing CC changes here as this
+could cause the port to be switched into sink states
+by default.
 
-syzbot has tested the proposed patch but the reproducer still triggered crash:
-WARNING in usbhid_raw_request/usb_submit_urb
+echo source > /sys/class/typec/port0/port_type
 
-------------[ cut here ]------------
-usb 1-1: BOGUS urb xfer, pipe 2 != type 2, pipe 0x80005600, ep attr 0x00, ep addr 0xff
-WARNING: CPU: 1 PID: 8507 at drivers/usb/core/urb.c:490 usb_submit_urb+0xa41/0x1380 drivers/usb/core/urb.c:490
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 1 PID: 8507 Comm: syz-executor.0 Not tainted 5.6.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- panic+0x2aa/0x6e1 kernel/panic.c:221
- __warn.cold+0x2f/0x30 kernel/panic.c:582
- report_bug+0x27b/0x2f0 lib/bug.c:195
- fixup_bug arch/x86/kernel/traps.c:174 [inline]
- fixup_bug arch/x86/kernel/traps.c:169 [inline]
- do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
- do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
- invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-RIP: 0010:usb_submit_urb+0xa41/0x1380 drivers/usb/core/urb.c:490
-Code: f7 e8 53 5e 17 ff 41 89 e9 41 89 d8 44 89 e1 41 55 48 89 c6 8b 44 24 30 48 c7 c7 80 dd 3b 86 50 48 8b 54 24 40 e8 c7 1e b2 fd <0f> 0b 58 5a e8 f6 8d dd fd 0f b6 6c 24 08 bb 86 03 00 00 48 c7 c6
-RSP: 0018:ffff8881cfef7b28 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff812974dd RDI: ffffed1039fdef57
-RBP: 0000000080005600 R08: ffff8881c528e200 R09: ffffed103b666248
-R10: ffffed103b666247 R11: ffff8881db33123f R12: 0000000000000002
-R13: 00000000000000ff R14: ffff8881d999d0a0 R15: ffff8881da357800
- usb_start_wait_urb+0x108/0x4c0 drivers/usb/core/message.c:58
- usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
- usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
- usbhid_set_raw_report drivers/hid/usbhid/hid-core.c:917 [inline]
- usbhid_raw_request+0x21f/0x640 drivers/hid/usbhid/hid-core.c:1265
- hid_hw_raw_request include/linux/hid.h:1079 [inline]
- hidraw_send_report+0x296/0x500 drivers/hid/hidraw.c:151
- hidraw_ioctl+0x620/0xaf0 drivers/hid/hidraw.c:422
- vfs_ioctl fs/ioctl.c:47 [inline]
- ksys_ioctl+0x11a/0x180 fs/ioctl.c:763
- __do_sys_ioctl fs/ioctl.c:772 [inline]
- __se_sys_ioctl fs/ioctl.c:770 [inline]
- __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:770
- do_syscall_64+0xb6/0x5a0 arch/x86/entry/common.c:294
- entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x45c849
-Code: ad b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 7b b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007fe66e55bc78 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007fe66e55c6d4 RCX: 000000000045c849
-RDX: 00000000200000c0 RSI: 0000000080404806 RDI: 0000000000000006
-RBP: 000000000076bfa0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000000ffffffff
-R13: 0000000000000335 R14: 00000000004c59df R15: 000000000076bfac
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+Before:
+[  154.528547] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms
+[  154.528560] CC1: 0 -> 0, CC2: 3 -> 0 [state PORT_RESET, polarity 0, disconnected]
+[  154.528564] state change PORT_RESET -> SNK_UNATTACHED
 
+After:
+[  151.068814] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev3 NONE_AMS]
+[  151.072440] CC1: 3 -> 0, CC2: 0 -> 0 [state PORT_RESET, polarity 0, disconnected]
+[  151.172117] state change PORT_RESET -> PORT_RESET_WAIT_OFF [delayed 100 ms]
+[  151.172136] pending state change PORT_RESET_WAIT_OFF -> SRC_UNATTACHED @ 870 ms [rev3 NONE_AMS]
+[  152.060106] state change PORT_RESET_WAIT_OFF -> SRC_UNATTACHED [delayed 870 ms]
+[  152.060118] Start toggling
 
-Tested on:
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-commit:         0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
-git tree:       https://github.com/google/kasan.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=15ddbf2fe00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
-dashboard link: https://syzkaller.appspot.com/bug?extid=db339689b2101f6f6071
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1559e85de00000
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index de3576e6530ab2..82b19ebd7838e0 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -3794,6 +3794,14 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
+ 		 */
+ 		break;
+ 
++	case PORT_RESET:
++	case PORT_RESET_WAIT_OFF:
++		/*
++		 * State set back to default mode once the timer completes.
++		 * Ignore CC changes here.
++		 */
++		break;
++
+ 	default:
+ 		if (tcpm_port_is_disconnected(port))
+ 			tcpm_set_state(port, unattached_state(port), 0);
+@@ -3855,6 +3863,15 @@ static void _tcpm_pd_vbus_on(struct tcpm_port *port)
+ 	case SRC_TRY_DEBOUNCE:
+ 		/* Do nothing, waiting for sink detection */
+ 		break;
++
++	case PORT_RESET:
++	case PORT_RESET_WAIT_OFF:
++		/*
++		 * State set back to default mode once the timer completes.
++		 * Ignore vbus changes here.
++		 */
++		break;
++
+ 	default:
+ 		break;
+ 	}
+@@ -3908,10 +3925,19 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
+ 	case PORT_RESET_WAIT_OFF:
+ 		tcpm_set_state(port, tcpm_default_state(port), 0);
+ 		break;
++
+ 	case SRC_TRY_WAIT:
+ 	case SRC_TRY_DEBOUNCE:
+ 		/* Do nothing, waiting for sink detection */
+ 		break;
++
++	case PORT_RESET:
++		/*
++		 * State set back to default mode once the timer completes.
++		 * Ignore vbus changes here.
++		 */
++		break;
++
+ 	default:
+ 		if (port->pwr_role == TYPEC_SINK &&
+ 		    port->attached)
+-- 
+2.26.0.292.g33ef6b2f38-goog
 
