@@ -2,73 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D20B819C2C3
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 15:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7732419C3A9
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 16:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388663AbgDBNep convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 2 Apr 2020 09:34:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57868 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387752AbgDBNeo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 2 Apr 2020 09:34:44 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 203419] Logitech Group USB audio stopped working in 5.1-rc6
-Date:   Thu, 02 Apr 2020 13:34:44 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mathias.nyman@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-203419-208809-0aU84bU7Jn@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-203419-208809@https.bugzilla.kernel.org/>
-References: <bug-203419-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S2388148AbgDBOM3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Apr 2020 10:12:29 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:52943 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728225AbgDBOM3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 10:12:29 -0400
+Received: (qmail 11839 invoked by uid 500); 2 Apr 2020 10:12:28 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 2 Apr 2020 10:12:28 -0400
+Date:   Thu, 2 Apr 2020 10:12:28 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Greg KH <gregkh@linuxfoundation.org>
+cc:     massimo <maxcipo1@tin.it>, <linux-usb@vger.kernel.org>
+Subject: Re: Usb_power_supply
+In-Reply-To: <20200402073942.GA2755501@kroah.com>
+Message-ID: <Pine.LNX.4.44L0.2004021010060.9681-100000@netrider.rowland.org>
 MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=203419
+On Thu, 2 Apr 2020, Greg KH wrote:
 
-Mathias Nyman (mathias.nyman@linux.intel.com) changed:
+> On Thu, Apr 02, 2020 at 09:19:06AM +0200, massimo wrote:
+> > I've read the interesting Greg's article about writing USB driver for
+> > Linux.
+> > I'm interested in a simpler question. Is it possible
+> > to write a driver in Ubuntu (19.10) to switch power on or off to a USB
+> > port, that' s to say to give or take off the 5 volts power supply  to a
+> > USB port (in order for example to switch on or off a simple usb lamp)?
+> > Thanks for your attention and courtesy, Massimo.
+> > 
+> 
+> Try the userspace program 'usbreset' that is part of the usbutils
+> package, and can be found also here:
+> 	https://github.com/gregkh/usbutils/blob/master/usbreset.c
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |mathias.nyman@linux.intel.c
-                   |                            |om
+Or you can use the program that was posted here:
 
---- Comment #21 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
-Any chance someone who could reproduce this on 5.1-rc6, 5.1 or 5.0 could bisect
-the kernel and find the problematic commit.
+	https://marc.info/?l=linux-usb&m=127162615232234&w=2
 
-Also traces and logs with more usb details enabled could be useful.
-These can be taken with any recent kernel.
+This program turns power on and off for specific ports, as opposed to
+resetting the entire hub.
 
-mount -t debugfs none /sys/kernel/debug
-echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
-echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
-echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
-echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
-< connect the logitec device >
-Send output of dmesg
-Send content of /sys/kernel/debug/tracing/trace
+Alan Stern
 
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+> if your hub supports it, this will work.  Note, not all USB hubs support
+> this type of behavior, as it is not required by the USB specification.
+> 
+> hope this helps,
+
