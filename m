@@ -2,241 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A7719CC2A
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 22:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5548719CC57
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 23:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388902AbgDBU7M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Apr 2020 16:59:12 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:15082 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730837AbgDBU7L (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 16:59:11 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e8651bb0001>; Thu, 02 Apr 2020 13:57:31 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 02 Apr 2020 13:59:10 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 02 Apr 2020 13:59:10 -0700
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 2 Apr
- 2020 20:59:09 +0000
-Received: from NAM04-SN1-obe.outbound.protection.outlook.com (104.47.44.56) by
- HQMAIL111.nvidia.com (172.20.187.18) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Thu, 2 Apr 2020 20:59:09 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KwmdrqpttmgpNuucMTsj8cMT1iGU782ZDzDhxB52hoITLv9zJzYo/ELLFXAXzJ44qu4L409MX1JRSpx5ZkRORmBOLE5pFFp/v0Ua75nTpWeE7yC0Uil2ikOrn/Do4hNSGu0zI5rckb5UR/Y3UPhPrUC/KP0lw03kAf98LrYrSVoXqtqLKlbBYtNqu8vZu09/SQhlCjkcwUDm2imCufxF5EoRdP0630/r67xIbwNp0zUz1ZxdNPoD3ASNy+4aisUpxVOpnJrb42UBP3MJsWf/IeQTY9F2kg4tJsfofh3aGFG2v2Bhp85w7Xn6w0z8bV5431X6WB2fCXXg2c7NyzfB+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CjZPfL+HG0khXSokmkq+AEdMl+eXW1us03S17H1bWsM=;
- b=Jc8iBABvWIYxKISCK0r3MK65rzzNMAnhr07R9ztf2ssKU6+2TG1T1NkqMvdMFhbbruB030xBLuheIQBXt47MwJbieCSlyNhc09HKeiJWPdZxhXl3rmoVb/M3DrtuWCirOZZ4M8e+meq69XoF1ziRuLLw8H5FvZpuNhWIlZv83YdkJgAf8pcZeUzYgYUkNSsZftZ0YtinhvQsRFbEYYXXTcysUYEkx8zW165y8XwL1IdW3V5i+dp3N1q1rxK8tFx6PQqmZ/axOvEh/XVg0b01qlnNRBEy2BLdrCdF2bO/yRYD8Nmm4GNfHj1CIY1I8ODDyoDaZx8g+YMdhAM0+R3v6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-Received: from BYAPR12MB2727.namprd12.prod.outlook.com (2603:10b6:a03:71::22)
- by BYAPR12MB3560.namprd12.prod.outlook.com (2603:10b6:a03:ae::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2835.23; Thu, 2 Apr
- 2020 20:59:08 +0000
-Received: from BYAPR12MB2727.namprd12.prod.outlook.com
- ([fe80::b874:508d:247f:e4f6]) by BYAPR12MB2727.namprd12.prod.outlook.com
- ([fe80::b874:508d:247f:e4f6%4]) with mapi id 15.20.2856.019; Thu, 2 Apr 2020
- 20:59:08 +0000
-From:   Ajay Gupta <ajayg@nvidia.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Jian-Hong Pan <jian-hong@endlessm.com>
-CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Linux Upstreaming Team <linux@endlessm.com>
-Subject: RE: [BUG] i2c_nvidia_gpu takes long time and makes system suspend &
- resume failed with NVIDIA cards
-Thread-Topic: [BUG] i2c_nvidia_gpu takes long time and makes system suspend &
- resume failed with NVIDIA cards
-Thread-Index: AQHWCNiFo9/27/yphUebnXQpkS4yXKhloviAgACuGxA=
-Date:   Thu, 2 Apr 2020 20:59:07 +0000
-Message-ID: <BYAPR12MB272705C6DEE5182159B0EF26DCC60@BYAPR12MB2727.namprd12.prod.outlook.com>
-References: <CAPpJ_edj++oy7_EDN95tM+BPdYFOztpCrRh-cfzFrY6unJb1Rw@mail.gmail.com>
- <20200402103447.GD1886416@kuha.fi.intel.com>
-In-Reply-To: <20200402103447.GD1886416@kuha.fi.intel.com>
-Accept-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Enabled=True;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SiteId=43083d15-7273-40c1-b7db-39efd9ccc17a;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Owner=ajayg@nvidia.com;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2020-04-02T20:59:05.5506017Z;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Name=Unrestricted;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_ActionId=1f843b3e-610c-496c-9d48-591965f4cf34;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Extended_MSFT_Method=Automatic
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=ajayg@nvidia.com; 
-x-originating-ip: [216.228.112.22]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 77d1a6ca-921b-4603-c8ef-08d7d748afb0
-x-ms-traffictypediagnostic: BYAPR12MB3560:
-x-microsoft-antispam-prvs: <BYAPR12MB3560E8DD6624AF546E7834C9DCC60@BYAPR12MB3560.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 0361212EA8
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2727.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(396003)(136003)(346002)(366004)(376002)(39860400002)(71200400001)(81166006)(81156014)(2906002)(186003)(55016002)(9686003)(6506007)(26005)(66446008)(53546011)(52536014)(316002)(33656002)(4326008)(7696005)(86362001)(8676002)(15650500001)(5660300002)(478600001)(110136005)(66556008)(54906003)(64756008)(966005)(76116006)(66946007)(66476007)(8936002);DIR:OUT;SFP:1101;
-received-spf: None (protection.outlook.com: nvidia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ZwVYfyaeYakKg7bOaCV/+FsUOpobuno5Ul5z1qpafz2EVGHFP0wrI4bhZIIcoefjMu4ERaqCmVf2LghnIJREHpVGW44Htw520kTy3ZVii9CE+/wv4tuOxvp5NifppKX72e7GMp4+/J1dGy95qMpjVWHcvJ2qatUU7Sei4prfYX408o000+28bfYbQM16P+8YzjOlaMtdNOUuMV65L1rCxzjd3sVp7jEGrWHE0yJ5KrnW6rwESEaNyePhzl1OkDPB3hXUfn+z2o/vbxxzI+VoAITh841u9GJGOSvDmU81PPlnabtHTYLwGoQZIrDr8WpS2CSsVQ/kdp4gXN074kvsQRDKPf1Gldi+qGJyYJrHMOUDpk3JfBAtRbhNfV/0KPrTCtk0BbWU+PznVoMGHvqrOwZVzAQIL12qbIVOCTRz2bYGUN6qv+RDo18C+bsPbzXQbNHA8amTDXU7EEoDdgUtE7ZHhoNqlpqMtv9dFVtl2hQCsUcmgPoM2LXr34alg6X9UbozOsEGJeI/+QA4r0Hn0Q==
-x-ms-exchange-antispam-messagedata: f8G+dIKrJauwKOEx1IYgz0pPQBoHqBcj0UgCxzYTvv+PLh4u7gwEsssmO5Bpzu2iOxYNXEehZB6rk8OrB6+P65RBDf/k7pK0jPDlYpJhVvBlTevYwwqUOrfUmLW43IlS++jkTGgAb+EYLA7g3uLt8Q==
-x-ms-exchange-transport-forked: True
+        id S2388148AbgDBVZF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Apr 2020 17:25:05 -0400
+Received: from mail-il1-f199.google.com ([209.85.166.199]:42295 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731842AbgDBVZE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 17:25:04 -0400
+Received: by mail-il1-f199.google.com with SMTP id j88so4709251ilg.9
+        for <linux-usb@vger.kernel.org>; Thu, 02 Apr 2020 14:25:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=7DSGAtFq8cBRMK5Ky7QRP/F+L98XsCIsky9uoP3uDLg=;
+        b=PlUUljJH+wg3TmffGJdiYc4K8trB5luBvzVogsBIvlz9ZXOtO5kjwa8ZoXAc2L/UCL
+         Q/PmSrNrWBCb8NpQt7vI3/zw5mksc6WzzT8enqGhKmaYI+joJlzazk8awra5cN6w64Ke
+         wYh8IFbzeVrjj+Sz1kAjX6KiuH0vVBA9QS58EJLb6izrkO/ltESwRZ8b8JjcfeYh7c2O
+         qP79C2Ff75UWW2zRIlx0LvC/G/Sy9nK9imPZL8/cJpAr5tmipLF080zXjME6k+Fr1bWi
+         K/NCxcEdG4wqFUIP16p7Wyqg/C418vVbtfffBvuUHzuBgYhZoqt17Y0c76m41AGn8htN
+         9QfA==
+X-Gm-Message-State: AGi0Pub8ECClwRQ9mQlosOZqOnZOgp09N0TAUuDVOG0d60OYt4L6qxLu
+        GpzD+QmdqTHBSulJVyGSrQYqNDytKkHa+Pyn1iLRtLfvO68L
+X-Google-Smtp-Source: APiQypILci59R8TeoWBPU+pLhDRVwa4sob2rWj6PZeTrYuFK4l9tk+3E4RVwEzBQT1LnM+f9HPUGEAt2mWJdFt7Jx9vmfQ8cgOin
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 77d1a6ca-921b-4603-c8ef-08d7d748afb0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Apr 2020 20:59:07.9921
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: E7V6oVGY8dS1JsmsHWbD+fJMxCW1kOY3Qhqj5IZLF3E5MvCdrv+uews3DEjqfVfcmpxdhso1TPx3XEyb/FMsVg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3560
-X-OriginatorOrg: Nvidia.com
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1585861051; bh=CjZPfL+HG0khXSokmkq+AEdMl+eXW1us03S17H1bWsM=;
-        h=X-PGP-Universal:ARC-Seal:ARC-Message-Signature:
-         ARC-Authentication-Results:From:To:CC:Subject:Thread-Topic:
-         Thread-Index:Date:Message-ID:References:In-Reply-To:
-         Accept-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:msip_labels:
-         authentication-results:x-originating-ip:x-ms-publictraffictype:
-         x-ms-office365-filtering-correlation-id:x-ms-traffictypediagnostic:
-         x-microsoft-antispam-prvs:x-ms-oob-tlc-oobclassifiers:
-         x-forefront-prvs:x-forefront-antispam-report:received-spf:
-         x-ms-exchange-senderadcheck:x-microsoft-antispam:
-         x-microsoft-antispam-message-info:
-         x-ms-exchange-antispam-messagedata:x-ms-exchange-transport-forked:
-         MIME-Version:X-MS-Exchange-CrossTenant-Network-Message-Id:
-         X-MS-Exchange-CrossTenant-originalarrivaltime:
-         X-MS-Exchange-CrossTenant-fromentityheader:
-         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-         X-MS-Exchange-CrossTenant-userprincipalname:
-         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
-         Content-Language:Content-Type:Content-Transfer-Encoding;
-        b=B2dAkwBIFRAakj1hSpLZz6scJEYGtBCab1l8cXZYzWKdwFhB0huAqPPjmEpElGSj5
-         hfeFYtLL8yGXJyIvW083DOoe0xb1nAlxhwyeYfky4joe9sJjqeSdUSUiStLVjpWoaX
-         0ztYeZdxaOfdF3xkBJu64oI8BdX9GNTIxnddxllaII+lK7/nco0wDYe3CZJB7zr3i/
-         R+2+WLQt4caKT8CM4eoW4gxRSbOBbKSLQtUF+HyFDKOEAzcxp0oXgCrVaJ8XssvRbl
-         YeSlfhfuD8fMgmbKI4OOaOUyy4YWRMjJ7bXthAAt31U2Gn7iT/gY4KTtiBqq7Ayede
-         XyRcWgkyc5DPg==
+X-Received: by 2002:a6b:8f11:: with SMTP id r17mr4461879iod.92.1585862703642;
+ Thu, 02 Apr 2020 14:25:03 -0700 (PDT)
+Date:   Thu, 02 Apr 2020 14:25:03 -0700
+In-Reply-To: <Pine.LNX.4.44L0.2004021428320.852-100000@netrider.rowland.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001cfc5605a2556fb7@google.com>
+Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
+From:   syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Jian
+Hello,
 
-> -----Original Message-----
-> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Sent: Thursday, April 2, 2020 3:35 AM
-> To: Jian-Hong Pan <jian-hong@endlessm.com>; Ajay Gupta
-> <ajayg@nvidia.com>
-> Cc: linux-i2c@vger.kernel.org; Linux Kernel <linux-kernel@vger.kernel.org=
->;
-> linux-usb@vger.kernel.org; Linux Upstreaming Team <linux@endlessm.com>
-> Subject: Re: [BUG] i2c_nvidia_gpu takes long time and makes system
-> suspend & resume failed with NVIDIA cards
->=20
-> External email: Use caution opening links or attachments
->=20
->=20
-> Hi,
->=20
-> On Thu, Apr 02, 2020 at 06:22:14PM +0800, Jian-Hong Pan wrote:
-> > Hi,
-> >
-> > We got some machines like Acer desktop equipped with NVIDIA GTX 1660
-> > card, Acer Predator PH315-52 equipped with NVIDIA GeForce RTX 2060
-> > Mobile and ASUS UX581LV equipped with NNVIDIA GeForce RTX 2060.
-> > We found them take long time (more than 50 seconds) to resume after
-> > suspend.  During the resuming time, the screen is blank.  And check
-> > the dmesg, found the error during resume:
-> >
-> > [   28.060831] PM: suspend entry (deep)
-> > [   28.144260] Filesystems sync: 0.083 seconds
-> > [   28.150219] Freezing user space processes ...
-> > [   48.153282] Freezing of tasks failed after 20.003 seconds (1 tasks
-> > refusing to freeze, wq_busy=3D0):
-> > [   48.153447] systemd-udevd   D13440   382    330 0x80004124
-> > [   48.153457] Call Trace:
-> > [   48.153504]  ? __schedule+0x272/0x5a0
-> > [   48.153558]  ? hrtimer_start_range_ns+0x18c/0x2c0
-> > [   48.153622]  schedule+0x45/0xb0
-> > [   48.153668]  schedule_hrtimeout_range_clock+0x8f/0x100
-> > [   48.153738]  ? hrtimer_init_sleeper+0x80/0x80
-> > [   48.153798]  usleep_range+0x5a/0x80
-> > [   48.153850]  gpu_i2c_check_status.isra.0+0x3a/0xa0 [i2c_nvidia_gpu]
-> > [   48.153933]  gpu_i2c_master_xfer+0x155/0x20e [i2c_nvidia_gpu]
-> > [   48.154012]  __i2c_transfer+0x163/0x4c0
-> > [   48.154067]  i2c_transfer+0x6e/0xc0
-> > [   48.154120]  ccg_read+0x11f/0x170 [ucsi_ccg]
-> > [   48.154182]  get_fw_info+0x17/0x50 [ucsi_ccg]
-> > [   48.154242]  ucsi_ccg_probe+0xf4/0x200 [ucsi_ccg]
-> > [   48.154312]  ? ucsi_ccg_init+0xe0/0xe0 [ucsi_ccg]
-> > [   48.154377]  i2c_device_probe+0x113/0x210
-> > [   48.154435]  really_probe+0xdf/0x280
-> > [   48.154487]  driver_probe_device+0x4b/0xc0
-> > [   48.154545]  device_driver_attach+0x4e/0x60
-> > [   48.154604]  __driver_attach+0x44/0xb0
-> > [   48.154657]  ? device_driver_attach+0x60/0x60
-> > [   48.154717]  bus_for_each_dev+0x6c/0xb0
-> > [   48.154772]  bus_add_driver+0x172/0x1c0
-> > [   48.154824]  driver_register+0x67/0xb0
-> > [   48.154877]  i2c_register_driver+0x39/0x70
-> > [   48.154932]  ? 0xffffffffc00ac000
-> > [   48.154978]  do_one_initcall+0x3e/0x1d0
-> > [   48.155032]  ? free_vmap_area_noflush+0x8d/0xe0
-> > [   48.155093]  ? _cond_resched+0x10/0x20
-> > [   48.155145]  ? kmem_cache_alloc_trace+0x3a/0x1b0
-> > [   48.155208]  do_init_module+0x56/0x200
-> > [   48.155260]  load_module+0x21fe/0x24e0
-> > [   48.155322]  ? __do_sys_finit_module+0xbf/0xe0
-> > [   48.155381]  __do_sys_finit_module+0xbf/0xe0
-> > [   48.155441]  do_syscall_64+0x3d/0x130
-> > [   48.156841]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> > [   48.158074] RIP: 0033:0x7fba3b4bc2a9
-> > [   48.158707] Code: Bad RIP value.
-> > [   48.158990] RSP: 002b:00007ffe1da3a6d8 EFLAGS: 00000246 ORIG_RAX:
-> > 0000000000000139
-> > [   48.159259] RAX: ffffffffffffffda RBX: 000055ca6922c470 RCX:
-> 00007fba3b4bc2a9
-> > [   48.159566] RDX: 0000000000000000 RSI: 00007fba3b3c0cad RDI:
-> 0000000000000010
-> > [   48.159842] RBP: 00007fba3b3c0cad R08: 0000000000000000 R09:
-> 0000000000000000
-> > [   48.160117] R10: 0000000000000010 R11: 0000000000000246 R12:
-> 0000000000000000
-> > [   48.160412] R13: 000055ca6922f940 R14: 0000000000020000 R15:
-> 000055ca6922c470
-> >
-> > I have filed this to bugzilla and more detail:
-> > https://bugzilla.kernel.org/show_bug.cgi?id=3D206653
-> >
-> > Any comment will be appreciated.
->=20
-> You are using an outdated kernel, 5.4.0. Please make sure that you can
-> reproduce the issue with mainline, or at least with the longterm 5.4.x.
->=20
-> Ajay, based on the backtrace, the issue seems to be starting from your I2=
-C
-> driver. Please take a look at this.
+syzbot has tested the proposed patch but the reproducer still triggered crash:
+WARNING in usbhid_raw_request/usb_submit_urb
 
-I have replied to Bugzilla
-https://bugzilla.kernel.org/show_bug.cgi?id=3D206653#c5
+------------[ cut here ]------------
+usb 1-1: BOGUS urb xfer, pipe 2 != type 2, pipe 0x80005600, ep attr 0x00, ep addr 0xff
+WARNING: CPU: 1 PID: 8507 at drivers/usb/core/urb.c:490 usb_submit_urb+0xa41/0x1380 drivers/usb/core/urb.c:490
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 8507 Comm: syz-executor.0 Not tainted 5.6.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xef/0x16e lib/dump_stack.c:118
+ panic+0x2aa/0x6e1 kernel/panic.c:221
+ __warn.cold+0x2f/0x30 kernel/panic.c:582
+ report_bug+0x27b/0x2f0 lib/bug.c:195
+ fixup_bug arch/x86/kernel/traps.c:174 [inline]
+ fixup_bug arch/x86/kernel/traps.c:169 [inline]
+ do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
+ do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
+ invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
+RIP: 0010:usb_submit_urb+0xa41/0x1380 drivers/usb/core/urb.c:490
+Code: f7 e8 53 5e 17 ff 41 89 e9 41 89 d8 44 89 e1 41 55 48 89 c6 8b 44 24 30 48 c7 c7 80 dd 3b 86 50 48 8b 54 24 40 e8 c7 1e b2 fd <0f> 0b 58 5a e8 f6 8d dd fd 0f b6 6c 24 08 bb 86 03 00 00 48 c7 c6
+RSP: 0018:ffff8881cfef7b28 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff812974dd RDI: ffffed1039fdef57
+RBP: 0000000080005600 R08: ffff8881c528e200 R09: ffffed103b666248
+R10: ffffed103b666247 R11: ffff8881db33123f R12: 0000000000000002
+R13: 00000000000000ff R14: ffff8881d999d0a0 R15: ffff8881da357800
+ usb_start_wait_urb+0x108/0x4c0 drivers/usb/core/message.c:58
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
+ usbhid_set_raw_report drivers/hid/usbhid/hid-core.c:917 [inline]
+ usbhid_raw_request+0x21f/0x640 drivers/hid/usbhid/hid-core.c:1265
+ hid_hw_raw_request include/linux/hid.h:1079 [inline]
+ hidraw_send_report+0x296/0x500 drivers/hid/hidraw.c:151
+ hidraw_ioctl+0x620/0xaf0 drivers/hid/hidraw.c:422
+ vfs_ioctl fs/ioctl.c:47 [inline]
+ ksys_ioctl+0x11a/0x180 fs/ioctl.c:763
+ __do_sys_ioctl fs/ioctl.c:772 [inline]
+ __se_sys_ioctl fs/ioctl.c:770 [inline]
+ __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:770
+ do_syscall_64+0xb6/0x5a0 arch/x86/entry/common.c:294
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x45c849
+Code: ad b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 7b b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007fe66e55bc78 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007fe66e55c6d4 RCX: 000000000045c849
+RDX: 00000000200000c0 RSI: 0000000080404806 RDI: 0000000000000006
+RBP: 000000000076bfa0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000ffffffff
+R13: 0000000000000335 R14: 00000000004c59df R15: 000000000076bfac
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
-Thanks
-> nvpuclic=20
->=20
-> thanks,
->=20
-> --
-> heikki
+
+Tested on:
+
+commit:         0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
+git tree:       https://github.com/google/kasan.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=15ddbf2fe00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
+dashboard link: https://syzkaller.appspot.com/bug?extid=db339689b2101f6f6071
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1559e85de00000
+
