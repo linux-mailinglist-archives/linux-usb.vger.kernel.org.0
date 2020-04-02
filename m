@@ -2,93 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 991A919C06E
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 13:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FEEC19C144
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 14:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387985AbgDBLt1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Apr 2020 07:49:27 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:60334 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387722AbgDBLt1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 07:49:27 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 032BnIVY054299;
-        Thu, 2 Apr 2020 06:49:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1585828158;
-        bh=pIJ3q+6FjXt4bCVez97Gn+sLqYP8+odcCAB1mdapmF4=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=vxLa0sTagxQZmXLn4cpJ+J3ZqAWTUw5BB+N3QtHRLpMw+5LwJP8dri9f9ddlEUvT2
-         U/1W7UaACCQX5nsbKJWPmPsIoITBdPN5Nax/eQ5Ztbd3dPQ5rRSE9JLpUmSmcMLzKv
-         0S+pQ8uQg6Z0tMoNd6UppgUVI8W3P0I5eHAOFXDc=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 032BnIlJ089793
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 2 Apr 2020 06:49:18 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 2 Apr
- 2020 06:49:18 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Thu, 2 Apr 2020 06:49:18 -0500
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 032BnGK2089240;
-        Thu, 2 Apr 2020 06:49:16 -0500
-Subject: Re: [PATCH 1/4] usb: cdns3: core: get role switch node from firmware
-To:     Peter Chen <peter.chen@nxp.com>, <balbi@kernel.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-imx@nxp.com>,
-        <pawell@cadence.com>, <gregkh@linuxfoundation.org>,
-        <jun.li@nxp.com>
-References: <20200331081005.32752-1-peter.chen@nxp.com>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <7ed54cd3-c9e4-ee50-9e40-563dd4592613@ti.com>
-Date:   Thu, 2 Apr 2020 14:49:15 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S2388154AbgDBMkX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Apr 2020 08:40:23 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:51042 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729213AbgDBMkX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 2 Apr 2020 08:40:23 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 9B32B2A08C991D16BF4F;
+        Thu,  2 Apr 2020 20:40:08 +0800 (CST)
+Received: from huawei.com (10.175.124.28) by DGGEMS406-HUB.china.huawei.com
+ (10.3.19.206) with Microsoft SMTP Server id 14.3.487.0; Thu, 2 Apr 2020
+ 20:40:01 +0800
+From:   Jason Yan <yanaijie@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <pawell@cadence.com>,
+        <peter.chen@nxp.com>, <linux-usb@vger.kernel.org>
+CC:     Jason Yan <yanaijie@huawei.com>
+Subject: [PATCH] usb: cdns3: gadget: make a bunch of functions static
+Date:   Thu, 2 Apr 2020 20:38:37 +0800
+Message-ID: <20200402123837.5850-1-yanaijie@huawei.com>
+X-Mailer: git-send-email 2.17.2
 MIME-Version: 1.0
-In-Reply-To: <20200331081005.32752-1-peter.chen@nxp.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain
+X-Originating-IP: [10.175.124.28]
+X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Fix the following sparse warning:
 
+drivers/usb/cdns3/gadget.c:85:6: warning: symbol
+'cdns3_clear_register_bit' was not declared. Should it be static?
+drivers/usb/cdns3/gadget.c:140:26: warning: symbol
+'cdns3_next_align_buf' was not declared. Should it be static?
+drivers/usb/cdns3/gadget.c:151:22: warning: symbol
+'cdns3_next_priv_request' was not declared. Should it be static?
+drivers/usb/cdns3/gadget.c:193:5: warning: symbol 'cdns3_ring_size' was
+not declared. Should it be static?
+drivers/usb/cdns3/gadget.c:348:6: warning: symbol
+'cdns3_move_deq_to_next_trb' was not declared. Should it be static?
+drivers/usb/cdns3/gadget.c:514:20: warning: symbol
+'cdns3_wa2_gadget_giveback' was not declared. Should it be static?
+drivers/usb/cdns3/gadget.c:554:5: warning: symbol
+'cdns3_wa2_gadget_ep_queue' was not declared. Should it be static?
+drivers/usb/cdns3/gadget.c:839:6: warning: symbol
+'cdns3_wa1_restore_cycle_bit' was not declared. Should it be static?
+drivers/usb/cdns3/gadget.c:1907:6: warning: symbol
+'cdns3_stream_ep_reconfig' was not declared. Should it be static?
+drivers/usb/cdns3/gadget.c:1928:6: warning: symbol
+'cdns3_configure_dmult' was not declared. Should it be static?
 
-On 31/03/2020 11:10, Peter Chen wrote:
-> After that, the role switch device (eg, Type-C device) could call
-> cdns3_role_set to finish the role switch.
-> 
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Jason Yan <yanaijie@huawei.com>
+---
+ drivers/usb/cdns3/gadget.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-For this patch and all in the series
-
-Reviewed-by: Roger Quadros <rogerq@ti.com>
-
-> ---
->   drivers/usb/cdns3/core.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-> index 4aafba20f450..704c679a0c5d 100644
-> --- a/drivers/usb/cdns3/core.c
-> +++ b/drivers/usb/cdns3/core.c
-> @@ -528,6 +528,8 @@ static int cdns3_probe(struct platform_device *pdev)
->   	sw_desc.get = cdns3_role_get;
->   	sw_desc.allow_userspace_control = true;
->   	sw_desc.driver_data = cdns;
-> +	if (device_property_read_bool(dev, "usb-role-switch"))
-> +		sw_desc.fwnode = dev->fwnode;
->   
->   	cdns->role_sw = usb_role_switch_register(dev, &sw_desc);
->   	if (IS_ERR(cdns->role_sw)) {
-> 
-
+diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+index 372460ea4df9..62f585c55846 100644
+--- a/drivers/usb/cdns3/gadget.c
++++ b/drivers/usb/cdns3/gadget.c
+@@ -82,7 +82,7 @@ static int cdns3_ep_run_stream_transfer(struct cdns3_endpoint *priv_ep,
+  * @ptr: address of device controller register to be read and changed
+  * @mask: bits requested to clar
+  */
+-void cdns3_clear_register_bit(void __iomem *ptr, u32 mask)
++static void cdns3_clear_register_bit(void __iomem *ptr, u32 mask)
+ {
+ 	mask = readl(ptr) & ~mask;
+ 	writel(mask, ptr);
+@@ -137,7 +137,7 @@ struct usb_request *cdns3_next_request(struct list_head *list)
+  *
+  * Returns buffer or NULL if no buffers in list
+  */
+-struct cdns3_aligned_buf *cdns3_next_align_buf(struct list_head *list)
++static struct cdns3_aligned_buf *cdns3_next_align_buf(struct list_head *list)
+ {
+ 	return list_first_entry_or_null(list, struct cdns3_aligned_buf, list);
+ }
+@@ -148,7 +148,7 @@ struct cdns3_aligned_buf *cdns3_next_align_buf(struct list_head *list)
+  *
+  * Returns request or NULL if no requests in list
+  */
+-struct cdns3_request *cdns3_next_priv_request(struct list_head *list)
++static struct cdns3_request *cdns3_next_priv_request(struct list_head *list)
+ {
+ 	return list_first_entry_or_null(list, struct cdns3_request, list);
+ }
+@@ -190,7 +190,7 @@ dma_addr_t cdns3_trb_virt_to_dma(struct cdns3_endpoint *priv_ep,
+ 	return priv_ep->trb_pool_dma + offset;
+ }
+ 
+-int cdns3_ring_size(struct cdns3_endpoint *priv_ep)
++static int cdns3_ring_size(struct cdns3_endpoint *priv_ep)
+ {
+ 	switch (priv_ep->type) {
+ 	case USB_ENDPOINT_XFER_ISOC:
+@@ -345,7 +345,7 @@ static void cdns3_ep_inc_deq(struct cdns3_endpoint *priv_ep)
+ 	cdns3_ep_inc_trb(&priv_ep->dequeue, &priv_ep->ccs, priv_ep->num_trbs);
+ }
+ 
+-void cdns3_move_deq_to_next_trb(struct cdns3_request *priv_req)
++static void cdns3_move_deq_to_next_trb(struct cdns3_request *priv_req)
+ {
+ 	struct cdns3_endpoint *priv_ep = priv_req->priv_ep;
+ 	int current_trb = priv_req->start_trb;
+@@ -511,7 +511,7 @@ static void cdns3_wa2_descmiss_copy_data(struct cdns3_endpoint *priv_ep,
+ 	}
+ }
+ 
+-struct usb_request *cdns3_wa2_gadget_giveback(struct cdns3_device *priv_dev,
++static struct usb_request *cdns3_wa2_gadget_giveback(struct cdns3_device *priv_dev,
+ 					      struct cdns3_endpoint *priv_ep,
+ 					      struct cdns3_request *priv_req)
+ {
+@@ -551,7 +551,7 @@ struct usb_request *cdns3_wa2_gadget_giveback(struct cdns3_device *priv_dev,
+ 	return &priv_req->request;
+ }
+ 
+-int cdns3_wa2_gadget_ep_queue(struct cdns3_device *priv_dev,
++static int cdns3_wa2_gadget_ep_queue(struct cdns3_device *priv_dev,
+ 			      struct cdns3_endpoint *priv_ep,
+ 			      struct cdns3_request *priv_req)
+ {
+@@ -836,7 +836,7 @@ void cdns3_gadget_giveback(struct cdns3_endpoint *priv_ep,
+ 		cdns3_gadget_ep_free_request(&priv_ep->endpoint, request);
+ }
+ 
+-void cdns3_wa1_restore_cycle_bit(struct cdns3_endpoint *priv_ep)
++static void cdns3_wa1_restore_cycle_bit(struct cdns3_endpoint *priv_ep)
+ {
+ 	/* Work around for stale data address in TRB*/
+ 	if (priv_ep->wa1_set) {
+@@ -1904,7 +1904,7 @@ static int cdns3_ep_onchip_buffer_reserve(struct cdns3_device *priv_dev,
+ 	return 0;
+ }
+ 
+-void cdns3_stream_ep_reconfig(struct cdns3_device *priv_dev,
++static void cdns3_stream_ep_reconfig(struct cdns3_device *priv_dev,
+ 			      struct cdns3_endpoint *priv_ep)
+ {
+ 	if (!priv_ep->use_streams || priv_dev->gadget.speed < USB_SPEED_SUPER)
+@@ -1925,7 +1925,7 @@ void cdns3_stream_ep_reconfig(struct cdns3_device *priv_dev,
+ 			       EP_CFG_TDL_CHK | EP_CFG_SID_CHK);
+ }
+ 
+-void cdns3_configure_dmult(struct cdns3_device *priv_dev,
++static void cdns3_configure_dmult(struct cdns3_device *priv_dev,
+ 			   struct cdns3_endpoint *priv_ep)
+ {
+ 	struct cdns3_usb_regs __iomem *regs = priv_dev->regs;
 -- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+2.17.2
+
