@@ -2,26 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7732419C3A9
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 16:12:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697BF19C3F8
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 16:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388148AbgDBOM3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Apr 2020 10:12:29 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:52943 "HELO
+        id S1729549AbgDBOZl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Apr 2020 10:25:41 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:60825 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728225AbgDBOM3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 10:12:29 -0400
-Received: (qmail 11839 invoked by uid 500); 2 Apr 2020 10:12:28 -0400
+        with SMTP id S1728225AbgDBOZl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 10:25:41 -0400
+Received: (qmail 12507 invoked by uid 500); 2 Apr 2020 10:18:58 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 2 Apr 2020 10:12:28 -0400
-Date:   Thu, 2 Apr 2020 10:12:28 -0400 (EDT)
+  by localhost with SMTP; 2 Apr 2020 10:18:58 -0400
+Date:   Thu, 2 Apr 2020 10:18:58 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@netrider.rowland.org
-To:     Greg KH <gregkh@linuxfoundation.org>
-cc:     massimo <maxcipo1@tin.it>, <linux-usb@vger.kernel.org>
-Subject: Re: Usb_power_supply
-In-Reply-To: <20200402073942.GA2755501@kroah.com>
-Message-ID: <Pine.LNX.4.44L0.2004021010060.9681-100000@netrider.rowland.org>
+To:     Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+cc:     gregkh@linuxfoundation.org, <hariprasad.kelam@gmail.com>,
+        <colin.king@canonical.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <ldv-project@linuxtesting.org>,
+        <andrianov@ispras.ru>
+Subject: Re: [PATCH] usb: host: u132-hcd: Traverse u132_static_list under
+ mutex lock in u132_hcd_exit
+In-Reply-To: <20200401191735.10809-1-madhuparnabhowmik10@gmail.com>
+Message-ID: <Pine.LNX.4.44L0.2004021015270.9681-100000@netrider.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -29,33 +33,57 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2 Apr 2020, Greg KH wrote:
+On Thu, 2 Apr 2020 madhuparnabhowmik10@gmail.com wrote:
 
-> On Thu, Apr 02, 2020 at 09:19:06AM +0200, massimo wrote:
-> > I've read the interesting Greg's article about writing USB driver for
-> > Linux.
-> > I'm interested in a simpler question. Is it possible
-> > to write a driver in Ubuntu (19.10) to switch power on or off to a USB
-> > port, that' s to say to give or take off the 5 volts power supply  to a
-> > USB port (in order for example to switch on or off a simple usb lamp)?
-> > Thanks for your attention and courtesy, Massimo.
-> > 
+> From: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
 > 
-> Try the userspace program 'usbreset' that is part of the usbutils
-> package, and can be found also here:
-> 	https://github.com/gregkh/usbutils/blob/master/usbreset.c
+> The global list u132_static_list is protected by u132_module_lock.
+> Elements are added to this list in the probe function and this list is
+> traversed in u132_hcd_exit() to unregister devices.
+> 
+> If probe and exit execute simultaneously there can be a race condition
+> between writing to this list in probe and reading the list in exit as
+> u132_module_lock is not held in exit function.
+> 
+> Even though u132_exiting variable is used in probe to detect if the module is
+> exiting, it is ineffective as the probe function may read the value
+> before it is updated in exit and thus leading to a race condition.
+> 
+> Therefore, hold u132_module_lock while traversing u132_static_list in
+> exit function.
+> 
+> Found by Linux Driver Verification project (linuxtesting.org).
+> 
+> Signed-off-by: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+> ---
+>  drivers/usb/host/u132-hcd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/u132-hcd.c b/drivers/usb/host/u132-hcd.c
+> index e9209e3e6248..1cadc4e0c9b2 100644
+> --- a/drivers/usb/host/u132-hcd.c
+> +++ b/drivers/usb/host/u132-hcd.c
+> @@ -3217,10 +3217,10 @@ static void __exit u132_hcd_exit(void)
+>  	struct u132 *temp;
+>  	mutex_lock(&u132_module_lock);
+>  	u132_exiting += 1;
+> -	mutex_unlock(&u132_module_lock);
+>  	list_for_each_entry_safe(u132, temp, &u132_static_list, u132_list) {
+>  		platform_device_unregister(u132->platform_dev);
+>  	}
+> +	mutex_unlock(&u132_module_lock);
 
-Or you can use the program that was posted here:
+How about just getting rid of this loop entirely, along with the 
+u132_static_list?  As far as I can see, that list doesn't do anything.
 
-	https://marc.info/?l=linux-usb&m=127162615232234&w=2
-
-This program turns power on and off for specific ports, as opposed to
-resetting the entire hub.
+Not to mention that this driver has no business calling 
+platform_device_unregister() here, since it didn't call 
+platform_device_register() in the first place.  The call to 
+platform_driver_unregister() below should do all the necessary work.
 
 Alan Stern
 
-> if your hub supports it, this will work.  Note, not all USB hubs support
-> this type of behavior, as it is not required by the USB specification.
-> 
-> hope this helps,
+>  	platform_driver_unregister(&u132_platform_driver);
+>  	printk(KERN_INFO "u132-hcd driver deregistered\n");
+>  	wait_event(u132_hcd_wait, u132_instances == 0);
 
