@@ -2,89 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFE319B9F4
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 03:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9BC519BA2C
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 04:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732783AbgDBBeL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Apr 2020 21:34:11 -0400
-Received: from mga07.intel.com ([134.134.136.100]:50388 "EHLO mga07.intel.com"
+        id S1733303AbgDBCJh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 1 Apr 2020 22:09:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46792 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732435AbgDBBeL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 1 Apr 2020 21:34:11 -0400
-IronPort-SDR: ra9YLEl274kI59wj+a5RbZeX7jKAITXRVUj+ykR7Wp8jiR8Id2rs07wBcOxd+YoKogGPieVmww
- JVBEyNDdaLWA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2020 18:34:09 -0700
-IronPort-SDR: DLqdeTOYf1qgCyqWcABZ76eQylWBG4nUtfyaR4TwN5AwSYlI27YVFKD+fyy3yED2/41SExpUBb
- OXBET1F/8Aow==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,333,1580803200"; 
-   d="scan'208";a="422942571"
-Received: from shao2-debian.sh.intel.com (HELO [10.239.13.3]) ([10.239.13.3])
-  by orsmga005.jf.intel.com with ESMTP; 01 Apr 2020 18:34:07 -0700
-Subject: Re: [kbuild-all] Re: [RFC PATCH] usb: cdns3:
- cdns3_clear_register_bit() can be static
-From:   Rong Chen <rong.a.chen@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kbuild test robot <lkp@intel.com>,
-        Colin King <colin.king@canonical.com>, kbuild-all@lists.01.org,
-        Sekhar Nori <nsekhar@ti.com>, Roger Quadros <rogerq@ti.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Pawel Laszczak <pawell@cadence.com>, linux-usb@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200325125041.94769-1-colin.king@canonical.com>
- <20200326122858.GA50118@cde5a4ed3207> <20200326130418.GA1295433@kroah.com>
- <571960b6-5ed7-2106-7091-3ea83c31051a@intel.com>
- <20200327064255.GA1603489@kroah.com>
- <372f30ad-fbea-d411-c58f-2d4692509a60@intel.com>
-Message-ID: <556997e2-1921-e3dd-c103-d6e3c8f91888@intel.com>
-Date:   Thu, 2 Apr 2020 09:33:46 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1732664AbgDBCJg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Apr 2020 22:09:36 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 207045] uvcvideo: properly handle UVC payloads that occur in
+ the middle of bulk URBs
+Date:   Thu, 02 Apr 2020 02:09:36 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jucmeyer@ucsc.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-207045-208809-55oh1Lzz6z@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-207045-208809@https.bugzilla.kernel.org/>
+References: <bug-207045-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <372f30ad-fbea-d411-c58f-2d4692509a60@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=207045
 
+--- Comment #3 from Julian Meyer (jucmeyer@ucsc.edu) ---
+I submitted a patch here: https://lore.kernel.org/patchwork/patch/1219476/
 
-On 3/27/20 2:53 PM, Rong Chen wrote:
->
->
-> On 3/27/20 2:42 PM, Greg Kroah-Hartman wrote:
->> On Fri, Mar 27, 2020 at 08:34:52AM +0800, Rong Chen wrote:
->>>
->>> On 3/26/20 9:04 PM, Greg Kroah-Hartman wrote:
->>>> On Thu, Mar 26, 2020 at 08:28:58PM +0800, kbuild test robot wrote:
->>>>> Fixes: 87db1192dc33 ("usb: cdns3: make signed 1 bit bitfields 
->>>>> unsigned")
->>>> This original patch did not "cause" this problem, it's just that 
->>>> you for
->>>> some reason ran sparse for the first time on the file.
->>>>
->>>> So I can't take this as-is, can you remove this line and resend?
->>> Hi Greg,
->>>
->>> Sorry for the inconvenience, the patch was generated by the bot,
->>> we'll check and resend it.
->> It's fine that it was generated, it's a bug somewhere that thinks this
->> specific patch was a problem so that this generated patch fixed it.
-> Yes, you are right, we'll fix the bug asap.
->
-
-Hi Greg,
-
-The commit 87db1192dc33 ("usb: cdns3: make signed 1 bit bitfields 
-unsigned") fixed a sparse error
-which causes many sparse warnings exposed, we'll remove the wrong 
-"Fixes" in our patch in future.
-
-Best Regards,
-Rong Chen
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
