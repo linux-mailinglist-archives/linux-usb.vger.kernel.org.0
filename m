@@ -2,70 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB7819BD6C
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 10:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2A719BE25
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 10:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387754AbgDBIRY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Apr 2020 04:17:24 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:43189 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387601AbgDBIRY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 04:17:24 -0400
-Received: by mail-ot1-f67.google.com with SMTP id a6so2518191otb.10
-        for <linux-usb@vger.kernel.org>; Thu, 02 Apr 2020 01:17:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=nYemTaPZVELQ68cGpYhn94QK/pQ+Abfp/EfTq+GhKk0=;
-        b=dPmVenb2Y5X/oUCZxU9OgnRrF15LBygQxWJXu/uqXzaT/+26tv/Dqe1B7rOn00zqT/
-         jAWRHaO0S13GiyvjsrqID1ClFNoyLGgHnssOetSpN4QwOmKTdV5x5HlZp0CLs/p3eTKj
-         lNg7pD3g1132RZw5X/tNgxr3aBRA0X3fLnw11Q660yfnTqFHDKeiiB5O9GQ0qQnDaBV3
-         HrvH1W/fUxDrlLDby0ednckzVk0p0gLQ0ifBXszwcGjBC4zABbZlUrObIKWXdiO7UTp2
-         iA8UDZKaxPXikwT9Yhl7PYpmbBpZXKZ3QVY+DfDJDWh+Mhflg9m29IGz5aL4Kb4atcjR
-         HONA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=nYemTaPZVELQ68cGpYhn94QK/pQ+Abfp/EfTq+GhKk0=;
-        b=atg8j3nCam2F6EPJamaYicgzmSg28HjbWvcYfEpZEHwS3+T7SZZ855yKQ6d6sU30w6
-         v9sR6f2WcXFOw8ZDjfnFwO6O9LVDbDQTnzlM3q4enotk9IvuRagpcOcNNTSYZzFnXMe2
-         8r4XplSGDKu6dNdlmcGvWYEz9BkwGf8B9xXDaj4TS6ONdxxmy+mjdODLfcfa3wk3Wt+U
-         gwVISJR8L7YDlU8BKC+6IqlaOT9vFX4NsxMgIQdZRMM7HXTm+XhgeTKP2JE5T4/jypcr
-         5uct1eEAWa6lseQ9Tw1oesdvDZa1nidfk279zX5aD8ogSwS20jbHNEdsslzwROpkhOq9
-         5qmA==
-X-Gm-Message-State: AGi0PualGVn3+jmuK7Q5YLHZdy8zGInuS/dZgR0deUPmd/PhcmNtbap5
-        3fFv4nCSWrWgp4fYaulfbZuCza9YPLbaHYIEuVs=
-X-Google-Smtp-Source: APiQypJxO1a7xFWPFXNpsBgZ+9ZcqNnIrfwkV70IBSEWHrMt5IfNGG8NRo1fI3drjCNKdbI/NWwG+iPo/hTVWHohlvY=
-X-Received: by 2002:a05:6830:18e:: with SMTP id q14mr1424030ota.136.1585815443204;
- Thu, 02 Apr 2020 01:17:23 -0700 (PDT)
+        id S2387901AbgDBIx2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Apr 2020 04:53:28 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:45410 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387875AbgDBIx2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 04:53:28 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0328rL9N112216;
+        Thu, 2 Apr 2020 03:53:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1585817601;
+        bh=8RipU1hJD6lh0TWgPa8V+A7cj+Mra4O9mtmScMPMXhA=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=i3L4ipV058kdgpfYIps7iT5Tq27LWXXAqRsfKtcRPv3zvwx3lBDRsaUWj1j2LO46W
+         OC5I8RvdLhRZAADjimMmG5GO83jMrlpLJBuMg/VgR0CuWIvy9a+L3DNc/3jfu1tmhf
+         4ZdCsLUlH8N03MpIHyO921VZ44/ZtRjaFZxzZTEo=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0328rLxc052491
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 2 Apr 2020 03:53:21 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 2 Apr
+ 2020 03:53:19 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 2 Apr 2020 03:53:19 -0500
+Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0328rHFa053965;
+        Thu, 2 Apr 2020 03:53:18 -0500
+Subject: Re: [PATCH 1/4] usb: cdns3: core: get role switch node from firmware
+To:     Peter Chen <peter.chen@nxp.com>, <balbi@kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-imx@nxp.com>,
+        <pawell@cadence.com>, <gregkh@linuxfoundation.org>,
+        <jun.li@nxp.com>
+References: <20200331081005.32752-1-peter.chen@nxp.com>
+From:   Roger Quadros <rogerq@ti.com>
+Message-ID: <bc2c6e57-accd-ccc9-caec-527773056744@ti.com>
+Date:   Thu, 2 Apr 2020 11:53:17 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Received: by 2002:a4a:9111:0:0:0:0:0 with HTTP; Thu, 2 Apr 2020 01:17:22 -0700 (PDT)
-Reply-To: mrsirene.antonino@gmail.com
-From:   Irene Antonino <abdulahiissai@gmail.com>
-Date:   Thu, 2 Apr 2020 01:17:22 -0700
-Message-ID: <CAA2pJoMpn4=g-riGDysPDZXBcB74XBw1nFmckPkaKHOnsroAwA@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200331081005.32752-1-peter.chen@nxp.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
--- 
-Dear Beloved One,
-I am a widow, affected with cancer of the breast. My condition is
-really deteriorating and is quite obvious that I may not live more
-than 2 months, because the cancer has gotten to its 3rd stage
-according to my doctor, Having accepted my health condition I have
-decided to entrust to a reliable individual the sum of US$1.950,000.00,
-which i deposited in the bank for the help of orphans and the less
-privileged to fulfill my last wish on earth, I am taking this decision
-because I don't have any child or devoted relations whose behavior has
-left much to be desired, Please if you are sure of your trustworthy to
-utilize the fund exactly as I will you tell you, reply urgent for more
-details.
+Hi Peter,
 
-Thanks
-Irene Antonino
+On 31/03/2020 11:10, Peter Chen wrote:
+> After that, the role switch device (eg, Type-C device) could call
+> cdns3_role_set to finish the role switch.
+> 
+> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+
+This does not apply on v5.6. What branch did you test this on?
+
+cheers,
+-roger
+
+> ---
+>   drivers/usb/cdns3/core.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+> index 4aafba20f450..704c679a0c5d 100644
+> --- a/drivers/usb/cdns3/core.c
+> +++ b/drivers/usb/cdns3/core.c
+> @@ -528,6 +528,8 @@ static int cdns3_probe(struct platform_device *pdev)
+>   	sw_desc.get = cdns3_role_get;
+>   	sw_desc.allow_userspace_control = true;
+>   	sw_desc.driver_data = cdns;
+> +	if (device_property_read_bool(dev, "usb-role-switch"))
+> +		sw_desc.fwnode = dev->fwnode;
+>   
+>   	cdns->role_sw = usb_role_switch_register(dev, &sw_desc);
+>   	if (IS_ERR(cdns->role_sw)) {
+> 
+
+-- 
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
