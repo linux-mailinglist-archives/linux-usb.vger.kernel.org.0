@@ -2,74 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B410019C5FA
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 17:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFB619C679
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 17:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389332AbgDBPfZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Apr 2020 11:35:25 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:55853 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2388931AbgDBPfZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 11:35:25 -0400
-Received: (qmail 21183 invoked by uid 500); 2 Apr 2020 11:35:24 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 2 Apr 2020 11:35:24 -0400
-Date:   Thu, 2 Apr 2020 11:35:23 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
-        <ingrassia@epigenesys.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
-Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
-In-Reply-To: <0000000000001873a005a240d114@google.com>
-Message-ID: <Pine.LNX.4.44L0.2004021133440.13377-100000@netrider.rowland.org>
+        id S2389638AbgDBPxG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Apr 2020 11:53:06 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:40206 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388677AbgDBPxF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 11:53:05 -0400
+Received: by mail-io1-f70.google.com with SMTP id z207so3238847iof.7
+        for <linux-usb@vger.kernel.org>; Thu, 02 Apr 2020 08:53:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=y7vyX4dwNfImoAb2kTpG/mlept3XB7l7BPC3h9R/j0U=;
+        b=tsvkxzLn5lz+or0DwIRbdaJ/mbyTQpkTpbfVi5XiaqJJRqJ9Jl3FlZsojRpvQN2R1a
+         I6YLaBrvMIA7Xy5xHaI5IU9hpj9C0A9dR1HAfFofCyNucokASla9H4GuObzpSY1pXKah
+         wpSjeiO+hLNrMm9Dv+PJiqahgbO0XXhsYkkC+E+NIFcWwWHEwFxnvUjc+PgW8JOQ6noL
+         Wqf5FoljeQYRDKuKaXCzUHgyezB8N9+sMyp0yPUf09CSibrI0olwc70V+o1RB+4BOvBs
+         dtYZIbn6goTj5ok62NHG9ARxzoVvT1PPlqnKmGEVcs9fFrAAunt4sSTik/9Y/40zH98U
+         vaDg==
+X-Gm-Message-State: AGi0PuY+wZ4K+T6Vyy4e+MZh7D1wIPWw4jVJc785PUnSsfcpj6SCdIOY
+        LdHRcwqUJM0s96BSxbILBjbdWMhaBmj9mKcX8yTZ8j5/Wt3k
+X-Google-Smtp-Source: APiQypIbeARlH3te42UHKEJijHcRjo6btS3ejyDzsS2fN0V2D0ZR4C80RFaYtWLaMBu213izZhliy4NrEep2SZ4XhPMyB9f31M4D
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Received: by 2002:a92:8604:: with SMTP id g4mr3792122ild.245.1585842783220;
+ Thu, 02 Apr 2020 08:53:03 -0700 (PDT)
+Date:   Thu, 02 Apr 2020 08:53:03 -0700
+In-Reply-To: <Pine.LNX.4.44L0.2004021133440.13377-100000@netrider.rowland.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c3793205a250cb6a@google.com>
+Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
+From:   syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 1 Apr 2020, syzbot wrote:
+Hello,
 
-> syzbot has found a reproducer for the following crash on:
-> 
-> HEAD commit:    0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=12aa8567e00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
-> dashboard link: https://syzkaller.appspot.com/bug?extid=db339689b2101f6f6071
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1342740be00000
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> usb 2-1: BOGUS urb xfer, pipe 2 != type 2
-> WARNING: CPU: 0 PID: 9241 at drivers/usb/core/urb.c:478 usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
+syzbot has tested the proposed patch and the reproducer did not trigger crash:
 
-At last!  Let's get some more information about this...
+Reported-and-tested-by: syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com
 
-Alan Stern
+Tested on:
 
-#syz test: https://github.com/google/kasan.git 0fa84af8
+commit:         0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
+git tree:       https://github.com/google/kasan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
+dashboard link: https://syzkaller.appspot.com/bug?extid=db339689b2101f6f6071
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=143c2c63e00000
 
-Index: usb-devel/drivers/usb/core/urb.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/urb.c
-+++ usb-devel/drivers/usb/core/urb.c
-@@ -475,8 +475,9 @@ int usb_submit_urb(struct urb *urb, gfp_
- 
- 	/* Check that the pipe's type matches the endpoint's type */
- 	if (usb_urb_ep_type_check(urb))
--		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x != type %x\n",
--			usb_pipetype(urb->pipe), pipetypes[xfertype]);
-+		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x != type %x, ep addr 0x%02x, pipe 0x%x, xfertype %d\n",
-+			usb_pipetype(urb->pipe), pipetypes[xfertype],
-+			ep->desc.bEndpointAddress, urb->pipe, xfertype);
- 
- 	/* Check against a simple/standard policy */
- 	allowed = (URB_NO_TRANSFER_DMA_MAP | URB_NO_INTERRUPT | URB_DIR_MASK |
-
+Note: testing is done by a robot and is best-effort only.
