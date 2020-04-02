@@ -2,110 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB35819C94C
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 21:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D51119CA15
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 21:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389903AbgDBTAE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Apr 2020 15:00:04 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:50623 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2389638AbgDBTAE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 15:00:04 -0400
-Received: (qmail 4070 invoked by uid 500); 2 Apr 2020 15:00:03 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 2 Apr 2020 15:00:03 -0400
-Date:   Thu, 2 Apr 2020 15:00:03 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
-        <ingrassia@epigenesys.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
-Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
-In-Reply-To: <0000000000000e8b8005a2520af1@google.com>
-Message-ID: <Pine.LNX.4.44L0.2004021428320.852-100000@netrider.rowland.org>
+        id S2387726AbgDBTiZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Apr 2020 15:38:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48204 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728452AbgDBTiZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 2 Apr 2020 15:38:25 -0400
+Received: from localhost (mobile-166-170-223-166.mycingular.net [166.170.223.166])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 95D6C206F8;
+        Thu,  2 Apr 2020 19:38:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1585856304;
+        bh=pwPtTd+4KW+g8YHAiKRR3T9hCq/0VHHvJwxJjB4MjIE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=mT0VCqJ6EcoVw211LaBPy1qvgmqjcZAnwvjzKdB0RRFAWx8dGPeHA7yHsFuOIgZQr
+         ctKevWwLWABji7HsKVUgdUEjz333xjlZUyCoO1I+KGYnF61tlS6M2gIGm4W2ncraLr
+         kaNX6JrIKH64KAeQ2hOH96KrZhsvKG7EhgNJiylA=
+Date:   Thu, 2 Apr 2020 14:38:20 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Andrew Murray <amurray@thegoodpenguin.co.uk>,
+        linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org,
+        tim.gover@raspberrypi.org, linux-pci@vger.kernel.org,
+        wahrenst@gmx.net, sergei.shtylyov@cogentembedded.com,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v6 3/4] PCI: brcmstb: Wait for Raspberry Pi's firmware
+ when present
+Message-ID: <20200402193820.GA32107@google.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <47c543e2144d5247743548b00d1931e9fc217f43.camel@suse.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2 Apr 2020, syzbot wrote:
+[+cc Rob for DT platform device dependency question]
 
-> Hello,
+On Thu, Apr 02, 2020 at 04:27:23PM +0200, Nicolas Saenz Julienne wrote:
+> On Wed, 2020-04-01 at 15:41 -0500, Bjorn Helgaas wrote:
+> > On Tue, Mar 24, 2020 at 07:28:11PM +0100, Nicolas Saenz Julienne wrote:
+> > > xHCI's PCI fixup, run at the end of pcie-brcmstb's probe, depends on
+> > > RPi4's VideoCore firmware interface to be up and running. It's possible
+> > > for both initializations to race, so make sure it's available prior to
+> > > starting.
+> > > 
+> > > Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> > > Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> > > ---
+> > >  drivers/pci/controller/pcie-brcmstb.c | 15 +++++++++++++++
+> > >  1 file changed, 15 insertions(+)
+> > > 
+> > > diff --git a/drivers/pci/controller/pcie-brcmstb.c
+> > > b/drivers/pci/controller/pcie-brcmstb.c
+> > > index 3a10e678c7f4..a3d3070a5832 100644
+> > > --- a/drivers/pci/controller/pcie-brcmstb.c
+> > > +++ b/drivers/pci/controller/pcie-brcmstb.c
+> > > @@ -28,6 +28,8 @@
+> > >  #include <linux/string.h>
+> > >  #include <linux/types.h>
+> > >  
+> > > +#include <soc/bcm2835/raspberrypi-firmware.h>
+> > > +
+> > >  #include "../pci.h"
+> > >  
+> > >  /* BRCM_PCIE_CAP_REGS - Offset for the mandatory capability config regs */
+> > > @@ -917,11 +919,24 @@ static int brcm_pcie_probe(struct platform_device
+> > > *pdev)
+> > >  {
+> > >  	struct device_node *np = pdev->dev.of_node, *msi_np;
+> > >  	struct pci_host_bridge *bridge;
+> > > +	struct device_node *fw_np;
+> > >  	struct brcm_pcie *pcie;
+> > >  	struct pci_bus *child;
+> > >  	struct resource *res;
+> > >  	int ret;
+> > >  
+> > > +	/*
+> > > +	 * We have to wait for the Raspberry Pi's firmware interface to be up
+> > > +	 * as some PCI fixups depend on it.
+> > 
+> > It'd be nice to know the nature of this dependency between the
+> > firmware interface and the fixups.  This may be useful for future
+> > maintenance.  E.g., if PCI config access doesn't work until the
+> > firmware interface is up, that would affect almost everything.  But
+> > you say "some PCI fixups", so I suppose the actual dependency is
+> > probably something else.
 > 
-> syzbot has tested the proposed patch but the reproducer still triggered crash:
-> WARNING in usbhid_raw_request/usb_submit_urb
+> Sorry it wasn't clear enough, I'll redo this comment. Also note that
+> the PCIe bus and the XHCI chip are hardwired, so that's the only
+> device that'll ever be available on the bus.
 > 
-> ------------[ cut here ]------------
-> usb 3-1: BOGUS urb xfer, pipe 2 != type 2, ep addr 0x00, pipe 0x80001a00, xfertype 0
+> VIA805's XHCI firmware has to be loaded trough RPi's firmware
+> mailbox in between the PCIe bus probe and the subsequent USB probe.
+> Note that a PCI reset clears the firmware. The only mechanism
+> available in between the two operations are PCI Fixups. These are
+> limited in their own way, as I can't return -EPROBE_DEFER if the
+> firmware interface isn't available yet. Hence the need for an
+> explicit dependency between pcie-brcmstb and raspberrypi's firmware
+> mailbox device.
+>
+> Your concern here showcases this series' limitations. From a high
+> level perspective it's not clear to me who should be responsible for
+> downloading the firmware. 
 
-Not much help, I'm afraid.  The pipe value decodes to:
+I think it's fairly common for drivers to download firmware to their
+devices.  I guess there's not really any need to download the firmware
+until a driver wants to use the device, right?
 
-	Direction:	OUT
-	Device address:	26 (which agrees with the console output)
-	Endpoint:	0
-	Pipe type:	Control (which is appropriate for ep 0
-			and agrees with xfertype)
+> And I get the feeling I'm abusing PCI fixups. I haven't found any
+> smart way to deal with this three way dependency of
+> platform/non-platform devices.
 
-Unfortunately, the values printed here need not be the same as the 
-values checked by usb_urb_ep_type_check(), if either the URB or the 
-descriptor is modified concurrently by another thread.
+So IIUC, the three-way dependency involves:
 
-Let's try a different approach.  Since this modifies the code before 
-the test, it may not trigger the warning.  But it's worth a try.
+  1) brcm_pcie_probe(), which initialize the PCI host controller
+  platform device, enumerates PCI devices, and makes them available
+  for driver binding,
 
-Alan Stern
+  2) the firmware mailbox initialization (maybe
+  rpi_firmware_probe()?),
 
-#syz test: https://github.com/google/kasan.git 0fa84af8
+  3) quirk_usb_early_handoff(), which downloads firmware to the VL805
+  PCI USB adapter via rpi_firmware_init_vl805(), which uses the
+  firmware mailbox?
 
-Index: usb-devel/drivers/usb/core/urb.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/urb.c
-+++ usb-devel/drivers/usb/core/urb.c
-@@ -199,15 +199,27 @@ static const int pipetypes[4] = {
-  * given urb.  It returns 0 if the urb contains a valid endpoint, otherwise
-  * a negative error code.
-  */
-+unsigned int alan_pipe, alan_epaddr, alan_epattr;
- int usb_urb_ep_type_check(const struct urb *urb)
- {
- 	const struct usb_host_endpoint *ep;
-+	unsigned int pipe, epattr;
- 
--	ep = usb_pipe_endpoint(urb->dev, urb->pipe);
--	if (!ep)
-+	pipe = READ_ONCE(urb->pipe);
-+	ep = usb_pipe_endpoint(urb->dev, pipe);
-+	if (!ep) {
-+		alan_pipe = pipe;
-+		alan_epattr = 0;
-+		alan_epaddr = 0xff;
- 		return -EINVAL;
--	if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
-+	}
-+	epattr = READ_ONCE(ep->desc.bmAttributes);
-+	if (usb_pipetype(pipe) != pipetypes[epattr & USB_ENDPOINT_XFERTYPE_MASK]) {
-+		alan_pipe = pipe;
-+		alan_epattr = epattr;
-+		alan_epaddr = ep->desc.bEndpointAddress;
- 		return -EINVAL;
-+	}
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(usb_urb_ep_type_check);
-@@ -475,8 +487,9 @@ int usb_submit_urb(struct urb *urb, gfp_
- 
- 	/* Check that the pipe's type matches the endpoint's type */
- 	if (usb_urb_ep_type_check(urb))
--		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x != type %x\n",
--			usb_pipetype(urb->pipe), pipetypes[xfertype]);
-+		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x != type %x, pipe 0x%x, ep attr 0x%02x, ep addr 0x%02x\n",
-+			usb_pipetype(urb->pipe), pipetypes[xfertype],
-+			alan_pipe, alan_epattr, alan_epaddr);
- 
- 	/* Check against a simple/standard policy */
- 	allowed = (URB_NO_TRANSFER_DMA_MAP | URB_NO_INTERRUPT | URB_DIR_MASK |
+Is there some way to express a dependency between
+"raspberrypi,bcm2835-firmware" (the platform device claimed by
+rpi_firmware_probe() and "brcm,bcm2711-pcie"?  If we could ensure that
+rpi_firmware_probe() runs before brcm_pcie_probe(), would that solve
+part of this?
 
-
+Bjorn
