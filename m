@@ -2,150 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B437919BEF1
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 11:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD85119BF3C
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Apr 2020 12:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387633AbgDBJyG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Apr 2020 05:54:06 -0400
-Received: from mail-lj1-f178.google.com ([209.85.208.178]:42961 "EHLO
-        mail-lj1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728135AbgDBJyG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 05:54:06 -0400
-Received: by mail-lj1-f178.google.com with SMTP id q19so2515187ljp.9
-        for <linux-usb@vger.kernel.org>; Thu, 02 Apr 2020 02:54:04 -0700 (PDT)
+        id S2387931AbgDBKVk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Apr 2020 06:21:40 -0400
+Received: from mail-vs1-f67.google.com ([209.85.217.67]:41126 "EHLO
+        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387726AbgDBKVk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 06:21:40 -0400
+Received: by mail-vs1-f67.google.com with SMTP id a63so1909528vsa.8
+        for <linux-usb@vger.kernel.org>; Thu, 02 Apr 2020 03:21:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=SdVB86okpAJ0iXwD1TL4a7g3WstPRwWpBx7L+qoD80I=;
-        b=WI2tO1JDiuQxzMmoqdRNBiqd8n97Llj6uErfRzqCFQ/sEKpdRJqtdEVGVVgf+uM1cI
-         dXHt46HJj9t1rTJMIkn9XLcfyTX+605XUcthe43gk1h3lfzCCGNHXyXchKqEBQCnUkLA
-         v4c27rKFxtS4jaxz9UEKEJ4iJnJltO7jwNJqZfd+3nK/uwsGnmE07mm/1N0lwGfoB9us
-         PLT3czufs5/WFyfyZtXAA/BTikz+B1KaT1AtC4N4fFKz6ww/1/qby4fgSVBMBGMc6s93
-         /lC0FHh9ciHQmRan61Q86pwawkk00X1pzQcuYS1t/WAJqKFFcDQIknrN+Kh54bN3CCmS
-         6lzw==
+        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=7GXKf40EHZAe1m8hEorb1dTJ1AK4agayreMbhqqIH8g=;
+        b=GXYMGfFQRDRkHm7OY0ZOeBp+nuTSLe0YEIp3Le2bpAmdRALcSx0s/eWsGURcsYMyJZ
+         D0pgag6c2FW0E9waIQgW5AsrVDWWHmzgeF6xtbQGQN/XLaNmotiqj5kuCs2DooyHwqhc
+         xJzcXjY/o025wtuT0sbPVu7bhVmJAKmXmGK/rt3fX8aO4+Jaaup7czWoBC692ZVuMJz/
+         UYpqoR0zM2+N1z+3vl20C6XHqFG2v5H6oWJDl8zTnm3K/W9AGuW4AGABALyPQ8Y2iHAI
+         kaHTVvH5sFWSHw1GVfvRLiKz71I/6j78CdVpVd5NYt6F4crKLdKoG6oM5J7onLX+4M5d
+         dUaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=SdVB86okpAJ0iXwD1TL4a7g3WstPRwWpBx7L+qoD80I=;
-        b=F6wM8FHs1GKYk3nbWz/ebP20BGNvmwUWn9f+mgzbTwdqBnwufWAwnjB4iwyMoGA3Ih
-         CRzVLgBrP0mWFucMMaYtUXQl+Egvry14dcNr0+LssMFNv+go3U7omA0pfFBexwmIfFvQ
-         VZ7dbImGHjp89BtcxRFv/IpKUndXUaw3SI0KloLFKmHco6aq0kMoX7a1V8W5oxKgvXEQ
-         LOAD0jV2GErfz7oHR8OxBn5pWeKk8ZIFk/Z9R1X8och6iIGgBI/Y6F0VkJfd/Z8VJ57Q
-         HEaM8dbbzrA7+W8TMXlZzIPfdOTazgKG1yD0oBgdsKjs1P80ymiyLGmwpR6OuPyqUFQk
-         4FiQ==
-X-Gm-Message-State: AGi0PuZglb00NlcPxFAAcMz64MmEkYayWrI/G8ditzouMYpiwiT9ESIH
-        fZ2jwXfaCts0xjlDlUxpPApje+8OvBQ=
-X-Google-Smtp-Source: APiQypIVqsbhSSNPlWX4hxrTs6wHnkLFW/3Ni7szMNhO5rT8jN1yM/KbEa5pu8VkblmakUFuB/GINw==
-X-Received: by 2002:a2e:1647:: with SMTP id 7mr1490511ljw.177.1585821243691;
-        Thu, 02 Apr 2020 02:54:03 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id f9sm2921824ljp.88.2020.04.02.02.54.02
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 02 Apr 2020 02:54:02 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Sriharsha Allenki <sallenki@codeaurora.org>
-Cc:     "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Jack Pham <jackp@codeaurora.org>
-Subject: Re: Fwd: [DWC3][Gadget] Question regarding the unmapping of request as part of queue failure
-In-Reply-To: <f76b1964-ee15-8076-2575-4f533fc53244@codeaurora.org>
-References: <0105a5cd-936e-fb08-77bf-c2f1dbf0aeed@codeaurora.org> <53a4614f-d1bc-5856-8e01-eb790a6ff7fe@codeaurora.org> <87369skhdm.fsf@kernel.org> <f76b1964-ee15-8076-2575-4f533fc53244@codeaurora.org>
-Date:   Thu, 02 Apr 2020 12:53:58 +0300
-Message-ID: <87pncq9ps9.fsf@kernel.org>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=7GXKf40EHZAe1m8hEorb1dTJ1AK4agayreMbhqqIH8g=;
+        b=OShEFMgzaqrmOX9dBeXJwon3wuvzqJxbJigtZH5r++91G2JnSHiPNZ1g5fo+L8ZzqO
+         HklXuxtahdMWOvzQcVgeDuYSXaFGGIQNMaTC6xZptn9woiRgsG7jE+MKVPY0yS9vqkVH
+         buLXMWqF8UApApszMv4yj73kW02w/f7xfVo47tEs8icjjVeQ8+fC6vO9pvV10l11+kHT
+         X3U6H8D6WbJE1BiLuS2Sbv6d7rwWhPufgRubkm4w0gvr1hjc1VA6IA2SX1tkxYamdyBc
+         ravGvwb3OscGE9EiLcv4C2qtRmWMrE1cLU+YQaNRtqZbu11x28iJ2ElnfHJjJFpMJZFJ
+         QuJQ==
+X-Gm-Message-State: AGi0PuZWRcWHr3BJYkwAQ0bd9fNERLzuZjuCLxKnRwwoc3bvCQ1aMIpT
+        V8h4DJokt5tgswV7do/HxEPTF4Ld1l0eLgD7sl2Pow==
+X-Google-Smtp-Source: APiQypKUV6+eeaGGs5jkHkbqjM9cFZprBr9pA7MC3HcBjfjY4MykhwbLuSYTF8XCDi9aLBRWqZOCdrmWe24+WL5vaJ0=
+X-Received: by 2002:a05:6102:2414:: with SMTP id j20mr1731776vsi.206.1585822898806;
+ Thu, 02 Apr 2020 03:21:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+From:   Jian-Hong Pan <jian-hong@endlessm.com>
+Date:   Thu, 2 Apr 2020 18:22:14 +0800
+Message-ID: <CAPpJ_edj++oy7_EDN95tM+BPdYFOztpCrRh-cfzFrY6unJb1Rw@mail.gmail.com>
+Subject: [BUG] i2c_nvidia_gpu takes long time and makes system suspend &
+ resume failed with NVIDIA cards
+To:     Ajay Gupta <ajayg@nvidia.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-i2c@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org,
+        Linux Upstreaming Team <linux@endlessm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-
 Hi,
 
-Sriharsha Allenki <sallenki@codeaurora.org> writes:
->> Sriharsha Allenki <sallenki@codeaurora.org> writes:
->>> I was looking at the code flow for ep_queue and came across the
->>> following piece of code.
->>>
->>> __dwc3_gadget_kick_transfer {
->>> =C2=A0
->>> =C2=A0=C2=A0=C2=A0 dwc3_prepare_trbs(dep);
->>> =C2=A0=C2=A0=C2=A0 req =3D next_request(&dep->started_list);
->>> =C2=A0=C2=A0=C2=A0 if (!req) {
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dep-=
->flags |=3D DWC3_EP_PENDING_REQUEST;
->>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 retu=
-rn 0;
->>> =C2=A0=C2=A0=C2=A0 }
->>> }
->>>
->>> As part of dwc3_prepare_trbs(dep), we get a request from the pending_li=
-st
->>> and queue to the tail of the started_list. But here we get the head of
->>> the started_list, now if there is any failure in issuing UPDATE_TRANSFER
->>> to the core, we unmap this request using "dwc3_gadget_del_and_unmap_req=
-uest".
->>>
->>> But if this kick_transfer was part of the ep_queue and we have failed
->>> to issue update transfer, instead of unmapping the request we are trying
->>> to queue, we will be unmapping a different request (first in the starte=
-d_list)
->>> which the core could have already started processing. I believe we shou=
-ld unmap
->>> the request we are trying to queue but not any other.
->> no, we have to start requests in order and dequeue them in order as
->> well. There's no way to verify that the request is already processed by
->> the HW, other than checking HWO bit which is set during
->> dwc3_prepare_trbs(). This is a HW-SW race condition that we can't really
->> fix.
->>
->> It is minimized, however, by the fact that, at least for non-isoc
->> endpoints, we use No Status Update Transfer commands, which means the
->> command can't fail.
-> Thanks Felipe for the reply. I see that this is a trick race condition
-> between HW-SW, I have seen one occurrence where ep_queue from f_fs has
-> failed (at kick_transfer).And since Asynchronous IO has been enabled,
+We got some machines like Acer desktop equipped with NVIDIA GTX 1660
+card, Acer Predator PH315-52 equipped with NVIDIA GeForce RTX 2060
+Mobile and ASUS UX581LV equipped with NNVIDIA GeForce RTX 2060.
+We found them take long time (more than 50 seconds) to resume after
+suspend.  During the resuming time, the screen is blank.  And check
+the dmesg, found the error during resume:
 
-what the reason to failure? Capture the debug data and send as a reply
-to this message. Method for reporting bugs on dwc3 is documented.
+[   28.060831] PM: suspend entry (deep)
+[   28.144260] Filesystems sync: 0.083 seconds
+[   28.150219] Freezing user space processes ...
+[   48.153282] Freezing of tasks failed after 20.003 seconds (1 tasks
+refusing to freeze, wq_busy=0):
+[   48.153447] systemd-udevd   D13440   382    330 0x80004124
+[   48.153457] Call Trace:
+[   48.153504]  ? __schedule+0x272/0x5a0
+[   48.153558]  ? hrtimer_start_range_ns+0x18c/0x2c0
+[   48.153622]  schedule+0x45/0xb0
+[   48.153668]  schedule_hrtimeout_range_clock+0x8f/0x100
+[   48.153738]  ? hrtimer_init_sleeper+0x80/0x80
+[   48.153798]  usleep_range+0x5a/0x80
+[   48.153850]  gpu_i2c_check_status.isra.0+0x3a/0xa0 [i2c_nvidia_gpu]
+[   48.153933]  gpu_i2c_master_xfer+0x155/0x20e [i2c_nvidia_gpu]
+[   48.154012]  __i2c_transfer+0x163/0x4c0
+[   48.154067]  i2c_transfer+0x6e/0xc0
+[   48.154120]  ccg_read+0x11f/0x170 [ucsi_ccg]
+[   48.154182]  get_fw_info+0x17/0x50 [ucsi_ccg]
+[   48.154242]  ucsi_ccg_probe+0xf4/0x200 [ucsi_ccg]
+[   48.154312]  ? ucsi_ccg_init+0xe0/0xe0 [ucsi_ccg]
+[   48.154377]  i2c_device_probe+0x113/0x210
+[   48.154435]  really_probe+0xdf/0x280
+[   48.154487]  driver_probe_device+0x4b/0xc0
+[   48.154545]  device_driver_attach+0x4e/0x60
+[   48.154604]  __driver_attach+0x44/0xb0
+[   48.154657]  ? device_driver_attach+0x60/0x60
+[   48.154717]  bus_for_each_dev+0x6c/0xb0
+[   48.154772]  bus_add_driver+0x172/0x1c0
+[   48.154824]  driver_register+0x67/0xb0
+[   48.154877]  i2c_register_driver+0x39/0x70
+[   48.154932]  ? 0xffffffffc00ac000
+[   48.154978]  do_one_initcall+0x3e/0x1d0
+[   48.155032]  ? free_vmap_area_noflush+0x8d/0xe0
+[   48.155093]  ? _cond_resched+0x10/0x20
+[   48.155145]  ? kmem_cache_alloc_trace+0x3a/0x1b0
+[   48.155208]  do_init_module+0x56/0x200
+[   48.155260]  load_module+0x21fe/0x24e0
+[   48.155322]  ? __do_sys_finit_module+0xbf/0xe0
+[   48.155381]  __do_sys_finit_module+0xbf/0xe0
+[   48.155441]  do_syscall_64+0x3d/0x130
+[   48.156841]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[   48.158074] RIP: 0033:0x7fba3b4bc2a9
+[   48.158707] Code: Bad RIP value.
+[   48.158990] RSP: 002b:00007ffe1da3a6d8 EFLAGS: 00000246 ORIG_RAX:
+0000000000000139
+[   48.159259] RAX: ffffffffffffffda RBX: 000055ca6922c470 RCX: 00007fba3b4bc2a9
+[   48.159566] RDX: 0000000000000000 RSI: 00007fba3b3c0cad RDI: 0000000000000010
+[   48.159842] RBP: 00007fba3b3c0cad R08: 0000000000000000 R09: 0000000000000000
+[   48.160117] R10: 0000000000000010 R11: 0000000000000246 R12: 0000000000000000
+[   48.160412] R13: 000055ca6922f940 R14: 0000000000020000 R15: 000055ca6922c470
 
-> the request was freed leading to thecorruption of started_list because
-> the list_del and unmap was happened on the requestat the head, but the
-> request freed by the f_fs is at the tail of the started_list. This
-> caused a use after free issue.
->
-> Please let me know your comments.
+I have filed this to bugzilla and more detail:
+https://bugzilla.kernel.org/show_bug.cgi?id=206653
 
-No comments, really. I need to see debug data from dwc3.
+Any comment will be appreciated.
 
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6FtjYACgkQzL64meEa
-mQYenhAAtEhTPlwd0RHdPdLgm77LZTaIfaE84I7bEsHRy99Z95+0DGlcxxzR6def
-noG1xLW1OmxC55Ilx5JK4azxMF18AgG3WlvoORU7vvk3VXeB1YZFVTcnZwG6cA7H
-tyfYr+5NXURaszIZ0sHmoXuZdyyn9rrAH+LKxhCvYq6NiIBImgDlhyRF7bBVfYXY
-cVjsuQZ87L1j1D0rm0OWJJMjX62UkkhyOJxksRAWptQiFGwn7IY16HW0yLWQh+Ve
-WCvRAOE9HjWSO+/RfJqqrHFe7afuK3vY4kLfhVagtezPMIEhA/cwMenNsmL0PTMd
-/BSWFoxsgGayx8Nq48QubsPUTn8aSDAEbfNXBe2fBDZX91q3btPZLs4fjsZcKq3R
-Wvw1BJG6scrf3oTdiPYTiAJWewTYtja5OZyTpqSFjlIymp/CzqT/5uYhxwZYc7Zs
-wrcuIsy8+wOiQT+97qzlbcN++AxbThGdtlzqeEXJxj7fF2ryr2jjhX7j7J59CwtC
-oYk5DtsOJvGm7wxO/KNNwcQFvywYV3LduKXq6bPGF8TX+xSIssJqnEl9l1QaSudP
-RuHKjdH6oknpilAR5TFRYSCHVz/FVNuH8z3uL2nqUmpVVKwFOwr8BPJXER8aXJT4
-BuHgQIA6kGyqNez6yZUlGAIHANOmMRUgTOP1oVuLdFcYkweyNZQ=
-=ibbP
------END PGP SIGNATURE-----
---=-=-=--
+Thanks,
+Jian-Hong Pan
