@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 481C619E053
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Apr 2020 23:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E65F219E087
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Apr 2020 23:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728308AbgDCVbG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Apr 2020 17:31:06 -0400
-Received: from mail-il1-f197.google.com ([209.85.166.197]:55918 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728249AbgDCVbG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Apr 2020 17:31:06 -0400
-Received: by mail-il1-f197.google.com with SMTP id h10so8314794ilq.22
-        for <linux-usb@vger.kernel.org>; Fri, 03 Apr 2020 14:31:04 -0700 (PDT)
+        id S1728456AbgDCVtI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Apr 2020 17:49:08 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:54105 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728459AbgDCVtF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Apr 2020 17:49:05 -0400
+Received: by mail-io1-f70.google.com with SMTP id f6so7342531ioc.20
+        for <linux-usb@vger.kernel.org>; Fri, 03 Apr 2020 14:49:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
          :from:to;
-        bh=SPAwpvKMvYbr6XxAGejDItd1iT8+uNKheRzWPuMzaNE=;
-        b=lXf71RdWJinxpqukEtH+DshXrAeXrEdX0ryKvN11pn1zzWK3m87P6NRwjfqAKoVN3W
-         IxSCkxSb3g0L8UMiAE5QhdCJHZlq6Dl6CrOnP4P8EENVi0yGj4I0XEOAAqOFaWsWo3+h
-         2A/zSZj910OIauS3/T7tDKTT1hwPwuGYF5eV5KR54BFuDkNMsYkk7fB1Bwef7q4snTjd
-         6frR0qB/PsBb7dA2t10v1WbHUhuy0+L2p1wwdsavx5zfy/MeBCobx2MBw7YW3wRJPQJG
-         B6k/cw4vw7VN+wcIs006/4SMkwJu4QK8j+7MPWUTvhk0NFvNEJ7Z5+gXn0wtAO29f6R0
-         HXdg==
-X-Gm-Message-State: AGi0PubGeRfmln/aSgQXGSeDz7IFU51/n4yA1kdKMRLkFmMbEY0VBhdV
-        j+30zW8zzrdTCh0my4UVVE+PmOyNq81KQAW7LUXUv7nP63iQ
-X-Google-Smtp-Source: APiQypKtbpUx/vzWx0thrapB3XZjS4Im1jHjhnIpoPxECPWeYSgLiP8MWdcuJaBa01aC7/l5u2pJ7JQUYFzktar8s2Ldy/IUQ2JZ
+        bh=zSI07CjR5IyEH+/NIlKzkOBeWdFhLCDjSvm8dcjjF9E=;
+        b=a67IEFnm6WcNhFCxq7OBvw1X+1H/0zT+J8Rjn5wTSL3Yty0+7SqHAbsMmKZ5Qyq+oR
+         YPq1GAT3RZv7AJ3TKzpYmcXKr3xgfMw7rXdNaCt8qymxPDpijbZeBxqlH7WqkCDzb4Ud
+         MMiE5GW7CWZwmt2BKp4MNtI6fve2XXgn2mDEIepCM7E/2T0Aamzgowe5otPhYcYGozKn
+         8jng3KZ5pJF85e1hnMsJUBfuWejMTmldWL0UuQmAGufkx4TZvblmjxYW1e3/B+PLNovh
+         iiu/EiTqAsCX6QJU2CLNWuLsGd0V4BImv+y7bQdkiWMu+8OWe64E0LAkHgyX1KyToXnK
+         UiZA==
+X-Gm-Message-State: AGi0PubkBLIrUufSRfaYaVWb9qzYA4vtbo0IShmRlFLrcq5s3Pg7w2CL
+        99RZncH1Qnl417DJfI9nfUlpQaqQnAdfcGIGGFs8/tBSRERd
+X-Google-Smtp-Source: APiQypIjGi0Wfgk0b25qP452rAzQr3GjIWACeIBF++/I8dzYGRRklPvqHEKztUVWk9BfQ+s9cnDjHNsygkQrmfW6PoH9mK/E1CNX
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:1550:: with SMTP id h16mr9161068iow.171.1585949464055;
- Fri, 03 Apr 2020 14:31:04 -0700 (PDT)
-Date:   Fri, 03 Apr 2020 14:31:04 -0700
-In-Reply-To: <CADG63jDxb5zkvQwNn=M1ONCsEVZxZBUo8SzN86U01w4tQ5F4Rg@mail.gmail.com>
+X-Received: by 2002:a02:2b11:: with SMTP id h17mr10019717jaa.140.1585950543555;
+ Fri, 03 Apr 2020 14:49:03 -0700 (PDT)
+Date:   Fri, 03 Apr 2020 14:49:03 -0700
+In-Reply-To: <CADG63jDvVnX=_5oJSEqrsTUsCuYPj6Grz9dEFLvWpa1F=oa1Lw@mail.gmail.com>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006fd4d605a269a296@google.com>
-Subject: Re: KASAN: use-after-free Read in htc_connect_service
-From:   syzbot <syzbot+9505af1ae303dabdc646@syzkaller.appspotmail.com>
+Message-ID: <000000000000c7b02e05a269e206@google.com>
+Subject: Re: KASAN: use-after-free Write in ath9k_htc_rx_msg
+From:   syzbot <syzbot+b1c61e5f11be5782f192@syzkaller.appspotmail.com>
 To:     andreyknvl@google.com, anenbupt@gmail.com,
         ath9k-devel@qca.qualcomm.com, davem@davemloft.net,
         kvalo@codeaurora.org, linux-kernel@vger.kernel.org,
@@ -52,15 +52,15 @@ Hello,
 
 syzbot has tested the proposed patch and the reproducer did not trigger crash:
 
-Reported-and-tested-by: syzbot+9505af1ae303dabdc646@syzkaller.appspotmail.com
+Reported-and-tested-by: syzbot+b1c61e5f11be5782f192@syzkaller.appspotmail.com
 
 Tested on:
 
 commit:         0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
 git tree:       https://github.com/google/kasan.git usb-fuzzer
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
-dashboard link: https://syzkaller.appspot.com/bug?extid=9505af1ae303dabdc646
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a782c087b1f425c6
+dashboard link: https://syzkaller.appspot.com/bug?extid=b1c61e5f11be5782f192
 compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=15bab2cde00000
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=11981b1fe00000
 
 Note: testing is done by a robot and is best-effort only.
