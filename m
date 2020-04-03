@@ -2,284 +2,229 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C11E719DDFB
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Apr 2020 20:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D301C19DF0B
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Apr 2020 22:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404206AbgDCSca (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Apr 2020 14:32:30 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:47414 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728329AbgDCSc3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Apr 2020 14:32:29 -0400
-Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
- id 2b0e6a1e55971b4a; Fri, 3 Apr 2020 20:32:26 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Qais Yousef <qais.yousef@arm.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux-pm mailing list <linux-pm@vger.kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
-Date:   Fri, 03 Apr 2020 20:32:25 +0200
-Message-ID: <3728342.COPzmv9P3G@kreacher>
-In-Reply-To: <Pine.LNX.4.44L0.2004031135130.7035-100000@netrider.rowland.org>
-References: <Pine.LNX.4.44L0.2004031135130.7035-100000@netrider.rowland.org>
+        id S1727928AbgDCUOL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Apr 2020 16:14:11 -0400
+Received: from mail-vs1-f68.google.com ([209.85.217.68]:39517 "EHLO
+        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726368AbgDCUOK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Apr 2020 16:14:10 -0400
+Received: by mail-vs1-f68.google.com with SMTP id u9so5781887vsp.6;
+        Fri, 03 Apr 2020 13:14:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JreADblCW8CCcGuC7MbFmuZZVPl4wZIfDjfnxguLq0A=;
+        b=oiU0eCXGuBDKV17f2iSZtqIuNsPQLLBsO8vLHMk58o/fUNK9XwBWtQ7KV6cN712f8k
+         wHo7Yd8rWrJ3PJTt7Od2Pk2A7QG+yzSK8P3e8n9NuIIfiSse7QCrmaWOSM7mqV9qyJdl
+         IFzVnjTKMiSr7hvhoX5VMNcUGCidDMmeoKIzIAZcslzU3yDF/0r88jqx6bCYwUk2vSB2
+         NjnlyPQ46ecLbLvqClvxxqKU95vBCwwdh/si8/45vDJ5BDvQoNx3/V6Ak7Z16tmcOEo9
+         wTLJbLaNsilUnp+NFB7grVQWutFTT1gbxlHQ4d0oSTNQJLdS6H1SNyjBWAXJ5epubzjK
+         Ff/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JreADblCW8CCcGuC7MbFmuZZVPl4wZIfDjfnxguLq0A=;
+        b=WcXTyaCu8bsy6gVaR4ahP+SpxNNY0MW8ZK6FHljDhd3g2rUmuZCX5XdSWZuDfOKvvi
+         ZXWIMIRtgpHkLIZb4sC8nVRqiGJI+4pOlNFGMohO2wJZLZMdeJy8rrLjJfd6h7eB5yqN
+         J/+QmusjVFbkXiuua7jy00YbJo4iN45xZEyVRDE58ihchd2omEfPv7FTvtvOcdplENJq
+         1u9tPQSFY4RGt6InGFNCpi+D7lCaq6wViwsfSQSwCl8VNAW68Znab+TXO5W7dmEiNsT9
+         Ak6HAF+kVQzaJPbvQRjdkiZ7LT2cgNj0SZHEXKnmvVXnFbpBMKZ9pDhnYc8TTwC2zliN
+         k4Pg==
+X-Gm-Message-State: AGi0PubRlTaGY4QxobxzqnNCGVnv4VU0vRXouS64Ejl56qlE+ywZnMqL
+        Yw74noIg1yROEXtjNJJ3XuoZQTdi9EzgsaDu1Hk=
+X-Google-Smtp-Source: APiQypK248nm9pbTuAM3+cX9mO8POhaGr4Gsd4AaS7yzCw1W7guAyZ0W4vMRkrrGa4nnqifCoPmvI7VBNEC5uU9OWYU=
+X-Received: by 2002:a05:6102:1b:: with SMTP id j27mr7821551vsp.150.1585944848451;
+ Fri, 03 Apr 2020 13:14:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <000000000000666c9c05a1c05d12@google.com>
+In-Reply-To: <000000000000666c9c05a1c05d12@google.com>
+From:   Qiujun Huang <anenbupt@gmail.com>
+Date:   Sat, 4 Apr 2020 04:13:55 +0800
+Message-ID: <CADG63jBkWfxOSsJ=7FkB-6ScdW48VPJZLV2KrhCVLjVRCASzhQ@mail.gmail.com>
+Subject: Re: general protection fault in ath9k_hif_usb_rx_cb
+To:     syzbot <syzbot+40d5d2e8a4680952f042@syzkaller.appspotmail.com>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        ath9k-devel@qca.qualcomm.com, davem@davemloft.net,
+        kvalo@codeaurora.org, LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: multipart/mixed; boundary="00000000000053adf805a2688f1a"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Friday, April 3, 2020 6:41:05 PM CEST Alan Stern wrote:
-> On Fri, 3 Apr 2020, Rafael J. Wysocki wrote:
-> 
-> > I'll address the other points in your message separately.
-> > 
-> > The rules for SMART_SUSPEND are as follows:
-> 
-> These rules are a sort of high-level overview.  They don't (for the
-> most part) say exactly what will happen, in terms of which callbacks
-> will be issued and under what circumstances.  I have tried to provide 
-> such a description inline below.
-> 
-> > (a) If SMART_SUSPEND is set and the device is runtime-suspended during system
-> >     suspend, it is not expected to be resumed by the core or the middle layer
-> >     (subsystem) code unless the latter has a specific reason to do that (e.g.
-> >     it knows that the device needs to be reconfigured which cannot be done
-> >     without resuming it).
-> > 
-> >     The device can still be resumed when it is needed to suspend a dependent
-> >     device, but that cannot happen before the "late suspend" phase.
-> 
-> Don't you mean it cannot happen during or after the "late suspend"  
-> phase?
+--00000000000053adf805a2688f1a
+Content-Type: text/plain; charset="UTF-8"
 
-Yes, I do.
+#syz test: https://github.com/google/kasan.git usb-fuzzer
 
-> (More precisely, it cannot happen after the time when the core
-> would issue the device's ->suspend_late callback, but it can happen
-> between that time and the time when the "late suspend" phase began --
-> for example, from within the dependent device's ->suspend_late
-> callback.)  After all, __device_suspend_late() calls
-> __pm_runtime_disable(), following which the device _cannot_ be runtime
-> resumed.
+--00000000000053adf805a2688f1a
+Content-Type: application/octet-stream; name="ath9k_040401.patch"
+Content-Disposition: attachment; filename="ath9k_040401.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_k8kmls2c0>
+X-Attachment-Id: f_k8kmls2c0
 
-Right.
-
-> Putting this in operational terms, it seems to say that if
-> SMART_SUSPEND is set and the device is runtime-suspended at the times
-> when the core would normally issue the driver's ->suspend_late or
-> ->suspend_noirq callback, then the core will skip the callback (with a
-> similar requirement for subsystems).  Correct?
-
-Yes.
-
-> > (b) Drivers that set SMART_SUSPEND are allowed to reuse their PM-runtime
-> >     callbacks for system-wide suspend and resume.
-> > 
-> >     That is, they can point either the ->suspend_late or the ->suspend_noirq
-> >     callback pointer to the same function as ->runtime_suspend and they can
-> >     point either the ->resume_noirq or ->the resume_early callback to the'
-> >     same function as ->runtime_resume.
-> 
-> Well, in theory any driver or subsystem can do this whenever it wants
-> to, regardless of any flag settings.
-
-Not exactly.
-
-Say the driver wants to point both ->runtime_suspend and ->suspend_late to
-the same function.
-
-If the bus type doesn't provide system-wide PM callbacks at all (which is
-the case for some bus types), that only works if the device is never
-runtime-suspended when ->suspend_late is about to run, because otherwise
-the function in question needs to check the context in which it is running
-(PM-runtime vs system-wide and runtime-suspended vs runtime-active in the
-latter case) which at least is awkward and hard to get right.
-
-> It's then up to the driver or
-> subsystem to make sure the callback "does the right thing".
-
-In theory.
-
-> What I'm concerned about now is: What guarantees can the core give to 
-> the driver and subsystem, so that they will know what is necessary in 
-> order to "do the right thing"?
-
-I'm not sure what you mean.
-
-If the subsystem provides callbacks, the core will run them regardless.
-
-If it does not provide callbacks, the core will skip ->suspend_late and
-->suspend_noirq for the driver and the device will remain suspended.
-
-If SMART_SUSPEND is not set, the core will execute all of the callbacks
-that are present.
-
-> > (c) Drivers that set SMART_SUSPEND are alwo allowed to provide special
-> >     simplified callbacks for the "freeze" and "thaw" transitions during
-> >     hibernation (and restore) and (if they do so) special callbacks for the
-> >     "restore" phase.
-> 
-> What do you mean by "simplified"?
-
-Avoiding actual PM.
-
-> As I see it, the suspend-side callbacks are generally responsible for 
-> four things:
-> 
-> 	1. Quiesce the device (finish ongoing I/O and do not allow any
-> 	   more to start).
-> 
-> 	2. Save the current device state.
-> 
-> 	3. Install the appropriate wakeup settings.
-> 
-> 	4. Put the device into low-power mode.
-> 
-> (Not explicitly listed: Perform a runtime-resume if needed in order to
-> carry out these four items.)
-> 
-> During a SUSPEND transition, we usually expect all four to happen.  
-> During a FREEZE transition, we only require 1.
-
-That's what I mean by "simplified".
-
-> During a POWEROFF
-> transition we require 1 and 3, and possibly 4 (depending on how the
-> platform handles poweroff).
-
-But doing 2 is not a bug AFAICS.
-
-> Similar requirements apply to the resume-side callbacks.  (But note 
-> that RESTORE is not the inverse of POWEROFF; it is more like an inverse 
-> of FREEZE with the added complication that the device's initial state 
-> is unknown.)
-
-It actually isn't even an inverse of FREEZE.  It is like RESUME with the
-additional requirements that (a) it can never be skipped and (b) the
-device need not be in a low-power state when it runs (the initial state
-of it is unknown if you will).
-
-> What changes to this analysis would SMART_SUSPEND allow?  None if the 
-> device is runtime-active.  But if the device is runtime-suspended and 
-> the wakeup settings don't need to be changed, then presumably none of 
-> the four items are necessary.
-> 
-> Is this what you mean?
-
-No.
-
-What I meant was that even if the driver pointed ->runtime_suspend and
-->suspend_late (say) to the same function and it pointed ->resume_early
-and ->runtime_resume to the same function, it didn't have to point
-->freeze_late and ->thaw_early to the same pair of functions, respectively.
-
-It can point ->freeze_late and ->thaw_early to a pair of different functions
-that only quiesce the device and reverse that, respectively.
-
-> > [OK, I realize that (b) and (c) are not documented, see the notes below.]
-> > 
-> > Because of (a), if the device with SMART_SUSPEND set is still runtime-suspended
-> > during the "late" phase of suspend, the core will not invoke the driver's
-> > "late" and "noirq" suspend callbacks directly (*).  Middle layer (subsystem)
-> > code is expected to behave accordingly.
-> 
-> Okay, this agrees with what I wrote above.
-> 
-> > Because of (b), if the "late" and "noirq" driver callbacks were skipped during
-> > the "freeze" transition, the core will also avoid invoking the "noirq" and
-> > "early" callbacks provided by the driver during the "thaw" transition and
-> > the callbacks during the "restore" transition will be executed unconditionally
-> > (**).  Middle layer code is expected to behave accordingly.
-> 
-> All right.  To summarize: If the driver's ->freeze_late callback is
-> skipped then the driver's ->thaw-early will be skipped, and similarly
-> for ->freeze_noirq and ->thaw_noirq.  But RESTORE callbacks are never
-> skipped.  Correct?
-
-Yes.
-
-> However, the most difficult transitions are SUSPEND and RESUME.  Is it
-> accurate to say that if the driver's ->suspend_late callback is skipped
-> then the driver's ->resume_early will be skipped, and similarly for
-> ->suspend_noirq and ->resume_noirq?
-
-If LEAVE_SUSPENDED is set in addition to SMART_SUSPEND, then yes.
-
-> > Notes:
-> > 
-> > 1. I have considered splitting SMART_SUSPEND into two or even three flags
-> >    so that (a), (b) and (c) are each associated with a separate flag, but
-> >    then I would expect the majority of users to use all of them anyway.
-> > 
-> > 2. LEAVE_SUSPENDED (which may be better renamed to SKIP_RESUME) is kind of
-> >    expected to be used along with SMART_SUSPEND unless there is a good enough
-> >    reason to avoid using it.  I admit that this isn't really straightforward,
-> >    maybe the default behavior should be to skip the resume and there should be
-> >    FORCE_RESUME instead of LEAVE_SUSPENDED.
-> 
-> One question not addressed above (in fact, the original reason for 
-> getting you involved in this discussion): What about the device's 
-> power.runtime_status?  Shall we say that that core will call 
-> pm_runtime_set_active() at some point before issuing the ->complete 
-> callback unless some combination of flags is set?  And what should that 
-> combination be?
-> 
-> After all, we expect that most drivers will want their devices to be in 
-> the runtime-active state at the end of a system sleep or hibernation.  
-> It makes sense for the core to do the necessary housekeeping.
-
-The core will set the PM-runtime status to "active" in device_resume_noirq()
-if (a) the subsystem callbacks are not invoked (otherwise the subsystem is
-responsible for doing that) and (b) if the driver's callback not skipped
-(in which case its ->resume_early callback will not be skipped too).
-
-> > 3. (*) Under the assumption that either ->suspend_late or ->suspend_noirq
-> >    points to the same routine as ->runtime_suspend (and the other is NULL),
-> >    invokig that callback for a runtime-suspended device is technically invalid.
-> 
-> Does this invalidate anything I wrote above?
-
-I don't think so.  It is the reason why driver callbacks are skipped for
-runtime-suspended devices.
-
-> >    In turn, under the assumption that either ->resume_early or ->resume_noirq
-> >    points to the same routine as ->runtime_resume (and the other is NULL), it is
-> >    valid to invoke that callback if the late/noirq suspend was skipped.
-> 
-> In other words, it's okay for the core either to issue or skip those 
-> callbacks.  Presumably the decision will be made based on some flag 
-> setting?
-
-Yes.  A flag combined with the PM-runtime status of the device in
-device_suspend_noirq().
-
-> > 4. (**) If the "freeze" and "thaw" callbacks are simplified, they cannot be
-> >    run back-to-back with ->runtime_resume and ->runtime_suspend, respectively.
-> >    Thus if "freeze" is skippend, "thaw" must be skipped too.  However,
-> >    "restore" needs to be prepared to be invoked after "freeze" or
-> >    ->runtime_suspend (and the state of the device may not match the
-> >    callback that ran previously), so it must be special.
-> > 
-> > 5. I agree that skipping the driver level of callbacks depending on what is
-> >    provided by the middle layer is inconsistent, but I wanted to take the
-> >    users of pm_runtime_force_suspend/resume() into account by letting those
-> >    things run.
-> > 
-> >    It would be more consistent to expect middle layer code (bus types, PM
-> >    domains) to provide either all of the noirq/early/late callbacks, or none
-> >    of them and make SMART_SUSPEND and pm_runtime_force_suspend/resume()
-> >    mutually exclusive.
-> 
-> I don't have a clear idea of how pm_runtime_force_suspend/resume() gets 
-> used.  Are we better off ignoring it for the time being?
-
-Yes, we are.
-
-
-
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2F0aC9hdGg5ay9oaWZfdXNiLmMgYi9k
+cml2ZXJzL25ldC93aXJlbGVzcy9hdGgvYXRoOWsvaGlmX3VzYi5jCmluZGV4IGRkMGMzMjM3OTM3
+NS4uMDJiMmY0Y2U1ZTE4IDEwMDY0NAotLS0gYS9kcml2ZXJzL25ldC93aXJlbGVzcy9hdGgvYXRo
+OWsvaGlmX3VzYi5jCisrKyBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2F0aC9hdGg5ay9oaWZfdXNi
+LmMKQEAgLTYxMiw2ICs2MTIsMTEgQEAgc3RhdGljIHZvaWQgYXRoOWtfaGlmX3VzYl9yeF9zdHJl
+YW0oc3RydWN0IGhpZl9kZXZpY2VfdXNiICpoaWZfZGV2LAogCQkJaGlmX2Rldi0+cmVtYWluX3Nr
+YiA9IG5za2I7CiAJCQlzcGluX3VubG9jaygmaGlmX2Rldi0+cnhfbG9jayk7CiAJCX0gZWxzZSB7
+CisJCQlpZiAocG9vbF9pbmRleCA9PSBNQVhfUEtUX05VTV9JTl9UUkFOU0ZFUikgeworCQkJCWRl
+dl9lcnIoJmhpZl9kZXYtPnVkZXYtPmRldiwKKwkJCQkJImF0aDlrX2h0Yzogb3ZlciBSWCBNQVhf
+UEtUX05VTVxuIik7CisJCQkJZ290byBlcnI7CisJCQl9CiAJCQluc2tiID0gX19kZXZfYWxsb2Nf
+c2tiKHBrdF9sZW4gKyAzMiwgR0ZQX0FUT01JQyk7CiAJCQlpZiAoIW5za2IpIHsKIAkJCQlkZXZf
+ZXJyKCZoaWZfZGV2LT51ZGV2LT5kZXYsCkBAIC02MzgsOSArNjQzLDkgQEAgc3RhdGljIHZvaWQg
+YXRoOWtfaGlmX3VzYl9yeF9zdHJlYW0oc3RydWN0IGhpZl9kZXZpY2VfdXNiICpoaWZfZGV2LAog
+CiBzdGF0aWMgdm9pZCBhdGg5a19oaWZfdXNiX3J4X2NiKHN0cnVjdCB1cmIgKnVyYikKIHsKLQlz
+dHJ1Y3Qgc2tfYnVmZiAqc2tiID0gKHN0cnVjdCBza19idWZmICopIHVyYi0+Y29udGV4dDsKLQlz
+dHJ1Y3QgaGlmX2RldmljZV91c2IgKmhpZl9kZXYgPQotCQl1c2JfZ2V0X2ludGZkYXRhKHVzYl9p
+Zm51bV90b19pZih1cmItPmRldiwgMCkpOworCXN0cnVjdCByeF9idWYgKnJ4X2J1ZiA9IChzdHJ1
+Y3QgcnhfYnVmKikgdXJiLT5jb250ZXh0OworCXN0cnVjdCBza19idWZmICpza2IgPSByeF9idWYt
+PnNrYjsKKwlzdHJ1Y3QgaGlmX2RldmljZV91c2IgKmhpZl9kZXYgPSByeF9idWYtPmhpZl9kZXY7
+CiAJaW50IHJldDsKIAogCWlmICghc2tiKQpAQCAtNjgwLDE0ICs2ODUsMTUgQEAgc3RhdGljIHZv
+aWQgYXRoOWtfaGlmX3VzYl9yeF9jYihzdHJ1Y3QgdXJiICp1cmIpCiAJcmV0dXJuOwogZnJlZToK
+IAlrZnJlZV9za2Ioc2tiKTsKKwlrZnJlZShyeF9idWYpOwogfQogCiBzdGF0aWMgdm9pZCBhdGg5
+a19oaWZfdXNiX3JlZ19pbl9jYihzdHJ1Y3QgdXJiICp1cmIpCiB7Ci0Jc3RydWN0IHNrX2J1ZmYg
+KnNrYiA9IChzdHJ1Y3Qgc2tfYnVmZiAqKSB1cmItPmNvbnRleHQ7CisJc3RydWN0IHJ4X2J1ZiAq
+cnhfYnVmID0gKHN0cnVjdCByeF9idWYqKSB1cmItPmNvbnRleHQ7CisJc3RydWN0IGhpZl9kZXZp
+Y2VfdXNiICpoaWZfZGV2ID0gcnhfYnVmLT5oaWZfZGV2OworCXN0cnVjdCBza19idWZmICpza2Ig
+PSByeF9idWYtPnNrYjsKIAlzdHJ1Y3Qgc2tfYnVmZiAqbnNrYjsKLQlzdHJ1Y3QgaGlmX2Rldmlj
+ZV91c2IgKmhpZl9kZXYgPQotCQl1c2JfZ2V0X2ludGZkYXRhKHVzYl9pZm51bV90b19pZih1cmIt
+PmRldiwgMCkpOwogCWludCByZXQ7CiAKIAlpZiAoIXNrYikKQEAgLTc0NSw2ICs3NTEsNyBAQCBz
+dGF0aWMgdm9pZCBhdGg5a19oaWZfdXNiX3JlZ19pbl9jYihzdHJ1Y3QgdXJiICp1cmIpCiAJcmV0
+dXJuOwogZnJlZToKIAlrZnJlZV9za2Ioc2tiKTsKKwlrZnJlZShyeF9idWYpOwogCXVyYi0+Y29u
+dGV4dCA9IE5VTEw7CiB9CiAKQEAgLTgyNyw4ICs4MzQsOSBAQCBzdGF0aWMgdm9pZCBhdGg5a19o
+aWZfdXNiX2RlYWxsb2NfcnhfdXJicyhzdHJ1Y3QgaGlmX2RldmljZV91c2IgKmhpZl9kZXYpCiAK
+IHN0YXRpYyBpbnQgYXRoOWtfaGlmX3VzYl9hbGxvY19yeF91cmJzKHN0cnVjdCBoaWZfZGV2aWNl
+X3VzYiAqaGlmX2RldikKIHsKLQlzdHJ1Y3QgdXJiICp1cmIgPSBOVUxMOworCXN0cnVjdCByeF9i
+dWYgKnJ4X2J1ZiA9IE5VTEw7CiAJc3RydWN0IHNrX2J1ZmYgKnNrYiA9IE5VTEw7CisJc3RydWN0
+IHVyYiAqdXJiID0gTlVMTDsKIAlpbnQgaSwgcmV0OwogCiAJaW5pdF91c2JfYW5jaG9yKCZoaWZf
+ZGV2LT5yeF9zdWJtaXR0ZWQpOwpAQCAtODM2LDYgKzg0NCwxMiBAQCBzdGF0aWMgaW50IGF0aDlr
+X2hpZl91c2JfYWxsb2NfcnhfdXJicyhzdHJ1Y3QgaGlmX2RldmljZV91c2IgKmhpZl9kZXYpCiAK
+IAlmb3IgKGkgPSAwOyBpIDwgTUFYX1JYX1VSQl9OVU07IGkrKykgewogCisJCXJ4X2J1ZiA9IGt6
+YWxsb2Moc2l6ZW9mKHN0cnVjdCByeF9idWYpLCBHRlBfS0VSTkVMKTsKKwkJaWYgKCFyeF9idWYp
+IHsKKwkJCXJldCA9IC1FTk9NRU07CisJCQlnb3RvIGVycl9yeGI7CisJCX0KKwkKIAkJLyogQWxs
+b2NhdGUgVVJCICovCiAJCXVyYiA9IHVzYl9hbGxvY191cmIoMCwgR0ZQX0tFUk5FTCk7CiAJCWlm
+ICh1cmIgPT0gTlVMTCkgewpAQCAtODUwLDExICs4NjQsMTQgQEAgc3RhdGljIGludCBhdGg5a19o
+aWZfdXNiX2FsbG9jX3J4X3VyYnMoc3RydWN0IGhpZl9kZXZpY2VfdXNiICpoaWZfZGV2KQogCQkJ
+Z290byBlcnJfc2tiOwogCQl9CiAKKwkJcnhfYnVmLT5oaWZfZGV2ID0gaGlmX2RldjsKKwkJcnhf
+YnVmLT5za2IgPSBza2I7CisKIAkJdXNiX2ZpbGxfYnVsa191cmIodXJiLCBoaWZfZGV2LT51ZGV2
+LAogCQkJCSAgdXNiX3JjdmJ1bGtwaXBlKGhpZl9kZXYtPnVkZXYsCiAJCQkJCQkgIFVTQl9XTEFO
+X1JYX1BJUEUpLAogCQkJCSAgc2tiLT5kYXRhLCBNQVhfUlhfQlVGX1NJWkUsCi0JCQkJICBhdGg5
+a19oaWZfdXNiX3J4X2NiLCBza2IpOworCQkJCSAgYXRoOWtfaGlmX3VzYl9yeF9jYiwgcnhfYnVm
+KTsKIAogCQkvKiBBbmNob3IgVVJCICovCiAJCXVzYl9hbmNob3JfdXJiKHVyYiwgJmhpZl9kZXYt
+PnJ4X3N1Ym1pdHRlZCk7CkBAIC04ODAsNiArODk3LDggQEAgc3RhdGljIGludCBhdGg5a19oaWZf
+dXNiX2FsbG9jX3J4X3VyYnMoc3RydWN0IGhpZl9kZXZpY2VfdXNiICpoaWZfZGV2KQogZXJyX3Nr
+YjoKIAl1c2JfZnJlZV91cmIodXJiKTsKIGVycl91cmI6CisJa2ZyZWUocnhfYnVmKTsKK2Vycl9y
+eGI6CiAJYXRoOWtfaGlmX3VzYl9kZWFsbG9jX3J4X3VyYnMoaGlmX2Rldik7CiAJcmV0dXJuIHJl
+dDsKIH0KQEAgLTg5MSwxNCArOTEwLDIxIEBAIHN0YXRpYyB2b2lkIGF0aDlrX2hpZl91c2JfZGVh
+bGxvY19yZWdfaW5fdXJicyhzdHJ1Y3QgaGlmX2RldmljZV91c2IgKmhpZl9kZXYpCiAKIHN0YXRp
+YyBpbnQgYXRoOWtfaGlmX3VzYl9hbGxvY19yZWdfaW5fdXJicyhzdHJ1Y3QgaGlmX2RldmljZV91
+c2IgKmhpZl9kZXYpCiB7Ci0Jc3RydWN0IHVyYiAqdXJiID0gTlVMTDsKKwlzdHJ1Y3QgcnhfYnVm
+ICpyeF9idWYgPSBOVUxMOwogCXN0cnVjdCBza19idWZmICpza2IgPSBOVUxMOworCXN0cnVjdCB1
+cmIgKnVyYiA9IE5VTEw7CiAJaW50IGksIHJldDsKIAogCWluaXRfdXNiX2FuY2hvcigmaGlmX2Rl
+di0+cmVnX2luX3N1Ym1pdHRlZCk7CiAKIAlmb3IgKGkgPSAwOyBpIDwgTUFYX1JFR19JTl9VUkJf
+TlVNOyBpKyspIHsKIAorCQlyeF9idWYgPSBremFsbG9jKHNpemVvZihzdHJ1Y3QgcnhfYnVmKSwg
+R0ZQX0tFUk5FTCk7CisJCWlmICghcnhfYnVmKSB7CisJCQlyZXQgPSAtRU5PTUVNOworCQkJZ290
+byBlcnJfcnhiOworCQl9CisKIAkJLyogQWxsb2NhdGUgVVJCICovCiAJCXVyYiA9IHVzYl9hbGxv
+Y191cmIoMCwgR0ZQX0tFUk5FTCk7CiAJCWlmICh1cmIgPT0gTlVMTCkgewpAQCAtOTEzLDExICs5
+MzksMTQgQEAgc3RhdGljIGludCBhdGg5a19oaWZfdXNiX2FsbG9jX3JlZ19pbl91cmJzKHN0cnVj
+dCBoaWZfZGV2aWNlX3VzYiAqaGlmX2RldikKIAkJCWdvdG8gZXJyX3NrYjsKIAkJfQogCisJCXJ4
+X2J1Zi0+aGlmX2RldiA9IGhpZl9kZXY7CisJCXJ4X2J1Zi0+c2tiID0gc2tiOworCiAJCXVzYl9m
+aWxsX2ludF91cmIodXJiLCBoaWZfZGV2LT51ZGV2LAogCQkJCSAgdXNiX3JjdmludHBpcGUoaGlm
+X2Rldi0+dWRldiwKIAkJCQkJCSAgVVNCX1JFR19JTl9QSVBFKSwKIAkJCQkgIHNrYi0+ZGF0YSwg
+TUFYX1JFR19JTl9CVUZfU0laRSwKLQkJCQkgIGF0aDlrX2hpZl91c2JfcmVnX2luX2NiLCBza2Is
+IDEpOworCQkJCSAgYXRoOWtfaGlmX3VzYl9yZWdfaW5fY2IsIHJ4X2J1ZiwgMSk7CiAKIAkJLyog
+QW5jaG9yIFVSQiAqLwogCQl1c2JfYW5jaG9yX3VyYih1cmIsICZoaWZfZGV2LT5yZWdfaW5fc3Vi
+bWl0dGVkKTsKQEAgLTk0Myw2ICs5NzIsOCBAQCBzdGF0aWMgaW50IGF0aDlrX2hpZl91c2JfYWxs
+b2NfcmVnX2luX3VyYnMoc3RydWN0IGhpZl9kZXZpY2VfdXNiICpoaWZfZGV2KQogZXJyX3NrYjoK
+IAl1c2JfZnJlZV91cmIodXJiKTsKIGVycl91cmI6CisJa2ZyZWUocnhfYnVmKTsKK2Vycl9yeGI6
+CiAJYXRoOWtfaGlmX3VzYl9kZWFsbG9jX3JlZ19pbl91cmJzKGhpZl9kZXYpOwogCXJldHVybiBy
+ZXQ7CiB9CkBAIC0xMzQxLDggKzEzNzIsOSBAQCBzdGF0aWMgdm9pZCBhdGg5a19oaWZfdXNiX2Rp
+c2Nvbm5lY3Qoc3RydWN0IHVzYl9pbnRlcmZhY2UgKmludGVyZmFjZSkKIAogCWlmIChoaWZfZGV2
+LT5mbGFncyAmIEhJRl9VU0JfUkVBRFkpIHsKIAkJYXRoOWtfaHRjX2h3X2RlaW5pdChoaWZfZGV2
+LT5odGNfaGFuZGxlLCB1bnBsdWdnZWQpOwotCQlhdGg5a19odGNfaHdfZnJlZShoaWZfZGV2LT5o
+dGNfaGFuZGxlKTsKIAkJYXRoOWtfaGlmX3VzYl9kZXZfZGVpbml0KGhpZl9kZXYpOworCQlhdGg5
+a19kZXN0b3lfd21pKGhpZl9kZXYtPmh0Y19oYW5kbGUtPmRydl9wcml2KTsKKwkJYXRoOWtfaHRj
+X2h3X2ZyZWUoaGlmX2Rldi0+aHRjX2hhbmRsZSk7CiAJfQogCiAJdXNiX3NldF9pbnRmZGF0YShp
+bnRlcmZhY2UsIE5VTEwpOwpkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvYXRoL2F0
+aDlrL2hpZl91c2IuaCBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2F0aC9hdGg5ay9oaWZfdXNiLmgK
+aW5kZXggNzg0NjkxNmFhMDFkLi4yNWI4MDIwYTg1ODEgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvbmV0
+L3dpcmVsZXNzL2F0aC9hdGg5ay9oaWZfdXNiLmgKKysrIGIvZHJpdmVycy9uZXQvd2lyZWxlc3Mv
+YXRoL2F0aDlrL2hpZl91c2IuaApAQCAtODYsNiArODYsMTEgQEAgc3RydWN0IHR4X2J1ZiB7CiAJ
+c3RydWN0IGxpc3RfaGVhZCBsaXN0OwogfTsKIAorc3RydWN0IHJ4X2J1ZiB7CisJc3RydWN0IHNr
+X2J1ZmYgKnNrYjsKKwlzdHJ1Y3QgaGlmX2RldmljZV91c2IgKmhpZl9kZXY7Cit9OworCiAjZGVm
+aW5lIEhJRl9VU0JfVFhfU1RPUCAgQklUKDApCiAjZGVmaW5lIEhJRl9VU0JfVFhfRkxVU0ggQklU
+KDEpCiAKZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2F0aC9hdGg5ay9odGNfZHJ2
+X2luaXQuYyBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2F0aC9hdGg5ay9odGNfZHJ2X2luaXQuYwpp
+bmRleCBkOTYxMDk1YWIwMWYuLmQxZDBlZDZlNjUzYyAxMDA2NDQKLS0tIGEvZHJpdmVycy9uZXQv
+d2lyZWxlc3MvYXRoL2F0aDlrL2h0Y19kcnZfaW5pdC5jCisrKyBiL2RyaXZlcnMvbmV0L3dpcmVs
+ZXNzL2F0aC9hdGg5ay9odGNfZHJ2X2luaXQuYwpAQCAtOTgyLDcgKzk4Miw3IEBAIHZvaWQgYXRo
+OWtfaHRjX2Rpc2Nvbm5lY3RfZGV2aWNlKHN0cnVjdCBodGNfdGFyZ2V0ICpodGNfaGFuZGxlLCBi
+b29sIGhvdHVucGx1ZykKIAkJCWh0Y19oYW5kbGUtPmRydl9wcml2LT5haC0+YWhfZmxhZ3MgfD0g
+QUhfVU5QTFVHR0VEOwogCiAJCWF0aDlrX2RlaW5pdF9kZXZpY2UoaHRjX2hhbmRsZS0+ZHJ2X3By
+aXYpOwotCQlhdGg5a19kZWluaXRfd21pKGh0Y19oYW5kbGUtPmRydl9wcml2KTsKKwkJYXRoOWtf
+c3RvcF93bWkoaHRjX2hhbmRsZS0+ZHJ2X3ByaXYpOwogCQlpZWVlODAyMTFfZnJlZV9odyhodGNf
+aGFuZGxlLT5kcnZfcHJpdi0+aHcpOwogCX0KIH0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3dp
+cmVsZXNzL2F0aC9hdGg5ay9odGNfaHN0LmMgYi9kcml2ZXJzL25ldC93aXJlbGVzcy9hdGgvYXRo
+OWsvaHRjX2hzdC5jCmluZGV4IGQwOTFjOGViZGNmMC4uZDJlMDYyZWFmNTYxIDEwMDY0NAotLS0g
+YS9kcml2ZXJzL25ldC93aXJlbGVzcy9hdGgvYXRoOWsvaHRjX2hzdC5jCisrKyBiL2RyaXZlcnMv
+bmV0L3dpcmVsZXNzL2F0aC9hdGg5ay9odGNfaHN0LmMKQEAgLTExMyw2ICsxMTMsOSBAQCBzdGF0
+aWMgdm9pZCBodGNfcHJvY2Vzc19jb25uX3JzcChzdHJ1Y3QgaHRjX3RhcmdldCAqdGFyZ2V0LAog
+CiAJaWYgKHN2Y19yc3Btc2ctPnN0YXR1cyA9PSBIVENfU0VSVklDRV9TVUNDRVNTKSB7CiAJCWVw
+aWQgPSBzdmNfcnNwbXNnLT5lbmRwb2ludF9pZDsKKwkJaWYgKGVwaWQgPCAwIHx8IGVwaWQgPj0g
+RU5EUE9JTlRfTUFYKQorCQkJcmV0dXJuOworCiAJCXNlcnZpY2VfaWQgPSBiZTE2X3RvX2NwdShz
+dmNfcnNwbXNnLT5zZXJ2aWNlX2lkKTsKIAkJbWF4X21zZ2xlbiA9IGJlMTZfdG9fY3B1KHN2Y19y
+c3Btc2ctPm1heF9tc2dfbGVuKTsKIAkJZW5kcG9pbnQgPSAmdGFyZ2V0LT5lbmRwb2ludFtlcGlk
+XTsKQEAgLTE3MCw3ICsxNzMsNiBAQCBzdGF0aWMgaW50IGh0Y19jb25maWdfcGlwZV9jcmVkaXRz
+KHN0cnVjdCBodGNfdGFyZ2V0ICp0YXJnZXQpCiAJdGltZV9sZWZ0ID0gd2FpdF9mb3JfY29tcGxl
+dGlvbl90aW1lb3V0KCZ0YXJnZXQtPmNtZF93YWl0LCBIWik7CiAJaWYgKCF0aW1lX2xlZnQpIHsK
+IAkJZGV2X2Vycih0YXJnZXQtPmRldiwgIkhUQyBjcmVkaXQgY29uZmlnIHRpbWVvdXRcbiIpOwot
+CQlrZnJlZV9za2Ioc2tiKTsKIAkJcmV0dXJuIC1FVElNRURPVVQ7CiAJfQogCkBAIC0yMDYsNyAr
+MjA4LDYgQEAgc3RhdGljIGludCBodGNfc2V0dXBfY29tcGxldGUoc3RydWN0IGh0Y190YXJnZXQg
+KnRhcmdldCkKIAl0aW1lX2xlZnQgPSB3YWl0X2Zvcl9jb21wbGV0aW9uX3RpbWVvdXQoJnRhcmdl
+dC0+Y21kX3dhaXQsIEhaKTsKIAlpZiAoIXRpbWVfbGVmdCkgewogCQlkZXZfZXJyKHRhcmdldC0+
+ZGV2LCAiSFRDIHN0YXJ0IHRpbWVvdXRcbiIpOwotCQlrZnJlZV9za2Ioc2tiKTsKIAkJcmV0dXJu
+IC1FVElNRURPVVQ7CiAJfQogCkBAIC0yNzksNyArMjgwLDYgQEAgaW50IGh0Y19jb25uZWN0X3Nl
+cnZpY2Uoc3RydWN0IGh0Y190YXJnZXQgKnRhcmdldCwKIAlpZiAoIXRpbWVfbGVmdCkgewogCQlk
+ZXZfZXJyKHRhcmdldC0+ZGV2LCAiU2VydmljZSBjb25uZWN0aW9uIHRpbWVvdXQgZm9yOiAlZFxu
+IiwKIAkJCXNlcnZpY2VfY29ubnJlcS0+c2VydmljZV9pZCk7Ci0JCWtmcmVlX3NrYihza2IpOwog
+CQlyZXR1cm4gLUVUSU1FRE9VVDsKIAl9CiAKZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3dpcmVs
+ZXNzL2F0aC9hdGg5ay93bWkuYyBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2F0aC9hdGg5ay93bWku
+YwppbmRleCBjZGMxNDYwOTExOTQuLjlhZTYzMWJjYzg0ZSAxMDA2NDQKLS0tIGEvZHJpdmVycy9u
+ZXQvd2lyZWxlc3MvYXRoL2F0aDlrL3dtaS5jCisrKyBiL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2F0
+aC9hdGg5ay93bWkuYwpAQCAtMTIzLDYgKzEyMywyMCBAQCB2b2lkIGF0aDlrX2RlaW5pdF93bWko
+c3RydWN0IGF0aDlrX2h0Y19wcml2ICpwcml2KQogCWtmcmVlKHByaXYtPndtaSk7CiB9CiAKK3Zv
+aWQgYXRoOWtfc3RvcF93bWkoc3RydWN0IGF0aDlrX2h0Y19wcml2ICpwcml2KQoreworCXN0cnVj
+dCB3bWkgKndtaSA9IHByaXYtPndtaTsKKworCW11dGV4X2xvY2soJndtaS0+b3BfbXV0ZXgpOwor
+CXdtaS0+c3RvcHBlZCA9IHRydWU7CisJbXV0ZXhfdW5sb2NrKCZ3bWktPm9wX211dGV4KTsKK30K
+Kwordm9pZCBhdGg5a19kZXN0b3lfd21pKHN0cnVjdCBhdGg5a19odGNfcHJpdiAqcHJpdikKK3sK
+KwlrZnJlZShwcml2LT53bWkpOworfQorCiB2b2lkIGF0aDlrX3dtaV9ldmVudF9kcmFpbihzdHJ1
+Y3QgYXRoOWtfaHRjX3ByaXYgKnByaXYpCiB7CiAJdW5zaWduZWQgbG9uZyBmbGFnczsKQEAgLTMz
+Niw3ICszNTAsNiBAQCBpbnQgYXRoOWtfd21pX2NtZChzdHJ1Y3Qgd21pICp3bWksIGVudW0gd21p
+X2NtZF9pZCBjbWRfaWQsCiAJCWF0aF9kYmcoY29tbW9uLCBXTUksICJUaW1lb3V0IHdhaXRpbmcg
+Zm9yIFdNSSBjb21tYW5kOiAlc1xuIiwKIAkJCXdtaV9jbWRfdG9fbmFtZShjbWRfaWQpKTsKIAkJ
+bXV0ZXhfdW5sb2NrKCZ3bWktPm9wX211dGV4KTsKLQkJa2ZyZWVfc2tiKHNrYik7CiAJCXJldHVy
+biAtRVRJTUVET1VUOwogCX0KIApkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvYXRo
+L2F0aDlrL3dtaS5oIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvYXRoL2F0aDlrL3dtaS5oCmluZGV4
+IDM4MDE3NWQ1ZWNkNy4uYzNlMjc4Mzc3MzY1IDEwMDY0NAotLS0gYS9kcml2ZXJzL25ldC93aXJl
+bGVzcy9hdGgvYXRoOWsvd21pLmgKKysrIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvYXRoL2F0aDlr
+L3dtaS5oCkBAIC0xODksNiArMTg5LDggQEAgaW50IGF0aDlrX3dtaV9jbWQoc3RydWN0IHdtaSAq
+d21pLCBlbnVtIHdtaV9jbWRfaWQgY21kX2lkLAogdm9pZCBhdGg5a193bWlfZXZlbnRfdGFza2xl
+dCh1bnNpZ25lZCBsb25nIGRhdGEpOwogdm9pZCBhdGg5a19mYXRhbF93b3JrKHN0cnVjdCB3b3Jr
+X3N0cnVjdCAqd29yayk7CiB2b2lkIGF0aDlrX3dtaV9ldmVudF9kcmFpbihzdHJ1Y3QgYXRoOWtf
+aHRjX3ByaXYgKnByaXYpOwordm9pZCBhdGg5a19zdG9wX3dtaShzdHJ1Y3QgYXRoOWtfaHRjX3By
+aXYgKnByaXYpOwordm9pZCBhdGg5a19kZXN0b3lfd21pKHN0cnVjdCBhdGg5a19odGNfcHJpdiAq
+cHJpdik7CiAKICNkZWZpbmUgV01JX0NNRChfd21pX2NtZCkJCQkJCQlcCiAJZG8gewkJCQkJCQkJ
+XAo=
+--00000000000053adf805a2688f1a--
