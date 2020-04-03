@@ -2,191 +2,232 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C628819D06A
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Apr 2020 08:48:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C209119D551
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Apr 2020 12:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388457AbgDCGsf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Apr 2020 02:48:35 -0400
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:38739 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388472AbgDCGsf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Apr 2020 02:48:35 -0400
-Received: by mail-pj1-f65.google.com with SMTP id m15so2540399pje.3;
-        Thu, 02 Apr 2020 23:48:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=X8sH17jtDMINv9quf+CHHV/bCIE6kl8S5IdK86F1KQE=;
-        b=bOPWjYg7B8DH9QrulXs3F3wHHmfBrRkcoJhncqWc/qjbF/8MADE6iaxFrqrVL7n63C
-         c0UEmgkpkxg1YiwlaiwNHAYDYe0x/n2F7krhJFTLeLiDoymAT+IdIJbTXsWSdXrsVGyk
-         Yeu8mm9g9ttT7A0fpUbD93zm5tAos+ax/KJHdF8lBbq44zXyYrbUwR3nUWImUJDKtP8o
-         L2vEoag+x+xo00ebLKOkqTFsKYY85PmgrbI6j5MDW6xgF+/jU6Mi3U/jCxLjFridKtwE
-         uS8sioUYLEi8DnYmzN1WKPq5Pyc+G/BY1ZS7DOA92Md5zp75HnPGx8UVFZbEktKyLlqf
-         pvJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=X8sH17jtDMINv9quf+CHHV/bCIE6kl8S5IdK86F1KQE=;
-        b=jI+NbDbYuMMQDJa12nSnWH626zcgJQsmdOL+wo12RfsrPZX0LSWo1AELUmc00gtue3
-         VfgA+2+aAdmSyfBi8dFlm33slQernDq4XZT8PA//4tPw4L5HJmxZbWg8c7JYz2PIPwXM
-         QxUmQR/7UB7l8rDeg4mDAknC7fhu8ZDwrcgpiVrjiQGj1qdLJw8JWf7er8iiC3FIfmiq
-         V4BlCat7NsgCmExGTmAuQt/eIJPvSLLjZQyOQoviwyRr+YBNBB1XqgHg1EHN/D8FvKSs
-         XrIIi9B9qiOV59xATHtZMwE0+GZQASVV2fZjeunNnfpn27TNtYBuPKxdwMK6nTEhaLij
-         jjcQ==
-X-Gm-Message-State: AGi0PuZTiD2jgcONHE+VAi8lCBdKAyGIoyDbfKdhvm/uu83uw1xGKQRJ
-        Owyb7Df5lxJPD4ktpABH+R+4kWQyGwg=
-X-Google-Smtp-Source: APiQypIgxqh1DBnzx+8YsP5YKSJSTmMCy4ilEK1+IGjU0CJPpK8/Zzl472xC/xJqFtVSDjcQHF5BBQ==
-X-Received: by 2002:a17:902:9a45:: with SMTP id x5mr6107549plv.296.1585896514050;
-        Thu, 02 Apr 2020 23:48:34 -0700 (PDT)
-Received: from taoren-ubuntu-R90MNF91 (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
-        by smtp.gmail.com with ESMTPSA id x25sm4719713pgc.63.2020.04.02.23.48.32
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 02 Apr 2020 23:48:33 -0700 (PDT)
-Date:   Thu, 2 Apr 2020 23:48:27 -0700
-From:   Tao Ren <rentao.bupt@gmail.com>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Stephen Boyd <swboyd@chromium.org>, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org, taoren@fb.com
-Subject: Re: [PATCH v3] usb: gadget: aspeed: improve vhub port irq handling
-Message-ID: <20200403064826.GA10866@taoren-ubuntu-R90MNF91>
-References: <20200315191430.12379-1-rentao.bupt@gmail.com>
- <20200401215826.GA8248@taoren-ubuntu-R90MNF91>
- <512d625e45ea953d722bb7ea73c3619730312284.camel@kernel.crashing.org>
+        id S2403768AbgDCKw5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Apr 2020 06:52:57 -0400
+Received: from smtp.domeneshop.no ([194.63.252.55]:49219 "EHLO
+        smtp.domeneshop.no" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727854AbgDCKw4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Apr 2020 06:52:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=karl-arne.no; s=ds201912; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Date:Message-ID:Subject:From:To:Sender:Reply-To:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=zO7TWWSWETZVhbR9nZUfzr5yHtbTdLFs18kNQppvS74=; b=HqHXMjdoiIQOECU3RSm7LQK6qh
+        A+X1wpCQR8DqM2BdSaM8kLFJNr2MXPnoM1bwdg5OukcrG7l5k8ux5+mOXvOYgHJrdFcys5hP+G4Sk
+        Uk19nID9FqeqbCGHPicYKloiN7muE42APi7uJ/id2qo4yIAFq2iMAYeAi8DPjDXcFYIh/7qDh7PWx
+        OAddn0B26+BAJV1wi8mSSArWaS+zuRqSgt4Dtfn8PxlGrfo5QBtwRhGqHQbrtw/WDJHToeljDXtJ5
+        ETb6hL1MVgNi+wc7U4k5bo0xb1ID2Web4a06Kl/eiF52QEa7ve9PHWQ20Mi5znG3plqMLz9IpGU0M
+        UpXlNSiw==;
+Received: from [2a05:9cc4:7d:5592:a944:2af9:8958:43ad] (port=33050)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <linux@karl-arne.no>)
+        id 1jKJwT-0005mx-St
+        for linux-usb@vger.kernel.org; Fri, 03 Apr 2020 12:52:53 +0200
+To:     linux-usb@vger.kernel.org
+From:   "Linux@karl-arne.no" <linux@karl-arne.no>
+Subject: Panasonic NV GS27E on Linux Mint
+Message-ID: <07a9e05d-4a19-0f05-ae6e-48a5e28409c5@karl-arne.no>
+Date:   Fri, 3 Apr 2020 12:52:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <512d625e45ea953d722bb7ea73c3619730312284.camel@kernel.crashing.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 02, 2020 at 09:45:38PM +1100, Benjamin Herrenschmidt wrote:
-> On Wed, 2020-04-01 at 14:58 -0700, Tao Ren wrote:
-> > Hi Ben,
-> > 
-> > Any further comments on the patch?
-> 
-> Ah sorry, nope. Did you check the generated assembly to see if it
-> looked any better ? :-)
-> 
-> Otherwise,
-> 
-> Acked-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Hello.
 
-Thanks Ben for the review. Let me see if I can collect some runtime data
-on my ast2400 BMC platform. Will update back later.
+I am new to this list. I have a question.
+
+After some investigation can I now see my camera registred in the 
+kernel. I can still not see the usb device listed and have no access to 
+the camera. Here is a lot of information that Ihope can be in your 
+interests if you can help me out...
+
+$ dmesg
+
+[131379.369857] usb 2-3: new full-speed USB device number 54 using xhci_hcd
+[131379.520713] usb 2-3: New USB device found, idVendor=04da, 
+idProduct=231d, bcdDevice= 1.00
+[131379.520717] usb 2-3: New USB device strings: Mfr=1, Product=2, 
+SerialNumber=3
+[131379.520719] usb 2-3: Product: DVC
+[131379.520722] usb 2-3: Manufacturer: Panasonic
+[131379.520724] usb 2-3: SerialNumber: 0000b16313d5
+[131379.527065] uvcvideo: Found UVC 1.00 device DVC (04da:231d)
+[131379.528890] uvcvideo 2-3:1.0: Entity type for entity SU was not 
+initialized!
+[131379.528896] uvcvideo 2-3:1.0: Entity type for entity Camera was not 
+initialized!
+[131379.528900] uvcvideo 2-3:1.0: Entity type for entity MTIT was not 
+initialized!
+[131379.529170] input: DVC: Web-Camera as 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.0/input/input42
 
 
-Cheers,
+:~$ sudo udevadm monitor
+monitor will print the received events for:
+UDEV - the event which udev sends out after rule processing
+KERNEL - the kernel uevent
 
-Tao
-> 
-> > 
-> > Cheers,
-> > 
-> > Tao
-> > 
-> > On Sun, Mar 15, 2020 at 12:14:30PM -0700, rentao.bupt@gmail.com
-> > wrote:
-> > > From: Tao Ren <rentao.bupt@gmail.com>
-> > > 
-> > > This patch evaluates vhub ports' irq mask before going through per-
-> > > port
-> > > irq handling one by one, which helps to speed up irq handling in
-> > > case
-> > > there is no port interrupt.
-> > > 
-> > > Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
-> > > ---
-> > >  Changes in v3:
-> > >    - assign istat to (unsigned long) bitmap before calling
-> > >      "for_each_set_bit_from".
-> > >  Changes in v2:
-> > >    - use "for_each_set_bit" to speed up port irq handling.
-> > > 
-> > >  drivers/usb/gadget/udc/aspeed-vhub/core.c | 12 +++++++++---
-> > >  drivers/usb/gadget/udc/aspeed-vhub/vhub.h |  8 +++-----
-> > >  2 files changed, 12 insertions(+), 8 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/gadget/udc/aspeed-vhub/core.c
-> > > b/drivers/usb/gadget/udc/aspeed-vhub/core.c
-> > > index f8d35dd60c34..555e8645fb1e 100644
-> > > --- a/drivers/usb/gadget/udc/aspeed-vhub/core.c
-> > > +++ b/drivers/usb/gadget/udc/aspeed-vhub/core.c
-> > > @@ -134,11 +134,15 @@ static irqreturn_t ast_vhub_irq(int irq, void
-> > > *data)
-> > >  	}
-> > >  
-> > >  	/* Handle device interrupts */
-> > > -	for (i = 0; i < vhub->max_ports; i++) {
-> > > -		u32 dev_mask = VHUB_IRQ_DEVICE1 << i;
-> > > +	if (istat & vhub->port_irq_mask) {
-> > > +		unsigned long bitmap = istat;
-> > > +		int offset = VHUB_IRQ_DEV1_BIT;
-> > > +		int size = VHUB_IRQ_DEV1_BIT + vhub->max_ports;
-> > >  
-> > > -		if (istat & dev_mask)
-> > > +		for_each_set_bit_from(offset, &bitmap, size) {
-> > > +			i = offset - VHUB_IRQ_DEV1_BIT;
-> > >  			ast_vhub_dev_irq(&vhub->ports[i].dev);
-> > > +		}
-> > >  	}
-> > >  
-> > >  	/* Handle top-level vHub EP0 interrupts */
-> > > @@ -332,6 +336,8 @@ static int ast_vhub_probe(struct
-> > > platform_device *pdev)
-> > >  
-> > >  	spin_lock_init(&vhub->lock);
-> > >  	vhub->pdev = pdev;
-> > > +	vhub->port_irq_mask = GENMASK(VHUB_IRQ_DEV1_BIT + vhub-
-> > > >max_ports - 1,
-> > > +				      VHUB_IRQ_DEV1_BIT);
-> > >  
-> > >  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > >  	vhub->regs = devm_ioremap_resource(&pdev->dev, res);
-> > > diff --git a/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
-> > > b/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
-> > > index fac79ef6d669..23a1ac91f8d2 100644
-> > > --- a/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
-> > > +++ b/drivers/usb/gadget/udc/aspeed-vhub/vhub.h
-> > > @@ -51,14 +51,11 @@
-> > >  #define VHUB_CTRL_UPSTREAM_CONNECT		(1 << 0)
-> > >  
-> > >  /* IER & ISR */
-> > > +#define VHUB_IRQ_DEV1_BIT			9
-> > >  #define VHUB_IRQ_USB_CMD_DEADLOCK		(1 << 18)
-> > >  #define VHUB_IRQ_EP_POOL_NAK			(1 << 17)
-> > >  #define VHUB_IRQ_EP_POOL_ACK_STALL		(1 << 16)
-> > > -#define VHUB_IRQ_DEVICE5			(1 << 13)
-> > > -#define VHUB_IRQ_DEVICE4			(1 << 12)
-> > > -#define VHUB_IRQ_DEVICE3			(1 << 11)
-> > > -#define VHUB_IRQ_DEVICE2			(1 << 10)
-> > > -#define VHUB_IRQ_DEVICE1			(1 << 9)
-> > > +#define VHUB_IRQ_DEVICE1			(1 <<
-> > > (VHUB_IRQ_DEV1_BIT))
-> > >  #define VHUB_IRQ_BUS_RESUME			(1 << 8)
-> > >  #define VHUB_IRQ_BUS_SUSPEND 			(1 << 7)
-> > >  #define VHUB_IRQ_BUS_RESET 			(1 << 6)
-> > > @@ -402,6 +399,7 @@ struct ast_vhub {
-> > >  	/* Per-port info */
-> > >  	struct ast_vhub_port		*ports;
-> > >  	u32				max_ports;
-> > > +	u32				port_irq_mask;
-> > >  
-> > >  	/* Generic EP data structures */
-> > >  	struct ast_vhub_ep		*epns;
-> > > -- 
-> > > 2.17.1
-> > > 
-> 
+KERNEL[137510.512307] add /devices/pci0000:00/0000:00:14.0/usb2/2-3 (usb)
+KERNEL[137510.515438] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.0 (usb)
+KERNEL[137510.518719] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.0/video4linux/video2 
+(video4linux)
+KERNEL[137510.518954] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.0/video4linux/video3 
+(video4linux)
+KERNEL[137510.519151] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.0/media1 (media)
+KERNEL[137510.519352] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.0/input/input45 (input)
+KERNEL[137510.519490] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.0/input/input45/event17 
+(input)
+KERNEL[137510.519593] bind 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.0 (usb)
+KERNEL[137510.520607] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.1 (usb)
+KERNEL[137510.520756] bind 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.1 (usb)
+KERNEL[137510.520854] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.2 (usb)
+KERNEL[137510.522548] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.2/sound/card2 (sound)
+KERNEL[137510.523760] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.2/sound/card2/pcmC2D0c 
+(sound)
+KERNEL[137510.523812] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.2/sound/card2/controlC2 
+(sound)
+KERNEL[137510.523865] bind 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.2 (usb)
+KERNEL[137510.523910] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.3 (usb)
+KERNEL[137510.523957] bind 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.3 (usb)
+KERNEL[137510.524007] bind /devices/pci0000:00/0000:00:14.0/usb2/2-3 (usb)
+UDEV  [137510.557083] add /devices/pci0000:00/0000:00:14.0/usb2/2-3 (usb)
+UDEV  [137510.560369] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.0 (usb)
+UDEV  [137510.561955] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.2 (usb)
+UDEV  [137510.564563] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.1 (usb)
+UDEV  [137510.567597] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.2/sound/card2 (sound)
+UDEV  [137510.569183] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.3 (usb)
+UDEV  [137510.569242] bind 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.1 (usb)
+UDEV  [137510.573796] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.0/media1 (media)
+UDEV  [137510.575225] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.0/video4linux/video2 
+(video4linux)
+UDEV  [137510.575747] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.0/video4linux/video3 
+(video4linux)
+UDEV  [137510.579563] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.2/sound/card2/pcmC2D0c 
+(sound)
+UDEV  [137510.581118] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.0/input/input45 (input)
+KERNEL[137510.581594] change 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.2/sound/card2 (sound)
+UDEV  [137510.581964] bind 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.3 (usb)
+UDEV  [137510.594775] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.2/sound/card2/controlC2 
+(sound)
+UDEV  [137510.599292] bind 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.2 (usb)
+UDEV  [137510.634954] add 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.0/input/input45/event17 
+(input)
+UDEV  [137510.638198] bind 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.0 (usb)
+UDEV  [137510.640240] bind /devices/pci0000:00/0000:00:14.0/usb2/2-3 (usb)
+UDEV  [137510.642502] change 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.2/sound/card2 (sound)
+
+
+
+
+~$ sudo udevadm info --path=/devices/pci0000:00/0000:00:14.0/usb2/2-3
+P: /devices/pci0000:00/0000:00:14.0/usb2/2-3
+N: bus/usb/002/055
+E: BUSNUM=002
+E: DEVNAME=/dev/bus/usb/002/055
+E: DEVNUM=055
+E: DEVPATH=/devices/pci0000:00/0000:00:14.0/usb2/2-3
+E: DEVTYPE=usb_device
+E: DRIVER=usb
+E: ID_BUS=usb
+E: ID_MODEL=DVC
+E: ID_MODEL_ENC=DVC
+E: ID_MODEL_FROM_DATABASE=DVC Web Camera Device
+E: ID_MODEL_ID=231d
+E: ID_REVISION=0100
+E: ID_SERIAL=Panasonic_DVC_0000b16313d5
+E: ID_SERIAL_SHORT=0000b16313d5
+E: ID_USB_INTERFACES=:0e0100:0e0200:010100:010200:
+E: ID_VENDOR=Panasonic
+E: ID_VENDOR_ENC=Panasonic
+E: ID_VENDOR_FROM_DATABASE=Panasonic (Matsushita)
+E: ID_VENDOR_ID=04da
+E: MAJOR=189
+E: MINOR=182
+E: PRODUCT=4da/231d/100
+E: SUBSYSTEM=usb
+E: TYPE=239/2/1
+E: USEC_INITIALIZED=132815614640
+
+
+dmesg | tail
+[138098.871354] usb 2-3: New USB device found, idVendor=04da, 
+idProduct=231d, bcdDevice= 1.00
+[138098.871360] usb 2-3: New USB device strings: Mfr=1, Product=2, 
+SerialNumber=3
+[138098.871364] usb 2-3: Product: DVC
+[138098.871367] usb 2-3: Manufacturer: Panasonic
+[138098.871370] usb 2-3: SerialNumber: 0000b16313d5
+[138098.877601] uvcvideo: Found UVC 1.00 device DVC (04da:231d)
+[138098.880262] uvcvideo 2-3:1.0: Entity type for entity SU was not 
+initialized!
+[138098.880268] uvcvideo 2-3:1.0: Entity type for entity Camera was not 
+initialized!
+[138098.880272] uvcvideo 2-3:1.0: Entity type for entity MTIT was not 
+initialized!
+[138098.880431] input: DVC: Web-Camera as 
+/devices/pci0000:00/0000:00:14.0/usb2/2-3/2-3:1.0/input/input47
+
+
+in /etc/udev/rules.d I have created this file:
+
+-usb.rules with those two lines.
+
+SUBSYSTEM=="usb", ACTION=="add", DRIVER=="usb", 
+ENV{DEVTYPE}=="usb_device" RUN+="/home/karl/koble_til_usb.sh"
+SUBSYSTEM=="usb", ACTION=="remove", DRIVER=="usb" 
+ENV{DEVTYPE}=="usb_device" RUN+="/home/karl/koble_fra_usb.sh"
+
+I have never tried this before so therefore all this information. I love 
+this stuff but now I need help!
+
+Thanks for your advice.
+
+Karl
+
