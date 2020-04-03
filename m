@@ -2,139 +2,284 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F29C19DDC0
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Apr 2020 20:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C11E719DDFB
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Apr 2020 20:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390962AbgDCSSi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Apr 2020 14:18:38 -0400
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:38563 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728268AbgDCSSh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Apr 2020 14:18:37 -0400
-Received: by mail-pj1-f65.google.com with SMTP id m15so3298385pje.3;
-        Fri, 03 Apr 2020 11:18:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=XyOcRqHLrPMKWL0+JCToAyCGJJg9Vdkcz8glcxLfQsY=;
-        b=ILFYgyubl8EZk3gAnCfiFTzzgD6EDawXKLLuYpR4xGfNSvpQRhdd2gt6aT1KSee0fi
-         gCeeigsN7dAe4UWcrr4JBXqCqOVm6q5KX2ASNntgXyFgwVBqUYf+NnHBGG8Dob9ZPGOA
-         buqRasH4wFH8/JUfGTVhzq2/RVPmK/YWT2FJEj3Vgxl9B5CorEAWmASlAd6PxeWAGvMS
-         iUtOOJydqkpgYxC3/M2Dld4oqYMMcfkn/yAxSZRnbGaLaWsFe2e10tL2EdrQWVuRwNAo
-         QMxjkkUfgTyBZUlXVYAIbThKxEtPNChSuuWUg06MuxJYxpK1pLIGCgOAieb596eMeca/
-         RKRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=XyOcRqHLrPMKWL0+JCToAyCGJJg9Vdkcz8glcxLfQsY=;
-        b=D4wrF9zPLggbsQI+dzW+kE0MGaXotOzmKt1l7VqGFHAdeCWv1InAhJ9HemaBLYETaw
-         8QXFVYvrM30ona1YWdMxmLud50VDPEUeFjMV41RIhRogVLmmUjwH0E4HvT41yxgq0pLn
-         Tqohr4GtUpNADGlbTui8ei8s6sQlksjMeECpx5orB6Wg1eyqi8BGxCy8VGu9OQ+cDagh
-         dekuSW/eJbM0G8/adWDKSW1sCfhGfvqhoYZk2RApI3qWGZy9zxyZE6mdG8DoSafAA/l2
-         qYQ5dX/WWNdLi3keTJCNto2cm8Um3ixm2eGCMP0LNVp8u6g23+c8IQMqKDtzArSk1a9B
-         s0Cw==
-X-Gm-Message-State: AGi0PuYeNE8zYL7TU2lHqttdqiHKN2/ZVRdCr1YiMWbblyGNzsAqH52K
-        +kPmDvi3hE6LeIFMF7p/08vlPUk=
-X-Google-Smtp-Source: APiQypJNWzRaLCfW1ZN5MjEnanFUEM0GaLuid95rtKhYEECecqDPgywodDlnjVvpHUmPkE0hN7jdrQ==
-X-Received: by 2002:a17:902:ac8d:: with SMTP id h13mr9142477plr.267.1585937916376;
-        Fri, 03 Apr 2020 11:18:36 -0700 (PDT)
-Received: from localhost.localdomain ([2402:3a80:d32:bec6:f832:439c:9244:ba33])
-        by smtp.gmail.com with ESMTPSA id f200sm6322893pfa.177.2020.04.03.11.18.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Apr 2020 11:18:35 -0700 (PDT)
-From:   madhuparnabhowmik10@gmail.com
-To:     gregkh@linuxfoundation.org, hariprasad.kelam@gmail.com,
-        colin.king@canonical.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ldv-project@linuxtesting.org, andrianov@ispras.ru,
-        stern@rowland.harvard.edu,
-        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
-Subject: [PATCH] usb: host: u132-hcd: Remove u132_static_list and list head u132_list
-Date:   Fri,  3 Apr 2020 23:48:16 +0530
-Message-Id: <20200403181816.8115-1-madhuparnabhowmik10@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S2404206AbgDCSca (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Apr 2020 14:32:30 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:47414 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728329AbgDCSc3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Apr 2020 14:32:29 -0400
+Received: from 185.80.35.16 (185.80.35.16) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.341)
+ id 2b0e6a1e55971b4a; Fri, 3 Apr 2020 20:32:26 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Qais Yousef <qais.yousef@arm.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux-pm mailing list <linux-pm@vger.kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
+Date:   Fri, 03 Apr 2020 20:32:25 +0200
+Message-ID: <3728342.COPzmv9P3G@kreacher>
+In-Reply-To: <Pine.LNX.4.44L0.2004031135130.7035-100000@netrider.rowland.org>
+References: <Pine.LNX.4.44L0.2004031135130.7035-100000@netrider.rowland.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+On Friday, April 3, 2020 6:41:05 PM CEST Alan Stern wrote:
+> On Fri, 3 Apr 2020, Rafael J. Wysocki wrote:
+> 
+> > I'll address the other points in your message separately.
+> > 
+> > The rules for SMART_SUSPEND are as follows:
+> 
+> These rules are a sort of high-level overview.  They don't (for the
+> most part) say exactly what will happen, in terms of which callbacks
+> will be issued and under what circumstances.  I have tried to provide 
+> such a description inline below.
+> 
+> > (a) If SMART_SUSPEND is set and the device is runtime-suspended during system
+> >     suspend, it is not expected to be resumed by the core or the middle layer
+> >     (subsystem) code unless the latter has a specific reason to do that (e.g.
+> >     it knows that the device needs to be reconfigured which cannot be done
+> >     without resuming it).
+> > 
+> >     The device can still be resumed when it is needed to suspend a dependent
+> >     device, but that cannot happen before the "late suspend" phase.
+> 
+> Don't you mean it cannot happen during or after the "late suspend"  
+> phase?
 
-u132_static_list is a global list protected by u132_module_lock.
-It is read in the u132_hcd_exit() function without holding the lock
-thus may lead to data race.
-However, it turns out that this list isn't used for anything useful
-and thus it is okay to get rid of it.
-Thus, remove the u132_static_list from u132-hcd module.
-Also remove struct list_head u132_list from struct u132.
+Yes, I do.
 
-Found by Linux Driver Verification project (linuxtesting.org).
+> (More precisely, it cannot happen after the time when the core
+> would issue the device's ->suspend_late callback, but it can happen
+> between that time and the time when the "late suspend" phase began --
+> for example, from within the dependent device's ->suspend_late
+> callback.)  After all, __device_suspend_late() calls
+> __pm_runtime_disable(), following which the device _cannot_ be runtime
+> resumed.
 
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
----
- drivers/usb/host/u132-hcd.c | 10 ----------
- 1 file changed, 10 deletions(-)
+Right.
 
-diff --git a/drivers/usb/host/u132-hcd.c b/drivers/usb/host/u132-hcd.c
-index e9209e3e6248..995bc52d2d22 100644
---- a/drivers/usb/host/u132-hcd.c
-+++ b/drivers/usb/host/u132-hcd.c
-@@ -81,7 +81,6 @@ static DECLARE_WAIT_QUEUE_HEAD(u132_hcd_wait);
- static struct mutex u132_module_lock;
- static int u132_exiting;
- static int u132_instances;
--static struct list_head u132_static_list;
- /*
- * end of the global variables protected by u132_module_lock
- */
-@@ -177,7 +176,6 @@ struct u132_ring {
- };
- struct u132 {
- 	struct kref kref;
--	struct list_head u132_list;
- 	struct mutex sw_lock;
- 	struct mutex scheduler_lock;
- 	struct u132_platform_data *board;
-@@ -254,7 +252,6 @@ static void u132_hcd_delete(struct kref *kref)
- 	struct usb_hcd *hcd = u132_to_hcd(u132);
- 	u132->going += 1;
- 	mutex_lock(&u132_module_lock);
--	list_del_init(&u132->u132_list);
- 	u132_instances -= 1;
- 	mutex_unlock(&u132_module_lock);
- 	dev_warn(&u132->platform_dev->dev, "FREEING the hcd=%p and thus the u13"
-@@ -3089,7 +3086,6 @@ static int u132_probe(struct platform_device *pdev)
- 		retval = 0;
- 		hcd->rsrc_start = 0;
- 		mutex_lock(&u132_module_lock);
--		list_add_tail(&u132->u132_list, &u132_static_list);
- 		u132->sequence_num = ++u132_instances;
- 		mutex_unlock(&u132_module_lock);
- 		u132_u132_init_kref(u132);
-@@ -3192,7 +3188,6 @@ static struct platform_driver u132_platform_driver = {
- static int __init u132_hcd_init(void)
- {
- 	int retval;
--	INIT_LIST_HEAD(&u132_static_list);
- 	u132_instances = 0;
- 	u132_exiting = 0;
- 	mutex_init(&u132_module_lock);
-@@ -3213,14 +3208,9 @@ static int __init u132_hcd_init(void)
- module_init(u132_hcd_init);
- static void __exit u132_hcd_exit(void)
- {
--	struct u132 *u132;
--	struct u132 *temp;
- 	mutex_lock(&u132_module_lock);
- 	u132_exiting += 1;
- 	mutex_unlock(&u132_module_lock);
--	list_for_each_entry_safe(u132, temp, &u132_static_list, u132_list) {
--		platform_device_unregister(u132->platform_dev);
--	}
- 	platform_driver_unregister(&u132_platform_driver);
- 	printk(KERN_INFO "u132-hcd driver deregistered\n");
- 	wait_event(u132_hcd_wait, u132_instances == 0);
--- 
-2.17.1
+> Putting this in operational terms, it seems to say that if
+> SMART_SUSPEND is set and the device is runtime-suspended at the times
+> when the core would normally issue the driver's ->suspend_late or
+> ->suspend_noirq callback, then the core will skip the callback (with a
+> similar requirement for subsystems).  Correct?
+
+Yes.
+
+> > (b) Drivers that set SMART_SUSPEND are allowed to reuse their PM-runtime
+> >     callbacks for system-wide suspend and resume.
+> > 
+> >     That is, they can point either the ->suspend_late or the ->suspend_noirq
+> >     callback pointer to the same function as ->runtime_suspend and they can
+> >     point either the ->resume_noirq or ->the resume_early callback to the'
+> >     same function as ->runtime_resume.
+> 
+> Well, in theory any driver or subsystem can do this whenever it wants
+> to, regardless of any flag settings.
+
+Not exactly.
+
+Say the driver wants to point both ->runtime_suspend and ->suspend_late to
+the same function.
+
+If the bus type doesn't provide system-wide PM callbacks at all (which is
+the case for some bus types), that only works if the device is never
+runtime-suspended when ->suspend_late is about to run, because otherwise
+the function in question needs to check the context in which it is running
+(PM-runtime vs system-wide and runtime-suspended vs runtime-active in the
+latter case) which at least is awkward and hard to get right.
+
+> It's then up to the driver or
+> subsystem to make sure the callback "does the right thing".
+
+In theory.
+
+> What I'm concerned about now is: What guarantees can the core give to 
+> the driver and subsystem, so that they will know what is necessary in 
+> order to "do the right thing"?
+
+I'm not sure what you mean.
+
+If the subsystem provides callbacks, the core will run them regardless.
+
+If it does not provide callbacks, the core will skip ->suspend_late and
+->suspend_noirq for the driver and the device will remain suspended.
+
+If SMART_SUSPEND is not set, the core will execute all of the callbacks
+that are present.
+
+> > (c) Drivers that set SMART_SUSPEND are alwo allowed to provide special
+> >     simplified callbacks for the "freeze" and "thaw" transitions during
+> >     hibernation (and restore) and (if they do so) special callbacks for the
+> >     "restore" phase.
+> 
+> What do you mean by "simplified"?
+
+Avoiding actual PM.
+
+> As I see it, the suspend-side callbacks are generally responsible for 
+> four things:
+> 
+> 	1. Quiesce the device (finish ongoing I/O and do not allow any
+> 	   more to start).
+> 
+> 	2. Save the current device state.
+> 
+> 	3. Install the appropriate wakeup settings.
+> 
+> 	4. Put the device into low-power mode.
+> 
+> (Not explicitly listed: Perform a runtime-resume if needed in order to
+> carry out these four items.)
+> 
+> During a SUSPEND transition, we usually expect all four to happen.  
+> During a FREEZE transition, we only require 1.
+
+That's what I mean by "simplified".
+
+> During a POWEROFF
+> transition we require 1 and 3, and possibly 4 (depending on how the
+> platform handles poweroff).
+
+But doing 2 is not a bug AFAICS.
+
+> Similar requirements apply to the resume-side callbacks.  (But note 
+> that RESTORE is not the inverse of POWEROFF; it is more like an inverse 
+> of FREEZE with the added complication that the device's initial state 
+> is unknown.)
+
+It actually isn't even an inverse of FREEZE.  It is like RESUME with the
+additional requirements that (a) it can never be skipped and (b) the
+device need not be in a low-power state when it runs (the initial state
+of it is unknown if you will).
+
+> What changes to this analysis would SMART_SUSPEND allow?  None if the 
+> device is runtime-active.  But if the device is runtime-suspended and 
+> the wakeup settings don't need to be changed, then presumably none of 
+> the four items are necessary.
+> 
+> Is this what you mean?
+
+No.
+
+What I meant was that even if the driver pointed ->runtime_suspend and
+->suspend_late (say) to the same function and it pointed ->resume_early
+and ->runtime_resume to the same function, it didn't have to point
+->freeze_late and ->thaw_early to the same pair of functions, respectively.
+
+It can point ->freeze_late and ->thaw_early to a pair of different functions
+that only quiesce the device and reverse that, respectively.
+
+> > [OK, I realize that (b) and (c) are not documented, see the notes below.]
+> > 
+> > Because of (a), if the device with SMART_SUSPEND set is still runtime-suspended
+> > during the "late" phase of suspend, the core will not invoke the driver's
+> > "late" and "noirq" suspend callbacks directly (*).  Middle layer (subsystem)
+> > code is expected to behave accordingly.
+> 
+> Okay, this agrees with what I wrote above.
+> 
+> > Because of (b), if the "late" and "noirq" driver callbacks were skipped during
+> > the "freeze" transition, the core will also avoid invoking the "noirq" and
+> > "early" callbacks provided by the driver during the "thaw" transition and
+> > the callbacks during the "restore" transition will be executed unconditionally
+> > (**).  Middle layer code is expected to behave accordingly.
+> 
+> All right.  To summarize: If the driver's ->freeze_late callback is
+> skipped then the driver's ->thaw-early will be skipped, and similarly
+> for ->freeze_noirq and ->thaw_noirq.  But RESTORE callbacks are never
+> skipped.  Correct?
+
+Yes.
+
+> However, the most difficult transitions are SUSPEND and RESUME.  Is it
+> accurate to say that if the driver's ->suspend_late callback is skipped
+> then the driver's ->resume_early will be skipped, and similarly for
+> ->suspend_noirq and ->resume_noirq?
+
+If LEAVE_SUSPENDED is set in addition to SMART_SUSPEND, then yes.
+
+> > Notes:
+> > 
+> > 1. I have considered splitting SMART_SUSPEND into two or even three flags
+> >    so that (a), (b) and (c) are each associated with a separate flag, but
+> >    then I would expect the majority of users to use all of them anyway.
+> > 
+> > 2. LEAVE_SUSPENDED (which may be better renamed to SKIP_RESUME) is kind of
+> >    expected to be used along with SMART_SUSPEND unless there is a good enough
+> >    reason to avoid using it.  I admit that this isn't really straightforward,
+> >    maybe the default behavior should be to skip the resume and there should be
+> >    FORCE_RESUME instead of LEAVE_SUSPENDED.
+> 
+> One question not addressed above (in fact, the original reason for 
+> getting you involved in this discussion): What about the device's 
+> power.runtime_status?  Shall we say that that core will call 
+> pm_runtime_set_active() at some point before issuing the ->complete 
+> callback unless some combination of flags is set?  And what should that 
+> combination be?
+> 
+> After all, we expect that most drivers will want their devices to be in 
+> the runtime-active state at the end of a system sleep or hibernation.  
+> It makes sense for the core to do the necessary housekeeping.
+
+The core will set the PM-runtime status to "active" in device_resume_noirq()
+if (a) the subsystem callbacks are not invoked (otherwise the subsystem is
+responsible for doing that) and (b) if the driver's callback not skipped
+(in which case its ->resume_early callback will not be skipped too).
+
+> > 3. (*) Under the assumption that either ->suspend_late or ->suspend_noirq
+> >    points to the same routine as ->runtime_suspend (and the other is NULL),
+> >    invokig that callback for a runtime-suspended device is technically invalid.
+> 
+> Does this invalidate anything I wrote above?
+
+I don't think so.  It is the reason why driver callbacks are skipped for
+runtime-suspended devices.
+
+> >    In turn, under the assumption that either ->resume_early or ->resume_noirq
+> >    points to the same routine as ->runtime_resume (and the other is NULL), it is
+> >    valid to invoke that callback if the late/noirq suspend was skipped.
+> 
+> In other words, it's okay for the core either to issue or skip those 
+> callbacks.  Presumably the decision will be made based on some flag 
+> setting?
+
+Yes.  A flag combined with the PM-runtime status of the device in
+device_suspend_noirq().
+
+> > 4. (**) If the "freeze" and "thaw" callbacks are simplified, they cannot be
+> >    run back-to-back with ->runtime_resume and ->runtime_suspend, respectively.
+> >    Thus if "freeze" is skippend, "thaw" must be skipped too.  However,
+> >    "restore" needs to be prepared to be invoked after "freeze" or
+> >    ->runtime_suspend (and the state of the device may not match the
+> >    callback that ran previously), so it must be special.
+> > 
+> > 5. I agree that skipping the driver level of callbacks depending on what is
+> >    provided by the middle layer is inconsistent, but I wanted to take the
+> >    users of pm_runtime_force_suspend/resume() into account by letting those
+> >    things run.
+> > 
+> >    It would be more consistent to expect middle layer code (bus types, PM
+> >    domains) to provide either all of the noirq/early/late callbacks, or none
+> >    of them and make SMART_SUSPEND and pm_runtime_force_suspend/resume()
+> >    mutually exclusive.
+> 
+> I don't have a clear idea of how pm_runtime_force_suspend/resume() gets 
+> used.  Are we better off ignoring it for the time being?
+
+Yes, we are.
+
+
 
