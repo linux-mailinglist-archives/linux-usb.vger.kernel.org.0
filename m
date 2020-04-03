@@ -2,162 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C05F719CE5F
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Apr 2020 03:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC9619CE72
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Apr 2020 03:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390320AbgDCBwC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Apr 2020 21:52:02 -0400
-Received: from mail-vs1-f68.google.com ([209.85.217.68]:32897 "EHLO
-        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388709AbgDCBwB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 21:52:01 -0400
-Received: by mail-vs1-f68.google.com with SMTP id y138so3995016vsy.0;
-        Thu, 02 Apr 2020 18:52:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yzcUwwZAx9cJWhIKNDwF4fx+PYIpeHg0vU5fbIxqvk8=;
-        b=QQu7IOoXLIXwr9uFFFsFQuEwoANIn0gcVdZ05Xr8+MnHevxePg4/WaiD/1GSzFPlnQ
-         txHHlNqqaRyFMXDFYxTQj+2tZuFt0S/nq8MO13fPbFiGoUpp6Be+QbpWJkPgLRgHM5jK
-         CWUzcLi2M1uERabWALn1BENWz8QAKV1F6LGoReElyfzGo1rEfCM49Hn4NlcP5wuF8YmH
-         IlAidr13QaSFmTG4srvDVZfxT5h6Fyqhz6S1xNjdBBAMvcTJ/9IKps/GJ+hOowlOJJJf
-         IxwDz2la/y0FlTWOQPgUHVLUutT2ZIsI6IjQINvh9Yb9/5KelKlWmfrgXLCY81+YjYja
-         K8xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yzcUwwZAx9cJWhIKNDwF4fx+PYIpeHg0vU5fbIxqvk8=;
-        b=Qv91AwezIHd257ACbvW8F+vv8lFSu0U5z0qQvX8QQlmtCiAyINqlpaZvCdCXUxyGZR
-         HDBsyTGjmC6YTStUp+3wgCnzaJJ670W4O6zM6TOSjEHSli6qvoTe2Yz5bDaL2jHTVzcB
-         vOiiNkarPJCfond7KAn/PWlxbMXQ3zkj+d1DKc1Ks/NCDfM14OfLR9xrc3WJ1y+AzD4s
-         YLKhKcRElAPiC2o3BdPkCsNnfAqnltkdNw7tZ4F1WhpZhEm9lkVfsiSoRJjMu8c1n75q
-         0v2dsUWwyp1RD2MuTKqyX0H6O4DD8FG6Qk+FRjcGLxK2gx0LHk8YaiF2UsNVs/AiEiYE
-         u2ew==
-X-Gm-Message-State: AGi0PuY3q3zbfHtnLdkmKgS4TQ329fqrCwKN1i/l7KaD/Wrr7XMPZe5l
-        oRio0K72q8Q4ZGNroNN6+7ZrJEoHhy4mEahuqM5sOZbj
-X-Google-Smtp-Source: APiQypJrlBnfOocvs6kqoA3k8N+fJ+UdXwLIEkJZ0HucmWLImsUfpuxCQi+C5w7anhz/V5UO10i+Q6vZiqMQipvFf8c=
-X-Received: by 2002:a67:fe41:: with SMTP id m1mr5103781vsr.174.1585878720525;
- Thu, 02 Apr 2020 18:52:00 -0700 (PDT)
+        id S2390176AbgDCB7X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Apr 2020 21:59:23 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:50474 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2389919AbgDCB7X (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Apr 2020 21:59:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1585879162;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gEDm5BrYJL3oTWRM1eaRB2PsA66yue+/A7GGuTldfzk=;
+        b=I1MhiJQJ7boPpuA6xR+0M3+crkpMfQ19PHpD1AZa6luzF/wLraSOM+DFHaLCY+H4FO1Jlb
+        PfZrSiDtFdnRojn9eE1KUE2/oCpcQbPgII4pwxjYbs7PhshzHa3bdr9JXAbPrxLHC95Ge3
+        ngd0/asFx73vDiR7BHot/9m7zT0IFUU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-89-WoGMyB3ZOHmeTNw4_7wMuQ-1; Thu, 02 Apr 2020 21:59:20 -0400
+X-MC-Unique: WoGMyB3ZOHmeTNw4_7wMuQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BEC43107ACC9;
+        Fri,  3 Apr 2020 01:59:19 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.10.110.40])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 34C1996B99;
+        Fri,  3 Apr 2020 01:59:19 +0000 (UTC)
+Message-ID: <49b60dd7735657d5b0cbfdff3bb9bd26306c2953.camel@redhat.com>
+Subject: Re: Alcatel x602d driver
+From:   Dan Williams <dcbw@redhat.com>
+To:     Benjamin Sembel <benjamin.sembel@gmx.de>, linux-usb@vger.kernel.org
+Date:   Thu, 02 Apr 2020 20:59:18 -0500
+In-Reply-To: <6ae3dfed-fcc0-0933-23b1-ef30db89dda0@gmx.de>
+References: <6ae3dfed-fcc0-0933-23b1-ef30db89dda0@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.5 (3.32.5-1.fc30) 
 MIME-Version: 1.0
-References: <000000000000666c9c05a1c05d12@google.com>
-In-Reply-To: <000000000000666c9c05a1c05d12@google.com>
-From:   Qiujun Huang <anenbupt@gmail.com>
-Date:   Fri, 3 Apr 2020 09:51:48 +0800
-Message-ID: <CADG63jAUxAFXRpxeyQodbt5kPouvfd+XoaXWWawd3kVMwMWwxg@mail.gmail.com>
-Subject: Re: general protection fault in ath9k_hif_usb_rx_cb
-To:     syzbot <syzbot+40d5d2e8a4680952f042@syzkaller.appspotmail.com>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        ath9k-devel@qca.qualcomm.com, davem@davemloft.net,
-        kvalo@codeaurora.org, LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: multipart/mixed; boundary="000000000000cb617405a25929ad"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---000000000000cb617405a25929ad
-Content-Type: text/plain; charset="UTF-8"
+On Thu, 2020-04-02 at 22:51 +0200, Benjamin Sembel wrote:
+> Hi,
+> 
+> I have an alcatel x602d umts stick with vendor id 1bbb and 022c.
+> After
+> using usb_modeswitch to switch it to configuration 2 it has no driver
+> attached. I managed to get it working with "modprobe usbserial -v
+> 1bbb
+> -b 022c" and wvdial with this configuration:
 
-#syz test: https://github.com/google/kasan.git usb-fuzzer
+What do you get when you run:
 
---000000000000cb617405a25929ad
-Content-Type: application/octet-stream; 
-	name="0001-ath9k-fix-use-after-free-read-in-htc_connect_service.patch"
-Content-Disposition: attachment; 
-	filename="0001-ath9k-fix-use-after-free-read-in-htc_connect_service.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_k8jj8hpg0>
-X-Attachment-Id: f_k8jj8hpg0
+lsusb -v -d 1bbb:022c
 
-RnJvbSA2MWE3N2JiMjE3OTJiYTIzMjMyOTk4ODBhYzRhMDdjNmZlMGI5NGEwIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBRaXVqdW4gSHVhbmcgPGhxamFnYWluQGdtYWlsLmNvbT4KRGF0
-ZTogVHVlLCAzMSBNYXIgMjAyMCAyMDoxODo1NiArMDgwMApTdWJqZWN0OiBbUEFUQ0hdIGF0aDlr
-OiBmaXggdXNlLWFmdGVyLWZyZWUgcmVhZCBpbiBodGNfY29ubmVjdF9zZXJ2aWNlCgooMSlUaGUg
-c2tiIGlzIGNvbnN1bWVkIGJ5IGh0Y19zZW5kX2VwaWQuCigyKWZyZWUgd21pIGxhdGVyIGFmdGVy
-IHVyYiBoYXMgYmVlbiBraWxsZWQuCigzKWNoZWNrIHRoZSBlbmRwb2ludF9pZC4KClNpZ25lZC1v
-ZmYtYnk6IFFpdWp1biBIdWFuZyA8aHFqYWdhaW5AZ21haWwuY29tPgotLS0KIGRyaXZlcnMvbmV0
-L3dpcmVsZXNzL2F0aC9hdGg5ay9oaWZfdXNiLmMgICAgICB8ICA0ICsrKy0KIGRyaXZlcnMvbmV0
-L3dpcmVsZXNzL2F0aC9hdGg5ay9odGNfZHJ2X2luaXQuYyB8ICAyICstCiBkcml2ZXJzL25ldC93
-aXJlbGVzcy9hdGgvYXRoOWsvaHRjX2hzdC5jICAgICAgfCAgNyArKysrLS0tCiBkcml2ZXJzL25l
-dC93aXJlbGVzcy9hdGgvYXRoOWsvd21pLmMgICAgICAgICAgfCAxNSArKysrKysrKysrKysrKy0K
-IGRyaXZlcnMvbmV0L3dpcmVsZXNzL2F0aC9hdGg5ay93bWkuaCAgICAgICAgICB8ICAyICsrCiA1
-IGZpbGVzIGNoYW5nZWQsIDI0IGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0pCgpkaWZmIC0t
-Z2l0IGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvYXRoL2F0aDlrL2hpZl91c2IuYyBiL2RyaXZlcnMv
-bmV0L3dpcmVsZXNzL2F0aC9hdGg5ay9oaWZfdXNiLmMKaW5kZXggZGQwYzMyMzc5Mzc1Li4yNzU2
-MDdhNzQ4NDEgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2F0aC9hdGg5ay9oaWZf
-dXNiLmMKKysrIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvYXRoL2F0aDlrL2hpZl91c2IuYwpAQCAt
-MTM0MSw4ICsxMzQxLDEwIEBAIHN0YXRpYyB2b2lkIGF0aDlrX2hpZl91c2JfZGlzY29ubmVjdChz
-dHJ1Y3QgdXNiX2ludGVyZmFjZSAqaW50ZXJmYWNlKQogCiAJaWYgKGhpZl9kZXYtPmZsYWdzICYg
-SElGX1VTQl9SRUFEWSkgewogCQlhdGg5a19odGNfaHdfZGVpbml0KGhpZl9kZXYtPmh0Y19oYW5k
-bGUsIHVucGx1Z2dlZCk7Ci0JCWF0aDlrX2h0Y19od19mcmVlKGhpZl9kZXYtPmh0Y19oYW5kbGUp
-OwogCQlhdGg5a19oaWZfdXNiX2Rldl9kZWluaXQoaGlmX2Rldik7CisJCXNtcF9tYigpOworCQlh
-dGg5a19kZXN0b3lfd21pKGhpZl9kZXYtPmh0Y19oYW5kbGUtPmRydl9wcml2KTsKKwkJYXRoOWtf
-aHRjX2h3X2ZyZWUoaGlmX2Rldi0+aHRjX2hhbmRsZSk7CiAJfQogCiAJdXNiX3NldF9pbnRmZGF0
-YShpbnRlcmZhY2UsIE5VTEwpOwpkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvYXRo
-L2F0aDlrL2h0Y19kcnZfaW5pdC5jIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvYXRoL2F0aDlrL2h0
-Y19kcnZfaW5pdC5jCmluZGV4IGQ5NjEwOTVhYjAxZi4uZDFkMGVkNmU2NTNjIDEwMDY0NAotLS0g
-YS9kcml2ZXJzL25ldC93aXJlbGVzcy9hdGgvYXRoOWsvaHRjX2Rydl9pbml0LmMKKysrIGIvZHJp
-dmVycy9uZXQvd2lyZWxlc3MvYXRoL2F0aDlrL2h0Y19kcnZfaW5pdC5jCkBAIC05ODIsNyArOTgy
-LDcgQEAgdm9pZCBhdGg5a19odGNfZGlzY29ubmVjdF9kZXZpY2Uoc3RydWN0IGh0Y190YXJnZXQg
-Kmh0Y19oYW5kbGUsIGJvb2wgaG90dW5wbHVnKQogCQkJaHRjX2hhbmRsZS0+ZHJ2X3ByaXYtPmFo
-LT5haF9mbGFncyB8PSBBSF9VTlBMVUdHRUQ7CiAKIAkJYXRoOWtfZGVpbml0X2RldmljZShodGNf
-aGFuZGxlLT5kcnZfcHJpdik7Ci0JCWF0aDlrX2RlaW5pdF93bWkoaHRjX2hhbmRsZS0+ZHJ2X3By
-aXYpOworCQlhdGg5a19zdG9wX3dtaShodGNfaGFuZGxlLT5kcnZfcHJpdik7CiAJCWllZWU4MDIx
-MV9mcmVlX2h3KGh0Y19oYW5kbGUtPmRydl9wcml2LT5odyk7CiAJfQogfQpkaWZmIC0tZ2l0IGEv
-ZHJpdmVycy9uZXQvd2lyZWxlc3MvYXRoL2F0aDlrL2h0Y19oc3QuYyBiL2RyaXZlcnMvbmV0L3dp
-cmVsZXNzL2F0aC9hdGg5ay9odGNfaHN0LmMKaW5kZXggZDA5MWM4ZWJkY2YwLi44NmNmMTE4Yzll
-NWYgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvbmV0L3dpcmVsZXNzL2F0aC9hdGg5ay9odGNfaHN0LmMK
-KysrIGIvZHJpdmVycy9uZXQvd2lyZWxlc3MvYXRoL2F0aDlrL2h0Y19oc3QuYwpAQCAtMTE1LDYg
-KzExNSwxMCBAQCBzdGF0aWMgdm9pZCBodGNfcHJvY2Vzc19jb25uX3JzcChzdHJ1Y3QgaHRjX3Rh
-cmdldCAqdGFyZ2V0LAogCQllcGlkID0gc3ZjX3JzcG1zZy0+ZW5kcG9pbnRfaWQ7CiAJCXNlcnZp
-Y2VfaWQgPSBiZTE2X3RvX2NwdShzdmNfcnNwbXNnLT5zZXJ2aWNlX2lkKTsKIAkJbWF4X21zZ2xl
-biA9IGJlMTZfdG9fY3B1KHN2Y19yc3Btc2ctPm1heF9tc2dfbGVuKTsKKworCQlpZiAoZXBpZCA+
-PSBFTkRQT0lOVF9NQVgpCisJCQlyZXR1cm47CisKIAkJZW5kcG9pbnQgPSAmdGFyZ2V0LT5lbmRw
-b2ludFtlcGlkXTsKIAogCQlmb3IgKHRlcGlkID0gKEVORFBPSU5UX01BWCAtIDEpOyB0ZXBpZCA+
-IEVORFBPSU5UMDsgdGVwaWQtLSkgewpAQCAtMTcwLDcgKzE3NCw2IEBAIHN0YXRpYyBpbnQgaHRj
-X2NvbmZpZ19waXBlX2NyZWRpdHMoc3RydWN0IGh0Y190YXJnZXQgKnRhcmdldCkKIAl0aW1lX2xl
-ZnQgPSB3YWl0X2Zvcl9jb21wbGV0aW9uX3RpbWVvdXQoJnRhcmdldC0+Y21kX3dhaXQsIEhaKTsK
-IAlpZiAoIXRpbWVfbGVmdCkgewogCQlkZXZfZXJyKHRhcmdldC0+ZGV2LCAiSFRDIGNyZWRpdCBj
-b25maWcgdGltZW91dFxuIik7Ci0JCWtmcmVlX3NrYihza2IpOwogCQlyZXR1cm4gLUVUSU1FRE9V
-VDsKIAl9CiAKQEAgLTIwNiw3ICsyMDksNiBAQCBzdGF0aWMgaW50IGh0Y19zZXR1cF9jb21wbGV0
-ZShzdHJ1Y3QgaHRjX3RhcmdldCAqdGFyZ2V0KQogCXRpbWVfbGVmdCA9IHdhaXRfZm9yX2NvbXBs
-ZXRpb25fdGltZW91dCgmdGFyZ2V0LT5jbWRfd2FpdCwgSFopOwogCWlmICghdGltZV9sZWZ0KSB7
-CiAJCWRldl9lcnIodGFyZ2V0LT5kZXYsICJIVEMgc3RhcnQgdGltZW91dFxuIik7Ci0JCWtmcmVl
-X3NrYihza2IpOwogCQlyZXR1cm4gLUVUSU1FRE9VVDsKIAl9CiAKQEAgLTI3OSw3ICsyODEsNiBA
-QCBpbnQgaHRjX2Nvbm5lY3Rfc2VydmljZShzdHJ1Y3QgaHRjX3RhcmdldCAqdGFyZ2V0LAogCWlm
-ICghdGltZV9sZWZ0KSB7CiAJCWRldl9lcnIodGFyZ2V0LT5kZXYsICJTZXJ2aWNlIGNvbm5lY3Rp
-b24gdGltZW91dCBmb3I6ICVkXG4iLAogCQkJc2VydmljZV9jb25ucmVxLT5zZXJ2aWNlX2lkKTsK
-LQkJa2ZyZWVfc2tiKHNrYik7CiAJCXJldHVybiAtRVRJTUVET1VUOwogCX0KIApkaWZmIC0tZ2l0
-IGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvYXRoL2F0aDlrL3dtaS5jIGIvZHJpdmVycy9uZXQvd2ly
-ZWxlc3MvYXRoL2F0aDlrL3dtaS5jCmluZGV4IGNkYzE0NjA5MTE5NC4uNjE1ZTZlMzJmNjg3IDEw
-MDY0NAotLS0gYS9kcml2ZXJzL25ldC93aXJlbGVzcy9hdGgvYXRoOWsvd21pLmMKKysrIGIvZHJp
-dmVycy9uZXQvd2lyZWxlc3MvYXRoL2F0aDlrL3dtaS5jCkBAIC0xMjMsNiArMTIzLDIwIEBAIHZv
-aWQgYXRoOWtfZGVpbml0X3dtaShzdHJ1Y3QgYXRoOWtfaHRjX3ByaXYgKnByaXYpCiAJa2ZyZWUo
-cHJpdi0+d21pKTsKIH0KIAordm9pZCBhdGg5a19zdG9wX3dtaShzdHJ1Y3QgYXRoOWtfaHRjX3By
-aXYgKnByaXYpCit7CisJc3RydWN0IHdtaSAqd21pID0gcHJpdi0+d21pOworCQorCW11dGV4X2xv
-Y2soJndtaS0+b3BfbXV0ZXgpOworCXdtaS0+c3RvcHBlZCA9IHRydWU7CisJbXV0ZXhfdW5sb2Nr
-KCZ3bWktPm9wX211dGV4KTsKK30KKwordm9pZCBhdGg5a19kZXN0b3lfd21pKHN0cnVjdCBhdGg5
-a19odGNfcHJpdiAqcHJpdikKK3sKKwlrZnJlZShwcml2LT53bWkpOworfQorCiB2b2lkIGF0aDlr
-X3dtaV9ldmVudF9kcmFpbihzdHJ1Y3QgYXRoOWtfaHRjX3ByaXYgKnByaXYpCiB7CiAJdW5zaWdu
-ZWQgbG9uZyBmbGFnczsKQEAgLTMzNiw3ICszNTAsNiBAQCBpbnQgYXRoOWtfd21pX2NtZChzdHJ1
-Y3Qgd21pICp3bWksIGVudW0gd21pX2NtZF9pZCBjbWRfaWQsCiAJCWF0aF9kYmcoY29tbW9uLCBX
-TUksICJUaW1lb3V0IHdhaXRpbmcgZm9yIFdNSSBjb21tYW5kOiAlc1xuIiwKIAkJCXdtaV9jbWRf
-dG9fbmFtZShjbWRfaWQpKTsKIAkJbXV0ZXhfdW5sb2NrKCZ3bWktPm9wX211dGV4KTsKLQkJa2Zy
-ZWVfc2tiKHNrYik7CiAJCXJldHVybiAtRVRJTUVET1VUOwogCX0KIApkaWZmIC0tZ2l0IGEvZHJp
-dmVycy9uZXQvd2lyZWxlc3MvYXRoL2F0aDlrL3dtaS5oIGIvZHJpdmVycy9uZXQvd2lyZWxlc3Mv
-YXRoL2F0aDlrL3dtaS5oCmluZGV4IDM4MDE3NWQ1ZWNkNy4uYzNlMjc4Mzc3MzY1IDEwMDY0NAot
-LS0gYS9kcml2ZXJzL25ldC93aXJlbGVzcy9hdGgvYXRoOWsvd21pLmgKKysrIGIvZHJpdmVycy9u
-ZXQvd2lyZWxlc3MvYXRoL2F0aDlrL3dtaS5oCkBAIC0xODksNiArMTg5LDggQEAgaW50IGF0aDlr
-X3dtaV9jbWQoc3RydWN0IHdtaSAqd21pLCBlbnVtIHdtaV9jbWRfaWQgY21kX2lkLAogdm9pZCBh
-dGg5a193bWlfZXZlbnRfdGFza2xldCh1bnNpZ25lZCBsb25nIGRhdGEpOwogdm9pZCBhdGg5a19m
-YXRhbF93b3JrKHN0cnVjdCB3b3JrX3N0cnVjdCAqd29yayk7CiB2b2lkIGF0aDlrX3dtaV9ldmVu
-dF9kcmFpbihzdHJ1Y3QgYXRoOWtfaHRjX3ByaXYgKnByaXYpOwordm9pZCBhdGg5a19zdG9wX3dt
-aShzdHJ1Y3QgYXRoOWtfaHRjX3ByaXYgKnByaXYpOwordm9pZCBhdGg5a19kZXN0b3lfd21pKHN0
-cnVjdCBhdGg5a19odGNfcHJpdiAqcHJpdik7CiAKICNkZWZpbmUgV01JX0NNRChfd21pX2NtZCkJ
-CQkJCQlcCiAJZG8gewkJCQkJCQkJXAotLSAKMi4xNy4xCgo=
---000000000000cb617405a25929ad--
+That tells us more about how the modem interfaces with the kernel.
+
+Dan
+
+> 
+> [Dialer Defaults]
+> Modem Type = Analog Modem
+> ISDN = 0
+> Baud = 9600
+> Carrier Check = yes
+> Stupid Mode = 1
+> Modem = /dev/ttyUSB1
+> Init1 = AT
+> Init2 = ATE0V1
+> Init3 = ATS0=0
+> Init4 = ATS7=60+DS=3,0;&K3
+> Init5 = AT+CGDCONT=1,"IP","internet.t-mobile"
+> Phone = *99#
+> Dial Command = ATD
+> Dial Attemps = 2
+> Username = none
+> Password = none
+> 
+> 
+> But i am loosing about half of the packets, and i found the message
+> in
+> /var/log/messages that I should contact you to add a proper driver to
+> my
+> device.
+> 
+> What should i do? I am relativly new to linux.
+> 
+> 
+> Kind regards, Benjamin
+> 
+
