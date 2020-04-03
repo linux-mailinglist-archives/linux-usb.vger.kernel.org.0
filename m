@@ -2,65 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E4E819E12C
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2020 00:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3AC419E1BC
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2020 02:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728681AbgDCWpH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Apr 2020 18:45:07 -0400
-Received: from mail-il1-f199.google.com ([209.85.166.199]:47819 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727829AbgDCWpF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Apr 2020 18:45:05 -0400
-Received: by mail-il1-f199.google.com with SMTP id a15so8534736ild.14
-        for <linux-usb@vger.kernel.org>; Fri, 03 Apr 2020 15:45:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=zSmQHMpVTPuNbvjhNgH4TOFQnalp5wC6Xun5Vz1zvC8=;
-        b=hPVMkUgZEnD88Sa02odaExW7nNi1Ir6mEquVaEQUuRZiMS7Lk3oHwFNBxBN/6RT1L1
-         lptLj/XimcN/TumqlphoDJ9HPAjcJ5bCn6E/I7OZvbV/2nxoQoLBh8GamrW3NK31f7hp
-         GpIYFU7OF/MOmro1Fb+XDxNdgF34mJXh3fbdK7WGwMBEnt/vrrz614CVlkINqjUB+tjO
-         2varzY9VMI3viPHN3WyEic6x4VpyrNsMhyXPfzakwB3oRhmFCZUdp/0sKeYS9jNYWiRP
-         P1b6l3URehAceqgB1eCM3RJYfTDPSgCimcl8u9l7W05Xh7XEw6Y8LnNH8Qmi4ksZukzb
-         Ppgg==
-X-Gm-Message-State: AGi0PuZRYJsDEgzASOzGII7d8Di5adWmkH6CIruJ/g4Eqdj/6RKJ4l7D
-        AOBUjkdAU5Kcd0qdHake+oIUNPHsGut4JMbBGXMWe/2g8QyW
-X-Google-Smtp-Source: APiQypIKDmUyBf9guvJkvEFIs6BXHK+tEO0WOLsZVEYo5TOyYoc094K76H4pzciRloGviGw2V0QWvIABWL18PjwKEBogYoICkj7b
+        id S1726437AbgDDAAI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Apr 2020 20:00:08 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:26382 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726269AbgDDAAH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 3 Apr 2020 20:00:07 -0400
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 48vH445nXfzBh;
+        Sat,  4 Apr 2020 02:00:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1585958405; bh=ZL1FnraQ0/rs6zSMOmrniVCYmeY3lor0j5mVDSLrkwQ=;
+        h=Date:From:Subject:To:Cc:From;
+        b=g96g/S/HMVqayegesKET2uy/rGUz5fVOTxMYhm6LLgpGPeyWJo+kzZJlxYzUg4GOu
+         rbfz2yXiLRB0jQrSBF+cOmjussS0DlyAbPmRWxanmFsryVatBe17SPlI1vr9JrOedD
+         Hv6ndl6700AAUjF0cySL/WfZIADP/j0eWZ7p+CbwckRXrNpIm0FS8F3saNKUQyu+lq
+         HKBqSHGuVPHMfePnha96KnV9SODP/TOzuRz7/P/zKHQwVwYPTgCxyQkV0FPWR4/0SK
+         v/FaCCCITgKpiDSTkXRLiD2dMQU+FnZXpwRWl8U79RuIxr2C49fsqZ6VCWC3vercGS
+         wueAzHUFwrm9g==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.102.2 at mail
+Date:   Sat, 04 Apr 2020 01:59:58 +0200
+Message-Id: <2b6d70595475a3ddbd5bb8ae1765868a98c404b6.1585958250.git.mirq-linux@rere.qmqm.pl>
+From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Subject: [PATCH 1/5] usb: chipidea: usb2: constify zynq_pdata
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9e4d:: with SMTP id i13mr9625291ioi.43.1585953904624;
- Fri, 03 Apr 2020 15:45:04 -0700 (PDT)
-Date:   Fri, 03 Apr 2020 15:45:04 -0700
-In-Reply-To: <CADG63jAuwRJ4uRH2qUGgqPP+Cjq0w7PrKziU4G3jWS3K4wpJog@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001d8c7d05a26aab0c@google.com>
-Subject: Re: KASAN: stack-out-of-bounds Write in ath9k_hif_usb_rx_cb
-From:   syzbot <syzbot+d403396d4df67ad0bd5f@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, anenbupt@gmail.com,
-        ath9k-devel@qca.qualcomm.com, davem@davemloft.net,
-        kvalo@codeaurora.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     Peter Chen <Peter.Chen@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+pdata is copied anyway to allow setting device name.
+Make the source const.
 
-syzbot has tested the proposed patch and the reproducer did not trigger crash:
+Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+---
+ drivers/usb/chipidea/ci_hdrc_usb2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reported-and-tested-by: syzbot+d403396d4df67ad0bd5f@syzkaller.appspotmail.com
+diff --git a/drivers/usb/chipidea/ci_hdrc_usb2.c b/drivers/usb/chipidea/ci_hdrc_usb2.c
+index c044fba463e4..62cf8a99cf78 100644
+--- a/drivers/usb/chipidea/ci_hdrc_usb2.c
++++ b/drivers/usb/chipidea/ci_hdrc_usb2.c
+@@ -28,7 +28,7 @@ static const struct ci_hdrc_platform_data ci_default_pdata = {
+ 	.flags		= CI_HDRC_DISABLE_STREAMING,
+ };
+ 
+-static struct ci_hdrc_platform_data ci_zynq_pdata = {
++static const struct ci_hdrc_platform_data ci_zynq_pdata = {
+ 	.capoffset	= DEF_CAPOFFSET,
+ };
+ 
+-- 
+2.20.1
 
-Tested on:
-
-commit:         0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a782c087b1f425c6
-dashboard link: https://syzkaller.appspot.com/bug?extid=d403396d4df67ad0bd5f
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=15bd0cfbe00000
-
-Note: testing is done by a robot and is best-effort only.
