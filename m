@@ -2,73 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE00D19E6B8
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2020 19:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66FF919E6CB
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2020 19:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726464AbgDDRVY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Apr 2020 13:21:24 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:41522 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726066AbgDDRVY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Apr 2020 13:21:24 -0400
-Received: by mail-il1-f196.google.com with SMTP id t6so10554219ilj.8;
-        Sat, 04 Apr 2020 10:21:23 -0700 (PDT)
+        id S1726246AbgDDRj3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Apr 2020 13:39:29 -0400
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:53266 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726207AbgDDRj3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Apr 2020 13:39:29 -0400
+Received: by mail-pj1-f66.google.com with SMTP id l36so4580870pjb.3;
+        Sat, 04 Apr 2020 10:39:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=rf3Vq8/IRCAw+STZ9AZuxHBMPJ565JHv5wHKM/w6aSo=;
+        b=ehRBq562FPQrUJIbElTPYPx+q5KfznlIHZ8EH27UafRR+Lrtpgcz/j80larxavVq+x
+         qPBOtLebWxmyU5/ilyzeQawxJkXoWABwQtz/Xt9fyvASkS2wq0ClYk3JuwDFCXdBQEM0
+         j0TJO9WgJ60TO5Hv98e4iLOxz4szb1jB/FFNRRGEkIhVcBsGbON3Ili0jAjpL8AHRT5g
+         LKHA1Tyj6X5v7HDraGPPxvYQI4fEPlqwx3265M3UgEyQp21rhwpwBFymaZ11jLa06lSU
+         WVCWS5WApuqJUOzeGRrKXrRiicjWcAwnVtXAz76oHB612Q+yPaba50p3RoZJ4CiPmed3
+         dehg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1n2uOR6wFgUHEXtF3w9/WEH6BH4ieKdqJajPzMFObBI=;
-        b=LqUaTS2tmTqwkvSVJ36XELhdoBM1DNe1aYU72dtwIDiFcOAdu3+3boiLqEinf0/+4e
-         iiaHbs1t8SbY6sgViwEGBGhOurLcNa4Pm2CdwI7l7et60sqfgO/B22FnFnrchrOPKQSI
-         yh9awobC6ktPqXW+ifFNJ3YkElAnjoCQdzHummgJqXrHGQyWN3QvmmB5JsXuNQBZTJEb
-         AyZsdBkvZaOF59RI+ux+wHR34fKEiljmhwus/8/GWdDWVnjXQICdLKdcVBMSzhICDofK
-         reMTx79y7mBFF+7ZGum4HWAPdN7zZOC/+wGaoILfcp8zWYwiv5ADKPbBIGyiBszyiHaZ
-         vK7A==
-X-Gm-Message-State: AGi0PuZmv9l4CMYmkCTc0t6+dVv7VscbxMMWP8mFfdjGCEaVnUL7LiPV
-        YLoaKe6fc9h+jRv5EyhwXA==
-X-Google-Smtp-Source: APiQypJQmZoJcNGxvGUS5ebio90Mu9iNzLO0TNKqrWWw6ta7vdiuT/lWFRwb1TqO2AyRYUyPJGlFvg==
-X-Received: by 2002:a92:881b:: with SMTP id h27mr14581682ild.262.1586020882799;
-        Sat, 04 Apr 2020 10:21:22 -0700 (PDT)
-Received: from rob-hp-laptop ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id j84sm4091586ili.65.2020.04.04.10.21.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Apr 2020 10:21:22 -0700 (PDT)
-Received: (nullmailer pid 28438 invoked by uid 1000);
-        Sat, 04 Apr 2020 17:21:20 -0000
-Date:   Sat, 4 Apr 2020 11:21:20 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     kishon@ti.com, balbi@kernel.org, khilman@baylibre.com,
-        martin.blumenstingl@googlemail.com, devicetree@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: Re: [PATCH v2 14/14] dt-bindings: usb: dwc3: remove old DWC3 wrapper
-Message-ID: <20200404172120.GA28402@bogus>
-References: <20200326134507.4808-1-narmstrong@baylibre.com>
- <20200326134507.4808-15-narmstrong@baylibre.com>
+        bh=rf3Vq8/IRCAw+STZ9AZuxHBMPJ565JHv5wHKM/w6aSo=;
+        b=PTHkp9i+cfIGB9Gmg4MJ3kdM6MJOmg0H57s58d3Ejq2ab4t3Nh/qmVkNIkcEM1eGtW
+         unrER907q+MkhX7bYZq4BtdPhTA7wrwVoM3MSzRPVvgJ3aGxx5AdgNQ6uqrmeHaeeQkt
+         X+WNrX4+EjibewAg6B0bkG7nWdmVNdHPqnna9SB/TXu3whOoCAnF36sFDCu3SEpF4Gux
+         nkniVqGWUO4CbY1o4hYybaNwUPREDrJQU+AsibUGdfKmQI05j+NhieWFsZM5vB4xHvbp
+         11WBXKDIf30ej5YhmvQ0Tjo754ql3AzNkZRd4HcSzs3lMTbTlQpRqekwSK1l4lFHB3fr
+         /Uag==
+X-Gm-Message-State: AGi0PuYpU44DFVPU4fYipUDq8XvJ4Qs8q5MiKDanHoW4nnFufKnIc5Yn
+        reWs3iLmX96SsyWQDPmA1g==
+X-Google-Smtp-Source: APiQypIkqhCIesa36KRc3Ycny4VLIp6X6B0R6zkeWVfbRUStUOKP3RTg9kUW6HNSHLIdpUMj1+ysjA==
+X-Received: by 2002:a17:90a:5a42:: with SMTP id m2mr16400067pji.165.1586021967954;
+        Sat, 04 Apr 2020 10:39:27 -0700 (PDT)
+Received: from madhuparna-HP-Notebook ([2402:3a80:d33:cff:f832:439c:9244:ba33])
+        by smtp.gmail.com with ESMTPSA id y131sm8055532pfb.78.2020.04.04.10.39.24
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 04 Apr 2020 10:39:27 -0700 (PDT)
+From:   Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+X-Google-Original-From: Madhuparna Bhowmik <change_this_user_name@gmail.com>
+Date:   Sat, 4 Apr 2020 23:09:21 +0530
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     madhuparnabhowmik10@gmail.com, hariprasad.kelam@gmail.com,
+        colin.king@canonical.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org,
+        andrianov@ispras.ru, stern@rowland.harvard.edu
+Subject: Re: [PATCH] usb: host: u132-hcd: Remove u132_static_list and list
+ head u132_list
+Message-ID: <20200404173921.GB19729@madhuparna-HP-Notebook>
+References: <20200403181816.8115-1-madhuparnabhowmik10@gmail.com>
+ <20200404092308.GB1110038@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200326134507.4808-15-narmstrong@baylibre.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200404092308.GB1110038@kroah.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 26 Mar 2020 14:45:06 +0100, Neil Armstrong wrote:
-> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+On Sat, Apr 04, 2020 at 11:23:08AM +0200, Greg KH wrote:
+> On Fri, Apr 03, 2020 at 11:48:16PM +0530, madhuparnabhowmik10@gmail.com wrote:
+> > From: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+> > 
+> > u132_static_list is a global list protected by u132_module_lock.
+> > It is read in the u132_hcd_exit() function without holding the lock
+> > thus may lead to data race.
+> > However, it turns out that this list isn't used for anything useful
+> > and thus it is okay to get rid of it.
+> > Thus, remove the u132_static_list from u132-hcd module.
+> > Also remove struct list_head u132_list from struct u132.
+> > 
+> > Found by Linux Driver Verification project (linuxtesting.org).
+> > 
+> > Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+> > Signed-off-by: Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>
+> > ---
+> >  drivers/usb/host/u132-hcd.c | 10 ----------
+> >  1 file changed, 10 deletions(-)
 > 
-> There is now an updated bindings for these SoCs making the old
-> compatible obsolete.
+> Please properly version your patches, otherwise I have no idea what
+> changed from the previous one, nor do I know which patch to take over
+> which.
 > 
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-> ---
->  .../devicetree/bindings/usb/amlogic,dwc3.txt  | 42 -------------------
->  1 file changed, 42 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
-> 
+> The instructions for how to do this is in the documentation.  Please fix
+> up and resend so I have a chance to know what to do...
+>
+Sure, I will do it.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Thank you,
+Madhuparna
+> thanks,
+> 
+> greg k-h
