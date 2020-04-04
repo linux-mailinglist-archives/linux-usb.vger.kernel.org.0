@@ -2,204 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 581A919E49C
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2020 12:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7EF19E51A
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2020 15:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726112AbgDDKuH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Apr 2020 06:50:07 -0400
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:52743 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725962AbgDDKuG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Apr 2020 06:50:06 -0400
-Received: by mail-pj1-f65.google.com with SMTP id ng8so4256267pjb.2;
-        Sat, 04 Apr 2020 03:50:03 -0700 (PDT)
+        id S1726294AbgDDNIh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Apr 2020 09:08:37 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:36608 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbgDDNIh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Apr 2020 09:08:37 -0400
+Received: by mail-wm1-f65.google.com with SMTP id d202so10861012wmd.1;
+        Sat, 04 Apr 2020 06:08:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=bLtks/fvQHTXg3jyiqutl/7OQaO4LAo9W4swHgvyYSo=;
-        b=qcjfUK7UPV0EhEXd8HS/7cXGbpErwdCZcVWwD2JhF3TAg7kbYhNuF6uB3juL8uU+l3
-         clEsFpstvqQQzY+tgEl60cLIQHM69T4ocWf7hBvRwgmbMIkqXQb93XMCIZWKnR0Va0ZB
-         jrgYR+6Htc1ERaUMnPkwo3S08QP8JjZ98nBlUYSzwd46Jex+S6LojpnVICSbxSr9t01w
-         aj78jvsmrei76hM90KI9GTY/lQ6X/4Tw7kL4HJrCnea1teYv6wL1X5qbHwklN7VMeNr6
-         IIrpOZKdsgfZMUxxCabCjmwaDUku/1sbUjSGr90y6Kkrk2/z8HCzltb7yH+JV9ZgSf2p
-         VtyA==
+        h=to:cc:references:from:autocrypt:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=g0lhfmepuqxhkSzHeSEIiTb4vyevQh1xR17a67PwJQQ=;
+        b=dri6mJYtciFG4/ZrwuqQCU7c4IS9vONkv8q4vmhBQEpUdqKGcpRPW/npcbLU1edukx
+         yiBxoc3c+BjEFjYpu5MBAEWNGYlm96JrWvx7bgShueCqpuG/I22f565wbJO+P+em0K3W
+         6hqruMAWMS6niWUvgYJ1F9Rs6PGC2wzAauiMSE8+L7CHoh9OjsESG7lEhCvEjdZwopB0
+         qwRveLIJ9agq47IsCnLHWAoyuREzPAwbygJyAFKVbrZwc+eXe9dnQhIFRUTFJFA2QOYE
+         EEk25wlmEpjI7NCUggZJgRo3e8iFbc0QZJDlmNsGXUdAQjzLhLGUQUaQ9fhGkDsweY1/
+         oxOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=bLtks/fvQHTXg3jyiqutl/7OQaO4LAo9W4swHgvyYSo=;
-        b=uBg4B3jBwCIZPgvJ6ZXYQ+gMuXerqwgzm82A56Sf60TnDkYLSJHWlCEKShrk2SV+jI
-         QTdntAmglAPznuCmAT0OOQUC9fgMFuXSsz1qbQ3FESDteciGukJC7Ju+9tD5Prfp306d
-         FbmVypOd1TTlD39JtZVL6/NGsNbs6N4tQbfWbjoZTq/1UaIZ8zHrMhKO/8LCEJrv0yHD
-         WsZxaIQVrKd0AgQhSnppEgjCG4fcQNdqOqPPY1SEQwl/D45OFnzEjbL15T2Jsxd5RF29
-         MO6AYJhvncLqnw6c4Rz06FCf2qkWoPuxDPG+ClXlzj/7WDLZ9xR4kelCK2VGMrvPWNKF
-         Q5aw==
-X-Gm-Message-State: AGi0PuY7BLSJbCt8AnWYvSpYNO6bftYEpJMvAHnErNw8vh4GD3G9auqy
-        APRmtRCMfvE1FE1ccduPFhs=
-X-Google-Smtp-Source: APiQypJpIeKiIjtvLfp18uOfDhAYzKMn/o1y+TKIM2ftfwkpT7wU+Yclef5SRHjHPEpO5tOMZCey0A==
-X-Received: by 2002:a17:902:7c84:: with SMTP id y4mr11140915pll.231.1585997402940;
-        Sat, 04 Apr 2020 03:50:02 -0700 (PDT)
-Received: from nishad ([106.51.232.103])
-        by smtp.gmail.com with ESMTPSA id b2sm390804pgg.77.2020.04.04.03.49.59
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 04 Apr 2020 03:50:02 -0700 (PDT)
-Date:   Sat, 4 Apr 2020 16:19:55 +0530
-From:   Nishad Kamdar <nishadkamdar@gmail.com>
-To:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Joe Perches <joe@perches.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: [PATCH] USB: musb: Use the correct style for SPDX License Identifier
-Message-ID: <20200404104952.GA6575@nishad>
+        h=x-gm-message-state:to:cc:references:from:autocrypt:subject
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=g0lhfmepuqxhkSzHeSEIiTb4vyevQh1xR17a67PwJQQ=;
+        b=JwMQ6FSEGHhMHECHT/cib1Uxp1iW+ZaELGsvdVfTtRcq2HkTKeoESu1cSbOg81tNNp
+         5Nm0sAkNU5Yj0V97N61MwznFYHSFAGWzuaKagCzw0UiRZpIBi+blOAeq8HBX++bcUCBX
+         vSeLfhv0HV9jbuzkw/5/jDLYhxTJDVtyudGXhLM1TUYa5dRD/yW4E4o8TaayWrRa7kOD
+         B90mGzSaHnqxidSZEJKnQQ7r+Z+moSaVEtKrKAIc8i1Wp32WLTH2Ho3KgP4gj93JsY2n
+         M7rOmF4HTSzukfDp+T+exeZSxeoaT3l+2PX+gb83cH3d/8pDq4tEbbbRaX7UCD3OHxUB
+         39mw==
+X-Gm-Message-State: AGi0PuaX7OBZFLYyF607iv8U/F0bO77fqWO8NwMmWCxRsUq5JIqbnDRh
+        xS+b+chdKLjkYP8dXnA6dAlN1Dl2Wj0=
+X-Google-Smtp-Source: APiQypI6hvMZkNwvsVxpYR5i02eTANSRy4tAI7LcYtYqoPJlBQhAQ1XfVNnuj0VEh0Xt5PF6ZJvYNw==
+X-Received: by 2002:a1c:9c15:: with SMTP id f21mr13348654wme.18.1586005714207;
+        Sat, 04 Apr 2020 06:08:34 -0700 (PDT)
+Received: from [192.168.43.88] ([109.126.129.227])
+        by smtp.gmail.com with ESMTPSA id w81sm16009467wmg.19.2020.04.04.06.08.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 04 Apr 2020 06:08:33 -0700 (PDT)
+To:     Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, Felipe Balbi <balbi@kernel.org>,
+        amd-gfx@lists.freedesktop.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        linux-usb@vger.kernel.org, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        intel-gfx@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        Jason Wang <jasowang@redhat.com>
+References: <20200404094101.672954-1-hch@lst.de>
+ <20200404094101.672954-6-hch@lst.de>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+Autocrypt: addr=asml.silence@gmail.com; prefer-encrypt=mutual; keydata=
+ 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 bA==
+Subject: Re: [Intel-gfx] [PATCH 5/6] kernel: better document the
+ use_mm/unuse_mm API contract
+Message-ID: <8c1e6600-bee3-d074-28e6-813a6dbf5fd0@gmail.com>
+Date:   Sat, 4 Apr 2020 16:07:31 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200404094101.672954-6-hch@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch corrects the SPDX License Identifier style in
-header files related to USB Dual Role (OTG-ready) Controller Drivers.
-For C header files Documentation/process/license-rules.rst
-mandates C-like comments (opposed to C source files where
-C++ style should be used).
+On 04/04/2020 12:41, Christoph Hellwig wrote:
+> Switch the function documentation to kerneldoc comments, and add
+> WARN_ON_ONCE asserts that the calling thread is a kernel thread and
+> does not have ->mm set (or has ->mm set in the case of unuse_mm).
+> 
+> Also give the functions a kthread_ prefix to better document the
+> use case.
+> 
 
-Changes made by using a script provided by Joe Perches here:
-https://lkml.org/lkml/2019/2/7/46.
+io_uring and io-wq bits LGTM.
 
-Suggested-by: Joe Perches <joe@perches.com>
-Signed-off-by: Nishad Kamdar <nishadkamdar@gmail.com>
----
- drivers/usb/musb/davinci.h     | 2 +-
- drivers/usb/musb/musb_core.h   | 2 +-
- drivers/usb/musb/musb_debug.h  | 2 +-
- drivers/usb/musb/musb_dma.h    | 2 +-
- drivers/usb/musb/musb_gadget.h | 2 +-
- drivers/usb/musb/musb_host.h   | 2 +-
- drivers/usb/musb/musb_io.h     | 2 +-
- drivers/usb/musb/musb_regs.h   | 2 +-
- drivers/usb/musb/musb_trace.h  | 2 +-
- drivers/usb/musb/omap2430.h    | 2 +-
- drivers/usb/musb/tusb6010.h    | 2 +-
- 11 files changed, 11 insertions(+), 11 deletions(-)
+> --- a/include/linux/kthread.h
+> +++ b/include/linux/kthread.h
+...
+> -/*
+> - * unuse_mm
+> - *	Reverses the effect of use_mm, i.e. releases the
+> - *	specified mm context which was earlier taken on
+> - *	by the calling kernel thread
+> - *	(Note: this routine is intended to be called only
+> - *	from a kernel thread context)
+> +/**
+> + * kthread_use_mm - reverse the effect of kthread_use_mm()
 
-diff --git a/drivers/usb/musb/davinci.h b/drivers/usb/musb/davinci.h
-index e021485c83ae..c8e67d15b510 100644
---- a/drivers/usb/musb/davinci.h
-+++ b/drivers/usb/musb/davinci.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * Copyright (C) 2005-2006 by Texas Instruments
-  */
-diff --git a/drivers/usb/musb/musb_core.h b/drivers/usb/musb/musb_core.h
-index 290a2bc46606..dbe5623db1e0 100644
---- a/drivers/usb/musb/musb_core.h
-+++ b/drivers/usb/musb/musb_core.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * MUSB OTG driver defines
-  *
-diff --git a/drivers/usb/musb/musb_debug.h b/drivers/usb/musb/musb_debug.h
-index c444a80fe1da..e5b3506c7b3f 100644
---- a/drivers/usb/musb/musb_debug.h
-+++ b/drivers/usb/musb/musb_debug.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * MUSB OTG driver debug defines
-  *
-diff --git a/drivers/usb/musb/musb_dma.h b/drivers/usb/musb/musb_dma.h
-index 4b4d8dc5d3f2..7d67b69df0a0 100644
---- a/drivers/usb/musb/musb_dma.h
-+++ b/drivers/usb/musb/musb_dma.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * MUSB OTG driver DMA controller abstraction
-  *
-diff --git a/drivers/usb/musb/musb_gadget.h b/drivers/usb/musb/musb_gadget.h
-index d02663660813..f49f25b3bf56 100644
---- a/drivers/usb/musb/musb_gadget.h
-+++ b/drivers/usb/musb/musb_gadget.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * MUSB OTG driver peripheral defines
-  *
-diff --git a/drivers/usb/musb/musb_host.h b/drivers/usb/musb/musb_host.h
-index 2999845632ce..32336571f05c 100644
---- a/drivers/usb/musb/musb_host.h
-+++ b/drivers/usb/musb/musb_host.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * MUSB OTG driver host defines
-  *
-diff --git a/drivers/usb/musb/musb_io.h b/drivers/usb/musb/musb_io.h
-index f17aabd95a50..12874d3b2a64 100644
---- a/drivers/usb/musb/musb_io.h
-+++ b/drivers/usb/musb/musb_io.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * MUSB OTG driver register I/O
-  *
-diff --git a/drivers/usb/musb/musb_regs.h b/drivers/usb/musb/musb_regs.h
-index 5cd7264fc2cb..5fa110978f1a 100644
---- a/drivers/usb/musb/musb_regs.h
-+++ b/drivers/usb/musb/musb_regs.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * MUSB OTG driver register defines
-  *
-diff --git a/drivers/usb/musb/musb_trace.h b/drivers/usb/musb/musb_trace.h
-index b193daf69685..380ebc77eab1 100644
---- a/drivers/usb/musb/musb_trace.h
-+++ b/drivers/usb/musb/musb_trace.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * musb_trace.h - MUSB Controller Trace Support
-  *
-diff --git a/drivers/usb/musb/omap2430.h b/drivers/usb/musb/omap2430.h
-index 859008fa0e3c..939a0361ae88 100644
---- a/drivers/usb/musb/omap2430.h
-+++ b/drivers/usb/musb/omap2430.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * Copyright (C) 2005-2006 by Texas Instruments
-  */
-diff --git a/drivers/usb/musb/tusb6010.h b/drivers/usb/musb/tusb6010.h
-index fd8025bbece7..8a253564fb18 100644
---- a/drivers/usb/musb/tusb6010.h
-+++ b/drivers/usb/musb/tusb6010.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
-  * Definitions for TUSB6010 USB 2.0 OTG Dual Role controller
-  *
+s/kthread_use_mm/kthread_unuse_mm/
+for the first one
+
+> + * @mm: address space to operate on
+>   */
+> -void unuse_mm(struct mm_struct *mm)
+> +void kthread_unuse_mm(struct mm_struct *mm)
+>  {
+
 -- 
-2.17.1
-
+Pavel Begunkov
