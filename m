@@ -2,114 +2,260 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1369B19E65A
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2020 18:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5271D19E6A2
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2020 19:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726307AbgDDQHS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Apr 2020 12:07:18 -0400
-Received: from mga02.intel.com ([134.134.136.20]:16443 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726287AbgDDQHS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 4 Apr 2020 12:07:18 -0400
-IronPort-SDR: 8fksCJ8UzkTv2A0tHlmruJnrxTM+cnTIcU59geqnqMTQPkLX0rrzEnKG2igob6FlRxKCv4XqnI
- toH7DYGdW/hA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2020 09:07:18 -0700
-IronPort-SDR: RDUjI/AWXs+vqYRceXyu3tD+Vj42RLCvdbXtx5gM8WJysEA8L/R++VxcxN3mbl+Yz+acGAncdm
- 5cNzwuGOPM/A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,344,1580803200"; 
-   d="scan'208";a="397049186"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 04 Apr 2020 09:07:16 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jKlKF-0008h4-9Y; Sun, 05 Apr 2020 00:07:15 +0800
-Date:   Sun, 5 Apr 2020 00:07:08 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     vladimir.stankovic@displaylink.com
-Cc:     kbuild-all@lists.01.org, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mausb-host-devel@displaylink.com
-Subject: Re: [PATCH v4 7/8] usb: mausb_host: MA-USB PAL events processing
-Message-ID: <202004050038.meqL6HAk%lkp@intel.com>
-References: <20200327152614.26833-8-vladimir.stankovic@displaylink.com>
+        id S1726283AbgDDRRE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Apr 2020 13:17:04 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:33432 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726057AbgDDRRE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Apr 2020 13:17:04 -0400
+Received: by mail-io1-f67.google.com with SMTP id o127so11130301iof.0;
+        Sat, 04 Apr 2020 10:17:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=LbvmpO8/bPCuPHRYyiVH18tDMFLwI93Ii9fpZRHXa24=;
+        b=ReT+lp7J0yRDoeB5Fc6+sosj5kigItmmvilMvz/otfDzISJVpLNTytcv2xQVns1um8
+         3OWe5v+1HXVA7suEN8Pt/UCNgoxfLQ8eqveDQxV+Pc8K1LWPdHIntL4LIcAYRwSxp8fN
+         X1ZcyD98IkD4PSqMI3b60AK/aaG7zkBcTxoRRiAJgU+YZKqFR24AVFkOm77J2/T3fbek
+         v3N9aW6ldrKBgzFXHWDDG1VGphjTZ2fgIK0RYWyHIwrfAmZa5fMeuuU8dLuTPGKPjaHo
+         m/104JG5JURV25h0EP6m9LwjaW1HRouXVfXh0wn+9E84cqgeFMBU++tWoJdmIg6iVhzf
+         hOtQ==
+X-Gm-Message-State: AGi0PuY7JtHmIFh25HRkVi0mogmgFvt46kw0ICaYwA7iGb6KhRY63uDf
+        gK9NehIyEK8FH5AwmROqxQ==
+X-Google-Smtp-Source: APiQypLFu5Hc0JAC3bpktegAn7G91KQCfoP4OvP8MY4BArxOHkzgelADg0pN6T66oqTT+a47UjxOEg==
+X-Received: by 2002:a5d:894a:: with SMTP id b10mr12955179iot.38.1586020622686;
+        Sat, 04 Apr 2020 10:17:02 -0700 (PDT)
+Received: from rob-hp-laptop ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id v11sm4005446ilk.68.2020.04.04.10.17.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Apr 2020 10:17:01 -0700 (PDT)
+Received: (nullmailer pid 22176 invoked by uid 1000);
+        Sat, 04 Apr 2020 17:17:00 -0000
+Date:   Sat, 4 Apr 2020 11:17:00 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>
+Subject: Re: [PATCH v5 1/2] dt-bindings: usb: qcom,dwc3: Convert USB DWC3
+ bindings
+Message-ID: <20200404171700.GA10096@bogus>
+References: <1585206368-685-1-git-send-email-sanm@codeaurora.org>
+ <1585206368-685-2-git-send-email-sanm@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200327152614.26833-8-vladimir.stankovic@displaylink.com>
+In-Reply-To: <1585206368-685-2-git-send-email-sanm@codeaurora.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on balbi-usb/next peter.chen-usb/ci-for-usb-next linus/master linux/master v5.6 next-20200403]
-[if your patch is applied to the wrong git tree, please drop us a note to help
-improve the system. BTW, we also suggest to use '--base' option to specify the
-base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
-
-url:    https://github.com/0day-ci/linux/commits/vladimir-stankovic-displaylink-com/Add-MA-USB-Host-driver/20200328-042436
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kbuild test robot <lkp@intel.com>
+On Thu, Mar 26, 2020 at 12:36:07PM +0530, Sandeep Maheswaram wrote:
+> Convert USB DWC3 bindings to DT schema format using json-schema.
+> 
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> ---
+>  .../devicetree/bindings/usb/qcom,dwc3.txt          | 104 --------------
+>  .../devicetree/bindings/usb/qcom,dwc3.yaml         | 158 +++++++++++++++++++++
+>  2 files changed, 158 insertions(+), 104 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/usb/qcom,dwc3.txt
+>  create mode 100644 Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
 
 
-coccinelle warnings: (new ones prefixed by >>)
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> new file mode 100644
+> index 0000000..0f69475
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> @@ -0,0 +1,158 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/qcom,dwc3.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm SuperSpeed DWC3 USB SoC controller
+> +
+> +maintainers:
+> +  - Manu Gautam <mgautam@codeaurora.org>
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - qcom,msm8996-dwc3
+> +          - qcom,msm8998-dwc3
+> +          - qcom,sdm845-dwc3
+> +      - const: qcom,dwc3
+> +
+> +  reg:
+> +    description: Offset and length of register set for QSCRATCH wrapper
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    enum: [ 1, 2 ]
+> +
+> +  "#size-cells":
+> +    enum: [ 1, 2 ]
+> +
+> +  power-domains:
+> +    description: specifies a phandle to PM domain provider node
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description:
+> +      A list of phandle and clock-specifier pairs for the clocks
+> +      listed in clock-names.
+> +    items:
+> +      - description: System Config NOC clock.
+> +      - description: Master/Core clock, has to be >= 125 MHz
+> +          for SS operation and >= 60MHz for HS operation.
+> +      - description: System bus AXI clock.
+> +      - description: Mock utmi clock needed for ITP/SOF generation
+> +          in host mode. Its frequency should be 19.2MHz.
+> +      - description: Sleep clock, used for wakeup when
+> +          USB3 core goes into low power mode (U3).
+> +
+> +  clock-names:
+> +    items:
+> +      - const: cfg_noc
+> +      - const: core
+> +      - const: iface
+> +      - const: mock_utmi
+> +      - const: sleep
+> +
+> +  assigned-clocks:
+> +    items:
+> +      - description: Phandle and clock specifier of MOCK_UTMI_CLK.
+> +      - description: Phandle and clock specifoer of MASTER_CLK.
+> +
+> +  assigned-clock-rates:
+> +    maxItems: 2
 
->> drivers/usb/mausb_host/utils.c:209:1-18: ERROR: nested lock+irqsave that reuses flags from line 201.
---
->> drivers/usb/mausb_host/hpal_events.c:86:46-49: ERROR: reference preceded by free on line 85
+Need to drop this as it is redundant. Soon this will generate an error.
 
-vim +209 drivers/usb/mausb_host/utils.c
+> +    items:
+> +      - description: Must be 19.2MHz (19200000).
 
-   182	
-   183	static ssize_t mausb_file_write(struct file *filp, const char __user *buffer,
-   184					size_t size, loff_t *offset)
-   185	{
-   186		ssize_t num_of_bytes_to_write =
-   187					sizeof(struct mausb_events_notification);
-   188		struct mausb_events_notification notification;
-   189		unsigned long flags;
-   190		struct mausb_device *dev;
-   191	
-   192		if (size != (size_t)num_of_bytes_to_write) {
-   193			mausb_pr_alert("Different expected bytes to write (%ld) from actual size (%ld)",
-   194				       num_of_bytes_to_write, size);
-   195			return MAUSB_DRIVER_WRITE_ERROR;
-   196		}
-   197	
-   198		if (copy_from_user(&notification, buffer, size))
-   199			return MAUSB_DRIVER_WRITE_ERROR;
-   200	
- > 201		spin_lock_irqsave(&mss.lock, flags);
-   202		dev = mausb_get_dev_from_addr_unsafe(notification.madev_addr);
-   203	
-   204		if (!dev) {
-   205			spin_unlock_irqrestore(&mss.lock, flags);
-   206			return 0;
-   207		}
-   208	
- > 209		spin_lock_irqsave(&dev->num_of_user_events_lock, flags);
-   210		dev->num_of_user_events += notification.num_of_events;
-   211		dev->num_of_completed_events += notification.num_of_completed_events;
-   212		spin_unlock_irqrestore(&dev->num_of_user_events_lock, flags);
-   213	
-   214		queue_work(dev->workq, &dev->work);
-   215		spin_unlock_irqrestore(&mss.lock, flags);
-   216	
-   217		return num_of_bytes_to_write;
-   218	}
-   219	
+Sounds like a constraint:
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+- const: 19200000
+
+> +      - description: Must be >= 60 MHz in HS mode, >= 125 MHz in SS mode.
+
+- minimum: 60000000
+  maximum: ?
+
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    items:
+> +      - description: The interrupt that is asserted
+> +          when a wakeup event is received on USB2 bus.
+> +      - description: The interrupt that is asserted
+> +          when a wakeup event is received on USB3 bus.
+> +      - description: Wakeup event on DM line.
+> +      - description: Wakeup event on DP line.
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: hs_phy_irq
+> +      - const: ss_phy_irq
+> +      - const: dm_hs_phy_irq
+> +      - const: dp_hs_phy_irq
+> +
+> +  qcom,select-utmi-as-pipe-clk:
+> +    description:
+> +      If present, disable USB3 pipe_clk requirement.
+> +      Used when dwc3 operates without SSPHY and only
+> +      HS/FS/LS modes are supported.
+> +    type: boolean
+> +
+> +# Required child node:
+> +
+> +patternProperties:
+> +  "^dwc3@[0-9a-f]+$":
+> +    type: object
+> +    description:
+> +      A child node must exist to represent the core DWC3 IP block
+> +      The content of the node is defined in dwc3.txt.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#address-cells"
+> +  - "#size-cells"
+> +  - power-domains
+> +  - clocks
+> +  - clock-names
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/qcom,gcc-sdm845.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    usb@a6f8800 {
+> +        compatible = "qcom,sdm845-dwc3", "qcom,dwc3";
+> +        reg = <0 0x0a6f8800 0 0x400>;
+> +
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
+> +                 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
+> +                 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
+> +                 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
+> +                 <&gcc GCC_USB30_PRIM_SLEEP_CLK>;
+> +        clock-names = "cfg_noc", "core", "iface", "mock_utmi",
+> +                      "sleep";
+> +
+> +        assigned-clocks = <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
+> +                          <&gcc GCC_USB30_PRIM_MASTER_CLK>;
+> +        assigned-clock-rates = <19200000>, <150000000>;
+> +
+> +        interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 486 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 488 IRQ_TYPE_LEVEL_HIGH>,
+> +                     <GIC_SPI 489 IRQ_TYPE_LEVEL_HIGH>;
+> +        interrupt-names = "hs_phy_irq", "ss_phy_irq",
+> +                          "dm_hs_phy_irq", "dp_hs_phy_irq";
+> +
+> +        power-domains = <&gcc USB30_PRIM_GDSC>;
+> +
+> +        resets = <&gcc GCC_USB30_PRIM_BCR>;
+> +
+> +        dwc3@a600000 {
+> +            compatible = "snps,dwc3";
+> +            reg = <0 0x0a600000 0 0xcd00>;
+
+You need 'ranges' in the parent for this address to be translatable.
+
+> +            interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
+> +            iommus = <&apps_smmu 0x740 0>;
+> +            snps,dis_u2_susphy_quirk;
+> +            snps,dis_enblslpm_quirk;
+> +            phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
+> +            phy-names = "usb2-phy", "usb3-phy";
+> +        };
+> +    };
+> -- 
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+> of Code Aurora Forum, hosted by The Linux Foundation
+> 
