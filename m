@@ -2,126 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1BBD19E455
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2020 11:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F10219E466
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2020 12:06:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726028AbgDDJqx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Apr 2020 05:46:53 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:44231 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725872AbgDDJqx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Apr 2020 05:46:53 -0400
-Received: by mail-pl1-f195.google.com with SMTP id h11so3815091plr.11;
-        Sat, 04 Apr 2020 02:46:51 -0700 (PDT)
+        id S1726230AbgDDKGC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Apr 2020 06:06:02 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:36293 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726148AbgDDKGB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Apr 2020 06:06:01 -0400
+Received: by mail-lj1-f196.google.com with SMTP id b1so9540197ljp.3
+        for <linux-usb@vger.kernel.org>; Sat, 04 Apr 2020 03:05:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=7GDPmcK6SJHRuf12SL7H5kks1bkdILcC7vA7ejas/BI=;
-        b=Fu+71osxmBa4Pi4TAUAFCefneyfNuFc6lMXThG8RWB8m1nG4GM86saiHEJDRjo+pzr
-         JI1m8vE6u6oYIcvuIWHTRqDuJadA41+YlpsH1XYTLimoupz4ol7MziXZoFy/cMFBDkNX
-         W9HFdyAOqwl57IwUynVUa0YAChrMOX6UQwlB4fF4PtIlWw2WimKEnAC87LQMcitsY6+/
-         IxVAg0topsI4Ji5q+1O9gZwqCnfIVxMjsRrZZfpPgZgQmJbM9UYO9Qu5GO0VS2TlKs9i
-         v0vW4JFEM+v4s92lNVCgPdq/vBl75YkvzV9v5MpeHELuFcruyb9nka95DSHD2Z7XoC5u
-         amww==
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=f5WeYVcExZ58viobGo5xENBYY/7iA5WtiHNaBP74Ohk=;
+        b=aTi0ATN9MaY24407laRnBef6LfGPpOgdRBwSwCQz2c3RW4Gj/WkUSmsjFupt1+Si1I
+         /jw0cOt3bzoZ1L8XI8Cd7xl4uND//yB9GJHWzUv8WZWdrs2vMEb5P/6AngfEuXPZiSGf
+         XPfLEX+uHTRcYFmBj3aEbcKNRHtdDgUwBBnViuTIu3RWq8uVF0MXaSq7dRYUFOEfUxag
+         Me75vpJfK3iUGksokG2xHslbFjKJVBBYOFEjoY7PYPAXlsjqaldQ3YKyfSNa7FMzpHkn
+         t+K46duTvK6NW20LFcqGjElqmIe9KQb5vJm4zg6VH9x14j7uPUY0uawotq+psxvUvGUB
+         UXxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=7GDPmcK6SJHRuf12SL7H5kks1bkdILcC7vA7ejas/BI=;
-        b=iWRvLJcYH05CzUMJog5QMk7dxdpzzGfzFujObvGr6kbUlc6PqV5rW/NG+i+hW7UhPt
-         jHMsiJ7oiRxfbHUdliAXkjakM2zB0eteJgMqweZlGMoXP253DPKlNfrMb4K1a8mGxzaV
-         Xm2x0cP/mCE+AFjv8EeY6RFAyj/s6YCTIhdKYhrW+Ae5HFki5PEX9TgD+Kn97zzP7WXB
-         GazGkdijeQxgcUOvNT4Jr6jvKSZN9Ny30B8eWj5fJI5DjYRH6TywFRW+451ZY4oG6I6/
-         O+wL6m/UI6Tn74nUrK0x7W9VPdUlXT/CSKUf7ajrLsVpQ2zqG0uFeUYSWNEmHCWieO8s
-         0HmA==
-X-Gm-Message-State: AGi0PuYZg1E0xe2Ysj5im4TYnXxjaikIGAPwD9Dkft7RlbfLQQJWrYAE
-        bVIWDh2fO3poxmWuY3bKQzT6yD00io0=
-X-Google-Smtp-Source: APiQypKlJqFw5oLJaP3DJtFrcGkMX6zh/o/z3j1IX+UszO2IgqlnUHMYe5xaOyUBTmXkReCqzE7z6Q==
-X-Received: by 2002:a17:90a:2601:: with SMTP id l1mr15063331pje.74.1585993610826;
-        Sat, 04 Apr 2020 02:46:50 -0700 (PDT)
-Received: from nishad ([106.51.232.103])
-        by smtp.gmail.com with ESMTPSA id 3sm3681088pfd.140.2020.04.04.02.46.47
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 04 Apr 2020 02:46:50 -0700 (PDT)
-Date:   Sat, 4 Apr 2020 15:16:43 +0530
-From:   Nishad Kamdar <nishadkamdar@gmail.com>
-To:     Thomas Winischhofer <thomas@winischhofer.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Joe Perches <joe@perches.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] USB: misc: Use the correct style for SPDX License Identifier
-Message-ID: <20200404094638.GA5319@nishad>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=f5WeYVcExZ58viobGo5xENBYY/7iA5WtiHNaBP74Ohk=;
+        b=cTAklK7fGlFZk+JDZWllqlrrArA4MOA/9gQKF8I2mRXWLrBxkM3/nvfjPr8C9EueIa
+         d8Qal6B0ThiYPOEzr0isu5MGmoeACurfYUdUxHE7ccyje9DXQAjyU4lxwfTJkLNcycEq
+         p0K0BpyQrIwrBopOSj2R/jnLZpNR+HvRPSr3yeINymrZoXoBnym2JVTHOJDSnQd6mWjc
+         3ELbv52d4QEfJ/UOCcw45FUmHWoOajyJFvBAxcqULD3RMf79EJd7vCb1lsSf/qG5ES8K
+         lHzM4dY62K+DTFc3L5HuJZFll4Z9xiX0VHP/E+nJ5CGo9r7QL6Zk4esCuSI8K1/ef6Qr
+         fRLg==
+X-Gm-Message-State: AGi0PuanIZpRDgCqPxDZxKAwMpW8l7z4eN5MFSwuFGpBELvQx0tjpmpN
+        CXUfki3yRbPPIcdgSEUyTWBqSg==
+X-Google-Smtp-Source: APiQypJgK3TXAPv85OfJ7vCTcz4u4tUzYYbvpr+INBxhiypWT+murLDDhRYYaeJT38bk35encw/Ldg==
+X-Received: by 2002:a2e:818e:: with SMTP id e14mr7232769ljg.225.1585994757852;
+        Sat, 04 Apr 2020 03:05:57 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:6f0:5f98:6c2c:3527:3946:ae? ([2a00:1fa0:6f0:5f98:6c2c:3527:3946:ae])
+        by smtp.gmail.com with ESMTPSA id p21sm6378055ljg.5.2020.04.04.03.05.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 04 Apr 2020 03:05:57 -0700 (PDT)
+Subject: Re: [PATCH 2/6] i915/gvt/kvm: a NULL ->mm does not mean a thread is a
+ kthread
+To:     Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20200404094101.672954-1-hch@lst.de>
+ <20200404094101.672954-3-hch@lst.de>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <0fb3cce8-fa3d-5c97-1eba-0f359797eea2@cogentembedded.com>
+Date:   Sat, 4 Apr 2020 13:05:52 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200404094101.672954-3-hch@lst.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch corrects the SPDX License Identifier style in
-header files related to USB Miscellaneous drivers.
-For C header files Documentation/process/license-rules.rst
-mandates C-like comments (opposed to C source files where
-C++ style should be used).
+Hello!
 
-Changes made by using a script provided by Joe Perches here:
-https://lkml.org/lkml/2019/2/7/46.
+On 04.04.2020 12:40, Christoph Hellwig wrote:
 
-Suggested-by: Joe Perches <joe@perches.com>
-Signed-off-by: Nishad Kamdar <nishadkamdar@gmail.com>
----
- drivers/usb/misc/sisusbvga/sisusb.h        | 2 +-
- drivers/usb/misc/sisusbvga/sisusb_init.h   | 2 +-
- drivers/usb/misc/sisusbvga/sisusb_struct.h | 2 +-
- drivers/usb/misc/usb_u132.h                | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+> Use the proper API instead.
+> 
+> Fixes: f440c8a572d7 ("drm/i915/gvt/kvmgt: read/write GPA via KVM API")
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>   drivers/gpu/drm/i915/gvt/kvmgt.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gvt/kvmgt.c b/drivers/gpu/drm/i915/gvt/kvmgt.c
+> index 074c4efb58eb..5848400620b4 100644
+> --- a/drivers/gpu/drm/i915/gvt/kvmgt.c
+> +++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
+> @@ -2037,7 +2037,7 @@ static int kvmgt_rw_gpa(unsigned long handle, unsigned long gpa,
+>   	struct kvmgt_guest_info *info;
+>   	struct kvm *kvm;
+>   	int idx, ret;
+> -	bool kthread = current->mm == NULL;
+> +	bool kthread = (current->flags & PF_KTHREAD);
 
-diff --git a/drivers/usb/misc/sisusbvga/sisusb.h b/drivers/usb/misc/sisusbvga/sisusb.h
-index 8a5e6bb07d05..c0fb9e1c5361 100644
---- a/drivers/usb/misc/sisusbvga/sisusb.h
-+++ b/drivers/usb/misc/sisusbvga/sisusb.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
-+/* SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause) */
- /*
-  * sisusb - usb kernel driver for Net2280/SiS315 based USB2VGA dongles
-  *
-diff --git a/drivers/usb/misc/sisusbvga/sisusb_init.h b/drivers/usb/misc/sisusbvga/sisusb_init.h
-index 1782c759c4ad..24c2e71d06e7 100644
---- a/drivers/usb/misc/sisusbvga/sisusb_init.h
-+++ b/drivers/usb/misc/sisusbvga/sisusb_init.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause) */
- /* $XFree86$ */
- /* $XdotOrg$ */
- /*
-diff --git a/drivers/usb/misc/sisusbvga/sisusb_struct.h b/drivers/usb/misc/sisusbvga/sisusb_struct.h
-index 706d77090e00..3df64d2a9d43 100644
---- a/drivers/usb/misc/sisusbvga/sisusb_struct.h
-+++ b/drivers/usb/misc/sisusbvga/sisusb_struct.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause) */
- /*
-  * General structure definitions for universal mode switching modules
-  *
-diff --git a/drivers/usb/misc/usb_u132.h b/drivers/usb/misc/usb_u132.h
-index 4bf77736914f..1584efbbd704 100644
---- a/drivers/usb/misc/usb_u132.h
-+++ b/drivers/usb/misc/usb_u132.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0
-+/* SPDX-License-Identifier: GPL-2.0 */
- /*
- * Common Header File for the Elan Digital Systems U132 adapter
- * this file should be included by both the "ftdi-u132" and
--- 
-2.17.1
+    Don't need the parens.
 
+[...]
+
+MBR, Sergei
