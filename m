@@ -2,158 +2,262 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7EF19E51A
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2020 15:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4A019E563
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2020 16:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726294AbgDDNIh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Apr 2020 09:08:37 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:36608 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725730AbgDDNIh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Apr 2020 09:08:37 -0400
-Received: by mail-wm1-f65.google.com with SMTP id d202so10861012wmd.1;
-        Sat, 04 Apr 2020 06:08:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=to:cc:references:from:autocrypt:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=g0lhfmepuqxhkSzHeSEIiTb4vyevQh1xR17a67PwJQQ=;
-        b=dri6mJYtciFG4/ZrwuqQCU7c4IS9vONkv8q4vmhBQEpUdqKGcpRPW/npcbLU1edukx
-         yiBxoc3c+BjEFjYpu5MBAEWNGYlm96JrWvx7bgShueCqpuG/I22f565wbJO+P+em0K3W
-         6hqruMAWMS6niWUvgYJ1F9Rs6PGC2wzAauiMSE8+L7CHoh9OjsESG7lEhCvEjdZwopB0
-         qwRveLIJ9agq47IsCnLHWAoyuREzPAwbygJyAFKVbrZwc+eXe9dnQhIFRUTFJFA2QOYE
-         EEk25wlmEpjI7NCUggZJgRo3e8iFbc0QZJDlmNsGXUdAQjzLhLGUQUaQ9fhGkDsweY1/
-         oxOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:autocrypt:subject
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=g0lhfmepuqxhkSzHeSEIiTb4vyevQh1xR17a67PwJQQ=;
-        b=JwMQ6FSEGHhMHECHT/cib1Uxp1iW+ZaELGsvdVfTtRcq2HkTKeoESu1cSbOg81tNNp
-         5Nm0sAkNU5Yj0V97N61MwznFYHSFAGWzuaKagCzw0UiRZpIBi+blOAeq8HBX++bcUCBX
-         vSeLfhv0HV9jbuzkw/5/jDLYhxTJDVtyudGXhLM1TUYa5dRD/yW4E4o8TaayWrRa7kOD
-         B90mGzSaHnqxidSZEJKnQQ7r+Z+moSaVEtKrKAIc8i1Wp32WLTH2Ho3KgP4gj93JsY2n
-         M7rOmF4HTSzukfDp+T+exeZSxeoaT3l+2PX+gb83cH3d/8pDq4tEbbbRaX7UCD3OHxUB
-         39mw==
-X-Gm-Message-State: AGi0PuaX7OBZFLYyF607iv8U/F0bO77fqWO8NwMmWCxRsUq5JIqbnDRh
-        xS+b+chdKLjkYP8dXnA6dAlN1Dl2Wj0=
-X-Google-Smtp-Source: APiQypI6hvMZkNwvsVxpYR5i02eTANSRy4tAI7LcYtYqoPJlBQhAQ1XfVNnuj0VEh0Xt5PF6ZJvYNw==
-X-Received: by 2002:a1c:9c15:: with SMTP id f21mr13348654wme.18.1586005714207;
-        Sat, 04 Apr 2020 06:08:34 -0700 (PDT)
-Received: from [192.168.43.88] ([109.126.129.227])
-        by smtp.gmail.com with ESMTPSA id w81sm16009467wmg.19.2020.04.04.06.08.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Apr 2020 06:08:33 -0700 (PDT)
-To:     Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, Felipe Balbi <balbi@kernel.org>,
-        amd-gfx@lists.freedesktop.org,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        linux-usb@vger.kernel.org, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        intel-gfx@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        Jason Wang <jasowang@redhat.com>
-References: <20200404094101.672954-1-hch@lst.de>
- <20200404094101.672954-6-hch@lst.de>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-Autocrypt: addr=asml.silence@gmail.com; prefer-encrypt=mutual; keydata=
- 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 bA==
-Subject: Re: [Intel-gfx] [PATCH 5/6] kernel: better document the
- use_mm/unuse_mm API contract
-Message-ID: <8c1e6600-bee3-d074-28e6-813a6dbf5fd0@gmail.com>
-Date:   Sat, 4 Apr 2020 16:07:31 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1726287AbgDDOMZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Apr 2020 10:12:25 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:24259 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726230AbgDDOMZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Apr 2020 10:12:25 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1586009544; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=1mFW4GvYCJDueYcN+uUWXvjyL3gGkxOhuBmkTrdqcJA=; b=tCOrjF31O4Sex79wdTqomCQ1ZW3svigpQEFNpOrQ2eLQhm5FrmElQQjQwmioVZBOSWvBum2J
+ 5eNQi0/9ap+1gMTj7CznQGzENqQALAc6O48B4oZi9Zvg+/eQr+/Ctxru0KD2d3mIVwmwdjwq
+ Y4jKljvG5BgQQI5xS4SjyC6fYo4=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e8895c7.7f0a3bf3c6f8-smtp-out-n05;
+ Sat, 04 Apr 2020 14:12:23 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 6E60EC433BA; Sat,  4 Apr 2020 14:12:23 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.79.170.113] (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: akdwived)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 85C34C433F2;
+        Sat,  4 Apr 2020 14:12:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 85C34C433F2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=akdwived@codeaurora.org
+Subject: Re: [PATCH v4 2/2] Embedded USB Debugger (EUD) driver
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ckadabi@codeaurora.org, tsoni@codeaurora.org,
+        bryanh@codeaurora.org, psodagud@codeaurora.org,
+        rnayak@codeaurora.org, satyap@codeaurora.org,
+        pheragu@codeaurora.org
+References: <1580445811-15948-1-git-send-email-akdwived@codeaurora.org>
+ <1580445811-15948-3-git-send-email-akdwived@codeaurora.org>
+ <20200203193533.GL3948@builder>
+ <5008a446-a90c-b68a-aaa4-3e7cd90418fa@linaro.org>
+ <d09f8a1d-0544-838f-e6f8-1c47f58e4f1f@codeaurora.org>
+ <8a854c02-7435-46c6-5bd1-05273e5249e4@linaro.org>
+ <aa942701-d11b-dcf2-d28f-144582af0d2f@codeaurora.org>
+ <a6cbc859-184e-2a0d-bd2b-0ad9653e5ee2@linaro.org>
+From:   "Dwivedi, Avaneesh Kumar (avani)" <akdwived@codeaurora.org>
+Message-ID: <5db1a666-62ec-c850-6626-ad33d337b452@codeaurora.org>
+Date:   Sat, 4 Apr 2020 19:42:13 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <20200404094101.672954-6-hch@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+In-Reply-To: <a6cbc859-184e-2a0d-bd2b-0ad9653e5ee2@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 04/04/2020 12:41, Christoph Hellwig wrote:
-> Switch the function documentation to kerneldoc comments, and add
-> WARN_ON_ONCE asserts that the calling thread is a kernel thread and
-> does not have ->mm set (or has ->mm set in the case of unuse_mm).
-> 
-> Also give the functions a kthread_ prefix to better document the
-> use case.
-> 
 
-io_uring and io-wq bits LGTM.
+On 2/18/2020 8:18 PM, Bryan O'Donoghue wrote:
+> On 18/02/2020 13:23, Dwivedi, Avaneesh Kumar (avani) wrote:
+>>
+>> On 2/18/2020 1:14 AM, Bryan O'Donoghue wrote:
+>>> On 16/02/2020 16:07, Dwivedi, Avaneesh Kumar (avani) wrote:
+>>>>
+>>>> On 2/4/2020 8:40 AM, Bryan O'Donoghue wrote:
+>>>>> On 03/02/2020 19:35, Bjorn Andersson wrote:
+>>>>>> On Thu 30 Jan 20:43 PST 2020, Avaneesh Kumar Dwivedi wrote:
+>>>>>
+>>>>> Hi Avaneesh.
+>>>>
+>>>> Hello Bryan, Thank you very much for your review comments.
+>>>>
+>>>> Will be replying to your comments and will be posting new patchset 
+>>>> soon as per review comments.
+>>>>
+>>>>>
+>>>>>> Please aim for keeping the sort order in this file (ignore QCOM_APR
+>>>>>> which obviously is in the wrong place)
+>>>>>>
+>>>>>>> +       tristate "QTI Embedded USB Debugger (EUD)"
+>>>>>>> +       depends on ARCH_QCOM
+>>>>>
+>>>>> If we persist with the model of EXTCON you should "select EXTCON" 
+>>>>> here.
+>>>
+>>>> I have asked this query with Bjorn Also against his review 
+>>>> comments, whether we need to persist with extcon or need to switch 
+>>>> to usb role switch framework, as we are notifying not only to usb 
+>>>> controller but also to pmic charger so in case we adopt usb role 
+>>>> switch then how we will notify to pmic charger to enable charging 
+>>>> battery ? Also as i mentioned there my dilema is it does not look 
+>>>> very apt to model EUD hw IP as c type connector, so please let me 
+>>>> know your views.
+>>>
+>>> I think there's a desire to model USB ports as connector child nodes 
+>>> of a USB controllers as opposed to the more generic extcon so, I 
+>>> think the effort should probably be made to model it up as typec.
+>> this comment is irrespective of your below comment (If we were to 
+>> support Control Peripheral where the local DWC3 controller has the 
+>> signals routed away entirely, then I think we would need to look into 
+>> modelling that in device tree - and using an overlay to show the DWC3 
+>> controller going away in Control Peripheral mode and coming back. )?
+>
+> Yes, I think irrespective we should model this as a connector not an 
+> extcon and I think you could do think you could do that as a typec
+>
+> 1. Using role-switch
+> 2. Use the regulator API to capture EUD related charger messages
+>    and trigger changes in the PMIC as opposed to using extcon
+>    to notify.
+>
+> I could be wrong about #2
 
-> --- a/include/linux/kthread.h
-> +++ b/include/linux/kthread.h
-...
-> -/*
-> - * unuse_mm
-> - *	Reverses the effect of use_mm, i.e. releases the
-> - *	specified mm context which was earlier taken on
-> - *	by the calling kernel thread
-> - *	(Note: this routine is intended to be called only
-> - *	from a kernel thread context)
-> +/**
-> + * kthread_use_mm - reverse the effect of kthread_use_mm()
+HI Bryan,
 
-s/kthread_use_mm/kthread_unuse_mm/
-for the first one
+Sorry for long pause on this thread, I went through USB role switch 
+framework  and yes we can move to it for notification of VBUS event, but 
+i am not able to find a good example in upstream, of how battery charger 
+module can be notified about charger stop and charger start event if we 
+don't use extcon interface for notification. I am not sure it would be 
+simple regulator enable and disable call, i will discuss with PMIC guys 
+on this and will come back.
 
-> + * @mm: address space to operate on
->   */
-> -void unuse_mm(struct mm_struct *mm)
-> +void kthread_unuse_mm(struct mm_struct *mm)
->  {
+>
+>>> Can that work for you ?
+>> Did not comprehend this comment fully. if possible can you give some 
+>> example.
+>
+> My understanding is we are generally being encouraged to model ports 
+> as connectors instead of extcon. I think it is possible to model your 
+> port driver as a typec connector using USB role-switching and the 
+> regulator API i.e. I don't think you really need extcon here.
+>
+>>> Ah so, the EUD is a mux, that sits between the connector and the 
+>>> controller, routing UTMI signals to an internal USB hub, which 
+>>> in-turn has debug functions attached to the hub...
+>> Yes that is correct understanding.
+>>>
+>>> Can the Arm core see the hub ? I assume not ?
+>> Not sure what is it mean by "Can the Arm core see the hub"?
+>
+> In Debug mode will a DWC3 controller in host mode enumerate the 
+> internal hub ? If so, is that a supported use-case ?
+In debug mode DWC3 controller will only enumerate in device mode.
+>
+>>> There are a few different modes - you should probably be clear on 
+>>> which mode it is you are supporting.
+>>>
+>>> Normal mode: (Bypass)
+>>> Port | EUD | Controller
+>>>
+>>> Normal + debug hub mode: (Debug)
+>>> Port | EUD | Controller + HUB -> debug functions
+>>>
+>>> Debug hub mode: (Control Peripheral)
+>>> Port | EUD | HUB -> debug functions
+>>>
+>>> its not clear to me from the documentation or the code which mode it 
+>>> is we are targeting to be supported here.
+>> Its debug mode which we are supporting in driver.
+>>>
+>>> I think you should support Debug mode only here, so that the Arm 
+>>> core never has to deal with the situation where the USB connector 
+>>> "goes away".
+>> Can you please help what you mean by "so that the Arm core never has 
+>> to deal with the situation where the USB connector "goes away""
+>
+> So my thinking is
+>
+> - DWC3 in host mode
+>   For argument sake, lets say an external self-powered hub is connected
+>   and a number of USB devices are enumerated
+> - EUD switches to Control Peripheral mode
+>
+> In this case what would happen ?
+I am not getting clarity about this from spec document, what i 
+understand is in this case PHY signal to USB controller will get 
+stop(UTMI switch will block signal from USB PHY to USB controller), so 
+before to switching to control peripheral mode EUD should send detach 
+event to USB controller so that it can enter low power mode, let me know 
+if it is grossly wrong understanding. In any case we are not supporting 
+control peripheral mode in present state of driver.
+>
+>>>
+>>> If we were to support Control Peripheral where the local DWC3 
+>>> controller has the signals routed away entirely, then I think we 
+>>> would need to look into modelling that in device tree - and using an 
+>>> overlay to show the DWC3 controller going away in Control Peripheral 
+>>> mode and coming back.
+>> debug mode is set run time via user, i will check how we can model 
+>> such scenario where device tree corresponding to a h/w module is only 
+>> valid in some scenario at run time. if possible please elaborate bit 
+>> more on your suggestion
+>
+> If Debug mode is all you are trying to do support then I don't think 
+> you really need to model that in DT.
+>
+> However if intend to support Control Peripheral mode which as I 
+> understand it, switches the UTMI signals away from a DWC3 controller 
+> in Host mode, then I think you would need to use a DT overlay to 
+> switch off the controller, before switching.
+>
+> That's why I'm asking you about Control Peripheral mode - do you want 
+> to support it - and if so, then what happens to DWC3 in host mode when 
+> the UTMI signals go away ?
+>
+> I think you've said you only want to support Debug mode, which makes 
+> more sense to me.
+>
+> Is Debug mode only valid when the DWC3 controller is in 
+> peripheral/device mode and if so, should we be checking/enforcing that 
+> somewhere - DT or EUD-driver code ?
+
+Yes in debug mode DWC3 controller should always be in device mode, and i 
+believe this we can insure when we inform USB controller about attach 
+event after starting in debug mode, using role-switch framework isnt it? 
+may be i am not getting your statement, how device mode enumeration can 
+be enforced using DT ?
+
+>
+>>> Also final thought since the EUD can operate in different modes, it 
+>>> really should be a string that gets passed in - with the string name 
+>>> aligning to the documentation "bypass", "debug" and so on, so that 
+>>> the mode we are switching to is obvious to anybody who has the spec 
+>>> and the driver.
+>>
+>> you mean we should document that this driver works in debug mode 
+>> only? not clear on where one should pass "debug" and "bypass" string?
+>
+> You have a routine to switch to debug mode that takes a parameter from 
+> user-space right ?
+>
+> Bjorn mentioned you could write 42. My question/suggestion is why 
+> isn't the value written a string which corresponds to the supported 
+> modes from the EUD spec ?
+> "bypass" as default "debug" the mode you want to add, at a later time 
+> you could optionally add in "control-periperhal" mode.
+>
+> Makes a little more sense to me than writing just 0, 1 or 42 :) into 
+> your store routine.
+OK.
+>
+> ---
+> bod
 
 -- 
-Pavel Begunkov
+Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project.
