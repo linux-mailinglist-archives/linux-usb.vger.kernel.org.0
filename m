@@ -2,65 +2,243 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C136919E2A1
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2020 06:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A571819E40C
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Apr 2020 11:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725876AbgDDEJG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Apr 2020 00:09:06 -0400
-Received: from mail-il1-f197.google.com ([209.85.166.197]:54567 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725836AbgDDEJF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Apr 2020 00:09:05 -0400
-Received: by mail-il1-f197.google.com with SMTP id m2so9118264ilb.21
-        for <linux-usb@vger.kernel.org>; Fri, 03 Apr 2020 21:09:05 -0700 (PDT)
+        id S1726016AbgDDJVw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Apr 2020 05:21:52 -0400
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:36160 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbgDDJVw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Apr 2020 05:21:52 -0400
+Received: by mail-pj1-f65.google.com with SMTP id nu11so4166257pjb.1;
+        Sat, 04 Apr 2020 02:21:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=NGWjop58dXG4vxvIdRNaBQN9RGU+nV2F4sGHS4krjUo=;
+        b=aoxYQ38PiYhTd+Dz1M1BjQDqvxcAfcndhj7HICuNEpV9z4uSvebaYJ5wAW/b/9YgAx
+         49+GSxdhFfaR2oLyCt83fpzwsuZT1EPmUDLfC2LdAdAJsu0AfL/HAHH1LFdspdtJBgf6
+         O9BT9reeHvTpZDIdPF7ba08EMb8Tu+M+Cy8ZoPavS/9ghMlxCR8bhTxRdiSpbaHlNit8
+         ZUkbxO69Azcqf+y8PXIZ/SJ+u0ZgOJ0mShekcuf3hn/mb56ktAyXhZSn/uYj560rIlC8
+         R1l1tblnVxeNfGd5nYY9fk3PQwbXJiB0j5ZB2frsIa65FyUnQRBqDZHTUXL7KixjqB8Z
+         i6Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=diBIYrBkL43yhmYF0/S2uMZTr+kD81tZauofr3nRl24=;
-        b=Yv55PPHb/MSyL9P0Z5wWsMA4BcwztJQYMNorPAQLsOiNAYBUiurJiKf5vnPmMNfWGZ
-         fsziEMAFa3DJXZwsXbjRrDbP3MauwmZ07EfjekQcFpQh3z0GqQGaxti824MciMsC98kn
-         65idUehwQtghD6cs+WzxGVBoFZ1ke6aKlHN0gKDrOkm3B4jq/LjArCZUu4OQX3zzcaoC
-         34KzlWeHplVrBVfdlkPROyBA6AaY+CxTIfSmYXinc6ZRB53DNUI0v1xU+klIdDqz2DcK
-         8lMr0ms7KRIxQFN/roLMithqWFKU+4iNCAiS1nwdiooSAZUtCIyUkTmrxZcRfPHgxNNM
-         HcQw==
-X-Gm-Message-State: AGi0PuY/LE6j84mBKviw0xc3qrDnl3c1qWgYv/u425yYu1EKqcHDl0JX
-        UbvxsC3NUF5ekGtGPOOCajuPkKRoGQewEUsLQOQc5kwYRltK
-X-Google-Smtp-Source: APiQypJ5efjfRCN5u7ZAYjDOHXe+DOFRnUU7zbwH7K1RJaIG4HFLng7f7L5dljhYeD3j82EhyOQlk1THoej8y+TkewC+4f/Gn6uz
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=NGWjop58dXG4vxvIdRNaBQN9RGU+nV2F4sGHS4krjUo=;
+        b=dZVA/gNF6hVMGIz/9oMw1pJ3I7gfJIWVTIXJMi7TWwaJ9Axk0PFx80Gbrs5h7D71GP
+         JAQDtCK6vkdDXuKq7/73C9XhbTOKIRRu8nEne/jzT/aJsqGGFMUBJ3ODHedhwrVJALsN
+         6CVQRPE7mBksge5QPhefKCiIexXuOr9oQY7scjQTob36a2p8dx5lTM7aqFNdwo56EPm/
+         SOnAkkKb0dkifVFdSlMZRSFrWimVlctu/TsYN7Fand5BXa3NuP9s27EWLnsIdCQQceOP
+         e7Jt+q7/WoPhnvm3pOC9AkKiAK5Rs0VWiPgvAQo6bt9PCuVt/amfR95nHGPBHo1Vd5d7
+         mixw==
+X-Gm-Message-State: AGi0PuZmFSr2sOKf2VngxBqwFXSLmTskGxbD54atQ7vnXdWhgKM3DVU3
+        Ogk0VyCgRaBaHfTd6EZS20s=
+X-Google-Smtp-Source: APiQypIh6/tBvi/I+KrSy5FN/7eVkcMYHZrfKkGYY0tvSU7vJ/rf7VYnpdxdwhHlE47Fga+c5RJHsQ==
+X-Received: by 2002:a17:902:c595:: with SMTP id p21mr11756123plx.17.1585992110608;
+        Sat, 04 Apr 2020 02:21:50 -0700 (PDT)
+Received: from nishad ([106.51.232.103])
+        by smtp.gmail.com with ESMTPSA id a2sm7550506pja.44.2020.04.04.02.21.44
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 04 Apr 2020 02:21:50 -0700 (PDT)
+Date:   Sat, 4 Apr 2020 14:51:40 +0530
+From:   Nishad Kamdar <nishadkamdar@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Joe Perches <joe@perches.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] USB: host: Use the correct style for SPDX License Identifier
+Message-ID: <20200404092135.GA4522@nishad>
 MIME-Version: 1.0
-X-Received: by 2002:a92:d108:: with SMTP id a8mr12182305ilb.107.1585973345184;
- Fri, 03 Apr 2020 21:09:05 -0700 (PDT)
-Date:   Fri, 03 Apr 2020 21:09:05 -0700
-In-Reply-To: <CADG63jDQEbMbmRsmQ=xVQyG_Gy=vqTYhFZ1J+3k1dTX_K75s6w@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000dcf19a05a26f3110@google.com>
-Subject: Re: KASAN: use-after-free Read in ath9k_wmi_ctrl_rx
-From:   syzbot <syzbot+5d338854440137ea0fef@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, anenbupt@gmail.com,
-        ath9k-devel@qca.qualcomm.com, davem@davemloft.net,
-        kvalo@codeaurora.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+This patch corrects the SPDX License Identifier style in
+header files related to USB host controller drivers.
+For C header files Documentation/process/license-rules.rst
+mandates C-like comments (opposed to C source files where
+C++ style should be used).
 
-syzbot has tested the proposed patch and the reproducer did not trigger crash:
+Changes made by using a script provided by Joe Perches here:
+https://lkml.org/lkml/2019/2/7/46.
 
-Reported-and-tested-by: syzbot+5d338854440137ea0fef@syzkaller.appspotmail.com
+Suggested-by: Joe Perches <joe@perches.com>
+Signed-off-by: Nishad Kamdar <nishadkamdar@gmail.com>
+---
+ drivers/usb/host/ehci-fsl.h      | 2 +-
+ drivers/usb/host/ehci.h          | 2 +-
+ drivers/usb/host/fhci.h          | 2 +-
+ drivers/usb/host/imx21-hcd.h     | 2 +-
+ drivers/usb/host/ohci.h          | 2 +-
+ drivers/usb/host/r8a66597.h      | 2 +-
+ drivers/usb/host/xhci-debugfs.h  | 2 +-
+ drivers/usb/host/xhci-ext-caps.h | 2 +-
+ drivers/usb/host/xhci-mtk.h      | 2 +-
+ drivers/usb/host/xhci-mvebu.h    | 2 +-
+ drivers/usb/host/xhci-plat.h     | 2 +-
+ drivers/usb/host/xhci-rcar.h     | 2 +-
+ drivers/usb/host/xhci-trace.h    | 2 +-
+ drivers/usb/host/xhci.h          | 2 +-
+ 14 files changed, 14 insertions(+), 14 deletions(-)
 
-Tested on:
+diff --git a/drivers/usb/host/ehci-fsl.h b/drivers/usb/host/ehci-fsl.h
+index 9d18c6e6ab27..c95341d472f4 100644
+--- a/drivers/usb/host/ehci-fsl.h
++++ b/drivers/usb/host/ehci-fsl.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0+
++/* SPDX-License-Identifier: GPL-2.0+ */
+ /* Copyright (C) 2005-2010,2012 Freescale Semiconductor, Inc.
+  * Copyright (c) 2005 MontaVista Software
+  */
+diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
+index 229b3de319e6..eabf22a78eae 100644
+--- a/drivers/usb/host/ehci.h
++++ b/drivers/usb/host/ehci.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0+
++/* SPDX-License-Identifier: GPL-2.0+ */
+ /*
+  * Copyright (c) 2001-2002 by David Brownell
+  */
+diff --git a/drivers/usb/host/fhci.h b/drivers/usb/host/fhci.h
+index 2ce5031d866d..81fbc019a9b3 100644
+--- a/drivers/usb/host/fhci.h
++++ b/drivers/usb/host/fhci.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0+
++/* SPDX-License-Identifier: GPL-2.0+ */
+ /*
+  * Freescale QUICC Engine USB Host Controller Driver
+  *
+diff --git a/drivers/usb/host/imx21-hcd.h b/drivers/usb/host/imx21-hcd.h
+index 7b9cf0a38d6e..96d16752a73e 100644
+--- a/drivers/usb/host/imx21-hcd.h
++++ b/drivers/usb/host/imx21-hcd.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0+
++/* SPDX-License-Identifier: GPL-2.0+ */
+ /*
+  * Macros and prototypes for i.MX21
+  *
+diff --git a/drivers/usb/host/ohci.h b/drivers/usb/host/ohci.h
+index 27c26ca10bfd..b85a39588f9d 100644
+--- a/drivers/usb/host/ohci.h
++++ b/drivers/usb/host/ohci.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-1.0+
++/* SPDX-License-Identifier: GPL-1.0+ */
+ /*
+  * OHCI HCD (Host Controller Driver) for USB.
+  *
+diff --git a/drivers/usb/host/r8a66597.h b/drivers/usb/host/r8a66597.h
+index 51973a923526..ab081475c113 100644
+--- a/drivers/usb/host/r8a66597.h
++++ b/drivers/usb/host/r8a66597.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
+ /*
+  * R8A66597 HCD (Host Controller Driver)
+  *
+diff --git a/drivers/usb/host/xhci-debugfs.h b/drivers/usb/host/xhci-debugfs.h
+index f7a4e2492b00..56db635fcd6e 100644
+--- a/drivers/usb/host/xhci-debugfs.h
++++ b/drivers/usb/host/xhci-debugfs.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
+ /*
+  * xhci-debugfs.h - xHCI debugfs interface
+  *
+diff --git a/drivers/usb/host/xhci-ext-caps.h b/drivers/usb/host/xhci-ext-caps.h
+index 268328c20681..fa59b242cd51 100644
+--- a/drivers/usb/host/xhci-ext-caps.h
++++ b/drivers/usb/host/xhci-ext-caps.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
+ /*
+  * xHCI host controller driver
+  *
+diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
+index acd56517215a..a93cfe817904 100644
+--- a/drivers/usb/host/xhci-mtk.h
++++ b/drivers/usb/host/xhci-mtk.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
+ /*
+  * Copyright (c) 2015 MediaTek Inc.
+  * Author:
+diff --git a/drivers/usb/host/xhci-mvebu.h b/drivers/usb/host/xhci-mvebu.h
+index ca0a3a5721dd..3be021793cc8 100644
+--- a/drivers/usb/host/xhci-mvebu.h
++++ b/drivers/usb/host/xhci-mvebu.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
+ /*
+  * Copyright (C) 2014 Marvell
+  *
+diff --git a/drivers/usb/host/xhci-plat.h b/drivers/usb/host/xhci-plat.h
+index 5681723fc9cd..b49f6447bd3a 100644
+--- a/drivers/usb/host/xhci-plat.h
++++ b/drivers/usb/host/xhci-plat.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
+ /*
+  * xhci-plat.h - xHCI host controller driver platform Bus Glue.
+  *
+diff --git a/drivers/usb/host/xhci-rcar.h b/drivers/usb/host/xhci-rcar.h
+index 012744a63a49..048ad3b8a6c7 100644
+--- a/drivers/usb/host/xhci-rcar.h
++++ b/drivers/usb/host/xhci-rcar.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
+ /*
+  * drivers/usb/host/xhci-rcar.h
+  *
+diff --git a/drivers/usb/host/xhci-trace.h b/drivers/usb/host/xhci-trace.h
+index b19582b2a72c..627abd236dbe 100644
+--- a/drivers/usb/host/xhci-trace.h
++++ b/drivers/usb/host/xhci-trace.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
+ /*
+  * xHCI host controller driver
+  *
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 3289bb516201..fb50f0e82d08 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
+ 
+ /*
+  * xHCI host controller driver
+-- 
+2.17.1
 
-commit:         0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a782c087b1f425c6
-dashboard link: https://syzkaller.appspot.com/bug?extid=5d338854440137ea0fef
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=11646f93e00000
-
-Note: testing is done by a robot and is best-effort only.
