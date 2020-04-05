@@ -2,154 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6578719E89F
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Apr 2020 04:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8627919EA0B
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Apr 2020 10:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726632AbgDECvo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Apr 2020 22:51:44 -0400
-Received: from mail-il1-f178.google.com ([209.85.166.178]:40842 "EHLO
-        mail-il1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726444AbgDECvn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Apr 2020 22:51:43 -0400
-Received: by mail-il1-f178.google.com with SMTP id j9so11419690ilr.7
-        for <linux-usb@vger.kernel.org>; Sat, 04 Apr 2020 19:51:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cDYSzr35MPD0+BllF+O9w43kH3zVS1+w1EZZRAPz+Q4=;
-        b=t2puYk2hefd/fDpiQWVSSkYFhYYQHyqgnWuvZjZU0hphZhiEARrUaQCpiDbodzou+u
-         8bGVlAkzMKPJtemucTqc8qH/Um82WpH/DIlIc8l37KAv7BnFLPAW5/izh7ZyyqqP2CZz
-         FAXG4zkQNoOCw0MJl9dugvXMWfVirlY8iAahDxrIRON505UveB6Y7Zene2IuZLX3M3Kr
-         B9D4GwXD7M7qH3razsvbFzzu6tZrzLoBnjwDaiIozs0/xvvg0DV5vvmfoywLaDTU4s8p
-         0SAZ3HIYqjVBXqfMcvWDDL/aoWLwnkkDwO2eTD/e46N9IjYSVUrb8sm2tARt0kKPv5l/
-         7+NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cDYSzr35MPD0+BllF+O9w43kH3zVS1+w1EZZRAPz+Q4=;
-        b=sgRG+hX3vPsoGVo0tccaaCSy04ZIoPabW5Ugwcha+/9xSKIL7F+KLy2DTMITsa0bVL
-         tVYs4pW20AO9Mz+gbQSkCdeogSaIc4m305HbYDXWmeBS+RQGgx3b3s2AfmVGW+7RBAnq
-         GB9Cu3RjtgYPkPNzqyom2MCmaScXPcAkZhG1t80jYyyRXYool6mDlsHPwlbpORyANwA9
-         A2sGTjmgMlKKM66XK2CbnuqA1llxG7czjwzFWT/znXnfLoxMayNzJ8EdYfXaWrRZzods
-         J31dttkz7ppuMngfdGsaGOC2VX9KlJGIzoPebyNyJ15WKHrH21r6Z4DwHInUXUJJH5PU
-         R+yw==
-X-Gm-Message-State: AGi0PubOtg9dVDx86NB+RXXbTxz8IvEe+h3xyPCyAXxfgU0MkuVj2B7s
-        1xjJo488q3SXwqJQ/CyzA62RduBrtDjSg7p1Nak1o0lLG/w=
-X-Google-Smtp-Source: APiQypIi4F9URUiQMdLqdTS4zv2bnMOxtn0N4vAMYhkJPbDCJ7pQpIuWUJDDV2G4q4TVY7kt0ZlN1wVyUAIVX96/454=
-X-Received: by 2002:a92:3b11:: with SMTP id i17mr16060722ila.161.1586055101108;
- Sat, 04 Apr 2020 19:51:41 -0700 (PDT)
+        id S1726390AbgDEIhm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Apr 2020 04:37:42 -0400
+Received: from walmailout05.yourhostingaccount.com ([65.254.253.40]:52065 "EHLO
+        walmailout05.yourhostingaccount.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726308AbgDEIhm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Apr 2020 04:37:42 -0400
+X-Greylist: delayed 1815 seconds by postgrey-1.27 at vger.kernel.org; Sun, 05 Apr 2020 04:37:41 EDT
+Received: from mailscan12.yourhostingaccount.com ([10.1.15.12] helo=walmailscan12.yourhostingaccount.com)
+        by walmailout05.yourhostingaccount.com with esmtp (Exim)
+        id 1jL0JQ-0001SE-2w
+        for linux-usb@vger.kernel.org; Sun, 05 Apr 2020 04:07:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=outlook.com
+        ; s=dkim; h=Sender:Content-Transfer-Encoding:Content-Type:MIME-Version:
+        Reply-To:From:Subject:Date:Message-ID:To:Cc:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=bG1v3815Um4cMeCrYRX8aesopxJcpzDRPwyU1eEpb+o=; b=BMnVOua3s1lT07kVBvZxCsKSjw
+        VFKlXzI8nMYEq7tR8j0e55zfHO5wcKRRkyhSgfD3uJy8TP5aOxkBOm1DCuS7Hof3KHVLWM02iXH5C
+        DYevB609rjXn/X19y15wcDoO5lCTXZlnkEeHqI+iCEGlUk2gh/pbFfoBN8FVf8xLzPVa5usXceIis
+        Vzpb6v4S1wm2fPWbcBESNnvfyeU+dbC0NStA5VG7JBz5YSGPpPF4b6o+M+Ff8+9aPyvEw6eyBs+LV
+        JO68sLRa5vMmBreX6CG7Iw66p8Q5KNZmFPcsnv2GouM74AU9CH8AR2AaZNZgFtMPyRxkfsaIZWeI/
+        0bsWj0xQ==;
+Received: from [10.114.3.31] (helo=walimpout11)
+        by walmailscan12.yourhostingaccount.com with esmtp (Exim)
+        id 1jL0JQ-0002Du-16
+        for linux-usb@vger.kernel.org; Sun, 05 Apr 2020 04:07:24 -0400
+Received: from walwebmail16.yourhostingaccount.com ([10.1.16.16])
+        by walimpout11 with 
+        id Nw7L220030Lncky01w7PBX; Sun, 05 Apr 2020 04:07:23 -0400
+X-Authority-Analysis: v=2.2 cv=cKKQihWN c=1 sm=1 tr=0
+ a=smjlbzShKu/u1a5JyaOa2A==:117 a=MTLdqIm8a7Hsb0igwrPktg==:17
+ a=9cW_t1CCXrUA:10 a=p8F6t4gkI7sA:10 a=8nJEP1OIZ-IA:10 a=x7bEGLp0ZPQA:10
+ a=Z72ZYUWJgGUA:10 a=cl8xLZFz6L8A:10 a=VnpjU5JkLH3v6DsBvkkA:9
+ a=t3cXErBrAYVJrKvs:21 a=-UzSf-bd6v_G5XUU:21 a=wPNLvfGTeEIA:10
+Received: from [127.0.0.1] (helo=email.fatcow.com)
+        by walwebmail16.yourhostingaccount.com with esmtp (Exim)
+        id 1jL0JM-0000UK-Dr; Sun, 05 Apr 2020 04:07:20 -0400
+Received: from 197.239.65.2
+        (SquirrelMail authenticated user pkish2@pkishrl.com)
+        by email.fatcow.com with HTTP;
+        Sun, 5 Apr 2020 04:07:20 -0400
+Message-ID: <ddce95f1cab7168a4312b663bd42c6df.squirrel@email.fatcow.com>
+Date:   Sun, 5 Apr 2020 04:07:20 -0400
+Subject: NOTE
+From:   "KISH PATRICK" <mo-ho@outlook.com>
+Reply-To: krp2014@live.fr
+User-Agent: SquirrelMail/1.4.19
 MIME-Version: 1.0
-References: <CAB=otbS1RTnn9PixJYjsW4U_37GcFvR-O3WZ-7YnamdcDGKvRA@mail.gmail.com>
- <Pine.LNX.4.44L0.2004042124390.25831-100000@netrider.rowland.org>
- <CAPXXXSBLHYdHNSS4aM2Ax07+GQSB1WbPziOrk0iVWf-LXLmQRg@mail.gmail.com> <CAPXXXSAajets4AqcBKt8aRd8V1AL4bjAmCyuBOKr8qBG-AHO1A@mail.gmail.com>
-In-Reply-To: <CAPXXXSAajets4AqcBKt8aRd8V1AL4bjAmCyuBOKr8qBG-AHO1A@mail.gmail.com>
-From:   Colin Williams <colin.williams.seattle@gmail.com>
-Date:   Sat, 4 Apr 2020 19:51:30 -0700
-Message-ID: <CAPXXXSA18e7Qw66boVjQpmOibMRyC98oD2xfNHFyscf0jPWFEg@mail.gmail.com>
-Subject: Re:
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Linux USB <linux-usb@vger.kernel.org>,
-        alsa-devel@alsa-project.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+X-Priority: 3 (Normal)
+Importance: Normal
+X-EN-AuthUser: pkish2@pkishrl.com
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello all
 
 
-This is embarrassing but I think my issues were due to a bad USB cable.
 
+Dear Friend,
 
-Thank You
+I assume that this message will reach you in good health.  I m Mrs. Kish
+Patrick, the wife of late kano Patrick,  the Director of High River Gold
+Mines Ltd Burkina Faso West Africa. Now I am suffering from breast cancer
+and from all indication, I understand that I am not going to survive this 
+sickness. Therefore, i need a reliable person, who will handle this
+project accordingly, accomplish  my heart desire and utilize this fund. I
+assured you honesty and reliability to champion this  business
+opportunity. I have decided to donate the sum Twenty-Five Million Two
+Hundred Thousand  United State Dollars Only  ($25,200,000.00) to Charity
+Organizations or to support the Orphans,  Motherless Babies, Less
+privileged and free Medical & Medicine Poor People's around the World
+since  I don t have any child and do not want the bank to take over the
+fund. If you are ready  handle this transaction, i will guide you on how
+you should apply for the claim so that the fund will release into your own
+account and  you will take 40% from the fund and the rest will use for
+Charity Organizations. Further information will be given to you as soon as
+I receive your reply.
 
+Remain blessed in the name of the Lord.
+Regard
+Mrs.Kish Patrick.
 
-On Sat, Apr 4, 2020 at 7:50 PM Colin Williams
-<colin.williams.seattle@gmail.com> wrote:
->
-> Hello all
->
->
-> This is embarrassing but I think my issues were due to a bad USB cable.
->
->
-> Thank You
->
->>
->> On Sat, Apr 4, 2020 at 6:27 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->>>
->>> On Sun, 5 Apr 2020, Ruslan Bilovol wrote:
->>>
->>> > Hi,
->>> >
->>> > Please also add to CC related mailing lists (alsa-devel, linux-usb) rather
->>> > then directly emailing - community may also help with the issue. Also it can be
->>> > googled so if somebody else have same issue it can find answers faster.
->>> >
->>> > On Fri, Apr 3, 2020 at 10:56 AM Colin Williams
->>> > <colin.williams.seattle@gmail.com> wrote:
->>> > >
->>> > > https://ubuntuforums.org/showthread.php?t=2439897
->>> > >
->>> > > On Thu, Apr 2, 2020 at 4:50 PM Colin Williams <colin.williams.seattle@gmail.com> wrote:
->>> > >>
->>> > >> Hello,
->>> > >>
->>> > >> Is it possible that one of these commits or related broke support for the Blue Mic Yeti?
->>> > >>
->>> > >> https://github.com/torvalds/linux/blame/ac438771ccb4479528594c7e19f2c39cf1814a86/sound/usb/stream.c#L816
->>> >
->>> > Tha'ts workaround to ignore last altsetting which is the same as previous.
->>> > During UAC3 implementation, I reimplemented that workaround carefully,
->>> > but I didn't have (and still do not own) any Blue Mic USB device.
->>> > I don't know whether it was tested after that by anyone.
->>> >
->>> > >>
->>> > >> I am getting the following when I plug my mic in:
->>> >
->>> > Which kernel version is that? Have you tried latest Linux Kernel?
->>> >
->>> > >>
->>> > >> [ 1283.848740] usb 1-1.2: new full-speed USB device number 82 using ehci-pci
->>> > >> [ 1283.964802] usb 1-1.2: New USB device found, idVendor=b58e, idProduct=9e84, bcdDevice= 1.00
->>> > >> [ 1283.964808] usb 1-1.2: New USB device strings: Mfr=1, Product=2, SerialNumber=0
->>> > >> [ 1283.964810] usb 1-1.2: Product: Yeti Stereo Microphone
->>> > >> [ 1283.964812] usb 1-1.2: Manufacturer: Blue Microphones
->>> > >> [ 1284.080671] usb 1-1.3: new low-speed USB device number 83 using ehci-pci
->>> > >> [ 1284.784678] usb 1-1.3: device descriptor read/64, error -32
->>> > >> [ 1285.180674] usb 1-1.3: device descriptor read/64, error -32
->>> > >> [ 1285.992682] usb 1-1.3: new low-speed USB device number 84 using ehci-pci
->>> > >> [ 1286.696672] usb 1-1.3: device descriptor read/64, error -32
->>> > >> [ 1287.092695] usb 1-1.3: device descriptor read/64, error -32
->>> > >> [ 1287.200804] usb 1-1-port3: attempt power cycle
->>> > >> [ 1287.804662] usb 1-1.3: new low-speed USB device number 85 using ehci-pci
->>> > >> [ 1288.220686] usb 1-1.3: device not accepting address 85, error -32
->>> > >> [ 1288.508685] usb 1-1.3: new low-speed USB device number 86 using ehci-pci
->>> > >> [ 1288.924690] usb 1-1.3: device not accepting address 86, error -32
->>> > >> [ 1288.924916] usb 1-1-port3: unable to enumerate USB device
->>> > >> [ 1288.925391] usb 1-1.2: USB disconnect, device number 82
->>> > >> [ 1289.308736] usb 1-1.3: new low-speed USB device number 87 using ehci-pci
->>> > >> [ 1289.596727] usb 1-1.3: device descriptor read/64, error -32
->>> > >> [ 1289.992635] usb 1-1.3: device descriptor read/64, error -32
->>> > >> [ 1290.596683] usb 1-1.3: new low-speed USB device number 88 using ehci-pci
->>> > >> [ 1290.888718] usb 1-1.3: device descriptor read/64, error -32
->>> > >> [ 1291.284673] usb 1-1.3: device descriptor read/64, error -32
->>> > >> [ 1291.392928] usb 1-1-port3: attempt power cycle
->>> >
->>> > Looking at this log, it seems the issue happens during enumeration,
->>> > so mentioned workaround isn't executed yet at this moment.
->>> > So it seems this is related to USB core, not to ALSA driver.
->>>
->>> All those errors were for the 1-1.3 device.  The microphone was 1-1.2.
->>> It's not clear from the log above what the relationship between those
->>> two devices is, but it sure looks like the microphone was enumerated
->>> okay.
->>>
->>> What shows up in /sys/kernel/debug/usb/devices?
->>>
->>> Alan Stern
->>>
