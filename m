@@ -2,285 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C0519FA4B
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Apr 2020 18:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0299D19FA55
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Apr 2020 18:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729531AbgDFQji (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Apr 2020 12:39:38 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:27759 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729527AbgDFQji (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Apr 2020 12:39:38 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1586191177; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=p0XtF/zhQFXWOlfW1YKM6MOQlK8lTjQ5wMkXZkRGCnY=; b=BrxzIhzVOa8UKyaxbR3jwpyICwlC5DoHM0zTm4kPGkmMIzIY4Ynt0QOrpYoCzUUkZ73/AIfa
- dIfWMjUeLNEBJM2W/FvBcd7BMl+nQmXedhV4b9MpNcNiscdPejMWsPzyUCH5sOT9JtrVACN4
- mMqzejB0aiN9oOm7i9eHVLOS6uI=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e8b5b3d.7f0a1db726c0-smtp-out-n05;
- Mon, 06 Apr 2020 16:39:25 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 67E3DC4478C; Mon,  6 Apr 2020 16:39:25 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.206.24.160] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sanm)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 01CCEC433D2;
-        Mon,  6 Apr 2020 16:39:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 01CCEC433D2
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sanm@codeaurora.org
-Subject: Re: [PATCH v5 1/2] dt-bindings: usb: qcom,dwc3: Convert USB DWC3
- bindings
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>
-References: <1585206368-685-1-git-send-email-sanm@codeaurora.org>
- <1585206368-685-2-git-send-email-sanm@codeaurora.org>
- <20200404171700.GA10096@bogus>
-From:   "Sandeep Maheswaram (Temp)" <sanm@codeaurora.org>
-Message-ID: <5e2eb0a4-ed70-4212-fc70-6ee850507a7e@codeaurora.org>
-Date:   Mon, 6 Apr 2020 22:09:17 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1729564AbgDFQkR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Apr 2020 12:40:17 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:40747 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729560AbgDFQkR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Apr 2020 12:40:17 -0400
+Received: by mail-pf1-f193.google.com with SMTP id c20so7792927pfi.7
+        for <linux-usb@vger.kernel.org>; Mon, 06 Apr 2020 09:40:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bgJwQUGkrHo8WkFM5XYCRlm849reBV1dmYwhsL9EaXs=;
+        b=HCUrow3q7UgODsxRB0qSihFqHuRuzt3M6E4Kxz5xOJ9qqF1pkSvp+mE/Witb9jovZp
+         cGmmsIQDmCMMOoXBR3dY3XHt9BR6HGTL5/2VGBd8qrh6EfGLUEB/Dx3T67H8ExUl1m+I
+         3bN7V9UneTlIIhv/oWzyOdegFj42tv1PDlkSh8xPmKxgdWkREmUoiUO64hMDuKfXjegX
+         inl96YiXdJ0l9ywc1oe3Mr/+NHEWvpAFEXQuV3FYzT4gDPQQ58n3tZo8oVAsfGRr02/u
+         nznhJDQHv5BacI9OgvDpzinZidKTjVKypNl1QUTDl4yoYZUIi1tDuW8sUu/ZqZd2cHHs
+         szVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bgJwQUGkrHo8WkFM5XYCRlm849reBV1dmYwhsL9EaXs=;
+        b=OYYJHQyyfReSd2ZFDy41kjB+eRv0LxXEI8JdyjXXVRv4npqQNP/IjVb/66OVIRxqo0
+         vvuN1w0u0GNPfBnFvEeJKmtd1FhzGBAiL+mPQvV0pr1BzMBW6/NfoCu1GH4vdmaUxtnE
+         tLLSG8bE2KQpYJf1CYfUKlLzLkrizThmt43f/Ypftt0LwRmQ8vXeM/TGB2Xm7A04r7Xj
+         hCJpxQQU8cgXd4cZQYovE4kWUVQMnNg7/bupmwp9cFthDI5PKT+ORiU5WkSChwpFT0M8
+         XAawio4HsMkeegflHMrlllXx5VJuzpfLY9uo0/e1Sy7l4McpAN2JLTwdjG26W5t0Tzab
+         TI5A==
+X-Gm-Message-State: AGi0PuY57QBNIAknWycfIemkC1xJWtDuah7P47FVp2T/F+fEwdVyoNsh
+        c1sZFkKo9EQUftks0err4sRMoXRi6b7Rkirj/N/EAw==
+X-Google-Smtp-Source: APiQypK98FYUDlxduCAIqeqe6mfPxyN+ysiZdRjv50nVGM3GR53p48azaK4GXQ2CuQVcCBhE+2BGGq6x3i8ekqht2EE=
+X-Received: by 2002:a62:ce48:: with SMTP id y69mr323937pfg.178.1586191215396;
+ Mon, 06 Apr 2020 09:40:15 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200404171700.GA10096@bogus>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <20200406145119.GG68494@mwanda>
+In-Reply-To: <20200406145119.GG68494@mwanda>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Mon, 6 Apr 2020 18:40:04 +0200
+Message-ID: <CAAeHK+zX-RG5=6pP=k9ofc_1bY1pK+SXrGjAsHmMbc+nVimGxA@mail.gmail.com>
+Subject: Re: [PATCH] usb: raw-gadget: Fix copy_to/from_user() checks
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rob,
-
-On 4/4/2020 10:47 PM, Rob Herring wrote:
-> On Thu, Mar 26, 2020 at 12:36:07PM +0530, Sandeep Maheswaram wrote:
->> Convert USB DWC3 bindings to DT schema format using json-schema.
->>
->> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
->> ---
->>   .../devicetree/bindings/usb/qcom,dwc3.txt          | 104 --------------
->>   .../devicetree/bindings/usb/qcom,dwc3.yaml         | 158 +++++++++++++++++++++
->>   2 files changed, 158 insertions(+), 104 deletions(-)
->>   delete mode 100644 Documentation/devicetree/bindings/usb/qcom,dwc3.txt
->>   create mode 100644 Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+On Mon, Apr 6, 2020 at 4:53 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
 >
->> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->> new file mode 100644
->> index 0000000..0f69475
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->> @@ -0,0 +1,158 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/usb/qcom,dwc3.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm SuperSpeed DWC3 USB SoC controller
->> +
->> +maintainers:
->> +  - Manu Gautam <mgautam@codeaurora.org>
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - qcom,msm8996-dwc3
->> +          - qcom,msm8998-dwc3
->> +          - qcom,sdm845-dwc3
->> +      - const: qcom,dwc3
->> +
->> +  reg:
->> +    description: Offset and length of register set for QSCRATCH wrapper
->> +    maxItems: 1
->> +
->> +  "#address-cells":
->> +    enum: [ 1, 2 ]
->> +
->> +  "#size-cells":
->> +    enum: [ 1, 2 ]
->> +
->> +  power-domains:
->> +    description: specifies a phandle to PM domain provider node
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    description:
->> +      A list of phandle and clock-specifier pairs for the clocks
->> +      listed in clock-names.
->> +    items:
->> +      - description: System Config NOC clock.
->> +      - description: Master/Core clock, has to be >= 125 MHz
->> +          for SS operation and >= 60MHz for HS operation.
->> +      - description: System bus AXI clock.
->> +      - description: Mock utmi clock needed for ITP/SOF generation
->> +          in host mode. Its frequency should be 19.2MHz.
->> +      - description: Sleep clock, used for wakeup when
->> +          USB3 core goes into low power mode (U3).
->> +
->> +  clock-names:
->> +    items:
->> +      - const: cfg_noc
->> +      - const: core
->> +      - const: iface
->> +      - const: mock_utmi
->> +      - const: sleep
->> +
->> +  assigned-clocks:
->> +    items:
->> +      - description: Phandle and clock specifier of MOCK_UTMI_CLK.
->> +      - description: Phandle and clock specifoer of MASTER_CLK.
->> +
->> +  assigned-clock-rates:
->> +    maxItems: 2
-> Need to drop this as it is redundant. Soon this will generate an error.
-Will do in next version.
->> +    items:
->> +      - description: Must be 19.2MHz (19200000).
-> Sounds like a constraint:
+> The copy_to/from_user() functions return the number of bytes remaining
+> but we want to return negative error codes.  I changed a couple checks
+> in raw_ioctl_ep_read() and raw_ioctl_ep0_read() to show that we still
+> we returning zero on error.
 >
-> - const: 19200000
+> Fixes: f2c2e717642c ("usb: gadget: add raw-gadget interface")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+
+Thanks, Dan!
+
+Reviewed-by: Andrey Konovalov <andreyknvl@google.com>
+Tested-by: Andrey Konovalov <andreyknvl@google.com>
+
+
+> ---
+>  drivers/usb/gadget/legacy/raw_gadget.c | 46 ++++++++++++++++++++++------------------------
+>  1 file changed, 22 insertions(+), 24 deletions(-)
 >
->> +      - description: Must be >= 60 MHz in HS mode, >= 125 MHz in SS mode.
-> - minimum: 60000000
->    maximum: ?
-
-Tried  as below but facing errors
-
-assigned-clock-rates:
-     items:
-       - const: 19200000
-       - minimum: 60000000
-         maximum: 150000000
-
-Errors
-
-linux-next/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dt.yaml: 
-usb@a6f8800: assigned-clock-rates: Additional items are not allowed 
-([150000000] was unexpected)
-linux-next/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dt.yaml: 
-usb@a6f8800: assigned-clock-rates:0: [19200000] is too short
-linux-next/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dt.yaml: 
-usb@a6f8800: assigned-clock-rates: [[19200000], [150000000]] is too long
-
->> +
->> +  resets:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    items:
->> +      - description: The interrupt that is asserted
->> +          when a wakeup event is received on USB2 bus.
->> +      - description: The interrupt that is asserted
->> +          when a wakeup event is received on USB3 bus.
->> +      - description: Wakeup event on DM line.
->> +      - description: Wakeup event on DP line.
->> +
->> +  interrupt-names:
->> +    items:
->> +      - const: hs_phy_irq
->> +      - const: ss_phy_irq
->> +      - const: dm_hs_phy_irq
->> +      - const: dp_hs_phy_irq
->> +
->> +  qcom,select-utmi-as-pipe-clk:
->> +    description:
->> +      If present, disable USB3 pipe_clk requirement.
->> +      Used when dwc3 operates without SSPHY and only
->> +      HS/FS/LS modes are supported.
->> +    type: boolean
->> +
->> +# Required child node:
->> +
->> +patternProperties:
->> +  "^dwc3@[0-9a-f]+$":
->> +    type: object
->> +    description:
->> +      A child node must exist to represent the core DWC3 IP block
->> +      The content of the node is defined in dwc3.txt.
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - "#address-cells"
->> +  - "#size-cells"
->> +  - power-domains
->> +  - clocks
->> +  - clock-names
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/clock/qcom,gcc-sdm845.h>
->> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->> +    #include <dt-bindings/interrupt-controller/irq.h>
->> +    usb@a6f8800 {
->> +        compatible = "qcom,sdm845-dwc3", "qcom,dwc3";
->> +        reg = <0 0x0a6f8800 0 0x400>;
->> +
->> +        #address-cells = <2>;
->> +        #size-cells = <2>;
->> +
->> +        clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
->> +                 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
->> +                 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
->> +                 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
->> +                 <&gcc GCC_USB30_PRIM_SLEEP_CLK>;
->> +        clock-names = "cfg_noc", "core", "iface", "mock_utmi",
->> +                      "sleep";
->> +
->> +        assigned-clocks = <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
->> +                          <&gcc GCC_USB30_PRIM_MASTER_CLK>;
->> +        assigned-clock-rates = <19200000>, <150000000>;
->> +
->> +        interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
->> +                     <GIC_SPI 486 IRQ_TYPE_LEVEL_HIGH>,
->> +                     <GIC_SPI 488 IRQ_TYPE_LEVEL_HIGH>,
->> +                     <GIC_SPI 489 IRQ_TYPE_LEVEL_HIGH>;
->> +        interrupt-names = "hs_phy_irq", "ss_phy_irq",
->> +                          "dm_hs_phy_irq", "dp_hs_phy_irq";
->> +
->> +        power-domains = <&gcc USB30_PRIM_GDSC>;
->> +
->> +        resets = <&gcc GCC_USB30_PRIM_BCR>;
->> +
->> +        dwc3@a600000 {
->> +            compatible = "snps,dwc3";
->> +            reg = <0 0x0a600000 0 0xcd00>;
-> You need 'ranges' in the parent for this address to be translatable.
-Will add in next version.
+> diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+> index 76406343fbe5..e490ffa1f58b 100644
+> --- a/drivers/usb/gadget/legacy/raw_gadget.c
+> +++ b/drivers/usb/gadget/legacy/raw_gadget.c
+> @@ -392,9 +392,8 @@ static int raw_ioctl_init(struct raw_dev *dev, unsigned long value)
+>         char *udc_device_name;
+>         unsigned long flags;
 >
->> +            interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
->> +            iommus = <&apps_smmu 0x740 0>;
->> +            snps,dis_u2_susphy_quirk;
->> +            snps,dis_enblslpm_quirk;
->> +            phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
->> +            phy-names = "usb2-phy", "usb3-phy";
->> +        };
->> +    };
->> -- 
->> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
->> of Code Aurora Forum, hosted by The Linux Foundation
->>
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
+> -       ret = copy_from_user(&arg, (void __user *)value, sizeof(arg));
+> -       if (ret)
+> -               return ret;
+> +       if (copy_from_user(&arg, (void __user *)value, sizeof(arg)))
+> +               return -EFAULT;
+>
+>         switch (arg.speed) {
+>         case USB_SPEED_UNKNOWN:
+> @@ -501,15 +500,13 @@ static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
+>
+>  static int raw_ioctl_event_fetch(struct raw_dev *dev, unsigned long value)
+>  {
+> -       int ret = 0;
+>         struct usb_raw_event arg;
+>         unsigned long flags;
+>         struct usb_raw_event *event;
+>         uint32_t length;
+>
+> -       ret = copy_from_user(&arg, (void __user *)value, sizeof(arg));
+> -       if (ret)
+> -               return ret;
+> +       if (copy_from_user(&arg, (void __user *)value, sizeof(arg)))
+> +               return -EFAULT;
+>
+>         spin_lock_irqsave(&dev->lock, flags);
+>         if (dev->state != STATE_DEV_RUNNING) {
+> @@ -530,20 +527,19 @@ static int raw_ioctl_event_fetch(struct raw_dev *dev, unsigned long value)
+>                 return -EINTR;
+>         }
+>         length = min(arg.length, event->length);
+> -       ret = copy_to_user((void __user *)value, event,
+> -                               sizeof(*event) + length);
+> -       return ret;
+> +       if (copy_to_user((void __user *)value, event, sizeof(*event) + length))
+> +               return -EFAULT;
+> +
+> +       return 0;
+>  }
+>
+>  static void *raw_alloc_io_data(struct usb_raw_ep_io *io, void __user *ptr,
+>                                 bool get_from_user)
+>  {
+> -       int ret;
+>         void *data;
+>
+> -       ret = copy_from_user(io, ptr, sizeof(*io));
+> -       if (ret)
+> -               return ERR_PTR(ret);
+> +       if (copy_from_user(io, ptr, sizeof(*io)))
+> +               return ERR_PTR(-EFAULT);
+>         if (io->ep >= USB_RAW_MAX_ENDPOINTS)
+>                 return ERR_PTR(-EINVAL);
+>         if (!usb_raw_io_flags_valid(io->flags))
+> @@ -658,12 +654,13 @@ static int raw_ioctl_ep0_read(struct raw_dev *dev, unsigned long value)
+>         if (IS_ERR(data))
+>                 return PTR_ERR(data);
+>         ret = raw_process_ep0_io(dev, &io, data, false);
+> -       if (ret < 0) {
+> -               kfree(data);
+> -               return ret;
+> -       }
+> +       if (ret)
+> +               goto free;
+> +
+>         length = min(io.length, (unsigned int)ret);
+> -       ret = copy_to_user((void __user *)(value + sizeof(io)), data, length);
+> +       if (copy_to_user((void __user *)(value + sizeof(io)), data, length))
+> +               ret = -EFAULT;
+> +free:
+>         kfree(data);
+>         return ret;
+>  }
+> @@ -952,12 +949,13 @@ static int raw_ioctl_ep_read(struct raw_dev *dev, unsigned long value)
+>         if (IS_ERR(data))
+>                 return PTR_ERR(data);
+>         ret = raw_process_ep_io(dev, &io, data, false);
+> -       if (ret < 0) {
+> -               kfree(data);
+> -               return ret;
+> -       }
+> +       if (ret)
+> +               goto free;
+> +
+>         length = min(io.length, (unsigned int)ret);
+> -       ret = copy_to_user((void __user *)(value + sizeof(io)), data, length);
+> +       if (copy_to_user((void __user *)(value + sizeof(io)), data, length))
+> +               ret = -EFAULT;
+> +free:
+>         kfree(data);
+>         return ret;
+>  }
