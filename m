@@ -2,211 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C4A19FD6C
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Apr 2020 20:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7B019FE0D
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Apr 2020 21:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726130AbgDFSqi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Apr 2020 14:46:38 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:43530 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725876AbgDFSqi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Apr 2020 14:46:38 -0400
-Received: by mail-il1-f196.google.com with SMTP id g15so491426ilj.10;
-        Mon, 06 Apr 2020 11:46:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mVbw6U0W43QnLaQdRTE/AknHWeK3fOBeopvs+ToCJzI=;
-        b=jnPaHxp3TU0EmSnZJelPcrv1dtoosfy2FiUVgCSec85jnswsIj6Xw2Ok6L+wE+T1tk
-         s3JEDitWTp5wplKFZAfXu4o5jkOP+dDI7NcFN7aqSgnpNpRJ7k6OJqgZlNEfMmNYxB7v
-         odfP9ubhpjpf07I6RFGD8PpqHEguoA6GlVv+xm0A5SFvNuhOIfknz+xUEt2GbkjzNWZU
-         jjlLzY03XcnYS9XC0p5OjNG5TQRBLrnMfBAibZzzNI4JqWsPimLhPZWmYcI3c7MO2ucu
-         ioRunN7uzIM/SL87odxaS3UUkozuHJtLI1cCBf6x/H3nBpBTH+xPOiglIqgqH71evugb
-         5CVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mVbw6U0W43QnLaQdRTE/AknHWeK3fOBeopvs+ToCJzI=;
-        b=fTyJLmR0AZEdoLFtvouzlWsrFSV3xJZZ8McMor5GwCghccnDiKw9GC3Fj1CIN9/aU9
-         AaPffVF7hlshpZbzlC0ZmA9kRaYDKOKvH4sdXo6imUAs2Iey9GL4iBXd1FFlq+K1nlUZ
-         qHDTwNploGzOvXRjP6OSAY/VxoKAAotLct3RL4O47FibqFROTLV+LjIzqJfEH0drEmia
-         rJYXExgMoeBvTTgvn2yn0s7OXTjOCVTEzaOwSU3zUrPOMUbp1S/jN5TwDUm3j//CaD34
-         1/8QwpIK96hc+2r/d+eMS0GaUxqC15We9zknX/yS/JhNt90+B2My7/gT/KK7xWOVwZ1e
-         4fVQ==
-X-Gm-Message-State: AGi0PuYkxBS/sjgX2M8hsB6gRFbGEowTBNQgqKI37hJ+SPh2WKlWOF/I
-        hvgqFBAl6XnpZQAnukjMOLo7IBm88o6apEjCIR4=
-X-Google-Smtp-Source: APiQypIMLrErILm+0n1az0w9IYwybJd3ar1vZlfPtpFymBfjMIfXrkUysYiSDbL014yKPqMnbidkLznZ9X4nxaPhbX4=
-X-Received: by 2002:a92:790a:: with SMTP id u10mr770618ilc.98.1586198797446;
- Mon, 06 Apr 2020 11:46:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200327204711.10614-1-alcooperx@gmail.com> <20200327204711.10614-4-alcooperx@gmail.com>
- <20200328201846.GF1922688@smile.fi.intel.com>
-In-Reply-To: <20200328201846.GF1922688@smile.fi.intel.com>
-From:   Alan Cooper <alcooperx@gmail.com>
-Date:   Mon, 6 Apr 2020 14:46:26 -0400
-Message-ID: <CAOGqxeVkgPttD7kqANAtp1uD=aFuSqV_2sWT4ybG3m0c_2SSjA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] usb: ehci: Add new EHCI driver for Broadcom STB SoC's
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     ": Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        DTML <devicetree@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+        id S1726332AbgDFT0Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Apr 2020 15:26:24 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:42381 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725895AbgDFT0Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Apr 2020 15:26:24 -0400
+Received: (qmail 28308 invoked by uid 500); 6 Apr 2020 15:26:23 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 6 Apr 2020 15:26:23 -0400
+Date:   Mon, 6 Apr 2020 15:26:23 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Andrey Konovalov <andreyknvl@google.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         USB list <linux-usb@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        LKML <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: Re: [PATCH] usb: raw-gadget: fix raw_event_queue_fetch locking
+In-Reply-To: <CAAeHK+wdEByqpv90WCtb2=E9Xx6WpkDxn7xq__8JwSh8ROZn7w@mail.gmail.com>
+Message-ID: <Pine.LNX.4.44L0.2004061504580.26186-100000@netrider.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Mar 28, 2020 at 4:18 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Fri, Mar 27, 2020 at 04:47:10PM -0400, Al Cooper wrote:
-> > Add a new EHCI driver for Broadcom STB SoC's. A new EHCI driver
-> > was created instead of adding support to the existing ehci platform
-> > driver because of the code required to workaround bugs in the EHCI
-> > controller.
->
-> I'm not sure this has been tested. See below.
->
-> ...
->
-> > +#include <linux/acpi.h>
-> > +#include <linux/of.h>
->
-> I didn;t find evidence these are needed.
+On Mon, 6 Apr 2020, Andrey Konovalov wrote:
 
-I removed them.
+> On Mon, Apr 6, 2020 at 8:20 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Mon, 6 Apr 2020, Andrey Konovalov wrote:
+> >
+> > > If queue->size check in raw_event_queue_fetch() fails (which normally
+> > > shouldn't happen, that check is a fail-safe), the function returns
+> > > without reenabling interrupts. This patch fixes that issue, along with
+> > > propagating the cause of failure to the function caller.
+> > >
+> > > Fixes: f2c2e717642c ("usb: gadget: add raw-gadget interface"
+> > > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> > > ---
+> > >
+> > > Greg, this should apply cleanly on top of Dan's "usb: raw-gadget: Fix
+> > > copy_to/from_user() checks" patch.
+> > >
+> > > ---
+> > >  drivers/usb/gadget/legacy/raw_gadget.c | 19 +++++++++++++++----
+> > >  1 file changed, 15 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+> > > index e490ffa1f58b..1582521ec774 100644
+> > > --- a/drivers/usb/gadget/legacy/raw_gadget.c
+> > > +++ b/drivers/usb/gadget/legacy/raw_gadget.c
+> > > @@ -81,6 +81,7 @@ static int raw_event_queue_add(struct raw_event_queue *queue,
+> > >  static struct usb_raw_event *raw_event_queue_fetch(
+> > >                               struct raw_event_queue *queue)
+> > >  {
+> > > +     int ret;
+> > >       unsigned long flags;
+> > >       struct usb_raw_event *event;
+> > >
+> > > @@ -89,11 +90,14 @@ static struct usb_raw_event *raw_event_queue_fetch(
+> > >        * there's at least one event queued by decrementing the semaphore,
+> > >        * and then take the lock to protect queue struct fields.
+> > >        */
+> > > -     if (down_interruptible(&queue->sema))
+> > > -             return NULL;
+> > > +     ret = down_interruptible(&queue->sema);
+> > > +     if (ret)
+> > > +             return ERR_PTR(ret);
+> > >       spin_lock_irqsave(&queue->lock, flags);
+> > > -     if (WARN_ON(!queue->size))
+> > > +     if (WARN_ON(!queue->size)) {
+> > > +             spin_unlock_irqrestore(&queue->lock, flags);
+> > >               return NULL;
+> >
+> > Suppose the WARN_ON triggers, and you return NULL here.  Then where do
+> > you reverse the down_interruptible() on queue->sema?
+> >
+> > > +     }
+> > >       event = queue->events[0];
+> > >       queue->size--;
+> > >       memmove(&queue->events[0], &queue->events[1],
+> > > @@ -522,10 +526,17 @@ static int raw_ioctl_event_fetch(struct raw_dev *dev, unsigned long value)
+> > >       spin_unlock_irqrestore(&dev->lock, flags);
+> > >
+> > >       event = raw_event_queue_fetch(&dev->queue);
+> > > -     if (!event) {
+> > > +     if (PTR_ERR(event) == -EINTR) {
+> > >               dev_dbg(&dev->gadget->dev, "event fetching interrupted\n");
+> > >               return -EINTR;
+> > >       }
+> > > +     if (IS_ERR_OR_NULL(event)) {
+> > > +             dev_err(&dev->gadget->dev, "failed to fetch event\n");
+> > > +             spin_lock_irqsave(&dev->lock, flags);
+> > > +             dev->state = STATE_DEV_FAILED;
+> > > +             spin_unlock_irqrestore(&dev->lock, flags);
+> > > +             return -ENODEV;
+> > > +     }
+> >
+> > Not here, obviously.  Does the semaphore ever get released?
+> 
+> If this warning triggered, something has already gone horribly wrong,
+> so we set the device stated to "failed".
+> 
+> But even if we ignore that, should the semaphore be "released"? The
+> initial semaphore's counter value is 0, so one up()+down() sequence of
+> events leaves it with the initial value. So it's the down() event that
+> brings it to the initial state (unless there were multiple up()s of
+> course). Unless I misunderstand something.
 
->
-> ...
->
->
-> > +     res = readl_relaxed_poll_timeout(&ehci->regs->frame_index, val,
-> > +                                      (val != frame_idx), 1, 130);
->
-> Too many parentheses.
->
+Okay, now I get it.  It's an invariant of the driver: the semaphore's
+value is always equal to queue->size.  You might consider putting this
+in a comment, in some future update.
 
-Fixed
+Incidentally, how often do you expect the queue to contain more than
+one entry?  If that happens a lot, it would be more efficient to
+implement the queue as a ring (with first and last pointers) than to
+call memmove() every time an entry is removed.
 
-> > +     if (res)
-> > +             dev_err(ehci_to_hcd(ehci)->self.controller,
-> > +                     "Error waiting for SOF\n");
->
-> ...
->
-> > +static int ehci_brcm_probe(struct platform_device *pdev)
-> > +{
-> > +     struct device *dev = &pdev->dev;
-> > +     struct resource *res_mem;
-> > +     struct brcm_priv *priv;
-> > +     struct usb_hcd *hcd;
-> > +     int irq;
-> > +     int err;
-> > +
-> > +     if (usb_disabled())
-> > +             return -ENODEV;
-> > +
-> > +     err = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
-> > +     if (err)
-> > +             return err;
-> > +
->
-> > +     irq = platform_get_irq(pdev, 0);
-> > +             return irq;
->
-> I'm not sure it was an intention to leave a lot of dead code below.
->
+Alan Stern
 
-Fixed.
-
-> > +     /* Hook the hub control routine to work around a bug */
->
-> > +     if (org_hub_control == NULL)
->
->         if (!org_hub_control) ?
->
-
-Changed.
-
-> > +             org_hub_control = ehci_brcm_hc_driver.hub_control;
-> > +     ehci_brcm_hc_driver.hub_control = ehci_brcm_hub_control;
->
-> > +     device_wakeup_enable(hcd->self.controller);
-> > +     device_enable_async_suspend(hcd->self.controller);
-> > +     platform_set_drvdata(pdev, hcd);
-> > +
->
-> > +     return err;
->
->         return 0; ?
->
-Changed.
-
-
-> > +err_clk:
-> > +     clk_disable_unprepare(priv->clk);
-> > +err_hcd:
-> > +     usb_put_hcd(hcd);
-> > +
-> > +     return err;
-> > +}
->
-> ...
->
-> > +#ifdef CONFIG_PM_SLEEP
->
-> You also can use __maybe_unused annotations.
->
-
-Changed.
-
-> > +static int ehci_brcm_suspend(struct device *dev)
-> > +{
-> > +     int ret;
-> > +     struct usb_hcd *hcd = dev_get_drvdata(dev);
-> > +     struct brcm_priv *priv = hcd_to_ehci_priv(hcd);
-> > +     bool do_wakeup = device_may_wakeup(dev);
-> > +
->
-> > +     ret = ehci_suspend(hcd, do_wakeup);
-> > +     clk_disable_unprepare(priv->clk);
-> > +     return ret;
->
-> So, if you fail to suspend the device, clocks will become unusable, how to recover from such case?
->
-
-Changed to handle the failure.
-
-> > +}
->
-> > +#endif /* CONFIG_PM_SLEEP */
->
-> ...
->
-> > +MODULE_DESCRIPTION(BRCM_DRIVER_DESC);
->
-> Better to have it explicit.
->
-
-Changed.
-
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
-
-v3 coming.
-Thanks again for the review
-Al
