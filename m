@@ -2,97 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADED119ECE7
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Apr 2020 19:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D2819F030
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Apr 2020 07:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727461AbgDERbR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sun, 5 Apr 2020 13:31:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43204 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727441AbgDERbQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 5 Apr 2020 13:31:16 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 207125] New: Possible null pointer dereference in 
- ohci_restart()
-Date:   Sun, 05 Apr 2020 17:31:15 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: zhandy@hit.edu.cn
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression
-Message-ID: <bug-207125-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726534AbgDFFyd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Apr 2020 01:54:33 -0400
+Received: from cmccmta1.chinamobile.com ([221.176.66.79]:4118 "EHLO
+        cmccmta1.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725884AbgDFFyd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Apr 2020 01:54:33 -0400
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.9]) by rmmx-syy-dmz-app04-12004 (RichMail) with SMTP id 2ee45e8ac3f6540-9b709; Mon, 06 Apr 2020 13:53:59 +0800 (CST)
+X-RM-TRANSID: 2ee45e8ac3f6540-9b709
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from localhost.localdomain (unknown[117.136.19.171])
+        by rmsmtp-syy-appsvr05-12005 (RichMail) with SMTP id 2ee55e8ac3f388d-bce89;
+        Mon, 06 Apr 2020 13:53:58 +0800 (CST)
+X-RM-TRANSID: 2ee55e8ac3f388d-bce89
+From:   Tang Bin <tangbin@cmss.chinamobile.com>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com
+Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Tang Bin <tangbin@cmss.chinamobile.com>
+Subject: [PATCH] usb: host: ehci-tegra: Remove superfluous dev_err() message
+Date:   Mon,  6 Apr 2020 13:55:30 +0800
+Message-Id: <20200406055530.10860-1-tangbin@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.20.1.windows.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=207125
+The platform_get_irq() can print error message,so remove the redundant
+dev_err() here.
 
-            Bug ID: 207125
-           Summary: Possible null pointer dereference in  ohci_restart()
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: Linux 4.17
-          Hardware: All
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: normal
-          Priority: P1
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: zhandy@hit.edu.cn
-        Regression: No
+Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+---
+ drivers/usb/host/ehci-tegra.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-In Linux 4.17, ohci_restart() in /drivers/usb/host/ohci-hcd.c does not handle
-the failure of ohci_init(), causing ohci->hcca could be a null pointer. After
-that, writting to this ohci->hcca->int_table [i] field could cause a null
-pointer dereference bug.
-
-Url of ohci_restart()
-https://elixir.bootlin.com/linux/v4.10.17/source/drivers/usb/host/ohci-hcd.c#L1000
-
-int ohci_restart(struct ohci_hcd *ohci)
-{
-        ...
-        ohci_init(ohci); //does not handle the failure
-        ...
-        for (i = 0; i < NUM_INTS; i++) ohci->hcca->int_table [i] = 0; //null
-pointer dereference
-        ...
-}
-
-Url of ohci_init()
-https://elixir.bootlin.com/linux/v4.10.17/source/drivers/usb/host/ohci-hcd.c#L441
-static int ohci_init (struct ohci_hcd *ohci)
-{
-...
-ohci->hcca = dma_alloc_coherent (hcd->self.controller,
-                        sizeof(*ohci->hcca), &ohci->hcca_dma, GFP_KERNEL);
-        if (!ohci->hcca)
-                return -ENOMEM; // ohci->hcca can be a null pointer
-...
-}
-
+diff --git a/drivers/usb/host/ehci-tegra.c b/drivers/usb/host/ehci-tegra.c
+index d6433f206..75a075daf 100644
+--- a/drivers/usb/host/ehci-tegra.c
++++ b/drivers/usb/host/ehci-tegra.c
+@@ -480,7 +480,6 @@ static int tegra_ehci_probe(struct platform_device *pdev)
+ 
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (!irq) {
+-		dev_err(&pdev->dev, "Failed to get IRQ\n");
+ 		err = -ENODEV;
+ 		goto cleanup_phy;
+ 	}
 -- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+2.20.1.windows.1
+
+
+
