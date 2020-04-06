@@ -2,200 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B29419F8D1
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Apr 2020 17:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1089D19F908
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Apr 2020 17:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728937AbgDFP2f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Apr 2020 11:28:35 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:40973 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728777AbgDFP2f (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Apr 2020 11:28:35 -0400
-Received: by mail-il1-f193.google.com with SMTP id t6so15032256ilj.8;
-        Mon, 06 Apr 2020 08:28:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tyNfGvI8xlMgP9IkvrRBBzNVq6mwzYQ+gOI9+q9PIZQ=;
-        b=XyEqc4DEG4j+uXqNvcxJtqMwYAYSq95od8zlYpQAY4Wv681ocQbqoVFQPBhxMB1x6N
-         7ApumgbAAYZPs0QiH56GvQi5I8k9jg72GrEhPPasNhuAdb/KRQ3ZF1C4H6KPLcUpmSse
-         O2QKWEr+slWvJtNesxo3I7RJS1sN/yj2A4cd4smqDgqzdZojGZmBfFrU1ycbK7MSTCio
-         ps1UtzwdVdq+BF296sjMSmmDa2CoEi8bydIWP/PO26VH92UORToKwptF3J6JwBeSmmKs
-         nnaWJDd68DPcnoMSHQp1roRq+rHgKckHwA+/48W03SOlXjuV9GkQlNMDFxKh8/RdnrBJ
-         P7xQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tyNfGvI8xlMgP9IkvrRBBzNVq6mwzYQ+gOI9+q9PIZQ=;
-        b=T8nPG6bBVBFBWPk+/V5lrdpkudGHkDCa15D0K8mcfENo7UGfAJwZSnoZlEChh8Rc1K
-         3sxGBTxFDTYc0oEXQum9XQBh7M80+QykRRKUawDtwcL3/7LQxM7h0qVHu8yrrhwsYxa1
-         IX6xIAC5hhLqn2XGiwBBbtkyFuI9vXxO/RuCHCDt8wXdHNq9M/AvmGZe3Cqm/rq/nS6w
-         7C3AI+aVNfZvBsY4eTbBNUG7dJJ7DhIPaWlWLpgoWgRRyEbEp3TdLmU9emX3XDbN+LBX
-         QIU8C2hjyAPO2h7Avslva8kNmHhVOWOp9vUD3R03Ll1MY4Bxi3benYA4kqrQh3gNTfwI
-         MR+Q==
-X-Gm-Message-State: AGi0Puay61epJeNeCSBTGGnXufE9iG8aY5RFjBhxXXBXgan3bWa8oVgz
-        RpT7ys+Vc97OmF8mvuQQBy4BJJgQ5QMI3R0tLLg=
-X-Google-Smtp-Source: APiQypJsFoDu9wRagMbFLsqaDNyD3lWs8SOgxKH9XPsxIiJzM8zrYy4VQ6AjUgkurPjCS4dpUliemIlh7GcvvfSL/cs=
-X-Received: by 2002:a92:c90d:: with SMTP id t13mr21476197ilp.10.1586186912593;
- Mon, 06 Apr 2020 08:28:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200327204711.10614-1-alcooperx@gmail.com> <20200327204711.10614-3-alcooperx@gmail.com>
- <1585535724.28859.18.camel@mhfsdcap03>
-In-Reply-To: <1585535724.28859.18.camel@mhfsdcap03>
-From:   Alan Cooper <alcooperx@gmail.com>
-Date:   Mon, 6 Apr 2020 11:28:20 -0400
-Message-ID: <CAOGqxeXvhYqGNgoMDAObz5vTA0zxWOW9HT3as206tvG9SFBbDQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] usb: xhci: xhci-plat: Add support for Broadcom STB SoC's
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     ": Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        DTML <devicetree@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Rob Herring <robh+dt@kernel.org>
+        id S1728955AbgDFPlG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 6 Apr 2020 11:41:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50064 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728890AbgDFPlF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 6 Apr 2020 11:41:05 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 207125] Possible null pointer dereference in  ohci_restart()
+Date:   Mon, 06 Apr 2020 15:41:05 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: zhandy@hit.edu.cn
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-207125-208809-qK55DSAxHP@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-207125-208809@https.bugzilla.kernel.org/>
+References: <bug-207125-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Mar 29, 2020 at 10:35 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
->
-> Hi,
-...
-> > +     }, {
-> > +             .compatible = "brcm,xhci-brcm-v2",
-> > +             .data = &xhci_plat_brcm,
-> This one is not described in dt-binding.
+https://bugzilla.kernel.org/show_bug.cgi?id=207125
 
-This is an obsolete name, but was left in the driver for backward
-compatibility with some older boards that still have this in their
-device tree.
+--- Comment #3 from Dongyang Zhan (zhandy@hit.edu.cn) ---
+(In reply to Alan Stern from comment #1)
+> This is not a bug.  When ohci_restart() calls ohci_init(), ohci->hcca
+> has already been initialized to a non-NULL value.  Therefore the
+> -ENOMEM return cannot happen.
 
-> > +     }, {
-> > +             .compatible = "brcm,bcm7445-xhci",
-> > +             .data = &xhci_plat_brcm,
-> bcm7445 is a SoC name ?
-> the quirk only happens on this one? or on all SoCs with Broadcom xHIC
-> IP?
+I mean could you tell me where ohci->hcca is initialized before ohci_restart()?
 
-bcm7445 is the first SoC with this style controller and all subsequent
-SoCs contain this compatible entry and also have the quirk.
-
->
-> >       },
-> >       {},
-> >  };
-
-Thanks
-Al
-
-On Sun, Mar 29, 2020 at 10:35 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
->
-> Hi,
-> On Fri, 2020-03-27 at 16:47 -0400, Al Cooper wrote:
-> > Add support for Broadcom STB SoC's to the xhci platform driver
-> >
-> > Signed-off-by: Al Cooper <alcooperx@gmail.com>
-> > ---
-> >  drivers/usb/host/xhci-brcm.c | 16 ++++++++++++++++
-> >  drivers/usb/host/xhci-brcm.h | 16 ++++++++++++++++
-> >  drivers/usb/host/xhci-plat.c | 11 +++++++++++
-> >  3 files changed, 43 insertions(+)
-> >  create mode 100644 drivers/usb/host/xhci-brcm.c
-> >  create mode 100644 drivers/usb/host/xhci-brcm.h
-> >
-> > diff --git a/drivers/usb/host/xhci-brcm.c b/drivers/usb/host/xhci-brcm.c
-> > new file mode 100644
-> > index 000000000000..bf8c0bfd1780
-> > --- /dev/null
-> > +++ b/drivers/usb/host/xhci-brcm.c
-> > @@ -0,0 +1,16 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/* Copyright (c) 2018, Broadcom */
-> > +
-> > +#include <linux/usb.h>
-> > +#include <linux/usb/hcd.h>
-> > +
-> > +#include "xhci.h"
-> > +
-> > +int xhci_plat_brcm_init_quirk(struct usb_hcd *hcd)
-> > +{
-> > +     struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-> > +
-> > +     xhci->quirks |= XHCI_RESET_ON_RESUME;
-> > +     return 0;
-> > +}
-> > +
-> > diff --git a/drivers/usb/host/xhci-brcm.h b/drivers/usb/host/xhci-brcm.h
-> > new file mode 100644
-> > index 000000000000..e64800fae4d5
-> > --- /dev/null
-> > +++ b/drivers/usb/host/xhci-brcm.h
-> > @@ -0,0 +1,16 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/* Copyright (c) 2018, Broadcom */
-> > +
-> > +#ifndef _XHCI_BRCM_H
-> > +#define _XHCI_BRCM_H
-> > +
-> > +#if IS_ENABLED(CONFIG_USB_XHCI_BRCM)
-> > +int xhci_plat_brcm_init_quirk(struct usb_hcd *hcd);
-> > +#else
-> > +static inline int xhci_plat_brcm_init_quirk(struct usb_hcd *hcd)
-> > +{
-> > +     return 0;
-> > +}
-> > +#endif
-> > +#endif /* _XHCI_BRCM_H */
-> > +
-> > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> > index 315b4552693c..3e90a1207803 100644
-> > --- a/drivers/usb/host/xhci-plat.c
-> > +++ b/drivers/usb/host/xhci-plat.c
-> > @@ -22,6 +22,7 @@
-> >
-> >  #include "xhci.h"
-> >  #include "xhci-plat.h"
-> > +#include "xhci-brcm.h"
-> >  #include "xhci-mvebu.h"
-> >  #include "xhci-rcar.h"
-> >
-> > @@ -112,6 +113,10 @@ static const struct xhci_plat_priv xhci_plat_renesas_rcar_gen3 = {
-> >       SET_XHCI_PLAT_PRIV_FOR_RCAR(XHCI_RCAR_FIRMWARE_NAME_V3)
-> >  };
-> >
-> > +static const struct xhci_plat_priv xhci_plat_brcm = {
-> > +     .init_quirk = xhci_plat_brcm_init_quirk,
-> > +};
-> > +
-> >  static const struct of_device_id usb_xhci_of_match[] = {
-> >       {
-> >               .compatible = "generic-xhci",
-> > @@ -147,6 +152,12 @@ static const struct of_device_id usb_xhci_of_match[] = {
-> >       }, {
-> >               .compatible = "renesas,rcar-gen3-xhci",
-> >               .data = &xhci_plat_renesas_rcar_gen3,
-> > +     }, {
-> > +             .compatible = "brcm,xhci-brcm-v2",
-> > +             .data = &xhci_plat_brcm,
-> This one is not described in dt-binding.
-> > +     }, {
-> > +             .compatible = "brcm,bcm7445-xhci",
-> > +             .data = &xhci_plat_brcm,
-> bcm7445 is a SoC name ?
-> the quirk only happens on this one? or on all SoCs with Broadcom xHIC
-> IP?
->
-> >       },
-> >       {},
-> >  };
->
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
