@@ -2,104 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B5919F33C
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Apr 2020 12:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C86B19F3E6
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Apr 2020 12:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726918AbgDFKFS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Apr 2020 06:05:18 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:43544 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726883AbgDFKFS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Apr 2020 06:05:18 -0400
-Received: by mail-wr1-f66.google.com with SMTP id w15so10439886wrv.10;
-        Mon, 06 Apr 2020 03:05:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=0tO7qYHShLZtkYLoWqZdme05F28qiTafVE+ie9CPm+U=;
-        b=FacHHc+Ve/FsyxlMwcp/ELyDcpBBR4FUOhLkL/oGlAcWieRc5prKdGur+vGog5Wdzy
-         e350bmIi2cmBfBs96Xcc5FPhviKdGBR0X0wBjg1SeeWWXgBmr1tUKslL8BgydRFSwDrM
-         lPz5SNKfvkmf1Ckf/vp3orhAIqCmiAhfFmYQjXDz3+IGd7eVqhJ/LPOWwN66v4CMaEV8
-         FQ72KbaZpIPsWin0mO+RyVGPfrZwo5ISdNFXx7lTMsOFnhPFX4eW8DP+qd2M/5PIi6a0
-         7roUwVlA/QNYuAvZnkSM9wS/wou0HIulLFUOQGdnd3YevTmRW7va0ZvlUxoNFBGIrlyt
-         Jolg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=0tO7qYHShLZtkYLoWqZdme05F28qiTafVE+ie9CPm+U=;
-        b=Ghh1qJRHcd0qfu2R9nZzpU08E0Dgml+IZ5SSdeG9FzAp7VH2e26mdxVXipFYYXvrA0
-         6IfoDZGFmO2sXnytDegxxZuIbNCRKOKoOQiD5wuFa6YslzkiLb94jQXDjQ1kTcdvSN+J
-         RvAfuEWbtuTQLwHp3l6+VBi2VERH19/ehR+gaj/1CUT6WxrM6FLS8OlO4Q1udcyBsEa+
-         KZFHjju2FE9N+EZlidSd7TEYX05eh0fCVrIsqqY52BwsuADpSBUThuWALQDVJ/zFKlH7
-         /tses95l0QWVKtgYgSEG4v44KRH7IzbXUZxOSr3jryJ2BlIHTQwv4pMzrTLTBw23FplI
-         210w==
-X-Gm-Message-State: AGi0Pua8iop/yOudCSsDyWYfw1BeoWDKYEFQAFlvvFKajewwDEeSsV7m
-        K1wZTOmjJRZW8MnN44GVeWU=
-X-Google-Smtp-Source: APiQypJWxcMenGaf7dx5vasdM0pTt65nxXxjnNC3cDM+mvVWxyfTQCbb+fN7JixUXFSa013EomKZiA==
-X-Received: by 2002:adf:bb4c:: with SMTP id x12mr3932121wrg.82.1586167516689;
-        Mon, 06 Apr 2020 03:05:16 -0700 (PDT)
-Received: from localhost (pD9E51D62.dip0.t-ipconnect.de. [217.229.29.98])
-        by smtp.gmail.com with ESMTPSA id z16sm10528370wrg.66.2020.04.06.03.05.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2020 03:05:15 -0700 (PDT)
-Date:   Mon, 6 Apr 2020 12:05:14 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Tang Bin <tangbin@cmss.chinamobile.com>
-Cc:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        jonathanh@nvidia.com, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: host: ehci-tegra: Remove superfluous dev_err()
- message
-Message-ID: <20200406100514.GC475759@ulmo>
-References: <20200406055530.10860-1-tangbin@cmss.chinamobile.com>
+        id S1727181AbgDFKz5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Apr 2020 06:55:57 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:53828 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726841AbgDFKz5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Apr 2020 06:55:57 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 036ArY7p143326;
+        Mon, 6 Apr 2020 10:55:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=JwYn2yunv96QXSp1F9XTuPw1UGimn+c4Xb86LD10VIs=;
+ b=y1ozHf2wGxnSE35g3upIAIpXTaMISZm3I3ibsp5y3uTxH9KEbeGjREd08cH/8nVufFzQ
+ CfwyBYT+HwrEjdQat5MKjzzGkacDjirG53qnIHy8D55EAXjmyw1MR5uhxs8EXV0Wox9n
+ 551Y66djrKT781k6HIUX3f6RXpWuu8V7QoF1BWbXugzOeVqpAcMoT4gnGN2sUfSGscIN
+ UVj/i8AeLkUkhS5P+SnX54DsNYzB3FMoBPWikXPv5ngtIrPpWpGUUtlY2lLvp/P9cS2f
+ YB1CNnszMigV34pb/71Ym1k13XecSwcOsWLsaxDzdRkPQ9ElWvX8PNuCjyMi+IDTUXyO NQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 306jvmx19x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 06 Apr 2020 10:55:54 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 036AqZnQ114890;
+        Mon, 6 Apr 2020 10:55:53 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 3073sppy4n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 06 Apr 2020 10:55:53 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 036Atq1U015004;
+        Mon, 6 Apr 2020 10:55:52 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 06 Apr 2020 03:55:51 -0700
+Date:   Mon, 6 Apr 2020 13:55:45 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     andreyknvl@google.com
+Cc:     Andrey Konovalov <andreyknvl@google.com>, linux-usb@vger.kernel.org
+Subject: [bug report] usb: gadget: add raw-gadget interface
+Message-ID: <20200406105545.GA35744@mwanda>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="bAmEntskrkuBymla"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200406055530.10860-1-tangbin@cmss.chinamobile.com>
-User-Agent: Mutt/1.13.1 (2019-12-14)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9582 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 spamscore=0
+ malwarescore=0 suspectscore=3 adultscore=0 bulkscore=0 mlxlogscore=551
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2004060095
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9582 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=3
+ mlxlogscore=599 mlxscore=0 bulkscore=0 adultscore=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1015 malwarescore=0 impostorscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004060095
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello Andrey Konovalov,
 
---bAmEntskrkuBymla
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The patch f2c2e717642c: "usb: gadget: add raw-gadget interface" from
+Feb 24, 2020, leads to the following static checker warning:
 
-On Mon, Apr 06, 2020 at 01:55:30PM +0800, Tang Bin wrote:
-> The platform_get_irq() can print error message,so remove the redundant
-> dev_err() here.
->=20
-> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
-> ---
->  drivers/usb/host/ehci-tegra.c | 1 -
->  1 file changed, 1 deletion(-)
+    drivers/usb/gadget/legacy/raw_gadget.c:102 raw_event_queue_fetch() warn: inconsistent returns 'queue->sema'.
+      Locked on  : 96,102
+      Unlocked on: 93
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+drivers/usb/gadget/legacy/raw_gadget.c
+    81  static struct usb_raw_event *raw_event_queue_fetch(
+    82                                  struct raw_event_queue *queue)
+    83  {
+    84          unsigned long flags;
+    85          struct usb_raw_event *event;
+    86  
+    87          /*
+    88           * This function can be called concurrently. We first check that
+    89           * there's at least one event queued by decrementing the semaphore,
+    90           * and then take the lock to protect queue struct fields.
+    91           */
+    92          if (down_interruptible(&queue->sema))
+    93                  return NULL;
+    94          spin_lock_irqsave(&queue->lock, flags);
+    95          if (WARN_ON(!queue->size))
+    96                  return NULL;
 
---bAmEntskrkuBymla
-Content-Type: application/pgp-signature; name="signature.asc"
+I'm going to have investigate to see why Smatch doesn't complain that
+we have disabled IRQs on this path...  Anyway, this doesn't seem like it
+can be correct.  I get that this is a WARN_ON() path, but we're leaving
+the computer in a very screwed up state we don't at least enable IRQs.
 
------BEGIN PGP SIGNATURE-----
+    97          event = queue->events[0];
+    98          queue->size--;
+    99          memmove(&queue->events[0], &queue->events[1],
+   100                          queue->size * sizeof(queue->events[0]));
+   101          spin_unlock_irqrestore(&queue->lock, flags);
+   102          return event;
+   103  }
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl6K/toACgkQ3SOs138+
-s6EFiQ/9HplumsKrtti66E0YSQfH8LrXsSNONksobklebtje7hxEn+0GDKDzoFT8
-yYMmEQMLLwZuOpaK884bFA8FZ4hGtZp7lNNV7oBJkkb/Ecfmsz6IL32LwEhGMWXr
-aGYYctiRXIUJNjVcE9dCIUArp8G/qzNmrb4rOv4/EqXw50FIz5DdwCWiQiDEmpBO
-kr/qnxF7fUPCcKJSIeoKGc8GVv61ML3YAUVC7tgLYLKSde8okR0fGtSnkwdSPGqS
-HBoJ5gKHCizrbvP2z9Fx0Ek1jpmutscmmigR3oidgefcLqqRhEdek7b4phZmmGHE
-Aq5n3Vbgqwcdh16WAvgz4Zen+8MF2sMNHWYGDY/PxzzBnVAimqptha3D1urc1Oda
-OFJ679xu1DK2hKiaVnb7zDpD9DtARuy3JX8JyV2TuTd43Q59nLN1L5GtW3CtRYmg
-LzN36Y8v+aB3faNkRDI5tipxkRezOJxTO2ETIISqcnvwqEn5kWz0LQ3MOxZFuiv0
-/GzzbWTC2zIyaj8Hhyc2yokNXRdblt64alNLeRzNsHmieweoW6TUtxDb0pwdSBJw
-BWhlF5PnzzI810uaxyVDt2B6O7GfN9Au84gM+MdkDmIY0OZdyikVq8j1vHzGpxTY
-nQAJ+8b6zdgjh/WMnljO/EvkiFAF5e1wyjP1MsR1EfATzbJNeWo=
-=B7KZ
------END PGP SIGNATURE-----
-
---bAmEntskrkuBymla--
+regards,
+dan carpenter
