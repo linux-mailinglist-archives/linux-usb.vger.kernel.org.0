@@ -2,69 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B05CF1A0E8A
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2020 15:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E921E1A0E8B
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2020 15:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728941AbgDGNlv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Apr 2020 09:41:51 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:37937 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728573AbgDGNlu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Apr 2020 09:41:50 -0400
-Received: from localhost (lfbn-lyo-1-9-35.w86-202.abo.wanadoo.fr [86.202.105.35])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id C9B56200010;
-        Tue,  7 Apr 2020 13:41:47 +0000 (UTC)
-Date:   Tue, 7 Apr 2020 15:41:47 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     cristian.birsan@microchip.com
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        nicolas.ferre@microchip.com, linux-arm-kernel@lists.infradead.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ludovic.desroches@microchip.com,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: Re: [PATCH 2/7] usb: gadget: udc: atmel: add compatible for
- SAM9X60's PMC
-Message-ID: <20200407134147.GI3628@piout.net>
-References: <20200407122852.19422-1-cristian.birsan@microchip.com>
- <20200407122852.19422-3-cristian.birsan@microchip.com>
+        id S1728956AbgDGNlz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 7 Apr 2020 09:41:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59518 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728573AbgDGNly (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 Apr 2020 09:41:54 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 207147] USB errors: uhci_hcd 0000:01:00.4: swiotlb buffer is
+ full (sz: 8 bytes) ; iommu=off
+Date:   Tue, 07 Apr 2020 13:41:54 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-207147-208809-QNHEsqWibm@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-207147-208809@https.bugzilla.kernel.org/>
+References: <bug-207147-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200407122852.19422-3-cristian.birsan@microchip.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+https://bugzilla.kernel.org/show_bug.cgi?id=207147
 
-On 07/04/2020 15:28:47+0300, cristian.birsan@microchip.com wrote:
-> From: Claudiu Beznea <claudiu.beznea@microchip.com>
-> 
-> Add compatible for SAM9X60's PMC.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> [cristian.birsan@microchip.com Add sentinel at the end of the array]
-> Signed-off-by: Cristian Birsan <cristian.birsan@microchip.com>
-> ---
->  drivers/usb/gadget/udc/atmel_usba_udc.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/gadget/udc/atmel_usba_udc.c b/drivers/usb/gadget/udc/atmel_usba_udc.c
-> index 32e5b44d9fbd..c50902b91a96 100644
-> --- a/drivers/usb/gadget/udc/atmel_usba_udc.c
-> +++ b/drivers/usb/gadget/udc/atmel_usba_udc.c
-> @@ -2056,6 +2056,8 @@ static const struct of_device_id atmel_pmc_dt_ids[] = {
->  	{ .compatible = "atmel,at91sam9g45-pmc" },
->  	{ .compatible = "atmel,at91sam9rl-pmc" },
->  	{ .compatible = "atmel,at91sam9x5-pmc" },
-> +	{ .compatible = "microchip,sam9x60-pmc" },
-> +	{ /* sentinel */ }
-
-This patch can be squashed in the previous one.
+--- Comment #2 from Alan Stern (stern@rowland.harvard.edu) ---
+So you if you care about the virtual keyboard and mouse then you should always
+use iommu=on.
 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are watching the assignee of the bug.
