@@ -2,110 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AABE1A0F29
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2020 16:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B79A1A0F57
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2020 16:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729177AbgDGO3y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Apr 2020 10:29:54 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:57204 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728992AbgDGO3x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Apr 2020 10:29:53 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 037ERrKI044811;
-        Tue, 7 Apr 2020 14:29:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=HiRrpXqOGpPEhIoXrzLkM1lz3EDgdVSYb4HNgvZ6e7E=;
- b=A9mKTYyTMKrKhiOLQLMQyOzxxb8sDGO+aPfIqRm90bnkqni9QZF4hwZ5osAOaUEWqWb7
- Zl2hciTiwY04I7Pl3OPgoY+tn9Fq3kAO2qX+mzWiyi0+p+mTKkBBDTye9wKlT8LIbh8s
- iIf2OagieWp/f+o44XcvBhf5leITmyzkj/0JOlWVSSVnHIEgCnjlqDOGOfhnNvC3Q7/o
- tBmfaMZ6HL8XhQXAFvPQw7i4fr4wHyZ/BEoPffQwizeUgDXMBw1XdJasiB0RxPtkzaXy
- huEwe0ztZkdIJYVhequnk1bk4ksO4fkLTtF2L6SgSGWUbA5JxtoI3jGdK3K7hdVaad4p vw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 308ffdbbqu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 07 Apr 2020 14:29:47 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 037ERTMx033631;
-        Tue, 7 Apr 2020 14:29:47 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 30741eeefj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 07 Apr 2020 14:29:47 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 037ETieI011271;
-        Tue, 7 Apr 2020 14:29:44 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 07 Apr 2020 07:29:43 -0700
-Date:   Tue, 7 Apr 2020 17:29:36 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH v2] usb: raw-gadget: fix raw_event_queue_fetch locking
-Message-ID: <20200407142936.GL2066@kadam>
-References: <c4cedb13ee6159857ed7d9884e55718e4b1dede4.1586268809.git.andreyknvl@google.com>
+        id S1729186AbgDGOfW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Apr 2020 10:35:22 -0400
+Received: from mail-il1-f198.google.com ([209.85.166.198]:37101 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728306AbgDGOfV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Apr 2020 10:35:21 -0400
+Received: by mail-il1-f198.google.com with SMTP id z89so3366031ilk.4
+        for <linux-usb@vger.kernel.org>; Tue, 07 Apr 2020 07:35:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=DrOiOhIFnf1BvQ7pnLuWGhH2q/1ZIrRtofFqFtUp27M=;
+        b=J8TmqNTijQWvNybb8R8lKvrnYLlFUq7jJo7SmnEyzph6Wx14dQ5zWnJvHo1SHap1ps
+         Vwofsle5LZ0Ae/NSRCHknqKO44lVfXGT8qKF96LyjqbBGQdXox8YYfBZjPfZG8ljUiGY
+         HJhZ+Xwvr9jvZ6XnpiqS97U03BJy+WuWapqeYCADeunHUfnaV+aPLiqdxj+HiELfVo4D
+         F4Yj+xqH0QXm0bRtlnEa+e9uTeXMlFxn+x9jPudqts6vtyJz5zQWkGOyKiHELBlEG38T
+         +UQOttKQRkDfrDcicMykZBuAKKXInLDeFzIwIHr/IP3dZU3UEv92XizNNmG88vm/XsKP
+         OGkQ==
+X-Gm-Message-State: AGi0PuYOlFH017YHhIpvzHZlxXyPXQD7pHoufv5WjUsmKFuwwe1+ctaO
+        D/paP3DXz6N58Bh89ud1aoDwIsNrMmiVlONWkCFXw85+ah7R
+X-Google-Smtp-Source: APiQypIPzmkdGfhwr1DKHuI4/FjJ/bMgn9Z346lrTLPvc30IISP1GbPLwjE+Qkth+YHj1ZooU6MxLDwq4gufEcCl16/+XanvKJii
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c4cedb13ee6159857ed7d9884e55718e4b1dede4.1586268809.git.andreyknvl@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9583 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0
- malwarescore=0 bulkscore=0 spamscore=0 adultscore=0 mlxlogscore=699
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004070126
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9583 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 priorityscore=1501
- impostorscore=0 malwarescore=0 mlxlogscore=750 lowpriorityscore=0
- clxscore=1011 phishscore=0 mlxscore=0 bulkscore=0 adultscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2004070126
+X-Received: by 2002:a92:b0a:: with SMTP id b10mr2580712ilf.18.1586270119511;
+ Tue, 07 Apr 2020 07:35:19 -0700 (PDT)
+Date:   Tue, 07 Apr 2020 07:35:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fdc98405a2b44a8c@google.com>
+Subject: WARNING in add_taint/usb_submit_urb
+From:   syzbot <syzbot+f44561cfce4cc0e75b89@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 07, 2020 at 04:14:50PM +0200, Andrey Konovalov wrote:
-> @@ -89,11 +90,18 @@ static struct usb_raw_event *raw_event_queue_fetch(
->  	 * there's at least one event queued by decrementing the semaphore,
->  	 * and then take the lock to protect queue struct fields.
->  	 */
-> -	if (down_interruptible(&queue->sema))
-> -		return NULL;
-> +	ret = down_interruptible(&queue->sema);
-> +	if (ret)
-> +		return ERR_PTR(ret);
->  	spin_lock_irqsave(&queue->lock, flags);
-> -	if (WARN_ON(!queue->size))
-> +	/*
-> +	 * queue->size must have the same value as queue->sema counter (before
-> +	 * the down_interruptible() call above), so this check is a fail-safe.
-> +	 */
-> +	if (WARN_ON(!queue->size)) {
-> +		spin_unlock_irqrestore(&queue->lock, flags);
->  		return NULL;
+Hello,
 
-I'm sorry for not noticing this earlier.  When a function returns both
-error pointers and NULL then NULL is supposed to a special case of
-success.  For example:
+syzbot found the following crash on:
 
-	my_struct_pointer = get_optional_feature();
+HEAD commit:    0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=11cce12be00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
+dashboard link: https://syzkaller.appspot.com/bug?extid=f44561cfce4cc0e75b89
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17a8312be00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14e35d8fe00000
 
-If there is a memory allocation failure then my_struct_pointer is
--ENOMEM and we fail.  But say the optional feature is disabled, then
-we can't return a valid pointer, but it's also working as designed so
-it's not an error.  In that case we return NULL.  The surrounding code
-should be written to allow NULL pointers.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+f44561cfce4cc0e75b89@syzkaller.appspotmail.com
 
-So I don't think returning NULL here is correct.
+------------[ cut here ]------------
+usb 1-1: BOGUS urb xfer, pipe 1 != type 3
+WARNING: CPU: 1 PID: 384 at drivers/usb/core/urb.c:478 usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 384 Comm: systemd-udevd Not tainted 5.6.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xef/0x16e lib/dump_stack.c:118
+ usb_submit_urb+0x10b0/0x1460 drivers/usb/core/urb.c:363
+ panic+0x2aa/0x6e1 kernel/panic.c:221
+ add_taint.cold+0x16/0x16 kernel/panic.c:434
+ set_bit include/asm-generic/bitops/instrumented-atomic.h:28 [inline]
+ set_ti_thread_flag include/linux/thread_info.h:55 [inline]
+ set_fs arch/x86/include/asm/uaccess.h:33 [inline]
+ __probe_kernel_read+0x188/0x1d0 mm/maccess.c:67
+ __warn.cold+0x14/0x30 kernel/panic.c:581
+ __warn+0xd5/0x1c8 kernel/panic.c:574
+ usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
+ __warn.cold+0x2f/0x30 kernel/panic.c:582
+ usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
+ report_bug+0x27b/0x2f0 lib/bug.c:195
+ fixup_bug arch/x86/kernel/traps.c:174 [inline]
+ fixup_bug arch/x86/kernel/traps.c:169 [inline]
+ do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
+ usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
+ do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
+ usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
+ invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
+RIP: 0010:usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
+Code: 4d 85 e
 
-regards,
-dan carpenter
 
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
