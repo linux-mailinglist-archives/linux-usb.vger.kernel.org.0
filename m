@@ -2,238 +2,265 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 704581A0075
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Apr 2020 23:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D4E1A0505
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2020 04:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726380AbgDFVtp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Apr 2020 17:49:45 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:49214 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726130AbgDFVtn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Apr 2020 17:49:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586209782;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kIXDxUjS2HMskB+mPSwuv3yFtOM4CbvksE2h37nZI78=;
-        b=G03to6zMu4TUsnLfHbUIWkeCIpfrl+oI/yvXLzi5Nzy5o5c+gDpowE6KOla1oKxlDuIP8w
-        UHw6/gSZfDpvqwMAU+5AN+Qm94CeQHHj1xWk4jiNh6xVIDWj164K9xxrjhUOj4mTrXOTlr
-        JAvQ1neZL0M2w5Wm0Tc2Pv+NBvkFtQo=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-344-pciecSKpOP-Jy1LKNQU9Fw-1; Mon, 06 Apr 2020 17:49:40 -0400
-X-MC-Unique: pciecSKpOP-Jy1LKNQU9Fw-1
-Received: by mail-wm1-f69.google.com with SMTP id p18so191153wmk.9
-        for <linux-usb@vger.kernel.org>; Mon, 06 Apr 2020 14:49:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kIXDxUjS2HMskB+mPSwuv3yFtOM4CbvksE2h37nZI78=;
-        b=CljDjl9N7sf77i/XSmfDAL2whAbMUbO0LGi71EZzj13k7WBxXEfXQ22nENC5HvSRCA
-         DH13KF1D/92/AERUIoq9uZiYeffNtTlfk3aSH0Npk/EPUm9fdq9Bgaa/JAhxVHk7loVA
-         ZfwHEyth0/oAhXGmUwLJDrMPbv1xNwb0Cb4eeXRwSN/HuBvjNexk5smOLetuuhbmbhme
-         hi0cVmJ0Xk4Vg84xNP8j9Yt30PYSnJ6GYVh5zBQJtApsqgStiMUbJtKgejzppB9l3lbI
-         oQ5XBSR/NKju5XOcu8CmMRpPgKegqt3EMdwASdP40Pn17jJPBbcCR6rLEGhSh9F4hQbr
-         gyEw==
-X-Gm-Message-State: AGi0Pubz5vmDpnFrL3WxZFRUvDmJnIarDhbIa75qA8Fip7GQ4RoO3QLT
-        znInRHTZjoeSWzmJs85Ac4GKdunuh+3UVy07HSE+5SQBNHWgP4LBRVUgbgoxlEgn1GhmB7AtvDs
-        waSF2/vVkoeeKM1wRz4Ht
-X-Received: by 2002:a5d:5230:: with SMTP id i16mr1340783wra.15.1586209779342;
-        Mon, 06 Apr 2020 14:49:39 -0700 (PDT)
-X-Google-Smtp-Source: APiQypJNgJ7eiNVOi5WqhYdhc42FjdejCWO6/Y8fkLNs2CGrGBsCWnbC9H2zd2UGSvXrNhDXRVbxFQ==
-X-Received: by 2002:a5d:5230:: with SMTP id i16mr1340765wra.15.1586209779132;
-        Mon, 06 Apr 2020 14:49:39 -0700 (PDT)
-Received: from redhat.com (bzq-79-176-51-222.red.bezeqint.net. [79.176.51.222])
-        by smtp.gmail.com with ESMTPSA id n6sm1057944wmc.28.2020.04.06.14.49.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2020 14:49:38 -0700 (PDT)
-Date:   Mon, 6 Apr 2020 17:49:34 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
+        id S1726332AbgDGCqc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Apr 2020 22:46:32 -0400
+Received: from mail-eopbgr150087.outbound.protection.outlook.com ([40.107.15.87]:49524
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726312AbgDGCqc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 6 Apr 2020 22:46:32 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QFBVqRTNj8SmuidceifMQiHTaV1QUUc29hBaB+dorQpv1pWLhPY1a1psZWIrg8ysjGK5ITNBz/PLOsjgbF7q5Rtc9itUfjuZIYirv3BxhcaiBco9wqZtc05lILilQJHJwSW01nfsUqxEKrP8fx+ou/rDI2XdnyQPI5ILAicfL+oyMs+R/odTdEvygeOjf7aJfhvYdhlS9f0mwL/o9bf/A5mumnCz3hAe+g9drlz856qjFtzAumz5F/ZISeJi3LVmjlUx/3f2B0A7Dz1TYg6fl07gMsiHYpTQ9EQO4psztNC4bB0qYU0d33Mp8PgqniaYVpeRxAvrTNUh8g/o9S6sPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xzv+PRGOdaM2/uoiDkWrYE4f9T2+6CHTX3C8GzAfTVc=;
+ b=M2k4EVFXt0qOkswphNKBHz/V5vaN+iW26UDJb4fULi780Mw0NAvO5P32KG1QlXfvVfBK+HFc0XfkxYYRwOnWM0LBfUopX386oQtVhP3qw/Ozj6daUvUUwAOTKO5LdjstPLhpPjDos3pAaeZPnk6+ugCtlAlyV3OcpTe2rMPTQacaQKKa99fp5eR4wPoWMRSvLWaPIs+atOMh5tGwigkfY5O+ccLpzGN1v17YIYfopRR0CAqtu0jUOySu8u55apYtgcAI/tew2RvuPlDwTQ4sq8fIs4nQbLTlRRMrlj97saxjzjMziD6mxvhvQxDGzX2XxNOgXi/Pi+c0IIihV07Mpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xzv+PRGOdaM2/uoiDkWrYE4f9T2+6CHTX3C8GzAfTVc=;
+ b=em77krqHbMDsjIFleCujK6BVk8fMEGlgJmmsnHw8K1HLSVr8ED7NzTV/fiTFZKr2TdJWODLMLNlhsTchLSZ76og9eikKP9iGsj96owx6VjYAB5XfPNw2V4GjxwbmRgxJWXK2XjiKlGhJ5wSycgNmEkOd6flAvIw5cffv/BmMugA=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM7PR04MB7126.eurprd04.prod.outlook.com (2603:10a6:20b:117::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2878.16; Tue, 7 Apr
+ 2020 02:46:27 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::902c:71:6377:4273]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::902c:71:6377:4273%5]) with mapi id 15.20.2878.018; Tue, 7 Apr 2020
+ 02:46:27 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Oliver Graute <oliver.graute@gmail.com>
+CC:     Mathias Nyman <mathias.nyman@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         Felipe Balbi <balbi@kernel.org>,
-        Jason Wang <jasowang@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 6/6] kernel: set USER_DS in kthread_use_mm
-Message-ID: <20200406174917-mutt-send-email-mst@kernel.org>
-References: <20200404094101.672954-1-hch@lst.de>
- <20200404094101.672954-7-hch@lst.de>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Oliver Graute <Oliver.Graute@KoCoConnector.com>
+Subject: Re: using cdns3-imx driver on imx8qm
+Thread-Topic: using cdns3-imx driver on imx8qm
+Thread-Index: AQHWA5EMk/twZNx6oE6N7BqRdcYd1qhcJrQAgAAMdACAADsSgIAGWxiAgAABLUCABLoUAIAE1DWAgACtqAA=
+Date:   Tue, 7 Apr 2020 02:46:27 +0000
+Message-ID: <20200407024650.GA26899@b29397-desktop>
+References: <20200326170109.GA28051@optiplex>
+ <20200327090554.GA31160@b29397-desktop> <20200327095028.GA19809@ripley>
+ <20200327132153.GA31668@b29397-desktop> <20200331142528.GA2246@portage>
+ <AM7PR04MB715728ED4EF3715A7798A5A08BC80@AM7PR04MB7157.eurprd04.prod.outlook.com>
+ <20200403144044.GA49880@archlinux.localdomain>
+ <20200406162517.GA3320@portage>
+In-Reply-To: <20200406162517.GA3320@portage>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 3f8f1486-9b9f-4d60-a3f4-08d7da9dde69
+x-ms-traffictypediagnostic: AM7PR04MB7126:|AM7PR04MB7126:|AM7PR04MB7126:
+x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM7PR04MB712650C06F2C2F568B91456D8BC30@AM7PR04MB7126.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 036614DD9C
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(7916004)(4636009)(39860400002)(346002)(396003)(376002)(136003)(366004)(54906003)(2906002)(478600001)(8936002)(5660300002)(26005)(91956017)(1076003)(9686003)(6512007)(6486002)(66556008)(66946007)(71200400001)(316002)(186003)(76116006)(66476007)(66446008)(64756008)(6916009)(33716001)(86362001)(8676002)(81156014)(81166006)(53546011)(6506007)(33656002)(4326008)(44832011)(32563001);DIR:OUT;SFP:1101;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: NiVmEYLog3swXA2O29YV2B4THumHshof53DM2+s7r6/0u1Z3W+6ir6jKDLwkOEopKDV9bRcjqU/iWEvJv8lfbv6IZXSWePvBWdL08gm8S+GnovDiQri9AJz7CM2i6006dRNG8055auTzqKPbrdUfal03+v92ef0IMQMz9SGGP28YYaQEza2dtU0lqwUoeKFF6cjoySc9NjYKXacLIj2KwfgTBA7TXyqKeYkth1HhLQcQ8DoOUGhpfswSRd1XR4K1joTb1XzZypFh01PovIs9Sbm2G+5SzMtwJKpEn/jkVohdhE9DV/rbOUl/nnGVakNWb5rpT+4u7hh+z3F3fPqOVeqjFhSVxv3jxao5qoYsvudALw5yB5GTT7Ef1cJ2gmHrU2tkUr2OWH7UGordl3BmbyjnKmku+8pxHIYnBvoExlTPGh0DFhB57ZlIrP5npjw8GauxsLaUIJnQvgczzL+PjhXJ1fU2rnQwI44IZpPY7pA=
+x-ms-exchange-antispam-messagedata: 3XuKUhY4pSFuFM5LbOPiB1Mz/IiyQTQ4Tec71KNh+03iGR4SMc6eVFm6g+2FdNtXM1t3LQUAn6OSn6GOqABM/4BME0TaIcwHPS20C1nid/1K/0rbBQ6PAFR82jzMChX/DzNwkdhPeV5c+5pZClkmEg==
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <9220884C60FD5543A027FF44C430B1D1@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200404094101.672954-7-hch@lst.de>
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f8f1486-9b9f-4d60-a3f4-08d7da9dde69
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Apr 2020 02:46:27.1554
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: EYP6UDcFI+9cd3iz+LQsaUQGv8PvDinKiCq0zZHPutpSZUGidf9zXynRGfuJIdA47tTagTNMMKj7m0iIZXJ2Qw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7126
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Apr 04, 2020 at 11:41:01AM +0200, Christoph Hellwig wrote:
-> Some architectures like arm64 and s390 require USER_DS to be set for
-> kernel threads to access user address space, which is the whole purpose
-> of kthread_use_mm, but other like x86 don't.  That has lead to a huge
-> mess where some callers are fixed up once they are tested on said
-> architectures, while others linger around and yet other like io_uring
-> try to do "clever" optimizations for what usually is just a trivial
-> asignment to a member in the thread_struct for most architectures.
-> 
-> Make kthread_use_mm set USER_DS, and kthread_unuse_mm restore to the
-> previous value instead.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+On 20-04-06 18:25:17, Oliver Graute wrote:
+> On 03/04/20, Oliver Graute wrote:
+> > On 31/03/20, Peter Chen wrote:
+> > >  =20
+> > > > > 		compatible =3D "fsl,imx8qxp-lpcg";
+> > > > > 		reg =3D <0x5b280000 0x10000>;
+> > > > > 		#clock-cells =3D <1>;
+> > > > > 		bit-offset =3D <0 4 16 20 24 28>;
+> > > > > 		clocks =3D <&clk IMX_SC_R_USB_2 IMX_SC_PM_CLK_PER>,
+> > > > > 			 <&clk IMX_SC_R_USB_2 IMX_SC_PM_CLK_MISC>,
+> > > > > 			 <&conn_ipg_clk>,
+> > > > > 			 <&conn_ipg_clk>,
+> > > > > 			 <&conn_ipg_clk>,
+> > > > > 			 <&clk IMX_SC_R_USB_2 IMX_SC_PM_CLK_MST_BUS>;
+> > > > > 		clock-output-names =3D "usb3_app_clk",
+> > > > > 				     "usb3_lpm_clk",
+> > > > > 				     "usb3_ipg_clk",
+> > > > > 				     "usb3_core_pclk",
+> > > > > 				     "usb3_phy_clk",
+> > > > > 				     "usb3_aclk";
+> > > > > 		power-domains =3D <&pd IMX_SC_R_USB_2_PHY>;
+> > > > > 	};
+> > > > >
+> > > > > 	usbotg3: usb3@5b110000 {
+> > > > > 		compatible =3D "fsl,imx8qm-usb3";
+> > > > > 		#address-cells =3D <1>;
+> > > > > 		#size-cells =3D <1>;
+> > > > > 		ranges;
+> > > > > 		reg =3D <0x5B110000 0x10000>;
+> > > > > 		clocks =3D <&usb3_lpcg 1>,
+> > > > > 			 <&usb3_lpcg 0>,
+> > > > > 			 <&usb3_lpcg 5>,
+> > > > > 			 <&usb3_lpcg 2>,
+> > > > > 			 <&usb3_lpcg 3>;
+> > > > > 		clock-names =3D "usb3_lpm_clk", "usb3_bus_clk", "usb3_aclk",
+> > > > > 			"usb3_ipg_clk", "usb3_core_pclk";
+> > > > > 		assigned-clocks =3D <&clk IMX_SC_R_USB_2
+> > > > IMX_SC_PM_CLK_PER>,
+> > > > > 			<&clk IMX_SC_R_USB_2 IMX_SC_PM_CLK_MISC>,
+> > > > > 			<&clk IMX_SC_R_USB_2 IMX_SC_PM_CLK_MST_BUS>;
+> > > > > 		assigned-clock-rates =3D <125000000>, <12000000>, <250000000>;
+> > > > > 		power-domains =3D <&pd IMX_SC_R_USB_2>;
+> > > > > 		status =3D "disabled";
+> > > > >
+> > > > > 		usbotg3_cdns3: cdns3 {
+> > > > > 			compatible =3D "cdns,usb3";
+> > > > > 			#address-cells =3D <1>;
+> > > > > 			#size-cells =3D <1>;
+> > > > > 			interrupt-parent =3D <&gic>;
+> > > > > 			interrupts =3D <GIC_SPI 271 IRQ_TYPE_LEVEL_HIGH>,
+> > > > > 					<GIC_SPI 271 IRQ_TYPE_LEVEL_HIGH>,
+> > > > > 					<GIC_SPI 271 IRQ_TYPE_LEVEL_HIGH>;
+> > > > > 			interrupt-names =3D "host", "peripheral", "otg";
+> > > > > 			reg =3D <0x5B130000 0x10000>,     /* memory area for HOST
+> > > > registers */
+> > > > > 				<0x5B140000 0x10000>,   /* memory area for
+> > > > DEVICE registers */
+> > > > > 				<0x5B120000 0x10000>;   /* memory area for
+> > > > OTG/DRD registers */
+> > > > > 			reg-names =3D "xhci", "dev", "otg";
+> > > > > 			phys =3D <&usb3_phy>;
+> > > > > 			phy-names =3D "cdns3,usb3-phy";
+> > > > > 			status =3D "disabled";
+> > > > > 		};
+> > > > > 	};
+> > > >=20
+> > > > Hello Peter,
+> > > >=20
+> > > > thx for the dts example. Now I get "wait clkvld timeout" in "cdns_i=
+mx_noncore_init()"
+> > > > So USB3_SSPHY_STATUS register seems to be wrong.
+> > > >=20
+> > > > dmesg | grep imx
+> > > > [    1.065445] cdns3-imx 5b110000.usb3: Adding to iommu group 0
+> > > > [    1.257309] imx-scu scu: NXP i.MX SCU Initialized
+> > > > [    1.275489] imx-scu-clk: probe of gpt0_clk failed with error -5
+> > > > [    1.291143] imx-scu-clk: probe of pwm_clk failed with error -22
+> > > > [    1.302517] imx-scu-clk: probe of lcd_clk failed with error -22
+> > > > [    1.341405] imx8qm-pinctrl scu:pinctrl: initialized IMX pinctrl =
+driver
+> > > > [    3.029484] cdns3-imx 5b110000.usb3: wait clkvld timeout
+> > > > [    3.034891] cdns3-imx: probe of 5b110000.usb3 failed with error =
+-110
+> > > > [    3.237393] sdhci-esdhc-imx 5b030000.mmc: Got CD GPIO
+> > > > [    3.242468] sdhci-esdhc-imx 5b030000.mmc: Got WP GPIO
+> > > > [    3.316687] imx8qxp-lpcg-clk 5a4a0000.clock-controller: ignoring=
+ dependency for
+> > > > device, assuming no driver
+> > > >=20
+> > > =20
+> > > Make sure the five clocks in dts are correct, and print the USB3_SSPH=
+Y_STATUS if
+> > > timeout still exists.
+> >=20
+> > ok thx, we got it fixed by replacing:
+> >=20
+> >  clocks =3D <&usb3_lpcg 1>,
+> >           <&usb3_lpcg 0>,
+> >           <&usb3_lpcg 4>,
+> >           <&usb3_lpcg 2>,
+> >           <&usb3_lpcg 3>;
+> >=20
+> > with this:
+> > =20
+> >  clocks =3D <&usb3_lpcg IMX_LPCG_CLK_1>,
+> >           <&usb3_lpcg IMX_LPCG_CLK_0>,
+> >           <&usb3_lpcg IMX_LPCG_CLK_7>,
+> >           <&usb3_lpcg IMX_LPCG_CLK_4>,
+> >           <&usb3_lpcg IMX_LPCG_CLK_5>;
+> >=20
+> > now the "wait clkvld timeout" is gone and the USB3_SSPHY_STATUS registe=
+r
+> > is very similar to another imx8qm device which runs linux-imx from NXP.
+> >=20
+> > Now I try to get into USB HOST mode:
+> >=20
+> > --- a/drivers/usb/cdns3/cdns3-imx.c
+> > +++ b/drivers/usb/cdns3/cdns3-imx.c
+> > @@ -113,11 +115,11 @@ static int cdns_imx_noncore_init(struct cdns_imx =
+*data)
+> >         udelay(1);
+> >=20
+> >         value =3D cdns_imx_readl(data, USB3_CORE_CTRL1);
+> > -       value =3D (value & ~MODE_STRAP_MASK) | OTG_MODE | OC_DISABLE;
+> > +       value =3D (value & ~MODE_STRAP_MASK) | HOST_MODE | OC_DISABLE;
+> >         cdns_imx_writel(data, USB3_CORE_CTRL1, value);
+> >=20
+> > Is this change necessary?
 
-I'm ok with vhost bits:
+No
 
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
+> >=20
+> > Do I need special changes on xhci.c do get it work with cdns-imx in hos=
+t mode?
+> >=20
 
-> ---
->  drivers/usb/gadget/function/f_fs.c | 4 ----
->  drivers/vhost/vhost.c              | 3 ---
->  fs/io-wq.c                         | 8 ++------
->  fs/io_uring.c                      | 4 ----
->  kernel/kthread.c                   | 6 ++++++
->  5 files changed, 8 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> index d9e48bd7c692..a1198f4c527c 100644
-> --- a/drivers/usb/gadget/function/f_fs.c
-> +++ b/drivers/usb/gadget/function/f_fs.c
-> @@ -824,13 +824,9 @@ static void ffs_user_copy_worker(struct work_struct *work)
->  	bool kiocb_has_eventfd = io_data->kiocb->ki_flags & IOCB_EVENTFD;
->  
->  	if (io_data->read && ret > 0) {
-> -		mm_segment_t oldfs = get_fs();
-> -
-> -		set_fs(USER_DS);
->  		kthread_use_mm(io_data->mm);
->  		ret = ffs_copy_to_iter(io_data->buf, ret, &io_data->data);
->  		kthread_unuse_mm(io_data->mm);
-> -		set_fs(oldfs);
->  	}
->  
->  	io_data->kiocb->ki_complete(io_data->kiocb, ret, ret);
-> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> index 1787d426a956..b5229ae01d3b 100644
-> --- a/drivers/vhost/vhost.c
-> +++ b/drivers/vhost/vhost.c
-> @@ -333,9 +333,7 @@ static int vhost_worker(void *data)
->  	struct vhost_dev *dev = data;
->  	struct vhost_work *work, *work_next;
->  	struct llist_node *node;
-> -	mm_segment_t oldfs = get_fs();
->  
-> -	set_fs(USER_DS);
->  	kthread_use_mm(dev->mm);
->  
->  	for (;;) {
-> @@ -365,7 +363,6 @@ static int vhost_worker(void *data)
->  		}
->  	}
->  	kthread_unuse_mm(dev->mm);
-> -	set_fs(oldfs);
->  	return 0;
->  }
->  
-> diff --git a/fs/io-wq.c b/fs/io-wq.c
-> index 83c2868eff2a..75cc2f31816d 100644
-> --- a/fs/io-wq.c
-> +++ b/fs/io-wq.c
-> @@ -168,7 +168,6 @@ static bool __io_worker_unuse(struct io_wqe *wqe, struct io_worker *worker)
->  			dropped_lock = true;
->  		}
->  		__set_current_state(TASK_RUNNING);
-> -		set_fs(KERNEL_DS);
->  		kthread_unuse_mm(worker->mm);
->  		mmput(worker->mm);
->  		worker->mm = NULL;
-> @@ -420,14 +419,11 @@ static void io_wq_switch_mm(struct io_worker *worker, struct io_wq_work *work)
->  		mmput(worker->mm);
->  		worker->mm = NULL;
->  	}
-> -	if (!work->mm) {
-> -		set_fs(KERNEL_DS);
-> +	if (!work->mm)
->  		return;
-> -	}
-> +
->  	if (mmget_not_zero(work->mm)) {
->  		kthread_use_mm(work->mm);
-> -		if (!worker->mm)
-> -			set_fs(USER_DS);
->  		worker->mm = work->mm;
->  		/* hang on to this mm */
->  		work->mm = NULL;
-> diff --git a/fs/io_uring.c b/fs/io_uring.c
-> index 367406381044..c332a34e8b34 100644
-> --- a/fs/io_uring.c
-> +++ b/fs/io_uring.c
-> @@ -5871,15 +5871,12 @@ static int io_sq_thread(void *data)
->  	struct io_ring_ctx *ctx = data;
->  	struct mm_struct *cur_mm = NULL;
->  	const struct cred *old_cred;
-> -	mm_segment_t old_fs;
->  	DEFINE_WAIT(wait);
->  	unsigned long timeout;
->  	int ret = 0;
->  
->  	complete(&ctx->completions[1]);
->  
-> -	old_fs = get_fs();
-> -	set_fs(USER_DS);
->  	old_cred = override_creds(ctx->creds);
->  
->  	timeout = jiffies + ctx->sq_thread_idle;
-> @@ -5985,7 +5982,6 @@ static int io_sq_thread(void *data)
->  	if (current->task_works)
->  		task_work_run();
->  
-> -	set_fs(old_fs);
->  	if (cur_mm) {
->  		kthread_unuse_mm(cur_mm);
->  		mmput(cur_mm);
-> diff --git a/kernel/kthread.c b/kernel/kthread.c
-> index 316db17f6b4f..9e27d01b6d78 100644
-> --- a/kernel/kthread.c
-> +++ b/kernel/kthread.c
-> @@ -52,6 +52,7 @@ struct kthread {
->  	unsigned long flags;
->  	unsigned int cpu;
->  	void *data;
-> +	mm_segment_t oldfs;
->  	struct completion parked;
->  	struct completion exited;
->  #ifdef CONFIG_BLK_CGROUP
-> @@ -1235,6 +1236,9 @@ void kthread_use_mm(struct mm_struct *mm)
->  
->  	if (active_mm != mm)
->  		mmdrop(active_mm);
-> +
-> +	to_kthread(tsk)->oldfs = get_fs();
-> +	set_fs(USER_DS);
->  }
->  EXPORT_SYMBOL_GPL(kthread_use_mm);
->  
-> @@ -1249,6 +1253,8 @@ void kthread_unuse_mm(struct mm_struct *mm)
->  	WARN_ON_ONCE(!(tsk->flags & PF_KTHREAD));
->  	WARN_ON_ONCE(!tsk->mm);
->  
-> +	set_fs(to_kthread(tsk)->oldfs);
-> +
->  	task_lock(tsk);
->  	sync_mm_rss(mm);
->  	tsk->mm = NULL;
-> -- 
-> 2.25.1
+No
 
+> > I'am stuck at:
+> >=20
+> > [   16.697525] xhci-hcd xhci-hcd.0.auto: can't setup: -110
+>=20
+> A bit more debug information:
+>=20
+> [    5.988571] cdns-usb3 5b130000.cdns3: DRD version v0 (00000100)
+> [    6.012664] xhci-hcd xhci-hcd.0.auto: xHCI Host Controller
+> [    6.018173] xhci-hcd xhci-hcd.0.auto: new USB bus registered, assigned=
+ bus number 1
+> [    6.036369] xhci-hcd xhci-hcd.0.auto: // Halt the HC
+> [    6.041335] xhci-hcd xhci-hcd.0.auto: Resetting HCD
+> [    6.056364] xhci-hcd xhci-hcd.0.auto: // Reset the HC
+> [   16.062450] xhci-hcd xhci-hcd.0.auto: can't setup: -110
+> [   16.067686] xhci-hcd xhci-hcd.0.auto: USB bus 1 deregistered
+> [   16.073361] xhci-hcd: probe of xhci-hcd.0.auto failed with error -110
+>=20
+
+set dr_mode =3D "otg" at dts, and after boot up, run below commands at
+console:
+
+echo host > /sys/class/usb_role/5b130000.cdns3-role-switch/role
+
+--=20
+
+Thanks,
+Peter Chen=
