@@ -2,100 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 183D11A165B
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2020 22:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21631A1662
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Apr 2020 22:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727089AbgDGUAk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Apr 2020 16:00:40 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:38138 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726436AbgDGUAk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 7 Apr 2020 16:00:40 -0400
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 48xdYy3FFgzGL;
-        Tue,  7 Apr 2020 22:00:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1586289638; bh=5xnG2lcxdLNlYJHyzuLqGlB+30R0TG/hB0uI8xRBvA0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TnCsoC/wBF/7n6YBcWyAfjzyuAkm1DbEuIjNj36xkLhAAsppuZx98XJd6u6BljKIN
-         GMrckW9uKrzRWWxqH4N7YoZTeq9S1SLQzxsl3bwXi1R4u4W3COkm4bUInwfVeA4hwM
-         d5FCkww6dm6zNQbhheSnk4gzfKN7VUl5h0pkKKJPFBEFBh0Kj6IdfnRdeJPILKkHfM
-         wxAkvkn61qRKKzM3crHm8pF7pi4Jm6roVN6rVGvIQM8fmpvf2JDBV5AXoOTWdfNq1v
-         uIRSuJI9kt4c2DlRpU3bLKegxH1gMaLSstwQcn0cOL8XHJRn7mg63YO6/AK6GNdCiF
-         6mztxbUf5UtYQ==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.102.2 at mail
-Date:   Tue, 7 Apr 2020 22:00:37 +0200
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+        id S1726840AbgDGUBo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Apr 2020 16:01:44 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:34345 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726436AbgDGUBo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Apr 2020 16:01:44 -0400
+Received: by mail-ed1-f67.google.com with SMTP id o1so5677959edv.1;
+        Tue, 07 Apr 2020 13:01:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=MUp2c8y2HHIRTgmEPGs/ibkN5lEkspycNdWSfgTEUbc=;
+        b=cbZRa7NAaCPaiw6zS3iRUdW4uzgbS0SWPdsGbxiwfadp2acuIijtujdC50n7iZ8NrE
+         FIcWdhrcoI5RNwMfBlexxqdGQ0SKzDBKJuVly8+JLmH+KcDOo2TFS0eSynx1WEJaPbku
+         LAqtf4x5pU40f+ftCz1Jomp6RE5xWIT6Dm1EPRaW28c9lSSr7yUzDt/EtyWq7XlvDsq/
+         08j/h2TRfeRinXGaAl4BqB7u656k4a6oeu3/veMM7zc9g26ZyDvAAA/BXXFuPWEortT4
+         lgWL6+pQBIwtuaAlLyAlXvWIb6DciwEerX99EigP+k+FUfWyR3nGIcArarq+CYp1hVYK
+         dh1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=MUp2c8y2HHIRTgmEPGs/ibkN5lEkspycNdWSfgTEUbc=;
+        b=Lr0QINsbrZxMLPmYx2EJdmmfod0qrQcUBVklEf7VrluYXD2/koY2fDflCuotafi6PE
+         oeKZ5bETlpSgpBtc5kP8l4dHDuRJEUPEKjMdNAX8QIAMKOVeqIY+NgvT0NEqIavUTu3C
+         xHEb+uu83i/Y18A4/9oaCOcYVdXT0/IAp9ias5xRjf6CTLfqWzYrj1vEdDPBvcJUhm2T
+         /5X467HgI3008X94Solq3iGu5OLBv5EBSIox9Nq9irG8w41LkZZyOUgQz4OJhSNV5YIZ
+         bckMUYh4U5Ni6MkE9azRXTjfvHudAVi9wEXXw7EeYYmabB8DtkGJAUGRHOxtlCEDkuao
+         9q/g==
+X-Gm-Message-State: AGi0PuaKzbikSg422Jp5mHmU6i0itUbOq/viMjUzW6U8USsd8jHnKWtp
+        EQf/ESqP3s44wwiM9k6HrRc=
+X-Google-Smtp-Source: APiQypLw2Bgw9Bv8VPrZlk8TUFwIQDQloArkzAbK/Bt5c3ZmgZ/x1wwX+mRUWbeYUPxRm8YxyuKo7w==
+X-Received: by 2002:a17:906:9386:: with SMTP id l6mr3463879ejx.305.1586289700207;
+        Tue, 07 Apr 2020 13:01:40 -0700 (PDT)
+Received: from localhost (ip1f115f16.dynamic.kabel-deutschland.de. [31.17.95.22])
+        by smtp.gmail.com with ESMTPSA id by11sm3245237ejc.89.2020.04.07.13.01.38
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 07 Apr 2020 13:01:38 -0700 (PDT)
+Date:   Tue, 7 Apr 2020 22:01:38 +0200
+From:   Oliver Graute <oliver.graute@gmail.com>
 To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 5/5] usb: chipidea: allow disabling glue drivers if
- EMBEDDED
-Message-ID: <20200407200037.GB744@qmqm.qmqm.pl>
-References: <2b6d70595475a3ddbd5bb8ae1765868a98c404b6.1585958250.git.mirq-linux@rere.qmqm.pl>
- <1bf89d4301baa8632daf48b3e28858aff5371954.1585958250.git.mirq-linux@rere.qmqm.pl>
- <20200407031300.GB26899@b29397-desktop>
+Cc:     robh+dt@kernel.org, kishon@ti.com, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, jun.li@nxp.com, linux-imx@nxp.com
+Subject: Re: [PATCH v3 2/2] doc: dt-binding: cdns-salvo-phy: add binding doc
+Message-ID: <20200407200138.GA13466@ripley>
+References: <20200324071030.19801-1-peter.chen@nxp.com>
+ <20200324071030.19801-2-peter.chen@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200407031300.GB26899@b29397-desktop>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200324071030.19801-2-peter.chen@nxp.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 07, 2020 at 03:12:36AM +0000, Peter Chen wrote:
-> On 20-04-04 02:00:06, Micha³ Miros³aw wrote:
-> > Allow to cut down on driver size for embedded config.
-> > 
-> > Signed-off-by: Micha³ Miros³aw <mirq-linux@rere.qmqm.pl>
-> > ---
-> >  drivers/usb/chipidea/Kconfig  | 37 ++++++++++++++++++++++++-----------
-> >  drivers/usb/chipidea/Makefile | 12 +++++-------
-> >  2 files changed, 31 insertions(+), 18 deletions(-)
-> > 
-> > diff --git a/drivers/usb/chipidea/Kconfig b/drivers/usb/chipidea/Kconfig
-> > index d53db520e209..8bafcfc6080d 100644
-> > --- a/drivers/usb/chipidea/Kconfig
-> > +++ b/drivers/usb/chipidea/Kconfig
-> > @@ -18,17 +18,6 @@ config USB_CHIPIDEA
-> >  
-> >  if USB_CHIPIDEA
-> >  
-> > -config USB_CHIPIDEA_OF
-> > -	tristate
-> > -	depends on OF
-> > -	default USB_CHIPIDEA
-> > -
-> > -config USB_CHIPIDEA_PCI
-> > -	tristate
-> > -	depends on USB_PCI
-> > -	depends on NOP_USB_XCEIV
-> > -	default USB_CHIPIDEA
-> > -
-> >  config USB_CHIPIDEA_UDC
-> >  	bool "ChipIdea device controller"
-> >  	depends on USB_GADGET
-> > @@ -43,4 +32,30 @@ config USB_CHIPIDEA_HOST
-> >  	help
-> >  	  Say Y here to enable host controller functionality of the
-> >  	  ChipIdea driver.
-> > +
-> > +config USB_CHIPIDEA_PCI
-> > +	tristate "Enable PCI glue driver" if EMBEDDED
-[...]
-> Why depends on EMBEDDED for this driver? Not everyone needs this
-> configuration.
+On 24/03/20, Peter Chen wrote:
+> Add Cadence SALVO PHY binding doc, this PHY is a legacy module,
+> and is only used for USB3 and USB2.
+> 
+> Signed-off-by: Peter Chen <peter.chen@nxp.com>
 
-This does not make the driver depend on EMBEDDED, only the prompts are.
-By default (without CONFIG_EMBEDDED) you will have all glue layers built
-if you enable the driver. I can remove the 'if EMBEDDED', but
-I suppose those options are only relevant for people building for
-resource-constrained systems, so would have EMBEDDED enabled anyway.
-
-Best Regards,
-Micha³ Miros³aw
+Tested-by:  Oliver Graute <oliver.graute@kococonnector.com>
