@@ -2,117 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2931A1B93
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Apr 2020 07:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 254851A1C44
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Apr 2020 09:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726464AbgDHFkb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Apr 2020 01:40:31 -0400
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:52833 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725879AbgDHFkb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Apr 2020 01:40:31 -0400
-Received: by mail-pj1-f67.google.com with SMTP id ng8so723686pjb.2;
-        Tue, 07 Apr 2020 22:40:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=g1prhrjKxEZds2TfTdybytV1XN9ZFJTSPhvDxSwKWbE=;
-        b=lLoEa84OH4TcHPRT1UimZUdQLc7+R6JFgPXWoCIIRTR2AyiT/OPSoK3ieDWDqzM8qx
-         lyCsqh2n5Zq2XflpC4bOHZ8iVDQrslNa1+/DzvMLAIWXtGMWlgcDE9ziykfEik9ddmBi
-         tyxXTYOkvFRPwBCL9z5pyp0iPfR1I3wurB47f21uuqJtHxLVwahEtgitfWWN7flMDjOZ
-         Safx8k04FtvoZcMhRSmyzx7z3Cwfou//CwYoXYZ07Wi8fW04reFQgw8Y0kGd+M/oglj0
-         CPxccDmDXnLlKNcHfvjbisMg0rXq9cG1uOMWcwhtmdlAZqu3MIuoskOTHuqaUL6yiZXb
-         664Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=g1prhrjKxEZds2TfTdybytV1XN9ZFJTSPhvDxSwKWbE=;
-        b=dsl/KrW+Cw8tzF+oUPBZAQeSP7UmOI9wKRMXIC85CSCnjliMNYlo4kRSm8PxSGrdGV
-         BGSiwkmgPvEeFdjWFBcHQROPE4cxNz4D1p4b7WDzzo9klpUOwkWPK4BI2I7qPrFY4edW
-         yrhsR3vyZwHaEoM3oo4kcGg0jEK/oqs5Hl7cRElY00T8wFb9VKwga/r4owlRxlGT6k7z
-         7bNFM3DonHzJIs1lRmV60h1juYAjN+5RGf0EsgffGZERGjPHV4QUodW5D9gojs1tm+sL
-         yJ9MF9oGG5QvR9Gw0TiiYugF1+M40GMun1he05l1cZbNaoM4SHPffr4QqtczparVrIy8
-         El7g==
-X-Gm-Message-State: AGi0PuaCKwflXvVHlYqiPS9ONq2xa09XbnUU9J8c99nmneyy8y+1PcT8
-        go09WczEOFvOinBYnJUvufQ=
-X-Google-Smtp-Source: APiQypJp2wIHnlyEMM+6phi0GLCRMB+cJZqLMeiHhoqYBQwNHDoMx8FFoIJI/HdUYAVagNG142s6pA==
-X-Received: by 2002:a17:902:a5c6:: with SMTP id t6mr5265576plq.319.1586324430524;
-        Tue, 07 Apr 2020 22:40:30 -0700 (PDT)
-Received: from taoren-ubuntu-R90MNF91 (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
-        by smtp.gmail.com with ESMTPSA id d3sm15544077pfq.126.2020.04.07.22.40.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 07 Apr 2020 22:40:30 -0700 (PDT)
-Date:   Tue, 7 Apr 2020 22:40:23 -0700
-From:   Tao Ren <rentao.bupt@gmail.com>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-aspeed@lists.ozlabs.org,
-        Andrew Jeffery <andrew@aj.id.au>,
+        id S1726671AbgDHHFr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Apr 2020 03:05:47 -0400
+Received: from mout.web.de ([212.227.15.14]:58329 "EHLO mout.web.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726525AbgDHHFq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 Apr 2020 03:05:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1586329531;
+        bh=JXnwcpm+IXspFjmxjaHwilFO2kCKNHmVXgBOCZO6Y94=;
+        h=X-UI-Sender-Class:Cc:Subject:From:To:Date;
+        b=U/7D27KX344Go1qHiv6a0Jlh+j7u6sYTWi5uOKCi1xsovTibwLp19w7/vzNTua7Oa
+         c/LfEb90w88WqL6vXfJm62Mbd7tLG6RV6XMvVstssiZLp4OpXqpMxB+g+tF/mkP2bF
+         N1HJhivUvWBSQyXvhQpvDtoLnJm0bDyUr7VmMZr0=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from [192.168.1.3] ([78.48.170.28]) by smtp.web.de (mrweb003
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 0Lm4jx-1imjtK2yRN-00ZcjE; Wed, 08
+ Apr 2020 09:05:31 +0200
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Joel Stanley <joel@jms.id.au>, taoren@fb.com,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3] usb: gadget: aspeed: improve vhub port irq handling
-Message-ID: <20200408054022.GA12469@taoren-ubuntu-R90MNF91>
-References: <20200315191430.12379-1-rentao.bupt@gmail.com>
- <20200401215826.GA8248@taoren-ubuntu-R90MNF91>
- <512d625e45ea953d722bb7ea73c3619730312284.camel@kernel.crashing.org>
- <20200403064826.GA10866@taoren-ubuntu-R90MNF91>
- <20200407060242.GA15050@taoren-ubuntu-R90MNF91>
- <93ae433317a82de86ff5e9c8485563b78656b615.camel@kernel.crashing.org>
+        Jonathan Hunter <jonathanh@nvidia.com>
+Subject: Re: [PATCH] usb: host: ehci-tegra: Remove superfluous dev_err()
+ message
+From:   Markus Elfring <Markus.Elfring@web.de>
+Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
+ 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 FEE=
+To:     Tang Bin <tangbin@cmss.chinamobile.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org
+Message-ID: <23c90343-3398-a475-650e-a7bae9aa5675@web.de>
+Date:   Wed, 8 Apr 2020 09:05:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <93ae433317a82de86ff5e9c8485563b78656b615.camel@kernel.crashing.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:QdhC+v3KdhI5Epb+HzVc72ubblTG/SZQfYsP29hy4blct2g7jth
+ sGTFU94jAJlxJzQWVKA6EE97AE6dXymueYmQFBPfdzWsQjPVVF3A+VeuqEEPZpZLvV6RaWh
+ sUBxGxJyHXQr91M1bWpAonbAu7ahdWwtgRjyLRMA3+gCt6HnafRZ/LWFd2SD81Ljuv/wE7W
+ kMMbuvNd2fGZFjJyK9SDw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:MI9mgsTiIww=:dYykbTzN8Zy+OSeDjkltYa
+ Z1S5ZA86ojF8aOMR56WdBiZg1+mgwymyGF5gYdc5EQVA9slkIs9mqtZNfhpF4TIWNI9BLLPCE
+ jWWZAFSTB1wDNa3StbuUyUKfwgyVVBJ3NCt3Fu3zRYBMyaDRJVaWbepjy8i7OVeqMz5bUDv2T
+ GdLcDX5rh2QLJQMU4NgcbZmhB1ygrXc0dAhwwe8BBpmxaVf92S4RrnlfSBKnrBjwV4LgFCGO4
+ SkgIj2SYQtDYsTXM+T3LrlhSOltobqH79lKsigDY2fika6jHLYUiGsxRt0QLSWAwhlK2iBF+R
+ 0Q3ezZi8Zsd+b1TDPA1j6xybyQxpQ9XRgV59x6KIDmsbY4EMZZGSlJdnGQpIYejM+5kDphLgs
+ cqbRxMkRG8PpG71e7UIxH9iv1hvH01zY2EOjMBv57gxV2i9MTEqu/VAWRaZ+vCIfiJivDfki2
+ NSNMvvbBZ78/+72DbfoRTos/jSVn1rkAIqT+nFrH3oVNksP3R75ujsP8kttaYHMicil4wBDmw
+ KQ9Ig5kdhrEtoXlw8DRKTZuDOVxzJgleqJcN8XVPnCeqaKm1/fAjHllSD8TjmgLTobvafZp79
+ +PPY+3U+QxL7duZuVIzIk9+OYczqDqgVnLF6EWitTruLeiNheqrgXYlZ0nJFLyJevN0FwrbvB
+ zXT4heeO1oXIesgrhrdttWYPll0+Dw0q9vrlD0D7UP+YqGSr9cp2irpWImgqXzTi5hEJslXUQ
+ H9Iu+pUbaW3tN1xzbjV5SZkoBcfe/waWSnaVhG3Jen+e7TMVYzhu8g1DhArz7DkKsZlj95VZM
+ S1gxhd/A+NdMEr+h6IOoDh6L7qH+vFnyhm4UPDJmns9u/hmDu3CeIj9/l9xE29gACT7OJdw+T
+ lkqDVo0SU5RiK1VIrJXewwK4gkJVvPGeHPnCRNSHYTapKrj7T9gUHh3OJeiP0F//l000MFgUH
+ BktFKLi6rBUeIwznZQw+e8hbn4Mj4UIZxXDudKASWmWG3R6L6/DviY4FijvCZwzwI2HyMz8Pk
+ IHYLAcOvYBVft9UEI4On0atD0ujZcwIoJ1s1sLsSaiw/Hl2nbXF+KhXRZg69V8c4XhBFvKFO6
+ Gk0tMUQM7/v28H6+7zGN/oJozSjVdVKSr1GLSOYvi2GHGSw76Qj/RBIhfSwUQ5EadFLXA0hq8
+ QCWJyPzvC5E3mduqVCxwycaUUhPvpzSBYMhcyQeOEVaPmIz4xEbBqaAjXonpRgqV0AI6/Oq5t
+ UcNI8r5lqJRKuw17Z
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 08, 2020 at 09:36:16AM +1000, Benjamin Herrenschmidt wrote:
-> On Mon, 2020-04-06 at 23:02 -0700, Tao Ren wrote:
-> > I ran some testing on my ast2400 and ast2500 BMC and looks like the
-> > for() loop runs faster than for_each_set_bit_from() loop in my
-> > environment. I'm not sure if something needs to be revised in my test
-> > code, but please kindly share your suggestions:
-> > 
-> > I use get_cycles() to calculate execution time of 2 different loops, and
-> > ast_vhub_dev_irq() is replaced with barrier() to avoid "noise"; below
-> > are the results:
-> > 
-> >   - when downstream port number is 5 and only 1 irq bit is set, it takes
-> >     ~30 cycles to finish for_each_set_bit() loop, and 20-25 cycles to
-> >     finish the for() loop.
-> > 
-> >   - if downstream port number is 5 and all 5 bits are set, then
-> >     for_each_set_bit() loop takes ~50 cycles and for() loop takes ~25
-> >     cycles.
-> > 
-> >   - when I increase downsteam port number to 16 and set 1 irq bit, the
-> >     for_each_set_bit() loop takes ~30 cycles and for() loop takes 25
-> >     cycles. It's a little surprise to me because I thought for() loop
-> >     would cost 60+ cycles (3 times of the value when port number is 5).
-> > 
-> >   - if downstream port number is 16 and all irq status bits are set,
-> >     then for_each_set_bit() loop takes 60-70 cycles and for() loop takes
-> >     30+ cycles.
-> 
-> I suspect the CPU doesn't have an efficient find-zero-bit primitive,
-> check the generated asm. In that case I would go back to the simple for
-> loop.
-> 
-> Cheers,
-> Ben.
+> The platform_get_irq() can print error message,so remove the redundant
+> dev_err() here.
 
-_find_next_bit_le() function is defined in arch/arm/lib/findbit.S. I'm
-looking at the code: will run more tests and send out patch v4 with
-simple for loop later.
+I suggest to adjust the commit message.
+
+* How do you think about to use the text =E2=80=9Cusb: host: ehci-tegra:
+  Remove an error message in tegra_ehci_probe()=E2=80=9D as the commit sub=
+ject?
+
+* Would a wording like the following be nicer?
+
+  The function =E2=80=9Cplatform_get_irq=E2=80=9D can log an error already=
+.
+  Thus remove a redundant message for the exception handling in the
+  calling function.
 
 
-Cheers,
+=E2=80=A6
+> +++ b/drivers/usb/host/ehci-tegra.c
+> @@ -480,7 +480,6 @@ static int tegra_ehci_probe(struct platform_device *=
+pdev)
+>
+>  	irq =3D platform_get_irq(pdev, 0);
+>  	if (!irq) {
+> -		dev_err(&pdev->dev, "Failed to get IRQ\n");
+>  		err =3D -ENODEV;
+>  		goto cleanup_phy;
 
-Tao
+I find another implementation detail questionable here.
+The software documentation is providing the following information
+for the used programming interface.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/dr=
+ivers/base/platform.c?id=3Df5e94d10e4c468357019e5c28d48499f677b284f#n221
+https://elixir.bootlin.com/linux/v5.6.2/source/drivers/base/platform.c#L20=
+2
+
+=E2=80=9C=E2=80=A6
+ * Return: IRQ number on success, negative error number on failure.
+=E2=80=A6=E2=80=9D
+
+Would you like to reconsider the shown condition check?
+
+Regards,
+Markus
