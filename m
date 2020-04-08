@@ -2,99 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B351A1B1B
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Apr 2020 06:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2931A1B93
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Apr 2020 07:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726512AbgDHEmy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Apr 2020 00:42:54 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:41916 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726345AbgDHEmx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Apr 2020 00:42:53 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1586320973; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=iWIIGMPoYNGURX0VaZ3ac1DtOkfzwlUTUE4xxC9XYag=; b=Faa9g/oygExA8ardMJLJ3Oum/67mwY4uMZD1TDQZEsq6HEBCXBvEPKykMmUFqMIO4NmV0l7i
- G4uuhEOAeE9UFC7qqcdVLtgq2fyQkxaB4oJjbt1yo08iIAqkXhoUkeAxBkqlEkghjgkw125z
- KvOix9V6ORvIrzPXtad7IMd1G+0=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e8d563e.7f1592bed3e8-smtp-out-n04;
- Wed, 08 Apr 2020 04:42:38 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 20F40C44788; Wed,  8 Apr 2020 04:42:37 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.206.24.160] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sanm)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id CF290C433F2;
-        Wed,  8 Apr 2020 04:42:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org CF290C433F2
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sanm@codeaurora.org
-Subject: Re: [PATCH v5 1/2] dt-bindings: usb: qcom,dwc3: Convert USB DWC3
- bindings
-To:     Stephen Boyd <swboyd@chromium.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Felipe Balbi <balbi@kernel.org>,
+        id S1726464AbgDHFkb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Apr 2020 01:40:31 -0400
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:52833 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725879AbgDHFkb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Apr 2020 01:40:31 -0400
+Received: by mail-pj1-f67.google.com with SMTP id ng8so723686pjb.2;
+        Tue, 07 Apr 2020 22:40:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=g1prhrjKxEZds2TfTdybytV1XN9ZFJTSPhvDxSwKWbE=;
+        b=lLoEa84OH4TcHPRT1UimZUdQLc7+R6JFgPXWoCIIRTR2AyiT/OPSoK3ieDWDqzM8qx
+         lyCsqh2n5Zq2XflpC4bOHZ8iVDQrslNa1+/DzvMLAIWXtGMWlgcDE9ziykfEik9ddmBi
+         tyxXTYOkvFRPwBCL9z5pyp0iPfR1I3wurB47f21uuqJtHxLVwahEtgitfWWN7flMDjOZ
+         Safx8k04FtvoZcMhRSmyzx7z3Cwfou//CwYoXYZ07Wi8fW04reFQgw8Y0kGd+M/oglj0
+         CPxccDmDXnLlKNcHfvjbisMg0rXq9cG1uOMWcwhtmdlAZqu3MIuoskOTHuqaUL6yiZXb
+         664Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=g1prhrjKxEZds2TfTdybytV1XN9ZFJTSPhvDxSwKWbE=;
+        b=dsl/KrW+Cw8tzF+oUPBZAQeSP7UmOI9wKRMXIC85CSCnjliMNYlo4kRSm8PxSGrdGV
+         BGSiwkmgPvEeFdjWFBcHQROPE4cxNz4D1p4b7WDzzo9klpUOwkWPK4BI2I7qPrFY4edW
+         yrhsR3vyZwHaEoM3oo4kcGg0jEK/oqs5Hl7cRElY00T8wFb9VKwga/r4owlRxlGT6k7z
+         7bNFM3DonHzJIs1lRmV60h1juYAjN+5RGf0EsgffGZERGjPHV4QUodW5D9gojs1tm+sL
+         yJ9MF9oGG5QvR9Gw0TiiYugF1+M40GMun1he05l1cZbNaoM4SHPffr4QqtczparVrIy8
+         El7g==
+X-Gm-Message-State: AGi0PuaCKwflXvVHlYqiPS9ONq2xa09XbnUU9J8c99nmneyy8y+1PcT8
+        go09WczEOFvOinBYnJUvufQ=
+X-Google-Smtp-Source: APiQypJp2wIHnlyEMM+6phi0GLCRMB+cJZqLMeiHhoqYBQwNHDoMx8FFoIJI/HdUYAVagNG142s6pA==
+X-Received: by 2002:a17:902:a5c6:: with SMTP id t6mr5265576plq.319.1586324430524;
+        Tue, 07 Apr 2020 22:40:30 -0700 (PDT)
+Received: from taoren-ubuntu-R90MNF91 (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
+        by smtp.gmail.com with ESMTPSA id d3sm15544077pfq.126.2020.04.07.22.40.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 07 Apr 2020 22:40:30 -0700 (PDT)
+Date:   Tue, 7 Apr 2020 22:40:23 -0700
+From:   Tao Ren <rentao.bupt@gmail.com>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-aspeed@lists.ozlabs.org,
+        Andrew Jeffery <andrew@aj.id.au>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>
-References: <1585206368-685-1-git-send-email-sanm@codeaurora.org>
- <1585206368-685-2-git-send-email-sanm@codeaurora.org>
- <158631747937.216820.504748426462367724@swboyd.mtv.corp.google.com>
-From:   "Sandeep Maheswaram (Temp)" <sanm@codeaurora.org>
-Message-ID: <0b8d0d73-0421-bd4d-9dcc-62713c1c7f23@codeaurora.org>
-Date:   Wed, 8 Apr 2020 10:12:27 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Joel Stanley <joel@jms.id.au>, taoren@fb.com,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3] usb: gadget: aspeed: improve vhub port irq handling
+Message-ID: <20200408054022.GA12469@taoren-ubuntu-R90MNF91>
+References: <20200315191430.12379-1-rentao.bupt@gmail.com>
+ <20200401215826.GA8248@taoren-ubuntu-R90MNF91>
+ <512d625e45ea953d722bb7ea73c3619730312284.camel@kernel.crashing.org>
+ <20200403064826.GA10866@taoren-ubuntu-R90MNF91>
+ <20200407060242.GA15050@taoren-ubuntu-R90MNF91>
+ <93ae433317a82de86ff5e9c8485563b78656b615.camel@kernel.crashing.org>
 MIME-Version: 1.0
-In-Reply-To: <158631747937.216820.504748426462367724@swboyd.mtv.corp.google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <93ae433317a82de86ff5e9c8485563b78656b615.camel@kernel.crashing.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, Apr 08, 2020 at 09:36:16AM +1000, Benjamin Herrenschmidt wrote:
+> On Mon, 2020-04-06 at 23:02 -0700, Tao Ren wrote:
+> > I ran some testing on my ast2400 and ast2500 BMC and looks like the
+> > for() loop runs faster than for_each_set_bit_from() loop in my
+> > environment. I'm not sure if something needs to be revised in my test
+> > code, but please kindly share your suggestions:
+> > 
+> > I use get_cycles() to calculate execution time of 2 different loops, and
+> > ast_vhub_dev_irq() is replaced with barrier() to avoid "noise"; below
+> > are the results:
+> > 
+> >   - when downstream port number is 5 and only 1 irq bit is set, it takes
+> >     ~30 cycles to finish for_each_set_bit() loop, and 20-25 cycles to
+> >     finish the for() loop.
+> > 
+> >   - if downstream port number is 5 and all 5 bits are set, then
+> >     for_each_set_bit() loop takes ~50 cycles and for() loop takes ~25
+> >     cycles.
+> > 
+> >   - when I increase downsteam port number to 16 and set 1 irq bit, the
+> >     for_each_set_bit() loop takes ~30 cycles and for() loop takes 25
+> >     cycles. It's a little surprise to me because I thought for() loop
+> >     would cost 60+ cycles (3 times of the value when port number is 5).
+> > 
+> >   - if downstream port number is 16 and all irq status bits are set,
+> >     then for_each_set_bit() loop takes 60-70 cycles and for() loop takes
+> >     30+ cycles.
+> 
+> I suspect the CPU doesn't have an efficient find-zero-bit primitive,
+> check the generated asm. In that case I would go back to the simple for
+> loop.
+> 
+> Cheers,
+> Ben.
 
-On 4/8/2020 9:14 AM, Stephen Boyd wrote:
-> Quoting Sandeep Maheswaram (2020-03-26 00:06:07)
->> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->> new file mode 100644
->> index 0000000..0f69475
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->> @@ -0,0 +1,158 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +
-> [...]
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    items:
->> +      - description: The interrupt that is asserted
->> +          when a wakeup event is received on USB2 bus.
->> +      - description: The interrupt that is asserted
->> +          when a wakeup event is received on USB3 bus.
->> +      - description: Wakeup event on DM line.
->> +      - description: Wakeup event on DP line.
-> I can see that it was optional before but that still doesn't make sense
-> to me. The glue hardware from qcom always has interrupts so I'd expect
-> it to be required in the binding.
-Will add in next version.
+_find_next_bit_le() function is defined in arch/arm/lib/findbit.S. I'm
+looking at the code: will run more tests and send out patch v4 with
+simple for loop later.
 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
+
+Cheers,
+
+Tao
