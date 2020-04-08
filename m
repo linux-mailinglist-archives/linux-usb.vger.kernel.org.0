@@ -2,140 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A796E1A23E2
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Apr 2020 16:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B10341A23EB
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Apr 2020 16:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728370AbgDHORW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Apr 2020 10:17:22 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:53377 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728081AbgDHORW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Apr 2020 10:17:22 -0400
-Received: by mail-io1-f69.google.com with SMTP id h17so29281ioh.20
-        for <linux-usb@vger.kernel.org>; Wed, 08 Apr 2020 07:17:21 -0700 (PDT)
+        id S1728520AbgDHOTa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Apr 2020 10:19:30 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:49649 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726550AbgDHOT3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Apr 2020 10:19:29 -0400
+Received: by mail-io1-f71.google.com with SMTP id v19so46588ioq.16
+        for <linux-usb@vger.kernel.org>; Wed, 08 Apr 2020 07:19:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to
-         :content-transfer-encoding;
-        bh=YrZMt1exbkqGBqVEXEcL8iEn4eFEtm/6F8EduxRoUr4=;
-        b=KLc+Q8xQWYjtA2xr8Tq1OKkhMt3rdvZJtACC82OazeVmd4tX9opQxpKHL1qXySWoPn
-         orbZ1O4gcPuOvcovOtWkVZmWyxU98KmbGkvmoQo9BKy8lHRdZhl91YHTMiIK7an2J7iK
-         qEMgYDY/l4bW6j3QyzGpzCXDFmhNvL50xzq5ikaL/0HjmvCUoAuMKPPLIXbF9raRBBbB
-         wW5lWs5DvdwWSUfPVMeLFblGZb+Ij/zfQnKkAz3ZbD1l5oE0GuwwfQ3jqWEUlgDMGOCg
-         G5JvymAOKgvK6GPS7HRbO5XVd+chDmJva2i8ilBpkH6Q5rNL+ZDFB8VxDN6OmnZ81Njl
-         d7Iw==
-X-Gm-Message-State: AGi0PubqWSinPXdyaEpM1CYc2hbk1ofBkuQeHfoj7JxNR9gUXuBLqouC
-        gKYE4fc8JUSFUwNhi5fJH1XLEh7h8WdubOytsaD076f/yyeG
-X-Google-Smtp-Source: APiQypIDNcnnEkvedPTu8OlpqjOdZHi91iTqH8lJ7IlbN3YFlUAbYmugxc8tQrGp2H4C9pvO9zmEnLipc2ByWZFcMYacBGPCvTW5
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=TzJl2eJqrV3NniGq9stMLFP0KwjNMjKGdek8VWiJ/5k=;
+        b=t6SR8C2W/zTXro3fKyzgxwaGNaaUyl4oGhIQufkCZYdllQu3eAUILVyoKMcGuyjX/c
+         knB9Lt0EEaiS5r85TWdXI8JFJFNnl+1T4T22pA4+zzQr3oVDdYQjaNwwFz0fKgSNtp/+
+         Qe8/5o4N/Mbs5DlNo/nmyGV7z3npGOZXHPMs6p+mn2TYH/XkAU5QUjGcH9xoPlUtRZ0K
+         nierydMG3oYdStzaMEZ5WDVCBPcPhCdx5pkaQUloi8/pci7xrV4nkV0DjT7ZV8LYdSXv
+         h+9dlAacHi3cFj9zWLc4TM4i+p98XNlAAFDfoqYS02L6J8Pcr77E7CPBS65Fegzy0yvH
+         WgQQ==
+X-Gm-Message-State: AGi0PuYI3mWC3UkHbzj9dr4xDBROebOlCWboQ9auxWXEHB45d4QL88Sc
+        oP86ulSYXGEXiSEbPMH0WozfXo/a2XoJUCNqDd8BVATVWrHo
+X-Google-Smtp-Source: APiQypJ5M4QzifR5kK5EiWmHZMEcNQDf3HpM5eWbMzy1VlqJDgANrcGrlmXWa+iJkv6kqCxdjVbiVI/agGiQdJw6WIddA1IbhRe0
 MIME-Version: 1.0
-X-Received: by 2002:a02:212c:: with SMTP id e44mr6824432jaa.108.1586355435365;
- Wed, 08 Apr 2020 07:17:15 -0700 (PDT)
-Date:   Wed, 08 Apr 2020 07:17:15 -0700
+X-Received: by 2002:a92:7eda:: with SMTP id q87mr7658504ill.179.1586355566701;
+ Wed, 08 Apr 2020 07:19:26 -0700 (PDT)
+Date:   Wed, 08 Apr 2020 07:19:16 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000366e8705a2c82882@google.com>
-Subject: INFO: trying to register non-static key in devres_release_all
-From:   syzbot <syzbot+22aec786ff221549b0ab@syzkaller.appspotmail.com>
+Message-ID: <0000000000000a9f7d05a2c8305a@google.com>
+Subject: WARNING in gtco_input_open/usb_submit_urb (2)
+From:   syzbot <syzbot+ab2a85d89a155440320b@syzkaller.appspotmail.com>
 To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        rafael@kernel.org, syzkaller-bugs@googlegroups.com
+        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGVsbG8sCgpzeXpib3QgZm91bmQgdGhlIGZvbGxvd2luZyBjcmFzaCBvbjoKCkhFQUQgY29tbWl0
-OiAgICAwZmE4NGFmOCBNZXJnZSB0YWcgJ3VzYi1zZXJpYWwtNS43LXJjMScgb2YgaHR0cHM6Ly9n
-aXQua2VyLi4KZ2l0IHRyZWU6ICAgICAgIGh0dHBzOi8vZ2l0aHViLmNvbS9nb29nbGUva2FzYW4u
-Z2l0IHVzYi1mdXp6ZXIKY29uc29sZSBvdXRwdXQ6IGh0dHBzOi8vc3l6a2FsbGVyLmFwcHNwb3Qu
-Y29tL3gvbG9nLnR4dD94PTEwMWVkOTVkZTAwMDAwCmtlcm5lbCBjb25maWc6ICBodHRwczovL3N5
-emthbGxlci5hcHBzcG90LmNvbS94Ly5jb25maWc/eD02YjljMTU0YjBjMjNhZWNmCmRhc2hib2Fy
-ZCBsaW5rOiBodHRwczovL3N5emthbGxlci5hcHBzcG90LmNvbS9idWc/ZXh0aWQ9MjJhZWM3ODZm
-ZjIyMTU0OWIwYWIKY29tcGlsZXI6ICAgICAgIGdjYyAoR0NDKSA5LjAuMCAyMDE4MTIzMSAoZXhw
-ZXJpbWVudGFsKQoKVW5mb3J0dW5hdGVseSwgSSBkb24ndCBoYXZlIGFueSByZXByb2R1Y2VyIGZv
-ciB0aGlzIGNyYXNoIHlldC4KCklNUE9SVEFOVDogaWYgeW91IGZpeCB0aGUgYnVnLCBwbGVhc2Ug
-YWRkIHRoZSBmb2xsb3dpbmcgdGFnIHRvIHRoZSBjb21taXQ6ClJlcG9ydGVkLWJ5OiBzeXpib3Qr
-MjJhZWM3ODZmZjIyMTU0OWIwYWJAc3l6a2FsbGVyLmFwcHNwb3RtYWlsLmNvbQoKdXNiIDUtMTog
-YXRoOWtfaHRjOiBVU0IgbGF5ZXIgZGVpbml0aWFsaXplZApJTkZPOiB0cnlpbmcgdG8gcmVnaXN0
-ZXIgbm9uLXN0YXRpYyBrZXkuCnRoZSBjb2RlIGlzIGZpbmUgYnV0IG5lZWRzIGxvY2tkZXAgYW5u
-b3RhdGlvbi4KdHVybmluZyBvZmYgdGhlIGxvY2tpbmcgY29ycmVjdG5lc3MgdmFsaWRhdG9yLgpD
-UFU6IDAgUElEOiA1IENvbW06IGt3b3JrZXIvMDowIE5vdCB0YWludGVkIDUuNi4wLXJjNy1zeXpr
-YWxsZXIgIzAKSGFyZHdhcmUgbmFtZTogR29vZ2xlIEdvb2dsZSBDb21wdXRlIEVuZ2luZS9Hb29n
-bGUgQ29tcHV0ZSBFbmdpbmUsIEJJT1MgR29vZ2xlIDAxLzAxLzIwMTEKV29ya3F1ZXVlOiB1c2Jf
-aHViX3dxIGh1Yl9ldmVudApDYWxsIFRyYWNlOgogX19kdW1wX3N0YWNrIGxpYi9kdW1wX3N0YWNr
-LmM6NzcgW2lubGluZV0KIGR1bXBfc3RhY2srMHhlZi8weDE2ZSBsaWIvZHVtcF9zdGFjay5jOjEx
-OAogYXNzaWduX2xvY2tfa2V5IGtlcm5lbC9sb2NraW5nL2xvY2tkZXAuYzo4ODAgW2lubGluZV0K
-IHJlZ2lzdGVyX2xvY2tfY2xhc3MrMHgxMDIyLzB4MTFkMCBrZXJuZWwvbG9ja2luZy9sb2NrZGVw
-LmM6MTE4OQogX19sb2NrX2FjcXVpcmUrMHhmYy8weDNiNjAga2VybmVsL2xvY2tpbmcvbG9ja2Rl
-cC5jOjM4MzYKIGxvY2tfYWNxdWlyZSsweDEzMC8weDM0MCBrZXJuZWwvbG9ja2luZy9sb2NrZGVw
-LmM6NDQ4NAogX19yYXdfc3Bpbl9sb2NrX2lycXNhdmUgaW5jbHVkZS9saW51eC9zcGlubG9ja19h
-cGlfc21wLmg6MTEwIFtpbmxpbmVdCiBfcmF3X3NwaW5fbG9ja19pcnFzYXZlKzB4MzIvMHg1MCBr
-ZXJuZWwvbG9ja2luZy9zcGlubG9jay5jOjE1OQogZGV2cmVzX3JlbGVhc2VfYWxsKzB4NDgvMHhj
-MyBkcml2ZXJzL2Jhc2UvZGV2cmVzLmM6NTI4CiBkZXZpY2VfcmVsZWFzZSsweDM5LzB4MjAwIGRy
-aXZlcnMvYmFzZS9jb3JlLmM6MTM2NAoga29iamVjdF9jbGVhbnVwIGxpYi9rb2JqZWN0LmM6Njkz
-IFtpbmxpbmVdCiBrb2JqZWN0X3JlbGVhc2UgbGliL2tvYmplY3QuYzo3MjIgW2lubGluZV0KIGty
-ZWZfcHV0IGluY2x1ZGUvbGludXgva3JlZi5oOjY1IFtpbmxpbmVdCiBrb2JqZWN0X3B1dCsweDI1
-Ni8weDU1MCBsaWIva29iamVjdC5jOjczOQogcHV0X2RldmljZSBkcml2ZXJzL2Jhc2UvY29yZS5j
-OjI1OTkgW2lubGluZV0KIGRldmljZV91bnJlZ2lzdGVyKzB4MzQvMHhjMCBkcml2ZXJzL2Jhc2Uv
-Y29yZS5jOjI3MTAKIHVzYl9yZW1vdmVfZXBfZGV2cysweDNlLzB4ODAgZHJpdmVycy91c2IvY29y
-ZS9lbmRwb2ludC5jOjIxNQogdXNiX2Rpc2Nvbm5lY3QrMHg0YmIvMHg5MDAgZHJpdmVycy91c2Iv
-Y29yZS9odWIuYzoyMjMwCiBodWJfcG9ydF9jb25uZWN0IGRyaXZlcnMvdXNiL2NvcmUvaHViLmM6
-NTA0NiBbaW5saW5lXQogaHViX3BvcnRfY29ubmVjdF9jaGFuZ2UgZHJpdmVycy91c2IvY29yZS9o
-dWIuYzo1MzM1IFtpbmxpbmVdCiBwb3J0X2V2ZW50IGRyaXZlcnMvdXNiL2NvcmUvaHViLmM6NTQ4
-MSBbaW5saW5lXQogaHViX2V2ZW50KzB4MWExZC8weDQzMDAgZHJpdmVycy91c2IvY29yZS9odWIu
-Yzo1NTYzCiBwcm9jZXNzX29uZV93b3JrKzB4OTRiLzB4MTYyMCBrZXJuZWwvd29ya3F1ZXVlLmM6
-MjI2Ngogd29ya2VyX3RocmVhZCsweDk2LzB4ZTIwIGtlcm5lbC93b3JrcXVldWUuYzoyNDEyCiBr
-dGhyZWFkKzB4MzE4LzB4NDIwIGtlcm5lbC9rdGhyZWFkLmM6MjU1CiByZXRfZnJvbV9mb3JrKzB4
-MjQvMHgzMCBhcmNoL3g4Ni9lbnRyeS9lbnRyeV82NC5TOjM1Mgp1c2IgMS0xOiBuZXcgaGlnaC1z
-cGVlZCBVU0IgZGV2aWNlIG51bWJlciAzIHVzaW5nIGR1bW15X2hjZAp1c2IgMS0xOiBjb25maWcg
-MSBpbnRlcmZhY2UgMCBhbHRzZXR0aW5nIDY0IGJ1bGsgZW5kcG9pbnQgMHg4MiBoYXMgaW52YWxp
-ZCBtYXhwYWNrZXQgMTAyNAp1c2IgMS0xOiBjb25maWcgMSBpbnRlcmZhY2UgMCBoYXMgbm8gYWx0
-c2V0dGluZyAwCnVzYiAxLTE6IE5ldyBVU0IgZGV2aWNlIGZvdW5kLCBpZFZlbmRvcj0wNTI1LCBp
-ZFByb2R1Y3Q9YTRhOCwgYmNkRGV2aWNlPSAwLjQwCnVzYiAxLTE6IE5ldyBVU0IgZGV2aWNlIHN0
-cmluZ3M6IE1mcj0xLCBQcm9kdWN0PTIsIFNlcmlhbE51bWJlcj0zCnVzYiAxLTE6IFByb2R1Y3Q6
-IHN5egp1c2IgMS0xOiBNYW51ZmFjdHVyZXI6IOuQu+SYsOO3ucm24rWW67ma4L+46aWR5YKp77Gs
-75y37LSo7Ka46oec5ZiF4YGn5L6T5YmL5p2h6qCw5oy45riQ7rOV6Iyt5aGC56OI64qa6rCR6q6c
-4KGhxJjrlL3sk5jqhr/qkLjpu4DrnZHolpvrkILsn7HrvY/mgpTjmLnijbjpip/ukIjvlqHuuILk
-nYTjnJPoprzro7ngp5DllKjgq5nuhqHhvqXuj5jrgp/sgIbqr7vqtKfhpJ3smJboorXqjKLgsozu
-qpDrhI/pjKbhgb/iporhk4DkgqDmrKvnn77thrDlspDjkILpkYnnv7HorpLphJXklb3qg5TpjpDr
-spTngKTpn73njLTolZXqgYfru4fqrJvjlq3XrOuymeK1l+SruOG8gum6iO6hvOSrnOm8pOW/rOWI
-p++ElO6Xi+6Ym+i3o+W6mOeDiueBjQp1c2IgMS0xOiBTZXJpYWxOdW1iZXI6IHN5egp1c2JscDog
-Y2FuJ3Qgc2V0IGRlc2lyZWQgYWx0c2V0dGluZyA2NCBvbiBpbnRlcmZhY2UgMAp1c2IgMS0xOiBV
-U0IgZGlzY29ubmVjdCwgZGV2aWNlIG51bWJlciAzCnVzYiAxLTE6IG5ldyBoaWdoLXNwZWVkIFVT
-QiBkZXZpY2UgbnVtYmVyIDQgdXNpbmcgZHVtbXlfaGNkCnVzYiAxLTE6IGNvbmZpZyAxIGludGVy
-ZmFjZSAwIGFsdHNldHRpbmcgNjQgYnVsayBlbmRwb2ludCAweDgyIGhhcyBpbnZhbGlkIG1heHBh
-Y2tldCAxMDI0CnVzYiAxLTE6IGNvbmZpZyAxIGludGVyZmFjZSAwIGhhcyBubyBhbHRzZXR0aW5n
-IDAKdXNiIDEtMTogTmV3IFVTQiBkZXZpY2UgZm91bmQsIGlkVmVuZG9yPTA1MjUsIGlkUHJvZHVj
-dD1hNGE4LCBiY2REZXZpY2U9IDAuNDAKdXNiIDEtMTogTmV3IFVTQiBkZXZpY2Ugc3RyaW5nczog
-TWZyPTEsIFByb2R1Y3Q9MiwgU2VyaWFsTnVtYmVyPTMKdXNiIDEtMTogUHJvZHVjdDogc3l6CnVz
-YiAxLTE6IE1hbnVmYWN0dXJlcjog65C75Jiw47e5ybbitZbruZrgv7jppZHlgqnvsazvnLfstKjs
-prjqh5zlmIXhgafkvpPliYvmnaHqoLDmjLjmuJDus5XojK3loYLno4jriprqsJHqrpzgoaHEmOuU
-veyTmOqGv+qQuOm7gOudkeiWm+uQguyfseu9j+aClOOYueKNuOmKn+6QiO+Woe64guSdhOOck+im
-vOujueCnkOWUqOCrme6GoeG+pe6PmOuCn+yAhuqvu+q0p+GkneyYluiiteqMouCyjO6qkOuEj+mM
-puGBv+KmiuGTgOSCoOasq+efvu2GsOWykOOQgumRiee/seiukumEleSVveqDlOmOkOuylOeApOmf
-veeMtOiVleqBh+u7h+qsm+OWrdes67KZ4rWX5Ku44byC6bqI7qG85Kuc6byk5b+s5Yin74SU7peL
-7pib6Lej5bqY54OK54GNCnVzYiAxLTE6IFNlcmlhbE51bWJlcjogc3l6CnVzYmxwOiBjYW4ndCBz
-ZXQgZGVzaXJlZCBhbHRzZXR0aW5nIDY0IG9uIGludGVyZmFjZSAwCnVzYiAxLTE6IFVTQiBkaXNj
-b25uZWN0LCBkZXZpY2UgbnVtYmVyIDQKdXNiIDYtMTogbmV3IGhpZ2gtc3BlZWQgVVNCIGRldmlj
-ZSBudW1iZXIgOSB1c2luZyBkdW1teV9oY2QKdXNiIDYtMTogY29uZmlnIDEgaW50ZXJmYWNlIDAg
-YWx0c2V0dGluZyA2NCBidWxrIGVuZHBvaW50IDB4ODIgaGFzIGludmFsaWQgbWF4cGFja2V0IDEw
-MjQKdXNiIDYtMTogY29uZmlnIDEgaW50ZXJmYWNlIDAgaGFzIG5vIGFsdHNldHRpbmcgMAp1c2Ig
-Ni0xOiBOZXcgVVNCIGRldmljZSBmb3VuZCwgaWRWZW5kb3I9MDUyNSwgaWRQcm9kdWN0PWE0YTgs
-IGJjZERldmljZT0gMC40MAp1c2IgNi0xOiBOZXcgVVNCIGRldmljZSBzdHJpbmdzOiBNZnI9MSwg
-UHJvZHVjdD0yLCBTZXJpYWxOdW1iZXI9Mwp1c2IgNi0xOiBQcm9kdWN0OiBzeXoKdXNiIDYtMTog
-TWFudWZhY3R1cmVyOiDrkLvkmLDjt7nJtuK1luu5muC/uOmlkeWCqe+xrO+ct+y0qOymuOqHnOWY
-heGBp+S+k+WJi+adoeqgsOaMuOa4kO6zleiMreWhguejiOuKmuqwkequnOChocSY65S97JOY6oa/
-6pC46buA652R6Jab65CC7J+x672P5oKU45i54o246Yqf7pCI75ah7riC5J2E45yT6Ka866O54KeQ
-5ZSo4KuZ7oah4b6l7o+Y64Kf7ICG6q+76rSn4aSd7JiW6KK16oyi4LKM7qqQ64SP6Yym4YG/4qaK
-4ZOA5IKg5qyr55++7Yaw5bKQ45CC6ZGJ57+x6K6S6YSV5JW96oOU6Y6Q67KU54Ck6Z+954y06JWV
-6oGH67uH6qyb45at16zrspnitZfkq7jhvILpuojuobzkq5zpvKTlv6zliKfvhJTul4vumJvot6Pl
-upjng4rngY0KdXNiIDYtMTogU2VyaWFsTnVtYmVyOiBzeXoKdXNibHA6IGNhbid0IHNldCBkZXNp
-cmVkIGFsdHNldHRpbmcgNjQgb24gaW50ZXJmYWNlIDAKdXNiIDYtMTogVVNCIGRpc2Nvbm5lY3Qs
-IGRldmljZSBudW1iZXIgOQoKCi0tLQpUaGlzIGJ1ZyBpcyBnZW5lcmF0ZWQgYnkgYSBib3QuIEl0
-IG1heSBjb250YWluIGVycm9ycy4KU2VlIGh0dHBzOi8vZ29vLmdsL3Rwc21FSiBmb3IgbW9yZSBp
-bmZvcm1hdGlvbiBhYm91dCBzeXpib3QuCnN5emJvdCBlbmdpbmVlcnMgY2FuIGJlIHJlYWNoZWQg
-YXQgc3l6a2FsbGVyQGdvb2dsZWdyb3Vwcy5jb20uCgpzeXpib3Qgd2lsbCBrZWVwIHRyYWNrIG9m
-IHRoaXMgYnVnIHJlcG9ydC4gU2VlOgpodHRwczovL2dvby5nbC90cHNtRUojc3RhdHVzIGZvciBo
-b3cgdG8gY29tbXVuaWNhdGUgd2l0aCBzeXpib3Qu
+Hello,
+
+syzbot found the following crash on:
+
+HEAD commit:    0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=17a84c3be00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
+dashboard link: https://syzkaller.appspot.com/bug?extid=ab2a85d89a155440320b
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12340e1be00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1112d61be00000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+ab2a85d89a155440320b@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+usb 1-1: BOGUS urb xfer, pipe 1 != type 3
+WARNING: CPU: 0 PID: 367 at drivers/usb/core/urb.c:478 usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 367 Comm: systemd-udevd Not tainted 5.6.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xef/0x16e lib/dump_stack.c:118
+ panic+0x2aa/0x6e1 kernel/panic.c:221
+ __warn.cold+0x2f/0x30 kernel/panic.c:582
+ report_bug+0x27b/0x2f0 lib/bug.c:195
+ fixup_bug arch/x86/kernel/traps.c:174 [inline]
+ fixup_bug arch/x86/kernel/traps.c:169 [inline]
+ do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
+ do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
+ invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
+RIP: 0010:usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
+Code: 4d 85 ed 74 46 e8 68 87 dd fd 4c 89 f7 e8 90 57 17 ff 41 89 d8 44 89 e1 4c 89 ea 48 89 c6 48 c7 c7 80 dd 3b 86 e8 10 18 b2 fd <0f> 0b e9 20 f4 ff ff e8 3c 87 dd fd 0f 1f 44 00 00 e8 32 87 dd fd
+RSP: 0018:ffff8881cd36f7e0 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff812974dd RDI: ffffed1039a6deee
+RBP: ffff8881d4311180 R08: ffff8881d2760000 R09: ffffed103b646248
+R10: ffffed103b646247 R11: ffff8881db23123f R12: 0000000000000001
+R13: ffff8881da2a3e58 R14: ffff8881cd6fd0a0 R15: ffff8881d06bbf00
+ gtco_input_open+0xd5/0x130 drivers/input/tablet/gtco.c:560
+ input_open_device+0x16c/0x2c0 drivers/input/input.c:623
+ evdev_open_device drivers/input/evdev.c:414 [inline]
+ evdev_open+0x3dc/0x4f0 drivers/input/evdev.c:496
+ chrdev_open+0x219/0x5c0 fs/char_dev.c:414
+ do_dentry_open+0x494/0x1120 fs/open.c:797
+ do_last fs/namei.c:3490 [inline]
+ path_openat+0x1222/0x32a0 fs/namei.c:3607
+ do_filp_open+0x192/0x260 fs/namei.c:3637
+ do_sys_openat2+0x54c/0x740 fs/open.c:1146
+ do_sys_open+0xc3/0x140 fs/open.c:1162
+ do_syscall_64+0xb6/0x5a0 arch/x86/entry/common.c:294
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x7fa58f493840
+Code: 73 01 c3 48 8b 0d 68 77 20 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 83 3d 89 bb 20 00 00 75 10 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 1e f6 ff ff 48 89 04 24
+RSP: 002b:00007ffdd9e70518 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 00005577299fd7e0 RCX: 00007fa58f493840
+RDX: 0000000000000000 RSI: 0000000000080000 RDI: 00005577299eaa00
+RBP: 00005577299eaa00 R08: 000055772884c670 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000020
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
