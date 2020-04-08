@@ -2,98 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3BE1A1CD7
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Apr 2020 09:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A50D01A1E2A
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Apr 2020 11:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726792AbgDHHuv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Apr 2020 03:50:51 -0400
-Received: from m177129.mail.qiye.163.com ([123.58.177.129]:21499 "EHLO
-        m177129.mail.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726366AbgDHHuv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Apr 2020 03:50:51 -0400
-X-Greylist: delayed 465 seconds by postgrey-1.27 at vger.kernel.org; Wed, 08 Apr 2020 03:50:45 EDT
-Received: from vivo.com (wm-2.qy.internal [127.0.0.1])
-        by m177129.mail.qiye.163.com (Hmail) with ESMTP id 909115C3299;
-        Wed,  8 Apr 2020 15:42:53 +0800 (CST)
+        id S1727652AbgDHJnU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 8 Apr 2020 05:43:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57162 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726521AbgDHJnU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 Apr 2020 05:43:20 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 203419] Logitech Group USB audio stopped working in 5.1-rc6
+Date:   Wed, 08 Apr 2020 09:43:19 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: hawk.it@tiscali.it
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-203419-208809-YrN0JZspGB@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-203419-208809@https.bugzilla.kernel.org/>
+References: <bug-203419-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-Message-ID: <ADsAIgAICMOkBsTG35M4NqqB.1.1586331773574.Hmail.tao.li@vivo.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        =?UTF-8?Q?Micha=C5=82_Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        Sergey Organov <sorganov@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wenhu.wang@vivo.com
-Subject: =?UTF-8?B?UmU6UmU6IFtQQVRDSF0gdXNiOiBnYWRnZXQ6IHNlcmlhbDogRml4ZWQgS0FTQU4gbnVsbC1wdHItZGVyZWYgaW4gdHR5X3dha2V1cA==?=
-X-Priority: 3
-X-Mailer: HMail Webmail Server V2.0 Copyright (c) 2016-163.com
-X-Originating-IP: 58.251.74.226
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Received: from tao.li@vivo.com( [58.251.74.226) ] by ajax-webmail ( [127.0.0.1] ) ; Wed, 8 Apr 2020 15:42:53 +0800 (GMT+08:00)
-From:   =?UTF-8?B?5p2O5qGD?= <tao.li@vivo.com>
-Date:   Wed, 8 Apr 2020 15:42:53 +0800 (GMT+08:00)
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZTlVMQkJLS0tJTUhJSk9KSllXWShZQU
-        hPN1dZLVlBSVdZCQ4XHghZQVk1NCk2OjckKS43PlkG
-X-HM-Sender-Digest: e1kMHhlZQQ8JDh5XWRIfHhUPWUFZRzo*CDoyHDoyODY0EDkILzxITjZP
-        NQoKOVVKVUpOQ01ISEpMTE1MSUJVMxYaEhdVDxoUVRcSOw0SDRRVGBQWRVlXWRILWUFZTkNVSU5K
-        VUxPVUlJTVlXWQgBWUFOQklLNwY+
-X-HM-Tid: 0a7158bdea9e6447kurs909115c3299
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-RnJvbTogR3JlZyBLcm9haC1IYXJ0bWFuIDxncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZz4KRGF0
-ZTogMjAyMC0wMy0xOCAxODoxMjo0MApUbzogIExpIFRhbyA8dGFvLmxpQHZpdm8uY29tPgpDYzog
-IEZlbGlwZSBCYWxiaSA8YmFsYmlAa2VybmVsLm9yZz4sIk1pY2hhxYIgTWlyb3PFgmF3IiA8bWly
-cS1saW51eEByZXJlLnFtcW0ucGw+LFNlcmdleSBPcmdhbm92IDxzb3JnYW5vdkBnbWFpbC5jb20+
-LGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmcsbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZyx3
-ZW5odS53YW5nQHZpdm8uY29tClN1YmplY3Q6IFJlOiBbUEFUQ0hdIHVzYjogZ2FkZ2V0OiBzZXJp
-YWw6IEZpeGVkIEtBU0FOIG51bGwtcHRyLWRlcmVmIGluIHR0eV93YWtldXA+T24gV2VkLCBNYXIg
-MTgsIDIwMjAgYXQgMTA6NTY6MDFBTSArMDgwMCwgTGkgVGFvIHdyb3RlOgo+PiBUaGUgcG9ydC0+
-cG9ydC50dHkgbWF5YmUgcmVzZXQgYXMgTlVMTCwgSWYgZ3NfY2xvc2UoKSB3YXMgaW52b2tlZAo+
-PiB1bmV4cGVjdGVkbHkgZHVyaW5nIHJ1bm5pbmcgZ3NlcmlhbF9jb25uZWN0KCkuCj4+IAo+PiBC
-VUc6IEtBU0FOOiBudWxsLXB0ci1kZXJlZiBpbiB0dHlfd2FrZXVwKzB4MWMvMHg4NAo+PiBDYWxs
-IHRyYWNlOgo+PiBbPDAwMDAwMDAwOTVjM2M4Mzc+XSBkdW1wX2JhY2t0cmFjZSsweDAvMHg2ZDQK
-Pj4gWzwwMDAwMDAwMDQ3NzI2YmI4Pl0gc2hvd19zdGFjaysweDE4LzB4MjAKPj4gWzwwMDAwMDAw
-MGJlZGI0YzFlPl0gLS1kdW1wX3N0YWNrKzB4MjAvMHgyOAo+PiBbPDAwMDAwMDAwNzIyZjJlMmE+
-XSBkdW1wX3N0YWNrKzB4ODQvMHhiMAo+PiBbPDAwMDAwMDAwMzI1NjgzZDQ+XSBrYXNhbl9yZXBv
-cnRfZXJyb3IrMHgxNzgvMHgxZTQKPj4gWzwwMDAwMDAwMDUzMDc5OTk4Pl0ga2FzYW5fcmVwb3J0
-X2Vycm9yKzB4MC8weDFlNAo+PiBbPDAwMDAwMDAwYjZkMzNhZmE+XSAtLWFzYW5fbG9hZDgrMHgx
-NTAvMHgxNWMKPj4gWzwwMDAwMDAwMDE4ODc0NWI4Pl0gdHR5X3dha2V1cCsweDFjLzB4ODQKPj4g
-WzwwMDAwMDAwMDY0ZjZkZDIxPl0gZ3Nfc3RhcnRfaW8rMHhkMC8weDExYwo+PiBbPDAwMDAwMDAw
-NjNkNjdiNmM+XSBnc2VyaWFsX2Nvbm5lY3QrMHgxNWMvMHgxYjAKPj4gWzwwMDAwMDAwMGZhZjdj
-MGY5Pl0gZG1fc2V0X2FsdCsweGE4LzB4MTkwCj4+IFs8MDAwMDAwMDA4ZGViMTkwOT5dIGNvbXBv
-c2l0ZV9zZXR1cCsweGRlNC8weDFlZGMKPj4gWzwwMDAwMDAwMDc5MmVlMTZkPl0gYW5kcm9pZF9z
-ZXR1cCsweDIxMC8weDI5NAo+PiBbPDAwMDAwMDAwYWIzMmVmMzA+XSBkd2MzX2VwMF9kZWxlZ2F0
-ZV9yZXErMHg0OC8weDY4Cj4+IFs8MDAwMDAwMDA1NGUyNmZkMj5dIGR3YzNfZXAwX2ludGVycnVw
-dCsweGYyYy8weDE2ZmMKPj4gWzwwMDAwMDAwMDUwY2IyMjYyPl0gZHdjM19pbnRlcnJ1cHQrMHg0
-NjQvMHgxZjQ0Cj4+IFs8MDAwMDAwMDBmZGNhYTZlOT5dIC0taGFuZGxlX2lycV9ldmVudF9wZXJj
-cHUrMHgxODQvMHgzOTgKPj4gWzwwMDAwMDAwMDNiMjRmZjU2Pl0gaGFuZGxlX2lycV9ldmVudF9w
-ZXJjcHUrMHhhMC8weDEzNAo+PiBbPDAwMDAwMDAwYWVkZGE1ZWU+XSBoYW5kbGVfaXJxX2V2ZW50
-KzB4NjAvMHhhMAo+PiBbPDAwMDAwMDAwNWY1MWE1NzA+XSBoYW5kbGVfZmFzdGVvaV9pcnErMHgy
-M2MvMHgzMWMKPj4gWzwwMDAwMDAwMDhkYjI2MDhkPl0gZ2VuZXJpY19oYW5kbGVfaXJxKzB4NzAv
-MHhhNAo+PiBbPDAwMDAwMDAwMDk4NjgzZmM+XSAtLWhhbmRsZV9kb21haW5faXJxKzB4ODQvMHhl
-MAo+PiBbPDAwMDAwMDAwOGVkMjNiNDY+XSBnaWNfaGFuZGxlX2lycSsweDk4LzB4YjgKPj4gCj4+
-IFNpZ25lZC1vZmYtYnk6IExpIFRhbyA8dGFvLmxpQHZpdm8uY29tPgo+PiAtLS0KPj4gIGRyaXZl
-cnMvdXNiL2dhZGdldC9mdW5jdGlvbi91X3NlcmlhbC5jIHwgMyArKy0KPj4gIDEgZmlsZSBjaGFu
-Z2VkLCAyIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPj4gCj4+IGRpZmYgLS1naXQgYS9k
-cml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vdV9zZXJpYWwuYyBiL2RyaXZlcnMvdXNiL2dhZGdl
-dC9mdW5jdGlvbi91X3NlcmlhbC5jCj4+IGluZGV4IDgxNjdkMzc5ZTExNS4uM2MxMDlhOGY5ZWM0
-IDEwMDY0NAo+PiAtLS0gYS9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vdV9zZXJpYWwuYwo+
-PiArKysgYi9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vdV9zZXJpYWwuYwo+PiBAQCAtNTY1
-LDcgKzU2NSw4IEBAIHN0YXRpYyBpbnQgZ3Nfc3RhcnRfaW8oc3RydWN0IGdzX3BvcnQgKnBvcnQp
-Cj4+ICAJCWdzX3N0YXJ0X3R4KHBvcnQpOwo+PiAgCQkvKiBVbmJsb2NrIGFueSBwZW5kaW5nIHdy
-aXRlcyBpbnRvIG91ciBjaXJjdWxhciBidWZmZXIsIGluIGNhc2UKPj4gIAkJICogd2UgZGlkbid0
-IGluIGdzX3N0YXJ0X3R4KCkgKi8KPj4gLQkJdHR5X3dha2V1cChwb3J0LT5wb3J0LnR0eSk7Cj4+
-ICsJCWlmIChwb3J0LT5wb3J0LnR0eSkKPj4gKwkJCXR0eV93YWtldXAocG9ydC0+cG9ydC50dHkp
-Owo+Cj5XaGF0IHByZXZlbnRzIHBvcnQudHR5IGZyb20gYmVpbmcgc2V0IHRvIE5VTEwgYmV0d2Vl
-biB0aGUgY2hlY2sgYW5kIHRoZQo+Y2FsbCB0byB0dHlfd2FrZXVwPwo+Cj5TaG91bGRuJ3QgZ3Nf
-Y2xvc2UoKSBhbmQgZ3NlcmlhbF9jb25uZWN0KCkgaGF2ZSBzb21lIHNvcnQgb2YgbG9ja2luZyB0
-bwo+cHJldmVudCB0aGlzPwo+CkkgZW5jb3VudGVyZWQgdGhpcyBpc3N1ZSBvbiBTYW1zdW5nIEVY
-WU5PUzk4MCBwbGF0Zm9ybSwgTWF5YmUgdGhpcyBpcyBwbGF0Zm9ybSBzcGVjaWZpYyBpc3N1ZS4K
-VGhlIFVTQiBpbnRlcnJ1cHQgaGFuZGxlciBnb3QgcG9ydF9sb2NrIG9uIENQVSAwIGluIGdzZXJp
-YWxfY29ubmVjdCB3aGlsZSBnc19jbG9zZSBpcyB3YWl0aW5nIGZvciAKdGhpcyBsb2NrIG9uIENQ
-VSAxLiAgQnV0IHRoaXMgcG9ydF9sb2NrIHdpbGwgdW5sb2NrIGluIGdzX3N0YXJ0X2lvLS0+Z3Nf
-c3RhcnRfcnggdGVtcG9yYXJpbHksIFRoaXMgcmFjZQpjb25kaXRpb24gbWF5IGNhdXNlIHBvcnQu
-dHR5IHNldCBhcyBOVUxMLgoKZ3JlZyBrLWgsIERvIHlvdSBoYXZlIHNvbWUgZ29vZCBzdWdnZXN0
-aW9ucz8KCj50aGFua3MsCj4KPmdyZWcgay1oCgoKDQoNCg==
+https://bugzilla.kernel.org/show_bug.cgi?id=203419
+
+Vincenzo Di Massa (hawk.it@tiscali.it) changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |hawk.it@tiscali.it
+
+--- Comment #22 from Vincenzo Di Massa (hawk.it@tiscali.it) ---
+Hello all,
+
+I don't have the HW to test, but I noticed that probably this bug is similar to
+bug 206897, which has been bisected to the same commit.
+
+I have the HUION device and I could help until the end of the week (pandemic ==
+no job for me :-( )
+
+I can build, install and develop kernel code, but i don't know about USB
+internals.
+
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
