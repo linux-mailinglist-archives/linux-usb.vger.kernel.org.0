@@ -2,187 +2,286 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 996581A2516
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Apr 2020 17:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D4D1A2609
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Apr 2020 17:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728367AbgDHP0x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Apr 2020 11:26:53 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:39408 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727192AbgDHP0x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Apr 2020 11:26:53 -0400
-Received: by mail-pg1-f195.google.com with SMTP id g32so3462222pgb.6
-        for <linux-usb@vger.kernel.org>; Wed, 08 Apr 2020 08:26:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=C+U4w7Kh7KCMD+z9p1HTWcc8jDFoEplyMmeswZk5us8=;
-        b=XlKAp1NV11bZzmeb9n6YHnS50wiKbAsskBgxl0X1k2F7n0Apxy2V0azLgcml9V/Q5O
-         c45ssUdPZtWmkZceleTn36Q0QtR0zNa8y6Mxwjxs59TfF/k1smTvIhH4OIpLdVjuZINQ
-         MPW515s3ZH2gcv0iMmawtH22dTnhxt9XH86p/yxf46b/aZB+pQYiGc4Sit9/lUdvSzQt
-         1rgc4QRoCxvfLJmT68++mlbQFP35Ra6UAWe9ruNRXr636P381snSetEHP9Z5x3ZtE3wN
-         R2q1ogUNGweNbk/iESCYHbDvIx+Kn3fWJ4MRi7zlwLNIvU3lWk78FvHBBzb+ENV2Gr5k
-         7BSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C+U4w7Kh7KCMD+z9p1HTWcc8jDFoEplyMmeswZk5us8=;
-        b=jlxmOgXz8FT0Cef0RRVKf9+bJhsSJXcj8VvZIWLbBvZgJWm0L1qYzTR4IV5iE61mtp
-         NguE+y+nmxPZzOf2PfUH8SRLBoYxJ2vMG+0CbItT61Yu/5GycK3KQm+rS6W7/+FXwWnR
-         7t0TQT94/S5gVn8l4T9P5RMyXLgsR76LRhGpzZqB5zC9VSpu9vpnyQu3FmHyLrstsDAm
-         M+H4mENziSVvCx1UO12C/xf4CwCKy1S+nmkMov8xtPr4VN9SsRchyFBHRqCgOIyzBTFc
-         pSkfaf+2AWmkzzso8KheUPN6X6u2FhPT+h1uMwSqqnzbMHJ5BkS6YF1+Xk1bg1tKTg3k
-         5Fyg==
-X-Gm-Message-State: AGi0PuYD8W0ByKyJIOzIc1G1ZdQ4p8w2zM9ninbH13sZrx1OD8J1IKCQ
-        LZEEEH5bWRAyItO/A/nqDk5J2PQbx6uGn/fVrAqTdg==
-X-Google-Smtp-Source: APiQypILdP7Hu8vMThcI+d0Jayttt4zdObp70IDn3Mxc7LvaF6HHnCor6CqS2K2BP4OfteL4d8WCpvEm1ojD8n3dAxk=
-X-Received: by 2002:a63:8342:: with SMTP id h63mr7611867pge.141.1586359611329;
- Wed, 08 Apr 2020 08:26:51 -0700 (PDT)
+        id S1729958AbgDHPsA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Apr 2020 11:48:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48894 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729567AbgDHPqd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 Apr 2020 11:46:33 -0400
+Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E436F20769;
+        Wed,  8 Apr 2020 15:46:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586360791;
+        bh=NGLDDtyN8RZKYu/2cTSKBLZPkCz8Mr0c9YVBRHz1zys=;
+        h=From:To:Cc:Subject:Date:From;
+        b=I3LVCc26/VdF24AsOrt+PHJ6A8shQrFjca47izBLXO8vl1fetOmpTsay+HfFnjRDn
+         ELpq2el4OVbLL0QQpHim4bJ4r72BlEiJ9tHPbEFlZ/E6g9CVUSW9fzJZn0GNpSqQLs
+         eoPTB+ArHDBqNWFtK9BnG7DerSf9cD29j4b39qq4=
+Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
+        (envelope-from <mchehab@kernel.org>)
+        id 1jMCuK-000cAH-Vl; Wed, 08 Apr 2020 17:46:28 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Yuti Amonkar <yamonkar@cadence.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-rdma@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, linux-crypto@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-afs@lists.infradead.org,
+        ecryptfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        ocfs2-devel@oss.oracle.com, linux-pci@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, linux-ide@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-spi@vger.kernel.org,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-usb@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Matthias Brugger <mbrugger@suse.com>, netdev@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH 00/35] Documentation fixes for Kernel 5.8
+Date:   Wed,  8 Apr 2020 17:45:52 +0200
+Message-Id: <cover.1586359676.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.25.2
 MIME-Version: 1.0
-References: <000000000000fdc98405a2b44a8c@google.com> <CAAeHK+wV_cpN9GbJDq4qprAFcL8-svb_8xgXxzFz8gtdykN=sA@mail.gmail.com>
-In-Reply-To: <CAAeHK+wV_cpN9GbJDq4qprAFcL8-svb_8xgXxzFz8gtdykN=sA@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 8 Apr 2020 17:26:40 +0200
-Message-ID: <CAAeHK+xhvCYFmJVLN=pVLgc5Jt_5c91kor5Zhd=xH3nNncbcmA@mail.gmail.com>
-Subject: Re: WARNING in add_taint/usb_submit_urb
-To:     syzbot <syzbot+f44561cfce4cc0e75b89@syzkaller.appspotmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Vladis Dronov <vdronov@redhat.com>,
-        Johan Hovold <johan@kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        ingrassia@epigenesys.com, LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 7, 2020 at 4:38 PM Andrey Konovalov <andreyknvl@google.com> wrote:
->
-> On Tue, Apr 7, 2020 at 4:35 PM syzbot
-> <syzbot+f44561cfce4cc0e75b89@syzkaller.appspotmail.com> wrote:
-> >
-> > Hello,
-> >
-> > syzbot found the following crash on:
-> >
-> > HEAD commit:    0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
-> > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=11cce12be00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=f44561cfce4cc0e75b89
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17a8312be00000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14e35d8fe00000
-> >
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+f44561cfce4cc0e75b89@syzkaller.appspotmail.com
-> >
-> > ------------[ cut here ]------------
-> > usb 1-1: BOGUS urb xfer, pipe 1 != type 3
-> > WARNING: CPU: 1 PID: 384 at drivers/usb/core/urb.c:478 usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
-> > Kernel panic - not syncing: panic_on_warn set ...
-> > CPU: 1 PID: 384 Comm: systemd-udevd Not tainted 5.6.0-rc7-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > Call Trace:
-> >  __dump_stack lib/dump_stack.c:77 [inline]
-> >  dump_stack+0xef/0x16e lib/dump_stack.c:118
-> >  usb_submit_urb+0x10b0/0x1460 drivers/usb/core/urb.c:363
-> >  panic+0x2aa/0x6e1 kernel/panic.c:221
-> >  add_taint.cold+0x16/0x16 kernel/panic.c:434
-> >  set_bit include/asm-generic/bitops/instrumented-atomic.h:28 [inline]
-> >  set_ti_thread_flag include/linux/thread_info.h:55 [inline]
-> >  set_fs arch/x86/include/asm/uaccess.h:33 [inline]
-> >  __probe_kernel_read+0x188/0x1d0 mm/maccess.c:67
-> >  __warn.cold+0x14/0x30 kernel/panic.c:581
-> >  __warn+0xd5/0x1c8 kernel/panic.c:574
-> >  usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
-> >  __warn.cold+0x2f/0x30 kernel/panic.c:582
-> >  usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
-> >  report_bug+0x27b/0x2f0 lib/bug.c:195
-> >  fixup_bug arch/x86/kernel/traps.c:174 [inline]
-> >  fixup_bug arch/x86/kernel/traps.c:169 [inline]
-> >  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
-> >  usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
-> >  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
-> >  usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
-> >  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-> > RIP: 0010:usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
-> > Code: 4d 85 e
-> >
-> >
-> > ---
-> > This bug is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >
-> > syzbot will keep track of this bug report. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > syzbot can test patches for this bug, for details see:
-> > https://goo.gl/tpsmEJ#testing-patches
->
-> +GTCO maintainers.
->
-> Proper report:
->
-> input: GTCO_CalComp as
-> /devices/platform/dummy_hcd.0/usb1/1-1/1-1:0.219/input/input4
-> ------------[ cut here ]------------
-> usb 1-1: BOGUS urb xfer, pipe 1 != type 3
-> WARNING: CPU: 0 PID: 892 at drivers/usb/core/urb.c:478
-> usb_submit_urb+0x1189/0x1460
-> Modules linked in:
-> CPU: 0 PID: 892 Comm: systemd-udevd Not tainted 5.6.0+ #167
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1 04/01/2014
-> RIP: 0010:usb_submit_urb+0x1189/0x1460 drivers/usb/core/urb.c:478
-> Code: 4d 85 ed 74 46 e8 d7 b5 d7 fd 4c 89 f7 e8 0f b4 16 ff 41 89 d8
-> 44 89 e1 4c 89 ea 48 89 c6 48 c7 c7d
-> RSP: 0018:ffff888062f4f7f8 EFLAGS: 00010286
-> RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-> RDX: 0000000000000000 RSI: ffffffff8129eb6d RDI: ffffed100c5e9ef1
-> RBP: ffff8880689aeb80 R08: ffff888069670000 R09: ffffed100d9443c9
-> R10: ffff88806ca21e43 R11: ffffed100d9443c8 R12: 0000000000000001
-> R13: ffff888065fa9f00 R14: ffff888068d390a0 R15: ffff88806bf67d00
-> FS:  00007f4b1048b8c0(0000) GS:ffff88806ca00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000055ad85210280 CR3: 000000005fccc000 CR4: 00000000000006f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  gtco_input_open+0xd5/0x130 drivers/input/tablet/gtco.c:560
->  input_open_device+0x171/0x2d0 drivers/input/input.c:624
->  evdev_open_device drivers/input/evdev.c:414
->  evdev_open+0x3eb/0x4f0 drivers/input/evdev.c:496
->  chrdev_open+0x219/0x5c0 fs/char_dev.c:414
->  do_dentry_open+0x4ac/0x1180 fs/open.c:797
->  do_open fs/namei.c:3229
->  path_openat+0x19dd/0x26f0 fs/namei.c:3346
->  do_filp_open+0x203/0x260 fs/namei.c:3375
->  do_sys_openat2+0x598/0x790 fs/open.c:1148
->  do_sys_open+0xc3/0x140 fs/open.c:1164
->  do_syscall_64+0xb6/0x5a0 arch/x86/entry/common.c:295
->  entry_SYSCALL_64_after_hwframe+0x49/0xb3 arch/x86/entry/entry_64.S:175
-> RIP: 0033:0x7f4b0f5d2840
-> Code: 73 01 c3 48 8b 0d 68 77 20 00 f7 d8 64 89 01 48 83 c8 ff c3 66
-> 0f 1f 44 00 00 83 3d 89 bb 20 00 004
-> RSP: 002b:00007ffce57653c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-> RAX: ffffffffffffffda RBX: 000055ad852c88e0 RCX: 00007f4b0f5d2840
-> RDX: 0000000000000000 RSI: 0000000000080000 RDI: 000055ad852d12a0
-> RBP: 000055ad852d12a0 R08: 000055ad83f4afe3 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000020
-> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> irq event stamp: 6960
-> hardirqs last  enabled at (6959): [<ffffffff81299621>]
-> console_unlock+0x911/0xca0
-> hardirqs last disabled at (6960): [<ffffffff81004721>]
-> trace_hardirqs_off_thunk+0x1a/0x1c
-> softirqs last  enabled at (6290): [<ffffffff85c00678>] __do_softirq+0x678/0x9a5
-> softirqs last disabled at (6281): [<ffffffff8115a258>] irq_exit+0x178/0x1a0
-> ---[ end trace 066086d0cefb4362 ]---
+Hi Jon,
 
-#syz dup: WARNING in gtco_input_open/usb_submit_urb (2)
+I have a large list of patches this time for the Documentation/. So, I'm
+starting sending them a little earier. Yet, those are meant to be applied
+after the end of the merge window. They're based on today's linux-next,
+with has only 49 patches pending to be applied upstream touching
+Documentation/, so I don't expect much conflicts if applied early at
+-rc cycle.
+
+Most of the patches here were already submitted, but weren't
+merged yet at next. So, it seems that nobody picked them yet.
+
+In any case, most of those patches here are independent from 
+the others.
+
+The number of doc build warnings have been rising with time.
+The main goal with this series is to get rid of most Sphinx warnings
+and other errors.
+
+Patches 1 to 5: fix broken references detected by this tool:
+
+        ./scripts/documentation-file-ref-check
+
+The other patches fix other random errors due to tags being
+mis-interpreted or mis-used.
+
+You should notice that several patches touch kernel-doc scripts.
+IMHO, some of the warnings are actually due to kernel-doc being
+too pedantic. So, I ended by improving some things at the toolset,
+in order to make it smarter. That's the case of those patches:
+
+	docs: scripts/kernel-doc: accept blank lines on parameter description
+	scripts: kernel-doc: accept negation like !@var
+	scripts: kernel-doc: proper handle @foo->bar()
+
+The last 4 patches address problems with PDF building.
+
+The first one address a conflict that will rise during the merge
+window: Documentation/media will be removed. Instead of
+just drop it from the list of PDF documents, I opted to drop the
+entire list, as conf.py will auto-generate from the sources:
+
+	docs: LaTeX/PDF: drop list of documents
+
+Also, right now, PDF output is broken due to a namespace conflict 
+at I2c (two pdf outputs there will have the same name).
+
+	docs: i2c: rename i2c.svg to i2c_bus.svg
+
+The third PDF patch is not really a fix, but it helps a lot to identify
+if the build succeeded or not, by placing the final PDF output on
+a separate dir:
+
+	docs: Makefile: place final pdf docs on a separate dir
+
+Finally, the last one solves a bug since the first supported Sphinx
+version, with also impacts PDF output: basically while nested tables
+are valid with ReST notation, the toolset only started supporting
+it on PDF output since version 2.4:
+
+	docs: update recommended Sphinx version to 2.4.4
+
+PS.: Due to the large number of C/C, I opted to keep a smaller
+set of C/C at this first e-mail (only e-mails with "L:" tag from
+MAINTAINERS file).
+
+Mauro Carvalho Chehab (35):
+  MAINTAINERS: dt: update display/allwinner file entry
+  docs: dt: fix broken reference to phy-cadence-torrent.yaml
+  docs: fix broken references to text files
+  docs: fix broken references for ReST files that moved around
+  docs: filesystems: fix renamed references
+  docs: amu: supress some Sphinx warnings
+  docs: arm64: booting.rst: get rid of some warnings
+  docs: pci: boot-interrupts.rst: improve html output
+  futex: get rid of a kernel-docs build warning
+  firewire: firewire-cdev.hL get rid of a docs warning
+  scripts: kernel-doc: proper handle @foo->bar()
+  lib: bitmap.c: get rid of some doc warnings
+  ata: libata-core: fix a doc warning
+  fs: inode.c: get rid of docs warnings
+  docs: ras: get rid of some warnings
+  docs: ras: don't need to repeat twice the same thing
+  docs: watch_queue.rst: supress some Sphinx warnings
+  scripts: kernel-doc: accept negation like !@var
+  docs: infiniband: verbs.c: fix some documentation warnings
+  docs: scripts/kernel-doc: accept blank lines on parameter description
+  docs: spi: spi.h: fix a doc building warning
+  docs: drivers: fix some warnings at base/platform.c when building docs
+  docs: fusion: mptbase.c: get rid of a doc build warning
+  docs: mm: slab.h: fix a broken cross-reference
+  docs mm: userfaultfd.rst: use ``foo`` for literals
+  docs: mm: userfaultfd.rst: use a cross-reference for a section
+  docs: vm: index.rst: add an orphan doc to the building system
+  docs: dt: qcom,dwc3.txt: fix cross-reference for a converted file
+  MAINTAINERS: dt: fix pointers for ARM Integrator, Versatile and
+    RealView
+  docs: dt: fix a broken reference for a file converted to json
+  powerpc: docs: cxl.rst: mark two section titles as such
+  docs: LaTeX/PDF: drop list of documents
+  docs: i2c: rename i2c.svg to i2c_bus.svg
+  docs: Makefile: place final pdf docs on a separate dir
+  docs: update recommended Sphinx version to 2.4.4
+
+ Documentation/ABI/stable/sysfs-devices-node   |   2 +-
+ Documentation/ABI/testing/procfs-smaps_rollup |   2 +-
+ Documentation/Makefile                        |   6 +-
+ Documentation/PCI/boot-interrupts.rst         |  34 +--
+ Documentation/admin-guide/cpu-load.rst        |   2 +-
+ Documentation/admin-guide/mm/userfaultfd.rst  | 209 +++++++++---------
+ Documentation/admin-guide/nfs/nfsroot.rst     |   2 +-
+ Documentation/admin-guide/ras.rst             |  18 +-
+ Documentation/arm64/amu.rst                   |   5 +
+ Documentation/arm64/booting.rst               |  36 +--
+ Documentation/conf.py                         |  38 ----
+ .../bindings/net/qualcomm-bluetooth.txt       |   2 +-
+ .../bindings/phy/ti,phy-j721e-wiz.yaml        |   2 +-
+ .../devicetree/bindings/usb/qcom,dwc3.txt     |   4 +-
+ .../doc-guide/maintainer-profile.rst          |   2 +-
+ .../driver-api/driver-model/device.rst        |   4 +-
+ .../driver-api/driver-model/overview.rst      |   2 +-
+ Documentation/filesystems/dax.txt             |   2 +-
+ Documentation/filesystems/dnotify.txt         |   2 +-
+ .../filesystems/ramfs-rootfs-initramfs.rst    |   2 +-
+ Documentation/filesystems/sysfs.rst           |   2 +-
+ Documentation/i2c/{i2c.svg => i2c_bus.svg}    |   2 +-
+ Documentation/i2c/summary.rst                 |   2 +-
+ Documentation/memory-barriers.txt             |   2 +-
+ Documentation/powerpc/cxl.rst                 |   2 +
+ .../powerpc/firmware-assisted-dump.rst        |   2 +-
+ Documentation/process/adding-syscalls.rst     |   2 +-
+ Documentation/process/submit-checklist.rst    |   2 +-
+ Documentation/sphinx/requirements.txt         |   2 +-
+ .../it_IT/process/adding-syscalls.rst         |   2 +-
+ .../it_IT/process/submit-checklist.rst        |   2 +-
+ .../translations/ko_KR/memory-barriers.txt    |   2 +-
+ .../translations/zh_CN/filesystems/sysfs.txt  |   8 +-
+ .../zh_CN/process/submit-checklist.rst        |   2 +-
+ Documentation/virt/kvm/arm/pvtime.rst         |   2 +-
+ Documentation/virt/kvm/devices/vcpu.rst       |   2 +-
+ Documentation/virt/kvm/hypercalls.rst         |   4 +-
+ Documentation/virt/kvm/mmu.rst                |   2 +-
+ Documentation/virt/kvm/review-checklist.rst   |   2 +-
+ Documentation/vm/index.rst                    |   1 +
+ Documentation/watch_queue.rst                 |  34 ++-
+ MAINTAINERS                                   |   7 +-
+ arch/powerpc/include/uapi/asm/kvm_para.h      |   2 +-
+ arch/x86/kvm/mmu/mmu.c                        |   2 +-
+ drivers/ata/libata-core.c                     |   2 +-
+ drivers/base/core.c                           |   2 +-
+ drivers/base/platform.c                       |   6 +-
+ .../allwinner/sun8i-ce/sun8i-ce-cipher.c      |   2 +-
+ .../crypto/allwinner/sun8i-ce/sun8i-ce-core.c |   2 +-
+ .../allwinner/sun8i-ss/sun8i-ss-cipher.c      |   2 +-
+ .../crypto/allwinner/sun8i-ss/sun8i-ss-core.c |   2 +-
+ drivers/gpu/drm/Kconfig                       |   2 +-
+ drivers/gpu/drm/drm_ioctl.c                   |   2 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h       |   2 +-
+ drivers/hwtracing/coresight/Kconfig           |   2 +-
+ drivers/infiniband/core/verbs.c               |   7 +-
+ drivers/media/v4l2-core/v4l2-fwnode.c         |   2 +-
+ drivers/message/fusion/mptbase.c              |   8 +-
+ fs/Kconfig                                    |   2 +-
+ fs/Kconfig.binfmt                             |   2 +-
+ fs/adfs/Kconfig                               |   2 +-
+ fs/affs/Kconfig                               |   2 +-
+ fs/afs/Kconfig                                |   6 +-
+ fs/bfs/Kconfig                                |   2 +-
+ fs/cramfs/Kconfig                             |   2 +-
+ fs/ecryptfs/Kconfig                           |   2 +-
+ fs/fat/Kconfig                                |   8 +-
+ fs/fuse/Kconfig                               |   2 +-
+ fs/fuse/dev.c                                 |   2 +-
+ fs/hfs/Kconfig                                |   2 +-
+ fs/hpfs/Kconfig                               |   2 +-
+ fs/inode.c                                    |   6 +-
+ fs/isofs/Kconfig                              |   2 +-
+ fs/namespace.c                                |   2 +-
+ fs/notify/inotify/Kconfig                     |   2 +-
+ fs/ntfs/Kconfig                               |   2 +-
+ fs/ocfs2/Kconfig                              |   2 +-
+ fs/overlayfs/Kconfig                          |   6 +-
+ fs/proc/Kconfig                               |   4 +-
+ fs/romfs/Kconfig                              |   2 +-
+ fs/sysfs/dir.c                                |   2 +-
+ fs/sysfs/file.c                               |   2 +-
+ fs/sysfs/mount.c                              |   2 +-
+ fs/sysfs/symlink.c                            |   2 +-
+ fs/sysv/Kconfig                               |   2 +-
+ fs/udf/Kconfig                                |   2 +-
+ include/linux/kobject.h                       |   2 +-
+ include/linux/kobject_ns.h                    |   2 +-
+ include/linux/mm.h                            |   4 +-
+ include/linux/relay.h                         |   2 +-
+ include/linux/slab.h                          |   2 +-
+ include/linux/spi/spi.h                       |   1 +
+ include/linux/sysfs.h                         |   2 +-
+ include/uapi/linux/ethtool_netlink.h          |   2 +-
+ include/uapi/linux/firewire-cdev.h            |   2 +-
+ include/uapi/linux/kvm.h                      |   4 +-
+ include/uapi/rdma/rdma_user_ioctl_cmds.h      |   2 +-
+ kernel/futex.c                                |   3 +
+ kernel/relay.c                                |   2 +-
+ lib/bitmap.c                                  |  27 +--
+ lib/kobject.c                                 |   4 +-
+ mm/gup.c                                      |  12 +-
+ scripts/kernel-doc                            |  41 ++--
+ tools/include/uapi/linux/kvm.h                |   4 +-
+ virt/kvm/arm/vgic/vgic-mmio-v3.c              |   2 +-
+ virt/kvm/arm/vgic/vgic.h                      |   4 +-
+ 106 files changed, 373 insertions(+), 338 deletions(-)
+ rename Documentation/i2c/{i2c.svg => i2c_bus.svg} (99%)
+
+-- 
+2.25.2
+
+
