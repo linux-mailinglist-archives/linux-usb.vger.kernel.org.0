@@ -2,53 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F69D1A3187
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Apr 2020 11:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A86731A338B
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Apr 2020 13:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726561AbgDIJIR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Apr 2020 05:08:17 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:39344 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726082AbgDIJIR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Apr 2020 05:08:17 -0400
-Received: by mail-pf1-f194.google.com with SMTP id k15so3842036pfh.6;
-        Thu, 09 Apr 2020 02:08:17 -0700 (PDT)
+        id S1726669AbgDILuE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Apr 2020 07:50:04 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:41049 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726523AbgDILuE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Apr 2020 07:50:04 -0400
+Received: by mail-io1-f68.google.com with SMTP id b12so3493438ion.8;
+        Thu, 09 Apr 2020 04:50:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=jZZ8GSU7SStyQTRXHioxf7XISlIWbs7FKaemI5HyWec=;
-        b=Pf7bzjaQ5hDx/t/Gdhx+prJ3hZzWY7z8BOrXNmQwwinVDgyebp53shIOJjd/WGNd1Z
-         OOQ/kZcMWJEDsJRCZWhzvOTSEob4M9qR40v7j34+JTtHWGvVmvhVa3CYjK5GFsSGPWXu
-         q02HGutMwJzFkVcPvmT+Tk34V8p/mgSxxTMHAlEc8khkxK0x2nCPspiwpkRuBjKh2s2v
-         gF7uFFYHyGT7Z8L9hu9RQ865SLcN+yyxp82YIBVcOeFKg3MBRvXMAioXWveHFpeKRkWa
-         E2nE7qZ6hp717cRLYztk2N6R/qyIq0mnXi2EIa0VrVZgC7xiA58EAypfm4qY7gFd4aTb
-         f1mw==
+        bh=+XqP7Ap1vUorR0W4ROT/4/sK/I8YLfCYd/qeR1cdEgE=;
+        b=pb9aAJmgSBJLFZELTtD91Tc95hIg9mDY+5kW6+GTYkZaHen2JQf7wzds/IJmGDXHUe
+         C5XEesCYKp3GfC6zLjKW6/rvD1Yrj3DHNXFn1DbVZQ8i7epRLwih8GTlFT1vZSK/iYU8
+         vlTFysaBrWnf11tqcUfcGUNE46VNhUcf8ztZzk/5FRvhWUb3VEOSNVyBh0nlgN6nh2d8
+         YTMQ6vxxVkgVp4cgEPHpp42L2cxkjxsoMNvWzg53KTRQONuKukD05S9tegwhGPsq396I
+         FmAQwmI57WYF2vX58i/su/H2kvtQmacL17KBJJy8pNhDaC8XurNV8rGaHkA8bQGfYj5k
+         ELYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jZZ8GSU7SStyQTRXHioxf7XISlIWbs7FKaemI5HyWec=;
-        b=Q9AIW/R9D58Cj4QjoMH/KFwMyxinkB859l5Nlk8XDiIYKnrHgECOmISlThF6aeWrnJ
-         nLZvfBqAJwzKYYuU3+QDuQroKcBg125PWjf3uh4k5nz6z+PxoBRm8iOgsn6lx+H7sX0B
-         DfaRz0yMqvZof5h8/YaifoKFHab7fCw4mkp8YWP0jspIN/CYRabjTV0JhUrMfaWG0HH9
-         IjC6lrUthjIpVuRR+suW3LQgkygjzjCvk4+oXxfdXTWSLK072VH6Mi7LWlhpyUYqI1Xl
-         L8BSLo3etSrGgmApP1u+0wUvzCgVI+yUwy6i2HANy/k86zPV9+1tb5h9GJouWSs3QyeF
-         0dQw==
-X-Gm-Message-State: AGi0PuYYqTH/mbcuUHRbJoHZxYg3gBdPPVuj9rxMv4GMAMXtBgPPqhxg
-        GLT/kykSCvuj0rf+xD6tY8ph/QAj3u65FaPLT/Q=
-X-Google-Smtp-Source: APiQypKsgNzxuKsYZzk5G8ZRDgratsR3V/rE5QkFegtqm1hvP5di0TFrjuZRpWKL4SNREGUub3ToDaBPO3YM4QEqcko=
-X-Received: by 2002:aa7:958f:: with SMTP id z15mr11815993pfj.130.1586423296973;
- Thu, 09 Apr 2020 02:08:16 -0700 (PDT)
+        bh=+XqP7Ap1vUorR0W4ROT/4/sK/I8YLfCYd/qeR1cdEgE=;
+        b=ASPO49B6wmSm9iVAe2Tzq9BLkM/gYshECuOECmlDZ9ra3LzNf3VI4jb0gVgNHuB+GD
+         VSe7Kfh8hN02osjyDKZpwzQjNE4RdEiT9GFqLz1uBpBCiXJXI8OYrU637MIk/uIZHjrf
+         XUHxcpwtBpAq8QXdz8cemW1+k6rxMRAEL94GYUg646qs/kp6nufpxek/OIy/MZ4LzVs5
+         m95X8ALrTWZqGKz5g1v0BlMll4k3q8Moig/wQhPuJdnkQV+H/4qmMXdfknAX1iOKGG7x
+         fvZLHaLnT4000iysc4TPJD/u+BxY3+XuJqCd1HFA2JwGxk6j2GnkGtOUHfTVMud3YwCS
+         sZug==
+X-Gm-Message-State: AGi0PuYzy2PdlbjhheieVSrC32Pw1AwUL0QIy5/3uhzzGoEwWyjs59lI
+        EKR7LATooYnSqrb5wd/v/PTeOlSuyMyfPNyJ76BMtpHaErY=
+X-Google-Smtp-Source: APiQypJQhXszQeNXb++KfW2iCUidd5W34HBnZ+kUn+qj+aseYfrFokyXuutDqIhvyASuZlMs6VaFb/5bfk17ypWr05s=
+X-Received: by 2002:a6b:5116:: with SMTP id f22mr11568386iob.15.1586433003478;
+ Thu, 09 Apr 2020 04:50:03 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200408181406.40389-1-alcooperx@gmail.com> <20200408181406.40389-5-alcooperx@gmail.com>
-In-Reply-To: <20200408181406.40389-5-alcooperx@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 9 Apr 2020 12:08:05 +0300
-Message-ID: <CAHp75Vd_nbgwdE5Fbm3oxd_+51BJZ=67sVyjKiN2zLS+J4X-Fw@mail.gmail.com>
+ <CAHp75Vd_nbgwdE5Fbm3oxd_+51BJZ=67sVyjKiN2zLS+J4X-Fw@mail.gmail.com>
+In-Reply-To: <CAHp75Vd_nbgwdE5Fbm3oxd_+51BJZ=67sVyjKiN2zLS+J4X-Fw@mail.gmail.com>
+From:   Alan Cooper <alcooperx@gmail.com>
+Date:   Thu, 9 Apr 2020 07:49:52 -0400
+Message-ID: <CAOGqxeXQE0z=+6yuEME48am__2vtJhBpetYd_sZamJmm1h_TLQ@mail.gmail.com>
 Subject: Re: [PATCH v3 4/4] usb: host: Add ability to build new Broadcom STB
  USB drivers
-To:     Al Cooper <alcooperx@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>,
         bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
@@ -66,34 +67,44 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 9, 2020 at 12:52 AM Al Cooper <alcooperx@gmail.com> wrote:
+On Thu, Apr 9, 2020 at 5:08 AM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
 >
-> Add the build system changes needed to get the Broadcom STB XHCI,
-> EHCI and OHCI functionality working. The OHCI support does not
-> require anything unique to Broadcom so the standard ohci-platform
-> driver is being used. The link order for XHCI was changed in the
-> Makefile because of the way STB XHCI, EHCI and OHCI controllers
-> share a port which requires that the XHCI driver be initialized
-> first. Also update MAINTAINERS.
-
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -3477,6 +3477,14 @@ S:       Supported
->  F:     drivers/i2c/busses/i2c-brcmstb.c
->  F:     Documentation/devicetree/bindings/i2c/brcm,brcmstb-i2c.yaml
+> On Thu, Apr 9, 2020 at 12:52 AM Al Cooper <alcooperx@gmail.com> wrote:
+> >
+> > Add the build system changes needed to get the Broadcom STB XHCI,
+> > EHCI and OHCI functionality working. The OHCI support does not
+> > require anything unique to Broadcom so the standard ohci-platform
+> > driver is being used. The link order for XHCI was changed in the
+> > Makefile because of the way STB XHCI, EHCI and OHCI controllers
+> > share a port which requires that the XHCI driver be initialized
+> > first. Also update MAINTAINERS.
 >
-> +BROADCOM BRCMSTB USB EHCI DRIVER
-> +M:     Al Cooper <alcooperx@gmail.com>
-> +L:     linux-usb@vger.kernel.org
-> +L:     bcm-kernel-feedback-list@broadcom.com
-> +S:     Maintained
-> +F:     drivers/usb/host/ehci-brcm.*
-> +F:     Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -3477,6 +3477,14 @@ S:       Supported
+> >  F:     drivers/i2c/busses/i2c-brcmstb.c
+> >  F:     Documentation/devicetree/bindings/i2c/brcm,brcmstb-i2c.yaml
+> >
+> > +BROADCOM BRCMSTB USB EHCI DRIVER
+> > +M:     Al Cooper <alcooperx@gmail.com>
+> > +L:     linux-usb@vger.kernel.org
+> > +L:     bcm-kernel-feedback-list@broadcom.com
+> > +S:     Maintained
+> > +F:     drivers/usb/host/ehci-brcm.*
+> > +F:     Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
+>
+> This has ordering issues.
+> Run parse-maintainer.pl to fix. (Note, it creates by default a new
+> file, you might need to run diff manually to see the difference).
 
-This has ordering issues.
-Run parse-maintainer.pl to fix. (Note, it creates by default a new
-file, you might need to run diff manually to see the difference).
+I'm not sure what you mean.
+I ran "./scripts/parse-maintainers.pl" and did "diff MAINTAINERS
+MAINTAINERS.new" and there are no differences in or around my entry.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Al
+
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
