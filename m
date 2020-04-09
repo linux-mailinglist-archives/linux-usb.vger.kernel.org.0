@@ -2,88 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F0A1A3146
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Apr 2020 10:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F69D1A3187
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Apr 2020 11:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726523AbgDIIxm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Apr 2020 04:53:42 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:12627 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725972AbgDIIxm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Apr 2020 04:53:42 -0400
-Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id D2E4B838DBA7F81E605E;
-        Thu,  9 Apr 2020 16:53:17 +0800 (CST)
-Received: from huawei.com (10.175.124.28) by DGGEMS401-HUB.china.huawei.com
- (10.3.19.201) with Microsoft SMTP Server id 14.3.487.0; Thu, 9 Apr 2020
- 16:53:10 +0800
-From:   Jason Yan <yanaijie@huawei.com>
-To:     <johan@kernel.org>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Jason Yan <yanaijie@huawei.com>
-Subject: [PATCH] USB: serial: garmin_gps: remove some defined but not used variables
-Date:   Thu, 9 Apr 2020 16:51:43 +0800
-Message-ID: <20200409085143.46078-1-yanaijie@huawei.com>
-X-Mailer: git-send-email 2.17.2
+        id S1726561AbgDIJIR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Apr 2020 05:08:17 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:39344 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726082AbgDIJIR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Apr 2020 05:08:17 -0400
+Received: by mail-pf1-f194.google.com with SMTP id k15so3842036pfh.6;
+        Thu, 09 Apr 2020 02:08:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jZZ8GSU7SStyQTRXHioxf7XISlIWbs7FKaemI5HyWec=;
+        b=Pf7bzjaQ5hDx/t/Gdhx+prJ3hZzWY7z8BOrXNmQwwinVDgyebp53shIOJjd/WGNd1Z
+         OOQ/kZcMWJEDsJRCZWhzvOTSEob4M9qR40v7j34+JTtHWGvVmvhVa3CYjK5GFsSGPWXu
+         q02HGutMwJzFkVcPvmT+Tk34V8p/mgSxxTMHAlEc8khkxK0x2nCPspiwpkRuBjKh2s2v
+         gF7uFFYHyGT7Z8L9hu9RQ865SLcN+yyxp82YIBVcOeFKg3MBRvXMAioXWveHFpeKRkWa
+         E2nE7qZ6hp717cRLYztk2N6R/qyIq0mnXi2EIa0VrVZgC7xiA58EAypfm4qY7gFd4aTb
+         f1mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jZZ8GSU7SStyQTRXHioxf7XISlIWbs7FKaemI5HyWec=;
+        b=Q9AIW/R9D58Cj4QjoMH/KFwMyxinkB859l5Nlk8XDiIYKnrHgECOmISlThF6aeWrnJ
+         nLZvfBqAJwzKYYuU3+QDuQroKcBg125PWjf3uh4k5nz6z+PxoBRm8iOgsn6lx+H7sX0B
+         DfaRz0yMqvZof5h8/YaifoKFHab7fCw4mkp8YWP0jspIN/CYRabjTV0JhUrMfaWG0HH9
+         IjC6lrUthjIpVuRR+suW3LQgkygjzjCvk4+oXxfdXTWSLK072VH6Mi7LWlhpyUYqI1Xl
+         L8BSLo3etSrGgmApP1u+0wUvzCgVI+yUwy6i2HANy/k86zPV9+1tb5h9GJouWSs3QyeF
+         0dQw==
+X-Gm-Message-State: AGi0PuYYqTH/mbcuUHRbJoHZxYg3gBdPPVuj9rxMv4GMAMXtBgPPqhxg
+        GLT/kykSCvuj0rf+xD6tY8ph/QAj3u65FaPLT/Q=
+X-Google-Smtp-Source: APiQypKsgNzxuKsYZzk5G8ZRDgratsR3V/rE5QkFegtqm1hvP5di0TFrjuZRpWKL4SNREGUub3ToDaBPO3YM4QEqcko=
+X-Received: by 2002:aa7:958f:: with SMTP id z15mr11815993pfj.130.1586423296973;
+ Thu, 09 Apr 2020 02:08:16 -0700 (PDT)
 MIME-Version: 1.0
+References: <20200408181406.40389-1-alcooperx@gmail.com> <20200408181406.40389-5-alcooperx@gmail.com>
+In-Reply-To: <20200408181406.40389-5-alcooperx@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 9 Apr 2020 12:08:05 +0300
+Message-ID: <CAHp75Vd_nbgwdE5Fbm3oxd_+51BJZ=67sVyjKiN2zLS+J4X-Fw@mail.gmail.com>
+Subject: Re: [PATCH v3 4/4] usb: host: Add ability to build new Broadcom STB
+ USB drivers
+To:     Al Cooper <alcooperx@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.124.28]
-X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix the following gcc warning:
+On Thu, Apr 9, 2020 at 12:52 AM Al Cooper <alcooperx@gmail.com> wrote:
+>
+> Add the build system changes needed to get the Broadcom STB XHCI,
+> EHCI and OHCI functionality working. The OHCI support does not
+> require anything unique to Broadcom so the standard ohci-platform
+> driver is being used. The link order for XHCI was changed in the
+> Makefile because of the way STB XHCI, EHCI and OHCI controllers
+> share a port which requires that the XHCI driver be initialized
+> first. Also update MAINTAINERS.
 
-drivers/usb/serial/garmin_gps.c:192:28: warning: ‘PRIVATE_REQ’ defined
-but not used [-Wunused-const-variable=]
- static unsigned char const PRIVATE_REQ[]
-                            ^~~~~~~~~~~
-drivers/usb/serial/garmin_gps.c:186:28: warning: ‘GARMIN_STOP_PVT_REQ’
-defined but not used [-Wunused-const-variable=]
- static unsigned char const GARMIN_STOP_PVT_REQ[]
-                            ^~~~~~~~~~~~~~~~~~~
-drivers/usb/serial/garmin_gps.c:184:28: warning: ‘GARMIN_START_PVT_REQ’
-defined but not used [-Wunused-const-variable=]
- static unsigned char const GARMIN_START_PVT_REQ[]
-                            ^~~~~~~~~~~~~~~~~~~~
-drivers/usb/serial/garmin_gps.c:182:28: warning:
-‘GARMIN_APP_LAYER_REPLY’ defined but not used [-Wunused-const-variable=]
- static unsigned char const GARMIN_APP_LAYER_REPLY[]
-                            ^~~~~~~~~~~~~~~~~~~~~~
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -3477,6 +3477,14 @@ S:       Supported
+>  F:     drivers/i2c/busses/i2c-brcmstb.c
+>  F:     Documentation/devicetree/bindings/i2c/brcm,brcmstb-i2c.yaml
+>
+> +BROADCOM BRCMSTB USB EHCI DRIVER
+> +M:     Al Cooper <alcooperx@gmail.com>
+> +L:     linux-usb@vger.kernel.org
+> +L:     bcm-kernel-feedback-list@broadcom.com
+> +S:     Maintained
+> +F:     drivers/usb/host/ehci-brcm.*
+> +F:     Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Jason Yan <yanaijie@huawei.com>
----
- drivers/usb/serial/garmin_gps.c | 9 ---------
- 1 file changed, 9 deletions(-)
+This has ordering issues.
+Run parse-maintainer.pl to fix. (Note, it creates by default a new
+file, you might need to run diff manually to see the difference).
 
-diff --git a/drivers/usb/serial/garmin_gps.c b/drivers/usb/serial/garmin_gps.c
-index ffd984142171..3b39d1e39fbf 100644
---- a/drivers/usb/serial/garmin_gps.c
-+++ b/drivers/usb/serial/garmin_gps.c
-@@ -179,19 +179,10 @@ static unsigned char const GARMIN_START_SESSION_REPLY[]
- 	= { 0, 0, 0, 0,  6, 0, 0, 0, 4, 0, 0, 0 };
- static unsigned char const GARMIN_BULK_IN_AVAIL_REPLY[]
- 	= { 0, 0, 0, 0,  2, 0, 0, 0, 0, 0, 0, 0 };
--static unsigned char const GARMIN_APP_LAYER_REPLY[]
--	= { 0x14, 0, 0, 0 };
--static unsigned char const GARMIN_START_PVT_REQ[]
--	= { 20, 0, 0, 0,  10, 0, 0, 0, 2, 0, 0, 0, 49, 0 };
--static unsigned char const GARMIN_STOP_PVT_REQ[]
--	= { 20, 0, 0, 0,  10, 0, 0, 0, 2, 0, 0, 0, 50, 0 };
- static unsigned char const GARMIN_STOP_TRANSFER_REQ[]
- 	= { 20, 0, 0, 0,  10, 0, 0, 0, 2, 0, 0, 0, 0, 0 };
- static unsigned char const GARMIN_STOP_TRANSFER_REQ_V2[]
- 	= { 20, 0, 0, 0,  10, 0, 0, 0, 1, 0, 0, 0, 0 };
--static unsigned char const PRIVATE_REQ[]
--	=    { 0x4B, 0x6E, 0x10, 0x01,  0xFF, 0, 0, 0, 0xFF, 0, 0, 0 };
--
- 
- 
- static const struct usb_device_id id_table[] = {
 -- 
-2.17.2
-
+With Best Regards,
+Andy Shevchenko
