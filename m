@@ -2,101 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2CE21A3405
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Apr 2020 14:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FA2C1A3406
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Apr 2020 14:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726609AbgDIMaJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Apr 2020 08:30:09 -0400
-Received: from mga12.intel.com ([192.55.52.136]:32630 "EHLO mga12.intel.com"
+        id S1726521AbgDIMcF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 9 Apr 2020 08:32:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36288 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725970AbgDIMaJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Apr 2020 08:30:09 -0400
-IronPort-SDR: tLcE/I/nyxdIntRi+kIFpwB43fynvVDm2JC34IXFaiNzWqh4X8nHQ0P3bP8zFqKEDPGGnrdsgG
- 0cqcL8Bo37OA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2020 05:30:09 -0700
-IronPort-SDR: jNckGK922sv43RdgPwXtoSA0NNEQdR62cPtNEuay78mLz49CqmwXBAhFjv+7kH0lXUfRn2pGQ2
- DHLGdtuAjqJA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,362,1580803200"; 
-   d="scan'208";a="362140105"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Apr 2020 05:30:03 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1jMWJp-00GxB8-3x; Thu, 09 Apr 2020 15:30:05 +0300
-Date:   Thu, 9 Apr 2020 15:30:05 +0300
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-To:     Alan Cooper <alcooperx@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v3 4/4] usb: host: Add ability to build new Broadcom STB
- USB drivers
-Message-ID: <20200409123005.GZ3676135@smile.fi.intel.com>
-References: <20200408181406.40389-1-alcooperx@gmail.com>
- <20200408181406.40389-5-alcooperx@gmail.com>
- <CAHp75Vd_nbgwdE5Fbm3oxd_+51BJZ=67sVyjKiN2zLS+J4X-Fw@mail.gmail.com>
- <CAOGqxeXQE0z=+6yuEME48am__2vtJhBpetYd_sZamJmm1h_TLQ@mail.gmail.com>
+        id S1725970AbgDIMcF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Apr 2020 08:32:05 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 207065] C-media USB audio device stops working from 5.2.0-rc3
+ onwards
+Date:   Thu, 09 Apr 2020 12:32:05 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mathias.nyman@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-207065-208809-acaXt6vp4x@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-207065-208809@https.bugzilla.kernel.org/>
+References: <bug-207065-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOGqxeXQE0z=+6yuEME48am__2vtJhBpetYd_sZamJmm1h_TLQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 09, 2020 at 07:49:52AM -0400, Alan Cooper wrote:
-> On Thu, Apr 9, 2020 at 5:08 AM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> >
-> > On Thu, Apr 9, 2020 at 12:52 AM Al Cooper <alcooperx@gmail.com> wrote:
-> > >
-> > > Add the build system changes needed to get the Broadcom STB XHCI,
-> > > EHCI and OHCI functionality working. The OHCI support does not
-> > > require anything unique to Broadcom so the standard ohci-platform
-> > > driver is being used. The link order for XHCI was changed in the
-> > > Makefile because of the way STB XHCI, EHCI and OHCI controllers
-> > > share a port which requires that the XHCI driver be initialized
-> > > first. Also update MAINTAINERS.
-> >
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -3477,6 +3477,14 @@ S:       Supported
-> > >  F:     drivers/i2c/busses/i2c-brcmstb.c
-> > >  F:     Documentation/devicetree/bindings/i2c/brcm,brcmstb-i2c.yaml
-> > >
-> > > +BROADCOM BRCMSTB USB EHCI DRIVER
-> > > +M:     Al Cooper <alcooperx@gmail.com>
-> > > +L:     linux-usb@vger.kernel.org
-> > > +L:     bcm-kernel-feedback-list@broadcom.com
-> > > +S:     Maintained
-> > > +F:     drivers/usb/host/ehci-brcm.*
-> > > +F:     Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
-> >
-> > This has ordering issues.
-> > Run parse-maintainer.pl to fix. (Note, it creates by default a new
-> > file, you might need to run diff manually to see the difference).
-> 
-> I'm not sure what you mean.
-> I ran "./scripts/parse-maintainers.pl" and did "diff MAINTAINERS
-> MAINTAINERS.new" and there are no differences in or around my entry.
+https://bugzilla.kernel.org/show_bug.cgi?id=207065
 
-Perhaps --order should be added.
+Mathias Nyman (mathias.nyman@linux.intel.com) changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |mathias.nyman@linux.intel.c
+                   |                            |om
+
+--- Comment #4 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
+Thanks, traces show its related to Clearing TT buffer after a STALL on 
+endpoint 0.
+
+The first stall looks like a protocol stall, not a function stall, meaning that
+endpoint isn't really halted, just that the device does not support the
+request in the control transfer. 
+
+Anyway, xhci starts clearing what it assumes is a halted endpoint, 
+including clearing the hub TT buffer.
+
+Specs are a bit unclear if TT should be cleared in this case, 
+or at least I couldn't find it.
+
+I'll create a tespatch that doesn't clear TT buffer on protocol stalls,
+and add excessive tracing and debugging to it.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+You are receiving this mail because:
+You are watching the assignee of the bug.
