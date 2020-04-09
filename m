@@ -2,109 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A86731A338B
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Apr 2020 13:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2CE21A3405
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Apr 2020 14:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726669AbgDILuE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Apr 2020 07:50:04 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:41049 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726523AbgDILuE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Apr 2020 07:50:04 -0400
-Received: by mail-io1-f68.google.com with SMTP id b12so3493438ion.8;
-        Thu, 09 Apr 2020 04:50:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+XqP7Ap1vUorR0W4ROT/4/sK/I8YLfCYd/qeR1cdEgE=;
-        b=pb9aAJmgSBJLFZELTtD91Tc95hIg9mDY+5kW6+GTYkZaHen2JQf7wzds/IJmGDXHUe
-         C5XEesCYKp3GfC6zLjKW6/rvD1Yrj3DHNXFn1DbVZQ8i7epRLwih8GTlFT1vZSK/iYU8
-         vlTFysaBrWnf11tqcUfcGUNE46VNhUcf8ztZzk/5FRvhWUb3VEOSNVyBh0nlgN6nh2d8
-         YTMQ6vxxVkgVp4cgEPHpp42L2cxkjxsoMNvWzg53KTRQONuKukD05S9tegwhGPsq396I
-         FmAQwmI57WYF2vX58i/su/H2kvtQmacL17KBJJy8pNhDaC8XurNV8rGaHkA8bQGfYj5k
-         ELYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+XqP7Ap1vUorR0W4ROT/4/sK/I8YLfCYd/qeR1cdEgE=;
-        b=ASPO49B6wmSm9iVAe2Tzq9BLkM/gYshECuOECmlDZ9ra3LzNf3VI4jb0gVgNHuB+GD
-         VSe7Kfh8hN02osjyDKZpwzQjNE4RdEiT9GFqLz1uBpBCiXJXI8OYrU637MIk/uIZHjrf
-         XUHxcpwtBpAq8QXdz8cemW1+k6rxMRAEL94GYUg646qs/kp6nufpxek/OIy/MZ4LzVs5
-         m95X8ALrTWZqGKz5g1v0BlMll4k3q8Moig/wQhPuJdnkQV+H/4qmMXdfknAX1iOKGG7x
-         fvZLHaLnT4000iysc4TPJD/u+BxY3+XuJqCd1HFA2JwGxk6j2GnkGtOUHfTVMud3YwCS
-         sZug==
-X-Gm-Message-State: AGi0PuYzy2PdlbjhheieVSrC32Pw1AwUL0QIy5/3uhzzGoEwWyjs59lI
-        EKR7LATooYnSqrb5wd/v/PTeOlSuyMyfPNyJ76BMtpHaErY=
-X-Google-Smtp-Source: APiQypJQhXszQeNXb++KfW2iCUidd5W34HBnZ+kUn+qj+aseYfrFokyXuutDqIhvyASuZlMs6VaFb/5bfk17ypWr05s=
-X-Received: by 2002:a6b:5116:: with SMTP id f22mr11568386iob.15.1586433003478;
- Thu, 09 Apr 2020 04:50:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200408181406.40389-1-alcooperx@gmail.com> <20200408181406.40389-5-alcooperx@gmail.com>
- <CAHp75Vd_nbgwdE5Fbm3oxd_+51BJZ=67sVyjKiN2zLS+J4X-Fw@mail.gmail.com>
-In-Reply-To: <CAHp75Vd_nbgwdE5Fbm3oxd_+51BJZ=67sVyjKiN2zLS+J4X-Fw@mail.gmail.com>
-From:   Alan Cooper <alcooperx@gmail.com>
-Date:   Thu, 9 Apr 2020 07:49:52 -0400
-Message-ID: <CAOGqxeXQE0z=+6yuEME48am__2vtJhBpetYd_sZamJmm1h_TLQ@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] usb: host: Add ability to build new Broadcom STB
- USB drivers
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+        id S1726609AbgDIMaJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Apr 2020 08:30:09 -0400
+Received: from mga12.intel.com ([192.55.52.136]:32630 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725970AbgDIMaJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Apr 2020 08:30:09 -0400
+IronPort-SDR: tLcE/I/nyxdIntRi+kIFpwB43fynvVDm2JC34IXFaiNzWqh4X8nHQ0P3bP8zFqKEDPGGnrdsgG
+ 0cqcL8Bo37OA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2020 05:30:09 -0700
+IronPort-SDR: jNckGK922sv43RdgPwXtoSA0NNEQdR62cPtNEuay78mLz49CqmwXBAhFjv+7kH0lXUfRn2pGQ2
+ DHLGdtuAjqJA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,362,1580803200"; 
+   d="scan'208";a="362140105"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Apr 2020 05:30:03 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1jMWJp-00GxB8-3x; Thu, 09 Apr 2020 15:30:05 +0300
+Date:   Thu, 9 Apr 2020 15:30:05 +0300
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Alan Cooper <alcooperx@gmail.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>,
         bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
         devicetree <devicetree@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         USB <linux-usb@vger.kernel.org>,
         Mathias Nyman <mathias.nyman@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v3 4/4] usb: host: Add ability to build new Broadcom STB
+ USB drivers
+Message-ID: <20200409123005.GZ3676135@smile.fi.intel.com>
+References: <20200408181406.40389-1-alcooperx@gmail.com>
+ <20200408181406.40389-5-alcooperx@gmail.com>
+ <CAHp75Vd_nbgwdE5Fbm3oxd_+51BJZ=67sVyjKiN2zLS+J4X-Fw@mail.gmail.com>
+ <CAOGqxeXQE0z=+6yuEME48am__2vtJhBpetYd_sZamJmm1h_TLQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOGqxeXQE0z=+6yuEME48am__2vtJhBpetYd_sZamJmm1h_TLQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 9, 2020 at 5:08 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Thu, Apr 9, 2020 at 12:52 AM Al Cooper <alcooperx@gmail.com> wrote:
+On Thu, Apr 09, 2020 at 07:49:52AM -0400, Alan Cooper wrote:
+> On Thu, Apr 9, 2020 at 5:08 AM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
 > >
-> > Add the build system changes needed to get the Broadcom STB XHCI,
-> > EHCI and OHCI functionality working. The OHCI support does not
-> > require anything unique to Broadcom so the standard ohci-platform
-> > driver is being used. The link order for XHCI was changed in the
-> > Makefile because of the way STB XHCI, EHCI and OHCI controllers
-> > share a port which requires that the XHCI driver be initialized
-> > first. Also update MAINTAINERS.
->
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -3477,6 +3477,14 @@ S:       Supported
-> >  F:     drivers/i2c/busses/i2c-brcmstb.c
-> >  F:     Documentation/devicetree/bindings/i2c/brcm,brcmstb-i2c.yaml
+> > On Thu, Apr 9, 2020 at 12:52 AM Al Cooper <alcooperx@gmail.com> wrote:
+> > >
+> > > Add the build system changes needed to get the Broadcom STB XHCI,
+> > > EHCI and OHCI functionality working. The OHCI support does not
+> > > require anything unique to Broadcom so the standard ohci-platform
+> > > driver is being used. The link order for XHCI was changed in the
+> > > Makefile because of the way STB XHCI, EHCI and OHCI controllers
+> > > share a port which requires that the XHCI driver be initialized
+> > > first. Also update MAINTAINERS.
 > >
-> > +BROADCOM BRCMSTB USB EHCI DRIVER
-> > +M:     Al Cooper <alcooperx@gmail.com>
-> > +L:     linux-usb@vger.kernel.org
-> > +L:     bcm-kernel-feedback-list@broadcom.com
-> > +S:     Maintained
-> > +F:     drivers/usb/host/ehci-brcm.*
-> > +F:     Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
->
-> This has ordering issues.
-> Run parse-maintainer.pl to fix. (Note, it creates by default a new
-> file, you might need to run diff manually to see the difference).
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -3477,6 +3477,14 @@ S:       Supported
+> > >  F:     drivers/i2c/busses/i2c-brcmstb.c
+> > >  F:     Documentation/devicetree/bindings/i2c/brcm,brcmstb-i2c.yaml
+> > >
+> > > +BROADCOM BRCMSTB USB EHCI DRIVER
+> > > +M:     Al Cooper <alcooperx@gmail.com>
+> > > +L:     linux-usb@vger.kernel.org
+> > > +L:     bcm-kernel-feedback-list@broadcom.com
+> > > +S:     Maintained
+> > > +F:     drivers/usb/host/ehci-brcm.*
+> > > +F:     Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
+> >
+> > This has ordering issues.
+> > Run parse-maintainer.pl to fix. (Note, it creates by default a new
+> > file, you might need to run diff manually to see the difference).
+> 
+> I'm not sure what you mean.
+> I ran "./scripts/parse-maintainers.pl" and did "diff MAINTAINERS
+> MAINTAINERS.new" and there are no differences in or around my entry.
 
-I'm not sure what you mean.
-I ran "./scripts/parse-maintainers.pl" and did "diff MAINTAINERS
-MAINTAINERS.new" and there are no differences in or around my entry.
+Perhaps --order should be added.
 
-Al
+-- 
+With Best Regards,
+Andy Shevchenko
 
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+
