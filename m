@@ -2,84 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 741571A4800
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2020 17:53:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC6A1A4910
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2020 19:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726263AbgDJPxU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Apr 2020 11:53:20 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:46435 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726181AbgDJPxU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Apr 2020 11:53:20 -0400
-Received: (qmail 22317 invoked by uid 500); 10 Apr 2020 11:53:20 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 10 Apr 2020 11:53:20 -0400
-Date:   Fri, 10 Apr 2020 11:53:20 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Andrey Konovalov <andreyknvl@google.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: Testing endpoint halt support for raw-gadget
-In-Reply-To: <CAAeHK+x5-z85v97ySvX+5=sJTn=hVbpkbCiQBZCD-6BKvKPSpQ@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.2004101136490.15021-100000@netrider.rowland.org>
+        id S1726744AbgDJRgz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Apr 2020 13:36:55 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:40918 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726234AbgDJRgz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Apr 2020 13:36:55 -0400
+Received: by mail-ot1-f65.google.com with SMTP id q2so2489275otk.7;
+        Fri, 10 Apr 2020 10:36:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=MzwM/gQ/NLaRvDFMI25L91K+i3EhNsGz95soTyWuQBo=;
+        b=WCAbFeh/+b8aiImco+FcjemeUmUjLuH7pSK3E8H/CC9dnOB2DjOatVw/kXjZgLkrGe
+         FLuNW+hcRyh4BlHgz0aSQRYUcxIFZHBuE91bwhRF/xlOTb72sRqDGxTf5cfMYxR+NKbH
+         ZPL+hQJh3WCpaIbzJxDJFeyIcXDGTh2f5ptJSihmiw7mnnDlo9hTrYe0LH4dWOom12VT
+         7kKCuRcFbFt/EF0gK86SEWNqTJ0PudWpFctKR/8ZJnj5WVbG4z1VSo/JNWMqFLAiSPy4
+         SxxEhzM24qZqXEQJwhXCCA0dSwERA9L8JMXBO6avJ/T1AmotlIvNLi8SF06VjFYh7+cO
+         TmJg==
+X-Gm-Message-State: AGi0PuYyslzXsjDds9AkvAeScoCAKxfAur09hvknncm0vRxnS+VHzOSj
+        hEo3UeLoRBd1NEP1LDwkhA==
+X-Google-Smtp-Source: APiQypLnAMIYEtn1snzAX7XsnL8YdEKpMgCeNLiH6hW+fVNoQm1scqQIshatQunCogs3B6D0xJoNWA==
+X-Received: by 2002:a4a:c819:: with SMTP id s25mr4930618ooq.6.1586540215007;
+        Fri, 10 Apr 2020 10:36:55 -0700 (PDT)
+Received: from rob-hp-laptop (ip-99-203-29-27.pools.cgn.spcsdns.net. [99.203.29.27])
+        by smtp.gmail.com with ESMTPSA id d25sm1625369ooh.34.2020.04.10.10.36.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Apr 2020 10:36:54 -0700 (PDT)
+Received: (nullmailer pid 13792 invoked by uid 1000);
+        Fri, 10 Apr 2020 16:31:08 -0000
+Date:   Fri, 10 Apr 2020 11:31:08 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: generic-ehci: Document
+ power-domains property
+Message-ID: <20200410163108.GA13579@bogus>
+References: <20200326163807.23216-1-geert+renesas@glider.be>
+ <20200326163807.23216-2-geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200326163807.23216-2-geert+renesas@glider.be>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 10 Apr 2020, Andrey Konovalov wrote:
-
-> On Fri, Apr 10, 2020 at 2:29 AM Alan Stern <stern@rowland.harvard.edu> wrote:
-
-> > Have you implemented wedge as well as halt?  Wedge is needed for the
-> > mass-storage protocol; as far as I know it isn't used anywhere else.
+On Thu, 26 Mar 2020 17:38:05 +0100, Geert Uytterhoeven wrote:
+> It is quite common for a generic EHCI block to be embedded in an SoC in
+> its own power domain.  Hence allow the DTS writer to describe the
+> controller's position in the power hierarchy, by documenting the
+> optional presence of a "power-domains" property.
 > 
-> No, I didn't know about "wedge" at all :) Looks like the API for it is
-> really simple, just usb_ep_set_wedge(). I'll need to figure out what
-> it is and how it works, and I'll send a patch that adds halt/wedge
-> support then.
-
-usb_ep_set_wedge(ep) does almost the same thing as 
-usb_ep_set_halt(ep).  The difference is that a Clear-Feature(halt) 
-request from the host will un-halt an endpoint if it is merely halted, 
-but it won't un-halt a wedged endpoint.  (I don't think this is 
-documented anywhere, unfortunately.)
-
-> > And have you given any thought to suspend/resume support?  It's a bit
-> > tricky because you have to consider both gadget suspend and USB bus
-> > suspend.
+> This gets rid of "make dtbs_check" warnings like:
 > 
-> Hm, no. Is there something specific I need to consider to support it?
-> I guess I'll need to read about how it works as well, before I can
-> understand what it would require and ask meaningful questions.
-
-The really tricky part involves a gadget that is in system suspend.  If 
-the USB bus isn't also suspended, the gadget won't work properly -- it 
-won't be able to respond to requests from the host.  Basically, when a 
-UDC driver sees that the system is going into suspend, it has no choice 
-but to disconnect from the USB bus.  This probably isn't implemented 
-very well in a lot of UDC drivers.
-
-USB bus suspend, on the other hand, _should_ be implemented.
-
-> > Nothing else springs to mind.
+>     arch/arm64/boot/dts/renesas/r8a774a1-hihope-rzg2m.dt.yaml: usb@ee080100: 'power-domains' does not match any of the regexes: 'pinctrl-[0-9]+'
 > 
-> Something else: I've been testing raw-gadget with various UDCs that I
-> have [1] and everything seems to work, except for emulating SuperSpeed
-> devices with net2280. I've just found it out yesterday night, and
-> haven't had a chance to debug that yet, but if you know about some
-> potential issues I could encounter with SuperSpeed/USB3+, please let
-> me know.
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+>  Documentation/devicetree/bindings/usb/generic-ehci.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
 
-Well, USB-3 has streams, unlike USB-2.  You may want to think about
-supporting them.
+Applied, thanks.
 
-Also, bear in mind that dummy-hcd doesn't support isochronous transfers 
-(although all real UDCs do support them).  So perhaps you haven't given 
-them as much testing.  usbtest can help a little with that.
-
-Alan Stern
-
+Rob
