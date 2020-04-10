@@ -2,92 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 649161A4778
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2020 16:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 906F11A47C6
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2020 17:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726142AbgDJOci (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Apr 2020 10:32:38 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:30692 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726082AbgDJOci (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Apr 2020 10:32:38 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03AESH4r027085;
-        Fri, 10 Apr 2020 16:32:26 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=STMicroelectronics;
- bh=TShubh2H2AdHxwazjuLdxZIzK8knwtSXhUp0llm02dE=;
- b=KcUnmzdoIgmrNUbeA646O6mMfPVdoUJRFXLOILsSVLUcs4HtevWuhAkCB2RRDGGp8wjV
- gBiafiVe1fOH6swpMuwQ10bwUSFe1xg1UlVQ93Q6QRqS17FN9Y8GgEihedhL0Q+EdYOx
- utWD+GjTOYpt+U3K7gBymXmomDcpf2+MQjEUAY8/gExEi+yTr82nENT1kgIQXkdwNS8o
- PAuvyL2gKxioB2k2WVoA88lFzUIiqtEb5K6bSKphThxp6t5d+UpkMQBhFNs66TLGWtc9
- 8gVvDy+NcoFAQjkWHUHTCUWZ975HrPd9jkpU6twa0lrps5efDvYn5u1F2jaamH8IaIe/ hQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 3091k78xah-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Apr 2020 16:32:26 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 344EA10002A;
-        Fri, 10 Apr 2020 16:32:22 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag5node3.st.com [10.75.127.15])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 19BD82BF9C5;
-        Fri, 10 Apr 2020 16:32:22 +0200 (CEST)
-Received: from localhost (10.75.127.47) by SFHDAG5NODE3.st.com (10.75.127.15)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 10 Apr 2020 16:32:21
- +0200
-From:   Fabrice Gasnier <fabrice.gasnier@st.com>
-To:     <hminas@synopsys.com>
-CC:     <gregkh@linuxfoundation.org>, <balbi@ti.com>,
-        <johnyoun@synopsys.com>, <gregory.herrero@intel.com>,
-        <Grigor.Tovmasyan@synopsys.com>, <amelie.delaunay@st.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH] usb: dwc2: only prevent new request when power_down is possible
-Date:   Fri, 10 Apr 2020 16:31:54 +0200
-Message-ID: <1586529114-25211-1-git-send-email-fabrice.gasnier@st.com>
-X-Mailer: git-send-email 2.7.4
+        id S1726173AbgDJPNR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Apr 2020 11:13:17 -0400
+Received: from mail-pl1-f181.google.com ([209.85.214.181]:32858 "EHLO
+        mail-pl1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726009AbgDJPNR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Apr 2020 11:13:17 -0400
+Received: by mail-pl1-f181.google.com with SMTP id ay1so764642plb.0
+        for <linux-usb@vger.kernel.org>; Fri, 10 Apr 2020 08:13:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XeogREMVwf0cgeT4ozB9w7tc5DpX25iOcdIiE1Oe5Jw=;
+        b=Ml2rjPkXYsEqbbATAPLk/TPvu8U/hGlzBzLDl11nsY6KmC7sQkGOJ16o7FNh//fs3n
+         SILDbJCUS7ugHauR8H+Ji0yX2IPWYMEm4AzRCdbMxqtig/WLqMX3xaaTg+1s8hV5cuKw
+         2l3LxLo0X9aC/pt/Sya/NgkogxQIV77censqQV9n9CTNMBMKlIk2NiGqXL5u9hpAJwpN
+         cU5Vafvd+gxJ8IxkahXWD5reKqSXj90N2bUN3EejBtYlbToHe2kWwiAX5N3w+YmqnNoW
+         aeow1dKxMrc7+enorMlN3uvqLZWgwscPzou99w5h+tDMU0RyuVgOlvNS4Ci83ocKIJwD
+         Xp5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XeogREMVwf0cgeT4ozB9w7tc5DpX25iOcdIiE1Oe5Jw=;
+        b=c7xfpJKt9ct4X31l3O8P/LQpSQeJaMXWihdKgccGWCBQkyF1P2CQSHL4UpRz4zWdi1
+         CH0RmHCHe8mhxwfqWzyD0nM+M9eZgTwWvurIIF4O6Ifadgx5JgQxpnX6PV7Win2uxYY0
+         U14MwjuAosldrR8yX9iEVffr8SQpLhmNAPDM8fnBOshbZNK8UdAmwaWTmbXkmuB8qmD8
+         KyhA52YH34zEPGz5D/XO3e9TQ4T1Ab3FuuuH75xQNa9tL0eWlxhCZAsjN/EMWhNZ2UdI
+         +bbTB/61cY8O5f9Z52tgx3BZo2KmCyn7Qwftlbpylg+MMM7iKw6mLYP30NSz7N4Q9wuv
+         MlIw==
+X-Gm-Message-State: AGi0PubOm9ErnR4I477kcpHmwzGUtIYs4hukJHgIT45BbiShSWj1ta7Z
+        Xg+D7sVIq1SYov9hgtZoxn/ep9+83/LoGBAjhAqDCD5XRxI=
+X-Google-Smtp-Source: APiQypJ4DwqFy9etemnzs6rmugnqKqA7FVaGq6BrJ9FBktkzaTbLfyMSPrrQsuIAp0BtH4HNFd+v6JYVUem7MQSrNUc=
+X-Received: by 2002:a17:902:8204:: with SMTP id x4mr1742182pln.336.1586531596495;
+ Fri, 10 Apr 2020 08:13:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG6NODE2.st.com (10.75.127.17) To SFHDAG5NODE3.st.com
- (10.75.127.15)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-10_05:2020-04-09,2020-04-10 signatures=0
+References: <CAAeHK+x7Fihwriocp8Kpr+AQks6h3syZa+g0Wd+Q62fg-y93Lg@mail.gmail.com>
+ <Pine.LNX.4.44L0.2004092015180.30065-100000@netrider.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.2004092015180.30065-100000@netrider.rowland.org>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Fri, 10 Apr 2020 17:13:05 +0200
+Message-ID: <CAAeHK+x5-z85v97ySvX+5=sJTn=hVbpkbCiQBZCD-6BKvKPSpQ@mail.gmail.com>
+Subject: Re: Testing endpoint halt support for raw-gadget
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When controller is suspended, registers mustn't be touched. This is not
-the case when 'power_down' is set to none. In this case, power saving
-routines are skipped.
+On Fri, Apr 10, 2020 at 2:29 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Thu, 9 Apr 2020, Andrey Konovalov wrote:
+>
+> > Hi Alan and Greg,
+> >
+> > I've been thinking about what kind of features raw-gadget might be
+> > missing, that would allow more flexibility in emulating USB devices.
+> > One of the things that is currently missing is halting endpoints.
+> > Adding this functionality seems to be fairly easy, but it's unclear to
+> > me how to test it. Any suggestions?
+>
+> You should use the usbtest driver along with the testusb program in
+> tools/usb.  Of course, to do it you will need a userspace driver for
+> raw-gadget.  usbtest works best with gadget-zero, but it can be used
+> (in degraded form) with any USB device.
 
-This fixes a case where gadget driver (f_acm) gets opened (cat /dev/ttyGS0)
-but the bus has been suspended by the host:
-- configfs-gadget gadget: acm ttyGS0 can't notify serial state, -11
+Oh, right, I'll try that!
 
-Fixes: 7ababa926c66 ("usb: dwc2: gadget: prevent new request submission during suspend")
-Fixes: 88b02f2cb1e1 ("usb: dwc2: Add core state checking")
+> > Also, are there some other features that might make sense to add? I
+> > see that e.g. GadgetFS has GADGETFS_FIFO_STATUS/FLUSH ioctls. Are
+> > those useful?
+>
+> I believe that was included just as an emulation of some existing UDC
+> hardware.  It's rather controller-specific, not of general interest.
+> (The general idea is that the UDC says that an IN request completes
+> when its data has been loaded into the controller's FIFO, rather than
+> when the data has actually been sent to the host.)
 
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
----
- drivers/usb/dwc2/gadget.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+OK, then I guess raw-gadget won't need those at least just yet.
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 92ed32e..45a8782 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -1375,7 +1375,8 @@ static int dwc2_hsotg_ep_queue(struct usb_ep *ep, struct usb_request *req,
- 		req->zero, req->short_not_ok);
- 
- 	/* Prevent new request submission when controller is suspended */
--	if (hs->lx_state != DWC2_L0) {
-+	if (hs->params.power_down != DWC2_POWER_DOWN_PARAM_NONE &&
-+	    hs->lx_state != DWC2_L0) {
- 		dev_dbg(hs->dev, "%s: submit request only in active state\n",
- 			__func__);
- 		return -EAGAIN;
--- 
-2.7.4
+> Have you implemented wedge as well as halt?  Wedge is needed for the
+> mass-storage protocol; as far as I know it isn't used anywhere else.
 
+No, I didn't know about "wedge" at all :) Looks like the API for it is
+really simple, just usb_ep_set_wedge(). I'll need to figure out what
+it is and how it works, and I'll send a patch that adds halt/wedge
+support then.
+
+> And have you given any thought to suspend/resume support?  It's a bit
+> tricky because you have to consider both gadget suspend and USB bus
+> suspend.
+
+Hm, no. Is there something specific I need to consider to support it?
+I guess I'll need to read about how it works as well, before I can
+understand what it would require and ask meaningful questions.
+
+> Nothing else springs to mind.
+
+Something else: I've been testing raw-gadget with various UDCs that I
+have [1] and everything seems to work, except for emulating SuperSpeed
+devices with net2280. I've just found it out yesterday night, and
+haven't had a chance to debug that yet, but if you know about some
+potential issues I could encounter with SuperSpeed/USB3+, please let
+me know.
+
+Thank you, Alan!
+
+[1] https://github.com/xairy/raw-gadget#usb-device-controllers
