@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3331A4037
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2020 05:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 741001A4020
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Apr 2020 05:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728197AbgDJDx5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Apr 2020 23:53:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35188 "EHLO mail.kernel.org"
+        id S1728992AbgDJDwx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Apr 2020 23:52:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36076 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726822AbgDJDuc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Apr 2020 23:50:32 -0400
+        id S1726666AbgDJDvD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Apr 2020 23:51:03 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C67EB214DB;
-        Fri, 10 Apr 2020 03:50:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7EE6E215A4;
+        Fri, 10 Apr 2020 03:51:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586490632;
-        bh=pYYnWNXIOOVYT3paGvt0+fyCX+Hzf57UqsPRpVa5kcM=;
+        s=default; t=1586490663;
+        bh=r/6PfOnKx679vpIeclauonjb+bhMjbDtN0wHoFr2PCM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JAs3QQ4KEgMe1q+wqKDi1UKpfCyeJl7afBJve1+m3wAPeA/ugbCcpMmaLKS16EA3K
-         eI0pdFVj1CDDkrBSijBj0g1xkhYEDtlZqxKDb5oKOWvG9ZTgniqzJhB2Hf9t+L95Mz
-         cUPSINwZ8csKA+6xubTMhGsrA4LJbzjJ/keKKSqk=
+        b=OnKZkn3Sn3cYHYg+mzhoLodP0ma4D7nUNeophb2pqT2coVJe1WUk5pCrTs2M1/DQ0
+         rMvRHQSAqA3NxvPMowCbJs9bYzaQ6POEDzL0uSGmacc3cqZdHVy44DAe+pM1a7o3fe
+         fREceiu4wSCBT9yB+Sy1Ihb5ax0DyKEcFYHKzaFs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Neil Armstrong <narmstrong@baylibre.com>,
@@ -32,12 +32,12 @@ Cc:     Neil Armstrong <narmstrong@baylibre.com>,
         Jun Li <lijun.kernel@gmail.com>, Tim <elatllat@gmail.com>,
         Felipe Balbi <balbi@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 23/32] usb: dwc3: core: add support for disabling SS instances in park mode
-Date:   Thu,  9 Apr 2020 23:49:56 -0400
-Message-Id: <20200410035005.9371-23-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 16/22] usb: dwc3: core: add support for disabling SS instances in park mode
+Date:   Thu,  9 Apr 2020 23:50:38 -0400
+Message-Id: <20200410035044.9698-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200410035005.9371-1-sashal@kernel.org>
-References: <20200410035005.9371-1-sashal@kernel.org>
+In-Reply-To: <20200410035044.9698-1-sashal@kernel.org>
+References: <20200410035044.9698-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -87,10 +87,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 9 insertions(+)
 
 diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 6666d2a52bf56..60d08269ad9a0 100644
+index 021899c580288..010201dbd029a 100644
 --- a/drivers/usb/dwc3/core.c
 +++ b/drivers/usb/dwc3/core.c
-@@ -981,6 +981,9 @@ static int dwc3_core_init(struct dwc3 *dwc)
+@@ -867,6 +867,9 @@ static int dwc3_core_init(struct dwc3 *dwc)
  		if (dwc->dis_tx_ipgap_linecheck_quirk)
  			reg |= DWC3_GUCTL1_TX_IPGAP_LINECHECK_DIS;
  
@@ -100,7 +100,7 @@ index 6666d2a52bf56..60d08269ad9a0 100644
  		dwc3_writel(dwc->regs, DWC3_GUCTL1, reg);
  	}
  
-@@ -1287,6 +1290,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+@@ -1107,6 +1110,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
  				"snps,dis-del-phy-power-chg-quirk");
  	dwc->dis_tx_ipgap_linecheck_quirk = device_property_read_bool(dev,
  				"snps,dis-tx-ipgap-linecheck-quirk");
@@ -110,18 +110,18 @@ index 6666d2a52bf56..60d08269ad9a0 100644
  	dwc->tx_de_emphasis_quirk = device_property_read_bool(dev,
  				"snps,tx_de_emphasis_quirk");
 diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 131028501752b..e34308d64619e 100644
+index 40bf0e0768d96..8747f9f02229e 100644
 --- a/drivers/usb/dwc3/core.h
 +++ b/drivers/usb/dwc3/core.h
-@@ -242,6 +242,7 @@
- #define DWC3_GUCTL_HSTINAUTORETRY	BIT(14)
+@@ -206,6 +206,7 @@
+ #define DWC3_GCTL_DSBLCLKGTNG		BIT(0)
  
  /* Global User Control 1 Register */
 +#define DWC3_GUCTL1_PARKMODE_DISABLE_SS	BIT(17)
  #define DWC3_GUCTL1_TX_IPGAP_LINECHECK_DIS	BIT(28)
  #define DWC3_GUCTL1_DEV_L1_EXIT_BY_HW	BIT(24)
  
-@@ -992,6 +993,8 @@ struct dwc3_scratchpad_array {
+@@ -863,6 +864,8 @@ struct dwc3_scratchpad_array {
   *			change quirk.
   * @dis_tx_ipgap_linecheck_quirk: set if we disable u2mac linestate
   *			check during HS transmit.
@@ -130,7 +130,7 @@ index 131028501752b..e34308d64619e 100644
   * @tx_de_emphasis_quirk: set if we enable Tx de-emphasis quirk
   * @tx_de_emphasis: Tx de-emphasis value
   * 	0	- -6dB de-emphasis
-@@ -1163,6 +1166,7 @@ struct dwc3 {
+@@ -1022,6 +1025,7 @@ struct dwc3 {
  	unsigned		dis_u2_freeclk_exists_quirk:1;
  	unsigned		dis_del_phy_power_chg_quirk:1;
  	unsigned		dis_tx_ipgap_linecheck_quirk:1;
