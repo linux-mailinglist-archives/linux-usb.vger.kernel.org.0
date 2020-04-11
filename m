@@ -2,124 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A3F1A5250
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2020 15:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AFF1A5261
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2020 15:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726129AbgDKNOA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 11 Apr 2020 09:14:00 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:43580 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726054AbgDKNOA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 11 Apr 2020 09:14:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1586610838; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=C1XJAdmDRDfqEilvxXKzunudTz10S0nZa0ndDzJpqLQ=;
-        b=o5AAeoYCxjcUgoubZAgGynGkQoEo4xH3nJfqaQhPD8wOobcerMgZlzDZhVxT5SBPkBEkdh
-        IDjWmJyjPMZBih9yw4xGt8f633BcyQ99H/lP7TUMx4DM7/yJawjKPz2Q0a+Y8MX4sSgt91
-        xoBwQv8wGYgxUqu33dn+XGhSsb/FQtk=
-Date:   Sat, 11 Apr 2020 15:13:47 +0200
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] usb: phy: jz4770: Add a missing '\n' in a log message
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Message-Id: <ZQKM8Q.561QQF8CXZTU3@crapouillou.net>
-In-Reply-To: <20200411063811.6767-1-christophe.jaillet@wanadoo.fr>
-References: <20200411063811.6767-1-christophe.jaillet@wanadoo.fr>
+        id S1726070AbgDKNjt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 11 Apr 2020 09:39:49 -0400
+Received: from canardo.mork.no ([148.122.252.1]:45483 "EHLO canardo.mork.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726054AbgDKNjt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 11 Apr 2020 09:39:49 -0400
+Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 03BDdmpZ022975
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Sat, 11 Apr 2020 15:39:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1586612388; bh=7m/AdLPPqzm9a8J+2GRplR0V6UvaC9m18ntQKA+cOLo=;
+        h=From:To:Cc:Subject:Date:Message-Id:From;
+        b=X2hOncnPr8ZLY5d1Gud03YG1i8I9NKj2Iv6L0O8BMaJJJ6I6Pk/+wDSSR7jnD4ixH
+         vKtr+ZFHCLoXnUiHb2Khy/HBe9o160abOn1p/5Riw8IClaHSShPuKmMB+XoEbUXRBM
+         YBTUBDWxa6v4d2aGWF1aLBs0bER5ZEv8S8RNVn0Y=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
+        (envelope-from <bjorn@miraculix.mork.no>)
+        id 1jNGMN-000109-Ri; Sat, 11 Apr 2020 15:39:47 +0200
+From:   =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
+To:     netdev@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
+Subject: [PATCH net,stable] qmi_wwan: add Huawei E1820
+Date:   Sat, 11 Apr 2020 15:39:41 +0200
+Message-Id: <20200411133941.3806-1-bjorn@mork.no>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.102.1 at canardo
+X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Christophe,
+Older Huawei modem, not using the "standard" Huawei class scheme.
+Supporting QMI on the 02/06/ff function.
 
-Le sam. 11 avril 2020 =E0 8:38, Christophe JAILLET=20
-<christophe.jaillet@wanadoo.fr> a =E9crit :
-> Message logged by 'dev_xxx()' or 'pr_xxx()' should end with a '\n'.
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=12d1 ProdID=14ac Rev= 0.00
+S:  Manufacturer=Huawei Technologies
+S:  Product=HUAWEI Mobile
+C:* #Ifs= 7 Cfg#= 1 Atr=c0 MxPwr=500mA
+A:  FirstIf#= 1 IfCount= 2 Cls=02(comm.) Sub=00 Prot=00
+I:* If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=4ms
+I:* If#= 1 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=ff Driver=qmi_wwan
+E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=qmi_wwan
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=4ms
+I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=4ms
+I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=4ms
+I:* If#= 5 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=usb-storage
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 6 Alt= 0 #EPs= 2 Cls=08(stor.) Sub=06 Prot=50 Driver=usb-storage
+E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-Is that so?
+Signed-off-by: Bjørn Mork <bjorn@mork.no>
+---
+ drivers/net/usb/qmi_wwan.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- From what I could see these macros add the \n themselves if needed. So=20
-the \n were omitted on purpose.
-
--Paul
-
-> Fixes: 541368b46b82 ("usb: phy: Add driver for the Ingenic JZ4770 USB=20
-> transceiver")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/usb/phy/phy-jz4770.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/usb/phy/phy-jz4770.c=20
-> b/drivers/usb/phy/phy-jz4770.c
-> index 3ea1f5b9bcf8..8f62dc2a90ff 100644
-> --- a/drivers/usb/phy/phy-jz4770.c
-> +++ b/drivers/usb/phy/phy-jz4770.c
-> @@ -125,13 +125,13 @@ static int jz4770_phy_init(struct usb_phy *phy)
->=20
->  	err =3D regulator_enable(priv->vcc_supply);
->  	if (err) {
-> -		dev_err(priv->dev, "Unable to enable VCC: %d", err);
-> +		dev_err(priv->dev, "Unable to enable VCC: %d\n", err);
->  		return err;
->  	}
->=20
->  	err =3D clk_prepare_enable(priv->clk);
->  	if (err) {
-> -		dev_err(priv->dev, "Unable to start clock: %d", err);
-> +		dev_err(priv->dev, "Unable to start clock: %d\n", err);
->  		return err;
->  	}
->=20
-> @@ -191,7 +191,7 @@ static int jz4770_phy_probe(struct=20
-> platform_device *pdev)
->=20
->  	priv->base =3D devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(priv->base)) {
-> -		dev_err(dev, "Failed to map registers");
-> +		dev_err(dev, "Failed to map registers\n");
->  		return PTR_ERR(priv->base);
->  	}
->=20
-> @@ -199,7 +199,7 @@ static int jz4770_phy_probe(struct=20
-> platform_device *pdev)
->  	if (IS_ERR(priv->clk)) {
->  		err =3D PTR_ERR(priv->clk);
->  		if (err !=3D -EPROBE_DEFER)
-> -			dev_err(dev, "Failed to get clock");
-> +			dev_err(dev, "Failed to get clock\n");
->  		return err;
->  	}
->=20
-> @@ -207,14 +207,14 @@ static int jz4770_phy_probe(struct=20
-> platform_device *pdev)
->  	if (IS_ERR(priv->vcc_supply)) {
->  		err =3D PTR_ERR(priv->vcc_supply);
->  		if (err !=3D -EPROBE_DEFER)
-> -			dev_err(dev, "failed to get regulator");
-> +			dev_err(dev, "Failed to get regulator\n");
->  		return err;
->  	}
->=20
->  	err =3D usb_add_phy(&priv->phy, USB_PHY_TYPE_USB2);
->  	if (err) {
->  		if (err !=3D -EPROBE_DEFER)
-> -			dev_err(dev, "Unable to register PHY");
-> +			dev_err(dev, "Unable to register PHY\n");
->  		return err;
->  	}
->=20
-> --
-> 2.20.1
->=20
-
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 6c738a271257..08614f1e7407 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -965,6 +965,10 @@ static const struct usb_device_id products[] = {
+ 		USB_VENDOR_AND_INTERFACE_INFO(HUAWEI_VENDOR_ID, USB_CLASS_VENDOR_SPEC, 0x01, 0x69),
+ 		.driver_info        = (unsigned long)&qmi_wwan_info,
+ 	},
++	{	/* Huawei E1820 */
++		USB_DEVICE_AND_INTERFACE_INFO(HUAWEI_VENDOR_ID, 0x14ac, USB_CLASS_COMM, USB_CDC_SUBCLASS_ETHERNET, 0xff),
++		.driver_info        = (unsigned long)&qmi_wwan_info,
++	},
+ 	{	/* Motorola Mapphone devices with MDM6600 */
+ 		USB_VENDOR_AND_INTERFACE_INFO(0x22b8, USB_CLASS_VENDOR_SPEC, 0xfb, 0xff),
+ 		.driver_info        = (unsigned long)&qmi_wwan_info,
+-- 
+2.20.1
 
