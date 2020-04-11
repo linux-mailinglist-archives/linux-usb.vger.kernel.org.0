@@ -2,153 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 89BED1A4D6C
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2020 04:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75A461A4D8B
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Apr 2020 04:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726809AbgDKCOD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Apr 2020 22:14:03 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:36604 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726671AbgDKCOD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Apr 2020 22:14:03 -0400
-Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id C3C41C00A7;
-        Sat, 11 Apr 2020 02:14:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1586571242; bh=3s6KEae8ikk5m3F3Mivhp+2U9IN3tkrxAT3oV2HVrng=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=l8ag8eJW828jXYdWSpvH0zbA3e6mPA/ChWVmxRd3A1QBchzjBg9V8WVd7/84eztnc
-         XUPfmzUmn9kh7O13DwGfOIjt9nxpJFtKVijw81HbG4Q3bNxsTFp3z/1Y8X6zi86PEq
-         Ow4s/Iy38FqzqIyeFB4RqkSNu2zxTdma2VLNcZkdo6zjAjEUK/vDZ1aOjI+nfDU9J+
-         TQJtsa3HZfnGnEsourYVJMMGBl5ZZld44qTlLDXgD6TL+Bnvv9TqZPSccWsla6V0Ra
-         RE9f0kcLnGdckIgoX9vRgv91U+C8anbgAblvEYz99HUnkDsZVHx4PWm/ivSkFhWEOI
-         tcyNSyT3jB0JA==
-Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 94B6BA007B;
-        Sat, 11 Apr 2020 02:14:01 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Fri, 10 Apr 2020 19:14:01 -0700
-Date:   Fri, 10 Apr 2020 19:14:01 -0700
-Message-Id: <8a8007221ff27eeeb4cb2e7042496fbe3e7a6527.1586570825.git.thinhn@synopsys.com>
-In-Reply-To: <cover.1586570825.git.thinhn@synopsys.com>
-References: <cover.1586570825.git.thinhn@synopsys.com>
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH 2/2] usb: dwc3: Get MDWIDTH for DWC_usb32
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>
+        id S1726694AbgDKClO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Apr 2020 22:41:14 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:42291 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726689AbgDKClO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Apr 2020 22:41:14 -0400
+Received: (qmail 1139 invoked by uid 500); 10 Apr 2020 22:41:14 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 10 Apr 2020 22:41:14 -0400
+Date:   Fri, 10 Apr 2020 22:41:14 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Qais Yousef <qais.yousef@arm.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux-pm mailing list <linux-pm@vger.kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
+In-Reply-To: <3100919.FSIbSBgRSq@kreacher>
+Message-ID: <Pine.LNX.4.44L0.2004102231270.30859-100000@netrider.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DWC_usb32 supports MDWIDTH value larger than 255 and up to 1023. The
-field HWPARAMS6[9:8] stores the upper 2-bit values of the DWC_usb32's
-MDWIDTH. Check that parameter and properly get the MDWIDTH for
-DWC_usb32.
+Okay, this is my attempt to summarize what we have been discussing.  
+But first: There is a dev_pm_skip_resume() helper routine which
+subsystems can call to see whether resume-side _early and _noirq driver
+callbacks should be skipped.  But there is no corresponding
+dev_pm_skip_suspend() helper routine.  Let's add one, or rename
+dev_pm_smart_suspend_and_suspended() to dev_pm_skip_suspend().
 
-Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
----
- drivers/usb/dwc3/core.h    |  3 +++
- drivers/usb/dwc3/debugfs.c | 14 ++++++++++++--
- drivers/usb/dwc3/gadget.c  |  7 +++++++
- 3 files changed, 22 insertions(+), 2 deletions(-)
+Given that, here's my understanding of what should happen.  (I'm
+assuming the direct_complete mechanism is not being used.)  This tries
+to describe what we _want_ to happen, which is not always the same as
+what the current code actually _does_.
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 3b3b751f23ae..2fba02985715 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -366,6 +366,9 @@
- #define DWC3_GHWPARAMS6_SRPSUPPORT		BIT(10)
- #define DWC3_GHWPARAMS6_EN_FPGA			BIT(7)
- 
-+/* DWC_usb32 only */
-+#define DWC3_GHWPARAMS6_MDWIDTH(n)		((n) & (0x3 << 8))
-+
- /* Global HWPARAMS7 Register */
- #define DWC3_GHWPARAMS7_RAM1_DEPTH(n)	((n) & 0xffff)
- #define DWC3_GHWPARAMS7_RAM2_DEPTH(n)	(((n) >> 16) & 0xffff)
-diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
-index 4fe8b1e1485c..6d9de334e46a 100644
---- a/drivers/usb/dwc3/debugfs.c
-+++ b/drivers/usb/dwc3/debugfs.c
-@@ -635,13 +635,18 @@ static int dwc3_tx_fifo_size_show(struct seq_file *s, void *unused)
- 	struct dwc3_ep		*dep = s->private;
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
-+	int			mdwidth;
- 	u32			val;
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_TXFIFO);
- 
- 	/* Convert to bytes */
--	val *= DWC3_MDWIDTH(dwc->hwparams.hwparams0);
-+	mdwidth = DWC3_MDWIDTH(dwc->hwparams.hwparams0);
-+	if (DWC3_IP_IS(DWC32))
-+		mdwidth += DWC3_GHWPARAMS6_MDWIDTH(dwc->hwparams.hwparams6);
-+
-+	val *= mdwidth;
- 	val >>= 3;
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
-@@ -654,13 +659,18 @@ static int dwc3_rx_fifo_size_show(struct seq_file *s, void *unused)
- 	struct dwc3_ep		*dep = s->private;
- 	struct dwc3		*dwc = dep->dwc;
- 	unsigned long		flags;
-+	int			mdwidth;
- 	u32			val;
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	val = dwc3_core_fifo_space(dep, DWC3_RXFIFO);
- 
- 	/* Convert to bytes */
--	val *= DWC3_MDWIDTH(dwc->hwparams.hwparams0);
-+	mdwidth = DWC3_MDWIDTH(dwc->hwparams.hwparams0);
-+	if (DWC3_IP_IS(DWC32))
-+		mdwidth += DWC3_GHWPARAMS6_MDWIDTH(dwc->hwparams.hwparams6);
-+
-+	val *= mdwidth;
- 	val >>= 3;
- 	seq_printf(s, "%u\n", val);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index b3b8db9db319..880cb00da706 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2010,6 +2010,8 @@ static void dwc3_gadget_setup_nump(struct dwc3 *dwc)
- 
- 	ram2_depth = DWC3_GHWPARAMS7_RAM2_DEPTH(dwc->hwparams.hwparams7);
- 	mdwidth = DWC3_GHWPARAMS0_MDWIDTH(dwc->hwparams.hwparams0);
-+	if (DWC3_IP_IS(DWC32))
-+		mdwidth += DWC3_GHWPARAMS6_MDWIDTH(dwc->hwparams.hwparams6);
- 
- 	nump = ((ram2_depth * mdwidth / 8) - 24 - 16) / 1024;
- 	nump = min_t(u32, nump, 16);
-@@ -2294,6 +2296,9 @@ static int dwc3_gadget_init_in_endpoint(struct dwc3_ep *dep)
- 	int size;
- 
- 	mdwidth = DWC3_MDWIDTH(dwc->hwparams.hwparams0);
-+	if (DWC3_IP_IS(DWC32))
-+		mdwidth += DWC3_GHWPARAMS6_MDWIDTH(dwc->hwparams.hwparams6);
-+
- 	/* MDWIDTH is represented in bits, we need it in bytes */
- 	mdwidth /= 8;
- 
-@@ -2338,6 +2343,8 @@ static int dwc3_gadget_init_out_endpoint(struct dwc3_ep *dep)
- 	int size;
- 
- 	mdwidth = DWC3_MDWIDTH(dwc->hwparams.hwparams0);
-+	if (DWC3_IP_IS(DWC32))
-+		mdwidth += DWC3_GHWPARAMS6_MDWIDTH(dwc->hwparams.hwparams6);
- 
- 	/* MDWIDTH is represented in bits, convert to bytes */
- 	mdwidth /= 8;
--- 
-2.11.0
+	During the suspend side, for each of the
+	{suspend,freeze,poweroff}_{late,noirq} phases: If
+	dev_pm_skip_suspend() returns true then the subsystem should
+	not invoke the driver's callback, and if there is no subsystem
+	callback then the core will not invoke the driver's callback.
+
+	During the resume side, for each of the
+	{resume,thaw,restore}_{early,noirq} phases: If
+	dev_pm_skip_resume() returns true then the subsystem should
+	not invoke the driver's callback, and if there is no subsystem
+	callback then the core will not invoke the driver's callback.
+
+	dev_pm_skip_suspend() will return "true" if SMART_SUSPEND is
+	set and the device's runtime status is "suspended".
+
+	power.must_resume gets set following the suspend-side _noirq
+	phase if power.usage_count > 1 (indicating the device was
+	in active use before the start of the sleep transition) or
+	power.must_resume is set for any of the device's dependents.
+
+	dev_pm_skip_resume() will return "false" if the current
+	transition is RESTORE or power.must_resume is set.  Otherwise:
+	It will return true if the current transition is THAW,
+	SMART_SUSPEND is set, and the device's runtime status is
+	"suspended".  It will return "true" if the current transition is
+	RESUME, SMART_SUSPEND and MAY_SKIP_RESUME are both set, and
+	the device's runtime status is "suspended".  For a RESUME
+	transition, it will also return "true" if MAY_SKIP_RESUME and
+	power.may_skip_resume are both set, regardless of
+	SMART_SUSPEND or the current runtime status.
+
+	At the start of the {resume,thaw,restore}_noirq phase, if
+	dev_pm_skip_resume() returns true then the core will set the
+	runtime status to "suspended".  Otherwise it will set the
+	runtime status to "active".  If this is not what the subsystem
+	or driver wants, it must update the runtime status itself.
+
+Comments and differences with respect to the code in your pm-sleep-core
+branch:
+
+	I'm not sure whether we should specify other conditions for
+	setting power.must_resume.
+
+	dev_pm_skip_resume() doesn't compute the value described
+	above.  I'm pretty sure the existing code is wrong.
+
+	device_resume_noirq() checks
+	dev_pm_smart_suspend_and_suspended() before setting the
+	runtime PM status to "active", contrary to the text above.
+	The difference shows up in the case where SMART_SUSPEND is
+	clear but the runtime PM status is "suspended".  Don't we want
+	to set the status to "active" in this case?  Or is there some 
+	need to accomodate legacy drivers here?  In any case, wouldn't
+	it be good enough to check just the SMART_SUSPEND flag?
+
+	__device_suspend_late() sets power.may_skip_resume, contrary
+	to the comment in include/linux/pm.h: That flag is supposed to
+	be set by subsystems, not the core.
+
+	I'm not at all sure that this algorithm won't run into trouble
+	at some point when it tries to set a device's runtime status
+	to "active" but the parent's status is set to "suspended".
+	And I'm not sure this problem can be fixed by adjusting
+	power.must_resume.
+
+Alan Stern
 
