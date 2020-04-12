@@ -2,21 +2,21 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F80A1A5E3B
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Apr 2020 13:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3CB1A5EE7
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Apr 2020 16:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726986AbgDLLUv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sun, 12 Apr 2020 07:20:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57508 "EHLO mail.kernel.org"
+        id S1726805AbgDLOO6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sun, 12 Apr 2020 10:14:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43364 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726658AbgDLLUv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 12 Apr 2020 07:20:51 -0400
+        id S1726139AbgDLOO5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 12 Apr 2020 10:14:57 -0400
 From:   bugzilla-daemon@bugzilla.kernel.org
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     linux-usb@vger.kernel.org
-Subject: [Bug 207209] Lenovo T490s + UltraDock - USB3 failed to recover after
- ultradock powerloss
-Date:   Sun, 12 Apr 2020 11:20:51 +0000
+Subject: [Bug 207209] Regression: Lenovo T490s + UltraDock - USB3 failed to
+ recover after disconnect
+Date:   Sun, 12 Apr 2020 14:14:57 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -31,8 +31,8 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-207209-208809-0FHTMM3nTH@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-207209-208809-ljLXxpORcO@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-207209-208809@https.bugzilla.kernel.org/>
 References: <bug-207209-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -47,10 +47,8 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=207209
 
---- Comment #3 from Oleksii Shevchuk (alxchk@gmail.com) ---
-Created attachment 288385
-  --> https://bugzilla.kernel.org/attachment.cgi?id=288385&action=edit
-USB after reboot
+--- Comment #4 from Oleksii Shevchuk (alxchk@gmail.com) ---
+Tested 5.5 - works fine
 
 -- 
 You are receiving this mail because:
