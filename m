@@ -2,133 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F5561A7A49
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2020 14:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A4F1A7A66
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2020 14:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439806AbgDNMEN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Apr 2020 08:04:13 -0400
-Received: from mga05.intel.com ([192.55.52.43]:42675 "EHLO mga05.intel.com"
+        id S2439922AbgDNMKk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Apr 2020 08:10:40 -0400
+Received: from mga14.intel.com ([192.55.52.115]:35090 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2439796AbgDNMEL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 14 Apr 2020 08:04:11 -0400
-IronPort-SDR: RNOdD/naQ0iNkiVc6nioCPwhSqlgUSEVPp4e3cB7gVje873pR6J+C6lxsw6dHduJI+JP57xgp8
- 39rT/Jc6lwIA==
+        id S2439918AbgDNMKg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 14 Apr 2020 08:10:36 -0400
+IronPort-SDR: Sbx7w2g+6r5SrxGvSFT0CSH7Bbd3kQwGbl7stQdqu0N9ssERqgPpYrVzwrmXTeTMo3ic2ZBpQr
+ uhKhOL/w4nPQ==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2020 05:04:10 -0700
-IronPort-SDR: oRMDJOms2rSS5xzB+UCZuIQpCbcLy78EEdThCfOkqiNyBSJYsitY/zsuKdb3C1McBCmkd2YKka
- erVTBiEPhOCA==
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2020 05:10:35 -0700
+IronPort-SDR: JJ/iZDxaMqli2ikt1LKxWGxUP+IQEI+H/Zac7XRD1mQWs2IOxHrhfegmPgoCZG/yRnXx8S4iEy
+ giePscINfvkg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.72,382,1580803200"; 
-   d="scan'208";a="363356670"
+   d="scan'208";a="363358155"
 Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 14 Apr 2020 05:04:08 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 14 Apr 2020 15:04:07 +0300
-Date:   Tue, 14 Apr 2020 15:04:07 +0300
+  by fmsmga001.fm.intel.com with SMTP; 14 Apr 2020 05:10:33 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 14 Apr 2020 15:10:32 +0300
+Date:   Tue, 14 Apr 2020 15:10:32 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Jason Yan <yanaijie@huawei.com>
+Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] usb: typec: tcpm: Ignore CC and vbus changes in
- PORT_RESET change
-Message-ID: <20200414120407.GE2828150@kuha.fi.intel.com>
-References: <20200402215947.176577-1-badhri@google.com>
+Subject: Re: [PATCH] usb: typec: tcpm: remove tcpm_altmode_ops and
+ associations
+Message-ID: <20200414121032.GF2828150@kuha.fi.intel.com>
+References: <20200409085117.45819-1-yanaijie@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200402215947.176577-1-badhri@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200409085117.45819-1-yanaijie@huawei.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 02, 2020 at 02:59:47PM -0700, Badhri Jagan Sridharan wrote:
-> After PORT_RESET, the port is set to the appropriate
-> default_state. Ignore processing CC changes here as this
-> could cause the port to be switched into sink states
-> by default.
-> 
-> echo source > /sys/class/typec/port0/port_type
-> 
-> Before:
-> [  154.528547] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms
-> [  154.528560] CC1: 0 -> 0, CC2: 3 -> 0 [state PORT_RESET, polarity 0, disconnected]
-> [  154.528564] state change PORT_RESET -> SNK_UNATTACHED
-> 
-> After:
-> [  151.068814] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev3 NONE_AMS]
-> [  151.072440] CC1: 3 -> 0, CC2: 0 -> 0 [state PORT_RESET, polarity 0, disconnected]
-> [  151.172117] state change PORT_RESET -> PORT_RESET_WAIT_OFF [delayed 100 ms]
-> [  151.172136] pending state change PORT_RESET_WAIT_OFF -> SRC_UNATTACHED @ 870 ms [rev3 NONE_AMS]
-> [  152.060106] state change PORT_RESET_WAIT_OFF -> SRC_UNATTACHED [delayed 870 ms]
-> [  152.060118] Start toggling
+Hi,
 
-Guenter, can you take a look at this?
+On Thu, Apr 09, 2020 at 04:51:17PM +0800, Jason Yan wrote:
+> Fix the following gcc warning:
+> 
+> drivers/usb/typec/tcpm/tcpm.c:1551:39: warning: ‘tcpm_altmode_ops’
+> defined but not used [-Wunused-const-variable=]
+>  static const struct typec_altmode_ops tcpm_altmode_ops = {
+>                                        ^~~~~~~~~~~~~~~~
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Jason Yan <yanaijie@huawei.com>
 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+This is a fix, so can you resend this with the following tag:
+
+Fixes: a079973f462a ("usb: typec: tcpm: Remove tcpc_config configuration mechanism").
+
+Don't forget the CC stable tag as well.
+
 > ---
->  drivers/usb/typec/tcpm/tcpm.c | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
+>  drivers/usb/typec/tcpm/tcpm.c | 51 -----------------------------------
+>  1 file changed, 51 deletions(-)
 > 
 > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index de3576e6530ab2..82b19ebd7838e0 100644
+> index de3576e6530a..0fcb1023bdbe 100644
 > --- a/drivers/usb/typec/tcpm/tcpm.c
 > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -3794,6 +3794,14 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
->  		 */
->  		break;
+> @@ -1503,57 +1503,6 @@ static int tcpm_validate_caps(struct tcpm_port *port, const u32 *pdo,
+>  	return 0;
+>  }
 >  
-> +	case PORT_RESET:
-> +	case PORT_RESET_WAIT_OFF:
-> +		/*
-> +		 * State set back to default mode once the timer completes.
-> +		 * Ignore CC changes here.
-> +		 */
-> +		break;
-> +
->  	default:
->  		if (tcpm_port_is_disconnected(port))
->  			tcpm_set_state(port, unattached_state(port), 0);
-> @@ -3855,6 +3863,15 @@ static void _tcpm_pd_vbus_on(struct tcpm_port *port)
->  	case SRC_TRY_DEBOUNCE:
->  		/* Do nothing, waiting for sink detection */
->  		break;
-> +
-> +	case PORT_RESET:
-> +	case PORT_RESET_WAIT_OFF:
-> +		/*
-> +		 * State set back to default mode once the timer completes.
-> +		 * Ignore vbus changes here.
-> +		 */
-> +		break;
-> +
->  	default:
->  		break;
->  	}
-> @@ -3908,10 +3925,19 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
->  	case PORT_RESET_WAIT_OFF:
->  		tcpm_set_state(port, tcpm_default_state(port), 0);
->  		break;
-> +
->  	case SRC_TRY_WAIT:
->  	case SRC_TRY_DEBOUNCE:
->  		/* Do nothing, waiting for sink detection */
->  		break;
-> +
-> +	case PORT_RESET:
-> +		/*
-> +		 * State set back to default mode once the timer completes.
-> +		 * Ignore vbus changes here.
-> +		 */
-> +		break;
-> +
->  	default:
->  		if (port->pwr_role == TYPEC_SINK &&
->  		    port->attached)
+> -static int tcpm_altmode_enter(struct typec_altmode *altmode, u32 *vdo)
+> -{
+> -	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
+> -	u32 header;
+> -
+> -	mutex_lock(&port->lock);
+> -	header = VDO(altmode->svid, vdo ? 2 : 1, CMD_ENTER_MODE);
+> -	header |= VDO_OPOS(altmode->mode);
+> -
+> -	tcpm_queue_vdm(port, header, vdo, vdo ? 1 : 0);
+> -	mod_delayed_work(port->wq, &port->vdm_state_machine, 0);
+> -	mutex_unlock(&port->lock);
+> -
+> -	return 0;
+> -}
+> -
+> -static int tcpm_altmode_exit(struct typec_altmode *altmode)
+> -{
+> -	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
+> -	u32 header;
+> -
+> -	mutex_lock(&port->lock);
+> -	header = VDO(altmode->svid, 1, CMD_EXIT_MODE);
+> -	header |= VDO_OPOS(altmode->mode);
+> -
+> -	tcpm_queue_vdm(port, header, NULL, 0);
+> -	mod_delayed_work(port->wq, &port->vdm_state_machine, 0);
+> -	mutex_unlock(&port->lock);
+> -
+> -	return 0;
+> -}
+> -
+> -static int tcpm_altmode_vdm(struct typec_altmode *altmode,
+> -			    u32 header, const u32 *data, int count)
+> -{
+> -	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
+> -
+> -	mutex_lock(&port->lock);
+> -	tcpm_queue_vdm(port, header, data, count - 1);
+> -	mod_delayed_work(port->wq, &port->vdm_state_machine, 0);
+> -	mutex_unlock(&port->lock);
+> -
+> -	return 0;
+> -}
+> -
+> -static const struct typec_altmode_ops tcpm_altmode_ops = {
+> -	.enter = tcpm_altmode_enter,
+> -	.exit = tcpm_altmode_exit,
+> -	.vdm = tcpm_altmode_vdm,
+> -};
+> -
+>  /*
+>   * PD (data, control) command handling functions
+>   */
 > -- 
-> 2.26.0.292.g33ef6b2f38-goog
+> 2.17.2
 
 thanks,
 
