@@ -2,227 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFDDB1A87EC
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2020 19:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 613D61A8BA0
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2020 21:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502746AbgDNRsc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Apr 2020 13:48:32 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:46383 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2502658AbgDNRrp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Apr 2020 13:47:45 -0400
-Received: (qmail 24357 invoked by uid 500); 14 Apr 2020 13:47:35 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 14 Apr 2020 13:47:35 -0400
-Date:   Tue, 14 Apr 2020 13:47:35 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-cc:     Qais Yousef <qais.yousef@arm.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux-pm mailing list <linux-pm@vger.kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
-In-Reply-To: <CAJZ5v0jSMC1FGc2N06B=2VmXRF1XJi4gNyKPkjfBPCEtjm50Yw@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.2004141150590.12758-100000@netrider.rowland.org>
+        id S2505298AbgDNT5Q convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 14 Apr 2020 15:57:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41708 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2505265AbgDNT4c (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 14 Apr 2020 15:56:32 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 205841] Lenovo USB-C dock audio NULL pointer
+Date:   Tue, 14 Apr 2020 19:56:31 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: serg@podtynnyi.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-205841-208809-ErKBbAs3uv@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-205841-208809@https.bugzilla.kernel.org/>
+References: <bug-205841-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 14 Apr 2020, Rafael J. Wysocki wrote:
+https://bugzilla.kernel.org/show_bug.cgi?id=205841
 
-> Note to self: avoid replying to technical messages late in the night ...
-> 
-> On Mon, Apr 13, 2020 at 11:32 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> >
-> > On Saturday, April 11, 2020 4:41:14 AM CEST Alan Stern wrote:
-> > > Okay, this is my attempt to summarize what we have been discussing.
-> > > But first: There is a dev_pm_skip_resume() helper routine which
-> > > subsystems can call to see whether resume-side _early and _noirq driver
-> > > callbacks should be skipped.  But there is no corresponding
-> > > dev_pm_skip_suspend() helper routine.  Let's add one, or rename
-> > > dev_pm_smart_suspend_and_suspended() to dev_pm_skip_suspend().
-> >
-> > OK
-> >
-> > > Given that, here's my understanding of what should happen.  (I'm
-> > > assuming the direct_complete mechanism is not being used.)  This tries
-> > > to describe what we _want_ to happen, which is not always the same as
-> > > what the current code actually _does_.
-> >
-> > OK
-> >
-> > >       During the suspend side, for each of the
-> > >       {suspend,freeze,poweroff}_{late,noirq} phases: If
-> > >       dev_pm_skip_suspend() returns true then the subsystem should
-> > >       not invoke the driver's callback, and if there is no subsystem
-> > >       callback then the core will not invoke the driver's callback.
-> > >
-> > >       During the resume side, for each of the
-> > >       {resume,thaw,restore}_{early,noirq} phases: If
-> > >       dev_pm_skip_resume() returns true then the subsystem should
-> > >       not invoke the driver's callback, and if there is no subsystem
-> > >       callback then the core will not invoke the driver's callback.
-> > >
-> > >       dev_pm_skip_suspend() will return "true" if SMART_SUSPEND is
-> > >       set and the device's runtime status is "suspended".
-> >
-> > Agreed with the above.
-> >
-> > >       power.must_resume gets set following the suspend-side _noirq
-> > >       phase if power.usage_count > 1 (indicating the device was
-> > >       in active use before the start of the sleep transition) or
-> > >       power.must_resume is set for any of the device's dependents.
-> >
-> > Or MAY_SKIP_RESUME is unset (which means that the driver does not
-> > allow its resume callbacks to be skipped), or power.may_skip_resume
-> > is unset (which means that the subsystem does not allow the
-> > driver callbacks to be skipped).
+Serg Podtynnyi (serg@podtynnyi.com) changed:
 
-Are you certain about that?  It contradicts what you said earlier, that
-MAY_SKIP_RESUME doesn't affect THAW transitions.  Also, it would mean 
-that a device whose subsystem doesn't know about power.may_skip_resume 
-would never be allowed to stay in runtime suspend.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |serg@podtynnyi.com
 
-> > >       dev_pm_skip_resume() will return "false" if the current
-> > >       transition is RESTORE or power.must_resume is set.  Otherwise:
-> > >       It will return true if the current transition is THAW,
-> > >       SMART_SUSPEND is set, and the device's runtime status is
-> > >       "suspended".
-> >
-> > The other way around.  That is:
-> >
-> > dev_pm_skip_resume() will return "true" if the current transition is
-> > THAW and dev_pm_skip_suspend() returns "true" for that device (so
-> > SMART_SUSPEND is set, and the device's runtime status is "suspended",
-> > as per the definition of that function above).
-> 
-> The above is what I wanted to say ->
-
-So for THAW, dev_pm_skip_resume() can return "true" even if 
-power.must_resume is set?  That doesn't seem right.
-
-> > Otherwise, it will return "true" if the current transition is RESTORE
-> > (which means that all devices are resumed) or power.must_resume is not
-> > set (so this particular device need not be resumed).
-> 
-> -> but this isn't.  In particular, I messed up the RESTORE part, so it
-> should read:
-> 
-> Otherwise, it will return "true" if the current transition is *not*
-> RESTORE (in which case all devices would be resumed) *and*
-> power.must_resume is not set (so this particular device need not be
-> resumed).
-> 
-> Sorry about that.
-
-For the RESTORE and THAW cases that is exactly the same as what I 
-wrote, apart from the THAW issue noted above.
-
-> > >  It will return "true" if the current transition is
-> > >       RESUME, SMART_SUSPEND and MAY_SKIP_RESUME are both set, and
-> > >       the device's runtime status is "suspended".
-> >
-> > Unless MAY_SKIP_RESUME is unset for at least one of its descendants (or
-> > dependent devices).
-> 
-> That should include the power.may_skip_resume flag, so as to read as follows:
-> 
-> Unless MAY_SKIP_RESUME is unset or power.may_skip_resume is unset for
-> at least one of its descendants (or dependent devices).
-
-What about the runtime PM usage counter?
-
-> > >       For a RESUME
-> > >       transition, it will also return "true" if MAY_SKIP_RESUME and
-> > >       power.may_skip_resume are both set, regardless of
-> > >       SMART_SUSPEND or the current runtime status.
-> >
-> > And if the device was not in active use before suspend (as per its usage
-> > counter) or MAY_SKIP_RESUME is unset for at least one of its descendants (or
-> > dependent devices in general).
-> 
-> And analogously here, so what I really should have written is:
-> 
-> And if the device was not in active use before suspend (as per its
-> usage counter) or MAY_SKIP_RESUME or power.may_skip_resume is unset
-> for at least one of its descendants (or dependent devices in general).
-
-In other words, for RESUME transitions you want the MAY_SKIP_RESUME and
-power.may_skip_resume restrictions to propagate up from dependent
-devices.  And of course, the way to do that is by adding them into the
-power.must_resume flag.
-
-How do you want to handle the usage counter restriction.  
-Should that also propagate upward?
-
-And how should the result of dev_pm_skip_resume() be affected by 
-SMART_SUSPEND for RESUME transitions?
-
-Maybe this is getting confusing because of the way I organized it.  
-Let's try like this:
-
-Transition   Conditions for dev_pm_skip_resume() to return "true"
-----------   ----------------------------------------------------
-
-RESTORE      Never
-
-THAW         power.must_resume is clear (which requires
-               MAY_SKIP_RESUME and power.may_skip_resume to be set and 
-               the runtime usage counter to be = 1, and which 
-               propagates up from dependent devices)
-             SMART_SUSPEND is set,
-             runtime status is "suspended"
-
-RESUME       Same as THAW?  Or maybe don't require SMART_SUSPEND?
-               (But if SMART_SUSPEND is clear, how could the runtime 
-               status be "suspended"?)
-
-I can't really tell what you want, because your comments at various 
-times have been inconsistent.
-
-Alan Stern
-
-> > >       At the start of the {resume,thaw,restore}_noirq phase, if
-> > >       dev_pm_skip_resume() returns true then the core will set the
-> > >       runtime status to "suspended".  Otherwise it will set the
-> > >       runtime status to "active".  If this is not what the subsystem
-> > >       or driver wants, it must update the runtime status itself.
-> >
-> > Right.
-> >
-> > > Comments and differences with respect to the code in your pm-sleep-core
-> > > branch:
-> > >
-> > >       I'm not sure whether we should specify other conditions for
-> > >       setting power.must_resume.
-> >
-> > IMO we should.
-> 
-> In fact, this is part of the implementation and it helps to
-> "propagate" the "must resume" condition to the parent and the
-> first-order suppliers of the device (which is sufficient, because
-> their power.must_resume "propagates" in the same way and so on).
-> 
-> IOW, the important piece is what the return value of
-> dev_pm_skip_resume() should be in particular conditions and that
-> return value is computed with the help of power.must_resume (and it
-> might have been computed in a different, possibly less efficient,
-> way).
-> 
-> > Otherwise it is rather hard to catch the case in which one of the
-> > device's descendants has MAY_SKIP_RESUME unset (and so the device
-> > needs to be resumed).
-> >
-> > >       dev_pm_skip_resume() doesn't compute the value described
-> > >       above.  I'm pretty sure the existing code is wrong.
-> >
-> > Well, we don't seem to have reached an agreement on some details
-> > above ...
-> 
-> Sorry for failing to be careful enough ...
+--- Comment #10 from Serg Podtynnyi (serg@podtynnyi.com) ---
+The same on 5.6.4 on Dell XPS 7390 2 in 1 while connecting D6000 USB-c dock
+station
 
 
+```
+[ 8101.565555] WARNING: CPU: 0 PID: 11422 at kernel/module.c:1158
+module_put.part.0+0xc9/0xd0
+[ 8101.565560] Modules linked in: rfcomm bnep xt_nat veth nf_conntrack_netlink
+xt_addrtype joydev hid_multitouch btusb btrtl btbcm btintel bluetooth
+xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT ip6table_mangle ip6table_nat
+iptable_mangle iptable_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4
+nf_tables ip6table_filter ip6_tables iptable_filter ip_tables bpfilter overlay
+algif_aead mei_hdcp des_generic libdes md4 wmi_bmof dell_wmi
+intel_wmi_thunderbolt dell_laptop dell_smbios dell_wmi_descriptor
+snd_hda_codec_hdmi dcdbas dell_smm_hwmon snd_sof_pci snd_sof_intel_byt
+snd_sof_intel_ipc snd_sof_intel_hda_common snd_sof_xtensa_dsp snd_sof
+snd_sof_nocodec snd_soc_acpi_intel_match snd_hda_codec_realtek snd_soc_acpi
+snd_hda_codec_generic snd_soc_core snd_compress snd_pcm_dmaengine ac97_bus
+ledtrig_audio snd_hda_intel psmouse snd_intel_dspcfg typec_displayport
+serio_raw snd_hda_codec snd_hda_core snd_hwdep snd_pcm snd_timer snd soundcore
+i2c_i801 mei_me hid_sensor_magn_3d hid_sensor_rotation
+[ 8101.565601]  mei hid_sensor_incl_3d hid_sensor_gyro_3d iwlmvm
+hid_sensor_custom hid_sensor_als intel_lpss_pci iwlwifi intel_lpss idma64
+cros_ec_ishtp virt_dma cros_ec thunderbolt processor_thermal_device
+intel_soc_dts_iosf wmi battery i2c_hid int3403_thermal int340x_thermal_zone
+soc_button_array intel_hid intel_pmc_core sparse_keymap int3400_thermal ac
+acpi_thermal_rel pkcs8_key_parser atkbd libps2 i8042
+[ 8101.565621] CPU: 0 PID: 11422 Comm: kworker/0:2 Tainted: G     U  W        
+5.6.4-7937.native #1
+[ 8101.565623] Hardware name: Dell Inc. XPS 13 7390 2-in-1/06CDVY, BIOS 1.3.1
+03/02/2020
+[ 8101.565629] Workqueue: events ucsi_handle_connector_change
+[ 8101.565633] RIP: 0010:module_put.part.0+0xc9/0xd0
+[ 8101.565636] Code: 24 48 85 c0 75 e3 65 ff 0d ac 15 df 46 75 8c e8 a3 b7 dd
+ff eb 85 e8 84 b7 dd ff 5b 31 c0 41 5c 41 5d 5d 89 c2 89 c6 89 c7 c3 <0f> 0b e9
+61 ff ff ff 48 85 ff 74 0d 55 48 89 e5 e8 22 ff ff ff 5d
+[ 8101.565638] RSP: 0000:ffff96f303d63c78 EFLAGS: 00010297
+[ 8101.565640] RAX: 0000000000000000 RBX: ffffffffc05a8140 RCX:
+0000000000000000
+[ 8101.565641] RDX: 00000000ffffffff RSI: 0000000000000000 RDI:
+0000000000000000
+[ 8101.565643] RBP: ffff96f303d63c90 R08: 0000000000000000 R09:
+0000000000000000
+[ 8101.565644] R10: 0000000000000000 R11: 0000000000000000 R12:
+ffff928b5ff59008
+[ 8101.565645] R13: 0000000000000000 R14: 0000000000000001 R15:
+ffff928d69dee2a8
+[ 8101.565647] FS:  0000000000000000(0000) GS:ffff928e7f600000(0000)
+knlGS:0000000000000000
+[ 8101.565649] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 8101.565650] CR2: 00007f5bbb9328a9 CR3: 00000002bfa60003 CR4:
+0000000000760ef0
+[ 8101.565652] PKRU: 55555554
+[ 8101.565653] Call Trace:
+[ 8101.565660]  module_put+0xe/0x20
+[ 8101.565664]  typec_altmode_update_active+0x4c/0xf0
+[ 8101.565669]  typec_remove+0x86/0x90
+[ 8101.565674]  device_release_driver_internal+0xf3/0x1c0
+[ 8101.565677]  device_release_driver+0xd/0x20
+[ 8101.565680]  bus_remove_device+0xdc/0x150
+[ 8101.565684]  device_del+0x171/0x3f0
+[ 8101.565688]  device_unregister+0x16/0x60
+[ 8101.565690]  typec_unregister_altmode+0x2b/0x40
+[ 8101.565694]  ucsi_unregister_altmodes+0x41/0x90
+[ 8101.565697]  ucsi_unregister_partner.part.0+0x12/0x30
+[ 8101.565700]  ucsi_handle_connector_change+0x221/0x311
+[ 8101.565705]  ? kfree+0x256/0x270
+[ 8101.565709]  process_one_work+0x19c/0x3a0
+[ 8101.565712]  worker_thread+0x4b/0x3b0
+[ 8101.565716]  kthread+0x101/0x140
+[ 8101.565718]  ? process_one_work+0x3a0/0x3a0
+[ 8101.565721]  ? kthread_park+0xa0/0xa0
+[ 8101.565726]  ret_from_fork+0x1f/0x40
+[ 8101.565729] ---[ end trace 227b0e97c6c80051 ]---
+```
+
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
