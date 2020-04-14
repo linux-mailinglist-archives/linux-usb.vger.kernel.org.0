@@ -2,21 +2,21 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D39D1A84EB
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2020 18:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C591A84F9
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2020 18:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391669AbgDNQaO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 14 Apr 2020 12:30:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42156 "EHLO mail.kernel.org"
+        id S2391634AbgDNQbW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 14 Apr 2020 12:31:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43412 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391655AbgDNQaD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 14 Apr 2020 12:30:03 -0400
+        id S2391680AbgDNQar (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 14 Apr 2020 12:30:47 -0400
 From:   bugzilla-daemon@bugzilla.kernel.org
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 207065] C-media USB audio device stops working from 5.2.0-rc3
  onwards
-Date:   Tue, 14 Apr 2020 16:30:02 +0000
+Date:   Tue, 14 Apr 2020 16:30:44 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -31,8 +31,8 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-207065-208809-62yrBtP6AC@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-207065-208809-Tma1Q0FPE2@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-207065-208809@https.bugzilla.kernel.org/>
 References: <bug-207065-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -47,10 +47,10 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=207065
 
---- Comment #9 from Florian Meyer (florianmey@gmx.de) ---
-With both patches applied the sound system is working.
-Thanks a lot!
-I will attach the requested logs with the patch applied as well.
+--- Comment #10 from Florian Meyer (florianmey@gmx.de) ---
+Created attachment 288447
+  --> https://bugzilla.kernel.org/attachment.cgi?id=288447&action=edit
+Dmesg output with both patches applied
 
 -- 
 You are receiving this mail because:
