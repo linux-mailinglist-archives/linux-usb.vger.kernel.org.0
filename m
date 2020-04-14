@@ -2,133 +2,211 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 613D61A8BA0
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2020 21:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C22D1A8C11
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Apr 2020 22:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505298AbgDNT5Q convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 14 Apr 2020 15:57:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41708 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2505265AbgDNT4c (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 14 Apr 2020 15:56:32 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 205841] Lenovo USB-C dock audio NULL pointer
-Date:   Tue, 14 Apr 2020 19:56:31 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: serg@podtynnyi.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-205841-208809-ErKBbAs3uv@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-205841-208809@https.bugzilla.kernel.org/>
-References: <bug-205841-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S2632837AbgDNUO5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Apr 2020 16:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36382 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2632822AbgDNUOq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Apr 2020 16:14:46 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BE6C03C1A6;
+        Tue, 14 Apr 2020 13:05:25 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id c138so446819pfc.0;
+        Tue, 14 Apr 2020 13:05:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WO49U3CojIPJ8FYnW7/AVcVTFMeuQ1/UiHUfJDgiAxU=;
+        b=s38jFPzpMQyzrgRfWEkRVpx3BQrmGDSC0GnahsExhsMBKjp1EPkClCuHwMlyRK95Vp
+         pem2yrn0Dyg/Gh4n7C07N1viukHCOClXz72Vws42txesS7kQk4qAmOV/vTY5xSPf89wx
+         kr65R3IHfA+nwsCKH0IbPNjt37z1IVDXiKmbZsVO/xC2aQYqb9LUbab15ypr1Rs/jJgf
+         1cHYzmzsIXswfqbOSt2O34U20XbufjphXF2Z4J0wgSaCU3MGbRtW3ACqyeAtIDKkp8Hq
+         FFf7Dg9dlEq/ChafohjggQqXrTf8/+7RR8uJNBYohTVD/SeCVCFujhQXZqapAODAODmI
+         E31w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=WO49U3CojIPJ8FYnW7/AVcVTFMeuQ1/UiHUfJDgiAxU=;
+        b=HeBSABfnxM2ciE3mAmds4sjx7LHtxOJhe2hG4pNvhxPox8QWrOIUXpIkHjZhAMS7HP
+         QfY46sCNLYTfmAMU67Du1MKlRSRcSDgLvEKBaKUaWTTLllVexHs5zf2VtWG++4+I5S1p
+         ilaEALK/WZSvT27tVgFjVxJaUjuMuU+UxpP4jpDcGogDV5pjS5vlKexTPg9WGbteOiDD
+         RSWXO5e9TkdR1r9gkiYQrICDmOlVi3rIdu76W9OSOaHy9hCyo9Wh6+T0KGq9+beoukyx
+         iy8oNAH/kwLjDThiTQOu43hTQ8Uxwhr+udOP0vlqxWZaxwye0TjRQUOTjbh2KrY+K0cZ
+         YZEg==
+X-Gm-Message-State: AGi0PubuA00rI44aBptrpqqVwsI3pvPK8zZAULpkF70/E2SjaixYuFYE
+        fcyhJihTPlDKnrIATWzU7JypvphI
+X-Google-Smtp-Source: APiQypIOPv72sj9XFebTeXkfUnAvmlFr5j/fB4pQD4Stl52w0o+TJYZ+nI+Squ24ZpUBlPkqB3eVIQ==
+X-Received: by 2002:a62:cfc3:: with SMTP id b186mr24120852pfg.311.1586894724786;
+        Tue, 14 Apr 2020 13:05:24 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a22sm6626136pfg.169.2020.04.14.13.05.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Apr 2020 13:05:23 -0700 (PDT)
+Subject: Re: [PATCH v1] usb: typec: tcpm: Ignore CC and vbus changes in
+ PORT_RESET change
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200402215947.176577-1-badhri@google.com>
+ <20200414120407.GE2828150@kuha.fi.intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <c2f718cc-4a3a-7b83-da7d-fe739ee0909a@roeck-us.net>
+Date:   Tue, 14 Apr 2020 13:05:22 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
+In-Reply-To: <20200414120407.GE2828150@kuha.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=205841
+On 4/14/20 5:04 AM, Heikki Krogerus wrote:
+> On Thu, Apr 02, 2020 at 02:59:47PM -0700, Badhri Jagan Sridharan wrote:
+>> After PORT_RESET, the port is set to the appropriate
+>> default_state. Ignore processing CC changes here as this
+>> could cause the port to be switched into sink states
+>> by default.
+>>
+>> echo source > /sys/class/typec/port0/port_type
+>>
+>> Before:
+>> [  154.528547] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms
+>> [  154.528560] CC1: 0 -> 0, CC2: 3 -> 0 [state PORT_RESET, polarity 0, disconnected]
+>> [  154.528564] state change PORT_RESET -> SNK_UNATTACHED
+>>
+>> After:
+>> [  151.068814] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev3 NONE_AMS]
+>> [  151.072440] CC1: 3 -> 0, CC2: 0 -> 0 [state PORT_RESET, polarity 0, disconnected]
+>> [  151.172117] state change PORT_RESET -> PORT_RESET_WAIT_OFF [delayed 100 ms]
+>> [  151.172136] pending state change PORT_RESET_WAIT_OFF -> SRC_UNATTACHED @ 870 ms [rev3 NONE_AMS]
+>> [  152.060106] state change PORT_RESET_WAIT_OFF -> SRC_UNATTACHED [delayed 870 ms]
+>> [  152.060118] Start toggling
+> 
+> Guenter, can you take a look at this?
+> 
 
-Serg Podtynnyi (serg@podtynnyi.com) changed:
+Sorry, looks like I missed the original patch. Makes sense to me.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |serg@podtynnyi.com
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
---- Comment #10 from Serg Podtynnyi (serg@podtynnyi.com) ---
-The same on 5.6.4 on Dell XPS 7390 2 in 1 while connecting D6000 USB-c dock
-station
+>> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+>> ---
+>>  drivers/usb/typec/tcpm/tcpm.c | 26 ++++++++++++++++++++++++++
+>>  1 file changed, 26 insertions(+)
+>>
+>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+>> index de3576e6530ab2..82b19ebd7838e0 100644
+>> --- a/drivers/usb/typec/tcpm/tcpm.c
+>> +++ b/drivers/usb/typec/tcpm/tcpm.c
+>> @@ -3794,6 +3794,14 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
+>>  		 */
+>>  		break;
+>>  
+>> +	case PORT_RESET:
+>> +	case PORT_RESET_WAIT_OFF:
+>> +		/*
+>> +		 * State set back to default mode once the timer completes.
+>> +		 * Ignore CC changes here.
+>> +		 */
+>> +		break;
+>> +
+>>  	default:
+>>  		if (tcpm_port_is_disconnected(port))
+>>  			tcpm_set_state(port, unattached_state(port), 0);
+>> @@ -3855,6 +3863,15 @@ static void _tcpm_pd_vbus_on(struct tcpm_port *port)
+>>  	case SRC_TRY_DEBOUNCE:
+>>  		/* Do nothing, waiting for sink detection */
+>>  		break;
+>> +
+>> +	case PORT_RESET:
+>> +	case PORT_RESET_WAIT_OFF:
+>> +		/*
+>> +		 * State set back to default mode once the timer completes.
+>> +		 * Ignore vbus changes here.
+>> +		 */
+>> +		break;
+>> +
+>>  	default:
+>>  		break;
+>>  	}
+>> @@ -3908,10 +3925,19 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
+>>  	case PORT_RESET_WAIT_OFF:
+>>  		tcpm_set_state(port, tcpm_default_state(port), 0);
+>>  		break;
+>> +
+>>  	case SRC_TRY_WAIT:
+>>  	case SRC_TRY_DEBOUNCE:
+>>  		/* Do nothing, waiting for sink detection */
+>>  		break;
+>> +
+>> +	case PORT_RESET:
+>> +		/*
+>> +		 * State set back to default mode once the timer completes.
+>> +		 * Ignore vbus changes here.
+>> +		 */
+>> +		break;
+>> +
+>>  	default:
+>>  		if (port->pwr_role == TYPEC_SINK &&
+>>  		    port->attached)
+>> -- 
+>> 2.26.0.292.g33ef6b2f38-goog
+> 
+> thanks,
+> 
 
-
-```
-[ 8101.565555] WARNING: CPU: 0 PID: 11422 at kernel/module.c:1158
-module_put.part.0+0xc9/0xd0
-[ 8101.565560] Modules linked in: rfcomm bnep xt_nat veth nf_conntrack_netlink
-xt_addrtype joydev hid_multitouch btusb btrtl btbcm btintel bluetooth
-xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT ip6table_mangle ip6table_nat
-iptable_mangle iptable_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4
-nf_tables ip6table_filter ip6_tables iptable_filter ip_tables bpfilter overlay
-algif_aead mei_hdcp des_generic libdes md4 wmi_bmof dell_wmi
-intel_wmi_thunderbolt dell_laptop dell_smbios dell_wmi_descriptor
-snd_hda_codec_hdmi dcdbas dell_smm_hwmon snd_sof_pci snd_sof_intel_byt
-snd_sof_intel_ipc snd_sof_intel_hda_common snd_sof_xtensa_dsp snd_sof
-snd_sof_nocodec snd_soc_acpi_intel_match snd_hda_codec_realtek snd_soc_acpi
-snd_hda_codec_generic snd_soc_core snd_compress snd_pcm_dmaengine ac97_bus
-ledtrig_audio snd_hda_intel psmouse snd_intel_dspcfg typec_displayport
-serio_raw snd_hda_codec snd_hda_core snd_hwdep snd_pcm snd_timer snd soundcore
-i2c_i801 mei_me hid_sensor_magn_3d hid_sensor_rotation
-[ 8101.565601]  mei hid_sensor_incl_3d hid_sensor_gyro_3d iwlmvm
-hid_sensor_custom hid_sensor_als intel_lpss_pci iwlwifi intel_lpss idma64
-cros_ec_ishtp virt_dma cros_ec thunderbolt processor_thermal_device
-intel_soc_dts_iosf wmi battery i2c_hid int3403_thermal int340x_thermal_zone
-soc_button_array intel_hid intel_pmc_core sparse_keymap int3400_thermal ac
-acpi_thermal_rel pkcs8_key_parser atkbd libps2 i8042
-[ 8101.565621] CPU: 0 PID: 11422 Comm: kworker/0:2 Tainted: G     U  W        
-5.6.4-7937.native #1
-[ 8101.565623] Hardware name: Dell Inc. XPS 13 7390 2-in-1/06CDVY, BIOS 1.3.1
-03/02/2020
-[ 8101.565629] Workqueue: events ucsi_handle_connector_change
-[ 8101.565633] RIP: 0010:module_put.part.0+0xc9/0xd0
-[ 8101.565636] Code: 24 48 85 c0 75 e3 65 ff 0d ac 15 df 46 75 8c e8 a3 b7 dd
-ff eb 85 e8 84 b7 dd ff 5b 31 c0 41 5c 41 5d 5d 89 c2 89 c6 89 c7 c3 <0f> 0b e9
-61 ff ff ff 48 85 ff 74 0d 55 48 89 e5 e8 22 ff ff ff 5d
-[ 8101.565638] RSP: 0000:ffff96f303d63c78 EFLAGS: 00010297
-[ 8101.565640] RAX: 0000000000000000 RBX: ffffffffc05a8140 RCX:
-0000000000000000
-[ 8101.565641] RDX: 00000000ffffffff RSI: 0000000000000000 RDI:
-0000000000000000
-[ 8101.565643] RBP: ffff96f303d63c90 R08: 0000000000000000 R09:
-0000000000000000
-[ 8101.565644] R10: 0000000000000000 R11: 0000000000000000 R12:
-ffff928b5ff59008
-[ 8101.565645] R13: 0000000000000000 R14: 0000000000000001 R15:
-ffff928d69dee2a8
-[ 8101.565647] FS:  0000000000000000(0000) GS:ffff928e7f600000(0000)
-knlGS:0000000000000000
-[ 8101.565649] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 8101.565650] CR2: 00007f5bbb9328a9 CR3: 00000002bfa60003 CR4:
-0000000000760ef0
-[ 8101.565652] PKRU: 55555554
-[ 8101.565653] Call Trace:
-[ 8101.565660]  module_put+0xe/0x20
-[ 8101.565664]  typec_altmode_update_active+0x4c/0xf0
-[ 8101.565669]  typec_remove+0x86/0x90
-[ 8101.565674]  device_release_driver_internal+0xf3/0x1c0
-[ 8101.565677]  device_release_driver+0xd/0x20
-[ 8101.565680]  bus_remove_device+0xdc/0x150
-[ 8101.565684]  device_del+0x171/0x3f0
-[ 8101.565688]  device_unregister+0x16/0x60
-[ 8101.565690]  typec_unregister_altmode+0x2b/0x40
-[ 8101.565694]  ucsi_unregister_altmodes+0x41/0x90
-[ 8101.565697]  ucsi_unregister_partner.part.0+0x12/0x30
-[ 8101.565700]  ucsi_handle_connector_change+0x221/0x311
-[ 8101.565705]  ? kfree+0x256/0x270
-[ 8101.565709]  process_one_work+0x19c/0x3a0
-[ 8101.565712]  worker_thread+0x4b/0x3b0
-[ 8101.565716]  kthread+0x101/0x140
-[ 8101.565718]  ? process_one_work+0x3a0/0x3a0
-[ 8101.565721]  ? kthread_park+0xa0/0xa0
-[ 8101.565726]  ret_from_fork+0x1f/0x40
-[ 8101.565729] ---[ end trace 227b0e97c6c80051 ]---
-```
-
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
