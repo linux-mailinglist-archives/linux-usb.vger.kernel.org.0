@@ -2,54 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E39621AA979
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2020 16:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC5B1AA9B6
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2020 16:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S370750AbgDOOIn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 15 Apr 2020 10:08:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48978 "EHLO mail.kernel.org"
+        id S2506393AbgDOOSD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Apr 2020 10:18:03 -0400
+Received: from mx2.suse.de ([195.135.220.15]:43912 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2634083AbgDOOIj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 15 Apr 2020 10:08:39 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 205841] Lenovo USB-C dock audio NULL pointer
-Date:   Wed, 15 Apr 2020 14:08:39 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: serg@podtynnyi.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-205841-208809-XGstrzxYjN@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-205841-208809@https.bugzilla.kernel.org/>
-References: <bug-205841-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
+        id S2506374AbgDOORy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 15 Apr 2020 10:17:54 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id E4A9AAA7C;
+        Wed, 15 Apr 2020 14:17:52 +0000 (UTC)
+From:   Oliver Neukum <oneukum@suse.com>
+To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH 1/2] UAS: no use logging any details in case of ENODEV
+Date:   Wed, 15 Apr 2020 16:17:49 +0200
+Message-Id: <20200415141750.811-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=205841
+Once a device is gone, the internal state does not matter anymore.
+There is no need to spam the logs.
 
---- Comment #12 from Serg Podtynnyi (serg@podtynnyi.com) ---
-In Red Hat https://bugzilla.redhat.com/show_bug.cgi?id=1772806
-and retrace https://retrace.fedoraproject.org/faf/reports/2662737/
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Fixes: 326349f824619 ("uas: add dead request list")
+---
+ drivers/usb/storage/uas.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
+diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+index 3670fda02c34..08503e3507bf 100644
+--- a/drivers/usb/storage/uas.c
++++ b/drivers/usb/storage/uas.c
+@@ -190,6 +190,9 @@ static void uas_log_cmd_state(struct scsi_cmnd *cmnd, const char *prefix,
+ 	struct uas_cmd_info *ci = (void *)&cmnd->SCp;
+ 	struct uas_cmd_info *cmdinfo = (void *)&cmnd->SCp;
+ 
++	if (status == -ENODEV) /* too late */
++		return;
++
+ 	scmd_printk(KERN_INFO, cmnd,
+ 		    "%s %d uas-tag %d inflight:%s%s%s%s%s%s%s%s%s%s%s%s ",
+ 		    prefix, status, cmdinfo->uas_tag,
 -- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+2.16.4
+
