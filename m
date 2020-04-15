@@ -2,304 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D37151A979E
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2020 10:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3B91A98D7
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2020 11:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408166AbgDOIxl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Apr 2020 04:53:41 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:63566 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2404868AbgDOIxj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Apr 2020 04:53:39 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1586940817; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: References: Cc: To: From:
- Subject: Sender; bh=rKGDumadH9dI+t8RctrpR+Hua0K7JVMEv7grB6TaX9M=; b=VSfHQLAtTPFr8WnPlf2bQy905u2PUyKwStgiwnDhJyGz9w7DN6c/37xv9H6amWp5oxMZ1lfc
- UWOAAwiIu4gbI8S5bsumoNtcT8MPU7SUVhfDpw0jLf8scIlGH/MvjmZbiDFtM44VbwzKlPet
- 3IiyXFSeBSEZlvTUZOmyLvPBKcI=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e96cb90.7f90cb2b84c8-smtp-out-n04;
- Wed, 15 Apr 2020 08:53:36 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id AF056C4478C; Wed, 15 Apr 2020 08:53:36 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.206.24.160] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sanm)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 937AEC433CB;
-        Wed, 15 Apr 2020 08:53:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 937AEC433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sanm@codeaurora.org
-Subject: Re: [PATCH v5 1/2] dt-bindings: usb: qcom,dwc3: Convert USB DWC3
- bindings
-From:   "Sandeep Maheswaram (Temp)" <sanm@codeaurora.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>
-References: <1585206368-685-1-git-send-email-sanm@codeaurora.org>
- <1585206368-685-2-git-send-email-sanm@codeaurora.org>
- <20200404171700.GA10096@bogus>
- <5e2eb0a4-ed70-4212-fc70-6ee850507a7e@codeaurora.org>
-Message-ID: <5793ea62-7a73-789e-33d6-6b2fb37b376c@codeaurora.org>
-Date:   Wed, 15 Apr 2020 14:23:29 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S2895520AbgDOJ1k convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 15 Apr 2020 05:27:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40422 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2895494AbgDOJ1h (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 15 Apr 2020 05:27:37 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 207283] New: Allen & Heath ZEDi-10 instability
+Date:   Wed, 15 Apr 2020 09:27:36 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: ben@427.org.uk
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression attachments.created
+Message-ID: <bug-207283-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <5e2eb0a4-ed70-4212-fc70-6ee850507a7e@codeaurora.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rob,
+https://bugzilla.kernel.org/show_bug.cgi?id=207283
 
-Any suggestions to solve this error in assigned-clock-rates
+            Bug ID: 207283
+           Summary: Allen & Heath ZEDi-10 instability
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.6.3
+          Hardware: x86-64
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: ben@427.org.uk
+        Regression: No
+
+Created attachment 288471
+  --> https://bugzilla.kernel.org/attachment.cgi?id=288471&action=edit
+Kernel config
+
+I keep seeing various errors in dmesg which I will show below, and occasional
+disconnects. I've tried it on two different computers and it's only happening
+on one of them so I don't think the hardware itself is at fault, but I'm sure
+people on the list here will know a lot more about it than I do.
 
 
-Regards
+Sometimes I get the error "ERROR Transfer event TRB DMA ptr not part of current
+TD" as well, and occasionally "parse_audio_format_rates_v2v3(): unable to find
+clock source (clock -71)" but often it's just disconnecting the port, which
+then reconnects within a second or so.
 
-Sandeep
 
-On 4/6/2020 10:09 PM, Sandeep Maheswaram (Temp) wrote:
-> Hi Rob,
->
-> On 4/4/2020 10:47 PM, Rob Herring wrote:
->> On Thu, Mar 26, 2020 at 12:36:07PM +0530, Sandeep Maheswaram wrote:
->>> Convert USB DWC3 bindings to DT schema format using json-schema.
->>>
->>> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
->>> ---
->>>   .../devicetree/bindings/usb/qcom,dwc3.txt          | 104 
->>> --------------
->>>   .../devicetree/bindings/usb/qcom,dwc3.yaml         | 158 
->>> +++++++++++++++++++++
->>>   2 files changed, 158 insertions(+), 104 deletions(-)
->>>   delete mode 100644 
->>> Documentation/devicetree/bindings/usb/qcom,dwc3.txt
->>>   create mode 100644 
->>> Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->>
->>> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml 
->>> b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->>> new file mode 100644
->>> index 0000000..0f69475
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->>> @@ -0,0 +1,158 @@
->>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>> +
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/usb/qcom,dwc3.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Qualcomm SuperSpeed DWC3 USB SoC controller
->>> +
->>> +maintainers:
->>> +  - Manu Gautam <mgautam@codeaurora.org>
->>> +
->>> +properties:
->>> +  compatible:
->>> +    items:
->>> +      - enum:
->>> +          - qcom,msm8996-dwc3
->>> +          - qcom,msm8998-dwc3
->>> +          - qcom,sdm845-dwc3
->>> +      - const: qcom,dwc3
->>> +
->>> +  reg:
->>> +    description: Offset and length of register set for QSCRATCH 
->>> wrapper
->>> +    maxItems: 1
->>> +
->>> +  "#address-cells":
->>> +    enum: [ 1, 2 ]
->>> +
->>> +  "#size-cells":
->>> +    enum: [ 1, 2 ]
->>> +
->>> +  power-domains:
->>> +    description: specifies a phandle to PM domain provider node
->>> +    maxItems: 1
->>> +
->>> +  clocks:
->>> +    description:
->>> +      A list of phandle and clock-specifier pairs for the clocks
->>> +      listed in clock-names.
->>> +    items:
->>> +      - description: System Config NOC clock.
->>> +      - description: Master/Core clock, has to be >= 125 MHz
->>> +          for SS operation and >= 60MHz for HS operation.
->>> +      - description: System bus AXI clock.
->>> +      - description: Mock utmi clock needed for ITP/SOF generation
->>> +          in host mode. Its frequency should be 19.2MHz.
->>> +      - description: Sleep clock, used for wakeup when
->>> +          USB3 core goes into low power mode (U3).
->>> +
->>> +  clock-names:
->>> +    items:
->>> +      - const: cfg_noc
->>> +      - const: core
->>> +      - const: iface
->>> +      - const: mock_utmi
->>> +      - const: sleep
->>> +
->>> +  assigned-clocks:
->>> +    items:
->>> +      - description: Phandle and clock specifier of MOCK_UTMI_CLK.
->>> +      - description: Phandle and clock specifoer of MASTER_CLK.
->>> +
->>> +  assigned-clock-rates:
->>> +    maxItems: 2
->> Need to drop this as it is redundant. Soon this will generate an error.
-> Will do in next version.
->>> +    items:
->>> +      - description: Must be 19.2MHz (19200000).
->> Sounds like a constraint:
->>
->> - const: 19200000
->>
->>> +      - description: Must be >= 60 MHz in HS mode, >= 125 MHz in SS 
->>> mode.
->> - minimum: 60000000
->>    maximum: ?
->
-> Tried  as below but facing errors
->
-> assigned-clock-rates:
->     items:
->       - const: 19200000
->       - minimum: 60000000
->         maximum: 150000000
->
-> Errors
->
-> linux-next/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dt.yaml: 
-> usb@a6f8800: assigned-clock-rates: Additional items are not allowed 
-> ([150000000] was unexpected)
-> linux-next/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dt.yaml: 
-> usb@a6f8800: assigned-clock-rates:0: [19200000] is too short
-> linux-next/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dt.yaml: 
-> usb@a6f8800: assigned-clock-rates: [[19200000], [150000000]] is too long
->
->>> +
->>> +  resets:
->>> +    maxItems: 1
->>> +
->>> +  interrupts:
->>> +    items:
->>> +      - description: The interrupt that is asserted
->>> +          when a wakeup event is received on USB2 bus.
->>> +      - description: The interrupt that is asserted
->>> +          when a wakeup event is received on USB3 bus.
->>> +      - description: Wakeup event on DM line.
->>> +      - description: Wakeup event on DP line.
->>> +
->>> +  interrupt-names:
->>> +    items:
->>> +      - const: hs_phy_irq
->>> +      - const: ss_phy_irq
->>> +      - const: dm_hs_phy_irq
->>> +      - const: dp_hs_phy_irq
->>> +
->>> +  qcom,select-utmi-as-pipe-clk:
->>> +    description:
->>> +      If present, disable USB3 pipe_clk requirement.
->>> +      Used when dwc3 operates without SSPHY and only
->>> +      HS/FS/LS modes are supported.
->>> +    type: boolean
->>> +
->>> +# Required child node:
->>> +
->>> +patternProperties:
->>> +  "^dwc3@[0-9a-f]+$":
->>> +    type: object
->>> +    description:
->>> +      A child node must exist to represent the core DWC3 IP block
->>> +      The content of the node is defined in dwc3.txt.
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - "#address-cells"
->>> +  - "#size-cells"
->>> +  - power-domains
->>> +  - clocks
->>> +  - clock-names
->>> +
->>> +examples:
->>> +  - |
->>> +    #include <dt-bindings/clock/qcom,gcc-sdm845.h>
->>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->>> +    #include <dt-bindings/interrupt-controller/irq.h>
->>> +    usb@a6f8800 {
->>> +        compatible = "qcom,sdm845-dwc3", "qcom,dwc3";
->>> +        reg = <0 0x0a6f8800 0 0x400>;
->>> +
->>> +        #address-cells = <2>;
->>> +        #size-cells = <2>;
->>> +
->>> +        clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
->>> +                 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
->>> +                 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
->>> +                 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
->>> +                 <&gcc GCC_USB30_PRIM_SLEEP_CLK>;
->>> +        clock-names = "cfg_noc", "core", "iface", "mock_utmi",
->>> +                      "sleep";
->>> +
->>> +        assigned-clocks = <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
->>> +                          <&gcc GCC_USB30_PRIM_MASTER_CLK>;
->>> +        assigned-clock-rates = <19200000>, <150000000>;
->>> +
->>> +        interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
->>> +                     <GIC_SPI 486 IRQ_TYPE_LEVEL_HIGH>,
->>> +                     <GIC_SPI 488 IRQ_TYPE_LEVEL_HIGH>,
->>> +                     <GIC_SPI 489 IRQ_TYPE_LEVEL_HIGH>;
->>> +        interrupt-names = "hs_phy_irq", "ss_phy_irq",
->>> +                          "dm_hs_phy_irq", "dp_hs_phy_irq";
->>> +
->>> +        power-domains = <&gcc USB30_PRIM_GDSC>;
->>> +
->>> +        resets = <&gcc GCC_USB30_PRIM_BCR>;
->>> +
->>> +        dwc3@a600000 {
->>> +            compatible = "snps,dwc3";
->>> +            reg = <0 0x0a600000 0 0xcd00>;
->> You need 'ranges' in the parent for this address to be translatable.
-> Will add in next version.
->>
->>> +            interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
->>> +            iommus = <&apps_smmu 0x740 0>;
->>> +            snps,dis_u2_susphy_quirk;
->>> +            snps,dis_enblslpm_quirk;
->>> +            phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
->>> +            phy-names = "usb2-phy", "usb3-phy";
->>> +        };
->>> +    };
->>> -- 
->>> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
->>> member
->>> of Code Aurora Forum, hosted by The Linux Foundation
->>>
+It's using the xhci_hcd driver, I've looked in to disabling xHCI in the BIOS
+after some searching on the web but this laptop doesn't have any option to do
+that, and it's also using that driver on the other laptop that doesn't seem to
+have this issue.
+
+I am attaching the current kernel config, as well as some dmesg extracts with
+'module xhci_hcd =p' set in /sys/kernel/debug/dynamic_debug/control.
+
+Environment:
+
+Linux tangyzizzle 5.6.3 #1 SMP Sun Apr 12 11:56:30 BST 2020 x86_64 GNU/Linux
+
+GNU Make                4.2.1
+Binutils                2.31.1
+Util-linux              2.33.1
+Mount                   2.33.1
+Bison                   3.3.2
+Flex                    2.6.4
+Linux C Library         2.28
+Dynamic linker (ldd)    2.28
+Procps                  3.3.15
+Kbd                     2.0.4
+Console-tools           2.0.4
+Sh-utils                8.30
+Udev                    241
+Modules Loaded          ac acpi_pad aesni_intel ahci ansi_cprng autofs4 battery
+binfmt_misc bluetooth bnep bridge btbcm btintel btrtl btusb button ccm cdrom
+cec cfg80211 cmac coretemp crc16 crc32c_generic crc32c_intel crc32_pclmul
+crct10dif_pclmul ctr dm_crypt dm_mod drbg drm drm_kms_helper ecc ecdh_generic
+efi_pstore efivarfs efivars evdev ext4 fat fuse ghash_clmulni_intel hid
+hid_generic i2c_algo_bit i2c_i801 i915 intel_cstate intel_powerclamp
+intel_rapl_common intel_rapl_msr intel_rapl_perf intel_uncore ip_tables
+ipt_REJECT irqbypass iTCO_vendor_support iTCO_wdt iwlmvm iwlwifi jbd2 joydev
+kvm kvm_intel ledtrig_audio libahci libarc4 libata libcrc32c libphy llc loop
+mac80211 mbcache mc mei mei_me mfd_core mmc_core msr nf_conntrack
+nf_defrag_ipv4 nf_defrag_ipv6 nf_nat nfnetlink nf_reject_ipv4 nf_tables
+nft_chain_nat nft_compat nft_counter nls_ascii nls_cp437 pcspkr psmouse psnap
+r8169 realtek rfkill rng_core rtsx_pci rtsx_pci_sdmmc scsi_mod sd_mod serio_raw
+sg snd snd_hda_codec snd_hda_codec_generic snd_hda_codec_hdmi
+snd_hda_codec_realtek snd_hda_core snd_hda_ext_core snd_hda_intel snd_hrtimer
+snd_hwdep snd_intel_dspcfg snd_pcm snd_rawmidi snd_seq snd_seq_device
+snd_seq_dummy snd_soc_acpi snd_soc_acpi_intel_match snd_soc_core
+snd_soc_hdac_hda snd_soc_skl snd_soc_sst_dsp snd_soc_sst_ipc snd_timer
+snd_usb_audio snd_usbmidi_lib soundcore sr_mod stp sunrpc t10_pi tpm tpm_crb
+tpm_tis tpm_tis_core tun usbcore usbhid uvcvideo vfat video videobuf2_common
+videobuf2_memops videobuf2_v4l2 videobuf2_vmalloc videodev watchdog wmi
+x86_pkg_temp_thermal xhci_hcd xhci_pci x_tables xt_CHECKSUM xt_conntrack
+xt_MASQUERADE xt_tcpudp
+
+
+Processor: Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+PCI information: will be attached shortly
+
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
+You are receiving this mail because:
+You are watching the assignee of the bug.
