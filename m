@@ -2,47 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8BF61AAA08
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2020 16:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1AD1AAA52
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2020 16:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392090AbgDOOdM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Apr 2020 10:33:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44616 "EHLO mail.kernel.org"
+        id S2636726AbgDOOkG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Apr 2020 10:40:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45450 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394033AbgDOOcw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 15 Apr 2020 10:32:52 -0400
+        id S2394039AbgDOOc6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 15 Apr 2020 10:32:58 -0400
 Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AE72520857;
-        Wed, 15 Apr 2020 14:32:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 04DAC21655;
+        Wed, 15 Apr 2020 14:32:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586961170;
-        bh=KiqG+YaH9TfLHMU7kAk5iZVq2iZm2vOE/nCgWZIaKyc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=zmtkQ2yvb4lMCW7VyZbrY08AHuA6jaNelMxk+XjbrMt6hLetgzFtmSoM/epsya/Qn
-         SEsnxu9G/tLR8lcHUuNuNcTbKgVyOplhVgI6xMcESplhJZCdGjqpBiZ/9grkpTlftr
-         a1iGFMi+kSC7G4SOvfHDNZD5/3QnrIy5wZXFM5Y4=
+        s=default; t=1586961171;
+        bh=wEKYUkJCpWRQi2Hed2j5ceWXlujzqWEI+GUVocm9FHI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XsaQttunknEsZRdce/2hxp6iNEVXQ9vJ5HJzEVtvKPA4oEdRUKZkzEtBMUyzlkMM9
+         u/jvKderccjJPd8i0pEfWDz6wcdJxWT4OZRfw/1WBFlw6en+JMOHc11Aw5nk1K2Zr6
+         3txdIbnn+mDKnPi5iswG5Nuuhj3pmspHk+An5MRo=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jOj5s-006kNi-SJ; Wed, 15 Apr 2020 16:32:48 +0200
+        id 1jOj5t-006kOP-97; Wed, 15 Apr 2020 16:32:49 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linuxppc-dev@lists.ozlabs.org, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
-        ecryptfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        ocfs2-devel@oss.oracle.com, linux-unionfs@vger.kernel.org,
-        linux-cachefs@redhat.com, linux-usb@vger.kernel.org,
-        codalist@coda.cs.cmu.edu, linux-ext4@vger.kernel.org,
-        cluster-devel@redhat.com, linux-xfs@vger.kernel.org
-Subject: [PATCH 00/34] fs: convert remaining docs to ReST file format
-Date:   Wed, 15 Apr 2020 16:32:13 +0200
-Message-Id: <cover.1586960617.git.mchehab+huawei@kernel.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Becker <jlbec@evilplan.org>,
+        Christoph Hellwig <hch@lst.de>, linux-usb@vger.kernel.org
+Subject: [PATCH 09/34] docs: filesystems: convert configfs.txt to ReST
+Date:   Wed, 15 Apr 2020 16:32:22 +0200
+Message-Id: <16a8e2f96ea4ae786f7499bee10afb388c229872.1586960617.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.2
+In-Reply-To: <cover.1586960617.git.mchehab+huawei@kernel.org>
+References: <cover.1586960617.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -50,197 +46,426 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch series convert the remaining files under Documentation/filesystems
-to the ReST file format. It is based on linux-next (next-20200414).
+- Add a SPDX header;
+- Adjust document and section titles;
+- Use copyright symbol;
+- Some whitespace fixes and new line breaks;
+- Mark literal blocks as such;
+- Add it to filesystems/index.rst.
 
-PS.: I opted to add mainly ML from the output of get_maintainers.pl to the c/c
-list of patch 00/34, because  otherwise the number of c/c would be too many,
-with would very likely cause ML servers to reject it.
+Also, as this file is alone on its own dir, and it doesn't
+seem too likely that other documents will follow it, let's
+move it to the filesystems/ root documentation dir.
 
-The results of those changes (together with other changes from my pending
-doc patches) are available at:
-
-   https://www.infradead.org/~mchehab/kernel_docs/filesystems/index.html
-
-Mauro Carvalho Chehab (34):
-  docs: filesystems: fix references for doc files there
-  docs: filesystems: convert caching/object.txt to ReST
-  docs: filesystems: convert caching/fscache.txt to ReST format
-  docs: filesystems: caching/netfs-api.txt: convert it to ReST
-  docs: filesystems: caching/operations.txt: convert it to ReST
-  docs: filesystems: caching/cachefiles.txt: convert to ReST
-  docs: filesystems: caching/backend-api.txt: convert it to ReST
-  docs: filesystems: convert cifs/cifsroot.rst to ReST
-  docs: filesystems: convert configfs.txt to ReST
-  docs: filesystems: convert automount-support.txt to ReST
-  docs: filesystems: convert coda.txt to ReST
-  docs: filesystems: convert dax.txt to ReST
-  docs: filesystems: convert devpts.txt to ReST
-  docs: filesystems: convert dnotify.txt to ReST
-  docs: filesystems: convert fiemap.txt to ReST
-  docs: filesystems: convert files.txt to ReST
-  docs: filesystems: convert fuse-io.txt to ReST
-  docs: filesystems: convert gfs2-glocks.txt to ReST
-  docs: filesystems: convert locks.txt to ReST
-  docs: filesystems: convert mandatory-locking.txt to ReST
-  docs: filesystems: convert mount_api.txt to ReST
-  docs: filesystems: rename path-lookup.txt file
-  docs: filesystems: convert path-walking.txt to ReST
-  docs: filesystems: convert quota.txt to ReST
-  docs: filesystems: convert seq_file.txt to ReST
-  docs: filesystems: convert sharedsubtree.txt to ReST
-  docs: filesystems: split spufs.txt into 3 separate files
-  docs: filesystems: convert spufs/spu_create.txt to ReST
-  docs: filesystems: convert spufs/spufs.txt to ReST
-  docs: filesystems: convert spufs/spu_run.txt to ReST
-  docs: filesystems: convert sysfs-pci.txt to ReST
-  docs: filesystems: convert sysfs-tagging.txt to ReST
-  docs: filesystems: convert xfs-delayed-logging-design.txt to ReST
-  docs: filesystems: convert xfs-self-describing-metadata.txt to ReST
-
- Documentation/ABI/stable/sysfs-devices-node   |    2 +-
- Documentation/ABI/testing/procfs-smaps_rollup |    2 +-
- Documentation/admin-guide/cpu-load.rst        |    2 +-
- Documentation/admin-guide/ext4.rst            |    2 +-
- Documentation/admin-guide/nfs/nfsroot.rst     |    2 +-
- Documentation/admin-guide/sysctl/kernel.rst   |    2 +-
- .../driver-api/driver-model/device.rst        |    2 +-
- .../driver-api/driver-model/overview.rst      |    2 +-
- ...ount-support.txt => automount-support.rst} |   23 +-
- .../{backend-api.txt => backend-api.rst}      |  165 +-
- .../{cachefiles.txt => cachefiles.rst}        |  139 +-
- Documentation/filesystems/caching/fscache.rst |  565 ++++++
- Documentation/filesystems/caching/fscache.txt |  448 -----
- Documentation/filesystems/caching/index.rst   |   14 +
- .../caching/{netfs-api.txt => netfs-api.rst}  |  172 +-
- .../caching/{object.txt => object.rst}        |   43 +-
- .../{operations.txt => operations.rst}        |   45 +-
- .../cifs/{cifsroot.txt => cifsroot.rst}       |   56 +-
- Documentation/filesystems/coda.rst            | 1670 ++++++++++++++++
- Documentation/filesystems/coda.txt            | 1676 -----------------
- .../{configfs/configfs.txt => configfs.rst}   |  129 +-
- .../filesystems/{dax.txt => dax.rst}          |   11 +-
- Documentation/filesystems/devpts.rst          |   36 +
- Documentation/filesystems/devpts.txt          |   26 -
- .../filesystems/{dnotify.txt => dnotify.rst}  |   13 +-
- Documentation/filesystems/ext2.rst            |    2 +-
- .../filesystems/{fiemap.txt => fiemap.rst}    |  133 +-
- .../filesystems/{files.txt => files.rst}      |   15 +-
- .../filesystems/{fuse-io.txt => fuse-io.rst}  |    6 +
- .../{gfs2-glocks.txt => gfs2-glocks.rst}      |  147 +-
- Documentation/filesystems/index.rst           |   26 +
- .../filesystems/{locks.txt => locks.rst}      |   14 +-
- ...tory-locking.txt => mandatory-locking.rst} |   25 +-
- .../{mount_api.txt => mount_api.rst}          |  329 ++--
- .../{path-lookup.txt => path-walking.rst}     |   88 +-
- Documentation/filesystems/porting.rst         |    2 +-
- Documentation/filesystems/proc.rst            |    2 +-
- .../filesystems/{quota.txt => quota.rst}      |   41 +-
- .../filesystems/ramfs-rootfs-initramfs.rst    |    2 +-
- .../{seq_file.txt => seq_file.rst}            |   61 +-
- .../{sharedsubtree.txt => sharedsubtree.rst}  |  394 ++--
- Documentation/filesystems/spufs/index.rst     |   13 +
- .../filesystems/spufs/spu_create.rst          |  131 ++
- Documentation/filesystems/spufs/spu_run.rst   |  138 ++
- .../{spufs.txt => spufs/spufs.rst}            |  304 +--
- .../{sysfs-pci.txt => sysfs-pci.rst}          |   23 +-
- .../{sysfs-tagging.txt => sysfs-tagging.rst}  |   22 +-
- ...ign.txt => xfs-delayed-logging-design.rst} |   65 +-
- ...a.txt => xfs-self-describing-metadata.rst} |  182 +-
- Documentation/iio/iio_configfs.rst            |    2 +-
- .../powerpc/firmware-assisted-dump.rst        |    2 +-
- Documentation/process/adding-syscalls.rst     |    2 +-
- .../it_IT/process/adding-syscalls.rst         |    2 +-
- .../translations/zh_CN/filesystems/sysfs.txt  |    6 +-
- Documentation/usb/gadget_configfs.rst         |    4 +-
- MAINTAINERS                                   |   16 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h       |    2 +-
- fs/Kconfig                                    |    2 +-
- fs/Kconfig.binfmt                             |    2 +-
- fs/adfs/Kconfig                               |    2 +-
- fs/affs/Kconfig                               |    2 +-
- fs/afs/Kconfig                                |    6 +-
- fs/bfs/Kconfig                                |    2 +-
- fs/cachefiles/Kconfig                         |    4 +-
- fs/coda/Kconfig                               |    2 +-
- fs/configfs/inode.c                           |    2 +-
- fs/configfs/item.c                            |    2 +-
- fs/cramfs/Kconfig                             |    2 +-
- fs/dcache.c                                   |    6 +-
- fs/ecryptfs/Kconfig                           |    2 +-
- fs/fat/Kconfig                                |    8 +-
- fs/fscache/Kconfig                            |    8 +-
- fs/fscache/cache.c                            |    8 +-
- fs/fscache/cookie.c                           |    2 +-
- fs/fscache/object.c                           |    4 +-
- fs/fscache/operation.c                        |    2 +-
- fs/fuse/Kconfig                               |    2 +-
- fs/fuse/dev.c                                 |    2 +-
- fs/hfs/Kconfig                                |    2 +-
- fs/hpfs/Kconfig                               |    2 +-
- fs/isofs/Kconfig                              |    2 +-
- fs/locks.c                                    |    2 +-
- fs/namei.c                                    |    2 +-
- fs/namespace.c                                |    2 +-
- fs/notify/inotify/Kconfig                     |    2 +-
- fs/ntfs/Kconfig                               |    2 +-
- fs/ocfs2/Kconfig                              |    2 +-
- fs/overlayfs/Kconfig                          |    6 +-
- fs/proc/Kconfig                               |    4 +-
- fs/romfs/Kconfig                              |    2 +-
- fs/sysfs/dir.c                                |    2 +-
- fs/sysfs/file.c                               |    2 +-
- fs/sysfs/mount.c                              |    2 +-
- fs/sysfs/symlink.c                            |    2 +-
- fs/sysv/Kconfig                               |    2 +-
- fs/udf/Kconfig                                |    2 +-
- include/linux/configfs.h                      |    2 +-
- include/linux/fs_context.h                    |    2 +-
- include/linux/fscache-cache.h                 |    4 +-
- include/linux/fscache.h                       |   42 +-
- include/linux/lsm_hooks.h                     |    2 +-
- include/linux/relay.h                         |    2 +-
- include/linux/sysfs.h                         |    2 +-
- kernel/relay.c                                |    2 +-
- 104 files changed, 4048 insertions(+), 3572 deletions(-)
- rename Documentation/filesystems/{automount-support.txt => automount-support.rst} (92%)
- rename Documentation/filesystems/caching/{backend-api.txt => backend-api.rst} (87%)
- rename Documentation/filesystems/caching/{cachefiles.txt => cachefiles.rst} (90%)
- create mode 100644 Documentation/filesystems/caching/fscache.rst
- delete mode 100644 Documentation/filesystems/caching/fscache.txt
- create mode 100644 Documentation/filesystems/caching/index.rst
- rename Documentation/filesystems/caching/{netfs-api.txt => netfs-api.rst} (91%)
- rename Documentation/filesystems/caching/{object.txt => object.rst} (95%)
- rename Documentation/filesystems/caching/{operations.txt => operations.rst} (90%)
- rename Documentation/filesystems/cifs/{cifsroot.txt => cifsroot.rst} (72%)
- create mode 100644 Documentation/filesystems/coda.rst
- delete mode 100644 Documentation/filesystems/coda.txt
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ .../{configfs/configfs.txt => configfs.rst}   | 129 +++++++++++-------
+ Documentation/filesystems/index.rst           |   1 +
+ Documentation/iio/iio_configfs.rst            |   2 +-
+ Documentation/usb/gadget_configfs.rst         |   4 +-
+ fs/configfs/inode.c                           |   2 +-
+ fs/configfs/item.c                            |   2 +-
+ include/linux/configfs.h                      |   2 +-
+ 7 files changed, 87 insertions(+), 55 deletions(-)
  rename Documentation/filesystems/{configfs/configfs.txt => configfs.rst} (87%)
- rename Documentation/filesystems/{dax.txt => dax.rst} (96%)
- create mode 100644 Documentation/filesystems/devpts.rst
- delete mode 100644 Documentation/filesystems/devpts.txt
- rename Documentation/filesystems/{dnotify.txt => dnotify.rst} (88%)
- rename Documentation/filesystems/{fiemap.txt => fiemap.rst} (70%)
- rename Documentation/filesystems/{files.txt => files.rst} (95%)
- rename Documentation/filesystems/{fuse-io.txt => fuse-io.rst} (95%)
- rename Documentation/filesystems/{gfs2-glocks.txt => gfs2-glocks.rst} (63%)
- rename Documentation/filesystems/{locks.txt => locks.rst} (91%)
- rename Documentation/filesystems/{mandatory-locking.txt => mandatory-locking.rst} (91%)
- rename Documentation/filesystems/{mount_api.txt => mount_api.rst} (79%)
- rename Documentation/filesystems/{path-lookup.txt => path-walking.rst} (91%)
- rename Documentation/filesystems/{quota.txt => quota.rst} (81%)
- rename Documentation/filesystems/{seq_file.txt => seq_file.rst} (92%)
- rename Documentation/filesystems/{sharedsubtree.txt => sharedsubtree.rst} (72%)
- create mode 100644 Documentation/filesystems/spufs/index.rst
- create mode 100644 Documentation/filesystems/spufs/spu_create.rst
- create mode 100644 Documentation/filesystems/spufs/spu_run.rst
- rename Documentation/filesystems/{spufs.txt => spufs/spufs.rst} (57%)
- rename Documentation/filesystems/{sysfs-pci.txt => sysfs-pci.rst} (92%)
- rename Documentation/filesystems/{sysfs-tagging.txt => sysfs-tagging.rst} (72%)
- rename Documentation/filesystems/{xfs-delayed-logging-design.txt => xfs-delayed-logging-design.rst} (97%)
- rename Documentation/filesystems/{xfs-self-describing-metadata.txt => xfs-self-describing-metadata.rst} (83%)
 
+diff --git a/Documentation/filesystems/configfs/configfs.txt b/Documentation/filesystems/configfs.rst
+similarity index 87%
+rename from Documentation/filesystems/configfs/configfs.txt
+rename to Documentation/filesystems/configfs.rst
+index 16e606c11f40..ddaf907405a6 100644
+--- a/Documentation/filesystems/configfs/configfs.txt
++++ b/Documentation/filesystems/configfs.rst
+@@ -1,15 +1,20 @@
++.. SPDX-License-Identifier: GPL-2.0
++.. include:: <isonum.txt>
+ 
+-configfs - Userspace-driven kernel object configuration.
++=======================================================
++Configfs - Userspace-driven Kernel oOject Configuration
++=======================================================
+ 
+ Joel Becker <joel.becker@oracle.com>
+ 
+ Updated: 31 March 2005
+ 
+-Copyright (c) 2005 Oracle Corporation,
++Copyright |copy| 2005 Oracle Corporation,
+ 	Joel Becker <joel.becker@oracle.com>
+ 
+ 
+-[What is configfs?]
++What is configfs?
++=================
+ 
+ configfs is a ram-based filesystem that provides the converse of
+ sysfs's functionality.  Where sysfs is a filesystem-based view of
+@@ -35,10 +40,11 @@ kernel modules backing the items must respond to this.
+ Both sysfs and configfs can and should exist together on the same
+ system.  One is not a replacement for the other.
+ 
+-[Using configfs]
++Using configfs
++==============
+ 
+ configfs can be compiled as a module or into the kernel.  You can access
+-it by doing
++it by doing::
+ 
+ 	mount -t configfs none /config
+ 
+@@ -56,28 +62,29 @@ values.  Don't mix more than one attribute in one attribute file.
+ There are two types of configfs attributes:
+ 
+ * Normal attributes, which similar to sysfs attributes, are small ASCII text
+-files, with a maximum size of one page (PAGE_SIZE, 4096 on i386).  Preferably
+-only one value per file should be used, and the same caveats from sysfs apply.
+-Configfs expects write(2) to store the entire buffer at once.  When writing to
+-normal configfs attributes, userspace processes should first read the entire
+-file, modify the portions they wish to change, and then write the entire
+-buffer back.
++  files, with a maximum size of one page (PAGE_SIZE, 4096 on i386).  Preferably
++  only one value per file should be used, and the same caveats from sysfs apply.
++  Configfs expects write(2) to store the entire buffer at once.  When writing to
++  normal configfs attributes, userspace processes should first read the entire
++  file, modify the portions they wish to change, and then write the entire
++  buffer back.
+ 
+ * Binary attributes, which are somewhat similar to sysfs binary attributes,
+-but with a few slight changes to semantics.  The PAGE_SIZE limitation does not
+-apply, but the whole binary item must fit in single kernel vmalloc'ed buffer.
+-The write(2) calls from user space are buffered, and the attributes'
+-write_bin_attribute method will be invoked on the final close, therefore it is
+-imperative for user-space to check the return code of close(2) in order to
+-verify that the operation finished successfully.
+-To avoid a malicious user OOMing the kernel, there's a per-binary attribute
+-maximum buffer value.
++  but with a few slight changes to semantics.  The PAGE_SIZE limitation does not
++  apply, but the whole binary item must fit in single kernel vmalloc'ed buffer.
++  The write(2) calls from user space are buffered, and the attributes'
++  write_bin_attribute method will be invoked on the final close, therefore it is
++  imperative for user-space to check the return code of close(2) in order to
++  verify that the operation finished successfully.
++  To avoid a malicious user OOMing the kernel, there's a per-binary attribute
++  maximum buffer value.
+ 
+ When an item needs to be destroyed, remove it with rmdir(2).  An
+ item cannot be destroyed if any other item has a link to it (via
+ symlink(2)).  Links can be removed via unlink(2).
+ 
+-[Configuring FakeNBD: an Example]
++Configuring FakeNBD: an Example
++===============================
+ 
+ Imagine there's a Network Block Device (NBD) driver that allows you to
+ access remote block devices.  Call it FakeNBD.  FakeNBD uses configfs
+@@ -86,14 +93,14 @@ sysadmins use to configure FakeNBD, but somehow that program has to tell
+ the driver about it.  Here's where configfs comes in.
+ 
+ When the FakeNBD driver is loaded, it registers itself with configfs.
+-readdir(3) sees this just fine:
++readdir(3) sees this just fine::
+ 
+ 	# ls /config
+ 	fakenbd
+ 
+ A fakenbd connection can be created with mkdir(2).  The name is
+ arbitrary, but likely the tool will make some use of the name.  Perhaps
+-it is a uuid or a disk name:
++it is a uuid or a disk name::
+ 
+ 	# mkdir /config/fakenbd/disk1
+ 	# ls /config/fakenbd/disk1
+@@ -102,7 +109,7 @@ it is a uuid or a disk name:
+ The target attribute contains the IP address of the server FakeNBD will
+ connect to.  The device attribute is the device on the server.
+ Predictably, the rw attribute determines whether the connection is
+-read-only or read-write.
++read-only or read-write::
+ 
+ 	# echo 10.0.0.1 > /config/fakenbd/disk1/target
+ 	# echo /dev/sda1 > /config/fakenbd/disk1/device
+@@ -111,7 +118,8 @@ read-only or read-write.
+ That's it.  That's all there is.  Now the device is configured, via the
+ shell no less.
+ 
+-[Coding With configfs]
++Coding With configfs
++====================
+ 
+ Every object in configfs is a config_item.  A config_item reflects an
+ object in the subsystem.  It has attributes that match values on that
+@@ -130,7 +138,10 @@ appears as a directory at the top of the configfs filesystem.  A
+ subsystem is also a config_group, and can do everything a config_group
+ can.
+ 
+-[struct config_item]
++struct config_item
++==================
++
++::
+ 
+ 	struct config_item {
+ 		char                    *ci_name;
+@@ -168,7 +179,10 @@ By itself, a config_item cannot do much more than appear in configfs.
+ Usually a subsystem wants the item to display and/or store attributes,
+ among other things.  For that, it needs a type.
+ 
+-[struct config_item_type]
++struct config_item_type
++=======================
++
++::
+ 
+ 	struct configfs_item_operations {
+ 		void (*release)(struct config_item *);
+@@ -192,7 +206,10 @@ allocated dynamically will need to provide the ct_item_ops->release()
+ method.  This method is called when the config_item's reference count
+ reaches zero.
+ 
+-[struct configfs_attribute]
++struct configfs_attribute
++=========================
++
++::
+ 
+ 	struct configfs_attribute {
+ 		char                    *ca_name;
+@@ -214,7 +231,10 @@ be called whenever userspace asks for a read(2) on the attribute.  If an
+ attribute is writable and provides a ->store  method, that method will be
+ be called whenever userspace asks for a write(2) on the attribute.
+ 
+-[struct configfs_bin_attribute]
++struct configfs_bin_attribute
++=============================
++
++::
+ 
+ 	struct configfs_bin_attribute {
+ 		struct configfs_attribute	cb_attr;
+@@ -240,11 +260,12 @@ will happen for write(2). The reads/writes are bufferred so only a
+ single read/write will occur; the attributes' need not concern itself
+ with it.
+ 
+-[struct config_group]
++struct config_group
++===================
+ 
+ A config_item cannot live in a vacuum.  The only way one can be created
+ is via mkdir(2) on a config_group.  This will trigger creation of a
+-child item.
++child item::
+ 
+ 	struct config_group {
+ 		struct config_item		cg_item;
+@@ -264,7 +285,7 @@ The config_group structure contains a config_item.  Properly configuring
+ that item means that a group can behave as an item in its own right.
+ However, it can do more: it can create child items or groups.  This is
+ accomplished via the group operations specified on the group's
+-config_item_type.
++config_item_type::
+ 
+ 	struct configfs_group_operations {
+ 		struct config_item *(*make_item)(struct config_group *group,
+@@ -296,13 +317,15 @@ upon item allocation.  If a subsystem has no work to do, it may omit
+ the ct_group_ops->drop_item() method, and configfs will call
+ config_item_put() on the item on behalf of the subsystem.
+ 
+-IMPORTANT: drop_item() is void, and as such cannot fail.  When rmdir(2)
+-is called, configfs WILL remove the item from the filesystem tree
+-(assuming that it has no children to keep it busy).  The subsystem is
+-responsible for responding to this.  If the subsystem has references to
+-the item in other threads, the memory is safe.  It may take some time
+-for the item to actually disappear from the subsystem's usage.  But it
+-is gone from configfs.
++.. Important::
++
++   drop_item() is void, and as such cannot fail.  When rmdir(2)
++   is called, configfs WILL remove the item from the filesystem tree
++   (assuming that it has no children to keep it busy).  The subsystem is
++   responsible for responding to this.  If the subsystem has references to
++   the item in other threads, the memory is safe.  It may take some time
++   for the item to actually disappear from the subsystem's usage.  But it
++   is gone from configfs.
+ 
+ When drop_item() is called, the item's linkage has already been torn
+ down.  It no longer has a reference on its parent and has no place in
+@@ -319,10 +342,11 @@ is implemented in the configfs rmdir(2) code.  ->drop_item() will not be
+ called, as the item has not been dropped.  rmdir(2) will fail, as the
+ directory is not empty.
+ 
+-[struct configfs_subsystem]
++struct configfs_subsystem
++=========================
+ 
+ A subsystem must register itself, usually at module_init time.  This
+-tells configfs to make the subsystem appear in the file tree.
++tells configfs to make the subsystem appear in the file tree::
+ 
+ 	struct configfs_subsystem {
+ 		struct config_group	su_group;
+@@ -332,17 +356,19 @@ tells configfs to make the subsystem appear in the file tree.
+ 	int configfs_register_subsystem(struct configfs_subsystem *subsys);
+ 	void configfs_unregister_subsystem(struct configfs_subsystem *subsys);
+ 
+-	A subsystem consists of a toplevel config_group and a mutex.
++A subsystem consists of a toplevel config_group and a mutex.
+ The group is where child config_items are created.  For a subsystem,
+ this group is usually defined statically.  Before calling
+ configfs_register_subsystem(), the subsystem must have initialized the
+ group via the usual group _init() functions, and it must also have
+ initialized the mutex.
+-	When the register call returns, the subsystem is live, and it
++
++When the register call returns, the subsystem is live, and it
+ will be visible via configfs.  At that point, mkdir(2) can be called and
+ the subsystem must be ready for it.
+ 
+-[An Example]
++An Example
++==========
+ 
+ The best example of these basic concepts is the simple_children
+ subsystem/group and the simple_child item in
+@@ -350,7 +376,8 @@ samples/configfs/configfs_sample.c. It shows a trivial object displaying
+ and storing an attribute, and a simple group creating and destroying
+ these children.
+ 
+-[Hierarchy Navigation and the Subsystem Mutex]
++Hierarchy Navigation and the Subsystem Mutex
++============================================
+ 
+ There is an extra bonus that configfs provides.  The config_groups and
+ config_items are arranged in a hierarchy due to the fact that they
+@@ -375,7 +402,8 @@ be in its parent's cg_children list for the same duration.  This allows
+ a subsystem to trust ci_parent and cg_children while they hold the
+ mutex.
+ 
+-[Item Aggregation Via symlink(2)]
++Item Aggregation Via symlink(2)
++===============================
+ 
+ configfs provides a simple group via the group->item parent/child
+ relationship.  Often, however, a larger environment requires aggregation
+@@ -403,7 +431,8 @@ A config_item cannot be removed while it links to any other item, nor
+ can it be removed while an item links to it.  Dangling symlinks are not
+ allowed in configfs.
+ 
+-[Automatically Created Subgroups]
++Automatically Created Subgroups
++===============================
+ 
+ A new config_group may want to have two types of child config_items.
+ While this could be codified by magic names in ->make_item(), it is much
+@@ -433,7 +462,8 @@ As a consequence of this, default groups cannot be removed directly via
+ rmdir(2).  They also are not considered when rmdir(2) on the parent
+ group is checking for children.
+ 
+-[Dependent Subsystems]
++Dependent Subsystems
++====================
+ 
+ Sometimes other drivers depend on particular configfs items.  For
+ example, ocfs2 mounts depend on a heartbeat region item.  If that
+@@ -460,9 +490,10 @@ succeeds, then heartbeat knows the region is safe to give to ocfs2.
+ If it fails, it was being torn down anyway, and heartbeat can gracefully
+ pass up an error.
+ 
+-[Committable Items]
++Committable Items
++=================
+ 
+-NOTE: Committable items are currently unimplemented.
++.. Note:: Committable items are currently unimplemented.
+ 
+ Some config_items cannot have a valid initial state.  That is, no
+ default values can be specified for the item's attributes such that the
+diff --git a/Documentation/filesystems/index.rst b/Documentation/filesystems/index.rst
+index d993b33a48c4..5f4ba0e40e72 100644
+--- a/Documentation/filesystems/index.rst
++++ b/Documentation/filesystems/index.rst
+@@ -61,6 +61,7 @@ Documentation for filesystem implementations.
+    btrfs
+    cifs/cifsroot
+    ceph
++   configfs
+    cramfs
+    debugfs
+    dlmfs
+diff --git a/Documentation/iio/iio_configfs.rst b/Documentation/iio/iio_configfs.rst
+index ecbfdb3afef7..6e38cbbd2981 100644
+--- a/Documentation/iio/iio_configfs.rst
++++ b/Documentation/iio/iio_configfs.rst
+@@ -9,7 +9,7 @@ Configfs is a filesystem-based manager of kernel objects. IIO uses some
+ objects that could be easily configured using configfs (e.g.: devices,
+ triggers).
+ 
+-See Documentation/filesystems/configfs/configfs.txt for more information
++See Documentation/filesystems/configfs.rst for more information
+ about how configfs works.
+ 
+ 2. Usage
+diff --git a/Documentation/usb/gadget_configfs.rst b/Documentation/usb/gadget_configfs.rst
+index 54fb08baae22..158e48dab586 100644
+--- a/Documentation/usb/gadget_configfs.rst
++++ b/Documentation/usb/gadget_configfs.rst
+@@ -24,7 +24,7 @@ Linux provides a number of functions for gadgets to use.
+ Creating a gadget means deciding what configurations there will be
+ and which functions each configuration will provide.
+ 
+-Configfs (please see `Documentation/filesystems/configfs/*`) lends itself nicely
++Configfs (please see `Documentation/filesystems/configfs.rst`) lends itself nicely
+ for the purpose of telling the kernel about the above mentioned decision.
+ This document is about how to do it.
+ 
+@@ -354,7 +354,7 @@ the directories in general can be named at will. A group can have
+ a number of its default sub-groups created automatically.
+ 
+ For more information on configfs please see
+-`Documentation/filesystems/configfs/*`.
++`Documentation/filesystems/configfs.rst`.
+ 
+ The concepts described above translate to USB gadgets like this:
+ 
+diff --git a/fs/configfs/inode.c b/fs/configfs/inode.c
+index fd0b5dd68f9e..8bd6a883c94c 100644
+--- a/fs/configfs/inode.c
++++ b/fs/configfs/inode.c
+@@ -9,7 +9,7 @@
+  *
+  * configfs Copyright (C) 2005 Oracle.  All rights reserved.
+  *
+- * Please see Documentation/filesystems/configfs/configfs.txt for more
++ * Please see Documentation/filesystems/configfs.rst for more
+  * information.
+  */
+ 
+diff --git a/fs/configfs/item.c b/fs/configfs/item.c
+index 6e0f1fcb8a5b..704a4356f137 100644
+--- a/fs/configfs/item.c
++++ b/fs/configfs/item.c
+@@ -9,7 +9,7 @@
+  *
+  * configfs Copyright (C) 2005 Oracle.  All rights reserved.
+  *
+- * Please see the file Documentation/filesystems/configfs/configfs.txt for
++ * Please see the file Documentation/filesystems/configfs.rst for
+  * critical information about using the config_item interface.
+  */
+ 
+diff --git a/include/linux/configfs.h b/include/linux/configfs.h
+index fa9490a8874c..2e8c69b43c64 100644
+--- a/include/linux/configfs.h
++++ b/include/linux/configfs.h
+@@ -13,7 +13,7 @@
+  *
+  * configfs Copyright (C) 2005 Oracle.  All rights reserved.
+  *
+- * Please read Documentation/filesystems/configfs/configfs.txt before using
++ * Please read Documentation/filesystems/configfs.rst before using
+  * the configfs interface, ESPECIALLY the parts about reference counts and
+  * item destructors.
+  */
 -- 
 2.25.2
-
 
