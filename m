@@ -2,55 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5891AA959
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2020 16:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39621AA979
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Apr 2020 16:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2636394AbgDOODP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Apr 2020 10:03:15 -0400
-Received: from mx2.suse.de ([195.135.220.15]:39436 "EHLO mx2.suse.de"
+        id S370750AbgDOOIn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 15 Apr 2020 10:08:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48978 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730833AbgDOODJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 15 Apr 2020 10:03:09 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id ACD2BAFB2;
-        Wed, 15 Apr 2020 14:03:06 +0000 (UTC)
-From:   Oliver Neukum <oneukum@suse.com>
-To:     johan@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH] garmin_gps: add sanity checking for data length
-Date:   Wed, 15 Apr 2020 16:03:04 +0200
-Message-Id: <20200415140304.471-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.16.4
+        id S2634083AbgDOOIj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 15 Apr 2020 10:08:39 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 205841] Lenovo USB-C dock audio NULL pointer
+Date:   Wed, 15 Apr 2020 14:08:39 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: serg@podtynnyi.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-205841-208809-XGstrzxYjN@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-205841-208809@https.bugzilla.kernel.org/>
+References: <bug-205841-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We must not process packets shorter than a packet ID
+https://bugzilla.kernel.org/show_bug.cgi?id=205841
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Reported-and-tested-by: syzbot+d29e9263e13ce0b9f4fd@syzkaller.appspotmail.com
----
- drivers/usb/serial/garmin_gps.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+--- Comment #12 from Serg Podtynnyi (serg@podtynnyi.com) ---
+In Red Hat https://bugzilla.redhat.com/show_bug.cgi?id=1772806
+and retrace https://retrace.fedoraproject.org/faf/reports/2662737/
 
-diff --git a/drivers/usb/serial/garmin_gps.c b/drivers/usb/serial/garmin_gps.c
-index ffd984142171..a72fbbc65436 100644
---- a/drivers/usb/serial/garmin_gps.c
-+++ b/drivers/usb/serial/garmin_gps.c
-@@ -1138,8 +1138,8 @@ static void garmin_read_process(struct garmin_data *garmin_data_p,
- 		   send it directly to the tty port */
- 		if (garmin_data_p->flags & FLAGS_QUEUING) {
- 			pkt_add(garmin_data_p, data, data_length);
--		} else if (bulk_data ||
--			   getLayerId(data) == GARMIN_LAYERID_APPL) {
-+		} else if (bulk_data || (data_length >= sizeof(u32) &&
-+			   getLayerId(data) == GARMIN_LAYERID_APPL)) {
- 
- 			spin_lock_irqsave(&garmin_data_p->lock, flags);
- 			garmin_data_p->flags |= APP_RESP_SEEN;
 -- 
-2.16.4
-
+You are receiving this mail because:
+You are watching the assignee of the bug.
