@@ -2,54 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDF01AD31A
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2020 01:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 528FC1AD322
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2020 01:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726385AbgDPXRn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Apr 2020 19:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34822 "EHLO
+        id S1729079AbgDPXUp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Apr 2020 19:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725988AbgDPXRn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Apr 2020 19:17:43 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA69AC061A0F
-        for <linux-usb@vger.kernel.org>; Thu, 16 Apr 2020 16:17:41 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id e25so216941ljg.5
-        for <linux-usb@vger.kernel.org>; Thu, 16 Apr 2020 16:17:41 -0700 (PDT)
+        with ESMTP id S1726224AbgDPXUo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Apr 2020 19:20:44 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43BD3C061A0F
+        for <linux-usb@vger.kernel.org>; Thu, 16 Apr 2020 16:20:44 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id j14so194920lfg.9
+        for <linux-usb@vger.kernel.org>; Thu, 16 Apr 2020 16:20:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=JC7D88QOw4Bs6yyETfbWvE0jts1FtmFkCIKCKwF147E=;
-        b=c80SbM2aPucury6aK6zHE9MqdtWGwG8E0pJX303/m4NoFKfUxDv8+6kLUvrDD7qOv1
-         dD01tEQgmAJ1CyVyg+OoZahUteq0YbBkGAWSV78CrM5poX03xwFt8wy2BiadMo6UJU/1
-         zyM88JvIGxlXTycjNxNdt20f61T1NvpCWuOsXibanr0UhmISMSye5gnELJbk3dRoT/kM
-         HdvrIZh3TYYHzY1PxJlWjAo8Febw4CHGZO+SRPiXsutVrA7Rlx84ZWJ95akxuf6x7/Mf
-         ltlsm9uFWZKGuRVOyy5V4LU6xT1gy94UFiYPnjaOlye1H//L2n2NwqVgf2G/CdwYM9p6
-         aCmw==
+        bh=rwrucZy9DBHBBcljOcNHP/6pKSxYd/iAqAkn7/H5AUM=;
+        b=sNpUQlj0xhDPC6oZ6OHCP8qpvA9c7K7MVw/nIvc13YSdP12pKI8wGmIiOFp0x2vGVd
+         UT5DL1OAZfUgRYoOjqxDn+OQinyd280v8aQVo2J3VXIPhiTgzWvWJnQAWx6oN/7MIPoU
+         ElUHEhjfhRmFcLStYVypHZdciW5UMKyvRByZbYOYTqOW4iQLecD2AYNhyg991yCqwUAf
+         k0iuR6nNhqq0+8S/bW4YkLa9V+Ho73ur5ILVUQL2zYA/qi6jq+zLfcYC0m6BWICLXh1F
+         UcEVxub6Je+s/FFgDp7QjxxT2pg5WZpU9HbF/Ge49bNKUtC6XmAF697GW5/CAneQyc7I
+         7VYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=JC7D88QOw4Bs6yyETfbWvE0jts1FtmFkCIKCKwF147E=;
-        b=sDRY8iwSRiXTEIcfhzqDtx2AK/GBHyiSZp5zSWwzyIwTBxb5Lk1B9k9j9CsZiqdmOU
-         Kjye6FEWTxv7QQATSHsnW/3u3jdCLfUVYKhUcY+jh0APMe5RJtcwswLdFFWvBKu76bky
-         zz8swKGb1wKC8kn3lmKoqNpvMPIde5BK+TpvfuaZGqUE3KyfwLi4ZsN0DZNzXvKdYoDu
-         XDaWwso4aBv07/BXuo/RxqPbUzl7XAE8senCbk2PCy90ovYF1Kzv+6mLfgwtutAy6IAr
-         USlJ90STzR6Y7/eSTCeYvEw0jUm+uTccMZi4ak8fjJefgwxWcnZqsMKSAdkmyX/d1vnj
-         +6Fw==
-X-Gm-Message-State: AGi0PuYlEr6/7CQJnyepxVHdGAamDqwwDH3yVy4Go1ydHbVJQCWaNllZ
-        SBXlBZpr+vwFs7Ptji7KdKOKSj/1K8273gRZdeU=
-X-Google-Smtp-Source: APiQypJ2fdw7Ixp6KnEhAtI9U4czHUCANiSG2R7knLg+nkKRE9Hm5boKJf5c6W74Qt+AHHHVX9LzOZO/Oy7f1G0UB0E=
-X-Received: by 2002:a2e:a40d:: with SMTP id p13mr268192ljn.264.1587079059975;
- Thu, 16 Apr 2020 16:17:39 -0700 (PDT)
+        bh=rwrucZy9DBHBBcljOcNHP/6pKSxYd/iAqAkn7/H5AUM=;
+        b=of2B2b4GJn7K9ZhGTt+v8zXQ+BDrWJZEOjYAXb29PPR6CdsOojWE5mPtPMtSZjwZiZ
+         n1Kd5329MIfNGf9PDHDCHJjGVoHsRe8GYQ1II/fiCX79g74JqiQ75YpymRBrbMeqd+A/
+         q6Bbu9V9AeRXd4JBe2bBtC1kKwIQxH00iFp+tA61Gebrbx3Yt8kVMgcK+ygXfTbZUXIc
+         N3VehFoaFsIdPpKRmt4UBgjhEKY5EvwLk6brprfBEZz2TnRtdPV2ZZL9djks1IquKMPD
+         1LzmjEfGc1Ym8ZwrVlLSmyr9uBnOo3XAEKnUHO82u7P0TPxkDBZZvSsh47VSQTCDpd3f
+         O8bg==
+X-Gm-Message-State: AGi0PuYkQp7lF/RjQ/F2ft1IRklexKkIyFDeJ+4ameqydLLC1LfqSta0
+        iv25MvyiCDAiil9ldQZyGMgXAr5Y2GiJvHPgXt7LYHW56sQ=
+X-Google-Smtp-Source: APiQypLzNKExbOuNg/PYEDGFn3yqZuiuigG9qn+j/eUrgjK7XWg4Z31cqzDTZU1fjg49hUJbbRG/YZGGcFoZ5FZHJAU=
+X-Received: by 2002:ac2:4213:: with SMTP id y19mr127683lfh.99.1587079242764;
+ Thu, 16 Apr 2020 16:20:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200416120825.65013-1-mika.westerberg@linux.intel.com>
-In-Reply-To: <20200416120825.65013-1-mika.westerberg@linux.intel.com>
+References: <20200416120146.54791-1-mika.westerberg@linux.intel.com>
+In-Reply-To: <20200416120146.54791-1-mika.westerberg@linux.intel.com>
 From:   Yehezkel Bernat <yehezkelshb@gmail.com>
-Date:   Fri, 17 Apr 2020 02:17:23 +0300
-Message-ID: <CA+CmpXtRZBt26E7rMNtZyNZdjjcqLuc84YfUNS0WgoWzQZhyBw@mail.gmail.com>
-Subject: Re: [PATCH] thunderbolt: Add support for Intel Tiger Lake
+Date:   Fri, 17 Apr 2020 02:20:26 +0300
+Message-ID: <CA+CmpXuEbpATXSw2x0sH4LWU9XAm8d5ZpkDm9Kuoi5CwvTZQvQ@mail.gmail.com>
+Subject: Re: [PATCH] thunderbolt: Check return value of tb_sw_read() in usb4_switch_op()
 To:     Mika Westerberg <mika.westerberg@linux.intel.com>
 Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
         Andreas Noever <andreas.noever@gmail.com>,
@@ -60,15 +60,14 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 16, 2020 at 3:08 PM Mika Westerberg
+On Thu, Apr 16, 2020 at 3:01 PM Mika Westerberg
 <mika.westerberg@linux.intel.com> wrote:
 >
-> Tiger Lake integrated Thunderbolt/USB4 controller is quite close to
-> Intel Ice Lake. By default it is still using firmware based connection
-> manager so we can use most of the Ice Lake flows in Tiger Lake as well.
-> We check if the firmware connection manager is running and in that case
-> use it, otherwise use the software based connection manager.
+> The function misses checking return value of tb_sw_read() before it
+> accesses the value that was read. Fix this by checking the return value
+> first.
 >
+> Fixes: b04079837b20 ("thunderbolt: Add initial support for USB4")
 > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Acked-by: Yehezkel Bernat <yehezkelshb@gmail.com>
+Reviewed-by: Yehezkel Bernat <yehezkelshb@gmail.com>
