@@ -2,155 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D721AB56D
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2020 03:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B75DD1AB760
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2020 07:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727991AbgDPBVf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Apr 2020 21:21:35 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:36015 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2387503AbgDPBVZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Apr 2020 21:21:25 -0400
-Received: (qmail 2642 invoked by uid 500); 15 Apr 2020 21:21:20 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 15 Apr 2020 21:21:20 -0400
-Date:   Wed, 15 Apr 2020 21:21:20 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Cyril Roelandt <tipecaml@gmail.com>
-cc:     USB list <linux-usb@vger.kernel.org>, <sellis@redhat.com>,
-        <pachoramos@gmail.com>, <labbott@fedoraproject.org>,
-        <gregkh@linuxfoundation.org>, <javhera@gmx.com>
-Subject: Re: [BUG] Regression in Linux 5.4.17 for JMicron JMS566 enclosure
-In-Reply-To: <20200415205610.GA8665@Susan>
-Message-ID: <Pine.LNX.4.44L0.2004152107170.1353-100000@netrider.rowland.org>
+        id S2406554AbgDPFcQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Apr 2020 01:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37874 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2406188AbgDPFcM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Apr 2020 01:32:12 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122A4C061A0F;
+        Wed, 15 Apr 2020 22:32:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=caaBFvJdfOo1IN5qevwlJmwf935Igyt+4EcpOBF44yE=; b=XUW+Db+sJFJbLBoT8O5Wa0upCM
+        /aJd+zWh0noLirqF3SVMiXpymnjLe2pbURetrVTa/cBAFmv0kU/9CkjyOkMUX6ItRycFtWBPd8WNB
+        y43uek6dwdJWBJZQWlqcKldVjOchgwPo55LyImUsSYL2T5MY2hP5YyyRLFJE16gH9x3dlp2saYoiG
+        8hz2Bv7hq6CvtCqux1v32NoCaZZytQny8Tq3TY5gDJecVHXo4f5h6Dy9XuhU4MCEP7fPUMAEOcBdA
+        vbvIfpCbshY9cVHo5xPgTl2uM6SAwiLbSF948nCXBCVfurje9wpH4LMz5EbRV2hW7mspgF17vb1C1
+        srKZ6lNg==;
+Received: from [2001:4bb8:184:4aa1:c70:4a89:bc61:2] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jOx84-0003cw-Kn; Thu, 16 Apr 2020 05:32:01 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: improve use_mm / unuse_mm v2
+Date:   Thu, 16 Apr 2020 07:31:55 +0200
+Message-Id: <20200416053158.586887-1-hch@lst.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 15 Apr 2020, Cyril Roelandt wrote:
+Hi all,
 
-> Hello,
-> 
-> I own a WD Blue 1TB hard drive that I use in combination with an Icy Box
-> IB-273StU3-B enclosure in order to plug it to my laptop using USB. It
-> worked fine with all the Linux versions I tried, up until 5.4.17.
-> 
-> 
-> Using Linux 5.3
-> ---------------
-> Everything works as expected when I plug the drive, and I can mount the
-> partitions:
-> 
-> # dmesg -T
-> [Sun Mar 22 23:48:39 2020] usb 2-2: new SuperSpeed Gen 1 USB device number 2 using xhci_hcd
-> [Sun Mar 22 23:48:39 2020] usb 2-2: New USB device found, idVendor=357d, idProduct=7788, bcdDevice= 1.14
-> [Sun Mar 22 23:48:39 2020] usb 2-2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> [Sun Mar 22 23:48:39 2020] usb 2-2: Product: USB to ATA/ATAPI Bridge
-> [Sun Mar 22 23:48:39 2020] usb 2-2: Manufacturer: JMicron
-> [Sun Mar 22 23:48:39 2020] usb 2-2: SerialNumber: 74D7851513309E5
-> [Sun Mar 22 23:48:39 2020] usbcore: registered new interface driver usb-storage
-> [Sun Mar 22 23:48:39 2020] scsi host6: uas
-> [Sun Mar 22 23:48:39 2020] usbcore: registered new interface driver uas
-> [Sun Mar 22 23:48:39 2020] scsi 6:0:0:0: Direct-Access     WDC WD10 JPVT-00A1YT0     0114 PQ: 0 ANSI: 6
-> [Sun Mar 22 23:48:39 2020] sd 6:0:0:0: Attached scsi generic sg1 type 0
-> [Sun Mar 22 23:48:39 2020] sd 6:0:0:0: [sdb] Spinning up disk...
-> [Sun Mar 22 23:48:40 2020] ..ready
-> [Sun Mar 22 23:48:41 2020] sd 6:0:0:0: [sdb] 1953525168 512-byte logical blocks: (1.00 TB/932 GiB)
-> [Sun Mar 22 23:48:41 2020] sd 6:0:0:0: [sdb] 4096-byte physical blocks
-> [Sun Mar 22 23:48:41 2020] sd 6:0:0:0: [sdb] Write Protect is off
-> [Sun Mar 22 23:48:41 2020] sd 6:0:0:0: [sdb] Mode Sense: 53 00 10 08
-> [Sun Mar 22 23:48:41 2020] sd 6:0:0:0: [sdb] Write cache: enabled, read cache: enabled, supports DPO and FUA
-> [Sun Mar 22 23:48:41 2020] sd 6:0:0:0: [sdb] Optimal transfer size 33553920 bytes not a multiple of physical block size (4096 bytes)
-> [Sun Mar 22 23:48:41 2020]  sdb: sdb1
-> [Sun Mar 22 23:48:41 2020] sd 6:0:0:0: [sdb] Attached SCSI disk
-> 
-> 
-> Using Linux 5.4
-> ---------------
-> 
-> # uname -a
-> Linux Susan 5.4.0-4-amd64 #1 SMP Debian 5.4.19-1 (2020-02-13) x86_64 GNU/Linux
-> 
-> # mkdir /tmp/mnt
-> 
-> # mount /dev/sdb1 /tmp/mnt
-> mount: /tmp/mnt: can't read superblock on /dev/sdb1.
-> 
-> # fsck -y /dev/sdb1
-> fsck from util-linux 2.34
-> e2fsck 1.45.6 (20-Mar-2020)
-> /dev/sdb1: clean, 2951657/61054976 files, 115035523/244190208 blocks
-> 
-> # dmesg -T 
-> [Mon Mar 23 18:43:06 2020] usb 3-2: new SuperSpeed Gen 1 USB device number 8 using xhci_hcd
-> [Mon Mar 23 18:43:06 2020] usb 3-2: New USB device found, idVendor=357d, idProduct=7788, bcdDevice= 1.14
-> [Mon Mar 23 18:43:06 2020] usb 3-2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> [Mon Mar 23 18:43:06 2020] usb 3-2: Product: USB to ATA/ATAPI Bridge
-> [Mon Mar 23 18:43:06 2020] usb 3-2: Manufacturer: JMicron
-> [Mon Mar 23 18:43:06 2020] usb 3-2: SerialNumber: 74D7851513309E5
-> [Mon Mar 23 18:43:06 2020] usb 3-2: UAS is blacklisted for this device, using usb-storage instead
-> [Mon Mar 23 18:43:06 2020] usb-storage 3-2:1.0: USB Mass Storage device detected
-> [Mon Mar 23 18:43:06 2020] usb-storage 3-2:1.0: Quirks match for vid 357d pid 7788: 4800000
-> [Mon Mar 23 18:43:06 2020] scsi host6: usb-storage 3-2:1.0
-> [Mon Mar 23 18:43:07 2020] scsi 6:0:0:0: Direct-Access     WDC WD10 JPVT-00A1YT0     0114 PQ: 0 ANSI: 6
-> [Mon Mar 23 18:43:07 2020] sd 6:0:0:0: Attached scsi generic sg1 type 0
-> [Mon Mar 23 18:43:07 2020] sd 6:0:0:0: [sdb] Spinning up disk...
-> [Mon Mar 23 18:43:08 2020] ..ready
-> [Mon Mar 23 18:43:09 2020] sd 6:0:0:0: [sdb] 1953525168 512-byte logical blocks: (1.00 TB/932 GiB)
-> [Mon Mar 23 18:43:09 2020] sd 6:0:0:0: [sdb] Write Protect is off
-> [Mon Mar 23 18:43:09 2020] sd 6:0:0:0: [sdb] Mode Sense: 47 00 10 08
-> [Mon Mar 23 18:43:09 2020] sd 6:0:0:0: [sdb] Write cache: enabled, read cache: enabled, supports DPO and FUA
-> [Mon Mar 23 18:43:09 2020]  sdb: sdb1
-> [Mon Mar 23 18:43:09 2020] sd 6:0:0:0: [sdb] Attached SCSI disk
-> [Mon Mar 23 18:43:30 2020] sd 6:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_SENSE
-> [Mon Mar 23 18:43:30 2020] sd 6:0:0:0: [sdb] tag#0 Sense Key : Illegal Request [current] 
-> [Mon Mar 23 18:43:30 2020] sd 6:0:0:0: [sdb] tag#0 Add. Sense: Invalid field in cdb
-> [Mon Mar 23 18:43:30 2020] sd 6:0:0:0: [sdb] tag#0 CDB: Write(10) 2a 08 00 00 08 00 00 00 08 00
-> [Mon Mar 23 18:43:30 2020] blk_update_request: critical target error, dev sdb, sector 2048 op 0x1:(WRITE) flags 0x20800 phys_seg 1 prio class 0
-> [Mon Mar 23 18:43:30 2020] Buffer I/O error on dev sdb1, logical block 0, lost sync page write
-> [Mon Mar 23 18:43:30 2020] EXT4-fs (sdb1): I/O error while writing superblock
-> [Mon Mar 23 18:43:30 2020] EXT4-fs (sdb1): mount failed
-> 
-> # lsusb 
-> Bus 003 Device 008: ID 357d:7788 Sharkoon QuickPort XT
-> 
-> 
-> Other considerations
-> --------------------
-> This enclosure works as expected with another drive: I tried with an old
-> Fujitsu 250GB drive and was able to mount the partitions.
-> 
-> The WD drive works with a similar enclosure: the Icy Box IB-268U3-B
-> enclosure. It has the exact same vendor id and product id (357d:7788)
-> but a different bcdDevice (2.03).
-> 
-> Looking at the dmesg logs I pasted above, I see that the main difference
-> is the driver used:
-> - uas in Linux 5.3;
-> - usb-storage in Linux 5.4, since uas is blacklisted.
-> 
-> 
-> I believe the uas driver was blacklisted because of an old bug[1] in
-> Fedora. In Linux, the commit that disabled uas is
-> bc3bdb12bbb3492067c8719011576370e959a2e6.
-> 
-> I do not really mind not being able to use uas, however I would like to
-> be able to mount my partitions using usb-storage.
+this series improves the use_mm / unuse_mm interface by better
+documenting the assumptions, and my taking the set_fs manipulations
+spread over the callers into the core API.
 
-It's entirely possible that the blacklisting is not necessary any more.  
-After all, it was added four and a half years ago; the kernel has
-improved since then.  I guess you're not in a position to test this,
-but maybe Steve Ellis or Takeo Nakayama is...?
-
-Does 5.3 work if you add a similar blacklist entry?
-
-Can you collect usbmon traces showing what happens with both uas and
-usb-storage?  Perhaps different sequences of commands get sent to the
-drive with the two drivers.
-
-Alan Stern
-
+Changes since v1:
+ - drop a few patches
+ - fix a comment typo
+ - cover the newly merged use_mm/unuse_mm caller in vfio
