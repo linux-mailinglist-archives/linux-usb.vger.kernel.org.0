@@ -2,68 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A0F1ABB05
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2020 10:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 337211ABB66
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2020 10:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441321AbgDPIUC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Apr 2020 04:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
+        id S2501938AbgDPIgy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Apr 2020 04:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2441314AbgDPITo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Apr 2020 04:19:44 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40876C061A0C;
-        Thu, 16 Apr 2020 01:19:40 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id x23so4921156lfq.1;
-        Thu, 16 Apr 2020 01:19:40 -0700 (PDT)
+        with ESMTP id S2502254AbgDPIgU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Apr 2020 04:36:20 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B68EC061A0C;
+        Thu, 16 Apr 2020 01:22:36 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id j14so4903993lfg.9;
+        Thu, 16 Apr 2020 01:22:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=W9MHtlxfWV5esFp8UKV1MC7UI06aVGBVOqmz4l0oTUE=;
-        b=ekIM/u0NoCzuOjB4d6swF8ik0SYVawZsVAjeK6ZOTzHDqRKmxUGGpbAQRb69YI57/7
-         YEqsZN10/mLKAn6BtkUdM1WK8dVWGAQdDpaQuO543EzMkkzJvviObNWiJ8/Ha/8HBkoy
-         ZAENdBwsq9LFQ5Ptrb6TNeh0GMtga64a8+JGMRNFlajv7ScuXbjNvTJStjTztaBsiaaZ
-         vChOMOsZys+sxL/SZpaBOCM58aOMNiPqHxYssLjPFvaVEhPC9dq9cIOv8j/6IrWjUQH1
-         P/qe5mJeR21JKRCD+xrzqOx5+hImvOv1sy2s2dtInXfyAh73EN9mdq1j4lbK+oKI4a9p
-         OLGQ==
+        bh=5XivUy7FYVNBF2ALrQWWddiXZG0r/RtMEsTQOMXoZEw=;
+        b=hrxyamFeaN5opbMcHQIxgyojWXXgF0/AxSdT61mtPK/9nuopn2X3w+Eo7DmP8MgRrW
+         cyaf9xt2UXlInW++gbOBn+B5WwIovU/cUwpTbDaABwoFf6xwgWIz3NH8KkrePTDplsKB
+         ooSPWlZBuCE8bUqqRkYUK9MfI6BmkvmvP2sRVcs6zVmHnu7c6cQoGlTWZmFc5xx6D6JD
+         XqNOkrRYtWq0NW4zllmDjBajqjgPIDlFtp/AzA1F5KJdrO17qnCbXArLOZjEMUkasGJo
+         uPE801WBQchV6XXE8oaDAXSz06AUauSnJ4VLBZAz0TwXeyJpI6InwVpG5Hpu4/WA3ee0
+         EBmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=W9MHtlxfWV5esFp8UKV1MC7UI06aVGBVOqmz4l0oTUE=;
-        b=FxN9dw2mN7kgHf4h4QAslvVb9IinEeMXCfT3GoadnVZzHlE6C7e/nJBmvrqdSbV+sA
-         R6I3FFFzeoaPDTsol0/6CoJ0XaP+DZrbVDGjlTOzV0toYsmtbeGrOmIckX8y/cVc4SY9
-         80bMDLynONX1q/t01hR+ETX1snbGWqRPEkaMihu4W7NG13RcJGmUJQgXjWtHlyn1xDcs
-         kT4U2n3o0RBD01FflK81A75wK6aEAIqKZo3U6f4fUQvJm2d3u6RfrVEABCScRXvsiqKE
-         YLm4mqJLrgvnoMBfPHcdRp7ST4yHpteSsS093bin8VNT4u+NwC1MSEjnbP+61VAAPoTN
-         /jFA==
-X-Gm-Message-State: AGi0PubhyRio16Is1WvlSECSpLBQp8uIBOjtFvX8zZzYNY/CNYAvBq3b
-        OtoI8yOdOuPqFnaZEUMTUxn8FvVBaU4=
-X-Google-Smtp-Source: APiQypLK+ZBdTA6YWUvfPtEFGDAvT6JMxGw/IpftO7xZ2urY+CCasg81Mye5Zos0vqS/yhGnfr3f8A==
-X-Received: by 2002:ac2:5192:: with SMTP id u18mr5335277lfi.114.1587025178168;
-        Thu, 16 Apr 2020 01:19:38 -0700 (PDT)
+        bh=5XivUy7FYVNBF2ALrQWWddiXZG0r/RtMEsTQOMXoZEw=;
+        b=G0UeX2h2pcFjrUThs+ZJXfdYbuKShaBL0C2vFtAZkinTWCsrEKmjDupnu9ectITvRR
+         Dxj//Q8F3UqtRK8D8JdQNJvCKyCt+ZZW0R/l2TQX3Jb9M/7nagJszvxz7dWE2zAPbCt2
+         snqB8a+4GNk0IEOVw8xiSiu/elujRbwWnegFn3iOIRRYnslV+MM+WLaM4emE5opqore8
+         rLabsEQ1bZdMXC6YtXAdE6HKr0qTFUDpmvuBDN2ssvNDmwM5qFGGE3Niu0qKM0qbgxpk
+         XyVfpr8irGqf4zKxfnEXHM1IzKoVhCVlqtxy21n/3bKA0CoXdcTDdq5f/4J4LJH4Aoic
+         iJ2w==
+X-Gm-Message-State: AGi0PuaTUiucwBO6LYrQ4clbsH/NPr6PsLcceNS4IehlQSlkzVHTZU5l
+        VTR9ZKQT90qJHWreH+tyxMKmt1GVrZY=
+X-Google-Smtp-Source: APiQypL8+Q52Lb0ewPp/pJoLw9OSGQ5XBl1Ni/2AkpVcoNu5RaFpOoY8wN7upjMPPDqseJD2jwRj5Q==
+X-Received: by 2002:ac2:4426:: with SMTP id w6mr5381093lfl.8.1587025354320;
+        Thu, 16 Apr 2020 01:22:34 -0700 (PDT)
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id o25sm14233941lfg.41.2020.04.16.01.19.36
+        by smtp.gmail.com with ESMTPSA id y25sm14443965lfy.59.2020.04.16.01.22.33
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 16 Apr 2020 01:19:37 -0700 (PDT)
+        Thu, 16 Apr 2020 01:22:33 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     Josh Gao <jmgao@google.com>, YongQin Liu <yongqin.liu@linaro.org>,
-        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
-        Yang Fei <fei.yang@intel.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
-        Tejas Joglekar <tejas.joglekar@synopsys.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: More dwc3 gadget issues with adb
-In-Reply-To: <CALAqxLW2R4d=Zm=TKbFprN-uYrerL1oCYsVC3VedEKtW0gCsyA@mail.gmail.com>
-References: <CALAqxLW2R4d=Zm=TKbFprN-uYrerL1oCYsVC3VedEKtW0gCsyA@mail.gmail.com>
-Date:   Thu, 16 Apr 2020 11:19:27 +0300
-Message-ID: <877dyfsv00.fsf@kernel.org>
+To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        Rob Herring <robh@kernel.org>,
+        Tejas Joglekar <Tejas.Joglekar@synopsys.com>
+Cc:     "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree\@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        John Youn <John.Youn@synopsys.com>
+Subject: Re: [RESENDING RFC PATCH 1/4] dt-bindings: usb: Add snps,consolidate-sgl & consolidate-sgl
+In-Reply-To: <fe59318a-b3dd-c6af-702e-1ca4aed04a8b@synopsys.com>
+References: <cover.1585297723.git.joglekar@synopsys.com> <8a9ca8e08d7c4957789a209c77589f1aa4bd2f06.1585297723.git.joglekar@synopsys.com> <20200405014548.GA25539@bogus> <fe59318a-b3dd-c6af-702e-1ca4aed04a8b@synopsys.com>
+Date:   Thu, 16 Apr 2020 11:22:29 +0300
+Message-ID: <874ktjsuuy.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -79,105 +76,62 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-John Stultz <john.stultz@linaro.org> writes:
-> Hey Felipe,
->   Last week or so, a change[1] in AOSP to adbd seemingly uncovered
-> another issue with dwc3 gadget scatter-gather support on HiKey960.
+Tejas Joglekar <Tejas.Joglekar@synopsys.com> writes:
+> Hi,
+> On 4/5/2020 7:15 AM, Rob Herring wrote:
+>> On Fri, Mar 27, 2020 at 03:11:56PM +0530, Tejas Joglekar wrote:
+>>> This commit adds the documentation for consolidate-sgl, and
+>>> snps,consolidate-sgl property. These when set enables the quirk for
+>>> XHCI driver for consolidation of sg list into a temporary buffer when s=
+mall
+>>> buffer sizes are scattered over the sg list not making up to MPS or tot=
+al
+>>> transfer size within TRB cache size with Synopsys xHC.
+>>>
+>>> Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/usb/dwc3.txt     | 3 +++
+>>>  Documentation/devicetree/bindings/usb/usb-xhci.txt | 3 +++
+>>>  2 files changed, 6 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documenta=
+tion/devicetree/bindings/usb/dwc3.txt
+>>> index 9946ff9ba735..292d1f7969e4 100644
+>>> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
+>>> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+>>> @@ -104,6 +104,9 @@ Optional properties:
+>>>  			this and tx-thr-num-pkt-prd to a valid, non-zero value
+>>>  			1-16 (DWC_usb31 programming guide section 1.2.3) to
+>>>  			enable periodic ESS TX threshold.
+>>> + - snps,consolidate-sgl: enable sg list consolidation - host mode only=
+. Set to use
+>>> +			SG buffers of at least MPS size by consolidating smaller SG
+>>> +			buffers list into a single buffer.
+>>=20
+>> The preference is not to keep adding properties for every single quirk=20
+>> or feature. These should be implied by specific compatibles. As Synopsys=
+=20
+>> knows what quirks/errata/features are in each version of IP, the=20
+>> compatible strings should reflect those versions. (And yes, I'm sure=20
+>> there's customer ECO fixes that aren't reflected in the version, but=20
+>> that's why we have SoC specific compatibles too.) This is the only way=20
+>> we can fix quirks in the OS without doing DT updates. For comparison, do=
+=20
+>> you want to have to update your PC BIOS so an OS can work-around issues?
+>>
+> Yes, I understand what you want to say here. But I think this compatible =
+string
+> does not work with the platform drivers with PCI based systems. So based =
+on the vendor=20
+> id and device id then I need to set the quirk required.=20
 >
-> Interestingly it doesn't seem to affect the Dragonboard 845c, which
-> uses the same dwc3 driver and has had its own issues in the past.
->
-> The behavior is the same as we saw last time around with both devices.
-> After booting the device, running "adb logcat -d" (or really any adb
-> command that transfers more than a trivial amount of data) on the host
-> will result in the adb output seeming to stall. Any further adb
-> invocations to the device will hang indefinitely.
->
-> I've captured trace events for before the change (works), after the
-> change (broken), and after the change with the sg_enabled flag turned
-> off (which works around the problem).
->
-> Let me know if there is anything else useful for me to share.
+> @Felipe: What do you suggest for setting up quirk without the DT update f=
+or dwc3?
 
-First the obvious questions: Which kernel version is this? What does
-"before" and "after" refer to in our traces? What are first working and
-first failing versions? Can you run git bisect?
-
-One thing I noticed is that we're missing a giveback on ep1out. Here's a
-working case:
-
-   UsbFfs-worker-580   [002] d..1    66.704886: dwc3_alloc_request: ep1out:=
- req 0000000011c55648 length 0/0 zsI =3D=3D> 0
-   UsbFfs-worker-580   [002] d..2    66.704889: dwc3_ep_queue: ep1out: req =
-0000000011c55648 length 0/16384 zsI =3D=3D> -115
-   UsbFfs-worker-580   [002] d..2    66.704892: dwc3_prepare_trb: ep1out: t=
-rb 000000003559c11c (E27:D7) buf 000000008843b000 size 16384 ctrl 00000819 =
-(HlcS:sC:normal)
-   UsbFfs-worker-580   [002] d..2    66.704897: dwc3_gadget_ep_cmd: ep1out:=
- cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
-: Successful
-     irq/65-dwc3-522   [000] d..1    66.705053: dwc3_event: event (00006084=
-): ep1out: Transfer In Progress [0] (SIm)
-     irq/65-dwc3-522   [000] d..1    66.705054: dwc3_complete_trb: ep1out: =
-trb 000000008c350fb3 (E27:D8) buf 0000000089d6b000 size 16360 ctrl 00000818=
- (hlcS:sC:normal)
-     irq/65-dwc3-522   [000] d..1    66.705058: dwc3_gadget_giveback: ep1ou=
-t: req 0000000001b9ed3f length 24/16384 zsI =3D=3D> 0
-   kworker/u16:2-260   [001] ....    66.705097: dwc3_free_request: ep1out: =
-req 0000000001b9ed3f length 24/16384 zsI =3D=3D> 0
-
-and the failure point:
-
-   UsbFfs-worker-580   [002] d..1    66.705129: dwc3_alloc_request: ep1out:=
- req 0000000067a34de4 length 0/0 zsI =3D=3D> 0
-   UsbFfs-worker-580   [002] d..2    66.705131: dwc3_ep_queue: ep1out: req =
-0000000067a34de4 length 0/16384 zsI =3D=3D> -115
-   UsbFfs-worker-580   [002] d..2    66.705134: dwc3_prepare_trb: ep1out: t=
-rb 00000000f3db4076 (E28:D8) buf 000000008843f000 size 16384 ctrl 00000819 =
-(HlcS:sC:normal)
-   UsbFfs-worker-580   [002] d..2    66.705141: dwc3_gadget_ep_cmd: ep1out:=
- cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
-: Successful
-     irq/65-dwc3-522   [000] d..1    66.705309: dwc3_event: event (00006084=
-): ep1out: Transfer In Progress [0] (SIm)
-     irq/65-dwc3-522   [000] d..1    66.705310: dwc3_complete_trb: ep1out: =
-trb 0000000092deef41 (E28:D9) buf 00000000ba8f1000 size 4072 ctrl 0000001c =
-(hlCS:sc:normal)
-     irq/65-dwc3-522   [000] d..1    66.705318: dwc3_gadget_ep_cmd: ep1out:=
- cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
-: Successful
-     irq/65-dwc3-522   [000] d..1    66.705323: dwc3_gadget_ep_cmd: ep1out:=
- cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
-: Successful
-     irq/65-dwc3-522   [000] d..1    66.705329: dwc3_gadget_ep_cmd: ep1out:=
- cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
-: Successful
-     irq/65-dwc3-522   [000] d..1    66.705334: dwc3_gadget_ep_cmd: ep1out:=
- cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
-: Successful
-     irq/65-dwc3-522   [000] d..1    66.705339: dwc3_gadget_ep_cmd: ep1out:=
- cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
-: Successful
-     irq/65-dwc3-522   [000] d..1    66.705344: dwc3_gadget_ep_cmd: ep1out:=
- cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
-: Successful
-     irq/65-dwc3-522   [000] d..1    66.705349: dwc3_gadget_ep_cmd: ep1out:=
- cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
-: Successful
-     irq/65-dwc3-522   [000] d..1    66.705354: dwc3_gadget_ep_cmd: ep1out:=
- cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
-: Successful
-
-One interesting thing is that TRB addresses are "odd". I can't find a
-proper lifetime for these TRBs. Do you have IOMMU enabled? Can you run
-without it? For example, nowhere in the log can I find the place where
-trb 0000000092deef41 was first enqueue. I'm assuming the log to be
-ordered, which means that trb is the same as 00000000f3db4076. But why
-are the addresses different?
-
-Another weird thing is that even though we CHN bit being set in
-0000000092deef41, we don't see where the second trb (the one its chained
-to) was prepared. It seems like it was *never* prepared, what gives?
+We have been using Synopsys controller's revision register, but that's
+not visible to xhci driver and we don't have a separate compatible for
+each synopsys version on the xhci driver side. One option would be to
+add "snps,xhci-foo-bar" to xhci-plat and use that.
 
 =2D-=20
 balbi
@@ -187,18 +141,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6YFQ8ACgkQzL64meEa
-mQaIqxAA2vxUnm+Omf8K/N5jvZbIQHW5HcTdVXcznXApCA73acgUGZ6H599/XB2V
-LXwkb//ezD8QtY84tC12cDEXSqh2WrwLKyXef8Zhr8aeJ8YPyWIYr50Jx6qzAS2e
-PU9KZFtmU3SXhlImihGeWM1eYV0ojhYOpCNUNEWqQ3Hwlmcp5RzINUPCSqYNUVdz
-rLZsRllXS/68OEkQarvCRc87b/dJok3k2czcETy+6R69weLeHkJ1gUr+MRVoOUf7
-boLSjJX8nrb1xweRmSqD27gXmPw+5yAm+OD++KSM9aVDh67i0VHq1pF/X11ULVxt
-03hb6VcEkjUzFznfJrRD7ye7EuXiUwSxJwX+i6bRA0bBU83SoX7Kwb3i8gI3x9vT
-l3HvhaL9fUMEnacupHYLzKtHxRHFG0GyBBnbP6KGOgBQutbwQzX/IYWR8mdl4AmO
-myTiwgMCgQR54IhchmmrnCBeVvWTA9cyov983sjwhlkZt72+Y/TuLJGU73qWCamb
-babTgDZo1FRaRN2SawTJw/qpLGqGM9fOuCX8FW8qTlyG/rPyg0FRgjLMuO3v0F2X
-D0hbkSrlpKkCa8i4vdEEWIF9fw4BaYsyXCUCJIUEP3QOpMkIfNC+j8WRAcIdUsDR
-GWEK8eaPF4mJ07GBpPt8stsZeTgE1ADys75u/184GrMm5zkKUto=
-=mTHT
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6YFcUACgkQzL64meEa
+mQastxAAyArwov8WGnSblC6znvn16hE4x9d7GVKj4PyYpMBcnccppp2VGviRXfRs
+BzH8B0drFGFQ5fhRGZDpm2uAssAJgdrUkw4npkVvVKFztohaAha8Q9yu02jtChXD
+1AVmbd1nUH5IiIhlLPa6AuxeszA3hP1p3os1wSCIuH3NcBEx6K+I27X5zgs7uG5v
+OT5oednhw3mgQBxHkh9luPlLiToFbrb1eE21w7FzCKPzbMeAnJzFVodlcVe5OTF/
+cvzdLk+YhP0JG+K4trjp1bu7/nlvy5qWXQ3FBaUv6/7DzAwDKKD77wN8z1i1nebl
+hhk60Kt6x1d566VvpJZNyjpYrdd5ub5HQbdp4933JBjMyNYwx2FBwjQxylV31M4s
+hB1BSDtVUy+h+cD9qwNWpE9I3iuRqjqNIl0IfJRxhEzaUHU89EYKpk3XbJr83rtp
+Ae/SopbpHr2GelmPhgUK0PBDeaeIIa+WWJQMqtfsVQO6z+43oBJHzYmsY8QZLj9H
+Yt8IuWRMc7kbpcNQl+Dx+JCQRLhggkeLIGaIPmexAzWSRY4Cod0Q4QD6xXmOlJiE
+S64Egfd9Q8d8LBY3iyFRRTMAQcCFVfaK+8Uf9kwitgHww/Hc/886/4WhBaVHTAoJ
+8Pwku4qw1VePFeKWoUKqwCEWdwuFxq0eqKTWgdu5HurClw+OJEg=
+=faNe
 -----END PGP SIGNATURE-----
 --=-=-=--
