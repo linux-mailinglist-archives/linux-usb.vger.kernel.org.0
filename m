@@ -2,132 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A3E1AC0F1
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2020 14:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEEDB1AC1D6
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2020 14:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2635325AbgDPMTp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Apr 2020 08:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2635303AbgDPMTd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Apr 2020 08:19:33 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F14C08C5F2
-        for <linux-usb@vger.kernel.org>; Thu, 16 Apr 2020 05:19:29 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id i10so4530557wrv.10
-        for <linux-usb@vger.kernel.org>; Thu, 16 Apr 2020 05:19:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HXXf6CzGWvqGfJ+pWD/XxsKx7m/sfAMCErpAVa4yyHE=;
-        b=WQyDyR5mxzNp5S9/EFFpNUBzyCTrTp2awkJyanbeEFwI7GQHQF6wbpwEwd+J9y+Upf
-         qEzKbb5p8JSw6giqyoQ8c3kElv/qoYGvCe1/xCr4lg6pTaVtbW6ErRiHU88hL3t9VNbB
-         hhiYTyMz3U2/c8QGkhk8GwYOR1CYm1Kc7ZHlN/E7INk4aXqte01N1CSiyAp2tveR1B2I
-         hb7cQ9CsHMHsxaI2V7jJmoW2KDav/NTUM93UD8Vif1i9eqqJ7NQ1fzC0WTcRwn2aiWl/
-         zA0XNuRTHj4BeQ6HxqOBh8YmKwiNvREECaZahCrX4PcwvIhE6M82DGq7hR9Agv1jpOn6
-         0YkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HXXf6CzGWvqGfJ+pWD/XxsKx7m/sfAMCErpAVa4yyHE=;
-        b=rGRHULucS1d6GAVX8mTEPjVs0FHcoXIkmnAl6g8Sw/PGJccQzW6Qv9IIleERfi+H0u
-         aSgSwp3I1baSmALL0UH66OyyFY9LDP0i9QH0BFc7XgaZAYnwcWOiLUAVXuQp2g2ntdWJ
-         8x48wpIT3YWArcuNN/I/pOfiv9hRaH7XJPf16fA16huK1jRLnXKLioe51yuAa0TQhcNA
-         D5/oPEygoEQO0/eLznx4cUUKu5QHKi4DRo8YX+5zCjCsR7DO0+urZomHQtsp7YUKU2B+
-         Qsv8QcoQ5hTnx81pmWbMRtE8mfHceL+mO6/+GT4FGaKlSYbx+Bp4L2kiDoIQ39sMrIfd
-         e7nQ==
-X-Gm-Message-State: AGi0Pua+5hleTufIxx0skQ6rNYy0nm6EqjW6A/lLvQ7HnT4VcanVig50
-        hZO3TDCZmu6Nhr3Ff2TM7h266Q==
-X-Google-Smtp-Source: APiQypKqIj6sEk0xjD5CGDimPOpkhr5FgQcDq+KtN3ZtPclHdg8q5OF+FP+2ZyDS9S0qDaRuPbSqCQ==
-X-Received: by 2002:a05:6000:12c5:: with SMTP id l5mr35779556wrx.185.1587039568034;
-        Thu, 16 Apr 2020 05:19:28 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e35:2ec0:82b0:39cc:a07:8b48:cc56])
-        by smtp.gmail.com with ESMTPSA id i13sm22035602wro.50.2020.04.16.05.19.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2020 05:19:27 -0700 (PDT)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     kishon@ti.com, balbi@kernel.org, khilman@baylibre.com,
-        martin.blumenstingl@googlemail.com, devicetree@vger.kernel.org
-Cc:     linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: [PATCH v3 8/8] dt-bindings: usb: dwc3: remove old DWC3 wrapper
-Date:   Thu, 16 Apr 2020 14:19:10 +0200
-Message-Id: <20200416121910.12723-9-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20200416121910.12723-1-narmstrong@baylibre.com>
-References: <20200416121910.12723-1-narmstrong@baylibre.com>
+        id S2894524AbgDPMzI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Apr 2020 08:55:08 -0400
+Received: from mga03.intel.com ([134.134.136.65]:44510 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2894386AbgDPMzD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 Apr 2020 08:55:03 -0400
+IronPort-SDR: QDJk1YuomN4Ox0Ih29E5CwR9zi/tj5m+ja1ETz/mfjMgeCgsjYNL14mMCWFDDquZ1P3zPDwmMy
+ QbjwShyR5aWg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2020 05:55:02 -0700
+IronPort-SDR: 14P7OUA2rGLVVihMxD7Mh+HTh7r2zX/e3sYE5q2bO9zCEJAb3oibfFAx5NtpPsXExduTJ7eQ0J
+ JjekCo9vW6vA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,391,1580803200"; 
+   d="scan'208";a="363986159"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 16 Apr 2020 05:54:59 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 16 Apr 2020 15:54:59 +0300
+Date:   Thu, 16 Apr 2020 15:54:59 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] usb: typec: tcpm: Ignore CC and vbus changes in
+ PORT_RESET change
+Message-ID: <20200416125459.GA3473073@kuha.fi.intel.com>
+References: <20200402215947.176577-1-badhri@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200402215947.176577-1-badhri@google.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+On Thu, Apr 02, 2020 at 02:59:47PM -0700, Badhri Jagan Sridharan wrote:
+> After PORT_RESET, the port is set to the appropriate
+> default_state. Ignore processing CC changes here as this
+> could cause the port to be switched into sink states
+> by default.
+> 
+> echo source > /sys/class/typec/port0/port_type
+> 
+> Before:
+> [  154.528547] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms
+> [  154.528560] CC1: 0 -> 0, CC2: 3 -> 0 [state PORT_RESET, polarity 0, disconnected]
+> [  154.528564] state change PORT_RESET -> SNK_UNATTACHED
+> 
+> After:
+> [  151.068814] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev3 NONE_AMS]
+> [  151.072440] CC1: 3 -> 0, CC2: 0 -> 0 [state PORT_RESET, polarity 0, disconnected]
+> [  151.172117] state change PORT_RESET -> PORT_RESET_WAIT_OFF [delayed 100 ms]
+> [  151.172136] pending state change PORT_RESET_WAIT_OFF -> SRC_UNATTACHED @ 870 ms [rev3 NONE_AMS]
+> [  152.060106] state change PORT_RESET_WAIT_OFF -> SRC_UNATTACHED [delayed 870 ms]
+> [  152.060118] Start toggling
+> 
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
-There is now an updated bindings for these SoCs making the old
-compatible obsolete.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
----
- .../devicetree/bindings/usb/amlogic,dwc3.txt  | 42 -------------------
- 1 file changed, 42 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 26 ++++++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index de3576e6530ab2..82b19ebd7838e0 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -3794,6 +3794,14 @@ static void _tcpm_cc_change(struct tcpm_port *port, enum typec_cc_status cc1,
+>  		 */
+>  		break;
+>  
+> +	case PORT_RESET:
+> +	case PORT_RESET_WAIT_OFF:
+> +		/*
+> +		 * State set back to default mode once the timer completes.
+> +		 * Ignore CC changes here.
+> +		 */
+> +		break;
+> +
+>  	default:
+>  		if (tcpm_port_is_disconnected(port))
+>  			tcpm_set_state(port, unattached_state(port), 0);
+> @@ -3855,6 +3863,15 @@ static void _tcpm_pd_vbus_on(struct tcpm_port *port)
+>  	case SRC_TRY_DEBOUNCE:
+>  		/* Do nothing, waiting for sink detection */
+>  		break;
+> +
+> +	case PORT_RESET:
+> +	case PORT_RESET_WAIT_OFF:
+> +		/*
+> +		 * State set back to default mode once the timer completes.
+> +		 * Ignore vbus changes here.
+> +		 */
+> +		break;
+> +
+>  	default:
+>  		break;
+>  	}
+> @@ -3908,10 +3925,19 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
+>  	case PORT_RESET_WAIT_OFF:
+>  		tcpm_set_state(port, tcpm_default_state(port), 0);
+>  		break;
+> +
+>  	case SRC_TRY_WAIT:
+>  	case SRC_TRY_DEBOUNCE:
+>  		/* Do nothing, waiting for sink detection */
+>  		break;
+> +
+> +	case PORT_RESET:
+> +		/*
+> +		 * State set back to default mode once the timer completes.
+> +		 * Ignore vbus changes here.
+> +		 */
+> +		break;
+> +
+>  	default:
+>  		if (port->pwr_role == TYPEC_SINK &&
+>  		    port->attached)
+> -- 
+> 2.26.0.292.g33ef6b2f38-goog
 
-diff --git a/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt b/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
-deleted file mode 100644
-index 9a8b631904fd..000000000000
---- a/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
-+++ /dev/null
-@@ -1,42 +0,0 @@
--Amlogic Meson GX DWC3 USB SoC controller
--
--Required properties:
--- compatible:	depending on the SoC this should contain one of:
--			* amlogic,meson-axg-dwc3
--			* amlogic,meson-gxl-dwc3
--- clocks:	a handle for the "USB general" clock
--- clock-names:	must be "usb_general"
--- resets:	a handle for the shared "USB OTG" reset line
--- reset-names:	must be "usb_otg"
--
--Required child node:
--A child node must exist to represent the core DWC3 IP block. The name of
--the node is not important. The content of the node is defined in dwc3.txt.
--
--PHY documentation is provided in the following places:
--- Documentation/devicetree/bindings/phy/meson-gxl-usb2-phy.txt
--- Documentation/devicetree/bindings/phy/meson-gxl-usb3-phy.txt
--
--Example device nodes:
--		usb0: usb@ff500000 {
--			compatible = "amlogic,meson-axg-dwc3";
--			#address-cells = <2>;
--			#size-cells = <2>;
--			ranges;
--
--			clocks = <&clkc CLKID_USB>;
--			clock-names = "usb_general";
--			resets = <&reset RESET_USB_OTG>;
--			reset-names = "usb_otg";
--
--			dwc3: dwc3@ff500000 {
--				compatible = "snps,dwc3";
--				reg = <0x0 0xff500000 0x0 0x100000>;
--				interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
--				dr_mode = "host";
--				maximum-speed = "high-speed";
--				snps,dis_u2_susphy_quirk;
--				phys = <&usb3_phy>, <&usb2_phy0>;
--				phy-names = "usb2-phy", "usb3-phy";
--			};
--		};
+thanks,
+
 -- 
-2.22.0
-
+heikki
