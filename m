@@ -2,58 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 491BE1AD336
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2020 01:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8E01AD181
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2020 22:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727919AbgDPXfH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Apr 2020 19:35:07 -0400
-Received: from mail.dsns.gov.ua ([194.0.148.99]:37970 "EHLO mail.dsns.gov.ua"
+        id S1728249AbgDPUul (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Apr 2020 16:50:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57810 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725770AbgDPXfD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 16 Apr 2020 19:35:03 -0400
-X-Greylist: delayed 9287 seconds by postgrey-1.27 at vger.kernel.org; Thu, 16 Apr 2020 19:34:56 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.dsns.gov.ua (Postfix) with ESMTP id 6223A1EC85AF;
-        Thu, 16 Apr 2020 23:35:36 +0300 (EEST)
-Received: from mail.dsns.gov.ua ([127.0.0.1])
-        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ekdCUR6pZ0Aa; Thu, 16 Apr 2020 23:35:36 +0300 (EEST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.dsns.gov.ua (Postfix) with ESMTP id 67C3E1EC85F9;
-        Thu, 16 Apr 2020 23:35:26 +0300 (EEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.dsns.gov.ua 67C3E1EC85F9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dsns.gov.ua;
-        s=1E60DAC0-2607-11E9-81E6-7A77C2B36653; t=1587069326;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=BFrHb0sdI6ttGZUrYrU3NgniYtd1aDAhnXXb2vKIb2B9styAswbm0NbzZRAHiMp0y
-         hUE3veWMbUD+qTP/VmiRFig+sJh7tgrjRSipmI8jEPDH4mLyVFQtPdyPojLkpu/SlT
-         y/CjSPHdIqozfsh/zyWU9aeO41yKuuO77HTVyT/eVGDUtLYGTijz0IeETvwB1Yur4I
-         5RegLOWC96rliENvAjVU5IoM4JfcadYa95Q959RRtGyCSnevHOMfGycVhDjkxX/p7G
-         0gUYzq9GdO73hW8YI3AV2m5dSWB1tPfsxP4FJUwoBTp88jIZZeY7uAiDenSeAUtBdj
-         PKl/BScyij7GQ==
-X-Virus-Scanned: amavisd-new at dsns.gov.ua
-Received: from mail.dsns.gov.ua ([127.0.0.1])
-        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id U4DcK3mdlYyf; Thu, 16 Apr 2020 23:35:26 +0300 (EEST)
-Received: from mail.dsns.gov.ua (localhost [127.0.0.1])
-        by mail.dsns.gov.ua (Postfix) with ESMTP id 9BAF81EC8118;
-        Thu, 16 Apr 2020 23:35:15 +0300 (EEST)
-Date:   Thu, 16 Apr 2020 23:35:15 +0300 (EEST)
-From:   Saleem Netanyahu <duchenko@dsns.gov.ua>
-Reply-To: Saleem Netanyahu <saleemnetu@gmail.com>
-Message-ID: <1255292802.718114.1587069315574.JavaMail.zimbra@dsns.gov.ua>
-Subject: Hey, how are u, can we talk?
+        id S1725894AbgDPUul (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 Apr 2020 16:50:41 -0400
+Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 54999221F7;
+        Thu, 16 Apr 2020 20:50:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587070241;
+        bh=8pJkCj7VJiAh7Fv15BzmBG8woE/Stmsai3tvkbrbPqE=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=n0UUlraLqLPjwYeqT/Ib4MzAhYTe3jERezX+JFSTgnmiiFuy1iRV9JufiLstTFI8H
+         5ckfrA10BFFVj1UxLmtyVr0sPTHkM+RwAvR5h6q0kt7RRVULMAf2Sejz1b7U6I68dT
+         dnrjquBKMape3ORtS5eDKMmqHRxAydReiX6vwno8=
+Date:   Thu, 16 Apr 2020 22:50:38 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Fatal Goth <gothfatal@gmail.com>
+cc:     linux-usb@vger.kernel.org, benjamin.tissoires@redhat.com
+Subject: Re: Asus GA502DU usb-hid keyboard not supported (0b05:1866)
+In-Reply-To: <CAPcc2qsLj7t5Ku2WVzaY7WfKqJTRLvU-1RN90PwLxnrEGednYA@mail.gmail.com>
+Message-ID: <nycvar.YFH.7.76.2004162250010.19713@cbobk.fhfr.pm>
+References: <CAPcc2qsLj7t5Ku2WVzaY7WfKqJTRLvU-1RN90PwLxnrEGednYA@mail.gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [45.82.223.36, 172.69.54.54]
-X-Mailer: Zimbra 8.8.15_GA_3918 (zclient/8.8.15_GA_3918)
-Thread-Index: oV9MZN6+Sh4gFPdsGziQ2IngcJhATw==
-Thread-Topic: Hey, how are u, can we talk?
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
+
+On Fri, 20 Mar 2020, Fatal Goth wrote:
+
+> The majority of the function keys for this laptop are not operational, and
+> neither is the keyboard backlight.
+> 
+> I've realized this is due to the hid-asus module not loading for this
+> keyboard. However, when I add the device ID to hid-asus.c most of the
+> function keys work, but some of the normal keyboard keys get incorrectly
+> mapped as brightness controls, and the keyboard LED still will not
+> initialize ("Asus failed to request functions: -75").
+> 
+> I'm having a go at trying to fix this up, though a helping hand would be
+> awesome. Here's the patch I'd created to even get to that point:
+
+The patch has been damaged by your mail client, and is missing 
+Signed-off-by line.
+
+Could you please fix that up and resubmit?
+
+Thanks!
+
+-- 
+Jiri Kosina
+SUSE Labs
 
