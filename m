@@ -2,84 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00FA11AD103
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2020 22:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 491BE1AD336
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2020 01:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730158AbgDPUUY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Apr 2020 16:20:24 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:37881 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728513AbgDPUUW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Apr 2020 16:20:22 -0400
-Received: (qmail 29376 invoked by uid 500); 16 Apr 2020 16:20:21 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 16 Apr 2020 16:20:21 -0400
-Date:   Thu, 16 Apr 2020 16:20:21 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Paul Zimmerman <pauldzim@gmail.com>
-cc:     Peter Chen <peter.chen@nxp.com>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: No disconnection event for suspended device at v5.6
-In-Reply-To: <8a6cd6f8-b3c0-ca7b-9e69-23c68ac80d9e@gmail.com>
-Message-ID: <Pine.LNX.4.44L0.2004161619300.20822-100000@netrider.rowland.org>
+        id S1727919AbgDPXfH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Apr 2020 19:35:07 -0400
+Received: from mail.dsns.gov.ua ([194.0.148.99]:37970 "EHLO mail.dsns.gov.ua"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725770AbgDPXfD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 Apr 2020 19:35:03 -0400
+X-Greylist: delayed 9287 seconds by postgrey-1.27 at vger.kernel.org; Thu, 16 Apr 2020 19:34:56 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mail.dsns.gov.ua (Postfix) with ESMTP id 6223A1EC85AF;
+        Thu, 16 Apr 2020 23:35:36 +0300 (EEST)
+Received: from mail.dsns.gov.ua ([127.0.0.1])
+        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id ekdCUR6pZ0Aa; Thu, 16 Apr 2020 23:35:36 +0300 (EEST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.dsns.gov.ua (Postfix) with ESMTP id 67C3E1EC85F9;
+        Thu, 16 Apr 2020 23:35:26 +0300 (EEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.dsns.gov.ua 67C3E1EC85F9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dsns.gov.ua;
+        s=1E60DAC0-2607-11E9-81E6-7A77C2B36653; t=1587069326;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=BFrHb0sdI6ttGZUrYrU3NgniYtd1aDAhnXXb2vKIb2B9styAswbm0NbzZRAHiMp0y
+         hUE3veWMbUD+qTP/VmiRFig+sJh7tgrjRSipmI8jEPDH4mLyVFQtPdyPojLkpu/SlT
+         y/CjSPHdIqozfsh/zyWU9aeO41yKuuO77HTVyT/eVGDUtLYGTijz0IeETvwB1Yur4I
+         5RegLOWC96rliENvAjVU5IoM4JfcadYa95Q959RRtGyCSnevHOMfGycVhDjkxX/p7G
+         0gUYzq9GdO73hW8YI3AV2m5dSWB1tPfsxP4FJUwoBTp88jIZZeY7uAiDenSeAUtBdj
+         PKl/BScyij7GQ==
+X-Virus-Scanned: amavisd-new at dsns.gov.ua
+Received: from mail.dsns.gov.ua ([127.0.0.1])
+        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id U4DcK3mdlYyf; Thu, 16 Apr 2020 23:35:26 +0300 (EEST)
+Received: from mail.dsns.gov.ua (localhost [127.0.0.1])
+        by mail.dsns.gov.ua (Postfix) with ESMTP id 9BAF81EC8118;
+        Thu, 16 Apr 2020 23:35:15 +0300 (EEST)
+Date:   Thu, 16 Apr 2020 23:35:15 +0300 (EEST)
+From:   Saleem Netanyahu <duchenko@dsns.gov.ua>
+Reply-To: Saleem Netanyahu <saleemnetu@gmail.com>
+Message-ID: <1255292802.718114.1587069315574.JavaMail.zimbra@dsns.gov.ua>
+Subject: Hey, how are u, can we talk?
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [45.82.223.36, 172.69.54.54]
+X-Mailer: Zimbra 8.8.15_GA_3918 (zclient/8.8.15_GA_3918)
+Thread-Index: oV9MZN6+Sh4gFPdsGziQ2IngcJhATw==
+Thread-Topic: Hey, how are u, can we talk?
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
-
-On Thu, 16 Apr 2020, Paul Zimmerman wrote:
-
-> On 4/16/20 7:34 AM, Alan Stern wrote:
-> > On Wed, 15 Apr 2020, Paul Zimmerman wrote:
-> > 
-> >> Hi Alan,
-> >>
-> >> On Wed, 15 Apr 2020 15:40:31 -0400 (EDT) Alan Stern <stern@rowland.harvard.edu> wrote:
-> > 
-> >>> Paul, I trust this new patch won't mess up your Bluetooth adapter.  It
-> >>> should still clear the hub->change_bits entry before the hub workqueue
-> >>> thread wakes up.
-> >>>
-> >>> Alan Stern
-> > 
-> >> Unfortunately, my testing on this is somewhat inconclusive. I updated
-> >> to the latest Linus kernel, then did about a half-dozen suspend/resume
-> >> cycles to verify it was still working. Then I applied the patch and
-> >> rebooted into the new kernel. At first I thought it was OK, but after
-> >> about 5 or 6 suspend/resume cycles, the bluetooth stopped working (the
-> >> desktop bluetooth manager in Linux Mint froze when I opened it). Another
-> >> suspend/resume cycle brought it back to life, but after a couple more
-> >> cycles it froze again.
-> > 
-> > That sounds different from your original bug report.  Didn't the
-> > adapter fail in a significantly larger fraction of suspends?
-> 
-> Yes it did.
-> 
-> >> But looking at the dmesg log, there were no errors concerning the
-> >> bluetooth adapter. With the original failure, it would show errors
-> >> before or during the firmware update of the bluetooth adapter, but
-> >> now, the firmware update seemed to complete OK. And to top it off,
-> >> after a reboot, I am no longer able to make it fail. I did more than
-> >> a dozen suspend/resume cycles and have not seen any further failures.
-> >>
-> >> So, make of that what you will :)
-> > 
-> > Overall, I guess we can call it a success.  Do you want to collect a
-> > usbmon trace to verify that the patch behaves as expected, or are you
-> > happy with the testing so far?
-> 
-> I doubt a usbmon trace would show us anything unless I could get the
-> bluetooth to fail again. And since I was the only one who saw the
-> original problem anyway, I think it's fine to proceed with this patch
-> as-is.
-
-Okay, then I'll add your Tested-by if you don't mind.
-
-Peter, have you tested the patch?
-
-Alan Stern
 
