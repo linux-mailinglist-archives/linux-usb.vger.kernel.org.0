@@ -2,69 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C08331AB858
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2020 08:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57AD61ABA04
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2020 09:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408432AbgDPGnt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Apr 2020 02:43:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52738 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2408168AbgDPGnp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 16 Apr 2020 02:43:45 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B4DA8206D6;
-        Thu, 16 Apr 2020 06:43:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587019423;
-        bh=BKmhwxbmr2z9YCdItTQJHwRjKGeTBBS+eQgot1INXhM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mWchGAC+vAFFSp6qh9NsLKsGlU90wq24zkjqWRuJQDRzI7cr9AxDmicO2eD+IzJ3c
-         sGCzNz3JCiuBvIVBeRdXO2UQKyfJ3SXnfZbVTf7z3X6+UWo1V7dQ9GHa/KBptAxeB3
-         icdyyi0gEO6PLAhNJ9+K2CaqqrQu1Y95AIUwfP44=
-Date:   Thu, 16 Apr 2020 08:43:41 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 2/3] kernel: better document the use_mm/unuse_mm API
- contract
-Message-ID: <20200416064341.GB300290@kroah.com>
-References: <20200416053158.586887-1-hch@lst.de>
- <20200416053158.586887-3-hch@lst.de>
+        id S2439349AbgDPHeq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Apr 2020 03:34:46 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:6231 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2438944AbgDPHep (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Apr 2020 03:34:45 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e980a870001>; Thu, 16 Apr 2020 00:34:31 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 16 Apr 2020 00:34:44 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 16 Apr 2020 00:34:44 -0700
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 16 Apr
+ 2020 07:34:44 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Thu, 16 Apr 2020 07:34:44 +0000
+Received: from nkristam-ubuntu.nvidia.com (Not Verified[10.19.67.128]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5e980a910000>; Thu, 16 Apr 2020 00:34:44 -0700
+From:   Nagarjuna Kristam <nkristam@nvidia.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <mark.rutland@arm.com>, <robh+dt@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        Nagarjuna Kristam <nkristam@nvidia.com>
+Subject: [PATCH V1 0/4] Tegra XUDC support on Tegra194 Soc
+Date:   Thu, 16 Apr 2020 13:04:16 +0530
+Message-ID: <1587022460-31988-1-git-send-email-nkristam@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200416053158.586887-3-hch@lst.de>
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1587022471; bh=WGWsXBGjVNAF9MTyr/8Av9p7t7MtwWUDSCVP9RaLjYU=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=Cvry6dAqsoE//M0k5t/Ig/f/O6aNpjTasH5/9RZxrnFQLm9Zb2qXn1LHK8VHzBT9U
+         hUlLfwRqhu7iGm17G70Yu6C8TP3StMEB+cMSbFsFFusG0VKLTl3jluSqhl0yFaK3k7
+         XneTv3btVWvmR8KAIdwhxwU+ezxHc8SvWncsVH4CTca0NysFXSPn8fovumLdEtcN4o
+         JI22c1TZOpJlMvCvg6wEIhXh0EurT7uJ9sUi7neh8EvHiBobsryQ3pUWO/rwCqfy3F
+         B2oL7ocn+ruL+28aSLXQXScvEzDH1IzWRvbCEJmUw+eIlg/oiMt8rsyBMAIm39z1Ea
+         SoLNJjhTg97iw==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 16, 2020 at 07:31:57AM +0200, Christoph Hellwig wrote:
-> Switch the function documentation to kerneldoc comments, and add
-> WARN_ON_ONCE asserts that the calling thread is a kernel thread and
-> does not have ->mm set (or has ->mm set in the case of unuse_mm).
-> 
-> Also give the functions a kthread_ prefix to better document the
-> use case.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Acked-by: Felix Kuehling <Felix.Kuehling@amd.com>
+This patch series adds support for XUSB Device Mode support on Tegra194 SoCs.
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org> [usb]
+This patchset is composed with:
+ - dt bindings of XUDC driver.
+ - dt changes to add xudc node on Tegra194 Soc.
+ - USB driver changes to tegra-xudc to add support on Tegra194 Soc. 
+
+Nagarjuna Kristam (4):
+  dt-bindings: usb: tegra-xudc: Add Tegra194 XUSB controller support
+  arm64: tegra: Add xudc node for Tegra194
+  usb: gadget: tegra-xudc: Add Tegra194 support
+  usb: gadget: tegra-xudc: add port_speed_quirk
+
+ .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml |   2 +
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi           |  18 +++
+ drivers/usb/gadget/udc/tegra-xudc.c                | 130 +++++++++++++++++++++
+ 3 files changed, 150 insertions(+)
+
+-- 
+2.7.4
+
