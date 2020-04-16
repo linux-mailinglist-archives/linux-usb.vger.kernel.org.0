@@ -2,247 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C161ABA11
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2020 09:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 771091ABAAA
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2020 09:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439411AbgDPHe6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Apr 2020 03:34:58 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:9968 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438944AbgDPHe4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Apr 2020 03:34:56 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e980a320000>; Thu, 16 Apr 2020 00:33:06 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Thu, 16 Apr 2020 00:34:56 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Thu, 16 Apr 2020 00:34:56 -0700
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 16 Apr
- 2020 07:34:56 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Thu, 16 Apr 2020 07:34:55 +0000
-Received: from nkristam-ubuntu.nvidia.com (Not Verified[10.19.67.128]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e980a9d0002>; Thu, 16 Apr 2020 00:34:55 -0700
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <mark.rutland@arm.com>, <robh+dt@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        Nagarjuna Kristam <nkristam@nvidia.com>
-Subject: [PATCH V1 4/4] usb: gadget: tegra-xudc: add port_speed_quirk
-Date:   Thu, 16 Apr 2020 13:04:20 +0530
-Message-ID: <1587022460-31988-5-git-send-email-nkristam@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1587022460-31988-1-git-send-email-nkristam@nvidia.com>
-References: <1587022460-31988-1-git-send-email-nkristam@nvidia.com>
-X-NVConfidentiality: public
+        id S2440328AbgDPH65 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Apr 2020 03:58:57 -0400
+Received: from mga01.intel.com ([192.55.52.88]:38670 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2440366AbgDPH6y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 Apr 2020 03:58:54 -0400
+IronPort-SDR: KufDS0qoycSLpxYeSX02oJeuq/05UguPMR15uK7B3fROR5ZZ0gwNgZzP5UAfFmXlmx0GFO/8tr
+ oVCHH3Y1Fq9Q==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2020 00:58:52 -0700
+IronPort-SDR: w9/CXsXqeQs4y0kuTpkpFpHncOx2vtCSdgQM3TEXXbw6vLs0demKZqBGV+XENtAmxW8gmLYELx
+ /9BfQ8FT1lIQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,390,1580803200"; 
+   d="scan'208";a="427744081"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga005.jf.intel.com with ESMTP; 16 Apr 2020 00:58:50 -0700
+Subject: Re: double-freed irq when suspending with Thinkpad Thunderbolt Dock
+ attached
+To:     Damien Riegel <damien.riegel@gmail.com>, linux-usb@vger.kernel.org,
+        linux-pci@vger.kernel.org
+References: <CAL4iiOe0NEMTRRQcUvy3-r8KXC3eFB7GozTGsNHKDiG6vmcKGA@mail.gmail.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <a7a935a2-3857-502e-5557-1fa8b2eae6fd@linux.intel.com>
+Date:   Thu, 16 Apr 2020 11:01:31 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1587022386; bh=naqEuQE4k8cFdiWBVAPEQm5vMjpwh+WbGHA3Ol+AaAk=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=opxz6HfZIJWYEIzeiI+X7Lf9binF1dK6DgrdR6jS/Sz7lBx8q+i/xCtnL1tBqy/Ap
-         GMB/TsL77Nk12pl2qFZ9mWQu1jLSemwa6h/yf3UVgO1yR7z/cubFoJFUAn2h9mze1U
-         r2QQUb6OaNFSH/mqE2Bo6cwyHS+K3yzuRbAU7PmHcbkGRuOS2IRzyeDlAVC6hU3KlE
-         6ARbenruqp8FkcrrmeHV0n2kn8cNGaaTYILhsiINxEWLxiOqVFCl4ZqyOp6RKM1h+T
-         Pe6tkFu5GjEBNZ4wMiUBHBEtOiZgfOdFeSs4yO7+k+iwhsAUASULu3vFgRJSllfo99
-         weKekPQt/qXeQ==
+In-Reply-To: <CAL4iiOe0NEMTRRQcUvy3-r8KXC3eFB7GozTGsNHKDiG6vmcKGA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add port_speed_quirk that modify below registers to limit/restore OTG
-port speed to GEN1/GEN2.
-SSPX_CORE_CNT56
-SSPX_CORE_CNT57
-SSPX_CORE_CNT65
-SSPX_CORE_CNT66
-SSPX_CORE_CNT67
-SSPX_CORE_CNT72
+On 9.4.2020 19.23, Damien Riegel wrote:
+> Hi,
+> 
+> 
+> I have a setup with a Thinkpad X1 Carbon Gen 6 with a Thinkpad
+> Thunderbolt 3 Dock attached to it. The issue is not exhibited when the
+> dock is not attached to the laptop.
+> 
+> Most of the time, it fails to resume from a suspend-to-disk. The system
+> hangs and logs are not flushed to disk so I don't have more details.
+> 
+> But sometimes (maybe 1 out of 20 times), it manages to resume and there
+> are double-freed irq errors, as shown in the following logs. As far as I
+> am concerned, the laptop is running fine on resume, but maybe this can
+> give a hint to where the issue causing the hang is.
+> 
+> I'm Ccing linux-usb and linux-pci as I couldn't tell which subsystem is
+> responsible.
+> 
+> 
+> Thanks,
+> Damien
 
-The basic idea is to make SCD intentionally fail, reduce SCD timeout and
-force device transit to TSEQ. Enable this flag to only Tegra194.
+xhci driver resume tries to reset and reinitialize everything in this case,
+shalting and resetting the host, and freeing irq and memory before
+reallocating everything.
+xhci driver resume doesn't notice the PCI device was already gone at this point,
+and will double free the irq.
 
-Based on work by WayneChang <waynec@nvidia.com>
+There is a patch in 5.7-rc1 that checks if xHC is accessible in resume, and should
+prevent the double free.
 
-Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
----
- drivers/usb/gadget/udc/tegra-xudc.c | 106 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 106 insertions(+)
+72ae194704da xhci: bail out early if driver can't accress host in resume
 
-diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
-index fb01117..63484f98 100644
---- a/drivers/usb/gadget/udc/tegra-xudc.c
-+++ b/drivers/usb/gadget/udc/tegra-xudc.c
-@@ -158,6 +158,30 @@
- #define  SSPX_CORE_CNT32_POLL_TBURST_MAX_MASK GENMASK(7, 0)
- #define  SSPX_CORE_CNT32_POLL_TBURST_MAX(x) ((x) & \
- 					SSPX_CORE_CNT32_POLL_TBURST_MAX_MASK)
-+#define SSPX_CORE_CNT56 0x6fc
-+#define  SSPX_CORE_CNT56_SCD_BIT0_TRPT_MAX_MASK GENMASK(19, 0)
-+#define  SSPX_CORE_CNT56_SCD_BIT0_TRPT_MAX(x) ((x) & \
-+				SSPX_CORE_CNT56_SCD_BIT0_TRPT_MAX_MASK)
-+#define SSPX_CORE_CNT57 0x700
-+#define  SSPX_CORE_CNT57_SCD_BIT1_TRPT_MAX_MASK GENMASK(19, 0)
-+#define  SSPX_CORE_CNT57_SCD_BIT1_TRPT_MAX(x) ((x) & \
-+				SSPX_CORE_CNT57_SCD_BIT1_TRPT_MAX_MASK)
-+#define SSPX_CORE_CNT65 0x720
-+#define  SSPX_CORE_CNT65_TX_SCD_END_TRPT_MID_MASK GENMASK(19, 0)
-+#define  SSPX_CORE_CNT65_TX_SCD_END_TRPT_MID(x) ((x) & \
-+				SSPX_CORE_CNT65_TX_SCD_END_TRPT_MID_MASK)
-+#define SSPX_CORE_CNT66 0x724
-+#define  SSPX_CORE_CNT66_TX_SCD_BIT0_TRPT_MID_MASK GENMASK(19, 0)
-+#define  SSPX_CORE_CNT66_TX_SCD_BIT0_TRPT_MID(x) ((x) & \
-+				SSPX_CORE_CNT66_TX_SCD_BIT0_TRPT_MID_MASK)
-+#define SSPX_CORE_CNT67 0x728
-+#define  SSPX_CORE_CNT67_TX_SCD_BIT1_TRPT_MID_MASK GENMASK(19, 0)
-+#define  SSPX_CORE_CNT67_TX_SCD_BIT1_TRPT_MID(x) ((x) & \
-+				SSPX_CORE_CNT67_TX_SCD_BIT1_TRPT_MID_MASK)
-+#define SSPX_CORE_CNT72 0x73c
-+#define  SSPX_CORE_CNT72_SCD_LFPS_TIMEOUT_MASK GENMASK(19, 0)
-+#define  SSPX_CORE_CNT72_SCD_LFPS_TIMEOUT(x) ((x) & \
-+				SSPX_CORE_CNT72_SCD_LFPS_TIMEOUT_MASK)
- #define SSPX_CORE_PADCTL4 0x750
- #define  SSPX_CORE_PADCTL4_RXDAT_VLD_TIMEOUT_U3_MASK GENMASK(19, 0)
- #define  SSPX_CORE_PADCTL4_RXDAT_VLD_TIMEOUT_U3(x) ((x) & \
-@@ -530,6 +554,7 @@ struct tegra_xudc_soc {
- 	bool invalid_seq_num;
- 	bool pls_quirk;
- 	bool port_reset_quirk;
-+	bool port_speed_quirk;
- 	bool has_ipfs;
- };
- 
-@@ -599,6 +624,78 @@ static inline void dump_trb(struct tegra_xudc *xudc, const char *type,
- 		trb->control);
- }
- 
-+static void tegra_xudc_limit_port_speed(struct tegra_xudc *xudc)
-+{
-+	u32 val;
-+
-+	/* limit port speed to gen 1 */
-+	val = xudc_readl(xudc, SSPX_CORE_CNT56);
-+	val &= ~(SSPX_CORE_CNT56_SCD_BIT0_TRPT_MAX_MASK);
-+	val |= SSPX_CORE_CNT56_SCD_BIT0_TRPT_MAX(0x260);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT56);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT57);
-+	val &= ~(SSPX_CORE_CNT57_SCD_BIT1_TRPT_MAX_MASK );
-+	val |= SSPX_CORE_CNT57_SCD_BIT1_TRPT_MAX(0x6D6);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT57);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT65);
-+	val &= ~(SSPX_CORE_CNT65_TX_SCD_END_TRPT_MID_MASK);
-+	val |= SSPX_CORE_CNT65_TX_SCD_END_TRPT_MID(0x4B0);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT66);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT66);
-+	val &= ~(SSPX_CORE_CNT66_TX_SCD_BIT0_TRPT_MID_MASK);
-+	val |= SSPX_CORE_CNT66_TX_SCD_BIT0_TRPT_MID(0x4B0);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT66);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT67);
-+	val &= ~(SSPX_CORE_CNT67_TX_SCD_BIT1_TRPT_MID_MASK);
-+	val |= SSPX_CORE_CNT67_TX_SCD_BIT1_TRPT_MID(0x4B0);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT67);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT72);
-+	val &= ~(SSPX_CORE_CNT72_SCD_LFPS_TIMEOUT_MASK);
-+	val |= SSPX_CORE_CNT72_SCD_LFPS_TIMEOUT(0x10);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT72);
-+}
-+
-+static void tegra_xudc_restore_port_speed(struct tegra_xudc *xudc)
-+{
-+	u32 val;
-+
-+	/* restore port speed to gen2 */
-+	val = xudc_readl(xudc, SSPX_CORE_CNT56);
-+	val &= ~(SSPX_CORE_CNT56_SCD_BIT0_TRPT_MAX_MASK);
-+	val |= SSPX_CORE_CNT56_SCD_BIT0_TRPT_MAX(0x438);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT56);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT57);
-+	val &= ~(SSPX_CORE_CNT57_SCD_BIT1_TRPT_MAX_MASK );
-+	val |= SSPX_CORE_CNT57_SCD_BIT1_TRPT_MAX(0x528);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT57);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT65);
-+	val &= ~(SSPX_CORE_CNT65_TX_SCD_END_TRPT_MID_MASK);
-+	val |= SSPX_CORE_CNT65_TX_SCD_END_TRPT_MID(0xE10);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT66);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT66);
-+	val &= ~(SSPX_CORE_CNT66_TX_SCD_BIT0_TRPT_MID_MASK);
-+	val |= SSPX_CORE_CNT66_TX_SCD_BIT0_TRPT_MID(0x348);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT66);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT67);
-+	val &= ~(SSPX_CORE_CNT67_TX_SCD_BIT1_TRPT_MID_MASK);
-+	val |= SSPX_CORE_CNT67_TX_SCD_BIT1_TRPT_MID(0x5a0);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT67);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT72);
-+	val &= ~(SSPX_CORE_CNT72_SCD_LFPS_TIMEOUT_MASK);
-+	val |= SSPX_CORE_CNT72_SCD_LFPS_TIMEOUT(0x1c21);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT72);
-+}
-+
- static void tegra_xudc_device_mode_on(struct tegra_xudc *xudc)
- {
- 	int err;
-@@ -631,6 +728,9 @@ static void tegra_xudc_device_mode_off(struct tegra_xudc *xudc)
- 
- 	reinit_completion(&xudc->disconnect_complete);
- 
-+	if (xudc->soc->port_speed_quirk)
-+		tegra_xudc_restore_port_speed(xudc);
-+
- 	phy_set_mode_ext(xudc->curr_utmi_phy, PHY_MODE_USB_OTG, USB_ROLE_NONE);
- 
- 	pls = (xudc_readl(xudc, PORTSC) & PORTSC_PLS_MASK) >>
-@@ -3274,6 +3374,9 @@ static void tegra_xudc_device_params_init(struct tegra_xudc *xudc)
- 		xudc_writel(xudc, val, BLCG);
- 	}
- 
-+	if (xudc->soc->port_speed_quirk)
-+		tegra_xudc_limit_port_speed(xudc);
-+
- 	/* Set a reasonable U3 exit timer value. */
- 	val = xudc_readl(xudc, SSPX_CORE_PADCTL4);
- 	val &= ~(SSPX_CORE_PADCTL4_RXDAT_VLD_TIMEOUT_U3_MASK);
-@@ -3513,6 +3616,7 @@ static struct tegra_xudc_soc tegra210_xudc_soc_data = {
- 	.invalid_seq_num = true,
- 	.pls_quirk = true,
- 	.port_reset_quirk = true,
-+	.port_speed_quirk = false,
- 	.has_ipfs = true,
- };
- 
-@@ -3526,6 +3630,7 @@ static struct tegra_xudc_soc tegra186_xudc_soc_data = {
- 	.invalid_seq_num = false,
- 	.pls_quirk = false,
- 	.port_reset_quirk = false,
-+	.port_speed_quirk = false,
- 	.has_ipfs = false,
- };
- 
-@@ -3539,6 +3644,7 @@ static struct tegra_xudc_soc tegra194_xudc_soc_data = {
- 	.invalid_seq_num = false,
- 	.pls_quirk = false,
- 	.port_reset_quirk = false,
-+	.port_speed_quirk = true,
- 	.has_ipfs = false,
- };
- 
--- 
-2.7.4
+Does it work for you?
 
+-Mathias
