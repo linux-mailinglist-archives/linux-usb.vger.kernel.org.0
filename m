@@ -2,125 +2,203 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 771091ABAAA
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2020 09:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75A0F1ABB05
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2020 10:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440328AbgDPH65 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Apr 2020 03:58:57 -0400
-Received: from mga01.intel.com ([192.55.52.88]:38670 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2440366AbgDPH6y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 16 Apr 2020 03:58:54 -0400
-IronPort-SDR: KufDS0qoycSLpxYeSX02oJeuq/05UguPMR15uK7B3fROR5ZZ0gwNgZzP5UAfFmXlmx0GFO/8tr
- oVCHH3Y1Fq9Q==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2020 00:58:52 -0700
-IronPort-SDR: w9/CXsXqeQs4y0kuTpkpFpHncOx2vtCSdgQM3TEXXbw6vLs0demKZqBGV+XENtAmxW8gmLYELx
- /9BfQ8FT1lIQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,390,1580803200"; 
-   d="scan'208";a="427744081"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga005.jf.intel.com with ESMTP; 16 Apr 2020 00:58:50 -0700
-Subject: Re: double-freed irq when suspending with Thinkpad Thunderbolt Dock
- attached
-To:     Damien Riegel <damien.riegel@gmail.com>, linux-usb@vger.kernel.org,
-        linux-pci@vger.kernel.org
-References: <CAL4iiOe0NEMTRRQcUvy3-r8KXC3eFB7GozTGsNHKDiG6vmcKGA@mail.gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <a7a935a2-3857-502e-5557-1fa8b2eae6fd@linux.intel.com>
-Date:   Thu, 16 Apr 2020 11:01:31 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2441321AbgDPIUC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Apr 2020 04:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2441314AbgDPITo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Apr 2020 04:19:44 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40876C061A0C;
+        Thu, 16 Apr 2020 01:19:40 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id x23so4921156lfq.1;
+        Thu, 16 Apr 2020 01:19:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=W9MHtlxfWV5esFp8UKV1MC7UI06aVGBVOqmz4l0oTUE=;
+        b=ekIM/u0NoCzuOjB4d6swF8ik0SYVawZsVAjeK6ZOTzHDqRKmxUGGpbAQRb69YI57/7
+         YEqsZN10/mLKAn6BtkUdM1WK8dVWGAQdDpaQuO543EzMkkzJvviObNWiJ8/Ha/8HBkoy
+         ZAENdBwsq9LFQ5Ptrb6TNeh0GMtga64a8+JGMRNFlajv7ScuXbjNvTJStjTztaBsiaaZ
+         vChOMOsZys+sxL/SZpaBOCM58aOMNiPqHxYssLjPFvaVEhPC9dq9cIOv8j/6IrWjUQH1
+         P/qe5mJeR21JKRCD+xrzqOx5+hImvOv1sy2s2dtInXfyAh73EN9mdq1j4lbK+oKI4a9p
+         OLGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=W9MHtlxfWV5esFp8UKV1MC7UI06aVGBVOqmz4l0oTUE=;
+        b=FxN9dw2mN7kgHf4h4QAslvVb9IinEeMXCfT3GoadnVZzHlE6C7e/nJBmvrqdSbV+sA
+         R6I3FFFzeoaPDTsol0/6CoJ0XaP+DZrbVDGjlTOzV0toYsmtbeGrOmIckX8y/cVc4SY9
+         80bMDLynONX1q/t01hR+ETX1snbGWqRPEkaMihu4W7NG13RcJGmUJQgXjWtHlyn1xDcs
+         kT4U2n3o0RBD01FflK81A75wK6aEAIqKZo3U6f4fUQvJm2d3u6RfrVEABCScRXvsiqKE
+         YLm4mqJLrgvnoMBfPHcdRp7ST4yHpteSsS093bin8VNT4u+NwC1MSEjnbP+61VAAPoTN
+         /jFA==
+X-Gm-Message-State: AGi0PubhyRio16Is1WvlSECSpLBQp8uIBOjtFvX8zZzYNY/CNYAvBq3b
+        OtoI8yOdOuPqFnaZEUMTUxn8FvVBaU4=
+X-Google-Smtp-Source: APiQypLK+ZBdTA6YWUvfPtEFGDAvT6JMxGw/IpftO7xZ2urY+CCasg81Mye5Zos0vqS/yhGnfr3f8A==
+X-Received: by 2002:ac2:5192:: with SMTP id u18mr5335277lfi.114.1587025178168;
+        Thu, 16 Apr 2020 01:19:38 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id o25sm14233941lfg.41.2020.04.16.01.19.36
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 16 Apr 2020 01:19:37 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     Josh Gao <jmgao@google.com>, YongQin Liu <yongqin.liu@linaro.org>,
+        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
+        Yang Fei <fei.yang@intel.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: More dwc3 gadget issues with adb
+In-Reply-To: <CALAqxLW2R4d=Zm=TKbFprN-uYrerL1oCYsVC3VedEKtW0gCsyA@mail.gmail.com>
+References: <CALAqxLW2R4d=Zm=TKbFprN-uYrerL1oCYsVC3VedEKtW0gCsyA@mail.gmail.com>
+Date:   Thu, 16 Apr 2020 11:19:27 +0300
+Message-ID: <877dyfsv00.fsf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAL4iiOe0NEMTRRQcUvy3-r8KXC3eFB7GozTGsNHKDiG6vmcKGA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 9.4.2020 19.23, Damien Riegel wrote:
-> Hi,
-> 
-> 
-> I have a setup with a Thinkpad X1 Carbon Gen 6 with a Thinkpad
-> Thunderbolt 3 Dock attached to it. The issue is not exhibited when the
-> dock is not attached to the laptop.
-> 
-> Most of the time, it fails to resume from a suspend-to-disk. The system
-> hangs and logs are not flushed to disk so I don't have more details.
-> 
-> But sometimes (maybe 1 out of 20 times), it manages to resume and there
-> are double-freed irq errors, as shown in the following logs. As far as I
-> am concerned, the laptop is running fine on resume, but maybe this can
-> give a hint to where the issue causing the hang is.
-> 
-> I'm Ccing linux-usb and linux-pci as I couldn't tell which subsystem is
-> responsible.
-> 
-> 
-> Thanks,
-> Damien
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-xhci driver resume tries to reset and reinitialize everything in this case,
-shalting and resetting the host, and freeing irq and memory before
-reallocating everything.
-xhci driver resume doesn't notice the PCI device was already gone at this point,
-and will double free the irq.
 
-There is a patch in 5.7-rc1 that checks if xHC is accessible in resume, and should
-prevent the double free.
+Hi,
 
-72ae194704da xhci: bail out early if driver can't accress host in resume
+John Stultz <john.stultz@linaro.org> writes:
+> Hey Felipe,
+>   Last week or so, a change[1] in AOSP to adbd seemingly uncovered
+> another issue with dwc3 gadget scatter-gather support on HiKey960.
+>
+> Interestingly it doesn't seem to affect the Dragonboard 845c, which
+> uses the same dwc3 driver and has had its own issues in the past.
+>
+> The behavior is the same as we saw last time around with both devices.
+> After booting the device, running "adb logcat -d" (or really any adb
+> command that transfers more than a trivial amount of data) on the host
+> will result in the adb output seeming to stall. Any further adb
+> invocations to the device will hang indefinitely.
+>
+> I've captured trace events for before the change (works), after the
+> change (broken), and after the change with the sg_enabled flag turned
+> off (which works around the problem).
+>
+> Let me know if there is anything else useful for me to share.
 
-Does it work for you?
+First the obvious questions: Which kernel version is this? What does
+"before" and "after" refer to in our traces? What are first working and
+first failing versions? Can you run git bisect?
 
--Mathias
+One thing I noticed is that we're missing a giveback on ep1out. Here's a
+working case:
+
+   UsbFfs-worker-580   [002] d..1    66.704886: dwc3_alloc_request: ep1out:=
+ req 0000000011c55648 length 0/0 zsI =3D=3D> 0
+   UsbFfs-worker-580   [002] d..2    66.704889: dwc3_ep_queue: ep1out: req =
+0000000011c55648 length 0/16384 zsI =3D=3D> -115
+   UsbFfs-worker-580   [002] d..2    66.704892: dwc3_prepare_trb: ep1out: t=
+rb 000000003559c11c (E27:D7) buf 000000008843b000 size 16384 ctrl 00000819 =
+(HlcS:sC:normal)
+   UsbFfs-worker-580   [002] d..2    66.704897: dwc3_gadget_ep_cmd: ep1out:=
+ cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
+: Successful
+     irq/65-dwc3-522   [000] d..1    66.705053: dwc3_event: event (00006084=
+): ep1out: Transfer In Progress [0] (SIm)
+     irq/65-dwc3-522   [000] d..1    66.705054: dwc3_complete_trb: ep1out: =
+trb 000000008c350fb3 (E27:D8) buf 0000000089d6b000 size 16360 ctrl 00000818=
+ (hlcS:sC:normal)
+     irq/65-dwc3-522   [000] d..1    66.705058: dwc3_gadget_giveback: ep1ou=
+t: req 0000000001b9ed3f length 24/16384 zsI =3D=3D> 0
+   kworker/u16:2-260   [001] ....    66.705097: dwc3_free_request: ep1out: =
+req 0000000001b9ed3f length 24/16384 zsI =3D=3D> 0
+
+and the failure point:
+
+   UsbFfs-worker-580   [002] d..1    66.705129: dwc3_alloc_request: ep1out:=
+ req 0000000067a34de4 length 0/0 zsI =3D=3D> 0
+   UsbFfs-worker-580   [002] d..2    66.705131: dwc3_ep_queue: ep1out: req =
+0000000067a34de4 length 0/16384 zsI =3D=3D> -115
+   UsbFfs-worker-580   [002] d..2    66.705134: dwc3_prepare_trb: ep1out: t=
+rb 00000000f3db4076 (E28:D8) buf 000000008843f000 size 16384 ctrl 00000819 =
+(HlcS:sC:normal)
+   UsbFfs-worker-580   [002] d..2    66.705141: dwc3_gadget_ep_cmd: ep1out:=
+ cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
+: Successful
+     irq/65-dwc3-522   [000] d..1    66.705309: dwc3_event: event (00006084=
+): ep1out: Transfer In Progress [0] (SIm)
+     irq/65-dwc3-522   [000] d..1    66.705310: dwc3_complete_trb: ep1out: =
+trb 0000000092deef41 (E28:D9) buf 00000000ba8f1000 size 4072 ctrl 0000001c =
+(hlCS:sc:normal)
+     irq/65-dwc3-522   [000] d..1    66.705318: dwc3_gadget_ep_cmd: ep1out:=
+ cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
+: Successful
+     irq/65-dwc3-522   [000] d..1    66.705323: dwc3_gadget_ep_cmd: ep1out:=
+ cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
+: Successful
+     irq/65-dwc3-522   [000] d..1    66.705329: dwc3_gadget_ep_cmd: ep1out:=
+ cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
+: Successful
+     irq/65-dwc3-522   [000] d..1    66.705334: dwc3_gadget_ep_cmd: ep1out:=
+ cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
+: Successful
+     irq/65-dwc3-522   [000] d..1    66.705339: dwc3_gadget_ep_cmd: ep1out:=
+ cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
+: Successful
+     irq/65-dwc3-522   [000] d..1    66.705344: dwc3_gadget_ep_cmd: ep1out:=
+ cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
+: Successful
+     irq/65-dwc3-522   [000] d..1    66.705349: dwc3_gadget_ep_cmd: ep1out:=
+ cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
+: Successful
+     irq/65-dwc3-522   [000] d..1    66.705354: dwc3_gadget_ep_cmd: ep1out:=
+ cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> status=
+: Successful
+
+One interesting thing is that TRB addresses are "odd". I can't find a
+proper lifetime for these TRBs. Do you have IOMMU enabled? Can you run
+without it? For example, nowhere in the log can I find the place where
+trb 0000000092deef41 was first enqueue. I'm assuming the log to be
+ordered, which means that trb is the same as 00000000f3db4076. But why
+are the addresses different?
+
+Another weird thing is that even though we CHN bit being set in
+0000000092deef41, we don't see where the second trb (the one its chained
+to) was prepared. It seems like it was *never* prepared, what gives?
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6YFQ8ACgkQzL64meEa
+mQaIqxAA2vxUnm+Omf8K/N5jvZbIQHW5HcTdVXcznXApCA73acgUGZ6H599/XB2V
+LXwkb//ezD8QtY84tC12cDEXSqh2WrwLKyXef8Zhr8aeJ8YPyWIYr50Jx6qzAS2e
+PU9KZFtmU3SXhlImihGeWM1eYV0ojhYOpCNUNEWqQ3Hwlmcp5RzINUPCSqYNUVdz
+rLZsRllXS/68OEkQarvCRc87b/dJok3k2czcETy+6R69weLeHkJ1gUr+MRVoOUf7
+boLSjJX8nrb1xweRmSqD27gXmPw+5yAm+OD++KSM9aVDh67i0VHq1pF/X11ULVxt
+03hb6VcEkjUzFznfJrRD7ye7EuXiUwSxJwX+i6bRA0bBU83SoX7Kwb3i8gI3x9vT
+l3HvhaL9fUMEnacupHYLzKtHxRHFG0GyBBnbP6KGOgBQutbwQzX/IYWR8mdl4AmO
+myTiwgMCgQR54IhchmmrnCBeVvWTA9cyov983sjwhlkZt72+Y/TuLJGU73qWCamb
+babTgDZo1FRaRN2SawTJw/qpLGqGM9fOuCX8FW8qTlyG/rPyg0FRgjLMuO3v0F2X
+D0hbkSrlpKkCa8i4vdEEWIF9fw4BaYsyXCUCJIUEP3QOpMkIfNC+j8WRAcIdUsDR
+GWEK8eaPF4mJ07GBpPt8stsZeTgE1ADys75u/184GrMm5zkKUto=
+=mTHT
+-----END PGP SIGNATURE-----
+--=-=-=--
