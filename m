@@ -2,232 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BEF51ABC29
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2020 11:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB9C1ABDC6
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Apr 2020 12:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503455AbgDPJFm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Apr 2020 05:05:42 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:2340 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2503247AbgDPJFZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 16 Apr 2020 05:05:25 -0400
-Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id EFE111020100B4DE5976;
-        Thu, 16 Apr 2020 17:05:02 +0800 (CST)
-Received: from localhost.localdomain (10.67.165.24) by
- DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
- 14.3.487.0; Thu, 16 Apr 2020 17:04:53 +0800
-From:   Yicong Yang <yangyicong@hisilicon.com>
-To:     <helgaas@kernel.org>, <linux-pci@vger.kernel.org>
-CC:     <kvalo@codeaurora.org>, <andreas.noever@gmail.com>,
-        <rjw@rjwysocki.net>, <linux-wireless@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linuxarm@huawei.com>,
-        <yangyicong@hisilicon.com>
-Subject: [PATCH] PCI: Use pci_pcie_find_root_port() to get root port
-Date:   Thu, 16 Apr 2020 17:04:53 +0800
-Message-ID: <1587027893-56628-1-git-send-email-yangyicong@hisilicon.com>
-X-Mailer: git-send-email 2.8.1
+        id S2504804AbgDPKTN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Apr 2020 06:19:13 -0400
+Received: from mail-out.m-online.net ([212.18.0.9]:34772 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2504682AbgDPKSj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Apr 2020 06:18:39 -0400
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 492wCy0Vjvz1qrf8;
+        Thu, 16 Apr 2020 12:18:22 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 492wCx74Rzz1qql0;
+        Thu, 16 Apr 2020 12:18:21 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id DPywE5ePCED0; Thu, 16 Apr 2020 12:18:20 +0200 (CEST)
+X-Auth-Info: O3pNTXW607WpWSosjX/1HYCfQQStNtFwDIZuogAnkLk=
+Received: from [IPv6:::1] (unknown [195.140.253.167])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Thu, 16 Apr 2020 12:18:20 +0200 (CEST)
+Subject: Re: [PATCH] [RFC] usb: dwc2: Run the core connect in dwc2_hcd_init()
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Cc:     Amelie Delaunay <amelie.delaunay@st.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+References: <20200413143107.181669-1-marex@denx.de>
+ <31b679d3-d3e4-0220-ec4b-58eada4d21d4@synopsys.com>
+ <b20fb33d-7fdd-5785-8f72-74900eb4d328@denx.de>
+ <9906c2da-8a20-eae7-d69e-6947085edf84@synopsys.com>
+ <b64f41ac-2d70-55a3-ab6a-77383cd463eb@denx.de>
+ <d1b36da4-b506-2f86-f5ad-95bf3aac4485@synopsys.com>
+ <c35e95cf-7f72-4a49-a0e1-efc0701d613d@denx.de>
+ <867a776d-1e2c-2207-4387-072d2a8423fb@synopsys.com>
+ <a6d681c5-d5fa-51d8-a320-6f6e9844c93a@denx.de>
+ <4b4478aa-85bd-c05c-b5d0-e11dc35eb623@synopsys.com>
+From:   Marek Vasut <marex@denx.de>
+Message-ID: <6ea2270d-19a4-7e8b-42fb-37a4a9d81e1f@denx.de>
+Date:   Thu, 16 Apr 2020 11:46:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.165.24]
-X-CFilter-Loop: Reflected
+In-Reply-To: <4b4478aa-85bd-c05c-b5d0-e11dc35eb623@synopsys.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Previously we use pcie_find_root_port() to get root port from a pcie
-device, use pci_find_pcie_root_port() to get root port from a pci
-device, which increase the complexity.
+On 4/15/20 5:10 PM, Minas Harutyunyan wrote:
+> Hi,
 
-Unify the two functions and use pci_pcie_find_root_port() to get root
-port from both pci device and pcie device. Then there is not need to
-distinguish the type of the device.
+Hi,
 
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-Acked-by: Kalle Valo <kvalo@codeaurora.org> // for wireless
----
-This Patch convert previous RFC patch to formal one. And add
-Kalle's Acked-by.
+> On 4/15/2020 6:55 PM, Marek Vasut wrote:
+>> On 4/15/20 10:37 AM, Minas Harutyunyan wrote:
+>>> Hi,
+>>>
+>>> On 4/14/2020 4:18 PM, Marek Vasut wrote:
+>>>> On 4/14/20 9:14 AM, Minas Harutyunyan wrote:
+>>>
+>>>>
+>>>>> 2. debug log
+>>>>
+>>>> What kind of debug log ?
+>>>>
+>>> Drivers debug log starting from dwc2 loading and connector connecting to
+>>> device, where issue seen.
+>>
+>> How do I enable the one you need ?
+>>
+> To enable debug prints from dwc2 use 'make menuconfig':
+> 
+>   Symbol: USB_DWC2_DEBUG [=y]
 
-Link:https://lore.kernel.org/linux-pci/1586262717-23566-1-git-send-email-yangyicong@hisilicon.com/
+Oh, this one, OK. There you go.
 
- drivers/net/wireless/intel/iwlwifi/pcie/trans.c |  2 +-
- drivers/pci/pci-acpi.c                          |  4 ++--
- drivers/pci/pci.c                               | 24 ------------------------
- drivers/pci/pcie/aer_inject.c                   |  2 +-
- drivers/pci/probe.c                             |  2 +-
- drivers/pci/quirks.c                            |  2 +-
- drivers/thunderbolt/switch.c                    |  4 ++--
- include/linux/pci.h                             | 14 +++++++-------
- 8 files changed, 15 insertions(+), 39 deletions(-)
+Note that there is no further output when I plug in the USB microB cable
+from a PC.
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/pcie/trans.c b/drivers/net/wireless/intel/iwlwifi/pcie/trans.c
-index 38d8fe2..556cb8c 100644
---- a/drivers/net/wireless/intel/iwlwifi/pcie/trans.c
-+++ b/drivers/net/wireless/intel/iwlwifi/pcie/trans.c
-@@ -158,7 +158,7 @@ void iwl_trans_pcie_dump_regs(struct iwl_trans *trans)
-
- 	/* Print root port AER registers */
- 	pos = 0;
--	pdev = pcie_find_root_port(pdev);
-+	pdev = pci_pcie_find_root_port(pdev);
- 	if (pdev)
- 		pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_ERR);
- 	if (pos) {
-diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-index 0c02d50..9316533 100644
---- a/drivers/pci/pci-acpi.c
-+++ b/drivers/pci/pci-acpi.c
-@@ -246,7 +246,7 @@ static acpi_status decode_type1_hpx_record(union acpi_object *record,
-
- static bool pcie_root_rcb_set(struct pci_dev *dev)
- {
--	struct pci_dev *rp = pcie_find_root_port(dev);
-+	struct pci_dev *rp = pci_pcie_find_root_port(dev);
- 	u16 lnkctl;
-
- 	if (!rp)
-@@ -948,7 +948,7 @@ static bool acpi_pci_bridge_d3(struct pci_dev *dev)
- 	 * Look for a special _DSD property for the root port and if it
- 	 * is set we know the hierarchy behind it supports D3 just fine.
- 	 */
--	root = pci_find_pcie_root_port(dev);
-+	root = pci_pcie_find_root_port(dev);
- 	if (!root)
- 		return false;
-
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index d828ca8..fc5e7b6 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -695,30 +695,6 @@ struct resource *pci_find_resource(struct pci_dev *dev, struct resource *res)
- EXPORT_SYMBOL(pci_find_resource);
-
- /**
-- * pci_find_pcie_root_port - return PCIe Root Port
-- * @dev: PCI device to query
-- *
-- * Traverse up the parent chain and return the PCIe Root Port PCI Device
-- * for a given PCI Device.
-- */
--struct pci_dev *pci_find_pcie_root_port(struct pci_dev *dev)
--{
--	struct pci_dev *bridge, *highest_pcie_bridge = dev;
--
--	bridge = pci_upstream_bridge(dev);
--	while (bridge && pci_is_pcie(bridge)) {
--		highest_pcie_bridge = bridge;
--		bridge = pci_upstream_bridge(bridge);
--	}
--
--	if (pci_pcie_type(highest_pcie_bridge) != PCI_EXP_TYPE_ROOT_PORT)
--		return NULL;
--
--	return highest_pcie_bridge;
--}
--EXPORT_SYMBOL(pci_find_pcie_root_port);
--
--/**
-  * pci_wait_for_pending - wait for @mask bit(s) to clear in status word @pos
-  * @dev: the PCI device to operate on
-  * @pos: config space offset of status word
-diff --git a/drivers/pci/pcie/aer_inject.c b/drivers/pci/pcie/aer_inject.c
-index 6988fe7..c3bfc1b5 100644
---- a/drivers/pci/pcie/aer_inject.c
-+++ b/drivers/pci/pcie/aer_inject.c
-@@ -332,7 +332,7 @@ static int aer_inject(struct aer_error_inj *einj)
- 	dev = pci_get_domain_bus_and_slot(einj->domain, einj->bus, devfn);
- 	if (!dev)
- 		return -ENODEV;
--	rpdev = pcie_find_root_port(dev);
-+	rpdev = pci_pcie_find_root_port(dev);
- 	if (!rpdev) {
- 		pci_err(dev, "Root port not found\n");
- 		ret = -ENODEV;
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index 512cb43..50f7733 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -2015,7 +2015,7 @@ static void pci_configure_relaxed_ordering(struct pci_dev *dev)
- 	 * For now, we only deal with Relaxed Ordering issues with Root
- 	 * Ports. Peer-to-Peer DMA is another can of worms.
- 	 */
--	root = pci_find_pcie_root_port(dev);
-+	root = pci_pcie_find_root_port(dev);
- 	if (!root)
- 		return;
-
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 29f473e..ac62675 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -4253,7 +4253,7 @@ DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_AMD, 0x1a02, PCI_CLASS_NOT_DEFINED,
-  */
- static void quirk_disable_root_port_attributes(struct pci_dev *pdev)
- {
--	struct pci_dev *root_port = pci_find_pcie_root_port(pdev);
-+	struct pci_dev *root_port = pci_pcie_find_root_port(pdev);
-
- 	if (!root_port) {
- 		pci_warn(pdev, "PCIe Completion erratum may cause device errors\n");
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index a2ce990..90844c1 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -263,7 +263,7 @@ static void nvm_authenticate_start_dma_port(struct tb_switch *sw)
- 	 * itself. To be on the safe side keep the root port in D0 during
- 	 * the whole upgrade process.
- 	 */
--	root_port = pci_find_pcie_root_port(sw->tb->nhi->pdev);
-+	root_port = pci_pcie_find_root_port(sw->tb->nhi->pdev);
- 	if (root_port)
- 		pm_runtime_get_noresume(&root_port->dev);
- }
-@@ -272,7 +272,7 @@ static void nvm_authenticate_complete_dma_port(struct tb_switch *sw)
- {
- 	struct pci_dev *root_port;
-
--	root_port = pci_find_pcie_root_port(sw->tb->nhi->pdev);
-+	root_port = pci_pcie_find_root_port(sw->tb->nhi->pdev);
- 	if (root_port)
- 		pm_runtime_put(&root_port->dev);
- }
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 3840a54..b341ca30 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -1011,7 +1011,6 @@ void pci_bus_add_device(struct pci_dev *dev);
- void pci_read_bridge_bases(struct pci_bus *child);
- struct resource *pci_find_parent_resource(const struct pci_dev *dev,
- 					  struct resource *res);
--struct pci_dev *pci_find_pcie_root_port(struct pci_dev *dev);
- u8 pci_swizzle_interrupt_pin(const struct pci_dev *dev, u8 pin);
- int pci_get_interrupt_pin(struct pci_dev *dev, struct pci_dev **bridge);
- u8 pci_common_swizzle(struct pci_dev *dev, u8 *pinp);
-@@ -2124,15 +2123,16 @@ static inline int pci_pcie_type(const struct pci_dev *dev)
- 	return (pcie_caps_reg(dev) & PCI_EXP_FLAGS_TYPE) >> 4;
- }
-
--static inline struct pci_dev *pcie_find_root_port(struct pci_dev *dev)
-+/**
-+ * pci_pcie_find_root_port - Get the PCIe root port device
-+ * @dev: PCI device
-+ */
-+static inline struct pci_dev *pci_pcie_find_root_port(struct pci_dev *dev)
- {
--	while (1) {
--		if (!pci_is_pcie(dev))
--			break;
-+	dev = pci_physfn(dev);
-+	while (dev) {
- 		if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
- 			return dev;
--		if (!dev->bus->self)
--			break;
- 		dev = dev->bus->self;
- 	}
- 	return NULL;
---
-2.8.1
-
+ dwc2 49000000.usb-otg: supply vusb_d not found, using dummy regulator
+ dwc2 49000000.usb-otg: supply vusb_a not found, using dummy regulator
+ dwc2 49000000.usb-otg: EPs: 9, dedicated fifos, 952 entries in SPRAM
+ dwc2 49000000.usb-otg: bound driver zero
+ dwc2 49000000.usb-otg: DCFG=0x08100000, DCTL=0x00000002, DIEPMSK=00000000
+ dwc2 49000000.usb-otg: GAHBCFG=0x00000000, GHWCFG1=0x00000000
+ dwc2 49000000.usb-otg: GRXFSIZ=0x00000400, GNPTXFSIZ=0x04000400
+ dwc2 49000000.usb-otg: DPTx[1] FSize=1024, StAddr=0x00000800
+ dwc2 49000000.usb-otg: DPTx[2] FSize=1024, StAddr=0x00000c00
+ dwc2 49000000.usb-otg: DPTx[3] FSize=1024, StAddr=0x00001000
+ dwc2 49000000.usb-otg: DPTx[4] FSize=1024, StAddr=0x00001400
+ dwc2 49000000.usb-otg: DPTx[5] FSize=1024, StAddr=0x00001800
+ dwc2 49000000.usb-otg: DPTx[6] FSize=1024, StAddr=0x00001c00
+ dwc2 49000000.usb-otg: DPTx[7] FSize=1024, StAddr=0x00002000
+ dwc2 49000000.usb-otg: DPTx[8] FSize=1024, StAddr=0x00002400
+ dwc2 49000000.usb-otg: ep0-in: EPCTL=0x00008800, SIZ=0x00000000,
+DMA=0x79daaf9c
+ dwc2 49000000.usb-otg: ep0-out: EPCTL=0x00008000, SIZ=0x00000000,
+DMA=0xa167db6c
+ dwc2 49000000.usb-otg: ep1-in: EPCTL=0x00001000, SIZ=0x00000000,
+DMA=0x88ad1397
+ dwc2 49000000.usb-otg: ep1-out: EPCTL=0x00000000, SIZ=0x00000000,
+DMA=0x6c5b357c
+ dwc2 49000000.usb-otg: ep2-in: EPCTL=0x00001800, SIZ=0x00000000,
+DMA=0xb4639367
+ dwc2 49000000.usb-otg: ep2-out: EPCTL=0x00000000, SIZ=0x00000000,
+DMA=0x503148e2
+ dwc2 49000000.usb-otg: ep3-in: EPCTL=0x00002000, SIZ=0x00000000,
+DMA=0x7e275f85
+ dwc2 49000000.usb-otg: ep3-out: EPCTL=0x00000000, SIZ=0x00000000,
+DMA=0x9474575a
+ dwc2 49000000.usb-otg: ep4-in: EPCTL=0x00002800, SIZ=0x00000000,
+DMA=0xbe22b68d
+ dwc2 49000000.usb-otg: ep4-out: EPCTL=0x00000000, SIZ=0x00000000,
+DMA=0xb89ae0de
+ dwc2 49000000.usb-otg: ep5-in: EPCTL=0x00003000, SIZ=0x00000000,
+DMA=0xa607065a
+ dwc2 49000000.usb-otg: ep5-out: EPCTL=0x00000000, SIZ=0x00000000,
+DMA=0xa8bc774f
+ dwc2 49000000.usb-otg: ep6-in: EPCTL=0x00003800, SIZ=0x00000000,
+DMA=0xbabafaf5
+ dwc2 49000000.usb-otg: ep6-out: EPCTL=0x00000000, SIZ=0x00000000,
+DMA=0x58ddeb04
+ dwc2 49000000.usb-otg: ep7-in: EPCTL=0x00004000, SIZ=0x00000000,
+DMA=0x8b6b00f3
+ dwc2 49000000.usb-otg: ep7-out: EPCTL=0x00000000, SIZ=0x00000000,
+DMA=0x87baf0d9
+ dwc2 49000000.usb-otg: ep8-in: EPCTL=0x00004800, SIZ=0x00000000,
+DMA=0xa2c3caca
+ dwc2 49000000.usb-otg: ep8-out: EPCTL=0x00000000, SIZ=0x00000000,
+DMA=0x67b6afe2
+ dwc2 49000000.usb-otg: DVBUSDIS=0x000017d7, DVBUSPULSE=000005b8
+ dwc2 49000000.usb-otg: DWC OTG Controller
+ dwc2 49000000.usb-otg: new USB bus registered, assigned bus number 1
+ dwc2 49000000.usb-otg: irq 45, io mem 0x49000000
+ dwc2 49000000.usb-otg: Mode Mismatch Interrupt: currently in Device mode
