@@ -2,65 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBE81AD61B
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2020 08:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F12901AD6EC
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2020 09:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727934AbgDQGbH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Apr 2020 02:31:07 -0400
-Received: from verein.lst.de ([213.95.11.211]:55867 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726065AbgDQGbH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 Apr 2020 02:31:07 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id CB09368BEB; Fri, 17 Apr 2020 08:31:02 +0200 (CEST)
-Date:   Fri, 17 Apr 2020 08:31:02 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: improve use_mm / unuse_mm v2
-Message-ID: <20200417063102.GA18556@lst.de>
-References: <20200416053158.586887-1-hch@lst.de> <20200417031744.GI5820@bombadil.infradead.org>
+        id S1728687AbgDQHGj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Apr 2020 03:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728338AbgDQHGi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Apr 2020 03:06:38 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14561C061A0C;
+        Fri, 17 Apr 2020 00:06:37 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id u15so939609ljd.3;
+        Fri, 17 Apr 2020 00:06:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=fGQzwyFoGGaL1dX6Nzoo0EvKYXbaPj6p3weXm+OGjx0=;
+        b=UysaFs+AQ31lBJ73Ap2WhLwj5xPh7rdmRYMteYX6CIUEuHHrrLio690vky9pOabo2b
+         UWD+feZBp4FxVReNa33Aq6ktZkhBZNpYdFFmHaKfrnezsDzKJRH8YyHilehYP9xAkXdZ
+         B3CPMdvWYVDn8H9EeNg7ipZx0FNmbI2YcVlgAC7i7nEP/U4yk2KPGKwwn3uDEGNXt0PF
+         TyV6riNyww8/vpOxoQ1pjZkpLV+3vJ//DRNukpUSWcbY5DShyvxw2epPdb319Y2tmtOB
+         MMMIMY+mN/yelabBg4a6CRrMiwX5WwYbkq6y7FG8qODk8V4olPLRxDboY91uDiWwj02X
+         3flQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=fGQzwyFoGGaL1dX6Nzoo0EvKYXbaPj6p3weXm+OGjx0=;
+        b=HlO3qQQ8id5z4gE43Q2xyOIRDAQ3xGG+Rkr90JocpkAsSk1mJpgfwFzgqr5GziFLYr
+         IDb3Vlr6Sl5gZWEyqMwEvb+ca0ZqRUkhfptPqAOAf6mrzIBjRRR1MMfY7UrAsIFTOa4z
+         39JC0GTmB4lezmnW59zaQw2KzVNdOiiy0EKnyr4ZKNztlxcBdg9wyof5S8zVivbcwCYz
+         2jd4LW4VVVhdofommYnRACaajCPqcLopQB2dWFvw2vmZpYbBFDIDRXd3BajGwcGPXVz+
+         +ud4bjp75oTaxOS1C/ZGFw/kORDXIiYb1pGoAftnvjTvGqmFuZBpjxV0x3fjXgMUKQUW
+         MrHg==
+X-Gm-Message-State: AGi0PuZYA8pwV3BRPWSom38dHuRzLYEkV44OuIv9ldAAXUYC3ZvWV6rB
+        WR0Za8PnjIKvrwnUFfKTjFqD4SkTLU3RnA==
+X-Google-Smtp-Source: APiQypK5/vPrxxRj4RPnWtOoi8a9uCdTop+h90ccE6pgqILqkyYYO9m7+RdjEgXDSjpEhKfwpvGNsg==
+X-Received: by 2002:a05:651c:3ce:: with SMTP id f14mr1236697ljp.98.1587107195235;
+        Fri, 17 Apr 2020 00:06:35 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id v9sm15591097ljj.31.2020.04.17.00.06.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 17 Apr 2020 00:06:34 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>
+Cc:     John Youn <John.Youn@synopsys.com>,
+        "stable\@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] usb: dwc3: gadget: Fix request completion check
+In-Reply-To: <5cdcb770-fb6a-14fe-e652-857234c9f69c@synopsys.com>
+References: <bed19f474892bb74be92b762c6727a6a7d0106e4.1585643834.git.thinhn@synopsys.com> <5cdcb770-fb6a-14fe-e652-857234c9f69c@synopsys.com>
+Date:   Fri, 17 Apr 2020 10:06:24 +0300
+Message-ID: <87k12ed21b.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200417031744.GI5820@bombadil.infradead.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 16, 2020 at 08:17:44PM -0700, Matthew Wilcox wrote:
-> On Thu, Apr 16, 2020 at 07:31:55AM +0200, Christoph Hellwig wrote:
-> > this series improves the use_mm / unuse_mm interface by better
-> > documenting the assumptions, and my taking the set_fs manipulations
-> > spread over the callers into the core API.
-> 
-> I appreciate all the work you're doing here.
-> 
-> Do you have plans to introduce a better-named API than set_fs() / get_fs()?
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Eventually.  For now I just plan to kill as many as possible.
 
-> Also, having set_fs() return the previous value of 'fs' would simplify
-> a lot of the callers.
+Hi Thinh,
 
-One thing that should go relatively soon is the need to store the
-previous value because we'll have so few callers left that we know we can't
-recurse. We should be able to get there around 5.9 / 5.10.
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+> Hi Felipe,
+>
+> Thinh Nguyen wrote:
+>> A request may not be completed because not all the TRBs are prepared for
+>> it. This happens when we run out of available TRBs. When some TRBs are
+>> completed, the driver needs to prepare the rest of the TRBs for the
+>> request. The check dwc3_gadget_ep_request_completed() shouldn't be
+>> checking the amount of data received but rather the number of pending
+>> TRBs. Revise this request completion check.
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: e0c42ce590fe ("usb: dwc3: gadget: simplify IOC handling")
+>> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+>> ---
+>> Changes in v2:
+>>   - Add Cc: stable tag
+>>
+>>   drivers/usb/dwc3/gadget.c | 12 ++----------
+>>   1 file changed, 2 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index 1a4fc03742aa..c45853b14cff 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -2550,14 +2550,7 @@ static int dwc3_gadget_ep_reclaim_trb_linear(stru=
+ct dwc3_ep *dep,
+>>=20=20=20
+>>   static bool dwc3_gadget_ep_request_completed(struct dwc3_request *req)
+>>   {
+>> -	/*
+>> -	 * For OUT direction, host may send less than the setup
+>> -	 * length. Return true for all OUT requests.
+>> -	 */
+>> -	if (!req->direction)
+>> -		return true;
+>> -
+>> -	return req->request.actual =3D=3D req->request.length;
+>> +	return req->num_pending_sgs =3D=3D 0;
+>>   }
+>>=20=20=20
+>>   static int dwc3_gadget_ep_cleanup_completed_request(struct dwc3_ep *de=
+p,
+>> @@ -2581,8 +2574,7 @@ static int dwc3_gadget_ep_cleanup_completed_reques=
+t(struct dwc3_ep *dep,
+>>=20=20=20
+>>   	req->request.actual =3D req->request.length - req->remaining;
+>>=20=20=20
+>> -	if (!dwc3_gadget_ep_request_completed(req) ||
+>> -			req->num_pending_sgs) {
+>> +	if (!dwc3_gadget_ep_request_completed(req)) {
+>>   		__dwc3_gadget_kick_transfer(dep);
+>>   		goto out;
+>>   	}
+>
+> Since you'll be picking this up for the rc cycle for your fix patches,=20
+> should I split this series to resend and wait for this patch to be=20
+> merged first before I resend the patch 2/2?
+> Let me know how you'd like to proceed.
+
+That's okay. Usually it's better to have the series split, but since
+it's only two patches, I can manage :-) I'll just leave patch 2 unread
+:-)
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6ZVXIACgkQzL64meEa
+mQZQKRAAxdoO+6RUfZJyQqS5ZzF/466fG1t53GS9Ps98u6M3aJuUVYtpJnNz6LAU
+lr/i7s8OCQVQEnNWMSYUHUpsDvQPyf42RCooaJbstcaXrWglW1FmY5nRF9j8JPeV
+AjhANXL5TnEeVNkKpbdCzhRzByk9GaozzXi1Fz3icEnorBWX0xq0Z702UAAaGNte
+7QBMosSIGCMr3b+cqWo/jnGRjqaxVRjiEB/heguCkZHG/8Pkjpa6Cx5lrMntGGgS
+LHslgIe1PemhFfA5N6Q7Wm3m6E+Gw+yudpxlKZRqR1UCGBX6jYPl5WR/bcD2fdCA
+eYIT/SK1iGf0Cy+KzvtsVvt+1b1mEpzGzS/jfdtRP7i4M2Pgaq/WOUwVziQFkaY+
+MX2IFRqgnNCutixEvgkL3K5r0Ge9ZZSXf3WW6/5bofmTtMS4bLM8evR7fnjLYx8f
+dOQ/hE9Zg1GCMfhtBh/G7E1anNd4d68Hzoe+g2xRp42TckyaQtsYK8L7B/OGKk+Q
+2e+WIdvPTyKHYkK8XIaalqEAL7x+7gBbMUQHKXTqq6NCYcH5Eb5flnyFa/ByI9CQ
+kwZnUbNgKGqdJ1i9OqFLTVO1gHcQ+pcjbkKo9QZihr5wKQto9bWlQxfw6C4gi7Nd
+szoktu6RYNNzYWqEhMOReG+AzRSi5//bVb1O6cJYmQbTM7hK8F8=
+=RGrp
+-----END PGP SIGNATURE-----
+--=-=-=--
