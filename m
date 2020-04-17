@@ -2,75 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7192C1AE561
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2020 21:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7071AE5AB
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2020 21:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728116AbgDQTB4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Apr 2020 15:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725960AbgDQTBz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Apr 2020 15:01:55 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6DEC061A0C;
-        Fri, 17 Apr 2020 12:01:55 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id d16so2263061edq.7;
-        Fri, 17 Apr 2020 12:01:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ws0lGObjtWkfbXmBqtfEqFJnV5cJRhTx4fqD0Q8cnBs=;
-        b=nhSCvAIn9SOUp/QSQE0a0stljfg8bCGxS/WVOKNAq32tSji2T/MlLN6N5hKSkGs8Q1
-         1Hj1P4OBFNbPEuexW2ofGFBJfn2JCZo/h/oBQtj3R+49YApA8xLc9FcENfylm4uZsihr
-         PrN3wtI2fyzkxaICZKRlp0Q6qiVeoAMwvDPPmqTmKJpPBpHL9Wlb8FAhu4tTuWNXihox
-         i6BZIRxCvdlNTKi6P6++kC1qTTbz2pJsm8GwDRMi3IFnC6psIAObSJOyRv8SOy/9LDea
-         kVO0ulyl92+e3ra0I4rZpAXxTtOE5sSFn94sL9qAMs9BHRmLpMgIGprNpDuBiIo2aWcr
-         GtsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ws0lGObjtWkfbXmBqtfEqFJnV5cJRhTx4fqD0Q8cnBs=;
-        b=DeBDyJ1j5c+uddKUXViG6wxB3TSHkF0zo0oegZYpvhKuD+gd4PN3R/q+tSAUjCiRrZ
-         qMihFK9rcoyMgF3u0uYmeumo2rdKxV1Zn8CQ8nHCOAXYEr3rEuj9jO5UM6vq/Z8x0v2n
-         YscbK6zm3l/tiL0WsJHUqhq1azqIwyN+rzi9vrGY9GsCYVqGtJcwAT28xHMxGKaoFpWx
-         wqt+Vmb/W4tEhLKvtys3bFU7h7aeEa8F+b2zSXBLSVS0JQEWRTec67sPQj5g+dberjXm
-         dPy+UZAsXYkMu/hKZ6yK30yGA8mfamjGh5Li0FqF50igw+JlKDywx1ngZefIWxMWUKWm
-         IilQ==
-X-Gm-Message-State: AGi0PuZRPsFghET5JY3nsWRxFrDE/dH4wO2NPHkI1NZm80SL6wgpbaEV
-        PoKGvbCNRcIiMHfhyb++3JR1p49i7YKVUPIvjWo=
-X-Google-Smtp-Source: APiQypKxFRcocN12xEBF5koGWzrxYBcKMvJXbVGzd+MQqeyCeALK+IsccNlNdyjEYO6sxS47F8FsDBlkB2FlBJzQWwM=
-X-Received: by 2002:a05:6402:1496:: with SMTP id e22mr4449267edv.301.1587150114192;
- Fri, 17 Apr 2020 12:01:54 -0700 (PDT)
+        id S1730521AbgDQTPe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Apr 2020 15:15:34 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:47181 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1730069AbgDQTPd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Apr 2020 15:15:33 -0400
+Received: (qmail 26691 invoked by uid 500); 17 Apr 2020 15:15:32 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 17 Apr 2020 15:15:32 -0400
+Date:   Fri, 17 Apr 2020 15:15:32 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     syzbot <syzbot+7bf5a7b0f0a1f9446f4c@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
+        <ingrassia@epigenesys.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
+Subject: Re: KASAN: use-after-free Read in usbhid_close (3)
+In-Reply-To: <00000000000002c98f05a31a949a@google.com>
+Message-ID: <Pine.LNX.4.44L0.2004171505170.25043-100000@netrider.rowland.org>
 MIME-Version: 1.0
-References: <20200416121910.12723-1-narmstrong@baylibre.com> <20200416121910.12723-4-narmstrong@baylibre.com>
-In-Reply-To: <20200416121910.12723-4-narmstrong@baylibre.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Fri, 17 Apr 2020 21:01:43 +0200
-Message-ID: <CAFBinCCPZCNsj=dA3_fzrPqGCrpRzeJ7OPGErFvUeKW=iW-r9g@mail.gmail.com>
-Subject: Re: [PATCH v3 3/8] usb: dwc3: meson-g12a: add support for GXL and GXM SoCs
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     kishon@ti.com, balbi@kernel.org, khilman@baylibre.com,
-        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 16, 2020 at 2:19 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
->
-> In order to add support for the Amlogic GXL/GXM USB Glue, this adds
-> the corresponding :
-super nit-pick: if you have to re-send this for whatever reason, then
-please add "new compatible strings with" before "the corresponding"
+On Sun, 12 Apr 2020, syzbot wrote:
 
-> - PHY names
-> - clock names
-> - USB2 PHY init and mode set
-> - regmap setup
->
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> syzbot has found a reproducer for the following crash on:
+> 
+> HEAD commit:    0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14453a8be00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
+> dashboard link: https://syzkaller.appspot.com/bug?extid=7bf5a7b0f0a1f9446f4c
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=140c644fe00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=163fb28be00000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+7bf5a7b0f0a1f9446f4c@syzkaller.appspotmail.com
+> 
+> ==================================================================
+> BUG: KASAN: use-after-free in atomic_read include/asm-generic/atomic-instrumented.h:26 [inline]
+> BUG: KASAN: use-after-free in usb_kill_urb drivers/usb/core/urb.c:696 [inline]
+> BUG: KASAN: use-after-free in usb_kill_urb+0x24b/0x2c0 drivers/usb/core/urb.c:688
+> Read of size 4 at addr ffff8881c6d6e210 by task systemd-udevd/1137
+
+Details removed.  Given how hard this is to reproduce, it definitely 
+seems like some sort of race.  But it's very hard to tell what is 
+racing with what.
+
+Let's start off easy and get a little extra information at the point 
+where the bug occurs.  As far as I can tell, usbhid_close() is always 
+supposed to be called before usbhid_stop().
+
+Alan Stern
+
+#syz test: https://github.com/google/kasan.git 0fa84af8
+
+Index: usb-devel/drivers/hid/usbhid/hid-core.c
+===================================================================
+--- usb-devel.orig/drivers/hid/usbhid/hid-core.c
++++ usb-devel/drivers/hid/usbhid/hid-core.c
+@@ -747,6 +747,13 @@ static void usbhid_close(struct hid_devi
+ 		return;
+ 
+ 	hid_cancel_delayed_stuff(usbhid);
++	if (usbhid->alan_alloc == 0)
++		dev_WARN(&usbhid->intf->dev, "Close after dealloc (open %d)\n",
++				usbhid->alan_open);
++	if (usbhid->alan_open != 1)
++		dev_WARN(&usbhid->intf->dev, "Close while open = %d\n",
++				usbhid->alan_open);
++	--usbhid->alan_open;
+ 	usb_kill_urb(usbhid->urbin);
+ 	usbhid->intf->needs_remote_wakeup = 0;
+ }
+@@ -1120,6 +1127,7 @@ static int usbhid_start(struct hid_devic
+ 				continue;
+ 			if (!(usbhid->urbin = usb_alloc_urb(0, GFP_KERNEL)))
+ 				goto fail;
++			++usbhid->alan_alloc;
+ 			pipe = usb_rcvintpipe(dev, endpoint->bEndpointAddress);
+ 			usb_fill_int_urb(usbhid->urbin, dev, pipe, usbhid->inbuf, insize,
+ 					 hid_irq_in, hid, interval);
+@@ -1177,6 +1185,7 @@ static int usbhid_start(struct hid_devic
+ 		usbhid_set_leds(hid);
+ 		device_set_wakeup_enable(&dev->dev, 1);
+ 	}
++	++usbhid->alan_open;
+ 	return 0;
+ 
+ fail:
+@@ -1197,6 +1206,9 @@ static void usbhid_stop(struct hid_devic
+ 	if (WARN_ON(!usbhid))
+ 		return;
+ 
++	if (usbhid->alan_open > 0)
++		dev_WARN(&usbhid->intf->dev, "Stop while open (alloc = %d)\n",
++				usbhid->alan_alloc);
+ 	if (hid->quirks & HID_QUIRK_ALWAYS_POLL) {
+ 		clear_bit(HID_IN_POLLING, &usbhid->iofl);
+ 		usbhid->intf->needs_remote_wakeup = 0;
+@@ -1206,6 +1218,7 @@ static void usbhid_stop(struct hid_devic
+ 	spin_lock_irq(&usbhid->lock);	/* Sync with error and led handlers */
+ 	set_bit(HID_DISCONNECTED, &usbhid->iofl);
+ 	spin_unlock_irq(&usbhid->lock);
++	--usbhid->alan_alloc;
+ 	usb_kill_urb(usbhid->urbin);
+ 	usb_kill_urb(usbhid->urbout);
+ 	usb_kill_urb(usbhid->urbctrl);
+Index: usb-devel/drivers/hid/usbhid/usbhid.h
+===================================================================
+--- usb-devel.orig/drivers/hid/usbhid/usbhid.h
++++ usb-devel/drivers/hid/usbhid/usbhid.h
+@@ -87,6 +87,9 @@ struct usbhid_device {
+ 	unsigned int retry_delay;                                       /* Delay length in ms */
+ 	struct work_struct reset_work;                                  /* Task context for resets */
+ 	wait_queue_head_t wait;						/* For sleeping */
++
++	int alan_alloc;
++	int alan_open;
+ };
+ 
+ #define	hid_to_usb_dev(hid_dev) \
+
