@@ -2,28 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7071AE5AB
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2020 21:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7131AE671
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2020 22:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730521AbgDQTPe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Apr 2020 15:15:34 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:47181 "HELO
+        id S1730751AbgDQUGF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Apr 2020 16:06:05 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:52665 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1730069AbgDQTPd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Apr 2020 15:15:33 -0400
-Received: (qmail 26691 invoked by uid 500); 17 Apr 2020 15:15:32 -0400
+        with SMTP id S1730573AbgDQUGF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Apr 2020 16:06:05 -0400
+Received: (qmail 31793 invoked by uid 500); 17 Apr 2020 16:06:04 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 17 Apr 2020 15:15:32 -0400
-Date:   Fri, 17 Apr 2020 15:15:32 -0400 (EDT)
+  by localhost with SMTP; 17 Apr 2020 16:06:04 -0400
+Date:   Fri, 17 Apr 2020 16:06:04 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@netrider.rowland.org
-To:     syzbot <syzbot+7bf5a7b0f0a1f9446f4c@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
-        <ingrassia@epigenesys.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
-Subject: Re: KASAN: use-after-free Read in usbhid_close (3)
-In-Reply-To: <00000000000002c98f05a31a949a@google.com>
-Message-ID: <Pine.LNX.4.44L0.2004171505170.25043-100000@netrider.rowland.org>
+To:     Cyril Roelandt <tipecaml@gmail.com>
+cc:     USB list <linux-usb@vger.kernel.org>, <sellis@redhat.com>,
+        <pachoramos@gmail.com>, <labbott@fedoraproject.org>,
+        <gregkh@linuxfoundation.org>, <javhera@gmx.com>
+Subject: Re: [BUG] Regression in Linux 5.4.17 for JMicron JMS566 enclosure
+In-Reply-To: <20200417183203.GA1889@Susan>
+Message-ID: <Pine.LNX.4.44L0.2004171539350.25043-100000@netrider.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -31,104 +31,97 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 12 Apr 2020, syzbot wrote:
+On Fri, 17 Apr 2020, Cyril Roelandt wrote:
 
-> syzbot has found a reproducer for the following crash on:
-> 
-> HEAD commit:    0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14453a8be00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
-> dashboard link: https://syzkaller.appspot.com/bug?extid=7bf5a7b0f0a1f9446f4c
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=140c644fe00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=163fb28be00000
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+7bf5a7b0f0a1f9446f4c@syzkaller.appspotmail.com
-> 
-> ==================================================================
-> BUG: KASAN: use-after-free in atomic_read include/asm-generic/atomic-instrumented.h:26 [inline]
-> BUG: KASAN: use-after-free in usb_kill_urb drivers/usb/core/urb.c:696 [inline]
-> BUG: KASAN: use-after-free in usb_kill_urb+0x24b/0x2c0 drivers/usb/core/urb.c:688
-> Read of size 4 at addr ffff8881c6d6e210 by task systemd-udevd/1137
+> On 2020-04-15 21:21, Alan Stern wrote:
 
-Details removed.  Given how hard this is to reproduce, it definitely 
-seems like some sort of race.  But it's very hard to tell what is 
-racing with what.
+> > > I do not really mind not being able to use uas, however I would like to
+> > > be able to mount my partitions using usb-storage.
+> > 
+> > It's entirely possible that the blacklisting is not necessary any more.  
+> > After all, it was added four and a half years ago; the kernel has
+> > improved since then.  I guess you're not in a position to test this,
+> > but maybe Steve Ellis or Takeo Nakayama is...?
+> > 
+> > Does 5.3 work if you add a similar blacklist entry?
+> 
+> I cloned Linus' tree, and cherry-picked
+> bc3bdb12bbb3492067c8719011576370e959a2e6 on top of v5.3, rebuilt the
+> kernel and rebooted: I had the exact same issue.
+> 
+> > 
+> > Can you collect usbmon traces showing what happens with both uas and
+> > usb-storage?  Perhaps different sequences of commands get sent to the
+> > drive with the two drivers.
+> 
+> Here it is:
 
-Let's start off easy and get a little extra information at the point 
-where the bug occurs.  As far as I can tell, usbhid_close() is always 
-supposed to be called before usbhid_stop().
+Two things.  First, you started the usbmon traces _after_ plugging in
+the drive.  As a result the traces do not contain a complete record of
+all the transfers between the computer and the drive; it's possible
+that something in the missing portions is responsible for your problem.
+For example, why does your uas log include a line ("[sdb] 4096-byte 
+physical blocks") that is missing in the usb-storage log?
+
+Second, the usbmon traces do show exactly where the problem appears.  
+Let's start with the preceding command, which is a READ(10).  With uas:
+
+ffff9d62594efe40 1213006464 S Bo:002:01 -115 32 = 01000001 00000000 00000000 00000000 28003a04 08000000 08000000 00000000
+--------------------------------------------------------------------------------------^^^^^^^^^^^^^^^^^^^^^^
+ffff9d62594efe40 1213006480 C Bo:002:01 0 32 >
+ffff9d62594efb40 1213006651 C Bi:002:03 0 4096 = c03b3998 00000004 00000000 00001000 00008000 00000001 0000c685 00000000
+ffff9d62594ef240 1213006663 C Bi:002:02 0 16 = 03000001 00000000 00000000 00000000
+
+This is a little difficult to follow, but I have marked the portion
+which contains the actual 10-byte SCSI command.  It transfers 4096
+bytes of data to the computer, as shown in the second-to-last line
+(only the first 32 bytes are saved in the trace).
+
+The same thing happens with usb-storage:
+
+ffff8c08b51be3c0 3314212 S Bo:012:02 -115 31 = 55534243 84000000 00100000 80000a28 003a0408 00000008 00000000 000000
+--------------------------------------------------------------------------------^^^^^^^^^^^^^^^^^^^^^^^
+ffff8c08b51be3c0 3314233 C Bo:012:02 0 31 >
+ffff8c0a8a278180 3314252 S Bi:012:01 -115 4096 <
+ffff8c0a8a278180 3314323 C Bi:012:01 0 4096 = c03b3998 00000004 00000000 00001000 00008000 00000001 0000c685 00000000
+ffff8c08b51be3c0 3314334 S Bi:012:01 -115 13 <
+ffff8c08b51be3c0 3314362 C Bi:012:01 0 13 = 55534253 84000000 00000000 00
+
+Again, I have marked the actual command.  You can see that it matches 
+exactly, as does the data sent back by the drive.
+
+The next command is a WRITE(10).  The uas version:
+
+ffff9d62594ef840 1213008271 S Bo:002:04 -115 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff9d62594efa80 1213008273 S Bo:002:01 -115 32 = 01000001 00000000 00000000 00000000 2a080000 08000000 08000000 00000000
+--------------------------------------------------------------------------------------^^^^^^^^^^^^^^^^^^^^^^
+ffff9d62594efa80 1213008295 C Bo:002:01 0 32 >
+ffff9d62594ef840 1213008550 C Bo:002:04 0 4096 >
+ffff9d62594efc00 1213008589 C Bi:002:02 0 16 = 03000001 00000000 00000000 00000000
+
+The first 32 bytes of the data being written are all 0, shown in the 
+first line.  The same command with usb-storage:
+
+ffff8c08b51be3c0 3318170 S Bo:012:02 -115 31 = 55534243 85000000 00100000 00000a2a 08000008 00000008 00000000 000000
+--------------------------------------------------------------------------------^^^^^^^^^^^^^^^^^^^^^^^
+ffff8c08b51be3c0 3318184 C Bo:012:02 0 31 >
+ffff8c089903c180 3318189 S Bo:012:02 -115 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff8c089903c180 3318233 C Bo:012:02 0 4096 >
+ffff8c08b51be3c0 3318239 S Bi:012:01 -115 13 <
+ffff8c08b51be3c0 3318262 C Bi:012:01 0 13 = 55534253 85000000 00100000 01
+
+The 01 at the end of the last line is a status indicator; it says that
+the command failed.  The following command (not shown here) gets more
+detailed status from the drive; you've already seen that information in
+your logs (Invalid Request, Invalid field in cdb).
+
+Of course, this makes no sense because the drive had no problem
+understanding the exact same command when it was sent by uas.
+
+At this point, all I can say is that something about the combination of
+the enclosure and the drive works with the UAS transport but not with
+the USB Mass-Storage transport.  As far as we can see from the usbmon 
+traces, the kernel isn't doing anything wrong.
 
 Alan Stern
-
-#syz test: https://github.com/google/kasan.git 0fa84af8
-
-Index: usb-devel/drivers/hid/usbhid/hid-core.c
-===================================================================
---- usb-devel.orig/drivers/hid/usbhid/hid-core.c
-+++ usb-devel/drivers/hid/usbhid/hid-core.c
-@@ -747,6 +747,13 @@ static void usbhid_close(struct hid_devi
- 		return;
- 
- 	hid_cancel_delayed_stuff(usbhid);
-+	if (usbhid->alan_alloc == 0)
-+		dev_WARN(&usbhid->intf->dev, "Close after dealloc (open %d)\n",
-+				usbhid->alan_open);
-+	if (usbhid->alan_open != 1)
-+		dev_WARN(&usbhid->intf->dev, "Close while open = %d\n",
-+				usbhid->alan_open);
-+	--usbhid->alan_open;
- 	usb_kill_urb(usbhid->urbin);
- 	usbhid->intf->needs_remote_wakeup = 0;
- }
-@@ -1120,6 +1127,7 @@ static int usbhid_start(struct hid_devic
- 				continue;
- 			if (!(usbhid->urbin = usb_alloc_urb(0, GFP_KERNEL)))
- 				goto fail;
-+			++usbhid->alan_alloc;
- 			pipe = usb_rcvintpipe(dev, endpoint->bEndpointAddress);
- 			usb_fill_int_urb(usbhid->urbin, dev, pipe, usbhid->inbuf, insize,
- 					 hid_irq_in, hid, interval);
-@@ -1177,6 +1185,7 @@ static int usbhid_start(struct hid_devic
- 		usbhid_set_leds(hid);
- 		device_set_wakeup_enable(&dev->dev, 1);
- 	}
-+	++usbhid->alan_open;
- 	return 0;
- 
- fail:
-@@ -1197,6 +1206,9 @@ static void usbhid_stop(struct hid_devic
- 	if (WARN_ON(!usbhid))
- 		return;
- 
-+	if (usbhid->alan_open > 0)
-+		dev_WARN(&usbhid->intf->dev, "Stop while open (alloc = %d)\n",
-+				usbhid->alan_alloc);
- 	if (hid->quirks & HID_QUIRK_ALWAYS_POLL) {
- 		clear_bit(HID_IN_POLLING, &usbhid->iofl);
- 		usbhid->intf->needs_remote_wakeup = 0;
-@@ -1206,6 +1218,7 @@ static void usbhid_stop(struct hid_devic
- 	spin_lock_irq(&usbhid->lock);	/* Sync with error and led handlers */
- 	set_bit(HID_DISCONNECTED, &usbhid->iofl);
- 	spin_unlock_irq(&usbhid->lock);
-+	--usbhid->alan_alloc;
- 	usb_kill_urb(usbhid->urbin);
- 	usb_kill_urb(usbhid->urbout);
- 	usb_kill_urb(usbhid->urbctrl);
-Index: usb-devel/drivers/hid/usbhid/usbhid.h
-===================================================================
---- usb-devel.orig/drivers/hid/usbhid/usbhid.h
-+++ usb-devel/drivers/hid/usbhid/usbhid.h
-@@ -87,6 +87,9 @@ struct usbhid_device {
- 	unsigned int retry_delay;                                       /* Delay length in ms */
- 	struct work_struct reset_work;                                  /* Task context for resets */
- 	wait_queue_head_t wait;						/* For sleeping */
-+
-+	int alan_alloc;
-+	int alan_open;
- };
- 
- #define	hid_to_usb_dev(hid_dev) \
 
