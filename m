@@ -2,89 +2,400 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 330CD1AE3DE
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2020 19:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4081AE4C5
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2020 20:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730000AbgDQRe5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 17 Apr 2020 13:34:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42650 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728458AbgDQRe5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 Apr 2020 13:34:57 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 207327] New: Hang when reading encrypted DVD
-Date:   Fri, 17 Apr 2020 17:34:56 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: horsley1953@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression
-Message-ID: <bug-207327-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726659AbgDQScK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Apr 2020 14:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726123AbgDQScJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Apr 2020 14:32:09 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C258C061A0C
+        for <linux-usb@vger.kernel.org>; Fri, 17 Apr 2020 11:32:09 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id x18so4198421wrq.2
+        for <linux-usb@vger.kernel.org>; Fri, 17 Apr 2020 11:32:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6tF/cePfE9Hr9qhsKHK2h8giUd32vKn5Q5xyxEpihck=;
+        b=oICfyXZb+jRCfZlh+nPlDl6qAPYsdfv1+RGc1hF9DteFY0SODpxB1E0dtLVs7SbYnr
+         THhHvWAiTc5F7KLXGpYkGCqafw55LNLbLjAUr6GND2sjnmdJ3BWwFuYri2qr2dux2DOO
+         cIFXxdVuWqO0POnbHyIm72FRf1aeM8pndwH0Hz/yuAQ7u2yOWhDNTqwlZI1qjW3BSB5d
+         W/fGFXEmVlCSI98WbKVQd8OtEb6CFijnmuMMX6L4IFYGXYIqlctKMUZBkhBJRiMioznj
+         uhJuo7pSosBLdysOw1oPGhDyOJkVSFem6ABIqwhDPlqUM4RkstifJJ9hIBYOJ+voBVGw
+         kV1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6tF/cePfE9Hr9qhsKHK2h8giUd32vKn5Q5xyxEpihck=;
+        b=Gh/gsXGqR9vnm+anNOooI/iXnLT30suorSKyRsUAvtIej6dYsXe9ZSK2+4FfrQah8p
+         +o3GMuYa+JHV9hFp/YHrPcyQyyluAmx2RpZ2JpFh+OeckQJMKgNAB970cbB4C32F5BK2
+         5CTUrRBOYBYNpgRs3i2uSk4bQk3U9ih53xxtcX7gclIiSZ2QSB1wzftWxVASxJThzFIM
+         AzgW93lDxyyDdWiDiG5xafQlk7MLQuy8ZC/OwngFZLc265+iOXxBNkwhGaeT7htxV0dD
+         GafVl2yR+j1NGsw07iSH8EHHRNt47pH32mUaHAMmoMMqzZeg16MvuUUW0vVXjicbtAET
+         Gz1A==
+X-Gm-Message-State: AGi0PubwcFZFdIzW/G4jkzAvMCdgmeOSSWM8fuNRtr6mLLBp9OZy+77e
+        vdXujijVGoCbH6A/gL8oMLo=
+X-Google-Smtp-Source: APiQypIr7Hx7AgCGGlgPMIaVW7vekZ18QbSOSD1u7nnHiU0n6B8ngAaq/6IEMuBxDRR1FYLOFl4C9g==
+X-Received: by 2002:a5d:574b:: with SMTP id q11mr5415915wrw.324.1587148326472;
+        Fri, 17 Apr 2020 11:32:06 -0700 (PDT)
+Received: from Susan (91-164-97-136.subs.proxad.net. [91.164.97.136])
+        by smtp.gmail.com with ESMTPSA id c18sm32013971wrx.5.2020.04.17.11.32.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Apr 2020 11:32:05 -0700 (PDT)
+Date:   Fri, 17 Apr 2020 20:32:03 +0200
+From:   Cyril Roelandt <tipecaml@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     USB list <linux-usb@vger.kernel.org>, sellis@redhat.com,
+        pachoramos@gmail.com, labbott@fedoraproject.org,
+        gregkh@linuxfoundation.org, javhera@gmx.com
+Subject: Re: [BUG] Regression in Linux 5.4.17 for JMicron JMS566 enclosure
+Message-ID: <20200417183203.GA1889@Susan>
+References: <20200415205610.GA8665@Susan>
+ <Pine.LNX.4.44L0.2004152107170.1353-100000@netrider.rowland.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.2004152107170.1353-100000@netrider.rowland.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=207327
+On 2020-04-15 21:21, Alan Stern wrote:
+> On Wed, 15 Apr 2020, Cyril Roelandt wrote:
+> 
+> > Hello,
+> > 
+> > I own a WD Blue 1TB hard drive that I use in combination with an Icy Box
+> > IB-273StU3-B enclosure in order to plug it to my laptop using USB. It
+> > worked fine with all the Linux versions I tried, up until 5.4.17.
+> > 
+> > 
+> > Using Linux 5.3
+> > ---------------
+> > Everything works as expected when I plug the drive, and I can mount the
+> > partitions:
+> > 
+> > # dmesg -T
+> > [Sun Mar 22 23:48:39 2020] usb 2-2: new SuperSpeed Gen 1 USB device number 2 using xhci_hcd
+> > [Sun Mar 22 23:48:39 2020] usb 2-2: New USB device found, idVendor=357d, idProduct=7788, bcdDevice= 1.14
+> > [Sun Mar 22 23:48:39 2020] usb 2-2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> > [Sun Mar 22 23:48:39 2020] usb 2-2: Product: USB to ATA/ATAPI Bridge
+> > [Sun Mar 22 23:48:39 2020] usb 2-2: Manufacturer: JMicron
+> > [Sun Mar 22 23:48:39 2020] usb 2-2: SerialNumber: 74D7851513309E5
+> > [Sun Mar 22 23:48:39 2020] usbcore: registered new interface driver usb-storage
+> > [Sun Mar 22 23:48:39 2020] scsi host6: uas
+> > [Sun Mar 22 23:48:39 2020] usbcore: registered new interface driver uas
+> > [Sun Mar 22 23:48:39 2020] scsi 6:0:0:0: Direct-Access     WDC WD10 JPVT-00A1YT0     0114 PQ: 0 ANSI: 6
+> > [Sun Mar 22 23:48:39 2020] sd 6:0:0:0: Attached scsi generic sg1 type 0
+> > [Sun Mar 22 23:48:39 2020] sd 6:0:0:0: [sdb] Spinning up disk...
+> > [Sun Mar 22 23:48:40 2020] ..ready
+> > [Sun Mar 22 23:48:41 2020] sd 6:0:0:0: [sdb] 1953525168 512-byte logical blocks: (1.00 TB/932 GiB)
+> > [Sun Mar 22 23:48:41 2020] sd 6:0:0:0: [sdb] 4096-byte physical blocks
+> > [Sun Mar 22 23:48:41 2020] sd 6:0:0:0: [sdb] Write Protect is off
+> > [Sun Mar 22 23:48:41 2020] sd 6:0:0:0: [sdb] Mode Sense: 53 00 10 08
+> > [Sun Mar 22 23:48:41 2020] sd 6:0:0:0: [sdb] Write cache: enabled, read cache: enabled, supports DPO and FUA
+> > [Sun Mar 22 23:48:41 2020] sd 6:0:0:0: [sdb] Optimal transfer size 33553920 bytes not a multiple of physical block size (4096 bytes)
+> > [Sun Mar 22 23:48:41 2020]  sdb: sdb1
+> > [Sun Mar 22 23:48:41 2020] sd 6:0:0:0: [sdb] Attached SCSI disk
+> > 
+> > 
+> > Using Linux 5.4
+> > ---------------
+> > 
+> > # uname -a
+> > Linux Susan 5.4.0-4-amd64 #1 SMP Debian 5.4.19-1 (2020-02-13) x86_64 GNU/Linux
+> > 
+> > # mkdir /tmp/mnt
+> > 
+> > # mount /dev/sdb1 /tmp/mnt
+> > mount: /tmp/mnt: can't read superblock on /dev/sdb1.
+> > 
+> > # fsck -y /dev/sdb1
+> > fsck from util-linux 2.34
+> > e2fsck 1.45.6 (20-Mar-2020)
+> > /dev/sdb1: clean, 2951657/61054976 files, 115035523/244190208 blocks
+> > 
+> > # dmesg -T 
+> > [Mon Mar 23 18:43:06 2020] usb 3-2: new SuperSpeed Gen 1 USB device number 8 using xhci_hcd
+> > [Mon Mar 23 18:43:06 2020] usb 3-2: New USB device found, idVendor=357d, idProduct=7788, bcdDevice= 1.14
+> > [Mon Mar 23 18:43:06 2020] usb 3-2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> > [Mon Mar 23 18:43:06 2020] usb 3-2: Product: USB to ATA/ATAPI Bridge
+> > [Mon Mar 23 18:43:06 2020] usb 3-2: Manufacturer: JMicron
+> > [Mon Mar 23 18:43:06 2020] usb 3-2: SerialNumber: 74D7851513309E5
+> > [Mon Mar 23 18:43:06 2020] usb 3-2: UAS is blacklisted for this device, using usb-storage instead
+> > [Mon Mar 23 18:43:06 2020] usb-storage 3-2:1.0: USB Mass Storage device detected
+> > [Mon Mar 23 18:43:06 2020] usb-storage 3-2:1.0: Quirks match for vid 357d pid 7788: 4800000
+> > [Mon Mar 23 18:43:06 2020] scsi host6: usb-storage 3-2:1.0
+> > [Mon Mar 23 18:43:07 2020] scsi 6:0:0:0: Direct-Access     WDC WD10 JPVT-00A1YT0     0114 PQ: 0 ANSI: 6
+> > [Mon Mar 23 18:43:07 2020] sd 6:0:0:0: Attached scsi generic sg1 type 0
+> > [Mon Mar 23 18:43:07 2020] sd 6:0:0:0: [sdb] Spinning up disk...
+> > [Mon Mar 23 18:43:08 2020] ..ready
+> > [Mon Mar 23 18:43:09 2020] sd 6:0:0:0: [sdb] 1953525168 512-byte logical blocks: (1.00 TB/932 GiB)
+> > [Mon Mar 23 18:43:09 2020] sd 6:0:0:0: [sdb] Write Protect is off
+> > [Mon Mar 23 18:43:09 2020] sd 6:0:0:0: [sdb] Mode Sense: 47 00 10 08
+> > [Mon Mar 23 18:43:09 2020] sd 6:0:0:0: [sdb] Write cache: enabled, read cache: enabled, supports DPO and FUA
+> > [Mon Mar 23 18:43:09 2020]  sdb: sdb1
+> > [Mon Mar 23 18:43:09 2020] sd 6:0:0:0: [sdb] Attached SCSI disk
+> > [Mon Mar 23 18:43:30 2020] sd 6:0:0:0: [sdb] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_SENSE
+> > [Mon Mar 23 18:43:30 2020] sd 6:0:0:0: [sdb] tag#0 Sense Key : Illegal Request [current] 
+> > [Mon Mar 23 18:43:30 2020] sd 6:0:0:0: [sdb] tag#0 Add. Sense: Invalid field in cdb
+> > [Mon Mar 23 18:43:30 2020] sd 6:0:0:0: [sdb] tag#0 CDB: Write(10) 2a 08 00 00 08 00 00 00 08 00
+> > [Mon Mar 23 18:43:30 2020] blk_update_request: critical target error, dev sdb, sector 2048 op 0x1:(WRITE) flags 0x20800 phys_seg 1 prio class 0
+> > [Mon Mar 23 18:43:30 2020] Buffer I/O error on dev sdb1, logical block 0, lost sync page write
+> > [Mon Mar 23 18:43:30 2020] EXT4-fs (sdb1): I/O error while writing superblock
+> > [Mon Mar 23 18:43:30 2020] EXT4-fs (sdb1): mount failed
+> > 
+> > # lsusb 
+> > Bus 003 Device 008: ID 357d:7788 Sharkoon QuickPort XT
+> > 
+> > 
+> > Other considerations
+> > --------------------
+> > This enclosure works as expected with another drive: I tried with an old
+> > Fujitsu 250GB drive and was able to mount the partitions.
+> > 
+> > The WD drive works with a similar enclosure: the Icy Box IB-268U3-B
+> > enclosure. It has the exact same vendor id and product id (357d:7788)
+> > but a different bcdDevice (2.03).
+> > 
+> > Looking at the dmesg logs I pasted above, I see that the main difference
+> > is the driver used:
+> > - uas in Linux 5.3;
+> > - usb-storage in Linux 5.4, since uas is blacklisted.
+> > 
+> > 
+> > I believe the uas driver was blacklisted because of an old bug[1] in
+> > Fedora. In Linux, the commit that disabled uas is
+> > bc3bdb12bbb3492067c8719011576370e959a2e6.
+> > 
+> > I do not really mind not being able to use uas, however I would like to
+> > be able to mount my partitions using usb-storage.
+> 
+> It's entirely possible that the blacklisting is not necessary any more.  
+> After all, it was added four and a half years ago; the kernel has
+> improved since then.  I guess you're not in a position to test this,
+> but maybe Steve Ellis or Takeo Nakayama is...?
+> 
+> Does 5.3 work if you add a similar blacklist entry?
 
-            Bug ID: 207327
-           Summary: Hang when reading encrypted DVD
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 5.5.15-200.fc31.x86_64
-          Hardware: All
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: normal
-          Priority: P1
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: horsley1953@gmail.com
-        Regression: No
+I cloned Linus' tree, and cherry-picked
+bc3bdb12bbb3492067c8719011576370e959a2e6 on top of v5.3, rebuilt the
+kernel and rebooted: I had the exact same issue.
 
-This redhat bug has a huge collection of comments analyzing the problem.
+> 
+> Can you collect usbmon traces showing what happens with both uas and
+> usb-storage?  Perhaps different sequences of commands get sent to the
+> drive with the two drivers.
 
-https://bugzilla.redhat.com/show_bug.cgi?id=1822948
+Here it is:
 
-It comes down to two issues:
+$ cat 5.3-uas.mon.out
+ffff9d6256e88a80 1212999968 S Bi:002:02 -115 112 <
+ffff9d6256e880c0 1212999993 S Bi:002:03 -115 1024 <
+ffff9d6256e88f00 1212999998 S Bo:002:01 -115 32 = 01000001 00000000 00000000 00000000 28000000 08020000 02000000 00000000
+ffff9d6256e88f00 1213000025 C Bo:002:01 0 32 >
+ffff9d6256e880c0 1213000166 C Bi:002:03 0 1024 = 00a0a303 000c8e0e 664dba00 d2079d07 ea4c7603 00000000 02000000 02000000
+ffff9d6256e88a80 1213000171 C Bi:002:02 0 16 = 03000001 00000000 00000000 00000000
+ffff9d6256e88c00 1213000263 S Bi:002:02 -115 112 <
+ffff9d6256e88480 1213000278 S Bi:002:03 -115 4096 <
+ffff9d6256e88cc0 1213000281 S Bo:002:01 -115 32 = 01000001 00000000 00000000 00000000 28000000 08000000 08000000 00000000
+ffff9d6256e88cc0 1213000290 C Bo:002:01 0 32 >
+ffff9d6256e88480 1213000476 C Bi:002:03 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff9d6256e88c00 1213000490 C Bi:002:02 0 16 = 03000001 00000000 00000000 00000000
+ffff9d6256e886c0 1213000533 S Bi:002:02 -115 112 <
+ffff9d6256e883c0 1213000536 S Bi:002:03 -115 4096 <
+ffff9d6256e88000 1213000538 S Bo:002:01 -115 32 = 01000001 00000000 00000000 00000000 28000000 08080000 08000000 00000000
+ffff9d6256e88000 1213000549 C Bo:002:01 0 32 >
+ffff9d6256e88240 1213000557 S Bi:002:02 -115 112 <
+ffff9d6256e88780 1213000559 S Bi:002:03 -115 4096 <
+ffff9d6256e88900 1213000561 S Bo:002:01 -115 32 = 01000002 00000000 00000000 00000000 28000000 08100000 08000000 00000000
+ffff9d6256e88b40 1213000577 S Bi:002:02 -115 112 <
+ffff9d6256e88540 1213000579 S Bi:002:03 -115 4096 <
+ffff9d6256e88d80 1213000581 S Bo:002:01 -115 32 = 01000003 00000000 00000000 00000000 28000000 08180000 08000000 00000000
+ffff9d6256e88900 1213000586 C Bo:002:01 0 32 >
+ffff9d6256e88d80 1213000588 C Bo:002:01 0 32 >
+ffff9d6256e88600 1213000596 S Bi:002:02 -115 112 <
+ffff9d6256e88d80 1213000599 S Bi:002:03 -115 4096 <
+ffff9d6256e88900 1213000602 S Bo:002:01 -115 32 = 01000004 00000000 00000000 00000000 28000000 08200000 08000000 00000000
+ffff9d6256e88000 1213000619 S Bi:002:02 -115 112 <
+ffff9d6256e88c00 1213000622 S Bi:002:03 -115 4096 <
+ffff9d6256e88480 1213000624 S Bo:002:01 -115 32 = 01000005 00000000 00000000 00000000 28000000 08280000 08000000 00000000
+ffff9d6256e88900 1213000626 C Bo:002:01 0 32 >
+ffff9d6256e88cc0 1213000641 S Bi:002:02 -115 112 <
+ffff9d6256e88a80 1213000644 S Bi:002:03 -115 4096 <
+ffff9d6256e880c0 1213000646 S Bo:002:01 -115 32 = 01000006 00000000 00000000 00000000 28000000 08300000 08000000 00000000
+ffff9d6256e88f00 1213000662 S Bi:002:02 -115 112 <
+ffff9d6256e88840 1213000664 S Bi:002:03 -115 4096 <
+ffff9d6256e88480 1213000666 C Bo:002:01 0 32 >
+ffff9d6256e88180 1213000668 S Bo:002:01 -115 32 = 01000007 00000000 00000000 00000000 28000000 08380000 08000000 00000000
+ffff9d6256e880c0 1213000668 C Bo:002:01 0 32 >
+ffff9d6256e880c0 1213000684 S Bi:002:02 -115 112 <
+ffff9d6256e88480 1213000686 S Bi:002:03 -115 4096 <
+ffff9d6256e88900 1213000688 S Bo:002:01 -115 32 = 01000008 00000000 00000000 00000000 28000000 08400000 08000000 00000000
+ffff9d6256e88180 1213000707 C Bo:002:01 0 32 >
+ffff9d62594ef9c0 1213000707 S Bi:002:02 -115 112 <
+ffff9d6256e88900 1213000709 C Bo:002:01 0 32 >
+ffff9d62594ef6c0 1213000710 S Bi:002:03 -115 4096 <
+ffff9d62594ef480 1213000713 S Bo:002:01 -115 32 = 01000009 00000000 00000000 00000000 28000000 08480000 08000000 00000000
+ffff9d62594efa80 1213000729 S Bi:002:02 -115 112 <
+ffff9d62594ef3c0 1213000731 S Bi:002:03 -115 4096 <
+ffff9d62594ef000 1213000733 S Bo:002:01 -115 32 = 0100000a 00000000 00000000 00000000 28000000 08500000 08000000 00000000
+ffff9d62594ef480 1213000746 C Bo:002:01 0 32 >
+ffff9d6256e883c0 1213000749 C Bi:002:03 0 4096 = 01040000 11040000 21040000 dc5bf51f 02000400 00000000 00000000 f51f5bd1
+ffff9d62594efc00 1213000750 S Bi:002:02 -115 112 <
+ffff9d62594ef840 1213000752 S Bi:002:03 -115 4096 <
+ffff9d62594efd80 1213000754 S Bo:002:01 -115 32 = 0100000b 00000000 00000000 00000000 28000000 08580000 08000000 00000000
+ffff9d62594ef000 1213000757 C Bo:002:01 0 32 >
+ffff9d6256e886c0 1213000759 C Bi:002:02 0 16 = 03000001 00000000 00000000 00000000
+ffff9d62594efd80 1213000762 C Bo:002:01 0 32 >
+ffff9d62594efcc0 1213000770 S Bi:002:02 -115 112 <
+ffff9d62594ef600 1213000772 S Bi:002:03 -115 4096 <
+ffff9d62594ef540 1213000774 S Bo:002:01 -115 32 = 01000001 00000000 00000000 00000000 28000000 08600000 08000000 00000000
+ffff9d62594ef540 1213000786 C Bo:002:01 0 32 >
+ffff9d62594efb40 1213000790 S Bi:002:02 -115 112 <
+ffff9d62594efe40 1213000793 S Bi:002:03 -115 4096 <
+ffff9d62594ef180 1213000799 S Bo:002:01 -115 32 = 0100000c 00000000 00000000 00000000 28000000 08680000 08000000 00000000
+ffff9d62594ef780 1213000821 S Bi:002:02 -115 112 <
+ffff9d62594ef240 1213000824 S Bi:002:03 -115 4096 <
+ffff9d62594ef180 1213000826 C Bo:002:01 0 32 >
+ffff9d62594ef900 1213000828 S Bo:002:01 -115 32 = 0100000d 00000000 00000000 00000000 28000000 08700000 08000000 00000000
+ffff9d62594ef0c0 1213000846 S Bi:002:02 -115 112 <
+ffff9d62594eff00 1213000849 S Bi:002:03 -115 4096 <
+ffff9d62594ef300 1213000851 S Bo:002:01 -115 32 = 0100000e 00000000 00000000 00000000 28000000 08780000 08000000 00000000
+ffff9d62594ef900 1213000867 C Bo:002:01 0 32 >
+ffff9d62594ef300 1213000869 C Bo:002:01 0 32 >
+ffff9d6256e88780 1213000870 C Bi:002:03 0 4096 = 00004000 10004000 20004000 77540020 00000500 00000000 00000000 0020b3fd
+ffff9d6256e88240 1213000907 C Bi:002:02 0 16 = 03000002 00000000 00000000 00000000
+ffff9d6255337600 1213000942 S Bi:002:02 -115 112 <
+ffff9d6255337e40 1213000947 S Bi:002:03 -115 65536 <
+ffff9d6255337900 1213000952 S Bo:002:01 -115 32 = 01000002 00000000 00000000 00000000 28000000 08800000 80000000 00000000
+ffff9d6255337900 1213000963 C Bo:002:01 0 32 >
+ffff9d6256e88540 1213001013 C Bi:002:03 0 4096 = 00008000 10008000 20008000 125f0020 00000500 00000000 00000000 002015f5
+ffff9d6256e88b40 1213001054 C Bi:002:02 0 16 = 03000003 00000000 00000000 00000000
+ffff9d6255337900 1213001079 S Bi:002:02 -115 112 <
+ffff9d6255337cc0 1213001081 S Bi:002:03 -115 114688 <
+ffff9d6255337540 1213001086 S Bo:002:01 -115 32 = 01000003 00000000 00000000 00000000 28000000 09000000 e0000000 00000000
+ffff9d6255337540 1213001094 C Bo:002:01 0 32 >
+ffff9d6256e88d80 1213001196 C Bi:002:03 0 4096 = 0000c000 1000c000 2000c000 e05f0020 00000500 00000000 00000000 00203226
+ffff9d6256e88600 1213001235 C Bi:002:02 0 16 = 03000004 00000000 00000000 00000000
+ffff9d6256e88c00 1213001373 C Bi:002:03 0 4096 = 00000001 10000001 20000001 e05f0020 00000500 00000000 00000000 00203aed
+ffff9d6256e88000 1213001412 C Bi:002:02 0 16 = 03000005 00000000 00000000 00000000
+ffff9d6256e88a80 1213001524 C Bi:002:03 0 4096 = 00004001 10004001 20004001 e05f0020 00000500 00000000 00000000 00208fb5
+ffff9d6256e88cc0 1213001564 C Bi:002:02 0 16 = 03000006 00000000 00000000 00000000
+ffff9d6256e88840 1213001676 C Bi:002:03 0 4096 = 00008001 10008001 20008001 e05f0020 00000500 00000000 00000000 0020505c
+ffff9d6256e88f00 1213001719 C Bi:002:02 0 16 = 03000007 00000000 00000000 00000000
+ffff9d6256e88480 1213001857 C Bi:002:03 0 4096 = 0000c001 1000c001 2000c001 e05f0020 00000500 00000000 00000000 0020e504
+ffff9d6256e880c0 1213001869 C Bi:002:02 0 16 = 03000008 00000000 00000000 00000000
+ffff9d62594ef6c0 1213002005 C Bi:002:03 0 4096 = 00000002 10000002 20000002 ee570020 00000500 00000000 00000000 0020a6a3
+ffff9d62594ef9c0 1213002016 C Bi:002:02 0 16 = 03000009 00000000 00000000 00000000
+ffff9d62594ef3c0 1213002184 C Bi:002:03 0 4096 = 00004002 10004002 20004002 e05f0020 00000500 00000000 00000000 0020f6d2
+ffff9d62594efa80 1213002195 C Bi:002:02 0 16 = 0300000a 00000000 00000000 00000000
+ffff9d62594ef840 1213002289 C Bi:002:03 0 4096 = 00008002 10008002 20008002 de5a0020 00000500 00000000 00000000 0020578e
+ffff9d62594efc00 1213002295 C Bi:002:02 0 16 = 0300000b 00000000 00000000 00000000
+ffff9d62594ef600 1213002440 C Bi:002:03 0 4096 = 0000c002 1000c002 2000c002 1a58040f 3b040400 00000000 00000000 970e74f4
+ffff9d62594efcc0 1213002479 C Bi:002:02 0 16 = 03000001 00000000 00000000 00000000
+ffff9d62594efe40 1213002592 C Bi:002:03 0 4096 = 00000003 10000003 20000003 00000000 f2020400 00000000 00000000 000082cf
+ffff9d62594efb40 1213002632 C Bi:002:02 0 16 = 0300000c 00000000 00000000 00000000
+ffff9d62594ef240 1213002745 C Bi:002:03 0 4096 = 00004003 10004003 20004003 3a568501 fd040400 00000000 00000000 1900aa58
+ffff9d62594ef780 1213002750 C Bi:002:02 0 16 = 0300000d 00000000 00000000 00000000
+ffff9d62594eff00 1213002894 C Bi:002:03 0 4096 = 00008003 10008003 20008003 8b3e6f15 d7010400 00000000 00000000 5612e584
+ffff9d62594ef0c0 1213002934 C Bi:002:02 0 16 = 0300000e 00000000 00000000 00000000
+ffff9d6255337e40 1213003289 C Bi:002:03 0 65536 = 0000c003 1000c003 2000c003 a301f512 f6010400 00000000 00000000 80062a0f
+ffff9d6255337600 1213003300 C Bi:002:02 0 16 = 03000002 00000000 00000000 00000000
+ffff9d6255337cc0 1213003773 C Bi:002:03 0 114688 = 0000c007 1000c007 2000c007 da5aa10a f9040400 00000000 00000000 490a8748
+ffff9d6255337900 1213003786 C Bi:002:02 0 16 = 03000003 00000000 00000000 00000000
+ffff9d62594ef0c0 1213006186 S Bi:002:02 -115 112 <
+ffff9d62594eff00 1213006191 S Bi:002:03 -115 4096 <
+ffff9d62594ef780 1213006192 S Bo:002:01 -115 32 = 01000001 00000000 00000000 00000000 28000000 29080000 08000000 00000000
+ffff9d62594ef780 1213006224 C Bo:002:01 0 32 >
+ffff9d62594eff00 1213006390 C Bi:002:03 0 4096 = 00000000 00000000 77488252 77488252 77488252 00000000 00000000 00000000
+ffff9d62594ef0c0 1213006401 C Bi:002:02 0 16 = 03000001 00000000 00000000 00000000
+ffff9d62594ef240 1213006461 S Bi:002:02 -115 112 <
+ffff9d62594efb40 1213006463 S Bi:002:03 -115 4096 <
+ffff9d62594efe40 1213006464 S Bo:002:01 -115 32 = 01000001 00000000 00000000 00000000 28003a04 08000000 08000000 00000000
+ffff9d62594efe40 1213006480 C Bo:002:01 0 32 >
+ffff9d62594efb40 1213006651 C Bi:002:03 0 4096 = c03b3998 00000004 00000000 00001000 00008000 00000001 0000c685 00000000
+ffff9d62594ef240 1213006663 C Bi:002:02 0 16 = 03000001 00000000 00000000 00000000
+ffff9d62594efc00 1213008268 S Bi:002:02 -115 112 <
+ffff9d62594ef840 1213008271 S Bo:002:04 -115 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff9d62594efa80 1213008273 S Bo:002:01 -115 32 = 01000001 00000000 00000000 00000000 2a080000 08000000 08000000 00000000
+ffff9d62594efa80 1213008295 C Bo:002:01 0 32 >
+ffff9d62594ef840 1213008550 C Bo:002:04 0 4096 >
+ffff9d62594efc00 1213008589 C Bi:002:02 0 16 = 03000001 00000000 00000000 00000000
+ffff9d62594ef3c0 1213016639 S Bi:002:02 -115 112 <
+ffff9d62594ef9c0 1213016653 S Bo:002:01 -115 32 = 01000001 00000000 00000000 00000000 35000000 00000000 00000000 00000000
+ffff9d62594ef9c0 1213016668 C Bo:002:01 0 32 >
+ffff9d62594ef3c0 1213353956 C Bi:002:02 0 16 = 03000001 00000000 00000000 00000000
+ffff9d6294abfe40 1213364033 S Bi:002:02 -115 112 <
+ffff9d6294abfcc0 1213364055 S Bo:002:01 -115 32 = 01000001 00000000 00000000 00000000 35000000 00000000 00000000 00000000
+ffff9d6294abfcc0 1213364078 C Bo:002:01 0 32 >
+ffff9d6294abfe40 1213364284 C Bi:002:02 0 16 = 03000001 00000000 00000000 00000000
 
-1. Reading an encrypted sector on a commercial movie DVD simply generates a
-scsi error with a directly connected sata drive, but put that same drive in an
-external USB enclosure and read the same sector, and the read seems to hang and
-leave the drive unusable.
+$ cat 5.4-usb-storage.mon.out
+ffff8c08b51be3c0 3308997 S Bo:012:02 -115 31 = 55534243 7e000000 00040000 80000a28 00000008 02000002 00000000 000000
+ffff8c08b51be3c0 3309053 C Bo:012:02 0 31 >
+ffff8c0a70bcd9c0 3309108 S Bi:012:01 -115 1024 <
+ffff8c0a70bcd9c0 3309126 C Bi:012:01 0 1024 = 00a0a303 000c8e0e 664dba00 d2079d07 ea4c7603 00000000 02000000 02000000
+ffff8c08b51be3c0 3309134 S Bi:012:01 -115 13 <
+ffff8c08b51be3c0 3309164 C Bi:012:01 0 13 = 55534253 7e000000 00000000 00
+ffff8c08b51be3c0 3309263 S Bo:012:02 -115 31 = 55534243 7f000000 00100000 80000a28 00000008 00000008 00000000 000000
+ffff8c08b51be3c0 3309277 C Bo:012:02 0 31 >
+ffff8c0a70bcd9c0 3309283 S Bi:012:01 -115 4096 <
+ffff8c0a70bcd9c0 3309364 C Bi:012:01 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff8c08b51be3c0 3309370 S Bi:012:01 -115 13 <
+ffff8c08b51be3c0 3309403 C Bi:012:01 0 13 = 55534253 7f000000 00000000 00
+ffff8c08b51be3c0 3309598 S Bo:012:02 -115 31 = 55534243 80000000 00100000 80000a28 00000008 08000008 00000000 000000
+ffff8c08b51be3c0 3309616 C Bo:012:02 0 31 >
+ffff8c0a8a278900 3309625 S Bi:012:01 -115 4096 <
+ffff8c0a8a278900 3309705 C Bi:012:01 0 4096 = 01040000 11040000 21040000 dc5bf51f 02000400 00000000 00000000 f51f5bd1
+ffff8c08b51be3c0 3309717 S Bi:012:01 -115 13 <
+ffff8c08b51be3c0 3309742 C Bi:012:01 0 13 = 55534253 80000000 00000000 00
+ffff8c08b51be3c0 3309777 S Bo:012:02 -115 31 = 55534243 81000000 00900000 80000a28 00000008 10000048 00000000 000000
+ffff8c08b51be3c0 3309794 C Bo:012:02 0 31 >
+ffff8c0a8a278900 3309801 S Bi:012:01 -115 36864 <
+ffff8c0a8a278900 3310026 C Bi:012:01 0 36864 = 00004000 10004000 20004000 77540020 00000500 00000000 00000000 0020b3fd
+ffff8c08b51be3c0 3310049 S Bi:012:01 -115 13 <
+ffff8c08b51be3c0 3310062 C Bi:012:01 0 13 = 55534253 81000000 00000000 00
+ffff8c08b51be3c0 3310151 S Bo:012:02 -115 31 = 55534243 82000000 00100300 80000a28 00000008 58000188 00000000 000000
+ffff8c08b51be3c0 3310179 C Bo:012:02 0 31 >
+ffff8c089903c180 3310187 S Bi:012:01 -115 200704 <
+ffff8c089903c180 3310957 C Bi:012:01 0 200704 = 00008002 10008002 20008002 de5a0020 00000500 00000000 00000000 0020578e
+ffff8c08b51be3c0 3310969 S Bi:012:01 -115 13 <
+ffff8c08b51be3c0 3310993 C Bi:012:01 0 13 = 55534253 82000000 00000000 00
+ffff8c08b51be3c0 3313928 S Bo:012:02 -115 31 = 55534243 83000000 00100000 80000a28 00000029 08000008 00000000 000000
+ffff8c08b51be3c0 3313962 C Bo:012:02 0 31 >
+ffff8c089903c180 3313970 S Bi:012:01 -115 4096 <
+ffff8c089903c180 3314036 C Bi:012:01 0 4096 = 00000000 00000000 77488252 77488252 77488252 00000000 00000000 00000000
+ffff8c08b51be3c0 3314044 S Bi:012:01 -115 13 <
+ffff8c08b51be3c0 3314075 C Bi:012:01 0 13 = 55534253 83000000 00000000 00
+ffff8c08b51be3c0 3314212 S Bo:012:02 -115 31 = 55534243 84000000 00100000 80000a28 003a0408 00000008 00000000 000000
+ffff8c08b51be3c0 3314233 C Bo:012:02 0 31 >
+ffff8c0a8a278180 3314252 S Bi:012:01 -115 4096 <
+ffff8c0a8a278180 3314323 C Bi:012:01 0 4096 = c03b3998 00000004 00000000 00001000 00008000 00000001 0000c685 00000000
+ffff8c08b51be3c0 3314334 S Bi:012:01 -115 13 <
+ffff8c08b51be3c0 3314362 C Bi:012:01 0 13 = 55534253 84000000 00000000 00
+ffff8c08b51be3c0 3318170 S Bo:012:02 -115 31 = 55534243 85000000 00100000 00000a2a 08000008 00000008 00000000 000000
+ffff8c08b51be3c0 3318184 C Bo:012:02 0 31 >
+ffff8c089903c180 3318189 S Bo:012:02 -115 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff8c089903c180 3318233 C Bo:012:02 0 4096 >
+ffff8c08b51be3c0 3318239 S Bi:012:01 -115 13 <
+ffff8c08b51be3c0 3318262 C Bi:012:01 0 13 = 55534253 85000000 00100000 01
+ffff8c08b51be3c0 3318267 S Bo:012:02 -115 31 = 55534243 86000000 60000000 80000603 00000060 00000000 00000000 000000
+ffff8c08b51be3c0 3318301 C Bo:012:02 0 31 >
+ffff8c089903c180 3318306 S Bi:012:01 -115 96 <
+ffff8c089903c180 3318341 C Bi:012:01 -121 18 = 70000500 0000000a 00000000 24000000 0000
+ffff8c08b51be3c0 3318346 S Bi:012:01 -115 13 <
+ffff8c08b51be3c0 3318385 C Bi:012:01 -32 0
+ffff8c08b51be3c0 3318390 S Co:012:00 s 02 01 0000 0081 0000 0
+ffff8c08b51be3c0 3318422 C Co:012:00 0 0
+ffff8c08b51be3c0 3318430 S Bi:012:01 -115 13 <
+ffff8c08b51be3c0 3318462 C Bi:012:01 0 13 = 55534253 86000000 4e000000 00
 
-2. systemd-udevd apparently decides to randomly read sectors, thus causing the
-drive to be useless as soon as you insert a movie DVD.
 
-Probably udevd shouldn't be doing that, but it also seems like it should be
-getting an error rather than a hung process, which seems like a kernel bug
-(unless it is a fundamental flaw in usb enclosures. I tried two different ones
-with the same results, though they may be using the same chipset).
-
-Comment 99 in the redhat bug has a somewhat more detailed summary:
-
-https://bugzilla.redhat.com/show_bug.cgi?id=1822948#c99
-
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+Cyril Roelandt.
