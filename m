@@ -2,141 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0BB1AE7F8
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2020 00:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 579F21AE80D
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2020 00:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728469AbgDQWKC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Apr 2020 18:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50260 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726284AbgDQWKB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Apr 2020 18:10:01 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEADC061A0C
-        for <linux-usb@vger.kernel.org>; Fri, 17 Apr 2020 15:10:01 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id o81so4402408wmo.2
-        for <linux-usb@vger.kernel.org>; Fri, 17 Apr 2020 15:10:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=09w18WqG1QvU7dZLohtkpmD4nwLSz/zlhw+BCMBmiCc=;
-        b=LsSnL0NP8hy79BHb0yICULaHg9evX/4kAxjxlr4ymTkKUANK4VCcAcVNO6ub4zJQWr
-         LkjU6bblfY6VZYsfnS/NbzTZVSHTPt1InuSC0lvGtnBxzVaUhIHYa0XXR3abqdEAtPM6
-         EKm14f/xxk+yBDsxIRAyGmhfLJ7aurQdvdgEF3w+l6xVTvoHYHU42OX7RWwdqPmXfA0Y
-         Zn7YNRMd2HzC53LyzxJkXukO0yHZ7XMM0FbV8MWE5+dnEbjpQiOyOS80gkCTeDeSItSN
-         tJVo3qAXPSGEjl1wdQxt5leid3B0QqVpllfKYpkt5WtAV9L1JoPSwliAE4bps8cNFiBG
-         /PxQ==
+        id S1728729AbgDQWPS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Apr 2020 18:15:18 -0400
+Received: from mail-il1-f197.google.com ([209.85.166.197]:33309 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728709AbgDQWPR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Apr 2020 18:15:17 -0400
+Received: by mail-il1-f197.google.com with SMTP id l18so4019146ilg.0
+        for <linux-usb@vger.kernel.org>; Fri, 17 Apr 2020 15:15:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=09w18WqG1QvU7dZLohtkpmD4nwLSz/zlhw+BCMBmiCc=;
-        b=Jhn0ij0+uiR7NArtTETkeEgYf92DDm8Fi/gh9hIqC1EIAnVE5kkL8y9JyPSZjzigr2
-         dxXSqfK/7oHU09o1EMzNn/24iEtdv049PxceNxVlnlH8fyMnwZnKm7cjY2PUdFKVzu3G
-         ZYAn/80V//ucXytV4wP9bHwQVgcGyB+jwINTUTGXfyLNkkXElDTrUEu4Pgofu6RtlIi6
-         HvaWM8Z5gx16GyMJy9ZCOWQT+1ixXeCATFn4pbXt/0p41LUXilzg+Rs72Ot8uM4eO2OL
-         /Nvy1wK1E1dNjYB6/XlzEcvlGNZcmJfIQRynjwlmPnpu8B4UvcAd37INyKws7cAMtbJs
-         pQWQ==
-X-Gm-Message-State: AGi0PubgijBSQeYP/VtkBmM/fVYRsBLrv/QEURBxPYRWFDrnjhpm77wm
-        yLXXCEKcdJZqg32bRjnLYWU=
-X-Google-Smtp-Source: APiQypKb8eenFqHITbp+YNcKNxSehI2H38ZwrmXzYcQRL1gcxtWRKbspf8Na2OARx1hLysimt8hszg==
-X-Received: by 2002:a1c:2392:: with SMTP id j140mr5385882wmj.136.1587161400182;
-        Fri, 17 Apr 2020 15:10:00 -0700 (PDT)
-Received: from Susan (91-164-97-136.subs.proxad.net. [91.164.97.136])
-        by smtp.gmail.com with ESMTPSA id e5sm34587571wru.92.2020.04.17.15.09.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Apr 2020 15:09:59 -0700 (PDT)
-Date:   Sat, 18 Apr 2020 00:09:57 +0200
-From:   Cyril Roelandt <tipecaml@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     USB list <linux-usb@vger.kernel.org>, sellis@redhat.com,
-        pachoramos@gmail.com, labbott@fedoraproject.org,
-        gregkh@linuxfoundation.org, javhera@gmx.com
-Subject: Re: [BUG] Regression in Linux 5.4.17 for JMicron JMS566 enclosure
-Message-ID: <20200417220957.GA4707@Susan>
-References: <20200417183203.GA1889@Susan>
- <Pine.LNX.4.44L0.2004171539350.25043-100000@netrider.rowland.org>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=WEcygz2yiTkhcSymwPQaWfTbOHv0m+f9utC1k92dGvI=;
+        b=EIwbSRX4MK6Z9HCy1qHgvIwz3GLrhcxruMQ4czwp43IvKe0+ZemQ92FhNzq38YRMCA
+         9HT3QJ3vcOpQGgKM1jb/ILG17/kjZ/iujKa45O6oPUG4xU8I7dBQbGQdtU+e09p/NXAb
+         2b9Zjf335BLCdJxY5F4ExclZ9TZrBEWkpDZ1Y/CaUxKBK8Dc9uXK6J5Z22BcRu17NPLD
+         emrsE2pmzHX5LIRymdgKBTbl58fFG/xg68m1INJm+H7xux7w2cA+xL00XIu6OUG7FxN/
+         WL7o7JPUh8F7IrP9KyYHHKd8JgOdRjHQD3DO0b+fmpYCl3EzTswgGgO7UU3K6XTZ4c4Y
+         RALg==
+X-Gm-Message-State: AGi0PuYVJLDMxApscarJ0awDFh9OPh6YByZj4gYWo+BHnmSBrVeRbsLO
+        RjFgL1cgYZJMNrQTzDZlb8TkRDQA09zStSEHj3rTXdlfvjHU
+X-Google-Smtp-Source: APiQypLz91J++bbdaxnWO+tLXAVzyEHztNeUaUbTrzFAsi0kWHzaJJsszL47TVyJGvKnkGqeSqIa2qGqms/BCMpq2zimre8JILyu
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Pine.LNX.4.44L0.2004171539350.25043-100000@netrider.rowland.org>
+X-Received: by 2002:a02:5184:: with SMTP id s126mr4928223jaa.81.1587161714629;
+ Fri, 17 Apr 2020 15:15:14 -0700 (PDT)
+Date:   Fri, 17 Apr 2020 15:15:14 -0700
+In-Reply-To: <0000000000006ed82e05a1c05dcc@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000033a1e005a383e276@google.com>
+Subject: Re: KASAN: use-after-free Read in hif_usb_regout_cb
+From:   syzbot <syzbot+b894396e6110e1df38c4@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
+        davem@davemloft.net, efault@gmx.de, hdanton@sina.com,
+        kvalo@codeaurora.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020-04-17 16:06, Alan Stern wrote:
-> On Fri, 17 Apr 2020, Cyril Roelandt wrote:
-> 
-> > On 2020-04-15 21:21, Alan Stern wrote:
-> 
-> > > > I do not really mind not being able to use uas, however I would like to
-> > > > be able to mount my partitions using usb-storage.
-> > > 
-> > > It's entirely possible that the blacklisting is not necessary any more.  
-> > > After all, it was added four and a half years ago; the kernel has
-> > > improved since then.  I guess you're not in a position to test this,
-> > > but maybe Steve Ellis or Takeo Nakayama is...?
-> > > 
-> > > Does 5.3 work if you add a similar blacklist entry?
-> > 
-> > I cloned Linus' tree, and cherry-picked
-> > bc3bdb12bbb3492067c8719011576370e959a2e6 on top of v5.3, rebuilt the
-> > kernel and rebooted: I had the exact same issue.
-> > 
-> > > 
-> > > Can you collect usbmon traces showing what happens with both uas and
-> > > usb-storage?  Perhaps different sequences of commands get sent to the
-> > > drive with the two drivers.
-> > 
-> > Here it is:
-> 
-> Two things.  First, you started the usbmon traces _after_ plugging in
-> the drive.  As a result the traces do not contain a complete record of
-> all the transfers between the computer and the drive; it's possible
-> that something in the missing portions is responsible for your problem.
-> For example, why does your uas log include a line ("[sdb] 4096-byte 
-> physical blocks") that is missing in the usb-storage log?
+syzbot has found a reproducer for the following crash on:
 
-Oh, sorry, I'm new to this. The logs became really long, so I've taken
-the liberty of pasting them to paste.debian.net. I captured what
-happened when plugging the WD drive and running "mount".
+HEAD commit:    0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=160e64d7e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
+dashboard link: https://syzkaller.appspot.com/bug?extid=b894396e6110e1df38c4
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=143956d7e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13dc3300100000
 
-- With a 5.3 kernel, using uas: http://paste.debian.net/1141035/
-- With a 5.4 kernel, using usb-storage: http://paste.debian.net/1141036/
-- With a 5.4 kernel, using usb-storage, using a similar enclosure that
-  works as expected (the Icy Box IB-268U3-B, which has the same product
-  ID and vendor ID but a different bcdDevice: 2.03 instead of
-  1.14): http://paste.debian.net/1141037/
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+b894396e6110e1df38c4@syzkaller.appspotmail.com
 
+==================================================================
+BUG: KASAN: use-after-free in atomic_read include/asm-generic/atomic-instrumented.h:26 [inline]
+BUG: KASAN: use-after-free in refcount_read include/linux/refcount.h:134 [inline]
+BUG: KASAN: use-after-free in skb_unref include/linux/skbuff.h:1042 [inline]
+BUG: KASAN: use-after-free in kfree_skb+0x32/0x3d0 net/core/skbuff.c:692
+Read of size 4 at addr ffff8881d15fd854 by task swapper/1/0
 
-> [...]
-> Of course, this makes no sense because the drive had no problem
-> understanding the exact same command when it was sent by uas.
-> 
-> At this point, all I can say is that something about the combination of
-> the enclosure and the drive works with the UAS transport but not with
-> the USB Mass-Storage transport.  As far as we can see from the usbmon 
-> traces, the kernel isn't doing anything wrong.
+CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.6.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xef/0x16e lib/dump_stack.c:118
+ print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
+ __kasan_report.cold+0x37/0x77 mm/kasan/report.c:506
+ kasan_report+0xe/0x20 mm/kasan/common.c:641
+ check_memory_region_inline mm/kasan/generic.c:185 [inline]
+ check_memory_region+0x152/0x1c0 mm/kasan/generic.c:192
+ atomic_read include/asm-generic/atomic-instrumented.h:26 [inline]
+ refcount_read include/linux/refcount.h:134 [inline]
+ skb_unref include/linux/skbuff.h:1042 [inline]
+ kfree_skb+0x32/0x3d0 net/core/skbuff.c:692
+ hif_usb_regout_cb+0x14c/0x1b0 drivers/net/wireless/ath/ath9k/hif_usb.c:97
+ __usb_hcd_giveback_urb+0x1f2/0x470 drivers/usb/core/hcd.c:1648
+ usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1713
+ dummy_timer+0x1258/0x32ae drivers/usb/gadget/udc/dummy_hcd.c:1966
+ call_timer_fn+0x195/0x6f0 kernel/time/timer.c:1404
+ expire_timers kernel/time/timer.c:1449 [inline]
+ __run_timers kernel/time/timer.c:1773 [inline]
+ __run_timers kernel/time/timer.c:1740 [inline]
+ run_timer_softirq+0x5f9/0x1500 kernel/time/timer.c:1786
+ __do_softirq+0x21e/0x950 kernel/softirq.c:292
+ invoke_softirq kernel/softirq.c:373 [inline]
+ irq_exit+0x178/0x1a0 kernel/softirq.c:413
+ exiting_irq arch/x86/include/asm/apic.h:546 [inline]
+ smp_apic_timer_interrupt+0x141/0x540 arch/x86/kernel/apic/apic.c:1146
+ apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:829
+ </IRQ>
+RIP: 0010:default_idle+0x28/0x300 arch/x86/kernel/process.c:696
+Code: cc cc 41 56 41 55 65 44 8b 2d 44 eb 71 7a 41 54 55 53 0f 1f 44 00 00 e8 f6 d7 b4 fb e9 07 00 00 00 0f 00 2d aa 7c 52 00 fb f4 <65> 44 8b 2d 20 eb 71 7a 0f 1f 44 00 00 5b 5d 41 5c 41 5d 41 5e c3
+RSP: 0018:ffff8881da22fda8 EFLAGS: 00000246 ORIG_RAX: ffffffffffffff13
+RAX: 0000000000000007 RBX: ffff8881da213100 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 0000000000000006 RDI: ffff8881da21394c
+RBP: ffffed103b442620 R08: ffff8881da213100 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
+R13: 0000000000000001 R14: ffffffff87e629c0 R15: 0000000000000000
+ cpuidle_idle_call kernel/sched/idle.c:154 [inline]
+ do_idle+0x3e0/0x500 kernel/sched/idle.c:269
+ cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:361
+ start_secondary+0x2a4/0x390 arch/x86/kernel/smpboot.c:264
+ secondary_startup_64+0xb6/0xc0 arch/x86/kernel/head_64.S:242
 
-I wrote in my original message that the enclosure worked fine with a
-Fujitsu drive, but upon further testing this proved inexact: it worked
-with an NTFS partition on said drive. Once I formatted it to ext4, it
-started failing as well. To recap, when using usb-storage this is what
-happens:
+Allocated by task 21:
+ save_stack+0x1b/0x80 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ __kasan_kmalloc mm/kasan/common.c:515 [inline]
+ __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:488
+ slab_post_alloc_hook mm/slab.h:584 [inline]
+ slab_alloc_node mm/slub.c:2786 [inline]
+ kmem_cache_alloc_node+0xdc/0x330 mm/slub.c:2822
+ __alloc_skb+0xba/0x5a0 net/core/skbuff.c:198
+ alloc_skb include/linux/skbuff.h:1081 [inline]
+ htc_connect_service+0x2cc/0x840 drivers/net/wireless/ath/ath9k/htc_hst.c:257
+ ath9k_wmi_connect+0xd2/0x1a0 drivers/net/wireless/ath/ath9k/wmi.c:265
+ ath9k_init_htc_services.constprop.0+0xb4/0x650 drivers/net/wireless/ath/ath9k/htc_drv_init.c:146
+ ath9k_htc_probe_device+0x25a/0x1d80 drivers/net/wireless/ath/ath9k/htc_drv_init.c:959
+ ath9k_htc_hw_init+0x31/0x60 drivers/net/wireless/ath/ath9k/htc_hst.c:501
+ ath9k_hif_usb_firmware_cb+0x26b/0x500 drivers/net/wireless/ath/ath9k/hif_usb.c:1187
+ request_firmware_work_func+0x126/0x242 drivers/base/firmware_loader/main.c:976
+ process_one_work+0x94b/0x1620 kernel/workqueue.c:2266
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2412
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 
-IB273 + WD Blue 1TB   (ext4)   -> Broken
-IB273 + Fujitsu 250GB (ext4)   -> Broken
-IB273 + Fujitsu 250GB (NTFS)   -> OK
-IB268 + WD1TB         (ext4)   -> OK
+Freed by task 21:
+ save_stack+0x1b/0x80 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ kasan_set_free_info mm/kasan/common.c:337 [inline]
+ __kasan_slab_free+0x117/0x160 mm/kasan/common.c:476
+ slab_free_hook mm/slub.c:1444 [inline]
+ slab_free_freelist_hook mm/slub.c:1477 [inline]
+ slab_free mm/slub.c:3034 [inline]
+ kmem_cache_free+0x9b/0x360 mm/slub.c:3050
+ kfree_skbmem net/core/skbuff.c:622 [inline]
+ kfree_skbmem+0xef/0x1b0 net/core/skbuff.c:616
+ __kfree_skb net/core/skbuff.c:679 [inline]
+ kfree_skb net/core/skbuff.c:696 [inline]
+ kfree_skb+0x102/0x3d0 net/core/skbuff.c:690
+ htc_connect_service.cold+0xa9/0x109 drivers/net/wireless/ath/ath9k/htc_hst.c:282
+ ath9k_wmi_connect+0xd2/0x1a0 drivers/net/wireless/ath/ath9k/wmi.c:265
+ ath9k_init_htc_services.constprop.0+0xb4/0x650 drivers/net/wireless/ath/ath9k/htc_drv_init.c:146
+ ath9k_htc_probe_device+0x25a/0x1d80 drivers/net/wireless/ath/ath9k/htc_drv_init.c:959
+ ath9k_htc_hw_init+0x31/0x60 drivers/net/wireless/ath/ath9k/htc_hst.c:501
+ ath9k_hif_usb_firmware_cb+0x26b/0x500 drivers/net/wireless/ath/ath9k/hif_usb.c:1187
+ request_firmware_work_func+0x126/0x242 drivers/base/firmware_loader/main.c:976
+ process_one_work+0x94b/0x1620 kernel/workqueue.c:2266
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2412
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 
-Where:
-- IB273 has idVendor=357d, idProduct=7788 and bcdDevice= 1.14
-- IB268 has idVendor=357d, idProduct=7788 and bcdDevice= 2.03
+The buggy address belongs to the object at ffff8881d15fd780
+ which belongs to the cache skbuff_head_cache of size 224
+The buggy address is located 212 bytes inside of
+ 224-byte region [ffff8881d15fd780, ffff8881d15fd860)
+The buggy address belongs to the page:
+page:ffffea0007457f40 refcount:1 mapcount:0 mapping:ffff8881da16b400 index:0x0
+flags: 0x200000000000200(slab)
+raw: 0200000000000200 0000000000000000 0000000300000001 ffff8881da16b400
+raw: 0000000000000000 00000000800c000c 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
 
+Memory state around the buggy address:
+ ffff8881d15fd700: fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff8881d15fd780: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff8881d15fd800: fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
+                                                 ^
+ ffff8881d15fd880: fc fc fc fc fc fc fc fc fb fb fb fb fb fb fb fb
+ ffff8881d15fd900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
-Thanks for your help,
-Cyril Roelandt.
