@@ -2,188 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A68F1AE1E4
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2020 18:11:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06ADB1AE321
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Apr 2020 19:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729906AbgDQQKU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Apr 2020 12:10:20 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:56865 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729902AbgDQQKU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Apr 2020 12:10:20 -0400
-Received: (qmail 9640 invoked by uid 500); 17 Apr 2020 12:10:19 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 17 Apr 2020 12:10:19 -0400
-Date:   Fri, 17 Apr 2020 12:10:19 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Qais Yousef <qais.yousef@arm.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux-pm mailing list <linux-pm@vger.kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
-In-Reply-To: <2040116.cccRbkeLkK@kreacher>
-Message-ID: <Pine.LNX.4.44L0.2004171129430.30344-100000@netrider.rowland.org>
+        id S1728547AbgDQRFt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Apr 2020 13:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727913AbgDQRFt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Apr 2020 13:05:49 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1363CC061A0C;
+        Fri, 17 Apr 2020 10:05:49 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id d17so3857110wrg.11;
+        Fri, 17 Apr 2020 10:05:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=L6vSpgIMmBWZUkn/2wzSE1YfGSB1WXikRLlIM0P2tsM=;
+        b=hQeRvJhnisjkFrQAbi2gCklzGQ+A8Yh/gPgG7AvNJ+iZvw5L4O1EDuYnLhe9D+bAIG
+         wMyvk/8/wHDT9Vbjdk/Jo9VIgFAfRrT7rcOIZNKDR46hovtvdn8OOS1Bd5ZU8bKuL4yZ
+         tRXxZ8zftPK4dhm/1HoTZFhFbigx5jRJzZD3YniCudE8zw8ebFBG/ps+wftR7PB7dowo
+         PbzmYMHTxbGNt50K0zvyYDJiNWFhRGJEkU0i3tqM9LP0JhQlubg2krtZFs4KUgBBhwti
+         UznvQKHpjNL7BJ163UdxcGvu13VDOWoBH7fqLR1ElYlAMg5GtagFMF1DR9fyaVxNXPzv
+         /r8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=L6vSpgIMmBWZUkn/2wzSE1YfGSB1WXikRLlIM0P2tsM=;
+        b=e8JtdQBMSvoqlZHQACHoUuhqHE1q3dK2hDZNrsyshdVw4gD8djS9Ph9Cm6yZe6D51E
+         rpwgJ6idBBw0Hq3NYJA5QZMFyD20JtKaZ4/K01WPxfJXs6iDMqrP0FSbEtQbJax54bHt
+         RMwY/Suy5gjfKboEEivrbyv7CT614p0Vo4D4WYJtTN62YEstn0ln+w9MkW+Fa9NrmM+p
+         lAC8/Hz14FI8clqLM1whAETd8atvyiilpGo8PH+oG6m+nj4hkWb3BqxxdGAmDARkP57d
+         8V4WL0BxVPN4Aifp37mwTo4sZfcKJbk95D4e89LlXVoRGdGdJzyPltl/QlymtMYDhKCS
+         dbcg==
+X-Gm-Message-State: AGi0PubQnyXHiM6EN9U0sXA2n2GxPEA0On0AJEYlcKaHYCr3+JiWxKNI
+        c/1pZOZuwmUDk01ba9iexos=
+X-Google-Smtp-Source: APiQypKD5Ch9ByBWdQAM3T/RtbqnzvMnjJN3d6GJWE47dWN1TipwNjJL8C3rgGR5diX1QS52jeQvPA==
+X-Received: by 2002:adf:db41:: with SMTP id f1mr4725933wrj.13.1587143147648;
+        Fri, 17 Apr 2020 10:05:47 -0700 (PDT)
+Received: from localhost (pD9E51D62.dip0.t-ipconnect.de. [217.229.29.98])
+        by smtp.gmail.com with ESMTPSA id u15sm30741852wrn.46.2020.04.17.10.05.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Apr 2020 10:05:46 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        Nagarjuna Kristam <nkristam@nvidia.com>,
+        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: tegra-xudc: Fix idle suspend/resume
+Date:   Fri, 17 Apr 2020 19:05:37 +0200
+Message-Id: <20200417170537.2540914-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 17 Apr 2020, Rafael J. Wysocki wrote:
+From: Thierry Reding <treding@nvidia.com>
 
-> On Thursday, April 16, 2020 5:18:15 PM CEST Alan Stern wrote:
+When the XUDC device is idle (i.e. powergated), care must be taken not
+to access any registers because that would lead to a crash.
 
-> > >   IOW, the
-> > > default value of power.may_skip_resume could be the return value of
-> > > dev_pm_skip_suspend()?]
-> > 
-> > How about this?  Let's set power.may_skip_resume to "true" for each
-> > device before issuing ->prepare.
-> 
-> Yes, it can be set to 'true' by default for all devices.
-> 
-> It doesn't need to be before ->prepare, it can be before ->suspend (as it
-> is now).
+Move the call to tegra_xudc_device_mode_off() into the same conditional
+as the tegra_xudc_powergate() call to make sure we only force device
+mode off if the XUDC is actually powered up.
 
-I suggested doing it before ->prepare so that subsystems can clear
-power.may_skip_resume in their ->prepare callbacks.  If you think the
-ability to do that isn't important then fine, initialize the flag
-before ->suspend.
+Fixes: 49db427232fe ("usb: gadget: Add UDC driver for tegra XUSB device mode controller")
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+---
+ drivers/usb/gadget/udc/tegra-xudc.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> > The subsystem can set it to "false"
-> > if it wants to during any of the suspend-side callbacks.  Following the
-> > ->suspend_noirq callback, the core will do the equivalent of:
-> > 
-> > 	dev->power.may_skip_resume &= dev_pm_skip_suspend(dev);
-> > 
-> > before propagating the flag.  Any subsystem changes to support this
-> > should be minimal, since only ACPI and PCI currently use
-> > may_skip_resume.
-> 
-> IMO it can be simpler even.
-> 
-> Because power.may_skip_resume is taken into account along with
-> MAY_SKIP_RESUME and the driver setting the latter must be prepared
-> for skipping its resume callbacks regardless of the suspend side of
-> things, they may always be skipped (and the device may be left in
-> suspend accordingly) if there is a reason to avoid doing that.
-> 
-> The core doesn't know about those reasons, so it has no reason to
-> touch power.may_skip_resume after setting it at the outset and then
-> whoever sees a reason why these callbacks should run (the subsystem
-> or the driver) needs to clear power.may_skip_resume (and clearing it
-> more than once obviously makes no difference).
-
-I was trying to implement your suggestion of making the default for
-power.may_skip_resume be the return value of dev_pm_skip_suspend().  
-However, making the default value be "true" is indeed simpler, and I
-think it would work okay.
-
-> > So here's what we've got:
-> > 
-> > > > Transition   Conditions for dev_pm_skip_resume() to return "true"
-> > > > ----------   ----------------------------------------------------
-> > > > 
-> > > > RESTORE      Never
-> > > 
-> > > Right.
-> > 
-> > >  THAW	         dev_pm_skip_suspend() returns "true".
-> > 
-> > >  RESUME        power.must_resume is clear (which requires
-> > >                  MAY_SKIP_RESUME and power.may_skip_resume to be set and
-> > >                  the runtime usage counter to be = 1, and which 
-> > >                  propagates up from dependent devices)
-> > > 
-> > > Nothing else is really strictly required IMO.
-> > 
-> > This seems very clear and simple.  And I will repeat here some of the 
-> > things posted earlier, to make the description more complete:
-> > 
-> > 	During the suspend side, for each of the
-> > 	{suspend,freeze,poweroff}_{late,noirq} phases: If
-> > 	dev_pm_skip_suspend() returns true then the subsystem should
-> > 	not invoke the driver's callback, and if there is no subsystem
-> > 	callback then the core will not invoke the driver's callback.
-> > 
-> > 	During the resume side, for each of the
-> > 	{resume,thaw,restore}_{early,noirq} phases: If
-> > 	dev_pm_skip_resume() returns true then the subsystem should
-> > 	not invoke the driver's callback, and if there is no subsystem
-> > 	callback then the core will not invoke the driver's callback.
-> > 
-> > 	dev_pm_skip_suspend() will return "true" if SMART_SUSPEND is
-> > 	set and the device's runtime status is "suspended".
-> > 
-> > 	For dev_pm_skip_resume() and power.must_resume, see above.
-> > 
-> > 	At the start of the {resume,thaw,restore}_noirq phase, if
-> > 	dev_pm_skip_resume() returns true then the core will set the
-> > 	runtime status to "suspended".  Otherwise it will set the
-> > 	runtime status to "active".  If this is not what the subsystem
-> > 	or driver wants, it must update the runtime status itself.
-> > 
-> > For this to work properly, we will have to rely on subsystems/drivers
-> > to call pm_runtime_resume() during the suspend/freeze transition if
-> > SMART_SUSPEND is clear.
-> 
-> That has been the case forever, though.
-
-I'm not so sure about that.  The existing PM core code doesn't ever get
-into a situation where it tries to set a device's runtime status to
-"active" while the parent's status is "suspended".
-
-> > Otherwise we could have the following scenario:
-> > 
-> > Device A has a child B, and both are runtime suspended when hibernation
-> > starts.  Suppose that the SMART_SUSPEND flag is set for A but not for
-> > B, and suppose that B's subsystem/driver neglects to call
-> > pm_runtime_resume() during the FREEZE transition.  Then during the THAW
-> > transition, dev_pm_skip_resume() will return "true" for A and "false"  
-> > for B.  This will lead to an error when the core tries to set B's
-> > runtime status to "active" while A's status is "suspended".
-> > 
-> > One way to avoid this is to have the core make the pm_runtime_resume()  
-> > call, but you have said that you don't like that approach.  Any 
-> > suggestions?
-> 
-> Because the core has not been calling pm_runtime_resume() during system-wide
-> suspend for devices with SMART_SUSPEND clear, that should not be changed or
-> we'll see regressions.
-> 
-> I know for a fact that some drivers expect the core to be doing nothing
-> with respect to that.
-> 
-> > Should the core take some special action following ->freeze_noirq if
-> > the runtime status is "suspended" and SMART_SUSPEND is clear?
-> 
-> Again, anything like that would change the current behavior which may
-> not be expected by at least some drivers, so I wouldn't change that.
-> 
-> IOW, SMART_SUSPEND clear means to the core that *it* need not care about
-> the suspend side at all (because somebody else will do that).
-
-But the core _does_ need to care, because if somebody else fails to
-take care of the suspend side then the core would trigger the WARN() in
-pm_runtime_enable() for the parent device.  I guess we could consider
-such a WARN() to be a symptom of a bug in the driver or subsystem,
-rather than in the core; is that how you want to handle the scenario
-above?
-
-This approach doesn't seem robust.  I can easily imagine cases where
-the parent's driver is aware of SMART_SUSPEND but the child's driver
-isn't.  Currently we don't require the child's driver to call 
-pm_runtime_resume().  Do you really want to consider all such cases to 
-be bugs?
-
-Basically, I'm saying that if the core allows things to arrive at a
-situation where we can come out of THAW with a runtime-suspended parent
-and a runtime-active child, it really should be considered to be the
-core's fault.
-
-Alan Stern
+diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
+index 52a6add961f4..dfabc54cdc27 100644
+--- a/drivers/usb/gadget/udc/tegra-xudc.c
++++ b/drivers/usb/gadget/udc/tegra-xudc.c
+@@ -3840,11 +3840,11 @@ static int __maybe_unused tegra_xudc_suspend(struct device *dev)
+ 
+ 	flush_work(&xudc->usb_role_sw_work);
+ 
+-	/* Forcibly disconnect before powergating. */
+-	tegra_xudc_device_mode_off(xudc);
+-
+-	if (!pm_runtime_status_suspended(dev))
++	if (!pm_runtime_status_suspended(dev)) {
++		/* Forcibly disconnect before powergating. */
++		tegra_xudc_device_mode_off(xudc);
+ 		tegra_xudc_powergate(xudc);
++	}
+ 
+ 	pm_runtime_disable(dev);
+ 
+-- 
+2.24.1
 
