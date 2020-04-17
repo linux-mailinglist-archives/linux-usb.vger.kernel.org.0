@@ -2,183 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 579F21AE80D
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2020 00:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BFF41AE8A8
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2020 01:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728729AbgDQWPS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Apr 2020 18:15:18 -0400
-Received: from mail-il1-f197.google.com ([209.85.166.197]:33309 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728709AbgDQWPR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Apr 2020 18:15:17 -0400
-Received: by mail-il1-f197.google.com with SMTP id l18so4019146ilg.0
-        for <linux-usb@vger.kernel.org>; Fri, 17 Apr 2020 15:15:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=WEcygz2yiTkhcSymwPQaWfTbOHv0m+f9utC1k92dGvI=;
-        b=EIwbSRX4MK6Z9HCy1qHgvIwz3GLrhcxruMQ4czwp43IvKe0+ZemQ92FhNzq38YRMCA
-         9HT3QJ3vcOpQGgKM1jb/ILG17/kjZ/iujKa45O6oPUG4xU8I7dBQbGQdtU+e09p/NXAb
-         2b9Zjf335BLCdJxY5F4ExclZ9TZrBEWkpDZ1Y/CaUxKBK8Dc9uXK6J5Z22BcRu17NPLD
-         emrsE2pmzHX5LIRymdgKBTbl58fFG/xg68m1INJm+H7xux7w2cA+xL00XIu6OUG7FxN/
-         WL7o7JPUh8F7IrP9KyYHHKd8JgOdRjHQD3DO0b+fmpYCl3EzTswgGgO7UU3K6XTZ4c4Y
-         RALg==
-X-Gm-Message-State: AGi0PuYVJLDMxApscarJ0awDFh9OPh6YByZj4gYWo+BHnmSBrVeRbsLO
-        RjFgL1cgYZJMNrQTzDZlb8TkRDQA09zStSEHj3rTXdlfvjHU
-X-Google-Smtp-Source: APiQypLz91J++bbdaxnWO+tLXAVzyEHztNeUaUbTrzFAsi0kWHzaJJsszL47TVyJGvKnkGqeSqIa2qGqms/BCMpq2zimre8JILyu
+        id S1728316AbgDQXhn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Apr 2020 19:37:43 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:58003 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726167AbgDQXhh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Apr 2020 19:37:37 -0400
+Received: (qmail 14532 invoked by uid 500); 17 Apr 2020 19:37:36 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 17 Apr 2020 19:37:36 -0400
+Date:   Fri, 17 Apr 2020 19:37:36 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Qais Yousef <qais.yousef@arm.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux-pm mailing list <linux-pm@vger.kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
+In-Reply-To: <3462492.idEHzggvYf@kreacher>
+Message-ID: <Pine.LNX.4.44L0.2004171928160.13245-100000@netrider.rowland.org>
 MIME-Version: 1.0
-X-Received: by 2002:a02:5184:: with SMTP id s126mr4928223jaa.81.1587161714629;
- Fri, 17 Apr 2020 15:15:14 -0700 (PDT)
-Date:   Fri, 17 Apr 2020 15:15:14 -0700
-In-Reply-To: <0000000000006ed82e05a1c05dcc@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000033a1e005a383e276@google.com>
-Subject: Re: KASAN: use-after-free Read in hif_usb_regout_cb
-From:   syzbot <syzbot+b894396e6110e1df38c4@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
-        davem@davemloft.net, efault@gmx.de, hdanton@sina.com,
-        kvalo@codeaurora.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following crash on:
+On Fri, 17 Apr 2020, Rafael J. Wysocki wrote:
 
-HEAD commit:    0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=160e64d7e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
-dashboard link: https://syzkaller.appspot.com/bug?extid=b894396e6110e1df38c4
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=143956d7e00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13dc3300100000
+> There is one detail here that I missed, sorry about that.
+> 
+> Actually, the core can only set the runtime status to "active" for
+> devices where dev_pm_skip_suspend() returns 'true'.
+> 
+> First, if the device is not "suspended", its status is "active" already
+> anyway.
+> 
+> Second, if the device has SMART_SUSPEND clear, the driver may not expect
+> its runtime status to change from "suspended" to "active" during system-wide
+> resume-type transitions (the driver's system-wide PM callbacks may use
+> the runtime status to determine what to do and changing the status this
+> way may confuse that).
+> 
+> [Actually, the drivers that set neither SMART_SUSPEND nor MAY_SKIP_RESUME
+>  may not expect the runtime status to change during system-wide resume-type
+>  transitions at all, but there is the corner case when the driver can set
+>  MAY_SKIP_RESUME without setting SMART_SUSPEND.  In that case its "noirq"
+>  and "early" resume callbacks may be skipped and then it should expect
+>  the runtime status to sometimes change from "active" to "suspended" during
+>  RESUME transitions, but it may still not expect to see changes the other way
+>  around, as in that case all of its callbacks are going to be invoked and
+>  apply the internal runtime status handling mentioned above.]
+> 
+> So overall:
+> 
+>   At the start of the {resume,thaw,restore}_noirq phase, if
+>   dev_pm_skip_resume() returns true ,then the core will set the
+>   runtime status to "suspended".  Otherwise, if dev_pm_skip_suspend()
+>   also returns true, then the core will set the runtime status to "active".
+>   If this is not what the subsystem or driver wants, it must update the
+>   runtime status itself.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+b894396e6110e1df38c4@syzkaller.appspotmail.com
+Sigh.  The bug which prompted this whole thread was when I forgot to 
+set the runtime PM status back to "active" in one of my drivers.  I was 
+hoping the core could handle it for me automatically.
 
-==================================================================
-BUG: KASAN: use-after-free in atomic_read include/asm-generic/atomic-instrumented.h:26 [inline]
-BUG: KASAN: use-after-free in refcount_read include/linux/refcount.h:134 [inline]
-BUG: KASAN: use-after-free in skb_unref include/linux/skbuff.h:1042 [inline]
-BUG: KASAN: use-after-free in kfree_skb+0x32/0x3d0 net/core/skbuff.c:692
-Read of size 4 at addr ffff8881d15fd854 by task swapper/1/0
+I guess the answer is always to set the SMART_SUSPEND flag.
 
-CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.6.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
- __kasan_report.cold+0x37/0x77 mm/kasan/report.c:506
- kasan_report+0xe/0x20 mm/kasan/common.c:641
- check_memory_region_inline mm/kasan/generic.c:185 [inline]
- check_memory_region+0x152/0x1c0 mm/kasan/generic.c:192
- atomic_read include/asm-generic/atomic-instrumented.h:26 [inline]
- refcount_read include/linux/refcount.h:134 [inline]
- skb_unref include/linux/skbuff.h:1042 [inline]
- kfree_skb+0x32/0x3d0 net/core/skbuff.c:692
- hif_usb_regout_cb+0x14c/0x1b0 drivers/net/wireless/ath/ath9k/hif_usb.c:97
- __usb_hcd_giveback_urb+0x1f2/0x470 drivers/usb/core/hcd.c:1648
- usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1713
- dummy_timer+0x1258/0x32ae drivers/usb/gadget/udc/dummy_hcd.c:1966
- call_timer_fn+0x195/0x6f0 kernel/time/timer.c:1404
- expire_timers kernel/time/timer.c:1449 [inline]
- __run_timers kernel/time/timer.c:1773 [inline]
- __run_timers kernel/time/timer.c:1740 [inline]
- run_timer_softirq+0x5f9/0x1500 kernel/time/timer.c:1786
- __do_softirq+0x21e/0x950 kernel/softirq.c:292
- invoke_softirq kernel/softirq.c:373 [inline]
- irq_exit+0x178/0x1a0 kernel/softirq.c:413
- exiting_irq arch/x86/include/asm/apic.h:546 [inline]
- smp_apic_timer_interrupt+0x141/0x540 arch/x86/kernel/apic/apic.c:1146
- apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:829
- </IRQ>
-RIP: 0010:default_idle+0x28/0x300 arch/x86/kernel/process.c:696
-Code: cc cc 41 56 41 55 65 44 8b 2d 44 eb 71 7a 41 54 55 53 0f 1f 44 00 00 e8 f6 d7 b4 fb e9 07 00 00 00 0f 00 2d aa 7c 52 00 fb f4 <65> 44 8b 2d 20 eb 71 7a 0f 1f 44 00 00 5b 5d 41 5c 41 5d 41 5e c3
-RSP: 0018:ffff8881da22fda8 EFLAGS: 00000246 ORIG_RAX: ffffffffffffff13
-RAX: 0000000000000007 RBX: ffff8881da213100 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000006 RDI: ffff8881da21394c
-RBP: ffffed103b442620 R08: ffff8881da213100 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
-R13: 0000000000000001 R14: ffffffff87e629c0 R15: 0000000000000000
- cpuidle_idle_call kernel/sched/idle.c:154 [inline]
- do_idle+0x3e0/0x500 kernel/sched/idle.c:269
- cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:361
- start_secondary+0x2a4/0x390 arch/x86/kernel/smpboot.c:264
- secondary_startup_64+0xb6/0xc0 arch/x86/kernel/head_64.S:242
 
-Allocated by task 21:
- save_stack+0x1b/0x80 mm/kasan/common.c:72
- set_track mm/kasan/common.c:80 [inline]
- __kasan_kmalloc mm/kasan/common.c:515 [inline]
- __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:488
- slab_post_alloc_hook mm/slab.h:584 [inline]
- slab_alloc_node mm/slub.c:2786 [inline]
- kmem_cache_alloc_node+0xdc/0x330 mm/slub.c:2822
- __alloc_skb+0xba/0x5a0 net/core/skbuff.c:198
- alloc_skb include/linux/skbuff.h:1081 [inline]
- htc_connect_service+0x2cc/0x840 drivers/net/wireless/ath/ath9k/htc_hst.c:257
- ath9k_wmi_connect+0xd2/0x1a0 drivers/net/wireless/ath/ath9k/wmi.c:265
- ath9k_init_htc_services.constprop.0+0xb4/0x650 drivers/net/wireless/ath/ath9k/htc_drv_init.c:146
- ath9k_htc_probe_device+0x25a/0x1d80 drivers/net/wireless/ath/ath9k/htc_drv_init.c:959
- ath9k_htc_hw_init+0x31/0x60 drivers/net/wireless/ath/ath9k/htc_hst.c:501
- ath9k_hif_usb_firmware_cb+0x26b/0x500 drivers/net/wireless/ath/ath9k/hif_usb.c:1187
- request_firmware_work_func+0x126/0x242 drivers/base/firmware_loader/main.c:976
- process_one_work+0x94b/0x1620 kernel/workqueue.c:2266
- worker_thread+0x96/0xe20 kernel/workqueue.c:2412
- kthread+0x318/0x420 kernel/kthread.c:255
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+> > > > For this to work properly, we will have to rely on subsystems/drivers
+> > > > to call pm_runtime_resume() during the suspend/freeze transition if
+> > > > SMART_SUSPEND is clear.
+> > > 
+> > > That has been the case forever, though.
+> > 
+> > I'm not so sure about that.  The existing PM core code doesn't ever get
+> > into a situation where it tries to set a device's runtime status to
+> > "active" while the parent's status is "suspended".
+> 
+> I'm assuming that you refer to the scenario below.
+> 
+> > > > Otherwise we could have the following scenario:
+> > > > 
+> > > > Device A has a child B, and both are runtime suspended when hibernation
+> > > > starts.  Suppose that the SMART_SUSPEND flag is set for A but not for
+> > > > B, and suppose that B's subsystem/driver neglects to call
+> > > > pm_runtime_resume() during the FREEZE transition.  Then during the THAW
+> > > > transition, dev_pm_skip_resume() will return "true" for A and "false"  
+> > > > for B.  This will lead to an error when the core tries to set B's
+> > > > runtime status to "active" while A's status is "suspended".
+> 
+> That cannot happen, because dev_pm_smart_suspend() also returns 'false' for B
+> and so its runtime status will not be changed to "active".
 
-Freed by task 21:
- save_stack+0x1b/0x80 mm/kasan/common.c:72
- set_track mm/kasan/common.c:80 [inline]
- kasan_set_free_info mm/kasan/common.c:337 [inline]
- __kasan_slab_free+0x117/0x160 mm/kasan/common.c:476
- slab_free_hook mm/slub.c:1444 [inline]
- slab_free_freelist_hook mm/slub.c:1477 [inline]
- slab_free mm/slub.c:3034 [inline]
- kmem_cache_free+0x9b/0x360 mm/slub.c:3050
- kfree_skbmem net/core/skbuff.c:622 [inline]
- kfree_skbmem+0xef/0x1b0 net/core/skbuff.c:616
- __kfree_skb net/core/skbuff.c:679 [inline]
- kfree_skb net/core/skbuff.c:696 [inline]
- kfree_skb+0x102/0x3d0 net/core/skbuff.c:690
- htc_connect_service.cold+0xa9/0x109 drivers/net/wireless/ath/ath9k/htc_hst.c:282
- ath9k_wmi_connect+0xd2/0x1a0 drivers/net/wireless/ath/ath9k/wmi.c:265
- ath9k_init_htc_services.constprop.0+0xb4/0x650 drivers/net/wireless/ath/ath9k/htc_drv_init.c:146
- ath9k_htc_probe_device+0x25a/0x1d80 drivers/net/wireless/ath/ath9k/htc_drv_init.c:959
- ath9k_htc_hw_init+0x31/0x60 drivers/net/wireless/ath/ath9k/htc_hst.c:501
- ath9k_hif_usb_firmware_cb+0x26b/0x500 drivers/net/wireless/ath/ath9k/hif_usb.c:1187
- request_firmware_work_func+0x126/0x242 drivers/base/firmware_loader/main.c:976
- process_one_work+0x94b/0x1620 kernel/workqueue.c:2266
- worker_thread+0x96/0xe20 kernel/workqueue.c:2412
- kthread+0x318/0x420 kernel/kthread.c:255
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Yes, your change to dev_pm_skip_resume() will prevent the problem from 
+arising.
 
-The buggy address belongs to the object at ffff8881d15fd780
- which belongs to the cache skbuff_head_cache of size 224
-The buggy address is located 212 bytes inside of
- 224-byte region [ffff8881d15fd780, ffff8881d15fd860)
-The buggy address belongs to the page:
-page:ffffea0007457f40 refcount:1 mapcount:0 mapping:ffff8881da16b400 index:0x0
-flags: 0x200000000000200(slab)
-raw: 0200000000000200 0000000000000000 0000000300000001 ffff8881da16b400
-raw: 0000000000000000 00000000800c000c 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
 
-Memory state around the buggy address:
- ffff8881d15fd700: fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc
- ffff8881d15fd780: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff8881d15fd800: fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
-                                                 ^
- ffff8881d15fd880: fc fc fc fc fc fc fc fc fb fb fb fb fb fb fb fb
- ffff8881d15fd900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+> BTW, I have updated my pm-sleep-core branch to reflect what appears to be
+> the current state-of-the-art to me.
+> 
+> I'm going to post a v2 of this patch series over the weekend for reference.
+
+Okay, I'll check it out.
+
+By the way, if you don't mind I may want to do some editing of 
+devices.rst.
+
+Alan Stern
+
 
