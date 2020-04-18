@@ -2,118 +2,235 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7401AF4F4
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2020 22:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 366571AF510
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2020 23:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728287AbgDRUcD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Apr 2020 16:32:03 -0400
-Received: from mail-il1-f200.google.com ([209.85.166.200]:51148 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726014AbgDRUcD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Apr 2020 16:32:03 -0400
-Received: by mail-il1-f200.google.com with SMTP id s7so6647423ilo.17
-        for <linux-usb@vger.kernel.org>; Sat, 18 Apr 2020 13:32:02 -0700 (PDT)
+        id S1728223AbgDRVI1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Apr 2020 17:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35694 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726014AbgDRVI1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Apr 2020 17:08:27 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336ACC061A0C;
+        Sat, 18 Apr 2020 14:08:27 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id ay1so2426025plb.0;
+        Sat, 18 Apr 2020 14:08:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=PQ+VkFm1IL2gzeFXBK+nXbQRBkL26Rg4FqNHDJ9y8EQ=;
+        b=AYjGRpComkMu9tmzqiNJx9vkjUQvgwfMriME7vyHciHhfmHM3qzNM6vHy1pEkbIXE+
+         HRVRTfHcE2Bhyagjkgroedt6tcXsBCT62Rdd63bis9wzGFHUSKxh5/+oB1pt+RuBRzVF
+         7qdcy86JYX3rfeoAw1b8hXUeq7nYw0F0N0arPPgjinm8jGhE4y7HYM0qHx5DvivczTaa
+         bQPQoetLyYiVKPaHY7dHcBxGyCe/yJoTkTt1HtYFfu2kRFTwSG1nbZruFWF9iws2N7Di
+         LinDuQyAAk7cc95wF9HEWPlXuNvz4/enyC7AN0wYR+s9n6lE6Uw0tnp4yx8YMKo4JCX0
+         ZL4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=4j/wJyokYK44Hc42WMvLPDps1kfmpnB2q5d2vVNyVB0=;
-        b=HgnAi0Pe6yQivi3Ra7Il00NQSeOuCn/XiJMoNyzpof8+Fy5vmAGk6QOMQF7AQytf3S
-         GWWOzhj7dfk8g8DGxMOJMeBshYJEOGtxtOH8BuIt64HXP5XTORoAIVAki4Nx2ebbhCUb
-         2bw3amP7PQtWIpHaUUrV02KQBjmHwFki6PiS2VX58P77PS6t8VV+QVNzyzt695SXythY
-         2tf8EfEkdSorEVBdtnzq2qFOAyB6ag9Jvyd8tdk6dRtsfIHerJRhhc0kw69fKt+gv1sQ
-         Fnce2OieBQNzyfkHFMnmMaD4rxgD6RLbrCDM65XQ/+Dj+EM3/DpbDn4Ah3bSZ2BCWUXy
-         sJsA==
-X-Gm-Message-State: AGi0PuaFGi1id9XVR5EwAhcxjR05BhnSQCWkF6zbbf42z2JOi5aHZs5Y
-        JyiOmLxEznAH9OjQeRmB/l5+5PcYOrCMvoDGbUoN6LTilbxt
-X-Google-Smtp-Source: APiQypKmZr0v+MVv1ritSQQlOa8XWMx6+hUDY6HrhYam9jNU2H9aqh19amQrNahQHpXjxNaLolSD0hXAKwP9MoQk+cRbY0yNna8e
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=PQ+VkFm1IL2gzeFXBK+nXbQRBkL26Rg4FqNHDJ9y8EQ=;
+        b=ey3vtmhinr1WtzomV2RrdJm08nTmoPjrFSeREhMadOcIcJ5tPcrlINbt4w0opnPgtx
+         /3XdMwGfLos1nFAEDwZgLIRn8U5gV0dwFga71d/ZSiUK8Aul3XqVz05P8sRU7ozHbpqC
+         aSxhCYkgjaw/7vCnjzTfyz4iHgIFizZHEEvx/i+DE0h0vL1z33weLmPZf3AWiz3+DPI4
+         n9M32EjZak2QhKG/d4VXQpPvRDS22VRpr0U8gfDXyCs7gySQCXumOcFiXWeRd68nMs6C
+         D07l7ZMTcqeHne5Hkip8m4Ui8TUc3SAaQPqdWcHfOo5VvSd1uHskZ4grMT44TCiysqBt
+         fM9Q==
+X-Gm-Message-State: AGi0PuawGrMgTXPeZGzZ4TlUtO8emFBKphuJodyfok3f2DbVIqCY1LDr
+        oaoweFvRwIELsulSXl+ZcoM=
+X-Google-Smtp-Source: APiQypIyy0mikmBUcY8Ngq2DMMEAWudajPedCmpZBm3jPRbJNq8QifzfQfTTZyI6773clVmWuXtpyw==
+X-Received: by 2002:a17:902:5997:: with SMTP id p23mr5617071pli.89.1587244106720;
+        Sat, 18 Apr 2020 14:08:26 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c84sm14751055pfb.153.2020.04.18.14.08.25
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 18 Apr 2020 14:08:26 -0700 (PDT)
+Date:   Sat, 18 Apr 2020 14:08:25 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Tobias Schramm <t.schramm@manjaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Yueyao Zhu <yueyao@google.com>, devicetree@vger.kernel.org
+Subject: Re: [PATCH] usb: fusb302: Convert to use GPIO descriptors
+Message-ID: <20200418210825.GA20485@roeck-us.net>
+References: <20200415192448.305257-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-X-Received: by 2002:a02:7125:: with SMTP id n37mr8426289jac.69.1587241922366;
- Sat, 18 Apr 2020 13:32:02 -0700 (PDT)
-Date:   Sat, 18 Apr 2020 13:32:02 -0700
-In-Reply-To: <Pine.LNX.4.44L0.2004181618050.8036-100000@netrider.rowland.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f4957305a3968e84@google.com>
-Subject: Re: KASAN: use-after-free Read in usbhid_close (3)
-From:   syzbot <syzbot+7bf5a7b0f0a1f9446f4c@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200415192448.305257-1-linus.walleij@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Wed, Apr 15, 2020 at 09:24:48PM +0200, Linus Walleij wrote:
+> This converts the FUSB302 driver to use GPIO descriptors.
+> The conversion to descriptors per se is pretty straight-forward.
+> 
+> In the process I discovered that:
+> 
+> 1. The driver uses a completely undocumented device tree binding
+>    for the interrupt GPIO line, "fcs,int_n". Ooops.
+> 
+> 2. The undocumented binding, presumably since it has not seen
+>    review, is just "fcs,int_n", lacking the compulsory "-gpios"
+>    suffix and also something that is not a good name because
+>    the "_n" implies the line is inverted which is something we
+>    handle with flags in the device tree. Ooops.
+> 
+> 3. Possibly the driver should not be requesting the line as a
+>    GPIO and request the corresponding interrupt line by open
+>    coding, the GPIO chip is very likely doubleing as an IRQ
+>    controller and can probably provide an interrupt directly
+>    for this line with interrupts-extended = <&gpio0 ...>;
+> 
+> 4. Possibly the IRQ should just be tagged on the I2C client node
+>    in the device tree like apparently ACPI does, as it overrides
+>    this IRQ with client->irq if that exists.
+> 
+> But now it is too late to do much about that and as I can see
+> this is used like this in the Pinebook which is a shipping product
+> so let'a just contain the mess and move on.
+> 
+> The property currently appears in:
+> arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts
+> 
+> Create a quirk in the GPIO OF library to allow this property
+> specifically to be specified without the "-gpios" suffix, we have
+> other such bindings already.
+> 
+> Cc: Tobias Schramm <t.schramm@manjaro.org>
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Cc: Yueyao Zhu <yueyao@google.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-syzbot has tested the proposed patch but the reproducer still triggered crash:
-WARNING in usbhid_stop
+No idea what to do about the above, but the change itself looks ok to me.
 
-usbhid 6-1:0.0: Stop: 1 1 0 0
-------------[ cut here ]------------
-usbhid 6-1:0.0: Stop while open = 1
-WARNING: CPU: 0 PID: 12 at drivers/hid/usbhid/hid-core.c:1205 usbhid_stop.cold+0x1fb/0x5e6 drivers/hid/usbhid/hid-core.c:1205
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.6.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- panic+0x2aa/0x6e1 kernel/panic.c:221
- __warn.cold+0x2f/0x30 kernel/panic.c:582
- report_bug+0x27b/0x2f0 lib/bug.c:195
- fixup_bug arch/x86/kernel/traps.c:174 [inline]
- fixup_bug arch/x86/kernel/traps.c:169 [inline]
- do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
- do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
- invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-RIP: 0010:usbhid_stop.cold+0x1fb/0x5e6 drivers/hid/usbhid/hid-core.c:1205
-Code: 48 89 7c 24 08 e8 0b 5f bd fc 48 8b 7c 24 08 e8 31 2f f7 fd 48 8b 14 24 44 89 f1 48 c7 c7 20 4b 84 86 48 89 c6 e8 b3 ef 91 fc <0f> 0b e8 e4 5e bd fc 48 8d bb ac 1e 00 00 b8 ff ff 37 00 48 89 fa
-RSP: 0018:ffff8881da227640 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffff8881cf7a8000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff812974dd RDI: ffffed103b444eba
-RBP: ffff8881d1de4000 R08: ffff8881da211880 R09: ffffed103b64439f
-R10: ffffed103b64439e R11: ffff8881db221cf3 R12: ffff8881d1de4008
-R13: ffff8881c5ff4000 R14: 0000000000000001 R15: ffff8881cf7a9fd8
- wacom_remove+0x88/0x3b0 drivers/hid/wacom_sys.c:2773
- hid_device_remove+0xed/0x1d0 drivers/hid/hid-core.c:2298
- __device_release_driver drivers/base/dd.c:1135 [inline]
- device_release_driver_internal+0x231/0x500 drivers/base/dd.c:1168
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
- device_del+0x481/0xd30 drivers/base/core.c:2677
- hid_remove_device drivers/hid/hid-core.c:2469 [inline]
- hid_destroy_device+0xe1/0x150 drivers/hid/hid-core.c:2488
- usbhid_disconnect+0x9f/0xe0 drivers/hid/usbhid/hid-core.c:1420
- usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:436
- __device_release_driver drivers/base/dd.c:1137 [inline]
- device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1168
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
- device_del+0x481/0xd30 drivers/base/core.c:2677
- usb_disable_device+0x23d/0x790 drivers/usb/core/message.c:1238
- usb_disconnect+0x293/0x900 drivers/usb/core/hub.c:2211
- hub_port_connect drivers/usb/core/hub.c:5046 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5335 [inline]
- port_event drivers/usb/core/hub.c:5481 [inline]
- hub_event+0x1a1d/0x4300 drivers/usb/core/hub.c:5563
- process_one_work+0x94b/0x1620 kernel/workqueue.c:2266
- worker_thread+0x96/0xe20 kernel/workqueue.c:2412
- kthread+0x318/0x420 kernel/kthread.c:255
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
+Guenter
 
-Tested on:
-
-commit:         0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
-git tree:       https://github.com/google/kasan.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=17f91227e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
-dashboard link: https://syzkaller.appspot.com/bug?extid=7bf5a7b0f0a1f9446f4c
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1216d073e00000
-
+> ---
+> This is now covered as far as GPIO is concerned but you might
+> want to look into creating proper bindings for this or
+> correcting the devicetree.
+> ---
+>  drivers/gpio/gpiolib-of.c        | 21 +++++++++++++++++++++
+>  drivers/usb/typec/tcpm/fusb302.c | 32 +++++++++-----------------------
+>  2 files changed, 30 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+> index ccc449df3792..20c2c428168e 100644
+> --- a/drivers/gpio/gpiolib-of.c
+> +++ b/drivers/gpio/gpiolib-of.c
+> @@ -460,6 +460,24 @@ static struct gpio_desc *of_find_arizona_gpio(struct device *dev,
+>  	return of_get_named_gpiod_flags(dev->of_node, con_id, 0, of_flags);
+>  }
+>  
+> +static struct gpio_desc *of_find_usb_gpio(struct device *dev,
+> +					  const char *con_id,
+> +					  enum of_gpio_flags *of_flags)
+> +{
+> +	/*
+> +	 * Currently this USB quirk is only for the Fairchild FUSB302 host which is using
+> +	 * an undocumented DT GPIO line named "fcs,int_n" without the compulsory "-gpios"
+> +	 * suffix.
+> +	 */
+> +	if (!IS_ENABLED(CONFIG_TYPEC_FUSB302))
+> +		return ERR_PTR(-ENOENT);
+> +
+> +	if (!con_id || strcmp(con_id, "fcs,int_n"))
+> +		return ERR_PTR(-ENOENT);
+> +
+> +	return of_get_named_gpiod_flags(dev->of_node, con_id, 0, of_flags);
+> +}
+> +
+>  struct gpio_desc *of_find_gpio(struct device *dev, const char *con_id,
+>  			       unsigned int idx, unsigned long *flags)
+>  {
+> @@ -504,6 +522,9 @@ struct gpio_desc *of_find_gpio(struct device *dev, const char *con_id,
+>  	if (PTR_ERR(desc) == -ENOENT)
+>  		desc = of_find_arizona_gpio(dev, con_id, &of_flags);
+>  
+> +	if (PTR_ERR(desc) == -ENOENT)
+> +		desc = of_find_usb_gpio(dev, con_id, &of_flags);
+> +
+>  	if (IS_ERR(desc))
+>  		return desc;
+>  
+> diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+> index b498960ff72b..b28facece43c 100644
+> --- a/drivers/usb/typec/tcpm/fusb302.c
+> +++ b/drivers/usb/typec/tcpm/fusb302.c
+> @@ -9,14 +9,13 @@
+>  #include <linux/delay.h>
+>  #include <linux/errno.h>
+>  #include <linux/extcon.h>
+> -#include <linux/gpio.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/i2c.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+>  #include <linux/of_device.h>
+> -#include <linux/of_gpio.h>
+>  #include <linux/pinctrl/consumer.h>
+>  #include <linux/proc_fs.h>
+>  #include <linux/regulator/consumer.h>
+> @@ -83,7 +82,7 @@ struct fusb302_chip {
+>  	struct work_struct irq_work;
+>  	bool irq_suspended;
+>  	bool irq_while_suspended;
+> -	int gpio_int_n;
+> +	struct gpio_desc *gpio_int_n;
+>  	int gpio_int_n_irq;
+>  	struct extcon_dev *extcon;
+>  
+> @@ -1618,30 +1617,17 @@ static void fusb302_irq_work(struct work_struct *work)
+>  
+>  static int init_gpio(struct fusb302_chip *chip)
+>  {
+> -	struct device_node *node;
+> +	struct device *dev = chip->dev;
+>  	int ret = 0;
+>  
+> -	node = chip->dev->of_node;
+> -	chip->gpio_int_n = of_get_named_gpio(node, "fcs,int_n", 0);
+> -	if (!gpio_is_valid(chip->gpio_int_n)) {
+> -		ret = chip->gpio_int_n;
+> -		dev_err(chip->dev, "cannot get named GPIO Int_N, ret=%d", ret);
+> -		return ret;
+> -	}
+> -	ret = devm_gpio_request(chip->dev, chip->gpio_int_n, "fcs,int_n");
+> -	if (ret < 0) {
+> -		dev_err(chip->dev, "cannot request GPIO Int_N, ret=%d", ret);
+> -		return ret;
+> -	}
+> -	ret = gpio_direction_input(chip->gpio_int_n);
+> -	if (ret < 0) {
+> -		dev_err(chip->dev,
+> -			"cannot set GPIO Int_N to input, ret=%d", ret);
+> -		return ret;
+> +	chip->gpio_int_n = devm_gpiod_get(dev, "fcs,int_n", GPIOD_IN);
+> +	if (IS_ERR(chip->gpio_int_n)) {
+> +		dev_err(dev, "failed to request gpio_int_n\n");
+> +		return PTR_ERR(chip->gpio_int_n);
+>  	}
+> -	ret = gpio_to_irq(chip->gpio_int_n);
+> +	ret = gpiod_to_irq(chip->gpio_int_n);
+>  	if (ret < 0) {
+> -		dev_err(chip->dev,
+> +		dev_err(dev,
+>  			"cannot request IRQ for GPIO Int_N, ret=%d", ret);
+>  		return ret;
+>  	}
+> -- 
+> 2.25.2
+> 
