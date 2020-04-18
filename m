@@ -2,158 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 200741AE92D
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2020 03:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E701AE93F
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2020 03:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725950AbgDRBaO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Apr 2020 21:30:14 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:49205 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725784AbgDRBaN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Apr 2020 21:30:13 -0400
-Received: (qmail 23212 invoked by uid 500); 17 Apr 2020 21:30:12 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 17 Apr 2020 21:30:12 -0400
-Date:   Fri, 17 Apr 2020 21:30:12 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     syzbot <syzbot+7bf5a7b0f0a1f9446f4c@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
-        <ingrassia@epigenesys.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
-Subject: Re: KASAN: use-after-free Read in usbhid_close (3)
-In-Reply-To: <0000000000005f3ae305a3823448@google.com>
-Message-ID: <Pine.LNX.4.44L0.2004172128290.23070-100000@netrider.rowland.org>
+        id S1725856AbgDRBlF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Apr 2020 21:41:05 -0400
+Received: from mail-il1-f198.google.com ([209.85.166.198]:40778 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725784AbgDRBlE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Apr 2020 21:41:04 -0400
+Received: by mail-il1-f198.google.com with SMTP id k5so4380655ilg.7
+        for <linux-usb@vger.kernel.org>; Fri, 17 Apr 2020 18:41:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=mPOo1JI3KWPZ93PiPgN/qhSo1d3M5LaQhxjvUxd2NT0=;
+        b=rU5j9jp2sIGSdZiaxyGiApJxzkhKuqgyMGo18rY+1Gagl/g4kY1uH3n31hjjPU83rR
+         C1yf2UK81dh7aJDZPbGGMg4HTZv4GrQjo172CPE7V5jalUB2QkGrkEnS4KtfF6hCEUjR
+         qTTzLQeilagmm6GnEVREECfm2ig1OxufIObP+y3LOCX8DffEL2bdhd26CqXPcGjVHwxp
+         yxP2kYHTJmJmeXlBK6o8xJlBWnjxIAeo34BWjPkh5oNJdklBOnllLQ0bYSvHC5C+kAtU
+         eggEtJkgKAHGFe0gD86yCLLkZ8bCoD3hnUxsPDlmv5QOYsTC/K03f6zgMT3UbASqCAuf
+         +bHA==
+X-Gm-Message-State: AGi0PubLUN6PmtVnYHnW/cuF+234TFyoFdO/eKNHixtqeTJGWfAr+JBr
+        hkfc8A253txkdQsV+3jDAt8furWHqONvQDpPQHrWsof9Lm0O
+X-Google-Smtp-Source: APiQypIwfk4o74t8TMtn5puTlqy/a0ePArGBfGpoMTmMWRG+QUpWX1V8mlpTjc5GHOfqjdx59Rn4HNdDBgXkMpdEmViWWUfeLRrq
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Received: by 2002:a02:cc91:: with SMTP id s17mr5780738jap.41.1587174063403;
+ Fri, 17 Apr 2020 18:41:03 -0700 (PDT)
+Date:   Fri, 17 Apr 2020 18:41:03 -0700
+In-Reply-To: <Pine.LNX.4.44L0.2004172128290.23070-100000@netrider.rowland.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003ef93005a386c2f9@google.com>
+Subject: Re: KASAN: use-after-free Read in usbhid_close (3)
+From:   syzbot <syzbot+7bf5a7b0f0a1f9446f4c@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 17 Apr 2020, syzbot wrote:
+Hello,
 
-> Hello,
-> 
-> syzbot has tested the proposed patch but the reproducer still triggered crash:
-> WARNING in usbhid_stop
-> 
-> usb 2-1: USB disconnect, device number 5
-> ------------[ cut here ]------------
-> usbhid 2-1:0.0: Stop while open (alloc = 1)
+syzbot has tested the proposed patch but the reproducer still triggered crash:
+KASAN: use-after-free Read in __input_unregister_device
 
-Okay, good.  usbhid_close() should have been called before this 
-happened.  Let's try tracing the pathway; maybe this will show where it 
-goes off the rails.
+wacom 0003:056A:0061.0002: Unknown device_type for 'HID 056a:0061'. Assuming pen.
+input: Wacom PenStation2 Pen as /devices/platform/dummy_hcd.1/usb2/2-1/2-1:0.0/0003:056A:0061.0002/input/input8
+wacom 0003:056A:0061.0002: hidraw1: USB HID v0.00 Device [HID 056a:0061] on usb-dummy_hcd.1-1/input0
+usb 6-1: USB disconnect, device number 2
+==================================================================
+BUG: KASAN: use-after-free in __input_unregister_device+0x4a6/0x4c0 drivers/input/input.c:2089
+Read of size 4 at addr ffff8881cc1380e8 by task kworker/0:1/12
 
-Alan Stern
+CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.6.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xef/0x16e lib/dump_stack.c:118
+ print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
+ __kasan_report.cold+0x37/0x77 mm/kasan/report.c:506
+ kasan_report+0xe/0x20 mm/kasan/common.c:641
+ __input_unregister_device+0x4a6/0x4c0 drivers/input/input.c:2089
+ release_nodes+0x499/0x910 drivers/base/devres.c:507
+ devres_release_group+0x160/0x210 drivers/base/devres.c:678
+ wacom_release_resources drivers/hid/wacom_sys.c:2238 [inline]
+ wacom_remove+0x244/0x3b0 drivers/hid/wacom_sys.c:2786
+ hid_device_remove+0xed/0x240 drivers/hid/hid-core.c:2296
+ __device_release_driver drivers/base/dd.c:1135 [inline]
+ device_release_driver_internal+0x231/0x500 drivers/base/dd.c:1168
+ bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
+ device_del+0x481/0xd30 drivers/base/core.c:2677
+ hid_remove_device drivers/hid/hid-core.c:2467 [inline]
+ hid_destroy_device+0xe1/0x150 drivers/hid/hid-core.c:2486
+ usbhid_disconnect+0x9f/0xe0 drivers/hid/usbhid/hid-core.c:1419
+ usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:436
+ __device_release_driver drivers/base/dd.c:1137 [inline]
+ device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1168
+ bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
+ device_del+0x481/0xd30 drivers/base/core.c:2677
+ usb_disable_device+0x23d/0x790 drivers/usb/core/message.c:1238
+ usb_disconnect+0x293/0x900 drivers/usb/core/hub.c:2211
+ hub_port_connect drivers/usb/core/hub.c:5046 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5335 [inline]
+ port_event drivers/usb/core/hub.c:5481 [inline]
+ hub_event+0x1a1d/0x4300 drivers/usb/core/hub.c:5563
+ process_one_work+0x94b/0x1620 kernel/workqueue.c:2266
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2412
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Allocated by task 3265:
+ save_stack+0x1b/0x80 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ __kasan_kmalloc mm/kasan/common.c:515 [inline]
+ __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:488
+ slab_post_alloc_hook mm/slab.h:584 [inline]
+ slab_alloc_node mm/slub.c:2786 [inline]
+ slab_alloc mm/slub.c:2794 [inline]
+ kmem_cache_alloc+0xd8/0x300 mm/slub.c:2799
+ getname_flags fs/namei.c:138 [inline]
+ getname_flags+0xd2/0x5b0 fs/namei.c:128
+ user_path_at_empty+0x2a/0x50 fs/namei.c:2746
+ user_path_at include/linux/namei.h:58 [inline]
+ do_faccessat+0x248/0x7a0 fs/open.c:398
+ do_syscall_64+0xb6/0x5a0 arch/x86/entry/common.c:294
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
+
+Freed by task 3265:
+ save_stack+0x1b/0x80 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ kasan_set_free_info mm/kasan/common.c:337 [inline]
+ __kasan_slab_free+0x117/0x160 mm/kasan/common.c:476
+ slab_free_hook mm/slub.c:1444 [inline]
+ slab_free_freelist_hook mm/slub.c:1477 [inline]
+ slab_free mm/slub.c:3034 [inline]
+ kmem_cache_free+0x9b/0x360 mm/slub.c:3050
+ putname+0xe1/0x120 fs/namei.c:259
+ filename_lookup+0x282/0x3e0 fs/namei.c:2475
+ user_path_at include/linux/namei.h:58 [inline]
+ do_faccessat+0x248/0x7a0 fs/open.c:398
+ do_syscall_64+0xb6/0x5a0 arch/x86/entry/common.c:294
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
+
+The buggy address belongs to the object at ffff8881cc138000
+ which belongs to the cache names_cache of size 4096
+The buggy address is located 232 bytes inside of
+ 4096-byte region [ffff8881cc138000, ffff8881cc139000)
+The buggy address belongs to the page:
+page:ffffea0007304e00 refcount:1 mapcount:0 mapping:ffff8881da11c000 index:0x0 compound_mapcount: 0
+flags: 0x200000000010200(slab|head)
+raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da11c000
+raw: 0000000000000000 0000000000070007 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff8881cc137f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff8881cc138000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff8881cc138080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                          ^
+ ffff8881cc138100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8881cc138180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
 
-#syz test: https://github.com/google/kasan.git 0fa84af8
+Tested on:
 
-Index: usb-devel/drivers/hid/usbhid/hid-core.c
-===================================================================
---- usb-devel.orig/drivers/hid/usbhid/hid-core.c
-+++ usb-devel/drivers/hid/usbhid/hid-core.c
-@@ -747,6 +747,7 @@ static void usbhid_close(struct hid_devi
- 		return;
- 
- 	hid_cancel_delayed_stuff(usbhid);
-+	--hid->alan_open;
- 	usb_kill_urb(usbhid->urbin);
- 	usbhid->intf->needs_remote_wakeup = 0;
- }
-@@ -1177,6 +1178,7 @@ static int usbhid_start(struct hid_devic
- 		usbhid_set_leds(hid);
- 		device_set_wakeup_enable(&dev->dev, 1);
- 	}
-+	++hid->alan_open;
- 	return 0;
- 
- fail:
-@@ -1197,6 +1199,10 @@ static void usbhid_stop(struct hid_devic
- 	if (WARN_ON(!usbhid))
- 		return;
- 
-+	if (hid->alan_open > 0)
-+		dev_WARN(&usbhid->intf->dev, "Stop while open = %d: %d %d %d\n",
-+				hid->alan_open,
-+				hid->alan1, hid->alan2, hid->alan3);
- 	if (hid->quirks & HID_QUIRK_ALWAYS_POLL) {
- 		clear_bit(HID_IN_POLLING, &usbhid->iofl);
- 		usbhid->intf->needs_remote_wakeup = 0;
-Index: usb-devel/drivers/hid/hid-input.c
-===================================================================
---- usb-devel.orig/drivers/hid/hid-input.c
-+++ usb-devel/drivers/hid/hid-input.c
-@@ -1960,6 +1960,7 @@ void hidinput_disconnect(struct hid_devi
- {
- 	struct hid_input *hidinput, *next;
- 
-+	++hid->alan1;
- 	hidinput_cleanup_battery(hid);
- 
- 	list_for_each_entry_safe(hidinput, next, &hid->inputs, list) {
-Index: usb-devel/drivers/input/evdev.c
-===================================================================
---- usb-devel.orig/drivers/input/evdev.c
-+++ usb-devel/drivers/input/evdev.c
-@@ -23,6 +23,7 @@
- #include <linux/major.h>
- #include <linux/device.h>
- #include <linux/cdev.h>
-+#include <linux/hid.h>
- #include "input-compat.h"
- 
- struct evdev {
-@@ -1329,6 +1330,11 @@ static void evdev_mark_dead(struct evdev
- static void evdev_cleanup(struct evdev *evdev)
- {
- 	struct input_handle *handle = &evdev->handle;
-+	struct hid_device *hid;
-+
-+	hid = (struct hid_device *) input_get_drvdata(evdev->handle.dev);
-+	if (hid)
-+		++hid->alan3;
- 
- 	evdev_mark_dead(evdev);
- 	evdev_hangup(evdev);
-Index: usb-devel/drivers/input/input.c
-===================================================================
---- usb-devel.orig/drivers/input/input.c
-+++ usb-devel/drivers/input/input.c
-@@ -23,6 +23,7 @@
- #include <linux/device.h>
- #include <linux/mutex.h>
- #include <linux/rcupdate.h>
-+#include <linux/hid.h>
- #include "input-compat.h"
- #include "input-poller.h"
- 
-@@ -2081,7 +2082,11 @@ static void input_cleanse_bitmasks(struc
- static void __input_unregister_device(struct input_dev *dev)
- {
- 	struct input_handle *handle, *next;
-+	struct hid_device *hid;
- 
-+	hid = (struct hid_device *) input_get_drvdata(dev);
-+	if (hid)
-+		++hid->alan2;
- 	input_disconnect_device(dev);
- 
- 	mutex_lock(&input_mutex);
-Index: usb-devel/include/linux/hid.h
-===================================================================
---- usb-devel.orig/include/linux/hid.h
-+++ usb-devel/include/linux/hid.h
-@@ -618,6 +618,9 @@ struct hid_device {							/* device repo
- 	struct list_head debug_list;
- 	spinlock_t  debug_list_lock;
- 	wait_queue_head_t debug_wait;
-+
-+	int alan_open;
-+	int alan1, alan2, alan3;
- };
- 
- #define to_hid_device(pdev) \
+commit:         0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
+git tree:       https://github.com/google/kasan.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=169d38d7e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
+dashboard link: https://syzkaller.appspot.com/bug?extid=7bf5a7b0f0a1f9446f4c
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=17a95273e00000
 
