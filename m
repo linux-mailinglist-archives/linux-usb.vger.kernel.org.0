@@ -2,38 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 521541AF0DE
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2020 16:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EECBF1AEF72
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2020 16:44:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728339AbgDROxC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Apr 2020 10:53:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51886 "EHLO mail.kernel.org"
+        id S1728545AbgDROnS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Apr 2020 10:43:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54204 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726105AbgDROmG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 18 Apr 2020 10:42:06 -0400
+        id S1728531AbgDROnR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 18 Apr 2020 10:43:17 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2D5CF221F4;
-        Sat, 18 Apr 2020 14:42:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EF3012224F;
+        Sat, 18 Apr 2020 14:43:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587220925;
-        bh=mbsr4pUywiBf3efxDxkiIZhl7JcP3EsZbHgjH0OG9wA=;
+        s=default; t=1587220996;
+        bh=ZdEoXfQqdR/KlSv3Rzr/9XNVcrwfzEXLQiDZD6AHx04=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p0gIAB4QdYOgZXH8mOmE+7jWAkur/uaLFPbaPGI7VvntldWjE8sLwd6zgdJpGQrg7
-         AamOJTKQwbvpJfmeNQH5XwPc4rjRSNsgvE5zh8OM4TiCYy8N9sWCF4dTSv/oQRnAdm
-         t6XP2KIly2/Arqy+3iw27DL++tKsLDhXJb9iauYI=
+        b=oH/81PI29x1NiOyxrF56O9/5+Xy2WTjoy5d+EzK4QIxZoiGRPW+3if+bzLfsFq+bi
+         PiVagJniOPo8dCmx83eq1JOQphCOISqrrXmZAwcXbPsCGC8OpjXX+dAgdZydsWZMsa
+         JQKXTAnn72gvbzZxAuE0EAvHvRwrUh3O6nTvdqoM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 63/78] xhci: Finetune host initiated USB3 rootport link suspend and resume
-Date:   Sat, 18 Apr 2020 10:40:32 -0400
-Message-Id: <20200418144047.9013-63-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 39/47] xhci: Ensure link state is U3 after setting USB_SS_PORT_LS_U3
+Date:   Sat, 18 Apr 2020 10:42:19 -0400
+Message-Id: <20200418144227.9802-39-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200418144047.9013-1-sashal@kernel.org>
-References: <20200418144047.9013-1-sashal@kernel.org>
+In-Reply-To: <20200418144227.9802-1-sashal@kernel.org>
+References: <20200418144227.9802-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,80 +44,52 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-[ Upstream commit ceca49382ac20e06ce04c21279c7f2868c4ec1d4 ]
+[ Upstream commit eb002726fac7cefb98ff39ddb89e150a1c24fe85 ]
 
-Depending on the current link state the steps to resume the link to U0
-varies. The normal case when a port is suspended (U3) we set the link
-to U0 and wait for a port event when U3exit completed and port moved to
-U0.
+The xHCI spec doesn't specify the upper bound of U3 transition time. For
+some devices 20ms is not enough, so we need to make sure the link state
+is in U3 before further actions.
 
-If the port is in U1/U2, then no event is issued, just set link to U0
+I've tried to use U3 Entry Capability by setting U3 Entry Enable in
+config register, however the port change event for U3 transition
+interrupts the system suspend process.
 
-If port is in Resume or Recovery state then the device has already
-initiated resume, and this host initiated resume is racing against it.
-Port event handler for device initiated resume will set link to U0,
-just wait for the port to reach U0 before returning.
+For now let's use the less ideal method by polling PLS.
 
+[use usleep_range(), and shorten the delay time while polling -Mathias]
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20200312144517.1593-9-mathias.nyman@linux.intel.com
+Link: https://lore.kernel.org/r/20200312144517.1593-7-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-hub.c | 36 +++++++++++++++++++++++++-----------
- 1 file changed, 25 insertions(+), 11 deletions(-)
+ drivers/usb/host/xhci-hub.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index 02f52d4f74df8..a9c87eb8951e8 100644
+index a024230f00e2d..eb4284696f25c 100644
 --- a/drivers/usb/host/xhci-hub.c
 +++ b/drivers/usb/host/xhci-hub.c
-@@ -1307,20 +1307,34 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 				goto error;
- 			}
+@@ -1266,7 +1266,16 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 			xhci_set_link_state(xhci, ports[wIndex], link_state);
  
-+			/*
-+			 * set link to U0, steps depend on current link state.
-+			 * U3: set link to U0 and wait for u3exit completion.
-+			 * U1/U2:  no PLC complete event, only set link to U0.
-+			 * Resume/Recovery: device initiated U0, only wait for
-+			 * completion
-+			 */
- 			if (link_state == USB_SS_PORT_LS_U0) {
--				if ((temp & PORT_PLS_MASK) == XDEV_U0)
--					break;
-+				u32 pls = temp & PORT_PLS_MASK;
-+				bool wait_u0 = false;
- 
--				if (!((temp & PORT_PLS_MASK) == XDEV_U1 ||
--				    (temp & PORT_PLS_MASK) == XDEV_U2 ||
--				    (temp & PORT_PLS_MASK) == XDEV_U3)) {
--					xhci_warn(xhci, "Can only set port %d to U0 from U state\n",
--							wIndex);
--					goto error;
-+				/* already in U0 */
-+				if (pls == XDEV_U0)
-+					break;
-+				if (pls == XDEV_U3 ||
-+				    pls == XDEV_RESUME ||
-+				    pls == XDEV_RECOVERY) {
-+					wait_u0 = true;
-+					reinit_completion(&bus_state->u3exit_done[wIndex]);
+ 			spin_unlock_irqrestore(&xhci->lock, flags);
+-			msleep(20); /* wait device to enter */
++			if (link_state == USB_SS_PORT_LS_U3) {
++				int retries = 16;
++
++				while (retries--) {
++					usleep_range(4000, 8000);
++					temp = readl(ports[wIndex]->addr);
++					if ((temp & PORT_PLS_MASK) == XDEV_U3)
++						break;
 +				}
-+				if (pls <= XDEV_U3) /* U1, U2, U3 */
-+					xhci_set_link_state(xhci, ports[wIndex],
-+							    USB_SS_PORT_LS_U0);
-+				if (!wait_u0) {
-+					if (pls > XDEV_U3)
-+						goto error;
-+					break;
- 				}
--				reinit_completion(&bus_state->u3exit_done[wIndex]);
--				xhci_set_link_state(xhci, ports[wIndex],
--						    USB_SS_PORT_LS_U0);
- 				spin_unlock_irqrestore(&xhci->lock, flags);
- 				if (!wait_for_completion_timeout(&bus_state->u3exit_done[wIndex],
- 								 msecs_to_jiffies(100)))
++			}
+ 			spin_lock_irqsave(&xhci->lock, flags);
+ 
+ 			temp = readl(ports[wIndex]->addr);
 -- 
 2.20.1
 
