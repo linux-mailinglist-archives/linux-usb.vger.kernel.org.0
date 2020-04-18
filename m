@@ -2,30 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BFF41AE8A8
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2020 01:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 200741AE92D
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2020 03:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728316AbgDQXhn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Apr 2020 19:37:43 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:58003 "HELO
+        id S1725950AbgDRBaO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Apr 2020 21:30:14 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:49205 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726167AbgDQXhh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Apr 2020 19:37:37 -0400
-Received: (qmail 14532 invoked by uid 500); 17 Apr 2020 19:37:36 -0400
+        with SMTP id S1725784AbgDRBaN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Apr 2020 21:30:13 -0400
+Received: (qmail 23212 invoked by uid 500); 17 Apr 2020 21:30:12 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 17 Apr 2020 19:37:36 -0400
-Date:   Fri, 17 Apr 2020 19:37:36 -0400 (EDT)
+  by localhost with SMTP; 17 Apr 2020 21:30:12 -0400
+Date:   Fri, 17 Apr 2020 21:30:12 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@netrider.rowland.org
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Qais Yousef <qais.yousef@arm.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux-pm mailing list <linux-pm@vger.kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
-In-Reply-To: <3462492.idEHzggvYf@kreacher>
-Message-ID: <Pine.LNX.4.44L0.2004171928160.13245-100000@netrider.rowland.org>
+To:     syzbot <syzbot+7bf5a7b0f0a1f9446f4c@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
+        <ingrassia@epigenesys.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
+Subject: Re: KASAN: use-after-free Read in usbhid_close (3)
+In-Reply-To: <0000000000005f3ae305a3823448@google.com>
+Message-ID: <Pine.LNX.4.44L0.2004172128290.23070-100000@netrider.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -33,87 +31,129 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 17 Apr 2020, Rafael J. Wysocki wrote:
+On Fri, 17 Apr 2020, syzbot wrote:
 
-> There is one detail here that I missed, sorry about that.
+> Hello,
 > 
-> Actually, the core can only set the runtime status to "active" for
-> devices where dev_pm_skip_suspend() returns 'true'.
+> syzbot has tested the proposed patch but the reproducer still triggered crash:
+> WARNING in usbhid_stop
 > 
-> First, if the device is not "suspended", its status is "active" already
-> anyway.
-> 
-> Second, if the device has SMART_SUSPEND clear, the driver may not expect
-> its runtime status to change from "suspended" to "active" during system-wide
-> resume-type transitions (the driver's system-wide PM callbacks may use
-> the runtime status to determine what to do and changing the status this
-> way may confuse that).
-> 
-> [Actually, the drivers that set neither SMART_SUSPEND nor MAY_SKIP_RESUME
->  may not expect the runtime status to change during system-wide resume-type
->  transitions at all, but there is the corner case when the driver can set
->  MAY_SKIP_RESUME without setting SMART_SUSPEND.  In that case its "noirq"
->  and "early" resume callbacks may be skipped and then it should expect
->  the runtime status to sometimes change from "active" to "suspended" during
->  RESUME transitions, but it may still not expect to see changes the other way
->  around, as in that case all of its callbacks are going to be invoked and
->  apply the internal runtime status handling mentioned above.]
-> 
-> So overall:
-> 
->   At the start of the {resume,thaw,restore}_noirq phase, if
->   dev_pm_skip_resume() returns true ,then the core will set the
->   runtime status to "suspended".  Otherwise, if dev_pm_skip_suspend()
->   also returns true, then the core will set the runtime status to "active".
->   If this is not what the subsystem or driver wants, it must update the
->   runtime status itself.
+> usb 2-1: USB disconnect, device number 5
+> ------------[ cut here ]------------
+> usbhid 2-1:0.0: Stop while open (alloc = 1)
 
-Sigh.  The bug which prompted this whole thread was when I forgot to 
-set the runtime PM status back to "active" in one of my drivers.  I was 
-hoping the core could handle it for me automatically.
-
-I guess the answer is always to set the SMART_SUSPEND flag.
-
-
-> > > > For this to work properly, we will have to rely on subsystems/drivers
-> > > > to call pm_runtime_resume() during the suspend/freeze transition if
-> > > > SMART_SUSPEND is clear.
-> > > 
-> > > That has been the case forever, though.
-> > 
-> > I'm not so sure about that.  The existing PM core code doesn't ever get
-> > into a situation where it tries to set a device's runtime status to
-> > "active" while the parent's status is "suspended".
-> 
-> I'm assuming that you refer to the scenario below.
-> 
-> > > > Otherwise we could have the following scenario:
-> > > > 
-> > > > Device A has a child B, and both are runtime suspended when hibernation
-> > > > starts.  Suppose that the SMART_SUSPEND flag is set for A but not for
-> > > > B, and suppose that B's subsystem/driver neglects to call
-> > > > pm_runtime_resume() during the FREEZE transition.  Then during the THAW
-> > > > transition, dev_pm_skip_resume() will return "true" for A and "false"  
-> > > > for B.  This will lead to an error when the core tries to set B's
-> > > > runtime status to "active" while A's status is "suspended".
-> 
-> That cannot happen, because dev_pm_smart_suspend() also returns 'false' for B
-> and so its runtime status will not be changed to "active".
-
-Yes, your change to dev_pm_skip_resume() will prevent the problem from 
-arising.
-
-
-> BTW, I have updated my pm-sleep-core branch to reflect what appears to be
-> the current state-of-the-art to me.
-> 
-> I'm going to post a v2 of this patch series over the weekend for reference.
-
-Okay, I'll check it out.
-
-By the way, if you don't mind I may want to do some editing of 
-devices.rst.
+Okay, good.  usbhid_close() should have been called before this 
+happened.  Let's try tracing the pathway; maybe this will show where it 
+goes off the rails.
 
 Alan Stern
 
+
+#syz test: https://github.com/google/kasan.git 0fa84af8
+
+Index: usb-devel/drivers/hid/usbhid/hid-core.c
+===================================================================
+--- usb-devel.orig/drivers/hid/usbhid/hid-core.c
++++ usb-devel/drivers/hid/usbhid/hid-core.c
+@@ -747,6 +747,7 @@ static void usbhid_close(struct hid_devi
+ 		return;
+ 
+ 	hid_cancel_delayed_stuff(usbhid);
++	--hid->alan_open;
+ 	usb_kill_urb(usbhid->urbin);
+ 	usbhid->intf->needs_remote_wakeup = 0;
+ }
+@@ -1177,6 +1178,7 @@ static int usbhid_start(struct hid_devic
+ 		usbhid_set_leds(hid);
+ 		device_set_wakeup_enable(&dev->dev, 1);
+ 	}
++	++hid->alan_open;
+ 	return 0;
+ 
+ fail:
+@@ -1197,6 +1199,10 @@ static void usbhid_stop(struct hid_devic
+ 	if (WARN_ON(!usbhid))
+ 		return;
+ 
++	if (hid->alan_open > 0)
++		dev_WARN(&usbhid->intf->dev, "Stop while open = %d: %d %d %d\n",
++				hid->alan_open,
++				hid->alan1, hid->alan2, hid->alan3);
+ 	if (hid->quirks & HID_QUIRK_ALWAYS_POLL) {
+ 		clear_bit(HID_IN_POLLING, &usbhid->iofl);
+ 		usbhid->intf->needs_remote_wakeup = 0;
+Index: usb-devel/drivers/hid/hid-input.c
+===================================================================
+--- usb-devel.orig/drivers/hid/hid-input.c
++++ usb-devel/drivers/hid/hid-input.c
+@@ -1960,6 +1960,7 @@ void hidinput_disconnect(struct hid_devi
+ {
+ 	struct hid_input *hidinput, *next;
+ 
++	++hid->alan1;
+ 	hidinput_cleanup_battery(hid);
+ 
+ 	list_for_each_entry_safe(hidinput, next, &hid->inputs, list) {
+Index: usb-devel/drivers/input/evdev.c
+===================================================================
+--- usb-devel.orig/drivers/input/evdev.c
++++ usb-devel/drivers/input/evdev.c
+@@ -23,6 +23,7 @@
+ #include <linux/major.h>
+ #include <linux/device.h>
+ #include <linux/cdev.h>
++#include <linux/hid.h>
+ #include "input-compat.h"
+ 
+ struct evdev {
+@@ -1329,6 +1330,11 @@ static void evdev_mark_dead(struct evdev
+ static void evdev_cleanup(struct evdev *evdev)
+ {
+ 	struct input_handle *handle = &evdev->handle;
++	struct hid_device *hid;
++
++	hid = (struct hid_device *) input_get_drvdata(evdev->handle.dev);
++	if (hid)
++		++hid->alan3;
+ 
+ 	evdev_mark_dead(evdev);
+ 	evdev_hangup(evdev);
+Index: usb-devel/drivers/input/input.c
+===================================================================
+--- usb-devel.orig/drivers/input/input.c
++++ usb-devel/drivers/input/input.c
+@@ -23,6 +23,7 @@
+ #include <linux/device.h>
+ #include <linux/mutex.h>
+ #include <linux/rcupdate.h>
++#include <linux/hid.h>
+ #include "input-compat.h"
+ #include "input-poller.h"
+ 
+@@ -2081,7 +2082,11 @@ static void input_cleanse_bitmasks(struc
+ static void __input_unregister_device(struct input_dev *dev)
+ {
+ 	struct input_handle *handle, *next;
++	struct hid_device *hid;
+ 
++	hid = (struct hid_device *) input_get_drvdata(dev);
++	if (hid)
++		++hid->alan2;
+ 	input_disconnect_device(dev);
+ 
+ 	mutex_lock(&input_mutex);
+Index: usb-devel/include/linux/hid.h
+===================================================================
+--- usb-devel.orig/include/linux/hid.h
++++ usb-devel/include/linux/hid.h
+@@ -618,6 +618,9 @@ struct hid_device {							/* device repo
+ 	struct list_head debug_list;
+ 	spinlock_t  debug_list_lock;
+ 	wait_queue_head_t debug_wait;
++
++	int alan_open;
++	int alan1, alan2, alan3;
+ };
+ 
+ #define to_hid_device(pdev) \
 
