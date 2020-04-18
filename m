@@ -2,94 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EECBF1AEF72
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2020 16:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28FD01AF35E
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Apr 2020 20:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728545AbgDROnS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Apr 2020 10:43:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54204 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728531AbgDROnR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 18 Apr 2020 10:43:17 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EF3012224F;
-        Sat, 18 Apr 2020 14:43:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587220996;
-        bh=ZdEoXfQqdR/KlSv3Rzr/9XNVcrwfzEXLQiDZD6AHx04=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oH/81PI29x1NiOyxrF56O9/5+Xy2WTjoy5d+EzK4QIxZoiGRPW+3if+bzLfsFq+bi
-         PiVagJniOPo8dCmx83eq1JOQphCOISqrrXmZAwcXbPsCGC8OpjXX+dAgdZydsWZMsa
-         JQKXTAnn72gvbzZxAuE0EAvHvRwrUh3O6nTvdqoM=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        id S1728048AbgDRSlX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Apr 2020 14:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726320AbgDRSlR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Apr 2020 14:41:17 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C78C061A41;
+        Sat, 18 Apr 2020 11:41:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=d5zfrylOKoUmkiJ/VV8Fl3fzLkxXbmDEJr/3MIsevyo=; b=XCwSjlVez+qHxOPmcyTIK6oiMp
+        olawr70vtpi0V1QI9XKQUEdNlzc7gZtydJwYjHnNgNwCiR0Y8ytqLU1885mYKcfU2nNRcSQ+hBEej
+        MiJH64ZiTrBz5h80SHKV7B2XhV/8NA5dx2/XMstBP2kRcY+jAyFTPEP07dibSEvWPpw6URRhjEARq
+        GsW6VSkFXNXfFpWKtacsKtxhxuNePEr2gYhZGljGT1rr1HkTT8hxKqdKHdiJLDwOvTjuHdAESVOeL
+        NqEnuUJjyC5UmLntvc7lJwAg8Acv/O1w1fMRoAZtCHCPa4lyuiz4kTPN/HiIYqU17pqZ6fxYiBEQ9
+        d15hNa1Q==;
+Received: from [2601:1c0:6280:3f0::19c2] (helo=smtpauth.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jPsOv-0007rZ-9I; Sat, 18 Apr 2020 18:41:13 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 39/47] xhci: Ensure link state is U3 after setting USB_SS_PORT_LS_U3
-Date:   Sat, 18 Apr 2020 10:42:19 -0400
-Message-Id: <20200418144227.9802-39-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200418144227.9802-1-sashal@kernel.org>
-References: <20200418144227.9802-1-sashal@kernel.org>
+        linux-usb@vger.kernel.org,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        linux-nfs@vger.kernel.org,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, linux-nvdimm@lists.01.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        Zzy Wysm <zzy@zzywysm.com>
+Subject: [RFC PATCH 0/9] fix -Wempty-body build warnings
+Date:   Sat, 18 Apr 2020 11:41:02 -0700
+Message-Id: <20200418184111.13401-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.16.4
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Hi,
 
-[ Upstream commit eb002726fac7cefb98ff39ddb89e150a1c24fe85 ]
+When -Wextra is used, gcc emits many warnings about an empty 'if' or
+'else' body, like this:
 
-The xHCI spec doesn't specify the upper bound of U3 transition time. For
-some devices 20ms is not enough, so we need to make sure the link state
-is in U3 before further actions.
+../fs/posix_acl.c: In function ‘get_acl’:
+../fs/posix_acl.c:127:22: warning: suggest braces around empty body in an ‘if’ statement [-Wempty-body]
+   /* fall through */ ;
+                      ^
 
-I've tried to use U3 Entry Capability by setting U3 Entry Enable in
-config register, however the port change event for U3 transition
-interrupts the system suspend process.
+To quieten these warnings, add a new macro "do_empty()".
+I originally wanted to use do_nothing(), but that's already in use.
 
-For now let's use the less ideal method by polling PLS.
+It would sorta be nice if "fallthrough" could be coerced for this
+instead of using something like do_empty().
 
-[use usleep_range(), and shorten the delay time while polling -Mathias]
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20200312144517.1593-7-mathias.nyman@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/host/xhci-hub.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+Or should we just use "{}" in place of ";"?
+This causes some odd coding style issue IMO. E.g., see this change:
 
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index a024230f00e2d..eb4284696f25c 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -1266,7 +1266,16 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 			xhci_set_link_state(xhci, ports[wIndex], link_state);
- 
- 			spin_unlock_irqrestore(&xhci->lock, flags);
--			msleep(20); /* wait device to enter */
-+			if (link_state == USB_SS_PORT_LS_U3) {
-+				int retries = 16;
-+
-+				while (retries--) {
-+					usleep_range(4000, 8000);
-+					temp = readl(ports[wIndex]->addr);
-+					if ((temp & PORT_PLS_MASK) == XDEV_U3)
-+						break;
-+				}
-+			}
- 			spin_lock_irqsave(&xhci->lock, flags);
- 
- 			temp = readl(ports[wIndex]->addr);
--- 
-2.20.1
+original:
+ 	if (cmpxchg(p, ACL_NOT_CACHED, sentinel) != ACL_NOT_CACHED)
+		/* fall through */ ;
 
+with new macro:
+ 	if (cmpxchg(p, ACL_NOT_CACHED, sentinel) != ACL_NOT_CACHED)
+		do_empty(); /* fall through */
+
+using {}:
+ 	if (cmpxchg(p, ACL_NOT_CACHED, sentinel) != ACL_NOT_CACHED)
+		{} /* fall through */
+or
+		{ /* fall through */ }
+or even
+ 	if (cmpxchg(p, ACL_NOT_CACHED, sentinel) != ACL_NOT_CACHED) {
+		/* fall through */ }
+or
+ 	if (cmpxchg(p, ACL_NOT_CACHED, sentinel) != ACL_NOT_CACHED) {
+		} /* fall through */
+
+
+ drivers/base/devcoredump.c         |    5 +++--
+ drivers/dax/bus.c                  |    5 +++--
+ drivers/input/mouse/synaptics.c    |    3 ++-
+ drivers/target/target_core_pscsi.c |    3 ++-
+ drivers/usb/core/sysfs.c           |    2 +-
+ fs/nfsd/nfs4state.c                |    3 ++-
+ fs/posix_acl.c                     |    2 +-
+ include/linux/kernel.h             |    8 ++++++++
+ sound/drivers/vx/vx_core.c         |    3 ++-
+ 9 files changed, 24 insertions(+), 10 deletions(-)
