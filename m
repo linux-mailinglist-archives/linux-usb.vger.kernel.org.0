@@ -2,115 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 149F21AF689
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Apr 2020 06:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A7C1AF76D
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Apr 2020 08:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725963AbgDSENs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Apr 2020 00:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725802AbgDSENs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Apr 2020 00:13:48 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F826C061A0C;
-        Sat, 18 Apr 2020 21:13:48 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id o185so2802709pgo.3;
-        Sat, 18 Apr 2020 21:13:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3s5cKFQ7XPNe0wu0jQrVSX2Ly/Khgn/8amiFN2ieLnw=;
-        b=nc7C4dtP5jWEPmI/augCn+uFPjAAh138K7yvfwh8oXVE+ZYZqIpHa+07/oyFlmAWSE
-         8ko6vN4BtMRK2fWqQFms4VjhA9BcA02OcsEUn1RTESHhD6tFFcuv8PYg9/Fehy9Y4zuB
-         urcq4LYm8rKvhwGDzOrLIiiLKhY2lD2Ni6uOi5+uwnMb6Cj+HjFiZFmnPtpvy+4IzKXB
-         G5jR7t+6ydWF8geHkbLrCLXKOvB7juzZNNXzB2Pu0gtpRTsFKp0ZysekCeBQPQgTZCBX
-         a8rSk7OnTSs5oGA3rnpV26xLIjuPMi9rBIWgxbkOGZ/0JReIvrzCKr4R6Hk/WK6PvN/g
-         v+lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3s5cKFQ7XPNe0wu0jQrVSX2Ly/Khgn/8amiFN2ieLnw=;
-        b=MAQXFPvdPzNXqIcugQLhp/+xjt17snxt4O4xm2hDkFvuano8dNZ8SK7PFLk0kU8zNZ
-         /YrZFAxDPL3Q86WJgMGj1ZSBwjE9TokGGqs8+9RHhqSOj6YX0yYXkV0eIQWxImM3kJ33
-         umLguihBYptWsP2ZVdLucSlDLRwCjOJ5j/MfIFqh2kz5RC+mkt2tfWtwXJQCo5Vmxkyt
-         0nHCMBk+SbFeeroaKnYExSkYDNlkqWFyao18OF6k38p11HpwqYfQsIgcdPJRKsi+Tv/E
-         PUut/DtN1HmNsPTCjhx8bMANiI6wBKf2mLFxZshljyapBScgKS5OUQSeT6lttuSgXZsJ
-         uRuQ==
-X-Gm-Message-State: AGi0PuZJhibf4Dg1FDMlwDqm8Cd/7pF0dZYfy3ewxFHw0xcLRp2S6Zhw
-        XXrEYcz7L4zyQNoMs0iUWrE=
-X-Google-Smtp-Source: APiQypJ0sQupgLMr/STedCRQuJsXmt1qheRZ06mnhejtYsJkcteV/9gzGW+Vl0sOMLQ+AAFaMmP5oQ==
-X-Received: by 2002:aa7:9575:: with SMTP id x21mr6722659pfq.324.1587269627673;
-        Sat, 18 Apr 2020 21:13:47 -0700 (PDT)
-Received: from dtor-ws ([2620:15c:202:201:3c2a:73a9:c2cf:7f45])
-        by smtp.gmail.com with ESMTPSA id x26sm15331040pfo.218.2020.04.18.21.13.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Apr 2020 21:13:47 -0700 (PDT)
-Date:   Sat, 18 Apr 2020 21:13:44 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Julian Squires <julian@cipht.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        syzbot <syzbot+7bf5a7b0f0a1f9446f4c@syzkaller.appspotmail.com>,
-        linux-input@vger.kernel.org, andreyknvl@google.com,
-        gregkh@linuxfoundation.org, ingrassia@epigenesys.com,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com, Ping Cheng <pingc@wacom.com>,
-        pinglinux@gmail.com, killertofu@gmail.com
-Subject: Re: KASAN: use-after-free Read in usbhid_close (3)
-Message-ID: <20200419041344.GC166864@dtor-ws>
-References: <000000000000f610e805a39af1d0@google.com>
- <Pine.LNX.4.44L0.2004182158020.26218-100000@netrider.rowland.org>
- <20200419040944.GB166864@dtor-ws>
+        id S1726026AbgDSGCv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Apr 2020 02:02:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60178 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725914AbgDSGCu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 19 Apr 2020 02:02:50 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A4A4B2076A;
+        Sun, 19 Apr 2020 06:02:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587276170;
+        bh=r2AgjpwBy563/SvDhTEdOgTQsrTjb6KChd2dLbtCIIs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pTMv1wODwFpdjz0FVgzA+p2WSCpvCxj18+/q3aiIPhhtKR+jsjHHIdl5zJ2q2+RA3
+         +Tdmi8jGAiqk3VTvUYzIU3dTg9Q3SKwo6y6sZDkWyGvygbRRccfGpH1VpT4kAcKc5E
+         4lTNQxLSLwDJyeMo2kAEPugwsa59XjBdxg3VhiTs=
+Date:   Sun, 19 Apr 2020 08:02:47 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        linux-nfs@vger.kernel.org,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, linux-nvdimm@lists.01.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        Zzy Wysm <zzy@zzywysm.com>
+Subject: Re: [PATCH 7/9] drivers/base: fix empty-body warnings in
+ devcoredump.c
+Message-ID: <20200419060247.GA3535909@kroah.com>
+References: <20200418184111.13401-1-rdunlap@infradead.org>
+ <20200418184111.13401-8-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200419040944.GB166864@dtor-ws>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200418184111.13401-8-rdunlap@infradead.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Apr 18, 2020 at 09:09:44PM -0700, Dmitry Torokhov wrote:
-> Hi Alan,
+On Sat, Apr 18, 2020 at 11:41:09AM -0700, Randy Dunlap wrote:
+> Fix gcc empty-body warning when -Wextra is used:
 > 
-> On Sat, Apr 18, 2020 at 10:16:32PM -0400, Alan Stern wrote:
-> > linux-input people:
-> > 
-> > syzbot has found a bug related to USB/HID/input, and I have narrowed it
-> > down to the wacom driver.  As far as I can tell, the problem is caused
-> > the fact that drivers/hid/wacom_sys.c calls input_register_device()
-> > in several places, but it never calls input_unregister_device().
-> > 
-> > I know very little about the input subsystem, but this certainly seems 
-> > like a bug.
+> ../drivers/base/devcoredump.c:297:42: warning: suggest braces around empty body in an ‘if’ statement [-Wempty-body]
+> ../drivers/base/devcoredump.c:301:42: warning: suggest braces around empty body in an ‘if’ statement [-Wempty-body]
 > 
-> Wacom driver uses devm_input_allocate_device(), so unregister should
-> happen automatically on device removal once we exit wacom_probe().
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Johannes Berg <johannes@sipsolutions.net>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> ---
+>  drivers/base/devcoredump.c |    5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> > 
-> > When the device is unplugged, the disconnect pathway doesn't call
-> > hid_hw_close().  That routine doesn't get called until the user closes
-> > the device file (which can be long after the device is gone and
-> > hid_hw_stop() has run).  Then usbhid_close() gets a use-after-free
-> > error when it tries to access data structures that were deallocated by
-> > usbhid_stop().  No doubt there are other problems too, but this is
-> > the one that syzbot found.
-> 
-> Unregistering the input device should result in calling wacom_close()
-> (if device was previously opened), which, as far as I can tell, calls
-> hid_hw_close().
-> 
-> I wonder if it is valid to call hid_hw_stop() before hid_hw_close()?
-> 
-> It could be that we again get confused by the "easiness" of devm APIs
-> and completely screwing up unwind order.
+> --- linux-next-20200417.orig/drivers/base/devcoredump.c
+> +++ linux-next-20200417/drivers/base/devcoredump.c
+> @@ -9,6 +9,7 @@
+>   *
+>   * Author: Johannes Berg <johannes@sipsolutions.net>
+>   */
+> +#include <linux/kernel.h>
 
-Let's also add Ping and Jason to the conversation...
+Why the need for this .h file being added for reformatting the code?
 
--- 
-Dmitry
+thanks,
+
+greg k-h
