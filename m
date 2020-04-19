@@ -2,97 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5EB41AFABA
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Apr 2020 15:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35B9D1AFB17
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Apr 2020 16:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726006AbgDSNbF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Apr 2020 09:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44856 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725793AbgDSNbF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Apr 2020 09:31:05 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7E6C061A0C;
-        Sun, 19 Apr 2020 06:31:03 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id f8so2913811plt.2;
-        Sun, 19 Apr 2020 06:31:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=XeW63w2kIWVeKtwQqvg/T7rrTKTD/Vw3x02Lf0zegeU=;
-        b=A6Is3stE+3bHgtyjZYV6VI11XXA/2Tpe/HGq+TZRXVjDKoieX8m1pRxFvadip/3Z59
-         KwpYLB7BC9uhbFoIFAAkOiz5Z6KQ6rXkgt357r8NjYtQxAEQ6p0AOTzrl05CUIl/ui4G
-         vBOXqH+gTBV6FfoZ3Ujoa0b38xkFWvxygqph17k+Av/Fr8A/Pl6K3WwTzPkGu18ux+ta
-         iyzh3L8NCSElYg9wBirYtSo25fE04XXbRshoijxcdr7h8g6zZz16cd2j0NcfnrDhal1j
-         3rwMvYjFDP+eDGyCedft9dwH7E9ID6lA5O40X1b43449ZtwqwEH6ADbqWIizfAk6ZNit
-         dVeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=XeW63w2kIWVeKtwQqvg/T7rrTKTD/Vw3x02Lf0zegeU=;
-        b=ocXqdokLek1Db4GmQTl6LBfIq5IYGlmyN/WEeU/CfLJ2N70o10sfg9FdCsETI55kkt
-         Ydh7F+avXAsCgzsNdpoBji0Zuuf9p1nqfW4e3+UNUp/B3uTW0tVTQNJWHFtx2GWQAh97
-         JzOH4sp5k1W4SdR8Wxbu9LF4qsVzgCpmDcFwxT1sDnh6RUQYB0b3SlQPkKRWTIjpERYU
-         NJTetQg+xNGs/a+UbGDSGB9tFZJJ+YG74smukCptsFV/41VOtC6Urz1k++i5405uQZys
-         gVPFhj51GhC0hqYSJ5o2b+jvENCKgrj2VeHSZHNOEGeNAYWTytJu3JIYmAwWPpn5Q+Ij
-         d3Dw==
-X-Gm-Message-State: AGi0Pubezu6t/Mk3aovg85ge4mSSvTlEDPcI1tEoHzfkNoXgVhZSuA3f
-        W0iaEQMVsCtc7RmFGRn5YA38p2+PRF4=
-X-Google-Smtp-Source: APiQypKMgGN+xYv+FGR7B9/jqDRQJaEKu2zzTtOWe85tWpHsEn7t6ihxrr7OtqqwxPCt8sQRNr2SvA==
-X-Received: by 2002:a17:902:8d8e:: with SMTP id v14mr11803655plo.186.1587303062686;
-        Sun, 19 Apr 2020 06:31:02 -0700 (PDT)
-Received: from nishad ([106.51.232.103])
-        by smtp.gmail.com with ESMTPSA id g14sm19289010pfh.49.2020.04.19.06.30.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 19 Apr 2020 06:31:02 -0700 (PDT)
-Date:   Sun, 19 Apr 2020 19:00:55 +0530
-From:   Nishad Kamdar <nishadkamdar@gmail.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Joe Perches <joe@perches.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] USB: typec: Use the correct style for SPDX License Identifier
-Message-ID: <20200419133051.GA7154@nishad>
+        id S1726036AbgDSOHg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Apr 2020 10:07:36 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:34515 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725905AbgDSOHf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Apr 2020 10:07:35 -0400
+Received: (qmail 30013 invoked by uid 500); 19 Apr 2020 10:07:34 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 19 Apr 2020 10:07:34 -0400
+Date:   Sun, 19 Apr 2020 10:07:34 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+cc:     Julian Squires <julian@cipht.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        syzbot <syzbot+7bf5a7b0f0a1f9446f4c@syzkaller.appspotmail.com>,
+        <linux-input@vger.kernel.org>, <andreyknvl@google.com>,
+        <gregkh@linuxfoundation.org>, <ingrassia@epigenesys.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        <syzkaller-bugs@googlegroups.com>, Ping Cheng <pingc@wacom.com>,
+        <pinglinux@gmail.com>, <killertofu@gmail.com>
+Subject: Re: KASAN: use-after-free Read in usbhid_close (3)
+In-Reply-To: <20200419041344.GC166864@dtor-ws>
+Message-ID: <Pine.LNX.4.44L0.2004191000080.29527-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch corrects the SPDX License Identifier style in
-header file related to USB Type-C support.
-For C header files Documentation/process/license-rules.rst
-mandates C-like comments (opposed to C source files where
-C++ style should be used).
+On Sat, 18 Apr 2020, Dmitry Torokhov wrote:
 
-Changes made by using a script provided by Joe Perches here:
-https://lkml.org/lkml/2019/2/7/46.
+> On Sat, Apr 18, 2020 at 09:09:44PM -0700, Dmitry Torokhov wrote:
+> > Hi Alan,
+> > 
+> > On Sat, Apr 18, 2020 at 10:16:32PM -0400, Alan Stern wrote:
+> > > linux-input people:
+> > > 
+> > > syzbot has found a bug related to USB/HID/input, and I have narrowed it
+> > > down to the wacom driver.  As far as I can tell, the problem is caused
+> > > the fact that drivers/hid/wacom_sys.c calls input_register_device()
+> > > in several places, but it never calls input_unregister_device().
+> > > 
+> > > I know very little about the input subsystem, but this certainly seems 
+> > > like a bug.
+> > 
+> > Wacom driver uses devm_input_allocate_device(), so unregister should
+> > happen automatically on device removal once we exit wacom_probe().
+> > 
+> > > 
+> > > When the device is unplugged, the disconnect pathway doesn't call
+> > > hid_hw_close().  That routine doesn't get called until the user closes
+> > > the device file (which can be long after the device is gone and
+> > > hid_hw_stop() has run).  Then usbhid_close() gets a use-after-free
+> > > error when it tries to access data structures that were deallocated by
+> > > usbhid_stop().  No doubt there are other problems too, but this is
+> > > the one that syzbot found.
+> > 
+> > Unregistering the input device should result in calling wacom_close()
+> > (if device was previously opened), which, as far as I can tell, calls
+> > hid_hw_close().
+> > 
+> > I wonder if it is valid to call hid_hw_stop() before hid_hw_close()?
 
-Suggested-by: Joe Perches <joe@perches.com>
-Signed-off-by: Nishad Kamdar <nishadkamdar@gmail.com>
----
- drivers/usb/typec/tcpm/fusb302_reg.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+No, it isn't.  If it were, for example, why would evdev_disconnect() -> 
+evdev_cleanup() need to call input_close_device()?  And why would 
+usbhid_disconnect() deallocate the usbhid structure which usbhid_stop()
+accesses?
 
-diff --git a/drivers/usb/typec/tcpm/fusb302_reg.h b/drivers/usb/typec/tcpm/fusb302_reg.h
-index 00b39d365478..edc0e4b0f1e6 100644
---- a/drivers/usb/typec/tcpm/fusb302_reg.h
-+++ b/drivers/usb/typec/tcpm/fusb302_reg.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Copyright 2016-2017 Google, Inc
-  *
--- 
-2.17.1
+> > It could be that we again get confused by the "easiness" of devm APIs
+> > and completely screwing up unwind order.
+
+That's probably what happened.
+
+Alan Stern
+
+> Let's also add Ping and Jason to the conversation...
 
