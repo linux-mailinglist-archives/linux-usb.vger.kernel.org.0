@@ -2,145 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CE71AFCA5
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Apr 2020 19:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9E41AFCDA
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Apr 2020 19:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726112AbgDSRS7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Apr 2020 13:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725932AbgDSRS6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Apr 2020 13:18:58 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D180C061A0C;
-        Sun, 19 Apr 2020 10:18:58 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id 145so1506609pfw.13;
-        Sun, 19 Apr 2020 10:18:58 -0700 (PDT)
+        id S1726316AbgDSRmE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Apr 2020 13:42:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725927AbgDSRmE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Apr 2020 13:42:04 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37E1C061A0C;
+        Sun, 19 Apr 2020 10:42:02 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id v2so3051320plp.9;
+        Sun, 19 Apr 2020 10:42:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qapmg8H0xsf8FtuVuTZYqLZSXqZnlrHTeBzdG8nPoxQ=;
-        b=ZLj0QO7JBhhyg2TkZzrF+7SNq3YZXndE/CqFNKiGMtdjt9k32EAhBGxNkIZIIP7oqu
-         iAX9gedTI9rI8ozBIW3Uqycn1NbdiuLkxJtKetbn64NN2dyX1yITXvGbBuFy/jZ2WodC
-         FEiZ1vjh6No0KocBqnIVkdi3Qsr8sOpfwb3fsvt6gKcEQGDlqrldwa9QvrrI1sNhFl3j
-         KL8BZIs/jO2fDXlD8p/yaMeg5A63UP4cXEBfZvgz0pHyKNKkOoODGubbdxv+Q+l9Kn1C
-         liD791cj7zzYUIvOhrzeh0t7pmmKLfydHg2b/vUlmMChzQrwbtMTptZXblc4CI/0VlsX
-         bCjA==
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zSa7VEonLrn14NZr8NENNWrUPCxMBtUgC26tpk2K+iQ=;
+        b=g6IY1q84Tm1Q1gj6ZW2S5Odbf0LHq8YmXobTzKVL1GrfkvjbkjZ63IJ24f6IjlBe+m
+         cTNTGpprvyi6L5Xml58PKyLh0sy7LuT7o0kZRGV5KeT1OeXkizKo9x4lZWfyNw/HP9/s
+         i7s22Y+XpoB54sJQcj76Sut6bbNmhBZCqIn1Y0xvOqVBoDHxYexSIBOfjg4ZWuskJto/
+         FD59ypCBmm0mAGafbeTKz7lIesY8NfL2+WNM+HEVJ8rtuM4bz+rmEy7TLf7+UhSfdMmI
+         5LxXG3G2nq3kUnaujCfEaxKJqqsvlzmhFCE20zen8ZG8JzstyghpHkVFaDTTy73nqeuT
+         MtUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qapmg8H0xsf8FtuVuTZYqLZSXqZnlrHTeBzdG8nPoxQ=;
-        b=PhEcdo6mr9GiEqIWros97z6UdS6W1Yi+mCHjPSNi8eLG+6fsGIfqnn35JH12r/OKWw
-         gxp5zKeFsszzdm8NB7AP6mqJP27VBetSW05og5wGfPSiPazIDVWL4yBskYr9b0dqaRV3
-         LGqqMOzvRR7iA1fz1dUNEEK1aN58H4vr7TyQyZYZCtiYjneWTZQ8om6nEUfDl8hH8owC
-         enI1aXsL1O1rIwrY8RgXbBm7flaCSrrGLw4p+KpZFutoO6EcJ5NlZNbtffjowHeRxB91
-         AyhKZ1vNNi75cEOJ6T4N6+xcZij3CdfcY7cRqBf36nbXhWZDfCP6Ys1rAjOPIiLVaTV6
-         6g4w==
-X-Gm-Message-State: AGi0PuYUCG2LvPN1JxX3LnXQtAeObgTqZPxIOiG/CvF788Bpj9ZUgUoU
-        Zt543GZtz5ogreS9mkDG7Swa3HrG
-X-Google-Smtp-Source: APiQypJBlIWcg4jaSV+mBDmX6rq5LhzmSESAt2LOosTpZPo72+cTWIIFEXwLzWJ6w/2GFdsnOpkRxg==
-X-Received: by 2002:a63:4a59:: with SMTP id j25mr12358714pgl.336.1587316737845;
-        Sun, 19 Apr 2020 10:18:57 -0700 (PDT)
-Received: from dtor-ws ([2620:15c:202:201:3c2a:73a9:c2cf:7f45])
-        by smtp.gmail.com with ESMTPSA id c15sm2406100pfo.188.2020.04.19.10.18.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Apr 2020 10:18:57 -0700 (PDT)
-Date:   Sun, 19 Apr 2020 10:18:55 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Julian Squires <julian@cipht.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        syzbot <syzbot+7bf5a7b0f0a1f9446f4c@syzkaller.appspotmail.com>,
-        linux-input@vger.kernel.org, andreyknvl@google.com,
-        gregkh@linuxfoundation.org, ingrassia@epigenesys.com,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com, Ping Cheng <pingc@wacom.com>,
-        pinglinux@gmail.com, killertofu@gmail.com
-Subject: Re: KASAN: use-after-free Read in usbhid_close (3)
-Message-ID: <20200419171855.GJ166864@dtor-ws>
-References: <20200419041344.GC166864@dtor-ws>
- <Pine.LNX.4.44L0.2004191000080.29527-100000@netrider.rowland.org>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=zSa7VEonLrn14NZr8NENNWrUPCxMBtUgC26tpk2K+iQ=;
+        b=VED6T9HIFn5aSVR6VGPoej/uFlHI3ff/T7FMBxU5axdg/lUwSckNjXbZ1zIMHyNysr
+         iAwsdcY8pxVQ4N8EydQukkAZJGj4NB3RXQ1vEjrCl1dCShoot6wOqfFGVAGanz2wosOk
+         euaw3IvGKw3rsRSG+Uz9a2S/ByoBR/rVsYxogKdCTfmurW1zffg5msbEEJRcaKg4WMTT
+         aDHALhr6XDp7fqI8zniK8OzGYGbs3lEOmvQS7PntKa/NmIU4708Etmfu75esAxS6moWJ
+         semUriKWPpR95XtPjFE8WnexFMQ/rxL01hakeY3BbO/aE9fQYsvaTejHHgvJulMnLfxD
+         MwzQ==
+X-Gm-Message-State: AGi0PuboMiZE7zvpz5f+ZNrmBX3ED14LOKCWgP7Io5OGiZqwumvsy1sX
+        n+yFwHewEVhbALpkUixSf+UMMkJl
+X-Google-Smtp-Source: APiQypLKPq8ujqCW1wdiwWQNOO06LqWENQmujeHdGZjCAWl0x4xcdeFlV0xAFeCfEUpf9kD7dgFQzA==
+X-Received: by 2002:a17:90a:f00b:: with SMTP id bt11mr17046320pjb.71.1587318121862;
+        Sun, 19 Apr 2020 10:42:01 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h15sm13229350pfe.92.2020.04.19.10.42.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Apr 2020 10:42:01 -0700 (PDT)
+Subject: Re: [PATCH] USB: typec: Use the correct style for SPDX License
+ Identifier
+To:     Nishad Kamdar <nishadkamdar@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Joe Perches <joe@perches.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200419133051.GA7154@nishad>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <c8174e44-b803-98c6-918a-2d778c4c18eb@roeck-us.net>
+Date:   Sun, 19 Apr 2020 10:41:59 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.2004191000080.29527-100000@netrider.rowland.org>
+In-Reply-To: <20200419133051.GA7154@nishad>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Apr 19, 2020 at 10:07:34AM -0400, Alan Stern wrote:
-> On Sat, 18 Apr 2020, Dmitry Torokhov wrote:
+On 4/19/20 6:30 AM, Nishad Kamdar wrote:
+> This patch corrects the SPDX License Identifier style in
+> header file related to USB Type-C support.
+> For C header files Documentation/process/license-rules.rst
+> mandates C-like comments (opposed to C source files where
+> C++ style should be used).
 > 
-> > On Sat, Apr 18, 2020 at 09:09:44PM -0700, Dmitry Torokhov wrote:
-> > > Hi Alan,
-> > > 
-> > > On Sat, Apr 18, 2020 at 10:16:32PM -0400, Alan Stern wrote:
-> > > > linux-input people:
-> > > > 
-> > > > syzbot has found a bug related to USB/HID/input, and I have narrowed it
-> > > > down to the wacom driver.  As far as I can tell, the problem is caused
-> > > > the fact that drivers/hid/wacom_sys.c calls input_register_device()
-> > > > in several places, but it never calls input_unregister_device().
-> > > > 
-> > > > I know very little about the input subsystem, but this certainly seems 
-> > > > like a bug.
-> > > 
-> > > Wacom driver uses devm_input_allocate_device(), so unregister should
-> > > happen automatically on device removal once we exit wacom_probe().
-> > > 
-> > > > 
-> > > > When the device is unplugged, the disconnect pathway doesn't call
-> > > > hid_hw_close().  That routine doesn't get called until the user closes
-> > > > the device file (which can be long after the device is gone and
-> > > > hid_hw_stop() has run).  Then usbhid_close() gets a use-after-free
-> > > > error when it tries to access data structures that were deallocated by
-> > > > usbhid_stop().  No doubt there are other problems too, but this is
-> > > > the one that syzbot found.
-> > > 
-> > > Unregistering the input device should result in calling wacom_close()
-> > > (if device was previously opened), which, as far as I can tell, calls
-> > > hid_hw_close().
-> > > 
-> > > I wonder if it is valid to call hid_hw_stop() before hid_hw_close()?
+> Changes made by using a script provided by Joe Perches here:
+> https://lkml.org/lkml/2019/2/7/46.
 > 
-> No, it isn't.  If it were, for example, why would evdev_disconnect() -> 
-> evdev_cleanup() need to call input_close_device()?
+> Suggested-by: Joe Perches <joe@perches.com>
+> Signed-off-by: Nishad Kamdar <nishadkamdar@gmail.com>
 
-Because input and HID are not the same. For input, when we attempt to
-unregister an input device we will go through all attached input
-handlers (like evdev) and if they believe they have the device open they
-will attempt to close it. How close is implemented is up to particular
-driver.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-I am not sure about HID implementation details, but I could envision
-transports where you can tell the transport that you no longer want
-events to be delivered to you ("close") vs you want to disable hardware
-("stop") and support any order of them.
-
-> And why would 
-> usbhid_disconnect() deallocate the usbhid structure which usbhid_stop()
-> accesses?
-
-This happens only after we return from hid_destroy_device(), so
-even in the presence of devm I'd expect that all devm-related stuff
-instantiated by hid-wacom would have been completed before we get back
-to usbhid_disconnect().
-
-Can we validate that calls to wacom_close() happen?
-
+> ---
+>  drivers/usb/typec/tcpm/fusb302_reg.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> > > It could be that we again get confused by the "easiness" of devm APIs
-> > > and completely screwing up unwind order.
+> diff --git a/drivers/usb/typec/tcpm/fusb302_reg.h b/drivers/usb/typec/tcpm/fusb302_reg.h
+> index 00b39d365478..edc0e4b0f1e6 100644
+> --- a/drivers/usb/typec/tcpm/fusb302_reg.h
+> +++ b/drivers/usb/typec/tcpm/fusb302_reg.h
+> @@ -1,4 +1,4 @@
+> -// SPDX-License-Identifier: GPL-2.0+
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+>  /*
+>   * Copyright 2016-2017 Google, Inc
+>   *
 > 
-> That's probably what happened.
 
-Thanks.
-
--- 
-Dmitry
