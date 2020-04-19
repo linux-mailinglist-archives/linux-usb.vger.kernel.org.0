@@ -2,64 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 527731AFA6C
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Apr 2020 15:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5EB41AFABA
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Apr 2020 15:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725959AbgDSNRG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Apr 2020 09:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
+        id S1726006AbgDSNbF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Apr 2020 09:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725905AbgDSNRE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Apr 2020 09:17:04 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEA0C061A0C;
-        Sun, 19 Apr 2020 06:17:04 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id np9so3328088pjb.4;
-        Sun, 19 Apr 2020 06:17:04 -0700 (PDT)
+        with ESMTP id S1725793AbgDSNbF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Apr 2020 09:31:05 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7E6C061A0C;
+        Sun, 19 Apr 2020 06:31:03 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id f8so2913811plt.2;
+        Sun, 19 Apr 2020 06:31:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:mime-version:content-disposition
          :user-agent;
-        bh=pojq7IS2ZkV3Xkekvu/Qb2XJwPNKxLd59gsvyr7juZY=;
-        b=uGpvQuceRHO5ZyprbL7HSKUS8eTodPE2iYjFoZT+E1KAI0Yz3aMLMhWWvopHyfbL6S
-         RQ4EpuUlgrsP5EBz9+OdaDYgWIicIzeboGEeBF2XE5u7SrdGhe1Y8a/EXJoCSAfMCuPI
-         iMOAXPj/lZsR7kYi06z/BNdIyze5lKyhWaPvdyB/RpfKKn1z9v08QFFmmpNXfYySVU9w
-         ne/RVDB+t0lKZ7Tq/h7W/keRiHp0GveNYXm8wXHqTm79wBhVyJNJ/SocxU8jtO7JIupl
-         LkArwyOlBK72wiuunkoJ9dTlIjjHlATNK6Q7JxXxJnCqwTSRCrIAcwIG8uFQYHantAsf
-         vKTg==
+        bh=XeW63w2kIWVeKtwQqvg/T7rrTKTD/Vw3x02Lf0zegeU=;
+        b=A6Is3stE+3bHgtyjZYV6VI11XXA/2Tpe/HGq+TZRXVjDKoieX8m1pRxFvadip/3Z59
+         KwpYLB7BC9uhbFoIFAAkOiz5Z6KQ6rXkgt357r8NjYtQxAEQ6p0AOTzrl05CUIl/ui4G
+         vBOXqH+gTBV6FfoZ3Ujoa0b38xkFWvxygqph17k+Av/Fr8A/Pl6K3WwTzPkGu18ux+ta
+         iyzh3L8NCSElYg9wBirYtSo25fE04XXbRshoijxcdr7h8g6zZz16cd2j0NcfnrDhal1j
+         3rwMvYjFDP+eDGyCedft9dwH7E9ID6lA5O40X1b43449ZtwqwEH6ADbqWIizfAk6ZNit
+         dVeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition:user-agent;
-        bh=pojq7IS2ZkV3Xkekvu/Qb2XJwPNKxLd59gsvyr7juZY=;
-        b=BrL+5yI3lnRr6jmGGa5SB32Iz880lxWRDeawNihq61Ymh7DV0Pq/M3bKD42KbRRBx3
-         6Cy9VkJ5YpqOHHqRnEn1Aw++u2fht98yoMTzXZDfZVtFMbD4nwj+fcpr2WCwx6pU3uOt
-         nC3RuwDkMTEnDvA4FIIcRAksbcxRExmuaN5bIU6x/BFpEw/T83/Bf6jlLLRrAAEMR538
-         8e/Z74vWkjH/Pas4tgafPgccnCgQij86L6MpoWPvI5MgpX1ank/av6//s5k2V+zd8R4p
-         fswb7rD2WQQcCC2JBDhfyzVebTVmbW26H8Td/vaO84QRSvA4pX8AUmn0ZCRrWfj2TrfL
-         lQLg==
-X-Gm-Message-State: AGi0PuZSwCFauF7TfVzdopcwm0I0VlBUk0kHQNuDyE3vX7A2h/ArK5mu
-        wQQUg30csHEGsjTcqF9jB0pxtMt4028=
-X-Google-Smtp-Source: APiQypI8L4YrWmkmIwvBdpZv7GuaXsPB0PFWN3G2DDDQbktirmF4jWv9JydHkEzmuOw+VpC+sjps+A==
-X-Received: by 2002:a17:902:b111:: with SMTP id q17mr11895329plr.160.1587302224002;
-        Sun, 19 Apr 2020 06:17:04 -0700 (PDT)
+        bh=XeW63w2kIWVeKtwQqvg/T7rrTKTD/Vw3x02Lf0zegeU=;
+        b=ocXqdokLek1Db4GmQTl6LBfIq5IYGlmyN/WEeU/CfLJ2N70o10sfg9FdCsETI55kkt
+         Ydh7F+avXAsCgzsNdpoBji0Zuuf9p1nqfW4e3+UNUp/B3uTW0tVTQNJWHFtx2GWQAh97
+         JzOH4sp5k1W4SdR8Wxbu9LF4qsVzgCpmDcFwxT1sDnh6RUQYB0b3SlQPkKRWTIjpERYU
+         NJTetQg+xNGs/a+UbGDSGB9tFZJJ+YG74smukCptsFV/41VOtC6Urz1k++i5405uQZys
+         gVPFhj51GhC0hqYSJ5o2b+jvENCKgrj2VeHSZHNOEGeNAYWTytJu3JIYmAwWPpn5Q+Ij
+         d3Dw==
+X-Gm-Message-State: AGi0Pubezu6t/Mk3aovg85ge4mSSvTlEDPcI1tEoHzfkNoXgVhZSuA3f
+        W0iaEQMVsCtc7RmFGRn5YA38p2+PRF4=
+X-Google-Smtp-Source: APiQypKMgGN+xYv+FGR7B9/jqDRQJaEKu2zzTtOWe85tWpHsEn7t6ihxrr7OtqqwxPCt8sQRNr2SvA==
+X-Received: by 2002:a17:902:8d8e:: with SMTP id v14mr11803655plo.186.1587303062686;
+        Sun, 19 Apr 2020 06:31:02 -0700 (PDT)
 Received: from nishad ([106.51.232.103])
-        by smtp.gmail.com with ESMTPSA id mq6sm11535048pjb.38.2020.04.19.06.17.00
+        by smtp.gmail.com with ESMTPSA id g14sm19289010pfh.49.2020.04.19.06.30.59
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 19 Apr 2020 06:17:03 -0700 (PDT)
-Date:   Sun, 19 Apr 2020 18:46:57 +0530
+        Sun, 19 Apr 2020 06:31:02 -0700 (PDT)
+Date:   Sun, 19 Apr 2020 19:00:55 +0530
 From:   Nishad Kamdar <nishadkamdar@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Joe Perches <joe@perches.com>
-Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] USB: Storage: Use the correct style for SPDX License
- Identifier
-Message-ID: <20200419131653.GA6611@nishad>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] USB: typec: Use the correct style for SPDX License Identifier
+Message-ID: <20200419133051.GA7154@nishad>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -70,7 +69,7 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 This patch corrects the SPDX License Identifier style in
-header files related to USB Storage driver configuration.
+header file related to USB Type-C support.
 For C header files Documentation/process/license-rules.rst
 mandates C-like comments (opposed to C source files where
 C++ style should be used).
@@ -81,239 +80,19 @@ https://lkml.org/lkml/2019/2/7/46.
 Suggested-by: Joe Perches <joe@perches.com>
 Signed-off-by: Nishad Kamdar <nishadkamdar@gmail.com>
 ---
- drivers/usb/storage/debug.h              | 2 +-
- drivers/usb/storage/initializers.h       | 2 +-
- drivers/usb/storage/protocol.h           | 2 +-
- drivers/usb/storage/scsiglue.h           | 2 +-
- drivers/usb/storage/transport.h          | 2 +-
- drivers/usb/storage/unusual_alauda.h     | 2 +-
- drivers/usb/storage/unusual_cypress.h    | 2 +-
- drivers/usb/storage/unusual_datafab.h    | 2 +-
- drivers/usb/storage/unusual_devs.h       | 2 +-
- drivers/usb/storage/unusual_ene_ub6250.h | 2 +-
- drivers/usb/storage/unusual_freecom.h    | 2 +-
- drivers/usb/storage/unusual_isd200.h     | 2 +-
- drivers/usb/storage/unusual_jumpshot.h   | 2 +-
- drivers/usb/storage/unusual_karma.h      | 2 +-
- drivers/usb/storage/unusual_onetouch.h   | 2 +-
- drivers/usb/storage/unusual_realtek.h    | 2 +-
- drivers/usb/storage/unusual_sddr09.h     | 2 +-
- drivers/usb/storage/unusual_sddr55.h     | 2 +-
- drivers/usb/storage/unusual_uas.h        | 2 +-
- drivers/usb/storage/unusual_usbat.h      | 2 +-
- drivers/usb/storage/usb.h                | 2 +-
- 21 files changed, 21 insertions(+), 21 deletions(-)
+ drivers/usb/typec/tcpm/fusb302_reg.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/storage/debug.h b/drivers/usb/storage/debug.h
-index 16ce06039a4d..a6505ceb6693 100644
---- a/drivers/usb/storage/debug.h
-+++ b/drivers/usb/storage/debug.h
+diff --git a/drivers/usb/typec/tcpm/fusb302_reg.h b/drivers/usb/typec/tcpm/fusb302_reg.h
+index 00b39d365478..edc0e4b0f1e6 100644
+--- a/drivers/usb/typec/tcpm/fusb302_reg.h
++++ b/drivers/usb/typec/tcpm/fusb302_reg.h
 @@ -1,4 +1,4 @@
 -// SPDX-License-Identifier: GPL-2.0+
 +/* SPDX-License-Identifier: GPL-2.0+ */
  /*
-  * Driver for USB Mass Storage compliant devices
-  * Debugging Functions Header File
-diff --git a/drivers/usb/storage/initializers.h b/drivers/usb/storage/initializers.h
-index 2dbf9c7d9749..dcd7b7e5eda8 100644
---- a/drivers/usb/storage/initializers.h
-+++ b/drivers/usb/storage/initializers.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Header file for Special Initializers for certain USB Mass Storage devices
+  * Copyright 2016-2017 Google, Inc
   *
-diff --git a/drivers/usb/storage/protocol.h b/drivers/usb/storage/protocol.h
-index 072f1ffda2af..1d102463a66c 100644
---- a/drivers/usb/storage/protocol.h
-+++ b/drivers/usb/storage/protocol.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Driver for USB Mass Storage compliant devices
-  * Protocol Functions Header File
-diff --git a/drivers/usb/storage/scsiglue.h b/drivers/usb/storage/scsiglue.h
-index 2bc5ea045bf7..2a79c3ed4d86 100644
---- a/drivers/usb/storage/scsiglue.h
-+++ b/drivers/usb/storage/scsiglue.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Driver for USB Mass Storage compliant devices
-  * SCSI Connecting Glue Header File
-diff --git a/drivers/usb/storage/transport.h b/drivers/usb/storage/transport.h
-index fb3bb4ee4ccf..74ffd0d7e7b6 100644
---- a/drivers/usb/storage/transport.h
-+++ b/drivers/usb/storage/transport.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Driver for USB Mass Storage compliant devices
-  * Transport Functions Header File
-diff --git a/drivers/usb/storage/unusual_alauda.h b/drivers/usb/storage/unusual_alauda.h
-index 0ec8c99a4976..13f61ec88cde 100644
---- a/drivers/usb/storage/unusual_alauda.h
-+++ b/drivers/usb/storage/unusual_alauda.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Unusual Devices File for the Alauda-based card readers
-  */
-diff --git a/drivers/usb/storage/unusual_cypress.h b/drivers/usb/storage/unusual_cypress.h
-index fb99e526cd48..0547daf116a2 100644
---- a/drivers/usb/storage/unusual_cypress.h
-+++ b/drivers/usb/storage/unusual_cypress.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Unusual Devices File for devices based on the Cypress USB/ATA bridge
-  *	with support for ATACB
-diff --git a/drivers/usb/storage/unusual_datafab.h b/drivers/usb/storage/unusual_datafab.h
-index fdab5e7d68ca..5335b5d2bd79 100644
---- a/drivers/usb/storage/unusual_datafab.h
-+++ b/drivers/usb/storage/unusual_datafab.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Unusual Devices File for the Datafab USB Compact Flash reader
-  */
-diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
-index 1880f3e13f57..325da547827a 100644
---- a/drivers/usb/storage/unusual_devs.h
-+++ b/drivers/usb/storage/unusual_devs.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Driver for USB Mass Storage compliant devices
-  * Unusual Devices File
-diff --git a/drivers/usb/storage/unusual_ene_ub6250.h b/drivers/usb/storage/unusual_ene_ub6250.h
-index 9134b91fbd73..a3b32abc2b2f 100644
---- a/drivers/usb/storage/unusual_ene_ub6250.h
-+++ b/drivers/usb/storage/unusual_ene_ub6250.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- #if defined(CONFIG_USB_STORAGE_ENE_UB6250) || \
- 		defined(CONFIG_USB_STORAGE_ENE_UB6250_MODULE)
- 
-diff --git a/drivers/usb/storage/unusual_freecom.h b/drivers/usb/storage/unusual_freecom.h
-index 949231c7a36b..9ca686364a93 100644
---- a/drivers/usb/storage/unusual_freecom.h
-+++ b/drivers/usb/storage/unusual_freecom.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Unusual Devices File for the Freecom USB/IDE adaptor
-  */
-diff --git a/drivers/usb/storage/unusual_isd200.h b/drivers/usb/storage/unusual_isd200.h
-index d03a02cc904e..f248190bd666 100644
---- a/drivers/usb/storage/unusual_isd200.h
-+++ b/drivers/usb/storage/unusual_isd200.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Unusual Devices File for In-System Design, Inc. ISD200 ASIC
-  */
-diff --git a/drivers/usb/storage/unusual_jumpshot.h b/drivers/usb/storage/unusual_jumpshot.h
-index c323338881ef..44878f849c1c 100644
---- a/drivers/usb/storage/unusual_jumpshot.h
-+++ b/drivers/usb/storage/unusual_jumpshot.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Unusual Devices File for the Lexar "Jumpshot" Compact Flash reader
-  */
-diff --git a/drivers/usb/storage/unusual_karma.h b/drivers/usb/storage/unusual_karma.h
-index 8f1eebd71d2c..9fbed4cbc895 100644
---- a/drivers/usb/storage/unusual_karma.h
-+++ b/drivers/usb/storage/unusual_karma.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Unusual Devices File for the Rio Karma
-  */
-diff --git a/drivers/usb/storage/unusual_onetouch.h b/drivers/usb/storage/unusual_onetouch.h
-index c76d4e990f7b..cdfee8f6cf37 100644
---- a/drivers/usb/storage/unusual_onetouch.h
-+++ b/drivers/usb/storage/unusual_onetouch.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Unusual Devices File for the Maxtor OneTouch USB hard drive's button
-  */
-diff --git a/drivers/usb/storage/unusual_realtek.h b/drivers/usb/storage/unusual_realtek.h
-index 7e14c2d7cf73..945dcb19d31d 100644
---- a/drivers/usb/storage/unusual_realtek.h
-+++ b/drivers/usb/storage/unusual_realtek.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Driver for Realtek RTS51xx USB card reader
-  *
-diff --git a/drivers/usb/storage/unusual_sddr09.h b/drivers/usb/storage/unusual_sddr09.h
-index 650cf2862754..bfb650974129 100644
---- a/drivers/usb/storage/unusual_sddr09.h
-+++ b/drivers/usb/storage/unusual_sddr09.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Unusual Devices File for SanDisk SDDR-09 SmartMedia reader
-  */
-diff --git a/drivers/usb/storage/unusual_sddr55.h b/drivers/usb/storage/unusual_sddr55.h
-index e89df2cea7bd..6d6f76eb0630 100644
---- a/drivers/usb/storage/unusual_sddr55.h
-+++ b/drivers/usb/storage/unusual_sddr55.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Unusual Devices File for SanDisk SDDR-55 SmartMedia reader
-  */
-diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-index 1b23741036ee..cfdec74e0f4a 100644
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Driver for USB Attached SCSI devices - Unusual Devices File
-  *
-diff --git a/drivers/usb/storage/unusual_usbat.h b/drivers/usb/storage/unusual_usbat.h
-index 05abf6870b8f..f9d3e5efc39d 100644
---- a/drivers/usb/storage/unusual_usbat.h
-+++ b/drivers/usb/storage/unusual_usbat.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Unusual Devices File for SCM Microsystems (a.k.a. Shuttle) USB-ATAPI cable
-  */
-diff --git a/drivers/usb/storage/usb.h b/drivers/usb/storage/usb.h
-index 5850d624cac7..0451fac1adce 100644
---- a/drivers/usb/storage/usb.h
-+++ b/drivers/usb/storage/usb.h
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-2.0+
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Driver for USB Mass Storage compliant devices
-  * Main Header File
 -- 
 2.17.1
 
