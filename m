@@ -2,124 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B29BA1AFE80
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2020 00:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 228E81AFEB4
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2020 00:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725959AbgDSWEK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Apr 2020 18:04:10 -0400
-Received: from mail-mw2nam10on2115.outbound.protection.outlook.com ([40.107.94.115]:64737
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725848AbgDSWEK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 19 Apr 2020 18:04:10 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=egS38qpT4eIoxHBF9NylDKfBWJB/6R65ou0CfLp86apnQQVC/N5qk1TOWxb7sTNBSDpvwqLdKbNQtd9ZQwvMHKDi2Tpxt19JNC3zWu6C/5dM12NAfshSnrzs3M9QfJZhQ54ckpiNgMPu0SLrl7GgfO/m4MYim2MD8w6sejlHf5FgvbLsyixR+5Ek6n8I+zd6ShFltxBvf1zV/4/31uvjpKboUcj7tifDrURJwML0+pEGn72KTE+lIiHcrshCMQeYvhxmM24Y1Fcn9Xicmpo1yajxKsJ3ws1cI/CbixAIn6HcjmJVEfSROhtEBW95ck/+sTK2LQoPRIJgKehkTvuMfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=K3crJmNXw4KH2h4tMiuIoSGjB/HIlfc6huMot8mWslc=;
- b=Te6oLeiZn4zW4Lr7oeIvZrVgMB97Lhv702j4XhBUmQTCim+yu09Rp7KxwzGkqHQ55lCNja+H/6uzeRSqf19+OdQW0+C9bgof/xMyaREowuNhzsRj/1xmXRk9ZncU0Vy3G0xIkNAiTT8vrAS2v1bwE/2t7nSORP4qxGXgvbp0xT6Qr2eMCQldcuu9must5voRTne4HGb8t4izKROzxqiFWfODI/NBBOEylXLtidsw3OeguuPRWEofLg0cNYuM/tI2gVCKF+c8BbKvbF7Qub78/gnJEbRYPZgOWJfudxJHkzfi8WeeW80OgE5El3sEr9gLwB0RbDJ+sdV4FHyN5QhYJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=northeastern.edu; dmarc=pass action=none
- header.from=northeastern.edu; dkim=pass header.d=northeastern.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=northeastern.edu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=K3crJmNXw4KH2h4tMiuIoSGjB/HIlfc6huMot8mWslc=;
- b=vrUPkjxwOXfd10O+trA17PCGJa3/82/dzR2r50VhDztmKBM6fUYaS05+/SqFG8o7lgOIAT3d/U6qE7NxuCwE9fa1X12h3kPZsVfqA74Eg9lxbPNQ6J01N4222By2Zic3la9doyGL4/jfVXNZ87J+zffj878+y6UkCTR82t6AF0U=
-Received: from BL0PR06MB4548.namprd06.prod.outlook.com (2603:10b6:208:56::26)
- by BL0PR06MB4674.namprd06.prod.outlook.com (2603:10b6:208:29::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.29; Sun, 19 Apr
- 2020 22:04:06 +0000
-Received: from BL0PR06MB4548.namprd06.prod.outlook.com
- ([fe80::fd87:3891:70a2:bc5d]) by BL0PR06MB4548.namprd06.prod.outlook.com
- ([fe80::fd87:3891:70a2:bc5d%3]) with mapi id 15.20.2921.027; Sun, 19 Apr 2020
- 22:04:06 +0000
-From:   Changming Liu <liu.changm@northeastern.edu>
-To:     "thomas@winischhofer.net" <thomas@winischhofer.net>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Lu, Long" <l.lu@northeastern.edu>,
-        "yaohway@gmail.com" <yaohway@gmail.com>
-Subject: [Bug Report] drivers/usb/misc/sisusbvga: integer overflow in
- sisusb_getidxreg and others
-Thread-Topic: [Bug Report] drivers/usb/misc/sisusbvga: integer overflow in
- sisusb_getidxreg and others
-Thread-Index: AdYWlZ92yg6LNz1FSfO75HAVsMxGXA==
-Date:   Sun, 19 Apr 2020 22:04:06 +0000
-Message-ID: <BL0PR06MB4548529DBAEA7075BAE4289EE5D70@BL0PR06MB4548.namprd06.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=liu.changm@northeastern.edu; 
-x-originating-ip: [73.167.12.228]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3845c4c6-7ed9-4e63-2eb1-08d7e4ad946a
-x-ms-traffictypediagnostic: BL0PR06MB4674:|BL0PR06MB4674:
-x-ld-processed: a8eec281-aaa3-4dae-ac9b-9a398b9215e7,ExtFwd
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BL0PR06MB46743BD65A226A68B53791FCE5D70@BL0PR06MB4674.namprd06.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0378F1E47A
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR06MB4548.namprd06.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10019020)(4636009)(39860400002)(396003)(376002)(366004)(136003)(346002)(26005)(76116006)(186003)(7696005)(66946007)(64756008)(66446008)(66476007)(8676002)(66556008)(52536014)(71200400001)(6916009)(55016002)(5660300002)(75432002)(9686003)(33656002)(2906002)(81156014)(54906003)(478600001)(86362001)(316002)(786003)(8936002)(4326008)(6506007);DIR:OUT;SFP:1102;
-received-spf: None (protection.outlook.com: northeastern.edu does not
- designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cfnwYVf8kizQsSW5xDGpWNuipyAq9ZOBbHBAsaeIEs7++9jEy3web95QcPVbXj9GCvDQF/tHPB6e9KcRGSXnl9HTwWFBANjF0Dr6UG9Qb7DpYpVhmDOTyK8fCuDwqA4GpX8FpdfFqUN9isZPBBAujW3hVIy6Rt6+1MIn4291V/FBDHoF0K8M3uQHvi7+tyfZ4iYRAKQ65GhG4RupxaULCdamT1twY4IETsxQ2eT5fpEZ+MQq5ZUF9l7cTiY67LLp9t8zsnAl5z4ZTwscRbg9MH8cxdD2mJB0sM7ZNQIr6tQBbMX4/4/59DXMal0OFQz56RKe/WggeQgfKJDqbPHAhzONM7MxF0ykFGRTA4/p5AXd/y1K8/DljSedQ62MEI4Ng1RyI+XyyjPtiisVrMDQCqxdA22MhTvUu1ETYMXdRCmXkTrQ2hW0+IMSFjCfKVQf
-x-ms-exchange-antispam-messagedata: OqHZiro6zDGtokINCoYjQZJCmiyGEvhYyQRK8wOqRChCgcKraJDuTh09zVWoaim8977X7CKS+CwlawlalujhpqceUlyR2vbq9ogea3Vm2HciqHC8fIQHUETXxqto0v1hzI4GS5g9Z3J/IZAi25VM3A==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1725964AbgDSWm1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Apr 2020 18:42:27 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:55417 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725932AbgDSWm0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Apr 2020 18:42:26 -0400
+Received: (qmail 29224 invoked by uid 500); 19 Apr 2020 18:42:25 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 19 Apr 2020 18:42:25 -0400
+Date:   Sun, 19 Apr 2020 18:42:25 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>
+cc:     Julian Squires <julian@cipht.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        syzbot <syzbot+7bf5a7b0f0a1f9446f4c@syzkaller.appspotmail.com>,
+        <linux-input@vger.kernel.org>, <andreyknvl@google.com>,
+        <gregkh@linuxfoundation.org>, <ingrassia@epigenesys.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        <syzkaller-bugs@googlegroups.com>, Ping Cheng <pingc@wacom.com>,
+        <pinglinux@gmail.com>, <killertofu@gmail.com>
+Subject: Re: KASAN: use-after-free Read in usbhid_close (3)
+In-Reply-To: <20200419171855.GJ166864@dtor-ws>
+Message-ID: <Pine.LNX.4.44L0.2004191835550.28419-100000@netrider.rowland.org>
 MIME-Version: 1.0
-X-OriginatorOrg: northeastern.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3845c4c6-7ed9-4e63-2eb1-08d7e4ad946a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Apr 2020 22:04:06.5197
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a8eec281-aaa3-4dae-ac9b-9a398b9215e7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yDakJfvovMfLiG3iZ1S4731RXh7NAB2JV+xSyObT8tqPxiG2TuKzZTcdGgE4/1Js803VeTVAkEdvRt8TpULZWBqZkbHpBDrRYADvec7Ipfk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR06MB4674
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thomas,
-Greetings, I'm a first-year PhD student who is interested in using UBSan fo=
-r linux kernel. With some experiments, I found that in
-drivers/usb/misc/sisusbvga/sisusb.c sisusb_getidxreg, there is an signed in=
-teger overflow which might cause unexpected result.
+On Sun, 19 Apr 2020, Dmitry Torokhov wrote:
 
-More specifically, starting from the fetch function in func sisusb_ioctl, l=
-ine 2959, struct sisusb_command y is filled with data from user space. Then=
- diving into=20
-sisusb_handle_command, the signed integer, named port, is casted from y->da=
-ta3.
-Then when executing sisusb_getidxreg, the signed integer, port, is used as =
-32-bit unsigned address in function sisusb_write_memio_byte.
+> On Sun, Apr 19, 2020 at 10:07:34AM -0400, Alan Stern wrote:
+> > On Sat, 18 Apr 2020, Dmitry Torokhov wrote:
+> > 
+> > > On Sat, Apr 18, 2020 at 09:09:44PM -0700, Dmitry Torokhov wrote:
+> > > > Hi Alan,
+> > > > 
+> > > > On Sat, Apr 18, 2020 at 10:16:32PM -0400, Alan Stern wrote:
+> > > > > linux-input people:
+> > > > > 
+> > > > > syzbot has found a bug related to USB/HID/input, and I have narrowed it
+> > > > > down to the wacom driver.  As far as I can tell, the problem is caused
+> > > > > the fact that drivers/hid/wacom_sys.c calls input_register_device()
+> > > > > in several places, but it never calls input_unregister_device().
+> > > > > 
+> > > > > I know very little about the input subsystem, but this certainly seems 
+> > > > > like a bug.
+> > > > 
+> > > > Wacom driver uses devm_input_allocate_device(), so unregister should
+> > > > happen automatically on device removal once we exit wacom_probe().
+> > > > 
+> > > > > 
+> > > > > When the device is unplugged, the disconnect pathway doesn't call
+> > > > > hid_hw_close().  That routine doesn't get called until the user closes
+> > > > > the device file (which can be long after the device is gone and
+> > > > > hid_hw_stop() has run).  Then usbhid_close() gets a use-after-free
+> > > > > error when it tries to access data structures that were deallocated by
+> > > > > usbhid_stop().  No doubt there are other problems too, but this is
+> > > > > the one that syzbot found.
+> > > > 
+> > > > Unregistering the input device should result in calling wacom_close()
+> > > > (if device was previously opened), which, as far as I can tell, calls
+> > > > hid_hw_close().
+> > > > 
+> > > > I wonder if it is valid to call hid_hw_stop() before hid_hw_close()?
+> > 
+> > No, it isn't.  If it were, for example, why would evdev_disconnect() -> 
+> > evdev_cleanup() need to call input_close_device()?
+> 
+> Because input and HID are not the same. For input, when we attempt to
+> unregister an input device we will go through all attached input
+> handlers (like evdev) and if they believe they have the device open they
+> will attempt to close it. How close is implemented is up to particular
+> driver.
+> 
+> I am not sure about HID implementation details, but I could envision
+> transports where you can tell the transport that you no longer want
+> events to be delivered to you ("close") vs you want to disable hardware
+> ("stop") and support any order of them.
 
-The suspected problem is that, in sisusb_getidxreg, or other functions that=
- have similar behavior, e.g. sisusb_setidxreg, the port integer value is di=
-rectly from user space, and is used as port and port + 1. So port + 1 might=
- overflow in a contrived way. With port being a signed integer, the overflo=
-wn value might be undefined. Perhaps change the port integer from signed to=
- unsigned would help?
+Jiri, you should know: Are HID drivers supposed to work okay when the
+->close callback is issued after (or concurrently with) the ->stop
+callback?
 
-To change the subject a little bit, I noted that, although all facing user =
-input in sisusb_handle_command, sisusb_clear_vram does a good job vetting t=
-he address and length input from user to keep them in range, while the othe=
-r functions like sisusb_setidxreg mentioned above, used the address without=
- checking. I'm wondering, what caused the difference? Since this kind of ch=
-eck can eliminate the possibility of the overflow entirely.
+The actual bug found by syzbot was a race between those two routines in 
+usbhid.
 
-Due to the lack of knowledge of the interactions between this driver and th=
-e user space and the real hardware, I'm not able to assess if this is an is=
-sue worth being dealt with, I'd be more than happy to hear your valuable op=
-inions, this would help with understand UB and linux kernel a lot!
+> > And why would 
+> > usbhid_disconnect() deallocate the usbhid structure which usbhid_stop()
+> > accesses?
+> 
+> This happens only after we return from hid_destroy_device(), so
+> even in the presence of devm I'd expect that all devm-related stuff
+> instantiated by hid-wacom would have been completed before we get back
+> to usbhid_disconnect().
+> 
+> Can we validate that calls to wacom_close() happen?
 
-Looking forward to your valuable response!
+I could find out if you think it's important.  In the syzbot tests, the 
+crash occurs before wacom_close() is called.
 
-Changming Liu
+Alan Stern
+
