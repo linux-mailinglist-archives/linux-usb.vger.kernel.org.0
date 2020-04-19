@@ -2,171 +2,241 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5771AF57D
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Apr 2020 00:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 035ED1AF623
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Apr 2020 03:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728241AbgDRWhJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Apr 2020 18:37:09 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:36466 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726887AbgDRWhI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Apr 2020 18:37:08 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03IMWJax025251;
-        Sat, 18 Apr 2020 22:35:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to;
- s=corp-2020-01-29; bh=zK4gJmDAQjm6odpqw+dWgt3X8Z8VkPHJX9eb1aKLC5g=;
- b=x2TF6WJw26JFS9DnzG1jjX7fP7mK0Gmueyj0VEUPz5H83bvjFEEwlne4gN+tk9eBscUm
- 90ro37TBLrsx8aoPw+tGrpex6qPRAvhSHvbeBXswEwzL2kVQ3pz78kuJncF1HNoWMT2j
- QRoWUa/r0eaCnaztQlQ4n8h/igTGoktprS0Lj0IKrdFzvtpr1o3bwUEpjem5uQioamKj
- 82bJVWqQoP+zfd1SQ+rPmWEF1NJGwV8Sey/KtKrs2TWKmazxhP9idWtuAFq86C+upl5u
- lJ2ZrAZYW+xzqm4vONNeX03aSz20xUVcvYXQ9z+0XJHfCyxQGRNSSE1mtNbDXfldBK+t HA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 30fsgkj1d6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 18 Apr 2020 22:35:49 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03IMXRJG022075;
-        Sat, 18 Apr 2020 22:33:49 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 30fqkadq8j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 18 Apr 2020 22:33:49 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 03IMXbL4005563;
-        Sat, 18 Apr 2020 22:33:41 GMT
-Received: from anon-dhcp-153.1015granger.net (/68.61.232.219)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sat, 18 Apr 2020 15:33:37 -0700
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
-Subject: Re: [PATCH 6/9] nfsd: fix empty-body warning in nfs4state.c
-From:   Chuck Lever <chuck.lever@oracle.com>
-In-Reply-To: <c838fc1d-3973-9cd8-ecc6-8739af514dd0@infradead.org>
-Date:   Sat, 18 Apr 2020 18:33:35 -0400
-Cc:     Trond Myklebust <trondmy@hammerspace.com>,
-        "linux-nvdimm@lists.01.org" <linux-nvdimm@lists.01.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Bruce Fields <bfields@fieldses.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "zzy@zzywysm.com" <zzy@zzywysm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "perex@perex.cz" <perex@perex.cz>,
-        "dave.jiang@intel.com" <dave.jiang@intel.com>,
-        "tiwai@suse.com" <tiwai@suse.com>,
-        "target-devel@vger.kernel.org" <target-devel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <B4067786-F04F-4CE5-B84B-DE5BB0890529@oracle.com>
-References: <20200418184111.13401-1-rdunlap@infradead.org>
- <20200418184111.13401-7-rdunlap@infradead.org>
- <CDCF7717-7CBC-47CA-9E83-3A18ECB3AB89@oracle.com>
- <d2e2f7967804446a825ec0ff61095e6640b5a968.camel@hammerspace.com>
- <c838fc1d-3973-9cd8-ecc6-8739af514dd0@infradead.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-X-Mailer: Apple Mail (2.3445.104.11)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9595 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
- spamscore=0 mlxscore=0 malwarescore=0 phishscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004180188
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9595 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 priorityscore=1501
- lowpriorityscore=0 mlxlogscore=999 malwarescore=0 clxscore=1015
- spamscore=0 bulkscore=0 phishscore=0 suspectscore=0 impostorscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004180188
+        id S1725990AbgDSBem (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Apr 2020 21:34:42 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:57089 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725953AbgDSBem (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Apr 2020 21:34:42 -0400
+Received: (qmail 26346 invoked by uid 500); 18 Apr 2020 21:34:40 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 18 Apr 2020 21:34:40 -0400
+Date:   Sat, 18 Apr 2020 21:34:40 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     syzbot <syzbot+7bf5a7b0f0a1f9446f4c@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
+        <ingrassia@epigenesys.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
+Subject: Re: KASAN: use-after-free Read in usbhid_close (3)
+In-Reply-To: <000000000000f4957305a3968e84@google.com>
+Message-ID: <Pine.LNX.4.44L0.2004182131100.26218-100000@netrider.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Sat, 18 Apr 2020, syzbot wrote:
 
+> Hello,
+> 
+> syzbot has tested the proposed patch but the reproducer still triggered crash:
+> WARNING in usbhid_stop
+> 
+> usbhid 6-1:0.0: Stop: 1 1 0 0
+> ------------[ cut here ]------------
+> usbhid 6-1:0.0: Stop while open = 1
 
-> On Apr 18, 2020, at 6:32 PM, Randy Dunlap <rdunlap@infradead.org> =
-wrote:
->=20
-> On 4/18/20 3:28 PM, Trond Myklebust wrote:
->> On Sat, 2020-04-18 at 14:45 -0400, Chuck Lever wrote:
->>>> On Apr 18, 2020, at 2:41 PM, Randy Dunlap <rdunlap@infradead.org>
->>>> wrote:
->>>>=20
->>>> Fix gcc empty-body warning when -Wextra is used:
->>>>=20
->>>> ../fs/nfsd/nfs4state.c:3898:3: warning: suggest braces around empty
->>>> body in an =E2=80=98else=E2=80=99 statement [-Wempty-body]
->>>>=20
->>>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->>>> Cc: Linus Torvalds <torvalds@linux-foundation.org>
->>>> Cc: Andrew Morton <akpm@linux-foundation.org>
->>>> Cc: "J. Bruce Fields" <bfields@fieldses.org>
->>>> Cc: Chuck Lever <chuck.lever@oracle.com>
->>>> Cc: linux-nfs@vger.kernel.org
->>>=20
->>> I have a patch in my queue that addresses this particular warning,
->>> but your change works for me too.
->>>=20
->>> Acked-by: Chuck Lever <chuck.lever@oracle.com>
->>>=20
->>> Unless Bruce objects.
->>>=20
->>>=20
->>>> ---
->>>> fs/nfsd/nfs4state.c |    3 ++-
->>>> 1 file changed, 2 insertions(+), 1 deletion(-)
->>>>=20
->>>> --- linux-next-20200417.orig/fs/nfsd/nfs4state.c
->>>> +++ linux-next-20200417/fs/nfsd/nfs4state.c
->>>> @@ -34,6 +34,7 @@
->>>>=20
->>>> #include <linux/file.h>
->>>> #include <linux/fs.h>
->>>> +#include <linux/kernel.h>
->>>> #include <linux/slab.h>
->>>> #include <linux/namei.h>
->>>> #include <linux/swap.h>
->>>> @@ -3895,7 +3896,7 @@ nfsd4_setclientid(struct svc_rqst *rqstp
->>>> 		copy_clid(new, conf);
->>>> 		gen_confirm(new, nn);
->>>> 	} else /* case 4 (new client) or cases 2, 3 (client reboot): */
->>>> -		;
->>>> +		do_empty();
->>=20
->> Urgh... This is just for documentation purposes anyway, so why not =
-just
->> turn it all into a comment by moving the 'else' into the comment =
-field?
->>=20
->> i.e.
->> 	} /* else case 4 (.... */
->>=20
->> 	new->cl_minorversion =3D 0;
->>>> 	gen_callback(new, setclid, rqstp);
->>>> 	add_to_unconfirmed(new);
->=20
-> Like I said earlier, since Chuck has a patch that addresses this,
-> let's just go with that.
+This indicates there is some confusion about whether the wacom device
+is an input device.  Apparently hidinput_connect() either doesn't get
+called or fails, but nevertheless an evdev input handler gets
+associated with the device.
 
-I'll post that patch for review as part of my NFSD for-5.8 patches.
+Maybe the confusion is only in my head.  This test may help clear it up 
+a little.
 
+Alan Stern
 
---
-Chuck Lever
+#syz test: https://github.com/google/kasan.git 0fa84af8
 
-
+Index: usb-devel/drivers/hid/usbhid/hid-core.c
+===================================================================
+--- usb-devel.orig/drivers/hid/usbhid/hid-core.c
++++ usb-devel/drivers/hid/usbhid/hid-core.c
+@@ -747,6 +747,7 @@ static void usbhid_close(struct hid_devi
+ 		return;
+ 
+ 	hid_cancel_delayed_stuff(usbhid);
++	--hid->alan_open;
+ 	usb_kill_urb(usbhid->urbin);
+ 	usbhid->intf->needs_remote_wakeup = 0;
+ }
+@@ -1177,6 +1178,7 @@ static int usbhid_start(struct hid_devic
+ 		usbhid_set_leds(hid);
+ 		device_set_wakeup_enable(&dev->dev, 1);
+ 	}
++	++hid->alan_open;
+ 	return 0;
+ 
+ fail:
+@@ -1197,6 +1199,11 @@ static void usbhid_stop(struct hid_devic
+ 	if (WARN_ON(!usbhid))
+ 		return;
+ 
++	dev_info(&usbhid->intf->dev, "Stop: %d %d %d %d\n",
++			hid->alan1, hid->alan2, hid->alan3, hid->alan4);
++	if (hid->alan_open > 0)
++		dev_WARN(&usbhid->intf->dev, "Stop while open = %d\n",
++				hid->alan_open);
+ 	if (hid->quirks & HID_QUIRK_ALWAYS_POLL) {
+ 		clear_bit(HID_IN_POLLING, &usbhid->iofl);
+ 		usbhid->intf->needs_remote_wakeup = 0;
+Index: usb-devel/drivers/hid/hid-input.c
+===================================================================
+--- usb-devel.orig/drivers/hid/hid-input.c
++++ usb-devel/drivers/hid/hid-input.c
+@@ -1861,6 +1861,7 @@ int hidinput_connect(struct hid_device *
+ 	unsigned int application;
+ 	int i, k;
+ 
++	dev_info(&hid->dev, "In hidinput_connect\n");
+ 	INIT_LIST_HEAD(&hid->inputs);
+ 	INIT_WORK(&hid->led_work, hidinput_led_worker);
+ 
+@@ -1960,6 +1961,7 @@ void hidinput_disconnect(struct hid_devi
+ {
+ 	struct hid_input *hidinput, *next;
+ 
++	++hid->alan3;
+ 	hidinput_cleanup_battery(hid);
+ 
+ 	list_for_each_entry_safe(hidinput, next, &hid->inputs, list) {
+Index: usb-devel/drivers/input/evdev.c
+===================================================================
+--- usb-devel.orig/drivers/input/evdev.c
++++ usb-devel/drivers/input/evdev.c
+@@ -23,6 +23,7 @@
+ #include <linux/major.h>
+ #include <linux/device.h>
+ #include <linux/cdev.h>
++#include <linux/hid.h>
+ #include "input-compat.h"
+ 
+ struct evdev {
+@@ -1329,6 +1330,11 @@ static void evdev_mark_dead(struct evdev
+ static void evdev_cleanup(struct evdev *evdev)
+ {
+ 	struct input_handle *handle = &evdev->handle;
++//	struct hid_device *hid;
++
++//	hid = evdev->handle.dev->hid;
++//	if (hid)
++//		++hid->alan3;
+ 
+ 	evdev_mark_dead(evdev);
+ 	evdev_hangup(evdev);
+Index: usb-devel/drivers/input/input.c
+===================================================================
+--- usb-devel.orig/drivers/input/input.c
++++ usb-devel/drivers/input/input.c
+@@ -23,6 +23,7 @@
+ #include <linux/device.h>
+ #include <linux/mutex.h>
+ #include <linux/rcupdate.h>
++#include <linux/hid.h>
+ #include "input-compat.h"
+ #include "input-poller.h"
+ 
+@@ -1031,6 +1032,10 @@ static int input_attach_handler(struct i
+ 	if (error && error != -ENODEV)
+ 		pr_err("failed to attach handler %s to device %s, error: %d\n",
+ 		       handler->name, kobject_name(&dev->dev.kobj), error);
++	if (!error && dev->hid) {
++		dev_info(&dev->dev, "Attached to handler %s\n", handler->name);
++		dump_stack();
++	}
+ 
+ 	return error;
+ }
+@@ -2157,6 +2162,7 @@ int input_register_device(struct input_d
+ 	const char *path;
+ 	int error;
+ 
++	dev_info(&dev->dev, "In input_register_device\n");
+ 	if (test_bit(EV_ABS, dev->evbit) && !dev->absinfo) {
+ 		dev_err(&dev->dev,
+ 			"Absolute device without dev->absinfo, refusing to register\n");
+@@ -2258,6 +2264,11 @@ EXPORT_SYMBOL(input_register_device);
+  */
+ void input_unregister_device(struct input_dev *dev)
+ {
++	struct hid_device *hid;
++
++	hid = dev->hid;
++	if (hid)
++		++hid->alan4;
+ 	if (dev->devres_managed) {
+ 		WARN_ON(devres_destroy(dev->dev.parent,
+ 					devm_input_device_unregister,
+Index: usb-devel/include/linux/hid.h
+===================================================================
+--- usb-devel.orig/include/linux/hid.h
++++ usb-devel/include/linux/hid.h
+@@ -618,6 +618,9 @@ struct hid_device {							/* device repo
+ 	struct list_head debug_list;
+ 	spinlock_t  debug_list_lock;
+ 	wait_queue_head_t debug_wait;
++
++	int alan_open;
++	int alan1, alan2, alan3, alan4;
+ };
+ 
+ #define to_hid_device(pdev) \
+Index: usb-devel/include/linux/input.h
+===================================================================
+--- usb-devel.orig/include/linux/input.h
++++ usb-devel/include/linux/input.h
+@@ -22,6 +22,7 @@
+ #include <linux/mod_devicetable.h>
+ 
+ struct input_dev_poller;
++struct hid_device;
+ 
+ /**
+  * struct input_value - input value representation
+@@ -129,6 +130,7 @@ enum input_clock_type {
+  *  by a driver
+  */
+ struct input_dev {
++	struct hid_device *hid;
+ 	const char *name;
+ 	const char *phys;
+ 	const char *uniq;
+Index: usb-devel/drivers/hid/wacom_sys.c
+===================================================================
+--- usb-devel.orig/drivers/hid/wacom_sys.c
++++ usb-devel/drivers/hid/wacom_sys.c
+@@ -2017,6 +2017,7 @@ static struct input_dev *wacom_allocate_
+ 	if (!input_dev)
+ 		return NULL;
+ 
++	input_dev->hid = hdev;
+ 	input_dev->name = wacom_wac->features.name;
+ 	input_dev->phys = hdev->phys;
+ 	input_dev->dev.parent = &hdev->dev;
+Index: usb-devel/drivers/hid/hid-core.c
+===================================================================
+--- usb-devel.orig/drivers/hid/hid-core.c
++++ usb-devel/drivers/hid/hid-core.c
+@@ -2001,6 +2001,7 @@ EXPORT_SYMBOL_GPL(hid_connect);
+ 
+ void hid_disconnect(struct hid_device *hdev)
+ {
++	++hdev->alan2;
+ 	device_remove_file(&hdev->dev, &dev_attr_country);
+ 	if (hdev->claimed & HID_CLAIMED_INPUT)
+ 		hidinput_disconnect(hdev);
+@@ -2050,6 +2051,7 @@ EXPORT_SYMBOL_GPL(hid_hw_start);
+  */
+ void hid_hw_stop(struct hid_device *hdev)
+ {
++	++hdev->alan1;
+ 	hid_disconnect(hdev);
+ 	hdev->ll_driver->stop(hdev);
+ }
 
