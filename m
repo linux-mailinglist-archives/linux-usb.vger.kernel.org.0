@@ -2,149 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9E41AFCDA
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Apr 2020 19:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B29BA1AFE80
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2020 00:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726316AbgDSRmE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Apr 2020 13:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725927AbgDSRmE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Apr 2020 13:42:04 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37E1C061A0C;
-        Sun, 19 Apr 2020 10:42:02 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id v2so3051320plp.9;
-        Sun, 19 Apr 2020 10:42:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zSa7VEonLrn14NZr8NENNWrUPCxMBtUgC26tpk2K+iQ=;
-        b=g6IY1q84Tm1Q1gj6ZW2S5Odbf0LHq8YmXobTzKVL1GrfkvjbkjZ63IJ24f6IjlBe+m
-         cTNTGpprvyi6L5Xml58PKyLh0sy7LuT7o0kZRGV5KeT1OeXkizKo9x4lZWfyNw/HP9/s
-         i7s22Y+XpoB54sJQcj76Sut6bbNmhBZCqIn1Y0xvOqVBoDHxYexSIBOfjg4ZWuskJto/
-         FD59ypCBmm0mAGafbeTKz7lIesY8NfL2+WNM+HEVJ8rtuM4bz+rmEy7TLf7+UhSfdMmI
-         5LxXG3G2nq3kUnaujCfEaxKJqqsvlzmhFCE20zen8ZG8JzstyghpHkVFaDTTy73nqeuT
-         MtUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=zSa7VEonLrn14NZr8NENNWrUPCxMBtUgC26tpk2K+iQ=;
-        b=VED6T9HIFn5aSVR6VGPoej/uFlHI3ff/T7FMBxU5axdg/lUwSckNjXbZ1zIMHyNysr
-         iAwsdcY8pxVQ4N8EydQukkAZJGj4NB3RXQ1vEjrCl1dCShoot6wOqfFGVAGanz2wosOk
-         euaw3IvGKw3rsRSG+Uz9a2S/ByoBR/rVsYxogKdCTfmurW1zffg5msbEEJRcaKg4WMTT
-         aDHALhr6XDp7fqI8zniK8OzGYGbs3lEOmvQS7PntKa/NmIU4708Etmfu75esAxS6moWJ
-         semUriKWPpR95XtPjFE8WnexFMQ/rxL01hakeY3BbO/aE9fQYsvaTejHHgvJulMnLfxD
-         MwzQ==
-X-Gm-Message-State: AGi0PuboMiZE7zvpz5f+ZNrmBX3ED14LOKCWgP7Io5OGiZqwumvsy1sX
-        n+yFwHewEVhbALpkUixSf+UMMkJl
-X-Google-Smtp-Source: APiQypLKPq8ujqCW1wdiwWQNOO06LqWENQmujeHdGZjCAWl0x4xcdeFlV0xAFeCfEUpf9kD7dgFQzA==
-X-Received: by 2002:a17:90a:f00b:: with SMTP id bt11mr17046320pjb.71.1587318121862;
-        Sun, 19 Apr 2020 10:42:01 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h15sm13229350pfe.92.2020.04.19.10.42.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Apr 2020 10:42:01 -0700 (PDT)
-Subject: Re: [PATCH] USB: typec: Use the correct style for SPDX License
- Identifier
-To:     Nishad Kamdar <nishadkamdar@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Joe Perches <joe@perches.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200419133051.GA7154@nishad>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <c8174e44-b803-98c6-918a-2d778c4c18eb@roeck-us.net>
-Date:   Sun, 19 Apr 2020 10:41:59 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <20200419133051.GA7154@nishad>
-Content-Type: text/plain; charset=utf-8
+        id S1725959AbgDSWEK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Apr 2020 18:04:10 -0400
+Received: from mail-mw2nam10on2115.outbound.protection.outlook.com ([40.107.94.115]:64737
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725848AbgDSWEK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 19 Apr 2020 18:04:10 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=egS38qpT4eIoxHBF9NylDKfBWJB/6R65ou0CfLp86apnQQVC/N5qk1TOWxb7sTNBSDpvwqLdKbNQtd9ZQwvMHKDi2Tpxt19JNC3zWu6C/5dM12NAfshSnrzs3M9QfJZhQ54ckpiNgMPu0SLrl7GgfO/m4MYim2MD8w6sejlHf5FgvbLsyixR+5Ek6n8I+zd6ShFltxBvf1zV/4/31uvjpKboUcj7tifDrURJwML0+pEGn72KTE+lIiHcrshCMQeYvhxmM24Y1Fcn9Xicmpo1yajxKsJ3ws1cI/CbixAIn6HcjmJVEfSROhtEBW95ck/+sTK2LQoPRIJgKehkTvuMfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K3crJmNXw4KH2h4tMiuIoSGjB/HIlfc6huMot8mWslc=;
+ b=Te6oLeiZn4zW4Lr7oeIvZrVgMB97Lhv702j4XhBUmQTCim+yu09Rp7KxwzGkqHQ55lCNja+H/6uzeRSqf19+OdQW0+C9bgof/xMyaREowuNhzsRj/1xmXRk9ZncU0Vy3G0xIkNAiTT8vrAS2v1bwE/2t7nSORP4qxGXgvbp0xT6Qr2eMCQldcuu9must5voRTne4HGb8t4izKROzxqiFWfODI/NBBOEylXLtidsw3OeguuPRWEofLg0cNYuM/tI2gVCKF+c8BbKvbF7Qub78/gnJEbRYPZgOWJfudxJHkzfi8WeeW80OgE5El3sEr9gLwB0RbDJ+sdV4FHyN5QhYJA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=northeastern.edu; dmarc=pass action=none
+ header.from=northeastern.edu; dkim=pass header.d=northeastern.edu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=northeastern.edu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K3crJmNXw4KH2h4tMiuIoSGjB/HIlfc6huMot8mWslc=;
+ b=vrUPkjxwOXfd10O+trA17PCGJa3/82/dzR2r50VhDztmKBM6fUYaS05+/SqFG8o7lgOIAT3d/U6qE7NxuCwE9fa1X12h3kPZsVfqA74Eg9lxbPNQ6J01N4222By2Zic3la9doyGL4/jfVXNZ87J+zffj878+y6UkCTR82t6AF0U=
+Received: from BL0PR06MB4548.namprd06.prod.outlook.com (2603:10b6:208:56::26)
+ by BL0PR06MB4674.namprd06.prod.outlook.com (2603:10b6:208:29::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.29; Sun, 19 Apr
+ 2020 22:04:06 +0000
+Received: from BL0PR06MB4548.namprd06.prod.outlook.com
+ ([fe80::fd87:3891:70a2:bc5d]) by BL0PR06MB4548.namprd06.prod.outlook.com
+ ([fe80::fd87:3891:70a2:bc5d%3]) with mapi id 15.20.2921.027; Sun, 19 Apr 2020
+ 22:04:06 +0000
+From:   Changming Liu <liu.changm@northeastern.edu>
+To:     "thomas@winischhofer.net" <thomas@winischhofer.net>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Lu, Long" <l.lu@northeastern.edu>,
+        "yaohway@gmail.com" <yaohway@gmail.com>
+Subject: [Bug Report] drivers/usb/misc/sisusbvga: integer overflow in
+ sisusb_getidxreg and others
+Thread-Topic: [Bug Report] drivers/usb/misc/sisusbvga: integer overflow in
+ sisusb_getidxreg and others
+Thread-Index: AdYWlZ92yg6LNz1FSfO75HAVsMxGXA==
+Date:   Sun, 19 Apr 2020 22:04:06 +0000
+Message-ID: <BL0PR06MB4548529DBAEA7075BAE4289EE5D70@BL0PR06MB4548.namprd06.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=liu.changm@northeastern.edu; 
+x-originating-ip: [73.167.12.228]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3845c4c6-7ed9-4e63-2eb1-08d7e4ad946a
+x-ms-traffictypediagnostic: BL0PR06MB4674:|BL0PR06MB4674:
+x-ld-processed: a8eec281-aaa3-4dae-ac9b-9a398b9215e7,ExtFwd
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BL0PR06MB46743BD65A226A68B53791FCE5D70@BL0PR06MB4674.namprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0378F1E47A
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR06MB4548.namprd06.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10019020)(4636009)(39860400002)(396003)(376002)(366004)(136003)(346002)(26005)(76116006)(186003)(7696005)(66946007)(64756008)(66446008)(66476007)(8676002)(66556008)(52536014)(71200400001)(6916009)(55016002)(5660300002)(75432002)(9686003)(33656002)(2906002)(81156014)(54906003)(478600001)(86362001)(316002)(786003)(8936002)(4326008)(6506007);DIR:OUT;SFP:1102;
+received-spf: None (protection.outlook.com: northeastern.edu does not
+ designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: cfnwYVf8kizQsSW5xDGpWNuipyAq9ZOBbHBAsaeIEs7++9jEy3web95QcPVbXj9GCvDQF/tHPB6e9KcRGSXnl9HTwWFBANjF0Dr6UG9Qb7DpYpVhmDOTyK8fCuDwqA4GpX8FpdfFqUN9isZPBBAujW3hVIy6Rt6+1MIn4291V/FBDHoF0K8M3uQHvi7+tyfZ4iYRAKQ65GhG4RupxaULCdamT1twY4IETsxQ2eT5fpEZ+MQq5ZUF9l7cTiY67LLp9t8zsnAl5z4ZTwscRbg9MH8cxdD2mJB0sM7ZNQIr6tQBbMX4/4/59DXMal0OFQz56RKe/WggeQgfKJDqbPHAhzONM7MxF0ykFGRTA4/p5AXd/y1K8/DljSedQ62MEI4Ng1RyI+XyyjPtiisVrMDQCqxdA22MhTvUu1ETYMXdRCmXkTrQ2hW0+IMSFjCfKVQf
+x-ms-exchange-antispam-messagedata: OqHZiro6zDGtokINCoYjQZJCmiyGEvhYyQRK8wOqRChCgcKraJDuTh09zVWoaim8977X7CKS+CwlawlalujhpqceUlyR2vbq9ogea3Vm2HciqHC8fIQHUETXxqto0v1hzI4GS5g9Z3J/IZAi25VM3A==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: northeastern.edu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3845c4c6-7ed9-4e63-2eb1-08d7e4ad946a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Apr 2020 22:04:06.5197
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a8eec281-aaa3-4dae-ac9b-9a398b9215e7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yDakJfvovMfLiG3iZ1S4731RXh7NAB2JV+xSyObT8tqPxiG2TuKzZTcdGgE4/1Js803VeTVAkEdvRt8TpULZWBqZkbHpBDrRYADvec7Ipfk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR06MB4674
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 4/19/20 6:30 AM, Nishad Kamdar wrote:
-> This patch corrects the SPDX License Identifier style in
-> header file related to USB Type-C support.
-> For C header files Documentation/process/license-rules.rst
-> mandates C-like comments (opposed to C source files where
-> C++ style should be used).
-> 
-> Changes made by using a script provided by Joe Perches here:
-> https://lkml.org/lkml/2019/2/7/46.
-> 
-> Suggested-by: Joe Perches <joe@perches.com>
-> Signed-off-by: Nishad Kamdar <nishadkamdar@gmail.com>
+Hi Thomas,
+Greetings, I'm a first-year PhD student who is interested in using UBSan fo=
+r linux kernel. With some experiments, I found that in
+drivers/usb/misc/sisusbvga/sisusb.c sisusb_getidxreg, there is an signed in=
+teger overflow which might cause unexpected result.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+More specifically, starting from the fetch function in func sisusb_ioctl, l=
+ine 2959, struct sisusb_command y is filled with data from user space. Then=
+ diving into=20
+sisusb_handle_command, the signed integer, named port, is casted from y->da=
+ta3.
+Then when executing sisusb_getidxreg, the signed integer, port, is used as =
+32-bit unsigned address in function sisusb_write_memio_byte.
 
-> ---
->  drivers/usb/typec/tcpm/fusb302_reg.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/fusb302_reg.h b/drivers/usb/typec/tcpm/fusb302_reg.h
-> index 00b39d365478..edc0e4b0f1e6 100644
-> --- a/drivers/usb/typec/tcpm/fusb302_reg.h
-> +++ b/drivers/usb/typec/tcpm/fusb302_reg.h
-> @@ -1,4 +1,4 @@
-> -// SPDX-License-Identifier: GPL-2.0+
-> +/* SPDX-License-Identifier: GPL-2.0+ */
->  /*
->   * Copyright 2016-2017 Google, Inc
->   *
-> 
+The suspected problem is that, in sisusb_getidxreg, or other functions that=
+ have similar behavior, e.g. sisusb_setidxreg, the port integer value is di=
+rectly from user space, and is used as port and port + 1. So port + 1 might=
+ overflow in a contrived way. With port being a signed integer, the overflo=
+wn value might be undefined. Perhaps change the port integer from signed to=
+ unsigned would help?
 
+To change the subject a little bit, I noted that, although all facing user =
+input in sisusb_handle_command, sisusb_clear_vram does a good job vetting t=
+he address and length input from user to keep them in range, while the othe=
+r functions like sisusb_setidxreg mentioned above, used the address without=
+ checking. I'm wondering, what caused the difference? Since this kind of ch=
+eck can eliminate the possibility of the overflow entirely.
+
+Due to the lack of knowledge of the interactions between this driver and th=
+e user space and the real hardware, I'm not able to assess if this is an is=
+sue worth being dealt with, I'd be more than happy to hear your valuable op=
+inions, this would help with understand UB and linux kernel a lot!
+
+Looking forward to your valuable response!
+
+Changming Liu
