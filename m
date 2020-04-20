@@ -2,116 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E201B02CB
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2020 09:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD4C1B04F2
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2020 10:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726067AbgDTHWx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Apr 2020 03:22:53 -0400
-Received: from mail-eopbgr1400093.outbound.protection.outlook.com ([40.107.140.93]:21504
-        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725815AbgDTHWw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 Apr 2020 03:22:52 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zl0VuETeCzuoLab9+NwliYUCwUnKhaZr0UdfEn02sD+HL5Ung24rK4yY/kapm1heTby/XMz6cyAKlDHxSNRYmDFUvR54kckOyKB8FCCnI4uU6g8Vw3avncg6H7BOuBI3ZAmstc7uX6QUnstAD55WhUgl2RIdU9pU8B6pGTvflA9nbrkYE92hT9q6DVLozqvYZuU9WOPesRwVxLA6pfSkx1fyDYmP7wTmYg1DOQ8KyoY+azX6NfaWeZp4j7cDL/eEl7I3hillDk7zgFwI/OUMMsDYTqH3G5yhSs6jdgizhE9hBUwE6o/9jsg20Zh4bU8Pn7Aoe6M0LsxEr7AjCivF9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=izE7d4ebI8p/AVjlfYCYgAT69TJ4Zqy/IHHlBpf97SQ=;
- b=hLfd0cuhJKROLFVPFKnUSfuGs6CARZiJ7QseCjfR2RydVGV9Fvxppi1mAWZILLV3vVCDrzXrcfQbCdK3Sb7M1AfJ7ew+tbnlyks+mLKmZeo/qesDYYxswFXzujVoA3qu2DQl22IFfqHKa80f1VAQ2NclLEXXqS8ItCDpo96QiP2bRdeqmlTflx5DaJkFiOIIBUOin25tqfDLtRcoMC53bOolfK4o/NBuq46By6CkT1HqLbaj8Pnj99yF/Q1tdfeEplWZ/X9v0Vvunr25F5b+xIfcP5iS8wLZ11O0TmPcXl35CBMInY+Rd05Y5QVBU5g+sPlugRqgDLpK2O//LPJ0hg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=izE7d4ebI8p/AVjlfYCYgAT69TJ4Zqy/IHHlBpf97SQ=;
- b=IY0qLiUKvftnrZCiK115QcU6KPhWosTtJmW4d+lgIZWX6x2x6PyAw6eeY5B/vm3WJF+ykkp4klXHpg/ZYspxk3whkv18T328u+4GtgH8fScsHfrDSSvEm17tQCzTI0Q84E7YOvo2U/Z7ySApQmqjk8h+l4jqJx57/u09wVO5KN0=
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.175.203) by
- TYAPR01MB4686.jpnprd01.prod.outlook.com (20.179.175.14) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2921.29; Mon, 20 Apr 2020 07:22:50 +0000
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::ed7f:1268:55a9:fc06]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::ed7f:1268:55a9:fc06%4]) with mapi id 15.20.2921.027; Mon, 20 Apr 2020
- 07:22:49 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Nishad Kamdar <nishadkamdar@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?iso-8859-1?Q?Uwe_Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Joe Perches <joe@perches.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] usb: renesas_usbhs: Use the correct style for SPDX
- License Identifier
-Thread-Topic: [PATCH] usb: renesas_usbhs: Use the correct style for SPDX
- License Identifier
-Thread-Index: AQHWFkoR6/STDNNI5kWpjekRx0czv6iBmPrw
-Date:   Mon, 20 Apr 2020 07:22:49 +0000
-Message-ID: <TYAPR01MB45443DA5ED70B06628785D6AD8D40@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-References: <20200419125705.GA5172@nishad>
-In-Reply-To: <20200419125705.GA5172@nishad>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [124.210.22.195]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 02ed71a0-0081-418e-b3f8-08d7e4fba1dc
-x-ms-traffictypediagnostic: TYAPR01MB4686:
-x-microsoft-antispam-prvs: <TYAPR01MB4686DD824FC2128DF9242CC3D8D40@TYAPR01MB4686.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-forefront-prvs: 03793408BA
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10019020)(4636009)(39860400002)(376002)(396003)(366004)(346002)(136003)(66556008)(8676002)(66946007)(8936002)(55236004)(71200400001)(66446008)(6506007)(7696005)(81156014)(55016002)(66476007)(9686003)(186003)(4326008)(64756008)(76116006)(4744005)(86362001)(52536014)(966005)(26005)(478600001)(54906003)(110136005)(5660300002)(33656002)(316002)(2906002);DIR:OUT;SFP:1102;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7M1pyeoxNZkFETHbJ56/r+e8hZZBT4YWJZnLagVrUIcjQ5vKPn2tCt/+kDYiTlvB2PohKAw2c/IZVN1yz7Ynttp1lXtT1VsoXdq85ZrqjLZScNfuFIoYBLcAfIOjOgGh6fWbynBiTtfbdsUh5NMDr2/XuBeXNidWLbF1MRAb0T+lKYBygQtNxqsryHaayT6G3vT2ZEEq5a2rR3ZkcGNZtph8hNJ2epuDXnfO/0nvUH7UDLul605ogflOdUTb607GW0RMWMQIZO48BzBk8+S4wvgWeUeY3RIL1Q00BYXgZyMLxaWoJFrOTb/TLUkIDzLFsYQ0ikxftFZtaLpDREVf7KFidkQnoADJoed+oR+1hYG98LU0l+OEGlbqB3r26bNK4Ih6frIJgsREFIEy5F6hY+UHW5Mve8EK3MbBQ+MJGqupIGivl7FCdrTjjKtEiSayCJes1rcgMc+dJ/yWFnK42FSHFH7m6ICHVVH7nOPxpZADpDzJX0GMx7EG9uvH3dtphXddCFLZ1TA85x9GnKadRg==
-x-ms-exchange-antispam-messagedata: fs1c6KkbTthXAW3bfFy6O5GqGM/4YjHLslry/tg5quAChB9flsGXBj9pTfNs7J5uJkwaJ03QN+hkwbusSBQmt/DN25onoSGwSN9IlHNddwayKkqe3ikg5DwfMHw6SN76jYTK/XzXRHrqd62VvBIEZQ==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1726355AbgDTI5N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Apr 2020 04:57:13 -0400
+Received: from mga07.intel.com ([134.134.136.100]:12822 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725886AbgDTI5M (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 Apr 2020 04:57:12 -0400
+IronPort-SDR: 1etWlaUZ0CEA9C77bjJLwqRH8uJMQt5MTJBBpmFd9Fp5ojO9NO7V0SVN6Ma/xYefKpazyhizjs
+ jELUsQbH0iPA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2020 01:57:12 -0700
+IronPort-SDR: prkYc6reaZk4OcfYBCBetKNdy6j/YP9OfDRV07RFHXJiKCugUt9Yd32KIVzJ3UTozI/a9kJU+4
+ vBKjeTY+78Mg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,406,1580803200"; 
+   d="scan'208";a="364942349"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001.fm.intel.com with SMTP; 20 Apr 2020 01:57:09 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 20 Apr 2020 11:57:09 +0300
+Date:   Mon, 20 Apr 2020 11:57:09 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Yehezkel Bernat <yehezkelshb@gmail.com>
+Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH] thunderbolt: Check return value of tb_sw_read() in
+ usb4_switch_op()
+Message-ID: <20200420085709.GU2586@lahna.fi.intel.com>
+References: <20200416120146.54791-1-mika.westerberg@linux.intel.com>
+ <CA+CmpXuEbpATXSw2x0sH4LWU9XAm8d5ZpkDm9Kuoi5CwvTZQvQ@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 02ed71a0-0081-418e-b3f8-08d7e4fba1dc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Apr 2020 07:22:49.8235
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xYHZVBSH+izLjCm6T0l14i9ZdxG72NnMOJGqy/yvuMnk3GvKyeGneXOZJaJgzeuTC7OC7kJj1mvIhUoF9euzei8eEJaz6tezkrgWcsTl7qkl/q27iM15Tmzc32JStHqv
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB4686
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+CmpXuEbpATXSw2x0sH4LWU9XAm8d5ZpkDm9Kuoi5CwvTZQvQ@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Nishad,
+On Fri, Apr 17, 2020 at 02:20:26AM +0300, Yehezkel Bernat wrote:
+> On Thu, Apr 16, 2020 at 3:01 PM Mika Westerberg
+> <mika.westerberg@linux.intel.com> wrote:
+> >
+> > The function misses checking return value of tb_sw_read() before it
+> > accesses the value that was read. Fix this by checking the return value
+> > first.
+> >
+> > Fixes: b04079837b20 ("thunderbolt: Add initial support for USB4")
+> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> 
+> Reviewed-by: Yehezkel Bernat <yehezkelshb@gmail.com>
 
-> From: Nishad Kamdar, Sent: Sunday, April 19, 2020 9:57 PM
->=20
-> This patch corrects the SPDX License Identifier style in
-> header files related to Renesas USBHS Controller Drivers.
-> For C header files Documentation/process/license-rules.rst
-> mandates C-like comments (opposed to C source files where
-> C++ style should be used).
->=20
-> Changes made by using a script provided by Joe Perches here:
-> https://lkml.org/lkml/2019/2/7/46.
->=20
-> Suggested-by: Joe Perches <joe@perches.com>
-> Signed-off-by: Nishad Kamdar <nishadkamdar@gmail.com>
-
-Thank you for the patch!
-
-Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-
-Best regards,
-Yoshihiro Shimoda
-
+Applied to fixes, thanks!
