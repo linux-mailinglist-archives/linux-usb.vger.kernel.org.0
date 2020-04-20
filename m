@@ -2,97 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2551B16FC
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2020 22:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F42081B18A9
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2020 23:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728239AbgDTU0s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Apr 2020 16:26:48 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:53719 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728225AbgDTU0r (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Apr 2020 16:26:47 -0400
-Received: (qmail 23111 invoked by uid 500); 20 Apr 2020 16:26:45 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 20 Apr 2020 16:26:45 -0400
-Date:   Mon, 20 Apr 2020 16:26:45 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Qais Yousef <qais.yousef@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-cc:     Oliver Neukum <oneukum@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux-pm mailing list <linux-pm@vger.kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: lockdep warning in urb.c:363 usb_submit_urb
-In-Reply-To: <Pine.LNX.4.44L0.2003251631360.1724-100000@netrider.rowland.org>
-Message-ID: <Pine.LNX.4.44L0.2004201622260.22032-100000@netrider.rowland.org>
+        id S1728003AbgDTVnV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Apr 2020 17:43:21 -0400
+Received: from ms.lwn.net ([45.79.88.28]:53958 "EHLO ms.lwn.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725989AbgDTVnT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 Apr 2020 17:43:19 -0400
+Received: from lwn.net (localhost [127.0.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 632E4823;
+        Mon, 20 Apr 2020 21:43:17 +0000 (UTC)
+Date:   Mon, 20 Apr 2020 15:43:16 -0600
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Yuti Amonkar <yamonkar@cadence.com>,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-rdma@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, linux-crypto@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-afs@lists.infradead.org,
+        ecryptfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        ocfs2-devel@oss.oracle.com, linux-pci@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-spi@vger.kernel.org,
+        Sandeep Maheswaram <sanm@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-usb@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Matthias Brugger <mbrugger@suse.com>, netdev@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net
+Subject: Re: [PATCH v2 00/33] Documentation fixes for Kernel 5.8
+Message-ID: <20200420154316.28e42905@lwn.net>
+In-Reply-To: <cover.1586881715.git.mchehab+huawei@kernel.org>
+References: <cover.1586881715.git.mchehab+huawei@kernel.org>
+Organization: LWN.net
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 25 Mar 2020, Alan Stern wrote:
+On Tue, 14 Apr 2020 18:48:26 +0200
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
 
-> On Wed, 25 Mar 2020, Qais Yousef wrote:
+> Patches 1 to 5 contain changes to the documentation toolset:
 > 
-> > Thanks for all the hints Alan.
-> > 
-> > I think I figured it out, the below patch seems to fix it for me. Looking
-> > at other drivers resume functions it seems we're missing the
-> > pm_runtime_disable()->set_active()->enable() dance. Doing that fixes the
-> > warning and the dev_err() in driver/base/power.
+> - The first 3 patches help to reduce a lot the number of reported
+>   kernel-doc issues, by making the tool more smart.
 > 
-> Ah, yes.  This should have been added years ago; guess I forgot.  :-(
+> - Patches 4 and 5 are meant to partially address the PDF
+>   build, with now requires Sphinx version 2.4 or upper.
 > 
-> > I don't see xhci-plat.c doing that, I wonder if it needs it too.
-> > 
-> > I'm not well versed about the details and the rules here. So my fix could be
-> > a hack, though it does seem the right thing to do.
-> > 
-> > I wonder why the power core doesn't handle this transparently..
+> The remaining patches fix broken references detected by
+> this tool:
 > 
-> Initially, we didn't want the PM core to do this automatically because
-> we thought some devices might want to remain runtime-suspended
-> following a system resume, and only the device driver would know what 
-> to do.
+>         ./scripts/documentation-file-ref-check
+> 
+> and address other random errors due to tags being mis-interpreted
+> or mis-used.
+> 
+> They are independent each other, but some may depend on
+> the kernel-doc improvements.
+> 
+> PS.: Due to the large number of C/C, I opted to keep a smaller
+> set of C/C at this first e-mail (only e-mails with "L:" tag from
+> MAINTAINERS file).
 
-Qais:
+OK, I've applied this set, minus #17 which was applied elsewhere.
 
-So it looks like the discussion with Rafael will lead to changes in the
-PM core, but they won't go into the -stable kernels, and they won't
-directly fix the problem here.
+Thanks,
 
-In the meantime, why don't you write up your patch below and submit it
-properly?  Even better, create similar patches for ehci-platform.c and
-xhci-plat.c and submit them too.
-
-Alan Stern
-
-> > diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
-> > index 7addfc2cbadc..eb92c8092fae 100644
-> > --- a/drivers/usb/host/ohci-platform.c
-> > +++ b/drivers/usb/host/ohci-platform.c
-> > @@ -299,6 +299,10 @@ static int ohci_platform_resume(struct device *dev)
-> >         }
-> > 
-> >         ohci_resume(hcd, false);
-> > +
-> > +       pm_runtime_disable(dev);
-> > +       pm_runtime_set_active(dev);
-> > +       pm_runtime_enable(dev);
-> >         return 0;
-> >  }
-> >  #endif /* CONFIG_PM_SLEEP */
-> > 
-> > 
-> > Thanks
-> > 
-> > --
-> > Qais Yousef
-> 
-> 
-> 
-
+jon
