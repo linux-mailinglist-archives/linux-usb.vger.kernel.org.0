@@ -2,421 +2,270 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CEF1B1F39
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2020 08:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A38F1B1FEF
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2020 09:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726867AbgDUGv1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Apr 2020 02:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726106AbgDUGv1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Apr 2020 02:51:27 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43063C061A0F
-        for <linux-usb@vger.kernel.org>; Mon, 20 Apr 2020 23:51:27 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1jQmka-0004gu-LO; Tue, 21 Apr 2020 08:51:20 +0200
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1jQmkZ-00013P-1r; Tue, 21 Apr 2020 08:51:19 +0200
-Date:   Tue, 21 Apr 2020 08:51:19 +0200
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
-Subject: Re: [PATCH 2/2] usb: dwc3: gadget: restart the transfer if a isoc
- request is queued too late
-Message-ID: <20200421065118.GB2338@pengutronix.de>
-References: <Pine.LNX.4.44L0.1911131036340.1558-100000@iolanthe.rowland.org>
- <587b0adf-b71d-6fde-407b-46089ed5d695@synopsys.com>
- <20191114121422.qtvyom6nytzwoy2e@pengutronix.de>
- <6d4b87c8-5aca-18cb-81db-a8d2fd4bd86e@synopsys.com>
- <20200409075958.GA19563@pengutronix.de>
- <431d2faa-b073-287c-62ec-557d7d021c48@synopsys.com>
- <20200410220336.GB19563@pengutronix.de>
- <295ff41f-f287-e2c8-7c33-1c225e9b76b5@synopsys.com>
+        id S1726741AbgDUHec (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Apr 2020 03:34:32 -0400
+Received: from mga01.intel.com ([192.55.52.88]:39875 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726018AbgDUHec (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 Apr 2020 03:34:32 -0400
+IronPort-SDR: /Wx4mvoDdI2jY/p1nOtVbmQ+Fn5EguJ2WwbqrOC0txNH6dYxffqdXcAlh6EV9Ibe80SgIXBWh7
+ 0Guy4IsD/iAw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2020 00:34:30 -0700
+IronPort-SDR: Lr+yTrxR1E36fswoScBH/HdzhsIQbiAya9hDs6NLI95JwsTkpv0YHhFGby1nJMph7oOuEDDzip
+ 2x65fkMQm4mw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,409,1580803200"; 
+   d="scan'208";a="247104409"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Apr 2020 00:34:29 -0700
+Subject: Re: [PROBLEM]: Infinite warm reset loops resulting in "Cannot enable.
+ Maybe the USB cable is bad?" messages
+To:     Matthew Ruffell <matthew.ruffell@canonical.com>,
+        linux-usb@vger.kernel.org
+Cc:     dann.frazier@canonical.com, heitor.de.siqueira@canonical.com,
+        glogow@fbihome.de
+References: <cd36bf27-fc7b-9a22-7065-2fabb8e89674@canonical.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ mQINBFMB0ccBEADd+nZnZrFDsIjQtclVz6OsqFOQ6k0nQdveiDNeBuwyFYykkBpaGekoHZ6f
+ lH4ogPZzQ+pzoJEMlRGXc881BIggKMCMH86fYJGfZKWdfpg9O6mqSxyEuvBHKe9eZCBKPvoC
+ L2iwygtO8TcXXSCynvXSeZrOwqAlwnxWNRm4J2ikDck5S5R+Qie0ZLJIfaId1hELofWfuhy+
+ tOK0plFR0HgVVp8O7zWYT2ewNcgAzQrRbzidA3LNRfkL7jrzyAxDapuejuK8TMrFQT/wW53e
+ uegnXcRJaibJD84RUJt+mJrn5BvZ0MYfyDSc1yHVO+aZcpNr+71yZBQVgVEI/AuEQ0+p9wpt
+ O9Wt4zO2KT/R5lq2lSz1MYMJrtfFRKkqC6PsDSB4lGSgl91XbibK5poxrIouVO2g9Jabg04T
+ MIPpVUlPme3mkYHLZUsboemRQp5/pxV4HTFR0xNBCmsidBICHOYAepCzNmfLhfo1EW2Uf+t4
+ L8IowAaoURKdgcR2ydUXjhACVEA/Ldtp3ftF4hTQ46Qhba/p4MUFtDAQ5yeA5vQVuspiwsqB
+ BoL/298+V119JzM998d70Z1clqTc8fiGMXyVnFv92QKShDKyXpiisQn2rrJVWeXEIVoldh6+
+ J8M3vTwzetnvIKpoQdSFJ2qxOdQ8iYRtz36WYl7hhT3/hwkHuQARAQABtCdNYXRoaWFzIE55
+ bWFuIDxtYXRoaWFzLm55bWFuQGdtYWlsLmNvbT6JAjsEEwECACUCGwMGCwkIBwMCBhUIAgkK
+ CwQWAgMBAh4BAheABQJTAeo1AhkBAAoJEFiDn/uYk8VJOdIP/jhA+RpIZ7rdUHFIYkHEKzHw
+ tkwrJczGA5TyLgQaI8YTCTPSvdNHU9Rj19mkjhUO/9MKvwfoT2RFYqhkrtk0K92STDaBNXTL
+ JIi4IHBqjXOyJ/dPADU0xiRVtCHWkBgjEgR7Wihr7McSdVpgupsaXhbZjXXgtR/N7PE0Wltz
+ hAL2GAnMuIeJyXhIdIMLb+uyoydPCzKdH6znfu6Ox76XfGWBCqLBbvqPXvk4oH03jcdt+8UG
+ 2nfSeti/To9ANRZIlSKGjddCGMa3xzjtTx9ryf1Xr0MnY5PeyNLexpgHp93sc1BKxKKtYaT0
+ lR6p0QEKeaZ70623oB7Sa2Ts4IytqUVxkQKRkJVWeQiPJ/dZYTK5uo15GaVwufuF8VTwnMkC
+ 4l5X+NUYNAH1U1bpRtlT40aoLEUhWKAyVdowxW4yGCP3nL5E69tZQQgsag+OnxBa6f88j63u
+ wxmOJGNXcwCerkCb+wUPwJzChSifFYmuV5l89LKHgSbv0WHSN9OLkuhJO+I9fsCNvro1Y7dT
+ U/yq4aSVzjaqPT3yrnQkzVDxrYT54FLWO1ssFKAOlcfeWzqrT9QNcHIzHMQYf5c03Kyq3yMI
+ Xi91hkw2uc/GuA2CZ8dUD3BZhUT1dm0igE9NViE1M7F5lHQONEr7MOCg1hcrkngY62V6vh0f
+ RcDeV0ISwlZWuQINBFMB0ccBEACXKmWvojkaG+kh/yipMmqZTrCozsLeGitxJzo5hq9ev31N
+ 2XpPGx4AGhpccbco63SygpVN2bOd0W62fJJoxGohtf/g0uVtRSuK43OTstoBPqyY/35+VnAV
+ oA5cnfvtdx5kQPIL6LRcxmYKgN4/3+A7ejIxbOrjWFmbWCC+SgX6mzHHBrV0OMki8R+NnrNa
+ NkUmMmosi7jBSKdoi9VqDqgQTJF/GftvmaZHqgmVJDWNrCv7UiorhesfIWPt1O/AIk9luxlE
+ dHwkx5zkWa9CGYvV6LfP9BznendEoO3qYZ9IcUlW727Le80Q1oh69QnHoI8pODDBBTJvEq1h
+ bOWcPm/DsNmDD8Rwr/msRmRyIoxjasFi5WkM/K/pzujICKeUcNGNsDsEDJC5TCmRO/TlvCvm
+ 0X+vdfEJRZV6Z+QFBflK1asUz9QHFre5csG8MyVZkwTR9yUiKi3KiqQdaEu+LuDD2CGF5t68
+ xEl66Y6mwfyiISkkm3ETA4E8rVZP1rZQBBm83c5kJEDvs0A4zrhKIPTcI1smK+TWbyVyrZ/a
+ mGYDrZzpF2N8DfuNSqOQkLHIOL3vuOyx3HPzS05lY3p+IIVmnPOEdZhMsNDIGmVorFyRWa4K
+ uYjBP/W3E5p9e6TvDSDzqhLoY1RHfAIadM3I8kEx5wqco67VIgbIHHB9DbRcxQARAQABiQIf
+ BBgBAgAJBQJTAdHHAhsMAAoJEFiDn/uYk8VJb7AQAK56tgX8V1Wa6RmZDmZ8dmBC7W8nsMRz
+ PcKWiDSMIvTJT5bygMy1lf7gbHXm7fqezRtSfXAXr/OJqSA8LB2LWfThLyuuCvrdNsQNrI+3
+ D+hjHJjhW/4185y3EdmwwHcelixPg0X9EF+lHCltV/w29Pv3PiGDkoKxJrnOpnU6jrwiBebz
+ eAYBfpSEvrCm4CR4hf+T6MdCs64UzZnNt0nxL8mLCCAGmq1iks9M4bZk+LG36QjCKGh8PDXz
+ 9OsnJmCggptClgjTa7pO6040OW76pcVrP2rZrkjo/Ld/gvSc7yMO/m9sIYxLIsR2NDxMNpmE
+ q/H7WO+2bRG0vMmsndxpEYS4WnuhKutoTA/goBEhtHu1fg5KC+WYXp9wZyTfeNPrL0L8F3N1
+ BCEYefp2JSZ/a355X6r2ROGSRgIIeYjAiSMgGAZMPEVsdvKsYw6BH17hDRzltNyIj5S0dIhb
+ Gjynb3sXforM/GVbr4mnuxTdLXQYlj2EJ4O4f0tkLlADT7podzKSlSuZsLi2D+ohKxtP3U/r
+ 42i8PBnX2oAV0UIkYk7Oel/3hr0+BP666SnTls9RJuoXc7R5XQVsomqXID6GmjwFQR5Wh/RE
+ IJtkiDAsk37cfZ9d1kZ2gCQryTV9lmflSOB6AFZkOLuEVSC5qW8M/s6IGDfYXN12YJaZPptJ fiD/
+Message-ID: <7620fe19-cd6c-528d-2bc2-dd5a3be3973a@linux.intel.com>
+Date:   Tue, 21 Apr 2020 10:37:11 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZoaI/ZTpAVc4A5k6"
-Content-Disposition: inline
-In-Reply-To: <295ff41f-f287-e2c8-7c33-1c225e9b76b5@synopsys.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 08:30:47 up 61 days, 14:01, 87 users,  load average: 0.28, 0.20,
- 0.16
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <cd36bf27-fc7b-9a22-7065-2fabb8e89674@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 21.4.2020 6.24, Matthew Ruffell wrote:
+> Hi,
+> 
+> I am struggling to debug a regression, and it would be great if we could work
+> this out together. I'm not very familiar with the USB subsystem, but I will try
+> my best.
+> 
+> We have had a few reports from users where their USB devices are extremely slow,
+> to the point where they are unusable. Their dmesg buffers are filled with:
+> 
+> [ 14.000130] usb usb2-port2: Cannot enable. Maybe the USB cable is bad?
+> [ 18.092123] usb usb2-port2: Cannot enable. Maybe the USB cable is bad?
+> [ 22.172116] usb usb2-port2: Cannot enable. Maybe the USB cable is bad?
+> [ 26.252116] usb usb2-port2: Cannot enable. Maybe the USB cable is bad?
+> 
+> This only seems to happen with specific hardware combinations. We did a git
+> bisect, and determined that the below commit was the root cause:
+> 
+> commit 4fdc1790e6a9ef22399c6bc6e63b80f4609f3b7e
+> Author: Jan-Marek Glogowski <glogow@fbihome.de>
+> Date:   Fri Feb 1 13:52:31 2019 +0100
+> Subject: usb: handle warm-reset port requests on hub resume
+> 
+> We had to revert this commit from the Ubuntu kernels for the time being, but we
+> wish to re-apply it once we determine how to fix this regression.
+> 
+> The problem still exists on the latest 5.7-rc1 kernel, and if we revert the
+> above commit, the problem vanishes.
+> 
+> Logs (from an affected system, it has a LOT of USB devices):
+> 
+> System Info:
+> Ubuntu 18.04, 4.15.0-72-generic kernel.
+> 
+> lsusb:                                  https://paste.ubuntu.com/p/Syh2StCyyT/
+> lsusb -t:                               https://paste.ubuntu.com/p/fG7DdXvh58/
+> filtered dmesg, with usbcore.dyndbg=+p: https://paste.ubuntu.com/p/DyY9SJRcdv/
+> filtered lspci:                         https://paste.ubuntu.com/p/Kr96PvRmH4/
+> 
+There are no USB3 devices enumerated.
 
---ZoaI/ZTpAVc4A5k6
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Do any of the devices connected to the hub support USB 3 speeds (5Gbps or faster)?
+If not, could you add one the hub hub?
 
-Hi,
+> My commentary on the problem:
+> 
+> First the hubs come onto the scene:
+> 
+> USB 2:
+> 
+> xhci_hcd 0000:00:14.0: new USB bus registered, assigned bus number 1
+> usb usb1: New USB device found, idVendor=1d6b, idProduct=0002
+> usb usb1: Product: xHCI Host Controller
+> hub 1-0:1.0: USB hub found
+> 
+> USB 3:
+> 
+> xhci_hcd 0000:00:14.0: new USB bus registered, assigned bus number 2
+> xhci_hcd 0000:00:14.0: Host supports USB 3.0 SuperSpeed
+> usb usb2: New USB device found, idVendor=1d6b, idProduct=0003
+> usb usb2: Product: xHCI Host Controller
+> hub 2-0:1.0: USB hub found 
+> 
+> Next, the USB 2 and 3 port peering happens. Let's only look at usb1-port2 and
+> usb2-port2.
+> 
+> usb usb2-port2: peered to usb1-port2
+> 
+> The next interesting message is hub 1-0 reporting normal state, followed by 
+> hub 2-0 reporting okay, then going into hub suspend.
+> 
+> hub 1-0:1.0: state 7 ports 16 chg 201c evt 0000
+> hub 2-0:1.0: state 7 ports 10 chg 0000 evt 0000
+> hub 2-0:1.0: hub_suspend
+> usb usb2: bus auto-suspend, wakeup 1
+> 
+> A new USB device is found on port 2. It gets registered under usb 1-2 and not
+> usb 2-2.
+> 
+> usb 1-2: new high-speed USB device number 2 using xhci_hcd
+> 
+> Following that, hub 2-0 resumes, noting a race event:
+> 
+> usb usb2: suspend raced with wakeup event
+> usb usb2: usb auto-resume
+> hub 2-0:1.0: hub_resume
+> 
+> Things keep on going with usb 1-2 though:
+> 
+> usb 1-2: New USB device found, idVendor=0424, idProduct=2807
+> usb 1-2: Product: USB2807 Hub
+> usb 1-2: Manufacturer: Microchip
+> hub 1-2:1.0: USB hub found
+> 
+> Its a Microchip USB hub. It becomes hub 1-2. The next thing to happen is where
+> the faults start coming in:
+> 
+> usb usb2-port2: do warm reset
+> 
+> A warm reset is issued to usb 2-2. But as we have previously gathered before,
+> 2-2 is an "empty" port, peered to 1-2, and the device is under 1-2. This seems
+> to be linked with the hub 2-0 suspend and auto-resume event.
+> 
+> This of course matches the text in the problematic commit message:
+> 
+>> This just happens, if its the only device on the root hub, the hub
+>> therefore resumes and the HCDs status_urb isn't yet available.
+>> If a warm-reset request is detected, this sets the hubs event_bits,
+>> which will prevent any auto-suspend and allows the hubs workqueue
+>> to warm-reset the port later in port_event.
+> 
+> At the moment, usb 1-2 is the only device on the hub 1-0 root hub. Or so I think
+> anyway. I think I am reading correctly that hub 2-0 has no devices yet.
+> 
+> Anyway, the warm reset is tried again after the first timeout:
+> 
+> usb usb2-port2: not warm reset yet, waiting 50ms
+> usb usb2-port2: not warm reset yet, waiting 200ms
+> 
+> While this is happening, usb 1-2 is trying to set up the new hub 1-2.
+> 
+> usb 1-2-port1: status 0101 change 0001
+> usb 1-2-port2: status 0101 change 0001
+> ...
+> 
+> A new warm reset is tried:
+> 
+> usb usb2-port2: not warm reset yet, waiting 200ms
+> 
+> hub 1-2 starts discovering new devices:
+> 
+> usb 1-2.1: New USB device found, idVendor=0403, idProduct=6011
+> usb 1-2.1: Product: Quad RS232-HS
+> usb 1-2.1: Manufacturer: FTDI
+> 
+> So things seem to be functioning normally at USB 2.0 speeds for usb 1-2. Back
+> on the usb 2-2 front:
+> 
+> usb usb2-port2: not warm reset yet, waiting 200ms
+> usb usb2-port2: not enabled, trying warm reset again...
+> 
+> From there on hub 1-2 keeps on discovering new devices and bringing them up,
+> and usb 2-2 keeps trying to warm reset.
+> 
+> Looking at the problematic code: 
+> 
+> /* Make sure a warm-reset request is handled by port_event */
+> if (type == HUB_RESUME &&
+> hub_port_warm_reset_required(hub, port1, portstatus))
+> set_bit(port1, hub->event_bits);
+> 
+> It almost feels like we are missing a check to see if the port in question is
+> already in use in another bus. Or if the port is "empty".
+> 
 
-On Sat, Apr 11, 2020 at 12:59:47AM +0000, Thinh Nguyen wrote:
->Hi,
->
->Michael Grzeschik wrote:
->> On Fri, Apr 10, 2020 at 01:09:23AM +0000, Thinh Nguyen wrote:
->>> Hi,
->>>
->>> Michael Grzeschik wrote:
->>>> On Thu, Nov 14, 2019 at 08:11:56PM +0000, Thinh Nguyen wrote:
->>>>> Michael Olbrich wrote:
->>>>>> On Wed, Nov 13, 2019 at 07:14:59PM +0000, Thinh Nguyen wrote:
->>>>>>> Alan Stern wrote:
->>>>>>>> On Wed, 13 Nov 2019, Michael Olbrich wrote:
->>>>>>>>> On Wed, Nov 13, 2019 at 03:55:01AM +0000, Thinh Nguyen wrote:
->>>>>>>>>> Michael Olbrich wrote:
->>>>>>>>>>> Currently, most gadget drivers handle isoc transfers on a best
->>>>>>>>>>> effort
->>>>>>>>>>> bases: If the request queue runs empty, then there will simply
->>>>>>>>>>> be gaps in
->>>>>>>>>>> the isoc data stream.
->>>>>>>>>>>
->>>>>>>>>>> The UVC gadget depends on this behaviour. It simply provides
->>>>>>>>>>> new requests
->>>>>>>>>>> when video frames are available and assumes that they are sent
->>>>>>>>>>> as soon as
->>>>>>>>>>> possible.
->>>>>>>>>>>
->>>>>>>>>>> The dwc3 gadget currently works differently: It assumes that
->>>>>>>>>>> there is a
->>>>>>>>>>> contiguous stream of requests without any gaps. If a request is
->>>>>>>>>>> too late,
->>>>>>>>>>> then it is dropped by the hardware.
->>>>>>>>>>> For the UVC gadget this means that a live stream stops after
->>>>>>>>>>> the first
->>>>>>>>>>> frame because all following requests are late.
->>>>>>>>>> Can you explain little more how UVC gadget fails?
->>>>>>>>>> dwc3 controller expects a steady stream of data otherwise it
->>>>>>>>>> will result
->>>>>>>>>> in missed_isoc status, and it should be fine as long as new
->>>>>>>>>> requests are
->>>>>>>>>> queued. The controller doesn't just drop the request unless
->>>>>>>>>> there's some
->>>>>>>>>> other failure.
->>>>>>>>> UVC (with a live stream) does not fill the complete bandwidth
->>>>>>>>> of an
->>>>>>>>> isochronous endpoint. Let's assume for the example that one video
->>>>>>>>> frame
->>>>>>>>> fills 3 requests. Because it is a live stream, there will be a
->>>>>>>>> gap between
->>>>>>>>> video frames. This is unavoidable, especially for compressed
->>>>>>>>> video. So the
->>>>>>>>> UVC gadget will have requests for the frame numbers 1 2 3 5 6 7 9
->>>>>>>>> 10 11 13 14
->>>>>>>>> 15 and so on.
->>>>>>>>> The dwc3 hardware tries to send those with frame numbers 1 2 3 4
->>>>>>>>> 5 6 7 8 9
->>>>>>>>> 10 11 12. So except for the fist few requests, all are late and
->>>>>>>>> result in a
->>>>>>>>> missed_isoc. I tried to just ignore the missed_isoc but that did
->>>>>>>>> not work
->>>>>>>>> for me. I only received the first frame at the other end.
->>>>>>>>> Maybe I missing something here, i don't have access to the
->>>>>>>>> hardware
->>>>>>>>> documentation, so I can only guess from the existing driver.
->>>>>>> The reason I asked is because your patch doesn't seem to address the
->>>>>>> actual issue.
->>>>>>>
->>>>>>> For the 2 checks you do here
->>>>>>> 1. There are currently no requests queued in the hardware
->>>>>>> 2. The current frame number provided by DSTS does not match the
->>>>>>> frame
->>>>>>> =A0 =A0=A0=A0 number returned by the last transfer.
->>>>>>>
->>>>>>> For #1, it's already done in the dwc3 driver. (check
->>>>>>> dwc3_gadget_endpoint_transfer_in_progress())
->>>>>> But that's only after a isoc_missed occurred. What exactly does that
->>>>>> mean?
->>>>>> Was the request transferred or not? My tests suggest that it was not
->>>>>> transferred, so I wanted to catch this before it happens.
->>>>>
->>>>> Missed_isoc status means that the controller did not move all the data
->>>>> in an interval.
->>>>
->>>> I read in some Processor documentation that in case the host tries to
->>>> fetch data from the client and no active TRB (HWO=3D1) is available the
->>>> XferInProgress Interrupt will be produced, with the missed status set.
->>>> This is done because the hardware will produce zero length packets
->>>> on its own, to keep the stream running.
->>>
->>> The controller only generates XferInProgress if it had processed a TRB
->>> (with specific control bits). For IN direction, if the controller is
->>> starved of TRB, it will send a ZLP if the host requests for data.
->>
->> Which control bits are those? ISOC-First, Chain and Last bits?
->>
->> I see the Scatter-Gather preparation is using these pattern.
->
->The IOC bit. You can check the programming guide for more detail on how
->to setup the TRBs, but what we have in dwc3 is fine.
+Unlike other devices USB 3 hubs will enumerate as both USB 2.0 and USB 3 devices. 
 
-OK.
+Looks like the USB 3 part of the hub is not working correctly.
 
->>>>>>> For #2, it's unlikely that DSTS current frame number will match
->>>>>>> with the
->>>>>>> XferNotReady's frame number. So this check doesn't mean much.
->>>>>> The frame number is also updated for each "Transfer In Progress"
->>>>>> interrupt.
->>>>>> If they match, then there a new request can still be queued
->>>>>> successfully.
->>>>>> Without this I got unnecessary stop/start transfers in the middle
->>>>>> of a
->>>>>> video frame. But maybe something else was wrong here. I'd need to
->>>>>> recheck.
->>>>>
->>>>> The reason they may not match is 1) the frame_number is only updated
->>>>> after the software handles the XferInProgress interrupt. Depends on
->>>>> system latency, that value may not be updated at the time that we
->>>>> check
->>>>> the frame_number.
->>>>> 2) This check doesn't work if the service interval is greater than 1
->>>>> uframe. That is, it doesn't have to match exactly the time to be
->>>>> consider not late. Though, the second reason can easily be fixed.
->>>>
->>>> In the empty trb case, after the Hardware has send enough zero packets
->>>> this
->>>> active transfer has to be stopped with endtransfer cmd. Because every
->>>> next
->>>> update transfer on that active transfer will likely lead to further
->>>> missed
->>>> transfers, as the newly updated trb will be handled to late anyway.
->>>
->>> The controller is expecting the function driver to feed TRBs to the
->>> controller for every interval. If it's late, then the controller will
->>> consider that data "missed_isoc".
->>>
->>> In your case, the UVC driver seems to queue requests to the controller
->>> driver as if it is bulk requests, and the UVC expects those data to go
->>> out at the time it queues. To achieve what UVC needs, then you may want
->>> to issue END_TRANSFER command before the next burst of data. This way,
->>> the controller can restart the isoc endpoint and not consider the next
->>> video frame data late. There are some corner cases that you need to
->>> watch out for. If you're going for this route, we can look further.
->>
->> Right, for now the drivers is doing:
->>
->> - Strart Transfer (with the right frame number) once.
->>
->> - Update Transfer On every ep_queue with the corresponding TRB
->> =A0setting CHN =3D 0, IOC =3D 1, First-ISOC =3D 1
->>
->> - End Transfer is somehow not handled right for this case.
->>
->> See my first comment. I think dwc3_prepare_one_trb_sg does the proper
->> chain
->> handling already.
->>
->>> Also, you'd need provide a way for the UVC to communicate to the dwc3 to
->>> let it know to expect the next burst of data.
->>
->> Can the UVC not just enqueue one big sg-request, which will represent
->> one burst
->> and not one TRB. Also that is=A0 what the SG code already seem to handle
->> right.
->
->Do you need SG? What size does video class driver setup its isoc URB? If
->it's superspeed, max is 48K, and depending on the type of platform
->you're running UVC on, you can setup a single 48K buffer per request if
->you want to do that. However, it's probably not a good idea since many
->host controllers can't even handle even close to 48K/uframe.
+My guess is that without the patch the USB 3 part of the hub is not working either. 
+Patch probably helps hub driver discover there is a USB 3 device in a SS_INVALID link
+state in the first place, and starts recovering it by warm resetting it.
 
-We wan't to transfer uncached 4K Video frames via UVC. So Scatter-Gather
-is a must anyway.
 
->What I was saying is if UVC knows when to wait for the next video data,
->it can tell dwc3 to stop the isoc endpoint before queuing the next video
->data in a set of requests. If UVC doesn't know that, then it needs to
->tell dwc3 to change its handling of isoc requests.
+> In any case, reverting this commit on a mainline 5.7-rc1 kernel fixes the problem.
+> 
+> We have obtained access to an affected machine, and we can gather any debug data
+> that might be useful, or test any patches. Let me know what I can do, and I will
+> promptly fetch output.
 
-In function/gadget/uvc_video.c we take a buffer and pump it into many
-available requests as we find. On the way the driver can drain that
-video frame queue, in that case we could stop the transfer. I have
-prepared a patch where we have only one source, queueing new requests,
-so this could work.
 
-For now to limit the interrupt load on the dwc3 driver we already set
-the request no_interrupt on every nth request, and make sure the
-interrupt is on the very last one of the frame. But with that we still
-sometimes run into missed transfers as the queued trb list somehow ends
-up with a TRB not having the IOC bit set.
+If it's an external hub can you try connecting some other USB 3 device first to a 
+USB 3 roothub port, and then the hub to another USB 3 roothub port?
 
->>>> The odd thing here is, that I don't see the refered XferInProgress
->>>> Interrupts with the missed event, when the started_list is empty.
->>>
->>> See my first comment.
->>>
->>>>
->>>> But this would be the only case to fall into this condition and
->>>> handle it
->>>> properly. Like alredy assumed in the following code:
->>>>
->>>> static void dwc3_gadget_endpoint_transfer_in_progress(struct dwc3_ep
->>>> *dep,
->>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 const struct dwc3_event_depevt *e=
-vent)
->>>> {
->>>> ...
->>>>
->>>> =A0=A0=A0=A0=A0=A0 if (event->status & DEPEVT_STATUS_MISSED_ISOC) {
->>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 status =3D -EXDEV;
->>>>
->>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 if (list_empty(&dep->starte=
-d_list))
->>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 sto=
-p =3D true;
->>>> =A0=A0=A0=A0=A0=A0 }
->>>>
->>>> ...
->>>>
->>>> =A0=A0=A0=A0=A0=A0 if (stop)
->>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 dwc3_stop_active_transfer(d=
-ep, true, true);
->>>> ...
->>>> }
->>>>
->>>> In fact I did sometimes see these XferInProgress Interrupts on empty
->>>> trb queue
->>>> after I stoped the tansfer when the started_list was empty right after
->>>> ep_cleanup_completed_requests has moved all trbs out of the queue.
->>>>
->>>> These Interrupts appeared right after the ENDTRANSFER cmd was send.
->>>> (But I
->>>> could no verify this every time)
->>>
->>> If END_TRANSFER command completes, then you should not see
->>> XferInProgress event. The next event should ber XferNotReady.
->>
->> Right. This also stops, after the Command Complete Interrupt arrives.
->>
->>>> Anyways in that case these Interrupts are not useful anymore, as I
->>>> already
->>>> implied the same stop, with ENDTRANSFER after we know that there are
->>>> no other
->>>> trbs in the chain.
->>>>
->>>
->>> Just curious, do you know if there's a reason for UVC to behave this
->>> way? Seems like what it's trying to do is more for bulk. Maybe it wants
->>> bandwidth priority perhaps?
->>
->> I don't know, probably it was more likely for USB 2.0 controllers to
->> be handled
->> this way.
->>
->> As mentioned the current uvc code is also working when we add this
->> changes.
->>
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index ec357f64f319..a5dc44f2e9d8 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -2629,6 +2629,9 @@ static void
->> dwc3_gadget_endpoint_transfer_in_progress(struct dwc3_ep *dep,
->>
->> =A0=A0=A0=A0=A0=A0 dwc3_gadget_ep_cleanup_completed_requests(dep, event,=
- status);
->>
->> +=A0=A0=A0=A0=A0=A0 if (list_empty(&dep->started_list))
->> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 stop =3D true;
->> +
->
->You should check the pending list too and either drop them or prepare
->those requests (maybe too late). This happens when there's no available
->TRB but UVC queues more requests.
->Also, make sure this change only applies for isoc.
+This way the USB 3 roothub (bus) should not be suspended when the USB 3 hub is connected.
+Does that help, or change anything
 
-I will send the patches for that so we can discuss the right handling
-for that in a separate thread.
+Thanks
+-Mathias
 
->This may work. Just keep in mind that the timing parameter of the
->XferNotReady will be expired by the time the UVC queues the next isoc
->request. (Maybe that's why you tried to check for the current frame
->number via DSTS instead in your first patch?).
->With the new changes in Felipe testing/next branch, this may be ok.
->
->
->> =A0=A0=A0=A0=A0=A0 if (stop)
->> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 dwc3_stop_active_transfer(dep=
-, true, true);
->> =A0=A0=A0=A0=A0=A0 else if (dwc3_gadget_ep_should_continue(dep))
->>
->> diff --git a/drivers/usb/gadget/function/uvc_video.c
->> b/drivers/usb/gadget/function/uvc_video.c
->> index da6ba8ba4bca..a3dac5d91aae 100644
->> --- a/drivers/usb/gadget/function/uvc_video.c
->> +++ b/drivers/usb/gadget/function/uvc_video.c
->> @@ -183,6 +183,7 @@ uvc_video_complete(struct usb_ep *ep, struct
->> usb_request *req)
->>
->> =A0=A0=A0=A0=A0=A0 switch (req->status) {
->> =A0=A0=A0=A0=A0=A0 case 0:
->> +=A0=A0=A0=A0=A0=A0 case -EXDEV: /* we ignore missed transfers */
->
->Any time you see missed_isoc, you have data dropped. May want to check
->to see what's going on.
-
-See my comment above.
-
->> break;
->>
->> =A0=A0=A0=A0=A0=A0 case -ESHUTDOWN:=A0=A0=A0=A0=A0=A0=A0 /* disconnect f=
-rom host. */
->>
->>
->
->BR,
->Thinh
->
-
-Regards,
-Michael
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---ZoaI/ZTpAVc4A5k6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAl6el+QACgkQC+njFXoe
-LGRAVBAApl78v2MM4MgQLf5/z4TttiRTj08slPceiKsUAnqZD/xWJJzGoyDGFs9a
-ErpfbBUYDf2821jW2IVmo18gAC7ZAv3si/+qI3AVvzEh6Rnepzg8+hhy6SEvWhZl
-udRfykS+l6Dw5TPI3OYRJ7mB1Dw3FzWNyDcanOTzch5Rl2UH3Z+AyqsPjIh+IzCF
-yAL1pAhO8iA3WIMuQqi+veEeR1mfP1tJtxJA0t5fGD1kmbJfcnjgMjidg0kBDHJb
-7VAtgn66By5xG/M6GOmggPRidousHjG3SdF8ayWIINiRhmApzcYmNMZXuk49Po1w
-cJkOdZ57jhT+cYHy6E3jXVIY9VS629lB/4j9x0TgaHuqWUXHMIJBGHugzWtzx0iw
-J59/yW/cmfyVXaM7aLghWUnjCtv8IRHk3Xy9i4oR8ty9JEeSk9AVtRPfKjwkivHn
-nEUNCLe9fqb+Nu5i/nryiTz0rawPWCuWa8nvYhqVsal8HNKAC5OmImjT44qKZupa
-GjClV5rc+i1LQzgZ7NaYRbZ6yv7ON6lmM6s2JR7yC4cJAhHIiHzpPVCUNEMNg2yS
-BK3O0t4rBimCuq314KFHEhzwB23/zOorEDf7YnzenctsggCRihAQk7G42/u9Epv9
-eIYsOIPsrsX1qkCODnjLe/tpewW6w4BtGE8qqi/QrMsXodhT7Xg=
-=CVuG
------END PGP SIGNATURE-----
-
---ZoaI/ZTpAVc4A5k6--
