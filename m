@@ -2,73 +2,210 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 853791B2F89
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2020 20:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C371B31B3
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2020 23:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726318AbgDUStF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Apr 2020 14:49:05 -0400
-Received: from sonic305-2.consmr.mail.bf2.yahoo.com ([74.6.133.41]:43056 "EHLO
-        sonic305-2.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726112AbgDUStE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Apr 2020 14:49:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1587494943; bh=NajTNMrfMLb6UXcjRhYpYerQX8PtVBLz0oFgaMINSWY=; h=Date:From:Reply-To:Subject:References:From:Subject; b=e1smIH8ZX+hTfsqm/3OwtiM9i6zVcUAp1/BcsA7BAiXIGxnq0+ZxMIk8/F/htHrNARbvsHVbZ7mS9rZCdGNYtaNLEn+gXG/1DaFb1x2y+qd9mHbFpx99J1w0kTRNd0XraIdoDrftMA75nCi9F3w9BeeOg/sHR3b22Qi9ZSZF9uy6C7dp9YzPc5UmN7KJSHVIjozQoVQ4nPINOYeRvIwzrvFSzvIlUnOFDohO4w+DzgROJnj5fpZy2a25Sz21eDEw+eVadu+3eom/ZS+fcGI8d7UAjyU8riBjpCa9J/9SftTQO7EYdD16YcAWSFv/njHS/KwKSKVZpdBGDMdjOfz2Gg==
-X-YMail-OSG: zTyVsasVM1m0W5Da6_I2G7wqLyIoS2msMDhnofDZ8lSBJR58C98rdZYVDzHcvWC
- DkddNtySdLnq6nN2pOQDVjuRQ0KX8RhYapJg.hecrpDgMhAUxqK7FIht_uAGvbWnowSblc7iktnV
- aS3xnM9SZvMW33ls71sMpfTuRHdir1c1sjvZFgBooKnTofkBrTSoSjWedc4YG17a_CV1kD3HhOaj
- 9pR2YfGanJSsd7lYqHVSoG0oM4g5BSxJQVvN8RzC4xR7BXHpgaya5VDO9eIr_X5wm17xpS9YfCRT
- hG95utyPMi7V7UwKCu.5cVL4rYFqP4kfAZ9FsNrcYa0OPq4IxvFPmv4O3u6Yha7OACoO2V8hp26K
- 1mB98GHbEg7n8Fe6OgtB9ZD.L9hxI5IS9zUretkHPsbct2pbbFbDnn_J7tMQt1_2Z5WRQlxPuBgi
- HcnZ_UKgfw9My8Bw8u7QgqEZ3WjB9wmp9ctGTgKxPnEIX6rgG1tK4f7jEzZDR_cqDWeNL7H2YKvf
- wwQsgb51pF6M7CkRUIlskGtd24and2BomAD3ivNVNa5gc3YxXczrHJa3UhqwQk8o2.tksHXl1Sms
- Ys.3fhBOK4nDsHyt_5tS98Ebf6TgHdH2hK5G2LJg9dp0em1GAUW8zcmONoJqymAce5ZxRiMmevZZ
- 8rhavO3uhcs4hnf_xdsdVozxwm5Kpe8FDUw1J5oOxG3MQ1sT.siQwycqWFxgq491grYmY4wu9Qtz
- LKBVEnEYOaEbolfT.WKlYSF0NWKTY9vZkupstjL4xCWJyuDlRdDsTy92xIYEx7y098OuvcnoRuzr
- 1DGzInyInhVHpp3GFc9lOytdlxrkALrDwzOmn8N9rfElA8dDVYWtUVbp3SfZHcMyYRoanwwt.2sc
- dzN3bhPlzmtFhF1YHB164hkYqjhk2Hknpq.H_xLXPj.1ThwQQjZMLhRhygCpfQqLRg2JbWwEmzyy
- pZ0575B4Lw314_WL1VVbsda0gwoNhOhp0Uceu7RZiR05k27p4H0ksHxF3WsdnPPqmN.QYG0V73wn
- jWuIZUxB2EmjwPtyZ4bDpEIdR3g_maNRu8Qip07m7oootcIDmQ5KwWm0VTJXj6V0b6UgZBCT12up
- YPqHHWjs9Rjlze07vQM62HAHwI4WjXJc75vgcL27.Oe3Z2Fq8np5Rbc0_TK78Uyl1Z8903kuhMvz
- xJYnj9uGjhLAYAAeyu56J892sdhXc_nsdqQUie.82La_OGoGi0ii4GKpCYXYFP3yvBs.sCAUPTd1
- O4CtBIz4QkyNXmjmyBrY8embb57PUhwfmUA0qVIXD2vtXV5JtoLhgXFR9s0Lbjx_6olEv7Msn.xT
- R5VleCCIf
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.bf2.yahoo.com with HTTP; Tue, 21 Apr 2020 18:49:03 +0000
-Date:   Tue, 21 Apr 2020 18:48:59 +0000 (UTC)
-From:   Ms lisa Hugh <lisahugh531@gmail.com>
-Reply-To: ms.lisahugh000@gmail.com
-Message-ID: <1040277377.306035.1587494939161@mail.yahoo.com>
-Subject: READ AND REPLY FROM MS LISA TRANSFER BUSINESS.
+        id S1726319AbgDUVPX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Apr 2020 17:15:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55130 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726012AbgDUVPU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Apr 2020 17:15:20 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD47DC03C1A7
+        for <linux-usb@vger.kernel.org>; Tue, 21 Apr 2020 14:15:18 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id g2so20673plo.3
+        for <linux-usb@vger.kernel.org>; Tue, 21 Apr 2020 14:15:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZVMZ4A2aUpVGf4Oc1yQl1xwOhbFiOotMi5P6czDpQa4=;
+        b=EhGKndkNNLMd8oIUr2bAwR6mWJIp8ph7ENARvnw3cdMbIf1ajkrFCKAv2OQAMTvbPR
+         kM8mHKCTnFzszTypxEH9ebQxkkMxL0VSHTY2whgFNuG/iXXcLYXDnthD2HacK9CXzYYL
+         FQsDuC9RLpIJg1u9xIWL7HeFAx+uq9dnNah1c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZVMZ4A2aUpVGf4Oc1yQl1xwOhbFiOotMi5P6czDpQa4=;
+        b=M36TIJz0sp75jB4NhhwfIB2UCtu7kXzIcQXVRg+W8tS1ZGxUh3ifTaVPj9TXNht2eS
+         gRqVdbQamR5V6+rjXjOYpBQ6uYXrWBZ+qQEu7klERkLPZDT4RQhsKgv/I4304+pOH/c3
+         jq3KX++/ZkIH3kB4wEVthnOKNjoiQxJUu4mGSYO3eQPP2BnsRotsvy+Q8/PFG0K06jE8
+         qAZHxd1E7yEiLj42tnVRroyF8ALjn50e+V8x+w+lhrsyHwKKjc4S0+lgyWG0PXkY0GVB
+         n5gXqgKCPbfigMfNHB33kjYY+XDPNdqbeIIW7GDtR6cv4LpAkwJsGiFU0mfipcMQu/va
+         JV7A==
+X-Gm-Message-State: AGi0PuapL6cQi7y3jLHp8K+AFXYBHiKt0X6OjOhAjfAkzQP5lMIBcrXv
+        kuxLt+SBOC5HHP6FDnq6CMA0bA==
+X-Google-Smtp-Source: APiQypL/w37lt59/d7Bk0r82TDa4H/b8TqQLgMzL4SnVuX0nsHFVIhTdSVQrHB/00H7CAlZFO9jN9g==
+X-Received: by 2002:a17:902:ab90:: with SMTP id f16mr22835817plr.291.1587503718068;
+        Tue, 21 Apr 2020 14:15:18 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
+        by smtp.gmail.com with ESMTPSA id c1sm3287880pfo.152.2020.04.21.14.15.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Apr 2020 14:15:17 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     jason.wessel@windriver.com, daniel.thompson@linaro.org,
+        gregkh@linuxfoundation.org
+Cc:     kgdb-bugreport@lists.sourceforge.net, mingo@redhat.com,
+        hpa@zytor.com, bp@alien8.de, linux-serial@vger.kernel.org,
+        agross@kernel.org, tglx@linutronix.de, frowand.list@gmail.com,
+        bjorn.andersson@linaro.org, jslaby@suse.com,
+        catalin.marinas@arm.com, corbet@lwn.net, will@kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Allison Randal <allison@lohutok.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@suse.de>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Enrico Weigelt <info@metux.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        James Morse <james.morse@arm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Matt Mullins <mmullins@fb.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Nadav Amit <namit@vmware.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        jinho lim <jordan.lim@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        x86@kernel.org
+Subject: [PATCH v2 0/9] kgdb: Support late serial drivers; enable early debug w/ boot consoles
+Date:   Tue, 21 Apr 2020 14:14:38 -0700
+Message-Id: <20200421211447.193860-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.26.1.301.g55bc3eb7cb9-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <1040277377.306035.1587494939161.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15739 YMailNodin Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This whole pile of patches was motivated by me trying to get kgdb to
+work properly on a platform where my serial driver ended up being hit
+by the -EPROBE_DEFER virus (it wasn't practicing social distancing
+from other drivers).  Specifically my serial driver's parent device
+depended on a resource that wasn't available when its probe was first
+called.  It returned -EPROBE_DEFER which meant that when "kgdboc"
+tried to run its setup the serial driver wasn't there.  Unfortunately
+"kgdboc" never tried again, so that meant that kgdb was disabled until
+I manually enalbed it via sysfs.
 
+While I could try to figure out how to get around the -EPROBE_DEFER
+somehow, the above problems could happen to anyone and -EPROBE_DEFER
+is generally considered something you just have to live with.  In any
+case the current "kgdboc" setup is a bit of a race waiting to happen.
+I _think_ I saw during early testing that even adding a msleep() in
+the typical serial driver's probe() is enough to trigger similar
+issues.
 
-Dear Friend,
+I decided that for the above race the best attitude to get kgdb to
+register at boot was probably "if you can't beat 'em, join 'em".
+Thus, "kgdboc" now jumps on the -EPROBE_DEFER bandwagon (now that my
+driver uses it it's no longer a virus).  It does so a little awkwardly
+because "kgdboc" hasn't normally had a "struct device" associated with
+it, but it's really not _that_ ugly to make a platform device and
+seems less ugly than alternatives.
 
-I am Ms Lisa hugh, work with the department of Audit and accounting manager here in the Bank(B.O.A).
+Unfortunately now on my system the debugger is one of the last things
+to register at boot.  That's OK for debugging problems that show up
+significantly after boot, but isn't so hot for all the boot problems
+that I end up debugging.  This motivated me to try to get something
+working a little earlier.
 
-Please i need your assistance for the transferring of thIs fund to your bank account for both of us benefit for life time investment, amount (US$4.5M DOLLARS).
+My first attempt was to try to get the existing "ekgdboc" to work
+earlier.  I tried that for a bit until I realized that it needed to
+work at the tty layer and I couldn't find any serial drivers that
+managed to register themselves to the tty layer super early at boot.
+The only documented use of "ekgdboc" is "ekgdboc=kbd" and that's a bit
+of a special snowflake.  Trying to get my serial driver and all its
+dependencies to probe normally and register the tty driver super early
+at boot seemed like a bad way to go.  In fact, all the complexity
+needed to do something like this is why the system already has a
+special concept of a "boot console" that lives only long enough to
+transition to the normal console.
 
-I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me for success.
+Leveraging the boot console seemed like a good way to go and that's
+what this series does.  I found that consoles could have a read()
+function, though I couldn't find anyone who implemented it.  I
+implemented it for two serial drivers for the devices I had easy
+access to, making the assumption that for boot consoles that we could
+assume read() and write() were polling-compatible (seems sane I
+think).
 
-Note/ 50% for you why 50% for me after success of the transfer to your bank account.
+Now anyone who makes a small change to their serial driver can easily
+enable early kgdb debugging!
 
-Below information is what i need from you so will can be reaching each other
+The devices I had for testing were:
+- arm32: rk3288-veyron-jerry
+- arm64: rk3399-gru-kevin
+- arm64: qcom-sc7180-trogdor (not mainline yet)
 
-1)Full name ...
-2)Private telephone number...
-3)Age...
-4)Nationality...
-5)Occupation ...
+These are the devices I tested this series on.  I tried to test
+various combinations of enabling/disabling various options and I
+hopefully caught the corner cases, but I'd appreciate any extra
+testing people can do.  Notably I didn't test on x86, but (I think) I
+didn't touch much there so I shouldn't have broken anything.
 
+When testing I found a few problems with actually dropping into the
+debugger super early on arm and arm64 devices.  Patches in this series
+should help with this.  For arm I just avoid dropping into the
+debugger until a little later and for arm64 I actually enable
+debugging super early.
 
-Thanks.
+I realize that bits of this series might feel a little hacky, though
+I've tried to do things in the cleanest way I could without overly
+interferring with the rest of the kernel.  If you hate the way I
+solved a problem I would love it if you could provide guidance on how
+you think I could solve the problem better.
 
-Ms Lisa hugh.
+This series (and my comments / documentation / commit messages) are
+now long enough that my eyes glaze over when I try to read it all over
+to double-check.  I've nontheless tried to double-check it, but I'm
+pretty sure I did something stupid.  Thank you ahead of time for
+pointing it out to me so I can fix it in v3.  If somehow I managed to
+not do anything stupid (really?) then thank you for double-checking me
+anyway.
+
+Changes in v2:
+- ("kgdb: Disable WARN_CONSOLE_UNLOCKED for all kgdb") new for v2.
+- ("Revert "kgdboc: disable the console lock when in kgdb"") new for v2.
+- Assumes we have ("kgdb: Disable WARN_CONSOLE_UNLOCKED for all kgdb")
+- Fix kgdbts, tty/mips_ejtag_fdc, and usb/early/ehci-dbgp
+
+Douglas Anderson (9):
+  kgdb: Disable WARN_CONSOLE_UNLOCKED for all kgdb
+  Revert "kgdboc: disable the console lock when in kgdb"
+  kgdboc: Use a platform device to handle tty drivers showing up late
+  kgdb: Delay "kgdbwait" to dbg_late_init() by default
+  arm64: Add call_break_hook() to early_brk64() for early kgdb
+  kgdboc: Add earlycon_kgdboc to support early kgdb using boot consoles
+  Documentation: kgdboc: Document new earlycon_kgdboc parameter
+  serial: qcom_geni_serial: Support earlycon_kgdboc
+  serial: 8250_early: Support earlycon_kgdboc
+
+ .../admin-guide/kernel-parameters.txt         |  20 ++
+ Documentation/dev-tools/kgdb.rst              |  14 +
+ arch/arm64/include/asm/debug-monitors.h       |   2 +
+ arch/arm64/kernel/debug-monitors.c            |   2 +-
+ arch/arm64/kernel/kgdb.c                      |   5 +
+ arch/arm64/kernel/traps.c                     |   3 +
+ arch/x86/kernel/kgdb.c                        |   5 +
+ drivers/misc/kgdbts.c                         |   2 +-
+ drivers/tty/mips_ejtag_fdc.c                  |   2 +-
+ drivers/tty/serial/8250/8250_early.c          |  23 ++
+ drivers/tty/serial/kgdboc.c                   | 262 ++++++++++++++++--
+ drivers/tty/serial/qcom_geni_serial.c         |  32 +++
+ drivers/usb/early/ehci-dbgp.c                 |   2 +-
+ include/linux/kgdb.h                          |  25 +-
+ kernel/debug/debug_core.c                     |  48 +++-
+ 15 files changed, 400 insertions(+), 47 deletions(-)
+
+-- 
+2.26.1.301.g55bc3eb7cb9-goog
+
