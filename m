@@ -2,248 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C30E1B27EE
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2020 15:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8CBA1B2891
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2020 15:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729061AbgDUNbH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Apr 2020 09:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729028AbgDUNbG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Apr 2020 09:31:06 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC61C061A10;
-        Tue, 21 Apr 2020 06:31:05 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id u15so14005474ljd.3;
-        Tue, 21 Apr 2020 06:31:05 -0700 (PDT)
+        id S1729143AbgDUNxt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Apr 2020 09:53:49 -0400
+Received: from mail-dm6nam10on2071.outbound.protection.outlook.com ([40.107.93.71]:6164
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728884AbgDUNxs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 Apr 2020 09:53:48 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mhgbC5/hldhBd1h8i+HxiJ/xkg1abO/I4PCRx+vBQ4fCl5QIsI6J0xdFDyB9uoK1eTCWLrRbtrJzf6g/76l9+Ix0va2qHi/+knoIyOFpRFNBwK8MPuw6CbgDy6KCOkVf9Wks8pHcItNiYEzN87wPH6vygn2UIu3e3MUrN9aIyF1JMACQErdRv8d4SCXZjZOA0SsBQlE0ocabrR8glDXobJG92FTpX6DEZ0UIsxOlOd7MWjBO6fEQRsCahRgb3V0a2Snr4y0TtzOo7vyfZQulk9sYLCRHPRPZEQD4Swwq/KoCVAgCyiluzXNmtjIYsatVw0TOsPml4grMrTbsP7taeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wTYuNA2ZeQiwC8psNUKP6WObL8WOfLb6adkhmfnszDU=;
+ b=R6D5MhtZkQyFdztkpDC99Byw6SUdRs915xao+nIMJvWnCM5dNzfeyJ8TKGXdE5wWWkJnzozAwbupCDBgDoK+tCFuUDaR+d0RAtXAv9eu9QNOwYWmcqW8w+4mkMvf2fNoVxeJo3CrESwdnZz87k0bISrudrYt+Z/lx85CkYhfEoApdic5Sw2DY2XiA5b4xwqGv2n7mtuny/jkL1NW+s5KbZILQOsubigWs1wnrahj//cF40ateRS9fOfLRjscubEYTqqTs5Eo2MG0B+ZEkXl+FeunibwfV4MMjH3G4XPv96JcCPA45r5ZormwS7XMLM2N+3BcbgrKkw2z/G1Q694TMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rYmvXTH2U9X/kLI4SB3G7LElQgVq5vUD+vhvzA8snH8=;
-        b=pls08lAH9GnLMCPYR5JJUgNdELDXYgRyz/95waeo2LwBEqcCLegYNbZeRGvABfW4ow
-         bspu8yhvRQGzQx67QmvwPcvfyToHLBekjSH/yE5/1BUYQc6pxCby5DqsBXQ42eQvvLo0
-         98/tFQjm1vHpMN/37zovgHD57ZBd/f/YywygpA6ToK4sJE92yTH4+equ8OJ/2niDSG42
-         hcyDnUqASrIODZEU4a0G7amzvDhL+U9iXmc1vTvLPTLzsbkIDl59iHgVyoVhViC9BMKU
-         ppE8IL+tJ1YRMJGIXhyndIPibLVBPMyg1I6Y9vuL8DgyPwWYcIZP87CG0UNI5+pSb4IA
-         ycrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rYmvXTH2U9X/kLI4SB3G7LElQgVq5vUD+vhvzA8snH8=;
-        b=MpjBFRVQ15kzVk3jcYY6IK4wKYrd7+3fcQpik5VRRxU9PUvc+702dytqS83qYuuj9B
-         pIAVzPESzlf32ABSc+/+ut59gtEaAQVmZBXXsSzKHabfFwZQWBG4Hi+G5ai/lLB8R4iC
-         8dEoM8L+pPYZD+QNIEM7PONVF33z1klz89h+82m3Q3Ybmn3kzNApQVMmrN+gBq2dhtwD
-         s/g5TWsr+DFw1aDRH/KDs0GH8pkvQjSuYAm91Ot0leWP+53D14O42ZB1taoI/BwgRUaw
-         hj9r0g6Tg8rRcA4K6vixcb+NZiS8KaW+QXfDpwzgWgTFLQa7xQS9LYTQf7GPEnj26DQP
-         0iUg==
-X-Gm-Message-State: AGi0PuZ33uQD/kGaDZ8wRo8wwYB2bn5i2f/wHkR3PEawIaYLYvw4bdHx
-        X3gxuBj2zf4Jx8bmUZusX3M=
-X-Google-Smtp-Source: APiQypLQ+q+353TmB2FTptjg7QIJo/90BZs+BtC6KmcUS8ubqcLGhpHA/duszlhJs6Ld61a6KKiLfA==
-X-Received: by 2002:a2e:b0ca:: with SMTP id g10mr13521662ljl.169.1587475864097;
-        Tue, 21 Apr 2020 06:31:04 -0700 (PDT)
-Received: from oak.local ([188.123.231.141])
-        by smtp.gmail.com with ESMTPSA id v17sm2031456lfi.49.2020.04.21.06.31.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Apr 2020 06:31:03 -0700 (PDT)
-From:   matwey.kornilov@gmail.com
-To:     stern@rowland.harvard.edu, Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org (open list:MUSB MULTIPOINT HIGH SPEED
-        DUAL-ROLE CONTROLLER), linux-kernel@vger.kernel.org (open list)
-Cc:     "Matwey V. Kornilov" <matwey@sai.msu.ru>,
-        linux-usb@vger.kernel.org (open list:MUSB MULTIPOINT HIGH SPEED
-        DUAL-ROLE CONTROLLER), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3 6/6] usb: musb: Decrease URB starting latency in musb_advance_schedule()
-Date:   Tue, 21 Apr 2020 16:30:19 +0300
-Message-Id: <20200421133019.27167-7-matwey.kornilov@gmail.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200421133019.27167-1-matwey.kornilov@gmail.com>
-References: <20200421133019.27167-1-matwey.kornilov@gmail.com>
-MIME-Version: 1.0
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wTYuNA2ZeQiwC8psNUKP6WObL8WOfLb6adkhmfnszDU=;
+ b=E52biTKiSnhhPQriRDOvsf7FrPW6iIQsrTxxkvDTv3yjeBQvQZyPc56jSxYiGNs7wKTnZGMHemNiakmLMEmyeGDTEtxnTGiAWQ2Hk+GjVl6JkL1yG0AXqsE1Pr0wqv3R4+f183Qi+kHFDU4anuBPw0zh0beZwgkkJ1iQQsSUklQ=
+Authentication-Results: spf=none (sender IP is )
+ smtp.mailfrom=Nehal-bakulchandra.Shah@amd.com; 
+Received: from BN6PR1201MB2467.namprd12.prod.outlook.com (2603:10b6:404:a7::8)
+ by BN6PR1201MB0212.namprd12.prod.outlook.com (2603:10b6:405:56::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.25; Tue, 21 Apr
+ 2020 13:53:45 +0000
+Received: from BN6PR1201MB2467.namprd12.prod.outlook.com
+ ([fe80::8daf:74d4:cbe4:759]) by BN6PR1201MB2467.namprd12.prod.outlook.com
+ ([fe80::8daf:74d4:cbe4:759%12]) with mapi id 15.20.2921.030; Tue, 21 Apr 2020
+ 13:53:45 +0000
+Subject: Re: ucsi and DRD controller interaction
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     linux-iio <linux-iio@vger.kernel.org>, linux-usb@vger.kernel.org,
+        Jagadish.Hadimani@amd.com
+References: <26823688-3b9c-5869-bcb6-4d6e5dcd77bc@amd.com>
+ <20200421074353.GE3768833@kuha.fi.intel.com>
+From:   "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
+Message-ID: <1d4fd9f3-8ea6-c054-0ba4-d50d78226fae@amd.com>
+Date:   Tue, 21 Apr 2020 19:23:30 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+In-Reply-To: <20200421074353.GE3768833@kuha.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-ClientProxiedBy: BM1PR01CA0119.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:b00:40::13) To BN6PR1201MB2467.namprd12.prod.outlook.com
+ (2603:10b6:404:a7::8)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [172.31.38.85] (165.204.159.242) by BM1PR01CA0119.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:40::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.13 via Frontend Transport; Tue, 21 Apr 2020 13:53:44 +0000
+X-Originating-IP: [165.204.159.242]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 86776501-fc60-43c2-e42e-08d7e5fb68cd
+X-MS-TrafficTypeDiagnostic: BN6PR1201MB0212:|BN6PR1201MB0212:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BN6PR1201MB0212C3EFF4440643C2907CBFA0D50@BN6PR1201MB0212.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-Forefront-PRVS: 038002787A
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR1201MB2467.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(4636009)(396003)(366004)(376002)(346002)(136003)(39860400002)(2616005)(31696002)(26005)(956004)(16526019)(186003)(31686004)(6486002)(316002)(2906002)(53546011)(478600001)(16576012)(86362001)(6666004)(8676002)(4326008)(66556008)(66946007)(36756003)(5660300002)(6916009)(52116002)(81156014)(66476007)(8936002);DIR:OUT;SFP:1101;
+Received-SPF: None (protection.outlook.com: amd.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FeF3WGPisfMtIN1j2VoKPrD6TSJPnQqNVuWbixxu9yYs9lTtxBcppKfcJ52OJ0607/RO+7mghj57vKtzwTvapY9lsqd6rsQ6OCUka+5YYVlbobzr4P1Uz9gPvD9wQ/agE+Ueq46EzK9tMsUfQhK9oVL09IMPaQtxbIEZYBtVH152Z8JkucAGXiKtIsTJ5bKfpUAqpU8DXEhCnmPGUJ+JqBYUxEEqljWhmeHXzU22/6U6Axp7Xpk2gb6nk8/L1daDKQryYuKi+ief8+gAxoIJhQ20UGFdN/kjuIaWwej/gvoKdmrSScXN/xWy/KVchqbEeGaJNN90EeazXPfT236eZ2KK7HM5fmvJMxvX8LaP+Slr1XUSgv4beWw+GDf5wP+pLw+mtZ+YMhQS2NwdGhR9LVylAMmbHlc39QtfC2C6R5WyEVTtAX9EjuOTDvvHji4d
+X-MS-Exchange-AntiSpam-MessageData: WqGSuLPgW+n+ga10T5VY0NGvw0xgp4WL8rvJkTzU67v7TEOLtr9GMe8dozwDOpmbB/a5FNo22HJXaMEBJa/K5CRpy8jRK5LBAP+sq1DUPmHXL3ueanvV/6LHNoKmB2XiZH1Z0maOw+4P8CLRi7BtmQ==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86776501-fc60-43c2-e42e-08d7e5fb68cd
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Apr 2020 13:53:45.6139
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LxS70i+A2XP/2QvtFJ/utGopJEHXH3Mwul2Ulgj+k6iR70eseYcx9jH51Gt40BkL
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0212
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: "Matwey V. Kornilov" <matwey@sai.msu.ru>
+Hi
 
-Previously, the algorithm was the following:
+On 4/21/2020 1:13 PM, Heikki Krogerus wrote:
+> Adding linux-usb mailing list.
+>
+> On Mon, Apr 20, 2020 at 07:09:17PM +0530, Shah, Nehal-bakulchandra wrote:
+>> Hi Heikki ,
+>>
+>> I need some pointer from you, so in a system where I have UCSI driver for DRD
+>> Controller, then how call stack will be?
+>>
+>> I am unable to comprehend the flow from UCSI infrastructure to DRD controller
+>> code base.
+> Do you need to tell the negotiated data role to your USB controller
+> driver from the UCSI driver? For that we would need to know which USB
+> controller, or more precisely, which USB port is connected to the
+> USB Type-C connector in question.
+>
+> That would require ACPI tables to be able to describe the connection
+> between the USB Type-C connector and the USB port (and the connection
+> between DisplayPort and the USB Type-C connector etc.). Unfortunately
+> there is currently no documented way of doing that, however, there is
+> a proposal for a document the defines how the USB Type-C connectors
+> should be described in ACPI in general. The proposal does consider
+> this problem as well. For this the solution is to use _DSD device
+> properties "usb2-port" and "usb3-port" that have references to the
+> correct USB port nodes as values.
+>
+> Which USB controller are you using btw?
+>
+> thanks,
 
- 1. giveback current URB
- 2. if current qh is not empty
-    then start next URB
- 3. if current qh is empty
-    then dispose the qh, find next qh if any, and start URB.
+Thanks for the mail.
 
-It may take a while to run urb->callback inside URB giveback which is
-run synchronously in musb. In order to improve the latency we rearrange
-the function behaviour for the case when qh is not empty: next URB is
-started before URB giveback. When qh is empty or current URB has an
-error then the behaviour is intentionally kept in order
-  a) not to break existing inter qh scheduling: URB giveback could
-potentionally enqueue other URB to the empty qh preventing it from being
-disposed;
-  b) allow the class driver to cancel outstanding URBs in the queue.
+Here is the configuration
 
-Correct URB giveback order is guaranteed as the following. For each
-qh there can be at most three ready URBs processing by the driver.
-Indeed, every ready URB can send at most one URB in
-musb_advance_schedule(), and in the worst case scenario we have the
-following ready URBs:
-  1) URB in the giveback lock protected section inside musb_giveback()
-  2) URB waiting at the giveback lock acqusition in musb_giveback()
-  3) URB waiting at the controller lock acqusition in the glue layer
-     interrput handler
-Here URB #2 and URB #3 are triggered by URB #1 and URB #2
-correspondingly when they passed through musb_advance_schedule().
-Since URB #3 is waiting before musb_advance_schedule(), no other new
-URBs will be sent until URB#1 is finished, URB#2 goes to the giveback
-lock protected section, and URB#3 goes to the controller lock protected
-musb_advance_schedule().
+1. DRD Controller (DWC3 controller)
 
-Before this patch, time spent in urb->callback led to the following
-glitches between the host and a hub during isoc transfer (line 4):
+2. TI PD Controller
 
-    11.624492 d=  0.000124 [130.6 +  1.050] [  4] SPLIT
-    11.624492 d=  0.000000 [130.6 +  1.467] [  3] IN   : 3.5
-    11.624493 d=  0.000000 [130.6 +  1.967] [ 37] DATA0: aa 08 [skipped...]
-    11.625617 d=  0.001124 [131.7 +  1.050] [  4] SPLIT
-    11.625617 d=  0.000000 [131.7 +  1.467] [  3] IN   : 3.5
-    11.625867 d=  0.000250 [132.1 +  1.050] [  4] SPLIT
-    11.625867 d=  0.000000 [132.1 +  1.467] [  3] IN   : 3.5
-    11.625868 d=  0.000001 [132.1 +  1.983] [  3] DATA0: 00 00
-    11.626617 d=  0.000749 [132.7 +  1.050] [  4] SPLIT
-    11.626617 d=  0.000000 [132.7 +  1.467] [  3] IN   : 3.5
-    11.626867 d=  0.000250 [133.1 +  1.050] [  4] SPLIT
-    11.626867 d=  0.000000 [133.1 +  1.467] [  3] IN   : 3.5
-    11.626868 d=  0.000000 [133.1 +  1.967] [  3] DATA0: 00 00
+3. TI PD Controller and Host has I2C as transport layer. So ACPI mechanism wont work here.
 
-After the hub, they look as the following and may lead to broken
-perepherial transfer (as in case of PWC based webcam):
 
-    11.332004 d=  0.000997 [ 30.0 +  3.417] [  3] IN   : 5.5
-    11.332007 d=  0.000003 [ 30.0 +  6.833] [800] DATA0: 8a 1c [skipped...]
-    11.334004 d=  0.001997 [ 32.0 +  3.417] [  3] IN   : 5.5
-    11.334007 d=  0.000003 [ 32.0 +  6.750] [  3] DATA0: 00 00
-    11.335004 d=  0.000997 [ 33   +  3.417] [  3] IN   : 5.5
-    11.335007 d=  0.000003 [ 33   +  6.750] [  3] DATA0: 00 00
+Hence i was wondering, is there any way from UCSI Driver we inform to DWC3 driver stack about Role change. I can understand one point that,
 
-Removing this glitches makes us able to successfully run 10fps
-video stream from the webcam attached via USB hub. That was
-previously impossible.
+DWC3 controller can work without UCSI Implementation i.e Only PD firmware. But i want to understand  if there is a role change, PD interrupt will be generated
 
-Signed-off-by: Matwey V. Kornilov <matwey@sai.msu.ru>
----
- drivers/usb/musb/musb_host.c | 36 ++++++++++++++++++++++++++++++++----
- drivers/usb/musb/musb_host.h |  1 +
- 2 files changed, 33 insertions(+), 4 deletions(-)
+and UCSI Driver will come to know about this role change. But from this onwards , i am  unable to comprehend how it can be propagated upto DWC3 stack.
 
-diff --git a/drivers/usb/musb/musb_host.c b/drivers/usb/musb/musb_host.c
-index 46d9dd7d6f67..863f55907ddc 100644
---- a/drivers/usb/musb/musb_host.c
-+++ b/drivers/usb/musb/musb_host.c
-@@ -85,6 +85,11 @@ static bool musb_qh_empty(struct musb_qh *qh)
- 	return list_empty(&qh->hep->urb_list);
- }
- 
-+static bool musb_qh_singular(struct musb_qh *qh)
-+{
-+	return list_is_singular(&qh->hep->urb_list);
-+}
-+
- static void musb_qh_unlink_hep(struct musb_qh *qh)
- {
- 	if (!qh->hep)
-@@ -301,15 +306,24 @@ musb_start_next_urb(struct musb *musb, int is_in, struct musb_qh *qh)
- }
- 
- /* Context: caller owns controller lock, IRQs are blocked */
--static void musb_giveback(struct musb *musb, struct urb *urb, int status)
-+static void musb_giveback(struct musb *musb, struct musb_qh *qh, struct urb *urb, int status)
- __releases(musb->lock)
- __acquires(musb->lock)
- {
- 	trace_musb_urb_gb(musb, urb);
- 
-+	/*
-+	 * This line is protected by the controller lock: at most
-+	 * one thread waiting on the giveback lock.
-+	 */
-+	spin_lock(&qh->giveback_lock);
- 	usb_hcd_unlink_urb_from_ep(musb->hcd, urb);
-+
- 	spin_unlock(&musb->lock);
-+
- 	usb_hcd_giveback_urb(musb->hcd, urb, status);
-+	spin_unlock(&qh->giveback_lock);
-+
- 	spin_lock(&musb->lock);
- }
- 
-@@ -344,8 +358,21 @@ static void musb_advance_schedule(struct musb *musb, struct urb *urb,
- 		break;
- 	}
- 
-+	if (ready && !musb_qh_singular(qh) && !status) {
-+		struct urb *next_urb = list_next_entry(urb, urb_list);
-+
-+		musb_dbg(musb, "... next ep%d %cX urb %p", hw_ep->epnum, is_in ? 'R' : 'T', next_urb);
-+		musb_start_urb(musb, is_in, qh, next_urb);
-+
-+		qh->is_ready = 0;
-+		musb_giveback(musb, qh, urb, status);
-+		qh->is_ready = ready;
-+
-+		return;
-+	}
-+
- 	qh->is_ready = 0;
--	musb_giveback(musb, urb, status);
-+	musb_giveback(musb, qh, urb, status);
- 	qh->is_ready = ready;
- 
- 	/* reclaim resources (and bandwidth) ASAP; deschedule it, and
-@@ -2174,6 +2201,7 @@ static int musb_urb_enqueue(
- 	qh->hep = hep;
- 	qh->dev = urb->dev;
- 	INIT_LIST_HEAD(&qh->ring);
-+	spin_lock_init(&qh->giveback_lock);
- 	qh->is_ready = 1;
- 
- 	qh->maxpacket = usb_endpoint_maxp(epd);
-@@ -2406,7 +2434,7 @@ static int musb_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
- 		int	ready = qh->is_ready;
- 
- 		qh->is_ready = 0;
--		musb_giveback(musb, urb, 0);
-+		musb_giveback(musb, qh, urb, 0);
- 		qh->is_ready = ready;
- 
- 		/* If nothing else (usually musb_giveback) is using it
-@@ -2465,7 +2493,7 @@ musb_h_disable(struct usb_hcd *hcd, struct usb_host_endpoint *hep)
- 		 * will activate any of these as it advances.
- 		 */
- 		while (!musb_qh_empty(qh))
--			musb_giveback(musb, next_urb(qh), -ESHUTDOWN);
-+			musb_giveback(musb, qh, next_urb(qh), -ESHUTDOWN);
- 
- 		musb_qh_free(qh);
- 	}
-diff --git a/drivers/usb/musb/musb_host.h b/drivers/usb/musb/musb_host.h
-index 2999845632ce..6223b0177c68 100644
---- a/drivers/usb/musb/musb_host.h
-+++ b/drivers/usb/musb/musb_host.h
-@@ -19,6 +19,7 @@ struct musb_qh {
- 	struct musb_hw_ep	*hw_ep;		/* current binding */
- 
- 	struct list_head	ring;		/* of musb_qh */
-+	spinlock_t		giveback_lock;	/* to keep URB giveback order */
- 	/* struct musb_qh		*next; */	/* for periodic tree */
- 	u8			mux;		/* qh multiplexed to hw_ep */
- 
--- 
-2.25.0
+
+Thanks
+
+Nehal Shah
+
+
+
 
