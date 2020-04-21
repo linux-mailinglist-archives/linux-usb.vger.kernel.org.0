@@ -2,88 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 573491B230A
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2020 11:41:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9CDE1B2329
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2020 11:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726095AbgDUJlG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Apr 2020 05:41:06 -0400
-Received: from ironboyv.h-da.de ([141.100.10.230]:47879 "EHLO ironboyv.h-da.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725920AbgDUJlF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Apr 2020 05:41:05 -0400
-X-Greylist: delayed 603 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 Apr 2020 05:41:05 EDT
-IronPort-SDR: RNWaWLtnTQKCZWdrrZ0LLreZ9METvb74/DeQtd+23ckPa27NTjjU3GlrpiW+Nq/sZ2wCXb8Fde
- n0hcf9/InPzJvcF6Zhb54z27VRy42AXq3ndqWLwMfkTnzojBKjIUG4tILA9fsFS12IuF6WdZqn
- JdIE0PKyIcCvW5WOYNGiGB59+/Cid9l2w5D5uNg0EqYqHH1UHE5lPnUyVtnXFa8Hk3T84JA3en
- bv0HW+9h2DysP6A3JuBRzmIMZjaLYPfiRw0ODjkKlOmNqSlv85ujAvewSxpHuzDUcfGlrhQnRZ
- qlg=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2G4EgA8vJ5e/2soZI1mHAEBAQEBBwE?=
- =?us-ascii?q?BEQEEBAEBgXuCKi1CUiAShEiOf04BAQEBAQEFAYEKCCEBg3SPX4YagWcKAQE?=
- =?us-ascii?q?BIRwEAQGEOgoCghUkOBMCAwEBAQMCBQEBBgEBAQEBAQQEAgJpBAEBBwoCAYR?=
- =?us-ascii?q?OIQEDBwoBQ4ZHBiMPAUYQCw0NAh8HAgJXBgEMCAEBgyKCWCmxB4EyGgKKVoE?=
- =?us-ascii?q?OKow5GnmBB4E4DIIvLj6ENYMrgl8EsgiBUnyXbCOCRQGNJwUUA4xUi2qECZ8?=
- =?us-ascii?q?AIymBLU0kFIMlTxiSHY4TP496AQE?=
-X-IPAS-Result: =?us-ascii?q?A2G4EgA8vJ5e/2soZI1mHAEBAQEBBwEBEQEEBAEBgXuCK?=
- =?us-ascii?q?i1CUiAShEiOf04BAQEBAQEFAYEKCCEBg3SPX4YagWcKAQEBIRwEAQGEOgoCg?=
- =?us-ascii?q?hUkOBMCAwEBAQMCBQEBBgEBAQEBAQQEAgJpBAEBBwoCAYROIQEDBwoBQ4ZHB?=
- =?us-ascii?q?iMPAUYQCw0NAh8HAgJXBgEMCAEBgyKCWCmxB4EyGgKKVoEOKow5GnmBB4E4D?=
- =?us-ascii?q?IIvLj6ENYMrgl8EsgiBUnyXbCOCRQGNJwUUA4xUi2qECZ8AIymBLU0kFIMlT?=
- =?us-ascii?q?xiSHY4TP496AQE?=
-Received: from unknown (HELO mail.fbihome.de) ([141.100.40.107])
-  by ironboyv.h-da.de with ESMTP; 21 Apr 2020 11:31:00 +0200
-Received: from [192.168.178.31] (x5f721447.dyn.telefonica.de [95.114.20.71])
-        by mail.fbihome.de (Postfix) with ESMTPSA id CDBE242197;
-        Tue, 21 Apr 2020 11:30:58 +0200 (CEST)
-Subject: Re: [PROBLEM]: Infinite warm reset loops resulting in "Cannot enable.
- Maybe the USB cable is bad?" messages
-To:     Matthew Ruffell <matthew.ruffell@canonical.com>,
-        linux-usb@vger.kernel.org
-Cc:     dann.frazier@canonical.com, heitor.de.siqueira@canonical.com
-References: <cd36bf27-fc7b-9a22-7065-2fabb8e89674@canonical.com>
-From:   Jan-Marek Glogowski <glogow@fbihome.de>
-Autocrypt: addr=glogow@fbihome.de; keydata=
- mQGiBEDrcVsRBACdQcj/8k2CSP+5frReJ2y7AAs4+3nBKPg08yOAsdcyQJAPbRGO8r1wJ6lb
- fnJI8+y8uvmsdQ83P4262EqpShHCpI7ioPUopkAKW5dWp/NM+YjYK0m3kMI03HlHeHKAMjyc
- pUmFu0sHktbDwrDUxTksgkcRHU1bbcyVuR7yaPbpdwCgoUn/Fthp7RItKuCLktKop6BcQbsE
- AIXM5gjo5C6l7I2tXFuO1+4boEwmL2WnGFEawFB4gBaBBJ6zUHzikdZW/5WHCUalSKRd38Bi
- PW2buoftYwIjuoRj30+YEVZ/2/oZsREcIazUeZzXaP2Emr/2rRNugj5KDPfgh6v6F9+Ravkw
- z6Bixv1lti7DoP32c7oDwggJEH6LA/0UVRt4RL3gO5Dcz+KIwOVrviZCKYB6/XSMfoAUDwne
- KhnYeQCB2ylV4O/bMrHz3dkNKHfgZ6SbMFJdAmCD1Vey0819jsh/CLCz9vp2wr5IzpTanL7y
- XYjj9R/qpDaW00LZF3+Maqavi3JKAi7K0CjnbcVfV65Rm/Qs1cfrsKQTf7QnSmFuLU1hcmVr
- IEdsb2dvd3NraSA8Z2xvZ293QGZiaWhvbWUuZGU+iFsEExECABsFAkDrcVsGCwkIBwMCAxUC
- AwMWAgECHgECF4AACgkQj6MK58wZA3cK/gCfb8IUFtgcxPSuAH1w8hn4C5WuSsUAn1P1Amys
- nLextO0t3xDDrFWO3PFhuQENBEDrcV0QBADpsD+yR9/1FEKKDGq7Q+jyz7or/SEwuCG/kHk3
- G+ynZYQzFEQ0cWBw0QFzNUNnwVAvG22M0UDjBn8v7BBH0ZtlrqVRUx++6uVv5dlj1uuBp1gp
- cpAHSQgmcXxN4xYSwdJ7fPbMeAkf+8IZc99xG2geF3uZNwzPxVFBHhP7zIZqIwADBQP8D5PU
- ZfoGLr3lDFqhoj6Z6sz9wrqWBC0+zjFcCBaoK4C9x7wxIyBJVRe+yhucLlxQt+LrrU9uQjlT
- YeHqkIL96Xp3KN4y2pr98bzMEF6uIifTEpZs+D+Jq1VvUiJiVUnw0EuCTzmds7tm9CMkOXcH
- hs7GRsJSHXRSWqsXZUec3muIRgQYEQIABgUCQOtxXQAKCRCPowrnzBkDd02+AJ0caVX6EEut
- 2yzgPx9/lndIHGYlhgCfXy/f9ENFxfAxMlLXjTvDUe9qye8=
-Message-ID: <fa0fff76-dad1-1322-c9c8-fed8f47c8f6a@fbihome.de>
-Date:   Tue, 21 Apr 2020 11:30:59 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <cd36bf27-fc7b-9a22-7065-2fabb8e89674@canonical.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1726628AbgDUJrw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Apr 2020 05:47:52 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:51468 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725920AbgDUJrw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Apr 2020 05:47:52 -0400
+Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 7F92EC0353;
+        Tue, 21 Apr 2020 09:47:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1587462471; bh=GCOkLmV4EmDz6ISgGT9wRw9lM5hPPhzwmrhK1ozo9qw=;
+        h=Date:From:Subject:To:Cc:From;
+        b=hY2TCnqb40zM7X9JUZZKHAa8wWNEnLTjaOSUnRYOetkufC5jsCir/n0eO2TRWHHBK
+         orKrYFvItKL+aVcfYp7DnLlhVQliNjvh9KxSIVC7srXSA3iDFMU0Km+45RrK3ttniL
+         TVVUIFbq1lmCAarpTyJdZNtivjivtsmyCQKzV15qIhV0lMYxs2HkY2cM8x5LlNhO3+
+         wDu2GXtFMVZkRTGcqu7rH6zNdLxVwTaf6SnSpsjHelYPH+2MH9/Rcj+FHCzDX9QOPo
+         2WOg2yGg+yysFWS3NJWSIKY3pp6P3C3T28BfZl/2Md7lvDrKrFnjNBheOfl/iE+GWM
+         dHaN5dkrui7wg==
+Received: from tejas-VirtualBox (joglekar-e7480.internal.synopsys.com [10.146.16.13])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 2762BA005C;
+        Tue, 21 Apr 2020 09:47:45 +0000 (UTC)
+Received: by tejas-VirtualBox (sSMTP sendmail emulation); Tue, 21 Apr 2020 15:17:43 +0530
+Date:   Tue, 21 Apr 2020 15:17:43 +0530
+Message-Id: <cover.1587461220.git.joglekar@synopsys.com>
+From:   Tejas Joglekar <Tejas.Joglekar@synopsys.com>
+Subject: [RFC PATCH v2 0/4] Add logic to consolidate TRBs for Synopsys xHC
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     John Youn <John.Youn@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+The Synopsys xHC has an internal TRB cache of size TRB_CACHE_SIZE for
+each endpoint. The default value for TRB_CACHE_SIZE is 16 for SS and 8
+for HS. The controller loads and updates the TRB cache from the
+transfer ring in system memory whenever the driver issues a start
+transfer or update transfer command.
 
-this was the only time I had to work on a kernel USB problem, so can't
-really help with knowledge of the USB subsystem.
+For chained TRBs, the Synopsys xHC requires that the total amount of
+bytes for all TRBs loaded in the TRB cache be greater than or equal to
+1 MPS. Or the chain ends within the TRB cache (with a last TRB).
 
-And unfortunately I don't have access to that hardware anymore. I've
-pinged some people, who might be able to get a hand on it again and then
-can verify a new patch to prevent the original bug from reappearing, but
-that's not up to me to decide.
+If this requirement is not met, the controller will not be able to
+send or receive a packet and it will hang causing a driver timeout and
+error.
 
-ATB
+This patch set adds logic to the XHCI driver to detect and prevent this
+from happening along with the quirk to enable this logic for Synopsys
+HAPS platform.
 
-Jan-Marek
+Based on Mathias's feedback on previous implementation where consolidation
+was done in TRB cache, with this patch series the implementation is done
+during mapping of the URB by consolidating the SG list into a temporary
+buffer if the SG list buffer sizes within TRB_CACHE_SIZE is less than MPS.
+
+Changes since v1:
+ - Comments from Greg are addressed on [PATCH 4/4] and [PATCH 1/4]
+ - Renamed the property and quirk as in other patches based on [PATCH 1/4]
+
+Tejas Joglekar (4):
+  dt-bindings: usb: Add documentation for SG trb cache size quirk
+  usb: xhci: Set quirk for XHCI_SG_TRB_CACHE_SIZE_QUIRK
+  usb: dwc3: Add device property sgl-trb-cache-size-quirk
+  usb: xhci: Use temporary buffer to consolidate SG
+
+ Documentation/devicetree/bindings/usb/dwc3.txt     |   4 +
+ Documentation/devicetree/bindings/usb/usb-xhci.txt |   3 +
+ drivers/usb/dwc3/core.c                            |   2 +
+ drivers/usb/dwc3/core.h                            |   2 +
+ drivers/usb/dwc3/dwc3-haps.c                       |   1 +
+ drivers/usb/dwc3/host.c                            |   6 +-
+ drivers/usb/host/xhci-pci.c                        |   3 +
+ drivers/usb/host/xhci-plat.c                       |   4 +
+ drivers/usb/host/xhci-ring.c                       |   2 +-
+ drivers/usb/host/xhci.c                            | 125 +++++++++++++++++++++
+ drivers/usb/host/xhci.h                            |   5 +
+ 11 files changed, 155 insertions(+), 2 deletions(-)
+
+-- 
+2.11.0
+
