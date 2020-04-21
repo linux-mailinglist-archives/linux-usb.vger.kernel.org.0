@@ -2,91 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F42081B18A9
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Apr 2020 23:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 306031B1B33
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2020 03:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728003AbgDTVnV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Apr 2020 17:43:21 -0400
-Received: from ms.lwn.net ([45.79.88.28]:53958 "EHLO ms.lwn.net"
+        id S1726055AbgDUBVN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Apr 2020 21:21:13 -0400
+Received: from mx2.suse.de ([195.135.220.15]:36846 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725989AbgDTVnT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 Apr 2020 17:43:19 -0400
-Received: from lwn.net (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 632E4823;
-        Mon, 20 Apr 2020 21:43:17 +0000 (UTC)
-Date:   Mon, 20 Apr 2020 15:43:16 -0600
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Yuti Amonkar <yamonkar@cadence.com>,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-ppc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-rdma@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, linux-crypto@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-afs@lists.infradead.org,
-        ecryptfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        ocfs2-devel@oss.oracle.com, linux-pci@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-spi@vger.kernel.org,
-        Sandeep Maheswaram <sanm@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
+        id S1725897AbgDUBVN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 Apr 2020 21:21:13 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 85D4EAEBE;
+        Tue, 21 Apr 2020 01:21:09 +0000 (UTC)
+From:   NeilBrown <neilb@suse.de>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Matthew Wilcox <willy@infradead.org>
+Date:   Tue, 21 Apr 2020 11:20:53 +1000
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Matthias Brugger <mbrugger@suse.com>, netdev@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-ide@vger.kernel.org, linux1394-devel@lists.sourceforge.net
-Subject: Re: [PATCH v2 00/33] Documentation fixes for Kernel 5.8
-Message-ID: <20200420154316.28e42905@lwn.net>
-In-Reply-To: <cover.1586881715.git.mchehab+huawei@kernel.org>
-References: <cover.1586881715.git.mchehab+huawei@kernel.org>
-Organization: LWN.net
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        linux-nfs@vger.kernel.org,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, linux-nvdimm@lists.01.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        Zzy Wysm <zzy@zzywysm.com>
+Subject: Re: [PATCH 5/9] usb: fix empty-body warning in sysfs.c
+In-Reply-To: <Pine.LNX.4.44L0.2004181549020.8036-100000@netrider.rowland.org>
+References: <Pine.LNX.4.44L0.2004181549020.8036-100000@netrider.rowland.org>
+Message-ID: <87368xskga.fsf@notabene.neil.brown.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 14 Apr 2020 18:48:26 +0200
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-> Patches 1 to 5 contain changes to the documentation toolset:
-> 
-> - The first 3 patches help to reduce a lot the number of reported
->   kernel-doc issues, by making the tool more smart.
-> 
-> - Patches 4 and 5 are meant to partially address the PDF
->   build, with now requires Sphinx version 2.4 or upper.
-> 
-> The remaining patches fix broken references detected by
-> this tool:
-> 
->         ./scripts/documentation-file-ref-check
-> 
-> and address other random errors due to tags being mis-interpreted
-> or mis-used.
-> 
-> They are independent each other, but some may depend on
-> the kernel-doc improvements.
-> 
-> PS.: Due to the large number of C/C, I opted to keep a smaller
-> set of C/C at this first e-mail (only e-mails with "L:" tag from
-> MAINTAINERS file).
+On Sat, Apr 18 2020, Alan Stern wrote:
 
-OK, I've applied this set, minus #17 which was applied elsewhere.
+> On Sat, 18 Apr 2020, Matthew Wilcox wrote:
+>
+>> On Sat, Apr 18, 2020 at 11:41:07AM -0700, Randy Dunlap wrote:
+>> > +++ linux-next-20200327/drivers/usb/core/sysfs.c
+>> > @@ -1263,7 +1263,7 @@ void usb_create_sysfs_intf_files(struct
+>> >  	if (!alt->string && !(udev->quirks & USB_QUIRK_CONFIG_INTF_STRINGS))
+>> >  		alt->string =3D usb_cache_string(udev, alt->desc.iInterface);
+>> >  	if (alt->string && device_create_file(&intf->dev, &dev_attr_interfac=
+e))
+>> > -		;	/* We don't actually care if the function fails. */
+>> > +		do_empty(); /* We don't actually care if the function fails. */
+>> >  	intf->sysfs_files_created =3D 1;
+>> >  }
+>>=20
+>> Why not just?
+>>=20
+>> +	if (alt->string)
+>> +		device_create_file(&intf->dev, &dev_attr_interface);
+>
+> This is another __must_check function call.
+>
+> The reason we don't care if the call fails is because the file
+> being created holds the USB interface string descriptor, something
+> which is purely informational and hardly ever gets set (and no doubt
+> gets used even less often).
+>
+> Is this another situation where the comment should be expanded and the=20
+> code modified to include a useless test and cast-to-void?
+>
+> Or should device_create_file() not be __must_check after all?
 
-Thanks,
+One approach to dealing with __must_check function that you don't want
+to check is to cause failure to call
+   pr_debug("usb: interface descriptor file not created");
+or similar.  It silences the compiler, serves as documentation, and
+creates a message that is almost certainly never seen.
 
-jon
+This is what I did in drivers/md/md.c...
+
+	if (mddev->kobj.sd &&
+	    sysfs_create_group(&mddev->kobj, &md_bitmap_group))
+		pr_debug("pointless warning\n");
+
+(I give better warnings elsewhere - I must have run out of patience by
+ this point).
+
+NeilBrown
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEG8Yp69OQ2HB7X0l6Oeye3VZigbkFAl6eSnUACgkQOeye3VZi
+gbn4EQ//WLEH1OYjzYF3ZAV16KgjXghaIeaNMOhGWUi79iqI/c9Zfe7VUDBPE5ip
+xTdZh+pKAubrzHjja6sbwXCEpY1XaGBeyKxl8lc/w8bsG6yMdN0n3eP7jgMucCtN
+U7DuAjjSjFvMLYDUBs6jhPbko+Qse3InDgyZH0gTueYI1QMmSag7EZs0xdvv6dAz
+NgtTQbJ7MBv3CQTg3Y+O6pMvRQbwSYuUb118jv9BH5ktkRmfJ5lP0LGfDD1d/AeR
+Z9oH8asOZK2ZprUXg6cuI/lf1kxFCNDGwXI9x0eDWpyt8akceeXLsxhg7Jw2KlZA
+Ry4UOB//Ehxq5ZtqxQAcHNzbfXJM1JaZjbyk+Im8F3q0/i2aE2/9pGvREe91rX3u
+gq2UO+5djv+TxKg1nZcFIHV/ycfdw4HWT6jKnYwOTahceJxkcswrRYqWBDePNqws
+oeWTPfUxQIIMUAYl0Zsf8EXLCqKvOmVqRI3cY2jIZHOJraynmtfL+/FRsg3PNu5T
+m5nSJbLvQMzITNuBTOf8BvdeAasCfR6v4RlIJYbonBJxXtUrXL7yeX0FclVpJ98+
+noaE1F/eUxnG5t+n3Gr6C9ttT/avXsr7Gm7okuNwkY1vvZSoXbFPZG0VIW0SiLWY
+kiqSFLeEDXCaNk4yYZlcNe17qTuJiZxx4RnTkF1IykZIcQv8haE=
+=K7Ae
+-----END PGP SIGNATURE-----
+--=-=-=--
