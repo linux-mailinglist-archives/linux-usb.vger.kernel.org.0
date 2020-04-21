@@ -2,266 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9FBE1B27CC
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2020 15:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C66E81B27E5
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Apr 2020 15:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728597AbgDUN2S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Apr 2020 09:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
+        id S1728864AbgDUNaq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Apr 2020 09:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726018AbgDUN2S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Apr 2020 09:28:18 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C595C061A10
-        for <linux-usb@vger.kernel.org>; Tue, 21 Apr 2020 06:28:18 -0700 (PDT)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1jQswi-0000in-PR; Tue, 21 Apr 2020 15:28:16 +0200
-Received: from mgr by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1jQswi-0002ja-1Z; Tue, 21 Apr 2020 15:28:16 +0200
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
-To:     linux-usb@vger.kernel.org
-Cc:     laurent.pinchart@ideasonboard.com, balbi@kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH] usb: gadget: uvc_video: add worker to handle the frame pumping
-Date:   Tue, 21 Apr 2020 15:28:14 +0200
-Message-Id: <20200421132814.10322-1-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.26.1
+        by vger.kernel.org with ESMTP id S1728519AbgDUNaq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Apr 2020 09:30:46 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6335EC061A10;
+        Tue, 21 Apr 2020 06:30:45 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id n6so10616749ljg.12;
+        Tue, 21 Apr 2020 06:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=80lm6Fk0sekxxITrDb5bHy56T1zgUeTIAIaDXyiWSbc=;
+        b=lnfsIgOT3/zSmQqA3A46dvPVKaDYEVabkhhKgjiqY74xqHvpBO+58J5eBepYDNYtfc
+         sIwarSKjCSijir339k4w2TOywidHeOcJnrQ/y8c3pbYAo3vDYcoNPjixYPNpNM+Uwwfo
+         lK5TNu6b7TRZj5Ly//EGBvDqLe9S+3fDKVMfDxg6h8xPk3Xq10JONj3eRENnrxipGSKP
+         LlaIRzvlzdHnF/QIwX7+7zccSlJiXazWBPHr2fahBcsRvQ9Q3OUO10kX4YdKHh7gYBZy
+         wMCFI3opl2p1BJj+v6eO8MPeWrOTRB0HM7eHyfAi/bnfUNrJYud1QftkGtVVxlyONGcM
+         ql8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=80lm6Fk0sekxxITrDb5bHy56T1zgUeTIAIaDXyiWSbc=;
+        b=WprZVsa1CspqRPNHeK2UVcThdbkYOxZU77eXMbmQGGm9qla8u3UsLWy7/QamscVbBZ
+         JdA8lX97XNud1pB4A6aEGghCetWz5poDMYmqR8ar4Ju1zDRV64iXNNsBjdl54YRLTmlY
+         HxQxVFNXZkjAji0kZ4CHuy6vNtmSnG3Uznr9C9JOFh1em2AFm1Cn9qzTn1k/feCfWvnj
+         Ts6v1XP/075HIgSoIcnegVAin8cQxGtDcDGzEgZmpm1yqDyKaCzG2r9dBNO05pWMMETg
+         PYvznQ8VsCZaqEf5YBGfL9ZX1XYGUMCAHCIVxMVh9OlLGPwIFftm4CrWdSY+/OONKM5K
+         s2oQ==
+X-Gm-Message-State: AGi0PuY1jWDqs/NaCODGj8tiesTv3/+RxzgN9OiFOUVSHdVvhmsg16LM
+        rpYkZKKU4Qm+rBi1PMzxzAiV+FtK6Es=
+X-Google-Smtp-Source: APiQypKSxRpChdTnmNbZQWNvmSsagPnFGHTzxOoipT9qphhjvxRuBRdugg7zAZ4jjwkEiWbTXZsJMA==
+X-Received: by 2002:a2e:b610:: with SMTP id r16mr13297479ljn.254.1587475843687;
+        Tue, 21 Apr 2020 06:30:43 -0700 (PDT)
+Received: from oak.local ([188.123.231.141])
+        by smtp.gmail.com with ESMTPSA id v17sm2031456lfi.49.2020.04.21.06.30.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Apr 2020 06:30:42 -0700 (PDT)
+From:   matwey.kornilov@gmail.com
+To:     stern@rowland.harvard.edu, b-liu@ti.com, gregkh@linuxfoundation.org
+Cc:     "Matwey V. Kornilov" <matwey@sai.msu.ru>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/6] musb: Improve performance for hub-attached webcams
+Date:   Tue, 21 Apr 2020 16:30:13 +0300
+Message-Id: <20200421133019.27167-1-matwey.kornilov@gmail.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch changes the function uvc_video_pump to be a separate
-scheduled worker. This way the completion handler of each usb request
-and every direct caller of the pump has only to schedule the worker
-instead of doing the request handling by itself.
+From: "Matwey V. Kornilov" <matwey@sai.msu.ru>
 
-Moving the request handling to one thread solves the locking problems
-between the three queueing cases in the completion handler, v4l2_qbuf
-and video_enable.
+The series is concerned to issues with isochronous transfer while
+streaming the USB webcam data. I discovered the issue first time
+when attached PWC USB webcam to AM335x-based BeagleBone Black SBC.
+It appeared that the root issue was in numerous missed IN requests
+during isochronous transfer where each missing leaded to the frame
+drop. Since every IN request is triggered in MUSB driver
+individually, it is important to queue the send IN request as
+earlier as possible when the previous IN completed. At the same
+time the URB giveback handler of the device driver has also to be
+called there, that leads to arbitrarily delay depending on the
+device driver performance. The details with the references are
+described in [1].
 
-Many drivers handle the completion handlers directly in their interrupt
-handlers. This patch also reduces the workload on each interrupt.
+The issue has two parts:
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
----
- drivers/usb/gadget/function/uvc.h       |  2 +
- drivers/usb/gadget/function/uvc_v4l2.c  |  4 +-
- drivers/usb/gadget/function/uvc_video.c | 76 +++++--------------------
- drivers/usb/gadget/function/uvc_video.h |  2 -
- 4 files changed, 19 insertions(+), 65 deletions(-)
+  1) peripheral driver URB callback performance
+  2) MUSB host driver performance
 
-diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index 1473d25ff17ad1..88e820db9234ec 100644
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -77,6 +77,8 @@ struct uvc_video {
- 	struct uvc_device *uvc;
- 	struct usb_ep *ep;
- 
-+	struct work_struct pump;
-+
- 	/* Frame parameters */
- 	u8 bpp;
- 	u32 fcc;
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index 495f0ec663ead9..4ca89eab61590d 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -169,7 +169,9 @@ uvc_v4l2_qbuf(struct file *file, void *fh, struct v4l2_buffer *b)
- 	if (ret < 0)
- 		return ret;
- 
--	return uvcg_video_pump(video);
-+	schedule_work(&video->pump);
-+
-+	return ret;
- }
- 
- static int
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index 5c042f3807081a..633e23d58d868c 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -142,44 +142,12 @@ static int uvcg_video_ep_queue(struct uvc_video *video, struct usb_request *req)
- 	return ret;
- }
- 
--/*
-- * I somehow feel that synchronisation won't be easy to achieve here. We have
-- * three events that control USB requests submission:
-- *
-- * - USB request completion: the completion handler will resubmit the request
-- *   if a video buffer is available.
-- *
-- * - USB interface setting selection: in response to a SET_INTERFACE request,
-- *   the handler will start streaming if a video buffer is available and if
-- *   video is not currently streaming.
-- *
-- * - V4L2 buffer queueing: the driver will start streaming if video is not
-- *   currently streaming.
-- *
-- * Race conditions between those 3 events might lead to deadlocks or other
-- * nasty side effects.
-- *
-- * The "video currently streaming" condition can't be detected by the irqqueue
-- * being empty, as a request can still be in flight. A separate "queue paused"
-- * flag is thus needed.
-- *
-- * The paused flag will be set when we try to retrieve the irqqueue head if the
-- * queue is empty, and cleared when we queue a buffer.
-- *
-- * The USB request completion handler will get the buffer at the irqqueue head
-- * under protection of the queue spinlock. If the queue is empty, the streaming
-- * paused flag will be set. Right after releasing the spinlock a userspace
-- * application can queue a buffer. The flag will then cleared, and the ioctl
-- * handler will restart the video stream.
-- */
- static void
- uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- {
- 	struct uvc_video *video = req->context;
- 	struct uvc_video_queue *queue = &video->queue;
--	struct uvc_buffer *buf;
- 	unsigned long flags;
--	int ret;
- 
- 	switch (req->status) {
- 	case 0:
-@@ -188,39 +156,20 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 	case -ESHUTDOWN:	/* disconnect from host. */
- 		uvcg_dbg(&video->uvc->func, "VS request cancelled.\n");
- 		uvcg_queue_cancel(queue, 1);
--		goto requeue;
-+		break;
- 
- 	default:
- 		uvcg_info(&video->uvc->func,
- 			  "VS request completed with status %d.\n",
- 			  req->status);
- 		uvcg_queue_cancel(queue, 0);
--		goto requeue;
- 	}
- 
--	spin_lock_irqsave(&video->queue.irqlock, flags);
--	buf = uvcg_queue_head(&video->queue);
--	if (buf == NULL) {
--		spin_unlock_irqrestore(&video->queue.irqlock, flags);
--		goto requeue;
--	}
--
--	video->encode(req, video, buf);
--
--	ret = uvcg_video_ep_queue(video, req);
--	spin_unlock_irqrestore(&video->queue.irqlock, flags);
--
--	if (ret < 0) {
--		uvcg_queue_cancel(queue, 0);
--		goto requeue;
--	}
--
--	return;
--
--requeue:
- 	spin_lock_irqsave(&video->req_lock, flags);
- 	list_add_tail(&req->list, &video->req_free);
- 	spin_unlock_irqrestore(&video->req_lock, flags);
-+
-+	schedule_work(&video->pump);
- }
- 
- static int
-@@ -294,18 +243,15 @@ uvc_video_alloc_requests(struct uvc_video *video)
-  * This function fills the available USB requests (listed in req_free) with
-  * video data from the queued buffers.
-  */
--int uvcg_video_pump(struct uvc_video *video)
-+static void uvcg_video_pump(struct work_struct *work)
- {
-+	struct uvc_video *video = container_of(work, struct uvc_video, pump);
- 	struct uvc_video_queue *queue = &video->queue;
- 	struct usb_request *req;
- 	struct uvc_buffer *buf;
- 	unsigned long flags;
- 	int ret;
- 
--	/* FIXME TODO Race between uvcg_video_pump and requests completion
--	 * handler ???
--	 */
--
- 	while (1) {
- 		/* Retrieve the first available USB request, protected by the
- 		 * request lock.
-@@ -313,7 +259,7 @@ int uvcg_video_pump(struct uvc_video *video)
- 		spin_lock_irqsave(&video->req_lock, flags);
- 		if (list_empty(&video->req_free)) {
- 			spin_unlock_irqrestore(&video->req_lock, flags);
--			return 0;
-+			return;
- 		}
- 		req = list_first_entry(&video->req_free, struct usb_request,
- 					list);
-@@ -345,7 +291,7 @@ int uvcg_video_pump(struct uvc_video *video)
- 	spin_lock_irqsave(&video->req_lock, flags);
- 	list_add_tail(&req->list, &video->req_free);
- 	spin_unlock_irqrestore(&video->req_lock, flags);
--	return 0;
-+	return;
- }
- 
- /*
-@@ -363,6 +309,9 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
- 	}
- 
- 	if (!enable) {
-+		cancel_work_sync(&video->pump);
-+		uvcg_queue_cancel(&video->queue, 0);
-+
- 		for (i = 0; i < UVC_NUM_REQUESTS; ++i)
- 			if (video->req[i])
- 				usb_ep_dequeue(video->ep, video->req[i]);
-@@ -384,7 +333,9 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
- 	} else
- 		video->encode = uvc_video_encode_isoc;
- 
--	return uvcg_video_pump(video);
-+	schedule_work(&video->pump);
-+
-+	return ret;
- }
- 
- /*
-@@ -394,6 +345,7 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
- {
- 	INIT_LIST_HEAD(&video->req_free);
- 	spin_lock_init(&video->req_lock);
-+	INIT_WORK(&video->pump, uvcg_video_pump);
- 
- 	video->uvc = uvc;
- 	video->fcc = V4L2_PIX_FMT_YUYV;
-diff --git a/drivers/usb/gadget/function/uvc_video.h b/drivers/usb/gadget/function/uvc_video.h
-index dff12103f69699..c618c7bee4756a 100644
---- a/drivers/usb/gadget/function/uvc_video.h
-+++ b/drivers/usb/gadget/function/uvc_video.h
-@@ -14,8 +14,6 @@
- 
- struct uvc_video;
- 
--int uvcg_video_pump(struct uvc_video *video);
--
- int uvcg_video_enable(struct uvc_video *video, int enable);
- 
- int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc);
+It appeared that the first part is related to the wrong memory
+allocation strategy in the most USB webcam drivers. Non-cached
+memory is used in assumption that coherent DMA memory leads to
+the better performance than non-coherent memory in conjunction with
+the proper synchronization. Yet the assumption might be valid for
+x86 platforms some time ago, the issue was fixed for PWC driver in:
+
+    1161db6776bd ("media: usb: pwc: Don't use coherent DMA buffers for ISO transfer")
+
+that leads to 3.5x performance gain. The more generic fix for this
+common issue are coming for the rest drivers [2].
+
+The patch allowed successfully running full-speed USB PWC webcams
+attached directly to BeagleBone Black USB port.
+
+However, the second part of the issue is still present for
+peripheral device attached through the high-speed USB hub due to
+its 125us frame time. The patch series is intended to reorganize
+musb_advance_schedule() to allow host to send IN request quicker.
+
+The patch series is organized as the following. First three patches
+improve readability of the existing code in
+musb_advance_schedule(). Patches 4 and 5 introduce updated
+signature for musb_start_urb(). The last patch introduce new
+code-path in musb_advance_schedule() which allows for faster
+response.
+
+References:
+
+[1] https://www.spinics.net/lists/linux-usb/msg165735.html
+[2] https://www.spinics.net/lists/linux-media/msg144279.html
+
+Changes since v2:
+ - rebase changes onto v5.7-rc2
+Changes since v1:
+ - Patch 6 was redone to keep URB giveback order and stop transmission at
+   erroneous URB.
+
+Matwey V. Kornilov (6):
+  usb: musb: Use USB_DIR_IN when calling musb_advance_schedule()
+  usb: musb: Introduce musb_qh_empty() helper function
+  usb: musb: Introduce musb_qh_free() helper function
+  usb: musb: Rename musb_start_urb() to musb_start_next_urb()
+  usb: musb: Introduce musb_start_urb()
+  usb: musb: Decrease URB starting latency in musb_advance_schedule()
+
+ drivers/usb/musb/musb_host.c | 132 ++++++++++++++++++++++-------------
+ drivers/usb/musb/musb_host.h |   1 +
+ 2 files changed, 86 insertions(+), 47 deletions(-)
+
 -- 
-2.26.1
+2.25.0
 
