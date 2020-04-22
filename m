@@ -2,133 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF261B462A
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2020 15:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D291B462D
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2020 15:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726323AbgDVNXc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 22 Apr 2020 09:23:32 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:45981 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726141AbgDVNXa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Apr 2020 09:23:30 -0400
-Received: from mail-pl1-f199.google.com ([209.85.214.199])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1jRFJK-0003jR-VV
-        for linux-usb@vger.kernel.org; Wed, 22 Apr 2020 13:21:07 +0000
-Received: by mail-pl1-f199.google.com with SMTP id w3so1837402plz.15
-        for <linux-usb@vger.kernel.org>; Wed, 22 Apr 2020 06:21:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=T0LMZyTXWoFEf1aVh2cXDeose+ywIML9Nz9WjlzDhZo=;
-        b=n8F/n4D1SH0CtutxsB6GJDLGA06gOQAw71dnxeqlglciB2rYZes4gz/n+XEcOjBblo
-         UTMd6Y+koFkCaYNwRIa7nn39L9K8AFSfl8U6wBvYeqys0ZttVoymgj82PZBcgyWAH+33
-         HVv8m3xtSIPC3h+ylFYFv/IRZIlYc5YzSAKf5SxjDywlCZ6Q27ET2EqQovMvtxabh9oE
-         xHw7qB82foUd6jCOg0AUwTFI2Q0cz7Y2s2eFxVGz8Za0kv7s2YrHyuzawTnsrQFJkoTB
-         qgLMwEk8U8PixHvE5t6MC+2QV/zeAUHtgMFexM60QT5UTWVoiDRn3a4tzxSpSSwunIau
-         qZXg==
-X-Gm-Message-State: AGi0PuZ+/cp+TgYeoqfcaG5HilHQNM5JOfm3scw5tkHhyOtFlLQVfOyF
-        KNMXfzcAA/Rk20rfeG7IGDrNvZYDguSxxlFw+0XWzkql/BNMcMPbZnVEE5BkSesM9ZvIOmBRDfL
-        fNNCi0itX3zvlfbOdOnqO2VuWSQR10W6RGriB4g==
-X-Received: by 2002:a17:902:8a89:: with SMTP id p9mr26137226plo.286.1587561665310;
-        Wed, 22 Apr 2020 06:21:05 -0700 (PDT)
-X-Google-Smtp-Source: APiQypLfA2O6VBk6BTeueKPVTORTPr78NbnZL7Zb6Nrl273jlScDPEo8rwuxAVxViRLC6q6jC2RXNA==
-X-Received: by 2002:a17:902:8a89:: with SMTP id p9mr26137195plo.286.1587561664959;
-        Wed, 22 Apr 2020 06:21:04 -0700 (PDT)
-Received: from [192.168.1.208] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
-        by smtp.gmail.com with ESMTPSA id w66sm5456578pfw.50.2020.04.22.06.21.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 Apr 2020 06:21:04 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.80.23.2.2\))
-Subject: Re: [PATCH v2] xhci: Set port link to RxDetect if port is not enabled
- after resume
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <B4E44BDC-5AFE-4F8A-8498-0EEE9CDAC0E1@canonical.com>
-Date:   Wed, 22 Apr 2020 21:21:01 +0800
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <635B3350-F064-4B45-B194-40F793423049@canonical.com>
-References: <20200311040456.25851-1-kai.heng.feng@canonical.com>
- <B4E44BDC-5AFE-4F8A-8498-0EEE9CDAC0E1@canonical.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>
-X-Mailer: Apple Mail (2.3608.80.23.2.2)
+        id S1726498AbgDVNZk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Apr 2020 09:25:40 -0400
+Received: from mga06.intel.com ([134.134.136.31]:52936 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726046AbgDVNZj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 Apr 2020 09:25:39 -0400
+IronPort-SDR: BZTOr5yHO6xFxIvmyoUUamZUma9RjicwZw1uqHK5s6cWYRiMRZYIPIKBMGJ+lshTxr2/3fTzTg
+ l3zfF4De3vcQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2020 06:25:36 -0700
+IronPort-SDR: 5XwFaHAwWBlz44Bg71dCR324era1xaQ63FmncVqiRy/B1JLy4DqD237M6Cg9uQyMN7gPhZAemr
+ 6UCEAIgP+AnQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,414,1580803200"; 
+   d="scan'208";a="365675280"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 22 Apr 2020 06:25:34 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 22 Apr 2020 16:25:33 +0300
+Date:   Wed, 22 Apr 2020 16:25:33 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Adding tps65986 to your tps6598x driver
+Message-ID: <20200422132533.GC618654@kuha.fi.intel.com>
+References: <d4a9214a-7a55-72ea-75b9-8388bc39d0dd@linaro.org>
+ <20200414151505.GK2828150@kuha.fi.intel.com>
+ <d64d7b21-4f03-05e8-e0db-aa8c75ba847e@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d64d7b21-4f03-05e8-e0db-aa8c75ba847e@linaro.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
++linux-usb ml
+
+On Wed, Apr 22, 2020 at 12:17:14PM +0100, Bryan O'Donoghue wrote:
+> On 14/04/2020 16:15, Heikki Krogerus wrote:
+> > Hi Bryan,
+> > 
+> > On Tue, Apr 14, 2020 at 03:42:24PM +0100, Bryan O'Donoghue wrote:
+> > > Hi Heikki.
+> > > 
+> > > I'm Bryan working with Linaro on a Qualcomm project.
+> > > 
+> > > We have a tps65986, which needs some upstreaming work.
+> > > 
+> > > http://www.ti.com/lit/gpn/tps65982
+> > > http://www.ti.com/lit/gpn/tps65986
+> > > 
+> > > As you can see the two parts are very similar except the 65986 does data
+> > > role switching but unlike the 65982 doesn't support 20v 5a power.
+> > > 
+> > > I was going to add
+> > > 
+> > > - OF probe support
+> > > - USB role switching support
+> > 
+> > By USB role switching you mean the USB role switch class, right?
+> > 
+> > > to your existing driver. Do you know of anybody who has done any work for
+> > > the tps65986 already ? Also does the above extension seem right/sensible to
+> > > you ?
+> > 
+> > There isn't anybody adding support for tps65986 to the driver that I
+> > know of, so please go for it. Both tasks make sense to me.
+> > 
+> > thanks,
+> > 
+> 
+> What about tcpm ?
+
+What about it?
+
+> As I understand it for your platform, you just want the power controller
+> stuff in the chip, without the data role.
+
+Role swapping is actually the only thing that we need the driver for
+on our platforms.
+
+> In my case - we have a point-of-sale terminal, which basically looks like a
+> phone - we want to be able to do data role switching.
+> 
+> What's your feeling. Add role switch into the driver you have here, or try
+> to get that driver working with tcpm ?
+
+So what you are proposing here is that you want to use tps65986 as
+just a port controller (so PHY), right? I don't think that's possible.
+
+TCPM (port manager) is the software that implements the USB Type-C and
+PD state machines. The USB PD controllers are running their own state
+machines, and the thing is that you can't turn off that part of them.
+So basically the USB PD controllers are supplying the TCPM
+functionality internally.
+
+> Something else ? It's important we get the changes upstream, so I'd
+> appreciate any thoughts you have on the right way to go about this.
+
+So what exactly is the problem here?
+
+Which USB controller are you using? Is it dual-role capable, or do you
+have separate xHCI controller and separate USB device controller plus
+a mux between them?
+
+Is it clear to you that the Type-C driver, so tps6598x.c in this case,
+is the consumer of the USB role switch? If you have a dual-role
+capable USB controller, then that will be the supplier of the switch.
+If you have separate USB host and devices IPs on your board, then the
+mux between them is the switch supplier.
+
+I'm attaching a diff that has all the changes that you should need to
+do to the tps6598x.c in order to get the role swapping working on your
+board.
+
+The next step is to figure out how to describe the connection between
+your USB role switch (which I'm guessing is the USB controller on your
+board) and the USB PD controller. You are using devicetree, right?
+
+> Could you recommend an Intel platform I could pick up to validate my changes
+> don't break existing code ?
+
+All -S variants of our SOCs can be used for testing the tps6598x.c,
+for example Coffee Lake -S, but unfortunately I don't know which
+products on the market actually use those SOCs. I do my development
+with the reference boards.
 
 
-> On Mar 26, 2020, at 19:33, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
-> 
-> Hi Mathias,
-> 
->> On Mar 11, 2020, at 12:04, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
->> 
->> On Dell TB16, Realtek USB ethernet (r8152) connects to an SMSC hub which
->> then connects to ASMedia xHCI's root hub:
->> 
->> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
->>   |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/7p, 5000M
->>           |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
->> 
->> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
->> Bus 004 Device 002: ID 0424:5537 Standard Microsystems Corp. USB5537B
->> Bus 004 Device 003: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
->> 
->> The port is disabled after resume:
->> xhci_hcd 0000:3f:00.0: Get port status 4-1 read: 0x280, return 0x280
->> 
->> According to xHCI 4.19.1.2.1, we should set link to RxDetect to transit
->> it from disabled state to disconnected state, which allows the port to
->> be set to U0 and completes the resume process.
->> 
->> My own test shows port can still resume when it's not enabled, as long
->> as its link is in U states. So constrain the new logic only when link is
->> not in any U state.
->> 
->> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> 
-> Do you think this is a proper fix?
+thanks,
 
-Another gentle ping...
-
-> 
-> Kai-Heng
-> 
->> ---
->> drivers/usb/host/xhci-hub.c | 8 ++++++++
->> 1 file changed, 8 insertions(+)
->> 
->> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
->> index a9c87eb8951e..263f9a9237a1 100644
->> --- a/drivers/usb/host/xhci-hub.c
->> +++ b/drivers/usb/host/xhci-hub.c
->> @@ -1776,6 +1776,14 @@ int xhci_bus_resume(struct usb_hcd *hcd)
->> 			clear_bit(port_index, &bus_state->bus_suspended);
->> 			continue;
->> 		}
->> +
->> +		/* 4.19.1.2.1 */
->> +		if (!(portsc & PORT_PE) && (portsc & PORT_PLS_MASK) > XDEV_U3) {
->> +			portsc = xhci_port_state_to_neutral(portsc);
->> +			portsc &= ~PORT_PLS_MASK;
->> +			portsc |= PORT_LINK_STROBE | XDEV_RXDETECT;
->> +		}
->> +
->> 		/* resume if we suspended the link, and it is still suspended */
->> 		if (test_bit(port_index, &bus_state->bus_suspended))
->> 			switch (portsc & PORT_PLS_MASK) {
->> -- 
->> 2.17.1
->> 
-> 
-
+-- 
+heikki
