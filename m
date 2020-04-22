@@ -2,168 +2,201 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 130D31B47AD
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2020 16:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E94D1B47AF
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2020 16:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726697AbgDVOtD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Apr 2020 10:49:03 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:60962 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725934AbgDVOtC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Apr 2020 10:49:02 -0400
-Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com [10.192.0.17])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id CC6C6C0B87;
-        Wed, 22 Apr 2020 14:49:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1587566941; bh=38TA8zEJ2eQQzm3e3PrgiAixNlTw7edM3oLvlFL5vLA=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=GhZrAiHg4gDQdL44m3Qk6ZI53cbxXkXdsPFiD70dRSWRJM2iFOvaIgR/bURVgJKvB
-         i9wpeY01UJ/GWxXgPZ+ENb9c43EEVWuXlljF32JTs2Wj1dvGBM0ap1b1c3CeBk1Rss
-         P640doklJqDNC3OalpJrh+Kc23XtlUNR2hB7mIl02ZBWiraST/hNqAiC2MZre52gQ/
-         ZuHIGjHTnWFV6IHVhxX59NdwPjFTPCjpsFkCjw389DSqEg2ucOeglslHGIAm6DaOeJ
-         KIQejdM/c94prJdURtaMO38u6/Pe3f5sffnPH1c64lot4L4BsDBL2PaMGvv5lLJXgv
-         rZOPe6j1kG1wg==
-Received: from US01WEHTC3.internal.synopsys.com (us01wehtc3.internal.synopsys.com [10.15.84.232])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 49E4BA00D4;
-        Wed, 22 Apr 2020 14:49:00 +0000 (UTC)
-Received: from US01HYBRID2.internal.synopsys.com (10.15.246.24) by
- US01WEHTC3.internal.synopsys.com (10.15.84.232) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Wed, 22 Apr 2020 07:48:55 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (10.202.3.67) by
- mrs.synopsys.com (10.15.246.24) with Microsoft SMTP Server (TLS) id
- 14.3.487.0; Wed, 22 Apr 2020 07:48:54 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hQq4X4cZCh+F3uwBaHGWD8mZ0KdLqDqa5dh67PTe1fqZYoJIpQcGTdEAiNSvFvqWsKtLTNZArPSBXf8P1WcNFiSKAzQ1gtwUHbgR1LEBQCo7Hz4LGH8+d+H5xXG60be+S8TZVWYVDko7UXIMC552KZjp92KC7mtijCZn+mXoDwVWU9Lh0TY5uc9F+rUW0iZyZYZWJKB0NT5QJ61qb0CVnEgYyEMhDePcBOSNL9IgfnHfKs4D5n4x10k70qo0uOwFXjxEC9azdxeHHo43Q+cQLXCU25kP4dQLrc7kgkzg27+ObgMhmr0Jsoh4OFldbx5yEcL73vMjrm0TaAJnwt9Crw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=38TA8zEJ2eQQzm3e3PrgiAixNlTw7edM3oLvlFL5vLA=;
- b=E1lQX+5By5JL1R8bulsyIiYP83KVS/l4ocmQFEwiZSQ87QYYMrGVluCI9AH0zLNIAAxRG+Gmn9tekGBwa8Bj/DFqVNBTnuVLlAut2vdqhS2+g3PwyeBJ7cblXA2GdSW6twZIPTSiDDRghzF1FXpirb/QLOCgyS//Ith7v+9vomySRdFLE1XlagYvQhiVrc6hSPzDwIveWluyJ1dOZ11QuZoVxk0p2SUD364IyOQ5x6dfp97NY31ZNZBVDBjoyzyF/ZZR6vjA+WC5pM4BS+2Hs8Oa/j5cbFS4tofRFdWtVaWrTbrkvCj5iXakDBli9DvaZshPFr9UrDPIfH7s0T45zg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=38TA8zEJ2eQQzm3e3PrgiAixNlTw7edM3oLvlFL5vLA=;
- b=eRYzu79ii8jSzomKSCoUPzPYPa93Mqn/2UJX8bWmybpKdukcuLDkFLXqga57otFAH6p3RGUO5j61si8d5ryG6QbfVLQLC2wgpjBtL2tg34xbloLCt1Lkf0KSPpkxIhHqQpPLiDDUihGrNolkqFOrHI0bTI5DPIE2SwrnDcT3l+w=
-Received: from SN1PR12MB2557.namprd12.prod.outlook.com (2603:10b6:802:22::15)
- by SN1PR12MB2574.namprd12.prod.outlook.com (2603:10b6:802:26::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.27; Wed, 22 Apr
- 2020 14:48:52 +0000
-Received: from SN1PR12MB2557.namprd12.prod.outlook.com
- ([fe80::20d2:fe98:5580:932d]) by SN1PR12MB2557.namprd12.prod.outlook.com
- ([fe80::20d2:fe98:5580:932d%7]) with mapi id 15.20.2937.012; Wed, 22 Apr 2020
- 14:48:52 +0000
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-To:     Fabrice Gasnier <fabrice.gasnier@st.com>,
-        "balbi@kernel.org" <balbi@kernel.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "amelie.delaunay@st.com" <amelie.delaunay@st.com>
-Subject: Re: [PATCH 1/4] usb: dwc2: gadget: move gadget resume after the core
- is in L0 state
-Thread-Topic: [PATCH 1/4] usb: dwc2: gadget: move gadget resume after the core
- is in L0 state
-Thread-Index: AQHWF9kltb5ivodInUCMhTw1JrJADqiFOpOA
-Date:   Wed, 22 Apr 2020 14:48:52 +0000
-Message-ID: <5391768a-da52-def8-9b2a-aeb559d8e26b@synopsys.com>
-References: <1587472341-17935-1-git-send-email-fabrice.gasnier@st.com>
- <1587472341-17935-2-git-send-email-fabrice.gasnier@st.com>
-In-Reply-To: <1587472341-17935-2-git-send-email-fabrice.gasnier@st.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=hminas@synopsys.com; 
-x-originating-ip: [198.182.37.200]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d88aa6a9-9df8-43e5-7881-08d7e6cc46a1
-x-ms-traffictypediagnostic: SN1PR12MB2574:
-x-microsoft-antispam-prvs: <SN1PR12MB2574F6399FB0C5CD5853016FA7D20@SN1PR12MB2574.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 03818C953D
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN1PR12MB2557.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10019020)(136003)(396003)(346002)(39860400002)(376002)(366004)(8676002)(53546011)(31686004)(6506007)(110136005)(316002)(54906003)(2616005)(86362001)(81156014)(31696002)(478600001)(186003)(4326008)(71200400001)(8936002)(36756003)(26005)(91956017)(6512007)(66556008)(64756008)(66946007)(66476007)(66446008)(5660300002)(6486002)(76116006)(2906002);DIR:OUT;SFP:1102;
-received-spf: None (protection.outlook.com: synopsys.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: J4OLJ5PiRHKX3s/6wpY1JCKp9+/ZdJN0oaeqjkrtrDZZWMWa+1qYU/qrkLRAtBg/VWBeXv9MTrWCUDESws8Ofhwfr9iecgzU7MiWvOxEZ/tbJdMd65B25i5yREDPqcm+a1qb+3VtZ4KlUEGDKErYYWmuIrm+3PxYR8n3rbZZdfMXgnmzk7zf43eb8xrXIvm5OA/4j89K0Ay6uRyd9syAoBV4V/HUuNwVjx31SbLY7ffIni2hMqk1rp0S+w2r9qh/arzcwUzCGftQ5M8AIqP8Xls5I8NLMv8Os79TFEerCk0VwRUkWZOmg6SrCm4AlVMeb7D7GoM/jaAb90/VPys/JfBk0hU5iBcQlm8MN7Jh3/iSdk+kjZPZZ+pbSgrDDBjKaSu3yTt/xBXTrDQcDcWlM92oenIp9EaT66cnOor/gFflTzh3vZEyGKRHrOJdL3sj
-x-ms-exchange-antispam-messagedata: E0t0i/JSmyD5/Kmy+Y64lWC1yRsGF5EHCfqJT7gGE/d0qEWPhNlWHcBIu4IZ1K4iGsjp0p/cGwN6mxsiu2J3yxoeuduNwXqWV/HiadQtndelpkcpXWW9rfcUNZm0JDmu2lXCB0t1NPHVphWmhzX77g==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <44B65D7E0EC7F24DB7E0461B4EFC89C7@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1726819AbgDVOtk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Apr 2020 10:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725935AbgDVOtk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Apr 2020 10:49:40 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C056EC03C1A9
+        for <linux-usb@vger.kernel.org>; Wed, 22 Apr 2020 07:49:39 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id u16so2692859wmc.5
+        for <linux-usb@vger.kernel.org>; Wed, 22 Apr 2020 07:49:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0NteFVNoHgRWrObHPbDpirDN6mvTQN6F8NaXslOU4m0=;
+        b=rJr8biWhV7qkM0V+ttKmBzemrgFOWhu60z2wvB7gFqW9jm9e0kJh1KPDkqWV/FE3Vi
+         560Bk9iRMMRC6rkw4snjPepvhhofdJ5+eF0HNcASOB/qB8ef6Sdu1+JoBNCE7AtUxdtN
+         bKmyJkj+Q1WqKqsMMQMBGyUqsmBrAGlSdwMYx6z/3PxRxcbe2Bf+afg+3mzlfgycLYtb
+         M3XfHlGeRVnFODmlA2vbcvmMOpYW7qnedXZRMOXvCj7SHAjveACIarp7NuZsUOfuD/8D
+         sgJRolYlQXfRx5DapboEaMsfcs5wq1mcIRq9Iu41y+ws+4B0wGIsTjWnldZGPGn9xHXr
+         yy+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0NteFVNoHgRWrObHPbDpirDN6mvTQN6F8NaXslOU4m0=;
+        b=h4hNtJlIWe6dmPAqCuwWZ4Jp5cQnSHVNLnlLJXrHd+BNteQdfM9vggM/s07toFeMpV
+         Jww6it891hWuwM1r3fiAB0v1/h+qzKYgHmrgIAo2uRGHV0pSDldjDd64ydaQk7Nq7tZ2
+         lCy4M+KnojwRwGKGBkMFVCj/X0FA6CqVkwNZjYA08VEGVM0SgT4o7jShZyJWqpwYFUWJ
+         HA8zzGxLav6fD+aNbsy08pqQ2pqt5mnd3P0dQTxukStW45k7EiXfbgxdbTxbC20/tgJQ
+         Ugfh2bl2j4wjUQ+cXU+GaYnQqUp8wX9K/QaJMBiOVRFP/PDF/A77ClqammRZVP4b874L
+         O4sw==
+X-Gm-Message-State: AGi0PuaXBFQivE/yNr+0Zvh0kf+k1A3qVgS5DdYFl7xyQcaHVCS38wLU
+        IcErhuHWWbaqDaeUyvsdGKltcyzBWd0=
+X-Google-Smtp-Source: APiQypLHJLvXcOLF3Jh9nFKV0aPWscBn4Kr2E+gxdJxUrR0o2I/cxhB4my12JLm3tS3UsJ4zElu7RQ==
+X-Received: by 2002:a1c:4409:: with SMTP id r9mr11361301wma.165.1587566978137;
+        Wed, 22 Apr 2020 07:49:38 -0700 (PDT)
+Received: from [192.168.0.38] ([176.61.57.127])
+        by smtp.gmail.com with ESMTPSA id q17sm7731450wmj.45.2020.04.22.07.49.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Apr 2020 07:49:37 -0700 (PDT)
+Subject: Re: Adding tps65986 to your tps6598x driver
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+References: <d4a9214a-7a55-72ea-75b9-8388bc39d0dd@linaro.org>
+ <20200414151505.GK2828150@kuha.fi.intel.com>
+ <d64d7b21-4f03-05e8-e0db-aa8c75ba847e@linaro.org>
+ <20200422132533.GC618654@kuha.fi.intel.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Message-ID: <e2eb882b-0ecd-a0a7-b415-8beae93f640f@linaro.org>
+Date:   Wed, 22 Apr 2020 15:50:08 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: d88aa6a9-9df8-43e5-7881-08d7e6cc46a1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Apr 2020 14:48:52.6679
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cE5tO3O/59GpLnGUDvMO9VckQE/G04wCYkv+OBPLf7ZxJMfoIQUEzh9MZjJDbhHQXxgLdieKLB3IaYVCxHrdHA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2574
-X-OriginatorOrg: synopsys.com
+In-Reply-To: <20200422132533.GC618654@kuha.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgRmFicmljZSwNCg0KT24gNC8yMS8yMDIwIDQ6MzIgUE0sIEZhYnJpY2UgR2FzbmllciB3cm90
-ZToNCj4gV2hlbiB0aGUgcmVtb3RlIHdha2V1cCBpbnRlcnJ1cHQgaXMgdHJpZ2dlcmVkLCBseF9z
-dGF0ZSBpcyByZXN1bWVkIGZyb20gTDINCj4gdG8gTDAgc3RhdGUuIEJ1dCB3aGVuIHRoZSBnYWRn
-ZXQgcmVzdW1lIGlzIGNhbGxlZCwgbHhfc3RhdGUgaXMgc3RpbGwgTDIuDQo+IFRoaXMgcHJldmVu
-dHMgdGhlIHJlc3VtZSBjYWxsYmFjayB0byBxdWV1ZSBhbnkgcmVxdWVzdC4gQW55IGF0dGVtcHQN
-Cj4gdG8gcXVldWUgYSByZXF1ZXN0IGZyb20gcmVzdW1lIGNhbGxiYWNrIHdpbGwgcmVzdWx0IGlu
-Og0KPiAtICJzdWJtaXQgcmVxdWVzdCBvbmx5IGluIGFjdGl2ZSBzdGF0ZSIgZGVidWcgbWVzc2Fn
-ZSB0byBiZSBpc3N1ZWQNCj4gLSBkd2MyX2hzb3RnX2VwX3F1ZXVlKCkgcmV0dXJucyAtRUFHQUlO
-DQo+IA0KPiBNb3ZlIHRoZSBjYWxsIHRvIHJlc3VtZSBnYWRnZXQgYWZ0ZXIgdGhlIGNvcmUgaXMg
-cHV0IGluIERXQzJfTDAgc3RhdGUuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBGYWJyaWNlIEdhc25p
-ZXIgPGZhYnJpY2UuZ2FzbmllckBzdC5jb20+DQo+IC0tLQ0KPiAgIGRyaXZlcnMvdXNiL2R3YzIv
-Y29yZV9pbnRyLmMgfCAxMCArKysrKysrLS0tDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDcgaW5zZXJ0
-aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9k
-d2MyL2NvcmVfaW50ci5jIGIvZHJpdmVycy91c2IvZHdjMi9jb3JlX2ludHIuYw0KPiBpbmRleCA4
-NzZmZjMxLi5iOGViZGE1IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3VzYi9kd2MyL2NvcmVfaW50
-ci5jDQo+ICsrKyBiL2RyaXZlcnMvdXNiL2R3YzIvY29yZV9pbnRyLmMNCj4gQEAgLTQwNCw5ICs0
-MDQsMTEgQEAgc3RhdGljIHZvaWQgZHdjMl9oYW5kbGVfd2FrZXVwX2RldGVjdGVkX2ludHIoc3Ry
-dWN0IGR3YzJfaHNvdGcgKmhzb3RnKQ0KPiAgIAl9DQo+ICAgDQo+ICAgCWlmIChkd2MyX2lzX2Rl
-dmljZV9tb2RlKGhzb3RnKSkgew0KPiArCQllbnVtIGR3YzJfbHhfc3RhdGUgbHhfc3RhdGUgPSBo
-c290Zy0+bHhfc3RhdGU7DQo+ICsNCj4gICAJCWRldl9kYmcoaHNvdGctPmRldiwgIkRTVFM9MHgl
-MHhcbiIsDQo+ICAgCQkJZHdjMl9yZWFkbChoc290ZywgRFNUUykpOw0KPiAtCQlpZiAoaHNvdGct
-Pmx4X3N0YXRlID09IERXQzJfTDIpIHsNCj4gKwkJaWYgKGx4X3N0YXRlID09IERXQzJfTDIpIHsN
-Cj4gICAJCQl1MzIgZGN0bCA9IGR3YzJfcmVhZGwoaHNvdGcsIERDVEwpOw0KPiAgIA0KPiAgIAkJ
-CS8qIENsZWFyIFJlbW90ZSBXYWtldXAgU2lnbmFsaW5nICovDQo+IEBAIC00MTUsMTEgKzQxNywx
-MyBAQCBzdGF0aWMgdm9pZCBkd2MyX2hhbmRsZV93YWtldXBfZGV0ZWN0ZWRfaW50cihzdHJ1Y3Qg
-ZHdjMl9oc290ZyAqaHNvdGcpDQo+ICAgCQkJcmV0ID0gZHdjMl9leGl0X3BhcnRpYWxfcG93ZXJf
-ZG93bihoc290ZywgdHJ1ZSk7DQo+ICAgCQkJaWYgKHJldCAmJiAocmV0ICE9IC1FTk9UU1VQUCkp
-DQo+ICAgCQkJCWRldl9lcnIoaHNvdGctPmRldiwgImV4aXQgcG93ZXJfZG93biBmYWlsZWRcbiIp
-Ow0KPiAtDQo+IC0JCQljYWxsX2dhZGdldChoc290ZywgcmVzdW1lKTsNCj4gICAJCX0NCj4gICAJ
-CS8qIENoYW5nZSB0byBMMCBzdGF0ZSAqLw0KPiAgIAkJaHNvdGctPmx4X3N0YXRlID0gRFdDMl9M
-MDsNCj4gKw0KPiArCQkvKiBHYWRnZXQgbWF5IHF1ZXVlIG5ldyByZXF1ZXN0cyB1cG9uIHJlc3Vt
-ZSB0byBMMCBzdGF0ZSAqLw0KPiArCQlpZiAobHhfc3RhdGUgPT0gRFdDMl9MMikNCj4gKwkJCWNh
-bGxfZ2FkZ2V0KGhzb3RnLCByZXN1bWUpOw0KPiAgIAl9IGVsc2Ugew0KPiAgIAkJaWYgKGhzb3Rn
-LT5wYXJhbXMucG93ZXJfZG93bikNCj4gICAJCQlyZXR1cm47DQo+IA0KDQpXaGF0IGFib3V0IGJl
-bG93IHBhdGNoIHdpdGhvdXQgaW50cm9kdWNpbmcgYWRkaXRpb25hbCB2YXJpYWJsZS4NCg0KZGlm
-ZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2R3YzIvY29yZV9pbnRyLmMgYi9kcml2ZXJzL3VzYi9kd2My
-L2NvcmVfaW50ci5jDQppbmRleCA4NzZmZjMxMjYxZDUuLjU0Mzg2NWUzMWM3MiAxMDA2NDQNCi0t
-LSBhL2RyaXZlcnMvdXNiL2R3YzIvY29yZV9pbnRyLmMNCisrKyBiL2RyaXZlcnMvdXNiL2R3YzIv
-Y29yZV9pbnRyLmMNCkBAIC00MTYsNiArNDE2LDggQEAgc3RhdGljIHZvaWQgZHdjMl9oYW5kbGVf
-d2FrZXVwX2RldGVjdGVkX2ludHIoc3RydWN0IA0KZHdjMl9oc290ZyAqaHNvdGcpDQogICAgICAg
-ICAgICAgICAgICAgICAgICAgaWYgKHJldCAmJiAocmV0ICE9IC1FTk9UU1VQUCkpDQogICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICBkZXZfZXJyKGhzb3RnLT5kZXYsICJleGl0IHBvd2Vy
-X2Rvd24gDQpmYWlsZWRcbiIpOw0KDQorICAgICAgICAgICAgICAgICAgICAgICAvKiBDaGFuZ2Ug
-dG8gTDAgc3RhdGUgKi8NCisgICAgICAgICAgICAgICAgICAgICAgIGhzb3RnLT5seF9zdGF0ZSA9
-IERXQzJfTDA7DQogICAgICAgICAgICAgICAgICAgICAgICAgY2FsbF9nYWRnZXQoaHNvdGcsIHJl
-c3VtZSk7DQogICAgICAgICAgICAgICAgIH0NCiAgICAgICAgICAgICAgICAgLyogQ2hhbmdlIHRv
-IEwwIHN0YXRlICovDQoNCg0KVGhhbmtzLA0KTWluYXMNCg0K
+On 22/04/2020 14:25, Heikki Krogerus wrote:
+> +linux-usb ml
+> 
+> On Wed, Apr 22, 2020 at 12:17:14PM +0100, Bryan O'Donoghue wrote:
+>> On 14/04/2020 16:15, Heikki Krogerus wrote: > So what you are proposing here is that you want to use tps65986 as
+> just a port controller (so PHY), right? I don't think that's possible.
+
+Both. Sorry I wasn't clear :)
+
+> TCPM (port manager) is the software that implements the USB Type-C and
+> PD state machines. The USB PD controllers are running their own state
+> machines, and the thing is that you can't turn off that part of them.
+> So basically the USB PD controllers are supplying the TCPM
+> functionality internally.
+
+OK. So forget about the above then. That answers the question why you 
+didn't implement tps6598x as a tcpm bound device.
+
+What's your feeling on the following.
+
+In DT if we find a child connector then we can determine the state we 
+are supposed to be in ?
+
+That way it _shouldn't_ change the logic you already depend on the ACPI 
+systems.
+
+typec1_con: connector {
+     compatible = "usb-c-connector";
+     label = "USB-C";
+     power-role = "dual";
+     data-role = "dual";
+     try-power-role = "sink";
+     source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
+     sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
+                 PDO_VAR(5000, 20000, 3000)>;
+     op-sink-microwatt = <15000000>;
+
+     self-powered;
+};
+
+we need to control :
+
+http://www.ti.com/lit/an/slva843a/slva843a.pdf
+
+- InitiateSwapToDPF
+- InitiateSwapToUFP
+- process-swap-to-dfp;
+- process-swap-to-ufp;
+- InitiateVconnSwap;
+- ProcessVconnSwap;
+
+The documentation makes clear some of these settings are mutually exclusive.
+
+You can capture the logic of that with the connector
+
+- power-role = "dual";
+- data-role = "dual";
+
+from the connector declaration. Absent the connector declaration the 
+ACPI launched code should still work as-is.
+
+Alternatively it could be something specific to the chip - as opposed to 
+the connector.
+
+My thought is you either have these two at the type-c controller level 
+or inside a child connector node.
+
+Either way tps6598x would consume them.
+
+> 
+>> Something else ? It's important we get the changes upstream, so I'd
+>> appreciate any thoughts you have on the right way to go about this.
+> 
+> So what exactly is the problem here?
+> 
+> Which USB controller are you using? Is it dual-role capable, or do you
+> have separate xHCI controller and separate USB device controller plus
+> a mux between them?
+
+Err, checks notes.
+Its a ChipIdea HDRC. That part just works.
+
+As I suggested above,
+
+tps6598x: tps6598x@38 {
+     compatible = "ti,tps6598x";
+     reg = <0x38>;
+
+     interrupt-parent = <&gpio>;
+     interrupts = <107 IRQ_TYPE_LEVEL_LOW>;
+     interrupt-names = "irq";
+
+     pinctrl-names = "default";
+     pinctrl-0 = <&typec_pins>;
+
+     port {
+         typec1_dr_sw: endpoint {
+             remote-endpoint = <&usb1_drd_sw>;
+         };
+     };
+
+     /* Example A */
+     typec1_con: connector {
+         compatible = "usb-c-connector";
+         label = "USB-C";
+         power-role = "dual";
+         data-role = "dual";
+         try-power-role = "sink";
+         source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
+                       sink-pdos = <PDO_FIXED(5000, 3000,
+                                    PDO_FIXED_USB_COMM)
+                                    PDO_VAR(5000, 20000, 3000)>;
+         op-sink-microwatt = <15000000>;
+     };
+
+     /* Example B */
+     power-role = "dual";
+     data-role = "dual";
+     try-power-role = "sink";
+     source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
+                   sink-pdos = <PDO_FIXED(5000, 3000,
+                                PDO_FIXED_USB_COMM)
+                                PDO_VAR(5000, 20000, 3000)>;
+     op-sink-microwatt = <15000000>;
+};
+
+I think connector is probably the right way to go.
+
+---
+bod
