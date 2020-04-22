@@ -2,117 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 333521B4266
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2020 13:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B9F1B43BA
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2020 14:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730069AbgDVLBA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Apr 2020 07:01:00 -0400
-Received: from mga12.intel.com ([192.55.52.136]:8790 "EHLO mga12.intel.com"
+        id S1728326AbgDVMAD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Apr 2020 08:00:03 -0400
+Received: from mx2.suse.de ([195.135.220.15]:53172 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726901AbgDVLA7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 Apr 2020 07:00:59 -0400
-IronPort-SDR: X4VYS5CZbNkA3XZSyqw+orgApF68jhsUgIkdH5TWJ7lhmgoHrXLMXGA2WB2rCbRKn0j3YkZVF7
- bUxIRs1bg5EA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2020 04:00:59 -0700
-IronPort-SDR: WWP7cSWFjsfrcn1r80x2nxgyrz3SkI8fI8MOv7KLXkXSBfQs2axptwW7mjVcO8xv37WAasvS6X
- BtAQIWG6ZPqA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,414,1580803200"; 
-   d="scan'208";a="365645408"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 22 Apr 2020 04:00:57 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 22 Apr 2020 14:00:56 +0300
-Date:   Wed, 22 Apr 2020 14:00:56 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
-Cc:     linux-iio <linux-iio@vger.kernel.org>, linux-usb@vger.kernel.org,
-        Jagadish.Hadimani@amd.com
-Subject: Re: ucsi and DRD controller interaction
-Message-ID: <20200422110056.GB618654@kuha.fi.intel.com>
-References: <26823688-3b9c-5869-bcb6-4d6e5dcd77bc@amd.com>
- <20200421074353.GE3768833@kuha.fi.intel.com>
- <1d4fd9f3-8ea6-c054-0ba4-d50d78226fae@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1d4fd9f3-8ea6-c054-0ba4-d50d78226fae@amd.com>
+        id S1727791AbgDVMAD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 Apr 2020 08:00:03 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id A9C23AE79;
+        Wed, 22 Apr 2020 12:00:00 +0000 (UTC)
+Message-ID: <1587556788.26476.13.camel@suse.com>
+Subject: Re: general protection fault in go7007_usb_probe
+From:   Oliver Neukum <oneukum@suse.com>
+To:     syzbot <syzbot+cabfa4b5b05ff6be4ef0@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, hverkuil-cisco@xs4all.nl,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Date:   Wed, 22 Apr 2020 13:59:48 +0200
+In-Reply-To: <0000000000003cbf8e05a3d57b98@google.com>
+References: <0000000000003cbf8e05a3d57b98@google.com>
+Content-Type: multipart/mixed; boundary="=-McCpIkgPwCqlblO8/Hrv"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 21, 2020 at 07:23:30PM +0530, Shah, Nehal-bakulchandra wrote:
-> Hi
-> 
-> On 4/21/2020 1:13 PM, Heikki Krogerus wrote:
-> > Adding linux-usb mailing list.
-> >
-> > On Mon, Apr 20, 2020 at 07:09:17PM +0530, Shah, Nehal-bakulchandra wrote:
-> >> Hi Heikki ,
-> >>
-> >> I need some pointer from you, so in a system where I have UCSI driver for DRD
-> >> Controller, then how call stack will be?
-> >>
-> >> I am unable to comprehend the flow from UCSI infrastructure to DRD controller
-> >> code base.
-> > Do you need to tell the negotiated data role to your USB controller
-> > driver from the UCSI driver? For that we would need to know which USB
-> > controller, or more precisely, which USB port is connected to the
-> > USB Type-C connector in question.
-> >
-> > That would require ACPI tables to be able to describe the connection
-> > between the USB Type-C connector and the USB port (and the connection
-> > between DisplayPort and the USB Type-C connector etc.). Unfortunately
-> > there is currently no documented way of doing that, however, there is
-> > a proposal for a document the defines how the USB Type-C connectors
-> > should be described in ACPI in general. The proposal does consider
-> > this problem as well. For this the solution is to use _DSD device
-> > properties "usb2-port" and "usb3-port" that have references to the
-> > correct USB port nodes as values.
-> >
-> > Which USB controller are you using btw?
-> >
-> > thanks,
-> 
-> Thanks for the mail.
-> 
-> Here is the configuration
-> 
-> 1. DRD Controller (DWC3 controller)
-> 
-> 2. TI PD Controller
-> 
-> 3. TI PD Controller and Host has I2C as transport layer. So ACPI mechanism wont work here.
-> 
-> 
-> Hence i was wondering, is there any way from UCSI Driver we inform to DWC3 driver stack about Role change. I can understand one point that,
-> 
-> DWC3 controller can work without UCSI Implementation i.e Only PD firmware. But i want to understand  if there is a role change, PD interrupt will be generated
-> 
-> and UCSI Driver will come to know about this role change. But from this onwards , i am  unable to comprehend how it can be propagated upto DWC3 stack.
 
-If the Type-C drivers need to tell DWC3 driver the data role (USB
-role) the connector is operating in, then you use the USB Role Switch
-Class for that (drivers/usb/role/). The USB Type-C driver (so ucsi.c
-or tps6598x.c in this case) that knows the USB role tells it to the
-USB role class by calling usb_role_switch_set_role().
+--=-McCpIkgPwCqlblO8/Hrv
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 
-The USB role switch class then takes care of forwarding the
-information to the actual switch, which is DWC3 in this case. The DWC3
-driver already registers the USB role switch for you
-(drivers/usb/dwc3/drd.c), but the UCSI driver, and also tps6598x.c,
-does not use the USB role switch API yet. There has never been need
-for that before this.
+Am Dienstag, den 21.04.2020, 16:36 -0700 schrieb syzbot:
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    e9010320 usb: cdns3: gadget: make a bunch of functions sta..
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1263a930100000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=bd14feb44652cfaf
+> dashboard link: https://syzkaller.appspot.com/bug?extid=cabfa4b5b05ff6be4ef0
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> 
+> Unfortunately, I don't have any reproducer for this crash yet.
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+cabfa4b5b05ff6be4ef0@syzkaller.appspotmail.com
 
-Adding USB role switch handling to the UCSI and tps6598x drivers can
-easily be fixed, but it's still not enough. You still need to describe
-the connection between the USB PD controller and DWC3 somewhere.
+#syz test: https://github.com/google/kasan.git e9010320
+--=-McCpIkgPwCqlblO8/Hrv
+Content-Disposition: attachment; filename="0001-go7007-add-sanity-checking.patch"
+Content-Transfer-Encoding: base64
+Content-Type: text/x-patch; name="0001-go7007-add-sanity-checking.patch";
+	charset="UTF-8"
 
-thanks,
+RnJvbSBlZjEzZjM1NWQ2MWNmODhjOTYyOWM5ZTBiMzI5OTNiMzE1MjBmMzYyIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
+OiBXZWQsIDIyIEFwciAyMDIwIDEzOjQ5OjU1ICswMjAwClN1YmplY3Q6IFtQQVRDSF0gZ283MDA3
+OiBhZGQgc2FuaXR5IGNoZWNraW5nCgpBIG1hbGljaW91cyBVU0IgZGV2aWNlIG1heSBsYWNrIGVu
+ZHBvaW50cyB0aGUgZHJpdmVyIGFzc3VtZXMgdG8gZXhpc3QKQWNjZXNzaW5nIHRoZW0gbGVhZHMg
+dG8gTlVMTCBwb2ludGVyIGFjY2Vzc2VzLiBUaGlzIHBhdGNoIGludHJvZHVjZXMKc2FuaXR5IGNo
+ZWNraW5nLgoKU2lnbmVkLW9mZi1ieTogT2xpdmVyIE5ldWt1bSA8b25ldWt1bUBzdXNlLmNvbT4K
+Rml4ZXM6IDg2NmI4Njk1ZDY3ZTggKCJTdGFnaW5nOiBhZGQgdGhlIGdvNzAwNyB2aWRlbyBkcml2
+ZXIiKQotLS0KIGRyaXZlcnMvbWVkaWEvdXNiL2dvNzAwNy9nbzcwMDctdXNiLmMgfCAxMiArKysr
+KysrKysrKy0KIDEgZmlsZSBjaGFuZ2VkLCAxMSBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0p
+CgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9tZWRpYS91c2IvZ283MDA3L2dvNzAwNy11c2IuYyBiL2Ry
+aXZlcnMvbWVkaWEvdXNiL2dvNzAwNy9nbzcwMDctdXNiLmMKaW5kZXggZjg4OWM5ZDc0MGNkLi5l
+YWU5ZTRlNTU1Y2YgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvbWVkaWEvdXNiL2dvNzAwNy9nbzcwMDct
+dXNiLmMKKysrIGIvZHJpdmVycy9tZWRpYS91c2IvZ283MDA3L2dvNzAwNy11c2IuYwpAQCAtMTEy
+MSw2ICsxMTIxLDExIEBAIHN0YXRpYyBpbnQgZ283MDA3X3VzYl9wcm9iZShzdHJ1Y3QgdXNiX2lu
+dGVyZmFjZSAqaW50ZiwKIAkJcmV0dXJuIC1FTk9NRU07CiAJfQogCisJLyogc2FuaXR5IGNoZWNr
+cyAqLworCWVwID0gdXNiLT51c2JkZXYtPmVwX2luWzRdOworCWlmICghZXApCisJCXJldHVybiAt
+RU5PREVWOworCiAJdXNiLT5ib2FyZCA9IGJvYXJkOwogCXVzYi0+dXNiZGV2ID0gdXNiZGV2Owog
+CXVzYl9tYWtlX3BhdGgodXNiZGV2LCBnby0+YnVzX2luZm8sIHNpemVvZihnby0+YnVzX2luZm8p
+KTsKQEAgLTExNDEsNyArMTE0Niw2IEBAIHN0YXRpYyBpbnQgZ283MDA3X3VzYl9wcm9iZShzdHJ1
+Y3QgdXNiX2ludGVyZmFjZSAqaW50ZiwKIAlpZiAodXNiLT5pbnRyX3VyYi0+dHJhbnNmZXJfYnVm
+ZmVyID09IE5VTEwpCiAJCWdvdG8gYWxsb2NmYWlsOwogCi0JZXAgPSB1c2ItPnVzYmRldi0+ZXBf
+aW5bNF07CiAJaWYgKHVzYl9lbmRwb2ludF90eXBlKCZlcC0+ZGVzYykgPT0gVVNCX0VORFBPSU5U
+X1hGRVJfQlVMSykKIAkJdXNiX2ZpbGxfYnVsa191cmIodXNiLT5pbnRyX3VyYiwgdXNiLT51c2Jk
+ZXYsCiAJCQl1c2JfcmN2YnVsa3BpcGUodXNiLT51c2JkZXYsIDQpLApAQCAtMTI2Myw5ICsxMjY3
+LDEzIEBAIHN0YXRpYyBpbnQgZ283MDA3X3VzYl9wcm9iZShzdHJ1Y3QgdXNiX2ludGVyZmFjZSAq
+aW50ZiwKIAogCS8qIEFsbG9jYXRlIHRoZSBVUkJzIGFuZCBidWZmZXJzIGZvciByZWNlaXZpbmcg
+dGhlIHZpZGVvIHN0cmVhbSAqLwogCWlmIChib2FyZC0+ZmxhZ3MgJiBHTzcwMDdfVVNCX0VaVVNC
+KSB7CisJCWlmICghdXNiLT51c2JkZXYtPmVwX2luWzZdKQorCQkJZ290byBhbGxvY2ZhaWw7CiAJ
+CXZfdXJiX2xlbiA9IDEwMjQ7CiAJCXZpZGVvX3BpcGUgPSB1c2JfcmN2YnVsa3BpcGUodXNiLT51
+c2JkZXYsIDYpOwogCX0gZWxzZSB7CisJCWlmICghdXNiLT51c2JkZXYtPmVwX2luWzFdKQorCQkJ
+Z290byBhbGxvY2ZhaWw7CiAJCXZfdXJiX2xlbiA9IDUxMjsKIAkJdmlkZW9fcGlwZSA9IHVzYl9y
+Y3ZidWxrcGlwZSh1c2ItPnVzYmRldiwgMSk7CiAJfQpAQCAtMTI4NSw2ICsxMjkzLDggQEAgc3Rh
+dGljIGludCBnbzcwMDdfdXNiX3Byb2JlKHN0cnVjdCB1c2JfaW50ZXJmYWNlICppbnRmLAogCS8q
+IEFsbG9jYXRlIHRoZSBVUkJzIGFuZCBidWZmZXJzIGZvciByZWNlaXZpbmcgdGhlIGF1ZGlvIHN0
+cmVhbSAqLwogCWlmICgoYm9hcmQtPmZsYWdzICYgR083MDA3X1VTQl9FWlVTQikgJiYKIAkgICAg
+KGJvYXJkLT5tYWluX2luZm8uZmxhZ3MgJiBHTzcwMDdfQk9BUkRfSEFTX0FVRElPKSkgeworCQlp
+ZiAoIXVzYi0+dXNiZGV2LT5lcF9pbls4XSkKKwkJCWdvdG8gYWxsb2NmYWlsOwogCQlmb3IgKGkg
+PSAwOyBpIDwgODsgKytpKSB7CiAJCQl1c2ItPmF1ZGlvX3VyYnNbaV0gPSB1c2JfYWxsb2NfdXJi
+KDAsIEdGUF9LRVJORUwpOwogCQkJaWYgKHVzYi0+YXVkaW9fdXJic1tpXSA9PSBOVUxMKQotLSAK
+Mi4xNi40Cgo=
 
--- 
-heikki
+
+--=-McCpIkgPwCqlblO8/Hrv--
+
