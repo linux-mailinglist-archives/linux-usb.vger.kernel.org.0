@@ -2,56 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E921B36B0
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2020 07:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 902F21B370F
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2020 08:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726078AbgDVFJl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Apr 2020 01:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43442 "EHLO
+        id S1726424AbgDVGAN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Apr 2020 02:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725787AbgDVFJk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Apr 2020 01:09:40 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7216BC03C1A6
-        for <linux-usb@vger.kernel.org>; Tue, 21 Apr 2020 22:09:39 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id i27so1037476ota.7
-        for <linux-usb@vger.kernel.org>; Tue, 21 Apr 2020 22:09:39 -0700 (PDT)
+        with ESMTP id S1725934AbgDVGAN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Apr 2020 02:00:13 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2499C03C1A6;
+        Tue, 21 Apr 2020 23:00:12 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id l19so929148lje.10;
+        Tue, 21 Apr 2020 23:00:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=m5LJs8OCYtoiaa1WpPfPHy0Im1CBN5FUEi59T95x5pc=;
-        b=QPFKKrsN5XoPK/cGxa3UYGDE8OE2TIzoh66phZcNzO+yLmQwwff5EqxUWG4CZlJePr
-         /MtEV6Hf/4M6GfONyptmEln7jog97FZntgfVQ7zViC8d38bVtKmLOJ9gLVmMg28E/gfB
-         bwEk+1Ctv0qmsJcsArUEPaDUk4M5cACjJbV2XExu6w/kxk43rKaxQEyT0U207E3VGskj
-         nUKkS9PVowVv3cMjj9ujA6guMioD/Ulyq/TAQW5zDFEgKYukQih3QCsWm6BNT6IaBPXt
-         3Gt8txN9wxxI7+rRCLVdoCBFFrZIp45qo2Oa4N6y/Nh2KQIEDZ4tzwuss7R3cpY9uRXA
-         hWRQ==
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=8wMite28CxNe4/9pqzhlBHCV6MZvYc1qSikiSwQiv+s=;
+        b=kSi3rXHlS6REIAYLmvE16izFWmtg2yznhkkNR+jSrAVpVpS/EDIHGhLV7jZhJe0uwj
+         D7/88+sRDcsEBNGhyXmyNH+7YOCWBhx/eZzFeXUNzOGLdY6IC6qdHeEUkiJHlOB6Gwra
+         GdTuZD7g3je95pfhEfx1JcxdpDXlcWltAR7Ee+ds+OMGi//Z4gcnAMaUhQJC1HGQaph7
+         dEPq5w1vlN7W+VAW4vOb98KOV6oiPUI5JKqf73jjLGpAPNN2U3HEHrKKTljnzZpeXjWo
+         gfPxpjk8DhvWwK0MARq5C1h19h5ndILYWjL9TztT1vktf2Lbes5U1vNWG0GL9xDquEdW
+         uY3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m5LJs8OCYtoiaa1WpPfPHy0Im1CBN5FUEi59T95x5pc=;
-        b=tpEFTzeIsOcmb5tR7DQeQ5O+lw0xgki6a01igMAfIhNwS5mIFaqyF+rhJw1Y5uXKtb
-         /SHPMCFcvUUgqk2uwQ4Pmngxog5PtOtNqjHkXr4Kd4kD/VeUyBlAdilcwHStfErD0yHu
-         azuH4t63acNNIM+fB+vwldwIX5lQFHhh2oHDRkIA255+r1lsKuXPkGLqoTTs8q26XhXN
-         wo5QdXkM0539O+d9c45PdVr1Dut2CkzKArM78damoftAFczayQhVU/OEBF8B+1S3U2xk
-         npbaqn+55NtUeHCUofJD00o6oLXjdf458fUQZHd+/DkRpGVW4SpnSFkJxa5A9ZcXbp3k
-         x/Yg==
-X-Gm-Message-State: AGi0PuZqXTpYtOnwzDTuCRxzqgMhkEMXhEA5aNdI4KNZ9f2VohpJIblO
-        lFK2FcdudDXIxSPvxy8+ek7W8zCepgkgQtlC3PgkRg==
-X-Google-Smtp-Source: APiQypLydPr6JvsK2/NbSFiLQXuQvJ5NYLXM2YJSn85HubMHn3f0qcFO5pPoewrLCssR788jtB1qnOIs4T5PbyPsNfI=
-X-Received: by 2002:a9d:3988:: with SMTP id y8mr15530511otb.352.1587532178717;
- Tue, 21 Apr 2020 22:09:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <CALAqxLW2R4d=Zm=TKbFprN-uYrerL1oCYsVC3VedEKtW0gCsyA@mail.gmail.com>
- <877dyfsv00.fsf@kernel.org> <CALAqxLUdzKRV6nrcLpWsykK+WPnqhUK4iwRe4_Xmo-TvEV5KOg@mail.gmail.com>
-In-Reply-To: <CALAqxLUdzKRV6nrcLpWsykK+WPnqhUK4iwRe4_Xmo-TvEV5KOg@mail.gmail.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Tue, 21 Apr 2020 22:09:27 -0700
-Message-ID: <CALAqxLWEdHrsU+efgsp2EHsgNGA8n7SE16XNnZHcfXjdM4v-WQ@mail.gmail.com>
-Subject: Re: More dwc3 gadget issues with adb
-To:     Felipe Balbi <balbi@kernel.org>
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=8wMite28CxNe4/9pqzhlBHCV6MZvYc1qSikiSwQiv+s=;
+        b=RZynelq8v5YKEAPU08MPlQxSajlD+cYdVP3zixvEBc+JUegc5/lDc9UlfhTLKRgtWo
+         v+7H5x/9FMRxAaDe/SB1TxIrY09dAndDZ4kclvwTmfciSgZD+05KjkvubfPudKmW7wZT
+         PQ47GfGYNc9zoFH5wCvOBRpEt6wmhPlMg0Q23O4d8010YCvrMTRrZ+LxoGoZDXQgGCMO
+         1ONe4h3m63PjpaOFxBFwL1hGIxNeOZgUAHlnQf7v+e+NAi0A7l4HlP75ZMxw1mHbTgvX
+         X8PlA2dtDkGl69cxZ15hqzkkahn1YKXFvtzmOH+J8S1rV1VO+BsLFfR4bt41/N8V35cB
+         bqTA==
+X-Gm-Message-State: AGi0PubTsgM3BK7Wq4hf0Q7BNuhSGrQCefXPL77Fg3CxepAlP1YDqPHi
+        UN6iFGrqNJh0vQU+pDPwC/O+E6mo
+X-Google-Smtp-Source: APiQypJBcznuyvynH9gk3++Kig9KC2Xf0zB76ONcidzmQDcyu8/CU3hAkN2qAlcVInW5F6eSQXLjXw==
+X-Received: by 2002:a2e:97d3:: with SMTP id m19mr583425ljj.136.1587535210832;
+        Tue, 21 Apr 2020 23:00:10 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id u21sm3397040ljo.61.2020.04.21.23.00.08
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 21 Apr 2020 23:00:09 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     John Stultz <john.stultz@linaro.org>
 Cc:     Josh Gao <jmgao@google.com>, YongQin Liu <yongqin.liu@linaro.org>,
         Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
         Yang Fei <fei.yang@intel.com>,
@@ -62,18 +59,31 @@ Cc:     Josh Gao <jmgao@google.com>, YongQin Liu <yongqin.liu@linaro.org>,
         Greg KH <gregkh@linuxfoundation.org>,
         Linux USB List <linux-usb@vger.kernel.org>,
         lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: More dwc3 gadget issues with adb
+In-Reply-To: <CALAqxLUdzKRV6nrcLpWsykK+WPnqhUK4iwRe4_Xmo-TvEV5KOg@mail.gmail.com>
+References: <CALAqxLW2R4d=Zm=TKbFprN-uYrerL1oCYsVC3VedEKtW0gCsyA@mail.gmail.com> <877dyfsv00.fsf@kernel.org> <CALAqxLUdzKRV6nrcLpWsykK+WPnqhUK4iwRe4_Xmo-TvEV5KOg@mail.gmail.com>
+Date:   Wed, 22 Apr 2020 09:00:05 +0300
+Message-ID: <87blnkcb6i.fsf@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 21, 2020 at 9:38 PM John Stultz <john.stultz@linaro.org> wrote:
->
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
+
+Hi,
+
+John Stultz <john.stultz@linaro.org> writes:
 > On Thu, Apr 16, 2020 at 1:19 AM Felipe Balbi <balbi@kernel.org> wrote:
-> > One thing I noticed is that we're missing a giveback on ep1out. Here's a
-> > working case:
-> >
+>> One thing I noticed is that we're missing a giveback on ep1out. Here's a
+>> working case:
+>>
 >
 > Hey Felipe,
 >   So I found some time to dig around on this today and I started
@@ -84,15 +94,19 @@ On Tue, Apr 21, 2020 at 9:38 PM John Stultz <john.stultz@linaro.org> wrote:
 > where pending_sgs is more than one.
 >
 > We call dwc3_prepare_one_trb_sg() on it:
->   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/dwc3/gadget.c?h=v5.7-rc2#n1068
+>   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/drivers/usb/dwc3/gadget.c?h=3Dv5.7-rc2#n1068
 >
 > And we process the sg list incrementing req->num_queued_sgs for each one.
 >
-> then later, dwc3_gadget_ep_cleanup_completed_request() is called on the request:
->   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/dwc3/gadget.c?h=v5.7-rc2#n2522
+> then later, dwc3_gadget_ep_cleanup_completed_request() is called on the r=
+equest:
+>   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/drivers/usb/dwc3/gadget.c?h=3Dv5.7-rc2#n2522
 >
 > We call dwc3_gadget_ep_reclaim_trb_sg()
->   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/dwc3/gadget.c?h=v5.7-rc2#n2470
+>   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/drivers/usb/dwc3/gadget.c?h=3Dv5.7-rc2#n2470
 >
 > Where we iterate over the req->sg, ideally decrementing
 > num_pending_sgs each time and return.
@@ -102,7 +116,10 @@ On Tue, Apr 21, 2020 at 9:38 PM John Stultz <john.stultz@linaro.org> wrote:
 >   if (!dwc3_gadget_ep_request_completed(req) ||
 >       req->num_pending_sgs) {
 > case which causes us to skip the call to dwc3_gadget_giveback().
->
+
+This logic was modified recently. Can you check if today's linus/master
+works for you?
+
 > Looking as to why the num_pending_sgs is non zero, that's because in
 > dwc3_gadget_ep_reclaim_trb_sg we're hitting the case where the trb has
 > the DWC3_TRB_CTRL_HWO ctrl flag set, which breaks us out of the loop
@@ -110,53 +127,62 @@ On Tue, Apr 21, 2020 at 9:38 PM John Stultz <john.stultz@linaro.org> wrote:
 >
 > For that trb, we're setting the HWO flag in __dwc3_prepare_one_trb()
 > (called from dwc3_prepare_one_trb_sg() back at the beginning):
->   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/dwc3/gadget.c?h=v5.7-rc2#n921
+>   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/drivers/usb/dwc3/gadget.c?h=3Dv5.7-rc2#n921
 >
 > I added logic showing every time we set or clear that flag, and it
 > seems like we're always setting it but never clearing it. And often
+
+HW clears HWO flag. We only have to manually clear in one or two cases.
+
 > that's not an issue as we only have one sg entry. But if its set on a
 > trb in a request with multiple sgs, that's where it seems to be
 > causing the issue.
+
+The issue is completing with HWO set, which should never happen. Can you
+collect tracepoints with linus/master of this particular situation?
+
+>> One interesting thing is that TRB addresses are "odd". I can't find a
+>> proper lifetime for these TRBs. Do you have IOMMU enabled? Can you run
+>> without it? For example, nowhere in the log can I find the place where
+>> trb 0000000092deef41 was first enqueue. I'm assuming the log to be
+>> ordered, which means that trb is the same as 00000000f3db4076. But why
+>> are the addresses different?
+>>
+>> Another weird thing is that even though we CHN bit being set in
+>> 0000000092deef41, we don't see where the second trb (the one its chained
+>> to) was prepared. It seems like it was *never* prepared, what gives?
 >
-> I'll continue to dig around to try to understand where it might be
-> going awry (why we never clear the HWO flag). But figured I'd try to
-> explain this much in case it rings any bells to you.
+> I suspect these bits were due to the tracing happening after some
+> minor amount of initial adb traffic began at bootup? So the trace
+> isn't capturing all the events.
 
-I was looking some more at this and it seems a little odd...
+No, no. That's more likely to be IOMMU mucking up the addresses. ADB is
+very sequential in its behavior and USB transfers requests in
+order. Please run linus/master without IOMMU.
 
-In dwc3_gadget_ep_reclaim_trb_sg():
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/dwc3/gadget.c?h=v5.7-rc2#n2470
+cheers
 
-The check for (trb->ctrl & DWC3_TRB_CTRL_HWO) which breaks us out of
-the loop happens before we call
-dwc3_gadget_ep_reclaim_completed_trb():
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/dwc3/gadget.c?h=v5.7-rc2#n2406
+=2D-=20
+balbi
 
-Which is what clears the DWC3_TRB_CTRL_HWO flag (outside of
-dwc3_gadget_ep_skip_trbs()).
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
-So on a whim I dropped that check, and things go back to working on
-HiKey960, no more adb stalls!
+-----BEGIN PGP SIGNATURE-----
 
-Does something like this make sense? It's not causing trouble on
-db845c either so far in my testing.
-
-thanks
--john
-
-(sorry gmail will whitespace corrupt this code paste - just want to
-communicate what I did clearly, not to apply)
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 4d3c79d90a6e..2a26d33520ce 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2457,9 +2457,6 @@ static int dwc3_gadget_ep_reclaim_trb_sg(struct
-dwc3_ep *dep,
-        for_each_sg(sg, s, pending, i) {
-                trb = &dep->trb_pool[dep->trb_dequeue];
-
--               if (trb->ctrl & DWC3_TRB_CTRL_HWO)
--                       break;
--
-                req->sg = sg_next(s);
-                req->num_pending_sgs--;
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6f3WUACgkQzL64meEa
+mQZdyQ//R324qRyXNq8MYvp3qnlSGkCmXCbzy6OKz3lx25FvUYXMBfnCTvfjCJAV
+MuDNe3mqC8EA+ubqORcmFgshfLpLbXZUTkZD40rqbyP7BgN3xtbxwE3wD0ObNe0J
+EY8eY9lwCKkjylTsUQn+3AiRRuxF3RcKPoTwuQOIbuR1MOUltGfgrFhQnGuaITrn
+8CD5q5Ij45LpPUYdFZ+fCB+NQLYoKjau6ATbFUo4vqkxekBQM1CA9+NnYM9nronM
+UwyM1USl7YU9nSWDwr+3pUFgO/Wv3OWe1beVMR+M+jPZ4cm8j/ABld3xnYXK7RsD
+/qKgXslcPGIDefmD+TLXOfw+wzOs0f72yaWWaIaxS/mBeGLiI0bCc1WnXfc+JHGt
+2fpFN9ut6s+l7AdeOVd2Xz+FhmOjSyPMCw3QcYp5EYhku7Ebf+dGzfsSecZ1TYnf
+iwoJOIQCR/Ij2nU07ZCtGXHLpH0XB/RXLu5B6pGCmhkTD0BRHypwHuPtTX4TYrqx
+ncjWl0zT4bRwejoN7nc6IVD5T8AFwceRbY50IigGTjHhjM7TLTt2doDo8bTROnrQ
+XjHzFQXtHtHIHjeSUlBG81XZWFR9yafczP7op//YGPxoATK5bel2L2ZKmlsZ8400
+NHivJbppwKkEWH7zvrGli/1Sg2OFZYueRu+F/BWy2cxpcAI9Eiw=
+=oteR
+-----END PGP SIGNATURE-----
+--=-=-=--
