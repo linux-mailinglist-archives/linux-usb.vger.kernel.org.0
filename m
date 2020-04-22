@@ -2,76 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C68491B38EF
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2020 09:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D4E21B395E
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2020 09:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726485AbgDVH2D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Apr 2020 03:28:03 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:43961 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725899AbgDVH2C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Apr 2020 03:28:02 -0400
-Received: by mail-lj1-f196.google.com with SMTP id l19so1139429lje.10;
-        Wed, 22 Apr 2020 00:28:01 -0700 (PDT)
+        id S1726648AbgDVHtF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Apr 2020 03:49:05 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:43728 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726465AbgDVHtE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Apr 2020 03:49:04 -0400
+Received: by mail-lj1-f193.google.com with SMTP id l19so1196734lje.10;
+        Wed, 22 Apr 2020 00:49:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HehvquyX/BRzMPyeN0mYBmeTubyfIaQMMH5cFq5I5DI=;
-        b=bmAqYHk8ujHz5xmp3geIJW/OrOZwFI1NQy587cIaT0i29v8Ua4SSe9l2+vUJ9bkq+9
-         I4vhIeLZDDH+/f14sUk3vQswcqkp4jJqqAdjs8nJrMhiZdC/x3gfLZsOzK3bqOYjg60g
-         ypal/SFqXVBm8IYpWJzH8cY9VUeFMEyCkIN4bnjxAvPDPrY3zjg3HPPNayUpMsGETmTu
-         yhjtUdtfnep/rdLgayzr79CprOdbO7XwYxyogMf7+gmJBQtadDjAHWeb7TBOOpMztrEq
-         Yn5xMdhwqaaoIz5CLSIHvlV1PlqwsobpDjKmlE9GJ8dLltoq+t6O/8dMHwmngwwUt5/y
-         VeQQ==
-X-Gm-Message-State: AGi0PuanC9NH9uTODRDI8uekT4YUNGRgRuLZQHGaLr/SqvIzjZAgIZ8q
-        6EU7nE/KOs8yvNOSlJcnWvuHg6I5
-X-Google-Smtp-Source: APiQypJWmeXOxbThP7lWWVqPFUutfBaFXA4CkU9Kv4i4mhtLv4m4EStWy0F4xu8GROYXPUuiTIyd7Q==
-X-Received: by 2002:a2e:700a:: with SMTP id l10mr3615795ljc.88.1587540480435;
-        Wed, 22 Apr 2020 00:28:00 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=epLkk574xfUuwBYwyvkq3l716pcv348uQ4qJKUQHi4U=;
+        b=QQmRpP8qUwwXXpYQHOlJPCrw9P+RsiQtId6ba1aS5qRY7JJhXBvtwxOiY3/hywH4/n
+         J6dWHLnEGTtgKn4d7N49qpZq0kQYqsO05tcRzFXF2RPfIWvIYL6CwL+hZ9IxnnnnoqIS
+         5u4LkHiMvy5CZDtoS+qSYrMbCh5B9YIUWhUCcMH4YZX6nd1RscYOgP6Rr8piB58B4UKL
+         ECKt8xAFK38PsgCdcexqCJzIfKCyliD3wYlSa9Lgr01bGxVrO7zIq0CjP4NYzuQOvSHr
+         sFGopWDZGs3VDU3q0NPwla/apvDKDLzvhIdckB+v95CiUfyI2QMG+ZQZsHj0xiBp3VdQ
+         62rg==
+X-Gm-Message-State: AGi0PuaMdhVCGB/Et0pBCiTS1qz3OF+GMhAHOFPw5I+ZXpmuXaAZ1zxW
+        VS5dR9czyin5TQza9xFPXrOPghaT
+X-Google-Smtp-Source: APiQypIiUoAOJBfWMzQsrwByW5AXVw1jusi/WALzJ+lUAL5lDZ8V+Sd50eIz7PgI1BH+IjrTkUeSpQ==
+X-Received: by 2002:a2e:b53b:: with SMTP id z27mr11767732ljm.114.1587541741978;
+        Wed, 22 Apr 2020 00:49:01 -0700 (PDT)
 Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id t24sm4310317lfk.90.2020.04.22.00.27.59
+        by smtp.gmail.com with ESMTPSA id u13sm3872384lji.27.2020.04.22.00.49.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Apr 2020 00:27:59 -0700 (PDT)
+        Wed, 22 Apr 2020 00:49:01 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.92.3)
         (envelope-from <johan@kernel.org>)
-        id 1jR9ni-0003kI-GT; Wed, 22 Apr 2020 09:28:06 +0200
-Date:   Wed, 22 Apr 2020 09:28:06 +0200
+        id 1jRA84-0006dZ-5Z; Wed, 22 Apr 2020 09:49:08 +0200
+Date:   Wed, 22 Apr 2020 09:49:08 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Nishad Kamdar <nishadkamdar@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Joe Perches <joe@perches.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: Use the correct style for SPDX License
- Identifier
-Message-ID: <20200422072806.GH18608@localhost>
-References: <20200419130603.GA5763@nishad>
+To:     Jason Yan <yanaijie@huawei.com>
+Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: garmin_gps: remove some defined but not
+ used variables
+Message-ID: <20200422074908.GJ18608@localhost>
+References: <20200409085143.46078-1-yanaijie@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200419130603.GA5763@nishad>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200409085143.46078-1-yanaijie@huawei.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Apr 19, 2020 at 06:36:07PM +0530, Nishad Kamdar wrote:
-> This patch corrects the SPDX License Identifier style in
-> header files related to USB Serial device configuration.
-> For C header files Documentation/process/license-rules.rst
-> mandates C-like comments (opposed to C source files where
-> C++ style should be used).
+On Thu, Apr 09, 2020 at 04:51:43PM +0800, Jason Yan wrote:
+> Fix the following gcc warning:
 > 
-> Changes made by using a script provided by Joe Perches here:
-> https://lkml.org/lkml/2019/2/7/46.
+> drivers/usb/serial/garmin_gps.c:192:28: warning: ‘PRIVATE_REQ’ defined
+> but not used [-Wunused-const-variable=]
+>  static unsigned char const PRIVATE_REQ[]
+>                             ^~~~~~~~~~~
+> drivers/usb/serial/garmin_gps.c:186:28: warning: ‘GARMIN_STOP_PVT_REQ’
+> defined but not used [-Wunused-const-variable=]
+>  static unsigned char const GARMIN_STOP_PVT_REQ[]
+>                             ^~~~~~~~~~~~~~~~~~~
+> drivers/usb/serial/garmin_gps.c:184:28: warning: ‘GARMIN_START_PVT_REQ’
+> defined but not used [-Wunused-const-variable=]
+>  static unsigned char const GARMIN_START_PVT_REQ[]
+>                             ^~~~~~~~~~~~~~~~~~~~
+> drivers/usb/serial/garmin_gps.c:182:28: warning:
+> ‘GARMIN_APP_LAYER_REPLY’ defined but not used [-Wunused-const-variable=]
+>  static unsigned char const GARMIN_APP_LAYER_REPLY[]
+>                             ^~~~~~~~~~~~~~~~~~~~~~
 > 
-> Suggested-by: Joe Perches <joe@perches.com>
-> Signed-off-by: Nishad Kamdar <nishadkamdar@gmail.com>
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Jason Yan <yanaijie@huawei.com>
 
-Applied for -next, thanks.
+You should mention that this is a W=1 one warning which isn't enabled
+by default.
+
+> ---
+>  drivers/usb/serial/garmin_gps.c | 9 ---------
+>  1 file changed, 9 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/garmin_gps.c b/drivers/usb/serial/garmin_gps.c
+> index ffd984142171..3b39d1e39fbf 100644
+> --- a/drivers/usb/serial/garmin_gps.c
+> +++ b/drivers/usb/serial/garmin_gps.c
+> @@ -179,19 +179,10 @@ static unsigned char const GARMIN_START_SESSION_REPLY[]
+>  	= { 0, 0, 0, 0,  6, 0, 0, 0, 4, 0, 0, 0 };
+>  static unsigned char const GARMIN_BULK_IN_AVAIL_REPLY[]
+>  	= { 0, 0, 0, 0,  2, 0, 0, 0, 0, 0, 0, 0 };
+> -static unsigned char const GARMIN_APP_LAYER_REPLY[]
+> -	= { 0x14, 0, 0, 0 };
+> -static unsigned char const GARMIN_START_PVT_REQ[]
+> -	= { 20, 0, 0, 0,  10, 0, 0, 0, 2, 0, 0, 0, 49, 0 };
+> -static unsigned char const GARMIN_STOP_PVT_REQ[]
+> -	= { 20, 0, 0, 0,  10, 0, 0, 0, 2, 0, 0, 0, 50, 0 };
+>  static unsigned char const GARMIN_STOP_TRANSFER_REQ[]
+>  	= { 20, 0, 0, 0,  10, 0, 0, 0, 2, 0, 0, 0, 0, 0 };
+>  static unsigned char const GARMIN_STOP_TRANSFER_REQ_V2[]
+>  	= { 20, 0, 0, 0,  10, 0, 0, 0, 1, 0, 0, 0, 0 };
+> -static unsigned char const PRIVATE_REQ[]
+> -	=    { 0x4B, 0x6E, 0x10, 0x01,  0xFF, 0, 0, 0, 0xFF, 0, 0, 0 };
+> -
+
+I'm reluctant to simply remove these as they document the protocol
+without any real downsides besides the W=1 warning.
 
 Johan
