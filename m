@@ -2,28 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB651B4E44
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2020 22:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6DE1B4E39
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2020 22:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726151AbgDVUTv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Apr 2020 16:19:51 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:34882 "HELO
+        id S1726173AbgDVUO6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Apr 2020 16:14:58 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:34856 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726087AbgDVUTv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Apr 2020 16:19:51 -0400
-Received: (qmail 11295 invoked by uid 2102); 22 Apr 2020 16:13:08 -0400
+        with SMTP id S1726109AbgDVUO6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Apr 2020 16:14:58 -0400
+X-Greylist: delayed 306 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 Apr 2020 16:14:58 EDT
+Received: (qmail 11303 invoked by uid 2102); 22 Apr 2020 16:14:57 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 22 Apr 2020 16:13:08 -0400
-Date:   Wed, 22 Apr 2020 16:13:08 -0400 (EDT)
+  by localhost with SMTP; 22 Apr 2020 16:14:57 -0400
+Date:   Wed, 22 Apr 2020 16:14:57 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
 To:     Greg KH <greg@kroah.com>
-cc:     William Bader <williambader@hotmail.com>,
-        Zeng Tao <prime.zeng@hisilicon.com>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: [PATCH] USB: hub: Revert commit bd0e6c9614b9 ("usb: hub: try old
- enumeration scheme first for high speed devices")
-Message-ID: <Pine.LNX.4.44L0.2004221611230.11262-100000@iolanthe.rowland.org>
+cc:     Cyril Roelandt <tipecaml@gmail.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        USB Storage list <usb-storage@lists.one-eyed-alien.net>
+Subject: [PATCH] usb-storage: Add unusual_devs entry for JMicron JMS566
+Message-ID: <Pine.LNX.4.44L0.2004221613110.11262-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -31,73 +31,47 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit bd0e6c9614b9 ("usb: hub: try old enumeration scheme first for
-high speed devices") changed the way the hub driver enumerates
-high-speed devices.  Instead of using the "new" enumeration scheme
-first and switching to the "old" scheme if that doesn't work, we start
-with the "old" scheme.  In theory this is better because the "old"
-scheme is slightly faster -- it involves resetting the device only
-once instead of twice.
+Cyril Roelandt reports that his JMicron JMS566 USB-SATA bridge fails
+to handle WRITE commands with the FUA bit set, even though it claims
+to support FUA.  (Oddly enough, a later version of the same bridge,
+version 2.03 as opposed to 1.14, doesn't claim to support FUA.  Also
+oddly, the bridge _does_ support FUA when using the UAS transport
+instead of the Bulk-Only transport -- but this device was blacklisted
+for uas in commit bc3bdb12bbb3 ("usb-storage: Disable UAS on JMicron
+SATA enclosure") for apparently unrelated reasons.)
 
-However, for a long time Windows used only the "new" scheme.  Zeng Tao
-said that Windows 8 and later use the "old" scheme for high-speed
-devices, but apparently there are some devices that don't like it.
-William Bader reports that the Ricoh webcam built into his Sony Vaio
-laptop not only doesn't enumerate under the "old" scheme, it gets hung
-up so badly that it won't then enumerate under the "new" scheme!  Only
-a cold reset will fix it.
+This patch adds a usb-storage unusual_devs entry with the BROKEN_FUA
+flag.  This allows the bridge to work properly with usb-storage.
 
-Therefore we will revert the commit and go back to trying the "new"
-scheme first for high-speed devices.
-
-Reported-and-tested-by: William Bader <williambader@hotmail.com>
-Ref: https://bugzilla.kernel.org/show_bug.cgi?id=207219
+Reported-and-tested-by: Cyril Roelandt <tipecaml@gmail.com>
 Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Reverts: bd0e6c9614b9 ("usb: hub: try old enumeration scheme first for high speed devices")
-CC: Zeng Tao <prime.zeng@hisilicon.com>
 CC: <stable@vger.kernel.org>
 
 ---
 
 
-[as1933]
+[as1934]
 
 
- Documentation/admin-guide/kernel-parameters.txt |    3 +--
- drivers/usb/core/hub.c                          |    4 +---
- 2 files changed, 2 insertions(+), 5 deletions(-)
+ drivers/usb/storage/unusual_devs.h |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Index: usb-devel/Documentation/admin-guide/kernel-parameters.txt
+Index: usb-devel/drivers/usb/storage/unusual_devs.h
 ===================================================================
---- usb-devel.orig/Documentation/admin-guide/kernel-parameters.txt
-+++ usb-devel/Documentation/admin-guide/kernel-parameters.txt
-@@ -5081,8 +5081,7 @@
+--- usb-devel.orig/drivers/usb/storage/unusual_devs.h
++++ usb-devel/drivers/usb/storage/unusual_devs.h
+@@ -2317,6 +2317,13 @@ UNUSUAL_DEV(  0x3340, 0xffff, 0x0000, 0x
+ 		USB_SC_DEVICE,USB_PR_DEVICE,NULL,
+ 		US_FL_MAX_SECTORS_64 ),
  
- 	usbcore.old_scheme_first=
- 			[USB] Start with the old device initialization
--			scheme,  applies only to low and full-speed devices
--			 (default 0 = off).
-+			scheme (default 0 = off).
- 
- 	usbcore.usbfs_memory_mb=
- 			[USB] Memory limit (in MB) for buffers allocated by
-Index: usb-devel/drivers/usb/core/hub.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hub.c
-+++ usb-devel/drivers/usb/core/hub.c
-@@ -2724,13 +2724,11 @@ static bool use_new_scheme(struct usb_de
- {
- 	int old_scheme_first_port =
- 		port_dev->quirks & USB_PORT_QUIRK_OLD_SCHEME;
--	int quick_enumeration = (udev->speed == USB_SPEED_HIGH);
- 
- 	if (udev->speed >= USB_SPEED_SUPER)
- 		return false;
- 
--	return USE_NEW_SCHEME(retry, old_scheme_first_port || old_scheme_first
--			      || quick_enumeration);
-+	return USE_NEW_SCHEME(retry, old_scheme_first_port || old_scheme_first);
- }
- 
- /* Is a USB 3.0 port in the Inactive or Compliance Mode state?
++/* Reported by Cyril Roelandt <tipecaml@gmail.com> */
++UNUSUAL_DEV(  0x357d, 0x7788, 0x0114, 0x0114,
++		"JMicron",
++		"USB to ATA/ATAPI Bridge",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_BROKEN_FUA ),
++
+ /* Reported by Andrey Rahmatullin <wrar@altlinux.org> */
+ UNUSUAL_DEV(  0x4102, 0x1020, 0x0100,  0x0100,
+ 		"iRiver",
 
