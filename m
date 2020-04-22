@@ -2,26 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D77231B4E3D
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2020 22:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB651B4E44
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2020 22:19:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726271AbgDVUQc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Apr 2020 16:16:32 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:34864 "HELO
+        id S1726151AbgDVUTv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Apr 2020 16:19:51 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:34882 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726090AbgDVUQc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Apr 2020 16:16:32 -0400
-Received: (qmail 11275 invoked by uid 2102); 22 Apr 2020 16:09:51 -0400
+        with SMTP id S1726087AbgDVUTv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Apr 2020 16:19:51 -0400
+Received: (qmail 11295 invoked by uid 2102); 22 Apr 2020 16:13:08 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 22 Apr 2020 16:09:51 -0400
-Date:   Wed, 22 Apr 2020 16:09:51 -0400 (EDT)
+  by localhost with SMTP; 22 Apr 2020 16:13:08 -0400
+Date:   Wed, 22 Apr 2020 16:13:08 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
 To:     Greg KH <greg@kroah.com>
-cc:     Paul Zimmerman <pauldzim@gmail.com>,
+cc:     William Bader <williambader@hotmail.com>,
+        Zeng Tao <prime.zeng@hisilicon.com>,
         USB list <linux-usb@vger.kernel.org>
-Subject: [PATCH] USB: hub: Fix handling of connect changes during sleep
-Message-ID: <Pine.LNX.4.44L0.2004221602480.11262-100000@iolanthe.rowland.org>
+Subject: [PATCH] USB: hub: Revert commit bd0e6c9614b9 ("usb: hub: try old
+ enumeration scheme first for high speed devices")
+Message-ID: <Pine.LNX.4.44L0.2004221611230.11262-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -29,78 +31,73 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit 8099f58f1ecd ("USB: hub: Don't record a connect-change event
-during reset-resume") wasn't very well conceived.  The problem it
-tried to fix was that if a connect-change event occurred while the
-system was asleep (such as a device disconnecting itself from the bus
-when it is suspended and then reconnecting when it resumes)
-requiring a reset-resume during the system wakeup transition, the hub
-port's change_bit entry would remain set afterward.  This would cause
-the hub driver to believe another connect-change event had occurred
-after the reset-resume, which was wrong and would lead the driver to
-send unnecessary requests to the device (which could interfere with a
-firmware update).
+Commit bd0e6c9614b9 ("usb: hub: try old enumeration scheme first for
+high speed devices") changed the way the hub driver enumerates
+high-speed devices.  Instead of using the "new" enumeration scheme
+first and switching to the "old" scheme if that doesn't work, we start
+with the "old" scheme.  In theory this is better because the "old"
+scheme is slightly faster -- it involves resetting the device only
+once instead of twice.
 
-The commit tried to fix this by not setting the change_bit during the
-wakeup.  But this was the wrong thing to do; it means that when a
-device is unplugged while the system is asleep, the hub driver doesn't
-realize anything has happened: The change_bit flag which would tell it
-to handle the disconnect event is clear.
+However, for a long time Windows used only the "new" scheme.  Zeng Tao
+said that Windows 8 and later use the "old" scheme for high-speed
+devices, but apparently there are some devices that don't like it.
+William Bader reports that the Ricoh webcam built into his Sony Vaio
+laptop not only doesn't enumerate under the "old" scheme, it gets hung
+up so badly that it won't then enumerate under the "new" scheme!  Only
+a cold reset will fix it.
 
-The commit needs to be reverted and the problem fixed in a different
-way.  Fortunately an alternative solution was noted in the commit's
-Changelog: We can continue to set the change_bit entry in
-hub_activate() but then clear it when a reset-resume occurs.  That way
-the the hub driver will see the change_bit when a device is
-disconnected but won't see it when the device is still present.
+Therefore we will revert the commit and go back to trying the "new"
+scheme first for high-speed devices.
 
-That's what this patch does.
-
-Reported-and-tested-by: Peter Chen <peter.chen@nxp.com>
+Reported-and-tested-by: William Bader <williambader@hotmail.com>
+Ref: https://bugzilla.kernel.org/show_bug.cgi?id=207219
 Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Fixes: 8099f58f1ecd ("USB: hub: Don't record a connect-change event during reset-resume")
-Tested-by: Paul Zimmerman <pauldzim@gmail.com>
+Reverts: bd0e6c9614b9 ("usb: hub: try old enumeration scheme first for high speed devices")
+CC: Zeng Tao <prime.zeng@hisilicon.com>
 CC: <stable@vger.kernel.org>
 
 ---
 
 
-[as1932]
+[as1933]
 
 
- drivers/usb/core/hub.c |   14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ Documentation/admin-guide/kernel-parameters.txt |    3 +--
+ drivers/usb/core/hub.c                          |    4 +---
+ 2 files changed, 2 insertions(+), 5 deletions(-)
 
+Index: usb-devel/Documentation/admin-guide/kernel-parameters.txt
+===================================================================
+--- usb-devel.orig/Documentation/admin-guide/kernel-parameters.txt
++++ usb-devel/Documentation/admin-guide/kernel-parameters.txt
+@@ -5081,8 +5081,7 @@
+ 
+ 	usbcore.old_scheme_first=
+ 			[USB] Start with the old device initialization
+-			scheme,  applies only to low and full-speed devices
+-			 (default 0 = off).
++			scheme (default 0 = off).
+ 
+ 	usbcore.usbfs_memory_mb=
+ 			[USB] Memory limit (in MB) for buffers allocated by
 Index: usb-devel/drivers/usb/core/hub.c
 ===================================================================
 --- usb-devel.orig/drivers/usb/core/hub.c
 +++ usb-devel/drivers/usb/core/hub.c
-@@ -1219,6 +1219,11 @@ static void hub_activate(struct usb_hub
- #ifdef CONFIG_PM
- 			udev->reset_resume = 1;
- #endif
-+			/* Don't set the change_bits when the device
-+			 * was powered off.
-+			 */
-+			if (test_bit(port1, hub->power_bits))
-+				set_bit(port1, hub->change_bits);
+@@ -2724,13 +2724,11 @@ static bool use_new_scheme(struct usb_de
+ {
+ 	int old_scheme_first_port =
+ 		port_dev->quirks & USB_PORT_QUIRK_OLD_SCHEME;
+-	int quick_enumeration = (udev->speed == USB_SPEED_HIGH);
  
- 		} else {
- 			/* The power session is gone; tell hub_wq */
-@@ -3084,6 +3089,15 @@ static int check_port_resume_type(struct
- 		if (portchange & USB_PORT_STAT_C_ENABLE)
- 			usb_clear_port_feature(hub->hdev, port1,
- 					USB_PORT_FEAT_C_ENABLE);
-+
-+		/*
-+		 * Whatever made this reset-resume necessary may have
-+		 * turned on the port1 bit in hub->change_bits.  But after
-+		 * a successful reset-resume we want the bit to be clear;
-+		 * if it was on it would indicate that something happened
-+		 * following the reset-resume.
-+		 */
-+		clear_bit(port1, hub->change_bits);
- 	}
+ 	if (udev->speed >= USB_SPEED_SUPER)
+ 		return false;
  
- 	return status;
+-	return USE_NEW_SCHEME(retry, old_scheme_first_port || old_scheme_first
+-			      || quick_enumeration);
++	return USE_NEW_SCHEME(retry, old_scheme_first_port || old_scheme_first);
+ }
+ 
+ /* Is a USB 3.0 port in the Inactive or Compliance Mode state?
 
