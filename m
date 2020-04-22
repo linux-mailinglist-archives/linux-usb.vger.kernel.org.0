@@ -2,141 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71D291B462D
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2020 15:25:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED161B4636
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Apr 2020 15:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726498AbgDVNZk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Apr 2020 09:25:40 -0400
-Received: from mga06.intel.com ([134.134.136.31]:52936 "EHLO mga06.intel.com"
+        id S1726670AbgDVN1G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Apr 2020 09:27:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59582 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726046AbgDVNZj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 Apr 2020 09:25:39 -0400
-IronPort-SDR: BZTOr5yHO6xFxIvmyoUUamZUma9RjicwZw1uqHK5s6cWYRiMRZYIPIKBMGJ+lshTxr2/3fTzTg
- l3zfF4De3vcQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2020 06:25:36 -0700
-IronPort-SDR: 5XwFaHAwWBlz44Bg71dCR324era1xaQ63FmncVqiRy/B1JLy4DqD237M6Cg9uQyMN7gPhZAemr
- 6UCEAIgP+AnQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,414,1580803200"; 
-   d="scan'208";a="365675280"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 22 Apr 2020 06:25:34 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 22 Apr 2020 16:25:33 +0300
-Date:   Wed, 22 Apr 2020 16:25:33 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Adding tps65986 to your tps6598x driver
-Message-ID: <20200422132533.GC618654@kuha.fi.intel.com>
-References: <d4a9214a-7a55-72ea-75b9-8388bc39d0dd@linaro.org>
- <20200414151505.GK2828150@kuha.fi.intel.com>
- <d64d7b21-4f03-05e8-e0db-aa8c75ba847e@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d64d7b21-4f03-05e8-e0db-aa8c75ba847e@linaro.org>
+        id S1726335AbgDVN1F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 Apr 2020 09:27:05 -0400
+Received: from localhost (unknown [137.135.114.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id F23272077D;
+        Wed, 22 Apr 2020 13:27:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587562024;
+        bh=EStC+e224USPml60fEuabjPmVmE23vZuJdCyYb6bp6U=;
+        h=Date:From:To:To:To:Cc:Cc:cc:Cc:Subject:In-Reply-To:References:
+         From;
+        b=m/2kehT1L2uLP8M9Xh+P2Hj40NBBWfHn7zd9WtiaW6mqq290LZzkLK9y7qpPLfbPM
+         7jy+kQkj870lXmHbkRfABlQ8wVLAwaks+1vcUp6HH1KSCBy9eA1P55Hp+MA/vn3/r0
+         vhTyGnTE679W/YIB4IfyYYgL6ApQagvCyuezfAto=
+Date:   Wed, 22 Apr 2020 13:27:03 +0000
+From:   Sasha Levin <sashal@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>
+Cc:     <stable@vger.kernel.org>
+cc:     Jeremy Compostella <jeremy.compostella@intel.com>
+Cc:     stable@vger.kernel.org
+Subject: Re: [PATCH 1/3] xhci: Fix handling halted endpoint even if endpoint ring appears empty
+In-Reply-To: <20200421140822.28233-2-mathias.nyman@linux.intel.com>
+References: <20200421140822.28233-2-mathias.nyman@linux.intel.com>
+Message-Id: <20200422132703.F23272077D@mail.kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-+linux-usb ml
+Hi
 
-On Wed, Apr 22, 2020 at 12:17:14PM +0100, Bryan O'Donoghue wrote:
-> On 14/04/2020 16:15, Heikki Krogerus wrote:
-> > Hi Bryan,
-> > 
-> > On Tue, Apr 14, 2020 at 03:42:24PM +0100, Bryan O'Donoghue wrote:
-> > > Hi Heikki.
-> > > 
-> > > I'm Bryan working with Linaro on a Qualcomm project.
-> > > 
-> > > We have a tps65986, which needs some upstreaming work.
-> > > 
-> > > http://www.ti.com/lit/gpn/tps65982
-> > > http://www.ti.com/lit/gpn/tps65986
-> > > 
-> > > As you can see the two parts are very similar except the 65986 does data
-> > > role switching but unlike the 65982 doesn't support 20v 5a power.
-> > > 
-> > > I was going to add
-> > > 
-> > > - OF probe support
-> > > - USB role switching support
-> > 
-> > By USB role switching you mean the USB role switch class, right?
-> > 
-> > > to your existing driver. Do you know of anybody who has done any work for
-> > > the tps65986 already ? Also does the above extension seem right/sensible to
-> > > you ?
-> > 
-> > There isn't anybody adding support for tps65986 to the driver that I
-> > know of, so please go for it. Both tasks make sense to me.
-> > 
-> > thanks,
-> > 
-> 
-> What about tcpm ?
+[This is an automated email]
 
-What about it?
+This commit has been processed because it contains a -stable tag.
+The stable tag indicates that it's relevant for the following trees: all
 
-> As I understand it for your platform, you just want the power controller
-> stuff in the chip, without the data role.
+The bot has tested the following trees: v5.6.5, v5.4.33, v4.19.116, v4.14.176, v4.9.219, v4.4.219.
 
-Role swapping is actually the only thing that we need the driver for
-on our platforms.
+v5.6.5: Build OK!
+v5.4.33: Build OK!
+v4.19.116: Failed to apply! Possible dependencies:
+    ef513be0a905 ("usb: xhci: Add Clear_TT_Buffer")
 
-> In my case - we have a point-of-sale terminal, which basically looks like a
-> phone - we want to be able to do data role switching.
-> 
-> What's your feeling. Add role switch into the driver you have here, or try
-> to get that driver working with tcpm ?
+v4.14.176: Failed to apply! Possible dependencies:
+    15febf5eede9 ("xhci: refactor xhci_urb_enqueue a bit with minor changes")
+    66a4550308b8 ("xhci: Convert timers to use timer_setup()")
+    ef513be0a905 ("usb: xhci: Add Clear_TT_Buffer")
+    f5249461b504 ("xhci: Clear the host side toggle manually when endpoint is soft reset")
 
-So what you are proposing here is that you want to use tps65986 as
-just a port controller (so PHY), right? I don't think that's possible.
+v4.9.219: Failed to apply! Possible dependencies:
+    0b6c324c8b60 ("xhci: cleanup and refactor process_ctrl_td()")
+    0ce5749959c6 ("xhci: add trb_is_noop() helper function")
+    217491487c43 ("xhci: Add support for endpoint soft reset")
+    30a65b45bfb1 ("xhci: cleanup and refactor process_bulk_intr_td()")
+    3495e451d137 ("xhci: use trb helper functions when possible")
+    52ab86852f74 ("xhci: remove extra URB_SHORT_NOT_OK checks in xhci, core handles most cases")
+    5eee4b6b4f57 ("xhci: support calling cleanup_halted_endpoint with soft retry")
+    a37c3f76e6a6 ("usb: host: xhci: make a generic TRB tracer")
+    d36374fdfb25 ("xhci: cleanup virtual endoint structure, remove stopped_stream")
+    f5249461b504 ("xhci: Clear the host side toggle manually when endpoint is soft reset")
+    f97c08ae329b ("xhci: rename endpoint related trb variables")
 
-TCPM (port manager) is the software that implements the USB Type-C and
-PD state machines. The USB PD controllers are running their own state
-machines, and the thing is that you can't turn off that part of them.
-So basically the USB PD controllers are supplying the TCPM
-functionality internally.
-
-> Something else ? It's important we get the changes upstream, so I'd
-> appreciate any thoughts you have on the right way to go about this.
-
-So what exactly is the problem here?
-
-Which USB controller are you using? Is it dual-role capable, or do you
-have separate xHCI controller and separate USB device controller plus
-a mux between them?
-
-Is it clear to you that the Type-C driver, so tps6598x.c in this case,
-is the consumer of the USB role switch? If you have a dual-role
-capable USB controller, then that will be the supplier of the switch.
-If you have separate USB host and devices IPs on your board, then the
-mux between them is the switch supplier.
-
-I'm attaching a diff that has all the changes that you should need to
-do to the tps6598x.c in order to get the role swapping working on your
-board.
-
-The next step is to figure out how to describe the connection between
-your USB role switch (which I'm guessing is the USB controller on your
-board) and the USB PD controller. You are using devicetree, right?
-
-> Could you recommend an Intel platform I could pick up to validate my changes
-> don't break existing code ?
-
-All -S variants of our SOCs can be used for testing the tps6598x.c,
-for example Coffee Lake -S, but unfortunately I don't know which
-products on the market actually use those SOCs. I do my development
-with the reference boards.
+v4.4.219: Failed to apply! Possible dependencies:
+    0b6c324c8b60 ("xhci: cleanup and refactor process_ctrl_td()")
+    0ce5749959c6 ("xhci: add trb_is_noop() helper function")
+    2251198bef42 ("xhci: clean up event ring checks from inc_enq()")
+    2d98ef406f17 ("xhci: use and add separate function for checking for link trbs")
+    30a65b45bfb1 ("xhci: cleanup and refactor process_bulk_intr_td()")
+    3495e451d137 ("xhci: use trb helper functions when possible")
+    474ed23a6257 ("xhci: align the last trb before link if it is easily splittable.")
+    52ab86852f74 ("xhci: remove extra URB_SHORT_NOT_OK checks in xhci, core handles most cases")
+    5eee4b6b4f57 ("xhci: support calling cleanup_halted_endpoint with soft retry")
+    d2510342fe93 ("usb: xhci: merge xhci_queue_bulk_tx and queue_bulk_sg_tx functions")
+    d36374fdfb25 ("xhci: cleanup virtual endoint structure, remove stopped_stream")
+    f5249461b504 ("xhci: Clear the host side toggle manually when endpoint is soft reset")
+    f97c08ae329b ("xhci: rename endpoint related trb variables")
 
 
-thanks,
+NOTE: The patch will not be queued to stable trees until it is upstream.
+
+How should we proceed with this patch?
 
 -- 
-heikki
+Thanks
+Sasha
