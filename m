@@ -2,94 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A9C1B5C2E
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 15:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0891B5C2C
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 15:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727875AbgDWNKQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Apr 2020 09:10:16 -0400
-Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:35921 "EHLO
-        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726532AbgDWNKP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 09:10:15 -0400
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id A8AAD6ED;
-        Thu, 23 Apr 2020 09:10:14 -0400 (EDT)
-Received: from imap22 ([10.202.2.72])
-  by compute7.internal (MEProxy); Thu, 23 Apr 2020 09:10:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
-        mime-version:message-id:in-reply-to:references:date:from:to
-        :subject:content-type; s=fm1; bh=ixgLONNLuhtM08CBER/+H7XDFMfz8cD
-        ddl6+aanWHrk=; b=k/LyiAUnu/7sTfMep+CgCgYpPcqgeMZ8k0QAMcy9bLRkmha
-        W1QjVgSjG5d5MtS+INpYmqiiyzz4CqOLqOz+7eqXM05KMCNV5Vvy1SWCR8HOijve
-        QnmSxxnL6Sgxc8ZnYyORrXhuUAP8A5pwioomeANvlychtQYxmyd46kS4aNLhrXuQ
-        a2U0h8qyWmMpDMhCPXDTUZIKbBd8WYEAfEMFprgsCC1QPT8Wjs9bDWrtmXjE+RzT
-        0gIySKajfCyid88Qin0/Zidt6ccwkh8XpuxiU0gFj3Vpeo//A2NuqEkHVSpEurv/
-        agCcF9YriT/F65//lwjPtRlefnF7wwDGsgRpULg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=ixgLON
-        NLuhtM08CBER/+H7XDFMfz8cDddl6+aanWHrk=; b=Q8MYvurY3orR92BHvfIwTN
-        BjiTvnsSd1hn0WRBWGyC4KmvQ5ULprOlG1F4yLBnNDoiK4h5h0tkY9NU7908CcHq
-        BGH81cCE/ufbLXTpfrwnthK6f8j3JjuQuvLgGYxiMSg6VOJTgAt/XL14iOJlAuBV
-        nuCPnxgm+2mNDH9pGL2cTt+uSlFH17W2i6lfMEQeCwsHn+pZgCMbCQa0/1i/s/9H
-        V1b4JsZtpyczr2DVh4dfg9PqmvmZdHk6bFBuG8ztGm6gGmkroqwgplYXQh2i+CAq
-        Z1RVg3phGurfI4kR5DaRABDQUibuHW3s2V39EiWDuIJG2rMq7c1ji0qgdi3f4YLw
-        ==
-X-ME-Sender: <xms:tZOhXpXaIgobGTAJs6cmjbddCl9B9PYqvn46xiegncpU1P_zLaSE9A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrgeelgdehkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhiugcu
-    ufhprhihfdcuoehsihgusegrvggrmhdruhhsqeenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehsihgusegrvggrmhdruhhs
-X-ME-Proxy: <xmx:tZOhXhNLb8zm-vNkJJs8fmIKA3O3mrOGUuhuqjNAeO_OkbQSmnY9Pw>
-    <xmx:tZOhXjAEw0bCgqgTk3cf1uGwoWFZTua_XOwt1XzNGCVVnwQj5_xR8w>
-    <xmx:tZOhXmemmGa1cJ0y89DjCYYJNi3Ncabu1M2EqmfhUVbRNHRtyH5PCw>
-    <xmx:tpOhXkddd-_W4lQkdH9J8qV-MbgOe_r1w2oqqx_4gOuYL5uGdfXvuw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id BE13A6680073; Thu, 23 Apr 2020 09:10:13 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.3.0-dev0-351-g9981f4f-fmstable-20200421v1
-Mime-Version: 1.0
-Message-Id: <cf2e697e-32ad-490c-a646-a18cc1740753@www.fastmail.com>
-In-Reply-To: <SN6PR11MB324507C7828C86B7460EDF11E3D30@SN6PR11MB3245.namprd11.prod.outlook.com>
-References: <df1fe132-79ac-4656-9ddf-040e26f11c28@www.fastmail.com>
- <SN6PR11MB324507C7828C86B7460EDF11E3D30@SN6PR11MB3245.namprd11.prod.outlook.com>
-Date:   Thu, 23 Apr 2020 08:09:49 -0500
-From:   "Sid Spry" <sid@aeam.us>
-To:     "Gopal, Saranya" <saranya.gopal@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: Failure to Assign UDC to ConfigFS Gadget
-Content-Type: text/plain
+        id S1727798AbgDWNKI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 09:10:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46596 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726926AbgDWNKI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Apr 2020 09:10:08 -0400
+Received: from localhost (unknown [117.99.83.91])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5D33B2076C;
+        Thu, 23 Apr 2020 13:10:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587647407;
+        bh=MrQ+RugElkiTg9LS3wQOxTE4aNNFTFJUQOB/dDU+5CQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AfAUNrxEz39CiNj1NAA5PSI+xEO/tfJFTFAkkF6Pf5hL5qVQkrkykiobJ+iHeU1Sj
+         QpSZgBb/jJID6xz1gRuflsOrbhpJhUi6Bt5lE49yrFbJn1B0qjiULC4J/oesIJxmHq
+         BgkPy1gIo3Y4TIOfXIqwEfMSIkVSDLPJre3RTcsU=
+Date:   Thu, 23 Apr 2020 18:40:00 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andreas =?iso-8859-1?Q?B=F6hler?= <dev@aboehler.at>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 0/5] usb: xhci: Add support for Renesas USB controllers
+Message-ID: <20200423131000.GJ72691@vkoul-mobl>
+References: <20200414164152.2786474-1-vkoul@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200414164152.2786474-1-vkoul@kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Ah, thanks. I actually tried that, but must have made a typo a couple times in a row. At least now I get a kernel bug printout!
+On 14-04-20, 22:11, Vinod Koul wrote:
+> This series add support for Renesas USB controllers uPD720201 and uPD720202.
+> These require firmware to be loaded and in case devices have ROM those can
+> also be programmed if empty. If ROM is programmed, it runs from ROM as well.
+> 
+> This includes patches from Christian which supported these controllers w/o
+> ROM and later my patches for ROM support and debugfs hook for rom erase and
+> export of xhci-pci functions.
 
-On Wed, Apr 22, 2020, at 10:28 PM, Gopal, Saranya wrote:
-> Hi Sid,
+Any feedback Mathias ?
+
 > 
-> > # stat /sys/class/udc/musb-hdrc.1.auto
-> > File: /sys/class/udc/musb-hdrc.1.auto ->
-> > ../../devices/platform/soc/1c19000.usb/musb-hdrc.1.auto/udc/musb-
-> > hdrc.1.auto
-> > 
-> > If I try to assign the UDC using the string 1c19000.usb I get:
-> > 
-> > # echo "1c19000.usb" > UDC
-> > bash: echo: write error: No such device
-> > 
-> > It's at this point I'm lost. I appreciate any help.
+> Changes in v9:
+>  Make fw load a sync call and have single instance of probe execute,
+>    elimating probe/remove races
+>  Add quirk for renesas and use that for loading
 > 
-> You need to give the exact name of UDC as present in /sys/class/udc.
-> So, try this:
-> echo "musb-hdrc.1.auto" > UDC
+> Changes in v8:
+>  Fix compile error reported by Kbuild-bot by making usb_hcd_pci_probe() take
+>  const struct hc_driver * as argument
 > 
-> Thanks,
-> Saranya
+> Changes in v7:
+>  Make a single module which removes issues with module loading
+>  Keep the renesas code in renesas file
+>  Add hc_driver as argument for usb_hcd_pci_probe and modify hdc drivers to
+>    pass this and not use driver_data
+>  Use driver data for fw name
+>  Remove code to check if we need to load firmware or not
+>  remove multiple fw version support, we can do that with symlink in
+>    userspace
 > 
-> > Cheers!
+> Changes in v6:
+>  Move the renesas code into a separate driver which invokes xhci-pci functions.
 > 
+> Changes in v5:
+>  Added a debugfs rom erase patch, helps in debugging
+>  Squashed patch 1 & 2 as requested by Mathias
+> 
+> Changes in v4:
+>  Rollback the delay values as we got device failures
+> 
+> Changes in v3:
+>   Dropped patch 2 as discussed with Christian
+>   Removed aligned 8 bytes check
+>   Change order for firmware search from highest version to lowest
+>   Added entry for new firmware for device 0x14 as well
+>   Add tested by Christian
+> 
+> Changes in v2:
+>   used macros for timeout count and delay
+>   removed renesas_fw_alive_check
+>   cleaned renesas_fw_callback
+>   removed recurion for renesas_fw_download
+>   added MODULE_FIRMWARE
+>   added comment for multiple fw order
+> 
+> Christian Lamparter (1):
+>   usb: renesas-xhci: Add the renesas xhci driver
+> 
+> Vinod Koul (4):
+>   usb: hci: add hc_driver as argument for usb_hcd_pci_probe
+>   usb: xhci: Add support for Renesas controller with memory
+>   usb: renesas-xhci: Add ROM loader for uPD720201
+>   usb: xhci: provide a debugfs hook for erasing rom
+> 
+>  drivers/usb/core/hcd-pci.c          |   7 +-
+>  drivers/usb/host/Makefile           |   3 +-
+>  drivers/usb/host/ehci-pci.c         |   6 +-
+>  drivers/usb/host/ohci-pci.c         |   9 +-
+>  drivers/usb/host/uhci-pci.c         |   8 +-
+>  drivers/usb/host/xhci-pci-renesas.c | 740 ++++++++++++++++++++++++++++
+>  drivers/usb/host/xhci-pci.c         |  47 +-
+>  drivers/usb/host/xhci-pci.h         |  16 +
+>  drivers/usb/host/xhci.h             |   1 +
+>  include/linux/usb/hcd.h             |   3 +-
+>  10 files changed, 817 insertions(+), 23 deletions(-)
+>  create mode 100644 drivers/usb/host/xhci-pci-renesas.c
+>  create mode 100644 drivers/usb/host/xhci-pci.h
+> 
+> -- 
+> 2.25.1
+
+-- 
+~Vinod
