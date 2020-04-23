@@ -2,117 +2,190 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C221B5CE5
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 15:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AAD41B5CEA
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 15:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728602AbgDWNsi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Apr 2020 09:48:38 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53800 "EHLO mx2.suse.de"
+        id S1728624AbgDWNuf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 09:50:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39132 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728277AbgDWNsi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Apr 2020 09:48:38 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 156F4ABEC;
-        Thu, 23 Apr 2020 13:48:36 +0000 (UTC)
-Message-ID: <1587649702.23108.10.camel@suse.com>
-Subject: Re: general protection fault in go7007_usb_probe
-From:   Oliver Neukum <oneukum@suse.com>
-To:     syzbot <syzbot+cabfa4b5b05ff6be4ef0@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, hverkuil-cisco@xs4all.nl,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Date:   Thu, 23 Apr 2020 15:48:22 +0200
-In-Reply-To: <0000000000003cbf8e05a3d57b98@google.com>
-References: <0000000000003cbf8e05a3d57b98@google.com>
-Content-Type: multipart/mixed; boundary="=-iLs55rpxhBtu80GHb/g1"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        id S1726926AbgDWNue (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Apr 2020 09:50:34 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3BFEB20728;
+        Thu, 23 Apr 2020 13:50:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587649833;
+        bh=Zl7NuDjGvPHVLfMVDJIvKZWGpQWblUX8qdNJAHq1Tr8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rtRmKMGa59ZzrLxzNTg+TXuM9mxHpLgKLQhjZLLNvtfpddzm7hI1VwnniqsV6bwDM
+         8N2/eCvUHDcmPP+1YOGNEgVBevpeEo4iTDASVgWq5AsAVxMYnUxdtxKHJBHn4Zn5Y9
+         oqFsLK6AoMDPqJDKJaVwDNwTkxQhVsA5qPT2HBuE=
+Date:   Thu, 23 Apr 2020 15:50:31 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     jason.wessel@windriver.com, daniel.thompson@linaro.org,
+        kgdb-bugreport@lists.sourceforge.net, mingo@redhat.com,
+        hpa@zytor.com, bp@alien8.de, linux-serial@vger.kernel.org,
+        agross@kernel.org, tglx@linutronix.de, frowand.list@gmail.com,
+        bjorn.andersson@linaro.org, jslaby@suse.com,
+        catalin.marinas@arm.com, corbet@lwn.net, will@kernel.org,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Allison Randal <allison@lohutok.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@suse.de>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Enrico Weigelt <info@metux.net>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        James Morse <james.morse@arm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Matt Mullins <mmullins@fb.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Nadav Amit <namit@vmware.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        jinho lim <jordan.lim@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH v2 0/9] kgdb: Support late serial drivers; enable early
+ debug w/ boot consoles
+Message-ID: <20200423135031.GA4091353@kroah.com>
+References: <20200421211447.193860-1-dianders@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200421211447.193860-1-dianders@chromium.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---=-iLs55rpxhBtu80GHb/g1
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-
-Am Dienstag, den 21.04.2020, 16:36 -0700 schrieb syzbot:
-> Hello,
+On Tue, Apr 21, 2020 at 02:14:38PM -0700, Douglas Anderson wrote:
+> This whole pile of patches was motivated by me trying to get kgdb to
+> work properly on a platform where my serial driver ended up being hit
+> by the -EPROBE_DEFER virus (it wasn't practicing social distancing
+> from other drivers).  Specifically my serial driver's parent device
+> depended on a resource that wasn't available when its probe was first
+> called.  It returned -EPROBE_DEFER which meant that when "kgdboc"
+> tried to run its setup the serial driver wasn't there.  Unfortunately
+> "kgdboc" never tried again, so that meant that kgdb was disabled until
+> I manually enalbed it via sysfs.
 > 
-> syzbot found the following crash on:
+> While I could try to figure out how to get around the -EPROBE_DEFER
+> somehow, the above problems could happen to anyone and -EPROBE_DEFER
+> is generally considered something you just have to live with.  In any
+> case the current "kgdboc" setup is a bit of a race waiting to happen.
+> I _think_ I saw during early testing that even adding a msleep() in
+> the typical serial driver's probe() is enough to trigger similar
+> issues.
 > 
-> HEAD commit:    e9010320 usb: cdns3: gadget: make a bunch of functions sta..
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1263a930100000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=bd14feb44652cfaf
-> dashboard link: https://syzkaller.appspot.com/bug?extid=cabfa4b5b05ff6be4ef0
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> I decided that for the above race the best attitude to get kgdb to
+> register at boot was probably "if you can't beat 'em, join 'em".
+> Thus, "kgdboc" now jumps on the -EPROBE_DEFER bandwagon (now that my
+> driver uses it it's no longer a virus).  It does so a little awkwardly
+> because "kgdboc" hasn't normally had a "struct device" associated with
+> it, but it's really not _that_ ugly to make a platform device and
+> seems less ugly than alternatives.
 > 
-> Unfortunately, I don't have any reproducer for this crash yet.
+> Unfortunately now on my system the debugger is one of the last things
+> to register at boot.  That's OK for debugging problems that show up
+> significantly after boot, but isn't so hot for all the boot problems
+> that I end up debugging.  This motivated me to try to get something
+> working a little earlier.
 > 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+cabfa4b5b05ff6be4ef0@syzkaller.appspotmail.com
+> My first attempt was to try to get the existing "ekgdboc" to work
+> earlier.  I tried that for a bit until I realized that it needed to
+> work at the tty layer and I couldn't find any serial drivers that
+> managed to register themselves to the tty layer super early at boot.
+> The only documented use of "ekgdboc" is "ekgdboc=kbd" and that's a bit
+> of a special snowflake.  Trying to get my serial driver and all its
+> dependencies to probe normally and register the tty driver super early
+> at boot seemed like a bad way to go.  In fact, all the complexity
+> needed to do something like this is why the system already has a
+> special concept of a "boot console" that lives only long enough to
+> transition to the normal console.
+> 
+> Leveraging the boot console seemed like a good way to go and that's
+> what this series does.  I found that consoles could have a read()
+> function, though I couldn't find anyone who implemented it.  I
+> implemented it for two serial drivers for the devices I had easy
+> access to, making the assumption that for boot consoles that we could
+> assume read() and write() were polling-compatible (seems sane I
+> think).
+> 
+> Now anyone who makes a small change to their serial driver can easily
+> enable early kgdb debugging!
+> 
+> The devices I had for testing were:
+> - arm32: rk3288-veyron-jerry
+> - arm64: rk3399-gru-kevin
+> - arm64: qcom-sc7180-trogdor (not mainline yet)
+> 
+> These are the devices I tested this series on.  I tried to test
+> various combinations of enabling/disabling various options and I
+> hopefully caught the corner cases, but I'd appreciate any extra
+> testing people can do.  Notably I didn't test on x86, but (I think) I
+> didn't touch much there so I shouldn't have broken anything.
+> 
+> When testing I found a few problems with actually dropping into the
+> debugger super early on arm and arm64 devices.  Patches in this series
+> should help with this.  For arm I just avoid dropping into the
+> debugger until a little later and for arm64 I actually enable
+> debugging super early.
+> 
+> I realize that bits of this series might feel a little hacky, though
+> I've tried to do things in the cleanest way I could without overly
+> interferring with the rest of the kernel.  If you hate the way I
+> solved a problem I would love it if you could provide guidance on how
+> you think I could solve the problem better.
+> 
+> This series (and my comments / documentation / commit messages) are
+> now long enough that my eyes glaze over when I try to read it all over
+> to double-check.  I've nontheless tried to double-check it, but I'm
+> pretty sure I did something stupid.  Thank you ahead of time for
+> pointing it out to me so I can fix it in v3.  If somehow I managed to
+> not do anything stupid (really?) then thank you for double-checking me
+> anyway.
+> 
+> Changes in v2:
+> - ("kgdb: Disable WARN_CONSOLE_UNLOCKED for all kgdb") new for v2.
+> - ("Revert "kgdboc: disable the console lock when in kgdb"") new for v2.
+> - Assumes we have ("kgdb: Disable WARN_CONSOLE_UNLOCKED for all kgdb")
+> - Fix kgdbts, tty/mips_ejtag_fdc, and usb/early/ehci-dbgp
+> 
+> Douglas Anderson (9):
+>   kgdb: Disable WARN_CONSOLE_UNLOCKED for all kgdb
+>   Revert "kgdboc: disable the console lock when in kgdb"
+>   kgdboc: Use a platform device to handle tty drivers showing up late
+>   kgdb: Delay "kgdbwait" to dbg_late_init() by default
+>   arm64: Add call_break_hook() to early_brk64() for early kgdb
+>   kgdboc: Add earlycon_kgdboc to support early kgdb using boot consoles
+>   Documentation: kgdboc: Document new earlycon_kgdboc parameter
+>   serial: qcom_geni_serial: Support earlycon_kgdboc
+>   serial: 8250_early: Support earlycon_kgdboc
+> 
+>  .../admin-guide/kernel-parameters.txt         |  20 ++
+>  Documentation/dev-tools/kgdb.rst              |  14 +
+>  arch/arm64/include/asm/debug-monitors.h       |   2 +
+>  arch/arm64/kernel/debug-monitors.c            |   2 +-
+>  arch/arm64/kernel/kgdb.c                      |   5 +
+>  arch/arm64/kernel/traps.c                     |   3 +
+>  arch/x86/kernel/kgdb.c                        |   5 +
+>  drivers/misc/kgdbts.c                         |   2 +-
+>  drivers/tty/mips_ejtag_fdc.c                  |   2 +-
+>  drivers/tty/serial/8250/8250_early.c          |  23 ++
+>  drivers/tty/serial/kgdboc.c                   | 262 ++++++++++++++++--
+>  drivers/tty/serial/qcom_geni_serial.c         |  32 +++
+>  drivers/usb/early/ehci-dbgp.c                 |   2 +-
+>  include/linux/kgdb.h                          |  25 +-
+>  kernel/debug/debug_core.c                     |  48 +++-
+>  15 files changed, 400 insertions(+), 47 deletions(-)
 
-#syz test: https://github.com/google/kasan.git e9010320
-
---=-iLs55rpxhBtu80GHb/g1
-Content-Disposition: attachment; filename="0001-go7007-add-only-insanity-checking.patch"
-Content-Transfer-Encoding: base64
-Content-Type: text/x-patch; name="0001-go7007-add-only-insanity-checking.patch";
-	charset="UTF-8"
-
-RnJvbSBjMjEyMzI2Yzk4MmUxM2EzMGNhMzE4NzhjYzJhNWE4OGViYjBjMTA2IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
-OiBXZWQsIDIyIEFwciAyMDIwIDEzOjQ5OjU1ICswMjAwClN1YmplY3Q6IFtQQVRDSCAxLzFdIGdv
-NzAwNzogYWRkIG9ubHkgaW5zYW5pdHkgY2hlY2tpbmcKCkEgbWFsaWNpb3VzIFVTQiBkZXZpY2Ug
-bWF5IGxhY2sgZW5kcG9pbnRzIHRoZSBkcml2ZXIgYXNzdW1lcyB0byBleGlzdApBY2Nlc3Npbmcg
-dGhlbSBsZWFkcyB0byBOVUxMIHBvaW50ZXIgYWNjZXNzZXMuIFRoaXMgcGF0Y2ggaW50cm9kdWNl
-cwpzYW5pdHkgY2hlY2tpbmcuCgpTaWduZWQtb2ZmLWJ5OiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3Vt
-QHN1c2UuY29tPgpGaXhlczogODY2Yjg2OTVkNjdlOCAoIlN0YWdpbmc6IGFkZCB0aGUgZ283MDA3
-IHZpZGVvIGRyaXZlciIpCi0tLQogZHJpdmVycy9tZWRpYS91c2IvZ283MDA3L2dvNzAwNy11c2Iu
-YyB8IDE5ICsrKysrKysrKysrKysrKysrKy0KIDEgZmlsZSBjaGFuZ2VkLCAxOCBpbnNlcnRpb25z
-KCspLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9tZWRpYS91c2IvZ283MDA3
-L2dvNzAwNy11c2IuYyBiL2RyaXZlcnMvbWVkaWEvdXNiL2dvNzAwNy9nbzcwMDctdXNiLmMKaW5k
-ZXggZjg4OWM5ZDc0MGNkLi5hNDkyZDgzZjY5YjkgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvbWVkaWEv
-dXNiL2dvNzAwNy9nbzcwMDctdXNiLmMKKysrIGIvZHJpdmVycy9tZWRpYS91c2IvZ283MDA3L2dv
-NzAwNy11c2IuYwpAQCAtMTA1MCw2ICsxMDUwLDEwIEBAIHN0YXRpYyBpbnQgZ283MDA3X3VzYl9w
-cm9iZShzdHJ1Y3QgdXNiX2ludGVyZmFjZSAqaW50ZiwKIAlpbnQgdmlkZW9fcGlwZSwgaSwgdl91
-cmJfbGVuOwogCiAJcHJfZGVidWcoInByb2JpbmcgbmV3IEdPNzAwNyBVU0IgYm9hcmRcbiIpOwor
-ICAgIGlmICghaW50ZikKKyAgICAgICAgcHJpbnRrKEtFUk5fRVJSIkRhdmUsIHdpbGwgSSBkcmVh
-bT9cbiIpOworICAgIGlmICghdXNiZGV2KQorICAgICAgICBwcmludGsoS0VSTl9FUlIiU2hhaSBI
-dWx1ZCFcbiIpOwogCiAJc3dpdGNoIChpZC0+ZHJpdmVyX2luZm8pIHsKIAljYXNlIEdPNzAwN19C
-T0FSRElEX01BVFJJWF9JSToKQEAgLTExMjEsNiArMTEyNSwxNCBAQCBzdGF0aWMgaW50IGdvNzAw
-N191c2JfcHJvYmUoc3RydWN0IHVzYl9pbnRlcmZhY2UgKmludGYsCiAJCXJldHVybiAtRU5PTUVN
-OwogCX0KIAorCS8qIHNhbml0eSBjaGVja3MgKi8KKyAgICAvL2lmICh1c2IgJiYgdXNiLT51c2Jk
-ZXYpCisgICAgICAgIGVwID0gdXNiLT51c2JkZXYtPmVwX2luWzRdOworICAgIC8vZWxzZQorICAg
-IC8vICAgIGVwID0gTlVMTDsKKwlpZiAoIWVwKQorCQlyZXR1cm4gLUVOT0RFVjsKKwogCXVzYi0+
-Ym9hcmQgPSBib2FyZDsKIAl1c2ItPnVzYmRldiA9IHVzYmRldjsKIAl1c2JfbWFrZV9wYXRoKHVz
-YmRldiwgZ28tPmJ1c19pbmZvLCBzaXplb2YoZ28tPmJ1c19pbmZvKSk7CkBAIC0xMTQxLDcgKzEx
-NTMsNiBAQCBzdGF0aWMgaW50IGdvNzAwN191c2JfcHJvYmUoc3RydWN0IHVzYl9pbnRlcmZhY2Ug
-KmludGYsCiAJaWYgKHVzYi0+aW50cl91cmItPnRyYW5zZmVyX2J1ZmZlciA9PSBOVUxMKQogCQln
-b3RvIGFsbG9jZmFpbDsKIAotCWVwID0gdXNiLT51c2JkZXYtPmVwX2luWzRdOwogCWlmICh1c2Jf
-ZW5kcG9pbnRfdHlwZSgmZXAtPmRlc2MpID09IFVTQl9FTkRQT0lOVF9YRkVSX0JVTEspCiAJCXVz
-Yl9maWxsX2J1bGtfdXJiKHVzYi0+aW50cl91cmIsIHVzYi0+dXNiZGV2LAogCQkJdXNiX3JjdmJ1
-bGtwaXBlKHVzYi0+dXNiZGV2LCA0KSwKQEAgLTEyNjMsOSArMTI3NCwxMyBAQCBzdGF0aWMgaW50
-IGdvNzAwN191c2JfcHJvYmUoc3RydWN0IHVzYl9pbnRlcmZhY2UgKmludGYsCiAKIAkvKiBBbGxv
-Y2F0ZSB0aGUgVVJCcyBhbmQgYnVmZmVycyBmb3IgcmVjZWl2aW5nIHRoZSB2aWRlbyBzdHJlYW0g
-Ki8KIAlpZiAoYm9hcmQtPmZsYWdzICYgR083MDA3X1VTQl9FWlVTQikgeworCQlpZiAoIXVzYi0+
-dXNiZGV2LT5lcF9pbls2XSkKKwkJCWdvdG8gYWxsb2NmYWlsOwogCQl2X3VyYl9sZW4gPSAxMDI0
-OwogCQl2aWRlb19waXBlID0gdXNiX3JjdmJ1bGtwaXBlKHVzYi0+dXNiZGV2LCA2KTsKIAl9IGVs
-c2UgeworCQlpZiAoIXVzYi0+dXNiZGV2LT5lcF9pblsxXSkKKwkJCWdvdG8gYWxsb2NmYWlsOwog
-CQl2X3VyYl9sZW4gPSA1MTI7CiAJCXZpZGVvX3BpcGUgPSB1c2JfcmN2YnVsa3BpcGUodXNiLT51
-c2JkZXYsIDEpOwogCX0KQEAgLTEyODUsNiArMTMwMCw4IEBAIHN0YXRpYyBpbnQgZ283MDA3X3Vz
-Yl9wcm9iZShzdHJ1Y3QgdXNiX2ludGVyZmFjZSAqaW50ZiwKIAkvKiBBbGxvY2F0ZSB0aGUgVVJC
-cyBhbmQgYnVmZmVycyBmb3IgcmVjZWl2aW5nIHRoZSBhdWRpbyBzdHJlYW0gKi8KIAlpZiAoKGJv
-YXJkLT5mbGFncyAmIEdPNzAwN19VU0JfRVpVU0IpICYmCiAJICAgIChib2FyZC0+bWFpbl9pbmZv
-LmZsYWdzICYgR083MDA3X0JPQVJEX0hBU19BVURJTykpIHsKKwkJaWYgKCF1c2ItPnVzYmRldi0+
-ZXBfaW5bOF0pCisJCQlnb3RvIGFsbG9jZmFpbDsKIAkJZm9yIChpID0gMDsgaSA8IDg7ICsraSkg
-ewogCQkJdXNiLT5hdWRpb191cmJzW2ldID0gdXNiX2FsbG9jX3VyYigwLCBHRlBfS0VSTkVMKTsK
-IAkJCWlmICh1c2ItPmF1ZGlvX3VyYnNbaV0gPT0gTlVMTCkKLS0gCjIuMTYuNAoK
-
-
---=-iLs55rpxhBtu80GHb/g1--
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
