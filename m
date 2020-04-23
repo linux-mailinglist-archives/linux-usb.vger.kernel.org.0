@@ -2,119 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39F641B5BB4
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 14:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A481B5C1B
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 15:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728385AbgDWMqy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Apr 2020 08:46:54 -0400
-Received: from mx2.suse.de ([195.135.220.15]:42052 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728340AbgDWMqx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Apr 2020 08:46:53 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 393FCAC50;
-        Thu, 23 Apr 2020 12:46:51 +0000 (UTC)
-Message-ID: <1587645997.23108.9.camel@suse.com>
+        id S1728367AbgDWNFI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 09:05:08 -0400
+Received: from mail-il1-f199.google.com ([209.85.166.199]:36782 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728512AbgDWNFH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 09:05:07 -0400
+Received: by mail-il1-f199.google.com with SMTP id l15so5204998ilj.3
+        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2020 06:05:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=mDeCiJymVJtdQweAH4ZMSfwDQZ44U0uHTCRHrn44daU=;
+        b=Yw3v/VWY7nsK/oUOPO8kUUE0AWuKVbfTGUpFIgA+6k+6yRCiBtgOB1S1QhtMKfLzKT
+         kgDDEdeWrQPX9Dg6siNHIbE7hO6gpw8jyUiSUbKmqtgovLhF3DGPelwVA/TPggAdKZ2Q
+         apY4UvWggixp+P/B1VatKF9Z/8d/PocF6EhDak+QEsa/xqdXP2u6+aaPgYb0yWI5ORTi
+         Mdi7GQfIiRxwkLAB6BOR9wRCrA9YOEWS6ueG7FGKxjH79g2CZ/8KM/7bzF8ubp3PLP1K
+         9JgoLgQqh6LkXqV/8Mmu+jR7xeYnUAruq4cKpi4IkDjjfVwuI2SFZzWoZXxfwj+tFlSD
+         EwoQ==
+X-Gm-Message-State: AGi0Pub1j4i7Fh6JxBemV3iHdvzZuJR+iscL4s4mmPM9SBU2qXucXaFS
+        HneUO/Jk0tZfhF/ySP2tiNDOMvXo2F5D5JiEsym83CvsdIh1
+X-Google-Smtp-Source: APiQypKXyqz/JlzpTAggRql5Ts4MQd1Yv7aMiN6XtgTUti0YG9yIBcvxI2iQdzYPdf5loOr0vwEuoAe/wokm4kEL4FbCdg+q2dxO
+MIME-Version: 1.0
+X-Received: by 2002:a5d:9354:: with SMTP id i20mr3491302ioo.207.1587647105465;
+ Thu, 23 Apr 2020 06:05:05 -0700 (PDT)
+Date:   Thu, 23 Apr 2020 06:05:05 -0700
+In-Reply-To: <1587645997.23108.9.camel@suse.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c0064305a3f4e57b@google.com>
 Subject: Re: general protection fault in go7007_usb_probe
-From:   Oliver Neukum <oneukum@suse.com>
-To:     syzbot <syzbot+cabfa4b5b05ff6be4ef0@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, hverkuil-cisco@xs4all.nl,
+From:   syzbot <syzbot+cabfa4b5b05ff6be4ef0@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, hverkuil-cisco@xs4all.nl,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org, oneukum@suse.com,
         syzkaller-bugs@googlegroups.com
-Date:   Thu, 23 Apr 2020 14:46:37 +0200
-In-Reply-To: <0000000000003cbf8e05a3d57b98@google.com>
-References: <0000000000003cbf8e05a3d57b98@google.com>
-Content-Type: multipart/mixed; boundary="=-Rm6ymNblYIvvzcF60Ug/"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello,
 
---=-Rm6ymNblYIvvzcF60Ug/
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
+syzbot has tested the proposed patch and the reproducer did not trigger crash:
 
-Am Dienstag, den 21.04.2020, 16:36 -0700 schrieb syzbot:
-> Hello,
-> 
-> syzbot found the following crash on:
-> 
-> HEAD commit:    e9010320 usb: cdns3: gadget: make a bunch of functions sta..
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1263a930100000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=bd14feb44652cfaf
-> dashboard link: https://syzkaller.appspot.com/bug?extid=cabfa4b5b05ff6be4ef0
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> 
-> Unfortunately, I don't have any reproducer for this crash yet.
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+cabfa4b5b05ff6be4ef0@syzkaller.appspotmail.com
+Reported-and-tested-by: syzbot+cabfa4b5b05ff6be4ef0@syzkaller.appspotmail.com
 
-#syz test: https://github.com/google/kasan.git e9010320
+Tested on:
 
---=-Rm6ymNblYIvvzcF60Ug/
-Content-Disposition: attachment;
-	filename="0001-go7007-add-sanity-checking-and-insanity-checking.patch"
-Content-Transfer-Encoding: base64
-Content-Type: text/x-patch;
-	name="0001-go7007-add-sanity-checking-and-insanity-checking.patch";
-	charset="UTF-8"
+commit:         e9010320 usb: cdns3: gadget: make a bunch of functions sta..
+git tree:       https://github.com/google/kasan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=bd14feb44652cfaf
+dashboard link: https://syzkaller.appspot.com/bug?extid=cabfa4b5b05ff6be4ef0
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1396d5bfe00000
 
-RnJvbSAxYzNiM2Y1ODYwOGUyYzc1ZTAyNjRhMWI3ZWFlMjEyNDVkNDQ2ZDc4IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
-OiBXZWQsIDIyIEFwciAyMDIwIDEzOjQ5OjU1ICswMjAwClN1YmplY3Q6IFtQQVRDSF0gZ283MDA3
-OiBhZGQgc2FuaXR5IGNoZWNraW5nIGFuZCBpbnNhbml0eSBjaGVja2luZwoKQSBtYWxpY2lvdXMg
-VVNCIGRldmljZSBtYXkgbGFjayBlbmRwb2ludHMgdGhlIGRyaXZlciBhc3N1bWVzIHRvIGV4aXN0
-CkFjY2Vzc2luZyB0aGVtIGxlYWRzIHRvIE5VTEwgcG9pbnRlciBhY2Nlc3Nlcy4gVGhpcyBwYXRj
-aCBpbnRyb2R1Y2VzCnNhbml0eSBjaGVja2luZy4KClNpZ25lZC1vZmYtYnk6IE9saXZlciBOZXVr
-dW0gPG9uZXVrdW1Ac3VzZS5jb20+CkZpeGVzOiA4NjZiODY5NWQ2N2U4ICgiU3RhZ2luZzogYWRk
-IHRoZSBnbzcwMDcgdmlkZW8gZHJpdmVyIikKLS0tCiBkcml2ZXJzL21lZGlhL3VzYi9nbzcwMDcv
-Z283MDA3LXVzYi5jIHwgMTkgKysrKysrKysrKysrKysrKysrLQogMSBmaWxlIGNoYW5nZWQsIDE4
-IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL21lZGlh
-L3VzYi9nbzcwMDcvZ283MDA3LXVzYi5jIGIvZHJpdmVycy9tZWRpYS91c2IvZ283MDA3L2dvNzAw
-Ny11c2IuYwppbmRleCBmODg5YzlkNzQwY2QuLjQzYjJmMDE4ZGY1NCAxMDA2NDQKLS0tIGEvZHJp
-dmVycy9tZWRpYS91c2IvZ283MDA3L2dvNzAwNy11c2IuYworKysgYi9kcml2ZXJzL21lZGlhL3Vz
-Yi9nbzcwMDcvZ283MDA3LXVzYi5jCkBAIC0xMDUwLDYgKzEwNTAsMTAgQEAgc3RhdGljIGludCBn
-bzcwMDdfdXNiX3Byb2JlKHN0cnVjdCB1c2JfaW50ZXJmYWNlICppbnRmLAogCWludCB2aWRlb19w
-aXBlLCBpLCB2X3VyYl9sZW47CiAKIAlwcl9kZWJ1ZygicHJvYmluZyBuZXcgR083MDA3IFVTQiBi
-b2FyZFxuIik7CisgICAgaWYgKCFpbnRmKQorICAgICAgICBwcmludGsoS0VSTl9FUlIiRGF2ZSwg
-d2lsbCBJIGRyZWFtP1xuIik7CisgICAgaWYgKCF1c2JkZXYpCisgICAgICAgIHByaW50ayhLRVJO
-X0VSUiJTaGFpIEh1bHVkIVxuIik7CiAKIAlzd2l0Y2ggKGlkLT5kcml2ZXJfaW5mbykgewogCWNh
-c2UgR083MDA3X0JPQVJESURfTUFUUklYX0lJOgpAQCAtMTEyMSw2ICsxMTI1LDE0IEBAIHN0YXRp
-YyBpbnQgZ283MDA3X3VzYl9wcm9iZShzdHJ1Y3QgdXNiX2ludGVyZmFjZSAqaW50ZiwKIAkJcmV0
-dXJuIC1FTk9NRU07CiAJfQogCisJLyogc2FuaXR5IGNoZWNrcyAqLworICAgIGlmICh1c2IgJiYg
-dXNiLT51c2JkZXYpCisgICAgICAgIGVwID0gdXNiLT51c2JkZXYtPmVwX2luWzRdOworICAgIGVs
-c2UKKyAgICAgICAgZXAgPSBOVUxMOworCWlmICghZXApCisJCXJldHVybiAtRU5PREVWOworCiAJ
-dXNiLT5ib2FyZCA9IGJvYXJkOwogCXVzYi0+dXNiZGV2ID0gdXNiZGV2OwogCXVzYl9tYWtlX3Bh
-dGgodXNiZGV2LCBnby0+YnVzX2luZm8sIHNpemVvZihnby0+YnVzX2luZm8pKTsKQEAgLTExNDEs
-NyArMTE1Myw2IEBAIHN0YXRpYyBpbnQgZ283MDA3X3VzYl9wcm9iZShzdHJ1Y3QgdXNiX2ludGVy
-ZmFjZSAqaW50ZiwKIAlpZiAodXNiLT5pbnRyX3VyYi0+dHJhbnNmZXJfYnVmZmVyID09IE5VTEwp
-CiAJCWdvdG8gYWxsb2NmYWlsOwogCi0JZXAgPSB1c2ItPnVzYmRldi0+ZXBfaW5bNF07CiAJaWYg
-KHVzYl9lbmRwb2ludF90eXBlKCZlcC0+ZGVzYykgPT0gVVNCX0VORFBPSU5UX1hGRVJfQlVMSykK
-IAkJdXNiX2ZpbGxfYnVsa191cmIodXNiLT5pbnRyX3VyYiwgdXNiLT51c2JkZXYsCiAJCQl1c2Jf
-cmN2YnVsa3BpcGUodXNiLT51c2JkZXYsIDQpLApAQCAtMTI2Myw5ICsxMjc0LDEzIEBAIHN0YXRp
-YyBpbnQgZ283MDA3X3VzYl9wcm9iZShzdHJ1Y3QgdXNiX2ludGVyZmFjZSAqaW50ZiwKIAogCS8q
-IEFsbG9jYXRlIHRoZSBVUkJzIGFuZCBidWZmZXJzIGZvciByZWNlaXZpbmcgdGhlIHZpZGVvIHN0
-cmVhbSAqLwogCWlmIChib2FyZC0+ZmxhZ3MgJiBHTzcwMDdfVVNCX0VaVVNCKSB7CisJCWlmICgh
-dXNiLT51c2JkZXYtPmVwX2luWzZdKQorCQkJZ290byBhbGxvY2ZhaWw7CiAJCXZfdXJiX2xlbiA9
-IDEwMjQ7CiAJCXZpZGVvX3BpcGUgPSB1c2JfcmN2YnVsa3BpcGUodXNiLT51c2JkZXYsIDYpOwog
-CX0gZWxzZSB7CisJCWlmICghdXNiLT51c2JkZXYtPmVwX2luWzFdKQorCQkJZ290byBhbGxvY2Zh
-aWw7CiAJCXZfdXJiX2xlbiA9IDUxMjsKIAkJdmlkZW9fcGlwZSA9IHVzYl9yY3ZidWxrcGlwZSh1
-c2ItPnVzYmRldiwgMSk7CiAJfQpAQCAtMTI4NSw2ICsxMzAwLDggQEAgc3RhdGljIGludCBnbzcw
-MDdfdXNiX3Byb2JlKHN0cnVjdCB1c2JfaW50ZXJmYWNlICppbnRmLAogCS8qIEFsbG9jYXRlIHRo
-ZSBVUkJzIGFuZCBidWZmZXJzIGZvciByZWNlaXZpbmcgdGhlIGF1ZGlvIHN0cmVhbSAqLwogCWlm
-ICgoYm9hcmQtPmZsYWdzICYgR083MDA3X1VTQl9FWlVTQikgJiYKIAkgICAgKGJvYXJkLT5tYWlu
-X2luZm8uZmxhZ3MgJiBHTzcwMDdfQk9BUkRfSEFTX0FVRElPKSkgeworCQlpZiAoIXVzYi0+dXNi
-ZGV2LT5lcF9pbls4XSkKKwkJCWdvdG8gYWxsb2NmYWlsOwogCQlmb3IgKGkgPSAwOyBpIDwgODsg
-KytpKSB7CiAJCQl1c2ItPmF1ZGlvX3VyYnNbaV0gPSB1c2JfYWxsb2NfdXJiKDAsIEdGUF9LRVJO
-RUwpOwogCQkJaWYgKHVzYi0+YXVkaW9fdXJic1tpXSA9PSBOVUxMKQotLSAKMi4xNi40Cgo=
-
-
---=-Rm6ymNblYIvvzcF60Ug/--
-
+Note: testing is done by a robot and is best-effort only.
