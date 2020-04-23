@@ -2,146 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 603B31B53F6
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 07:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C091B545C
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 07:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbgDWFKr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Apr 2020 01:10:47 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:57454 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725961AbgDWFKp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 01:10:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587618644;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U40nhfdJJbB+Icncn6AK7VjEAKFmoP4SFbc4aKF2RZk=;
-        b=Ju8UknDPELGtSocnhKlaE0G3z3Qznz+Abe7d+QWcKfaMv9nL3OqlbYSEQWK/FVKAwpRjbZ
-        +T7eelh5nOGf+WwbxI4VODx5RrS3Ti8kGeauKYvKCd/IdQjeLbbPxTRpDEoZmgU0ydJxEn
-        SNw9nxQDHJ1mKMkm16MHSoZPqN87iYE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-79-hEGdBmBdOcmc-jiBbwohhA-1; Thu, 23 Apr 2020 01:10:39 -0400
-X-MC-Unique: hEGdBmBdOcmc-jiBbwohhA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 28EAE18C43C0;
-        Thu, 23 Apr 2020 05:10:38 +0000 (UTC)
-Received: from suzdal.zaitcev.lan (ovpn-113-207.phx2.redhat.com [10.3.113.207])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 696EF5DA66;
-        Thu, 23 Apr 2020 05:10:37 +0000 (UTC)
-Date:   Thu, 23 Apr 2020 00:10:36 -0500
-From:   Pete Zaitcev <zaitcev@redhat.com>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     syzbot <syzbot+be5b5f86a162a6c281e6@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, zaitcev@redhat.com
-Subject: Re: KASAN: use-after-free Read in usblp_bulk_read
-Message-ID: <20200423001036.41324bd4@suzdal.zaitcev.lan>
-In-Reply-To: <20200422032323.8536-1-hdanton@sina.com>
-References: <00000000000046503905a3cec366@google.com>
-        <20200422032323.8536-1-hdanton@sina.com>
-Organization: Red Hat, Inc.
+        id S1726650AbgDWFrT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 01:47:19 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:53500 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725854AbgDWFrP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 01:47:15 -0400
+Received: from mail-pl1-f200.google.com ([209.85.214.200])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <matthew.ruffell@canonical.com>)
+        id 1jRUhd-0005QS-1x
+        for linux-usb@vger.kernel.org; Thu, 23 Apr 2020 05:47:13 +0000
+Received: by mail-pl1-f200.google.com with SMTP id w7so3878277ply.0
+        for <linux-usb@vger.kernel.org>; Wed, 22 Apr 2020 22:47:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ot2HtEfliGd8kj0tyPfLQEV3MTVqS9GO1dUH0PUjJ5g=;
+        b=ucV1IB7Pd2fE9QsvAc+Bl8Dvjms9srXwgVrbPsycP6BagW8GfshqRL19VoCQlxkf4l
+         45PVIXVnXiGMAMlCDBhpy/TZj8e4TtwK4YMM+wNWGmU2b20wG/lW2yziZw+nt9uC/zvM
+         Lqs1n2J5gnVLSadZIYK/3X1YTG/DsXvKSbumPynwNiXGvtmuzgshq3QCUU1M6b2PGf0P
+         8hdOwM5ojNu9VYQjGdqLX5QSB3XPRQJ7Q43RX1MCYGdvzg/sPNgyWl54Td8i8tkEeU80
+         Z7x/Gv/o5NLwt1Mu94vWcf1HTRG9fBi2ZHv6575NbTHM0MkN8zlMYrAtWqpyV8JsnPYF
+         3S2A==
+X-Gm-Message-State: AGi0PuYeIEogt0IocXG0z8KSta4XBzV1F7TqEPYGWWWo12slKk2uypfy
+        5o9kYAsfeHlEGutDW65NZMw2S9ybpq9j/Fcefbs350cA/a3Qeg7PKt164Ieo3IvohUE8ImEsXkS
+        167R8h0Ih866Uvo/G+a8tZEIrCRcSAnX+QMd+NA==
+X-Received: by 2002:a17:902:599b:: with SMTP id p27mr443676pli.193.1587620831468;
+        Wed, 22 Apr 2020 22:47:11 -0700 (PDT)
+X-Google-Smtp-Source: APiQypJP4iSYeZVwRsocgHHaHJtofpSDzqOU2qN0KieudHOle/oDEoXIkG+nm1uBje1EVs+mbm7qlQ==
+X-Received: by 2002:a17:902:599b:: with SMTP id p27mr443646pli.193.1587620830990;
+        Wed, 22 Apr 2020 22:47:10 -0700 (PDT)
+Received: from [192.168.1.107] (222-154-99-146-fibre.sparkbb.co.nz. [222.154.99.146])
+        by smtp.gmail.com with ESMTPSA id i25sm1333137pfo.196.2020.04.22.22.47.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Apr 2020 22:47:10 -0700 (PDT)
+Subject: Re: [PROBLEM]: Infinite warm reset loops resulting in "Cannot enable.
+ Maybe the USB cable is bad?" messages
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Cc:     dann.frazier@canonical.com, heitor.de.siqueira@canonical.com
+References: <cd36bf27-fc7b-9a22-7065-2fabb8e89674@canonical.com>
+ <7620fe19-cd6c-528d-2bc2-dd5a3be3973a@linux.intel.com>
+From:   Matthew Ruffell <matthew.ruffell@canonical.com>
+Message-ID: <80a1c2ae-4377-dfef-dd0b-97662a0e736a@canonical.com>
+Date:   Thu, 23 Apr 2020 17:47:05 +1200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <7620fe19-cd6c-528d-2bc2-dd5a3be3973a@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 22 Apr 2020 11:23:23 +0800
-Hillf Danton <hdanton@sina.com> wrote:
+Hi Mathias,
 
-> Do cleanup for lp after submitted urb completes.
+Thanks for responding.
+
+On 21/04/20 7:37 pm, Mathias Nyman wrote:
+
+> There are no USB3 devices enumerated.
 > 
-> --- a/drivers/usb/class/usblp.c
-> +++ b/drivers/usb/class/usblp.c
-> @@ -1376,8 +1376,10 @@ static void usblp_disconnect(struct usb_
->  	usblp_unlink_urbs(usblp);
->  	mutex_unlock(&usblp->mut);
->  
-> -	if (!usblp->used)
-> +	if (!usblp->used) {
-> +		wait_event(usblp->rwait, usblp->rcomplete != 0);
->  		usblp_cleanup(usblp);
-> +	}
->  	mutex_unlock(&usblp_mutex);
->  }
+> Do any of the devices connected to the hub support USB 3 speeds (5Gbps or faster)?
+> If not, could you add one the hub hub?
+> Unlike other devices USB 3 hubs will enumerate as both USB 2.0 and USB 3 devices. 
+> 
+> Looks like the USB 3 part of the hub is not working correctly.
 
-I do not agree with this kind of workaround. The model we're following
-is for usb_kill_urb() to cancel the transfer. The usblp invokes it
-through usb_kill_anchored_urbs() and usblp_unlink_urbs(), as seen
-above. There can be no timer hitting anything once it returns.
+Interesting. Looking at the general overview of this system:
 
-At this point I suspect the fake HCD that the test harness invokes
-fails to termine the transfer properly and then a timer hits.
+There is only one hub, an Intel PCH LBG-1, which has
+-- 2x USB 3.0 ports connected to 2x USB 3.0 ports in the front of the chassis
+-- 2x USB 3.0 ports connected to 2x USB 3.0 ports in the back of the chassis
+-- 2x USB 3.0 ports connected to 2x USB 3.0 ports on the motherboard itself
+-- 1x USB 2.0 port connected to the BMC (AST2500) 
 
-Here's the bot's evidence and how I read it:
+A USB 3 hub is connected to a USB 3 port on the back of the chassis with a USB 3 cable, 
+and this hub contains many devices.
 
-> Tue, 21 Apr 2020 08:35:18 -0700
-> > Reported-by: syzbot+be5b5f86a162a6c281e6@syzkaller.appspotmail.com
+There was a previous incident with the same hardware where a "bad" USB 3 cable
+caused a similar warm reset loop. The symptoms were the same, with the infinite
+warm resets on usb2-port2, and logs filled with "Cannot enable. Maybe the USB cable is bad?"
+messages. One of my colleagues looked into a usbmon dump, and came up with the
+following analysis:
 
-This is where the problem is tripped, notice that it comes
-because gadget runs a timer:
+The driver starts by inquiring the current port status with a GET_STATUS request:
+ID TIME SOURCE DEST PROT LEN INFO
+35 0.624266 host 2.1.0 USBHUB 64 GET_STATUS Request [Port 2]
+36 0.624280 2.1.0 host USBHUB 68 GET_STATUS Response [Port 2]
 
-> >  kasan_report+0xe/0x20 mm/kasan/common.c:641
-> >  __lock_acquire+0x31af/0x3b60 kernel/locking/lockdep.c:3827
-> >  lock_acquire+0x130/0x340 kernel/locking/lockdep.c:4484
-> >  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
-> >  _raw_spin_lock_irqsave+0x32/0x50 kernel/locking/spinlock.c:159
-> >  usblp_bulk_read+0x211/0x270 drivers/usb/class/usblp.c:303
-> >  __usb_hcd_giveback_urb+0x1f2/0x470 drivers/usb/core/hcd.c:1648
-> >  usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1713
-> >  dummy_timer+0x1258/0x32ae drivers/usb/gadget/udc/dummy_hcd.c:1966
-> >  call_timer_fn+0x195/0x6f0 kernel/time/timer.c:1404
-> >  expire_timers kernel/time/timer.c:1449 [inline]
-> >  __run_timers kernel/time/timer.c:1773 [inline]
-> >  __run_timers kernel/time/timer.c:1740 [inline]
+Frame 36 responds with [Port Status: 0x0340, PORT_POWER, PORT_LOW_SPEED]. When
+taking bits 5-8 from 0x340, we get '0xA'. According to "Table 10-13. Port Status
+Field, wPortStatus" from the USB specification, this corresponds to Compliance
+Mode.
 
-At this point the whole struct usblp is freed, including the
-spinlock which we're trying to lock.
+The driver then issues a Warm Reset. According to "7.5.5.2 Exit from
+Compliance Mode", a Warm Reset shall transition the port to Rx.Detect.
+ID TIME SOURCE DEST PROT LEN INFO
+37 0.624299 host 2.1.0 USBHUB 64 SET_FEATURE Request [Port 2: BH_PORT_RESET]
+38 0.624321 2.1.0 host USBHUB 64 SET_FEATURE Response [Port 2: BH_PORT_RESET]
 
-> > Allocated by task 3361:
-> >  save_stack+0x1b/0x80 mm/kasan/common.c:72
-> >  set_track mm/kasan/common.c:80 [inline]
-> >  __kasan_kmalloc mm/kasan/common.c:515 [inline]
-> >  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:488
-> >  kmalloc include/linux/slab.h:555 [inline]
-> >  kzalloc include/linux/slab.h:669 [inline]
-> >  usblp_probe+0xed/0x1200 drivers/usb/class/usblp.c:1104
-> >  usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:374
-> >  really_probe+0x290/0xac0 drivers/base/dd.c:551
-> >  driver_probe_device+0x223/0x350 drivers/base/dd.c:724
+What follows is the driver querying the port status for the C_PORT_RESET
+flag. This flag is responsible for indicating the port is done with the Warm
+Reset, and operation can proceed from the Rx.Detect state:
+ID TIME SOURCE DEST PROT LEN INFO
+39 0.683989 host 2.1.0 USBHUB 64 GET_STATUS Request [Port 2]
+40 0.684015 2.1.0 host USBHUB 68 GET_STATUS Response [Port 2] (Port Status: 0x350 | Port Change: 0x0)
+41 0.743988 host 2.1.0 USBHUB 64 GET_STATUS Request [Port 2]
+42 0.744012 2.1.0 host USBHUB 68 GET_STATUS Response [Port 2] (Port Status: 0x2f0 | Port Change: 0x0)
+43 0.951986 host 2.1.0 USBHUB 64 GET_STATUS Request [Port 2]
+44 0.952011 2.1.0 host USBHUB 68 GET_STATUS Response [Port 2] (Port Status: 0x2f0 | Port Change: 0x0)
+45 1.159985 host 2.1.0 USBHUB 64 GET_STATUS Request [Port 2]
+46 1.160010 2.1.0 host USBHUB 68 GET_STATUS Response [Port 2] (Port Status: 0x2f0 | Port Change: 0x0)
+49 1.367981 host 2.1.0 USBHUB 64 GET_STATUS Request [Port 2]
+50 1.368010 2.1.0 host USBHUB 68 GET_STATUS Response [Port 2] (Port Status: 0x340 | Port Change: 0x30)
 
-1104 is kzalloc for struct usblp.
+In frame 40, the Port Status changes to 0x350 by setting PORT_RESET,
+acknowledging the Warm Reset request. It then changes to 0x2f0 in frame 42,
+which corresponds to the Polling state. The C_PORT_RESET flag is still not set,
+so we shouldn't be transitioning to this state yet! (we need to end in Rx.Detect)
+At last in frame 50, the Port Change flag is set to 0x30, corresponding to the
+C_PORT_RESET bit. The Port Status is now back to 0x340, indicating the port is
+back to Compliance Mode.
 
-> > Freed by task 12266:
-> >  save_stack+0x1b/0x80 mm/kasan/common.c:72
-> >  set_track mm/kasan/common.c:80 [inline]
-> >  kasan_set_free_info mm/kasan/common.c:337 [inline]
-> >  __kasan_slab_free+0x117/0x160 mm/kasan/common.c:476
-> >  slab_free_hook mm/slub.c:1444 [inline]
-> >  slab_free_freelist_hook mm/slub.c:1477 [inline]
-> >  slab_free mm/slub.c:3034 [inline]
-> >  kfree+0xd5/0x300 mm/slub.c:3995
-> >  usblp_disconnect.cold+0x24/0x29 drivers/usb/class/usblp.c:1380
-> >  usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:436
-> >  __device_release_driver drivers/base/dd.c:1137 [inline]
-> >  device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1168
-> >  bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
+The driver then clears the Port Change flags, and starts issuing the Warm Reset
+again. This repeats until PORT_RESET_TRIES, which is 5 for the Bionic
+kernel. This process is also the cause of all the log spam, since even without
+debug information this section of the driver has a lot of messages.
+ID TIME SOURCE DEST PROT LEN INFO
+51 1.368020 host 2.1.0 USBHUB 64 CLEAR_FEATURE Request [Port 2: C_PORT_RESET]
+52 1.368031 2.1.0 host USBHUB 64 CLEAR_FEATURE Response [Port 2: C_PORT_RESET]
+53 1.368035 host 2.1.0 USBHUB 64 CLEAR_FEATURE Request [Port 2: C_BH_PORT_RESET]
+54 1.368045 2.1.0 host USBHUB 64 CLEAR_FEATURE Response [Port 2: C_BH_PORT_RESET]
+55 1.368049 host 2.1.0 USBHUB 64 CLEAR_FEATURE Request [Port 2: C_PORT_LINK_STATE]
+56 1.368058 2.1.0 host USBHUB 64 CLEAR_FEATURE Response [Port 2: C_PORT_LINK_STATE]
+57 1.368062 host 2.1.0 USBHUB 64 CLEAR_FEATURE Request [Port 2: C_PORT_CONNECTION]
+58 1.368071 2.1.0 host USBHUB 64 CLEAR_FEATURE Response [Port 2: C_PORT_CONNECTION]
+59 1.368074 host 2.1.0 USBHUB 64 GET_STATUS Request [Port 2]
+60 1.368085 2.1.0 host USBHUB 68 GET_STATUS Response [Port 2] (Port Status: 0x340 | Port Change: 0x0)
+61 1.368093 host 2.1.0 USBHUB 64 SET_FEATURE Request [Port 2: BH_PORT_RESET]
+62 1.368100 2.1.0 host USBHUB 64 SET_FEATURE Response [Port 2: BH_PORT_RESET]
 
-1380 is an inlined call to usblp_cleanup, which is just
-a bunch of kfree.
+The thing is, the technicians swapped out the USB 3 cable which connected one of the
+rear USB 3 ports to the USB 3 hub with many devices for a different cable from a
+different manufacturer. The problem vanished, and it was assumed to be a bad batch
+of cables.
 
-The bug report is still a bug report, but I'm pretty sure the
-culprit is the emulated HCD and/or the gadget layer. Unfortunately,
-I'm not up to speed in that subsystem. Maybe Alan can look at it?
+The problem returned again when the before mentioned patch was backported to the Ubuntu
+kernel, and caused this "regression". 
 
--- Pete
+> 
+> My guess is that without the patch the USB 3 part of the hub is not working either. 
+> Patch probably helps hub driver discover there is a USB 3 device in a SS_INVALID link
+> state in the first place, and starts recovering it by warm resetting it.
+> 
 
+You may very well be right, considering our previous experience with the "bad" USB 3 cable.
+How can we determine which device might be in this SS_INVALID link state? Should we do
+another usbmon binary dump with a recent mainline kernel and go from there?
+
+If the current warm reset regression is the same as what we previously saw when there was
+a "bad" USB cable, does the non-compliant behaviour indicate that this is a hardware problem
+and not a kernel problem?
+
+> If it's an external hub can you try connecting some other USB 3 device first to a 
+> USB 3 roothub port, and then the hub to another USB 3 roothub port?
+> 
+> This way the USB 3 roothub (bus) should not be suspended when the USB 3 hub is connected.
+> Does that help, or change anything
+
+Unfortunately no one has physical access to the server at the moment due to the lockdown,
+and we only have remote ssh access. We will try this out once the technicians have access
+to their offices again.
+
+Again, thank you for your help.
+
+Matthew
