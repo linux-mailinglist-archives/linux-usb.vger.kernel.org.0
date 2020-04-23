@@ -2,78 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7721B58B3
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 11:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08EF21B58F0
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 12:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbgDWJ7M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Apr 2020 05:59:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59238 "EHLO mail.kernel.org"
+        id S1726750AbgDWKTo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 06:19:44 -0400
+Received: from mga04.intel.com ([192.55.52.120]:29833 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726343AbgDWJ7M (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Apr 2020 05:59:12 -0400
-Received: from pobox.suse.cz (unknown [195.250.132.148])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2583320776;
-        Thu, 23 Apr 2020 09:59:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587635951;
-        bh=h0cEpFyyTV9DIslKZvNsTAoxOPb/8EK4/m+d0jhEsZw=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=mPzDOmfNMHch49qxZ6670ViWhek75QlHoYknXGyv0HzFtVpaMX6oSBnDFNvw+fOUv
-         faDBVd/Kp+qO8ntHsLErzLvOHMuvoZfmWouAXkrIzHnL2lsQwzdoCgH4EpqEfeDHee
-         YyB8W9SchtJ41Ny3gi+vPpE/WhC+kvXEd6VvxpeE=
-Date:   Thu, 23 Apr 2020 11:59:07 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-cc:     syzbot <syzbot+7bf5a7b0f0a1f9446f4c@syzkaller.appspotmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Julian Squires <julian@cipht.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, andreyknvl@google.com,
-        gregkh@linuxfoundation.org, ingrassia@epigenesys.com,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com, Ping Cheng <pingc@wacom.com>,
-        pinglinux@gmail.com, killertofu@gmail.com
-Subject: Re: KASAN: use-after-free Read in usbhid_close (3)
-In-Reply-To: <Pine.LNX.4.44L0.2004221058240.20574-100000@netrider.rowland.org>
-Message-ID: <nycvar.YFH.7.76.2004231157160.19713@cbobk.fhfr.pm>
-References: <Pine.LNX.4.44L0.2004221058240.20574-100000@netrider.rowland.org>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        id S1726490AbgDWKTo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Apr 2020 06:19:44 -0400
+IronPort-SDR: TC88eBxm469uo44iVhzRyCaK1OwYEZ+KJRohid+U5Tnkr4YHgQHkOJDIb3jXhpAnIeb8XMTeHn
+ sk8oNkYsL4+w==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2020 03:19:43 -0700
+IronPort-SDR: rcIskyk6nKvlN2GAWkh1/9Dyc0RneQxqJWAa7jtqbzZNgub/bIh7ytz6vk0u81XppObMID7o6D
+ yKgKBxTWIO3Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,306,1583222400"; 
+   d="scan'208";a="365963385"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 23 Apr 2020 03:19:41 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 23 Apr 2020 13:19:40 +0300
+Date:   Thu, 23 Apr 2020 13:19:40 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Naoki Kiryu <naonaokiryu2@gmail.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: altmode: Fix typec_altmode_get_partner
+ sometimes returning an invalid pointer
+Message-ID: <20200423101940.GA1286704@kuha.fi.intel.com>
+References: <20200422144345.43262-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200422144345.43262-1-hdegoede@redhat.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 22 Apr 2020, Alan Stern wrote:
-
-> > Jiri, you should know: Are HID drivers supposed to work okay when the
-> > ->close callback is issued after (or concurrently with) the ->stop
-> > callback?
+On Wed, Apr 22, 2020 at 04:43:45PM +0200, Hans de Goede wrote:
+> From: Naoki Kiryu <naonaokiryu2@gmail.com>
 > 
-> No response.  
+> Before this commit, typec_altmode_get_partner would return a
+> const struct typec_altmode * pointing to address 0x08 when
+> to_altmode(adev)->partner was NULL.
+> 
+> Add a check for to_altmode(adev)->partner being NULL to fix this.
+> 
+> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=206365
+> BugLink: https://bugzilla.redhat.com/show_bug.cgi?id=1785972
+> Fixes: 5f54a85db5df ("usb: typec: Make sure an alt mode exist before getting its partner")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Naoki Kiryu <naonaokiryu2@gmail.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-Sorry, I've been a bit swamped recently. Thanks a lot for taking care of 
-this.
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-> I'll assume that strange callback orderings should be supported.  Let's 
-> see if the patch below fixes the race in usbhid.
+> ---
+>  drivers/usb/typec/bus.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/bus.c b/drivers/usb/typec/bus.c
+> index c823122f9cb7..e8ddb81cb6df 100644
+> --- a/drivers/usb/typec/bus.c
+> +++ b/drivers/usb/typec/bus.c
+> @@ -198,7 +198,10 @@ EXPORT_SYMBOL_GPL(typec_altmode_vdm);
+>  const struct typec_altmode *
+>  typec_altmode_get_partner(struct typec_altmode *adev)
+>  {
+> -	return adev ? &to_altmode(adev)->partner->adev : NULL;
+> +	if (!adev || !to_altmode(adev)->partner)
+> +		return NULL;
+> +
+> +	return &to_altmode(adev)->partner->adev;
+>  }
+>  EXPORT_SYMBOL_GPL(typec_altmode_get_partner);
+>  
+> -- 
+> 2.26.0
 
-Unfortunately I don't believe the supportability of this is fully defined. 
-I have tried to quickly go over the few major drivers and didn't find 
-anything relying various orderings, but I might have easily missed some 
-case.
-
-So unless we have a programatic way to check it, the patch you created for 
-mutual exclusion is a good bandaid I believe.
-
-Thanks again Alan, I'll push it to Linus for 5.7.
+thanks,
 
 -- 
-Jiri Kosina
-SUSE Labs
-
+heikki
