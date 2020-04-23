@@ -2,130 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A851B630A
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 20:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 559191B637C
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 20:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730186AbgDWSKk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Apr 2020 14:10:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50242 "EHLO
+        id S1730162AbgDWS1Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 14:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730169AbgDWSKj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 14:10:39 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5746C09B043
-        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2020 11:10:37 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id k18so2668257pll.6
-        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2020 11:10:37 -0700 (PDT)
+        with ESMTP id S1730378AbgDWS1O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 14:27:14 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA296C09B047
+        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2020 11:27:13 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id o127so7539862iof.0
+        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2020 11:27:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QrjNM8BIB5l9RDDyP/w9uL8SShDah7FJKmQ5DvjnKE8=;
-        b=AsXfCxXazLdQ4m4tFsITnoDFMxqGenJRkSF+hQa764+Ie951E0z1+86ZtMDbqQeqN9
-         EoMfgJun6N/RY0LSGQ4n6KcyLtyLxeE6qI0AYgv5QA60oCmP8THtiezL2RHowJtIe/7X
-         ibS7aUydBcFHYotXKrT/7B5h0McBa7t+WrF0Kod6rl8RAR3VRpE2rebAt0ODkRKw89rM
-         h2swOx8HZH8pTN3Epi4K0wNbez+NDF2bsW3xtSPJjsFeLdq7yB50zmj/WTJb0qBWc6sq
-         zELPZtUFYAhh1kh05HOxNhOi2RPJGDPjiDAXuUVBTAZRVjZr8kCBRFN0xdbZ/Wq5/FTF
-         rGDA==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
+        b=G0MearUWJO2XoX5WFWCbOSBM0KnomNOcLxBMKb36E56Tk8IIyFbWO7z4INTed1WkRU
+         qeMi1eRR7YsA+BDT6DQvUAii78YnzCjvNMVBKy4slcZy3/gJbFRS56rTYb2i1ZQ8vqn/
+         EOaplCA4N/rSu1DPvHSaWXp+qBo2gCjTbf/vDHta9DawS0nUkV5FYws7CV/zXlK/VYiG
+         COL+ehFclZxGMjmnJCFdgQT7XS8eBs73XeZW6OQ9vAUq0KfaGK/YZHActLVD5NzSJiie
+         gXxsbNT9IQMnd4wAzDKDPSrX8AkY/tvkHFQgBX+60qxPigWKusZrEf/ce5VP7zRF3LJ+
+         eYhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QrjNM8BIB5l9RDDyP/w9uL8SShDah7FJKmQ5DvjnKE8=;
-        b=Y4fDMXNkhOuIFzmsAU7D7PYswzYbftKHdOVhYcK+gp2n1n6555oKp8ll7TXxyBMRac
-         YwZ0EFz9mMiadD8eK/yEMBfGLwKIahpqTyGBuE+StWhmZqU/S1/cC9bwzJgSRBsIpIUB
-         tbh9lkWNQXW8XfNS0TfLNlOzI0Wwj1DNO9c7dBTr+3tGFaZofPFtmxuyPcX5yZRhe+YX
-         FqprRIdWRTsz4Zvu4r23qpg2ud1eI/TaJZeUAzkZnF/Qce9j5d4TPR7Mrid8jV6W+5wN
-         fM6M18DKo++aEgS2Df0q5TfeQhraqtUpGCMJfw39ny/Q+1T1U/z0nycg4uMGIlAJJf7/
-         IPdQ==
-X-Gm-Message-State: AGi0PuYpDHXz3fAogu/WuHtBqLBuIRFjMyV3XtLwNkEPj7PJ5Lc7mShu
-        30Hfe87iYMh5OJ6+BO+BzD9e5NAcISEAPVaOINvCwA==
-X-Google-Smtp-Source: APiQypJxSAw4KraboivCNfbdVu5dxs22Lp01yJChZEKk7LuJohXkK/zLo28qdyZgNXxQMSdqcAn9Gjof2vvDu8FLAOQ=
-X-Received: by 2002:a17:902:ac87:: with SMTP id h7mr4756081plr.119.1587665437124;
- Thu, 23 Apr 2020 11:10:37 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
+        b=S/3zShMH+W53KIP/T7SlaDd7C6Hl8vWqkNx50mx/Kny5hWn3D+wsJEMs6U9M0Yt4OJ
+         omoAGiQyBq9dWeckkGCPPtt0CmUozSMzDWa2ETE5Uvk/Do0Ocn77u0Np0FYlunwtsYdb
+         Hhmj2Rqfq+zSkDS+IY7pjAMkk4xh5BZ9h0EElrdXAh4KP9pvZ6uyu20aEd+B3dk5QSKg
+         BUIdN4hNGbEXkzGj0NkBVDrnorhUsf7WRdklZGfnjXH92TWJdxvuGqwNdKpVJvpGnjpG
+         f7EjKzY9m0b6kydL195999t9m654qNnmgsc9xSjJXNmUbQeETkiZcGgB6A/nDt5gyuWv
+         ejHA==
+X-Gm-Message-State: AGi0PuYlTLZxd9NwqSksJ2TayS6Bta1iupvdBVW1gncV+OXFLMVXargf
+        gdiHxqb9d9IxtQEJDXYbbZze9bD5wAUKVkLbrg==
+X-Google-Smtp-Source: APiQypKOhu0Ivyzu1MQANRLgnSM6D7f6PDwmOyOGFsy7UwOOUt5tM1gVxevJ7CcMC29eb2aYcjzRxadXayX+T6slpNc=
+X-Received: by 2002:a05:6602:d:: with SMTP id b13mr5025673ioa.176.1587666433220;
+ Thu, 23 Apr 2020 11:27:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200423162923.10886-1-natechancellor@gmail.com>
-In-Reply-To: <20200423162923.10886-1-natechancellor@gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 23 Apr 2020 11:10:25 -0700
-Message-ID: <CAKwvOdnP247LJpqo5ZZfGXUktjtXKzhDwQU=aTOrFi-y_px9mA@mail.gmail.com>
-Subject: Re: [PATCH] USB: gadget: udc: s3c2410_udc: Remove pointless NULL
- check in s3c2410_udc_nuke
-To:     Nathan Chancellor <natechancellor@gmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        kbuild test robot <lkp@intel.com>
+Received: by 2002:a02:c845:0:0:0:0:0 with HTTP; Thu, 23 Apr 2020 11:27:12
+ -0700 (PDT)
+Reply-To: boa.benin107@yahoo.com
+From:   "Mrs. Angella Michelle" <info.zennitbankplcnigerian@gmail.com>
+Date:   Thu, 23 Apr 2020 20:27:12 +0200
+Message-ID: <CABHzvrnzZLe4Z0E4acOdcsDJTPa3wvp-Oz12f_M4TQ03PAGZkw@mail.gmail.com>
+Subject: Contact Eco bank-Benin to receive your payment funds transfer amount
+ of $12.800.000,00 Million USD,approved this morning by IMF.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 23, 2020 at 9:30 AM Nathan Chancellor
-<natechancellor@gmail.com> wrote:
->
-> Clang warns:
->
-> drivers/usb/gadget/udc/s3c2410_udc.c:255:11: warning: comparison of
-> address of 'ep->queue' equal to a null pointer is always false
-> [-Wtautological-pointer-compare]
->         if (&ep->queue == NULL)
->              ~~~~^~~~~    ~~~~
-> 1 warning generated.
->
-> It is not wrong, queue is not a pointer so if ep is not NULL, the
-> address of queue cannot be NULL. No other driver does a check like this
-> and this check has been around since the driver was first introduced,
-> presumably with no issues so it does not seem like this check should be
-> something else. Just remove it.
->
-> Commit afe956c577b2d ("kbuild: Enable -Wtautological-compare") exposed
-> this but it is not the root cause of the warning.
->
-> Fixes: 3fc154b6b8134 ("USB Gadget driver for Samsung s3c2410 ARM SoC")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1004
-> Reported-by: kbuild test robot <lkp@intel.com>
-> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
-
-Thanks for the patch!  If anything, I'd be happy to see some more NULL
-checks against `ep`, though the callers of s3c2410_udc_nuke() also
-seem quite confident that the pointer is not NULL.
-
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-> ---
->  drivers/usb/gadget/udc/s3c2410_udc.c | 4 ----
->  1 file changed, 4 deletions(-)
->
-> diff --git a/drivers/usb/gadget/udc/s3c2410_udc.c b/drivers/usb/gadget/udc/s3c2410_udc.c
-> index 0507a2ca0f552..80002d97b59d8 100644
-> --- a/drivers/usb/gadget/udc/s3c2410_udc.c
-> +++ b/drivers/usb/gadget/udc/s3c2410_udc.c
-> @@ -251,10 +251,6 @@ static void s3c2410_udc_done(struct s3c2410_ep *ep,
->  static void s3c2410_udc_nuke(struct s3c2410_udc *udc,
->                 struct s3c2410_ep *ep, int status)
->  {
-> -       /* Sanity check */
-> -       if (&ep->queue == NULL)
-> -               return;
-> -
->         while (!list_empty(&ep->queue)) {
->                 struct s3c2410_request *req;
->                 req = list_entry(ep->queue.next, struct s3c2410_request,
->
-> base-commit: ae83d0b416db002fe95601e7f97f64b59514d936
-> --
-> 2.26.2
->
-> --
-> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/20200423162923.10886-1-natechancellor%40gmail.com.
-
-
-
--- 
-Thanks,
-~Nick Desaulniers
+Attn Dear.
+Contact Bank of Africa-Benin to receive your payment funds transfer amount =
+of
+$12.800.000,00 Million USD,approved this morning by IMF.
+Happy to inform you, we have finally deposited your payment funds
+$12.8 million us dollars with the Paying Bank of Africa-Benin
+to transfer the payment amount of $12.800,000,00 Million Us Dollars to you
+Contact the bank immediately you receive this email now.
+Director Bank of Africa-Benin: Dr. Festus Obiara
+Email id:  boa.benin107@yahoo.com
+Tel/mobile, (229) 62819378
+BOA-BENIN | GROUPE BANK OF AFRICA, boa-benin
+Avenue Jean-Paul II - 08 BP 0879 - Cotonou - B=C3=A9nin
+Phone:(229) 62819378.
+2020 GROUPE BANK OF AFRICA
+Be advised to re-confirm your bank details to this bank as listed.
+Your account Holder's name----------------
+Bank Name----------------------------------------------------------
+Bank address----------------------------------------------
+Account Numbers---------------------------------------
+Rounting-----------------------------------------------------------------
+Your direct Phone Numbers----------------------------------------------
+Note,I have paid the deposit and insurance fees for you
+But the only money you are to send to this bank is $150.00 us dollars
+Been for the wire transfer fees of your funds
+Contact Him now to receive your transfer deposited this morning
+I wait for your reply upon confirmation
+Mrs. Angella Michelle
+Editor, Zenith Bank- Companies Benin
+mrsa9389@gmail.com
