@@ -2,190 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AAD41B5CEA
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 15:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 318AF1B5D06
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 15:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728624AbgDWNuf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Apr 2020 09:50:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39132 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726926AbgDWNue (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Apr 2020 09:50:34 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3BFEB20728;
-        Thu, 23 Apr 2020 13:50:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587649833;
-        bh=Zl7NuDjGvPHVLfMVDJIvKZWGpQWblUX8qdNJAHq1Tr8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rtRmKMGa59ZzrLxzNTg+TXuM9mxHpLgKLQhjZLLNvtfpddzm7hI1VwnniqsV6bwDM
-         8N2/eCvUHDcmPP+1YOGNEgVBevpeEo4iTDASVgWq5AsAVxMYnUxdtxKHJBHn4Zn5Y9
-         oqFsLK6AoMDPqJDKJaVwDNwTkxQhVsA5qPT2HBuE=
-Date:   Thu, 23 Apr 2020 15:50:31 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     jason.wessel@windriver.com, daniel.thompson@linaro.org,
-        kgdb-bugreport@lists.sourceforge.net, mingo@redhat.com,
-        hpa@zytor.com, bp@alien8.de, linux-serial@vger.kernel.org,
-        agross@kernel.org, tglx@linutronix.de, frowand.list@gmail.com,
-        bjorn.andersson@linaro.org, jslaby@suse.com,
-        catalin.marinas@arm.com, corbet@lwn.net, will@kernel.org,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@suse.de>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Enrico Weigelt <info@metux.net>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        James Morse <james.morse@arm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Matt Mullins <mmullins@fb.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        jinho lim <jordan.lim@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v2 0/9] kgdb: Support late serial drivers; enable early
- debug w/ boot consoles
-Message-ID: <20200423135031.GA4091353@kroah.com>
-References: <20200421211447.193860-1-dianders@chromium.org>
+        id S1728562AbgDWN7G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 09:59:06 -0400
+Received: from mail-il1-f198.google.com ([209.85.166.198]:41504 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726910AbgDWN7G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 09:59:06 -0400
+Received: by mail-il1-f198.google.com with SMTP id y2so5356221ilm.8
+        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2020 06:59:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=dpbkYCqNwiya7LvDlfQG8V+VIE3Sl4BpSmb11y1lkGI=;
+        b=sC8Pyqk3iEUfx/tQ16bA2DUEmMq4YMlrWWTfkq0uoxnsoe6ol+4SGFJVlqB51blQ/x
+         1FMtQJMx7nOXYoIwtfbdUwc8A/e5gKGpL97CHAFD2tcCuG44ip6q1419L5oXEktBHAkf
+         ivBsKEHqVUnqd6YVtFdT/O2tOahBx/LEJRlEpmAIikqj1FU6S1zfOQeUF8/F6l1d8pY+
+         18scsivg3spjEquWyFg3m2WBqUxyr9K4yWNrHB99AR80ukDpngoqBZRH/7IbVw1hpmPd
+         1Bk4jVYodb4JAqlkqnlDXoc8zKQSEW5J4awfey+makU/bBdE7x0U93wYr0JYsUw5upgr
+         tY1g==
+X-Gm-Message-State: AGi0PuZC2GeShdncRKAnn2cEMKvkAD0vJVyL487RjcjoarYop0ZeQpRJ
+        0BgZhsMr0WRdtax1Gid7oMc3kYr1zh5obfdJ8vNTa21IAqFq
+X-Google-Smtp-Source: APiQypJC6MDg/0aIVVcBeCfiSeeypJEdYyejUKpZAtN6rtzzlYUG5E69//6Oj7KkicPbf/rKLGOXHGUZTUqPe/D3w7bEbAaXiNNQ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200421211447.193860-1-dianders@chromium.org>
+X-Received: by 2002:a5e:a607:: with SMTP id q7mr3846471ioi.109.1587650343840;
+ Thu, 23 Apr 2020 06:59:03 -0700 (PDT)
+Date:   Thu, 23 Apr 2020 06:59:03 -0700
+In-Reply-To: <1587649702.23108.10.camel@suse.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c5b43705a3f5a69f@google.com>
+Subject: Re: general protection fault in go7007_usb_probe
+From:   syzbot <syzbot+cabfa4b5b05ff6be4ef0@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, hverkuil-cisco@xs4all.nl,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org, oneukum@suse.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 21, 2020 at 02:14:38PM -0700, Douglas Anderson wrote:
-> This whole pile of patches was motivated by me trying to get kgdb to
-> work properly on a platform where my serial driver ended up being hit
-> by the -EPROBE_DEFER virus (it wasn't practicing social distancing
-> from other drivers).  Specifically my serial driver's parent device
-> depended on a resource that wasn't available when its probe was first
-> called.  It returned -EPROBE_DEFER which meant that when "kgdboc"
-> tried to run its setup the serial driver wasn't there.  Unfortunately
-> "kgdboc" never tried again, so that meant that kgdb was disabled until
-> I manually enalbed it via sysfs.
-> 
-> While I could try to figure out how to get around the -EPROBE_DEFER
-> somehow, the above problems could happen to anyone and -EPROBE_DEFER
-> is generally considered something you just have to live with.  In any
-> case the current "kgdboc" setup is a bit of a race waiting to happen.
-> I _think_ I saw during early testing that even adding a msleep() in
-> the typical serial driver's probe() is enough to trigger similar
-> issues.
-> 
-> I decided that for the above race the best attitude to get kgdb to
-> register at boot was probably "if you can't beat 'em, join 'em".
-> Thus, "kgdboc" now jumps on the -EPROBE_DEFER bandwagon (now that my
-> driver uses it it's no longer a virus).  It does so a little awkwardly
-> because "kgdboc" hasn't normally had a "struct device" associated with
-> it, but it's really not _that_ ugly to make a platform device and
-> seems less ugly than alternatives.
-> 
-> Unfortunately now on my system the debugger is one of the last things
-> to register at boot.  That's OK for debugging problems that show up
-> significantly after boot, but isn't so hot for all the boot problems
-> that I end up debugging.  This motivated me to try to get something
-> working a little earlier.
-> 
-> My first attempt was to try to get the existing "ekgdboc" to work
-> earlier.  I tried that for a bit until I realized that it needed to
-> work at the tty layer and I couldn't find any serial drivers that
-> managed to register themselves to the tty layer super early at boot.
-> The only documented use of "ekgdboc" is "ekgdboc=kbd" and that's a bit
-> of a special snowflake.  Trying to get my serial driver and all its
-> dependencies to probe normally and register the tty driver super early
-> at boot seemed like a bad way to go.  In fact, all the complexity
-> needed to do something like this is why the system already has a
-> special concept of a "boot console" that lives only long enough to
-> transition to the normal console.
-> 
-> Leveraging the boot console seemed like a good way to go and that's
-> what this series does.  I found that consoles could have a read()
-> function, though I couldn't find anyone who implemented it.  I
-> implemented it for two serial drivers for the devices I had easy
-> access to, making the assumption that for boot consoles that we could
-> assume read() and write() were polling-compatible (seems sane I
-> think).
-> 
-> Now anyone who makes a small change to their serial driver can easily
-> enable early kgdb debugging!
-> 
-> The devices I had for testing were:
-> - arm32: rk3288-veyron-jerry
-> - arm64: rk3399-gru-kevin
-> - arm64: qcom-sc7180-trogdor (not mainline yet)
-> 
-> These are the devices I tested this series on.  I tried to test
-> various combinations of enabling/disabling various options and I
-> hopefully caught the corner cases, but I'd appreciate any extra
-> testing people can do.  Notably I didn't test on x86, but (I think) I
-> didn't touch much there so I shouldn't have broken anything.
-> 
-> When testing I found a few problems with actually dropping into the
-> debugger super early on arm and arm64 devices.  Patches in this series
-> should help with this.  For arm I just avoid dropping into the
-> debugger until a little later and for arm64 I actually enable
-> debugging super early.
-> 
-> I realize that bits of this series might feel a little hacky, though
-> I've tried to do things in the cleanest way I could without overly
-> interferring with the rest of the kernel.  If you hate the way I
-> solved a problem I would love it if you could provide guidance on how
-> you think I could solve the problem better.
-> 
-> This series (and my comments / documentation / commit messages) are
-> now long enough that my eyes glaze over when I try to read it all over
-> to double-check.  I've nontheless tried to double-check it, but I'm
-> pretty sure I did something stupid.  Thank you ahead of time for
-> pointing it out to me so I can fix it in v3.  If somehow I managed to
-> not do anything stupid (really?) then thank you for double-checking me
-> anyway.
-> 
-> Changes in v2:
-> - ("kgdb: Disable WARN_CONSOLE_UNLOCKED for all kgdb") new for v2.
-> - ("Revert "kgdboc: disable the console lock when in kgdb"") new for v2.
-> - Assumes we have ("kgdb: Disable WARN_CONSOLE_UNLOCKED for all kgdb")
-> - Fix kgdbts, tty/mips_ejtag_fdc, and usb/early/ehci-dbgp
-> 
-> Douglas Anderson (9):
->   kgdb: Disable WARN_CONSOLE_UNLOCKED for all kgdb
->   Revert "kgdboc: disable the console lock when in kgdb"
->   kgdboc: Use a platform device to handle tty drivers showing up late
->   kgdb: Delay "kgdbwait" to dbg_late_init() by default
->   arm64: Add call_break_hook() to early_brk64() for early kgdb
->   kgdboc: Add earlycon_kgdboc to support early kgdb using boot consoles
->   Documentation: kgdboc: Document new earlycon_kgdboc parameter
->   serial: qcom_geni_serial: Support earlycon_kgdboc
->   serial: 8250_early: Support earlycon_kgdboc
-> 
->  .../admin-guide/kernel-parameters.txt         |  20 ++
->  Documentation/dev-tools/kgdb.rst              |  14 +
->  arch/arm64/include/asm/debug-monitors.h       |   2 +
->  arch/arm64/kernel/debug-monitors.c            |   2 +-
->  arch/arm64/kernel/kgdb.c                      |   5 +
->  arch/arm64/kernel/traps.c                     |   3 +
->  arch/x86/kernel/kgdb.c                        |   5 +
->  drivers/misc/kgdbts.c                         |   2 +-
->  drivers/tty/mips_ejtag_fdc.c                  |   2 +-
->  drivers/tty/serial/8250/8250_early.c          |  23 ++
->  drivers/tty/serial/kgdboc.c                   | 262 ++++++++++++++++--
->  drivers/tty/serial/qcom_geni_serial.c         |  32 +++
->  drivers/usb/early/ehci-dbgp.c                 |   2 +-
->  include/linux/kgdb.h                          |  25 +-
->  kernel/debug/debug_core.c                     |  48 +++-
->  15 files changed, 400 insertions(+), 47 deletions(-)
+Hello,
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+syzbot has tested the proposed patch but the reproducer still triggered crash:
+general protection fault in go7007_usb_probe
+
+usb 3-1: string descriptor 0 read error: -71
+general protection fault, probably for non-canonical address 0xdffffc00000000bd: 0000 [#1] SMP KASAN
+KASAN: null-ptr-deref in range [0x00000000000005e8-0x00000000000005ef]
+CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.7.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:go7007_usb_probe+0x1ff/0x1de4 drivers/media/usb/go7007/go7007-usb.c:1130
+Code: 03 80 3c 02 00 0f 85 00 19 00 00 4d 8b ae 98 00 00 00 48 b8 00 00 00 00 00 fc ff df 49 8d bd e8 05 00 00 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 cd 18 00 00 4d 8b ad e8 05 00 00 4d 85 ed 0f 84
+RSP: 0018:ffff8881da317190 EFLAGS: 00010206
+RAX: dffffc0000000000 RBX: ffff8881d5768000 RCX: 1ffffffff126c1fa
+RDX: 00000000000000bd RSI: ffffffff845438b9 RDI: 00000000000005e8
+RBP: ffff8881cbc94000 R08: 0000000000000001 R09: fffffbfff1268ad6
+R10: ffffffff893456af R11: fffffbfff1268ad5 R12: ffffffff867853e0
+R13: 0000000000000000 R14: ffff8881cbd02400 R15: ffff8881c7f23000
+FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000056141ffa7578 CR3: 00000001ccc54000 CR4: 00000000001406e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:374
+ really_probe+0x290/0xac0 drivers/base/dd.c:527
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:701
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:808
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x21a/0x390 drivers/base/dd.c:874
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0x1367/0x1c20 drivers/base/core.c:2533
+ usb_set_configuration+0xed4/0x1850 drivers/usb/core/message.c:2025
+ usb_generic_driver_probe+0x9d/0xe0 drivers/usb/core/generic.c:241
+ usb_probe_device+0xd9/0x230 drivers/usb/core/driver.c:272
+ really_probe+0x290/0xac0 drivers/base/dd.c:527
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:701
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:808
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x21a/0x390 drivers/base/dd.c:874
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0x1367/0x1c20 drivers/base/core.c:2533
+ usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2548
+ hub_port_connect drivers/usb/core/hub.c:5195 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5335 [inline]
+ port_event drivers/usb/core/hub.c:5481 [inline]
+ hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5563
+ process_one_work+0x965/0x1630 kernel/workqueue.c:2268
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2414
+ kthread+0x326/0x430 kernel/kthread.c:268
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Modules linked in:
+---[ end trace 3c58732c46bcaa36 ]---
+RIP: 0010:go7007_usb_probe+0x1ff/0x1de4 drivers/media/usb/go7007/go7007-usb.c:1130
+Code: 03 80 3c 02 00 0f 85 00 19 00 00 4d 8b ae 98 00 00 00 48 b8 00 00 00 00 00 fc ff df 49 8d bd e8 05 00 00 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 cd 18 00 00 4d 8b ad e8 05 00 00 4d 85 ed 0f 84
+RSP: 0018:ffff8881da317190 EFLAGS: 00010206
+RAX: dffffc0000000000 RBX: ffff8881d5768000 RCX: 1ffffffff126c1fa
+RDX: 00000000000000bd RSI: ffffffff845438b9 RDI: 00000000000005e8
+RBP: ffff8881cbc94000 R08: 0000000000000001 R09: fffffbfff1268ad6
+R10: ffffffff893456af R11: fffffbfff1268ad5 R12: ffffffff867853e0
+R13: 0000000000000000 R14: ffff8881cbd02400 R15: ffff8881c7f23000
+FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000056141ffa7578 CR3: 00000001ccc54000 CR4: 00000000001406e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
+Tested on:
+
+commit:         e9010320 usb: cdns3: gadget: make a bunch of functions sta..
+git tree:       https://github.com/google/kasan.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=158aba87e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=bd14feb44652cfaf
+dashboard link: https://syzkaller.appspot.com/bug?extid=cabfa4b5b05ff6be4ef0
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=12d0bfd7e00000
+
