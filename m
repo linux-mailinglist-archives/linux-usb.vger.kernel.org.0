@@ -2,91 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 559191B637C
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 20:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 196E21B6414
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 20:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730162AbgDWS1Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Apr 2020 14:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730378AbgDWS1O (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 14:27:14 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA296C09B047
-        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2020 11:27:13 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id o127so7539862iof.0
-        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2020 11:27:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
-        b=G0MearUWJO2XoX5WFWCbOSBM0KnomNOcLxBMKb36E56Tk8IIyFbWO7z4INTed1WkRU
-         qeMi1eRR7YsA+BDT6DQvUAii78YnzCjvNMVBKy4slcZy3/gJbFRS56rTYb2i1ZQ8vqn/
-         EOaplCA4N/rSu1DPvHSaWXp+qBo2gCjTbf/vDHta9DawS0nUkV5FYws7CV/zXlK/VYiG
-         COL+ehFclZxGMjmnJCFdgQT7XS8eBs73XeZW6OQ9vAUq0KfaGK/YZHActLVD5NzSJiie
-         gXxsbNT9IQMnd4wAzDKDPSrX8AkY/tvkHFQgBX+60qxPigWKusZrEf/ce5VP7zRF3LJ+
-         eYhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
-        b=S/3zShMH+W53KIP/T7SlaDd7C6Hl8vWqkNx50mx/Kny5hWn3D+wsJEMs6U9M0Yt4OJ
-         omoAGiQyBq9dWeckkGCPPtt0CmUozSMzDWa2ETE5Uvk/Do0Ocn77u0Np0FYlunwtsYdb
-         Hhmj2Rqfq+zSkDS+IY7pjAMkk4xh5BZ9h0EElrdXAh4KP9pvZ6uyu20aEd+B3dk5QSKg
-         BUIdN4hNGbEXkzGj0NkBVDrnorhUsf7WRdklZGfnjXH92TWJdxvuGqwNdKpVJvpGnjpG
-         f7EjKzY9m0b6kydL195999t9m654qNnmgsc9xSjJXNmUbQeETkiZcGgB6A/nDt5gyuWv
-         ejHA==
-X-Gm-Message-State: AGi0PuYlTLZxd9NwqSksJ2TayS6Bta1iupvdBVW1gncV+OXFLMVXargf
-        gdiHxqb9d9IxtQEJDXYbbZze9bD5wAUKVkLbrg==
-X-Google-Smtp-Source: APiQypKOhu0Ivyzu1MQANRLgnSM6D7f6PDwmOyOGFsy7UwOOUt5tM1gVxevJ7CcMC29eb2aYcjzRxadXayX+T6slpNc=
-X-Received: by 2002:a05:6602:d:: with SMTP id b13mr5025673ioa.176.1587666433220;
- Thu, 23 Apr 2020 11:27:13 -0700 (PDT)
+        id S1730339AbgDWSym (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 14:54:42 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:54149 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726362AbgDWSym (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 14:54:42 -0400
+Received: (qmail 13479 invoked by uid 500); 23 Apr 2020 14:54:40 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 23 Apr 2020 14:54:40 -0400
+Date:   Thu, 23 Apr 2020 14:54:40 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
+        <ingrassia@epigenesys.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
+Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
+In-Reply-To: <00000000000084cea205a3f875bd@google.com>
+Message-ID: <Pine.LNX.4.44L0.2004231451570.13251-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Received: by 2002:a02:c845:0:0:0:0:0 with HTTP; Thu, 23 Apr 2020 11:27:12
- -0700 (PDT)
-Reply-To: boa.benin107@yahoo.com
-From:   "Mrs. Angella Michelle" <info.zennitbankplcnigerian@gmail.com>
-Date:   Thu, 23 Apr 2020 20:27:12 +0200
-Message-ID: <CABHzvrnzZLe4Z0E4acOdcsDJTPa3wvp-Oz12f_M4TQ03PAGZkw@mail.gmail.com>
-Subject: Contact Eco bank-Benin to receive your payment funds transfer amount
- of $12.800.000,00 Million USD,approved this morning by IMF.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Attn Dear.
-Contact Bank of Africa-Benin to receive your payment funds transfer amount =
-of
-$12.800.000,00 Million USD,approved this morning by IMF.
-Happy to inform you, we have finally deposited your payment funds
-$12.8 million us dollars with the Paying Bank of Africa-Benin
-to transfer the payment amount of $12.800,000,00 Million Us Dollars to you
-Contact the bank immediately you receive this email now.
-Director Bank of Africa-Benin: Dr. Festus Obiara
-Email id:  boa.benin107@yahoo.com
-Tel/mobile, (229) 62819378
-BOA-BENIN | GROUPE BANK OF AFRICA, boa-benin
-Avenue Jean-Paul II - 08 BP 0879 - Cotonou - B=C3=A9nin
-Phone:(229) 62819378.
-2020 GROUPE BANK OF AFRICA
-Be advised to re-confirm your bank details to this bank as listed.
-Your account Holder's name----------------
-Bank Name----------------------------------------------------------
-Bank address----------------------------------------------
-Account Numbers---------------------------------------
-Rounting-----------------------------------------------------------------
-Your direct Phone Numbers----------------------------------------------
-Note,I have paid the deposit and insurance fees for you
-But the only money you are to send to this bank is $150.00 us dollars
-Been for the wire transfer fees of your funds
-Contact Him now to receive your transfer deposited this morning
-I wait for your reply upon confirmation
-Mrs. Angella Michelle
-Editor, Zenith Bank- Companies Benin
-mrsa9389@gmail.com
+On Thu, 23 Apr 2020, syzbot wrote:
+
+> Hello,
+> 
+> syzbot has tested the proposed patch and the reproducer did not trigger crash:
+
+Bad luck, I guess.  Let's try again.
+
+#syz test: https://github.com/google/kasan.git 0fa84af8
+
+Index: usb-devel/drivers/usb/core/hub.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/hub.c
++++ usb-devel/drivers/usb/core/hub.c
+@@ -4440,6 +4440,7 @@ void usb_ep0_reinit(struct usb_device *u
+ 	usb_disable_endpoint(udev, 0 + USB_DIR_IN, true);
+ 	usb_disable_endpoint(udev, 0 + USB_DIR_OUT, true);
+ 	usb_enable_endpoint(udev, &udev->ep0, true);
++	udev->alan1 = 0;
+ }
+ EXPORT_SYMBOL_GPL(usb_ep0_reinit);
+ 
+@@ -4471,6 +4472,7 @@ static int hub_set_address(struct usb_de
+ 		update_devnum(udev, devnum);
+ 		/* Device now using proper address. */
+ 		usb_set_device_state(udev, USB_STATE_ADDRESS);
++		udev->alan1 = 1;
+ 		usb_ep0_reinit(udev);
+ 	}
+ 	return retval;
+@@ -4838,6 +4840,7 @@ hub_port_init(struct usb_hub *hub, struc
+ 		else
+ 			dev_warn(&udev->dev, "Using ep0 maxpacket: %d\n", i);
+ 		udev->ep0.desc.wMaxPacketSize = cpu_to_le16(i);
++		udev->alan1 = 2;
+ 		usb_ep0_reinit(udev);
+ 	}
+ 
+@@ -5226,6 +5229,7 @@ static void hub_port_connect(struct usb_
+ loop_disable:
+ 		hub_port_disable(hub, port1, 1);
+ loop:
++		udev->alan1 = 3;
+ 		usb_ep0_reinit(udev);
+ 		release_devnum(udev);
+ 		hub_free_dev(udev);
+@@ -5766,6 +5770,7 @@ static int usb_reset_and_verify_device(s
+ 
+ 		/* ep0 maxpacket size may change; let the HCD know about it.
+ 		 * Other endpoints will be handled by re-enumeration. */
++		udev->alan1 = 4;
+ 		usb_ep0_reinit(udev);
+ 		ret = hub_port_init(parent_hub, udev, port1, i);
+ 		if (ret >= 0 || ret == -ENOTCONN || ret == -ENODEV)
+Index: usb-devel/drivers/usb/core/urb.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/urb.c
++++ usb-devel/drivers/usb/core/urb.c
+@@ -204,8 +204,12 @@ int usb_urb_ep_type_check(const struct u
+ 	const struct usb_host_endpoint *ep;
+ 
+ 	ep = usb_pipe_endpoint(urb->dev, urb->pipe);
+-	if (!ep)
++	if (!ep) {
++		dev_info(&urb->dev->dev, "Ep %d disabled: %d\n",
++			usb_pipeendpoint(urb->pipe),
++			urb->dev->alan1);
+ 		return -EINVAL;
++	}
+ 	if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
+ 		return -EINVAL;
+ 	return 0;
+Index: usb-devel/include/linux/usb.h
+===================================================================
+--- usb-devel.orig/include/linux/usb.h
++++ usb-devel/include/linux/usb.h
+@@ -629,6 +629,7 @@ struct usb3_lpm_parameters {
+  * usb_set_device_state().
+  */
+ struct usb_device {
++	int		alan1;
+ 	int		devnum;
+ 	char		devpath[16];
+ 	u32		route;
+
