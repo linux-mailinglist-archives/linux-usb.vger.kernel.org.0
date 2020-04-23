@@ -2,242 +2,212 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA101B580C
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 11:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D88B41B5823
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 11:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726346AbgDWJWq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Apr 2020 05:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725884AbgDWJWq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 05:22:46 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5446C03C1AF;
-        Thu, 23 Apr 2020 02:22:45 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id y4so5463499ljn.7;
-        Thu, 23 Apr 2020 02:22:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=5doi24Y6gjm8FI56UPIWnNVv3Prw/IrGAiEig/4smDw=;
-        b=r1i7tA6ZpF5x24N31aCJa9XQ248HyRRE+7gqnCxI0hcsDh55i5qzhbrEK6F45Zp/pp
-         jIKFz/5dT4h4OptGYTOpkxMN1G9z8yq7MIVjq+j680OEDAFlC/fqT69TAtThLJ9lWxLn
-         ypPHOvms5aeq4mLOMaOIc+bJbXyrgkuxsIPNtAOS0vrX8oYp0WtNnY3w9Mmw/QJobb6o
-         2KZ0CVoF1NFMk3k9gsm46IiNKUKkiSTurI2aTIJdvgNw16/ANlgl9mqphpl/P5fFu0rR
-         8jG3sPeFsw6hcldR82vmmnduoMzgyPO0afjmO7mSBn3S9yFaDV0EaZpzY2g+Y0NlI7wi
-         O7dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=5doi24Y6gjm8FI56UPIWnNVv3Prw/IrGAiEig/4smDw=;
-        b=TdfYaIqe35Mtf53SyqYZWLvI0M8WVNCKKCenjIsuNxX32PjoAiiGtZ+nZ2g4GPMUVP
-         +b3yYgflvsJ+tGNjzHtmTwvuNMpuhnMwWW5i0TEjt7CpL3gIRuLXoAQF2KcRL5dDZHGk
-         CEvutgDzqFVZFghOpk9/o9r2z66lHP7JWlUf84niXDGMJPvmiufi8l6cBZqNpAFefRny
-         FWiCm9nkRU+C47dkMy1j+AC0SqEodj/kdbyzHLwdX2xiuozBMM8SuWP0cMDMtT2Cs3uL
-         oJmGtqXnw2qCGcjF1SYQrU4ddQg4LT22jsGGZ3SrKF/6QwGzvxagjBRWIR7yZEooct/C
-         Ix5w==
-X-Gm-Message-State: AGi0PuYGKPjdHjmXizaTTNJ9Eas805HZ9fGivKYCXmm6mIB6GSAvJqE6
-        xcTfiYvoHgZgWRjfNNjkmduYiW4dOs8=
-X-Google-Smtp-Source: APiQypIoCacksgsXd8LiZPoRDZM/Zgr5dUAB5/J0YcHYLgZMSBNCJCn8A1md3qcx1la1OAHOLf02Xg==
-X-Received: by 2002:a05:651c:515:: with SMTP id o21mr1854567ljp.91.1587633763869;
-        Thu, 23 Apr 2020 02:22:43 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id y8sm1275341ljh.83.2020.04.23.02.22.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 23 Apr 2020 02:22:42 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     Josh Gao <jmgao@google.com>, YongQin Liu <yongqin.liu@linaro.org>,
-        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
-        Yang Fei <fei.yang@intel.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
-        Tejas Joglekar <tejas.joglekar@synopsys.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: More dwc3 gadget issues with adb
-In-Reply-To: <CALAqxLXkY2veX7DKAhXn-uxtMYygfKrJQaPiSKKLbnDvQnHinA@mail.gmail.com>
-References: <CALAqxLW2R4d=Zm=TKbFprN-uYrerL1oCYsVC3VedEKtW0gCsyA@mail.gmail.com> <877dyfsv00.fsf@kernel.org> <CALAqxLUdzKRV6nrcLpWsykK+WPnqhUK4iwRe4_Xmo-TvEV5KOg@mail.gmail.com> <87blnkcb6i.fsf@kernel.org> <CALAqxLXkY2veX7DKAhXn-uxtMYygfKrJQaPiSKKLbnDvQnHinA@mail.gmail.com>
-Date:   Thu, 23 Apr 2020 12:22:32 +0300
-Message-ID: <87k1261rqf.fsf@kernel.org>
+        id S1726386AbgDWJ1n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 05:27:43 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:38908 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725854AbgDWJ1n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 05:27:43 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03N9CamF018121;
+        Thu, 23 Apr 2020 11:27:35 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=ddZbmMdkoc6AUdq6N6QFS5E1Zm5acr798GCEd7mVLZA=;
+ b=0Jefn8E2CfPrP+w5DnjbGMLrcDPnH57GyUIqtVXVNTqD1opnn0WpoG5M35fEqAzNhUiw
+ OzVa3iRsym/yZokeHk05qANZt0xz7K+M8e2ShinUIYdVOEAwW5hgbPM1h2nvAVYzSqzp
+ QXVd71ReTeuCTjGKaiEPTEpUH8dx0TmSg3D3DcFI4scwFtfS1j3qUaadEtKMfgruQmWC
+ 9ox7BNDM6q1NhmXXiWQKTCEl3FQYqMv0UeUzKHmzm34HotHTVLDM+frI4YM014psDVAZ
+ oIZt1uI45DJfmJBF9k8fuidA58a3WAW6V8XQoTubiawiqxaCZIJI0G5SAUXXx0RNlKcf Yg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 30freguu6u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Apr 2020 11:27:35 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F161610002A;
+        Thu, 23 Apr 2020 11:27:34 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag5node3.st.com [10.75.127.15])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DD97121FE9E;
+        Thu, 23 Apr 2020 11:27:34 +0200 (CEST)
+Received: from [10.211.2.131] (10.75.127.45) by SFHDAG5NODE3.st.com
+ (10.75.127.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 23 Apr
+ 2020 11:27:33 +0200
+Subject: Re: [PATCH 1/4] usb: dwc2: gadget: move gadget resume after the core
+ is in L0 state
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        "balbi@kernel.org" <balbi@kernel.org>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "amelie.delaunay@st.com" <amelie.delaunay@st.com>
+References: <1587472341-17935-1-git-send-email-fabrice.gasnier@st.com>
+ <1587472341-17935-2-git-send-email-fabrice.gasnier@st.com>
+ <5391768a-da52-def8-9b2a-aeb559d8e26b@synopsys.com>
+ <ba525953-fbab-c2cf-beba-8755846cd27e@st.com>
+ <13a35aac-a3c9-df9f-a2b7-64abdbf9463c@synopsys.com>
+From:   Fabrice Gasnier <fabrice.gasnier@st.com>
+Message-ID: <d1a2ce55-450b-47ea-15f9-a8532000a647@st.com>
+Date:   Thu, 23 Apr 2020 11:27:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+In-Reply-To: <13a35aac-a3c9-df9f-a2b7-64abdbf9463c@synopsys.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG5NODE3.st.com (10.75.127.15) To SFHDAG5NODE3.st.com
+ (10.75.127.15)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-23_07:2020-04-22,2020-04-23 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-
-
-Hi,
-
-John Stultz <john.stultz@linaro.org> writes:
-> On Tue, Apr 21, 2020 at 11:00 PM Felipe Balbi <balbi@kernel.org> wrote:
->> John Stultz <john.stultz@linaro.org> writes:
->> > On Thu, Apr 16, 2020 at 1:19 AM Felipe Balbi <balbi@kernel.org> wrote:
->> >> One thing I noticed is that we're missing a giveback on ep1out. Here'=
-s a
->> >> working case:
->> >>
->> >
->> > Hey Felipe,
->> >   So I found some time to dig around on this today and I started
->> > trying to understand this issue that you've pointed out about missing
->> > the giveback.
->> >
->> > It seems part of the issue is we get to a point where we have some req
->> > where pending_sgs is more than one.
->> >
->> > We call dwc3_prepare_one_trb_sg() on it:
->> >   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/t=
-ree/drivers/usb/dwc3/gadget.c?h=3Dv5.7-rc2#n1068
->> >
->> > And we process the sg list incrementing req->num_queued_sgs for each o=
-ne.
->> >
->> > then later, dwc3_gadget_ep_cleanup_completed_request() is called on th=
-e request:
->> >   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/t=
-ree/drivers/usb/dwc3/gadget.c?h=3Dv5.7-rc2#n2522
->> >
->> > We call dwc3_gadget_ep_reclaim_trb_sg()
->> >   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/t=
-ree/drivers/usb/dwc3/gadget.c?h=3Dv5.7-rc2#n2470
->> >
->> > Where we iterate over the req->sg, ideally decrementing
->> > num_pending_sgs each time and return.
->> >
->> > But back in dwc3_gadget_ep_cleanup_completed_request()  and there
->> > we're hitting the:
->> >   if (!dwc3_gadget_ep_request_completed(req) ||
->> >       req->num_pending_sgs) {
->> > case which causes us to skip the call to dwc3_gadget_giveback().
+On 4/22/20 6:16 PM, Minas Harutyunyan wrote:
+> Hi Fabrice,
+> 
+> On 4/22/2020 7:57 PM, Fabrice Gasnier wrote:
+>> On 4/22/20 4:48 PM, Minas Harutyunyan wrote:
+>>> Hi Fabrice,
+>>>
+>>> On 4/21/2020 4:32 PM, Fabrice Gasnier wrote:
+>>>> When the remote wakeup interrupt is triggered, lx_state is resumed from L2
+>>>> to L0 state. But when the gadget resume is called, lx_state is still L2.
+>>>> This prevents the resume callback to queue any request. Any attempt
+>>>> to queue a request from resume callback will result in:
+>>>> - "submit request only in active state" debug message to be issued
+>>>> - dwc2_hsotg_ep_queue() returns -EAGAIN
+>>>>
+>>>> Move the call to resume gadget after the core is put in DWC2_L0 state.
+>>>>
+>>>> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
+>>>> ---
+>>>>    drivers/usb/dwc2/core_intr.c | 10 +++++++---
+>>>>    1 file changed, 7 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+>>>> index 876ff31..b8ebda5 100644
+>>>> --- a/drivers/usb/dwc2/core_intr.c
+>>>> +++ b/drivers/usb/dwc2/core_intr.c
+>>>> @@ -404,9 +404,11 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+>>>>    	}
+>>>>    
+>>>>    	if (dwc2_is_device_mode(hsotg)) {
+>>>> +		enum dwc2_lx_state lx_state = hsotg->lx_state;
+>>>> +
+>>>>    		dev_dbg(hsotg->dev, "DSTS=0x%0x\n",
+>>>>    			dwc2_readl(hsotg, DSTS));
+>>>> -		if (hsotg->lx_state == DWC2_L2) {
+>>>> +		if (lx_state == DWC2_L2) {
+>>>>    			u32 dctl = dwc2_readl(hsotg, DCTL);
+>>>>    
+>>>>    			/* Clear Remote Wakeup Signaling */
+>>>> @@ -415,11 +417,13 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+>>>>    			ret = dwc2_exit_partial_power_down(hsotg, true);
+>>>>    			if (ret && (ret != -ENOTSUPP))
+>>>>    				dev_err(hsotg->dev, "exit power_down failed\n");
+>>>> -
+>>>> -			call_gadget(hsotg, resume);
+>>>>    		}
+>>>>    		/* Change to L0 state */
+>>>>    		hsotg->lx_state = DWC2_L0;
+>>>> +
+>>>> +		/* Gadget may queue new requests upon resume to L0 state */
+>>>> +		if (lx_state == DWC2_L2)
+>>>> +			call_gadget(hsotg, resume);
+>>>>    	} else {
+>>>>    		if (hsotg->params.power_down)
+>>>>    			return;
+>>>>
+>>>
+>>> What about below patch without introducing additional variable.
+>>>
+>>> diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+>>> index 876ff31261d5..543865e31c72 100644
+>>> --- a/drivers/usb/dwc2/core_intr.c
+>>> +++ b/drivers/usb/dwc2/core_intr.c
+>>> @@ -416,6 +416,8 @@ static void dwc2_handle_wakeup_detected_intr(struct
+>>> dwc2_hsotg *hsotg)
+>>>                           if (ret && (ret != -ENOTSUPP))
+>>>                                   dev_err(hsotg->dev, "exit power_down
+>>> failed\n");
+>>>
+>>> +                       /* Change to L0 state */
+>>> +                       hsotg->lx_state = DWC2_L0;
 >>
->> This logic was modified recently. Can you check if today's linus/master
->> works for you?
->
-> I was testing this against 5.7-rc2, but I updated to linus/master and
-> I'm not seeing any change.
-
-good
-
->> > Looking as to why the num_pending_sgs is non zero, that's because in
->> > dwc3_gadget_ep_reclaim_trb_sg we're hitting the case where the trb has
->> > the DWC3_TRB_CTRL_HWO ctrl flag set, which breaks us out of the loop
->> > early before we decrement num_pending_sgs.
->> >
->> > For that trb, we're setting the HWO flag in __dwc3_prepare_one_trb()
->> > (called from dwc3_prepare_one_trb_sg() back at the beginning):
->> >   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/t=
-ree/drivers/usb/dwc3/gadget.c?h=3Dv5.7-rc2#n921
->> >
->> > I added logic showing every time we set or clear that flag, and it
->> > seems like we're always setting it but never clearing it. And often
+>> Hi Minas,
 >>
->> HW clears HWO flag. We only have to manually clear in one or two cases.
->
-> I guess the bit that worries me with the current code is in
-> dwc3_gadget_ep_reclaim_completed_trb():
->   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/drivers/usb/dwc3/gadget.c?h=3Dv5.7-rc2#n2406
->
-> There is the logic:
->   if (chain && (trb->ctrl & DWC3_TRB_CTRL_HWO))
->            trb->ctrl &=3D ~DWC3_TRB_CTRL_HWO;
->
-> But that will never trip, as the only time we call
-> dwc3_gadget_ep_reclaim_completed_trb() with chain=3D=3Dtrue is from
-> dwc3_gadget_ep_reclaim_trb_sg():
->   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/drivers/usb/dwc3/gadget.c?h=3Dv5.7-rc2#n2470
->
-> Where if the trb->ctrl has the HWO flag set, we break out before
-> calling  dwc3_gadget_ep_reclaim_completed_trb().
->
-> So the logic quoted above seems to be effectively dead code (despite
-> the big comment as to why we need it)
-
-There is another situation when we use CHN bit. If we're starting an OUT
-transfer and the length is not aligned to wMaxPacketSize.
-
-> That's why I suspected the HWO check in
-> dwc3_gadget_ep_reclaim_trb_sg() is problematic.
-
-okay
-
->> > that's not an issue as we only have one sg entry. But if its set on a
->> > trb in a request with multiple sgs, that's where it seems to be
->> > causing the issue.
+>> That was my first approach locally, but I added a variable to avoid do
+>> it twice... few lines after.
 >>
->> The issue is completing with HWO set, which should never happen. Can you
->> collect tracepoints with linus/master of this particular situation?
->
-> Will do, though again, its a little tough as often we hit the stall
-> state pretty quickly at bootup, before I can even try to enable
-> tracing, so it may take a few tries.
-
-IIRC there's a way to configure tracepoints from cmdline, I never tested
-it though.
-
->> >> One interesting thing is that TRB addresses are "odd". I can't find a
->> >> proper lifetime for these TRBs. Do you have IOMMU enabled? Can you run
->> >> without it? For example, nowhere in the log can I find the place where
->> >> trb 0000000092deef41 was first enqueue. I'm assuming the log to be
->> >> ordered, which means that trb is the same as 00000000f3db4076. But why
->> >> are the addresses different?
->> >>
->> >> Another weird thing is that even though we CHN bit being set in
->> >> 0000000092deef41, we don't see where the second trb (the one its chai=
-ned
->> >> to) was prepared. It seems like it was *never* prepared, what gives?
->> >
->> > I suspect these bits were due to the tracing happening after some
->> > minor amount of initial adb traffic began at bootup? So the trace
->> > isn't capturing all the events.
+>> But if you prefer, I can change in V2 ?
 >>
->> No, no. That's more likely to be IOMMU mucking up the addresses. ADB is
->> very sequential in its behavior and USB transfers requests in
->> order. Please run linus/master without IOMMU.
->
-> So I didn't have any IOMMU support enabled in the config I was testing
-> with. I went through and added IOMMU options in my config with
-> linus/master as well and that didn't seem to change the behavior
-> either.
+>> Please let me know.
+>>
+>> Thanks,
+>> Fabrice
+>>
+>>>                           call_gadget(hsotg, resume);
+>>>                   }
+>>>                   /* Change to L0 state */
+>>>
+>>>
+>>> Thanks,
+>>> Minas
+>>>
+> To avoid twice setting lx_state you can add 'else' before second setting.
 
-pretty odd that the TRB addresses change like that.
+Hi Minas,
 
-> I'll get back to you with further trace logs.
+Thanks for your quick answer. Sure, I'll update it in v2.
 
-thanks
+Also, do you think this can/should be marked as a fix ?
+- e.g. add a Fixes tag?
 
-=2D-=20
-balbi
+Fixes: f81f46e1f530 ("usb: dwc2: implement hibernation during bus
+suspend/resume")
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+Please advise,
+Best Regards,
+Fabrice
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6hXlsACgkQzL64meEa
-mQZk3xAAv30RrB564Z2Wt3UlrD5nQVIKXRIkgaINWSlDMiESJH4Oi8j1pxmVO4A2
-46UDXELuwxLWr5S8glicqGJ2evU3M3zRVFsByGguFsLGgZiD2RT6vuSwZJ17QBvK
-yEu1J6SttHHIuFGv7UdfH2Q6Z+Rqa4c+HBrFCZL5OcYK2688ks/TB/DFyXLo0+cL
-MwIZk/7vg51wrJZr7cEJsMPMXb2hOt/MgvW0e+KtstMF98zPotGLZHZxZL5wQEXQ
-xPlW/XlLrr6I5A8PXM0i5zJ331UW3lH/ztCOZkfk7T4avk1ulWzEgHy2HR/1Ka/J
-eJosIh9EQMi5ewsRw3d0RH3/cxS70mTlk/GrlhvVMCzVzZAe3pLwgIKR4gB0MQ0Y
-OCejw/pSNcz2fzH5YmujwPEzdlQ3CX2343C1fVspwrsWAzAGdiiNBjDKb/5vksgL
-qOYAeUAdohIJBXaPK8xpEfzdaKBPdRbr1OEDNGfArLr/6797otuUOuWKamPK4MLg
-MlKUXXVYDazJ8FCSdSww3BxxMUZjgbZK7v+qRczbxJ1leC26b977kvVDxXWsaIKI
-N427yeZ2cY+eWKqRrQ8aItNhZv/Ezu6qeFczY3PAkSd9qWTxM0DE4UqTpSNdT6V4
-48WRrS7M3BmOmMNrA77NsTf3oHz790JulLMdq8qxX0NmFe9YLh4=
-=HbNo
------END PGP SIGNATURE-----
---=-=-=--
+> 
+> diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+> index 876ff31261d5..f59dabd46e60 100644
+> --- a/drivers/usb/dwc2/core_intr.c
+> +++ b/drivers/usb/dwc2/core_intr.c
+> @@ -416,10 +416,14 @@ static void 
+> dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+>                          if (ret && (ret != -ENOTSUPP))
+>                                  dev_err(hsotg->dev, "exit power_down 
+> failed\n");
+> 
+> +                       /* Change to L0 state */
+> +                       hsotg->lx_state = DWC2_L0;
+>                          call_gadget(hsotg, resume);
+>                  }
+> -               /* Change to L0 state */
+> -               hsotg->lx_state = DWC2_L0;
+> +               else {
+> +                       /* Change to L0 state */
+> +                       hsotg->lx_state = DWC2_L0;
+> +               }
+>          } else {
+>                  if (hsotg->params.power_down)
+>                          return;
+> 
+> 
+> 
+> Am I missed something?
+> 
+> Thanks,
+> Minas
+> 
