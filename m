@@ -2,111 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C3651B59E5
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 13:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E453A1B5A2A
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 13:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728012AbgDWLBq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Apr 2020 07:01:46 -0400
-Received: from mx2.suse.de ([195.135.220.15]:44222 "EHLO mx2.suse.de"
+        id S1727903AbgDWLNu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 07:13:50 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52312 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727883AbgDWLBq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Apr 2020 07:01:46 -0400
+        id S1727077AbgDWLNu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Apr 2020 07:13:50 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id EB86BB0B7;
-        Thu, 23 Apr 2020 11:01:43 +0000 (UTC)
-Message-ID: <1587639690.23108.2.camel@suse.com>
-Subject: Re: general protection fault in go7007_usb_probe
+        by mx2.suse.de (Postfix) with ESMTP id 5B198B08C;
+        Thu, 23 Apr 2020 11:13:47 +0000 (UTC)
+Message-ID: <1587640413.23108.7.camel@suse.com>
+Subject: Re: KASAN: use-after-free Read in usblp_bulk_read
 From:   Oliver Neukum <oneukum@suse.com>
-To:     syzbot <syzbot+cabfa4b5b05ff6be4ef0@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, hverkuil-cisco@xs4all.nl,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org,
+To:     Pete Zaitcev <zaitcev@redhat.com>, Hillf Danton <hdanton@sina.com>
+Cc:     syzbot <syzbot+be5b5f86a162a6c281e6@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         syzkaller-bugs@googlegroups.com
-Date:   Thu, 23 Apr 2020 13:01:30 +0200
-In-Reply-To: <0000000000003cbf8e05a3d57b98@google.com>
-References: <0000000000003cbf8e05a3d57b98@google.com>
-Content-Type: multipart/mixed; boundary="=-q2m0MxcCOOFn1/lZrA+P"
+Date:   Thu, 23 Apr 2020 13:13:33 +0200
+In-Reply-To: <20200423001036.41324bd4@suzdal.zaitcev.lan>
+References: <00000000000046503905a3cec366@google.com>
+         <20200422032323.8536-1-hdanton@sina.com>
+         <20200423001036.41324bd4@suzdal.zaitcev.lan>
+Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.26.6 
 Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---=-q2m0MxcCOOFn1/lZrA+P
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-
-Am Dienstag, den 21.04.2020, 16:36 -0700 schrieb syzbot:
-> Hello,
+Am Donnerstag, den 23.04.2020, 00:10 -0500 schrieb Pete Zaitcev:
 > 
-> syzbot found the following crash on:
+> I do not agree with this kind of workaround. The model we're following
+> is for usb_kill_urb() to cancel the transfer. The usblp invokes it
+> through usb_kill_anchored_urbs() and usblp_unlink_urbs(), as seen
+> above. There can be no timer hitting anything once it returns.
+
+Right. It seems to me that the problem is not killing an existing
+transfer but a failure to check in case of new transfers whether
+the device has been disconnected.
+
+> 1104 is kzalloc for struct usblp.
 > 
-> HEAD commit:    e9010320 usb: cdns3: gadget: make a bunch of functions sta..
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1263a930100000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=bd14feb44652cfaf
-> dashboard link: https://syzkaller.appspot.com/bug?extid=cabfa4b5b05ff6be4ef0
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > > Freed by task 12266:
+> > >  save_stack+0x1b/0x80 mm/kasan/common.c:72
+> > >  set_track mm/kasan/common.c:80 [inline]
+> > >  kasan_set_free_info mm/kasan/common.c:337 [inline]
+> > >  __kasan_slab_free+0x117/0x160 mm/kasan/common.c:476
+> > >  slab_free_hook mm/slub.c:1444 [inline]
+> > >  slab_free_freelist_hook mm/slub.c:1477 [inline]
+> > >  slab_free mm/slub.c:3034 [inline]
+> > >  kfree+0xd5/0x300 mm/slub.c:3995
+> > >  usblp_disconnect.cold+0x24/0x29 drivers/usb/class/usblp.c:1380
+> > >  usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:436
+> > >  __device_release_driver drivers/base/dd.c:1137 [inline]
+> > >  device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1168
+> > >  bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
 > 
-> Unfortunately, I don't have any reproducer for this crash yet.
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+cabfa4b5b05ff6be4ef0@syzkaller.appspotmail.com
+> 1380 is an inlined call to usblp_cleanup, which is just
+> a bunch of kfree.
 
-#syz test: https://github.com/google/kasan.git e9010320
+But that must never happen while while the device is open.
+If that ever happens something is wrong with usblp->used.
 
---=-q2m0MxcCOOFn1/lZrA+P
-Content-Disposition: attachment; filename="0001-go7007-add-sanity-checking.patch"
-Content-Transfer-Encoding: base64
-Content-Type: text/x-patch; name="0001-go7007-add-sanity-checking.patch";
-	charset="UTF-8"
+> The bug report is still a bug report, but I'm pretty sure the
+> culprit is the emulated HCD and/or the gadget layer. Unfortunately,
+> I'm not up to speed in that subsystem. Maybe Alan can look at it?
 
-RnJvbSA1ZjFhNmJkMGJmMDEzNzkyYjg2YTAxYjU4ZjlmNmU1N2YxYzlkMDY1IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
-OiBXZWQsIDIyIEFwciAyMDIwIDEzOjQ5OjU1ICswMjAwClN1YmplY3Q6IFtQQVRDSF0gZ283MDA3
-OiBhZGQgc2FuaXR5IGNoZWNraW5nCgpBIG1hbGljaW91cyBVU0IgZGV2aWNlIG1heSBsYWNrIGVu
-ZHBvaW50cyB0aGUgZHJpdmVyIGFzc3VtZXMgdG8gZXhpc3QKQWNjZXNzaW5nIHRoZW0gbGVhZHMg
-dG8gTlVMTCBwb2ludGVyIGFjY2Vzc2VzLiBUaGlzIHBhdGNoIGludHJvZHVjZXMKc2FuaXR5IGNo
-ZWNraW5nLgoKU2lnbmVkLW9mZi1ieTogT2xpdmVyIE5ldWt1bSA8b25ldWt1bUBzdXNlLmNvbT4K
-Rml4ZXM6IDg2NmI4Njk1ZDY3ZTggKCJTdGFnaW5nOiBhZGQgdGhlIGdvNzAwNyB2aWRlbyBkcml2
-ZXIiKQotLS0KIGRyaXZlcnMvbWVkaWEvdXNiL2dvNzAwNy9nbzcwMDctdXNiLmMgfCAxNSArKysr
-KysrKysrKysrKy0KIDEgZmlsZSBjaGFuZ2VkLCAxNCBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9u
-KC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9tZWRpYS91c2IvZ283MDA3L2dvNzAwNy11c2IuYyBi
-L2RyaXZlcnMvbWVkaWEvdXNiL2dvNzAwNy9nbzcwMDctdXNiLmMKaW5kZXggZjg4OWM5ZDc0MGNk
-Li5hNGY0ZmQyMzBhNjcgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvbWVkaWEvdXNiL2dvNzAwNy9nbzcw
-MDctdXNiLmMKKysrIGIvZHJpdmVycy9tZWRpYS91c2IvZ283MDA3L2dvNzAwNy11c2IuYwpAQCAt
-MTEyMSw2ICsxMTIxLDE0IEBAIHN0YXRpYyBpbnQgZ283MDA3X3VzYl9wcm9iZShzdHJ1Y3QgdXNi
-X2ludGVyZmFjZSAqaW50ZiwKIAkJcmV0dXJuIC1FTk9NRU07CiAJfQogCisJLyogc2FuaXR5IGNo
-ZWNrcyAqLworICAgIGlmICh1c2IgJiYgdXNiLT51c2JkZXYpCisgICAgICAgIGVwID0gdXNiLT51
-c2JkZXYtPmVwX2luWzRdOworICAgIGVsc2UKKyAgICAgICAgZXAgPSBOVUxMOworCWlmICghZXAp
-CisJCXJldHVybiAtRU5PREVWOworCiAJdXNiLT5ib2FyZCA9IGJvYXJkOwogCXVzYi0+dXNiZGV2
-ID0gdXNiZGV2OwogCXVzYl9tYWtlX3BhdGgodXNiZGV2LCBnby0+YnVzX2luZm8sIHNpemVvZihn
-by0+YnVzX2luZm8pKTsKQEAgLTExNDEsNyArMTE0OSw2IEBAIHN0YXRpYyBpbnQgZ283MDA3X3Vz
-Yl9wcm9iZShzdHJ1Y3QgdXNiX2ludGVyZmFjZSAqaW50ZiwKIAlpZiAodXNiLT5pbnRyX3VyYi0+
-dHJhbnNmZXJfYnVmZmVyID09IE5VTEwpCiAJCWdvdG8gYWxsb2NmYWlsOwogCi0JZXAgPSB1c2It
-PnVzYmRldi0+ZXBfaW5bNF07CiAJaWYgKHVzYl9lbmRwb2ludF90eXBlKCZlcC0+ZGVzYykgPT0g
-VVNCX0VORFBPSU5UX1hGRVJfQlVMSykKIAkJdXNiX2ZpbGxfYnVsa191cmIodXNiLT5pbnRyX3Vy
-YiwgdXNiLT51c2JkZXYsCiAJCQl1c2JfcmN2YnVsa3BpcGUodXNiLT51c2JkZXYsIDQpLApAQCAt
-MTI2Myw5ICsxMjcwLDEzIEBAIHN0YXRpYyBpbnQgZ283MDA3X3VzYl9wcm9iZShzdHJ1Y3QgdXNi
-X2ludGVyZmFjZSAqaW50ZiwKIAogCS8qIEFsbG9jYXRlIHRoZSBVUkJzIGFuZCBidWZmZXJzIGZv
-ciByZWNlaXZpbmcgdGhlIHZpZGVvIHN0cmVhbSAqLwogCWlmIChib2FyZC0+ZmxhZ3MgJiBHTzcw
-MDdfVVNCX0VaVVNCKSB7CisJCWlmICghdXNiLT51c2JkZXYtPmVwX2luWzZdKQorCQkJZ290byBh
-bGxvY2ZhaWw7CiAJCXZfdXJiX2xlbiA9IDEwMjQ7CiAJCXZpZGVvX3BpcGUgPSB1c2JfcmN2YnVs
-a3BpcGUodXNiLT51c2JkZXYsIDYpOwogCX0gZWxzZSB7CisJCWlmICghdXNiLT51c2JkZXYtPmVw
-X2luWzFdKQorCQkJZ290byBhbGxvY2ZhaWw7CiAJCXZfdXJiX2xlbiA9IDUxMjsKIAkJdmlkZW9f
-cGlwZSA9IHVzYl9yY3ZidWxrcGlwZSh1c2ItPnVzYmRldiwgMSk7CiAJfQpAQCAtMTI4NSw2ICsx
-Mjk2LDggQEAgc3RhdGljIGludCBnbzcwMDdfdXNiX3Byb2JlKHN0cnVjdCB1c2JfaW50ZXJmYWNl
-ICppbnRmLAogCS8qIEFsbG9jYXRlIHRoZSBVUkJzIGFuZCBidWZmZXJzIGZvciByZWNlaXZpbmcg
-dGhlIGF1ZGlvIHN0cmVhbSAqLwogCWlmICgoYm9hcmQtPmZsYWdzICYgR083MDA3X1VTQl9FWlVT
-QikgJiYKIAkgICAgKGJvYXJkLT5tYWluX2luZm8uZmxhZ3MgJiBHTzcwMDdfQk9BUkRfSEFTX0FV
-RElPKSkgeworCQlpZiAoIXVzYi0+dXNiZGV2LT5lcF9pbls4XSkKKwkJCWdvdG8gYWxsb2NmYWls
-OwogCQlmb3IgKGkgPSAwOyBpIDwgODsgKytpKSB7CiAJCQl1c2ItPmF1ZGlvX3VyYnNbaV0gPSB1
-c2JfYWxsb2NfdXJiKDAsIEdGUF9LRVJORUwpOwogCQkJaWYgKHVzYi0+YXVkaW9fdXJic1tpXSA9
-PSBOVUxMKQotLSAKMi4xNi40Cgo=
+I doubt it. Operation by a timer triggering a timeout must work.
 
+	Regards
+		Oliver
 
---=-q2m0MxcCOOFn1/lZrA+P--
 
