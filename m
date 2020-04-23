@@ -2,129 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD211B5320
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 05:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 603B31B53F6
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 07:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726639AbgDWD3X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Apr 2020 23:29:23 -0400
-Received: from mga17.intel.com ([192.55.52.151]:48893 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726002AbgDWD3W (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 Apr 2020 23:29:22 -0400
-IronPort-SDR: 0wKB8OBx9j+UssLnHpd/wi2WVv6JGqosFAjJJMFtiwW9PR/TnOTc+00sulOxTRidkHbva4c+Il
- Hau2m1JgCBzQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2020 20:29:21 -0700
-IronPort-SDR: VpSUxslH9ZGKTd7bklropK9H2MBtHijHwFnI8Ycv99ZAVn3O2nuzcnuIrofbqcFL0mUOnbVDGB
- J/5QPu/EtQfA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,305,1583222400"; 
-   d="scan'208";a="301102138"
-Received: from fmsmsx103.amr.corp.intel.com ([10.18.124.201])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 Apr 2020 20:29:21 -0700
-Received: from fmsmsx151.amr.corp.intel.com (10.18.125.4) by
- FMSMSX103.amr.corp.intel.com (10.18.124.201) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Wed, 22 Apr 2020 20:28:50 -0700
-Received: from FMSEDG002.ED.cps.intel.com (10.1.192.134) by
- FMSMSX151.amr.corp.intel.com (10.18.125.4) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Wed, 22 Apr 2020 20:28:44 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.36.55) by
- edgegateway.intel.com (192.55.55.69) with Microsoft SMTP Server (TLS) id
- 14.3.439.0; Wed, 22 Apr 2020 20:28:33 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N1sfqwfxXg/He7q91Bk7hI2dZeW1cNu1MCqBCrzPNPH1aVB0MCpzdf9FcgeUF91Rhe5c0GA6ZVdTP7Yn9wQbBFUj+qWWyFa/u0O1zR9BvZvJqnfJ+Y08Z7nZaCxZQw/bwY8ejevM1doS08IjzLLofSR5U25JrpzQ9DKFKjoCSsXAPnkvN1IhduzwF37+YY8OCM351938sD8iGkACLZr0JSIVIeg92d2zFVWbIppr9Y3zsfkumE52Od9k3UYJLrphkQylTZVJQQrZ10vPR7FP0CuZY3gRa6yREiJAOGQ4oz2RtpEhyGOcgsnJAKOIc/7tHT1sC1f6VpAgmMQEoeFZtg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b86oV3h5BnD0Y2bU01WaWEPqlGE/JtiIuKgLsq/4bP8=;
- b=FfNTLjq+nHUVhO/cK6vxp/N0ynxXDzNmK+gxtTN0MaGzwHlLVAWCxuiNMqodjXkuvNmI3lpRPYGQ5u0e6Wm5N9huAkKkWm9TPL1DSq1FrmOcP7YFluAAF880nHu+Lsy28d20HmTUWikhBgaWIscRSCXBxZhCVIcb575Nfa3Cwp3Ylpskqh7AdFgVpS49F3zIFb1Y3LzB8tC7k8eQQ3pi1pErCBpepkpBO6nchlCfmARAAigp7CnHvJ5uKS8QrvloCqMSlGAVsh1OjEsv+E/twW6NaBBS8UqKE2W0pI+FkCddeHypiHVFcbS0CVn9j/Psk8/0OK091iWi5GtHS+W+Hw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b86oV3h5BnD0Y2bU01WaWEPqlGE/JtiIuKgLsq/4bP8=;
- b=mjFLiki5xI1l+7oegeOQ9MzF8y/TGGF+BNvQaQXu1LL34gs65497r2wzfrDzNOcedp1jOb3rZerXngTZ69xwsZyWG0dGeEo3ucezkIGasC2JhoKFVu5HDEvApmzSC8Awrx6Qyd77pN3hcGzHFWIM+P+XIVZC7eJzgNnOPzAaGs4=
-Received: from SN6PR11MB3245.namprd11.prod.outlook.com (2603:10b6:805:be::32)
- by SN6PR11MB3486.namprd11.prod.outlook.com (2603:10b6:805:c5::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.29; Thu, 23 Apr
- 2020 03:28:32 +0000
-Received: from SN6PR11MB3245.namprd11.prod.outlook.com
- ([fe80::875:de1c:e14f:34c4]) by SN6PR11MB3245.namprd11.prod.outlook.com
- ([fe80::875:de1c:e14f:34c4%3]) with mapi id 15.20.2937.012; Thu, 23 Apr 2020
- 03:28:32 +0000
-From:   "Gopal, Saranya" <saranya.gopal@intel.com>
-To:     Sid Spry <sid@aeam.us>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: Failure to Assign UDC to ConfigFS Gadget
-Thread-Topic: Failure to Assign UDC to ConfigFS Gadget
-Thread-Index: AQHWGPHM9hzzWNqMuUqnz4/7GNK8Z6iGC5nA
-Date:   Thu, 23 Apr 2020 03:28:32 +0000
-Message-ID: <SN6PR11MB324507C7828C86B7460EDF11E3D30@SN6PR11MB3245.namprd11.prod.outlook.com>
-References: <df1fe132-79ac-4656-9ddf-040e26f11c28@www.fastmail.com>
-In-Reply-To: <df1fe132-79ac-4656-9ddf-040e26f11c28@www.fastmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-version: 11.2.0.6
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=saranya.gopal@intel.com; 
-x-originating-ip: [192.55.79.124]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bae35c41-f4ae-4d32-36dc-08d7e736664e
-x-ms-traffictypediagnostic: SN6PR11MB3486:
-x-microsoft-antispam-prvs: <SN6PR11MB348665F789DCDD8072480913E3D30@SN6PR11MB3486.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-forefront-prvs: 03827AF76E
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3245.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10019020)(346002)(376002)(396003)(39860400002)(136003)(366004)(110136005)(66946007)(81156014)(5660300002)(8936002)(316002)(55016002)(9686003)(186003)(71200400001)(4744005)(8676002)(33656002)(86362001)(2906002)(64756008)(66556008)(66476007)(76116006)(66446008)(7696005)(478600001)(26005)(6506007)(52536014);DIR:OUT;SFP:1102;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0eUjUS76mmX6HjhQdijv5pk0cJHGw1afF53CHTYaIUHO8BunnBXkPyQuc7GCYcQfuy5oOe6JdlMpmiwpJwC08NuUjW4m6iUOBUsllJKti2412BpOfRvf2LDSSPBR+5UkCnTyYQcTNHX6/SqEA8CG0K7/Q5qKgxiaFF7frEgkNxCwK4RhhEFrNAtWPC2n2NEWTxgYWChhHbFC1iI+XJqw8/LqIMgNDP0wAx8CzK0bf+w7LaxOtag1CiUJhVDIuBhjE8M9x12NZV8kVHRlkrcqommeTvS/PVfVfyXMdtYW2RmNN1UZhM8JOB/prjM0Ko17SjuBaluq/5AK280ZdXmWKBFNkAk9IB3nxHhi3f2GCBZWp5EGjpa38B0KHIVuAH9tTkj6thoXgk83NRq6PGGmiOemsmfS9YTMcfsRLFuSel2r07zfZ7A4bitLkFxJTOA1
-x-ms-exchange-antispam-messagedata: W5vmPhwYL+858rGKhmy11Qm4axABJGS6trU8aEftEY4OX43AMZTI1qoHBJElqkucGfvhZzaKOSb4+6Q0fLhc8UOCYldO6JeW+DJ5sM4ds8H8tXm4gG6QIbyEratEqxCodevHnde+46sTZDWB062iwA==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726593AbgDWFKr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 01:10:47 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:57454 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725961AbgDWFKp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 01:10:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1587618644;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=U40nhfdJJbB+Icncn6AK7VjEAKFmoP4SFbc4aKF2RZk=;
+        b=Ju8UknDPELGtSocnhKlaE0G3z3Qznz+Abe7d+QWcKfaMv9nL3OqlbYSEQWK/FVKAwpRjbZ
+        +T7eelh5nOGf+WwbxI4VODx5RrS3Ti8kGeauKYvKCd/IdQjeLbbPxTRpDEoZmgU0ydJxEn
+        SNw9nxQDHJ1mKMkm16MHSoZPqN87iYE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-79-hEGdBmBdOcmc-jiBbwohhA-1; Thu, 23 Apr 2020 01:10:39 -0400
+X-MC-Unique: hEGdBmBdOcmc-jiBbwohhA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 28EAE18C43C0;
+        Thu, 23 Apr 2020 05:10:38 +0000 (UTC)
+Received: from suzdal.zaitcev.lan (ovpn-113-207.phx2.redhat.com [10.3.113.207])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 696EF5DA66;
+        Thu, 23 Apr 2020 05:10:37 +0000 (UTC)
+Date:   Thu, 23 Apr 2020 00:10:36 -0500
+From:   Pete Zaitcev <zaitcev@redhat.com>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     syzbot <syzbot+be5b5f86a162a6c281e6@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, zaitcev@redhat.com
+Subject: Re: KASAN: use-after-free Read in usblp_bulk_read
+Message-ID: <20200423001036.41324bd4@suzdal.zaitcev.lan>
+In-Reply-To: <20200422032323.8536-1-hdanton@sina.com>
+References: <00000000000046503905a3cec366@google.com>
+        <20200422032323.8536-1-hdanton@sina.com>
+Organization: Red Hat, Inc.
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: bae35c41-f4ae-4d32-36dc-08d7e736664e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Apr 2020 03:28:32.5387
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UEx/8IrycVALO2ANnJuEYUGYWt0LEcFthTu+4GQ40AhwwuQq+JFzdXyo1tjd8T+aeC9Wee4nxWnN5GPO4Sz7SQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3486
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Sid,
+On Wed, 22 Apr 2020 11:23:23 +0800
+Hillf Danton <hdanton@sina.com> wrote:
 
-> # stat /sys/class/udc/musb-hdrc.1.auto
->   File: /sys/class/udc/musb-hdrc.1.auto ->
-> ../../devices/platform/soc/1c19000.usb/musb-hdrc.1.auto/udc/musb-
-> hdrc.1.auto
->=20
-> If I try to assign the UDC using the string 1c19000.usb I get:
->=20
-> # echo "1c19000.usb" > UDC
-> bash: echo: write error: No such device
->=20
-> It's at this point I'm lost. I appreciate any help.
+> Do cleanup for lp after submitted urb completes.
+> 
+> --- a/drivers/usb/class/usblp.c
+> +++ b/drivers/usb/class/usblp.c
+> @@ -1376,8 +1376,10 @@ static void usblp_disconnect(struct usb_
+>  	usblp_unlink_urbs(usblp);
+>  	mutex_unlock(&usblp->mut);
+>  
+> -	if (!usblp->used)
+> +	if (!usblp->used) {
+> +		wait_event(usblp->rwait, usblp->rcomplete != 0);
+>  		usblp_cleanup(usblp);
+> +	}
+>  	mutex_unlock(&usblp_mutex);
+>  }
 
-You need to give the exact name of UDC as present in /sys/class/udc.
-So, try this:
-echo "musb-hdrc.1.auto" > UDC
+I do not agree with this kind of workaround. The model we're following
+is for usb_kill_urb() to cancel the transfer. The usblp invokes it
+through usb_kill_anchored_urbs() and usblp_unlink_urbs(), as seen
+above. There can be no timer hitting anything once it returns.
 
-Thanks,
-Saranya
+At this point I suspect the fake HCD that the test harness invokes
+fails to termine the transfer properly and then a timer hits.
 
-> Cheers!
+Here's the bot's evidence and how I read it:
+
+> Tue, 21 Apr 2020 08:35:18 -0700
+> > Reported-by: syzbot+be5b5f86a162a6c281e6@syzkaller.appspotmail.com
+
+This is where the problem is tripped, notice that it comes
+because gadget runs a timer:
+
+> >  kasan_report+0xe/0x20 mm/kasan/common.c:641
+> >  __lock_acquire+0x31af/0x3b60 kernel/locking/lockdep.c:3827
+> >  lock_acquire+0x130/0x340 kernel/locking/lockdep.c:4484
+> >  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+> >  _raw_spin_lock_irqsave+0x32/0x50 kernel/locking/spinlock.c:159
+> >  usblp_bulk_read+0x211/0x270 drivers/usb/class/usblp.c:303
+> >  __usb_hcd_giveback_urb+0x1f2/0x470 drivers/usb/core/hcd.c:1648
+> >  usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1713
+> >  dummy_timer+0x1258/0x32ae drivers/usb/gadget/udc/dummy_hcd.c:1966
+> >  call_timer_fn+0x195/0x6f0 kernel/time/timer.c:1404
+> >  expire_timers kernel/time/timer.c:1449 [inline]
+> >  __run_timers kernel/time/timer.c:1773 [inline]
+> >  __run_timers kernel/time/timer.c:1740 [inline]
+
+At this point the whole struct usblp is freed, including the
+spinlock which we're trying to lock.
+
+> > Allocated by task 3361:
+> >  save_stack+0x1b/0x80 mm/kasan/common.c:72
+> >  set_track mm/kasan/common.c:80 [inline]
+> >  __kasan_kmalloc mm/kasan/common.c:515 [inline]
+> >  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:488
+> >  kmalloc include/linux/slab.h:555 [inline]
+> >  kzalloc include/linux/slab.h:669 [inline]
+> >  usblp_probe+0xed/0x1200 drivers/usb/class/usblp.c:1104
+> >  usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:374
+> >  really_probe+0x290/0xac0 drivers/base/dd.c:551
+> >  driver_probe_device+0x223/0x350 drivers/base/dd.c:724
+
+1104 is kzalloc for struct usblp.
+
+> > Freed by task 12266:
+> >  save_stack+0x1b/0x80 mm/kasan/common.c:72
+> >  set_track mm/kasan/common.c:80 [inline]
+> >  kasan_set_free_info mm/kasan/common.c:337 [inline]
+> >  __kasan_slab_free+0x117/0x160 mm/kasan/common.c:476
+> >  slab_free_hook mm/slub.c:1444 [inline]
+> >  slab_free_freelist_hook mm/slub.c:1477 [inline]
+> >  slab_free mm/slub.c:3034 [inline]
+> >  kfree+0xd5/0x300 mm/slub.c:3995
+> >  usblp_disconnect.cold+0x24/0x29 drivers/usb/class/usblp.c:1380
+> >  usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:436
+> >  __device_release_driver drivers/base/dd.c:1137 [inline]
+> >  device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1168
+> >  bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
+
+1380 is an inlined call to usblp_cleanup, which is just
+a bunch of kfree.
+
+The bug report is still a bug report, but I'm pretty sure the
+culprit is the emulated HCD and/or the gadget layer. Unfortunately,
+I'm not up to speed in that subsystem. Maybe Alan can look at it?
+
+-- Pete
+
