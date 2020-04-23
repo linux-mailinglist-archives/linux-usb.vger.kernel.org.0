@@ -2,113 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B37491B60F7
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 18:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4931B6115
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 18:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729509AbgDWQaU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Apr 2020 12:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729446AbgDWQaU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 12:30:20 -0400
-Received: from mail-oo1-xc42.google.com (mail-oo1-xc42.google.com [IPv6:2607:f8b0:4864:20::c42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D290CC09B041;
-        Thu, 23 Apr 2020 09:30:18 -0700 (PDT)
-Received: by mail-oo1-xc42.google.com with SMTP id q204so1451436ooq.1;
-        Thu, 23 Apr 2020 09:30:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HfMYnWMcgnIY3nd+oLvzUL7qnJpXroGRL8ZoecQv4Uc=;
-        b=cKOd4A7azrl4Vm7tSN/fCKPvy3PR/U3Uyaw6nPIAEBZnf/F5eQ4RVSjync+mtYrfii
-         u+o7EMbntnkNGQe1wddxGbM15Q5wKx/Pf1093jikw/kLl+rFbVuTO4+1cGLDja0CBCv0
-         h0ugnaikixNVrNrcATsn5LdRnpos8sDly92ng1dus7UC3JvLC4m5uJkb14o+Ks2LGTm7
-         WqRttur9+962uS6hWtxuftsTDHiqnApvNOQuiR/3ke12K2U+f0SR5j8if6W+Z0R6CMnL
-         4g9nuAQWpZM0SWJRYGHVynESqKH6NNhd9Umst40d3QkXzVyVt0VwI5B10pZGR7t05U3h
-         Tt8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HfMYnWMcgnIY3nd+oLvzUL7qnJpXroGRL8ZoecQv4Uc=;
-        b=pWMnB3f5L2n81JOBAvc1dV+ez1A84mWYx2+aWerZVfE57auwp29M6OGgKj8abAQmhR
-         ILIDMDJbQAhwvkMdL+qsqpQeYr9BWK2+rRmbGdZ/K/2Dm9Lg6XbqTrMltnZPgv0occ+u
-         YSNitzgr93AwiPCyFL2I1EiZ+dkeb7W84yyM5MVXEWEaNrxP1kC22iiDniHTengq9LuP
-         x0hY68osYVueiXQaouzaluax1/HXVg/iycEuNW724wzWd8rytoHvQpw+/X2jX0sBc0oG
-         LedmFbz4YHc7fjHXodRAyz3BpTAjuNt1+5Qwr/hgz0h+BUkEbJ6K/4owXgoe4zHDdjZB
-         AYFA==
-X-Gm-Message-State: AGi0PubODAhPQo569eomRsLB5lCOYsMmQimsxU385Ec/qszWJNt68YGp
-        +kUa24T1ZsSXRJ4nB8uIGoiAdLbS
-X-Google-Smtp-Source: APiQypIaCRE0Nsmi4ws4s7q6Ep7nOYaDSuoHlmT9yiItoTvZh8USxpZrLlXu3lVmkvxBYIMxBz95yA==
-X-Received: by 2002:a4a:df51:: with SMTP id j17mr4010608oou.57.1587659418007;
-        Thu, 23 Apr 2020 09:30:18 -0700 (PDT)
-Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id 10sm703031oto.80.2020.04.23.09.30.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Apr 2020 09:30:17 -0700 (PDT)
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        kbuild test robot <lkp@intel.com>
-Subject: [PATCH] USB: gadget: udc: s3c2410_udc: Remove pointless NULL check in s3c2410_udc_nuke
-Date:   Thu, 23 Apr 2020 09:29:24 -0700
-Message-Id: <20200423162923.10886-1-natechancellor@gmail.com>
-X-Mailer: git-send-email 2.26.2
+        id S1729621AbgDWQhG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 12:37:06 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:36861 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729407AbgDWQhG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 12:37:06 -0400
+Received: (qmail 2431 invoked by uid 500); 23 Apr 2020 12:37:05 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 23 Apr 2020 12:37:05 -0400
+Date:   Thu, 23 Apr 2020 12:37:05 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
+        <ingrassia@epigenesys.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
+Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
+In-Reply-To: <00000000000099a4f005a3eb458b@google.com>
+Message-ID: <Pine.LNX.4.44L0.2004231235560.20147-100000@netrider.rowland.org>
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Clang warns:
+On Wed, 22 Apr 2020, syzbot wrote:
 
-drivers/usb/gadget/udc/s3c2410_udc.c:255:11: warning: comparison of
-address of 'ep->queue' equal to a null pointer is always false
-[-Wtautological-pointer-compare]
-        if (&ep->queue == NULL)
-             ~~~~^~~~~    ~~~~
-1 warning generated.
+> Hello,
+> 
+> syzbot has tested the proposed patch but the reproducer still triggered crash:
+> WARNING in usbhid_raw_request/usb_submit_urb
+> 
+> usb 5-1: Ep 0 disabled: 2 0
 
-It is not wrong, queue is not a pointer so if ep is not NULL, the
-address of queue cannot be NULL. No other driver does a check like this
-and this check has been around since the driver was first introduced,
-presumably with no issues so it does not seem like this check should be
-something else. Just remove it.
+This means that URB submission raced with usb_ep0_reinit().  Let's try 
+to find out how.
 
-Commit afe956c577b2d ("kbuild: Enable -Wtautological-compare") exposed
-this but it is not the root cause of the warning.
+Alan Stern
 
-Fixes: 3fc154b6b8134 ("USB Gadget driver for Samsung s3c2410 ARM SoC")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1004
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
----
- drivers/usb/gadget/udc/s3c2410_udc.c | 4 ----
- 1 file changed, 4 deletions(-)
+#syz test: https://github.com/google/kasan.git 0fa84af8
 
-diff --git a/drivers/usb/gadget/udc/s3c2410_udc.c b/drivers/usb/gadget/udc/s3c2410_udc.c
-index 0507a2ca0f552..80002d97b59d8 100644
---- a/drivers/usb/gadget/udc/s3c2410_udc.c
-+++ b/drivers/usb/gadget/udc/s3c2410_udc.c
-@@ -251,10 +251,6 @@ static void s3c2410_udc_done(struct s3c2410_ep *ep,
- static void s3c2410_udc_nuke(struct s3c2410_udc *udc,
- 		struct s3c2410_ep *ep, int status)
- {
--	/* Sanity check */
--	if (&ep->queue == NULL)
--		return;
--
- 	while (!list_empty(&ep->queue)) {
- 		struct s3c2410_request *req;
- 		req = list_entry(ep->queue.next, struct s3c2410_request,
-
-base-commit: ae83d0b416db002fe95601e7f97f64b59514d936
--- 
-2.26.2
+Index: usb-devel/drivers/usb/core/hub.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/hub.c
++++ usb-devel/drivers/usb/core/hub.c
+@@ -4440,6 +4440,7 @@ void usb_ep0_reinit(struct usb_device *u
+ 	usb_disable_endpoint(udev, 0 + USB_DIR_IN, true);
+ 	usb_disable_endpoint(udev, 0 + USB_DIR_OUT, true);
+ 	usb_enable_endpoint(udev, &udev->ep0, true);
++	udev->alan1 = 0;
+ }
+ EXPORT_SYMBOL_GPL(usb_ep0_reinit);
+ 
+@@ -4471,6 +4472,7 @@ static int hub_set_address(struct usb_de
+ 		update_devnum(udev, devnum);
+ 		/* Device now using proper address. */
+ 		usb_set_device_state(udev, USB_STATE_ADDRESS);
++		udev->alan1 = 1;
+ 		usb_ep0_reinit(udev);
+ 	}
+ 	return retval;
+@@ -4838,6 +4840,7 @@ hub_port_init(struct usb_hub *hub, struc
+ 		else
+ 			dev_warn(&udev->dev, "Using ep0 maxpacket: %d\n", i);
+ 		udev->ep0.desc.wMaxPacketSize = cpu_to_le16(i);
++		udev->alan1 = 2;
+ 		usb_ep0_reinit(udev);
+ 	}
+ 
+@@ -5226,6 +5229,7 @@ static void hub_port_connect(struct usb_
+ loop_disable:
+ 		hub_port_disable(hub, port1, 1);
+ loop:
++		udev->alan1 = 3;
+ 		usb_ep0_reinit(udev);
+ 		release_devnum(udev);
+ 		hub_free_dev(udev);
+@@ -5766,6 +5770,7 @@ static int usb_reset_and_verify_device(s
+ 
+ 		/* ep0 maxpacket size may change; let the HCD know about it.
+ 		 * Other endpoints will be handled by re-enumeration. */
++		udev->alan1 = 4;
+ 		usb_ep0_reinit(udev);
+ 		ret = hub_port_init(parent_hub, udev, port1, i);
+ 		if (ret >= 0 || ret == -ENOTCONN || ret == -ENODEV)
+Index: usb-devel/drivers/usb/core/urb.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/urb.c
++++ usb-devel/drivers/usb/core/urb.c
+@@ -204,8 +204,12 @@ int usb_urb_ep_type_check(const struct u
+ 	const struct usb_host_endpoint *ep;
+ 
+ 	ep = usb_pipe_endpoint(urb->dev, urb->pipe);
+-	if (!ep)
++	if (!ep) {
++		dev_info(&urb->dev->dev, "Ep %d disabled: %d\n",
++			usb_pipeendpoint(urb->pipe),
++			urb->dev->alan1);
+ 		return -EINVAL;
++	}
+ 	if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
+ 		return -EINVAL;
+ 	return 0;
+Index: usb-devel/include/linux/usb.h
+===================================================================
+--- usb-devel.orig/include/linux/usb.h
++++ usb-devel/include/linux/usb.h
+@@ -629,6 +629,7 @@ struct usb3_lpm_parameters {
+  * usb_set_device_state().
+  */
+ struct usb_device {
++	int		alan1;
+ 	int		devnum;
+ 	char		devpath[16];
+ 	u32		route;
 
