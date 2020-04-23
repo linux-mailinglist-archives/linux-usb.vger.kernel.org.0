@@ -2,34 +2,34 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB951B5C67
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 15:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 209A71B5C68
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 15:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728363AbgDWNVI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S1728370AbgDWNVI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Thu, 23 Apr 2020 09:21:08 -0400
 Received: from mga07.intel.com ([134.134.136.100]:16372 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726753AbgDWNVG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Apr 2020 09:21:06 -0400
-IronPort-SDR: EanpjvNyjjo/aGxi7E05OQcVe+ytmZoUJwZEvCn7U6iPiF5uygrk0dte0t2oTvpHmiTwm1oOE6
- V322gs44d21A==
+        id S1728367AbgDWNVI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Apr 2020 09:21:08 -0400
+IronPort-SDR: MxYnLxjTo7QI3HZpLW7aWwhxtJ6vz2k3tdixot8SiAQsK3C7ZjTjP5SL9NNWVXeXQmAEJClbR1
+ Vf4rRVXZ6QGQ==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2020 06:21:06 -0700
-IronPort-SDR: I5vWWZrq746FAM6pYRJkVjxu3E+673kU6t9/wNDyPTkoOAkIvdjmrl6pK9nwgW6xdYwKrI0eJv
- DtmbgCeNYk9w==
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2020 06:21:07 -0700
+IronPort-SDR: IFD5K60FNvydQX6sLWtq/zsY10Gr3Vv0O1dB7JRI/6S7/TDxZ2YVTCCNaZ6gK2lYYtH3aIrEVw
+ boojj/oib4Mg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,307,1583222400"; 
-   d="scan'208";a="366001015"
+   d="scan'208";a="366001019"
 Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Apr 2020 06:21:04 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 23 Apr 2020 06:21:06 -0700
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org, "K V, Abhilash" <abhilash.k.v@intel.com>
-Subject: [PATCH 2/6] usb: typec: ucsi: Workaround for missed op_mode change
-Date:   Thu, 23 Apr 2020 16:20:54 +0300
-Message-Id: <20200423132058.6972-3-heikki.krogerus@linux.intel.com>
+Subject: [PATCH 3/6] usb: typec: ucsi: replace magic numbers
+Date:   Thu, 23 Apr 2020 16:20:55 +0300
+Message-Id: <20200423132058.6972-4-heikki.krogerus@linux.intel.com>
 X-Mailer: git-send-email 2.26.1
 In-Reply-To: <20200423132058.6972-1-heikki.krogerus@linux.intel.com>
 References: <20200423132058.6972-1-heikki.krogerus@linux.intel.com>
@@ -42,37 +42,40 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: "K V, Abhilash" <abhilash.k.v@intel.com>
 
-EC firmware on Dell XPS & Latitude series does not set "Power Operation
-Mode Change" bit in "Connector Status change" field of MESSAGE IN Data
-while transitioning from type-C current to PD mode.
-
-Instead the "Negotiated Power Level Change" bit is set when the "Power
-Operation Mode" field shows the correct mode (i.e. PD).
-
-This patch adds a check for this bit also, to trigger an update of
-power operation mode in class driver, while handling GET_CONNECTOR_STATUS
-command.
+Replace magic numbers with macros in trace.h.
 
 Signed-off-by: K V, Abhilash <abhilash.k.v@intel.com>
 Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- drivers/usb/typec/ucsi/ucsi.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/usb/typec/ucsi/trace.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index e9baa9a749e5..0c7c3f9b1b50 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -613,7 +613,8 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+diff --git a/drivers/usb/typec/ucsi/trace.c b/drivers/usb/typec/ucsi/trace.c
+index 48ad1dc1b1b2..cb62ad835761 100644
+--- a/drivers/usb/typec/ucsi/trace.c
++++ b/drivers/usb/typec/ucsi/trace.c
+@@ -35,16 +35,16 @@ const char *ucsi_cmd_str(u64 raw_cmd)
  
- 	role = !!(con->status.flags & UCSI_CONSTAT_PWR_DIR);
+ const char *ucsi_cci_str(u32 cci)
+ {
+-	if (cci & GENMASK(7, 0)) {
+-		if (cci & BIT(29))
++	if (UCSI_CCI_CONNECTOR(cci)) {
++		if (cci & UCSI_CCI_ACK_COMPLETE)
+ 			return "Event pending (ACK completed)";
+-		if (cci & BIT(31))
++		if (cci & UCSI_CCI_COMMAND_COMPLETE)
+ 			return "Event pending (command completed)";
+ 		return "Connector Change";
+ 	}
+-	if (cci & BIT(29))
++	if (cci & UCSI_CCI_ACK_COMPLETE)
+ 		return "ACK completed";
+-	if (cci & BIT(31))
++	if (cci & UCSI_CCI_COMMAND_COMPLETE)
+ 		return "Command completed";
  
--	if (con->status.change & UCSI_CONSTAT_POWER_OPMODE_CHANGE)
-+	if (con->status.change & UCSI_CONSTAT_POWER_OPMODE_CHANGE ||
-+	    con->status.change & UCSI_CONSTAT_POWER_LEVEL_CHANGE)
- 		ucsi_pwr_opmode_change(con);
- 
- 	if (con->status.change & UCSI_CONSTAT_POWER_DIR_CHANGE) {
+ 	return "";
 -- 
 2.26.1
 
