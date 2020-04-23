@@ -2,127 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 318AF1B5D06
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 15:59:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E831B5D3D
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 16:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728562AbgDWN7G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Apr 2020 09:59:06 -0400
-Received: from mail-il1-f198.google.com ([209.85.166.198]:41504 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726910AbgDWN7G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 09:59:06 -0400
-Received: by mail-il1-f198.google.com with SMTP id y2so5356221ilm.8
-        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2020 06:59:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=dpbkYCqNwiya7LvDlfQG8V+VIE3Sl4BpSmb11y1lkGI=;
-        b=sC8Pyqk3iEUfx/tQ16bA2DUEmMq4YMlrWWTfkq0uoxnsoe6ol+4SGFJVlqB51blQ/x
-         1FMtQJMx7nOXYoIwtfbdUwc8A/e5gKGpL97CHAFD2tcCuG44ip6q1419L5oXEktBHAkf
-         ivBsKEHqVUnqd6YVtFdT/O2tOahBx/LEJRlEpmAIikqj1FU6S1zfOQeUF8/F6l1d8pY+
-         18scsivg3spjEquWyFg3m2WBqUxyr9K4yWNrHB99AR80ukDpngoqBZRH/7IbVw1hpmPd
-         1Bk4jVYodb4JAqlkqnlDXoc8zKQSEW5J4awfey+makU/bBdE7x0U93wYr0JYsUw5upgr
-         tY1g==
-X-Gm-Message-State: AGi0PuZC2GeShdncRKAnn2cEMKvkAD0vJVyL487RjcjoarYop0ZeQpRJ
-        0BgZhsMr0WRdtax1Gid7oMc3kYr1zh5obfdJ8vNTa21IAqFq
-X-Google-Smtp-Source: APiQypJC6MDg/0aIVVcBeCfiSeeypJEdYyejUKpZAtN6rtzzlYUG5E69//6Oj7KkicPbf/rKLGOXHGUZTUqPe/D3w7bEbAaXiNNQ
+        id S1726307AbgDWOFD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 10:05:03 -0400
+Received: from mga05.intel.com ([192.55.52.43]:17591 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726079AbgDWOFC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Apr 2020 10:05:02 -0400
+IronPort-SDR: c7vrka6OyuW3pEUeuYwHcMfnoIiTsy5S26GLKirrT0VUbIWiAZwpr0FzJnPFMqeApkfcHt0TZW
+ N+jZpgmdAiXg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2020 07:05:02 -0700
+IronPort-SDR: vSHftgx/xm8MIZ2aj/xAFIsOTZ2xMkci/s7kKRxD3RkmW+c87tTxsopNO6aQtTw0vdTaz/XfnP
+ DNcoQbAo2mzg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,307,1583222400"; 
+   d="scan'208";a="246272302"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga007.fm.intel.com with ESMTP; 23 Apr 2020 07:04:59 -0700
+Subject: Re: [PATCH v9 3/5] usb: xhci: Add support for Renesas controller with
+ memory
+To:     Vinod Koul <vkoul@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        =?UTF-8?Q?Andreas_B=c3=b6hler?= <dev@aboehler.at>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200414164152.2786474-1-vkoul@kernel.org>
+ <20200414164152.2786474-4-vkoul@kernel.org>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <f61fbae0-28c5-c7ad-383f-2017a9e8597d@linux.intel.com>
+Date:   Thu, 23 Apr 2020 17:07:43 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-Received: by 2002:a5e:a607:: with SMTP id q7mr3846471ioi.109.1587650343840;
- Thu, 23 Apr 2020 06:59:03 -0700 (PDT)
-Date:   Thu, 23 Apr 2020 06:59:03 -0700
-In-Reply-To: <1587649702.23108.10.camel@suse.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c5b43705a3f5a69f@google.com>
-Subject: Re: general protection fault in go7007_usb_probe
-From:   syzbot <syzbot+cabfa4b5b05ff6be4ef0@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, hverkuil-cisco@xs4all.nl,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org, oneukum@suse.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200414164152.2786474-4-vkoul@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On 14.4.2020 19.41, Vinod Koul wrote:
+> Some rensas controller like uPD720201 and uPD720202 need firmware to be
+> loaded. Add these devices in table and invoke renesas firmware loader
+> functions to check and load the firmware into device memory when
+> required.
+> 
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> ---
+>  drivers/usb/host/xhci-pci.c | 33 +++++++++++++++++++++++++++++++++
+>  drivers/usb/host/xhci.h     |  1 +
+>  2 files changed, 34 insertions(+)
+> 
+> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> index b6c2f5c530e3..11521e2e1720 100644
+> --- a/drivers/usb/host/xhci-pci.c
+> +++ b/drivers/usb/host/xhci-pci.c
+> @@ -15,6 +15,7 @@
+>  
+>  #include "xhci.h"
+>  #include "xhci-trace.h"
+> +#include "xhci-pci.h"
+>  
+>  #define SSIC_PORT_NUM		2
+>  #define SSIC_PORT_CFG2		0x880c
+> @@ -328,6 +329,21 @@ static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  	int retval;
+>  	struct xhci_hcd *xhci;
+>  	struct usb_hcd *hcd;
+> +	struct xhci_driver_data *driver_data;
+> +
+> +	driver_data = (struct xhci_driver_data *)id->driver_data;
+> +
+> +	if (driver_data && driver_data->quirks & XHCI_RENESAS_FW_QUIRK) {
+> +		retval = renesas_xhci_pci_probe(dev, id);
+> +		switch (retval) {
+> +		case 0: /* fw check success, continue */
+> +			break;
+> +		case 1: /* fw will be loaded by async load */
+> +			return 0;
 
-syzbot has tested the proposed patch but the reproducer still triggered crash:
-general protection fault in go7007_usb_probe
+This is no longer true, right?
 
-usb 3-1: string descriptor 0 read error: -71
-general protection fault, probably for non-canonical address 0xdffffc00000000bd: 0000 [#1] SMP KASAN
-KASAN: null-ptr-deref in range [0x00000000000005e8-0x00000000000005ef]
-CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.7.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:go7007_usb_probe+0x1ff/0x1de4 drivers/media/usb/go7007/go7007-usb.c:1130
-Code: 03 80 3c 02 00 0f 85 00 19 00 00 4d 8b ae 98 00 00 00 48 b8 00 00 00 00 00 fc ff df 49 8d bd e8 05 00 00 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 cd 18 00 00 4d 8b ad e8 05 00 00 4d 85 ed 0f 84
-RSP: 0018:ffff8881da317190 EFLAGS: 00010206
-RAX: dffffc0000000000 RBX: ffff8881d5768000 RCX: 1ffffffff126c1fa
-RDX: 00000000000000bd RSI: ffffffff845438b9 RDI: 00000000000005e8
-RBP: ffff8881cbc94000 R08: 0000000000000001 R09: fffffbfff1268ad6
-R10: ffffffff893456af R11: fffffbfff1268ad5 R12: ffffffff867853e0
-R13: 0000000000000000 R14: ffff8881cbd02400 R15: ffff8881c7f23000
-FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000056141ffa7578 CR3: 00000001ccc54000 CR4: 00000000001406e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:374
- really_probe+0x290/0xac0 drivers/base/dd.c:527
- driver_probe_device+0x223/0x350 drivers/base/dd.c:701
- __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:808
- bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
- __device_attach+0x21a/0x390 drivers/base/dd.c:874
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0x1367/0x1c20 drivers/base/core.c:2533
- usb_set_configuration+0xed4/0x1850 drivers/usb/core/message.c:2025
- usb_generic_driver_probe+0x9d/0xe0 drivers/usb/core/generic.c:241
- usb_probe_device+0xd9/0x230 drivers/usb/core/driver.c:272
- really_probe+0x290/0xac0 drivers/base/dd.c:527
- driver_probe_device+0x223/0x350 drivers/base/dd.c:701
- __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:808
- bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
- __device_attach+0x21a/0x390 drivers/base/dd.c:874
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0x1367/0x1c20 drivers/base/core.c:2533
- usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2548
- hub_port_connect drivers/usb/core/hub.c:5195 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5335 [inline]
- port_event drivers/usb/core/hub.c:5481 [inline]
- hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5563
- process_one_work+0x965/0x1630 kernel/workqueue.c:2268
- worker_thread+0x96/0xe20 kernel/workqueue.c:2414
- kthread+0x326/0x430 kernel/kthread.c:268
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-Modules linked in:
----[ end trace 3c58732c46bcaa36 ]---
-RIP: 0010:go7007_usb_probe+0x1ff/0x1de4 drivers/media/usb/go7007/go7007-usb.c:1130
-Code: 03 80 3c 02 00 0f 85 00 19 00 00 4d 8b ae 98 00 00 00 48 b8 00 00 00 00 00 fc ff df 49 8d bd e8 05 00 00 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 cd 18 00 00 4d 8b ad e8 05 00 00 4d 85 ed 0f 84
-RSP: 0018:ffff8881da317190 EFLAGS: 00010206
-RAX: dffffc0000000000 RBX: ffff8881d5768000 RCX: 1ffffffff126c1fa
-RDX: 00000000000000bd RSI: ffffffff845438b9 RDI: 00000000000005e8
-RBP: ffff8881cbc94000 R08: 0000000000000001 R09: fffffbfff1268ad6
-R10: ffffffff893456af R11: fffffbfff1268ad5 R12: ffffffff867853e0
-R13: 0000000000000000 R14: ffff8881cbd02400 R15: ffff8881c7f23000
-FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000056141ffa7578 CR3: 00000001ccc54000 CR4: 00000000001406e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+To me it looks like renesas_xhci_pci_probe() returns 0 on success, both if
+firmware was already running or if successfully loaded, and negative on error
 
+While changing this the function name "renesas_xhci_pci_probe()" should be
+changed as well. This isn't anymore a separate firmware loading driver, just a
+a lot of renesas firmware loading code.
 
-Tested on:
+You could call renesas_xhci_check_request_fw() directly instead:
 
-commit:         e9010320 usb: cdns3: gadget: make a bunch of functions sta..
-git tree:       https://github.com/google/kasan.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=158aba87e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bd14feb44652cfaf
-dashboard link: https://syzkaller.appspot.com/bug?extid=cabfa4b5b05ff6be4ef0
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12d0bfd7e00000
+	if (driver_data && driver_data->quirks & XHCI_RENESAS_FW_QUIRK) {
+		retval = renesas_xhci_check_request_fw(dev, id);
+		if (retval)
+			return retval;
+	}
 
+-Mathias
