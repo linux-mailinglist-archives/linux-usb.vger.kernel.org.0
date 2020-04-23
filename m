@@ -2,116 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DACCC1B51EE
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 03:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD211B5320
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 05:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726479AbgDWBgF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Apr 2020 21:36:05 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:37813 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbgDWBgE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Apr 2020 21:36:04 -0400
-Received: by mail-io1-f70.google.com with SMTP id c26so4240812ioa.4
-        for <linux-usb@vger.kernel.org>; Wed, 22 Apr 2020 18:36:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=FurOsJafTUjOU7htoinTVNM+xvVe0P4gX8irUYQlJoI=;
-        b=kmz5qdZFMTjUBNInFrOqKvONqKbsb3ABCxMTf4Vq+EiKs/YCFjodnvrftYjz1gcKhA
-         0s8PUEQPhs6XXwPLazOqODA+Cx+rFbO6ADvR4t4gdU07NzRhjjUUWP0pzQ3hbLIW1Roi
-         dCUX3H4R6DPlzWtMgrAbvHzZXS2tXwiFqivph2oRMwR8iGpmg3uYGgVur1ecb4UnQmk/
-         J/kyE3kMNW6SfYZnFyoPY3IvQqU8E7eYjwTLELMjGBj8jX+LCSjTVYRKdTVN9AI2y7QD
-         4Zu1+Ooiy1XbGznZhpdWOOsK6wG4SuZvh9kPvrlwuhHwvWO1JlhdCFWqH9ezuv2D5tLI
-         vxDA==
-X-Gm-Message-State: AGi0Pub88M0vky0bI0y7pQXTrM7Tjb/psblQuK8PYDp8JbKnhHym1jOp
-        F6A4mn5c/m9Npxf06V0YPCZ+Pc8MM6RyhSKYUGv7ui5TYMaf
-X-Google-Smtp-Source: APiQypLxwT9vIB8z1xbpNZFZYJtukGXqrgEPUjrPuRJFkBzGiQ0BPObrAusrWakDQBgEMUE0AvWRr3C89uTip5icnivgbFUMyGN9
+        id S1726639AbgDWD3X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Apr 2020 23:29:23 -0400
+Received: from mga17.intel.com ([192.55.52.151]:48893 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726002AbgDWD3W (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 Apr 2020 23:29:22 -0400
+IronPort-SDR: 0wKB8OBx9j+UssLnHpd/wi2WVv6JGqosFAjJJMFtiwW9PR/TnOTc+00sulOxTRidkHbva4c+Il
+ Hau2m1JgCBzQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2020 20:29:21 -0700
+IronPort-SDR: VpSUxslH9ZGKTd7bklropK9H2MBtHijHwFnI8Ycv99ZAVn3O2nuzcnuIrofbqcFL0mUOnbVDGB
+ J/5QPu/EtQfA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,305,1583222400"; 
+   d="scan'208";a="301102138"
+Received: from fmsmsx103.amr.corp.intel.com ([10.18.124.201])
+  by FMSMGA003.fm.intel.com with ESMTP; 22 Apr 2020 20:29:21 -0700
+Received: from fmsmsx151.amr.corp.intel.com (10.18.125.4) by
+ FMSMSX103.amr.corp.intel.com (10.18.124.201) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Wed, 22 Apr 2020 20:28:50 -0700
+Received: from FMSEDG002.ED.cps.intel.com (10.1.192.134) by
+ FMSMSX151.amr.corp.intel.com (10.18.125.4) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Wed, 22 Apr 2020 20:28:44 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.36.55) by
+ edgegateway.intel.com (192.55.55.69) with Microsoft SMTP Server (TLS) id
+ 14.3.439.0; Wed, 22 Apr 2020 20:28:33 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N1sfqwfxXg/He7q91Bk7hI2dZeW1cNu1MCqBCrzPNPH1aVB0MCpzdf9FcgeUF91Rhe5c0GA6ZVdTP7Yn9wQbBFUj+qWWyFa/u0O1zR9BvZvJqnfJ+Y08Z7nZaCxZQw/bwY8ejevM1doS08IjzLLofSR5U25JrpzQ9DKFKjoCSsXAPnkvN1IhduzwF37+YY8OCM351938sD8iGkACLZr0JSIVIeg92d2zFVWbIppr9Y3zsfkumE52Od9k3UYJLrphkQylTZVJQQrZ10vPR7FP0CuZY3gRa6yREiJAOGQ4oz2RtpEhyGOcgsnJAKOIc/7tHT1sC1f6VpAgmMQEoeFZtg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=b86oV3h5BnD0Y2bU01WaWEPqlGE/JtiIuKgLsq/4bP8=;
+ b=FfNTLjq+nHUVhO/cK6vxp/N0ynxXDzNmK+gxtTN0MaGzwHlLVAWCxuiNMqodjXkuvNmI3lpRPYGQ5u0e6Wm5N9huAkKkWm9TPL1DSq1FrmOcP7YFluAAF880nHu+Lsy28d20HmTUWikhBgaWIscRSCXBxZhCVIcb575Nfa3Cwp3Ylpskqh7AdFgVpS49F3zIFb1Y3LzB8tC7k8eQQ3pi1pErCBpepkpBO6nchlCfmARAAigp7CnHvJ5uKS8QrvloCqMSlGAVsh1OjEsv+E/twW6NaBBS8UqKE2W0pI+FkCddeHypiHVFcbS0CVn9j/Psk8/0OK091iWi5GtHS+W+Hw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
+ s=selector2-intel-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=b86oV3h5BnD0Y2bU01WaWEPqlGE/JtiIuKgLsq/4bP8=;
+ b=mjFLiki5xI1l+7oegeOQ9MzF8y/TGGF+BNvQaQXu1LL34gs65497r2wzfrDzNOcedp1jOb3rZerXngTZ69xwsZyWG0dGeEo3ucezkIGasC2JhoKFVu5HDEvApmzSC8Awrx6Qyd77pN3hcGzHFWIM+P+XIVZC7eJzgNnOPzAaGs4=
+Received: from SN6PR11MB3245.namprd11.prod.outlook.com (2603:10b6:805:be::32)
+ by SN6PR11MB3486.namprd11.prod.outlook.com (2603:10b6:805:c5::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2921.29; Thu, 23 Apr
+ 2020 03:28:32 +0000
+Received: from SN6PR11MB3245.namprd11.prod.outlook.com
+ ([fe80::875:de1c:e14f:34c4]) by SN6PR11MB3245.namprd11.prod.outlook.com
+ ([fe80::875:de1c:e14f:34c4%3]) with mapi id 15.20.2937.012; Thu, 23 Apr 2020
+ 03:28:32 +0000
+From:   "Gopal, Saranya" <saranya.gopal@intel.com>
+To:     Sid Spry <sid@aeam.us>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: Failure to Assign UDC to ConfigFS Gadget
+Thread-Topic: Failure to Assign UDC to ConfigFS Gadget
+Thread-Index: AQHWGPHM9hzzWNqMuUqnz4/7GNK8Z6iGC5nA
+Date:   Thu, 23 Apr 2020 03:28:32 +0000
+Message-ID: <SN6PR11MB324507C7828C86B7460EDF11E3D30@SN6PR11MB3245.namprd11.prod.outlook.com>
+References: <df1fe132-79ac-4656-9ddf-040e26f11c28@www.fastmail.com>
+In-Reply-To: <df1fe132-79ac-4656-9ddf-040e26f11c28@www.fastmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-version: 11.2.0.6
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=saranya.gopal@intel.com; 
+x-originating-ip: [192.55.79.124]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: bae35c41-f4ae-4d32-36dc-08d7e736664e
+x-ms-traffictypediagnostic: SN6PR11MB3486:
+x-microsoft-antispam-prvs: <SN6PR11MB348665F789DCDD8072480913E3D30@SN6PR11MB3486.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 03827AF76E
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR11MB3245.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10019020)(346002)(376002)(396003)(39860400002)(136003)(366004)(110136005)(66946007)(81156014)(5660300002)(8936002)(316002)(55016002)(9686003)(186003)(71200400001)(4744005)(8676002)(33656002)(86362001)(2906002)(64756008)(66556008)(66476007)(76116006)(66446008)(7696005)(478600001)(26005)(6506007)(52536014);DIR:OUT;SFP:1102;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0eUjUS76mmX6HjhQdijv5pk0cJHGw1afF53CHTYaIUHO8BunnBXkPyQuc7GCYcQfuy5oOe6JdlMpmiwpJwC08NuUjW4m6iUOBUsllJKti2412BpOfRvf2LDSSPBR+5UkCnTyYQcTNHX6/SqEA8CG0K7/Q5qKgxiaFF7frEgkNxCwK4RhhEFrNAtWPC2n2NEWTxgYWChhHbFC1iI+XJqw8/LqIMgNDP0wAx8CzK0bf+w7LaxOtag1CiUJhVDIuBhjE8M9x12NZV8kVHRlkrcqommeTvS/PVfVfyXMdtYW2RmNN1UZhM8JOB/prjM0Ko17SjuBaluq/5AK280ZdXmWKBFNkAk9IB3nxHhi3f2GCBZWp5EGjpa38B0KHIVuAH9tTkj6thoXgk83NRq6PGGmiOemsmfS9YTMcfsRLFuSel2r07zfZ7A4bitLkFxJTOA1
+x-ms-exchange-antispam-messagedata: W5vmPhwYL+858rGKhmy11Qm4axABJGS6trU8aEftEY4OX43AMZTI1qoHBJElqkucGfvhZzaKOSb4+6Q0fLhc8UOCYldO6JeW+DJ5sM4ds8H8tXm4gG6QIbyEratEqxCodevHnde+46sTZDWB062iwA==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Received: by 2002:a6b:5109:: with SMTP id f9mr1539650iob.125.1587605763890;
- Wed, 22 Apr 2020 18:36:03 -0700 (PDT)
-Date:   Wed, 22 Apr 2020 18:36:03 -0700
-In-Reply-To: <Pine.LNX.4.44L0.2004222111060.7643-100000@netrider.rowland.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000099a4f005a3eb458b@google.com>
-Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
-From:   syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-CrossTenant-Network-Message-Id: bae35c41-f4ae-4d32-36dc-08d7e736664e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Apr 2020 03:28:32.5387
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UEx/8IrycVALO2ANnJuEYUGYWt0LEcFthTu+4GQ40AhwwuQq+JFzdXyo1tjd8T+aeC9Wee4nxWnN5GPO4Sz7SQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3486
+X-OriginatorOrg: intel.com
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi Sid,
 
-syzbot has tested the proposed patch but the reproducer still triggered crash:
-WARNING in usbhid_raw_request/usb_submit_urb
+> # stat /sys/class/udc/musb-hdrc.1.auto
+>   File: /sys/class/udc/musb-hdrc.1.auto ->
+> ../../devices/platform/soc/1c19000.usb/musb-hdrc.1.auto/udc/musb-
+> hdrc.1.auto
+>=20
+> If I try to assign the UDC using the string 1c19000.usb I get:
+>=20
+> # echo "1c19000.usb" > UDC
+> bash: echo: write error: No such device
+>=20
+> It's at this point I'm lost. I appreciate any help.
 
-usb 5-1: Ep 0 disabled: 2 0
-------------[ cut here ]------------
-usb 5-1: BOGUS urb xfer, pipe 2 != type 2
-WARNING: CPU: 0 PID: 6371 at drivers/usb/core/urb.c:482 usb_submit_urb+0xa41/0x1390 drivers/usb/core/urb.c:482
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 6371 Comm: syz-executor.4 Not tainted 5.6.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- panic+0x2aa/0x6e1 kernel/panic.c:221
- __warn.cold+0x2f/0x30 kernel/panic.c:582
- report_bug+0x27b/0x2f0 lib/bug.c:195
- fixup_bug arch/x86/kernel/traps.c:174 [inline]
- fixup_bug arch/x86/kernel/traps.c:169 [inline]
- do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
- do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
- invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-RIP: 0010:usb_submit_urb+0xa41/0x1390 drivers/usb/core/urb.c:482
-Code: 84 49 04 00 00 e8 7f 89 dd fd 4c 89 ef e8 87 59 17 ff 41 89 d8 44 89 e1 4c 89 f2 48 89 c6 48 c7 c7 c0 dd 3b 86 e8 27 1a b2 fd <0f> 0b e8 58 89 dd fd 0f b6 6c 24 08 bb 86 03 00 00 48 c7 c6 20 df
-RSP: 0018:ffff8881be9afb30 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff812974dd RDI: ffffed1037d35f58
-RBP: 0000000000000000 R08: ffff8881d41fe200 R09: ffffed103b64439f
-R10: ffffed103b64439e R11: ffff8881db221cf3 R12: 0000000000000002
-R13: ffff8881cf1390a8 R14: ffff8881d8fb8e88 R15: ffff8881d89b8e00
- usb_start_wait_urb+0x108/0x4c0 drivers/usb/core/message.c:58
- usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
- usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
- usbhid_set_raw_report drivers/hid/usbhid/hid-core.c:917 [inline]
- usbhid_raw_request+0x225/0x620 drivers/hid/usbhid/hid-core.c:1265
- hid_hw_raw_request include/linux/hid.h:1079 [inline]
- hidraw_send_report+0x296/0x500 drivers/hid/hidraw.c:151
- hidraw_ioctl+0x620/0xaf0 drivers/hid/hidraw.c:422
- vfs_ioctl fs/ioctl.c:47 [inline]
- ksys_ioctl+0x11a/0x180 fs/ioctl.c:763
- __do_sys_ioctl fs/ioctl.c:772 [inline]
- __se_sys_ioctl fs/ioctl.c:770 [inline]
- __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:770
- do_syscall_64+0xb6/0x5a0 arch/x86/entry/common.c:294
- entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x45c849
-Code: ad b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 7b b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007fa679711c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007fa6797126d4 RCX: 000000000045c849
-RDX: 00000000200000c0 RSI: 0000000080404806 RDI: 0000000000000006
-RBP: 000000000076bfa0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000000ffffffff
-R13: 0000000000000335 R14: 00000000004c59df R15: 000000000076bfac
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+You need to give the exact name of UDC as present in /sys/class/udc.
+So, try this:
+echo "musb-hdrc.1.auto" > UDC
 
+Thanks,
+Saranya
 
-Tested on:
-
-commit:         0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
-git tree:       https://github.com/google/kasan.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=1120236fe00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
-dashboard link: https://syzkaller.appspot.com/bug?extid=db339689b2101f6f6071
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1799b3bfe00000
-
+> Cheers!
