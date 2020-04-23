@@ -2,82 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E453A1B5A2A
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 13:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D95A1B5A5A
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 13:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727903AbgDWLNu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Apr 2020 07:13:50 -0400
-Received: from mx2.suse.de ([195.135.220.15]:52312 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727077AbgDWLNu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Apr 2020 07:13:50 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 5B198B08C;
-        Thu, 23 Apr 2020 11:13:47 +0000 (UTC)
-Message-ID: <1587640413.23108.7.camel@suse.com>
-Subject: Re: KASAN: use-after-free Read in usblp_bulk_read
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Pete Zaitcev <zaitcev@redhat.com>, Hillf Danton <hdanton@sina.com>
-Cc:     syzbot <syzbot+be5b5f86a162a6c281e6@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        id S1728064AbgDWLUG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 07:20:06 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:50705 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727858AbgDWLUG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 07:20:06 -0400
+Received: by mail-io1-f69.google.com with SMTP id a12so5286916ioe.17
+        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2020 04:20:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=7ws0cdv3Hoh5HeHAP/ghf6fY1WIucwMKaP3c8MnIE78=;
+        b=hDnVnl/y3YhXarlzevA0jnsdAdxzGNs9xafGjqgLGar6Z2mzH3VYqJRNi+Q59vIjLH
+         CDHc/e9XKVpxYepGvEfIptvePctLraxJzb0A7GYOcMCeW87D5Hk6fgb3BQdhqE2fcMLf
+         1N0Qs+B1rJ6kfrr8AMlE5vkvOHgvO6VRHgc1eB3nM85oMsDtKXwKR3IC1iXkj8JD8k7H
+         Q/SGowv8dIGW4wGS7S7PWmWocfOU+Y1xyMvHnP2jazUIO2h8751Ni7Vfxno3PdjJj3om
+         4dR1nUG2Eg+B/c0EIic+GNw9iX5ueTYadCOPFRw7w86ttAY1CQLXTDK6ifCfvfYp1UQn
+         mBag==
+X-Gm-Message-State: AGi0PuboTxLXWDLSEXnVI7KYBmcuroUdP00Iwh7IqLsUW8xDMMKe/KZy
+        aSi1pfLTVShD9gbhtyE+2Ti/Iha/CtAJTD3gIzQ0Q1ZG72Ug
+X-Google-Smtp-Source: APiQypI+EsLOsSPy6Sg+P7SRjTLpki9gp5v/Xt5zbhKL9lDbKFt5ewoTipmheSr6K6PolKz5AuPvg7AodJLNWX3+BaXd0t0KhCeX
+MIME-Version: 1.0
+X-Received: by 2002:a92:3cc4:: with SMTP id j65mr2713330ilf.190.1587640805461;
+ Thu, 23 Apr 2020 04:20:05 -0700 (PDT)
+Date:   Thu, 23 Apr 2020 04:20:05 -0700
+In-Reply-To: <1587639690.23108.2.camel@suse.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003d967305a3f36ee9@google.com>
+Subject: Re: general protection fault in go7007_usb_probe
+From:   syzbot <syzbot+cabfa4b5b05ff6be4ef0@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, hverkuil-cisco@xs4all.nl,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org, oneukum@suse.com,
         syzkaller-bugs@googlegroups.com
-Date:   Thu, 23 Apr 2020 13:13:33 +0200
-In-Reply-To: <20200423001036.41324bd4@suzdal.zaitcev.lan>
-References: <00000000000046503905a3cec366@google.com>
-         <20200422032323.8536-1-hdanton@sina.com>
-         <20200423001036.41324bd4@suzdal.zaitcev.lan>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Donnerstag, den 23.04.2020, 00:10 -0500 schrieb Pete Zaitcev:
-> 
-> I do not agree with this kind of workaround. The model we're following
-> is for usb_kill_urb() to cancel the transfer. The usblp invokes it
-> through usb_kill_anchored_urbs() and usblp_unlink_urbs(), as seen
-> above. There can be no timer hitting anything once it returns.
+Hello,
 
-Right. It seems to me that the problem is not killing an existing
-transfer but a failure to check in case of new transfers whether
-the device has been disconnected.
+syzbot has tested the proposed patch and the reproducer did not trigger crash:
 
-> 1104 is kzalloc for struct usblp.
-> 
-> > > Freed by task 12266:
-> > >  save_stack+0x1b/0x80 mm/kasan/common.c:72
-> > >  set_track mm/kasan/common.c:80 [inline]
-> > >  kasan_set_free_info mm/kasan/common.c:337 [inline]
-> > >  __kasan_slab_free+0x117/0x160 mm/kasan/common.c:476
-> > >  slab_free_hook mm/slub.c:1444 [inline]
-> > >  slab_free_freelist_hook mm/slub.c:1477 [inline]
-> > >  slab_free mm/slub.c:3034 [inline]
-> > >  kfree+0xd5/0x300 mm/slub.c:3995
-> > >  usblp_disconnect.cold+0x24/0x29 drivers/usb/class/usblp.c:1380
-> > >  usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:436
-> > >  __device_release_driver drivers/base/dd.c:1137 [inline]
-> > >  device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1168
-> > >  bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
-> 
-> 1380 is an inlined call to usblp_cleanup, which is just
-> a bunch of kfree.
+Reported-and-tested-by: syzbot+cabfa4b5b05ff6be4ef0@syzkaller.appspotmail.com
 
-But that must never happen while while the device is open.
-If that ever happens something is wrong with usblp->used.
+Tested on:
 
-> The bug report is still a bug report, but I'm pretty sure the
-> culprit is the emulated HCD and/or the gadget layer. Unfortunately,
-> I'm not up to speed in that subsystem. Maybe Alan can look at it?
+commit:         e9010320 usb: cdns3: gadget: make a bunch of functions sta..
+git tree:       https://github.com/google/kasan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=bd14feb44652cfaf
+dashboard link: https://syzkaller.appspot.com/bug?extid=cabfa4b5b05ff6be4ef0
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=108a4ecfe00000
 
-I doubt it. Operation by a timer triggering a timeout must work.
-
-	Regards
-		Oliver
-
-
+Note: testing is done by a robot and is best-effort only.
