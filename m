@@ -2,120 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9021B5DD2
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 16:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6173E1B60ED
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Apr 2020 18:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726419AbgDWObc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Apr 2020 10:31:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39034 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726060AbgDWObc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Apr 2020 10:31:32 -0400
-Received: from localhost (unknown [117.99.83.91])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 33AF020728;
-        Thu, 23 Apr 2020 14:31:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587652292;
-        bh=lI3x3Wgxq/DlxqjieCrseB2CoKABPYFIihFQcs7uAuo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fRY+2kfDUSjwGHmBG3P90xdDtebN6Az+VfjTLoi322j7th4zLubnSAoTZtg00p35q
-         bX1IFR1EU3Kup5TwP2TnQNn+JjmeYQY6J9F2Vm41UYl5DoiS2en+iR8Bj6iZcy+8+e
-         1Nlm3C+PJAgLj1MAYEpM7AIV9qZycz6NUMIAdw9o=
-Date:   Thu, 23 Apr 2020 20:01:27 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andreas =?iso-8859-1?Q?B=F6hler?= <dev@aboehler.at>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 3/5] usb: xhci: Add support for Renesas controller
- with memory
-Message-ID: <20200423143127.GK72691@vkoul-mobl>
-References: <20200414164152.2786474-1-vkoul@kernel.org>
- <20200414164152.2786474-4-vkoul@kernel.org>
- <f61fbae0-28c5-c7ad-383f-2017a9e8597d@linux.intel.com>
+        id S1729673AbgDWQ3S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 12:29:18 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:47347 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729613AbgDWQ3R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 12:29:17 -0400
+Received: (qmail 1763 invoked by uid 500); 23 Apr 2020 12:29:15 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 23 Apr 2020 12:29:15 -0400
+Date:   Thu, 23 Apr 2020 12:29:15 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Oliver Neukum <oneukum@suse.com>
+cc:     Pete Zaitcev <zaitcev@redhat.com>, Hillf Danton <hdanton@sina.com>,
+        syzbot <syzbot+be5b5f86a162a6c281e6@syzkaller.appspotmail.com>,
+        <andreyknvl@google.com>, <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: Re: KASAN: use-after-free Read in usblp_bulk_read
+In-Reply-To: <1587640413.23108.7.camel@suse.com>
+Message-ID: <Pine.LNX.4.44L0.2004231213260.20147-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f61fbae0-28c5-c7ad-383f-2017a9e8597d@linux.intel.com>
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23-04-20, 17:07, Mathias Nyman wrote:
-> On 14.4.2020 19.41, Vinod Koul wrote:
-> > Some rensas controller like uPD720201 and uPD720202 need firmware to be
-> > loaded. Add these devices in table and invoke renesas firmware loader
-> > functions to check and load the firmware into device memory when
-> > required.
+On Thu, 23 Apr 2020, Oliver Neukum wrote:
+
+> Am Donnerstag, den 23.04.2020, 00:10 -0500 schrieb Pete Zaitcev:
 > > 
-> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> > ---
-> >  drivers/usb/host/xhci-pci.c | 33 +++++++++++++++++++++++++++++++++
-> >  drivers/usb/host/xhci.h     |  1 +
-> >  2 files changed, 34 insertions(+)
+> > I do not agree with this kind of workaround. The model we're following
+> > is for usb_kill_urb() to cancel the transfer. The usblp invokes it
+> > through usb_kill_anchored_urbs() and usblp_unlink_urbs(), as seen
+> > above. There can be no timer hitting anything once it returns.
+> 
+> Right. It seems to me that the problem is not killing an existing
+> transfer but a failure to check in case of new transfers whether
+> the device has been disconnected.
+> 
+> > 1104 is kzalloc for struct usblp.
 > > 
-> > diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> > index b6c2f5c530e3..11521e2e1720 100644
-> > --- a/drivers/usb/host/xhci-pci.c
-> > +++ b/drivers/usb/host/xhci-pci.c
-> > @@ -15,6 +15,7 @@
-> >  
-> >  #include "xhci.h"
-> >  #include "xhci-trace.h"
-> > +#include "xhci-pci.h"
-> >  
-> >  #define SSIC_PORT_NUM		2
-> >  #define SSIC_PORT_CFG2		0x880c
-> > @@ -328,6 +329,21 @@ static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
-> >  	int retval;
-> >  	struct xhci_hcd *xhci;
-> >  	struct usb_hcd *hcd;
-> > +	struct xhci_driver_data *driver_data;
-> > +
-> > +	driver_data = (struct xhci_driver_data *)id->driver_data;
-> > +
-> > +	if (driver_data && driver_data->quirks & XHCI_RENESAS_FW_QUIRK) {
-> > +		retval = renesas_xhci_pci_probe(dev, id);
-> > +		switch (retval) {
-> > +		case 0: /* fw check success, continue */
-> > +			break;
-> > +		case 1: /* fw will be loaded by async load */
-> > +			return 0;
+> > > > Freed by task 12266:
+> > > >  save_stack+0x1b/0x80 mm/kasan/common.c:72
+> > > >  set_track mm/kasan/common.c:80 [inline]
+> > > >  kasan_set_free_info mm/kasan/common.c:337 [inline]
+> > > >  __kasan_slab_free+0x117/0x160 mm/kasan/common.c:476
+> > > >  slab_free_hook mm/slub.c:1444 [inline]
+> > > >  slab_free_freelist_hook mm/slub.c:1477 [inline]
+> > > >  slab_free mm/slub.c:3034 [inline]
+> > > >  kfree+0xd5/0x300 mm/slub.c:3995
+> > > >  usblp_disconnect.cold+0x24/0x29 drivers/usb/class/usblp.c:1380
+> > > >  usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:436
+> > > >  __device_release_driver drivers/base/dd.c:1137 [inline]
+> > > >  device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1168
+> > > >  bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
+> > 
+> > 1380 is an inlined call to usblp_cleanup, which is just
+> > a bunch of kfree.
 > 
-> This is no longer true, right?
-
-Correct.
-
-> To me it looks like renesas_xhci_pci_probe() returns 0 on success, both if
-> firmware was already running or if successfully loaded, and negative on error
-
-Yes now it does that and I will update this part..
+> But that must never happen while while the device is open.
+> If that ever happens something is wrong with usblp->used.
 > 
-> While changing this the function name "renesas_xhci_pci_probe()" should be
-> changed as well. This isn't anymore a separate firmware loading driver, just a
-> a lot of renesas firmware loading code.
+> > The bug report is still a bug report, but I'm pretty sure the
+> > culprit is the emulated HCD and/or the gadget layer. Unfortunately,
+> > I'm not up to speed in that subsystem. Maybe Alan can look at it?
 > 
-> You could call renesas_xhci_check_request_fw() directly instead:
-> 
-> 	if (driver_data && driver_data->quirks & XHCI_RENESAS_FW_QUIRK) {
-> 		retval = renesas_xhci_check_request_fw(dev, id);
-> 		if (retval)
-> 			return retval;
-> 	}
+> I doubt it. Operation by a timer triggering a timeout must work.
 
-Yes I can remove this layer and directly invoke the internal function..
+The timer is not the issue.  usb_kill_anchored_urbs() waits until all 
+the URBs have completed, and those completions happen when the timer 
+fires.
 
-Thanks for the comments
+The only suspicious thing I see is that usblp_resume() calls 
+handle_bidir() without first acquiring any mutex.  But resume shouldn't 
+race with disconnect.
 
--- 
-~Vinod
+The only other place where read URBs get submitted is under
+usblp_read(), which does acquire the mutex and checks for disconnection
+while holding it.
+
+So I'm baffled.
+
+Alan Stern
+
