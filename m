@@ -2,127 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6011B6A90
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 03:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 179FE1B6AAC
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 03:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728176AbgDXBA7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Apr 2020 21:00:59 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:60171 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725993AbgDXBA7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 21:00:59 -0400
-Received: (qmail 2364 invoked by uid 500); 23 Apr 2020 21:00:58 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 23 Apr 2020 21:00:58 -0400
-Date:   Thu, 23 Apr 2020 21:00:58 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
-        <ingrassia@epigenesys.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
-Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
-In-Reply-To: <000000000000c06f9105a3fc3ed2@google.com>
-Message-ID: <Pine.LNX.4.44L0.2004232059480.2101-100000@netrider.rowland.org>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+        id S1727968AbgDXBKH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 21:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727890AbgDXBKH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 21:10:07 -0400
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18306C09B043
+        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2020 18:10:07 -0700 (PDT)
+Received: by mail-wm1-x34a.google.com with SMTP id h184so3103592wmf.5
+        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2020 18:10:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=88mZnk/yJJPxv8ksSnTZfxrk5uMuKcJLn1UiqJx+wmw=;
+        b=Xjy0j8oGaQBfUC0+TLweiaTVBntI5YN9B+ojSDjBhyR5peIn+AA+/fa23bCTH3tEPR
+         xUM6US7ZQz7kMwXzO9iMVgkYLxaFQDPMKIEwgVRG2Q/qb4+gRNlQ7ouRgyJ7HugzFiRC
+         17y1xK81h1VFdRZXkpktGeDPnCtjQ/PJCjD5WVfxioYm4SaexlU0CU4JzXFC1f4bX9NR
+         vfMCoQFcHtAUh9V3nvqvTcGUIrVN9SLhRr+P9M9NFr8Ijt1ZWKLuyUbuu2rzT2bF1nLG
+         As3NVgP6NZGHzw0cl1VtyDbpl2WjwEIiAzOy+bT98IZxfp/A2baWrqYz4uiz4uSHZTjE
+         SGnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=88mZnk/yJJPxv8ksSnTZfxrk5uMuKcJLn1UiqJx+wmw=;
+        b=SLguBoYK5wnKADqwm90T02g9SdxWaq7HLhBZhLvvRB8FLK2b5iWkIaPW+k2u9m+3GD
+         vigdkzXW7hBuH3pX3i9hcdBCKBUAmO7qucF6uciAT7/yAv6kWkurqP9P3nPpxMVXwvyq
+         dgPKbT/xS68fxi5VR3lIwVjdUFwfGIiQP2Bwb0WCE98hX3q0ZU0+ibnNO5fYoremj9sn
+         qfgZ+1He7Nj2I6YaZX0M/AbAeRTgPL0d7fknsu8+1+DLzg5aDP/bnpgquMb7KnOZROFG
+         mEJKmNdhHTA4iguSEkbRQNrikeTwt0Hk3XUMevE6zPlHnys0Xbvcw/Bvbg4yHljsdm/c
+         3IiA==
+X-Gm-Message-State: AGi0PuZ+otXjayDMqLvBrlnKSRoLcfMEmwi07KNZbGTmsn1+kzgTBLHP
+        4ZBq32FkGAaoYctLtxoQMhox+LzuHFeXaIM9
+X-Google-Smtp-Source: APiQypLPbcD2u3CRgSM+YSTrO9Dn4z0hpKBCeWEN1/zI3eqQ7+bp2ft+MtTqNYq3W2P3SZPbmLzBuX/XwjTVCdVc
+X-Received: by 2002:adf:a11a:: with SMTP id o26mr7819194wro.284.1587690604105;
+ Thu, 23 Apr 2020 18:10:04 -0700 (PDT)
+Date:   Fri, 24 Apr 2020 03:09:58 +0200
+Message-Id: <ca6b79b47313aa7ee9d8c24c5a7f595772764171.1587690539.git.andreyknvl@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.26.2.303.gf8c07b1a785-goog
+Subject: [PATCH USB 1/2] usb: raw-gadget: fix return value of ep read ioctls
+From:   Andrey Konovalov <andreyknvl@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 23 Apr 2020, syzbot wrote:
+They must return the number of bytes transferred during the data stage.
 
-> Hello,
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger crash:
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+---
+ drivers/usb/gadget/legacy/raw_gadget.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Okay, try again.
-
-Alan Stern
-
-#syz test: https://github.com/google/kasan.git 0fa84af8
-
-Index: usb-devel/drivers/usb/core/hub.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hub.c
-+++ usb-devel/drivers/usb/core/hub.c
-@@ -4440,6 +4440,7 @@ void usb_ep0_reinit(struct usb_device *u
- 	usb_disable_endpoint(udev, 0 + USB_DIR_IN, true);
- 	usb_disable_endpoint(udev, 0 + USB_DIR_OUT, true);
- 	usb_enable_endpoint(udev, &udev->ep0, true);
-+	udev->alan1 = 0;
- }
- EXPORT_SYMBOL_GPL(usb_ep0_reinit);
+diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+index ca7d95bf7397..7b241992ad5a 100644
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -669,12 +669,14 @@ static int raw_ioctl_ep0_read(struct raw_dev *dev, unsigned long value)
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+ 	ret = raw_process_ep0_io(dev, &io, data, false);
+-	if (ret)
++	if (ret < 0)
+ 		goto free;
  
-@@ -4471,6 +4472,7 @@ static int hub_set_address(struct usb_de
- 		update_devnum(udev, devnum);
- 		/* Device now using proper address. */
- 		usb_set_device_state(udev, USB_STATE_ADDRESS);
-+		udev->alan1 = 1;
- 		usb_ep0_reinit(udev);
- 	}
- 	return retval;
-@@ -4838,6 +4840,7 @@ hub_port_init(struct usb_hub *hub, struc
- 		else
- 			dev_warn(&udev->dev, "Using ep0 maxpacket: %d\n", i);
- 		udev->ep0.desc.wMaxPacketSize = cpu_to_le16(i);
-+		udev->alan1 = 2;
- 		usb_ep0_reinit(udev);
- 	}
+ 	length = min(io.length, (unsigned int)ret);
+ 	if (copy_to_user((void __user *)(value + sizeof(io)), data, length))
+ 		ret = -EFAULT;
++	else
++		ret = length;
+ free:
+ 	kfree(data);
+ 	return ret;
+@@ -964,12 +966,14 @@ static int raw_ioctl_ep_read(struct raw_dev *dev, unsigned long value)
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+ 	ret = raw_process_ep_io(dev, &io, data, false);
+-	if (ret)
++	if (ret < 0)
+ 		goto free;
  
-@@ -5226,6 +5229,7 @@ static void hub_port_connect(struct usb_
- loop_disable:
- 		hub_port_disable(hub, port1, 1);
- loop:
-+		udev->alan1 = 3;
- 		usb_ep0_reinit(udev);
- 		release_devnum(udev);
- 		hub_free_dev(udev);
-@@ -5762,10 +5766,14 @@ static int usb_reset_and_verify_device(s
- 	bos = udev->bos;
- 	udev->bos = NULL;
- 
-+	dev_info(&udev->dev, "Device reset\n");
-+	dump_stack();
-+
- 	for (i = 0; i < SET_CONFIG_TRIES; ++i) {
- 
- 		/* ep0 maxpacket size may change; let the HCD know about it.
- 		 * Other endpoints will be handled by re-enumeration. */
-+		udev->alan1 = 4;
- 		usb_ep0_reinit(udev);
- 		ret = hub_port_init(parent_hub, udev, port1, i);
- 		if (ret >= 0 || ret == -ENOTCONN || ret == -ENODEV)
-Index: usb-devel/drivers/usb/core/urb.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/urb.c
-+++ usb-devel/drivers/usb/core/urb.c
-@@ -204,8 +204,12 @@ int usb_urb_ep_type_check(const struct u
- 	const struct usb_host_endpoint *ep;
- 
- 	ep = usb_pipe_endpoint(urb->dev, urb->pipe);
--	if (!ep)
-+	if (!ep) {
-+		dev_info(&urb->dev->dev, "Ep %d disabled: %d\n",
-+			usb_pipeendpoint(urb->pipe),
-+			urb->dev->alan1);
- 		return -EINVAL;
-+	}
- 	if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
- 		return -EINVAL;
- 	return 0;
-Index: usb-devel/include/linux/usb.h
-===================================================================
---- usb-devel.orig/include/linux/usb.h
-+++ usb-devel/include/linux/usb.h
-@@ -629,6 +629,7 @@ struct usb3_lpm_parameters {
-  * usb_set_device_state().
-  */
- struct usb_device {
-+	int		alan1;
- 	int		devnum;
- 	char		devpath[16];
- 	u32		route;
-
+ 	length = min(io.length, (unsigned int)ret);
+ 	if (copy_to_user((void __user *)(value + sizeof(io)), data, length))
+ 		ret = -EFAULT;
++	else
++		ret = length;
+ free:
+ 	kfree(data);
+ 	return ret;
+-- 
+2.26.2.303.gf8c07b1a785-goog
 
