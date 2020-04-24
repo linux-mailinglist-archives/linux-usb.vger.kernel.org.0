@@ -2,116 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D95F1B66B1
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 00:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6011B6A90
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 03:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726062AbgDWWUt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Apr 2020 18:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726057AbgDWWUt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 18:20:49 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F385C09B042
-        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2020 15:20:47 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id x4so8348096wmj.1
-        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2020 15:20:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-transfer-encoding:content-language;
-        bh=iZJstUGA8qL5bMJc9utsvlq+grMCWtBoxMXU5F9FZA4=;
-        b=AnIGVChAVpyJG6TAOhM6gpZMvR3w5mcPALbQYxxM6AOdcdXr3uhpGn5WzbY2JhE/DO
-         CpptBY/zVdeRvesFB90xK/l78I/45/eWb4rrq3rypq3tG0BmD51LHhIOK0fcGcL29WMP
-         dnuzEb2Ez7mJ6ZWN1PYg51dNCt2SItvutPuvDLcPdHFlbzGHn6rpYaiAHL6SLXyeDSTg
-         1pyEQqB8MsE8G9KHNKJiJ2LQlRcfwrhplqLNoAnl92HIGRVaZPCGAfA90Er4kh8nq7yf
-         c9/NoM20Vt2qjOBrTI/ND6ThqfSyMOuZnBdW/nz3aGHFiXbEfwcQqdcuqRdBZLCJVk3X
-         WvBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=iZJstUGA8qL5bMJc9utsvlq+grMCWtBoxMXU5F9FZA4=;
-        b=sTnpazNBwgCMX2nVnMzl+AhFXkfPVytwekt2UMpnBQruBn0NcZdhYs6ymmqieO5+6n
-         JYtQ9SZOHExAlyZEP/h1mf8ATkTLlvBWEjmqsYiD9sTd639GdVi3WvfgrVqpU84MpFLb
-         4e1WeLVzzPmact34bxheBzj5HPqM8nCyeX8KDgou19ndruTO6ANs5QHOH5+wDRw/AIbj
-         6sYv1z/Nz6cJMjl5Y0+KseQaaQ8LvrscSUxm4txsDY7mjdGsqovMQonFZ7cwyN2LP6/u
-         aJPA9zKsXofoNcPelRo7lrGUgCoSHHzmbzihIPYyHwk0cFzJFWB/ixRT593ksC7mLvve
-         aolA==
-X-Gm-Message-State: AGi0PuYtND1D6OZFAYW6skzDF1ulDdLnYvXg2JenzGWpDa5ddZxOc5IQ
-        LucShHR4x8Kg/0tLTPZb6I9PR+Zrxkc=
-X-Google-Smtp-Source: APiQypLLJnfppeVbLBIw4iaxodPezttzMoIbBnAtaM99RapzxEZsO0QRVkRiUUSbWPcO4S4j7o//Fg==
-X-Received: by 2002:a1c:a794:: with SMTP id q142mr6428836wme.4.1587680445948;
-        Thu, 23 Apr 2020 15:20:45 -0700 (PDT)
-Received: from [192.168.1.103] ([149.200.161.180])
-        by smtp.gmail.com with ESMTPSA id w18sm5566154wrn.55.2020.04.23.15.20.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Apr 2020 15:20:45 -0700 (PDT)
-Subject: Re: USB BUG on BCM6318
-To:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
-References: <590879e3-f9ea-0a59-3262-41192ca4cf46@gmail.com>
- <1587632815.23108.1.camel@suse.com>
-From:   xchetah <xchetah@gmail.com>
-Message-ID: <cfe3c792-33ff-b4f8-635b-d4e60b632c8e@gmail.com>
-Date:   Fri, 24 Apr 2020 01:20:44 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.2.2
+        id S1728176AbgDXBA7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 21:00:59 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:60171 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725993AbgDXBA7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 21:00:59 -0400
+Received: (qmail 2364 invoked by uid 500); 23 Apr 2020 21:00:58 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 23 Apr 2020 21:00:58 -0400
+Date:   Thu, 23 Apr 2020 21:00:58 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
+        <ingrassia@epigenesys.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
+Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
+In-Reply-To: <000000000000c06f9105a3fc3ed2@google.com>
+Message-ID: <Pine.LNX.4.44L0.2004232059480.2101-100000@netrider.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <1587632815.23108.1.camel@suse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 4/23/20 12:06 PM, Oliver Neukum wrote:
-> Am Mittwoch, den 22.04.2020, 19:45 +0300 schrieb xchetah:
->
-> Hi,
->
-> which kernel version?
->
->> the problem is that there’s no connectivity at all , I can connect to
->> the AP (only without encryption ) and the ssid doesn’t always show on my
->> mobile phone.
->> the usb port is working fine , I tried mounting a usb flash drive with
->> no problem.
->> also the adapter is working , I tried it on Orange pi , Raspberrypi ,
->> bcm6328 , all with openwrt installed on them and didn’t have any problem .
->> I guess it is something related to bcm6318 or its architecture code .
->> the onboard broadcom pci wifi is working .
->> I suspected that its a power problem so I added an external usb power ,
->> but with same issues.
->> also I tried openwrt 19 ,18 ,17 with same problem.
->> I’m also using two bcm6328 routers as point to point wifi 5ghz link with
->> Ralink RT5572 chipset ( rt2800usb driver ) withouyt any problem.
->> dmesg is filled with :
->>
->> [ 1269.191198] rt2800usb_tx_sta_fifo_read_completed: 13054 callbacks
->> suppressed
->> [ 1269.191239] ieee80211 phy1: rt2800usb_tx_sta_fifo_read_completed:
->> Warning - TX status read failed -32
-> -EPIPE. Something is stalled. The cause is unknown. What is the very
-> first error during the enumeration process?
->
-> 	Regards
-> 		Oliver
->
-kernel version : 4.14.171 , also tried testing kernel 5.4 with the same
-results.
+On Thu, 23 Apr 2020, syzbot wrote:
 
-there's no error during enumeration , errors occur as soon as I activate
-the device in AP mode or client mode , if the device is doing nothing I
-get no errors.
+> Hello,
+> 
+> syzbot has tested the proposed patch and the reproducer did not trigger crash:
 
-usb works fine with usb storage , I tried another adapter with rt2800 
-driver and got the same exact problem.
+Okay, try again.
 
-Regards
+Alan Stern
 
-Eyad
+#syz test: https://github.com/google/kasan.git 0fa84af8
+
+Index: usb-devel/drivers/usb/core/hub.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/hub.c
++++ usb-devel/drivers/usb/core/hub.c
+@@ -4440,6 +4440,7 @@ void usb_ep0_reinit(struct usb_device *u
+ 	usb_disable_endpoint(udev, 0 + USB_DIR_IN, true);
+ 	usb_disable_endpoint(udev, 0 + USB_DIR_OUT, true);
+ 	usb_enable_endpoint(udev, &udev->ep0, true);
++	udev->alan1 = 0;
+ }
+ EXPORT_SYMBOL_GPL(usb_ep0_reinit);
+ 
+@@ -4471,6 +4472,7 @@ static int hub_set_address(struct usb_de
+ 		update_devnum(udev, devnum);
+ 		/* Device now using proper address. */
+ 		usb_set_device_state(udev, USB_STATE_ADDRESS);
++		udev->alan1 = 1;
+ 		usb_ep0_reinit(udev);
+ 	}
+ 	return retval;
+@@ -4838,6 +4840,7 @@ hub_port_init(struct usb_hub *hub, struc
+ 		else
+ 			dev_warn(&udev->dev, "Using ep0 maxpacket: %d\n", i);
+ 		udev->ep0.desc.wMaxPacketSize = cpu_to_le16(i);
++		udev->alan1 = 2;
+ 		usb_ep0_reinit(udev);
+ 	}
+ 
+@@ -5226,6 +5229,7 @@ static void hub_port_connect(struct usb_
+ loop_disable:
+ 		hub_port_disable(hub, port1, 1);
+ loop:
++		udev->alan1 = 3;
+ 		usb_ep0_reinit(udev);
+ 		release_devnum(udev);
+ 		hub_free_dev(udev);
+@@ -5762,10 +5766,14 @@ static int usb_reset_and_verify_device(s
+ 	bos = udev->bos;
+ 	udev->bos = NULL;
+ 
++	dev_info(&udev->dev, "Device reset\n");
++	dump_stack();
++
+ 	for (i = 0; i < SET_CONFIG_TRIES; ++i) {
+ 
+ 		/* ep0 maxpacket size may change; let the HCD know about it.
+ 		 * Other endpoints will be handled by re-enumeration. */
++		udev->alan1 = 4;
+ 		usb_ep0_reinit(udev);
+ 		ret = hub_port_init(parent_hub, udev, port1, i);
+ 		if (ret >= 0 || ret == -ENOTCONN || ret == -ENODEV)
+Index: usb-devel/drivers/usb/core/urb.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/urb.c
++++ usb-devel/drivers/usb/core/urb.c
+@@ -204,8 +204,12 @@ int usb_urb_ep_type_check(const struct u
+ 	const struct usb_host_endpoint *ep;
+ 
+ 	ep = usb_pipe_endpoint(urb->dev, urb->pipe);
+-	if (!ep)
++	if (!ep) {
++		dev_info(&urb->dev->dev, "Ep %d disabled: %d\n",
++			usb_pipeendpoint(urb->pipe),
++			urb->dev->alan1);
+ 		return -EINVAL;
++	}
+ 	if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
+ 		return -EINVAL;
+ 	return 0;
+Index: usb-devel/include/linux/usb.h
+===================================================================
+--- usb-devel.orig/include/linux/usb.h
++++ usb-devel/include/linux/usb.h
+@@ -629,6 +629,7 @@ struct usb3_lpm_parameters {
+  * usb_set_device_state().
+  */
+ struct usb_device {
++	int		alan1;
+ 	int		devnum;
+ 	char		devpath[16];
+ 	u32		route;
 
 
