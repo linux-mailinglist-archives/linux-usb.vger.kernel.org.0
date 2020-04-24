@@ -2,95 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8412E1B6AAD
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 03:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47DB31B6AC0
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 03:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728225AbgDXBKJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Apr 2020 21:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728155AbgDXBKJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 21:10:09 -0400
-Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C849BC09B043
-        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2020 18:10:08 -0700 (PDT)
-Received: by mail-wr1-x449.google.com with SMTP id q10so3878280wrv.10
-        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2020 18:10:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=2lczKYi6eXKIqEV5vZ3OKNN42MIcg9ncaA29fA6tV5c=;
-        b=k362AasEOyB1hZyiKYyn7oJMpt7MhEmnTnZLwIwrtZPUbV81EfZN0mHvpywWsDlJAo
-         YHETS/awxfTsyeOqruwu/O4eIbUQY5m7jWvgb4y0UZgYDoLzJJcV948J7zapkKI3MRcl
-         nIeSFiDHYHCmRl9VxwlQHFAxE+FEBqGi7c+6Wey7PjvsHSwc6zbc3Pq1sULGU4XBdSyi
-         QIxEzDBjILr0vXJHF0T0+u1QzY/TmnacZUiuwQmeXBeCVKg8R8lJeufELyAsKdbMmQC6
-         6fG7pmzh4jlMEj0ruR94njKSvOqPIxDRmMFoSd8MonQCtYCz5AXdJ7ICvWpcEWnf7XPu
-         DPQw==
+        id S1728036AbgDXBTD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 21:19:03 -0400
+Received: from mail-il1-f200.google.com ([209.85.166.200]:48782 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725888AbgDXBTC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 21:19:02 -0400
+Received: by mail-il1-f200.google.com with SMTP id h26so8092388ilf.15
+        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2020 18:19:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=2lczKYi6eXKIqEV5vZ3OKNN42MIcg9ncaA29fA6tV5c=;
-        b=fbSkTg5jRaBCUEG5plBfMl6Wz8+O0zH7t/J965AUEiJbUUMzUkOkI03EXkAvNmmmZ4
-         C1GWTHMxQhn59bYffYvEFlvEaH/B8vOiWRMJPxHdgzGTrXqh7puP6Y1BEtdfdzEe9TTx
-         yfaKta05CvQOhUHJzpVt4loFDenfPZT7l/sseEs6A99AdVwxUTf0xbObAwH51kDf85V8
-         e0HNQhU9r5D1GsC4/O48gbGqV0VyGpeOS7oKjVtnouH4XjHm7LoCxq02B4mLYc4hUKsB
-         /vxL6uk77BhNPhtQjYl111hRzYbkRMamdeRIGQFO4zpMYAORri1SJe9JeqxO1yX9DlfE
-         79OQ==
-X-Gm-Message-State: AGi0PuZta73/jNmPvBCDsq6+wyXTpMlkmI0pvV8TS0Vb1jOaKex9iJcD
-        yK2T7HPCaqbBt/Zb76WIrCpSkOtQ9kpOuzID
-X-Google-Smtp-Source: APiQypIHd9N1IA6FkupTM7be7kBBWctFdnyZM1y7pXkX8lojIIfJy0f+oMp7IR1LlAdk96j7s54eBmX3cuA3wJ2y
-X-Received: by 2002:adf:f146:: with SMTP id y6mr8493146wro.132.1587690607372;
- Thu, 23 Apr 2020 18:10:07 -0700 (PDT)
-Date:   Fri, 24 Apr 2020 03:09:59 +0200
-In-Reply-To: <ca6b79b47313aa7ee9d8c24c5a7f595772764171.1587690539.git.andreyknvl@google.com>
-Message-Id: <059e7e0ff26cc7d6e85275f764e31d85db867c4b.1587690539.git.andreyknvl@google.com>
-Mime-Version: 1.0
-References: <ca6b79b47313aa7ee9d8c24c5a7f595772764171.1587690539.git.andreyknvl@google.com>
-X-Mailer: git-send-email 2.26.2.303.gf8c07b1a785-goog
-Subject: [PATCH USB 2/2] usb: raw-gadget: fix typo in uapi headers
-From:   Andrey Konovalov <andreyknvl@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andrey Konovalov <andreyknvl@google.com>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=v2zkYldKkekixKO8WAt2/m+8khJWXoDi3M8ZXRlhJLs=;
+        b=f++3gGyVmzFPDwfymU5o6ab4TwYO1gVvEIyhCcGFmrTP6LxkYqIaVAFyQ/Bmn9gPX4
+         5GH+04m3XJ4C0HYvRCWuJamUr++rM/kjoyB7PIYLDRyCOvtsppNHrmHAkpjmBq1nqxux
+         AJA2tFPYTAgp7X59PjCR3y36YyKZC3zxZ8+KUTsj0Kp3X5ZK26aqZ2lcflZTkk7fWymM
+         g/lAm3Omh0Y8ha/ZpBIar6aXw+F7yp9VsE9l/k6M6WZkQx+JRLqb4SQCVMylrNNdBXkx
+         iWSaox3wiwaM9I+aq4nB9nkRidjRJt8NMmx+bUMvR2JvxZOuMXLF2cFYTWQcbqw2Mekr
+         arRw==
+X-Gm-Message-State: AGi0PuayJGS3y2HZFImmhwhtOiBAPQzMr/91kwXTQqcrOM5ewvHmLWty
+        BsEvLjVMinZoDbO6RwpSWLYRO02MOrNk5l6vDlJsTP2MV9MT
+X-Google-Smtp-Source: APiQypLj4NW2u0003xdrqvbIZukQh+qr3wA2LYK9h5V6cNp+SK12Sh+q3xiLk280yC7yd+Nf8KNJ22Onr0OhnuFdlwrcIVMo4XnZ
+MIME-Version: 1.0
+X-Received: by 2002:a6b:7302:: with SMTP id e2mr5939972ioh.98.1587691142235;
+ Thu, 23 Apr 2020 18:19:02 -0700 (PDT)
+Date:   Thu, 23 Apr 2020 18:19:02 -0700
+In-Reply-To: <Pine.LNX.4.44L0.2004232059480.2101-100000@netrider.rowland.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008bca8305a3ff2639@google.com>
+Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
+From:   syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- include/uapi/linux/usb/raw_gadget.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/include/uapi/linux/usb/raw_gadget.h b/include/uapi/linux/usb/raw_gadget.h
-index ea375082b3ac..8544802b25bd 100644
---- a/include/uapi/linux/usb/raw_gadget.h
-+++ b/include/uapi/linux/usb/raw_gadget.h
-@@ -119,7 +119,7 @@ struct usb_raw_ep_io {
-  * received on endpoint 0, provided that was an IN (OUT for READ) request and
-  * waits until the urb is completed. Copies received data to user for READ.
-  * Accepts a pointer to the usb_raw_ep_io struct as an argument.
-- * Returns length of trasferred data on success or negative error code on
-+ * Returns length of transferred data on success or negative error code on
-  * failure.
-  */
- #define USB_RAW_IOCTL_EP0_WRITE		_IOW('U', 3, struct usb_raw_ep_io)
-@@ -145,7 +145,7 @@ struct usb_raw_ep_io {
-  * request and waits until the urb is completed. Copies received data to user
-  * for READ.
-  * Accepts a pointer to the usb_raw_ep_io struct as an argument.
-- * Returns length of trasferred data on success or negative error code on
-+ * Returns length of transferred data on success or negative error code on
-  * failure.
-  */
- #define USB_RAW_IOCTL_EP_WRITE		_IOW('U', 7, struct usb_raw_ep_io)
--- 
-2.26.2.303.gf8c07b1a785-goog
+syzbot has tested the proposed patch and the reproducer did not trigger crash:
 
+Reported-and-tested-by: syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
+git tree:       https://github.com/google/kasan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
+dashboard link: https://syzkaller.appspot.com/bug?extid=db339689b2101f6f6071
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=136ca310100000
+
+Note: testing is done by a robot and is best-effort only.
