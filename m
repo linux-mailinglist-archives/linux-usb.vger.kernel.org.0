@@ -2,39 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D26E1B72D3
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 13:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A6A1B72F8
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 13:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726975AbgDXLNA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Apr 2020 07:13:00 -0400
-Received: from cable.insite.cz ([84.242.75.189]:49564 "EHLO cable.insite.cz"
+        id S1726857AbgDXLVu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Apr 2020 07:21:50 -0400
+Received: from cable.insite.cz ([84.242.75.189]:51378 "EHLO cable.insite.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726668AbgDXLNA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 24 Apr 2020 07:13:00 -0400
-X-Greylist: delayed 433 seconds by postgrey-1.27 at vger.kernel.org; Fri, 24 Apr 2020 07:12:59 EDT
+        id S1726289AbgDXLVu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 24 Apr 2020 07:21:50 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id E263EA1F2BCB4;
-        Fri, 24 Apr 2020 13:05:41 +0200 (CEST)
+        by cable.insite.cz (Postfix) with ESMTP id C0CBBA1F2BCF1;
+        Fri, 24 Apr 2020 13:21:47 +0200 (CEST)
 Received: from cable.insite.cz ([84.242.75.189])
         by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id TQAVCiLHIiVu; Fri, 24 Apr 2020 13:05:36 +0200 (CEST)
+        with ESMTP id gIEcJZTPzvjm; Fri, 24 Apr 2020 13:21:42 +0200 (CEST)
 Received: from [192.168.105.191] (ip28.insite.cz [81.0.237.28])
         (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 7BE96A1F2B0B3;
-        Fri, 24 Apr 2020 13:05:36 +0200 (CEST)
-Subject: Re: Re: [PATCH] usb: gadget: f_uac2: EP OUT adaptive instead of async
-To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Linux USB <linux-usb@vger.kernel.org>
-References: <2bd4ac94-f7c3-41d6-27a7-352f3319bda7@ivitera.com>
- <CAB=otbTiTLDPv8TbjFkoXLj=i3pb0rueoADbRMZVMETX_UsqZA@mail.gmail.com>
+        by cable.insite.cz (Postfix) with ESMTPSA id BB324A1755F1F;
+        Fri, 24 Apr 2020 13:21:41 +0200 (CEST)
+Subject: Re: usb:gadget:f_uac2: EP OUT is adaptive instead of async
 From:   Pavel Hofman <pavel.hofman@ivitera.com>
-Message-ID: <cb434374-9684-77b0-1dc2-366d18c4eb78@ivitera.com>
-Date:   Fri, 24 Apr 2020 13:05:35 +0200
+To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+References: <4bd36708-0ade-fbd7-5eec-5b8df7b3f2ee@ivitera.com>
+ <CAB=otbRMQ6eCD0U-2zDCQvN37VRhBta_9_+9u4FwEbY4St=AgQ@mail.gmail.com>
+ <f3114cb0-dc77-b4a6-f70b-2e72c9e87ce2@ivitera.com>
+Message-ID: <cf933b39-1d4a-aeff-3db9-5e05da302665@ivitera.com>
+Date:   Fri, 24 Apr 2020 13:21:40 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <CAB=otbTiTLDPv8TbjFkoXLj=i3pb0rueoADbRMZVMETX_UsqZA@mail.gmail.com>
+In-Reply-To: <f3114cb0-dc77-b4a6-f70b-2e72c9e87ce2@ivitera.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -44,83 +43,64 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
-Dne 11. 02. 20 v 17:16 Ruslan Bilovol napsal(a):
-> On Fri, Feb 7, 2020 at 6:55 PM Pavel Hofman <pavel.hofman@ivitera.com> wrote:
->>
->> The existing UAC2 implementation presents its EP OUT as
->> USB_ENDPOINT_SYNC_ASYNC.
->>
->> However:
->> 1) f_uac2 does not define any feedback endpoint
->>
->> 2) IMO in reality it is adaptive - the USB host is the one which sets
->> the pace of data.
->>
->> Changing USB_ENDPOINT_SYNC_ASYNC to USB_ENDPOINT_SYNC_ADAPTIVE for the FS
->> and HS output endpoints corrects the config to reflect real functionality.
+
+Dne 11. 02. 20 v 20:02 Pavel Hofman napsal(a):
+> Hi Ruslan,
 > 
-> That's a good idea but ADAPTIVE endpoint still requires feedback endpoint for
-> source (USB IN) case so the host can synchronize with such endpoint
-> (see 3.16.2.2 of
-> UAC2 spec "For adaptive audio source endpoints and asynchronous audio sink
-> endpoints, an explicit synchronization mechanism is needed to maintain
-> synchronization
-> during transfers").
-
-I apologize for missing this message. Please can we resume the discussion?
-
-The tested combination is (not-changed) async IN and (changed) adaptive
-OUT, which is what most USB-adaptive soundcards use. Such combination
-does not require any feedback endpoint.
-
-> 
+> Dne 11. 02. 20 v 17:10 Ruslan Bilovol napsal(a):
+>> On Thu, Feb 6, 2020 at 3:35 PM Pavel Hofman <pavel.hofman@ivitera.com> wrote:
+>>>
+>>> .
 >>
->> Also, the change makes the UAC2 gadget recognized and working
->> in MS Windows.
+>> Are you working on async feedback EP implementation? I'm interested in that
+>> feature and I can implement it soon but do not want to do double work
+>> if somebody
+>> is already working on it and will send to the community soon
 > 
-> Does it recognizes well with both IN and OUT (e.g. capture+playback enabled)
-> adaptive endpoints?
+> I would be happy if you focused on the feedback. I want to solve the
+> g_audio usability somehow first
+> https://lore.kernel.org/linux-usb/df2eeff0-ca9c-35f9-2e72-8426b2cf72c9@ivitera.com/
+> as it would allow easy usage of the existing adaptive gadget version.
+> 
+> The feedback - I have been shown a simple implementation which is not
+> public and is not using the g_audio alsa device on the other side.
+> 
+> IMO the key issue is designing the async feedback to accept feedback
+> values from userspace as well as from any third-party kernel module. Why
+> userspace? The stream provided by the g_audio capture device  can be
+> output to a real master-clock alsa device (e.g. after synchronous
+> resampling), be sent by network to some master-clock device, many other
+> options possible. Any master-clock output device/ userspace sink should
+> be able to provide data for calculating proper up-to-date feedback value
+> for the slaved UAC2 gadget.
+> 
+> I have done a few trials with master alsa output device -
+> 
+> https://www.diyaudio.com/forums/pc-based/342070-linux-usb-audio-gadget-rpi4-otg.html#post5909816
+> 
+> 
+> https://www.diyaudio.com/forums/pc-based/342070-linux-usb-audio-gadget-rpi4-otg.html#post5910911
+> 
+> Details for alsa-lib are discussed in
+> https://www.spinics.net/lists/alsa-devel/msg96781.html
+> 
+> 
+> This is a solution I need - syncing the UAC2 gadget to master clock of
+> real alsa soundcard . But again - I think the solution should be
+> flexible to support any source of feedback information, be it in kernel
+> or from userspace.
+> 
 
-Only OUT is adaptive, IN stays async.
+Hi, please can we resume this discussion about the feedback endpoint?
+
+Meanwhile a simple method described in
+https://www.aktives-hoeren.de/viewtopic.php?p=137829&sid=0d6cd50e0f58618da33621c62e412ada#p137829
+for obtaining required rate shift from /proc/asound/.../status to keep
+the master side buffer optimally filled was tested. That could be one
+source for the rate shift, to be passed to the driver. Perhaps a control
+element like the "PCM Rate Shift" of the snd-aloop driver could be used.
+
 
 Thanks a lot,
 
 Pavel.
-
-
-> 
-> Thanks,
-> Ruslan
-> 
->>
->> Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
->> ---
->>  drivers/usb/gadget/function/f_uac2.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/f_uac2.c
->> b/drivers/usb/gadget/function/f_uac2.c
->> index db2d498..e8c9dd1 100644
->> --- a/drivers/usb/gadget/function/f_uac2.c
->> +++ b/drivers/usb/gadget/function/f_uac2.c
->> @@ -273,7 +273,7 @@ enum {
->>         .bDescriptorType = USB_DT_ENDPOINT,
->>
->>         .bEndpointAddress = USB_DIR_OUT,
->> -       .bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC,
->> +       .bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ADAPTIVE,
->>         .wMaxPacketSize = cpu_to_le16(1023),
->>         .bInterval = 1,
->>  };
->> @@ -282,7 +282,7 @@ enum {
->>         .bLength = USB_DT_ENDPOINT_SIZE,
->>         .bDescriptorType = USB_DT_ENDPOINT,
->>
->> -       .bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC,
->> +       .bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ADAPTIVE,
->>         .wMaxPacketSize = cpu_to_le16(1024),
->>         .bInterval = 4,
->>  };
->> --
->> 1.9.1
-> 
