@@ -2,136 +2,225 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1FA1B73C3
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 14:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE401B744B
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 14:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727017AbgDXMUr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Apr 2020 08:20:47 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:41079 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726993AbgDXMUq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Apr 2020 08:20:46 -0400
-Received: (qmail 27308 invoked by uid 500); 24 Apr 2020 08:20:45 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 24 Apr 2020 08:20:45 -0400
-Date:   Fri, 24 Apr 2020 08:20:45 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
-        <ingrassia@epigenesys.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
-Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
-In-Reply-To: <0000000000002e31b205a3ffddb6@google.com>
-Message-ID: <Pine.LNX.4.44L0.2004240817010.26813-100000@netrider.rowland.org>
+        id S1727783AbgDXMZW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Apr 2020 08:25:22 -0400
+Received: from gloria.sntech.de ([185.11.138.130]:47502 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728695AbgDXMZU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 24 Apr 2020 08:25:20 -0400
+Received: from p508fd049.dip0.t-ipconnect.de ([80.143.208.73] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1jRxO6-0003cR-Hk; Fri, 24 Apr 2020 14:24:58 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Tobias Schramm <t.schramm@manjaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Yueyao Zhu <yueyao@google.com>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH] usb: fusb302: Convert to use GPIO descriptors
+Date:   Fri, 24 Apr 2020 14:24:57 +0200
+Message-ID: <1936344.48hpDf0ZCg@phil>
+In-Reply-To: <22317f07-ad49-ada2-b323-ad16695ae3d2@arm.com>
+References: <20200415192448.305257-1-linus.walleij@linaro.org> <22317f07-ad49-ada2-b323-ad16695ae3d2@arm.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 23 Apr 2020, syzbot wrote:
-
-> Hello,
+Am Donnerstag, 23. April 2020, 14:02:42 CEST schrieb Robin Murphy:
+> On 2020-04-15 8:24 pm, Linus Walleij wrote:
+> > This converts the FUSB302 driver to use GPIO descriptors.
+> > The conversion to descriptors per se is pretty straight-forward.
+> > 
+> > In the process I discovered that:
+> > 
+> > 1. The driver uses a completely undocumented device tree binding
+> >     for the interrupt GPIO line, "fcs,int_n". Ooops.
+> > 
+> > 2. The undocumented binding, presumably since it has not seen
+> >     review, is just "fcs,int_n", lacking the compulsory "-gpios"
+> >     suffix and also something that is not a good name because
+> >     the "_n" implies the line is inverted which is something we
+> >     handle with flags in the device tree. Ooops.
+> > 
+> > 3. Possibly the driver should not be requesting the line as a
+> >     GPIO and request the corresponding interrupt line by open
+> >     coding, the GPIO chip is very likely doubleing as an IRQ
+> >     controller and can probably provide an interrupt directly
+> >     for this line with interrupts-extended = <&gpio0 ...>;
+> > 
+> > 4. Possibly the IRQ should just be tagged on the I2C client node
+> >     in the device tree like apparently ACPI does, as it overrides
+> >     this IRQ with client->irq if that exists.
+> > 
+> > But now it is too late to do much about that and as I can see
+> > this is used like this in the Pinebook which is a shipping product
+> > so let'a just contain the mess and move on.
+> > 
+> > The property currently appears in:
+> > arch/arm64/boot/dts/rockchip/rk3399-pinebook-pro.dts
+> > 
+> > Create a quirk in the GPIO OF library to allow this property
+> > specifically to be specified without the "-gpios" suffix, we have
+> > other such bindings already.
 > 
-> syzbot has tested the proposed patch but the reproducer still triggered crash:
-> WARNING in usb_reset_and_verify_device
+> FWIW, the datasheet makes it clear than INT_N is just a regular IRQ 
+> output, so it really should be specified as an interrupt targeting the 
+> GPIO controller just like any other I2C chip, and the FUSB302 binding 
+> itself supports.
 > 
-> ------------[ cut here ]------------
-> usb 1-1: Device reset
+> The Pinebook Pro devicetree has only just landed this cycle, so there 
+> should still be plenty of time to fix it and not have to worry about an 
+> ugly undocumented quirk. The downstream vendor kernels use a totally 
+> different FUSB302 driver from the upstream one (based on extcon rather 
+> than the typec framework) so I don't think downstream DTBs are a concern.
 
->  usb_reset_device+0x4bb/0x960 drivers/usb/core/hub.c:5946
->  __usb_queue_reset_device+0x68/0x90 drivers/usb/core/message.c:1754
->  process_one_work+0x94b/0x1620 kernel/workqueue.c:2266
+I guess it's just about removing the "fcs,int_n" property, right?
+Does someone want to send a patch removing that?
 
-The reset was queued.  Let's see who queued it.
+I'm hopeful the whole extcon mess will go away ... cros-ec-power-delivery
+now seems to have moved to the typec framework, so at some point
+the rk3399 typec-phy-driver could be converted as well, enabling us to
+also have real type-c on non-chromebook rk3399 boards.
 
-Alan Stern
 
-#syz test: https://github.com/google/kasan.git 0fa84af8
+Heiko
 
-Index: usb-devel/drivers/usb/core/hub.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hub.c
-+++ usb-devel/drivers/usb/core/hub.c
-@@ -4440,6 +4440,7 @@ void usb_ep0_reinit(struct usb_device *u
- 	usb_disable_endpoint(udev, 0 + USB_DIR_IN, true);
- 	usb_disable_endpoint(udev, 0 + USB_DIR_OUT, true);
- 	usb_enable_endpoint(udev, &udev->ep0, true);
-+	udev->alan1 = 0;
- }
- EXPORT_SYMBOL_GPL(usb_ep0_reinit);
- 
-@@ -4471,6 +4472,7 @@ static int hub_set_address(struct usb_de
- 		update_devnum(udev, devnum);
- 		/* Device now using proper address. */
- 		usb_set_device_state(udev, USB_STATE_ADDRESS);
-+		udev->alan1 = 1;
- 		usb_ep0_reinit(udev);
- 	}
- 	return retval;
-@@ -4838,6 +4840,7 @@ hub_port_init(struct usb_hub *hub, struc
- 		else
- 			dev_warn(&udev->dev, "Using ep0 maxpacket: %d\n", i);
- 		udev->ep0.desc.wMaxPacketSize = cpu_to_le16(i);
-+		udev->alan1 = 2;
- 		usb_ep0_reinit(udev);
- 	}
- 
-@@ -5226,6 +5229,7 @@ static void hub_port_connect(struct usb_
- loop_disable:
- 		hub_port_disable(hub, port1, 1);
- loop:
-+		udev->alan1 = 3;
- 		usb_ep0_reinit(udev);
- 		release_devnum(udev);
- 		hub_free_dev(udev);
-@@ -5766,6 +5770,7 @@ static int usb_reset_and_verify_device(s
- 
- 		/* ep0 maxpacket size may change; let the HCD know about it.
- 		 * Other endpoints will be handled by re-enumeration. */
-+		udev->alan1 = 4;
- 		usb_ep0_reinit(udev);
- 		ret = hub_port_init(parent_hub, udev, port1, i);
- 		if (ret >= 0 || ret == -ENOTCONN || ret == -ENODEV)
-@@ -6007,6 +6012,8 @@ EXPORT_SYMBOL_GPL(usb_reset_device);
-  */
- void usb_queue_reset_device(struct usb_interface *iface)
- {
-+	dev_WARN(&iface->dev, "Device reset\n");
-+
- 	if (schedule_work(&iface->reset_ws))
- 		usb_get_intf(iface);
- }
-Index: usb-devel/drivers/usb/core/urb.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/urb.c
-+++ usb-devel/drivers/usb/core/urb.c
-@@ -204,8 +204,12 @@ int usb_urb_ep_type_check(const struct u
- 	const struct usb_host_endpoint *ep;
- 
- 	ep = usb_pipe_endpoint(urb->dev, urb->pipe);
--	if (!ep)
-+	if (!ep) {
-+		dev_info(&urb->dev->dev, "Ep %d disabled: %d\n",
-+			usb_pipeendpoint(urb->pipe),
-+			urb->dev->alan1);
- 		return -EINVAL;
-+	}
- 	if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
- 		return -EINVAL;
- 	return 0;
-Index: usb-devel/include/linux/usb.h
-===================================================================
---- usb-devel.orig/include/linux/usb.h
-+++ usb-devel/include/linux/usb.h
-@@ -629,6 +629,7 @@ struct usb3_lpm_parameters {
-  * usb_set_device_state().
-  */
- struct usb_device {
-+	int		alan1;
- 	int		devnum;
- 	char		devpath[16];
- 	u32		route;
+> > Cc: Tobias Schramm <t.schramm@manjaro.org>
+> > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Cc: Yueyao Zhu <yueyao@google.com>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Cc: devicetree@vger.kernel.org
+> > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> > ---
+> > This is now covered as far as GPIO is concerned but you might
+> > want to look into creating proper bindings for this or
+> > correcting the devicetree.
+> > ---
+> >   drivers/gpio/gpiolib-of.c        | 21 +++++++++++++++++++++
+> >   drivers/usb/typec/tcpm/fusb302.c | 32 +++++++++-----------------------
+> >   2 files changed, 30 insertions(+), 23 deletions(-)
+> > 
+> > diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+> > index ccc449df3792..20c2c428168e 100644
+> > --- a/drivers/gpio/gpiolib-of.c
+> > +++ b/drivers/gpio/gpiolib-of.c
+> > @@ -460,6 +460,24 @@ static struct gpio_desc *of_find_arizona_gpio(struct device *dev,
+> >   	return of_get_named_gpiod_flags(dev->of_node, con_id, 0, of_flags);
+> >   }
+> >   
+> > +static struct gpio_desc *of_find_usb_gpio(struct device *dev,
+> > +					  const char *con_id,
+> > +					  enum of_gpio_flags *of_flags)
+> > +{
+> > +	/*
+> > +	 * Currently this USB quirk is only for the Fairchild FUSB302 host which is using
+> > +	 * an undocumented DT GPIO line named "fcs,int_n" without the compulsory "-gpios"
+> > +	 * suffix.
+> > +	 */
+> > +	if (!IS_ENABLED(CONFIG_TYPEC_FUSB302))
+> > +		return ERR_PTR(-ENOENT);
+> > +
+> > +	if (!con_id || strcmp(con_id, "fcs,int_n"))
+> > +		return ERR_PTR(-ENOENT);
+> > +
+> > +	return of_get_named_gpiod_flags(dev->of_node, con_id, 0, of_flags);
+> > +}
+> > +
+> >   struct gpio_desc *of_find_gpio(struct device *dev, const char *con_id,
+> >   			       unsigned int idx, unsigned long *flags)
+> >   {
+> > @@ -504,6 +522,9 @@ struct gpio_desc *of_find_gpio(struct device *dev, const char *con_id,
+> >   	if (PTR_ERR(desc) == -ENOENT)
+> >   		desc = of_find_arizona_gpio(dev, con_id, &of_flags);
+> >   
+> > +	if (PTR_ERR(desc) == -ENOENT)
+> > +		desc = of_find_usb_gpio(dev, con_id, &of_flags);
+> > +
+> >   	if (IS_ERR(desc))
+> >   		return desc;
+> >   
+> > diff --git a/drivers/usb/typec/tcpm/fusb302.c b/drivers/usb/typec/tcpm/fusb302.c
+> > index b498960ff72b..b28facece43c 100644
+> > --- a/drivers/usb/typec/tcpm/fusb302.c
+> > +++ b/drivers/usb/typec/tcpm/fusb302.c
+> > @@ -9,14 +9,13 @@
+> >   #include <linux/delay.h>
+> >   #include <linux/errno.h>
+> >   #include <linux/extcon.h>
+> > -#include <linux/gpio.h>
+> > +#include <linux/gpio/consumer.h>
+> >   #include <linux/i2c.h>
+> >   #include <linux/interrupt.h>
+> >   #include <linux/kernel.h>
+> >   #include <linux/module.h>
+> >   #include <linux/mutex.h>
+> >   #include <linux/of_device.h>
+> > -#include <linux/of_gpio.h>
+> >   #include <linux/pinctrl/consumer.h>
+> >   #include <linux/proc_fs.h>
+> >   #include <linux/regulator/consumer.h>
+> > @@ -83,7 +82,7 @@ struct fusb302_chip {
+> >   	struct work_struct irq_work;
+> >   	bool irq_suspended;
+> >   	bool irq_while_suspended;
+> > -	int gpio_int_n;
+> > +	struct gpio_desc *gpio_int_n;
+> >   	int gpio_int_n_irq;
+> >   	struct extcon_dev *extcon;
+> >   
+> > @@ -1618,30 +1617,17 @@ static void fusb302_irq_work(struct work_struct *work)
+> >   
+> >   static int init_gpio(struct fusb302_chip *chip)
+> >   {
+> > -	struct device_node *node;
+> > +	struct device *dev = chip->dev;
+> >   	int ret = 0;
+> >   
+> > -	node = chip->dev->of_node;
+> > -	chip->gpio_int_n = of_get_named_gpio(node, "fcs,int_n", 0);
+> > -	if (!gpio_is_valid(chip->gpio_int_n)) {
+> > -		ret = chip->gpio_int_n;
+> > -		dev_err(chip->dev, "cannot get named GPIO Int_N, ret=%d", ret);
+> > -		return ret;
+> > -	}
+> > -	ret = devm_gpio_request(chip->dev, chip->gpio_int_n, "fcs,int_n");
+> > -	if (ret < 0) {
+> > -		dev_err(chip->dev, "cannot request GPIO Int_N, ret=%d", ret);
+> > -		return ret;
+> > -	}
+> > -	ret = gpio_direction_input(chip->gpio_int_n);
+> > -	if (ret < 0) {
+> > -		dev_err(chip->dev,
+> > -			"cannot set GPIO Int_N to input, ret=%d", ret);
+> > -		return ret;
+> > +	chip->gpio_int_n = devm_gpiod_get(dev, "fcs,int_n", GPIOD_IN);
+> > +	if (IS_ERR(chip->gpio_int_n)) {
+> > +		dev_err(dev, "failed to request gpio_int_n\n");
+> > +		return PTR_ERR(chip->gpio_int_n);
+> >   	}
+> > -	ret = gpio_to_irq(chip->gpio_int_n);
+> > +	ret = gpiod_to_irq(chip->gpio_int_n);
+> >   	if (ret < 0) {
+> > -		dev_err(chip->dev,
+> > +		dev_err(dev,
+> >   			"cannot request IRQ for GPIO Int_N, ret=%d", ret);
+> >   		return ret;
+> >   	}
+> > 
+> 
+
+
+
 
