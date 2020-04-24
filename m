@@ -2,125 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 227131B6AE2
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 03:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CF7A1B6B10
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 04:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726107AbgDXBj2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Apr 2020 21:39:28 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:47781 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725913AbgDXBj2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 21:39:28 -0400
-Received: (qmail 4187 invoked by uid 500); 23 Apr 2020 21:39:27 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 23 Apr 2020 21:39:27 -0400
-Date:   Thu, 23 Apr 2020 21:39:27 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
-        <ingrassia@epigenesys.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
-Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
-In-Reply-To: <0000000000008bca8305a3ff2639@google.com>
-Message-ID: <Pine.LNX.4.44L0.2004232138280.2101-100000@netrider.rowland.org>
+        id S1726316AbgDXCKI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Apr 2020 22:10:08 -0400
+Received: from mail-il1-f199.google.com ([209.85.166.199]:54559 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726100AbgDXCKH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Apr 2020 22:10:07 -0400
+Received: by mail-il1-f199.google.com with SMTP id m2so8128965ilb.21
+        for <linux-usb@vger.kernel.org>; Thu, 23 Apr 2020 19:10:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=/Fhh7LGHtZ8ySY6CxiNl1ZczNiIJ80m1bW6bNjasur0=;
+        b=XStqw2Vj0pInzVraKFycWBpwJek+PD+mDUxOI0IsIE1Ile5zw/I0hovjaTBCBgCC1e
+         xdvCIOxvSBDgqf6hHH7ztkoDkSyH//wDz9USaifDqd79jqYtGWkuYpdOZ+Jtxo9ovPIJ
+         TOCAqIx8kCbn9Cdtsczzo6C29G2l1lB7AlF5CF7o3l/dbpv/srWseH4CTZxim7FrRL8Q
+         WCTZNyJ7m8CD2I5y2gn6xtVeuAm3hzMN474jjgsgIiT9sdWFvkRbEn+c2V4ENxYtxY8w
+         Cr5bGQ9OTTQcEkj0RoNO2SGmrGgXEZMZ9+Pk3FKLf0+VAgJP839Ec3ro+pil5KKFm8EE
+         LNtg==
+X-Gm-Message-State: AGi0PuZQoRQry3RNjLQ5GFSswXbxgSjbvaCjG6mDi1qrfCNMEapN1428
+        oQwQN/Kqrk1D0E/Wj/P4lS/HLmErLRWK2gO35A5nHU27AfYh
+X-Google-Smtp-Source: APiQypIaglRgjHeVPw1rS8+Pi/Vd8U1xr5pKZ0owqp7Vszi0bF51J4Wg1RyKWdBJlyOKt4cUpDcgt9OerUZzIJqJNI17iS3/TsvW
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Received: by 2002:a92:498e:: with SMTP id k14mr5729919ilg.160.1587694206331;
+ Thu, 23 Apr 2020 19:10:06 -0700 (PDT)
+Date:   Thu, 23 Apr 2020 19:10:06 -0700
+In-Reply-To: <Pine.LNX.4.44L0.2004232138280.2101-100000@netrider.rowland.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002e31b205a3ffddb6@google.com>
+Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
+From:   syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 23 Apr 2020, syzbot wrote:
+Hello,
 
-> Hello,
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger crash:
+syzbot has tested the proposed patch but the reproducer still triggered crash:
+WARNING in usb_reset_and_verify_device
 
-Forget about trying to catch the race, let's just see what's going on.
+------------[ cut here ]------------
+usb 1-1: Device reset
+WARNING: CPU: 0 PID: 94 at drivers/usb/core/hub.c:5761 usb_reset_and_verify_device+0x37d/0xce0 drivers/usb/core/hub.c:5761
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 94 Comm: kworker/0:2 Not tainted 5.6.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events __usb_queue_reset_device
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xef/0x16e lib/dump_stack.c:118
+ panic+0x2aa/0x6e1 kernel/panic.c:221
+ __warn.cold+0x2f/0x30 kernel/panic.c:582
+ report_bug+0x27b/0x2f0 lib/bug.c:195
+ fixup_bug arch/x86/kernel/traps.c:174 [inline]
+ fixup_bug arch/x86/kernel/traps.c:169 [inline]
+ do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
+ do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
+ invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
+RIP: 0010:usb_reset_and_verify_device+0x37d/0xce0 drivers/usb/core/hub.c:5761
+Code: 0f 84 9e 06 00 00 e8 82 89 df fd 49 8d bc 24 a8 00 00 00 e8 85 59 19 ff 4c 89 ea 48 c7 c7 e0 86 3b 86 48 89 c6 e8 2b 1a b4 fd <0f> 0b 4d 89 e5 4c 89 34 24 44 8b 74 24 3c 48 b8 00 00 00 00 00 fc
+RSP: 0018:ffff8881d5d7fb98 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: ffff8881d4d70000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff812974dd RDI: ffffed103abaff65
+RBP: 0000000000000000 R08: ffff8881d6b01880 R09: ffffed103b646248
+R10: ffffed103b646247 R11: ffff8881db23123f R12: ffff8881d8f1e000
+R13: ffff8881c9381900 R14: ffff8881d4ce5000 R15: ffff8881d8f1e560
+ usb_reset_device+0x4bb/0x960 drivers/usb/core/hub.c:5946
+ __usb_queue_reset_device+0x68/0x90 drivers/usb/core/message.c:1754
+ process_one_work+0x94b/0x1620 kernel/workqueue.c:2266
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2412
+ kthread+0x318/0x420 kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
-Alan Stern
 
-#syz test: https://github.com/google/kasan.git 0fa84af8
+Tested on:
 
-Index: usb-devel/drivers/usb/core/hub.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/hub.c
-+++ usb-devel/drivers/usb/core/hub.c
-@@ -4440,6 +4440,7 @@ void usb_ep0_reinit(struct usb_device *u
- 	usb_disable_endpoint(udev, 0 + USB_DIR_IN, true);
- 	usb_disable_endpoint(udev, 0 + USB_DIR_OUT, true);
- 	usb_enable_endpoint(udev, &udev->ep0, true);
-+	udev->alan1 = 0;
- }
- EXPORT_SYMBOL_GPL(usb_ep0_reinit);
- 
-@@ -4471,6 +4472,7 @@ static int hub_set_address(struct usb_de
- 		update_devnum(udev, devnum);
- 		/* Device now using proper address. */
- 		usb_set_device_state(udev, USB_STATE_ADDRESS);
-+		udev->alan1 = 1;
- 		usb_ep0_reinit(udev);
- 	}
- 	return retval;
-@@ -4838,6 +4840,7 @@ hub_port_init(struct usb_hub *hub, struc
- 		else
- 			dev_warn(&udev->dev, "Using ep0 maxpacket: %d\n", i);
- 		udev->ep0.desc.wMaxPacketSize = cpu_to_le16(i);
-+		udev->alan1 = 2;
- 		usb_ep0_reinit(udev);
- 	}
- 
-@@ -5226,6 +5229,7 @@ static void hub_port_connect(struct usb_
- loop_disable:
- 		hub_port_disable(hub, port1, 1);
- loop:
-+		udev->alan1 = 3;
- 		usb_ep0_reinit(udev);
- 		release_devnum(udev);
- 		hub_free_dev(udev);
-@@ -5762,10 +5766,13 @@ static int usb_reset_and_verify_device(s
- 	bos = udev->bos;
- 	udev->bos = NULL;
- 
-+	dev_WARN(&udev->dev, "Device reset\n");
-+
- 	for (i = 0; i < SET_CONFIG_TRIES; ++i) {
- 
- 		/* ep0 maxpacket size may change; let the HCD know about it.
- 		 * Other endpoints will be handled by re-enumeration. */
-+		udev->alan1 = 4;
- 		usb_ep0_reinit(udev);
- 		ret = hub_port_init(parent_hub, udev, port1, i);
- 		if (ret >= 0 || ret == -ENOTCONN || ret == -ENODEV)
-Index: usb-devel/drivers/usb/core/urb.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/urb.c
-+++ usb-devel/drivers/usb/core/urb.c
-@@ -204,8 +204,12 @@ int usb_urb_ep_type_check(const struct u
- 	const struct usb_host_endpoint *ep;
- 
- 	ep = usb_pipe_endpoint(urb->dev, urb->pipe);
--	if (!ep)
-+	if (!ep) {
-+		dev_info(&urb->dev->dev, "Ep %d disabled: %d\n",
-+			usb_pipeendpoint(urb->pipe),
-+			urb->dev->alan1);
- 		return -EINVAL;
-+	}
- 	if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
- 		return -EINVAL;
- 	return 0;
-Index: usb-devel/include/linux/usb.h
-===================================================================
---- usb-devel.orig/include/linux/usb.h
-+++ usb-devel/include/linux/usb.h
-@@ -629,6 +629,7 @@ struct usb3_lpm_parameters {
-  * usb_set_device_state().
-  */
- struct usb_device {
-+	int		alan1;
- 	int		devnum;
- 	char		devpath[16];
- 	u32		route;
+commit:         0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
+git tree:       https://github.com/google/kasan.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=10d0c580100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
+dashboard link: https://syzkaller.appspot.com/bug?extid=db339689b2101f6f6071
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14ab96a0100000
 
