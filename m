@@ -2,77 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 274241B776E
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 15:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B34B91B777D
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 15:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728318AbgDXNsb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Apr 2020 09:48:31 -0400
-Received: from foss.arm.com ([217.140.110.172]:34842 "EHLO foss.arm.com"
+        id S1727010AbgDXNu6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Apr 2020 09:50:58 -0400
+Received: from cable.insite.cz ([84.242.75.189]:50404 "EHLO cable.insite.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726968AbgDXNs3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 24 Apr 2020 09:48:29 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D9C3113E;
-        Fri, 24 Apr 2020 06:48:29 -0700 (PDT)
-Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.195.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F33E13F68F;
-        Fri, 24 Apr 2020 06:48:27 -0700 (PDT)
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>
-Cc:     Qais Yousef <qais.yousef@arm.com>,
-        Tony Prisk <linux@prisktech.co.nz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Oliver Neukum <oneukum@suse.de>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] usb/ehci-platform: Set PM runtime as active on resume
-Date:   Fri, 24 Apr 2020 14:48:00 +0100
-Message-Id: <20200424134800.4629-3-qais.yousef@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200424134800.4629-1-qais.yousef@arm.com>
-References: <20200424134800.4629-1-qais.yousef@arm.com>
+        id S1726301AbgDXNu6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 24 Apr 2020 09:50:58 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id 43F76A1755F1F;
+        Fri, 24 Apr 2020 15:50:56 +0200 (CEST)
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id VT3A0paSuqdh; Fri, 24 Apr 2020 15:50:51 +0200 (CEST)
+Received: from [192.168.105.191] (ip28.insite.cz [81.0.237.28])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id EAA6EA1F2B0D7;
+        Fri, 24 Apr 2020 15:50:50 +0200 (CEST)
+Subject: Re: usb:gadget:f_uac2: EP OUT is adaptive instead of async
+To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Cc:     Linux USB <linux-usb@vger.kernel.org>
+References: <4bd36708-0ade-fbd7-5eec-5b8df7b3f2ee@ivitera.com>
+ <CAB=otbRMQ6eCD0U-2zDCQvN37VRhBta_9_+9u4FwEbY4St=AgQ@mail.gmail.com>
+ <f3114cb0-dc77-b4a6-f70b-2e72c9e87ce2@ivitera.com>
+ <cf933b39-1d4a-aeff-3db9-5e05da302665@ivitera.com>
+ <CAB=otbQLV1b6mv3n6d0URRM71OnEmwkTSEDuiNW5-rniBzdo1w@mail.gmail.com>
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+Message-ID: <d6646b6e-2799-91f4-5be3-ece31ac96ecc@ivitera.com>
+Date:   Fri, 24 Apr 2020 15:50:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <CAB=otbQLV1b6mv3n6d0URRM71OnEmwkTSEDuiNW5-rniBzdo1w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Follow suit of ohci-platform.c and perform pm_runtime_set_active() on
-resume.
+Dne 24. 04. 20 v 14:34 Ruslan Bilovol napsal(a):
+> 
+> I worked on this during last moths and implemented feedback endpoint
+> and other improvements to UAC2 driver.
+> Currently it's under testing, I do expect to submit patches to community soon.
 
-ohci-platform.c had a warning reported due to the missing
-pm_runtime_set_active() [1].
+That is amazing, thank you.
 
-[1] https://lore.kernel.org/lkml/20200323143857.db5zphxhq4hz3hmd@e107158-lin.cambridge.arm.com/
+> 
+> I used the same idea with "PCM Rate Shift" control to make it work with
+> existing alsaloop tool, but the in this case I do think it's better to expose
+> frequency directly to the control
 
-Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-CC: Tony Prisk <linux@prisktech.co.nz>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Mathias Nyman <mathias.nyman@intel.com>
-CC: Oliver Neukum <oneukum@suse.de>
-CC: linux-arm-kernel@lists.infradead.org
-CC: linux-usb@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
----
- drivers/usb/host/ehci-platform.c | 4 ++++
- 1 file changed, 4 insertions(+)
+I agree. Nevertheless compatibility with alsaloop would be quite useful.
+ E.g. the gadget could just implement a simple loopback from gaudio ->
+some alsa plugins chain -> one or more output soundcards to offer simple
+features not available readily in other OSes (route, multi, etc). With
+alsaloop such configuration would be very simple. Perhaps making both
+relative and absolute controls available?
 
-diff --git a/drivers/usb/host/ehci-platform.c b/drivers/usb/host/ehci-platform.c
-index e4fc3f66d43b..e9a49007cce4 100644
---- a/drivers/usb/host/ehci-platform.c
-+++ b/drivers/usb/host/ehci-platform.c
-@@ -455,6 +455,10 @@ static int ehci_platform_resume(struct device *dev)
- 
- 	ehci_resume(hcd, priv->reset_on_resume);
- 
-+	pm_runtime_disable(dev);
-+	pm_runtime_set_active(dev);
-+	pm_runtime_enable(dev);
-+
- 	if (priv->quirk_poll)
- 		quirk_poll_init(priv);
- 
--- 
-2.17.1
+Thank you for your work.
 
+Regards,
+
+Pavel.
