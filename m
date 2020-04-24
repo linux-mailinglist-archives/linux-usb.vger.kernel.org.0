@@ -2,98 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1B81B753F
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 14:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B021B7576
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 14:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728544AbgDXMcG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Apr 2020 08:32:06 -0400
-Received: from mail-il1-f200.google.com ([209.85.166.200]:48176 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728467AbgDXMcF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Apr 2020 08:32:05 -0400
-Received: by mail-il1-f200.google.com with SMTP id h26so9431726ilf.15
-        for <linux-usb@vger.kernel.org>; Fri, 24 Apr 2020 05:32:04 -0700 (PDT)
+        id S1726915AbgDXMec (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Apr 2020 08:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726793AbgDXMec (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Apr 2020 08:34:32 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E83C09B045
+        for <linux-usb@vger.kernel.org>; Fri, 24 Apr 2020 05:34:32 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id e26so12070507otr.2
+        for <linux-usb@vger.kernel.org>; Fri, 24 Apr 2020 05:34:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=86OI2RgVsJxpkILEGqDj2aahSfy5d8G5pns3PwdbWPE=;
+        b=S3wedulMW2TBj3eWjMmshLK0TqBYleFo08PoogLRM+0ShA4MQKeqytpCrlFPJlhrIb
+         tpN8HrMcVTLj6rXJ7pwcLUU6EJsaghmC5ONqcssJKjrb9sv9+fjStvRDMdnCNZIdW63I
+         /sOkb0cClx0seE3E3Gxb3DDGHItdp7MuZsApgj9woVqpcoIc81HXS4nz8bSZS8uYnjvB
+         iCFo6B7BKRmOJB4gRf5NDckFUnFnwYIIocIcrxyV126Bj5MSpRh5gMnCGOxWwVEuF70p
+         B5HhiRJhcZxPlZ490wXhvYiO8C74DJdDfqlY6lF+Pi+QjpBm2lpk6atcVxPAn3LZcX0B
+         DEhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=yK0wAoGKugNS69+oM9ObjI/OyZcx0KM5Rr5d8hGyhfk=;
-        b=Gqk7qzsgHyy4twfghFJbLUciQK5sMGOxKQqw0Ddonizr71YGjhuYLsbrqpKpcBfc3B
-         LKkxWXNmVq5QHK10unHQHMjrEc+jah5vZWw9PvBGSQ8HCJivXKSp1JMNA3LYpfc43SOB
-         9ix6BOlTc0v4RtV3ijT/4oCW8XVUI0aYCbeglekJZJZaVZkHtT6e/DPiX5a9r0GAQqWH
-         C5dScSEO1+KXjwdmLBwQHRBBUWhcl2z0qWLeJpdKtgAprErRUIGCCpG9nve0zrhuPvyC
-         SjmcmBiYVaPMYwe11B+tudRoxgwGGco/5pzqgeYdKg9QwESTR4M7yED9HFgbLR9oMXfx
-         kyZw==
-X-Gm-Message-State: AGi0PuYLp/qUUF3hQ5Myj8SGVEkKhYnkKZe6HDf/MgMNaVPN2gkRQ6hW
-        6qZMkQSlpngGy7wTL0YKwgO1sDeckDGX4yl7KryxeoZjPEFh
-X-Google-Smtp-Source: APiQypIJVlz/0E/OMhixpF63qSBEIklUpfcXcAxKIuCOhhWqte2oP4DM638Zjln5/L8qBnO46RGI81CrYem5xaQKnJ+Bx0O7wKJm
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=86OI2RgVsJxpkILEGqDj2aahSfy5d8G5pns3PwdbWPE=;
+        b=GLoP6DGrLWeRcOkqvYr3ZlYG5nU0R7Q2Eij5RoHEHKO1lhlybJteZ1RnR1r+aLERjM
+         33/AmeNePpeuMRpSsqNcC6VGacX5AL0O8PQWC210pZ0GFGMRTBLFQv5A6yWzXU719Z+C
+         438IRnP4QRlcqsTlcc3Y54KkrzJZoqKBs3p7pNR8sKGZDCeJvbR2CGPNvhqxYgOWLwZK
+         gjFRKZNOFsQoryZJrvHZ/LfW/EJlU7XMgkelI5Z1nTdJcrB1DoDeV9S7o5mSuu2zARTa
+         lCxPQJyqsb0RanUk//Eg0qXA88GdFvy1TelZFNs2epCyepveM0YgrtwnnAbK9XcXUtgE
+         zb1A==
+X-Gm-Message-State: AGi0PuYg5U0d2M3UoxeD52diBbfxeqjeZE5Viq/xWC/R8vvmmQDuUQ1n
+        TbLHUgGxApxtj2xgeaEpY8DOl9cWMJE3iBF5zduJ2uP6x8U=
+X-Google-Smtp-Source: APiQypIJc7KFpszeKkcw+bRfwXa8X/DnW5lcBdiYk95gJNMP9aE8LoJQn/Z/QUYqXxc3qjQ5B3we7HQBNQk+eF/b6M4=
+X-Received: by 2002:aca:c0c3:: with SMTP id q186mr7078694oif.174.1587731671613;
+ Fri, 24 Apr 2020 05:34:31 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:247:: with SMTP id w7mr7991586jaq.128.1587731523959;
- Fri, 24 Apr 2020 05:32:03 -0700 (PDT)
-Date:   Fri, 24 Apr 2020 05:32:03 -0700
-In-Reply-To: <Pine.LNX.4.44L0.2004240817010.26813-100000@netrider.rowland.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007c083305a4088d09@google.com>
-Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
-From:   syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
+References: <4bd36708-0ade-fbd7-5eec-5b8df7b3f2ee@ivitera.com>
+ <CAB=otbRMQ6eCD0U-2zDCQvN37VRhBta_9_+9u4FwEbY4St=AgQ@mail.gmail.com>
+ <f3114cb0-dc77-b4a6-f70b-2e72c9e87ce2@ivitera.com> <cf933b39-1d4a-aeff-3db9-5e05da302665@ivitera.com>
+In-Reply-To: <cf933b39-1d4a-aeff-3db9-5e05da302665@ivitera.com>
+From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Date:   Fri, 24 Apr 2020 15:34:20 +0300
+Message-ID: <CAB=otbQLV1b6mv3n6d0URRM71OnEmwkTSEDuiNW5-rniBzdo1w@mail.gmail.com>
+Subject: Re: usb:gadget:f_uac2: EP OUT is adaptive instead of async
+To:     Pavel Hofman <pavel.hofman@ivitera.com>
+Cc:     Linux USB <linux-usb@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Fri, Apr 24, 2020 at 2:21 PM Pavel Hofman <pavel.hofman@ivitera.com> wrote:
+>
+>
+>
+> Dne 11. 02. 20 v 20:02 Pavel Hofman napsal(a):
+> > Hi Ruslan,
+> >
+> > Dne 11. 02. 20 v 17:10 Ruslan Bilovol napsal(a):
+> >> On Thu, Feb 6, 2020 at 3:35 PM Pavel Hofman <pavel.hofman@ivitera.com> wrote:
+> >>>
+> >>> .
+> >>
+> >> Are you working on async feedback EP implementation? I'm interested in that
+> >> feature and I can implement it soon but do not want to do double work
+> >> if somebody
+> >> is already working on it and will send to the community soon
+> >
+> > I would be happy if you focused on the feedback. I want to solve the
+> > g_audio usability somehow first
+> > https://lore.kernel.org/linux-usb/df2eeff0-ca9c-35f9-2e72-8426b2cf72c9@ivitera.com/
+> > as it would allow easy usage of the existing adaptive gadget version.
+> >
+> > The feedback - I have been shown a simple implementation which is not
+> > public and is not using the g_audio alsa device on the other side.
+> >
+> > IMO the key issue is designing the async feedback to accept feedback
+> > values from userspace as well as from any third-party kernel module. Why
+> > userspace? The stream provided by the g_audio capture device  can be
+> > output to a real master-clock alsa device (e.g. after synchronous
+> > resampling), be sent by network to some master-clock device, many other
+> > options possible. Any master-clock output device/ userspace sink should
+> > be able to provide data for calculating proper up-to-date feedback value
+> > for the slaved UAC2 gadget.
+> >
+> > I have done a few trials with master alsa output device -
+> >
+> > https://www.diyaudio.com/forums/pc-based/342070-linux-usb-audio-gadget-rpi4-otg.html#post5909816
+> >
+> >
+> > https://www.diyaudio.com/forums/pc-based/342070-linux-usb-audio-gadget-rpi4-otg.html#post5910911
+> >
+> > Details for alsa-lib are discussed in
+> > https://www.spinics.net/lists/alsa-devel/msg96781.html
+> >
+> >
+> > This is a solution I need - syncing the UAC2 gadget to master clock of
+> > real alsa soundcard . But again - I think the solution should be
+> > flexible to support any source of feedback information, be it in kernel
+> > or from userspace.
+> >
+>
+> Hi, please can we resume this discussion about the feedback endpoint?
+>
+> Meanwhile a simple method described in
+> https://www.aktives-hoeren.de/viewtopic.php?p=137829&sid=0d6cd50e0f58618da33621c62e412ada#p137829
+> for obtaining required rate shift from /proc/asound/.../status to keep
+> the master side buffer optimally filled was tested. That could be one
+> source for the rate shift, to be passed to the driver. Perhaps a control
+> element like the "PCM Rate Shift" of the snd-aloop driver could be used.
 
-syzbot has tested the proposed patch but the reproducer still triggered crash:
-WARNING in usb_queue_reset_device
+I worked on this during last moths and implemented feedback endpoint
+and other improvements to UAC2 driver.
+Currently it's under testing, I do expect to submit patches to community soon.
 
-------------[ cut here ]------------
-usbhid 3-1:0.0: Device reset
-WARNING: CPU: 0 PID: 12 at drivers/usb/core/hub.c:6007 usb_queue_reset_device+0x63/0x130 drivers/usb/core/hub.c:6007
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.6.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events hid_reset
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- panic+0x2aa/0x6e1 kernel/panic.c:221
- __warn.cold+0x2f/0x30 kernel/panic.c:582
- report_bug+0x27b/0x2f0 lib/bug.c:195
- fixup_bug arch/x86/kernel/traps.c:174 [inline]
- fixup_bug arch/x86/kernel/traps.c:169 [inline]
- do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
- do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
- invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-RIP: 0010:usb_queue_reset_device+0x63/0x130 drivers/usb/core/hub.c:6007
-Code: 00 00 4c 8d 6d 30 4d 85 e4 74 72 e8 47 02 e0 fd 4c 89 ef e8 4f d2 19 ff 4c 89 e2 48 c7 c7 20 79 3b 86 48 89 c6 e8 f5 92 b4 fd <0f> 0b 48 8d 95 f0 04 00 00 48 c7 c0 88 2a e6 87 48 b9 00 00 00 00
-RSP: 0018:ffff8881da227ce0 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: ffff8881cd5ae920 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff812974dd RDI: ffffed103b444f8e
-RBP: ffff8881ce92d000 R08: ffff8881da211880 R09: ffffed103b646248
-R10: ffffed103b646247 R11: ffff8881db23123f R12: ffff8881d4c25d80
-R13: ffff8881ce92d030 R14: ffff8881da0ef400 R15: ffff8881db233e00
- hid_reset+0x219/0x3e0 drivers/hid/usbhid/hid-core.c:138
- process_one_work+0x94b/0x1620 kernel/workqueue.c:2266
- worker_thread+0x96/0xe20 kernel/workqueue.c:2412
- kthread+0x318/0x420 kernel/kthread.c:255
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+I used the same idea with "PCM Rate Shift" control to make it work with
+existing alsaloop tool, but the in this case I do think it's better to expose
+frequency directly to the control
 
+Anyway, let'l look at the patches
 
-Tested on:
-
-commit:         0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
-git tree:       https://github.com/google/kasan.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=147a58a7e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
-dashboard link: https://syzkaller.appspot.com/bug?extid=db339689b2101f6f6071
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1131acdfe00000
-
+Thanks,
+Ruslan
