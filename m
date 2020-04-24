@@ -2,108 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C961B7F6E
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 21:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2251B7F83
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 22:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727022AbgDXT4q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Apr 2020 15:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38474 "EHLO
+        id S1729466AbgDXUBu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Apr 2020 16:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726908AbgDXT4p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Apr 2020 15:56:45 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9838AC09B048
-        for <linux-usb@vger.kernel.org>; Fri, 24 Apr 2020 12:56:45 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id w3so4126984plz.5
-        for <linux-usb@vger.kernel.org>; Fri, 24 Apr 2020 12:56:45 -0700 (PDT)
+        with ESMTP id S1729457AbgDXUBt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Apr 2020 16:01:49 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D07C09B04B
+        for <linux-usb@vger.kernel.org>; Fri, 24 Apr 2020 13:01:49 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id j4so14579286otr.11
+        for <linux-usb@vger.kernel.org>; Fri, 24 Apr 2020 13:01:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=I8bnmrDOav0ISmc4AdfKKhK4ImeTGQjkXnzufyc2sFo=;
-        b=mvNa78l4kee9H2IlLdd5842jBSL2f8W2BBmhuoitF6gOv3KBtqQqlQjQa/3yTFJtQv
-         zK3ASYb2e1dOxra4mdS/X5jQuf2UGBoc0QhxLYvMahW9mOFObmttmTAGvvWxCcBirLZ7
-         jf1ou6Oh5l5fh6mA+EgT9kvCkIMdupZltx0VjQHXGY5fRmmK1USx8Ae7yfMsy1ytg4z/
-         zCG7u/UQsvNjHRPri1FNxP9heP/qcVs4pCKAl394bjhdPhCQkMoUyEqBzBGDcx6dL8Sj
-         AVUo4OZaweaBbPcBnVPmQ4jPDuoeZNKbDlgWVtMTvlrQlKJ7NPmS5UQ67tIYLv9zYx0K
-         3wXQ==
+        bh=8XI1LvypvRpBnnfjlnzQMUzrYBVqCVi4omkZLAUHHT0=;
+        b=EPrPgdaMmqH/8+NLEje7ykgzlxHHBtmWjq6MpgQXjVqpFTZEpVMrublr+7m3pVkfRI
+         IJU8r7MUaEuZvWjxeqcHm1/e8mGMOyuG0H5uCHADhwtxE5B0dbN9dNaVxjAkMb8MR8oC
+         aca78pdutVnsMDpa18xm5Be7gxdmLqjtxJRP3oYxzKBJ2zbruCqOxMenTS1jIKrb59jq
+         m8uSnQIV/At9jcnk+n0nZZvzP0Hjfs1xepgTW6gKeHoe/D9JN0j5s+Qffuv3yE/CR7bd
+         8tWn4AhNqjvC1ayhMm9gkNTvKbTv44eX07NDUlVeHYQ1Ez4ILLqf/2W2PqlBRGBLCcyN
+         t4ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=I8bnmrDOav0ISmc4AdfKKhK4ImeTGQjkXnzufyc2sFo=;
-        b=Lcldubb+lI8GuUzSf/4+PvUCPEJdt20UAWz8qRMYEC51K0PeN7WGQXNBOhiIcxWu8T
-         lHg/0nH2Gk4eujzYRlTVZU6zp0CtHEFxwA0AQ18lcXz55iiRcleLFCA9c6/dFa+EG8PW
-         To6WN1iOeroAx/iWDIfiUmVp/wNMNfp3EyA7eiY9nE6zyEfNUDweekEHOeVZvaomRwaF
-         7BYONtTxsuNBg8hVPwRB/ErzzCTcQ+XBoB/ryA1U/ZzKW7OJHpvLt1DMRZKD0M9R8HUa
-         qc2WRqD2bDQr53LIftSXNefMuHrxZXwWGzDWenfX0Y2ZJKmJb3UuGcfX/O7OHTojaXfu
-         ALZg==
-X-Gm-Message-State: AGi0PuZm3Zn+oTmVpCX/gjIDd0YSbo6EfHbPqZqG6E/4DREJQtPUhE52
-        aInOepFli8yQVFIMfoHg7FKPTlYlHK61dLTD2730vA==
-X-Google-Smtp-Source: APiQypLOCDgfwYanbQ/JxC9nEpjlMHTiru5rKqc4TN7EOWXlf+ZDQ/pOx8EOwMVWN39QDhgrIoo8+Y3DkhGPeebe0E0=
-X-Received: by 2002:a17:902:9889:: with SMTP id s9mr10067842plp.252.1587758204889;
- Fri, 24 Apr 2020 12:56:44 -0700 (PDT)
+        bh=8XI1LvypvRpBnnfjlnzQMUzrYBVqCVi4omkZLAUHHT0=;
+        b=C5m/kxtKS16yxH1YiQQVDika2hpP/FiD0m6Y8dGN1xmMlyo62yAy2/7UCsakrqnjLm
+         E3H4rqFBkKpEwiww697+CSjNshivo1NwYOT2m3H0jfO0MR83C3FWgtS4u8+HTG9lInkw
+         YHlh7bpEi4146ldRIE9uO6kTmRKKXrvnftN4DhJQLoiTQCa4p9JhJWpfkkW0mVwnnTv5
+         TfJJMAStcQU+c1boEQSmRELmh3lViwW1+jrmiAyFomQz/iXBVn+xMvU8/sgA/seWbrzN
+         xv4qG+HOMhxYPreXRrJYCA11Sbv6/hPEnLalBul0Bihg8IYJw0dumJx26SHz0C6wonFO
+         vhfw==
+X-Gm-Message-State: AGi0PuYuvQZt4akFrf9gwHL5uASe6cdXkd+8LR/YHg5XGBrKLgmOpkId
+        MFhgbrO6RBYCpVsbLL2F5IerZldNTxREciFdQZD10g==
+X-Google-Smtp-Source: APiQypICItYltUwSug3LlyQP5kPRd/5Joreyx8DjDwE5SJABX05p72jQqyzCHTts2Twb6Udiy3mcs0DShBO485Oluss=
+X-Received: by 2002:a05:6830:1589:: with SMTP id i9mr9792803otr.102.1587758508417;
+ Fri, 24 Apr 2020 13:01:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAAeHK+x7Fihwriocp8Kpr+AQks6h3syZa+g0Wd+Q62fg-y93Lg@mail.gmail.com>
- <Pine.LNX.4.44L0.2004092015180.30065-100000@netrider.rowland.org> <CAAeHK+wYc1De7AN12mkkjDsx-PJODOAvBCOtcDSykSjq6gwCNA@mail.gmail.com>
-In-Reply-To: <CAAeHK+wYc1De7AN12mkkjDsx-PJODOAvBCOtcDSykSjq6gwCNA@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 24 Apr 2020 21:56:34 +0200
-Message-ID: <CAAeHK+z1O4KgCnxrpD9yvYFUGybNmKPHVEcHetuQHz2J9V4n4w@mail.gmail.com>
-Subject: Re: Testing endpoint halt support for raw-gadget
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>
+References: <CALAqxLW2R4d=Zm=TKbFprN-uYrerL1oCYsVC3VedEKtW0gCsyA@mail.gmail.com>
+ <877dyfsv00.fsf@kernel.org> <CALAqxLUdzKRV6nrcLpWsykK+WPnqhUK4iwRe4_Xmo-TvEV5KOg@mail.gmail.com>
+ <CALAqxLWEdHrsU+efgsp2EHsgNGA8n7SE16XNnZHcfXjdM4v-WQ@mail.gmail.com>
+ <20200424171247.GA20167@jackp-linux.qualcomm.com> <CALAqxLUkg8gqY6kN1D=NbpgLDd_yMdvxOJCksrmXw0v8McHodw@mail.gmail.com>
+In-Reply-To: <CALAqxLUkg8gqY6kN1D=NbpgLDd_yMdvxOJCksrmXw0v8McHodw@mail.gmail.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Fri, 24 Apr 2020 13:01:35 -0700
+Message-ID: <CALAqxLUSr8vnW3MgK+GZk80c8D58PXM6ovN66y0hwFbURrBpiA@mail.gmail.com>
+Subject: Re: More dwc3 gadget issues with adb
+To:     Jack Pham <jackp@codeaurora.org>
+Cc:     Felipe Balbi <balbi@kernel.org>, Josh Gao <jmgao@google.com>,
+        YongQin Liu <yongqin.liu@linaro.org>,
+        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
+        Yang Fei <fei.yang@intel.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Todd Kjos <tkjos@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 24, 2020 at 9:36 PM Andrey Konovalov <andreyknvl@google.com> wrote:
->
-> On Fri, Apr 10, 2020 at 2:29 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+On Fri, Apr 24, 2020 at 11:36 AM John Stultz <john.stultz@linaro.org> wrote:
+> On Fri, Apr 24, 2020 at 10:12 AM Jack Pham <jackp@codeaurora.org> wrote:
+> > On Tue, Apr 21, 2020 at 10:09:27PM -0700, John Stultz wrote:
+> > > Does something like this make sense? It's not causing trouble on
+> > > db845c either so far in my testing.
 > >
-> > On Thu, 9 Apr 2020, Andrey Konovalov wrote:
+> > Ok I'll bite...
 > >
-> > > Hi Alan and Greg,
-> > >
-> > > I've been thinking about what kind of features raw-gadget might be
-> > > missing, that would allow more flexibility in emulating USB devices.
-> > > One of the things that is currently missing is halting endpoints.
-> > > Adding this functionality seems to be fairly easy, but it's unclear to
-> > > me how to test it. Any suggestions?
+> > I'm now curious why it hasn't been a problem with the Qualcomm HW. Do
+> > you mind please capturing a similar trace log on the db845c?  Would be
+> > good to see a side-by-side comparison and see if, first of all, whether
+> > the same S/G path is getting exercised (i.e. 16KiB OUT requests from ADB
+> > userspace using AIO which then get broken up into 4K chunks by f_fs),
+> > and what the behaviors of the reclaim_trb and giveback are when the
+> > transfer is completed.
 > >
-> > You should use the usbtest driver along with the testusb program in
-> > tools/usb.  Of course, to do it you will need a userspace driver for
-> > raw-gadget.  usbtest works best with gadget-zero, but it can be used
-> > (in degraded form) with any USB device.
+> > Preferably if you could get a trace without your patch applied that
+> > would be great. And maybe also one after your patch just to see if the
+> > traces are truly identical or not.
 >
-> Hi Alan,
+> Sure. I've captured logs in the same manner with and without on db845c
+> (against 5.7-rc2). See attached.
 >
-> I've started working on a test suite for raw-gadget based on the
-> usbtest module as you suggested and have a few questions:
->
-> 1. (Re test #10:) Currently there's no way to stall USB (control)
-> requests with raw-gadget (which is what happens when you return -EPIPE
-> from gadget's setup() callback AFAIU). Is stalling an important part
-> of the protocol? Should we somehow support it? AFAIU gadgetfs also has
-> no ability to stall requests that are passed to userspace.
->
-> 2. Re test #4: the test fails with length that is not divisible by
-> endpoint's max packet value when using dummy_hcd (assuming that gadget
-> keeps queueing URBs with max packet length), as dummy_hcd's transfer()
-> function sets status to -EOVERFLOW when this happens. Is this
-> expected?
->
-> 3. Re test #7: the test fails when e.g. vary parameter is set to some
-> odd value when using dummy_hcd. AFAIU this happens since dummy_hcd
-> doesn't have no_sg_constraint flag set and therefore the sanity check
-> in usb_submit_urb() fails. Is this expected?
+> I suspect the difference is the db845c is using an iommu (I don't
+> think it will boot without it) where hikey960 isn't, but I'll let you
+> take a look.
 
-4. Re test #13: it seems that both dummy_hcd and the UDC on Raspberry
-Pi Zero handle host driven endpoint halts themselves without any need
-to support them on the gadget side. Thus this test can't really be
-used to test the halt implementation I have for raw-gadget. Are there
-other ways to test it?
+And I've added my own printk debugging that I used to track the issue
+down on HiKey960 and on the db845c we are never hitting the case where
+the HWO flag is set when we call dwc3_gadget_ep_reclaim_trb_sg()
+
+thanks
+-john
