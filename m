@@ -2,81 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B30221B7EAA
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 21:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7FBF1B7EEC
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Apr 2020 21:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729088AbgDXTOQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Apr 2020 15:14:16 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:45339 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726793AbgDXTOQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Apr 2020 15:14:16 -0400
-Received: (qmail 24942 invoked by uid 500); 24 Apr 2020 15:14:15 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 24 Apr 2020 15:14:15 -0400
-Date:   Fri, 24 Apr 2020 15:14:15 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
-        <ingrassia@epigenesys.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        <syzkaller-bugs@googlegroups.com>
-Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
-In-Reply-To: <000000000000535b2805a40b1847@google.com>
-Message-ID: <Pine.LNX.4.44L0.2004241456070.17162-100000@netrider.rowland.org>
+        id S1727059AbgDXTcE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Apr 2020 15:32:04 -0400
+Received: from mail-il1-f199.google.com ([209.85.166.199]:38545 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725970AbgDXTcE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Apr 2020 15:32:04 -0400
+Received: by mail-il1-f199.google.com with SMTP id u11so11410200ilg.5
+        for <linux-usb@vger.kernel.org>; Fri, 24 Apr 2020 12:32:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=vA7Hj07TAr42CqeEpKdo2ArIABvLEDSOmjr35bxOqYk=;
+        b=Qn59LZxQnExBysV8CAllSgRBw2NT5frVruKWc/qa4WvJSR9vbREcTVlFoYis/m/bpv
+         yZQ7y55MhEzm3d8TZ/46jTAG7GGa1osL7Mofo8dzJ9uJbs7lW97GwlkQo99vU4GW5ZiD
+         vJohdadVokbjXlKn7kOiIQ1b6hSsnXveVyyqb8dXKEqxkceA/zRWsSC54iQOIOnh+Fby
+         5NRsdh0X0N6GH3FsB/E4ROkhGgDE1zrR/QhtnAcbN+1oHeKPRPPx7I0EhbEdQpVBO6jc
+         fxbc/f0lVRuWozhg3zezPcALq2KiDiHsKEElKXAkxZUeeC/dOGFL9Qw8JFIcGxxG3LAB
+         EmVw==
+X-Gm-Message-State: AGi0Pubvrkpf56LDgwNLv3jVF9/hhHnLX2LT9on9t36Tl7y+5BfbcF/Z
+        CkfFUlfyztHCWWWeqOmtTluqdgaM3upNWdMXIE3P5XWVzjys
+X-Google-Smtp-Source: APiQypIjA6RvuhP8WE5NS5VHcMG7z2cPwvLAODZjpQt6NcmRh+vcAX3PNIes9BadXSxMx0IyZf4f8vwRvOzENlSCONhfZNGzZl0S
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Received: by 2002:a05:6638:f92:: with SMTP id h18mr10148653jal.115.1587756722804;
+ Fri, 24 Apr 2020 12:32:02 -0700 (PDT)
+Date:   Fri, 24 Apr 2020 12:32:02 -0700
+In-Reply-To: <Pine.LNX.4.44L0.2004241456070.17162-100000@netrider.rowland.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000073e03705a40e6b38@google.com>
+Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
+From:   syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 24 Apr 2020, syzbot wrote:
+Hello,
 
-> Hello,
-> 
-> syzbot has tested the proposed patch but the reproducer still triggered crash:
-> INFO: task hung in usb_disable_device
+syzbot has tested the proposed patch and the reproducer did not trigger crash:
 
-That wasn't what I expected.  Still, the important information was
-present: The reset was instigated by hid_io_error(), because of some 
-sort of communication error.
+Reported-and-tested-by: syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com
 
-Note that the hid_submit_out, hid_submit_ctrl, and so on don't test the
-RESET_PENDING flag.  At least, not with any proper synchronization.  
-That's why we got an URB submitted while the device was being reset.
+Tested on:
 
-Nevertheless, the USB core should be able to handle such things without 
-a big WARNing, particularly for ep0.  The patch below tries to do this.
+commit:         0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
+git tree:       https://github.com/google/kasan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
+dashboard link: https://syzkaller.appspot.com/bug?extid=db339689b2101f6f6071
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=17d37144100000
 
-Alan Stern
-
-#syz test: https://github.com/google/kasan.git 0fa84af8
-
-Index: usb-devel/drivers/usb/core/urb.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/urb.c
-+++ usb-devel/drivers/usb/core/urb.c
-@@ -204,8 +204,17 @@ int usb_urb_ep_type_check(const struct u
- 	const struct usb_host_endpoint *ep;
- 
- 	ep = usb_pipe_endpoint(urb->dev, urb->pipe);
--	if (!ep)
--		return -EINVAL;
-+	if (!ep) {
-+		/*
-+		 * Special case: The pointers for ep0 are temporarily cleared
-+		 * during device resets.  We won't count this as an error;
-+		 * drivers can reasonably expect that ep0 always exists.
-+		 */
-+		if (usb_pipeendpoint(urb->pipe) == 0)
-+			ep = &urb->dev->ep0;
-+		else
-+			return -EINVAL;
-+	}
- 	if (usb_pipetype(urb->pipe) != pipetypes[usb_endpoint_type(&ep->desc)])
- 		return -EINVAL;
- 	return 0;
-
+Note: testing is done by a robot and is best-effort only.
