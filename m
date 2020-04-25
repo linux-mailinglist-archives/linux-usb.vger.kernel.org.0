@@ -2,85 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF941B873E
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Apr 2020 17:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE161B879C
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Apr 2020 18:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726112AbgDYPCg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Apr 2020 11:02:36 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:34091 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726097AbgDYPCg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Apr 2020 11:02:36 -0400
-Received: (qmail 20443 invoked by uid 500); 25 Apr 2020 11:02:35 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 25 Apr 2020 11:02:35 -0400
-Date:   Sat, 25 Apr 2020 11:02:35 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Andrey Konovalov <andreyknvl@google.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>
-Subject: Re: Testing endpoint halt support for raw-gadget
-In-Reply-To: <CAAeHK+z5DXp9HL+=9z2cEOHpBUuhAV_EmDHucyc4+GtSaYJFjg@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.2004251054140.19305-100000@netrider.rowland.org>
+        id S1726181AbgDYQDa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Apr 2020 12:03:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55324 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726124AbgDYQD3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Apr 2020 12:03:29 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51708C09B04E
+        for <linux-usb@vger.kernel.org>; Sat, 25 Apr 2020 09:03:29 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id d15so13589648wrx.3
+        for <linux-usb@vger.kernel.org>; Sat, 25 Apr 2020 09:03:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=t0TLC5mt6zw20J38nO6UV1Kz+5E95WBtIXeRkoxQ4a0=;
+        b=XNeHtRBGGoPV8Xpdph/IAItJ/etuj6jmd6XNwJWBrlnKBRY6XXRDDS38OPVeiYjyz+
+         7lSJMltGn9u8SIj4vHqjEvR9ddDeTjxcbyYIMuAkbbsrX7MOdo8e0OpGBIA0g3mzYbHI
+         ao3jQN+bWfpzPLWXhGKjYdaM83iDq93TP2ky5cjhn43z+XkPIM1s7h7vuWQ0elaXujPF
+         RdMuIIeIcP6Jv9XE/44LQEg3Lb+9jR6vxa1B46bWIby5FQYWLEwYdxWU7hl+gGOaNUDZ
+         Vgk1HijPcdMKcG95f5oVV2Esb6Fwaw2j9YlFtG0Pvt7AVxRDIOEuSUsNoj5YmK3Qk8fv
+         KuVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=t0TLC5mt6zw20J38nO6UV1Kz+5E95WBtIXeRkoxQ4a0=;
+        b=o8RWI7imAfvWEbhuuRqA8D1uwqQjzWJBCXDv3ga3LUHqGpceRr95Wsnb2NDGD5zxig
+         WhXM0XhKZbelIs+1HmusNnvuOhH/HKB2ISJ8QW4vvdk+N6whUXpa/jt8sb1xFGFcGo9g
+         D0A6N65YLpJt2OgRdVjsgpuqlsMDkQ4rVM+i+JvdPOUjY8ZizdpWWZU25hf8WPrRXN5Z
+         v/GqYTucVcnANAPun/xpI5qYYXOfwr7tna+gqDa/d5IJN1cep5qi6PUTmsacjQEpigz1
+         LBIqlbYjVxECIR68EFODnURhvm+K978Dqq/w3e3ogDNfipIEF/Yzhi/yuFkBaKlDmYK3
+         2MLw==
+X-Gm-Message-State: AGi0PuaYXrVRKKYGppqQOx8uAgfwAOiJVQoPpDooGJz0IpfubTV18A4i
+        RtlGV6qn+PmDkqLbvuqZWSzkaGAyl5XopoJuzXw=
+X-Google-Smtp-Source: APiQypIq7hHMtk9621ZyfCn/UYgPY85y3IRfWtuRH0gORBdOtCV/AphU1BxN8qvvhyW41mauplcf6UYPL05yOxs2tXQ=
+X-Received: by 2002:adf:b310:: with SMTP id j16mr18698381wrd.95.1587830607900;
+ Sat, 25 Apr 2020 09:03:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Reply-To: mrsanna.h.bruun119@gmail.com
+Received: by 2002:a5d:4589:0:0:0:0:0 with HTTP; Sat, 25 Apr 2020 09:03:27
+ -0700 (PDT)
+From:   "Mrs. Anna H. Bruun" <mrsanna.h.bruun119@gmail.com>
+Date:   Sat, 25 Apr 2020 09:03:27 -0700
+X-Google-Sender-Auth: NF1DCJ3o7TjYe-EN4TSnFmjeDOs
+Message-ID: <CADyOJT96obPAuiUSbVOOZapZ-PoNJNvvFa2d7Fe4-SGXFnDA_A@mail.gmail.com>
+Subject: My Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 25 Apr 2020, Andrey Konovalov wrote:
+My Dear
 
-> On Sat, Apr 25, 2020 at 3:53 AM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Fri, 24 Apr 2020, Andrey Konovalov wrote:
-> >
-> > > On Fri, Apr 24, 2020 at 9:36 PM Andrey Konovalov <andreyknvl@google.com> wrote:
-> >
-> > > > Hi Alan,
-> > > >
-> > > > I've started working on a test suite for raw-gadget based on the
-> > > > usbtest module as you suggested and have a few questions:
-> > > >
-> > > > 1. (Re test #10:) Currently there's no way to stall USB (control)
-> > > > requests with raw-gadget (which is what happens when you return -EPIPE
-> > > > from gadget's setup() callback AFAIU). Is stalling an important part
-> > > > of the protocol? Should we somehow support it? AFAIU gadgetfs also has
-> > > > no ability to stall requests that are passed to userspace.
-> >
-> > Yes, stalling is important, and you do need to support it.  gadgetfs
-> > does have a way to stall requests on ep0 from userspace: just perform
-> > I/O in the "wrong" direction.  If the host sends a control-IN request
-> > and the user does a read of the ep0 file, or if the host sends a
-> > control-OUT request and the user does a write, gadgetfs will call
-> > usb_ep_set_halt.  (However I do not remember how the setup_can_stall
-> > flag is meant to work.)
-> 
-> Ah, so halting ep0 after having successfully received a setup stage
-> request (setup() callback returns 0) will result in a stall during the
-> data stage
+My Name is Mrs. Anna H. Bruun, from Norway. I know that this message
+will be a surprise to you. Firstly, I am married to Mr. Patrick Bruun,
+A gold merchant who owns a small gold Mine in Burkina Faso; He died of
+Cardiovascular Disease in mid-March 2011. During his life time he
+deposited the sum of =E2=82=AC 8.5 Million Euro) Eight million, Five hundre=
+d
+thousand Euros in a bank in Ouagadougou the capital city of Burkina
+Faso. The deposited money was from the sale of the shares, death
+benefits payment and entitlements of my deceased husband by his
+company.
 
-Or during the status stage, if there is no data stage (a 0-length 
-transfer).
+I am sending this message to you praying that it will reach you in
+good health, since I am not in good health condition in which I sleep
+every night without knowing if I may be alive to see the next day. I
+am suffering from long time cancer and presently i am partially
+suffering from a stroke illness which has become almost impossible for
+me to move around. I am married to my late husband for over 4 years
+before he died and is unfortunately that we don't have a child, my
+doctor confided in me that i have less chance to live. Having known my
+health condition, I decided to contact you to claim the fund since I
+don't have any relation I grew up from the orphanage home,
 
->  (I hope I'm using those "stage" terms right) without the
-> gadget needing to queue an URB as it happens during a normal response?
+I have decided to donate what I have to you for the support of helping
+Motherless babies/Less privileged/Widows' because I am dying and
+diagnosed of cancer for about 2 years ago. I have been touched by God
+Almighty to donate from what I have inherited from my late husband to
+you for good work of God Almighty. I have asked Almighty God to
+forgive me and believe he has, because He is a Merciful God I will be
+going in for an operation surgery soon
 
-Yes.
+This is the reason i need your services to stand as my next of kin or
+an executor to claim the funds for charity purposes. If this money
+remains unclaimed after my death, the bank executives or the
+government will take the money as unclaimed fund and maybe use it for
+selfish and worthless ventures, I need a very honest person who can
+claim this money and use it for Charity works, for orphanages, widows
+and also build schools for less privilege that will be named after my
+late husband and my name; I need your urgent answer to know if you
+will be able to execute this project, and I will give you more
+Information on how the fund will be transferred to your bank account.
 
-> Shouldn't this halt the endpoint until the user (or the gadget)
-> unhalts it? Does this work when we want to just stall a single
-> request? What happens with the requests that come after?
-
-Ep0 is special.  See the description of protocol stalls in sections 
-8.4.5 and 8.5.3 (especially 8.5.3.4) in the USB 2.0 spec.
-
-Think about the problem for a moment.  Suppose a halt of ep0 persisted 
-until it was cleared by the host.  Then it would never get cleared -- 
-the only way the host can clear a halt condition is by sending a 
-Clear-Halt request on ep0!
-
-Alan Stern
-
+Thanks
+Mrs. Anna H.
