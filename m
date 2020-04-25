@@ -2,96 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 042861B87FA
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Apr 2020 19:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D042C1B8821
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Apr 2020 19:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726208AbgDYRIm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Apr 2020 13:08:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726146AbgDYRIm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Apr 2020 13:08:42 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291F8C09B04D;
-        Sat, 25 Apr 2020 10:08:42 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id x4so14740132wmj.1;
-        Sat, 25 Apr 2020 10:08:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=O1616GdJZQwMAYCstXMQMO+mfdnUnYcAiAdqWMQMdCk=;
-        b=j4JzYTSp3PtLbLbdxcMK87wTyBA+cZ9QfDr8XV3TqsDzR2+kzS0Thq0j4qF6+KhnwD
-         IxkXuVSgY+8xgG+zJPuIeQg4Z2vDQiIT8YdYB8qJCICmhw2XZJgLGhC8pW2KTQ30UnvX
-         hSicDM9OkRCqIoKETGn428fQxa/T6bS2DIHZvssE6ZumH4i8Qg/36eFvQceQJw1BS5dQ
-         RFxaawFiG8yK71Ig4F793o4iV8/Gf3F3o6tzuYu/7YvWSp++XqnqLyQlQpX4vuFJm/Ik
-         8PXvxpO4gXICnXdJN3zj8WK9i2ilkslQMO1i5n8tGbhl6IEiKWi/pGD33gsrMe960Bv0
-         qVjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=O1616GdJZQwMAYCstXMQMO+mfdnUnYcAiAdqWMQMdCk=;
-        b=H7W/94ObsOlHcC2g3rFCvgL8gUozgBtuO53Pw6kao66s6oLPo6mW/tVSV+lBvQ1f9l
-         4LKs+jsFSKxRmR3n6xbfPa7sgVlq1iq3/MGIQ9mOBZhX8bEAT4HXTV/CJix48ilKGd/J
-         KBt2xGL1fpk4fpr6LC5jRn9FDLKSzdOz0MgY98qmn2IDL+1zVLw31UG6Y8Z5wEWh/mXV
-         yOweEEGtKJwuG2T6ttdmbn9FKp+Lb7Rr4OTP3PHLkec9Yx0urTYf+MPMhbmh6DWT/aww
-         USvoA0JL7Mo+UcHGATVQW4kuYrBEI0odj8MQTz62L8LDLLI/F9TjzRRunHdk2J+tpLCA
-         n7XQ==
-X-Gm-Message-State: AGi0Pua/1BkHgyd5rI4wKShp7KTp+uhYW6AQmME+g56AhAAtk+zYOP20
-        SOpdAVyBvVF+8x/0nZYAFwE=
-X-Google-Smtp-Source: APiQypJ0HdhWPnrZxWn5tl/nMOJwIvph3SNIW4dQKPyjSEoo+S9vKcobegz/uTrZe6sqeXJ61115cA==
-X-Received: by 2002:a1c:9d84:: with SMTP id g126mr15715568wme.184.1587834520927;
-        Sat, 25 Apr 2020 10:08:40 -0700 (PDT)
-Received: from debian.home (ip51ccf9cd.speed.planet.nl. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id t67sm8549717wmg.40.2020.04.25.10.08.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 25 Apr 2020 10:08:40 -0700 (PDT)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de
-Cc:     robh+dt@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: usb: dwc2: add power-domains property
-Date:   Sat, 25 Apr 2020 19:08:33 +0200
-Message-Id: <20200425170833.26718-1-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.11.0
+        id S1726279AbgDYRbm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Apr 2020 13:31:42 -0400
+Received: from mx2.suse.de ([195.135.220.15]:40642 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726145AbgDYRbm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 25 Apr 2020 13:31:42 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 09B95AE5E;
+        Sat, 25 Apr 2020 17:31:38 +0000 (UTC)
+Message-ID: <1587835881.19130.3.camel@suse.com>
+Subject: Re: KASAN: use-after-free Read in usblp_bulk_read
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Pete Zaitcev <zaitcev@redhat.com>, Hillf Danton <hdanton@sina.com>,
+        syzbot <syzbot+be5b5f86a162a6c281e6@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Date:   Sat, 25 Apr 2020 19:31:21 +0200
+In-Reply-To: <Pine.LNX.4.44L0.2004231213260.20147-100000@netrider.rowland.org>
+References: <Pine.LNX.4.44L0.2004231213260.20147-100000@netrider.rowland.org>
+Content-Type: multipart/mixed; boundary="=-DJknTLj6xfyw8eo1K2Bh"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A test with the command below gives this error:
 
-arch/arm64/boot/dts/rockchip/px30-evb.dt.yaml: usb@ff300000:
-'power-domains' does not match any of the regexes: 'pinctrl-[0-9]+'
+--=-DJknTLj6xfyw8eo1K2Bh
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 
-With the conversion to yaml it also filters things
-in a node that are used by other drivers like
-'power-domains' for Rockchip px30 usb nodes,
-so add them to 'dwc2.yaml'.
+Am Donnerstag, den 23.04.2020, 12:29 -0400 schrieb Alan Stern:
+> On Thu, 23 Apr 2020, Oliver Neukum wrote:
 
-make ARCH=arm64 dtbs_check
-DT_SCHEMA_FILES=Documentation/devicetree/bindings/usb/dwc2.yaml
+> The only suspicious thing I see is that usblp_resume() calls 
+> handle_bidir() without first acquiring any mutex.  But resume shouldn't 
+> race with disconnect.
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
- Documentation/devicetree/bindings/usb/dwc2.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+Right.
 
-diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
-index fb2f62aef..9352a8ef6 100644
---- a/Documentation/devicetree/bindings/usb/dwc2.yaml
-+++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
-@@ -78,6 +78,9 @@ properties:
-   phy-names:
-     const: usb2-phy
- 
-+  power-domains:
-+    maxItems: 1
-+
-   vbus-supply:
-     description: reference to the VBUS regulator. Depending on the current mode
-       this is enabled (in "host" mode") or disabled (in "peripheral" mode). The
--- 
-2.11.0
+> The only other place where read URBs get submitted is under
+> usblp_read(), which does acquire the mutex
+
+Right.
+
+>  and checks for disconnection
+> while holding it.
+
+Where? It should, but I do not see where it does so.
+
+	Regards
+		Oliver
+
+--=-DJknTLj6xfyw8eo1K2Bh
+Content-Disposition: attachment;
+	filename="0001-usblp-fix-race-between-disconnect-and-read.patch"
+Content-Transfer-Encoding: base64
+Content-Type: text/x-patch; name="0001-usblp-fix-race-between-disconnect-and-read.patch";
+	charset="UTF-8"
+
+RnJvbSA4OWRiNTIzMmI0ZGY1Njk3MmQyODRjMTJmZDFiYjhlNDRmYjgxZTdkIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
+OiBXZWQsIDIyIEFwciAyMDIwIDEzOjE0OjI1ICswMjAwClN1YmplY3Q6IFtQQVRDSF0gdXNibHA6
+IGZpeCByYWNlIGJldHdlZW4gZGlzY29ubmVjdCgpIGFuZCByZWFkKCkKCnJlYWQoKSBuZWVkcyB0
+byBjaGVjayB3aGV0aGVyIHRoZSBkZXZpY2UgaGFzIGJlZW4KZGlzY29ubmVjdGVkIGJlZm9yZSBp
+dCB0cmllcyB0byB0YWxrIHRvIHRoZSBkZXZpY2UuCgpTaWduZWQtb2ZmLWJ5OiBPbGl2ZXIgTmV1
+a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpSZXBvcnRlZC1ieTogc3l6Ym90K2JlNWI1Zjg2YTE2MmE2
+YzI4MWU2QHN5emthbGxlci5hcHBzcG90bWFpbC5jb20KLS0tCiBkcml2ZXJzL3VzYi9jbGFzcy91
+c2JscC5jIHwgNSArKysrKwogMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKQoKZGlmZiAt
+LWdpdCBhL2RyaXZlcnMvdXNiL2NsYXNzL3VzYmxwLmMgYi9kcml2ZXJzL3VzYi9jbGFzcy91c2Js
+cC5jCmluZGV4IDBkOGUzZjM4MDRhMy4uZmJjODI5OGM1Zjg0IDEwMDY0NAotLS0gYS9kcml2ZXJz
+L3VzYi9jbGFzcy91c2JscC5jCisrKyBiL2RyaXZlcnMvdXNiL2NsYXNzL3VzYmxwLmMKQEAgLTgy
+Niw2ICs4MjYsMTEgQEAgc3RhdGljIHNzaXplX3QgdXNibHBfcmVhZChzdHJ1Y3QgZmlsZSAqZmls
+ZSwgY2hhciBfX3VzZXIgKmJ1ZmZlciwgc2l6ZV90IGxlbiwgbG8KIAlpZiAocnYgPCAwKQogCQly
+ZXR1cm4gcnY7CiAKKwlpZiAoIXVzYmxwLT5wcmVzZW50KSB7CisJCWNvdW50ID0gLUVOT0RFVjsK
+KwkJZ290byBkb25lOworCX0KKwogCWlmICgoYXZhaWwgPSB1c2JscC0+cnN0YXR1cykgPCAwKSB7
+CiAJCXByaW50ayhLRVJOX0VSUiAidXNibHAlZDogZXJyb3IgJWQgcmVhZGluZyBmcm9tIHByaW50
+ZXJcbiIsCiAJCSAgICB1c2JscC0+bWlub3IsIChpbnQpYXZhaWwpOwotLSAKMi4xNi40Cgo=
+
+
+--=-DJknTLj6xfyw8eo1K2Bh--
 
