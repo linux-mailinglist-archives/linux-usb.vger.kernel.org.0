@@ -2,88 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 178141B8322
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Apr 2020 03:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100461B8538
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Apr 2020 11:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726059AbgDYBxg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Apr 2020 21:53:36 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:34015 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726032AbgDYBxf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Apr 2020 21:53:35 -0400
-Received: (qmail 19441 invoked by uid 500); 24 Apr 2020 21:53:34 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 24 Apr 2020 21:53:34 -0400
-Date:   Fri, 24 Apr 2020 21:53:34 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Andrey Konovalov <andreyknvl@google.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>
-Subject: Re: Testing endpoint halt support for raw-gadget
-In-Reply-To: <CAAeHK+z1O4KgCnxrpD9yvYFUGybNmKPHVEcHetuQHz2J9V4n4w@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.2004242118210.17660-100000@netrider.rowland.org>
+        id S1726070AbgDYJUz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Apr 2020 05:20:55 -0400
+Received: from eu-smtp-delivery-167.mimecast.com ([146.101.78.167]:49052 "EHLO
+        eu-smtp-delivery-167.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726059AbgDYJUT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Apr 2020 05:20:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=displaylink.com;
+        s=mimecast20151025; t=1587806415;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NWmHQ7TqnUwTOSqjURO2avUgpvbQDuZhnWbVVnlFCls=;
+        b=KkK71qCKJs/eo71TbM1qOvSHNDyLWatcry2hBAatjSf8wLC+AATDuUP3e5nv2b+ahUi47Z
+        WyzLAaikHrikZVmpzsckelAKBAPF08lNE2D6P7KNqaHxM2I1cTm2qNW5L7+nqmhF4LW8sT
+        v3V37IzC51hGZo1btx8b9kcM7yOs0LE=
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com
+ (mail-he1eur01lp2054.outbound.protection.outlook.com [104.47.0.54]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-233-hIbZqVSwO5Sd4dvbv3S0tA-2; Sat, 25 Apr 2020 10:20:13 +0100
+X-MC-Unique: hIbZqVSwO5Sd4dvbv3S0tA-2
+Received: from VI1PR1001MB1056.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:800:64::13) by VI1PR1001MB1056.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:800:64::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.22; Sat, 25 Apr
+ 2020 09:20:09 +0000
+Received: from VI1PR1001MB1056.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::8cba:c335:a57e:9dfd]) by VI1PR1001MB1056.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::8cba:c335:a57e:9dfd%5]) with mapi id 15.20.2937.020; Sat, 25 Apr 2020
+ 09:20:09 +0000
+From:   vladimir.stankovic@displaylink.com
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        mausb-host-devel@displaylink.com
+Subject: [PATCH v5 0/8] Add MA USB Host driver
+Date:   Sat, 25 Apr 2020 11:19:46 +0200
+Message-Id: <20200425091954.1610-1-vladimir.stankovic@displaylink.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200327152614.26833-1-vladimir.stankovic@displaylink.com>
+References: <20200327152614.26833-1-vladimir.stankovic@displaylink.com>
+X-ClientProxiedBy: LO2P265CA0131.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:9f::23) To VI1PR1001MB1056.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:800:64::13)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from raven-hp.endava.net (94.189.199.177) by LO2P265CA0131.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:9f::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.13 via Frontend Transport; Sat, 25 Apr 2020 09:20:08 +0000
+X-Mailer: git-send-email 2.17.1
+X-Originating-IP: [94.189.199.177]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b297b9f8-7b5c-42c8-0949-08d7e8f9d9a8
+X-MS-TrafficTypeDiagnostic: VI1PR1001MB1056:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <VI1PR1001MB105616F8A5F26AEF8278B2AE91D10@VI1PR1001MB1056.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1051;
+X-Forefront-PRVS: 0384275935
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR1001MB1056.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(346002)(366004)(136003)(39840400004)(396003)(376002)(9686003)(6512007)(8936002)(66946007)(316002)(52116002)(66476007)(6666004)(5660300002)(8676002)(66556008)(81156014)(1076003)(86362001)(6486002)(478600001)(6506007)(956004)(6916009)(2906002)(4326008)(26005)(36756003)(2616005)(186003)(16526019)(107886003);DIR:OUT;SFP:1101;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: P1ZT/uEvbhF/fvEEkrSw5aSOe6hUSXtGFlgcd3JNRX2IausZglghSloGEGhaznJf0QvSojFQvco0/Ly3RQH0fdVaChhhDmZRKc3Xa9EJmWQv7OGHQpEtFDbmPG9B1hZD8iXlU9ECvXaRzs+HxVTQvcwAqCKwDbXQtRKNE+cA7YzBu1pXevxX8NhsBHp4GtaYFZc1Ux1LFk5C7iUGG44Fweqnc3Ajq8fU4cFvouzpY9HAnxaBXiXQsr+MbpIwq2dH1dIU+zTIszkejCIsVk3dY2Fa1dYEUzRntVQTmddbP1PloKAqJQiEMuyFhqSIb+4Mq8yKH7C6Bsj0NevGeZBizjhB9ZjddHiYt+240uD2M0rhSriE51++92qtS316TPUqDeFETLmnyYLhL2bkRt4TfdOnoOWUT1Oo1KxguEwgHuaOGCBDb8U6eJDxsvcr4avS
+X-MS-Exchange-AntiSpam-MessageData: UxcVXsoIZtqudmeZlVXMIHXsPPbtAdDFG22vmTOUkxOmnmaJbM4pl+fL+qmNJEm7NpBjQUGXTlAUUqmnSshCOGJ/2EYqyn3/DpNNf8v11Pdk7cdrVcPNM4wpwFjXVJVyOrT4GpxrHYk6iTqsy5c6RdlTWTGOwRDFOgGeRZmdgZKA2EchJTR13gi5ZDqcLBMiqgvr2v3RQey9Zm77Zc3a/8i9DG3FgdFGQbr6Bw0noQUksCga2IbQAFpAwbgEkSHgaJTGoZV5KWNj/XF3ufK15Ch6zd+M4f/EYcR8YqjHT9NZ9vHF7e9dI4dpxZretNkusnCHCvJkCM84eiKx8GTtiWeMU82Tagu1YRb5sryoMyaG4Ooi8OWoEAbZaOnLtqNEMbkY0j/PwME//ofNx8xgQC44UR3CoPK5xdclrZxKP9pXfu0zQLXtaWk6cr1o1MDS5vGHLsX4F6u9O79W5F8K4lhiqg+0ny6UThm+6639FWho3R8GtQRzwVxyjH8PRklkNObStn0lyVRhrHoCDawcN9Ra8TLGEcBJ4TcrZogtW6sTMUU2fORkhijZmhc3qQqI1ijpJWUTkBIv645yABxahcHZaYw9I0hoa8TQQ7wo1pFTrg00LVRMHzif45XV4+I0Zr/4cfuowjG51DOKfyFjoK3NxzKSdL2cG/E0gRukdZmaAscvPRtlcmVVdUgtaFg/ZW3QmYmYNMTaGzIf6lRyyCOSYCOcY2bZoJ0juPlbtehBuqm1OuCRijKtB1Z+YRwL9XD4a3JNvT7VD4XloCnehco5XQuUQ2gLMW68nKOGcBg=
+X-OriginatorOrg: displaylink.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b297b9f8-7b5c-42c8-0949-08d7e8f9d9a8
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2020 09:20:09.4622
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: a4bda75a-b444-4312-9c90-44a7c4b2c91a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qaBsVqjlxGvsENT4N1xqau7c4XP8FkV8fEpdtY299zERqIEGqdD+8uwuvV4piVT2V+Z4uXhyBpQ8fYV9QSlRw/6dToaPtRfKhPf0pqITyehVtixhLRgz9rIqhY+ZkqQx
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR1001MB1056
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: displaylink.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 24 Apr 2020, Andrey Konovalov wrote:
+Media Agnostic (MA) USB Host driver provides USB connectivity over an
+available network, allowing host device to access remote USB devices
+attached to one or more MA USB devices (accessible via network).
 
-> On Fri, Apr 24, 2020 at 9:36 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+This driver has been developed to enable the host to communicate
+with DisplayLink products supporting MA USB protocol (MA USB device,
+in terms of MA USB Specification).
 
-> > Hi Alan,
-> >
-> > I've started working on a test suite for raw-gadget based on the
-> > usbtest module as you suggested and have a few questions:
-> >
-> > 1. (Re test #10:) Currently there's no way to stall USB (control)
-> > requests with raw-gadget (which is what happens when you return -EPIPE
-> > from gadget's setup() callback AFAIU). Is stalling an important part
-> > of the protocol? Should we somehow support it? AFAIU gadgetfs also has
-> > no ability to stall requests that are passed to userspace.
+MA USB protocol used by MA USB Host driver has been implemented in
+accordance with MA USB Specification Release 1.0b.
 
-Yes, stalling is important, and you do need to support it.  gadgetfs
-does have a way to stall requests on ep0 from userspace: just perform
-I/O in the "wrong" direction.  If the host sends a control-IN request
-and the user does a read of the ep0 file, or if the host sends a
-control-OUT request and the user does a write, gadgetfs will call
-usb_ep_set_halt.  (However I do not remember how the setup_can_stall
-flag is meant to work.)
+This driver depends on the functions provided by DisplayLink's
+user-space driver.
 
-> > 2. Re test #4: the test fails with length that is not divisible by
-> > endpoint's max packet value when using dummy_hcd (assuming that gadget
-> > keeps queueing URBs with max packet length), as dummy_hcd's transfer()
-> > function sets status to -EOVERFLOW when this happens. Is this
-> > expected?
+v2:
+- Fixed licensing info in headers
+- Reorganized code to lower file count
+- Patch has been split into 8 smaller patches
 
-Yes, it is.  If you want to avoid overflow errors, you have to set the
-"vary" parameter to a multiple of the bulk-IN endpoint's maxpacket
-value and the "length" parameter to a multiple of that.
+v3:
+- Fixed nested spinlock usage
+- Implemented IPv6 support
 
-> > 3. Re test #7: the test fails when e.g. vary parameter is set to some
-> > odd value when using dummy_hcd. AFAIU this happens since dummy_hcd
-> > doesn't have no_sg_constraint flag set and therefore the sanity check
-> > in usb_submit_urb() fails. Is this expected?
+v4:
+- No code changes
+- Re-sent patch with different mail client config
 
-No, I don't think so.  Have you tried setting no_sg_constraint?  
-Probably we just forgot to do it.
+v5:
+- Updated kernel configuration with MA info
+- Addressed build warnings for c6x architecture
+- Fixed coccinelle warnings
 
-> 4. Re test #13: it seems that both dummy_hcd and the UDC on Raspberry
-> Pi Zero handle host driven endpoint halts themselves without any need
-> to support them on the gadget side. Thus this test can't really be
-> used to test the halt implementation I have for raw-gadget. Are there
-> other ways to test it?
+Vladimir Stankovic (8):
+  usb: Add MA-USB Host kernel module
+  usb: mausb_host: Add link layer implementation
+  usb: mausb_host: HCD initialization
+  usb: mausb_host: Implement initial hub handlers
+  usb: mausb_host: Introduce PAL processing
+  usb: mausb_host: Add logic for PAL-to-PAL communication
+  usb: mausb_host: MA-USB PAL events processing
+  usb: mausb_host: Process MA-USB data packets
 
-Have you tried running the USBCV tests, available from usb.org?  They
-need a Windows host to run on but are otherwise pretty straightforward.
-If a mass-storage gadget (like g-mass-storage) can pass the USBCV
-Mass-Storage test, for example, that's a pretty stringent verification.  
+ MAINTAINERS                                  |    7 +
+ drivers/usb/Kconfig                          |    2 +
+ drivers/usb/Makefile                         |    2 +
+ drivers/usb/mausb_host/Kconfig               |   15 +
+ drivers/usb/mausb_host/Makefile              |   17 +
+ drivers/usb/mausb_host/hcd.c                 | 1874 ++++++++++++++++
+ drivers/usb/mausb_host/hcd.h                 |  162 ++
+ drivers/usb/mausb_host/hpal.c                | 2082 ++++++++++++++++++
+ drivers/usb/mausb_host/hpal.h                |  339 +++
+ drivers/usb/mausb_host/hpal_data.c           |  714 ++++++
+ drivers/usb/mausb_host/hpal_data.h           |   34 +
+ drivers/usb/mausb_host/hpal_events.c         |  611 +++++
+ drivers/usb/mausb_host/hpal_events.h         |   85 +
+ drivers/usb/mausb_host/ip_link.c             |  374 ++++
+ drivers/usb/mausb_host/ip_link.h             |   87 +
+ drivers/usb/mausb_host/ma_usb.h              |  869 ++++++++
+ drivers/usb/mausb_host/mausb_address.h       |   26 +
+ drivers/usb/mausb_host/mausb_core.c          |  212 ++
+ drivers/usb/mausb_host/mausb_driver_status.h |   17 +
+ drivers/usb/mausb_host/mausb_event.h         |  224 ++
+ drivers/usb/mausb_host/utils.c               |  358 +++
+ drivers/usb/mausb_host/utils.h               |   45 +
+ 22 files changed, 8156 insertions(+)
+ create mode 100644 drivers/usb/mausb_host/Kconfig
+ create mode 100644 drivers/usb/mausb_host/Makefile
+ create mode 100644 drivers/usb/mausb_host/hcd.c
+ create mode 100644 drivers/usb/mausb_host/hcd.h
+ create mode 100644 drivers/usb/mausb_host/hpal.c
+ create mode 100644 drivers/usb/mausb_host/hpal.h
+ create mode 100644 drivers/usb/mausb_host/hpal_data.c
+ create mode 100644 drivers/usb/mausb_host/hpal_data.h
+ create mode 100644 drivers/usb/mausb_host/hpal_events.c
+ create mode 100644 drivers/usb/mausb_host/hpal_events.h
+ create mode 100644 drivers/usb/mausb_host/ip_link.c
+ create mode 100644 drivers/usb/mausb_host/ip_link.h
+ create mode 100644 drivers/usb/mausb_host/ma_usb.h
+ create mode 100644 drivers/usb/mausb_host/mausb_address.h
+ create mode 100644 drivers/usb/mausb_host/mausb_core.c
+ create mode 100644 drivers/usb/mausb_host/mausb_driver_status.h
+ create mode 100644 drivers/usb/mausb_host/mausb_event.h
+ create mode 100644 drivers/usb/mausb_host/utils.c
+ create mode 100644 drivers/usb/mausb_host/utils.h
 
-Try them on any userspace gadget drivers you have lying around.
 
-Alan Stern
+base-commit: ab51cac00ef2859f20a73d33a53f3a8987b65e11
+--=20
+2.17.1
 
