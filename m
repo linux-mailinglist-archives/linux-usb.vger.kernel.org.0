@@ -2,63 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C0D1B89A9
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Apr 2020 23:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA2EA1B8A4E
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2020 02:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726271AbgDYVvF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sat, 25 Apr 2020 17:51:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52434 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726015AbgDYVvF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 25 Apr 2020 17:51:05 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 207219] [BISECTED] Sony Vaio laptop built-in ricoh webcam no
- longer found on Fedora 31 with 5.4.11 kernel
-Date:   Sat, 25 Apr 2020 21:51:04 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: williambader@hotmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-207219-208809-Jz78PdW46Z@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-207219-208809@https.bugzilla.kernel.org/>
-References: <bug-207219-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726101AbgDZAcL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Apr 2020 20:32:11 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:40783 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726070AbgDZAcL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Apr 2020 20:32:11 -0400
+Received: (qmail 14241 invoked by uid 500); 25 Apr 2020 20:32:10 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 25 Apr 2020 20:32:10 -0400
+Date:   Sat, 25 Apr 2020 20:32:09 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     vladimir.stankovic@displaylink.com
+cc:     gregkh@linuxfoundation.org, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <mausb-host-devel@displaylink.com>
+Subject: Re: [PATCH v5 5/8] usb: mausb_host: Introduce PAL processing
+In-Reply-To: <20200425091954.1610-6-vladimir.stankovic@displaylink.com>
+Message-ID: <Pine.LNX.4.44L0.2004252027360.13475-100000@netrider.rowland.org>
 MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=207219
+On Sat, 25 Apr 2020 vladimir.stankovic@displaylink.com wrote:
 
---- Comment #9 from William Bader (williambader@hotmail.com) ---
-Thanks for working on it so quickly. I got an email a few days ago that a patch
-"USB: hub: Revert commit bd0e6c9614b9 ("usb: hub: try old enumeration" was
-added to the usb-linus branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-I can see it as
-https://kernel.googlesource.com/pub/scm/linux/kernel/git/gregkh/usb/+/3155f4f40811c5d7e3c686215051acf504e05565
-Considering that reverting the commit will make USB enumeration slower and that
-apparently no one else has reported a problem, I would be fine with adding
-something like usbcore.old_scheme_first=1 to my kernel command line (although
-that particular option didn't help on kernel 5.5.15-200.fc31.x86_64).
+> Protocol adaptation layer (PAL) implementation has been added to
+> introduce MA-USB structures and logic.
+> 
+> Signed-off-by: Vladimir Stankovic <vladimir.stankovic@displaylink.com>
 
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+...
+
+> +	/*
+> +	 * Masking URB_SHORT_NOT_OK flag as SCSI driver is adding it where it
+> +	 * should not, so it is breaking the USB drive on the linux
+> +	 */
+> +	urb->transfer_flags &= ~URB_SHORT_NOT_OK;
+
+Removing the SHORT_NOT_OK flag is _not_ a valid thing to do.  It will 
+cause drivers to malfunction.
+
+Can you please explain this comment?
+
+	What SCSI driver?
+
+	When is the flag being added?
+
+	How does it break USB drives?
+
+	Why haven't you already reported this problem to the 
+	appropriate maintainers?
+
+Alan Stern
+
