@@ -2,62 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB161B8E7E
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2020 11:44:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3D41B8F1C
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2020 12:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726488AbgDZJnC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 Apr 2020 05:43:02 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:2909 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726143AbgDZJnC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 26 Apr 2020 05:43:02 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 5DBDB860BFCC0A26912E;
-        Sun, 26 Apr 2020 17:43:00 +0800 (CST)
-Received: from huawei.com (10.175.124.28) by DGGEMS407-HUB.china.huawei.com
- (10.3.19.207) with Microsoft SMTP Server id 14.3.487.0; Sun, 26 Apr 2020
- 17:42:52 +0800
-From:   Jason Yan <yanaijie@huawei.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Jason Yan <yanaijie@huawei.com>
-Subject: [PATCH] usb: gadget: udc: remove comparison to bool in mv_u3d_core.c
-Date:   Sun, 26 Apr 2020 17:42:19 +0800
-Message-ID: <20200426094219.23748-1-yanaijie@huawei.com>
-X-Mailer: git-send-email 2.21.1
+        id S1726306AbgDZKtS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 Apr 2020 06:49:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36860 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726117AbgDZKtS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 26 Apr 2020 06:49:18 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 434C92071C;
+        Sun, 26 Apr 2020 10:49:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587898157;
+        bh=qYciFqm9A2mHqdOl9z5rqOecRchvTFDbHdrpz3YIxgQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ugyVltQ8Nu2syxbsAEgpUTbQzrM56SNQxUFM511q4W6laCdocVnEtqbVkRFQM1b2X
+         OxpL7b19mWufrHFOx6yNRF5fklbxVUOqmxUIy/OlhbPBO9W+IfIYz+ib1HIxuuw7Z7
+         LjyBU7+SuMITBSgojPqw0LsTbmH5TYpD10F9I92g=
+Date:   Sun, 26 Apr 2020 12:49:15 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 5.7-rc3
+Message-ID: <20200426104915.GA2121124@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.28]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix the following coccicheck warning:
+The following changes since commit 8f3d9f354286745c751374f5f1fcafee6b3f3136:
 
-drivers/usb/gadget/udc/mv_u3d_core.c:1551:5-13: WARNING: Comparison to
-bool
+  Linux 5.7-rc1 (2020-04-12 12:35:55 -0700)
 
-Signed-off-by: Jason Yan <yanaijie@huawei.com>
----
- drivers/usb/gadget/udc/mv_u3d_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+are available in the Git repository at:
 
-diff --git a/drivers/usb/gadget/udc/mv_u3d_core.c b/drivers/usb/gadget/udc/mv_u3d_core.c
-index 35e02a8d0091..5bb0568b934e 100644
---- a/drivers/usb/gadget/udc/mv_u3d_core.c
-+++ b/drivers/usb/gadget/udc/mv_u3d_core.c
-@@ -1548,7 +1548,7 @@ static void mv_u3d_handle_setup_packet(struct mv_u3d *u3d, u8 ep_num,
- 		delegate = true;
- 
- 	/* delegate USB standard requests to the gadget driver */
--	if (delegate == true) {
-+	if (delegate) {
- 		/* USB requests handled by gadget */
- 		if (setup->wLength) {
- 			/* DATA phase from gadget, STATUS phase from u3d */
--- 
-2.21.1
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.7-rc3
 
+for you to fetch changes up to 2df7405f79ce1674d73c2786fe1a8727c905d65b:
+
+  USB: sisusbvga: Change port variable from signed to unsigned (2020-04-23 15:26:17 +0200)
+
+----------------------------------------------------------------
+USB fixes for 5.7-rc3
+
+Here are a number of USB driver fixes for 5.7-rc3.
+
+Nothing huge, just the usual collection of:
+	- xhci fixes
+	- gadget driver fixes
+	- syzkaller fuzzing fixes
+	- new device ids and DT bindings
+	- new quirks added for broken devices
+
+A few of the gadget driver fixes show up twice here as they were applied
+to my branch, and also by Felipe to his branch which I then pulled in as
+we got out of sync a bit.
+
+All of these have been in linux-next with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Alan Stern (4):
+      USB: core: Fix free-while-in-use bug in the USB S-Glibrary
+      USB: hub: Fix handling of connect changes during sleep
+      USB: hub: Revert commit bd0e6c9614b9 ("usb: hub: try old enumeration scheme first for high speed devices")
+      usb-storage: Add unusual_devs entry for JMicron JMS566
+
+Andrey Konovalov (2):
+      usb: raw-gadget: fix raw_event_queue_fetch locking
+      usb: raw-gadget: fix raw_event_queue_fetch locking
+
+Badhri Jagan Sridharan (1):
+      usb: typec: tcpm: Ignore CC and vbus changes in PORT_RESET change
+
+Changming Liu (1):
+      USB: sisusbvga: Change port variable from signed to unsigned
+
+Cristian Birsan (1):
+      usb: gadget: udc: atmel: Fix vbus disconnect handling
+
+Dan Carpenter (2):
+      usb: raw-gadget: Fix copy_to/from_user() checks
+      usb: raw-gadget: Fix copy_to/from_user() checks
+
+Greg Kroah-Hartman (1):
+      Merge tag 'fixes-for-v5.7-rc2' of git://git.kernel.org/.../balbi/usb into usb-linus
+
+Hans de Goede (1):
+      usb: typec: pi3usb30532: Set switch_ / mux_desc name field to NULL
+
+Jann Horn (1):
+      USB: early: Handle AMD's spec-compliant identifiers, too
+
+Jonathan Cox (1):
+      USB: Add USB_QUIRK_DELAY_CTRL_MSG and USB_QUIRK_DELAY_INIT for Corsair K70 RGB RAPIDFIRE
+
+Mathias Nyman (3):
+      xhci: Fix handling halted endpoint even if endpoint ring appears empty
+      xhci: prevent bus suspend if a roothub port detected a over-current condition
+      xhci: Don't clear hub TT buffer on ep0 protocol stall
+
+Mauro Carvalho Chehab (1):
+      docs: dt: qcom,dwc3.txt: fix cross-reference for a converted file
+
+Naoki Kiryu (1):
+      usb: typec: altmode: Fix typec_altmode_get_partner sometimes returning an invalid pointer
+
+Nathan Chancellor (1):
+      usb: gadget: udc: bdc: Remove unnecessary NULL checks in bdc_req_complete
+
+Oliver Neukum (4):
+      UAS: no use logging any details in case of ENODEV
+      UAS: fix deadlock in error handling and PM flushing work
+      cdc-acm: close race betrween suspend() and acm_softint
+      cdc-acm: introduce a cool down
+
+Thierry Reding (1):
+      phy: tegra: Select USB_COMMON for usb_get_maximum_speed()
+
+Thinh Nguyen (4):
+      usb: dwc3: Fix GTXFIFOSIZ.TXFDEP macro name
+      usb: dwc3: gadget: Properly set maxpacket limit
+      usb: dwc3: gadget: Do link recovery for SS and SSP
+      usb: dwc3: gadget: Fix request completion check
+
+Udipto Goswami (1):
+      usb: f_fs: Clear OS Extended descriptor counts to zero in ffs_data_reset()
+
+Yoshihiro Shimoda (3):
+      dt-bindings: usb: usb-xhci: add r8a77961 support
+      dt-bindings: usb: renesas,usbhs: add r8a77961 support
+      dt-bindings: usb: renesas,usb3-peri: add r8a77961 support
+
+ Documentation/admin-guide/kernel-parameters.txt    |  3 +-
+ .../devicetree/bindings/usb/qcom,dwc3.txt          |  4 +-
+ .../devicetree/bindings/usb/renesas,usb3-peri.yaml |  1 +
+ .../devicetree/bindings/usb/renesas,usbhs.yaml     |  1 +
+ Documentation/devicetree/bindings/usb/usb-xhci.txt |  3 +-
+ drivers/phy/tegra/Kconfig                          |  3 +-
+ drivers/usb/class/cdc-acm.c                        | 36 ++++++++--
+ drivers/usb/class/cdc-acm.h                        |  5 +-
+ drivers/usb/core/hub.c                             | 18 ++++-
+ drivers/usb/core/message.c                         |  9 ++-
+ drivers/usb/core/quirks.c                          |  4 ++
+ drivers/usb/dwc3/core.h                            |  8 ++-
+ drivers/usb/dwc3/gadget.c                          | 76 +++++++++++++---------
+ drivers/usb/early/xhci-dbc.c                       |  8 +--
+ drivers/usb/early/xhci-dbc.h                       | 18 ++++-
+ drivers/usb/gadget/function/f_fs.c                 |  4 ++
+ drivers/usb/gadget/legacy/raw_gadget.c             | 71 +++++++++++---------
+ drivers/usb/gadget/udc/atmel_usba_udc.c            |  4 +-
+ drivers/usb/gadget/udc/bdc/bdc_ep.c                |  2 +-
+ drivers/usb/host/xhci-hub.c                        |  9 +++
+ drivers/usb/host/xhci-ring.c                       | 46 +++++++++++--
+ drivers/usb/host/xhci.c                            | 14 ++--
+ drivers/usb/host/xhci.h                            |  5 +-
+ drivers/usb/misc/sisusbvga/sisusb.c                | 20 +++---
+ drivers/usb/misc/sisusbvga/sisusb_init.h           | 14 ++--
+ drivers/usb/storage/uas.c                          | 46 ++++++++++++-
+ drivers/usb/storage/unusual_devs.h                 |  7 ++
+ drivers/usb/typec/bus.c                            |  5 +-
+ drivers/usb/typec/mux/pi3usb30532.c                |  4 +-
+ drivers/usb/typec/tcpm/tcpm.c                      | 26 ++++++++
+ 30 files changed, 351 insertions(+), 123 deletions(-)
