@@ -2,141 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF0C1B8FD6
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2020 14:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 205D01B9054
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2020 15:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726152AbgDZMdP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 Apr 2020 08:33:15 -0400
-Received: from eu-smtp-delivery-167.mimecast.com ([146.101.78.167]:34744 "EHLO
-        eu-smtp-delivery-167.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726143AbgDZMdO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Apr 2020 08:33:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=displaylink.com;
-        s=mimecast20151025; t=1587904390;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=73bYSNjAIG8h7FjkczmpGhuUSgoCWA9KHzAr1OKKiN4=;
-        b=Gz6LpeU3Z1WD5yCGzHBwNqVEcVP2CjxO0dKS/pzprytfOwfwDM9i95piSF8eXGEDLmPnq1
-        pgxh16wFnjC6ArbppPUBhRdm+rr+dVxK4jVw5iRp0HNm6nMrO1vkjQqtcFjdbLe89wQ6lG
-        QTbnP7ntSwGhrZknQPJWBfXlPqee99s=
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com
- (mail-he1eur04lp2051.outbound.protection.outlook.com [104.47.13.51]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-117-hhlPHE5pOWK1GIOdiHQI6A-1; Sun, 26 Apr 2020 13:33:09 +0100
-X-MC-Unique: hhlPHE5pOWK1GIOdiHQI6A-1
-Received: from VI1PR1001MB1056.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:800:64::13) by VI1PR1001MB1232.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:800:dc::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.22; Sun, 26 Apr
- 2020 12:33:06 +0000
-Received: from VI1PR1001MB1056.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::8cba:c335:a57e:9dfd]) by VI1PR1001MB1056.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::8cba:c335:a57e:9dfd%5]) with mapi id 15.20.2937.023; Sun, 26 Apr 2020
- 12:33:05 +0000
-From:   Vladimir Stankovic <vladimir.stankovic@displaylink.com>
-Subject: Re: [PATCH v5 5/8] usb: mausb_host: Introduce PAL processing
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, mausb-host-devel@displaylink.com
-References: <Pine.LNX.4.44L0.2004252027360.13475-100000@netrider.rowland.org>
-Message-ID: <48e45671-1f07-c994-8083-04199822c818@displaylink.com>
-Date:   Sun, 26 Apr 2020 14:32:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-In-Reply-To: <Pine.LNX.4.44L0.2004252027360.13475-100000@netrider.rowland.org>
-Content-Language: en-US
-X-ClientProxiedBy: LNXP265CA0028.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:5c::16) To VI1PR1001MB1056.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:800:64::13)
+        id S1726154AbgDZNHu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 Apr 2020 09:07:50 -0400
+Received: from mail-eopbgr70079.outbound.protection.outlook.com ([40.107.7.79]:38793
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725876AbgDZNHt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 26 Apr 2020 09:07:49 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ird3wEMYGmB234QFH83wwQ1uJkRW0TXuo1SCx92mcEg2wv+gDtEGzjq0iU0FTO5xiWoLG/Vw2NtFJ762+ibsj4G+TcOs83SMiGwJY9R5CckUqXWz5znb4c8MA5UAkukR5Oi/vJSYip4OwxPpGnzxr6OhSXobF0BeUEID0gSbdc/qIgMWhUdJifTrHbQZHJZXYUdFF6HLekm1dLC+qtwMLwziWtxINT0aixEARPAlR9oN4Pz1WwQSGhO2R4fCSc7bpRdqWdaw01RKeuoPFXPowbvJTVix0xYyS7TqWg/IblnB/L1EbQjaLOIP4GgZ12FpEZvcdJb7I3ZOixWE98w3+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7neTIEE9UXLna1XNYZoS5CRYs41wuxYap+H1JLHotKM=;
+ b=B3aTYCfQa+jTE6EcO+EkMSmmZe56J6uPaLr53fSMz4+gcIIJXRkTAnFEQmDUefg87Dga79PC1xqc7xBKxRXiwBqdA7PwhTFfXOIyJ6XrY7/CWh0RQGv8Pf1h9d2mn7vUyDyWlhunIMMyliFwMUR4hkujLXipqCZpQRHvC6HipZpSMG3SmbWr5GnFO/klFSW9Dl0JnVknvr2L71SR2NzTQ0yuerUiRljULhtZV1Uge+CopyVJI1mZb//e022b03F81AMhnqeVXwUnV7nDfNg+lEjKDcChTxnp6hd1v4rIZ2MBvklPmM9zmXtRTguP8s5DU18mlLaFivluuVOLb/aK4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7neTIEE9UXLna1XNYZoS5CRYs41wuxYap+H1JLHotKM=;
+ b=MV/Ceeua48n1RqIYnaEpHME5qsoP6BWncmmS9FpK5VMB3gG3I4fEu5k77D/51Im69/5LpxDc0Nfl5vWfTeLUU08CblY2fsZPHTdo3TIV/4f+jDP3DXA2TujOeiidk61Thw6cJe2J+iJKJOQZnq+3lIay2OV/GQpVex+OnNZFmTM=
+Authentication-Results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM7PR04MB7029.eurprd04.prod.outlook.com (2603:10a6:20b:118::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.13; Sun, 26 Apr
+ 2020 13:07:45 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::7c34:7ade:17d0:b792]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::7c34:7ade:17d0:b792%7]) with mapi id 15.20.2937.023; Sun, 26 Apr 2020
+ 13:07:45 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, pawell@cadence.com,
+        rogerq@ti.com, gregkh@linuxfoundation.org, jun.li@nxp.com,
+        Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH 1/1] usb: cdns3: ep0: delete the redundant status stage
+Date:   Sun, 26 Apr 2020 21:07:51 +0800
+Message-Id: <20200426130751.32556-1-peter.chen@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0187.apcprd06.prod.outlook.com (2603:1096:4:1::19)
+ To AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.0.17] (94.189.199.177) by LNXP265CA0028.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:5c::16) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.13 via Frontend Transport; Sun, 26 Apr 2020 12:33:04 +0000
-X-Originating-IP: [94.189.199.177]
+Received: from b29397-desktop.ap.freescale.net (119.31.174.66) by SG2PR06CA0187.apcprd06.prod.outlook.com (2603:1096:4:1::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.13 via Frontend Transport; Sun, 26 Apr 2020 13:07:42 +0000
+X-Mailer: git-send-email 2.17.1
+X-Originating-IP: [119.31.174.66]
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c23285bb-3822-47f4-7414-08d7e9ddf7ab
-X-MS-TrafficTypeDiagnostic: VI1PR1001MB1232:
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 077875b8-6d3c-4b53-8368-08d7e9e2cf50
+X-MS-TrafficTypeDiagnostic: AM7PR04MB7029:|AM7PR04MB7029:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <VI1PR1001MB12329126574F656C8058865191AE0@VI1PR1001MB1232.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-Microsoft-Antispam-PRVS: <AM7PR04MB7029FF2A2E6437461EC87DB28BAE0@AM7PR04MB7029.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
 X-Forefront-PRVS: 03853D523D
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR1001MB1056.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(396003)(376002)(366004)(346002)(39830400003)(956004)(2616005)(26005)(44832011)(6666004)(2906002)(36756003)(478600001)(81156014)(186003)(8676002)(8936002)(86362001)(31696002)(5660300002)(66946007)(16576012)(16526019)(4326008)(6916009)(52116002)(6486002)(316002)(107886003)(66556008)(31686004)(66476007);DIR:OUT;SFP:1101;
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(396003)(136003)(376002)(346002)(39860400002)(6486002)(86362001)(316002)(26005)(6512007)(8936002)(81156014)(1076003)(5660300002)(36756003)(6666004)(16526019)(2616005)(956004)(44832011)(2906002)(8676002)(186003)(66946007)(66476007)(66556008)(6916009)(52116002)(6506007)(478600001)(4326008);DIR:OUT;SFP:1101;
+Received-SPF: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: X299i9Vvy352Ry7mSy0KNymxH1B4HQtNPCGZWAFRdr9ceHhLCIJvvzMkYYpkBa/QGS4AlnXAH3yQKt9WcHwOOO3SZNzcbyjEnK81cqbHi1iUqdcgEThe5UQl0Hum2FBV75lI4+1ChKmGipoQjFHpSZuuMgC6kBGlDw0YOkwg2lkWfrJaBu0TqF/k3MmqvMe2LrI44/iKb8sPdeACNzm3xcCp3hBy9dc+ZT4vQLTGWihEF1ZFijLTRWcX6I+XYCWKNNCZOo5+cNbH/Hv8V4YNk+sruE2qUHnwk6gyFN9z1+bOrUd6NDJrbwABg+iIYBnOxT5h2JnAFX4EpjPSELNly7PYINyRK9L731O41mahqP/wR2U7s+AMeaZfmmSiHAHjd7VQIhozulj5u9emNCEQvn/dbNcMujAjBwqLrNSk1XSSLT3pYl4i1sOM8V2XzKmj
-X-MS-Exchange-AntiSpam-MessageData: 0pDktgiIIGBRzTsZmjMXU//9aBc+2R9jSkQrVYvFc/esQSRrV1vUdClUb+JlI6I8VNJf4A0YI1QY4tly4ltfP+jw/M+mRU9p/OwlI99r3+aOmWih1bD4suGkxdzzEHVRKGxI0PdqUVHQitD2SMZbPeYLbBgc7wTi6MwQZ7gE96u1O6v4ZuQKdzBlV3vPO2bspN7xIQVLhpxtwqvVkPEoUkCk1EtvLABCX8cuHrCYpaXxNcZr71OLxvA04hZi9B4nUbH56xQQfgyJo5IU028Qu8A+rpaPPiSeP8U6w7q8WL4XxVmVrDGVMt+Mifmy8WZ1aGhFuqV1mJtZNlVLv0XMA2qGsaGyj8zBBPDiH2L8fgMZI0cHJUBdhVRR/feFlg4r/uKAGLrvQ2BBAhtHTzoFDQ8idpftXPdXCPasUZ1Zr1U59zqoLPq4BUYnMvJ8yaKtpbNTzQzxGXxPE9DFZX62KdZuTSjDvED/LK6me8wUj7es/0qpT0+mtGievkPNyrUOKv13HfY2NXy+qjroZ+jBxTR2tPHDeSX+gdsvD50IW2FVXiLiLEQbIKKZhze1CMrtXKhZJLeXANM85ARJuobHWrTuiV3KsZ37LFimI7TUXMn0YYfdtViVejvbVnnqsbxdz8dzKcnXPvYXU4KGr1GCGU6cp9NDNsiS8JZll5y8Twjfc1QPUxzoyLnelLD/5+PK93bPTk/XVSwDmYxWhStr+Pa5kdzDljUY8jnyFvWUMj/pI20cdL7E5ALQ11MBp8as+/eaGQlqi2YSqU+nqa68RU83Y/e2PJgPxq5ZFvEMU+8=
-X-OriginatorOrg: displaylink.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c23285bb-3822-47f4-7414-08d7e9ddf7ab
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2020 12:33:05.5724
+X-Microsoft-Antispam-Message-Info: mtyGZ+XHtPF4dNGbQb2fPJi9wT+OAAVZBDp8YIGiKmhQsJq91fx6dkhcW/yvNdCyxno2jijDDM+H2d18C2xIVl8TLPVJzgaRAmVpluaNzOZuHQjl1I0+uWuBn7qYq7EtCx/HGrUxlYkUF3IA+yHRTEOX6wpY2YyMUrKSlYwZlPCksHgDJZRjCcPy8JKsFpv8F4Prbq1eIVNdUlfZyt/mqlc7WWiocUTRJTbDTmRek4gvL9XREdgW9+pKLAWNsRVo6Q9lT0G+X8Jl3UrZXkWyDbvsQIyYYfiviwutXxwxqlbE98d7IRiwojKJk10CbBUV6CxYpIa3X/YaWlfzaYFoqRiwar+Fv9uaOdF59YQYxvA3wUJfNsznKhpUbmSbODHPSx6/hbIo1egwn60Cck+5RSrbh2z1qQdLYpWFxjMx9hwV4qDUvJtWfgfUQO3JQq0C
+X-MS-Exchange-AntiSpam-MessageData: jFDLiqV3G6hE5XprkuhA1EYy32r21yDRPXUGyzy9tkAJpBt1sPbX/sEj8sEnpcfzfU/D3Cb+qF7UFkrAjr1pho2VsPw6KS95MWAQrxpaFVUV9t+Ddyi+GHnoElVTBN78UPiK6Yl2iutUQ8hwNseex0caudzYGM0Biti3FncIP0LXxZAEi5UEJB8aR0vrIXnuw6DVbJwrNfsdMwWmieT1gPMW8xVWquBpTeYQgZO03SKhsNSz5TVbfyr0PnsxY6cOZssXrbsCGG42Q8RyimPYZhRVgZy+MquW0mDmyBzlsovh3VPi5bqbdK1I8OwisYwOkL3JfroMi4iTVGYzGOCXSZQwWlok4dMmBWP4P1I2L+uDph8BEvvAvAMDQk1+57O6VRGubJNdeCiuT745MyoSTwFvOAxwC1BXG6m8Eq43iVI4mFMqz9ZdDh8cWW5IKBU/hWuzUUk3tAuQ4SbJuPIjQnfkB3x/EfPXQ5IvnqZK6932HvHg8Hb3A7qRK8fv4EJ7ZKCh2jwn5sOo8S+WLKGrwftqT4UpEmXxgBpgpf23vSyxLO209pbk4wDU4JyP7jeLADfv7RiXVKFwuNEbgyXk+/Z2JU490mFqOzLXacFM8to9YaQHlvKNzfrvb4moSIfcEQH6UKwk1glu0RiV+hsvhj5SZZzSCs76K6ePiFjiyfKpYC12QDuFBhmAIqBwWtzy4/u9j4p9mflQZfg5pqUjLrAzmWEwJAuQ1cWiyt3l0OldX12gG10ZdAWlpPUnbAzp9EKQw35wVyCX4ernmByFxjR438dbzy0pBv7KdBN6s44=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 077875b8-6d3c-4b53-8368-08d7e9e2cf50
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2020 13:07:44.9670
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: a4bda75a-b444-4312-9c90-44a7c4b2c91a
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yVsr2kQrwQSu/ONy9neoyk/6Zpskg0ykX+eEfAhuGwZeBX9/lVurAr2B//SWeh5DqlAsl7EqHqePWAWf+URTDkj1SDmgiZ1pyFTkDj6mOfTAuj//+JSL+XZAeHMgbb/W
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR1001MB1232
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: displaylink.com
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-CrossTenant-UserPrincipalName: u/7UnuQgSmZA69cDeHM1ntsrkhGCFXE+Q6sjiRGyywPJepI4osBFUzuCGltOMzXneGJkEyWxgQgbLJ7h0LbN9A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7029
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 26.4.20. 02:32, Alan Stern wrote:
-> On Sat, 25 Apr 2020 vladimir.stankovic@displaylink.com wrote:
->=20
->> Protocol adaptation layer (PAL) implementation has been added to
->> introduce MA-USB structures and logic.
->>
->> Signed-off-by: Vladimir Stankovic <vladimir.stankovic@displaylink.com>
->=20
-> ...
->=20
->> +=09/*
->> +=09 * Masking URB_SHORT_NOT_OK flag as SCSI driver is adding it where i=
-t
->> +=09 * should not, so it is breaking the USB drive on the linux
->> +=09 */
->> +=09urb->transfer_flags &=3D ~URB_SHORT_NOT_OK;
->=20
-> Removing the SHORT_NOT_OK flag is _not_ a valid thing to do.  It will=20
-> cause drivers to malfunction.
->=20
-> Can you please explain this comment?
->=20
-> =09What SCSI driver?
->=20
-> =09When is the flag being added?
->=20
-> =09How does it break USB drives?
->=20
-> =09Why haven't you already reported this problem to the=20
-> =09appropriate maintainers?
->=20
-> Alan Stern
->=20
+Each setup stage will prepare status stage at cdns3_ep0_setup_phase,
+it doesn't need to add extra status stage for test mode handling,
+otherwise, the controller can't enter the test mode. Through the Lecroy
+bus analyzer log, the controller will always wait status stage
+even it is prepared by software later than the test mode is set
+by software. If we comment out the status stage at cdns3_ep0_setup_phase,
+the controller will not enter test mode even the test mode is set
+beforehand.
 
-Hi,
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
+---
+ drivers/usb/cdns3/ep0.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-Issue that removal of SHORT_NOT_OK flag addressed is linked to particular
-set of Kingston USB 3.0 flash drives (super speed) - other USB flash drives
-haven't had this flag set. Without this "fix", those Kingston flash drives
-are not being enumerated properly.
-
-This particular line was added in the early stage of development, during
-enumeration process implementation. The reason why it remained in the code
-since is because we haven't noticed any side-effects, even with various
-USB devices being attached to remote MA-USB device, including flash drives,
-cameras, wireless mice, etc.
-
-The problem has been reported, and is actively being investigated.
-
-As soon as it gets addressed properly (w/o global negation of the flag),
-a new patch will be pushed.
-
---=20
-Regards,
-Vladimir.
+diff --git a/drivers/usb/cdns3/ep0.c b/drivers/usb/cdns3/ep0.c
+index e71240b386b4..82645a2a0f52 100644
+--- a/drivers/usb/cdns3/ep0.c
++++ b/drivers/usb/cdns3/ep0.c
+@@ -332,13 +332,6 @@ static int cdns3_ep0_feature_handle_device(struct cdns3_device *priv_dev,
+ 		case TEST_K:
+ 		case TEST_SE0_NAK:
+ 		case TEST_PACKET:
+-			cdns3_ep0_complete_setup(priv_dev, 0, 1);
+-			/**
+-			 *  Little delay to give the controller some time
+-			 * for sending status stage.
+-			 * This time should be less then 3ms.
+-			 */
+-			mdelay(1);
+ 			cdns3_set_register_bit(&priv_dev->regs->usb_cmd,
+ 					       USB_CMD_STMODE |
+ 					       USB_STS_TMODE_SEL(tmode - 1));
+-- 
+2.17.1
 
