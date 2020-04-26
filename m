@@ -2,80 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC8C1B90D7
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2020 16:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4461B90DF
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2020 16:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726157AbgDZOZe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sun, 26 Apr 2020 10:25:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45004 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725876AbgDZOZe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 26 Apr 2020 10:25:34 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 207219] [BISECTED] Sony Vaio laptop built-in ricoh webcam no
- longer found on Fedora 31 with 5.4.11 kernel
-Date:   Sun, 26 Apr 2020 14:25:33 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-207219-208809-xIvkRZllIC@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-207219-208809@https.bugzilla.kernel.org/>
-References: <bug-207219-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726177AbgDZOcA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 Apr 2020 10:32:00 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:42793 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726166AbgDZOb7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Apr 2020 10:31:59 -0400
+Received: (qmail 16225 invoked by uid 500); 26 Apr 2020 10:31:58 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 26 Apr 2020 10:31:58 -0400
+Date:   Sun, 26 Apr 2020 10:31:58 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Vladimir Stankovic <vladimir.stankovic@displaylink.com>
+cc:     gregkh@linuxfoundation.org, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <mausb-host-devel@displaylink.com>
+Subject: Re: [PATCH v5 5/8] usb: mausb_host: Introduce PAL processing
+In-Reply-To: <48e45671-1f07-c994-8083-04199822c818@displaylink.com>
+Message-ID: <Pine.LNX.4.44L0.2004261025550.15458-100000@netrider.rowland.org>
 MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=207219
+On Sun, 26 Apr 2020, Vladimir Stankovic wrote:
 
-Alan Stern (stern@rowland.harvard.edu) changed:
+> On 26.4.20. 02:32, Alan Stern wrote:
+> > On Sat, 25 Apr 2020 vladimir.stankovic@displaylink.com wrote:
+> > 
+> >> Protocol adaptation layer (PAL) implementation has been added to
+> >> introduce MA-USB structures and logic.
+> >>
+> >> Signed-off-by: Vladimir Stankovic <vladimir.stankovic@displaylink.com>
+> > 
+> > ...
+> > 
+> >> +	/*
+> >> +	 * Masking URB_SHORT_NOT_OK flag as SCSI driver is adding it where it
+> >> +	 * should not, so it is breaking the USB drive on the linux
+> >> +	 */
+> >> +	urb->transfer_flags &= ~URB_SHORT_NOT_OK;
+> > 
+> > Removing the SHORT_NOT_OK flag is _not_ a valid thing to do.  It will 
+> > cause drivers to malfunction.
+> > 
+> > Can you please explain this comment?
+> > 
+> > 	What SCSI driver?
+> > 
+> > 	When is the flag being added?
+> > 
+> > 	How does it break USB drives?
+> > 
+> > 	Why haven't you already reported this problem to the 
+> > 	appropriate maintainers?
+> > 
+> > Alan Stern
+> > 
+> 
+> Hi,
+> 
+> Issue that removal of SHORT_NOT_OK flag addressed is linked to particular
+> set of Kingston USB 3.0 flash drives (super speed) - other USB flash drives
+> haven't had this flag set. Without this "fix", those Kingston flash drives
+> are not being enumerated properly.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |stern@rowland.harvard.edu
+Please explain in detail how the enumeration of these Kingston flash
+drives fails.  Or if such an explanation has already been posted,
+please provide a link to it.
 
---- Comment #10 from Alan Stern (stern@rowland.harvard.edu) ---
-It won't slow down enumeration all that much.
+> This particular line was added in the early stage of development, during
+> enumeration process implementation. The reason why it remained in the code
+> since is because we haven't noticed any side-effects, even with various
+> USB devices being attached to remote MA-USB device, including flash drives,
+> cameras, wireless mice, etc.
 
-If you had a problem then it's likely that a bunch of other people had the same
-problem too; they just didn't bother to report it.  Fixing your system will
-help all those other people as well -- certainly it should help anyone who has
-the same kind of laptop with the same kind of camera.  (Unless the problem was
-a hardware flaw in your webcam, not any others.)
+Come to think of it, the SHORT_NOT_OK flag is mainly used with HCDs
+that don't have scatter-gather support.  Since your mausb driver does
+support scatter-gather, you most likely won't encounter any problems 
+unless you go looking for them specifically.
 
-In theory we could add another usbcore module parameter for this.  But in fact,
-usbcore already has too many module parameters; adding new ones is discouraged.
- Besides, that sort of thing isn't guaranteed always to work.  Some devices
-will want the old scheme to come first, and others (like your webcam) will want
-the new scheme to come first.  What can you do if your system has both types of
-device present?
+> The problem has been reported, and is actively being investigated.
 
-If you really want to track this down farther, here's something you can try. 
-Set up your system so that the ehci-pci driver doesn't get loaded
-automatically, in either the running system or the initrd image.  Then when the
-system has started up, start up a usbmon trace from the 0u file (that is, all
-buses) and load ehci-pci manually.  That way we can see exactly what happens
-when the webcam gets initialized for the first time.
+Where was the problem reported (URL to a mailing list archive)?  Who is
+investigating it?
 
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+> As soon as it gets addressed properly (w/o global negation of the flag),
+> a new patch will be pushed.
+
+Thank you.
+
+Alan Stern
+
