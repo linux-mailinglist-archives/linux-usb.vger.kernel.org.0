@@ -2,64 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1298A1B938D
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2020 21:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5CD1B9413
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2020 22:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726170AbgDZTN5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 Apr 2020 15:13:57 -0400
-Received: from nimbus1.mmprivatehosting.com ([54.208.90.49]:42904 "EHLO
-        nimbus1.mmprivatehosting.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726004AbgDZTN5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Apr 2020 15:13:57 -0400
-X-Greylist: delayed 317 seconds by postgrey-1.27 at vger.kernel.org; Sun, 26 Apr 2020 15:13:57 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by nimbus1.mmprivatehosting.com (Postfix) with ESMTP id C7D2B6005B;
-        Sun, 26 Apr 2020 19:08:39 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at mmprivatehosting.com
-Received: from dave.mielke.cc (CPE74dada261772-CMac202ebc50a0.cpe.net.cable.rogers.com [174.115.199.202])
-        (Authenticated sender: relay@dave.mielke.cc)
-        by nimbus1.mmprivatehosting.com (Postfix) with ESMTPA;
-        Sun, 26 Apr 2020 19:08:39 +0000 (UTC)
-Received: from beta.private.mielke.cc (beta.private.mielke.cc [192.168.0.2])
-        by dave.mielke.cc (Postfix) with ESMTPS id DFD644BB;
-        Sun, 26 Apr 2020 15:08:38 -0400 (EDT)
-Received: from beta.private.mielke.cc (localhost [127.0.0.1])
-        by beta.private.mielke.cc (8.15.2/8.15.2) with ESMTP id 03QJ8ccU000525;
-        Sun, 26 Apr 2020 15:08:38 -0400
-Received: (from dave@localhost)
-        by beta.private.mielke.cc (8.15.2/8.15.2/Submit) id 03QJ8cmE000524;
-        Sun, 26 Apr 2020 15:08:38 -0400
-Date:   Sun, 26 Apr 2020 15:08:38 -0400
-From:   Dave Mielke <Dave@mielke.cc>
-To:     linux-usb@vger.kernel.org
-Cc:     Samuel Thibault <Samuel.Thibault@ens-lyon.org>,
-        Nicolas Pitre <nico@fluxnic.net>
-Subject: Writing to /sys/../power/autosuspend when not root.
-Message-ID: <20200426190838.GU756@beta.private.mielke.cc>
+        id S1726316AbgDZU4n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 Apr 2020 16:56:43 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:53301 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726199AbgDZU4n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Apr 2020 16:56:43 -0400
+Received: (qmail 2181 invoked by uid 500); 26 Apr 2020 16:56:41 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 26 Apr 2020 16:56:41 -0400
+Date:   Sun, 26 Apr 2020 16:56:41 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Vladimir Stankovic <vladimir.stankovic@displaylink.com>
+cc:     gregkh@linuxfoundation.org, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <mausb-host-devel@displaylink.com>
+Subject: Re: [External] Re: [PATCH v5 5/8] usb: mausb_host: Introduce PAL
+ processing
+In-Reply-To: <871dcf46-19f8-f152-99c0-8185832ed109@displaylink.com>
+Message-ID: <Pine.LNX.4.44L0.2004261655390.1962-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We're working on getting brltty to run as an unprivileged user with just a few
-required capabilities. We don't want one of those required capabilities to be
-CAP_DAC_OVERRIDE (bypass file permission checks).
+On Sun, 26 Apr 2020, Vladimir Stankovic wrote:
 
-Some USB-connected braille devices don't respond very well to being
-autosuspended. We get around this, when running as root, by writing to the
-SYSFS power/autosuspend file associated with the device. Our problem is that
-only the root user can write to it.
+> On 26.4.20. 16:31, Alan Stern wrote:
+> > On Sun, 26 Apr 2020, Vladimir Stankovic wrote:
+> > 
+> >> On 26.4.20. 02:32, Alan Stern wrote:
+> >>> On Sat, 25 Apr 2020 vladimir.stankovic@displaylink.com wrote:
+> >>>
+> >>>> Protocol adaptation layer (PAL) implementation has been added to
+> >>>> introduce MA-USB structures and logic.
+> >>>>
+> >>>> Signed-off-by: Vladimir Stankovic <vladimir.stankovic@displaylink.com>
+> >>>
+> >>> ...
+> >>>
+> >>>> +	/*
+> >>>> +	 * Masking URB_SHORT_NOT_OK flag as SCSI driver is adding it where it
+> >>>> +	 * should not, so it is breaking the USB drive on the linux
+> >>>> +	 */
+> >>>> +	urb->transfer_flags &= ~URB_SHORT_NOT_OK;
+> >>>
+> >>> Removing the SHORT_NOT_OK flag is _not_ a valid thing to do.  It will 
+> >>> cause drivers to malfunction.
+> >>>
+> >>> Can you please explain this comment?
+> >>>
+> >>> 	What SCSI driver?
+> >>>
+> >>> 	When is the flag being added?
+> >>>
+> >>> 	How does it break USB drives?
+> >>>
+> >>> 	Why haven't you already reported this problem to the 
+> >>> 	appropriate maintainers?
+> >>>
+> >>> Alan Stern
+> >>>
+> >>
+> >> Hi,
+> >>
+> >> Issue that removal of SHORT_NOT_OK flag addressed is linked to particular
+> >> set of Kingston USB 3.0 flash drives (super speed) - other USB flash drives
+> >> haven't had this flag set. Without this "fix", those Kingston flash drives
+> >> are not being enumerated properly.
+> > 
+> > Please explain in detail how the enumeration of these Kingston flash
+> > drives fails.  Or if such an explanation has already been posted,
+> > please provide a link to it.
+> 
+> Will reproduce the issue once again (w/o the fix) and run through the events.
+> Issue has been noticed during early development, and addressed right away.
+> > 
+> >> This particular line was added in the early stage of development, during
+> >> enumeration process implementation. The reason why it remained in the code
+> >> since is because we haven't noticed any side-effects, even with various
+> >> USB devices being attached to remote MA-USB device, including flash drives,
+> >> cameras, wireless mice, etc.
+> > 
+> > Come to think of it, the SHORT_NOT_OK flag is mainly used with HCDs
+> > that don't have scatter-gather support.  Since your mausb driver does
+> > support scatter-gather, you most likely won't encounter any problems 
+> > unless you go looking for them specifically.
+> > 
+> >> The problem has been reported, and is actively being investigated.
+> > 
+> > Where was the problem reported (URL to a mailing list archive)?  Who is
+> > investigating it?
+> 
+> Ticket has been submitted to DisplayLink's internal issue-tracking system
+> and is being investigated by mausb-host-devel team.
 
-Other than using CAP_DAC_OVERRIDE (which we don't want to do), what other
-way(s) might we be able to use to overcome this restriction? For example, is
-there some kind of safe (enough) udev rule?
+Okay.  What SCSI driver does the comment refer to?  Is it something 
+internal to DisplayLink or is it part of the regular Linux kernel?
 
--- 
-I believe the Bible to be the very Word of God: http://Mielke.cc/bible/
-Dave Mielke            | 2213 Fox Crescent | WebHome: http://Mielke.cc/
-EMail: Dave@Mielke.cc  | Ottawa, Ontario   | Twitter: @Dave_Mielke
-Phone: +1 613 726 0014 | Canada  K2A 1H7   |
+Alan Stern
+
