@@ -2,53 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8621B92C9
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2020 20:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1298A1B938D
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2020 21:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726364AbgDZSZR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 Apr 2020 14:25:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55500 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726151AbgDZSZQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 26 Apr 2020 14:25:16 -0400
-Subject: Re: [GIT PULL] USB driver fixes for 5.7-rc3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587925516;
-        bh=sli8dVbN68bnOFLVHNcyPfdvedBo83Oh3UfcDoEfYiM=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=XTySH/CqeBkS2MptkQcZ90yApsATGJQzTf0oBVVblHZ0yEJLOe3gKVGz0h3y/AT1/
-         ySsEQf+B+4TniOk8+3YSDenjCbJHVTywGuaTpogFQ87qr8b9trFLTnBT6+afH8iCMq
-         vWleH5OVXlmym4SNdeizcv7pHxStcItpPw3wUfao=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200426104915.GA2121124@kroah.com>
-References: <20200426104915.GA2121124@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200426104915.GA2121124@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.7-rc3
-X-PR-Tracked-Commit-Id: 2df7405f79ce1674d73c2786fe1a8727c905d65b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e9a61afb69f07b1c5880984d45e5cc232ec1bf6f
-Message-Id: <158792551633.16875.15747508956804022723.pr-tracker-bot@kernel.org>
-Date:   Sun, 26 Apr 2020 18:25:16 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+        id S1726170AbgDZTN5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 Apr 2020 15:13:57 -0400
+Received: from nimbus1.mmprivatehosting.com ([54.208.90.49]:42904 "EHLO
+        nimbus1.mmprivatehosting.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726004AbgDZTN5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Apr 2020 15:13:57 -0400
+X-Greylist: delayed 317 seconds by postgrey-1.27 at vger.kernel.org; Sun, 26 Apr 2020 15:13:57 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by nimbus1.mmprivatehosting.com (Postfix) with ESMTP id C7D2B6005B;
+        Sun, 26 Apr 2020 19:08:39 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at mmprivatehosting.com
+Received: from dave.mielke.cc (CPE74dada261772-CMac202ebc50a0.cpe.net.cable.rogers.com [174.115.199.202])
+        (Authenticated sender: relay@dave.mielke.cc)
+        by nimbus1.mmprivatehosting.com (Postfix) with ESMTPA;
+        Sun, 26 Apr 2020 19:08:39 +0000 (UTC)
+Received: from beta.private.mielke.cc (beta.private.mielke.cc [192.168.0.2])
+        by dave.mielke.cc (Postfix) with ESMTPS id DFD644BB;
+        Sun, 26 Apr 2020 15:08:38 -0400 (EDT)
+Received: from beta.private.mielke.cc (localhost [127.0.0.1])
+        by beta.private.mielke.cc (8.15.2/8.15.2) with ESMTP id 03QJ8ccU000525;
+        Sun, 26 Apr 2020 15:08:38 -0400
+Received: (from dave@localhost)
+        by beta.private.mielke.cc (8.15.2/8.15.2/Submit) id 03QJ8cmE000524;
+        Sun, 26 Apr 2020 15:08:38 -0400
+Date:   Sun, 26 Apr 2020 15:08:38 -0400
+From:   Dave Mielke <Dave@mielke.cc>
+To:     linux-usb@vger.kernel.org
+Cc:     Samuel Thibault <Samuel.Thibault@ens-lyon.org>,
+        Nicolas Pitre <nico@fluxnic.net>
+Subject: Writing to /sys/../power/autosuspend when not root.
+Message-ID: <20200426190838.GU756@beta.private.mielke.cc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Sun, 26 Apr 2020 12:49:15 +0200:
+We're working on getting brltty to run as an unprivileged user with just a few
+required capabilities. We don't want one of those required capabilities to be
+CAP_DAC_OVERRIDE (bypass file permission checks).
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.7-rc3
+Some USB-connected braille devices don't respond very well to being
+autosuspended. We get around this, when running as root, by writing to the
+SYSFS power/autosuspend file associated with the device. Our problem is that
+only the root user can write to it.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e9a61afb69f07b1c5880984d45e5cc232ec1bf6f
-
-Thank you!
+Other than using CAP_DAC_OVERRIDE (which we don't want to do), what other
+way(s) might we be able to use to overcome this restriction? For example, is
+there some kind of safe (enough) udev rule?
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+I believe the Bible to be the very Word of God: http://Mielke.cc/bible/
+Dave Mielke            | 2213 Fox Crescent | WebHome: http://Mielke.cc/
+EMail: Dave@Mielke.cc  | Ottawa, Ontario   | Twitter: @Dave_Mielke
+Phone: +1 613 726 0014 | Canada  K2A 1H7   |
