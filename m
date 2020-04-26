@@ -2,38 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF43A1B8A82
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2020 02:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B50171B8A8E
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2020 02:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726323AbgDZA5J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Apr 2020 20:57:09 -0400
-Received: from mga11.intel.com ([192.55.52.93]:17383 "EHLO mga11.intel.com"
+        id S1726117AbgDZA6M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Apr 2020 20:58:12 -0400
+Received: from mga03.intel.com ([134.134.136.65]:10629 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725962AbgDZA5J (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 25 Apr 2020 20:57:09 -0400
-IronPort-SDR: N5XC4vkO+L6PVHMR8ZW/SY7isY+utRBS5OCqihhSHszjSjBicYNs7jJ7XoCDC6dwQeQSzyMGa0
- B4YW9uAONyvQ==
+        id S1726108AbgDZA6M (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 25 Apr 2020 20:58:12 -0400
+IronPort-SDR: c4pGkzjDo1hD0taQQkP20FLY+XSYPzJHjsC+Eb6/2un6zJJ98Id+oGHQAKk1czIZj426EkaIoP
+ Q0sXmcXqY57A==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2020 17:57:08 -0700
-IronPort-SDR: hZVLXRpOqw1YiX57tMVhjoUn2ewjYNlANCboxrJZQjRpuE6DOO62M51XsH/AOw0mJS8jnd4n5e
- oiVYhSlIpgfg==
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Apr 2020 17:58:11 -0700
+IronPort-SDR: a+5PwNEoHcm7SiqutACLP5sxra4x/eI1K3YPVFS2hJwTGxOYHaU6LMmXBw/+IxJPtiB7yNBkqT
+ kF43aSc/Gxbg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,318,1583222400"; 
-   d="scan'208";a="366773322"
+   d="scan'208";a="458365348"
 Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Apr 2020 17:57:07 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 25 Apr 2020 17:58:09 -0700
 Received: from kbuild by lkp-server01 with local (Exim 4.89)
         (envelope-from <lkp@intel.com>)
-        id 1jSVbW-000I5y-GN; Sun, 26 Apr 2020 08:57:06 +0800
-Date:   Sun, 26 Apr 2020 08:56:52 +0800
+        id 1jSVcW-0000Ux-Ui; Sun, 26 Apr 2020 08:58:08 +0800
+Date:   Sun, 26 Apr 2020 08:57:40 +0800
 From:   kbuild test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 992a60ed0d5e312ce9a485c9e12097ac82ae4b3e
-Message-ID: <5ea4dc54.Wlc+n9JQyu/hrrFM%lkp@intel.com>
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 2df7405f79ce1674d73c2786fe1a8727c905d65b
+Message-ID: <5ea4dc84.mNhg12lXKbFsnofQ%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -43,12 +43,12 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: 992a60ed0d5e312ce9a485c9e12097ac82ae4b3e  usb: typec: ucsi: register with power_supply class
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
+branch HEAD: 2df7405f79ce1674d73c2786fe1a8727c905d65b  USB: sisusbvga: Change port variable from signed to unsigned
 
-elapsed time: 3439m
+elapsed time: 3440m
 
-configs tested: 250
+configs tested: 232
 configs skipped: 0
 
 The following configs have been built successfully.
@@ -72,20 +72,15 @@ sparc                            allyesconfig
 powerpc                             defconfig
 ia64                                defconfig
 mips                      fuloong2e_defconfig
-mips                             allyesconfig
-microblaze                      mmu_defconfig
 arc                              allyesconfig
-sparc64                             defconfig
-sh                            titan_defconfig
-m68k                           sun3_defconfig
 riscv                          rv32_defconfig
 mips                          ath79_defconfig
 openrisc                    or1ksim_defconfig
 i386                              allnoconfig
-i386                             allyesconfig
 i386                             alldefconfig
 i386                                defconfig
 i386                              debian-10.3
+i386                             allyesconfig
 ia64                             allmodconfig
 ia64                              allnoconfig
 ia64                        generic_defconfig
@@ -109,14 +104,17 @@ h8300                     edosk2674_defconfig
 m68k                       m5475evb_defconfig
 m68k                             allmodconfig
 h8300                    h8300h-sim_defconfig
+m68k                           sun3_defconfig
 m68k                          multi_defconfig
 arc                                 defconfig
 powerpc                       ppc64_defconfig
 powerpc                          rhel-kconfig
+microblaze                      mmu_defconfig
 microblaze                    nommu_defconfig
 powerpc                           allnoconfig
 mips                      malta_kvm_defconfig
 mips                            ar7_defconfig
+mips                             allyesconfig
 mips                         64r6el_defconfig
 mips                              allnoconfig
 mips                           32r2_defconfig
@@ -158,15 +156,6 @@ c6x                  randconfig-a001-20200425
 h8300                randconfig-a001-20200425
 sparc64              randconfig-a001-20200425
 microblaze           randconfig-a001-20200425
-sh                   randconfig-a001-20200424
-csky                 randconfig-a001-20200424
-s390                 randconfig-a001-20200424
-xtensa               randconfig-a001-20200424
-openrisc             randconfig-a001-20200424
-sh                   randconfig-a001-20200423
-csky                 randconfig-a001-20200423
-xtensa               randconfig-a001-20200423
-openrisc             randconfig-a001-20200423
 sh                   randconfig-a001-20200425
 csky                 randconfig-a001-20200425
 s390                 randconfig-a001-20200425
@@ -220,10 +209,6 @@ x86_64               randconfig-e003-20200426
 i386                 randconfig-e002-20200426
 i386                 randconfig-e001-20200426
 x86_64               randconfig-e001-20200426
-i386                 randconfig-a003-20200423
-i386                 randconfig-a001-20200423
-i386                 randconfig-a002-20200423
-x86_64               randconfig-a002-20200423
 i386                 randconfig-f002-20200425
 i386                 randconfig-f003-20200425
 x86_64               randconfig-f003-20200425
@@ -269,11 +254,6 @@ ia64                 randconfig-a001-20200425
 powerpc              randconfig-a001-20200425
 arm                  randconfig-a001-20200425
 arc                  randconfig-a001-20200425
-sparc                randconfig-a001-20200423
-ia64                 randconfig-a001-20200423
-arm                  randconfig-a001-20200423
-arm64                randconfig-a001-20200423
-arc                  randconfig-a001-20200423
 riscv                            allyesconfig
 riscv                    nommu_virt_defconfig
 riscv                             allnoconfig
@@ -288,9 +268,11 @@ s390                             alldefconfig
 s390                                defconfig
 sh                          rsk7269_defconfig
 sh                               allmodconfig
+sh                            titan_defconfig
 sh                  sh7785lcr_32bit_defconfig
 sh                                allnoconfig
 sparc                               defconfig
+sparc64                             defconfig
 sparc64                           allnoconfig
 sparc64                          allyesconfig
 sparc64                          allmodconfig
