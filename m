@@ -2,175 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3D41B8F1C
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2020 12:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF0C1B8FD6
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2020 14:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726306AbgDZKtS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 Apr 2020 06:49:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36860 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726117AbgDZKtS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 26 Apr 2020 06:49:18 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 434C92071C;
-        Sun, 26 Apr 2020 10:49:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587898157;
-        bh=qYciFqm9A2mHqdOl9z5rqOecRchvTFDbHdrpz3YIxgQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ugyVltQ8Nu2syxbsAEgpUTbQzrM56SNQxUFM511q4W6laCdocVnEtqbVkRFQM1b2X
-         OxpL7b19mWufrHFOx6yNRF5fklbxVUOqmxUIy/OlhbPBO9W+IfIYz+ib1HIxuuw7Z7
-         LjyBU7+SuMITBSgojPqw0LsTbmH5TYpD10F9I92g=
-Date:   Sun, 26 Apr 2020 12:49:15 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fixes for 5.7-rc3
-Message-ID: <20200426104915.GA2121124@kroah.com>
+        id S1726152AbgDZMdP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 Apr 2020 08:33:15 -0400
+Received: from eu-smtp-delivery-167.mimecast.com ([146.101.78.167]:34744 "EHLO
+        eu-smtp-delivery-167.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726143AbgDZMdO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Apr 2020 08:33:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=displaylink.com;
+        s=mimecast20151025; t=1587904390;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=73bYSNjAIG8h7FjkczmpGhuUSgoCWA9KHzAr1OKKiN4=;
+        b=Gz6LpeU3Z1WD5yCGzHBwNqVEcVP2CjxO0dKS/pzprytfOwfwDM9i95piSF8eXGEDLmPnq1
+        pgxh16wFnjC6ArbppPUBhRdm+rr+dVxK4jVw5iRp0HNm6nMrO1vkjQqtcFjdbLe89wQ6lG
+        QTbnP7ntSwGhrZknQPJWBfXlPqee99s=
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com
+ (mail-he1eur04lp2051.outbound.protection.outlook.com [104.47.13.51]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-117-hhlPHE5pOWK1GIOdiHQI6A-1; Sun, 26 Apr 2020 13:33:09 +0100
+X-MC-Unique: hhlPHE5pOWK1GIOdiHQI6A-1
+Received: from VI1PR1001MB1056.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:800:64::13) by VI1PR1001MB1232.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:800:dc::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.22; Sun, 26 Apr
+ 2020 12:33:06 +0000
+Received: from VI1PR1001MB1056.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::8cba:c335:a57e:9dfd]) by VI1PR1001MB1056.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::8cba:c335:a57e:9dfd%5]) with mapi id 15.20.2937.023; Sun, 26 Apr 2020
+ 12:33:05 +0000
+From:   Vladimir Stankovic <vladimir.stankovic@displaylink.com>
+Subject: Re: [PATCH v5 5/8] usb: mausb_host: Introduce PAL processing
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, mausb-host-devel@displaylink.com
+References: <Pine.LNX.4.44L0.2004252027360.13475-100000@netrider.rowland.org>
+Message-ID: <48e45671-1f07-c994-8083-04199822c818@displaylink.com>
+Date:   Sun, 26 Apr 2020 14:32:51 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+In-Reply-To: <Pine.LNX.4.44L0.2004252027360.13475-100000@netrider.rowland.org>
+Content-Language: en-US
+X-ClientProxiedBy: LNXP265CA0028.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:5c::16) To VI1PR1001MB1056.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:800:64::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [192.168.0.17] (94.189.199.177) by LNXP265CA0028.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:5c::16) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2937.13 via Frontend Transport; Sun, 26 Apr 2020 12:33:04 +0000
+X-Originating-IP: [94.189.199.177]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c23285bb-3822-47f4-7414-08d7e9ddf7ab
+X-MS-TrafficTypeDiagnostic: VI1PR1001MB1232:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <VI1PR1001MB12329126574F656C8058865191AE0@VI1PR1001MB1232.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-Forefront-PRVS: 03853D523D
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR1001MB1056.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(396003)(376002)(366004)(346002)(39830400003)(956004)(2616005)(26005)(44832011)(6666004)(2906002)(36756003)(478600001)(81156014)(186003)(8676002)(8936002)(86362001)(31696002)(5660300002)(66946007)(16576012)(16526019)(4326008)(6916009)(52116002)(6486002)(316002)(107886003)(66556008)(31686004)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: X299i9Vvy352Ry7mSy0KNymxH1B4HQtNPCGZWAFRdr9ceHhLCIJvvzMkYYpkBa/QGS4AlnXAH3yQKt9WcHwOOO3SZNzcbyjEnK81cqbHi1iUqdcgEThe5UQl0Hum2FBV75lI4+1ChKmGipoQjFHpSZuuMgC6kBGlDw0YOkwg2lkWfrJaBu0TqF/k3MmqvMe2LrI44/iKb8sPdeACNzm3xcCp3hBy9dc+ZT4vQLTGWihEF1ZFijLTRWcX6I+XYCWKNNCZOo5+cNbH/Hv8V4YNk+sruE2qUHnwk6gyFN9z1+bOrUd6NDJrbwABg+iIYBnOxT5h2JnAFX4EpjPSELNly7PYINyRK9L731O41mahqP/wR2U7s+AMeaZfmmSiHAHjd7VQIhozulj5u9emNCEQvn/dbNcMujAjBwqLrNSk1XSSLT3pYl4i1sOM8V2XzKmj
+X-MS-Exchange-AntiSpam-MessageData: 0pDktgiIIGBRzTsZmjMXU//9aBc+2R9jSkQrVYvFc/esQSRrV1vUdClUb+JlI6I8VNJf4A0YI1QY4tly4ltfP+jw/M+mRU9p/OwlI99r3+aOmWih1bD4suGkxdzzEHVRKGxI0PdqUVHQitD2SMZbPeYLbBgc7wTi6MwQZ7gE96u1O6v4ZuQKdzBlV3vPO2bspN7xIQVLhpxtwqvVkPEoUkCk1EtvLABCX8cuHrCYpaXxNcZr71OLxvA04hZi9B4nUbH56xQQfgyJo5IU028Qu8A+rpaPPiSeP8U6w7q8WL4XxVmVrDGVMt+Mifmy8WZ1aGhFuqV1mJtZNlVLv0XMA2qGsaGyj8zBBPDiH2L8fgMZI0cHJUBdhVRR/feFlg4r/uKAGLrvQ2BBAhtHTzoFDQ8idpftXPdXCPasUZ1Zr1U59zqoLPq4BUYnMvJ8yaKtpbNTzQzxGXxPE9DFZX62KdZuTSjDvED/LK6me8wUj7es/0qpT0+mtGievkPNyrUOKv13HfY2NXy+qjroZ+jBxTR2tPHDeSX+gdsvD50IW2FVXiLiLEQbIKKZhze1CMrtXKhZJLeXANM85ARJuobHWrTuiV3KsZ37LFimI7TUXMn0YYfdtViVejvbVnnqsbxdz8dzKcnXPvYXU4KGr1GCGU6cp9NDNsiS8JZll5y8Twjfc1QPUxzoyLnelLD/5+PK93bPTk/XVSwDmYxWhStr+Pa5kdzDljUY8jnyFvWUMj/pI20cdL7E5ALQ11MBp8as+/eaGQlqi2YSqU+nqa68RU83Y/e2PJgPxq5ZFvEMU+8=
+X-OriginatorOrg: displaylink.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c23285bb-3822-47f4-7414-08d7e9ddf7ab
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2020 12:33:05.5724
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: a4bda75a-b444-4312-9c90-44a7c4b2c91a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yVsr2kQrwQSu/ONy9neoyk/6Zpskg0ykX+eEfAhuGwZeBX9/lVurAr2B//SWeh5DqlAsl7EqHqePWAWf+URTDkj1SDmgiZ1pyFTkDj6mOfTAuj//+JSL+XZAeHMgbb/W
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR1001MB1232
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: displaylink.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 8f3d9f354286745c751374f5f1fcafee6b3f3136:
+On 26.4.20. 02:32, Alan Stern wrote:
+> On Sat, 25 Apr 2020 vladimir.stankovic@displaylink.com wrote:
+>=20
+>> Protocol adaptation layer (PAL) implementation has been added to
+>> introduce MA-USB structures and logic.
+>>
+>> Signed-off-by: Vladimir Stankovic <vladimir.stankovic@displaylink.com>
+>=20
+> ...
+>=20
+>> +=09/*
+>> +=09 * Masking URB_SHORT_NOT_OK flag as SCSI driver is adding it where i=
+t
+>> +=09 * should not, so it is breaking the USB drive on the linux
+>> +=09 */
+>> +=09urb->transfer_flags &=3D ~URB_SHORT_NOT_OK;
+>=20
+> Removing the SHORT_NOT_OK flag is _not_ a valid thing to do.  It will=20
+> cause drivers to malfunction.
+>=20
+> Can you please explain this comment?
+>=20
+> =09What SCSI driver?
+>=20
+> =09When is the flag being added?
+>=20
+> =09How does it break USB drives?
+>=20
+> =09Why haven't you already reported this problem to the=20
+> =09appropriate maintainers?
+>=20
+> Alan Stern
+>=20
 
-  Linux 5.7-rc1 (2020-04-12 12:35:55 -0700)
+Hi,
 
-are available in the Git repository at:
+Issue that removal of SHORT_NOT_OK flag addressed is linked to particular
+set of Kingston USB 3.0 flash drives (super speed) - other USB flash drives
+haven't had this flag set. Without this "fix", those Kingston flash drives
+are not being enumerated properly.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.7-rc3
+This particular line was added in the early stage of development, during
+enumeration process implementation. The reason why it remained in the code
+since is because we haven't noticed any side-effects, even with various
+USB devices being attached to remote MA-USB device, including flash drives,
+cameras, wireless mice, etc.
 
-for you to fetch changes up to 2df7405f79ce1674d73c2786fe1a8727c905d65b:
+The problem has been reported, and is actively being investigated.
 
-  USB: sisusbvga: Change port variable from signed to unsigned (2020-04-23 15:26:17 +0200)
+As soon as it gets addressed properly (w/o global negation of the flag),
+a new patch will be pushed.
 
-----------------------------------------------------------------
-USB fixes for 5.7-rc3
+--=20
+Regards,
+Vladimir.
 
-Here are a number of USB driver fixes for 5.7-rc3.
-
-Nothing huge, just the usual collection of:
-	- xhci fixes
-	- gadget driver fixes
-	- syzkaller fuzzing fixes
-	- new device ids and DT bindings
-	- new quirks added for broken devices
-
-A few of the gadget driver fixes show up twice here as they were applied
-to my branch, and also by Felipe to his branch which I then pulled in as
-we got out of sync a bit.
-
-All of these have been in linux-next with no reported issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Alan Stern (4):
-      USB: core: Fix free-while-in-use bug in the USB S-Glibrary
-      USB: hub: Fix handling of connect changes during sleep
-      USB: hub: Revert commit bd0e6c9614b9 ("usb: hub: try old enumeration scheme first for high speed devices")
-      usb-storage: Add unusual_devs entry for JMicron JMS566
-
-Andrey Konovalov (2):
-      usb: raw-gadget: fix raw_event_queue_fetch locking
-      usb: raw-gadget: fix raw_event_queue_fetch locking
-
-Badhri Jagan Sridharan (1):
-      usb: typec: tcpm: Ignore CC and vbus changes in PORT_RESET change
-
-Changming Liu (1):
-      USB: sisusbvga: Change port variable from signed to unsigned
-
-Cristian Birsan (1):
-      usb: gadget: udc: atmel: Fix vbus disconnect handling
-
-Dan Carpenter (2):
-      usb: raw-gadget: Fix copy_to/from_user() checks
-      usb: raw-gadget: Fix copy_to/from_user() checks
-
-Greg Kroah-Hartman (1):
-      Merge tag 'fixes-for-v5.7-rc2' of git://git.kernel.org/.../balbi/usb into usb-linus
-
-Hans de Goede (1):
-      usb: typec: pi3usb30532: Set switch_ / mux_desc name field to NULL
-
-Jann Horn (1):
-      USB: early: Handle AMD's spec-compliant identifiers, too
-
-Jonathan Cox (1):
-      USB: Add USB_QUIRK_DELAY_CTRL_MSG and USB_QUIRK_DELAY_INIT for Corsair K70 RGB RAPIDFIRE
-
-Mathias Nyman (3):
-      xhci: Fix handling halted endpoint even if endpoint ring appears empty
-      xhci: prevent bus suspend if a roothub port detected a over-current condition
-      xhci: Don't clear hub TT buffer on ep0 protocol stall
-
-Mauro Carvalho Chehab (1):
-      docs: dt: qcom,dwc3.txt: fix cross-reference for a converted file
-
-Naoki Kiryu (1):
-      usb: typec: altmode: Fix typec_altmode_get_partner sometimes returning an invalid pointer
-
-Nathan Chancellor (1):
-      usb: gadget: udc: bdc: Remove unnecessary NULL checks in bdc_req_complete
-
-Oliver Neukum (4):
-      UAS: no use logging any details in case of ENODEV
-      UAS: fix deadlock in error handling and PM flushing work
-      cdc-acm: close race betrween suspend() and acm_softint
-      cdc-acm: introduce a cool down
-
-Thierry Reding (1):
-      phy: tegra: Select USB_COMMON for usb_get_maximum_speed()
-
-Thinh Nguyen (4):
-      usb: dwc3: Fix GTXFIFOSIZ.TXFDEP macro name
-      usb: dwc3: gadget: Properly set maxpacket limit
-      usb: dwc3: gadget: Do link recovery for SS and SSP
-      usb: dwc3: gadget: Fix request completion check
-
-Udipto Goswami (1):
-      usb: f_fs: Clear OS Extended descriptor counts to zero in ffs_data_reset()
-
-Yoshihiro Shimoda (3):
-      dt-bindings: usb: usb-xhci: add r8a77961 support
-      dt-bindings: usb: renesas,usbhs: add r8a77961 support
-      dt-bindings: usb: renesas,usb3-peri: add r8a77961 support
-
- Documentation/admin-guide/kernel-parameters.txt    |  3 +-
- .../devicetree/bindings/usb/qcom,dwc3.txt          |  4 +-
- .../devicetree/bindings/usb/renesas,usb3-peri.yaml |  1 +
- .../devicetree/bindings/usb/renesas,usbhs.yaml     |  1 +
- Documentation/devicetree/bindings/usb/usb-xhci.txt |  3 +-
- drivers/phy/tegra/Kconfig                          |  3 +-
- drivers/usb/class/cdc-acm.c                        | 36 ++++++++--
- drivers/usb/class/cdc-acm.h                        |  5 +-
- drivers/usb/core/hub.c                             | 18 ++++-
- drivers/usb/core/message.c                         |  9 ++-
- drivers/usb/core/quirks.c                          |  4 ++
- drivers/usb/dwc3/core.h                            |  8 ++-
- drivers/usb/dwc3/gadget.c                          | 76 +++++++++++++---------
- drivers/usb/early/xhci-dbc.c                       |  8 +--
- drivers/usb/early/xhci-dbc.h                       | 18 ++++-
- drivers/usb/gadget/function/f_fs.c                 |  4 ++
- drivers/usb/gadget/legacy/raw_gadget.c             | 71 +++++++++++---------
- drivers/usb/gadget/udc/atmel_usba_udc.c            |  4 +-
- drivers/usb/gadget/udc/bdc/bdc_ep.c                |  2 +-
- drivers/usb/host/xhci-hub.c                        |  9 +++
- drivers/usb/host/xhci-ring.c                       | 46 +++++++++++--
- drivers/usb/host/xhci.c                            | 14 ++--
- drivers/usb/host/xhci.h                            |  5 +-
- drivers/usb/misc/sisusbvga/sisusb.c                | 20 +++---
- drivers/usb/misc/sisusbvga/sisusb_init.h           | 14 ++--
- drivers/usb/storage/uas.c                          | 46 ++++++++++++-
- drivers/usb/storage/unusual_devs.h                 |  7 ++
- drivers/usb/typec/bus.c                            |  5 +-
- drivers/usb/typec/mux/pi3usb30532.c                |  4 +-
- drivers/usb/typec/tcpm/tcpm.c                      | 26 ++++++++
- 30 files changed, 351 insertions(+), 123 deletions(-)
