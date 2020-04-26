@@ -2,108 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5CD1B9413
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2020 22:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A45831B9423
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Apr 2020 23:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726316AbgDZU4n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 Apr 2020 16:56:43 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:53301 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726199AbgDZU4n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 26 Apr 2020 16:56:43 -0400
-Received: (qmail 2181 invoked by uid 500); 26 Apr 2020 16:56:41 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 26 Apr 2020 16:56:41 -0400
-Date:   Sun, 26 Apr 2020 16:56:41 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Vladimir Stankovic <vladimir.stankovic@displaylink.com>
-cc:     gregkh@linuxfoundation.org, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <mausb-host-devel@displaylink.com>
-Subject: Re: [External] Re: [PATCH v5 5/8] usb: mausb_host: Introduce PAL
- processing
-In-Reply-To: <871dcf46-19f8-f152-99c0-8185832ed109@displaylink.com>
-Message-ID: <Pine.LNX.4.44L0.2004261655390.1962-100000@netrider.rowland.org>
+        id S1726210AbgDZVHE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sun, 26 Apr 2020 17:07:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34738 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725996AbgDZVHE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 26 Apr 2020 17:07:04 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 207219] [BISECTED] Sony Vaio laptop built-in ricoh webcam no
+ longer found on Fedora 31 with 5.4.11 kernel
+Date:   Sun, 26 Apr 2020 21:07:04 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-207219-208809-KP90075wte@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-207219-208809@https.bugzilla.kernel.org/>
+References: <bug-207219-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 26 Apr 2020, Vladimir Stankovic wrote:
+https://bugzilla.kernel.org/show_bug.cgi?id=207219
 
-> On 26.4.20. 16:31, Alan Stern wrote:
-> > On Sun, 26 Apr 2020, Vladimir Stankovic wrote:
-> > 
-> >> On 26.4.20. 02:32, Alan Stern wrote:
-> >>> On Sat, 25 Apr 2020 vladimir.stankovic@displaylink.com wrote:
-> >>>
-> >>>> Protocol adaptation layer (PAL) implementation has been added to
-> >>>> introduce MA-USB structures and logic.
-> >>>>
-> >>>> Signed-off-by: Vladimir Stankovic <vladimir.stankovic@displaylink.com>
-> >>>
-> >>> ...
-> >>>
-> >>>> +	/*
-> >>>> +	 * Masking URB_SHORT_NOT_OK flag as SCSI driver is adding it where it
-> >>>> +	 * should not, so it is breaking the USB drive on the linux
-> >>>> +	 */
-> >>>> +	urb->transfer_flags &= ~URB_SHORT_NOT_OK;
-> >>>
-> >>> Removing the SHORT_NOT_OK flag is _not_ a valid thing to do.  It will 
-> >>> cause drivers to malfunction.
-> >>>
-> >>> Can you please explain this comment?
-> >>>
-> >>> 	What SCSI driver?
-> >>>
-> >>> 	When is the flag being added?
-> >>>
-> >>> 	How does it break USB drives?
-> >>>
-> >>> 	Why haven't you already reported this problem to the 
-> >>> 	appropriate maintainers?
-> >>>
-> >>> Alan Stern
-> >>>
-> >>
-> >> Hi,
-> >>
-> >> Issue that removal of SHORT_NOT_OK flag addressed is linked to particular
-> >> set of Kingston USB 3.0 flash drives (super speed) - other USB flash drives
-> >> haven't had this flag set. Without this "fix", those Kingston flash drives
-> >> are not being enumerated properly.
-> > 
-> > Please explain in detail how the enumeration of these Kingston flash
-> > drives fails.  Or if such an explanation has already been posted,
-> > please provide a link to it.
-> 
-> Will reproduce the issue once again (w/o the fix) and run through the events.
-> Issue has been noticed during early development, and addressed right away.
-> > 
-> >> This particular line was added in the early stage of development, during
-> >> enumeration process implementation. The reason why it remained in the code
-> >> since is because we haven't noticed any side-effects, even with various
-> >> USB devices being attached to remote MA-USB device, including flash drives,
-> >> cameras, wireless mice, etc.
-> > 
-> > Come to think of it, the SHORT_NOT_OK flag is mainly used with HCDs
-> > that don't have scatter-gather support.  Since your mausb driver does
-> > support scatter-gather, you most likely won't encounter any problems 
-> > unless you go looking for them specifically.
-> > 
-> >> The problem has been reported, and is actively being investigated.
-> > 
-> > Where was the problem reported (URL to a mailing list archive)?  Who is
-> > investigating it?
-> 
-> Ticket has been submitted to DisplayLink's internal issue-tracking system
-> and is being investigated by mausb-host-devel team.
+--- Comment #12 from Alan Stern (stern@rowland.harvard.edu) ---
+Yes, that procedure should prevent the driver from being loaded, except that
+the module you want to affect is ehci-pci, not ehci-hcd.
 
-Okay.  What SCSI driver does the comment refer to?  Is it something 
-internal to DisplayLink or is it part of the regular Linux kernel?
+You load the driver manually by doing:
 
-Alan Stern
+   insmod /lib/modules/$(uname -r)/kernel/drivers/usb/host/ehci-pci.ko
 
+Using modprobe won't work when you have blacklisted the driver.  Also, make
+sure your .config has:
+
+   CONFIG_USB_EHCI_PCI=m
+
+so that the driver is built as a module.
+
+(An alternate approach, that doesn't involve blacklisting, is to simply rename
+the driver file.  Then modprobe won't be able to find and load it.  But of
+course you still have to rebuild the initrd image.)
+
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
