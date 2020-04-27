@@ -2,62 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED84D1BA2A8
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2020 13:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 734F11BA315
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2020 14:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727768AbgD0Llm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Apr 2020 07:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727101AbgD0Llg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Apr 2020 07:41:36 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C42AC0086C2
-        for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2020 04:41:35 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id e8so16311745ilm.7
-        for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2020 04:41:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=F+HbPvxQnRBlqBFKy/zn6110uxUPAWY6eSsMY6+ckPY=;
-        b=uI1U3pP4FazEZaTfkDGgaf1Qyb1hL6AlgZB9tozzlJtw0tc2p0xAeW9BNdbY4A2XuL
-         JYn8lE6gg3HqjBgRaTT8CTSOLDZ9E79yDyBM0EGnWldSdHyzrk+BT/7frJGn/PAhMIrE
-         VCZdq7yfljhgiOOYhIeLP2AIIFXvLFMREe3IREMgf/Wimn5okrCaqK4gkS0+n2Tqfq3c
-         EFYh4cYLyK3nIET0YOm2adzDe5W5QN3hsgSvwW72euh+PRPDs3oxC82+7cfg/ZGTOz8/
-         eTagf6SblJMWIJeJ59y/zg3//EVOq9RPByBfKkQCDUJB6vE62XJLcx9qUgZNIxoYrz8S
-         JAeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=F+HbPvxQnRBlqBFKy/zn6110uxUPAWY6eSsMY6+ckPY=;
-        b=RohgCtp2twknM6jrpaIU77JzO4d98H1e1RgXQco9u5zpE1LtG+QZUAAHBYeOMF9GF+
-         IEVt+/Td8Bj6WkmG3Zo6OdsgQa7TOiE94uCqPEacJfOuPnWHrn1UOFXDd5d9VWMzbskC
-         ceXX7PE3z1CWJexJmdV52X4ocAw/s7gtShVCl2pXnsDYHr3ooP3eEriEA7mI+oXHaeQM
-         6vnQ53kT6NLKz49q14vj8GmKzpEr8+5bY7gA4tLusyGcDcsVW7c6lm25AMZh9mMhpfjy
-         sqHYOybEfiYr5dMMHnplJGIafgaxsEfuNr9rVQt4zjv0/wvygsICmzf/5bCuS24/WW3f
-         RlXQ==
-X-Gm-Message-State: AGi0PuZMjfqO3YdVxwWJFfy2YepwSUan2WIM+yFqeMCzea8JPooZWKwu
-        dariw/xLSX9OUu6dVPAaplQxFfB0TucFmnvhWr5SWF9cxuw=
-X-Google-Smtp-Source: APiQypJWdjzUZMbeRoAX94bUJV0IgwyoF5kUG7iPo3CBzKxW8lStFNsM/6tz3An/TyzRuH2Qw14DtavsVumw6JVLls0=
-X-Received: by 2002:a6b:7d4a:: with SMTP id d10mr4072296ioq.70.1587987694042;
- Mon, 27 Apr 2020 04:41:34 -0700 (PDT)
+        id S1726769AbgD0MAg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Apr 2020 08:00:36 -0400
+Received: from mga09.intel.com ([134.134.136.24]:61677 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726260AbgD0MAg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 Apr 2020 08:00:36 -0400
+IronPort-SDR: fLTtaa6fCX/LUqwF5MEayQrkbQ21KyJKr//yV7YjW1JVkwUaZ70Gy45irwpQaIesV4a4BqJfmN
+ oKogZsEAmr2Q==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2020 05:00:35 -0700
+IronPort-SDR: f4dieNNeqH+D72icavoYrhwnajLAet2hWZRv24hCwhaJgXQI1yjWeIaW8Igjbh95dX8UTT3GZl
+ MvtDiNfbzEYg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,324,1583222400"; 
+   d="scan'208";a="367141656"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 27 Apr 2020 05:00:32 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 27 Apr 2020 15:00:32 +0300
+Date:   Mon, 27 Apr 2020 15:00:32 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
+Cc:     linux-iio <linux-iio@vger.kernel.org>, linux-usb@vger.kernel.org,
+        Jagadish.Hadimani@amd.com
+Subject: Re: ucsi and DRD controller interaction
+Message-ID: <20200427120032.GA2351955@kuha.fi.intel.com>
+References: <26823688-3b9c-5869-bcb6-4d6e5dcd77bc@amd.com>
+ <20200421074353.GE3768833@kuha.fi.intel.com>
+ <1d4fd9f3-8ea6-c054-0ba4-d50d78226fae@amd.com>
+ <20200422110056.GB618654@kuha.fi.intel.com>
+ <841d88c6-e08b-72d3-6884-0aa51805e3be@amd.com>
+ <20200422142808.GE618654@kuha.fi.intel.com>
+ <e85cefec-2731-65e8-f0f5-8cdc5d9e3773@amd.com>
 MIME-Version: 1.0
-Received: by 2002:a5d:8f89:0:0:0:0:0 with HTTP; Mon, 27 Apr 2020 04:41:33
- -0700 (PDT)
-Reply-To: convy0090@gmail.com
-From:   Ruben CONVY <andrewboccc@gmail.com>
-Date:   Mon, 27 Apr 2020 12:41:33 +0100
-Message-ID: <CAHVC0+Ag87TMCmfNNwWbxXOFxn5166q8GG5wEfPjwtixj9=EXQ@mail.gmail.com>
-Subject: Why continued silence 2
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e85cefec-2731-65e8-f0f5-8cdc5d9e3773@amd.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Did you receive my previous email regarding your family inheritance?
-Reply strictly through: convy0090@gmail.com
-Best Regards,
-Ruben CONVY
+On Wed, Apr 22, 2020 at 08:23:54PM +0530, Shah, Nehal-bakulchandra wrote:
+> > Can you still influence what goes to your ACPI tables, or are we
+> > talking about products that are already on the market?
+> 
+> Yes still it is in development phase so i can work out with BIOS team for the same. When you say description of connection ,something like this should be part of _DSD method right? (i.e from below dts
+> to _DSD of ACPI)
+> 
+>  usb_con: connector {
+> compatible = "usb-c-connector";
+>  label = "USB-C";
+>  data-role = "dual";
+>  power-role = "dual";
+>  try-power-role = "sink";
+>  source-pdos = <PDO_FIXED(5000, 500, PDO_FIXED_USB_COMM)>;
+>  sink-pdos = <PDO_FIXED(5000, 500, PDO_FIXED_USB_COMM)
+>  PDO_VAR(5000, 5000, 1000)>;
+>  op-sink-microwatt = <10000000>;
+>  };
+
+Here's how the ASL for the _DSD should look like. I don't know how
+are all these components placed on your platform, so I'm just assuming
+that your I2C host is under PCI0, as well as your DWC3 controller.
+It's just an example, but hopefully you get the point from it:
+
+/*
+ * I2C1 is the I2C host, and PDC1 is the USB PD Controller (I2C slave device).
+ */
+Scope (\_SB.PCI0.I2C1.PDC1)
+{
+        /* Each connector should have its own ACPI device entry (node). */
+        Device (CON0)
+        {
+                Name (_ADR, 0)
+
+                Name (_DSD, Package () {
+                    ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                    Package() {
+                        Package () {"usb-role-switch", \_SB.PCI0.DWC3},
+                    }
+                })
+        }
+}
+
+So that property "usb-role-switch" has reference to the DWC3 node as
+its value. That's what we are after here. If you have that property,
+the subsystem will find the USB controller for you.
+
+If you need for example the properties for the roles, then the _DSD
+would look like this:
+
+Name (_DSD, Package () {
+    ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+    Package() {
+        Package () {"usb-role-switch", \_SB.PCI0.DWC3},
+        Package () {"power-role", "dual"},
+        Package () {"data-role", "dual"},
+    }
+})
+
+and so on...
+
+
+Thanks,
+
+-- 
+heikki
