@@ -2,68 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8611BA12F
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2020 12:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C571BA210
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2020 13:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727094AbgD0KaN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Apr 2020 06:30:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44992 "EHLO mail.kernel.org"
+        id S1726831AbgD0LMt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Apr 2020 07:12:49 -0400
+Received: from mga18.intel.com ([134.134.136.126]:33333 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726507AbgD0KaM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 27 Apr 2020 06:30:12 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5A83B2064C;
-        Mon, 27 Apr 2020 10:30:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587983411;
-        bh=o6HcIrDKw7gba4QcHj5zgbPydp6k6jWgPdkgLm31quU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JYaCPpN4VoozD05QGLyyqW8orhiau0BfTQ7QslAECYn2ZzGCsT0qECX24dIHC2i8L
-         fXHj6UMbNtNPdBQYdXkA8sg498nwCKQyJOSX5DwCxL04MUvkt2l9B97v0Wpg1cDnF2
-         IBRqQ+WlZFcsQ3ys3AIA/A7C+aAGdDDzB4vZ7gV4=
-Date:   Mon, 27 Apr 2020 12:30:09 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dave Mielke <Dave@mielke.cc>
-Cc:     linux-usb@vger.kernel.org,
-        Samuel Thibault <Samuel.Thibault@ens-lyon.org>,
-        Nicolas Pitre <nico@fluxnic.net>
-Subject: Re: Writing to /sys/../power/autosuspend when not root.
-Message-ID: <20200427103009.GA2362731@kroah.com>
-References: <20200426190838.GU756@beta.private.mielke.cc>
+        id S1726589AbgD0LMt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 Apr 2020 07:12:49 -0400
+IronPort-SDR: ajWFZW+rKQNChZE+Mk7/UA+wj09twIqSeqSzRtCoJi5gXh2siZy6B3lFwY1Hpd6pFtNx25mWNM
+ C2OFP8GTfEqg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2020 04:12:49 -0700
+IronPort-SDR: fG90uco9HGeRw7IPuXvq1dMrXetkMg2X5Q9hMUtUPD+B44q+M/RF0nGk2+MyzewNtCQ9l30cFs
+ jaX1R37dFgZQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,323,1583222400"; 
+   d="scan'208";a="367131128"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 27 Apr 2020 04:12:46 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "K V, Abhilash" <abhilash.k.v@intel.com>,
+        kbuild test robot <lkp@intel.com>, linux-usb@vger.kernel.org
+Subject: [PATCH] usb: typec: ucsi: Fix the stub for ucsi_register_port_psy()
+Date:   Mon, 27 Apr 2020 14:12:46 +0300
+Message-Id: <20200427111246.4889-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200426190838.GU756@beta.private.mielke.cc>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Apr 26, 2020 at 03:08:38PM -0400, Dave Mielke wrote:
-> We're working on getting brltty to run as an unprivileged user with just a few
-> required capabilities. We don't want one of those required capabilities to be
-> CAP_DAC_OVERRIDE (bypass file permission checks).
-> 
-> Some USB-connected braille devices don't respond very well to being
-> autosuspended. We get around this, when running as root, by writing to the
-> SYSFS power/autosuspend file associated with the device. Our problem is that
-> only the root user can write to it.
-> 
-> Other than using CAP_DAC_OVERRIDE (which we don't want to do), what other
-> way(s) might we be able to use to overcome this restriction? For example, is
-> there some kind of safe (enough) udev rule?
+The stub was ucsi_register_port() when it should have been
+ucsi_register_port_psy().
 
-Have a udev rule that turns autosuspend off for each specific USB device
-that you know does not work with autosuspend.  Do you have such a list?
+Fixes: 992a60ed0d5e ("usb: typec: ucsi: register with power_supply class")
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/typec/ucsi/ucsi.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If so, we can add it to the USB core with the
-USB_QUIRK_DISCONNECT_SUSPEND flag.  Or is it the USB_QUIRK_NO_LPM that
-they need?  I can't remember, but you can test it out from userspace
-by reading about those in the
-Documentation/admin-guide/kernel-parameters.txt file.
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index e52b5540b254..cba6f77bea61 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -341,7 +341,7 @@ int ucsi_resume(struct ucsi *ucsi);
+ int ucsi_register_port_psy(struct ucsi_connector *con);
+ void ucsi_unregister_port_psy(struct ucsi_connector *con);
+ #else
+-static inline int ucsi_register_port(struct ucsi_connector *con) { return 0; }
++static inline int ucsi_register_port_psy(struct ucsi_connector *con) { return 0; }
+ static inline void ucsi_unregister_port_psy(struct ucsi_connector *con) { }
+ #endif /* CONFIG_POWER_SUPPLY */
+ 
+-- 
+2.26.2
 
-Hope this helps,
-
-greg k-h
