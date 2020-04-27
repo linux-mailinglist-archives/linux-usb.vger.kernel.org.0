@@ -2,43 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 735861BB031
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2020 23:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDDE1BB0B7
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2020 23:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726570AbgD0VSD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Apr 2020 17:18:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34212 "EHLO mail.kernel.org"
+        id S1726312AbgD0VoC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Apr 2020 17:44:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43844 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726410AbgD0VR1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 27 Apr 2020 17:17:27 -0400
+        id S1726030AbgD0VoC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 Apr 2020 17:44:02 -0400
 Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2832C2222B;
-        Mon, 27 Apr 2020 21:17:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5757A2070B;
+        Mon, 27 Apr 2020 21:44:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588022245;
-        bh=RFGUcCVxrgv5mUyJOaax4cRxjCGpLehPRqP0Yl9mXSE=;
+        s=default; t=1588023840;
+        bh=yEZR47UgJyhSSJO4ozelLdV+zJf+BKuMoYnPphHSyNk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T0ItBSHQVBLtokQpLSmNwKyDtx6tXki0321irqjcj5nRqxGn/tskT3Ye2e0BgX1Er
-         GeIPPFYnS+dmmSJjy2Mx8rHukToQ41mMFsDJmBnwxLpLceotd0MJSqHwDncbggBfa/
-         x1oBUbMYj6k+xNep5LYBAWOQCkyfOx53c3S0E8N4=
+        b=YMLU3X2hFJEfyaalFFCweryUgO4Iz80lcpAhkklEhp500sievGaHw9wC/2TBIj/S3
+         5ulSjpAWi/ySHQRYLCtQZgp3tcXsWLIQSfzoGCmjl45Y0gXbUL4hZbUJ/CM0R0IDLj
+         8K7WSix9dnzgVRjETLOOH5u53rIhe/gaD3UXS4j4=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1jTB7z-000Hlv-E7; Mon, 27 Apr 2020 23:17:23 +0200
+        id 1jTBXi-000IYD-JP; Mon, 27 Apr 2020 23:43:58 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Joel Becker <jlbec@evilplan.org>,
-        Christoph Hellwig <hch@lst.de>, linux-usb@vger.kernel.org
-Subject: [PATCH v3 29/29] docs: filesystems: convert configfs.txt to ReST
-Date:   Mon, 27 Apr 2020 23:17:21 +0200
-Message-Id: <c2424ec2ad4d735751434ff7f52144c44aa02d5a.1588021877.git.mchehab+huawei@kernel.org>
+        Christoph Hellwig <hch@lst.de>, Jan Kara <jack@suse.cz>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v3.1] docs: filesystems: convert configfs.txt to ReST
+Date:   Mon, 27 Apr 2020 23:43:56 +0200
+Message-Id: <5f005c5a846b3fd4382a24166a1ba736ff697b86.1588022310.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <cover.1588021877.git.mchehab+huawei@kernel.org>
-References: <cover.1588021877.git.mchehab+huawei@kernel.org>
+In-Reply-To: <c2424ec2ad4d735751434ff7f52144c44aa02d5a.1588021877.git.mchehab+huawei@kernel.org>
+References: <c2424ec2ad4d735751434ff7f52144c44aa02d5a.1588021877.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -59,6 +63,9 @@ move it to the filesystems/ root documentation dir.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
+
+v3.1: Fixed the case at the document title
+
  .../{configfs/configfs.txt => configfs.rst}   | 131 +++++++++++-------
  Documentation/filesystems/index.rst           |   1 +
  Documentation/iio/iio_configfs.rst            |   2 +-
@@ -73,14 +80,14 @@ diff --git a/Documentation/filesystems/configfs/configfs.txt b/Documentation/fil
 similarity index 87%
 rename from Documentation/filesystems/configfs/configfs.txt
 rename to Documentation/filesystems/configfs.rst
-index 16e606c11f40..851d475798f7 100644
+index 16e606c11f40..f8941954c667 100644
 --- a/Documentation/filesystems/configfs/configfs.txt
 +++ b/Documentation/filesystems/configfs.rst
 @@ -1,5 +1,6 @@
 -
 -configfs - Userspace-driven kernel object configuration.
 +=======================================================
-+Configfs - Userspace-driven Kernel oOject Configuration
++Configfs - Userspace-driven Kernel Object Configuration
 +=======================================================
  
  Joel Becker <joel.becker@oracle.com>
@@ -479,4 +486,5 @@ index fa9490a8874c..2e8c69b43c64 100644
   */
 -- 
 2.25.4
+
 
