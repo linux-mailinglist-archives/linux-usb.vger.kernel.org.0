@@ -2,107 +2,230 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF221BAE7A
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2020 21:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 033931BAE8C
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2020 21:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726315AbgD0Tvj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Apr 2020 15:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726205AbgD0Tvi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Apr 2020 15:51:38 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270DAC0610D5
-        for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2020 12:51:38 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id p25so9488263pfn.11
-        for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2020 12:51:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=x7xWj6j9n+9+cfjCADqZgyuvG4fjTtrHxxoI8cwoBm8=;
-        b=FVFYqvUc2XmhOAQa+HP4qbn3f2ePzMmwzJOQD9n97Mtv0n1CMY+WlxNjjSBbt2gEiW
-         ERpcN3ewRsp1ZcMyqWAeStCJsVadu1CFhxpl6hsocOhpGp8WZSiunBkn0g0eL5CbcXnX
-         CqlXgcUOMWjJVrAarqEPYmpB39laVFpT1FK2tdMviV0YKGYO2fo8XzYTG48qbfPOsc4x
-         TqmCzxhjf4mRJL+hpYYRfYwn5XkRGPVHEh18A6UJUKFACJeUBQXdjR0deNtpLQHbdSMv
-         ctirxEab5dAziWDiD4qeDc0VrrIJoEbV+DGs9fmUMF/CqXrMdq3j3h1yGZD2DloRiTuV
-         bIRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x7xWj6j9n+9+cfjCADqZgyuvG4fjTtrHxxoI8cwoBm8=;
-        b=MSYio8Fi97BkQYo5TXnJifmgCc+5PzKcA0H+wRdH7gV70zzwvYYOebmmqFfZc61OcU
-         f6xjXe606Pmx/5+urUJpnenfjmo+OVU5t/g4qKDk0LK/eN2NM0Hx6VQ1ZRr9uquAFQVl
-         Hu/Z3YKEdWOMf4rkjXhLiPK1FrwF4W2pHSpNXlHuQTXWpS3YcyjBhcSCRs4b1d76UdJO
-         i83SewxofFp4cQbbUbnobYlCGRef6GNtDdW2f5vQ6YD3cys47ZhzY3rf5oFfp6ErtGtM
-         HDWEPgHPBEA0LkVkQg87pJ5InlNM+NsDzZMznEi2obxLY2yTECuPCGElQ0FuhVhwf0sf
-         a0Ig==
-X-Gm-Message-State: AGi0PuYBJ2BKgZbQ78u21vPgJHqiw3Ei1FWcwLSnvPq7+k7L4p9NFuqm
-        Cx41xJdhUPcdQ+XVm38cCq4/HQF+zo/aaqqnLVv9nw==
-X-Google-Smtp-Source: APiQypJUKqJR9LqWGZuTphH82p6tQklQT/2BkcjWF3wL5Oshz4nurByK098EsRNt45RAm6WE5rJeEtb3QKkjycvUd1M=
-X-Received: by 2002:a63:cf02:: with SMTP id j2mr115081pgg.130.1588017097425;
- Mon, 27 Apr 2020 12:51:37 -0700 (PDT)
+        id S1726654AbgD0T4b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Apr 2020 15:56:31 -0400
+Received: from mga17.intel.com ([192.55.52.151]:40226 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726561AbgD0T4a (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 Apr 2020 15:56:30 -0400
+IronPort-SDR: El8YHrzEZQzQ0bcYNM5tZrKSrJySSn+753PlBvS88JmhosIAG77jiJv4UxetV46zt6ZrzIiLOZ
+ tU21p9SFnqtA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2020 12:56:30 -0700
+IronPort-SDR: 9vF65UQk7OXoLroeQSyTowNzvcakz+BS3XOFmULtG3mw7qUDEtg8gO1O44WUn4BUtalmNrOxAq
+ Qj4v2zdh+myg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,325,1583222400"; 
+   d="scan'208";a="302468852"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Apr 2020 12:56:29 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jT9rg-000G6A-F9; Tue, 28 Apr 2020 03:56:28 +0800
+Date:   Tue, 28 Apr 2020 03:55:28 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 1417cff96ef8ae2108df7084f035b90d2eabbba3
+Message-ID: <5ea738b0.4znPhuXk7CJI4PtT%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <CAAeHK+x7Fihwriocp8Kpr+AQks6h3syZa+g0Wd+Q62fg-y93Lg@mail.gmail.com>
- <Pine.LNX.4.44L0.2004092015180.30065-100000@netrider.rowland.org> <CAAeHK+wYc1De7AN12mkkjDsx-PJODOAvBCOtcDSykSjq6gwCNA@mail.gmail.com>
-In-Reply-To: <CAAeHK+wYc1De7AN12mkkjDsx-PJODOAvBCOtcDSykSjq6gwCNA@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 27 Apr 2020 21:51:26 +0200
-Message-ID: <CAAeHK+ykiDzvzFu1sKLXqiGxsnJP_iKXGttNk22Smzu1O31p=Q@mail.gmail.com>
-Subject: Re: Testing endpoint halt support for raw-gadget
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 24, 2020 at 9:36 PM Andrey Konovalov <andreyknvl@google.com> wrote:
->
-> On Fri, Apr 10, 2020 at 2:29 AM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Thu, 9 Apr 2020, Andrey Konovalov wrote:
-> >
-> > > Hi Alan and Greg,
-> > >
-> > > I've been thinking about what kind of features raw-gadget might be
-> > > missing, that would allow more flexibility in emulating USB devices.
-> > > One of the things that is currently missing is halting endpoints.
-> > > Adding this functionality seems to be fairly easy, but it's unclear to
-> > > me how to test it. Any suggestions?
-> >
-> > You should use the usbtest driver along with the testusb program in
-> > tools/usb.  Of course, to do it you will need a userspace driver for
-> > raw-gadget.  usbtest works best with gadget-zero, but it can be used
-> > (in degraded form) with any USB device.
->
-> Hi Alan,
->
-> I've started working on a test suite for raw-gadget based on the
-> usbtest module as you suggested and have a few questions:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: 1417cff96ef8ae2108df7084f035b90d2eabbba3  usb: typec: ucsi: Fix the stub for ucsi_register_port_psy()
 
-Another question, which actually seems to be a major problem.
+elapsed time: 482m
 
-It looks like automatic endpoint selection based on required features
-doesn't work in raw-gadget. The way it tries to do that is iterating
-over the list of available endpoints and finding one that has the
-right direction and transfer type. But it seems that the right way to
-do that (like it's done in usb_ep_autoconfig()) is to also patch the
-bEndpointAddress field of the endpoint descriptor.
+configs tested: 171
+configs skipped: 0
 
-Currently with raw-gadget the endpoints are supposed to be enabled
-after a set_configuration/set_interface request from the host, so it's
-too late to patch the endpoint descriptor (the one that was sent to
-the host during enumeration). I'm guessing that sending one endpoint
-descriptor during enumeration and then using a different one (with
-patched bEndpointAddress) to set ep->desc before doing usb_ep_enable()
-won't work (as there's going to be mismatch in endpoint addresses
-between the host and the UDC), right?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-I wonder what we can do about that. It seems that we actually need to
-parse the descriptors and figure out the right endpoints before the
-enumeration starts.
+arm                           efm32_defconfig
+arm                         at91_dt_defconfig
+arm                        shmobile_defconfig
+arm64                               defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                           sunxi_defconfig
+arm                        multi_v7_defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+arm64                            allmodconfig
+arm                              allmodconfig
+arm64                             allnoconfig
+arm                               allnoconfig
+sparc                            allyesconfig
+i386                             alldefconfig
+h8300                    h8300h-sim_defconfig
+mips                              allnoconfig
+mips                      loongson3_defconfig
+i386                                defconfig
+s390                          debug_defconfig
+sparc64                          allmodconfig
+csky                                defconfig
+microblaze                    nommu_defconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                              debian-10.3
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                        generic_defconfig
+ia64                          tiger_defconfig
+ia64                         bigsur_defconfig
+ia64                             allyesconfig
+ia64                             alldefconfig
+nds32                               defconfig
+nds32                             allnoconfig
+alpha                               defconfig
+nios2                         3c120_defconfig
+nios2                         10m50_defconfig
+c6x                        evmc6678_defconfig
+xtensa                          iss_defconfig
+c6x                              allyesconfig
+xtensa                       common_defconfig
+openrisc                 simple_smp_defconfig
+openrisc                    or1ksim_defconfig
+h8300                       h8s-sim_defconfig
+h8300                     edosk2674_defconfig
+m68k                       m5475evb_defconfig
+m68k                             allmodconfig
+m68k                           sun3_defconfig
+m68k                          multi_defconfig
+arc                                 defconfig
+arc                              allyesconfig
+powerpc                             defconfig
+powerpc                       ppc64_defconfig
+powerpc                          rhel-kconfig
+microblaze                      mmu_defconfig
+powerpc                           allnoconfig
+mips                      fuloong2e_defconfig
+mips                      malta_kvm_defconfig
+mips                            ar7_defconfig
+mips                             allyesconfig
+mips                         64r6el_defconfig
+mips                           32r2_defconfig
+mips                             allmodconfig
+mips                malta_kvm_guest_defconfig
+mips                         tb0287_defconfig
+mips                       capcella_defconfig
+mips                           ip32_defconfig
+mips                  decstation_64_defconfig
+mips                          ath79_defconfig
+mips                        bcm63xx_defconfig
+parisc                            allnoconfig
+parisc                generic-64bit_defconfig
+parisc                generic-32bit_defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+parisc               randconfig-a001-20200427
+alpha                randconfig-a001-20200427
+mips                 randconfig-a001-20200427
+m68k                 randconfig-a001-20200427
+riscv                randconfig-a001-20200427
+nds32                randconfig-a001-20200427
+nios2                randconfig-a001-20200427
+c6x                  randconfig-a001-20200427
+h8300                randconfig-a001-20200427
+sparc64              randconfig-a001-20200427
+microblaze           randconfig-a001-20200427
+nios2                randconfig-a001-20200428
+h8300                randconfig-a001-20200428
+c6x                  randconfig-a001-20200428
+sparc64              randconfig-a001-20200428
+microblaze           randconfig-a001-20200428
+sh                   randconfig-a001-20200427
+csky                 randconfig-a001-20200427
+xtensa               randconfig-a001-20200427
+openrisc             randconfig-a001-20200427
+i386                 randconfig-a003-20200427
+i386                 randconfig-a001-20200427
+i386                 randconfig-a002-20200427
+x86_64               randconfig-a002-20200427
+i386                 randconfig-b002-20200427
+x86_64               randconfig-b001-20200427
+i386                 randconfig-b001-20200427
+i386                 randconfig-b003-20200427
+x86_64               randconfig-b002-20200427
+x86_64               randconfig-b003-20200427
+i386                 randconfig-c002-20200427
+i386                 randconfig-c001-20200427
+x86_64               randconfig-c002-20200427
+x86_64               randconfig-c001-20200427
+i386                 randconfig-c003-20200427
+x86_64               randconfig-c003-20200427
+x86_64               randconfig-d001-20200427
+x86_64               randconfig-d002-20200427
+i386                 randconfig-d002-20200427
+i386                 randconfig-d001-20200427
+x86_64               randconfig-d003-20200427
+i386                 randconfig-d003-20200427
+i386                 randconfig-e003-20200427
+x86_64               randconfig-e002-20200427
+x86_64               randconfig-e003-20200427
+i386                 randconfig-e002-20200427
+i386                 randconfig-e001-20200427
+x86_64               randconfig-e001-20200427
+i386                 randconfig-g003-20200427
+i386                 randconfig-g001-20200427
+x86_64               randconfig-g001-20200427
+i386                 randconfig-g002-20200427
+x86_64               randconfig-g003-20200427
+i386                 randconfig-h003-20200427
+x86_64               randconfig-h002-20200427
+i386                 randconfig-h002-20200427
+i386                 randconfig-h001-20200427
+sparc                randconfig-a001-20200427
+ia64                 randconfig-a001-20200427
+arm                  randconfig-a001-20200427
+arm64                randconfig-a001-20200427
+arc                  randconfig-a001-20200427
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+s390                       zfcpdump_defconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                             alldefconfig
+s390                                defconfig
+sh                          rsk7269_defconfig
+sh                               allmodconfig
+sh                            titan_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                                allnoconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                                  defconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
