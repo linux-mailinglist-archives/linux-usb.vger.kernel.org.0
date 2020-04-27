@@ -2,66 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C571BA210
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2020 13:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED84D1BA2A8
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2020 13:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726831AbgD0LMt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Apr 2020 07:12:49 -0400
-Received: from mga18.intel.com ([134.134.136.126]:33333 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726589AbgD0LMt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 27 Apr 2020 07:12:49 -0400
-IronPort-SDR: ajWFZW+rKQNChZE+Mk7/UA+wj09twIqSeqSzRtCoJi5gXh2siZy6B3lFwY1Hpd6pFtNx25mWNM
- C2OFP8GTfEqg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2020 04:12:49 -0700
-IronPort-SDR: fG90uco9HGeRw7IPuXvq1dMrXetkMg2X5Q9hMUtUPD+B44q+M/RF0nGk2+MyzewNtCQ9l30cFs
- jaX1R37dFgZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,323,1583222400"; 
-   d="scan'208";a="367131128"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 27 Apr 2020 04:12:46 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "K V, Abhilash" <abhilash.k.v@intel.com>,
-        kbuild test robot <lkp@intel.com>, linux-usb@vger.kernel.org
-Subject: [PATCH] usb: typec: ucsi: Fix the stub for ucsi_register_port_psy()
-Date:   Mon, 27 Apr 2020 14:12:46 +0300
-Message-Id: <20200427111246.4889-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.26.2
+        id S1727768AbgD0Llm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Apr 2020 07:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727101AbgD0Llg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Apr 2020 07:41:36 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C42AC0086C2
+        for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2020 04:41:35 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id e8so16311745ilm.7
+        for <linux-usb@vger.kernel.org>; Mon, 27 Apr 2020 04:41:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=F+HbPvxQnRBlqBFKy/zn6110uxUPAWY6eSsMY6+ckPY=;
+        b=uI1U3pP4FazEZaTfkDGgaf1Qyb1hL6AlgZB9tozzlJtw0tc2p0xAeW9BNdbY4A2XuL
+         JYn8lE6gg3HqjBgRaTT8CTSOLDZ9E79yDyBM0EGnWldSdHyzrk+BT/7frJGn/PAhMIrE
+         VCZdq7yfljhgiOOYhIeLP2AIIFXvLFMREe3IREMgf/Wimn5okrCaqK4gkS0+n2Tqfq3c
+         EFYh4cYLyK3nIET0YOm2adzDe5W5QN3hsgSvwW72euh+PRPDs3oxC82+7cfg/ZGTOz8/
+         eTagf6SblJMWIJeJ59y/zg3//EVOq9RPByBfKkQCDUJB6vE62XJLcx9qUgZNIxoYrz8S
+         JAeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=F+HbPvxQnRBlqBFKy/zn6110uxUPAWY6eSsMY6+ckPY=;
+        b=RohgCtp2twknM6jrpaIU77JzO4d98H1e1RgXQco9u5zpE1LtG+QZUAAHBYeOMF9GF+
+         IEVt+/Td8Bj6WkmG3Zo6OdsgQa7TOiE94uCqPEacJfOuPnWHrn1UOFXDd5d9VWMzbskC
+         ceXX7PE3z1CWJexJmdV52X4ocAw/s7gtShVCl2pXnsDYHr3ooP3eEriEA7mI+oXHaeQM
+         6vnQ53kT6NLKz49q14vj8GmKzpEr8+5bY7gA4tLusyGcDcsVW7c6lm25AMZh9mMhpfjy
+         sqHYOybEfiYr5dMMHnplJGIafgaxsEfuNr9rVQt4zjv0/wvygsICmzf/5bCuS24/WW3f
+         RlXQ==
+X-Gm-Message-State: AGi0PuZMjfqO3YdVxwWJFfy2YepwSUan2WIM+yFqeMCzea8JPooZWKwu
+        dariw/xLSX9OUu6dVPAaplQxFfB0TucFmnvhWr5SWF9cxuw=
+X-Google-Smtp-Source: APiQypJWdjzUZMbeRoAX94bUJV0IgwyoF5kUG7iPo3CBzKxW8lStFNsM/6tz3An/TyzRuH2Qw14DtavsVumw6JVLls0=
+X-Received: by 2002:a6b:7d4a:: with SMTP id d10mr4072296ioq.70.1587987694042;
+ Mon, 27 Apr 2020 04:41:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a5d:8f89:0:0:0:0:0 with HTTP; Mon, 27 Apr 2020 04:41:33
+ -0700 (PDT)
+Reply-To: convy0090@gmail.com
+From:   Ruben CONVY <andrewboccc@gmail.com>
+Date:   Mon, 27 Apr 2020 12:41:33 +0100
+Message-ID: <CAHVC0+Ag87TMCmfNNwWbxXOFxn5166q8GG5wEfPjwtixj9=EXQ@mail.gmail.com>
+Subject: Why continued silence 2
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The stub was ucsi_register_port() when it should have been
-ucsi_register_port_psy().
-
-Fixes: 992a60ed0d5e ("usb: typec: ucsi: register with power_supply class")
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/ucsi/ucsi.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index e52b5540b254..cba6f77bea61 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -341,7 +341,7 @@ int ucsi_resume(struct ucsi *ucsi);
- int ucsi_register_port_psy(struct ucsi_connector *con);
- void ucsi_unregister_port_psy(struct ucsi_connector *con);
- #else
--static inline int ucsi_register_port(struct ucsi_connector *con) { return 0; }
-+static inline int ucsi_register_port_psy(struct ucsi_connector *con) { return 0; }
- static inline void ucsi_unregister_port_psy(struct ucsi_connector *con) { }
- #endif /* CONFIG_POWER_SUPPLY */
- 
--- 
-2.26.2
-
+Did you receive my previous email regarding your family inheritance?
+Reply strictly through: convy0090@gmail.com
+Best Regards,
+Ruben CONVY
