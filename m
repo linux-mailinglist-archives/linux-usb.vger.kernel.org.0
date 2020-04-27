@@ -2,184 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B24491BA06B
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2020 11:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8611BA12F
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2020 12:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727021AbgD0Ju6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Apr 2020 05:50:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56896 "EHLO mail.kernel.org"
+        id S1727094AbgD0KaN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Apr 2020 06:30:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44992 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726485AbgD0Ju6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 27 Apr 2020 05:50:58 -0400
-Received: from localhost.localdomain (unknown [180.171.74.255])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726507AbgD0KaM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 Apr 2020 06:30:12 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B2F8220663;
-        Mon, 27 Apr 2020 09:50:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5A83B2064C;
+        Mon, 27 Apr 2020 10:30:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587981057;
-        bh=cbonv1gsYD8NJAIAIYbRXL+tSke9pTH0C+CVM5DdVdk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EYf3ZGsWCz5YBGgysmNKdhrji7zEkZO+kBGKtD2kE9JoGkniU44UBIgcVXZqDKwgO
-         sKb8Qc4KF5RkSR111eseWgmfJBisIwPJSis1biOre1FHFSWGHu2qBUEGLVXililXUI
-         z6P50viTniUXgfs8TXLd0C/UtUBuFnmQERZ0cSio=
-From:   Peter Chen <peter.chen@kernel.org>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-imx@nxp.com, Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH 4/4] usb: chipidea: usbmisc_imx: using different ops for imx7d and imx7ulp
-Date:   Mon, 27 Apr 2020 17:50:39 +0800
-Message-Id: <20200427095039.3833-4-peter.chen@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200427095039.3833-1-peter.chen@kernel.org>
-References: <20200427095039.3833-1-peter.chen@kernel.org>
+        s=default; t=1587983411;
+        bh=o6HcIrDKw7gba4QcHj5zgbPydp6k6jWgPdkgLm31quU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JYaCPpN4VoozD05QGLyyqW8orhiau0BfTQ7QslAECYn2ZzGCsT0qECX24dIHC2i8L
+         fXHj6UMbNtNPdBQYdXkA8sg498nwCKQyJOSX5DwCxL04MUvkt2l9B97v0Wpg1cDnF2
+         IBRqQ+WlZFcsQ3ys3AIA/A7C+aAGdDDzB4vZ7gV4=
+Date:   Mon, 27 Apr 2020 12:30:09 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dave Mielke <Dave@mielke.cc>
+Cc:     linux-usb@vger.kernel.org,
+        Samuel Thibault <Samuel.Thibault@ens-lyon.org>,
+        Nicolas Pitre <nico@fluxnic.net>
+Subject: Re: Writing to /sys/../power/autosuspend when not root.
+Message-ID: <20200427103009.GA2362731@kroah.com>
+References: <20200426190838.GU756@beta.private.mielke.cc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200426190838.GU756@beta.private.mielke.cc>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Peter Chen <peter.chen@nxp.com>
+On Sun, Apr 26, 2020 at 03:08:38PM -0400, Dave Mielke wrote:
+> We're working on getting brltty to run as an unprivileged user with just a few
+> required capabilities. We don't want one of those required capabilities to be
+> CAP_DAC_OVERRIDE (bypass file permission checks).
+> 
+> Some USB-connected braille devices don't respond very well to being
+> autosuspended. We get around this, when running as root, by writing to the
+> SYSFS power/autosuspend file associated with the device. Our problem is that
+> only the root user can write to it.
+> 
+> Other than using CAP_DAC_OVERRIDE (which we don't want to do), what other
+> way(s) might we be able to use to overcome this restriction? For example, is
+> there some kind of safe (enough) udev rule?
 
-imx7ulp uses different USB PHY with imx7d (MXS PHY vs PICO PHY), so the
-features are supported by non-core register are a little different.
-For example, autoresume feature is supported by all controllers for
-imx7ulp, but for imx7d, it is only supported by non-HSIC controller.
+Have a udev rule that turns autosuspend off for each specific USB device
+that you know does not work with autosuspend.  Do you have such a list?
 
-Besides, these two platforms use different HSIC controller, imx7ulp
-needs software operation, but imx7d doesn't.
+If so, we can add it to the USB core with the
+USB_QUIRK_DISCONNECT_SUSPEND flag.  Or is it the USB_QUIRK_NO_LPM that
+they need?  I can't remember, but you can test it out from userspace
+by reading about those in the
+Documentation/admin-guide/kernel-parameters.txt file.
 
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
----
- drivers/usb/chipidea/usbmisc_imx.c | 89 ++++++++++++++++++++++++++++--
- 1 file changed, 84 insertions(+), 5 deletions(-)
+Hope this helps,
 
-diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
-index 8d7e78657e3d..f136876cb4a3 100644
---- a/drivers/usb/chipidea/usbmisc_imx.c
-+++ b/drivers/usb/chipidea/usbmisc_imx.c
-@@ -100,6 +100,7 @@
- #define MX7D_USB_VBUS_WAKEUP_SOURCE_AVALID	MX7D_USB_VBUS_WAKEUP_SOURCE(1)
- #define MX7D_USB_VBUS_WAKEUP_SOURCE_BVALID	MX7D_USB_VBUS_WAKEUP_SOURCE(2)
- #define MX7D_USB_VBUS_WAKEUP_SOURCE_SESS_END	MX7D_USB_VBUS_WAKEUP_SOURCE(3)
-+#define MX7D_USBNC_AUTO_RESUME				BIT(2)
- /* The default DM/DP value is pull-down */
- #define MX7D_USBNC_USB_CTRL2_OPMODE(v)			(v << 6)
- #define MX7D_USBNC_USB_CTRL2_OPMODE_NON_DRIVING	MX7D_USBNC_USB_CTRL2_OPMODE(1)
-@@ -638,10 +639,17 @@ static int usbmisc_imx7d_init(struct imx_usbmisc_data *data)
- 		reg |= MX6_BM_PWR_POLARITY;
- 	writel(reg, usbmisc->base);
- 
--	reg = readl(usbmisc->base + MX7D_USBNC_USB_CTRL2);
--	reg &= ~MX7D_USB_VBUS_WAKEUP_SOURCE_MASK;
--	writel(reg | MX7D_USB_VBUS_WAKEUP_SOURCE_BVALID,
--		 usbmisc->base + MX7D_USBNC_USB_CTRL2);
-+	/* SoC non-burst setting */
-+	reg = readl(usbmisc->base);
-+	writel(reg | MX6_BM_NON_BURST_SETTING, usbmisc->base);
-+
-+	if (!data->hsic) {
-+		reg = readl(usbmisc->base + MX7D_USBNC_USB_CTRL2);
-+		reg &= ~MX7D_USB_VBUS_WAKEUP_SOURCE_MASK;
-+		writel(reg | MX7D_USB_VBUS_WAKEUP_SOURCE_BVALID
-+			| MX7D_USBNC_AUTO_RESUME,
-+			usbmisc->base + MX7D_USBNC_USB_CTRL2);
-+	}
- 
- 	spin_unlock_irqrestore(&usbmisc->lock, flags);
- 
-@@ -832,6 +840,70 @@ static int imx7d_charger_detection(struct imx_usbmisc_data *data)
- 	return ret;
- }
- 
-+static int usbmisc_imx7ulp_init(struct imx_usbmisc_data *data)
-+{
-+	struct imx_usbmisc *usbmisc = dev_get_drvdata(data->dev);
-+	unsigned long flags;
-+	u32 reg;
-+
-+	if (data->index >= 1)
-+		return -EINVAL;
-+
-+	spin_lock_irqsave(&usbmisc->lock, flags);
-+	reg = readl(usbmisc->base);
-+	if (data->disable_oc) {
-+		reg |= MX6_BM_OVER_CUR_DIS;
-+	} else {
-+		reg &= ~MX6_BM_OVER_CUR_DIS;
-+
-+		/*
-+		 * If the polarity is not configured keep it as setup by the
-+		 * bootloader.
-+		 */
-+		if (data->oc_pol_configured && data->oc_pol_active_low)
-+			reg |= MX6_BM_OVER_CUR_POLARITY;
-+		else if (data->oc_pol_configured)
-+			reg &= ~MX6_BM_OVER_CUR_POLARITY;
-+	}
-+	/* If the polarity is not set keep it as setup by the bootlader */
-+	if (data->pwr_pol == 1)
-+		reg |= MX6_BM_PWR_POLARITY;
-+
-+	writel(reg, usbmisc->base);
-+
-+	/* SoC non-burst setting */
-+	reg = readl(usbmisc->base);
-+	writel(reg | MX6_BM_NON_BURST_SETTING, usbmisc->base);
-+
-+	if (data->hsic) {
-+		reg = readl(usbmisc->base);
-+		writel(reg | MX6_BM_UTMI_ON_CLOCK, usbmisc->base);
-+
-+		reg = readl(usbmisc->base + MX6_USB_HSIC_CTRL_OFFSET);
-+		reg |= MX6_BM_HSIC_EN | MX6_BM_HSIC_CLK_ON;
-+		writel(reg, usbmisc->base + MX6_USB_HSIC_CTRL_OFFSET);
-+
-+		/*
-+		 * For non-HSIC controller, the autoresume is enabled
-+		 * at MXS PHY driver (usbphy_ctrl bit18).
-+		 */
-+		reg = readl(usbmisc->base + MX7D_USBNC_USB_CTRL2);
-+		writel(reg | MX7D_USBNC_AUTO_RESUME,
-+			usbmisc->base + MX7D_USBNC_USB_CTRL2);
-+	} else {
-+		reg = readl(usbmisc->base + MX7D_USBNC_USB_CTRL2);
-+		reg &= ~MX7D_USB_VBUS_WAKEUP_SOURCE_MASK;
-+		writel(reg | MX7D_USB_VBUS_WAKEUP_SOURCE_BVALID,
-+			 usbmisc->base + MX7D_USBNC_USB_CTRL2);
-+	}
-+
-+	spin_unlock_irqrestore(&usbmisc->lock, flags);
-+
-+	usbmisc_imx7d_set_wakeup(data, false);
-+
-+	return 0;
-+}
-+
- static const struct usbmisc_ops imx25_usbmisc_ops = {
- 	.init = usbmisc_imx25_init,
- 	.post = usbmisc_imx25_post,
-@@ -873,6 +945,13 @@ static const struct usbmisc_ops imx7d_usbmisc_ops = {
- 	.charger_detection = imx7d_charger_detection,
- };
- 
-+static const struct usbmisc_ops imx7ulp_usbmisc_ops = {
-+	.init = usbmisc_imx7ulp_init,
-+	.set_wakeup = usbmisc_imx7d_set_wakeup,
-+	.hsic_set_connect = usbmisc_imx6_hsic_set_connect,
-+	.hsic_set_clk = usbmisc_imx6_hsic_set_clk,
-+};
-+
- static inline bool is_imx53_usbmisc(struct imx_usbmisc_data *data)
- {
- 	struct imx_usbmisc *usbmisc = dev_get_drvdata(data->dev);
-@@ -1025,7 +1104,7 @@ static const struct of_device_id usbmisc_imx_dt_ids[] = {
- 	},
- 	{
- 		.compatible = "fsl,imx7ulp-usbmisc",
--		.data = &imx7d_usbmisc_ops,
-+		.data = &imx7ulp_usbmisc_ops,
- 	},
- 	{ /* sentinel */ }
- };
--- 
-2.17.1
-
+greg k-h
