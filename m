@@ -2,116 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 734F11BA315
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2020 14:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42CDC1BA3C8
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Apr 2020 14:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726769AbgD0MAg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Apr 2020 08:00:36 -0400
-Received: from mga09.intel.com ([134.134.136.24]:61677 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726260AbgD0MAg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 27 Apr 2020 08:00:36 -0400
-IronPort-SDR: fLTtaa6fCX/LUqwF5MEayQrkbQ21KyJKr//yV7YjW1JVkwUaZ70Gy45irwpQaIesV4a4BqJfmN
- oKogZsEAmr2Q==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2020 05:00:35 -0700
-IronPort-SDR: f4dieNNeqH+D72icavoYrhwnajLAet2hWZRv24hCwhaJgXQI1yjWeIaW8Igjbh95dX8UTT3GZl
- MvtDiNfbzEYg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,324,1583222400"; 
-   d="scan'208";a="367141656"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 27 Apr 2020 05:00:32 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 27 Apr 2020 15:00:32 +0300
-Date:   Mon, 27 Apr 2020 15:00:32 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
-Cc:     linux-iio <linux-iio@vger.kernel.org>, linux-usb@vger.kernel.org,
-        Jagadish.Hadimani@amd.com
-Subject: Re: ucsi and DRD controller interaction
-Message-ID: <20200427120032.GA2351955@kuha.fi.intel.com>
-References: <26823688-3b9c-5869-bcb6-4d6e5dcd77bc@amd.com>
- <20200421074353.GE3768833@kuha.fi.intel.com>
- <1d4fd9f3-8ea6-c054-0ba4-d50d78226fae@amd.com>
- <20200422110056.GB618654@kuha.fi.intel.com>
- <841d88c6-e08b-72d3-6884-0aa51805e3be@amd.com>
- <20200422142808.GE618654@kuha.fi.intel.com>
- <e85cefec-2731-65e8-f0f5-8cdc5d9e3773@amd.com>
+        id S1727074AbgD0MsC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Apr 2020 08:48:02 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:42390 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726539AbgD0MsC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Apr 2020 08:48:02 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 03RClvUb031518;
+        Mon, 27 Apr 2020 07:47:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1587991677;
+        bh=wFp1uW4oVyqo4XUTEBnZc+chQAinP/gEUIiYLAAyvfo=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=og4BrfRcXPOS4RZrz3PZ1lx5YOxTEQ++Uo6MQsl9AqP1KexYRh3ANrWoJEUa1IvrI
+         Nl4cbqECaIWWPtrrLJGxWfV6vQTh/wJau2F03Ltxp0STnO96+6DZby+VCnQaDtnF+K
+         bO4UinxQm/NxlVrZhPQ4N/GZVZYyv3dQOliRoE9A=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 03RClvIk125927
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 27 Apr 2020 07:47:57 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 27
+ Apr 2020 07:47:57 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Mon, 27 Apr 2020 07:47:57 -0500
+Received: from [10.250.233.85] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 03RClsKx047815;
+        Mon, 27 Apr 2020 07:47:55 -0500
+Subject: Re: [PATH v4 1/2] phy: cadence: salvo: add salvo phy driver
+To:     Peter Chen <hzpeterchen@gmail.com>,
+        Oliver Graute <oliver.graute@gmail.com>
+CC:     Peter Chen <peter.chen@nxp.com>, <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, USB list <linux-usb@vger.kernel.org>,
+        <jun.li@nxp.com>, <linux-imx@nxp.com>
+References: <20200401013851.16227-1-peter.chen@nxp.com>
+ <20200409143205.GA15163@portage>
+ <CAL411-rfxO-88aPaiDcjW+ri+RKMFz=C6tkNMztWYA-+uNvopA@mail.gmail.com>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <d91e7b91-4197-3f5e-ba0d-854281b94403@ti.com>
+Date:   Mon, 27 Apr 2020 18:17:54 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e85cefec-2731-65e8-f0f5-8cdc5d9e3773@amd.com>
+In-Reply-To: <CAL411-rfxO-88aPaiDcjW+ri+RKMFz=C6tkNMztWYA-+uNvopA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 22, 2020 at 08:23:54PM +0530, Shah, Nehal-bakulchandra wrote:
-> > Can you still influence what goes to your ACPI tables, or are we
-> > talking about products that are already on the market?
+Hi Peter,
+
+On 4/26/2020 12:30 PM, Peter Chen wrote:
+> On Fri, Apr 10, 2020 at 12:30 AM Oliver Graute <oliver.graute@gmail.com> wrote:
+>>
+>> On 01/04/20, Peter Chen wrote:
+>>> Cadence SALVO PHY is a 28nm product, and is only used for USB3 & USB2.
+>>> According to the Cadence, this PHY is a legacy Module, and Sierra and
+>>> Torrent are later evolutions from it, and their sequence overlap is
+>>> minimal, meaning we cannot reuse either (Sierra & Torrent) of the PHY
+>>> drivers.
+>>>
+>>> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+>>
+>> Tested-by:  Oliver Graute <oliver.graute@kococonnector.com>
 > 
-> Yes still it is in development phase so i can work out with BIOS team for the same. When you say description of connection ,something like this should be part of _DSD method right? (i.e from below dts
-> to _DSD of ACPI)
+> Hi Kithon,
 > 
->  usb_con: connector {
-> compatible = "usb-c-connector";
->  label = "USB-C";
->  data-role = "dual";
->  power-role = "dual";
->  try-power-role = "sink";
->  source-pdos = <PDO_FIXED(5000, 500, PDO_FIXED_USB_COMM)>;
->  sink-pdos = <PDO_FIXED(5000, 500, PDO_FIXED_USB_COMM)
->  PDO_VAR(5000, 5000, 1000)>;
->  op-sink-microwatt = <10000000>;
->  };
+> Rob has already acked the dt-binding patch, would you please merge
+> these two patches,
 
-Here's how the ASL for the _DSD should look like. I don't know how
-are all these components placed on your platform, so I'm just assuming
-that your I2C host is under PCI0, as well as your DWC3 controller.
-It's just an example, but hopefully you get the point from it:
+Sure, I'll be merging it this week.
 
-/*
- * I2C1 is the I2C host, and PDC1 is the USB PD Controller (I2C slave device).
- */
-Scope (\_SB.PCI0.I2C1.PDC1)
-{
-        /* Each connector should have its own ACPI device entry (node). */
-        Device (CON0)
-        {
-                Name (_ADR, 0)
-
-                Name (_DSD, Package () {
-                    ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-                    Package() {
-                        Package () {"usb-role-switch", \_SB.PCI0.DWC3},
-                    }
-                })
-        }
-}
-
-So that property "usb-role-switch" has reference to the DWC3 node as
-its value. That's what we are after here. If you have that property,
-the subsystem will find the USB controller for you.
-
-If you need for example the properties for the roles, then the _DSD
-would look like this:
-
-Name (_DSD, Package () {
-    ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-    Package() {
-        Package () {"usb-role-switch", \_SB.PCI0.DWC3},
-        Package () {"power-role", "dual"},
-        Package () {"data-role", "dual"},
-    }
-})
-
-and so on...
-
-
-Thanks,
-
--- 
-heikki
+Thanks
+Kishon
