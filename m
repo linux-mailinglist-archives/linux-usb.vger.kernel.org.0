@@ -2,90 +2,214 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACFF1BCC5C
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 21:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6778C1BCC61
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 21:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728512AbgD1TZN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Apr 2020 15:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52278 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728620AbgD1TZM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Apr 2020 15:25:12 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371B2C035493
-        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2020 12:25:12 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id x12so17773621qts.9
-        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2020 12:25:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cs-cmu-edu.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=vip41qUVMKBqTzEGULB2fq8TW2WA+09ehaEg4M6b7gA=;
-        b=OX9cephvVUT6NSDLm2aPp0wg7GbJRFkTlOE6HtLl4AbVbrBiWitjfdPqKFn2uTTlo6
-         RZZdVY5cYJ+X7nFP4U5wwIm17XpQi5lJMGdnsrRRWdXhllecGup4mn011MRDxqd3PaX1
-         pXXo7vzr8OqmVOdwIAIy9lxu/ZmUvfEliPItaLNfxjqDftU0dYHi4Rqi6laIoRZoWuq6
-         QUwdoT7Qegg/09sur7Wia9CP4DHAidc5klwQee/5ecVGpPPKoPvyQ94BuQk8ERNSDOBw
-         I9n2PPZxuM4t/KRY1hbRe5t/i6EWjpMK7w0MzwXDgyzGwrJciJy1oRw5ZNA/A4Ib1xiv
-         Z8wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to:user-agent;
-        bh=vip41qUVMKBqTzEGULB2fq8TW2WA+09ehaEg4M6b7gA=;
-        b=KcROmjPwz/W1phfhkvJn/vO+GzH3xeRsvnFMUYgMCRXUaovzk7UFgRlw7HyrWCVqZV
-         EUIJHxOC/KO15uwvmopVcmxxSN7PKnKUjnvHSJh9NcwQ67OdK0uVBxLcMPdHKv77NGPe
-         42OPBTqHNzN3E5nhBOBM28+SccSrmu1s7hM7zpKeh8Nrtpj0GaEFDjDSRYwD9PAAM8GO
-         FxcW2Ew4Q4pAIv7THBtkpPe3BgG38zL8rXKwdaF7zBpCJ3bC55S+GrfgrunlLg71HKyc
-         gtWGSHFXJW1z3JBxpkiWTMXl2hMJv4F+qdD49wGoXOmt8TN7O+VzIgwdqWT4TpJAUlOG
-         N7/A==
-X-Gm-Message-State: AGi0PuYb2euQr8Vt057ImeUW0he6VKH9MmcSyI7T65h/a6gTxRR7Gupy
-        44SbhAmFeqBZ/dTG2xrjLimb9w==
-X-Google-Smtp-Source: APiQypIhJhTV5HGwJH/cgQxWAhYS/uXm9mZJikUijUM58zV+qHDsER/fp3y62V6/MA+IjGf4ymv/JQ==
-X-Received: by 2002:ac8:1a2b:: with SMTP id v40mr30279995qtj.170.1588101910910;
-        Tue, 28 Apr 2020 12:25:10 -0700 (PDT)
-Received: from cs.cmu.edu (tunnel29655-pt.tunnel.tserv13.ash1.ipv6.he.net. [2001:470:7:582::2])
-        by smtp.gmail.com with ESMTPSA id y9sm14261631qkb.41.2020.04.28.12.25.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 12:25:10 -0700 (PDT)
-Date:   Tue, 28 Apr 2020 15:25:07 -0400
-From:   Jan Harkes <jaharkes@cs.cmu.edu>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-xfs@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 00/29] Convert files to ReST - part 2
-Message-ID: <20200428192317.7h5d2wiqmy7y473r@cs.cmu.edu>
-Mail-Followup-To: Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-xfs@vger.kernel.org, linux-usb@vger.kernel.org
-References: <cover.1588021877.git.mchehab+huawei@kernel.org>
- <20200428130128.22c4b973@lwn.net>
+        id S1728882AbgD1T1J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Apr 2020 15:27:09 -0400
+Received: from mout02.posteo.de ([185.67.36.66]:47867 "EHLO mout02.posteo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728613AbgD1T1J (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 28 Apr 2020 15:27:09 -0400
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 634FD2400FB
+        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2020 21:27:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1588102023; bh=+Xpw0shhYHBpsX3QPHRsK+zdjS0X14PXeTwC6/eoRwI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=QxFNzYsiEeJ7QsHiLFlNV8FHhgkGj2dI36waujkoTDpEYqAs5Zw+uSKkTxIwSvxGi
+         9jCTO0hasLK8IntiRZgz0qyvP0bhTfqiEeDWKvBK24/0Bhk9X5pIT/YE9MAH3a6Tcg
+         BQyzixTBRUlFxBIzgTnXM0Hy+JteLSViSDN7rKEl/3OtaG+ewpWtSraUHCK3O5O4GI
+         i54WuZOHDVjXnmCpXSJtN+K01JzfnzeKaeJ7t3LxKmRE3+iQV/affy6bRPLmCtPugX
+         KlvVhhPlH9Sgy28XoEcmPvmL8v5O+uLAlDhhd1bDcTCnVNOfxCTXfnZ1OG7u+QO5LZ
+         kubvwrLCY8PHA==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 49BWqV4RcFz6tmQ;
+        Tue, 28 Apr 2020 21:27:02 +0200 (CEST)
+Date:   Tue, 28 Apr 2020 21:27:01 +0200
+From:   Julian =?UTF-8?B?R3Jvw58=?= <julian.g@posteo.de>
+To:     hdegoede@redhat.co
+Cc:     linux-usb@vger.kernel.org
+Subject: unusual_uas.h additional entry
+Message-ID: <20200428212701.2ee42662@motofckr9k-mint-desktop>
+X-Mailer: Claws Mail 3.16.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200428130128.22c4b973@lwn.net>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 28, 2020 at 03:09:51PM -0400, Jonathan Corbet wrote:
-> So I'm happy to merge this set, but there is one thing that worries me a
-> bit... 
-> 
-> >  fs/coda/Kconfig                               |    2 +-
-> 
-> I'd feel a bit better if I could get an ack or two from filesystem folks
-> before I venture that far out of my own yard...what say you all?
+Hello,
 
-I acked the Coda parts on the first iteration of this patch. I have no
-problem with you merging them.
+I would like to ask for an addition to the "unusual_uas.h" file.
+According to
+https://en.opensuse.org/SDB:USB_3.0_Hard_Drive_troubleshooting I went
+through the usb_stor_adjust_quirks flags for my USB 3.0 storage device
+and found flag "f" to fix my issue of the device needing several
+minutes to connect (flag "u" of couse also fixing the issue).
 
-Jan
+As I don't understand the format of the entries, please add missing
+information from the "lsusb -v" output down below.
+
+
+
+/* Reported-by: Julian Gro=C3=9F <julian.g@posteo.de> */
+UNUSUAL_DEV(0xXXXX,
+		"",
+		"",
+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+		US_FL_NO_REPORT_OPCODES),
+
+
+
+
+
+Bus 002 Device 022: ID 059f:105f LaCie, Ltd=20
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               3.00
+  bDeviceClass            0 (Defined at Interface level)
+  bDeviceSubClass         0=20
+  bDeviceProtocol         0=20
+  bMaxPacketSize0         9
+  idVendor           0x059f LaCie, Ltd
+  idProduct          0x105f=20
+  bcdDevice            0.01
+  iManufacturer           2 LaCie
+  iProduct                3 2Big Quadra USB3
+  iSerial                 1 000000002598fe2400ad
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength          121
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0=20
+    bmAttributes         0xc0
+      Self Powered
+    MaxPower               36mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass         8 Mass Storage
+      bInterfaceSubClass      6 SCSI
+      bInterfaceProtocol     80 Bulk-Only
+      iInterface              0=20
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst              15
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst              15
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       1
+      bNumEndpoints           4
+      bInterfaceClass         8 Mass Storage
+      bInterfaceSubClass      6 SCSI
+      bInterfaceProtocol     98=20
+      iInterface              0=20
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst              15
+        MaxStreams             32
+        Data-in pipe (0x03)
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst              15
+        MaxStreams             32
+        Data-out pipe (0x04)
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst              15
+        MaxStreams             32
+        Status pipe (0x02)
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x04  EP 4 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0400  1x 1024 bytes
+        bInterval               0
+        bMaxBurst               0
+        Command pipe (0x01)
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength           22
+  bNumDeviceCaps          2
+  USB 2.0 Extension Device Capability:
+    bLength                 7
+    bDescriptorType        16
+    bDevCapabilityType      2
+    bmAttributes   0x00000002
+      Link Power Management (LPM) Supported
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x00
+    wSpeedsSupported   0x000e
+      Device can operate at Full Speed (12Mbps)
+      Device can operate at High Speed (480Mbps)
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   1
+      Lowest fully-functional device speed is Full Speed (12Mbps)
+    bU1DevExitLat          10 micro seconds
+    bU2DevExitLat        2047 micro seconds
+Device Status:     0x000d
+  Self Powered
+  U1 Enabled
+  U2 Enabled
