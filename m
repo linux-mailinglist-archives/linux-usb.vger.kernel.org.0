@@ -2,62 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B876C1BB6CB
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 08:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E66451BB725
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 09:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726391AbgD1Ger (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Apr 2020 02:34:47 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:3361 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726386AbgD1Ger (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 28 Apr 2020 02:34:47 -0400
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 39C9FE14DDB9C07D45B5;
-        Tue, 28 Apr 2020 14:34:43 +0800 (CST)
-Received: from huawei.com (10.175.124.28) by DGGEMS405-HUB.china.huawei.com
- (10.3.19.205) with Microsoft SMTP Server id 14.3.487.0; Tue, 28 Apr 2020
- 14:34:33 +0800
-From:   Jason Yan <yanaijie@huawei.com>
-To:     <Peter.Chen@nxp.com>, <gregkh@linuxfoundation.org>,
-        <mirq-linux@rere.qmqm.pl>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Jason Yan <yanaijie@huawei.com>
-Subject: [PATCH] usb: chipidea: usb2: remove unneeded semicolon
-Date:   Tue, 28 Apr 2020 14:33:59 +0800
-Message-ID: <20200428063359.16433-1-yanaijie@huawei.com>
-X-Mailer: git-send-email 2.21.1
+        id S1725867AbgD1HCQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Apr 2020 03:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726437AbgD1HCQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Apr 2020 03:02:16 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72B4C03C1AD
+        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2020 00:02:14 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id e6so708745pjt.4
+        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2020 00:02:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4/nXkttFFpuCRApbDJrQtkcOv5tbYmzw7WwX94JHLec=;
+        b=akJy1tba1VpIzlH/CXLZlgwmODN/R788RBn+EBkFiZNxPR9HnUenKsz8T7JZ3hBiQs
+         6JxexXdGrkQivjC7Y9LpCP3JuG7fTFRrji8IJor7BprWzLpoplEjU1ufuwh+f1Z/rflv
+         cj8ycSNF6ebqJt7mCKn11SKuViZxnhv1YL6SmKkoG2wggjoB5z3g+EIDR/kjNGSiM52i
+         wmBl6bGfJ9pCt2vdzS74YeyDnawUMQokZMZEpok+2zU4ZBPPHHawFEkcVdqtHwS8SLLm
+         B+0MFC85J0M48ov68PK4QQ0OOIGNv4Zmy9W4+VSV9tgm9A953mb3aQFl+AkIP5omVDyd
+         GGjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4/nXkttFFpuCRApbDJrQtkcOv5tbYmzw7WwX94JHLec=;
+        b=tvUgzVvMZ5XoivIyBhH9xFO9eeuh4saTMsBnAof9TQfyx4Ae0rTRY+kzm1gVG52gUC
+         f/WxzrmV4TDYXfK5Kyfkb/kph76s7hZU7OBLzS1Eox5GulwY7VP/eNbTDJKvTJ2S1ela
+         PJ42bW5cFjQyh8YiWmnLxegJ357WITC3rhUDG+L9cp/eE6xMvFfYl1E8NiF/soDXZfE5
+         WuBtQT0z+JMh68+Ls6vniKAn3lm7tcsf3IuTCUVweoIYI/JXdS6ZOZeARPiEeQFnTS4K
+         a9OjNmLg0VUlz1BZmIh7JFBP415zoyVaOJY7HXyYOr4fn3vN7xgN9cjB1uJy7U51cCuh
+         Fsow==
+X-Gm-Message-State: AGi0PuYdwA1mJ2nViFAvz6BCYeVIbmlxnPExeo1g7Ut1A1Y6YsYzJQod
+        nTemaB93F/xgYRj0/3taSU/m7g==
+X-Google-Smtp-Source: APiQypKJLT+5WEewrpsIGozji9eAxX0I24yBU7u0wC3+voEg1WXhmgIc5VBQVKbIDRa6YQ/bPe8YjA==
+X-Received: by 2002:a17:90a:7105:: with SMTP id h5mr3221811pjk.3.1588057334032;
+        Tue, 28 Apr 2020 00:02:14 -0700 (PDT)
+Received: from localhost.localdomain (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id h193sm14310501pfe.30.2020.04.28.00.02.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Apr 2020 00:02:12 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Chuhong Yuan <hslester96@gmail.com>,
+        Peter Fink <pfink@christ-es.de>
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH] net: usb: ax88179_178a: Implement ethtool_ops set_eeprom
+Date:   Tue, 28 Apr 2020 00:01:39 -0700
+Message-Id: <20200428070139.3465511-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.28]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix the following coccicheck warning:
+The vendor driver does upon failing to read a valid MAC address from
+EEPROM write the netdev's address back to EEPROM and invoking a EEPROM
+reload operation. Based on this we can implement the ethtool_ops
+set_eeprom and provide the means to populate the EEPROM from within
+Linux.
 
-drivers/usb/chipidea/ci_hdrc_usb2.c:75:28-29: Unneeded semicolon
+It's worth noting that ax88179_get_eeprom() will return some default
+data unless the content of the EEPROM is deemed "complete", so until the
+EEPROM is fully populated (e.g. by running ethtool -e | ethtool -E)
+data written with ax88179_set_eeprom() will appear not to stick.
 
-Signed-off-by: Jason Yan <yanaijie@huawei.com>
+The implementation is based on asix_set_eeprom(), from asix_common.c
+
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
- drivers/usb/chipidea/ci_hdrc_usb2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/usb/ax88179_178a.c | 77 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
 
-diff --git a/drivers/usb/chipidea/ci_hdrc_usb2.c b/drivers/usb/chipidea/ci_hdrc_usb2.c
-index 93c864759135..89e1d82d739b 100644
---- a/drivers/usb/chipidea/ci_hdrc_usb2.c
-+++ b/drivers/usb/chipidea/ci_hdrc_usb2.c
-@@ -72,7 +72,7 @@ static int ci_hdrc_usb2_probe(struct platform_device *pdev)
+diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
+index 93044cf1417a..b05bb11a02cb 100644
+--- a/drivers/net/usb/ax88179_178a.c
++++ b/drivers/net/usb/ax88179_178a.c
+@@ -31,6 +31,7 @@
+ #define AX_ACCESS_PHY				0x02
+ #define AX_ACCESS_EEPROM			0x04
+ #define AX_ACCESS_EFUS				0x05
++#define AX_RELOAD_EEPROM_EFUSE			0x06
+ #define AX_PAUSE_WATERLVL_HIGH			0x54
+ #define AX_PAUSE_WATERLVL_LOW			0x55
  
- 	priv->clk = devm_clk_get_optional(dev, NULL);
- 	if (IS_ERR(priv->clk))
--		return PTR_ERR(priv->clk);;
-+		return PTR_ERR(priv->clk);
+@@ -611,6 +612,81 @@ ax88179_get_eeprom(struct net_device *net, struct ethtool_eeprom *eeprom,
+ 	return 0;
+ }
  
- 	ret = clk_prepare_enable(priv->clk);
- 	if (ret) {
++static int
++ax88179_set_eeprom(struct net_device *net, struct ethtool_eeprom *eeprom,
++		   u8 *data)
++{
++	struct usbnet *dev = netdev_priv(net);
++	u16 *eeprom_buff;
++	int first_word;
++	int last_word;
++	int ret;
++	int i;
++
++	netdev_dbg(net, "write EEPROM len %d, offset %d, magic 0x%x\n",
++		   eeprom->len, eeprom->offset, eeprom->magic);
++
++	if (eeprom->len == 0)
++		return -EINVAL;
++
++	if (eeprom->magic != AX88179_EEPROM_MAGIC)
++		return -EINVAL;
++
++	first_word = eeprom->offset >> 1;
++	last_word = (eeprom->offset + eeprom->len - 1) >> 1;
++
++	eeprom_buff = kmalloc_array(last_word - first_word + 1, sizeof(u16),
++				    GFP_KERNEL);
++	if (!eeprom_buff)
++		return -ENOMEM;
++
++	/* align data to 16 bit boundaries, read the missing data from
++	   the EEPROM */
++	if (eeprom->offset & 1) {
++		ret = ax88179_read_cmd(dev, AX_ACCESS_EEPROM, first_word, 1, 2,
++				       &eeprom_buff[0]);
++		if (ret < 0) {
++			netdev_err(net, "Failed to read EEPROM at offset 0x%02x.\n", first_word);
++			goto free;
++		}
++	}
++
++	if ((eeprom->offset + eeprom->len) & 1) {
++		ret = ax88179_read_cmd(dev, AX_ACCESS_EEPROM, last_word, 1, 2,
++				       &eeprom_buff[last_word - first_word]);
++		if (ret < 0) {
++			netdev_err(net, "Failed to read EEPROM at offset 0x%02x.\n", last_word);
++			goto free;
++		}
++	}
++
++	memcpy((u8 *)eeprom_buff + (eeprom->offset & 1), data, eeprom->len);
++
++	for (i = first_word; i <= last_word; i++) {
++		netdev_dbg(net, "write to EEPROM at offset 0x%02x, data 0x%04x\n",
++			   i, eeprom_buff[i - first_word]);
++		ret = ax88179_write_cmd(dev, AX_ACCESS_EEPROM, i, 1, 2,
++					&eeprom_buff[i - first_word]);
++		if (ret < 0) {
++			netdev_err(net, "Failed to write EEPROM at offset 0x%02x.\n", i);
++			goto free;
++		}
++		msleep(20);
++	}
++
++	/* reload EEPROM data */
++	ret = ax88179_write_cmd(dev, AX_RELOAD_EEPROM_EFUSE, 0x0000, 0, 0, NULL);
++	if (ret < 0) {
++		netdev_err(net, "Failed to reload EEPROM data\n");
++		goto free;
++	}
++
++	ret = 0;
++free:
++	kfree(eeprom_buff);
++	return ret;
++}
++
+ static int ax88179_get_link_ksettings(struct net_device *net,
+ 				      struct ethtool_link_ksettings *cmd)
+ {
+@@ -822,6 +898,7 @@ static const struct ethtool_ops ax88179_ethtool_ops = {
+ 	.set_wol		= ax88179_set_wol,
+ 	.get_eeprom_len		= ax88179_get_eeprom_len,
+ 	.get_eeprom		= ax88179_get_eeprom,
++	.set_eeprom		= ax88179_set_eeprom,
+ 	.get_eee		= ax88179_get_eee,
+ 	.set_eee		= ax88179_set_eee,
+ 	.nway_reset		= usbnet_nway_reset,
 -- 
-2.21.1
+2.24.0
 
