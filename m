@@ -2,586 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4041BCCC4
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 21:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E081BCCC8
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 21:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729161AbgD1TyF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Apr 2020 15:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728559AbgD1TyF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Apr 2020 15:54:05 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1158C03C1AC
-        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2020 12:54:03 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id t11so10981231pgg.2
-        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2020 12:54:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PZgDa/Fq0Ei9i3EeMD9351M4X890P0OTSjoSz5BWees=;
-        b=s7bKaNQ3GDrNLgjhfyND0NKiVcVGNLZXWDivq/luHobNvgDfNXIPsvAJm61w4+BTqf
-         /BPE0O9tEf+2D+lSTRqUTZIO4MVCj2RUTqfxjz/J9GFqwnlIWdLVF4cCYKMKAIUdzcfh
-         +abC8Ezz5YoxKIbAk8DwyN3gQGW/2BO5w7VSEij8hmINMk+A/sfXPyktcRQBi+BEdHOj
-         YZhU7zbBILC+kkJzugnwzGB5Rq0WtVwI2auTx+djshY8PSTnYoJqxX+b0YmhdQ1Lj3h2
-         ml6QCv2S+b93JPnW+OqslZTB+fP0aFJkpwUei7xRD2KxB4xomPwux4LAFjgpUlJo0yvP
-         muyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PZgDa/Fq0Ei9i3EeMD9351M4X890P0OTSjoSz5BWees=;
-        b=oD/h5fysFlonSl2CHf20cIdcIBarYYq0A6CLfGOn6Imk5cvP70a6g4gvNOPUWtSfZE
-         G4aSQQV5C6RprVZYZ6kEhqmArak9nrAnIrXKEyUb2c2Z9A74W5sEq1ki0/1QFfMB0Oin
-         /volV8B432tNkeWxgQ+/NDDr3o/7xcuc3K7RgqZ1Ej/1HkVgzOo/5mdOdIUbyru+5Hpv
-         +RoODKwlrlPhaBIhx+6fWfuOf+dkZw3DoqSrarLRTluVnIHn3c4zHS1VjdsK6D4tYRKg
-         EqGuulqN4gvvJXO4uE59PJeuY0GWY7mwbVDuVB2pnfJyaQbAcp02mzPP8v4oQOreT1wz
-         IDFQ==
-X-Gm-Message-State: AGi0PubZBRDznYn2+eVcccAV5+2QZlgBV7XAQ9TxduRV16AWFyVidirA
-        vixdrDAv0Bnt6j0PCLZn1Bpte+0tjE53Wc+2ZHv9gBe//TORJg==
-X-Google-Smtp-Source: APiQypK3Sekvo8xltMEhxYtCRvJnKfZmDnNO7QIu2egu9IypHVq3f3FvRfvvQfg4a1RGW0c2D28sS/fCTgbD7tVJfAo=
-X-Received: by 2002:a62:5289:: with SMTP id g131mr21982219pfb.318.1588103642496;
- Tue, 28 Apr 2020 12:54:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <e7920e1960ed65410f00c3400bdeccb27553c736.1588103144.git.andreyknvl@google.com>
-In-Reply-To: <e7920e1960ed65410f00c3400bdeccb27553c736.1588103144.git.andreyknvl@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 28 Apr 2020 21:53:51 +0200
-Message-ID: <CAAeHK+yscLbzCh3P5uhOpxtB8-xhQbBSmSHpj6ugM=AMqjE7NA@mail.gmail.com>
-Subject: Re: [PATCH] usb: raw-gadget: fix gadget endpoint selection
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1728812AbgD1T5A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Apr 2020 15:57:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52348 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728584AbgD1T5A (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 28 Apr 2020 15:57:00 -0400
+Received: from localhost.localdomain (unknown [157.51.86.211])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 373612176D;
+        Tue, 28 Apr 2020 19:56:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588103820;
+        bh=UFA0Ixoy/ieW4R7Wteg5u5FS3Gsbhp97qtNu9VjbEAE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=M2AKCb/qus/lxhlPZGxSypMSEaW4J5eW75ea0WdgzDbKX2c0wh+ka3AycItBCLzP0
+         FuSkc2MjSQniy80sdqXweSummYx+lYY4MQybe/KqtSQm6G6f9glQ2OPpvCg0VoaO0d
+         +CnDehhNa0gRcczyo21haoHkC6RqZMoYWferp2Z0=
+From:   mani@kernel.org
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patong.mxl@gmail.com, Manivannan Sadhasivam <mani@kernel.org>
+Subject: [PATCH 0/2] Add support for MaxLinear/Exar USB to serial converters
+Date:   Wed, 29 Apr 2020 01:26:49 +0530
+Message-Id: <20200428195651.6793-1-mani@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 28, 2020 at 9:46 PM Andrey Konovalov <andreyknvl@google.com> wrote:
->
-> Currently automatic gadget endpoint selection based on required features
-> doesn't work. Raw Gadget tries iterating over the list of available
-> endpoints and finding one that has the right direction and transfer type.
-> Unfortunately selecting arbitrary gadget endpoints (even if they satisfy
-> feature requirements) doesn't work, as (depending on the UDC driver) they
-> might have fixed addresses, and one also needs to provide matching
-> endpoint addresses in the descriptors sent to the host.
->
-> The composite framework deals with this by assigning endpoint addresses
-> in usb_ep_autoconfig() before enumeration starts. This approach won't work
-> with Raw Gadget as the endpoints are supposed to be enabled after a
-> set_configuration/set_interface request from the host, so it's too late to
-> patch the endpoint descriptors that had already been sent to the host.
->
-> For Raw Gadget we take the another approach. Similarly to GadgetFS, we
-> allow the user to make the decision as to which gadget endpoints to use.
->
-> This patch adds another Raw Gadget ioctl USB_RAW_IOCTL_EPS_INFO that
-> exposes information about all non-control endpoints that a currently
-> connected UDC has. This information includes endpoints addresses, as well
-> as their capabilities and limits to allow the user to chose the most
-> fitting gadget endpoint.
->
-> The USB_RAW_IOCTL_EP_ENABLE ioctl is updated to use the proper endpoint
-> validation routine usb_gadget_ep_match_desc() and also now accepts an
-> optional usb_ss_ep_comp_descriptor argument.
->
-> These changes affect the portability of the gadgets that use Raw Gadget
-> when running on different UDCs. Nevertheless, as long as the user relies
-> on the information provided by USB_RAW_IOCTL_EPS_INFO to dynamically
-> choose endpoint addresses, UDC-agnostic gadgets can still be written with
-> Raw Gadget.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+From: Manivannan Sadhasivam <mani@kernel.org>
 
-Hi Alan,
+Hello,
 
-This patch uses the approach that I mentioned in the discussion about
-endpoint selection. Does this look acceptable?
+This series adds support for MaxLinear/Exar USB to serial converters.
+This driver only supports XR21V141X series but provision has been made
+to support other series in future.
 
-I'm not sure which endpoint limits it makes sense to expose via
-USB_RAW_IOCTL_EPS_INFO. I'm more or less sure about maxpacket_limit
-and max_streams, but I don't exactly know what maxburst is used for.
-Maybe there are some others?
+This driver is inspired from the initial one submitted by Patong Yang:
 
-I also wonder if we need to expose ep0 limits via USB_RAW_IOCTL_EPS_INFO too.
-expose ep0 parameters?
+https://patchwork.kernel.org/patch/10543261/
 
-Thanks!
+While the initial driver was a custom tty USB driver exposing whole
+new serial interface ttyXRUSBn, this version is completely based on USB
+serial core thus exposing the interfaces as ttyUSBn. This will avoid
+the overhead of exposing a new USB serial interface which the userspace
+tools are unaware of.
 
+This series has been tested on Hikey970 board hosting XR21V141X chip.
 
-> ---
->  Documentation/usb/raw-gadget.rst       |   6 +-
->  drivers/usb/gadget/legacy/raw_gadget.c | 194 ++++++++++++++++---------
->  include/uapi/linux/usb/raw_gadget.h    |  84 ++++++++++-
->  3 files changed, 207 insertions(+), 77 deletions(-)
->
-> diff --git a/Documentation/usb/raw-gadget.rst b/Documentation/usb/raw-gadget.rst
-> index 9e78cb858f86..42bd446d72b2 100644
-> --- a/Documentation/usb/raw-gadget.rst
-> +++ b/Documentation/usb/raw-gadget.rst
-> @@ -27,11 +27,7 @@ differences are:
->  3. Raw Gadget provides a way to select a UDC device/driver to bind to,
->     while GadgetFS currently binds to the first available UDC.
->
-> -4. Raw Gadget uses predictable endpoint names (handles) across different
-> -   UDCs (as long as UDCs have enough endpoints of each required transfer
-> -   type).
-> -
-> -5. Raw Gadget has ioctl-based interface instead of a filesystem-based one.
-> +4. Raw Gadget has ioctl-based interface instead of a filesystem-based one.
->
->  Userspace interface
->  ~~~~~~~~~~~~~~~~~~~
-> diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-> index 7b241992ad5a..cbf4b0572188 100644
-> --- a/drivers/usb/gadget/legacy/raw_gadget.c
-> +++ b/drivers/usb/gadget/legacy/raw_gadget.c
-> @@ -7,6 +7,7 @@
->   */
->
->  #include <linux/compiler.h>
-> +#include <linux/ctype.h>
->  #include <linux/debugfs.h>
->  #include <linux/delay.h>
->  #include <linux/kref.h>
-> @@ -123,8 +124,6 @@ static void raw_event_queue_destroy(struct raw_event_queue *queue)
->
->  struct raw_dev;
->
-> -#define USB_RAW_MAX_ENDPOINTS 32
-> -
->  enum ep_state {
->         STATE_EP_DISABLED,
->         STATE_EP_ENABLED,
-> @@ -134,6 +133,7 @@ struct raw_ep {
->         struct raw_dev          *dev;
->         enum ep_state           state;
->         struct usb_ep           *ep;
-> +       u8                      addr;
->         struct usb_request      *req;
->         bool                    urb_queued;
->         bool                    disabling;
-> @@ -168,7 +168,8 @@ struct raw_dev {
->         bool                            ep0_out_pending;
->         bool                            ep0_urb_queued;
->         ssize_t                         ep0_status;
-> -       struct raw_ep                   eps[USB_RAW_MAX_ENDPOINTS];
-> +       struct raw_ep                   eps[USB_RAW_EPS_NUM_MAX];
-> +       int                             eps_num;
->
->         struct completion               ep0_done;
->         struct raw_event_queue          queue;
-> @@ -202,7 +203,7 @@ static void dev_free(struct kref *kref)
->                 usb_ep_free_request(dev->gadget->ep0, dev->req);
->         }
->         raw_event_queue_destroy(&dev->queue);
-> -       for (i = 0; i < USB_RAW_MAX_ENDPOINTS; i++) {
-> +       for (i = 0; i < USB_RAW_EPS_NUM_MAX; i++) {
->                 if (dev->eps[i].state != STATE_EP_ENABLED)
->                         continue;
->                 usb_ep_disable(dev->eps[i].ep);
-> @@ -249,12 +250,26 @@ static void gadget_ep0_complete(struct usb_ep *ep, struct usb_request *req)
->         complete(&dev->ep0_done);
->  }
->
-> +static u8 get_ep_addr(const char *name)
-> +{
-> +       /* If the endpoint has fixed function (named as e.g. "ep12out-bulk"),
-> +        * parse the endpoint address from its name. We deliberately use
-> +        * deprecated simple_strtoul() function here, as the number isn't
-> +        * followed by '\0' nor '\n'.
-> +        */
-> +       if (isdigit(name[2]))
-> +               return simple_strtoul(&name[2], NULL, 10);
-> +       /* Otherwise the endpoint is configurable (named as e.g. "ep-a"). */
-> +       return USB_RAW_EP_ADDR_ANY;
-> +}
-> +
->  static int gadget_bind(struct usb_gadget *gadget,
->                         struct usb_gadget_driver *driver)
->  {
-> -       int ret = 0;
-> +       int ret = 0, i = 0;
->         struct raw_dev *dev = container_of(driver, struct raw_dev, driver);
->         struct usb_request *req;
-> +       struct usb_ep *ep;
->         unsigned long flags;
->
->         if (strcmp(gadget->name, dev->udc_name) != 0)
-> @@ -273,6 +288,13 @@ static int gadget_bind(struct usb_gadget *gadget,
->         dev->req->context = dev;
->         dev->req->complete = gadget_ep0_complete;
->         dev->gadget = gadget;
-> +       gadget_for_each_ep(ep, dev->gadget) {
-> +               dev->eps[i].ep = ep;
-> +               dev->eps[i].addr = get_ep_addr(ep->name);
-> +               dev->eps[i].state = STATE_EP_DISABLED;
-> +               i++;
-> +       }
-> +       dev->eps_num = i;
->         spin_unlock_irqrestore(&dev->lock, flags);
->
->         /* Matches kref_put() in gadget_unbind(). */
-> @@ -555,7 +577,7 @@ static void *raw_alloc_io_data(struct usb_raw_ep_io *io, void __user *ptr,
->
->         if (copy_from_user(io, ptr, sizeof(*io)))
->                 return ERR_PTR(-EFAULT);
-> -       if (io->ep >= USB_RAW_MAX_ENDPOINTS)
-> +       if (io->ep >= USB_RAW_EPS_NUM_MAX)
->                 return ERR_PTR(-EINVAL);
->         if (!usb_raw_io_flags_valid(io->flags))
->                 return ERR_PTR(-EINVAL);
-> @@ -682,52 +704,30 @@ static int raw_ioctl_ep0_read(struct raw_dev *dev, unsigned long value)
->         return ret;
->  }
->
-> -static bool check_ep_caps(struct usb_ep *ep,
-> -                               struct usb_endpoint_descriptor *desc)
-> -{
-> -       switch (usb_endpoint_type(desc)) {
-> -       case USB_ENDPOINT_XFER_ISOC:
-> -               if (!ep->caps.type_iso)
-> -                       return false;
-> -               break;
-> -       case USB_ENDPOINT_XFER_BULK:
-> -               if (!ep->caps.type_bulk)
-> -                       return false;
-> -               break;
-> -       case USB_ENDPOINT_XFER_INT:
-> -               if (!ep->caps.type_int)
-> -                       return false;
-> -               break;
-> -       default:
-> -               return false;
-> -       }
-> -
-> -       if (usb_endpoint_dir_in(desc) && !ep->caps.dir_in)
-> -               return false;
-> -       if (usb_endpoint_dir_out(desc) && !ep->caps.dir_out)
-> -               return false;
-> -
-> -       return true;
-> -}
-> -
->  static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
->  {
->         int ret = 0, i;
->         unsigned long flags;
-> -       struct usb_endpoint_descriptor *desc;
-> -       struct usb_ep *ep = NULL;
-> +       struct usb_raw_ep_descs *descs;
-> +       struct usb_endpoint_descriptor *ep_desc;
-> +       struct usb_ss_ep_comp_descriptor *comp_desc = NULL;
-> +       struct raw_ep *ep;
->
-> -       desc = memdup_user((void __user *)value, sizeof(*desc));
-> -       if (IS_ERR(desc))
-> -               return PTR_ERR(desc);
-> +       descs = memdup_user((void __user *)value, sizeof(*descs));
-> +       if (IS_ERR(descs))
-> +               return PTR_ERR(descs);
-> +
-> +       ep_desc = &descs->ep;
-> +       if (descs->comp.bLength != 0)
-> +               comp_desc = &descs->comp;
->
->         /*
->          * Endpoints with a maxpacket length of 0 can cause crashes in UDC
->          * drivers.
->          */
-> -       if (usb_endpoint_maxp(desc) == 0) {
-> +       if (usb_endpoint_maxp(ep_desc) == 0) {
->                 dev_dbg(dev->dev, "fail, bad endpoint maxpacket\n");
-> -               kfree(desc);
-> +               kfree(descs);
->                 return -EINVAL;
->         }
->
-> @@ -743,41 +743,38 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
->                 goto out_free;
->         }
->
-> -       for (i = 0; i < USB_RAW_MAX_ENDPOINTS; i++) {
-> -               if (dev->eps[i].state == STATE_EP_ENABLED)
-> +       for (i = 0; i < dev->eps_num; i++) {
-> +               ep = &dev->eps[i];
-> +               if (ep->state != STATE_EP_DISABLED)
->                         continue;
-> -               break;
-> -       }
-> -       if (i == USB_RAW_MAX_ENDPOINTS) {
-> -               dev_dbg(&dev->gadget->dev,
-> -                               "fail, no device endpoints available\n");
-> -               ret = -EBUSY;
-> -               goto out_free;
-> -       }
-> -
-> -       gadget_for_each_ep(ep, dev->gadget) {
-> -               if (ep->enabled)
-> +               if (ep->addr != usb_endpoint_num(ep_desc) &&
-> +                               ep->addr != USB_RAW_EP_ADDR_ANY)
->                         continue;
-> -               if (!check_ep_caps(ep, desc))
-> +               if (!usb_gadget_ep_match_desc(dev->gadget, ep->ep,
-> +                                                       ep_desc, comp_desc))
->                         continue;
-> -               ep->desc = desc;
-> -               ret = usb_ep_enable(ep);
-> +               /* Gadget subsystem requires us to assign only a pointer to the
-> +                * endpoint descriptor here, but technically we store pointer
-> +                * to a usb_raw_ep_descs struct with both ep and comp
-> +                * descriptors to be later freed by raw_ioctl_ep_disable().
-> +                */
-> +               ep->ep->desc = ep_desc;
-> +               ret = usb_ep_enable(ep->ep);
->                 if (ret < 0) {
->                         dev_err(&dev->gadget->dev,
->                                 "fail, usb_ep_enable returned %d\n", ret);
->                         goto out_free;
->                 }
-> -               dev->eps[i].req = usb_ep_alloc_request(ep, GFP_ATOMIC);
-> -               if (!dev->eps[i].req) {
-> +               ep->req = usb_ep_alloc_request(ep->ep, GFP_ATOMIC);
-> +               if (!ep->req) {
->                         dev_err(&dev->gadget->dev,
->                                 "fail, usb_ep_alloc_request failed\n");
-> -                       usb_ep_disable(ep);
-> +                       usb_ep_disable(ep->ep);
->                         ret = -ENOMEM;
->                         goto out_free;
->                 }
-> -               dev->eps[i].ep = ep;
-> -               dev->eps[i].state = STATE_EP_ENABLED;
-> -               ep->driver_data = &dev->eps[i];
-> +               ep->state = STATE_EP_ENABLED;
-> +               ep->ep->driver_data = ep;
->                 ret = i;
->                 goto out_unlock;
->         }
-> @@ -786,7 +783,7 @@ static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
->         ret = -EBUSY;
->
->  out_free:
-> -       kfree(desc);
-> +       kfree(descs);
->  out_unlock:
->         spin_unlock_irqrestore(&dev->lock, flags);
->         return ret;
-> @@ -796,9 +793,9 @@ static int raw_ioctl_ep_disable(struct raw_dev *dev, unsigned long value)
->  {
->         int ret = 0, i = value;
->         unsigned long flags;
-> -       const void *desc;
-> +       const void *descs;
->
-> -       if (i < 0 || i >= USB_RAW_MAX_ENDPOINTS)
-> +       if (i < 0 || i >= USB_RAW_EPS_NUM_MAX)
->                 return -EINVAL;
->
->         spin_lock_irqsave(&dev->lock, flags);
-> @@ -836,10 +833,10 @@ static int raw_ioctl_ep_disable(struct raw_dev *dev, unsigned long value)
->
->         spin_lock_irqsave(&dev->lock, flags);
->         usb_ep_free_request(dev->eps[i].ep, dev->eps[i].req);
-> -       desc = dev->eps[i].ep->desc;
-> +       descs = dev->eps[i].ep->desc;
->         dev->eps[i].ep = NULL;
->         dev->eps[i].state = STATE_EP_DISABLED;
-> -       kfree(desc);
-> +       kfree(descs);
->         dev->eps[i].disabling = false;
->
->  out_unlock:
-> @@ -1027,6 +1024,64 @@ static int raw_ioctl_vbus_draw(struct raw_dev *dev, unsigned long value)
->         return ret;
->  }
->
-> +static void fill_ep_caps(struct usb_ep_caps *caps,
-> +                               struct usb_raw_ep_caps *raw_caps)
-> +{
-> +       raw_caps->type_control = caps->type_control;
-> +       raw_caps->type_iso = caps->type_iso;
-> +       raw_caps->type_bulk = caps->type_bulk;
-> +       raw_caps->type_int = caps->type_int;
-> +       raw_caps->dir_in = caps->dir_in;
-> +       raw_caps->dir_out = caps->dir_out;
-> +}
-> +
-> +static void fill_ep_limits(struct usb_ep *ep, struct usb_raw_ep_limits *limits)
-> +{
-> +       limits->maxpacket_limit = ep->maxpacket_limit;
-> +       limits->max_streams = ep->max_streams;
-> +       limits->maxburst = ep->maxburst;
-> +}
-> +
-> +static int raw_ioctl_eps_info(struct raw_dev *dev, unsigned long value)
-> +{
-> +       int ret = 0, i;
-> +       unsigned long flags;
-> +       struct usb_raw_eps_info info;
-> +       struct raw_ep *ep;
-> +
-> +       spin_lock_irqsave(&dev->lock, flags);
-> +       if (dev->state != STATE_DEV_RUNNING) {
-> +               dev_dbg(dev->dev, "fail, device is not running\n");
-> +               ret = -EINVAL;
-> +               spin_unlock_irqrestore(&dev->lock, flags);
-> +               goto out;
-> +       }
-> +       if (!dev->gadget) {
-> +               dev_dbg(dev->dev, "fail, gadget is not bound\n");
-> +               ret = -EBUSY;
-> +               spin_unlock_irqrestore(&dev->lock, flags);
-> +               goto out;
-> +       }
-> +
-> +       memset(&info, 0, sizeof(info));
-> +       for (i = 0; i < dev->eps_num; i++) {
-> +               ep = &dev->eps[i];
-> +               strscpy(&info.eps[i].name[0], ep->ep->name,
-> +                               USB_RAW_EP_NAME_MAX);
-> +               info.eps[i].addr = ep->addr;
-> +               fill_ep_caps(&ep->ep->caps, &info.eps[i].caps);
-> +               fill_ep_limits(ep->ep, &info.eps[i].limits);
-> +       }
-> +       ret = dev->eps_num;
-> +       spin_unlock_irqrestore(&dev->lock, flags);
-> +
-> +       if (copy_to_user((void __user *)value, &info, sizeof(info)))
-> +               ret = -EFAULT;
-> +
-> +out:
-> +       return ret;
-> +}
-> +
->  static long raw_ioctl(struct file *fd, unsigned int cmd, unsigned long value)
->  {
->         struct raw_dev *dev = fd->private_data;
-> @@ -1069,6 +1124,9 @@ static long raw_ioctl(struct file *fd, unsigned int cmd, unsigned long value)
->         case USB_RAW_IOCTL_VBUS_DRAW:
->                 ret = raw_ioctl_vbus_draw(dev, value);
->                 break;
-> +       case USB_RAW_IOCTL_EPS_INFO:
-> +               ret = raw_ioctl_eps_info(dev, value);
-> +               break;
->         default:
->                 ret = -EINVAL;
->         }
-> diff --git a/include/uapi/linux/usb/raw_gadget.h b/include/uapi/linux/usb/raw_gadget.h
-> index 8544802b25bd..6ae626d17f0c 100644
-> --- a/include/uapi/linux/usb/raw_gadget.h
-> +++ b/include/uapi/linux/usb/raw_gadget.h
-> @@ -93,6 +93,75 @@ struct usb_raw_ep_io {
->         __u8            data[0];
->  };
->
-> +/*
-> + * struct usb_raw_ep_descs - argument for USB_RAW_IOCTL_EP_ENABLE ioctl.
-> + * @ep: Endpoint descriptor.
-> + * @comp: SuperSpeed Endpoint Companion descriptor.
-> + *
-> + * Both of these descriptors are only used by the gadget subsystem including
-> + * the UDC driver and don't affect the descriptors that are sent to the host.
-> + * However, the user must make sure that the host and the gadget sides agree
-> + * on the used endpoint parameters (such as e.g. endpoint addresses).
-> + */
-> +struct usb_raw_ep_descs {
-> +       struct usb_endpoint_descriptor          ep;
-> +       struct usb_ss_ep_comp_descriptor        comp;
-> +};
-> +
-> +/* Maximum number of non-control endpoints in struct usb_raw_eps_info. */
-> +#define USB_RAW_EPS_NUM_MAX    30
-> +
-> +/* Maximum length of UDC endpoint name in struct usb_raw_ep_info. */
-> +#define USB_RAW_EP_NAME_MAX    16
-> +
-> +/* Used as addr in struct usb_raw_ep_info if endpoint accepts any address. */
-> +#define USB_RAW_EP_ADDR_ANY    0xff
-> +
-> +/*
-> + * struct usb_raw_ep_caps - exposes endpoint capabilities from
-> + *     struct usb_ep_caps.
-> + */
-> +struct usb_raw_ep_caps {
-> +       __u32   type_control:1;
-> +       __u32   type_iso:1;
-> +       __u32   type_bulk:1;
-> +       __u32   type_int:1;
-> +       __u32   dir_in:1;
-> +       __u32   dir_out:1;
-> +};
-> +
-> +/*
-> + * struct usb_raw_ep_limits - exposes endpoint limits from struct usb_ep.
-> + */
-> +struct usb_raw_ep_limits {
-> +       __u32   maxpacket_limit;
-> +       __u32   max_streams;
-> +       __u32   maxburst;
-> +};
-> +
-> +/*
-> + * struct usb_raw_ep_info - stores information about a gadget endpoint.
-> + * @name: Name of the endpoint as it is defined in the UDC driver.
-> + * @addr: Address of the endpoint that must be specified in the endpoint
-> + *     descriptor passed to USB_RAW_IOCTL_EP_ENABLE ioctl.
-> + * @caps: Endpoint capabilities.
-> + * @limits: Endpoint limits.
-> + */
-> +struct usb_raw_ep_info {
-> +       __u8                            name[USB_RAW_EP_NAME_MAX];
-> +       __u32                           addr;
-> +       struct usb_raw_ep_caps          caps;
-> +       struct usb_raw_ep_limits        limits;
-> +};
-> +
-> +/*
-> + * struct usb_raw_eps_info - argument for USB_RAW_IOCTL_EPS_INFO ioctl.
-> + * eps: Structures that store information about non-control endpoints.
-> + */
-> +struct usb_raw_eps_info {
-> +       struct usb_raw_ep_info  eps[USB_RAW_EPS_NUM_MAX];
-> +};
-> +
->  /*
->   * Initializes a Raw Gadget instance.
->   * Accepts a pointer to the usb_raw_init struct as an argument.
-> @@ -126,12 +195,12 @@ struct usb_raw_ep_io {
->  #define USB_RAW_IOCTL_EP0_READ         _IOWR('U', 4, struct usb_raw_ep_io)
->
->  /*
-> - * Finds an endpoint that supports the transfer type specified in the
-> - * descriptor and enables it.
-> - * Accepts a pointer to the usb_endpoint_descriptor struct as an argument.
-> + * Finds an endpoint that satisfies the parameters specified in the provided
-> + * descriptors (address, transfer type, etc.) and enables it.
-> + * Accepts a pointer to the usb_raw_ep_descs struct as an argument.
->   * Returns enabled endpoint handle on success or negative error code on failure.
->   */
-> -#define USB_RAW_IOCTL_EP_ENABLE                _IOW('U', 5, struct usb_endpoint_descriptor)
-> +#define USB_RAW_IOCTL_EP_ENABLE                _IOW('U', 5, struct usb_raw_ep_descs)
->
->  /* Disables specified endpoint.
->   * Accepts endpoint handle as an argument.
-> @@ -164,4 +233,11 @@ struct usb_raw_ep_io {
->   */
->  #define USB_RAW_IOCTL_VBUS_DRAW                _IOW('U', 10, __u32)
->
-> +/* Fills in the usb_raw_eps_info structure with information about non-control
-> + * endpoints available for the currently connected UDC.
-> + * Returns the number of available endpoints on success or negative error code
-> + * on failure.
-> + */
-> +#define USB_RAW_IOCTL_EPS_INFO         _IOR('U', 11, struct usb_raw_eps_info)
-> +
->  #endif /* _UAPI__LINUX_USB_RAW_GADGET_H */
-> --
-> 2.26.2.303.gf8c07b1a785-goog
->
+Thanks,
+Mani
+
+Manivannan Sadhasivam (2):
+  usb: serial: Add MaxLinear/Exar USB to Serial driver
+  usb: serial: xr_serial: Add gpiochip support
+
+ drivers/usb/serial/Kconfig     |   9 +
+ drivers/usb/serial/Makefile    |   1 +
+ drivers/usb/serial/xr_serial.c | 728 +++++++++++++++++++++++++++++++++
+ drivers/usb/serial/xr_serial.h | 110 +++++
+ 4 files changed, 848 insertions(+)
+ create mode 100644 drivers/usb/serial/xr_serial.c
+ create mode 100644 drivers/usb/serial/xr_serial.h
+
+-- 
+2.17.1
+
