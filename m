@@ -2,67 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BD41BBA7A
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 12:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A7C1BBAA9
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 12:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727082AbgD1KAA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Apr 2020 06:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
+        id S1727865AbgD1KEz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Apr 2020 06:04:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726932AbgD1KAA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Apr 2020 06:00:00 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41105C03C1A9;
-        Tue, 28 Apr 2020 03:00:00 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id r26so2177844wmh.0;
-        Tue, 28 Apr 2020 03:00:00 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1727107AbgD1KEz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Apr 2020 06:04:55 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D96C03C1A9;
+        Tue, 28 Apr 2020 03:04:54 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id u16so2159539wmc.5;
+        Tue, 28 Apr 2020 03:04:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=tm8QUuHypYdy6peDLxrq3qYWGCdtFGNET4j6OaIsk9k=;
-        b=Ad1ZJrwLD9cCV39g73K95Ub4PqPOtRM7bPwvHFdVaz+X6IwPjG64p7ABxC3rxtgtwO
-         iwEvDEZWFVRjbBttQmPUYXtsxVgBOFeHRWfJlI+tn0Fm24lSO+pksLAIsfjT1eCXYqRd
-         OAIJw8ZkYDF1WO1eBEILaHS6T83r8yrpOieYwhC3Wv7wIK9+Mh16uHjXILCTrABuXFHu
-         2dLLTbnPe3y4q5MSNAK9JR8vYiCMjl6wtlh7ua3kpcZtz/kTkt+qCoRRMl4eUDUlUQAo
-         tSwgi28+QXlf7wRibE6Fw839OFuS0+Vr4TrrCpdFHp5Q/jAkcS8mtD/f7QoaI4VmtilN
-         OY6g==
+        bh=FZWj3Lysed22PL4Y078VhelfrwEFYvUTFp241hLfoxQ=;
+        b=dBiajpPtLsQdpwuDEw2bnf6HyJiOTwuaLSXbOYVaUbpwkKu3Imwdjtc4iYE5+qpkGh
+         zAnmxl0G1wsBUSo1dx9v9KzgRSjcDS72Qicr/WaEinXnnr06KHR2nUfsgpzggQjl5tu6
+         BWyTQo41EtcGqkr+DgF6Gf0xhcxEqlyBAZtLoWnDUvCcS2k+12+oODug5TBofSMXxLzW
+         CIczvcddiqecK06/eo/lqPCgzmOPpdWhaPxSfmtb6KaipQoXn7vCTxqRDG/actw8k3eR
+         BGOu5Ecf6efLZsFoGySM0BBwAxrTJMWGwsP84kWF39w8ODeQqg0OghQemu0d7HR37CUZ
+         771Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=tm8QUuHypYdy6peDLxrq3qYWGCdtFGNET4j6OaIsk9k=;
-        b=Mts7jHXyTD4qv2XqMAEgpoA7HGgXM4RdOekXsZRrwfDTXxj9A7i/LpvGB1xf6MKMJQ
-         AtaGhVaw9xoOeHrgNTISR5OxQwjOnPAWuVbfg5Y79H+Ku2g9qxMY9Z6pbSudqs15qbdP
-         3yLrgBIu/NvDXTR4rV3GsG1NRrOtUPgUeE6oWWK/UUH9pMnEfS21ahv46o+2IR9P1/tO
-         bXiXNZUiWVIYGtcLJXpH9fslkH8w4k1P/Q51zY6GhkzEqGlLpTbQKO6WEWNXdG3mXucF
-         5sK3+jlOunn8OOhv7WubMrPNgV45Gve7qyKbh45SLiIHo6+rnj/l/KyZOd2tM5f1/R8P
-         Hb7Q==
-X-Gm-Message-State: AGi0PuaTLymbf2TjRrKCxjA2kOOtd9O129UamXQ9Qv+tnnqS7pnsLut1
-        aU5AhbJM7jJ07hVYbIK9CnXGa6Zj
-X-Google-Smtp-Source: APiQypIWJI1KCYKxCIxhBzkg+SuCGCYmxxz0XTo/fdyzr4E9mRlmNBRurfF/HAfitXzNcMMVI/9zSw==
-X-Received: by 2002:a1c:9c0a:: with SMTP id f10mr3662331wme.139.1588067998846;
-        Tue, 28 Apr 2020 02:59:58 -0700 (PDT)
+        bh=FZWj3Lysed22PL4Y078VhelfrwEFYvUTFp241hLfoxQ=;
+        b=F32QDDNB0gxx44mUJpcpAF3AShmmCU7MmqlJiDZrzRzUj9qrgzMVh42qUC43yP3bEq
+         zMWcbAZS+3MuqGMKLzfbkrfloF7gWmSvwdrBN8slwo2kbjti6F89Zd0BPIh4fbvPTfzV
+         Ven/ipR22aRKQCNYFbKpcQ32fYptjMc74gmQ/wTGcD6HG4kDDD2Ptxsq5IWPYfV73TkS
+         etxfpglU9Jtku13zEsH1vUQBHpohtrCqH/xdUH+GxdtQaWs9j0TJFUUTBBAgePL14xz2
+         dcEF9VBM+WM6RPnZe/h2l3U758ULcSTEG8zO+aQT7qwuh4vmXlwbR+2udnlVpOIuCXQQ
+         hCPw==
+X-Gm-Message-State: AGi0PuabHCQf9wJMgQNq2LpzQzwQw/N4QiiNq68KykM7FAtt/F+2d19r
+        0UKRnTZpROFyZKXlyeP/ZzI=
+X-Google-Smtp-Source: APiQypKOqaTwnSgVcZuq9zDy5UEUMjaevZemWQiNQyqv4++XNHvfQ3PT0Ok6td7Ld0TvJb/lC/PXdA==
+X-Received: by 2002:a1c:4b0a:: with SMTP id y10mr3621379wma.24.1588068293697;
+        Tue, 28 Apr 2020 03:04:53 -0700 (PDT)
 Received: from localhost (p2E5BEDBA.dip0.t-ipconnect.de. [46.91.237.186])
-        by smtp.gmail.com with ESMTPSA id i25sm2574222wml.43.2020.04.28.02.59.56
+        by smtp.gmail.com with ESMTPSA id p7sm26117997wrf.31.2020.04.28.03.04.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 02:59:57 -0700 (PDT)
-Date:   Tue, 28 Apr 2020 11:59:56 +0200
+        Tue, 28 Apr 2020 03:04:52 -0700 (PDT)
+Date:   Tue, 28 Apr 2020 12:04:51 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Nagarjuna Kristam <nkristam@nvidia.com>
 Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
         mark.rutland@arm.com, robh+dt@kernel.org, kishon@ti.com,
         devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 2/8] usb: gadget: tegra-xudc: Add vbus_draw support
-Message-ID: <20200428095956.GB3592148@ulmo>
+Subject: Re: [PATCH V2 3/8] phy: tegra: xusb: Add support for UTMI pad power
+ control
+Message-ID: <20200428100451.GC3592148@ulmo>
 References: <1586939108-10075-1-git-send-email-nkristam@nvidia.com>
- <1586939108-10075-3-git-send-email-nkristam@nvidia.com>
+ <1586939108-10075-4-git-send-email-nkristam@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ZoaI/ZTpAVc4A5k6"
+        protocol="application/pgp-signature"; boundary="xo44VMWPx7vlQ2+2"
 Content-Disposition: inline
-In-Reply-To: <1586939108-10075-3-git-send-email-nkristam@nvidia.com>
+In-Reply-To: <1586939108-10075-4-git-send-email-nkristam@nvidia.com>
 User-Agent: Mutt/1.13.1 (2019-12-14)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
@@ -70,87 +71,49 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---ZoaI/ZTpAVc4A5k6
+--xo44VMWPx7vlQ2+2
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 15, 2020 at 01:55:02PM +0530, Nagarjuna Kristam wrote:
-> Register vbus_draw to gadget ops and update corresponding vbus
-> draw current to usb_phy.
+On Wed, Apr 15, 2020 at 01:55:03PM +0530, Nagarjuna Kristam wrote:
+> Add support for UTMI pad power on and off API's via soc ops. These API
+> can be used by operations like charger detect to power on and off UTMI
+> pad if needed. Update powered_on flag in the pad power control API's.
 >=20
 > Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
 > ---
 > V2:
 >  - Patch re-based.
 > ---
->  drivers/usb/gadget/udc/tegra-xudc.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->=20
-> diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc=
-/tegra-xudc.c
-> index 52a6add..9d3c109 100644
-> --- a/drivers/usb/gadget/udc/tegra-xudc.c
-> +++ b/drivers/usb/gadget/udc/tegra-xudc.c
-> @@ -492,6 +492,7 @@ struct tegra_xudc {
->  	bool powergated;
-> =20
->  	struct usb_phy **usbphy;
-> +	struct usb_phy *curr_usbphy;
->  	struct notifier_block vbus_nb;
-> =20
->  	struct completion disconnect_complete;
-> @@ -719,6 +720,7 @@ static int tegra_xudc_vbus_notify(struct notifier_blo=
-ck *nb,
->  	if (!xudc->suspended && phy_index !=3D -1) {
->  		xudc->curr_utmi_phy =3D xudc->utmi_phy[phy_index];
->  		xudc->curr_usb3_phy =3D xudc->usb3_phy[phy_index];
-> +		xudc->curr_usbphy =3D usbphy;
->  		schedule_work(&xudc->usb_role_sw_work);
->  	}
-> =20
-> @@ -2042,6 +2044,19 @@ static int tegra_xudc_gadget_stop(struct usb_gadge=
-t *gadget)
->  	return 0;
->  }
-> =20
-> +static int tegra_xudc_gadget_vbus_draw(struct usb_gadget *gadget,
-> +						unsigned int m_a)
-> +{
-> +	struct tegra_xudc *xudc =3D to_xudc(gadget);
-> +
-> +	dev_dbg(xudc->dev, "%s: %u mA\n", __func__, m_a);
-> +
-> +	if (xudc->curr_usbphy->chg_type =3D=3D SDP_TYPE)
-> +		usb_phy_set_power(xudc->curr_usbphy, m_a);
+>  drivers/phy/tegra/xusb-tegra186.c | 51 ++++++++++++++++++---------------=
+------
+>  drivers/phy/tegra/xusb.h          |  2 ++
+>  2 files changed, 26 insertions(+), 27 deletions(-)
 
-Do we need to propagate the error code here in case the USB PHY for some
-reason doesn't support the given current? Or is it guaranteed that we
-always do support whatever is passed in here?
-
-Regardless of whether we support it or not, it might still be useful to
-add proper handling, if for nothing else but to set a good example.
+Can we not simply pass another reference to the UTMI PHY to the charger
+detect code so that we can avoid this custom API?
 
 Thierry
 
---ZoaI/ZTpAVc4A5k6
+--xo44VMWPx7vlQ2+2
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl6n/pwACgkQ3SOs138+
-s6HV4w/+Kh8/1qiFfVfFtWh49TeX/icuvedDrV4bIynZR70lHjKGgcQtJWzsl8ni
-iDKtOJjTncd4O2qdSRId28a8LkdnhcgzehP5k43Oaq/LZQWhvFUn37xn+Fe7ELsn
-D/lFytyqrePe0fWrIZiYejVCilPO+m/xz5JhkSnWxOy7FjmBBLWKjG3x9W6aNbU1
-gaVzP5p0OJmOB+JXofiJM8myD+vypiUZ6y/zbKbdFi6zgw0snfSu2l3xuQKSuME2
-uS+FmMhY/c4fqvc2iqNemxGv6JWQuN7Li2u/nfhPeZG8asgumTuDBjeOYKtRbpo9
-80xmG8VImnB+RY8uqw6+MUQoemTcyVdY80pUc/q4DdOp1vdH3GQmoUoE8ge8bYqD
-U87hN5v5Grsjw5kvMCTfxO5DKjYlyozc4UvKXM4M6joKNQZCPHZwOdMhs59VjqhY
-McZOfzR2HlepxmDJJwQnrGn1vGG1w1v/RtgFv2FDo68AzkqxjMs+HszqFkYGr9Sk
-vZXUb+vEXZw99ghBZQW0eoORnvOffPpXKh4JMOdVauhXqHjYKuRKCod8Nh0T3GnV
-2GJhBHz9rrdDqrm8kPGwPMDC7Axtz4PGhxjxFMDf6Vt47E7cjsG5xz6TOCsAndLF
-mN9CD/UwVKMH7FXexoRl9rWrIO5HjuUOx3umGI4D/ZMhfe5Pg8w=
-=Gwck
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl6n/8MACgkQ3SOs138+
+s6FYKRAAqpXiamm0RvGR2izSuYbKEcEOvzxc1iQ6OjqGlTkQY8qiW0sUQob8c54J
+2+weCIjkd6HhULC4XGi6qdP1MgNBXQiniGmsj1+9cRING/Qg2Ad3sd6mOCfjBmYw
+rkd0erSue+hecchK9PlIdEQc1HRhFMRTKAWAPfFyXjE4y0gUKnTyFYmHmYYd3aJs
+FlNE6tOnNBvGkTndMyYX/ikByJECinH0dyonLcGrrCuGDhVF+qu8YZRJNCAFQ/H8
+HJn2zp3qm4BNs89UF05rs/OB6V7jGk3eAV34YBWw7aMt4TjC8l/AB05m6YAs19yB
+T+wcqzTHFpUm86zcAM5jDBwRGou9C6Gr7CQUDiEVBMo7P0wRlHoj7dQ5CCA9iO17
+ELSvO7svvJaNqqumcB1bOTsD2Oy/XNIeCnoA/PCO2ZmuDjSr2p8onshOpoZbyFvg
+IW8pzi/9QkPcnA1WproUoXOfmUuiTui83/6nv1k167OjyfD2RcjHxxsflEbfn9zP
+u/Hk31VMscbKS4oA+QE5b1OkGYzLGD/YxwuOtnLwMhcEInMEqJrS9SKua6Zyn4jL
+HNKPNcd7sxPbccbWG0+YQhWGTVMdfqppSilUJNQK7jtYsr/2tikA0/zYOoiWVof9
+biMSeF+0rVjSd9UBsbx12onY7p9wUM8EWoAePAB/A1ScEEKWl/I=
+=27Yf
 -----END PGP SIGNATURE-----
 
---ZoaI/ZTpAVc4A5k6--
+--xo44VMWPx7vlQ2+2--
