@@ -2,109 +2,347 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA101BBBBE
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 12:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4281BBBD5
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 13:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726450AbgD1K6i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Apr 2020 06:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726364AbgD1K6h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Apr 2020 06:58:37 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0DCC03C1A9;
-        Tue, 28 Apr 2020 03:58:37 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id i10so24098229wrv.10;
-        Tue, 28 Apr 2020 03:58:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=t5n1x2S+hMgzHe+DJTRE4uXUFYWCAd6cwy2zE9TXKj8=;
-        b=fsseRELGzjV3nw0OnJb8J2yMMUals+T3NpyLSCeLTidRv9zn8DMxFkKyKdD57O4CJV
-         hAjrf7r0FguwBG/jG6NK40oEyLvnCdGvp3w/n/PRiPEBrb+1UAkUyfB9O5QERqf0/6kS
-         YcuHcAAp2e1/XkofVRhC4L1NQSWDB+QbYlexgj1BRqegG4hyu3LOs0K4KXZlC/4rtdEM
-         2+NETjYYpaS91AEbjW7MiDq8hn+mmch1e5oO/pGtS7cCqEibUhYMWHeMeTpixr2KPNRS
-         jQqm8kjnGigKykRb/mi/1PWEEgTbqDpg4ly8mwn2uzlo7dPlrZnb5ev/o/Rkgovz2CrM
-         zJcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=t5n1x2S+hMgzHe+DJTRE4uXUFYWCAd6cwy2zE9TXKj8=;
-        b=QEB9mLEl1tZcYrlCXzLyeCZOwlTKioEt2TNr4ExP3YJmpDdV41ZcDALqzJGZgQoNdi
-         z8Gqez1CbdsFNp+8ecy9t3CLw9IuATiPaRPFNHGu0F+fW8gds4J5dBH1eIVT9gPpdKjs
-         kUkSuyJ5nqDohjZj7GsZQYvtctyC1hTQ91j26SpBd5V1BQFEyppilOMNbvev9biID7CW
-         3NQnTvK/DtSji48KDTMVGSmreh1SyFsv5A2xPn651Ag4ly3/CUpG/u0DCbhEjVT3/plQ
-         gKOjN9BJR5NQkVC8nmKLvXljaqsWQfg3qavd7xZWlQVdDoXH3v+X8gbtWxDwvFdxXn01
-         9IEw==
-X-Gm-Message-State: AGi0PuadHD41owXFccnQQYdTFiSuFm5K2Cdk1Vk/BAWvQiPgnaFbgJq0
-        5brBiu8h5g7d1wBTSLKEqLo=
-X-Google-Smtp-Source: APiQypIgHZ4wbuHTwISD2PgDLUFcIjklJBGdOddlFw0x5NjmTtmMuFA/4Th25Tf2Ulo3BTah8l9PCw==
-X-Received: by 2002:a05:6000:4:: with SMTP id h4mr33856041wrx.386.1588071516225;
-        Tue, 28 Apr 2020 03:58:36 -0700 (PDT)
-Received: from localhost (p2E5BEDBA.dip0.t-ipconnect.de. [46.91.237.186])
-        by smtp.gmail.com with ESMTPSA id w6sm25776444wrm.86.2020.04.28.03.58.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 03:58:34 -0700 (PDT)
-Date:   Tue, 28 Apr 2020 12:58:33 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Nagarjuna Kristam <nkristam@nvidia.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH V1 1/4] dt-bindings: usb: tegra-xudc: Add Tegra194 XUSB
- controller support
-Message-ID: <20200428105833.GK3592148@ulmo>
-References: <1587022460-31988-1-git-send-email-nkristam@nvidia.com>
- <1587022460-31988-2-git-send-email-nkristam@nvidia.com>
+        id S1726468AbgD1LDv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Apr 2020 07:03:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58262 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726364AbgD1LDv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 28 Apr 2020 07:03:51 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E875420661;
+        Tue, 28 Apr 2020 11:03:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588071830;
+        bh=z+/W1GSQCnaDa8dvtTYWSzpbMQuuEer9i0Mzts4YpcI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qqAC43x89Xm1ntiVsqdQTKd1kN/p5WhF22eBKmRMvGvOyJtvk6dpSn2Q8CNyxV0og
+         d1Z+V6MUaEeoqiwMyt3q7+4aeu27SjSYfFfL7VUCVXZ0O2e0DRiDYgHkGHYbXVQqR6
+         bC+Vg6qafL0gzjvvZwggIuYm/wOGtoWWpQHiYnVU=
+Date:   Tue, 28 Apr 2020 13:03:47 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     vladimir.stankovic@displaylink.com
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        mausb-host-devel@displaylink.com
+Subject: Re: [PATCH v5 1/8] usb: Add MA-USB Host kernel module
+Message-ID: <20200428110347.GA1145239@kroah.com>
+References: <20200327152614.26833-1-vladimir.stankovic@displaylink.com>
+ <20200425091954.1610-1-vladimir.stankovic@displaylink.com>
+ <20200425091954.1610-2-vladimir.stankovic@displaylink.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="5dNcufZ4prhark0F"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1587022460-31988-2-git-send-email-nkristam@nvidia.com>
-User-Agent: Mutt/1.13.1 (2019-12-14)
+In-Reply-To: <20200425091954.1610-2-vladimir.stankovic@displaylink.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---5dNcufZ4prhark0F
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Apr 16, 2020 at 01:04:17PM +0530, Nagarjuna Kristam wrote:
-> Extend the Tegra XUSB controller device tree binding with Tegra194
-> support.
->=20
-> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
+On Sat, Apr 25, 2020 at 11:19:47AM +0200, vladimir.stankovic@displaylink.com wrote:
+> Added utility macros, kernel device creation and cleanup, functions for
+> handling log formatting and a placeholder module for MA-USB Host device
+> driver.
+> 
+> Signed-off-by: Vladimir Stankovic <vladimir.stankovic@displaylink.com>
 > ---
->  Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+>  MAINTAINERS                         |  7 +++
+>  drivers/usb/Kconfig                 |  2 +
+>  drivers/usb/Makefile                |  2 +
+>  drivers/usb/mausb_host/Kconfig      | 15 +++++
+>  drivers/usb/mausb_host/Makefile     | 12 ++++
+>  drivers/usb/mausb_host/mausb_core.c | 90 +++++++++++++++++++++++++++++
+>  drivers/usb/mausb_host/utils.c      | 85 +++++++++++++++++++++++++++
+>  drivers/usb/mausb_host/utils.h      | 40 +++++++++++++
+>  8 files changed, 253 insertions(+)
+>  create mode 100644 drivers/usb/mausb_host/Kconfig
+>  create mode 100644 drivers/usb/mausb_host/Makefile
+>  create mode 100644 drivers/usb/mausb_host/mausb_core.c
+>  create mode 100644 drivers/usb/mausb_host/utils.c
+>  create mode 100644 drivers/usb/mausb_host/utils.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 453fe0713e68..8b63b246ba67 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -10352,6 +10352,13 @@ W:	https://linuxtv.org
+>  T:	git git://linuxtv.org/media_tree.git
+>  F:	drivers/media/radio/radio-maxiradio*
+>  
+> +MEDIA AGNOSTIC (MA) USB HOST DRIVER
+> +M:	Vladimir Stankovic <vladimir.stankovic@displaylink.com>
+> +L:	mausb-host-devel@displaylink.com
+> +W:	https://www.displaylink.com
+> +S:	Maintained
+> +F:	drivers/usb/mausb_host/*
+> +
+>  MCAN MMIO DEVICE DRIVER
+>  M:	Dan Murphy <dmurphy@ti.com>
+>  M:	Sriram Dash <sriram.dash@samsung.com>
+> diff --git a/drivers/usb/Kconfig b/drivers/usb/Kconfig
+> index 275568abc670..4e92f1fa0fa5 100644
+> --- a/drivers/usb/Kconfig
+> +++ b/drivers/usb/Kconfig
+> @@ -164,6 +164,8 @@ source "drivers/usb/misc/Kconfig"
+>  
+>  source "drivers/usb/atm/Kconfig"
+>  
+> +source "drivers/usb/mausb_host/Kconfig"
+> +
+>  endif # USB
+>  
+>  source "drivers/usb/phy/Kconfig"
+> diff --git a/drivers/usb/Makefile b/drivers/usb/Makefile
+> index 1c1c1d659394..22d1998db0e2 100644
+> --- a/drivers/usb/Makefile
+> +++ b/drivers/usb/Makefile
+> @@ -66,3 +66,5 @@ obj-$(CONFIG_USBIP_CORE)	+= usbip/
+>  obj-$(CONFIG_TYPEC)		+= typec/
+>  
+>  obj-$(CONFIG_USB_ROLE_SWITCH)	+= roles/
+> +
+> +obj-$(CONFIG_HOST_MAUSB)        += mausb_host/
+> diff --git a/drivers/usb/mausb_host/Kconfig b/drivers/usb/mausb_host/Kconfig
+> new file mode 100644
+> index 000000000000..a8363e7e8f97
+> --- /dev/null
+> +++ b/drivers/usb/mausb_host/Kconfig
+> @@ -0,0 +1,15 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Kernel configuration file for MA-USB Host driver.
+> +#
+> +# Copyright (c) 2019 - 2020 DisplayLink (UK) Ltd.
+> +#
+> +
+> +config HOST_MAUSB
+> +	tristate "Media Agnostic (MA) USB Host Driver"
+> +	depends on USB=y
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+Why can't USB=m?
 
---5dNcufZ4prhark0F
-Content-Type: application/pgp-signature; name="signature.asc"
+> +	help
+> +	  This is a Media Agnostic (MA) USB Host driver which enables host
+> +	  communication via MA USB protocol stack.
+> +
+> +	  If this driver is compiled as a module, it will be named mausb_host.
 
------BEGIN PGP SIGNATURE-----
+And why isn't this all in drivers/usb/host/ ?  Why a separate directory?
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl6oDFkACgkQ3SOs138+
-s6Emhw//X5T2bBokenhft92gCDW93wpq/OSYsj6EENSnKva4cUvKJwme/xbzPGx+
-mfIOhlR/BmmOXgkCPQ7sbSkpEAxUv2hmAvh3ASZsxQL7jsqfeP1GuR2khkq1uvfb
-JiNY9XHdKFcdxsRqBCTlt2kllTqIANkLbKCUfSO7Ru1JFwAXlD5HFziIyVZh4QvD
-cARWy+t3wkDf04goNM2OsMYihAyNd8p4TMylyDx169PlBDcn4GGKlgOoxvaCQMnz
-c1Y7OmOpF4j6C2Fswbs4bJr4M1UNN+Vgvl8dG0pBYk1iLdYa1wn/kupAheR2yIBo
-0C/1t7Kj8ledBkjvBx5sd7BWcoo1RKXseCP/dElWY/JtPeyWyllQBi+o62Up76h+
-1aimXHp0L5NkmAXoQaGRrcSR9qEchdAy2JOW78569wSNuWoqN5RlXUdD93dz1PB6
-NOpKOUAyUGckAIKzc9cgGPFKIRMFqLDE6vSktJFEkrT8qOjui/9J5+OOjEPWP9Uw
-Ckyk7wzXNjDIOnoePxdl/O5aD0zENQSHkZQSXmM7hQxPbDNnO4G4hqMvtJQR9Yr3
-n4Zt0UvTKT+9ZeVUD5kPTUX8EfARr81ZyzUtOq0TvLxkSevnsm86zJhNWhZTF5XK
-1nxENTF6xhGB7OjEED5W7UsWNdRe+9htq6gDDCMAv+SNpRfrbLQ=
-=iXcs
------END PGP SIGNATURE-----
+If you really need your own directory, why not drivers/usb/host/mausb/ ?
 
---5dNcufZ4prhark0F--
+
+
+> diff --git a/drivers/usb/mausb_host/Makefile b/drivers/usb/mausb_host/Makefile
+> new file mode 100644
+> index 000000000000..2e353fa0958b
+> --- /dev/null
+> +++ b/drivers/usb/mausb_host/Makefile
+> @@ -0,0 +1,12 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Makefile for DisplayLink MA-USB Host driver.
+> +#
+> +# Copyright (c) 2019 - 2020 DisplayLink (UK) Ltd.
+> +#
+> +
+> +obj-$(CONFIG_HOST_MAUSB) += mausb_host.o
+> +mausb_host-y := mausb_core.o
+> +mausb_host-y += utils.o
+> +
+> +ccflags-y += -I$(srctree)/$(src)
+
+Ick, really?  Why?  You should not need this.
+
+
+
+> diff --git a/drivers/usb/mausb_host/mausb_core.c b/drivers/usb/mausb_host/mausb_core.c
+> new file mode 100644
+> index 000000000000..8638dd0a4856
+> --- /dev/null
+> +++ b/drivers/usb/mausb_host/mausb_core.c
+> @@ -0,0 +1,90 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2019 - 2020 DisplayLink (UK) Ltd.
+> + */
+> +#include <linux/in.h>
+> +#include <linux/inet.h>
+
+Why do you need these two .h files for this file at this time?
+
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/kobject.h>
+> +#include <linux/module.h>
+> +#include <linux/moduleparam.h>
+
+You have no module parameters here, why do you need this?
+
+> +#include <linux/net.h>
+
+Why do you need this?
+
+> +
+> +#include "utils.h"
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_AUTHOR("DisplayLink (UK) Ltd.");
+> +MODULE_VERSION(MAUSB_DRIVER_VERSION);
+> +
+> +static int mausb_client_connect(const char *value,
+> +				const struct kernel_param *kp)
+> +{
+> +	mausb_pr_info("Version=%s", MAUSB_DRIVER_VERSION);
+
+No custom driver "printk" macros please.  We have been stomping them out
+for years.  Just use dev_*() instead.
+
+And a driver version means nothing when it is in the kernel itself,
+please just remove.
+
+> +
+> +	return 0;
+> +}
+> +
+> +static int mausb_client_disconnect(const char *value,
+> +				   const struct kernel_param *kp)
+> +{
+> +	mausb_pr_info("Version=%s", MAUSB_DRIVER_VERSION);
+
+Also, why info?  This is just fun debugging stuff, don't do that, that
+is what ftrace is for.
+
+If you are trying to provide stubs to later fill in, that's fine, but
+don't clutter it up with this type of stuff please.
+
+> +int mausb_create_dev(void)
+> +{
+> +	int device_created = 0;
+> +	int status = alloc_chrdev_region(&mausb_major_kernel, 0, 1,
+> +					 MAUSB_KERNEL_DEV_NAME "_proc");
+
+Why does a USB host driver need a char dev node?
+
+> +	if (status)
+> +		goto cleanup;
+> +
+> +	mausb_kernel_class = class_create(THIS_MODULE,
+> +					  MAUSB_KERNEL_DEV_NAME "_sys");
+
+Why do you need your own class that has a different name from your
+device node?  None of that should be needed at all here, right?
+
+> +	if (!mausb_kernel_class) {
+> +		status = -ENOMEM;
+> +		goto cleanup;
+> +	}
+> +
+> +	if (!device_create(mausb_kernel_class, NULL, mausb_major_kernel, NULL,
+> +			   MAUSB_KERNEL_DEV_NAME "_dev")) {
+> +		status = -ENOMEM;
+> +		goto cleanup;
+> +	}
+> +	device_created = 1;
+
+You set this and never touch it again :(
+Oh wait, you pass it into a cleanup function later, which isn't really
+needed anyway.
+
+> +	cdev_init(&mausb_kernel_dev, &mausb_file_ops);
+> +	status = cdev_add(&mausb_kernel_dev, mausb_major_kernel, 1);
+
+one device node?  If you REALLY need it, just use a misc device, but we
+need a ton of documentation here as to what you are doing with this, and
+why it is needed, because as-is, I have no idea just looking at this
+patch :(
+
+
+> +	if (status)
+> +		goto cleanup;
+> +	return 0;
+> +cleanup:
+> +	mausb_cleanup_dev(device_created);
+> +	return status;
+> +}
+> +
+> +void mausb_cleanup_dev(int device_created)
+> +{
+> +	if (device_created) {
+
+So this isn't a global variable??
+
+That really isn't needed, please don't.
+
+> +		device_destroy(mausb_kernel_class, mausb_major_kernel);
+> +		cdev_del(&mausb_kernel_dev);
+> +	}
+> +
+> +	if (mausb_kernel_class)
+> +		class_destroy(mausb_kernel_class);
+> +
+> +	unregister_chrdev_region(mausb_major_kernel, 1);
+> +}
+> diff --git a/drivers/usb/mausb_host/utils.h b/drivers/usb/mausb_host/utils.h
+> new file mode 100644
+> index 000000000000..9adf4122e64d
+> --- /dev/null
+> +++ b/drivers/usb/mausb_host/utils.h
+> @@ -0,0 +1,40 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2019 - 2020 DisplayLink (UK) Ltd.
+> + */
+> +#ifndef __MAUSB_UTILS_H__
+> +#define __MAUSB_UTILS_H__
+> +
+> +#if defined(MAUSB_NO_LOGS)
+> +#define mausb_pr_logs(...)
+> +#else
+> +#include <linux/printk.h>
+> +#include <linux/sched.h>
+> +#define mausb_pr_logs(level_str, level, log, ...)\
+> +	pr_##level_str("MAUSB " #level " [%x:%x] [%s] " log "\n",\
+> +	current->pid, current->tgid, __func__, ##__VA_ARGS__)
+> +#endif /* MAUSB_NO_LOGS */
+> +
+> +#define mausb_pr_alert(...) mausb_pr_logs(alert, 1, ##__VA_ARGS__)
+> +
+> +#define mausb_pr_err(...) mausb_pr_logs(err, 2, ##__VA_ARGS__)
+> +
+> +#define mausb_pr_warn(...) mausb_pr_logs(warn, 3, ##__VA_ARGS__)
+> +
+> +#define mausb_pr_info(...) mausb_pr_logs(info, 4, ##__VA_ARGS__)
+> +
+> +#if defined(MAUSB_LOG_VERBOSE)
+> +	#define mausb_pr_debug(...) mausb_pr_logs(debug, 5, ##__VA_ARGS__)
+> +#else
+> +	#define mausb_pr_debug(...)
+> +#endif /* defined(MAUSB_LOG_VERBOSE) */
+
+Again, drop all of this, and use the build-in kernel functions, there's
+nothing special about this one tiny driver to override uniformity.
+
+> +
+> +#define MAUSB_STRINGIFY2(x) #x
+> +#define MAUSB_STRINGIFY(x) MAUSB_STRINGIFY2(x)
+
+Ick, why???
+
+> +
+> +#define MAUSB_DRIVER_VERSION MAUSB_STRINGIFY(1.3.0.0.6f5beb53)
+
+That's funny.  And pointless :)
+
+> +
+> +int mausb_create_dev(void);
+> +void mausb_cleanup_dev(int device_created);
+
+No need for that parameter.
+
+thanks,
+
+greg k-h
