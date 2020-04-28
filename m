@@ -2,86 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 778781BC5F5
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 19:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CCC1BC756
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 19:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728191AbgD1RBe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Apr 2020 13:01:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60384 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726406AbgD1RBe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 28 Apr 2020 13:01:34 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 763C020730;
-        Tue, 28 Apr 2020 17:01:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588093293;
-        bh=0LphSW+nEOML3VabclV/1ydlTPntModDS9qr0NH2AGQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0L2gF98Q4RDgjaF+I9aQo8T9XAT8iLGb+3vDL8CTnhGu6sixUx95sAgP9Uwk7jYA9
-         Nkx7UML2SnLIKUjDyo3yfAQZy8JRZF0o4+h206FCDdWZtIOE2sAuCVvjIeUmGEjnfZ
-         PvhmieixMtGTtvlW1PQIxqMOtTqT+ZZ6zqIm26Jc=
-Date:   Tue, 28 Apr 2020 19:01:31 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org
-Subject: Re: [GIT PULL] Thunderbolt/USB4 fix for v5.7-rc4
-Message-ID: <20200428170131.GA1641691@kroah.com>
-References: <20200428090956.GR487496@lahna.fi.intel.com>
- <20200428105018.GA1143911@kroah.com>
- <20200428115815.GY487496@lahna.fi.intel.com>
+        id S1728605AbgD1R62 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Apr 2020 13:58:28 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:47288 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727827AbgD1R61 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Apr 2020 13:58:27 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03SHrGHc156636;
+        Tue, 28 Apr 2020 17:58:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=bMHDr+peVKNDWx4zqP+LW/B+GykIpmD+phvceywSp1w=;
+ b=rkQ2IzzkF8PqzV2M1/XQEJNFSKjbV3RC61KpVOGXVMkUQG/RnY2Oa2AnAEDRSMaxfrKy
+ vamxqO6OidRyrN9xSHAKUY37tuFSrKkiIway9FM71uCq3SEam5iXyUivWDGZjJ8T8Aly
+ tnQXFHgvImDeZV87HFKx3xjtWXgo61nkoIcmN0pTIcp7bytTdQCCQ9csCuGmlp+llPLz
+ nYxi5xcwLDzPfynQo3eVUpYbFLeZnSELK3QCB5Th8+PzHLcbupnSsAqjVzK/JV8TQ19q
+ x77bId0TfcFhMX95sfsrercyf9kkcuZ5+lMrJVp4PbX7HazicSeOAoueqODzM6SEkCLq VA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 30p2p06x0c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Apr 2020 17:58:24 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03SHw14j154893;
+        Tue, 28 Apr 2020 17:58:23 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 30mxrt3krk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Apr 2020 17:58:23 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 03SHwLO4024934;
+        Tue, 28 Apr 2020 17:58:21 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 28 Apr 2020 10:58:21 -0700
+Date:   Tue, 28 Apr 2020 20:58:14 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] usb: phy: twl6030-usb: Fix a resource leak in an error
+ handling path in 'twl6030_usb_probe()'
+Message-ID: <20200428175814.GI2014@kadam>
+References: <20200427202116.94380-1-christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200428115815.GY487496@lahna.fi.intel.com>
+In-Reply-To: <20200427202116.94380-1-christophe.jaillet@wanadoo.fr>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9605 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 suspectscore=2
+ mlxlogscore=938 malwarescore=0 bulkscore=0 spamscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2004280143
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9605 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 clxscore=1015
+ bulkscore=0 adultscore=0 lowpriorityscore=0 impostorscore=0 malwarescore=0
+ mlxscore=0 suspectscore=2 mlxlogscore=993 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2004280142
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 28, 2020 at 02:58:15PM +0300, Mika Westerberg wrote:
-> On Tue, Apr 28, 2020 at 12:50:18PM +0200, Greg Kroah-Hartman wrote:
-> > On Tue, Apr 28, 2020 at 12:09:56PM +0300, Mika Westerberg wrote:
-> > > Hi Greg,
-> > > 
-> > > The following changes since commit ae83d0b416db002fe95601e7f97f64b59514d936:
-> > > 
-> > >   Linux 5.7-rc2 (2020-04-19 14:35:30 -0700)
-> > > 
-> > > are available in the Git repository at:
-> > > 
-> > >   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-fix-for-v5.7-rc4
-> > > 
-> > > for you to fetch changes up to 9d2214b14103594efdbf33018b893b9417846d42:
-> > > 
-> > >   thunderbolt: Check return value of tb_sw_read() in usb4_switch_op() (2020-04-20 11:54:19 +0300)
-> > > 
-> > > ----------------------------------------------------------------
-> > > thunderbolt: Fix for v5.7-rc4
-> > > 
-> > > - Fix checking return value of tb_sw_read() in usb4_switch_op().
-> > > 
-> > > ----------------------------------------------------------------
-> > > Mika Westerberg (1):
-> > >       thunderbolt: Check return value of tb_sw_read() in usb4_switch_op()
-> > 
-> > Why does this commit not have a cc: stable tag on it?  I can apply it by
-> > hand and add it, but that will not show up as a pull request/merge, is
-> > that ok?
+On Mon, Apr 27, 2020 at 10:21:16PM +0200, Christophe JAILLET wrote:
+> A call to 'regulator_get()' is hidden in 'twl6030_usb_ldo_init()'. A
+> corresponding put must be performed in the error handling path, as
+> already done in the remove function.
 > 
-> I'm not sure this qualifies as stable material to be honest. Changes
-> that this triggers is really low because there are no USB4 devices
-> available for public at the moment (that's the reason I did not add the
-> tag).
+> While at it, also move a 'free_irq()' call in the error handling path in
+> order to be consistent.
 > 
-> If you still think it should have stable tag, then it would be great if
-> you could add it. It is fine if it goes in as a patch not a merge.
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Maybe adding a 'twl6030_usb_ldo_uninit()' function would be more explicit.
 
-I'll add it and queue it up now, thanks.
+It would be nicer, yes, but probably this is fine too.
 
-greg k-h
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+
+regards,
+dan carpenter
+
