@@ -2,188 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E66451BB725
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 09:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C561BB987
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 11:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725867AbgD1HCQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Apr 2020 03:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48660 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726437AbgD1HCQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Apr 2020 03:02:16 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72B4C03C1AD
-        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2020 00:02:14 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id e6so708745pjt.4
-        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2020 00:02:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4/nXkttFFpuCRApbDJrQtkcOv5tbYmzw7WwX94JHLec=;
-        b=akJy1tba1VpIzlH/CXLZlgwmODN/R788RBn+EBkFiZNxPR9HnUenKsz8T7JZ3hBiQs
-         6JxexXdGrkQivjC7Y9LpCP3JuG7fTFRrji8IJor7BprWzLpoplEjU1ufuwh+f1Z/rflv
-         cj8ycSNF6ebqJt7mCKn11SKuViZxnhv1YL6SmKkoG2wggjoB5z3g+EIDR/kjNGSiM52i
-         wmBl6bGfJ9pCt2vdzS74YeyDnawUMQokZMZEpok+2zU4ZBPPHHawFEkcVdqtHwS8SLLm
-         B+0MFC85J0M48ov68PK4QQ0OOIGNv4Zmy9W4+VSV9tgm9A953mb3aQFl+AkIP5omVDyd
-         GGjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4/nXkttFFpuCRApbDJrQtkcOv5tbYmzw7WwX94JHLec=;
-        b=tvUgzVvMZ5XoivIyBhH9xFO9eeuh4saTMsBnAof9TQfyx4Ae0rTRY+kzm1gVG52gUC
-         f/WxzrmV4TDYXfK5Kyfkb/kph76s7hZU7OBLzS1Eox5GulwY7VP/eNbTDJKvTJ2S1ela
-         PJ42bW5cFjQyh8YiWmnLxegJ357WITC3rhUDG+L9cp/eE6xMvFfYl1E8NiF/soDXZfE5
-         WuBtQT0z+JMh68+Ls6vniKAn3lm7tcsf3IuTCUVweoIYI/JXdS6ZOZeARPiEeQFnTS4K
-         a9OjNmLg0VUlz1BZmIh7JFBP415zoyVaOJY7HXyYOr4fn3vN7xgN9cjB1uJy7U51cCuh
-         Fsow==
-X-Gm-Message-State: AGi0PuYdwA1mJ2nViFAvz6BCYeVIbmlxnPExeo1g7Ut1A1Y6YsYzJQod
-        nTemaB93F/xgYRj0/3taSU/m7g==
-X-Google-Smtp-Source: APiQypKJLT+5WEewrpsIGozji9eAxX0I24yBU7u0wC3+voEg1WXhmgIc5VBQVKbIDRa6YQ/bPe8YjA==
-X-Received: by 2002:a17:90a:7105:: with SMTP id h5mr3221811pjk.3.1588057334032;
-        Tue, 28 Apr 2020 00:02:14 -0700 (PDT)
-Received: from localhost.localdomain (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id h193sm14310501pfe.30.2020.04.28.00.02.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 00:02:12 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Chuhong Yuan <hslester96@gmail.com>,
-        Peter Fink <pfink@christ-es.de>
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH] net: usb: ax88179_178a: Implement ethtool_ops set_eeprom
-Date:   Tue, 28 Apr 2020 00:01:39 -0700
-Message-Id: <20200428070139.3465511-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.24.0
+        id S1726540AbgD1JKA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Apr 2020 05:10:00 -0400
+Received: from mga18.intel.com ([134.134.136.126]:43554 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726271AbgD1JKA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 28 Apr 2020 05:10:00 -0400
+IronPort-SDR: i9A/KpjnXIiQaP62GqONaTtpPcVDrkYeR9X4CEEWj4j1HTs6cyh2ViSLAYOEU2rG/5Imj/kXYZ
+ kJU+tngYZluw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2020 02:10:00 -0700
+IronPort-SDR: PLqDA7DYusmb+EvvBiPQ0WcTPWJy9wId9IrB8M4nwfM3V8KzhDKPquFjhierqVxb098Ne/WoDa
+ 6fpgJYXVi4/Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,327,1583222400"; 
+   d="scan'208";a="367444997"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001.fm.intel.com with SMTP; 28 Apr 2020 02:09:57 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 28 Apr 2020 12:09:56 +0300
+Date:   Tue, 28 Apr 2020 12:09:56 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org
+Subject: [GIT PULL] Thunderbolt/USB4 fix for v5.7-rc4
+Message-ID: <20200428090956.GR487496@lahna.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The vendor driver does upon failing to read a valid MAC address from
-EEPROM write the netdev's address back to EEPROM and invoking a EEPROM
-reload operation. Based on this we can implement the ethtool_ops
-set_eeprom and provide the means to populate the EEPROM from within
-Linux.
+Hi Greg,
 
-It's worth noting that ax88179_get_eeprom() will return some default
-data unless the content of the EEPROM is deemed "complete", so until the
-EEPROM is fully populated (e.g. by running ethtool -e | ethtool -E)
-data written with ax88179_set_eeprom() will appear not to stick.
+The following changes since commit ae83d0b416db002fe95601e7f97f64b59514d936:
 
-The implementation is based on asix_set_eeprom(), from asix_common.c
+  Linux 5.7-rc2 (2020-04-19 14:35:30 -0700)
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- drivers/net/usb/ax88179_178a.c | 77 ++++++++++++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+are available in the Git repository at:
 
-diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index 93044cf1417a..b05bb11a02cb 100644
---- a/drivers/net/usb/ax88179_178a.c
-+++ b/drivers/net/usb/ax88179_178a.c
-@@ -31,6 +31,7 @@
- #define AX_ACCESS_PHY				0x02
- #define AX_ACCESS_EEPROM			0x04
- #define AX_ACCESS_EFUS				0x05
-+#define AX_RELOAD_EEPROM_EFUSE			0x06
- #define AX_PAUSE_WATERLVL_HIGH			0x54
- #define AX_PAUSE_WATERLVL_LOW			0x55
- 
-@@ -611,6 +612,81 @@ ax88179_get_eeprom(struct net_device *net, struct ethtool_eeprom *eeprom,
- 	return 0;
- }
- 
-+static int
-+ax88179_set_eeprom(struct net_device *net, struct ethtool_eeprom *eeprom,
-+		   u8 *data)
-+{
-+	struct usbnet *dev = netdev_priv(net);
-+	u16 *eeprom_buff;
-+	int first_word;
-+	int last_word;
-+	int ret;
-+	int i;
-+
-+	netdev_dbg(net, "write EEPROM len %d, offset %d, magic 0x%x\n",
-+		   eeprom->len, eeprom->offset, eeprom->magic);
-+
-+	if (eeprom->len == 0)
-+		return -EINVAL;
-+
-+	if (eeprom->magic != AX88179_EEPROM_MAGIC)
-+		return -EINVAL;
-+
-+	first_word = eeprom->offset >> 1;
-+	last_word = (eeprom->offset + eeprom->len - 1) >> 1;
-+
-+	eeprom_buff = kmalloc_array(last_word - first_word + 1, sizeof(u16),
-+				    GFP_KERNEL);
-+	if (!eeprom_buff)
-+		return -ENOMEM;
-+
-+	/* align data to 16 bit boundaries, read the missing data from
-+	   the EEPROM */
-+	if (eeprom->offset & 1) {
-+		ret = ax88179_read_cmd(dev, AX_ACCESS_EEPROM, first_word, 1, 2,
-+				       &eeprom_buff[0]);
-+		if (ret < 0) {
-+			netdev_err(net, "Failed to read EEPROM at offset 0x%02x.\n", first_word);
-+			goto free;
-+		}
-+	}
-+
-+	if ((eeprom->offset + eeprom->len) & 1) {
-+		ret = ax88179_read_cmd(dev, AX_ACCESS_EEPROM, last_word, 1, 2,
-+				       &eeprom_buff[last_word - first_word]);
-+		if (ret < 0) {
-+			netdev_err(net, "Failed to read EEPROM at offset 0x%02x.\n", last_word);
-+			goto free;
-+		}
-+	}
-+
-+	memcpy((u8 *)eeprom_buff + (eeprom->offset & 1), data, eeprom->len);
-+
-+	for (i = first_word; i <= last_word; i++) {
-+		netdev_dbg(net, "write to EEPROM at offset 0x%02x, data 0x%04x\n",
-+			   i, eeprom_buff[i - first_word]);
-+		ret = ax88179_write_cmd(dev, AX_ACCESS_EEPROM, i, 1, 2,
-+					&eeprom_buff[i - first_word]);
-+		if (ret < 0) {
-+			netdev_err(net, "Failed to write EEPROM at offset 0x%02x.\n", i);
-+			goto free;
-+		}
-+		msleep(20);
-+	}
-+
-+	/* reload EEPROM data */
-+	ret = ax88179_write_cmd(dev, AX_RELOAD_EEPROM_EFUSE, 0x0000, 0, 0, NULL);
-+	if (ret < 0) {
-+		netdev_err(net, "Failed to reload EEPROM data\n");
-+		goto free;
-+	}
-+
-+	ret = 0;
-+free:
-+	kfree(eeprom_buff);
-+	return ret;
-+}
-+
- static int ax88179_get_link_ksettings(struct net_device *net,
- 				      struct ethtool_link_ksettings *cmd)
- {
-@@ -822,6 +898,7 @@ static const struct ethtool_ops ax88179_ethtool_ops = {
- 	.set_wol		= ax88179_set_wol,
- 	.get_eeprom_len		= ax88179_get_eeprom_len,
- 	.get_eeprom		= ax88179_get_eeprom,
-+	.set_eeprom		= ax88179_set_eeprom,
- 	.get_eee		= ax88179_get_eee,
- 	.set_eee		= ax88179_set_eee,
- 	.nway_reset		= usbnet_nway_reset,
--- 
-2.24.0
+  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-fix-for-v5.7-rc4
 
+for you to fetch changes up to 9d2214b14103594efdbf33018b893b9417846d42:
+
+  thunderbolt: Check return value of tb_sw_read() in usb4_switch_op() (2020-04-20 11:54:19 +0300)
+
+----------------------------------------------------------------
+thunderbolt: Fix for v5.7-rc4
+
+- Fix checking return value of tb_sw_read() in usb4_switch_op().
+
+----------------------------------------------------------------
+Mika Westerberg (1):
+      thunderbolt: Check return value of tb_sw_read() in usb4_switch_op()
+
+ drivers/thunderbolt/usb4.c | 3 +++
+ 1 file changed, 3 insertions(+)
