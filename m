@@ -2,67 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB7B1BBD6B
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 14:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CBD21BBD82
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 14:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726859AbgD1MV0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Apr 2020 08:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42272 "EHLO
+        id S1726817AbgD1MZR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Apr 2020 08:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726645AbgD1MVZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Apr 2020 08:21:25 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A73C03C1A9;
-        Tue, 28 Apr 2020 05:21:24 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id b11so24383843wrs.6;
-        Tue, 28 Apr 2020 05:21:24 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726739AbgD1MZQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Apr 2020 08:25:16 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204B8C03C1A9;
+        Tue, 28 Apr 2020 05:25:16 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id k13so24441096wrw.7;
+        Tue, 28 Apr 2020 05:25:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=gQggrWVxtlWooHJ9VvmMjmE6560rDoPz8QZk/w9nGfo=;
-        b=IVHJv8nDbrtfq5tdFexHAMTsPWZ803scNQRQKY+ISa4BbE+YECsfirgQ/S3MPdYhH6
-         0bwck8PpsJMlwLtQoyG5YWtamswbd3krm8bMowxOBCGHRZjsCtwqEBtJ2dNnYn2JhcLj
-         yOtSrT1IEd6WYSyryGcGnd/NzMVNhvgmwpoVhFVvFazZHxpW8GYKzV7zKOyMueUcI00d
-         ZAdBc54nJOz+glnQ0J1HqzG2wXa7zLK6fBiMzrmxuv4J88u6yB6F37tvzfVyztw1rGEh
-         LGxLOjKQ4v1a3WDrFck8dYGDbeqLmfBFs09owl41HHq/J+ufj13ye7RAAXd67q4WjH2m
-         mqFQ==
+        bh=781oNo11x931cim0fl8S1PiQGZJbX/Ze59g07/BoxgM=;
+        b=CvOVlnDd5fDcNAf95b63/H/YM7RVcHI1AsIXCZWs6gsASaiIrkBZZkrIruuBH9BLU3
+         Uo/4trUJNULx5eRudzZ4inAv9067APiAs04NPlbwXStqBqxPyIsWYRAEeiRmbqN8CW+S
+         xLnyweO/An8GSYeEecBbC4e5D2gmZpK69UoD6V/ErJB08gn+A3aeknbXlUuOm1eHCjQH
+         pys9lKHWLP369LJa+OqWrzAyX36BnkkolunQNX6Iw6E44B2ZOzJ23UPR/f5HOiB80Fgq
+         Key+z9TLf00n/nIgoUePNFEPE/gqrSx7i5Q3jw9u/jncMVw0vVpD4grN+naolCu2oqBK
+         W3+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gQggrWVxtlWooHJ9VvmMjmE6560rDoPz8QZk/w9nGfo=;
-        b=BWZtahYK7i2cuvi1trxCpjB7uNxC3kfI542n9X1FnOV1MKHIQBy107LukdsakHpfVm
-         nhrJXqtn9IzvsmiMzZ+dxdt3Te4wMOrgoBCuO6JUTkiiHD9cThI2PtHjddmimh4/92F0
-         qHTZqU6gr97tbZU21nRuPQ2MJtIuM4BKMHF0uZlvlScGRjdZP/3dlDq8Bu4f3PwR8byq
-         Dpn/B78W13DYd+IsY9gZvsS6u5qgDvSnnEDWdkDh+BodOnJixw3PmIZG+ppY/Ryp2Jly
-         oZzBC2LwK6TrchYqPKQxC6M/iK2pEnMJSbxSJdkn/pC9dlH0HQlITNz1DOLYBnyjzCTO
-         miAw==
-X-Gm-Message-State: AGi0PubJXZDIZlR342CxMdeANbH9GN10ae4CtAfRhc5yFVPONOHO4iE6
-        e2Q+ZZ12IJoiKt1ddsXEIRQ=
-X-Google-Smtp-Source: APiQypJoUxDi9VtW8QtRjJtJubunQk2bk/KU3MhPGbODlHzGpoj4Jnd+OiIVJ+ozdHhcjSApv2ppiw==
-X-Received: by 2002:a5d:4485:: with SMTP id j5mr31113728wrq.427.1588076482889;
-        Tue, 28 Apr 2020 05:21:22 -0700 (PDT)
+        bh=781oNo11x931cim0fl8S1PiQGZJbX/Ze59g07/BoxgM=;
+        b=jeWyAfLeFhuf/iSriOsctbvKgDKMkI0WMcOoKWaqsV9AMmDFHpNC45TxnBYPPnz6bj
+         GKkrliKXjwBDHa/woX8EPh4ViTO0TEZSbfx6soHvazszJ9ZI65Jf9bdVTCvtzI60tsPm
+         K2IhKs0P4IhkotOpfef9MW4yMyiTEH78Ma9ULfdClrnwv87sced5z2q9jidIT1DQAHBQ
+         cST1zG6yA7owwKbIxGR1151tu/zv8LLrcjEJ7LjbJ33Xlr2QJ4kBOpTMPNbWz7sAWOLY
+         PeYoAH8C7UO3ggowFp4yksaMMtOlBzXvjSktiuvMaQgVQ6/1oX3rcO6hcVExR5vGCViv
+         5gtg==
+X-Gm-Message-State: AGi0PuaB1odfwnSk8ByeXaDeMg93stS2cEITISCOoyjJB0/7f/FoEZuN
+        QxTjrTJmkOu1PrLcfrQv69o=
+X-Google-Smtp-Source: APiQypLDXIxO7A0O4EZ58eEalijCyP8izHMI3fCOongyuPYiyfJfo3JND95DyqhBt4AHPgT+1LPYKQ==
+X-Received: by 2002:a5d:5304:: with SMTP id e4mr31268481wrv.87.1588076714459;
+        Tue, 28 Apr 2020 05:25:14 -0700 (PDT)
 Received: from localhost (p2E5BEDBA.dip0.t-ipconnect.de. [46.91.237.186])
-        by smtp.gmail.com with ESMTPSA id a9sm2932215wmm.38.2020.04.28.05.21.21
+        by smtp.gmail.com with ESMTPSA id j4sm24826680wrm.85.2020.04.28.05.25.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 05:21:21 -0700 (PDT)
-Date:   Tue, 28 Apr 2020 14:21:20 +0200
+        Tue, 28 Apr 2020 05:25:13 -0700 (PDT)
+Date:   Tue, 28 Apr 2020 14:25:12 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Nagarjuna Kristam <nkristam@nvidia.com>
 Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
         mark.rutland@arm.com, robh+dt@kernel.org,
         devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: Re: [PATCH V1 3/4] usb: gadget: tegra-xudc: Add Tegra194 support
-Message-ID: <20200428122120.GM3592148@ulmo>
+Subject: Re: [PATCH V1 4/4] usb: gadget: tegra-xudc: add port_speed_quirk
+Message-ID: <20200428122512.GN3592148@ulmo>
 References: <1587022460-31988-1-git-send-email-nkristam@nvidia.com>
- <1587022460-31988-4-git-send-email-nkristam@nvidia.com>
+ <1587022460-31988-5-git-send-email-nkristam@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="VLAOICcq5m4DWEYr"
+        protocol="application/pgp-signature"; boundary="NJSRbAqOy4NeGDns"
 Content-Disposition: inline
-In-Reply-To: <1587022460-31988-4-git-send-email-nkristam@nvidia.com>
+In-Reply-To: <1587022460-31988-5-git-send-email-nkristam@nvidia.com>
 User-Agent: Mutt/1.13.1 (2019-12-14)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
@@ -70,64 +70,57 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---VLAOICcq5m4DWEYr
+--NJSRbAqOy4NeGDns
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 16, 2020 at 01:04:19PM +0530, Nagarjuna Kristam wrote:
-> This commit adds support for XUSB device mode controller support on
-> Tegra194 SoC. This is very similar to the existing Tegra186 XUDC, with lpm
-> support added in addition.
+On Thu, Apr 16, 2020 at 01:04:20PM +0530, Nagarjuna Kristam wrote:
+> Add port_speed_quirk that modify below registers to limit/restore OTG
+> port speed to GEN1/GEN2.
+> SSPX_CORE_CNT56
+> SSPX_CORE_CNT57
+> SSPX_CORE_CNT65
+> SSPX_CORE_CNT66
+> SSPX_CORE_CNT67
+> SSPX_CORE_CNT72
+>=20
+> The basic idea is to make SCD intentionally fail, reduce SCD timeout and
+> force device transit to TSEQ. Enable this flag to only Tegra194.
+>=20
+> Based on work by WayneChang <waynec@nvidia.com>
 >=20
 > Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
 > ---
->  drivers/usb/gadget/udc/tegra-xudc.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
->=20
-> diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc=
-/tegra-xudc.c
-> index 52a6add..fb01117 100644
-> --- a/drivers/usb/gadget/udc/tegra-xudc.c
-> +++ b/drivers/usb/gadget/udc/tegra-xudc.c
-> @@ -3494,6 +3494,13 @@ static const char * const tegra186_xudc_clock_name=
-s[] =3D {
->  	"fs_src",
->  };
-> =20
-> +static const char * const tegra194_xudc_clock_names[] =3D {
-> +	"dev",
-> +	"ss",
-> +	"ss_src",
-> +	"fs_src",
-> +};
-> +
+>  drivers/usb/gadget/udc/tegra-xudc.c | 106 ++++++++++++++++++++++++++++++=
+++++++
+>  1 file changed, 106 insertions(+)
 
-This looks identical to tegra186_xudc_clock_names, so there's no need to
-duplicate them. Just reuse the other one for Tegra194.
+You're telling readers what you're doing, but after reading the commit
+message, I have no idea why this is being done. Can you provide more
+information on why exactly is this needed? Why do we have to limit the
+OTG port speed?
 
-With that fixed:
+Thierry
 
-Acked-by: Thierry Reding <treding@nvidia.com>
-
---VLAOICcq5m4DWEYr
+--NJSRbAqOy4NeGDns
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl6oH8AACgkQ3SOs138+
-s6G2ag/8CU0kKOqPbPmx1dYndCz1V9xbrpIjqRROzzgU7SJ+NGfKfceJe7gTfGZM
-AZKeUlVoN494QnDJSB4Z1wII+i14sio5Y7kznzURcHniZnv2leNqI3jlagiVYCOe
-nTgBwCPp7Ls/pzgmOlULelIVr/7xtEbxXFB9V6VCkV67jEmsaea8FUGmksXIC+YN
-u/oFdPHWhXw96NHF1PBHpyuLNdGyw8iXB/zLn/zJC05eSfQirP1xb5oWDXZNIe+9
-OZjNEWv7hMJEpt+Xe7T+6EBSH50Se+yMfj6qX6uZGHM1xY33JT80K2acbAOsKxYT
-6JBTUQ655uYJu8+fxV1yl8eUJhYUjkU/NLTJROBqKBD4TqOsNxFSiqVckEXG0d0p
-T/r3mKHEKbC7NB/Fd7xL4JTWkK8erqLWzgqOzc4iz3lJ2KHEPpnWkWsGGBqiMJPV
-BUUugLiZ6XWi5S3L1OXkqV5Ritz5PWaHzLSYHaihSO7e8p3WDdDNAcLPcy651buQ
-cBjHlsMbABNo459gBdiEvbDX7MWkNzWr8QjBzOK1wigVSUav9wKvutCwaFsIRJfh
-44KtPIK+cdyaQIoK3rFHKaTnNlD6857wJWqhuOyYTcd9znRh/e0xU3d1Jwvb6mBv
-a+osPQeem0I+hhJg8dP/FqLGHK52oM5kA1IZNPh5ZOTX9d+dh50=
-=BU7n
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl6oIKgACgkQ3SOs138+
+s6H1XRAAgIkN+EUOOO1bRRCqdItpBhUzAnXz56qxx16NpYjpIjJPHwPtCDwb2XhK
+NK6gSk93H07QtoJtWLRt74q5c/exqcYbFDpP1Zx1tnPaK9IlTi0x450TBO6cW5QC
+NDeOAyRwckbJT16Iab59ZOM6uSIW2VnB2eHHmEiq46mKPm/TQb2aE3lJMjkNskE7
+ZzW7SCNwfkJu7r8WcDq/+4jYjg+/0viQ/jd8gyZCJ+WqQu+G6qlPws2D7sVlta6Z
+PjC4lWFddArpC6W1Xvhq+I0cDJ4ActilTeIeOnSPF60T52S1Uso4cJRBn0AwGcaG
+Eoab3z2D9s1HkbvCwbteWpMnXWuscXasxKonQ71Z4ifwcQFxoXRtNLBFKrX+Zdxy
+azEmdmu/6WF5AY28LvmM36UzWvQgPcXimOE2Bb+fOUOb7jW4qtqTNbBPtSJg8zqP
+NlzMxQ5JDfxhdG7W/A9MzV31cuDjLSWCI59BGSEOcoKjN3ehapybAHxfacvpqarz
+VoEvo/KG2AykqH8Xx5DJU7eLyOHZKSTF86mHKCucU2G+7NcdMi+j8kQwhzY41rDH
+2G4Jh8ycg/HpjIdQLXebWLZh+afh2M0LxX9ShM6MJ4KrTph0hbnzf72mCHhmRzFk
+C5g1JrwbmRR+tdwsfbSUHOnK7S4J+kG65VCCuyKexREetPWzeY0=
+=KTH2
 -----END PGP SIGNATURE-----
 
---VLAOICcq5m4DWEYr--
+--NJSRbAqOy4NeGDns--
