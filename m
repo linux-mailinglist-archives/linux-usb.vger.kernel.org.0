@@ -2,85 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA2F41BBCE7
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 13:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E661BBD44
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 14:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726682AbgD1L6T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Apr 2020 07:58:19 -0400
-Received: from mga18.intel.com ([134.134.136.126]:51685 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726505AbgD1L6T (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 28 Apr 2020 07:58:19 -0400
-IronPort-SDR: fXhF726Sm6OIQS7eE8PVn2QDQbxEseJWK6+MTUiWBfVEcv+Vg08QBkstPlThEQdmOChicUT0vZ
- 4+GNsVF7t4CQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2020 04:58:19 -0700
-IronPort-SDR: y3P4o11mIgCqlvRCq883TGGvZu2TGc5M1PqVAhKMSbc35M/kBIFc+Kjg+bIDPWD5MPImvrX/5Z
- WpPuItFCvZQw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,327,1583222400"; 
-   d="scan'208";a="367478930"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 28 Apr 2020 04:58:16 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 28 Apr 2020 14:58:15 +0300
-Date:   Tue, 28 Apr 2020 14:58:15 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org
-Subject: Re: [GIT PULL] Thunderbolt/USB4 fix for v5.7-rc4
-Message-ID: <20200428115815.GY487496@lahna.fi.intel.com>
-References: <20200428090956.GR487496@lahna.fi.intel.com>
- <20200428105018.GA1143911@kroah.com>
+        id S1726804AbgD1MQe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Apr 2020 08:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726361AbgD1MQc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Apr 2020 08:16:32 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A793C03C1A9;
+        Tue, 28 Apr 2020 05:16:32 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id k13so24408923wrw.7;
+        Tue, 28 Apr 2020 05:16:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=KJcceZKHt8YY/nAlytIbRqg+XVhvkXqTJQkvmynr/Jo=;
+        b=PjR9IzQ8VD3sksu/DJg+ZCI27xjQM2hp3LDGLLrBEn6lwZoi0hx0FbNn34GGPXBU0g
+         4Pyqp/f/L4WeeqIp40aL724tWTQGScWi8CBHzbhDCa6DXk9WPMrG89YTkEe2hM2eRpXX
+         XYQPpDzxx6W2PQ8VlJbvMlL499j+fGlTO9BjitN8n/U4zyLsmf2xwczWdpmdaRgmDVVB
+         DALWUIskfHDPpTFWeGfrQvjp3y9Br9LsaksIico9cRhGq3JgwHmU+UPM+7zEBYOSYH5P
+         tbmeKkMJZC/w+gw8S0W7mw4EQa1I4aUe6ln2WUkDQHsNzyfXSx2qKvpVrm9r3SsvcYvY
+         GwBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=KJcceZKHt8YY/nAlytIbRqg+XVhvkXqTJQkvmynr/Jo=;
+        b=WJSzPyA6963HzxAR5jVQyknqMG1cG6TctzoOu4XWm4lth2/eTn6KqPnuV/9QQbRLIJ
+         QnMFcQMevyaSTO3PlKn9It5ULukrMCt9v90fjFlHnCY+JbaCgiu/0TzhCoyx3LUjvrnS
+         fAdUImpmKwd8bHs3UeTdE/9c3ebHEFB2xMv9BSXbLdDo9LHjBZ6e7lSWJG7pCfSZbPuB
+         e1jU/2uYFGrJr2E+zf1RtYlr1WclJtAO2XFtiG1OkGVKy/XhXke7XH9ZI9hHQHCmwAEc
+         XmiY1bTYW/hGTo3NDCi70W30QADQFJeGAC58iaI6iqpBs9KbMuBW9yhvFZy1FeynJlLp
+         KVIA==
+X-Gm-Message-State: AGi0PubD6celFiJxp4xp/ecPpK0uZ6TNYlhp039i/zEsu6Mt511Sm12/
+        qpRRHztd78Cg+bbIY517OtY=
+X-Google-Smtp-Source: APiQypInzRT5VmQThYG3hxKLRxdUsWIeHCEjdaSPbMEX3fOsSnTEiOElIJit9A8BQBrWmmHk6GooDQ==
+X-Received: by 2002:adf:e9cb:: with SMTP id l11mr32334378wrn.24.1588076191212;
+        Tue, 28 Apr 2020 05:16:31 -0700 (PDT)
+Received: from localhost (p2E5BEDBA.dip0.t-ipconnect.de. [46.91.237.186])
+        by smtp.gmail.com with ESMTPSA id s30sm25530090wrb.67.2020.04.28.05.16.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Apr 2020 05:16:27 -0700 (PDT)
+Date:   Tue, 28 Apr 2020 14:16:26 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Nagarjuna Kristam <nkristam@nvidia.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH V1 2/4] arm64: tegra: Add xudc node for Tegra194
+Message-ID: <20200428121626.GL3592148@ulmo>
+References: <1587022460-31988-1-git-send-email-nkristam@nvidia.com>
+ <1587022460-31988-3-git-send-email-nkristam@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="m+jEI8cDoTn6Mu9E"
 Content-Disposition: inline
-In-Reply-To: <20200428105018.GA1143911@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <1587022460-31988-3-git-send-email-nkristam@nvidia.com>
+User-Agent: Mutt/1.13.1 (2019-12-14)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 28, 2020 at 12:50:18PM +0200, Greg Kroah-Hartman wrote:
-> On Tue, Apr 28, 2020 at 12:09:56PM +0300, Mika Westerberg wrote:
-> > Hi Greg,
-> > 
-> > The following changes since commit ae83d0b416db002fe95601e7f97f64b59514d936:
-> > 
-> >   Linux 5.7-rc2 (2020-04-19 14:35:30 -0700)
-> > 
-> > are available in the Git repository at:
-> > 
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-fix-for-v5.7-rc4
-> > 
-> > for you to fetch changes up to 9d2214b14103594efdbf33018b893b9417846d42:
-> > 
-> >   thunderbolt: Check return value of tb_sw_read() in usb4_switch_op() (2020-04-20 11:54:19 +0300)
-> > 
-> > ----------------------------------------------------------------
-> > thunderbolt: Fix for v5.7-rc4
-> > 
-> > - Fix checking return value of tb_sw_read() in usb4_switch_op().
-> > 
-> > ----------------------------------------------------------------
-> > Mika Westerberg (1):
-> >       thunderbolt: Check return value of tb_sw_read() in usb4_switch_op()
-> 
-> Why does this commit not have a cc: stable tag on it?  I can apply it by
-> hand and add it, but that will not show up as a pull request/merge, is
-> that ok?
 
-I'm not sure this qualifies as stable material to be honest. Changes
-that this triggers is really low because there are no USB4 devices
-available for public at the moment (that's the reason I did not add the
-tag).
+--m+jEI8cDoTn6Mu9E
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If you still think it should have stable tag, then it would be great if
-you could add it. It is fine if it goes in as a patch not a merge.
+On Thu, Apr 16, 2020 at 01:04:18PM +0530, Nagarjuna Kristam wrote:
+> Tegra194 has one XUSB device mode controller, which can be operated
+> HS and SS modes. Add DT entry for XUSB device mode controller
+>=20
+> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
+> ---
+>  arch/arm64/boot/dts/nvidia/tegra194.dtsi | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
 
-Thanks!
+Looks good to me, I'll pick this up into the Tegra tree.
+
+Thierry
+
+--m+jEI8cDoTn6Mu9E
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl6oHpcACgkQ3SOs138+
+s6F38w/8DcNjQD7ygu05FLIvH5mMzvp/ZOq1zIJxBqJ39kNj1aGgyT1wlnw0d6o7
+MfdVgIC2Z4rRXaGjGkD1UAvatjkgOUhdONYBJVM7FvoGmv/+1KRSR03ibr+EZtvy
+WfCxoj11GHauJlzuYulg+6fpnCxzhXn4RSBDSm1/12Vp3BbQvjOcdidEHCQYbDHy
+mV8ylgoNrJ/DW56wsWlMYsdoTWBuSh6S3NsC1rEzKVs31+qcp1qIhVTJegdS4KZF
+hr6QasS7SQy2z1VRkFqh+D4fRUErOWHiheJ0EPO/UQpQTnQQW3hO9IHEV3r1N3BQ
+SJV6/4pDaJuKJE1qXfu5QfqYuoD5ZR2ViWE3cEc6VNxGoRu1uGTfs+/fDi0Bz6oR
+INDmJuNXyB+KtrWWooSQMOZ5naawEDRHojCvDJUA+l/474MI6v/RxLCoj9QD9ECx
+AvbALWhpwSzUJWszB4cMBdMuDmKE23V85gDU4Md7VcwqOSelUnoauVeVNmlKwAt7
+Y4FmRC5pL7CZCnP0jHGAEexEnxQaCbMdXe3TN9eRt5RVqj0ks3MkWyJ7PIu63Bu1
+o4yZma2mkq7skiM2e9Ari8JgMBQ+EjBHtpG4kshmkJJpzbrDHH79f3w9hTw49q25
+MCSr+mpc2gnWKx1BPBJHlGSKVVHXyWNEWWFdbI4eK8dmnsVnm0s=
+=2SXp
+-----END PGP SIGNATURE-----
+
+--m+jEI8cDoTn6Mu9E--
