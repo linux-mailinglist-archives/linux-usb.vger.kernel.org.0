@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6778C1BCC61
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 21:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A589B1BCC63
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 21:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728882AbgD1T1J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Apr 2020 15:27:09 -0400
-Received: from mout02.posteo.de ([185.67.36.66]:47867 "EHLO mout02.posteo.de"
+        id S1728574AbgD1T17 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Apr 2020 15:27:59 -0400
+Received: from mout02.posteo.de ([185.67.36.66]:38371 "EHLO mout02.posteo.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728613AbgD1T1J (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 28 Apr 2020 15:27:09 -0400
+        id S1728511AbgD1T17 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 28 Apr 2020 15:27:59 -0400
 Received: from submission (posteo.de [89.146.220.130]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 634FD2400FB
-        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2020 21:27:03 +0200 (CEST)
+        by mout02.posteo.de (Postfix) with ESMTPS id 542902400FB
+        for <linux-usb@vger.kernel.org>; Tue, 28 Apr 2020 21:27:56 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1588102023; bh=+Xpw0shhYHBpsX3QPHRsK+zdjS0X14PXeTwC6/eoRwI=;
+        t=1588102076; bh=+Xpw0shhYHBpsX3QPHRsK+zdjS0X14PXeTwC6/eoRwI=;
         h=Date:From:To:Cc:Subject:From;
-        b=QxFNzYsiEeJ7QsHiLFlNV8FHhgkGj2dI36waujkoTDpEYqAs5Zw+uSKkTxIwSvxGi
-         9jCTO0hasLK8IntiRZgz0qyvP0bhTfqiEeDWKvBK24/0Bhk9X5pIT/YE9MAH3a6Tcg
-         BQyzixTBRUlFxBIzgTnXM0Hy+JteLSViSDN7rKEl/3OtaG+ewpWtSraUHCK3O5O4GI
-         i54WuZOHDVjXnmCpXSJtN+K01JzfnzeKaeJ7t3LxKmRE3+iQV/affy6bRPLmCtPugX
-         KlvVhhPlH9Sgy28XoEcmPvmL8v5O+uLAlDhhd1bDcTCnVNOfxCTXfnZ1OG7u+QO5LZ
-         kubvwrLCY8PHA==
+        b=InziKb6OxXsQVZ2UyP/JeS2oyYBZsEg1ZGCQS07YlqCig48db39e5FyjldX4YRUa+
+         xmpgyd/HfrCPR5AnxZCY6NEd0PaKuLGE6BJvCf0bR1r4lKpY5uW5QnAOopBKSMCYhS
+         dBNgNGUhFoRTdFPFG2mZi/2GRkumxHox4ZH3S4C1GivALevUXfFkqnF7w5B3fVI577
+         o7rh8LnFcV1uV/E3xdGcgHXcqe6VZ7WUKrrcSNlF6HcuE71har66S+Vb73smEBOP7+
+         F2UEcmWyi/gNlcoL+y3Q2EeQxDCzS5GscE8ITg8OaqDTeG+NUgxCq8a67BTntnKrrj
+         bG8+RZODxuMxg==
 Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 49BWqV4RcFz6tmQ;
-        Tue, 28 Apr 2020 21:27:02 +0200 (CEST)
-Date:   Tue, 28 Apr 2020 21:27:01 +0200
+        by submission (posteo.de) with ESMTPSA id 49BWrW5ZJcz6tmK;
+        Tue, 28 Apr 2020 21:27:55 +0200 (CEST)
+Date:   Tue, 28 Apr 2020 21:27:54 +0200
 From:   Julian =?UTF-8?B?R3Jvw58=?= <julian.g@posteo.de>
-To:     hdegoede@redhat.co
+To:     hdegoede@redhat.com
 Cc:     linux-usb@vger.kernel.org
 Subject: unusual_uas.h additional entry
-Message-ID: <20200428212701.2ee42662@motofckr9k-mint-desktop>
+Message-ID: <20200428212754.0a18dd25@motofckr9k-mint-desktop>
 X-Mailer: Claws Mail 3.16.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
