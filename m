@@ -2,68 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D47A41BBAB5
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 12:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E251BBAEB
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Apr 2020 12:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727790AbgD1KGg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Apr 2020 06:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
+        id S1727823AbgD1KPT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Apr 2020 06:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727066AbgD1KGg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Apr 2020 06:06:36 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A2BC03C1A9;
-        Tue, 28 Apr 2020 03:06:35 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id j2so23936730wrs.9;
-        Tue, 28 Apr 2020 03:06:35 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1727051AbgD1KPS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Apr 2020 06:15:18 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801C6C03C1A9;
+        Tue, 28 Apr 2020 03:15:18 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id g12so2200032wmh.3;
+        Tue, 28 Apr 2020 03:15:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=0NOPRK0/Yhwkuu7bUSlcqL6G+yespVTHDJSREMkCqog=;
-        b=JBPK9JRz84aiA4FcjeQVa53YeTll/0vLhduBNuC3BPHjAnaQOq7/fsfSZF1NRBO3bg
-         QVIUP/tGpw902ClCUlNYJ/bIM/zNzsjlO+9tJ7MMdj9g13G2WtacQjl5EE/jkArnzt/g
-         aiXnVUgjppZ9tNo1b5GOy7ntnOYoLnbkUO4EnxbaZydD5zLl90y0i8eE9VIMvcCe4Gsa
-         GbAlVSRjddGK6Ifuc+gpk1JZlWUURMG8rjbd4nKhEZNEjfrFGFZ+ljO+ZUx+ACVw6UGx
-         4l/fW9Jp/+pA6/w650L/X6mBx5Lh9sdxsxDsY3nCViD5oxji1y6NjrsSiIlJu0zCt8cO
-         afdg==
+        bh=LbZMlVxJkAvCCISg7/2P7IzAohKBal3yK6VSlV/EC3M=;
+        b=Q4hYnK+JJNBxzUPE7TvK/iuRKGSS60W3XJyFftlbjAjHmp6cV1MWFh1bBH0uMdslPF
+         UtN0ESnLuZUKGt7CsI9+y9zvXnPm35VoV5mNcnSM0XR9nqCNeCt07tnSHrA/j7kNzfx6
+         rCmlQqyfLq+K+JV6oqZAHW2SkVG4kZTkheUPYesMA+0X6A1jR4h+IGaFQ4Y/HpoaS33b
+         I9RWYxGyQsu6UFY+2A8pC5LtR8igmp6aYIcgiaksJvSd+vRSWi4D3Rs6Cf5iNsTw+UyD
+         6n5CPF/xLfnHflx25bXGthZbaR61WpiY3JmwbUj48QT85eqne3eo4UZDa1cxpN1FbEZW
+         0hbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=0NOPRK0/Yhwkuu7bUSlcqL6G+yespVTHDJSREMkCqog=;
-        b=G7Uu13NrWM9ltqKKcAahMXQX0awHY+RVbTrIdjgX/J4jCJm8Nmx0Ioskna8cay25Lk
-         TTJjsqVyiI4NJfh8CY+ycKJlHfzjxd29+C/rRdZP3ugXOGuwX5u8Gv+pE8D5IsJSPMHd
-         Cv3U4Zrhle/6imKxumPCYmoLPKahJlJbwpkP9bOmyQOY3tVOQNujHJmeloz72ygT0LXf
-         EQ3l8F2E6tihewGMq/OL8uLrIdYrSyWYnSp9crRb6owkaLx8U3h+afKHc7n9upGUUhly
-         O8yQOAH4bLUUaWywGQ7dYnlkHXhpc9BBPsDmqwqYr/3/S7r+1jF2gRVH/qhW2R+62xwY
-         Ba0g==
-X-Gm-Message-State: AGi0PuY1ZsLrPoW5jiFyJV/RZ75z4aYjT/KzXBtYWcutIiwfQ0J6OFLQ
-        pb6LRNQ/CWRuz70ajMADGuCmbGkD
-X-Google-Smtp-Source: APiQypJi5ZpL1icthw5cAYkTdZLk7nsvaXcwbZzuN4qQcwQWsTAh/CP1Xwvu/LGQvYzH+4s95ERlog==
-X-Received: by 2002:adf:ab1b:: with SMTP id q27mr34705138wrc.220.1588068394689;
-        Tue, 28 Apr 2020 03:06:34 -0700 (PDT)
+        bh=LbZMlVxJkAvCCISg7/2P7IzAohKBal3yK6VSlV/EC3M=;
+        b=tU/pnbmoQqhCieK48jbU68G57RE+8KQtn2eJgql17xaHwDV91YlRiXWz2MI2QC2teL
+         VbCOXCwpifAKC3fr044bkeeV6YK5hY6KcKads6GwDAWegXIrXcpnibC6adgl4eiqqXp5
+         DQZqZm8HnFZrzHnSYOUIE2H6UZvIISG46bHnUXnYSKx/eFP1W8SzO7GjCgPPqzwmAvRo
+         sIxuuS2XA5GRg7SK3jDs/s99iJd0Br8Z6XUoaZe9zIPWrdkOOXAPGsMADr4aLB/9WUJV
+         qzSqObAtQ7yrnS77jAYQ5VkYVcDwY3Fg3Z42RmcOvza2hwgreDej5JU8rBl586IEFLUw
+         HQgw==
+X-Gm-Message-State: AGi0PuZPWsQ6toCS4nJUKiNw79mVgYWfvOxo6IhKicqhFUKLbGuNjsu0
+        eCYbe4wd9QVFE/zmBX4SXRI=
+X-Google-Smtp-Source: APiQypJK69/lbKBiJcOYPcLc6OtKjB2iz568ZvzeTMVRdz1B7S8dhFll8FzoFD39jBKTqexEs3xYpQ==
+X-Received: by 2002:a7b:c0d5:: with SMTP id s21mr3712820wmh.107.1588068917194;
+        Tue, 28 Apr 2020 03:15:17 -0700 (PDT)
 Received: from localhost (p2E5BEDBA.dip0.t-ipconnect.de. [46.91.237.186])
-        by smtp.gmail.com with ESMTPSA id t20sm3201391wmi.2.2020.04.28.03.06.32
+        by smtp.gmail.com with ESMTPSA id i17sm24678113wru.39.2020.04.28.03.15.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 03:06:33 -0700 (PDT)
-Date:   Tue, 28 Apr 2020 12:06:32 +0200
+        Tue, 28 Apr 2020 03:15:16 -0700 (PDT)
+Date:   Tue, 28 Apr 2020 12:15:15 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Nagarjuna Kristam <nkristam@nvidia.com>
 Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
         mark.rutland@arm.com, robh+dt@kernel.org, kishon@ti.com,
         devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 4/8] phy: tegra: xusb: Add USB2 pad power control
- support for Tegra210
-Message-ID: <20200428100632.GD3592148@ulmo>
+Subject: Re: [PATCH V2 5/8] phy: tegra: xusb: Add soc ops API to enable UTMI
+ PAD protection
+Message-ID: <20200428101515.GE3592148@ulmo>
 References: <1586939108-10075-1-git-send-email-nkristam@nvidia.com>
- <1586939108-10075-5-git-send-email-nkristam@nvidia.com>
+ <1586939108-10075-6-git-send-email-nkristam@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wLAMOaPNJ0fu1fTG"
+        protocol="application/pgp-signature"; boundary="/2994txjAzEdQwm5"
 Content-Disposition: inline
-In-Reply-To: <1586939108-10075-5-git-send-email-nkristam@nvidia.com>
+In-Reply-To: <1586939108-10075-6-git-send-email-nkristam@nvidia.com>
 User-Agent: Mutt/1.13.1 (2019-12-14)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
@@ -71,51 +71,236 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---wLAMOaPNJ0fu1fTG
+--/2994txjAzEdQwm5
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 15, 2020 at 01:55:04PM +0530, Nagarjuna Kristam wrote:
-> Add USB2 pad power on and off API's for TEgra210 and provide its control
-
-"Tegra210"
-
-> via soc ops. It can be used by operations like charger detect to power on
-> and off USB2 pad if needed.
+On Wed, Apr 15, 2020 at 01:55:05PM +0530, Nagarjuna Kristam wrote:
+> When USB charger is enabled, UTMI PAD needs to be protected according
+> to the direction and current level. Add support for the same on Tegra210
+> and Tegra186.
 >=20
 > Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
 > ---
 > V2:
+>  - Commit message coorected.
 >  - Patch re-based.
 > ---
->  drivers/phy/tegra/xusb-tegra210.c | 190 ++++++++++++++++++++++++++------=
-------
->  1 file changed, 133 insertions(+), 57 deletions(-)
+>  drivers/phy/tegra/xusb-tegra186.c | 40 +++++++++++++++++++++++++++++++++=
+++++++
+>  drivers/phy/tegra/xusb-tegra210.c | 31 ++++++++++++++++++++++++++++++
+>  drivers/phy/tegra/xusb.h          | 13 +++++++++++++
+>  3 files changed, 84 insertions(+)
 
-Again, is there any particular reason why this has to be done with a
-custom API rather than just passing the UTMI PHY to the charging code?
+Oh wait... you're not actually adding custom public APIs for this but
+are simply wiring this through the SoC-specific code. Okay, that seems
+fine to me.
+
+Ignore my comments on the prior two patches.
+
+> diff --git a/drivers/phy/tegra/xusb-tegra186.c b/drivers/phy/tegra/xusb-t=
+egra186.c
+> index f862254..03bdb5b 100644
+> --- a/drivers/phy/tegra/xusb-tegra186.c
+> +++ b/drivers/phy/tegra/xusb-tegra186.c
+> @@ -68,6 +68,13 @@
+>  #define   PORTX_SPEED_SUPPORT_MASK		(0x3)
+>  #define     PORT_SPEED_SUPPORT_GEN1		(0x0)
+> =20
+> +#define USB2_BATTERY_CHRG_OTGPADX_CTL1(x)       (0x84 + (x) * 0x40)
+> +#define  PD_VREG                                (1 << 6)
+> +#define  VREG_LEV(x)                            (((x) & 0x3) << 7)
+> +#define  VREG_DIR(x)                            (((x) & 0x3) << 11)
+> +#define  VREG_DIR_IN                            VREG_DIR(1)
+> +#define  VREG_DIR_OUT                           VREG_DIR(2)
+> +
+>  #define XUSB_PADCTL_USB2_OTG_PADX_CTL0(x)	(0x88 + (x) * 0x40)
+>  #define  HS_CURR_LEVEL(x)			((x) & 0x3f)
+>  #define  TERM_SEL				BIT(25)
+> @@ -289,6 +296,37 @@ static void tegra_phy_xusb_utmi_pad_power_down(struc=
+t phy *phy)
+>  	usb2->powered_on =3D false;
+>  }
+> =20
+> +static void tegra186_xusb_padctl_utmi_pad_set_protection_level(
+> +				struct tegra_xusb_port *port, int level,
+> +				enum tegra_vbus_dir dir)
+
+It's more idiomatic to wrap after the return type and while at it,
+perhaps make this name a little shorter, like so:
+
+    static void
+    tegra186_xusb_padctl_utmi_pad_set_protection(struct tegra_xusb_port *po=
+rt,
+						 int level,
+						 enum tegra_vbus_dir dir)
+
+> +{
+> +	u32 value;
+> +	struct tegra_xusb_padctl *padctl =3D port->padctl;
+> +	unsigned int index =3D port->index;
+> +
+> +	value =3D padctl_readl(padctl, USB2_BATTERY_CHRG_OTGPADX_CTL1(index));
+> +
+> +	if (level < 0) {
+> +		/* disable pad protection */
+> +		value |=3D PD_VREG;
+> +		value &=3D ~VREG_LEV(~0);
+> +		value &=3D ~VREG_DIR(~0);
+> +	} else {
+> +		if (dir =3D=3D TEGRA_VBUS_SOURCE)
+> +			value |=3D VREG_DIR_OUT;
+> +		else if (dir =3D=3D TEGRA_VBUS_SINK)
+> +			value |=3D VREG_DIR_IN;
+> +
+> +		value &=3D ~PD_VREG;
+> +		value &=3D ~VREG_DIR(~0);
+> +		value &=3D ~VREG_LEV(~0);
+> +		value |=3D VREG_LEV(level);
+> +	}
+> +
+> +	padctl_writel(padctl, value, USB2_BATTERY_CHRG_OTGPADX_CTL1(index));
+> +}
+> +
+> +
+
+There's an extra blank line above that can be dropped.
+
+>  static int tegra186_xusb_padctl_vbus_override(struct tegra_xusb_padctl *=
+padctl,
+>  					       bool status)
+>  {
+> @@ -935,6 +973,8 @@ static const struct tegra_xusb_padctl_ops tegra186_xu=
+sb_padctl_ops =3D {
+>  	.vbus_override =3D tegra186_xusb_padctl_vbus_override,
+>  	.utmi_pad_power_on =3D tegra_phy_xusb_utmi_pad_power_on,
+>  	.utmi_pad_power_down =3D tegra_phy_xusb_utmi_pad_power_down,
+> +	.utmi_pad_set_protection_level =3D
+> +			tegra186_xusb_padctl_utmi_pad_set_protection_level,
+>  };
+> =20
+>  #if IS_ENABLED(CONFIG_ARCH_TEGRA_186_SOC)
+> diff --git a/drivers/phy/tegra/xusb-tegra210.c b/drivers/phy/tegra/xusb-t=
+egra210.c
+> index caf0890..7d84f1a 100644
+> --- a/drivers/phy/tegra/xusb-tegra210.c
+> +++ b/drivers/phy/tegra/xusb-tegra210.c
+> @@ -74,6 +74,8 @@
+>  #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_MASK 0x3
+>  #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_VAL 0x1
+>  #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_FIX18 (1 << 6)
+> +#define USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV(x) (((x) & 0x3) << 7)
+> +#define USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_DIR(x) (((x) & 0x3) << 11)
+> =20
+>  #define XUSB_PADCTL_USB2_OTG_PADX_CTL0(x) (0x088 + (x) * 0x40)
+>  #define XUSB_PADCTL_USB2_OTG_PAD_CTL0_PD_ZI (1 << 29)
+> @@ -1116,6 +1118,33 @@ void tegra210_usb2_pad_power_down(struct phy *phy)
+>  	usb2->powered_on =3D false;
+>  }
+> =20
+> +static void tegra210_xusb_padctl_utmi_pad_set_protection_level(
+> +				struct tegra_xusb_port *port, int level,
+> +				enum tegra_vbus_dir dir)
+
+Same comment as above.
+
+> +{
+> +	u32 value;
+> +	struct tegra_xusb_padctl *padctl =3D port->padctl;
+> +	unsigned int index =3D port->index;
+> +
+> +	value =3D padctl_readl(padctl,
+> +			     XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL1(index));
+> +
+> +	if (level < 0) {
+> +		/* disable pad protection */
+> +		value |=3D XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_FIX18;
+> +		value &=3D USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV(~0);
+> +		value &=3D ~USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_DIR(~0);
+> +	} else {
+> +		value &=3D ~XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_FIX18;
+> +		value &=3D ~USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_DIR(~0);
+> +		value &=3D USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV(~0);
+> +		value |=3D USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV(level);
+> +	}
+> +
+> +	padctl_writel(padctl, value,
+> +		      XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL1(index));
+> +}
+> +
+>  static int tegra210_usb2_phy_set_mode(struct phy *phy, enum phy_mode mod=
+e,
+>  				      int submode)
+>  {
+> @@ -2291,6 +2320,8 @@ static const struct tegra_xusb_padctl_ops tegra210_=
+xusb_padctl_ops =3D {
+>  	.utmi_port_reset =3D tegra210_utmi_port_reset,
+>  	.utmi_pad_power_on =3D tegra210_usb2_pad_power_on,
+>  	.utmi_pad_power_down =3D tegra210_usb2_pad_power_down,
+> +	.utmi_pad_set_protection_level =3D
+> +			tegra210_xusb_padctl_utmi_pad_set_protection_level,
+>  };
+> =20
+>  static const char * const tegra210_xusb_padctl_supply_names[] =3D {
+> diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
+> index 6995fc4..79e96b0 100644
+> --- a/drivers/phy/tegra/xusb.h
+> +++ b/drivers/phy/tegra/xusb.h
+> @@ -259,6 +259,17 @@ to_sata_pad(struct tegra_xusb_pad *pad)
+>   */
+>  struct tegra_xusb_port_ops;
+> =20
+> +/*
+> + * Tegra OTG port VBUS direction:
+> + * default (based on port capability) or
+> + * as source or sink
+> + */
+> +enum tegra_vbus_dir {
+> +	TEGRA_VBUS_DEFAULT,
+> +	TEGRA_VBUS_SOURCE,
+> +	TEGRA_VBUS_SINK
+> +};
+
+Can't we key off of something like the OTG mode? I thought we already
+carried that elsewhere.
+
+> +
+>  struct tegra_xusb_port {
+>  	struct tegra_xusb_padctl *padctl;
+>  	struct tegra_xusb_lane *lane;
+> @@ -398,6 +409,8 @@ struct tegra_xusb_padctl_ops {
+>  	int (*utmi_port_reset)(struct phy *phy);
+>  	void (*utmi_pad_power_on)(struct phy *phy);
+>  	void (*utmi_pad_power_down)(struct phy *phy);
+> +	void (*utmi_pad_set_protection_level)(struct tegra_xusb_port *port,
+> +					int max_ua, enum tegra_vbus_dir dir);
+
+You call the variable "max_ua" here but it's "level" in the
+implementations, which is slightly confusing. Please choose one and
+stick with it. Also, if it's a value in microamperes, perhaps just make
+it unsigned int?
 
 Thierry
 
---wLAMOaPNJ0fu1fTG
+--/2994txjAzEdQwm5
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl6oACgACgkQ3SOs138+
-s6F9KQ/+M3fL7+wFt2a7E9qXFb9sgMBGcZ60bYeJG5FVGV2Rs3Ec9cPx1cvmJqnG
-esMRcnr6qzKuZtSt+5aoA1q7wRDqrjAFdt4y1KUl8/hjKhqOO/K+/mWXRFem+9HZ
-SDMi2IfNwizsGojMftpg9LXZgJVsr9tI01etxAeJ0xfBtoQSyCtoXfbCXWuTi58E
-KpvwuzpgbK0LAADwTxmwmijgZ8OFHve1AHoT8Ye0cWhXGKWBZLM9hkYaEhPXWYNH
-9ZKzZuzf69ovCNcdJZUOelo4mVGWqwZpYj8z+Kxl+6G4bWE437M3bCHS7q0Ffsda
-34uLaJehBT+UeN6FsVbPbvsy7kUjEs9fPC12zk43ThMg1msgXE661QDU7U7N4d6j
-BgzW6800Ae12vMC1rmLSL1QtfeW9/EUjw7LX0krTOBkJ/Lz8PpWybN2dtkDb3vLJ
-crKgw8jMm08K0/1wAL+McPymKHZLn5UoOupBgyj2bLBM5nXolX3F3yABEW45+7Ur
-djmeUddxwOoR/+ceoDz5tSLDEJ8tR1m636wL+Ao2Zu97jPKCP+R05fOax/qPNdOw
-oCjzAeY14cr3zSwUdKCUmg/f8lLGb+Py36xF7HyO75TY1ZaW5DWpkfKWwtfZwvEF
-8khdnwwHo6oZhnHCy+trucc3Wkyb+IYFQL3b18uzH3YaigPbr/g=
-=tXcG
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl6oAjMACgkQ3SOs138+
+s6HnBw//ZjUsnod3XAMDdcAZQjZ7EBM/xu0ED9w5Al3D45Iag0fGfmDbX5z/C4SF
+8671usCmdMZkCYxA+F+8xDx+GISy46qMylOx5W1P6Exw6XxNMTCuryxBzm9K529+
+OxugKnoAFsXcKMn6rY0Gwx5GoukzzBR6UXQ2CUAwwbpDrEKcvO3BxleCYzy+U57h
+K0+3fLVsJly1glCJcr+me0vcWgVKvD0/HvhTziWMV89vKA6LJe9Yr/CDZiLDE0M/
+Xigxs6GnLGATNIPnREkyFcuKlRYJO0Jrlf63XfTqJVL04SxfPxlHunUJhaGq4oeP
+2R7E61eIKQrZdFJfrFWQ9d0++nIRTZVWAi2Do/jX+eygGx9qd4bBNJbmuXDzz9FM
+V1o1+Hu0+Q6grasIa0Z0UepA2G7MKpeqIYStyffDmeyNmM/A25bjGozDaoB5UPKM
+E4Akl99hU9UwT/n1lCVEbSZTRRSmht3es+lCkTA3wji76dHrist0M26ax6gXvjGp
+NV9sJf1D+N7yhg9Z7/J2vGifFZE+ZHVEd1+egMXVqBYQhU769GoDF69HBaZTRMpm
+F3dHKxhYKBHRwPx/ibrYvDy7xNOrMpnx7TuzQndXHwtA8GNVHtwH92m5omnge+jr
+ttcI+xy6g4je4+Nik188Oc+WIhgF6JgW13dNB0HGHLU/c9F8+HI=
+=Cnp9
 -----END PGP SIGNATURE-----
 
---wLAMOaPNJ0fu1fTG--
+--/2994txjAzEdQwm5--
