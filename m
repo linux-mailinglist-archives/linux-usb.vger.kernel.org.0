@@ -2,123 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A33A1BE43E
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 18:47:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D521BE471
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 18:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727073AbgD2Qrz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Apr 2020 12:47:55 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58314 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727049AbgD2Qry (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 29 Apr 2020 12:47:54 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 4B358AD80;
-        Wed, 29 Apr 2020 16:47:52 +0000 (UTC)
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     f.fainelli@gmail.com, gregkh@linuxfoundation.org,
-        helgaas@kernel.org, linux-kernel@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com, tim.gover@raspberrypi.org,
-        linux-pci@vger.kernel.org, wahrenst@gmx.net,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Subject: [PATCH v7 4/4] USB: pci-quirks: Add Raspberry Pi 4 quirk
-Date:   Wed, 29 Apr 2020 18:47:34 +0200
-Message-Id: <20200429164734.21506-5-nsaenzjulienne@suse.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200429164734.21506-1-nsaenzjulienne@suse.de>
-References: <20200429164734.21506-1-nsaenzjulienne@suse.de>
+        id S1726836AbgD2Q5o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Apr 2020 12:57:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726423AbgD2Q5o (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Apr 2020 12:57:44 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B51EC03C1AE
+        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2020 09:57:44 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id a21so3367888ljb.9
+        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2020 09:57:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=Xi4iDibWDbLhPvWQ9akE+87w7/35NrQsYNKu5z1n3v0=;
+        b=WTkKtZMN0zzT2OT7skJQAhh47if/tpHMnWmiecG0eFF984gxLcYjrANu3g0XLDhmBS
+         00qt48l0xD0Cmlopc/zPnFpBi2wD85HBN4hb54a6u94E87AtdsH9+UZvoVCCveTIa8ei
+         48rr7CBb49PWbwXEKWwe3vLAvSl5wchLMMGVq/E+AVo4A7A4V3FzvQ+E88B5maXpnf/8
+         FRzkLr+J/nTvySgsmUIVNdfKhNtd19AvSESYXpudiUmKM/Vf1aoG3+XbVkzBWYx8/uVH
+         qk3K+IcDr1t+S/yBgcAxdxrokdu4atNmyDj0TbOyAJha2obAcekSZDqqL46aIw+PeB5f
+         U73A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=Xi4iDibWDbLhPvWQ9akE+87w7/35NrQsYNKu5z1n3v0=;
+        b=HCULjD9XFPUFi9rkR8OHncoBi2ZVMZl1K2x9dYdQmw25xenFQDPQL0y8UwlNOxMW9/
+         loc4KUdUz6czEy07Vne3Md9WFW85Dp1XUpdzS+FgfV6BnV1aK+aI2AXjUszohxsSutGt
+         dVazRmQGfYPami8F2uITqMUZhwmdj6W2Gd6u2TlX+WrHASKRDuGrdB5GIG0pirnvA0wn
+         4HZSLvm+MAHTn08HB35SNJwqPWn08bk24fAxNBSUskL3p20oZvwd35gq/IIqAktwLm6h
+         Vj2CHs9u90Ifr7DrR9M9IrzBONtjYUQvI7I2slY791vk/gUf6OnVnOmpmfJfPuZBKt38
+         4i6Q==
+X-Gm-Message-State: AGi0PuZ1/Seiz624ss+oAqp7gnHXJYsbV26edXY5g047h0QuAKtlX5aA
+        jOme2WxhoXP20uSHaM+3zOOk5GzMu3w=
+X-Google-Smtp-Source: APiQypIURcx+7WK9w1vwe0AqEK6ikhPPPfNB6Ru9TW0otMm5ZexQ2tWGRbQvy4VeleyoD3L6MXPWZw==
+X-Received: by 2002:a05:651c:291:: with SMTP id b17mr21923913ljo.166.1588179462493;
+        Wed, 29 Apr 2020 09:57:42 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id d5sm1186257lfn.56.2020.04.29.09.57.41
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 29 Apr 2020 09:57:41 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: Re: Recommended USB3/SuperSpeed gadget device
+In-Reply-To: <CAAeHK+yRMBFX4zgYLSLECdnM54GoEYcbocTDw=GrGrAD+cJ1bA@mail.gmail.com>
+References: <CAAeHK+zBLWKn-YQjoD6S5uwwhuB-kTmdnBD28E06ujrx8ymv7A@mail.gmail.com> <87ees62114.fsf@kernel.org> <CAAeHK+yRMBFX4zgYLSLECdnM54GoEYcbocTDw=GrGrAD+cJ1bA@mail.gmail.com>
+Date:   Wed, 29 Apr 2020 19:57:37 +0300
+Message-ID: <877dxy1b7i.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On the Raspberry Pi 4, after a PCI reset, VL805's firmware may either be
-loaded directly from an EEPROM or, if not present, by the SoC's
-VideoCore. Inform VideoCore that VL805 was just reset.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Also, as this creates a dependency between USB_PCI and VideoCore's
-firmware interface, and since USB_PCI can't be set as a module neither
-this can. Reflect that on the firmware interface Kconfg.
 
-Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
----
+Hi,
 
-Changes since v5:
- - Fix Kconfig issue with allmodconfig
+Andrey Konovalov <andreyknvl@google.com> writes:
+>> If you're not willing to do that, I anything using dwc3 (dragonboard,
+>> beaglebone AI, and many many others) would be good here.
+>
+> All DragonBoards that I found have USB 2.0 device ports AFAIU, but
 
-Changes since v4:
- - Do not split up error message
+Oh, they put a USB2.0 only connector. That sucks, as it actually has
+dwc3 inside.
 
-Changes since v3:
- - Add more complete error message
+> BeagleBone AI looks like what I need. Thanks!
 
-Changes since v1:
- - Make RASPBERRYPI_FIRMWARE dependent on this quirk to make sure it
-   gets compiled when needed.
+beware that beaglebone AI runs quite hot. Get yourself some beefy
+heatsink and a fan. Also, make sure to get the non-standard serial cable.
 
- drivers/firmware/Kconfig      |  3 ++-
- drivers/usb/host/pci-quirks.c | 16 ++++++++++++++++
- 2 files changed, 18 insertions(+), 1 deletion(-)
+> While looking for a board with USB 3.0 device support, I've also found
+> the UP board [1]. I'm not sure which driver it uses though.
+>
+> [1] https://up-board.org/up/specifications/
 
-diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
-index 8007d4aa76dc..b42140cff8ac 100644
---- a/drivers/firmware/Kconfig
-+++ b/drivers/firmware/Kconfig
-@@ -178,8 +178,9 @@ config ISCSI_IBFT
- 	  Otherwise, say N.
- 
- config RASPBERRYPI_FIRMWARE
--	tristate "Raspberry Pi Firmware Driver"
-+	bool "Raspberry Pi Firmware Driver"
- 	depends on BCM2835_MBOX
-+	default USB_PCI
- 	help
- 	  This option enables support for communicating with the firmware on the
- 	  Raspberry Pi.
-diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
-index beb2efa71341..0dc34668bb2a 100644
---- a/drivers/usb/host/pci-quirks.c
-+++ b/drivers/usb/host/pci-quirks.c
-@@ -16,6 +16,9 @@
- #include <linux/export.h>
- #include <linux/acpi.h>
- #include <linux/dmi.h>
-+
-+#include <soc/bcm2835/raspberrypi-firmware.h>
-+
- #include "pci-quirks.h"
- #include "xhci-ext-caps.h"
- 
-@@ -1243,11 +1246,24 @@ static void quirk_usb_handoff_xhci(struct pci_dev *pdev)
- 
- static void quirk_usb_early_handoff(struct pci_dev *pdev)
- {
-+	int ret;
-+
- 	/* Skip Netlogic mips SoC's internal PCI USB controller.
- 	 * This device does not need/support EHCI/OHCI handoff
- 	 */
- 	if (pdev->vendor == 0x184e)	/* vendor Netlogic */
- 		return;
-+
-+	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483) {
-+		ret = rpi_firmware_init_vl805(pdev);
-+		if (ret) {
-+			/* Firmware might be outdated, or something failed */
-+			dev_warn(&pdev->dev,
-+				 "Failed to load VL805's firmware: %d. Will continue to attempt to work, but bad things might happen. You should fix this...\n",
-+				 ret);
-+		}
-+	}
-+
- 	if (pdev->class != PCI_CLASS_SERIAL_USB_UHCI &&
- 			pdev->class != PCI_CLASS_SERIAL_USB_OHCI &&
- 			pdev->class != PCI_CLASS_SERIAL_USB_EHCI &&
--- 
-2.26.2
+It uses dwc3. It's Intel CherryTrail inside. Heikki and Andy (Cc) should
+have information about those, hopefully.
 
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6psgEACgkQzL64meEa
+mQYDnQ//eXK6S6JANxJdGcOCYTknWoryILBCO2YkmVaqy/BGrUf8wJc5T1JN/hnv
+fDSY3fjvRv9dg5MagdxvJ5FQdBeN3+HyGqmgEy664Srb2ypuPbkGMmtMK1En4Mra
+MOXSlwhPaRdx48lh98ebXmDRlPvGRxS2foFBXFBm2rgLaILaLUZ5wyZedSJJERBt
+84kmx/2MKp40jWcsoQ+PcztaEqJ15Y+B3V+Lmh5k8J2OXSnFzduV0iGaEY45Ss2l
+9ccUkg1j/0x5u1gAVjYg0btiBwMoXvMuTPE76QGKFKr3XH4SK4dkDFRNbj+c5aWs
+9yEvNfp8R/Bb2DyiCsKaUT6EVjyVe6+NN7NpWWJVwGrRzjnyvfVScM1k4hEhQYa3
+NwEpLatxnbfHBN+Pm9xll6YYsMSw59r/5WE4Dr+/be3q+64Dd8s5o7mvxjxuoriP
+DwRlT3Chxq4ArDkniVuZniMD90FyMYBLm70if0jmbcmdI2XlOh/l/CKgnCVxJeBM
+b5lfjDD3WAE5mEG42UlsMfCzRmgFmHfkUx9/vBlSBtA7TiHMjTv9WOPH3XQ5PZj4
+AMinlbbIYJE6KYuXYU7MaQoX5zA7W/psbABisxKLdvavlf40Q7tHKhvDhGL8bi20
+Ph562oRcfERiZxhWk1etuf2efI/Kv8eKpPDn+e9LB0D19vy7QcE=
+=02a7
+-----END PGP SIGNATURE-----
+--=-=-=--
