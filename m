@@ -2,136 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D86CE1BD593
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 09:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 837961BD639
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 09:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726508AbgD2HUl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Apr 2020 03:20:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57414 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726483AbgD2HUl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 29 Apr 2020 03:20:41 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 884C62076B;
-        Wed, 29 Apr 2020 07:20:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588144839;
-        bh=MC7v/B/AUB+89bATTGb3hziKs1OjKTAH6JyUhQGNvPI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PkjuO7H3O+1g5LH2lMW2dsDVrHOO7kKFPejUHYQdMR/RVCWUu1Q5uR3jxTV41YQVA
-         hr9CwS7A4WPgsZW+Zu3VU4EIdX1PRdNZ4fOufw2vFT2iTQEFzs7lr2PpwIUe4rm69/
-         pk650QeRHER3wPv6jTm0tc/KPTTk6cp+YveQTt+I=
-Date:   Wed, 29 Apr 2020 09:20:36 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     mani@kernel.org
-Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patong.mxl@gmail.com
-Subject: Re: [PATCH 1/2] usb: serial: Add MaxLinear/Exar USB to Serial driver
-Message-ID: <20200429072036.GA2045202@kroah.com>
-References: <20200428195651.6793-1-mani@kernel.org>
- <20200428195651.6793-2-mani@kernel.org>
+        id S1726381AbgD2Hj7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Apr 2020 03:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53732 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726355AbgD2Hj7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Apr 2020 03:39:59 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B5BC03C1AD
+        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2020 00:39:58 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id a21so1495886ljj.11
+        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2020 00:39:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=4rAFqQQzgqrKKlnDKMCjqOBHoJ4VOWeRgTMfselSWKQ=;
+        b=BGk6SQcxoW5wPDl+wPY33Nve4ob4dL6cCZw8vETSh1n8IuaYcVYCqZ2Sx3SIfsKJxw
+         yUJORO/M+VWDnD+ID//nUKcAg6EftqLVF7/3rc5BA9qZke6EdE22LlypcK0iS7CovPgf
+         nlgO3jmKlFmm2NM0RzUKatqOiNI2sDvQ2UqR2CqWd1Jk7SHBRHZAPz9jmK4CoBCxegSS
+         Yoelyd8lizjSA2hvHqb0ZzPvT4Zm+r4LlzM1ffzvOVfmrox4G7Rp+0LLbX/89vQCp2F2
+         ftCEFQ3e8+nLGGMjhVyokpRgFJjb/SQ1BWRmbYCV3ZrHcXXJppRoStUPrjbf/AQda4o4
+         84BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=4rAFqQQzgqrKKlnDKMCjqOBHoJ4VOWeRgTMfselSWKQ=;
+        b=cBUCzcRqRHKtggS0eibpC4L60N2wDclKlVb8PO4EIfGbwZpjQ/pquCfSCv07x/p/XE
+         fCZ1Nzpkn8d8bArLTnkR0nmrYMHGaBvRxO+KxCi8wkDFMWYIdyUrBuLDvVsQECJ7+lo0
+         CGI6psy/qmNBbRV5UJaFA1ZB0xVYQvNIHUsVP0Cl9ogCNwFhbPGYVzYz/BXIEKnuvD4+
+         RBKe5wV1Ax9TY4i8QmxfcejM1BOphIJz4DYBTxVFHzfeRp7haFx0qCcnaM0HXjJEvGwa
+         fg0CLtvOdPzDTJ3FMoD2wVgv59I5WOsAiLzuseuCdeI7K0njoNkqzcJdgYPzG8R2iQ1r
+         6mWg==
+X-Gm-Message-State: AGi0PuZoyJHJm4U3L2mnbdvzbrwBOqUnE/7DNWAlZY+9OTT/I2PUoY01
+        O3hp0b9gPimyvirDvyg1n/s=
+X-Google-Smtp-Source: APiQypLLvCQLxWYP4xG51BVTBysmELdjXvknuJl9R2kgZ9dV14rYxW9Tym7F3+FzzjVOJLV6T/I53A==
+X-Received: by 2002:a05:651c:1055:: with SMTP id x21mr17166123ljm.210.1588145996852;
+        Wed, 29 Apr 2020 00:39:56 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id s7sm1692497ljm.58.2020.04.29.00.39.55
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 29 Apr 2020 00:39:56 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Andrey Konovalov <andreyknvl@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>
+Cc:     Dmitry Vyukov <dvyukov@google.com>
+Subject: Re: Recommended USB3/SuperSpeed gadget device
+In-Reply-To: <CAAeHK+zBLWKn-YQjoD6S5uwwhuB-kTmdnBD28E06ujrx8ymv7A@mail.gmail.com>
+References: <CAAeHK+zBLWKn-YQjoD6S5uwwhuB-kTmdnBD28E06ujrx8ymv7A@mail.gmail.com>
+Date:   Wed, 29 Apr 2020 10:39:51 +0300
+Message-ID: <87ees62114.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200428195651.6793-2-mani@kernel.org>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 29, 2020 at 01:26:50AM +0530, mani@kernel.org wrote:
-> From: Manivannan Sadhasivam <mani@kernel.org>
-> 
-> Add support for MaxLinear/Exar USB to Serial converters. This driver
-> only supports XR21V141X series but provision has been made to support
-> other series in future.
-> 
-> This driver is inspired from the initial one submitted by Patong Yang:
-> 
-> https://patchwork.kernel.org/patch/10543261/
-> 
-> While the initial driver was a custom tty USB driver exposing whole
-> new serial interface ttyXRUSBn, this version is completely based on USB
-> serial core thus exposing the interfaces as ttyUSBn. This will avoid
-> the overhead of exposing a new USB serial interface which the userspace
-> tools are unaware of.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Nice work!
 
-Some comments below:
+Hi,
 
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * MaxLinear/Exar USB to Serial driver
-> + *
-> + * Based on initial driver written by Patong Yang <patong.mxl@gmail.com>
-> + *
-> + * Copyright (c) 2020 Manivannan Sadhasivam <mani@kernel.org>
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/slab.h>
-> +#include <linux/tty.h>
-> +#include <linux/usb.h>
-> +#include <linux/usb/serial.h>
-> +
-> +#include "xr_serial.h"
+Andrey Konovalov <andreyknvl@google.com> writes:
+> What is the recommended driver/device to test USB3/SuperSpeed gadgets?
+> Ideally something cheap, but at the same time with good driver
+> support.
+>
+> I have a EC3380-AB board [1], which kind of works with net2280 driver,
+> but it passes almost none of the usbtest tests with g_zero (only tests
+> #1 and #9). I need something better.
 
-No need for a .h file for a single .c file.
+You have a unique chance to fix those problems :-)
 
-> +static int xr_get_reg(struct usb_serial_port *port, u8 block, u16 reg,
-> +		      u16 *val)
-> +{
-> +	struct usb_serial *serial = port->serial;
-> +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
-> +	void *dmabuf;
-> +	int ret = -EINVAL;
-> +
-> +	dmabuf = kmalloc(sizeof(reg), GFP_KERNEL);
+If you're not willing to do that, I anything using dwc3 (dragonboard,
+beaglebone AI, and many many others) would be good here.
 
-So that is 2 bytes?
+=2D-=20
+balbi
 
-> +	if (!dmabuf)
-> +		return -ENOMEM;
-> +
-> +	if (port_priv->idProduct == XR21V141X_ID) {
-> +		/* XR21V141X uses custom command for reading UART registers */
-> +		ret = usb_control_msg(serial->dev,
-> +				      usb_rcvctrlpipe(serial->dev, 0),
-> +				      XR_GET_XR21V141X,
-> +				      USB_DIR_IN | USB_TYPE_VENDOR, 0,
-> +				      reg | (block << 8), dmabuf,
-> +				      port_priv->reg_width,
-> +				      USB_CTRL_SET_TIMEOUT);
-> +	}
-> +
-> +	if (ret == port_priv->reg_width) {
-> +		memcpy(val, dmabuf, port_priv->reg_width);
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
-But here you copy ->reg_width bytes in?  How do you know val can hold
-that much?  It's only set to be 1, so you copy 1 byte to a 16bit value?
-What part of the 16bits did you just copy those 8 bits to (hint, think
-cpu endian issues...)
+-----BEGIN PGP SIGNATURE-----
 
-That feels really really odd and a bit broken.
-
-> --- /dev/null
-> +++ b/drivers/usb/serial/xr_serial.h
-> @@ -0,0 +1,103 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ */
-
-Are you sure about the "+"?  I have to ask :)
-
-> +
-> +#ifndef __LINUX_USB_SERIAL_XR_SERIAL_H
-> +#define __LINUX_USB_SERIAL_XR_SERIAL_H
-
-As you will drop this file, just a general statement, no need for
-__LINUX as this is all Linux :)
-
-thanks,
-
-greg k-h
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6pL0cACgkQzL64meEa
+mQZe2A//cjYaEQr/FuxkWO900p3IOZWj5Um5T70UdrwDTt9JwaGpMRHJnENANN2v
+r7xYGdljh4Fi34NKcyFVrn+ViaoYpV7pvSZy4I3MuWvSOZ9Kq/2xeEYOzlWdXAkk
+M/LM4uJHOv51Q3phVAl6FgOeB0Wvy1BLZ2SsbXnISx2kp7JT0LbKdlxfjvOZXBZ2
+DmwfluAexi3jiSxywN9xLqC6IYbt6GhEIIMMDmtmwg5ISEP6OpsOuLFvwpsdi4od
+rdROoWD0o5+yLbGyn0BOzQUs+zGvUABs2aw1acrBqTbuVISsDJMS2EjlPGaW3BgM
+7YDpkPOe9FWdukUGzcZv6y+NmLAYw61+PIMN5Mxuawl7LRNymRE9WbVbg1vpNKWp
+3hTKgaYJrR1b2VgntIg6WJUwcFDInJ/sE5lN6R0yFNdFyGlsz71HTdsdzZ+x82fu
+JGkUx1E8lplfGRAmDnF8LZQ41sLGlk+wjmHApHiXRAJq8APKg8cn3pHjyEPukxDW
+Nf9AR5RKNXRZ/EgTfNmDV1qePyY1xRa8DGUQM7jFFbxZCCYjWqGp9/vvTyRzTBcH
+mZnmZtwZYNa1BnSEJT7viZJHVKJaa9Lw9Lou1MEiga6iFo3is7sQzDFok81BPyto
+ZDIS9yKGRNMrJNueAa7CXycxbYYiWd+UXRIZ4wLS4LY50DOkCuM=
+=i0GP
+-----END PGP SIGNATURE-----
+--=-=-=--
