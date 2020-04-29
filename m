@@ -2,174 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 767E91BE549
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 19:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4143A1BE599
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 19:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727773AbgD2Rbn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Apr 2020 13:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33632 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727124AbgD2Rbn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Apr 2020 13:31:43 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CB1C03C1AE;
-        Wed, 29 Apr 2020 10:31:42 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id r26so2944923wmh.0;
-        Wed, 29 Apr 2020 10:31:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=lpRZMrHTzTW8z6tlIKgNxL8ccVzt5z7E+tVpzahVStY=;
-        b=g8iStKx7j3a48hQ9diCtkrfWscJCCjYi7R66T+6R1drJJReIC6vDifbT2xfmsQ2KV0
-         aVGYa6wkdwF4YvznqekDAvkGExxvQ31gzgiaQ2HLsBPuNTY0xzu2x502zVSTB/xgmtG7
-         YbqioJ510L4TNH/ZM8bK8O+gjwvDp/xCDSPt0PkbadtJKu3brwPlSD9ReyOx8AXzbitg
-         TUkbFF7ps0QaiGzGmrGTxCz+f8SE/Lzo8DqCxDDPWMVYdU61aNZfFRlkODzjtAzqG2Je
-         OJo2MdQz01EceTYw1uC5twm15UOqQWXuAkNohFwRwZLf5AIN6CioZFwr+OTAf+BNTiJa
-         h25Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=lpRZMrHTzTW8z6tlIKgNxL8ccVzt5z7E+tVpzahVStY=;
-        b=YvsDZ+P73StGYsae1CJG8etUXdhG9vF0zCK2kJRUa/bkRT6T3lGgvsq+4o1W9EOxJZ
-         ilxOUwW9AjQc88en7ssr0lcNwxjPPscJP4N6/QDnaIvg+IqrS2Gjc1pQ2V+Zi+lWpBRh
-         FWZDA5FC7Jk2ldem9dE2fyJJZ9KajAETlXVLZkwi/Vb/oqcrpYYFRtLygu7KQShfPGUu
-         lwJ9HfcHhk1U20IdOikCwLpG9omb5pGP+l7GC7HdmZnIHHiY8mfhHPu/DD+8+upKMXD4
-         ZL/ET+yinAnVkjAR2A+4buAk0rLnTNLmyxM1Mm0ylo6wwt1rlK2/k+MEnPykR9itJqfm
-         TEdA==
-X-Gm-Message-State: AGi0Pua2gSvWfKkykqzoaKhChCtQdV3tFL8hI7JuIsWVPRFSk8ciTPKA
-        iA76BDI+DaeficWvSaFjLhKw404K/uY=
-X-Google-Smtp-Source: APiQypLH8sXqeobIc6UxTjqBMumvmLNAP3xqvcVTHT/bEOZ1FL08GJZzVtJ+rSFwNZ/4eU4l+oaZxA==
-X-Received: by 2002:a1c:e903:: with SMTP id q3mr4300005wmc.76.1588181501178;
-        Wed, 29 Apr 2020 10:31:41 -0700 (PDT)
-Received: from stbsrv-and-01.and.broadcom.net ([192.19.231.250])
-        by smtp.gmail.com with ESMTPSA id j11sm31177182wrr.62.2020.04.29.10.31.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2020 10:31:40 -0700 (PDT)
-From:   Al Cooper <alcooperx@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Al Cooper <alcooperx@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v4 4/4] usb: host: Add ability to build new Broadcom STB USB drivers
-Date:   Wed, 29 Apr 2020 13:31:12 -0400
-Message-Id: <20200429173112.38366-5-alcooperx@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200429173112.38366-1-alcooperx@gmail.com>
-References: <20200429173112.38366-1-alcooperx@gmail.com>
+        id S1726558AbgD2Rri (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Apr 2020 13:47:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58978 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726423AbgD2Rri (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 29 Apr 2020 13:47:38 -0400
+Received: from Mani-XPS-13-9360 (unknown [157.46.25.26])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C0C0521D7B;
+        Wed, 29 Apr 2020 17:47:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588182457;
+        bh=r8sc/05h1cK547jVXshgKR35cDRc+aZhoCzMM02oCxA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tXUW56abLC8abdMIs32nPbHuT1IlqZsOQr0oxpDt71VxEGDJr8QWhPhGqfQSLfrqg
+         S8l0dNxLrUk9eSsWqcQ4YaWy6DPClWzhX8zDiYeLXHlKDbROfHaDbBx8aH9L7588zD
+         Xab5EI2SxfQsJPpA43MaUwh8DpWd7vn9c56GCwzo=
+Date:   Wed, 29 Apr 2020 23:17:27 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patong.mxl@gmail.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 2/2] usb: serial: xr_serial: Add gpiochip support
+Message-ID: <20200429174727.GF6443@Mani-XPS-13-9360>
+References: <20200428195651.6793-1-mani@kernel.org>
+ <20200428195651.6793-3-mani@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200428195651.6793-3-mani@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the build system changes needed to get the Broadcom STB XHCI,
-EHCI and OHCI functionality working. The OHCI support does not
-require anything unique to Broadcom so the standard ohci-platform
-driver is being used. The link order for XHCI was changed in the
-Makefile because of the way STB XHCI, EHCI and OHCI controllers
-share a port which requires that the XHCI driver be initialized
-first. Also update MAINTAINERS.
+Hi Greg,
 
-Signed-off-by: Al Cooper <alcooperx@gmail.com>
----
- MAINTAINERS               |  8 ++++++++
- drivers/usb/host/Kconfig  | 16 ++++++++++++++++
- drivers/usb/host/Makefile | 16 ++++++++++------
- 3 files changed, 34 insertions(+), 6 deletions(-)
+On Wed, Apr 29, 2020 at 01:26:51AM +0530, mani@kernel.org wrote:
+> From: Manivannan Sadhasivam <mani@kernel.org>
+> 
+> Add gpiochip support for Maxlinear/Exar USB to serial converter
+> for controlling the available gpios.
+> 
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: linux-gpio@vger.kernel.org
+> Signed-off-by: Manivannan Sadhasivam <mani@kernel.org>
+> ---
+>  drivers/usb/serial/xr_serial.c | 186 ++++++++++++++++++++++++++++++++-
+>  drivers/usb/serial/xr_serial.h |   7 ++
+>  2 files changed, 192 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/serial/xr_serial.c b/drivers/usb/serial/xr_serial.c
+> index ea4a0b167d3f..d86fd40839f8 100644
+> --- a/drivers/usb/serial/xr_serial.c
+> +++ b/drivers/usb/serial/xr_serial.c
+> @@ -476,6 +476,189 @@ static void xr_break_ctl(struct tty_struct *tty, int break_state)
+>  		   state);
+>  }
+>  
+> +#ifdef CONFIG_GPIOLIB
+> +
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 26f281d9f32a..6147ed78d212 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3481,6 +3481,14 @@ S:	Supported
- F:	Documentation/devicetree/bindings/i2c/brcm,brcmstb-i2c.yaml
- F:	drivers/i2c/busses/i2c-brcmstb.c
- 
-+BROADCOM BRCMSTB USB EHCI DRIVER
-+M:	Al Cooper <alcooperx@gmail.com>
-+L:	linux-usb@vger.kernel.org
-+L:	bcm-kernel-feedback-list@broadcom.com
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
-+F:	drivers/usb/host/ehci-brcm.*
-+
- BROADCOM BRCMSTB USB2 and USB3 PHY DRIVER
- M:	Al Cooper <alcooperx@gmail.com>
- L:	linux-kernel@vger.kernel.org
-diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index 55bdfdf11e4c..7d58fd66e412 100644
---- a/drivers/usb/host/Kconfig
-+++ b/drivers/usb/host/Kconfig
-@@ -97,6 +97,22 @@ config USB_XHCI_TEGRA
- 
- endif # USB_XHCI_HCD
- 
-+config USB_EHCI_BRCMSTB
-+       tristate
-+
-+config USB_BRCMSTB
-+	tristate "Broadcom STB USB support"
-+	depends on (ARCH_BRCMSTB && PHY_BRCM_USB) || COMPILE_TEST
-+	select USB_OHCI_HCD_PLATFORM if USB_OHCI_HCD
-+	select USB_EHCI_BRCMSTB if USB_EHCI_HCD
-+	select USB_XHCI_PLATFORM if USB_XHCI_HCD
-+	help
-+	  Say Y to enable support for XHCI, EHCI and OHCI host controllers
-+	  found in Broadcom STB SoC's.
-+
-+	  Disabling this will keep the controllers and corresponding
-+	  PHYs powered down.
-+
- config USB_EHCI_HCD
- 	tristate "EHCI HCD (USB 2.0) support"
- 	depends on HAS_DMA && HAS_IOMEM
-diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
-index b191361257cc..85fa6ace552a 100644
---- a/drivers/usb/host/Makefile
-+++ b/drivers/usb/host/Makefile
-@@ -37,6 +37,15 @@ endif
- 
- obj-$(CONFIG_USB_PCI)	+= pci-quirks.o
- 
-+# NOTE: BRCMSTB systems require that xhci driver be linked before the
-+# ehci/ohci drivers.
-+obj-$(CONFIG_USB_XHCI_HCD)	+= xhci-hcd.o
-+obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o
-+obj-$(CONFIG_USB_XHCI_PLATFORM) += xhci-plat-hcd.o
-+obj-$(CONFIG_USB_XHCI_HISTB)	+= xhci-histb.o
-+obj-$(CONFIG_USB_XHCI_MTK)	+= xhci-mtk.o
-+obj-$(CONFIG_USB_XHCI_TEGRA)	+= xhci-tegra.o
-+
- obj-$(CONFIG_USB_EHCI_HCD)	+= ehci-hcd.o
- obj-$(CONFIG_USB_EHCI_PCI)	+= ehci-pci.o
- obj-$(CONFIG_USB_EHCI_HCD_PLATFORM)	+= ehci-platform.o
-@@ -49,6 +58,7 @@ obj-$(CONFIG_USB_EHCI_HCD_STI)	+= ehci-st.o
- obj-$(CONFIG_USB_EHCI_EXYNOS)	+= ehci-exynos.o
- obj-$(CONFIG_USB_EHCI_HCD_AT91) += ehci-atmel.o
- obj-$(CONFIG_USB_EHCI_TEGRA)	+= ehci-tegra.o
-+obj-$(CONFIG_USB_EHCI_BRCMSTB)	+= ehci-brcm.o
- 
- obj-$(CONFIG_USB_OXU210HP_HCD)	+= oxu210hp-hcd.o
- obj-$(CONFIG_USB_ISP116X_HCD)	+= isp116x-hcd.o
-@@ -69,12 +79,6 @@ obj-$(CONFIG_USB_OHCI_HCD_DAVINCI)	+= ohci-da8xx.o
- 
- obj-$(CONFIG_USB_UHCI_HCD)	+= uhci-hcd.o
- obj-$(CONFIG_USB_FHCI_HCD)	+= fhci.o
--obj-$(CONFIG_USB_XHCI_HCD)	+= xhci-hcd.o
--obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o
--obj-$(CONFIG_USB_XHCI_PLATFORM) += xhci-plat-hcd.o
--obj-$(CONFIG_USB_XHCI_HISTB)	+= xhci-histb.o
--obj-$(CONFIG_USB_XHCI_MTK)	+= xhci-mtk.o
--obj-$(CONFIG_USB_XHCI_TEGRA)	+= xhci-tegra.o
- obj-$(CONFIG_USB_SL811_HCD)	+= sl811-hcd.o
- obj-$(CONFIG_USB_SL811_CS)	+= sl811_cs.o
- obj-$(CONFIG_USB_U132_HCD)	+= u132-hcd.o
--- 
-2.17.1
+[...]
 
+> +
+> +static int xr_gpio_init(struct usb_serial_port *port)
+> +{
+> +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
+> +	int ret = 0;
+> +
+> +	if (port_priv->idProduct == XR21V141X_ID)
+> +		ret = xr21v141x_gpio_init(port);
+> +
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	port_priv->gc.label = "xr_gpios";
+> +	port_priv->gc.request = xr_gpio_request;
+> +	port_priv->gc.get_direction = xr_gpio_direction_get;
+> +	port_priv->gc.direction_input = xr_gpio_direction_input;
+> +	port_priv->gc.direction_output = xr_gpio_direction_output;
+> +	port_priv->gc.get = xr_gpio_get;
+> +	port_priv->gc.set = xr_gpio_set;
+> +	port_priv->gc.owner = THIS_MODULE;
+> +	port_priv->gc.parent = &port->dev;
+> +	port_priv->gc.base = -1;
+> +	port_priv->gc.can_sleep = true;
+> +
+> +	ret = gpiochip_add_data(&port_priv->gc, port);
+> +	if (!ret)
+> +		port_priv->gpio_registered = true;
+> +
+> +	return ret;
+> +}
+> +
+> +static void xr_gpio_remove(struct usb_serial_port *port)
+> +{
+> +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
+> +
+> +	if (port_priv->gpio_registered) {
+> +		gpiochip_remove(&port_priv->gc);
+> +		port_priv->gpio_registered = false;
+> +	}
+> +}
+> +
+> +#else
+> +
+> +static int xr_gpio_init(struct usb_serial_port *port)
+> +{
+> +	return 0;
+> +}
+> +
+> +static void xr_gpio_remove(struct usb_serial_port *port)
+> +{
+> +	/* Nothing to do */
+> +}
+> +
+> +#endif
+> +
+>  static int xr_port_probe(struct usb_serial_port *port)
+>  {
+>  	struct usb_serial *serial = port->serial;
+> @@ -495,13 +678,14 @@ static int xr_port_probe(struct usb_serial_port *port)
+>  
+>  	usb_set_serial_port_data(port, port_priv);
+>  
+> -	return 0;
+> +	return xr_gpio_init(port);
+
+Just realised that the gpiochip is registered for 2 interfaces exposed by
+this chip. This is due to the fact that this chip presents CDC-ACM model,
+so there are 2 interfaces (interrupt and bulk IN/OUT).
+
+We shouldn't need gpiochip for interface 0. So what is the recommended way
+to filter that?
+
+Thanks,
+Mani
+
+>  }
+>  
+>  static int xr_port_remove(struct usb_serial_port *port)
+>  {
+>  	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
+>  
+> +	xr_gpio_remove(port);
+>  	kfree(port_priv);
+>  
+>  	return 0;
+> diff --git a/drivers/usb/serial/xr_serial.h b/drivers/usb/serial/xr_serial.h
+> index d2977ef847a0..079098cf553a 100644
+> --- a/drivers/usb/serial/xr_serial.h
+> +++ b/drivers/usb/serial/xr_serial.h
+> @@ -3,6 +3,8 @@
+>  #ifndef __LINUX_USB_SERIAL_XR_SERIAL_H
+>  #define __LINUX_USB_SERIAL_XR_SERIAL_H
+>  
+> +#include <linux/gpio/driver.h>
+> +
+>  struct xr_uart_regs {
+>  	u8 enable;
+>  	u8 format;
+> @@ -21,6 +23,11 @@ struct xr_uart_regs {
+>  };
+>  
+>  struct xr_port_private {
+> +#ifdef CONFIG_GPIOLIB
+> +	struct gpio_chip gc;
+> +	bool gpio_registered;
+> +	u8 gpio_altfunc;
+> +#endif
+>  	const struct xr_uart_regs *regs;
+>  	u16 idProduct;
+>  	u8 reg_width;
+> -- 
+> 2.17.1
+> 
