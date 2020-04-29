@@ -2,121 +2,256 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D521BE471
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 18:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02701BE4B2
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 19:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726836AbgD2Q5o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Apr 2020 12:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56408 "EHLO
+        id S1726689AbgD2RET (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Apr 2020 13:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726423AbgD2Q5o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Apr 2020 12:57:44 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B51EC03C1AE
-        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2020 09:57:44 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id a21so3367888ljb.9
-        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2020 09:57:44 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726423AbgD2RES (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Apr 2020 13:04:18 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F185C03C1AE
+        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2020 10:04:18 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id u16so2836078wmc.5
+        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2020 10:04:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=Xi4iDibWDbLhPvWQ9akE+87w7/35NrQsYNKu5z1n3v0=;
-        b=WTkKtZMN0zzT2OT7skJQAhh47if/tpHMnWmiecG0eFF984gxLcYjrANu3g0XLDhmBS
-         00qt48l0xD0Cmlopc/zPnFpBi2wD85HBN4hb54a6u94E87AtdsH9+UZvoVCCveTIa8ei
-         48rr7CBb49PWbwXEKWwe3vLAvSl5wchLMMGVq/E+AVo4A7A4V3FzvQ+E88B5maXpnf/8
-         FRzkLr+J/nTvySgsmUIVNdfKhNtd19AvSESYXpudiUmKM/Vf1aoG3+XbVkzBWYx8/uVH
-         qk3K+IcDr1t+S/yBgcAxdxrokdu4atNmyDj0TbOyAJha2obAcekSZDqqL46aIw+PeB5f
-         U73A==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=kjKMXLzcwr4axBX2OaYHfsddLl1QFj/mnkcodysTxEY=;
+        b=gKPQVCRw6nUUqMKep4nC7g9v/rtf4YEy3ox5sUL/QxJSIJnpPOD+3PUBk7I4QKqEFx
+         cQ34IqS2kSUVij+dLPlxygIedAFLJmEc42JUD3xWx9Y6Grz7hrtZ5/RvDsuSFaXoMUJN
+         phQP8d3LAHo9IDZB049GAcR5EntkYy5J8G4ybHGffe4BGdVxXb927vvxnlT2F6esY5bn
+         PtiksHsyjIFRzy2lK2p4X/vYqm6CudIWGZzwsUylxglZ6DAs1gfzTLu4xSHiWWimhgOZ
+         s7bIBDIQlsIa8iU0+NpeskuAbekobZ8WlKmOoAev0MuRNlDN55eLLnDs8TK3RqACts1u
+         6jBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=Xi4iDibWDbLhPvWQ9akE+87w7/35NrQsYNKu5z1n3v0=;
-        b=HCULjD9XFPUFi9rkR8OHncoBi2ZVMZl1K2x9dYdQmw25xenFQDPQL0y8UwlNOxMW9/
-         loc4KUdUz6czEy07Vne3Md9WFW85Dp1XUpdzS+FgfV6BnV1aK+aI2AXjUszohxsSutGt
-         dVazRmQGfYPami8F2uITqMUZhwmdj6W2Gd6u2TlX+WrHASKRDuGrdB5GIG0pirnvA0wn
-         4HZSLvm+MAHTn08HB35SNJwqPWn08bk24fAxNBSUskL3p20oZvwd35gq/IIqAktwLm6h
-         Vj2CHs9u90Ifr7DrR9M9IrzBONtjYUQvI7I2slY791vk/gUf6OnVnOmpmfJfPuZBKt38
-         4i6Q==
-X-Gm-Message-State: AGi0PuZ1/Seiz624ss+oAqp7gnHXJYsbV26edXY5g047h0QuAKtlX5aA
-        jOme2WxhoXP20uSHaM+3zOOk5GzMu3w=
-X-Google-Smtp-Source: APiQypIURcx+7WK9w1vwe0AqEK6ikhPPPfNB6Ru9TW0otMm5ZexQ2tWGRbQvy4VeleyoD3L6MXPWZw==
-X-Received: by 2002:a05:651c:291:: with SMTP id b17mr21923913ljo.166.1588179462493;
-        Wed, 29 Apr 2020 09:57:42 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id d5sm1186257lfn.56.2020.04.29.09.57.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 29 Apr 2020 09:57:41 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: Re: Recommended USB3/SuperSpeed gadget device
-In-Reply-To: <CAAeHK+yRMBFX4zgYLSLECdnM54GoEYcbocTDw=GrGrAD+cJ1bA@mail.gmail.com>
-References: <CAAeHK+zBLWKn-YQjoD6S5uwwhuB-kTmdnBD28E06ujrx8ymv7A@mail.gmail.com> <87ees62114.fsf@kernel.org> <CAAeHK+yRMBFX4zgYLSLECdnM54GoEYcbocTDw=GrGrAD+cJ1bA@mail.gmail.com>
-Date:   Wed, 29 Apr 2020 19:57:37 +0300
-Message-ID: <877dxy1b7i.fsf@kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=kjKMXLzcwr4axBX2OaYHfsddLl1QFj/mnkcodysTxEY=;
+        b=aWYD19NzF6yv98WFHG48evMaQbaPAQa8TSNuVvRRKpXda1r8d9Hhgbe/qT/mlgF1Cu
+         SY8OKERPDpbPW5cQkMrZLnawxZP5y8kKg90G1brkyO0SV9vQMFGZ9tpCHBlhBan1Y5wE
+         KC9umh99xYQzrmAPRAd43IBEzlarS6HGVGUFLnpfEsioQjkppThSvHCqtUmsJ/rM9T1H
+         UHpCrNh464Oh32PS6JiruArtOhoxpPn9+jKHrZB+GfjYJ2BbDjaBi/11l2FfUVVXex8L
+         gQA7Oz57mMqiZQbkJsbmJcVaCEXJy/iPMG5t5bo+K38YOZmSY0ePFUJUHa0o27GLDYvd
+         +PHw==
+X-Gm-Message-State: AGi0PuaEGeA1XACuKOeVMBsOK66YpLiYQYs/bLbOildvyuf2hghTXjwH
+        TMvPHCPTt+UPnK8kXOMju/BNPHk/Eyo=
+X-Google-Smtp-Source: APiQypLoDUU9GIguTav7F6befROwiA4r1AQLaCoeEaYkllxh3oyMxtQoinKht+C+hDHqF5T/DGCpWg==
+X-Received: by 2002:a1c:1985:: with SMTP id 127mr4627580wmz.13.1588179856510;
+        Wed, 29 Apr 2020 10:04:16 -0700 (PDT)
+Received: from [192.168.0.38] ([176.61.57.127])
+        by smtp.gmail.com with ESMTPSA id i74sm13070738wri.49.2020.04.29.10.04.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Apr 2020 10:04:15 -0700 (PDT)
+Subject: Re: Adding tps65986 to your tps6598x driver
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+References: <d4a9214a-7a55-72ea-75b9-8388bc39d0dd@linaro.org>
+ <20200414151505.GK2828150@kuha.fi.intel.com>
+ <d64d7b21-4f03-05e8-e0db-aa8c75ba847e@linaro.org>
+ <20200422132533.GC618654@kuha.fi.intel.com>
+ <e2eb882b-0ecd-a0a7-b415-8beae93f640f@linaro.org>
+ <20200429140351.GE2738754@kuha.fi.intel.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Message-ID: <4087f16d-a170-eea9-0738-ec5f1c42317d@linaro.org>
+Date:   Wed, 29 Apr 2020 18:04:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+In-Reply-To: <20200429140351.GE2738754@kuha.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On 29/04/2020 15:03, Heikki Krogerus wrote:
+> On Wed, Apr 22, 2020 at 03:50:08PM +0100, Bryan O'Donoghue wrote:
+>> What's your feeling on the following.
+>>
+>> In DT if we find a child connector then we can determine the state we are
+>> supposed to be in ?
+>>
+>> That way it _shouldn't_ change the logic you already depend on the ACPI
+>> systems.
+>>
+>> typec1_con: connector {
+>>      compatible = "usb-c-connector";
+>>      label = "USB-C";
+>>      power-role = "dual";
+>>      data-role = "dual";
+>>      try-power-role = "sink";
+>>      source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
+>>      sink-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)
+>>                  PDO_VAR(5000, 20000, 3000)>;
+>>      op-sink-microwatt = <15000000>;
+>>
+>>      self-powered;
+>> };
+>>
+>> we need to control :
+>>
+>> http://www.ti.com/lit/an/slva843a/slva843a.pdf
+>>
+>> - InitiateSwapToDPF
+>> - InitiateSwapToUFP
+>> - process-swap-to-dfp;
+>> - process-swap-to-ufp;
+>> - InitiateVconnSwap;
+>> - ProcessVconnSwap;
+>>
+>> The documentation makes clear some of these settings are mutually exclusive.
+>>
+>> You can capture the logic of that with the connector
+>>
+>> - power-role = "dual";
+>> - data-role = "dual";
+>>
+>> from the connector declaration. Absent the connector declaration the ACPI
+>> launched code should still work as-is.
+>>
+>> Alternatively it could be something specific to the chip - as opposed to the
+>> connector.
+>>
+>> My thought is you either have these two at the type-c controller level or
+>> inside a child connector node.
+>>
+>> Either way tps6598x would consume them.
+> 
+> You should always have a child node for every connector. Please Note
+> that we usually have one for each connector in ACPI as well.
+> 
+> For now on every platform the application code (the PD controler FW)
+> has been platform specific, which means we have not needed to
+> configure things like the System Configuration register, because we've
+> known that the application code has already done that for us.
+> 
+> In your case I'm assuming you do not have a platform specific PD
+> controler FW, so you are going to need to use device properties, which
+> is the correct thing to do.
+
+On our platform I found the settings "just worked" asking around it 
+turns out our FW has been configured with the TI configuration tool, so 
+at this moment in time I don't think the stuff I'm working on has a 
+specific need to configure these options.
 
 
-Hi,
+> So we can always check those properties in tps6598x.c. If we have
+> them, we configure the System Configuration, and what have you,
+> according to those. If we don't have them, then we know the PD
+> controller FW is platform specific.
+> 
+>>>> Something else ? It's important we get the changes upstream, so I'd
+>>>> appreciate any thoughts you have on the right way to go about this.
+>>>
+>>> So what exactly is the problem here?
+>>>
+>>> Which USB controller are you using? Is it dual-role capable, or do you
+>>> have separate xHCI controller and separate USB device controller plus
+>>> a mux between them?
+>>
+>> Err, checks notes.
+>> Its a ChipIdea HDRC. That part just works.
+>>
+>> As I suggested above,
+>>
+>> tps6598x: tps6598x@38 {
+>>      compatible = "ti,tps6598x";
+>>      reg = <0x38>;
+>>
+>>      interrupt-parent = <&gpio>;
+>>      interrupts = <107 IRQ_TYPE_LEVEL_LOW>;
+>>      interrupt-names = "irq";
+>>
+>>      pinctrl-names = "default";
+>>      pinctrl-0 = <&typec_pins>;
+>>
+>>      port {
+>>          typec1_dr_sw: endpoint {
+>>              remote-endpoint = <&usb1_drd_sw>;
+>>          };
+>>      };
+> 
+> That looks a bit odd to me. I think you want to place that under the
+> connector node too, however, OF graph is a bit problematic with
+> Type-C. 
 
-Andrey Konovalov <andreyknvl@google.com> writes:
->> If you're not willing to do that, I anything using dwc3 (dragonboard,
->> beaglebone AI, and many many others) would be good here.
->
-> All DragonBoards that I found have USB 2.0 device ports AFAIU, but
 
-Oh, they put a USB2.0 only connector. That sucks, as it actually has
-dwc3 inside.
+I discovered that as I came to implement, also looking at the other 
+typec controllers like the fusb302 and hd3ss3220 it became obvious a 
+connector {} should be included.
 
-> BeagleBone AI looks like what I need. Thanks!
+tps6598x: tps6598x@38 {
+         compatible = "ti,tps6598x";
+         reg = <0x38>;
 
-beware that beaglebone AI runs quite hot. Get yourself some beefy
-heatsink and a fan. Also, make sure to get the non-standard serial cable.
+         interrupt-parent = <&msmgpio>;
+         interrupts = <107 IRQ_TYPE_LEVEL_LOW>;
+         interrupt-names = "irq";
 
-> While looking for a board with USB 3.0 device support, I've also found
-> the UP board [1]. I'm not sure which driver it uses though.
->
-> [1] https://up-board.org/up/specifications/
+         reset-gpios = <&msmgpio 116 GPIO_ACTIVE_LOW>;
 
-It uses dwc3. It's Intel CherryTrail inside. Heikki and Andy (Cc) should
-have information about those, hopefully.
+         pinctrl-names = "default";
+         pinctrl-0 = <&typec_pins>;
 
-=2D-=20
-balbi
+         typec_con: connector {
+                 compatible = "usb-c-connector";
+                 label = "USB-C";
+                 port {
+                         typec_ep: endpoint {
+                                 remote-endpoint = <&otg_ep>;
+                         };
+                 };
+         };
+};
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+&otg {
+         status = "okay";
+         usb-role-switch;
+         ulpi {
+                 usb_hs_phy: phy {
+                         v1p8-supply = <&pm8916_l7>;
+                         v3p3-supply = <&pm8916_l13>;
+                 };
+         };
+         port {
+                 otg_ep: endpoint {
+                         remote-endpoint = <&typec_ep>;
+                 };
+         };
+};
 
------BEGIN PGP SIGNATURE-----
+with no more change than adding OF binding and the role-switch stuff we 
+discussed.
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6psgEACgkQzL64meEa
-mQYDnQ//eXK6S6JANxJdGcOCYTknWoryILBCO2YkmVaqy/BGrUf8wJc5T1JN/hnv
-fDSY3fjvRv9dg5MagdxvJ5FQdBeN3+HyGqmgEy664Srb2ypuPbkGMmtMK1En4Mra
-MOXSlwhPaRdx48lh98ebXmDRlPvGRxS2foFBXFBm2rgLaILaLUZ5wyZedSJJERBt
-84kmx/2MKp40jWcsoQ+PcztaEqJ15Y+B3V+Lmh5k8J2OXSnFzduV0iGaEY45Ss2l
-9ccUkg1j/0x5u1gAVjYg0btiBwMoXvMuTPE76QGKFKr3XH4SK4dkDFRNbj+c5aWs
-9yEvNfp8R/Bb2DyiCsKaUT6EVjyVe6+NN7NpWWJVwGrRzjnyvfVScM1k4hEhQYa3
-NwEpLatxnbfHBN+Pm9xll6YYsMSw59r/5WE4Dr+/be3q+64Dd8s5o7mvxjxuoriP
-DwRlT3Chxq4ArDkniVuZniMD90FyMYBLm70if0jmbcmdI2XlOh/l/CKgnCVxJeBM
-b5lfjDD3WAE5mEG42UlsMfCzRmgFmHfkUx9/vBlSBtA7TiHMjTv9WOPH3XQ5PZj4
-AMinlbbIYJE6KYuXYU7MaQoX5zA7W/psbABisxKLdvavlf40Q7tHKhvDhGL8bi20
-Ph562oRcfERiZxhWk1etuf2efI/Kv8eKpPDn+e9LB0D19vy7QcE=
-=02a7
------END PGP SIGNATURE-----
---=-=-=--
+Not quite ready to send out yet.
+
+> The problem is that there is no way to identify the OF graph
+> ports/endpoints. It means that there does not seem to be any way to
+> know which port/endpoint/remote-endpoint is for the DisplayPort, the
+> mux, USB port, TBT 3 port, retimer #1, retimer #2, etc.
+
+
+> There is a proposal to define device property that simply contains
+> reference to the correct node for every type of connection. For USB
+> role switch the property is named "usb-role-switch":
+> 
+>          connector {
+>                  ...
+>                  usb-role-switch = <the remote port parent of &usb1_drd_sw>;
+>                  ...
+>          };
+
+I'll take a look.
+
+Thanks for the feedback.
+
+---
+bod
