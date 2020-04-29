@@ -2,110 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 893E41BDCAC
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 14:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CF51BDCF3
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 15:01:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727057AbgD2Mt2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Apr 2020 08:49:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47730 "EHLO mail.kernel.org"
+        id S1726830AbgD2NBi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Apr 2020 09:01:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36038 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726599AbgD2Mt1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 29 Apr 2020 08:49:27 -0400
+        id S1726516AbgD2NBh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 29 Apr 2020 09:01:37 -0400
 Received: from Mani-XPS-13-9360 (unknown [157.46.25.26])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E45F42085B;
-        Wed, 29 Apr 2020 12:49:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 21E41214D8;
+        Wed, 29 Apr 2020 13:01:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588164567;
-        bh=5/wUlfpAFr+xk1jHyr+vgbwi2/B7/efoDXjCT+3aLqI=;
+        s=default; t=1588165297;
+        bh=zNBekyFZGFYfMOOOV65o8aytIfG87wwm23IWKpe4Fbc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eMecHkiJKNNyePhQP3DvfOk7uu5YZDOt0LgHqh0CtMnlxIELsjmyJeEsCjdb5ShOU
-         mEMFFBGsIvXgRq4JdccWJqSq2uIChJq8rYu86j0VxWSPmItZpJDWIc8gYt8Ojt0RBu
-         aWkLhBEj6bhnIbh/lMVzg7vk5PA7Ap948+JakX58=
-Date:   Wed, 29 Apr 2020 18:19:18 +0530
+        b=UmNAjTgu/r1QUb30T3OHTNekPYdmIwYkZVLrOhrnkrNyeIhUUfozyHjTRTlM7eDxH
+         O6L9CB4CsdJS+K3PfVwTthyrWWYQ8g2d+wJf9585Kd0x44+zwE+bX2XtvoH6jRl2oC
+         ar1wY0UdqMwZ2vHXy7+8mW8hDJBFeqnTKotbzWOs=
+Date:   Wed, 29 Apr 2020 18:31:26 +0530
 From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        patong.mxl@gmail.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Subject: Re: [PATCH 2/2] usb: serial: xr_serial: Add gpiochip support
-Message-ID: <20200429124918.GC6443@Mani-XPS-13-9360>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patong.mxl@gmail.com
+Subject: Re: [PATCH 1/2] usb: serial: Add MaxLinear/Exar USB to Serial driver
+Message-ID: <20200429130126.GD6443@Mani-XPS-13-9360>
 References: <20200428195651.6793-1-mani@kernel.org>
- <20200428195651.6793-3-mani@kernel.org>
- <CACRpkdZ3b-VLvxN06H_4cDOtUEQTVbe=Zw+NA=YjssMzK2d2sQ@mail.gmail.com>
+ <20200428195651.6793-2-mani@kernel.org>
+ <20200429072036.GA2045202@kroah.com>
+ <20200429074025.GA6443@Mani-XPS-13-9360>
+ <20200429092904.GA2079263@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACRpkdZ3b-VLvxN06H_4cDOtUEQTVbe=Zw+NA=YjssMzK2d2sQ@mail.gmail.com>
+In-Reply-To: <20200429092904.GA2079263@kroah.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Linus,
-
-On Wed, Apr 29, 2020 at 02:12:24PM +0200, Linus Walleij wrote:
-> On Tue, Apr 28, 2020 at 9:57 PM <mani@kernel.org> wrote:
+On Wed, Apr 29, 2020 at 11:29:04AM +0200, Greg KH wrote:
+> On Wed, Apr 29, 2020 at 01:10:26PM +0530, Manivannan Sadhasivam wrote:
+> > Hi Greg,
+> > 
+> > On Wed, Apr 29, 2020 at 09:20:36AM +0200, Greg KH wrote:
+> > > On Wed, Apr 29, 2020 at 01:26:50AM +0530, mani@kernel.org wrote:
+> > > > From: Manivannan Sadhasivam <mani@kernel.org>
+> > > > 
+> > > > Add support for MaxLinear/Exar USB to Serial converters. This driver
+> > > > only supports XR21V141X series but provision has been made to support
+> > > > other series in future.
+> > > > 
+> > > > This driver is inspired from the initial one submitted by Patong Yang:
+> > > > 
+> > > > https://patchwork.kernel.org/patch/10543261/
+> > > > 
+> > > > While the initial driver was a custom tty USB driver exposing whole
+> > > > new serial interface ttyXRUSBn, this version is completely based on USB
+> > > > serial core thus exposing the interfaces as ttyUSBn. This will avoid
+> > > > the overhead of exposing a new USB serial interface which the userspace
+> > > > tools are unaware of.
+> > > 
+> > > Nice work!
+> > > 
+> > > Some comments below:
+> > > 
+> > > > +// SPDX-License-Identifier: GPL-2.0+
+> > > > +/*
+> > > > + * MaxLinear/Exar USB to Serial driver
+> > > > + *
+> > > > + * Based on initial driver written by Patong Yang <patong.mxl@gmail.com>
+> > > > + *
+> > > > + * Copyright (c) 2020 Manivannan Sadhasivam <mani@kernel.org>
+> > > > + */
+> > > > +
+> > > > +#include <linux/kernel.h>
+> > > > +#include <linux/module.h>
+> > > > +#include <linux/slab.h>
+> > > > +#include <linux/tty.h>
+> > > > +#include <linux/usb.h>
+> > > > +#include <linux/usb/serial.h>
+> > > > +
+> > > > +#include "xr_serial.h"
+> > > 
+> > > No need for a .h file for a single .c file.
+> > > 
+> > 
+> > Yeah but since this driver can support multiple series of XR chips (they
+> > might have separate register definitions and such), I thought it is a good
+> > idea to have a header file to keep the driver sane. But can club it to the
+> > source file for now.
 > 
-> > From: Manivannan Sadhasivam <mani@kernel.org>
-> >
-> > Add gpiochip support for Maxlinear/Exar USB to serial converter
-> > for controlling the available gpios.
-> >
-> > Cc: Linus Walleij <linus.walleij@linaro.org>
-> > Cc: linux-gpio@vger.kernel.org
-> > Signed-off-by: Manivannan Sadhasivam <mani@kernel.org>
-> 
-> That's a nice and clean GPIO driver.
-
-Thanks for the compliments :)
-
-> 
-> I would change this:
-> 
->    port_priv->gc.label = "xr_gpios";
-> 
-> to something that is device-unique, like "xr-gpios-<serial number>"
-> which makes it easy to locate the GPIOs on a specific serial converter
-> for lab use. However the USB serial maintainers know better what
-> to use here. Whatever makes a USB-to-serial unique from a TTY
-> point of view is probably fine with me too.
-> 
-> My idea is that people might want to know which USB cable
-> this is sitting on, so I have this USB cable and from this label
-> I can always figure out which GPIO device it is.
+> Don't worry about future stuff, focus on what you need to do now :)
 > 
 
-Sounds reasonable. I can postfix the PID as below:
+Alright, will do :)
 
-port_priv->gc.label = devm_kasprintf(port->dev, GFP_KERNEL, "XR%04x",
-                                     port_priv->idProduct);
-
-So this will become, "XR1410".
-
-> Either way, it is not a super-big issue so:
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> > > > +static int xr_get_reg(struct usb_serial_port *port, u8 block, u16 reg,
+> > > > +		      u16 *val)
+> > > > +{
+> > > > +	struct usb_serial *serial = port->serial;
+> > > > +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
+> > > > +	void *dmabuf;
+> > > > +	int ret = -EINVAL;
+> > > > +
+> > > > +	dmabuf = kmalloc(sizeof(reg), GFP_KERNEL);
+> > > 
+> > > So that is 2 bytes?
+> > > 
+> > 
+> > Explanation below...
+> > 
+> > > > +	if (!dmabuf)
+> > > > +		return -ENOMEM;
+> > > > +
+> > > > +	if (port_priv->idProduct == XR21V141X_ID) {
+> > > > +		/* XR21V141X uses custom command for reading UART registers */
+> > > > +		ret = usb_control_msg(serial->dev,
+> > > > +				      usb_rcvctrlpipe(serial->dev, 0),
+> > > > +				      XR_GET_XR21V141X,
+> > > > +				      USB_DIR_IN | USB_TYPE_VENDOR, 0,
+> > > > +				      reg | (block << 8), dmabuf,
+> > > > +				      port_priv->reg_width,
+> > > > +				      USB_CTRL_SET_TIMEOUT);
+> > > > +	}
+> > > > +
+> > > > +	if (ret == port_priv->reg_width) {
+> > > > +		memcpy(val, dmabuf, port_priv->reg_width);
+> > > 
+> > > But here you copy ->reg_width bytes in?  How do you know val can hold
+> > > that much?  It's only set to be 1, so you copy 1 byte to a 16bit value?
+> > > What part of the 16bits did you just copy those 8 bits to (hint, think
+> > > cpu endian issues...)
+> > > 
+> > > That feels really really odd and a bit broken.
+> > > 
+> > 
+> > Right. The reason is, the other series which can be supported by this driver
+> > have different register widths. For instance XR2280x. I haven't used them
+> > personally but seen this in initial driver. So I just used the max u16 type
+> > to make the reg_{set/get} routines work with those.
 > 
-> Is this a off-the-shelf product that can be bought or is it mainly
-> integrated on boards?
+> Drop the whole "different register width" stuff for now, as the driver
+> does not support it and it adds additional complexity that is hard to
+> review for no good reason.  If you want to add support for new devices
+> later, _then_ we can add support for that.
+> 
+> Don't over-engineer :)
 > 
 
-Both I believe, though I have only used it integrated in dev boards. But
-a quick googling gives me below,
+Sure!
 
-https://www.digikey.in/product-detail/en/maxlinear-inc/XR21V1410IL-0C-EB/1016-1425-ND/2636664
+> > But agree, I should've used le16_to_cpu() cast to avoid endian issues.
+> 
+> You have to, the code is broken as-is right now.
+> 
+
+We don't need the conversion if u8 is used everywhere :)
 
 Thanks,
 Mani
 
-> I'm asking because I'm looking for a neat USB-to-serial adapter
-> with some GPIOs (2 is enough) that can be used for reset and
-> power cycling of lab boards using one simple piece of equipment.
+> > If you think this hack is not required now, I can just use u8 and worry about
+> > compatibility later.
 > 
-> Yours,
-> Linus Walleij
+> Please do so.
+> 
+> thanks,
+> 
+> greg k-h
