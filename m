@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FAC81BDCCB
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 14:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6341BDCD2
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 14:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727028AbgD2M54 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Apr 2020 08:57:56 -0400
-Received: from asav21.altibox.net ([109.247.116.8]:58660 "EHLO
+        id S1727064AbgD2M6A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Apr 2020 08:58:00 -0400
+Received: from asav21.altibox.net ([109.247.116.8]:58746 "EHLO
         asav21.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727023AbgD2M54 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Apr 2020 08:57:56 -0400
+        with ESMTP id S1726968AbgD2M57 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Apr 2020 08:57:59 -0400
 Received: from localhost.localdomain (unknown [81.166.168.211])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: noralf.tronnes@ebnett.no)
-        by asav21.altibox.net (Postfix) with ESMTPSA id BAAF78018C;
+        by asav21.altibox.net (Postfix) with ESMTPSA id E178D800EA;
         Wed, 29 Apr 2020 14:48:50 +0200 (CEST)
 From:   =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
 To:     dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org
 Cc:     =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
-Subject: [PATCH 03/10] drm/client: Add drm_client_init_from_id()
-Date:   Wed, 29 Apr 2020 14:48:23 +0200
-Message-Id: <20200429124830.27475-4-noralf@tronnes.org>
+Subject: [PATCH 04/10] drm/client: Add drm_client_framebuffer_flush()
+Date:   Wed, 29 Apr 2020 14:48:24 +0200
+Message-Id: <20200429124830.27475-5-noralf@tronnes.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20200429124830.27475-1-noralf@tronnes.org>
 References: <20200429124830.27475-1-noralf@tronnes.org>
@@ -33,121 +33,75 @@ X-CMAE-Score: 0
 X-CMAE-Analysis: v=2.3 cv=AvXAIt1P c=1 sm=1 tr=0
         a=OYZzhG0JTxDrWp/F2OJbnw==:117 a=OYZzhG0JTxDrWp/F2OJbnw==:17
         a=IkcTkHD0fZMA:10 a=M51BFTxLslgA:10 a=SJz97ENfAAAA:8
-        a=K4G_t0gYd1P4o9CfPpEA:9 a=QEXdDO2ut3YA:10 a=vFet0B0WnEQeilDPIY6i:22
+        a=0jVh_8K4HvQRDTyCFMcA:9 a=QEXdDO2ut3YA:10 a=vFet0B0WnEQeilDPIY6i:22
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-drm_client_init_from_id() provides a way for clients to add a client based
-on the minor. drm_client_register() is changed to return whether it was
-registered or not depending on the unplugged status of the DRM device.
-Its only caller drm_fbdev_generic_setup() runs inside probe() so it
-doesn't have to check.
-
-v2:
-- Move drm_client_modeset_set() to a separate patch with added functions.
-- Previous version had drm_client_init_from_id() call
-  drm_client_register(). This put the client in a position where it could
-  receive hotplugs during init in addition to akward error paths. Instead
-  let drm_client_register() return status so clients can know if the DRM
-  device is gone or not.
+Some drivers need explicit flushing of buffer changes, add a function
+that does that.
 
 Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
 ---
- drivers/gpu/drm/drm_client.c | 48 +++++++++++++++++++++++++++++++++++-
- include/drm/drm_client.h     |  4 ++-
- 2 files changed, 50 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/drm_client.c | 31 +++++++++++++++++++++++++++++++
+ include/drm/drm_client.h     |  1 +
+ 2 files changed, 32 insertions(+)
 
 diff --git a/drivers/gpu/drm/drm_client.c b/drivers/gpu/drm/drm_client.c
-index b031b45aa8ef..cb5ee9f1ffaa 100644
+index cb5ee9f1ffaa..8dbc2ecdcaea 100644
 --- a/drivers/gpu/drm/drm_client.c
 +++ b/drivers/gpu/drm/drm_client.c
-@@ -112,6 +112,40 @@ int drm_client_init(struct drm_device *dev, struct drm_client_dev *client,
+@@ -483,6 +483,37 @@ void drm_client_framebuffer_delete(struct drm_client_buffer *buffer)
  }
- EXPORT_SYMBOL(drm_client_init);
+ EXPORT_SYMBOL(drm_client_framebuffer_delete);
  
 +/**
-+ * drm_client_init_from_id - Initialise a DRM client
-+ * @minor_id: DRM minor id
-+ * @client: DRM client
-+ * @name: Client name
-+ * @funcs: DRM client functions (optional)
++ * drm_client_framebuffer_flush - Manually flush client framebuffer
++ * @buffer: DRM client buffer (can be NULL)
++ * @rect: Damage rectangle (if NULL flushes all)
 + *
-+ * This function looks up the drm_device using the minor id and initializes the client.
-+ *
-+ * See drm_client_init() and drm_client_register().
++ * This calls &drm_framebuffer_funcs->dirty (if present) to flush buffer changes
++ * for drivers that need it.
 + *
 + * Returns:
 + * Zero on success or negative error code on failure.
 + */
-+int drm_client_init_from_id(unsigned int minor_id, struct drm_client_dev *client,
-+			    const char *name, const struct drm_client_funcs *funcs)
++int drm_client_framebuffer_flush(struct drm_client_buffer *buffer, struct drm_rect *rect)
 +{
-+	struct drm_minor *minor;
-+	int ret;
++	struct drm_clip_rect clip_rect, *clip = NULL;
 +
-+	minor = drm_minor_acquire(minor_id);
-+	if (IS_ERR(minor))
-+		return PTR_ERR(minor);
++	if (!buffer || !buffer->fb || !buffer->fb->funcs->dirty)
++		return 0;
 +
-+	mutex_lock(&minor->dev->clientlist_mutex);
-+	ret = drm_client_init(minor->dev, client, name, funcs);
-+	mutex_unlock(&minor->dev->clientlist_mutex);
++	if (rect) {
++		clip = &clip_rect;
++		clip->x1 = rect->x1;
++		clip->y1 = rect->y1;
++		clip->x2 = rect->x2;
++		clip->y2 = rect->y2;
++	}
 +
-+	drm_minor_release(minor);
-+
-+	return ret;
++	return buffer->fb->funcs->dirty(buffer->fb, buffer->client->file,
++					0, 0, clip, clip ? 1 : 0);
 +}
-+EXPORT_SYMBOL(drm_client_init_from_id);
++EXPORT_SYMBOL(drm_client_framebuffer_flush);
 +
- /**
-  * drm_client_register - Register client
-  * @client: DRM client
-@@ -121,14 +155,26 @@ EXPORT_SYMBOL(drm_client_init);
-  * drm_client_register() it is no longer permissible to call drm_client_release()
-  * directly (outside the unregister callback), instead cleanup will happen
-  * automatically on driver unload.
-+ *
-+ * Returns:
-+ * True if the client has been registered, false if the DRM device has already
-+ * been unregistered.
-  */
--void drm_client_register(struct drm_client_dev *client)
-+bool drm_client_register(struct drm_client_dev *client)
+ #ifdef CONFIG_DEBUG_FS
+ static int drm_client_debugfs_internal_clients(struct seq_file *m, void *data)
  {
- 	struct drm_device *dev = client->dev;
-+	int idx;
-+
-+	if (!drm_dev_enter(client->dev, &idx))
-+		return false;
- 
- 	mutex_lock(&dev->clientlist_mutex);
- 	list_add(&client->list, &dev->clientlist);
- 	mutex_unlock(&dev->clientlist_mutex);
-+
-+	drm_dev_exit(idx);
-+
-+	return true;
- }
- EXPORT_SYMBOL(drm_client_register);
- 
 diff --git a/include/drm/drm_client.h b/include/drm/drm_client.h
-index 3ed5dee899fd..bbb5689fa9a8 100644
+index bbb5689fa9a8..6ef5364d6dfb 100644
 --- a/include/drm/drm_client.h
 +++ b/include/drm/drm_client.h
-@@ -109,8 +109,10 @@ struct drm_client_dev {
+@@ -156,6 +156,7 @@ struct drm_client_buffer {
+ struct drm_client_buffer *
+ drm_client_framebuffer_create(struct drm_client_dev *client, u32 width, u32 height, u32 format);
+ void drm_client_framebuffer_delete(struct drm_client_buffer *buffer);
++int drm_client_framebuffer_flush(struct drm_client_buffer *buffer, struct drm_rect *rect);
+ void *drm_client_buffer_vmap(struct drm_client_buffer *buffer);
+ void drm_client_buffer_vunmap(struct drm_client_buffer *buffer);
  
- int drm_client_init(struct drm_device *dev, struct drm_client_dev *client,
- 		    const char *name, const struct drm_client_funcs *funcs);
-+int drm_client_init_from_id(unsigned int minor_id, struct drm_client_dev *client,
-+			    const char *name, const struct drm_client_funcs *funcs);
- void drm_client_release(struct drm_client_dev *client);
--void drm_client_register(struct drm_client_dev *client);
-+bool drm_client_register(struct drm_client_dev *client);
- 
- void drm_client_dev_unregister(struct drm_device *dev);
- void drm_client_dev_hotplug(struct drm_device *dev);
 -- 
 2.23.0
 
