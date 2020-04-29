@@ -2,103 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A34281BDB8A
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 14:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3F61BDC37
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 14:32:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727054AbgD2MMj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Apr 2020 08:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39720 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726741AbgD2MMi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Apr 2020 08:12:38 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF8BC035493
-        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2020 05:12:38 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id f11so2371057ljp.1
-        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2020 05:12:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+vmsu/fwPs4oBXZNMxWYLe7MCK2oXBROz7k2oW8iuVU=;
-        b=zwlAAJ9nJlMD2a5IChrfCW2OFWh0NNBeo2TJZRkCy2uyh37eWiMVFQ72IPC7DcpMxx
-         fQRcjYZJ5JKxaU8fs/knzvbTgYG0HoF02FuSesWF09CKEwzf14V+pyXM5eCxyLv3anxY
-         crZSju5V3kzYc0GRbRYi1qiyuQsAWQzWRlTo34hgoCWWxVhBrUFMRVcKHsuapJABo4T4
-         xIZ2EeNzKCB6GucCqqcPeNVhHwtCx8SA93ToNo19jWk/BnOmKuwq/sw2FBlvsQNcZASw
-         O5IK8Ldupd2KxPbf8XLp7bV72eGzyjxKqRPaSuN/8adAJuqQj6KEb3bs31YGhRgRgZx+
-         tfdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+vmsu/fwPs4oBXZNMxWYLe7MCK2oXBROz7k2oW8iuVU=;
-        b=eqa5Um4TTKR1OOBdlGH9kpSxUJmYIfxNrMgcZ9PvX/lMveU4VXba5+pb8nNPwDEHyy
-         EOsCKHP4pSR6RzpFYKaZXNO0wL0O9tlW/2hLMxYex1PjXkDd9Np70MoDGyQsQXg7TNwq
-         Sg5cdBl/WxxQLi7cZIGre24AogYaVQjbML2qHLsoH1A6NrwV7kwhbKAEAZVEV5bay18F
-         PliD9Hmy/LCb7lX7io1HwZSWXWbC8NubPV7sQnM3DHMGmJ+DHTMgiOAYU3K+OE1bwxWX
-         SxpOPTof0fJDSRyA6sE56JrPN0HibDkGzFrRfJjNlnwDRyvOylJK5Ncq1lgBGc1yIgxn
-         ZKAw==
-X-Gm-Message-State: AGi0PuaqNHHpy0WN7V+Vvwcl6Ap2L+YfDokMhh8vrnyRA+sDdV3LUTXU
-        IZPDU5Asy/NcBT89swnGmqWmY036ZBSkzToxKPbyLA==
-X-Google-Smtp-Source: APiQypJadb433yUV+3CvSyHkcenoW49EI2HbqVsg3NYeo//Kqhy39vGkteTUQQYPvvWVEtHeYRVPW0nafRpsIBBtHdU=
-X-Received: by 2002:a05:651c:32e:: with SMTP id b14mr20911578ljp.277.1588162356793;
- Wed, 29 Apr 2020 05:12:36 -0700 (PDT)
+        id S1727029AbgD2McI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Apr 2020 08:32:08 -0400
+Received: from mga05.intel.com ([192.55.52.43]:38142 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726554AbgD2McI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 29 Apr 2020 08:32:08 -0400
+IronPort-SDR: MY+iQx1UMuaEkzUiRJfhW0alux81eKnIzFT8Ej/cHiHkpj/4mhB/eb0Dxu6bbpbXl3mb5v8+d2
+ k8Rqn7QOkJ/Q==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2020 05:32:08 -0700
+IronPort-SDR: uECXpProGKoGxHCxtdC7mRXgmn8QiFkNwiIVooF1jMmXrUo4sB3j5Gqj0oYP8ZbWiS7Csftvy+
+ fvlpwCV0FABA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,332,1583222400"; 
+   d="scan'208";a="367792649"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 29 Apr 2020 05:32:04 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 29 Apr 2020 15:32:03 +0300
+Date:   Wed, 29 Apr 2020 15:32:03 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, bleung@chromium.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:USB TYPEC CLASS" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v2] usb: typec: mux: intel: Handle alt mode HPD_HIGH
+Message-ID: <20200429123203.GB2738754@kuha.fi.intel.com>
+References: <20200429054432.134178-1-pmalani@chromium.org>
 MIME-Version: 1.0
-References: <20200428195651.6793-1-mani@kernel.org> <20200428195651.6793-3-mani@kernel.org>
-In-Reply-To: <20200428195651.6793-3-mani@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 29 Apr 2020 14:12:24 +0200
-Message-ID: <CACRpkdZ3b-VLvxN06H_4cDOtUEQTVbe=Zw+NA=YjssMzK2d2sQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] usb: serial: xr_serial: Add gpiochip support
-To:     mani@kernel.org
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        patong.mxl@gmail.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200429054432.134178-1-pmalani@chromium.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 28, 2020 at 9:57 PM <mani@kernel.org> wrote:
+On Tue, Apr 28, 2020 at 10:44:28PM -0700, Prashant Malani wrote:
+> According to the PMC Type C Subsystem (TCSS) Mux programming guide rev
+> 0.6, when a device is transitioning to DP Alternate Mode state, if the
+> HPD_STATE (bit 7) field in the status update command VDO is set to
+> HPD_HIGH, the HPD_HIGH field in the Alternate Mode request “mode_data”
+> field (bit 14) should also be set. Ensure the bit is correctly handled
+> while issuing the Alternate Mode request.
+> 
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> Fixes: 6701adfa9693 ("usb: typec: driver for Intel PMC mux control")
 
-> From: Manivannan Sadhasivam <mani@kernel.org>
->
-> Add gpiochip support for Maxlinear/Exar USB to serial converter
-> for controlling the available gpios.
->
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: linux-gpio@vger.kernel.org
-> Signed-off-by: Manivannan Sadhasivam <mani@kernel.org>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-That's a nice and clean GPIO driver.
+> ---
+> 
+> Changes in v2:
+> - Clarified the commit message to mention the proper field names.
+> 
+>  drivers/usb/typec/mux/intel_pmc_mux.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+> index f5c5e0aef66f..c599112559e7 100644
+> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
+> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+> @@ -157,6 +157,10 @@ pmc_usb_mux_dp(struct pmc_usb_port *port, struct typec_mux_state *state)
+>  	req.mode_data |= (state->mode - TYPEC_STATE_MODAL) <<
+>  			 PMC_USB_ALTMODE_DP_MODE_SHIFT;
+>  
+> +	if (data->status & DP_STATUS_HPD_STATE)
+> +		req.mode_data |= PMC_USB_DP_HPD_LVL <<
+> +				 PMC_USB_ALTMODE_DP_MODE_SHIFT;
+> +
+>  	return pmc_usb_command(port, (void *)&req, sizeof(req));
+>  }
+>  
+> -- 
+> 2.26.2.303.gf8c07b1a785-goog
 
-I would change this:
+thanks,
 
-   port_priv->gc.label = "xr_gpios";
-
-to something that is device-unique, like "xr-gpios-<serial number>"
-which makes it easy to locate the GPIOs on a specific serial converter
-for lab use. However the USB serial maintainers know better what
-to use here. Whatever makes a USB-to-serial unique from a TTY
-point of view is probably fine with me too.
-
-My idea is that people might want to know which USB cable
-this is sitting on, so I have this USB cable and from this label
-I can always figure out which GPIO device it is.
-
-Either way, it is not a super-big issue so:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Is this a off-the-shelf product that can be bought or is it mainly
-integrated on boards?
-
-I'm asking because I'm looking for a neat USB-to-serial adapter
-with some GPIOs (2 is enough) that can be used for reset and
-power cycling of lab boards using one simple piece of equipment.
-
-Yours,
-Linus Walleij
+-- 
+heikki
