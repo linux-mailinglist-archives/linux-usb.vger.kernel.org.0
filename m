@@ -2,98 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC801BD90D
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 12:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1BA1BD9AD
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 12:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726871AbgD2KGy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Apr 2020 06:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726859AbgD2KGx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Apr 2020 06:06:53 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFEAC03C1AD;
-        Wed, 29 Apr 2020 03:06:52 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id h4so1354937wmb.4;
-        Wed, 29 Apr 2020 03:06:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=K7tV0HkT7HrwkRP5DztAp91Q49aDaAWOUuwdASD/KEg=;
-        b=rF05JE99smwY21LygzHWkyP9ZOixx+Xowt/nid3jshRTyRymbu4qrcFO6C1wAH7yYR
-         +rVY7f3hwXkj4x9/XcJOBXh/Kx328F92FSKgjv8OihGSJFMMonzEGsPHWux91FYj1haW
-         KZ0UzIeecYZ40m4aC3wU5T3Rgafjdc3NmLMiDWHug5CUvYBxpq5EDH6UzwgShT2d0J9Q
-         huYLXsuln4s9W+5xOe9sD7HngHevHno1QR/NgLGG6Iv9ttCKeuluqe/uoJI9rPexhMBz
-         9VU041oytVG54JyrzKKIOnW4hpf+bRzTPqPDFhiDwJzJphaE3HMEaitRo31sb/tlA/xf
-         nx/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=K7tV0HkT7HrwkRP5DztAp91Q49aDaAWOUuwdASD/KEg=;
-        b=WeK4wsaUF6JKTTOFaVfKssY4+MxQTyoce17gbl6OejGv8gV15YftRQKHV5xhFnAPCy
-         zcKJvWycnzkv9SleEVTcRRveEACu4Oy6oUKDynFK7wZqvBAozvJBSzU30tI6La5gt1TR
-         0zFCFWVd+XXpvQod80i1AHHV+uJVjtek/HKn0sT5Znc3k0AAT7RzdWE0SR+ZA4TUFox0
-         5Xsi59ec6ffkyphETcw5pIR7U3U45saTPLJvsXprhU4qDOz+EkLpDnI/m7uQfRuW8zRl
-         gd1MklDslTni3rqi1NpNmyHHx3s+klsZg6Zqta24lc/BcUeUVM/X/bufTwK/2kDtWfVI
-         Klyg==
-X-Gm-Message-State: AGi0PuY4XUqGgd+F6GPVL6hqAa/ZS4m8+XkktVFE73G8AqBnndgvBPYm
-        2hJRy0e3HI7rgm8fjAyDk94SI2xwF+cu
-X-Google-Smtp-Source: APiQypLpS2S0arKeoQ1LomvTgUgegpl97drINHcjvkKeuRGh7izrg5b2ownig4pnsowwRP/3kTZpMw==
-X-Received: by 2002:a05:600c:2dcf:: with SMTP id e15mr2497790wmh.171.1588154811040;
-        Wed, 29 Apr 2020 03:06:51 -0700 (PDT)
-Received: from ninjahost.lan (host-2-102-14-195.as13285.net. [2.102.14.195])
-        by smtp.gmail.com with ESMTPSA id 1sm7205478wmi.0.2020.04.29.03.06.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2020 03:06:50 -0700 (PDT)
-From:   Jules Irenge <jbi.octave@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        "Jacky.Cao@sony.com" <Jacky.Cao@sony.com>,
-        linux-usb@vger.kernel.org (open list:USB GADGET/PERIPHERAL SUBSYSTEM)
-Subject: [PATCH 5/6] USB: dummy-hcd: Add missing annotation for set_link_state()
-Date:   Wed, 29 Apr 2020 11:05:27 +0100
-Message-Id: <20200429100529.19645-6-jbi.octave@gmail.com>
-X-Mailer: git-send-email 2.25.3
-In-Reply-To: <20200429100529.19645-1-jbi.octave@gmail.com>
-References: <0/6>
- <20200429100529.19645-1-jbi.octave@gmail.com>
-MIME-Version: 1.0
+        id S1726554AbgD2KeM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Apr 2020 06:34:12 -0400
+Received: from mx2.suse.de ([195.135.220.15]:47486 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726516AbgD2KeL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 29 Apr 2020 06:34:11 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 0327DABAD;
+        Wed, 29 Apr 2020 10:34:09 +0000 (UTC)
+Message-ID: <1588156428.8672.1.camel@suse.com>
+Subject: Re: [PATCH] UAS: add quirk for LaCie 2Big Quadra
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Date:   Wed, 29 Apr 2020 12:33:48 +0200
+In-Reply-To: <20200429093344.GA2080215@kroah.com>
+References: <20200429083204.21428-1-oneukum@suse.com>
+         <20200429093344.GA2080215@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Sparse reports a warning at set_link_state()
+Am Mittwoch, den 29.04.2020, 11:33 +0200 schrieb Greg KH:
+> On Wed, Apr 29, 2020 at 10:32:04AM +0200, Oliver Neukum wrote:
+> > This device needs US_FL_NO_REPORT_OPCODES to avoid going
+> > through prolonged error handling on enumeration.
+> > 
+> > Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> > Cc: stable <stable@vger.kernel.org>
+> > Reported-by: Julian Groß <julian.g@posteo.de>
+> > ---
+> >  drivers/usb/storage/unusual_uas.h | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> > 
+> > diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+> > index cfdec74e0f4a..d6c54b5bde75 100644
+> > --- a/drivers/usb/storage/unusual_uas.h
+> > +++ b/drivers/usb/storage/unusual_uas.h
+> > @@ -73,6 +73,13 @@ UNUSUAL_DEV(0x152d, 0x0578, 0x0000, 0x9999,
+> >  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> >  		US_FL_BROKEN_FUA),
+> >  
+> > +/* Reported-by: Julian Groß <julian.g@posteo.de> */
+> > +UNUSUAL_DEV(0x059f, 0x105f, 0x0000, 0x9999,
+> > +		"LaCie",
+> > +		"2Big Quadra USB3",
+> > +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> > +		US_FL_NO_REPORT_OPCODES),
+> > +
+> 
+> Can you please keep these in sorted order by vendor/product id as the
+> comment in the file suggests to do so?
 
-warning: context imbalance in set_link_state() - unexpected unlock
+Sorry, skipped a position. Resending.
 
-The root cause is the missing annotation at set_link_state()
-Add the missing __must_hold(&dum->lock)
-
-Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
----
- drivers/usb/gadget/udc/dummy_hcd.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
-index 4c9d1e49d5ed..c07ddf11e137 100644
---- a/drivers/usb/gadget/udc/dummy_hcd.c
-+++ b/drivers/usb/gadget/udc/dummy_hcd.c
-@@ -427,6 +427,7 @@ static void set_link_state_by_speed(struct dummy_hcd *dum_hcd)
- 
- /* caller must hold lock */
- static void set_link_state(struct dummy_hcd *dum_hcd)
-+	__must_hold(&dum->lock)
- {
- 	struct dummy *dum = dum_hcd->dum;
- 	unsigned int power_bit;
--- 
-2.25.3
+	Regards
+		Oliver
 
