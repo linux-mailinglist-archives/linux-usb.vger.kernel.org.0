@@ -2,64 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E951BE88C
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 22:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 246001BE9AA
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 23:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726914AbgD2UaI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Apr 2020 16:30:08 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:35456 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726511AbgD2UaF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Apr 2020 16:30:05 -0400
-Received: by mail-io1-f71.google.com with SMTP id s26so3823633ioj.2
-        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2020 13:30:04 -0700 (PDT)
+        id S1726926AbgD2VNF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Apr 2020 17:13:05 -0400
+Received: from mail-oo1-f67.google.com ([209.85.161.67]:39275 "EHLO
+        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726511AbgD2VNF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Apr 2020 17:13:05 -0400
+Received: by mail-oo1-f67.google.com with SMTP id c83so770032oob.6;
+        Wed, 29 Apr 2020 14:13:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=P36ux4kpJA4yJ0M9w1keQlA8L7/Ku3ikNPWzORzqPpQ=;
-        b=O9vEC+2ew6cF8SX55X7XVlSvEgAcSpuvgkwBxyrRXSlBv/U3UwAnPFaKNg38ZiOryE
-         l+ZVU/1LtOYrDPxopaTdgzNB7GdIl/iu/FzKPKCJgo5UY8pm2OnRFvqn7xhhuEPbpHga
-         f5mY0xYalq5BJnFhvIOv5chD7+FKOyY2FIjFv7hY3EOD3xZ00nROYgbXbV4OgawohEja
-         zCbEGsi6Jh9r3iOIsFx4fhy/s29oXuJhIenoI+YOXJmSWOw2wDqBgQIvEmjSRv784WQi
-         dLfMvZjonLu6f5AMPP8FCImpf+HSei/HdBCtgnMGsDeBXvyYyrYIn9nd8LVTHrvtyJaq
-         5DAA==
-X-Gm-Message-State: AGi0Pua5TJTEI4t2xdH0Hcyn2U9hbyTx+3kFuiwlwixJCFXORj4a9rFK
-        UA57vMDz7cBxTKOn6N7lq/nPI2IvREdx8NULiRVVPCCeh+SQ
-X-Google-Smtp-Source: APiQypJtO21lrjpHALiSJyG1R7XX5MYRsAvJuVRMEvqi38U8bebrgP09swd00jLT9r90N3751dAGaeiGZhTX2GTT/KujJwiW1QaN
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Wram8/kvGtBAPhudD3mqn9Lg4Z/ZgDC7ak83b1h5db8=;
+        b=FpCbEo3CH4WjBqpa1CKbLXD5++Sh6aAw+lwIq2wQOyJMzu0PQeN4Xo2oPVijTW9XRo
+         NmEz+2+UuDN7mfqto3nYUsvO2aRCUVqh5lCs3+crjawi+UofvUIr4FtcksgDjkXmk/Ab
+         vpT6EO/kfGae7pGP9QhcAbUtNK/YSXlZ9KkmmWwnKu8FSbhyaS5F7zhAq1BS2Z+KKK/x
+         9ZNPbFg3YS/vNGM4/1Qs68oYyT3Awwn9DFmbZAKs3+MYLtKXYD+Fvd0AgpJAKcKggIUo
+         4s5FQgbR9QIhaOHhI1lenS4noMYQlpZRwceLR2/JtqQgfaWUlne7OfN8tddsaFsgReQh
+         6RDg==
+X-Gm-Message-State: AGi0PuYsNdIsCQYJU1R+0f3NtVYhbQzTPXFBr9u4ZLtJB6J+4hvqglqo
+        m95KuOG/8Ci7AfJsAB6b1A==
+X-Google-Smtp-Source: APiQypLPtKMDPynnB2XXcurJjkj+Cn6H8/fxekGEw0MPH9dURNDuAQSyJXCcqt/ccUdZs51T2QL4tA==
+X-Received: by 2002:a4a:accf:: with SMTP id c15mr8418oon.29.1588194784387;
+        Wed, 29 Apr 2020 14:13:04 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id s10sm648162otd.69.2020.04.29.14.13.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Apr 2020 14:13:03 -0700 (PDT)
+Received: (nullmailer pid 7846 invoked by uid 1000);
+        Wed, 29 Apr 2020 21:13:02 -0000
+Date:   Wed, 29 Apr 2020 16:13:02 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Al Cooper <alcooperx@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v5 1/4] dt-bindings: Add Broadcom STB USB support
+Message-ID: <20200429211302.GA4535@bogus>
+References: <20200429200826.20177-1-alcooperx@gmail.com>
+ <20200429200826.20177-2-alcooperx@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:6a4e:: with SMTP id m14mr32417870jaf.17.1588192203152;
- Wed, 29 Apr 2020 13:30:03 -0700 (PDT)
-Date:   Wed, 29 Apr 2020 13:30:03 -0700
-In-Reply-To: <Pine.LNX.4.44L0.2004291608270.24784-100000@netrider.rowland.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001aa0e705a473d05c@google.com>
-Subject: Re: WARNING in usbhid_raw_request/usb_submit_urb (3)
-From:   syzbot <syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200429200826.20177-2-alcooperx@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Wed, Apr 29, 2020 at 04:08:23PM -0400, Al Cooper wrote:
+> Add DT bindings for Broadcom STB USB EHCI and XHCI drivers.
+> 
+> NOTE: The OHCI driver is not included because it uses the generic
+>       platform driver.
+> 
+> Signed-off-by: Al Cooper <alcooperx@gmail.com>
+> ---
+>  .../bindings/usb/brcm,bcm7445-ehci.yaml       | 60 +++++++++++++++++++
+>  .../devicetree/bindings/usb/usb-xhci.txt      |  1 +
+>  2 files changed, 61 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml b/Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
+> new file mode 100644
+> index 000000000000..7c67f7dd7a67
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
+> @@ -0,0 +1,60 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/brcm,bcm7445-ehci.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Broadcom STB USB EHCI Controller Device Tree Bindings
+> +
+> +allOf:
+> +  - $ref: "usb-hcd.yaml"
+> +
+> +maintainers:
+> +  - Al Cooper <alcooperx@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    contains:
 
-syzbot has tested the proposed patch and the reproducer did not trigger crash:
+Drop contains. Other strings present are not allowed.
 
-Reported-and-tested-by: syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com
+With that,
 
-Tested on:
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-commit:         0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
-git tree:       https://github.com/google/kasan.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
-dashboard link: https://syzkaller.appspot.com/bug?extid=db339689b2101f6f6071
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14a84ac4100000
-
-Note: testing is done by a robot and is best-effort only.
+> +      const: brcm,bcm7445-ehci
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +    description: Clock specifier for the EHCI clock
+> +
+> +  clock-names:
+> +    const: sw_usb
+> +
+> +  phys:
+> +    maxItems: 1
+> +
+> +  phy-names:
+> +    const: usbphy
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - phys
+> +  - clocks
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    usb@f0b00300 {
+> +        compatible = "brcm,bcm7445-ehci";
+> +        reg = <0xf0b00300 0xa8>;
+> +        interrupts = <0x0 0x5a 0x0>;
+> +        phys = <&usbphy_0 0x0>;
+> +        phy-names = "usbphy";
+> +        clocks = <&usb20>;
+> +        clock-names = "sw_usb";
+> +    };
+> +
+> +...
+> diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.txt b/Documentation/devicetree/bindings/usb/usb-xhci.txt
+> index dc025f126d71..23e89d798b1b 100644
+> --- a/Documentation/devicetree/bindings/usb/usb-xhci.txt
+> +++ b/Documentation/devicetree/bindings/usb/usb-xhci.txt
+> @@ -24,6 +24,7 @@ Required properties:
+>        device
+>      - "renesas,rcar-gen3-xhci" for a generic R-Car Gen3 or RZ/G2 compatible
+>        device
+> +    - "brcm,bcm7445-xhci" for Broadcom STB SoCs with XHCI
+>      - "xhci-platform" (deprecated)
+>  
+>      When compatible with the generic version, nodes must list the
+> -- 
+> 2.17.1
+> 
