@@ -2,81 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7001BDD04
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 15:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C87EC1BDF56
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 15:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727789AbgD2NDT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Apr 2020 09:03:19 -0400
-Received: from mga09.intel.com ([134.134.136.24]:25882 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726516AbgD2NDT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 29 Apr 2020 09:03:19 -0400
-IronPort-SDR: sDOLxxoUz4dUWSf+D5DHDEYsBvPqMOAv0sYyLX/hSyKdw+IPBB3DkHeKmZFFvxBlGw9p9rEs+S
- 73GRNy8OjMTw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2020 06:03:18 -0700
-IronPort-SDR: jd8PV5TJXkyfqaoGQy6o+rgxDdDEOwr2l1Lfs7V6gdeAhmGEl3n3infeGaxG+a/J13Q+VGuLOp
- 6fR16xyrt0AA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,332,1583222400"; 
-   d="scan'208";a="367798156"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 29 Apr 2020 06:03:15 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 29 Apr 2020 16:03:15 +0300
-Date:   Wed, 29 Apr 2020 16:03:15 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     "Shah, Nehal-bakulchandra" <nehal-bakulchandra.shah@amd.com>
-Cc:     linux-iio <linux-iio@vger.kernel.org>, linux-usb@vger.kernel.org,
-        Jagadish.Hadimani@amd.com
-Subject: Re: ucsi and DRD controller interaction
-Message-ID: <20200429130315.GD2738754@kuha.fi.intel.com>
-References: <26823688-3b9c-5869-bcb6-4d6e5dcd77bc@amd.com>
- <20200421074353.GE3768833@kuha.fi.intel.com>
- <1d4fd9f3-8ea6-c054-0ba4-d50d78226fae@amd.com>
- <20200422110056.GB618654@kuha.fi.intel.com>
- <841d88c6-e08b-72d3-6884-0aa51805e3be@amd.com>
- <20200422142808.GE618654@kuha.fi.intel.com>
- <e85cefec-2731-65e8-f0f5-8cdc5d9e3773@amd.com>
- <20200427120032.GA2351955@kuha.fi.intel.com>
- <b139b18c-0452-d717-856e-14b9dd03910a@amd.com>
- <20200429124321.GC2738754@kuha.fi.intel.com>
+        id S1727803AbgD2Nme (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Apr 2020 09:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726765AbgD2Nmd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Apr 2020 09:42:33 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221B7C03C1AD
+        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2020 06:42:33 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id f15so858228plr.3
+        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2020 06:42:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jcuMipojCGNcmWtZkpEsne85cuM9vCdsVRuhqw4qkfQ=;
+        b=Vo6ujL+1K/rlmwBetJOfKkmpNJvZkAU6G4eFYQa3axLt6JNk78WtLy58SdvaQGvx3C
+         GjS9SvTPA3vrZjniyMdNYVPiLxz3hinFmIBnHj0cTDjsZuUU7iqHVIWoYGlPhXPAPQWQ
+         vCKXbYDB0Ce6varsLjyrvDMPfnzCzx2DxEN9gZJZ/Pdz6p4NViZbarikgYfw2wufsIL/
+         l98r/vFb7xm8++l54YIam3db3LV2/TlkXJ8Sg2HndFvtpOs31/SEZ1xKxJinmgYcvQSn
+         WAWO2MxOgdCVmf+WHhxILT8IgXXAEMKOtAN+613CsThM9GiJqgz+bkl+4myVYmfkckwM
+         HkWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jcuMipojCGNcmWtZkpEsne85cuM9vCdsVRuhqw4qkfQ=;
+        b=LC+JeVU9OqjMg62kvuE2dW5Kpx82UeQOU81wNQ8fb8FAudIRP6DoZY98agPrLs9NJ8
+         6dx9xIDEkZYBKpsHM1bLl11G5qxsN8JRr8RW9o8JFahf3JIZb42x8F5++nJkjaFGXjgX
+         CyWMGUjn6tEOkp4gsnTd9zGj9XW5/Im1traJVlN7fgvW4sIe/l/yBzOlou8ddzWJVMPo
+         L120Zdinpks6xP7W8BAlDnVbeAiX+hJaL3QqeMBYmnV1Thob1+jsv50j9yzsUGZ7rmUb
+         YMd5kGTj1M38ZXaPmOgmQL/rmROss4mFYcARbbavKO1ZcwuyHQG2HgFyCByzxoQjRjsy
+         srYg==
+X-Gm-Message-State: AGi0Puagex9i6bFXL2fC+g0KF2QGaZQuWNi/0lDYWBMbRbz8Z1D2la2L
+        Tk0RSB1LinzEPv/HdydnCwli0mMKz4xETd6YNcjbpw==
+X-Google-Smtp-Source: APiQypIotw8JHRrzMYfXh2Ai/shtV6ofa1ev2DZpViQJ0YmRkKeU5mYHpb2Z1/9/H9L8FIskYiEouR8MIgOa8dShWp4=
+X-Received: by 2002:a17:90b:198e:: with SMTP id mv14mr3335876pjb.69.1588167752368;
+ Wed, 29 Apr 2020 06:42:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200429124321.GC2738754@kuha.fi.intel.com>
+References: <CAAeHK+zBLWKn-YQjoD6S5uwwhuB-kTmdnBD28E06ujrx8ymv7A@mail.gmail.com>
+ <87ees62114.fsf@kernel.org>
+In-Reply-To: <87ees62114.fsf@kernel.org>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Wed, 29 Apr 2020 15:42:21 +0200
+Message-ID: <CAAeHK+yRMBFX4zgYLSLECdnM54GoEYcbocTDw=GrGrAD+cJ1bA@mail.gmail.com>
+Subject: Re: Recommended USB3/SuperSpeed gadget device
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi again,
+On Wed, Apr 29, 2020 at 9:39 AM Felipe Balbi <balbi@kernel.org> wrote:
+>
+>
+> Hi,
+>
+> Andrey Konovalov <andreyknvl@google.com> writes:
+> > What is the recommended driver/device to test USB3/SuperSpeed gadgets?
+> > Ideally something cheap, but at the same time with good driver
+> > support.
+> >
+> > I have a EC3380-AB board [1], which kind of works with net2280 driver,
+> > but it passes almost none of the usbtest tests with g_zero (only tests
+> > #1 and #9). I need something better.
+>
+> You have a unique chance to fix those problems :-)
 
-> > Thanks for the details so this will enable the role switch  for drd controller. Now for UCSI driver to call the role make functions it needs the reference of the same switch reference,
-> > 
-> > so for that do i have to use device_get_named_child_node(dev,"CON0"), in UCSI Driver?
-> 
-> No. If you use the ucsi driver, and if your connector child nodes are
-> in correct order, then ucsi_find_fwnode() takes care of assigning the
-> node for you.
-> 
-> But you do need to use the USB role class API to get a handle to the
-> switch (dwc3) in the typec driver.
-> 
-> UCSI is really meant to be a status interface. The specification
-> states that the USB Type-C connectors should function autonomously
-> without any OS involvement. So by relying on the driver to configure
-> the muxes, you are actually corrupting that part of the specification.
+It would be awesome to get that board working properly, as it's a
+really compact solution that fits into an ExpressCard slot on older
+laptops. My current priority is to figure out a testing setup for Raw
+Gadget though.
 
-I had to recheck that. I seem to be wrong about this. It does not
-clearly state that the ports need to function autonomously. Also, in
-this case the USB role switch isn't a mux.
+>
+> If you're not willing to do that, I anything using dwc3 (dragonboard,
+> beaglebone AI, and many many others) would be good here.
 
-Sorry about that.
+All DragonBoards that I found have USB 2.0 device ports AFAIU, but
+BeagleBone AI looks like what I need. Thanks!
 
-> I would still strongly recommend that you use TI's own host interface.
+While looking for a board with USB 3.0 device support, I've also found
+the UP board [1]. I'm not sure which driver it uses though.
 
--- 
-heikki
+[1] https://up-board.org/up/specifications/
