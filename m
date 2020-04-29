@@ -2,135 +2,533 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3671BE651
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 20:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 322D91BE662
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 20:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726481AbgD2Sfp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Apr 2020 14:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43656 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726456AbgD2Sfp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Apr 2020 14:35:45 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34884C03C1AE
-        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2020 11:35:45 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id fu13so1096208pjb.5
-        for <linux-usb@vger.kernel.org>; Wed, 29 Apr 2020 11:35:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=08p5fj27gfIIM4xLE6VPLWHuk1iLyqebey0af2ogLu0=;
-        b=FFYaTLS0A9F0ReP7zEIjXTXSPBAQlwGMHcaVMhSuhovYiugz+6a/Jt1nQiHzV9Qqju
-         IIgYl82tPD6UusRRDbHgqmQ129i1tXYC2lP1T+7GXnCkUaOUYf1adDB6+eJ2xJgkNnQp
-         VDMicnpzkiWiEiVs7ynjv4LAK4leb5+gcAJOI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=08p5fj27gfIIM4xLE6VPLWHuk1iLyqebey0af2ogLu0=;
-        b=KvxcXYcVo0QeVjO5r2Ck27gvJ/kNoSX/QYMUJaSAeCOsDWb0/lJPABsainJWynXHXm
-         lYwYr9KqStvqQt4jWUywbo5FksjBbnxHNyRIySdekdnIZDIL1T+dJwY+kEviMyCysHq4
-         W+tsRmP0FcnJzO9d2/bnInLVwlc6kSaKfno0yaJHeUITk7HtLGBdNB092AjShWM3FGk+
-         WpBCu/wG9r64vI68j+SNwvfJUJzfSKX90+I/52yc6Ks6xaP9EImMI08CH+IClLxjBp+Q
-         88nxlrOcnDfeZPDeJtQcVtWZ3O2R7p/y0YTSm2AhoS96TEYu8g1k34M6ryWHsWoApPFq
-         EhHQ==
-X-Gm-Message-State: AGi0PuYlAMWgEknsHdHneh854tTVeHuWXMklLuSQCBY1oNoyK4wnBbfo
-        maO1zyK66+S/urZCOYLALceqRQ==
-X-Google-Smtp-Source: APiQypKTRutC1MlI4l1Qf7LKmUxg3tadHomjIMqKmf84o5IE8XamP56lmNdNZx1ZAkOHMQE0Jamzuw==
-X-Received: by 2002:a17:90a:3450:: with SMTP id o74mr4681969pjb.159.1588185344615;
-        Wed, 29 Apr 2020 11:35:44 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id o40sm16770pjb.18.2020.04.29.11.35.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Apr 2020 11:35:43 -0700 (PDT)
-Date:   Wed, 29 Apr 2020 11:35:42 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Sandeep Maheswaram <sanm@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
-Subject: Re: [PATCH v7 0/4] ADD interconnect support for Qualcomm DWC3 driver
-Message-ID: <20200429183542.GS4525@google.com>
-References: <1585718145-29537-1-git-send-email-sanm@codeaurora.org>
+        id S1726775AbgD2Skh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Apr 2020 14:40:37 -0400
+Received: from smtp.domeneshop.no ([194.63.252.55]:41337 "EHLO
+        smtp.domeneshop.no" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726481AbgD2Skg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Apr 2020 14:40:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds201912; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=SXYnp9sDwhnCJ01lV0d8D/EbK1IQ6p+/3fHW4CJ7rUI=; b=Ks5e+ZXKopi7l3OFImqBpmT3Tz
+        /+3pbw6CI5U03pXl42ceCJlLyLvAG9IgAFTx9lHo175xm/uSM6WlBMoLbZg2OR7XJFXHVSBDgRJC8
+        W5NSyFZNiB7a+f/UeCYaVuTk56ACA6/98uQJ7kp9RhXjofclD8IDB7R5dzh/K4pI0bzfuH96vAdy7
+        Xkuqe/C/0Jld0GIq1bH0sNtUaJa0oieB9bn+s6tS6PEx53+GFcMZW9FTzMA514WzDuW+gEK9PvVcL
+        bjaXsj/lqeI2ZP7gwLtMXCynKjkM9KBAejr+qd54YZW9MaG1ptlj5aFzGlFX1ipIDlgSZB7B3UALi
+        lEl2SHkw==;
+Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:59288 helo=[192.168.10.61])
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1jTrdG-0006Qn-PH; Wed, 29 Apr 2020 20:40:30 +0200
+Subject: Re: [PATCH 02/10] drm: Add backlight helper
+To:     Hans de Goede <hdegoede@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Martin Peres <martin.peres@linux.intel.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Christian Kellner <ckellner@redhat.com>
+References: <20200429124830.27475-1-noralf@tronnes.org>
+ <20200429124830.27475-3-noralf@tronnes.org>
+ <c9ddad5d-0023-70dd-0be6-9e944150cc92@redhat.com>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Message-ID: <399a0783-6a10-7ffa-71bc-e1833f9555b0@tronnes.org>
+Date:   Wed, 29 Apr 2020 20:40:27 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <c9ddad5d-0023-70dd-0be6-9e944150cc92@redhat.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1585718145-29537-1-git-send-email-sanm@codeaurora.org>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Felipe,
 
-all patches of this series have been reviewed and there are no outstanding
-comments, so I guess it should be ready to land?
 
-Thanks
+Den 29.04.2020 16.13, skrev Hans de Goede:
+> Hi Noralf,
+> 
+> On 4/29/20 2:48 PM, Noralf Trønnes wrote:
+>> This adds a function that creates a backlight device for a connector.
+>> It does not deal with the KMS backlight ABI proposition[1] to add a
+>> connector property. It only takes the current best practise to
+>> standardise
+>> the creation of a backlight device for DRM drivers while we wait for the
+>> property.
+>>
+>> The brightness value is set using a connector state variable and an
+>> atomic
+>> commit.
+>>
+>> I have looked through some of the backlight users and this is what
+>> I've found:
+>>
+>> GNOME [2]
+>> ---------
+>>
+>> Brightness range: 0-100
+>> Scale: Assumes perceptual
+> 
+> I'm afraid that this is an incaccurate view of how GNOME handles the
+> brightness. gnome-settings-daemon (g-s-d) exports a DBUS property which has
+> a range of 0 - 100%.  But it also offers step-up and step-down DBUS methods
+> which are used for handling brightness hotkey presses.
+> 
+> This is important because g-s-d internally also keeps a step_size variable
+> which depends on the brightness_max value of the sysfs backlight interface,
+> like this:
+> 
+> BRIGHTNESS_STEP_AMOUNT(max) ((max) < 20 ? 1 : (max) / 20)
+> 
+> This is important because some older laptops where we depend on the
+> vendor specific ACPI method (from e.g. dell-laptop or thinkpad_acpi)
+> there are only 8 levels. So if g-s-d where to simply fake a 1-100
+> range and would leave the stepping up to the DBus API user and that
+> user would want 20 steps, so 5 % per step, then the user would get
+> 
+> Start      -> 100% -> level 8
+> Press down ->  95% -> level 7
+> Press down ->  90% -> level 7 *no change*
+> etc.
+> 
+> Somewhat related on some embedded ARM devices there are tricks where
+> when the entire scene being rendered does not use 100% white as color,
+> the entire scene has all its rgb values upscaled (too a curve) so that
+> the brightest colors do hit 100% of one of r/g/b, combined with dimming
+> the backlight a bit to save power. As you can imagine for tricks like
+> these you want as much backlight control precision as possible.
+> 
+> So any backlight infra we add must expose the true range of the
+> backlight control and not normalize it to a 0-100 range.
+> 
+> So sorry, but nack for the current version because of the hardcoding
+> of the range.
 
-Matthias
+No problem, I just had to start from somewhere, and I started with: Give
+the driver developer as few options as possible, no more than necessary,
+but I didn't really know what was necessary :-)
 
-On Wed, Apr 01, 2020 at 10:45:41AM +0530, Sandeep Maheswaram wrote:
-> This path series aims to add interconnect support in
-> dwc3-qcom driver on SDM845 and SC7180 SoCs.
+The reason I chose a 0-100 range is because the backlight property ABI
+proposal had this range and it maps so nicely to percent. And can the
+ordinary human see brightness changes in more than 100 steps?
+
+This helper is only to be used by drm drivers and I assumed that all the
+current drivers registering a backlight device could at least do that range.
+
+Looking through the drivers and their max_brightness values that
+assumption isn't quite right:
+
+amd: 255
+gma500: 100
+i915: <don't know, register read>
+nouveau/nv40: 31
+nouveau/nv50: 100
+radeon: 255
+shmobile: <don't know, from platform data>
+
+panel-dsi-cm.c: 255
+panel-jdi-lt070me05000.c: 255
+panel-orisetech-otm8009a.c: 255
+panel-raydium-rm67191.c: 255
+panel-samsung-s6e63m0.c: 10
+panel-sony-acx424akp.c: 1023
+panel-samsung-s6e3ha2.c: 100
+panel-samsung-s6e63j0x03.c: 100
+panel-sony-acx565akm.c: 255
+bridge/parade-ps8622.c: 255
+
+I'll add max_brightness as an argument together with scale which you
+commented on below.
+
 > 
-> Changes from v6 -> v7
->   > [PATCH 2/4] Fixed review comments from Matthias in DWC3 driver.
->   > Other patches remain unchanged.
+> Also the scale really should be specified by the driver, or be hardcoded
+> to BACKLIGHT_SCALE_UNKNOWN for now. In many cases we do not really know.
+> But for e.g. the acpi_video firmware backlight interface a good guess is
+> that it actually represents a perceptual scale rather then controlling
+> the wattage.
 > 
-> Changes from v5 -> v6
->   > [PATCH 1/4] Addressed comments from Rob.
->   > [PATCH 2/4] Fixed review comments from Matthias in DWC3 driver.
->   > [PATCH 3/4] Ignoring 80 char limit in defining interconnect paths.
->   > Added [PATCH 4/4] in this series. Adding interconnect nodes for SC7180.
->     Depends on patch https://patchwork.kernel.org/patch/11417989/.	
+> Where as the native i915 backlight interface really is controlling
+> the wattage without any perceptual correction.
 > 
-> Changes from v4 -> v5
->   > [PATCH 1/3] Added the interconnect properties in yaml. This patch depends
->     on series https://patchwork.kernel.org/cover/11372641/.
->   > [PATCH 2/3] Fixed review comments from Matthias in DWC3 driver.
->   > [PATCH 3/3] Modified as per the new interconnect nodes in sdm845. Depends
->     on series https://patchwork.kernel.org/cover/11372211/. 
+> Another problem with your proposal is that it seems to assume that
+> the backlight is controlled by the drm/kms driver. On x86 we have
+
+Yes, this backlight device is just for drm drivers.
+The reason I spend time on this is because I want to pass backlight
+brightness changes through the atomic machinery like any other state change.
+
+Noralf.
+
+> atleast 3 different drivers for the backlight:
+> 
+> 1) The i915 (or amd/nouveau) native driver which more or less
+> directly pokes the PWM controller of the GPU.
+> 2) The ACPI video standard backlight interface
+> 3) Vendor specific ACPI interfaces from older laptops
+> 
+> ATM we always register 1. which could remain unchanged with
+> your code and then also register 2/3 if we (the kernel) think
+> that will work better (*) and then rely on userspace prefering
+> these (they have a different backlight_type) over 1.
+> 
+> Ideally any infra we add will also offer the option to tie
+> 2. or 3. to the connector...
+> 
+> Regards,
+> 
+> Hans
 > 
 > 
-> Changes from v3 -> v4
->   > Fixed review comments from Matthias
->   > [PATCH 1/3] and [PATCH 3/3] remains unchanged
 > 
-> Changes from v2 -> v3
->   > Fixed review comments from Matthias and Manu
->   > changed the functions prefix from usb_* to dwc3_qcom_*
-> 
-> Changes since V1:
->   > Comments by Georgi Djakov on "[PATCH 2/3]" addressed
->   > [PATCH 1/3] and [PATCH 3/3] remains unchanged
+> *) e.g. it will work while the others will not work at all
 > 
 > 
-> Sandeep Maheswaram (4):
->   dt-bindings: usb: qcom,dwc3: Introduce interconnect properties for
->     Qualcomm DWC3 driver
->   usb: dwc3: qcom: Add interconnect support in dwc3 driver
->   arm64: dts: qcom: sdm845: Add interconnect properties for USB
->   arm64: dts: qcom: sc7180: Add interconnect properties for USB
 > 
->  .../devicetree/bindings/usb/qcom,dwc3.yaml         |   8 ++
->  arch/arm64/boot/dts/qcom/sc7180.dtsi               |   4 +
->  arch/arm64/boot/dts/qcom/sdm845.dtsi               |   8 ++
->  drivers/usb/dwc3/dwc3-qcom.c                       | 128 ++++++++++++++++++++-
->  4 files changed, 146 insertions(+), 2 deletions(-)
 > 
-> -- 
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-> of Code Aurora Forum, hosted by The Linux Foundation
+>>
+>> Avoids setting the sysfs brightness value to zero if max_brightness >=
+>> 99.
+>> Can connect connector and backlight using the sysfs device.
+>>
+>> KDE [3]
+>> -------
+>>
+>> Brightness range: 0-100
+>> Scale: Assumes perceptual
+>>
+>> Weston [4]
+>> ----------
+>>
+>> Brightness range: 0-255
+>> Scale: Assumes perceptual
+>>
+>> Chromium OS [5]
+>> ---------------
+>>
+>> Brightness range: 0-100
+>> Scale: Depends on the sysfs file 'scale' which is a recent addition
+>> (2019)
+>>
+>> xserver [6]
+>> -----------
+>>
+>> Brightness range: 0-x (driver specific) (1 is minimum, 0 is OFF)
+>> Scale: Assumes perceptual
+>>
+>> The builtin modesetting driver[7] does not support Backlight, Intel[8]
+>> does.
+>>
+>> [1]
+>> https://lore.kernel.org/dri-devel/4b17ba08-39f3-57dd-5aad-d37d844b02c6@linux.intel.com/
+>>
+>> [2]
+>> https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/blob/master/plugins/power/gsd-backlight.c
+>>
+>> [3]
+>> https://github.com/KDE/powerdevil/blob/master/daemon/backends/upower/backlighthelper.cpp
+>>
+>> [4]
+>> https://gitlab.freedesktop.org/wayland/weston/-/blob/master/libweston/backend-drm/drm.c
+>>
+>> [5]
+>> https://chromium.googlesource.com/chromiumos/platform2/+/refs/heads/master/power_manager/powerd/system/internal_backlight.cc
+>>
+>> [6]
+>> https://github.com/freedesktop/xorg-randrproto/blob/master/randrproto.txt
+>> [7]
+>> https://gitlab.freedesktop.org/xorg/xserver/-/blob/master/hw/xfree86/drivers/modesetting/drmmode_display.c
+>>
+>> [8]
+>> https://gitlab.freedesktop.org/xorg/driver/xf86-video-intel/-/blob/master/src/backlight.c
+>>
+>>
+>> Cc: Hans de Goede <hdegoede@redhat.com>
+>> Cc: Jani Nikula <jani.nikula@linux.intel.com>
+>> Cc: Martin Peres <martin.peres@linux.intel.com>
+>> Cc: Daniel Thompson <daniel.thompson@linaro.org>
+>> Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
+>> ---
+>>   Documentation/gpu/drm-kms-helpers.rst  |   6 +
+>>   drivers/gpu/drm/Kconfig                |   7 ++
+>>   drivers/gpu/drm/Makefile               |   1 +
+>>   drivers/gpu/drm/drm_backlight_helper.c | 154 +++++++++++++++++++++++++
+>>   include/drm/drm_backlight_helper.h     |   9 ++
+>>   include/drm/drm_connector.h            |  10 ++
+>>   6 files changed, 187 insertions(+)
+>>   create mode 100644 drivers/gpu/drm/drm_backlight_helper.c
+>>   create mode 100644 include/drm/drm_backlight_helper.h
+>>
+>> diff --git a/Documentation/gpu/drm-kms-helpers.rst
+>> b/Documentation/gpu/drm-kms-helpers.rst
+>> index 9668a7fe2408..29a2f4b49fd2 100644
+>> --- a/Documentation/gpu/drm-kms-helpers.rst
+>> +++ b/Documentation/gpu/drm-kms-helpers.rst
+>> @@ -411,3 +411,9 @@ SHMEM GEM Helper Reference
+>>     .. kernel-doc:: drivers/gpu/drm/drm_gem_shmem_helper.c
+>>      :export:
+>> +
+>> +Backlight Helper Reference
+>> +==========================
+>> +
+>> +.. kernel-doc:: drivers/gpu/drm/drm_backlight_helper.c
+>> +   :export:
+>> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+>> index d0aa6cff2e02..f6e13e18c9ca 100644
+>> --- a/drivers/gpu/drm/Kconfig
+>> +++ b/drivers/gpu/drm/Kconfig
+>> @@ -224,6 +224,13 @@ config DRM_GEM_SHMEM_HELPER
+>>       help
+>>         Choose this if you need the GEM shmem helper functions
+>>   +config DRM_BACKLIGHT_HELPER
+>> +    bool
+>> +    depends on DRM
+>> +    select BACKLIGHT_CLASS_DEVICE
+>> +    help
+>> +      Choose this if you need the backlight device helper functions
+>> +
+>>   config DRM_VM
+>>       bool
+>>       depends on DRM && MMU
+>> diff --git a/drivers/gpu/drm/Makefile b/drivers/gpu/drm/Makefile
+>> index 6493088a0fdd..0d17662dde0a 100644
+>> --- a/drivers/gpu/drm/Makefile
+>> +++ b/drivers/gpu/drm/Makefile
+>> @@ -52,6 +52,7 @@ drm_kms_helper-$(CONFIG_DRM_FBDEV_EMULATION) +=
+>> drm_fb_helper.o
+>>   drm_kms_helper-$(CONFIG_DRM_KMS_CMA_HELPER) += drm_fb_cma_helper.o
+>>   drm_kms_helper-$(CONFIG_DRM_DP_AUX_CHARDEV) += drm_dp_aux_dev.o
+>>   drm_kms_helper-$(CONFIG_DRM_DP_CEC) += drm_dp_cec.o
+>> +drm_kms_helper-$(CONFIG_DRM_BACKLIGHT_HELPER) += drm_backlight_helper.o
+>>     obj-$(CONFIG_DRM_KMS_HELPER) += drm_kms_helper.o
+>>   obj-$(CONFIG_DRM_DEBUG_SELFTEST) += selftests/
+>> diff --git a/drivers/gpu/drm/drm_backlight_helper.c
+>> b/drivers/gpu/drm/drm_backlight_helper.c
+>> new file mode 100644
+>> index 000000000000..06e6a75d1d0a
+>> --- /dev/null
+>> +++ b/drivers/gpu/drm/drm_backlight_helper.c
+>> @@ -0,0 +1,154 @@
+>> +// SPDX-License-Identifier: GPL-2.0 OR MIT
+>> +/*
+>> + * Copyright 2020 Noralf Trønnes
+>> + */
+>> +
+>> +#include <linux/backlight.h>
+>> +
+>> +#include <drm/drm_atomic.h>
+>> +#include <drm/drm_connector.h>
+>> +#include <drm/drm_drv.h>
+>> +#include <drm/drm_file.h>
+>> +
+>> +static int drm_backlight_update_status(struct backlight_device *bd)
+>> +{
+>> +    struct drm_connector *connector = bl_get_data(bd);
+>> +    struct drm_connector_state *connector_state;
+>> +    struct drm_device *dev = connector->dev;
+>> +    struct drm_modeset_acquire_ctx ctx;
+>> +    struct drm_atomic_state *state;
+>> +    int ret;
+>> +
+>> +    state = drm_atomic_state_alloc(dev);
+>> +    if (!state)
+>> +        return -ENOMEM;
+>> +
+>> +    drm_modeset_acquire_init(&ctx, 0);
+>> +    state->acquire_ctx = &ctx;
+>> +retry:
+>> +    connector_state = drm_atomic_get_connector_state(state, connector);
+>> +    if (IS_ERR(connector_state)) {
+>> +        ret = PTR_ERR(connector_state);
+>> +        goto out;
+>> +    }
+>> +
+>> +    connector_state->backlight_brightness = bd->props.brightness;
+>> +
+>> +    ret = drm_atomic_commit(state);
+>> +out:
+>> +    if (ret == -EDEADLK) {
+>> +        drm_atomic_state_clear(state);
+>> +        drm_modeset_backoff(&ctx);
+>> +        goto retry;
+>> +    }
+>> +
+>> +    drm_atomic_state_put(state);
+>> +
+>> +    drm_modeset_drop_locks(&ctx);
+>> +    drm_modeset_acquire_fini(&ctx);
+>> +
+>> +    return ret;
+>> +}
+>> +
+>> +static int drm_backlight_get_brightness(struct backlight_device *bd)
+>> +{
+>> +    struct drm_connector *connector = bl_get_data(bd);
+>> +    struct drm_device *dev = connector->dev;
+>> +    int brightness;
+>> +
+>> +    drm_modeset_lock(&dev->mode_config.connection_mutex, NULL);
+>> +    brightness = connector->state->backlight_brightness;
+>> +    drm_modeset_unlock(&dev->mode_config.connection_mutex);
+>> +
+>> +    return brightness;
+>> +}
+>> +
+>> +static const struct backlight_ops drm_backlight_ops = {
+>> +    .get_brightness = drm_backlight_get_brightness,
+>> +    .update_status    = drm_backlight_update_status,
+>> +};
+>> +
+>> +/* Can be exported for drivers carrying a legacy name */
+>> +static int drm_backlight_register_with_name(struct drm_connector
+>> *connector, const char *name)
+>> +{
+>> +    struct backlight_device *bd;
+>> +    const struct backlight_properties props = {
+>> +        .type = BACKLIGHT_RAW,
+>> +        .scale = BACKLIGHT_SCALE_NON_LINEAR,
+>> +        .max_brightness = 100,
+>> +    };
+>> +
+>> +    if (WARN_ON(!drm_core_check_feature(connector->dev,
+>> DRIVER_MODESET) ||
+>> +            !drm_drv_uses_atomic_modeset(connector->dev) ||
+>> +            !connector->kdev))
+>> +        return -EINVAL;
+>> +
+>> +    bd = backlight_device_register(name, connector->kdev, connector,
+>> +                       &drm_backlight_ops, &props);
+>> +    if (IS_ERR(bd))
+>> +        return PTR_ERR(bd);
+>> +
+>> +    connector->backlight = bd;
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +/**
+>> + * drm_backlight_register() - Register a backlight device for a
+>> connector
+>> + * @connector: Connector
+>> + *
+>> + * This function registers a backlight device for @connector with the
+>> following
+>> + * characteristics:
+>> + *
+>> + * - The connector sysfs device is used as a parent device for the
+>> backlight device.
+>> + *   Userspace can use this to connect backlight device and connector.
+>> + * - Name will be on the form: **card0-HDMI-A-1-backlight**
+>> + * - Type is "raw"
+>> + * - Scale is "non-linear" (perceptual)
+>> + * - Max brightness is 100 giving a range of 0-100 inclusive
+>> + * - Reading sysfs **brightness** returns the backlight device property
+>> + * - Reading sysfs **actual_brightness** returns the connector state
+>> value
+>> + * - Writing sysfs **bl_power** is ignored, the DPMS connector
+>> property should
+>> + *   be used to control power.
+>> + * - Backlight device suspend/resume events are ignored.
+>> + *
+>> + * Note:
+>> + *
+>> + * Brightness zero should not turn off backlight it should be the
+>> minimum
+>> + * brightness, DPMS handles power.
+>> + *
+>> + * This function must be called from
+>> &drm_connector_funcs->late_register() since
+>> + * it depends on the sysfs device.
+>> + *
+>> + * Returns:
+>> + * Zero on success or negative error code on failure.
+>> + */
+>> +int drm_backlight_register(struct drm_connector *connector)
+>> +{
+>> +    const char *name = NULL;
+>> +    int ret;
+>> +
+>> +    name = kasprintf(GFP_KERNEL, "card%d-%s-backlight",
+>> +             connector->dev->primary->index, connector->name);
+>> +    if (!name)
+>> +        return -ENOMEM;
+>> +
+>> +    ret = drm_backlight_register_with_name(connector, name);
+>> +    kfree(name);
+>> +
+>> +    return ret;
+>> +}
+>> +EXPORT_SYMBOL(drm_backlight_register);
+>> +
+>> +/**
+>> + * drm_backlight_unregister() - Unregister backlight device
+>> + * @connector: Connector
+>> + *
+>> + * Unregister a backlight device. This must be called from the
+>> + * &drm_connector_funcs->early_unregister() callback.
+>> + */
+>> +void drm_backlight_unregister(struct drm_connector *connector)
+>> +{
+>> +    backlight_device_unregister(connector->backlight);
+>> +}
+>> +EXPORT_SYMBOL(drm_backlight_unregister);
+>> diff --git a/include/drm/drm_backlight_helper.h
+>> b/include/drm/drm_backlight_helper.h
+>> new file mode 100644
+>> index 000000000000..4151b66eb0b4
+>> --- /dev/null
+>> +++ b/include/drm/drm_backlight_helper.h
+>> @@ -0,0 +1,9 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 OR MIT */
+>> +
+>> +#ifndef _LINUX_DRM_BACKLIGHT_HELPER_H
+>> +#define _LINUX_DRM_BACKLIGHT_HELPER_H
+>> +
+>> +int drm_backlight_register(struct drm_connector *connector);
+>> +void drm_backlight_unregister(struct drm_connector *connector);
+>> +
+>> +#endif
+>> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+>> index 221910948b37..ce678b694f45 100644
+>> --- a/include/drm/drm_connector.h
+>> +++ b/include/drm/drm_connector.h
+>> @@ -32,6 +32,7 @@
+>>     #include <uapi/drm/drm_mode.h>
+>>   +struct backlight_device;
+>>   struct drm_connector_helper_funcs;
+>>   struct drm_modeset_acquire_ctx;
+>>   struct drm_device;
+>> @@ -656,6 +657,12 @@ struct drm_connector_state {
+>>        */
+>>       u8 max_bpc;
+>>   +    /**
+>> +     * @backlight_brightness: Brightness value of the connector
+>> backlight
+>> +     * device. See drm_backlight_register().
+>> +     */
+>> +    u8 backlight_brightness;
+>> +
+>>       /**
+>>        * @hdr_output_metadata:
+>>        * DRM blob property for HDR output metadata
+>> @@ -1422,6 +1429,9 @@ struct drm_connector {
+>>         /** @hdr_sink_metadata: HDR Metadata Information read from
+>> sink */
+>>       struct hdr_sink_metadata hdr_sink_metadata;
+>> +
+>> +    /** @backlight: Backlight device. See drm_backlight_register() */
+>> +    struct backlight_device *backlight;
+>>   };
+>>     #define obj_to_connector(x) container_of(x, struct drm_connector,
+>> base)
+>>
+> 
 > 
