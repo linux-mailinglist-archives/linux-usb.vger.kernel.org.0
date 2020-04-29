@@ -2,152 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 476FD1BE5C0
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 19:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F501BE5E0
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 20:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726955AbgD2R7t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Apr 2020 13:59:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38858 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726423AbgD2R7t (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 29 Apr 2020 13:59:49 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B68C920B1F;
-        Wed, 29 Apr 2020 17:59:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588183188;
-        bh=uKVXdg34+bztAgTFd7nuch2OdjnH6f6f+YwPjkMWGJ4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VLvmgh5hiOXOYRzq7Pe1/72+ImTN2ycukWM8kmUNAR15gTXhEk7L+yYFGVWajg9pu
-         PIKUvU80FG+ouSVjL3CIaNL2OTaIAHZqA+CYzmxlEljPRhW6ZfivpZ1Z9YjeyGNHJE
-         EpXZO5nLcbeBl6X/mdfmq/ho7KQWwausMJPZ7QqY=
-Date:   Wed, 29 Apr 2020 19:59:45 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patong.mxl@gmail.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: serial: xr_serial: Add gpiochip support
-Message-ID: <20200429175945.GA2336267@kroah.com>
-References: <20200428195651.6793-1-mani@kernel.org>
- <20200428195651.6793-3-mani@kernel.org>
- <20200429174727.GF6443@Mani-XPS-13-9360>
+        id S1726910AbgD2SLO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Apr 2020 14:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726423AbgD2SLO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Apr 2020 14:11:14 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052DCC03C1AE;
+        Wed, 29 Apr 2020 11:11:14 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id x77so1466706pfc.0;
+        Wed, 29 Apr 2020 11:11:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=32iTtqxt7eYmJSkonzXigk+VsulRBCWrnlSfTREBeNo=;
+        b=Lw9eS9hZl4dK37CHk5tVRw7uUhCKuSADlk5CRXEhminLpoMONDxAQixmerLC3pBvvZ
+         FrfP3b82EU79rswwstsUDcMOADVZqNmdB9Zx8Xaer91E8fuLGQWXddNO4STLwyfNrMR0
+         iPLRyVLGHtCgyh1ZhQ0bGz3eCN7f1NOiQy4IuUZNDp9IViHBAI1W3l0LR7bYNUVY/dwD
+         CwhAbRi80WkMrUB3cimuC7TkvK1803k/9WQ9W0xsz8OqAtDkcXoA3IPEe3wKMOmRZ7NP
+         27wMUy3IG63FwYI/56sG+ptMRat5NM28DLp9Nn9808D8hfDABRW70ZQHAeCq9wRDZ6fY
+         xqvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=32iTtqxt7eYmJSkonzXigk+VsulRBCWrnlSfTREBeNo=;
+        b=IH/++rmbvatHxZ/0KCI1drfvlzLo5Dn6XC7W/ZFbOpA6UNXBGaGctqxFAlcW/NdS+E
+         odE8X2RQSQLqoFdNMOJu/dxfE2SkKaWFZtiXy8Z4Y0TrZZoSFtddqTfmBzn0SwTFeXnh
+         RyR63TDHVXeQxFGt+jCp+e2EGkYXR9fr2PJqalK1QvaHXZ8hNGDsCwRKjNLvhv9Bo2ME
+         NjrXfAg2nBB46YC779IdQDQuRFWRm7KAIlDsYGJm05yAzbwfXmpFEcsNM4Nl56riJHd1
+         Ql9QyD5kfcHdqiGeK0IXIzAJFwRI1LJhnDURNL5ZbINQwxwJUz9BUOULuKXQGzCMcfaJ
+         ua5w==
+X-Gm-Message-State: AGi0PuZHXlZJ+j7KJnJXfX7157J5muqUnO5V/q+A6459h2NVLfj0wkZ9
+        mV9rooimoq2kohgU1y8WUAUggjsFpDyDzgCsrYc=
+X-Google-Smtp-Source: APiQypL6rg6zBqJKDlDtZabgKh8dNkv3z24vfaXNyZiW3GC67TZ/jVKXSp84ouzCZxuZ9+Z8KNTqntBii41GUJgnfIs=
+X-Received: by 2002:aa7:8f26:: with SMTP id y6mr37105646pfr.36.1588183873578;
+ Wed, 29 Apr 2020 11:11:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200429174727.GF6443@Mani-XPS-13-9360>
+References: <20200429173112.38366-1-alcooperx@gmail.com> <20200429173112.38366-4-alcooperx@gmail.com>
+In-Reply-To: <20200429173112.38366-4-alcooperx@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 29 Apr 2020 21:11:06 +0300
+Message-ID: <CAHp75VdwCBDTpipJZFOXxEvB4yW1qZo5XC5vs1pzHfTnVR+Nvw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] usb: ehci: Add new EHCI driver for Broadcom STB SoC's
+To:     Al Cooper <alcooperx@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 29, 2020 at 11:17:27PM +0530, Manivannan Sadhasivam wrote:
-> Hi Greg,
-> 
-> On Wed, Apr 29, 2020 at 01:26:51AM +0530, mani@kernel.org wrote:
-> > From: Manivannan Sadhasivam <mani@kernel.org>
-> > 
-> > Add gpiochip support for Maxlinear/Exar USB to serial converter
-> > for controlling the available gpios.
-> > 
-> > Cc: Linus Walleij <linus.walleij@linaro.org>
-> > Cc: linux-gpio@vger.kernel.org
-> > Signed-off-by: Manivannan Sadhasivam <mani@kernel.org>
-> > ---
-> >  drivers/usb/serial/xr_serial.c | 186 ++++++++++++++++++++++++++++++++-
-> >  drivers/usb/serial/xr_serial.h |   7 ++
-> >  2 files changed, 192 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/serial/xr_serial.c b/drivers/usb/serial/xr_serial.c
-> > index ea4a0b167d3f..d86fd40839f8 100644
-> > --- a/drivers/usb/serial/xr_serial.c
-> > +++ b/drivers/usb/serial/xr_serial.c
-> > @@ -476,6 +476,189 @@ static void xr_break_ctl(struct tty_struct *tty, int break_state)
-> >  		   state);
-> >  }
-> >  
-> > +#ifdef CONFIG_GPIOLIB
-> > +
-> 
-> [...]
-> 
-> > +
-> > +static int xr_gpio_init(struct usb_serial_port *port)
-> > +{
-> > +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
-> > +	int ret = 0;
-> > +
-> > +	if (port_priv->idProduct == XR21V141X_ID)
-> > +		ret = xr21v141x_gpio_init(port);
-> > +
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	port_priv->gc.label = "xr_gpios";
-> > +	port_priv->gc.request = xr_gpio_request;
-> > +	port_priv->gc.get_direction = xr_gpio_direction_get;
-> > +	port_priv->gc.direction_input = xr_gpio_direction_input;
-> > +	port_priv->gc.direction_output = xr_gpio_direction_output;
-> > +	port_priv->gc.get = xr_gpio_get;
-> > +	port_priv->gc.set = xr_gpio_set;
-> > +	port_priv->gc.owner = THIS_MODULE;
-> > +	port_priv->gc.parent = &port->dev;
-> > +	port_priv->gc.base = -1;
-> > +	port_priv->gc.can_sleep = true;
-> > +
-> > +	ret = gpiochip_add_data(&port_priv->gc, port);
-> > +	if (!ret)
-> > +		port_priv->gpio_registered = true;
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static void xr_gpio_remove(struct usb_serial_port *port)
-> > +{
-> > +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
-> > +
-> > +	if (port_priv->gpio_registered) {
-> > +		gpiochip_remove(&port_priv->gc);
-> > +		port_priv->gpio_registered = false;
-> > +	}
-> > +}
-> > +
-> > +#else
-> > +
-> > +static int xr_gpio_init(struct usb_serial_port *port)
-> > +{
-> > +	return 0;
-> > +}
-> > +
-> > +static void xr_gpio_remove(struct usb_serial_port *port)
-> > +{
-> > +	/* Nothing to do */
-> > +}
-> > +
-> > +#endif
-> > +
-> >  static int xr_port_probe(struct usb_serial_port *port)
-> >  {
-> >  	struct usb_serial *serial = port->serial;
-> > @@ -495,13 +678,14 @@ static int xr_port_probe(struct usb_serial_port *port)
-> >  
-> >  	usb_set_serial_port_data(port, port_priv);
-> >  
-> > -	return 0;
-> > +	return xr_gpio_init(port);
-> 
-> Just realised that the gpiochip is registered for 2 interfaces exposed by
-> this chip. This is due to the fact that this chip presents CDC-ACM model,
-> so there are 2 interfaces (interrupt and bulk IN/OUT).
-> 
-> We shouldn't need gpiochip for interface 0. So what is the recommended way
-> to filter that?
+On Wed, Apr 29, 2020 at 8:34 PM Al Cooper <alcooperx@gmail.com> wrote:
+>
+> Add a new EHCI driver for Broadcom STB SoC's. A new EHCI driver
+> was created instead of adding support to the existing ehci platform
+> driver because of the code required to workaround bugs in the EHCI
+> controller.
 
-Not create the gpiochip for interface 0?  :)
+...
 
-I really don't know what else to say here, sorry.
+> +/* Copyright (c) 2018, Broadcom */
 
-greg k-h
+2020?
+
+...
+
+> +       res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +       hcd->regs = devm_ioremap_resource(dev, res_mem);
+
+devm_platform_get_and_ioremap_resource() ?
+
+> +       if (IS_ERR(hcd->regs)) {
+> +               err = PTR_ERR(hcd->regs);
+> +               goto err_clk;
+> +       }
+> +       hcd->rsrc_start = res_mem->start;
+> +       hcd->rsrc_len = resource_size(res_mem);
+
+-- 
+With Best Regards,
+Andy Shevchenko
