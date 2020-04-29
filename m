@@ -2,53 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDCD1BD810
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 11:20:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5DF1BD841
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Apr 2020 11:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726366AbgD2JUH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Apr 2020 05:20:07 -0400
-Received: from mx2.suse.de ([195.135.220.15]:34590 "EHLO mx2.suse.de"
+        id S1726551AbgD2J3I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Apr 2020 05:29:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45754 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726345AbgD2JUG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 29 Apr 2020 05:20:06 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 18C11AF69;
-        Wed, 29 Apr 2020 09:20:05 +0000 (UTC)
-Message-ID: <1588151982.8672.0.camel@suse.com>
-Subject: Re: unusual_uas.h additional entry
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Julian =?ISO-8859-1?Q?Gro=DF?= <julian.g@posteo.de>,
-        hdegoede@redhat.co
-Cc:     linux-usb@vger.kernel.org
-Date:   Wed, 29 Apr 2020 11:19:42 +0200
-In-Reply-To: <20200428212701.2ee42662@motofckr9k-mint-desktop>
-References: <20200428212701.2ee42662@motofckr9k-mint-desktop>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726423AbgD2J3H (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 29 Apr 2020 05:29:07 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B3C7A20787;
+        Wed, 29 Apr 2020 09:29:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588152547;
+        bh=IrWdVf5+edDBoeiVwChyNnOmdRKCUVlj/3oxfeED9aI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HdEItaGKg8LGktGVuE7H+UB+JIPExOsEbGZQfvq47Cr1XeBPzOrpFlFo/3z6UwUG1
+         m78kekXnVq+e34N5uxs+BRPEWLzQiJS59p0t3qXVCQxOP0v8lpvgZyKbNJeyO/GWPk
+         RzOALTGlg9LMRx9+CgfJeVNJVX6St28tI4nh5Hm8=
+Date:   Wed, 29 Apr 2020 11:29:04 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patong.mxl@gmail.com
+Subject: Re: [PATCH 1/2] usb: serial: Add MaxLinear/Exar USB to Serial driver
+Message-ID: <20200429092904.GA2079263@kroah.com>
+References: <20200428195651.6793-1-mani@kernel.org>
+ <20200428195651.6793-2-mani@kernel.org>
+ <20200429072036.GA2045202@kroah.com>
+ <20200429074025.GA6443@Mani-XPS-13-9360>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200429074025.GA6443@Mani-XPS-13-9360>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Dienstag, den 28.04.2020, 21:27 +0200 schrieb Julian Groß:
-> Hello,
+On Wed, Apr 29, 2020 at 01:10:26PM +0530, Manivannan Sadhasivam wrote:
+> Hi Greg,
 > 
-> I would like to ask for an addition to the "unusual_uas.h" file.
-> According to
-> https://en.opensuse.org/SDB:USB_3.0_Hard_Drive_troubleshooting I went
-> through the usb_stor_adjust_quirks flags for my USB 3.0 storage device
-> and found flag "f" to fix my issue of the device needing several
-> minutes to connect (flag "u" of couse also fixing the issue).
+> On Wed, Apr 29, 2020 at 09:20:36AM +0200, Greg KH wrote:
+> > On Wed, Apr 29, 2020 at 01:26:50AM +0530, mani@kernel.org wrote:
+> > > From: Manivannan Sadhasivam <mani@kernel.org>
+> > > 
+> > > Add support for MaxLinear/Exar USB to Serial converters. This driver
+> > > only supports XR21V141X series but provision has been made to support
+> > > other series in future.
+> > > 
+> > > This driver is inspired from the initial one submitted by Patong Yang:
+> > > 
+> > > https://patchwork.kernel.org/patch/10543261/
+> > > 
+> > > While the initial driver was a custom tty USB driver exposing whole
+> > > new serial interface ttyXRUSBn, this version is completely based on USB
+> > > serial core thus exposing the interfaces as ttyUSBn. This will avoid
+> > > the overhead of exposing a new USB serial interface which the userspace
+> > > tools are unaware of.
+> > 
+> > Nice work!
+> > 
+> > Some comments below:
+> > 
+> > > +// SPDX-License-Identifier: GPL-2.0+
+> > > +/*
+> > > + * MaxLinear/Exar USB to Serial driver
+> > > + *
+> > > + * Based on initial driver written by Patong Yang <patong.mxl@gmail.com>
+> > > + *
+> > > + * Copyright (c) 2020 Manivannan Sadhasivam <mani@kernel.org>
+> > > + */
+> > > +
+> > > +#include <linux/kernel.h>
+> > > +#include <linux/module.h>
+> > > +#include <linux/slab.h>
+> > > +#include <linux/tty.h>
+> > > +#include <linux/usb.h>
+> > > +#include <linux/usb/serial.h>
+> > > +
+> > > +#include "xr_serial.h"
+> > 
+> > No need for a .h file for a single .c file.
+> > 
 > 
-> As I don't understand the format of the entries, please add missing
-> information from the "lsusb -v" output down below.
+> Yeah but since this driver can support multiple series of XR chips (they
+> might have separate register definitions and such), I thought it is a good
+> idea to have a header file to keep the driver sane. But can club it to the
+> source file for now.
 
-Hi,
+Don't worry about future stuff, focus on what you need to do now :)
 
-done. Thank you for the report. You have improved the kernel.
+> > > +static int xr_get_reg(struct usb_serial_port *port, u8 block, u16 reg,
+> > > +		      u16 *val)
+> > > +{
+> > > +	struct usb_serial *serial = port->serial;
+> > > +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
+> > > +	void *dmabuf;
+> > > +	int ret = -EINVAL;
+> > > +
+> > > +	dmabuf = kmalloc(sizeof(reg), GFP_KERNEL);
+> > 
+> > So that is 2 bytes?
+> > 
+> 
+> Explanation below...
+> 
+> > > +	if (!dmabuf)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	if (port_priv->idProduct == XR21V141X_ID) {
+> > > +		/* XR21V141X uses custom command for reading UART registers */
+> > > +		ret = usb_control_msg(serial->dev,
+> > > +				      usb_rcvctrlpipe(serial->dev, 0),
+> > > +				      XR_GET_XR21V141X,
+> > > +				      USB_DIR_IN | USB_TYPE_VENDOR, 0,
+> > > +				      reg | (block << 8), dmabuf,
+> > > +				      port_priv->reg_width,
+> > > +				      USB_CTRL_SET_TIMEOUT);
+> > > +	}
+> > > +
+> > > +	if (ret == port_priv->reg_width) {
+> > > +		memcpy(val, dmabuf, port_priv->reg_width);
+> > 
+> > But here you copy ->reg_width bytes in?  How do you know val can hold
+> > that much?  It's only set to be 1, so you copy 1 byte to a 16bit value?
+> > What part of the 16bits did you just copy those 8 bits to (hint, think
+> > cpu endian issues...)
+> > 
+> > That feels really really odd and a bit broken.
+> > 
+> 
+> Right. The reason is, the other series which can be supported by this driver
+> have different register widths. For instance XR2280x. I haven't used them
+> personally but seen this in initial driver. So I just used the max u16 type
+> to make the reg_{set/get} routines work with those.
 
-	Regards
-		Oliver
+Drop the whole "different register width" stuff for now, as the driver
+does not support it and it adds additional complexity that is hard to
+review for no good reason.  If you want to add support for new devices
+later, _then_ we can add support for that.
+
+Don't over-engineer :)
+
+> But agree, I should've used le16_to_cpu() cast to avoid endian issues.
+
+You have to, the code is broken as-is right now.
+
+> If you think this hack is not required now, I can just use u8 and worry about
+> compatibility later.
+
+Please do so.
+
+thanks,
+
+greg k-h
