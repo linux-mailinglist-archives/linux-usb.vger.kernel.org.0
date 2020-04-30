@@ -2,108 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B4B1C0740
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 22:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B05651C090B
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 23:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726645AbgD3UCl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Apr 2020 16:02:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60914 "EHLO mail.kernel.org"
+        id S1726548AbgD3VTY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Apr 2020 17:19:24 -0400
+Received: from foss.arm.com ([217.140.110.172]:33902 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726272AbgD3UCl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 30 Apr 2020 16:02:41 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 10ECF2072A;
-        Thu, 30 Apr 2020 20:02:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588276960;
-        bh=Csk1FRgOIkPXyDs3SuTpRgxr84txcfkymZTVF3Q2W24=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H4b2vurNh0IRcr02dgZoCe8UV0dnNbAlPIYG82dJ3/iq+gyl+Jgk6cMhnYk/2Lssa
-         lvjUmetVvs6JLT5KJzI+rSTKAEnH5bPkdAvYSozN7nAR39nu21nXBk60lSTIAB+6Ap
-         5yoYU0owO/BOkxdMuY3VqMBFr1jpkR2zA5ZAYylY=
-Date:   Thu, 30 Apr 2020 22:02:38 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Vladimir Stankovic <vladimir.stankovic@displaylink.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mausb-host-devel@displaylink.com
-Subject: Re: [External] Re: [PATCH v5 0/8] Add MA USB Host driver
-Message-ID: <20200430200238.GB3843398@kroah.com>
-References: <20200327152614.26833-1-vladimir.stankovic@displaylink.com>
- <20200425091954.1610-1-vladimir.stankovic@displaylink.com>
- <20200428110459.GB1145239@kroah.com>
- <b14a2f71-3931-8d32-43a1-cbf52add48bb@displaylink.com>
+        id S1726449AbgD3VTY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 Apr 2020 17:19:24 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E6D241FB;
+        Thu, 30 Apr 2020 14:19:23 -0700 (PDT)
+Received: from mammon-tx2.austin.arm.com (mammon-tx2.austin.arm.com [10.118.28.62])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DF1733F68F;
+        Thu, 30 Apr 2020 14:19:23 -0700 (PDT)
+From:   Jeremy Linton <jeremy.linton@arm.com>
+To:     linux-usb@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        git@thegavinli.com, jarkko.sakkinen@linux.intel.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Jeremy Linton <jeremy.linton@arm.com>
+Subject: [PATCH] usb: usbfs: correct kernel->user page attribute mismatch
+Date:   Thu, 30 Apr 2020 16:19:22 -0500
+Message-Id: <20200430211922.929165-1-jeremy.linton@arm.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b14a2f71-3931-8d32-43a1-cbf52add48bb@displaylink.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 30, 2020 at 06:51:10PM +0200, Vladimir Stankovic wrote:
-> On 28.4.20. 13:04, Greg KH wrote:
-> > On Sat, Apr 25, 2020 at 11:19:46AM +0200, vladimir.stankovic@displaylink.com wrote:
-> >> Media Agnostic (MA) USB Host driver provides USB connectivity over an
-> >> available network, allowing host device to access remote USB devices
-> >> attached to one or more MA USB devices (accessible via network).
-> >>
-> >> This driver has been developed to enable the host to communicate
-> >> with DisplayLink products supporting MA USB protocol (MA USB device,
-> >> in terms of MA USB Specification).
-> >>
-> >> MA USB protocol used by MA USB Host driver has been implemented in
-> >> accordance with MA USB Specification Release 1.0b.
-> > 
-> > Is that a USB-released spec?
-> Correct, document is being maintained by USB IF and is publicly available.
-> However, I just noticed a typo, correct version is 1.0a. Will correct.
-> 
-> In short, MA USB Specification defines an MA USB protocol that performs USB
-> communication via any communication medium. As such, it defines how to pack
-> USB data within MA USB payload, and how to communicate with remote MA USB device.
-> > 
-> >>
-> >> This driver depends on the functions provided by DisplayLink's
-> >> user-space driver.
-> > 
-> > Where can that userspace code be found?
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> > 
-> Userspace code is not publicly available. However, in short, it's purpose is
-> twofold, to provide interface to application layer, and to prepare MA USB packets
-> that will be used by remote device.
+On arm64, and possibly other architectures, requesting
+IO coherent memory may return Normal-NC if the underlying
+hardware isn't coherent. If these pages are then
+remapped into userspace as Normal, that defeats the
+purpose of getting Normal-NC, as well as resulting in
+mappings with differing cache attributes.
 
-So you want us to take a one-off char-driver kernel code for a closed
-source userspace application for a public spec?  That feels really
-really odd, if not actually against a few licenses.  I hate to ask it,
-but are your lawyers ok with this?
+In particular this happens with libusb, when it attempts
+to create zero-copy buffers as is used by rtl-sdr, and
+maybe other applications. The result is usually
+application death.
 
-> Related to userspace related questions (i.e. comments around two devices used),
-> we can provide detailed description of the used IPC. In that sense, please state
-> the most appropriate way/place to state/publish such description (i.e. is it ok
-> to add it within the cover letter, or publicly available URL is preferred). 
+If dma_mmap_attr() is used instead of remap_pfn_range,
+the page cache/etc attributes can be matched between the
+kernel and userspace.
 
-I asked a bunch of questions about this in the patches themselves, you
-all need to document the heck out of it everywhere you can, otherwise we
-can't even review the code properly.  Could you review it without
-knowing what userspace is supposed to be doing?
+Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+---
+ drivers/usb/core/devio.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-But, note, I will not take a spec-compliant driver that requires closed
-source userspace code, nor should you even want me to do that if you
-rely on Linux.
+diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+index 6833c918abce..1e7458dd6e5d 100644
+--- a/drivers/usb/core/devio.c
++++ b/drivers/usb/core/devio.c
+@@ -217,6 +217,7 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
+ {
+ 	struct usb_memory *usbm = NULL;
+ 	struct usb_dev_state *ps = file->private_data;
++	struct usb_hcd *hcd = bus_to_hcd(ps->dev->bus);
+ 	size_t size = vma->vm_end - vma->vm_start;
+ 	void *mem;
+ 	unsigned long flags;
+@@ -250,9 +251,7 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
+ 	usbm->vma_use_count = 1;
+ 	INIT_LIST_HEAD(&usbm->memlist);
+ 
+-	if (remap_pfn_range(vma, vma->vm_start,
+-			virt_to_phys(usbm->mem) >> PAGE_SHIFT,
+-			size, vma->vm_page_prot) < 0) {
++	if (dma_mmap_attrs(hcd->self.sysdev, vma, mem, dma_handle, size, 0)) {
+ 		dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
+ 		return -EAGAIN;
+ 	}
+-- 
+2.24.1
 
-So please, release the userspace code, as it's going to have to be
-changed anyway as your current user/kernel api is broken/incorrect
-as-is.  Why not just bundle it in the kernel tree like we have the usbip
-code?  That way you know it all works properly, and better yet, it can
-be tested and maintained properly over time.
-
-thanks,
-
-greg k-h
