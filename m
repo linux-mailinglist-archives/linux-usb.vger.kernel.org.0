@@ -2,99 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5A01BFB7D
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 16:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532CF1BFB02
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 15:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728915AbgD3NyN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Apr 2020 09:54:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36432 "EHLO mail.kernel.org"
+        id S1729273AbgD3N5H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Apr 2020 09:57:07 -0400
+Received: from mga02.intel.com ([134.134.136.20]:18821 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728904AbgD3NyL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 30 Apr 2020 09:54:11 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 08F772137B;
-        Thu, 30 Apr 2020 13:54:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588254850;
-        bh=9Lp5v9/keYjswVxSuVEnn/6z7aoKhj1nB4IUyn6JhvY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u0kqg40KMGgDhE/gc6rS290hfs5kYxQuaRJqFaKe8o3kmAoEQ+XmAlzsL6rwuUcdP
-         jTTBtMqdp8YjeelIkxsbR3+Kt1dkbu/Gc6kXHCdYSIdEeVEaKzmtmAF9Is5sw3M398
-         CNTlFx9OUGuyWezfFpoIFb1b62YO4zq263ZvbFQA=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 07/27] usb: dwc3: gadget: Do link recovery for SS and SSP
-Date:   Thu, 30 Apr 2020 09:53:42 -0400
-Message-Id: <20200430135402.20994-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200430135402.20994-1-sashal@kernel.org>
-References: <20200430135402.20994-1-sashal@kernel.org>
+        id S1728068AbgD3N5A (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 Apr 2020 09:57:00 -0400
+IronPort-SDR: JX4pCOyjCT2qvT+vmDO18LjpBXlS3kGyz0IH+uxSSrUE6FF5137KpafFS3jIdZM89zVtmqoER+
+ CWp2FNXyPsFA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2020 06:57:00 -0700
+IronPort-SDR: 40kyOiQdPwuTcwXgT4kw40nfwFO2WXwykGUus353VDBlAxw+/rmikldxjlRWGRDtJ/kSNSy0Lg
+ ghIc2kLCOQEA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,336,1583222400"; 
+   d="scan'208";a="368150477"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 30 Apr 2020 06:56:58 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>, linux-usb@vger.kernel.org
+Subject: [PATCH] usb: typec: intel_pmc_mux: Fix the property names
+Date:   Thu, 30 Apr 2020 16:56:57 +0300
+Message-Id: <20200430135657.45169-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+The device property names for the port index number are
+"usb2-port-number" and "usb3-port-number", not "usb2-port"
+and "usb3-port".
 
-[ Upstream commit d0550cd20e52558ecf6847a0f96ebd5d944c17e4 ]
-
-The controller always supports link recovery for device in SS and SSP.
-Remove the speed limit check. Also, when the device is in RESUME or
-RESET state, it means the controller received the resume/reset request.
-The driver must send the link recovery to acknowledge the request. They
-are valid states for the driver to send link recovery.
-
-Fixes: 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
-Fixes: ee5cd41c9117 ("usb: dwc3: Update speed checks for SuperSpeedPlus")
-Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
-Signed-off-by: Felipe Balbi <balbi@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 6701adfa9693 ("usb: typec: driver for Intel PMC mux control")
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- drivers/usb/dwc3/gadget.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/usb/typec/mux/intel_pmc_mux.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 76a0020b0f2e8..4149d751719e3 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1641,7 +1641,6 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
- 	u32			reg;
+diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+index f5c5e0aef66f..bb23886c1768 100644
+--- a/drivers/usb/typec/mux/intel_pmc_mux.c
++++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+@@ -298,11 +298,11 @@ static int pmc_usb_register_port(struct pmc_usb *pmc, int index,
+ 	struct typec_mux_desc mux_desc = { };
+ 	int ret;
  
- 	u8			link_state;
--	u8			speed;
+-	ret = fwnode_property_read_u8(fwnode, "usb2-port", &port->usb2_port);
++	ret = fwnode_property_read_u8(fwnode, "usb2-port-number", &port->usb2_port);
+ 	if (ret)
+ 		return ret;
  
- 	/*
- 	 * According to the Databook Remote wakeup request should
-@@ -1651,16 +1650,13 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
- 	 */
- 	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
+-	ret = fwnode_property_read_u8(fwnode, "usb3-port", &port->usb3_port);
++	ret = fwnode_property_read_u8(fwnode, "usb3-port-number", &port->usb3_port);
+ 	if (ret)
+ 		return ret;
  
--	speed = reg & DWC3_DSTS_CONNECTSPD;
--	if ((speed == DWC3_DSTS_SUPERSPEED) ||
--	    (speed == DWC3_DSTS_SUPERSPEED_PLUS))
--		return 0;
--
- 	link_state = DWC3_DSTS_USBLNKST(reg);
- 
- 	switch (link_state) {
-+	case DWC3_LINK_STATE_RESET:
- 	case DWC3_LINK_STATE_RX_DET:	/* in HS, means Early Suspend */
- 	case DWC3_LINK_STATE_U3:	/* in HS, means SUSPEND */
-+	case DWC3_LINK_STATE_RESUME:
- 		break;
- 	default:
- 		return -EINVAL;
 -- 
-2.20.1
+2.26.2
 
