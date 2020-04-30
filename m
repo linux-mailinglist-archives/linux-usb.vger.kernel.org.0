@@ -2,227 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E0D1C0119
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 17:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D95B1C030E
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 18:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727791AbgD3P7R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Apr 2020 11:59:17 -0400
-Received: from mga17.intel.com ([192.55.52.151]:31193 "EHLO mga17.intel.com"
+        id S1726625AbgD3QtS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 30 Apr 2020 12:49:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44732 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726411AbgD3P7Q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 30 Apr 2020 11:59:16 -0400
-IronPort-SDR: kHTy7ihaLparEKSN38ZOmyQQDvwcjN+F3qn0Gs5TtvzActpkth3LqTVWRsg+4auS78rrwA0jU4
- X70TnQK9fOsw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2020 08:59:15 -0700
-IronPort-SDR: ZDc2i6Rmc60cjpYMLqQzIDAi0bDzlRCsegjzrMwd30iSiuZaohtt73iTw2YnwJQqp0MrKTmO9m
- 8cntvzIHgVKw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,336,1583222400"; 
-   d="scan'208";a="405450483"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 30 Apr 2020 08:59:14 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jUBaj-000CWY-L2; Thu, 30 Apr 2020 23:59:13 +0800
-Date:   Thu, 30 Apr 2020 23:58:31 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 9f04db234af691007bb785342a06abab5fb34474
-Message-ID: <5eaaf5a7.QaKc9xPZOsanLJQg%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726467AbgD3QtS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 Apr 2020 12:49:18 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 207219] [BISECTED] Sony Vaio laptop built-in ricoh webcam no
+ longer found on Fedora 31 with 5.4.11 kernel
+Date:   Thu, 30 Apr 2020 16:49:17 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-207219-208809-bF35fzPTJj@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-207219-208809@https.bugzilla.kernel.org/>
+References: <bug-207219-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
-branch HEAD: 9f04db234af691007bb785342a06abab5fb34474  USB: uas: add quirk for LaCie 2Big Quadra
+https://bugzilla.kernel.org/show_bug.cgi?id=207219
 
-elapsed time: 506m
+--- Comment #16 from Alan Stern (stern@rowland.harvard.edu) ---
+There's something wrong with what you did, but I can't tell what.  To start
+with, before ehci-pci.ko was loaded there should have been no usbmon/3u or
+usbmon/4u files, so your cat commands should have failed.  Those filenames
+correspond directly to the USB bus numbers, and your lsusb output shows only
+buses 1 and 2.
 
-configs tested: 168
-configs skipped: 0
+For another, the device numbering is off.  On bus 3, device 1 is the root hub
+and device 2 is the integrated hub -- fine.  But then the Foxconn and Ricoh
+devices should have been numbers 3 and 4, not 6 and 7.  Clearly something
+happened before you started your monitoring.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Also, your usbmon3 trace shows the webcam working after it was initialized
+using the old scheme!  It's pretty hard to tell what that means, though,
+especially since the actions shown in the trace probably weren't the first time
+the webcam had been initialized since the last cold reboot.
 
-arm64                            allyesconfig
-arm                              allyesconfig
-arm64                            allmodconfig
-arm                              allmodconfig
-arm64                             allnoconfig
-arm                               allnoconfig
-arm                           efm32_defconfig
-arm                         at91_dt_defconfig
-arm                        shmobile_defconfig
-arm64                               defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                           sunxi_defconfig
-arm                        multi_v7_defconfig
-sparc                            allyesconfig
-sh                               allmodconfig
-riscv                             allnoconfig
-powerpc                      chrp32_defconfig
-c6x                        evmc6678_defconfig
-xtensa                       common_defconfig
-ia64                             alldefconfig
-ia64                             allmodconfig
-mips                       capcella_defconfig
-mips                      fuloong2e_defconfig
-parisc                generic-64bit_defconfig
-ia64                          tiger_defconfig
-parisc                            allnoconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                             alldefconfig
-i386                                defconfig
-i386                              debian-10.3
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                        generic_defconfig
-ia64                         bigsur_defconfig
-ia64                             allyesconfig
-m68k                       m5475evb_defconfig
-m68k                             allmodconfig
-m68k                       bvme6000_defconfig
-m68k                           sun3_defconfig
-m68k                          multi_defconfig
-nios2                         3c120_defconfig
-nios2                         10m50_defconfig
-c6x                              allyesconfig
-openrisc                 simple_smp_defconfig
-openrisc                    or1ksim_defconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                                defconfig
-alpha                               defconfig
-h8300                       h8s-sim_defconfig
-h8300                     edosk2674_defconfig
-xtensa                          iss_defconfig
-h8300                    h8300h-sim_defconfig
-arc                                 defconfig
-arc                              allyesconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-mips                      malta_kvm_defconfig
-mips                            ar7_defconfig
-mips                             allyesconfig
-mips                         64r6el_defconfig
-mips                              allnoconfig
-mips                           32r2_defconfig
-mips                             allmodconfig
-mips                malta_kvm_guest_defconfig
-mips                         tb0287_defconfig
-mips                           ip32_defconfig
-mips                  decstation_64_defconfig
-mips                      loongson3_defconfig
-mips                          ath79_defconfig
-mips                        bcm63xx_defconfig
-parisc                generic-32bit_defconfig
-parisc                           allyesconfig
-parisc                           allmodconfig
-powerpc                             defconfig
-powerpc                       holly_defconfig
-powerpc                       ppc64_defconfig
-powerpc                          rhel-kconfig
-powerpc                           allnoconfig
-powerpc                  mpc866_ads_defconfig
-powerpc                    amigaone_defconfig
-powerpc                    adder875_defconfig
-powerpc                     ep8248e_defconfig
-powerpc                          g5_defconfig
-powerpc                     mpc512x_defconfig
-parisc               randconfig-a001-20200430
-mips                 randconfig-a001-20200430
-m68k                 randconfig-a001-20200430
-riscv                randconfig-a001-20200430
-alpha                randconfig-a001-20200430
-nds32                randconfig-a001-20200430
-microblaze           randconfig-a001-20200430
-nios2                randconfig-a001-20200430
-h8300                randconfig-a001-20200430
-c6x                  randconfig-a001-20200430
-sparc64              randconfig-a001-20200430
-s390                 randconfig-a001-20200430
-xtensa               randconfig-a001-20200430
-csky                 randconfig-a001-20200430
-openrisc             randconfig-a001-20200430
-sh                   randconfig-a001-20200430
-i386                 randconfig-b001-20200430
-i386                 randconfig-b002-20200430
-x86_64               randconfig-b001-20200430
-i386                 randconfig-b003-20200430
-x86_64               randconfig-b002-20200430
-x86_64               randconfig-b003-20200430
-x86_64               randconfig-c001-20200430
-i386                 randconfig-c001-20200430
-i386                 randconfig-c002-20200430
-x86_64               randconfig-c002-20200430
-x86_64               randconfig-c003-20200430
-i386                 randconfig-c003-20200430
-x86_64               randconfig-d002-20200430
-x86_64               randconfig-d001-20200430
-i386                 randconfig-d001-20200430
-i386                 randconfig-d003-20200430
-i386                 randconfig-d002-20200430
-x86_64               randconfig-d003-20200430
-x86_64               randconfig-e002-20200430
-i386                 randconfig-e003-20200430
-x86_64               randconfig-e003-20200430
-i386                 randconfig-e002-20200430
-x86_64               randconfig-e001-20200430
-i386                 randconfig-e001-20200430
-i386                 randconfig-h002-20200430
-i386                 randconfig-h003-20200430
-x86_64               randconfig-h001-20200430
-x86_64               randconfig-h003-20200430
-i386                 randconfig-h001-20200430
-sparc                randconfig-a001-20200430
-arc                  randconfig-a001-20200430
-ia64                 randconfig-a001-20200430
-powerpc              randconfig-a001-20200430
-arm                  randconfig-a001-20200430
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-s390                       zfcpdump_defconfig
-s390                          debug_defconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                             alldefconfig
-s390                                defconfig
-sh                          rsk7269_defconfig
-sh                            titan_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                                allnoconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                                  defconfig
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                                  kexec
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
