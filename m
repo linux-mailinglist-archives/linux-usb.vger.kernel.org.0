@@ -2,94 +2,227 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4411C009D
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 17:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E0D1C0119
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 17:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727881AbgD3Pl7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Apr 2020 11:41:59 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:36593 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726350AbgD3Pl6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Apr 2020 11:41:58 -0400
-Received: (qmail 4742 invoked by uid 500); 30 Apr 2020 11:41:57 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 30 Apr 2020 11:41:57 -0400
-Date:   Thu, 30 Apr 2020 11:41:57 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Vladimir Stankovic <vladimir.stankovic@displaylink.com>
-cc:     gregkh@linuxfoundation.org, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <mausb-host-devel@displaylink.com>
-Subject: Re: [External] Re: [PATCH v5 5/8] usb: mausb_host: Introduce PAL
- processing
-In-Reply-To: <32cc80c0-c2ff-440c-7505-e848aba782d8@displaylink.com>
-Message-ID: <Pine.LNX.4.44L0.2004301139560.3855-100000@netrider.rowland.org>
+        id S1727791AbgD3P7R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Apr 2020 11:59:17 -0400
+Received: from mga17.intel.com ([192.55.52.151]:31193 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726411AbgD3P7Q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 Apr 2020 11:59:16 -0400
+IronPort-SDR: kHTy7ihaLparEKSN38ZOmyQQDvwcjN+F3qn0Gs5TtvzActpkth3LqTVWRsg+4auS78rrwA0jU4
+ X70TnQK9fOsw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2020 08:59:15 -0700
+IronPort-SDR: ZDc2i6Rmc60cjpYMLqQzIDAi0bDzlRCsegjzrMwd30iSiuZaohtt73iTw2YnwJQqp0MrKTmO9m
+ 8cntvzIHgVKw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,336,1583222400"; 
+   d="scan'208";a="405450483"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 30 Apr 2020 08:59:14 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jUBaj-000CWY-L2; Thu, 30 Apr 2020 23:59:13 +0800
+Date:   Thu, 30 Apr 2020 23:58:31 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 9f04db234af691007bb785342a06abab5fb34474
+Message-ID: <5eaaf5a7.QaKc9xPZOsanLJQg%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 30 Apr 2020, Vladimir Stankovic wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
+branch HEAD: 9f04db234af691007bb785342a06abab5fb34474  USB: uas: add quirk for LaCie 2Big Quadra
 
-> On 30.4.20. 17:18, Alan Stern wrote:
-> > On Thu, 30 Apr 2020, Vladimir Stankovic wrote:
-> > 
-> >> On 26.4.20. 22:56, Alan Stern wrote:
-> >>> On Sun, 26 Apr 2020, Vladimir Stankovic wrote:
-> >>>
-> >>>> On 26.4.20. 16:31, Alan Stern wrote:
-> >>>>> On Sun, 26 Apr 2020, Vladimir Stankovic wrote:
-> >>>>>
-> >>>>>> On 26.4.20. 02:32, Alan Stern wrote:
-> >>>>>>> On Sat, 25 Apr 2020 vladimir.stankovic@displaylink.com wrote:
-> >>>>>>>
-> >>>>>>>> Protocol adaptation layer (PAL) implementation has been added to
-> >>>>>>>> introduce MA-USB structures and logic.
-> >>>>>>>>
-> >>>>>>>> Signed-off-by: Vladimir Stankovic <vladimir.stankovic@displaylink.com>
-> >>>>>>>
-> >>>>>>> ...
-> >>>>>>>
-> >>>>>>>> +	/*
-> >>>>>>>> +	 * Masking URB_SHORT_NOT_OK flag as SCSI driver is adding it where it
-> >>>>>>>> +	 * should not, so it is breaking the USB drive on the linux
-> >>>>>>>> +	 */
-> >>>>>>>> +	urb->transfer_flags &= ~URB_SHORT_NOT_OK;
-> > 
-> > ...
+elapsed time: 506m
 
-> > Also, what makes you think the driver is setting the SHORT_NOT_OK flag
-> > at the wrong time?  In fact, how can there be a wrong time?  
-> > SHORT_NOT_OK is a valid flag to use with any control or bulk URB.
-> > 
-> > Alan Stern
-> > 
-> The comment is clearly wrong - as mentioned earlier, this fix was added in early
-> development phase and I guess that implementer was not clear on how the particular
-> flag was added. Investigation is ongoing around proper fix for this.
-> 
-> Anyhow, it is a usb-storage driver related to this - here is usb-related log snippet:
-> 
-> usb 3-1.1.2: new high-speed USB device number 5 using mausb_host_hcd_dev
-> usb 3-1.1.2: New USB device found, idVendor=0951, idProduct=1666
-> usb 3-1.1.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> usb 3-1.1.2: Product: DataTraveler 3.0
-> usb 3-1.1.2: Manufacturer: Kingston
-> usb 3-1.1.2: SerialNumber: 0C9D9210E304E311095E087A
-> usb-storage 3-1.1.2:1.0: USB Mass Storage device detected
-> scsi host3: usb-storage 3-1.1.2:1.0
-> scsi 3:0:0:0: Direct-Access     Kingston DataTraveler 3.0 PMAP PQ: 0 ANSI: 6
-> Attached scsi generic sg2 type 0
-> [sdb] 30277632 512-byte logical blocks: (15.5 GB/14.4 GiB)
-> 
-> As can be seen, USB flash attached to remote device is properly enumerated via
-> MA USB. Without the fix, usb driver is not able to read USB descriptors, ending
-> up in USB storage not being accessible.
+configs tested: 168
+configs skipped: 0
 
-That's strange, considering that the SHORT_NOT_OK flag doesn't get set 
-when the system is reading the device's USB descriptors.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Alan Stern
+arm64                            allyesconfig
+arm                              allyesconfig
+arm64                            allmodconfig
+arm                              allmodconfig
+arm64                             allnoconfig
+arm                               allnoconfig
+arm                           efm32_defconfig
+arm                         at91_dt_defconfig
+arm                        shmobile_defconfig
+arm64                               defconfig
+arm                          exynos_defconfig
+arm                        multi_v5_defconfig
+arm                           sunxi_defconfig
+arm                        multi_v7_defconfig
+sparc                            allyesconfig
+sh                               allmodconfig
+riscv                             allnoconfig
+powerpc                      chrp32_defconfig
+c6x                        evmc6678_defconfig
+xtensa                       common_defconfig
+ia64                             alldefconfig
+ia64                             allmodconfig
+mips                       capcella_defconfig
+mips                      fuloong2e_defconfig
+parisc                generic-64bit_defconfig
+ia64                          tiger_defconfig
+parisc                            allnoconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                             alldefconfig
+i386                                defconfig
+i386                              debian-10.3
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                        generic_defconfig
+ia64                         bigsur_defconfig
+ia64                             allyesconfig
+m68k                       m5475evb_defconfig
+m68k                             allmodconfig
+m68k                       bvme6000_defconfig
+m68k                           sun3_defconfig
+m68k                          multi_defconfig
+nios2                         3c120_defconfig
+nios2                         10m50_defconfig
+c6x                              allyesconfig
+openrisc                 simple_smp_defconfig
+openrisc                    or1ksim_defconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                                defconfig
+alpha                               defconfig
+h8300                       h8s-sim_defconfig
+h8300                     edosk2674_defconfig
+xtensa                          iss_defconfig
+h8300                    h8300h-sim_defconfig
+arc                                 defconfig
+arc                              allyesconfig
+microblaze                      mmu_defconfig
+microblaze                    nommu_defconfig
+mips                      malta_kvm_defconfig
+mips                            ar7_defconfig
+mips                             allyesconfig
+mips                         64r6el_defconfig
+mips                              allnoconfig
+mips                           32r2_defconfig
+mips                             allmodconfig
+mips                malta_kvm_guest_defconfig
+mips                         tb0287_defconfig
+mips                           ip32_defconfig
+mips                  decstation_64_defconfig
+mips                      loongson3_defconfig
+mips                          ath79_defconfig
+mips                        bcm63xx_defconfig
+parisc                generic-32bit_defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                             defconfig
+powerpc                       holly_defconfig
+powerpc                       ppc64_defconfig
+powerpc                          rhel-kconfig
+powerpc                           allnoconfig
+powerpc                  mpc866_ads_defconfig
+powerpc                    amigaone_defconfig
+powerpc                    adder875_defconfig
+powerpc                     ep8248e_defconfig
+powerpc                          g5_defconfig
+powerpc                     mpc512x_defconfig
+parisc               randconfig-a001-20200430
+mips                 randconfig-a001-20200430
+m68k                 randconfig-a001-20200430
+riscv                randconfig-a001-20200430
+alpha                randconfig-a001-20200430
+nds32                randconfig-a001-20200430
+microblaze           randconfig-a001-20200430
+nios2                randconfig-a001-20200430
+h8300                randconfig-a001-20200430
+c6x                  randconfig-a001-20200430
+sparc64              randconfig-a001-20200430
+s390                 randconfig-a001-20200430
+xtensa               randconfig-a001-20200430
+csky                 randconfig-a001-20200430
+openrisc             randconfig-a001-20200430
+sh                   randconfig-a001-20200430
+i386                 randconfig-b001-20200430
+i386                 randconfig-b002-20200430
+x86_64               randconfig-b001-20200430
+i386                 randconfig-b003-20200430
+x86_64               randconfig-b002-20200430
+x86_64               randconfig-b003-20200430
+x86_64               randconfig-c001-20200430
+i386                 randconfig-c001-20200430
+i386                 randconfig-c002-20200430
+x86_64               randconfig-c002-20200430
+x86_64               randconfig-c003-20200430
+i386                 randconfig-c003-20200430
+x86_64               randconfig-d002-20200430
+x86_64               randconfig-d001-20200430
+i386                 randconfig-d001-20200430
+i386                 randconfig-d003-20200430
+i386                 randconfig-d002-20200430
+x86_64               randconfig-d003-20200430
+x86_64               randconfig-e002-20200430
+i386                 randconfig-e003-20200430
+x86_64               randconfig-e003-20200430
+i386                 randconfig-e002-20200430
+x86_64               randconfig-e001-20200430
+i386                 randconfig-e001-20200430
+i386                 randconfig-h002-20200430
+i386                 randconfig-h003-20200430
+x86_64               randconfig-h001-20200430
+x86_64               randconfig-h003-20200430
+i386                 randconfig-h001-20200430
+sparc                randconfig-a001-20200430
+arc                  randconfig-a001-20200430
+ia64                 randconfig-a001-20200430
+powerpc              randconfig-a001-20200430
+arm                  randconfig-a001-20200430
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+s390                       zfcpdump_defconfig
+s390                          debug_defconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                             alldefconfig
+s390                                defconfig
+sh                          rsk7269_defconfig
+sh                            titan_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                                allnoconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                                  defconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
