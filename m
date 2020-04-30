@@ -2,115 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0DE1BF5C4
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 12:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF0B1BF638
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 13:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726743AbgD3KmY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Apr 2020 06:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
+        id S1726839AbgD3LNT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Apr 2020 07:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726127AbgD3KmY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Apr 2020 06:42:24 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB77C035494
-        for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2020 03:42:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds201912; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=nQammwL/KER+BZcG7PHhZvvr0kyfo7A035lR1ln3CZM=; b=cMcywDi5TEcehrwg96yR6INmiN
-        4qNQtzWXcIjVtFTwFidVlu8gRz2/8IwEfMyJWMzV1gI7zuPmyIWjPxJqRWaFK7slGQuizGVcS9Inb
-        mpKtgiGV8YWvgE6/Zq+3mi9JmCo69qj7VIVulxKLcuJQ8cadnh0GdgP9M6UILdCC1AhV6lx3ljiUI
-        IO/kdRmYuZsS3qfts312A5ncHv2/6kTGmQPWboX6VXAfTrZkjrS7FvbcKKOOE0msTBvJvPxspjCjs
-        TVA10Iu6GYt1WSh9cIBf7VA/OPc7tGcHFo/ij5uM7RU+Yan69FQf2zbuJ8QkpeQGv1FVDjrkkS2F+
-        LVwyT/dA==;
-Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:61204 helo=[192.168.10.61])
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1jU6e6-0000yj-J5; Thu, 30 Apr 2020 12:42:22 +0200
-Subject: Re: [PATCH 01/10] backlight: Add backlight_device_get_by_name()
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>
-References: <20200429124830.27475-1-noralf@tronnes.org>
- <20200429124830.27475-2-noralf@tronnes.org> <20200430083219.GC3118@dell>
- <0fbc4eb5-cb39-5974-85bb-9f13278ecab4@tronnes.org>
- <20200430101529.GB298816@dell>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-Message-ID: <a1ac82de-c303-be00-70ae-7ae26eb39c82@tronnes.org>
-Date:   Thu, 30 Apr 2020 12:42:21 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <20200430101529.GB298816@dell>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+        by vger.kernel.org with ESMTP id S1726309AbgD3LNT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Apr 2020 07:13:19 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3FCC035494;
+        Thu, 30 Apr 2020 04:13:18 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id e26so1382093wmk.5;
+        Thu, 30 Apr 2020 04:13:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=4z8sT9CuILd9aYFGoOvoTvoY8pkzB5UA6DzZlKXbDgY=;
+        b=C1J19SXWSrCIMcluHqDbetMtFEYhZVAgKsNikEJsnLCFNNoNG/IRKFoj1UNco9zFmG
+         BV6jqKiRXzm36cbS2feaw6nCV0/UlPdh9RmEeODGsVJfybvEcdeOp5DUrj6ZdxhbIp7K
+         /vGEKuObNgfRyPZ+7ifu8h3LbNskxoh3B42Lmcb9wGTC69ZtEuc95AK6OyglMRtfUJwL
+         cFR4ibIlB6ed+GkLKoHKxhEI/vB8FXUF+V1UOVl/46YqdmQppfg2GBOYksKbKJVLg9AG
+         degIn85uZaLbn/ugBq+xEGNdmks35sn5FqRC8h26uWEmFTTuiiQuqVvcz7fOVx8Nn5Vm
+         5DEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=4z8sT9CuILd9aYFGoOvoTvoY8pkzB5UA6DzZlKXbDgY=;
+        b=G5+1Eg1ON6ibb6c+2a8e7GS+s1NL+XG/e9IQHglkCQCZYBu7rJEmZidPS5sor3AvXk
+         aSNN0P3nAcBEPVLgIoMovjB7vrK1XKgss0jxxoPiPUsiKa+ntsjwY9t4Rbiq/qyDOt2U
+         NnFxhGqi/7fehhdV0dGx+qlH/boXpOSAN2GI6kuY0vh5iOz4HeytGao4+nMpwtE7orla
+         ohrG3GrFDU05Q55Cl7a0xWxFdJokDnnhqrRnMQ3qn1N4uUvLywVV6BPGKA9uku2OeD10
+         kmwaTsIf4Y83J+DtaVaXHCIkG22cEjlMfpuXbF/MJmEN3ef1U2BABrUFgzsf897ufQ+1
+         /eDw==
+X-Gm-Message-State: AGi0Pub+450hW7TBNu+EH14cwKJYw7EPwRJVO3QNGiZWgNV+wFpYQjL6
+        JIPagNqqE86hJszh1TRh0NXICKARHpE=
+X-Google-Smtp-Source: APiQypLSq5LI1RaeU9+A56fFunR4suuVXxjC8TT1B/rCsQCvcfhX07RrnjElEuLsRKAm8GQtVuILCQ==
+X-Received: by 2002:a1c:9dd1:: with SMTP id g200mr2574998wme.82.1588245197110;
+        Thu, 30 Apr 2020 04:13:17 -0700 (PDT)
+Received: from stbsrv-and-01.and.broadcom.net ([192.19.231.250])
+        by smtp.gmail.com with ESMTPSA id 74sm3727077wrk.30.2020.04.30.04.13.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Apr 2020 04:13:16 -0700 (PDT)
+From:   Al Cooper <alcooperx@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Al Cooper <alcooperx@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v6 0/4] Add XHCI, EHCI and OHCI support for Broadcom STB SoS's
+Date:   Thu, 30 Apr 2020 07:12:54 -0400
+Message-Id: <20200430111258.6091-1-alcooperx@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+v6 - Remove "contains:" from compatible section of
+     brcm,bcm7445-ehci.yaml as requested by Rob Herring.
+
+v5 - Use devm_platform_get_and_ioremap_resource() in ehci-brcm.c
+     as requested by Andy Shevchenko.
+   - Add pm_runtime_set_active() to ehci_resume() in ehci-brcm.c
+     as requested by Alan Stern.
+
+v4 - A few more fixes to the brcm,bcm7445-ehci.yaml dt-bindings
+     document requested by Rob Herring.
+   - Fixed ordering issue in MAINTAINERS as requested by
+     Andy Shevchenko.
+
+v3 - Addressed all of Andy Shevchenko's review comments for
+     ehci-brcm.c.
+   - Fixed the brcm,bcm7445-ehci.yaml dt-bindings document,
+     dt_binding_check now passes.
+   - Added the XHCI functionality to xhci-plat.c instead of creating
+     new brcmstb files, as suggested by Mathias Nyman.
+
+v2 - Addressed Andy Shevchenko's review comments.
+   - Fixed dt_binding_check error pointed out by Rob Herring.
+   - Removed pr_info message in ehci_brcm_init as suggested by
+     Greg Kroah-Hartman.
 
 
-Den 30.04.2020 12.15, skrev Lee Jones:
-> On Thu, 30 Apr 2020, Noralf Trønnes wrote:
-> 
->>
->>
->> Den 30.04.2020 10.32, skrev Lee Jones:
->>> On Wed, 29 Apr 2020, Noralf Trønnes wrote:
->>>
->>>> Add a way to lookup a backlight device based on its name.
->>>> Will be used by a USB display gadget getting the name from configfs.
->>>>
->>>> Cc: Lee Jones <lee.jones@linaro.org>
->>>> Cc: Daniel Thompson <daniel.thompson@linaro.org>
->>>> Cc: Jingoo Han <jingoohan1@gmail.com>
->>>> Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
->>>> ---
->>>>  drivers/video/backlight/backlight.c | 21 +++++++++++++++++++++
->>>>  include/linux/backlight.h           |  1 +
->>>>  2 files changed, 22 insertions(+)
->>>
->>> Once reviewed, can this patch be applied on its own?
->>>
->>
->> If you can apply it for 5.8, then we're good. DRM has cutoff at -rc5 and
->> the driver won't be ready for that. This patch has this dependency
->> chain: usb -> drm -> backlight. So if you can apply it for 5.8, things
->> gets easier.
->>
->>> My guess is that it can't, as the other patches in this set depend on
->>> it, right?  If this assumption is true, you need to send me the rest
->>> of the set.
->>>
->>> FYI: It's normally better to send the whole set to everyone, as it
->>> provides visibility on current review (or lack there of) status of the
->>> other patches and allows each of the maintainers to discuss possible
->>> merge strategies.
->>
->> dri-devel is the ML for backlight so I assumed you got the full set.
-> 
-> dri-devel isn't the ML for Backlight.  It's an interested party.
+Al Cooper (4):
+  dt-bindings: Add Broadcom STB USB support
+  usb: xhci: xhci-plat: Add support for Broadcom STB SoC's
+  usb: ehci: Add new EHCI driver for Broadcom STB SoC's
+  usb: host: Add ability to build new Broadcom STB USB drivers
 
-Oh, I thought it was strange, but kernel development has all kinds of
-things that seems strange to me, so I just went with it.
+ .../bindings/usb/brcm,bcm7445-ehci.yaml       |  59 ++++
+ .../devicetree/bindings/usb/usb-xhci.txt      |   1 +
+ MAINTAINERS                                   |   8 +
+ drivers/usb/host/Kconfig                      |  16 +
+ drivers/usb/host/Makefile                     |  16 +-
+ drivers/usb/host/ehci-brcm.c                  | 290 ++++++++++++++++++
+ drivers/usb/host/xhci-plat.c                  |  10 +
+ 7 files changed, 394 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
+ create mode 100644 drivers/usb/host/ehci-brcm.c
 
-> 
-> I certainly have no intention of subscribing to it.
-> 
->> I have had trouble in the past with my email provider dropping parts of
->> a series when I had to many recipients.
-> 
-> Without visibility into the other patches in the set, things become
-> more difficult.  Maybe use a different/better email provider.
-> 
+-- 
+2.17.1
 
-Yeah, you need to have context, I have resent the series to you, Daniel
-and Jingoo.
-
-Noralf.
