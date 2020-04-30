@@ -2,140 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D610A1BF406
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 11:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2049D1BF4F9
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 12:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726395AbgD3JUF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Apr 2020 05:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726127AbgD3JUF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Apr 2020 05:20:05 -0400
-X-Greylist: delayed 52772 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Apr 2020 02:20:05 PDT
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437B6C035494
-        for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2020 02:20:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds201912; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=JGLc3a8ABGQstMR37awCEhI2dEUBYckj05oUPEzH5zM=; b=O4V/PgrcyNboVQMuC2pLT8XbA1
-        oazmcsBDo3SqYAigfLRfcShWTqbVV+zQmLLQdIvnWneZYCjJ0syXrKnxBbIN2Tp0GNfSHwSDmt8nU
-        7YvsfqrON1QdxVz12P8t17OwX73BerxvhHyE7EEiby7enzme4FvfnyfaZgC9NUmFksSOeMkaF9Zzf
-        LU9jvsb0GGUIstsvUiQpgSa/tlC7zXm/2EbwiNI2F2FxGPbiQ3RY2WY3WIls513fuWRdVz5aZBzB8
-        mhd1ukAowutdTTBkrXpzcVMSS7AgtDWr1Qs7kDIZ/a2zGzrXsckczG1T6GtQSxVd/XPQVbzC4JIpE
-        yXxDftEw==;
-Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:61049 helo=[192.168.10.61])
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1jU5MQ-0002XZ-G5; Thu, 30 Apr 2020 11:20:02 +0200
-Subject: Re: [PATCH 01/10] backlight: Add backlight_device_get_by_name()
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>
-References: <20200429124830.27475-1-noralf@tronnes.org>
- <20200429124830.27475-2-noralf@tronnes.org> <20200430083219.GC3118@dell>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-Message-ID: <0fbc4eb5-cb39-5974-85bb-9f13278ecab4@tronnes.org>
-Date:   Thu, 30 Apr 2020 11:20:01 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1726616AbgD3KKh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Apr 2020 06:10:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44628 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726127AbgD3KKh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 Apr 2020 06:10:37 -0400
+Received: from localhost.localdomain (unknown [122.182.217.38])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BDA2C20575;
+        Thu, 30 Apr 2020 10:10:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588241436;
+        bh=QxTKssTy8RcoD/O4MDjqi+FIIiejOXh7+oJmdEK3lI8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BMgG8YpmdRVEi/22yd2m4gmcVgOS0aqto7vSxZrvsLtsQQb7uhhMbnFmpEwQIRSbF
+         oag4a2UhIzD6yMdwjqyX04KOE9Lyc86nqauw6f/s6pJliPkjwZKWzuj/ufmh4pQngO
+         gR+R11RLyO8ePnwmFXIhMGxMxSheLfIO2s6EdCN0=
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        =?UTF-8?q?Andreas=20B=C3=B6hler?= <dev@aboehler.at>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v11 0/5] usb: xhci: Add support for Renesas USB controllers
+Date:   Thu, 30 Apr 2020 15:40:14 +0530
+Message-Id: <20200430101019.1130956-1-vkoul@kernel.org>
+X-Mailer: git-send-email 2.25.3
 MIME-Version: 1.0
-In-Reply-To: <20200430083219.GC3118@dell>
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This series add support for Renesas USB controllers uPD720201 and uPD720202.
+These require firmware to be loaded and in case devices have ROM those can
+also be programmed if empty. If ROM is programmed, it runs from ROM as well.
 
+This includes patches from Christian which supported these controllers w/o
+ROM and later my patches for ROM support and debugfs hook for rom erase and
+export of xhci-pci functions.
 
-Den 30.04.2020 10.32, skrev Lee Jones:
-> On Wed, 29 Apr 2020, Noralf Trønnes wrote:
-> 
->> Add a way to lookup a backlight device based on its name.
->> Will be used by a USB display gadget getting the name from configfs.
->>
->> Cc: Lee Jones <lee.jones@linaro.org>
->> Cc: Daniel Thompson <daniel.thompson@linaro.org>
->> Cc: Jingoo Han <jingoohan1@gmail.com>
->> Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
->> ---
->>  drivers/video/backlight/backlight.c | 21 +++++++++++++++++++++
->>  include/linux/backlight.h           |  1 +
->>  2 files changed, 22 insertions(+)
-> 
-> Once reviewed, can this patch be applied on its own?
-> 
+Changes in v10:
+  - update xhci->quirks and use that in remove function
+  - remove error return renesas_verify_fw_version()
+  - remove renesas_download_rom() and modify renesas_fw_download_image() for
+  reuse
+Changes in v10:
+  remove renesas_xhci_pci_probe and call renesas_xhci_check_request_fw and
+  also cleanup exit code along with it.
 
-If you can apply it for 5.8, then we're good. DRM has cutoff at -rc5 and
-the driver won't be ready for that. This patch has this dependency
-chain: usb -> drm -> backlight. So if you can apply it for 5.8, things
-gets easier.
+Changes in v9:
+ Make fw load a sync call and have single instance of probe execute,
+   elimating probe/remove races
+ Add quirk for renesas and use that for loading
 
-> My guess is that it can't, as the other patches in this set depend on
-> it, right?  If this assumption is true, you need to send me the rest
-> of the set.
-> 
-> FYI: It's normally better to send the whole set to everyone, as it
-> provides visibility on current review (or lack there of) status of the
-> other patches and allows each of the maintainers to discuss possible
-> merge strategies.
+Changes in v8:
+ Fix compile error reported by Kbuild-bot by making usb_hcd_pci_probe() take
+ const struct hc_driver * as argument
 
-dri-devel is the ML for backlight so I assumed you got the full set.
-I have had trouble in the past with my email provider dropping parts of
-a series when I had to many recipients.
+Changes in v7:
+ Make a single module which removes issues with module loading
+ Keep the renesas code in renesas file
+ Add hc_driver as argument for usb_hcd_pci_probe and modify hdc drivers to
+   pass this and not use driver_data
+ Use driver data for fw name
+ Remove code to check if we need to load firmware or not
+ remove multiple fw version support, we can do that with symlink in
+   userspace
 
-Noralf.
+Changes in v6:
+ Move the renesas code into a separate driver which invokes xhci-pci functions.
 
-> 
->> diff --git a/drivers/video/backlight/backlight.c b/drivers/video/backlight/backlight.c
->> index cac3e35d7630..92d80aa0c0ef 100644
->> --- a/drivers/video/backlight/backlight.c
->> +++ b/drivers/video/backlight/backlight.c
->> @@ -432,6 +432,27 @@ struct backlight_device *backlight_device_get_by_type(enum backlight_type type)
->>  }
->>  EXPORT_SYMBOL(backlight_device_get_by_type);
->>  
->> +/**
->> + * backlight_device_get_by_name - Get backlight device by name
->> + * @name: Device name
->> + *
->> + * This function looks up a backlight device by its name. It obtains a reference
->> + * on the backlight device and it is the caller's responsibility to drop the
->> + * reference by calling backlight_put().
->> + *
->> + * Returns:
->> + * A pointer to the backlight device if found, otherwise NULL.
->> + */
->> +struct backlight_device *backlight_device_get_by_name(const char *name)
->> +{
->> +	struct device *dev;
->> +
->> +	dev = class_find_device_by_name(backlight_class, name);
->> +
->> +	return dev ? to_backlight_device(dev) : NULL;
->> +}
->> +EXPORT_SYMBOL(backlight_device_get_by_name);
->> +
->>  /**
->>   * backlight_device_unregister - unregisters a backlight device object.
->>   * @bd: the backlight device object to be unregistered and freed.
->> diff --git a/include/linux/backlight.h b/include/linux/backlight.h
->> index c7d6b2e8c3b5..56e4580d4f55 100644
->> --- a/include/linux/backlight.h
->> +++ b/include/linux/backlight.h
->> @@ -190,6 +190,7 @@ extern void backlight_force_update(struct backlight_device *bd,
->>  extern int backlight_register_notifier(struct notifier_block *nb);
->>  extern int backlight_unregister_notifier(struct notifier_block *nb);
->>  extern struct backlight_device *backlight_device_get_by_type(enum backlight_type type);
->> +struct backlight_device *backlight_device_get_by_name(const char *name);
->>  extern int backlight_device_set_brightness(struct backlight_device *bd, unsigned long brightness);
->>  
->>  #define to_backlight_device(obj) container_of(obj, struct backlight_device, dev)
-> 
+Changes in v5:
+ Added a debugfs rom erase patch, helps in debugging
+ Squashed patch 1 & 2 as requested by Mathias
+
+Changes in v4:
+ Rollback the delay values as we got device failures
+
+Changes in v3:
+  Dropped patch 2 as discussed with Christian
+  Removed aligned 8 bytes check
+  Change order for firmware search from highest version to lowest
+  Added entry for new firmware for device 0x14 as well
+  Add tested by Christian
+
+Changes in v2:
+  used macros for timeout count and delay
+  removed renesas_fw_alive_check
+  cleaned renesas_fw_callback
+  removed recurion for renesas_fw_download
+  added MODULE_FIRMWARE
+  added comment for multiple fw order
+
+Christian Lamparter (1):
+  usb: renesas-xhci: Add the renesas xhci driver
+
+Vinod Koul (4):
+  usb: hci: add hc_driver as argument for usb_hcd_pci_probe
+  usb: xhci: Add support for Renesas controller with memory
+  usb: renesas-xhci: Add ROM loader for uPD720201
+  usb: xhci: provide a debugfs hook for erasing rom
+
+ drivers/usb/core/hcd-pci.c          |   7 +-
+ drivers/usb/host/Makefile           |   3 +-
+ drivers/usb/host/ehci-pci.c         |   6 +-
+ drivers/usb/host/ohci-pci.c         |   9 +-
+ drivers/usb/host/uhci-pci.c         |   8 +-
+ drivers/usb/host/xhci-pci-renesas.c | 674 ++++++++++++++++++++++++++++
+ drivers/usb/host/xhci-pci.c         |  47 +-
+ drivers/usb/host/xhci-pci.h         |  16 +
+ drivers/usb/host/xhci.h             |   1 +
+ include/linux/usb/hcd.h             |   3 +-
+ 10 files changed, 751 insertions(+), 23 deletions(-)
+ create mode 100644 drivers/usb/host/xhci-pci-renesas.c
+ create mode 100644 drivers/usb/host/xhci-pci.h
+
+-- 
+2.25.3
+
