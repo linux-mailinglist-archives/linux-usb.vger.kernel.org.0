@@ -2,51 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1731C1C103C
-	for <lists+linux-usb@lfdr.de>; Fri,  1 May 2020 11:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13B4B1C0740
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 22:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728495AbgEAJU6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 May 2020 05:20:58 -0400
-Received: from [104.248.214.7] ([104.248.214.7]:54220 "EHLO narrain.in"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728325AbgEAJU5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 1 May 2020 05:20:57 -0400
-Received: from 127.0.0.1 (localhost [127.0.0.1])
-        by narrain.in (Postfix) with SMTP id 54FCB5C3447;
-        Thu, 30 Apr 2020 22:00:51 +0000 (UTC)
-Received: from [79.101.166.143] by 127.0.0.1 with ESMTP id 049AF3FDBD4; Thu, 30 Apr 2020 19:54:00 -0300
-Message-ID: <25w9za$14af7@xbj.ofgv.p4zd0>
-From:   "JEAN MARIE" <fkinneyofd@tampabay.rr.com>
-Reply-To: "JEAN MARIE" <fkinneyofd@tampabay.rr.com>
-To:     lintheartist@yahoo.com
-Subject: Please Kindly Acknowledge Receipt
-Date:   Thu, 30 Apr 20 19:54:00 GMT
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+        id S1726645AbgD3UCl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Apr 2020 16:02:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60914 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726272AbgD3UCl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 Apr 2020 16:02:41 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 10ECF2072A;
+        Thu, 30 Apr 2020 20:02:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588276960;
+        bh=Csk1FRgOIkPXyDs3SuTpRgxr84txcfkymZTVF3Q2W24=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H4b2vurNh0IRcr02dgZoCe8UV0dnNbAlPIYG82dJ3/iq+gyl+Jgk6cMhnYk/2Lssa
+         lvjUmetVvs6JLT5KJzI+rSTKAEnH5bPkdAvYSozN7nAR39nu21nXBk60lSTIAB+6Ap
+         5yoYU0owO/BOkxdMuY3VqMBFr1jpkR2zA5ZAYylY=
+Date:   Thu, 30 Apr 2020 22:02:38 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Vladimir Stankovic <vladimir.stankovic@displaylink.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        mausb-host-devel@displaylink.com
+Subject: Re: [External] Re: [PATCH v5 0/8] Add MA USB Host driver
+Message-ID: <20200430200238.GB3843398@kroah.com>
+References: <20200327152614.26833-1-vladimir.stankovic@displaylink.com>
+ <20200425091954.1610-1-vladimir.stankovic@displaylink.com>
+ <20200428110459.GB1145239@kroah.com>
+ <b14a2f71-3931-8d32-43a1-cbf52add48bb@displaylink.com>
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="4CF92E5_32._B.E_53"
-X-Priority: 3
-X-MSMail-Priority: Normal
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b14a2f71-3931-8d32-43a1-cbf52add48bb@displaylink.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Thu, Apr 30, 2020 at 06:51:10PM +0200, Vladimir Stankovic wrote:
+> On 28.4.20. 13:04, Greg KH wrote:
+> > On Sat, Apr 25, 2020 at 11:19:46AM +0200, vladimir.stankovic@displaylink.com wrote:
+> >> Media Agnostic (MA) USB Host driver provides USB connectivity over an
+> >> available network, allowing host device to access remote USB devices
+> >> attached to one or more MA USB devices (accessible via network).
+> >>
+> >> This driver has been developed to enable the host to communicate
+> >> with DisplayLink products supporting MA USB protocol (MA USB device,
+> >> in terms of MA USB Specification).
+> >>
+> >> MA USB protocol used by MA USB Host driver has been implemented in
+> >> accordance with MA USB Specification Release 1.0b.
+> > 
+> > Is that a USB-released spec?
+> Correct, document is being maintained by USB IF and is publicly available.
+> However, I just noticed a typo, correct version is 1.0a. Will correct.
+> 
+> In short, MA USB Specification defines an MA USB protocol that performs USB
+> communication via any communication medium. As such, it defines how to pack
+> USB data within MA USB payload, and how to communicate with remote MA USB device.
+> > 
+> >>
+> >> This driver depends on the functions provided by DisplayLink's
+> >> user-space driver.
+> > 
+> > Where can that userspace code be found?
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> > 
+> Userspace code is not publicly available. However, in short, it's purpose is
+> twofold, to provide interface to application layer, and to prepare MA USB packets
+> that will be used by remote device.
 
---4CF92E5_32._B.E_53
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+So you want us to take a one-off char-driver kernel code for a closed
+source userspace application for a public spec?  That feels really
+really odd, if not actually against a few licenses.  I hate to ask it,
+but are your lawyers ok with this?
 
-I 'm a Financial Consultant.  under my network as a financial consultant, =
-there are few private investors offering capital injection as project fund=
-ing or business expansion in critical areas of Investment placements such =
-as Real Estate, Healthcare, Transportation and Agriculture. 
-Get back to me for more details as you express your interest areas of spec=
-ialization.
+> Related to userspace related questions (i.e. comments around two devices used),
+> we can provide detailed description of the used IPC. In that sense, please state
+> the most appropriate way/place to state/publish such description (i.e. is it ok
+> to add it within the cover letter, or publicly available URL is preferred). 
 
-Regards.
-Mr. J. Marie
-fkinneyofd Consulting
+I asked a bunch of questions about this in the patches themselves, you
+all need to document the heck out of it everywhere you can, otherwise we
+can't even review the code properly.  Could you review it without
+knowing what userspace is supposed to be doing?
 
---4CF92E5_32._B.E_53--
+But, note, I will not take a spec-compliant driver that requires closed
+source userspace code, nor should you even want me to do that if you
+rely on Linux.
 
+So please, release the userspace code, as it's going to have to be
+changed anyway as your current user/kernel api is broken/incorrect
+as-is.  Why not just bundle it in the kernel tree like we have the usbip
+code?  That way you know it all works properly, and better yet, it can
+be tested and maintained properly over time.
+
+thanks,
+
+greg k-h
