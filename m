@@ -2,131 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 655281C0951
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 23:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2891C0AF4
+	for <lists+linux-usb@lfdr.de>; Fri,  1 May 2020 01:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727124AbgD3Vcm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Apr 2020 17:32:42 -0400
-Received: from mout.kundenserver.de ([212.227.126.135]:51025 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726336AbgD3Vcl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Apr 2020 17:32:41 -0400
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1MRmwM-1jaI7F1geQ-00T9PZ; Thu, 30 Apr 2020 23:32:35 +0200
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH 08/15] usb: ehci: avoid gcc-10 zero-length-bounds warning
-Date:   Thu, 30 Apr 2020 23:30:50 +0200
-Message-Id: <20200430213101.135134-9-arnd@arndb.de>
-X-Mailer: git-send-email 2.26.0
-In-Reply-To: <20200430213101.135134-1-arnd@arndb.de>
-References: <20200430213101.135134-1-arnd@arndb.de>
+        id S1726545AbgD3X0T convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 30 Apr 2020 19:26:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54006 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726355AbgD3X0T (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 Apr 2020 19:26:19 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 207219] [BISECTED] Sony Vaio laptop built-in ricoh webcam no
+ longer found on Fedora 31 with 5.4.11 kernel
+Date:   Thu, 30 Apr 2020 23:26:18 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: williambader@hotmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-207219-208809-Ns4sOlm8Sa@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-207219-208809@https.bugzilla.kernel.org/>
+References: <bug-207219-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:9LwbzPiDVBTutPI7/SmbJcMbJzAjVunAx6lsoRTMq+jOauVlaC3
- MgKUiAe+HddGUKoavqOfiAsSpWnCH3KOmtqZqSCBvUZkoD9k1rj+PQ4AVhfvLLaMvdG9CX+
- 7Y4+sJJK7i+mMhDuVBqNuXk9EhPc6KK6v5/xyT3y9wGWLHToM1tskvt271mkLVQOER9AXa0
- qJwyxkiW9dCsIY54jJz+Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lguDXmXr0vo=:HF3x9q9yVSo8GfNZqml4nG
- Y1So3lZ/EU291ooBiltDFReKVfKroB8H0GqCweHIfHh6ZZf6T5OnasR3za5ZgEKMNPJOljE4a
- rWkbTcCbBgIhJhoqEWoe41PNI+jy4CTiEv0dQJqPzDkW8tMgWVqFNEPh0lS+VGUI7FvAZr8MA
- pofS+LpblAWAZaqFYgbVxEEwkjisO8qqt9+kX6Y5DtO90yomqQtzL1YRZ/UUH+HQ4TKRP6oM1
- 5W1QWYCFiV5y3z/VGtB/va7j9vYN5YCGZFty33a+DKvGVQHTXL+H19tHgYZpzabzt2mmpwL2h
- DhQVJYKPM5s8dsNv6ho3RpA4FEpOhyvpUX09S/CtvXi61/rfEf/TSLZBytZDOUONU5h5HvV/S
- CJJR6hf6ytHn3MRgCJ/ASzMQCjsOVhVD1JdGu53rovZp++mR3j4SOCNpO9bnqXB89k6rUGuiQ
- s/FhHMGN8ra75zHUkqrTLKsz7+PYN04EYGegMNGOrs2EZUeQvHWdWBpqLCApu0pcbVLoh5hNh
- dAsXXYqkNqL82ettUCs/rW41TxPWItB/wdrvmowJ55Z6SvBDAHKzINaUA3dDfgrXO+VGpGeGT
- LbiHgKUPF23qbcBSa3hKkjDFs7i2BrTuAxWrkPJ+W85XBX+xuD0tBeFExInOrjz0306cCzMim
- p5B/m+taevaLNoTey3/geklfUu+bp9vOpBdLvQjcvjo00thdkxfYSTXnHATU3pkLpOc4SlCDH
- i2X+CjrNuhZomIKp6ZFwG5PTc5bt9MSl8wDWg33jP19lMpou6wQm5Eg5T/yjaziSMHK/nPASt
- z60ev2uT6xJm/Vhvywu0OrPttAQ8naeLtNyPkstQNrkLFzSFq8=
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Building ehci drivers with gcc-10 results in a number of warnings like
-when an zero-length array is accessed:
+https://bugzilla.kernel.org/show_bug.cgi?id=207219
 
-drivers/usb/host/ehci-hub.c: In function 'ehci_bus_suspend':
-drivers/usb/host/ehci-hub.c:320:30: error: array subscript 14 is outside the bounds of an interior zero-length array 'u32[0]' {aka 'unsigned int[0]'} [-Werror=zero-length-bounds]
-  320 |    u32 __iomem *hostpc_reg = &ehci->regs->hostpc[port];
-      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from drivers/usb/host/ehci.h:273,
-                 from drivers/usb/host/ehci-hcd.c:96:
-include/linux/usb/ehci_def.h:186:7: note: while referencing 'hostpc'
-  186 |  u32  hostpc[0]; /* HOSTPC extension */
-      |       ^~~~~~
-In file included from drivers/usb/host/ehci-hcd.c:305:
-drivers/usb/host/ehci-hub.c: In function 'ehci_hub_control':
-drivers/usb/host/ehci-hub.c:892:15: error: array subscript 256 is outside the bounds of an interior zero-length array 'u32[0]' {aka 'unsigned int[0]'} [-Werror=zero-length-bounds]
-  892 |  hostpc_reg = &ehci->regs->hostpc[temp];
-      |               ^~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from drivers/usb/host/ehci.h:273,
-                 from drivers/usb/host/ehci-hcd.c:96:
-include/linux/usb/ehci_def.h:186:7: note: while referencing 'hostpc'
-  186 |  u32  hostpc[0]; /* HOSTPC extension */
-      |       ^~~~~~
+--- Comment #17 from William Bader (williambader@hotmail.com) ---
+Created attachment 288863
+  --> https://bugzilla.kernel.org/attachment.cgi?id=288863&action=edit
+usbmon logs
 
-All these fields are colocated with reserved fields that I guess
-refer to the correct field length.
+>To start with, before ehci-pci.ko was loaded there should have been no
+>usbmon/3u or usbmon/4u files
 
-Change the two struct definition to use an unnamed union to define
-both of these fields at the same location as the corresponding
-reserved fields.
+I might have transcribed the lines in the wrong order. The mouse wasn't
+working, so I had to type into a text console and I couldn't copy and paste to
+another window.
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- include/linux/usb/ehci_def.h | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+>your usbmon3 trace shows the webcam working after it was initialized using the
+>old scheme!
 
-diff --git a/include/linux/usb/ehci_def.h b/include/linux/usb/ehci_def.h
-index 78e006355557..8777d8e56ef2 100644
---- a/include/linux/usb/ehci_def.h
-+++ b/include/linux/usb/ehci_def.h
-@@ -127,7 +127,8 @@ struct ehci_regs {
- #define FLAG_CF		(1<<0)		/* true: we'll support "high speed" */
- 
- 	/* PORTSC: offset 0x44 */
--	u32		port_status[0];	/* up to N_PORTS */
-+	union {
-+		u32		port_status[9];	/* up to N_PORTS */
- /* EHCI 1.1 addendum */
- #define PORTSC_SUSPEND_STS_ACK 0
- #define PORTSC_SUSPEND_STS_NYET 1
-@@ -165,7 +166,8 @@ struct ehci_regs {
- #define PORT_CONNECT	(1<<0)		/* device connected */
- #define PORT_RWC_BITS   (PORT_CSC | PORT_PEC | PORT_OCC)
- 
--	u32		reserved3[9];
-+		u32		reserved3[9];
-+	};
- 
- 	/* USBMODE: offset 0x68 */
- 	u32		usbmode;	/* USB Device mode */
-@@ -181,11 +183,13 @@ struct ehci_regs {
-  * PORTSCx
-  */
- 	/* HOSTPC: offset 0x84 */
--	u32		hostpc[0];	/* HOSTPC extension */
-+	union {
-+		u32		hostpc[17];	/* HOSTPC extension */
- #define HOSTPC_PHCD	(1<<22)		/* Phy clock disable */
- #define HOSTPC_PSPD	(3<<25)		/* Port speed detection */
- 
--	u32		reserved5[17];
-+		u32		reserved5[17];
-+	};
- 
- 	/* USBMODE_EX: offset 0xc8 */
- 	u32		usbmode_ex;	/* USB Device mode extension */
+I know. I am pretty sure that I did a cold boot, and that I tested for
+/dev/video* after booting.
+Since I reported the problem, I have continued using the official Fedora
+kernels for day-to-day work, and I use the test kernels only for short periods
+for testing.
+I have been checking the webcam every day out of curiosity when I boot my
+laptop in the morning, and maybe 1 out of 10 times the old scheme works.
+
+In any case, I just did the procedure again, taking better care.
+
+cold boot from kernel 5.6.6.localversion14
+
+no /dev/video
+ls: cannot access '/dev/vid*': No such file or directory
+
+lsusb
+ Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+ Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+sudo ls -l /sys/kernel/debug/usb/usbmon
+total 0
+-rw------- 1 root root 0 May  1 00:03 0s
+-rw------- 1 root root 0 May  1 00:03 0u
+-rw------- 1 root root 0 May  1 00:03 1s
+-rw------- 1 root root 0 May  1 00:03 1t
+-rw------- 1 root root 0 May  1 00:03 1u
+-rw------- 1 root root 0 May  1 00:03 2s
+-rw------- 1 root root 0 May  1 00:03 2t
+-rw------- 1 root root 0 May  1 00:03 2u
+
+restore ehci-pci.ko
+
+lsusb unchanged with only 2 devices
+
+insmod /lib/modules/$(uname -r)/kernel/drivers/usb/host/ehci-pci.ko
+cat /sys/kernel/debug/usb/usbmon/3u > usbmon3.txt &
+cat /sys/kernel/debug/usb/usbmon/4u > usbmon4.txt &
+
+no /dev/video
+
+lsusb
+Bus 004 Device 003: ID 093a:2510 Pixart Imaging, Inc. Optical Mouse
+Bus 004 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 004 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 003 Device 004: ID 05ca:18c0 Ricoh Co., Ltd
+Bus 003 Device 005: ID 0489:e036 Foxconn / Hon Hai
+Bus 003 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+echo 0 >/sys/bus/usb/devices/3-1/bConfigurationValue
+echo 1 >/sys/bus/usb/devices/3-1/bConfigurationValue
+no /dev/video*
+
 -- 
-2.26.0
-
+You are receiving this mail because:
+You are watching the assignee of the bug.
