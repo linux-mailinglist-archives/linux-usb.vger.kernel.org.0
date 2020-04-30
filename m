@@ -2,171 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C72E41C0963
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 23:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655281C0951
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 23:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727996AbgD3Vda (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Apr 2020 17:33:30 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:45197 "EHLO
+        id S1727124AbgD3Vcm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Apr 2020 17:32:42 -0400
+Received: from mout.kundenserver.de ([212.227.126.135]:51025 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726909AbgD3Vd3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Apr 2020 17:33:29 -0400
+        with ESMTP id S1726336AbgD3Vcl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Apr 2020 17:32:41 -0400
 Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
  (mreue010 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1MmlCY-1imznH36yU-00jrwf; Thu, 30 Apr 2020 23:31:17 +0200
+ 1MRmwM-1jaI7F1geQ-00T9PZ; Thu, 30 Apr 2020 23:32:35 +0200
 From:   Arnd Bergmann <arnd@arndb.de>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        James Smart <james.smart@broadcom.com>,
-        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
-        Bob Copeland <me@bobcopeland.com>, Jan Kara <jack@suse.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        linux-crypto@vger.kernel.org, linux-media@vger.kernel.org,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-scsi@vger.kernel.org,
-        linux-karma-devel@lists.sourceforge.net, bpf@vger.kernel.org,
-        linux-usb@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org
-Subject: [PATCH 00/15] gcc-10 warning fixes
-Date:   Thu, 30 Apr 2020 23:30:42 +0200
-Message-Id: <20200430213101.135134-1-arnd@arndb.de>
+        Alan Stern <stern@rowland.harvard.edu>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 08/15] usb: ehci: avoid gcc-10 zero-length-bounds warning
+Date:   Thu, 30 Apr 2020 23:30:50 +0200
+Message-Id: <20200430213101.135134-9-arnd@arndb.de>
 X-Mailer: git-send-email 2.26.0
+In-Reply-To: <20200430213101.135134-1-arnd@arndb.de>
+References: <20200430213101.135134-1-arnd@arndb.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:d0r1T0atJ0fP6VC0lsoU2Nb50uVHm7+C7HFBKxo5Oh9FT7cjF4F
- 56LFacsuF89qNSNIhAKt16YSLWAlWssvN8MtPe8NN45LaPwc/cCelzxDkHr4+0tFL6+Sa9G
- a57V34rwqixwafD6sE/njElSMiK55+3n3WBVw4f5PpMdpEy2CNFI8yBkDaQox92MxOq478P
- ATheht8WQuHpTQRLL5ZEQ==
+X-Provags-ID: V03:K1:9LwbzPiDVBTutPI7/SmbJcMbJzAjVunAx6lsoRTMq+jOauVlaC3
+ MgKUiAe+HddGUKoavqOfiAsSpWnCH3KOmtqZqSCBvUZkoD9k1rj+PQ4AVhfvLLaMvdG9CX+
+ 7Y4+sJJK7i+mMhDuVBqNuXk9EhPc6KK6v5/xyT3y9wGWLHToM1tskvt271mkLVQOER9AXa0
+ qJwyxkiW9dCsIY54jJz+Q==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:qtjOffXScL0=:Yde/YTTIyDLV71HcVFV/g8
- 5aCgJ4X4xNzxI3sDnVHzb+4x1iuaUyj/FDU6axm1cC5dNjOHg+8xAyvhGoryNPJJFdXCQ9E8u
- /vBjaVgpQi6NvTWJp+z0wFIoWkqjlRGR2wCLBCvG5ImhRZo6H4jl5uiqg/TUea1BRC5KOAUug
- NLH3+1SoQ96QZaVVmYPbql6nsHgFb4uZYdjCp8JTVI2L30Rp4+0Uw3uwnSsZJuLBGqAnsFaeh
- k7gAnZ02jIaJcsH2V+TwomCcLBG4OX9P3yetdeZWPtDSychl7RC+/gMGRpPt2beTcJXb7Sr4/
- wgqf3CYR6/N2vUz2MhXS9Sl+HtdkF3gKvKsNTp2mw9draDW6IVxA+E16ianBs3s2/Jj86Cp4d
- ehuoj5P2KJYrz+9tZ+et7SchBa5i/iGqThgNGHpUmVXaAI8nZHkjO7rEce0Ctm42WVr0HLTd4
- o1jt4fwG8tpZvziYdVKKK9x4WQWsYAq2xx0LoedsVxg8abX+ql1c1UVSezkM6FJvLsBYSOqLC
- Wl2wmpwXK3rQEhxxX4Sh0+p7vR68f1MiX8v4GGJjHzQvAfDgNp//3vXmnFa9OfQMY1+J5Oamt
- RKC21TWUo81CDfLbGJUutjWh36LNJfa+N4p4bSAvqbx+J8urAAoBgP4lL7BwvnjawPWVT3bQ7
- nx782MGIljH805ldEh/1deDsyPsEUVqES3Wx9pJakt2RNm+5lKUyzj8TLjsuKM9bM+MwiaVGP
- y3sVYv2Jji3wkCZuDo3KR4124HQta8GSeSFOnIEeWuWxcaFbOJf9loaB0IyqLaH/bv1s0C1At
- ctEvneGxLk11FkM6cOL//qiBQ4ws+UB1hR0Fmjp4sHdhGtlvK4=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lguDXmXr0vo=:HF3x9q9yVSo8GfNZqml4nG
+ Y1So3lZ/EU291ooBiltDFReKVfKroB8H0GqCweHIfHh6ZZf6T5OnasR3za5ZgEKMNPJOljE4a
+ rWkbTcCbBgIhJhoqEWoe41PNI+jy4CTiEv0dQJqPzDkW8tMgWVqFNEPh0lS+VGUI7FvAZr8MA
+ pofS+LpblAWAZaqFYgbVxEEwkjisO8qqt9+kX6Y5DtO90yomqQtzL1YRZ/UUH+HQ4TKRP6oM1
+ 5W1QWYCFiV5y3z/VGtB/va7j9vYN5YCGZFty33a+DKvGVQHTXL+H19tHgYZpzabzt2mmpwL2h
+ DhQVJYKPM5s8dsNv6ho3RpA4FEpOhyvpUX09S/CtvXi61/rfEf/TSLZBytZDOUONU5h5HvV/S
+ CJJR6hf6ytHn3MRgCJ/ASzMQCjsOVhVD1JdGu53rovZp++mR3j4SOCNpO9bnqXB89k6rUGuiQ
+ s/FhHMGN8ra75zHUkqrTLKsz7+PYN04EYGegMNGOrs2EZUeQvHWdWBpqLCApu0pcbVLoh5hNh
+ dAsXXYqkNqL82ettUCs/rW41TxPWItB/wdrvmowJ55Z6SvBDAHKzINaUA3dDfgrXO+VGpGeGT
+ LbiHgKUPF23qbcBSa3hKkjDFs7i2BrTuAxWrkPJ+W85XBX+xuD0tBeFExInOrjz0306cCzMim
+ p5B/m+taevaLNoTey3/geklfUu+bp9vOpBdLvQjcvjo00thdkxfYSTXnHATU3pkLpOc4SlCDH
+ i2X+CjrNuhZomIKp6ZFwG5PTc5bt9MSl8wDWg33jP19lMpou6wQm5Eg5T/yjaziSMHK/nPASt
+ z60ev2uT6xJm/Vhvywu0OrPttAQ8naeLtNyPkstQNrkLFzSFq8=
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Here are a couple of fixes for warnings introduced with gcc-10.
-If you wish to reproduce these, you can find the compiler I used
-at [1].
+Building ehci drivers with gcc-10 results in a number of warnings like
+when an zero-length array is accessed:
 
-If you like the fixes, please apply them directly into maintainer
-trees. I expect that we will also need them to be backported
-into stable kernels later.
+drivers/usb/host/ehci-hub.c: In function 'ehci_bus_suspend':
+drivers/usb/host/ehci-hub.c:320:30: error: array subscript 14 is outside the bounds of an interior zero-length array 'u32[0]' {aka 'unsigned int[0]'} [-Werror=zero-length-bounds]
+  320 |    u32 __iomem *hostpc_reg = &ehci->regs->hostpc[port];
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from drivers/usb/host/ehci.h:273,
+                 from drivers/usb/host/ehci-hcd.c:96:
+include/linux/usb/ehci_def.h:186:7: note: while referencing 'hostpc'
+  186 |  u32  hostpc[0]; /* HOSTPC extension */
+      |       ^~~~~~
+In file included from drivers/usb/host/ehci-hcd.c:305:
+drivers/usb/host/ehci-hub.c: In function 'ehci_hub_control':
+drivers/usb/host/ehci-hub.c:892:15: error: array subscript 256 is outside the bounds of an interior zero-length array 'u32[0]' {aka 'unsigned int[0]'} [-Werror=zero-length-bounds]
+  892 |  hostpc_reg = &ehci->regs->hostpc[temp];
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from drivers/usb/host/ehci.h:273,
+                 from drivers/usb/host/ehci-hcd.c:96:
+include/linux/usb/ehci_def.h:186:7: note: while referencing 'hostpc'
+  186 |  u32  hostpc[0]; /* HOSTPC extension */
+      |       ^~~~~~
 
-I disabled -Wrestrict on gcc in my local test tree, but with
-the patches from this series and the ones I have already sent,
-I see no gcc-10 specific warnings in linux-next when doing
-many randconfig builds for arm/arm64/x86.
+All these fields are colocated with reserved fields that I guess
+refer to the correct field length.
 
-      Arnd
+Change the two struct definition to use an unnamed union to define
+both of these fields at the same location as the corresponding
+reserved fields.
 
-Arnd Bergmann (15):
-  crypto - Avoid free() namespace collision
-  iwlwifi: mvm: fix gcc-10 zero-length-bounds warning
-  mwifiex: avoid -Wstringop-overflow warning
-  ath10k: fix gcc-10 zero-length-bounds warnings
-  bpf: avoid gcc-10 stringop-overflow warning
-  netfilter: conntrack: avoid gcc-10 zero-length-bounds warning
-  drop_monitor: work around gcc-10 stringop-overflow warning
-  usb: ehci: avoid gcc-10 zero-length-bounds warning
-  udf: avoid gcc-10 zero-length-bounds warnings
-  hpfs: avoid gcc-10 zero-length-bounds warning
-  omfs: avoid gcc-10 stringop-overflow warning
-  media: s5k5baf: avoid gcc-10 zero-length-bounds warning
-  scsi: sas: avoid gcc-10 zero-length-bounds warning
-  isci: avoid gcc-10 zero-length-bounds warning
-  nvme: avoid gcc-10 zero-length-bounds warning
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ include/linux/usb/ehci_def.h | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
- crypto/lrw.c                                  |  6 +--
- crypto/xts.c                                  |  6 +--
- drivers/media/i2c/s5k5baf.c                   |  4 +-
- drivers/net/wireless/ath/ath10k/htt.h         |  4 +-
- .../net/wireless/intel/iwlwifi/fw/api/tx.h    | 14 +++----
- .../net/wireless/marvell/mwifiex/sta_cmd.c    | 39 ++++++++-----------
- drivers/nvme/host/fc.c                        |  2 +-
- drivers/scsi/aic94xx/aic94xx_tmf.c            |  4 +-
- drivers/scsi/isci/task.h                      |  7 ++--
- drivers/scsi/libsas/sas_task.c                |  3 +-
- fs/hpfs/anode.c                               |  7 +++-
- fs/omfs/file.c                                | 12 +++---
- fs/omfs/omfs_fs.h                             |  2 +-
- fs/udf/ecma_167.h                             |  2 +-
- fs/udf/super.c                                |  2 +-
- include/linux/filter.h                        |  6 +--
- include/linux/usb/ehci_def.h                  | 12 ++++--
- include/net/netfilter/nf_conntrack.h          |  2 +-
- net/core/drop_monitor.c                       | 11 ++++--
- net/netfilter/nf_conntrack_core.c             |  4 +-
- 20 files changed, 76 insertions(+), 73 deletions(-)
-
-[1] https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/10.0.20200413/
-
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Kalle Valo <kvalo@codeaurora.org>
-Cc: Johannes Berg <johannes.berg@intel.com>
-Cc: Intel Linux Wireless <linuxwifi@intel.com>
-Cc: Amitkumar Karwar <amitkarwar@gmail.com>
-Cc: James Smart <james.smart@broadcom.com>
-Cc: Jens Axboe <axboe@fb.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
-Cc: Bob Copeland <me@bobcopeland.com>
-Cc: Jan Kara <jack@suse.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: Florian Westphal <fw@strlen.de>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Neil Horman <nhorman@tuxdriver.com>
-Cc: linux-crypto@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-media@vger.kernel.org
-Cc: ath10k@lists.infradead.org
-Cc: linux-wireless@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: linux-nvme@lists.infradead.org
-Cc: linux-scsi@vger.kernel.org
-Cc: linux-karma-devel@lists.sourceforge.net
-Cc: bpf@vger.kernel.org
-Cc: linux-usb@vger.kernel.org
-Cc: netfilter-devel@vger.kernel.org
-Cc: coreteam@netfilter.org
-
-
-
+diff --git a/include/linux/usb/ehci_def.h b/include/linux/usb/ehci_def.h
+index 78e006355557..8777d8e56ef2 100644
+--- a/include/linux/usb/ehci_def.h
++++ b/include/linux/usb/ehci_def.h
+@@ -127,7 +127,8 @@ struct ehci_regs {
+ #define FLAG_CF		(1<<0)		/* true: we'll support "high speed" */
+ 
+ 	/* PORTSC: offset 0x44 */
+-	u32		port_status[0];	/* up to N_PORTS */
++	union {
++		u32		port_status[9];	/* up to N_PORTS */
+ /* EHCI 1.1 addendum */
+ #define PORTSC_SUSPEND_STS_ACK 0
+ #define PORTSC_SUSPEND_STS_NYET 1
+@@ -165,7 +166,8 @@ struct ehci_regs {
+ #define PORT_CONNECT	(1<<0)		/* device connected */
+ #define PORT_RWC_BITS   (PORT_CSC | PORT_PEC | PORT_OCC)
+ 
+-	u32		reserved3[9];
++		u32		reserved3[9];
++	};
+ 
+ 	/* USBMODE: offset 0x68 */
+ 	u32		usbmode;	/* USB Device mode */
+@@ -181,11 +183,13 @@ struct ehci_regs {
+  * PORTSCx
+  */
+ 	/* HOSTPC: offset 0x84 */
+-	u32		hostpc[0];	/* HOSTPC extension */
++	union {
++		u32		hostpc[17];	/* HOSTPC extension */
+ #define HOSTPC_PHCD	(1<<22)		/* Phy clock disable */
+ #define HOSTPC_PSPD	(3<<25)		/* Port speed detection */
+ 
+-	u32		reserved5[17];
++		u32		reserved5[17];
++	};
+ 
+ 	/* USBMODE_EX: offset 0xc8 */
+ 	u32		usbmode_ex;	/* USB Device mode extension */
 -- 
 2.26.0
 
