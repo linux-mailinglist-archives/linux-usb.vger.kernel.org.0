@@ -2,86 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 336D91BFFF8
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 17:18:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E171C0036
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 17:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726768AbgD3PSn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Apr 2020 11:18:43 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:50917 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726419AbgD3PSn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Apr 2020 11:18:43 -0400
-Received: (qmail 1937 invoked by uid 500); 30 Apr 2020 11:18:42 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 30 Apr 2020 11:18:42 -0400
-Date:   Thu, 30 Apr 2020 11:18:42 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Vladimir Stankovic <vladimir.stankovic@displaylink.com>
-cc:     gregkh@linuxfoundation.org, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <mausb-host-devel@displaylink.com>
-Subject: Re: [External] Re: [PATCH v5 5/8] usb: mausb_host: Introduce PAL
- processing
-In-Reply-To: <8536b665-1e25-bd5a-4ca0-3f68233ff1be@displaylink.com>
-Message-ID: <Pine.LNX.4.44L0.2004301112390.27217-100000@netrider.rowland.org>
+        id S1726830AbgD3P0z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Apr 2020 11:26:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34502 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726534AbgD3P0y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 Apr 2020 11:26:54 -0400
+Received: from localhost (unknown [122.182.217.38])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8276920731;
+        Thu, 30 Apr 2020 15:26:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588260414;
+        bh=Gc4CSNIYpNL1Sg9aqBxD4gp1PKP4X9xSXcXPNS+Bx0A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PJ/uIJou43m0kJET6CvgCvR7YIAAP+pe//6F8guEs95z2CUfJ/NDPTQ/9rM4LSFJ0
+         NbzWBBhknCEV4wj/v/FWMa4RtiuIm5BuD/bTaeo3WesaPVcMZJ1kgJgdM+Hu2u8HSM
+         uJ55r1b03YwOhgpPzxrGfd/0TJyNo6KUx4+CVnJQ=
+Date:   Thu, 30 Apr 2020 20:56:50 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andreas =?iso-8859-1?Q?B=F6hler?= <dev@aboehler.at>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 2/5] usb: renesas-xhci: Add the renesas xhci driver
+Message-ID: <20200430152650.GK948789@vkoul-mobl.Dlink>
+References: <20200430101019.1130956-1-vkoul@kernel.org>
+ <20200430101019.1130956-3-vkoul@kernel.org>
+ <8ffd119b-192f-8fcc-46cc-3a405e30338c@linux.intel.com>
+ <20200430144641.GJ948789@vkoul-mobl.Dlink>
+ <20200430145302.GB3495619@kroah.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200430145302.GB3495619@kroah.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 30 Apr 2020, Vladimir Stankovic wrote:
-
-> On 26.4.20. 22:56, Alan Stern wrote:
-> > On Sun, 26 Apr 2020, Vladimir Stankovic wrote:
+On 30-04-20, 16:53, Greg Kroah-Hartman wrote:
+> On Thu, Apr 30, 2020 at 08:16:41PM +0530, Vinod Koul wrote:
+> > > > diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
+> > > > index b191361257cc..c3a79f626393 100644
+> > > > --- a/drivers/usb/host/Makefile
+> > > > +++ b/drivers/usb/host/Makefile
+> > > > @@ -70,7 +70,8 @@ obj-$(CONFIG_USB_OHCI_HCD_DAVINCI)	+= ohci-da8xx.o
+> > > >  obj-$(CONFIG_USB_UHCI_HCD)	+= uhci-hcd.o
+> > > >  obj-$(CONFIG_USB_FHCI_HCD)	+= fhci.o
+> > > >  obj-$(CONFIG_USB_XHCI_HCD)	+= xhci-hcd.o
+> > > > -obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o
+> > > > +usb-xhci-pci-objs		:= xhci-pci.o xhci-pci-renesas.o
+> > > > +obj-$(CONFIG_USB_XHCI_PCI)	+= usb-xhci-pci.o
+> > > 
+> > > I don't think it's a good idea to rename the xhci-pci module to usb-xhci-pci
+> > > 
+> > > does
+> > > 
+> > > xhci-pci-y			:= xhci-pci.o xhci-pci-renesas.o
+> > > obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o
+> > > 
+> > > cause some kbuild issues?
 > > 
-> >> On 26.4.20. 16:31, Alan Stern wrote:
-> >>> On Sun, 26 Apr 2020, Vladimir Stankovic wrote:
-> >>>
-> >>>> On 26.4.20. 02:32, Alan Stern wrote:
-> >>>>> On Sat, 25 Apr 2020 vladimir.stankovic@displaylink.com wrote:
-> >>>>>
-> >>>>>> Protocol adaptation layer (PAL) implementation has been added to
-> >>>>>> introduce MA-USB structures and logic.
-> >>>>>>
-> >>>>>> Signed-off-by: Vladimir Stankovic <vladimir.stankovic@displaylink.com>
-> >>>>>
-> >>>>> ...
-> >>>>>
-> >>>>>> +	/*
-> >>>>>> +	 * Masking URB_SHORT_NOT_OK flag as SCSI driver is adding it where it
-> >>>>>> +	 * should not, so it is breaking the USB drive on the linux
-> >>>>>> +	 */
-> >>>>>> +	urb->transfer_flags &= ~URB_SHORT_NOT_OK;
-
-...
-
-> > Okay.  What SCSI driver does the comment refer to?  Is it something 
-> > internal to DisplayLink or is it part of the regular Linux kernel?
+> > Yes with this version I get the warning:
+> > make[4]: Circular drivers/usb/host/xhci-pci.o <- drivers/usb/host/xhci-pci.o dependency dropped.
 > > 
-> > Alan Stern
+> > I don't speak enough Kbuild, but I guess it does make sense that we have
+> > xhci-pci.o as target for both xhci-pci.o xhci-pci-renesas.o! That was
+> > the reason for adding usb tag to this to resolve the conflict.
 > > 
-> Hi,
+> > I am okay for any other mechanism which can work well here. Btw what
+> > issues do you foresee with adding usb tag to module name.
 > 
-> Comment was related to the SCSI driver that's part of regular Linux kernel -
-> once the remote USB flash drive gets enumerated by host, it would appear as
-> directly attached to host and then handled by the kernel.
-> 
-> With current implementation, following messages are being logged:
-> 
-> scsi 3:0:0:0: Direct-Access     Kingston DataTraveler 3.0 PMAP PQ: 0 ANSI: 6
-> sd 3:0:0:0: Attached scsi generic sg2 type 0
-> 
-> after which the flash drive is usable/accessible from host side.
+> It will break all sorts of things.  Happens every time we rename
+> modules, let's not do it unless we absolutely have to.
 
-More context please.  Without the log messages preceding this one we 
-can't tell whether the device is using the usb-storage driver or the 
-uas driver.
+Hmm that is interesting, am not sure why though :)
 
-Also, what makes you think the driver is setting the SHORT_NOT_OK flag
-at the wrong time?  In fact, how can there be a wrong time?  
-SHORT_NOT_OK is a valid flag to use with any control or bulk URB.
+Anyway, I have fixed it up and was able to make both as modules and
+export two symbols for xhci-pci.ko to use :)
 
-Alan Stern
+Makefile change looks like:
 
++obj-$(CONFIG_USB_XHCI_PCI)     += xhci-pci.o xhci-pci-renesas.o
+
+Thanks
+-- 
+~Vinod
