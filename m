@@ -2,132 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2091BF50A
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 12:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A881BF51F
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Apr 2020 12:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726975AbgD3KK7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Apr 2020 06:10:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45022 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726962AbgD3KK6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 30 Apr 2020 06:10:58 -0400
-Received: from localhost.localdomain (unknown [122.182.217.38])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DE58B2192A;
-        Thu, 30 Apr 2020 10:10:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588241457;
-        bh=91ZNjhxl/4Uk0CVDSwzfRxA1xGjjiJCyaQ+kB6AFPbQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BBCyF0iufkmTpMNXobvqeArzVdrhaEgmX4P2La6MP92thxnYsT8VAh/dr/KJXE/lh
-         0dH/4oBxgYxH397IGiO/QmjoteV+xisWR6jhZcZrLwEJmpUO2TAKJ9KdVcc4OObfyw
-         CYIJUnKWvSNUrXoPgHLYfoQO4ob8O12hDUrNS4EY=
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        =?UTF-8?q?Andreas=20B=C3=B6hler?= <dev@aboehler.at>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v11 5/5] usb: xhci: provide a debugfs hook for erasing rom
-Date:   Thu, 30 Apr 2020 15:40:19 +0530
-Message-Id: <20200430101019.1130956-6-vkoul@kernel.org>
-X-Mailer: git-send-email 2.25.3
-In-Reply-To: <20200430101019.1130956-1-vkoul@kernel.org>
-References: <20200430101019.1130956-1-vkoul@kernel.org>
+        id S1726789AbgD3KPg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Apr 2020 06:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726405AbgD3KPf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Apr 2020 06:15:35 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434AFC035494
+        for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2020 03:15:35 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id f13so6124463wrm.13
+        for <linux-usb@vger.kernel.org>; Thu, 30 Apr 2020 03:15:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=5pQJEnxi1ZD+zVU+9wcTIUMU9jsK5QVaYW3YwxeiYoA=;
+        b=Z4jK5/Q2+yoNtPe/piK7UBqVqFGX3OQ89ytUfl7UNsG1b3m1ifHBlWIPg/YkRSxjdB
+         c0wRXwmsaIE9EL6X0sMWhLn22ryuw+Yru4vK+o1MRzuIGNaz6bzvJgzvLU5tnlsn2SJP
+         Gz9PSWgIGheg8T4zZsrhNkB3BJRfmwKnuSqwEOQ9jQGiUlwtEg9H7V2mSJDRYr23yNmW
+         xJmhQbv9+ySDyAv8C9XOL6EgJOSfI2RLCD9WSz9uz2R4gDiIzJ2NzLohL5lkIUaJBeUK
+         FjBEJ/K4dTqsQUzR2zJz3S6KzDrKLAAHq6Ucq/K1BiCYSgkFdxdHZq8wobW2E2nvcWbs
+         Jpiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=5pQJEnxi1ZD+zVU+9wcTIUMU9jsK5QVaYW3YwxeiYoA=;
+        b=WbU9FmUWMnydWShdpp+b7duyZh5mV9fUbZzmnsZX5Li7eVeEwI6Ygkzq/IjZWdf8Bd
+         JzW582mR8/ot/TM8TI9mvpBcaiU9xKF8H2bRJK4ooeamhM75eC50mgdJTB/DDaqaGsdt
+         nObvCaY6g/UJwD8zSONOexwbsR4H98Oqyo34EkMXVH9Bn6x/SlC18jowWjMjUTR1uRUj
+         xJp2xouYFrJr2sMZjBoRJwUx+E4PRNetNl6MtPh23j399QUMoBEXmzZMKKaQio2wPY5o
+         KzZwtUZW2oBx5pIggZjaLSGOlTNJrjY+ZPWMWw6PBbgbOt900hRC/EDrjiQUsByI2rRW
+         /Q/g==
+X-Gm-Message-State: AGi0PuYp3rHw97y4ObFXV2Mc3hOPn6HvVggYrnwCH0qc1h7Jw/Oi5Wfp
+        NhpfEsZl2yFLR1v5tFM/AZe3ocYD6IE=
+X-Google-Smtp-Source: APiQypKyDzrfbAtIeZ2On3yC+hU2HnQ8q4rO6XTcJ+rJCMBGwEiDGDglmxTwGckDzQa3DmceDN9vbQ==
+X-Received: by 2002:adf:f1c5:: with SMTP id z5mr3261383wro.100.1588241734021;
+        Thu, 30 Apr 2020 03:15:34 -0700 (PDT)
+Received: from dell ([2.31.163.63])
+        by smtp.gmail.com with ESMTPSA id h1sm12675147wme.42.2020.04.30.03.15.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Apr 2020 03:15:33 -0700 (PDT)
+Date:   Thu, 30 Apr 2020 11:15:29 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>
+Subject: Re: [PATCH 01/10] backlight: Add backlight_device_get_by_name()
+Message-ID: <20200430101529.GB298816@dell>
+References: <20200429124830.27475-1-noralf@tronnes.org>
+ <20200429124830.27475-2-noralf@tronnes.org>
+ <20200430083219.GC3118@dell>
+ <0fbc4eb5-cb39-5974-85bb-9f13278ecab4@tronnes.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <0fbc4eb5-cb39-5974-85bb-9f13278ecab4@tronnes.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-run "echo 1 > /sys/kernel/debug/renesas-usb/rom_erase" to erase firmware
-when driver is loaded.
+On Thu, 30 Apr 2020, Noralf Trønnes wrote:
 
-Subsequent init of driver shall reload the firmware
+> 
+> 
+> Den 30.04.2020 10.32, skrev Lee Jones:
+> > On Wed, 29 Apr 2020, Noralf Trønnes wrote:
+> > 
+> >> Add a way to lookup a backlight device based on its name.
+> >> Will be used by a USB display gadget getting the name from configfs.
+> >>
+> >> Cc: Lee Jones <lee.jones@linaro.org>
+> >> Cc: Daniel Thompson <daniel.thompson@linaro.org>
+> >> Cc: Jingoo Han <jingoohan1@gmail.com>
+> >> Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
+> >> ---
+> >>  drivers/video/backlight/backlight.c | 21 +++++++++++++++++++++
+> >>  include/linux/backlight.h           |  1 +
+> >>  2 files changed, 22 insertions(+)
+> > 
+> > Once reviewed, can this patch be applied on its own?
+> > 
+> 
+> If you can apply it for 5.8, then we're good. DRM has cutoff at -rc5 and
+> the driver won't be ready for that. This patch has this dependency
+> chain: usb -> drm -> backlight. So if you can apply it for 5.8, things
+> gets easier.
+> 
+> > My guess is that it can't, as the other patches in this set depend on
+> > it, right?  If this assumption is true, you need to send me the rest
+> > of the set.
+> > 
+> > FYI: It's normally better to send the whole set to everyone, as it
+> > provides visibility on current review (or lack there of) status of the
+> > other patches and allows each of the maintainers to discuss possible
+> > merge strategies.
+> 
+> dri-devel is the ML for backlight so I assumed you got the full set.
 
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
----
- drivers/usb/host/xhci-pci-renesas.c | 33 +++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+dri-devel isn't the ML for Backlight.  It's an interested party.
 
-diff --git a/drivers/usb/host/xhci-pci-renesas.c b/drivers/usb/host/xhci-pci-renesas.c
-index aebd9546d994..977a4d4a3b54 100644
---- a/drivers/usb/host/xhci-pci-renesas.c
-+++ b/drivers/usb/host/xhci-pci-renesas.c
-@@ -2,6 +2,7 @@
- /* Copyright (C) 2019-2020 Linaro Limited */
- 
- #include <linux/acpi.h>
-+#include <linux/debugfs.h>
- #include <linux/firmware.h>
- #include <linux/module.h>
- #include <linux/pci.h>
-@@ -170,6 +171,8 @@ static int renesas_fw_verify(const void *fw_data,
- 	return 0;
- }
- 
-+static void debugfs_init(struct pci_dev *pdev);
-+
- static bool renesas_check_rom(struct pci_dev *pdev)
- {
- 	u16 rom_status;
-@@ -183,6 +186,7 @@ static bool renesas_check_rom(struct pci_dev *pdev)
- 	rom_status &= RENESAS_ROM_STATUS_ROM_EXISTS;
- 	if (rom_status) {
- 		dev_dbg(&pdev->dev, "External ROM exists\n");
-+		debugfs_init(pdev);
- 		return true; /* External ROM exists */
- 	}
- 
-@@ -449,6 +453,34 @@ static void renesas_rom_erase(struct pci_dev *pdev)
- 	dev_dbg(&pdev->dev, "ROM Erase... Done success\n");
- }
- 
-+static int debugfs_rom_erase(void *data, u64 value)
-+{
-+	struct pci_dev *pdev = data;
-+
-+	if (value == 1) {
-+		dev_dbg(&pdev->dev, "Userspace requested ROM erase\n");
-+		renesas_rom_erase(pdev);
-+		return 0;
-+	}
-+	return -EINVAL;
-+}
-+DEFINE_DEBUGFS_ATTRIBUTE(rom_erase_ops, NULL, debugfs_rom_erase, "%llu\n");
-+
-+static struct dentry *debugfs_root;
-+
-+static void debugfs_init(struct pci_dev *pdev)
-+{
-+	debugfs_root = debugfs_create_dir("renesas_usb", NULL);
-+
-+	debugfs_create_file("rom_erase", 0200, debugfs_root,
-+			    pdev, &rom_erase_ops);
-+}
-+
-+static void debugfs_exit(void)
-+{
-+	debugfs_remove_recursive(debugfs_root);
-+}
-+
- static bool renesas_setup_rom(struct pci_dev *pdev, const struct firmware *fw)
- {
- 	const u32 *fw_data = (const u32 *)fw->data;
-@@ -638,4 +670,5 @@ int renesas_xhci_check_request_fw(struct pci_dev *pdev,
- 
- void renesas_xhci_pci_exit(struct pci_dev *dev)
- {
-+	debugfs_exit();
- }
+I certainly have no intention of subscribing to it.
+
+> I have had trouble in the past with my email provider dropping parts of
+> a series when I had to many recipients.
+
+Without visibility into the other patches in the set, things become
+more difficult.  Maybe use a different/better email provider.
+
 -- 
-2.25.3
-
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
