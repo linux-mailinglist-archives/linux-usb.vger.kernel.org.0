@@ -2,72 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9001C1143
-	for <lists+linux-usb@lfdr.de>; Fri,  1 May 2020 12:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F8A1C125A
+	for <lists+linux-usb@lfdr.de>; Fri,  1 May 2020 14:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728588AbgEAKzY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 May 2020 06:55:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51236 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728352AbgEAKzW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 1 May 2020 06:55:22 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E06052166E;
-        Fri,  1 May 2020 10:55:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588330522;
-        bh=erC6W5Is3Nh/oL4QwwTvkse8Vyv5xbMSlz9NG80pnSs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uEKrn4o5840WtXxkC9WrJ17O5Jlu2T5837fDfIhIeL2APjwSqIXoIC8mLpye/1y/9
-         13sLP6s7aik7eVuQOxVCXsjN5lnl3XoM4n3Zye2tx6gXqZmiZX0iAeWLo/MDIQpnJQ
-         aytWAXjD/jPWwGbEdZVKarybkBxRoKVTfPxdNT4E=
-Date:   Fri, 1 May 2020 12:55:20 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Jeremy Linton <jeremy.linton@arm.com>, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu, git@thegavinli.com,
-        jarkko.sakkinen@linux.intel.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] usb: usbfs: correct kernel->user page attribute mismatch
-Message-ID: <20200501105520.GA1434711@kroah.com>
-References: <20200430211922.929165-1-jeremy.linton@arm.com>
- <20200501070500.GA887524@kroah.com>
- <20200501103712.GA51954@C02TD0UTHF1T.local>
+        id S1728585AbgEAMn6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 May 2020 08:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728443AbgEAMn6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 May 2020 08:43:58 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8026EC061A0C
+        for <linux-usb@vger.kernel.org>; Fri,  1 May 2020 05:43:56 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id a2so7391433ejx.5
+        for <linux-usb@vger.kernel.org>; Fri, 01 May 2020 05:43:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=wWZ8LSgQok2030dJExD3dyzeUfwe6PjYJQ9NMe251wI=;
+        b=tzgJVzjFBNeIS5K46bVjCVqJTfVu9DhQuAG6qEgZAH9b4p1I4ICN3aEezOzbQUV3OC
+         YvOUIsGhRiIOtQvio8Hk00lcEHA9i74fe7gp8bMFlFP7PNmHS6+wpYonUrbWfisKvz7v
+         3Y0qkv7fzflikoUEPjiVn461mBQGVWkgAM/dIkmFd+3HNoKxT/UvGXF+gaGOlV36S7aV
+         ikPZy+NUbVIYPeHr7dp5yBNQ6fbEuSOl+pnkv+5APE/0mBGSd4u6pMEzLrXz7B/WGO9Q
+         rrZJGtbeAYIy3QdWJP5nqdMbyEBpls3vB1EDQxAQz8kiuMc+p3xlPB0hjTntaDoXvree
+         i53Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=wWZ8LSgQok2030dJExD3dyzeUfwe6PjYJQ9NMe251wI=;
+        b=GITYZZJbYbBNAgaWBrHN6NRQLVBYgRuNHi+I+PPvyJ+Yp1voAvB6jquheASh6/ImRH
+         pqoAPOow605YuWkn34tkh8Kzm8BwXkS78dwER4GNo7WOm7UtJoCke2YNxMxHm7eRsHeF
+         SmPSO4p50DpR2NbnV+qrelqKWwyUGBmxgakblbam5ky4p1tMs8dqKCUekqlFEmz0W3CM
+         N0c07Tvbrt84nzjCdufaFzJCoI/S0XuAYMRtyboEpWng+ADZ3CPvfaeNbnTr8nmA0GL1
+         NClYXgtoSKduMJ7zotVHBfnXvWuefQBcg0i9WlD+ALZr/raJpnYvDTpuIWRTeR8HEgqQ
+         xGhA==
+X-Gm-Message-State: AGi0PuaukhLFIPNNsWq2i9ICy4yhSC84ZFWCbgLwEXeCwsqFZOtZRnDs
+        AhFnU378qfQxYHUNmU4eXv9oshlTno7lMQSvqJM=
+X-Google-Smtp-Source: APiQypK2MtTAR7hXT1JV1F9ZYY4ja823we10gVdsV3grFylZhiWieE1UfgOK13ZICuOySJUciMTiTcNSYqRfRFC+68A=
+X-Received: by 2002:a17:906:57d7:: with SMTP id u23mr2736833ejr.354.1588337035231;
+ Fri, 01 May 2020 05:43:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200501103712.GA51954@C02TD0UTHF1T.local>
+Received: by 2002:ab4:a741:0:0:0:0:0 with HTTP; Fri, 1 May 2020 05:43:54 -0700 (PDT)
+Reply-To: cfffdfd8brahim4@yandex.com
+From:   Salah Ibrahim <mr.moussa.ahmed888@gmail.com>
+Date:   Fri, 1 May 2020 13:43:54 +0100
+Message-ID: <CAK56hS+NRSsmM+DFkWQMN3+V1AgbtP82imyGgjQe2SDGoazuVw@mail.gmail.com>
+Subject: Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 01, 2020 at 11:37:12AM +0100, Mark Rutland wrote:
-> On Fri, May 01, 2020 at 09:05:00AM +0200, Greg KH wrote:
-> > On Thu, Apr 30, 2020 at 04:19:22PM -0500, Jeremy Linton wrote:
-> > > On arm64, and possibly other architectures, requesting
-> > > IO coherent memory may return Normal-NC if the underlying
-> > > hardware isn't coherent. If these pages are then
-> > > remapped into userspace as Normal, that defeats the
-> > > purpose of getting Normal-NC, as well as resulting in
-> > > mappings with differing cache attributes.
-> > 
-> > What is "Normal-NC"?
-> 
-> Arm terminology for "Normal Non-Cacheable"; it might be better to say
-> something like:
-> 
-> On some architectures (e.g. arm64) an IO coherent mapping may use
-> non-cachable attributes if the relevant device is cache coherent.
-> If userspace mappings are cacheable, these may not be coherent with
-> non-cacheable mappings. On arm64 this is the case for Normal-NC and
-> Normal (cacheable) mappings.
-
-That's better, but it doesn't answer any of my other questions on this
-patch :)
-
-thanks,
-
-greg k-h
+I Am Mr. Nor Salah Ibrahim,I have a business
+proposal of  $35 Million USD which i want to transact with you  get
+back for more details.Best Regards Salah Ibrahim
