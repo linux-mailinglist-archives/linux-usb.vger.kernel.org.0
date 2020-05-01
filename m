@@ -2,53 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3967C1C1097
-	for <lists+linux-usb@lfdr.de>; Fri,  1 May 2020 12:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6381C10F3
+	for <lists+linux-usb@lfdr.de>; Fri,  1 May 2020 12:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728458AbgEAKEx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 May 2020 06:04:53 -0400
-Received: from s52.coreserver.jp ([202.172.28.53]:46554 "EHLO
-        s52.coreserver.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728119AbgEAKEx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 May 2020 06:04:53 -0400
-Received: (qmail 413733 invoked by uid 10000); 1 May 2020 19:04:51 +0900
-To:     undisclosed-recipients:;
-Subject: =?UTF-8?Q?=E3=81=82=E3=81=AA=E3=81=9F=E3=81=B8=E3=81=AE=E3=81=94?=  =?UTF-8?Q?=E6=8C=A8=E6=8B=B6?=
+        id S1728610AbgEAKhX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 May 2020 06:37:23 -0400
+Received: from foss.arm.com ([217.140.110.172]:38456 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728545AbgEAKhX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 1 May 2020 06:37:23 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7BA4F30E;
+        Fri,  1 May 2020 03:37:22 -0700 (PDT)
+Received: from C02TD0UTHF1T.local (unknown [10.57.7.8])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8266F3F73D;
+        Fri,  1 May 2020 03:37:20 -0700 (PDT)
+Date:   Fri, 1 May 2020 11:37:12 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jeremy Linton <jeremy.linton@arm.com>, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, git@thegavinli.com,
+        jarkko.sakkinen@linux.intel.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] usb: usbfs: correct kernel->user page attribute mismatch
+Message-ID: <20200501103712.GA51954@C02TD0UTHF1T.local>
+References: <20200430211922.929165-1-jeremy.linton@arm.com>
+ <20200501070500.GA887524@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Fri, 01 May 2020 03:04:51 -0700
-From:   Dominique Bell <keiko@ono.bz>
-Reply-To: dominiquebell757@gmail.com
-Mail-Reply-To: dominiquebell757@gmail.com
-Message-ID: <6a8a3be5cc247d62eb36a427895a840a@ono.bz>
-X-Sender: keiko@ono.bz
-User-Agent: Roundcube Webmail/0.9.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200501070500.GA887524@kroah.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-注::このメッセージをSPAM / JUNKフォルダーで受信した場合は、インターネットサービスプロバイダーによって制限が課せられているためです。
+On Fri, May 01, 2020 at 09:05:00AM +0200, Greg KH wrote:
+> On Thu, Apr 30, 2020 at 04:19:22PM -0500, Jeremy Linton wrote:
+> > On arm64, and possibly other architectures, requesting
+> > IO coherent memory may return Normal-NC if the underlying
+> > hardware isn't coherent. If these pages are then
+> > remapped into userspace as Normal, that defeats the
+> > purpose of getting Normal-NC, as well as resulting in
+> > mappings with differing cache attributes.
+> 
+> What is "Normal-NC"?
 
-メッセージでご迷惑をおかけして申し訳ありません。削除する前に、少し時間をかけてお読みください。
-あなたが私に与えなかったので、このメールはあなたにとって驚きかもしれません
-そうする許可とあなたは私を知らないが、私があなたに言う前に
-私自身についてこのメールを送ったことを許してください
-あなたの許可なしに。
+Arm terminology for "Normal Non-Cacheable"; it might be better to say
+something like:
 
-私は自信を持ってこの手紙を書いています。
-あなたがこのプロジェクトを手伝ってくれる神の私、正直で信頼が必要です
-あなたのような立派な人がこの巨大な移転プロジェクトを任せてください。わたし
-次の慈善団体にあなたを紹介するためにあなたの協力を求めています
-世界中の開発。 ..
- 
-私はあなたに提案があります。あなたのことを示すために私に返信してください
-詳細に興味があります。
+On some architectures (e.g. arm64) an IO coherent mapping may use
+non-cachable attributes if the relevant device is cache coherent.
+If userspace mappings are cacheable, these may not be coherent with
+non-cacheable mappings. On arm64 this is the case for Normal-NC and
+Normal (cacheable) mappings.
 
-私は辛抱強くあなたの返事を待ちます、
-dominiquebell755@gmail.com
-
-ありがとう
-ドミニク・ベル氏
+Thanks,
+Mark.
