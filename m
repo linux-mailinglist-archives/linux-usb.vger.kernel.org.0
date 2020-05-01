@@ -2,28 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3821C1E33
-	for <lists+linux-usb@lfdr.de>; Fri,  1 May 2020 22:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EFE81C1E36
+	for <lists+linux-usb@lfdr.de>; Fri,  1 May 2020 22:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726440AbgEAUHa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 May 2020 16:07:30 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:32835 "HELO
+        id S1726501AbgEAUKE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 May 2020 16:10:04 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:43141 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726307AbgEAUH3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 May 2020 16:07:29 -0400
-Received: (qmail 2143 invoked by uid 500); 1 May 2020 16:07:28 -0400
+        with SMTP id S1726377AbgEAUKE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 May 2020 16:10:04 -0400
+Received: (qmail 2454 invoked by uid 500); 1 May 2020 16:10:03 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 1 May 2020 16:07:28 -0400
-Date:   Fri, 1 May 2020 16:07:28 -0400 (EDT)
+  by localhost with SMTP; 1 May 2020 16:10:03 -0400
+Date:   Fri, 1 May 2020 16:10:03 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@netrider.rowland.org
-To:     Greg KH <greg@kroah.com>
-cc:     andreyknvl@google.com, <ingrassia@epigenesys.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        <syzkaller-bugs@googlegroups.com>
-Subject: [PATCH] USB: core: Fix misleading driver bug report
-In-Reply-To: <0000000000002a7b2905a4839206@google.com>
-Message-ID: <Pine.LNX.4.44L0.2005011558590.903-100000@netrider.rowland.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        USB list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 08/15] usb: ehci: avoid gcc-10 zero-length-bounds warning
+In-Reply-To: <CAK8P3a19DSnyvzSRCFr6fQGAMudQwhZY7Wy2yS6HL8y3TsfoLw@mail.gmail.com>
+Message-ID: <Pine.LNX.4.44L0.2005011609140.903-100000@netrider.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -31,67 +32,78 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The syzbot fuzzer found a race between URB submission to endpoint 0
-and device reset.  Namely, during the reset we call usb_ep0_reinit()
-because the characteristics of ep0 may have changed (if the reset
-follows a firmware update, for example).  While usb_ep0_reinit() is
-running there is a brief period during which the pointers stored in
-udev->ep_in[0] and udev->ep_out[0] are set to NULL, and if an URB is
-submitted to ep0 during that period, usb_urb_ep_type_check() will
-report it as a driver bug.  In the absence of those pointers, the
-routine thinks that the endpoint doesn't exist.  The log message looks
-like this:
+On Fri, 1 May 2020, Arnd Bergmann wrote:
 
-------------[ cut here ]------------
-usb 2-1: BOGUS urb xfer, pipe 2 != type 2
-WARNING: CPU: 0 PID: 9241 at drivers/usb/core/urb.c:478
-usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
+> On Fri, May 1, 2020 at 4:42 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > On Thu, 30 Apr 2020, Arnd Bergmann wrote:
+> 
+> >
+> > No, they don't.
+> 
+> > >       /* PORTSC: offset 0x44 */
+> > > -     u32             port_status[0]; /* up to N_PORTS */
+> > > +     union {
+> > > +             u32             port_status[9]; /* up to N_PORTS */
+> >
+> > This array can have up to 15 elements, meaning that it can extend out
+> > to offset 0x80.
+> 
+> Ok, thanks for the clarification!
+> 
+> > >  /* EHCI 1.1 addendum */
+> > >  #define PORTSC_SUSPEND_STS_ACK 0
+> > >  #define PORTSC_SUSPEND_STS_NYET 1
+> > > @@ -165,7 +166,8 @@ struct ehci_regs {
+> > >  #define PORT_CONNECT (1<<0)          /* device connected */
+> > >  #define PORT_RWC_BITS   (PORT_CSC | PORT_PEC | PORT_OCC)
+> > >
+> > > -     u32             reserved3[9];
+> > > +             u32             reserved3[9];
+> > > +     };
+> > >
+> > >       /* USBMODE: offset 0x68 */
+> > >       u32             usbmode;        /* USB Device mode */
+> >
+> > As you see, this next field actually lies inside the preceding array.
+> > It's not a real conflict; any hardware which supports the usbmode field
+> > uses only the first element of the port_status array.
+> >
+> > I don't know how you want to handle this.  Doing
+> >
+> > #define usbmode port_status[9]
+> >
+> > doesn't seem like a very good approach, but I can't think of anything
+> > better at the moment.  Maybe just set the array size to 9, as you did,
+> > but with a comment explaining what's really going on.
+> 
+> The easiest change would be to use an anonymous struct like this
+> 
+>         /* PORTSC: offset 0x44 */
+>         union {
+>                 u32             port_status[15]; /* up to N_PORTS */
+> /* EHCI 1.1 addendum */
+> #define PORTSC_SUSPEND_STS_ACK 0
+> ...
+> #define PORT_RWC_BITS   (PORT_CSC | PORT_PEC | PORT_OCC)
+>                 struct {
+>                         u32             reserved3[9];
+> 
+>         /* USBMODE: offset 0x68 */
+>                         u32             usbmode;        /* USB Device mode */
+> #define USBMODE_SDIS    (1<<3)          /* Stream disable */
+> #define USBMODE_BE      (1<<2)          /* BE/LE endianness select */
+> #define USBMODE_CM_HC   (3<<0)          /* host controller mode */
+> #define USBMODE_CM_IDLE (0<<0)          /* idle state */
+> 
+>                         u32             reserved4[5];
+>                 };
+>         };
+>         u32             reserved5;
+> 
+> It doesn't really improve readability, but it should correctly
+> reflect the layout as you described it.
 
-Now, although submitting an URB while the device is being reset is a
-questionable thing to do, it shouldn't count as a driver bug as severe
-as submitting an URB for an endpoint that doesn't exist.  Indeed,
-endpoint 0 always exists, even while the device is in its unconfigured
-state.
+Sounds good.  Please go ahead and update the patch.
 
-To prevent these misleading driver bug reports, this patch updates
-usb_disable_endpoint() to avoid clearing the ep_in[] and ep_out[]
-pointers when the endpoint being disabled is ep0.  There's no danger
-of leaving a stale pointer in place, because the usb_host_endpoint
-structure being pointed to is stored permanently in udev->ep0; it
-doesn't get deallocated until the entire usb_device structure does.
-
-Reported-and-tested-by: syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-
----
-
-I don't think this needs to go into the stable kernels.  It only avoids
-a dev_WARN() call, and the problem only occurs under fairly unlikely
-circumstances.
-
-
-[as1938]
-
-
- drivers/usb/core/message.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-Index: usb-devel/drivers/usb/core/message.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/message.c
-+++ usb-devel/drivers/usb/core/message.c
-@@ -1143,11 +1143,11 @@ void usb_disable_endpoint(struct usb_dev
- 
- 	if (usb_endpoint_out(epaddr)) {
- 		ep = dev->ep_out[epnum];
--		if (reset_hardware)
-+		if (reset_hardware && epnum != 0)
- 			dev->ep_out[epnum] = NULL;
- 	} else {
- 		ep = dev->ep_in[epnum];
--		if (reset_hardware)
-+		if (reset_hardware && epnum != 0)
- 			dev->ep_in[epnum] = NULL;
- 	}
- 	if (ep) {
+Alan Stern
 
