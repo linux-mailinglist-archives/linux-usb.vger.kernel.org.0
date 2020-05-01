@@ -2,125 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 432031C12C6
-	for <lists+linux-usb@lfdr.de>; Fri,  1 May 2020 15:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8E01C19B0
+	for <lists+linux-usb@lfdr.de>; Fri,  1 May 2020 17:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728833AbgEANWO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 May 2020 09:22:14 -0400
-Received: from smtp.domeneshop.no ([194.63.252.55]:53971 "EHLO
-        smtp.domeneshop.no" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728586AbgEANWO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 May 2020 09:22:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds201912; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:Reply-To:Cc:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=1YNtvX4oLOqohRGsO2EGt5NIEzrQblXC2Xx169MlaTc=; b=WepnMGF1q6j/hhvfishf7vhy4D
-        kniChuzNXNrOa+AdBwaLSRVLJ4pySwfWgZ/4pNVZL/zpyVxMp3Ff0a4Pl6FXM1m3F8er3dKoR7ygl
-        KVehHEnXvTy110W4KB0xxELh8mliDhnd2VNeUgTBtd2sQ+FVq1eVtfJnLCPuGMGWIcRZ6atycgXKY
-        OR+4SoPQ7tFbWqoDe6vNiag+2eF7vteNp/R4USHZhztj1hHbrW1kAM4ZklknWAhGuUeILQx20/n6b
-        YCkmtrQ5QXdUBR8j20j4BcRbMov8C2r1mRAsCxd+6+y6LQfQYP/KA9w6uyVVC9jRzNaG6P+DHHnOz
-        6YSxJogA==;
-Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:57902 helo=[192.168.10.61])
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1jUVcI-0001IF-Uh; Fri, 01 May 2020 15:22:10 +0200
-Subject: Re: [PATCH 00/10] Generic USB Display driver
-To:     dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org
-References: <20200429124830.27475-1-noralf@tronnes.org>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-Message-ID: <10d713c1-f1dd-431e-6b64-520304575ac7@tronnes.org>
-Date:   Fri, 1 May 2020 15:22:09 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+        id S1729799AbgEAPgW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 May 2020 11:36:22 -0400
+Received: from foss.arm.com ([217.140.110.172]:42798 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729008AbgEAPgW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 1 May 2020 11:36:22 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 53DA130E;
+        Fri,  1 May 2020 08:36:21 -0700 (PDT)
+Received: from [10.57.39.240] (unknown [10.57.39.240])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 050AD3F68F;
+        Fri,  1 May 2020 08:36:19 -0700 (PDT)
+Subject: Re: [PATCH] usb: usbfs: correct kernel->user page attribute mismatch
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Jeremy Linton <jeremy.linton@arm.com>
+Cc:     git@thegavinli.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jarkko.sakkinen@linux.intel.com,
+        stern@rowland.harvard.edu, linux-arm-kernel@lists.infradead.org
+References: <20200430211922.929165-1-jeremy.linton@arm.com>
+ <20200501070500.GA887524@kroah.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <e1ce8224-db38-c0c6-02c0-2032f4165903@arm.com>
+Date:   Fri, 1 May 2020 16:36:17 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200429124830.27475-1-noralf@tronnes.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200501070500.GA887524@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 2020-05-01 8:05 am, Greg KH wrote:
+> On Thu, Apr 30, 2020 at 04:19:22PM -0500, Jeremy Linton wrote:
+>> On arm64, and possibly other architectures, requesting
+>> IO coherent memory may return Normal-NC if the underlying
+>> hardware isn't coherent. If these pages are then
+>> remapped into userspace as Normal, that defeats the
+>> purpose of getting Normal-NC, as well as resulting in
+>> mappings with differing cache attributes.
+> 
+> What is "Normal-NC"?
+> 
+>> In particular this happens with libusb, when it attempts
+>> to create zero-copy buffers as is used by rtl-sdr, and
+> 
+> What is "rtl-sdr"
+> 
+>> maybe other applications. The result is usually
+>> application death.
+> 
+> So is this a new problem?  Old problem?  Old problem only showing up on
+> future devices?  On current devices?  I need a hint here as to know if
+> this is a bugfix or just work to make future devices work properly.
+> 
+>>
+>> If dma_mmap_attr() is used instead of remap_pfn_range,
+>> the page cache/etc attributes can be matched between the
+>> kernel and userspace.
+>>
+>> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+>> ---
+>>   drivers/usb/core/devio.c | 5 ++---
+>>   1 file changed, 2 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+>> index 6833c918abce..1e7458dd6e5d 100644
+>> --- a/drivers/usb/core/devio.c
+>> +++ b/drivers/usb/core/devio.c
+>> @@ -217,6 +217,7 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
+>>   {
+>>   	struct usb_memory *usbm = NULL;
+>>   	struct usb_dev_state *ps = file->private_data;
+>> +	struct usb_hcd *hcd = bus_to_hcd(ps->dev->bus);
+>>   	size_t size = vma->vm_end - vma->vm_start;
+>>   	void *mem;
+>>   	unsigned long flags;
+>> @@ -250,9 +251,7 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
+>>   	usbm->vma_use_count = 1;
+>>   	INIT_LIST_HEAD(&usbm->memlist);
+>>   
+>> -	if (remap_pfn_range(vma, vma->vm_start,
+>> -			virt_to_phys(usbm->mem) >> PAGE_SHIFT,
+>> -			size, vma->vm_page_prot) < 0) {
+>> +	if (dma_mmap_attrs(hcd->self.sysdev, vma, mem, dma_handle, size, 0)) {
+> 
+> Given that this code has not changed since 2016, how has no one noticed
+> this issue before?
 
+They have. Here's where the most recent one in my inbox ended, which has 
+breadcrumbs to a couple more:
 
-Den 29.04.2020 14.48, skrev Noralf Trønnes:
-> Hi,
-> 
-> A while back I had the idea to turn a Raspberry Pi Zero into a $5
-> USB to HDMI/SDTV/DSI/DPI display adapter.
-> 
-> This series adds a USB host driver and a device/gadget driver to achieve
-> that.
-> 
-> The reason for calling it 'Generic' is so anyone can make a USB
-> display/adapter against this driver, all that's needed is to add a USB
-> vid:pid. I was hoping to have someone working on a microcontroller based
-> USB display by now, but unfortunately that has been delayed. It would
-> have been nice to have a microcontroller implementation to ensure that I
-> haven't made things unnecessary difficult to implement.
-> 
-> Performance
-> The one thing that decides how useful this all is, is how smooth an
-> experience it gives. My hope was that it should not be noticeably laggy
-> with ordinary office use on 1920x1080@RG16. I'm pleased to see that it's
-> also possible to watch youtube movies, although not in fullscreen.
-> 
-> Some of the main factors that affects performance:
-> - Display resolution
-> - Userspace providing damage reports (FB_DAMAGE_CLIPS or
-> DRM_IOCTL_MODE_DIRTYFB)
-> - Color depth (DRM_CAP_DUMB_PREFERRED_DEPTH = 16 if RGB565)
-> - How well the frames compress (lz4)
-> - Gadget device memory bandwidth, CPU power for decompression
-> - (Big endian hosts will have to do byte swapping on the frames)
+https://lore.kernel.org/linux-arm-kernel/20190808130525.GA1756@kroah.com/
 
-One factor that I forgot is USB2 vs USB3.
-The Pi's have a USB2 Device controller (dwc2). I couldn't find a cheap
-board with a USB3 Device controller that could run mainline Linux, so I
-haven't tried that.
+Note the author ;)
 
-> 
-> I've tested these:
-> - xorg-server on Pi4. This was nice and smooth since it uses
-> DRM_IOCTL_MODE_DIRTYFB and honours DRM_CAP_DUMB_PREFERRED_DEPTH.
-> - Ubuntu 20.04 GNOME on x86. This was useable, but not so good for
-> movies. GNOME doesn't look at DRM_CAP_DUMB_PREFERRED_DEPTH and doesn't
-> set FB_DAMAGE_CLIPS on the pageflips.
-> 
-> I've made a short video to show what it looks like[1].
+ From memory, all the previous attempts wound up getting stuck on the 
+subtlety that buffers from hcd_alloc() may or may not actually have come 
+from the DMA API. Since then, the localmem_pool rework has probably 
+helped a bit, but I'm not sure we've ever really nailed down whether 
+kmalloc()ed buffers from PIO-mode controllers (i.e. the !hcd_uses_dma() 
+case) can end up down this devio path.
 
-I got a question if this would work with usbip[4], USB over IP.
-I did a quick test with two Pi4's connected by cable to the same network
-switch (1Gb). Showing a movie in a window like my previous test didn't
-show much of a difference. Maybe some occasional glitching, hard to tell
-without proper tests.
-
-There's no pageflipping on the device side, so it could be tearing that
-I saw.
-
-Noralf.
-
-[4] tools/usb/usbip/README
-
-> 
-> I have used a Pi4 as the gadget during development since it has much
-> better memory bandwith (4000 vs 200 MBps)[2] and CPU than the PiZ. They
-> both have the same gadget controller (dwc2).
-> 
-> I did an RFC [3] of this 2 months ago where I looked at doing a Multi
-> Function USB device. I gave up on that when I realised how much work the
-> review process would be. So I stripped down to my original idea. I have
-> made sure that the drivers will tolerate another USB interface of type
-> VENDOR, so it's still possible for the display to be part of a multi
-> function device.
-> 
-> Noralf.
-> 
-> [1] https://youtu.be/AhGZWwUm8JU
-> [2] https://magpi.raspberrypi.org/articles/raspberry-pi-specs-benchmarks
-> [3] https://patchwork.freedesktop.org/series/73508/
-> 
+Robin.
