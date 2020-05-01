@@ -2,60 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F8A1C125A
-	for <lists+linux-usb@lfdr.de>; Fri,  1 May 2020 14:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 432031C12C6
+	for <lists+linux-usb@lfdr.de>; Fri,  1 May 2020 15:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728585AbgEAMn6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 May 2020 08:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728443AbgEAMn6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 May 2020 08:43:58 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8026EC061A0C
-        for <linux-usb@vger.kernel.org>; Fri,  1 May 2020 05:43:56 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id a2so7391433ejx.5
-        for <linux-usb@vger.kernel.org>; Fri, 01 May 2020 05:43:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=wWZ8LSgQok2030dJExD3dyzeUfwe6PjYJQ9NMe251wI=;
-        b=tzgJVzjFBNeIS5K46bVjCVqJTfVu9DhQuAG6qEgZAH9b4p1I4ICN3aEezOzbQUV3OC
-         YvOUIsGhRiIOtQvio8Hk00lcEHA9i74fe7gp8bMFlFP7PNmHS6+wpYonUrbWfisKvz7v
-         3Y0qkv7fzflikoUEPjiVn461mBQGVWkgAM/dIkmFd+3HNoKxT/UvGXF+gaGOlV36S7aV
-         ikPZy+NUbVIYPeHr7dp5yBNQ6fbEuSOl+pnkv+5APE/0mBGSd4u6pMEzLrXz7B/WGO9Q
-         rrZJGtbeAYIy3QdWJP5nqdMbyEBpls3vB1EDQxAQz8kiuMc+p3xlPB0hjTntaDoXvree
-         i53Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=wWZ8LSgQok2030dJExD3dyzeUfwe6PjYJQ9NMe251wI=;
-        b=GITYZZJbYbBNAgaWBrHN6NRQLVBYgRuNHi+I+PPvyJ+Yp1voAvB6jquheASh6/ImRH
-         pqoAPOow605YuWkn34tkh8Kzm8BwXkS78dwER4GNo7WOm7UtJoCke2YNxMxHm7eRsHeF
-         SmPSO4p50DpR2NbnV+qrelqKWwyUGBmxgakblbam5ky4p1tMs8dqKCUekqlFEmz0W3CM
-         N0c07Tvbrt84nzjCdufaFzJCoI/S0XuAYMRtyboEpWng+ADZ3CPvfaeNbnTr8nmA0GL1
-         NClYXgtoSKduMJ7zotVHBfnXvWuefQBcg0i9WlD+ALZr/raJpnYvDTpuIWRTeR8HEgqQ
-         xGhA==
-X-Gm-Message-State: AGi0PuaukhLFIPNNsWq2i9ICy4yhSC84ZFWCbgLwEXeCwsqFZOtZRnDs
-        AhFnU378qfQxYHUNmU4eXv9oshlTno7lMQSvqJM=
-X-Google-Smtp-Source: APiQypK2MtTAR7hXT1JV1F9ZYY4ja823we10gVdsV3grFylZhiWieE1UfgOK13ZICuOySJUciMTiTcNSYqRfRFC+68A=
-X-Received: by 2002:a17:906:57d7:: with SMTP id u23mr2736833ejr.354.1588337035231;
- Fri, 01 May 2020 05:43:55 -0700 (PDT)
+        id S1728833AbgEANWO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 May 2020 09:22:14 -0400
+Received: from smtp.domeneshop.no ([194.63.252.55]:53971 "EHLO
+        smtp.domeneshop.no" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728586AbgEANWO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 May 2020 09:22:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds201912; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:Reply-To:Cc:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=1YNtvX4oLOqohRGsO2EGt5NIEzrQblXC2Xx169MlaTc=; b=WepnMGF1q6j/hhvfishf7vhy4D
+        kniChuzNXNrOa+AdBwaLSRVLJ4pySwfWgZ/4pNVZL/zpyVxMp3Ff0a4Pl6FXM1m3F8er3dKoR7ygl
+        KVehHEnXvTy110W4KB0xxELh8mliDhnd2VNeUgTBtd2sQ+FVq1eVtfJnLCPuGMGWIcRZ6atycgXKY
+        OR+4SoPQ7tFbWqoDe6vNiag+2eF7vteNp/R4USHZhztj1hHbrW1kAM4ZklknWAhGuUeILQx20/n6b
+        YCkmtrQ5QXdUBR8j20j4BcRbMov8C2r1mRAsCxd+6+y6LQfQYP/KA9w6uyVVC9jRzNaG6P+DHHnOz
+        6YSxJogA==;
+Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:57902 helo=[192.168.10.61])
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1jUVcI-0001IF-Uh; Fri, 01 May 2020 15:22:10 +0200
+Subject: Re: [PATCH 00/10] Generic USB Display driver
+To:     dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org
+References: <20200429124830.27475-1-noralf@tronnes.org>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Message-ID: <10d713c1-f1dd-431e-6b64-520304575ac7@tronnes.org>
+Date:   Fri, 1 May 2020 15:22:09 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Received: by 2002:ab4:a741:0:0:0:0:0 with HTTP; Fri, 1 May 2020 05:43:54 -0700 (PDT)
-Reply-To: cfffdfd8brahim4@yandex.com
-From:   Salah Ibrahim <mr.moussa.ahmed888@gmail.com>
-Date:   Fri, 1 May 2020 13:43:54 +0100
-Message-ID: <CAK56hS+NRSsmM+DFkWQMN3+V1AgbtP82imyGgjQe2SDGoazuVw@mail.gmail.com>
-Subject: Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200429124830.27475-1-noralf@tronnes.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I Am Mr. Nor Salah Ibrahim,I have a business
-proposal of  $35 Million USD which i want to transact with you  get
-back for more details.Best Regards Salah Ibrahim
+
+
+Den 29.04.2020 14.48, skrev Noralf Trønnes:
+> Hi,
+> 
+> A while back I had the idea to turn a Raspberry Pi Zero into a $5
+> USB to HDMI/SDTV/DSI/DPI display adapter.
+> 
+> This series adds a USB host driver and a device/gadget driver to achieve
+> that.
+> 
+> The reason for calling it 'Generic' is so anyone can make a USB
+> display/adapter against this driver, all that's needed is to add a USB
+> vid:pid. I was hoping to have someone working on a microcontroller based
+> USB display by now, but unfortunately that has been delayed. It would
+> have been nice to have a microcontroller implementation to ensure that I
+> haven't made things unnecessary difficult to implement.
+> 
+> Performance
+> The one thing that decides how useful this all is, is how smooth an
+> experience it gives. My hope was that it should not be noticeably laggy
+> with ordinary office use on 1920x1080@RG16. I'm pleased to see that it's
+> also possible to watch youtube movies, although not in fullscreen.
+> 
+> Some of the main factors that affects performance:
+> - Display resolution
+> - Userspace providing damage reports (FB_DAMAGE_CLIPS or
+> DRM_IOCTL_MODE_DIRTYFB)
+> - Color depth (DRM_CAP_DUMB_PREFERRED_DEPTH = 16 if RGB565)
+> - How well the frames compress (lz4)
+> - Gadget device memory bandwidth, CPU power for decompression
+> - (Big endian hosts will have to do byte swapping on the frames)
+
+One factor that I forgot is USB2 vs USB3.
+The Pi's have a USB2 Device controller (dwc2). I couldn't find a cheap
+board with a USB3 Device controller that could run mainline Linux, so I
+haven't tried that.
+
+> 
+> I've tested these:
+> - xorg-server on Pi4. This was nice and smooth since it uses
+> DRM_IOCTL_MODE_DIRTYFB and honours DRM_CAP_DUMB_PREFERRED_DEPTH.
+> - Ubuntu 20.04 GNOME on x86. This was useable, but not so good for
+> movies. GNOME doesn't look at DRM_CAP_DUMB_PREFERRED_DEPTH and doesn't
+> set FB_DAMAGE_CLIPS on the pageflips.
+> 
+> I've made a short video to show what it looks like[1].
+
+I got a question if this would work with usbip[4], USB over IP.
+I did a quick test with two Pi4's connected by cable to the same network
+switch (1Gb). Showing a movie in a window like my previous test didn't
+show much of a difference. Maybe some occasional glitching, hard to tell
+without proper tests.
+
+There's no pageflipping on the device side, so it could be tearing that
+I saw.
+
+Noralf.
+
+[4] tools/usb/usbip/README
+
+> 
+> I have used a Pi4 as the gadget during development since it has much
+> better memory bandwith (4000 vs 200 MBps)[2] and CPU than the PiZ. They
+> both have the same gadget controller (dwc2).
+> 
+> I did an RFC [3] of this 2 months ago where I looked at doing a Multi
+> Function USB device. I gave up on that when I realised how much work the
+> review process would be. So I stripped down to my original idea. I have
+> made sure that the drivers will tolerate another USB interface of type
+> VENDOR, so it's still possible for the display to be part of a multi
+> function device.
+> 
+> Noralf.
+> 
+> [1] https://youtu.be/AhGZWwUm8JU
+> [2] https://magpi.raspberrypi.org/articles/raspberry-pi-specs-benchmarks
+> [3] https://patchwork.freedesktop.org/series/73508/
+> 
