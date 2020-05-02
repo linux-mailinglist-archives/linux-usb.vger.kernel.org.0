@@ -2,243 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EDED1C2440
-	for <lists+linux-usb@lfdr.de>; Sat,  2 May 2020 11:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 719E91C25F6
+	for <lists+linux-usb@lfdr.de>; Sat,  2 May 2020 15:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726764AbgEBJFe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 May 2020 05:05:34 -0400
-Received: from mout.gmx.net ([212.227.17.22]:42917 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726488AbgEBJFd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 2 May 2020 05:05:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1588410317;
-        bh=q9VJyCnFY+/O21OZN8bVN/A8qThXFaSA5sJxzEm7oeI=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=aOeUD+aQCk+gcQCM0GFQzBa2oFcpCZ53QkQTN8ymUeAZs7Ta8AA9ipfjC3JgdZ1m6
-         pD1HN+VirGZ0LJu3LZBWBuFho1Du5QaZKH6qmnbBq8u3vpBEfSFn2uZdyT30LQvbkz
-         hTCyiifr4mojlhBisLlV1YyN9bmidcbuYbiBPatI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.1.164] ([37.4.249.134]) by mail.gmx.com (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N63VY-1j6lrZ1K6y-016NEe; Sat, 02
- May 2020 11:05:17 +0200
-Subject: Re: [PATCH v7 2/4] firmware: raspberrypi: Introduce vl805 init
- routine
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        f.fainelli@gmail.com, gregkh@linuxfoundation.org,
-        helgaas@kernel.org, linux-kernel@vger.kernel.org,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com
-Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, tim.gover@raspberrypi.org,
-        linux-pci@vger.kernel.org
-References: <20200429164734.21506-1-nsaenzjulienne@suse.de>
- <20200429164734.21506-3-nsaenzjulienne@suse.de>
-From:   Stefan Wahren <wahrenst@gmx.net>
-Message-ID: <5fce05ca-5d7e-f4cc-be34-0764fbe4edff@gmx.net>
-Date:   Sat, 2 May 2020 11:05:12 +0200
+        id S1728008AbgEBN4u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 May 2020 09:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727921AbgEBN4t (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 May 2020 09:56:49 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342CBC061A0C
+        for <linux-usb@vger.kernel.org>; Sat,  2 May 2020 06:56:49 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id d17so15203047wrg.11
+        for <linux-usb@vger.kernel.org>; Sat, 02 May 2020 06:56:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Io1LXUZNEcboXh8F44BlxRuNoh4z/FowLUBDrMbY0zQ=;
+        b=vM0JKQXXn/FVJdPQDGY4mDLNxVkIV3jXntjER4z8GQO2smnPUPGwcFNkTCDDkXTpHl
+         esCD0fm2gIfJlasZDfUL5JGgxZhgaMlPqfsfl+z4KrsNtaE9TMfLNaSe+K7eD8mIPmXN
+         y3ntHb9dmCfL6IfgTjgY4mWq3Hh4nnftW8OpAubLauDa1o0EDJicf3Jl4uwWsaKLrN7G
+         EYM/sfYhxGa2KEk4w7FOQK8hBeaDZgF544SF3ZPc6vcJcIh2w61nI0fmr8YcHnlezZ48
+         bSHabDSkiz11zjmZSN2Iy/35eP68QL3O7FTCq33HyNhW0d90LjlGNYoqigDcJ5/tQexH
+         xhMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Io1LXUZNEcboXh8F44BlxRuNoh4z/FowLUBDrMbY0zQ=;
+        b=glAtTHkrrJoFyDEvTLtZV4RYNHbEeFrwVv+GmME4Ys2Gt7n/QnfmhcglE9RSRCAsh8
+         WpDbwlada4gWmxlLEqhS4rbVmQZvqF+OMbgkEIaNSRsqN5Vw9oatFgWDpzk/8YrK9Qgm
+         SS69ifSjKNWV5HQogzMGKGN1jJFzN5MCaLOvHAT+cml9be65uvysW+f9E+yUIiUWP/HJ
+         PtvZmzF6gDtoSqGzpiQDXLspFg5x9V4kBA/Tq2YAydnliHcyHwC5BvfFA/FyixCbrNNI
+         LhJi4Kzh9clsuSTPkJzTdRgZgr/qEN3lK17mwJbJB2FjBEahGqNSwWRnki+cPqXkXQdu
+         oq5A==
+X-Gm-Message-State: AGi0Pub8ln/9W1h+G5LRLKl++5tn6vU50SsTPeY7ufjYnQp3xtywhu5u
+        bZzURBjNJvXy7WKaKVGTqtg=
+X-Google-Smtp-Source: APiQypIVT9w7D/gPwXeultB8EosbP/2Qs4z+aQFihR0NzqBTRL1XgXMiHzRiWiUmCsNziTDp4JVCLg==
+X-Received: by 2002:adf:fcc8:: with SMTP id f8mr9338144wrs.230.1588427807582;
+        Sat, 02 May 2020 06:56:47 -0700 (PDT)
+Received: from [192.168.2.75] (ip4d14af3f.dynamic.kabel-deutschland.de. [77.20.175.63])
+        by smtp.gmail.com with ESMTPSA id u2sm7465733wrd.40.2020.05.02.06.56.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 May 2020 06:56:46 -0700 (PDT)
+Subject: Re: [PATCH 1/1] usb: storage: Add quirk for Samsung Fit flash
+To:     Jim Lin <jilin@nvidia.com>, stern@rowland.harvard.edu,
+        linux-usb@vger.kernel.org
+Cc:     usb-storage@lists.one-eyed-alien.net
+References: <1583158895-31342-1-git-send-email-jilin@nvidia.com>
+From:   Atanas Dinev <atanasd@gmail.com>
+Message-ID: <bb4db5cf-60bc-9c0f-e1dc-3047542d2b42@gmail.com>
+Date:   Sat, 2 May 2020 15:56:45 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200429164734.21506-3-nsaenzjulienne@suse.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1583158895-31342-1-git-send-email-jilin@nvidia.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-X-Provags-ID: V03:K1:QA/aSLOy+cPlvO18nEM/MicqwS747XxEXAG4GyaaHnDfSZ4Tmtk
- PVcVoCLuH1g/fLaI+QAorJKQs+/yGXo+BeCehPvf79n+ALJv+1n29kftcUmC+bOBBRFLf4i
- k02zj8VEOarH08P1FI3V2bmFG/JFF5fmLFDaU8+/SbVGitbryg1gRaOHJMtECq7XfKPBArS
- gUzl/xGwaNB1He1/zQu7Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:b27J4oTjFnA=:k0TtacXgZeH36zxXHNZPGs
- TleOnzvFCN3iCKhE2i8sdtvI0FiBx7Ia22XXttoaCtWN/1Gkahl9vsihmfNcUB45kGutY+pwR
- U8m3n7Npx8ETCstRraHr452FmRE/cTA544O4lFbOLwRh9uq0dxn0ODXcuQamYaBFiuoOGm8M7
- 0z0qNoYZ0rJXI5Oe4IxV/MBZprac9xoBUg8NZP7vyBvnLv9LI/nSciaKBkrkUS4df5rlAN/M1
- Enxo4EcMht9ADR+IIRiRkd+HXy0wSv/PHgIkligGrZ9GGUn+hnl2zDUJpnqE1sM6fvI5X/dH5
- Xy+O8bzZ1S2MsT4zPZSWxuUNBBjVVLFJqdQKKgiwpBTA5qClEIle6M0vo3L+zjzdbTK6QJZBb
- Ya9YMU0R+Rp0GTkzvBEIiBXjOGcyENNjZGWnBYsgKpFS14W73bwH18mpEYBA4XwJZybxjfZJz
- fnC84yulfUOs+Ra/MUxFRmqikbRaAeLu89bYbQ1UmJZwf/jMgHsJCzxmcncaPilUgPPWbLwCO
- 4fhVZRilboJG5bfI7DxWmB35Oex2rWunLO44NBv5XUyeYkYp6lxhZofN8Toitkc5kIuxhRUY1
- RLkFRmIn1PKTWDpWrLIvrFomus7meNiOimZDH6cBFUaX8lRHBTmO6Ulkaev81vwkLoAkN7Juh
- 0APXUwRoRLhutGvBLqpib7CBi3/MvJ1MFV+9cUlnPJo6LDCzfDhCdu9t5tPcdpFateIPQd0Py
- HiFNQUbT5dZLsxPwjDF8E0V89mIKapPo+/5fxylHUmdWC3Y0xprurkLDmeANxnJZeCIPAHai2
- +1WDW0nB2Xi3HqSsnhuY49d6uooNq26ESuvXq4pnvdQv/PYyjfPNlQziar6aimF7+QnLcUVkb
- O/R+FVKHDeNWrsOUwhKWaFaIalEFpPi3U83jq0hPkFlge7klg+jT3KeFkymVz/YCTxonFJ1dY
- PjBg16uj7KyjNtnE0V15kkCWeG35yvJ9KlnpOgXzdadmLCobmE5OB1kYQXqFu+1Y5xVaIlOPQ
- oBGYe9QKDjxi+4THEGbXS3RU2tor7kF9mSBSilaf2eu51RXOWFpbqfvvgMDXKmaaoi/GGo1Xj
- 7auD/5AJsg9J5jNSAi/Yw4IOJrvry4rUcTcRRTcRIBO2Frjddgf+URmRbujAyONrjQhIJm6Qb
- vY1CWwCCVlmK2lzp/GgQehtfdcjN8dV5M9yIY4IESn177MuWft5ImhNkg0UPeTde5cFkiT/b5
- 4/a1ovijJfdmtRj8l
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Nicolas,
+Hello,
 
-Am 29.04.20 um 18:47 schrieb Nicolas Saenz Julienne:
-> The Raspberry Pi 4 gets its USB functionality from VL805, a PCIe chip
-> that implements xHCI. After a PCI reset, VL805's firmware may either be
-> loaded directly from an EEPROM or, if not present, by the SoC's
-> co-processor, VideoCore. RPi4's VideoCore OS contains both the non publi=
-c
-> firmware load logic and the VL805 firmware blob. The function this patch
-> introduces triggers the aforementioned process.
->
-> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
->
+Jim Lin wrote on 02.03.20 15:21:
+> Current driver has 240 (USB2.0) and 2048 (USB3.0) as max_sectors,
+> e.g., /sys/bus/scsi/devices/0:0:0:0/max_sectors
+> 
+> If data access times out, driver error handling will issue a port
+> reset.
+> Sometimes Samsung Fit (090C:1000) flash disk will not respond to
+> later Set Address or Get Descriptor command.
+> 
+> Adding this quirk to limit max_sectors to 64 sectors to avoid issue
+> occurring.
+> 
+This may need revisiting as it appears to be a performance killer (3-4 times slower seq reads) for otherwise perfectly working sticks.
+Going down from 2048 to 64 seems to cause a pretty significant speed degradation.
+Here are a few examples:
+
+# lsusb
+Bus 002 Device 012: ID 090c:1000 Silicon Motion, Inc. - Taiwan (formerly Feiya Technology Corp.) Flash Drive
+# lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
+     |__ Port 3: Dev 12, If 0, Class=Mass Storage, Driver=usb-storage, 5000M
+
+# dmesg
+[23153.493726] usb 2-3: Product: Flash Drive FIT
+[23153.493729] usb 2-3: Manufacturer: Samsung
+[23153.493731] usb 2-3: SerialNumber: 0375119090033353
+[23153.575386] usb-storage 2-3:1.0: USB Mass Storage device detected
+[23153.575514] usb-storage 2-3:1.0: Quirks match for vid 090c pid 1000: 400
+[23153.575559] scsi host2: usb-storage 2-3:1.0
+[23153.576529] usbcore: registered new interface driver usb-storage
+[23153.578645] usbcore: registered new interface driver uas
+
+# cat /proc/scsi/usb-storage/*
+    Host scsi2: usb-storage
+        Vendor: Samsung
+       Product: Flash Drive FIT
+Serial Number: 0375119090033353
+      Protocol: Transparent SCSI
+     Transport: Bulk
+        Quirks: MAX_SECTORS_64 SANE_SENSE
+
+# hdparm -t /dev/sdb
+  Timing buffered disk reads: 132 MB in  3.03 seconds = 43.62 MB/sec
+# dd if=/dev/sdb of=/dev/null bs=1M count=1000
+1048576000 bytes (1,0 GB, 1000 MiB) copied, 22,3564 s, 46,9 MB/s
+
+# rmmod uas usb_storage
+# modprobe usb_storage quirks=090c:1000:
+
+# hdparm -t /dev/sdb
+  Timing buffered disk reads: 452 MB in  3.01 seconds = 150.33 MB/sec
+# dd if=/dev/sdb of=/dev/null bs=1M count=1000
+1048576000 bytes (1,0 GB, 1000 MiB) copied, 6,51492 s, 161 MB/s
+
+
+[23612.690798] usb 2-3: Product: Intenso High Speed Line
+[23612.690799] usb 2-3: Manufacturer: SMI
+[23612.690801] usb 2-3: SerialNumber: 19112500000332
+[23612.780771] usb-storage 2-3:1.0: USB Mass Storage device detected
+[23612.780895] usb-storage 2-3:1.0: Quirks match for vid 090c pid 1000: 400
+[23612.780940] scsi host2: usb-storage 2-3:1.0
+[23612.781093] usbcore: registered new interface driver usb-storage
+[23612.783226] usbcore: registered new interface driver uas
+
+# cat /proc/scsi/usb-storage/*
+    Host scsi2: usb-storage
+        Vendor: SMI
+       Product: Intenso High Speed Line
+Serial Number: 19112500000332
+      Protocol: Transparent SCSI
+     Transport: Bulk
+        Quirks: MAX_SECTORS_64 SANE_SENSE
+
+# hdparm -t /dev/sdb
+  Timing buffered disk reads: 220 MB in  3.00 seconds = 73.22 MB/sec
+# dd if=/dev/sdb of=/dev/null bs=1M count=1000
+1048576000 bytes (1,0 GB, 1000 MiB) copied, 11,5469 s, 90,8 MB/s
+
+# rmmod uas usb_storage
+# modprobe usb_storage quirks=090c:1000:
+# hdparm -t /dev/sdb
+Timing buffered disk reads: 1016 MB in  3.00 seconds = 338.51 MB/sec
+# dd if=/dev/sdb of=/dev/null bs=1M count=1000
+1048576000 bytes (1,0 GB, 1000 MiB) copied, 3,31022 s, 317 MB/s
+
+
+I'm using both sticks as a bootable/emergency media (Debian stable, kernel 4.19/no-quirks with X, XFCE, web browser, etc) and haven't had any issues with timeouts, unresponsiveness or whatsoever.
+
+When tested with recent kernels (e.g. Debian testing/5.5, Ubuntu 20.04 LTS/5.4) it's slow.
+
+Setting "options usb_storage quirks=090c:1000:" in /etc/modprobe.d as a workaround for now.
+
+> Signed-off-by: Jim Lin <jilin@nvidia.com>
 > ---
->
-> Change since v6:
-> - Add test to avoid loading the firmware when not needed
-> - Since we have it around, print VL805's firmware version, it'll make
-> debugging easier in the future
-> - Correct typos
-> - Add a clearer view of HW topology in patch description
->
-> Changes since v4:
-> - Inline function definition when RASPBERRYPI_FIRMWARE is not defined
->
-> Changes since v1:
-> - Move include into .c file and add forward declaration to .h
->
->  drivers/firmware/raspberrypi.c             | 52 ++++++++++++++++++++++
->  include/soc/bcm2835/raspberrypi-firmware.h |  7 +++
->  2 files changed, 59 insertions(+)
->
-> diff --git a/drivers/firmware/raspberrypi.c b/drivers/firmware/raspberry=
-pi.c
-> index da26a584dca0..230c05e53403 100644
-> --- a/drivers/firmware/raspberrypi.c
-> +++ b/drivers/firmware/raspberrypi.c
-> @@ -12,6 +12,8 @@
->  #include <linux/of_platform.h>
->  #include <linux/platform_device.h>
->  #include <linux/slab.h>
-> +#include <linux/pci.h>
-> +#include <linux/delay.h>
->  #include <soc/bcm2835/raspberrypi-firmware.h>
->
->  #define MBOX_MSG(chan, data28)		(((data28) & ~0xf) | ((chan) & 0xf))
-> @@ -19,6 +21,8 @@
->  #define MBOX_DATA28(msg)		((msg) & ~0xf)
->  #define MBOX_CHAN_PROPERTY		8
->
-> +#define VL805_PCI_CONFIG_VERSION_OFFSET		0x50
+>   drivers/usb/storage/unusual_devs.h | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
+> index 1cd9b6305b06..1880f3e13f57 100644
+> --- a/drivers/usb/storage/unusual_devs.h
+> +++ b/drivers/usb/storage/unusual_devs.h
+> @@ -1258,6 +1258,12 @@ UNUSUAL_DEV( 0x090a, 0x1200, 0x0000, 0x9999,
+>   		USB_SC_RBC, USB_PR_BULK, NULL,
+>   		0 ),
+>   
+> +UNUSUAL_DEV(0x090c, 0x1000, 0x1100, 0x1100,
+> +		"Samsung",
+> +		"Flash Drive FIT",
+> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> +		US_FL_MAX_SECTORS_64),
 > +
->  static struct platform_device *rpi_hwmon;
->  static struct platform_device *rpi_clk;
->
-> @@ -286,6 +290,54 @@ struct rpi_firmware *rpi_firmware_get(struct device=
-_node *firmware_node)
->  }
->  EXPORT_SYMBOL_GPL(rpi_firmware_get);
->
-> +/*
-> + * The Raspberry Pi 4 gets its USB functionality from VL805, a PCIe chi=
-p that
-> + * implements xHCI. After a PCI reset, VL805's firmware may either be l=
-oaded
-> + * directly from an EEPROM or, if not present, by the SoC's co-processo=
-r,
-> + * VideoCore. RPi4's VideoCore OS contains both the non public firmware=
- load
-> + * logic and the VL805 firmware blob. This function triggers the aforem=
-entioned
-> + * process.
-> + */
-> +int rpi_firmware_init_vl805(struct pci_dev *pdev)
-> +{
-> +	struct device_node *fw_np;
-> +	struct rpi_firmware *fw;
-> +	u32 dev_addr, version;
-> +	int ret =3D 0;
-> +
-> +	fw_np =3D of_find_compatible_node(NULL, NULL,
-> +					"raspberrypi,bcm2835-firmware");
-> +	if (!fw_np)
-> +		return 0;
-> +
-> +	fw =3D rpi_firmware_get(fw_np);
-> +	of_node_put(fw_np);
-> +	if (!fw)
-> +		return -ENODEV;
-> +
-> +	/* Make sure we don't trigger a firmware load unnecesarely *
-s/unnecesarely/unnecessarily/
-> +	pci_read_config_dword(pdev, VL805_PCI_CONFIG_VERSION_OFFSET, &version)=
-;
-pci_read_config_dword() can fail, we might want to store the return value?
-> +	if (version)
-> +		goto exit;
-> +
-> +	dev_addr =3D pdev->bus->number << 20 | PCI_SLOT(pdev->devfn) << 15 |
-> +		   PCI_FUNC(pdev->devfn) << 12;
-> +
-> +	ret =3D rpi_firmware_property(fw, RPI_FIRMWARE_NOTIFY_XHCI_RESET,
-> +				    &dev_addr, sizeof(dev_addr));
-> +	/* Wait for vl805 to startup */
-> +	udelay(200);
+>   /* aeb */
+>   UNUSUAL_DEV( 0x090c, 0x1132, 0x0000, 0xffff,
+>   		"Feiya",
+> 
 
-I know, it makes it harder to read but do we really want to wait
-unnecessarily if rpi_firmware_property failed?
-
-Btw i assume we are in non-atomic context, so maybe it's worth to use
-usleep_range() here?
-
-> +
-> +exit:
-> +	if (!version)
-> +		pci_read_config_dword(pdev, VL805_PCI_CONFIG_VERSION_OFFSET,
-> +				      &version);
-> +	pci_info(pdev, "VL805 firmware version %08x\n", version);
-
-In case pci_read_config_dword() fails the return code would be more helpfu=
-l.
-
-Best regards
-
-> +	return ret;
-> +
-> +}
-> +EXPORT_SYMBOL_GPL(rpi_firmware_init_vl805);
-> +
->  static const struct of_device_id rpi_firmware_of_match[] =3D {
->  	{ .compatible =3D "raspberrypi,bcm2835-firmware", },
->  	{},
-> diff --git a/include/soc/bcm2835/raspberrypi-firmware.h b/include/soc/bc=
-m2835/raspberrypi-firmware.h
-> index cc9cdbc66403..3025aca3c358 100644
-> --- a/include/soc/bcm2835/raspberrypi-firmware.h
-> +++ b/include/soc/bcm2835/raspberrypi-firmware.h
-> @@ -10,6 +10,7 @@
->  #include <linux/of_device.h>
->
->  struct rpi_firmware;
-> +struct pci_dev;
->
->  enum rpi_firmware_property_status {
->  	RPI_FIRMWARE_STATUS_REQUEST =3D 0,
-> @@ -141,6 +142,7 @@ int rpi_firmware_property(struct rpi_firmware *fw,
->  int rpi_firmware_property_list(struct rpi_firmware *fw,
->  			       void *data, size_t tag_size);
->  struct rpi_firmware *rpi_firmware_get(struct device_node *firmware_node=
-);
-> +int rpi_firmware_init_vl805(struct pci_dev *pdev);
->  #else
->  static inline int rpi_firmware_property(struct rpi_firmware *fw, u32 ta=
-g,
->  					void *data, size_t len)
-> @@ -158,6 +160,11 @@ static inline struct rpi_firmware *rpi_firmware_get=
-(struct device_node *firmware
->  {
->  	return NULL;
->  }
-> +
-> +static inline int rpi_firmware_init_vl805(struct pci_dev *pdev)
-> +{
-> +	return 0;
-> +}
->  #endif
->
->  #endif /* __SOC_RASPBERRY_FIRMWARE_H__ */
+Thanks,
+Atanas
