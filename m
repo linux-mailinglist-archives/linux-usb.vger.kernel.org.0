@@ -2,87 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F391C26AE
-	for <lists+linux-usb@lfdr.de>; Sat,  2 May 2020 17:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0D21C275C
+	for <lists+linux-usb@lfdr.de>; Sat,  2 May 2020 19:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728294AbgEBPxO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 May 2020 11:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727897AbgEBPxN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 May 2020 11:53:13 -0400
-Received: from mail-ot1-x362.google.com (mail-ot1-x362.google.com [IPv6:2607:f8b0:4864:20::362])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3773C061A0F
-        for <linux-usb@vger.kernel.org>; Sat,  2 May 2020 08:53:13 -0700 (PDT)
-Received: by mail-ot1-x362.google.com with SMTP id j26so5094825ots.0
-        for <linux-usb@vger.kernel.org>; Sat, 02 May 2020 08:53:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=footclan-ninja.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=I4lpNAVGaRE4y7I/DvtIkD9a+y/AhW0J4S2h5DhYWcU=;
-        b=eF5aD3eQaFLfSaCVSzr+hsdnGLLWDBRrM29f9WnbpPXgHpR2R6Ys6VFcEv0SBbxBvC
-         x5Jv9QgJr3RkEQcfR5d/jj6FfoXtu04CqWn4Avfc31kN6ZsFTIlAlrkEzkS9gl7/uD5p
-         x8BuxDibkPaQCKj7uYWINuxRlPyydfS2D13tqLVoOt0mxd8CBTYuEneCgUO2iBXkfWoV
-         kbNz2UWUVIpjJNRG35DaN7LfnbBACeC/GooxLCR+lBA1z0vw+EbsJjAXHsU+29XQdfNn
-         kTzOskiZX4hF/9nwq5eH70LH4QkAI5Scj8mhnps4NkM2Bf7vs5ZMJgXhe6YZjuF+dR08
-         f+Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=I4lpNAVGaRE4y7I/DvtIkD9a+y/AhW0J4S2h5DhYWcU=;
-        b=ClPUmZVR2V2eZKmD9BzrS93oeMz16SWTKlXydGPSpvnouWQadXGW1FxL66TUPxfqkt
-         VFppG4MexjTyFYV7BMSwMchGjwQNrV2sgfX4IXbx3vy0y9OkQlI9ACpoYzDjt9qwjvi4
-         XOlmgS0hPcEoVL8wffi+RhkaZRfmKDDN9peLdMit5967bGDIsYVhyCX9sIZnTqTqgjHP
-         EFritNMmBHCmTC4iKQb0thHIv3itH7mqL6BXIFRKfXaIIk6Nre7ODilNCDBzndb3VeAN
-         HwVBKFl1YZtxCAR8SAxAvEXpR/byjIGxQelok5L+YuKyUwT4wRvdAx/RQV6uyLxkAGEE
-         JtTg==
-X-Gm-Message-State: AGi0PuYV61/pmUyofX0/PF18o53Dc+LiW3bFRNZKGOdTHz0IzaIOQFI4
-        oG1bIBEQnn8GJOs/5VjO7W7/sbLsX31w89318OD+eqb7xwgazA==
-X-Google-Smtp-Source: APiQypL9yBY5YBqEJi0A9Ktx/4u1HlE+pywv0Z0JzNnbdkLEwmpTGIlJUcteGVidiB8KwK8fbcW90uO15gFy
-X-Received: by 2002:a9d:7d91:: with SMTP id j17mr7742822otn.342.1588434792936;
-        Sat, 02 May 2020 08:53:12 -0700 (PDT)
-Received: from localhost.localdomain (pa49-195-101-57.pa.nsw.optusnet.com.au. [49.195.101.57])
-        by smtp-relay.gmail.com with ESMTPS id s12sm702441oou.7.2020.05.02.08.53.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 May 2020 08:53:12 -0700 (PDT)
-X-Relaying-Domain: footclan.ninja
-From:   Matt Jolly <Kangie@footclan.ninja>
-To:     =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Matt Jolly <Kangie@footclan.ninja>
-Subject: [PATCH] net: usb: qmi_wwan: add support for DW5816e
-Date:   Sun,  3 May 2020 01:52:28 +1000
-Message-Id: <20200502155228.11535-1-Kangie@footclan.ninja>
-X-Mailer: git-send-email 2.26.2
+        id S1728414AbgEBR6I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 May 2020 13:58:08 -0400
+Received: from smtp.domeneshop.no ([194.63.252.55]:52707 "EHLO
+        smtp.domeneshop.no" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727880AbgEBR6I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 May 2020 13:58:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds201912; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:Reply-To:Cc:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=S44YQVBSf+4uM5McTgtiDRdvS1ZBtuWsLXCvE2yH/1Y=; b=bUmAtM3EJWPCZ93Duujk3Fi/So
+        TSQ56h/5bYO7tmBJuon0U3TYag1QIxFtGUa6h6Nrg1yI+KdddTVXOfT3ZmbtFmV8Si/EuBOwaTcHw
+        wjawSCYs6la65iTTBM2Q/GWOihYDi5uf7HOE6/M7BXOaynQ9XFhwvD7RNTggBXYZYYG1Tq+ibrdLr
+        uIdRwDh36pD2Vn0dJIIdcTj2QyqKAtKuGvK4wF3xnxp/6Dtzc8pfySzMwU2uQ4iPj7u93x2n5goq4
+        tWTb8w5IXfTvntZbBTFGm0OciOK51cJuv21e3Vuh6wXLfDUOYMQk6pSauhVRxifxPcYCR9yLZkQZn
+        m7Tlc3ZA==;
+Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:50543 helo=[192.168.10.61])
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1jUwOs-0005fV-Eu; Sat, 02 May 2020 19:58:06 +0200
+Subject: Re: [PATCH 08/10] drm: Add Generic USB Display driver
+To:     dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org
+References: <20200429124830.27475-1-noralf@tronnes.org>
+ <20200429124830.27475-9-noralf@tronnes.org>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Message-ID: <7ebe9c87-55f8-ae1f-5bdf-3413d676f3d7@tronnes.org>
+Date:   Sat, 2 May 2020 19:58:05 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <20200429124830.27475-9-noralf@tronnes.org>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add support for Dell Wireless 5816e to drivers/net/usb/qmi_wwan.c
 
-Signed-off-by: Matt Jolly <Kangie@footclan.ninja>
----
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 6c738a271257..4bb8552a00d3 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1359,6 +1359,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x413c, 0x81b3, 8)},	/* Dell Wireless 5809e Gobi(TM) 4G LTE Mobile Broadband Card (rev3) */
- 	{QMI_FIXED_INTF(0x413c, 0x81b6, 8)},	/* Dell Wireless 5811e */
- 	{QMI_FIXED_INTF(0x413c, 0x81b6, 10)},	/* Dell Wireless 5811e */
-+	{QMI_FIXED_INTF(0x413c, 0x81cc, 8)},	/* Dell Wireless 5816e */
- 	{QMI_FIXED_INTF(0x413c, 0x81d7, 0)},	/* Dell Wireless 5821e */
- 	{QMI_FIXED_INTF(0x413c, 0x81d7, 1)},	/* Dell Wireless 5821e preproduction config */
- 	{QMI_FIXED_INTF(0x413c, 0x81e0, 0)},	/* Dell Wireless 5821e with eSIM support*/
--- 
-2.26.2
+Den 29.04.2020 14.48, skrev Noralf Trønnes:
+> This adds a generic USB display driver with the intention that it can be
+> used with future USB interfaced low end displays/adapters. The Linux
+> gadget device driver will serve as the canonical device implementation.
+> 
+> The following DRM properties are supported:
+> - Plane rotation
+> - Connector TV properties
+> 
+> There is also support for backlight brightness exposed as a backlight
+> device.
+> 
+> Display modes can be made available to the host driver either as DRM
+> display modes or through EDID. If both are present, EDID is just passed
+> on to userspace.
+> 
+> Performance is preferred over color depth, so if the device supports
+> RGB565, DRM_CAP_DUMB_PREFERRED_DEPTH will return 16.
+> 
+> If the device transfer buffer can't fit an uncompressed framebuffer
+> update, the update is split up into parts that do fit.
+> 
+> Optimal user experience is achieved by providing damage reports either by
+> setting FB_DAMAGE_CLIPS on pageflips or calling DRM_IOCTL_MODE_DIRTYFB.
+> 
+> LZ4 compression is used if the device supports it.
+> 
+> The driver supports a one bit monochrome transfer format: R1. This is not
+> implemented in the gadget driver. It is added in preparation for future
+> monochrome e-ink displays.
+> 
+> The driver is MIT licensed to smooth the path for any BSD port of the
+> driver.
+> 
+> Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
+> ---
 
+> diff --git a/drivers/gpu/drm/gud/gud_drm_drv.c b/drivers/gpu/drm/gud/gud_drm_drv.c
+
+> +static int gud_drm_probe(struct usb_interface *interface,
+> +			 const struct usb_device_id *id)
+> +{
+
+<snip>
+
+> +	gdrm = kzalloc(sizeof(*gdrm), GFP_KERNEL);
+> +	if (!gdrm)
+> +		return -ENOMEM;
+> +
+> +	gdrm->usb = usb;
+> +	gdrm->ifnum = interface->cur_altsetting->desc.bInterfaceNumber;
+> +	gdrm->compression = desc.bCompression & GUD_DRM_COMPRESSION_LZ4;
+> +
+> +	drm = &gdrm->drm;
+> +	ret = devm_drm_dev_init(dev, drm, &gud_drm_driver);
+> +	if (ret) {
+> +		kfree(gdrm);
+> +		return ret;
+> +	}
+
+I see that Daniel's series has landed now, so I will use
+devm_drm_dev_alloc() and drmm_mode_config_init() in the next version.
+
+<snip>
+
+> +	drm_fbdev_generic_setup(drm, 16);
+
+This should be:
+
+	drm_fbdev_generic_setup(drm, 0);
+
+Noralf.
+
+> +
+> +	return 0;
+> +}
