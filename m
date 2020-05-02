@@ -2,76 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2872C1C220A
-	for <lists+linux-usb@lfdr.de>; Sat,  2 May 2020 02:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD221C222A
+	for <lists+linux-usb@lfdr.de>; Sat,  2 May 2020 03:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726455AbgEBAor (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 May 2020 20:44:47 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:34772 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726352AbgEBAoq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 May 2020 20:44:46 -0400
-Received: from mailhost.synopsys.com (sv2-mailhost1.synopsys.com [10.205.2.133])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 50B1E4398D;
-        Sat,  2 May 2020 00:44:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1588380286; bh=f2s7mSgHF8VO4XLOfnwmQTgt2ilzKuI2hZe+IzdJUJM=;
-        h=Date:From:Subject:To:Cc:From;
-        b=aPLoFZEWBpENlDqHDxmnRjK4Fwo1irAi4Z+hBEXc/a3/tQNRIzJ6/hPCH+4dFfmUC
-         iplDwVPIHuB0JgKq5s+bUGHMdVbFcugF44doj0gU3LKm2q7tdq4WruJYH9HNdbPnPQ
-         We0n3SWhfaGm4zphdVwAgrMWhgPWQUho85ruG8KRzZ1dBTIMym2PZpy8whL/gMXF4I
-         znWfQna8kqDlf85dUtalBLLaMq16gdBg1oTh8Ue69pziprgksWqPI0fTQEwfVTyuL6
-         LJVxzptoDvOXgbk1db4+0XFUKM+1gNArrO7M6bmmDgB5eRoH5yLzOADXccDtQaCni+
-         Dk5jQTpMDmYoA==
-Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id D5542A0259;
-        Sat,  2 May 2020 00:44:44 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Fri, 01 May 2020 17:44:44 -0700
-Date:   Fri, 01 May 2020 17:44:44 -0700
-Message-Id: <7685ba14eaa185a170d6c4c9668d2ad98eeb8b14.1588380090.git.thinhn@synopsys.com>
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH] usb: dwc3: gadget: Don't setup more than requested
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Anurag Kumar Vulisha <anuragku@xilinx.com>
-Cc:     John Youn <John.Youn@synopsys.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        stable@vger.kernel.org
+        id S1726387AbgEBBwa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 1 May 2020 21:52:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42480 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726381AbgEBBwa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 1 May 2020 21:52:30 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 207219] [BISECTED] Sony Vaio laptop built-in ricoh webcam no
+ longer found on Fedora 31 with 5.4.11 kernel
+Date:   Sat, 02 May 2020 01:52:29 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-207219-208809-pzAN8JHueI@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-207219-208809@https.bugzilla.kernel.org/>
+References: <bug-207219-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The sgl may be allocated larger than the requested length. Check the
-usb_request->length and make sure that we don't setup the TRB to
-send/receive more than requested.
+https://bugzilla.kernel.org/show_bug.cgi?id=207219
 
-Cc: stable@vger.kernel.org
-Fixes: a31e63b608ff ("usb: dwc3: gadget: Correct handling of scattergather lists")
-Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
----
- drivers/usb/dwc3/gadget.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+--- Comment #20 from Alan Stern (stern@rowland.harvard.edu) ---
+That got it.  It's kind of interesting to compare this usbmon trace with the
+earlier one you made under a "good" kernel.  Here's where the difference first
+shows up.  The first lines show the system asking the device for the first nine
+bytes of its configuration descriptor, and the second lines show the device's
+reply (the last nine hex bytes on the line).
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 4ca3e197bee4..95ec39e42409 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1040,7 +1040,8 @@ static void dwc3_prepare_one_trb(struct dwc3_ep *dep,
- 	unsigned		no_interrupt = req->request.no_interrupt;
- 
- 	if (req->request.num_sgs > 0) {
--		length = sg_dma_len(req->start_sg);
-+		length = min_t(unsigned int, req->request.length,
-+			       sg_dma_len(req->start_sg));
- 		dma = sg_dma_address(req->start_sg);
- 	} else {
- 		length = req->request.length;
+Good trace:
+
+ffff895e0a2063c0 123165855 S Ci:1:007:0 s 80 06 0200 0000 0009 9 <
+ffff895e0a2063c0 123166213 C Ci:1:007:0 0 9 = 09026502 02010080 64
+
+Bad trace:
+
+ffffa0e9e4fdb680 145518314 S Ci:3:004:0 s 80 06 0200 0000 0009 9 <
+ffffa0e9e4fdb680 145518517 C Ci:3:004:0 0 9 = 09027602 78f7e4ff 02
+
+As you can see, the replies are very different.  The third and fourth bytes are
+supposed to contain the descriptor's full length (16-bit little endian); the
+values are 0x0265 vs. 0x0276, or 613 vs. 630 in decimal.  This explains the
+difference in the next request, where the system asks the device to send the
+entire configuration descriptor.  The good trace asks for 613 bytes and the bad
+trace asks for 630.
+
+Good trace:
+
+ffff895e0a2063c0 123166260 S Ci:1:007:0 s 80 06 0200 0000 0265 613 <
+ffff895e0a2063c0 123170157 C Ci:1:007:0 0 613 = 09026502 02010080 64080b00
+020e0300 04090400 00010e01 00040d24 0100014d
+
+Bad trace:
+
+ffffa0e9e4fdb680 145518526 S Ci:3:004:0 s 80 06 0200 0000 0276 630 <
+ffffa0e9e4fdb680 145522024 C Ci:3:004:0 0 630 = 09027602 78f7e4ff 029e5f02
+4675e490 b197f0a3 f07b017a b0790012 28ef7404
+
+Comparing the responses (which only contain the first 32 bytes of each reply)
+shows that they are almost completely different.  It looks like the device is
+sending random data in the bad trace!
+
+As we suspected, there's nothing really wrong with the "bad" kernel.  The
+difference is that it initializes the device using the old scheme instead of
+the new scheme.  And the initialization works, sort of, but the device goes
+crazy and starts sending garbage data.  Later on in the bad trace, the device
+stops responding entirely.
+
+Clearly the webcam is buggy.  But since it does work well enough when
+initialized with the old scheme, it looks like the patch that was just accepted
+is the right thing to do.
+
+The kernel log even shows why the Foxconn device ends up being number 5 instead
+of number 3.  Originally it is number 3, but then it disconnects from the USB
+bus (evidently as the result of a firmware upload and a restart) and
+reconnects.  The system assigns it the next device number (5) at that point.
+
 -- 
-2.11.0
-
+You are receiving this mail because:
+You are watching the assignee of the bug.
