@@ -2,116 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E081C2A80
-	for <lists+linux-usb@lfdr.de>; Sun,  3 May 2020 09:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98AED1C2A8C
+	for <lists+linux-usb@lfdr.de>; Sun,  3 May 2020 09:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727067AbgECHNj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 3 May 2020 03:13:39 -0400
-Received: from asavdk3.altibox.net ([109.247.116.14]:35772 "EHLO
-        asavdk3.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726884AbgECHNj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 3 May 2020 03:13:39 -0400
-Received: from ravnborg.org (unknown [158.248.194.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by asavdk3.altibox.net (Postfix) with ESMTPS id 4922320026;
-        Sun,  3 May 2020 09:13:35 +0200 (CEST)
-Date:   Sun, 3 May 2020 09:13:28 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH 01/10] backlight: Add backlight_device_get_by_name()
-Message-ID: <20200503071328.GA11582@ravnborg.org>
-References: <20200429124830.27475-1-noralf@tronnes.org>
- <20200429124830.27475-2-noralf@tronnes.org>
+        id S1727787AbgECH1h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 3 May 2020 03:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727067AbgECH1g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 3 May 2020 03:27:36 -0400
+X-Greylist: delayed 804 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 03 May 2020 00:27:36 PDT
+Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B21C061A0C;
+        Sun,  3 May 2020 00:27:36 -0700 (PDT)
+Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 0437DwHZ022534
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Sun, 3 May 2020 09:13:59 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1588490040; bh=TZDbNan2WwMW7qqj6Vfc61R0Z8dFpNE2zQBNw2PBk8A=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=oNNeOQl5ZRxh0mPbUrx6iYN3x1bNTAAgv2GwW83UtMSnYP94dhspo5Z9at75q2Cml
+         67eGrm2pBa4gMqhbBAImCNGvY7alv8pTrMGiW8apCtBfgWrKtmukSwsxHbs1jjeWTl
+         Oz8+kXsi/74KXUHQK5/wexh3l8b00tUSxckac50M=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
+        (envelope-from <bjorn@mork.no>)
+        id 1jV8p4-00070Y-Hh; Sun, 03 May 2020 09:13:58 +0200
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Matt Jolly <Kangie@footclan.ninja>
+Cc:     "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: usb: qmi_wwan: add support for DW5816e
+Organization: m
+References: <20200502155228.11535-1-Kangie@footclan.ninja>
+Date:   Sun, 03 May 2020 09:13:58 +0200
+In-Reply-To: <20200502155228.11535-1-Kangie@footclan.ninja> (Matt Jolly's
+        message of "Sun, 3 May 2020 01:52:28 +1000")
+Message-ID: <87v9ldlccp.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200429124830.27475-2-noralf@tronnes.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.3 cv=ULXz4hXy c=1 sm=1 tr=0
-        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
-        a=8nJEP1OIZ-IA:10 a=KKAkSRfTAAAA:8 a=pGLkceISAAAA:8 a=SJz97ENfAAAA:8
-        a=7gkXJVJtAAAA:8 a=e5mUnYsNAAAA:8 a=Glsn2Xz2PHKrFKEi74kA:9
-        a=wPNLvfGTeEIA:10 a=cvBusfyB2V15izCimMoJ:22 a=vFet0B0WnEQeilDPIY6i:22
-        a=E9Po1WZjFZOl8hwRPBS3:22 a=Vxmtnl_E_bksehYqCbjh:22
-        a=pHzHmUro8NiASowvMSCR:22 a=6VlIyEUom7LUIeUMNQJH:22
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.102.1 at canardo
+X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Noralf.
+Matt Jolly <Kangie@footclan.ninja> writes:
 
-On Wed, Apr 29, 2020 at 02:48:21PM +0200, Noralf Trønnes wrote:
-> Add a way to lookup a backlight device based on its name.
-> Will be used by a USB display gadget getting the name from configfs.
-> 
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Daniel Thompson <daniel.thompson@linaro.org>
-> Cc: Jingoo Han <jingoohan1@gmail.com>
-> Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
-
-Simple and well-documented.
-Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+> Add support for Dell Wireless 5816e to drivers/net/usb/qmi_wwan.c
+>
+> Signed-off-by: Matt Jolly <Kangie@footclan.ninja>
 > ---
->  drivers/video/backlight/backlight.c | 21 +++++++++++++++++++++
->  include/linux/backlight.h           |  1 +
->  2 files changed, 22 insertions(+)
-> 
-> diff --git a/drivers/video/backlight/backlight.c b/drivers/video/backlight/backlight.c
-> index cac3e35d7630..92d80aa0c0ef 100644
-> --- a/drivers/video/backlight/backlight.c
-> +++ b/drivers/video/backlight/backlight.c
-> @@ -432,6 +432,27 @@ struct backlight_device *backlight_device_get_by_type(enum backlight_type type)
->  }
->  EXPORT_SYMBOL(backlight_device_get_by_type);
->  
-> +/**
-> + * backlight_device_get_by_name - Get backlight device by name
-> + * @name: Device name
-> + *
-> + * This function looks up a backlight device by its name. It obtains a reference
-> + * on the backlight device and it is the caller's responsibility to drop the
-> + * reference by calling backlight_put().
-> + *
-> + * Returns:
-> + * A pointer to the backlight device if found, otherwise NULL.
-> + */
-> +struct backlight_device *backlight_device_get_by_name(const char *name)
-> +{
-> +	struct device *dev;
-> +
-> +	dev = class_find_device_by_name(backlight_class, name);
-> +
-> +	return dev ? to_backlight_device(dev) : NULL;
-> +}
-> +EXPORT_SYMBOL(backlight_device_get_by_name);
-> +
->  /**
->   * backlight_device_unregister - unregisters a backlight device object.
->   * @bd: the backlight device object to be unregistered and freed.
-> diff --git a/include/linux/backlight.h b/include/linux/backlight.h
-> index c7d6b2e8c3b5..56e4580d4f55 100644
-> --- a/include/linux/backlight.h
-> +++ b/include/linux/backlight.h
-> @@ -190,6 +190,7 @@ extern void backlight_force_update(struct backlight_device *bd,
->  extern int backlight_register_notifier(struct notifier_block *nb);
->  extern int backlight_unregister_notifier(struct notifier_block *nb);
->  extern struct backlight_device *backlight_device_get_by_type(enum backlight_type type);
-> +struct backlight_device *backlight_device_get_by_name(const char *name);
->  extern int backlight_device_set_brightness(struct backlight_device *bd, unsigned long brightness);
->  
->  #define to_backlight_device(obj) container_of(obj, struct backlight_device, dev)
-> -- 
-> 2.23.0
-> 
-> _______________________________________________
-> dri-devel mailing list
-> dri-devel@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+>  drivers/net/usb/qmi_wwan.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+> index 6c738a271257..4bb8552a00d3 100644
+> --- a/drivers/net/usb/qmi_wwan.c
+> +++ b/drivers/net/usb/qmi_wwan.c
+> @@ -1359,6 +1359,7 @@ static const struct usb_device_id products[] =3D {
+>  	{QMI_FIXED_INTF(0x413c, 0x81b3, 8)},	/* Dell Wireless 5809e Gobi(TM) 4G=
+ LTE Mobile Broadband Card (rev3) */
+>  	{QMI_FIXED_INTF(0x413c, 0x81b6, 8)},	/* Dell Wireless 5811e */
+>  	{QMI_FIXED_INTF(0x413c, 0x81b6, 10)},	/* Dell Wireless 5811e */
+> +	{QMI_FIXED_INTF(0x413c, 0x81cc, 8)},	/* Dell Wireless 5816e */
+>  	{QMI_FIXED_INTF(0x413c, 0x81d7, 0)},	/* Dell Wireless 5821e */
+>  	{QMI_FIXED_INTF(0x413c, 0x81d7, 1)},	/* Dell Wireless 5821e preproducti=
+on config */
+>  	{QMI_FIXED_INTF(0x413c, 0x81e0, 0)},	/* Dell Wireless 5821e with eSIM s=
+upport*/
+
+Looks fine to me.  Please add to the stable queue as well,  Thanks.
+
+Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
