@@ -2,48 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C30331C2905
-	for <lists+linux-usb@lfdr.de>; Sun,  3 May 2020 01:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC0B1C295F
+	for <lists+linux-usb@lfdr.de>; Sun,  3 May 2020 04:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726625AbgEBXnv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sat, 2 May 2020 19:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726433AbgEBXnu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 May 2020 19:43:50 -0400
-Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC586C061A0C;
-        Sat,  2 May 2020 16:43:50 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 5FFA415166C3B;
-        Sat,  2 May 2020 16:43:50 -0700 (PDT)
-Date:   Sat, 02 May 2020 16:43:49 -0700 (PDT)
-Message-Id: <20200502.164349.488231555246678455.davem@davemloft.net>
-To:     Kangie@footclan.ninja
-Cc:     bjorn@mork.no, netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: usb: qmi_wwan: add support for DW5816e
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200502155228.11535-1-Kangie@footclan.ninja>
-References: <20200502155228.11535-1-Kangie@footclan.ninja>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sat, 02 May 2020 16:43:50 -0700 (PDT)
+        id S1726692AbgECCDK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 May 2020 22:03:10 -0400
+Received: from s52.coreserver.jp ([202.172.28.53]:53219 "EHLO
+        s52.coreserver.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726660AbgECCDK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 May 2020 22:03:10 -0400
+Received: (qmail 650975 invoked by uid 10000); 3 May 2020 11:03:08 +0900
+To:     undisclosed-recipients:;
+Subject: =?UTF-8?Q?=E3=81=82=E3=81=AA=E3=81=9F=E3=81=B8=E3=81=AE=E3=81=94?=  =?UTF-8?Q?=E6=8C=A8=E6=8B=B6?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Sat, 02 May 2020 19:03:08 -0700
+From:   Dominique Bell <keiko@ono.bz>
+Reply-To: dominiquebell757@gmail.com
+Mail-Reply-To: dominiquebell757@gmail.com
+Message-ID: <5650430114feec6e90bd48697486c847@ono.bz>
+X-Sender: keiko@ono.bz
+User-Agent: Roundcube Webmail/0.9.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Matt Jolly <Kangie@footclan.ninja>
-Date: Sun,  3 May 2020 01:52:28 +1000
+注::このメッセージをSPAM / JUNKフォルダーで受信した場合は、インターネットサービスプロバイダーによって制限が課せられているためです。
 
-> Add support for Dell Wireless 5816e to drivers/net/usb/qmi_wwan.c
-> 
-> Signed-off-by: Matt Jolly <Kangie@footclan.ninja>
+メッセージでご迷惑をおかけして申し訳ありません。削除する前に、少し時間をかけてお読みください。
+あなたが私に与えなかったので、このメールはあなたにとって驚きかもしれません
+そうする許可とあなたは私を知らないが、私があなたに言う前に
+私自身についてこのメールを送ったことを許してください
+あなたの許可なしに。
 
-Bj�rn, please review.
+私は自信を持ってこの手紙を書いています。
+あなたがこのプロジェクトを手伝ってくれる神の私、正直で信頼が必要です
+あなたのような立派な人がこの巨大な移転プロジェクトを任せてください。わたし
+次の慈善団体にあなたを紹介するためにあなたの協力を求めています
+世界中の開発。 ..
+ 
+私はあなたに提案があります。あなたのことを示すために私に返信してください
+詳細に興味があります。
+
+私は辛抱強くあなたの返事を待ちます、
+dominiquebell755@gmail.com
+
+ありがとう
+ドミニク・ベル氏
