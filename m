@@ -2,178 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20CB51C3B1F
-	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 15:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF3B1C3C66
+	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 16:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726913AbgEDNVj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 May 2020 09:21:39 -0400
-Received: from foss.arm.com ([217.140.110.172]:44676 "EHLO foss.arm.com"
+        id S1728531AbgEDOIl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 May 2020 10:08:41 -0400
+Received: from mx2.suse.de ([195.135.220.15]:49188 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726351AbgEDNVi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 4 May 2020 09:21:38 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B3A691FB;
-        Mon,  4 May 2020 06:21:35 -0700 (PDT)
-Received: from [192.168.122.166] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 76A493F71F;
-        Mon,  4 May 2020 06:21:35 -0700 (PDT)
-Subject: Re: [PATCH] usb: usbfs: correct kernel->user page attribute mismatch
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        git@thegavinli.com, jarkko.sakkinen@linux.intel.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20200430211922.929165-1-jeremy.linton@arm.com>
- <20200501070500.GA887524@kroah.com>
- <d2d4f50e-a0bf-77c8-399b-86c2137bfa84@arm.com>
- <20200504071306.GA831956@kroah.com>
-From:   Jeremy Linton <jeremy.linton@arm.com>
-Message-ID: <b3e38dba-ec98-147c-bb7b-c464882b33fd@arm.com>
-Date:   Mon, 4 May 2020 08:21:31 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <20200504071306.GA831956@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726404AbgEDOIl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 4 May 2020 10:08:41 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id DCE4DAD2C;
+        Mon,  4 May 2020 14:08:40 +0000 (UTC)
+Message-ID: <1588601290.13662.6.camel@suse.com>
+Subject: Re: general protection fault in go7007_usb_probe
+From:   Oliver Neukum <oneukum@suse.com>
+To:     syzbot <syzbot+cabfa4b5b05ff6be4ef0@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, hverkuil-cisco@xs4all.nl,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Date:   Mon, 04 May 2020 16:08:10 +0200
+In-Reply-To: <0000000000003cbf8e05a3d57b98@google.com>
+References: <0000000000003cbf8e05a3d57b98@google.com>
+Content-Type: multipart/mixed; boundary="=-NgPzncis5hgzBhPmjfxz"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
 
-On 5/4/20 2:13 AM, Greg KH wrote:
-> On Fri, May 01, 2020 at 10:47:22AM -0500, Jeremy Linton wrote:
->> Hi,
->>
->> Thanks for taking a look at this.
->>
->> On 5/1/20 2:05 AM, Greg KH wrote:
->>> On Thu, Apr 30, 2020 at 04:19:22PM -0500, Jeremy Linton wrote:
->>>> On arm64, and possibly other architectures, requesting
->>>> IO coherent memory may return Normal-NC if the underlying
->>>> hardware isn't coherent. If these pages are then
->>>> remapped into userspace as Normal, that defeats the
->>>> purpose of getting Normal-NC, as well as resulting in
->>>> mappings with differing cache attributes.
->>>
->>> What is "Normal-NC"?
->>
->> A non-cacheable attribute on arm64 pages. I think Mark R & Marc Z elaborated
->> while I was asleep (thanks!).
->>    .
->>
->>
->>>
->>>> In particular this happens with libusb, when it attempts
->>>> to create zero-copy buffers as is used by rtl-sdr, and
->>>
->>> What is "rtl-sdr"
->>
->> Its the realtek software defined radio (SDR), a really inexpensive TV dongle
->> that was discovered could be used as a general purpose SDR a decade or so
->> ago. In particular, this project
->> https://github.com/osmocom/rtl-sdr/
->> which is packaged by fedora/etc.
->>
->>>
->>>> maybe other applications. The result is usually
->>>> application death.
->>>
->>> So is this a new problem?  Old problem?  Old problem only showing up on
->>> future devices?  On current devices?  I need a hint here as to know if
->>> this is a bugfix or just work to make future devices work properly.
->>
->> This has been a problem on arm devices without IO coherent USB apparently
->> for years. The rtl-sdr project itself has a disable zero-copy mode that
->> people have been using on rpi/etc specific builds. Fedora OTOH, is building
->> it with the same flags on x86 & arm64 which means that people report
->> problems. This happened a few days ago (on a pinebook), and I duplicated it
->> on an NXP platform just running the `rtl_test` artifact with a nooelec from
->> my junk box. Guessing that it was a page mismatch I went looking for that,
->> rather than disabling the zero copy since punishing arm machine that have IO
->> coherent USB adapters for the sins of these low end devices isn't ideal. I
->> found this, and this patch allows the rtl_test app to run without issues on
->> my NXP/solidrun.
->>
->> Plus, given that its actually a kernel/libusb problem its likely there are
->> other applications having similar problems.
->>
->>>
->>>>
->>>> If dma_mmap_attr() is used instead of remap_pfn_range,
->>>> the page cache/etc attributes can be matched between the
->>>> kernel and userspace.
->>>>
->>>> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
->>>> ---
->>>>    drivers/usb/core/devio.c | 5 ++---
->>>>    1 file changed, 2 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
->>>> index 6833c918abce..1e7458dd6e5d 100644
->>>> --- a/drivers/usb/core/devio.c
->>>> +++ b/drivers/usb/core/devio.c
->>>> @@ -217,6 +217,7 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
->>>>    {
->>>>    	struct usb_memory *usbm = NULL;
->>>>    	struct usb_dev_state *ps = file->private_data;
->>>> +	struct usb_hcd *hcd = bus_to_hcd(ps->dev->bus);
->>>>    	size_t size = vma->vm_end - vma->vm_start;
->>>>    	void *mem;
->>>>    	unsigned long flags;
->>>> @@ -250,9 +251,7 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
->>>>    	usbm->vma_use_count = 1;
->>>>    	INIT_LIST_HEAD(&usbm->memlist);
->>>> -	if (remap_pfn_range(vma, vma->vm_start,
->>>> -			virt_to_phys(usbm->mem) >> PAGE_SHIFT,
->>>> -			size, vma->vm_page_prot) < 0) {
->>>> +	if (dma_mmap_attrs(hcd->self.sysdev, vma, mem, dma_handle, size, 0)) {
->>>
->>> Given that this code has not changed since 2016, how has no one noticed
->>> this issue before?
->> They have there are a lot of reports of sdr failures, but the general use
->> case is rare?
->>
->>>
->>> And have you tested this change out on other systems (i.e. x86) to
->>> ensure that this still works properly?
->>
->> Yes and no, I did some basic libusb tests on an x86 machine, but its a bit
->> tricky at the moment for me to get the rtl plugged into a x86 test machine.
->> (its a work in progress).
->>
->>
->>>
->>> And why isn't this call used more by drivers if this is a real issue?
->> The particulars of asking for iocoherent memory and then mapping it to
->> userspace is rarer than just asking for kmalloc()/remap() and then
->> performing the dma ops?
->>
->> Then there are all the softer issues around arm64 testing/availability and
->> vendors carrying "fixes" for particular issues (like rtl-sdr disabling zero
->> copy).
->>
->>> And will this cause issues with how the userspace mapping is handled as
->>> now we rely on userspace to do things differently?  Or am I reading the
->>> dma_mmap_attrs() documentation wrong?
->> I don't think userspace is doing anything differently here, and AFAIK, on
->> systems with IO coherent adapters this ends up with the same page mapping as
->> just doing the remap_pfn_rage() with the same attributes as before. I've
->> looked at dma_map_attrs() a bit, but i'm also trusting it does what it says
->> on the tin.
->>
->>
->> Thanks again for looking at this.
+--=-NgPzncis5hgzBhPmjfxz
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+
+Am Dienstag, den 21.04.2020, 16:36 -0700 schrieb syzbot:
+> Hello,
 > 
-> Ok, can I get a lot better written changelog text for this patch based
-> on this thread, so that it makes more sense when we merge this patch?
+> syzbot found the following crash on:
+> 
+> HEAD commit:    e9010320 usb: cdns3: gadget: make a bunch of functions sta..
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1263a930100000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=bd14feb44652cfaf
+> dashboard link: https://syzkaller.appspot.com/bug?extid=cabfa4b5b05ff6be4ef0
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> 
+> Unfortunately, I don't have any reproducer for this crash yet.
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+cabfa4b5b05ff6be4ef0@syzkaller.appspotmail.com
 
-Yes, sure. I also plan on changing it to dma_mmap_coherent() which is 
-the same as the dma_mmap_attrs() with the attrs as above.
+#syz test: https://github.com/google/kasan.git e9010320
+
+--=-NgPzncis5hgzBhPmjfxz
+Content-Disposition: attachment; filename="0001-go7007-add-sanity-checking-for-endpoints.patch"
+Content-Transfer-Encoding: base64
+Content-Type: text/x-patch; name="0001-go7007-add-sanity-checking-for-endpoints.patch";
+	charset="UTF-8"
+
+RnJvbSBhNDAxYjllZjg5YzRjZmJkZWIzOTkzZDY4YjUxNDIzZTkwOGJlN2E1IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
+OiBXZWQsIDIyIEFwciAyMDIwIDEzOjQ5OjU1ICswMjAwClN1YmplY3Q6IFtQQVRDSF0gZ283MDA3
+OiBhZGQgc2FuaXR5IGNoZWNraW5nIGZvciBlbmRwb2ludHMKCkEgbWFsaWNpb3VzIFVTQiBkZXZp
+Y2UgbWF5IGxhY2sgZW5kcG9pbnRzIHRoZSBkcml2ZXIgYXNzdW1lcyB0byBleGlzdApBY2Nlc3Np
+bmcgdGhlbSBsZWFkcyB0byBOVUxMIHBvaW50ZXIgYWNjZXNzZXMuIFRoaXMgcGF0Y2ggaW50cm9k
+dWNlcwpzYW5pdHkgY2hlY2tpbmcuCgpTaWduZWQtb2ZmLWJ5OiBPbGl2ZXIgTmV1a3VtIDxvbmV1
+a3VtQHN1c2UuY29tPgpGaXhlczogODY2Yjg2OTVkNjdlOCAoIlN0YWdpbmc6IGFkZCB0aGUgZ283
+MDA3IHZpZGVvIGRyaXZlciIpCi0tLQogZHJpdmVycy9tZWRpYS91c2IvZ283MDA3L2dvNzAwNy11
+c2IuYyB8IDExICsrKysrKysrKystCiAxIGZpbGUgY2hhbmdlZCwgMTAgaW5zZXJ0aW9ucygrKSwg
+MSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVkaWEvdXNiL2dvNzAwNy9nbzcw
+MDctdXNiLmMgYi9kcml2ZXJzL21lZGlhL3VzYi9nbzcwMDcvZ283MDA3LXVzYi5jCmluZGV4IGY4
+ODljOWQ3NDBjZC4uZGJmMDQ1NWQ1ZDUwIDEwMDY0NAotLS0gYS9kcml2ZXJzL21lZGlhL3VzYi9n
+bzcwMDcvZ283MDA3LXVzYi5jCisrKyBiL2RyaXZlcnMvbWVkaWEvdXNiL2dvNzAwNy9nbzcwMDct
+dXNiLmMKQEAgLTExMzIsNiArMTEzMiwxMCBAQCBzdGF0aWMgaW50IGdvNzAwN191c2JfcHJvYmUo
+c3RydWN0IHVzYl9pbnRlcmZhY2UgKmludGYsCiAJCWdvLT5ocGlfb3BzID0gJmdvNzAwN191c2Jf
+b25ib2FyZF9ocGlfb3BzOwogCWdvLT5ocGlfY29udGV4dCA9IHVzYjsKIAorCWVwID0gdXNiLT51
+c2JkZXYtPmVwX2luWzRdOworCWlmICghZXApCisJCXJldHVybiAtRU5PREVWOworCiAJLyogQWxs
+b2NhdGUgdGhlIFVSQiBhbmQgYnVmZmVyIGZvciByZWNlaXZpbmcgaW5jb21pbmcgaW50ZXJydXB0
+cyAqLwogCXVzYi0+aW50cl91cmIgPSB1c2JfYWxsb2NfdXJiKDAsIEdGUF9LRVJORUwpOwogCWlm
+ICh1c2ItPmludHJfdXJiID09IE5VTEwpCkBAIC0xMTQxLDcgKzExNDUsNiBAQCBzdGF0aWMgaW50
+IGdvNzAwN191c2JfcHJvYmUoc3RydWN0IHVzYl9pbnRlcmZhY2UgKmludGYsCiAJaWYgKHVzYi0+
+aW50cl91cmItPnRyYW5zZmVyX2J1ZmZlciA9PSBOVUxMKQogCQlnb3RvIGFsbG9jZmFpbDsKIAot
+CWVwID0gdXNiLT51c2JkZXYtPmVwX2luWzRdOwogCWlmICh1c2JfZW5kcG9pbnRfdHlwZSgmZXAt
+PmRlc2MpID09IFVTQl9FTkRQT0lOVF9YRkVSX0JVTEspCiAJCXVzYl9maWxsX2J1bGtfdXJiKHVz
+Yi0+aW50cl91cmIsIHVzYi0+dXNiZGV2LAogCQkJdXNiX3JjdmJ1bGtwaXBlKHVzYi0+dXNiZGV2
+LCA0KSwKQEAgLTEyNjMsOSArMTI2NiwxMyBAQCBzdGF0aWMgaW50IGdvNzAwN191c2JfcHJvYmUo
+c3RydWN0IHVzYl9pbnRlcmZhY2UgKmludGYsCiAKIAkvKiBBbGxvY2F0ZSB0aGUgVVJCcyBhbmQg
+YnVmZmVycyBmb3IgcmVjZWl2aW5nIHRoZSB2aWRlbyBzdHJlYW0gKi8KIAlpZiAoYm9hcmQtPmZs
+YWdzICYgR083MDA3X1VTQl9FWlVTQikgeworCQlpZiAoIXVzYi0+dXNiZGV2LT5lcF9pbls2XSkK
+KwkJCWdvdG8gYWxsb2NmYWlsOwogCQl2X3VyYl9sZW4gPSAxMDI0OwogCQl2aWRlb19waXBlID0g
+dXNiX3JjdmJ1bGtwaXBlKHVzYi0+dXNiZGV2LCA2KTsKIAl9IGVsc2UgeworCQlpZiAoIXVzYi0+
+dXNiZGV2LT5lcF9pblsxXSkKKwkJCWdvdG8gYWxsb2NmYWlsOwogCQl2X3VyYl9sZW4gPSA1MTI7
+CiAJCXZpZGVvX3BpcGUgPSB1c2JfcmN2YnVsa3BpcGUodXNiLT51c2JkZXYsIDEpOwogCX0KQEAg
+LTEyODUsNiArMTI5Miw4IEBAIHN0YXRpYyBpbnQgZ283MDA3X3VzYl9wcm9iZShzdHJ1Y3QgdXNi
+X2ludGVyZmFjZSAqaW50ZiwKIAkvKiBBbGxvY2F0ZSB0aGUgVVJCcyBhbmQgYnVmZmVycyBmb3Ig
+cmVjZWl2aW5nIHRoZSBhdWRpbyBzdHJlYW0gKi8KIAlpZiAoKGJvYXJkLT5mbGFncyAmIEdPNzAw
+N19VU0JfRVpVU0IpICYmCiAJICAgIChib2FyZC0+bWFpbl9pbmZvLmZsYWdzICYgR083MDA3X0JP
+QVJEX0hBU19BVURJTykpIHsKKwkJaWYgKCF1c2ItPnVzYmRldi0+ZXBfaW5bOF0pCisJCQlnb3Rv
+IGFsbG9jZmFpbDsKIAkJZm9yIChpID0gMDsgaSA8IDg7ICsraSkgewogCQkJdXNiLT5hdWRpb191
+cmJzW2ldID0gdXNiX2FsbG9jX3VyYigwLCBHRlBfS0VSTkVMKTsKIAkJCWlmICh1c2ItPmF1ZGlv
+X3VyYnNbaV0gPT0gTlVMTCkKLS0gCjIuMTYuNAoK
 
 
-I will re-post later this afternoon.
+--=-NgPzncis5hgzBhPmjfxz--
 
-Thanks,
