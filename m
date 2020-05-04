@@ -2,135 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5F91C3D24
-	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 16:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C31721C3E36
+	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 17:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728950AbgEDOet (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 May 2020 10:34:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51236 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728187AbgEDOes (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 4 May 2020 10:34:48 -0400
-Received: from localhost (unknown [171.76.84.84])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D506220757;
-        Mon,  4 May 2020 14:34:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588602887;
-        bh=A61gpXUG4UlZNcao5CGbMn9uCY5KgqwpBqAKkoOg+To=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rKhHTMP32JxNwlJgGzU7jatQB87jrHF+dIUMRHmHCJfCrlk20uFsz24BOpZ1KG76Z
-         t+vupbHqjyGE4KOqOorfwez/JSQGl76/4mTP1wQEyYs7Uu3whJoV/yKUGbth5E3jc5
-         Ab7fiLo4EZn6eEfjq7ZYfuvuuJ6Ee3E9I953cBso=
-Date:   Mon, 4 May 2020 20:04:38 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andreas =?iso-8859-1?Q?B=F6hler?= <dev@aboehler.at>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 2/5] usb: renesas-xhci: Add the renesas xhci driver
-Message-ID: <20200504143438.GT1375924@vkoul-mobl>
-References: <20200430165920.1345409-1-vkoul@kernel.org>
- <20200430165920.1345409-3-vkoul@kernel.org>
- <81e0eff0-8b40-3c47-e39b-929e1dc07fd5@linux.intel.com>
+        id S1728968AbgEDPMQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 May 2020 11:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726509AbgEDPMQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 May 2020 11:12:16 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0D3C061A0E
+        for <linux-usb@vger.kernel.org>; Mon,  4 May 2020 08:12:15 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id o18so3350227pgg.8
+        for <linux-usb@vger.kernel.org>; Mon, 04 May 2020 08:12:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zAgqElNOEB4sfvd/YNDWk1ZpRVXjlXgVkQGnwHDqFzo=;
+        b=BrzKW+LorT56/tizKQS4xy20QQ69K2KOMywsICo6eW9ysCFFGA+CcQCUpQAxCSwI3H
+         LYkUAhwdGBTwt2aDIeP79uqEQr8hjW5fcS1WiW+XDwFn3KDTjMQcHO0Om98bQ3w7FjH6
+         WMenBg2wDt1XufrPXfBXFRF30rqzU9jewcaTLMwrT7zfHRp7tDV9GDQ9guE8TctRKjxm
+         MeD1EOGecfZGJmHKaToZfmh2DN/MLkTW4SXM+Z6p4JyZzp8WZQIPBPLBT5WMA6ZK0kzq
+         u812LO9eQIvLkYXUJ9M1kTN/rEbhG0CzCr19tuUC0hXdiRpvPR8reEUH3Uzh9tpTEw1P
+         G1aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zAgqElNOEB4sfvd/YNDWk1ZpRVXjlXgVkQGnwHDqFzo=;
+        b=atCKsP63NfIBHiAqYU1UKC3z5g7/nRredPJ1+tchYCjyiW8a7TU5vxTEYvI68UyyGr
+         6GchYbqPdVZkbeScg2B7KXwtihJ5CiBGp6Gh6KBJpvy3Cco4iGkS+ZHHeaewnU36RXqm
+         NXbftWXe0xEAKffSxZ1LVDmV0rZOyjxETNKJAIsR6G2e3MGoKtR0twarsSVgzn/I1cT7
+         WiHnjhHs91HYCMrkmSm3NWHxuSs5/njzDWhHDtmmFdddNGpqpWYveLliVzi0du3tYP5T
+         afXVmbSH3lYrdcmTu+EVqMnAAqemCmkAbxE/8f2T5VDRiyw4HxwXINAZLWXP/myd28Da
+         YFSw==
+X-Gm-Message-State: AGi0PuZ45nKLmy81jpUfXfIA6raUiLRf65G2RpWWzHwSZ8U21oq01evV
+        qylrAfJfiUCtvwoDR7xxOZtcfXZeDUn9kBJIDZMWCA==
+X-Google-Smtp-Source: APiQypILbNqxA1/gCqTuBcjQLpbszXrbWvJDpF2fTWUBIdz+DGK+lV86ukLt19uR5VqhxNL8DO7BVKBqBklumJWfKDo=
+X-Received: by 2002:a63:a61:: with SMTP id z33mr4289902pgk.440.1588605134613;
+ Mon, 04 May 2020 08:12:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <81e0eff0-8b40-3c47-e39b-929e1dc07fd5@linux.intel.com>
+References: <CAAeHK+zdN280v54=qbEA5ALuXuCB3u=8BO8YHN+ZMzxWBzsQYg@mail.gmail.com>
+ <Pine.LNX.4.44L0.2005041018520.11213-100000@netrider.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.2005041018520.11213-100000@netrider.rowland.org>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Mon, 4 May 2020 17:11:52 +0200
+Message-ID: <CAAeHK+y0A5U6m6XmeVZTSh-pyVJB6oe37HDDcv4S6_LfYyZS7Q@mail.gmail.com>
+Subject: Re: Testing endpoint halt support for raw-gadget
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
+On Mon, May 4, 2020 at 4:24 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Mon, 4 May 2020, Andrey Konovalov wrote:
+>
+> > One more question (sorry for so many :).
+> >
+> > Looking at other fields of usb_request struct I see frame_number.
+> > AFAIU it's filled in by the UDC driver for ISO transfers. Does it make
+> > sense to expose it to userspace? I don't see any composite/legacy
+> > gadgets use that field at all.
+>
+> Do any of those gadget drivers use isochronous endpoints?
 
-On 04-05-20, 16:01, Mathias Nyman wrote:
-> On 30.4.2020 19.59, Vinod Koul wrote:
-> > From: Christian Lamparter <chunkeey@googlemail.com>
-> > 
-> > This add a new driver for renesas xhci which is basically a firmware
-> > loader for uPD720201 and uPD720202 w/o ROM. The xhci-pci driver will
-> > invoke this driver for loading/unloading on relevant devices.
-> > 
-> > This patch adds a firmware loader for the uPD720201K8-711-BAC-A
-> > and uPD720202K8-711-BAA-A variant. Both of these chips are listed
-> > in Renesas' R19UH0078EJ0500 Rev.5.00 "User's Manual: Hardware" as
-> > devices which need the firmware loader on page 2 in order to
-> > work as they "do not support the External ROM".
-> > 
-> > The "Firmware Download Sequence" is describe in chapter
-> > "7.1 FW Download Interface" R19UH0078EJ0500 Rev.5.00 page 131.
-> > 
-> > The firmware "K2013080.mem" is available from a USB3.0 Host to
-> > PCIe Adapter (PP2U-E card) "Firmware download" archive. An
-> > alternative version can be sourced from Netgear's WNDR4700 GPL
-> > archives.
-> > 
-> > The release notes of the PP2U-E's "Firmware Download" ver 2.0.1.3
-> > (2012-06-15) state that the firmware is for the following devices:
-> >  - uPD720201 ES 2.0 sample whose revision ID is 2.
-> >  - uPD720201 ES 2.1 sample & CS sample & Mass product, ID is 3.
-> >  - uPD720202 ES 2.0 sample & CS sample & Mass product, ID is 2.
-> > 
-> > Signed-off-by: Christian Lamparter <chunkeey@googlemail.com>
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > [vkoul: fixed comments:
-> > 	used macros for timeout count and delay
-> > 	removed renesas_fw_alive_check
-> > 	cleaned renesas_fw_callback
-> > 	removed recursion for renesas_fw_download
-> > 	add register defines and field names
-> > 	move to a separate file
-> > 	make fw loader as sync probe so that we execute in probe and
-> >         prevent race
-> > 	export symbols for xhci-pci to use]
-> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> > ---
-> >  drivers/usb/host/Makefile           |   2 +-
-> >  drivers/usb/host/xhci-pci-renesas.c | 365 ++++++++++++++++++++++++++++
-> >  drivers/usb/host/xhci-pci.h         |  16 ++
-> >  3 files changed, 382 insertions(+), 1 deletion(-)
-> >  create mode 100644 drivers/usb/host/xhci-pci-renesas.c
-> >  create mode 100644 drivers/usb/host/xhci-pci.h
-> > 
-> > diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
-> > index b191361257cc..f3a5a2f01874 100644
-> > --- a/drivers/usb/host/Makefile
-> > +++ b/drivers/usb/host/Makefile
-> > @@ -70,7 +70,7 @@ obj-$(CONFIG_USB_OHCI_HCD_DAVINCI)	+= ohci-da8xx.o
-> >  obj-$(CONFIG_USB_UHCI_HCD)	+= uhci-hcd.o
-> >  obj-$(CONFIG_USB_FHCI_HCD)	+= fhci.o
-> >  obj-$(CONFIG_USB_XHCI_HCD)	+= xhci-hcd.o
-> > -obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o
-> > +obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o xhci-pci-renesas.o
-> 
-> Hmm, now we end up with two modules, xhci-pci and xhci-pci-renesas, even if
-> xhci-pci-renesas just includes helper functions to load firmware for renesas.
+Yes, there are audio/uvc function/legacy drivers that use those.
 
-Right, these are two modules. Do you forsee an issue with two ko's
-> 
-> My kbuild knowledge is limited, but one way to solve this would be to 
-> rename xhci-pci.c to xhci-pci-core.c and add:
+> In fact, it also looks like none of the drivers in gadget/udc/ touch
+> the frame_number field.  Maybe we should just get rid of it, since it
+> isn't being used.
 
-Yeah i wanted to avoid the rename (stopped short of suggesting that)..
-> 
-> xhci-pci-y := xhci-pci-core.o xhci-pci-renesas.o
-> 
-> unless someone can suggest a better way to solve this
-
-I dont have any better idea atm!
-
-So if you are okay with rename of file, I can do that first and then
-these patches
-
-Thanks
--- 
-~Vinod
+It is used by dwc2/3 gadget drivers (which are not in gadget/udc/).
