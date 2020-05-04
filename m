@@ -2,112 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 784151C356C
-	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 11:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F12241C35D5
+	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 11:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728132AbgEDJUD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 May 2020 05:20:03 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:58517 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727930AbgEDJUC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 May 2020 05:20:02 -0400
-Received: from 61-220-137-37.hinet-ip.hinet.net ([61.220.137.37] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1jVXGZ-0006Es-4z; Mon, 04 May 2020 09:19:59 +0000
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     mathias.nyman@intel.com
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        id S1728071AbgEDJdz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 May 2020 05:33:55 -0400
+Received: from mga12.intel.com ([192.55.52.136]:57966 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726625AbgEDJdz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 4 May 2020 05:33:55 -0400
+IronPort-SDR: VWIKzGN8Kkq/iia6QUR0Pzix3/Jh4WGvRp2aqXtDxZLssCGZFh1bsTSOo7PbSRImIRTR8/TlbF
+ +BNb1OYIwk3A==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2020 02:33:55 -0700
+IronPort-SDR: QSJuzcglUB8dnNG9yfVAFaOYY5bpi0oek4qg95jwBlrswJmAt/NBlxSqk1W3aC1kmYKz+glhwP
+ XP3AZVYiHUBw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,351,1583222400"; 
+   d="scan'208";a="262768787"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 04 May 2020 02:33:53 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id CB941E1; Mon,  4 May 2020 12:33:52 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org (open list:USB XHCI DRIVER),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] xhci: Prevent runtime suspend all the time with XHCI_RESET_ON_RESUME quirk
-Date:   Mon,  4 May 2020 17:19:52 +0800
-Message-Id: <20200504091952.15820-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.17.1
+        linux-usb@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1] usb: dwc3: pci: Enable extcon driver for Intel Merrifield
+Date:   Mon,  4 May 2020 12:33:52 +0300
+Message-Id: <20200504093352.7981-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Etron EJ168 USB 3.0 Host Controller stops working after S3, if it was
-runtime suspended previously:
-[  370.080359] pci 0000:02:00.0: can't change power state from D3cold to D0 (config space inaccessible)
-[  370.080477] xhci_hcd 0000:04:00.0: can't change power state from D3cold to D0 (config space inaccessible)
-[  370.080532] pcieport 0000:00:1c.0: DPC: containment event, status:0x1f05 source:0x0200
-[  370.080533] pcieport 0000:00:1c.0: DPC: ERR_FATAL detected
-[  370.080536] xhci_hcd 0000:04:00.0: can't change power state from D3hot to D0 (config space inaccessible)
-[  370.080552] xhci_hcd 0000:04:00.0: AER: can't recover (no error_detected callback)
-[  370.080566] usb usb3: root hub lost power or was reset
-[  370.080566] usb usb4: root hub lost power or was reset
-[  370.080572] xhci_hcd 0000:04:00.0: Host halt failed, -19
-[  370.080574] xhci_hcd 0000:04:00.0: Host not accessible, reset failed.
-[  370.080575] xhci_hcd 0000:04:00.0: PCI post-resume error -19!
-[  370.080586] xhci_hcd 0000:04:00.0: HC died; cleaning up
+Intel Merrifield provides a DR support via PMIC which has its own
+extcon driver.
 
-This can be fixed by not runtime suspend the controller at all.
+Add a property string to link to that driver.
 
-So instead of conditionally runtime suspend the controller, always
-prevent runtime suspend with XHCI_RESET_ON_RESUME quirk.
-
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/usb/host/xhci-pci.c |  3 ++-
- drivers/usb/host/xhci.c     | 19 -------------------
- 2 files changed, 2 insertions(+), 20 deletions(-)
+ drivers/usb/dwc3/dwc3-pci.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 766b74723e64..7d2660923dae 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -371,7 +371,8 @@ static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 		xhci->shared_hcd->can_do_streams = 1;
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index 7051611229c983..b67372737dc9b2 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -114,6 +114,7 @@ static const struct property_entry dwc3_pci_intel_properties[] = {
  
- 	/* USB-2 and USB-3 roothubs initialized, allow runtime pm suspend */
--	pm_runtime_put_noidle(&dev->dev);
-+	if (!(xhci->quirks & XHCI_RESET_ON_RESUME))
-+		pm_runtime_put_noidle(&dev->dev);
- 
- 	if (xhci->quirks & XHCI_DEFAULT_PM_RUNTIME_ALLOW)
- 		pm_runtime_allow(&dev->dev);
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index bee5deccc83d..8a1e3172405b 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -3860,16 +3860,6 @@ static void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev)
- 	struct xhci_slot_ctx *slot_ctx;
- 	int i, ret;
- 
--#ifndef CONFIG_USB_DEFAULT_PERSIST
--	/*
--	 * We called pm_runtime_get_noresume when the device was attached.
--	 * Decrement the counter here to allow controller to runtime suspend
--	 * if no devices remain.
--	 */
--	if (xhci->quirks & XHCI_RESET_ON_RESUME)
--		pm_runtime_put_noidle(hcd->self.controller);
--#endif
--
- 	ret = xhci_check_args(hcd, udev, NULL, 0, true, __func__);
- 	/* If the host is halted due to driver unload, we still need to free the
- 	 * device.
-@@ -4020,15 +4010,6 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
- 
- 	xhci_debugfs_create_slot(xhci, slot_id);
- 
--#ifndef CONFIG_USB_DEFAULT_PERSIST
--	/*
--	 * If resetting upon resume, we can't put the controller into runtime
--	 * suspend if there is a device attached.
--	 */
--	if (xhci->quirks & XHCI_RESET_ON_RESUME)
--		pm_runtime_get_noresume(hcd->self.controller);
--#endif
--
- 	/* Is this a LS or FS device under a HS hub? */
- 	/* Hub or peripherial? */
- 	return 1;
+ static const struct property_entry dwc3_pci_mrfld_properties[] = {
+ 	PROPERTY_ENTRY_STRING("dr_mode", "otg"),
++	PROPERTY_ENTRY_STRING("linux,extcon-name", "mrfld_bcove_pwrsrc"),
+ 	PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
+ 	{}
+ };
 -- 
-2.17.1
+2.26.2
 
