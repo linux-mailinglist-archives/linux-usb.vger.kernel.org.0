@@ -2,32 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C15A41C47BE
-	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 22:14:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC83B1C49BB
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 00:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726756AbgEDUOB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 May 2020 16:14:01 -0400
-Received: from foss.arm.com ([217.140.110.172]:52874 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726111AbgEDUOA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 4 May 2020 16:14:00 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5BD30101E;
-        Mon,  4 May 2020 13:14:00 -0700 (PDT)
-Received: from mammon-tx2.austin.arm.com (mammon-tx2.austin.arm.com [10.118.28.62])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 52CCC3F71F;
-        Mon,  4 May 2020 13:14:00 -0700 (PDT)
-From:   Jeremy Linton <jeremy.linton@arm.com>
-To:     linux-usb@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        git@thegavinli.com, jarkko.sakkinen@linux.intel.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        mark.rutland@arm.com, maz@kernel.org, robin.murphy@arm.com,
-        Jeremy Linton <jeremy.linton@arm.com>
-Subject: [PATCH v2] usb: usbfs: correct kernel->user page attribute mismatch
-Date:   Mon,  4 May 2020 15:13:48 -0500
-Message-Id: <20200504201348.1183246-1-jeremy.linton@arm.com>
-X-Mailer: git-send-email 2.24.1
+        id S1726469AbgEDWnQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 May 2020 18:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726338AbgEDWnP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 May 2020 18:43:15 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F401C061A0F
+        for <linux-usb@vger.kernel.org>; Mon,  4 May 2020 15:43:15 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id x25so79208wmc.0
+        for <linux-usb@vger.kernel.org>; Mon, 04 May 2020 15:43:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JjruGVFTYIkCOp/6P69N/+5GVlaNIjo9XcpDR89Pd+0=;
+        b=mQxmO5SnyZe8PfDf60tP3gPYEkzPyOIcM3Md/Gdw43BDEazdiO5THIRKvYImhxW/Zc
+         pVDzQsWFc2hJiOxJRlfPlTREeMHRkfu31jRlhnmOZdBcAH1bUT5rbqFurdQ0Uggdix30
+         CVCzDXzUR2F85C+OLcSgpFtmXOdapgTjEA677JX92wUCrj3NHgxubE5ogp1gM7sGmpjd
+         cCVWPBCJ9CfgLP9G9gl3DAArd7M2Zr3lD17FanRN4rDT+iFj21P/m11WthnGCQJwPqBp
+         Q0LSt67itKjxxTb9YnXZKvIBESSlM86++zJrBaB9GL9NByXCxAX7QTQxW2RWRd9b5MQr
+         6u7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JjruGVFTYIkCOp/6P69N/+5GVlaNIjo9XcpDR89Pd+0=;
+        b=a2u2HSSfnK6nWlxNZK2eKF6hk1jp4lkfY0j+Mk01kLLwCKGbvjrD+w+5jKOXPL16RH
+         RlpbFAbAAHCWG8Z4aOcVL2rClcwUaWxdzSbYmdURRXWyjAQLKD2EwGyO59oDF206VZlr
+         LVWcOQcRd1NGG6o4oxqCS/DR/kTMJ6IMrMqfspM8htZeXlOlNQcRoaEJxlQdHO4+60xm
+         D34VKPlPs1GwB69J3sklD+y4dVLTTyVwBWous4UllyT9T9DMY6Ccsy7Z86v/03owOI6X
+         EhsAx1ruRjiNjvpWWK7dHoTh5AfAVsMc3i0xIdnu6seW8eGV8vZmujIZ5fd14raegp2B
+         k+jQ==
+X-Gm-Message-State: AGi0PubZCDpOp5azkC6y5GSf5/qBbnXOXXN1JwIo80tXqKjmZ6OPKtXE
+        fU/HxeIg54a76d/8L9dzdyJ7sw==
+X-Google-Smtp-Source: APiQypJFVRDUjBynGeveRHht+yHkpJBWWsZUQG2vKRa9MtV1rTwsgkSsdhGYav7UCSZmEFtT5TcXUg==
+X-Received: by 2002:a1c:6a08:: with SMTP id f8mr16162694wmc.132.1588632194182;
+        Mon, 04 May 2020 15:43:14 -0700 (PDT)
+Received: from localhost.localdomain ([176.61.57.127])
+        by smtp.gmail.com with ESMTPSA id a13sm13895888wrv.67.2020.05.04.15.43.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 May 2020 15:43:13 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     Peter.Chen@nxp.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: [PATCH 0/2] ChipIdea USB role-switch fixes and tweaks
+Date:   Mon,  4 May 2020 23:43:44 +0100
+Message-Id: <20200504224346.613377-1-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -35,61 +63,24 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On some architectures (e.g. arm64) requests for
-IO coherent memory may use non-cachable attributes if
-the relevant device isn't cache coherent. If these
-pages are then remapped into userspace as cacheable,
-they may not be coherent with the non-cacheable mappings.
+This set addresses two things:
 
-In particular this happens with libusb, when it attempts
-to create zero-copy buffers for use by rtl-sdr
-(https://github.com/osmocom/rtl-sdr/). On low end arm
-devices with non-coherent USB ports, the application will
-be unexpectedly killed, while continuing to work fine on
-arm machines with coherent USB controllers.
+- A bug when using the USB role-switch API.
+  If we are using role-switch we still want to switch HS_PHY_GENCONFIG_2
+  bits.
 
-This bug has been discovered/reported a few times over
-the last few years. In the case of rtl-sdr a compile time
-option to enable/disable zero copy was implemented to
-work around it.
+- Adding the flag to allow user-space to control the USB role as other
+  controllers already support.
 
-Rather than relaying on application specific workarounds,
-dma_mmap_coherent() can be used instead of remap_pfn_range().
-The page cache/etc attributes will then be correctly set in
-userspace to match the kernel mapping.
+Bryan O'Donoghue (2):
+  usb: chipidea: msm: Ensure proper controller reset using role switch
+    API
+  usb: chipidea: Enable user-space triggered role-switching
 
-Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
----
-v1->v2:
-	Update commit message and change to dma_mmap_coherent()
-	from dma_mmap_attr(,,,0) which are the same.
+ drivers/usb/chipidea/ci_hdrc_msm.c | 2 +-
+ drivers/usb/chipidea/core.c        | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
- drivers/usb/core/devio.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index 6833c918abce..b9db9812d6c5 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -217,6 +217,7 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
- {
- 	struct usb_memory *usbm = NULL;
- 	struct usb_dev_state *ps = file->private_data;
-+	struct usb_hcd *hcd = bus_to_hcd(ps->dev->bus);
- 	size_t size = vma->vm_end - vma->vm_start;
- 	void *mem;
- 	unsigned long flags;
-@@ -250,9 +251,7 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
- 	usbm->vma_use_count = 1;
- 	INIT_LIST_HEAD(&usbm->memlist);
- 
--	if (remap_pfn_range(vma, vma->vm_start,
--			virt_to_phys(usbm->mem) >> PAGE_SHIFT,
--			size, vma->vm_page_prot) < 0) {
-+	if (dma_mmap_coherent(hcd->self.sysdev, vma, mem, dma_handle, size)) {
- 		dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
- 		return -EAGAIN;
- 	}
 -- 
-2.24.1
+2.25.1
 
