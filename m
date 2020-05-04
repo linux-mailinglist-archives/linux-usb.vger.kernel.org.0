@@ -2,91 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9ECD1C319F
-	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 06:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E61B21C32FE
+	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 08:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725941AbgEDEJA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 May 2020 00:09:00 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:17434 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725770AbgEDEI7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 May 2020 00:08:59 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5eaf954e0000>; Sun, 03 May 2020 21:08:47 -0700
+        id S1727790AbgEDGdb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 May 2020 02:33:31 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:19609 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726743AbgEDGdb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 May 2020 02:33:31 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5eafb6bb0000>; Sun, 03 May 2020 23:31:23 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
   by hqpgpgate101.nvidia.com (PGP Universal service);
-  Sun, 03 May 2020 21:08:59 -0700
+  Sun, 03 May 2020 23:33:30 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Sun, 03 May 2020 21:08:59 -0700
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 4 May
- 2020 04:08:58 +0000
-Received: from [10.19.66.205] (10.124.1.5) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 4 May 2020
- 04:08:55 +0000
-Subject: Re: [PATCH V2 2/8] usb: gadget: tegra-xudc: Add vbus_draw support
-To:     Thierry Reding <thierry.reding@gmail.com>
-CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <jonathanh@nvidia.com>, <mark.rutland@arm.com>,
-        <robh+dt@kernel.org>, <kishon@ti.com>,
-        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1586939108-10075-1-git-send-email-nkristam@nvidia.com>
- <1586939108-10075-3-git-send-email-nkristam@nvidia.com>
- <20200428095956.GB3592148@ulmo>
-X-Nvconfidentiality: public
+        by hqpgpgate101.nvidia.com on Sun, 03 May 2020 23:33:30 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 4 May
+ 2020 06:33:30 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 4 May 2020 06:33:30 +0000
+Received: from nkristam-ubuntu.nvidia.com (Not Verified[10.19.67.128]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5eafb7370001>; Sun, 03 May 2020 23:33:29 -0700
 From:   Nagarjuna Kristam <nkristam@nvidia.com>
-Message-ID: <b22b696b-69db-a680-f3c6-a54ec6c7acad@nvidia.com>
-Date:   Mon, 4 May 2020 09:40:48 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+To:     <robh+dt@kernel.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <balbi@kernel.org>,
+        <gregkh@linuxfoundation.org>
+CC:     <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        Nagarjuna Kristam <nkristam@nvidia.com>
+Subject: [PATCH V2 0/3] Tegra XUDC support on Tegra194 Soc
+Date:   Mon, 4 May 2020 12:04:38 +0530
+Message-ID: <1588574081-23160-1-git-send-email-nkristam@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-In-Reply-To: <20200428095956.GB3592148@ulmo>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1588565327; bh=68fwostdTEIu4e1eYM/xozH9ML01bWeSStjD0PufGGA=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=cZhxQs0Bnq4E1UPuXHP+ngvhGzFdSmgUjfPs5pn6DuizxrrzDEzLje6RUejp54E6+
-         yPy30jRk/x24CioXuqDwN0qH1dXjk0YSBN2DkrkKXorEwcotngSAALc147BWmLglTD
-         cPFEVtztCWGJOvrIx4Wt1fE8dz79NO5zqXPjS4JRmbPHtxzM95KB57j6JSsmPkkTAz
-         oLYr1WZggv1TpAkq7lTPLCasKT8DytlS4gx+mP+GKv3HYtYyt48FXvxiFBXC0laiq4
-         PHRzCYrVpma5zRHHPHaNHmEBs07xMYvH6lKYPUR36WipwdsIFmjY4vNklFi7rDvU9b
-         J35MvePpyLqOQ==
+        t=1588573883; bh=8dKivDV9UwxpcqmL8X5yY6Atv8WXJsbXieJcgZNM0Js=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=BLuwhdsmZxR42+JVfBGYgTJzJfVqWrxJRyex79Rep4LGDHf6Tg7e6neBqPW5fSqjG
+         FmLQRXQRvf5Zkbp7s4/VF86tzCh0NqRwcFhikk0t0FypUycnm6dcZX7sV+D7DurFs4
+         P1ND9+ZgZopHwewv1MEMh5jrG8QCtp8nv2+Qd7Et1TPx1vno/bsXQ8+lKKD9wV89dt
+         /uD2L8k0BPSZAp2ls5qQm7nwaoYtFUHyVChxXgcpc2QJqINbEffoHg2wD55RFI00oj
+         h/GSdnLCcS/5D2qVv2mGDF81xqLeWcKNd9X62v+78syB9kty1kIe0kdG0X5MoKheKA
+         q9ocDL19n8Uew==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This patch series adds support for XUSB Device Mode support on Tegra194 SoCs.
 
+This patchset is composed with:
+ - dt bindings of XUDC driver.
+ - USB driver changes to tegra-xudc to add support on Tegra194 Soc.
 
-On 28-04-2020 15:29, Thierry Reding wrote:
->> @@ -2042,6 +2044,19 @@ static int tegra_xudc_gadget_stop(struct usb_gadget *gadget)
->>   	return 0;
->>   }
->>   
->> +static int tegra_xudc_gadget_vbus_draw(struct usb_gadget *gadget,
->> +						unsigned int m_a)
->> +{
->> +	struct tegra_xudc *xudc = to_xudc(gadget);
->> +
->> +	dev_dbg(xudc->dev, "%s: %u mA\n", __func__, m_a);
->> +
->> +	if (xudc->curr_usbphy->chg_type == SDP_TYPE)
->> +		usb_phy_set_power(xudc->curr_usbphy, m_a);
-> Do we need to propagate the error code here in case the USB PHY for some
-> reason doesn't support the given current? Or is it guaranteed that we
-> always do support whatever is passed in here?
-> 
-> Regardless of whether we support it or not, it might still be useful to
-> add proper handling, if for nothing else but to set a good example.
-> 
-> Thierry
-Will update accordingly, propagate the return the code to caller.
+V2:
+ - Added ACKed-by details.
+ - Updated commit message for port speed quirk.
+ - Fixed checkpatch errors.
+ 
+Nagarjuna Kristam (3):
+  dt-bindings: usb: tegra-xudc: Add Tegra194 XUSB controller support
+  usb: gadget: tegra-xudc: Add Tegra194 support
+  usb: gadget: tegra-xudc: add port_speed_quirk
+
+ .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml |   2 +
+ drivers/usb/gadget/udc/tegra-xudc.c                | 123 +++++++++++++++++++++
+ 2 files changed, 125 insertions(+)
+
+-- 
+2.7.4
+
