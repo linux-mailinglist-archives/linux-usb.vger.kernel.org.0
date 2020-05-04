@@ -2,153 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 987FC1C3352
-	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 09:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79FF01C3366
+	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 09:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727100AbgEDHK2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 May 2020 03:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726625AbgEDHK1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 May 2020 03:10:27 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B245DC061A0E
-        for <linux-usb@vger.kernel.org>; Mon,  4 May 2020 00:10:25 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id y3so523509wrt.1
-        for <linux-usb@vger.kernel.org>; Mon, 04 May 2020 00:10:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=PG6BwDAPcL8wb4HpwlS4YSmvTNTE6ibzVKQn+MZi8Es=;
-        b=LkM38JAq4noGtfOnmF87UfUXUnx6MfQgOywDyS/n35EYboeqiGo2aRfDc8mXTnwM5w
-         CPXlcI8M5+UniPHP9U8mAy6J6HNBwBJBxlJUZ70R0THyb75LvqPSiTOxHAEq+XclvRZ+
-         Cs4PSD7jw3rXiWEvuQicaqtfskfu/SsE8N//AJugm+JvRey12eitbIz3Vbw0QSYHHO33
-         738FUZBMV0R+7+ccdZClm7k0b5FVLgHBo2QbawaJeeDYBCyb1od0JYkd9NxKojoufQiU
-         Qyx56CKXSBdBgNIZdHSrW77VUg5t4F4oI5lrot6S6VGQll+BGG9+x7cvPpn4scU/0aj/
-         Vr7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=PG6BwDAPcL8wb4HpwlS4YSmvTNTE6ibzVKQn+MZi8Es=;
-        b=lJM/1y/yyM8rUkSMSl9TlyZUvog6LK+pamTfOJWBfAe0dg/Ze8VzRk5DWg5e5PdJKf
-         6u3I11m/JHsmF9vtte+eKWwZvvwz0R8BEDcssUAs2TvRKSVm4GMsbSI3SRNxM7olKFlX
-         NIZZvbSAe2S4WijiaQg8pnazrK77A0PkK/SaRS43KU34lmoUdag3JloLDWX8uHzVcW1K
-         k9HIXM2dKgwv+pxGaAqytXUiykKznu9X2l3ExBD/Vgkm1V/nPpL7OnBziMSEEVtLAJx+
-         nJ4QXNC2KUcmMgRtpVSje++LvKclbUb4tZqf8Fon43TgRQ/VQLJHDu8Zz2qG/Q+curGc
-         l8Gw==
-X-Gm-Message-State: AGi0PuZ+5EjJ+m3GHwQieh5Epv7o6yQJL+HIuMmumPSPaMCBpMZZspi/
-        Jzn9B84CmoDMu4zWPtwqtjAjW0Ryk3Q=
-X-Google-Smtp-Source: APiQypJJ8tWv285WswOjJBC9z1LmXOMpX5hXpKi/l41oV/Xikfp3MSONQbmU+rPwn7cBbxCVScdgeQ==
-X-Received: by 2002:adf:f5c4:: with SMTP id k4mr17360658wrp.294.1588576224290;
-        Mon, 04 May 2020 00:10:24 -0700 (PDT)
-Received: from dell ([2.31.163.63])
-        by smtp.gmail.com with ESMTPSA id l15sm11423844wmi.48.2020.05.04.00.10.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2020 00:10:23 -0700 (PDT)
-Date:   Mon, 4 May 2020 08:10:21 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 01/10] backlight: Add backlight_device_get_by_name()
-Message-ID: <20200504071021.GC298816@dell>
-References: <20200429124830.27475-1-noralf@tronnes.org>
- <20200429124830.27475-2-noralf@tronnes.org>
- <20200430083219.GC3118@dell>
- <0fbc4eb5-cb39-5974-85bb-9f13278ecab4@tronnes.org>
- <20200430101529.GB298816@dell>
- <20200430140242.GF10381@phenom.ffwll.local>
+        id S1728079AbgEDHNM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 May 2020 03:13:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40228 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727882AbgEDHNL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 4 May 2020 03:13:11 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1CA5420757;
+        Mon,  4 May 2020 07:13:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588576390;
+        bh=XfFhhStBycJzV0puy65G2AGQGcJw71aLuImYtkVyKy0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PN6OVx5JB5/9SQpEja8hYrfZezsED5+zQGTFoXQ1/Tyk+8+nqB/XuGG0UuKkQweP+
+         FVlGCGy6RsuefwhtdM25LkXiPLAWeD78PCEqUKTZLBzzLkp84ji3V3DmIXA18j3RnO
+         VnbSPAV01ET9XxFSbqCTDJ+NdEbt/8NTdzh/ly9s=
+Date:   Mon, 4 May 2020 09:13:06 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        git@thegavinli.com, jarkko.sakkinen@linux.intel.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] usb: usbfs: correct kernel->user page attribute mismatch
+Message-ID: <20200504071306.GA831956@kroah.com>
+References: <20200430211922.929165-1-jeremy.linton@arm.com>
+ <20200501070500.GA887524@kroah.com>
+ <d2d4f50e-a0bf-77c8-399b-86c2137bfa84@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200430140242.GF10381@phenom.ffwll.local>
+In-Reply-To: <d2d4f50e-a0bf-77c8-399b-86c2137bfa84@arm.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 30 Apr 2020, Daniel Vetter wrote:
-
-> On Thu, Apr 30, 2020 at 11:15:29AM +0100, Lee Jones wrote:
-> > On Thu, 30 Apr 2020, Noralf Trønnes wrote:
-> > 
-> > > 
-> > > 
-> > > Den 30.04.2020 10.32, skrev Lee Jones:
-> > > > On Wed, 29 Apr 2020, Noralf Trønnes wrote:
-> > > > 
-> > > >> Add a way to lookup a backlight device based on its name.
-> > > >> Will be used by a USB display gadget getting the name from configfs.
-> > > >>
-> > > >> Cc: Lee Jones <lee.jones@linaro.org>
-> > > >> Cc: Daniel Thompson <daniel.thompson@linaro.org>
-> > > >> Cc: Jingoo Han <jingoohan1@gmail.com>
-> > > >> Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
-> > > >> ---
-> > > >>  drivers/video/backlight/backlight.c | 21 +++++++++++++++++++++
-> > > >>  include/linux/backlight.h           |  1 +
-> > > >>  2 files changed, 22 insertions(+)
-> > > > 
-> > > > Once reviewed, can this patch be applied on its own?
-> > > > 
-> > > 
-> > > If you can apply it for 5.8, then we're good. DRM has cutoff at -rc5 and
-> > > the driver won't be ready for that. This patch has this dependency
-> > > chain: usb -> drm -> backlight. So if you can apply it for 5.8, things
-> > > gets easier.
-> > > 
-> > > > My guess is that it can't, as the other patches in this set depend on
-> > > > it, right?  If this assumption is true, you need to send me the rest
-> > > > of the set.
-> > > > 
-> > > > FYI: It's normally better to send the whole set to everyone, as it
-> > > > provides visibility on current review (or lack there of) status of the
-> > > > other patches and allows each of the maintainers to discuss possible
-> > > > merge strategies.
+On Fri, May 01, 2020 at 10:47:22AM -0500, Jeremy Linton wrote:
+> Hi,
 > 
-> Unfortunately this doesn't hold universally, since once you cc too many
-> people smtp servers start throwing your mails away. Generally only happens
-> for bigger refactorings, so pretty much anyone working cross-tree doesn't
-> do this because it doesn't work.
-
-I haven't experienced issues with SMTP servers.  Although I am aware
-of a few mailing lists that are configured to require moderator
-intervention if the recipient list reaches a given length.
-
-> > > dri-devel is the ML for backlight so I assumed you got the full set.
-> > 
-> > dri-devel isn't the ML for Backlight.  It's an interested party.
-> > 
-> > I certainly have no intention of subscribing to it.
+> Thanks for taking a look at this.
 > 
-> dri-devel is on lore so that you can grab missing patches. No need to
-> subscribe. I've only manged to get this sorted recently (last autumn or
-> so), but it's finally done.
-
-This is helpful.  Thanks for doing the work required to make this
-happen.  It's still infinitely more convenient to have the full set
-in my inbox available for review.  As someone who works cross-
-subsystem a lot, I can tell you that it works well in the vast
-majority of cases.
-
-Maybe just add the listed (in 'MAINTAINERS') maintainers and possibly
-the reviewers.  Obviously all of the secondary interested parties that
-get_maintainer.pl recommends should be omitted.
-
-> > > I have had trouble in the past with my email provider dropping parts of
-> > > a series when I had to many recipients.
+> On 5/1/20 2:05 AM, Greg KH wrote:
+> > On Thu, Apr 30, 2020 at 04:19:22PM -0500, Jeremy Linton wrote:
+> > > On arm64, and possibly other architectures, requesting
+> > > IO coherent memory may return Normal-NC if the underlying
+> > > hardware isn't coherent. If these pages are then
+> > > remapped into userspace as Normal, that defeats the
+> > > purpose of getting Normal-NC, as well as resulting in
+> > > mappings with differing cache attributes.
 > > 
-> > Without visibility into the other patches in the set, things become
-> > more difficult.  Maybe use a different/better email provider.
+> > What is "Normal-NC"?
+> 
+> A non-cacheable attribute on arm64 pages. I think Mark R & Marc Z elaborated
+> while I was asleep (thanks!).
+>   .
+> 
+> 
+> > 
+> > > In particular this happens with libusb, when it attempts
+> > > to create zero-copy buffers as is used by rtl-sdr, and
+> > 
+> > What is "rtl-sdr"
+> 
+> Its the realtek software defined radio (SDR), a really inexpensive TV dongle
+> that was discovered could be used as a general purpose SDR a decade or so
+> ago. In particular, this project
+> https://github.com/osmocom/rtl-sdr/
+> which is packaged by fedora/etc.
+> 
+> > 
+> > > maybe other applications. The result is usually
+> > > application death.
+> > 
+> > So is this a new problem?  Old problem?  Old problem only showing up on
+> > future devices?  On current devices?  I need a hint here as to know if
+> > this is a bugfix or just work to make future devices work properly.
+> 
+> This has been a problem on arm devices without IO coherent USB apparently
+> for years. The rtl-sdr project itself has a disable zero-copy mode that
+> people have been using on rpi/etc specific builds. Fedora OTOH, is building
+> it with the same flags on x86 & arm64 which means that people report
+> problems. This happened a few days ago (on a pinebook), and I duplicated it
+> on an NXP platform just running the `rtl_test` artifact with a nooelec from
+> my junk box. Guessing that it was a page mismatch I went looking for that,
+> rather than disabling the zero copy since punishing arm machine that have IO
+> coherent USB adapters for the sins of these low end devices isn't ideal. I
+> found this, and this patch allows the rtl_test app to run without issues on
+> my NXP/solidrun.
+> 
+> Plus, given that its actually a kernel/libusb problem its likely there are
+> other applications having similar problems.
+> 
+> > 
+> > > 
+> > > If dma_mmap_attr() is used instead of remap_pfn_range,
+> > > the page cache/etc attributes can be matched between the
+> > > kernel and userspace.
+> > > 
+> > > Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+> > > ---
+> > >   drivers/usb/core/devio.c | 5 ++---
+> > >   1 file changed, 2 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+> > > index 6833c918abce..1e7458dd6e5d 100644
+> > > --- a/drivers/usb/core/devio.c
+> > > +++ b/drivers/usb/core/devio.c
+> > > @@ -217,6 +217,7 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
+> > >   {
+> > >   	struct usb_memory *usbm = NULL;
+> > >   	struct usb_dev_state *ps = file->private_data;
+> > > +	struct usb_hcd *hcd = bus_to_hcd(ps->dev->bus);
+> > >   	size_t size = vma->vm_end - vma->vm_start;
+> > >   	void *mem;
+> > >   	unsigned long flags;
+> > > @@ -250,9 +251,7 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
+> > >   	usbm->vma_use_count = 1;
+> > >   	INIT_LIST_HEAD(&usbm->memlist);
+> > > -	if (remap_pfn_range(vma, vma->vm_start,
+> > > -			virt_to_phys(usbm->mem) >> PAGE_SHIFT,
+> > > -			size, vma->vm_page_prot) < 0) {
+> > > +	if (dma_mmap_attrs(hcd->self.sysdev, vma, mem, dma_handle, size, 0)) {
+> > 
+> > Given that this code has not changed since 2016, how has no one noticed
+> > this issue before?
+> They have there are a lot of reports of sdr failures, but the general use
+> case is rare?
+> 
+> > 
+> > And have you tested this change out on other systems (i.e. x86) to
+> > ensure that this still works properly?
+> 
+> Yes and no, I did some basic libusb tests on an x86 machine, but its a bit
+> tricky at the moment for me to get the rtl plugged into a x86 test machine.
+> (its a work in progress).
+> 
+> 
+> > 
+> > And why isn't this call used more by drivers if this is a real issue?
+> The particulars of asking for iocoherent memory and then mapping it to
+> userspace is rarer than just asking for kmalloc()/remap() and then
+> performing the dma ops?
+> 
+> Then there are all the softer issues around arm64 testing/availability and
+> vendors carrying "fixes" for particular issues (like rtl-sdr disabling zero
+> copy).
+> 
+> > And will this cause issues with how the userspace mapping is handled as
+> > now we rely on userspace to do things differently?  Or am I reading the
+> > dma_mmap_attrs() documentation wrong?
+> I don't think userspace is doing anything differently here, and AFAIK, on
+> systems with IO coherent adapters this ends up with the same page mapping as
+> just doing the remap_pfn_rage() with the same attributes as before. I've
+> looked at dma_map_attrs() a bit, but i'm also trusting it does what it says
+> on the tin.
+> 
+> 
+> Thanks again for looking at this.
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Ok, can I get a lot better written changelog text for this patch based
+on this thread, so that it makes more sense when we merge this patch?
+
+thanks,
+
+greg k-h
